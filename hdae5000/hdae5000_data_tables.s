@@ -14503,83 +14503,195 @@ HDAE5000_UI_Icons:	; 0x2E365D
 	.asciz "LANFRA00"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 
+; ----------------------------------------------------------------------------
+; HDAE5000_Multilingual_Messages (0x2E3704-0x2E5ADF, 9,180 bytes): the texts of
+; UI class 016A:000A ("AcLanguageText1Proc", 122 objects in the UI pool), 232
+; NUL-terminated strings, word-aligned.
+; READER: HDAE5000_AcLanguageText1Proc (0x28B554).  It takes a message number
+; N from its object (+0x1A of the descriptor it fetches), switches through
+; HDAE5000_LangText_CaseTable (below, after the strings), and each case copies
+; one of three strings -- by the language word at (xsp+4): 1 English, 2
+; German, 3 French -- into its buffer with HDAE5000_StrCpy.  The pointer is
+; pushed as two halves (`pushw 0x002e` / `pushw 0xLLLL`; the low-half line
+; names the string label).  N = 1..67 and 200..212; 63, 204, 205 and any
+; out-of-range N print "No Message".  Every string here is used by exactly the
+; cases found (scripts/converters/hdae5000_label_langtext.py asserts it and
+; prints the counts); each carries a label HDAE5000_LangMsg_<N>_<EN|DE|FR>.
+; This block label and the first string's label mark the same byte.
+; ----------------------------------------------------------------------------
 HDAE5000_Multilingual_Messages:	; 0x2E3704
 	; Trilingual UI messages (EN/DE/FR)
+HDAE5000_LangMsg_001_EN:
+	; message 1, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Would you really delete the selected directory?"
+HDAE5000_LangMsg_001_DE:
+	; message 1, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Moechten Sie das angewaehlte Verzeichnis wirklich loeschen?"
+HDAE5000_LangMsg_001_FR:
+	; message 1, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Voulez-vous effacer ce r"
 	.byte 0xe9  ; "é"
 	.asciz "pertoir?"
+HDAE5000_LangMsg_002_EN:
+	; message 2, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Would you really delete the selected title?"
+HDAE5000_LangMsg_002_DE:
+	; message 2, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Moechten Sie den angewaehlten Titel wirklich loeschen?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_002_FR:
+	; message 2, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Voulez-vous effacer ce titre?"
+HDAE5000_LangMsg_003_EN:
+	; message 3, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "COPY FD TO HARD DISK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_003_DE:
+	; message 3, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "COPY FD TO HARD DISK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_003_FR:
+	; message 3, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "COPY FD TO HARD DISK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_004_EN:
+	; message 4, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OUTPUT SETTING"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_004_DE:
+	; message 4, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OUTPUT SETTING"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_004_FR:
+	; message 4, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OUTPUT SETTING"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_005_EN:
+	; message 5, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SELECT BY   NAME    "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_005_DE:
+	; message 5, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SELECT BY   NAME    "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_005_FR:
+	; message 5, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SELECT BY   NAME    "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_006_EN:
+	; message 6, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "LOAD BY     NUMBER"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_006_DE:
+	; message 6, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "LOAD BY     NUMBER"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_006_FR:
+	; message 6, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "LOAD BY     NUMBER"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_007_EN:
+	; message 7, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SELECT FILE LOAD SCRIPT"
+HDAE5000_LangMsg_007_DE:
+	; message 7, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SELECT FILE LOAD SCRIPT"
+HDAE5000_LangMsg_007_FR:
+	; message 7, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SELECT FILE LOAD SCRIPT"
+HDAE5000_LangMsg_008_EN:
+	; message 8, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "WRITE PROTECT: "
+HDAE5000_LangMsg_008_DE:
+	; message 8, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "WRITE PROTECT: "
+HDAE5000_LangMsg_008_FR:
+	; message 8, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "WRITE PROTECT: "
+HDAE5000_LangMsg_009_EN:
+	; message 9, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "WRITE CONFIRM: "
+HDAE5000_LangMsg_009_DE:
+	; message 9, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "WRITE CONFIRM: "
+HDAE5000_LangMsg_009_FR:
+	; message 9, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "WRITE CONFIRM: "
+HDAE5000_LangMsg_010_EN:
+	; message 10, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "ABOUT & HELP "
+HDAE5000_LangMsg_010_DE:
+	; message 10, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "ABOUT & HELP "
+HDAE5000_LangMsg_010_FR:
+	; message 10, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "ABOUT & HELP "
+HDAE5000_LangMsg_011_EN:
+	; message 11, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SAVE SETUP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_011_DE:
+	; message 11, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SAVE SETUP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_011_FR:
+	; message 11, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SAVE SETUP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_012_EN:
+	; message 12, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OUTPUT SETTING"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_012_DE:
+	; message 12, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OUTPUT SETTING"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_012_FR:
+	; message 12, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OUTPUT SETTING"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_013_EN:
+	; message 13, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SEPARATE OUTPUT MODE:"
+HDAE5000_LangMsg_013_DE:
+	; message 13, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SEPARATE OUTPUT MODE:"
+HDAE5000_LangMsg_013_FR:
+	; message 13, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "SEPARATE OUTPUT MODE:"
+HDAE5000_LangMsg_014_EN:
+	; message 14, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_014_DE:
+	; message 14, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_014_FR:
+	; message 14, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "PART SELECT FOR SEQ.DRUMS OUT:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_015_EN:
+	; message 15, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_015_DE:
+	; message 15, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_015_FR:
+	; message 15, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "PART SELECT FOR SEQ.BASS  OUT:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_016_EN:
+	; message 16, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "! The separate outputs cannot be controlled by the internal volume control."
+HDAE5000_LangMsg_016_DE:
+	; message 16, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "! Die separaten Ausgaenge werden nicht durch Volumen am Keyboard kontrolliert."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_016_FR:
+	; message 16, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "! Les sortie s"
 	.byte 0xe9  ; "é"
 	.ascii "par"
@@ -14589,50 +14701,104 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii "tre control"
 	.byte 0xe9  ; "é"
 	.asciz "es par les volume du calvier."
+HDAE5000_LangMsg_017_EN:
+	; message 17, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hardware and software developement:"
+HDAE5000_LangMsg_017_DE:
+	; message 17, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hardware und Software Entwicklung:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_017_FR:
+	; message 17, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hardware et Software developement:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_018_EN:
+	; message 18, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Conception, marketing, sales and service:"
+HDAE5000_LangMsg_018_DE:
+	; message 18, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Konzeption, Marketing, Verkauf und Service:"
+HDAE5000_LangMsg_018_FR:
+	; message 18, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Conception, Marketing, Vente et Service:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_019_EN:
+	; message 19, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "All rigths reserved by the called companies"
+HDAE5000_LangMsg_019_DE:
+	; message 19, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Alle Rechte bei den obengenannten Firmen"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_019_FR:
+	; message 19, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "All rigths reserved by the called companies"
+HDAE5000_LangMsg_020_EN:
+	; message 20, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Special thanks to:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_020_DE:
+	; message 20, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Spezieller Dank an:"
+HDAE5000_LangMsg_020_FR:
+	; message 20, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Special thanks to:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_021_EN:
+	; message 21, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Press 3 digits for directory and 2 digits for the file."
+HDAE5000_LangMsg_021_DE:
+	; message 21, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Geben Sie 3 Ziffern fuer das Verzeichnis und 2 Ziffern fuer den Titel ein."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_021_FR:
+	; message 21, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Introduisez 3 chiffres pour le r"
 	.byte 0xe9  ; "é"
 	.asciz "pertoir at 2 chiffres pour le titre."
+HDAE5000_LangMsg_022_EN:
+	; message 22, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Do you really want to overwrite this FLS entry?"
+HDAE5000_LangMsg_022_DE:
+	; message 22, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Wollen Sie den bestehenden FLS Eintrag wirklich ueberschreiben?"
+HDAE5000_LangMsg_022_FR:
+	; message 22, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Voulez-vous vraiment "
 	.byte 0xe9  ; "é"
 	.asciz "crire par dessus le FLS?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_023_EN:
+	; message 23, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Do you really want to delete this FLS entry?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_023_DE:
+	; message 23, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Wollen Sie den bestehenden FLS Eintrag wirklich loeschen?"
+HDAE5000_LangMsg_023_FR:
+	; message 23, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Voulez-vous vraiment effacer ce FLS?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_024_EN:
+	; message 24, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "HD FORMAT will erase all files at once."
+HDAE5000_LangMsg_024_DE:
+	; message 24, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "HD FORMAT loescht alle Daten auf der Festplatte."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_024_FR:
+	; message 24, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "HD-FORMAT effacera toutes les donn"
 	.byte 0xe9  ; "é"
 	.asciz "es de votre disque dur."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_025_EN:
+	; message 25, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Therefore you need a 6-digit key code. Please refer your owners manual chapter SETUP & TOOLS."
+HDAE5000_LangMsg_025_DE:
+	; message 25, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Geben Sie auf dieser Seite den 6-stelligen Code ein. Schauen Sie in der Anleitung unter SETUP & TOOLS nach."
+HDAE5000_LangMsg_025_FR:
+	; message 25, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Indroduisez le code "
 	.byte 0xe0  ; "à"
 	.ascii " 6 chiffres et r"
@@ -14642,9 +14808,15 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii "rez-vous "
 	.byte 0xe0  ; "à"
 	.asciz " votre manuel dans (SETUP & TOOLS)."
+HDAE5000_LangMsg_026_EN:
+	; message 26, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "After your code input all data will be deleted irrevocable!"
+HDAE5000_LangMsg_026_DE:
+	; message 26, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Nach der Codeeingabe werden alle Daten unwiderruflich geloescht!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_026_FR:
+	; message 26, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Apr"
 	.byte 0xe8  ; "è"
 	.ascii "s l'introduction du code, toutes les donn"
@@ -14652,78 +14824,156 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii "es seront effac"
 	.byte 0xe9  ; "é"
 	.asciz "es."
+HDAE5000_LangMsg_027_EN:
+	; message 27, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "You are going to delete a FLS entry. Are you sure?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_027_DE:
+	; message 27, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Sie haben einen FLS Eintrag zum Loeschen markiert. Sind Sie sicher?"
+HDAE5000_LangMsg_027_FR:
+	; message 27, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Vous avez marquer un FLS connection pour effacer. Vous ait sure?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_028_EN:
+	; message 28, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "You are going to overwrite a FLS entry. Are you sure?"
+HDAE5000_LangMsg_028_DE:
+	; message 28, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Sie ueberschreiben eine bestehenden FLS Eintrag. Sind Sie sicher?"
+HDAE5000_LangMsg_028_FR:
+	; message 28, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Voulez-vous vraiment transcrire ce FLS enregistration?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_029_EN:
+	; message 29, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The hard disk is write protected!"
+HDAE5000_LangMsg_029_DE:
+	; message 29, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Die Festplatte ist schreibgesch"
 	.byte 0xfc  ; "ü"
 	.asciz "tzt!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_029_FR:
+	; message 29, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Le disque dur est prot"
 	.byte 0xe9  ; "é"
 	.ascii "ger contre l'"
 	.byte 0xe9  ; "é"
 	.asciz "ctriture!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_030_EN:
+	; message 30, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please set the write protect mode to OFF."
+HDAE5000_LangMsg_030_DE:
+	; message 30, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Schalten Sie WRITE PROTECT im SETUP & TOOLS auf OFF."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_030_FR:
+	; message 30, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Pour "
 	.byte 0xe9  ; "é"
 	.asciz "crire mettez la protection sur OFF."
+HDAE5000_LangMsg_031_EN:
+	; message 31, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The hard disk is not formatted!"
+HDAE5000_LangMsg_031_DE:
+	; message 31, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die Festplatte ist nicht formatiert!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_031_FR:
+	; message 31, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Le disque dur n'est pas format"
 	.byte 0xe9  ; "é"
 	.asciz "."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_032_EN:
+	; message 32, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hard disk SRAM error."
+HDAE5000_LangMsg_032_DE:
+	; message 32, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Im HD-AE5000 SRAM ist ein Fehler aufgetreten."
+HDAE5000_LangMsg_032_FR:
+	; message 32, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Il y a un problem avec le SRAM de HD-AE5000."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_033_EN:
+	; message 33, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hard disk reset error."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_033_DE:
+	; message 33, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die Festplatte konnte nicht initialisiert werden."
+HDAE5000_LangMsg_033_FR:
+	; message 33, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Votre disque dur n'est pas reconnu."
+HDAE5000_LangMsg_034_EN:
+	; message 34, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hard disk read error."
+HDAE5000_LangMsg_034_DE:
+	; message 34, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Beim Lesen der Festplatte ist ein Fehler aufgetreten."
+HDAE5000_LangMsg_034_FR:
+	; message 34, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Il y a un probl"
 	.byte 0xe9  ; "é"
 	.asciz "me de leture du disque."
+HDAE5000_LangMsg_035_EN:
+	; message 35, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hard disk ID read error."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_035_DE:
+	; message 35, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die ID der Festplatte konnte nicht gelesen werden."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_035_FR:
+	; message 35, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "L'ID du disque dur n'a pas pu "
 	.byte 0xea  ; "ê"
 	.asciz "tre lue."
+HDAE5000_LangMsg_036_EN:
+	; message 36, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hard disk track 0 error."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_036_DE:
+	; message 36, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Track O der Festplatte konnte nicht gelesen werden."
+HDAE5000_LangMsg_036_FR:
+	; message 36, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "La piste 0 du disque dur n'a pas pu "
 	.byte 0xea  ; "ê"
 	.asciz "tre lue."
+HDAE5000_LangMsg_037_EN:
+	; message 37, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hard disk FAT read error."
+HDAE5000_LangMsg_037_DE:
+	; message 37, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die FAT der Festplatte konnte nicht gelesen werden."
+HDAE5000_LangMsg_037_FR:
+	; message 37, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Le FAT du disque dur n'a pas pu "
 	.byte 0xea  ; "ê"
 	.asciz "tre lue."
+HDAE5000_LangMsg_038_EN:
+	; message 38, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Hard disk FSB read error."
+HDAE5000_LangMsg_038_DE:
+	; message 38, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Der FSB der Festplatte konnte nicht gelesen werden."
+HDAE5000_LangMsg_038_FR:
+	; message 38, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Le FSB du disque dur n'a pas pu "
 	.byte 0xea  ; "ê"
 	.asciz "tre lue."
+HDAE5000_LangMsg_039_EN:
+	; message 39, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "There are no files marked for copy to HD!"
+HDAE5000_LangMsg_039_DE:
+	; message 39, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Es wurden keine Titel zum Kopieren gefunden."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_039_FR:
+	; message 39, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Aucun titre n'a "
 	.byte 0xe9  ; "é"
 	.ascii "t"
@@ -14731,34 +14981,58 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii " marqu"
 	.byte 0xe9  ; "é"
 	.asciz " pour faire des copies."
+HDAE5000_LangMsg_040_EN:
+	; message 40, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please make a safety backup of your data and call your service center."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_040_DE:
+	; message 40, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Sichern Sie alle Ihre Daten auf Diskette oder den PC und rufen Sie Ihre Service-Stelle an."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_040_FR:
+	; message 40, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Sauvez vos donn"
 	.byte 0xe9  ; "é"
 	.asciz "e sur disquette ou l'ordinateur et contactez votre service assistance."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_041_EN:
+	; message 41, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please make a safety backup of your data and call your service center."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_041_DE:
+	; message 41, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Sichern Sie alle Ihre Daten auf Diskette oder den PC und rufen Sie Ihre Service-Stelle an."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_041_FR:
+	; message 41, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Sauvez vos donn"
 	.byte 0xe9  ; "é"
 	.asciz "e sur disquette ou l'ordinateur et contactez votre service assistance."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_042_EN:
+	; message 42, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The data on the disk you would like to copy to HD has no KN5000 format or some data are corrupted."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_042_DE:
+	; message 42, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die Daten auf der Diskette die Sie kopieren moechten, haben keine KN5000 ID oder sind fehlerhaft."
+HDAE5000_LangMsg_042_FR:
+	; message 42, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Les donn"
 	.byte 0xe9  ; "é"
 	.ascii "es que vous voulez charger ne sont pas du KN5000 format ou ont des d"
 	.byte 0xe9  ; "é"
 	.asciz "faults."
+HDAE5000_LangMsg_043_EN:
+	; message 43, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The number or marked songs cannot fit in the free space of the selected directory."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_043_DE:
+	; message 43, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Im gewuenschten Verzeichnis sind nicht genuegend freie Plaetze fuer die Anzahl markierter Titel."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_043_FR:
+	; message 43, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Le r"
 	.byte 0xe9  ; "é"
 	.ascii "pertoir est satur"
@@ -14767,16 +15041,28 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0xe0  ; "à"
 	.asciz " plus de place pour d'autres titre."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_044_EN:
+	; message 44, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Reduce the number of selected songs or find a free directory."
+HDAE5000_LangMsg_044_DE:
+	; message 44, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Reduzieren Sie die Zahl der Titel oder waehlen Sie ein anderes Verzeichnis."
+HDAE5000_LangMsg_044_FR:
+	; message 44, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Changer de r"
 	.byte 0xe9  ; "é"
 	.asciz "pertoire ou supprimez des titres."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_045_EN:
+	; message 45, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "You cannot copy files/songs to an unnamed directory."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_045_DE:
+	; message 45, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Kopieren Sie keine Titel in ein nicht beschriftetes Verzeichnis."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_045_FR:
+	; message 45, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Vous ne pouvez pas copier des titres dans un r"
 	.byte 0xe9  ; "é"
 	.ascii "pertoire pas pr"
@@ -14785,36 +15071,78 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.byte 0xe9  ; "é"
 	.asciz "."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_046_EN:
+	; message 46, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please use a named directory or create the new directory with EDIT first."
+HDAE5000_LangMsg_046_DE:
+	; message 46, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Waehlen Sie ein bereits beschriftetes Verzeichnis oder benennen Sie es zuvor mit EDIT."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_046_FR:
+	; message 46, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Nommez-le d'abord par example avec EDIT."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_047_EN:
+	; message 47, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The DIR number is out of range."
+HDAE5000_LangMsg_047_DE:
+	; message 47, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Sie haben eine ungueltige Verzeichnis Nummer eingegeben."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_047_FR:
+	; message 47, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Le r"
 	.byte 0xe9  ; "é"
 	.asciz "pertoire choisi n'existe pas."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_048_EN:
+	; message 48, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The file number is out of range."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_048_DE:
+	; message 48, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die eingegebene Nummer existiert nicht."
+HDAE5000_LangMsg_048_FR:
+	; message 48, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Le titre choisi n'existe pas."
+HDAE5000_LangMsg_049_EN:
+	; message 49, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please wait ..."
+HDAE5000_LangMsg_049_DE:
+	; message 49, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Bitte warten ..."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_049_FR:
+	; message 49, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Attendre S.V.P."
+HDAE5000_LangMsg_050_EN:
+	; message 50, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!FORMAT ERROR!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_050_DE:
+	; message 50, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!FORMAT FEHLER!"
+HDAE5000_LangMsg_050_FR:
+	; message 50, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!FORMAT ERREUR!"
+HDAE5000_LangMsg_051_EN:
+	; message 51, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The automatic HD format was not successful!"
+HDAE5000_LangMsg_051_DE:
+	; message 51, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die Formatierung war nicht erfolgreich!"
+HDAE5000_LangMsg_051_FR:
+	; message 51, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Le formatage du disque dur n'a pas pu se faire correctement!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_052_EN:
+	; message 52, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please try once more, refer your owners manual or ask your dealer/service center."
+HDAE5000_LangMsg_052_DE:
+	; message 52, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Versuchen Sie es nochmals, schauen Sie in der Anleitung nach oder rufen Sie Ihre Service-Stelle an."
+HDAE5000_LangMsg_052_FR:
+	; message 52, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "R"
 	.byte 0xe9  ; "é"
 	.ascii "p"
@@ -14826,16 +15154,34 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii "rent au manuel ou en cas d'"
 	.byte 0xe9  ; "é"
 	.asciz "chec, contactez votre service assistance."
+HDAE5000_LangMsg_053_EN:
+	; message 53, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Input error!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_053_DE:
+	; message 53, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Eingabe-Fehler!"
+HDAE5000_LangMsg_053_FR:
+	; message 53, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Erreur d'operation!"
+HDAE5000_LangMsg_054_EN:
+	; message 54, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The key code input was wrong!"
+HDAE5000_LangMsg_054_DE:
+	; message 54, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die Nummerneingabe war falsch!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_054_FR:
+	; message 54, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Le cocde n'est pas correct!"
+HDAE5000_LangMsg_055_EN:
+	; message 55, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please try once more, refer your owners manual or ask your dealer/service center."
+HDAE5000_LangMsg_055_DE:
+	; message 55, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Versuchen Sie es nochmals, schauen Sie in der Anleitung nach oder rufen Sie Ihre Service-Stelle an."
+HDAE5000_LangMsg_055_FR:
+	; message 55, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Veuillez r"
 	.byte 0xe9  ; "é"
 	.ascii "p"
@@ -14847,255 +15193,339 @@ HDAE5000_Multilingual_Messages:	; 0x2E3704
 	.ascii "f"
 	.byte 0xe9  ; "é"
 	.asciz "rez au manuel ou contactez votre service assistance."
+HDAE5000_LangMsg_056_EN:
+	; message 56, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Delete file from hard disk:"
+HDAE5000_LangMsg_056_DE:
+	; message 56, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Loesche Titel von Festplatte:"
+HDAE5000_LangMsg_056_FR:
+	; message 56, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Effacer titre du disque dur:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_057_EN:
+	; message 57, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The hard disk will now be formatted. This procedure can take about 2-3 minutes."
+HDAE5000_LangMsg_057_DE:
+	; message 57, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Die Festplatte wird nun neu formatiert. Dieser Vorgang dauert ca. 2-3 Minuten."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_057_FR:
+	; message 57, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The hard disk will now be formatted. This procedure can take about 2-3 minutes."
+HDAE5000_LangMsg_058_EN:
+	; message 58, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "We recommend to turn ON and OFF again the power after the complete format."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_058_DE:
+	; message 58, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Wir empfehlen, nach der Formatierung das Keyboard aus und wieder einzuschalten."
+HDAE5000_LangMsg_058_FR:
+	; message 58, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "We recommend to turn ON and OFF again the power after the complete format."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_059_EN:
+	; message 59, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Track O will be recovered:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_059_DE:
+	; message 59, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Track 0 wird kontrolliert:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_059_FR:
+	; message 59, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Track O will be recovered:"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_060_EN:
+	; message 60, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "The FLS entry remains free."
+HDAE5000_LangMsg_060_DE:
+	; message 60, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Der FLS Eintrag bleibt frei."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_060_FR:
+	; message 60, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Ce FLS registartion reste libre."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_061_EN:
+	; message 61, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "All following entries will be moved."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_061_DE:
+	; message 61, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Alle nachfolgenden Eintraege werden nachgeschoben."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_061_FR:
+	; message 61, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Tous les registartion suivant seront d"
 	.byte 0xe9  ; "é"
 	.asciz "placer."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_062_EN:
+	; message 62, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Evaluation 01-01-99"
+HDAE5000_LangMsg_062_DE:
+	; message 62, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Test-Version 01-01-99"
+HDAE5000_LangMsg_062_FR:
+	; message 62, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.ascii "Version d'"
 	.byte 0xe9  ; "é"
 	.asciz "valuation"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_064_EN:
+	; message 64, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "LYRICS LOAD MODE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_064_DE:
+	; message 64, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "LYRICS LOAD MODE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_064_FR:
+	; message 64, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "LYRICS LOAD MODE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_065_EN:
+	; message 65, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "COLOR ACTIV"
+HDAE5000_LangMsg_065_DE:
+	; message 65, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "AKTIVE FARBE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_065_FR:
+	; message 65, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "COLOUR ACTIVE"
+HDAE5000_LangMsg_066_EN:
+	; message 66, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "COLOR PASSIV"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_066_DE:
+	; message 66, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "PASSIVE FARBE"
+HDAE5000_LangMsg_066_FR:
+	; message 66, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "COLOUR PASSIVE"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_067_EN:
+	; message 67, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "You are going to overwrite an existing entry. Are you sure?"
+HDAE5000_LangMsg_067_DE:
+	; message 67, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Sie ueberschreiben einen bestehenden Eintrag. Sind Sie sicher?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_067_FR:
+	; message 67, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Vous etes en train de modifier un titre existant. Etes-vous sur?"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_200_EN:
+	; message 200, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "YES"
+HDAE5000_LangMsg_200_DE:
+	; message 200, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "JA"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_200_FR:
+	; message 200, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OUI"
+HDAE5000_LangMsg_201_EN:
+	; message 201, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "NO"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_201_DE:
+	; message 201, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "NEIN"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_201_FR:
+	; message 201, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "NON"
+HDAE5000_LangMsg_202_EN:
+	; message 202, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_202_DE:
+	; message 202, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_202_FR:
+	; message 202, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "OK"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_203_EN:
+	; message 203, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "CANCEL"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_203_DE:
+	; message 203, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Abbruch"
+HDAE5000_LangMsg_203_FR:
+	; message 203, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "CANCEL"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_206_EN:
+	; message 206, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Operation error!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_206_DE:
+	; message 206, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Bedienungsfehler!"
+HDAE5000_LangMsg_206_FR:
+	; message 206, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Error d'operation!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_207_EN:
+	; message 207, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!SAVE ERROR!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_207_DE:
+	; message 207, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!SAVE-FEHLER!"
+HDAE5000_LangMsg_207_FR:
+	; message 207, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!SAVE ERREUR!"
+HDAE5000_LangMsg_208_EN:
+	; message 208, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!LOAD ERROR!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_208_DE:
+	; message 208, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!LOAD-FEHLER!"
+HDAE5000_LangMsg_208_FR:
+	; message 208, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!LOAD ERREUR!"
+HDAE5000_LangMsg_209_EN:
+	; message 209, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!SYSTEM ERROR!"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_209_DE:
+	; message 209, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!SYSTEM-FEHLER!"
+HDAE5000_LangMsg_209_FR:
+	; message 209, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!SYSTEM ERREUR!"
+HDAE5000_LangMsg_210_EN:
+	; message 210, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!ATTENTION!"
+HDAE5000_LangMsg_210_DE:
+	; message 210, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!ACHTUNG!"
+HDAE5000_LangMsg_210_FR:
+	; message 210, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "!ATTENTION!"
+HDAE5000_LangMsg_211_EN:
+	; message 211, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Press YES for confirmation, NO to abort."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_211_DE:
+	; message 211, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Bestaetigen Sie den Vorgang mit JA oder druecken Sie die NEIN Taste."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_211_FR:
+	; message 211, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Pressez OUI pour confirmer ou NON pour annuler."
+HDAE5000_LangMsg_212_EN:
+	; message 212, language 1 (English): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Please call your dealer or service center."
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
+HDAE5000_LangMsg_212_DE:
+	; message 212, language 2 (German): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Bitte rufen Sie Ihre Service-Stelle an."
+HDAE5000_LangMsg_212_FR:
+	; message 212, language 3 (French): read by HDAE5000_AcLanguageText1Proc
 	.asciz "Contactez votre service assistance."
+HDAE5000_LangMsg_NoMessage:
+	; the default text, all three languages: read by HDAE5000_AcLanguageText1Proc
 	.asciz "No Message"
-	.zero 3
-	.asciz "I"
-	.byte 0x92  ; ""
-	.byte 0x00
-	.byte 0xdb  ; "Û"
-	.byte 0x00
-	.byte 0x24
-	.byte 0x01
-	.ascii "m"
-	.byte 0x01
-	.byte 0xb6, 0x01
-	.byte 0xff
-	.byte 0x01
-	.byte 0x48
-	.byte 0x02
-	.byte 0x91, 0x02, 0xda, 0x02
-	.byte 0x23, 0x03
-	.ascii "l"
-	.byte 0x03
-	.byte 0xb5  ; "µ"
-	.byte 0x03
-	.byte 0xfe  ; "þ"
-	.byte 0x03
-	.byte 0x47
-	.byte 0x04
-	.byte 0x90  ; ""
-	.byte 0x04
-	.byte 0xd9  ; "Ù"
-	.byte 0x04
-	.byte 0x22
-	.byte 0x05
-	.ascii "k"
-	.byte 0x05
-	.byte 0xb4  ; "´"
-	.byte 0x05
-	.byte 0xfd  ; "ý"
-	.byte 0x05
-	.byte 0x46
-	.byte 0x06
-	.byte 0x8f  ; ""
-	.byte 0x06
-	.byte 0xd8  ; "Ø"
-	.byte 0x06
-	.byte 0x21
-	.byte 0x07
-	.ascii "j"
-	.byte 0x07
-	.byte 0xb3  ; "³"
-	.byte 0x07
-	.byte 0xfc  ; "ü"
-	.byte 0x07
-	.byte 0x45
-	.byte 0x08
-	.byte 0x8e  ; ""
-	.byte 0x08
-	.byte 0xd7  ; "×"
-	.byte 0x08
-	.ascii " "
-	.byte 0x09
-	.ascii "i"
-	.byte 0x09
-	.byte 0xb2  ; "²"
-	.byte 0x09
-	.byte 0xfb  ; "û"
-	.byte 0x09
-	.byte 0x44
-	.byte 0x0a
-	.byte 0x8d  ; ""
-	.byte 0x0a
-	.byte 0xd6  ; "Ö"
-	.byte 0x0a, 0x1f, 0x0b
-	.ascii "h"
-	.byte 0x0b
-	.byte 0xb1  ; "±"
-	.byte 0x0b
-	.byte 0xfa  ; "ú"
-	.byte 0x0b
-	.byte 0x43
-	.byte 0x0c
-	.byte 0x8c  ; ""
-	.byte 0x0c
-	.byte 0xd5  ; "Õ"
-	.byte 0x0c, 0x1e, 0x0d
-	.ascii "g"
-	.byte 0x0d
-	.byte 0xb0  ; "°"
-	.byte 0x0d
-	.byte 0xf9  ; "ù"
-	.byte 0x0d
-	.byte 0x42
-	.byte 0x0e
-	.byte 0x8b  ; ""
-	.byte 0x0e
-	.byte 0xd4  ; "Ô"
-	.byte 0x0e, 0x1d, 0x0f
-	.ascii "f"
-	.byte 0x0f
-	.byte 0xaf  ; "¯"
-	.byte 0x0f
-	.byte 0xf8  ; "ø"
-	.byte 0x0f
-	.byte 0x41
-	.byte 0x10
-	.byte 0x8a  ; ""
-	.byte 0x10
-	.byte 0xd3  ; "Ó"
-	.byte 0x10, 0x1c, 0x11
-	.ascii "e"
-	.byte 0x11
-	.byte 0xf1  ; "ñ"
-	.byte 0x15
-	.byte 0xae  ; "®"
-	.byte 0x11
-	.byte 0xf7  ; "÷"
-	.byte 0x11
-	.byte 0x40
-	.byte 0x12
-	.byte 0x89  ; ""
-	.byte 0x12
-	.byte 0xd2  ; "Ò"
-	.byte 0x12, 0x1b, 0x13
-	.ascii "d"
-	.byte 0x13
-	.byte 0xad  ; "­"
-	.byte 0x13
-	.byte 0xf1  ; "ñ"
-	.byte 0x15
-	.byte 0xf1  ; "ñ"
-	.byte 0x15
-	.byte 0xf6  ; "ö"
-	.byte 0x13
-	.byte 0x3f
-	.byte 0x14
-	.byte 0x88  ; ""
-	.byte 0x14
-	.byte 0xd1  ; "Ñ"
-	.byte 0x14, 0x1a, 0x15
-	.ascii "c"
-	.byte 0x15
-	.byte 0xaa  ; "ª"
-	.byte 0x15
+	.balign 2, 0x00					; pad after "No Message"
+;
+; HDAE5000_LangText_CaseTable (0x2E5AE0, 80 x u16): the message switch of
+; HDAE5000_AcLanguageText1Proc.  Entry i serves message i+1 (i <= 0x42) or
+; i+0x85 (i >= 0x43, the `sub wa,0x84` range); each value is an offset
+; from HDAE5000_AcLanguageText1Proc_Msg001, the first case, and the reader
+; jumps there (`jp T,XIX+WA`).  Three entries (messages 63, 204, 205) and
+; every out-of-range number share the _NoMessage case.  Evidence and the
+; extraction: scripts/converters/hdae5000_label_langtext.py.
+;
+HDAE5000_LangText_CaseTable:
+	.short	HDAE5000_AcLanguageText1Proc_Msg001 - HDAE5000_AcLanguageText1Proc_Msg001	; message 1
+	.short	HDAE5000_AcLanguageText1Proc_Msg002 - HDAE5000_AcLanguageText1Proc_Msg001	; message 2
+	.short	HDAE5000_AcLanguageText1Proc_Msg003 - HDAE5000_AcLanguageText1Proc_Msg001	; message 3
+	.short	HDAE5000_AcLanguageText1Proc_Msg004 - HDAE5000_AcLanguageText1Proc_Msg001	; message 4
+	.short	HDAE5000_AcLanguageText1Proc_Msg005 - HDAE5000_AcLanguageText1Proc_Msg001	; message 5
+	.short	HDAE5000_AcLanguageText1Proc_Msg006 - HDAE5000_AcLanguageText1Proc_Msg001	; message 6
+	.short	HDAE5000_AcLanguageText1Proc_Msg007 - HDAE5000_AcLanguageText1Proc_Msg001	; message 7
+	.short	HDAE5000_AcLanguageText1Proc_Msg008 - HDAE5000_AcLanguageText1Proc_Msg001	; message 8
+	.short	HDAE5000_AcLanguageText1Proc_Msg009 - HDAE5000_AcLanguageText1Proc_Msg001	; message 9
+	.short	HDAE5000_AcLanguageText1Proc_Msg010 - HDAE5000_AcLanguageText1Proc_Msg001	; message 10
+	.short	HDAE5000_AcLanguageText1Proc_Msg011 - HDAE5000_AcLanguageText1Proc_Msg001	; message 11
+	.short	HDAE5000_AcLanguageText1Proc_Msg012 - HDAE5000_AcLanguageText1Proc_Msg001	; message 12
+	.short	HDAE5000_AcLanguageText1Proc_Msg013 - HDAE5000_AcLanguageText1Proc_Msg001	; message 13
+	.short	HDAE5000_AcLanguageText1Proc_Msg014 - HDAE5000_AcLanguageText1Proc_Msg001	; message 14
+	.short	HDAE5000_AcLanguageText1Proc_Msg015 - HDAE5000_AcLanguageText1Proc_Msg001	; message 15
+	.short	HDAE5000_AcLanguageText1Proc_Msg016 - HDAE5000_AcLanguageText1Proc_Msg001	; message 16
+	.short	HDAE5000_AcLanguageText1Proc_Msg017 - HDAE5000_AcLanguageText1Proc_Msg001	; message 17
+	.short	HDAE5000_AcLanguageText1Proc_Msg018 - HDAE5000_AcLanguageText1Proc_Msg001	; message 18
+	.short	HDAE5000_AcLanguageText1Proc_Msg019 - HDAE5000_AcLanguageText1Proc_Msg001	; message 19
+	.short	HDAE5000_AcLanguageText1Proc_Msg020 - HDAE5000_AcLanguageText1Proc_Msg001	; message 20
+	.short	HDAE5000_AcLanguageText1Proc_Msg021 - HDAE5000_AcLanguageText1Proc_Msg001	; message 21
+	.short	HDAE5000_AcLanguageText1Proc_Msg022 - HDAE5000_AcLanguageText1Proc_Msg001	; message 22
+	.short	HDAE5000_AcLanguageText1Proc_Msg023 - HDAE5000_AcLanguageText1Proc_Msg001	; message 23
+	.short	HDAE5000_AcLanguageText1Proc_Msg024 - HDAE5000_AcLanguageText1Proc_Msg001	; message 24
+	.short	HDAE5000_AcLanguageText1Proc_Msg025 - HDAE5000_AcLanguageText1Proc_Msg001	; message 25
+	.short	HDAE5000_AcLanguageText1Proc_Msg026 - HDAE5000_AcLanguageText1Proc_Msg001	; message 26
+	.short	HDAE5000_AcLanguageText1Proc_Msg027 - HDAE5000_AcLanguageText1Proc_Msg001	; message 27
+	.short	HDAE5000_AcLanguageText1Proc_Msg028 - HDAE5000_AcLanguageText1Proc_Msg001	; message 28
+	.short	HDAE5000_AcLanguageText1Proc_Msg029 - HDAE5000_AcLanguageText1Proc_Msg001	; message 29
+	.short	HDAE5000_AcLanguageText1Proc_Msg030 - HDAE5000_AcLanguageText1Proc_Msg001	; message 30
+	.short	HDAE5000_AcLanguageText1Proc_Msg031 - HDAE5000_AcLanguageText1Proc_Msg001	; message 31
+	.short	HDAE5000_AcLanguageText1Proc_Msg032 - HDAE5000_AcLanguageText1Proc_Msg001	; message 32
+	.short	HDAE5000_AcLanguageText1Proc_Msg033 - HDAE5000_AcLanguageText1Proc_Msg001	; message 33
+	.short	HDAE5000_AcLanguageText1Proc_Msg034 - HDAE5000_AcLanguageText1Proc_Msg001	; message 34
+	.short	HDAE5000_AcLanguageText1Proc_Msg035 - HDAE5000_AcLanguageText1Proc_Msg001	; message 35
+	.short	HDAE5000_AcLanguageText1Proc_Msg036 - HDAE5000_AcLanguageText1Proc_Msg001	; message 36
+	.short	HDAE5000_AcLanguageText1Proc_Msg037 - HDAE5000_AcLanguageText1Proc_Msg001	; message 37
+	.short	HDAE5000_AcLanguageText1Proc_Msg038 - HDAE5000_AcLanguageText1Proc_Msg001	; message 38
+	.short	HDAE5000_AcLanguageText1Proc_Msg039 - HDAE5000_AcLanguageText1Proc_Msg001	; message 39
+	.short	HDAE5000_AcLanguageText1Proc_Msg040 - HDAE5000_AcLanguageText1Proc_Msg001	; message 40
+	.short	HDAE5000_AcLanguageText1Proc_Msg041 - HDAE5000_AcLanguageText1Proc_Msg001	; message 41
+	.short	HDAE5000_AcLanguageText1Proc_Msg042 - HDAE5000_AcLanguageText1Proc_Msg001	; message 42
+	.short	HDAE5000_AcLanguageText1Proc_Msg043 - HDAE5000_AcLanguageText1Proc_Msg001	; message 43
+	.short	HDAE5000_AcLanguageText1Proc_Msg044 - HDAE5000_AcLanguageText1Proc_Msg001	; message 44
+	.short	HDAE5000_AcLanguageText1Proc_Msg045 - HDAE5000_AcLanguageText1Proc_Msg001	; message 45
+	.short	HDAE5000_AcLanguageText1Proc_Msg046 - HDAE5000_AcLanguageText1Proc_Msg001	; message 46
+	.short	HDAE5000_AcLanguageText1Proc_Msg047 - HDAE5000_AcLanguageText1Proc_Msg001	; message 47
+	.short	HDAE5000_AcLanguageText1Proc_Msg048 - HDAE5000_AcLanguageText1Proc_Msg001	; message 48
+	.short	HDAE5000_AcLanguageText1Proc_Msg049 - HDAE5000_AcLanguageText1Proc_Msg001	; message 49
+	.short	HDAE5000_AcLanguageText1Proc_Msg050 - HDAE5000_AcLanguageText1Proc_Msg001	; message 50
+	.short	HDAE5000_AcLanguageText1Proc_Msg051 - HDAE5000_AcLanguageText1Proc_Msg001	; message 51
+	.short	HDAE5000_AcLanguageText1Proc_Msg052 - HDAE5000_AcLanguageText1Proc_Msg001	; message 52
+	.short	HDAE5000_AcLanguageText1Proc_Msg053 - HDAE5000_AcLanguageText1Proc_Msg001	; message 53
+	.short	HDAE5000_AcLanguageText1Proc_Msg054 - HDAE5000_AcLanguageText1Proc_Msg001	; message 54
+	.short	HDAE5000_AcLanguageText1Proc_Msg055 - HDAE5000_AcLanguageText1Proc_Msg001	; message 55
+	.short	HDAE5000_AcLanguageText1Proc_Msg056 - HDAE5000_AcLanguageText1Proc_Msg001	; message 56
+	.short	HDAE5000_AcLanguageText1Proc_Msg057 - HDAE5000_AcLanguageText1Proc_Msg001	; message 57
+	.short	HDAE5000_AcLanguageText1Proc_Msg058 - HDAE5000_AcLanguageText1Proc_Msg001	; message 58
+	.short	HDAE5000_AcLanguageText1Proc_Msg059 - HDAE5000_AcLanguageText1Proc_Msg001	; message 59
+	.short	HDAE5000_AcLanguageText1Proc_Msg060 - HDAE5000_AcLanguageText1Proc_Msg001	; message 60
+	.short	HDAE5000_AcLanguageText1Proc_Msg061 - HDAE5000_AcLanguageText1Proc_Msg001	; message 61
+	.short	HDAE5000_AcLanguageText1Proc_Msg062 - HDAE5000_AcLanguageText1Proc_Msg001	; message 62
+	.short	HDAE5000_AcLanguageText1Proc_NoMessage - HDAE5000_AcLanguageText1Proc_Msg001	; message 63
+	.short	HDAE5000_AcLanguageText1Proc_Msg064 - HDAE5000_AcLanguageText1Proc_Msg001	; message 64
+	.short	HDAE5000_AcLanguageText1Proc_Msg065 - HDAE5000_AcLanguageText1Proc_Msg001	; message 65
+	.short	HDAE5000_AcLanguageText1Proc_Msg066 - HDAE5000_AcLanguageText1Proc_Msg001	; message 66
+	.short	HDAE5000_AcLanguageText1Proc_Msg067 - HDAE5000_AcLanguageText1Proc_Msg001	; message 67
+	.short	HDAE5000_AcLanguageText1Proc_Msg200 - HDAE5000_AcLanguageText1Proc_Msg001	; message 200
+	.short	HDAE5000_AcLanguageText1Proc_Msg201 - HDAE5000_AcLanguageText1Proc_Msg001	; message 201
+	.short	HDAE5000_AcLanguageText1Proc_Msg202 - HDAE5000_AcLanguageText1Proc_Msg001	; message 202
+	.short	HDAE5000_AcLanguageText1Proc_Msg203 - HDAE5000_AcLanguageText1Proc_Msg001	; message 203
+	.short	HDAE5000_AcLanguageText1Proc_NoMessage - HDAE5000_AcLanguageText1Proc_Msg001	; message 204
+	.short	HDAE5000_AcLanguageText1Proc_NoMessage - HDAE5000_AcLanguageText1Proc_Msg001	; message 205
+	.short	HDAE5000_AcLanguageText1Proc_Msg206 - HDAE5000_AcLanguageText1Proc_Msg001	; message 206
+	.short	HDAE5000_AcLanguageText1Proc_Msg207 - HDAE5000_AcLanguageText1Proc_Msg001	; message 207
+	.short	HDAE5000_AcLanguageText1Proc_Msg208 - HDAE5000_AcLanguageText1Proc_Msg001	; message 208
+	.short	HDAE5000_AcLanguageText1Proc_Msg209 - HDAE5000_AcLanguageText1Proc_Msg001	; message 209
+	.short	HDAE5000_AcLanguageText1Proc_Msg210 - HDAE5000_AcLanguageText1Proc_Msg001	; message 210
+	.short	HDAE5000_AcLanguageText1Proc_Msg211 - HDAE5000_AcLanguageText1Proc_Msg001	; message 211
+	.short	HDAE5000_AcLanguageText1Proc_Msg212 - HDAE5000_AcLanguageText1Proc_Msg001	; message 212
 
 HDAE5000_Lang_Codes:	; 0x2E5B80
 	; Language code strings and file types
