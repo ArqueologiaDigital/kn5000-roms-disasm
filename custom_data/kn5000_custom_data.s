@@ -8,14 +8,14 @@
 ; Address range: 0x300000 - 0x3FFFFF (1MB)
 ;
 ; User-writable flash programmed from the "initial data disk" at factory setup.
-; The firmware identifies this chip via Flash_IdentifyChip (EF3723) using the
+; The firmware identifies this chip via Flash_IdentifyChip (0xEF3724) using the
 ; AMD flash command protocol (0xAAAA/0x5555 unlock sequence).
 ; Device IDs checked: 0x2223 (AM29LV800B-T) and 0x22AB (AM29LV800B-B).
 ;
 ; CONTENTS:
 ;   - Custom accompaniment styles (8 sections, "HK" header format)
 ;   - LCD wallpaper/screenshot storage (76,800 + 1,024 bytes)
-;   - Registration memory (3 banks + config, 4KB)
+;   - Sound-parameter blocks: "HK " header, 3 user banks, one 0x50 block (4KB)
 ;   - SubCPU payload staging area (for firmware updates)
 ;
 ; ROM LAYOUT:
@@ -31,11 +31,11 @@
 ;   0x3B0000-0x3B0FFF    4KB  Section 7: SubCPU Performance Data
 ;   0x3B1000-0x3BFFFF   60KB  [erased]
 ;   0x3C0000-0x3D2FFF   78KB  LCD Wallpaper/Screenshot Storage
-;   0x3D3000-0x3D3FFF    4KB  Registration Memory
+;   0x3D3000-0x3D3FFF    4KB  Sound-parameter user banks (SndParam_*)
 ;   0x3D4000-0x3DFFFF   48KB  [erased]
 ;   0x3E0000-0x3FFFFF  128KB  SubCPU Payload Staging Area
 ;
-; SECTION POINTER TABLE (computed at runtime by LABEL_F16A57):
+; SECTION POINTER TABLE (computed at runtime by Flash_InitExtMemAddrs, 0xF16A57):
 ;   Section 0: 0x300000  (RAM 0x0C76)   Section 4: 0x360000  (RAM 0x0C86)
 ;   Section 1: 0x319800  (RAM 0x0C7A)   Section 5: 0x379800  (RAM 0x0C8A)
 ;   Section 2: 0x330000  (RAM 0x0C7E)   Section 6: 0x390000  (RAM 0x0C8E)
@@ -46,11 +46,9 @@
 ;   +0x02: word 0x004B ('K')     Sections contain style names, MIDI patterns,
 ;   +0x04: 4 bytes flags/config  and accompaniment arrangement data.
 ;
-; REGISTRATION MEMORY FORMAT (0x3D3000):
-;   +0x00: "HK " (ASCII, 4 bytes)
-;   +0x04: config header (12 bytes, includes bank count)
-;   +0x10: Bank 0 data (pointer table + parameters)
-;   Pointer entries: 6 bytes each (2-byte offset + 4-byte data)
+; SOUND-PARAMETER BANKS (0x3D3000; see CustomData_SndParamBanks below):
+;   +0x000: "HK " + 13 bytes      +0x010 / +0x110 / +0x210: banks 0-2, 234 bytes
+;   each = 39 entries of {u32 main-CPU RAM address, u16 value}; +0x400: 0x50 bytes
 ; =============================================================================
 
 	.org 0x300000 - 0x300000, 0xFF
@@ -1640,20 +1638,31 @@ CustomData_LCD_Wallpaper:
 
 
 ; ============================================================
-; Registration Memory — 3 banks + config
-; Base address: 0x3D3000
-; Written by firmware registration save routines
+; Sound-parameter user banks -- 0x3D3000 (was "Registration Memory", a name
+; nothing in the code supports)
+; Readers and writers in the v10 main-CPU source:
+;   SndParam_GetBlockPointer: parameter blocks 0..0x18 are 234-byte records
+;     in ROM (NakaInst_SoundConfig_LookupTable_0x8A + 234*n); 0x1B / 0x1C /
+;     0x1D return 0x3D3010 / 0x3D3110 / 0x3D3210 -- three user banks here;
+;   SndParam_CopyPreset: FlashWrite 0xEA bytes to bank 0 / 1 / 2;
+;   ToneGen_FlashVerify / ToneGen_FlashWriteAll: when the 3 bytes at 0x3D3000
+;     differ from the ROM default (0xED933A), write the defaults: 0xFA bytes
+;     (header + bank 0) from 0xED933A, banks 1-2 from 0xED9434 / 0xED951E,
+;     and a 0x50-byte block at 0x3D3400 (read back by
+;     ToneGen_FlashReadAndRestore).
 ; ============================================================
-CustomData_Registration_Memory:
+CustomData_SndParamBanks:
 	; 1,104 live bytes then 2,992 bytes of erased flash.
 	;
-	; ⚠ CORRECTED 2026-08-21: the old header here described "Bank 0/1/2 at
-	; +0x10/+0x110/+0x210, 234 bytes each". THE BYTES DO NOT SHOW THAT. What is
-	; here is an "HK " magic followed by entries on a 0x1A stride carrying what
-	; look like RAM pointers (0xF9C2, 0xF9DC, 0xF9F6 ... ascending by 0x1A).
-	; The three-bank reading was never verified and does not fit; it is removed
-	; rather than left to mislead. [INFERENCE] the pointer reading itself is not
-	; proven either -- no writer has been traced to this region.
+	; CORRECTED 2026-09-25: a 2026-08-21 note here said the bytes do not show
+	; "Bank 0/1/2 at +0x10/+0x110/+0x210, 234 bytes each" and that no writer
+	; was traced.  Both claims are PROVEN FALSE: the readers/writers above use
+	; exactly those three addresses and 0xEA = 234 bytes, and the bytes agree
+	; -- each bank is 39 six-byte entries {u32 RAM address, u16 value} (the
+	; addresses 0xF9C2, 0xF9DC, ... step by 0x1A, then 0xFD50, 0xFD51, ...),
+	; padded with 0xFF to the next 0x100.  This dump's header + bank 0 differ
+	; from the ROM default at 0xED933A in 14 of 0xFA bytes (values only):
+	; user-edited.
 	.byte 0x48, 0x4b, 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x03	; +0x0000  HK .............
 	.byte 0xc2, 0xf9, 0x00, 0x00, 0x00, 0x00, 0xdc, 0xf9, 0x00, 0x00, 0x00, 0x03, 0xf6, 0xf9, 0x00, 0x00	; +0x0010  ................
 	.byte 0x00, 0x01, 0x10, 0xfa, 0x00, 0x00, 0x00, 0x02, 0x2a, 0xfa, 0x00, 0x00, 0x00, 0x04, 0x44, 0xfa	; +0x0020  ........*.....D.
