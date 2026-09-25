@@ -1,3 +1,5 @@
+; Tail of the NAKA record whose header (naka_header type 0x25) is at 0xE818E6,
+; in the previous file; a 32-bit pointer to that record is at 0xE85474.
 // Sound menu / TechniChord dispatch data
 // Extracted from kn5000_v10_program.s
 // Contains: Sound menu NAKA widgets (scrollbars, list boxes, page controls),

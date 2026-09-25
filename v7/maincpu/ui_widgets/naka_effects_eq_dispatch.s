@@ -4,16 +4,18 @@
 // EvtEffDraw_PtrTable, EvtName_* event strings,
 // MT_FuncName_PtrTable and all MT_* function name strings.
 
-	jr	gt, 0x00
+; Name and instance-code strings of the 26 class records at 0xE27180 that
+; InitializeKubo registers (`RegObjTable 0x1600004, ClassProc, 0xe27596, 0xe27180,
+; 0x168`, sequencer/sequencer_ui.s): 7 record fields point into these bytes
+; (32-bit pointers at 0xE2718C..0xE271D4).  The first two bytes end "^^j", which
+; starts at 0xE27556 in the previous file.
+	.byte 0x6a, 0x00
 	aligned_string "SqedtVal2"
 	aligned_string "^^jC"
 	aligned_string "SqedtVal"
-	jr	gt, 67
-	.byte 0x00			; padding
-	.byte 0xff			; padding
+	aligned_string "jC"
 	aligned_string "EqualizerBox"
-	jr	gt, 66
-	.byte 0x42, 0x43, 0x00, 0xff
+	aligned_string "jBBC"
 	aligned_string "EffectBox"
 ; Registered in v10 by InitializeKubo (sequencer/sequencer_ui.s:4298): `RegObjTable 0x1600004, 0xfa44e2, 0xe27596, 0xe27180, 0x168`
 ; = u16 26, the entry count of that class 0x1600004 (ClassProc) table, read with `ldw_da`.

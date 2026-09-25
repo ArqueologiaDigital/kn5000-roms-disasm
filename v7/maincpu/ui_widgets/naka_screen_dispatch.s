@@ -7,20 +7,19 @@
 ; layouts. Pointer tables for widget instantiation.
 ; =============================================================================
 
-	xor	(xiz), wa
-	pop	sr
-	.byte 0x00			; padding
-	.byte 0xba, 0xd8, 0x03
-	.byte 0x00			; padding
+; Entries 26-32 and the NULL end of the 33-entry table at 0xE1B786 (it starts
+; in the previous file) that InitializeSuna registers: `RegObjTabl 0x1600010,
+; ViewableProc, 0x21, 0xe1b786, 0xb8` (storage/flash_floppy_handlers.s).
+; 0x0003Dxxx entries are RAM addresses of widgets that Boot_InitWorkRAM_ROMCopy1
+; initialises from WorkRamInit_Image (RAM 0x3D524 + k <- ROM 0xEED8C8 + k).
+	.long 0x0003D896	; RAM; from ROM 0xEEDC3A
+	.long 0x0003D8BA	; RAM; from ROM 0xEEDC5E
 	.long NakaLabel_PatternCopy_MemoryLabel
 	.long NakaLabel_PatternCopy_PatMemLabel
-	cp	iz, 0:i3
-	pop	sr
-	.byte 0x00			; padding
-	push	sr
-	.byte 0xd9, 0x03, 0x00
+	.long 0x0003D8DE	; RAM; from ROM 0xEEDC82
+	.long 0x0003D902	; RAM; from ROM 0xEEDCA6
 	.long NakaNode_PatternCopy_ProgressBar
-	.byte 0x00, 0x00, 0x00, 0x00
+	.long 0	; end of the table
 ; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5354): `RegObjTabl 0x1600010, 0xfa5995, 0x25, 0xe1b80e, 0xb9`
 ; = class 0x1600010 (ViewableProc), 37 entries (immediate count), id 0xB9.
 ; v7 names this label's address (0xE1B80E) as a 24-bit operand at 0xF19C1C.
