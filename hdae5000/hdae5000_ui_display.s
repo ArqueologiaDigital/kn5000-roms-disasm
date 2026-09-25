@@ -14009,7 +14009,7 @@ HDAE5000_PPI_Write_Sector_Helper:
 	call	(xhl)
 	call HDAE5000_ATA_SoftReset_Status
 	ld	iz, hl
-	call 0x2998e4
+	call HDAE5000_HD_LoadSettings
 	or	iz, hl
 	cpw	(xsp+2), 0x0001
 	jr z, .LDC_3f14                        ; [66 06] jr Z,0x293f14
@@ -14040,7 +14040,7 @@ HDAE5000_SetupP2SwCatch_Helper:
 	call	(xhl)
 	call HDAE5000_ATA_SoftReset_Status
 	ld	iz, hl
-	call HDAE5000_Display_Callback_Helper3
+	call HDAE5000_HD_SaveSettings
 	or	iz, hl
 	cpw	(xsp+2), 0x0001
 	jr z, .LDC_3f6e                        ; [66 06] jr Z,0x293f6e
@@ -19106,7 +19106,7 @@ HDAE5000_HD_Init_SramClearLoop:
 	jp HDAE5000_HD_Init_SramClearLoop                             ; jp 0x2971fc
 	call HDAE5000_RAM_Test_Helper9
 	call .Lppe_write_setup
-	lda xwa, (0x298c9d:24)
+	lda xwa, (HDAE5000_HD_CheckVersionKey:24)
 	ld	(0x229d6c), xwa
 	ld	(0x229D90:24), 0
 	ld	(0x229D92:24), 0
@@ -19329,7 +19329,7 @@ HDAE5000_ATA_Standby:
 HDAE5000_HD_CheckSignature:
 	; RAM 0x229D98 = 1 if the sector-1 image at 0x200628 starts with the
 	; longs 0xAA55AA55, 0xF4F1F2F3 (the signature
-	; HDAE5000_Display_Callback_Helper3 builds there and writes to sector 1),
+	; HDAE5000_HD_SaveSettings builds there and writes to sector 1),
 	; else 0.
 	push xix
 	push xbc
@@ -19356,7 +19356,7 @@ HDAE5000_HD_CheckSignature_Done:
 	push xwa
 	push xbc
 	push xix
-	lda xix, (0x299a4b:24)
+	lda xix, (HDAE5000_Version_Key:24)
 	ld xwa, (xix)                           ; ld XWA,(XIX)
 	ld	xbc, (0x229c60)
 	cp	xwa, xbc
@@ -20982,8 +20982,8 @@ HDAE5000_Display_String_Render_Helper3:
 	ld	xwa, 0xf4f1f2f3
 	ld (xix), xwa                           ; ld (XIX),XWA
 	inc 4, xix                              ; inc 4,XIX
-	lda xiy, (0x2999b2:24)
-	lda xiz, (0x299a22:24)
+	lda xiy, (HDAE5000_Version_Info:24)
+	lda xiz, (HDAE5000_Version_Info_End:24)
 HDAE5000_Display_String_Render_Join6:
 	cp	xiy, xiz
 	jp	z, (0x2988EC:24)
@@ -21175,7 +21175,7 @@ HDAE5000_Display_String_Render_Join15:
 	jp	nz, (0x298A98:24)
 	lda xix, (0x20086e:24)
 	sub	xix, xde
-	lda xiy, (0x2998d9:24)
+	lda xiy, (HDAE5000_DecimalDigits:24)
 	pop xbc                                 ; pop XBC
 	ld	qbc, 0
 	add	xiy, xbc
@@ -21348,10 +21348,16 @@ HDAE5000_Display_String_Render_Helper11:
 	inc 1, xwa                              ; inc 1,XWA
 	ret
 
+HDAE5000_HD_CheckVersionKey:
+	; compares the long at HDAE5000_Version_Key ("XXXX") with RAM 0x229C60;
+	; on a mismatch it pops one extra long and returns to its caller's
+	; caller.  Not called directly: HDAE5000_HD_Init stores its address in
+	; RAM 0x229D6C (`lda xwa,(...)` / `ld (0x229d6c),xwa`), and no read of
+	; 0x229D6C was found in this ROM (searched the literal).
 	push xwa
 	push xbc
 	push xix
-	lda xix, (0x299a4b:24)
+	lda xix, (HDAE5000_Version_Key:24)
 	ld xwa, (xix)                           ; ld XWA,(XIX)
 	ld	xbc, (0x229c60)
 	cp	xwa, xbc
@@ -22532,11 +22538,21 @@ HDAE5000_Display_String_Render_Join49:
 	add	xwa, xix
 	ret
 
-	ldw	wa, 0x3231
-	ldw	hl, 0x3534
-	ldw	iz, 0x3837
-	push xbc
-	ld	w, 0x3e:opc
+; HDAE5000_DecimalDigits (0x2998D9, 11 bytes): "0123456789 ", the digit table
+; of HDAE5000_Display_String_Render_Helper8 (0x298A8E), which divides by 10
+; with HDAE5000_HD_UDiv32 and then indexes this string with each remainder
+; (`lda xiy,(HDAE5000_DecimalDigits:24)` / `add xiy,xbc` / `ld a,(xiy)`).
+; It used to be decoded as `ldw wa,0x3231 / ldw hl,0x3534 / ldw iz,0x3837 /
+; push xbc` plus `ld w,0x3e`, whose 0x3E was really the first opcode of
+; HDAE5000_HD_LoadSettings -- the misframe behind the branch symboliser's
+; "mid-line" refusal of `call 0x2998e4` (a call into the middle of `ld w`).
+HDAE5000_DecimalDigits:
+	.ascii	"0123456789 "
+HDAE5000_HD_LoadSettings:
+	; read sector 1 (the signature sector) into RAM 0x200628 and restore the
+	; six setting bytes it carries at +0x78 (0x2006A0) into 0x229DA9..AE --
+	; the mirror image of HDAE5000_HD_SaveSettings.  Called from 0x293F01.
+	push	xiz
 	ld	xhl, 1:i3
 	lda xix, (0x200628:24)
 	ld	xde, 0x00000200
@@ -22557,7 +22573,14 @@ HDAE5000_Display_String_Render_Join49:
 	pop xiz                                 ; pop XIZ
 	ret
 
-HDAE5000_Display_Callback_Helper3:
+HDAE5000_HD_SaveSettings:
+	; build and write the signature sector: at RAM 0x200628, after
+	; HDAE5000_Display_String_Render_Helper2, the longs 0xAA55AA55 and
+	; 0xF4F1F2F3 (what HDAE5000_HD_CheckSignature looks for), the 112-byte
+	; HDAE5000_Version_Info record copied byte by byte (_CopyLoop, up to
+	; HDAE5000_Version_Info_End), the six setting bytes 0x229DA9..AE at +0x78
+	; (0x2006A0), a 0xFFFFFFFF long, then HDAE5000_ATA_WriteSector(1).
+	; (Was Display_Callback_Helper3.)
 	push xiz
 	lda xix, (0x200628:24)
 	call HDAE5000_Display_String_Render_Helper2
@@ -22568,16 +22591,16 @@ HDAE5000_Display_Callback_Helper3:
 	ld	xwa, 0xf4f1f2f3
 	ld (xix), xwa                           ; ld (XIX),XWA
 	inc 4, xix                              ; inc 4,XIX
-	lda xiy, (0x2999b2:24)
-	lda xiz, (0x299a22:24)
-HDAE5000_Display_String_Render_Join50:
+	lda xiy, (HDAE5000_Version_Info:24)
+	lda xiz, (HDAE5000_Version_Info_End:24)
+HDAE5000_HD_SaveSettings_CopyLoop:
 	cp	xiy, xiz
 	jp	z, (0x299969:24)
 	ld	a, (xiy)
 	ld	(xix), a
 	inc 1, xix                              ; inc 1,XIX
 	inc 1, xiy                              ; inc 1,XIY
-	jp HDAE5000_Display_String_Render_Join50                             ; jp 0x299956
+	jp HDAE5000_HD_SaveSettings_CopyLoop                             ; jp 0x299956
 	lda xix, (0x2006a0:24)
 	ld	a, (0x229DA9:24)
 	lda_dpi xbc, 0xf0		; ld (XIX+),A
@@ -22608,11 +22631,24 @@ HDAE5000_Display_String_Render_Join50:
 	; Real code resumes at 0x299AE7; the old fake `ld xde,...` opcode byte (0x42, the 'B' of
 	; "CVNB" here) had swallowed the first real instruction's bytes with it, so the true next
 	; two instructions are given explicitly below and match ROM bytes 0x299AE7-0x299AEA.
+; HDAE5000_Version_Info (0x2999B2, 112 bytes): four space-padded fields --
+; author (40), version "2.33J" (24), "2.21" (24), "TECHNICS KN5000" (24).
+; READERS: HDAE5000_HD_SaveSettings copies exactly these 112 bytes
+; (HDAE5000_Version_Info .. HDAE5000_Version_Info_End) into the signature
+; sector; the routine at 0x2988CF copies the same range.
+HDAE5000_Version_Info:
 	.ascii "Technics Software section    M. Kitajima"
 	.ascii "2.33J                   "
 	.ascii "2.21                    "
-	.ascii "TECHNICS KN5000                                 "
-	.ascii "Juli-Oktober 1996XXXXXXXX"
+	.ascii "TECHNICS KN5000         "
+HDAE5000_Version_Info_End:
+	.ascii "                        "
+	.ascii "Juli-Oktober 1996"
+; HDAE5000_Version_Key (0x299A4B): the long "XXXX" that
+; HDAE5000_HD_CheckVersionKey (0x298C9D) and the identical unlabelled copy
+; at 0x297551 compare with RAM 0x229C60.
+HDAE5000_Version_Key:
+	.ascii "XXXXXXXX"
 	.byte 0x1b, 0x1c, 0x1f                ; non-ASCII control bytes inside the confirmed-data version/reference-digit block documented above (0x2999B2-0x299AE6) -- not code, individual meaning not determined
 	.ascii "\"VE \""
 	.ascii "E12345678910111213141516171819202122232425ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvw #.-,;:_portuoirutoiurtUPOTRUJRNGERIUT7457890CVNB"
