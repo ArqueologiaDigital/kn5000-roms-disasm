@@ -1345,6 +1345,8 @@ def cmd_islands(args):
     for (x, y) in list(datseg):
         if all(k in cur_code for k in range(x, y)):
             ev = data_evidence(img, rb, x, y)
+            if x in {int(f, 16) for f in args.force_data}:
+                ev = ev + ["forced by caller (reader evidence)"]
             if not ev:
                 kept.append((x, y))
                 datseg.remove((x, y))
@@ -1370,6 +1372,9 @@ def cmd_islands(args):
         isdata = c.startswith(".")
         rng = range(ad, ad + n)
         ok = True
+        if c.startswith(".incbin"):
+            bad.append(i)           # verbatim ROM slice: always re-typed
+            continue
         if not isdata:
             ok = ad in bound and (ad + n) in bound and all(k in code for k in rng)
         else:
@@ -1606,6 +1611,8 @@ def main():
     p.add_argument("--image", required=True)
     p.add_argument("--plan", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--force-data", action="append", default=[],
+                   help="data segment start to re-type even without byte-level evidence")
     p = sub.add_parser("apply")
     p.add_argument("--image", required=True)
     p.add_argument("--spec", required=True)

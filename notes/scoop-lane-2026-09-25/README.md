@@ -103,3 +103,41 @@ runs on into `ui/bitmap_out_routines.s`), the `VGA_Stub_1..3` `ret`s,
 `scoop_display.s` plan flags only two segments, both data by their reader: a
 4-byte slice of the `.long` table at 0xEFB2B3-0xEFB307 and the display list
 `Scoop_DisplayData_ButtonLayout` handed to `UIRender_TwoTableGeneral` in xiy.)
+
+### v7 (all three files; every romslice retired)
+
+    plan --image v7 --file v7/maincpu/display/scoop_display.s --lo 0xEF5AD8 --hi 0xF036EF \
+         --exclude 0xEFE95F --entry 0xEFB0A9 --entry 0xEFF2FC --entry 0xEFF04D \
+         --entry 0xF00272 --entry 0xF00091
+    islands --image v7 --plan PLAN.json --force-data 0xF00A79
+    plan --image v7 --file v7/maincpu/display/scoop_editor_data.s --lo 0xF03D56 --hi 0xF06146 \
+         --entry 0xF05132 --entry 0xF051C2
+    plan --image v7 --file v7/maincpu/display/graphics_text_vga.s --lo 0xFB0FA3 --hi 0xFB3B7F
+    plan --image v7 --file v7/maincpu/display/graphics_text_vga.s --lo 0xFC1257 --hi 0xFC27C8
+
+The v7 overrides are the v10 ones at their v7 addresses (located by byte
+context: v10 0xEFE989/0xEFB0D3/0xEFF326/0xEFF077/0xF0029C/0xF000BB =
+v7 0xEFE95F/0xEFB0A9/0xEFF2FC/0xEFF04D/0xF00272/0xF00091), plus the two
+`extz wa / ld bc,3 / ldw de,48 / jr <join>` alternate entries of the sound
+editor that v10 holds as code at 0xF0515C/0xF051EC (v7 0xF05132/0xF051C2), and
+`--force-data 0xF00A79`: the 8-byte display list v10 calls
+`Scoop_DisplayData_ButtonLayout`, which its reader loads into xiy for
+`UIRender_TwoTableGeneral` (byte-level evidence alone cannot see a reader).
+`islands` always re-types a `.incbin` in the span.
+
+Corroboration (scripts/analysis/scoop_v7_v10_correspondence.py, unidasm
+mnemonic streams of the two images aligned with difflib):
+
+| v7 span | v10 span | matching instructions |
+|---|---|---|
+| 0xF03D56-0xF06146 (scoop_editor_data) | 0xF03D80-0xF0616F | 3,421 / 3,422 (ratio 1.000) |
+| 0xFB0FA3-0xFB3B7F (graphics_text_vga) | 0xFB13B0-0xFB3F8C | 3,986 / 3,986 (1.000) |
+| 0xFC1257-0xFC27C8 (graphics_text_vga) | 0xFC1A22-0xFC2F93 | 1,689 / 1,689 (1.000) |
+| 0xEF5AD8-0xF036EF (scoop_display, data included) | 0xEF5B02-0xF03719 | 18,113 / 19,240 (0.942) |
+
+The retired `.bin` romslices under `v7/maincpu/includes/romslices/` are no
+longer referenced by these files; they are owned by lane `sys` and were left
+in place.
+
+Correction to 02d072ed: v7 scoop_editor_data.s held 9 romslices, not 11
+(the 7,434 B figure was right).
