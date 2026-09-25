@@ -782,7 +782,7 @@ FadeSetGridCheck:
 Data_FadeSetGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 31457423
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -793,19 +793,19 @@ Data_FadeSetGridDispatch:
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (15202674:24)
-	ld_rrl	xwa, xbc, wa
-	cp	xwa, 4294967295
+	lda	xbc, (0xe7f972:24)
+	ld	xwa, (xbc+wa)
+	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	FadeSetGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 31457423
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -816,14 +816,14 @@ Data_FadeSetGridDispatch:
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (15202674:24)
-	ld_rrl	xwa, xbc, wa
-	cp	xwa, 4294967295
+	lda	xbc, (0xe7f972:24)
+	ld	xwa, (xbc+wa)
+	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
-	ldw	bc, 65535
+	ldw	bc, 0xffff
 	ld	de, 2:i3
 FadeSetGridCheck_Join:
 	call	MainLswAdd
@@ -832,14 +832,14 @@ FadeSetGridCheck_Join:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda	xix, (15202674:24)
+	lda	xix, (0xe7f972:24)
 	ld	xiz, (xsp+28)
 	jr	FadeSetGridCheck_Join2
 FadeSetGridCheck_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
+	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0	; cp xwa,(xix+iy) -- the backend cannot spell this form
 	jr	z, FadeSetGridCheck_Skip
 	inc	1, bc
 	ld	(xde), bc
@@ -853,31 +853,33 @@ FadeSetGridCheck_Skip:
 	ld	xwa, (xsp+28)
 	ld	xhl, (xwa)
 	lda	xde, (xwa+4)
-	cp	xhl, 10770
+	cp	xhl, 0x2a12
 	jr	z, FadeSetGridCheck_Skip2
-	cp	xhl, 10769
+	cp	xhl, 0x2a11
 	jr	z, FadeSetGridCheck_Skip2
-	cp	xhl, 10768
+	cp	xhl, 0x2a10
 	jr	z, FadeSetGridCheck_Skip2
-	cp	xhl, 10753
+	cp	xhl, 0x2a01
 	jr	z, FadeSetGridCheck_Entry
-	cp	xhl, 10752
+	cp	xhl, 0x2a00
 	jrl	nz, SndParam_ReturnZero2
 FadeSetGridCheck_Entry:
-	.byte 0x92, 0x04, 0x0b, 0xe7, 0x00, 0x0b, 0x9e, 0xf9
+	pushm	(xde)
+	pushw	231
+	pushw	0xf99e
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	SndParam_SendEventAndReturn
 FadeSetGridCheck_Skip2:
-	ld	xwa, 15202738
-	.byte 0x92, 0x3f, 0x00, 0x00
+	ld	xwa, NakaInst_OFF_WidgetTbl2_0x9C
+	cpw	(xde), 0
 	jr	z, FadeSetGridCheck_Skip3
-	ld	xwa, 15202732
+	ld	xwa, 0xe7f9ac
 FadeSetGridCheck_Skip3:
 	push	xwa
 	push	xbc
@@ -886,7 +888,7 @@ FadeSetGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	SndParam_SendEventAndReturn
 AcInOutGrid_Handler:
 	lda xde, (xsp + 4)
@@ -1063,7 +1065,7 @@ AcInOutGrid_Init:
 	cp	hl, 0:i3
 	jr	nz, AcInOutGrid_ScrollUp_AltTable
 	lda	xbc, (15202784:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	ld	bc, iz
 	sub	bc, wa
 	ld	de, bc
@@ -1140,7 +1142,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	cp	hl, 0:i3
 	jr	nz, AcInOutGrid_ScrollDown_AltTable	; -> 0xF75574
 	lda	xbc, (15202820:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	add	wa, iz
 	ld	de, wa
 	extz	xde
@@ -1294,7 +1296,7 @@ Data_InOutGridDispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 308 of 360 slots byte-identical
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 31457423
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1312,59 +1314,61 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
-	lda	xix, (NakaInst_DIRECT_E7FCE4_0x7A:24)
-	ld_rrw	bc, xix, bc
-	lda	xix, (16209704:24)
+	lda	xix, (0xe7fd5e:24)
+	ld	bc, (xix+bc)
+	lda	xix, (0xf75728:24)
 	jp_rr	8, xix, bc
-	ld	xwa, 8448
+	ld	xwa, 0x2100
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 8449
+	ld	xwa, 0x2101
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 20480
+	ld	xwa, 0x5000
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 20480
+	ld	xwa, 0x5000
 	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
 	jr	z, InOutGridCheck_Skip
 	cp	hl, 1:i3
 	jrl	nz, MdPreset_ReturnZero2
-	ld	xwa, 20481
+	ld	xwa, 0x5001
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
 InOutGridCheck_Skip:
-	ld	xwa, 20482
+	ld	xwa, 0x5002
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 8577
+	ld	xwa, 0x2181
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 8580
+	ld	xwa, 0x2184
 	ld	bc, 1:i3
-	.byte 0xda	; v10 does not spell this byte either
-	.byte 0xa9	; v10 does not spell this byte either
-	.byte 0x78	; v10 does not spell this byte either
-	.byte 0xe2	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
-	ld	xwa, 8578
+	; v10 does not spell this byte either
+	ld	de, 1:i3
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	jrl	InOutGridCheck_Join
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	xwa, 0x2182
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
-	ld	xwa, 8579
+	ld	xwa, 0x2183
 	ld	bc, 1:i3
 	ld	de, 1:i3
 	jrl	InOutGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 31457423
+	ld	xbc, 0x1e0008f
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1382,51 +1386,51 @@ InOutGridCheck_Skip:
 	cp	bc, 8
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
-	lda	xix, (NakaInst_DIRECT_E7FCE4_0x68:24)
-	ld_rrw	bc, xix, bc
-	lda	xix, (16209908:24)
+	lda	xix, (0xe7fd4c:24)
+	ld	bc, (xix+bc)
+	lda	xix, (0xf757f4:24)
 	jp_rr	8, xix, bc
-	ld	xwa, 8448
-	ldw	bc, 65535
+	ld	xwa, 0x2100
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-	ld	xwa, 8449
-	ldw	bc, 65535
+	ld	xwa, 0x2101
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-	ld	xwa, 20480
-	ldw	bc, 65535
+	ld	xwa, 0x5000
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-	ld	xwa, 20480
+	ld	xwa, 0x5000
 	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
 	jr	z, InOutGridCheck_Skip2
 	cp	hl, 1:i3
 	jrl	nz, MdPreset_ReturnZero2
-	ld	xwa, 20481
-	ldw	bc, 65535
+	ld	xwa, 0x5001
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
 InOutGridCheck_Skip2:
-	ld	xwa, 20482
-	ldw	bc, 65535
+	ld	xwa, 0x5002
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-	ld	xwa, 8577
-	ldw	bc, 65535
+	ld	xwa, 0x2181
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-	ld	xwa, 8580
-	ldw	bc, 65535
+	ld	xwa, 0x2184
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-	ld	xwa, 8578
-	ldw	bc, 65535
+	ld	xwa, 0x2182
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 	jr	InOutGridCheck_Join
-	ld	xwa, 8579
-	ldw	bc, 65535
+	ld	xwa, 0x2183
+	ldw	bc, 0xffff
 	ld	de, 1:i3
 InOutGridCheck_Join:
 	call	MainLswAdd
@@ -1437,31 +1441,31 @@ InOutGridCheck_Join:
 	ld	(xwa+4), xbc
 	ld	xix, (xiz)
 	lda	xbc, (xwa+2)
-	lda	xhl, (NakaInst_OFF_WidgetTbl2_0x37E:24)
-	cp	xix, 8579
+	lda	xhl, (0xe7fc94:24)
+	cp	xix, 0x2183
 	jrl	z, InOutGridCheck_Entry
-	cp	xix, 8578
+	cp	xix, 0x2182
 	jrl	z, InOutGridCheck_Skip13
-	cp	xix, 8580
+	cp	xix, 0x2184
 	jrl	z, InOutGridCheck_Skip12
 	lda	xwa, (xiz+4)
-	cp	xix, 8577
+	cp	xix, 0x2181
 	jrl	z, InOutGridCheck_Skip11
-	cp	xix, 20482
+	cp	xix, 0x5002
 	jrl	z, InOutGridCheck_Skip9
-	cp	xix, 20481
+	cp	xix, 0x5001
 	jrl	z, InOutGridCheck_Skip7
-	cp	xix, 20480
+	cp	xix, 0x5000
 	jr	z, InOutGridCheck_Skip4
-	cp	xix, 8449
+	cp	xix, 0x2101
 	jr	z, InOutGridCheck_Skip3
-	cp	xix, 8448
+	cp	xix, 0x2100
 	jrl	nz, MdPreset_ReturnZero2
 	ldw	(xbc), 0
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (NakaInst_OFF_E7FCA2_0x6:24)
-	ld_rrl	xwa, xbc, wa
+	lda	xbc, (0xe7fca8:24)
+	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1469,13 +1473,13 @@ InOutGridCheck_Join:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip3:
 	ldw	(xbc), 1
 	ld	wa, (xwa)
 	sla	wa, 2
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1483,12 +1487,12 @@ InOutGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip4:
 	ld	xix, xwa
 	ld	wa, (xwa)
-	lda	xhl, (ControlMode_Option_Table_0xA:24)
+	lda	xhl, (0xe7fcc4:24)
 	cp	wa, 2:i3
 	jr	z, InOutGridCheck_Skip6
 	cp	wa, 1:i3
@@ -1498,7 +1502,7 @@ InOutGridCheck_Skip4:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1506,18 +1510,18 @@ InOutGridCheck_Skip4:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 29360140
+	ld	xbc, 0x1c0000c
 	ld	xde, 0:i3
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip5:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1525,18 +1529,18 @@ InOutGridCheck_Skip5:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 29360140
+	ld	xbc, 0x1c0000c
 	ld	xde, 0:i3
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip6:
 	ldw	(xbc), 2
 	ld	wa, (xix)
 	sla	wa, 2
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1544,16 +1548,16 @@ InOutGridCheck_Skip6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 29360140
+	ld	xbc, 0x1c0000c
 	ld	xde, 0:i3
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip7:
 	ldw	(xbc), 3
-	ld	xwa, 20480
+	ld	xwa, 0x5000
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
 	jr	nz, InOutGridCheck_Skip8
@@ -1561,7 +1565,7 @@ InOutGridCheck_Skip7:
 	exts	wa
 	pushw	wa
 	pushw	231
-	pushw	64766
+	pushw	0xfcfe
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -1569,7 +1573,7 @@ InOutGridCheck_Skip7:
 	jr	InOutGridCheck_Join2
 InOutGridCheck_Skip8:
 	pushw	231
-	pushw	64772
+	pushw	0xfd04
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -1578,19 +1582,20 @@ InOutGridCheck_Join2:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip9:
 	ldw	(xbc), 3
-	ld	xwa, 20480
+	ld	xwa, 0x5000
 	call	AcApcToggleProc_Helper
 	cp	hl, 2:i3
 	jr	nz, InOutGridCheck_Skip10
-	.byte 0x9e	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	pushm	(xiz+4)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
 	pushw	231
-	pushw	64778
+	pushw	0xfd0a
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -1598,7 +1603,7 @@ InOutGridCheck_Skip9:
 	jr	InOutGridCheck_Join3
 InOutGridCheck_Skip10:
 	pushw	231
-	pushw	64784
+	pushw	0xfd10
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -1607,13 +1612,13 @@ InOutGridCheck_Join3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip11:
 	ldw	(xbc), 5
 	ld	wa, (xwa)
 	sla	wa, 2
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1621,13 +1626,13 @@ InOutGridCheck_Skip11:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip12:
 	ldw	(xbc), 6
 	ld	wa, (xiz+4)
 	sla	wa, 2
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1635,13 +1640,13 @@ InOutGridCheck_Skip12:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip13:
 	ldw	(xbc), 7
 	ld	wa, (xiz+4)
 	sla	wa, 2
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1649,17 +1654,16 @@ InOutGridCheck_Skip13:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Entry:
-	.byte 0xb1	; v10 does not spell this byte either
-	push	sr
-	ld	(0:8), 158:io
-	.byte 0x04	; v10 does not spell this byte either
-	ld	a, 217:opc
-	.byte 0xec	; v10 does not spell this byte either
-	push	sr
-	ld_rrl	xwa, xhl, bc
+	; v10 does not spell this byte either
+	ldw	(xbc), 8
+	ld	bc, (xiz+4)
+	; v10 does not spell this byte either
+	sla	bc, 2
+	; v10 does not spell this byte either
+	ld	xwa, (xhl+bc)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -1667,7 +1671,7 @@ InOutGridCheck_Entry:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, 0x1e0008c
 	jrl	InOutGridCheck_Join4
 ParaLoadOpt_Entry:
 	lda xde, (xsp + 4)
@@ -1697,7 +1701,7 @@ Data_ParaLoadOptDispatch:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (15203496:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1712,7 +1716,7 @@ Data_ParaLoadOptDispatch:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (15203476:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1727,7 +1731,7 @@ Data_ParaLoadOptDispatch:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (15203524:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1846,7 +1850,7 @@ InOutGridCheck_Skip17:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (15203476:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1861,7 +1865,7 @@ InOutGridCheck_Skip17:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (15203476:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1876,7 +1880,7 @@ InOutGridCheck_Skip17:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (15203476:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -1891,7 +1895,7 @@ InOutGridCheck_Skip17:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (15203476:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -2251,10 +2255,10 @@ MainMpst_HandlePresetCopy:
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
 	ld	xde, 27263214
-	call	16423243
+	call	ApPostEvent
 	ld	xwa, (xsp)
 	extz	wa
-	call	16600558
+	call	SndParam_AllocAndCopyPreset
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, 29360150
@@ -2272,16 +2276,26 @@ MainMpst_ReadPresetIndex:
 	ret
 
 TtMdExc:
-	.byte 0xe9, 0xcf, 0x0c, 0x00, 0xc0, 0x01, 0x66, 0x3a
-	.byte 0xe9, 0xcf, 0x0b, 0x00, 0xc0, 0x01, 0x66, 0x32
-	.byte 0xe9, 0xcf, 0x02, 0x00, 0xc0, 0x01, 0x66, 0x22
-	.byte 0xe9, 0xcf, 0x01, 0x00, 0xc0, 0x01, 0x6e, 0x22
-	.byte 0xea, 0xe2, 0x6e, 0x1e, 0xf1, 0x46, 0xb7, 0xbe
-	.byte 0x40, 0x03, 0x00, 0x57, 0x00, 0x1d, 0x59, 0x5e
-	.byte 0xfa, 0xab, 0x26, 0x20, 0xb0, 0x02, 0x00, 0x00
-	.byte 0x68, 0x08
+	cp	xbc, 0x1c0000c
+	jr	z, TtMdExc_ReturnZero
+	cp	xbc, 0x1c0000b
+	jr	z, TtMdExc_ReturnZero
+	cp	xbc, 0x1c00002
+	jr	z, TtMdExc_HandleClose
+	cp	xbc, 0x1c00001
+	jr	nz, TtMdExc_ReturnZero
+	or	xde, xde
+	jr	nz, TtMdExc_ReturnZero
+	set	6, (0xb746:16)
+	ld	xwa, 0x570003
+	call	GetViewInstance
+	ld	xwa, (xhl+38)
+	ldw	(xwa), 0
+	jr	TtMdExc_ReturnZero
 TtMdExc_HandleClose:
-	.byte 0xea, 0xe2, 0x6e, 0x04, 0xf1, 0x46, 0xb7, 0xb6
+	or	xde, xde
+	jr	nz, TtMdExc_ReturnZero
+	res	6, (0xb746:16)
 TtMdExc_ReturnZero:
 	ld xhl, 0:i3
 	ret
