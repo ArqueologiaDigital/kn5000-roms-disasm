@@ -324,12 +324,13 @@ WndEvt_EventCodeDispatch:
 	call	SendEvent
 	ld	xwa, (xsp+50)
 	ld	xbc, (xsp+46)
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x2a	; v10 does not spell this byte either
-	.byte 0x22	; v10 does not spell this byte either
-	.byte 0x78	; v10 does not spell this byte either
-	.byte 0x36	; v10 does not spell this byte either
-	pop	sr
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	xde, (xsp+42)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	jrl	WndEvt_EventCodeDispatch_Join3
 	ld	wa, (160984:24)
 	ld	bc, wa
 	inc	1, bc
@@ -410,9 +411,10 @@ WndEvt_EventCodeDispatch_Skip:
 	ld	(xsp+4), xwa
 	extz	xbc
 	sll	xbc, 2
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x81	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xbc, (xsp+4)
 	ld	xwa, (xbc)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
@@ -445,25 +447,27 @@ WndEvt_EventCodeDispatch_Skip2:
 	ld	wa, (160990:24)
 	extz	xwa
 	sll	xwa, 2
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+4)
 	ld	xwa, (xwa)
 	ld	xbc, (xsp+8)
 	call	ConvertStrings
-	ld	wa, (160994:24)
+	ld	wa, (0x0274e2:24)
 	mul	wa, 3
-	add	wa, (160986:24)
+	addda16_24	xwa, (0x0274da)
 	extz	xwa
 	add	xwa, xwa
 	lda	xde, (Data_SoundEditorCharsLayout_0xC:24)
 	ld	xbc, xde
 	add	xbc, xwa
-	ld	wa, (160990:24)
+	ld	wa, (0x0274de:24)
 	ld	hl, wa
 	add	hl, 12
-	.byte 0x91	; v10 does not spell this byte either
-	.byte 0xf3	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	hl, (xbc)
 	jr	ugt, WndEvt_EventCodeDispatch_Skip4
 	ld	c, (xsp+12)
 	cp	c, 90
@@ -472,53 +476,56 @@ WndEvt_EventCodeDispatch_Skip2:
 	jr	nz, WndEvt_EventCodeDispatch_Skip4
 WndEvt_EventCodeDispatch_Skip3:
 	dec	1, wa
-	ld	(160990:24), wa
+	ld	(0x0274de:24), wa
 WndEvt_EventCodeDispatch_Skip4:
-	ld	bc, (160994:24)
+	ld	bc, (0x0274e2:24)
 	mul	bc, 3
-	ld	wa, (160986:24)
+	ld	wa, (0x0274da:24)
 	add	bc, wa
 	extz	xbc
 	add	xbc, xbc
 	add	xde, xbc
-	ld	wa, (160990:24)
+	ld	wa, (0x0274de:24)
 	ld	bc, wa
 	add	bc, 13
-	.byte 0x92	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	bc, (xde)
 	jrl	ugt, UIDialog_ReturnZeroJmp
 	ld	bc, wa
 	add	bc, 13
-	ld	(160990:24), bc
-	ld	wa, (160986:24)
+	ld	(0x0274de:24), bc
+	ld	wa, (0x0274da:24)
 	extz	xwa
 	sll	xwa, 2
-	.byte 0x42	; v10 does not spell this byte either
-	.byte 0xd2	; v10 does not spell this byte either
-	.byte 0x9e	; v10 does not spell this byte either
-	.byte 0xea	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	xde, Data_SoundEditorCharsLayout
 	add	xde, xwa
 	ld	xwa, (xde)
 	ld	(xsp+4), xwa
 	extz	xbc
 	sll	xbc, 2
 	ld	xwa, xbc
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+4)
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	lda	xwa, (160944:24)
+	lda	xwa, (0x0274b0:24)
 	cp	c, 83
 	jr	nz, WndEvt_EventCodeDispatch_Skip5
-	.byte 0x8a	; v10 does not spell this byte either
-	.byte 0x01	; v10 does not spell this byte either
-	push	xsp
-	.byte 0x50	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	(xde+1), 80
 	jr	nz, WndEvt_EventCodeDispatch_Skip5
 	ld	bc, (160984:24)
 	extz	xbc
@@ -565,29 +572,31 @@ WndEvt_EventCodeDispatch_Join:
 	ld	wa, (160990:24)
 	ld	de, wa
 	inc	1, de
-	.byte 0x91	; v10 does not spell this byte either
-	.byte 0xf2	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	de, (xbc)
 	jrl	ugt, UIDialog_ReturnZeroJmp
 	inc	1, wa
-	ld	(160990:24), wa
+	ld	(0x0274de:24), wa
 	extz	xwa
 	sll	xwa, 2
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+4)
 	lda	xbc, (xsp+12)
 	ld	xwa, (xwa)
 	call	ConvertStrings
 	lda	xde, (xsp+12)
 	ld	c, (xde)
-	ld	wa, (160984:24)
+	ld	wa, (0x0274d8:24)
 	extz	xwa
 	cp	c, 83
 	jr	nz, WndEvt_EventCodeDispatch_Skip6
-	.byte 0x8a	; v10 does not spell this byte either
-	.byte 0x01	; v10 does not spell this byte either
-	push	xsp
-	.byte 0x50	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	(xde+1), 80
 	jr	nz, WndEvt_EventCodeDispatch_Skip6
 	ld	xbc, 160944
 	add	xbc, xwa
@@ -704,31 +713,31 @@ WndEvt_EventCodeDispatch_Skip8:
 	jr	ule, WndEvt_EventCodeDispatch_Skip9
 	lda	xhl, (160944:24)
 	ld	a, (xbc)
+WndEvt_EventCodeDispatch_Skip8_Loop:
 	ld	bc, iz
 	extz	xbc
 	ld	xix, xhl
 	add	xix, xbc
-	.byte 0x84	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
-	jr	nz, 9
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	a, (xix)
+	jr	nz, WndEvt_EventCodeDispatch_Skip9
 	inc	1, qiz
 	inc	1, iz
 	cp	iz, de
-	jr	c, -21
+	jr	c, WndEvt_EventCodeDispatch_Skip8_Loop
 WndEvt_EventCodeDispatch_Skip9:
 	ld	wa, qiz
 	cp	wa, de
-	jrl	z, 1103
-	.byte 0xbf	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	push	sr
-	nop
-	nop
+	jrl	z, UIDialog_ReturnZeroJmp
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ldw	(xsp+4), 0
 	ld	iz, 0:i3
 	cp	de, 0:i3
-	jr	ule, 37
-	lda	xbc, (160944:24)
-	ld	xwa, (160996:24)
+	jr	ule, WndEvt_EventCodeDispatch_Skip10
+	lda	xbc, (0x0274b0:24)
+	ld	xwa, (0x0274e4:24)
 	ld	a, (xwa)
 WndEvt_EventCodeDispatch_Loop3:
 	ld	hl, de
@@ -737,8 +746,9 @@ WndEvt_EventCodeDispatch_Loop3:
 	extz	xhl
 	ld	xix, xbc
 	add	xix, xhl
-	.byte 0x84	; v10 does not spell this byte either
-	.byte 0xf1	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	a, (xix)
 	jr	nz, WndEvt_EventCodeDispatch_Skip10
 	incw	1, (xsp+4)
 	inc	1, iz
@@ -749,54 +759,52 @@ WndEvt_EventCodeDispatch_Skip10:
 	ld	(xsp+6), wa
 	ld	wa, (xsp+4)
 	add	(xsp+6), wa
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	jrl	nc, 25050
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	srlw	(xsp+6)
+	inc	1, de
 	pushw	de
-	call	16713379
+	call	SLIDE_Decompress_4K_Init_Helper2
 	ld	(xsp+10), xhl
 	ld	wa, qiz
 	extz	xwa
-	ld	xbc, 160944
+	ld	xbc, 0x0274b0
 	add	xbc, xwa
 	push	xbc
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	Free_Compare2
-	ld	wa, (160982:24)
-	.byte 0xd7	; v10 does not spell this byte either
-	swi	2
-	.byte 0xa0	; v10 does not spell this byte either
-	.byte 0x9f	; v10 does not spell this byte either
-	ret
-	or	(xwa), xwa
-	ccf
-	.byte 0xaf	; v10 does not spell this byte either
-	ccf
-	.byte 0x80	; v10 does not spell this byte either
+	ld	wa, (0x0274d6:24)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	sub	wa, qiz
+	sub	wa, (xsp+14)	; v10 does not spell this byte either
+	extz	xwa
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	xwa, (xsp+18)
 	ld	(xwa), 0
 	ld	xwa, (xsp+18)
 	push	xwa
 	ld	wa, (xsp+20)
 	extz	xwa
-	ld	xbc, 160944
+	ld	xbc, 0x0274b0
 	add	xbc, xwa
 	push	xbc
 	call	Free_Compare2
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16712469
+	call	SLIDE_Decompress_4K_Init_Helper
 	lda	xsp, (xsp+22)
 	ld	iz, 0:i3
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	push	xsp
-	nop
-	nop
-	jr	ule, 31
-	lda	xde, (160944:24)
-	ld	xhl, (160996:24)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cpw	(xsp+6), 0
+	jr	ule, WndEvt_EventCodeDispatch_Skip10_Skip
+	lda	xde, (0x0274b0:24)
+	ld	xhl, (0x0274e4:24)
 	ld	xbc, 0:i3
+WndEvt_EventCodeDispatch_Skip10_Loop:
 	ld	xwa, xbc
 	ld	xix, xde
 	add	xix, xwa
@@ -804,24 +812,28 @@ WndEvt_EventCodeDispatch_Skip10:
 	ld	(xix), a
 	inc	1, iz
 	inc	1, xbc
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	.byte 0xf6	; v10 does not spell this byte either
-	jr	c, -19
-	.byte 0xd7	; v10 does not spell this byte either
-	swi	2
-	.byte 0x89	; v10 does not spell this byte either
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0x81	; v10 does not spell this byte either
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	.byte 0xa1	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	iz, (xsp+6)
+	jr	c, WndEvt_EventCodeDispatch_Skip10_Loop
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+WndEvt_EventCodeDispatch_Skip10_Skip:
+	ld	bc, qiz
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	bc, (xsp+4)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	sub	bc, (xsp+6)
 	ld	wa, (160982:24)
 	ld	iz, wa
 	sub	iz, bc
 	cp	iz, wa
-	jr	nc, 35
+	jr	nc, WndEvt_EventCodeDispatch_Skip10_Skip2
 	lda	xde, (160944:24)
 	ld	xhl, (160996:24)
 	ld	bc, iz
@@ -836,6 +848,7 @@ WndEvt_EventCodeDispatch_Loop4:
 	inc	1, xbc
 	cp	iz, (160982:24)
 	jr	c, WndEvt_EventCodeDispatch_Loop4
+WndEvt_EventCodeDispatch_Skip10_Skip2:
 	ld	xwa, 22
 	ld	xbc, 29360143
 	ld	xde, 160944
@@ -844,14 +857,12 @@ WndEvt_EventCodeDispatch_Loop4:
 	extz	xde
 	ld	xwa, (xsp+50)
 	ld	xbc, 31457408
-	jrl	820
+	jrl	WndScroll_SendAndReturn
 	ld	iz, 0:i3
-	.byte 0xd2	; v10 does not spell this byte either
-	.byte 0xd6	; v10 does not spell this byte either
-	jrl	ov, 16130
-	nop
-	nop
-	jr	ule, 30
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cpw	(0x0274d6:24), 0
+	jr	ule, WndEvt_EventCodeDispatch_Loop4_Skip
 	lda	xde, (160944:24)
 	ld	xhl, xbc
 	ld	xbc, 0:i3
@@ -865,6 +876,7 @@ WndEvt_EventCodeDispatch_Loop5:
 	inc	1, xbc
 	cp	iz, (160982:24)
 	jr	c, WndEvt_EventCodeDispatch_Loop5
+WndEvt_EventCodeDispatch_Loop4_Skip:
 	ld	xwa, 22
 	ld	xbc, 31457408
 	ld	xde, 0:i3
@@ -2018,9 +2030,9 @@ EditSw_ByteData:
 	calr	GetEditSwPoint
 	lda	xwa, (xsp+18)
 	lda	xbc, (xsp+12)
-	.byte 0x98, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xwa+2), 239
 	jr	z, DrawDesignFrame_Skip2
-	.byte 0x90, 0x3f, 0x00, 0x00
+	cpw	(xwa), 0
 	jr	nz, DrawDesignFrame_Skip
 	ld	xwa, 15376742
 	jr	DrawDesignFrame_Join
@@ -2074,23 +2086,23 @@ DrawDesignFrame_Skip3:
 	exts	xwa
 	divs	wa, 2
 	lda	xix, (xsp+22)
-	.byte 0x91, 0x3f, 0x00, 0x00
+	cpw	(xbc), 0
 	jr	nz, DrawDesignFrame_Entry
 	ldw	(xix), 65534
 	ld	de, (xbc+2)
 	sub	de, wa
 	ld	(xix+2), de
 DrawDesignFrame_Entry:
-	.byte 0x91, 0x3f, 0x3f, 0x01
+	cpw	(xbc), 319
 	jr	nz, DrawDesignFrame_Entry2
 	ldw	de, 318
-	.byte 0x9f, 0x06, 0xa2
+	sub	de, (xsp+6)
 	ld	(xix), de
 	ld	de, (xbc+2)
 	sub	de, wa
 	ld	(xix+2), de
 DrawDesignFrame_Entry2:
-	.byte 0x99, 0x02, 0x3f, 0xef, 0x00
+	cpw	(xbc+2), 239
 	jr	nz, DrawDesignFrame_Skip4
 	ld	wa, (xsp+6)
 	exts	xwa
@@ -2105,7 +2117,7 @@ DrawDesignFrame_Entry2:
 DrawDesignFrame_Skip4:
 	lda	xde, (xix+4)
 	ld	wa, (xsp+6)
-	.byte 0x94, 0x80
+	add	wa, (xix)
 	inc	1, wa
 	ld	(xde), wa
 	lda	xiy, (xix+6)
@@ -2149,17 +2161,30 @@ DrawEditSw_SelectVariantA:
 	jr DrawEditSw_CopyVariant
 
 DrawEditSw_SelectVariantC:
-	ld xwa, Data_SoundEditorCharsLayout_0x2A8
+	ld	xwa, Data_SoundEditorCharsLayout_0x2A8
 
 DrawEditSw_CopyVariant:
-	.byte 0x38, 0x39, 0x1d, 0x70, 0x07, 0xff, 0xef, 0x60
-	.byte 0xbf, 0x02, 0x30, 0xe9, 0xa8, 0x1d, 0xc4, 0x22
-	.byte 0xfb, 0xdb, 0x8e, 0xe8, 0xa8, 0x1d, 0xfd, 0x21
-	.byte 0xfb, 0xbf, 0x08, 0x31, 0xdb, 0x8a, 0xea, 0x13
-	.byte 0xda, 0x0b, 0x02, 0x00, 0xbf, 0x0c, 0x30, 0x91
-	.byte 0x3f, 0x00, 0x00, 0x6e, 0x0c, 0xb0, 0x02, 0xfe
-	.byte 0xff, 0x99, 0x02, 0x24, 0xda, 0xa4, 0xb8, 0x02
-	.byte 0x54
+	push	xwa
+	push	xbc
+	call	Free_Compare2
+	inc	8, xsp
+	lda	xwa, (xsp+2)
+	ld	xbc, 0:i3
+	call	CalcTotalWidth
+	ld	iz, hl
+	ld	xwa, 0:i3
+	call	GetCharHeight
+	lda	xbc, (xsp+8)
+	ld	de, hl
+	exts	xde
+	divs	de, 2
+	lda	xwa, (xsp+12)
+	cpw	(xbc), 0
+	jr	nz, DrawEditSw_PositionLeft
+	ldw	(xwa), 65534
+	ld	ix, (xbc+2)
+	sub	ix, de
+	ld	(xwa+2), ix
 DrawEditSw_PositionLeft:
 	cpw (xbc), 0x13f
 	jr nz, DrawEditSw_PositionRight
@@ -2292,16 +2317,32 @@ TextBox_DrawLineLoop:
 	pushw 0xa17e
 	push XIZ
 	call DrawEditSw_CopyVariant_Code_Helper
-	inc 0,XSP
-	.byte 0xf3, 0x07, 0xf8, 0xec, 0x30, 0xbf, 0x0a, 0x60
-	.byte 0xb0, 0x00, 0x00, 0xbf, 0x1a, 0x30, 0x98, 0x04
-	.byte 0x22, 0x90, 0xa2, 0xaf, 0x12, 0x20, 0xa8, 0x1e
-	.byte 0x21, 0xee, 0x88, 0x1d, 0x4d, 0x23, 0xfb, 0xbf
-	.byte 0x0e, 0x53, 0x3e, 0x1d, 0xc3, 0x07, 0xff, 0xef
-	.byte 0x64, 0x9f, 0x0e, 0x20, 0xdb, 0xf0, 0x66, 0x17
-	.byte 0xaf, 0x0a, 0x20, 0xb0, 0x00, 0x0d, 0x9f, 0x0e
-	.byte 0x20, 0xe8, 0x13, 0xee, 0x80, 0xbf, 0x0a, 0x60
-	.byte 0xf4, 0xe0, 0x00, 0x00, 0xbf, 0x0a, 0x60
+	inc	8, xsp
+	lda_rr	xwa, xiz, hl	; lda xwa, xiz+hl
+	ld	(xsp+10), xwa
+	ld	(xwa), 0
+	lda	xwa, (xsp+26)
+	ld	de, (xwa+4)
+	sub	de, (xwa)
+	ld	xwa, (xsp+18)
+	ld	xbc, (xwa+30)
+	ld	xwa, xiz
+	call	WordwrapStrings
+	ld	(xsp+14), hl
+	push	xiz
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	4, xsp
+	ld	wa, (xsp+14)
+	cp	wa, hl
+	jr	z, TextBox_CheckMoreText
+	ld	xwa, (xsp+10)
+	ld	(xwa), 13
+	ld	wa, (xsp+14)
+	exts	xwa
+	add	xwa, xiz
+	ld	(xsp+10), xwa
+	stib_dpd	224, 0
+	ld	(xsp+10), xwa
 TextBox_CheckMoreText:
 	ld wa, (xsp + 8)
 	mrdw3 0x9f, 0x10, 0x40
@@ -4376,16 +4417,10 @@ DrawDesignBox_QueueCallback:
 	lda	xhl, (xwa+4)
 	ld	bc, (xwa+12)
 	ld	de, (xwa+14)
-	.byte 0xd2
-	popw	iz
-	max
-	pop	sr
-	push	xsp
-	nop
-	nop
+	cpw	(0x03044e:24), 0
 	ret	z
 	ld	xwa, xhl
-	calr	1
+	calr	DrawDesignBox_Impl
 	ret
 
 DrawDesignBox_Impl:
@@ -6126,7 +6161,7 @@ DrawDesignBox_Impl_Loop2:
 	ld	xbc, xiz
 	sub	xbc, xde
 	inc	1, xiz
-	.byte 0xaf, 0x04, 0x81
+	add	xbc, (xsp+4)
 	ld	c, (xbc)
 	ld	(xhl), c
 	inc	1, iy
@@ -6264,23 +6299,43 @@ SplashBMP_DecodePalette:
 	add (xsp + 6), xwa
 	ld xbc, (xsp + 6)
 	cp xbc, (xsp + 30)
-	jr c, SplashBMP_DecodePalette
+	jr	c, SplashBMP_DecodePalette
 
 SplashBMP_ReadInfoHeader:
-	.byte 0xf3, 0xfd, 0x22, 0x04, 0x31, 0xa9, 0x04, 0x20
-	.byte 0xbf, 0x0e, 0x60, 0xa9, 0x08, 0x20, 0xbf, 0x02
-	.byte 0x60, 0x40, 0x08, 0x00, 0x00, 0x00, 0x99, 0x0e
-	.byte 0x50, 0xe8, 0x12, 0xbf, 0x1e, 0x60, 0xe8, 0xec
-	.byte 0x02, 0xe8, 0x89, 0xe8, 0x69, 0xaf, 0x0e, 0x80
-	.byte 0x1d, 0x31, 0x04, 0xff, 0xbf, 0x12, 0x63, 0xeb
-	.byte 0xec, 0x02, 0xbf, 0x12, 0x63, 0xeb, 0x88, 0xaf
-	.byte 0x1e, 0x21, 0x1d, 0x7f, 0x02, 0xff, 0x2b, 0x1d
-	.byte 0xa3, 0x06, 0xff, 0xef, 0x62, 0xbf, 0x1e, 0x63
-	.byte 0xaf, 0x1e, 0x20, 0xbf, 0x1a, 0x60, 0xaf, 0x02
-	.byte 0x20, 0xe8, 0xcf, 0xf0, 0x00, 0x00, 0x00, 0x62
-	.byte 0x46, 0xe8, 0xa8, 0xbf, 0x06, 0x60, 0xaf, 0x02
-	.byte 0x20, 0xe8, 0xca, 0xf0, 0x00, 0x00, 0x00, 0x62
-	.byte 0x2e
+	lda	xbc, (xsp+1058)
+	ld	xwa, (xbc+4)
+	ld	(xsp+14), xwa
+	ld	xwa, (xbc+8)
+	ld	(xsp+2), xwa
+	ld	xwa, 8
+	div	wa, (xbc+14)
+	extz	xwa
+	ld	(xsp+30), xwa
+	sla	xwa, 2
+	ld	xbc, xwa
+	dec	1, xwa
+	add	xwa, (xsp+14)
+	call	0xff0431
+	ld	(xsp+18), xhl
+	sla	xhl, 2
+	ld	(xsp+18), xhl
+	ld	xwa, xhl
+	ld	xbc, (xsp+30)
+	call	InitializeKubo_Helper
+	pushw	hl
+	call	SLIDE_Decompress_4K_Init_Helper2
+	inc	2, xsp
+	ld	(xsp+30), xhl
+	ld	xwa, (xsp+30)
+	ld	(xsp+26), xwa
+	ld	xwa, (xsp+2)
+	cp	xwa, 240
+	jr	le, SplashBMP_PrepareRowBuffer
+	ld	xwa, 0:i3
+	ld	(xsp+6), xwa
+	ld	xwa, (xsp+2)
+	sub	xwa, 240
+	jr	le, SplashBMP_ClampHeight
 SplashBMP_SkipExcessRows:
 	ld xwa, (xsp + 30)
 	ld xbc, (xsp + 18)
@@ -6362,15 +6417,26 @@ SplashBMP_WideImage:
 	ld	xwa, 320
 	call	16712753
 	cp	xhl, 0
-	jr	le, 51
+	jr	le, SplashBMP_CopyRemainder
 SplashBMP_TileNarrow:
-	.byte 0xaf, 0x0e, 0x20, 0x28, 0xaf, 0x1c, 0x20, 0x38
-	.byte 0xaf, 0x10, 0x20, 0xaf, 0x14, 0x21, 0x1d, 0x7f
-	.byte 0x02, 0xff, 0xaf, 0x1c, 0x83, 0x3b, 0x1d, 0xbc
-	.byte 0x05, 0xff, 0xbf, 0x0a, 0x37, 0xe8, 0xa9, 0xaf
-	.byte 0x0a, 0x88, 0xaf, 0x0e, 0x21, 0x40, 0x40, 0x01
-	.byte 0x00, 0x00, 0x1d, 0x31, 0x04, 0xff, 0xaf, 0x0a
-	.byte 0xfb, 0x61, 0xcd
+	ld	xwa, (xsp+14)
+	pushw	wa
+	ld	xwa, (xsp+28)
+	push	xwa
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+20)
+	call	InitializeKubo_Helper
+	add	xhl, (xsp+28)
+	push	xhl
+	call	0xff05bc
+	lda	xsp, (xsp+10)
+	ld	xwa, 1:i3
+	add	(xsp+10), xwa
+	ld	xbc, (xsp+14)
+	ld	xwa, 320
+	call	0xff0431
+	cp	(xsp+10), xhl
+	jr	lt, SplashBMP_TileNarrow
 SplashBMP_CopyRemainder:
 	ld xwa, (xsp + 10)
 
@@ -6411,7 +6477,7 @@ SplashBMP_CopyToFramebuffer:
 
 	cp xwa, (xsp + 2)
 
-	.byte 0x71, 0x33, 0xff	; jrl lt, SplashBMP_ReadRowLoop (v7 displacement)
+	jrl	lt, SplashBMP_ReadRowLoop	; jrl lt, SplashBMP_ReadRowLoop (v7 displacement)
 
 
 
@@ -6466,18 +6532,36 @@ Gfx_ProcessSplashData:
 	ld (XSP+0x1c),XWA
 	cpw (XSP+0x16), 0x0018
 	jrl z, SplashData_Epilogue
-	ld XIZ,0x00000008
-	.byte 0x9f, 0x16, 0x56, 0xde, 0x88, 0xe8, 0x12, 0xaf
-	.byte 0x18, 0x21, 0x1d, 0x7f, 0x02, 0xff, 0xbf, 0x12
-	.byte 0x63, 0x9f, 0x16, 0x3f, 0x01, 0x00, 0x66, 0x73
-	.byte 0x9f, 0x16, 0x3f, 0x04, 0x00, 0x7e, 0x41, 0x01
-	.byte 0xbf, 0x08, 0x56, 0xaf, 0x12, 0x20, 0xbf, 0x04
-	.byte 0x60, 0x2b, 0x1d, 0xa3, 0x06, 0xff, 0xbf, 0x10
-	.byte 0x63, 0xaf, 0x10, 0x21, 0xbf, 0x0c, 0x61, 0xaf
-	.byte 0x14, 0x20, 0x28, 0xaf, 0x20, 0x20, 0x38, 0x39
-	.byte 0x1d, 0xbc, 0x05, 0xff, 0xbf, 0x0c, 0x37, 0xe9
-	.byte 0xa8, 0xaf, 0x12, 0x20, 0xe8, 0xcf, 0x00, 0x00
-	.byte 0x00, 0x00, 0x62, 0x30
+	ld	xiz, 8
+	div	iz, (xsp+22)
+	ld	wa, iz
+	extz	xwa
+	ld	xbc, (xsp+24)
+	call	InitializeKubo_Helper
+	ld	(xsp+18), xhl
+	cpw	(xsp+22), 1
+	jr	z, SplashData_1bppSetup
+	cpw	(xsp+22), 4
+	jrl	nz, SplashData_Epilogue
+	ld	(xsp+8), iz
+	ld	xwa, (xsp+18)
+	ld	(xsp+4), xwa
+	pushw	hl
+	call	SLIDE_Decompress_4K_Init_Helper2
+	ld	(xsp+16), xhl
+	ld	xbc, (xsp+16)
+	ld	(xsp+12), xbc
+	ld	xwa, (xsp+20)
+	pushw	wa
+	ld	xwa, (xsp+32)
+	push	xwa
+	push	xbc
+	call	0xff05bc
+	lda	xsp, (xsp+12)
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+18)
+	cp	xwa, 0
+	jr	le, SplashData_4bppFree
 SplashData_4bppLoop:
 	ld xde, xbc
 	add xde, (xsp + 28)
@@ -6927,25 +7011,48 @@ CaptureLcd:
 	ld XWA,0x000000f0
 	ld (XBC+0x08),XWA
 	ldw (XBC+0x0c), 0x0001
-	ldw (XBC+0x0e), 0x0008
-	.byte 0xe8, 0xa8, 0xb9, 0x10, 0x60, 0x40, 0x00, 0x2c
-	.byte 0x01, 0x00, 0xb9, 0x14, 0x60, 0xe8, 0xa8, 0xb9
-	.byte 0x18, 0x60, 0xb9, 0x1c, 0x60, 0x40, 0x00, 0x01
-	.byte 0x00, 0x00, 0xb9, 0x20, 0x60, 0xb9, 0x24, 0x60
-	.byte 0xe2, 0x4a, 0x04, 0x03, 0x20, 0x38, 0x0b, 0xea
-	.byte 0x00, 0x0b, 0x50, 0xae, 0xbf, 0x12, 0x30, 0x38
-	.byte 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x14, 0x37, 0xe8
-	.byte 0xa9, 0xe2, 0x4a, 0x04, 0x03, 0x88, 0x1d, 0x13
-	.byte 0x91, 0xf8, 0x1d, 0x70, 0x94, 0xf8, 0xbf, 0x02
-	.byte 0x30, 0x41, 0x5e, 0xae, 0xea, 0x00, 0x1d, 0xba
-	.byte 0x87, 0xf8, 0xdb, 0xd8, 0x7e, 0x12, 0x01, 0xf3
-	.byte 0xfd, 0x3a, 0x04, 0x30, 0x41, 0x0e, 0x00, 0x00
-	.byte 0x00, 0x1d, 0x1b, 0x8a, 0xf8, 0xeb, 0xcf, 0x0e
-	.byte 0x00, 0x00, 0x00, 0x7e, 0xf7, 0x00, 0xf3, 0xfd
-	.byte 0x12, 0x04, 0x30, 0x41, 0x28, 0x00, 0x00, 0x00
-	.byte 0x1d, 0x1b, 0x8a, 0xf8, 0xeb, 0xcf, 0x28, 0x00
-	.byte 0x00, 0x00, 0x7e, 0xe0, 0x00, 0xde, 0xa8, 0xe2
-	.byte 0x94, 0xef, 0x03, 0x20, 0xe8, 0xe0, 0x66, 0x4d
+	ldw	(xbc+14), 8
+	ld	xwa, 0:i3
+	ld	(xbc+16), xwa
+	ld	xwa, 0x012c00
+	ld	(xbc+20), xwa
+	ld	xwa, 0:i3
+	ld	(xbc+24), xwa
+	ld	(xbc+28), xwa
+	ld	xwa, 256
+	ld	(xbc+32), xwa
+	ld	(xbc+36), xwa
+	ld	xwa, (0x03044a:24)
+	push	xwa
+	pushw	234
+	pushw	44624
+	lda	xwa, (xsp+18)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+20)
+	ld	xwa, 1:i3
+	addl_da	(0x03044a), xwa
+	call	GetDiskSizeInfo
+	call	GetEncodedFileSizeData
+	lda	xwa, (xsp+2)
+	ld	xbc, Str_No_0xB48
+	call	FileIO_OpenWithMode
+	cp	hl, 0:i3
+	jrl	nz, CaptureLcd_WriteFailed
+	lda	xwa, (xsp+1082)
+	ld	xbc, 14
+	call	FileIO_WriteByte_Impl
+	cp	xhl, 14
+	jrl	nz, FileIO_ClosePath
+	lda	xwa, (xsp+1042)
+	ld	xbc, 40
+	call	FileIO_WriteByte_Impl
+	cp	xhl, 40
+	jrl	nz, FileIO_ClosePath
+	ld	iz, 0:i3
+	ld	xwa, (0x03ef94:24)
+	or	xwa, xwa
+	jr	z, CaptureLcd_WritePaletteNoOr94
 CaptureLcd_WritePaletteOr94:
 	ld wa, iz
 	call Table_LookupDword
@@ -7623,16 +7730,10 @@ ColorBlit_CallbackBlock:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	ld	(0x03efaa:24), c
-	.byte 0xd2
-	popw	iz
-	max
-	pop	sr
-	push	xsp
-	nop
-	nop
+	cpw	(0x03044e:24), 0
 	ret	z
 	ld	bc, de
-	calr	1
+	calr	ColorBlit_Impl
 	ret
 
 ColorBlit_Impl:
@@ -7925,16 +8026,10 @@ ColorBlit2_CallbackBlock:
 	ld	de, (xbc+12)
 	ld	c, (xbc+14)
 	ld	(0x03efaa:24), c
-	.byte 0xd2
-	popw	iz
-	max
-	pop	sr
-	push	xsp
-	nop
-	nop
+	cpw	(0x03044e:24), 0
 	ret	z
 	ld	bc, de
-	calr	1
+	calr	ColorBlit2_Impl
 	ret
 
 ColorBlit2_Impl:
@@ -8214,4 +8309,1685 @@ ColorBlit2_PopReturn:
 	ret
 
 ColorBlit2_LargeCodeBlock:
-	.incbin "includes/romslices/v7_fix_colorblit2_largecodeblock.bin"
+	dec	6, xsp
+	push	xiz
+	ld	(xsp+4), de
+	ld	(xsp+6), xbc
+	ld	xiz, xwa
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
+	cp	hl, 0:i3
+	jr	z, ColorBlit2_LargeCodeBlock_Skip
+	ld	a, (0x03efa8:24)
+	ld	(0x03efaa:24), a
+	cpw	(0x03044e:24), 0
+	jr	z, ColorBlit2_LargeCodeBlock_Epilogue
+	ld	xwa, xiz
+	ld	xbc, (xsp+6)
+	ld	de, (xsp+4)
+	calr	ColorBlit2_LargeCodeBlock_Helper
+	jr	ColorBlit2_LargeCodeBlock_Epilogue
+ColorBlit2_LargeCodeBlock_Skip:
+	ldw	wa, 20
+	calr	DrawQueue_Alloc
+	ld	xwa, xhl
+	lda	xbc, (ColorBlit2_LargeCodeBlock_0x65:24)
+	ld	(xwa), xbc
+	ld	xiy, xiz
+	lda	xix, (xwa+4)
+	ld	bc, 4:i3
+	ldirw
+	ld	xbc, (xsp+6)
+	ld	(xwa+12), xbc
+	ld	bc, (xsp+4)
+	ld	(xwa+16), bc
+	ld	c, (0x03efa8:24)
+	ld	(xwa+18), c
+	calr	DisplayCmd_DequeueAndExecute
+ColorBlit2_LargeCodeBlock_Epilogue:
+	pop	xiz
+	inc	6, xsp
+	ret
+	ld	xbc, xwa
+	lda	xwa, (xbc+4)
+	ld	xhl, (xbc+12)
+	ld	de, (xbc+16)
+	ld	c, (xbc+18)
+	ld	(0x03efaa:24), c
+	cpw	(0x03044e:24), 0
+	ret	z
+	ld	xbc, xhl
+	calr	ColorBlit2_LargeCodeBlock_Helper
+	ret
+ColorBlit2_LargeCodeBlock_Helper:
+	lda	xsp, (xsp-30)
+	pushw	iz
+	ld	(xsp+22), de
+	ld	(xsp+24), xbc
+	ld	(xsp+28), xwa
+	ld	a, (0x03efaa:24)
+	cp	a, 2:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip10
+	cp	a, 1:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip7
+	cp	a, 0:i3
+	jrl	nz, ColorBlit2_LargeCodeBlock_Join12
+	ldw	(xsp+6), 0
+	jrl	ColorBlit2_LargeCodeBlock_Join3
+ColorBlit2_LargeCodeBlock_Loop:
+	ldw	(xsp+8), 0
+	jrl	ColorBlit2_LargeCodeBlock_Join2
+ColorBlit2_LargeCodeBlock_Loop2:
+	lda	xwa, (xsp+18)
+	ld	(xsp+10), xwa
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa)
+	add	bc, (xsp+6)
+	ld	xwa, (xsp+10)
+	stw_dpi	bc, 225	; ld (xwa+), bc
+	ld	(xsp+14), xwa
+	ld	bc, (xde)
+	add	bc, (xsp+8)
+	ld	xwa, (xsp+14)
+	ld	(xwa), bc
+	ld	xwa, (xsp+24)
+	ld	a, (xwa)
+	ld	(xsp+2), a
+	ld	(xsp+4), 0
+ColorBlit2_LargeCodeBlock_Loop3:
+	ld	xhl, (0x030452:24)
+	ld	xwa, (xsp+14)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	lda	xbc, (0x043c00:24)
+	bitm	7, (xsp+2)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip4
+	ld	xiy, (xsp+10)
+	ld	iz, (xsp+22)
+	ld	xwa, (xsp+10)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	ld	xix, xbc
+	add	xix, xwa
+	cp	iz, 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip2
+	and	(xix), 0x60
+	ld	wa, iz
+	and	wa, 0x9f
+	add	(xix), a
+	ld	bc, iz
+	and	bc, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip3
+	jrl	ColorBlit2_LargeCodeBlock_Join
+ColorBlit2_LargeCodeBlock_Skip2:
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xhl, xde
+	and	(xix), 0x60
+	ld	a, (xhl)
+	and	a, 0x9f
+	add	(xix), a
+	ld	c, (xhl)
+	and	c, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, c
+	jr	z, ColorBlit2_LargeCodeBlock_Join
+ColorBlit2_LargeCodeBlock_Skip3:
+	xor	(xix), 0x60
+	jr	ColorBlit2_LargeCodeBlock_Join
+ColorBlit2_LargeCodeBlock_Skip4:
+	ld	xiy, (xsp+10)
+	ld	iz, (0x03efa2:24)
+	ld	xwa, (xsp+10)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	ld	xix, xbc
+	add	xix, xwa
+	cp	iz, 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip5
+	and	(xix), 0x60
+	ld	wa, iz
+	and	wa, 0x9f
+	add	(xix), a
+	ld	bc, iz
+	and	bc, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip6
+	jr	ColorBlit2_LargeCodeBlock_Join
+ColorBlit2_LargeCodeBlock_Skip5:
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xhl, xde
+	and	(xix), 0x60
+	ld	a, (xhl)
+	and	a, 0x9f
+	add	(xix), a
+	ld	c, (xhl)
+	and	c, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, c
+	jr	z, ColorBlit2_LargeCodeBlock_Join
+ColorBlit2_LargeCodeBlock_Skip6:
+	xor	(xix), 0x60
+ColorBlit2_LargeCodeBlock_Join:
+	ld	a, (xsp+2)
+	add	(xsp+2), a
+	ld	xwa, (xsp+10)
+	incw	1, (xwa)
+	inc	1, (xsp+4)
+	cp	(xsp+4), 8
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop3
+	ld	xwa, 1:i3
+	add	(xsp+24), xwa
+	incw	1, (xsp+8)
+ColorBlit2_LargeCodeBlock_Join2:
+	ld	xwa, (xsp+28)
+	lda	xde, (xwa+2)
+	ld	bc, (xde)
+	ld	wa, (xwa+6)
+	sub	wa, bc
+	cp	(xsp+8), wa
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop2
+	incw	8, (xsp+6)
+ColorBlit2_LargeCodeBlock_Join3:
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa+4)
+	sub	bc, (xwa)
+	cp	(xsp+6), bc
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop
+	jrl	ColorBlit2_LargeCodeBlock_Join12
+ColorBlit2_LargeCodeBlock_Skip7:
+	ldw	(xsp+6), 0
+	jrl	ColorBlit2_LargeCodeBlock_Join7
+ColorBlit2_LargeCodeBlock_Loop4:
+	ldw	(xsp+8), 0
+	jr	ColorBlit2_LargeCodeBlock_Join6
+ColorBlit2_LargeCodeBlock_Loop5:
+	lda	xde, (xsp+18)
+	ld	xwa, (xsp+28)
+	ld	wa, (xwa)
+	add	wa, (xsp+6)
+	ld	(xde), wa
+	lda	xhl, (xde+2)
+	ld	wa, (xix)
+	add	wa, (xsp+8)
+	ld	(xhl), wa
+	ld	xwa, (xsp+24)
+	ld	a, (xwa)
+	ld	(xsp+2), a
+	ld	(xsp+4), 0
+ColorBlit2_LargeCodeBlock_Loop6:
+	lda	xix, (0x043c00:24)
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	bitm	7, (xsp+2)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip8
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	ld	xbc, xix
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip9
+	jr	ColorBlit2_LargeCodeBlock_Join4
+ColorBlit2_LargeCodeBlock_Skip8:
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	ld	xbc, xix
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip9
+ColorBlit2_LargeCodeBlock_Join4:
+	setm	5, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join5
+ColorBlit2_LargeCodeBlock_Skip9:
+	resm	5, (xbc)
+ColorBlit2_LargeCodeBlock_Join5:
+	ld	a, (xsp+2)
+	add	(xsp+2), a
+	incw	1, (xde)
+	inc	1, (xsp+4)
+	cp	(xsp+4), 8
+	jr	c, ColorBlit2_LargeCodeBlock_Loop6
+	ld	xwa, 1:i3
+	add	(xsp+24), xwa
+	incw	1, (xsp+8)
+ColorBlit2_LargeCodeBlock_Join6:
+	ld	xwa, (xsp+28)
+	lda	xix, (xwa+2)
+	ld	bc, (xix)
+	ld	wa, (xwa+6)
+	sub	wa, bc
+	cp	(xsp+8), wa
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop5
+	incw	8, (xsp+6)
+ColorBlit2_LargeCodeBlock_Join7:
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa+4)
+	sub	bc, (xwa)
+	cp	(xsp+6), bc
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop4
+	jrl	ColorBlit2_LargeCodeBlock_Join12
+ColorBlit2_LargeCodeBlock_Skip10:
+	ldw	(xsp+6), 0
+	jrl	ColorBlit2_LargeCodeBlock_Join11
+ColorBlit2_LargeCodeBlock_Loop7:
+	ldw	(xsp+8), 0
+	jr	ColorBlit2_LargeCodeBlock_Join10
+ColorBlit2_LargeCodeBlock_Loop8:
+	lda	xde, (xsp+18)
+	ld	xwa, (xsp+28)
+	ld	wa, (xwa)
+	add	wa, (xsp+6)
+	ld	(xde), wa
+	lda	xhl, (xde+2)
+	ld	wa, (xix)
+	add	wa, (xsp+8)
+	ld	(xhl), wa
+	ld	xwa, (xsp+24)
+	ld	a, (xwa)
+	ld	(xsp+2), a
+	ld	(xsp+4), 0
+ColorBlit2_LargeCodeBlock_Loop9:
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	bitm	7, (xsp+2)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip11
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip12
+	jr	ColorBlit2_LargeCodeBlock_Join8
+ColorBlit2_LargeCodeBlock_Skip11:
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xbc
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip12
+ColorBlit2_LargeCodeBlock_Join8:
+	setm	6, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join9
+ColorBlit2_LargeCodeBlock_Skip12:
+	resm	6, (xbc)
+ColorBlit2_LargeCodeBlock_Join9:
+	ld	a, (xsp+2)
+	add	(xsp+2), a
+	incw	1, (xde)
+	inc	1, (xsp+4)
+	cp	(xsp+4), 8
+	jr	c, ColorBlit2_LargeCodeBlock_Loop9
+	ld	xwa, 1:i3
+	add	(xsp+24), xwa
+	incw	1, (xsp+8)
+ColorBlit2_LargeCodeBlock_Join10:
+	ld	xwa, (xsp+28)
+	lda	xix, (xwa+2)
+	ld	bc, (xix)
+	ld	wa, (xwa+6)
+	sub	wa, bc
+	cp	(xsp+8), wa
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop8
+	incw	8, (xsp+6)
+ColorBlit2_LargeCodeBlock_Join11:
+	ld	xwa, (xsp+28)
+	ld	bc, (xwa+4)
+	sub	bc, (xwa)
+	cp	(xsp+6), bc
+	jrl	c, ColorBlit2_LargeCodeBlock_Loop7
+ColorBlit2_LargeCodeBlock_Join12:
+	ld	xwa, (xsp+28)
+	calr	SetChangeRect
+	popw	iz
+	lda	xsp, (xsp+30)
+	ret
+	dec	6, xsp
+	push	xiz
+	ld	(xsp+4), de
+	ld	(xsp+6), xbc
+	ld	xiz, xwa
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
+	cp	hl, 0:i3
+	jr	z, ColorBlit2_LargeCodeBlock_Skip13
+	ld	a, (0x03efa8:24)
+	ld	(0x03efaa:24), a
+	cpw	(0x03044e:24), 0
+	jr	z, ColorBlit2_LargeCodeBlock_Epilogue2
+	ld	xwa, xiz
+	ld	xbc, (xsp+6)
+	ld	de, (xsp+4)
+	calr	ColorBlit2_LargeCodeBlock_Helper2
+	jr	ColorBlit2_LargeCodeBlock_Epilogue2
+ColorBlit2_LargeCodeBlock_Skip13:
+	ldw	wa, 16
+	calr	DrawQueue_Alloc
+	ld	xwa, xhl
+	lda	xbc, (ColorBlit2_LargeCodeBlock_0x3F0:24)
+	ld	(xwa), xbc
+	ld	xiy, xiz
+	lda	xix, (xwa+4)
+	ldiw
+	ldiw
+	ld	xbc, (xsp+6)
+	ld	xiy, xbc
+	lda	xix, (xwa+8)
+	ldiw
+	ldiw
+	ld	bc, (xsp+4)
+	ld	(xwa+12), bc
+	ld	c, (0x03efa8:24)
+	ld	(xwa+14), c
+	calr	DisplayCmd_DequeueAndExecute
+ColorBlit2_LargeCodeBlock_Epilogue2:
+	pop	xiz
+	inc	6, xsp
+	ret
+	ld	xbc, xwa
+	lda	xwa, (xbc+4)
+	lda	xhl, (xbc+8)
+	ld	de, (xbc+12)
+	ld	c, (xbc+14)
+	ld	(0x03efaa:24), c
+	cpw	(0x03044e:24), 0
+	ret	z
+	ld	xbc, xhl
+	calr	ColorBlit2_LargeCodeBlock_Helper2
+	ret
+ColorBlit2_LargeCodeBlock_Helper2:
+	lda	xsp, (xsp-72)
+	push	xiz
+	ld	(xsp+66), de
+	ld	(xsp+68), xbc
+	ld	(xsp+72), xwa
+	ld	xwa, (xsp+72)
+	calr	IsPointOnScreen
+	cp	hl, 0:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue3
+	ld	xwa, (xsp+68)
+	calr	IsPointOnScreen
+	cp	hl, 0:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue3
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+68)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+72)
+	cp	bc, (xwa)
+	jr	le, ColorBlit2_LargeCodeBlock_Skip14
+	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip14:
+	ld	(xsp+12), xde
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+68)
+	inc	2, xwa
+	ld	(xsp+22), xwa
+	ld	xwa, (xsp+72)
+	inc	2, xwa
+	ld	(xsp+26), xwa
+	ld	xwa, (xsp+22)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+26)
+	ld	hl, (xwa)
+	cp	bc, hl
+	jr	le, ColorBlit2_LargeCodeBlock_Skip15
+	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip15:
+	ld	(xsp+16), xde
+	ld	xwa, (xsp+12)
+	cp	xwa, 1
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip16
+	ld	xwa, (xsp+68)
+	ld	de, (xwa)
+	ld	xwa, (xsp+72)
+	sub	de, (xwa)
+	jr	ColorBlit2_LargeCodeBlock_Join13
+ColorBlit2_LargeCodeBlock_Skip16:
+	ld	xwa, (xsp+72)
+	ld	de, (xwa)
+	ld	xwa, (xsp+68)
+	sub	de, (xwa)
+ColorBlit2_LargeCodeBlock_Join13:
+	exts	xde
+	ld	(xsp+4), xde
+	ld	xwa, (xsp+16)
+	cp	xwa, 1
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip17
+	sub	bc, hl
+	ld	hl, bc
+	jr	ColorBlit2_LargeCodeBlock_Join14
+ColorBlit2_LargeCodeBlock_Skip17:
+	sub	hl, bc
+ColorBlit2_LargeCodeBlock_Join14:
+	exts	xhl
+	ld	(xsp+8), xhl
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip18
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	z, ColorBlit2_LargeCodeBlock_Epilogue3
+ColorBlit2_LargeCodeBlock_Skip18:
+	ld	xwa, (xsp+72)
+	ld	xiy, xwa
+	lda	xix, (xsp+62)
+	ldiw
+	ldiw
+	ld	a, (0x03efaa:24)
+	ld	(xsp+20), a
+	lda	xwa, (0x043c00:24)
+	ld	(xsp+38), xwa
+	ld	(xsp+30), xwa
+	ld	xwa, (xsp+8)
+	sla	xwa, 0
+	ld	xbc, (xsp+4)
+	call	0xff0431
+	ld	(xsp+34), xhl
+	lda	xwa, (xsp+62)
+	ld	(xsp+42), xwa
+	ld	xwa, (xsp+4)
+	sla	xwa, 0
+	ld	xbc, (xsp+8)
+	call	0xff0431
+	ld	xix, (xsp+42)
+	lda	xwa, (xix+2)
+	ld	(xsp+46), xwa
+	ld	wa, (xwa)
+	exts	xwa
+	sla	xwa, 0
+	ld	(xsp+50), xwa
+	ld	xwa, 32768
+	add	(xsp+50), xwa
+	cp	(xsp+20), 2
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip40
+	cp	(xsp+20), 1
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip32
+	cp	(xsp+20), 0
+	jrl	nz, ColorBlit2_LargeCodeBlock_Join25
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jrl	nz, ColorBlit2_LargeCodeBlock_Skip22
+	ld	xde, (xsp+42)
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	wa, (xix)
+	exts	xwa
+	add	xwa, xbc
+	ld	xhl, (xsp+30)
+	add	xhl, xwa
+	cpw	(xsp+66), 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip20
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop10:
+	and	(xhl), 0x60
+	ld	wa, (xsp+66)
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	de, (xsp+66)
+	and	de, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, de
+	jr	z, ColorBlit2_LargeCodeBlock_Skip19
+	xor	(xhl), 0x60
+ColorBlit2_LargeCodeBlock_Skip19:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xhl, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop10
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip20:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xbc
+	add	xix, xwa
+	add	xix, (0x030452:24)
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop11:
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	e, (xix)
+	and	e, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, e
+	jr	z, ColorBlit2_LargeCodeBlock_Skip21
+	xor	(xhl), 0x60
+ColorBlit2_LargeCodeBlock_Skip21:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xhl, xwa
+	add	xix, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop11
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip22:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	nz, ColorBlit2_LargeCodeBlock_Skip26
+	ld	xde, (xsp+42)
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xhl, (xsp+30)
+	add	xhl, xwa
+	cpw	(xsp+66), 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip24
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop12:
+	and	(xhl), 0x60
+	ld	wa, (xsp+66)
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	de, (xsp+66)
+	and	de, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, de
+	jr	z, ColorBlit2_LargeCodeBlock_Skip23
+	xor	(xhl), 0x60
+ColorBlit2_LargeCodeBlock_Skip23:
+	add	xhl, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop12
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip24:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xbc
+	add	xix, xwa
+	add	xix, (0x030452:24)
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop13:
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	e, (xix)
+	and	e, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, e
+	jr	z, ColorBlit2_LargeCodeBlock_Skip25
+	xor	(xhl), 0x60
+ColorBlit2_LargeCodeBlock_Skip25:
+	add	xhl, (xsp+12)
+	add	xix, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop13
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip26:
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jrl	le, ColorBlit2_LargeCodeBlock_Skip29
+	ld	xwa, (xsp+12)
+	ld	xbc, xhl
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, xde
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop14:
+	ld	xiy, xde
+	ld	hl, (xsp+66)
+	lda	xwa, (xde+2)
+	ld	(xsp+50), xwa
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	cpw	(xsp+66), 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip27
+	and	(xix), 0x60
+	ld	wa, hl
+	and	wa, 0x9f
+	add	(xix), a
+	and	hl, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, hl
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip28
+	jr	ColorBlit2_LargeCodeBlock_Join15
+ColorBlit2_LargeCodeBlock_Skip27:
+	ld	xiz, (0x030452:24)
+	ld	hl, (xiy)
+	exts	xhl
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xiy, xwa
+	sll	xiy, 2
+	add	xiy, xwa
+	sll	xiy, 6
+	add	xiy, xhl
+	add	xiz, xiy
+	and	(xix), 0x60
+	ld	a, (xiz)
+	and	a, 0x9f
+	add	(xix), a
+	ld	l, (xiz)
+	and	l, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, l
+	jr	z, ColorBlit2_LargeCodeBlock_Join15
+ColorBlit2_LargeCodeBlock_Skip28:
+	xor	(xix), 0x60
+ColorBlit2_LargeCodeBlock_Join15:
+	ld	xwa, (xsp+12)
+	add	(xsp+4), xwa
+	ld	xwa, (xsp+4)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xhl, (xsp+16)
+	ld	xwa, (xsp+50)
+	add	(xwa), hl
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jrl	le, ColorBlit2_LargeCodeBlock_Loop14
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip29:
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+34)
+	call	InitializeKubo_Helper
+	ld	(xsp+16), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, (xsp+46)
+	ld	(xsp+46), xwa
+	ld	xwa, (xsp+50)
+	ld	(xsp+8), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop15:
+	ld	xix, xde
+	ld	hl, (xsp+66)
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xiy, xwa
+	sll	xiy, 2
+	add	xiy, xwa
+	sll	xiy, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xiy
+	ld	xiy, (xsp+38)
+	add	xiy, xwa
+	cpw	(xsp+66), 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip30
+	and	(xiy), 0x60
+	ld	wa, hl
+	and	wa, 0x9f
+	add	(xiy), a
+	and	hl, 0x80
+	ld	a, (xiy)
+	and	a, 0x80
+	extz	wa
+	cp	wa, hl
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip31
+	jr	ColorBlit2_LargeCodeBlock_Join16
+ColorBlit2_LargeCodeBlock_Skip30:
+	ld	xiz, (0x030452:24)
+	ld	hl, (xix)
+	exts	xhl
+	ld	wa, (xix+2)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	add	xix, xhl
+	add	xiz, xix
+	and	(xiy), 0x60
+	ld	a, (xiz)
+	and	a, 0x9f
+	add	(xiy), a
+	ld	l, (xiz)
+	and	l, 0x80
+	ld	a, (xiy)
+	and	a, 0x80
+	cp	a, l
+	jr	z, ColorBlit2_LargeCodeBlock_Join16
+ColorBlit2_LargeCodeBlock_Skip31:
+	xor	(xiy), 0x60
+ColorBlit2_LargeCodeBlock_Join16:
+	ld	xwa, (xsp+16)
+	add	(xsp+8), xwa
+	ld	xhl, (xsp+8)
+	sra	xhl, 0
+	ld	xwa, (xsp+46)
+	ld	(xwa), hl
+	ld	xwa, (xsp+12)
+	add	(xde), wa
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jrl	le, ColorBlit2_LargeCodeBlock_Loop15
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip32:
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip34
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop16:
+	bitm	7, (xde)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip33
+	setm	5, (xde)
+	jr	ColorBlit2_LargeCodeBlock_Join17
+ColorBlit2_LargeCodeBlock_Skip33:
+	resm	5, (xde)
+ColorBlit2_LargeCodeBlock_Join17:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xde, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop16
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip34:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip36
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop17:
+	bitm	7, (xde)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip35
+	setm	5, (xde)
+	jr	ColorBlit2_LargeCodeBlock_Join18
+ColorBlit2_LargeCodeBlock_Skip35:
+	resm	5, (xde)
+ColorBlit2_LargeCodeBlock_Join18:
+	add	xde, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop17
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip36:
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Skip38
+	ld	xwa, (xsp+12)
+	ld	xbc, xhl
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, xde
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop18:
+	lda	xhl, (xde+2)
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bitm	7, (xix)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip37
+	resm	5, (xix)
+	jr	ColorBlit2_LargeCodeBlock_Join19
+ColorBlit2_LargeCodeBlock_Skip37:
+	setm	5, (xix)
+ColorBlit2_LargeCodeBlock_Join19:
+	ld	xwa, (xsp+12)
+	add	(xsp+4), xwa
+	ld	xwa, (xsp+4)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+16)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop18
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip38:
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+34)
+	call	InitializeKubo_Helper
+	ld	(xsp+16), xhl
+	ld	xhl, (xsp+42)
+	ld	xde, (xsp+46)
+	ld	xwa, (xsp+50)
+	ld	(xsp+8), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop19:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xhl)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bitm	7, (xix)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip39
+	resm	5, (xix)
+	jr	ColorBlit2_LargeCodeBlock_Join20
+ColorBlit2_LargeCodeBlock_Skip39:
+	setm	5, (xix)
+ColorBlit2_LargeCodeBlock_Join20:
+	ld	xwa, (xsp+16)
+	add	(xsp+8), xwa
+	ld	xwa, (xsp+8)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+12)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop19
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip40:
+	ld	xwa, (xsp+46)
+	ld	wa, (xwa)
+	exts	xwa
+	ld	xbc, xwa
+	sll	xbc, 2
+	add	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip42
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop20:
+	bitm	7, (xde)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip41
+	resm	6, (xde)
+	jr	ColorBlit2_LargeCodeBlock_Join21
+ColorBlit2_LargeCodeBlock_Skip41:
+	setm	6, (xde)
+ColorBlit2_LargeCodeBlock_Join21:
+	ld	xwa, (xsp+16)
+	sla	xwa, 2
+	add	xwa, (xsp+16)
+	sla	xwa, 6
+	add	xde, xwa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop20
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip42:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip44
+	ld	xwa, (xsp+42)
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xbc
+	ld	xde, (xsp+30)
+	add	xde, xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop21:
+	bitm	7, (xde)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip43
+	resm	6, (xde)
+	jr	ColorBlit2_LargeCodeBlock_Join22
+ColorBlit2_LargeCodeBlock_Skip43:
+	setm	6, (xde)
+ColorBlit2_LargeCodeBlock_Join22:
+	add	xde, (xsp+12)
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop21
+	jrl	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip44:
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Skip46
+	ld	xwa, (xsp+12)
+	ld	xbc, xhl
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xde, (xsp+42)
+	ld	xwa, xde
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop22:
+	lda	xhl, (xde+2)
+	ld	wa, (xhl)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xde)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bitm	7, (xix)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip45
+	resm	6, (xix)
+	jr	ColorBlit2_LargeCodeBlock_Join23
+ColorBlit2_LargeCodeBlock_Skip45:
+	setm	6, (xix)
+ColorBlit2_LargeCodeBlock_Join23:
+	ld	xwa, (xsp+12)
+	add	(xsp+4), xwa
+	ld	xwa, (xsp+4)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+16)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+8)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop22
+	jr	ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Skip46:
+	ld	xwa, (xsp+16)
+	ld	xbc, (xsp+34)
+	call	InitializeKubo_Helper
+	ld	(xsp+16), xhl
+	ld	xhl, (xsp+42)
+	ld	xde, (xsp+46)
+	ld	xwa, (xsp+50)
+	ld	(xsp+8), xwa
+	ld	xbc, 0:i3
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jr	lt, ColorBlit2_LargeCodeBlock_Join25
+ColorBlit2_LargeCodeBlock_Loop23:
+	ld	wa, (xde)
+	exts	xwa
+	ld	xix, xwa
+	sll	xix, 2
+	add	xix, xwa
+	sll	xix, 6
+	ld	wa, (xhl)
+	exts	xwa
+	add	xwa, xix
+	ld	xix, (xsp+38)
+	add	xix, xwa
+	bitm	7, (xix)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip47
+	resm	6, (xix)
+	jr	ColorBlit2_LargeCodeBlock_Join24
+ColorBlit2_LargeCodeBlock_Skip47:
+	setm	6, (xix)
+ColorBlit2_LargeCodeBlock_Join24:
+	ld	xwa, (xsp+16)
+	add	(xsp+8), xwa
+	ld	xwa, (xsp+8)
+	sra	xwa, 0
+	ld	(xde), wa
+	ld	xwa, (xsp+12)
+	add	(xhl), wa
+	inc	1, xbc
+	cp	xbc, (xsp+4)
+	jr	le, ColorBlit2_LargeCodeBlock_Loop23
+ColorBlit2_LargeCodeBlock_Join25:
+	lda	xwa, (xsp+54)
+	ld	xbc, (xsp+26)
+	ld	bc, (xbc)
+	ld	(xwa+2), bc
+	ld	xbc, (xsp+72)
+	ld	bc, (xbc)
+	ld	(xwa), bc
+	ld	xbc, (xsp+68)
+	ld	bc, (xbc)
+	ld	(xwa+4), bc
+	ld	xbc, (xsp+22)
+	ld	bc, (xbc)
+	ld	(xwa+6), bc
+	calr	SetChangeRect
+ColorBlit2_LargeCodeBlock_Epilogue3:
+	pop	xiz
+	lda	xsp, (xsp+72)
+	ret
+	dec	6, xsp
+	push	xiz
+	ld	(xsp+4), de
+	ld	(xsp+6), xbc
+	ld	xiz, xwa
+	calr	IS_XSP_INSIDE_4K_REGION_AT_1C032
+	cp	hl, 0:i3
+	jr	z, ColorBlit2_LargeCodeBlock_Skip48
+	ld	a, (0x03efa8:24)
+	ld	(0x03efaa:24), a
+	cpw	(0x03044e:24), 0
+	jr	z, ColorBlit2_LargeCodeBlock_Epilogue4
+	ld	xwa, xiz
+	ld	xbc, (xsp+6)
+	ld	de, (xsp+4)
+	calr	ColorBlit2_LargeCodeBlock_Helper3
+	jr	ColorBlit2_LargeCodeBlock_Epilogue4
+ColorBlit2_LargeCodeBlock_Skip48:
+	ldw	wa, 16
+	calr	DrawQueue_Alloc
+	ld	xwa, xhl
+	lda	xbc, (ColorBlit2_LargeCodeBlock_0xBD9:24)
+	ld	(xwa), xbc
+	ld	xiy, xiz
+	lda	xix, (xwa+4)
+	ldiw
+	ldiw
+	ld	xbc, (xsp+6)
+	ld	xiy, xbc
+	lda	xix, (xwa+8)
+	ldiw
+	ldiw
+	ld	bc, (xsp+4)
+	ld	(xwa+12), bc
+	ld	c, (0x03efa8:24)
+	ld	(xwa+14), c
+	calr	DisplayCmd_DequeueAndExecute
+ColorBlit2_LargeCodeBlock_Epilogue4:
+	pop	xiz
+	inc	6, xsp
+	ret
+	ld	xbc, xwa
+	lda	xwa, (xbc+4)
+	lda	xhl, (xbc+8)
+	ld	de, (xbc+12)
+	ld	c, (xbc+14)
+	ld	(0x03efaa:24), c
+	cpw	(0x03044e:24), 0
+	ret	z
+	ld	xbc, xhl
+	calr	ColorBlit2_LargeCodeBlock_Helper3
+	ret
+ColorBlit2_LargeCodeBlock_Helper3:
+	lda	xsp, (xsp-56)
+	push	xiz
+	ld	(xsp+50), de
+	ld	(xsp+52), xbc
+	ld	(xsp+56), xwa
+	ld	(xsp+24), 0
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+52)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+56)
+	cp	bc, (xwa)
+	jr	le, ColorBlit2_LargeCodeBlock_Skip49
+	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip49:
+	ld	(xsp+12), xde
+	ld	xde, 0xffffffff
+	ld	xwa, (xsp+52)
+	inc	2, xwa
+	ld	(xsp+26), xwa
+	ld	xwa, (xsp+56)
+	inc	2, xwa
+	ld	(xsp+30), xwa
+	ld	xwa, (xsp+26)
+	ld	bc, (xwa)
+	ld	xwa, (xsp+30)
+	ld	hl, (xwa)
+	cp	bc, hl
+	jr	le, ColorBlit2_LargeCodeBlock_Skip50
+	ld	xde, 1:i3
+ColorBlit2_LargeCodeBlock_Skip50:
+	ld	(xsp+16), xde
+	ld	xwa, (xsp+12)
+	cp	xwa, 1
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip51
+	ld	xwa, (xsp+52)
+	ld	de, (xwa)
+	ld	xwa, (xsp+56)
+	sub	de, (xwa)
+	jr	ColorBlit2_LargeCodeBlock_Join26
+ColorBlit2_LargeCodeBlock_Skip51:
+	ld	xwa, (xsp+56)
+	ld	de, (xwa)
+	ld	xwa, (xsp+52)
+	sub	de, (xwa)
+ColorBlit2_LargeCodeBlock_Join26:
+	exts	xde
+	ld	(xsp+4), xde
+	ld	xwa, (xsp+16)
+	cp	xwa, 1
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip52
+	sub	bc, hl
+	ld	hl, bc
+	jr	ColorBlit2_LargeCodeBlock_Join27
+ColorBlit2_LargeCodeBlock_Skip52:
+	sub	hl, bc
+ColorBlit2_LargeCodeBlock_Join27:
+	exts	xhl
+	ld	(xsp+8), xhl
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip53
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	z, 1328
+ColorBlit2_LargeCodeBlock_Skip53:
+	ld	xwa, (xsp+56)
+	ld	xiy, xwa
+	lda	xix, (xsp+46)
+	ldiw
+	ldiw
+	ld	xwa, (xsp+4)
+	or	xwa, xwa
+	jrl	nz, ColorBlit2_LargeCodeBlock_Skip61
+	ld	xwa, 0:i3
+	ld	(xsp+20), xwa
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, Voice_FactoryPresetData_Code_Join4
+ColorBlit2_LargeCodeBlock_Loop24:
+	cp	(xsp+24), 3
+	jr	ule, ColorBlit2_LargeCodeBlock_Skip54
+	ld	(xsp+24), 0
+	jrl	ColorBlit2_LargeCodeBlock_Join29
+ColorBlit2_LargeCodeBlock_Skip54:
+	cp	(xsp+24), 1
+	jrl	ugt, ColorBlit2_LargeCodeBlock_Join28
+	ld	a, (0x03efaa:24)
+	cp	a, 2:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip59
+	cp	a, 1:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip57
+	cp	a, 0:i3
+	jrl	nz, ColorBlit2_LargeCodeBlock_Join28
+	lda	xwa, (xsp+46)
+	ld	xiy, xwa
+	ld	ix, (xsp+50)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xhl, (0x043c00:24)
+	add	xhl, xwa
+	cpw	(xsp+50), 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip55
+	and	(xhl), 0x60
+	ld	wa, ix
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	bc, ix
+	and	bc, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip56
+	jrl	ColorBlit2_LargeCodeBlock_Join28
+ColorBlit2_LargeCodeBlock_Skip55:
+	ld	xix, (0x030452:24)
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xix, xde
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	c, (xix)
+	and	c, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, c
+	jr	z, ColorBlit2_LargeCodeBlock_Join28
+ColorBlit2_LargeCodeBlock_Skip56:
+	xor	(xhl), 0x60
+	jr	ColorBlit2_LargeCodeBlock_Join28
+ColorBlit2_LargeCodeBlock_Skip57:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip58
+	resm	5, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join28
+ColorBlit2_LargeCodeBlock_Skip58:
+	setm	5, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join28
+ColorBlit2_LargeCodeBlock_Skip59:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip60
+	resm	6, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join28
+ColorBlit2_LargeCodeBlock_Skip60:
+	setm	6, (xbc)
+ColorBlit2_LargeCodeBlock_Join28:
+	inc	1, (xsp+24)
+ColorBlit2_LargeCodeBlock_Join29:
+	ld	xwa, (xsp+16)
+	add	(xsp+48), wa
+	ld	xwa, 1:i3
+	add	(xsp+20), xwa
+	ld	xwa, (xsp+20)
+	cp	xwa, (xsp+8)
+	jrl	le, ColorBlit2_LargeCodeBlock_Loop24
+	jrl	Voice_FactoryPresetData_Code_Join4
+ColorBlit2_LargeCodeBlock_Skip61:
+	ld	xwa, (xsp+8)
+	or	xwa, xwa
+	jrl	nz, ColorBlit2_LargeCodeBlock_Skip69
+	ld	xwa, 0:i3
+	ld	(xsp+20), xwa
+	ld	xwa, (xsp+4)
+	cp	xwa, 0
+	jrl	lt, Voice_FactoryPresetData_Code_Join4
+ColorBlit2_LargeCodeBlock_Loop25:
+	cp	(xsp+24), 3
+	jr	ule, ColorBlit2_LargeCodeBlock_Skip62
+	ld	(xsp+24), 0
+	jrl	ColorBlit2_LargeCodeBlock_Join31
+ColorBlit2_LargeCodeBlock_Skip62:
+	cp	(xsp+24), 1
+	jrl	ugt, ColorBlit2_LargeCodeBlock_Join30
+	ld	a, (0x03efaa:24)
+	cp	a, 2:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip67
+	cp	a, 1:i3
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip65
+	cp	a, 0:i3
+	jrl	nz, ColorBlit2_LargeCodeBlock_Join30
+	lda	xwa, (xsp+46)
+	ld	xiy, xwa
+	ld	ix, (xsp+50)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xhl, (0x043c00:24)
+	add	xhl, xwa
+	cpw	(xsp+50), 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip63
+	and	(xhl), 0x60
+	ld	wa, ix
+	and	wa, 0x9f
+	add	(xhl), a
+	ld	bc, ix
+	and	bc, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	extz	wa
+	cp	wa, bc
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip64
+	jrl	ColorBlit2_LargeCodeBlock_Join30
+ColorBlit2_LargeCodeBlock_Skip63:
+	ld	xix, (0x030452:24)
+	ld	bc, (xiy)
+	exts	xbc
+	ld	wa, (xiy+2)
+	exts	xwa
+	ld	xde, xwa
+	sll	xde, 2
+	add	xde, xwa
+	sll	xde, 6
+	add	xde, xbc
+	add	xix, xde
+	and	(xhl), 0x60
+	ld	a, (xix)
+	and	a, 0x9f
+	add	(xhl), a
+	ld	c, (xix)
+	and	c, 0x80
+	ld	a, (xhl)
+	and	a, 0x80
+	cp	a, c
+	jr	z, ColorBlit2_LargeCodeBlock_Join30
+ColorBlit2_LargeCodeBlock_Skip64:
+	xor	(xhl), 0x60
+	jr	ColorBlit2_LargeCodeBlock_Join30
+ColorBlit2_LargeCodeBlock_Skip65:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip66
+	resm	5, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join30
+ColorBlit2_LargeCodeBlock_Skip66:
+	setm	5, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join30
+ColorBlit2_LargeCodeBlock_Skip67:
+	lda	xwa, (xsp+46)
+	ld	bc, (xwa+2)
+	exts	xbc
+	ld	xde, xbc
+	sll	xde, 2
+	add	xde, xbc
+	sll	xde, 6
+	ld	wa, (xwa)
+	exts	xwa
+	add	xwa, xde
+	lda	xbc, (0x043c00:24)
+	add	xbc, xwa
+	bitm	7, (xbc)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip68
+	resm	6, (xbc)
+	jr	ColorBlit2_LargeCodeBlock_Join30
+ColorBlit2_LargeCodeBlock_Skip68:
+	setm	6, (xbc)
+ColorBlit2_LargeCodeBlock_Join30:
+	inc	1, (xsp+24)
+ColorBlit2_LargeCodeBlock_Join31:
+	ld	xwa, (xsp+12)
+	add	(xsp+46), wa
+	ld	xwa, 1:i3
+	add	(xsp+20), xwa
+	ld	xwa, (xsp+20)
+	cp	xwa, (xsp+4)
+	jrl	le, ColorBlit2_LargeCodeBlock_Loop25
+	jrl	Voice_FactoryPresetData_Code_Join4
+ColorBlit2_LargeCodeBlock_Skip69:
+	lda	xwa, (xsp+46)
+	ld	(xsp+34), xwa
+	ld	xwa, (xsp+8)
+	cp	xwa, (xsp+4)
+	jrl	le, 322
+	ld	xwa, (xsp+4)
+	sla	xwa, 0
+	ld	xbc, (xsp+8)
+	call	0xff0431
+	ld	xiz, xhl
+	ld	xwa, (xsp+12)
+	ld	xbc, xiz
+	call	InitializeKubo_Helper
+	ld	(xsp+12), xhl
+	ld	xbc, (xsp+34)
+	ld	xwa, xbc
+	ld	wa, (xwa)
+	exts	xwa
+	ld	(xsp+4), xwa
+	sla	xwa, 0
+	ld	(xsp+4), xwa
+	ld	xwa, 32768
+	add	(xsp+4), xwa
+	ld	xwa, 0:i3
+	ld	(xsp+20), xwa
+	ld	xwa, (xsp+8)
+	cp	xwa, 0
+	jrl	lt, Voice_FactoryPresetData_Code_Join4
+	cp	(xsp+24), 3
+	jr	ule, ColorBlit2_LargeCodeBlock_Skip70
+	ld	(xsp+24), 0
+	jrl	202
+ColorBlit2_LargeCodeBlock_Skip70:
+	cp	(xsp+24), 1
+	jrl	ugt, Voice_FactoryPresetData_Code_Join
+	ld	a, (0x03efaa:24)
+	ldb_erp	a, 240	; ld ixl, a
+	ld	wa, (xbc+2)
+	exts	xwa
+	ld	xhl, xwa
+	sll	xhl, 2
+	add	xhl, xwa
+	sll	xhl, 6
+	lda	xde, (0x043c00:24)
+	cpib_erp	240, 2	; cp ixl, 2
+	jrl	z, ColorBlit2_LargeCodeBlock_Skip75
+	cpib_erp	240, 1	; cp ixl, 1
+	jr	z, ColorBlit2_LargeCodeBlock_Skip73
+	cpib_erp	240, 0	; cp ixl, 0
+	jrl	nz, Voice_FactoryPresetData_Code_Join
+	ld	xiz, xbc
+	ld	iy, (xsp+50)
+	ld	wa, (xbc)
+	exts	xwa
+	add	xwa, xhl
+	ld	xix, xde
+	add	xix, xwa
+	cpw	(xsp+50), 245
+	jr	z, ColorBlit2_LargeCodeBlock_Skip71
+	and	(xix), 0x60
+	ld	wa, iy
+	and	wa, 0x9f
+	add	(xix), a
+	ld	de, iy
+	and	de, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	extz	wa
+	cp	wa, de
+	jr	nz, ColorBlit2_LargeCodeBlock_Skip72
+	jr	Voice_FactoryPresetData_Code_Join
+ColorBlit2_LargeCodeBlock_Skip71:
+	ld	xiy, (0x030452:24)
+	ld	de, (xiz)
+	exts	xde
+	ld	wa, (xiz+2)
+	exts	xwa
+	ld	xhl, xwa
+	sll	xhl, 2
+	add	xhl, xwa
+	sll	xhl, 6
+	add	xhl, xde
+	add	xiy, xhl
+	and	(xix), 0x60
+	ld	a, (xiy)
+	and	a, 0x9f
+	add	(xix), a
+	ld	e, (xiy)
+	and	e, 0x80
+	ld	a, (xix)
+	and	a, 0x80
+	cp	a, e
+	jr	z, Voice_FactoryPresetData_Code_Join
+ColorBlit2_LargeCodeBlock_Skip72:
+	xor	(xix), 0x60
+	jr	Voice_FactoryPresetData_Code_Join
+ColorBlit2_LargeCodeBlock_Skip73:
+	ld	wa, (xbc)
+	exts	xwa
+	add	xwa, xhl
+	add	xde, xwa
+	bitm	7, (xde)
+	jr	z, ColorBlit2_LargeCodeBlock_Skip74
+	resm	5, (xde)
+	jr	Voice_FactoryPresetData_Code_Join
+ColorBlit2_LargeCodeBlock_Skip74:
+	setm	5, (xde)
+	jr	Voice_FactoryPresetData_Code_Join
+ColorBlit2_LargeCodeBlock_Skip75:
+	ld	wa, (xbc)

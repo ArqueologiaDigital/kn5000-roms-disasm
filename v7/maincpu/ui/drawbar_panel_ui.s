@@ -50,7 +50,7 @@ AcSendEditSw_EventD:
 	ld	xbc, (xiz+48)
 	lda	xde, (xsp+4)
 	lda	xwa, (15204348:24)
-	.byte 0x91, 0x3f, 0xc1, 0x00
+	cpw	(xbc), 193
 	jr	nz, AcSendEditSw_DrawAlt
 	ld	xbc, 0:i3
 	push	xbc
@@ -195,7 +195,7 @@ ComSetGridCheck_JumpTable:
 	ld	(xbc), wa
 	ld	xwa, (xsp+22)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, UI_ReturnZero
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
@@ -230,7 +230,7 @@ ComSetGridCheck_JumpTable_Skip:
 	ld	(xbc), wa
 	ld	xwa, (xsp+22)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, UI_ReturnZero
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
@@ -265,7 +265,7 @@ ComSetGridCheck_JumpTable_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0
+	.byte	0xe3, 0x07, 0xf0, 0xf4, 0xf0	; cp xwa, (xix+iy)
 	jr	z, ComSetGridCheck_JumpTable_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -299,7 +299,7 @@ ComSetGridCheck_JumpTable_Skip3:
 ComSetGridCheck_JumpTable_Skip4:
 	ld	xbc, 15204426
 	ld	xwa, (xsp+22)
-	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xwa+4), 0
 	jr	z, ComSetGridCheck_JumpTable_Skip5
 	ld	xbc, 15204420
 ComSetGridCheck_JumpTable_Skip5:
@@ -1127,7 +1127,616 @@ PmemOutLGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 PmemOutLGridCheck_JumpTable:
-	.incbin "includes/romslices/v7_transplant_PmemOutLGridCheck_JumpTable.bin"
+	call	GetFocusObject
+	ld	xwa, xhl
+	ld	xbc, 0x1e0008f
+	ld	xde, 0:i3
+	call	SendEvent
+	lda	xwa, (xsp+36)
+	ld	xbc, xhl
+	srl	xbc, 0
+	ld	qbc, 0
+	ld	(xwa), bc
+	ld	(xwa+2), hl
+	cpw	(xwa), 1
+	jrl	nz, PmemOutGrid_ReturnZero
+	cp	hl, 3:i3
+	jr	z, PmemOutLGridCheck_JumpTable_Skip2
+	cp	hl, 1:i3
+	jr	z, PmemOutLGridCheck_JumpTable_Skip
+	cp	hl, 0:i3
+	jrl	nz, PmemOutGrid_ReturnZero
+	ld	xiy, NakaData_PartFlags
+	lda	xix, (xsp+60)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+60)
+	lda	xbc, (0x024772:24)
+	ld	(xwa), xbc
+	ld	xbc, 79
+	ld	(xwa+6), xbc
+	jrl	PmemOutLGridCheck_JumpTable_Join2
+PmemOutLGridCheck_JumpTable_Skip:
+	ld	xiy, NakaData_PartFlags
+	lda	xix, (xsp+60)
+	ldw	bc, 11
+	ldirw
+	lda_d16	xde, (64812)
+	sub	xde, 63904
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	ld	xbc, xwa
+	add	xbc, xde
+	lda	xwa, (xsp+60)
+	ld	(xwa), xbc
+	ld	xbc, 255
+	ld	(xwa+6), xbc
+	ld	xbc, (xwa)
+	ld	c, (xbc)
+	set	1, c
+	ld	b, 0:opc
+	extz	xbc
+	ld	(xwa+14), xbc
+	jrl	PmemOutLGridCheck_JumpTable_Join
+PmemOutLGridCheck_JumpTable_Skip2:
+	ld	xiy, NakaData_PartFlags
+	lda	xix, (xsp+60)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+60)
+	lda	xbc, (0x024774:24)
+	ld	(xwa), xbc
+	ld	xbc, 2:i3
+	ld	(xwa+6), xbc
+	jrl	PmemOutLGridCheck_JumpTable_Join2
+	call	GetFocusObject
+	ld	xwa, xhl
+	ld	xbc, 0x1e0008f
+	ld	xde, 0:i3
+	call	SendEvent
+	lda	xwa, (xsp+36)
+	ld	xbc, xhl
+	srl	xbc, 0
+	ld	qbc, 0
+	ld	(xwa), bc
+	ld	(xwa+2), hl
+	cpw	(xwa), 1
+	jrl	nz, PmemOutGrid_ReturnZero
+	cp	hl, 3:i3
+	jrl	z, PmemOutLGridCheck_JumpTable_Skip4
+	cp	hl, 1:i3
+	jr	z, PmemOutLGridCheck_JumpTable_Skip3
+	cp	hl, 0:i3
+	jrl	nz, PmemOutGrid_ReturnZero
+	ld	xiy, NakaData_PartFlags
+	lda	xix, (xsp+60)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+60)
+	lda	xbc, (0x024772:24)
+	ld	(xwa), xbc
+	ld	xbc, 79
+	ld	(xwa+6), xbc
+	ld	xbc, 0xffffffff
+	ld	(xwa+14), xbc
+	jr	PmemOutLGridCheck_JumpTable_Join2
+PmemOutLGridCheck_JumpTable_Skip3:
+	ld	xiy, NakaData_PartFlags
+	lda	xix, (xsp+60)
+	ldw	bc, 11
+	ldirw
+	lda_d16	xde, (64812)
+	sub	xde, 63904
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	ld	xbc, xwa
+	add	xbc, xde
+	lda	xwa, (xsp+60)
+	ld	(xwa), xbc
+	ld	xbc, 255
+	ld	(xwa+6), xbc
+	ld	xbc, (xwa)
+	ld	c, (xbc)
+	res	1, c
+	ld	b, 0:opc
+	extz	xbc
+	ld	(xwa+14), xbc
+PmemOutLGridCheck_JumpTable_Join:
+	call	MainRamPut
+	jrl	PmemOutGrid_ReturnZero
+PmemOutLGridCheck_JumpTable_Skip4:
+	ld	xiy, NakaData_PartFlags
+	lda	xix, (xsp+60)
+	ldw	bc, 11
+	ldirw
+	lda	xwa, (xsp+60)
+	lda	xbc, (0x024774:24)
+	ld	(xwa), xbc
+	ld	xbc, 2:i3
+	ld	(xwa+6), xbc
+	ld	xbc, 0xffffffff
+	ld	(xwa+14), xbc
+PmemOutLGridCheck_JumpTable_Join2:
+	call	MainRamAdd
+	jrl	PmemOutGrid_ReturnZero
+	ld	(xsp+4), xhl
+	ldw	(xbc), 1
+	lda	xwa, (xsp+44)
+	ld	(xsp+12), xwa
+	ld	xwa, (xsp+28)
+	ld	xhl, (xsp+12)
+	ld	(xwa), xhl
+	lda	xbc, (0x024772:24)
+	ld	(xsp+16), xiy
+	ld	xde, (xsp+4)
+	lda	xwa, (xde+14)
+	ld	(xsp+28), xwa
+	cp	xbc, (xde)
+	jrl	nz, PmemOutLGridCheck_JumpTable_Skip8
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 0
+	ld	xwa, (xsp+28)
+	ld	xde, (xwa)
+	ld	xwa, xde
+	ld	xbc, xwa
+	sra	xbc, 15
+	sra	xbc, 0
+	and	xbc, 7
+	add	xbc, xwa
+	and	xbc, 0xfffffff8
+	sub	xwa, xbc
+	inc	1, xwa
+	pushw	wa
+	ld	xbc, xde
+	sra	xbc, 15
+	sra	xbc, 0
+	and	xbc, 7
+	add	xbc, xde
+	sra	xbc, 3
+	inc	1, xbc
+	pushw	bc
+	pushw	232
+	pushw	308
+	push	xhl
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+36)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	lda_d16	xde, (64812)
+	sub	xde, 63904
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xde
+	bitm	1, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Skip5
+	ld	xwa, 0xe8013e
+	jr	PmemOutLGridCheck_JumpTable_Join3
+PmemOutLGridCheck_JumpTable_Skip5:
+	ld	xwa, NakaInst_OFF_E80144
+PmemOutLGridCheck_JumpTable_Join3:
+	push	xwa
+	lda	xwa, (xsp+48)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	ldw	(xsp+38), 1
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+36)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 0
+	lda_d16	xwa, (63940)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	InitializeKubo_Helper
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Skip6
+	pushw	232
+	pushw	330
+	lda	xwa, (xsp+48)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join4
+PmemOutLGridCheck_JumpTable_Skip6:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	336
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join4:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 1
+	lda_d16	xwa, (63941)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	InitializeKubo_Helper
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	342
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 2
+	lda_d16	xwa, (63943)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	InitializeKubo_Helper
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Skip7
+	pushw	232
+	pushw	348
+	lda	xwa, (xsp+48)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join5
+PmemOutLGridCheck_JumpTable_Skip7:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	354
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join5:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Skip8:
+	ld	xwa, (xsp+20)
+	ld	(xsp+20), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	ld	xwa, (xsp+24)
+	add	xwa, xbc
+	ld	(xsp+24), xwa
+	ld	xbc, xwa
+	add	xbc, (xsp+32)
+	ld	xwa, (xsp+4)
+	cp	(xwa), xbc
+	jr	nz, PmemOutLGridCheck_JumpTable_Skip10
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 1
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	bit	1, wa
+	jr	z, PmemOutLGridCheck_JumpTable_Skip9
+	ld	xwa, NakaInst_ON_E80168
+	jr	PmemOutLGridCheck_JumpTable_Join6
+PmemOutLGridCheck_JumpTable_Skip9:
+	ld	xwa, 0xe8016e
+PmemOutLGridCheck_JumpTable_Join6:
+	push	xwa
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+36)
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Skip10:
+	lda	xbc, (0x024774:24)
+	ld	xwa, (xsp+4)
+	cp	xbc, (xwa)
+	jrl	nz, PmemOutLGridCheck_JumpTable_Skip13
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 3
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	sll	xwa, 2
+	ld	xbc, (xsp+8)
+	add	xbc, xwa
+	ld	xwa, (xbc)
+	push	xwa
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+36)
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 0
+	lda_d16	xwa, (63940)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	InitializeKubo_Helper
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	lda	xbc, (xsp+44)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Skip11
+	pushw	232
+	pushw	372
+	push	xbc
+	call	Free_Compare2
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join7
+PmemOutLGridCheck_JumpTable_Skip11:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	378
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join7:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 1
+	lda_d16	xwa, (63941)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	InitializeKubo_Helper
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	384
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	call	SendEvent
+	ldw	(xsp+38), 2
+	lda_d16	xwa, (63943)
+	sub	xwa, 63904
+	ld	(xsp+32), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	InitializeKubo_Helper
+	ld	xwa, 0:i3
+	ld	a, (0x024772:24)
+	ld	xbc, xwa
+	sll	xbc, 4
+	sub	xbc, xwa
+	sll	xbc, 6
+	lda	xwa, (0x1ed400:24)
+	add	xwa, xbc
+	add	xwa, xhl
+	add	xwa, (xsp+32)
+	bitm	7, (xwa)
+	jr	z, PmemOutLGridCheck_JumpTable_Skip12
+	pushw	232
+	pushw	390
+	lda	xwa, (xsp+48)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join8
+PmemOutLGridCheck_JumpTable_Skip12:
+	ld	a, (xwa)
+	extz	wa
+	pushw	wa
+	pushw	232
+	pushw	396
+	lda	xwa, (xsp+50)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+PmemOutLGridCheck_JumpTable_Join8:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Skip13:
+	lda_d16	xwa, (63926)
+	ld	(xsp+32), xwa
+	lda	xwa, (xwa+14)
+	sub	xwa, (xsp+20)
+	ld	(xsp+8), xwa
+	ld	xwa, 0:i3
+	ld	a, (0x024774:24)
+	ld	xbc, 26
+	call	InitializeKubo_Helper
+	ld	xbc, (xsp+24)
+	add	xbc, xhl
+	ld	xde, xbc
+	add	xde, (xsp+8)
+	ld	xwa, (xsp+4)
+	cp	(xwa), xde
+	jr	nz, PmemOutLGridCheck_JumpTable_Skip15
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 0
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	bit	7, wa
+	jr	z, PmemOutLGridCheck_JumpTable_Skip14
+	pushw	232
+	pushw	402
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join9
+PmemOutLGridCheck_JumpTable_Skip14:
+	push	xwa
+	pushw	232
+	pushw	408
+	ld	xwa, (xsp+20)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+PmemOutLGridCheck_JumpTable_Join9:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Skip15:
+	ld	xwa, (xsp+32)
+	lda	xwa, (xwa+15)
+	sub	xwa, (xsp+20)
+	ld	xde, xbc
+	add	xde, xwa
+	ld	xwa, (xsp+4)
+	cp	(xwa), xde
+	jr	nz, PmemOutLGridCheck_JumpTable_Skip16
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 1
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	push	xwa
+	pushw	232
+	pushw	414
+	ld	xwa, (xsp+20)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
+PmemOutLGridCheck_JumpTable_Skip16:
+	ld	xwa, (xsp+32)
+	lda	xwa, (xwa+17)
+	sub	xwa, (xsp+20)
+	add	xbc, xwa
+	ld	xwa, (xsp+4)
+	cp	(xwa), xbc
+	jrl	nz, PmemOutGrid_ReturnZero
+	ld	xwa, (xsp+16)
+	ldw	(xwa), 2
+	ld	xwa, (xsp+28)
+	ld	xwa, (xwa)
+	bit	7, wa
+	jr	z, PmemOutLGridCheck_JumpTable_Skip17
+	pushw	232
+	pushw	420
+	ld	xwa, (xsp+16)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	PmemOutLGridCheck_JumpTable_Join10
+PmemOutLGridCheck_JumpTable_Skip17:
+	push	xwa
+	pushw	232
+	pushw	426
+	ld	xwa, (xsp+20)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+12)
+PmemOutLGridCheck_JumpTable_Join10:
+	lda	xde, (xsp+36)
+	ld	xwa, 0x5b0009
+	ld	xbc, 0x1e0008c
+	jrl	PmemOutL_GridCheck_Return
 PmemOutL_GridCheck:
 	ld XWA,XHL
 	srl XWA, 0x00
@@ -1291,7 +1900,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, TtMdCtlMsg_ReturnZero2
 	cp	bc, 2:i3
 	jrl	z, PmemOutLGridCheck_JumpTable_Code_Skip3
@@ -1302,7 +1911,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (63940:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1320,13 +1929,13 @@ TtMdCtlMsg_EventDispatch:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip
 	ld	xbc, 0:i3
 	ld	(xwa+14), xbc
@@ -1338,7 +1947,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip2:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (63941:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1356,7 +1965,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip2:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 255
@@ -1366,7 +1975,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip3:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (63943:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1384,13 +1993,13 @@ PmemOutLGridCheck_JumpTable_Code_Skip3:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip4
 	ld	xbc, 0:i3
 	ld	(xwa+14), xbc
@@ -1411,7 +2020,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip4:
 	ld	(xwa), bc
 	ld	bc, iz
 	ld	(xwa+2), bc
-	.byte 0x90, 0x3f, 0x01, 0x00
+	cpw	(xwa), 1
 	jrl	nz, TtMdCtlMsg_ReturnZero2
 	cp	bc, 2:i3
 	jrl	z, PmemOutLGridCheck_JumpTable_Code_Skip7
@@ -1422,7 +2031,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip4:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (63940:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1440,17 +2049,17 @@ PmemOutLGridCheck_JumpTable_Code_Skip4:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jrl	nz, TtMdCtlMsg_ReturnZero2
 	ld	xbc, (xwa)
 	lda	xde, (xwa+14)
-	.byte 0x81, 0x3f, 0x00
+	cp	(xbc), 0
 	jr	nz, PmemOutLGridCheck_JumpTable_Code_Skip5
 	ld	xbc, 128
 	ld	(xde), xbc
@@ -1463,7 +2072,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip6:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (63941:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1481,7 +2090,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip6:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 255
@@ -1493,7 +2102,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip7:
 	ld	xiy, 15204820
 	lda	xix, (xsp+56)
 	ldw	bc, 11
-	.byte 0x95, 0x11
+	ldirw
 	lda	xwa, (63943:16)
 	sub	xwa, 63904
 	ld	(xsp+28), xwa
@@ -1511,17 +2120,17 @@ PmemOutLGridCheck_JumpTable_Code_Skip7:
 	add	xwa, xbc
 	add	xwa, xhl
 	ld	xbc, xwa
-	.byte 0xaf, 0x1c, 0x81
+	add	xbc, (xsp+28)
 	lda	xwa, (xsp+56)
 	ld	(xwa), xbc
 	ld	xbc, 127
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
-	.byte 0xb1, 0xcf
+	bitm	7, (xbc)
 	jrl	nz, TtMdCtlMsg_ReturnZero2
 	ld	xbc, (xwa)
 	lda	xde, (xwa+14)
-	.byte 0x81, 0x3f, 0x00
+	cp	(xbc), 0
 	jr	nz, PmemOutLGridCheck_JumpTable_Code_Skip8
 	ld	xbc, 128
 	ld	(xde), xbc
@@ -1543,7 +2152,7 @@ PmemOutLGridCheck_JumpTable_Code_Join2:
 	lda	xwa, (149362:24)
 	ld	(xsp+24), xiy
 	lda	xbc, (63904:16)
-	.byte 0xa6, 0xf0
+	cp	xwa, (xiz)
 	jrl	nz, PmemOutLGridCheck_JumpTable_Code_Skip11
 	ld	xwa, (xsp+24)
 	ldw	(xwa), 0
@@ -1564,9 +2173,10 @@ PmemOutLGridCheck_JumpTable_Code_Join2:
 	add	xwa, xbc
 	add	xwa, xhl
 	add	xwa, xiz
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip9
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xfa, 0x01
+	pushw	232
+	pushw	506
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -1605,7 +2215,7 @@ PmemOutLGridCheck_JumpTable_Code_Join3:
 	lda	xwa, (2020352:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
@@ -1637,7 +2247,8 @@ PmemOutLGridCheck_JumpTable_Code_Join3:
 	lda	xwa, (2020352:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
+	add	xwa, (xsp+28)
+	bitm	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip10
 	pushw 232
 	pushw 524
@@ -1667,7 +2278,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip11:
 	ld	xwa, (xsp+28)
 	sub	xwa, xbc
 	ld	(xsp+28), xwa
-	.byte 0xa6, 0xf2
+	cp	xde, (xiz)
 	jrl	nz, PmemOutLGridCheck_JumpTable_Code_Skip14
 	ld	xwa, (xsp+24)
 	ldw	(xwa), 0
@@ -1684,7 +2295,8 @@ PmemOutLGridCheck_JumpTable_Code_Skip11:
 	ld	xwa, (xsp+16)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80, 0xb0, 0xcf
+	add	xwa, (xsp+28)
+	bitm	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip12
 	pushw 232
 	pushw 536
@@ -1726,7 +2338,7 @@ PmemOutLGridCheck_JumpTable_Code_Join5:
 	lda	xwa, (2020352:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	ld	a, (xwa)
 	extz	wa
 	pushw	wa
@@ -1758,9 +2370,9 @@ PmemOutLGridCheck_JumpTable_Code_Join5:
 	lda	xwa, (2020352:24)
 	add	xwa, xbc
 	add	xwa, xhl
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	lda	xbc, (xsp+40)
-	.byte 0xb0, 0xcf
+	bitm	7, (xwa)
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip13
 	pushw 232
 	pushw 554
@@ -1801,7 +2413,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip14:
 	add	xbc, xwa
 	add	xbc, xhl
 	ld	xwa, xbc
-	.byte 0xaf, 0x1c, 0x80
+	add	xwa, (xsp+28)
 	cp	(xiz), xwa
 	jr	nz, PmemOutLGridCheck_JumpTable_Code_Skip16
 	ld	xwa, (xsp+24)
@@ -1833,7 +2445,7 @@ PmemOutLGridCheck_JumpTable_Code_Join7:
 PmemOutLGridCheck_JumpTable_Code_Skip16:
 	ld	xwa, (xsp+20)
 	lda	xwa, (xwa+15)
-	.byte 0xaf, 0x08, 0xa0
+	sub	xwa, (xsp+8)
 	ld	xhl, xbc
 	add	xhl, xwa
 	ld	xwa, (xsp+4)
@@ -1858,7 +2470,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip16:
 PmemOutLGridCheck_JumpTable_Code_Skip17:
 	ld	xwa, (xsp+20)
 	lda	xwa, (xwa+17)
-	.byte 0xaf, 0x08, 0xa0
+	sub	xwa, (xsp+8)
 	add	xbc, xwa
 	ld	xwa, (xsp+4)
 	cp	(xwa), xbc
@@ -2142,11 +2754,15 @@ AcCtlMsgGrid_Show:
 	push XWA
 	call Free_Compare2
 	inc 0,XSP
-	lda xde, (xsp + 0x08)
-	.byte 0xe8, 0xa8, 0x38, 0x0b, 0x00, 0x00, 0x0b, 0xf7
-	.byte 0x00, 0x40, 0xf2, 0xec, 0xe7, 0x00, 0x41, 0xfa
-	.byte 0xec, 0xe7, 0x00, 0x1d, 0x9f, 0xca, 0xfa, 0x78
-	.byte 0x3b, 0x03
+	lda	xde, (xsp+8)
+	ld	xwa, 0:i3
+	push	xwa
+	pushw	0
+	pushw	247
+	ld	xwa, MidiPart_PageDisplay_Data
+	ld	xbc, MidiPart_PageDisplay_Data_0x8
+	call	DrawStringCentered
+	jrl	AcCtlMsgGrid_ReturnHandled
 AcCtlMsgGrid_OK:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
@@ -2511,7 +3127,7 @@ CtlMsgGridCheck_JumpTable:
 	ld	(xbc), wa
 	ld	xwa, (xsp+30)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, CtlMsgGrid_ReturnZero
 	ld	bc, wa
 	sla	bc, 2
@@ -2538,7 +3154,7 @@ CtlMsgGridCheck_JumpTable:
 	ld	(xbc), wa
 	ld	xwa, (xsp+30)
 	ld	(xbc+2), wa
-	.byte 0x91, 0x3f, 0x01, 0x00
+	cpw	(xbc), 1
 	jrl	nz, CtlMsgGrid_ReturnZero
 	ld	bc, wa
 	sla	bc, 2
@@ -2571,14 +3187,14 @@ CtlMsgGridCheck_Loop:
 	ld	iy, ix
 	add	iy, wa
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xec, 0xf4, 0xf0
+	.byte	0xe3, 0x07, 0xec, 0xf4, 0xf0	; cp xwa, (xhl+iy)
 	jr	nz, CtlMsgGridCheck_Skip2
 	lda	xde, (xsp+20)
 	ld	xwa, (xsp+4)
 	ld	(xwa+4), xde
 	ld	xbc, 15205342
 	ld	xwa, (xsp+30)
-	.byte 0x98, 0x04, 0x3f, 0x00, 0x00
+	cpw	(xwa+4), 0
 	jr	z, CtlMsgGridCheck_Skip
 	ld	xbc, 15205336
 CtlMsgGridCheck_Skip:
@@ -2786,11 +3402,15 @@ MidiSetup_TtlCase4:
 	push XWA
 	call Free_Compare2
 	inc 0,XSP
-	lda xde, (xsp + 0x08)
-	.byte 0xe8, 0xa8, 0x38, 0x0b, 0x00, 0x00, 0x0b, 0xf7
-	.byte 0x00, 0x40, 0xf2, 0xec, 0xe7, 0x00, 0x41, 0xfa
-	.byte 0xec, 0xe7, 0x00, 0x1d, 0x9f, 0xca, 0xfa, 0x78
-	.byte 0x04, 0x05
+	lda	xde, (xsp+8)
+	ld	xwa, 0:i3
+	push	xwa
+	pushw	0
+	pushw	247
+	ld	xwa, MidiPart_PageDisplay_Data
+	ld	xbc, MidiPart_PageDisplay_Data_0x8
+	call	DrawStringCentered
+	jrl	MidiPart_ReturnZeroJmp
 MidiSetup_TtlCase5:
 	ld xwa, (xsp + 32)
 	ld xbc, (xsp + 28)
@@ -3286,7 +3906,322 @@ MidiPartGridCheck:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MidiPartGridCheck_JumpTable:
-	.incbin "includes/romslices/v7_transplant_MidiPartGridCheck_JumpTable.bin"
+	call	GetFocusObject
+	ld	xwa, xhl
+	ld	xbc, 0x1e0008f
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	(xsp+34), xhl
+	lda	xbc, (xsp+16)
+	ld	xwa, (xsp+34)
+	srl	xwa, 0
+	ld	qwa, 0
+	ld	(xbc), wa
+	ld	xwa, (xsp+34)
+	ld	(xbc+2), wa
+	muls	wa, 12
+	ld	de, wa
+	sub	de, 24
+	ld	a, (0x024778:24)
+	extz	wa
+	muls	wa, 96
+	ld	hl, wa
+	add	hl, de
+	ld	wa, (xbc)
+	sla	wa, 2
+	dec	4, wa
+	ld	de, wa
+	add	de, hl
+	lda	xwa, (NakaInst_ON_E80168_0x3B8:24)
+	ld_rrl	xwa, xwa, de	; ld xwa, (xwa+de)
+	ld	(xsp+12), xwa
+	ld	wa, (xbc)
+	cp	wa, 3:i3
+	jr	z, MidiPartGridCheck_Skip4
+	cp	wa, 2:i3
+	jr	z, MidiPartGridCheck_Skip3
+	cp	wa, 1:i3
+	jrl	nz, MidiSetup_ReturnZero
+	ld	xwa, (xsp+12)
+	inc	1, xwa
+	call	AcApcToggleProc_Helper
+	cp	hl, 0:i3
+	jr	nz, MidiPartGridCheck_Skip
+	ld	xwa, (xsp+12)
+	inc	1, xwa
+	ld	bc, 1:i3
+	ld	de, 2:i3
+	call	MainLswPut
+	ld	xwa, (xsp+12)
+	inc	2, xwa
+	ld	bc, 1:i3
+	ld	de, 2:i3
+	call	MainLswPut
+	ld	xwa, (xsp+12)
+	ld	bc, 0:i3
+	ld	de, 2:i3
+	jrl	MidiPartGridCheck_Join2
+MidiPartGridCheck_Skip:
+	ld	xwa, (xsp+38)
+	cp	xwa, 0x1c00019
+	jr	nz, MidiPartGridCheck_Skip2
+	ld	xwa, (xsp+12)
+	ld	bc, 4:i3
+	ld	de, 2:i3
+	jrl	MidiPartGridCheck_Join
+MidiPartGridCheck_Skip2:
+	ld	xwa, (xsp+12)
+	ld	bc, 1:i3
+	ld	de, 2:i3
+	jrl	MidiPartGridCheck_Join
+MidiPartGridCheck_Skip3:
+	ld	xwa, (xsp+12)
+	call	AcApcToggleProc_Helper
+	ld	wa, hl
+	add	wa, wa
+	lda	xbc, (0xe80640:24)
+	ld_rrw	bc, xbc, wa	; ld bc, (xbc+wa)
+	cp	bc, hl
+	jrl	z, MidiSetup_ReturnZero
+	ld	xwa, (xsp+12)
+	ld	de, 2:i3
+	jrl	MidiPartGridCheck_Join2
+MidiPartGridCheck_Skip4:
+	ld	xwa, (xsp+12)
+	ld	bc, 1:i3
+	ld	de, 2:i3
+	jrl	MidiPartGridCheck_Join2
+	call	GetFocusObject
+	ld	xwa, xhl
+	ld	xbc, 0x1e0008f
+	ld	xde, 0:i3
+	call	SendEvent
+	ld	(xsp+34), xhl
+	lda	xbc, (xsp+16)
+	ld	xwa, (xsp+34)
+	srl	xwa, 0
+	ld	qwa, 0
+	ld	(xbc), wa
+	ld	xwa, (xsp+34)
+	ld	(xbc+2), wa
+	muls	wa, 12
+	ld	de, wa
+	sub	de, 24
+	ld	a, (0x024778:24)
+	extz	wa
+	muls	wa, 96
+	ld	hl, wa
+	add	hl, de
+	ld	wa, (xbc)
+	sla	wa, 2
+	dec	4, wa
+	ld	de, wa
+	add	de, hl
+	lda	xwa, (NakaInst_ON_E80168_0x3B8:24)
+	ld_rrl	xwa, xwa, de	; ld xwa, (xwa+de)
+	ld	(xsp+12), xwa
+	ld	wa, (xbc)
+	cp	wa, 3:i3
+	jr	z, MidiPartGridCheck_Skip8
+	cp	wa, 2:i3
+	jr	z, MidiPartGridCheck_Skip7
+	cp	wa, 1:i3
+	jrl	nz, MidiSetup_ReturnZero
+	ld	xwa, (xsp+12)
+	inc	1, xwa
+	call	AcApcToggleProc_Helper
+	cp	hl, 1:i3
+	jrl	nz, MidiSetup_ReturnZero
+	ld	xwa, (xsp+12)
+	call	AcApcToggleProc_Helper
+	cp	hl, 0:i3
+	jr	nz, MidiPartGridCheck_Skip5
+	ld	xwa, (xsp+12)
+	inc	1, xwa
+	ld	bc, 0:i3
+	ld	de, 2:i3
+	call	MainLswPut
+	ld	xwa, (xsp+12)
+	inc	2, xwa
+	ld	bc, 0:i3
+	ld	de, 2:i3
+	jr	MidiPartGridCheck_Join2
+MidiPartGridCheck_Skip5:
+	ld	xwa, (xsp+38)
+	cp	xwa, 0x1c0001a
+	jr	nz, MidiPartGridCheck_Skip6
+	ld	xwa, (xsp+12)
+	ldw	bc, 65532
+	ld	de, 2:i3
+	jr	MidiPartGridCheck_Join
+MidiPartGridCheck_Skip6:
+	ld	xwa, (xsp+12)
+	ldw	bc, 65535
+	ld	de, 2:i3
+MidiPartGridCheck_Join:
+	call	MainLswAdd
+	jrl	MidiSetup_ReturnZero
+MidiPartGridCheck_Skip7:
+	ld	xwa, (xsp+12)
+	call	AcApcToggleProc_Helper
+	ld	wa, hl
+	add	wa, wa
+	lda	xbc, (0xe80650:24)
+	ld_rrw	bc, xbc, wa	; ld bc, (xbc+wa)
+	cp	bc, hl
+	jrl	z, MidiSetup_ReturnZero
+	ld	xwa, (xsp+12)
+	ld	de, 2:i3
+	jr	MidiPartGridCheck_Join2
+MidiPartGridCheck_Skip8:
+	ld	xwa, (xsp+12)
+	ld	bc, 0:i3
+	ld	de, 2:i3
+MidiPartGridCheck_Join2:
+	call	MainLswPut
+	jrl	MidiSetup_ReturnZero
+	ld	xix, (xsp+34)
+	ld	(xsp+4), xiy
+	ld	(xsp+8), xhl
+	ld	(xde), xhl
+	ld	(xsp+12), xbc
+	ldw	(xbc), 2
+	jrl	MidiPartGridCheck_Join5
+MidiPartGridCheck_Loop:
+	ld	de, bc
+	muls	de, 12
+	sub	de, 24
+	ld	a, (0x024778:24)
+	extz	wa
+	muls	wa, 96
+	ld	iy, wa
+	add	iy, de
+	lda	xhl, (NakaInst_ON_E80168_0x3B8:24)
+	ld_rrl	xiz, xhl, iy	; ld xiz, (xhl+iy)
+	ld	xde, (xsp+34)
+	cp	(xde), xiz
+	jr	nz, MidiPartGridCheck_Skip10
+	ld	xwa, (xsp+4)
+	ldw	(xwa), 1
+	ld	xwa, (xde)
+	inc	1, xwa
+	call	AcApcToggleProc_Helper
+	cp	hl, 0:i3
+	jr	nz, MidiPartGridCheck_Skip9
+	pushw	232
+	pushw	1722
+	lda	xwa, (xsp+28)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	MidiPartGridCheck_Join3
+MidiPartGridCheck_Skip9:
+	ld	xwa, (xsp+34)
+	ld	wa, (xwa+4)
+	inc	1, wa
+	pushw	wa
+	pushw	232
+	pushw	1728
+	lda	xwa, (xsp+30)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+MidiPartGridCheck_Join3:
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip10:
+	ld	xwa, (xix)
+	dec	1, xwa
+	lda	xde, (xix+4)
+	cp	xwa, xiz
+	jr	nz, MidiPartGridCheck_Skip12
+	ld	xwa, (xsp+4)
+	ldw	(xwa), 1
+	cpw	(xde), 0
+	jr	nz, MidiPartGridCheck_Skip11
+	pushw	232
+	pushw	1736
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	jr	MidiPartGridCheck_Join4
+MidiPartGridCheck_Skip11:
+	ld	xwa, (xsp+34)
+	ld	xwa, (xwa)
+	dec	1, xwa
+	call	AcApcToggleProc_Helper
+	inc	1, hl
+	pushw	hl
+	pushw	232
+	pushw	1742
+	lda	xwa, (xsp+30)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+MidiPartGridCheck_Join4:
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip12:
+	ld	iz, iy
+	inc	4, iz
+	ld	xwa, (xix)
+	.byte	0xe3, 0x07, 0xec, 0xf8, 0xf0	; cp xwa, (xhl+iz)
+	jr	nz, MidiPartGridCheck_Skip13
+	ld	xwa, (xsp+4)
+	ldw	(xwa), 2
+	ld	wa, (xde)
+	sla	wa, 2
+	lda	xbc, (Transpose_ValueDisplay_Table:24)
+	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	push	xwa
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip13:
+	inc	8, iy
+	ld	xwa, (xix)
+	.byte	0xe3, 0x07, 0xec, 0xf4, 0xf0	; cp xwa, (xhl+iy)
+	jr	nz, MidiPartGridCheck_Skip15
+	ld	xwa, (xsp+4)
+	ldw	(xwa), 3
+	ld	xwa, 0xe806dc
+	cpw	(xde), 0
+	jr	z, MidiPartGridCheck_Skip14
+	ld	xwa, 0xe806d6
+MidiPartGridCheck_Skip14:
+	push	xwa
+	ld	xwa, (xsp+12)
+	push	xwa
+	call	Free_Compare2
+	inc	8, xsp
+	call	GetFocusObject
+	ld	xwa, xhl
+	lda	xde, (xsp+16)
+	ld	xbc, 0x1e0008c
+	jrl	MidiPart_SendEventReturn
+MidiPartGridCheck_Skip15:
+	inc	1, bc
+	ld	xwa, (xsp+12)
+	ld	(xwa), bc
+MidiPartGridCheck_Join5:
+	ld	xwa, (xsp+12)
+	ld	bc, (xwa)
+	cp	bc, 10
+	jrl	lt, MidiPartGridCheck_Loop
+	jrl	MidiSetup_ReturnZero
 MidiSetup_EventHandler:
 	ld XWA,(XSP+0x22)
 	srl XWA, 0x00
@@ -3396,7 +4331,21 @@ MidiSetup_ReturnZero:
 	ret
 
 MidiPart_DataBlock:
-	.incbin "includes/romslices/v7_transplant_MidiPart_DataBlock.bin"
+	cpdi8	(49124), 168
+	ret	nz
+	cpdi8	(49121), 5
+	ret	nz
+	ldb_d8	c, (49123)
+	bit	6, c
+	ret	z
+	ldb_d8	a, (49122)
+	and	a, c
+	ret	z
+	cpdi8	(35996), 15
+	ret	z
+	ldw	wa, 15
+	call	SoundCtrl_SendCommand
+	ret
 InitializeMurai:
 	lda xsp, (xsp - 0x0e)
 	lda XBC, (XSP)
@@ -3774,57 +4723,111 @@ InitializeMurai:
 	call RegisterObjectTable
 	pushw 0x0001
 	pushw 0x00e8
-	pushw 0x658a
-	.byte 0xe8, 0xaa, 0x41, 0x00, 0x00, 0x20, 0x01, 0x42
-	.byte 0x02, 0x00, 0xa0, 0x01, 0x1d, 0x1e, 0x49, 0xfa
-	.byte 0x0b, 0x01, 0x00, 0x0b, 0xe8, 0x00, 0x0b, 0x94
-	.byte 0x65, 0xe8, 0xaa, 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x02, 0x00, 0x1d, 0x73, 0x49
-	.byte 0xfa, 0x0b, 0x01, 0x00, 0x0b, 0xe8, 0x00, 0x0b
-	.byte 0x9e, 0x65, 0xe8, 0xab, 0x41, 0x00, 0x00, 0x20
-	.byte 0x01, 0x42, 0x00, 0x00, 0x03, 0x00, 0x1d, 0x73
-	.byte 0x49, 0xfa, 0x0b, 0x01, 0x00, 0x0b, 0xe8, 0x00
-	.byte 0x0b, 0xa8, 0x65, 0xe8, 0xac, 0x41, 0x00, 0x00
-	.byte 0x20, 0x01, 0x42, 0x00, 0x00, 0x04, 0x00, 0x1d
-	.byte 0x73, 0x49, 0xfa, 0x0b, 0x01, 0x00, 0x0b, 0xe8
-	.byte 0x00, 0x0b, 0xb4, 0x65, 0xe8, 0xad, 0x41, 0x00
-	.byte 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x05, 0x00
-	.byte 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x01, 0x00, 0x0b
-	.byte 0xe8, 0x00, 0x0b, 0xc0, 0x65, 0xe8, 0xaf, 0x41
-	.byte 0x00, 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x07
-	.byte 0x00, 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x01, 0x00
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xcc, 0x65, 0x40, 0x08
-	.byte 0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0x08, 0x00, 0x1d, 0x73, 0x49
-	.byte 0xfa, 0x0b, 0x01, 0x00, 0x0b, 0xe8, 0x00, 0x0b
-	.byte 0xd8, 0x65, 0x40, 0x0d, 0x00, 0x00, 0x00, 0x41
-	.byte 0x00, 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0x0d
-	.byte 0x00, 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x01, 0x00
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xe2, 0x65, 0x40, 0xa5
-	.byte 0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xa5, 0x00, 0x1d, 0x73, 0x49
-	.byte 0xfa, 0x0b, 0x01, 0x00, 0x0b, 0xe8, 0x00, 0x0b
-	.byte 0xee, 0x65, 0x40, 0xe4, 0x00, 0x00, 0x00, 0x41
-	.byte 0x00, 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0xe4
-	.byte 0x00, 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x01, 0x00
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0xfe, 0x65, 0x40, 0xea
-	.byte 0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xea, 0x00, 0x1d, 0x73, 0x49
-	.byte 0xfa, 0x0b, 0x01, 0x00, 0x0b, 0xe8, 0x00, 0x0b
-	.byte 0x0a, 0x66, 0x40, 0xeb, 0x00, 0x00, 0x00, 0x41
-	.byte 0x00, 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0xeb
-	.byte 0x00, 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x01, 0x00
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x18, 0x66, 0x40, 0xee
-	.byte 0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xee, 0x00, 0x1d, 0x73, 0x49
-	.byte 0xfa, 0x0b, 0x01, 0x00, 0x0b, 0xe8, 0x00, 0x0b
-	.byte 0x22, 0x66, 0x40, 0xef, 0x00, 0x00, 0x00, 0x41
-	.byte 0x00, 0x00, 0x20, 0x01, 0x42, 0x00, 0x00, 0xef
-	.byte 0x00, 0x1d, 0x73, 0x49, 0xfa, 0x0b, 0x01, 0x00
-	.byte 0x0b, 0xe8, 0x00, 0x0b, 0x2c, 0x66, 0x40, 0xf0
-	.byte 0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x20, 0x01
-	.byte 0x42, 0x00, 0x00, 0xf0, 0x00, 0x1d, 0x73, 0x49
-	.byte 0xfa, 0xbf, 0x0e, 0x37, 0x0e
+	pushw	25994
+	ld	xwa, 2:i3
+	ld	xbc, 0x1200000
+	ld	xde, 0x1a00002
+	call	RegisterMode
+	pushw	1
+	pushw	232
+	pushw	26004
+	ld	xwa, 2:i3
+	ld	xbc, 0x1200000
+	ld	xde, 0x020000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26014
+	ld	xwa, 3:i3
+	ld	xbc, 0x1200000
+	ld	xde, 0x030000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26024
+	ld	xwa, 4:i3
+	ld	xbc, 0x1200000
+	ld	xde, 0x040000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26036
+	ld	xwa, 5:i3
+	ld	xbc, 0x1200000
+	ld	xde, 0x050000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26048
+	ld	xwa, 7:i3
+	ld	xbc, 0x1200000
+	ld	xde, 0x070000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26060
+	ld	xwa, 8
+	ld	xbc, 0x1200000
+	ld	xde, 0x080000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26072
+	ld	xwa, 13
+	ld	xbc, 0x1200000
+	ld	xde, 0x0d0000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26082
+	ld	xwa, 165
+	ld	xbc, 0x1200000
+	ld	xde, 0xa50000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26094
+	ld	xwa, 228
+	ld	xbc, 0x1200000
+	ld	xde, NakaData_ExternalBase
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26110
+	ld	xwa, 234
+	ld	xbc, 0x1200000
+	ld	xde, Presentation_RootEntry
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26122
+	ld	xwa, 235
+	ld	xbc, 0x1200000
+	ld	xde, 0xeb0000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26136
+	ld	xwa, 238
+	ld	xbc, 0x1200000
+	ld	xde, 0xee0000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26146
+	ld	xwa, 239
+	ld	xbc, 0x1200000
+	ld	xde, 0xef0000
+	call	RegisterTitle
+	pushw	1
+	pushw	232
+	pushw	26156
+	ld	xwa, 240
+	ld	xbc, 0x1200000
+	ld	xde, 0xf00000
+	call	RegisterTitle
+	lda	xsp, (xsp+14)
+	ret
 BitmapAccita16:
 	cp xbc, 0x1e000a3
 	jr z, BitmapAccita16_Height
@@ -5821,12 +6824,20 @@ AcLswPartPan_Confirm:
 	sra XBC, 0x00
 	and XBC,0x00000fff
 	add XBC,XWA
-	sra XBC, 0x0c
-	.byte 0x9e, 0x02, 0x62, 0x96, 0x81, 0xd9, 0x62, 0xb6
-	.byte 0x51, 0xd9, 0x64, 0xaf, 0x08, 0x20, 0xb0, 0x51
-	.byte 0x9e, 0x06, 0x6a, 0xee, 0x88, 0x31, 0xc1, 0x00
-	.byte 0x32, 0x0a, 0x00, 0x1d, 0x4c, 0xd1, 0xfa, 0x78
-	.byte 0xa6, 0x00
+	sra	xbc, 12
+	incw	2, (xiz+2)
+	add	bc, (xiz)
+	inc	2, bc
+	ld	(xiz), bc
+	inc	4, bc
+	ld	xwa, (xsp+8)
+	ld	(xwa), bc
+	decw	2, (xiz+6)
+	ld	xwa, xiz
+	ldw	bc, 193
+	ldw	de, 10
+	call	DrawDesignBox
+	jrl	AcLswPartPan_ReturnHandled
 AcLswPartPan_Match:
 	ld	xwa, (xsp+36)
 	ld	xbc, xiz
@@ -6422,23 +7433,46 @@ AudioCtrl_PopIzRet6:
 	ret
 
 LswReverb:
-	.byte 0x3e, 0xe8, 0x8e, 0xf2, 0xaa, 0x52, 0xe9, 0x33
-	.byte 0xe9, 0xcf, 0x83, 0x00, 0xe0, 0x01, 0x76, 0xee
-	.byte 0x00, 0xea, 0x8c, 0xec, 0xee, 0x02, 0xeb, 0x88
-	.byte 0xec, 0x80, 0xe9, 0xcf, 0x02, 0x00, 0xe1, 0x01
-	.byte 0x76, 0xcc, 0x00, 0xe9, 0xcf, 0x3f, 0x00, 0xe0
-	.byte 0x01, 0x76, 0xb3, 0x00, 0xe9, 0xcf, 0x3e, 0x00
-	.byte 0xe0, 0x01, 0x76, 0x9f, 0x00, 0xe9, 0xcf, 0x41
-	.byte 0x00, 0xe0, 0x01, 0x76, 0x8a, 0x00, 0xe9, 0xcf
-	.byte 0x01, 0x00, 0xe1, 0x01, 0x66, 0x6c, 0xe9, 0xcf
-	.byte 0x00, 0x00, 0xe1, 0x01, 0x66, 0x46, 0xe9, 0xcf
-	.byte 0x42, 0x00, 0xe0, 0x01, 0x7e, 0xa8, 0x00, 0xa2
-	.byte 0x20, 0xe8, 0xef, 0x00, 0xd7, 0xe2, 0xa8, 0xe8
-	.byte 0x12, 0xe8, 0xee, 0x02, 0xe8, 0x83, 0xaa, 0x08
-	.byte 0x21, 0xa3, 0x20, 0xd8, 0x33, 0x0d, 0x66, 0x13
-	.byte 0x9a, 0x04, 0x04, 0x0b, 0xe9, 0x00, 0x0b, 0xbc
-	.byte 0x55, 0x39, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0a
-	.byte 0x37, 0x68, 0x0d
+	push	xiz
+	ld	xiz, xwa
+	lda	xhl, (MixerPartTable_Start_0x8:24)
+	cp	xbc, 0x1e00083
+	jrl	z, AudioCtrlVibratoZeroReturn
+	ld	xix, xde
+	sll	xix, 2
+	ld	xwa, xhl
+	add	xwa, xix
+	cp	xbc, 0x1e10002
+	jrl	z, LswReverb_GetSignedToggle
+	cp	xbc, 0x1e0003f
+	jrl	z, LswReverb_GetToggle
+	cp	xbc, 0x1e0003e
+	jrl	z, LswReverb_CheckEnabled
+	cp	xbc, 0x1e00041
+	jrl	z, LswReverb_StepSize
+	cp	xbc, 0x1e10001
+	jr	z, LswReverb_GetSubParam
+	cp	xbc, 0x1e10000
+	jr	z, LswReverb_GetPartId
+	cp	xbc, 0x1e00042
+	jrl	nz, AudioCtrlVibratoZeroReturn
+	ld	xwa, (xde)
+	srl	xwa, 0
+	ld	qwa, 0
+	extz	xwa
+	sll	xwa, 2
+	add	xhl, xwa
+	ld	xbc, (xde+8)
+	ld	xwa, (xhl)
+	bit	13, wa
+	jr	z, LswReverb_InactiveStr
+	pushm	(xde+4)
+	pushw	233
+	pushw	21948
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	jr	LswReverb_ReturnThis
 LswReverb_InactiveStr:
 	pushw	233
 	pushw	21952
@@ -6513,22 +7547,46 @@ AudioCtrl_PopIzRet1:
 	ret
 
 LswDSPEffect:
-	.byte 0x3e, 0xe8, 0x8e, 0xf2, 0xaa, 0x52, 0xe9, 0x33
-	.byte 0xe9, 0xcf, 0x83, 0x00, 0xe0, 0x01, 0x76, 0xc1
-	.byte 0x00, 0xea, 0x8c, 0xec, 0xee, 0x02, 0xeb, 0x88
-	.byte 0xec, 0x80, 0xe9, 0xcf, 0x02, 0x00, 0xe1, 0x01
-	.byte 0x76, 0x9f, 0x00, 0xe9, 0xcf, 0x3f, 0x00, 0xe0
-	.byte 0x01, 0x76, 0x86, 0x00, 0xe9, 0xcf, 0x3e, 0x00
-	.byte 0xe0, 0x01, 0x66, 0x73, 0xe9, 0xcf, 0x41, 0x00
-	.byte 0xe0, 0x01, 0x66, 0x72, 0xe9, 0xcf, 0x01, 0x00
-	.byte 0xe1, 0x01, 0x66, 0x5c, 0xe9, 0xcf, 0x00, 0x00
-	.byte 0xe1, 0x01, 0x66, 0x45, 0xe9, 0xcf, 0x42, 0x00
-	.byte 0xe0, 0x01, 0x6e, 0x7e, 0xa2, 0x20, 0xe8, 0xef
-	.byte 0x00, 0xd7, 0xe2, 0xa8, 0xe8, 0x12, 0xe8, 0xee
-	.byte 0x02, 0xe8, 0x83, 0xaa, 0x08, 0x21, 0xa3, 0x20
-	.byte 0xd8, 0x33, 0x0c, 0x66, 0x13, 0x9a, 0x04, 0x04
-	.byte 0x0b, 0xe9, 0x00, 0x0b, 0xc4, 0x55, 0x39, 0x1d
-	.byte 0x95, 0x02, 0xff, 0xbf, 0x0a, 0x37, 0x68, 0x0d
+	push	xiz
+	ld	xiz, xwa
+	lda	xhl, (MixerPartTable_Start_0x8:24)
+	cp	xbc, 0x1e00083
+	jrl	z, LswDSPEffZeroReturn
+	ld	xix, xde
+	sll	xix, 2
+	ld	xwa, xhl
+	add	xwa, xix
+	cp	xbc, 0x1e10002
+	jrl	z, LswDSPEff_GetSignedToggle
+	cp	xbc, 0x1e0003f
+	jrl	z, LswDSPEff_GetToggle
+	cp	xbc, 0x1e0003e
+	jr	z, LswDSPEff_CheckEnabled
+	cp	xbc, 0x1e00041
+	jr	z, LswDSPEff_StepReturn
+	cp	xbc, 0x1e10001
+	jr	z, LswDSPEff_GetSubParam
+	cp	xbc, 0x1e10000
+	jr	z, LswDSPEff_GetPartId
+	cp	xbc, 0x1e00042
+	jr	nz, LswDSPEffZeroReturn
+	ld	xwa, (xde)
+	srl	xwa, 0
+	ld	qwa, 0
+	extz	xwa
+	sll	xwa, 2
+	add	xhl, xwa
+	ld	xbc, (xde+8)
+	ld	xwa, (xhl)
+	bit	12, wa
+	jr	z, LswDSPEff_InactiveStr
+	pushm	(xde+4)
+	pushw	233
+	pushw	21956
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	jr	LswDSPEff_ReturnThis
 LswDSPEff_InactiveStr:
 	pushw	233
 	pushw	21960
@@ -7107,22 +8165,46 @@ AudioCtrl_PopIzRet4:
 	ret
 
 LswBendRange:
-	.byte 0x3e, 0xe8, 0x8e, 0xf2, 0xaa, 0x52, 0xe9, 0x33
-	.byte 0xe9, 0xcf, 0x83, 0x00, 0xe0, 0x01, 0x76, 0xc1
-	.byte 0x00, 0xea, 0x8c, 0xec, 0xee, 0x02, 0xeb, 0x88
-	.byte 0xec, 0x80, 0xe9, 0xcf, 0x02, 0x00, 0xe1, 0x01
-	.byte 0x76, 0x9f, 0x00, 0xe9, 0xcf, 0x3f, 0x00, 0xe0
-	.byte 0x01, 0x76, 0x86, 0x00, 0xe9, 0xcf, 0x3e, 0x00
-	.byte 0xe0, 0x01, 0x66, 0x73, 0xe9, 0xcf, 0x41, 0x00
-	.byte 0xe0, 0x01, 0x66, 0x72, 0xe9, 0xcf, 0x01, 0x00
-	.byte 0xe1, 0x01, 0x66, 0x5c, 0xe9, 0xcf, 0x00, 0x00
-	.byte 0xe1, 0x01, 0x66, 0x45, 0xe9, 0xcf, 0x42, 0x00
-	.byte 0xe0, 0x01, 0x6e, 0x7e, 0xa2, 0x20, 0xe8, 0xef
-	.byte 0x00, 0xd7, 0xe2, 0xa8, 0xe8, 0x12, 0xe8, 0xee
-	.byte 0x02, 0xe8, 0x83, 0xaa, 0x08, 0x21, 0xa3, 0x20
-	.byte 0xd8, 0x33, 0x07, 0x66, 0x13, 0x9a, 0x04, 0x04
-	.byte 0x0b, 0xe9, 0x00, 0x0b, 0x0c, 0x56, 0x39, 0x1d
-	.byte 0x95, 0x02, 0xff, 0xbf, 0x0a, 0x37, 0x68, 0x0d
+	push	xiz
+	ld	xiz, xwa
+	lda	xhl, (MixerPartTable_Start_0x8:24)
+	cp	xbc, 0x1e00083
+	jrl	z, LswBendRangeZeroReturn
+	ld	xix, xde
+	sll	xix, 2
+	ld	xwa, xhl
+	add	xwa, xix
+	cp	xbc, 0x1e10002
+	jrl	z, LswBendRng_GetSignedToggle
+	cp	xbc, 0x1e0003f
+	jrl	z, LswBendRng_GetToggle
+	cp	xbc, 0x1e0003e
+	jr	z, LswBendRng_CheckEnabled
+	cp	xbc, 0x1e00041
+	jr	z, LswBendRng_StepReturn
+	cp	xbc, 0x1e10001
+	jr	z, LswBendRng_GetSubParam
+	cp	xbc, 0x1e10000
+	jr	z, LswBendRng_GetPartId
+	cp	xbc, 0x1e00042
+	jr	nz, LswBendRangeZeroReturn
+	ld	xwa, (xde)
+	srl	xwa, 0
+	ld	qwa, 0
+	extz	xwa
+	sll	xwa, 2
+	add	xhl, xwa
+	ld	xbc, (xde+8)
+	ld	xwa, (xhl)
+	bit	7, wa
+	jr	z, LswBendRng_InactiveStr
+	pushm	(xde+4)
+	pushw	233
+	pushw	22028
+	push	xbc
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	jr	LswBendRng_ReturnThis
 LswBendRng_InactiveStr:
 	pushw	233
 	pushw	22032
@@ -7927,7 +9009,7 @@ IvMesageProc:
 	ld	wa, (149388:24)
 	muls	wa, 14
 	lda	xbc, (15323968:24)
-	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3f, 0x05, 0x00
+	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3f, 0x05, 0x00	; cp (xbc+wa), 0x0005
 	jrl	nz, IvMessageStrcpyReturn
 	ld	xwa, 4294967295
 	ld	xbc, 31457459
@@ -8334,36 +9416,69 @@ MessageHeader:
 	cp xbc, 0x1e0009f
 	jr z, MsgHeader_BuildHeader
 	ld xhl, 0:i3
-	jrl MsgHeader_Epilogue
+	jrl	MsgHeader_Epilogue
 
 MsgHeader_BuildHeader:
-	.byte 0xd2, 0x8c, 0x47, 0x02, 0x21, 0xd9, 0x09, 0x0e
-	.byte 0x00, 0xf2, 0x40, 0xd3, 0xe9, 0x30, 0xf3, 0x07
-	.byte 0xe0, 0xe4, 0x30, 0x90, 0x3f, 0x03, 0x00, 0x7e
-	.byte 0xac, 0x00, 0x0b, 0x18, 0x00, 0x1d, 0xa3, 0x06
-	.byte 0xff, 0xef, 0x62, 0xbf, 0x04, 0x63, 0x40, 0xff
-	.byte 0xff, 0xff, 0xff, 0x41, 0x23, 0x00, 0xe0, 0x01
-	.byte 0xaf, 0x04, 0x22, 0x1d, 0x45, 0x93, 0xfa, 0xbf
-	.byte 0x08, 0x02, 0x00, 0x00
+	ld	bc, (0x02478c:24)
+	muls	bc, 14
+	lda	xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda_rr	xwa, xwa, bc	; lda xwa, xwa+bc
+	cpw	(xwa), 3
+	jrl	nz, MsgHeader_SingleEntry
+	pushw	24
+	call	SLIDE_Decompress_4K_Init_Helper2
+	inc	2, xsp
+	ld	(xsp+4), xhl
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e00023
+	ld	xde, (xsp+4)
+	call	PostEvent
+	ldw	(xsp+8), 0
 MsgHeader_BuildLoop:
-	.byte 0xd2, 0x8c, 0x47, 0x02, 0x21, 0xd9, 0x09, 0x0e
-	.byte 0x00, 0xf2, 0x46, 0xd3, 0xe9, 0x30, 0x9f, 0x08
-	.byte 0x22, 0xea, 0x12, 0xea, 0xee, 0x02, 0xe3, 0x07
-	.byte 0xe0, 0xe4, 0x82, 0xa2, 0x20, 0x38, 0x1d, 0xc3
-	.byte 0x07, 0xff, 0xdb, 0x66, 0x2b, 0x1d, 0xa3, 0x06
-	.byte 0xff, 0xeb, 0x8e, 0xd2, 0x8c, 0x47, 0x02, 0x21
-	.byte 0xd9, 0x09, 0x0e, 0x00, 0xf2, 0x40, 0xd3, 0xe9
-	.byte 0x30, 0xf3, 0x07, 0xe0, 0xe4, 0x30, 0x98, 0x04
-	.byte 0x04, 0x9f, 0x10, 0x21, 0xe9, 0x12, 0xe9, 0xee
-	.byte 0x02, 0xa8, 0x06, 0x81, 0xa1, 0x20, 0x38, 0x0b
-	.byte 0xe9, 0x00, 0x0b, 0xa2, 0xd8, 0x3e, 0x1d, 0x95
-	.byte 0x02, 0xff, 0xbf, 0x14, 0x37, 0x40, 0xff, 0xff
-	.byte 0xff, 0xff, 0x41, 0x23, 0x00, 0xe0, 0x01, 0xee
-	.byte 0x8a, 0x1d, 0x45, 0x93, 0xfa, 0x9f, 0x08, 0x20
-	.byte 0xe8, 0x12, 0xe8, 0xee, 0x02, 0xaf, 0x04, 0x80
-	.byte 0xb0, 0x66, 0x9f, 0x08, 0x61, 0x9f, 0x08, 0x3f
-	.byte 0x05, 0x00, 0x73, 0x7b, 0xff, 0xaf, 0x04, 0x23
-	.byte 0x68, 0x03
+	ld	bc, (0x02478c:24)
+	muls	bc, 14
+	lda	xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x11E:24)
+	ld	de, (xsp+8)
+	extz	xde
+	sll	xde, 2
+	.byte	0xe3, 0x07, 0xe0, 0xe4, 0x82	; add xde, (xwa+bc)
+	ld	xwa, (xde)
+	push	xwa
+	call	LyricsTrack_ReadAndParse_Helper2
+	inc	6, hl
+	pushw	hl
+	call	SLIDE_Decompress_4K_Init_Helper2
+	ld	xiz, xhl
+	ld	bc, (0x02478c:24)
+	muls	bc, 14
+	lda	xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda_rr	xwa, xwa, bc	; lda xwa, xwa+bc
+	pushm	(xwa+4)
+	ld	bc, (xsp+16)
+	extz	xbc
+	sll	xbc, 2
+	add	xbc, (xwa+6)
+	ld	xwa, (xbc)
+	push	xwa
+	pushw	233
+	pushw	55458
+	push	xiz
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+20)
+	ld	xwa, 0xffffffff
+	ld	xbc, 0x1e00023
+	ld	xde, xiz
+	call	PostEvent
+	ld	wa, (xsp+8)
+	extz	xwa
+	sll	xwa, 2
+	add	xwa, (xsp+4)
+	ld	(xwa), xiz
+	incw	1, (xsp+8)
+	cpw	(xsp+8), 5
+	jrl	ule, MsgHeader_BuildLoop
+	ld	xhl, (xsp+4)
+	jr	MsgHeader_Epilogue
 MsgHeader_SingleEntry:
 	ld xhl, (xwa + 6)
 
@@ -9964,29 +11079,58 @@ IvSoftverProc:
 	jr z, Softver_ShowHide
 	ld xwa, xiz
 	call InheritedProc
-	jrl Softver_Epilogue
+	jrl	Softver_Epilogue
 
 Softver_ShowHide:
-	.byte 0xee, 0x88, 0x1d, 0xfc, 0x3f, 0xfa, 0xd2, 0x30
-	.byte 0x79, 0xeb, 0x04, 0x0b, 0xe9, 0x00, 0x0b, 0x3e
-	.byte 0xde, 0xbf, 0x0a, 0x30, 0x38, 0x1d, 0x95, 0x02
-	.byte 0xff, 0xbf, 0x0a, 0x37, 0xbf, 0x04, 0x32, 0x40
-	.byte 0x01, 0x00, 0xf0, 0x00, 0x41, 0x0f, 0x00, 0xc0
-	.byte 0x01, 0x1d, 0x53, 0x92, 0xfa, 0x1d, 0xaa, 0x07
-	.byte 0xef, 0x2b, 0x0b, 0xe9, 0x00, 0x0b, 0x42, 0xde
-	.byte 0xbf, 0x0a, 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff
-	.byte 0xbf, 0x0a, 0x37, 0xbf, 0x04, 0x32, 0x40, 0x02
-	.byte 0x00, 0xf0, 0x00, 0x41, 0x0f, 0x00, 0xc0, 0x01
-	.byte 0x1d, 0x53, 0x92, 0xfa, 0x1d, 0xb7, 0x07, 0xef
-	.byte 0x2b, 0x0b, 0xe9, 0x00, 0x0b, 0x46, 0xde, 0xbf
-	.byte 0x0a, 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf
-	.byte 0x0a, 0x37, 0xbf, 0x04, 0x32, 0x40, 0x03, 0x00
-	.byte 0xf0, 0x00, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x1d
-	.byte 0x53, 0x92, 0xfa, 0x1d, 0xbc, 0x07, 0xef, 0x2b
-	.byte 0x0b, 0xe9, 0x00, 0x0b, 0x4a, 0xde, 0xbf, 0x0a
-	.byte 0x30, 0x38, 0x1d, 0x95, 0x02, 0xff, 0xbf, 0x0a
-	.byte 0x37, 0xbf, 0x04, 0x32, 0x40, 0x04, 0x00, 0xf0
-	.byte 0x00, 0x41, 0x0f, 0x00, 0xc0, 0x01, 0x68, 0x0f
+	ld	xwa, xiz
+	call	InheritedProc
+	pushdi_24	(0xeb7930)
+	pushw	233
+	pushw	56894
+	lda	xwa, (xsp+10)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	lda	xde, (xsp+4)
+	ld	xwa, 0xf00001
+	ld	xbc, 0x1c0000f
+	call	SendEvent
+	call	Boot_ParseTableDataTimestamp
+	pushw	hl
+	pushw	233
+	pushw	56898
+	lda	xwa, (xsp+10)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	lda	xde, (xsp+4)
+	ld	xwa, 0xf00002
+	ld	xbc, 0x1c0000f
+	call	SendEvent
+	call	Boot_GetSystemPointer
+	pushw	hl
+	pushw	233
+	pushw	56902
+	lda	xwa, (xsp+10)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	lda	xde, (xsp+4)
+	ld	xwa, 0xf00003
+	ld	xbc, 0x1c0000f
+	call	SendEvent
+	call	Boot_ParseSubCPUTimestamp
+	pushw	hl
+	pushw	233
+	pushw	56906
+	lda	xwa, (xsp+10)
+	push	xwa
+	call	Scoop_EventLoop_12Entry_Helper
+	lda	xsp, (xsp+10)
+	lda	xde, (xsp+4)
+	ld	xwa, 0xf00004
+	ld	xbc, 0x1c0000f
+	jr	Softver_SendEvent
 Softver_Paint:
 	ld xwa, xiz
 	call InheritedProc
@@ -10217,63 +11361,54 @@ AcWelcomScreen_RenderBytecode:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x1e000b3
 	ld	xde, 0:i3
-	jrl	987
+	jrl	AcWelcomScreen_DispatchEvent
 	ld	iz, (xbc+10)
 	cp	iz, 2:i3
-	jrl	ge, 873
+	jrl	ge, AcWelcomScreen_Select_NextStep
 	ld	bc, iz
 	muls	bc, 12
-	lda	xwa, (0x3ea0c:24)
-	.byte 0xf3
-	reti
-	.byte 0xe0, 0xe4
-	ldw	wa, 2712
-	push	xsp
-	swi	7
-	swi	7
-	jr	z, 26
-	cp	iz, 0xffff
-	jr	z, 20
+	lda	xwa, (0x03ea0c:24)
+	lda_rr	xwa, xwa, bc	; lda xwa, xwa+bc
+	cpw	(xwa+10), 65535
+	jr	z, AcWelcomScreen_RenderBytecode_Skip
+	cp	iz, 65535
+	jr	z, AcWelcomScreen_RenderBytecode_Skip
 	lda	xiy, (xwa+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
 	call	ClipBlit_Direct
-	ld	wa, (0x24784:24)
+AcWelcomScreen_RenderBytecode_Skip:
+	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	add	xbc, (0x24786:24)
+	add	xbc, (0x024786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	ldw	bc, 30
 	call	ClipBlit_Replace
-	cp	iz, 0xffff
+	cp	iz, 65535
 	jrl	z, AcWelcomScreen_Select_NextStep
 	muls	iz, 12
-	lda	xwa, (0x3ea0c:24)
-	ld	bc, (0x24784:24)
+	lda	xwa, (0x03ea0c:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xiy, xbc
 	add	xiy, xiy
 	add	xiy, xbc
 	sll	xiy, 2
-	add	xiy, (0x24786:24)
-	lda_rr xix, xwa, iz
-	ld bc, 6:i3
-	.byte 0x95
-	scf
+	add	xiy, (0x024786:24)
+	lda_rr	xix, xwa, iz	; lda xix, xwa+iz
+	ld	bc, 6:i3
+	ldirw
 	jrl	AcWelcomScreen_Select_NextStep
 	ld	xwa, (xsp+20)
 	ld	xbc, 0x1c0000c
@@ -10281,86 +11416,68 @@ AcWelcomScreen_RenderBytecode:
 	call	SendEvent
 	jrl	AcWelcomScreen_Select_NextStep
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
 	ld	xbc, NakaInst_TOTAL_0x34
 	ldw	de, 16
 	jrl	Softver_ShowHide_Code_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
 	jrl	Softver_ShowHide_Code_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
-	.byte 0x41
-	.long Bitmap_DigitL
+	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
 	jr	Softver_ShowHide_Code_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
 	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	jr	Softver_ShowHide_Code_Join
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	.byte 0x92, 0x04
+	pushm	(xde)
 	pushw	247
-	.byte 0x41
-	.long Bitmap_DigitR
+	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
 	jr	Softver_ShowHide_Code_Join
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
 	pushw	255
 	pushw	247
-	.byte 0x41
-	.long Bitmap_Digit1
+	ld	xbc, Bitmap_Digit1
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
 	pushw	255
 	pushw	247
@@ -10369,9 +11486,8 @@ AcWelcomScreen_RenderBytecode:
 Softver_ShowHide_Code_Join:
 	call	DrawBitmapSP2
 	jrl	AcWelcomScreen_Select_NextStep
-	lda	xhl, (0x3ea24:24)
-	.byte 0x9b
-	ldw	(63:8), 0xffff:io
+	lda	xhl, (0x03ea24:24)
+	cpw	(xhl+10), 65535
 	jr	z, Softver_ShowHide_Code_Skip2
 	lda	xwa, (xsp+4)
 	lda	xde, (xwa+2)
@@ -10394,167 +11510,135 @@ Softver_ShowHide_Code_Join:
 	sll	xde, 2
 	ld	xbc, (0x24786:24)
 	add	xde, xbc
-	.byte 0x9a
-	ld	(63:8), 12:io
-	nop
+	cpw	(xde+8), 12
 	jr	nz, Softver_ShowHide_Code_Skip
-	.byte 0x93
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xhl), 16
 Softver_ShowHide_Code_Skip:
 	ldw	bc, 245
 	call	DrawBox
 Softver_ShowHide_Code_Skip2:
-	ld	wa, (0x24784:24)
+	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	add	xbc, (0x24786:24)
+	add	xbc, (0x024786:24)
 	lda	xiy, (xbc+4)
 	lda	xix, (xsp+12)
-	.byte 0x95
-	rcf
-	.byte 0x95
-	rcf
+	ldiw
+	ldiw
 	lda	xwa, (xsp+12)
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, NakaInst_TOTAL_0x34
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitL
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitL_0x44
 	ldw	de, 16
 	call	DrawBitmapSP2
-	ld	wa, (0x24784:24)
+	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xbc, xwa
 	add	xbc, xbc
 	add	xbc, xwa
 	sll	xbc, 2
-	ld	xwa, (0x24786:24)
+	ld	xwa, (0x024786:24)
 	add	xbc, xwa
-	.byte 0x99
-	ld	(63:8), 12:io
-	nop
+	cpw	(xbc+8), 12
 	jr	nz, Softver_ShowHide_Code_Skip3
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	ld	xbc, (0x24786:24)
+	ld	xbc, (0x024786:24)
 	add	xde, xbc
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
-	.byte 0x41
-	.long Bitmap_DigitD
+	pushm	(xde+10)
+	pushw	247
+	ld	xbc, Bitmap_DigitD
 	ldw	de, 16
 	call	DrawBitmapSP2
 Softver_ShowHide_Code_Skip3:
 	lda	xwa, (xsp+12)
-	.byte 0x90
-	push	xwa
-	rcf
-	nop
+	addiw_da	(xwa), 16
 	pushw	17
-	ld	bc, (0x24784:24)
+	ld	bc, (0x024784:24)
 	exts	xbc
 	ld	xde, xbc
 	add	xde, xde
 	add	xde, xbc
 	sll	xde, 2
-	add	xde, (0x24786:24)
-	.byte 0x9a
-	ldw	(4:8), 0xf70b:io
-	nop
+	add	xde, (0x024786:24)
+	pushm	(xde+10)
+	pushw	247
 	ld	xbc, Bitmap_DigitR
 	ldw	de, 16
 	call	DrawBitmapSP2
-	ld	wa, (0x24784:24)
+	ld	wa, (0x024784:24)
 	exts	xwa
 	ld	xiy, xwa
 	add	xiy, xiy
 	add	xiy, xwa
 	sll	xiy, 2
-	add	xiy, (0x24786:24)
-	ld	xix, 0x3ea24
+	add	xiy, (0x024786:24)
+	ld	xix, 0x03ea24
 	ld	bc, 6:i3
-	.byte 0x95
-	scf
+	ldirw
 	jr	AcWelcomScreen_Select_NextStep
 	ld	xwa, 0x120000b
 	ld	xbc, 0x1e000ac
@@ -11115,14 +12199,22 @@ AudioCtrl_DispatchHandler:
 AudioCtrl_PageHandler:
 	ld XWA,(XSP+0x52)
 	cp XWA,0x0000008f
-	jrl nz, AudioCtrl_CheckEventF
-	.byte 0xd2, 0x90, 0x47, 0x02, 0x60, 0xd2, 0x94, 0x47
-	.byte 0x02, 0x61, 0xd2, 0x90, 0x47, 0x02, 0x20, 0x1e
-	.byte 0xbb, 0x08, 0xd7, 0xfa, 0x9b, 0xd7, 0xfa, 0xcf
-	.byte 0xff, 0x00, 0x66, 0x1a, 0x40, 0xc0, 0x00, 0x00
-	.byte 0x00, 0x1d, 0x66, 0xcc, 0xfc, 0xdb, 0xd9, 0xd9
-	.byte 0x76, 0xd2, 0x94, 0x47, 0x02, 0x3f, 0x02, 0x00
-	.byte 0xd8, 0x76, 0xd9, 0xc0, 0x66, 0x25
+	jrl	nz, AudioCtrl_CheckEventF
+	incdi16_24	8, (0x024790)
+	incdi16_24	1, (0x024794)
+	ld	wa, (0x024790:24)
+	calr	PsMixer_ReadWordArrayEntry
+	ld	qiz, hl
+	cpw	qiz, 255
+	jr	z, AudioCtrl_PageAdvance
+	ld	xwa, 192
+	call	AcApcToggleProc_Helper
+	cp	hl, 1:i3
+	scc	z, bc
+	cpw	(0x024794:24), 2
+	scc	z, wa
+	and	wa, bc
+	jr	z, AudioCtrl_SetupPartDisplay
 AudioCtrl_PageAdvance:
 	ld wa, (0x024790:24)
 	exts xwa
@@ -11328,18 +12420,33 @@ PsMixer_ControlCase8:
 	ld XWA,(XSP+0x04)
 	ld WA,(XWA+0x02)
 	sla WA, 0x02
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
-	.byte 0xf3, 0x07, 0xe4, 0xe0, 0x33, 0xaf, 0x5a, 0x20
-	.byte 0xaf, 0x56, 0x21, 0xaf, 0x52, 0x22, 0xa3, 0x23
-	.byte 0xb3, 0xe8, 0x78, 0x70, 0x04, 0xaf, 0x5a, 0x20
-	.byte 0xaf, 0x56, 0x21, 0xaf, 0x52, 0x22, 0x1d, 0xfc
-	.byte 0x3f, 0xfa, 0xaf, 0x52, 0x20, 0xe8, 0x8d, 0xbf
-	.byte 0x46, 0x34, 0xd9, 0xae, 0x95, 0x11, 0xbf, 0x46
-	.byte 0x30, 0xbf, 0x44, 0x31, 0xbf, 0x42, 0x32, 0x1d
-	.byte 0xf4, 0xcf, 0xfc, 0xd2, 0x96, 0x47, 0x02, 0x20
-	.byte 0xd8, 0x09, 0x05, 0x00, 0xbf, 0x08, 0x50, 0xbf
-	.byte 0x0a, 0x02, 0x00, 0x00, 0xdb, 0xcf, 0xff, 0xff
-	.byte 0x76, 0x15, 0x01
+	lda	xbc, (Bitmap_DigitD_0x11F0:24)
+	lda_rr	xhl, xbc, wa	; lda xhl, xbc+wa
+	ld	xwa, (xsp+90)
+	ld	xbc, (xsp+86)
+	ld	xde, (xsp+82)
+	ld	xhl, (xhl)
+	call	(xhl)
+	jrl	AudioCtrl_ReturnZero
+	ld	xwa, (xsp+90)
+	ld	xbc, (xsp+86)
+	ld	xde, (xsp+82)
+	call	InheritedProc
+	ld	xwa, (xsp+82)
+	ld	xiy, xwa
+	lda	xix, (xsp+70)
+	ld	bc, 6:i3
+	ldirw
+	lda	xwa, (xsp+70)
+	lda	xbc, (xsp+68)
+	lda	xde, (xsp+66)
+	call	SndParam_ResolveOscEntry_Helper
+	ld	wa, (0x024796:24)
+	muls	wa, 5
+	ld	(xsp+8), wa
+	ldw	(xsp+10), 0
+	cp	hl, 65535
+	jrl	z, PsMixer_UnmatchedPartScan
 PsMixer_MidiScanOuterLoop:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
@@ -11941,8 +13048,7 @@ AudioCtrl_DataBlock:
 	ld	xiy, xiz
 	lda	xix, (xsp+16)
 	ld	bc, 4:i3
-	.byte 0x95	; v10 does not spell this byte either
-	scf
+	ldirw	; v10 does not spell this byte either
 	lda	xwa, (xsp+16)
 	ld	bc, (xsp+4)
 	dec	2, bc
@@ -11962,6 +13068,7 @@ AudioCtrl_DataBlock:
 	dec	2, wa
 	ld	(xde+2), wa
 	ld	iz, 0:i3
+AudioCtrl_DataBlock_Loop4:
 	lda	xwa, (xsp+12)
 	lda	xbc, (xsp+8)
 	ldw	de, 248
@@ -11972,16 +13079,11 @@ AudioCtrl_DataBlock:
 	incw	1, (xbc)
 	ldw	de, 255
 	call	DrawLine
-	.byte 0x9f	; v10 does not spell this byte either
-	incf
-	push	xwa
-	ld	e, 0:opc
-	.byte 0x9f	; v10 does not spell this byte either
-	ld	(56:8), 37:io
-	nop
+	addiw_da	(xsp+12), 37	; v10 does not spell this byte either
+	addiw_da	(xsp+8), 37	; v10 does not spell this byte either
 	inc	1, iz
 	cp	iz, 7:i3
-	jr	lt, -46
+	jr	lt, AudioCtrl_DataBlock_Loop4
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
@@ -11997,8 +13099,7 @@ AudioCtrl_DataBlock_Helper:
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	ld	bc, 4:i3
-	.byte 0x95	; v10 does not spell this byte either
-	scf
+	ldirw	; v10 does not spell this byte either
 	lda	xwa, (xsp+8)
 	ld	bc, (xsp+4)
 	dec	2, bc
@@ -12024,23 +13125,20 @@ AudioCtrl_DataBlock_Helper2:
 	ld	(xwa), bc
 	ld	bc, (xiz+2)
 	ld	(xwa+2), bc
-	.byte 0x9f	; v10 does not spell this byte either
-	push_f
-	push	xsp
-	nop
-	nop
-	jr	z, 8
+	cpw	(xsp+24), 0	; v10 does not spell this byte either
+	jr	z, AudioCtrl_DataBlock_Helper2_Skip
 	ldw	bc, 52
 	ldw	de, 242
-	jr	6
+	jr	AudioCtrl_DataBlock_Helper2_Join
+AudioCtrl_DataBlock_Helper2_Skip:
 	ldw	bc, 52
 	ldw	de, 8
+AudioCtrl_DataBlock_Helper2_Join:
 	call	DrawFrameSP
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	ld	bc, 4:i3
-	.byte 0x95	; v10 does not spell this byte either
-	scf
+	ldirw	; v10 does not spell this byte either
 	lda	xwa, (xsp+12)
 	ld	bc, (xiz)
 	add	bc, (xsp+6)
@@ -12080,32 +13178,33 @@ AudioCtrl_DataBlock_Helper3:
 	ld	wa, (xbc+4)
 	ld	(xsp+4), wa
 	ldw	wa, 136
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	.byte 0x80	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	add	wa, (xsp+6)
 	lda	xbc, (xsp+8)
 	call	GetEditSwPoint
 	lda	xde, (xiz+2)
 	lda	xbc, (xsp+10)
 	ld	wa, (xbc)
 	sub	wa, 9
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	.byte 0xa0	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	sub	wa, (xsp+6)
 	ld	(xde), wa
-	.byte 0xb6	; v10 does not spell this byte either
-	push	sr
-	ld	(0:8), 190:io
-	.byte 0x04	; v10 does not spell this byte either
-	push	sr
-	.byte 0x37	; v10 does not spell this byte either
-	.byte 0x01	; v10 does not spell this byte either
+	ldw	(xiz), 8	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ldw	(xiz+4), 311
 	lda	xhl, (xiz+6)
 	ld	wa, (xbc)
 	add	wa, 31
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	.byte 0xa0	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	sub	wa, (xsp+6)
 	ld	(xhl), wa
 	ld	wa, (xsp+4)
 	add	(xde), wa
@@ -12126,8 +13225,7 @@ AudioCtrl_DataBlock_Helper4:
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
 	ld	bc, 4:i3
-	.byte 0x95	; v10 does not spell this byte either
-	scf
+	ldirw	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	dec	2, wa
 	add	(xsp+14), wa
@@ -12165,8 +13263,7 @@ AudioCtrl_DataBlock_Helper5:
 	ld	xiy, xiz
 	lda	xix, (xsp+8)
 	ld	bc, 4:i3
-	.byte 0x95	; v10 does not spell this byte either
-	scf
+	ldirw	; v10 does not spell this byte either
 	lda	xde, (xsp+8)
 	lda	xbc, (xde+2)
 	ld	wa, (xsp+4)
@@ -12175,11 +13272,10 @@ AudioCtrl_DataBlock_Helper5:
 	ld	wa, (xsp+16)
 	exts	xwa
 	divs	wa, 8
-	.byte 0xd7	; v10 does not spell this byte either
-	ld	xwa, (301707:24)
-	.byte 0x92	; v10 does not spell this byte either
-	xor	(xwa), xwa
-	.byte 0x8c	; v10 does not spell this byte either
+	ld	hl, qwa	; v10 does not spell this byte either
+	ld	wa, (xde+4)
+	sub	wa, (xde)	; v10 does not spell this byte either
+	ld	ix, wa	; v10 does not spell this byte either
 	exts	xix
 	divs	ix, 4
 	ld	wa, hl
@@ -12240,10 +13336,8 @@ AudioCtrl_DataBlock_Helper5:
 	ld	bc, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+20)
-	.byte 0x98	; v10 does not spell this byte either
-	push	sr
-	push	xwa
-	ldw	(0:8), 45017:io
+	addiw_da	(xwa+2), 10	; v10 does not spell this byte either
+	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock
 	jrl	AudioCtrl_DataBlock_Join2
 AudioCtrl_DataBlock_Skip:
@@ -12254,13 +13348,10 @@ AudioCtrl_DataBlock_Skip:
 	ld	bc, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+20)
-	.byte 0x98	; v10 does not spell this byte either
-	push	sr
-	push	xwa
-	ldw	(0:8), 4287:io
-	ldw	bc, 3743
-	ld	b, 30:opc
-	cp	(xwa), h
+	addiw_da	(xwa+2), 10	; v10 does not spell this byte either
+	lda	xbc, (xsp+16)
+	ld	de, (xsp+14)
+	calr	AudioCtrl_DataBlock_Helper4
 	lda	xbc, (xsp+16)
 	lda	xwa, (256688:24)
 	ld	de, (xsp+4)
@@ -12286,27 +13377,24 @@ AudioCtrl_DataBlock_Skip2:
 	pushw	0
 AudioCtrl_DataBlock_Join:
 	call	DrawStringReverse
-	jrl	193
+	jrl	AudioCtrl_DataBlock_Join2
 AudioCtrl_DataBlock_Skip3:
 	ld	wa, (xsp+12)
-	calr	64606
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+14)
-	calr	64621
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 191:opc
-	incf
-	jr	f, -97
-	.byte 0x04	; v10 does not spell this byte either
-	ld	b, 234:opc
-	zcf
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+12), xwa
+	ld	de, (xsp+4)	; v10 does not spell this byte either
+	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457342
 	call	ApFuncCall
@@ -12341,10 +13429,9 @@ AudioCtrl_DataBlock_Skip3:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
-	.byte 0x9f	; v10 does not spell this byte either
-	ld	(4:8), 159:io
-	ld	(32:8), 219:io
-	.byte 0x89	; v10 does not spell this byte either
+	pushm	(xsp+8)	; v10 does not spell this byte either
+	ld	wa, (xsp+8)
+	ld	bc, hl	; v10 does not spell this byte either
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
 	jr	AudioCtrl_DataBlock_Join2
@@ -12417,61 +13504,52 @@ AudioCtrl_DataBlock_Skip5:
 	pushw	247
 	call	DrawStringCentered
 	lda	xbc, (xsp+16)
-	.byte 0x99	; v10 does not spell this byte either
-	push	sr
-	push	xwa
-	ldw	(0:8), 35058:io
-	.byte 0xeb	; v10 does not spell this byte either
-	pop	sr
-	ldw	wa, 3743
-	ld	b, 218:opc
-	.byte 0xec	; v10 does not spell this byte either
-	push	sr
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xe0	; v10 does not spell this byte either
-	.byte 0xe8	; v10 does not spell this byte either
-	ld	b, 191:opc
-	push_a
-	ldw	wa, 3743
-	ld	c, 210:opc
-	.byte 0x90	; v10 does not spell this byte either
-	ld	xsp, 292483842
+	addiw_da	(xbc+2), 10	; v10 does not spell this byte either
+	lda	xwa, (0x03eb88:24)	; v10 does not spell this byte either
+	ld	de, (xsp+14)
+	sla	de, 2	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rrl	xde, xwa, de
+	lda	xwa, (xsp+20)
+	ld	hl, (xsp+14)
+	cpda16_24	xhl, (0x024790)	; v10 does not spell this byte either
+	jr	nz, AudioCtrl_DataBlock_Helper5_Skip
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	242
 	pushw	0
 	pushw	0
-	jr	15
+	jr	AudioCtrl_DataBlock_Helper5_Join
+AudioCtrl_DataBlock_Helper5_Skip:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	8
 	pushw	0
 	pushw	0
+AudioCtrl_DataBlock_Helper5_Join:
 	call	DrawStringReverse
-	jrl	193
+	jrl	AudioCtrl_DataBlock_Join3
 AudioCtrl_DataBlock_Skip6:
 	ld	wa, (xsp+12)
-	calr	64150
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+14)
-	calr	64165
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 191:opc
-	incf
-	jr	f, -97
-	.byte 0x04	; v10 does not spell this byte either
-	ld	b, 234:opc
-	zcf
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+12), xwa
+	ld	de, (xsp+4)	; v10 does not spell this byte either
+	exts	xde
 	ld	xwa, (xsp+12)
 	ld	xbc, 31457342
 	call	ApFuncCall
@@ -12506,16 +13584,15 @@ AudioCtrl_DataBlock_Skip6:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
-	.byte 0x9f	; v10 does not spell this byte either
-	ld	(4:8), 159:io
-	ld	(32:8), 219:io
-	.byte 0x89	; v10 does not spell this byte either
+	pushm	(xsp+8)	; v10 does not spell this byte either
+	ld	wa, (xsp+8)
+	ld	bc, hl	; v10 does not spell this byte either
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
 	jr	AudioCtrl_DataBlock_Join3
 AudioCtrl_DataBlock_Skip7:
 	ld	xwa, (xsp+12)
-	ld	xbc, 31522817
+	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	xwa, xhl
 	ld	bc, (xsp+10)
@@ -12534,13 +13611,12 @@ AudioCtrl_DataBlock_Join3:
 	ld	(xsp+10), wa
 	ld	xwa, (xsp+70)
 	srl	xwa, 0
-	.byte 0xd7	; v10 does not spell this byte either
-	sub	(9033896:24), xsp
-	popw	de
-	ld	w, 232:opc
-	set	0, l
-	.byte 0xc0	; v10 does not spell this byte either
-	.byte 0x01	; v10 does not spell this byte either
+	ld	qwa, 0	; v10 does not spell this byte either
+	ld	bc, wa
+	ld	xwa, (xsp+74)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	xwa, 0x1c00031
 	jrl	z, AudioCtrl_DataBlock_Skip14
 	ld	(xsp+12), bc
 	cp	xwa, 29360154
@@ -12605,10 +13681,7 @@ AudioCtrl_DataBlock_Skip9:
 	lda	xbc, (xsp+58)
 	ld	de, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper4
-	.byte 0x9f	; v10 does not spell this byte either
-	push	xix
-	push	xde
-	push	0
+	submi16	(xsp+60), 9	; v10 does not spell this byte either
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -12640,11 +13713,13 @@ AudioCtrl_DataBlock_Join4:
 	ld	bc, iz
 	extz	xbc
 	ld	wa, (xsp+4)
-	.byte 0xe8	; v10 does not spell this byte either
-	.byte 0x12	; v10 does not spell this byte either
-	.byte 0xe8	; v10 does not spell this byte either
-	.byte 0xee	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	extz	xwa
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	sll	xwa, 0
 	add	xwa, xbc
 	lda	xde, (xsp+46)
 	ld	(xde), xwa
@@ -12720,28 +13795,25 @@ AudioCtrl_DataBlock_Join6:
 	lda	xwa, (xsp+58)
 	ld	xbc, 5:i3
 	call	DrawBitmap
-	jrl	405
+	jrl	AudioCtrl_DataBlock_Join7
 AudioCtrl_DataBlock_Skip13:
 	ld	wa, (xsp+10)
-	calr	63396
+	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
 	ld	wa, (xsp+12)
-	calr	63410
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 191:opc
-	.byte 0x06	; v10 does not spell this byte either
-	jr	f, -97
-	.byte 0x04	; v10 does not spell this byte either
-	ld	b, 234:opc
-	zcf
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+6), xwa	; v10 does not spell this byte either
+	ld	de, (xsp+4)	; v10 does not spell this byte either
+	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457342
 	call	ApFuncCall
@@ -12774,19 +13846,20 @@ AudioCtrl_DataBlock_Skip13:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, 32
+	jr	z, AudioCtrl_DataBlock_Helper5_Skip2
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f	; v10 does not spell this byte either
-	incf
-	.byte 0x04	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	pushm	(xsp+12)
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
-	jrl	223
+	jrl	AudioCtrl_DataBlock_Join7
+AudioCtrl_DataBlock_Helper5_Skip2:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -12794,34 +13867,31 @@ AudioCtrl_DataBlock_Skip13:
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
 	call	MainLswAdd
-	jrl	196
+	jrl	AudioCtrl_DataBlock_Join7
 AudioCtrl_DataBlock_Skip14:
 	ld	iz, bc
 	ld	wa, (xsp+10)
-	calr	63185
+	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
 	ld	wa, iz
-	calr	63200
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 191:opc
-	.byte 0x06	; v10 does not spell this byte either
-	jr	f, -97
-	.byte 0x04	; v10 does not spell this byte either
-	ld	b, 234:opc
-	zcf
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+6), xwa	; v10 does not spell this byte either
+	ld	de, (xsp+4)	; v10 does not spell this byte either
+	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457464
 	call	ApFuncCall
 	or	xhl, xhl
-	jrl	z, 134
+	jrl	z, AudioCtrl_DataBlock_Join7
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -12842,21 +13912,22 @@ AudioCtrl_DataBlock_Skip14:
 	ld	(xsp+10), hl
 	ld	wa, (xsp+2)
 	cp	wa, 65535
-	jr	z, 36
+	jr	z, AudioCtrl_DataBlock_Helper5_Skip3
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f	; v10 does not spell this byte either
-	incf
-	.byte 0x04	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	pushm	(xsp+12)
 	ld	wa, (xsp+4)
 	ld	bc, iz
 	ld	de, (xsp+12)
 	call	MainLswPartPut
-	jr	29
+	jr	AudioCtrl_DataBlock_Join7
+AudioCtrl_DataBlock_Helper5_Skip3:
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -12877,12 +13948,13 @@ AudioCtrl_DataBlock_Helper6:
 	ld	(xsp+72), xde
 	ld	(xsp+76), xbc
 	ld	xwa, (xsp+72)
-	.byte 0xaf	; v10 does not spell this byte either
-	popw	wa
-	.byte 0x21	; v10 does not spell this byte either
-	.byte 0xe9	; v10 does not spell this byte either
-	.byte 0xef	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	xbc, (xsp+72)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	srl	xbc, 0
 	ld	(xsp+12), wa
 	ld	qbc, 0
 	ld	(xsp+14), bc
@@ -13068,9 +14140,9 @@ AudioCtrl_DataBlock_Skip19:
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f	; v10 does not spell this byte either
-	ret
-	.byte 0x04	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	pushm	(xsp+14)
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
@@ -13131,9 +14203,9 @@ AudioCtrl_DataBlock_Skip21:
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	iz, hl
-	.byte 0x9f	; v10 does not spell this byte either
-	ret
-	.byte 0x04	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	pushm	(xsp+14)
 	ld	wa, (xsp+6)
 	ld	bc, iz
 	ld	de, (xsp+14)
@@ -13225,14 +14297,11 @@ AudioCtrl_DataBlock_Skip24:
 	calr	AudioCtrl_DataBlock_Helper4
 	lda	xiy, (xsp+62)
 	lda	xix, (xsp+58)
-	.byte 0x95	; v10 does not spell this byte either
-	rcf
-	.byte 0x95	; v10 does not spell this byte either
-	rcf
-	.byte 0x9f	; v10 does not spell this byte either
-	ld	xwa, 3204450618
-	push	xde
-	ldw	wa, 28560
+	ldiw	; v10 does not spell this byte either
+	ldiw	; v10 does not spell this byte either
+	submi16	(xsp+64), 9	; v10 does not spell this byte either
+	lda	xwa, (xsp+58)
+	decw	7, (xwa)
 	decm	1, (xwa+2)
 	ld	de, (xsp+4)
 	exts	xde
@@ -13308,9 +14377,7 @@ AudioCtrl_DataBlock_Join12:
 	lda	xwa, (xsp+58)
 	or	xhl, xhl
 	jr	z, AudioCtrl_DataBlock_Skip27
-	.byte 0x9f	; v10 does not spell this byte either
-	ldw	de, 63
-	nop
+	cpw	(xsp+50), 0	; v10 does not spell this byte either
 	jr	nz, AudioCtrl_DataBlock_Skip28
 AudioCtrl_DataBlock_Skip27:
 	ld	xbc, 30
@@ -13319,27 +14386,24 @@ AudioCtrl_DataBlock_Skip28:
 	ld	xbc, 29
 AudioCtrl_DataBlock_Join13:
 	call	DrawBitmap
-	jrl	192
+	jrl	AudioCtrl_DataBlock_Join14
 AudioCtrl_DataBlock_Skip29:
 	ld	wa, (xsp+10)
-	calr	61678
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+12)
-	calr	61693
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 191:opc
-	.byte 0x06	; v10 does not spell this byte either
-	jr	f, -97
-	.byte 0x04	; v10 does not spell this byte either
-	ld	b, 234:opc
-	zcf
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+6), xwa	; v10 does not spell this byte either
+	ld	de, (xsp+4)	; v10 does not spell this byte either
+	exts	xde
 	ld	xwa, (xsp+6)
 	ld	xbc, 31457342
 	call	ApFuncCall
@@ -13370,19 +14434,20 @@ AudioCtrl_DataBlock_Skip29:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, 32
+	jr	z, AudioCtrl_DataBlock_Helper6_Skip
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
-	.byte 0xd7	; v10 does not spell this byte either
-	swi	2
-	.byte 0x9b	; v10 does not spell this byte either
-	.byte 0x9f	; v10 does not spell this byte either
-	ldw	(4:8), 35038:io
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	qiz, hl
+	pushm	(xsp+10)	; v10 does not spell this byte either
+	ld	wa, iz
 	ld	bc, qiz
 	ld	de, (xsp+14)
 	call	MainLswPartAdd
-	jr	24
+	jr	AudioCtrl_DataBlock_Join14
+AudioCtrl_DataBlock_Helper6_Skip:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13425,10 +14490,9 @@ AudioCtrl_DataBlock_Helper7:
 	ld	bc, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+64)
-	.byte 0x98	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	push	xwa
-	ld	w, 0:opc
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	addiw_da	(xwa+6), 32
 	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock
 	ld	wa, (xsp+12)
@@ -13471,10 +14535,7 @@ AudioCtrl_DataBlock_Skip31:
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
 	calr	AudioCtrl_DataBlock_Helper4
-	.byte 0x9f	; v10 does not spell this byte either
-	push	xiz
-	push	xde
-	push	0
+	submi16	(xsp+62), 9	; v10 does not spell this byte either
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
@@ -13551,30 +14612,20 @@ AudioCtrl_DataBlock_Skip34:
 AudioCtrl_DataBlock_Join16:
 	call	DrawStringReverse
 	lda	xwa, (xsp+64)
-	.byte 0x98	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	push	xwa
-	ld	w, 0:opc
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	addiw_da	(xwa+6), 32
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
-	calr	61494
+	calr	AudioCtrl_DataBlock_Helper4
 	lda	xwa, (xsp+60)
-	.byte 0x90	; v10 does not spell this byte either
-	push	xde
-	incf
-	nop
-	.byte 0x98	; v10 does not spell this byte either
-	push	sr
-	push	xde
-	zcf
-	nop
+	submi16	(xwa), 12	; v10 does not spell this byte either
+	submi16	(xwa+2), 19	; v10 does not spell this byte either
 	ld	xbc, 2:i3
 	call	DrawBitmap
 	ldw	wa, 128
-	.byte 0x9f	; v10 does not spell this byte either
-	ldw	ix, 55456
-	push	36
-	nop
+	sub	wa, (xsp+52)	; v10 does not spell this byte either
+	muls	wa, 36
 	exts	xwa
 	divs	wa, 128
 	ld	bc, wa
@@ -13627,19 +14678,20 @@ AudioCtrl_DataBlock_Skip35:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, 32
+	jr	z, AudioCtrl_DataBlock_Helper7_Skip
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	(xsp+4), hl
-	.byte 0x9f	; v10 does not spell this byte either
-	incf
-	.byte 0x04	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	pushm	(xsp+12)
 	ld	wa, iz
 	ld	bc, (xsp+6)
 	ld	de, (xsp+16)
 	call	MainLswPartAdd
-	jr	24
+	jr	AudioCtrl_DataBlock_Join17
+AudioCtrl_DataBlock_Helper7_Skip:
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13659,17 +14711,18 @@ AudioCtrl_DataBlock_Join17:
 	ld	xde, (xsp+34)
 	cp	xde, 29360156
 	jrl	z, AudioCtrl_DataBlock_Skip40
-	.byte 0xaf	; v10 does not spell this byte either
-	.byte 0x1e	; v10 does not spell this byte either
-	.byte 0x21	; v10 does not spell this byte either
-	.byte 0xe9	; v10 does not spell this byte either
-	.byte 0xef	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
-	.byte 0xd7	; v10 does not spell this byte either
-	.byte 0xe6	; v10 does not spell this byte either
-	and	(xwa-22), xsp
-	ldw	bc, 49152
-	.byte 0x01	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	xbc, (xsp+30)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	srl	xbc, 0
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld	qbc, 0
+	cp	xde, 0x1c00031	; v10 does not spell this byte either
 	jrl	z, AudioCtrl_DataBlock_Skip39
 	cp	xde, 29360154
 	jrl	z, AudioCtrl_DataBlock_Skip37
@@ -13730,29 +14783,21 @@ AudioCtrl_DataBlock_Skip36:
 	call	ApFuncCall
 	ld	xiz, xhl
 	ld	xwa, xiz
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(xsp+16), hl
 AudioCtrl_DataBlock_Entry:
-	.byte 0x9f	; v10 does not spell this byte either
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 80
+	cpw	(xsp+16), 0	; v10 does not spell this byte either
+	jr	z, AudioCtrl_DataBlock_Loop
 	lda	xwa, (xsp+22)
 	ld	bc, (xsp+8)
-	calr	60878
+	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
 	ld	de, (xsp+10)
-	calr	60973
+	calr	AudioCtrl_DataBlock_Helper4
 	lda	xbc, (xsp+18)
 	incw	1, (xbc)
-	.byte 0x99	; v10 does not spell this byte either
-	push	sr
-	push	xwa
-	ccf
-	nop
+	addiw_da	(xbc+2), 18	; v10 does not spell this byte either
 	lda	xwa, (xsp+22)
 	ld	de, (xbc)
 	sub	de, 12
@@ -13760,11 +14805,9 @@ AudioCtrl_DataBlock_Entry:
 	ld	de, (xbc)
 	add	de, 12
 	ld	(xwa+4), de
-	.byte 0x98	; v10 does not spell this byte either
-	.byte 0x06	; v10 does not spell this byte either
-	push	xwa
-	ccf
-	nop
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	addiw_da	(xwa+6), 18
 	ld	xde, 3:i3
 	push	xde
 	pushw	251
@@ -13807,51 +14850,37 @@ AudioCtrl_DataBlock_Skip37:
 	ld	(xsp+14), hl
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
-	call	16567590
+	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+16), hl
-	.byte 0x9f	; v10 does not spell this byte either
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 63
-	.byte 0x9f	; v10 does not spell this byte either
-	ldw	(4:8), 1695:io
-	ld	w, 159:opc
-	rcf
-	ld	a, 218:opc
-	.byte 0xa8, 0x1d, 0xd0	; differs from v10 here and llvm-objdump cannot read it
-	.byte 0xf4	; differs from v10 here and llvm-objdump cannot read it
-	swi	1
-	jr	46
+	cpw	(xsp+16), 0	; v10 does not spell this byte either
+	jr	z, AudioCtrl_DataBlock_Helper7_Join
+	pushm	(xsp+10)	; v10 does not spell this byte either
+	ld	wa, (xsp+6)
+	ld	bc, (xsp+16)
+	ld	de, 0:i3	; differs from v10 here and llvm-objdump cannot read it
+	call	MainLswPartPut	; differs from v10 here and llvm-objdump cannot read it
+	jr	AudioCtrl_DataBlock_Helper7_Join
 AudioCtrl_DataBlock_Skip38:
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
-	ld	xbc, 31522817
+	ld	xbc, 0x1e10001
 	call	ApFuncCall
 	ld	xiz, xhl
 	ld	xwa, xiz
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(xsp+16), hl
-	.byte 0x9f	; v10 does not spell this byte either
-	rcf
-	push	xsp
-	nop
-	nop
-	jr	z, 11
+	cpw	(xsp+16), 0	; v10 does not spell this byte either
+	jr	z, AudioCtrl_DataBlock_Helper7_Join
 	ld	xwa, xiz
 	ld	bc, 0:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
-	.byte 0x9f	; v10 does not spell this byte either
-	rcf
-	push	xsp
-	nop
-	nop
-	jrl	nz, -187
+AudioCtrl_DataBlock_Helper7_Join:
+	cpw	(xsp+16), 0	; v10 does not spell this byte either
+	jrl	nz, AudioCtrl_DataBlock_Loop
 	ld	wa, (xsp+8)
-	calr	60252
+	calr	Util_SignExtendAndDouble
 	ld	wa, (xhl)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
@@ -13891,20 +14920,18 @@ AudioCtrl_DataBlock_Skip38:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, 34
+	jr	z, AudioCtrl_DataBlock_Helper7_Skip2
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	(xsp+14), hl
-	.byte 0x9f	; v10 does not spell this byte either
-	ldw	(4:8), 1695:io
-	ld	w, 159:opc
-	rcf
-	ld	a, 159:opc
-	ldw	(34:8), 34845:io
-	.byte 0xf5	; differs from v10 here and llvm-objdump cannot read it
-	swi	1
-	jrl	-356
+	pushm	(xsp+10)	; v10 does not spell this byte either
+	ld	wa, (xsp+6)
+	ld	bc, (xsp+16)
+	ld	de, (xsp+10)
+	call	MainLswPartAdd	; differs from v10 here and llvm-objdump cannot read it
+	jrl	AudioCtrl_DataBlock_Loop
+AudioCtrl_DataBlock_Helper7_Skip2:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13913,10 +14940,10 @@ AudioCtrl_DataBlock_Skip38:
 	ld	bc, (xsp+16)
 	ld	de, (xsp+10)
 	call	MainLswAdd
-	jrl	-385
+	jrl	AudioCtrl_DataBlock_Loop
 AudioCtrl_DataBlock_Skip39:
 	ld	wa, bc
-	calr	60078
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
 	ld	xwa, (MixerPartTable_Start_0x104:24)
 	ld	(xsp+12), xwa
@@ -13936,20 +14963,18 @@ AudioCtrl_DataBlock_Skip39:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, 33
+	jr	z, AudioCtrl_DataBlock_Helper7_Skip3
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	(xsp+14), hl
-	.byte 0x9f	; v10 does not spell this byte either
-	ldw	(4:8), 1695:io
-	ld	w, 159:opc
-	rcf
-	ld	a, 218:opc
-	.byte 0xa9, 0x1d, 0xd0	; differs from v10 here and llvm-objdump cannot read it
-	.byte 0xf4	; differs from v10 here and llvm-objdump cannot read it
-	swi	1
-	jrl	-488
+	pushm	(xsp+10)	; v10 does not spell this byte either
+	ld	wa, (xsp+6)
+	ld	bc, (xsp+16)
+	ld	de, 1:i3	; differs from v10 here and llvm-objdump cannot read it
+	call	MainLswPartPut	; differs from v10 here and llvm-objdump cannot read it
+	jrl	AudioCtrl_DataBlock_Loop
+AudioCtrl_DataBlock_Helper7_Skip3:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13958,7 +14983,7 @@ AudioCtrl_DataBlock_Skip39:
 	ld	bc, 1:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
-	jrl	-516
+	jrl	AudioCtrl_DataBlock_Loop
 AudioCtrl_DataBlock_Skip40:
 	ld	xwa, (xsp+30)
 	cp	xwa, 8
@@ -14010,11 +15035,7 @@ AudioCtrl_DataBlock_Helper8:
 	ld	bc, (xsp+18)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+82)
-	.byte 0x98	; v10 does not spell this byte either
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22	; v10 does not spell this byte either
 	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock_Helper
 	ld	wa, (xsp+18)
@@ -14024,18 +15045,19 @@ AudioCtrl_DataBlock_Helper8:
 	add	wa, 136
 	call	DrawEditSw
 	lda	xbc, (xsp+68)
-	.byte 0xbf	; v10 does not spell this byte either
-	.byte 0x42	; v10 does not spell this byte either
-	.byte 0x32	; v10 does not spell this byte either
-	.byte 0x30	; v10 does not spell this byte either
-	.byte 0x34	; v10 does not spell this byte either
-	.byte 0x00	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	lda	xde, (xsp+66)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ldw	wa, 52
 	call	GetFrameSPSize
 	lda	xhl, (xsp+82)
 	ld	wa, (xhl+4)
-	.byte 0x93	; v10 does not spell this byte either
-	or	(xwa), xwa
-	zcf
+	sub	wa, (xhl)	; v10 does not spell this byte either
+	exts	xwa
 	divs	wa, 2
 	ld	bc, (xhl)
 	add	bc, wa
@@ -14043,12 +15065,9 @@ AudioCtrl_DataBlock_Helper8:
 	ld	(xwa), bc
 	ld	bc, (xsp+66)
 	dec	2, bc
-	.byte 0x9b	; v10 does not spell this byte either
-	push	sr
-	xor	(xbc), a
-	jr	le, -72
-	push	sr
-	.byte 0x51	; v10 does not spell this byte either
+	add	bc, (xhl+2)	; v10 does not spell this byte either
+	inc	2, bc
+	ld	(xwa+2), bc	; v10 does not spell this byte either
 	lda	xbc, (xsp+70)
 	ld	de, (xwa)
 	ld	(xbc), de
@@ -14068,28 +15087,26 @@ AudioCtrl_DataBlock_Helper8:
 	sla	wa, 3
 	ld	(xsp+12), wa
 	ldw	(xsp+18), 0
+AudioCtrl_DataBlock_Helper8_Loop:
 	lda	xwa, (xsp+82)
 	lda	xbc, (xsp+78)
 	ld	de, (xsp+12)
-	calr	60184
-	.byte 0x9f	; v10 does not spell this byte either
-	popw	iz
-	push	xde
-	ldw	ix, 40704
-	incf
-	ld	w, 30:opc
-	.byte 0xef	; v10 does not spell this byte either
-	.byte 0xe8	; v10 does not spell this byte either
+	calr	AudioCtrl_DataBlock_Helper5
+	submi16	(xsp+78), 52	; v10 does not spell this byte either
+	ld	wa, (xsp+12)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	sla	hl, 2
-	lda	xwa, (256568:24)
-	ld_rrl	xwa, xwa, hl
+	lda	xwa, (0x03ea38:24)
+	ld_rrl	xwa, xwa, hl	; ld xwa, (xwa+hl)
 	push	xwa
 	pushw	233
 	pushw	63602
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16712341
+	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+82)
 	lda	xbc, (xsp+78)
@@ -14101,11 +15118,8 @@ AudioCtrl_DataBlock_Helper8:
 	call	DrawStringCentered
 	incw	1, (xsp+12)
 	incw	1, (xsp+18)
-	.byte 0x9f	; v10 does not spell this byte either
-	ccf
-	push	xsp
-	ld	(0:8), 97:io
-	.byte 0xa4	; v10 does not spell this byte either
+	cpw	(xsp+18), 8	; v10 does not spell this byte either
+	jr	lt, AudioCtrl_DataBlock_Helper8_Loop	; v10 does not spell this byte either
 	jrl	AudioCtrl_DataBlock_Join19
 AudioCtrl_DataBlock_Skip43:
 	ld	wa, (xsp+18)
@@ -14115,11 +15129,7 @@ AudioCtrl_DataBlock_Skip43:
 	ld	bc, (xsp+18)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+82)
-	.byte 0x98	; v10 does not spell this byte either
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22	; v10 does not spell this byte either
 	ld	xbc, (xsp+90)
 	srl	xbc, 0
 	ld	qbc, 0
@@ -14145,56 +15155,44 @@ AudioCtrl_DataBlock_Skip45:
 	muls	wa, 5
 	ld	(xsp+10), wa
 	ldw	(xsp+18), 0
+AudioCtrl_DataBlock_Helper8_Loop2:
 	ld	wa, (xsp+10)
-	calr	59424
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (MixerPartTable_Start_0x80:24)
-	.byte 0xe3	; v10 does not spell this byte either
-	reti
-	.byte 0xe4	; v10 does not spell this byte either
-	.byte 0xe0	; v10 does not spell this byte either
-	ld	w, 191:opc
-	ret
-	jr	f, -24
-	.byte 0xcf	; v10 does not spell this byte either
-	ld	l, 0:opc
-	ld	a, 1:opc
-	jrl	nz, 205
-	ld	wa, (149396:24)
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	ld_rrl	xwa, xbc, wa
+	ld	(xsp+14), xwa
+	cp	xwa, 0x1210027	; v10 does not spell this byte either
+	jrl	nz, AudioCtrl_DataBlock_Helper8_Skip2
+	ld	wa, (0x024794:24)
 	ld	(xsp+12), wa
 	sla	wa, 3
 	ld	(xsp+12), wa
 	ldw	(xsp+20), 0
+AudioCtrl_DataBlock_Helper8_Loop3:
 	ld	wa, (xsp+12)
-	calr	59393
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa)
 	ld	xwa, MixerPartTable_Start_0x12C
 	calr	SdpartLookupPartId
-	.byte 0x9f	; v10 does not spell this byte either
-	ld	(243:8), 126:io
-	.byte 0x90	; v10 does not spell this byte either
-	nop
+	cp	hl, (xsp+8)	; v10 does not spell this byte either
+	jrl	nz, AudioCtrl_DataBlock_Helper8_Skip	; v10 does not spell this byte either
 	lda	xwa, (xsp+82)
 	ld	bc, (xsp+10)
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+82)
-	.byte 0x98	; v10 does not spell this byte either
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22	; v10 does not spell this byte either
 	lda	xbc, (xsp+78)
 	ld	de, (xsp+12)
 	calr	AudioCtrl_DataBlock_Helper5
-	.byte 0x9f	; v10 does not spell this byte either
-	popw	iz
-	push	xwa
-	push_a
-	nop
+	addiw_da	(xsp+78), 20	; v10 does not spell this byte either
 	lda	xwa, (xsp+54)
 	ld	bc, (xsp+8)
 	extz	xbc
@@ -14237,27 +15235,23 @@ AudioCtrl_DataBlock_Skip46:
 	pushw	0
 AudioCtrl_DataBlock_Join18:
 	call	DrawStringReverse
+AudioCtrl_DataBlock_Helper8_Skip:
 	incw	1, (xsp+12)
 	incw	1, (xsp+20)
-	.byte 0x9f	; v10 does not spell this byte either
-	push_a
-	push	xsp
-	ld	(0:8), 113:io
-	ld	xiz, 1628086271
+	cpw	(xsp+20), 8	; v10 does not spell this byte either
+	jrl	lt, AudioCtrl_DataBlock_Helper8_Loop3
+AudioCtrl_DataBlock_Helper8_Skip2:
+	incw	1, (xsp+10)
 	incw	1, (xsp+18)
-	.byte 0x9f	; v10 does not spell this byte either
-	ccf
-	push	xsp
-	halt
-	nop
-	jrl	lt, -254
-	jrl	131
+	cpw	(xsp+18), 5	; v10 does not spell this byte either
+	jrl	lt, AudioCtrl_DataBlock_Helper8_Loop2
+	jrl	AudioCtrl_DataBlock_Join19
 AudioCtrl_DataBlock_Skip47:
 	ld	wa, (xsp+18)
-	calr	59167
+	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	ld	wa, (xsp+20)
-	calr	59182
+	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	ld	wa, (xiz)
 	sla	wa, 2
@@ -14311,11 +15305,7 @@ AudioCtrl_DataBlock_Skip48:
 	ld	bc, iz
 	calr	AudioCtrl_DataBlock_Helper3
 	lda	xwa, (xsp+52)
-	.byte 0x98	; v10 does not spell this byte either
-	push	sr
-	push	xde
-	ex_ff
-	nop
+	submi16	(xwa+2), 22	; v10 does not spell this byte either
 	ld	bc, 7:i3
 	calr	AudioCtrl_DataBlock_Helper
 	ld	wa, iz
@@ -14330,9 +15320,8 @@ AudioCtrl_DataBlock_Skip48:
 	call	GetFrameSPSize
 	lda	xhl, (xsp+52)
 	ld	wa, (xhl+4)
-	.byte 0x93	; v10 does not spell this byte either
-	or	(xwa), xwa
-	zcf
+	sub	wa, (xhl)	; v10 does not spell this byte either
+	exts	xwa
 	divs	wa, 2
 	ld	bc, (xhl)
 	add	bc, wa
@@ -14340,12 +15329,9 @@ AudioCtrl_DataBlock_Skip48:
 	ld	(xwa), bc
 	ld	bc, (xsp+36)
 	dec	2, bc
-	.byte 0x9b	; v10 does not spell this byte either
-	push	sr
-	xor	(xbc), a
-	jr	le, -72
-	push	sr
-	.byte 0x51	; v10 does not spell this byte either
+	add	bc, (xhl+2)	; v10 does not spell this byte either
+	inc	2, bc
+	ld	(xwa+2), bc	; v10 does not spell this byte either
 	lda	xbc, (xsp+40)
 	ld	de, (xwa)
 	ld	(xbc), de
@@ -14360,7 +15346,7 @@ AudioCtrl_DataBlock_Skip48:
 	incw	1, (xbc)
 	ldw	de, 255
 	call	DrawLine
-	ld	iz, (149396:24)
+	ld	iz, (0x024794:24)
 	sla	iz, 3
 	ld	qiz, 0
 AudioCtrl_DataBlock_Loop2:
@@ -14368,9 +15354,7 @@ AudioCtrl_DataBlock_Loop2:
 	lda	xbc, (xsp+48)
 	ld	de, iz
 	calr	AudioCtrl_DataBlock_Helper5
-	.byte 0x9f	; v10 does not spell this byte either
-	ldw	wa, 13370
-	nop
+	submi16	(xsp+48), 52	; v10 does not spell this byte either
 	ld	wa, iz
 	sla	wa, 2
 	lda	xbc, (256808:24)
@@ -14470,58 +15454,51 @@ AudioCtrl_DataBlock_Skip49:
 	ld	(xsp+12), hl
 	ld	wa, (xsp+2)
 	cp	wa, 65535
-	jrl	z, 144
-	.byte 0x9f	; v10 does not spell this byte either
-	ret
-	push	xsp
-	nop
-	nop
-	jrl	z, 140
+	jrl	z, AudioCtrl_DataBlock_Loop3
+	cpw	(xsp+14), 0	; v10 does not spell this byte either
+	jrl	z, AudioCtrl_DataBlock_Entry2
 	ld	xwa, (xsp+16)
-	cp	xwa, 29360154
-	jr	z, 81
-	cp	xwa, 29360152
-	jr	z, 73
-	cp	xwa, 29360153
-	jr	z, 8
-	cp	xwa, 29360151
-	jr	nz, 105
+	cp	xwa, 0x1c0001a
+	jr	z, AudioCtrl_DataBlock_Helper8_Skip4
+	cp	xwa, 0x1c00018
+	jr	z, AudioCtrl_DataBlock_Helper8_Skip4
+	cp	xwa, 0x1c00019
+	jr	z, AudioCtrl_DataBlock_Helper8_Skip3
+	cp	xwa, 0x1c00017
+	jr	nz, AudioCtrl_DataBlock_Entry2
+AudioCtrl_DataBlock_Helper8_Skip3:
 	ld	wa, (xsp+2)
 	ldw	bc, 1026
 	call	DkMdlyPly_CheckState_Helper
 	cp	hl, 0:i3
 	jr	nz, AudioCtrl_DataBlock_Entry2
-	.byte 0x9f	; v10 does not spell this byte either
-	ei	4
+	pushm	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
 	ld	de, 1:i3
 	call	MainLswPartPut
-	.byte 0x9f	; v10 does not spell this byte either
-	ei	4
+	pushm	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
 	ld	de, 1:i3
 	call	MainLswPartPut
-	.byte 0x9f	; v10 does not spell this byte either
-	ei	4
+	pushm	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
 	ld	de, 0:i3
 	jr	AudioCtrl_DataBlock_Join20
+AudioCtrl_DataBlock_Helper8_Skip4:
 	ld	wa, (xsp+2)
 	ldw	bc, 1025
 	call	DkMdlyPly_CheckState_Helper
 	cp	hl, 0:i3
 	jr	nz, AudioCtrl_DataBlock_Entry2
-	.byte 0x9f	; v10 does not spell this byte either
-	ei	4
+	pushm	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
 	ld	de, 0:i3
 	call	MainLswPartPut
-	.byte 0x9f	; v10 does not spell this byte either
-	ei	4
+	pushm	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
 	ld	de, 0:i3
@@ -14531,8 +15508,7 @@ AudioCtrl_DataBlock_Loop3:
 	ld	xhl, 0:i3
 	jr	AudioCtrl_DataBlock_Epilogue3
 AudioCtrl_DataBlock_Entry2:
-	.byte 0x9f	; v10 does not spell this byte either
-	ei	4
+	pushm	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
 	ld	de, (xsp+6)

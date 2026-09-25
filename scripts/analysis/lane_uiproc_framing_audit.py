@@ -119,10 +119,19 @@ def audit(img, rom, amap, rel):
         for r in run:
             # `\t.byte\t...\t; reading` is the re-framer's own spelling of an
             # instruction the backend cannot encode: already handled
-            if r[3] == "B" and re.match(r'^\t\.byte\t[^;]*;', src[r[2]]):
-                continue
+            if r[3] == "B" and re.match(r'^\t\.byte\t', src[r[2]]):
+                continue        # the re-framer's own `\t.byte\t` spelling
             if r[3] == "B" and r[0] in U and r[1] in (U | uend):
                 out.append(("BYTE-CODE", r[2] + 1, r[2] + 1, r[0], r[1], 1, 0, []))
+            # a .long/.ascii/... line whose bytes unidasm covers with whole,
+            # non-absurd instructions between two instruction lines: a data
+            # directive that is really code (e.g. `.long Label` = push wa /
+            # pushw 0xe8).  Reported for review, like MISFRAME-D.
+            if (r[3] == "D" and r[0] in U and r[1] in (U | uend) and
+                    not any(r[0] <= x < r[1] for x in absurd_at)):
+                k = run.index(r)
+                if 0 < k < len(run) - 1 and run[k - 1][3] == "I" and run[k + 1][3] == "I":
+                    out.append(("MISFRAME-D", r[2] + 1, r[2] + 1, r[0], r[1], 0, 0, [r[2] + 1]))
     return out
 
 

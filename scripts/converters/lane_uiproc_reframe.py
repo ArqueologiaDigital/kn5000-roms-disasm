@@ -420,27 +420,37 @@ def render_window(img, rom, amap, syms, lines, rel, lo0, hi0, datar, srcroot, ex
     ci = sorted(carry, key=lambda x: (x[0], x[1]))
     j = 0
     for ad, n, u, k in ins:
-        tcom = []
+        absorbed = []
         while j < len(ci) and ci[j][0] < ad + n:
-            cad, li, kk, t = ci[j]
+            absorbed.append(ci[j])
+            j += 1
+        body = out_ins[ad]
+        if any(x[2] in ("comment", "tcomment") for x in absorbed) and "\t; " in body:
+            # the source already comments these bytes: do not interleave a new
+            # reading comment with the carried ones (assert_comments_preserved.py
+            # aligns with difflib, which mis-pairs runs of identical comments
+            # when new ones are interleaved -- a false "lost" report)
+            body = body.split("\t; ")[0]
+        tidx = [q for q, x in enumerate(absorbed) if x[2] == "tcomment"]
+        # one trailing comment that nothing comment-like follows can stay on
+        # the instruction line; otherwise every comment is emitted as a line
+        # IN ITS ORIGINAL ORDER (assert_comments_preserved.py checks order)
+        inline = (len(tidx) == 1 and body.find(";") < 0 and
+                  not any(x[2] in ("comment", "tcomment") for x in absorbed[tidx[0] + 1:]))
+        for q, (cad, li, kk, t) in enumerate(absorbed):
             if cad > ad and kk == "label":
                 pass    # stranded inside this instruction: dropped (reported)
             elif kk == "label":
                 out.append(t + ":")
             elif kk == "tcomment":
-                tcom.append(t)
+                if inline:
+                    body = body + "\t" + t
+                else:
+                    out.append("\t" + t)
             elif kk in ("comment", "directive"):
                 out.append(t)
             elif kk == "blank":
                 out.append("")
-            j += 1
-        body = out_ins[ad]
-        if tcom:
-            if body.find(";") < 0 and len(tcom) == 1:
-                body = body + "\t" + tcom[0]
-            else:
-                for t in tcom:
-                    out.append("\t" + t)
         out.append(body)
     while j < len(ci):
         cad, li, kk, t = ci[j]
