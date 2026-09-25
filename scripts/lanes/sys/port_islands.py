@@ -73,6 +73,8 @@ IDENT = re.compile(r'(?<![\w.$])([A-Za-z_.$][\w.$]*)')
 NUM = re.compile(r'(?<![\w.$])(-?0x[0-9a-fA-F]+|-?\d+)(?![\w.$])')
 LABEL = re.compile(r'^([A-Za-z_.$][\w.$]*):')
 DATA_DIR = re.compile(r'^\.(byte|incbin)\b')
+ABS = re.compile(r'^(halt|incf|decf|ldf|normal|max|min|swi)\b|^(jr|jrl)\s+[a-z]+\s*,\s*(0x)?0+$'
+                 r'|^(jr|jrl)\s+f\s*,')
 
 
 # ------------------------------------------------------------------ maps
@@ -357,8 +359,8 @@ class Porter:
             if e[4] <= 0:
                 continue
             labs, body, com = split_line(e[3])
-            if not body or body.startswith(".include") or body.startswith(".incbin"):
-                continue
+            if not body or body.startswith((".include", ".incbin", ".byte")):
+                continue          # .byte -> .byte would gain nothing
             a, n = e[0], e[4]
             ds = {dm.get(a + q) for q in range(n)}
             if len(ds) != 1 or None in ds:
@@ -451,6 +453,18 @@ class Porter:
         dm, s0, s1 = self.align(lo, hi, delta)
         cands = [c for c in self.candidates(lo, hi, dm, s0, s1) if c[2] not in demoted]
         cands.sort()
+        # if the src counterpart itself holds data-as-code markers, it is
+        # (partly) data decoded as code: port only its typed-data lines
+        if cands:
+            ks = [c[2] for c in cands]
+            span = range(min(ks), max(ks) + 1)
+            if any(ABS.search(split_line(self.os[q][3])[1]) for q in span if self.os[q][0] is not None):
+                cands = [c for c in cands if split_line(self.os[c[2]][3])[1].startswith(".")]
+                self.note = "src has markers: typed data only"
+            else:
+                self.note = ""
+        else:
+            self.note = ""
         # non-overlapping, not straddling a dst label
         dlabels_in = {a for a in self.dlab_at if lo < a < hi}
         items, last = [], lo
@@ -588,8 +602,8 @@ def main():
                 continue
             ok, labs_new, delta = res
             cov = sum(it[1] for it in ok)
-            print("  %s:%d 0x%06X %5d B  ported %5d B in %d lines (delta %+#x), +%d labels" % (
-                rel, P.od[k0][2], lo, hi - lo, cov, len(ok), delta, len(labs_new)))
+            print("  %s:%d 0x%06X %5d B  ported %5d B in %d lines (delta %+#x), +%d labels %s" % (
+                rel, P.od[k0][2], lo, hi - lo, cov, len(ok), delta, len(labs_new), P.note))
             if cov:
                 plan.append([rel, k0, k1, lo, hi, ok, labs_new])
     print("total ported: %d B" % sum(sum(it[1] for it in p[5]) for p in plan))

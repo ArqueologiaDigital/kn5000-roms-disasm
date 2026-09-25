@@ -24,8 +24,11 @@ MiddleFuncCall:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 MiddleFuncCall_DispatchData:
-	.byte 0xf1, 0xa4
-	.ascii "(E:;<>"
+	stb_d8	(0x28a4), e
+	push	xde
+	push	xhl
+	push	xix
+	push	xiz
 	call	Demo_SelectEntry_ProcessSongList
 	pop	xiz
 	pop	xix
@@ -49,8 +52,7 @@ MiddleFuncCall_DispatchData:
 	.ascii "[Zh[:;<>"
 	call MiddleFuncCall_DispatchData_Code_Helper2
 	.ascii "^\\[ZhM:;<>"
-	.byte 0x1d, 0x6a
-	.byte 0xf0, 0xf1
+	call	SetWall_InitCallSequences
 	.ascii "^\\[Zh?:;<>"
 	call MiddleFuncCall_DispatchData_Code_Helper3
 	.ascii "^\\[Zh1:;<>"

@@ -5525,34 +5525,27 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	ld	(0x34ef:16), 7
 	ld	(0x34d6:16), 17
 	ld	wa, hl
-	calr	277
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 10
 	ld	(0x34d6:16), 14
 	ld	wa, hl
-	calr	262
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 11
 	ld	(0x34d6:16), 15
 	ld	wa, hl
-	calr	247
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	xbc, (3182:16)
-	.byte 0xc3, 0xe5, 0xf0, 0x01
-	pop_f
-	.byte 0xed
-	ldw	ix, 0x6ee1
-	incf
-	ld	a, 195:opc
-	.byte 0xe5, 0xf1, 0x01
-	pop_f
-	.byte 0xee
-	ldw	ix, 0xeff1
-	ldw	ix, 1024
+	ld	(0x34ed), (xbc+0x1f0)
+	ldda32	xbc, (0xc6e)
+	ld	(0x34ee), (xbc+0x1f1)
+	stdi8	(0x34ef), 4
 	ld	(0x34d6:16), 18
 	ld	wa, hl
-	calr	210
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 5
 	ld	(0x34d6:16), 19
 	ld	wa, hl
-	calr	195
+	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	(0x34ef:16), 6
 	ld	(0x34d6:16), 22
 	ld	wa, hl

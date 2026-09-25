@@ -133,6 +133,24 @@ class Reframer:
     def file_rows(self, rel):
         return [e for e in self.order if e[1] == rel]
 
+    @staticmethod
+    def shortdata(e):
+        b = body_of(e[3])
+        return bool(b) and e[0] is not None and 0 < e[4] <= 8 and b.startswith((".byte", ".ascii"))
+
+    def data_run_bytes(self, rows, i):
+        """total bytes of the run of consecutive data lines containing line i"""
+        def isdata(e):
+            b = body_of(e[3])
+            return bool(b) and not is_insn(b)
+        lo = i
+        while lo - 1 >= 0 and (not body_of(rows[lo - 1][3]) or isdata(rows[lo - 1])):
+            lo -= 1
+        hi = i
+        while hi + 1 < len(rows) and (not body_of(rows[hi + 1][3]) or isdata(rows[hi + 1])):
+            hi += 1
+        return sum(rows[k][4] for k in range(lo, hi + 1) if rows[k][0] is not None and isdata(rows[k]))
+
     def suspects(self, rows):
         idx = []
         for i, e in enumerate(rows):
@@ -141,11 +159,13 @@ class Reframer:
                 continue
             if is_insn(b) and ABS.search(b):
                 idx.append(i)
-            elif b.startswith(".byte") and 0 < e[4] <= 3:
-                # short .byte between instructions
+            elif self.shortdata(e) and self.data_run_bytes(rows, i) <= 8:
+                # short .byte / .ascii between instructions (or other short data)
                 prv = next((rows[j] for j in range(i - 1, -1, -1) if body_of(rows[j][3])), None)
                 nxt = next((rows[j] for j in range(i + 1, len(rows)) if body_of(rows[j][3])), None)
-                if prv and nxt and is_insn(body_of(prv[3])) and is_insn(body_of(nxt[3])):
+                ok = [x for x in (prv, nxt) if x is not None]
+                if len(ok) == 2 and all(is_insn(body_of(x[3])) or self.shortdata(x) for x in ok) \
+                        and any(is_insn(body_of(x[3])) for x in ok):
                     idx.append(i)
         cl = []
         for i in idx:
@@ -167,6 +187,9 @@ class Reframer:
             b = body_of(e[3])
             if b and e[0] is not None and e[4] > 0:
                 if not is_insn(b):
+                    if self.shortdata(e) and self.data_run_bytes(rows, j) <= 8:
+                        j -= 1
+                        continue
                     break
                 cands.append(j)
             j -= 1

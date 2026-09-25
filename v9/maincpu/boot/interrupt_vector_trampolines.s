@@ -29,7 +29,8 @@
 ; a short dispatcher on the record's byte 1 that sits directly in front of the
 ; jump table it indexes (written as <table> - <its length> because the
 ; dispatchers have no labels of their own in audio/audio_control_engine.s).
-; What the record types mean at the MIDI level is not established here.
+; Open question, for whoever documents the writers of the RX buffer: which
+; incoming MIDI traffic produces record types 0x48, 0x60 and 0x98.
 
 	.byte	0xff					; last byte of entry 60 (type 0x3C): 0xFFFFFFFF
 	.long	0xffffffff, 0xffffffff, 0xffffffff	; types 0x3D-0x3F

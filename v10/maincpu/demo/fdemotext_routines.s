@@ -1720,8 +1720,8 @@ FDemoText_ByteData_TextRenderer_Loop:
 	ld	xde, (xsp+2)
 	lda_rr xwa, xde, iz
 	ld xbc, xwa
-	.byte 0x80
-	.ascii "?=nU"
+	cp	(xwa), 61
+	jr	nz, FDemoText_ByteData_TextRenderer_Skip3
 	ld	(xbc), 0
 	push	xde
 	ld	xwa, (xsp+10)
@@ -1757,6 +1757,7 @@ FDemoText_ByteData_TextRenderer_Skip:
 	call	Strcpy
 	inc	8, xsp
 	jr	FDemoText_ByteData_TextRenderer_Skip2
+FDemoText_ByteData_TextRenderer_Skip3:
 	inc	1, iz
 	ld	xwa, (xsp+2)
 	.byte	0xc3, 0x07, 0xe0, 0xf8, 0x3f, 0x00	; cp (XWA+IZ),0x00
@@ -2237,6 +2238,7 @@ FDemoText_TextDispatch_Skip9:
 	ld	iz, 0:i3
 	cpw	(xsp+274), 0
 	jr	lt, FDemoText_TextDispatch_Skip25
+FDemoText_TextDispatch_Loop12:
 	lda	xde, (xsp+0xca)
 	lda	xwa, (xsp+0x88)
 	push	xwa
@@ -2245,6 +2247,7 @@ FDemoText_TextDispatch_Skip9:
 	calr	FDemoText_ByteData_TextRenderer
 	ld qiz, 0
 	jr	FDemoText_TextDispatch_Join9
+FDemoText_TextDispatch_Loop13:
 	lda	xwa, (xsp+202)
 	push	xwa
 	push	xbc
@@ -2254,22 +2257,25 @@ FDemoText_TextDispatch_Skip9:
 	jr	nz, FDemoText_TextDispatch_Skip24
 	ld wa, qiz
 	cpw qiz, 8
-	jr	gt, 37
+	jr	gt, FDemoText_TextDispatch_Skip24
 	cp	wa, 2:i3
-	jr	ge, 33
+	jr	ge, FDemoText_TextDispatch_Skip24
 	lda	xbc, (xsp+136)
 	cp	wa, 0:i3
-	jr	z, 6
+	jr	z, FDemoText_TextDispatch_Skip26
 	cp	wa, 1:i3
-	jr	z, 9
-	jr	18
+	jr	z, FDemoText_TextDispatch_Skip27
+	jr	FDemoText_TextDispatch_Skip24
+FDemoText_TextDispatch_Skip26:
 	push	xbc
-	.byte 0xbf
-	.ascii "J08h"
-	halt
+	lda	xwa, (xsp+0x4a)
+	push	xwa
+	jr	FDemoText_TextDispatch_Join11
+FDemoText_TextDispatch_Skip27:
 	push	xbc
 	lda	xwa, (xsp+8)
 	push	xwa
+FDemoText_TextDispatch_Join11:
 	call	Strcpy
 	inc	8, xsp
 FDemoText_TextDispatch_Skip24:
@@ -2278,27 +2284,24 @@ FDemoText_TextDispatch_Join9:
 	ld bc, qiz
 	sla bc, 2
 	lda	xwa, (ImgAttr_NameTable:24)
-	.byte 0xe3
-	reti
-	.byte 0xe0, 0xe4
-	ld	a, 129:opc
-	push	xsp
-	nop
-	jr	nz, -88
+	ld_rrl	xbc, xwa, bc
+	cp	(xbc), 0
+	jr	nz, FDemoText_TextDispatch_Loop13
 	inc	1, iz
 	cp	iz, (xsp+274)
-	jr	le, -123
+	jr	le, FDemoText_TextDispatch_Loop12
 FDemoText_TextDispatch_Skip25:
 	lda	xbc, (xsp+70)
 	cpw	(xsp+268), 1
-	jr	z, 21
+	jr	z, FDemoText_TextDispatch_Skip28
 	cpw	(xsp+268), 0
-	jr	nz, 22
+	jr	nz, FDemoText_TextDispatch_Join10
 	ld	xwa, xbc
 	cp	(xbc), 0
 	jr	z, FDemoText_TextDispatch_Join10
 	calr	FDemoText_ByteData_LayoutB
 	jr	FDemoText_TextDispatch_Join10
+FDemoText_TextDispatch_Skip28:
 	ld	xwa, xbc
 	cp	(xbc), 0
 	call_24	nz, (0xf868fd)

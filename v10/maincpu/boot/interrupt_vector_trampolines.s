@@ -29,7 +29,8 @@
 ; a short dispatcher on the record's byte 1 that sits directly in front of the
 ; jump table it indexes (written as <table> - <its length> because the
 ; dispatchers have no labels of their own in audio/audio_control_engine.s).
-; What the record types mean at the MIDI level is not established here.
+; Open question, for whoever documents the writers of the RX buffer: which
+; incoming MIDI traffic produces record types 0x48, 0x60 and 0x98.
 ;
 ; Earlier notes on two of these rows (kept; both regions are table entries):
 ; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFCD01C-0xFCD02C (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=5 near MidiStream_HandleRunningStatus_0x98+283
