@@ -39769,10 +39769,12 @@ DL_F14712:
 ; Entry count: 2048 / 16 = 128 EXACTLY, no remainder.  The run is
 ;   MAXIMAL: the byte before 0xF147AC is 0x00 and the byte at
 ;   0xF14FAC is 0x02, neither printable.
-; Read by: NOTHING in prom_a or prom_b spells 0x00F147AC in a
-;   decodable operand.  The only byte-scan hits are 4-byte windows
-;   inside the record region at 0xF144A6-0xF146E8, so what indexes
-;   this table is NOT established here.
+; Read by: the +0x07 string-table fields of five interpreter-B
+;   records -- three op-07 records in DL_F1449F, op-02 records at
+;   DL_F145EA and DL_F146E1 -- which are the only byte-scan hits (4-byte
+;   windows inside 0xF144A6-0xF146E8); no INSTRUCTION in prom_a or prom_b
+;   spells 0x00F147AC.  (Until 2026-09-25 this line concluded that what
+;   indexes the table was unknown; the note below is how it was found.)
 ; ⚠ CORRECTED 2026-09-25 (lane promb): those five "windows" are the `+0x07`
 ;   table fields of five interpreter-B string-table records that have since
 ;   been typed -- three op-07 records in DL_F1449F (sources (0x2640),
