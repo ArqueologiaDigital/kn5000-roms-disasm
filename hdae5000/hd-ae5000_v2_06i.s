@@ -3,6 +3,55 @@
 
 	.include "shared/event_codes.s"
 
+; ----------------------------------------------------------------------------
+; RAM variables (the expansion's SRAM 0x200000-0x23FFFF) whose role the code
+; shows; each comment names the evidence.  Operands equal to one of these
+; addresses were rewritten by scripts/converters/hdae5000_symbolize_ram.py.
+; ----------------------------------------------------------------------------
+	.equ HDAE5000_RAM_AtaError, 0x200222	; drive error byte: 0 = ok; set by the HDAE5000_ATA_* routines, tested after every disk operation
+	.equ HDAE5000_RAM_DirNames, 0x201632	; directory names, 16 B x 120 (HDAE5000_HD_GetBlockInfo block 0)
+	.equ HDAE5000_RAM_SongRecords, 0x201db2	; song records, 76 B x 1920 (HDAE5000_HD_GetBlockInfo block 1)
+	.equ HDAE5000_RAM_FlsRecords, 0x2257b2	; FLS records, 144 B x 120 (HDAE5000_HD_GetBlockInfo block 2)
+	.equ HDAE5000_RAM_ClusterBytes, 0x229c58	; cluster size in bytes (HDAE5000_HD_ParseIdentify)
+	.equ HDAE5000_RAM_SectorsPerCluster, 0x229c5c	; 0x20, or 0x40 on drives of >= 0x14DC93 sectors (HD_ParseIdentify)
+	.equ HDAE5000_RAM_TablesStartSector, 0x229c64	; first of the 323 filesystem-table sectors, 3908 (HD_ParseIdentify)
+	.equ HDAE5000_RAM_FatStartSector, 0x229c68	; 2 (HD_ParseIdentify)
+	.equ HDAE5000_RAM_DataStartSector, 0x229c6c	; 4231, cluster 1's first sector (HD_ParseIdentify)
+	.equ HDAE5000_RAM_FatEntryCount, 0x229c70	; FAT entries, whole 128-entry sectors (HD_ParseIdentify)
+	.equ HDAE5000_RAM_FreeClusters, 0x229c80	; free-cluster count (HDAE5000_HD_CountFreeClusters, WriteFile, FreeChain)
+	.equ HDAE5000_RAM_DataSectorCount, 0x229c94	; sectors from DataStartSector to the end (HD_ParseIdentify)
+	.equ HDAE5000_RAM_HdInitResult, 0x229d92	; HDAE5000_HD_Init's step code, returned by HDAE5000_Check_HD_Present
+	.equ HDAE5000_RAM_HdSignatureOk, 0x229d98	; 1 when sector 1 carries AA55AA55 F4F1F2F3 (HDAE5000_HD_CheckSignature)
+	.equ HDAE5000_RAM_WriteProtect, 0x229d99	; "WRITE PROTECTION" of HDAE5000_TitleInfo_Template, 0/1 = OFF/ON
+	.equ HDAE5000_RAM_WriteConfirm, 0x229d9a	; "WRITE CONFIRM" of HDAE5000_TitleInfo_Template, 0/1 = OFF/ON
+	.equ HDAE5000_RAM_QuickLoadMode, 0x229da9	; "QUICK LOAD MODE" (TitleInfo); one of the six setting bytes of sector 1
+	.equ HDAE5000_RAM_LoadByNumberMode, 0x229daa	; "LOAD BY NUMBER MODE" (TitleInfo); sector-1 setting byte
+	.equ HDAE5000_RAM_JumpAfterLoad, 0x229dab	; "JUMP AFTER LOAD" (TitleInfo); sector-1 setting byte
+	.equ HDAE5000_RAM_SaveOptions, 0x22aa4c	; 12-byte part-selection record of the save options: u16 mask, then flags 0x22AA4E+k (HDAE5000_TypeSel_*)
+	.equ HDAE5000_RAM_LbnDigitPos, 0x22aa5c	; load-by-number digit position 0..5 (HDAE5000_Lbn_TypeDigit)
+	.equ HDAE5000_RAM_LbnDir, 0x22aa5e	; load-by-number directory number being typed (HDAE5000_Lbn_TypeDigit)
+	.equ HDAE5000_RAM_LbnSong, 0x22aa60	; load-by-number song number being typed (HDAE5000_Lbn_TypeDigit)
+	.equ HDAE5000_RAM_DeleteOptions, 0x22abe6	; 12-byte part-selection record of the delete options (HDAE5000_DelOpt_*)
+	.equ HDAE5000_RAM_SeparateOutputMode, 0x22b2f4	; 0..3 = OFF / DRUMS L/R / BASS+DRUMS MIX / BASS/DRUMS MONO (HDAE5000_SeparateOutput_Apply)
+	.equ HDAE5000_RAM_HdStreamBuffer, 0x230f1c	; 0x8000-byte buffer of the streamed file writes/reads (HDAE5000_HD_WriteStream, the part loaders/savers)
+	.equ HDAE5000_RAM_HdStreamBufferEnd, 0x238f1c	; end of HdStreamBuffer (HDAE5000_HD_WriteStream)
+	.equ HDAE5000_RAM_HdStreamFill, 0x238f24	; fill pointer into HdStreamBuffer (HDAE5000_HD_WriteOpen/_WriteStream)
+	.equ HDAE5000_RAM_HdStreamSlot, 0x238f28	; the first-cluster slot of the open buffered write (HD_WriteOpen)
+	.equ HDAE5000_RAM_HdStreamState, 0x238f2c	; 0 closed, 1 open and nothing written, 2 written (HD_WriteOpen)
+	.equ HDAE5000_RAM_PportError, 0x2390d4	; PC-link error flag, set to 1 by PPORT_RecvByte/SendByte/EndBlock
+	.equ HDAE5000_RAM_PportChecksum, 0x2390fc	; 32-bit running sum of the PC-link block in transfer
+	.equ HDAE5000_RAM_PportPacket, 0x239168	; the 256-byte PC-link packet (HDAE5000_PPORT_SendPacket/RecvPacket)
+	.equ HDAE5000_RAM_DirPageBase, 0x23a08e	; first directory of the list page (HDAE5000_DirList_BuildPage)
+	.equ HDAE5000_RAM_FlsPageBase, 0x23a090	; first FLS of the list page (HDAE5000_FlsList_BuildPage)
+	.equ HDAE5000_RAM_CurDir, 0x23a092	; selected directory (HDAE5000_SongScreen_Refresh, Song_PartMask callers)
+	.equ HDAE5000_RAM_CurSong, 0x23a094	; selected song within CurDir (HDAE5000_SongScreen_Refresh)
+	.equ HDAE5000_RAM_CurFls, 0x23a096	; selected FLS (HDAE5000_FlsScreen_Refresh)
+	.equ HDAE5000_RAM_SeparateBassPart, 0x23a09e	; bass part, 0 = NONE (SeparateBassPartCheck's value; _Apply)
+	.equ HDAE5000_RAM_SeparateDrumPart, 0x23a0a0	; drum part, 0 = NONE (SeparateDrumPartCheck's value; _Apply)
+	.equ HDAE5000_RAM_SeparateDrumPartSent, 0x23a0a2	; drum part last sent by HDAE5000_SeparateOutput_Apply
+	.equ HDAE5000_RAM_SeparateBassPartSent, 0x23a0a4	; bass part last sent by HDAE5000_SeparateOutput_Apply
+	.equ HDAE5000_RAM_MainWorkspacePtr, 0x23a1a2	; the main CPU's workspace; every call into it is (this)->0x0E88 or ->0x0E0A table + offset (init image: HDAE5000_Workspace_Ptr_Init)
+
 ; HDAE5000 Hard Disk Expansion ROM Disassembly
 ; Original file: hd-ae5000_v2_06i.ic4
 ; Size: 512KB (0x80000 bytes)
@@ -303,7 +352,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; Handler function = ClassProc (0xFA44E2) via workspace[0x0E0A][0x0168]
 	ld xwa, 0x1600004	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA  ; port address
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)             ; Handler dispatch table
 	ld XWA, (xwa + 0x0168)             ; Handler function via table offset 0x0168
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA  ; handler function ptr
@@ -313,7 +362,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA  ; data pointer
 	lda xwa, (xsp)	; lda XWA, XSP  ; XWA = param block ptr
 	ld xbc, xwa	; XBC = param block ptr
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable function
 	ldw wa, 0x16A	; Handler ID
@@ -322,7 +371,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 2: RAM data area A (ID=0x01CA, port=0x0160000C) ===
 	ld xwa, 0x160000C	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x013c)             ; Handler function via table offset 0x013C
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -332,7 +381,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x1CA	; Handler ID
@@ -341,7 +390,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 3: RAM data area B (ID=0x01EA, port=0x0160000D) ===
 	ld xwa, 0x160000D	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x0140)             ; Handler function via table offset 0x0140
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -351,7 +400,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x1EA	; Handler ID
@@ -360,7 +409,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 4: Init data primary (ID=0x012A, port=0x01600002) ===
 	ld xwa, 0x1600002	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x0248)             ; Handler function via table offset 0x0248
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -369,7 +418,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x12A	; Handler ID
@@ -378,7 +427,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 5: Init data secondary (ID=0x042A, port=0x01600002) ===
 	ld xwa, 0x1600002	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x0248)             ; Handler function via table offset 0x0248
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -387,7 +436,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x42A	; Handler ID
@@ -396,7 +445,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 6: Serial data primary (ID=0x010A, port=0x01600001) ===
 	ld xwa, 0x1600001	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x0244)             ; Handler function via table offset 0x0244
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -405,7 +454,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x10A	; Handler ID
@@ -414,7 +463,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 7: Serial data secondary (ID=0x040A, port=0x01600001) ===
 	ld xwa, 0x1600001	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x0244)             ; Handler function via table offset 0x0244
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -423,7 +472,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x40A	; Handler ID
@@ -432,7 +481,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 8: Parallel data primary (ID=0x014A, port=0x01600003) ===
 	ld xwa, 0x1600003	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x024c)             ; Handler function via table offset 0x024C
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -441,7 +490,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x14A	; Handler ID
@@ -450,7 +499,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 9: Parallel data secondary (ID=0x044A, port=0x01600003) ===
 	ld xwa, 0x1600003	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x024c)             ; Handler function via table offset 0x024C
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -459,7 +508,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x44A	; Handler ID
@@ -468,7 +517,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 10: UI object descriptor table (ID=0x007F, port=0x01600010) ===
 	ld xwa, 0x1600010	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x0280)             ; Handler function via table offset 0x0280
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -477,7 +526,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x7F	; Handler ID
@@ -486,7 +535,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	; === Handler 11: UI object name table (ID=0x037F, port=0x0160000F) ===
 	ld xwa, 0x160000F	; PPI port address
 	ld (xsp + 256), xwa	; ld (XSP+0x00), XWA
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XWA, (xwa + 0x0148)             ; Handler function via table offset 0x0148
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
@@ -495,7 +544,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld_sril XHL, (xwa + 0x00e4)             ; RegisterObjectTable
 	ldw wa, 0x37F	; Handler ID
@@ -506,7 +555,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	pushw 0xA	; push 10 bytes (param size)
 	lda xwa, (0x2a849a:24)
 	push xwa	; push pointer to init params
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + 0x0e0a)
 	ld XHL, (xwa + 0x0270)             ; Special dispatch function
 	ld xwa, 0x7F	; Graphics handler ID
@@ -651,32 +700,32 @@ HDAE5000_UiState_Reset:	; 0x2803C2
 ; LRF: 0x2803C2 (9266 bytes)
 	; ^ conversion-region size (local-label prefix .LRF_), not a routine size.
 
-	ldw	(0x23A08E:24), 0
-	ldw	(0x23A092:24), 0
-	ldw	(0x23A094:24), 0
+	ldw	(HDAE5000_RAM_DirPageBase:24), 0
+	ldw	(HDAE5000_RAM_CurDir:24), 0
+	ldw	(HDAE5000_RAM_CurSong:24), 0
 	ld	xiy, HDAE5000_Lbn_BlockTemplate
 	ld	xix, 0x0022aa58
 	ld	bc, 5:i3
 	ldirw                                   ; ldirw
 	ld	xiy, HDAE5000_TypeSel_TemplateBlank
-	ld	xix, 0x0022aa4c
+	ld	xix, HDAE5000_RAM_SaveOptions
 	ld	bc, 6:i3
 	ldirw                                   ; ldirw
-	ldw	(0x22AA4C:24), 511
-	ld	wa, (0x23A092:24)
-	ld	bc, (0x23A094:24)
+	ldw	(HDAE5000_RAM_SaveOptions:24), 511
+	ld	wa, (HDAE5000_RAM_CurDir:24)
+	ld	bc, (HDAE5000_RAM_CurSong:24)
 	call HDAE5000_Song_PartMask
 	ld	wa, hl
 	cp	wa, 0xffff
 	jr z, .LRF_0424                        ; [66 14] jr Z,0x280424
-	lda xwa, (0x22aa4c:24)
+	lda xwa, (HDAE5000_RAM_SaveOptions:24)
 	pushw 0x0002
 	ld	bc, hl
 	lda xde, (HDAE5000_TypeSel_TemplateBlank:24)
 	calr	HDAE5000_TypeSel_Init
 	jr t, .LRF_0436                        ; [68 12] jr T,0x280436
 .LRF_0424:
-	lda xwa, (0x22aa4c:24)
+	lda xwa, (HDAE5000_RAM_SaveOptions:24)
 	pushw 0x0002
 	lda xde, (HDAE5000_TypeSel_TemplateBlank:24)
 	ld	bc, 0:i3
@@ -696,7 +745,7 @@ HDAE5000_AcWindowPage1Proc:
 	cp	xwa, 0x01c00001
 	jr nz, .LRF_046c                       ; [6e 1a] jr NZ,0x28046c
 	ld	xwa, xiz
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e0007f
@@ -706,7 +755,7 @@ HDAE5000_AcWindowPage1Proc:
 	ld	xwa, xiz
 	ld xbc, (xsp + 0x08)                    ; ld XBC,(XSP+0x08)
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -751,12 +800,12 @@ HDAE5000_TtlScreenRProc:
 	push xwa
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+30)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x013c)
 	ld	wa, 3:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 3:i3
@@ -765,14 +814,14 @@ HDAE5000_TtlScreenRProc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld	xhl, 0:i3
 	jr t, .LRF_0563                        ; [68 2c] jr T,0x280563
 .LRF_0537:
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 2:i3
@@ -781,7 +830,7 @@ HDAE5000_TtlScreenRProc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -827,12 +876,12 @@ HDAE5000_TtlScreenR2Proc:
 	push xwa
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+30)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x013c)
 	ld	wa, 3:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 3:i3
@@ -841,14 +890,14 @@ HDAE5000_TtlScreenR2Proc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld	xhl, 0:i3
 	jr t, .LRF_0641                        ; [68 2c] jr T,0x280641
 .LRF_0615:
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 2:i3
@@ -857,7 +906,7 @@ HDAE5000_TtlScreenR2Proc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -903,12 +952,12 @@ HDAE5000_TtlScreenR3Proc:
 	push xwa
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+30)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x013c)
 	ld	wa, 3:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 3:i3
@@ -917,14 +966,14 @@ HDAE5000_TtlScreenR3Proc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld	xhl, 0:i3
 	jr t, .LRF_071f                        ; [68 2c] jr T,0x28071f
 .LRF_06f3:
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 2:i3
@@ -933,7 +982,7 @@ HDAE5000_TtlScreenR3Proc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -967,12 +1016,12 @@ HDAE5000_IvScreenR2Proc:
 	push xwa
 	call HDAE5000_MemCopy
 	lda	xsp, (xsp+10)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x013c)
 	ld	wa, 3:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 3:i3
@@ -981,14 +1030,14 @@ HDAE5000_IvScreenR2Proc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld	xhl, 0:i3
 	jr t, .LRF_07d5                        ; [68 2c] jr T,0x2807d5
 .LRF_07a9:
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e88)
 	ld	xhl, (xwa + 0x0138)
 	ld	wa, 2:i3
@@ -997,7 +1046,7 @@ HDAE5000_IvScreenR2Proc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xbc, xiz
 	ld xde, (xsp + 0x04)                    ; ld XDE,(XSP+0x04)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -1049,12 +1098,12 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
@@ -1066,12 +1115,12 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1083,20 +1132,20 @@ HDAE5000_SelectListProc:
 	cpw	(xwa+50), 0x0000
 	jr z, .LRF_0942                        ; [66 49] jr Z,0x280942
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x03c8)
 	ld	xbc, 0x01c00018
 	ld	xde, 0:i3
 	call	(xhl)
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x03cc)
 	ld	xbc, 0x01c00017
 	ld	xde, 0:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x03c4)
 	ld	wa, 1:i3
@@ -1104,7 +1153,7 @@ HDAE5000_SelectListProc:
 .LRF_0942:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01c00001
@@ -1116,12 +1165,12 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1135,12 +1184,12 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1151,7 +1200,7 @@ HDAE5000_SelectListProc:
 	lda	xwa, (xsp+80)
 	ld	xbc, xwa
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x02d4)
 	call	(xhl)
@@ -1185,7 +1234,7 @@ HDAE5000_SelectListProc:
 	lda	xwa, (xsp+88)
 	ld	xbc, xwa
 	ld	xwa, xde
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld_sril	xhl, (xde + 0x009c)
 	ldw	de, 0x00ff
@@ -1197,7 +1246,7 @@ HDAE5000_SelectListProc:
 	lda	xwa, (xsp+88)
 	ld	xbc, xwa
 	ld	xwa, xde
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld_sril	xhl, (xde + 0x009c)
 	ld	de, 7:i3
@@ -1214,7 +1263,7 @@ HDAE5000_SelectListProc:
 	jrl t, .LRF_1225                       ; [78 94 07] jrl T,0x281225
 .LRF_0a91:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1243,7 +1292,7 @@ HDAE5000_SelectListProc:
 	lda	xwa, (xsp+80)
 	ld	xbc, xwa
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x02d4)
 	call	(xhl)
@@ -1346,14 +1395,14 @@ HDAE5000_SelectListProc:
 	ld (xsp + 0x5e), bc
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x1c)                    ; ld XWA,(XWA+0x1c)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0154)
 	call	(xhl)
 	ld	iz, hl
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x1c)                    ; ld XWA,(XWA+0x1c)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x0150)
 	call	(xix)
@@ -1365,7 +1414,7 @@ HDAE5000_SelectListProc:
 	ld	iz, wa
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x1c)                    ; ld XWA,(XWA+0x1c)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x0158)
 	call	(xix)
@@ -1380,7 +1429,7 @@ HDAE5000_SelectListProc:
 	cpw	(xwa+58), 0x0000
 	jr nz, .LRF_0cb1                       ; [6e 49] jr NZ,0x280cb1
 	lda	xwa, (xsp+72)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x00a4)
 	ldw	bc, 0x00ff
@@ -1397,7 +1446,7 @@ HDAE5000_SelectListProc:
 	pushw 0x0000
 	pushw 0x00f7
 	ld	xwa, xhl
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
@@ -1406,7 +1455,7 @@ HDAE5000_SelectListProc:
 	lda	xwa, (xsp+72)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	bc, (xbc+22)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld_sril	xhl, (xde + 0x00a4)
 	call	(xhl)
@@ -1421,12 +1470,12 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x0a)                    ; ld XWA,(XSP+0x0a)
 	pushm	(xwa+22)
 	ld	xwa, xhl
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
 	lda	xwa, (xsp+72)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x00a8)
 	ldw	bc, 0x00f2
@@ -1439,7 +1488,7 @@ HDAE5000_SelectListProc:
 	lda	xwa, (xsp+72)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	bc, (xbc+22)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld_sril	xhl, (xde + 0x00a4)
 	call	(xhl)
@@ -1454,7 +1503,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x0a)                    ; ld XWA,(XSP+0x0a)
 	pushm	(xwa+22)
 	ld	xwa, xhl
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
@@ -1463,7 +1512,7 @@ HDAE5000_SelectListProc:
 	lda	xwa, (xsp+72)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	bc, (xbc+22)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld_sril	xhl, (xde + 0x00a4)
 	call	(xhl)
@@ -1478,7 +1527,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x0a)                    ; ld XWA,(XSP+0x0a)
 	pushm	(xwa+22)
 	ld	xwa, xhl
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
@@ -1495,7 +1544,7 @@ HDAE5000_SelectListProc:
 	jrl t, .LRF_1225                       ; [78 59 04] jrl T,0x281225
 .LRF_0dcc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1511,7 +1560,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0001
@@ -1529,7 +1578,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0000
@@ -1540,7 +1589,7 @@ HDAE5000_SelectListProc:
 	exts xbc                                ; exts XBC
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01ea0003
@@ -1550,7 +1599,7 @@ HDAE5000_SelectListProc:
 	jrl t, .LRF_1225                       ; [78 b8 03] jrl T,0x281225
 .LRF_0e6d:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1566,7 +1615,7 @@ HDAE5000_SelectListProc:
 	exts xbc                                ; exts XBC
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
@@ -1576,7 +1625,7 @@ HDAE5000_SelectListProc:
 	ld	de, (xwa)
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
@@ -1587,7 +1636,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0002
@@ -1596,7 +1645,7 @@ HDAE5000_SelectListProc:
 	jrl t, .LRF_1225                       ; [78 22 03] jrl T,0x281225
 .LRF_0f03:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1607,7 +1656,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0005
@@ -1616,7 +1665,7 @@ HDAE5000_SelectListProc:
 	jrl t, .LRF_1225                       ; [78 e1 02] jrl T,0x281225
 .LRF_0f44:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1631,13 +1680,13 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld	wa, 0:i3
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00051
@@ -1645,7 +1694,7 @@ HDAE5000_SelectListProc:
 	call	(xhl)
 	ld	xiz, xhl
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1664,7 +1713,7 @@ HDAE5000_SelectListProc:
 	exts xbc                                ; exts XBC
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01ea0002
@@ -1675,7 +1724,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
@@ -1685,19 +1734,19 @@ HDAE5000_SelectListProc:
 	jr z, .LRF_106d                        ; [66 49] jr Z,0x28106d
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld	xde, xiz
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x03c8)
 	ld	xbc, 0x01c00018
 	call	(xhl)
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld	xde, xiz
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x03cc)
 	ld	xbc, 0x01c00017
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x03c4)
 	ld	wa, 1:i3
@@ -1736,7 +1785,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0006
@@ -1754,7 +1803,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0008
@@ -1772,7 +1821,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea000d
@@ -1790,7 +1839,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0007
@@ -1808,7 +1857,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea000c
@@ -1826,7 +1875,7 @@ HDAE5000_SelectListProc:
 	exts xde                                ; exts XDE
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0254)
 	ld	xbc, 0x01ea0009
@@ -1838,7 +1887,7 @@ HDAE5000_SelectListProc:
 	jr t, .LRF_1225                        ; [68 4d] jr T,0x281225
 .LRF_11d8:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1847,7 +1896,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xwa + 0x22)                    ; ld XWA,(XWA+0x22)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x0254)
 	call	(xhl)
@@ -1855,7 +1904,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x68)                    ; ld XWA,(XSP+0x68)
 	ld xbc, (xsp + 0x64)                    ; ld XBC,(XSP+0x64)
 	ld xde, (xsp + 0x60)                    ; ld XDE,(XSP+0x60)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -1877,14 +1926,14 @@ HDAE5000_DbMemoClProc:
 	jr z, .LRF_125f                        ; [66 19] jr Z,0x28125f
 	ld	xwa, xiz
 	ld xde, (xsp + 0x6a)                    ; ld XDE,(XSP+0x6a)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
 	jrl t, .LRF_140c                       ; [78 ad 01] jrl T,0x28140c
 .LRF_125f:
 	ld	xwa, xiz
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1893,7 +1942,7 @@ HDAE5000_DbMemoClProc:
 	lda	xwa, (xwa+14)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	de, (xbc+22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x02dc)
 	ldw	bc, 0x00c5
@@ -1910,7 +1959,7 @@ HDAE5000_DbMemoClProc:
 	lda	xwa, (xsp+98)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	de, (xbc+22)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x02dc)
 	ldw	bc, 0x00c6
@@ -1919,7 +1968,7 @@ HDAE5000_DbMemoClProc:
 	ld	xbc, xwa
 	ld	xwa, xiz
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c00025
@@ -1928,7 +1977,7 @@ HDAE5000_DbMemoClProc:
 	jrl t, .LRF_140c                       ; [78 1c 01] jrl T,0x28140c
 .LRF_12f0:
 	ld	xwa, xiz
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
@@ -1976,14 +2025,14 @@ HDAE5000_DbMemoClProc:
 	lda	xwa, (xsp+74)
 	ld	xbc, xwa
 	ld	xwa, xde
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld_sril	xhl, (xde + 0x00b0)
 	call	(xhl)
 	lda	xwa, (xsp+82)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	bc, (xbc+22)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld_sril	xhl, (xde + 0x00a4)
 	call	(xhl)
@@ -2011,7 +2060,7 @@ HDAE5000_DbMemoClProc:
 	ld xwa, (xsp + 0x0a)                    ; ld XWA,(XSP+0x0a)
 	pushm	(xwa+22)
 	ld	xwa, xhl
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
@@ -2093,7 +2142,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ldw	(0x22A028:24), 0
 	ldw	(0x22A02A:24), 0
 	ld	xwa, (0x22a022)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x0250)
 	ld	xbc, 0x01e0007c
@@ -2105,7 +2154,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ldw	(0x22A026:24), 32
 .LRF_152b:
 	ld	xwa, (0x22a022)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x0250)
 	ld	xbc, 0x01e00084
@@ -2121,19 +2170,19 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	(0x22a034), xwa
 	cpw	(0x22A032:24), 0
 	jr z, .LRF_15b8                        ; [66 4a] jr Z,0x2815b8
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
 	ld	xwa, HDAE5000_OBJ_HddNamingABC
 	ld	bc, 0:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
 	ld	xwa, HDAE5000_OBJ_HddNamingabc
 	ld	bc, 0:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
 	ld	xwa, HDAE5000_OBJ_HddNamingSymbol
@@ -2141,19 +2190,19 @@ HDAE5000_AcHddNamingWindowProc:
 	call	(xhl)
 	jr t, .LRF_1600                        ; [68 48] jr T,0x281600
 .LRF_15b8:
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
 	ld	xwa, HDAE5000_OBJ_HddNamingABC
 	ld	bc, 1:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
 	ld	xwa, HDAE5000_OBJ_HddNamingabc
 	ld	bc, 1:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x0294)
 	ld	xwa, HDAE5000_OBJ_HddNamingSymbol
@@ -2184,7 +2233,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	xbc, xwa
 	ld	xwa, (0x22a022)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x0250)
 	ld	xbc, 0x01e0003a
@@ -2193,25 +2242,25 @@ HDAE5000_AcHddNamingWindowProc:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x03c8)
 	ld	xbc, 0x01c00017
 	ld	xde, 5:i3
 	call	(xhl)
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xhl, (xbc + 0x03cc)
 	ld	xbc, 0x01c00018
 	ld	xde, 3:i3
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld	xhl, (xwa + 0x03c4)
 	ld	wa, 1:i3
@@ -2222,7 +2271,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
@@ -2231,7 +2280,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -2242,7 +2291,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
@@ -2257,7 +2306,7 @@ HDAE5000_AcHddNamingWindowProc:
 	lda	xwa, (xsp+32)
 	ld	xbc, xwa
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x02d4)
 	call	(xhl)
@@ -2278,7 +2327,7 @@ HDAE5000_AcHddNamingWindowProc:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -2315,7 +2364,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	wa, 0x0011
 	ld (xsp + 0x1e), wa                     ; ld (XSP+0x1e),WA
 	lda	xwa, (xsp+24)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x00a8)
 	ldw	bc, 0x00f5
@@ -2329,7 +2378,7 @@ HDAE5000_AcHddNamingWindowProc:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -2366,7 +2415,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	wa, 0x0011
 	ld (xsp + 0x1e), wa                     ; ld (XSP+0x1e),WA
 	lda	xwa, (xsp+24)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x00a8)
 	ldw	bc, 0x00f2
@@ -2384,12 +2433,12 @@ HDAE5000_AcHddNamingWindowProc:
 	lda	xwa, (xsp+32)
 	ld	xbc, xwa
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x02d4)
 	call	(xhl)
 	lda	xwa, (xsp+32)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x00a4)
 	ldw	bc, 0x00f5
@@ -2438,7 +2487,7 @@ HDAE5000_AcHddNamingWindowProc:
 	pushw 0x00f7
 	ld	xwa, xhl
 	ld xde, (xde)                           ; ld XDE,(XDE)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00c4)
 	call	(xhl)
@@ -2462,7 +2511,7 @@ HDAE5000_AcHddNamingWindowProc:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
@@ -2484,7 +2533,7 @@ HDAE5000_AcHddNamingWindowProc_Case1:
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -2492,7 +2541,7 @@ HDAE5000_AcHddNamingWindowProc_Case1:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
@@ -2506,7 +2555,7 @@ HDAE5000_AcHddNamingWindowProc_Case2:
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -2514,7 +2563,7 @@ HDAE5000_AcHddNamingWindowProc_Case2:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
@@ -2538,7 +2587,7 @@ HDAE5000_AcHddNamingWindowProc_Case3:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -2550,7 +2599,7 @@ HDAE5000_AcHddNamingWindowProc_Case3:
 	ld	(xbc), a
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -2559,7 +2608,7 @@ HDAE5000_AcHddNamingWindowProc_Case3:
 	ld	de, (0x22A02E:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000e
@@ -2567,7 +2616,7 @@ HDAE5000_AcHddNamingWindowProc_Case3:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
@@ -2601,7 +2650,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -2613,7 +2662,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	(xbc), a
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -2622,7 +2671,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	de, (0x22A02E:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000e
@@ -2630,7 +2679,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
@@ -2651,7 +2700,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -2700,7 +2749,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -2726,7 +2775,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 .LRF_1d57:
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -2735,7 +2784,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld	de, (0x22A02E:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000e
@@ -2743,7 +2792,7 @@ HDAE5000_AcHddNamingWindowProc_Case4:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
@@ -2776,7 +2825,7 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -2802,7 +2851,7 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 .LRF_1e55:
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -2811,7 +2860,7 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 	ld	de, (0x22A02E:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000e
@@ -2819,7 +2868,7 @@ HDAE5000_AcHddNamingWindowProc_Case5:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld	xhl, (xhl + 0x042c)
 	call	(xhl)
@@ -2854,7 +2903,7 @@ HDAE5000_AcHddNamingWindowProc_Case6:
 	ld	(xbc), a
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -2863,7 +2912,7 @@ HDAE5000_AcHddNamingWindowProc_Case6:
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -2899,7 +2948,7 @@ HDAE5000_AcHddNamingWindowProc_Case7:
 	ld	(xbc), a
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -2908,7 +2957,7 @@ HDAE5000_AcHddNamingWindowProc_Case7:
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -2964,7 +3013,7 @@ HDAE5000_AcHddNamingWindowProc_Case8:
 	ld	wa, (0x22A026:24)
 	inc	1, wa
 	extz xwa
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e88)
 	ld	xix, (xbc + 0x0130)
 	call	(xix)
@@ -2993,7 +3042,7 @@ HDAE5000_AcHddNamingWindowProc_Case8:
 	call HDAE5000_StrCpy
 	lda	xsp, (xsp+16)
 	ld	xwa, xiz
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e88)
 	ld	xhl, (xbc + 0x0134)
 	call	(xhl)
@@ -3033,7 +3082,7 @@ HDAE5000_AcHddNamingWindowProc_Case8:
 .LRF_2115:
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -3042,7 +3091,7 @@ HDAE5000_AcHddNamingWindowProc_Case8:
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -3064,7 +3113,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	cp	iz, (0x22A026:24)
 	jr c, .LRF_2163                        ; [67 e3] jr C,0x282163
 .LRF_2180:
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -3073,14 +3122,14 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	call	(xhl)
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
 	ld	xbc, 0x01c0000f
 	call	(xhl)
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -3097,7 +3146,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	call HDAE5000_StrCpy
 	inc 0, xsp                              ; inc 0,XSP
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -3127,7 +3176,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld xwa, (xsp + 0x28)                    ; ld XWA,(XSP+0x28)
 	extz xwa
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, 0xffffffff
@@ -3137,7 +3186,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	de, (0x22A02A:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
@@ -3148,7 +3197,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	xbc, HDAE5000_TextPtrs_ABC123_Abc123_Chr202123242526
 	add	xbc, xwa
 	ld xde, (xbc)                           ; ld XDE,(XBC)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingLabel
@@ -3161,7 +3210,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	(0x22a028), wa
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -3169,7 +3218,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	call	(xhl)
 	lda xwa, (0x22a000:24)
 	ld	xde, xwa
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingCursorBox
@@ -3279,7 +3328,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -3308,7 +3357,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	de, (0x22A02A:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e0007f
@@ -3316,7 +3365,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	de, (0x22A02E:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000e
@@ -3333,7 +3382,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	de, (0x22A028:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00080
@@ -3344,7 +3393,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
@@ -3358,7 +3407,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	extz xbc                                ; extz XBC
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e0007f
@@ -3398,7 +3447,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	lda	xwa, (xsp+10)
 	ld	xbc, xwa
 	ld xwa, (xde)                           ; ld XWA,(XDE)
-	ld	xde, (0x23a1a2)
+	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xde, (xde + 0x0e0a)
 	ld	xhl, (xde + 0x015c)
 	call	(xhl)
@@ -3412,7 +3461,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	c, a
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00081
@@ -3424,7 +3473,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	c, a
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01e00081
@@ -3433,7 +3482,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	de, (0x22A02E:24)
 	extz xde                                ; extz XDE
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000e
@@ -3445,7 +3494,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld xbc, (xsp + 0x2c)                    ; ld XBC,(XSP+0x2c)
 	ld xde, (xsp + 0x28)                    ; ld XDE,(XSP+0x28)
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -3471,7 +3520,7 @@ HDAE5000_IvHddNamingProc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	xde, xiz
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	call	(xix)
@@ -3480,7 +3529,7 @@ HDAE5000_IvHddNamingProc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	xde, xiz
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
@@ -3488,7 +3537,7 @@ HDAE5000_IvHddNamingProc:
 	ld	xbc, xwa
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld	xde, xbc
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld_sril	xhl, (xbc + 0x0100)
 	ld	xbc, 0x01c0000f
@@ -3499,24 +3548,24 @@ HDAE5000_IvHddNamingProc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	xde, xiz
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
-	ld	xbc, (0x23a1a2)
+	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + 0x0e0a)
 	ld	xix, (xbc + 0x02c4)
 	call	(xix)
 	ld xde, (xhl + 0x16)                    ; ld XDE,(XHL+0x16)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingWindow
 	ld	xbc, 0x01e0007b
 	call	(xhl)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingWindow
@@ -3526,7 +3575,7 @@ HDAE5000_IvHddNamingProc:
 	jr t, .LRF_27a4                        ; [68 36] jr T,0x2827a4
 .LRF_276e:
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HddNamingWindow
@@ -3535,7 +3584,7 @@ HDAE5000_IvHddNamingProc:
 	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
 	ld xbc, (xsp + 0x04)                    ; ld XBC,(XSP+0x04)
 	ld	xde, xiz
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
@@ -3550,16 +3599,16 @@ HDAE5000_HDTitleMenuProc:
 	ld	xhl, xbc
 	cp	xhl, 0x01c0000f
 	jr z, .LRF_27c3                        ; [66 11] jr Z,0x2827c3
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xix, (xhl + 0x00dc)
 	jp	(xix)
 .LRF_27c3:
-	ld	xhl, (0x23a1a2)
+	ld	xhl, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xhl, (xhl + 0x0e0a)
 	ld_sril	xhl, (xhl + 0x00dc)
 	call	(xhl)
-	ld	xwa, (0x23a1a2)
+	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + 0x0e0a)
 	ld_sril	xhl, (xwa + 0x0100)
 	ld	xwa, HDAE5000_OBJ_HD_MENU_BMP
@@ -3577,7 +3626,7 @@ HDAE5000_HardTest_Print:	; 0x2827F4 (932 bytes)
 	; and its tests HDAE5000_HardTest_PortTest / _HddIdRead.  (Was "Event
 	; handler ... registers callback via vtable": it registers nothing.)
 	ld xde, xwa					; e8 8a
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20 — load context base
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20 — load context base
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20 — xwa = (xwa+0x0e0a) vtable ptr
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23 — xhl = (xwa+0x0100) callback
 	ld xwa, 0xffffffff				; 40 ff ff ff ff
@@ -3606,7 +3655,7 @@ HDAE5000_HardTestPage:
 	ld xwa, xiz					; ee 88 — restore context
 	ld xbc, (xsp + 0x08)				; af 08 21
 	ld xde, (xsp + 0x04)				; af 04 22
-	ld xhl, (0x23a1a2:24); e2 a2 a1 23 23
+	ld xhl, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 23
 	ld xhl, (xhl + 0x0e0a)             ; e3 ed 0a 0e 23 — xhl = (xhl+0x0e0a)
 	ld_sril xhl, (xhl + 0x00dc)             ; e3 ed dc 00 23 — xhl = (xhl+0x00dc) indirect call
 	call (xhl)					; b3 e8
@@ -3614,7 +3663,7 @@ HDAE5000_HardTestPage:
 	ld xbc, xwa					; e8 89
 	ld xwa, xiz					; ee 88
 	ld xde, xbc					; e9 8a
-	ld xbc, (0x23a1a2:24); e2 a2 a1 23 21
+	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 21
 	ld xbc, (xbc + 0x0e0a)             ; e3 e5 0a 0e 21 — xbc = (xbc+0x0e0a)
 	ld_sril xhl, (xbc + 0x0100)             ; e3 e5 00 01 23 — xhl = (xbc+0x0100) callback
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
@@ -3634,14 +3683,14 @@ HDAE5000_HardTestPage:
 	jrl nz, .Leh_epilogue				; 7e d8 02
 	; XDE == 0x09: register event 0x4B, call init, register vtable callback
 .Leh_xde_09:
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23 — callback ptr
 	ld xwa, HDAE5000_OBJ_PPORT_SW				; 40 4b 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8 — register event
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0084)             ; e3 e1 84 00 23 — (xwa+0x0084) init fn
 	call (xhl)					; b3 e8 — call init
@@ -3649,14 +3698,14 @@ HDAE5000_HardTestPage:
 	lda xwa, (HDAE5000_Str_PPORTTEST:24); f2 e4 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 17 ff — register handler
 	calr HDAE5000_HardTest_PortTest		; 1e 47 03
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
 	ld xwa, HDAE5000_OBJ_PPORT_SW				; 40 4b 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8 — unregister event
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24 — xix = callback
 	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
@@ -3671,7 +3720,7 @@ HDAE5000_HardTestPage:
 	ld xwa, 0x0000000a				; 40 0a 00 00 00
 	push xwa					; 38
 	ld xbc, xiz					; ee 89
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + 0x0410)             ; e3 e1 10 04 23 — (xwa+0x0410) dispatch
 	ld xwa, 0x00000029				; 40 29 00 00 00
@@ -3680,14 +3729,14 @@ HDAE5000_HardTestPage:
 	jrl t, .Leh_epilogue				; 78 2c 02
 	; XDE == 0x0A: register event 0x4D, write sector
 .Leh_xde_0a:
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
 	ld xwa, HDAE5000_OBJ_HDD_SW				; 40 4d 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0084)             ; e3 e1 84 00 23 — init fn
 	call (xhl)					; b3 e8
@@ -3695,14 +3744,14 @@ HDAE5000_HardTestPage:
 	lda xwa, (HDAE5000_Str_HDDIDREAD:24); f2 f0 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 6b fe
 	calr HDAE5000_HardTest_HddIdRead			; 1e e2 02
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
 	ld xwa, HDAE5000_OBJ_HDD_SW				; 40 4d 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24
 	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
@@ -3716,7 +3765,7 @@ HDAE5000_HardTestPage:
 	ld xwa, 0x0000000b				; 40 0b 00 00 00
 	push xwa					; 38
 	ld xbc, xiz					; ee 89
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + 0x0410)             ; e3 e1 10 04 23
 	ld xwa, 0x00000029				; 40 29 00 00 00
@@ -3725,14 +3774,14 @@ HDAE5000_HardTestPage:
 	jrl t, .Leh_epilogue				; 78 80 01
 	; XDE == 0x0B: register event 0x4C, read/check disk status
 .Leh_xde_0b:
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
 	ld xwa, HDAE5000_OBJ_FD_SW				; 40 4c 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 1:i3					; ea a9
 	call (xhl)					; b3 e8
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0084)             ; e3 e1 84 00 23
 	call (xhl)					; b3 e8
@@ -3740,7 +3789,7 @@ HDAE5000_HardTestPage:
 	lda xwa, (HDAE5000_Str_FDTEST:24); f2 fc 21 2e 30
 	calr HDAE5000_HardTest_Print			; 1e bf fd
 	; Check disk status via 0x0e88 table
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e88)             ; e3 e1 88 0e 20 — (xwa+0x0e88)
 	ld xix, (xwa + 0x08)				; a8 08 24
 	call (xix)					; b4 e8
@@ -3749,7 +3798,7 @@ HDAE5000_HardTestPage:
 	cp l, 2:i3					; cf da
 	jr nz, .Leh_status_other			; 6e 27
 .Leh_status_2or3:
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e88)             ; e3 e1 88 0e 20
 	ld xix, (xwa + 0x04)				; a8 04 24
 	call (xix)					; b4 e8
@@ -3766,14 +3815,14 @@ HDAE5000_HardTestPage:
 	lda xwa, (HDAE5000_Str_ERROR_HardTestPage:24); f2 0e 22 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 79 fd
 .Leh_after_status:
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
 	ld xwa, HDAE5000_OBJ_FD_SW				; 40 4c 00 7f 00
 	ld xbc, 0x01c0000f				; 41 0f 00 c0 01
 	ld xde, 0:i3					; ea a8
 	call (xhl)					; b3 e8
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24
 	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
@@ -3787,7 +3836,7 @@ HDAE5000_HardTestPage:
 	ld xwa, 0x00000009				; 40 09 00 00 00
 	push xwa					; 38
 	ld xbc, xiz					; ee 89
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + 0x0410)             ; e3 e1 10 04 23
 	ld xwa, 0x00000029				; 40 29 00 00 00
@@ -3796,7 +3845,7 @@ HDAE5000_HardTestPage:
 	jrl t, .Leh_epilogue				; 78 91 00
 	; XDE == 0x0C: check device, show status messages
 .Leh_xde_0c:
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xix, (xwa + 0x0100)             ; e3 e1 00 01 24
 	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
@@ -3806,7 +3855,7 @@ HDAE5000_HardTestPage:
 	cp xhl, 0x00000001				; eb cf 01 00 00 00
 	jr nz, .Leh_xde_0c_no_device			; 6e 27
 	; Device present: show "connected" message
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
 	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
@@ -3818,7 +3867,7 @@ HDAE5000_HardTestPage:
 	jr t, .Leh_epilogue				; 68 45
 .Leh_xde_0c_no_device:
 	; Device not present: show "not connected" message
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld_sril xhl, (xwa + 0x0100)             ; e3 e1 00 01 23
 	ld xwa, HDAE5000_OBJ_RUN_STOP				; 40 49 00 7f 00
@@ -3828,7 +3877,7 @@ HDAE5000_HardTestPage:
 	lda xwa, (HDAE5000_Str_STARTTESTLOOP:24); f2 24 22 2e 30
 	calr HDAE5000_HardTest_Print			; 1e 99 fc
 	; Final cleanup: call deregister via vtable
-	ld xwa, (0x23a1a2:24); e2 a2 a1 23 20
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 20
 	ld xwa, (xwa + 0x0e0a)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + 0x0104)             ; e3 e1 04 01 23 — (xwa+0x0104) deregister
 	ld xwa, 0xffffffff				; 40 ff ff ff ff
@@ -3840,7 +3889,7 @@ HDAE5000_HardTestPage:
 	ld xwa, xiz					; ee 88
 	ld xbc, (xsp + 0x08)				; af 08 21
 	ld xde, (xsp + 0x04)				; af 04 22
-	ld xhl, (0x23a1a2:24); e2 a2 a1 23 23
+	ld xhl, (HDAE5000_RAM_MainWorkspacePtr:24); e2 a2 a1 23 23
 	ld xhl, (xhl + 0x0e0a)             ; e3 ed 0a 0e 23 — xhl = (xhl+0x0e0a)
 	ld_sril xix, (xhl + 0x00dc)             ; e3 ed dc 00 24 — xix = (xhl+0x00dc)
 	call (xix)					; b4 e8
@@ -4047,14 +4096,14 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	; Register PPI device: first handler pair (0xDE)
 	lda xwa, (0x22aa9c:24); 0x22AA9C - buffer ptr
 	ld xde, xwa
-	ld xwa, (0x23a1a2:24); workspace ptr (0x23A1A2)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24); workspace ptr (0x23A1A2)
 	ld xwa, (xwa + 0x0e0a)             ; (XWA + 0x0E0A)
 	ld xhl, (xwa + 0x0124)             ; (XWA + 0x0124)
 	ld xwa, HDAE5000_OBJ_CP_FD_VOLLABEL
 	ld xbc, 0x01EA000A
 	call (xhl)
 	; Register second handler (0xDE, different params)
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
 	ld xwa, HDAE5000_OBJ_CP_FD_VOLLABEL
@@ -4072,14 +4121,14 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	; Register PPI device: second handler pair (0xD7)
 	lda xwa, (0x22aaaa:24); 0x22AAAA
 	ld xde, xwa
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
 	ld xwa, HDAE5000_OBJ_CP_FD_LIST
 	ld xbc, 0x01EA000A
 	call (xhl)
 	; Second handler (0xD7, different params)
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
 	ld xwa, HDAE5000_OBJ_CP_FD_LIST
@@ -4087,7 +4136,7 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	ld xde, 0xFFFFFFFF
 	call (xhl)
 	; Register third handler (0xD9)
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
 	ld xwa, HDAE5000_OBJ_CP_FD_LINE1
@@ -4095,7 +4144,7 @@ HDAE5000_FdList_Clear:	; 0x282D2E (270 bytes)
 	ld xde, 0:i3
 	call (xhl)
 	; Register fourth handler (0xD8)
-	ld xwa, (0x23a1a2:24)
+	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + 0x0e0a)
 	ld xhl, (xwa + 0x0124)
 	ld xwa, HDAE5000_OBJ_CP_FD_LINE2

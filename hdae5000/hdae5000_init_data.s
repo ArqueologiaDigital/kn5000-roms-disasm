@@ -696,9 +696,15 @@ HDAE5000_Browser_State:
 	.short 0, 0, 0, 0, 0, 0, 0
 	.short 127			; RAM 0x23a09c, not read anywhere in this ROM
 	.short 0			; RAM 0x23a09e, byte-tested flag
+				; ^ = HDAE5000_RAM_SeparateBassPart (0 = NONE): the value of
+				;   SeparateBassPartCheck, used by HDAE5000_SeparateOutput_Apply
 HDAE5000_Browser_PageRows:
+	; ^ name not supported by the code: 0x23a0a0 is HDAE5000_RAM_SeparateDrumPart
+	;   (SeparateDrumPartCheck's value, initially 16) and 0x23a0a2 the drum part
+	;   last sent (HDAE5000_RAM_SeparateDrumPartSent); see HDAE5000_SeparateOutput_Apply.
 	.short 16, 16		; RAM 0x23a0a0/0x23a0a2
 	.short 0			; RAM 0x23a0a4, byte-tested flag
+				; ^ = HDAE5000_RAM_SeparateBassPartSent
 	.short 2			; RAM 0x23a0a6
 	.short 0			; RAM 0x23a0a8
 HDAE5000_Dir_EntrySlots:
