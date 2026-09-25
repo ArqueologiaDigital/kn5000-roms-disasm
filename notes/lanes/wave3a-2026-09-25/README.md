@@ -59,6 +59,10 @@ by re-running the scripts: `records.json` 25 MB, `tree_audit.tsv` 5 MB and
 3. Then Wave 3b, the parallel lanes on the new toolchain: `WAVE3-PLAN.md` section 3b, plus the
    items appended at the end of `notes/lanes/wave2-2026-09-25/WAVE3-LEADS.md` after the docs
    catch-up (event-code names, the HD-AE5000 signature header, the tone-DB inverse check).
-4. Lane scratch and `TMPDIR` go to `~/compartilhado/tmp/<project>-<topic>/` or
+4. **Owed blog post** (mame-blog `posts/kn7000/`, after part 266, which promised this): the Wave 2 results
+   (strict 64.15% -> 95.04%, the four semantic merge conflicts) and T1's semantic backend fixes
+   (the `di` alias, post-increment operands, true register names, the extended-register LD direction).
+   Not written: work stopped first.
+5. Lane scratch and `TMPDIR` go to `~/compartilhado/tmp/<project>-<topic>/` or
    `~/compartilhado/disasm-lanes/`, never `/tmp` (owner's standing rule since 2026-09-25).
    Tell every sub-agent the same.
