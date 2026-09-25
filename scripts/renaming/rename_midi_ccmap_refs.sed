@@ -38,3 +38,4 @@
 /^[[:space:]]*;/!s/\bPanelEvt_Dispatch11_TableAndHandlers_0x5F\b/PanelEvt_D11Slot11_ValueMap/g
 /^[[:space:]]*;/!s/\bPanelEvt_Handler_4_DualValueCheck_0x77\b/MidiDispatchCC_HandlerTable/g
 /^[[:space:]]*;/!s/\bPanelEvt_Handler_4_DualValueCheck_0x377\b/MidiCC_FunctionToCCNumber/g
+/^[[:space:]]*;/!s/\bMIDI_CHANNEL_HANDLER_JUMP_TABLE_0x1\b/MIDI_CHANNEL_HANDLERS/g

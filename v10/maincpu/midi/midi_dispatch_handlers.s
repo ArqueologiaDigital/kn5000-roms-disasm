@@ -1813,120 +1813,121 @@ MidiCC_ChannelDispatch_Ctrl0:
 BitMask_Ctrl0_ConfigExit:
 	ret
 
-MidiCC_ChannelDispatch_MultiHandler:
+; MidiCC_ChannelDispatch_Func09 / _Func08 / _Func12 / _Func13 / _Func14 / _Func15
+; (0xFD0BF1 + 0x30*k): six more routines of the exact shape of
+; MidiCC_ChannelDispatch_Ctrl1/_Ctrl3/_Ctrl0 just above (same 7-byte prologue
+; `ld l, (0x964d) / cp l, 31`, each loading the next 0x80-stride record of the
+; per-part pointer tables, 0xFD228F..0xFD250F, then `ld w, N / calr
+; MidiChannel_ConfigureController`), for CC functions 9, 8, 12, 13, 14, 15.
+; NO REFERENCE FOUND: searched their 32-bit and 24-bit addresses anywhere in the
+; 2 MB dump and every `calr` byte pattern within +-32 KB -- none; the four
+; siblings are in MidiDispatchCC_HandlerTable, these are not.  Those six
+; functions are also exactly the ones with no controller number in
+; MidiCC_FunctionToCCNumber (0xFF), where MidiChannel_ConfigureController gives
+; up -- consistent with handlers left in for unassigned functions.  Decoded as
+; code on that shape evidence (clean decode from each start, calr to a known
+; routine, the same bytes misframed one byte later as `pop xbc / swi 5`).
+MidiCC_ChannelDispatch_Func09:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xBA8
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, a
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return
+	bit	1, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return
+	ld	e, (0x964e:16)
 	ld	w, 9:opc
-	calr	243
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return:
 	ret
+MidiCC_ChannelDispatch_Func08:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return2
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xC28
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, b
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return2
+	bit	2, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return2
+	ld	e, (0x964e:16)
 	ld	w, 8:opc
-	calr	195
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return2:
 	ret
+MidiCC_ChannelDispatch_Func12:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return3
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xCA8
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, c
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return3
+	bit	3, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return3
+	ld	e, (0x964e:16)
 	ld	w, 12:opc
-	calr	147
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return3:
 	ret
+MidiCC_ChannelDispatch_Func13:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return4
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xD28
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, c
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return4
+	bit	3, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return4
+	ld	e, (0x964e:16)
 	ld	w, 13:opc
-	calr	99
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return4:
 	ret
+MidiCC_ChannelDispatch_Func14:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return5
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xDA8
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, d
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return5
+	bit	4, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return5
+	ld	e, (0x964e:16)
 	ld	w, 14:opc
-	calr	51
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return5:
 	ret
+MidiCC_ChannelDispatch_Func15:
 	ld	l, (0x964d:16)
 	cp	l, 31
-	jr	ugt, 38
+	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return6
 	ld	xix, PanelEvt_Handler_4_DualValueCheck_0xE28
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
-	cp xix, 4294967295
-	jr	z, 15
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, d
-	push	193
-	popw	iz
-	ld	iy, (xiz)
+	cp	xix, 0xffffffff
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return6
+	bit	4, (0xfd59:16)
+	jr	z, MidiCC_ChannelDispatch_Ctrl0_Return6
+	ld	e, (0x964e:16)
 	ld	w, 15:opc
-	calr	3
+	calr	MidiChannel_ConfigureController
+MidiCC_ChannelDispatch_Ctrl0_Return6:
 	ret
 	ret
 	ret
