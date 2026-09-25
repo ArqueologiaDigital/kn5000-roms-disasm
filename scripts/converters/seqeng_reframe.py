@@ -149,6 +149,12 @@ FAMILY = {
     "lda_24": {"lda"}, "lda_rr": {"lda"}, "ld_rrw": {"ld"}, "ld_rrb": {"ld"},
     "ld_rrl": {"ld"}, "st_rrb": {"ld"}, "st_rrw": {"ld"}, "st_rrl": {"ld"},
     "call_24": {"call"}, "call16": {"call"}, "jp16": {"jp"}, "jp_rr": {"jp"},
+    # extended-register (ERP) forms: llvm prints the register as its bank code
+    # (251 = 0xFB = QIZH, 250 = QIZL, 230 = QC, ...); the text gets unidasm's
+    # decode as a comment so a reader does not need the code table.
+    "bit_erpb": {"bit"}, "res_erpb": {"res"}, "set_erpb": {"set"},
+    "inc1b_erp": {"inc"}, "dec1b_erp": {"dec"}, "cp_erpb": {"cp"}, "cpib_erp": {"cp"},
+    "incm": {"incw"}, "decm": {"decw"}, "incm8": {"inc"}, "decm8": {"dec"},
     "ex": {"ex"}, "mirr": {"mirr"}, "paa": {"paa"}, "link": {"link"}, "unlk": {"unlk"},
 }
 REGS = re.compile(r'\b(q?(?:x?(?:wa|bc|de|hl|ix|iy|iz|sp))|[wabcdehl]|q?[abcdehlw]|q?i[xyz][hl]|sr|f)\b', re.I)
@@ -158,7 +164,16 @@ def agree(lt, ut):
     lm = lt.split()[0].lower()
     um = ut.split()[0].lower() if ut.split() else ""
     fam = FAMILY.get(lm)
-    if fam is None or um not in fam:
+    if fam is None:
+        # generic rule for the backend's many operand-form suffixes
+        # (stda32, addda16, cpdm16, ex16, ...): the leading operation word
+        # must be unidasm's, `st` counting as `ld`; registers are still checked.
+        mm = re.match(r'^(ld|st|cp|add|adc|sub|sbc|and|or|xor|inc|dec|ex|push|pop|bit|set|res|mul|div)', lm)
+        if not mm:
+            return False
+        op = "ld" if mm.group(1) == "st" else mm.group(1)
+        fam = {op, op + "w"}
+    if um not in fam:
         return False
     lops = lt.split(None, 1)[1] if len(lt.split(None, 1)) > 1 else ""
     uops = ut.split(None, 1)[1] if len(ut.split(None, 1)) > 1 else ""
@@ -168,11 +183,88 @@ def agree(lt, ut):
         # llvm names the 16-bit half (`div bc,(m)`), Toshiba/unidasm the 32-bit
         # register pair that holds dividend/product (`div XBC,(m)`): same register
         ur |= {r[1:] for r in ur if r.startswith("x")}
+        lr = {r[1:] if r.startswith("x") and r[1:] in ur else r for r in lr}
     return lr <= ur
-SUSPECT_NEW = re.compile(r'^db\b|\+\)|\(-|call 0x00|^(swi|halt|ldf|incf|decf|max|min|normal|reti|ei)\b')
+# `ei N` is only suspect when N is not an interrupt level (0..7): `ei 6 ... ei 0`
+# brackets are real critical sections in the sequencer (v7 SeqPlay_DeactivateParts).
+SUSPECT_NEW = re.compile(r'^db\b|\+\)|\(-|call 0x00|^(swi|halt|ldf|incf|decf|max|min|normal|reti)\b'
+                         r'|^ei\s+0x(?!0[0-7]$)[0-9a-f]+$')
 
 
-def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True):
+UNIDASM = os.environ.get("UNIDASM", os.path.expanduser("~/compartilhado/tools/unidasm"))
+
+
+def fresh_unidasm(rom, base, a0, a1):
+    """unidasm over [a0, a1) only, starting AT a0: the framing a routine that
+    begins at a0 has, independent of whatever precedes it in the dump."""
+    with tempfile.NamedTemporaryFile(suffix=".bin", delete=False) as f:
+        f.write(bytes(rom[a0 - base:a1 - base]))
+        tmp = f.name
+    try:
+        out = subprocess.run([UNIDASM, tmp, "-arch", "tlcs900", "-basepc", "%x" % a0],
+                             capture_output=True, text=True).stdout
+    finally:
+        os.unlink(tmp)
+    d = {}
+    for ln in out.split("\n"):
+        m = re.match(r'^([0-9a-f]+):\s+((?:[0-9a-f]{2} )+)\s*(.*)$', ln.strip())
+        if m:
+            d[int(m.group(1), 16)] = (len(m.group(2).split()), m.group(3).strip())
+    d[a1] = (0, "<end>")
+    return d
+
+
+_LABELS = {}
+
+
+def rom_labels(image):
+    """address -> [names] of text symbols in the last build of the image
+    (rebuilt_ROMs/, produced by `make`).  Addresses do not move under a
+    byte-identical edit, so a slightly stale ELF still maps correctly."""
+    if image not in _LABELS:
+        nm = os.path.join(os.path.dirname(MC), "llvm-nm")
+        elf = os.path.join(ROOT, "rebuilt_ROMs", "kn5000_%s_program.llvm.elf" % image)
+        d = {}
+        if os.path.exists(elf):
+            for ln in subprocess.run([nm, "-n", elf], capture_output=True, text=True).stdout.split("\n"):
+                p = ln.split()
+                if len(p) >= 3 and p[1] in "tT" and not p[2].startswith((".", "__")):
+                    d.setdefault(int(p[0], 16), []).append(p[2])
+        _LABELS[image] = d
+    return _LABELS[image]
+
+
+def symbolize_imm(txt, image, prefer):
+    """`ld xwa, 14961522` -> `ld xwa, FontPalette_Gradient7` when a label sits
+    exactly at that ROM address.  Only 32-bit register loads / lda of a value in
+    the maincpu ROM window; a name already used in the old text of the zone is
+    preferred, then a non-positional name.  The byte gate checks the result."""
+    m2 = re.match(r'^(add|sub|cp|and|or)\t(x\w+), (\d+)$', txt)
+    if m2:
+        # arithmetic on an address: only when the OLD text of the zone already
+        # named a label at exactly that value (e.g. `.long MidiPart_ColWidthData`
+        # that was the operand of this very `add`)
+        val = int(m2.group(3))
+        names = [n for n in rom_labels(image).get(val, []) if n in prefer]
+        return "%s\t%s, %s" % (m2.group(1), m2.group(2), names[0]) if names else txt
+    m = re.match(r'^(ld|lda|lda_24)\t(x\w+), \(?(\d+)\)?$', txt)
+    if not m:
+        return txt
+    val = int(m.group(3))
+    if not (0xE00000 <= val <= 0xFFFFFF):
+        return txt
+    names = rom_labels(image).get(val, [])
+    if not names:
+        return txt
+    pick = [n for n in names if n in prefer] or \
+           [n for n in names if not re.search(r'_0x[0-9A-Fa-f]+$', n)] or names
+    name = pick[0]
+    if m.group(1) == "ld":
+        return "ld\t%s, %s" % (m.group(2), name)
+    return "lda\t%s, (%s:24)" % (m.group(2), name) if m.group(1) == "lda_24" else txt
+
+
+def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True, fresh=False):
     base = IMAGES[image]["base"]
     by_line = {ln: (a, sz) for ln, a, sz in rows}
     marked = sorted(by_line)
@@ -186,6 +278,8 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True):
         a0 = by_line[first[0]][0]
         last = first[-1]
         a1 = by_line[last][0] + (by_line[last][1] or 0)
+        if fresh:
+            uni = fresh_unidasm(rom, base, a0, a1)
         if a0 not in uni or a1 not in uni:
             print("REFUSE %d-%d: ends 0x%06X/0x%06X not unidasm boundaries" % (l0, l1, a0, a1))
             continue
@@ -234,10 +328,10 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True):
                 if d != ".byte" or len(c.split(None, 1)[1].split(",")) > 4:
                     shape_bad = c
                     break
-        if shape_bad and require_sig:
+        if shape_bad and require_sig and not fresh:
             print("REFUSE %d-%d: data-shaped line in zone: %s" % (l0, l1, shape_bad[:60]))
             continue
-        if not sig and require_sig:
+        if not sig and require_sig and not fresh:
             print("REFUSE %d-%d: no misframe signature (no .byte/.ascii fragment, no absurd mnemonic)" % (l0, l1))
             continue
         # label / comment / directive positions
@@ -293,6 +387,9 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True):
             continue
         out = []
         n_insn = n_byte = 0
+        prefer = set()
+        for ln in range(l0, l1 + 1):
+            prefer |= set(re.findall(r'\b[A-Za-z_]\w+\b', strip_comment(src[ln - 1])))
         for a, bs, t in insns:
             out += pre.get(a, [])
             txt = llvm_decode(bs)
@@ -302,8 +399,13 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True):
                     txt = None
             if txt is not None and not agree(txt, t):
                 DISAGREE.append((a, txt, t))
-                txt = None
+                txt = respell(t, bs)
+            elif txt is None:
+                txt = respell(t, bs)
             if txt is not None:
+                txt = symbolize_imm(txt, image, prefer)
+                if "_erp" in txt.split()[0]:
+                    txt += "\t; " + t.lower()
                 out.append("\t" + txt)
                 PAIRS.append((a, txt, t))
                 n_insn += 1
@@ -316,6 +418,38 @@ def reframe(image, rel, zlist, uni, rom, rows, src, require_sig=True):
     return edits
 
 
+def respell(ut, bs):
+    """Transliterate unidasm's text into llvm-mc syntax and keep the first
+    variant that assembles to EXACTLY bs.  Used when llvm's own spelling of
+    the bytes disagrees with unidasm (e.g. llvm prints `cpda8 xbc, (8990)`
+    for `cp A,(0x231e)` -- right bytes, misleading register) -- the result
+    then says what unidasm says, and the byte check proves it is the same
+    instruction."""
+    t = ut.strip().lower()
+    if not t or " " not in t:
+        return None
+    m, ops = t.split(None, 1)
+    ops = re.sub(r'\+0x([0-9a-f]+)\)', lambda mm: "+%d)" % int(mm.group(1), 16), ops)
+    mems = re.findall(r'\((0x[0-9a-f]+)\)', ops)
+    variants = [ops]
+    for mem in mems:
+        nv = []
+        for v in variants:
+            val = int(mem, 16)
+            for suf in ((":16", ":24") if val > 0xff else (":8", ":16", ":24")):
+                nv.append(v.replace("(%s)" % mem, "(0x%x%s)" % (val, suf), 1))
+        variants = nv
+    cands = []
+    for mm in (m, m + "w", m + "b"):
+        for v in variants:
+            cands.append("%s\t%s" % (mm, re.sub(r'\s*,\s*', ', ', v)))
+    for c in cands:
+        enc = llvm_encode([c])
+        if enc and enc[0] == list(bs):
+            return c
+    return None
+
+
 def selftest():
     """pure-function control on synthetic pairs (not on tree data)."""
     cases = [("stb_dpi a, 224", "lda XBC,XWA+", False),     # llvm misreads f5 e0 31
@@ -326,7 +460,16 @@ def selftest():
              ("and (xhl), xwa", "bit 0,(XHL)", False),        # the b3 c8 bug shape
              ("ldmm16 10377, 9830", "ldw (0x2889),(0x2666)", True),
              ("div bc, (xwa+38)", "div XBC,(XWA+0x26)", True),
-             ("ld bc, (xwa+38)", "ld XBC,(XWA+0x26)", False)]
+             ("ld bc, (xwa+38)", "ld XBC,(XWA+0x26)", False),
+             ("div xwa, xbc", "div XWA,BC", True),
+             ("incm 1, (xsp+4)", "incw 1,(XSP+0x04)", True),
+             ("incm8 1, (xwa+51)", "inc 1,(XWA+0x33)", True),
+             ("incm 1, (xsp+4)", "inc 1,(XSP+0x04)", False),
+             ("ex16 iz, ix", "ex IZ,IX", True),
+             ("stda32 (32119), xhl", "ld (0x7d77),XHL", True),
+             ("addda16 xwa, (1134)", "add WA,(0x046e)", False),   # llvm names WA as xwa
+             ("cpda8 xbc, (8990)", "cp A,(0x231e)", False),       # llvm names A as xbc
+             ("stb_dpi a, 224", "lda XBC,XWA+", False)]
     bad = [(l, u) for l, u, want in cases if agree(l, u) != want]
     for l, u in bad:
         print("SELFTEST FAIL", l, "|", u)
@@ -346,6 +489,10 @@ def main():
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--quiet", action="store_true")
     ap.add_argument("--no-signature", action="store_true")
+    ap.add_argument("--fresh", action="store_true",
+                    help="CODE-AS-DATA mode: decode each zone with unidasm starting AT its first "
+                         "byte (not the global listing); skips the misframe-signature and shape "
+                         "guards, KEEPS the decode-absurdity guard and the agreement check")
     ap.add_argument("--pairs", help="write llvm-text / unidasm-text pairs here for review")
     a = ap.parse_args()
     up = a.unidasm or os.path.join(ROOT, "original_ROMs/kn5000_%s_program.rom.unidasm" % a.image)
@@ -362,7 +509,7 @@ def main():
         for l0, l1, _, _ in find_zones(a.image, a.file, uni):
             zl.append((l0, l1 - 1))
     rows = line_map(a.image, [a.file])[a.file]
-    edits = reframe(a.image, a.file, zl, uni, rom, rows, src, not a.no_signature)
+    edits = reframe(a.image, a.file, zl, uni, rom, rows, src, not a.no_signature, a.fresh)
     tot = ni = nb = 0
     for l0, l1, out, a0, a1, n_insn, n_byte, dropped in edits:
         tot += a1 - a0
@@ -381,7 +528,7 @@ def main():
             for ad, lt, ut in PAIRS:
                 f.write("%06x\t%-40s\t%s\n" % (ad, lt.replace("\t", " "), ut))
     for ad, lt, ut in DISAGREE:
-        print("DISAGREE 0x%06X llvm=%r unidasm=%r -> .byte" % (ad, lt, ut))
+        print("DISAGREE 0x%06X llvm=%r unidasm=%r -> respelled from unidasm, else .byte" % (ad, lt, ut))
     print("TOTAL %d zones %d B, %d insns, %d .byte" % (len(edits), tot, ni, nb))
     if a.apply and edits:
         for l0, l1, out, *_ in sorted(edits, key=lambda e: -e[0]):
