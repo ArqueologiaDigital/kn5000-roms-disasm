@@ -16,6 +16,9 @@
 	.byte 0x42, 0x43, 0x00, 0xff
 	aligned_string "EffectBox"
 	.byte 0x1a, 0x00
+; Registered in v10 by InitializeKubo (sequencer/sequencer_ui.s:4299): `RegObjTable 0x160000c, 0xfa58fb, 0xe275f8, 0xe27598, 0x1c8`
+; = class 0x160000C (ResEventProc), 5 entries (count word at 0xE275F8), id 0x1C8.
+; v7 names this label's address (0xE27598) as a 24-bit operand at 0xF2D2DF.
 EvtEffDraw_PtrTable:
 	.long EvtName_EffFixDraw
 	.long EvtName_EffParaDraw
@@ -33,6 +36,9 @@ EvtName_EffParaDraw:	aligned_string "EV_EFFPARADRAW"
 EvtName_EffFixDraw:	aligned_string "EV_EFFFIXDRAW"
 	.byte 0x05, 0x00
 
+; Registered in v10 by InitializeKubo (sequencer/sequencer_ui.s:4300): `RegObjTable 0x160000d, 0xfa5948, 0xe27fa2, 0xe275fa, 0x1e8`
+; = class 0x160000D (ResMethodProc), 119 entries (count word at 0xE27FA2), id 0x1E8.
+; v7 names this label's address (0xE275FA) as a 24-bit operand at 0xF2D307.
 MT_FuncName_PtrTable:
 	.long MT_GetEffFixString_Name
 	.long MT_GetEffDlt0Str_Name

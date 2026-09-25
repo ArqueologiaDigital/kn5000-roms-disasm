@@ -21,6 +21,9 @@
 	.byte 0xd9, 0x03, 0x00
 	.long NakaNode_PatternCopy_ProgressBar
 	.byte 0x00, 0x00, 0x00, 0x00
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5354): `RegObjTabl 0x1600010, 0xfa5995, 0x25, 0xe1b80e, 0xb9`
+; = class 0x1600010 (ViewableProc), 37 entries (immediate count), id 0xB9.
+; v7 names this label's address (0xE1B80E) as a 24-bit operand at 0xF19C1C.
 Naka_SeqToComposer_Screens:
 	.long NakaContainer_SeqToComposer_Root
 	.long Naka0x3E_SeqToComposer_DrmBtn
@@ -65,6 +68,9 @@ Naka_SeqCopy_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5356): `RegObjTabl 0x1600010, 0xfa5995, 0xe, 0xe1b8a6, 0xba`
+; = class 0x1600010 (ViewableProc), 14 entries (immediate count), id 0xBA.
+; v7 names this label's address (0xE1B8A6) as a 24-bit operand at 0xF19C66.
 Naka_EasyComposer_Screens:
 	.long NakaContainer_EasyComposer_Root
 	.long Naka0x29_EasyComposer_Scrollbar
@@ -83,6 +89,9 @@ Naka_EasyComposer_Screens:
 	.zero 4
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5358): `RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1b8e2, 0xbb`
+; = class 0x1600010 (ViewableProc), 4 entries (immediate count), id 0xBB.
+; v7 names this label's address (0xE1B8E2) as a 24-bit operand at 0xF19CB0.
 Naka_EasyComposer2_Screens:
 	.long NakaContainer_BendRange_Root
 	.long Naka0x22_BendRange_PartSelector
@@ -91,6 +100,9 @@ Naka_EasyComposer2_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5360): `RegObjTabl 0x1600010, 0xfa5995, 0xb, 0xe1b8f6, 0xbd`
+; = class 0x1600010 (ViewableProc), 11 entries (immediate count), id 0xBD.
+; v7 names this label's address (0xE1B8F6) as a 24-bit operand at 0xF19CFA.
 Naka_ModeSelect_Screens:
 	.long NakaContainer_ModeSelect_Root
 	.long NakaLabel_ModeSelect_IntroFillIns
@@ -106,6 +118,9 @@ Naka_ModeSelect_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5362): `RegObjTabl 0x1600010, 0xfa5995, 0x21, 0xe1b926, 0xbe`
+; = class 0x1600010 (ViewableProc), 33 entries (immediate count), id 0xBE.
+; v7 names this label's address (0xE1B926) as a 24-bit operand at 0xF19D44.
 Naka_ExpandMode_Screens:
 	.long NakaNode_CustomCopy_RootOuter
 	.long NakaLabel_CustomCopy_FromLabel
@@ -143,6 +158,9 @@ Naka_ExpandMode_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5364): `RegObjTabl 0x1600010, 0xfa5995, 0x1b, 0xe1b9ae, 0xc8`
+; = class 0x1600010 (ViewableProc), 27 entries (immediate count), id 0xC8.
+; v7 names this label's address (0xE1B9AE) as a 24-bit operand at 0xF19D8E.
 Naka_Accomp7_Screens:
 	.long NakaContainer_CustomCopy_FinalRoot
 	.long NakaNode_Accomp7_Widget01
@@ -193,6 +211,9 @@ Naka_Accomp8_Screens:
 	.zero 4
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5368): `RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe1ba62, 0xca`
+; = class 0x1600010 (ViewableProc), 6 entries (immediate count), id 0xCA.
+; v7 names this label's address (0xE1BA62) as a 24-bit operand at 0xF19E22.
 Naka_Accomp9_Screens:
 	.long NakaNode_Accomp9_Widget01
 	.long NakaNode_Accomp9_Widget02
@@ -203,6 +224,9 @@ Naka_Accomp9_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5370): `RegObjTabl 0x1600010, 0xfa5995, 0x4, 0xe1ba7e, 0xcb`
+; = class 0x1600010 (ViewableProc), 4 entries (immediate count), id 0xCB.
+; v7 names this label's address (0xE1BA7E) as a 24-bit operand at 0xF19E6C.
 Naka_Accomp10_Screens:
 	.long NakaNode_Accomp10_Widget01
 	.long NakaNode_Accomp10_Widget02
@@ -211,6 +235,9 @@ Naka_Accomp10_Screens:
 	.zero 4
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5372): `RegObjTabl 0x1600010, 0xfa5995, 0x9, 0xe1ba92, 0xcc`
+; = class 0x1600010 (ViewableProc), 9 entries (immediate count), id 0xCC.
+; v7 names this label's address (0xE1BA92) as a 24-bit operand at 0xF19EB6.
 Naka_Accomp11_Screens:
 	.long NakaNode_Accomp11_Widget01
 	.long NakaNode_Accomp11_Widget02
@@ -224,6 +251,9 @@ Naka_Accomp11_Screens:
 	.zero 4
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5374): `RegObjTabl 0x1600010, 0xfa5995, 0x8, 0xe1baba, 0xdc`
+; = class 0x1600010 (ViewableProc), 8 entries (immediate count), id 0xDC.
+; v7 names this label's address (0xE1BABA) as a 24-bit operand at 0xF19F00.
 Naka_Accomp12_Screens:
 	.long NakaNode_Accomp12_Widget01
 	.long NakaNode_Accomp12_Widget02
@@ -236,6 +266,9 @@ Naka_Accomp12_Screens:
 	.byte 0x00, 0x00, 0x00, 0x00
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5376): `RegObjTabl 0x1600010, 0xfa5995, 0x6, 0xe1bade, 0xed`
+; = class 0x1600010 (ViewableProc), 6 entries (immediate count), id 0xED.
+; v7 names this label's address (0xE1BADE) as a 24-bit operand at 0xF19F4A.
 Naka_Accomp13_Screens:
 	.long NakaNode_Accomp13_Widget01
 	.long NakaNode_Accomp13_Widget02
@@ -246,6 +279,9 @@ Naka_Accomp13_Screens:
 	.zero 4
 
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5323): `RegObjTabl 0x160000f, 0xfa62cb, 0x3, 0xe1bafa, 0x310`
+; = class 0x160000F (ResNameProc), 3 entries (immediate count), id 0x310.
+; v7 names this label's address (0xE1BAFA) as a 24-bit operand at 0xF197A1.
 Naka_Accomp14_Screens:
 	.long NakaInst_StylCnvWaitScreen
 	.long NakaEmpty_Accomp14_Slot1
@@ -255,6 +291,9 @@ NakaEmpty_Accomp14_Slot3:	aligned_string ""
 NakaEmpty_Accomp14_Slot2:	aligned_string ""
 NakaEmpty_Accomp14_Slot1:	aligned_string ""
 NakaInst_StylCnvWaitScreen:	aligned_string "StylCnvWaitScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5325): `RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1bb22, 0x311`
+; = class 0x160000F (ResNameProc), 8 entries (immediate count), id 0x311.
+; v7 names this label's address (0xE1BB22) as a 24-bit operand at 0xF197EB.
 Naka_StylCnvWait_Screens:
 	.long NakaInst_StylCnvModlScreen
 	.long NakaEmpty_StylCnvModl_Slot1
@@ -274,6 +313,9 @@ NakaEmpty_StylCnvWait_Slot5:	aligned_string ""
 NakaInst_StylCnvModlBox:	aligned_string "StylCnvModlBox"
 NakaEmpty_StylCnvModl_Slot1:	aligned_string ""
 NakaInst_StylCnvModlScreen:	aligned_string "StylCnvModlScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5327): `RegObjTabl 0x160000f, 0xfa62cb, 0x7, 0xe1bb80, 0x312`
+; = class 0x160000F (ResNameProc), 7 entries (immediate count), id 0x312.
+; v7 names this label's address (0xE1BB80) as a 24-bit operand at 0xF19835.
 Naka_StylCnvVer_Screens:
 	.long NakaInst_StylCnvCnvtScreen
 	.long NakaEmpty_StylCnvCnvt_Slot1
@@ -314,6 +356,9 @@ NakaEmpty_StylCnvStor_Slot3:	aligned_string ""
 NakaEmpty_StylCnvStor_Slot2:	aligned_string ""
 NakaEmpty_StylCnvStor_Slot1:	aligned_string ""
 NakaInst_StylCnvTxtScreen:	aligned_string "StylCnvTxtScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5333): `RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1bc2a, 0x315`
+; = class 0x160000F (ResNameProc), 8 entries (immediate count), id 0x315.
+; v7 names this label's address (0xE1BC2A) as a 24-bit operand at 0xF19913.
 Naka_StylCnvTxt_Screens:
 	.long NakaInst_StylCnvSelScreen
 	.long NakaEmpty_StylCnvSel_Slot1
@@ -389,6 +434,9 @@ NakaEmpty_StylCnvCont_Slot3:	aligned_string ""
 NakaEmpty_StylCnvCont_Slot2:	aligned_string ""
 NakaEmpty_StylCnvCont_Slot1:	aligned_string ""
 NakaInst_CmpMenuScreen:	aligned_string "CmpMenuScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5339): `RegObjTabl 0x160000f, 0xfa62cb, 0xc, 0xe1bd3a, 0x3b1`
+; = class 0x160000F (ResNameProc), 12 entries (immediate count), id 0x3B1.
+; v7 names this label's address (0xE1BD3A) as a 24-bit operand at 0xF199F1.
 Naka_CmpMenu_Screens:
 	.long NakaInst_CmpBkslScreen
 	.long NakaEmpty_CmpMenu_Slot1
@@ -476,6 +524,9 @@ NakaInst_NameMemLabel:	aligned_string "NameMemLabel"
 NakaEmpty_CmpBkslSub_Slot3:	aligned_string ""
 NakaEmpty_CmpBkslSub_Slot2:	aligned_string ""
 NakaInst_CmpNamingScreen:	aligned_string "CmpNamingScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5345): `RegObjTabl 0x160000f, 0xfa62cb, 0x12, 0xe1be9a, 0x3b4`
+; = class 0x160000F (ResNameProc), 18 entries (immediate count), id 0x3B4.
+; v7 names this label's address (0xE1BE9A) as a 24-bit operand at 0xF19ACF.
 Naka_NamingMem_Screens:
 	.long NakaInst_CmpSetScreen
 	.long NakaEmpty_CmpSet_Slot8
@@ -515,6 +566,9 @@ NakaInst_CmSetP1Ctl:	aligned_string "CmSetP1Ctl"
 NakaInst_CmSetPage:	aligned_string "CmSetPage"
 NakaEmpty_CmpSet_Slot8:	aligned_string ""
 NakaInst_CmpSetScreen:	aligned_string "CmpSetScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5347): `RegObjTabl 0x160000f, 0xfa62cb, 0x1f, 0xe1bf7a, 0x3b5`
+; = class 0x160000F (ResNameProc), 31 entries (immediate count), id 0x3B5.
+; v7 names this label's address (0xE1BF7A) as a 24-bit operand at 0xF19B19.
 Naka_CmSetP1Grid_Screens:
 	.long NakaInst_CmpRealScreen
 	.long NakaEmpty_CmpReal_Slot23
@@ -585,6 +639,9 @@ NakaInst_CmpRealScreen:	aligned_string "CmpRealScreen"
 	.long NakaEmpty_CmpReal_Slot24
 NakaEmpty_CmpReal_Slot24:	aligned_string ""
 NakaEmpty_CmpReal_Slot25:	aligned_string ""
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5351): `RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c082, 0x3b7`
+; = class 0x160000F (ResNameProc), 6 entries (immediate count), id 0x3B7.
+; v7 names this label's address (0xE1C082) as a 24-bit operand at 0xF19BAD.
 Naka_CmpMem_Screens:
 	.long NakaInst_CmpBalScreen
 	.long NakaInst_CmpDrmVol
@@ -600,6 +657,9 @@ NakaInst_CmpAc2Vol:	aligned_string "CmpAc2Vol"
 NakaInst_CmpAc3Vol:	aligned_string "CmpAc3Vol"
 NakaInst_CmpDrmVol:	aligned_string "CmpDrmVol"
 NakaInst_CmpBalScreen:	aligned_string "CmpBalScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5353): `RegObjTabl 0x160000f, 0xfa62cb, 0x21, 0xe1c0e0, 0x3b8`
+; = class 0x160000F (ResNameProc), 33 entries (immediate count), id 0x3B8.
+; v7 names this label's address (0xE1C0E0) as a 24-bit operand at 0xF19BF7.
 PtrTbl_CmpNcpScreenStrs:
 	.long StrCmpNcpScreen
 	.long StrCmpNcpFitmSw_Empty
@@ -669,6 +729,9 @@ StrCmpNcpTitmSw_Empty:	aligned_string ""
 StrCmpNcpFitmSw:	aligned_string "CmpNcpFitmSw"
 StrCmpNcpFitmSw_Empty:	aligned_string ""
 StrCmpNcpScreen:	aligned_string "CmpNcpScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5355): `RegObjTabl 0x160000f, 0xfa62cb, 0x25, 0xe1c1fa, 0x3b9`
+; = class 0x160000F (ResNameProc), 37 entries (immediate count), id 0x3B9.
+; v7 names this label's address (0xE1C1FA) as a 24-bit operand at 0xF19C41, 0xF97F3C.
 PtrTbl_S2cScreenStrs:
 	.long StrS2cScreen
 	.long StrS2cTrans_Empty17
@@ -746,6 +809,9 @@ StrS2cTrans_Empty15:	aligned_string ""
 StrS2cTrans_Empty16:	aligned_string ""
 StrS2cTrans_Empty17:	aligned_string ""
 StrS2cScreen:		aligned_string "S2CScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5357): `RegObjTabl 0x160000f, 0xfa62cb, 0xe, 0xe1c318, 0x3ba`
+; = class 0x160000F (ResNameProc), 14 entries (immediate count), id 0x3BA.
+; v7 names this label's address (0xE1C318) as a 24-bit operand at 0xF19C8B.
 PtrTbl_EasyCompScreenStrs:
 	.long StrCmpEasyScreen
 	.long StrEsCmpMemNo_Empty8
@@ -777,6 +843,9 @@ StrEsCmpMemNo_Empty6:	aligned_string ""
 StrEsCmpMemNo_Empty7:	aligned_string ""
 StrEsCmpMemNo_Empty8:	aligned_string ""
 StrCmpEasyScreen:	aligned_string "CmpEasyScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5359): `RegObjTabl 0x160000f, 0xfa62cb, 0x4, 0xe1c392, 0x3bb`
+; = class 0x160000F (ResNameProc), 4 entries (immediate count), id 0x3BB.
+; v7 names this label's address (0xE1C392) as a 24-bit operand at 0xF19CD5.
 PtrTbl_BendScreenStrs:
 	.long StrCmpBendScreen
 	.long StrCmpBendScreen_Empty4
@@ -813,6 +882,9 @@ StrCmpModeScreen_Empty9:	aligned_string ""
 StrCmpModeScreen_EmptyA:	aligned_string ""
 StrCmpModeScreen_EmptyB:	aligned_string ""
 StrCmpModeScreen:		aligned_string "CmpModeScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5363): `RegObjTabl 0x160000f, 0xfa62cb, 0x21, 0xe1c410, 0x3be`
+; = class 0x160000F (ResNameProc), 33 entries (immediate count), id 0x3BE.
+; v7 names this label's address (0xE1C410) as a 24-bit operand at 0xF19D69.
 PtrTbl_CstmCpScreenStrs:
 	.long StrCmpCstmCpScreen
 	.long StrCmpCstmCpScreen_Empty2
@@ -882,6 +954,9 @@ StrCstmCpFrmVal:		aligned_string "CstmCpFrmVal"
 StrCmpCstmCpScreen_Empty1:	aligned_string ""
 StrCmpCstmCpScreen_Empty2:	aligned_string ""
 StrCmpCstmCpScreen:		aligned_string "CmpCstmCpScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5365): `RegObjTabl 0x160000f, 0xfa62cb, 0x1b, 0xe1c560, 0x3c8`
+; = class 0x160000F (ResNameProc), 27 entries (immediate count), id 0x3C8.
+; v7 names this label's address (0xE1C560) as a 24-bit operand at 0xF19DB3.
 PtrTbl_MspBkslScreenStrs:
 	.long StrMspBkslScreen
 	.long StrMspBkslWin
@@ -975,6 +1050,9 @@ StrMspBnkLbl:		aligned_string "MspBnkLbl"
 StrMspRecBox1_Empty:	aligned_string ""
 StrMspRecBox1:		aligned_string "MspRecBox1"
 StrMspRecScreen:	aligned_string "MspRecScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5369): `RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c798, 0x3ca`
+; = class 0x160000F (ResNameProc), 6 entries (immediate count), id 0x3CA.
+; v7 names this label's address (0xE1C798) as a 24-bit operand at 0xF19E47.
 PtrTbl_MspMenuScreenStrs:
 	.long StrMspMenuScreen
 	.long StrMspMenuScreen_Empty6
@@ -1004,6 +1082,9 @@ StrMspNamingScreen_Empty2:	aligned_string ""
 StrMspNamingScreen_Empty3:	aligned_string ""
 StrMspNamingScreen_Empty4:	aligned_string ""
 StrMspNamingScreen:		aligned_string "MspNamingScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5373): `RegObjTabl 0x160000f, 0xfa62cb, 0x9, 0xe1c7fa, 0x3cc`
+; = class 0x160000F (ResNameProc), 9 entries (immediate count), id 0x3CC.
+; v7 names this label's address (0xE1C7FA) as a 24-bit operand at 0xF19EDB.
 PtrTbl_MspReGrpScreenStrs:
 	.long StrMspReGrpScreen
 	.long StrRGrpBnkSw
@@ -1025,6 +1106,9 @@ StrMspRGrpGrid:		aligned_string "MspRGrpGrid"
 StrRGrpBnkSw_Empty:	aligned_string ""
 StrRGrpBnkSw:		aligned_string "RGrpBnkSw"
 StrMspReGrpScreen:	aligned_string "MspReGrpScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5375): `RegObjTabl 0x160000f, 0xfa62cb, 0x8, 0xe1c85e, 0x3dc`
+; = class 0x160000F (ResNameProc), 8 entries (immediate count), id 0x3DC.
+; v7 names this label's address (0xE1C85E) as a 24-bit operand at 0xF19F25.
 PtrTbl_SndArgrScreenStrs:
 	.long StrSndArgrScreen
 	.long StrSndArgrScreen_Empty
@@ -1044,6 +1128,9 @@ StrSndArgRhyName_Empty2:	aligned_string ""
 StrSndArgRhyName:		aligned_string "SndArgRhyName"
 StrSndArgrScreen_Empty:		aligned_string ""
 StrSndArgrScreen:		aligned_string "SndArgrScreen"
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5377): `RegObjTabl 0x160000f, 0xfa62cb, 0x6, 0xe1c8b6, 0x3ed`
+; = class 0x160000F (ResNameProc), 6 entries (immediate count), id 0x3ED.
+; v7 names this label's address (0xE1C8B6) as a 24-bit operand at 0xF19F6F.
 PtrTbl_ApcSelScreenStrs:
 	.long StrApcSelScreen
 	.long StrApcSelScreen_Empty3
@@ -1135,6 +1222,9 @@ StrApcSelScreen:	aligned_string "ApcSelScreen"
 	.long MainStylCnvFunc
 	.long 0x0
 
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5321): `RegObjTabl 0x1600003, 0xfa4a18, 0x24, 0xe1cb02, 0x444`
+; = class 0x1600003 (MainFunctionProc), 36 entries (immediate count), id 0x444.
+; v7 names this label's address (0xE1CB02) as a 24-bit operand at 0xF19757.
 PtrTbl_FuncNameStrs:
 	.long StrCmpModeFunc
 	.long StrCmpSetTtlFunc

@@ -216,107 +216,84 @@ StrFld_S2cGrid_FixedCol:	aligned_string "fixedcol"
 StrDesc_PsStylCnvVer:
 	.long StrVal_Empty_PsStylCnvVer
 StrVal_Empty_PsStylCnvVer:	aligned_string ""
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5313): `RegObjTable 0x1600004, 0xfa44e2, 0xe17322, 0xe16c86, 0x164`
+; = class 0x1600004 (ClassProc), 41 entries (count word at 0xE17322), id 0x164.
+Suna_ClassTable_164:
 	.long AcMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_AcMemNoBox
 	.long StrEmpty_AcMemNoBox
 	.long StrDesc_Empty_0
 	.long AcCmpRecBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld h, 0:opc
-	push sr
-	nop
+	.short 38, 2
 	.long StrName_AcCmpRecBox
 	.long StrPrefix_AcCmpRecBox
 	.long StrDesc_RecordBits
 	.long PsCmpQtzBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsCmpQtzBox
 	.long StrEmpty_PsCmpQtzBox
 	.long StrDesc_Empty_1
 	.long PsCmpMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsCmpMeasBox
 	.long StrEmpty_PsCmpMeasBox
 	.long StrDesc_Empty_2
 	.long PsCmpMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsCmpMemBox
 	.long StrEmpty_PsCmpMemBox
 	.long StrDesc_Empty_3
 	.long AcS2cMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_AcS2cMemNoBox
 	.long StrEmpty_AcS2cMemNoBox
 	.long StrDesc_Empty_4
 	.long PsS2cFmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsS2cFmeasBox
 	.long StrEmpty_PsS2cFmeasBox
 	.long StrDesc_Empty_5
 	.long PsS2cLmeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsS2cLmeasBox
 	.long StrEmpty_PsS2cLmeasBox
 	.long StrDesc_Empty_6
 	.long PsSeqSongNoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsSeqSongNoBox
 	.long StrEmpty_PsSeqSongNoBox
 	.long StrDesc_Empty_7
 	.long PsS2cTransBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsS2cTransBox
 	.long StrEmpty_PsS2cTransBox
 	.long StrDesc_Empty_8
 	.long PsCstmCpBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld h, 0:opc
-	push sr
-	nop
+	.short 38, 2
 	.long StrName_PsCstmCpBnkBox
 	.long StrPrefix_PsCstmCpBnkBox
 	.long StrDesc_BankPair_0
 	.long PsCstmCpSwBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld h, 0:opc
-	push sr
-	nop
+	.short 38, 2
 	.long StrName_PsCstmCpSwBox
 	.long StrPrefix_PsCstmCpSwBox
 	.long StrDesc_BankPair_1
 	.long PsCtmAttStrBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsCtmAttStrBox
 	.long StrEmpty_PsCtmAttStrBox
 	.long StrDesc_RamField
@@ -343,49 +320,37 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_MspBnkPair_0
 	.long PsMspBnkNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld h, 0:opc
-	push sr
-	nop
+	.short 38, 2
 	.long StrName_PsMspBnkNameBox
 	.long StrPrefix_PsMspBnkNameBox
 	.long StrDesc_MspBnkPair_1
 	.long AcCmpTempoBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_AcCmpTempoBox
 	.long StrEmpty_AcCmpTempoBox
 	.long StrDesc_Empty_9
 	.long PsCmpCpFGrpBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsCmpCpFGrpBox
 	.long StrEmpty_PsCmpCpFGrpBox
 	.long StrDesc_Empty_10
 	.long PsCmpCpFVariBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsCmpCpFVariBox
 	.long StrEmpty_PsCmpCpFVariBox
 	.long StrDesc_Empty_11
 	.long PsCmpCpFPtnBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsCmpCpFPtnBox
 	.long StrEmpty_PsCmpCpFPtnBox
 	.long StrDesc_Empty_12
 	.long PsNameMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsNameMemBox
 	.long StrEmpty_PsNameMemBox
 	.long StrDesc_Empty_13
@@ -397,9 +362,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long GridProperty_Config_Table
 	.long PsRgpSetBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsRgpSetBnkBox
 	.long StrEmpty_PsRgpSetBnkBox
 	.long StrDesc_Empty_14
@@ -411,49 +374,37 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long GridProperty_AltConfig_Table
 	.long PsMspMeasBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsMspMeasBox
 	.long StrEmpty_PsMspMeasBox
 	.long StrDesc_Empty_15
 	.long PsMspMemBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsMspMemBox
 	.long StrEmpty_PsMspMemBox
 	.long StrDesc_Empty_16
 	.long PsMspRecPadBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsMspRecPadBox
 	.long StrEmpty_PsMspRecPadBox
 	.long StrDesc_Empty_17
 	.long PsMspRecBnkBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsMspRecBnkBox
 	.long StrEmpty_PsMspRecBnkBox
 	.long StrDesc_Empty_18
 	.long PsMspNameBnkProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsMspNameBnk
 	.long StrEmpty_PsMspNameBnk
 	.long StrDesc_Empty_19
 	.long PsCstmCpNameBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld h, 0:opc
-	push sr
-	nop
+	.short 38, 2
 	.long StrName_PsCstmCpNameBox
 	.long NakaInst_AcApcToggle_0x0C
 	.long StrDesc_CstmCpNameBox
@@ -477,9 +428,7 @@ StrVal_Empty_PsStylCnvVer:	aligned_string ""
 	.long StrDesc_PsParaListBox
 	.long PsSCTxtBoxProc
 	naka_header NAKA_TYPE_0x12
-	ld d, 0:opc
-	nop
-	nop
+	.short 36, 0
 	.long StrName_PsSCTxtBox
 	.long StrEmpty_PsSCTxtBox
 	.long StrFld_ParaList_Font_0x06
@@ -520,8 +469,7 @@ NakaDesc_VwVariBox_DataPtrs:
 	.long StrDesc_S2cGridBox
 	.long PsStylCnvVerProc
 	naka_header NAKA_TYPE_0x12
-	.byte 0x24, 0x00
-	.byte 0x00, 0x00
+	.short 36, 0
 	.long StrName_PsStylCnvVer
 	.long StrEmpty_PsStylCnvVer
 	.long StrDesc_PsStylCnvVer
@@ -631,7 +579,20 @@ StrPrefix_AcCmpRecBox:
 StrName_AcCmpRecBox:	aligned_string "AcCmpRecBox"
 StrEmpty_AcMemNoBox:	aligned_string ""
 StrName_AcMemNoBox:	aligned_string "AcMemNoBox"
-	.byte 0x29, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00		; padding
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5313): `RegObjTable 0x1600004, 0xfa44e2, 0xe17322, 0xe16c86, 0x164`
+; = u16 41, the entry count of that class 0x1600004 (ClassProc) table, read with `ldw_da`.
+Suna_ClassCount_164:
+	.short 41
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5314): `RegObjTable 0x160000c, 0xfa58fb, 0xe17328, 0xe17324, 0x1c4`
+; = class 0x160000C (ResEventProc), 0 entries (count word at 0xE17328), id 0x1C4.
+Suna_ResEventTable_1C4:
+	.long 0
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5314): `RegObjTable 0x160000c, 0xfa58fb, 0xe17328, 0xe17324, 0x1c4`
+; = u16 0, the entry count of that class 0x160000C (ResEventProc) table, read with `ldw_da`.
+Suna_ResEventCount_1C4:
+	.short 0
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5315): `RegObjTable 0x160000d, 0xfa5948, 0xe176d2, 0xe1732a, 0x1e4`
+; = class 0x160000D (ResMethodProc), 50 entries (count word at 0xE176D2), id 0x1E4.
 NakaMethodTable_PtrsStart:
 	.long MTStr_CmpNameSet
 	.long MTStr_MspNameSet
@@ -738,9 +699,17 @@ MTStr_RhyGrpNmGet:	aligned_string "MT_RhyGrpNmGet"
 MTStr_MspNameSet:	aligned_string "MT_MspNameSet"
 MTStr_CmpNameSet:	aligned_string "MT_CmpNameSet"
 
-; PaintArrowProc dispatch entry (last entry in property descriptor tables)
-; 18 bytes: dispatch fields (5) + zero padding (5) + two pointers (8)
-	.byte 0x32, 0x00, 0xb1, 0xdf, 0xf1	; dispatch fields
-	.zero 5					; zero padding
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5315): `RegObjTable 0x160000d, 0xfa5948, 0xe176d2, 0xe1732a, 0x1e4`
+; = u16 50, the entry count of that class 0x160000D (ResMethodProc) table, read with `ldw_da`.
+Suna_ResMethodCount_1E4:
+	.short 50
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5318): `RegObjTabl 0x1600001, 0xfa48a9, 0x1, 0xe176d4, 0x104`
+; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x104.
+Suna_FunctionTable_104:
+	.long StylCnvStorBnk_ProcDataBlock	; the routine named "PaintArrowProc" by the next table
+	.long 0
+; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5319): `RegObjTabl 0x1600001, 0xfa48a9, 0x1, 0xe176dc, 0x404`
+; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x404.
+Suna_FunctionTable_404:
 	.long NakaStr_PaintArrowProc_Empty + 2	; -> "PaintArrowProc" name string
-	.long NakaStr_PaintArrowProc_Empty	; -> empty code string
+	.long NakaStr_PaintArrowProc_Empty	; -> "", the end of the list

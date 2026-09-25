@@ -12,7 +12,12 @@
 	aligned_string "EqualizerBox"
 	.byte 0x6a, 0x42, 0x42, 0x43, 0x00, 0xff
 	aligned_string "EffectBox"
+; Registered by InitializeKubo (sequencer/sequencer_ui.s:4298): `RegObjTable 0x1600004, 0xfa44e2, 0xe27596, 0xe27180, 0x168`
+; = u16 26, the entry count of that class 0x1600004 (ClassProc) table, read with `ldw_da`.
+Kubo_ClassCount_168:
 	.byte 0x1a, 0x00
+; Registered by InitializeKubo (sequencer/sequencer_ui.s:4299): `RegObjTable 0x160000c, 0xfa58fb, 0xe275f8, 0xe27598, 0x1c8`
+; = class 0x160000C (ResEventProc), 5 entries (count word at 0xE275F8), id 0x1C8.
 EvtEffDraw_PtrTable:
 	.long EvtName_EffFixDraw
 	.long EvtName_EffParaDraw
@@ -28,8 +33,13 @@ EvtName_EqStrDraw:	aligned_string "EV_EQSTRDRAW"
 EvtName_EqLineDraw:	aligned_string "EV_EQLINEDRAW"
 EvtName_EffParaDraw:	aligned_string "EV_EFFPARADRAW"
 EvtName_EffFixDraw:	aligned_string "EV_EFFFIXDRAW"
+; Registered by InitializeKubo (sequencer/sequencer_ui.s:4299): `RegObjTable 0x160000c, 0xfa58fb, 0xe275f8, 0xe27598, 0x1c8`
+; = u16 5, the entry count of that class 0x160000C (ResEventProc) table, read with `ldw_da`.
+Kubo_ResEventCount_1C8:
 	.byte 0x05, 0x00
 
+; Registered by InitializeKubo (sequencer/sequencer_ui.s:4300): `RegObjTable 0x160000d, 0xfa5948, 0xe27fa2, 0xe275fa, 0x1e8`
+; = class 0x160000D (ResMethodProc), 119 entries (count word at 0xE27FA2), id 0x1E8.
 MT_FuncName_PtrTable:
 	.long MT_GetEffFixString_Name
 	.long MT_GetEffDlt0Str_Name
