@@ -602,11 +602,18 @@ MidiSerial_ParseStatus_Data:
 	call (xiz)
 	ret
 	swi	7
+; MidiSerial_CmdJumpTable -- 16 handler pointers for SYSTEM messages F0..FF,
+; indexed by the status byte's low nibble.  Reader MidiSerial_ParseStatus_Data
+; (MidiSerial_StatusTable slot 7): `ld l, (0x9634) / and l, 15 / sla l, 2 /
+; ld xiz, MidiSerial_CmdJumpTable / ld xiz, (xiz+hl) / call (xiz)`.  F2 (song
+; position pointer) -> MidiSerial_HandleSongPosition, F3 (song select) ->
+; MidiSerial_HandleSongSelect, every other slot -> MidiSerial_HandleDefault_Data
+; (`or (0x428:16), 1 / ret`).
 MidiSerial_CmdJumpTable:
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
-	.long MidiSerial_HandleSysReset_Data
-	.long MidiSerial_HandleSysCommon_Data
+	.long MidiSerial_HandleSongPosition
+	.long MidiSerial_HandleSongSelect
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
@@ -619,7 +626,7 @@ MidiSerial_CmdJumpTable:
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
-MidiSerial_HandleSysReset_Data:
+MidiSerial_HandleSongPosition:
 	ld	wa, (0x9599:16)
 	ld	(1069:16), a
 	bit	2, (0xfd52:16)
@@ -627,7 +634,7 @@ MidiSerial_HandleSysReset_Data:
 	set	7, w
 	ld	(1070:16), w
 	ret
-MidiSerial_HandleSysCommon_Data:
+MidiSerial_HandleSongSelect:
 	ld	a, (0x9599:16)
 	bit	3, (0xfd51:16)
 	jr	z, 3
@@ -678,6 +685,15 @@ MidiRx_ChannelMsgDispatch:
 MidiRx_ChannelMsgDispatch_Return:
 	ret
 	swi	7
+; MidiCC_LowRange_Table -- 8 handler pointers, one per status-byte high nibble.
+; Reader MidiRx_ChannelMsgDispatch: `ld l, (0x9634) / and l, 0x70 / srl hl, 2 /
+; ld xix, MidiCC_LowRange_Table / ld xix, (xix+hl) / call (xix)`, slot =
+; (status >> 4) & 7, called once per part in the channel's part list.  Slots:
+; 8x note off, 9x note on, Ax key pressure -> MidiCC_Handler_SimpleParamStore
+; (`or (0x428:16), 1 / ret`); Bx control change -> MidiCC_Handler_CC3_TableLookup;
+; Cx program change -> MidiCC_Handler_CC4_VoiceParam; Dx channel pressure ->
+; MidiCC_Handler_CC5_VoiceParam; Ex pitch bend -> MidiCC_Handler_CC6_VoiceParam;
+; Fx -> SimpleParamStore (MidiSerial_StatusTable never sends Fx here).
 MidiCC_LowRange_Table:
 	.long MidiCC_Handler_SimpleParamStore
 	.long MidiCC_Handler_SimpleParamStore
@@ -720,6 +736,13 @@ MidiCC_Handler_CC3_TableLookup_Skip:
 	call (xix)
 MidiCC_Handler_CC3_TableLookup_Return:
 	ret
+; MidiCC_ExtendedRange_Table -- 48 handler pointers, one per CC FUNCTION index
+; (the index MidiCC_ChannelMappingData gives a controller number).  Reader
+; MidiCC_Handler_CC3_TableLookup: `ld a, (0x9657) / sla wa, 2 / ld xix,
+; MidiCC_ExtendedRange_Table / ld xix, (xix+wa) / call (xix)`.  48 entries = the
+; function range of MidiCC_FunctionRxFilter and MidiCC_FunctionToCCNumber (both
+; 48); the per-part target table each slot's handler reads is listed in the
+; header of MidiCC_ChannelMappingData.
 MidiCC_ExtendedRange_Table:
 	.long MidiCC_VoiceParam_0
 	.long MidiCC_VoiceParam_3

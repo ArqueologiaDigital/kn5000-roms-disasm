@@ -95,11 +95,18 @@ MidiSerial_ParseStatus_Data:
 	swi	7
 
 
+; MidiSerial_CmdJumpTable -- 16 handler pointers for SYSTEM messages F0..FF,
+; indexed by the status byte's low nibble.  Reader MidiSerial_ParseStatus_Data
+; (MidiSerial_StatusTable slot 7): `ld l, (0x9634) / and l, 15 / sla l, 2 /
+; ld xiz, MidiSerial_CmdJumpTable / ld xiz, (xiz+hl) / call (xiz)`.  F2 (song
+; position pointer) -> MidiSerial_HandleSongPosition, F3 (song select) ->
+; MidiSerial_HandleSongSelect, every other slot -> MidiSerial_HandleDefault_Data
+; (`or (0x428:16), 1 / ret`).
 MidiSerial_CmdJumpTable:
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
-	.long MidiSerial_HandleSysReset_Data
-	.long MidiSerial_HandleSysCommon_Data
+	.long MidiSerial_HandleSongPosition
+	.long MidiSerial_HandleSongSelect
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
@@ -112,7 +119,7 @@ MidiSerial_CmdJumpTable:
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
 	.long MidiSerial_HandleDefault_Data
-MidiSerial_HandleSysReset_Data:
+MidiSerial_HandleSongPosition:
 	ld	wa, (0x9635:16)
 	ld	(1069:16), a
 	bit	2, (0xfd52:16)
@@ -120,7 +127,7 @@ MidiSerial_HandleSysReset_Data:
 	set	7, w
 	ld	(1070:16), w
 	ret
-MidiSerial_HandleSysCommon_Data:
+MidiSerial_HandleSongSelect:
 	ld	a, (0x9635:16)
 	bit	3, (0xfd51:16)
 	jr	z, 3
@@ -173,6 +180,15 @@ MidiRx_ChannelMsgDispatch_Return:
 	swi	7
 
 
+; MidiCC_LowRange_Table -- 8 handler pointers, one per status-byte high nibble.
+; Reader MidiRx_ChannelMsgDispatch: `ld l, (0x9634) / and l, 0x70 / srl hl, 2 /
+; ld xix, MidiCC_LowRange_Table / ld xix, (xix+hl) / call (xix)`, slot =
+; (status >> 4) & 7, called once per part in the channel's part list.  Slots:
+; 8x note off, 9x note on, Ax key pressure -> MidiCC_Handler_SimpleParamStore
+; (`or (0x428:16), 1 / ret`); Bx control change -> MidiCC_Handler_CC3_TableLookup;
+; Cx program change -> MidiCC_Handler_CC4_VoiceParam; Dx channel pressure ->
+; MidiCC_Handler_CC5_VoiceParam; Ex pitch bend -> MidiCC_Handler_CC6_VoiceParam;
+; Fx -> SimpleParamStore (MidiSerial_StatusTable never sends Fx here).
 MidiCC_LowRange_Table:
 	.long MidiCC_Handler_SimpleParamStore
 	.long MidiCC_Handler_SimpleParamStore
@@ -213,6 +229,13 @@ MidiCC_Handler_CC3_TableLookup_Return:
 	ret
 
 
+; MidiCC_ExtendedRange_Table -- 48 handler pointers, one per CC FUNCTION index
+; (the index MidiCC_ChannelMappingData gives a controller number).  Reader
+; MidiCC_Handler_CC3_TableLookup: `ld a, (0x9657) / sla wa, 2 / ld xix,
+; MidiCC_ExtendedRange_Table / ld xix, (xix+wa) / call (xix)`.  48 entries = the
+; function range of MidiCC_FunctionRxFilter and MidiCC_FunctionToCCNumber (both
+; 48); the per-part target table each slot's handler reads is listed in the
+; header of MidiCC_ChannelMappingData.
 MidiCC_ExtendedRange_Table:
 	.long MidiCC_VoiceParam_0
 	.long MidiCC_VoiceParam_3
@@ -2341,6 +2364,8 @@ MidiCC_PartTargets_Unread_A:
 	.byte 0xbc, 0x14, 0x7f, 0xbc, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xbc, 0x17, 0x7f
 	.byte 0xbc, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Unread_B (+0x500): same record layout; no reader found --
+; see the searches listed above MidiCC_PartTargets_Unread_A.
 MidiCC_PartTargets_Unread_B:
 	.byte 0xbd, 0x00, 0x7f, 0xbd, 0x01, 0x7f, 0xbd, 0x02, 0x7f, 0xbd, 0x03, 0x7f
 	.byte 0xbd, 0x04, 0x7f, 0xbd, 0x05, 0x7f, 0xbd, 0x06, 0x7f, 0xbd, 0x07, 0x7f
@@ -2363,6 +2388,8 @@ MidiCC_PartTargets_Func12:
 	.byte 0xb8, 0x14, 0x7f, 0xb8, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb8, 0x17, 0x7f
 	.byte 0xb8, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func13 (+0x5C0): same 32 x 3-byte record layout as the tables
+; above; function 13, reader MidiCC_VoiceParam_11 (0xFD00E0) -> MidiStream_DispatchData_0xD0.
 MidiCC_PartTargets_Func13:
 	.byte 0xb9, 0x00, 0x7f, 0xb9, 0x01, 0x7f, 0xb9, 0x02, 0x7f, 0xb9, 0x03, 0x7f
 	.byte 0xb9, 0x04, 0x7f, 0xb9, 0x05, 0x7f, 0xb9, 0x06, 0x7f, 0xb9, 0x07, 0x7f
@@ -2372,6 +2399,8 @@ MidiCC_PartTargets_Func13:
 	.byte 0xb9, 0x14, 0x7f, 0xb9, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb9, 0x17, 0x7f
 	.byte 0xb9, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func14 (+0x620): same 32 x 3-byte record layout as the tables
+; above; function 14, reader MidiCC_VoiceParam_12 (0xFD0121) -> MidiStream_DispatchData_0xD0.
 MidiCC_PartTargets_Func14:
 	.byte 0xba, 0x00, 0x7f, 0xba, 0x01, 0x7f, 0xba, 0x02, 0x7f, 0xba, 0x03, 0x7f
 	.byte 0xba, 0x04, 0x7f, 0xba, 0x05, 0x7f, 0xba, 0x06, 0x7f, 0xba, 0x07, 0x7f
@@ -2381,6 +2410,8 @@ MidiCC_PartTargets_Func14:
 	.byte 0xba, 0x14, 0x7f, 0xba, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xba, 0x17, 0x7f
 	.byte 0xba, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+; MidiCC_PartTargets_Func15 (+0x680): same 32 x 3-byte record layout as the tables
+; above; function 15, reader MidiCC_VoiceParam_13 (0xFD0162) -> MidiStream_DispatchData_0xD0.
 MidiCC_PartTargets_Func15:
 	.byte 0xbb, 0x00, 0x7f, 0xbb, 0x01, 0x7f, 0xbb, 0x02, 0x7f, 0xbb, 0x03, 0x7f
 	.byte 0xbb, 0x04, 0x7f, 0xbb, 0x05, 0x7f, 0xbb, 0x06, 0x7f, 0xbb, 0x07, 0x7f
