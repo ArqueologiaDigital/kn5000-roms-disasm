@@ -283,10 +283,11 @@ def compile_blob(v, blob):
         return open(b, 'rb').read()
 
 
-def s_slices(spath, blob):
+def s_slices(spath, blob, lines=None):
     """label -> (offset, length) for every label directly above an .incbin
     of `blob` (several labels may name one slice)."""
-    lines = open(spath, encoding='latin-1').read().split('\n')
+    if lines is None:
+        lines = open(spath, encoding='latin-1').read().split('\n')
     out, pend = {}, []
     rx = re.compile(r'^\t\.incbin "includes/generated/%s\.bin", (0x[0-9A-Fa-f]+|\d+), '
                     r'(0x[0-9A-Fa-f]+|\d+)\s*$' % re.escape(blob))
@@ -552,7 +553,7 @@ def welcome_region(cb, data, sl):
                       "does (decoded with unidasm at label + offset, v10): op 0 (+0) "
                       "posts 0x1E000B3 and ends the script; op 1 (+896) just advances "
                       "to the next step; op 2 (+15) reads arg (cp iz, 2) and a 12-byte "
-                      "record table in RAM at 0x03EA0C (not analysed); op 3 (+162) "
+                      "record table in RAM at 0x03EA0C (that table was not followed); op 3 (+162) "
                       "calls SendEvent with 0x1C0000C; ops 4/5/6/7/11 (+179/+208/+237/"
                       "+293/+265) draw one glyph each -- C, O, L, R, U; op 8 (+321) "
                       "draws I then N; ops 9 and 12 (+386) draw C-O-L-O(-U)-R; op 10 "
@@ -1022,6 +1023,411 @@ def apply_regions_s(v, apply):
             open(path, 'wb').write(out)
 
 
+# ---------------------------------------------------------------- object runs
+# .s files whose slices are re-cut at the objects the firmware REGISTERS
+# (scripts/analysis/nakarest_objtab_map.py), each piece headed by what starts
+# in it.  The C is not touched by this pass.
+OBJRUN_FILES = [
+    ('disk_menu_file_io_screens.s', 'naka_disk_menu_file_io'),
+    ('midi_reverb_presets_screens.s', 'naka_midi_reverb'),
+    ('debug_naming_panel_sim.s', 'naka_debug_naming'),
+    ('direct_play_medley_screens.s', 'naka_direct_play'),
+    ('disk_warning_strings.s', 'naka_disk_warning'),
+    ('sequencer_channel_containers.s', 'naka_sequencer_channels'),
+    ('composer_style_convert_screens.s', 'naka_composer_style'),
+    ('effects_sequencer_screens.s', 'naka_effects_seq'),
+    ('msp_recording_screens.s', 'naka_msp_recording'),
+    ('block_012.s', 'naka_block_012'),
+    ('block_007.s', 'naka_block_007'),
+    ('normal_mode_layout.s', 'naka_normal_mode'),
+    ('naka_accomp7_widgets.s', 'naka_accomp7_widgets'),
+    ('sound_menu_drawbar_screens.s', 'naka_sound_menu_drawbar'),
+    ('sequencer_exit_widgets.s', 'naka_sequencer_exit'),
+    ('master_style_grid_screens.s', 'naka_master_style'),
+    ('control_menu_screens.s', 'naka_control_menu_header'),
+    ('control_menu_screens.s', 'naka_ctrl_menu_body'),
+    ('extension_device_screens.s', 'naka_extension_device'),
+    ('performance_style_screens.s', 'naka_perf_style'),
+    ('technichord_part_settings.s', 'naka_technichord_part'),
+]
+
+
+def blob_base(v, path, blob, lines=None):
+    """ROM address of blob offset 0: from any label on one of its slices
+    (linked ELF), else from the C file's `#define BASE`."""
+    sl = s_slices(path, blob, lines)
+    sym = objmap(v).sym
+    for lab, (off, _) in sl.items():
+        if lab in sym:
+            return sym[lab] - off
+    c = os.path.join(ui(v), {'naka_control_menu_header': 'control_menu_header'}.get(blob, blob) + '.c')
+    m = re.search(r'^#define BASE\s+(0x[0-9A-Fa-f]+)u?\s*$', open(c, encoding='latin-1').read(), re.M)
+    return int(m.group(1), 16)
+_MAPS = {}
+
+
+def objmap(v):
+    if v not in _MAPS:
+        sys.path.insert(0, os.path.join(ROOT, 'scripts', 'analysis'))
+        import nakarest_objtab_map as O
+        _MAPS[v] = O.Map(v)
+    return _MAPS[v]
+
+
+def _ranges(ks):
+    ks = sorted(ks)
+    out, a = [], None
+    for i, k in enumerate(ks):
+        if a is None:
+            a = k
+        if i + 1 == len(ks) or ks[i + 1] != k + 1:
+            out.append('%d' % a if a == k else '%d-%d' % (a, k))
+            a = None
+    return ', '.join(out)
+
+
+CLS_NAME = {0x1600010: 'Viewable', 0x160000F: 'ResName', 0x1600002: 'ApFunction',
+            0x1600001: 'Function', 0x1600003: 'MainFunction', 0x1600004: 'Class',
+            0x160000C: 'ResEvent', 0x160000D: 'ResMethod'}
+CLS_PROC = {k: v + 'Proc' for k, v in CLS_NAME.items()}
+
+
+def _reg_short(r):
+    return ('%s slot 0x%X (table 0x%06X, %d entries, %s)'
+            % (CLS_NAME[r['cls']], r['slot'], r['table'], r['count'], r['init']))
+
+
+def _reg_full(m, r):
+    """The file-level note for one registered table."""
+    if r.get('count_at') is not None:
+        t = ('%s slot 0x%X: RegObjTable 0x%X, %s, 0x%06X, 0x%06X, 0x%X in %s (%s) -- '
+             'the count, %d, is the word at 0x%06X; RegisterObjectTable stores '
+             '{class, proc, count, table} at 0x27ED2 + 14*0x%X.'
+             % (CLS_NAME[r['cls']], r['slot'], r['cls'], CLS_PROC[r['cls']], r['count_at'],
+                r['table'], r['slot'], r['init'], r['file'].split('/maincpu/')[1],
+                r['count'], r['count_at'], r['slot']))
+    else:
+        t = ('%s slot 0x%X: RegObjTabl 0x%X, %s, 0x%X, 0x%06X, 0x%X in %s (%s), '
+             'i.e. RegisterObjectTable stores {class, proc, %d, table} at 0x27ED2 + 14*0x%X.'
+             % (CLS_NAME[r['cls']], r['slot'], r['cls'], CLS_PROC[r['cls']], r['count'],
+                r['table'], r['slot'], r['init'], r['file'].split('/maincpu/')[1], r['count'],
+                r['slot']))
+    if r['cls'] == 0x1600010:
+        rn = m.by_slot.get(r['slot'] + 0x300)
+        n0 = m.string_at(m.entries(rn)[0]) if rn and m.entries(rn) and m.inrom(m.entries(rn)[0]) else ''
+        n, bad = m.check_links(r)
+        outside = [k for k, a in enumerate(m.entries(r)) if not m.inrom(a)]
+        t += ('  Element 0 is named "%s" in ResName slot 0x%X.  Links: %s%s.'
+              % (n0, r['slot'] + 0x300,
+                 'all %d records consistent' % n if not bad else
+                 '%d of %d records have a disagreeing link (elements %s)'
+                 % (len({k for k, _ in bad}), n, _ranges({k for k, _ in bad})),
+                 ('; element%s %s point%s outside the program ROM (RAM records)'
+                  % ('s' if len(outside) > 1 else '', _ranges(outside),
+                     '' if len(outside) > 1 else 's')) if outside else ''))
+    return t
+
+
+FORMAT_NOTE = (
+    "How these pieces were identified (scripts/analysis/nakarest_objtab_map.py): "
+    "every RegObjTabl registration in the v10, v9 and v7 sources (the macro, "
+    "and v7's written-out form) was parsed, each registered table was read out "
+    "of the original ROM dump, and every address those tables point at is an "
+    "object START: a Viewable table points at NAKA widget records, a ResName "
+    "table (slot = Viewable slot + 0x300) at the name string of each element, "
+    "an ApFunction / Function / MainFunction table (slot 0x1xx) at procedures "
+    "and its slot + 0x300 twin at their names.  Each piece below starts at one "
+    "such run of objects or at a label that already existed.  A widget record "
+    "starts TT 00 6x 01 (TT = type byte); +4 parent, +6 first child, +8 next "
+    "sibling, +10 previous sibling are element indices of the same table "
+    "(0xFFFF = none), checked against each other for every table (the Links "
+    "result per table).  Name strings are NUL-terminated and 0xFF-padded to "
+    "even length.  The first word of a widget record is its CLASS ID 0x016S_KKKK: "
+    "ClassProc (ui/ui_widget_defs.s) takes (id >> 16) & 0xFFF as a registry "
+    "slot -- the Class table that RegObjTable 0x1600004 put there -- and "
+    "0x18 * (id & 0xFFFF) into it.  Each class definition gives the instance "
+    "size (+8 allsize), and all 3,340 in-ROM widget records of v10 resolve to "
+    "a class and are at least that far apart "
+    "(THE CLASS SYSTEM, scripts/analysis/nakarest_objtab_map.py).")
+
+
+def _group_text(m, kind, r, ks, starts):
+    from collections import Counter
+    if kind == 'record':
+        rn = m.by_slot.get(r['slot'] + 0x300)
+        n0 = m.string_at(m.entries(rn)[0]) if rn and m.entries(rn) and m.inrom(m.entries(rn)[0]) else ''
+        cl = Counter()
+        for a in starts:
+            c = m.record_class(a)
+            cl['%s (%d B, id 0x%08X)' % (c['name'], c['allsize'], m.u32(a)) if c else
+               'unresolved id 0x%08X' % m.u32(a)] += 1
+        return ('Widget records of element%s %s of %s%s; classes: %s.'
+                % ('s' if len(ks) > 1 else '', _ranges(ks), _reg_short(r),
+                   ', element 0 "%s"' % n0 if n0 else '',
+                   ', '.join('%s x%d' % (n, c) if c > 1 else n for n, c in cl.items())))
+    if kind in ('classdef', 'classname', 'classsig', 'propnames'):
+        names = []
+        for k in ks:
+            c = m.classes.get(((r['slot'] & 0xFFF) << 16) | k)
+            if c and c['name'] not in names:
+                names.append(c['name'])
+        shown = ', '.join(names[:10]) + (', ...' if len(names) > 10 else '')
+        if kind == 'classdef':
+            return ('Class definitions %s of %s: %s.  24 bytes each: +0 proc, +4 parent '
+                    '(class id), +8 allsize, +10 selfsize, +12 name, +16 propdata, +20 '
+                    'propname -- the firmware\'s own field names, from the propname '
+                    'table of the root class "Class".' % (_ranges(ks), _reg_short(r), shown))
+        if kind == 'classname':
+            return 'Class-name strings (the +12 name of classes %s of %s): %s.' % (
+                _ranges(ks), _reg_short(r), shown)
+        if kind == 'classsig':
+            sig = [m.string_at(a) for a in starts]
+            return ('propdata strings (the +16 field signature, one character per own '
+                    'field) of class%s %s of %s (%s): %s.' % (
+                        'es' if len(ks) > 1 else '', _ranges(ks), _reg_short(r), shown,
+                        ', '.join('"%s"' % x for x in sig[:8]) + (', ...' if len(sig) > 8 else '')))
+        # propnames: the class's field names, in field order
+        ex = []
+        for k in ks[:4]:
+            c = m.classes.get(((r['slot'] & 0xFFF) << 16) | k)
+            if c:
+                ex.append('%s {%s}' % (c['name'], ', '.join(c['fields'][:-1])))
+        return ('propname blocks (the +20 of class%s %s of %s): len(propdata) + 1 '
+                'pointers -- one per own field, the last to an empty string -- then '
+                'the field-name strings; e.g. %s%s.' % (
+                    'es' if len(ks) > 1 else '', _ranges(ks), _reg_short(r),
+                    '; '.join(ex), '; ...' if len(ks) > 4 else ''))
+    if kind == 'name':
+        names = [m.string_at(a) for a in starts]
+        shown = ', '.join('"%s"' % x for x in names[:6]) + (', ...' if len(names) > 6 else '')
+        par = m.by_slot.get(r['slot'] - 0x300)
+        return ('Name strings of element%s %s of %s%s: %s.'
+                % ('s' if len(ks) > 1 else '', _ranges(ks), _reg_short(r),
+                   ', names for %s slot 0x%X' % (CLS_NAME[par['cls']], par['slot']) if par else '',
+                   shown))
+    if kind == 'table':
+        if r['cls'] == 0x1600004:
+            return ('The table itself: %s -- %d class definitions of 24 bytes.'
+                    % (_reg_short(r), r['count']))
+        return ('The table itself: %s -- %d x u32 entry pointers.' % (_reg_short(r), r['count']))
+    raise ValueError(kind)
+
+
+def objrun_pieces(m, blob, base, S0, S1, labels_at, used):
+    """Pieces for the blob span [S0, S1): cut at the start of every run of
+    registered objects of one (kind, slot), and at every existing label.
+    Registered tables mentioned are added to `used`."""
+    objs = []
+    for a, vs in m.in_range(base + S0, base + S1):
+        for kind, r, k in vs:
+            objs.append((a - base, kind, r, k))
+    cuts = {S0} | set(labels_at)
+    prev = None
+    for off, kind, r, k in objs:
+        key = (kind, r['slot'])
+        if key != prev:
+            cuts.add(off)
+        prev = key
+    cuts = sorted(c for c in cuts if S0 <= c < S1)
+    pieces = []
+    for i, c in enumerate(cuts):
+        e = cuts[i + 1] if i + 1 < len(cuts) else S1
+        inside = [o for o in objs if c <= o[0] < e]
+        groups = []
+        for off, kind, r, k in inside:
+            used.setdefault(r['slot'], r)
+            if groups and groups[-1][0] == kind and groups[-1][1] is r:
+                groups[-1][2].append(k)
+                groups[-1][3].append(base + off)
+            else:
+                groups.append([kind, r, [k], [base + off]])
+        labs = labels_at.get(c, [])
+        name = labs[0] if labs else '%s+0x%X' % (blob, c)
+        title = ('%s  --  %s +0x%X..+0x%X (ROM 0x%06X..0x%06X), %d bytes'
+                 % (name, blob, c, e, base + c, base + e, e - c))
+        paras = []
+        if not inside or inside[0][0] != c:
+            first = inside[0][0] if inside else e
+            paras.append('No RegObjTabl-registered table points at the start of these '
+                         '%d bytes (0x%06X..0x%06X); purpose not established by that '
+                         'route.' % (first - c, base + c, base + first))
+        for kind, r, ks, starts in groups:
+            paras.append(_group_text(m, kind, r, ks, starts))
+        if len(labs) > 1:
+            paras.append('Other labels on this address: %s.' % ', '.join(labs[1:]))
+        hdr = title + '\n' + wrap(' '.join(paras))
+        pieces.append(Piece(name, c, e - c, hdr, None, labs))
+    return pieces
+
+
+def write_file_note(lines, blob, text):
+    """Insert/replace this driver's file-level note for `blob` after the
+    file's leading comment lines."""
+    mark = MARK + 'registered NAKA tables: ' + blob
+    block = [RULE, mark] + ['; ' + l if l else ';' for l in text.split('\n')] + [RULE]
+    block = [re.sub(r'0x[0-9A-Fa-f]+', lambda m_: m_.group(0).lower(), l).rstrip() for l in block]
+    if mark in lines:
+        i = lines.index(mark) - 1
+        j = lines.index(RULE, i + 2)
+        lines[i:j + 1] = block
+        return
+    i = 0
+    while i < len(lines) and lines[i] != RULE and \
+            (lines[i].startswith(';') or not lines[i].strip()):
+        i += 1
+    lines[i:i] = block
+
+
+def _incbin_spans(lines, blob):
+    """[(first_off, end_off, {off: [labels]})] for maximal runs of contiguous
+    .incbin slices of `blob` separated only by labels, blank lines and this
+    driver's own header blocks."""
+    rx = re.compile(r'^\t\.incbin "includes/generated/%s\.bin", (0x[0-9A-Fa-f]+|\d+), '
+                    r'(0x[0-9A-Fa-f]+|\d+)\s*$' % re.escape(blob))
+    spans, cur, pend, in_hdr = [], None, [], False
+    for l in lines:
+        if l == RULE:
+            in_hdr = not in_hdr
+            continue
+        if in_hdr:
+            continue
+        m = rx.match(l)
+        if m:
+            o, n = int(m.group(1), 0), int(m.group(2), 0)
+            if cur is not None and cur[1] == o:
+                cur[1] = o + n
+            else:
+                cur = [o, o + n, {}]
+                spans.append(cur)
+            if pend:
+                cur[2].setdefault(o, []).extend(pend)
+            pend = []
+            continue
+        lm = re.match(r'^([A-Za-z_][A-Za-z0-9_]*):$', l)
+        if lm:
+            pend.append(lm.group(1))
+            continue
+        if not l.strip():
+            continue
+        cur, pend = None, []
+    return spans
+
+
+def apply_objruns(v, apply):
+    m = objmap(v)
+    for sname, blob in OBJRUN_FILES:
+        path = os.path.join(ui(v), sname)
+        raw = open(path, 'rb').read()
+        lines = raw.decode('latin-1').split('\n')
+        # a whole-file `.incbin "<blob>.bin"` becomes the (offset, length)
+        # form, the same bytes, so it can be cut like the others
+        whole = '\t.incbin "includes/generated/%s.bin"' % blob
+        if whole in lines:
+            n = os.path.getsize(os.path.join(ROOT, v, 'maincpu', 'includes', 'generated', blob + '.bin'))
+            lines[lines.index(whole)] = whole + ', 0x0, 0x%X' % n
+        base = blob_base(v, path, blob, lines)
+        total = 0
+        used = {}
+        for S0, S1, labels_at in _incbin_spans(lines, blob):
+            pieces = objrun_pieces(m, blob, base, S0, S1, labels_at, used)
+            total += rewrite_s_span(path, lines, blob, pieces)
+        if used:
+            note = wrap(FORMAT_NOTE) + '\n\nTables with objects in this file:\n\n' + \
+                '\n\n'.join(wrap(_reg_full(m, r)) for _, r in sorted(used.items()))
+            write_file_note(lines, blob, note)
+        out = '\n'.join(lines).encode('latin-1')
+        print('%s %s objruns: %+d lines, %+d bytes' % (v, sname, total, len(out) - len(raw)))
+        if apply and out != raw:
+            open(path, 'wb').write(out)
+
+
+# Comment corrections, applied idempotently to v10, v9 and v7: (file, the
+# exact old text, the new text).  Each one corrects a claim PROVEN false; the
+# reason is in the new text itself.
+TEXT_FIXES = [
+    ('control_menu_screens.s',
+     """; ===========================================================================
+; CPU Data Transmission Error Dialog Widgets (Screen Group 7)
+; ===========================================================================
+; These widgets form the error dialog displayed when Sub-CPU payload
+; transfer fails during boot. The dialog shows a severe hardware error
+; that typically requires service center attention.
+;
+; Widget format:
+;   Byte 0-1: Entry length (low byte) + 0x00
+;   Byte 2-3: Widget type = 0x0160 (text widget)
+;   Byte 4-5: Screen group ID (0x07 = error dialogs)
+;   Byte 6-7: Flags (0xffff = default)
+;   Byte 8-9: Widget index within screen group
+;   Remaining: Widget-specific data (position, font, text)
+; ===========================================================================
+
+; ---------------------------------------------------------------------------
+; Widget 9: CAUTION!! Header
+; Screen group 7, index 9
+; ---------------------------------------------------------------------------
+ErrorDialog_CautionHeader:
+	.byte 0x2b, 0x00	; Entry length: 43 bytes
+""",
+     """; ===========================================================================
+; CPU data-transmission error messages: elements 8-12 of the Viewable table
+; of slot 0xf4 (0xed7c62, 14 entries, registered by InitializeToshi in
+; extensions/extension_init.s)
+; ===========================================================================
+; Five records of class Label (class id 0x0160002b: root Class table, slot
+; 0x160, entry 0x2b; 32 bytes: class, super, sub, next, prev, flag, rect,
+; str, font, fontcolor -- the firmware's own field names) whose strings are
+; "CAUTION!!", "** ERROR in CPU data transmission **", "Please try turning
+; off and on again.", "If this message appears again," and "this unit
+; needs repairing." (the text follows each record in
+; extensions/extension_data.s).  Their parent (`super`) is element 7, a
+; Window named "TEST1CP" in the parallel ResName table (slot 0x3f4);
+; elements 1-6 are the "TEST1RAM" Window and its Labels; elements 0 and 13
+; are full-screen (0,0)-(319,239) TtlScreen records.  The .include of this
+; file sits in extension_data.s, which carries the rest of element 8 after
+; the two bytes below, and elements 9-12.
+;
+; Record layout: the Viewable fields, +0 class id, +4 super (parent
+; element), +6 sub (first child), +8 next, +10 prev (element indices,
+; 0xffff = none), +12 flag, +14..+20 rect x1, y1, x2, y2 (element 8:
+; (78,128)-(225,146), inside its parent's (4,120)-(315,237)); all 14 links
+; of slot 0xf4 consistent (scripts/analysis/nakarest_objtab_map.py; lane
+; ext's ext_lane_checks.py test1 found the same).
+;
+; CORRECTED (lane nakarest, 2026-09-25): this block used to describe the
+; records as "Byte 0-1: entry length, Byte 2-3: widget type 0x0160, Byte
+; 4-5: screen group ID (0x07 = error dialogs), Byte 6-7: flags, Byte 8-9:
+; widget index within screen group", call this one "Widget 9 ... Screen
+; group 7, index 9", and read the two bytes below as "Entry length: 43
+; bytes".  Proven false by the links: the 0x07 at +4 is the parent element
+; (element 7's +6 first child is 8), the 0x09 at +8 is the next sibling
+; (element 9's +10 is 8), and 0x2b is the class index of Label for every
+; one of the five records, whatever their length.  The earlier header's
+; purpose statement, kept as written (not re-verified here -- note that the
+; parent panel is named TEST1CP):
+; These widgets form the error dialog displayed when Sub-CPU payload
+; transfer fails during boot. The dialog shows a severe hardware error
+; that typically requires service center attention.
+; ===========================================================================
+ErrorDialog_CautionHeader:
+	.byte 0x2b, 0x00	; class id 0x0160002b (Label), low half: index 0x2b
+"""),
+]
+
+
+def apply_text_fixes(v, apply):
+    for sname, old, new in TEXT_FIXES:
+        path = os.path.join(ui(v), sname)
+        b = open(path, 'rb').read()
+        if new.encode() in b:
+            continue
+        if b.count(old.encode()) != 1:
+            raise SystemExit('%s: text fix anchor found %d times' % (path, b.count(old.encode())))
+        print('%s %s: comment correction applied' % (v, sname))
+        if apply:
+            open(path, 'wb').write(b.replace(old.encode(), new.encode()))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true')
@@ -1036,6 +1442,8 @@ def main():
             build_c(v, args.apply, args.render)
         apply_s(v, args.apply)
         apply_regions_s(v, args.apply)
+        apply_text_fixes(v, args.apply)
+        apply_objruns(v, args.apply)
 
 
 if __name__ == '__main__':

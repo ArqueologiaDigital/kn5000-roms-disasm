@@ -8163,8 +8163,8 @@ typedef struct __attribute__((packed)) {
      * What each handler does (decoded with unidasm at label + offset, v10):
      * op 0 (+0) posts 0x1E000B3 and ends the script; op 1 (+896) just
      * advances to the next step; op 2 (+15) reads arg (cp iz, 2) and a
-     * 12-byte record table in RAM at 0x03EA0C (not analysed); op 3 (+162)
-     * calls SendEvent with 0x1C0000C; ops 4/5/6/7/11
+     * 12-byte record table in RAM at 0x03EA0C (that table was not followed);
+     * op 3 (+162) calls SendEvent with 0x1C0000C; ops 4/5/6/7/11
      * (+179/+208/+237/+293/+265) draw one glyph each -- C, O, L, R, U; op 8
      * (+321) draws I then N; ops 9 and 12 (+386) draw C-O-L-O(-U)-R; op 10
      * (+860) calls ApFuncCall on 0x120000B with 0x1E000AC, CaptureLcd, then
