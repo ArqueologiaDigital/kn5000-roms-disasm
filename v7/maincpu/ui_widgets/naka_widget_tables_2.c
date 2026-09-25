@@ -87,8 +87,6 @@ extern const char MainVocalistPage1OKFunc;
 extern const char MainVocalistPage2OKFunc;
 extern const char MessageHeader;
 extern const char MessageText;
-extern const char NakaData_UserMemoryConfig;
-extern const char Naka_MainDispatch_Table;
 extern const char PsLabelBoxProc;
 extern const char PsMixerControlProc;
 extern const char PsVariBoxProc;
@@ -99,280 +97,219 @@ extern const char VwUserBitmapSpProc;
 #define BASE  0x00E5A39Eu
 
 typedef struct __attribute__((packed)) {
-    uint32_t ptrs_0[9];  /* 9 pointers */
-    char str_0[2];
-    char str_1[2];
-    char str_2[2];
-    char str_3[2];
-    char str_4[2];
-    char w0_code[2];
-    char w0_name[14];
-    char w1_code[2];
-    char w1_name[20];
-    uint32_t ptrs_1[7];  /* 7 pointers */
-    char str_5[2];
-    char str_6[2];
-    char w2_code[2];
-    char w2_name[10];
-    char str_7[20];
-    char w3_code[2];
-    char w3_name[20];
-    uint32_t ptrs_2[6];  /* 6 pointers */
-    char str_8[2];
-    char str_9[2];
-    char str_10[2];
-    char w4_code[2];
-    char w4_name[14];
-    char str_11[18];
-    uint32_t ptrs_3[6];  /* 6 pointers */
-    char str_12[2];
-    char str_13[2];
-    char str_14[2];
-    char w5_code[2];
-    char w5_name[14];
-    char str_15[18];
-    uint32_t ptrs_4[68];  /* 68 pointers */
-    char str_16[2];
-    char str_17[2];
-    char str_18[2];
-    char str_19[2];
-    char str_20[2];
-    char str_21[2];
-    char str_22[2];
-    char str_23[2];
-    char str_24[2];
-    char w6_code[2];
-    char w6_name[20];
-    char w7_code[2];
-    char w7_name[22];
-    char str_25[2];
-    char str_26[2];
-    char str_27[2];
-    char str_28[2];
-    char str_29[2];
-    char str_30[2];
-    char str_31[2];
-    char str_32[2];
-    char w8_code[2];
-    char w8_name[22];
-    char w9_code[2];
-    char w9_name[24];
-    char w10_code[2];
-    char w10_name[14];
-    char str_33[2];
-    char str_34[2];
-    char w11_code[2];
-    char w11_name[22];
-    char str_35[16];
-    char str_36[2];
-    char str_37[2];
-    char w12_code[2];
-    char w12_name[22];
-    char str_38[16];
-    char str_39[2];
-    char str_40[2];
-    char str_41[2];
-    char str_42[2];
-    char str_43[2];
-    char str_44[2];
-    char str_45[2];
-    char str_46[2];
-    char w13_code[2];
-    char w13_name[18];
-    char w14_code[2];
-    char w14_name[20];
-    char str_47[2];
-    char str_48[2];
-    char str_49[2];
-    char str_50[2];
-    char str_51[2];
-    char w15_code[2];
-    char w15_name[22];
-    char str_52[2];
-    char str_53[2];
-    char str_54[2];
-    char w16_code[2];
-    char w16_name[24];
-    char w17_code[2];
-    char w17_name[14];
-    char str_55[14];
-    char str_56[2];
-    char w18_code[2];
-    char w18_name[16];
-    char str_57[12];
-    uint32_t ptrs_5[29];  /* 29 pointers */
-    char w19_code[2];
-    char w19_name[14];
-    char str_58[14];
-    char str_59[14];
-    char str_60[14];
-    char str_61[14];
-    char str_62[14];
-    char str_63[14];
-    char str_64[2];
-    char str_65[2];
-    char w20_code[2];
-    char w20_name[14];
-    char str_66[14];
-    char str_67[14];
-    char str_68[14];
-    char str_69[14];
-    char str_70[16];
-    char str_71[16];
-    char str_72[16];
-    char str_73[2];
-    char str_74[2];
-    char w21_code[2];
-    char w21_name[14];
-    char str_75[2];
-    char w22_code[2];
-    char w22_name[12];
-    char str_76[2];
-    char w23_code[2];
-    char w23_name[14];
-    uint32_t ptrs_6[22];  /* 22 pointers */
-    char str_77[2];
-    char str_78[2];
-    char str_79[2];
-    char str_80[2];
-    char str_81[2];
-    char str_82[2];
-    char str_83[2];
-    char str_84[2];
-    char str_85[10];
-    char str_86[2];
-    char str_87[2];
-    char str_88[2];
-    char str_89[2];
-    char str_90[2];
-    char str_91[2];
-    char str_92[2];
-    char str_93[10];
-    char str_94[2];
-    char str_95[2];
-    char str_96[2];
-    char w24_code[12];
-    char w24_name[12];
-    uint32_t ptrs_7[7];  /* 7 pointers */
-    char str_97[2];
-    char str_98[2];
-    char str_99[2];
-    char str_100[2];
-    char w25_code[2];
-    char w25_name[14];
-    char str_101[14];
-    uint32_t ptrs_8[7];  /* 7 pointers */
-    char str_102[2];
-    char str_103[2];
-    char str_104[2];
-    char str_105[2];
-    char str_106[2];
-    char w26_code[2];
-    char w26_name[24];
-    uint32_t ptrs_9[18];  /* 18 pointers */
-    char str_107[2];
-    char str_108[2];
-    char str_109[2];
-    char str_110[2];
-    char str_111[2];
-    char str_112[2];
-    char str_113[2];
-    char w27_code[2];
-    char w27_name[14];
-    char str_114[12];
-    char str_115[2];
-    char str_116[2];
-    char str_117[2];
-    char str_118[2];
-    char str_119[2];
-    char str_120[2];
-    char w28_code[2];
-    char w28_name[22];
-    uint32_t ptrs_10[9];  /* 9 pointers */
-    char str_121[2];
-    char str_122[2];
-    char str_123[2];
-    char str_124[2];
-    char str_125[2];
-    char str_126[2];
-    char w29_code[2];
-    char w29_name[16];
-    char str_127[10];
-    uint32_t ptrs_11[25];  /* 25 pointers */
-    char str_128[2];
-    char str_129[2];
-    char str_130[2];
-    char str_131[2];
-    char str_132[2];
-    char str_133[2];
-    char str_134[2];
-    char str_135[2];
-    char str_136[2];
-    char w30_code[2];
-    char w30_name[18];
-    char str_137[14];
-    char str_138[14];
-    char w31_code[2];
-    char w31_name[16];
-    char str_139[2];
-    char str_140[2];
-    char str_141[2];
-    char w32_code[2];
-    char w32_name[14];
-    char w33_code[2];
-    char w33_name[14];
-    char str_142[2];
-    char w34_code[2];
-    char w34_name[18];
-    uint32_t ptrs_12[9];  /* 9 pointers */
-    char str_143[2];
-    char str_144[2];
-    char str_145[2];
-    char str_146[2];
-    char str_147[2];
-    char str_148[2];
-    char w35_code[2];
-    char w35_name[18];
-    char str_149[16];
-    uint32_t ptrs_13[7];  /* 7 pointers */
-    char str_150[2];
-    char str_151[2];
-    char str_152[2];
-    char str_153[2];
-    char str_154[2];
-    char w36_code[2];
-    char w36_name[14];
-    char str_155[8];
-    char str_156[14];
-    char str_157[10];
-    char str_158[14];
-    char str_159[12];
-    char str_160[16];
-    char str_161[10];
-    char str_162[10];
-    char str_163[10];
-    char str_164[10];
-    char str_165[10];
-    char str_166[12];
-    char str_167[12];
-    char str_168[10];
-    char str_169[12];
-    char str_170[12];
-    char str_171[10];
-    char str_172[12];
-    char str_173[12];
-    char str_174[12];
-    char str_175[12];
-    char str_176[12];
-    uint32_t ptrs_14[16];  /* 16 pointers */
-    char w37_code[2];
-    char w37_name[20];
-    char str_177[24];
-    char str_178[24];
-    char str_179[14];
-    char str_180[14];
-    char str_181[12];
-    char str_182[16];
+    /* ---------------------------------------------------------------------
+     * [typed] by span_t2a
+     * NakaData_WidgetTables2 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2645) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 8, 0xE5A39E, 0x352` --
+     * class 0x160000f (ResNameProc), 8 objects, base id 0x352. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t NakaData_WidgetTables2[9];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_352 -- the strings East_ResNameTable_352 points at: 9
+     * NUL-terminated names (0xFF pads to even length), 48 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_352[48];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_353 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2647) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 6, 0xE5A3F2, 0x353` --
+     * class 0x160000f (ResNameProc), 6 objects, base id 0x353. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_353[7];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_353 -- the strings East_ResNameTable_353 points at: 7
+     * NUL-terminated names (0xFF pads to even length), 58 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_353[58];
+    /* ---------------------------------------------------------------------
+     * NakaObj_MidiCommonSetting_Table -- object table: InitializeEast
+     * (v10/v9 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2649)
+     * registers it with `RegObjTabl 0x160000f, ResNameProc, 5, 0xE5A448,
+     * 0x354` -- class 0x160000f (ResNameProc), 5 objects, base id 0x354.
+     * Entries: pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t NakaObj_MidiCommonSetting_Table[6];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_354 -- the strings East_ResNameTable_354 points at: 6
+     * NUL-terminated names (0xFF pads to even length), 40 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_354[40];
+    /* ---------------------------------------------------------------------
+     * NakaObj_MidiInOutSetting_Table -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2651) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 5, 0xE5A488, 0x355` --
+     * class 0x160000f (ResNameProc), 5 objects, base id 0x355. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t NakaObj_MidiInOutSetting_Table[6];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_355 -- the strings East_ResNameTable_355 points at: 6
+     * NUL-terminated names (0xFF pads to even length), 40 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_355[40];
+    /* ---------------------------------------------------------------------
+     * NakaObj_MidiPresets_Table -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2653) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 67, 0xE5A4C8, 0x356` --
+     * class 0x160000f (ResNameProc), 67 objects, base id 0x356. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t NakaObj_MidiPresets_Table[68];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_356 -- the strings East_ResNameTable_356 points at: 68
+     * NUL-terminated names (0xFF pads to even length), 420 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_356[420];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_357 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2655) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 28, 0xE5A77C, 0x357` --
+     * class 0x160000f (ResNameProc), 28 objects, base id 0x357. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_357[29];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_357 -- the strings East_ResNameTable_357 points at: 29
+     * NUL-terminated names (0xFF pads to even length), 278 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_357[278];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_358 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2657) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 21, 0xE5A906, 0x358` --
+     * class 0x160000f (ResNameProc), 21 objects, base id 0x358. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_358[22];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_358 -- the strings East_ResNameTable_358 points at: 22
+     * NUL-terminated names (0xFF pads to even length), 80 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_358[80];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_359 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2659) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 6, 0xE5A9AE, 0x359` --
+     * class 0x160000f (ResNameProc), 6 objects, base id 0x359. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_359[7];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_359 -- the strings East_ResNameTable_359 points at: 7
+     * NUL-terminated names (0xFF pads to even length), 38 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_359[38];
+    /* ---------------------------------------------------------------------
+     * NakaObj_MidiComputerConn_Table -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2661) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 6, 0xE5A9F0, 0x35A` --
+     * class 0x160000f (ResNameProc), 6 objects, base id 0x35A. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t NakaObj_MidiComputerConn_Table[7];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_35A -- the strings East_ResNameTable_35A points at: 7
+     * NUL-terminated names (0xFF pads to even length), 36 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_35A[36];
+    /* ---------------------------------------------------------------------
+     * NakaObj_MidiPmemOutput_Table -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2663) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 17, 0xE5AA30, 0x35B` --
+     * class 0x160000f (ResNameProc), 17 objects, base id 0x35B. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t NakaObj_MidiPmemOutput_Table[18];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_35B -- the strings East_ResNameTable_35B points at: 18
+     * NUL-terminated names (0xFF pads to even length), 78 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_35B[78];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_35C -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2665) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 8, 0xE5AAC6, 0x35C` --
+     * class 0x160000f (ResNameProc), 8 objects, base id 0x35C. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_35C[9];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_35C -- the strings East_ResNameTable_35C points at: 9
+     * NUL-terminated names (0xFF pads to even length), 40 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_35C[40];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_3D7 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2667) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 24, 0xE5AB12, 0x3D7` --
+     * class 0x160000f (ResNameProc), 24 objects, base id 0x3D7. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_3D7[25];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_3D7 -- the strings East_ResNameTable_3D7 points at: 25
+     * NUL-terminated names (0xFF pads to even length), 144 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_3D7[144];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_3D8 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2669) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 8, 0xE5AC06, 0x3D8` --
+     * class 0x160000f (ResNameProc), 8 objects, base id 0x3D8. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_3D8[9];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_3D8 -- the strings East_ResNameTable_3D8 points at: 9
+     * NUL-terminated names (0xFF pads to even length), 48 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_3D8[48];
+    /* ---------------------------------------------------------------------
+     * East_ResNameTable_3EC -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2671) registers
+     * it with `RegObjTabl 0x160000f, ResNameProc, 6, 0xE5AC5A, 0x3EC` --
+     * class 0x160000f (ResNameProc), 6 objects, base id 0x3EC. Entries:
+     * pointers to resource-name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_ResNameTable_3EC[7];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_3EC -- the strings East_ResNameTable_3EC points at: 7
+     * NUL-terminated names (0xFF pads to even length), 26 bytes.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_3EC[26];
+    /* ---------------------------------------------------------------------
+     * East_ResNames_3EC_Strings -- 252 bytes of NUL-terminated strings after
+     * East_ResNames_3EC; no registration or code reference reaches them
+     * (searched: RegObjTabl tables, slice and positional labels). Which code
+     * uses them is not established.
+     * --------------------------------------------------------------------- */
+    char East_ResNames_3EC_Strings[252];
+    /* ---------------------------------------------------------------------
+     * East_MainFuncTable_143 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2628) registers
+     * it with `RegObjTabl 0x1600003, MainFunctionProc, 7, 0xE5AD8C, 0x143`
+     * -- class 0x1600003 (MainFunctionProc), 7 objects, base id 0x143.
+     * Entries: procedure addresses then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_MainFuncTable_143[8];
+    /* ---------------------------------------------------------------------
+     * East_MainFuncNameTable_443 -- object table: InitializeEast (v10/v9
+     * 0xF72BAC, v7 0xF727A8) (sequencer/seq_event_playback.s:2629) registers
+     * it with `RegObjTabl 0x1600003, MainFunctionProc, 7, 0xE5ADAC, 0x443`
+     * -- class 0x1600003 (MainFunctionProc), 7 objects, base id 0x443.
+     * Entries: pointers to the procedures' name strings then a ""
+     * terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t East_MainFuncNameTable_443[8];
+    /* ---------------------------------------------------------------------
+     * East_MainFuncNames_443 -- the strings East_MainFuncNameTable_443
+     * points at: 8 NUL-terminated names (0xFF pads to even length), 126
+     * bytes.
+     * --------------------------------------------------------------------- */
+    char East_MainFuncNames_443[126];
     /* ---------------------------------------------------------------------
      * Bitmap_SplitPoint_no_split  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
      *
@@ -878,1481 +815,1724 @@ typedef struct __attribute__((packed)) {
      * upright; a wrong width would shear it.
      * --------------------------------------------------------------------- */
     uint8_t Bitmap_Bmphk[120][100];
-    uint8_t bytes_24954[2];
-    uint16_t field_24956;
-    uint16_t field_24958;
-    uint16_t field_2495a;
-    uint16_t field_2495c;
-    uint16_t field_2495e;
-    uint32_t ptr_24960;
-    uint32_t ptr_24964;
-    char str_2244[10];
-    char str_2245[10];
-    uint32_t ptrs_325[3];  /* 3 pointers */
-    char str_2246[10];
-    char str_2247[10];
-    char str_2248[10];
-    uint8_t pad_2995[8];  /* zero padding */
-    uint16_t field_249ae;
-    uint16_t field_249b0;
-    uint16_t field_249b2;
-    uint16_t field_249b4;
-    uint16_t field_249b6;
-    uint16_t field_249b8;
-    uint16_t field_249ba;
-    uint16_t field_249bc;
-    uint16_t field_249be;
-    uint16_t field_249c0;
-    uint16_t field_249c2;
-    uint16_t field_249c4;
-    uint16_t field_249c6;
-    uint16_t field_249c8;
-    uint16_t field_249ca;
-    uint16_t field_249cc;
-    uint16_t field_249ce;
-    uint16_t field_249d0;
-    uint16_t field_249d2;
-    uint16_t field_249d4;
-    uint16_t field_249d6;
-    uint16_t field_249d8;
-    uint16_t field_249da;
-    uint16_t field_249dc;
-    char str_2249[2];
-    uint16_t field_249e0;
-    char str_2250[2];
-    uint16_t field_249e4;
-    uint16_t field_249e6;
-    uint16_t field_249e8;
-    uint16_t field_249ea;
-    uint32_t ptr_249ec;
-    uint32_t ptr_249f0;
-    char str_2251[6];
-    char str_2252[6];
-    uint32_t ptrs_326[12];  /* 12 pointers */
-    char str_2253[4];
-    char str_2254[6];
-    char str_2255[4];
-    char str_2256[6];
-    char str_2257[4];
-    char str_2258[6];
-    char str_2259[4];
-    char str_2260[4];
-    char str_2261[6];
-    char str_2262[4];
-    char str_2263[6];
-    char str_2264[4];
-    uint32_t ptrs_327[11];  /* 11 pointers */
-    char str_2265[4];
-    char str_2266[4];
-    char str_2267[4];
-    char str_2268[4];
-    char str_2269[4];
-    char str_2270[4];
-    char str_2271[4];
-    char str_2272[4];
-    char str_2273[4];
-    char str_2274[4];
-    char str_2275[4];
-    uint16_t field_24ac2;
-    uint16_t field_24ac4;
-    uint16_t field_24ac6;
-    uint16_t field_24ac8;
-    uint16_t field_24aca;
-    uint16_t field_24acc;
-    uint16_t field_24ace;
-    uint16_t field_24ad0;
-    uint16_t field_24ad2;
-    uint8_t pad_2996[2];  /* zero padding */
-    uint16_t field_24ad6;
-    uint8_t pad_2997[2];  /* zero padding */
-    uint16_t field_24ada;
-    uint8_t pad_2998[2];  /* zero padding */
-    uint16_t field_24ade;
-    uint8_t pad_2999[2];  /* zero padding */
-    uint16_t field_24ae2;
-    uint8_t pad_3000[2];  /* zero padding */
-    uint16_t field_24ae6;
-    uint8_t pad_3001[2];  /* zero padding */
-    uint16_t field_24aea;
-    uint8_t pad_3002[2];  /* zero padding */
-    uint16_t field_24aee;
-    uint8_t pad_3003[2];  /* zero padding */
-    uint16_t field_24af2;
-    uint8_t pad_3004[2];  /* zero padding */
-    uint16_t field_24af6;
-    uint8_t pad_3005[2];  /* zero padding */
-    uint16_t field_24afa;
-    uint8_t pad_3006[2];  /* zero padding */
-    uint16_t field_24afe;
-    uint8_t pad_3007[2];  /* zero padding */
-    uint16_t field_24b02;
-    uint16_t field_24b04;
-    uint16_t field_24b06;
-    uint16_t field_24b08;
-    uint16_t field_24b0a;
-    uint16_t field_24b0c;
-    uint16_t field_24b0e;
-    uint16_t field_24b10;
-    uint16_t field_24b12;
-    uint8_t pad_3008[2];  /* zero padding */
-    uint16_t field_24b16;
-    uint8_t pad_3009[2];  /* zero padding */
-    uint16_t field_24b1a;
-    uint8_t pad_3010[2];  /* zero padding */
-    uint16_t field_24b1e;
-    uint8_t pad_3011[34];  /* zero padding */
-    char str_2276[12];
-    char str_2277[12];
-    char str_2278[12];
-    char str_2279[12];
-    char str_2280[12];
-    char str_2281[12];
-    char str_2282[12];
-    char str_2283[12];
-    char w38_code[12];
-    char w38_name[12];
-    char str_2284[12];
-    char str_2285[12];
-    char str_2286[12];
-    char str_2287[8];
-    char str_2288[6];
-    char str_2289[6];
-    char str_2290[12];
-    char str_2291[12];
-    char str_2292[12];
-    char str_2293[12];
-    char str_2294[12];
-    char str_2295[12];
-    char str_2296[12];
-    char str_2297[12];
-    char w39_code[12];
-    char w39_name[12];
-    char str_2298[12];
-    char str_2299[12];
-    char str_2300[12];
-    char str_2301[8];
-    char str_2302[8];
-    char str_2303[6];
-    char str_2304[6];
-    uint8_t pad_3012[2];  /* zero padding */
-    uint16_t field_24cac;
-    char str_2305[2];
-    uint16_t field_24cb0;
-    uint16_t field_24cb2;
-    uint16_t field_24cb4;
-    uint16_t field_24cb6;
-    uint32_t ptr_24cb8;
-    uint16_t field_24cbc;
-    uint16_t field_24cbe;
-    uint16_t field_24cc0;
-    uint16_t field_24cc2;
-    uint16_t field_24cc4;
-    uint16_t field_24cc6;
-    uint16_t field_24cc8;
-    uint16_t field_24cca;
-    uint16_t field_24ccc;
-    uint16_t field_24cce;
-    uint16_t field_24cd0;
-    uint8_t pad_3013[2];  /* zero padding */
-    uint16_t field_24cd4;
-    char str_2306[2];
-    uint16_t field_24cd8;
-    char str_2307[2];
-    uint16_t field_24cdc;
-    uint16_t field_24cde;
-    uint16_t field_24ce0;
-    uint16_t field_24ce2;
-    uint16_t field_24ce4;
-    uint16_t field_24ce6;
-    uint16_t field_24ce8;
-    uint16_t field_24cea;
-    uint16_t field_24cec;
-    uint16_t field_24cee;
-    uint16_t field_24cf0;
-    uint16_t field_24cf2;
-    uint16_t field_24cf4;
-    uint16_t field_24cf6;
-    uint16_t field_24cf8;
-    uint8_t pad_3014[2];  /* zero padding */
-    char str_2308[2];
-    uint8_t pad_3015[2];  /* zero padding */
-    char str_2309[2];
-    uint16_t field_24d02;
-    uint16_t field_24d04;
-    uint16_t field_24d06;
-    uint8_t pad_3016[2];  /* zero padding */
-    uint16_t field_24d0a;
-    uint8_t pad_3017[2];  /* zero padding */
-    uint16_t field_24d0e;
-    uint8_t pad_3018[2];  /* zero padding */
-    uint16_t field_24d12;
-    uint32_t ptr_24d14;
-    char str_2310[24];
-    uint8_t pad_3019[14];  /* zero padding */
-    char str_2311[2];
-    uint8_t pad_3020[2];  /* zero padding */
-    char str_2312[2];
-    uint16_t field_24d44;
-    uint16_t field_24d46;
-    char w40_code[6];
-    char w40_name[6];
-    char str_2313[6];
-    uint32_t ptrs_328[6];  /* 6 pointers */
-    char str_2314[12];
-    char str_2315[12];
-    uint16_t field_24d8a;
-    uint16_t field_24d8c;
-    uint16_t field_24d8e;
-    uint16_t field_24d90;
-    char str_2316[4];
-    char str_2317[12];
-    char str_2318[10];
-    char str_2319[12];
-    char str_2320[92];
-    uint16_t field_24e14;
-    uint16_t field_24e16;
-    uint16_t field_24e18;
-    uint16_t field_24e1a;
-    uint16_t field_24e1c;
-    uint16_t field_24e1e;
-    uint16_t field_24e20;
-    uint16_t field_24e22;
-    uint16_t field_24e24;
-    uint16_t field_24e26;
-    uint16_t field_24e28;
-    uint16_t field_24e2a;
-    uint16_t field_24e2c;
-    uint16_t field_24e2e;
-    uint16_t field_24e30;
-    uint16_t field_24e32;
-    uint16_t field_24e34;
-    uint16_t field_24e36;
-    uint16_t field_24e38;
-    uint16_t field_24e3a;
-    uint16_t field_24e3c;
-    uint16_t field_24e3e;
-    uint16_t field_24e40;
-    uint16_t field_24e42;
-    uint16_t field_24e44;
-    uint16_t field_24e46;
-    uint16_t field_24e48;
-    uint16_t field_24e4a;
-    uint16_t field_24e4c;
-    uint16_t field_24e4e;
-    uint16_t field_24e50;
-    uint16_t field_24e52;
-    uint16_t field_24e54;
-    uint16_t field_24e56;
-    uint16_t field_24e58;
-    uint16_t field_24e5a;
-    uint16_t field_24e5c;
-    uint16_t field_24e5e;
-    uint16_t field_24e60;
-    uint16_t field_24e62;
-    uint16_t field_24e64;
-    uint16_t field_24e66;
-    uint16_t field_24e68;
-    uint16_t field_24e6a;
-    uint16_t field_24e6c;
-    uint16_t field_24e6e;
-    uint16_t field_24e70;
-    uint16_t field_24e72;
-    uint16_t field_24e74;
-    uint16_t field_24e76;
-    uint16_t field_24e78;
-    uint16_t field_24e7a;
-    char str_2321[6];
-    uint16_t field_24e82;
-    uint16_t field_24e84;
-    uint16_t field_24e86;
-    uint16_t field_24e88;
-    uint16_t field_24e8a;
-    uint16_t field_24e8c;
-    uint16_t field_24e8e;
-    uint16_t field_24e90;
-    uint16_t field_24e92;
-    uint16_t field_24e94;
-    uint16_t field_24e96;
-    uint16_t field_24e98;
-    uint16_t field_24e9a;
-    uint16_t field_24e9c;
-    uint16_t field_24e9e;
-    uint16_t field_24ea0;
-    uint16_t field_24ea2;
-    uint16_t field_24ea4;
-    uint16_t field_24ea6;
-    uint16_t field_24ea8;
-    uint16_t field_24eaa;
-    uint16_t field_24eac;
-    uint16_t field_24eae;
-    uint16_t field_24eb0;
-    uint16_t field_24eb2;
-    uint16_t field_24eb4;
-    uint16_t field_24eb6;
-    uint16_t field_24eb8;
-    uint16_t field_24eba;
-    uint16_t field_24ebc;
-    uint16_t field_24ebe;
-    uint16_t field_24ec0;
-    uint16_t field_24ec2;
-    uint16_t field_24ec4;
-    uint16_t field_24ec6;
-    uint16_t field_24ec8;
-    uint16_t field_24eca;
-    uint16_t field_24ecc;
-    uint16_t field_24ece;
-    uint16_t field_24ed0;
-    uint16_t field_24ed2;
-    uint16_t field_24ed4;
-    uint16_t field_24ed6;
-    char str_2322[22];
-    uint16_t field_24eee;
-    char str_2323[110];
-    char str_2324[82];
-    uint32_t ptrs_329[6];  /* 6 pointers */
-    char str_2325[106];
-    char str_2326[120];
-    uint16_t field_250aa;
-    uint16_t field_250ac;
-    uint16_t field_250ae;
-    uint16_t field_250b0;
-    uint16_t field_250b2;
-    uint16_t field_250b4;
-    uint16_t field_250b6;
-    uint16_t field_250b8;
-    uint16_t field_250ba;
-    uint16_t field_250bc;
-    uint16_t field_250be;
-    uint16_t field_250c0;
-    uint16_t field_250c2;
-    uint16_t field_250c4;
-    uint16_t field_250c6;
-    uint16_t field_250c8;
-    uint16_t field_250ca;
-    uint16_t field_250cc;
-    uint16_t field_250ce;
-    uint16_t field_250d0;
-    uint16_t field_250d2;
-    uint16_t field_250d4;
-    uint16_t field_250d6;
-    uint16_t field_250d8;
-    uint16_t field_250da;
-    uint16_t field_250dc;
-    uint16_t field_250de;
-    uint16_t field_250e0;
-    uint16_t field_250e2;
-    uint16_t field_250e4;
-    uint16_t field_250e6;
-    uint16_t field_250e8;
-    uint16_t field_250ea;
-    uint16_t field_250ec;
-    uint16_t field_250ee;
-    uint16_t field_250f0;
-    uint16_t field_250f2;
-    uint16_t field_250f4;
-    uint16_t field_250f6;
-    uint16_t field_250f8;
-    uint16_t field_250fa;
-    uint16_t field_250fc;
-    uint16_t field_250fe;
-    uint16_t field_25100;
-    uint16_t field_25102;
-    uint16_t field_25104;
-    uint16_t field_25106;
-    uint16_t field_25108;
-    char str_2327[16];
-    uint16_t field_2511a;
-    uint16_t field_2511c;
-    uint16_t field_2511e;
-    uint16_t field_25120;
-    uint16_t field_25122;
-    uint16_t field_25124;
-    uint16_t field_25126;
-    uint16_t field_25128;
-    uint16_t field_2512a;
-    uint16_t field_2512c;
-    uint16_t field_2512e;
-    uint16_t field_25130;
-    uint16_t field_25132;
-    uint16_t field_25134;
-    uint16_t field_25136;
-    uint16_t field_25138;
-    uint16_t field_2513a;
-    uint16_t field_2513c;
-    uint16_t field_2513e;
-    uint16_t field_25140;
-    uint16_t field_25142;
-    uint16_t field_25144;
-    uint16_t field_25146;
-    uint16_t field_25148;
-    uint16_t field_2514a;
-    uint16_t field_2514c;
-    uint16_t field_2514e;
-    uint16_t field_25150;
-    uint16_t field_25152;
-    uint16_t field_25154;
-    uint16_t field_25156;
-    uint16_t field_25158;
-    uint16_t field_2515a;
-    uint16_t field_2515c;
-    uint16_t field_2515e;
-    uint16_t field_25160;
-    uint16_t field_25162;
-    uint16_t field_25164;
-    uint16_t field_25166;
-    uint16_t field_25168;
-    uint16_t field_2516a;
-    uint16_t field_2516c;
-    uint16_t field_2516e;
-    uint16_t field_25170;
-    uint16_t field_25172;
-    uint16_t field_25174;
-    uint16_t field_25176;
-    uint16_t field_25178;
-    uint16_t field_2517a;
-    uint16_t field_2517c;
-    uint16_t field_2517e;
-    uint16_t field_25180;
-    uint16_t field_25182;
-    uint16_t field_25184;
-    uint16_t field_25186;
-    uint16_t field_25188;
-    uint16_t field_2518a;
-    uint16_t field_2518c;
-    uint16_t field_2518e;
-    uint16_t field_25190;
-    uint16_t field_25192;
-    uint16_t field_25194;
-    uint16_t field_25196;
-    char str_2328[8];
-    char str_2329[136];
-    uint32_t ptrs_330[12];  /* 12 pointers */
-    char str_2330[28];
-    char str_2331[14];
-    uint16_t field_25282;
-    uint16_t field_25284;
-    uint16_t field_25286;
-    char str_2332[8];
-    uint16_t field_25290;
-    uint16_t field_25292;
-    uint16_t field_25294;
-    uint16_t field_25296;
-    uint16_t field_25298;
-    uint16_t field_2529a;
-    char str_2333[4];
-    char str_2334[18];
-    char str_2335[14];
-    uint32_t ptrs_331[6];  /* 6 pointers */
-    char str_2336[40];
-    char str_2337[40];
-    char str_2338[40];
-    char str_2339[40];
-    char str_2340[58];
-    char str_2341[40];
-    uint32_t ptrs_332[12];  /* 12 pointers */
-    char str_2342[4];
-    char str_2343[6];
-    char str_2344[4];
-    char str_2345[6];
-    char str_2346[4];
-    char str_2347[6];
-    char str_2348[4];
-    char str_2349[4];
-    char str_2350[6];
-    char str_2351[4];
-    char str_2352[6];
-    char str_2353[4];
-    uint32_t ptrs_333[13];  /* 13 pointers */
-    uint16_t field_25478;
-    uint16_t field_2547a;
-    char str_2354[6];
-    char str_2355[6];
-    char str_2356[6];
-    char str_2357[6];
-    char str_2358[6];
-    char w41_code[6];
-    char w41_name[6];
-    uint16_t field_254a6;
-    char str_2359[2];
-    char str_2360[26];
-    char str_2361[26];
-    char str_2362[26];
-    char str_2363[26];
-    char str_2364[10];
-    char str_2365[10];
-    char str_2366[10];
-    char str_2367[10];
-    char str_2368[10];
-    char str_2369[10];
-    char str_2370[10];
-    char str_2371[10];
-    uint32_t ptrs_334[4];  /* 4 pointers */
-    char str_2372[6];
-    char str_2373[6];
-    char str_2374[6];
-    char str_2375[6];
-    char str_2376[2];
-    char str_2377[2];
-    char str_2378[2];
-    char str_2379[2];
-    char str_2380[2];
-    char str_2381[2];
-    char str_2382[2];
-    char str_2383[2];
-    char str_2384[2];
-    uint8_t pad_3021[2];  /* zero padding */
-    char w42_code[6];
-    char w42_name[6];
-    uint16_t field_255aa;
-    uint16_t field_255ac;
-    uint16_t field_255ae;
-    uint16_t field_255b0;
-    uint16_t field_255b2;
-    uint16_t field_255b4;
-    uint16_t field_255b6;
-    uint16_t field_255b8;
-    uint16_t field_255ba;
-    uint16_t field_255bc;
-    uint16_t field_255be;
-    uint16_t field_255c0;
-    uint16_t field_255c2;
-    uint16_t field_255c4;
-    char str_2385[2];
-    uint16_t field_255c8;
-    char str_2386[2];
-    uint16_t field_255cc;
-    uint16_t field_255ce;
-    uint16_t field_255d0;
-    uint16_t field_255d2;
-    uint16_t field_255d4;
-    uint16_t field_255d6;
-    uint16_t field_255d8;
-    uint8_t pad_3022[2];  /* zero padding */
-    uint16_t field_255dc;
-    uint16_t field_255de;
-    uint16_t field_255e0;
-    uint8_t pad_3023[2];  /* zero padding */
-    uint16_t field_255e4;
-    uint8_t pad_3024[2];  /* zero padding */
-    uint16_t field_255e8;
-    uint8_t pad_3025[2];  /* zero padding */
-    uint16_t field_255ec;
-    uint8_t pad_3026[18];  /* zero padding */
-    char str_2387[14];
-    char str_2388[6];
-    char str_2389[6];
-    char str_2390[14];
-    char str_2391[6];
-    char str_2392[6];
-    uint8_t pad_3027[2];  /* zero padding */
-    char str_2393[2];
-    uint8_t pad_3028[2];  /* zero padding */
-    char str_2394[2];
-    uint16_t field_2563c;
-    uint16_t field_2563e;
-    uint16_t field_25640;
-    uint16_t field_25642;
-    uint16_t field_25644;
-    uint16_t field_25646;
-    uint16_t field_25648;
-    uint16_t field_2564a;
-    uint16_t field_2564c;
-    uint16_t field_2564e;
-    uint16_t field_25650;
-    uint16_t field_25652;
-    uint16_t field_25654;
-    uint16_t field_25656;
-    uint16_t field_25658;
-    uint16_t field_2565a;
-    uint16_t field_2565c;
-    uint16_t field_2565e;
-    uint16_t field_25660;
-    uint16_t field_25662;
-    uint16_t field_25664;
-    uint16_t field_25666;
-    uint16_t field_25668;
-    uint16_t field_2566a;
-    uint16_t field_2566c;
-    uint16_t field_2566e;
-    uint16_t field_25670;
-    uint16_t field_25672;
-    uint16_t field_25674;
-    uint16_t field_25676;
-    uint16_t field_25678;
-    uint16_t field_2567a;
-    uint16_t field_2567c;
-    uint16_t field_2567e;
-    uint16_t field_25680;
-    uint16_t field_25682;
-    uint16_t field_25684;
-    uint16_t field_25686;
-    uint16_t field_25688;
-    char str_2395[186];
-    char str_2396[210];
-    char str_2397[210];
-    char str_2398[2];
-    uint16_t field_258ea;
-    char str_2399[2];
-    uint16_t field_258ee;
-    uint16_t field_258f0;
-    uint16_t field_258f2;
-    uint16_t field_258f4;
-    uint32_t ptr_258f6;
-    uint32_t ptr_258fa;
-    char str_2400[6];
-    char str_2401[6];
-    uint32_t ptr_2590a;
-    uint32_t ptr_2590e;
-    char str_2402[10];
-    char str_2403[10];
-    uint32_t ptrs_335[3];  /* 3 pointers */
-    char str_2404[10];
-    char str_2405[10];
-    char str_2406[10];
-    uint8_t pad_3029[16];  /* zero padding */
-    char str_2407[6];
-    char str_2408[6];
-    char str_2409[6];
-    char str_2410[6];
-    char str_2411[6];
-    char str_2412[6];
-    char str_2413[6];
-    char str_2414[6];
-    char str_2415[6];
-    char str_2416[6];
-    uint8_t pad_3030[2];  /* zero padding */
-    char str_2417[2];
-    char str_2418[2];
-    uint16_t field_259a2;
-    uint16_t field_259a4;
-    uint16_t field_259a6;
-    uint16_t field_259a8;
-    uint16_t field_259aa;
-    uint16_t field_259ac;
-    uint8_t pad_3031[2];  /* zero padding */
-    uint16_t field_259b0;
-    uint16_t field_259b2;
-    char str_2419[2];
-    uint16_t field_259b6;
-    char str_2420[2];
-    char str_2421[2];
-    char str_2422[2];
-    char str_2423[2];
-    uint8_t pad_3032[2];  /* zero padding */
-    uint16_t field_259c2;
-    uint16_t field_259c4;
-    char str_2424[2];
-    uint16_t field_259c8;
-    char str_2425[2];
-    char str_2426[2];
-    char str_2427[2];
-    char str_2428[2];
-    uint8_t pad_3033[2];  /* zero padding */
-    uint16_t field_259d4;
-    uint8_t pad_3034[2];  /* zero padding */
-    uint16_t field_259d8;
-    uint16_t field_259da;
-    uint16_t field_259dc;
-    uint16_t field_259de;
-    char str_2429[6];
-    uint16_t field_259e6;
-    uint16_t field_259e8;
-    uint16_t field_259ea;
-    char str_2430[2];
-    char str_2431[2];
-    char str_2432[2];
-    char str_2433[2];
-    char str_2434[2];
-    char str_2435[2];
-    char str_2436[2];
-    char str_2437[2];
-    char str_2438[2];
-    uint8_t pad_3035[2];  /* zero padding */
-    uint32_t ptrs_336[4];  /* 4 pointers */
-    char str_2439[10];
-    char str_2440[10];
-    char str_2441[10];
-    char str_2442[10];
-    uint16_t field_25a38;
-    uint16_t field_25a3a;
-    char str_2443[2];
-    char str_2444[2];
-    char str_2445[2];
-    char str_2446[2];
-    char str_2447[2];
-    char str_2448[2];
-    uint16_t field_25a48;
-    uint8_t pad_3036[2];  /* zero padding */
-    uint16_t field_25a4c;
-    uint16_t field_25a4e;
-    char str_2449[2];
-    char str_2450[2];
-    char str_2451[2];
-    char str_2452[2];
-    char str_2453[2];
-    char str_2454[2];
-    uint16_t field_25a5c;
-    uint8_t pad_3037[2];  /* zero padding */
-    uint16_t field_25a60;
-    uint16_t field_25a62;
-    char str_2455[2];
-    char str_2456[2];
-    char str_2457[2];
-    char str_2458[2];
-    char str_2459[2];
-    char str_2460[2];
-    uint16_t field_25a70;
-    uint8_t pad_3038[2];  /* zero padding */
-    uint16_t field_25a74;
-    uint16_t field_25a76;
-    char str_2461[2];
-    char str_2462[2];
-    char str_2463[2];
-    char str_2464[2];
-    char str_2465[2];
-    char str_2466[2];
-    uint16_t field_25a84;
-    uint8_t pad_3039[2];  /* zero padding */
-    uint16_t field_25a88;
-    uint16_t field_25a8a;
-    char str_2467[2];
-    char str_2468[2];
-    char str_2469[2];
-    char str_2470[2];
-    char str_2471[2];
-    char str_2472[2];
-    uint16_t field_25a98;
-    uint8_t pad_3040[4];  /* zero padding */
-    char str_2473[2];
-    char str_2474[2];
-    char str_2475[2];
-    char str_2476[2];
-    uint16_t field_25aa6;
-    uint16_t field_25aa8;
-    uint16_t field_25aaa;
-    uint32_t ptr_25aac;
-    uint16_t field_25ab0;
-    uint32_t ptr_25ab2;
-    uint8_t pad_3041[2];  /* zero padding */
-    char str_2477[2];
-    char str_2478[2];
-    char str_2479[2];
-    char str_2480[2];
-    uint16_t field_25ac0;
-    uint16_t field_25ac2;
-    uint16_t field_25ac4;
-    uint32_t ptr_25ac6;
-    uint16_t field_25aca;
-    uint32_t ptr_25acc;
-    uint16_t field_25ad0;
-    uint16_t field_25ad2;
-    uint16_t field_25ad4;
-    uint16_t field_25ad6;
-    uint16_t field_25ad8;
-    uint16_t field_25ada;
-    uint16_t field_25adc;
-    uint16_t field_25ade;
-    uint16_t field_25ae0;
-    uint16_t field_25ae2;
-    uint16_t field_25ae4;
-    uint16_t field_25ae6;
-    uint16_t field_25ae8;
-    uint16_t field_25aea;
-    uint16_t field_25aec;
-    uint16_t field_25aee;
-    uint16_t field_25af0;
-    uint16_t field_25af2;
-    uint16_t field_25af4;
-    uint16_t field_25af6;
-    uint16_t field_25af8;
-    uint16_t field_25afa;
-    uint16_t field_25afc;
-    uint16_t field_25afe;
-    uint16_t field_25b00;
-    uint8_t pad_3042[4];  /* zero padding */
-    uint32_t ptr_25b06;
-    uint8_t pad_3043[6];  /* zero padding */
-    uint16_t field_25b10;
-    uint8_t pad_3044[6];  /* zero padding */
-    uint32_t ptr_25b18;
-    uint32_t ptr_25b1c;
-    char str_2481[6];
-    char str_2482[6];
-    uint32_t ptrs_337[4];  /* 4 pointers */
-    char str_2483[10];
-    char str_2484[10];
-    char str_2485[10];
-    char str_2486[10];
-    uint8_t pad_3045[18];  /* zero padding */
-    uint16_t field_25b76;
-    uint8_t pad_3046[2];  /* zero padding */
-    uint16_t field_25b7a;
-    uint16_t field_25b7c;
-    uint16_t field_25b7e;
-    uint16_t field_25b80;
-    char str_2487[2];
-    uint16_t field_25b84;
-    char str_2488[2];
-    uint16_t field_25b88;
-    uint16_t field_25b8a;
-    uint16_t field_25b8c;
-    uint16_t field_25b8e;
-    uint8_t pad_3047[4];  /* zero padding */
-    uint32_t ptr_25b94;
-    uint8_t pad_3048[6];  /* zero padding */
-    uint16_t field_25b9e;
-    uint8_t pad_3049[16];  /* zero padding */
-    char str_2489[6];
-    char str_2490[6];
-    char str_2491[6];
-    char str_2492[8];
-    char str_2493[6];
-    char str_2494[8];
-    char str_2495[6];
-    char str_2496[6];
-    char str_2497[8];
-    char str_2498[6];
-    char str_2499[6];
-    char str_2500[8];
-    char str_2501[6];
-    char str_2502[6];
-    char str_2503[6];
-    char str_2504[8];
-    char str_2505[6];
-    char str_2506[8];
-    char str_2507[6];
-    char str_2508[6];
-    char str_2509[8];
-    char str_2510[6];
-    char str_2511[6];
-    char str_2512[8];
-    uint8_t pad_3050[2];  /* zero padding */
-    uint16_t field_25c52;
-    uint8_t pad_3051[2];  /* zero padding */
-    uint16_t field_25c56;
-    uint16_t field_25c58;
-    uint16_t field_25c5a;
-    uint16_t field_25c5c;
-    uint16_t field_25c5e;
-    uint16_t field_25c60;
-    uint16_t field_25c62;
-    uint16_t field_25c64;
-    uint16_t field_25c66;
-    uint16_t field_25c68;
-    uint16_t field_25c6a;
-    uint16_t field_25c6c;
-    uint8_t pad_3052[10];  /* zero padding */
-    uint16_t field_25c78;
-    uint8_t pad_3053[2];  /* zero padding */
-    uint16_t field_25c7c;
-    uint8_t pad_3054[2];  /* zero padding */
-    uint16_t field_25c80;
-    uint8_t pad_3055[2];  /* zero padding */
-    uint16_t field_25c84;
-    uint16_t field_25c86;
-    uint16_t field_25c88;
-    uint16_t field_25c8a;
-    uint16_t field_25c8c;
-    uint8_t pad_3056[2];  /* zero padding */
-    uint16_t field_25c90;
-    uint8_t pad_3057[2];  /* zero padding */
-    uint16_t field_25c94;
-    uint8_t pad_3058[2];  /* zero padding */
-    uint16_t field_25c98;
-    uint8_t pad_3059[12];  /* zero padding */
-    char str_2513[6];
-    char str_2514[6];
-    char str_2515[10];
-    char str_2516[10];
-    char str_2517[10];
-    char str_2518[10];
-    char str_2519[10];
-    char str_2520[6];
-    char str_2521[6];
-    char str_2522[10];
-    char str_2523[10];
-    char str_2524[10];
-    char str_2525[10];
-    char str_2526[10];
-    uint8_t pad_3060[2];  /* zero padding */
-    char str_2527[2];
-    uint8_t pad_3061[2];  /* zero padding */
-    char str_2528[2];
-    uint32_t ptr_25d2a;
-    uint16_t field_25d2e;
-    uint16_t field_25d30;
-    uint16_t field_25d32;
-    uint16_t field_25d34;
-    uint16_t field_25d36;
-    uint16_t field_25d38;
-    uint16_t field_25d3a;
-    uint16_t field_25d3c;
-    char str_2529[2];
-    char str_2530[2];
-    char str_2531[2];
-    char str_2532[2];
-    uint16_t field_25d46;
-    uint16_t field_25d48;
-    uint16_t field_25d4a;
-    uint32_t ptrs_338[3];  /* 3 pointers */
-    char str_2533[8];
-    char str_2534[8];
-    char str_2535[8];
-    uint8_t pad_3062[4];  /* zero padding */
-    uint16_t field_25d74;
-    uint16_t field_25d76;
-    uint8_t pad_3063[6];  /* zero padding */
-    uint16_t field_25d7e;
-    uint8_t pad_3064[22];  /* zero padding */
-    char str_2536[10];
-    char str_2537[6];
-    char str_2538[6];
-    char str_2539[6];
-    char str_2540[6];
-    char str_2541[6];
-    char str_2542[6];
-    char str_2543[6];
-    char str_2544[6];
-    char str_2545[6];
-    char str_2546[6];
-    char str_2547[6];
-    char str_2548[6];
-    char str_2549[6];
-    char str_2550[6];
-    char str_2551[6];
-    char str_2552[6];
-    char str_2553[6];
-    char str_2554[6];
-    char str_2555[6];
-    char str_2556[10];
-    char str_2557[6];
-    char str_2558[6];
-    uint8_t pad_3065[2];  /* zero padding */
-    uint16_t field_25e2a;
-    uint8_t pad_3066[2];  /* zero padding */
-    uint16_t field_25e2e;
-    uint16_t field_25e30;
-    uint16_t field_25e32;
-    uint16_t field_25e34;
-    uint8_t pad_3067[4];  /* zero padding */
-    uint16_t field_25e3a;
-    uint16_t field_25e3c;
-    uint8_t pad_3068[6];  /* zero padding */
-    uint16_t field_25e44;
-    uint8_t pad_3069[22];  /* zero padding */
-    char str_2559[6];
-    char str_2560[6];
-    char str_2561[6];
-    char str_2562[6];
-    char str_2563[6];
-    char str_2564[6];
-    char str_2565[6];
-    char str_2566[6];
-    char str_2567[6];
-    char str_2568[6];
-    char str_2569[6];
-    char str_2570[6];
-    char str_2571[6];
-    char str_2572[6];
-    char str_2573[6];
-    char str_2574[6];
-    char str_2575[6];
-    char str_2576[6];
-    char str_2577[6];
-    char str_2578[6];
-    uint8_t pad_3070[2];  /* zero padding */
-    uint16_t field_25ed6;
-    uint8_t pad_3071[2];  /* zero padding */
-    uint16_t field_25eda;
-    uint16_t field_25edc;
-    uint16_t field_25ede;
-    uint16_t field_25ee0;
-    uint16_t field_25ee2;
-    uint8_t pad_3072[16];  /* zero padding */
-    char str_2579[124];
-    char str_2580[106];
-    uint16_t field_25fda;
-    uint16_t field_25fdc;
-    uint16_t field_25fde;
-    uint16_t field_25fe0;
-    uint16_t field_25fe2;
-    uint16_t field_25fe4;
-    uint16_t field_25fe6;
-    uint16_t field_25fe8;
-    uint16_t field_25fea;
-    uint16_t field_25fec;
-    uint16_t field_25fee;
-    uint16_t field_25ff0;
-    uint8_t pad_3073[2];  /* zero padding */
-    uint16_t field_25ff4;
-    uint8_t pad_3074[2];  /* zero padding */
-    uint16_t field_25ff8;
-    uint8_t pad_3075[2];  /* zero padding */
-    uint16_t field_25ffc;
-    uint8_t pad_3076[2];  /* zero padding */
-    uint16_t field_26000;
-    uint8_t pad_3077[2];  /* zero padding */
-    uint16_t field_26004;
-    uint8_t pad_3078[2];  /* zero padding */
-    uint16_t field_26008;
-    uint8_t pad_3079[2];  /* zero padding */
-    uint16_t field_2600c;
-    uint16_t field_2600e;
-    uint16_t field_26010;
-    uint16_t field_26012;
-    uint16_t field_26014;
-    uint8_t pad_3080[2];  /* zero padding */
-    uint16_t field_26018;
-    uint8_t pad_3081[2];  /* zero padding */
-    uint16_t field_2601c;
-    uint8_t pad_3082[2];  /* zero padding */
-    uint16_t field_26020;
-    uint8_t pad_3083[2];  /* zero padding */
-    uint16_t field_26024;
-    uint8_t pad_3084[2];  /* zero padding */
-    uint16_t field_26028;
-    uint8_t pad_3085[2];  /* zero padding */
-    uint16_t field_2602c;
-    uint16_t field_2602e;
-    uint8_t pad_3086[10];  /* zero padding */
-    char str_2581[6];
-    char str_2582[6];
-    char str_2583[6];
-    char str_2584[6];
-    uint8_t pad_3087[2];  /* zero padding */
-    char str_2585[2];
-    uint8_t pad_3088[2];  /* zero padding */
-    char str_2586[2];
-    uint16_t field_2605a;
-    uint16_t field_2605c;
-    uint16_t field_2605e;
-    uint8_t pad_3089[3];  /* zero padding */
-    uint16_t field_26063;
-    uint16_t field_26065;
-    uint16_t field_26067;
-    uint16_t field_26069;
-    uint16_t field_2606b;
-    uint16_t field_2606d;
-    uint16_t field_2606f;
-    uint16_t field_26071;
-    uint16_t field_26073;
-    uint16_t field_26075;
-    uint16_t field_26077;
-    uint16_t field_26079;
-    uint16_t field_2607b;
-    uint16_t field_2607d;
-    uint16_t field_2607f;
-    uint16_t field_26081;
-    uint16_t field_26083;
-    uint16_t field_26085;
-    uint16_t field_26087;
-    uint16_t field_26089;
-    uint16_t field_2608b;
-    uint16_t field_2608d;
-    uint16_t field_2608f;
-    uint16_t field_26091;
-    uint16_t field_26093;
-    uint16_t field_26095;
-    uint16_t field_26097;
-    uint16_t field_26099;
-    uint16_t field_2609b;
-    uint16_t field_2609d;
-    uint16_t field_2609f;
-    uint16_t field_260a1;
-    uint16_t field_260a3;
-    uint32_t ptrs_339[4];  /* 4 pointers */
-    uint8_t pad_3090[3];  /* zero padding */
-    char str_2587[60];
-    char str_2588[66];
-    char str_2589[62];
-    uint16_t field_26174;
-    uint16_t field_26176;
-    uint16_t field_26178;
-    uint16_t field_2617a;
-    uint16_t field_2617c;
-    uint16_t field_2617e;
-    uint16_t field_26180;
-    uint16_t field_26182;
-    uint16_t field_26184;
-    uint16_t field_26186;
-    uint16_t field_26188;
-    uint16_t field_2618a;
-    uint16_t field_2618c;
-    uint16_t field_2618e;
-    uint16_t field_26190;
-    uint16_t field_26192;
-    uint16_t field_26194;
-    uint16_t field_26196;
-    uint16_t field_26198;
-    uint16_t field_2619a;
-    uint16_t field_2619c;
-    uint16_t field_2619e;
-    uint16_t field_261a0;
-    uint16_t field_261a2;
-    uint16_t field_261a4;
-    uint16_t field_261a6;
-    uint16_t field_261a8;
-    uint16_t field_261aa;
-    uint16_t field_261ac;
-    uint16_t field_261ae;
-    uint16_t field_261b0;
-    uint16_t field_261b2;
-    uint16_t field_261b4;
-    uint16_t field_261b6;
-    uint16_t field_261b8;
-    uint16_t field_261ba;
-    uint16_t field_261bc;
-    uint16_t field_261be;
-    uint16_t field_261c0;
-    uint16_t field_261c2;
-    uint16_t field_261c4;
-    uint16_t field_261c6;
-    uint16_t field_261c8;
-    uint16_t field_261ca;
-    uint16_t field_261cc;
-    uint16_t field_261ce;
-    uint16_t field_261d0;
-    uint16_t field_261d2;
-    uint16_t field_261d4;
-    uint16_t field_261d6;
-    uint16_t field_261d8;
-    uint16_t field_261da;
-    uint16_t field_261dc;
-    uint16_t field_261de;
-    uint16_t field_261e0;
-    uint16_t field_261e2;
-    uint16_t field_261e4;
-    uint16_t field_261e6;
-    uint16_t field_261e8;
-    uint16_t field_261ea;
-    uint16_t field_261ec;
-    uint16_t field_261ee;
-    uint16_t field_261f0;
-    uint16_t field_261f2;
-    uint16_t field_261f4;
-    uint16_t field_261f6;
-    uint16_t field_261f8;
-    uint16_t field_261fa;
-    uint16_t field_261fc;
-    uint16_t field_261fe;
-    uint16_t field_26200;
-    uint16_t field_26202;
-    uint16_t field_26204;
-    uint16_t field_26206;
-    uint16_t field_26208;
-    uint16_t field_2620a;
-    uint16_t field_2620c;
-    uint16_t field_2620e;
-    uint16_t field_26210;
-    uint16_t field_26212;
-    uint16_t field_26214;
-    uint16_t field_26216;
-    uint16_t field_26218;
-    uint16_t field_2621a;
-    uint16_t field_2621c;
-    uint16_t field_2621e;
-    uint16_t field_26220;
-    uint16_t field_26222;
-    uint16_t field_26224;
-    uint16_t field_26226;
-    uint16_t field_26228;
-    uint16_t field_2622a;
-    uint16_t field_2622c;
-    uint16_t field_2622e;
-    uint16_t field_26230;
-    uint16_t field_26232;
-    uint16_t field_26234;
-    uint16_t field_26236;
-    uint16_t field_26238;
-    uint16_t field_2623a;
-    uint16_t field_2623c;
-    uint16_t field_2623e;
-    uint16_t field_26240;
-    uint16_t field_26242;
-    uint16_t field_26244;
-    uint16_t field_26246;
-    uint16_t field_26248;
-    uint16_t field_2624a;
-    uint16_t field_2624c;
-    uint16_t field_2624e;
-    uint16_t field_26250;
-    uint16_t field_26252;
-    uint16_t field_26254;
-    uint16_t field_26256;
-    uint16_t field_26258;
-    uint16_t field_2625a;
-    uint16_t field_2625c;
-    uint16_t field_2625e;
-    uint16_t field_26260;
-    uint16_t field_26262;
-    uint16_t field_26264;
-    uint16_t field_26266;
-    uint16_t field_26268;
-    uint16_t field_2626a;
-    uint16_t field_2626c;
-    uint16_t field_2626e;
-    uint16_t field_26270;
-    uint16_t field_26272;
-    uint16_t field_26274;
-    uint16_t field_26276;
-    uint16_t field_26278;
-    uint16_t field_2627a;
-    uint16_t field_2627c;
-    uint16_t field_2627e;
-    uint16_t field_26280;
-    uint16_t field_26282;
-    uint16_t field_26284;
-    uint16_t field_26286;
-    uint16_t field_26288;
-    uint16_t field_2628a;
-    uint16_t field_2628c;
-    uint16_t field_2628e;
-    uint16_t field_26290;
-    uint16_t field_26292;
-    uint16_t field_26294;
-    uint16_t field_26296;
-    uint16_t field_26298;
-    uint16_t field_2629a;
-    uint16_t field_2629c;
-    uint16_t field_2629e;
-    uint16_t field_262a0;
-    uint16_t field_262a2;
-    uint16_t field_262a4;
-    uint16_t field_262a6;
-    uint16_t field_262a8;
-    uint8_t pad_3091[2];  /* zero padding */
-    uint16_t field_262ac;
-    uint16_t field_262ae;
-    uint8_t pad_3092[2];  /* zero padding */
-    uint16_t field_262b2;
-    uint8_t pad_3093[2];  /* zero padding */
-    uint16_t field_262b6;
-    uint16_t field_262b8;
-    uint8_t pad_3094[2];  /* zero padding */
-    uint16_t field_262bc;
-    uint16_t field_262be;
-    uint16_t field_262c0;
-    uint32_t ptrs_340[8];  /* 8 pointers */
-    char str_2590[6];
-    char str_2591[6];
-    char w43_code[6];
-    char w43_name[6];
-    char str_2592[6];
-    char str_2593[6];
-    char str_2594[6];
-    char str_2595[6];
-    uint8_t pad_3095[10];  /* zero padding */
-    char str_2596[6];
-    char str_2597[8];
-    char str_2598[6];
-    char str_2599[8];
-    char str_2600[6];
-    char str_2601[6];
-    char str_2602[6];
-    char str_2603[8];
-    char str_2604[6];
-    char str_2605[6];
-    uint8_t pad_3096[2];  /* zero padding */
-    uint16_t field_26360;
-    uint8_t pad_3097[2];  /* zero padding */
-    uint16_t field_26364;
-    uint16_t field_26366;
-    uint16_t field_26368;
-    uint16_t field_2636a;
-    uint32_t ptrs_341[90];  /* 90 pointers */
-    char str_2606[2];
-    char w44_code[10];
-    char w44_name[14];
-    char str_2607[16];
-    char str_2608[14];
-    char w45_code[10];
-    char w45_name[14];
-    char str_2609[16];
-    char str_2610[14];
-    char str_2611[14];
-    char str_2612[14];
-    char str_2613[16];
-    char str_2614[16];
-    char str_2615[16];
-    char str_2616[16];
-    char w46_code[12];
-    char w46_name[16];
-    char str_2617[18];
-    char str_2618[16];
-    char str_2619[16];
-    char str_2620[16];
-    char str_2621[16];
-    char str_2622[16];
-    char str_2623[12];
-    char str_2624[14];
-    char str_2625[14];
-    char str_2626[14];
-    char w47_code[8];
-    char w47_name[12];
-    char str_2627[14];
-    char str_2628[14];
-    char str_2629[16];
-    char str_2630[14];
-    char str_2631[14];
-    char w48_code[10];
-    char w48_name[12];
-    char str_2632[18];
-    char w49_code[12];
-    char w49_name[18];
-    char str_2633[14];
-    char w50_code[10];
-    char w50_name[8];
-    char w51_code[10];
-    char w51_name[12];
-    char str_2634[10];
-    uint32_t ptr_26734;
-    char str_2635[2];
-    uint32_t ptrs_342[3];  /* 3 pointers */
-    char str_2636[2];
-    char str_2637[6];
-    char str_2638[6];
-    uint32_t ptrs_343[4];  /* 4 pointers */
-    char str_2639[2];
-    char str_2640[6];
-    char str_2641[6];
-    char str_2642[6];
-    uint32_t ptr_26778;
-    char str_2643[2];
-    uint32_t ptr_2677e;
-    char str_2644[2];
-    uint32_t ptr_26784;
-    char str_2645[2];
-    uint32_t ptrs_344[3];  /* 3 pointers */
-    char str_2646[2];
-    char str_2647[6];
-    char str_2648[6];
-    uint32_t ptrs_345[7];  /* 7 pointers */
-    char str_2649[2];
-    char str_2650[10];
-    char str_2651[10];
-    char str_2652[6];
-    char str_2653[10];
-    char str_2654[6];
-    char str_2655[4];
-    uint32_t ptr_267f0;
-    char str_2656[2];
-    uint32_t ptr_267f6;
-    char str_2657[2];
-    uint32_t ptr_267fc;
-    char str_2658[2];
-    uint32_t ptr_26802;
-    char str_2659[2];
-    uint32_t ptr_26808;
-    char str_2660[2];
-    uint32_t ptr_2680e;
-    char str_2661[2];
-    uint32_t ptr_26814;
-    char str_2662[2];
-    uint32_t ptr_2681a;
-    char str_2663[2];
-    uint32_t ptrs_346[3];  /* 3 pointers */
-    char str_2664[2];
-    char str_2665[8];
-    char str_2666[6];
-    uint32_t ptr_2683c;
-    char str_2667[2];
-    uint32_t ptr_26842;
-    char str_2668[2];
-    uint32_t ptr_26848;
-    char str_2669[2];
-    uint32_t ptr_2684e;
-    char str_2670[2];
-    uint32_t ptr_26854;
-    char str_2671[2];
-    uint32_t ptr_2685a;
-    char str_2672[2];
-    uint32_t ptrs_347[6];  /* 6 pointers */
-    char str_2673[2];
-    char str_2674[10];
-    char str_2675[8];
-    char str_2676[6];
-    char str_2677[10];
-    char str_2678[6];
-    uint32_t ptr_268a2;
-    char str_2679[2];
-    uint32_t ptr_268a8;
-    char str_2680[2];
-    uint32_t ptr_268ae;
-    char str_2681[2];
-    uint32_t ptr_268b4;
-    char str_2682[2];
-    uint32_t ptrs_348[3];  /* 3 pointers */
-    char str_2683[2];
-    char str_2684[6];
-    char str_2685[6];
-    uint32_t ptrs_349[5];  /* 5 pointers */
-    char str_2686[2];
-    char str_2687[6];
-    char str_2688[10];
-    char str_2689[8];
-    char str_2690[4];
-    uint32_t ptr_26906;
-    char str_2691[2];
-    uint32_t ptr_2690c;
-    char str_2692[2];
-    uint32_t ptr_26912;
-    char str_2693[2];
-    uint32_t ptr_26918;
-    char str_2694[2];
-    uint32_t ptrs_350[3];  /* 3 pointers */
-    char str_2695[2];
-    char str_2696[4];
-    char str_2697[6];
-    uint32_t ptrs_351[3];  /* 3 pointers */
-    char str_2698[2];
-    char str_2699[8];
-    char str_2700[6];
-    uint32_t ptr_26952;
-    char str_2701[2];
-    uint32_t ptr_26958;
-    naka_dispatch_t w52;  /* 0x27 */
-    naka_dispatch_t w53;  /* 0x15 */
-    naka_dispatch_t w54;  /* 0x15 */
-    naka_dispatch_t w55;  /* 0x27 */
-    naka_dispatch_t w56;  /* 0x27 */
-    naka_dispatch_t w57;  /* 0x27 */
-    naka_dispatch_t w58;  /* 0x4E */
-    naka_dispatch_t w59;  /* 0x11 */
-    naka_dispatch_t w60;  /* 0x27 */
-    naka_dispatch_t w61;  /* 0x27 */
-    naka_dispatch_t w62;  /* 0x27 */
-    naka_dispatch_t w63;  /* 0x33 */
-    naka_dispatch_t w64;  /* 0x12 */
-    uint16_t field_26a94;
-    uint16_t field_26a96;
-    char str_2702[2];
-    uint8_t pad_3098[2];  /* zero padding */
-    uint32_t ptrs_352[4];  /* 4 pointers */
-    uint16_t field_26aac;
-    uint16_t field_26aae;
-    char str_2703[2];
-    uint8_t pad_3099[2];  /* zero padding */
-    uint32_t ptrs_353[4];  /* 4 pointers */
-    naka_dispatch_t w65;  /* 0x27 */
-    naka_dispatch_t w66;  /* 0x27 */
-    naka_dispatch_t w67;  /* 0x27 */
-    naka_dispatch_t w68;  /* 0x27 */
-    naka_dispatch_t w69;  /* 0x27 */
-    naka_dispatch_t w70;  /* 0x27 */
-    naka_dispatch_t w71;  /* 0x27 */
-    naka_dispatch_t w72;  /* 0x25 */
-    naka_dispatch_t w73;  /* 0x11 */
-    naka_dispatch_t w74;  /* 0x35 */
-    naka_dispatch_t w75;  /* 0x27 */
-    naka_dispatch_t w76;  /* 0x27 */
-    uint16_t field_26be4;
-    uint16_t field_26be6;
-    char str_2704[2];
-    uint8_t pad_3100[2];  /* zero padding */
-    uint32_t ptrs_354[4];  /* 4 pointers */
-    naka_dispatch_t w77;  /* 0x11 */
-    naka_dispatch_t w78;  /* 0x12 */
-    naka_dispatch_t w79;  /* 0x69 */
+    /* ---------------------------------------------------------------------
+     * [typed] by span_t2b
+     * MidiPart_PageDisplay_Data -- read by AcCtlMsgGrid_Show (v10/v9
+     * 0xF79BD8, v7 0xF797D4) (`ld xwa, MidiPart_PageDisplay_Data`),
+     * MidiSetup_TtlCase4 (v10/v9 0xF7A2F0, v7 0xF79EEC) (`ld xwa,
+     * MidiPart_PageDisplay_Data`). 8 bytes to the next object; the layout
+     * beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiPart_PageDisplay_Data[8];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGrid_Show_Table -- read by AcCtlMsgGrid_Show (v10/v9 0xF79BD8,
+     * v7 0xF797D4) (`ld xbc, MidiPart_PageDisplay_Data_0x8`),
+     * MidiSetup_TtlCase4 (v10/v9 0xF7A2F0, v7 0xF79EEC) (`ld xbc,
+     * MidiPart_PageDisplay_Data_0x8`). 4 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcCtlMsgGrid_Show_Table[4];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGrid_Show_PtrTable -- 2 u32 addresses, read by
+     * AcCtlMsgGrid_Show (v10/v9 0xF79BD8, v7 0xF797D4) (`lda xbc,
+     * (MidiPart_PageDisplay_Data_0xC:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t AcCtlMsgGrid_Show_PtrTable[2];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGrid_Show_Strings -- the 2 strings AcCtlMsgGrid_Show_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 20 bytes.
+     * --------------------------------------------------------------------- */
+    char AcCtlMsgGrid_Show_Strings[20];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_TtlCase4_PtrTable -- 3 u32 addresses, read by
+     * MidiSetup_TtlCase4 (v10/v9 0xF7A2F0, v7 0xF79EEC) (`lda xbc,
+     * (MidiPart_PageStr_1of2_0xA:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t MidiSetup_TtlCase4_PtrTable[3];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_TtlCase4_Strings -- the 3 strings
+     * MidiSetup_TtlCase4_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 30 bytes.
+     * --------------------------------------------------------------------- */
+    char MidiSetup_TtlCase4_Strings[30];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_LocalInit -- initializer of a local array:
+     * ComSetGridCheck (v10/v9 0xF77F6C, v7 0xF77B68) (`ld xiy,
+     * MidiPart_PageStr_1of3_0xA`), PmemOutLGridCheck (v10/v9 0xF78988, v7
+     * 0xF78584) (`ld xiy, MidiPart_PageStr_1of3_0xA`), PmemOutRGridCheck
+     * (v10/v9 0xF791E4, v7 0xF78DE0) (`ld xiy, MidiPart_PageStr_1of3_0xA`),
+     * CtlMsgGridCheck (v10/v9 0xF79F88, v7 0xF79B84) (`ld xiy,
+     * MidiPart_PageStr_1of3_0xA`), MidiPartGridCheck (v10/v9 0xF7A869, v7
+     * 0xF7A465) (`ld xiy, MidiPart_PageStr_1of3_0xA`), FadeSetGridCheck
+     * (v10/v9 0xF754BE, v7 0xF750BA) (`ld xiy, MidiPart_PageStr_1of3_0xA`),
+     * InOutGridCheck (v10/v9 0xF75A83, v7 0xF7567F) (`ld xiy,
+     * MidiPart_PageStr_1of3_0xA`), PcgOutGridCheck (v10/v9 0xF77653, v7
+     * 0xF7724F) (`ld xiy, MidiPart_PageStr_1of3_0xA`), ParaLoadOptGridCheck
+     * (v10/v9 0xF76F62, v7 0xF76B5E) (`ld xiy, MidiPart_PageStr_1of3_0xA`),
+     * VocalistGridCheck (v10/v9 0xF738D2, v7 0xF734CE) (`ld xiy,
+     * MidiPart_PageStr_1of3_0xA`) copies 8 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t ComSetGridCheck_LocalInit[4];
+    /* ---------------------------------------------------------------------
+     * AcVocalGrid_DialSetup_Table -- read by AcVocalGrid_DialSetup (v10/v9
+     * 0xF736A3, v7 0xF7329F) (`lda xbc, (MidiPart_PageStr_1of3_0x12:24)`).
+     * 24 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcVocalGrid_DialSetup_Table[24];
+    /* ---------------------------------------------------------------------
+     * AcVocalGrid_DialSetup_Table_2 -- read by AcVocalGrid_DialSetup (v10/v9
+     * 0xF736A3, v7 0xF7329F) (`lda xbc, (MidiPart_PageStr_1of3_0x2A:24)`).
+     * 24 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcVocalGrid_DialSetup_Table_2[24];
+    /* ---------------------------------------------------------------------
+     * AcVocalGridBoxProc_CaseTable -- jump table of a compiled `switch` in
+     * AcVocalGridBoxProc (v10/v9 0xF73642, v7 0xF7323E) (`add xbc,
+     * MidiPart_PageStr_1of3_0x42`): 7 u16 case offsets from
+     * AcVocalGrid_DialSetup.
+     * --------------------------------------------------------------------- */
+    uint16_t AcVocalGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_PtrTable -- 2 u32 addresses, read by
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`lda xwa,
+     * (MidiPart_PageStr_1of3_0x50:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t VocalistGrid_DispatchData_PtrTable[2];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Strings -- the 2 strings
+     * VocalistGrid_DispatchData_PtrTable points at (NUL-terminated, 0xFF pad
+     * to even length), 12 bytes.
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Strings[12];
+    /* ---------------------------------------------------------------------
+     * MidiPart_NoteNameTable -- 12 u32 addresses, read by
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`lda xbc,
+     * (MidiPart_NoteNameTable:24)`), VocalistGrid_DispatchData (v10/v9
+     * 0xF73938, v7 0xF73534) (`lda xde, (MidiPart_NoteNameTable:24)`),
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`lda xwa,
+     * (MidiPart_NoteNameTable:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t MidiPart_NoteNameTable[12];
+    /* ---------------------------------------------------------------------
+     * MidiPart_NoteNameTable_Strings -- the 12 strings
+     * MidiPart_NoteNameTable points at (NUL-terminated, 0xFF pad to even
+     * length), 58 bytes.
+     * --------------------------------------------------------------------- */
+    char MidiPart_NoteNameTable_Strings[58];
+    /* ---------------------------------------------------------------------
+     * MidiPart_OctaveTable -- 11 u32 addresses, read by
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`lda xhl,
+     * (MidiPart_OctaveTable:24)`), VocalistGrid_DispatchData (v10/v9
+     * 0xF73938, v7 0xF73534) (`lda xbc, (MidiPart_OctaveTable:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t MidiPart_OctaveTable[11];
+    /* ---------------------------------------------------------------------
+     * MidiPart_OctaveTable_Strings -- the 11 strings MidiPart_OctaveTable
+     * points at (NUL-terminated, 0xFF pad to even length), 44 bytes.
+     * --------------------------------------------------------------------- */
+    char MidiPart_OctaveTable_Strings[44];
+    /* ---------------------------------------------------------------------
+     * VocalistGridCheck_Table -- read by VocalistGridCheck (v10/v9 0xF738D2,
+     * v7 0xF734CE) (`lda xwa, (MidiPart_OctaveStr_m2_0x4:24)`),
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`lda xde,
+     * (MidiPart_OctaveStr_m2_0x4:24)`). 96 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t VocalistGridCheck_Table[96];
+    /* ---------------------------------------------------------------------
+     * VocalistGridCheck_LocalInit -- initializer of a local array:
+     * VocalistGridCheck (v10/v9 0xF738D2, v7 0xF734CE) (`ld xiy,
+     * MidiPart_OctaveStr_m2_0x64`) copies 32 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t VocalistGridCheck_LocalInit[16];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str -- NUL-terminated string(s), 12 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0x84`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_2 -- NUL-terminated string(s), 72 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0x90`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_2[72];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_3 -- NUL-terminated string(s), 12 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0xD8`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_3[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_4 -- NUL-terminated string(s), 12 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0xE4`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_4[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_5 -- NUL-terminated string(s), 12 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0xF0`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_5[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_6 -- NUL-terminated string(s), 12 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0xFC`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_6[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_7 -- NUL-terminated string(s), 32 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0x108`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_7[32];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_8 -- NUL-terminated string(s), 6 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0x128`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_8[6];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_9 -- NUL-terminated string(s), 6 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_OctaveStr_m2_0x12E`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_9[6];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_10 -- NUL-terminated string(s), 12
+     * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
+     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x134`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_10[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_11 -- NUL-terminated string(s), 60
+     * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
+     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x140`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_11[60];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_12 -- NUL-terminated string(s), 12
+     * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
+     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x17C`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_12[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_13 -- NUL-terminated string(s), 12
+     * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
+     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x188`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_13[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_14 -- NUL-terminated string(s), 12
+     * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
+     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x194`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_14[12];
+    /* ---------------------------------------------------------------------
+     * MidiPart_RecvTransStr -- NUL-terminated string(s), 12 bytes, used by
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`.long
+     * MidiPart_RecvTransStr`).
+     * --------------------------------------------------------------------- */
+    char MidiPart_RecvTransStr[12];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_15 -- NUL-terminated string(s), 12
+     * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
+     * 0xF73534) (`ld xwa, MidiPart_RecvTransStr_0xC`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_15[12];
+    /* ---------------------------------------------------------------------
+     * MidiPart_AfterStr -- NUL-terminated string(s), 40 bytes, used by
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`.long
+     * MidiPart_AfterStr`).
+     * --------------------------------------------------------------------- */
+    char MidiPart_AfterStr[40];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_16 -- NUL-terminated string(s), 6 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_AfterStr_0x28`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_16[6];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_Str_17 -- NUL-terminated string(s), 6 bytes,
+     * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
+     * xwa, MidiPart_AfterStr_0x2E`).
+     * --------------------------------------------------------------------- */
+    char VocalistGrid_DispatchData_Str_17[6];
+    /* ---------------------------------------------------------------------
+     * VocalistGrid_DispatchData_CaseTable -- jump table of a compiled
+     * `switch` in VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534)
+     * (`add xwa, MidiPart_AfterStr_0x34`): 20 u16 case offsets from
+     * VocalistGrid_CheckDispData.
+     * --------------------------------------------------------------------- */
+    uint16_t VocalistGrid_DispatchData_CaseTable[20];
+    /* ---------------------------------------------------------------------
+     * MidiPart_ColWidthData -- jump table of a compiled `switch` in
+     * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`.long
+     * MidiPart_ColWidthData`): 20 u16 case offsets from
+     * VocalistGrid_DispatchData_0x160.
+     * --------------------------------------------------------------------- */
+    uint16_t MidiPart_ColWidthData[20];
+    /* ---------------------------------------------------------------------
+     * VocalistGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * VocalistGridCheck (v10/v9 0xF738D2, v7 0xF734CE) (`add xwa,
+     * MidiPart_ColWidthData_0x28`): 7 u16 case offsets from
+     * VocalistGrid_DispatchData.
+     * --------------------------------------------------------------------- */
+    uint16_t VocalistGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * AcVocalist_ListSetup_CaseTable -- jump table of a compiled `switch` in
+     * AcVocalist_ListSetup (v10/v9 0xF73FC8, v7 0xF73BC4) (`add xhl,
+     * MidiPart_ColWidthData_0x36`): 6 u16 case offsets from
+     * AcVocalist_ListDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t AcVocalist_ListSetup_CaseTable[6];
+    /* ---------------------------------------------------------------------
+     * PsHarm_DrawActiveBox_PtrTable -- 1 u32 addresses, read by
+     * PsHarm_DrawActiveBox (v10/v9 0xF740EC, v7 0xF73CE8) (`ld xde,
+     * (MidiPart_ColWidthData_0x42:24)`), PsHarm_DrawInactiveBox (v10/v9
+     * 0xF74147, v7 0xF73D43) (`ld xde, (MidiPart_ColWidthData_0x42:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t PsHarm_DrawActiveBox_PtrTable[1];
+    /* ---------------------------------------------------------------------
+     * MidiPart_HarmLocalStr -- label kept because other files use it; 24
+     * bytes to the next object. Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiPart_HarmLocalStr[24];
+    /* ---------------------------------------------------------------------
+     * PsHarmOnOffBoxProc_LocalInit -- initializer of a local array:
+     * PsHarmOnOffBoxProc (v10/v9 0xF74019, v7 0xF73C15) (`ld xiy,
+     * MidiPart_HarmLocalStr_0x18`) copies 4 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t PsHarmOnOffBoxProc_LocalInit[2];
+    /* ---------------------------------------------------------------------
+     * PsHarmOnOffBoxProc_LocalInit_2 -- initializer of a local array:
+     * PsHarmOnOffBoxProc (v10/v9 0xF74019, v7 0xF73C15) (`ld xiy,
+     * MidiPart_HarmLocalStr_0x1C`) copies 8 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t PsHarmOnOffBoxProc_LocalInit_2[4];
+    /* ---------------------------------------------------------------------
+     * MainVocalistPage1OKFunc_CaseTable -- jump table of a compiled `switch`
+     * in MainVocalistPage1OKFunc (v10/v9 0xF74201, v7 0xF73DFD) (`lda xix,
+     * (MidiPart_HarmLocalStr_0x24:24)`): 6 u16 case offsets from
+     * VocalistPage1OK_Dispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t MainVocalistPage1OKFunc_CaseTable[6];
+    /* ---------------------------------------------------------------------
+     * RevSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by
+     * RevSel_HandleConfirm (v10/v9 0xF74403, v7 0xF73FFF) (`ld xde,
+     * MidiPart_HarmLocalStr_0x30`).
+     * --------------------------------------------------------------------- */
+    char RevSel_HandleConfirm_Str[6];
+    /* ---------------------------------------------------------------------
+     * EqSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by
+     * EqSel_HandleConfirm (v10/v9 0xF744E7, v7 0xF740E3) (`ld xde,
+     * MidiPart_HarmLocalStr_0x36`).
+     * --------------------------------------------------------------------- */
+    char EqSel_HandleConfirm_Str[6];
+    /* ---------------------------------------------------------------------
+     * RevEqSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used
+     * by RevEqSel_HandleConfirm (v10/v9 0xF7460D, v7 0xF74209) (`ld xde,
+     * MidiPart_HarmLocalStr_0x3C`).
+     * --------------------------------------------------------------------- */
+    char RevEqSel_HandleConfirm_Str[6];
+    /* ---------------------------------------------------------------------
+     * GMMode_AttentionTable -- 6 u32 addresses, read by StsAttentionCheck
+     * (v10/v9 0xF74762, v7 0xF7435E) (`lda xhl,
+     * (GMMode_AttentionTable:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t GMMode_AttentionTable[6];
+    /* ---------------------------------------------------------------------
+     * GMMode_AttentionTable_Strings -- the 6 strings GMMode_AttentionTable
+     * points at (NUL-terminated, 0xFF pad to even length), 70 bytes.
+     * --------------------------------------------------------------------- */
+    char GMMode_AttentionTable_Strings[70];
+    /* ---------------------------------------------------------------------
+     * StsGMOnCheck_Strings -- the 5 strings StsGMOnCheck_PtrTable points at
+     * (NUL-terminated, 0xFF pad to even length), 504 bytes.
+     * --------------------------------------------------------------------- */
+    char StsGMOnCheck_Strings[504];
+    /* ---------------------------------------------------------------------
+     * StsGMOnCheck_PtrTable -- 6 u32 addresses, read by StsGMOnCheck (v10/v9
+     * 0xF74773, v7 0xF7436F) (`lda xhl,
+     * (GMMode_Attention_English2_0x204:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsGMOnCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsGMOnCheck_PtrTable_Tail -- 608 bytes after StsGMOnCheck_PtrTable
+     * that no registration or code reference reaches (searched: RegObjTabl
+     * tables, slice and positional labels). Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t StsGMOnCheck_PtrTable_Tail[608];
+    /* ---------------------------------------------------------------------
+     * StsGMOffCheck_PtrTable -- 12 u32 addresses, read by StsGMOffCheck
+     * (v10/v9 0xF74784, v7 0xF74380) (`lda xhl,
+     * (GMMode_Attention_English2_0x47C:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsGMOffCheck_PtrTable[12];
+    /* ---------------------------------------------------------------------
+     * StsGMOffCheck_PtrTable_Tail -- 104 bytes after StsGMOffCheck_PtrTable
+     * that no registration or code reference reaches (searched: RegObjTabl
+     * tables, slice and positional labels). Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t StsGMOffCheck_PtrTable_Tail[104];
+    /* ---------------------------------------------------------------------
+     * StsSplitCheck_PtrTable -- 6 u32 addresses, read by StsSplitCheck
+     * (v10/v9 0xF748A6, v7 0xF744A2) (`lda xhl,
+     * (GMMode_Attention_English2_0x514:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t StsSplitCheck_PtrTable[6];
+    /* ---------------------------------------------------------------------
+     * StsSplitCheck_Strings -- the 6 strings StsSplitCheck_PtrTable points
+     * at (NUL-terminated, 0xFF pad to even length), 258 bytes.
+     * --------------------------------------------------------------------- */
+    char StsSplitCheck_Strings[258];
+    /* ---------------------------------------------------------------------
+     * SplitPoint_NoteNameTable -- 12 u32 addresses, read by
+     * SplitPoint_HandleNoteEvt (v10/v9 0xF749CC, v7 0xF745C8) (`lda xbc,
+     * (SplitPoint_NoteNameTable:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t SplitPoint_NoteNameTable[12];
+    /* ---------------------------------------------------------------------
+     * SplitPoint_NoteNameTable_Strings -- the 12 strings
+     * SplitPoint_NoteNameTable points at (NUL-terminated, 0xFF pad to even
+     * length), 58 bytes.
+     * --------------------------------------------------------------------- */
+    char SplitPoint_NoteNameTable_Strings[58];
+    /* ---------------------------------------------------------------------
+     * SplitPoint_BitmapTable -- the 13 keyboard-octave bitmaps of the
+     * split-point display: entry 0 = Bitmap_SplitPoint_no_split, entries
+     * 1..12 = Bitmap_SplitPoint_C .. Bitmap_SplitPoint_B. SplitPointFunc
+     * (v10/v9 0xF748B7, v7 0xF744B3) reads entry 1 + (split note mod 12)
+     * through SplitPoint_NoteEntry_C_Code+4 (`lda xde,...; ld
+     * xbc,(xde+bc)`), with bc = (note mod 12) * 4.
+     * --------------------------------------------------------------------- */
+    uint32_t SplitPoint_BitmapTable[13];
+    /* ---------------------------------------------------------------------
+     * SplitPointFunc_LocalInit -- initializer of a local array:
+     * SplitPointFunc (v10/v9 0xF748B7, v7 0xF744B3) (`ld xiy,
+     * SplitPoint_NoteEntry_C_Code_0x38`) copies 4 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t SplitPointFunc_LocalInit[2];
+    /* ---------------------------------------------------------------------
+     * SplitPointFunc_LocalInit_Strings -- 6 bytes of NUL-terminated strings
+     * after SplitPointFunc_LocalInit; no registration or code reference
+     * reaches them (searched: RegObjTabl tables, slice and positional
+     * labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char SplitPointFunc_LocalInit_Strings[6];
+    /* ---------------------------------------------------------------------
+     * R12Octave_HandleNoteEvt_Str -- NUL-terminated string(s), 6 bytes, used
+     * by R12Octave_HandleNoteEvt (v10/v9 0xF74A7F, v7 0xF7467B) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0x42`).
+     * --------------------------------------------------------------------- */
+    char R12Octave_HandleNoteEvt_Str[6];
+    /* ---------------------------------------------------------------------
+     * R12Octave_Octave2_Str -- NUL-terminated string(s), 6 bytes, used by
+     * R12Octave_Octave2 (v10/v9 0xF74AAA, v7 0xF746A6) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0x48`).
+     * --------------------------------------------------------------------- */
+    char R12Octave_Octave2_Str[6];
+    /* ---------------------------------------------------------------------
+     * R12Octave_Octave3_Str -- NUL-terminated string(s), 6 bytes, used by
+     * R12Octave_Octave3 (v10/v9 0xF74AB1, v7 0xF746AD) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0x4E`).
+     * --------------------------------------------------------------------- */
+    char R12Octave_Octave3_Str[6];
+    /* ---------------------------------------------------------------------
+     * R12Octave_Octave4_Str -- NUL-terminated string(s), 6 bytes, used by
+     * R12Octave_Octave4 (v10/v9 0xF74AB8, v7 0xF746B4) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0x54`).
+     * --------------------------------------------------------------------- */
+    char R12Octave_Octave4_Str[6];
+    /* ---------------------------------------------------------------------
+     * R12Octave_Octave5_Str -- NUL-terminated string(s), 6 bytes, used by
+     * R12Octave_Octave5 (v10/v9 0xF74ABF, v7 0xF746BB) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0x5A`).
+     * --------------------------------------------------------------------- */
+    char R12Octave_Octave5_Str[6];
+    /* ---------------------------------------------------------------------
+     * R12Octave_OctaveDefault_Str -- NUL-terminated string(s), 6 bytes, used
+     * by R12Octave_OctaveDefault (v10/v9 0xF74AC6, v7 0xF746C2) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0x60`).
+     * --------------------------------------------------------------------- */
+    char R12Octave_OctaveDefault_Str[6];
+    /* ---------------------------------------------------------------------
+     * MdCmptCnctFunc_LocalInit -- initializer of a local array:
+     * MdCmptCnctFunc (v10/v9 0xF74B40, v7 0xF7473C) (`ld xiy,
+     * SplitPoint_NoteEntry_C_Code_0x66`) copies 4 bytes into its stack
+     * frame.
+     * --------------------------------------------------------------------- */
+    uint16_t MdCmptCnctFunc_LocalInit[2];
+    /* ---------------------------------------------------------------------
+     * MdCmptCnctFunc_LocalInit_Strings -- 104 bytes of NUL-terminated
+     * strings after MdCmptCnctFunc_LocalInit; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char MdCmptCnctFunc_LocalInit_Strings[104];
+    /* ---------------------------------------------------------------------
+     * PcgModeGridEventStart_Str -- NUL-terminated string(s), 10 bytes, used
+     * by PcgModeGridEventStart (v10/v9 0xF74C4E, v7 0xF7484A) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0xD2`).
+     * --------------------------------------------------------------------- */
+    char PcgModeGridEventStart_Str[10];
+    /* ---------------------------------------------------------------------
+     * PcgModeDisplayString_Bank1_Str -- NUL-terminated string(s), 20 bytes,
+     * used by PcgModeDisplayString_Bank1 (v10/v9 0xF74C6A, v7 0xF74866) (`ld
+     * xwa, SplitPoint_NoteEntry_C_Code_0xDC`).
+     * --------------------------------------------------------------------- */
+    char PcgModeDisplayString_Bank1_Str[20];
+    /* ---------------------------------------------------------------------
+     * PcgModeDefaultCase_Str -- NUL-terminated string(s), 10 bytes, used by
+     * PcgModeDefaultCase (v10/v9 0xF74C7C, v7 0xF74878) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0xF0`).
+     * --------------------------------------------------------------------- */
+    char PcgModeDefaultCase_Str[10];
+    /* ---------------------------------------------------------------------
+     * DrumType_GridEvent_Str -- NUL-terminated string(s), 10 bytes, used by
+     * DrumType_GridEvent (v10/v9 0xF74CC7, v7 0xF748C3) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0xFA`).
+     * --------------------------------------------------------------------- */
+    char DrumType_GridEvent_Str[10];
+    /* ---------------------------------------------------------------------
+     * DrumType_CopyStrBank1_Str -- NUL-terminated string(s), 20 bytes, used
+     * by DrumType_CopyStrBank1 (v10/v9 0xF74CE3, v7 0xF748DF) (`ld xwa,
+     * SplitPoint_NoteEntry_C_Code_0x104`).
+     * --------------------------------------------------------------------- */
+    char DrumType_CopyStrBank1_Str[20];
+    /* ---------------------------------------------------------------------
+     * DrumType_CopyStrDefault_Str -- NUL-terminated string(s), 10 bytes,
+     * used by DrumType_CopyStrDefault (v10/v9 0xF74CF5, v7 0xF748F1) (`ld
+     * xwa, SplitPoint_NoteEntry_C_Code_0x118`).
+     * --------------------------------------------------------------------- */
+    char DrumType_CopyStrDefault_Str[10];
+    /* ---------------------------------------------------------------------
+     * DisplayMode_OnOff_Table -- 4 u32 addresses, read by MdSetupLoadFunc
+     * (v10/v9 0xF74D11, v7 0xF7490D) (`ld xiy, DisplayMode_OnOff_Table`).
+     * --------------------------------------------------------------------- */
+    uint32_t DisplayMode_OnOff_Table[4];
+    /* ---------------------------------------------------------------------
+     * DisplayMode_OnOff_Table_Strings -- the 4 strings
+     * DisplayMode_OnOff_Table points at (NUL-terminated, 0xFF pad to even
+     * length), 24 bytes.
+     * --------------------------------------------------------------------- */
+    char DisplayMode_OnOff_Table_Strings[24];
+    /* ---------------------------------------------------------------------
+     * MdSetupLoadFunc_CaseTable -- jump table of a compiled `switch` in
+     * MdSetupLoadFunc (v10/v9 0xF74D11, v7 0xF7490D) (`add xhl,
+     * NakaInst_OFF_WidgetTbl2_0x12`): 10 u16 case offsets from
+     * SetupLoadOptionJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t MdSetupLoadFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * MdSetupLoadFunc_CaseTable_Strings -- 12 bytes of NUL-terminated
+     * strings after MdSetupLoadFunc_CaseTable; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char MdSetupLoadFunc_CaseTable_Strings[12];
+    /* ---------------------------------------------------------------------
+     * VoiceParam_ListHandler_Table -- read by VoiceParam_ListHandler (v10/v9
+     * 0xF7528A, v7 0xF74E86) (`lda xbc, (NakaInst_OFF_WidgetTbl2_0x32:24)`).
+     * 14 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t VoiceParam_ListHandler_Table[14];
+    /* ---------------------------------------------------------------------
+     * VoiceParam_ListHandler_Table_2 -- read by VoiceParam_ListHandler
+     * (v10/v9 0xF7528A, v7 0xF74E86) (`lda xbc,
+     * (NakaInst_OFF_WidgetTbl2_0x40:24)`). 14 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t VoiceParam_ListHandler_Table_2[14];
+    /* ---------------------------------------------------------------------
+     * AcFadeSetGridBoxProc_CaseTable -- jump table of a compiled `switch` in
+     * AcFadeSetGridBoxProc (v10/v9 0xF75229, v7 0xF74E25) (`add xbc,
+     * NakaInst_OFF_WidgetTbl2_0x4E`): 7 u16 case offsets from
+     * VoiceParam_ListHandler.
+     * --------------------------------------------------------------------- */
+    uint16_t AcFadeSetGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * Data_FadeSetGridDispatch_Table -- read by Data_FadeSetGridDispatch
+     * (v10/v9 0xF75517, v7 0xF75113) (`lda xbc,
+     * (NakaInst_OFF_WidgetTbl2_0x5C:24)`), Data_FadeSetGridDispatch (v10/v9
+     * 0xF75517, v7 0xF75113) (`lda xix, (NakaInst_OFF_WidgetTbl2_0x5C:24)`),
+     * AcInOutGrid_Handler (v10/v9 0xF75664, v7 0xF75260) (`lda xbc,
+     * (NakaInst_OFF_WidgetTbl2_0x5C:24)`). 28 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t Data_FadeSetGridDispatch_Table[28];
+    /* ---------------------------------------------------------------------
+     * FadeSetGridCheck_LocalInit -- initializer of a local array:
+     * FadeSetGridCheck (v10/v9 0xF754BE, v7 0xF750BA) (`ld xiy,
+     * NakaInst_OFF_WidgetTbl2_0x78`) copies 16 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t FadeSetGridCheck_LocalInit[8];
+    /* ---------------------------------------------------------------------
+     * FadeSetGridCheck_LocalInit_Strings -- 20 bytes of NUL-terminated
+     * strings after FadeSetGridCheck_LocalInit; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char FadeSetGridCheck_LocalInit_Strings[20];
+    /* ---------------------------------------------------------------------
+     * Data_FadeSetGridDispatch_Str -- NUL-terminated string(s), 20 bytes,
+     * used by Data_FadeSetGridDispatch (v10/v9 0xF75517, v7 0xF75113) (`ld
+     * xwa, NakaInst_OFF_WidgetTbl2_0x9C`).
+     * --------------------------------------------------------------------- */
+    char Data_FadeSetGridDispatch_Str[20];
+    /* ---------------------------------------------------------------------
+     * SndParam_FormatAndDisplay_Str -- NUL-terminated string(s), 6 bytes,
+     * used by SndParam_FormatAndDisplay (v10/v9 0xF756E6, v7 0xF752E2) (`ld
+     * xwa, NakaInst_OFF_WidgetTbl2_0xB0`).
+     * --------------------------------------------------------------------- */
+    char SndParam_FormatAndDisplay_Str[6];
+    /* ---------------------------------------------------------------------
+     * SndParam_FormatAndDisplay_Str_2 -- NUL-terminated string(s), 6 bytes,
+     * used by SndParam_FormatAndDisplay (v10/v9 0xF756E6, v7 0xF752E2) (`ld
+     * xwa, NakaInst_OFF_WidgetTbl2_0xB6`).
+     * --------------------------------------------------------------------- */
+    char SndParam_FormatAndDisplay_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * FadeSetGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * FadeSetGridCheck (v10/v9 0xF754BE, v7 0xF750BA) (`add xwa,
+     * NakaInst_OFF_WidgetTbl2_0xBC`): 7 u16 case offsets from
+     * Data_FadeSetGridDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t FadeSetGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * AcInOutGrid_Init_Table -- read by AcInOutGrid_Init (v10/v9 0xF757BC,
+     * v7 0xF753B8) (`lda xbc, (NakaInst_OFF_WidgetTbl2_0xCA:24)`). 18 bytes
+     * to the next object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcInOutGrid_Init_Table[18];
+    /* ---------------------------------------------------------------------
+     * AcInOutGrid_ScrollUp_AltTable_Table -- read by
+     * AcInOutGrid_ScrollUp_AltTable (v10/v9 0xF7588B, v7 0xF75487) (`lda
+     * xbc, (NakaInst_OFF_WidgetTbl2_0xDC:24)`). 18 bytes to the next object;
+     * the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcInOutGrid_ScrollUp_AltTable_Table[18];
+    /* ---------------------------------------------------------------------
+     * AcInOutGrid_ScrollUp_Dispatch_Table -- read by
+     * AcInOutGrid_ScrollUp_Dispatch (v10/v9 0xF758AB, v7 0xF754A7) (`lda
+     * xbc, (NakaInst_OFF_WidgetTbl2_0xEE:24)`). 18 bytes to the next object;
+     * the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcInOutGrid_ScrollUp_Dispatch_Table[18];
+    /* ---------------------------------------------------------------------
+     * AcInOutGrid_ScrollDown_AltTable_Table -- read by
+     * AcInOutGrid_ScrollDown_AltTable (v10/v9 0xF75978, v7 0xF75574) (`lda
+     * xbc, (NakaInst_OFF_WidgetTbl2_0x100:24)`). 18 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcInOutGrid_ScrollDown_AltTable_Table[18];
+    /* ---------------------------------------------------------------------
+     * AcInOutGrid_GetRowText_Str -- NUL-terminated string(s), 186 bytes,
+     * used by AcInOutGrid_GetRowText (v10/v9 0xF75A12, v7 0xF7560E) (`ld
+     * xwa, NakaInst_OFF_WidgetTbl2_0x112`).
+     * --------------------------------------------------------------------- */
+    char AcInOutGrid_GetRowText_Str[186];
+    /* ---------------------------------------------------------------------
+     * AcInOutGrid_GetRowText_Src1_Str -- NUL-terminated string(s), 210
+     * bytes, used by AcInOutGrid_GetRowText_Src1 (v10/v9 0xF75A2E, v7
+     * 0xF7562A) (`ld xwa, NakaInst_OFF_WidgetTbl2_0x1CC`).
+     * --------------------------------------------------------------------- */
+    char AcInOutGrid_GetRowText_Src1_Str[210];
+    /* ---------------------------------------------------------------------
+     * AcInOutGrid_GetRowText_Src2_Str -- NUL-terminated string(s), 210
+     * bytes, used by AcInOutGrid_GetRowText_Src2 (v10/v9 0xF75A35, v7
+     * 0xF75631) (`ld xwa, NakaInst_OFF_WidgetTbl2_0x29E`).
+     * --------------------------------------------------------------------- */
+    char AcInOutGrid_GetRowText_Src2_Str[210];
+    /* ---------------------------------------------------------------------
+     * AcInOutGridBoxProc_CaseTable -- jump table of a compiled `switch` in
+     * AcInOutGridBoxProc (v10/v9 0xF7575A, v7 0xF75356) (`add xbc,
+     * NakaInst_OFF_WidgetTbl2_0x370`): 7 u16 case offsets from
+     * AcInOutGrid_Init.
+     * --------------------------------------------------------------------- */
+    uint16_t AcInOutGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_PtrTable -- 2 u32 addresses, read by
+     * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xhl,
+     * (NakaInst_OFF_WidgetTbl2_0x37E:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * 0xF75F68, v7 0xF75B64) (`lda xwa,
+     * (NakaInst_OFF_WidgetTbl2_0x37E:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t Data_InOutGridDispatch_PtrTable[2];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_Strings -- the 2 strings
+     * Data_InOutGridDispatch_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 12 bytes.
+     * --------------------------------------------------------------------- */
+    char Data_InOutGridDispatch_Strings[12];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_PtrTable_2 -- 2 u32 addresses, read by
+     * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xbc,
+     * (NakaInst_OFF_E7FCA2_0x6:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * 0xF75F68, v7 0xF75B64) (`lda xwa, (NakaInst_OFF_E7FCA2_0x6:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t Data_InOutGridDispatch_PtrTable_2[2];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_Strings_2 -- the 2 strings
+     * Data_InOutGridDispatch_PtrTable_2 points at (NUL-terminated, 0xFF pad
+     * to even length), 20 bytes.
+     * --------------------------------------------------------------------- */
+    char Data_InOutGridDispatch_Strings_2[20];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_PtrTable_3 -- 3 u32 addresses, read by
+     * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xhl,
+     * (ControlMode_Option_Table_0xA:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * 0xF75F68, v7 0xF75B64) (`lda xwa, (ControlMode_Option_Table_0xA:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t Data_InOutGridDispatch_PtrTable_3[3];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_Strings_3 -- the 3 strings
+     * Data_InOutGridDispatch_PtrTable_3 points at (NUL-terminated, 0xFF pad
+     * to even length), 30 bytes.
+     * --------------------------------------------------------------------- */
+    char Data_InOutGridDispatch_Strings_3[30];
+    /* ---------------------------------------------------------------------
+     * InOutGridCheck_LocalInit -- initializer of a local array:
+     * InOutGridCheck (v10/v9 0xF75A83, v7 0xF7567F) (`ld xiy,
+     * NakaInst_DIRECT_E7FCE4_0xA`) copies 16 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t InOutGridCheck_LocalInit[8];
+    /* ---------------------------------------------------------------------
+     * InOutGridCheck_LocalInit_Strings -- 60 bytes of NUL-terminated strings
+     * after InOutGridCheck_LocalInit; no registration or code reference
+     * reaches them (searched: RegObjTabl tables, slice and positional
+     * labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char InOutGridCheck_LocalInit_Strings[60];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_CaseTable -- jump table of a compiled `switch`
+     * in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xix,
+     * (NakaInst_DIRECT_E7FCE4_0x56:24)`): 9 u16 case offsets from
+     * Data_ParaLoadOptDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t Data_InOutGridDispatch_CaseTable[9];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_CaseTable_2 -- jump table of a compiled
+     * `switch` in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA)
+     * (`lda xix, (NakaInst_DIRECT_E7FCE4_0x68:24)`): 9 u16 case offsets from
+     * 16210936.
+     * --------------------------------------------------------------------- */
+    uint16_t Data_InOutGridDispatch_CaseTable_2[9];
+    /* ---------------------------------------------------------------------
+     * Data_InOutGridDispatch_CaseTable_3 -- jump table of a compiled
+     * `switch` in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA)
+     * (`lda xix, (NakaInst_DIRECT_E7FCE4_0x7A:24)`): 9 u16 case offsets from
+     * 16210732.
+     * --------------------------------------------------------------------- */
+    uint16_t Data_InOutGridDispatch_CaseTable_3[9];
+    /* ---------------------------------------------------------------------
+     * InOutGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * InOutGridCheck (v10/v9 0xF75A83, v7 0xF7567F) (`add xwa,
+     * NakaInst_DIRECT_E7FCE4_0x8C`): 7 u16 case offsets from
+     * Data_InOutGridDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t InOutGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * InOutGridCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings
+     * after InOutGridCheck_CaseTable; no registration or code reference
+     * reaches them (searched: RegObjTabl tables, slice and positional
+     * labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char InOutGridCheck_CaseTable_Strings[6];
+    /* ---------------------------------------------------------------------
+     * MainExcSend_ClampIndexToRange_Table -- read by
+     * MainExcSend_ClampIndexToRange (v10/v9 0xF7665C, v7 0xF76258) (`ld xwa,
+     * NakaInst_DIRECT_E7FCE4_0xA0`). 6 bytes to the next object; the layout
+     * beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t MainExcSend_ClampIndexToRange_Table[6];
+    /* ---------------------------------------------------------------------
+     * ExcDotFunc_CaseTable -- jump table of a compiled `switch` in
+     * ExcDotFunc (v10/v9 0xF7666C, v7 0xF76268) (`add xbc,
+     * NakaInst_DIRECT_E7FCE4_0xA6`): 10 u16 case offsets from
+     * ExcDotFunc_HandlerJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t ExcDotFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * FileTransfer_Status_Table -- 4 u32 addresses, read by
+     * ExcPmemFunc_HandlerJumpTable (v10/v9 0xF76706, v7 0xF76302) (`ld xbc,
+     * FileTransfer_Status_Table`), ExcSmemFunc_HandlerJumpTable (v10/v9
+     * 0xF76764, v7 0xF76360) (`ld xbc, FileTransfer_Status_Table`),
+     * ExcCompFunc_HandlerJumpTable (v10/v9 0xF767C2, v7 0xF763BE) (`ld xbc,
+     * FileTransfer_Status_Table`), ExcSeqFunc_HandlerJumpTable (v10/v9
+     * 0xF76820, v7 0xF7641C) (`ld xbc, FileTransfer_Status_Table`),
+     * ExcMspFunc_HandlerJumpTable (v10/v9 0xF7687E, v7 0xF7647A) (`ld xbc,
+     * FileTransfer_Status_Table`).
+     * --------------------------------------------------------------------- */
+    uint32_t FileTransfer_Status_Table[4];
+    /* ---------------------------------------------------------------------
+     * FileTransfer_Status_Table_Strings -- the 4 strings
+     * FileTransfer_Status_Table points at (NUL-terminated, 0xFF pad to even
+     * length), 40 bytes.
+     * --------------------------------------------------------------------- */
+    char FileTransfer_Status_Table_Strings[40];
+    /* ---------------------------------------------------------------------
+     * ExcPmemFunc_CaseTable -- jump table of a compiled `switch` in
+     * ExcPmemFunc (v10/v9 0xF766D9, v7 0xF762D5) (`add xbc,
+     * FileTransfer_BlankStatus_0xA`): 10 u16 case offsets from
+     * ExcPmemFunc_HandlerJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t ExcPmemFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * ExcSmemFunc_CaseTable -- jump table of a compiled `switch` in
+     * ExcSmemFunc (v10/v9 0xF76737, v7 0xF76333) (`add xbc,
+     * FileTransfer_BlankStatus_0x1E`): 10 u16 case offsets from
+     * ExcSmemFunc_HandlerJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t ExcSmemFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * ExcCompFunc_CaseTable -- jump table of a compiled `switch` in
+     * ExcCompFunc (v10/v9 0xF76795, v7 0xF76391) (`add xbc,
+     * FileTransfer_BlankStatus_0x32`): 10 u16 case offsets from
+     * ExcCompFunc_HandlerJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t ExcCompFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * ExcSeqFunc_CaseTable -- jump table of a compiled `switch` in
+     * ExcSeqFunc (v10/v9 0xF767F3, v7 0xF763EF) (`add xbc,
+     * FileTransfer_BlankStatus_0x46`): 10 u16 case offsets from
+     * ExcSeqFunc_HandlerJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t ExcSeqFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * ExcMspFunc_CaseTable -- jump table of a compiled `switch` in
+     * ExcMspFunc (v10/v9 0xF76851, v7 0xF7644D) (`add xbc,
+     * FileTransfer_BlankStatus_0x5A`): 10 u16 case offsets from
+     * ExcMspFunc_HandlerJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t ExcMspFunc_CaseTable[10];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOpt_AudioFlagCheck_CaseTable -- jump table of a compiled
+     * `switch` in ParaLoadOpt_AudioFlagCheck (v10/v9 0xF768AF, v7 0xF764AB)
+     * (`lda xix, (FileTransfer_BlankStatus_0x6E:24)`): 13 u16 case offsets
+     * from ParaLoadOpt_DispatchTable_A.
+     * --------------------------------------------------------------------- */
+    uint16_t ParaLoadOpt_AudioFlagCheck_CaseTable[13];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOpt_AudioFlagCheck_B_CaseTable -- jump table of a compiled
+     * `switch` in ParaLoadOpt_AudioFlagCheck_B (v10/v9 0xF76A52, v7
+     * 0xF7664E) (`lda xix, (FileTransfer_BlankStatus_0x88:24)`): 13 u16 case
+     * offsets from ParaLoadOpt_DispatchTable_B.
+     * --------------------------------------------------------------------- */
+    uint16_t ParaLoadOpt_AudioFlagCheck_B_CaseTable[13];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOpt_GridReturn_Table -- read by ParaLoadOpt_GridReturn (v10/v9
+     * 0xF76D32, v7 0xF7692E) (`lda xbc,
+     * (FileTransfer_BlankStatus_0xA2:24)`). 18 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t ParaLoadOpt_GridReturn_Table[18];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOpt_GridDelegateProc_Table -- read by
+     * ParaLoadOpt_GridDelegateProc (v10/v9 0xF76DFC, v7 0xF769F8) (`lda xbc,
+     * (FileTransfer_BlankStatus_0xB4:24)`). 18 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t ParaLoadOpt_GridDelegateProc_Table[18];
+    /* ---------------------------------------------------------------------
+     * AcParaLoadOptGridBoxProc_CaseTable -- jump table of a compiled
+     * `switch` in AcParaLoadOptGridBoxProc (v10/v9 0xF76C5E, v7 0xF7685A)
+     * (`add xbc, FileTransfer_BlankStatus_0xC6`): 7 u16 case offsets from
+     * ParaLoadOpt_GridHandler.
+     * --------------------------------------------------------------------- */
+    uint16_t AcParaLoadOptGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * UserMemory_ConfirmData -- initializer of a local array:
+     * ParaLoadOpt_GridDispatch (v10/v9 0xF76FE2, v7 0xF76BDE) (`ld xiy,
+     * UserMemory_ConfirmData`), ParaLoadOpt_GridDispatch (v10/v9 0xF76FE2,
+     * v7 0xF76BDE) (`.long UserMemory_ConfirmData`) copies 22 bytes into its
+     * stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t UserMemory_ConfirmData[11];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOptGridCheck_PtrTable -- 2 u32 addresses, read by
+     * ParaLoadOptGridCheck (v10/v9 0xF76F62, v7 0xF76B5E) (`lda xwa,
+     * (UserMemory_ConfirmData_0x16:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t ParaLoadOptGridCheck_PtrTable[2];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOptGridCheck_Strings -- the 2 strings
+     * ParaLoadOptGridCheck_PtrTable points at (NUL-terminated, 0xFF pad to
+     * even length), 12 bytes.
+     * --------------------------------------------------------------------- */
+    char ParaLoadOptGridCheck_Strings[12];
+    /* ---------------------------------------------------------------------
+     * UserMemory_Config_Table -- 4 u32 addresses, read by
+     * ParaLoadOptGridCheck (v10/v9 0xF76F62, v7 0xF76B5E) (`lda xwa,
+     * (UserMemory_Config_Table:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t UserMemory_Config_Table[4];
+    /* ---------------------------------------------------------------------
+     * UserMemory_Config_Table_Strings -- the 4 strings
+     * UserMemory_Config_Table points at (NUL-terminated, 0xFF pad to even
+     * length), 40 bytes.
+     * --------------------------------------------------------------------- */
+    char UserMemory_Config_Table_Strings[40];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOptGridCheck_LocalInit -- initializer of a local array:
+     * ParaLoadOptGridCheck (v10/v9 0xF76F62, v7 0xF76B5E) (`ld xiy,
+     * NakaInst_INITIAL_0xA`) copies 16 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t ParaLoadOptGridCheck_LocalInit[8];
+    /* ---------------------------------------------------------------------
+     * ParaLoadOptGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * ParaLoadOptGridCheck (v10/v9 0xF76F62, v7 0xF76B5E) (`add xde,
+     * NakaInst_INITIAL_0x1A`): 7 u16 case offsets from
+     * ParaLoadOpt_GridDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t ParaLoadOptGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * AcPcgOutGridBoxProc_CaseTable -- jump table of a compiled `switch` in
+     * AcPcgOutGridBoxProc (v10/v9 0xF773DA, v7 0xF76FD6) (`add xbc,
+     * NakaInst_INITIAL_0x28`): 7 u16 case offsets from
+     * PcgOutGridBoxEventDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t AcPcgOutGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * UserMemory_FormatStrings -- label kept because other files use it; 22
+     * bytes to the next object. Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t UserMemory_FormatStrings[22];
+    /* ---------------------------------------------------------------------
+     * PcgOutGridCheck_LocalInit -- initializer of a local array:
+     * PcgOutGridCheck (v10/v9 0xF77653, v7 0xF7724F) (`ld xiy,
+     * UserMemory_FormatStrings_0x16`) copies 10 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t PcgOutGridCheck_LocalInit[5];
+    /* ---------------------------------------------------------------------
+     * PcgOutGridCheck_LocalInit_Strings -- 160 bytes of NUL-terminated
+     * strings after PcgOutGridCheck_LocalInit; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char PcgOutGridCheck_LocalInit_Strings[160];
+    /* ---------------------------------------------------------------------
+     * PcgOutGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * PcgOutGridCheck (v10/v9 0xF77653, v7 0xF7724F) (`add xwa,
+     * UserMemory_FormatStrings_0xC0`): 7 u16 case offsets from
+     * PcgOutGridCheckJumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t PcgOutGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * AcSendEditSw_EventD_Table -- read by AcSendEditSw_EventD (v10/v9
+     * 0xF77E36, v7 0xF77A32) (`lda xwa,
+     * (UserMemory_FormatStrings_0xCE:24)`). 8 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcSendEditSw_EventD_Table[8];
+    /* ---------------------------------------------------------------------
+     * AcSendEditSw_DrawAlt_Table -- read by AcSendEditSw_DrawAlt (v10/v9
+     * 0xF77E83, v7 0xF77A7F) (`ld xbc, UserMemory_FormatStrings_0xD6`). 4
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcSendEditSw_DrawAlt_Table[4];
+    /* ---------------------------------------------------------------------
+     * NakaData_ModeConfig1 -- read by AcSendEditSw_EventD (v10/v9 0xF77E36,
+     * v7 0xF77A32) (`ld xbc, NakaData_ModeConfig1`). 4 bytes to the next
+     * object; the layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaData_ModeConfig1[4];
+    /* ---------------------------------------------------------------------
+     * AcSendEditSwProc_LocalInit -- initializer of a local array:
+     * AcSendEditSwProc (v10/v9 0xF77DF5, v7 0xF779F1) (`ld xiy,
+     * NakaData_ModeConfig1_0x4`) copies 2 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint8_t AcSendEditSwProc_LocalInit[2];
+    /* ---------------------------------------------------------------------
+     * NakaData_ModeConfig2 -- label kept because other files use it; 8 bytes
+     * to the next object. Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaData_ModeConfig2[8];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_JumpTable_Table -- read by ComSetGridCheck_JumpTable
+     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`lda xbc,
+     * (NakaData_ModeConfig2_0x8:24)`), ComSetGridCheck_JumpTable (v10/v9
+     * 0xF77FC4, v7 0xF77BC0) (`lda xwa, (NakaData_ModeConfig2_0x8:24)`),
+     * ComSetGridCheck_JumpTable (v10/v9 0xF77FC4, v7 0xF77BC0) (`lda xix,
+     * (NakaData_ModeConfig2_0x8:24)`), ComSetGrid_EventHandler (v10/v9
+     * 0xF781C1, v7 0xF77DBD) (`lda xbc, (NakaData_ModeConfig2_0x8:24)`),
+     * ComSetGrid_LookupByColumn (v10/v9 0xF7827D, v7 0xF77E79) (`lda xwa,
+     * (NakaData_ModeConfig2_0x8:24)`). 36 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t ComSetGridCheck_JumpTable_Table[36];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_LocalInit_2 -- initializer of a local array:
+     * ComSetGridCheck (v10/v9 0xF77F6C, v7 0xF77B68) (`ld xiy,
+     * NakaData_ModeConfig2_0x2C`) copies 6 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t ComSetGridCheck_LocalInit_2[3];
+    /* ---------------------------------------------------------------------
+     * NakaToggle_OnOff_Data -- NUL-terminated string(s), 4 bytes, used by
+     * FDTest_Group_OnOff (0xE1F8D8 in v10/v9/v7) (`.long
+     * NakaToggle_OnOff_Data`).
+     * --------------------------------------------------------------------- */
+    char NakaToggle_OnOff_Data[4];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_JumpTable
+     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xbc, NakaToggle_OnOff_Data_0x4`).
+     * 4 bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t ComSetGridCheck_JumpTable_Table_2[4];
+    /* ---------------------------------------------------------------------
+     * NakaInst_OFF_E80048 -- label kept because other files use it; 2 bytes
+     * to the next object. Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaInst_OFF_E80048[2];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
+     * used by ComSetGridCheck_JumpTable (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * xbc, NakaInst_OFF_E80048_0x2`).
+     * --------------------------------------------------------------------- */
+    char ComSetGridCheck_JumpTable_Str[6];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 10 bytes,
+     * used by ComSetGridCheck_JumpTable (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * xwa, NakaInst_OFF_E80048_0x8`).
+     * --------------------------------------------------------------------- */
+    char ComSetGridCheck_JumpTable_Str_2[10];
+    /* ---------------------------------------------------------------------
+     * NakaInst_NORMAL -- NUL-terminated string(s), 10 bytes, used by
+     * ComSetGridCheck_JumpTable (v10/v9 0xF77FC4, v7 0xF77BC0) (`.long
+     * NakaInst_NORMAL`).
+     * --------------------------------------------------------------------- */
+    char NakaInst_NORMAL[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_JumpTable_Str_3 -- NUL-terminated string(s), 10 bytes,
+     * used by ComSetGridCheck_JumpTable (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * xwa, NakaInst_NORMAL_0xA`).
+     * --------------------------------------------------------------------- */
+    char ComSetGridCheck_JumpTable_Str_3[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_JumpTable
+     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xwa, NakaInst_NORMAL_0x14`). 2
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t ComSetGridCheck_JumpTable_Table_3[2];
+    /* ---------------------------------------------------------------------
+     * NakaInst_GM -- label kept because other files use it; 8 bytes to the
+     * next object. Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaInst_GM[8];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_JumpTable_Str_4 -- NUL-terminated string(s), 10 bytes,
+     * used by ComSetGridCheck_JumpTable (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
+     * xwa, NakaInst_GM_0x8`).
+     * --------------------------------------------------------------------- */
+    char ComSetGridCheck_JumpTable_Str_4[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_ParamDisplay_Str -- NUL-terminated string(s), 6 bytes,
+     * used by ComSetGridCheck_ParamDisplay (v10/v9 0xF7823C, v7 0xF77E38)
+     * (`ld xwa, NakaInst_GM_0x12`).
+     * --------------------------------------------------------------------- */
+    char ComSetGridCheck_ParamDisplay_Str[6];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_ParamDisplay_Str_2 -- NUL-terminated string(s), 6
+     * bytes, used by ComSetGridCheck_ParamDisplay (v10/v9 0xF7823C, v7
+     * 0xF77E38) (`ld xwa, NakaInst_GM_0x18`).
+     * --------------------------------------------------------------------- */
+    char ComSetGridCheck_ParamDisplay_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * ComSetGrid_CopyStrAndDispatch_Str -- NUL-terminated string(s), 10
+     * bytes, used by ComSetGrid_CopyStrAndDispatch (v10/v9 0xF78251, v7
+     * 0xF77E4D) (`ld xwa, NakaInst_GM_0x1E`).
+     * --------------------------------------------------------------------- */
+    char ComSetGrid_CopyStrAndDispatch_Str[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGrid_LookupByColumn_Str -- NUL-terminated string(s), 10 bytes,
+     * used by ComSetGrid_LookupByColumn (v10/v9 0xF7827D, v7 0xF77E79) (`ld
+     * xwa, NakaInst_GM_0x28`).
+     * --------------------------------------------------------------------- */
+    char ComSetGrid_LookupByColumn_Str[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGrid_ParamStr1_Str -- NUL-terminated string(s), 10 bytes, used
+     * by ComSetGrid_ParamStr1 (v10/v9 0xF782A4, v7 0xF77EA0) (`ld xwa,
+     * NakaInst_GM_0x32`).
+     * --------------------------------------------------------------------- */
+    char ComSetGrid_ParamStr1_Str[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGrid_ParamStr3_Str -- NUL-terminated string(s), 10 bytes, used
+     * by ComSetGrid_ParamStr3 (v10/v9 0xF782AB, v7 0xF77EA7) (`ld xwa,
+     * NakaInst_GM_0x3C`).
+     * --------------------------------------------------------------------- */
+    char ComSetGrid_ParamStr3_Str[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGrid_ParamStrDefault_Str -- NUL-terminated string(s), 10 bytes,
+     * used by ComSetGrid_ParamStrDefault (v10/v9 0xF782B2, v7 0xF77EAE) (`ld
+     * xwa, NakaInst_GM_0x46`).
+     * --------------------------------------------------------------------- */
+    char ComSetGrid_ParamStrDefault_Str[10];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * ComSetGridCheck (v10/v9 0xF77F6C, v7 0xF77B68) (`add xwa,
+     * NakaInst_GM_0x50`): 7 u16 case offsets from ComSetGridCheck_JumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t ComSetGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * ComSetGridCheck_CaseTable_Tail -- 14 bytes after
+     * ComSetGridCheck_CaseTable that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t ComSetGridCheck_CaseTable_Tail[14];
+    /* ---------------------------------------------------------------------
+     * AcPmemOutRGridBoxProc_CaseTable -- jump table of a compiled `switch`
+     * in AcPmemOutRGridBoxProc (v10/v9 0xF7867C, v7 0xF78278) (`add xbc,
+     * NakaInst_GM_0x6C`): 6 u16 case offsets from AcPmemOutR_Init.
+     * --------------------------------------------------------------------- */
+    uint16_t AcPmemOutRGridBoxProc_CaseTable[6];
+    /* ---------------------------------------------------------------------
+     * NakaInst_NEXT_E800E8 -- label kept because other files use it; 2 bytes
+     * to the next object. Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaInst_NEXT_E800E8[2];
+    /* ---------------------------------------------------------------------
+     * PmemOutLGridCheck_PtrTable -- 3 u32 addresses, read by
+     * PmemOutLGridCheck (v10/v9 0xF78988, v7 0xF78584) (`lda xwa,
+     * (NakaInst_NEXT_E800E8_0x2:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t PmemOutLGridCheck_PtrTable[3];
+    /* ---------------------------------------------------------------------
+     * PmemOutLGridCheck_Strings -- the 3 strings PmemOutLGridCheck_PtrTable
+     * points at (NUL-terminated, 0xFF pad to even length), 24 bytes.
+     * --------------------------------------------------------------------- */
+    char PmemOutLGridCheck_Strings[24];
+    /* ---------------------------------------------------------------------
+     * NakaData_PartFlags -- 15 bytes after PtrTarget that no registration or
+     * code reference reaches (searched: RegObjTabl tables, slice and
+     * positional labels). Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaData_PartFlags[15];
+    /* ---------------------------------------------------------------------
+     * NakaInst_2d_d -- NUL-terminated string(s), 7 bytes, used by
+     * SeBitmap_EnvCurve5 (v10/v9 0xF10FCE, v7 0xF10FA4) (`.long
+     * NakaInst_2d_d`).
+     * --------------------------------------------------------------------- */
+    char NakaInst_2d_d[7];
+    /* ---------------------------------------------------------------------
+     * PmemOutLGridCheck_LocalInit -- initializer of a local array:
+     * PmemOutLGridCheck (v10/v9 0xF78988, v7 0xF78584) (`ld xiy,
+     * NakaInst_2d_d_0x7`) copies 16 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t PmemOutLGridCheck_LocalInit[8];
+    /* ---------------------------------------------------------------------
+     * PmemOutLGridCheck_LocalInit_Strings -- 52 bytes of NUL-terminated
+     * strings after PmemOutLGridCheck_LocalInit; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char PmemOutLGridCheck_LocalInit_Strings[52];
+    /* ---------------------------------------------------------------------
+     * NakaInst_ON_E80168 -- label kept because other files use it; 82 bytes
+     * to the next object. Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t NakaInst_ON_E80168[82];
+    /* ---------------------------------------------------------------------
+     * PmemOutL_BitCheckDisplay_Str -- NUL-terminated string(s), 6 bytes,
+     * used by PmemOutL_BitCheckDisplay (v10/v9 0xF7916A, v7 0xF78D66) (`ld
+     * xwa, NakaInst_ON_E80168_0x52`).
+     * --------------------------------------------------------------------- */
+    char PmemOutL_BitCheckDisplay_Str[6];
+    /* ---------------------------------------------------------------------
+     * PmemOutL_LoadOffStr_Str -- NUL-terminated string(s), 6 bytes, used by
+     * PmemOutL_LoadOffStr (v10/v9 0xF7918E, v7 0xF78D8A) (`ld xwa,
+     * NakaInst_ON_E80168_0x58`).
+     * --------------------------------------------------------------------- */
+    char PmemOutL_LoadOffStr_Str[6];
+    /* ---------------------------------------------------------------------
+     * PmemOutLGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * PmemOutLGridCheck (v10/v9 0xF78988, v7 0xF78584) (`add xwa,
+     * NakaInst_ON_E80168_0x5E`): 7 u16 case offsets from
+     * PmemOutLGridCheck_JumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t PmemOutLGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * PmemOutLGridCheck_CaseTable_Tail -- 22 bytes after
+     * PmemOutLGridCheck_CaseTable that no registration or code reference
+     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * Contents not established.
+     * --------------------------------------------------------------------- */
+    uint8_t PmemOutLGridCheck_CaseTable_Tail[22];
+    /* ---------------------------------------------------------------------
+     * PmemOutRGridCheck_LocalInit -- initializer of a local array:
+     * PmemOutRGridCheck (v10/v9 0xF791E4, v7 0xF78DE0) (`ld xiy,
+     * NakaInst_ON_E80168_0x82`) copies 16 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t PmemOutRGridCheck_LocalInit[8];
+    /* ---------------------------------------------------------------------
+     * PmemOutRGridCheck_LocalInit_Strings -- 120 bytes of NUL-terminated
+     * strings after PmemOutRGridCheck_LocalInit; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char PmemOutRGridCheck_LocalInit_Strings[120];
+    /* ---------------------------------------------------------------------
+     * PmemOutRGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * PmemOutRGridCheck (v10/v9 0xF791E4, v7 0xF78DE0) (`add xhl,
+     * NakaInst_ON_E80168_0x10A`): 7 u16 case offsets from
+     * TtMdCtlMsg_EventDispatch.
+     * --------------------------------------------------------------------- */
+    uint16_t PmemOutRGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGrid_ScrollUp_PageDec_Table -- read by
+     * AcCtlMsgGrid_ScrollUp_PageDec (v10/v9 0xF79D32, v7 0xF7992E) (`lda
+     * xbc, (NakaInst_ON_E80168_0x118:24)`), AcCtlMsgGrid_ScrollUp_AutoScroll
+     * (v10/v9 0xF79DA5, v7 0xF799A1) (`lda xhl,
+     * (NakaInst_ON_E80168_0x118:24)`). 2 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t AcCtlMsgGrid_ScrollUp_PageDec_Table[2];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGridBoxProc_LocalInit -- initializer of a local array:
+     * AcCtlMsgGridBoxProc (v10/v9 0xF79ADC, v7 0xF796D8) (`ld xiy,
+     * NakaInst_ON_E80168_0x11A`) copies 16 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t AcCtlMsgGridBoxProc_LocalInit[8];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGrid_GetRowText_Str -- NUL-terminated string(s), 124 bytes,
+     * used by AcCtlMsgGrid_GetRowText (v10/v9 0xF79F1F, v7 0xF79B1B) (`ld
+     * xwa, NakaInst_ON_E80168_0x12A`).
+     * --------------------------------------------------------------------- */
+    char AcCtlMsgGrid_GetRowText_Str[124];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGrid_GetRowText_Page1_Str -- NUL-terminated string(s), 106
+     * bytes, used by AcCtlMsgGrid_GetRowText_Page1 (v10/v9 0xF79F3A, v7
+     * 0xF79B36) (`ld xwa, NakaInst_ON_E80168_0x1A6`).
+     * --------------------------------------------------------------------- */
+    char AcCtlMsgGrid_GetRowText_Page1_Str[106];
+    /* ---------------------------------------------------------------------
+     * AcCtlMsgGridBoxProc_CaseTable -- jump table of a compiled `switch` in
+     * AcCtlMsgGridBoxProc (v10/v9 0xF79ADC, v7 0xF796D8) (`add xbc,
+     * NakaInst_ON_E80168_0x210`): 7 u16 case offsets from AcCtlMsgGrid_Init.
+     * --------------------------------------------------------------------- */
+    uint16_t AcCtlMsgGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * CtlMsgGridCheck_Table -- read by CtlMsgGridCheck (v10/v9 0xF79F88, v7
+     * 0xF79B84) (`lda xwa, (NakaInst_ON_E80168_0x21E:24)`),
+     * CtlMsgGridCheck_JumpTable (v10/v9 0xF79FF0, v7 0xF79BEC) (`lda xwa,
+     * (NakaInst_ON_E80168_0x21E:24)`). 72 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t CtlMsgGridCheck_Table[72];
+    /* ---------------------------------------------------------------------
+     * CtlMsgGridCheck_LocalInit -- initializer of a local array:
+     * CtlMsgGridCheck (v10/v9 0xF79F88, v7 0xF79B84) (`ld xiy,
+     * NakaInst_ON_E80168_0x266`) copies 10 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t CtlMsgGridCheck_LocalInit[5];
+    /* ---------------------------------------------------------------------
+     * CtlMsgGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
+     * used by CtlMsgGridCheck_JumpTable (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
+     * xbc, NakaInst_ON_E80168_0x270`).
+     * --------------------------------------------------------------------- */
+    char CtlMsgGridCheck_JumpTable_Str[6];
+    /* ---------------------------------------------------------------------
+     * CtlMsgGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 6 bytes,
+     * used by CtlMsgGridCheck_JumpTable (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
+     * xbc, NakaInst_ON_E80168_0x276`).
+     * --------------------------------------------------------------------- */
+    char CtlMsgGridCheck_JumpTable_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_TtlDispatch_Str -- NUL-terminated string(s), 6 bytes, used
+     * by MidiSetup_TtlDispatch (v10/v9 0xF7A113, v7 0xF79D0F) (`ld xwa,
+     * NakaInst_ON_E80168_0x27C`).
+     * --------------------------------------------------------------------- */
+    char MidiSetup_TtlDispatch_Str[6];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_TtlDispatch_Str_2 -- NUL-terminated string(s), 6 bytes, used
+     * by MidiSetup_TtlDispatch (v10/v9 0xF7A113, v7 0xF79D0F) (`ld xwa,
+     * NakaInst_ON_E80168_0x282`).
+     * --------------------------------------------------------------------- */
+    char MidiSetup_TtlDispatch_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * CtlMsgGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * CtlMsgGridCheck (v10/v9 0xF79F88, v7 0xF79B84) (`add xwa,
+     * NakaInst_ON_E80168_0x288`): 7 u16 case offsets from
+     * CtlMsgGridCheck_JumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t CtlMsgGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * MidiPart_CallMainFunc_Str -- NUL-terminated string(s), 2 bytes, used
+     * by MidiPart_CallMainFunc (v10/v9 0xF7A436, v7 0xF7A032) (`lda xbc,
+     * (NakaInst_ON_E80168_0x296:24)`), MidiPart_Part2ColumnNav (v10/v9
+     * 0xF7A51D, v7 0xF7A119) (`lda xbc, (NakaInst_ON_E80168_0x296:24)`),
+     * MidiPart_GenericColumnNav (v10/v9 0xF7A584, v7 0xF7A180) (`lda xbc,
+     * (NakaInst_ON_E80168_0x296:24)`), MidiPart_Part2ColumnNavUp (v10/v9
+     * 0xF7A6DA, v7 0xF7A2D6) (`lda xbc, (NakaInst_ON_E80168_0x296:24)`),
+     * MidiPart_GenericColumnNavUp (v10/v9 0xF7A73D, v7 0xF7A339) (`lda xbc,
+     * (NakaInst_ON_E80168_0x296:24)`).
+     * --------------------------------------------------------------------- */
+    char MidiPart_CallMainFunc_Str[2];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_TtlCase5_Table -- read by MidiSetup_TtlCase5 (v10/v9
+     * 0xF7A34F, v7 0xF79F4B) (`lda xbc, (NakaInst_ON_E80168_0x298:24)`),
+     * MidiPart_DecrementPart (v10/v9 0xF7A3D9, v7 0xF79FD5) (`lda xbc,
+     * (NakaInst_ON_E80168_0x298:24)`), MidiPart_InitGridBox (v10/v9
+     * 0xF7A628, v7 0xF7A224) (`lda xbc, (NakaInst_ON_E80168_0x298:24)`). 28
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiSetup_TtlCase5_Table[28];
+    /* ---------------------------------------------------------------------
+     * MidiPart_Part2ColumnNav_Table -- read by MidiPart_Part2ColumnNav
+     * (v10/v9 0xF7A51D, v7 0xF7A119) (`lda xbc,
+     * (NakaInst_ON_E80168_0x2B4:24)`). 18 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiPart_Part2ColumnNav_Table[18];
+    /* ---------------------------------------------------------------------
+     * MidiPart_Part2ColumnNavUp_Table -- read by MidiPart_Part2ColumnNavUp
+     * (v10/v9 0xF7A6DA, v7 0xF7A2D6) (`lda xbc,
+     * (NakaInst_ON_E80168_0x2C6:24)`). 20 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiPart_Part2ColumnNavUp_Table[20];
+    /* ---------------------------------------------------------------------
+     * MidiPart_CallMainFunc_Table -- read by MidiPart_CallMainFunc (v10/v9
+     * 0xF7A436, v7 0xF7A032) (`lda xbc, (NakaInst_ON_E80168_0x2DA:24)`). 4
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiPart_CallMainFunc_Table[4];
+    /* ---------------------------------------------------------------------
+     * AcMidiPartGridBoxProc_LocalInit -- initializer of a local array:
+     * AcMidiPartGridBoxProc (v10/v9 0xF7A1F4, v7 0xF79DF0) (`ld xiy,
+     * NakaInst_ON_E80168_0x2DE`) copies 16 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t AcMidiPartGridBoxProc_LocalInit[8];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_GridBoxCase1_Str -- NUL-terminated string(s), 60 bytes, used
+     * by MidiSetup_GridBoxCase1 (v10/v9 0xF7A7F5, v7 0xF7A3F1) (`ld xwa,
+     * NakaInst_ON_E80168_0x2EE`).
+     * --------------------------------------------------------------------- */
+    char MidiSetup_GridBoxCase1_Str[60];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_GridStr1_Str -- NUL-terminated string(s), 66 bytes, used by
+     * MidiSetup_GridStr1 (v10/v9 0xF7A814, v7 0xF7A410) (`ld xwa,
+     * NakaInst_ON_E80168_0x32A`).
+     * --------------------------------------------------------------------- */
+    char MidiSetup_GridStr1_Str[66];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_GridStr2_Str -- NUL-terminated string(s), 62 bytes, used by
+     * MidiSetup_GridStr2 (v10/v9 0xF7A81B, v7 0xF7A417) (`ld xwa,
+     * NakaInst_ON_E80168_0x36C`).
+     * --------------------------------------------------------------------- */
+    char MidiSetup_GridStr2_Str[62];
+    /* ---------------------------------------------------------------------
+     * AcMidiPartGridBoxProc_CaseTable -- jump table of a compiled `switch`
+     * in AcMidiPartGridBoxProc (v10/v9 0xF7A1F4, v7 0xF79DF0) (`add xbc,
+     * NakaInst_ON_E80168_0x3AA`): 7 u16 case offsets from
+     * MidiSetup_TtlCase3.
+     * --------------------------------------------------------------------- */
+    uint16_t AcMidiPartGridBoxProc_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * MidiSetup_EventHandler_Table -- read by MidiSetup_EventHandler (v10/v9
+     * 0xF7AC20, v7 0xF7A81C) (`lda xbc, (NakaInst_ON_E80168_0x3B8:24)`). 8
+     * bytes to the next object; the layout beyond that access is not
+     * established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiSetup_EventHandler_Table[8];
+    /* ---------------------------------------------------------------------
+     * MidiPart_LookupFromTable_Table -- read by MidiPart_LookupFromTable
+     * (v10/v9 0xF7ACFB, v7 0xF7A8F7) (`lda xbc,
+     * (NakaInst_ON_E80168_0x3C0:24)`). 312 bytes to the next object; the
+     * layout beyond that access is not established.
+     * --------------------------------------------------------------------- */
+    uint8_t MidiPart_LookupFromTable_Table[312];
+    /* ---------------------------------------------------------------------
+     * Transpose_ValueDisplay_Table -- 8 u32 addresses, read by
+     * MidiPart_LookupColumnParam (v10/v9 0xF7ACBA, v7 0xF7A8B6) (`lda xwa,
+     * (Transpose_ValueDisplay_Table:24)`).
+     * --------------------------------------------------------------------- */
+    uint32_t Transpose_ValueDisplay_Table[8];
+    /* ---------------------------------------------------------------------
+     * Transpose_ValueDisplay_Table_Strings -- the 8 strings
+     * Transpose_ValueDisplay_Table points at (NUL-terminated, 0xFF pad to
+     * even length), 48 bytes.
+     * --------------------------------------------------------------------- */
+    char Transpose_ValueDisplay_Table_Strings[48];
+    /* ---------------------------------------------------------------------
+     * MidiPartGridCheck_LocalInit -- initializer of a local array:
+     * MidiPartGridCheck (v10/v9 0xF7A869, v7 0xF7A465) (`ld xiy,
+     * Transpose_String_Plus2_0x12`) copies 10 bytes into its stack frame.
+     * --------------------------------------------------------------------- */
+    uint16_t MidiPartGridCheck_LocalInit[5];
+    /* ---------------------------------------------------------------------
+     * MidiPartGridCheck_LocalInit_Strings -- 54 bytes of NUL-terminated
+     * strings after MidiPartGridCheck_LocalInit; no registration or code
+     * reference reaches them (searched: RegObjTabl tables, slice and
+     * positional labels). Which code uses them is not established.
+     * --------------------------------------------------------------------- */
+    char MidiPartGridCheck_LocalInit_Strings[54];
+    /* ---------------------------------------------------------------------
+     * MidiPart_LookupFromTable_Str -- NUL-terminated string(s), 6 bytes,
+     * used by MidiPart_LookupFromTable (v10/v9 0xF7ACFB, v7 0xF7A8F7) (`ld
+     * xwa, Transpose_String_Plus2_0x52`).
+     * --------------------------------------------------------------------- */
+    char MidiPart_LookupFromTable_Str[6];
+    /* ---------------------------------------------------------------------
+     * MidiPart_LookupFromTable_Str_2 -- NUL-terminated string(s), 6 bytes,
+     * used by MidiPart_LookupFromTable (v10/v9 0xF7ACFB, v7 0xF7A8F7) (`ld
+     * xwa, Transpose_String_Plus2_0x58`).
+     * --------------------------------------------------------------------- */
+    char MidiPart_LookupFromTable_Str_2[6];
+    /* ---------------------------------------------------------------------
+     * MidiPartGridCheck_CaseTable -- jump table of a compiled `switch` in
+     * MidiPartGridCheck (v10/v9 0xF7A869, v7 0xF7A465) (`add xwa,
+     * Transpose_String_Plus2_0x5E`): 7 u16 case offsets from
+     * MidiPartGridCheck_JumpTable.
+     * --------------------------------------------------------------------- */
+    uint16_t MidiPartGridCheck_CaseTable[7];
+    /* ---------------------------------------------------------------------
+     * Murai_ApFuncTable_121 -- object table: InitializeMurai (v10/v9
+     * 0xF7AD77, v7 0xF7A973) (ui/drawbar_panel_ui.s:4188) registers it with
+     * `RegObjTabl 0x1600002, 0xfa496c, 44, 0xE8070A, 0x121` -- class
+     * 0x1600002 (ApFunctionProc), 44 objects, base id 0x121. Entries:
+     * procedure addresses then a 0 terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Murai_ApFuncTable_121[45];
+    /* ---------------------------------------------------------------------
+     * Murai_ApFuncNameTable_421 -- object table: InitializeMurai (v10/v9
+     * 0xF7AD77, v7 0xF7A973) (ui/drawbar_panel_ui.s:4189) registers it with
+     * `RegObjTabl 0x1600002, 0xfa496c, 44, 0xE807BE, 0x421` -- class
+     * 0x1600002 (ApFunctionProc), 44 objects, base id 0x421. Entries:
+     * pointers to the procedures' name strings then a "" terminator.
+     * --------------------------------------------------------------------- */
+    uint32_t Murai_ApFuncNameTable_421[45];
+    /* ---------------------------------------------------------------------
+     * Murai_ApFuncNames_421 -- the strings Murai_ApFuncNameTable_421 points
+     * at: 45 NUL-terminated names (0xFF pads to even length), 608 bytes.
+     * --------------------------------------------------------------------- */
+    char Murai_ApFuncNames_421[608];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSdpart -- property names of class IvSdpart (descriptor 0
+     * of Murai_ClassTable_161, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSdpart[1];
+    char ClassProps_IvSdpart_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcLswPartEditBox -- property names of class
+     * AcLswPartEditBox (descriptor 1 of Murai_ClassTable_161, whose +0x14
+     * points here): 2 pointers, one per letter of its signature "jn" --
+     * "func", "data" -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcLswPartEditBox[3];
+    char ClassProps_AcLswPartEditBox_Names[14];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcVolPartEditBox -- property names of class
+     * AcVolPartEditBox (descriptor 2 of Murai_ClassTable_161, whose +0x14
+     * points here): 3 pointers, one per letter of its signature "jjn" --
+     * "fvol", "fmute", "data" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcVolPartEditBox[4];
+    char ClassProps_AcVolPartEditBox_Names[20];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvMesage -- property names of class IvMesage (descriptor 3
+     * of Murai_ClassTable_161, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvMesage[1];
+    char ClassProps_IvMesage_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvAccordion -- property names of class IvAccordion
+     * (descriptor 4 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvAccordion[1];
+    char ClassProps_IvAccordion_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvAccordionX -- property names of class IvAccordionX
+     * (descriptor 5 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvAccordionX[1];
+    char ClassProps_IvAccordionX_Names[2];
+    /* ---------------------------------------------------------------------
+     * AudioStream_Property_Table -- property names of class AcAccordionTab
+     * (descriptor 6 of Murai_ClassTable_161, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "XX" -- "str1", "str3" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t AudioStream_Property_Table[3];
+    char AudioStream_Property_Table_Names[14];
+    /* ---------------------------------------------------------------------
+     * ClassProps_PsLabelBox -- property names of class PsLabelBox
+     * (descriptor 7 of Murai_ClassTable_161, whose +0x14 points here): 6
+     * pointers, one per letter of its signature "Xc^dmm" -- "str", "font",
+     * "fontcolor", "align", "selected", "dialfocus" -- then a pointer to "",
+     * then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_PsLabelBox[7];
+    char ClassProps_PsLabelBox_Names[48];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSdtecd -- property names of class IvSdtecd (descriptor 8
+     * of Murai_ClassTable_161, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSdtecd[1];
+    char ClassProps_IvSdtecd_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSdtecd1 -- property names of class IvSdtecd1 (descriptor
+     * 9 of Murai_ClassTable_161, whose +0x14 points here): 0 pointers, one
+     * per letter of its signature "" -- none -- then a pointer to "", then
+     * the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSdtecd1[1];
+    char ClassProps_IvSdtecd1_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSdscltyp2 -- property names of class IvSdscltyp2
+     * (descriptor 10 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSdscltyp2[1];
+    char ClassProps_IvSdscltyp2_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcWelcomScreen -- property names of class AcWelcomScreen
+     * (descriptor 11 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcWelcomScreen[1];
+    char ClassProps_AcWelcomScreen_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_PsMixerControl -- property names of class PsMixerControl
+     * (descriptor 12 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_PsMixerControl[1];
+    char ClassProps_PsMixerControl_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPartMixer -- property names of class AcPartMixer
+     * (descriptor 13 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPartMixer[1];
+    char ClassProps_AcPartMixer_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcTrackMixer -- property names of class AcTrackMixer
+     * (descriptor 14 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcTrackMixer[1];
+    char ClassProps_AcTrackMixer_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvSoftver -- property names of class IvSoftver (descriptor
+     * 15 of Murai_ClassTable_161, whose +0x14 points here): 0 pointers, one
+     * per letter of its signature "" -- none -- then a pointer to "", then
+     * the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvSoftver[1];
+    char ClassProps_IvSoftver_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvPageOverWrite -- property names of class IvPageOverWrite
+     * (descriptor 16 of Murai_ClassTable_161, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "At" -- "page", "window" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvPageOverWrite[3];
+    char ClassProps_IvPageOverWrite_Names[16];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvDrawbar -- property names of class IvDrawbar (descriptor
+     * 17 of Murai_ClassTable_161, whose +0x14 points here): 0 pointers, one
+     * per letter of its signature "" -- none -- then a pointer to "", then
+     * the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvDrawbar[1];
+    char ClassProps_IvDrawbar_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvDrawbar1 -- property names of class IvDrawbar1
+     * (descriptor 18 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvDrawbar1[1];
+    char ClassProps_IvDrawbar1_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvDrawbar2 -- property names of class IvDrawbar2
+     * (descriptor 19 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvDrawbar2[1];
+    char ClassProps_IvDrawbar2_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvDrawbarNorm -- property names of class IvDrawbarNorm
+     * (descriptor 20 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvDrawbarNorm[1];
+    char ClassProps_IvDrawbarNorm_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvDrawbarSndE -- property names of class IvDrawbarSndE
+     * (descriptor 21 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvDrawbarSndE[1];
+    char ClassProps_IvDrawbarSndE_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcResetPage -- property names of class AcResetPage
+     * (descriptor 22 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcResetPage[1];
+    char ClassProps_AcResetPage_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_PsVariBox -- property names of class PsVariBox (descriptor
+     * 23 of Murai_ClassTable_161, whose +0x14 points here): 5 pointers, one
+     * per letter of its signature "c^dem" -- "font", "fontcolor", "align",
+     * "editsw", "selected" -- then a pointer to "", then the names
+     * themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_PsVariBox[6];
+    char ClassProps_PsVariBox_Names[42];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPresentationControl -- property names of class
+     * AcPresentationControl (descriptor 24 of Murai_ClassTable_161, whose
+     * +0x14 points here): 0 pointers, one per letter of its signature "" --
+     * none -- then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPresentationControl[1];
+    char ClassProps_AcPresentationControl_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvDemofeature1 -- property names of class IvDemofeature1
+     * (descriptor 25 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvDemofeature1[1];
+    char ClassProps_IvDemofeature1_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvDemofeature2 -- property names of class IvDemofeature2
+     * (descriptor 26 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvDemofeature2[1];
+    char ClassProps_IvDemofeature2_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcDrawEditBox -- property names of class AcDrawEditBox
+     * (descriptor 27 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcDrawEditBox[1];
+    char ClassProps_AcDrawEditBox_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcLswPartPan -- property names of class AcLswPartPan
+     * (descriptor 28 of Murai_ClassTable_161, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "jn" -- "func", "data" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcLswPartPan[3];
+    char ClassProps_AcLswPartPan_Names[14];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPresentationBox -- property names of class
+     * AcPresentationBox (descriptor 29 of Murai_ClassTable_161, whose +0x14
+     * points here): 4 pointers, one per letter of its signature "XemA" --
+     * "str", "editsw", "selected", "song" -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPresentationBox[5];
+    char ClassProps_AcPresentationBox_Names[30];
+    /* ---------------------------------------------------------------------
+     * ClassProps_VwUserBitmapSp -- property names of class VwUserBitmapSp
+     * (descriptor 30 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_VwUserBitmapSp[1];
+    char ClassProps_VwUserBitmapSp_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcFdemoScreen -- property names of class AcFdemoScreen
+     * (descriptor 31 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcFdemoScreen[1];
+    char ClassProps_AcFdemoScreen_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcSndEMenu -- property names of class AcSndEMenu
+     * (descriptor 32 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcSndEMenu[1];
+    char ClassProps_AcSndEMenu_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcPleaseWait -- property names of class AcPleaseWait
+     * (descriptor 33 of Murai_ClassTable_161, whose +0x14 points here): 0
+     * pointers, one per letter of its signature "" -- none -- then a pointer
+     * to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcPleaseWait[1];
+    char ClassProps_AcPleaseWait_Names[2];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcDrawSetting -- property names of class AcDrawSetting
+     * (descriptor 34 of Murai_ClassTable_161, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "AA" -- "index", "tag" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcDrawSetting[3];
+    char ClassProps_AcDrawSetting_Names[12];
+    /* ---------------------------------------------------------------------
+     * ClassProps_AcDrawbarName -- property names of class AcDrawbarName
+     * (descriptor 35 of Murai_ClassTable_161, whose +0x14 points here): 2
+     * pointers, one per letter of its signature "ue" -- "part", "editsw" --
+     * then a pointer to "", then the names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_AcDrawbarName[3];
+    char ClassProps_AcDrawbarName_Names[16];
+    /* ---------------------------------------------------------------------
+     * ClassProps_IvMPver -- property names of class IvMPver (descriptor 36
+     * of Murai_ClassTable_161, whose +0x14 points here): 0 pointers, one per
+     * letter of its signature "" -- none -- then a pointer to "", then the
+     * names themselves.
+     * --------------------------------------------------------------------- */
+    uint32_t ClassProps_IvMPver[1];
+    char ClassProps_IvMPver_Names[2];
+    /* ---------------------------------------------------------------------
+     * Murai_ClassTable_161 -- class table: InitializeMurai (v10/v9 0xF7AD77,
+     * v7 0xF7A973) (ui/drawbar_panel_ui.s:4185) registers it with
+     * `RegObjTable 0x1600004, 0xfa44e2, (count at 0xe812e2 = 37), 0xE80CF6,
+     * 0x161` -- 37 naka_class_t descriptors (naka_types.h: proc, base class,
+     * two u16, name, field-type letters, property data), 31 of them inside
+     * this blob; the table runs on into the next blob, and the 4 bytes left
+     * here begin descriptor 31.
+     * --------------------------------------------------------------------- */
+    naka_class_t Murai_ClassTable_161[31];
+    /* ---------------------------------------------------------------------
+     * Murai_ClassTable_161_Desc31Head -- the first u32 (proc) of descriptor
+     * 31 of Murai_ClassTable_161; the rest of that table is in the next
+     * blob.
+     * --------------------------------------------------------------------- */
+    uint32_t Murai_ClassTable_161_Desc31Head[1];
 } naka_widget_tables_2_t;
 
 #define SELF(field) \
@@ -2364,780 +2544,559 @@ _Static_assert(sizeof(naka_widget_tables_2_t) == 158788,
 const naka_widget_tables_2_t naka_widget_tables_2_data
     __attribute__((section(".text"), used)) = {
 
-    .ptrs_0 = {
-        SELF(w1_name),
-        SELF(w1_code),
-        SELF(w0_name),
-        SELF(w0_code),
-        SELF(str_4),
-        SELF(str_3),
-        SELF(str_2),
-        SELF(str_1),
-        SELF(str_0),
+    .NakaData_WidgetTables2 = {
+        SELF(East_ResNames_352[28]),
+        SELF(East_ResNames_352[26]),
+        SELF(East_ResNames_352[12]),
+        SELF(East_ResNames_352[10]),
+        SELF(East_ResNames_352[8]),
+        SELF(East_ResNames_352[6]),
+        SELF(East_ResNames_352[4]),
+        SELF(East_ResNames_352[2]),
+        SELF(East_ResNames_352),
     },
 
-    .str_0 = ALIGNED_STRING(""),
+    .East_ResNames_352 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "CtlMsgGridBox\0"
+        "\0\xFF"
+        "MidiControlMessage\0\xFF",
 
-    .str_1 = ALIGNED_STRING(""),
-
-    .str_2 = ALIGNED_STRING(""),
-
-    .str_3 = ALIGNED_STRING(""),
-
-    .str_4 = ALIGNED_STRING(""),
-
-    .w0_code = ALIGNED_STRING(""),
-
-    .w0_name = "CtlMsgGridBox",
-
-    .w1_code = ALIGNED_STRING(""),
-
-    .w1_name = ALIGNED_STRING("MidiControlMessage"),
-
-    .ptrs_1 = {
-        SELF(w3_name),
-        SELF(w3_code),
-        SELF(str_7),
-        SELF(w2_name),
-        SELF(w2_code),
-        SELF(str_6),
-        SELF(str_5),
+    .East_ResNameTable_353 = {
+        SELF(East_ResNames_353[38]),
+        SELF(East_ResNames_353[36]),
+        SELF(East_ResNames_353[16]),
+        SELF(East_ResNames_353[6]),
+        SELF(East_ResNames_353[4]),
+        SELF(East_ResNames_353[2]),
+        SELF(East_ResNames_353),
     },
 
-    .str_5 = ALIGNED_STRING(""),
+    .East_ResNames_353 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "ClockBox\0\xFF"
+        "RealtimeCommandBox\0\xFF"
+        "\0\xFF"
+        "MidiRealtimeMessage",
 
-    .str_6 = ALIGNED_STRING(""),
-
-    .w2_code = ALIGNED_STRING(""),
-
-    .w2_name = ALIGNED_STRING("ClockBox"),
-
-    .str_7 = ALIGNED_STRING("RealtimeCommandBox"),
-
-    .w3_code = ALIGNED_STRING(""),
-
-    .w3_name = "MidiRealtimeMessage",
-
-    .ptrs_2 = {
-        SELF(str_11),
-        SELF(w4_name),
-        SELF(w4_code),
-        SELF(str_10),
-        SELF(str_9),
-        SELF(str_8),
+    .NakaObj_MidiCommonSetting_Table = {
+        SELF(East_ResNames_354[22]),
+        SELF(East_ResNames_354[8]),
+        SELF(East_ResNames_354[6]),
+        SELF(East_ResNames_354[4]),
+        SELF(East_ResNames_354[2]),
+        SELF(East_ResNames_354),
     },
 
-    .str_8 = ALIGNED_STRING(""),
+    .East_ResNames_354 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "ComSetGridBox\0"
+        "MidiCommonSetting",
 
-    .str_9 = ALIGNED_STRING(""),
-
-    .str_10 = ALIGNED_STRING(""),
-
-    .w4_code = ALIGNED_STRING(""),
-
-    .w4_name = "ComSetGridBox",
-
-    .str_11 = "MidiCommonSetting",
-
-    .ptrs_3 = {
-        SELF(str_15),
-        SELF(w5_name),
-        SELF(w5_code),
-        SELF(str_14),
-        SELF(str_13),
-        SELF(str_12),
+    .NakaObj_MidiInOutSetting_Table = {
+        SELF(East_ResNames_355[22]),
+        SELF(East_ResNames_355[8]),
+        SELF(East_ResNames_355[6]),
+        SELF(East_ResNames_355[4]),
+        SELF(East_ResNames_355[2]),
+        SELF(East_ResNames_355),
     },
 
-    .str_12 = ALIGNED_STRING(""),
+    .East_ResNames_355 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "InOutGridBox\0\xFF"
+        "MidiInOutSetting\0\xFF",
 
-    .str_13 = ALIGNED_STRING(""),
-
-    .str_14 = ALIGNED_STRING(""),
-
-    .w5_code = ALIGNED_STRING(""),
-
-    .w5_name = ALIGNED_STRING("InOutGridBox"),
-
-    .str_15 = ALIGNED_STRING("MidiInOutSetting"),
-
-    .ptrs_4 = {
-        SELF(str_57),
-        SELF(w18_name),
-        SELF(w18_code),
-        SELF(str_56),
-        SELF(str_55),
-        SELF(w17_name),
-        SELF(w17_code),
-        SELF(w16_name),
-        SELF(w16_code),
-        SELF(str_54),
-        SELF(str_53),
-        SELF(str_52),
-        SELF(w15_name),
-        SELF(w15_code),
-        SELF(str_51),
-        SELF(str_50),
-        SELF(str_49),
-        SELF(str_48),
-        SELF(str_47),
-        SELF(w14_name),
-        SELF(w14_code),
-        SELF(w13_name),
-        SELF(w13_code),
-        SELF(str_46),
-        SELF(str_45),
-        SELF(str_44),
-        SELF(str_43),
-        SELF(str_42),
-        SELF(str_41),
-        SELF(str_40),
-        SELF(str_39),
-        SELF(str_38),
-        SELF(w12_name),
-        SELF(w12_code),
-        SELF(str_37),
-        SELF(str_36),
-        SELF(str_35),
-        SELF(w11_name),
-        SELF(w11_code),
-        SELF(str_34),
-        SELF(str_33),
-        SELF(w10_name),
-        SELF(w10_code),
-        SELF(w9_name),
-        SELF(w9_code),
-        SELF(w8_name),
-        SELF(w8_code),
-        SELF(str_32),
-        SELF(str_31),
-        SELF(str_30),
-        SELF(str_29),
-        SELF(str_28),
-        SELF(str_27),
-        SELF(str_26),
-        SELF(str_25),
-        SELF(w7_name),
-        SELF(w7_code),
-        SELF(w6_name),
-        SELF(w6_code),
-        SELF(str_24),
-        SELF(str_23),
-        SELF(str_22),
-        SELF(str_21),
-        SELF(str_20),
-        SELF(str_19),
-        SELF(str_18),
-        SELF(str_17),
-        SELF(str_16),
+    .NakaObj_MidiPresets_Table = {
+        SELF(East_ResNames_356[408]),
+        SELF(East_ResNames_356[392]),
+        SELF(East_ResNames_356[390]),
+        SELF(East_ResNames_356[388]),
+        SELF(East_ResNames_356[374]),
+        SELF(East_ResNames_356[360]),
+        SELF(East_ResNames_356[358]),
+        SELF(East_ResNames_356[334]),
+        SELF(East_ResNames_356[332]),
+        SELF(East_ResNames_356[330]),
+        SELF(East_ResNames_356[328]),
+        SELF(East_ResNames_356[326]),
+        SELF(East_ResNames_356[304]),
+        SELF(East_ResNames_356[302]),
+        SELF(East_ResNames_356[300]),
+        SELF(East_ResNames_356[298]),
+        SELF(East_ResNames_356[296]),
+        SELF(East_ResNames_356[294]),
+        SELF(East_ResNames_356[292]),
+        SELF(East_ResNames_356[272]),
+        SELF(East_ResNames_356[270]),
+        SELF(East_ResNames_356[252]),
+        SELF(East_ResNames_356[250]),
+        SELF(East_ResNames_356[248]),
+        SELF(East_ResNames_356[246]),
+        SELF(East_ResNames_356[244]),
+        SELF(East_ResNames_356[242]),
+        SELF(East_ResNames_356[240]),
+        SELF(East_ResNames_356[238]),
+        SELF(East_ResNames_356[236]),
+        SELF(East_ResNames_356[234]),
+        SELF(East_ResNames_356[218]),
+        SELF(East_ResNames_356[196]),
+        SELF(East_ResNames_356[194]),
+        SELF(East_ResNames_356[192]),
+        SELF(East_ResNames_356[190]),
+        SELF(East_ResNames_356[174]),
+        SELF(East_ResNames_356[152]),
+        SELF(East_ResNames_356[150]),
+        SELF(East_ResNames_356[148]),
+        SELF(East_ResNames_356[146]),
+        SELF(East_ResNames_356[132]),
+        SELF(East_ResNames_356[130]),
+        SELF(East_ResNames_356[106]),
+        SELF(East_ResNames_356[104]),
+        SELF(East_ResNames_356[82]),
+        SELF(East_ResNames_356[80]),
+        SELF(East_ResNames_356[78]),
+        SELF(East_ResNames_356[76]),
+        SELF(East_ResNames_356[74]),
+        SELF(East_ResNames_356[72]),
+        SELF(East_ResNames_356[70]),
+        SELF(East_ResNames_356[68]),
+        SELF(East_ResNames_356[66]),
+        SELF(East_ResNames_356[64]),
+        SELF(East_ResNames_356[42]),
+        SELF(East_ResNames_356[40]),
+        SELF(East_ResNames_356[20]),
+        SELF(East_ResNames_356[18]),
+        SELF(East_ResNames_356[16]),
+        SELF(East_ResNames_356[14]),
+        SELF(East_ResNames_356[12]),
+        SELF(East_ResNames_356[10]),
+        SELF(East_ResNames_356[8]),
+        SELF(East_ResNames_356[6]),
+        SELF(East_ResNames_356[4]),
+        SELF(East_ResNames_356[2]),
+        SELF(East_ResNames_356),
     },
 
-    .str_16 = ALIGNED_STRING(""),
-
-    .str_17 = ALIGNED_STRING(""),
-
-    .str_18 = ALIGNED_STRING(""),
-
-    .str_19 = ALIGNED_STRING(""),
-
-    .str_20 = ALIGNED_STRING(""),
-
-    .str_21 = ALIGNED_STRING(""),
-
-    .str_22 = ALIGNED_STRING(""),
-
-    .str_23 = ALIGNED_STRING(""),
-
-    .str_24 = ALIGNED_STRING(""),
-
-    .w6_code = ALIGNED_STRING(""),
-
-    .w6_name = ALIGNED_STRING("MpstMasterWithList"),
-
-    .w7_code = ALIGNED_STRING(""),
-
-    .w7_name = ALIGNED_STRING("MidiPresetMasterWith"),
-
-    .str_25 = ALIGNED_STRING(""),
-
-    .str_26 = ALIGNED_STRING(""),
-
-    .str_27 = ALIGNED_STRING(""),
-
-    .str_28 = ALIGNED_STRING(""),
-
-    .str_29 = ALIGNED_STRING(""),
-
-    .str_30 = ALIGNED_STRING(""),
-
-    .str_31 = ALIGNED_STRING(""),
-
-    .str_32 = ALIGNED_STRING(""),
-
-    .w8_code = ALIGNED_STRING(""),
-
-    .w8_name = "MpstMasterWithoutList",
-
-    .w9_code = ALIGNED_STRING(""),
-
-    .w9_name = "MidiPresetMasterWithout",
-
-    .w10_code = ALIGNED_STRING(""),
-
-    .w10_name = "MdpstSplitBox",
-
-    .str_33 = ALIGNED_STRING(""),
-
-    .str_34 = ALIGNED_STRING(""),
-
-    .w11_code = ALIGNED_STRING(""),
-
-    .w11_name = "MdPresetUserWriteList",
-
-    .str_35 = "MidiPresetPage4",
-
-    .str_36 = ALIGNED_STRING(""),
-
-    .str_37 = ALIGNED_STRING(""),
-
-    .w12_code = ALIGNED_STRING(""),
-
-    .w12_name = ALIGNED_STRING("MdPresetUserLoadList"),
-
-    .str_38 = "MidiPresetPage3",
-
-    .str_39 = ALIGNED_STRING(""),
-
-    .str_40 = ALIGNED_STRING(""),
-
-    .str_41 = ALIGNED_STRING(""),
-
-    .str_42 = ALIGNED_STRING(""),
-
-    .str_43 = ALIGNED_STRING(""),
-
-    .str_44 = ALIGNED_STRING(""),
-
-    .str_45 = ALIGNED_STRING(""),
-
-    .str_46 = ALIGNED_STRING(""),
-
-    .w13_code = ALIGNED_STRING(""),
-
-    .w13_name = "MpstSlaveWithList",
-
-    .w14_code = ALIGNED_STRING(""),
-
-    .w14_name = "MidiPresetSlaveWith",
-
-    .str_47 = ALIGNED_STRING(""),
-
-    .str_48 = ALIGNED_STRING(""),
-
-    .str_49 = ALIGNED_STRING(""),
-
-    .str_50 = ALIGNED_STRING(""),
-
-    .str_51 = ALIGNED_STRING(""),
-
-    .w15_code = ALIGNED_STRING(""),
-
-    .w15_name = ALIGNED_STRING("MpstSlaveWithoutList"),
-
-    .str_52 = ALIGNED_STRING(""),
-
-    .str_53 = ALIGNED_STRING(""),
-
-    .str_54 = ALIGNED_STRING(""),
-
-    .w16_code = ALIGNED_STRING(""),
-
-    .w16_name = ALIGNED_STRING("MidiPresetSlaveWithout"),
-
-    .w17_code = ALIGNED_STRING(""),
-
-    .w17_name = ALIGNED_STRING("MpstPageCtl2"),
-
-    .str_55 = ALIGNED_STRING("MpstPageCtl1"),
-
-    .str_56 = ALIGNED_STRING(""),
-
-    .w18_code = ALIGNED_STRING(""),
-
-    .w18_name = "MdPresetPageBox",
-
-    .str_57 = "MidiPresets",
-
-    .ptrs_5 = {
-        SELF(w23_name),
-        SELF(w23_code),
-        SELF(str_76),
-        SELF(w22_name),
-        SELF(w22_code),
-        SELF(str_75),
-        SELF(w21_name),
-        SELF(w21_code),
-        SELF(str_74),
-        SELF(str_73),
-        SELF(str_72),
-        SELF(str_71),
-        SELF(str_70),
-        SELF(str_69),
-        SELF(str_68),
-        SELF(str_67),
-        SELF(str_66),
-        SELF(w20_name),
-        SELF(w20_code),
-        SELF(str_65),
-        SELF(str_64),
-        SELF(str_63),
-        SELF(str_62),
-        SELF(str_61),
-        SELF(str_60),
-        SELF(str_59),
-        SELF(str_58),
-        SELF(w19_name),
-        SELF(w19_code),
+    .East_ResNames_356 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MpstMasterWithList\0\xFF"
+        "\0\xFF"
+        "MidiPresetMasterWith\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MpstMasterWithoutList\0"
+        "\0\xFF"
+        "MidiPresetMasterWithout\0"
+        "\0\xFF"
+        "MdpstSplitBox\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MdPresetUserWriteList\0"
+        "MidiPresetPage4\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MdPresetUserLoadList\0\xFF"
+        "MidiPresetPage3\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MpstSlaveWithList\0"
+        "\0\xFF"
+        "MidiPresetSlaveWith\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MpstSlaveWithoutList\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MidiPresetSlaveWithout\0\xFF"
+        "\0\xFF"
+        "MpstPageCtl2\0\xFF"
+        "MpstPageCtl1\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MdPresetPageBox\0"
+        "MidiPresets",
+
+    .East_ResNameTable_357 = {
+        SELF(East_ResNames_357[264]),
+        SELF(East_ResNames_357[262]),
+        SELF(East_ResNames_357[260]),
+        SELF(East_ResNames_357[248]),
+        SELF(East_ResNames_357[246]),
+        SELF(East_ResNames_357[244]),
+        SELF(East_ResNames_357[230]),
+        SELF(East_ResNames_357[228]),
+        SELF(East_ResNames_357[226]),
+        SELF(East_ResNames_357[224]),
+        SELF(East_ResNames_357[208]),
+        SELF(East_ResNames_357[192]),
+        SELF(East_ResNames_357[176]),
+        SELF(East_ResNames_357[162]),
+        SELF(East_ResNames_357[148]),
+        SELF(East_ResNames_357[134]),
+        SELF(East_ResNames_357[120]),
+        SELF(East_ResNames_357[106]),
+        SELF(East_ResNames_357[104]),
+        SELF(East_ResNames_357[102]),
+        SELF(East_ResNames_357[100]),
+        SELF(East_ResNames_357[86]),
+        SELF(East_ResNames_357[72]),
+        SELF(East_ResNames_357[58]),
+        SELF(East_ResNames_357[44]),
+        SELF(East_ResNames_357[30]),
+        SELF(East_ResNames_357[16]),
+        SELF(East_ResNames_357[2]),
+        SELF(East_ResNames_357),
     },
 
-    .w19_code = ALIGNED_STRING(""),
+    .East_ResNames_357 = 
+        "\0\xFF"
+        "ExcRcvDotBox\0\xFF"
+        "ExcRcvMspBox\0\xFF"
+        "ExcRcvSeqBox\0\xFF"
+        "ExcRcvCmpBox\0\xFF"
+        "ExcRcvSmemBox\0"
+        "ExcRcvPmemBox\0"
+        "ExcRcvShowBox\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "ExcRcvWindow\0\xFF"
+        "ExcSendDotBox\0"
+        "ExcSendMspBox\0"
+        "ExcSendSeqBox\0"
+        "ExcSendCmpBox\0"
+        "ExcSendSmemBox\0\xFF"
+        "ExcSendPmemBox\0\xFF"
+        "ExcSendShowBox\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "ExcSendWindow\0"
+        "\0\xFF"
+        "\0\xFF"
+        "ExcListBox\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MidiExclusive",
 
-    .w19_name = ALIGNED_STRING("ExcRcvDotBox"),
-
-    .str_58 = ALIGNED_STRING("ExcRcvMspBox"),
-
-    .str_59 = ALIGNED_STRING("ExcRcvSeqBox"),
-
-    .str_60 = ALIGNED_STRING("ExcRcvCmpBox"),
-
-    .str_61 = "ExcRcvSmemBox",
-
-    .str_62 = "ExcRcvPmemBox",
-
-    .str_63 = "ExcRcvShowBox",
-
-    .str_64 = ALIGNED_STRING(""),
-
-    .str_65 = ALIGNED_STRING(""),
-
-    .w20_code = ALIGNED_STRING(""),
-
-    .w20_name = ALIGNED_STRING("ExcRcvWindow"),
-
-    .str_66 = "ExcSendDotBox",
-
-    .str_67 = "ExcSendMspBox",
-
-    .str_68 = "ExcSendSeqBox",
-
-    .str_69 = "ExcSendCmpBox",
-
-    .str_70 = ALIGNED_STRING("ExcSendSmemBox"),
-
-    .str_71 = ALIGNED_STRING("ExcSendPmemBox"),
-
-    .str_72 = ALIGNED_STRING("ExcSendShowBox"),
-
-    .str_73 = ALIGNED_STRING(""),
-
-    .str_74 = ALIGNED_STRING(""),
-
-    .w21_code = ALIGNED_STRING(""),
-
-    .w21_name = "ExcSendWindow",
-
-    .str_75 = ALIGNED_STRING(""),
-
-    .w22_code = ALIGNED_STRING(""),
-
-    .w22_name = ALIGNED_STRING("ExcListBox"),
-
-    .str_76 = ALIGNED_STRING(""),
-
-    .w23_code = ALIGNED_STRING(""),
-
-    .w23_name = "MidiExclusive",
-
-    .ptrs_6 = {
-        SELF(w24_name),
-        SELF(w24_code),
-        SELF(str_96),
-        SELF(str_95),
-        SELF(str_94),
-        SELF(str_93),
-        SELF(str_92),
-        SELF(str_91),
-        SELF(str_90),
-        SELF(str_89),
-        SELF(str_88),
-        SELF(str_87),
-        SELF(str_86),
-        SELF(str_85),
-        SELF(str_84),
-        SELF(str_83),
-        SELF(str_82),
-        SELF(str_81),
-        SELF(str_80),
-        SELF(str_79),
-        SELF(str_78),
-        SELF(str_77),
+    .East_ResNameTable_358 = {
+        SELF(East_ResNames_358[68]),
+        SELF(East_ResNames_358[56]),
+        SELF(East_ResNames_358[54]),
+        SELF(East_ResNames_358[52]),
+        SELF(East_ResNames_358[50]),
+        SELF(East_ResNames_358[40]),
+        SELF(East_ResNames_358[38]),
+        SELF(East_ResNames_358[36]),
+        SELF(East_ResNames_358[34]),
+        SELF(East_ResNames_358[32]),
+        SELF(East_ResNames_358[30]),
+        SELF(East_ResNames_358[28]),
+        SELF(East_ResNames_358[26]),
+        SELF(East_ResNames_358[16]),
+        SELF(East_ResNames_358[14]),
+        SELF(East_ResNames_358[12]),
+        SELF(East_ResNames_358[10]),
+        SELF(East_ResNames_358[8]),
+        SELF(East_ResNames_358[6]),
+        SELF(East_ResNames_358[4]),
+        SELF(East_ResNames_358[2]),
+        SELF(East_ResNames_358),
     },
 
-    .str_77 = ALIGNED_STRING(""),
+    .East_ResNames_358 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "GMOFFSure\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "GMONSure\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "GMOnOffBox\0\xFF"
+        "MidiGmMode\0\xFF",
 
-    .str_78 = ALIGNED_STRING(""),
-
-    .str_79 = ALIGNED_STRING(""),
-
-    .str_80 = ALIGNED_STRING(""),
-
-    .str_81 = ALIGNED_STRING(""),
-
-    .str_82 = ALIGNED_STRING(""),
-
-    .str_83 = ALIGNED_STRING(""),
-
-    .str_84 = ALIGNED_STRING(""),
-
-    .str_85 = "GMOFFSure",
-
-    .str_86 = ALIGNED_STRING(""),
-
-    .str_87 = ALIGNED_STRING(""),
-
-    .str_88 = ALIGNED_STRING(""),
-
-    .str_89 = ALIGNED_STRING(""),
-
-    .str_90 = ALIGNED_STRING(""),
-
-    .str_91 = ALIGNED_STRING(""),
-
-    .str_92 = ALIGNED_STRING(""),
-
-    .str_93 = ALIGNED_STRING("GMONSure"),
-
-    .str_94 = ALIGNED_STRING(""),
-
-    .str_95 = ALIGNED_STRING(""),
-
-    .str_96 = ALIGNED_STRING(""),
-
-    .w24_code = ALIGNED_STRING("GMOnOffBox"),
-
-    .w24_name = ALIGNED_STRING("MidiGmMode"),
-
-    .ptrs_7 = {
-        SELF(str_101),
-        SELF(w25_name),
-        SELF(w25_code),
-        SELF(str_100),
-        SELF(str_99),
-        SELF(str_98),
-        SELF(str_97),
+    .East_ResNameTable_359 = {
+        SELF(East_ResNames_359[24]),
+        SELF(East_ResNames_359[10]),
+        SELF(East_ResNames_359[8]),
+        SELF(East_ResNames_359[6]),
+        SELF(East_ResNames_359[4]),
+        SELF(East_ResNames_359[2]),
+        SELF(East_ResNames_359),
     },
 
-    .str_97 = ALIGNED_STRING(""),
+    .East_ResNames_359 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "PcgOutGridBox\0"
+        "MidiPcgOutput",
 
-    .str_98 = ALIGNED_STRING(""),
-
-    .str_99 = ALIGNED_STRING(""),
-
-    .str_100 = ALIGNED_STRING(""),
-
-    .w25_code = ALIGNED_STRING(""),
-
-    .w25_name = "PcgOutGridBox",
-
-    .str_101 = "MidiPcgOutput",
-
-    .ptrs_8 = {
-        SELF(w26_name),
-        SELF(w26_code),
-        SELF(str_106),
-        SELF(str_105),
-        SELF(str_104),
-        SELF(str_103),
-        SELF(str_102),
+    .NakaObj_MidiComputerConn_Table = {
+        SELF(East_ResNames_35A[12]),
+        SELF(East_ResNames_35A[10]),
+        SELF(East_ResNames_35A[8]),
+        SELF(East_ResNames_35A[6]),
+        SELF(East_ResNames_35A[4]),
+        SELF(East_ResNames_35A[2]),
+        SELF(East_ResNames_35A),
     },
 
-    .str_102 = ALIGNED_STRING(""),
+    .East_ResNames_35A = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MidiComputerConnection\0\xFF",
 
-    .str_103 = ALIGNED_STRING(""),
-
-    .str_104 = ALIGNED_STRING(""),
-
-    .str_105 = ALIGNED_STRING(""),
-
-    .str_106 = ALIGNED_STRING(""),
-
-    .w26_code = ALIGNED_STRING(""),
-
-    .w26_name = ALIGNED_STRING("MidiComputerConnection"),
-
-    .ptrs_9 = {
-        SELF(w28_name),
-        SELF(w28_code),
-        SELF(str_120),
-        SELF(str_119),
-        SELF(str_118),
-        SELF(str_117),
-        SELF(str_116),
-        SELF(str_115),
-        SELF(str_114),
-        SELF(w27_name),
-        SELF(w27_code),
-        SELF(str_113),
-        SELF(str_112),
-        SELF(str_111),
-        SELF(str_110),
-        SELF(str_109),
-        SELF(str_108),
-        SELF(str_107),
+    .NakaObj_MidiPmemOutput_Table = {
+        SELF(East_ResNames_35B[56]),
+        SELF(East_ResNames_35B[54]),
+        SELF(East_ResNames_35B[52]),
+        SELF(East_ResNames_35B[50]),
+        SELF(East_ResNames_35B[48]),
+        SELF(East_ResNames_35B[46]),
+        SELF(East_ResNames_35B[44]),
+        SELF(East_ResNames_35B[42]),
+        SELF(East_ResNames_35B[30]),
+        SELF(East_ResNames_35B[16]),
+        SELF(East_ResNames_35B[14]),
+        SELF(East_ResNames_35B[12]),
+        SELF(East_ResNames_35B[10]),
+        SELF(East_ResNames_35B[8]),
+        SELF(East_ResNames_35B[6]),
+        SELF(East_ResNames_35B[4]),
+        SELF(East_ResNames_35B[2]),
+        SELF(East_ResNames_35B),
     },
 
-    .str_107 = ALIGNED_STRING(""),
+    .East_ResNames_35B = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "PmemOutRight\0\xFF"
+        "PmemOutLeft\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MidiPanelMemoryOutput",
 
-    .str_108 = ALIGNED_STRING(""),
-
-    .str_109 = ALIGNED_STRING(""),
-
-    .str_110 = ALIGNED_STRING(""),
-
-    .str_111 = ALIGNED_STRING(""),
-
-    .str_112 = ALIGNED_STRING(""),
-
-    .str_113 = ALIGNED_STRING(""),
-
-    .w27_code = ALIGNED_STRING(""),
-
-    .w27_name = ALIGNED_STRING("PmemOutRight"),
-
-    .str_114 = "PmemOutLeft",
-
-    .str_115 = ALIGNED_STRING(""),
-
-    .str_116 = ALIGNED_STRING(""),
-
-    .str_117 = ALIGNED_STRING(""),
-
-    .str_118 = ALIGNED_STRING(""),
-
-    .str_119 = ALIGNED_STRING(""),
-
-    .str_120 = ALIGNED_STRING(""),
-
-    .w28_code = ALIGNED_STRING(""),
-
-    .w28_name = "MidiPanelMemoryOutput",
-
-    .ptrs_10 = {
-        SELF(str_127),
-        SELF(w29_name),
-        SELF(w29_code),
-        SELF(str_126),
-        SELF(str_125),
-        SELF(str_124),
-        SELF(str_123),
-        SELF(str_122),
-        SELF(str_121),
+    .East_ResNameTable_35C = {
+        SELF(East_ResNames_35C[30]),
+        SELF(East_ResNames_35C[14]),
+        SELF(East_ResNames_35C[12]),
+        SELF(East_ResNames_35C[10]),
+        SELF(East_ResNames_35C[8]),
+        SELF(East_ResNames_35C[6]),
+        SELF(East_ResNames_35C[4]),
+        SELF(East_ResNames_35C[2]),
+        SELF(East_ResNames_35C),
     },
 
-    .str_121 = ALIGNED_STRING(""),
+    .East_ResNames_35C = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "MdSetOptGridBox\0"
+        "MidiSetup",
 
-    .str_122 = ALIGNED_STRING(""),
-
-    .str_123 = ALIGNED_STRING(""),
-
-    .str_124 = ALIGNED_STRING(""),
-
-    .str_125 = ALIGNED_STRING(""),
-
-    .str_126 = ALIGNED_STRING(""),
-
-    .w29_code = ALIGNED_STRING(""),
-
-    .w29_name = "MdSetOptGridBox",
-
-    .str_127 = "MidiSetup",
-
-    .ptrs_11 = {
-        SELF(w34_name),
-        SELF(w34_code),
-        SELF(str_142),
-        SELF(w33_name),
-        SELF(w33_code),
-        SELF(w32_name),
-        SELF(w32_code),
-        SELF(str_141),
-        SELF(str_140),
-        SELF(str_139),
-        SELF(w31_name),
-        SELF(w31_code),
-        SELF(str_138),
-        SELF(str_137),
-        SELF(w30_name),
-        SELF(w30_code),
-        SELF(str_136),
-        SELF(str_135),
-        SELF(str_134),
-        SELF(str_133),
-        SELF(str_132),
-        SELF(str_131),
-        SELF(str_130),
-        SELF(str_129),
-        SELF(str_128),
+    .East_ResNameTable_3D7 = {
+        SELF(East_ResNames_3D7[126]),
+        SELF(East_ResNames_3D7[124]),
+        SELF(East_ResNames_3D7[122]),
+        SELF(East_ResNames_3D7[108]),
+        SELF(East_ResNames_3D7[106]),
+        SELF(East_ResNames_3D7[92]),
+        SELF(East_ResNames_3D7[90]),
+        SELF(East_ResNames_3D7[88]),
+        SELF(East_ResNames_3D7[86]),
+        SELF(East_ResNames_3D7[84]),
+        SELF(East_ResNames_3D7[68]),
+        SELF(East_ResNames_3D7[66]),
+        SELF(East_ResNames_3D7[52]),
+        SELF(East_ResNames_3D7[38]),
+        SELF(East_ResNames_3D7[20]),
+        SELF(East_ResNames_3D7[18]),
+        SELF(East_ResNames_3D7[16]),
+        SELF(East_ResNames_3D7[14]),
+        SELF(East_ResNames_3D7[12]),
+        SELF(East_ResNames_3D7[10]),
+        SELF(East_ResNames_3D7[8]),
+        SELF(East_ResNames_3D7[6]),
+        SELF(East_ResNames_3D7[4]),
+        SELF(East_ResNames_3D7[2]),
+        SELF(East_ResNames_3D7),
     },
 
-    .str_128 = ALIGNED_STRING(""),
+    .East_ResNames_3D7 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "VocalistPage2Box\0\xFF"
+        "VocalistPage2\0"
+        "HarmOnOffBox\0\xFF"
+        "\0\xFF"
+        "VocalistListBox\0"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "VocalistPage1\0"
+        "\0\xFF"
+        "VocalistPage\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "EntertainerVocal\0\xFF",
 
-    .str_129 = ALIGNED_STRING(""),
-
-    .str_130 = ALIGNED_STRING(""),
-
-    .str_131 = ALIGNED_STRING(""),
-
-    .str_132 = ALIGNED_STRING(""),
-
-    .str_133 = ALIGNED_STRING(""),
-
-    .str_134 = ALIGNED_STRING(""),
-
-    .str_135 = ALIGNED_STRING(""),
-
-    .str_136 = ALIGNED_STRING(""),
-
-    .w30_code = ALIGNED_STRING(""),
-
-    .w30_name = ALIGNED_STRING("VocalistPage2Box"),
-
-    .str_137 = "VocalistPage2",
-
-    .str_138 = ALIGNED_STRING("HarmOnOffBox"),
-
-    .w31_code = ALIGNED_STRING(""),
-
-    .w31_name = "VocalistListBox",
-
-    .str_139 = ALIGNED_STRING(""),
-
-    .str_140 = ALIGNED_STRING(""),
-
-    .str_141 = ALIGNED_STRING(""),
-
-    .w32_code = ALIGNED_STRING(""),
-
-    .w32_name = "VocalistPage1",
-
-    .w33_code = ALIGNED_STRING(""),
-
-    .w33_name = ALIGNED_STRING("VocalistPage"),
-
-    .str_142 = ALIGNED_STRING(""),
-
-    .w34_code = ALIGNED_STRING(""),
-
-    .w34_name = ALIGNED_STRING("EntertainerVocal"),
-
-    .ptrs_12 = {
-        SELF(str_149),
-        SELF(w35_name),
-        SELF(w35_code),
-        SELF(str_148),
-        SELF(str_147),
-        SELF(str_146),
-        SELF(str_145),
-        SELF(str_144),
-        SELF(str_143),
+    .East_ResNameTable_3D8 = {
+        SELF(East_ResNames_3D8[32]),
+        SELF(East_ResNames_3D8[14]),
+        SELF(East_ResNames_3D8[12]),
+        SELF(East_ResNames_3D8[10]),
+        SELF(East_ResNames_3D8[8]),
+        SELF(East_ResNames_3D8[6]),
+        SELF(East_ResNames_3D8[4]),
+        SELF(East_ResNames_3D8[2]),
+        SELF(East_ResNames_3D8),
     },
 
-    .str_143 = ALIGNED_STRING(""),
+    .East_ResNames_3D8 = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "FadeInOutGridBox\0\xFF"
+        "EntertainerFade",
 
-    .str_144 = ALIGNED_STRING(""),
-
-    .str_145 = ALIGNED_STRING(""),
-
-    .str_146 = ALIGNED_STRING(""),
-
-    .str_147 = ALIGNED_STRING(""),
-
-    .str_148 = ALIGNED_STRING(""),
-
-    .w35_code = ALIGNED_STRING(""),
-
-    .w35_name = ALIGNED_STRING("FadeInOutGridBox"),
-
-    .str_149 = "EntertainerFade",
-
-    .ptrs_13 = {
-        SELF(w36_name),
-        SELF(w36_code),
-        SELF(str_154),
-        SELF(str_153),
-        SELF(str_152),
-        SELF(str_151),
-        SELF(str_150),
+    .East_ResNameTable_3EC = {
+        SELF(East_ResNames_3EC[12]),
+        SELF(East_ResNames_3EC[10]),
+        SELF(East_ResNames_3EC[8]),
+        SELF(East_ResNames_3EC[6]),
+        SELF(East_ResNames_3EC[4]),
+        SELF(East_ResNames_3EC[2]),
+        SELF(East_ResNames_3EC),
     },
 
-    .str_150 = ALIGNED_STRING(""),
+    .East_ResNames_3EC = 
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "\0\xFF"
+        "SplitSetting\0\xFF",
 
-    .str_151 = ALIGNED_STRING(""),
+    .East_ResNames_3EC_Strings = 
+        "MD_MIDI\0"
+        "TT_REVEQMENU\0\xFF"
+        "TT_SDOCT\0\xFF"
+        "TT_REVPRESET\0\xFF"
+        "TT_EQPRESET\0"
+        "TT_REVEQPRESET\0\xFF"
+        "TT_MDMENU\0"
+        "TT_MDPART\0"
+        "TT_MDCTRL\0"
+        "TT_MDREAL\0"
+        "TT_MDCOM\0\xFF"
+        "TT_MDINOUT\0\xFF"
+        "TT_MDPRESET\0"
+        "TT_MDEXC\0\xFF"
+        "TT_MDGMMODE\0"
+        "TT_MDTXPCG\0\xFF"
+        "TT_MDCOMP\0"
+        "TT_MDPMLCTL\0"
+        "TT_MDSETUP\0\xFF"
+        "TT_ETVOCAL\0\xFF"
+        "TT_ETFADEIN\0"
+        "TT_SPLITSEL",
 
-    .str_152 = ALIGNED_STRING(""),
-
-    .str_153 = ALIGNED_STRING(""),
-
-    .str_154 = ALIGNED_STRING(""),
-
-    .w36_code = ALIGNED_STRING(""),
-
-    .w36_name = ALIGNED_STRING("SplitSetting"),
-
-    .str_155 = "MD_MIDI",
-
-    .str_156 = ALIGNED_STRING("TT_REVEQMENU"),
-
-    .str_157 = ALIGNED_STRING("TT_SDOCT"),
-
-    .str_158 = ALIGNED_STRING("TT_REVPRESET"),
-
-    .str_159 = "TT_EQPRESET",
-
-    .str_160 = ALIGNED_STRING("TT_REVEQPRESET"),
-
-    .str_161 = "TT_MDMENU",
-
-    .str_162 = "TT_MDPART",
-
-    .str_163 = "TT_MDCTRL",
-
-    .str_164 = "TT_MDREAL",
-
-    .str_165 = ALIGNED_STRING("TT_MDCOM"),
-
-    .str_166 = ALIGNED_STRING("TT_MDINOUT"),
-
-    .str_167 = "TT_MDPRESET",
-
-    .str_168 = ALIGNED_STRING("TT_MDEXC"),
-
-    .str_169 = "TT_MDGMMODE",
-
-    .str_170 = ALIGNED_STRING("TT_MDTXPCG"),
-
-    .str_171 = "TT_MDCOMP",
-
-    .str_172 = "TT_MDPMLCTL",
-
-    .str_173 = ALIGNED_STRING("TT_MDSETUP"),
-
-    .str_174 = ALIGNED_STRING("TT_ETVOCAL"),
-
-    .str_175 = "TT_ETFADEIN",
-
-    .str_176 = "TT_SPLITSEL",
-
-    .ptrs_14 = {
+    .East_MainFuncTable_143 = {
         NAKA_ADDR(MainPcgOutSend),
         NAKA_ADDR(MainExcSend),
         NAKA_ADDR(MainMpstFunc),
@@ -3146,31 +3105,28 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         NAKA_ADDR(MainVocalistPage2OKFunc),
         NAKA_ADDR(MainRevEqPresetLoad),
         0x00000000,
-        SELF(str_182),
-        SELF(str_181),
-        SELF(str_180),
-        SELF(str_179),
-        SELF(str_178),
-        SELF(str_177),
-        SELF(w37_name),
-        SELF(w37_code),
     },
 
-    .w37_code = ALIGNED_STRING(""),
+    .East_MainFuncNameTable_443 = {
+        SELF(East_MainFuncNames_443[110]),
+        SELF(East_MainFuncNames_443[98]),
+        SELF(East_MainFuncNames_443[84]),
+        SELF(East_MainFuncNames_443[70]),
+        SELF(East_MainFuncNames_443[46]),
+        SELF(East_MainFuncNames_443[22]),
+        SELF(East_MainFuncNames_443[2]),
+        SELF(East_MainFuncNames_443),
+    },
 
-    .w37_name = "MainRevEqPresetLoad",
-
-    .str_177 = "MainVocalistPage2OKFunc",
-
-    .str_178 = "MainVocalistPage1OKFunc",
-
-    .str_179 = "MainFlashFunc",
-
-    .str_180 = ALIGNED_STRING("MainMpstFunc"),
-
-    .str_181 = "MainExcSend",
-
-    .str_182 = ALIGNED_STRING("MainPcgOutSend"),
+    .East_MainFuncNames_443 = 
+        "\0\xFF"
+        "MainRevEqPresetLoad\0"
+        "MainVocalistPage2OKFunc\0"
+        "MainVocalistPage1OKFunc\0"
+        "MainFlashFunc\0"
+        "MainMpstFunc\0\xFF"
+        "MainExcSend\0"
+        "MainPcgOutSend\0\xFF",
 
     .Bitmap_SplitPoint_no_split = {
         /*   0 */ {
@@ -12303,1051 +12259,380 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         },
     },
 
-    .bytes_24954 = { 0xF5, 0x00 },
+    .MidiPart_PageDisplay_Data = { 0xF5, 0x00, 0x06, 0x00, 0x3A, 0x01, 0x17, 0x00 },
 
-    .field_24956 = 0x0006,
+    .AcCtlMsgGrid_Show_Table = { 0x18, 0x01, 0x0F, 0x00 },
 
-    .field_24958 = 0x013A,
-
-    .field_2495a = 0x0017,
-
-    .field_2495c = 0x0118,
-
-    .field_2495e = 0x000F,
-
-    .ptr_24960 = SELF(str_2245),
-
-    .ptr_24964 = SELF(str_2244),
-
-    .str_2244 = ALIGNED_STRING("PAGE 2/2"),
-
-    .str_2245 = ALIGNED_STRING("PAGE 1/2"),
-
-    .ptrs_325 = {
-        SELF(str_2248),
-        SELF(str_2247),
-        SELF(str_2246),
+    .AcCtlMsgGrid_Show_PtrTable = {
+        SELF(AcCtlMsgGrid_Show_Strings[10]),
+        SELF(AcCtlMsgGrid_Show_Strings),
     },
 
-    .str_2246 = ALIGNED_STRING("PAGE 3/3"),
+    .AcCtlMsgGrid_Show_Strings = 
+        "PAGE 2/2\0\xFF"
+        "PAGE 1/2\0\xFF",
 
-    .str_2247 = ALIGNED_STRING("PAGE 2/3"),
-
-    .str_2248 = ALIGNED_STRING("PAGE 1/3"),
-
-    .pad_2995 = { 0 },
-
-    .field_249ae = 0x0001,
-
-    .field_249b0 = 0x0001,
-
-    .field_249b2 = 0x0001,
-
-    .field_249b4 = 0x0001,
-
-    .field_249b6 = 0x0001,
-
-    .field_249b8 = 0x0001,
-
-    .field_249ba = 0x0001,
-
-    .field_249bc = 0x0001,
-
-    .field_249be = 0x0001,
-
-    .field_249c0 = 0x0001,
-
-    .field_249c2 = 0x0003,
-
-    .field_249c4 = 0x0001,
-
-    .field_249c6 = 0x0001,
-
-    .field_249c8 = 0x0001,
-
-    .field_249ca = 0x0001,
-
-    .field_249cc = 0x0001,
-
-    .field_249ce = 0x0001,
-
-    .field_249d0 = 0x0001,
-
-    .field_249d2 = 0x0001,
-
-    .field_249d4 = 0x0003,
-
-    .field_249d6 = 0x0001,
-
-    .field_249d8 = 0x0001,
-
-    .field_249da = 0x0001,
-
-    .field_249dc = 0x0001,
-
-    .str_2249 = "j",
-
-    .field_249e0 = 0x011C,
-
-    .str_2250 = "j",
-
-    .field_249e4 = 0x011C,
-
-    .field_249e6 = 0x021E,
-
-    .field_249e8 = 0x01F6,
-
-    .field_249ea = 0x01F6,
-
-    .ptr_249ec = SELF(str_2252),
-
-    .ptr_249f0 = SELF(str_2251),
-
-    .str_2251 = "ABOVE",
-
-    .str_2252 = "BELOW",
-
-    .ptrs_326 = {
-        SELF(str_2264),
-        SELF(str_2263),
-        SELF(str_2262),
-        SELF(str_2261),
-        SELF(str_2260),
-        SELF(str_2259),
-        SELF(str_2258),
-        SELF(str_2257),
-        SELF(str_2256),
-        SELF(str_2255),
-        SELF(str_2254),
-        SELF(str_2253),
+    .MidiSetup_TtlCase4_PtrTable = {
+        SELF(MidiSetup_TtlCase4_Strings[20]),
+        SELF(MidiSetup_TtlCase4_Strings[10]),
+        SELF(MidiSetup_TtlCase4_Strings),
     },
 
-    .str_2253 = ALIGNED_STRING("B "),
+    .MidiSetup_TtlCase4_Strings = 
+        "PAGE 3/3\0\xFF"
+        "PAGE 2/3\0\xFF"
+        "PAGE 1/3\0\xFF",
 
-    .str_2254 = ALIGNED_STRING("B~a0"),
+    .ComSetGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .str_2255 = ALIGNED_STRING("A "),
-
-    .str_2256 = ALIGNED_STRING("A~a0"),
-
-    .str_2257 = ALIGNED_STRING("G "),
-
-    .str_2258 = ALIGNED_STRING("F~9e"),
-
-    .str_2259 = ALIGNED_STRING("F "),
-
-    .str_2260 = ALIGNED_STRING("E "),
-
-    .str_2261 = ALIGNED_STRING("E~a0"),
-
-    .str_2262 = ALIGNED_STRING("D "),
-
-    .str_2263 = ALIGNED_STRING("D~a0"),
-
-    .str_2264 = ALIGNED_STRING("C "),
-
-    .ptrs_327 = {
-        SELF(str_2275),
-        SELF(str_2274),
-        SELF(str_2273),
-        SELF(str_2272),
-        SELF(str_2271),
-        SELF(str_2270),
-        SELF(str_2269),
-        SELF(str_2268),
-        SELF(str_2267),
-        SELF(str_2266),
-        SELF(str_2265),
+    .AcVocalGrid_DialSetup_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00,
     },
 
-    .str_2265 = ALIGNED_STRING(" 8"),
-
-    .str_2266 = ALIGNED_STRING(" 7"),
-
-    .str_2267 = ALIGNED_STRING(" 6"),
-
-    .str_2268 = ALIGNED_STRING(" 5"),
-
-    .str_2269 = ALIGNED_STRING(" 4"),
-
-    .str_2270 = ALIGNED_STRING(" 3"),
-
-    .str_2271 = ALIGNED_STRING(" 2"),
-
-    .str_2272 = ALIGNED_STRING(" 1"),
-
-    .str_2273 = ALIGNED_STRING(" 0"),
-
-    .str_2274 = ALIGNED_STRING("-1"),
-
-    .str_2275 = ALIGNED_STRING("-2"),
-
-    .field_24ac2 = NAKA_NONE,
-
-    .field_24ac4 = NAKA_NONE,
-
-    .field_24ac6 = NAKA_NONE,
-
-    .field_24ac8 = NAKA_NONE,
-
-    .field_24aca = NAKA_NONE,
-
-    .field_24acc = NAKA_NONE,
-
-    .field_24ace = NAKA_NONE,
-
-    .field_24ad0 = NAKA_NONE,
-
-    .field_24ad2 = 0x2D00,
-
-    .pad_2996 = { 0 },
-
-    .field_24ad6 = 0x2D01,
-
-    .pad_2997 = { 0 },
-
-    .field_24ada = 0x2D02,
-
-    .pad_2998 = { 0 },
-
-    .field_24ade = 0x2D03,
-
-    .pad_2999 = { 0 },
-
-    .field_24ae2 = 0x2D04,
-
-    .pad_3000 = { 0 },
-
-    .field_24ae6 = 0x2D05,
-
-    .pad_3001 = { 0 },
-
-    .field_24aea = 0x2D06,
-
-    .pad_3002 = { 0 },
-
-    .field_24aee = 0x2D07,
-
-    .pad_3003 = { 0 },
-
-    .field_24af2 = 0x2D08,
-
-    .pad_3004 = { 0 },
-
-    .field_24af6 = 0x2D09,
-
-    .pad_3005 = { 0 },
-
-    .field_24afa = 0x2D0A,
-
-    .pad_3006 = { 0 },
-
-    .field_24afe = 0x2D0B,
-
-    .pad_3007 = { 0 },
-
-    .field_24b02 = NAKA_NONE,
-
-    .field_24b04 = NAKA_NONE,
-
-    .field_24b06 = NAKA_NONE,
-
-    .field_24b08 = NAKA_NONE,
-
-    .field_24b0a = NAKA_NONE,
-
-    .field_24b0c = NAKA_NONE,
-
-    .field_24b0e = NAKA_NONE,
-
-    .field_24b10 = NAKA_NONE,
-
-    .field_24b12 = 0x2D0C,
-
-    .pad_3008 = { 0 },
-
-    .field_24b16 = 0x2D0F,
-
-    .pad_3009 = { 0 },
-
-    .field_24b1a = 0x2D10,
-
-    .pad_3010 = { 0 },
-
-    .field_24b1e = 0x2D13,
-
-    .pad_3011 = { 0 },
-
-    .str_2276 = ALIGNED_STRING("   OFF    "),
-
-    .str_2277 = ALIGNED_STRING("   OMNI   "),
-
-    .str_2278 = "    %2d    ",
-
-    .str_2279 = ALIGNED_STRING("   %3d    "),
-
-    .str_2280 = "     %d    ",
-
-    .str_2281 = ALIGNED_STRING("     %s   "),
-
-    .str_2282 = ALIGNED_STRING("   OFF    "),
-
-    .str_2283 = ALIGNED_STRING("   Recv   "),
-
-    .w38_code = ALIGNED_STRING("  Trans   "),
-
-    .w38_name = ALIGNED_STRING("Recv+Trans"),
-
-    .str_2284 = ALIGNED_STRING("   NONE   "),
-
-    .str_2285 = ALIGNED_STRING("  AFTER   "),
-
-    .str_2286 = ALIGNED_STRING("  CC%3d   "),
-
-    .str_2287 = "%s %s%s",
-
-    .str_2288 = " ON  ",
-
-    .str_2289 = " OFF ",
-
-    .str_2290 = ALIGNED_STRING("   OFF    "),
-
-    .str_2291 = ALIGNED_STRING("   OMNI   "),
-
-    .str_2292 = "    %2d    ",
-
-    .str_2293 = ALIGNED_STRING("   %3d    "),
-
-    .str_2294 = "     %d    ",
-
-    .str_2295 = ALIGNED_STRING("     %s   "),
-
-    .str_2296 = ALIGNED_STRING("   OFF    "),
-
-    .str_2297 = ALIGNED_STRING("   Recv   "),
-
-    .w39_code = ALIGNED_STRING("  Trans   "),
-
-    .w39_name = ALIGNED_STRING("Recv+Trans"),
-
-    .str_2298 = ALIGNED_STRING("   NONE   "),
-
-    .str_2299 = ALIGNED_STRING("  AFTER   "),
-
-    .str_2300 = ALIGNED_STRING("  CC%3d   "),
-
-    .str_2301 = "%s %s%s",
-
-    .str_2302 = "%s %s%s",
-
-    .str_2303 = " ON  ",
-
-    .str_2304 = " OFF ",
-
-    .pad_3012 = { 0 },
-
-    .field_24cac = 0x0285,
-
-    .str_2305 = "\\",
-
-    .field_24cb0 = 0x0285,
-
-    .field_24cb2 = 0x008A,
-
-    .field_24cb4 = 0x0285,
-
-    .field_24cb6 = 0x00B8,
-
-    .ptr_24cb8 = 0x00F10285,
-
-    .field_24cbc = 0x0285,
-
-    .field_24cbe = 0x0140,
-
-    .field_24cc0 = 0x0285,
-
-    .field_24cc2 = 0x019A,
-
-    .field_24cc4 = 0x02C5,
-
-    .field_24cc6 = 0x02C5,
-
-    .field_24cc8 = 0x0285,
-
-    .field_24cca = 0x0210,
-
-    .field_24ccc = 0x02C5,
-
-    .field_24cce = 0x02C5,
-
-    .field_24cd0 = 0x0285,
-
-    .pad_3013 = { 0 },
-
-    .field_24cd4 = 0x01CA,
-
-    .str_2306 = "L",
-
-    .field_24cd8 = 0x01CA,
-
-    .str_2307 = "s",
-
-    .field_24cdc = 0x01CA,
-
-    .field_24cde = 0x009A,
-
-    .field_24ce0 = 0x01CA,
-
-    .field_24ce2 = 0x00CC,
-
-    .field_24ce4 = 0x01CA,
-
-    .field_24ce6 = 0x0114,
-
-    .field_24ce8 = 0x01CA,
-
-    .field_24cea = 0x015E,
-
-    .field_24cec = 0x0516,
-
-    .field_24cee = 0x0516,
-
-    .field_24cf0 = 0x01CA,
-
-    .field_24cf2 = 0x015E,
-
-    .field_24cf4 = 0x0516,
-
-    .field_24cf6 = 0x0516,
-
-    .field_24cf8 = 0x01CA,
-
-    .pad_3014 = { 0 },
-
-    .str_2308 = "g",
-
-    .pad_3015 = { 0 },
-
-    .str_2309 = "g",
-
-    .field_24d02 = 0x0676,
-
-    .field_24d04 = 0x00D4,
-
-    .field_24d06 = 0x0676,
-
-    .pad_3016 = { 0 },
-
-    .field_24d0a = 0x000E,
-
-    .pad_3017 = { 0 },
-
-    .field_24d0e = 0x000E,
-
-    .pad_3018 = { 0 },
-
-    .field_24d12 = 0x000E,
-
-    .ptr_24d14 = SELF(str_2310),
-
-    .str_2310 = "HARMONY PART LOCAL: ---",
-
-    .pad_3019 = { 0 },
-
-    .str_2311 = "`",
-
-    .pad_3020 = { 0 },
-
-    .str_2312 = "`",
-
-    .field_24d44 = 0x00AB,
-
-    .field_24d46 = 0x0106,
-
-    .w40_code = ALIGNED_STRING("CcEv"),
-
-    .w40_name = ALIGNED_STRING("CcEv"),
-
-    .str_2313 = ALIGNED_STRING("CcEv"),
-
-    .ptrs_328 = {
-        SELF(str_2319),
-        SELF(str_2318),
-        SELF(str_2317),
-        SELF(field_24d8a),
-        SELF(str_2315),
-        SELF(str_2314),
+    .AcVocalGrid_DialSetup_Table_2 = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x03, 0x00,
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
     },
 
-    .str_2314 = "Perhatian !",
-
-    .str_2315 = ALIGNED_STRING("ATTENTION!"),
-
-    .field_24d8a = 0x41A1,
-
-    .field_24d8c = 0x4554,
-
-    .field_24d8e = 0x434E,
-
-    .field_24d90 = 0xD349,
-
-    .str_2316 = ALIGNED_STRING("N!"),
-
-    .str_2317 = ALIGNED_STRING("ATTENTION!"),
-
-    .str_2318 = "ACHTUNG !",
-
-    .str_2319 = ALIGNED_STRING("ATTENTION!"),
-
-    .str_2320 = "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!",
-
-    .field_24e14 = 0x7544,
-
-    .field_24e16 = 0x6372,
-
-    .field_24e18 = 0x2068,
-
-    .field_24e1a = 0x6164,
-
-    .field_24e1c = 0x2073,
-
-    .field_24e1e = 0x6945,
-
-    .field_24e20 = 0x736E,
-
-    .field_24e22 = 0x6863,
-
-    .field_24e24 = 0x6C61,
-
-    .field_24e26 = 0x6574,
-
-    .field_24e28 = 0x206E,
-
-    .field_24e2a = 0x6564,
-
-    .field_24e2c = 0x2073,
-
-    .field_24e2e = 0x4547,
-
-    .field_24e30 = 0x454E,
-
-    .field_24e32 = 0x4152,
-
-    .field_24e34 = 0x204C,
-
-    .field_24e36 = 0x494D,
-
-    .field_24e38 = 0x4944,
-
-    .field_24e3a = 0x4D20,
-
-    .field_24e3c = 0x444F,
-
-    .field_24e3e = 0x2045,
-
-    .field_24e40 = 0x6577,
-
-    .field_24e42 = 0x6472,
-
-    .field_24e44 = 0x6E65,
-
-    .field_24e46 = 0x6120,
-
-    .field_24e48 = 0x6C6C,
-
-    .field_24e4a = 0x2065,
-
-    .field_24e4c = 0x6945,
-
-    .field_24e4e = 0x736E,
-
-    .field_24e50 = 0x6574,
-
-    .field_24e52 = 0x6C6C,
-
-    .field_24e54 = 0x6E75,
-
-    .field_24e56 = 0x6567,
-
-    .field_24e58 = 0x206E,
-
-    .field_24e5a = 0x757A,
-
-    .field_24e5c = 0x4720,
-
-    .field_24e5e = 0x4E45,
-
-    .field_24e60 = 0x5245,
-
-    .field_24e62 = 0x4C41,
-
-    .field_24e64 = 0x4D20,
-
-    .field_24e66 = 0x4449,
-
-    .field_24e68 = 0x2049,
-
-    .field_24e6a = 0x6945,
-
-    .field_24e6c = 0x736E,
-
-    .field_24e6e = 0x6574,
-
-    .field_24e70 = 0x6C6C,
-
-    .field_24e72 = 0x6E75,
-
-    .field_24e74 = 0x6567,
-
-    .field_24e76 = 0x206E,
-
-    .field_24e78 = 0x6567,
-
-    .field_24e7a = 0x6EE4,
-
-    .str_2321 = "dert!",
-
-    .field_24e82 = 0x274C,
-
-    .field_24e84 = 0x6361,
-
-    .field_24e86 = 0x6974,
-
-    .field_24e88 = 0x6176,
-
-    .field_24e8a = 0x6974,
-
-    .field_24e8c = 0x6E6F,
-
-    .field_24e8e = 0x6420,
-
-    .field_24e90 = 0x2075,
-
-    .field_24e92 = 0x6F6D,
-
-    .field_24e94 = 0x6564,
-
-    .field_24e96 = 0x4720,
-
-    .field_24e98 = 0x4E45,
-
-    .field_24e9a = 0x5245,
-
-    .field_24e9c = 0x4C41,
-
-    .field_24e9e = 0x4D20,
-
-    .field_24ea0 = 0x4449,
-
-    .field_24ea2 = 0x2049,
-
-    .field_24ea4 = 0x4F4D,
-
-    .field_24ea6 = 0x4544,
-
-    .field_24ea8 = 0x7220,
-
-    .field_24eaa = 0x6D65,
-
-    .field_24eac = 0x6C70,
-
-    .field_24eae = 0x6361,
-
-    .field_24eb0 = 0x7265,
-
-    .field_24eb2 = 0x2061,
-
-    .field_24eb4 = 0x6F74,
-
-    .field_24eb6 = 0x7375,
-
-    .field_24eb8 = 0x6C20,
-
-    .field_24eba = 0x7365,
-
-    .field_24ebc = 0x7220,
-
-    .field_24ebe = 0x67E9,
-
-    .field_24ec0 = 0x616C,
-
-    .field_24ec2 = 0x6567,
-
-    .field_24ec4 = 0x2073,
-
-    .field_24ec6 = 0x6361,
-
-    .field_24ec8 = 0x7574,
-
-    .field_24eca = 0x6C65,
-
-    .field_24ecc = 0x2073,
-
-    .field_24ece = 0x6170,
-
-    .field_24ed0 = 0x2072,
-
-    .field_24ed2 = 0x656C,
-
-    .field_24ed4 = 0x2073,
-
-    .field_24ed6 = 0xE972,
-
-    .str_2322 = ALIGNED_STRING("glages GENERAL MIDI!"),
-
-    .field_24eee = 0x41A1,
-
-    .str_2323 = "l activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!",
-
-    .str_2324 = ALIGNED_STRING("Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang."),
-
-    .ptrs_329 = {
-        SELF(str_2320),
-        SELF(field_24e14),
-        SELF(field_24e82),
-        SELF(field_24eee),
-        SELF(str_2320),
-        SELF(str_2324),
+    .AcVocalGridBoxProc_CaseTable = { 0x006A, 0x011C, 0x006A, 0x011C, 0x021E, 0x01F6, 0x01F6 },
+
+    .VocalistGrid_DispatchData_PtrTable = {
+        SELF(VocalistGrid_DispatchData_Strings[6]),
+        SELF(VocalistGrid_DispatchData_Strings),
     },
 
-    .str_2325 = ALIGNED_STRING("Turning off GENERAL MIDI MODE will replace the GENERAL MIDI settings with the original factory settings!"),
-
-    .str_2326 = "Durch das Ausschalten des GENERAL MIDI MODE werden die GENERAL MIDI Einstellungen durch die Werkseinstellungen ersetzt.",
-
-    .field_250aa = 0x614C,
-
-    .field_250ac = 0x6420,
-
-    .field_250ae = 0x73E9,
-
-    .field_250b0 = 0x6361,
-
-    .field_250b2 = 0x6974,
-
-    .field_250b4 = 0x6176,
-
-    .field_250b6 = 0x6974,
-
-    .field_250b8 = 0x6E6F,
-
-    .field_250ba = 0x6420,
-
-    .field_250bc = 0x2075,
-
-    .field_250be = 0x6F6D,
-
-    .field_250c0 = 0x6564,
-
-    .field_250c2 = 0x4720,
-
-    .field_250c4 = 0x4E45,
-
-    .field_250c6 = 0x5245,
-
-    .field_250c8 = 0x4C41,
-
-    .field_250ca = 0x4D20,
-
-    .field_250cc = 0x4449,
-
-    .field_250ce = 0x2049,
-
-    .field_250d0 = 0x4F4D,
-
-    .field_250d2 = 0x4544,
-
-    .field_250d4 = 0x7220,
-
-    .field_250d6 = 0x6D65,
-
-    .field_250d8 = 0x6C70,
-
-    .field_250da = 0x6361,
-
-    .field_250dc = 0x7265,
-
-    .field_250de = 0x2061,
-
-    .field_250e0 = 0x6F74,
-
-    .field_250e2 = 0x7375,
-
-    .field_250e4 = 0x6C20,
-
-    .field_250e6 = 0x7365,
-
-    .field_250e8 = 0x7220,
-
-    .field_250ea = 0x67E9,
-
-    .field_250ec = 0x616C,
-
-    .field_250ee = 0x6567,
-
-    .field_250f0 = 0x2073,
-
-    .field_250f2 = 0x4547,
-
-    .field_250f4 = 0x454E,
-
-    .field_250f6 = 0x4152,
-
-    .field_250f8 = 0x204C,
-
-    .field_250fa = 0x494D,
-
-    .field_250fc = 0x4944,
-
-    .field_250fe = 0x7020,
-
-    .field_25100 = 0x7261,
-
-    .field_25102 = 0x6C20,
-
-    .field_25104 = 0x7365,
-
-    .field_25106 = 0x7220,
-
-    .field_25108 = 0x67E9,
-
-    .str_2327 = "lages d'usines!",
-
-    .field_2511a = 0x41A1,
-
-    .field_2511c = 0x206C,
-
-    .field_2511e = 0x6564,
-
-    .field_25120 = 0x6373,
-
-    .field_25122 = 0x6E6F,
-
-    .field_25124 = 0x6365,
-
-    .field_25126 = 0x6174,
-
-    .field_25128 = 0x2072,
-
-    .field_2512a = 0x6C65,
-
-    .field_2512c = 0x6D20,
-
-    .field_2512e = 0x646F,
-
-    .field_25130 = 0x206F,
-
-    .field_25132 = 0x494D,
-
-    .field_25134 = 0x4944,
-
-    .field_25136 = 0x4720,
-
-    .field_25138 = 0x6E65,
-
-    .field_2513a = 0x7265,
-
-    .field_2513c = 0x6C61,
-
-    .field_2513e = 0x7320,
-
-    .field_25140 = 0x2065,
-
-    .field_25142 = 0x6572,
-
-    .field_25144 = 0x6D65,
-
-    .field_25146 = 0x6C70,
-
-    .field_25148 = 0x7A61,
-
-    .field_2514a = 0x6E61,
-
-    .field_2514c = 0x6C20,
-
-    .field_2514e = 0x7361,
-
-    .field_25150 = 0x6320,
-
-    .field_25152 = 0x6E6F,
-
-    .field_25154 = 0x6966,
-
-    .field_25156 = 0x7567,
-
-    .field_25158 = 0x6172,
-
-    .field_2515a = 0x6963,
-
-    .field_2515c = 0x6E6F,
-
-    .field_2515e = 0x7365,
-
-    .field_25160 = 0x4D20,
-
-    .field_25162 = 0x4449,
-
-    .field_25164 = 0x2049,
-
-    .field_25166 = 0x6547,
-
-    .field_25168 = 0x656E,
-
-    .field_2516a = 0x6172,
-
-    .field_2516c = 0x656C,
-
-    .field_2516e = 0x2073,
-
-    .field_25170 = 0x6F70,
-
-    .field_25172 = 0x2072,
-
-    .field_25174 = 0x616C,
-
-    .field_25176 = 0x2073,
-
-    .field_25178 = 0x6F63,
-
-    .field_2517a = 0x666E,
-
-    .field_2517c = 0x6769,
-
-    .field_2517e = 0x7275,
-
-    .field_25180 = 0x6361,
-
-    .field_25182 = 0x6F69,
-
-    .field_25184 = 0x656E,
-
-    .field_25186 = 0x2073,
-
-    .field_25188 = 0x726F,
-
-    .field_2518a = 0x6769,
-
-    .field_2518c = 0x6E69,
-
-    .field_2518e = 0x6C61,
-
-    .field_25190 = 0x7365,
-
-    .field_25192 = 0x6420,
-
-    .field_25194 = 0x2065,
-
-    .field_25196 = 0xE166,
-
-    .str_2328 = ALIGNED_STRING("brica!"),
-
-    .str_2329 = ALIGNED_STRING("Non-aktifkan fungsi GENERAL MIDI MODE bila akan kembali ke susunan GENERAL MIDI sesuai susunan dari pabrik(originil factory settings)."),
-
-    .ptrs_330 = {
-        SELF(str_2325),
-        SELF(str_2326),
-        SELF(field_250aa),
-        SELF(field_2511a),
-        SELF(str_2325),
-        SELF(str_2329),
-        SELF(str_2335),
-        SELF(str_2334),
-        SELF(field_25290),
-        SELF(field_25282),
-        SELF(str_2331),
-        SELF(str_2330),
+    .VocalistGrid_DispatchData_Strings = 
+        "ABOVE\0"
+        "BELOW",
+
+    .MidiPart_NoteNameTable = {
+        SELF(MidiPart_NoteNameTable_Strings[54]),
+        SELF(MidiPart_NoteNameTable_Strings[48]),
+        SELF(MidiPart_NoteNameTable_Strings[44]),
+        SELF(MidiPart_NoteNameTable_Strings[38]),
+        SELF(MidiPart_NoteNameTable_Strings[34]),
+        SELF(MidiPart_NoteNameTable_Strings[30]),
+        SELF(MidiPart_NoteNameTable_Strings[24]),
+        SELF(MidiPart_NoteNameTable_Strings[20]),
+        SELF(MidiPart_NoteNameTable_Strings[14]),
+        SELF(MidiPart_NoteNameTable_Strings[10]),
+        SELF(MidiPart_NoteNameTable_Strings[4]),
+        SELF(MidiPart_NoteNameTable_Strings),
     },
 
-    .str_2330 = "Apakah yakin akan dihapus ?",
+    .MidiPart_NoteNameTable_Strings = 
+        "B \0\xFF"
+        "B~a0\0\xFF"
+        "A \0\xFF"
+        "A~a0\0\xFF"
+        "G \0\xFF"
+        "F~9e\0\xFF"
+        "F \0\xFF"
+        "E \0\xFF"
+        "E~a0\0\xFF"
+        "D \0\xFF"
+        "D~a0\0\xFF"
+        "C \0\xFF",
 
-    .str_2331 = "Are You Sure?",
-
-    .field_25282 = 0x45BF,
-
-    .field_25284 = 0x7473,
-
-    .field_25286 = 0x20E1,
-
-    .str_2332 = "seguro?",
-
-    .field_25290 = 0x7445,
-
-    .field_25292 = 0x7365,
-
-    .field_25294 = 0x7620,
-
-    .field_25296 = 0x756F,
-
-    .field_25298 = 0x2073,
-
-    .field_2529a = 0xFB73,
-
-    .str_2333 = ALIGNED_STRING("r?"),
-
-    .str_2334 = "Sind Sie sicher ?",
-
-    .str_2335 = "Are You Sure?",
-
-    .ptrs_331 = {
-        SELF(str_2341),
-        SELF(str_2340),
-        SELF(str_2339),
-        SELF(str_2338),
-        SELF(str_2337),
-        SELF(str_2336),
+    .MidiPart_OctaveTable = {
+        SELF(MidiPart_OctaveTable_Strings[40]),
+        SELF(MidiPart_OctaveTable_Strings[36]),
+        SELF(MidiPart_OctaveTable_Strings[32]),
+        SELF(MidiPart_OctaveTable_Strings[28]),
+        SELF(MidiPart_OctaveTable_Strings[24]),
+        SELF(MidiPart_OctaveTable_Strings[20]),
+        SELF(MidiPart_OctaveTable_Strings[16]),
+        SELF(MidiPart_OctaveTable_Strings[12]),
+        SELF(MidiPart_OctaveTable_Strings[8]),
+        SELF(MidiPart_OctaveTable_Strings[4]),
+        SELF(MidiPart_OctaveTable_Strings),
     },
 
-    .str_2336 = ALIGNED_STRING("Press a key to select the split point."),
+    .MidiPart_OctaveTable_Strings = 
+        " 8\0\xFF"
+        " 7\0\xFF"
+        " 6\0\xFF"
+        " 5\0\xFF"
+        " 4\0\xFF"
+        " 3\0\xFF"
+        " 2\0\xFF"
+        " 1\0\xFF"
+        " 0\0\xFF"
+        "-1\0\xFF"
+        "-2\0\xFF",
 
-    .str_2337 = ALIGNED_STRING("Press a key to select the split point."),
-
-    .str_2338 = ALIGNED_STRING("Press a key to select the split point."),
-
-    .str_2339 = ALIGNED_STRING("Press a key to select the split point."),
-
-    .str_2340 = "Dr~fcken Sie eine Taste, um den Split-Punkt zu bestimmen.",
-
-    .str_2341 = ALIGNED_STRING("Press a key to select the split point."),
-
-    .ptrs_332 = {
-        SELF(str_2353),
-        SELF(str_2352),
-        SELF(str_2351),
-        SELF(str_2350),
-        SELF(str_2349),
-        SELF(str_2348),
-        SELF(str_2347),
-        SELF(str_2346),
-        SELF(str_2345),
-        SELF(str_2344),
-        SELF(str_2343),
-        SELF(str_2342),
+    .VocalistGridCheck_Table = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x00, 0x2D, 0x00, 0x00, 0x01, 0x2D, 0x00, 0x00, 0x02, 0x2D, 0x00, 0x00, 0x03, 0x2D, 0x00, 0x00,
+        0x04, 0x2D, 0x00, 0x00, 0x05, 0x2D, 0x00, 0x00, 0x06, 0x2D, 0x00, 0x00, 0x07, 0x2D, 0x00, 0x00,
+        0x08, 0x2D, 0x00, 0x00, 0x09, 0x2D, 0x00, 0x00, 0x0A, 0x2D, 0x00, 0x00, 0x0B, 0x2D, 0x00, 0x00,
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x0C, 0x2D, 0x00, 0x00, 0x0F, 0x2D, 0x00, 0x00, 0x10, 0x2D, 0x00, 0x00, 0x13, 0x2D, 0x00, 0x00,
     },
 
-    .str_2342 = ALIGNED_STRING("B "),
+    .VocalistGridCheck_LocalInit = {
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+        0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
+    },
 
-    .str_2343 = ALIGNED_STRING("B~a0"),
+    .VocalistGrid_DispatchData_Str = 
+        "   OFF    \0\xFF",
 
-    .str_2344 = ALIGNED_STRING("A "),
+    .VocalistGrid_DispatchData_Str_2 = 
+        "   OMNI   \0\xFF"
+        "    %2d    \0"
+        "   %3d    \0\xFF"
+        "     %d    \0"
+        "     %s   \0\xFF"
+        "   OFF    \0\xFF",
 
-    .str_2345 = ALIGNED_STRING("A~a0"),
+    .VocalistGrid_DispatchData_Str_3 = 
+        "   Recv   \0\xFF",
 
-    .str_2346 = ALIGNED_STRING("G "),
+    .VocalistGrid_DispatchData_Str_4 = 
+        "  Trans   \0\xFF",
 
-    .str_2347 = ALIGNED_STRING("F~9e"),
+    .VocalistGrid_DispatchData_Str_5 = 
+        "Recv+Trans\0\xFF",
 
-    .str_2348 = ALIGNED_STRING("F "),
+    .VocalistGrid_DispatchData_Str_6 = 
+        "   NONE   \0\xFF",
 
-    .str_2349 = ALIGNED_STRING("E "),
+    .VocalistGrid_DispatchData_Str_7 = 
+        "  AFTER   \0\xFF"
+        "  CC%3d   \0\xFF"
+        "%s %s%s",
 
-    .str_2350 = ALIGNED_STRING("E~a0"),
+    .VocalistGrid_DispatchData_Str_8 = 
+        " ON  ",
 
-    .str_2351 = ALIGNED_STRING("D "),
+    .VocalistGrid_DispatchData_Str_9 = 
+        " OFF ",
 
-    .str_2352 = ALIGNED_STRING("D~a0"),
+    .VocalistGrid_DispatchData_Str_10 = 
+        "   OFF    \0\xFF",
 
-    .str_2353 = ALIGNED_STRING("C "),
+    .VocalistGrid_DispatchData_Str_11 = 
+        "   OMNI   \0\xFF"
+        "    %2d    \0"
+        "   %3d    \0\xFF"
+        "     %d    \0"
+        "     %s   \0\xFF",
 
-    .ptrs_333 = {
+    .VocalistGrid_DispatchData_Str_12 = 
+        "   OFF    \0\xFF",
+
+    .VocalistGrid_DispatchData_Str_13 = 
+        "   Recv   \0\xFF",
+
+    .VocalistGrid_DispatchData_Str_14 = 
+        "  Trans   \0\xFF",
+
+    .MidiPart_RecvTransStr = 
+        "Recv+Trans\0\xFF",
+
+    .VocalistGrid_DispatchData_Str_15 = 
+        "   NONE   \0\xFF",
+
+    .MidiPart_AfterStr = 
+        "  AFTER   \0\xFF"
+        "  CC%3d   \0\xFF"
+        "%s %s%s\0"
+        "%s %s%s",
+
+    .VocalistGrid_DispatchData_Str_16 = 
+        " ON  ",
+
+    .VocalistGrid_DispatchData_Str_17 = 
+        " OFF ",
+
+    .VocalistGrid_DispatchData_CaseTable = {
+        0x0000, 0x0285, 0x005C, 0x0285, 0x008A, 0x0285, 0x00B8, 0x0285,
+        0x00F1, 0x0285, 0x0140, 0x0285, 0x019A, 0x02C5, 0x02C5, 0x0285,
+        0x0210, 0x02C5, 0x02C5, 0x0285,
+    },
+
+    .MidiPart_ColWidthData = {
+        0x0000, 0x01CA, 0x004C, 0x01CA, 0x0073, 0x01CA, 0x009A, 0x01CA,
+        0x00CC, 0x01CA, 0x0114, 0x01CA, 0x015E, 0x0516, 0x0516, 0x01CA,
+        0x015E, 0x0516, 0x0516, 0x01CA,
+    },
+
+    .VocalistGridCheck_CaseTable = { 0x0000, 0x0067, 0x0000, 0x0067, 0x0676, 0x00D4, 0x0676 },
+
+    .AcVocalist_ListSetup_CaseTable = { 0x0000, 0x000E, 0x0000, 0x000E, 0x0000, 0x000E },
+
+    .PsHarm_DrawActiveBox_PtrTable = {
+        SELF(MidiPart_HarmLocalStr),
+    },
+
+    .MidiPart_HarmLocalStr = {
+        0x48, 0x41, 0x52, 0x4D, 0x4F, 0x4E, 0x59, 0x20, 0x50, 0x41, 0x52, 0x54, 0x20, 0x4C, 0x4F, 0x43,
+        0x41, 0x4C, 0x3A, 0x20, 0x2D, 0x2D, 0x2D, 0x00,
+    },
+
+    .PsHarmOnOffBoxProc_LocalInit = { 0x0000, 0x0000 },
+
+    .PsHarmOnOffBoxProc_LocalInit_2 = { 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .MainVocalistPage1OKFunc_CaseTable = { 0x0000, 0x0060, 0x0000, 0x0060, 0x00AB, 0x0106 },
+
+    .RevSel_HandleConfirm_Str = 
+        "CcEv\0\xFF",
+
+    .EqSel_HandleConfirm_Str = 
+        "CcEv\0\xFF",
+
+    .RevEqSel_HandleConfirm_Str = 
+        "CcEv\0\xFF",
+
+    .GMMode_AttentionTable = {
+        SELF(GMMode_AttentionTable_Strings[58]),
+        SELF(GMMode_AttentionTable_Strings[48]),
+        SELF(GMMode_AttentionTable_Strings[36]),
+        SELF(GMMode_AttentionTable_Strings[24]),
+        SELF(GMMode_AttentionTable_Strings[12]),
+        SELF(GMMode_AttentionTable_Strings),
+    },
+
+    .GMMode_AttentionTable_Strings = 
+        "Perhatian !\0"
+        "ATTENTION!\0\xFF"
+        "\xA1" "ATENCI\xD3N!\0\xFF"
+        "ATTENTION!\0\xFF"
+        "ACHTUNG !\0"
+        "ATTENTION!\0\xFF",
+
+    .StsGMOnCheck_Strings = 
+        "Turning on GENERAL MIDI MODE will replace your current settings with GENERAL MIDI settings!\0"
+        "Durch das Einschalten des GENERAL MIDI MODE werden alle Einstellungen zu GENERAL MIDI Einstellungen ge\xE4ndert!\0"
+        "L'activation du mode GENERAL MIDI MODE remplacera tous les r\xE9glages actuels par les r\xE9glages GENERAL MIDI!\0\xFF"
+        "\xA1" "Al activar el modo MIDI General se reemplazan las configuraciones actuales por configuraciones MIDI Generales!\0"
+        "Aktifkan GENERAL MIDI MODE untuk kembali ke  susunan GENERAL MIDI yang sekarang.\0\xFF",
+
+    .StsGMOnCheck_PtrTable = {
+        SELF(StsGMOnCheck_Strings),
+        SELF(StsGMOnCheck_Strings[92]),
+        SELF(StsGMOnCheck_Strings[202]),
+        SELF(StsGMOnCheck_Strings[310]),
+        SELF(StsGMOnCheck_Strings),
+        SELF(StsGMOnCheck_Strings[422]),
+    },
+
+    .StsGMOnCheck_PtrTable_Tail = {
+        0x54, 0x75, 0x72, 0x6E, 0x69, 0x6E, 0x67, 0x20, 0x6F, 0x66, 0x66, 0x20, 0x47, 0x45, 0x4E, 0x45,
+        0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x77, 0x69,
+        0x6C, 0x6C, 0x20, 0x72, 0x65, 0x70, 0x6C, 0x61, 0x63, 0x65, 0x20, 0x74, 0x68, 0x65, 0x20, 0x47,
+        0x45, 0x4E, 0x45, 0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x73, 0x65, 0x74, 0x74,
+        0x69, 0x6E, 0x67, 0x73, 0x20, 0x77, 0x69, 0x74, 0x68, 0x20, 0x74, 0x68, 0x65, 0x20, 0x6F, 0x72,
+        0x69, 0x67, 0x69, 0x6E, 0x61, 0x6C, 0x20, 0x66, 0x61, 0x63, 0x74, 0x6F, 0x72, 0x79, 0x20, 0x73,
+        0x65, 0x74, 0x74, 0x69, 0x6E, 0x67, 0x73, 0x21, 0x00, 0xFF, 0x44, 0x75, 0x72, 0x63, 0x68, 0x20,
+        0x64, 0x61, 0x73, 0x20, 0x41, 0x75, 0x73, 0x73, 0x63, 0x68, 0x61, 0x6C, 0x74, 0x65, 0x6E, 0x20,
+        0x64, 0x65, 0x73, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49,
+        0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x77, 0x65, 0x72, 0x64, 0x65, 0x6E, 0x20, 0x64, 0x69, 0x65,
+        0x20, 0x47, 0x45, 0x4E, 0x45, 0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x45, 0x69,
+        0x6E, 0x73, 0x74, 0x65, 0x6C, 0x6C, 0x75, 0x6E, 0x67, 0x65, 0x6E, 0x20, 0x64, 0x75, 0x72, 0x63,
+        0x68, 0x20, 0x64, 0x69, 0x65, 0x20, 0x57, 0x65, 0x72, 0x6B, 0x73, 0x65, 0x69, 0x6E, 0x73, 0x74,
+        0x65, 0x6C, 0x6C, 0x75, 0x6E, 0x67, 0x65, 0x6E, 0x20, 0x65, 0x72, 0x73, 0x65, 0x74, 0x7A, 0x74,
+        0x2E, 0x00, 0x4C, 0x61, 0x20, 0x64, 0xE9, 0x73, 0x61, 0x63, 0x74, 0x69, 0x76, 0x61, 0x74, 0x69,
+        0x6F, 0x6E, 0x20, 0x64, 0x75, 0x20, 0x6D, 0x6F, 0x64, 0x65, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52,
+        0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x72, 0x65, 0x6D,
+        0x70, 0x6C, 0x61, 0x63, 0x65, 0x72, 0x61, 0x20, 0x74, 0x6F, 0x75, 0x73, 0x20, 0x6C, 0x65, 0x73,
+        0x20, 0x72, 0xE9, 0x67, 0x6C, 0x61, 0x67, 0x65, 0x73, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52, 0x41,
+        0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x70, 0x61, 0x72, 0x20, 0x6C, 0x65, 0x73, 0x20, 0x72,
+        0xE9, 0x67, 0x6C, 0x61, 0x67, 0x65, 0x73, 0x20, 0x64, 0x27, 0x75, 0x73, 0x69, 0x6E, 0x65, 0x73,
+        0x21, 0x00, 0xA1, 0x41, 0x6C, 0x20, 0x64, 0x65, 0x73, 0x63, 0x6F, 0x6E, 0x65, 0x63, 0x74, 0x61,
+        0x72, 0x20, 0x65, 0x6C, 0x20, 0x6D, 0x6F, 0x64, 0x6F, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x47,
+        0x65, 0x6E, 0x65, 0x72, 0x61, 0x6C, 0x20, 0x73, 0x65, 0x20, 0x72, 0x65, 0x65, 0x6D, 0x70, 0x6C,
+        0x61, 0x7A, 0x61, 0x6E, 0x20, 0x6C, 0x61, 0x73, 0x20, 0x63, 0x6F, 0x6E, 0x66, 0x69, 0x67, 0x75,
+        0x72, 0x61, 0x63, 0x69, 0x6F, 0x6E, 0x65, 0x73, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x47, 0x65,
+        0x6E, 0x65, 0x72, 0x61, 0x6C, 0x65, 0x73, 0x20, 0x70, 0x6F, 0x72, 0x20, 0x6C, 0x61, 0x73, 0x20,
+        0x63, 0x6F, 0x6E, 0x66, 0x69, 0x67, 0x75, 0x72, 0x61, 0x63, 0x69, 0x6F, 0x6E, 0x65, 0x73, 0x20,
+        0x6F, 0x72, 0x69, 0x67, 0x69, 0x6E, 0x61, 0x6C, 0x65, 0x73, 0x20, 0x64, 0x65, 0x20, 0x66, 0xE1,
+        0x62, 0x72, 0x69, 0x63, 0x61, 0x21, 0x00, 0xFF, 0x4E, 0x6F, 0x6E, 0x2D, 0x61, 0x6B, 0x74, 0x69,
+        0x66, 0x6B, 0x61, 0x6E, 0x20, 0x66, 0x75, 0x6E, 0x67, 0x73, 0x69, 0x20, 0x47, 0x45, 0x4E, 0x45,
+        0x52, 0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x4D, 0x4F, 0x44, 0x45, 0x20, 0x62, 0x69,
+        0x6C, 0x61, 0x20, 0x61, 0x6B, 0x61, 0x6E, 0x20, 0x6B, 0x65, 0x6D, 0x62, 0x61, 0x6C, 0x69, 0x20,
+        0x6B, 0x65, 0x20, 0x73, 0x75, 0x73, 0x75, 0x6E, 0x61, 0x6E, 0x20, 0x47, 0x45, 0x4E, 0x45, 0x52,
+        0x41, 0x4C, 0x20, 0x4D, 0x49, 0x44, 0x49, 0x20, 0x73, 0x65, 0x73, 0x75, 0x61, 0x69, 0x20, 0x73,
+        0x75, 0x73, 0x75, 0x6E, 0x61, 0x6E, 0x20, 0x64, 0x61, 0x72, 0x69, 0x20, 0x70, 0x61, 0x62, 0x72,
+        0x69, 0x6B, 0x28, 0x6F, 0x72, 0x69, 0x67, 0x69, 0x6E, 0x69, 0x6C, 0x20, 0x66, 0x61, 0x63, 0x74,
+        0x6F, 0x72, 0x79, 0x20, 0x73, 0x65, 0x74, 0x74, 0x69, 0x6E, 0x67, 0x73, 0x29, 0x2E, 0x00, 0xFF,
+    },
+
+    .StsGMOffCheck_PtrTable = {
+        SELF(StsGMOnCheck_PtrTable_Tail),
+        SELF(StsGMOnCheck_PtrTable_Tail[106]),
+        SELF(StsGMOnCheck_PtrTable_Tail[226]),
+        SELF(StsGMOnCheck_PtrTable_Tail[338]),
+        SELF(StsGMOnCheck_PtrTable_Tail),
+        SELF(StsGMOnCheck_PtrTable_Tail[472]),
+        SELF(StsGMOffCheck_PtrTable_Tail[90]),
+        SELF(StsGMOffCheck_PtrTable_Tail[72]),
+        SELF(StsGMOffCheck_PtrTable_Tail[56]),
+        SELF(StsGMOffCheck_PtrTable_Tail[42]),
+        SELF(StsGMOffCheck_PtrTable_Tail[28]),
+        SELF(StsGMOffCheck_PtrTable_Tail),
+    },
+
+    .StsGMOffCheck_PtrTable_Tail = {
+        0x41, 0x70, 0x61, 0x6B, 0x61, 0x68, 0x20, 0x79, 0x61, 0x6B, 0x69, 0x6E, 0x20, 0x61, 0x6B, 0x61,
+        0x6E, 0x20, 0x64, 0x69, 0x68, 0x61, 0x70, 0x75, 0x73, 0x20, 0x3F, 0x00, 0x41, 0x72, 0x65, 0x20,
+        0x59, 0x6F, 0x75, 0x20, 0x53, 0x75, 0x72, 0x65, 0x3F, 0x00, 0xBF, 0x45, 0x73, 0x74, 0xE1, 0x20,
+        0x73, 0x65, 0x67, 0x75, 0x72, 0x6F, 0x3F, 0x00, 0x45, 0x74, 0x65, 0x73, 0x20, 0x76, 0x6F, 0x75,
+        0x73, 0x20, 0x73, 0xFB, 0x72, 0x3F, 0x00, 0xFF, 0x53, 0x69, 0x6E, 0x64, 0x20, 0x53, 0x69, 0x65,
+        0x20, 0x73, 0x69, 0x63, 0x68, 0x65, 0x72, 0x20, 0x3F, 0x00, 0x41, 0x72, 0x65, 0x20, 0x59, 0x6F,
+        0x75, 0x20, 0x53, 0x75, 0x72, 0x65, 0x3F, 0x00,
+    },
+
+    .StsSplitCheck_PtrTable = {
+        SELF(StsSplitCheck_Strings[218]),
+        SELF(StsSplitCheck_Strings[160]),
+        SELF(StsSplitCheck_Strings[120]),
+        SELF(StsSplitCheck_Strings[80]),
+        SELF(StsSplitCheck_Strings[40]),
+        SELF(StsSplitCheck_Strings),
+    },
+
+    .StsSplitCheck_Strings = 
+        "Press a key to select the split point.\0\xFF"
+        "Press a key to select the split point.\0\xFF"
+        "Press a key to select the split point.\0\xFF"
+        "Press a key to select the split point.\0\xFF"
+        "Dr~fcken Sie eine Taste, um den Split-Punkt zu bestimmen.\0"
+        "Press a key to select the split point.\0\xFF",
+
+    .SplitPoint_NoteNameTable = {
+        SELF(SplitPoint_NoteNameTable_Strings[54]),
+        SELF(SplitPoint_NoteNameTable_Strings[48]),
+        SELF(SplitPoint_NoteNameTable_Strings[44]),
+        SELF(SplitPoint_NoteNameTable_Strings[38]),
+        SELF(SplitPoint_NoteNameTable_Strings[34]),
+        SELF(SplitPoint_NoteNameTable_Strings[30]),
+        SELF(SplitPoint_NoteNameTable_Strings[24]),
+        SELF(SplitPoint_NoteNameTable_Strings[20]),
+        SELF(SplitPoint_NoteNameTable_Strings[14]),
+        SELF(SplitPoint_NoteNameTable_Strings[10]),
+        SELF(SplitPoint_NoteNameTable_Strings[4]),
+        SELF(SplitPoint_NoteNameTable_Strings),
+    },
+
+    .SplitPoint_NoteNameTable_Strings = 
+        "B \0\xFF"
+        "B~a0\0\xFF"
+        "A \0\xFF"
+        "A~a0\0\xFF"
+        "G \0\xFF"
+        "F~9e\0\xFF"
+        "F \0\xFF"
+        "E \0\xFF"
+        "E~a0\0\xFF"
+        "D \0\xFF"
+        "D~a0\0\xFF"
+        "C \0\xFF",
+
+    .SplitPoint_BitmapTable = {
         SELF(Bitmap_SplitPoint_no_split),
         SELF(Bitmap_SplitPoint_C),
         SELF(Bitmap_SplitPoint_Db),
@@ -13363,1636 +12648,632 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         SELF(Bitmap_SplitPoint_B),
     },
 
-    .field_25478 = 0x000F,
+    .SplitPointFunc_LocalInit = { 0x000F, 0x009C },
 
-    .field_2547a = 0x009C,
+    .SplitPointFunc_LocalInit_Strings = 
+        "%s%2d",
 
-    .str_2354 = "%s%2d",
+    .R12Octave_HandleNoteEvt_Str = 
+        " - 2 ",
 
-    .str_2355 = " - 2 ",
+    .R12Octave_Octave2_Str = 
+        " - 1 ",
 
-    .str_2356 = " - 1 ",
+    .R12Octave_Octave3_Str = 
+        "   0 ",
 
-    .str_2357 = "   0 ",
+    .R12Octave_Octave4_Str = 
+        " + 1 ",
 
-    .str_2358 = " + 1 ",
+    .R12Octave_Octave5_Str = 
+        " + 2 ",
 
-    .w41_code = " + 2 ",
+    .R12Octave_OctaveDefault_Str = 
+        "Error",
 
-    .w41_name = "Error",
+    .MdCmptCnctFunc_LocalInit = { 0x000A, 0x0052 },
 
-    .field_254a6 = 0x000A,
+    .MdCmptCnctFunc_LocalInit_Strings = 
+        "         NORMAL         \0\xFF"
+        "      KN as master      \0\xFF"
+        "      KN as slave       \0\xFF"
+        "         Error!         \0\xFF",
 
-    .str_2359 = "R",
+    .PcgModeGridEventStart_Str = 
+        " NORMAL \0\xFF",
 
-    .str_2360 = ALIGNED_STRING("         NORMAL         "),
+    .PcgModeDisplayString_Bank1_Str = 
+        "  TECH  \0\xFF"
+        "   GM   \0\xFF",
 
-    .str_2361 = ALIGNED_STRING("      KN as master      "),
+    .PcgModeDefaultCase_Str = 
+        " Error! \0\xFF",
 
-    .str_2362 = ALIGNED_STRING("      KN as slave       "),
+    .DrumType_GridEvent_Str = 
+        " NORMAL \0\xFF",
 
-    .str_2363 = ALIGNED_STRING("         Error!         "),
+    .DrumType_CopyStrBank1_Str = 
+        "  TECH  \0\xFF"
+        "   GM   \0\xFF",
 
-    .str_2364 = ALIGNED_STRING(" NORMAL "),
+    .DrumType_CopyStrDefault_Str = 
+        " Error! \0\xFF",
 
-    .str_2365 = ALIGNED_STRING("  TECH  "),
-
-    .str_2366 = ALIGNED_STRING("   GM   "),
-
-    .str_2367 = ALIGNED_STRING(" Error! "),
-
-    .str_2368 = ALIGNED_STRING(" NORMAL "),
-
-    .str_2369 = ALIGNED_STRING("  TECH  "),
-
-    .str_2370 = ALIGNED_STRING("   GM   "),
-
-    .str_2371 = ALIGNED_STRING(" Error! "),
-
-    .ptrs_334 = {
-        SELF(str_2375),
-        SELF(str_2374),
-        SELF(str_2373),
-        SELF(str_2372),
+    .DisplayMode_OnOff_Table = {
+        SELF(DisplayMode_OnOff_Table_Strings[18]),
+        SELF(DisplayMode_OnOff_Table_Strings[12]),
+        SELF(DisplayMode_OnOff_Table_Strings[6]),
+        SELF(DisplayMode_OnOff_Table_Strings),
     },
 
-    .str_2372 = " ON  ",
-
-    .str_2373 = " ON  ",
-
-    .str_2374 = " OFF ",
-
-    .str_2375 = " OFF ",
-
-    .str_2376 = "\"",
-
-    .str_2377 = "\"",
-
-    .str_2378 = "*",
-
-    .str_2379 = "*",
-
-    .str_2380 = "*",
-
-    .str_2381 = "&",
-
-    .str_2382 = "*",
-
-    .str_2383 = ".",
-
-    .str_2384 = "5",
-
-    .pad_3021 = { 0 },
-
-    .w42_code = "Error",
-
-    .w42_name = "Error",
-
-    .field_255aa = 0x0001,
-
-    .field_255ac = 0x0001,
-
-    .field_255ae = 0x0001,
-
-    .field_255b0 = 0x0002,
-
-    .field_255b2 = 0x0001,
-
-    .field_255b4 = 0x0001,
-
-    .field_255b6 = 0x0001,
-
-    .field_255b8 = 0x0001,
-
-    .field_255ba = 0x0002,
-
-    .field_255bc = 0x0001,
-
-    .field_255be = 0x0001,
-
-    .field_255c0 = 0x0001,
-
-    .field_255c2 = 0x0001,
-
-    .field_255c4 = 0x0001,
-
-    .str_2385 = "j",
-
-    .field_255c8 = 0x0121,
-
-    .str_2386 = "j",
-
-    .field_255cc = 0x0121,
-
-    .field_255ce = 0x0223,
-
-    .field_255d0 = 0x01FB,
-
-    .field_255d2 = 0x01FB,
-
-    .field_255d4 = NAKA_NONE,
-
-    .field_255d6 = NAKA_NONE,
-
-    .field_255d8 = 0x2A00,
-
-    .pad_3022 = { 0 },
-
-    .field_255dc = NAKA_NONE,
-
-    .field_255de = NAKA_NONE,
-
-    .field_255e0 = 0x2A01,
-
-    .pad_3023 = { 0 },
-
-    .field_255e4 = 0x2A12,
-
-    .pad_3024 = { 0 },
-
-    .field_255e8 = 0x2A10,
-
-    .pad_3025 = { 0 },
-
-    .field_255ec = 0x2A11,
-
-    .pad_3026 = { 0 },
-
-    .str_2387 = " %2d measure ",
-
-    .str_2388 = " ON  ",
-
-    .str_2389 = " OFF ",
-
-    .str_2390 = " %2d measure ",
-
-    .str_2391 = " ON  ",
-
-    .str_2392 = " OFF ",
-
-    .pad_3027 = { 0 },
-
-    .str_2393 = "K",
-
-    .pad_3028 = { 0 },
-
-    .str_2394 = "K",
-
-    .field_2563c = 0x01FE,
-
-    .field_2563e = 0x009C,
-
-    .field_25640 = 0x009C,
-
-    .field_25642 = 0x0001,
-
-    .field_25644 = 0x0001,
-
-    .field_25646 = 0x0001,
-
-    .field_25648 = 0x0001,
-
-    .field_2564a = 0x0001,
-
-    .field_2564c = 0x0003,
-
-    .field_2564e = 0x0001,
-
-    .field_25650 = 0x0001,
-
-    .field_25652 = 0x0001,
-
-    .field_25654 = 0x0001,
-
-    .field_25656 = 0x0001,
-
-    .field_25658 = 0x0001,
-
-    .field_2565a = 0x0001,
-
-    .field_2565c = 0x0001,
-
-    .field_2565e = 0x0002,
-
-    .field_25660 = 0x0001,
-
-    .field_25662 = 0x0001,
-
-    .field_25664 = 0x0001,
-
-    .field_25666 = 0x0001,
-
-    .field_25668 = 0x0001,
-
-    .field_2566a = 0x0003,
-
-    .field_2566c = 0x0002,
-
-    .field_2566e = 0x0001,
-
-    .field_25670 = 0x0001,
-
-    .field_25672 = 0x0001,
-
-    .field_25674 = 0x0001,
-
-    .field_25676 = 0x0001,
-
-    .field_25678 = 0x0001,
-
-    .field_2567a = 0x0001,
-
-    .field_2567c = 0x0001,
-
-    .field_2567e = 0x0002,
-
-    .field_25680 = 0x0001,
-
-    .field_25682 = 0x0001,
-
-    .field_25684 = 0x0001,
-
-    .field_25686 = 0x0001,
-
-    .field_25688 = 0x0001,
-
-    .str_2395 = " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| |-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
-
-    .str_2396 = " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY OFFSET VALUE  :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
-
-    .str_2397 = " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY FIXED VALUE   :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
-
-    .str_2398 = "l",
-
-    .field_258ea = 0x015B,
-
-    .str_2399 = "l",
-
-    .field_258ee = 0x015B,
-
-    .field_258f0 = 0x02B5,
-
-    .field_258f2 = 0x028B,
-
-    .field_258f4 = 0x028B,
-
-    .ptr_258f6 = SELF(str_2401),
-
-    .ptr_258fa = SELF(str_2400),
-
-    .str_2400 = " ON  ",
-
-    .str_2401 = " OFF ",
-
-    .ptr_2590a = SELF(str_2403),
-
-    .ptr_2590e = SELF(str_2402),
-
-    .str_2402 = " DIRECT  ",
-
-    .str_2403 = "CONDUCTOR",
-
-    .ptrs_335 = {
-        SELF(str_2406),
-        SELF(str_2405),
-        SELF(str_2404),
+    .DisplayMode_OnOff_Table_Strings = 
+        " ON  \0"
+        " ON  \0"
+        " OFF \0"
+        " OFF ",
+
+    .MdSetupLoadFunc_CaseTable = {
+        0x0022, 0x0022, 0x002A, 0x002A, 0x002A, 0x0026, 0x002A, 0x002E,
+        0x0035, 0x0000,
     },
 
-    .str_2404 = ALIGNED_STRING("  FIX   "),
+    .MdSetupLoadFunc_CaseTable_Strings = 
+        "Error\0"
+        "Error",
 
-    .str_2405 = ALIGNED_STRING(" OFFSET "),
+    .VoiceParam_ListHandler_Table = { 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00 },
 
-    .str_2406 = ALIGNED_STRING(" DIRECT "),
+    .VoiceParam_ListHandler_Table_2 = { 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00 },
 
-    .pad_3029 = { 0 },
+    .AcFadeSetGridBoxProc_CaseTable = { 0x006A, 0x0121, 0x006A, 0x0121, 0x0223, 0x01FB, 0x01FB },
 
-    .str_2407 = " %3d ",
-
-    .str_2408 = "     ",
-
-    .str_2409 = " %3d ",
-
-    .str_2410 = "     ",
-
-    .str_2411 = "     ",
-
-    .str_2412 = " %3d ",
-
-    .str_2413 = " %3d ",
-
-    .str_2414 = "     ",
-
-    .str_2415 = " %3d ",
-
-    .str_2416 = " %3d ",
-
-    .pad_3030 = { 0 },
-
-    .str_2417 = "2",
-
-    .str_2418 = "d",
-
-    .field_259a2 = 0x0138,
-
-    .field_259a4 = 0x0290,
-
-    .field_259a6 = 0x01C9,
-
-    .field_259a8 = 0x01FB,
-
-    .field_259aa = 0x022C,
-
-    .field_259ac = 0x025D,
-
-    .pad_3031 = { 0 },
-
-    .field_259b0 = 0x000C,
-
-    .field_259b2 = 0x0018,
-
-    .str_2419 = "$",
-
-    .field_259b6 = 0x0600,
-
-    .str_2420 = "N",
-
-    .str_2421 = "Z",
-
-    .str_2422 = "f",
-
-    .str_2423 = "r",
-
-    .pad_3032 = { 0 },
-
-    .field_259c2 = 0x000C,
-
-    .field_259c4 = 0x0018,
-
-    .str_2424 = "$",
-
-    .field_259c8 = 0x06CC,
-
-    .str_2425 = "N",
-
-    .str_2426 = "Z",
-
-    .str_2427 = "f",
-
-    .str_2428 = "r",
-
-    .pad_3033 = { 0 },
-
-    .field_259d4 = 0x00CC,
-
-    .pad_3034 = { 0 },
-
-    .field_259d8 = 0x00CC,
-
-    .field_259da = 0x071A,
-
-    .field_259dc = 0x019D,
-
-    .field_259de = 0x071A,
-
-    .str_2429 = ALIGNED_STRING("PAGE"),
-
-    .field_259e6 = 0x0400,
-
-    .field_259e8 = 0x0201,
-
-    .field_259ea = 0x0306,
-
-    .str_2430 = "1",
-
-    .str_2431 = "1",
-
-    .str_2432 = ":",
-
-    .str_2433 = ":",
-
-    .str_2434 = ":",
-
-    .str_2435 = "4",
-
-    .str_2436 = ":",
-
-    .str_2437 = "=",
-
-    .str_2438 = "1",
-
-    .pad_3035 = { 0 },
-
-    .ptrs_336 = {
-        SELF(str_2442),
-        SELF(str_2441),
-        SELF(str_2440),
-        SELF(str_2439),
+    .Data_FadeSetGridDispatch_Table = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0x00, 0x2A, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0x01, 0x2A, 0x00, 0x00,
+        0x12, 0x2A, 0x00, 0x00, 0x10, 0x2A, 0x00, 0x00, 0x11, 0x2A, 0x00, 0x00,
     },
 
-    .str_2439 = "COMPLETED",
+    .FadeSetGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .str_2440 = "RECIEVING",
+    .FadeSetGridCheck_LocalInit_Strings = 
+        " %2d measure \0"
+        " ON  ",
 
-    .str_2441 = " SENDING ",
+    .Data_FadeSetGridDispatch_Str = 
+        " OFF \0"
+        " %2d measure ",
 
-    .str_2442 = "         ",
+    .SndParam_FormatAndDisplay_Str = 
+        " ON  ",
 
-    .field_25a38 = 0x001E,
+    .SndParam_FormatAndDisplay_Str_2 = 
+        " OFF ",
 
-    .field_25a3a = 0x001E,
+    .FadeSetGridCheck_CaseTable = { 0x0000, 0x004B, 0x0000, 0x004B, 0x01FE, 0x009C, 0x009C },
 
-    .str_2443 = "&",
-
-    .str_2444 = "&",
-
-    .str_2445 = "&",
-
-    .str_2446 = "\"",
-
-    .str_2447 = "&",
-
-    .str_2448 = "*",
-
-    .field_25a48 = 0x001E,
-
-    .pad_3036 = { 0 },
-
-    .field_25a4c = 0x001E,
-
-    .field_25a4e = 0x001E,
-
-    .str_2449 = "&",
-
-    .str_2450 = "&",
-
-    .str_2451 = "&",
-
-    .str_2452 = "\"",
-
-    .str_2453 = "&",
-
-    .str_2454 = "*",
-
-    .field_25a5c = 0x001E,
-
-    .pad_3037 = { 0 },
-
-    .field_25a60 = 0x001E,
-
-    .field_25a62 = 0x001E,
-
-    .str_2455 = "&",
-
-    .str_2456 = "&",
-
-    .str_2457 = "&",
-
-    .str_2458 = "\"",
-
-    .str_2459 = "&",
-
-    .str_2460 = "*",
-
-    .field_25a70 = 0x001E,
-
-    .pad_3038 = { 0 },
-
-    .field_25a74 = 0x001E,
-
-    .field_25a76 = 0x001E,
-
-    .str_2461 = "&",
-
-    .str_2462 = "&",
-
-    .str_2463 = "&",
-
-    .str_2464 = "\"",
-
-    .str_2465 = "&",
-
-    .str_2466 = "*",
-
-    .field_25a84 = 0x001E,
-
-    .pad_3039 = { 0 },
-
-    .field_25a88 = 0x001E,
-
-    .field_25a8a = 0x001E,
-
-    .str_2467 = "&",
-
-    .str_2468 = "&",
-
-    .str_2469 = "&",
-
-    .str_2470 = "\"",
-
-    .str_2471 = "&",
-
-    .str_2472 = "*",
-
-    .field_25a98 = 0x001E,
-
-    .pad_3040 = { 0 },
-
-    .str_2473 = "-",
-
-    .str_2474 = "B",
-
-    .str_2475 = "W",
-
-    .str_2476 = "l",
-
-    .field_25aa6 = 0x0080,
-
-    .field_25aa8 = 0x0094,
-
-    .field_25aaa = 0x00A8,
-
-    .ptr_25aac = 0x00FA00BC,
-
-    .field_25ab0 = 0x00FA,
-
-    .ptr_25ab2 = NAKA_ADDR(NakaData_UserMemoryConfig),
-
-    .pad_3041 = { 0 },
-
-    .str_2477 = "-",
-
-    .str_2478 = "B",
-
-    .str_2479 = "W",
-
-    .str_2480 = "l",
-
-    .field_25ac0 = 0x0080,
-
-    .field_25ac2 = 0x0094,
-
-    .field_25ac4 = 0x00A8,
-
-    .ptr_25ac6 = 0x00FA00BC,
-
-    .field_25aca = 0x00FA,
-
-    .ptr_25acc = NAKA_ADDR(NakaData_UserMemoryConfig),
-
-    .field_25ad0 = 0x0001,
-
-    .field_25ad2 = 0x0001,
-
-    .field_25ad4 = 0x0001,
-
-    .field_25ad6 = 0x0001,
-
-    .field_25ad8 = 0x0001,
-
-    .field_25ada = 0x0001,
-
-    .field_25adc = 0x0001,
-
-    .field_25ade = 0x0004,
-
-    .field_25ae0 = 0x0001,
-
-    .field_25ae2 = 0x0001,
-
-    .field_25ae4 = 0x0001,
-
-    .field_25ae6 = 0x0001,
-
-    .field_25ae8 = 0x0004,
-
-    .field_25aea = 0x0001,
-
-    .field_25aec = 0x0001,
-
-    .field_25aee = 0x0001,
-
-    .field_25af0 = 0x0001,
-
-    .field_25af2 = 0x0001,
-
-    .field_25af4 = 0x00D5,
-
-    .field_25af6 = 0x0187,
-
-    .field_25af8 = 0x00D5,
-
-    .field_25afa = 0x0187,
-
-    .field_25afc = 0x0289,
-
-    .field_25afe = 0x0261,
-
-    .field_25b00 = 0x0261,
-
-    .pad_3042 = { 0 },
-
-    .ptr_25b06 = 0x00FF0001,
-
-    .pad_3043 = { 0 },
-
-    .field_25b10 = 0x0001,
-
-    .pad_3044 = { 0 },
-
-    .ptr_25b18 = SELF(str_2482),
-
-    .ptr_25b1c = SELF(str_2481),
-
-    .str_2481 = " YES ",
-
-    .str_2482 = " NO  ",
-
-    .ptrs_337 = {
-        SELF(str_2486),
-        SELF(str_2485),
-        SELF(str_2484),
-        SELF(str_2483),
+    .AcInOutGrid_Init_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
     },
 
-    .str_2483 = "  USER3  ",
-
-    .str_2484 = "  USER2  ",
-
-    .str_2485 = "  USER1  ",
-
-    .str_2486 = " INITIAL ",
-
-    .pad_3045 = { 0 },
-
-    .field_25b76 = 0x00B7,
-
-    .pad_3046 = { 0 },
-
-    .field_25b7a = 0x00B7,
-
-    .field_25b7c = 0x0349,
-
-    .field_25b7e = 0x0349,
-
-    .field_25b80 = 0x0190,
-
-    .str_2487 = "j",
-
-    .field_25b84 = 0x010E,
-
-    .str_2488 = "j",
-
-    .field_25b88 = 0x010E,
-
-    .field_25b8a = 0x0207,
-
-    .field_25b8c = 0x01DF,
-
-    .field_25b8e = 0x01DF,
-
-    .pad_3047 = { 0 },
-
-    .ptr_25b94 = 0x00FF0001,
-
-    .pad_3048 = { 0 },
-
-    .field_25b9e = 0x0001,
-
-    .pad_3049 = { 0 },
-
-    .str_2489 = " %3d ",
-
-    .str_2490 = " %3d ",
-
-    .str_2491 = " --- ",
-
-    .str_2492 = "  OFF  ",
-
-    .str_2493 = " %3d ",
-
-    .str_2494 = ALIGNED_STRING(" %5d )"),
-
-    .str_2495 = " --- ",
-
-    .str_2496 = " OFF ",
-
-    .str_2497 = "  OFF  ",
-
-    .str_2498 = " %3d ",
-
-    .str_2499 = " %3d ",
-
-    .str_2500 = ALIGNED_STRING(" %5d )"),
-
-    .str_2501 = " %3d ",
-
-    .str_2502 = " %3d ",
-
-    .str_2503 = " --- ",
-
-    .str_2504 = "  OFF  ",
-
-    .str_2505 = " %3d ",
-
-    .str_2506 = ALIGNED_STRING(" %5d )"),
-
-    .str_2507 = " --- ",
-
-    .str_2508 = " OFF ",
-
-    .str_2509 = "  OFF  ",
-
-    .str_2510 = " %3d ",
-
-    .str_2511 = " %3d ",
-
-    .str_2512 = ALIGNED_STRING(" %5d )"),
-
-    .pad_3050 = { 0 },
-
-    .field_25c52 = 0x010E,
-
-    .pad_3051 = { 0 },
-
-    .field_25c56 = 0x010E,
-
-    .field_25c58 = 0x06C6,
-
-    .field_25c5a = 0x06C6,
-
-    .field_25c5c = 0x0258,
-
-    .field_25c5e = 0x010E,
-
-    .field_25c60 = 0x00A0,
-
-    .field_25c62 = 0x0135,
-
-    .field_25c64 = 0x00B2,
-
-    .field_25c66 = 0x0122,
-
-    .field_25c68 = 0x00AA,
-
-    .field_25c6a = 0x0121,
-
-    .field_25c6c = 0x00A9,
-
-    .pad_3052 = { 0 },
-
-    .field_25c78 = 0x2203,
-
-    .pad_3053 = { 0 },
-
-    .field_25c7c = 0x2202,
-
-    .pad_3054 = { 0 },
-
-    .field_25c80 = 0x2282,
-
-    .pad_3055 = { 0 },
-
-    .field_25c84 = 0xA001,
-
-    .field_25c86 = 0x0002,
-
-    .field_25c88 = 0xA000,
-
-    .field_25c8a = 0x0002,
-
-    .field_25c8c = 0x229A,
-
-    .pad_3056 = { 0 },
-
-    .field_25c90 = 0x2201,
-
-    .pad_3057 = { 0 },
-
-    .field_25c94 = 0x2205,
-
-    .pad_3058 = { 0 },
-
-    .field_25c98 = 0x2280,
-
-    .pad_3059 = { 0 },
-
-    .str_2513 = " ON  ",
-
-    .str_2514 = " OFF ",
-
-    .str_2515 = ALIGNED_STRING("  ----  "),
-
-    .str_2516 = ALIGNED_STRING(" NORMAL "),
-
-    .str_2517 = ALIGNED_STRING("  TECH  "),
-
-    .str_2518 = ALIGNED_STRING("   GM   "),
-
-    .str_2519 = ALIGNED_STRING(" Error! "),
-
-    .str_2520 = " ON  ",
-
-    .str_2521 = " OFF ",
-
-    .str_2522 = ALIGNED_STRING("  ----  "),
-
-    .str_2523 = ALIGNED_STRING(" NORMAL "),
-
-    .str_2524 = ALIGNED_STRING("  TECH  "),
-
-    .str_2525 = ALIGNED_STRING("   GM   "),
-
-    .str_2526 = ALIGNED_STRING(" Error! "),
-
-    .pad_3060 = { 0 },
-
-    .str_2527 = "t",
-
-    .pad_3061 = { 0 },
-
-    .str_2528 = "t",
-
-    .ptr_25d2a = NAKA_ADDR(Naka_MainDispatch_Table),
-
-    .field_25d2e = 0x00EE,
-
-    .field_25d30 = 0x00B1,
-
-    .field_25d32 = 0x00B1,
-
-    .field_25d34 = 0x00B1,
-
-    .field_25d36 = 0x00B1,
-
-    .field_25d38 = 0x02DF,
-
-    .field_25d3a = 0x02B5,
-
-    .field_25d3c = 0x02B5,
-
-    .str_2529 = "j",
-
-    .str_2530 = "j",
-
-    .str_2531 = "j",
-
-    .str_2532 = "j",
-
-    .field_25d46 = 0x0298,
-
-    .field_25d48 = 0x026E,
-
-    .field_25d4a = 0x026E,
-
-    .ptrs_338 = {
-        SELF(str_2535),
-        SELF(str_2534),
-        SELF(str_2533),
+    .AcInOutGrid_ScrollUp_AltTable_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
     },
 
-    .str_2533 = " LEFT  ",
-
-    .str_2534 = "RIGHT 2",
-
-    .str_2535 = "RIGHT 1",
-
-    .pad_3062 = { 0 },
-
-    .field_25d74 = 0x0001,
-
-    .field_25d76 = 0x0001,
-
-    .pad_3063 = { 0 },
-
-    .field_25d7e = 0x0001,
-
-    .pad_3064 = { 0 },
-
-    .str_2536 = ALIGNED_STRING(" %2d-%d "),
-
-    .str_2537 = " ON  ",
-
-    .str_2538 = " OFF ",
-
-    .str_2539 = " OFF ",
-
-    .str_2540 = " %3d ",
-
-    .str_2541 = " %3d ",
-
-    .str_2542 = " OFF ",
-
-    .str_2543 = " %3d ",
-
-    .str_2544 = " ON  ",
-
-    .str_2545 = " OFF ",
-
-    .str_2546 = " OFF ",
-
-    .str_2547 = " %3d ",
-
-    .str_2548 = " %3d ",
-
-    .str_2549 = " OFF ",
-
-    .str_2550 = " %3d ",
-
-    .str_2551 = " OFF ",
-
-    .str_2552 = " %3d ",
-
-    .str_2553 = " %3d ",
-
-    .str_2554 = " OFF ",
-
-    .str_2555 = " %3d ",
-
-    .str_2556 = ALIGNED_STRING(" %2d-%d "),
-
-    .str_2557 = " ON  ",
-
-    .str_2558 = " OFF ",
-
-    .pad_3065 = { 0 },
-
-    .field_25e2a = 0x00C7,
-
-    .pad_3066 = { 0 },
-
-    .field_25e2e = 0x00C7,
-
-    .field_25e30 = 0x07CC,
-
-    .field_25e32 = 0x07CC,
-
-    .field_25e34 = 0x01A6,
-
-    .pad_3067 = { 0 },
-
-    .field_25e3a = 0x0001,
-
-    .field_25e3c = 0x0001,
-
-    .pad_3068 = { 0 },
-
-    .field_25e44 = 0x0001,
-
-    .pad_3069 = { 0 },
-
-    .str_2559 = " OFF ",
-
-    .str_2560 = " %3d ",
-
-    .str_2561 = " %3d ",
-
-    .str_2562 = " OFF ",
-
-    .str_2563 = " %3d ",
-
-    .str_2564 = " OFF ",
-
-    .str_2565 = " %3d ",
-
-    .str_2566 = " %3d ",
-
-    .str_2567 = " OFF ",
-
-    .str_2568 = " %3d ",
-
-    .str_2569 = " OFF ",
-
-    .str_2570 = " %3d ",
-
-    .str_2571 = " %3d ",
-
-    .str_2572 = " OFF ",
-
-    .str_2573 = " %3d ",
-
-    .str_2574 = " OFF ",
-
-    .str_2575 = " %3d ",
-
-    .str_2576 = " %3d ",
-
-    .str_2577 = " OFF ",
-
-    .str_2578 = " %3d ",
-
-    .pad_3070 = { 0 },
-
-    .field_25ed6 = 0x0169,
-
-    .pad_3071 = { 0 },
-
-    .field_25eda = 0x0169,
-
-    .field_25edc = 0x0831,
-
-    .field_25ede = 0x0831,
-
-    .field_25ee0 = 0x0302,
-
-    .field_25ee2 = 0x0708,
-
-    .pad_3072 = { 0 },
-
-    .str_2579 = ALIGNED_STRING(" |-| PRG.CHANGE     | BANK SELECT    | PITCH BEND     | VOLUME         | EXPRESSION     | PAN            | SUSTAIN        "),
-
-    .str_2580 = " |-| EFFECT & REVERB| MODULATION     | TUNING         | BEND RANGE     | AFTER TOUCH    | RESET ALL CONT.",
-
-    .field_25fda = 0x017E,
-
-    .field_25fdc = 0x029C,
-
-    .field_25fde = 0x017E,
-
-    .field_25fe0 = 0x029C,
-
-    .field_25fe2 = 0x0419,
-
-    .field_25fe4 = 0x03EF,
-
-    .field_25fe6 = 0x03EF,
-
-    .field_25fe8 = NAKA_NONE,
-
-    .field_25fea = NAKA_NONE,
-
-    .field_25fec = NAKA_NONE,
-
-    .field_25fee = NAKA_NONE,
-
-    .field_25ff0 = 0x228A,
-
-    .pad_3073 = { 0 },
-
-    .field_25ff4 = 0x228D,
-
-    .pad_3074 = { 0 },
-
-    .field_25ff8 = 0x228C,
-
-    .pad_3075 = { 0 },
-
-    .field_25ffc = 0x228E,
-
-    .pad_3076 = { 0 },
-
-    .field_26000 = 0x228F,
-
-    .pad_3077 = { 0 },
-
-    .field_26004 = 0x2290,
-
-    .pad_3078 = { 0 },
-
-    .field_26008 = 0x2291,
-
-    .pad_3079 = { 0 },
-
-    .field_2600c = NAKA_NONE,
-
-    .field_2600e = NAKA_NONE,
-
-    .field_26010 = NAKA_NONE,
-
-    .field_26012 = NAKA_NONE,
-
-    .field_26014 = 0x2294,
-
-    .pad_3080 = { 0 },
-
-    .field_26018 = 0x2295,
-
-    .pad_3081 = { 0 },
-
-    .field_2601c = 0x2296,
-
-    .pad_3082 = { 0 },
-
-    .field_26020 = 0x2298,
-
-    .pad_3083 = { 0 },
-
-    .field_26024 = 0x228B,
-
-    .pad_3084 = { 0 },
-
-    .field_26028 = 0x2299,
-
-    .pad_3085 = { 0 },
-
-    .field_2602c = NAKA_NONE,
-
-    .field_2602e = NAKA_NONE,
-
-    .pad_3086 = { 0 },
-
-    .str_2581 = " ON  ",
-
-    .str_2582 = " OFF ",
-
-    .str_2583 = " ON  ",
-
-    .str_2584 = " OFF ",
-
-    .pad_3087 = { 0 },
-
-    .str_2585 = "S",
-
-    .pad_3088 = { 0 },
-
-    .str_2586 = "S",
-
-    .field_2605a = 0x0194,
-
-    .field_2605c = 0x00AC,
-
-    .field_2605e = 0x0194,
-
-    .pad_3089 = { 0 },
-
-    .field_26063 = 0x0201,
-
-    .field_26065 = 0x0403,
-
-    .field_26067 = 0x0605,
-
-    .field_26069 = 0x0007,
-
-    .field_2606b = 0x0800,
-
-    .field_2606d = 0x0A09,
-
-    .field_2606f = 0x0C0B,
-
-    .field_26071 = 0x0E0D,
-
-    .field_26073 = 0x000F,
-
-    .field_26075 = 0x1900,
-
-    .field_26077 = 0x1000,
-
-    .field_26079 = 0x1211,
-
-    .field_2607b = 0x1413,
-
-    .field_2607d = 0x0115,
-
-    .field_2607f = 0x0100,
-
-    .field_26081 = 0x0100,
-
-    .field_26083 = 0x0100,
-
-    .field_26085 = 0x0200,
-
-    .field_26087 = 0x0100,
-
-    .field_26089 = 0x0100,
-
-    .field_2608b = 0x0100,
-
-    .field_2608d = 0x0100,
-
-    .field_2608f = 0x0100,
-
-    .field_26091 = 0x0100,
-
-    .field_26093 = 0x0200,
-
-    .field_26095 = 0x0100,
-
-    .field_26097 = 0x0100,
-
-    .field_26099 = 0x0100,
-
-    .field_2609b = 0x0100,
-
-    .field_2609d = 0x0100,
-
-    .field_2609f = 0x0100,
-
-    .field_260a1 = 0x0100,
-
-    .field_260a3 = 0x0900,
-
-    .ptrs_339 = {
-        0x00FF0909,
-        0x00000000,
-        0x00000000,
-        0x00000000,
+    .AcInOutGrid_ScrollUp_Dispatch_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x03, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
     },
 
-    .pad_3090 = { 0 },
-
-    .str_2587 = "|-| RIGHT1| RIGHT2| LEFT| PART4| PART5| PART6| PART7| PART8",
-
-    .str_2588 = "|-| PART9| PART10| PART11| PART12| PART13| PART14| PART15| PART16",
-
-    .str_2589 = ALIGNED_STRING("|-| CONTROL| | ACCOMP1| ACCOMP2| ACCOMP3| BASS| DRUMS| CHORD"),
-
-    .field_26174 = 0x01C8,
-
-    .field_26176 = 0x03B3,
-
-    .field_26178 = 0x01C8,
-
-    .field_2617a = 0x03B3,
-
-    .field_2617c = 0x05E2,
-
-    .field_2617e = 0x05B8,
-
-    .field_26180 = 0x05DE,
-
-    .field_26182 = 0x8001,
-
-    .field_26184 = 0x0001,
-
-    .field_26186 = 0x8004,
-
-    .field_26188 = 0x0001,
-
-    .field_2618a = 0x8000,
-
-    .field_2618c = 0x0001,
-
-    .field_2618e = 0x8401,
-
-    .field_26190 = 0x0001,
-
-    .field_26192 = 0x8404,
-
-    .field_26194 = 0x0001,
-
-    .field_26196 = 0x8400,
-
-    .field_26198 = 0x0001,
-
-    .field_2619a = 0x8801,
-
-    .field_2619c = 0x0001,
-
-    .field_2619e = 0x8804,
-
-    .field_261a0 = 0x0001,
-
-    .field_261a2 = 0x8800,
-
-    .field_261a4 = 0x0001,
-
-    .field_261a6 = 0x8C01,
-
-    .field_261a8 = 0x0001,
-
-    .field_261aa = 0x8C04,
-
-    .field_261ac = 0x0001,
-
-    .field_261ae = 0x8C00,
-
-    .field_261b0 = 0x0001,
-
-    .field_261b2 = 0x9001,
-
-    .field_261b4 = 0x0001,
-
-    .field_261b6 = 0x9004,
-
-    .field_261b8 = 0x0001,
-
-    .field_261ba = 0x9000,
-
-    .field_261bc = 0x0001,
-
-    .field_261be = 0x9401,
-
-    .field_261c0 = 0x0001,
-
-    .field_261c2 = 0x9404,
-
-    .field_261c4 = 0x0001,
-
-    .field_261c6 = 0x9400,
-
-    .field_261c8 = 0x0001,
-
-    .field_261ca = 0x9801,
-
-    .field_261cc = 0x0001,
-
-    .field_261ce = 0x9804,
-
-    .field_261d0 = 0x0001,
-
-    .field_261d2 = 0x9800,
-
-    .field_261d4 = 0x0001,
-
-    .field_261d6 = 0x9C01,
-
-    .field_261d8 = 0x0001,
-
-    .field_261da = 0x9C04,
-
-    .field_261dc = 0x0001,
-
-    .field_261de = 0x9C00,
-
-    .field_261e0 = 0x0001,
-
-    .field_261e2 = 0xA001,
-
-    .field_261e4 = 0x0001,
-
-    .field_261e6 = 0xA004,
-
-    .field_261e8 = 0x0001,
-
-    .field_261ea = 0xA000,
-
-    .field_261ec = 0x0001,
-
-    .field_261ee = 0xA401,
-
-    .field_261f0 = 0x0001,
-
-    .field_261f2 = 0xA404,
-
-    .field_261f4 = 0x0001,
-
-    .field_261f6 = 0xA400,
-
-    .field_261f8 = 0x0001,
-
-    .field_261fa = 0xA801,
-
-    .field_261fc = 0x0001,
-
-    .field_261fe = 0xA804,
-
-    .field_26200 = 0x0001,
-
-    .field_26202 = 0xA800,
-
-    .field_26204 = 0x0001,
-
-    .field_26206 = 0xAC01,
-
-    .field_26208 = 0x0001,
-
-    .field_2620a = 0xAC04,
-
-    .field_2620c = 0x0001,
-
-    .field_2620e = 0xAC00,
-
-    .field_26210 = 0x0001,
-
-    .field_26212 = 0xB001,
-
-    .field_26214 = 0x0001,
-
-    .field_26216 = 0xB004,
-
-    .field_26218 = 0x0001,
-
-    .field_2621a = 0xB000,
-
-    .field_2621c = 0x0001,
-
-    .field_2621e = 0xB401,
-
-    .field_26220 = 0x0001,
-
-    .field_26222 = 0xB404,
-
-    .field_26224 = 0x0001,
-
-    .field_26226 = 0xB400,
-
-    .field_26228 = 0x0001,
-
-    .field_2622a = 0xB801,
-
-    .field_2622c = 0x0001,
-
-    .field_2622e = 0xB804,
-
-    .field_26230 = 0x0001,
-
-    .field_26232 = 0xB800,
-
-    .field_26234 = 0x0001,
-
-    .field_26236 = 0xBC01,
-
-    .field_26238 = 0x0001,
-
-    .field_2623a = 0xBC04,
-
-    .field_2623c = 0x0001,
-
-    .field_2623e = 0xBC00,
-
-    .field_26240 = 0x0001,
-
-    .field_26242 = 0xE401,
-
-    .field_26244 = 0x0001,
-
-    .field_26246 = 0xE404,
-
-    .field_26248 = 0x0001,
-
-    .field_2624a = 0xE400,
-
-    .field_2624c = 0x0001,
-
-    .field_2624e = NAKA_NONE,
-
-    .field_26250 = NAKA_NONE,
-
-    .field_26252 = NAKA_NONE,
-
-    .field_26254 = NAKA_NONE,
-
-    .field_26256 = NAKA_NONE,
-
-    .field_26258 = NAKA_NONE,
-
-    .field_2625a = 0xC001,
-
-    .field_2625c = 0x0001,
-
-    .field_2625e = 0xC004,
-
-    .field_26260 = 0x0001,
-
-    .field_26262 = 0xC000,
-
-    .field_26264 = 0x0001,
-
-    .field_26266 = 0xC401,
-
-    .field_26268 = 0x0001,
-
-    .field_2626a = 0xC404,
-
-    .field_2626c = 0x0001,
-
-    .field_2626e = 0xC400,
-
-    .field_26270 = 0x0001,
-
-    .field_26272 = 0xC801,
-
-    .field_26274 = 0x0001,
-
-    .field_26276 = 0xC804,
-
-    .field_26278 = 0x0001,
-
-    .field_2627a = 0xC800,
-
-    .field_2627c = 0x0001,
-
-    .field_2627e = 0xCC01,
-
-    .field_26280 = 0x0001,
-
-    .field_26282 = 0xCC04,
-
-    .field_26284 = 0x0001,
-
-    .field_26286 = 0xCC00,
-
-    .field_26288 = 0x0001,
-
-    .field_2628a = 0xD001,
-
-    .field_2628c = 0x0001,
-
-    .field_2628e = 0xD004,
-
-    .field_26290 = 0x0001,
-
-    .field_26292 = 0xD000,
-
-    .field_26294 = 0x0001,
-
-    .field_26296 = 0xD401,
-
-    .field_26298 = 0x0001,
-
-    .field_2629a = 0xD404,
-
-    .field_2629c = 0x0001,
-
-    .field_2629e = 0xD400,
-
-    .field_262a0 = 0x0001,
-
-    .field_262a2 = 0x0001,
-
-    .field_262a4 = 0x0002,
-
-    .field_262a6 = 0x0003,
-
-    .field_262a8 = 0x0003,
-
-    .pad_3091 = { 0 },
-
-    .field_262ac = 0x0006,
-
-    .field_262ae = 0x0007,
-
-    .pad_3092 = { 0 },
-
-    .field_262b2 = 0x0007,
-
-    .pad_3093 = { 0 },
-
-    .field_262b6 = 0x0001,
-
-    .field_262b8 = 0x0002,
-
-    .pad_3094 = { 0 },
-
-    .field_262bc = 0x0005,
-
-    .field_262be = 0x0005,
-
-    .field_262c0 = 0x0006,
-
-    .ptrs_340 = {
-        SELF(str_2595),
-        SELF(str_2594),
-        SELF(str_2593),
-        SELF(str_2592),
-        SELF(w43_name),
-        SELF(w43_code),
-        SELF(str_2591),
-        SELF(str_2590),
+    .AcInOutGrid_ScrollDown_AltTable_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
     },
 
-    .str_2590 = " -1  ",
+    .AcInOutGrid_GetRowText_Str = 
+        " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| |-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
 
-    .str_2591 = " -2  ",
+    .AcInOutGrid_GetRowText_Src1_Str = 
+        " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY OFFSET VALUE  :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
 
-    .w43_code = " -3  ",
+    .AcInOutGrid_GetRowText_Src2_Str = 
+        " RIGHT 1 INPUT          :| AUTO PLAY CHORD INPUT  :| VELOCITY INPUT         :| VELOCITY FIXED VALUE   :|-| TECHNI-CHORD OUTPUT    :| TRANSPOSE OUTPUT       :| DRUM PATTERN OUTPUT    :| AUTO PLAY CHORD OUTPUT :",
 
-    .w43_name = "Error",
+    .AcInOutGridBoxProc_CaseTable = { 0x006C, 0x015B, 0x006C, 0x015B, 0x02B5, 0x028B, 0x028B },
 
-    .str_2592 = "  3  ",
+    .Data_InOutGridDispatch_PtrTable = {
+        SELF(Data_InOutGridDispatch_Strings[6]),
+        SELF(Data_InOutGridDispatch_Strings),
+    },
 
-    .str_2593 = "  2  ",
+    .Data_InOutGridDispatch_Strings = 
+        " ON  \0"
+        " OFF ",
 
-    .str_2594 = "  1  ",
+    .Data_InOutGridDispatch_PtrTable_2 = {
+        SELF(Data_InOutGridDispatch_Strings_2[10]),
+        SELF(Data_InOutGridDispatch_Strings_2),
+    },
 
-    .str_2595 = "  0  ",
+    .Data_InOutGridDispatch_Strings_2 = 
+        " DIRECT  \0"
+        "CONDUCTOR",
 
-    .pad_3095 = { 0 },
+    .Data_InOutGridDispatch_PtrTable_3 = {
+        SELF(Data_InOutGridDispatch_Strings_3[20]),
+        SELF(Data_InOutGridDispatch_Strings_3[10]),
+        SELF(Data_InOutGridDispatch_Strings_3),
+    },
 
-    .str_2596 = " OFF ",
+    .Data_InOutGridDispatch_Strings_3 = 
+        "  FIX   \0\xFF"
+        " OFFSET \0\xFF"
+        " DIRECT \0\xFF",
 
-    .str_2597 = ALIGNED_STRING(" %2d  "),
+    .InOutGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
 
-    .str_2598 = " OFF ",
+    .InOutGridCheck_LocalInit_Strings = 
+        " %3d \0"
+        "     \0"
+        " %3d \0"
+        "     \0"
+        "     \0"
+        " %3d \0"
+        " %3d \0"
+        "     \0"
+        " %3d \0"
+        " %3d ",
 
-    .str_2599 = ALIGNED_STRING(" %2d  "),
+    .Data_InOutGridDispatch_CaseTable = {
+        0x0000, 0x0032, 0x0064, 0x0138, 0x0290, 0x01C9, 0x01FB, 0x022C,
+        0x025D,
+    },
 
-    .str_2600 = " ON  ",
+    .Data_InOutGridDispatch_CaseTable_2 = {
+        0x0000, 0x000C, 0x0018, 0x0024, 0x0600, 0x004E, 0x005A, 0x0066,
+        0x0072,
+    },
 
-    .str_2601 = " OFF ",
+    .Data_InOutGridDispatch_CaseTable_3 = {
+        0x0000, 0x000C, 0x0018, 0x0024, 0x06CC, 0x004E, 0x005A, 0x0066,
+        0x0072,
+    },
 
-    .str_2602 = " OFF ",
+    .InOutGridCheck_CaseTable = { 0x0000, 0x00CC, 0x0000, 0x00CC, 0x071A, 0x019D, 0x071A },
 
-    .str_2603 = ALIGNED_STRING(" %2d  "),
+    .InOutGridCheck_CaseTable_Strings = 
+        "PAGE\0\xFF",
 
-    .str_2604 = " ON  ",
+    .MainExcSend_ClampIndexToRange_Table = { 0x00, 0x04, 0x01, 0x02, 0x06, 0x03 },
 
-    .str_2605 = " OFF ",
+    .ExcDotFunc_CaseTable = {
+        0x0031, 0x0031, 0x003A, 0x003A, 0x003A, 0x0034, 0x003A, 0x003D,
+        0x0031, 0x0000,
+    },
 
-    .pad_3096 = { 0 },
+    .FileTransfer_Status_Table = {
+        SELF(FileTransfer_Status_Table_Strings[30]),
+        SELF(FileTransfer_Status_Table_Strings[20]),
+        SELF(FileTransfer_Status_Table_Strings[10]),
+        SELF(FileTransfer_Status_Table_Strings),
+    },
 
-    .field_26360 = 0x00E4,
+    .FileTransfer_Status_Table_Strings = 
+        "COMPLETED\0"
+        "RECIEVING\0"
+        " SENDING \0"
+        "         ",
 
-    .pad_3097 = { 0 },
+    .ExcPmemFunc_CaseTable = {
+        0x001E, 0x001E, 0x0026, 0x0026, 0x0026, 0x0022, 0x0026, 0x002A,
+        0x001E, 0x0000,
+    },
 
-    .field_26364 = 0x00E4,
+    .ExcSmemFunc_CaseTable = {
+        0x001E, 0x001E, 0x0026, 0x0026, 0x0026, 0x0022, 0x0026, 0x002A,
+        0x001E, 0x0000,
+    },
 
-    .field_26366 = 0x046E,
+    .ExcCompFunc_CaseTable = {
+        0x001E, 0x001E, 0x0026, 0x0026, 0x0026, 0x0022, 0x0026, 0x002A,
+        0x001E, 0x0000,
+    },
 
-    .field_26368 = 0x01D0,
+    .ExcSeqFunc_CaseTable = {
+        0x001E, 0x001E, 0x0026, 0x0026, 0x0026, 0x0022, 0x0026, 0x002A,
+        0x001E, 0x0000,
+    },
 
-    .field_2636a = 0x046E,
+    .ExcMspFunc_CaseTable = {
+        0x001E, 0x001E, 0x0026, 0x0026, 0x0026, 0x0022, 0x0026, 0x002A,
+        0x001E, 0x0000,
+    },
 
-    .ptrs_341 = {
+    .ParaLoadOpt_AudioFlagCheck_CaseTable = {
+        0x0000, 0x002D, 0x0042, 0x0057, 0x006C, 0x0080, 0x0094, 0x00A8,
+        0x00BC, 0x00FA, 0x00FA, 0x00D0, 0x00E4,
+    },
+
+    .ParaLoadOpt_AudioFlagCheck_B_CaseTable = {
+        0x0000, 0x002D, 0x0042, 0x0057, 0x006C, 0x0080, 0x0094, 0x00A8,
+        0x00BC, 0x00FA, 0x00FA, 0x00D0, 0x00E4,
+    },
+
+    .ParaLoadOpt_GridReturn_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x04, 0x00,
+        0x01, 0x00,
+    },
+
+    .ParaLoadOpt_GridDelegateProc_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x04, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
+    },
+
+    .AcParaLoadOptGridBoxProc_CaseTable = { 0x00D5, 0x0187, 0x00D5, 0x0187, 0x0289, 0x0261, 0x0261 },
+
+    .UserMemory_ConfirmData = {
+        0x0000, 0x0000, 0x0001, 0x00FF, 0x0000, 0x0000, 0x0000, 0x0001,
+        0x0000, 0x0000, 0x0000,
+    },
+
+    .ParaLoadOptGridCheck_PtrTable = {
+        SELF(ParaLoadOptGridCheck_Strings[6]),
+        SELF(ParaLoadOptGridCheck_Strings),
+    },
+
+    .ParaLoadOptGridCheck_Strings = 
+        " YES \0"
+        " NO  ",
+
+    .UserMemory_Config_Table = {
+        SELF(UserMemory_Config_Table_Strings[30]),
+        SELF(UserMemory_Config_Table_Strings[20]),
+        SELF(UserMemory_Config_Table_Strings[10]),
+        SELF(UserMemory_Config_Table_Strings),
+    },
+
+    .UserMemory_Config_Table_Strings = 
+        "  USER3  \0"
+        "  USER2  \0"
+        "  USER1  \0"
+        " INITIAL ",
+
+    .ParaLoadOptGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .ParaLoadOptGridCheck_CaseTable = { 0x0000, 0x00B7, 0x0000, 0x00B7, 0x0349, 0x0349, 0x0190 },
+
+    .AcPcgOutGridBoxProc_CaseTable = { 0x006A, 0x010E, 0x006A, 0x010E, 0x0207, 0x01DF, 0x01DF },
+
+    .UserMemory_FormatStrings = {
+        0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0xFF, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    },
+
+    .PcgOutGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .PcgOutGridCheck_LocalInit_Strings = 
+        " %3d \0"
+        " %3d \0"
+        " --- \0"
+        "  OFF  \0"
+        " %3d \0"
+        " %5d )\0\xFF"
+        " --- \0"
+        " OFF \0"
+        "  OFF  \0"
+        " %3d \0"
+        " %3d \0"
+        " %5d )\0\xFF"
+        " %3d \0"
+        " %3d \0"
+        " --- \0"
+        "  OFF  \0"
+        " %3d \0"
+        " %5d )\0\xFF"
+        " --- \0"
+        " OFF \0"
+        "  OFF  \0"
+        " %3d \0"
+        " %3d \0"
+        " %5d )\0\xFF",
+
+    .PcgOutGridCheck_CaseTable = { 0x0000, 0x010E, 0x0000, 0x010E, 0x06C6, 0x06C6, 0x0258 },
+
+    .AcSendEditSw_EventD_Table = { 0x0E, 0x01, 0xA0, 0x00, 0x35, 0x01, 0xB2, 0x00 },
+
+    .AcSendEditSw_DrawAlt_Table = { 0x22, 0x01, 0xAA, 0x00 },
+
+    .NakaData_ModeConfig1 = { 0x21, 0x01, 0xA9, 0x00 },
+
+    .AcSendEditSwProc_LocalInit = { 0x00, 0x00 },
+
+    .NakaData_ModeConfig2 = { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 },
+
+    .ComSetGridCheck_JumpTable_Table = {
+        0x03, 0x22, 0x00, 0x00, 0x02, 0x22, 0x00, 0x00, 0x82, 0x22, 0x00, 0x00, 0x01, 0xA0, 0x02, 0x00,
+        0x00, 0xA0, 0x02, 0x00, 0x9A, 0x22, 0x00, 0x00, 0x01, 0x22, 0x00, 0x00, 0x05, 0x22, 0x00, 0x00,
+        0x80, 0x22, 0x00, 0x00,
+    },
+
+    .ComSetGridCheck_LocalInit_2 = { 0x0000, 0x0000, 0x0000 },
+
+    .NakaToggle_OnOff_Data = 
+        "\0"
+        "\0"
+        "\0"
+        "",
+
+    .ComSetGridCheck_JumpTable_Table_2 = { 0x20, 0x4F, 0x4E, 0x20 },
+
+    .NakaInst_OFF_E80048 = { 0x20, 0x00 },
+
+    .ComSetGridCheck_JumpTable_Str = 
+        " OFF ",
+
+    .ComSetGridCheck_JumpTable_Str_2 = 
+        "  ----  \0\xFF",
+
+    .NakaInst_NORMAL = 
+        " NORMAL \0\xFF",
+
+    .ComSetGridCheck_JumpTable_Str_3 = 
+        "  TECH  \0\xFF",
+
+    .ComSetGridCheck_JumpTable_Table_3 = { 0x20, 0x20 },
+
+    .NakaInst_GM = { 0x20, 0x47, 0x4D, 0x20, 0x20, 0x20, 0x00, 0xFF },
+
+    .ComSetGridCheck_JumpTable_Str_4 = 
+        " Error! \0\xFF",
+
+    .ComSetGridCheck_ParamDisplay_Str = 
+        " ON  ",
+
+    .ComSetGridCheck_ParamDisplay_Str_2 = 
+        " OFF ",
+
+    .ComSetGrid_CopyStrAndDispatch_Str = 
+        "  ----  \0\xFF",
+
+    .ComSetGrid_LookupByColumn_Str = 
+        " NORMAL \0\xFF",
+
+    .ComSetGrid_ParamStr1_Str = 
+        "  TECH  \0\xFF",
+
+    .ComSetGrid_ParamStr3_Str = 
+        "   GM   \0\xFF",
+
+    .ComSetGrid_ParamStrDefault_Str = 
+        " Error! \0\xFF",
+
+    .ComSetGridCheck_CaseTable = { 0x0000, 0x0074, 0x0000, 0x0074, 0x0310, 0x00EE, 0x00EE },
+
+    .ComSetGridCheck_CaseTable_Tail = { 0xB1, 0x00, 0xB1, 0x00, 0xB1, 0x00, 0xB1, 0x00, 0xDF, 0x02, 0xB5, 0x02, 0xB5, 0x02 },
+
+    .AcPmemOutRGridBoxProc_CaseTable = { 0x006A, 0x006A, 0x006A, 0x006A, 0x0298, 0x026E },
+
+    .NakaInst_NEXT_E800E8 = { 0x6E, 0x02 },
+
+    .PmemOutLGridCheck_PtrTable = {
+        SELF(PmemOutLGridCheck_Strings[16]),
+        SELF(PmemOutLGridCheck_Strings[8]),
+        SELF(PmemOutLGridCheck_Strings),
+    },
+
+    .PmemOutLGridCheck_Strings = 
+        " LEFT  \0"
+        "RIGHT 2\0"
+        "RIGHT 1",
+
+    .NakaData_PartFlags = { 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01 },
+
+    .NakaInst_2d_d = 
+        "\0"
+        "\0"
+        "\0"
+        "\0"
+        "\0"
+        "\0"
+        "",
+
+    .PmemOutLGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .PmemOutLGridCheck_LocalInit_Strings = 
+        " %2d-%d \0\xFF"
+        " ON  \0"
+        " OFF \0"
+        " OFF \0"
+        " %3d \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d ",
+
+    .NakaInst_ON_E80168 = {
+        0x20, 0x4F, 0x4E, 0x20, 0x20, 0x00, 0x20, 0x4F, 0x46, 0x46, 0x20, 0x00, 0x20, 0x4F, 0x46, 0x46,
+        0x20, 0x00, 0x20, 0x25, 0x33, 0x64, 0x20, 0x00, 0x20, 0x25, 0x33, 0x64, 0x20, 0x00, 0x20, 0x4F,
+        0x46, 0x46, 0x20, 0x00, 0x20, 0x25, 0x33, 0x64, 0x20, 0x00, 0x20, 0x4F, 0x46, 0x46, 0x20, 0x00,
+        0x20, 0x25, 0x33, 0x64, 0x20, 0x00, 0x20, 0x25, 0x33, 0x64, 0x20, 0x00, 0x20, 0x4F, 0x46, 0x46,
+        0x20, 0x00, 0x20, 0x25, 0x33, 0x64, 0x20, 0x00, 0x20, 0x25, 0x32, 0x64, 0x2D, 0x25, 0x64, 0x20,
+        0x00, 0xFF,
+    },
+
+    .PmemOutL_BitCheckDisplay_Str = 
+        " ON  ",
+
+    .PmemOutL_LoadOffStr_Str = 
+        " OFF ",
+
+    .PmemOutLGridCheck_CaseTable = { 0x0000, 0x00C7, 0x0000, 0x00C7, 0x07CC, 0x07CC, 0x01A6 },
+
+    .PmemOutLGridCheck_CaseTable_Tail = {
+        0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+    },
+
+    .PmemOutRGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .PmemOutRGridCheck_LocalInit_Strings = 
+        " OFF \0"
+        " %3d \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d \0"
+        " %3d \0"
+        " OFF \0"
+        " %3d ",
+
+    .PmemOutRGridCheck_CaseTable = { 0x0000, 0x0169, 0x0000, 0x0169, 0x0831, 0x0831, 0x0302 },
+
+    .AcCtlMsgGrid_ScrollUp_PageDec_Table = { 0x08, 0x07 },
+
+    .AcCtlMsgGridBoxProc_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .AcCtlMsgGrid_GetRowText_Str = 
+        " |-| PRG.CHANGE     | BANK SELECT    | PITCH BEND     | VOLUME         | EXPRESSION     | PAN            | SUSTAIN        \0\xFF",
+
+    .AcCtlMsgGrid_GetRowText_Page1_Str = 
+        " |-| EFFECT & REVERB| MODULATION     | TUNING         | BEND RANGE     | AFTER TOUCH    | RESET ALL CONT.",
+
+    .AcCtlMsgGridBoxProc_CaseTable = { 0x017E, 0x029C, 0x017E, 0x029C, 0x0419, 0x03EF, 0x03EF },
+
+    .CtlMsgGridCheck_Table = {
+        0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x8A, 0x22, 0x00, 0x00, 0x8D, 0x22, 0x00, 0x00,
+        0x8C, 0x22, 0x00, 0x00, 0x8E, 0x22, 0x00, 0x00, 0x8F, 0x22, 0x00, 0x00, 0x90, 0x22, 0x00, 0x00,
+        0x91, 0x22, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0x94, 0x22, 0x00, 0x00,
+        0x95, 0x22, 0x00, 0x00, 0x96, 0x22, 0x00, 0x00, 0x98, 0x22, 0x00, 0x00, 0x8B, 0x22, 0x00, 0x00,
+        0x99, 0x22, 0x00, 0x00, 0xFF, 0xFF, 0xFF, 0xFF,
+    },
+
+    .CtlMsgGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .CtlMsgGridCheck_JumpTable_Str = 
+        " ON  ",
+
+    .CtlMsgGridCheck_JumpTable_Str_2 = 
+        " OFF ",
+
+    .MidiSetup_TtlDispatch_Str = 
+        " ON  ",
+
+    .MidiSetup_TtlDispatch_Str_2 = 
+        " OFF ",
+
+    .CtlMsgGridCheck_CaseTable = { 0x0000, 0x0053, 0x0000, 0x0053, 0x0194, 0x00AC, 0x0194 },
+
+    .MidiPart_CallMainFunc_Str = 
+        "\0"
+        "",
+
+    .MidiSetup_TtlCase5_Table = {
+        0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x00, 0x00, 0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D,
+        0x0E, 0x0F, 0x00, 0x00, 0x19, 0x00, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15,
+    },
+
+    .MidiPart_Part2ColumnNav_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00,
+    },
+
+    .MidiPart_Part2ColumnNavUp_Table = {
+        0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00,
+        0x01, 0x00, 0x01, 0x00,
+    },
+
+    .MidiPart_CallMainFunc_Table = { 0x09, 0x09, 0x09, 0xFF },
+
+    .AcMidiPartGridBoxProc_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .MidiSetup_GridBoxCase1_Str = 
+        "|-| RIGHT1| RIGHT2| LEFT| PART4| PART5| PART6| PART7| PART8",
+
+    .MidiSetup_GridStr1_Str = 
+        "|-| PART9| PART10| PART11| PART12| PART13| PART14| PART15| PART16",
+
+    .MidiSetup_GridStr2_Str = 
+        "|-| CONTROL| | ACCOMP1| ACCOMP2| ACCOMP3| BASS| DRUMS| CHORD\0\xFF",
+
+    .AcMidiPartGridBoxProc_CaseTable = { 0x01C8, 0x03B3, 0x01C8, 0x03B3, 0x05E2, 0x05B8, 0x05DE },
+
+    .MidiSetup_EventHandler_Table = { 0x01, 0x80, 0x01, 0x00, 0x04, 0x80, 0x01, 0x00 },
+
+    .MidiPart_LookupFromTable_Table = {
+        0x00, 0x80, 0x01, 0x00, 0x01, 0x84, 0x01, 0x00, 0x04, 0x84, 0x01, 0x00, 0x00, 0x84, 0x01, 0x00,
+        0x01, 0x88, 0x01, 0x00, 0x04, 0x88, 0x01, 0x00, 0x00, 0x88, 0x01, 0x00, 0x01, 0x8C, 0x01, 0x00,
+        0x04, 0x8C, 0x01, 0x00, 0x00, 0x8C, 0x01, 0x00, 0x01, 0x90, 0x01, 0x00, 0x04, 0x90, 0x01, 0x00,
+        0x00, 0x90, 0x01, 0x00, 0x01, 0x94, 0x01, 0x00, 0x04, 0x94, 0x01, 0x00, 0x00, 0x94, 0x01, 0x00,
+        0x01, 0x98, 0x01, 0x00, 0x04, 0x98, 0x01, 0x00, 0x00, 0x98, 0x01, 0x00, 0x01, 0x9C, 0x01, 0x00,
+        0x04, 0x9C, 0x01, 0x00, 0x00, 0x9C, 0x01, 0x00, 0x01, 0xA0, 0x01, 0x00, 0x04, 0xA0, 0x01, 0x00,
+        0x00, 0xA0, 0x01, 0x00, 0x01, 0xA4, 0x01, 0x00, 0x04, 0xA4, 0x01, 0x00, 0x00, 0xA4, 0x01, 0x00,
+        0x01, 0xA8, 0x01, 0x00, 0x04, 0xA8, 0x01, 0x00, 0x00, 0xA8, 0x01, 0x00, 0x01, 0xAC, 0x01, 0x00,
+        0x04, 0xAC, 0x01, 0x00, 0x00, 0xAC, 0x01, 0x00, 0x01, 0xB0, 0x01, 0x00, 0x04, 0xB0, 0x01, 0x00,
+        0x00, 0xB0, 0x01, 0x00, 0x01, 0xB4, 0x01, 0x00, 0x04, 0xB4, 0x01, 0x00, 0x00, 0xB4, 0x01, 0x00,
+        0x01, 0xB8, 0x01, 0x00, 0x04, 0xB8, 0x01, 0x00, 0x00, 0xB8, 0x01, 0x00, 0x01, 0xBC, 0x01, 0x00,
+        0x04, 0xBC, 0x01, 0x00, 0x00, 0xBC, 0x01, 0x00, 0x01, 0xE4, 0x01, 0x00, 0x04, 0xE4, 0x01, 0x00,
+        0x00, 0xE4, 0x01, 0x00, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
+        0x01, 0xC0, 0x01, 0x00, 0x04, 0xC0, 0x01, 0x00, 0x00, 0xC0, 0x01, 0x00, 0x01, 0xC4, 0x01, 0x00,
+        0x04, 0xC4, 0x01, 0x00, 0x00, 0xC4, 0x01, 0x00, 0x01, 0xC8, 0x01, 0x00, 0x04, 0xC8, 0x01, 0x00,
+        0x00, 0xC8, 0x01, 0x00, 0x01, 0xCC, 0x01, 0x00, 0x04, 0xCC, 0x01, 0x00, 0x00, 0xCC, 0x01, 0x00,
+        0x01, 0xD0, 0x01, 0x00, 0x04, 0xD0, 0x01, 0x00, 0x00, 0xD0, 0x01, 0x00, 0x01, 0xD4, 0x01, 0x00,
+        0x04, 0xD4, 0x01, 0x00, 0x00, 0xD4, 0x01, 0x00, 0x01, 0x00, 0x02, 0x00, 0x03, 0x00, 0x03, 0x00,
+        0x00, 0x00, 0x06, 0x00, 0x07, 0x00, 0x00, 0x00, 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x00,
+        0x00, 0x00, 0x05, 0x00, 0x05, 0x00, 0x06, 0x00,
+    },
+
+    .Transpose_ValueDisplay_Table = {
+        SELF(Transpose_ValueDisplay_Table_Strings[42]),
+        SELF(Transpose_ValueDisplay_Table_Strings[36]),
+        SELF(Transpose_ValueDisplay_Table_Strings[30]),
+        SELF(Transpose_ValueDisplay_Table_Strings[24]),
+        SELF(Transpose_ValueDisplay_Table_Strings[18]),
+        SELF(Transpose_ValueDisplay_Table_Strings[12]),
+        SELF(Transpose_ValueDisplay_Table_Strings[6]),
+        SELF(Transpose_ValueDisplay_Table_Strings),
+    },
+
+    .Transpose_ValueDisplay_Table_Strings = 
+        " -1  \0"
+        " -2  \0"
+        " -3  \0"
+        "Error\0"
+        "  3  \0"
+        "  2  \0"
+        "  1  \0"
+        "  0  ",
+
+    .MidiPartGridCheck_LocalInit = { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
+
+    .MidiPartGridCheck_LocalInit_Strings = 
+        " OFF \0"
+        " %2d  \0\xFF"
+        " OFF \0"
+        " %2d  \0\xFF"
+        " ON  \0"
+        " OFF \0"
+        " OFF \0"
+        " %2d  \0\xFF",
+
+    .MidiPart_LookupFromTable_Str = 
+        " ON  ",
+
+    .MidiPart_LookupFromTable_Str_2 = 
+        " OFF ",
+
+    .MidiPartGridCheck_CaseTable = { 0x0000, 0x00E4, 0x0000, 0x00E4, 0x046E, 0x01D0, 0x046E },
+
+    .Murai_ApFuncTable_121 = {
         NAKA_ADDR(TtSdmenu),
         NAKA_ADDR(LswLeftHold),
         NAKA_ADDR(LswVolume),
@@ -15038,726 +13319,458 @@ const naka_widget_tables_2_t naka_widget_tables_2_data
         NAKA_ADDR(BitmapKn5000),
         NAKA_ADDR(FDemoText),
         0x00000000,
-        SELF(str_2634),
-        SELF(w51_name),
-        SELF(w51_code),
-        SELF(w50_name),
-        SELF(w50_code),
-        SELF(str_2633),
-        SELF(w49_name),
-        SELF(w49_code),
-        SELF(str_2632),
-        SELF(w48_name),
-        SELF(w48_code),
-        SELF(str_2631),
-        SELF(str_2630),
-        SELF(str_2629),
-        SELF(str_2628),
-        SELF(str_2627),
-        SELF(w47_name),
-        SELF(w47_code),
-        SELF(str_2626),
-        SELF(str_2625),
-        SELF(str_2624),
-        SELF(str_2623),
-        SELF(str_2622),
-        SELF(str_2621),
-        SELF(str_2620),
-        SELF(str_2619),
-        SELF(str_2618),
-        SELF(str_2617),
-        SELF(w46_name),
-        SELF(w46_code),
-        SELF(str_2616),
-        SELF(str_2615),
-        SELF(str_2614),
-        SELF(str_2613),
-        SELF(str_2612),
-        SELF(str_2611),
-        SELF(str_2610),
-        SELF(str_2609),
-        SELF(w45_name),
-        SELF(w45_code),
-        SELF(str_2608),
-        SELF(str_2607),
-        SELF(w44_name),
-        SELF(w44_code),
-        SELF(str_2606),
     },
 
-    .str_2606 = ALIGNED_STRING(""),
-
-    .w44_code = "FDemoText",
-
-    .w44_name = ALIGNED_STRING("BitmapKn5000"),
-
-    .str_2607 = ALIGNED_STRING("BitmapTechnics"),
-
-    .str_2608 = ALIGNED_STRING("ApPreControl"),
-
-    .w45_code = ALIGNED_STRING("LswSound"),
-
-    .w45_name = ALIGNED_STRING("BitmapDrawsw"),
-
-    .str_2609 = ALIGNED_STRING("LswDrawRelease"),
-
-    .str_2610 = "LswDrawAttack",
-
-    .str_2611 = ALIGNED_STRING("LswPercLevel"),
-
-    .str_2612 = ALIGNED_STRING("LswPercDecay"),
-
-    .str_2613 = ALIGNED_STRING("BitmapAccita16"),
-
-    .str_2614 = ALIGNED_STRING("BitmapAccger16"),
-
-    .str_2615 = ALIGNED_STRING("LswMidiChannel"),
-
-    .str_2616 = "LswLocalControl",
-
-    .w46_code = ALIGNED_STRING("TtSdscltyp"),
-
-    .w46_name = ALIGNED_STRING("LswScalingKeyX"),
-
-    .str_2617 = ALIGNED_STRING("LswScalingShift2"),
-
-    .str_2618 = ALIGNED_STRING("LswScalingMode"),
-
-    .str_2619 = "LswScalingShift",
-
-    .str_2620 = ALIGNED_STRING("LswScalingType"),
-
-    .str_2621 = "LswMasterTuning",
-
-    .str_2622 = "LswOrchestrator",
-
-    .str_2623 = "MessageText",
-
-    .str_2624 = "MessageHeader",
-
-    .str_2625 = ALIGNED_STRING("CheckMessage"),
-
-    .str_2626 = "CheckLanguage",
-
-    .w47_code = "LswMute",
-
-    .w47_name = ALIGNED_STRING("LswPartExp"),
-
-    .str_2627 = "LswAfterTouch",
-
-    .str_2628 = "LswKeyScaling",
-
-    .str_2629 = "LswSustainPedal",
-
-    .str_2630 = "LswGlidePedal",
-
-    .str_2631 = ALIGNED_STRING("LswBendRange"),
-
-    .w48_code = "LswTuning",
-
-    .w48_name = "LswKeyShift",
-
-    .str_2632 = ALIGNED_STRING("LswSustainLength"),
-
-    .w49_code = ALIGNED_STRING("LswSustain"),
-
-    .w49_name = ALIGNED_STRING("LswDigitalEffect"),
-
-    .str_2633 = ALIGNED_STRING("LswDSPEffect"),
-
-    .w50_code = "LswReverb",
-
-    .w50_name = ALIGNED_STRING("LswPan"),
-
-    .w51_code = "LswVolume",
-
-    .w51_name = "LswLeftHold",
-
-    .str_2634 = ALIGNED_STRING("TtSdmenu"),
-
-    .ptr_26734 = SELF(str_2635),
-
-    .str_2635 = ALIGNED_STRING(""),
-
-    .ptrs_342 = {
-        SELF(str_2638),
-        SELF(str_2637),
-        SELF(str_2636),
+    .Murai_ApFuncNameTable_421 = {
+        SELF(Murai_ApFuncNames_421[598]),
+        SELF(Murai_ApFuncNames_421[586]),
+        SELF(Murai_ApFuncNames_421[576]),
+        SELF(Murai_ApFuncNames_421[568]),
+        SELF(Murai_ApFuncNames_421[558]),
+        SELF(Murai_ApFuncNames_421[544]),
+        SELF(Murai_ApFuncNames_421[526]),
+        SELF(Murai_ApFuncNames_421[514]),
+        SELF(Murai_ApFuncNames_421[496]),
+        SELF(Murai_ApFuncNames_421[484]),
+        SELF(Murai_ApFuncNames_421[474]),
+        SELF(Murai_ApFuncNames_421[460]),
+        SELF(Murai_ApFuncNames_421[446]),
+        SELF(Murai_ApFuncNames_421[430]),
+        SELF(Murai_ApFuncNames_421[416]),
+        SELF(Murai_ApFuncNames_421[402]),
+        SELF(Murai_ApFuncNames_421[390]),
+        SELF(Murai_ApFuncNames_421[382]),
+        SELF(Murai_ApFuncNames_421[368]),
+        SELF(Murai_ApFuncNames_421[354]),
+        SELF(Murai_ApFuncNames_421[340]),
+        SELF(Murai_ApFuncNames_421[328]),
+        SELF(Murai_ApFuncNames_421[312]),
+        SELF(Murai_ApFuncNames_421[296]),
+        SELF(Murai_ApFuncNames_421[280]),
+        SELF(Murai_ApFuncNames_421[264]),
+        SELF(Murai_ApFuncNames_421[248]),
+        SELF(Murai_ApFuncNames_421[230]),
+        SELF(Murai_ApFuncNames_421[214]),
+        SELF(Murai_ApFuncNames_421[202]),
+        SELF(Murai_ApFuncNames_421[186]),
+        SELF(Murai_ApFuncNames_421[170]),
+        SELF(Murai_ApFuncNames_421[154]),
+        SELF(Murai_ApFuncNames_421[138]),
+        SELF(Murai_ApFuncNames_421[124]),
+        SELF(Murai_ApFuncNames_421[110]),
+        SELF(Murai_ApFuncNames_421[96]),
+        SELF(Murai_ApFuncNames_421[80]),
+        SELF(Murai_ApFuncNames_421[66]),
+        SELF(Murai_ApFuncNames_421[56]),
+        SELF(Murai_ApFuncNames_421[42]),
+        SELF(Murai_ApFuncNames_421[26]),
+        SELF(Murai_ApFuncNames_421[12]),
+        SELF(Murai_ApFuncNames_421[2]),
+        SELF(Murai_ApFuncNames_421),
     },
 
-    .str_2636 = ALIGNED_STRING(""),
+    .Murai_ApFuncNames_421 = 
+        "\0\xFF"
+        "FDemoText\0"
+        "BitmapKn5000\0\xFF"
+        "BitmapTechnics\0\xFF"
+        "ApPreControl\0\xFF"
+        "LswSound\0\xFF"
+        "BitmapDrawsw\0\xFF"
+        "LswDrawRelease\0\xFF"
+        "LswDrawAttack\0"
+        "LswPercLevel\0\xFF"
+        "LswPercDecay\0\xFF"
+        "BitmapAccita16\0\xFF"
+        "BitmapAccger16\0\xFF"
+        "LswMidiChannel\0\xFF"
+        "LswLocalControl\0"
+        "TtSdscltyp\0\xFF"
+        "LswScalingKeyX\0\xFF"
+        "LswScalingShift2\0\xFF"
+        "LswScalingMode\0\xFF"
+        "LswScalingShift\0"
+        "LswScalingType\0\xFF"
+        "LswMasterTuning\0"
+        "LswOrchestrator\0"
+        "MessageText\0"
+        "MessageHeader\0"
+        "CheckMessage\0\xFF"
+        "CheckLanguage\0"
+        "LswMute\0"
+        "LswPartExp\0\xFF"
+        "LswAfterTouch\0"
+        "LswKeyScaling\0"
+        "LswSustainPedal\0"
+        "LswGlidePedal\0"
+        "LswBendRange\0\xFF"
+        "LswTuning\0"
+        "LswKeyShift\0"
+        "LswSustainLength\0\xFF"
+        "LswSustain\0\xFF"
+        "LswDigitalEffect\0\xFF"
+        "LswDSPEffect\0\xFF"
+        "LswReverb\0"
+        "LswPan\0\xFF"
+        "LswVolume\0"
+        "LswLeftHold\0"
+        "TtSdmenu\0\xFF",
 
-    .str_2637 = ALIGNED_STRING("data"),
-
-    .str_2638 = ALIGNED_STRING("func"),
-
-    .ptrs_343 = {
-        SELF(str_2642),
-        SELF(str_2641),
-        SELF(str_2640),
-        SELF(str_2639),
+    .ClassProps_IvSdpart = {
+        SELF(ClassProps_IvSdpart_Names),
     },
 
-    .str_2639 = ALIGNED_STRING(""),
+    .ClassProps_IvSdpart_Names = 
+        "\0\xFF",
 
-    .str_2640 = ALIGNED_STRING("data"),
-
-    .str_2641 = "fmute",
-
-    .str_2642 = ALIGNED_STRING("fvol"),
-
-    .ptr_26778 = SELF(str_2643),
-
-    .str_2643 = ALIGNED_STRING(""),
-
-    .ptr_2677e = SELF(str_2644),
-
-    .str_2644 = ALIGNED_STRING(""),
-
-    .ptr_26784 = SELF(str_2645),
-
-    .str_2645 = ALIGNED_STRING(""),
-
-    .ptrs_344 = {
-        SELF(str_2648),
-        SELF(str_2647),
-        SELF(str_2646),
+    .ClassProps_AcLswPartEditBox = {
+        SELF(ClassProps_AcLswPartEditBox_Names[8]),
+        SELF(ClassProps_AcLswPartEditBox_Names[2]),
+        SELF(ClassProps_AcLswPartEditBox_Names),
     },
 
-    .str_2646 = ALIGNED_STRING(""),
+    .ClassProps_AcLswPartEditBox_Names = 
+        "\0\xFF"
+        "data\0\xFF"
+        "func\0\xFF",
 
-    .str_2647 = ALIGNED_STRING("str3"),
-
-    .str_2648 = ALIGNED_STRING("str1"),
-
-    .ptrs_345 = {
-        SELF(str_2655),
-        SELF(str_2654),
-        SELF(str_2653),
-        SELF(str_2652),
-        SELF(str_2651),
-        SELF(str_2650),
-        SELF(str_2649),
+    .ClassProps_AcVolPartEditBox = {
+        SELF(ClassProps_AcVolPartEditBox_Names[14]),
+        SELF(ClassProps_AcVolPartEditBox_Names[8]),
+        SELF(ClassProps_AcVolPartEditBox_Names[2]),
+        SELF(ClassProps_AcVolPartEditBox_Names),
     },
 
-    .str_2649 = ALIGNED_STRING(""),
+    .ClassProps_AcVolPartEditBox_Names = 
+        "\0\xFF"
+        "data\0\xFF"
+        "fmute\0"
+        "fvol\0\xFF",
 
-    .str_2650 = "dialfocus",
-
-    .str_2651 = ALIGNED_STRING("selected"),
-
-    .str_2652 = "align",
-
-    .str_2653 = "fontcolor",
-
-    .str_2654 = ALIGNED_STRING("font"),
-
-    .str_2655 = "str",
-
-    .ptr_267f0 = SELF(str_2656),
-
-    .str_2656 = ALIGNED_STRING(""),
-
-    .ptr_267f6 = SELF(str_2657),
-
-    .str_2657 = ALIGNED_STRING(""),
-
-    .ptr_267fc = SELF(str_2658),
-
-    .str_2658 = ALIGNED_STRING(""),
-
-    .ptr_26802 = SELF(str_2659),
-
-    .str_2659 = ALIGNED_STRING(""),
-
-    .ptr_26808 = SELF(str_2660),
-
-    .str_2660 = ALIGNED_STRING(""),
-
-    .ptr_2680e = SELF(str_2661),
-
-    .str_2661 = ALIGNED_STRING(""),
-
-    .ptr_26814 = SELF(str_2662),
-
-    .str_2662 = ALIGNED_STRING(""),
-
-    .ptr_2681a = SELF(str_2663),
-
-    .str_2663 = ALIGNED_STRING(""),
-
-    .ptrs_346 = {
-        SELF(str_2666),
-        SELF(str_2665),
-        SELF(str_2664),
+    .ClassProps_IvMesage = {
+        SELF(ClassProps_IvMesage_Names),
     },
 
-    .str_2664 = ALIGNED_STRING(""),
+    .ClassProps_IvMesage_Names = 
+        "\0\xFF",
 
-    .str_2665 = ALIGNED_STRING("window"),
-
-    .str_2666 = ALIGNED_STRING("page"),
-
-    .ptr_2683c = SELF(str_2667),
-
-    .str_2667 = ALIGNED_STRING(""),
-
-    .ptr_26842 = SELF(str_2668),
-
-    .str_2668 = ALIGNED_STRING(""),
-
-    .ptr_26848 = SELF(str_2669),
-
-    .str_2669 = ALIGNED_STRING(""),
-
-    .ptr_2684e = SELF(str_2670),
-
-    .str_2670 = ALIGNED_STRING(""),
-
-    .ptr_26854 = SELF(str_2671),
-
-    .str_2671 = ALIGNED_STRING(""),
-
-    .ptr_2685a = SELF(str_2672),
-
-    .str_2672 = ALIGNED_STRING(""),
-
-    .ptrs_347 = {
-        SELF(str_2678),
-        SELF(str_2677),
-        SELF(str_2676),
-        SELF(str_2675),
-        SELF(str_2674),
-        SELF(str_2673),
+    .ClassProps_IvAccordion = {
+        SELF(ClassProps_IvAccordion_Names),
     },
 
-    .str_2673 = ALIGNED_STRING(""),
+    .ClassProps_IvAccordion_Names = 
+        "\0\xFF",
 
-    .str_2674 = ALIGNED_STRING("selected"),
-
-    .str_2675 = ALIGNED_STRING("editsw"),
-
-    .str_2676 = "align",
-
-    .str_2677 = "fontcolor",
-
-    .str_2678 = ALIGNED_STRING("font"),
-
-    .ptr_268a2 = SELF(str_2679),
-
-    .str_2679 = ALIGNED_STRING(""),
-
-    .ptr_268a8 = SELF(str_2680),
-
-    .str_2680 = ALIGNED_STRING(""),
-
-    .ptr_268ae = SELF(str_2681),
-
-    .str_2681 = ALIGNED_STRING(""),
-
-    .ptr_268b4 = SELF(str_2682),
-
-    .str_2682 = ALIGNED_STRING(""),
-
-    .ptrs_348 = {
-        SELF(str_2685),
-        SELF(str_2684),
-        SELF(str_2683),
+    .ClassProps_IvAccordionX = {
+        SELF(ClassProps_IvAccordionX_Names),
     },
 
-    .str_2683 = ALIGNED_STRING(""),
+    .ClassProps_IvAccordionX_Names = 
+        "\0\xFF",
 
-    .str_2684 = ALIGNED_STRING("data"),
-
-    .str_2685 = ALIGNED_STRING("func"),
-
-    .ptrs_349 = {
-        SELF(str_2690),
-        SELF(str_2689),
-        SELF(str_2688),
-        SELF(str_2687),
-        SELF(str_2686),
+    .AudioStream_Property_Table = {
+        SELF(AudioStream_Property_Table_Names[8]),
+        SELF(AudioStream_Property_Table_Names[2]),
+        SELF(AudioStream_Property_Table_Names),
     },
 
-    .str_2686 = ALIGNED_STRING(""),
+    .AudioStream_Property_Table_Names = 
+        "\0\xFF"
+        "str3\0\xFF"
+        "str1\0\xFF",
 
-    .str_2687 = ALIGNED_STRING("song"),
-
-    .str_2688 = ALIGNED_STRING("selected"),
-
-    .str_2689 = ALIGNED_STRING("editsw"),
-
-    .str_2690 = "str",
-
-    .ptr_26906 = SELF(str_2691),
-
-    .str_2691 = ALIGNED_STRING(""),
-
-    .ptr_2690c = SELF(str_2692),
-
-    .str_2692 = ALIGNED_STRING(""),
-
-    .ptr_26912 = SELF(str_2693),
-
-    .str_2693 = ALIGNED_STRING(""),
-
-    .ptr_26918 = SELF(str_2694),
-
-    .str_2694 = ALIGNED_STRING(""),
-
-    .ptrs_350 = {
-        SELF(str_2697),
-        SELF(str_2696),
-        SELF(str_2695),
+    .ClassProps_PsLabelBox = {
+        SELF(ClassProps_PsLabelBox_Names[44]),
+        SELF(ClassProps_PsLabelBox_Names[38]),
+        SELF(ClassProps_PsLabelBox_Names[28]),
+        SELF(ClassProps_PsLabelBox_Names[22]),
+        SELF(ClassProps_PsLabelBox_Names[12]),
+        SELF(ClassProps_PsLabelBox_Names[2]),
+        SELF(ClassProps_PsLabelBox_Names),
     },
 
-    .str_2695 = ALIGNED_STRING(""),
+    .ClassProps_PsLabelBox_Names = 
+        "\0\xFF"
+        "dialfocus\0"
+        "selected\0\xFF"
+        "align\0"
+        "fontcolor\0"
+        "font\0\xFF"
+        "str",
 
-    .str_2696 = "tag",
-
-    .str_2697 = "index",
-
-    .ptrs_351 = {
-        SELF(str_2700),
-        SELF(str_2699),
-        SELF(str_2698),
+    .ClassProps_IvSdtecd = {
+        SELF(ClassProps_IvSdtecd_Names),
     },
 
-    .str_2698 = ALIGNED_STRING(""),
+    .ClassProps_IvSdtecd_Names = 
+        "\0\xFF",
 
-    .str_2699 = ALIGNED_STRING("editsw"),
-
-    .str_2700 = ALIGNED_STRING("part"),
-
-    .ptr_26952 = SELF(str_2701),
-
-    .str_2701 = ALIGNED_STRING(""),
-
-    .ptr_26958 = NAKA_ADDR(IvSdpartProc),
-
-    .w52 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E812D8,
-        .inst_ptr   = 0x00E812D6,
-        .link_ptr   = SELF(ptr_26734),
-        .proc_addr  = NAKA_ADDR(AcLswPartEditBoxProc),
+    .ClassProps_IvSdtecd1 = {
+        SELF(ClassProps_IvSdtecd1_Names),
     },
 
-    .w53 = {
-        .header    = NAKA_HDR(0x15),
-        .field_04   = 0x003A,
-        .field_06   = 0x0008,
-        .name_ptr   = 0x00E812C4,
-        .inst_ptr   = 0x00E812C0,
-        .link_ptr   = SELF(ptrs_342),
-        .proc_addr  = NAKA_ADDR(AcVolPartEditBoxProc),
+    .ClassProps_IvSdtecd1_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvSdscltyp2 = {
+        SELF(ClassProps_IvSdscltyp2_Names),
     },
 
-    .w54 = {
-        .header    = NAKA_HDR(0x15),
-        .field_04   = 0x003E,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E812AE,
-        .inst_ptr   = 0x00E812AA,
-        .link_ptr   = SELF(ptrs_343),
-        .proc_addr  = NAKA_ADDR(IvMesageProc),
+    .ClassProps_IvSdscltyp2_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcWelcomScreen = {
+        SELF(ClassProps_AcWelcomScreen_Names),
     },
 
-    .w55 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E812A0,
-        .inst_ptr   = 0x00E8129E,
-        .link_ptr   = SELF(ptr_26778),
-        .proc_addr  = NAKA_ADDR(IvAccordionProc),
+    .ClassProps_AcWelcomScreen_Names = 
+        "\0\xFF",
+
+    .ClassProps_PsMixerControl = {
+        SELF(ClassProps_PsMixerControl_Names),
     },
 
-    .w56 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81292,
-        .inst_ptr   = 0x00E81290,
-        .link_ptr   = SELF(ptr_2677e),
-        .proc_addr  = NAKA_ADDR(IvAccordionXProc),
+    .ClassProps_PsMixerControl_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcPartMixer = {
+        SELF(ClassProps_AcPartMixer_Names),
     },
 
-    .w57 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81282,
-        .inst_ptr   = 0x00E81280,
-        .link_ptr   = SELF(ptr_26784),
-        .proc_addr  = NAKA_ADDR(AcAccordionTabProc),
+    .ClassProps_AcPartMixer_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcTrackMixer = {
+        SELF(ClassProps_AcTrackMixer_Names),
     },
 
-    .w58 = {
-        .header    = NAKA_HDR(0x4E),
-        .field_04   = 0x0034,
-        .field_06   = 0x0008,
-        .name_ptr   = 0x00E81270,
-        .inst_ptr   = 0x00E8126C,
-        .link_ptr   = SELF(ptrs_344),
-        .proc_addr  = NAKA_ADDR(PsLabelBoxProc),
+    .ClassProps_AcTrackMixer_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvSoftver = {
+        SELF(ClassProps_IvSoftver_Names),
     },
 
-    .w59 = {
-        .header    = NAKA_HDR(0x11),
-        .field_04   = 0x0030,
-        .field_06   = 0x0014,
-        .name_ptr   = 0x00E81260,
-        .inst_ptr   = 0x00E81258,
-        .link_ptr   = SELF(ptrs_345),
-        .proc_addr  = NAKA_ADDR(IvSdtecdProc),
+    .ClassProps_IvSoftver_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvPageOverWrite = {
+        SELF(ClassProps_IvPageOverWrite_Names[10]),
+        SELF(ClassProps_IvPageOverWrite_Names[2]),
+        SELF(ClassProps_IvPageOverWrite_Names),
     },
 
-    .w60 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E8124E,
-        .inst_ptr   = 0x00E8124C,
-        .link_ptr   = SELF(ptr_267f0),
-        .proc_addr  = NAKA_ADDR(IvSdtecd1Proc),
+    .ClassProps_IvPageOverWrite_Names = 
+        "\0\xFF"
+        "window\0\xFF"
+        "page\0\xFF",
+
+    .ClassProps_IvDrawbar = {
+        SELF(ClassProps_IvDrawbar_Names),
     },
 
-    .w61 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81242,
-        .inst_ptr   = 0x00E81240,
-        .link_ptr   = SELF(ptr_267f6),
-        .proc_addr  = NAKA_ADDR(IvSdscltyp2Proc),
+    .ClassProps_IvDrawbar_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvDrawbar1 = {
+        SELF(ClassProps_IvDrawbar1_Names),
     },
 
-    .w62 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81234,
-        .inst_ptr   = 0x00E81232,
-        .link_ptr   = SELF(ptr_267fc),
-        .proc_addr  = NAKA_ADDR(AcWelcomScreenProc),
+    .ClassProps_IvDrawbar1_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvDrawbar2 = {
+        SELF(ClassProps_IvDrawbar2_Names),
     },
 
-    .w63 = {
-        .header    = NAKA_HDR(0x33),
-        .field_04   = 0x0022,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81222,
-        .inst_ptr   = 0x00E81220,
-        .link_ptr   = SELF(ptr_26802),
-        .proc_addr  = NAKA_ADDR(PsMixerControlProc),
+    .ClassProps_IvDrawbar2_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvDrawbarNorm = {
+        SELF(ClassProps_IvDrawbarNorm_Names),
     },
 
-    .w64 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x0024,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81210,
-        .inst_ptr   = 0x00E8120E,
-        .link_ptr   = SELF(ptr_26808),
-        .proc_addr  = NAKA_ADDR(AcPartMixerProc),
+    .ClassProps_IvDrawbarNorm_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvDrawbarSndE = {
+        SELF(ClassProps_IvDrawbarSndE_Names),
     },
 
-    .field_26a94 = 0x000C,
+    .ClassProps_IvDrawbarSndE_Names = 
+        "\0\xFF",
 
-    .field_26a96 = 0x0161,
-
-    .str_2702 = "$",
-
-    .pad_3098 = { 0 },
-
-    .ptrs_352 = {
-        0x00E81202,
-        0x00E81200,
-        SELF(ptr_2680e),
-        NAKA_ADDR(AcTrackMixerProc),
+    .ClassProps_AcResetPage = {
+        SELF(ClassProps_AcResetPage_Names),
     },
 
-    .field_26aac = 0x000C,
+    .ClassProps_AcResetPage_Names = 
+        "\0\xFF",
 
-    .field_26aae = 0x0161,
-
-    .str_2703 = "$",
-
-    .pad_3099 = { 0 },
-
-    .ptrs_353 = {
-        0x00E811F2,
-        0x00E811F0,
-        SELF(ptr_26814),
-        NAKA_ADDR(IvSoftverProc),
+    .ClassProps_PsVariBox = {
+        SELF(ClassProps_PsVariBox_Names[36]),
+        SELF(ClassProps_PsVariBox_Names[26]),
+        SELF(ClassProps_PsVariBox_Names[20]),
+        SELF(ClassProps_PsVariBox_Names[12]),
+        SELF(ClassProps_PsVariBox_Names[2]),
+        SELF(ClassProps_PsVariBox_Names),
     },
 
-    .w65 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E811E6,
-        .inst_ptr   = 0x00E811E4,
-        .link_ptr   = SELF(ptr_2681a),
-        .proc_addr  = NAKA_ADDR(IvPageOverWriteProc),
+    .ClassProps_PsVariBox_Names = 
+        "\0\xFF"
+        "selected\0\xFF"
+        "editsw\0\xFF"
+        "align\0"
+        "fontcolor\0"
+        "font\0\xFF",
+
+    .ClassProps_AcPresentationControl = {
+        SELF(ClassProps_AcPresentationControl_Names),
     },
 
-    .w66 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x001C,
-        .field_06   = 0x0006,
-        .name_ptr   = 0x00E811D4,
-        .inst_ptr   = 0x00E811D0,
-        .link_ptr   = SELF(ptrs_346),
-        .proc_addr  = NAKA_ADDR(IvDrawbarProc),
+    .ClassProps_AcPresentationControl_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvDemofeature1 = {
+        SELF(ClassProps_IvDemofeature1_Names),
     },
 
-    .w67 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E811C6,
-        .inst_ptr   = 0x00E811C4,
-        .link_ptr   = SELF(ptr_2683c),
-        .proc_addr  = NAKA_ADDR(IvDrawbar1Proc),
+    .ClassProps_IvDemofeature1_Names = 
+        "\0\xFF",
+
+    .ClassProps_IvDemofeature2 = {
+        SELF(ClassProps_IvDemofeature2_Names),
     },
 
-    .w68 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E811B8,
-        .inst_ptr   = 0x00E811B6,
-        .link_ptr   = SELF(ptr_26842),
-        .proc_addr  = NAKA_ADDR(IvDrawbar2Proc),
+    .ClassProps_IvDemofeature2_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcDrawEditBox = {
+        SELF(ClassProps_AcDrawEditBox_Names),
     },
 
-    .w69 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E811AA,
-        .inst_ptr   = 0x00E811A8,
-        .link_ptr   = SELF(ptr_26848),
-        .proc_addr  = NAKA_ADDR(IvDrawbarNormProc),
+    .ClassProps_AcDrawEditBox_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcLswPartPan = {
+        SELF(ClassProps_AcLswPartPan_Names[8]),
+        SELF(ClassProps_AcLswPartPan_Names[2]),
+        SELF(ClassProps_AcLswPartPan_Names),
     },
 
-    .w70 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E8119A,
-        .inst_ptr   = 0x00E81198,
-        .link_ptr   = SELF(ptr_2684e),
-        .proc_addr  = NAKA_ADDR(IvDrawbarSndEProc),
+    .ClassProps_AcLswPartPan_Names = 
+        "\0\xFF"
+        "data\0\xFF"
+        "func\0\xFF",
+
+    .ClassProps_AcPresentationBox = {
+        SELF(ClassProps_AcPresentationBox_Names[26]),
+        SELF(ClassProps_AcPresentationBox_Names[18]),
+        SELF(ClassProps_AcPresentationBox_Names[8]),
+        SELF(ClassProps_AcPresentationBox_Names[2]),
+        SELF(ClassProps_AcPresentationBox_Names),
     },
 
-    .w71 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E8118A,
-        .inst_ptr   = 0x00E81188,
-        .link_ptr   = SELF(ptr_26854),
-        .proc_addr  = NAKA_ADDR(AcResetPageProc),
+    .ClassProps_AcPresentationBox_Names = 
+        "\0\xFF"
+        "song\0\xFF"
+        "selected\0\xFF"
+        "editsw\0\xFF"
+        "str",
+
+    .ClassProps_VwUserBitmapSp = {
+        SELF(ClassProps_VwUserBitmapSp_Names),
     },
 
-    .w72 = {
-        .header    = NAKA_HDR(0x25),
-        .field_04   = 0x0024,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E8117C,
-        .inst_ptr   = 0x00E8117A,
-        .link_ptr   = SELF(ptr_2685a),
-        .proc_addr  = NAKA_ADDR(PsVariBoxProc),
+    .ClassProps_VwUserBitmapSp_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcFdemoScreen = {
+        SELF(ClassProps_AcFdemoScreen_Names),
     },
 
-    .w73 = {
-        .header    = NAKA_HDR(0x11),
-        .field_04   = 0x002A,
-        .field_06   = 0x000E,
-        .name_ptr   = 0x00E81170,
-        .inst_ptr   = 0x00E8116A,
-        .link_ptr   = SELF(ptrs_347),
-        .proc_addr  = NAKA_ADDR(AcPresentationControlProc),
+    .ClassProps_AcFdemoScreen_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcSndEMenu = {
+        SELF(ClassProps_AcSndEMenu_Names),
     },
 
-    .w74 = {
-        .header    = NAKA_HDR(0x35),
-        .field_04   = 0x0024,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81154,
-        .inst_ptr   = 0x00E81152,
-        .link_ptr   = SELF(ptr_268a2),
-        .proc_addr  = NAKA_ADDR(IvDemofeature1Proc),
+    .ClassProps_AcSndEMenu_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcPleaseWait = {
+        SELF(ClassProps_AcPleaseWait_Names),
     },
 
-    .w75 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81142,
-        .inst_ptr   = 0x00E81140,
-        .link_ptr   = SELF(ptr_268a8),
-        .proc_addr  = NAKA_ADDR(IvDemofeature2Proc),
+    .ClassProps_AcPleaseWait_Names = 
+        "\0\xFF",
+
+    .ClassProps_AcDrawSetting = {
+        SELF(ClassProps_AcDrawSetting_Names[6]),
+        SELF(ClassProps_AcDrawSetting_Names[2]),
+        SELF(ClassProps_AcDrawSetting_Names),
     },
 
-    .w76 = {
-        .header    = NAKA_HDR(0x27),
-        .field_04   = 0x0016,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E81130,
-        .inst_ptr   = 0x00E8112E,
-        .link_ptr   = SELF(ptr_268ae),
-        .proc_addr  = NAKA_ADDR(AcDrawEditBoxProc),
+    .ClassProps_AcDrawSetting_Names = 
+        "\0\xFF"
+        "tag\0"
+        "index",
+
+    .ClassProps_AcDrawbarName = {
+        SELF(ClassProps_AcDrawbarName_Names[10]),
+        SELF(ClassProps_AcDrawbarName_Names[2]),
+        SELF(ClassProps_AcDrawbarName_Names),
     },
 
-    .field_26be4 = 0x0001,
+    .ClassProps_AcDrawbarName_Names = 
+        "\0\xFF"
+        "editsw\0\xFF"
+        "part\0\xFF",
 
-    .field_26be6 = 0x0161,
-
-    .str_2704 = ":",
-
-    .pad_3100 = { 0 },
-
-    .ptrs_354 = {
-        0x00E81120,
-        0x00E8111E,
-        SELF(ptr_268b4),
-        NAKA_ADDR(AcLswPartPanProc),
+    .ClassProps_IvMPver = {
+        SELF(ClassProps_IvMPver_Names),
     },
 
-    .w77 = {
-        .header    = NAKA_HDR(0x11),
-        .field_04   = 0x0024,
-        .field_06   = 0x0008,
-        .name_ptr   = 0x00E81110,
-        .inst_ptr   = 0x00E8110C,
-        .link_ptr   = SELF(ptrs_348),
-        .proc_addr  = NAKA_ADDR(AcPresentationBoxProc),
+    .ClassProps_IvMPver_Names = 
+        "\0\xFF",
+
+    .Murai_ClassTable_161 = {
+        { NAKA_ADDR(IvSdpartProc), 0x01600027, 22, 0, 0x00E812D8, 0x00E812D6, SELF(ClassProps_IvSdpart) },
+        { NAKA_ADDR(AcLswPartEditBoxProc), 0x01600015, 58, 8, 0x00E812C4, 0x00E812C0, SELF(ClassProps_AcLswPartEditBox) },
+        { NAKA_ADDR(AcVolPartEditBoxProc), 0x01600015, 62, 12, 0x00E812AE, 0x00E812AA, SELF(ClassProps_AcVolPartEditBox) },
+        { NAKA_ADDR(IvMesageProc), 0x01600027, 22, 0, 0x00E812A0, 0x00E8129E, SELF(ClassProps_IvMesage) },
+        { NAKA_ADDR(IvAccordionProc), 0x01600027, 22, 0, 0x00E81292, 0x00E81290, SELF(ClassProps_IvAccordion) },
+        { NAKA_ADDR(IvAccordionXProc), 0x01600027, 22, 0, 0x00E81282, 0x00E81280, SELF(ClassProps_IvAccordionX) },
+        { NAKA_ADDR(AcAccordionTabProc), 0x0160004E, 52, 8, 0x00E81270, 0x00E8126C, SELF(AudioStream_Property_Table) },
+        { NAKA_ADDR(PsLabelBoxProc), 0x01600011, 48, 20, 0x00E81260, 0x00E81258, SELF(ClassProps_PsLabelBox) },
+        { NAKA_ADDR(IvSdtecdProc), 0x01600027, 22, 0, 0x00E8124E, 0x00E8124C, SELF(ClassProps_IvSdtecd) },
+        { NAKA_ADDR(IvSdtecd1Proc), 0x01600027, 22, 0, 0x00E81242, 0x00E81240, SELF(ClassProps_IvSdtecd1) },
+        { NAKA_ADDR(IvSdscltyp2Proc), 0x01600027, 22, 0, 0x00E81234, 0x00E81232, SELF(ClassProps_IvSdscltyp2) },
+        { NAKA_ADDR(AcWelcomScreenProc), 0x01600033, 34, 0, 0x00E81222, 0x00E81220, SELF(ClassProps_AcWelcomScreen) },
+        { NAKA_ADDR(PsMixerControlProc), 0x01600012, 36, 0, 0x00E81210, 0x00E8120E, SELF(ClassProps_PsMixerControl) },
+        { NAKA_ADDR(AcPartMixerProc), 0x0161000C, 36, 0, 0x00E81202, 0x00E81200, SELF(ClassProps_AcPartMixer) },
+        { NAKA_ADDR(AcTrackMixerProc), 0x0161000C, 36, 0, 0x00E811F2, 0x00E811F0, SELF(ClassProps_AcTrackMixer) },
+        { NAKA_ADDR(IvSoftverProc), 0x01600027, 22, 0, 0x00E811E6, 0x00E811E4, SELF(ClassProps_IvSoftver) },
+        { NAKA_ADDR(IvPageOverWriteProc), 0x01600027, 28, 6, 0x00E811D4, 0x00E811D0, SELF(ClassProps_IvPageOverWrite) },
+        { NAKA_ADDR(IvDrawbarProc), 0x01600027, 22, 0, 0x00E811C6, 0x00E811C4, SELF(ClassProps_IvDrawbar) },
+        { NAKA_ADDR(IvDrawbar1Proc), 0x01600027, 22, 0, 0x00E811B8, 0x00E811B6, SELF(ClassProps_IvDrawbar1) },
+        { NAKA_ADDR(IvDrawbar2Proc), 0x01600027, 22, 0, 0x00E811AA, 0x00E811A8, SELF(ClassProps_IvDrawbar2) },
+        { NAKA_ADDR(IvDrawbarNormProc), 0x01600027, 22, 0, 0x00E8119A, 0x00E81198, SELF(ClassProps_IvDrawbarNorm) },
+        { NAKA_ADDR(IvDrawbarSndEProc), 0x01600027, 22, 0, 0x00E8118A, 0x00E81188, SELF(ClassProps_IvDrawbarSndE) },
+        { NAKA_ADDR(AcResetPageProc), 0x01600025, 36, 0, 0x00E8117C, 0x00E8117A, SELF(ClassProps_AcResetPage) },
+        { NAKA_ADDR(PsVariBoxProc), 0x01600011, 42, 14, 0x00E81170, 0x00E8116A, SELF(ClassProps_PsVariBox) },
+        { NAKA_ADDR(AcPresentationControlProc), 0x01600035, 36, 0, 0x00E81154, 0x00E81152, SELF(ClassProps_AcPresentationControl) },
+        { NAKA_ADDR(IvDemofeature1Proc), 0x01600027, 22, 0, 0x00E81142, 0x00E81140, SELF(ClassProps_IvDemofeature1) },
+        { NAKA_ADDR(IvDemofeature2Proc), 0x01600027, 22, 0, 0x00E81130, 0x00E8112E, SELF(ClassProps_IvDemofeature2) },
+        { NAKA_ADDR(AcDrawEditBoxProc), 0x01610001, 58, 0, 0x00E81120, 0x00E8111E, SELF(ClassProps_AcDrawEditBox) },
+        { NAKA_ADDR(AcLswPartPanProc), 0x01600011, 36, 8, 0x00E81110, 0x00E8110C, SELF(ClassProps_AcLswPartPan) },
+        { NAKA_ADDR(AcPresentationBoxProc), 0x01600012, 48, 12, 0x00E810FA, 0x00E810F4, SELF(ClassProps_AcPresentationBox) },
+        { NAKA_ADDR(VwUserBitmapSpProc), 0x01600069, 26, 0, 0x00E810E4, 0x00E810E2, SELF(ClassProps_VwUserBitmapSp) },
     },
 
-    .w78 = {
-        .header    = NAKA_HDR(0x12),
-        .field_04   = 0x0030,
-        .field_06   = 0x000C,
-        .name_ptr   = 0x00E810FA,
-        .inst_ptr   = 0x00E810F4,
-        .link_ptr   = SELF(ptrs_349),
-        .proc_addr  = NAKA_ADDR(VwUserBitmapSpProc),
-    },
-
-    .w79 = {
-        .header    = NAKA_HDR(0x69),
-        .field_04   = 0x001A,
-        .field_06   = 0x0000,
-        .name_ptr   = 0x00E810E4,
-        .inst_ptr   = 0x00E810E2,
-        .link_ptr   = SELF(ptr_26906),
-        .proc_addr  = NAKA_ADDR(AcFdemoScreenProc),
+    .Murai_ClassTable_161_Desc31Head = {
+        NAKA_ADDR(AcFdemoScreenProc),
     },
 
 };

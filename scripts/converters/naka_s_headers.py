@@ -252,8 +252,9 @@ def main():
             raw = open(path, 'rb').read()
             lines = raw.decode('latin-1').split('\n')
             objs, longs = span_objs[span]
-            if objs[0][2] + ':' in lines and any(l.startswith('; [naka_s_headers]') for l in lines):
-                continue
+            present = set(l[:-1] for l in lines if l.endswith(':'))
+            if all(o[2] in present for o in objs):
+                continue      # this span is already sliced
             n = NS.s_restructure(span, lines, objs, sp['blob'], longs)
             if args.apply:
                 open(path, 'wb').write('\n'.join(lines).encode('latin-1'))

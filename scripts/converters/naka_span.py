@@ -62,6 +62,18 @@ OWN = ('ui_widgets/widget_descriptors.s', 'ui_widgets/naka_widget_tables_1.s',
 SPANS = {
     't1': dict(blob='naka_widget_tables_1', sfile='naka_widget_tables_1.s',
                base=0xE24056, lo=0x0, hi=0x324E, manual={}),
+    # naka_widget_tables_2 around the bitmaps typed by naka_c_retype.OBJECTS
+    't2a': dict(blob='naka_widget_tables_2', sfile='naka_widget_tables_2.s',
+                base=0xE5A39E, lo=0x0, hi=0xAAC, manual={}),
+    't2b': dict(blob='naka_widget_tables_2', sfile='naka_widget_tables_2.s',
+                base=0xE5A39E, lo=0x24954, hi=0x26C44, manual={
+        0x25444: (52, 'SplitPoint_BitmapTable', 'uint32_t', '[13]',
+                  'the 13 keyboard-octave bitmaps of the split-point display: entry 0 = '
+                  'Bitmap_SplitPoint_no_split, entries 1..12 = Bitmap_SplitPoint_C .. '
+                  'Bitmap_SplitPoint_B.  {SplitPointFunc} reads entry 1 + (split note mod '
+                  '12) through SplitPoint_NoteEntry_C_Code+4 (`lda xde,...; ld xbc,'
+                  '(xde+bc)`), with bc = (note mod 12) * 4.'),
+    }),
 }
 
 
@@ -259,6 +271,7 @@ def build(span, cb, data, fmt, srcs=None):
             anchors[m.group(1)] = anchors[m.group(2)] + int(m.group(3))
     ext = external_labels(srcs, list(anchors))
     refs = span_refs(srcs, anchors, lo, hi)
+    symolds = old_u32_exprs(cb, lo, hi)
     regs = [r for r in registry(srcs) if base + lo <= r['table'] < base + hi]
     u32 = lambda o: int.from_bytes(data[o:o + 4], 'little')
     objs = {}          # off -> dict(size, name, ctype, dims, text, expr, kind)
@@ -428,11 +441,19 @@ def build(span, cb, data, fmt, srcs=None):
         if any(p <= o < p + (v['size'] or 1) for p, v in objs.items()):
             continue
         kind, info = SR.classify(refs[o])
+        nsym = 0
+        while o + 4 * nsym in symolds:
+            nsym += 1
+        if nsym:
+            # the generator (or a previous pass) already resolved these words to
+            # symbols: a pointer table, whatever the reader's shape suggests
+            objs[o] = dict(size=4 * nsym, kind='ref:ptrs', info=info, refs=refs[o])
+            continue
         objs[o] = dict(size=None, kind='ref:' + kind, info=info, refs=refs[o])
     # --- 3b. strings that the span's own pointer tables point at
     for o in sorted(list(objs)):
         v = objs[o]
-        if v['kind'] != 'ref:lookup' and v['kind'] != 'ref:procs':
+        if v['kind'] not in ('ref:lookup', 'ref:procs', 'ref:ptrs'):
             continue
         nxt_ = min([p for p in objs if p > o] + [hi])
         npt = ptr_prefix(data, o, nxt_)
@@ -535,7 +556,12 @@ def build(span, cb, data, fmt, srcs=None):
         kind, info = SR.classify(rs)
         size, ctype, dims = ext_len, 'uint8_t', '[%d]' % ext_len
         ln = string_run(data, cur, nxt)
-        if kind == 'switch':
+        if ob['kind'] == 'ref:ptrs':
+            npt = ob['size'] // 4
+            size, ctype, dims = 4 * npt, 'uint32_t', '[%d]' % npt
+            name = uniq(lab_at.get(cur) or '%s_PtrTable' % routine)
+            txt = ('%d u32 addresses, read by %s.' % (npt, ', '.join(rd)))
+        elif kind == 'switch':
             b = info['bound']
             nc = b + 1 if b is not None and 2 * (b + 1) <= ext_len else ext_len // 2
             size, ctype, dims = 2 * nc, 'uint16_t', '[%d]' % nc

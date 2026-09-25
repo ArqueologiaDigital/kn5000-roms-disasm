@@ -576,6 +576,8 @@ CUSTOM_AT = [
     ('naka_widget_descriptors', 0x243B0, build_apfunction_tables),
     ('naka_widget_descriptors', 0x13618, build_seq_rodata),
     ('naka_widget_tables_1', 0x0, span_builder('t1')),
+    ('naka_widget_tables_2', 0x0, span_builder('t2a')),
+    ('naka_widget_tables_2', 0x24954, span_builder('t2b')),
 ]
 
 
