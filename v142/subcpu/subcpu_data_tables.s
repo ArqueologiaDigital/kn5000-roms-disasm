@@ -528,7 +528,9 @@ Voice_Search_Order_List_3:
 ;         +4 u8  = a small class code (0x00, 0x01, 0x02)
 ;         +5 u8  = copied verbatim into the allocated voice node at node+38
 ; Contents: {F60B,0,3}, {F61A,1,3}, {F628,2,4}, then 13 x {F628,2,5}.
-; 0x00F693-0x00F69A is 8 bytes of 0x00 filler between this table and the next.
+; ★ CORRECTED 2026-09-25: this line said "0x00F693-0x00F69A is 8 bytes of 0x00 filler between
+; this table and the next".  They are entries 0..3 of Pitch_OctaveShift_CaseOffsets, the
+; 10-entry table Pitch_Get_Patch_Octave_Shift reads from 0x00F693 (carve below).
 ; --- 0x00F633-0x00F692  Note-on layer descriptor table, 16 entries of 6 bytes
 ; Indexed by the low nibble of a note-event slot byte in Voice_Allocate_Nodes (0x0223BE).
 ; Entry layout: { u32 candidate_list_ptr; u8 priority_key; u8 node_param }.
@@ -551,60 +553,190 @@ Voice_SFX_ModulationTable:
 	.byte 0x28, 0xf6, 0x00, 0x00, 0x02, 0x05, 0x28, 0xf6
 	.byte 0x00, 0x00, 0x02, 0x05, 0x28, 0xf6, 0x00, 0x00
 	.byte 0x02, 0x05, 0x28, 0xf6, 0x00, 0x00, 0x02, 0x05
-	.zero 8
 
-PitchBend_DispatchTable:
-	.byte 0x04, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00
-	.byte 0x06, 0x00, 0x09, 0x00
-
-Voice_GroupOffsets_A:
-	.byte 0x0c, 0x00, 0x0f, 0x00, 0x00, 0x00, 0x17, 0x00
-	.byte 0x1e, 0x00, 0x25, 0x00
-
-Voice_GroupOffsets_B:
-	.byte 0x2c, 0x00, 0x33, 0x00, 0x00, 0x00, 0x13, 0x00
-	.byte 0x13, 0x00, 0x1b, 0x00
-
-Voice_GroupOffsets_C:
-	.byte 0x36, 0x00, 0x3e, 0x00, 0x00, 0x00, 0x13, 0x00
-	.byte 0x13, 0x00, 0x1b, 0x00
-
-Voice_BitMask_ChannelType:
-	.byte 0x36, 0x00, 0x3e, 0x00, 0x01, 0x04, 0x10, 0x40
-	.byte 0x02, 0x08, 0x20, 0x80, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00
-	.zero 8
-	.byte 0x80, 0x60, 0x80, 0x62, 0x80, 0x64, 0x80, 0x65
-
-MIDI_NoteFreqTable:
-	.byte 0x80, 0x67, 0x80, 0x69, 0x80, 0x6b, 0x80, 0x6c
-	.byte 0x00, 0x00, 0x05, 0x00, 0x0a, 0x00, 0x0f, 0x00
-
-Voice_EnvelopeRateTable:
-	.byte 0x1a, 0x00, 0x25, 0x00, 0x30, 0x00, 0x3b, 0x00
-	.byte 0x46, 0x00, 0x51, 0x00, 0x5c, 0x00, 0x67, 0x00
-	.byte 0x72, 0x00, 0x7d, 0x00, 0x88, 0x00, 0x93, 0x00
-	.byte 0x9e, 0x00, 0xa9, 0x00, 0xb4, 0x00, 0xbf, 0x00
-	.byte 0xca, 0x00, 0xd5, 0x00, 0xe0, 0x00, 0xeb, 0x00
-	.byte 0xf6, 0x00, 0x01, 0x01, 0x0c, 0x01, 0xe5, 0x00
-	.byte 0xf0, 0x00, 0xe2, 0x01, 0xfc, 0x00
-
-Voice_PolyphonyConfig:
-	.byte 0xe2, 0x01, 0xe2, 0x01, 0xe2, 0x01, 0xe2, 0x01
-	.byte 0x17, 0x01, 0x2d, 0x01, 0x51, 0x01, 0x08, 0x00
-	.byte 0x10, 0x00, 0x18, 0x00, 0x1e, 0x00
-
-Voice_ParamScaleTable:
-	.byte 0xf6, 0x00, 0x24, 0x00, 0x2c, 0x00, 0x34, 0x00
-	.byte 0x4f, 0x00, 0x52, 0x00, 0x5e, 0x00, 0x6a, 0x00
-	.byte 0x76, 0x00, 0x82, 0x00, 0x8e, 0x00, 0x9a, 0x00
-	.byte 0xa6, 0x00, 0xb2, 0x00, 0xbf, 0x00, 0xcc, 0x00
-	.byte 0xd9, 0x00, 0xe6, 0x00, 0xee, 0x00, 0x00, 0x01
-	.byte 0x06, 0x03, 0x05, 0x08, 0x02, 0x04
-
-Const_ChannelMax:
-	.byte 0x07
+; --- 0x00F693-0x00F6A6  10 x u16 case offsets from Pitch_Get_Patch_Octave_Shift_JumpTable (0x022982).
+; Read by Pitch_Get_Patch_Octave_Shift (0x02294E): WA = selector - 0x10, range-checked 0..9
+; (so 10 entries), doubled, `lda xix,(table:24) / ldw_sri / lda xix,(base:24) / jp_ind`.
+; Only selector 0x14 (entry 4) reaches the fallback; the other nine return 0.
+Pitch_OctaveShift_CaseOffsets:
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x10
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x11
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x12
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x13
+	.short Pitch_Get_Patch_Octave_Shift_Fallback - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x14
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x15
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x16
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x17
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x18
+	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x19
+; --- 0x00F6A7-0x00F6B2  6 x u16 case offsets from TVF_Build_Dispatch_Table (0x02412B).
+; Read by TVF_Build_Dispatch (0x024102): index = (tonerec+54) & 7, range-checked 0..5
+; (6 entries), doubled, then the same ldw_sri / jp_ind computed goto.
+TVF_Build_CaseOffsets:
+	.short TVF_Build_Dispatch_Table - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 0
+	.short TVF_Build_Dispatch_Case1 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 1
+	.short TVF_Build_Dispatch_Case2 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 2
+	.short TVF_Build_Dispatch_Case3 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 3
+	.short TVF_Build_Dispatch_Case4 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 4
+	.short TVF_Build_Dispatch_Case5 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 5
+; --- 0x00F6B3-0x00F6BE  6 x u16 case offsets from TVF_BuildEmit_Short_Dispatch_Table (0x02432C).
+; Read by TVF_BuildEmit_Short_Dispatch (0x024300): index = (tonerec+0x0F) & 7,
+; range-checked 0..5 (6 entries), doubled, ldw_sri / jp_ind.
+TVF_BuildEmit_Short_CaseOffsets:
+	.short TVF_BuildEmit_Short_Dispatch_Table - TVF_BuildEmit_Short_Dispatch_Table			; (tonerec+0x0F)&7 = 0
+	.short TVF_BuildEmit_Short_Case1 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 1
+	.short TVF_BuildEmit_Short_Case2 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 2
+	.short TVF_BuildEmit_Short_Case3 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 3
+	.short TVF_BuildEmit_Short_Case4 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 4
+	.short TVF_BuildEmit_Short_Case5 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 5
+; --- 0x00F6BF-0x00F6CA  6 x u16 case offsets from TVF_Emit_Registers_Table (0x024472).
+; Read by TVF_Emit_Registers (0x024444): index = (tonerec+54) & 7, range-checked 0..5
+; (6 entries), doubled, ldw_sri / jp_ind.  Cases 1 and 2 share one body.
+TVF_Emit_Registers_CaseOffsets:
+	.short TVF_Emit_Registers_Table - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 0
+	.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 1
+	.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 2
+	.short TVF_Emit_Registers_Case3 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 3
+	.short TVF_Emit_Registers_Case4 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 4
+	.short TVF_Emit_Registers_Case5 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 5
+; --- 0x00F6CB-0x00F6D6  6 x u16 case offsets from Voice_PanReg_WriteDispatchB_Table (0x024582); the same six
+; values as TVF_Emit_Registers_CaseOffsets, for the twin landing pad.
+; Read by Voice_PanReg_WriteDispatchB (0x024554): index = (tonerec+0x0F) & 7, range-checked
+; 0..5 (6 entries), doubled, ldw_sri / jp_ind.  Cases 1 and 2 share one body.
+Voice_PanReg_WriteDispatchB_CaseOffsets:
+	.short Voice_PanReg_WriteDispatchB_Table - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 0
+	.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 1
+	.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 2
+	.short Voice_PanReg_WriteDispatchB_Case3 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 3
+	.short Voice_PanReg_WriteDispatchB_Case4 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 4
+	.short Voice_PanReg_WriteDispatchB_Case5 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 5
+; --- 0x00F6D7-0x00F6DE  two 4-byte bit tables, one byte per output bus w = 0..3
+; Read by AudioMod_Apply_BusRouting (0x02833C): per bus w it loads byte [table + w]
+; from each (`lda xiy,(table:24) / ld L,(XIY+HL)`, HL = w, loop bound w < 4) and ANDs it
+; with the caller's C: EnableBits[w] = 1 << 2w, OrIXBits[w] = 1 << (2w+1).  With the
+; enable bit clear the routine clears DE|IX in slot word w (+0x18 of output-slot record w
+; of the part); with it set, the second bit chooses OR DE|IX (set) or clear IX then OR DE.
+AudioMod_BusRouting_EnableBits:
+	.byte 0x01, 0x04, 0x10, 0x40		; buses 0..3: bits 0, 2, 4, 6 of C
+AudioMod_BusRouting_OrIXBits:
+	.byte 0x02, 0x08, 0x20, 0x80		; buses 0..3: bits 1, 3, 5, 7 of C
+; --- 0x00F6DF-0x00F6F2  10 x u16 case offsets from AudioMod_Porta_Curve_JumpBase (0x028500).
+; Read by AudioMod_Apply_Porta_Curve (0x0284AC): index = A - 0x10, range-checked 0..9
+; (10 entries), doubled, ldw_sri / jp_ind.  Only A = 0x14 (entry 4) reaches
+; AudioMod_Apply_Porta_Curve_Skip; the other nine take the shared base body.
+AudioMod_PortaCurve_CaseOffsets:
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x10
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x11
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x12
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x13
+	.short AudioMod_Apply_Porta_Curve_Skip - AudioMod_Porta_Curve_JumpBase				; A = 0x14
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x15
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x16
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x17
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x18
+	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x19
+; --- 0x00F6F3-0x00F702  8 x u16, rhythm-mode word stored at 0x041360
+; Read by Voice_SetRhythmMode (0x028B9C): index = bits 7..4 of the packed SysEx byte A
+; (`and c,0xF0 / srl c,4 / add bc,bc / lda xde,(table:24) / ldw_sri`), result -> 0x041360.
+; Count 8 is pinned by the next table (AudioChannel_CaseOffsets, 0x00F703): the reader
+; does NOT bound the index, so a nibble of 8..15 would read that table instead.
+; High bytes 0x60 0x62 0x64 0x65 0x67 0x69 0x6B 0x6C step 2,2,1,2,2,2,1 -- a major scale --
+; and the low byte is 0x80 in all eight.  Reading them as 8.8 semitone pitches (the unit
+; Pitch_Get_Patch_Octave_Shift uses) is an inference from that pattern; the consumer of
+; 0x041360 was not traced.
+Voice_RhythmMode_ScalePitch_Table:
+	.short 0x6080, 0x6280, 0x6480, 0x6580, 0x6780, 0x6980, 0x6b80, 0x6c80
+; --- 0x00F703-0x00F738  27 x u16 case offsets from AudioChannel_DispatchTable (0x029E5B): the stub for
+; destination command id k+1 (entries 0..2 are 5-byte stubs, the rest 11-byte ones).
+; Read by AudioChannel_Dispatch (0x029E31): index = ((XDE+1) & 0x3F) - 1, range-checked
+; 0..0x1A (27 entries), doubled, ldw_sri / jp_ind.
+AudioChannel_CaseOffsets:
+	.short AudioChannel_DispatchTable - AudioChannel_DispatchTable					; command id 0x01
+	.short AudioChannel_Stub_Cmd02 - AudioChannel_DispatchTable					; command id 0x02
+	.short AudioChannel_Stub_Cmd03 - AudioChannel_DispatchTable					; command id 0x03
+	.short AudioChannel_Stub_Cmd04 - AudioChannel_DispatchTable					; command id 0x04
+	.short AudioChannel_Stub_Cmd05 - AudioChannel_DispatchTable					; command id 0x05
+	.short AudioChannel_Stub_Cmd06 - AudioChannel_DispatchTable					; command id 0x06
+	.short AudioChannel_Stub_Cmd07 - AudioChannel_DispatchTable					; command id 0x07
+	.short AudioChannel_Stub_Cmd08 - AudioChannel_DispatchTable					; command id 0x08
+	.short AudioChannel_Stub_Cmd09 - AudioChannel_DispatchTable					; command id 0x09
+	.short AudioChannel_Stub_Cmd0A - AudioChannel_DispatchTable					; command id 0x0A
+	.short AudioChannel_Stub_Cmd0B - AudioChannel_DispatchTable					; command id 0x0B
+	.short AudioChannel_Stub_Cmd0C - AudioChannel_DispatchTable					; command id 0x0C
+	.short AudioChannel_Stub_Cmd0D - AudioChannel_DispatchTable					; command id 0x0D
+	.short AudioChannel_Stub_Cmd0E - AudioChannel_DispatchTable					; command id 0x0E
+	.short AudioChannel_Stub_Cmd0F - AudioChannel_DispatchTable					; command id 0x0F
+	.short AudioChannel_Stub_Cmd10 - AudioChannel_DispatchTable					; command id 0x10
+	.short AudioChannel_Stub_Cmd11 - AudioChannel_DispatchTable					; command id 0x11
+	.short AudioChannel_Stub_Cmd12 - AudioChannel_DispatchTable					; command id 0x12
+	.short AudioChannel_Stub_Cmd13 - AudioChannel_DispatchTable					; command id 0x13
+	.short AudioChannel_Stub_Cmd14 - AudioChannel_DispatchTable					; command id 0x14
+	.short AudioChannel_Stub_Cmd15 - AudioChannel_DispatchTable					; command id 0x15
+	.short AudioChannel_Stub_Cmd16 - AudioChannel_DispatchTable					; command id 0x16
+	.short AudioChannel_Stub_Cmd17 - AudioChannel_DispatchTable					; command id 0x17
+	.short AudioChannel_Stub_Cmd18 - AudioChannel_DispatchTable					; command id 0x18
+	.short AudioChannel_Stub_Cmd19 - AudioChannel_DispatchTable					; command id 0x19
+	.short AudioChannel_Stub_Cmd1A - AudioChannel_DispatchTable					; command id 0x1A
+	.short AudioChannel_Stub_Cmd1B - AudioChannel_DispatchTable					; command id 0x1B
+; --- 0x00F739-0x00F74E  11 x u16 case offsets for controller numbers 120..130, relative to Voice_CC_ModWheel
+; (0x02A306, which is only the base of the arithmetic here, not a case).
+; Read by Voice_CtrlChange (0x02A282) after its explicit compares for the other CCs:
+; WA = CC - 0x78, range-checked 0..0x0A (11 entries), doubled, ldw_sri / jp_ind.
+; 122 and 124..127 go straight to Voice_CC_Exit.  (MIDI 1.0 names 120/121/123 All
+; Sound Off / Reset All Controllers / All Notes Off; 128..130 are not MIDI controller
+; numbers, so they arrive from inside the firmware.  Each target's body is its callee
+; list, written next to its entry.)
+Voice_CC_Mode_CaseOffsets:
+	.short Voice_CC_Num120 - Voice_CC_ModWheel							; CC 120 -> Voice_PortamentoSlots_WriteHW(part)
+	.short Voice_CC_Num121 - Voice_CC_ModWheel							; CC 121 -> Voice_NoteState_Clear(part)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 122 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Num123 - Voice_CC_ModWheel							; CC 123 -> Voice_SetLFO_ActiveFlag, Voice_AllocateForRelease, Voice_ParamInit
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 124 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 125 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 126 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Exit - Voice_CC_ModWheel							; CC 127 -> Voice_CC_Exit (ignored)
+	.short Voice_CC_Num128 - Voice_CC_ModWheel							; CC 128 -> Voice_CC_SetPortamentoRate(part, value)
+	.short Voice_CC_Num129 - Voice_CC_ModWheel							; CC 129 -> Voice_CC_SetPortamentoDepth, then Pitch_Refresh_Sounding_Voices
+	.short Voice_CC_Num130 - Voice_CC_ModWheel							; CC 130 -> Voice_CC_SetPortamentoTime(part, value)
+; --- 0x00F74F-0x00F77C  23 x u16 case offsets from Voice_SystemMsg_DispatchTable (0x02A7FC).
+; Read by Voice_SystemMsg (0x02A7AF, the jump at Voice_SystemMsg_DispatchJump):
+; sub-command C - 0x80 in 0..7 is used directly; otherwise C - 0x80 - 0x1B must be
+; 8..0x16, so entries 8..22 serve sub-commands 0xA3..0xB1 (23 entries in all).
+; Doubled, ldw_sri / jp_ind.  Sub-command 0x84 lands on a bare `ret`.
+Voice_SystemMsg_CaseOffsets:
+	.short Voice_SystemMsg_Sub80 - Voice_SystemMsg_DispatchTable					; sub-command 0x80
+	.short Voice_SystemMsg_Sub81 - Voice_SystemMsg_DispatchTable					; sub-command 0x81
+	.short Voice_SystemMsg_Sub82 - Voice_SystemMsg_DispatchTable					; sub-command 0x82
+	.short Voice_SystemMsg_Sub83 - Voice_SystemMsg_DispatchTable					; sub-command 0x83
+	.short Voice_SystemMsg_Sub84 - Voice_SystemMsg_DispatchTable					; sub-command 0x84
+	.short Voice_SystemMsg_Sub85 - Voice_SystemMsg_DispatchTable					; sub-command 0x85
+	.short Voice_SystemMsg_Sub86 - Voice_SystemMsg_DispatchTable					; sub-command 0x86
+	.short Voice_SystemMsg_Sub87 - Voice_SystemMsg_DispatchTable					; sub-command 0x87
+	.short Voice_SystemMsg_SubA3 - Voice_SystemMsg_DispatchTable					; sub-command 0xA3
+	.short Voice_SystemMsg_SubA4 - Voice_SystemMsg_DispatchTable					; sub-command 0xA4
+	.short Voice_SystemMsg_SubA5 - Voice_SystemMsg_DispatchTable					; sub-command 0xA5
+	.short Voice_SystemMsg_SubA6 - Voice_SystemMsg_DispatchTable					; sub-command 0xA6
+	.short Voice_SystemMsg_SubA7 - Voice_SystemMsg_DispatchTable					; sub-command 0xA7
+	.short Voice_SystemMsg_SubA8 - Voice_SystemMsg_DispatchTable					; sub-command 0xA8
+	.short Voice_SystemMsg_SubA9 - Voice_SystemMsg_DispatchTable					; sub-command 0xA9
+	.short Voice_SystemMsg_SubAA - Voice_SystemMsg_DispatchTable					; sub-command 0xAA
+	.short Voice_SystemMsg_SubAB - Voice_SystemMsg_DispatchTable					; sub-command 0xAB
+	.short Voice_SystemMsg_SubAC - Voice_SystemMsg_DispatchTable					; sub-command 0xAC
+	.short Voice_SystemMsg_SubAD - Voice_SystemMsg_DispatchTable					; sub-command 0xAD
+	.short Voice_SystemMsg_SubAE - Voice_SystemMsg_DispatchTable					; sub-command 0xAE
+	.short Voice_SystemMsg_SubAF - Voice_SystemMsg_DispatchTable					; sub-command 0xAF
+	.short Voice_SystemMsg_SubB0 - Voice_SystemMsg_DispatchTable					; sub-command 0xB0
+	.short Voice_SystemMsg_SubB1 - Voice_SystemMsg_DispatchTable					; sub-command 0xB1
+; --- 0x00F77D-0x00F785  3 records x 3 bytes: scratch-array slot of each 4-bit field
+; Read by Voice_Selector_Unpack3Groups (0x02ABEE): for group E = 0..2 it reads bytes
+; [table + 3E + 0], [+1], [+2] (three `lda (table+k:24)` bases, index E*3 via `muls 3`) and
+; stores the k-th low nibble of BC at that index of the caller's 9-byte stack array.
+; The nine destinations are a permutation of 0..8.  Count 3 = the three calls E = 0..2 made
+; by Voice_Selector_FindBestSlot.  (The last byte, 0x07, was labelled Const_ChannelMax.)
+Voice_Selector_FieldSlot_Table:
+	.byte 0, 1, 6		; group 0: fields 0,1,2 -> slots 0, 1, 6
+	.byte 3, 5, 8		; group 1: fields 0,1,2 -> slots 3, 5, 8
+	.byte 2, 4, 7		; group 2: fields 0,1,2 -> slots 2, 4, 7
 
 ; --- 0x00F786-0x00F799  10 x s16, part transpose/trim table A -> DRAM 0x041476
 ; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` in Voice_Selector_ComputeMixWeights

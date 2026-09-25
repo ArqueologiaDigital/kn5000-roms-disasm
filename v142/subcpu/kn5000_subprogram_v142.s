@@ -6421,7 +6421,7 @@ Pitch_Get_Patch_Octave_Shift_Dispatch:
 	cp wa, 0x9
 	jr gt, Pitch_Get_Patch_Octave_Shift_Fallback
 	add wa, wa
-	lda xix, (0x00f693:24)
+	lda xix, (Pitch_OctaveShift_CaseOffsets:24)
 	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda xix, (Pitch_Get_Patch_Octave_Shift_JumpTable:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0
@@ -9944,7 +9944,7 @@ TVF_Build_Dispatch:
 	cp bc, 5:i3
 	jr gt, TVF_Build_Dispatch_Table
 	add bc, bc
-	lda xix, (0x00f6a7:24)
+	lda xix, (TVF_Build_CaseOffsets:24)
 	ldw_sri BC, 0x07, 0xF0, 0xE4
 	lda xix, (TVF_Build_Dispatch_Table:24)
 	jp_ind 8, 0x07, 0xF0, 0xE4
@@ -9955,10 +9955,15 @@ TVF_Build_Dispatch:
 ; Offsets come from the word table at 0x00F6A7.
 TVF_Build_Dispatch_Table:
 	jrl TVF_Set_Bypass
+TVF_Build_Dispatch_Case1:
 	jrl TVF_Build_Full
+TVF_Build_Dispatch_Case2:
 	jrl Voice_PitchPack_Mode2
+TVF_Build_Dispatch_Case3:
 	jrl Voice_PitchPack_Mode3
+TVF_Build_Dispatch_Case4:
 	jrl Voice_PitchPack_Mode4_Single
+TVF_Build_Dispatch_Case5:
 	calr Voice_PitchPack_Mode5_Dual
 	ret
 
@@ -10179,7 +10184,7 @@ TVF_BuildEmit_Short_Dispatch:
 	cp wa, 5:i3
 	jr gt, TVF_BuildEmit_Short_Dispatch_Table
 	add wa, wa
-	lda xix, (0x00f6b3:24)
+	lda xix, (TVF_BuildEmit_Short_CaseOffsets:24)
 	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda xix, (TVF_BuildEmit_Short_Dispatch_Table:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0
@@ -10196,18 +10201,23 @@ TVF_BuildEmit_Short_Dispatch_Table:
 	ld wa, (xiz + 68)
 	ld (0x0451d6:24), wa
 	jr TVF_BuildEmit_Short_Dispatch_Return
+TVF_BuildEmit_Short_Case1:
 	ld xwa, xiz
 	calr TVF_Build_Short
 	jr TVF_BuildEmit_Short_Dispatch_Return
+TVF_BuildEmit_Short_Case2:
 	ld xwa, xiz
 	calr Voice_PitchPack_RouteB
 	jr TVF_BuildEmit_Short_Dispatch_Return
+TVF_BuildEmit_Short_Case3:
 	ld xwa, xiz
 	calr Voice_PitchPack_RouteC
 	jr TVF_BuildEmit_Short_Dispatch_Return
+TVF_BuildEmit_Short_Case4:
 	ld xwa, xiz
 	calr Voice_PitchPack_RouteD
 	jr TVF_BuildEmit_Short_Dispatch_Return
+TVF_BuildEmit_Short_Case5:
 	ld xwa, xiz
 	calr Voice_PitchPack_RouteE
 
@@ -10339,40 +10349,49 @@ TVF_Emit_Registers:
 	cp wa, 5:i3
 	jr gt, TVF_Emit_Registers_Table
 	add wa, wa
-	lda xix, (0x00f6bf:24)
+	lda xix, (TVF_Emit_Registers_CaseOffsets:24)
 	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda xix, (TVF_Emit_Registers_Table:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0
 
 ; Six-case landing pad for the (tonerec+54)&7 dispatcher; offsets from the word table at
-; 0x00F6BF. Case 0 = verbatim copy of voice+66/+68; case 1 = TVF_Emit_Offset_Reg100;
-; case 2 = same but gated on bit 9 of (patch+2); cases 3/4 = TVF_Emit_Offset_Both;
+; 0x00F6BF (TVF_Emit_Registers_CaseOffsets). Case 0 = verbatim copy of voice+66/+68;
+; cases 1 AND 2 = TVF_Emit_Offset_Reg100 (both table entries are +0x13); case 3 = the same
+; but gated on bit 9 of (patch+2), else TVF_Emit_Offset_Both; case 4 = TVF_Emit_Offset_Both;
 ; case 5 = the inline arms below.
+; ★ CORRECTED 2026-09-25: this said "case 2 = same but gated on bit 9 of (patch+2); cases
+; 3/4 = TVF_Emit_Offset_Both" -- one case off: the table's entries 1..5 are +0x13 +0x13
+; +0x1B +0x36 +0x3E, so the gated body is case 3 and only case 4 is the plain Both call.
 TVF_Emit_Registers_Table:
 	ld wa, (xiz + 66)
 	ld (0x0451d4:24), wa
 	ld wa, (xiz + 68)
 	ld (0x0451d6:24), wa
 	jrl TVF_Emit_Registers_Return
+TVF_Emit_Registers_Case1:
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Reg100
 	jrl TVF_Emit_Registers_Return
+TVF_Emit_Registers_Case3:
 	ld xwa, (xiz + 35)
 	ld wa, (xwa + 2)
 	bit 9, wa
-	jr z, Voice_PanReg_Dispatch_Mode2_CheckBit9
+	jr z, TVF_Emit_Registers_Case3_Bit9Clear
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Reg100
 	jrl TVF_Emit_Registers_Return
 
-; Bit-9-clear arm of case 2: use the "both registers" offset routine instead.
-Voice_PanReg_Dispatch_Mode2_CheckBit9:
+; Bit-9-clear arm of case 3 (was "case 2", see the ★ CORRECTED note above): use the "both
+; registers" offset routine instead.
+TVF_Emit_Registers_Case3_Bit9Clear:
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Both
 	jrl TVF_Emit_Registers_Return
+TVF_Emit_Registers_Case4:
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Both
 	jrl TVF_Emit_Registers_Return
+TVF_Emit_Registers_Case5:
 	ld xwa, (xiz + 39)
 	ld wa, (xwa + 24)
 	bit 6, wa
@@ -10464,7 +10483,7 @@ Voice_PanReg_WriteDispatchB:
 	cp wa, 5:i3
 	jr gt, Voice_PanReg_WriteDispatchB_Table
 	add wa, wa
-	lda xix, (0x00f6cb:24)
+	lda xix, (Voice_PanReg_WriteDispatchB_CaseOffsets:24)
 	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda xix, (Voice_PanReg_WriteDispatchB_Table:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0
@@ -10476,25 +10495,30 @@ Voice_PanReg_WriteDispatchB_Table:
 	ld wa, (xiz + 68)
 	ld (0x0451d6:24), wa
 	jrl Voice_PanReg_WriteDispatchB_Return
+Voice_PanReg_WriteDispatchB_Case1:
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Reg100
 	jrl Voice_PanReg_WriteDispatchB_Return
+Voice_PanReg_WriteDispatchB_Case3:
 	ld xwa, (xiz + 35)
 	ld wa, (xwa + 2)
 	bit 9, wa
-	jr z, Voice_PanReg_DispatchB_Mode2_CheckBit9
+	jr z, Voice_PanReg_WriteDispatchB_Case3_Bit9Clear
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Reg100
 	jrl Voice_PanReg_WriteDispatchB_Return
 
-; Bit-9-clear arm of case 2 in dispatch B.
-Voice_PanReg_DispatchB_Mode2_CheckBit9:
+; Bit-9-clear arm of case 3 in dispatch B (was "case 2": entries 1 and 2 of
+; Voice_PanReg_WriteDispatchB_CaseOffsets are both +0x13, entry 3 is this gated body).
+Voice_PanReg_WriteDispatchB_Case3_Bit9Clear:
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Both
 	jrl Voice_PanReg_WriteDispatchB_Return
+Voice_PanReg_WriteDispatchB_Case4:
 	ld xwa, xiz
 	calr TVF_Emit_Offset_Both
 	jrl Voice_PanReg_WriteDispatchB_Return
+Voice_PanReg_WriteDispatchB_Case5:
 	ld xwa, (xiz + 39)
 	ld wa, (xwa + 24)
 	bit 6, wa
@@ -18067,13 +18091,13 @@ AudioMod_Apply_BusRouting:
 LABEL_028347:
 	ld	l, w
 	extz	hl
-	lda	xiy, (63191:24)
+	lda	xiy, (AudioMod_BusRouting_EnableBits:24)
 	ld_rrb	l, xiy, hl	; ld L,(XIY+HL)
 	and	l, c
 	jrl	z, LABEL_0283EE
 	ld	l, w
 	extz	hl
-	lda	xiy, (63195:24)
+	lda	xiy, (AudioMod_BusRouting_OrIXBits:24)
 	ld_rrb	l, xiy, hl	; ld L,(XIY+HL)
 	and	l, c
 	jr	z, LABEL_02839A
@@ -18251,7 +18275,7 @@ LABEL_0284C8:
 	cp	wa, 9
 	jr	gt, AudioMod_Apply_Porta_Curve_Skip
 	add	wa, wa
-	lda	xix, (63199:24)
+	lda	xix, (AudioMod_PortaCurve_CaseOffsets:24)
 	ld_rrw	wa, xix, wa	; ld WA,(XIX+WA)
 	lda	xix, (AudioMod_Porta_Curve_JumpBase:24)
 	jp_rr	8, xix, wa	; jp T,XIX+WA
@@ -19079,7 +19103,7 @@ Voice_SetRhythmMode_BranchB:
 	srl c, 4
 	extz bc
 	add bc, bc
-	lda xde, (0x00f6f3:24)
+	lda xde, (Voice_RhythmMode_ScalePitch_Table:24)
 	ldw_sri BC, 0x07, 0xE8, 0xE4
 	ld (0x041360:24), bc
 	bit 2, a
@@ -21095,7 +21119,7 @@ AudioChannel_Dispatch:
 	cp hl, 0x1A
 	ret gt
 	add hl, hl
-	lda xix, (0x00f703:24)
+	lda xix, (AudioChannel_CaseOffsets:24)
 	ldw_sri HL, 0x07, 0xF0, 0xEC
 	lda xix, (AudioChannel_DispatchTable:24)
 	jp_ind 8, 0x07, 0xF0, 0xEC
@@ -21114,125 +21138,151 @@ AudioChannel_Dispatch:
 AudioChannel_DispatchTable:
 	extz	wa
 	jrl	AudioChannel_Handler_Cmd01
+AudioChannel_Stub_Cmd02:
 	extz	wa
 	jrl	AudioChannel_Handler_Cmd02
+AudioChannel_Stub_Cmd03:
 	extz	wa
 	jrl	AudioChannel_Handler_Cmd03
+AudioChannel_Stub_Cmd04:
 	extz	wa
 	extz	bc
 	pushw	0
 	calr	AudioChannel_Handler_Cmd04_07
 	ret
+AudioChannel_Stub_Cmd05:
 	extz	wa
 	extz	bc
 	pushw	1
 	calr	AudioChannel_Handler_Cmd04_07
 	ret
+AudioChannel_Stub_Cmd06:
 	extz	wa
 	extz	bc
 	pushw	2
 	calr	AudioChannel_Handler_Cmd04_07
 	ret
+AudioChannel_Stub_Cmd07:
 	extz	wa
 	extz	bc
 	pushw	3
 	calr	AudioChannel_Handler_Cmd04_07
 	ret
+AudioChannel_Stub_Cmd08:
 	extz	wa
 	extz	bc
 	pushw	0
 	calr	AudioChannel_Handler_Cmd08_0B
 	ret
+AudioChannel_Stub_Cmd09:
 	extz	wa
 	extz	bc
 	pushw	1
 	calr	AudioChannel_Handler_Cmd08_0B
 	ret
+AudioChannel_Stub_Cmd0A:
 	extz	wa
 	extz	bc
 	pushw	2
 	calr	AudioChannel_Handler_Cmd08_0B
 	ret
+AudioChannel_Stub_Cmd0B:
 	extz	wa
 	extz	bc
 	pushw	3
 	calr	AudioChannel_Handler_Cmd08_0B
 	ret
+AudioChannel_Stub_Cmd0C:
 	extz	wa
 	extz	bc
 	pushw	0
 	calr	AudioChannel_Handler_Cmd0C_0F
 	ret
+AudioChannel_Stub_Cmd0D:
 	extz	wa
 	extz	bc
 	pushw	1
 	calr	AudioChannel_Handler_Cmd0C_0F
 	ret
+AudioChannel_Stub_Cmd0E:
 	extz	wa
 	extz	bc
 	pushw	2
 	calr	AudioChannel_Handler_Cmd0C_0F
 	ret
+AudioChannel_Stub_Cmd0F:
 	extz	wa
 	extz	bc
 	pushw	3
 	calr	AudioChannel_Handler_Cmd0C_0F
 	ret
+AudioChannel_Stub_Cmd10:
 	extz	wa
 	extz	bc
 	pushw	0
 	calr	AudioChannel_Handler_Cmd10_13
 	ret
+AudioChannel_Stub_Cmd11:
 	extz	wa
 	extz	bc
 	pushw	1
 	calr	AudioChannel_Handler_Cmd10_13
 	ret
+AudioChannel_Stub_Cmd12:
 	extz	wa
 	extz	bc
 	pushw	2
 	calr	AudioChannel_Handler_Cmd10_13
 	ret
+AudioChannel_Stub_Cmd13:
 	extz	wa
 	extz	bc
 	pushw	3
 	calr	AudioChannel_Handler_Cmd10_13
 	ret
+AudioChannel_Stub_Cmd14:
 	extz	wa
 	extz	bc
 	pushw	0
 	calr	AudioChannel_Handler_Cmd14_17
 	ret
+AudioChannel_Stub_Cmd15:
 	extz	wa
 	extz	bc
 	pushw	1
 	calr	AudioChannel_Handler_Cmd14_17
 	ret
+AudioChannel_Stub_Cmd16:
 	extz	wa
 	extz	bc
 	pushw	2
 	calr	AudioChannel_Handler_Cmd14_17
 	ret
+AudioChannel_Stub_Cmd17:
 	extz	wa
 	extz	bc
 	pushw	3
 	calr	AudioChannel_Handler_Cmd14_17
 	ret
+AudioChannel_Stub_Cmd18:
 	extz	wa
 	extz	bc
 	pushw	0
 	calr	AudioChannel_Handler_Cmd18_1B
 	ret
+AudioChannel_Stub_Cmd19:
 	extz	wa
 	extz	bc
 	pushw	1
 	calr	AudioChannel_Handler_Cmd18_1B
 	ret
+AudioChannel_Stub_Cmd1A:
 	extz	wa
 	extz	bc
 	pushw	2
 	calr	AudioChannel_Handler_Cmd18_1B
 	ret
+AudioChannel_Stub_Cmd1B:
 	extz	wa
 	extz	bc
 	pushw	3
@@ -21678,7 +21728,7 @@ Voice_CtrlChange:
 	cp wa, 0xA
 	jrl gt, Voice_CC_Exit
 	add wa, wa
-	lda xix, (0x00f739:24)
+	lda xix, (Voice_CC_Mode_CaseOffsets:24)
 	ldw_sri WA, 0x07, 0xF0, 0xE0
 	lda xix, (Voice_CC_ModWheel:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0
@@ -21799,14 +21849,17 @@ Voice_CC_Portamento:
 	ld wa, de
 	calr Voice_Portamento_OnHandler
 	jrl Voice_CC_Exit
+Voice_CC_Num120:
 	ld a, (xiz + 1)
 	extz wa
 	calr Voice_PortamentoSlots_WriteHW
 	jrl Voice_CC_Exit
+Voice_CC_Num121:
 	ld a, (xiz + 1)
 	extz wa
 	call Voice_NoteState_Clear
 	jrl Voice_CC_Exit
+Voice_CC_Num123:
 	ld a, (xiz + 1)
 	extz wa
 	call Voice_SetLFO_ActiveFlag
@@ -21816,6 +21869,7 @@ Voice_CC_Portamento:
 	ld xwa, xhl
 	call Voice_ParamInit
 	jrl Voice_CC_Exit
+Voice_CC_Num128:
 	ld a, (xiz + 1)
 	ld e, a
 	extz de
@@ -21825,6 +21879,7 @@ Voice_CC_Portamento:
 	ld wa, de
 	calr Voice_CC_SetPortamentoRate
 	jrl Voice_CC_Exit
+Voice_CC_Num129:
 	ld a, (xiz + 1)
 	ld e, a
 	extz de
@@ -21839,6 +21894,7 @@ Voice_CC_Portamento:
 	ld xwa, xhl
 	calr Pitch_Refresh_Sounding_Voices
 	jrl Voice_CC_Exit
+Voice_CC_Num130:
 	ld a, (xiz + 1)
 	ld e, a
 	extz de
@@ -22295,7 +22351,7 @@ Voice_SystemMsg:
 ; The computed jump itself: BC*2 -> word at 0x00F74F -> jp (0x02A7FC + offset).
 Voice_SystemMsg_DispatchJump:
 	add bc, bc
-	lda xix, (0x00f74f:24)
+	lda xix, (Voice_SystemMsg_CaseOffsets:24)
 	ldw_sri BC, 0x07, 0xF0, 0xE4
 	lda xix, (Voice_SystemMsg_DispatchTable:24)
 	jp_ind 8, 0x07, 0xF0, 0xE4
@@ -22315,26 +22371,36 @@ Voice_SystemMsg_DispatchJump:
 ;   index 7 (0x87)         offset 0x0034 -> 0x02A830 Voice_SetRhythmMode
 ; Indices 8..0x16 (sub-commands 0xA3..0xB1) resolve past 0x02A838 into the three named
 ; DispatchEntry stubs and the code that follows them; index > 0x16 is rejected by the caller.
+; (Measured from the table, Voice_SystemMsg_CaseOffsets: none of 8..0x16 lands ON a
+; DispatchEntry stub -- index 8 is the instruction right after DispatchEntry2's `jrl`, and
+; 9..0x16 the stubs after that, labelled Voice_SystemMsg_SubA3 .. _SubB1.)
 Voice_SystemMsg_DispatchTable:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetPolyphonyMode
+Voice_SystemMsg_Sub80:
 	ld a, (xwa + 3)
 	extz wa
 	jrl VoiceCC_Stub_Ret1
+Voice_SystemMsg_Sub81:
 	ld a, (xwa + 3)
 	extz wa
 	jrl VoiceCC_Stub_Ret2
+Voice_SystemMsg_Sub82:
 	ld a, (xwa + 3)
 	jrl Voice_SetPitchBendRangeAndApply
+Voice_SystemMsg_Sub83:
 	ld a, (xwa + 3)
 	jrl Voice_SetPitchBendRange
+Voice_SystemMsg_Sub85:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetKeyShiftEnable
+Voice_SystemMsg_Sub86:
 	ld a, (xwa + 3)
 	extz wa
 	jrl ScaleTune_Set_Global_Mode
+Voice_SystemMsg_Sub87:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetRhythmMode
@@ -22349,79 +22415,99 @@ Voice_SystemMsg_DispatchEntry0:
 Voice_SystemMsg_DispatchEntry1:
 	jrl Voice_AllVoices_PortamentoUpdate
 
-; Sub-command 0x99 -> a small group ending in ScaleTune_Set_User_Offset with WA = 0x0B,
-; Voice_AllVoices_UpdateVelocity and ScaleTune_Set_Global_Enabled.
+; Sub-command 0x99 -> Voice_SetCCMaxFlag(A = message byte 3), and nothing else: the `jrl`
+; is unconditional.  The stubs after it are cases 0xA3..0xB1 of Voice_SystemMsg_CaseOffsets
+; (Voice_SystemMsg_SubA3 .. _SubB1), and 0x84 lands on the bare `ret` at the end.
+; ★ CORRECTED 2026-09-25: this said "Sub-command 0x99 -> a small group ending in
+; ScaleTune_Set_User_Offset with WA = 0x0B, Voice_AllVoices_UpdateVelocity and
+; ScaleTune_Set_Global_Enabled" -- those are the separately-dispatched stubs that follow.
 Voice_SystemMsg_DispatchEntry2:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_SetCCMaxFlag
+Voice_SystemMsg_SubA3:
 	jrl Voice_AllVoices_PortamentoReset
+Voice_SystemMsg_SubA4:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 0:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubA5:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 1:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubA6:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 2:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubA7:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 3:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubA8:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 4:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubA9:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 5:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubAA:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 6:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubAB:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ld wa, 7:i3
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubAC:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0x8
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubAD:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0x9
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubAE:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0xA
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubAF:
 	ld a, (xwa + 3)
 	extz wa
 	ld bc, wa
 	ldw wa, 0xB
 	jrl ScaleTune_Set_User_Offset
+Voice_SystemMsg_SubB0:
 	ld a, (xwa + 3)
 	extz wa
 	jrl Voice_AllVoices_UpdateVelocity
+Voice_SystemMsg_SubB1:
 	ld a, (xwa + 3)
 	extz wa
 	jrl ScaleTune_Set_Global_Enabled
+Voice_SystemMsg_Sub84:
 	ret
 
 ; Full audio-side reset.  Reached by `jp` from the audio init sequence (right after
@@ -22781,7 +22867,7 @@ Voice_Selector_Unpack3Groups:
 	ld l, e
 	extz hl
 	muls hl, 0x3
-	lda xix, (0x00f77d:24)
+	lda xix, (Voice_Selector_FieldSlot_Table:24)
 	ldb_sri L, 0x07, 0xF0, 0xEC
 	ldb_erp L, 0xF0
 	extz ix
@@ -22792,7 +22878,7 @@ Voice_Selector_Unpack3Groups:
 	ld l, e
 	extz hl
 	muls hl, 0x3
-	lda xix, (0x00f77e:24)
+	lda xix, (Voice_Selector_FieldSlot_Table+1:24)
 	ldb_sri L, 0x07, 0xF0, 0xEC
 	ldb_erp L, 0xF0
 	extz ix
@@ -22802,7 +22888,7 @@ Voice_Selector_Unpack3Groups:
 	srl bc, 4
 	extz de
 	muls de, 0x3
-	lda xhl, (0x00f77f:24)
+	lda xhl, (Voice_Selector_FieldSlot_Table+2:24)
 	ldb_sri E, 0x07, 0xEC, 0xE8
 	extz de
 	and bc, 0xF
