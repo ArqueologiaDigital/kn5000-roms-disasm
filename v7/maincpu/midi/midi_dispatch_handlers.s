@@ -32,7 +32,7 @@ MidiCC_Handler_ChannelMapping_Return:
 ; +3 D -> (0x347D), then `call AccWrap_ReplaySavedExpr`; when E == 0 it calls
 ; again with B+1 and D = 4.  +0 (C, always 0x48 here) is loaded but not used
 ; by this reader.  12 entries = the `cp a, 11` bound; the table ends where
-; MidiCC_VoiceParam_0 begins.
+; MidiCC_RxCC64_Sustain begins.
 MidiCC_CC82_Records:
 	.byte 0x48, 0x05, 0x00, 0xfc
 	.byte 0x48, 0x05, 0x40, 0x40
@@ -47,10 +47,10 @@ MidiCC_CC82_Records:
 	.byte 0x48, 0x05, 0x00, 0xfc
 	.byte 0x48, 0x05, 0x00, 0xfc
 	.byte 0x48, 0x06, 0x04, 0x04
-MidiCC_VoiceParam_0:
+MidiCC_RxCC64_Sustain:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_0_Return
+	jr	ugt, MidiCC_RxCC64_Sustain_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -59,10 +59,10 @@ MidiCC_VoiceParam_0:
 ; v7 NAME DISPLACED: `MidiSerial_StatusTable` (0xFCF64D) falls inside the line above in the
 ; correct framing (v10 0xFCFE1E).  Kept as an alias because another v7
 ; file references this address by this name.
-	.set MidiSerial_StatusTable, MidiCC_VoiceParam_0 + 19
+	.set MidiSerial_StatusTable, MidiCC_RxCC64_Sustain + 19
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_0_Return
+	jr	z, MidiCC_RxCC64_Sustain_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -71,12 +71,12 @@ MidiCC_VoiceParam_0:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	calr	MidiCC_Helper_ConditionalESetup
-MidiCC_VoiceParam_0_Return:
+MidiCC_RxCC64_Sustain_Return:
 	ret
-MidiCC_VoiceParam_1:
+MidiCC_RxFunc08:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_1_Return
+	jr	ugt, MidiCC_RxFunc08_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -84,7 +84,7 @@ MidiCC_VoiceParam_1:
 	ld	xix, MidiCC_PartTargets_Func08
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_1_Return
+	jr	z, MidiCC_RxFunc08_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -93,12 +93,12 @@ MidiCC_VoiceParam_1:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiStream_DispatchData_0xB2
-MidiCC_VoiceParam_1_Return:
+MidiCC_RxFunc08_Return:
 	ret
-MidiCC_VoiceParam_2:
+MidiCC_RxFunc09:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_2_Return
+	jr	ugt, MidiCC_RxFunc09_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -106,7 +106,7 @@ MidiCC_VoiceParam_2:
 	ld	xix, MidiCC_PartTargets_Func09
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_2_Return
+	jr	z, MidiCC_RxFunc09_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -115,12 +115,12 @@ MidiCC_VoiceParam_2:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiStream_DispatchData_0xB2
-MidiCC_VoiceParam_2_Return:
+MidiCC_RxFunc09_Return:
 	ret
-MidiCC_VoiceParam_3:
+MidiCC_RxCC1_Modulation:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_3_Return
+	jr	ugt, MidiCC_RxCC1_Modulation_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -128,7 +128,7 @@ MidiCC_VoiceParam_3:
 	ld	xix, MidiCC_PartTargets_CC1_Modulation
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_3_Return
+	jr	z, MidiCC_RxCC1_Modulation_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -137,12 +137,12 @@ MidiCC_VoiceParam_3:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiStream_DispatchData_0x81
-MidiCC_VoiceParam_3_Return:
+MidiCC_RxCC1_Modulation_Return:
 	ret
-MidiCC_VoiceParam_4:
+MidiCC_RxCC7_Volume:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_4_Return
+	jr	ugt, MidiCC_RxCC7_Volume_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -150,7 +150,7 @@ MidiCC_VoiceParam_4:
 	ld	xix, MidiCC_PartTargets_CC7_Volume
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_4_Return
+	jr	z, MidiCC_RxCC7_Volume_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -159,12 +159,12 @@ MidiCC_VoiceParam_4:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiStream_DispatchData_0x16
-MidiCC_VoiceParam_4_Return:
+MidiCC_RxCC7_Volume_Return:
 	ret
-MidiCC_VoiceParam_5:
+MidiCC_RxCC11_Expression:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_5_Return
+	jr	ugt, MidiCC_RxCC11_Expression_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -172,7 +172,7 @@ MidiCC_VoiceParam_5:
 	ld	xix, MidiCC_PartTargets_CC11_Expression
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_4_Return
+	jr	z, MidiCC_RxCC7_Volume_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -181,12 +181,12 @@ MidiCC_VoiceParam_5:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiStream_DispatchData_0x42
-MidiCC_VoiceParam_5_Return:
+MidiCC_RxCC11_Expression_Return:
 	ret
-MidiCC_VoiceParam_6:
+MidiCC_RxCC10_Pan:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_6_Return
+	jr	ugt, MidiCC_RxCC10_Pan_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -194,7 +194,7 @@ MidiCC_VoiceParam_6:
 	ld	xix, MidiCC_PartTargets_CC10_Pan
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_4_Return
+	jr	z, MidiCC_RxCC7_Volume_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -203,12 +203,12 @@ MidiCC_VoiceParam_6:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper6
-MidiCC_VoiceParam_6_Return:
+MidiCC_RxCC10_Pan_Return:
 	ret
-MidiCC_VoiceParam_7:
+MidiCC_RxCC93_Chorus:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_7_Return
+	jr	ugt, MidiCC_RxCC93_Chorus_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -216,7 +216,7 @@ MidiCC_VoiceParam_7:
 	ld	xix, MidiCC_PartTargets_CC93_Chorus
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_7_Return
+	jr	z, MidiCC_RxCC93_Chorus_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -225,11 +225,11 @@ MidiCC_VoiceParam_7:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper6
-MidiCC_VoiceParam_7_Return:
+MidiCC_RxCC93_Chorus_Return:
 	ret
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_8_Return
+	jr	ugt, MidiCC_RxCC94_Celeste_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -237,7 +237,7 @@ MidiCC_VoiceParam_7_Return:
 	ld	xix, MidiCC_PartTargets_CC94_Celeste
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_8_Return
+	jr	z, MidiCC_RxCC94_Celeste_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -246,12 +246,12 @@ MidiCC_VoiceParam_7_Return:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	calr	MidiCC_Helper_ConditionalESetup
-MidiCC_VoiceParam_8_Return:
+MidiCC_RxCC94_Celeste_Return:
 	ret
-MidiCC_VoiceParam_9:
+MidiCC_RxCC91_Reverb:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_9_Return
+	jr	ugt, MidiCC_RxCC91_Reverb_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -259,7 +259,7 @@ MidiCC_VoiceParam_9:
 	ld	xix, MidiCC_PartTargets_CC91_Reverb
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_9_Return
+	jr	z, MidiCC_RxCC91_Reverb_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -272,21 +272,21 @@ MidiCC_VoiceParam_9:
 ; Kept because another v7 file references this address by this name.
 MidiCC_Handler_BitManipulation:
 	cp	c, 96
-	jr	z, MidiCC_VoiceParam_9_Skip
+	jr	z, MidiCC_RxCC91_Reverb_Skip
 	call	MidiCC_Handler_BitManipulation_Code_Helper6
-	jr	MidiCC_VoiceParam_9_Return
-MidiCC_VoiceParam_9_Skip:
+	jr	MidiCC_RxCC91_Reverb_Return
+MidiCC_RxCC91_Reverb_Skip:
 	calr	MidiCC_Helper_ConditionalESetup
-MidiCC_VoiceParam_9_Return:
+MidiCC_RxCC91_Reverb_Return:
 	ret
 MidiCC_StubHandler_A:
 	ret
 MidiCC_StubHandler_B:
 	ret
-MidiCC_VoiceParam_10:
+MidiCC_RxFunc12:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_10_Return
+	jr	ugt, MidiCC_RxFunc12_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -294,7 +294,7 @@ MidiCC_VoiceParam_10:
 	ld	xix, MidiCC_PartTargets_Func12
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_10_Return
+	jr	z, MidiCC_RxFunc12_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -303,21 +303,21 @@ MidiCC_VoiceParam_10:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper4
-MidiCC_VoiceParam_10_Return:
+MidiCC_RxFunc12_Return:
 	ret
-MidiCC_VoiceParam_11:
+MidiCC_RxFunc13:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_11_Return
+	jr	ugt, MidiCC_RxFunc13_Return
 	xor	w, w
-MidiCC_VoiceParam_11_MidEntry:
+MidiCC_RxFunc13_MidEntry:
 	ld	hl, wa
 	sll	wa, 1
 	add	hl, wa
 	ld	xix, MidiCC_PartTargets_Func13
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_11_Return
+	jr	z, MidiCC_RxFunc13_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -326,12 +326,12 @@ MidiCC_VoiceParam_11_MidEntry:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper4
-MidiCC_VoiceParam_11_Return:
+MidiCC_RxFunc13_Return:
 	ret
-MidiCC_VoiceParam_12:
+MidiCC_RxFunc14:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_12_Return
+	jr	ugt, MidiCC_RxFunc14_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -339,7 +339,7 @@ MidiCC_VoiceParam_12:
 	ld	xix, MidiCC_PartTargets_Func14
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_12_Return
+	jr	z, MidiCC_RxFunc14_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -348,12 +348,12 @@ MidiCC_VoiceParam_12:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper4
-MidiCC_VoiceParam_12_Return:
+MidiCC_RxFunc14_Return:
 	ret
-MidiCC_VoiceParam_13:
+MidiCC_RxFunc15:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_VoiceParam_13_Return
+	jr	ugt, MidiCC_RxFunc15_Return
 	xor	w, w
 	ld	hl, wa
 	sll	wa, 1
@@ -361,7 +361,7 @@ MidiCC_VoiceParam_13:
 	ld	xix, MidiCC_PartTargets_Func15
 	ld	bc, (xix+hl)
 	cp c, 255
-	jr	z, MidiCC_VoiceParam_13_Return
+	jr	z, MidiCC_RxFunc15_Return
 	inc	2, xix
 	ld	d, (xix+hl)
 	ld	e, (0x959a:16)
@@ -370,7 +370,7 @@ MidiCC_VoiceParam_13:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper4
-MidiCC_VoiceParam_13_Return:
+MidiCC_RxFunc15_Return:
 	ret
 MidiCC_Handler_BankModeSelect:
 	ld	l, (0x95ce:16)
@@ -555,17 +555,17 @@ MidiCC_Helper_EntryWithEqA:
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper6
 	ret
-MidiCC_Handler_CC4_VoiceParam:
+MidiRx_ProgramChange:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_Handler_CC4_VoiceParam_Return
+	jr	ugt, MidiRx_ProgramChange_Return
 	bit	4, (0xfd57:16)
-	jr	z, MidiCC_Handler_CC4_VoiceParam_Return
+	jr	z, MidiRx_ProgramChange_Return
 	sll	a, 1
 	ld	xix, MidiPC_PartTargets
 	ld	bc, (xix+a)
 	cp c, 255
-	jr	z, MidiCC_Handler_CC4_VoiceParam_Return
+	jr	z, MidiRx_ProgramChange_Return
 	ld	e, (0x9599:16)
 	ld	d, 255:opc
 	ld	a, (0x959b:16)
@@ -573,19 +573,19 @@ MidiCC_Handler_CC4_VoiceParam:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiStream_ExtendedDispatch_0x1
-MidiCC_Handler_CC4_VoiceParam_Return:
+MidiRx_ProgramChange_Return:
 	ret
-MidiCC_Handler_CC6_VoiceParam:
+MidiRx_PitchBend:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_Handler_CC6_VoiceParam_Return
+	jr	ugt, MidiRx_PitchBend_Return
 	bit	6, (0xfd57:16)
-	jr	z, MidiCC_Handler_CC6_VoiceParam_Return
+	jr	z, MidiRx_PitchBend_Return
 	sll	a, 1
 	ld	xix, MidiPB_PartTargets
 	ld	bc, (xix+a)
 	cp c, 255
-	jr	z, MidiCC_Handler_CC6_VoiceParam_Return
+	jr	z, MidiRx_PitchBend_Return
 	ld	e, (0x9599:16)
 	ld	d, (0x959a:16)
 	ld	a, (0x959b:16)
@@ -593,23 +593,23 @@ MidiCC_Handler_CC6_VoiceParam:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper2
-MidiCC_Handler_CC6_VoiceParam_Return:
+MidiRx_PitchBend_Return:
 	ret
-MidiCC_Handler_CC5_VoiceParam:
+MidiRx_ChannelPressure:
 	ld	a, (0x95ce:16)
 	cp	a, 31
-	jr	ugt, MidiCC_Handler_CC5_VoiceParam_Return
+	jr	ugt, MidiRx_ChannelPressure_Return
 	bit	5, (0xfd57:16)
-	jr	z, MidiCC_Handler_CC5_VoiceParam_Return
+	jr	z, MidiRx_ChannelPressure_Return
 	sll	a, 1
 	ld	xix, MidiCP_PartTargets
 ; v7 NAME DISPLACED: `MidiCC_VoiceParam_8` (0xFCFC5B) falls inside the line above in the
 ; correct framing (v10 0xFD042C).  Kept as an alias because another v7
 ; file references this address by this name.
-	.set MidiCC_VoiceParam_8, MidiCC_Handler_CC5_VoiceParam + 22
+	.set MidiCC_VoiceParam_8, MidiRx_ChannelPressure + 22
 	ld	bc, (xix+a)
 	cp c, 255
-	jr	z, MidiCC_Handler_CC5_VoiceParam_Return
+	jr	z, MidiRx_ChannelPressure_Return
 	ld	e, (0x9599:16)
 	ld	d, 127:opc
 	ld	a, (0x959b:16)
@@ -617,7 +617,7 @@ MidiCC_Handler_CC5_VoiceParam:
 	stda16	(0x95a8), bc
 	stda16	(0x95aa), de
 	call	MidiCC_Handler_BitManipulation_Code_Helper4
-MidiCC_Handler_CC5_VoiceParam_Return:
+MidiRx_ChannelPressure_Return:
 	ret
 ; ============================================================================
 ; UIState_ProcessDisplayUpdate - Process a display update event in UI state
@@ -1700,7 +1700,7 @@ Periodic_TimestampCompare_Done:
 ; =====================================================================
 ;
 ; MidiCC_ChannelMappingData (+0x000, 128 x u8): CONTROLLER NUMBER -> CC FUNCTION
-; INDEX (0..47), 0xFF = controller ignored.  Reader MidiCC_Handler_CC3_TableLookup
+; INDEX (0..47), 0xFF = controller ignored.  Reader MidiRx_ControlChange
 ; (0xFCFB63): `ld xix, MidiCC_ChannelMappingData / ld l, (0x9635) /
 ; ld a, (xix+l)`, result kept in (0x9657) and used as the index into the
 ; 48-entry MidiCC_ExtendedRange_Table.  Mapped here: CC0->24 CC1->1 CC6->32
@@ -1718,7 +1718,7 @@ Periodic_TimestampCompare_Done:
 ;
 ; MidiCC_FunctionRxFilter (+0x080, 48 x {u8 bit mask, u8 byte offset}), one per
 ; CC function index (48 = the size of MidiCC_ExtendedRange_Table).  Reader
-; MidiCC_Handler_CC3_TableLookup: `sll a, 1 / ld wa, (<this>+2*func)`; 0xFFFF
+; MidiRx_ControlChange: `sll a, 1 / ld wa, (<this>+2*func)`; 0xFFFF
 ; = always dispatched, else `ld c, (0xfd57 + W) / and c, A / jr z` skips the
 ; function when that bit of the RAM byte array at 0xFD57 is clear (bytes
 ; 0xFD58/0xFD59 are used here; the handlers themselves test 0xFD57 bits
@@ -1783,7 +1783,7 @@ MidiCC_FunctionRxFilter:
 ; ld bc, (xix+hl) / cp c, 255 / jr z / inc 2, xix / ld d, (xix+hl)`.
 ;
 ; MidiCC_PartTargets_CC64_Sustain (+0x0E0): function 0 <- CC64; reader
-; MidiCC_VoiceParam_0 (0xFCFE0B), whose tail MidiCC_Helper_ConditionalESetup
+; MidiCC_RxCC64_Sustain (0xFCFE0B), whose tail MidiCC_Helper_ConditionalESetup
 ; (0xFD036B) replaces E with D when the value is >= 0x40 and with 0 below it:
 ; here D = 0x08.
 MidiCC_PartTargets_CC64_Sustain:
@@ -1796,7 +1796,7 @@ MidiCC_PartTargets_CC64_Sustain:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x17, 0x04, 0x08
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-; MidiCC_PartTargets_Func08 (+0x140): function 8, reader MidiCC_VoiceParam_1
+; MidiCC_PartTargets_Func08 (+0x140): function 8, reader MidiCC_RxFunc08
 ; (0xFCFE4B) -> MidiStream_DispatchData_0xB2.  No controller maps to function 8
 ; in MidiCC_ChannelMappingData, so this table is reachable only if (0x9657) is
 ; set some other way (not searched).
@@ -1809,7 +1809,7 @@ MidiCC_PartTargets_Func08:
 	.byte 0xff, 0xff, 0xff, 0xb7, 0x15, 0x7f, 0xff, 0xff, 0xff, 0xb7, 0x17, 0x7f
 	.byte 0xb7, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-; MidiCC_PartTargets_Func09 (+0x1A0): function 9, reader MidiCC_VoiceParam_2
+; MidiCC_PartTargets_Func09 (+0x1A0): function 9, reader MidiCC_RxFunc09
 ; (0xFCFE8C) -> MidiStream_DispatchData_0xB2.  Unmapped, as function 8.
 MidiCC_PartTargets_Func09:
 	.byte 0xb6, 0x00, 0x7f, 0xb6, 0x01, 0x7f, 0xb6, 0x02, 0x7f, 0xb6, 0x03, 0x7f
@@ -1821,7 +1821,7 @@ MidiCC_PartTargets_Func09:
 	.byte 0xb6, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC1_Modulation (+0x200): function 1 <- CC1, reader
-; MidiCC_VoiceParam_3 (0xFCFECD) -> MidiStream_DispatchData_0x81.
+; MidiCC_RxCC1_Modulation (0xFCFECD) -> MidiStream_DispatchData_0x81.
 MidiCC_PartTargets_CC1_Modulation:
 	.byte 0xb2, 0x00, 0x7f, 0xb2, 0x01, 0x7f, 0xb2, 0x02, 0x7f, 0xb2, 0x03, 0x7f
 	.byte 0xb2, 0x04, 0x7f, 0xb2, 0x05, 0x7f, 0xb2, 0x06, 0x7f, 0xb2, 0x07, 0x7f
@@ -1832,7 +1832,7 @@ MidiCC_PartTargets_CC1_Modulation:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC7_Volume (+0x260): function 2 <- CC7, reader
-; MidiCC_VoiceParam_4 (0xFCFF0E) -> MidiStream_DispatchData_0x16.
+; MidiCC_RxCC7_Volume (0xFCFF0E) -> MidiStream_DispatchData_0x16.
 MidiCC_PartTargets_CC7_Volume:
 	.byte 0x00, 0x03, 0x7f, 0x01, 0x03, 0x7f, 0x02, 0x03, 0x7f, 0x03, 0x03, 0x7f
 	.byte 0x04, 0x03, 0x7f, 0x05, 0x03, 0x7f, 0x06, 0x03, 0x7f, 0x07, 0x03, 0x7f
@@ -1843,7 +1843,7 @@ MidiCC_PartTargets_CC7_Volume:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC11_Expression (+0x2C0): function 3 <- CC11, reader
-; MidiCC_VoiceParam_5 (0xFCFF4F) -> MidiStream_DispatchData_0x42.
+; MidiCC_RxCC11_Expression (0xFCFF4F) -> MidiStream_DispatchData_0x42.
 MidiCC_PartTargets_CC11_Expression:
 	.byte 0xb3, 0x00, 0x7f, 0xb3, 0x01, 0x7f, 0xb3, 0x02, 0x7f, 0xb3, 0x03, 0x7f
 	.byte 0xb3, 0x04, 0x7f, 0xb3, 0x05, 0x7f, 0xb3, 0x06, 0x7f, 0xb3, 0x07, 0x7f
@@ -1854,7 +1854,7 @@ MidiCC_PartTargets_CC11_Expression:
 	.byte 0xff, 0xff, 0xff, 0xb0, 0x01, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC10_Pan (+0x320): function 4 <- CC10, reader
-; MidiCC_VoiceParam_6 (0xFCFF90) -> MidiStream_DispatchData_0x191.
+; MidiCC_RxCC10_Pan (0xFCFF90) -> MidiStream_DispatchData_0x191.
 MidiCC_PartTargets_CC10_Pan:
 	.byte 0x00, 0x08, 0x7f, 0x01, 0x08, 0x7f, 0x02, 0x08, 0x7f, 0x03, 0x08, 0x7f
 	.byte 0x04, 0x08, 0x7f, 0x05, 0x08, 0x7f, 0x06, 0x08, 0x7f, 0x07, 0x08, 0x7f
@@ -1865,7 +1865,7 @@ MidiCC_PartTargets_CC10_Pan:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC93_Chorus (+0x380): function 5 <- CC93, reader
-; MidiCC_VoiceParam_7 (0xFCFFD1) -> MidiStream_DispatchData_0x191.
+; MidiCC_RxCC93_Chorus (0xFCFFD1) -> MidiStream_DispatchData_0x191.
 MidiCC_PartTargets_CC93_Chorus:
 	.byte 0x00, 0x05, 0x7f, 0x01, 0x05, 0x7f, 0x02, 0x05, 0x7f, 0x03, 0x05, 0x7f
 	.byte 0x04, 0x05, 0x7f, 0x05, 0x05, 0x7f, 0x06, 0x05, 0x7f, 0x07, 0x05, 0x7f
@@ -1886,7 +1886,7 @@ MidiCC_PartTargets_CC93_Chorus:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC94_Celeste (+0x3E0): function 6 <- CC94 (MIDI 1.0
-; "effect 4 depth", formerly celeste), reader MidiCC_VoiceParam_8 (0xFD0012);
+; "effect 4 depth", formerly celeste), reader MidiCC_RxCC94_Celeste (0xFD0012);
 ; D = 0x40 here where the other level tables hold 0x7F.
 MidiCC_PartTargets_CC94_Celeste:
 	.byte 0x00, 0x04, 0x40, 0x01, 0x04, 0x40, 0x02, 0x04, 0x40, 0x03, 0x04, 0x40
@@ -1902,7 +1902,7 @@ MidiCC_PartTargets_CC94_Celeste:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC91_Reverb (+0x440): function 7 <- CC91, reader
-; MidiCC_VoiceParam_9 (0xFD0052) -> MidiStream_DispatchData_0x191.
+; MidiCC_RxCC91_Reverb (0xFD0052) -> MidiStream_DispatchData_0x191.
 MidiCC_PartTargets_CC91_Reverb:
 	.byte 0x00, 0x07, 0x7f, 0x01, 0x07, 0x7f, 0x02, 0x07, 0x7f, 0x03, 0x07, 0x7f
 	.byte 0x04, 0x07, 0x7f, 0x05, 0x07, 0x7f, 0x06, 0x07, 0x7f, 0x07, 0x07, 0x7f
@@ -1941,7 +1941,7 @@ MidiCC_PartTargets_Unread_B:
 	.byte 0xbd, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_Func12..15 (+0x560, +0x5C0, +0x620, +0x680): functions
-; 12-15, readers MidiCC_VoiceParam_10 (0xFD009F), _11 (0xFD00E0), _12
+; 12-15, readers MidiCC_RxFunc12 (0xFD009F), _11 (0xFD00E0), _12
 ; (0xFD0121), _13 (0xFD0162), all -> MidiStream_DispatchData_0xD0.  No
 ; controller maps to these functions in MidiCC_ChannelMappingData.
 MidiCC_PartTargets_Func12:
@@ -1954,7 +1954,7 @@ MidiCC_PartTargets_Func12:
 	.byte 0xb8, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_Func13 (+0x5C0): same 32 x 3-byte record layout as the tables
-; above; function 13, reader MidiCC_VoiceParam_11 (0xFD00E0) -> MidiStream_DispatchData_0xD0.
+; above; function 13, reader MidiCC_RxFunc13 (0xFD00E0) -> MidiStream_DispatchData_0xD0.
 MidiCC_PartTargets_Func13:
 	.byte 0xb9, 0x00, 0x7f, 0xb9, 0x01, 0x7f, 0xb9, 0x02, 0x7f, 0xb9, 0x03, 0x7f
 	.byte 0xb9, 0x04, 0x7f, 0xb9, 0x05, 0x7f, 0xb9, 0x06, 0x7f, 0xb9, 0x07, 0x7f
@@ -1965,7 +1965,7 @@ MidiCC_PartTargets_Func13:
 	.byte 0xb9, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_Func14 (+0x620): same 32 x 3-byte record layout as the tables
-; above; function 14, reader MidiCC_VoiceParam_12 (0xFD0121) -> MidiStream_DispatchData_0xD0.
+; above; function 14, reader MidiCC_RxFunc14 (0xFD0121) -> MidiStream_DispatchData_0xD0.
 MidiCC_PartTargets_Func14:
 	.byte 0xba, 0x00, 0x7f, 0xba, 0x01, 0x7f, 0xba, 0x02, 0x7f, 0xba, 0x03, 0x7f
 	.byte 0xba, 0x04, 0x7f, 0xba, 0x05, 0x7f, 0xba, 0x06, 0x7f, 0xba, 0x07, 0x7f
@@ -1976,7 +1976,7 @@ MidiCC_PartTargets_Func14:
 	.byte 0xba, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_Func15 (+0x680): same 32 x 3-byte record layout as the tables
-; above; function 15, reader MidiCC_VoiceParam_13 (0xFD0162) -> MidiStream_DispatchData_0xD0.
+; above; function 15, reader MidiCC_RxFunc15 (0xFD0162) -> MidiStream_DispatchData_0xD0.
 MidiCC_PartTargets_Func15:
 	.byte 0xbb, 0x00, 0x7f, 0xbb, 0x01, 0x7f, 0xbb, 0x02, 0x7f, 0xbb, 0x03, 0x7f
 	.byte 0xbb, 0x04, 0x7f, 0xbb, 0x05, 0x7f, 0xbb, 0x06, 0x7f, 0xbb, 0x07, 0x7f
@@ -2007,7 +2007,7 @@ MidiCC_PartTargets_CC120_AllSoundOff:
 	.short 0x10ae, 0x11ae, 0x12ae, 0x13ae, 0x14ae, 0x15ae, 0xffff, 0xffff
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
 ; MidiPC_PartTargets (+0x760): PROGRAM CHANGE (status Cx).  Reader
-; MidiCC_Handler_CC4_VoiceParam (0xFD039C, MidiCC_LowRange_Table slot 4):
+; MidiRx_ProgramChange (0xFD039C, MidiCC_LowRange_Table slot 4):
 ; E = program number (0x9635), D = 0xFF, gated by bit 4 of (0xFD57),
 ; -> MidiStream_ExtendedDispatch_0x1.
 MidiPC_PartTargets:
@@ -2016,7 +2016,7 @@ MidiPC_PartTargets:
 	.short 0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0xffff, 0x0017
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
 ; MidiPB_PartTargets (+0x7A0): PITCH BEND (status Ex).  Reader
-; MidiCC_Handler_CC6_VoiceParam (0xFD03D8, slot 6): E = LSB (0x9635),
+; MidiRx_PitchBend (0xFD03D8, slot 6): E = LSB (0x9635),
 ; D = MSB (0x9636), gated by bit 6 of (0xFD57), -> MidiStream_DispatchData_0x67.
 MidiPB_PartTargets:
 	.short 0x00b1, 0x01b1, 0x02b1, 0x03b1, 0x04b1, 0x05b1, 0x06b1, 0x07b1
@@ -2024,7 +2024,7 @@ MidiPB_PartTargets:
 	.short 0x10b1, 0x11b1, 0x12b1, 0x13b1, 0xffff, 0x15b1, 0xffff, 0x17b1
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
 ; MidiCP_PartTargets (+0x7E0): CHANNEL PRESSURE (status Dx).  Reader
-; MidiCC_Handler_CC5_VoiceParam (0xFD0416, slot 5): E = pressure (0x9635),
+; MidiRx_ChannelPressure (0xFD0416, slot 5): E = pressure (0x9635),
 ; D = 0x7F, gated by bit 5 of (0xFD57), -> MidiStream_DispatchData_0xD0.
 MidiCP_PartTargets:
 	.short 0x00b4, 0x01b4, 0x02b4, 0x03b4, 0x04b4, 0x05b4, 0x06b4, 0x07b4
