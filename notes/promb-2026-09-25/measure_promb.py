@@ -8,6 +8,8 @@ QUESTION THIS ANSWERS
         scripts/analysis/lane_worklists.py uses (grade UNKNOWN, or a header that
         admits ignorance, or undocumented data embedded in code; never CODE);
       * the data-as-code marker count (the same ABS regex lane_worklists.py uses);
+      * numeric branch operands, counted with symbolize_numeric_branches.py's
+        own BRANCH_RE (jr / jrl / calr / call / jp with a number);
       * the numeric ROM-address operands still in the source, by mnemonic and by
         which image the value lands in (prom_b 0xF00000-0xF7FFFF, prom_a
         0xF80000-0xFFFFFF);
@@ -99,6 +101,18 @@ def text_counts():
             if 0xF00000 <= v <= 0xFFFFFF:
                 nums[(mn, "prom_b" if v < 0xF80000 else "prom_a")] += 1
     print("data-as-code markers: %d" % nabs)
+    # numeric branch operands, with the branch symboliser's own line regex
+    import sys as _s
+    _s.path.insert(0, os.path.join(ROOT, "scripts", "converters"))
+    _s.path.insert(0, os.path.join(ROOT, "scripts", "analysis"))
+    import symbolize_numeric_branches as snb
+    nb = collections.Counter()
+    for ln in L:
+        m = snb.BRANCH_RE.match(ln)
+        if m:
+            nb[m.group("mn")] += 1
+    print("numeric branch operands (symboliser regex): %d  %s" % (
+        sum(nb.values()), " ".join("%s %d" % kv for kv in sorted(nb.items()))))
     print("labels:")
     for k, v in sorted(labels.items()):
         print("  %-32s %6d" % (k, v))
