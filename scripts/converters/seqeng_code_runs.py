@@ -88,6 +88,9 @@ def main():
                     "is the same byte window found there, and is it CODE in that image's source?")
     ap.add_argument("--require-xref-code", action="store_true",
                     help="accept only zones whose bytes are code in the --xref image")
+    ap.add_argument("--all-data", action="store_true",
+                    help="consider every non-CODE data region, not only embedded-in-code ones "
+                         "(use with --xref v10 --require-xref-code, or review each zone)")
     ap.add_argument("--exclude-label", default=None,
                     help="regex: skip candidates whose census label matches (known data objects)")
     ap.add_argument("--apply", action="store_true")
@@ -109,7 +112,9 @@ def main():
     for r in json.load(open(a.census))["regions"]:
         if r["image"] != a.image or r["rel"] != a.file or r["grade"] == "CODE":
             continue
-        if not r.get("embedded_in_code") or r["size"] < a.min_size:
+        if r["size"] < a.min_size or r["grade"] == "FILLER":
+            continue
+        if not r.get("embedded_in_code") and not (a.all_data and r["bucket"] == "data"):
             continue
         if only and r["addr"] not in only:
             continue

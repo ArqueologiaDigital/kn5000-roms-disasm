@@ -6636,9 +6636,10 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	ld	(xsp+6), a
 	ld	xwa, (xsp+16)
 	ld	wa, (xwa+46)
-	.byte 0x9f	; v10 does not spell this byte either
-	.byte 0x04	; v10 does not spell this byte either
-	.byte 0xf0	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	; v10 does not spell this byte either
+	cp	wa, (xsp+4)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip2
 	ld	xwa, (xsp+16)
 	; v10 does not spell this byte either
@@ -10921,7 +10922,7 @@ Rhythm_InitDataBlock:
 	.zero 128
 
 Rhythm_QueuePartChangeEvent:
-	call	16624672
+	call	SysEx_ApplyVoiceParam_49
 	ret
 Seq_ReadTempoLookup:
 	xor	xhl, xhl
