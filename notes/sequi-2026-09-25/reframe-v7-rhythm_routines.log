@@ -1,0 +1,293 @@
+0xF556F6-0xF5572E: 11 old lines (5 dirty) -> 12 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF5570B  ld_rr8b l, xiy, l                        || unidasm: ld L,(XIY+L)
+    0xF55710  cp l, 0:i3                               || unidasm: cp L,0
+    0xF55712  jr z, 43                                 || unidasm: jr Z,0xf5573f
+    0xF55714  ld h, (0x334a:16)                        || unidasm: ld H,(0x334a)
+    0xF55718  cp l, 1:i3                               || unidasm: cp L,1
+    0xF5571A  jr z, 4                                  || unidasm: jr Z,0xf55720
+    0xF5571C  ld h, (0x334b:16)                        || unidasm: ld H,(0x334b)
+    0xF55720  bit 5, h                                 || unidasm: bit 0x05,H
+    0xF55723  jr z, 9                                  || unidasm: jr Z,0xf5572e
+    0xF55725  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF55727  or (0x3349:16), 0x01                     || unidasm: or (0x3349),0x01
+    0xF5572C  jr 17                                    || unidasm: jr T,0xf5573f
+REFUSED 0xF55678: absurd decode 'swi 0' at 0xF5568C
+0xF553DE-0xF555F3: 77 old lines (71 dirty) -> 153 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF553EF  and (0x328b:16), 0xc0                    || unidasm: and (0x328b),0xc0
+    0xF553F4  ld a, (0x3276:16)                        || unidasm: ld A,(0x3276)
+    0xF553F8  and a, 63                                || unidasm: and A,0x3f
+    0xF553FB  jr nz, 93                                || unidasm: jr NZ,0xf5545a
+    0xF553FD  ld a, (0x327d:16)                        || unidasm: ld A,(0x327d)
+    0xF55401  and a, 63                                || unidasm: and A,0x3f
+    0xF55404  jr z, 84                                 || unidasm: jr Z,0xf5545a
+    0xF55406  and (0xfc5f:16), 0xbf                    || unidasm: and (0xfc5f),0xbf
+    0xF5540B  ld a, (0x3277:16)                        || unidasm: ld A,(0x3277)
+    0xF5540F  and a, 63                                || unidasm: and A,0x3f
+    0xF55412  jr z, 10                                 || unidasm: jr Z,0xf5541e
+    0xF55414  or (0xfc5f:16), 0x80                     || unidasm: or (0xfc5f),0x80
+    0xF55419  or (0x3260:16), 0x02                     || unidasm: or (0x3260),0x02
+    0xF5541E  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF55420  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF55422  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF55424  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF55426  calr 56514                               || unidasm: calr 0xf530eb
+    0xF55429  and (0x3260:16), 0xfe                    || unidasm: and (0x3260),0xfe
+    0xF5542E  and (0x328f:16), 0xfd                    || unidasm: and (0x328f),0xfd
+    0xF55433  ld a, (0x3277:16)                        || unidasm: ld A,(0x3277)
+    0xF55437  or a, (0x327a:16)                        || unidasm: or A,(0x327a)
+    0xF5543B  or a, (0x327b:16)                        || unidasm: or A,(0x327b)
+    0xF5543F  or a, (0x327c:16)                        || unidasm: or A,(0x327c)
+    0xF55443  or a, (0x3278:16)                        || unidasm: or A,(0x3278)
+    0xF55447  or a, (0x3279:16)                        || unidasm: or A,(0x3279)
+    0xF5544B  and a, 63                                || unidasm: and A,0x3f
+    0xF5544E  jr nz, 10                                || unidasm: jr NZ,0xf5545a
+    0xF55450  or (0x31e8:16), 0x10                     || unidasm: or (0x31e8),0x10
+    0xF55455  or (0x31e8:16), 0x04                     || unidasm: or (0x31e8),0x04
+    0xF5545A  ld a, (0x3277:16)                        || unidasm: ld A,(0x3277)
+    0xF5545E  and a, 63                                || unidasm: and A,0x3f
+    0xF55461  jr nz, 93                                || unidasm: jr NZ,0xf554c0
+    0xF55463  ld a, (0x327e:16)                        || unidasm: ld A,(0x327e)
+    0xF55467  and a, 63                                || unidasm: and A,0x3f
+    0xF5546A  jr z, 84                                 || unidasm: jr Z,0xf554c0
+    0xF5546C  and (0xfc5f:16), 0x7f                    || unidasm: and (0xfc5f),0x7f
+    0xF55471  ld a, (0x3276:16)                        || unidasm: ld A,(0x3276)
+    0xF55475  and a, 63                                || unidasm: and A,0x3f
+    0xF55478  jr z, 10                                 || unidasm: jr Z,0xf55484
+    0xF5547A  or (0xfc5f:16), 0x40                     || unidasm: or (0xfc5f),0x40
+    0xF5547F  or (0x3260:16), 0x01                     || unidasm: or (0x3260),0x01
+    0xF55484  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF55486  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF55488  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF5548A  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF5548C  calr 56412                               || unidasm: calr 0xf530eb
+    0xF5548F  and (0x3260:16), 0xfd                    || unidasm: and (0x3260),0xfd
+    0xF55494  and (0x328f:16), 0xfb                    || unidasm: and (0x328f),0xfb
+    0xF55499  ld a, (0x3276:16)                        || unidasm: ld A,(0x3276)
+    0xF5549D  or a, (0x327a:16)                        || unidasm: or A,(0x327a)
+    0xF554A1  or a, (0x327b:16)                        || unidasm: or A,(0x327b)
+    0xF554A5  or a, (0x327c:16)                        || unidasm: or A,(0x327c)
+    0xF554A9  or a, (0x3278:16)                        || unidasm: or A,(0x3278)
+    0xF554AD  or a, (0x3279:16)                        || unidasm: or A,(0x3279)
+    0xF554B1  and a, 63                                || unidasm: and A,0x3f
+    0xF554B4  jr nz, 10                                || unidasm: jr NZ,0xf554c0
+    0xF554B6  or (0x31e8:16), 0x10                     || unidasm: or (0x31e8),0x10
+    0xF554BB  or (0x31e8:16), 0x04                     || unidasm: or (0x31e8),0x04
+    0xF554C0  ld a, (0x327a:16)                        || unidasm: ld A,(0x327a)
+    0xF554C4  and a, 63                                || unidasm: and A,0x3f
+    0xF554C7  jr nz, 64                                || unidasm: jr NZ,0xf55509
+    0xF554C9  ld a, (0x3281:16)                        || unidasm: ld A,(0x3281)
+    0xF554CD  and a, 63                                || unidasm: and A,0x3f
+    0xF554D0  jr z, 55                                 || unidasm: jr Z,0xf55509
+    0xF554D2  and (0xfc5f:16), 0xfb                    || unidasm: and (0xfc5f),0xfb
+    0xF554D7  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF554D9  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF554DB  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF554DD  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF554DF  calr 56329                               || unidasm: calr 0xf530eb
+    0xF554E2  and (0x3264:16), 0xfe                    || unidasm: and (0x3264),0xfe
+    0xF554E7  ld a, (0x327b:16)                        || unidasm: ld A,(0x327b)
+    0xF554EB  or a, (0x327c:16)                        || unidasm: or A,(0x327c)
+    0xF554EF  or a, (0x3276:16)                        || unidasm: or A,(0x3276)
+    0xF554F3  or a, (0x3277:16)                        || unidasm: or A,(0x3277)
+    0xF554F7  or a, (0x3278:16)                        || unidasm: or A,(0x3278)
+    0xF554FB  or a, (0x3279:16)                        || unidasm: or A,(0x3279)
+    0xF554FF  and a, 63                                || unidasm: and A,0x3f
+    0xF55502  jr nz, 5                                 || unidasm: jr NZ,0xf55509
+    0xF55504  or (0x31e8:16), 0x08                     || unidasm: or (0x31e8),0x08
+    0xF55509  ld a, (0x327b:16)                        || unidasm: ld A,(0x327b)
+    0xF5550D  and a, 63                                || unidasm: and A,0x3f
+    0xF55510  jr nz, 64                                || unidasm: jr NZ,0xf55552
+    0xF55512  ld a, (0x3282:16)                        || unidasm: ld A,(0x3282)
+    0xF55516  and a, 63                                || unidasm: and A,0x3f
+    0xF55519  jr z, 55                                 || unidasm: jr Z,0xf55552
+    0xF5551B  and (0xfc5f:16), 0xf7                    || unidasm: and (0xfc5f),0xf7
+    0xF55520  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF55522  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF55524  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF55526  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF55528  calr 56256                               || unidasm: calr 0xf530eb
+    0xF5552B  and (0x3264:16), 0xfd                    || unidasm: and (0x3264),0xfd
+    0xF55530  ld a, (0x327a:16)                        || unidasm: ld A,(0x327a)
+    0xF55534  or a, (0x327c:16)                        || unidasm: or A,(0x327c)
+    0xF55538  or a, (0x3276:16)                        || unidasm: or A,(0x3276)
+    0xF5553C  or a, (0x3277:16)                        || unidasm: or A,(0x3277)
+    0xF55540  or a, (0x3278:16)                        || unidasm: or A,(0x3278)
+    0xF55544  or a, (0x3279:16)                        || unidasm: or A,(0x3279)
+    0xF55548  and a, 63                                || unidasm: and A,0x3f
+    0xF5554B  jr nz, 5                                 || unidasm: jr NZ,0xf55552
+    0xF5554D  or (0x31e8:16), 0x08                     || unidasm: or (0x31e8),0x08
+    0xF55552  ld a, (0x327c:16)                        || unidasm: ld A,(0x327c)
+    0xF55556  and a, 63                                || unidasm: and A,0x3f
+    0xF55559  jr nz, 64                                || unidasm: jr NZ,0xf5559b
+    0xF5555B  ld a, (0x3283:16)                        || unidasm: ld A,(0x3283)
+    0xF5555F  and a, 63                                || unidasm: and A,0x3f
+    0xF55562  jr z, 55                                 || unidasm: jr Z,0xf5559b
+    0xF55564  and (0xfc60:16), 0xfb                    || unidasm: and (0xfc60),0xfb
+    0xF55569  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF5556B  ld d, 6:opc                              || unidasm: ld D,0x06
+    0xF5556D  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF5556F  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF55571  calr 56183                               || unidasm: calr 0xf530eb
+    0xF55574  and (0x3264:16), 0xfb                    || unidasm: and (0x3264),0xfb
+    0xF55579  ld a, (0x327a:16)                        || unidasm: ld A,(0x327a)
+    0xF5557D  or a, (0x327b:16)                        || unidasm: or A,(0x327b)
+    0xF55581  or a, (0x3276:16)                        || unidasm: or A,(0x3276)
+    0xF55585  or a, (0x3277:16)                        || unidasm: or A,(0x3277)
+    0xF55589  or a, (0x3278:16)                        || unidasm: or A,(0x3278)
+    0xF5558D  or a, (0x3279:16)                        || unidasm: or A,(0x3279)
+    0xF55591  and a, 63                                || unidasm: and A,0x3f
+    0xF55594  jr nz, 5                                 || unidasm: jr NZ,0xf5559b
+    0xF55596  or (0x31e8:16), 0x08                     || unidasm: or (0x31e8),0x08
+    0xF5559B  ld a, (0x3278:16)                        || unidasm: ld A,(0x3278)
+    0xF5559F  and a, 63                                || unidasm: and A,0x3f
+    0xF555A2  jr nz, 35                                || unidasm: jr NZ,0xf555c7
+    0xF555A4  ld a, (0x327f:16)                        || unidasm: ld A,(0x327f)
+    0xF555A8  and a, 63                                || unidasm: and A,0x3f
+    0xF555AB  jr z, 26                                 || unidasm: jr Z,0xf555c7
+    0xF555AD  and (0xfc5f:16), 0xef                    || unidasm: and (0xfc5f),0xef
+    0xF555B2  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF555B4  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF555B6  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF555B8  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF555BA  calr 56110                               || unidasm: calr 0xf530eb
+    0xF555BD  and (0x3261:16), 0xfe                    || unidasm: and (0x3261),0xfe
+    0xF555C2  or (0x31e8:16), 0x04                     || unidasm: or (0x31e8),0x04
+    0xF555C7  ld a, (0x3279:16)                        || unidasm: ld A,(0x3279)
+    0xF555CB  and a, 63                                || unidasm: and A,0x3f
+    0xF555CE  jr nz, 35                                || unidasm: jr NZ,0xf555f3
+    0xF555D0  ld a, (0x3280:16)                        || unidasm: ld A,(0x3280)
+    0xF555D4  and a, 63                                || unidasm: and A,0x3f
+    0xF555D7  jr z, 26                                 || unidasm: jr Z,0xf555f3
+    0xF555D9  and (0xfc5f:16), 0xdf                    || unidasm: and (0xfc5f),0xdf
+    0xF555DE  ld e, 72:opc                             || unidasm: ld E,0x48
+    0xF555E0  ld d, 5:opc                              || unidasm: ld D,0x05
+    0xF555E2  ld a, 0:opc                              || unidasm: ld A,0x00
+    0xF555E4  ld w, 0:opc                              || unidasm: ld W,0x00
+    0xF555E6  calr 56066                               || unidasm: calr 0xf530eb
+    0xF555E9  and (0x3261:16), 0xfd                    || unidasm: and (0x3261),0xfd
+    0xF555EE  or (0x31e8:16), 0x04                     || unidasm: or (0x31e8),0x04
+0xF55374-0xF553CC: 16 old lines (10 dirty) -> 19 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF55387  ld (0x31e7:16), a                        || unidasm: ld (0x31e7),A
+    0xF5538B  or (0x3257:16), 0x01                     || unidasm: or (0x3257),0x01
+    0xF55390  cp (0x31e4:16), 0                        || unidasm: cp (0x31e4),0x00
+    0xF55395  jr nz, 12                                || unidasm: jr NZ,0xf553a3
+    0xF55397  cp (0x31e3:16), 48                       || unidasm: cp (0x31e3),0x30
+    0xF5539C  jr c, 5                                  || unidasm: jr C,0xf553a3
+    0xF5539E  and (0x328d:16), 0xc0                    || unidasm: and (0x328d),0xc0
+    0xF553A3  ld a, (0x326f:16)                        || unidasm: ld A,(0x326f)
+    0xF553A7  and a, 3                                 || unidasm: and A,0x03
+    0xF553AA  jr nz, 6                                 || unidasm: jr NZ,0xf553b2
+    0xF553AC  bit 0, (0x3270:16)                       || unidasm: bit 0,(0x3270)
+    0xF553B0  jr z, 21                                 || unidasm: jr Z,0xf553c7
+    0xF553B2  ld a, (0x328a:16)                        || unidasm: ld A,(0x328a)
+    0xF553B6  and a, 63                                || unidasm: and A,0x3f
+    0xF553B9  jr nz, 17                                || unidasm: jr NZ,0xf553cc
+    0xF553BB  and (0x326f:16), 0xfc                    || unidasm: and (0x326f),0xfc
+    0xF553C0  and (0x3270:16), 0xfe                    || unidasm: and (0x3270),0xfe
+    0xF553C5  jr 5                                     || unidasm: jr T,0xf553cc
+    0xF553C7  and (0x328a:16), 0xc0                    || unidasm: and (0x328a),0xc0
+0xF55150-0xF5518A: 12 old lines (6 dirty) -> 14 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF5515F  pushw wa                                 || unidasm: push WA
+    0xF55160  ld a, (xix+3)                            || unidasm: ld A,(XIX+0x03)
+    0xF55163  ld (0x3394:16), a                        || unidasm: ld (0x3394),A
+    0xF55167  ld a, (xix+6)                            || unidasm: ld A,(XIX+0x06)
+    0xF5516A  ld (0x3397:16), a                        || unidasm: ld (0x3397),A
+    0xF5516E  ld a, (xix+7)                            || unidasm: ld A,(XIX+0x07)
+    0xF55171  ld (0x3398:16), a                        || unidasm: ld (0x3398),A
+    0xF55175  ld a, (xix+8)                            || unidasm: ld A,(XIX+0x08)
+    0xF55178  calr 64040                               || unidasm: calr 0xf54ba3
+    0xF5517B  bit 4, (0x3258:16)                       || unidasm: bit 4,(0x3258)
+    0xF5517F  jr nz, 12                                || unidasm: jr NZ,0xf5518d
+    0xF55181  bit 3, (0x3258:16)                       || unidasm: bit 3,(0x3258)
+    0xF55185  jr z, 3                                  || unidasm: jr Z,0xf5518a
+    0xF55187  calr 64077                               || unidasm: calr 0xf54bd7
+0xF5510A-0xF5512B: 9 old lines (3 dirty) -> 6 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF55119  calr 64135                               || unidasm: calr 0xf54ba3
+    0xF5511C  bit 4, (0x3258:16)                       || unidasm: bit 4,(0x3258)
+    0xF55120  jr nz, 12                                || unidasm: jr NZ,0xf5512e
+    0xF55122  bit 3, (0x3258:16)                       || unidasm: bit 3,(0x3258)
+    0xF55126  jr z, 3                                  || unidasm: jr Z,0xf5512b
+    0xF55128  calr 64172                               || unidasm: calr 0xf54bd7
+0xF54EEA-0xF54F09: 8 old lines (2 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54EF9  ld xiy, Rhythm_VelocityTable_A           || unidasm: ld XIY,0x00f54f2a
+    0xF54EFE  bit 2, (0x3258:16)                       || unidasm: bit 2,(0x3258)
+    0xF54F02  jr z, 5                                  || unidasm: jr Z,0xf54f09
+    0xF54F04  ld xiy, Rhythm_VelocityTable_A_0x31      || unidasm: ld XIY,0x00f54f5b
+0xF54E1F-0xF54E4A: 10 old lines (4 dirty) -> 7 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54E2F  ld xiy, Rhythm_InstrMapTable_Default     || unidasm: ld XIY,0x00f54cc6
+    0xF54E34  bit 2, (0x3258:16)                       || unidasm: bit 2,(0x3258)
+    0xF54E38  jr z, 5                                  || unidasm: jr Z,0xf54e3f
+    0xF54E3A  ld xiy, Rhythm_InstrMapTable_Default_0x31 || unidasm: ld XIY,0x00f54cf7
+    0xF54E3F  bit 3, (0x3258:16)                       || unidasm: bit 3,(0x3258)
+    0xF54E43  jr z, 5                                  || unidasm: jr Z,0xf54e4a
+    0xF54E45  ld xiy, Rhythm_InstrMapTable_Default_0x62 || unidasm: ld XIY,0x00f54d28
+0xF54DCD-0xF54DF0: 8 old lines (2 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54DE0  ld xiy, Rhythm_PitchShiftTable_Default   || unidasm: ld XIY,0x00f54e6b
+    0xF54DE5  bit 3, (0x3258:16)                       || unidasm: bit 3,(0x3258)
+    0xF54DE9  jr z, 5                                  || unidasm: jr Z,0xf54df0
+    0xF54DEB  ld xiy, Rhythm_PitchShiftTable_Default_0x31 || unidasm: ld XIY,0x00f54e9c
+0xF54D81-0xF54DB8: 13 old lines (7 dirty) -> 13 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54D90  cp (0x3230:16), 12                       || unidasm: cp (0x3230),0x0c
+    0xF54D95  jr c, 11                                 || unidasm: jr C,0xf54da2
+    0xF54D97  cp w, (0x3230:16)                        || unidasm: cp W,(0x3230)
+    0xF54D9B  jr c, 5                                  || unidasm: jr C,0xf54da2
+    0xF54D9D  sub w, 12                                || unidasm: sub W,0x0c
+    0xF54DA0  jr -11                                   || unidasm: jr T,0xf54d97
+    0xF54DA2  ld a, w                                  || unidasm: ld A,W
+    0xF54DA4  bit 0, (0x3291:16)                       || unidasm: bit 0,(0x3291)
+    0xF54DA8  jr z, 9                                  || unidasm: jr Z,0xf54db3
+    0xF54DAA  cp a, (0x3292:16)                        || unidasm: cp A,(0x3292)
+    0xF54DAE  jr nc, 3                                 || unidasm: jr NC,0xf54db3
+    0xF54DB0  add a, 12                                || unidasm: add A,0x0c
+    0xF54DB3  and (0x3291:16), 0xfe                    || unidasm: and (0x3291),0xfe
+0xF54C6C-0xF54C96: 10 old lines (4 dirty) -> 7 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54C7B  ld xiy, Rhythm_InstrMapTable_Default     || unidasm: ld XIY,0x00f54cc6
+    0xF54C80  bit 2, (0x3258:16)                       || unidasm: bit 2,(0x3258)
+    0xF54C84  jr z, 5                                  || unidasm: jr Z,0xf54c8b
+    0xF54C86  ld xiy, Rhythm_InstrMapTable_Default_0x31 || unidasm: ld XIY,0x00f54cf7
+    0xF54C8B  bit 3, (0x3258:16)                       || unidasm: bit 3,(0x3258)
+    0xF54C8F  jr z, 5                                  || unidasm: jr Z,0xf54c96
+    0xF54C91  ld xiy, Rhythm_InstrMapTable_Default_0x62 || unidasm: ld XIY,0x00f54d28
+REFUSED: dirty stretch at 0xF54C4D follows a terminator (ret) -- could be a data island
+0xF54B17-0xF54B9B: 26 old lines (15 dirty) -> 27 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54B2A  cp a, 145                                || unidasm: cp A,0x91
+    0xF54B2D  jr nz, 108                               || unidasm: jr NZ,0xf54b9b
+    0xF54B2F  call RingBuf_AdvanceIndex                || unidasm: call 0xf53c55
+    0xF54B33  call RingBuf_AdvanceIndex                || unidasm: call 0xf53c55
+    0xF54B37  pushw iy                                 || unidasm: push IY
+    0xF54B38  call RingBuf_AdvanceIndex                || unidasm: call 0xf53c55
+    0xF54B3C  ld_rrb a, xhl, iy                        || unidasm: ld A,(XHL+IY)
+    0xF54B41  ld (0x3394:16), a                        || unidasm: ld (0x3394),A
+    0xF54B45  calr 107                                 || unidasm: calr 0xf54bb3
+    0xF54B48  ld_rrb a, xhl, iy                        || unidasm: ld A,(XHL+IY)
+    0xF54B4D  ld (0x3397:16), a                        || unidasm: ld (0x3397),A
+    0xF54B51  call RingBuf_AdvanceIndex                || unidasm: call 0xf53c55
+    0xF54B55  ld_rrb a, xhl, iy                        || unidasm: ld A,(XHL+IY)
+    0xF54B5A  ld (0x3398:16), a                        || unidasm: ld (0x3398),A
+    0xF54B5E  call RingBuf_AdvanceIndex                || unidasm: call 0xf53c55
+    0xF54B62  ld_rrb a, xhl, iy                        || unidasm: ld A,(XHL+IY)
+    0xF54B67  calr 57                                  || unidasm: calr 0xf54ba3
+    0xF54B6A  bit 4, (0x3258:16)                       || unidasm: bit 4,(0x3258)
+    0xF54B6E  jr nz, 12                                || unidasm: jr NZ,0xf54b7c
+    0xF54B70  bit 3, (0x3258:16)                       || unidasm: bit 3,(0x3258)
+    0xF54B74  jr z, 3                                  || unidasm: jr Z,0xf54b79
+    0xF54B76  calr 94                                  || unidasm: calr 0xf54bd7
+    0xF54B85  call RingBuf_AdvanceIndex                || unidasm: call 0xf53c55
+    0xF54B89  ld a, (0x3394:16)                        || unidasm: ld A,(0x3394)
+    0xF54B92  calr 30                                  || unidasm: calr 0xf54bb3
+    0xF54B95  calr 27                                  || unidasm: calr 0xf54bb3
+    0xF54B98  jrl -193                                 || unidasm: jrl T,0xf54ada
+0xF54A86-0xF54AAE: 9 old lines (3 dirty) -> 7 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54A97  ld_rrb a, xhl, iy                        || unidasm: ld A,(XHL+IY)
+    0xF54A9C  calr 260                                 || unidasm: calr 0xf54ba3
+    0xF54A9F  bit 4, (0x3258:16)                       || unidasm: bit 4,(0x3258)
+    0xF54AA3  jr nz, 12                                || unidasm: jr NZ,0xf54ab1
+    0xF54AA5  bit 3, (0x3258:16)                       || unidasm: bit 3,(0x3258)
+    0xF54AA9  jr z, 3                                  || unidasm: jr Z,0xf54aae
+    0xF54AAB  calr 297                                 || unidasm: calr 0xf54bd7
+0xF54A35-0xF54A59: 8 old lines (2 dirty) -> 4 new instrs replaced, 0 .byte fallbacks, dropped labels -
+    0xF54A4D  cp (0x3388:16), a                        || unidasm: cp (0x3388),A
+    0xF54A51  jr nz, 6                                 || unidasm: jr NZ,0xf54a59
+    0xF54A53  call RhythmEvt_IterateNoteOn             || unidasm: call 0xf54a5e
+    0xF54A57  jr 4                                     || unidasm: jr T,0xf54a5d
+VERIFIED: v7 byte-identical after 13 span(s)
