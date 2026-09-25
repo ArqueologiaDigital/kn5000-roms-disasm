@@ -12073,6 +12073,19 @@ PsMixer_ControlHelper:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
+; PsMixer control-type procedure table Bitmap_DigitD_0x11F0 (v7 0xE9F11C, 11 x 32-bit, read from
+;   the ROM by scripts/renaming/uiproc_psmixer_ctltypes.py), indexed by word +2 of the control's record:
+;    0 -> PsMixer_CtlTypeProc0
+;    1 -> PsMixer_CtlTypeProc1
+;    2 -> PsMixer_CtlTypeProc2
+;    3 -> PsMixer_CtlTypeProc3
+;    4 -> PsMixer_CtlTypeProc4
+;    5 -> PsMixer_CtlTypeProc5
+;    6 -> PsMixer_CtlTypeProc6
+;    7 -> PsMixer_CtlTypeProc7
+;    8 -> PsMixer_CtlTypeProc8
+;    9 -> PsMixer_CtlTypeProc9
+;   10 -> PsMixer_CtlTypeProc10
 	lda xbc, (Bitmap_DigitD_0x11F0:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ld xwa, (xsp + 90)
@@ -13190,7 +13203,46 @@ Util_StoreGridArrayBase:
 	ld (0x03ea34:24), xwa
 	ret
 
+
+; -----------------------------------------------------------------------------
+; PsMixer drawing helpers (the next ~0x2a0 bytes), shared by the
+; PsMixer_CtlTypeProc<i> control procedures further down:
+;
+; PsMixer_DrawFrameBoxWithDividers(XWA = rect, BC = colour) -- the same box
+; as PsMixer_DrawFrameBox, then seven vertical double lines (DrawLine colour
+; 248 at x, colour 255 at x+1) at x = 45, 83, ... 273 (`addiw (xsp+12), 37`
+; after the +1: a 38-pixel pitch), from y0+2 to y1-2 of the box: eight
+; 38-pixel columns.
+; Callers: the PsMixer_CtlTypeProc<i> routines below.
+;
+; PsMixer_DrawFrameBox(XWA = rect, BC = style/colour) -- GetFrameSPSize(52)
+; gives the frame's text size; the rectangle is copied, its y0 moved down by
+; that height - 2, and DrawDesignBox(rect, 193, BC) draws it.
+;
+; PsMixer_DrawCaptionFrame(XWA = rect, XDE = caption string, BC = selected
+; flag) -- DrawFrameSP(style 52, colour 242 if BC != 0 else 8) at the rect's
+; origin, then DrawStringCentered(caption, colours 247/255, 3) centred
+; (GetBoxCenter) in a box the size GetFrameSPSize(52) reports.
+;
+; PsMixer_CalcRowBandRect(XWA = out rect, BC = control index) -- n = index
+; mod 5 (`divs wa,5 / ld wa,qwa`); point = GetEditSwPoint(136 + n); out rect =
+; x 8..311, y (point.y - 9 - n) .. (point.y + 31 - n), both y shifted by the
+; word +4 of the control's 12-byte record at (0x03ea30) + index*12.
+;
+; PsMixer_CalcSwitchPointInFrame(XWA = frame rect, XBC = out point, DE =
+; param) -- n = param mod 8; y = centre of the frame rect (after the same
+; GetFrameSPSize(52) caption offset as PsMixer_DrawFrameBox, GetBoxCenter);
+; x = GetEditSwPoint(n).x - (2n - 8) - 2.
+;
+; PsMixer_CalcGridCellPoint(XWA = frame rect, XBC = out point, DE = param) --
+; n = param mod 8; inside the frame (caption offset as PsMixer_DrawFrameBox)
+; cell width = width/4, cell height = height/8, and
+; x = x0 + (2*(n div 4) + 1) * width/4 + 2, y = y0 + (2*(n mod 4) + 1) *
+; height/8 + 2: the centre of cell n of a 2-column x 4-row grid.
+; -----------------------------------------------------------------------------
+; AudioCtrl_DataBlock: previous name of this label, kept only because it is still referenced by shared/positional_labels.s (owned by another lane)
 AudioCtrl_DataBlock:
+PsMixer_DrawFrameBoxWithDividers:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 2194 of 2536 slots byte-identical
 	lda	xsp, (xsp-22)
 	push	xiz
@@ -13223,7 +13275,7 @@ AudioCtrl_DataBlock:
 	dec	2, wa
 	ld	(xde+2), wa
 	ld	iz, 0:i3
-AudioCtrl_DataBlock_Loop4:
+PsMixer_DrawFrameBoxWithDividers_Loop:
 	lda	xwa, (xsp+12)
 	lda	xbc, (xsp+8)
 	ldw	de, 248
@@ -13238,11 +13290,11 @@ AudioCtrl_DataBlock_Loop4:
 	addw	(xsp+8), 0x25	; v10 does not spell this byte either
 	inc	1, iz
 	cp	iz, 7:i3
-	jr	lt, AudioCtrl_DataBlock_Loop4
+	jr	lt, PsMixer_DrawFrameBoxWithDividers_Loop
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
-AudioCtrl_DataBlock_Helper:
+PsMixer_DrawFrameBox:
 	lda	xsp, (xsp-14)
 	push	xiz
 	ld	(xsp+16), bc
@@ -13265,7 +13317,7 @@ AudioCtrl_DataBlock_Helper:
 	pop	xiz
 	lda	xsp, (xsp+14)
 	ret
-AudioCtrl_DataBlock_Helper2:
+PsMixer_DrawCaptionFrame:
 	lda	xsp, (xsp-22)
 	push	xiz
 	ld	(xsp+20), xde
@@ -13281,14 +13333,14 @@ AudioCtrl_DataBlock_Helper2:
 	ld	bc, (xiz+2)
 	ld	(xwa+2), bc
 	cpw	(xsp+24), 0	; v10 does not spell this byte either
-	jr	z, AudioCtrl_DataBlock_Helper2_Skip
+	jr	z, PsMixer_DrawCaptionFrame_Skip
 	ldw	bc, 52
 	ldw	de, 242
-	jr	AudioCtrl_DataBlock_Helper2_Join
-AudioCtrl_DataBlock_Helper2_Skip:
+	jr	PsMixer_DrawCaptionFrame_Join
+PsMixer_DrawCaptionFrame_Skip:
 	ldw	bc, 52
 	ldw	de, 8
-AudioCtrl_DataBlock_Helper2_Join:
+PsMixer_DrawCaptionFrame_Join:
 	call	DrawFrameSP
 	ld	xiy, xiz
 	lda	xix, (xsp+12)
@@ -13314,7 +13366,7 @@ AudioCtrl_DataBlock_Helper2_Join:
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
-AudioCtrl_DataBlock_Helper3:
+PsMixer_CalcRowBandRect:
 	dec	8, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -13367,7 +13419,7 @@ AudioCtrl_DataBlock_Helper3:
 	pop	xiz
 	inc	8, xsp
 	ret
-AudioCtrl_DataBlock_Helper4:
+PsMixer_CalcSwitchPointInFrame:
 	lda	xsp, (xsp-22)
 	push	xiz
 	ld	(xsp+20), de
@@ -13405,7 +13457,7 @@ AudioCtrl_DataBlock_Helper4:
 	pop	xiz
 	lda	xsp, (xsp+22)
 	ret
-AudioCtrl_DataBlock_Helper5:
+PsMixer_CalcGridCellPoint:
 	lda	xsp, (xsp-18)
 	push	xiz
 	ld	(xsp+16), de
@@ -13462,8 +13514,10 @@ AudioCtrl_DataBlock_Helper5:
 	pop	xiz
 	lda	xsp, (xsp+18)
 	ret
+PsMixer_CtlTypeProc0:
 	ld	xhl, 0:i3
 	ret
+PsMixer_CtlTypeProc5:
 	lda	xsp, (xsp-28)
 	push	xiz
 	ld	(xsp+28), xbc
@@ -13474,39 +13528,39 @@ AudioCtrl_DataBlock_Helper5:
 	ld	(xsp+14), de
 	ld	xwa, (xsp+28)
 	cp	xwa, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_Skip3
 	cp	xwa, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_Skip3
 	cp	xwa, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_Skip3
 	cp	xwa, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip3
+	jrl	z, PsMixer_CtlTypeProc5_Skip3
 	cp	xwa, 29360143
-	jr	z, AudioCtrl_DataBlock_Skip
+	jr	z, PsMixer_CtlTypeProc5_Skip
 	cp	xwa, 29360142
-	jrl	z, AudioCtrl_DataBlock_Join2
+	jrl	z, PsMixer_CtlTypeProc5_Join2
 	cp	xwa, 29360141
-	jrl	nz, AudioCtrl_DataBlock_Join2
+	jrl	nz, PsMixer_CtlTypeProc5_Join2
 	lda	xwa, (xsp+20)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+20)
 	addw	(xwa+2), 0xa	; v10 does not spell this byte either
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock
-	jrl	AudioCtrl_DataBlock_Join2
-AudioCtrl_DataBlock_Skip:
+	calr	PsMixer_DrawFrameBoxWithDividers
+	jrl	PsMixer_CtlTypeProc5_Join2
+PsMixer_CtlTypeProc5_Skip:
 	ld	wa, (xsp+14)
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	lda	xwa, (xsp+20)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+20)
 	addw	(xwa+2), 0xa	; v10 does not spell this byte either
 	lda	xbc, (xsp+16)
 	ld	de, (xsp+14)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	lda	xbc, (xsp+16)
 	lda	xwa, (256688:24)
 	ld	de, (xsp+4)
@@ -13515,25 +13569,25 @@ AudioCtrl_DataBlock_Skip:
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
 	cp	hl, (149392:24)
-	jr	nz, AudioCtrl_DataBlock_Skip2
+	jr	nz, PsMixer_CtlTypeProc5_Skip2
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	242
 	pushw	0
 	pushw	0
-	jr	AudioCtrl_DataBlock_Join
-AudioCtrl_DataBlock_Skip2:
+	jr	PsMixer_CtlTypeProc5_Join
+PsMixer_CtlTypeProc5_Skip2:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	8
 	pushw	0
 	pushw	0
-AudioCtrl_DataBlock_Join:
+PsMixer_CtlTypeProc5_Join:
 	call	DrawStringReverse
-	jrl	AudioCtrl_DataBlock_Join2
-AudioCtrl_DataBlock_Skip3:
+	jrl	PsMixer_CtlTypeProc5_Join2
+PsMixer_CtlTypeProc5_Skip3:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -13580,7 +13634,7 @@ AudioCtrl_DataBlock_Skip3:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip4
+	jr	z, PsMixer_CtlTypeProc5_Skip4
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13589,8 +13643,8 @@ AudioCtrl_DataBlock_Skip3:
 	ld	bc, hl	; v10 does not spell this byte either
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
-	jr	AudioCtrl_DataBlock_Join2
-AudioCtrl_DataBlock_Skip4:
+	jr	PsMixer_CtlTypeProc5_Join2
+PsMixer_CtlTypeProc5_Skip4:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13598,11 +13652,12 @@ AudioCtrl_DataBlock_Skip4:
 	ld	bc, (xsp+10)
 	ld	de, (xsp+8)
 	call	MainLswAdd
-AudioCtrl_DataBlock_Join2:
+PsMixer_CtlTypeProc5_Join2:
 	ld	xhl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+28)
 	ret
+PsMixer_CtlTypeProc6:
 	lda	xsp, (xsp-28)
 	push	xiz
 	ld	(xsp+28), xbc
@@ -13613,39 +13668,39 @@ AudioCtrl_DataBlock_Join2:
 	ld	(xsp+14), de
 	ld	xwa, (xsp+28)
 	cp	xwa, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip6
+	jrl	z, PsMixer_CtlTypeProc6_Skip3
 	cp	xwa, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip6
+	jrl	z, PsMixer_CtlTypeProc6_Skip3
 	cp	xwa, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip6
+	jrl	z, PsMixer_CtlTypeProc6_Skip3
 	cp	xwa, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip6
+	jrl	z, PsMixer_CtlTypeProc6_Skip3
 	cp	xwa, 29360143
-	jr	z, AudioCtrl_DataBlock_Skip5
+	jr	z, PsMixer_CtlTypeProc6_Skip
 	cp	xwa, 29360142
-	jrl	z, AudioCtrl_DataBlock_Join3
+	jrl	z, PsMixer_CtlTypeProc6_Join2
 	cp	xwa, 29360141
-	jrl	nz, AudioCtrl_DataBlock_Join3
+	jrl	nz, PsMixer_CtlTypeProc6_Join2
 	lda	xwa, (xsp+20)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+20)
 	incw	7, (xwa+2)
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock
-	jrl	AudioCtrl_DataBlock_Join3
-AudioCtrl_DataBlock_Skip5:
+	calr	PsMixer_DrawFrameBoxWithDividers
+	jrl	PsMixer_CtlTypeProc6_Join2
+PsMixer_CtlTypeProc6_Skip:
 	ld	wa, (xsp+14)
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+4), hl
 	lda	xwa, (xsp+20)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+20)
 	incw	7, (xwa+2)
 	lda	xbc, (xsp+16)
 	ld	de, (xsp+14)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	lda	xbc, (xsp+16)
 	decw	6, (xbc+2)
 	lda	xwa, (xsp+20)
@@ -13670,25 +13725,25 @@ AudioCtrl_DataBlock_Skip5:
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
 	cpda16_24	xhl, (0x024790)	; v10 does not spell this byte either
-	jr	nz, AudioCtrl_DataBlock_Helper5_Skip
+	jr	nz, PsMixer_CtlTypeProc6_Skip2
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	242
 	pushw	0
 	pushw	0
-	jr	AudioCtrl_DataBlock_Helper5_Join
-AudioCtrl_DataBlock_Helper5_Skip:
+	jr	PsMixer_CtlTypeProc6_Join
+PsMixer_CtlTypeProc6_Skip2:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	255
 	pushw	8
 	pushw	0
 	pushw	0
-AudioCtrl_DataBlock_Helper5_Join:
+PsMixer_CtlTypeProc6_Join:
 	call	DrawStringReverse
-	jrl	AudioCtrl_DataBlock_Join3
-AudioCtrl_DataBlock_Skip6:
+	jrl	PsMixer_CtlTypeProc6_Join2
+PsMixer_CtlTypeProc6_Skip3:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -13735,7 +13790,7 @@ AudioCtrl_DataBlock_Skip6:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip7
+	jr	z, PsMixer_CtlTypeProc6_Skip4
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13744,8 +13799,8 @@ AudioCtrl_DataBlock_Skip6:
 	ld	bc, hl	; v10 does not spell this byte either
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
-	jr	AudioCtrl_DataBlock_Join3
-AudioCtrl_DataBlock_Skip7:
+	jr	PsMixer_CtlTypeProc6_Join2
+PsMixer_CtlTypeProc6_Skip4:
 	ld	xwa, (xsp+12)
 	ld	xbc, 0x1e10001
 	call	ApFuncCall
@@ -13753,11 +13808,12 @@ AudioCtrl_DataBlock_Skip7:
 	ld	bc, (xsp+10)
 	ld	de, (xsp+8)
 	call	MainLswAdd
-AudioCtrl_DataBlock_Join3:
+PsMixer_CtlTypeProc6_Join2:
 	ld	xhl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+28)
 	ret
+PsMixer_CtlTypeProc3:
 	lda	xsp, (xsp-76)
 	pushw	iz
 	ld	(xsp+70), xde
@@ -13772,51 +13828,51 @@ AudioCtrl_DataBlock_Join3:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	cp	xwa, 0x1c00031
-	jrl	z, AudioCtrl_DataBlock_Skip14
+	jrl	z, PsMixer_CtlTypeProc3_Skip8
 	ld	(xsp+12), bc
 	cp	xwa, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip13
+	jrl	z, PsMixer_CtlTypeProc3_Skip6
 	cp	xwa, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip13
+	jrl	z, PsMixer_CtlTypeProc3_Skip6
 	cp	xwa, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip13
+	jrl	z, PsMixer_CtlTypeProc3_Skip6
 	cp	xwa, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip13
+	jrl	z, PsMixer_CtlTypeProc3_Skip6
 	cp	xwa, 29360143
-	jr	z, AudioCtrl_DataBlock_Skip9
+	jr	z, PsMixer_CtlTypeProc3_Skip2
 	cp	xwa, 29360142
-	jr	z, AudioCtrl_DataBlock_Skip8
+	jr	z, PsMixer_CtlTypeProc3_Skip
 	cp	xwa, 29360141
-	jrl	nz, AudioCtrl_DataBlock_Join7
+	jrl	nz, PsMixer_CtlTypeProc3_Join4
 	lda	xwa, (xsp+62)
 	ld	bc, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+62)
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock
+	calr	PsMixer_DrawFrameBoxWithDividers
 	ld	wa, (xsp+10)
 	exts	xwa
 	divs	wa, 5
 	ld	wa, qwa
 	add	wa, 136
 	call	DrawEditSw
-	jrl	AudioCtrl_DataBlock_Join7
-AudioCtrl_DataBlock_Skip8:
+	jrl	PsMixer_CtlTypeProc3_Join4
+PsMixer_CtlTypeProc3_Skip:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
 	lda	xwa, (xsp+62)
 	ld	bc, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+62)
 	ld	xbc, (xsp+70)
 	srl	xbc, 0
 	ld	qbc, 0
 	ld	xde, (xsp+6)
 	ld	xde, (xde+8)
-	calr	AudioCtrl_DataBlock_Helper2
-	jrl	AudioCtrl_DataBlock_Join7
-AudioCtrl_DataBlock_Skip9:
+	calr	PsMixer_DrawCaptionFrame
+	jrl	PsMixer_CtlTypeProc3_Join4
+PsMixer_CtlTypeProc3_Skip2:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
@@ -13831,11 +13887,11 @@ AudioCtrl_DataBlock_Skip9:
 	ld	(xsp+6), xwa
 	lda	xwa, (xsp+62)
 	ld	bc, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+62)
 	lda	xbc, (xsp+58)
 	ld	de, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	subw	(xsp+60), 9	; v10 does not spell this byte either
 	ld	de, (xsp+4)
 	exts	xde
@@ -13847,7 +13903,7 @@ AudioCtrl_DataBlock_Skip9:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip10
+	jr	z, PsMixer_CtlTypeProc3_Skip3
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -13856,15 +13912,15 @@ AudioCtrl_DataBlock_Skip9:
 	ld	bc, iz
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+50), hl
-	jr	AudioCtrl_DataBlock_Join4
-AudioCtrl_DataBlock_Skip10:
+	jr	PsMixer_CtlTypeProc3_Join
+PsMixer_CtlTypeProc3_Skip3:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	xwa, xhl
 	call	AcApcToggleProc_Helper
 	ld	(xsp+50), hl
-AudioCtrl_DataBlock_Join4:
+PsMixer_CtlTypeProc3_Join:
 	ld	bc, iz
 	extz	xbc
 	ld	wa, (xsp+4)
@@ -13888,30 +13944,30 @@ AudioCtrl_DataBlock_Join4:
 	lda	xbc, (xsp+58)
 	ld	hl, (xsp+10)
 	cp	hl, (149394:24)
-	jr	nz, AudioCtrl_DataBlock_Skip11
+	jr	nz, PsMixer_CtlTypeProc3_Skip4
 	ld	hl, (xsp+12)
 	cp	hl, (149392:24)
-	jr	nz, AudioCtrl_DataBlock_Skip11
+	jr	nz, PsMixer_CtlTypeProc3_Skip4
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	1
-	jr	AudioCtrl_DataBlock_Join5
-AudioCtrl_DataBlock_Skip11:
+	jr	PsMixer_CtlTypeProc3_Join2
+PsMixer_CtlTypeProc3_Skip4:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	0
-AudioCtrl_DataBlock_Join5:
+PsMixer_CtlTypeProc3_Join2:
 	call	DrawStringReverse
 	lda	xwa, (xsp+62)
 	lda	xbc, (xsp+58)
 	ld	de, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	lda	xwa, (xsp+58)
 	decw	8, (xwa)
 	decw	3, (xwa+2)
@@ -13924,7 +13980,7 @@ AudioCtrl_DataBlock_Join5:
 	call	ApFuncCall
 	lda	xbc, (MidiParam_MixerCfgData_0x2A:24)
 	or	xhl, xhl
-	jr	z, AudioCtrl_DataBlock_Skip12
+	jr	z, PsMixer_CtlTypeProc3_Skip5
 	lda	xhl, (xsp+58)
 	lda	xde, (xsp+50)
 	ld	wa, (xde)
@@ -13939,19 +13995,19 @@ AudioCtrl_DataBlock_Join5:
 	add	xwa, xbc
 	ld	wa, (xwa+2)
 	add	(xhl+2), wa
-	jr	AudioCtrl_DataBlock_Join6
-AudioCtrl_DataBlock_Skip12:
+	jr	PsMixer_CtlTypeProc3_Join3
+PsMixer_CtlTypeProc3_Skip5:
 	lda	xde, (xsp+58)
 	ld	wa, (xbc+32)
 	add	(xde), wa
 	ld	wa, (xbc+34)
 	add	(xde+2), wa
-AudioCtrl_DataBlock_Join6:
+PsMixer_CtlTypeProc3_Join3:
 	lda	xwa, (xsp+58)
 	ld	xbc, 5:i3
 	call	DrawBitmap
-	jrl	AudioCtrl_DataBlock_Join7
-AudioCtrl_DataBlock_Skip13:
+	jrl	PsMixer_CtlTypeProc3_Join4
+PsMixer_CtlTypeProc3_Skip6:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	(xsp+6), xhl
@@ -14001,7 +14057,7 @@ AudioCtrl_DataBlock_Skip13:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Helper5_Skip2
+	jr	z, PsMixer_CtlTypeProc3_Skip7
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14013,8 +14069,8 @@ AudioCtrl_DataBlock_Skip13:
 	ld	bc, iz
 	ld	de, (xsp+12)
 	call	MainLswPartAdd
-	jrl	AudioCtrl_DataBlock_Join7
-AudioCtrl_DataBlock_Helper5_Skip2:
+	jrl	PsMixer_CtlTypeProc3_Join4
+PsMixer_CtlTypeProc3_Skip7:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14022,8 +14078,8 @@ AudioCtrl_DataBlock_Helper5_Skip2:
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
 	call	MainLswAdd
-	jrl	AudioCtrl_DataBlock_Join7
-AudioCtrl_DataBlock_Skip14:
+	jrl	PsMixer_CtlTypeProc3_Join4
+PsMixer_CtlTypeProc3_Skip8:
 	ld	iz, bc
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
@@ -14046,7 +14102,7 @@ AudioCtrl_DataBlock_Skip14:
 	ld	xbc, 31457464
 	call	ApFuncCall
 	or	xhl, xhl
-	jrl	z, AudioCtrl_DataBlock_Join7
+	jrl	z, PsMixer_CtlTypeProc3_Join4
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -14067,7 +14123,7 @@ AudioCtrl_DataBlock_Skip14:
 	ld	(xsp+10), hl
 	ld	wa, (xsp+2)
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Helper5_Skip3
+	jr	z, PsMixer_CtlTypeProc3_Skip9
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -14081,8 +14137,8 @@ AudioCtrl_DataBlock_Skip14:
 	ld	bc, iz
 	ld	de, (xsp+12)
 	call	MainLswPartPut
-	jr	AudioCtrl_DataBlock_Join7
-AudioCtrl_DataBlock_Helper5_Skip3:
+	jr	PsMixer_CtlTypeProc3_Join4
+PsMixer_CtlTypeProc3_Skip9:
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, (xsp+6)
@@ -14092,12 +14148,12 @@ AudioCtrl_DataBlock_Helper5_Skip3:
 	ld	bc, (xsp+10)
 	ld	de, (xsp+12)
 	call	MainLswPut
-AudioCtrl_DataBlock_Join7:
+PsMixer_CtlTypeProc3_Join4:
 	ld	xhl, 0:i3
 	popw	iz
 	lda	xsp, (xsp+76)
 	ret
-AudioCtrl_DataBlock_Helper6:
+PsMixer_CtlTypeProc7:
 	lda	xsp, (xsp-76)
 	push	xiz
 	ld	(xsp+72), xde
@@ -14115,49 +14171,49 @@ AudioCtrl_DataBlock_Helper6:
 	ld	(xsp+14), bc
 	ld	xwa, (xsp+76)
 	cp	xwa, 29360177
-	jrl	z, AudioCtrl_DataBlock_Skip21
+	jrl	z, PsMixer_CtlTypeProc7_Skip7
 	cp	xwa, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip19
+	jrl	z, PsMixer_CtlTypeProc7_Skip5
 	cp	xwa, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip19
+	jrl	z, PsMixer_CtlTypeProc7_Skip5
 	cp	xwa, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip19
+	jrl	z, PsMixer_CtlTypeProc7_Skip5
 	cp	xwa, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip19
+	jrl	z, PsMixer_CtlTypeProc7_Skip5
 	cp	xwa, 29360143
-	jr	z, AudioCtrl_DataBlock_Skip16
+	jr	z, PsMixer_CtlTypeProc7_Skip2
 	cp	xwa, 29360142
-	jr	z, AudioCtrl_DataBlock_Skip15
+	jr	z, PsMixer_CtlTypeProc7_Skip
 	cp	xwa, 29360141
-	jrl	nz, AudioCtrl_DataBlock_Join10
+	jrl	nz, PsMixer_CtlTypeProc7_Join3
 	lda	xwa, (xsp+64)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+64)
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock
+	calr	PsMixer_DrawFrameBoxWithDividers
 	ld	wa, (xsp+12)
 	exts	xwa
 	divs	wa, 5
 	ld	wa, qwa
 	add	wa, 136
 	call	DrawEditSw
-	jrl	AudioCtrl_DataBlock_Join10
-AudioCtrl_DataBlock_Skip15:
+	jrl	PsMixer_CtlTypeProc7_Join3
+PsMixer_CtlTypeProc7_Skip:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	lda	xwa, (xsp+64)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+64)
 	ld	xbc, (xsp+72)
 	srl	xbc, 0
 	ld	qbc, 0
 	ld	xde, (xiz+8)
-	calr	AudioCtrl_DataBlock_Helper2
-	jrl	AudioCtrl_DataBlock_Join10
-AudioCtrl_DataBlock_Skip16:
+	calr	PsMixer_DrawCaptionFrame
+	jrl	PsMixer_CtlTypeProc7_Join3
+PsMixer_CtlTypeProc7_Skip2:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14171,11 +14227,11 @@ AudioCtrl_DataBlock_Skip16:
 	ld	(xsp+8), xwa
 	lda	xwa, (xsp+64)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+64)
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
@@ -14184,7 +14240,7 @@ AudioCtrl_DataBlock_Skip16:
 	ld	(xsp+4), hl
 	ld	wa, (xsp+4)
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip17
+	jr	z, PsMixer_CtlTypeProc7_Skip3
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
@@ -14195,8 +14251,8 @@ AudioCtrl_DataBlock_Skip16:
 	ld	bc, iz
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+52), hl
-	jr	AudioCtrl_DataBlock_Join8
-AudioCtrl_DataBlock_Skip17:
+	jr	PsMixer_CtlTypeProc7_Join
+PsMixer_CtlTypeProc7_Skip3:
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
@@ -14205,7 +14261,7 @@ AudioCtrl_DataBlock_Skip17:
 	ld	xwa, xhl
 	call	AcApcToggleProc_Helper
 	ld	(xsp+52), hl
-AudioCtrl_DataBlock_Join8:
+PsMixer_CtlTypeProc7_Join:
 	ld	bc, iz
 	extz	xbc
 	ld	wa, (xsp+6)
@@ -14224,28 +14280,28 @@ AudioCtrl_DataBlock_Join8:
 	lda	xde, (xsp+16)
 	ld	hl, (xsp+12)
 	cp	hl, (149394:24)
-	jr	nz, AudioCtrl_DataBlock_Skip18
+	jr	nz, PsMixer_CtlTypeProc7_Skip4
 	ld	hl, (xsp+14)
 	cp	hl, (149392:24)
-	jr	nz, AudioCtrl_DataBlock_Skip18
+	jr	nz, PsMixer_CtlTypeProc7_Skip4
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	1
-	jr	AudioCtrl_DataBlock_Join9
-AudioCtrl_DataBlock_Skip18:
+	jr	PsMixer_CtlTypeProc7_Join2
+PsMixer_CtlTypeProc7_Skip4:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	0
-AudioCtrl_DataBlock_Join9:
+PsMixer_CtlTypeProc7_Join2:
 	call	DrawStringReverse
-	jrl	AudioCtrl_DataBlock_Join10
-AudioCtrl_DataBlock_Skip19:
+	jrl	PsMixer_CtlTypeProc7_Join3
+PsMixer_CtlTypeProc7_Skip5:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14290,7 +14346,7 @@ AudioCtrl_DataBlock_Skip19:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip20
+	jr	z, PsMixer_CtlTypeProc7_Skip6
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14302,8 +14358,8 @@ AudioCtrl_DataBlock_Skip19:
 	ld	bc, iz
 	ld	de, (xsp+14)
 	call	MainLswPartAdd
-	jrl	AudioCtrl_DataBlock_Join10
-AudioCtrl_DataBlock_Skip20:
+	jrl	PsMixer_CtlTypeProc7_Join3
+PsMixer_CtlTypeProc7_Skip6:
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14311,8 +14367,8 @@ AudioCtrl_DataBlock_Skip20:
 	ld	bc, (xsp+12)
 	ld	de, (xsp+14)
 	call	MainLswAdd
-	jrl	AudioCtrl_DataBlock_Join10
-AudioCtrl_DataBlock_Skip21:
+	jrl	PsMixer_CtlTypeProc7_Join3
+PsMixer_CtlTypeProc7_Skip7:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14330,7 +14386,7 @@ AudioCtrl_DataBlock_Skip21:
 	ld	xbc, 31457464
 	call	ApFuncCall
 	or	xhl, xhl
-	jrl	z, AudioCtrl_DataBlock_Join10
+	jrl	z, PsMixer_CtlTypeProc7_Join3
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
@@ -14353,7 +14409,7 @@ AudioCtrl_DataBlock_Skip21:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip22
+	jr	z, PsMixer_CtlTypeProc7_Skip8
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14365,8 +14421,8 @@ AudioCtrl_DataBlock_Skip21:
 	ld	bc, iz
 	ld	de, (xsp+14)
 	call	MainLswPartPut
-	jr	AudioCtrl_DataBlock_Join10
-AudioCtrl_DataBlock_Skip22:
+	jr	PsMixer_CtlTypeProc7_Join3
+PsMixer_CtlTypeProc7_Skip8:
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14374,11 +14430,12 @@ AudioCtrl_DataBlock_Skip22:
 	ld	bc, (xsp+12)
 	ld	de, (xsp+14)
 	call	MainLswPut
-AudioCtrl_DataBlock_Join10:
+PsMixer_CtlTypeProc7_Join3:
 	ld	xhl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+76)
 	ret
+PsMixer_CtlTypeProc4:
 	lda	xsp, (xsp-78)
 	push	xiz
 	ld	(xsp+74), xde
@@ -14391,47 +14448,47 @@ AudioCtrl_DataBlock_Join10:
 	ld	(xsp+12), bc
 	ld	xwa, (xsp+78)
 	cp	xwa, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip29
+	jrl	z, PsMixer_CtlTypeProc4_Skip7
 	cp	xwa, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip29
+	jrl	z, PsMixer_CtlTypeProc4_Skip7
 	cp	xwa, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip29
+	jrl	z, PsMixer_CtlTypeProc4_Skip7
 	cp	xwa, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip29
+	jrl	z, PsMixer_CtlTypeProc4_Skip7
 	cp	xwa, 29360143
-	jr	z, AudioCtrl_DataBlock_Skip24
+	jr	z, PsMixer_CtlTypeProc4_Skip2
 	cp	xwa, 29360142
-	jr	z, AudioCtrl_DataBlock_Skip23
+	jr	z, PsMixer_CtlTypeProc4_Skip
 	cp	xwa, 29360141
-	jrl	nz, AudioCtrl_DataBlock_Join14
+	jrl	nz, PsMixer_CtlTypeProc4_Join4
 	lda	xwa, (xsp+66)
 	ld	bc, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+66)
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock
+	calr	PsMixer_DrawFrameBoxWithDividers
 	ld	wa, (xsp+10)
 	exts	xwa
 	divs	wa, 5
 	ld	wa, qwa
 	add	wa, 136
 	call	DrawEditSw
-	jrl	AudioCtrl_DataBlock_Join14
-AudioCtrl_DataBlock_Skip23:
+	jrl	PsMixer_CtlTypeProc4_Join4
+PsMixer_CtlTypeProc4_Skip:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	lda	xwa, (xsp+66)
 	ld	bc, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+66)
 	ld	xbc, (xsp+74)
 	srl	xbc, 0
 	ld	qbc, 0
 	ld	xde, (xiz+8)
-	calr	AudioCtrl_DataBlock_Helper2
-	jrl	AudioCtrl_DataBlock_Join14
-AudioCtrl_DataBlock_Skip24:
+	calr	PsMixer_DrawCaptionFrame
+	jrl	PsMixer_CtlTypeProc4_Join4
+PsMixer_CtlTypeProc4_Skip2:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14445,11 +14502,11 @@ AudioCtrl_DataBlock_Skip24:
 	ld	(xsp+6), xwa
 	lda	xwa, (xsp+66)
 	ld	bc, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+66)
 	lda	xbc, (xsp+62)
 	ld	de, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	lda	xiy, (xsp+62)
 	lda	xix, (xsp+58)
 	ldiw	; v10 does not spell this byte either
@@ -14468,7 +14525,7 @@ AudioCtrl_DataBlock_Skip24:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip25
+	jr	z, PsMixer_CtlTypeProc4_Skip3
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14477,15 +14534,15 @@ AudioCtrl_DataBlock_Skip24:
 	ld	bc, qiz
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+50), hl
-	jr	AudioCtrl_DataBlock_Join11
-AudioCtrl_DataBlock_Skip25:
+	jr	PsMixer_CtlTypeProc4_Join
+PsMixer_CtlTypeProc4_Skip3:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	xwa, xhl
 	call	AcApcToggleProc_Helper
 	ld	(xsp+50), hl
-AudioCtrl_DataBlock_Join11:
+PsMixer_CtlTypeProc4_Join:
 	ld	bc, qiz
 	extz	xbc
 	ld	wa, (xsp+4)
@@ -14504,25 +14561,25 @@ AudioCtrl_DataBlock_Join11:
 	lda	xde, (xsp+14)
 	ld	hl, (xsp+10)
 	cp	hl, (149394:24)
-	jr	nz, AudioCtrl_DataBlock_Skip26
+	jr	nz, PsMixer_CtlTypeProc4_Skip4
 	ld	hl, (xsp+12)
 	cp	hl, (149392:24)
-	jr	nz, AudioCtrl_DataBlock_Skip26
+	jr	nz, PsMixer_CtlTypeProc4_Skip4
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	1
-	jr	AudioCtrl_DataBlock_Join12
-AudioCtrl_DataBlock_Skip26:
+	jr	PsMixer_CtlTypeProc4_Join2
+PsMixer_CtlTypeProc4_Skip4:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	0
-AudioCtrl_DataBlock_Join12:
+PsMixer_CtlTypeProc4_Join2:
 	call	DrawStringReverse
 	ld	de, (xsp+4)
 	exts	xde
@@ -14531,18 +14588,18 @@ AudioCtrl_DataBlock_Join12:
 	call	ApFuncCall
 	lda	xwa, (xsp+58)
 	or	xhl, xhl
-	jr	z, AudioCtrl_DataBlock_Skip27
+	jr	z, PsMixer_CtlTypeProc4_Skip5
 	cpw	(xsp+50), 0	; v10 does not spell this byte either
-	jr	nz, AudioCtrl_DataBlock_Skip28
-AudioCtrl_DataBlock_Skip27:
+	jr	nz, PsMixer_CtlTypeProc4_Skip6
+PsMixer_CtlTypeProc4_Skip5:
 	ld	xbc, 30
-	jr	AudioCtrl_DataBlock_Join13
-AudioCtrl_DataBlock_Skip28:
+	jr	PsMixer_CtlTypeProc4_Join3
+PsMixer_CtlTypeProc4_Skip6:
 	ld	xbc, 29
-AudioCtrl_DataBlock_Join13:
+PsMixer_CtlTypeProc4_Join3:
 	call	DrawBitmap
-	jrl	AudioCtrl_DataBlock_Join14
-AudioCtrl_DataBlock_Skip29:
+	jrl	PsMixer_CtlTypeProc4_Join4
+PsMixer_CtlTypeProc4_Skip7:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14589,7 +14646,7 @@ AudioCtrl_DataBlock_Skip29:
 	ld	de, (xsp+4)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Helper6_Skip
+	jr	z, PsMixer_CtlTypeProc4_Skip8
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14601,8 +14658,8 @@ AudioCtrl_DataBlock_Skip29:
 	ld	bc, qiz
 	ld	de, (xsp+14)
 	call	MainLswPartAdd
-	jr	AudioCtrl_DataBlock_Join14
-AudioCtrl_DataBlock_Helper6_Skip:
+	jr	PsMixer_CtlTypeProc4_Join4
+PsMixer_CtlTypeProc4_Skip8:
 	ld	xwa, (xsp+6)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14610,12 +14667,12 @@ AudioCtrl_DataBlock_Helper6_Skip:
 	ld	bc, (xsp+12)
 	ld	de, (xsp+10)
 	call	MainLswAdd
-AudioCtrl_DataBlock_Join14:
+PsMixer_CtlTypeProc4_Join4:
 	ld	xhl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+78)
 	ret
-AudioCtrl_DataBlock_Helper7:
+PsMixer_CtlTypeProc9:
 	lda	xsp, (xsp-76)
 	push	xiz
 	ld	(xsp+72), xde
@@ -14628,50 +14685,50 @@ AudioCtrl_DataBlock_Helper7:
 	ld	(xsp+14), bc
 	ld	xwa, (xsp+76)
 	cp	xwa, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip35
+	jrl	z, PsMixer_CtlTypeProc9_Skip6
 	cp	xwa, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip35
+	jrl	z, PsMixer_CtlTypeProc9_Skip6
 	cp	xwa, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip35
+	jrl	z, PsMixer_CtlTypeProc9_Skip6
 	cp	xwa, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip35
+	jrl	z, PsMixer_CtlTypeProc9_Skip6
 	cp	xwa, 29360143
-	jr	z, AudioCtrl_DataBlock_Skip31
+	jr	z, PsMixer_CtlTypeProc9_Skip2
 	cp	xwa, 29360142
-	jr	z, AudioCtrl_DataBlock_Skip30
+	jr	z, PsMixer_CtlTypeProc9_Skip
 	cp	xwa, 29360141
-	jrl	nz, AudioCtrl_DataBlock_Join17
+	jrl	nz, PsMixer_CtlTypeProc9_Join3
 	lda	xwa, (xsp+64)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+64)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	addw	(xwa+6), 0x20
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock
+	calr	PsMixer_DrawFrameBoxWithDividers
 	ld	wa, (xsp+12)
 	exts	xwa
 	divs	wa, 5
 	ld	wa, qwa
 	add	wa, 136
 	call	DrawEditSw
-	jrl	AudioCtrl_DataBlock_Join17
-AudioCtrl_DataBlock_Skip30:
+	jrl	PsMixer_CtlTypeProc9_Join3
+PsMixer_CtlTypeProc9_Skip:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	lda	xwa, (xsp+64)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+64)
 	ld	xbc, (xsp+72)
 	srl	xbc, 0
 	ld	qbc, 0
 	ld	xde, (xiz+8)
-	calr	AudioCtrl_DataBlock_Helper2
-	jrl	AudioCtrl_DataBlock_Join17
-AudioCtrl_DataBlock_Skip31:
+	calr	PsMixer_DrawCaptionFrame
+	jrl	PsMixer_CtlTypeProc9_Join3
+PsMixer_CtlTypeProc9_Skip2:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14685,11 +14742,11 @@ AudioCtrl_DataBlock_Skip31:
 	ld	(xsp+8), xwa
 	lda	xwa, (xsp+64)
 	ld	bc, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+64)
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	subw	(xsp+62), 9	; v10 does not spell this byte either
 	ld	de, (xsp+6)
 	exts	xde
@@ -14697,7 +14754,7 @@ AudioCtrl_DataBlock_Skip31:
 	ld	xbc, 31522818
 	call	ApFuncCall
 	or	xhl, xhl
-	jr	z, AudioCtrl_DataBlock_Skip33
+	jr	z, PsMixer_CtlTypeProc9_Skip4
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+8)
@@ -14708,7 +14765,7 @@ AudioCtrl_DataBlock_Skip31:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip32
+	jr	z, PsMixer_CtlTypeProc9_Skip3
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14716,17 +14773,17 @@ AudioCtrl_DataBlock_Skip31:
 	ld	wa, iz
 	ld	bc, (xsp+4)
 	call	DkMdlyPly_CheckState_Helper
-	jr	AudioCtrl_DataBlock_Join15
-AudioCtrl_DataBlock_Skip32:
+	jr	PsMixer_CtlTypeProc9_Join
+PsMixer_CtlTypeProc9_Skip3:
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
 	ld	xwa, xhl
 	call	AcApcToggleProc_Helper
-	jr	AudioCtrl_DataBlock_Join15
-AudioCtrl_DataBlock_Skip33:
+	jr	PsMixer_CtlTypeProc9_Join
+PsMixer_CtlTypeProc9_Skip4:
 	ld	hl, 0:i3
-AudioCtrl_DataBlock_Join15:
+PsMixer_CtlTypeProc9_Join:
 	ld	(xsp+52), hl
 	ld	bc, (xsp+4)
 	extz	xbc
@@ -14746,25 +14803,25 @@ AudioCtrl_DataBlock_Join15:
 	lda	xbc, (xsp+60)
 	ld	hl, (xsp+12)
 	cp	hl, (149394:24)
-	jr	nz, AudioCtrl_DataBlock_Skip34
+	jr	nz, PsMixer_CtlTypeProc9_Skip5
 	ld	hl, (xsp+14)
 	cp	hl, (149392:24)
-	jr	nz, AudioCtrl_DataBlock_Skip34
+	jr	nz, PsMixer_CtlTypeProc9_Skip5
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	1
-	jr	AudioCtrl_DataBlock_Join16
-AudioCtrl_DataBlock_Skip34:
+	jr	PsMixer_CtlTypeProc9_Join2
+PsMixer_CtlTypeProc9_Skip5:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	0
-AudioCtrl_DataBlock_Join16:
+PsMixer_CtlTypeProc9_Join2:
 	call	DrawStringReverse
 	lda	xwa, (xsp+64)
 	; v10 does not spell this byte either
@@ -14772,7 +14829,7 @@ AudioCtrl_DataBlock_Join16:
 	addw	(xwa+6), 0x20
 	lda	xbc, (xsp+60)
 	ld	de, (xsp+14)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	lda	xwa, (xsp+60)
 	subw	(xwa), 0xc	; v10 does not spell this byte either
 	subw	(xwa+2), 0x13	; v10 does not spell this byte either
@@ -14788,8 +14845,8 @@ AudioCtrl_DataBlock_Join16:
 	add	(xwa+2), bc
 	ld	xbc, 3:i3
 	call	DrawBitmap
-	jrl	AudioCtrl_DataBlock_Join17
-AudioCtrl_DataBlock_Skip35:
+	jrl	PsMixer_CtlTypeProc9_Join3
+PsMixer_CtlTypeProc9_Skip6:
 	ld	wa, (xsp+12)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -14833,7 +14890,7 @@ AudioCtrl_DataBlock_Skip35:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Helper7_Skip
+	jr	z, PsMixer_CtlTypeProc9_Skip7
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14845,8 +14902,8 @@ AudioCtrl_DataBlock_Skip35:
 	ld	bc, (xsp+6)
 	ld	de, (xsp+16)
 	call	MainLswPartAdd
-	jr	AudioCtrl_DataBlock_Join17
-AudioCtrl_DataBlock_Helper7_Skip:
+	jr	PsMixer_CtlTypeProc9_Join3
+PsMixer_CtlTypeProc9_Skip7:
 	ld	xwa, (xsp+8)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -14854,18 +14911,19 @@ AudioCtrl_DataBlock_Helper7_Skip:
 	ld	bc, (xsp+14)
 	ld	de, (xsp+12)
 	call	MainLswAdd
-AudioCtrl_DataBlock_Join17:
+PsMixer_CtlTypeProc9_Join3:
 	ld	xhl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+76)
 	ret
+PsMixer_CtlTypeProc2:
 	lda	xsp, (xsp-34)
 	push	xiz
 	ld	(xsp+30), xde
 	ld	(xsp+34), xbc
 	ld	xde, (xsp+34)
 	cp	xde, 29360156
-	jrl	z, AudioCtrl_DataBlock_Skip40
+	jrl	z, PsMixer_CtlTypeProc2_Skip7
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
@@ -14878,20 +14936,20 @@ AudioCtrl_DataBlock_Join17:
 	; v10 does not spell this byte either
 	ld	qbc, 0
 	cp	xde, 0x1c00031	; v10 does not spell this byte either
-	jrl	z, AudioCtrl_DataBlock_Skip39
+	jrl	z, PsMixer_CtlTypeProc2_Skip5
 	cp	xde, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip37
+	jrl	z, PsMixer_CtlTypeProc2_Skip2
 	cp	xde, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip37
+	jrl	z, PsMixer_CtlTypeProc2_Skip2
 	cp	xde, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip37
+	jrl	z, PsMixer_CtlTypeProc2_Skip2
 	cp	xde, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip37
+	jrl	z, PsMixer_CtlTypeProc2_Skip2
 	cp	xde, 29360143
-	jrl	nz, AudioCtrl_DataBlock_Skip42
+	jrl	nz, PsMixer_CtlTypeProc2_Skip9
 	ld	xbc, (xsp+34)
 	ld	xde, (xsp+30)
-	calr	AudioCtrl_DataBlock_Helper7
+	calr	PsMixer_CtlTypeProc9
 	ld	xwa, (xsp+30)
 	ld	(xsp+8), wa
 	ld	xwa, (xsp+30)
@@ -14909,7 +14967,7 @@ AudioCtrl_DataBlock_Join17:
 	ld	xbc, 31522818
 	call	ApFuncCall
 	or	xhl, xhl
-	jrl	z, AudioCtrl_DataBlock_Loop
+	jrl	z, PsMixer_CtlTypeProc2_Loop
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
@@ -14918,7 +14976,7 @@ AudioCtrl_DataBlock_Join17:
 	ld	(xsp+4), hl
 	ld	wa, (xsp+4)
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip36
+	jr	z, PsMixer_CtlTypeProc2_Skip
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
@@ -14929,8 +14987,8 @@ AudioCtrl_DataBlock_Join17:
 	ld	bc, (xsp+14)
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+16), hl
-	jr	AudioCtrl_DataBlock_Entry
-AudioCtrl_DataBlock_Skip36:
+	jr	PsMixer_CtlTypeProc2_Entry
+PsMixer_CtlTypeProc2_Skip:
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
@@ -14940,16 +14998,16 @@ AudioCtrl_DataBlock_Skip36:
 	ld	xwa, xiz
 	call	AcApcToggleProc_Helper
 	ld	(xsp+16), hl
-AudioCtrl_DataBlock_Entry:
+PsMixer_CtlTypeProc2_Entry:
 	cpw	(xsp+16), 0	; v10 does not spell this byte either
-	jr	z, AudioCtrl_DataBlock_Loop
+	jr	z, PsMixer_CtlTypeProc2_Loop
 	lda	xwa, (xsp+22)
 	ld	bc, (xsp+8)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
 	ld	de, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper4
+	calr	PsMixer_CalcSwitchPointInFrame
 	lda	xbc, (xsp+18)
 	incw	1, (xbc)
 	addw	(xbc+2), 0x12	; v10 does not spell this byte either
@@ -14971,10 +15029,10 @@ AudioCtrl_DataBlock_Entry:
 	pushw	1
 	ld	xde, MidiParam_MixerCfgData_0x6A
 	call	DrawStringReverse
-AudioCtrl_DataBlock_Loop:
+PsMixer_CtlTypeProc2_Loop:
 	ld	xhl, 0:i3
-	jrl	AudioCtrl_DataBlock_Epilogue
-AudioCtrl_DataBlock_Skip37:
+	jrl	PsMixer_CtlTypeProc2_Epilogue
+PsMixer_CtlTypeProc2_Skip2:
 	ld	xwa, (xsp+30)
 	ld	(xsp+8), wa
 	ld	wa, bc
@@ -14996,7 +15054,7 @@ AudioCtrl_DataBlock_Skip37:
 	ld	(xsp+10), hl
 	ld	wa, (xsp+4)
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Skip38
+	jr	z, PsMixer_CtlTypeProc2_Skip3
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
@@ -15008,14 +15066,14 @@ AudioCtrl_DataBlock_Skip37:
 	call	DkMdlyPly_CheckState_Helper
 	ld	(xsp+16), hl
 	cpw	(xsp+16), 0	; v10 does not spell this byte either
-	jr	z, AudioCtrl_DataBlock_Helper7_Join
+	jr	z, PsMixer_CtlTypeProc2_Join
 	pushw	(xsp+10)	; v10 does not spell this byte either
 	ld	wa, (xsp+6)
 	ld	bc, (xsp+16)
 	ld	de, 0:i3	; differs from v10 here and llvm-objdump cannot read it
 	call	MainLswPartPut	; differs from v10 here and llvm-objdump cannot read it
-	jr	AudioCtrl_DataBlock_Helper7_Join
-AudioCtrl_DataBlock_Skip38:
+	jr	PsMixer_CtlTypeProc2_Join
+PsMixer_CtlTypeProc2_Skip3:
 	ld	de, (xsp+6)
 	exts	xde
 	ld	xwa, (xsp+12)
@@ -15026,14 +15084,14 @@ AudioCtrl_DataBlock_Skip38:
 	call	AcApcToggleProc_Helper
 	ld	(xsp+16), hl
 	cpw	(xsp+16), 0	; v10 does not spell this byte either
-	jr	z, AudioCtrl_DataBlock_Helper7_Join
+	jr	z, PsMixer_CtlTypeProc2_Join
 	ld	xwa, xiz
 	ld	bc, 0:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
-AudioCtrl_DataBlock_Helper7_Join:
+PsMixer_CtlTypeProc2_Join:
 	cpw	(xsp+16), 0	; v10 does not spell this byte either
-	jrl	nz, AudioCtrl_DataBlock_Loop
+	jrl	nz, PsMixer_CtlTypeProc2_Loop
 	ld	wa, (xsp+8)
 	calr	Util_SignExtendAndDouble
 	ld	wa, (xhl)
@@ -15075,7 +15133,7 @@ AudioCtrl_DataBlock_Helper7_Join:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Helper7_Skip2
+	jr	z, PsMixer_CtlTypeProc2_Skip4
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -15085,8 +15143,8 @@ AudioCtrl_DataBlock_Helper7_Join:
 	ld	bc, (xsp+16)
 	ld	de, (xsp+10)
 	call	MainLswPartAdd	; differs from v10 here and llvm-objdump cannot read it
-	jrl	AudioCtrl_DataBlock_Loop
-AudioCtrl_DataBlock_Helper7_Skip2:
+	jrl	PsMixer_CtlTypeProc2_Loop
+PsMixer_CtlTypeProc2_Skip4:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -15095,8 +15153,8 @@ AudioCtrl_DataBlock_Helper7_Skip2:
 	ld	bc, (xsp+16)
 	ld	de, (xsp+10)
 	call	MainLswAdd
-	jrl	AudioCtrl_DataBlock_Loop
-AudioCtrl_DataBlock_Skip39:
+	jrl	PsMixer_CtlTypeProc2_Loop
+PsMixer_CtlTypeProc2_Skip5:
 	ld	wa, bc
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
@@ -15118,7 +15176,7 @@ AudioCtrl_DataBlock_Skip39:
 	ld	de, (xsp+6)
 	exts	xde
 	cp	wa, 65535
-	jr	z, AudioCtrl_DataBlock_Helper7_Skip3
+	jr	z, PsMixer_CtlTypeProc2_Skip6
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -15128,8 +15186,8 @@ AudioCtrl_DataBlock_Skip39:
 	ld	bc, (xsp+16)
 	ld	de, 1:i3	; differs from v10 here and llvm-objdump cannot read it
 	call	MainLswPartPut	; differs from v10 here and llvm-objdump cannot read it
-	jrl	AudioCtrl_DataBlock_Loop
-AudioCtrl_DataBlock_Helper7_Skip3:
+	jrl	PsMixer_CtlTypeProc2_Loop
+PsMixer_CtlTypeProc2_Skip6:
 	ld	xwa, (xsp+12)
 	ld	xbc, 31522817
 	call	ApFuncCall
@@ -15138,27 +15196,27 @@ AudioCtrl_DataBlock_Helper7_Skip3:
 	ld	bc, 1:i3
 	ld	de, (xsp+10)
 	call	MainLswPut
-	jrl	AudioCtrl_DataBlock_Loop
-AudioCtrl_DataBlock_Skip40:
+	jrl	PsMixer_CtlTypeProc2_Loop
+PsMixer_CtlTypeProc2_Skip7:
 	ld	xwa, (xsp+30)
 	cp	xwa, 8
-	jr	z, AudioCtrl_DataBlock_Skip41
+	jr	z, PsMixer_CtlTypeProc2_Skip8
 	cp	xwa, 165899
-	jr	z, AudioCtrl_DataBlock_Skip41
+	jr	z, PsMixer_CtlTypeProc2_Skip8
 	cp	xwa, 59400
-	jrl	nz, AudioCtrl_DataBlock_Loop
-AudioCtrl_DataBlock_Skip41:
+	jrl	nz, PsMixer_CtlTypeProc2_Loop
+PsMixer_CtlTypeProc2_Skip8:
 	ld	xhl, 1:i3
-	jr	AudioCtrl_DataBlock_Epilogue
-AudioCtrl_DataBlock_Skip42:
+	jr	PsMixer_CtlTypeProc2_Epilogue
+PsMixer_CtlTypeProc2_Skip9:
 	ld	xbc, (xsp+34)
 	ld	xde, (xsp+30)
-	calr	AudioCtrl_DataBlock_Helper7
-AudioCtrl_DataBlock_Epilogue:
+	calr	PsMixer_CtlTypeProc9
+PsMixer_CtlTypeProc2_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+34)
 	ret
-AudioCtrl_DataBlock_Helper8:
+PsMixer_CtlTypeProc1:
 	lda	xsp, (xsp-94)
 	push	xiz
 	ld	(xsp+90), xde
@@ -15171,28 +15229,28 @@ AudioCtrl_DataBlock_Helper8:
 	ld	(xsp+20), bc
 	ld	xwa, (xsp+94)
 	cp	xwa, 29360154
-	jrl	z, AudioCtrl_DataBlock_Skip47
+	jrl	z, PsMixer_CtlTypeProc1_Skip7
 	cp	xwa, 29360152
-	jrl	z, AudioCtrl_DataBlock_Skip47
+	jrl	z, PsMixer_CtlTypeProc1_Skip7
 	cp	xwa, 29360153
-	jrl	z, AudioCtrl_DataBlock_Skip47
+	jrl	z, PsMixer_CtlTypeProc1_Skip7
 	cp	xwa, 29360151
-	jrl	z, AudioCtrl_DataBlock_Skip47
+	jrl	z, PsMixer_CtlTypeProc1_Skip7
 	cp	xwa, 29360160
-	jrl	z, AudioCtrl_DataBlock_Skip45
+	jrl	z, PsMixer_CtlTypeProc1_Skip3
 	cp	xwa, 29360143
-	jrl	z, AudioCtrl_DataBlock_Skip44
+	jrl	z, PsMixer_CtlTypeProc1_Skip2
 	cp	xwa, 29360142
-	jrl	z, AudioCtrl_DataBlock_Skip43
+	jrl	z, PsMixer_CtlTypeProc1_Skip
 	cp	xwa, 29360141
-	jrl	nz, AudioCtrl_DataBlock_Join19
+	jrl	nz, PsMixer_CtlTypeProc1_Join2
 	lda	xwa, (xsp+82)
 	ld	bc, (xsp+18)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+82)
 	subw	(xwa+2), 0x16	; v10 does not spell this byte either
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock_Helper
+	calr	PsMixer_DrawFrameBox
 	ld	wa, (xsp+18)
 	exts	xwa
 	divs	wa, 5
@@ -15242,11 +15300,11 @@ AudioCtrl_DataBlock_Helper8:
 	sla	wa, 3
 	ld	(xsp+12), wa
 	ldw	(xsp+18), 0
-AudioCtrl_DataBlock_Helper8_Loop:
+PsMixer_CtlTypeProc1_Loop:
 	lda	xwa, (xsp+82)
 	lda	xbc, (xsp+78)
 	ld	de, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper5
+	calr	PsMixer_CalcGridCellPoint
 	subw	(xsp+78), 0x34	; v10 does not spell this byte either
 	ld	wa, (xsp+12)
 	; v10 does not spell this byte either
@@ -15274,24 +15332,24 @@ AudioCtrl_DataBlock_Helper8_Loop:
 	incw	1, (xsp+12)
 	incw	1, (xsp+18)
 	cpw	(xsp+18), 8	; v10 does not spell this byte either
-	jr	lt, AudioCtrl_DataBlock_Helper8_Loop	; v10 does not spell this byte either
-	jrl	AudioCtrl_DataBlock_Join19
-AudioCtrl_DataBlock_Skip43:
+	jr	lt, PsMixer_CtlTypeProc1_Loop	; v10 does not spell this byte either
+	jrl	PsMixer_CtlTypeProc1_Join2
+PsMixer_CtlTypeProc1_Skip:
 	ld	wa, (xsp+18)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
 	lda	xwa, (xsp+82)
 	ld	bc, (xsp+18)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+82)
 	subw	(xwa+2), 0x16	; v10 does not spell this byte either
 	ld	xbc, (xsp+90)
 	srl	xbc, 0
 	ld	qbc, 0
 	ld	xde, (xiz+8)
-	calr	AudioCtrl_DataBlock_Helper2
-	jrl	AudioCtrl_DataBlock_Join19
-AudioCtrl_DataBlock_Skip44:
+	calr	PsMixer_DrawCaptionFrame
+	jrl	PsMixer_CtlTypeProc1_Join2
+PsMixer_CtlTypeProc1_Skip2:
 	ld	wa, (xsp+20)
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
@@ -15302,15 +15360,15 @@ AudioCtrl_DataBlock_Skip44:
 	ld	xwa, 20971524
 	ld	xbc, 31457374
 	call	FuncCall
-	jrl	AudioCtrl_DataBlock_Join19
-AudioCtrl_DataBlock_Skip45:
+	jrl	PsMixer_CtlTypeProc1_Join2
+PsMixer_CtlTypeProc1_Skip3:
 	ld	xwa, (xsp+90)
 	ld	(xsp+4), xwa
 	ld	wa, (149398:24)
 	muls	wa, 5
 	ld	(xsp+10), wa
 	ldw	(xsp+18), 0
-AudioCtrl_DataBlock_Helper8_Loop2:
+PsMixer_CtlTypeProc1_Loop2:
 	ld	wa, (xsp+10)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -15323,13 +15381,13 @@ AudioCtrl_DataBlock_Helper8_Loop2:
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+14), xwa
 	cp	xwa, 0x1210027	; v10 does not spell this byte either
-	jrl	nz, AudioCtrl_DataBlock_Helper8_Skip2
+	jrl	nz, PsMixer_CtlTypeProc1_Skip6
 	ld	wa, (0x024794:24)
 	ld	(xsp+12), wa
 	sla	wa, 3
 	ld	(xsp+12), wa
 	ldw	(xsp+20), 0
-AudioCtrl_DataBlock_Helper8_Loop3:
+PsMixer_CtlTypeProc1_Loop3:
 	ld	wa, (xsp+12)
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
@@ -15338,15 +15396,15 @@ AudioCtrl_DataBlock_Helper8_Loop3:
 	ld	xwa, MixerPartTable_Start_0x12C
 	calr	SdpartLookupPartId
 	cp	hl, (xsp+8)	; v10 does not spell this byte either
-	jrl	nz, AudioCtrl_DataBlock_Helper8_Skip	; v10 does not spell this byte either
+	jrl	nz, PsMixer_CtlTypeProc1_Skip5	; v10 does not spell this byte either
 	lda	xwa, (xsp+82)
 	ld	bc, (xsp+10)
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+82)
 	subw	(xwa+2), 0x16	; v10 does not spell this byte either
 	lda	xbc, (xsp+78)
 	ld	de, (xsp+12)
-	calr	AudioCtrl_DataBlock_Helper5
+	calr	PsMixer_CalcGridCellPoint
 	addw	(xsp+78), 0x14	; v10 does not spell this byte either
 	lda	xwa, (xsp+54)
 	ld	bc, (xsp+8)
@@ -15370,38 +15428,38 @@ AudioCtrl_DataBlock_Helper8_Loop3:
 	lda	xde, (xsp+22)
 	ld	hl, (xsp+10)
 	cp	hl, (149394:24)
-	jr	nz, AudioCtrl_DataBlock_Skip46
+	jr	nz, PsMixer_CtlTypeProc1_Skip4
 	ld	hl, (xsp+12)
 	cp	hl, (149392:24)
-	jr	nz, AudioCtrl_DataBlock_Skip46
+	jr	nz, PsMixer_CtlTypeProc1_Skip4
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	1
-	jr	AudioCtrl_DataBlock_Join18
-AudioCtrl_DataBlock_Skip46:
+	jr	PsMixer_CtlTypeProc1_Join
+PsMixer_CtlTypeProc1_Skip4:
 	ld	xhl, 3:i3
 	push	xhl
 	pushw	0
 	pushw	7
 	pushw	0
 	pushw	0
-AudioCtrl_DataBlock_Join18:
+PsMixer_CtlTypeProc1_Join:
 	call	DrawStringReverse
-AudioCtrl_DataBlock_Helper8_Skip:
+PsMixer_CtlTypeProc1_Skip5:
 	incw	1, (xsp+12)
 	incw	1, (xsp+20)
 	cpw	(xsp+20), 8	; v10 does not spell this byte either
-	jrl	lt, AudioCtrl_DataBlock_Helper8_Loop3
-AudioCtrl_DataBlock_Helper8_Skip2:
+	jrl	lt, PsMixer_CtlTypeProc1_Loop3
+PsMixer_CtlTypeProc1_Skip6:
 	incw	1, (xsp+10)
 	incw	1, (xsp+18)
 	cpw	(xsp+18), 5	; v10 does not spell this byte either
-	jrl	lt, AudioCtrl_DataBlock_Helper8_Loop2
-	jrl	AudioCtrl_DataBlock_Join19
-AudioCtrl_DataBlock_Skip47:
+	jrl	lt, PsMixer_CtlTypeProc1_Loop2
+	jrl	PsMixer_CtlTypeProc1_Join2
+PsMixer_CtlTypeProc1_Skip7:
 	ld	wa, (xsp+18)
 	calr	Util_SignExtendAndDouble
 	ld	xiz, xhl
@@ -15443,26 +15501,27 @@ AudioCtrl_DataBlock_Skip47:
 	ld	xwa, 20971524
 	ld	xbc, 31457449
 	call	MainFuncCall
-AudioCtrl_DataBlock_Join19:
+PsMixer_CtlTypeProc1_Join2:
 	ld	xhl, 0:i3
 	pop	xiz
 	lda	xsp, (xsp+94)
 	ret
+PsMixer_CtlTypeProc10:
 	lda	xsp, (xsp-56)
 	push	xiz
 	cp	xbc, 29360141
-	jr	z, AudioCtrl_DataBlock_Skip48
-	calr	AudioCtrl_DataBlock_Helper8
-	jrl	AudioCtrl_DataBlock_Epilogue2
-AudioCtrl_DataBlock_Skip48:
+	jr	z, PsMixer_CtlTypeProc10_Skip
+	calr	PsMixer_CtlTypeProc1
+	jrl	PsMixer_CtlTypeProc10_Epilogue
+PsMixer_CtlTypeProc10_Skip:
 	ld	iz, de
 	lda	xwa, (xsp+52)
 	ld	bc, iz
-	calr	AudioCtrl_DataBlock_Helper3
+	calr	PsMixer_CalcRowBandRect
 	lda	xwa, (xsp+52)
 	subw	(xwa+2), 0x16	; v10 does not spell this byte either
 	ld	bc, 7:i3
-	calr	AudioCtrl_DataBlock_Helper
+	calr	PsMixer_DrawFrameBox
 	ld	wa, iz
 	exts	xwa
 	divs	wa, 5
@@ -15504,11 +15563,11 @@ AudioCtrl_DataBlock_Skip48:
 	ld	iz, (0x024794:24)
 	sla	iz, 3
 	ld	qiz, 0
-AudioCtrl_DataBlock_Loop2:
+PsMixer_CtlTypeProc10_Loop:
 	lda	xwa, (xsp+52)
 	lda	xbc, (xsp+48)
 	ld	de, iz
-	calr	AudioCtrl_DataBlock_Helper5
+	calr	PsMixer_CalcGridCellPoint
 	subw	(xsp+48), 0x34	; v10 does not spell this byte either
 	ld	wa, iz
 	sla	wa, 2
@@ -15532,30 +15591,31 @@ AudioCtrl_DataBlock_Loop2:
 	inc	1, iz
 	inc	1, qiz
 	cpw	qiz, 8
-	jr	lt, AudioCtrl_DataBlock_Loop2
+	jr	lt, PsMixer_CtlTypeProc10_Loop
 	ld	xhl, 0:i3
-AudioCtrl_DataBlock_Epilogue2:
+PsMixer_CtlTypeProc10_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+56)
 	ret
+PsMixer_CtlTypeProc8:
 	lda	xsp, (xsp-18)
 	pushw	iz
 	ld	(xsp+16), xbc
 	ld	xbc, (xsp+16)
 	cp	xbc, 29360156
-	jrl	z, AudioCtrl_DataBlock_Skip50
+	jrl	z, PsMixer_CtlTypeProc8_Skip4
 	cp	xbc, 29360154
-	jr	z, AudioCtrl_DataBlock_Skip49
+	jr	z, PsMixer_CtlTypeProc8_Skip
 	cp	xbc, 29360152
-	jr	z, AudioCtrl_DataBlock_Skip49
+	jr	z, PsMixer_CtlTypeProc8_Skip
 	cp	xbc, 29360153
-	jr	z, AudioCtrl_DataBlock_Skip49
+	jr	z, PsMixer_CtlTypeProc8_Skip
 	cp	xbc, 29360151
-	jr	z, AudioCtrl_DataBlock_Skip49
+	jr	z, PsMixer_CtlTypeProc8_Skip
 	ld	xbc, (xsp+16)
-	calr	AudioCtrl_DataBlock_Helper6
-	jrl	AudioCtrl_DataBlock_Epilogue3
-AudioCtrl_DataBlock_Skip49:
+	calr	PsMixer_CtlTypeProc7
+	jrl	PsMixer_CtlTypeProc8_Epilogue
+PsMixer_CtlTypeProc8_Skip:
 	ld	wa, de
 	srl	xde, 0
 	ld	qde, 0
@@ -15609,24 +15669,24 @@ AudioCtrl_DataBlock_Skip49:
 	ld	(xsp+12), hl
 	ld	wa, (xsp+2)
 	cp	wa, 65535
-	jrl	z, AudioCtrl_DataBlock_Loop3
+	jrl	z, PsMixer_CtlTypeProc8_Loop
 	cpw	(xsp+14), 0	; v10 does not spell this byte either
-	jrl	z, AudioCtrl_DataBlock_Entry2
+	jrl	z, PsMixer_CtlTypeProc8_Entry
 	ld	xwa, (xsp+16)
 	cp	xwa, 0x1c0001a
-	jr	z, AudioCtrl_DataBlock_Helper8_Skip4
+	jr	z, PsMixer_CtlTypeProc8_Skip3
 	cp	xwa, 0x1c00018
-	jr	z, AudioCtrl_DataBlock_Helper8_Skip4
+	jr	z, PsMixer_CtlTypeProc8_Skip3
 	cp	xwa, 0x1c00019
-	jr	z, AudioCtrl_DataBlock_Helper8_Skip3
+	jr	z, PsMixer_CtlTypeProc8_Skip2
 	cp	xwa, 0x1c00017
-	jr	nz, AudioCtrl_DataBlock_Entry2
-AudioCtrl_DataBlock_Helper8_Skip3:
+	jr	nz, PsMixer_CtlTypeProc8_Entry
+PsMixer_CtlTypeProc8_Skip2:
 	ld	wa, (xsp+2)
 	ldw	bc, 1026
 	call	DkMdlyPly_CheckState_Helper
 	cp	hl, 0:i3
-	jr	nz, AudioCtrl_DataBlock_Entry2
+	jr	nz, PsMixer_CtlTypeProc8_Entry
 	pushw	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
@@ -15641,13 +15701,13 @@ AudioCtrl_DataBlock_Helper8_Skip3:
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
 	ld	de, 0:i3
-	jr	AudioCtrl_DataBlock_Join20
-AudioCtrl_DataBlock_Helper8_Skip4:
+	jr	PsMixer_CtlTypeProc8_Join
+PsMixer_CtlTypeProc8_Skip3:
 	ld	wa, (xsp+2)
 	ldw	bc, 1025
 	call	DkMdlyPly_CheckState_Helper
 	cp	hl, 0:i3
-	jr	nz, AudioCtrl_DataBlock_Entry2
+	jr	nz, PsMixer_CtlTypeProc8_Entry
 	pushw	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ldw	bc, 1026
@@ -15657,26 +15717,26 @@ AudioCtrl_DataBlock_Helper8_Skip4:
 	ld	wa, (xsp+4)
 	ldw	bc, 1027
 	ld	de, 0:i3
-AudioCtrl_DataBlock_Join20:
+PsMixer_CtlTypeProc8_Join:
 	call	MainLswPartPut
-AudioCtrl_DataBlock_Loop3:
+PsMixer_CtlTypeProc8_Loop:
 	ld	xhl, 0:i3
-	jr	AudioCtrl_DataBlock_Epilogue3
-AudioCtrl_DataBlock_Entry2:
+	jr	PsMixer_CtlTypeProc8_Epilogue
+PsMixer_CtlTypeProc8_Entry:
 	pushw	(xsp+6)	; v10 does not spell this byte either
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+14)
 	ld	de, (xsp+6)
 	call	MainLswPartAdd
-	jr	AudioCtrl_DataBlock_Loop3
-AudioCtrl_DataBlock_Skip50:
+	jr	PsMixer_CtlTypeProc8_Loop
+PsMixer_CtlTypeProc8_Skip4:
 	cp	xde, 1026
-	jr	z, AudioCtrl_DataBlock_Skip51
+	jr	z, PsMixer_CtlTypeProc8_Skip5
 	cp	xde, 1027
-	jr	nz, AudioCtrl_DataBlock_Loop3
-AudioCtrl_DataBlock_Skip51:
+	jr	nz, PsMixer_CtlTypeProc8_Loop
+PsMixer_CtlTypeProc8_Skip5:
 	ld	xhl, 1:i3
-AudioCtrl_DataBlock_Epilogue3:
+PsMixer_CtlTypeProc8_Epilogue:
 	popw	iz
 	lda	xsp, (xsp+18)
 	ret
