@@ -352,7 +352,7 @@ FP_pow_IntPower:
 	lda xwa, (xsp + 66)
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	cp hl, 0:i3
 	jr nz, FP_pow_IntPower_GreaterPath
 	lda xwa, (xsp + 46)
@@ -389,14 +389,14 @@ FP_pow_IntPower_LargeStep:
 	call FP_DP_CmpZero64
 	cp hl, 0:i3
 	jr nz, FP_pow_IntPower_LargeStep_NegPath
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_CopyOrNegate8
 	jr FP_pow_IntPower_LargeStep_Copy
 
 ; Overflow with a negative base: result = -DBL_MAX.
 FP_pow_IntPower_LargeStep_NegPath:
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	lda xwa, (xsp + 46)
 	call FP_DP_Raw8Copy
 
@@ -533,7 +533,7 @@ FP_pow_ExpLog_RangeCheck:
 	ld bc, 2:i3
 	call FP_DP_CmpZero64
 	lda xwa, (xsp + 46)
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	cp hl, 0:i3
 	jr nz, FP_pow_ExpLog_NegResult
 	call FP_DP_CopyOrNegate8
@@ -1588,7 +1588,7 @@ FP_DP_ShiftDecode_Zero:
 FP_DP_AddMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EA06:24)
+	jp nz, (FP_DP_CopyWithSign:24)
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	add xde, (xbc + 4)
@@ -1619,7 +1619,7 @@ FP_DP_AddMantissa_Store:
 FP_SP_AddMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EA02:24)
+	jp nz, (FP_DP_CopyNoSign:24)
 	ld xix, (xwa + 4)
 	add xix, (xbc + 4)
 	bit_erpw 0xF2, 0x08
@@ -1846,7 +1846,7 @@ __jrt_nop_03E0A5:
 ; program's writable DRAM image. The identical hook appears at 0x03E0FB for singles.
 ; (The alias symbol __jrt_nop_03E0A5 refers to the same address.)
 FP_DP_Encode_NormCheck:
-	ld xbc, (0x00f428:24)
+	ld xbc, (FPConst_Zero:24)
 	or xbc, xbc
 	mri_d2 0xB1, 0xEE
 	ret
@@ -1904,7 +1904,7 @@ FP_SP_Encode_Overflow:
 FP_SP_Encode_Overflow_Store:
 	ldw (0x040c22:24), 0x0022
 	ld (xwa), xde
-	ld xbc, (0x00f428:24)
+	ld xbc, (FPConst_Zero:24)
 	or xbc, xbc
 	mri_d2 0xB1, 0xEE
 	ret
@@ -2382,7 +2382,7 @@ FP_SP_AlignMantissa_MaxShift:
 FP_DP_DivCore:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3E884:24)
+	jp nz, (FP_NaN_Handler:24)
 	ld l, (xbc + 3)
 	xor (xwa + 3), l
 	ld hl, (xbc + 256)
@@ -2472,7 +2472,7 @@ FP_SP_DivCore_Pad:
 FP_SP_DivCore:
 	ld e, (xwa + 2)
 	or e, (xwa + 2)
-	jp nz, (0x3E884:24)
+	jp nz, (FP_NaN_Handler:24)
 	push xiz
 	push xwa
 	ld hl, (xbc + 256)
@@ -2571,7 +2571,7 @@ FP_SP_MulMantissaCore_Divisor1:
 FP_DP_SubMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE3A:24)
+	jp nz, (FP_DP_NegWithSign:24)
 	ld xhl, (xwa + 8)
 	ld xde, (xwa + 4)
 	sub xde, (xbc + 4)
@@ -2666,7 +2666,7 @@ FP_DP_SubMantissa_Zero:
 FP_SP_SubMantissa:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE36:24)
+	jp nz, (FP_DP_NegNoSign:24)
 	ld xiy, xwa
 	ld de, (xwa + 256)
 	ld xix, (xwa + 4)
@@ -2755,7 +2755,7 @@ FP_exp_NonZero:
 	jr nz, FP_exp_LessPath
 	ldw (0x040c22:24), 0x0022
 	ld xwa, (xsp + 54)
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	call FP_DP_Raw8Copy
 	jrl FP_exp_Epilog
 
@@ -2859,7 +2859,7 @@ FP_log:
 FP_log_InRange:
 	lda xwa, (xsp + 104)
 	push xwa
-	lda xde, (0x00f42c:24)
+	lda xde, (FPConst_Ln2:24)
 	lda xbc, (xsp + 118)
 	lda xwa, (xsp + 52)
 	call FP_ddiv
@@ -3338,7 +3338,7 @@ FP_ldexp_InRange:
 	cp bc, 0x7FF
 	jr le, FP_ldexp_ClampLow
 	ldw (0x040c22:24), 0x0022
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	bitm 7, (xhl)
 	jr z, FP_ldexp_ClampHigh
 	ld xwa, xde
@@ -3393,7 +3393,7 @@ FP_ldexp_IncLoop:
 	cp wa, 0x7FF
 	jr c, FP_ldexp_IncStep
 	ldw (0x040c22:24), 0x0022
-	lda xbc, (0x00f420:24)
+	lda xbc, (FPConst_MaxNorm:24)
 	ld a, (xix)
 	bit 7, a
 	jr z, FP_ldexp_IncClamp_Copy
@@ -3482,7 +3482,7 @@ FP_DP_MulAdd_Pad:
 FP_DP_MulAdd:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE70:24)
+	jp nz, (FP_Overflow_Handler:24)
 	push xiz
 	lda xsp, (xsp - 16)
 	ld xhl, (xbc)
@@ -3569,7 +3569,7 @@ FP_DP_MulAdd_Store:
 FP_SP_MulAdd:
 	ld e, (xwa + 2)
 	or e, (xbc + 2)
-	jp nz, (0x3EE70:24)
+	jp nz, (FP_Overflow_Handler:24)
 	push xiz
 	ld xiz, xwa
 	ld xhl, (xbc)
