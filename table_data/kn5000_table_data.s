@@ -1618,7 +1618,7 @@ Boot_ClearRAM:
 	srl xbc, 1	; SRL 1, XBC (divide by 2 for word count)
 	jr z, Boot_ClearRAM__clear1_done	; skip if zero
 	ld xhl, xde	; source = dest for fill
-	stiw_dsp 0xE9, 0x00, 0x00	; LD (XDE+), 0x0000 (store first zero word)
+	ldw (xde+), 0x0000	; LD (XDE+), 0x0000 (store first zero word)
 	dec 1, xbc	; DEC 1, XBC
 	or xbc, xbc	; test if zero
 	jr z, Boot_ClearRAM__clear1_done
@@ -1641,7 +1641,7 @@ Boot_ClearRAM__clear1_aligned:
 	srl xbc, 1	; SRL 1, XBC
 	jr z, Boot_ClearRAM__clear2_done
 	ld xhl, xde
-	stiw_dsp 0xE9, 0x00, 0x00	; LD (XDE+), 0x0000
+	ldw (xde+), 0x0000	; LD (XDE+), 0x0000
 	dec 1, xbc	; DEC 1, XBC
 	or xbc, xbc
 	jr z, Boot_ClearRAM__clear2_done

@@ -14414,8 +14414,8 @@ VoiceSlot_ComputeIndex_Helper:
 	pop	xix
 	cpw	(3426:16), 0
 	jrl	z, Display_BytecodeBlock_F_Entry2
-	stib_dsp	240, 27
-	stib_dsp	240, 139
+	ld	(xix+), 27
+	ld	(xix+), 139
 	ld	wa, (3426:16)
 	call	UIRender_DescriptorTable2
 	ld	xiy, 4481
@@ -14432,7 +14432,7 @@ VoiceSlot_ComputeIndex_Helper:
 Display_BytecodeBlock_F_Entry:
 	bitda	7, (0x0d64)
 	jrl	z, Display_BytecodeBlock_F_Return3
-	stib_dsp	240, 43
+	ld	(xix+), 43
 Display_BytecodeBlock_F_Entry2:
 	bitda	7, (0x0d64)
 	jrl	z, Display_BytecodeBlock_F_Return3

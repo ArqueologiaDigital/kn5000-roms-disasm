@@ -370,7 +370,7 @@ MemClear_DRAM_And_ExtRAM:
 	srl xbc, 1
 	jr z, MemClear_DRAM_OddByte
 	ld xhl, xde
-	stiw_dsp 0xE9, 0x00, 0x00
+	ldw (xde+), 0x0000
 	dec 1, xbc
 	or xbc, xbc
 	jr z, MemClear_DRAM_OddByte
@@ -395,7 +395,7 @@ MemClear_ExtRAM:
 	srl xbc, 1
 	jr z, MemClear_ExtRAM_OddByte
 	ld xhl, xde
-	stiw_dsp 0xE9, 0x00, 0x00
+	ldw (xde+), 0x0000
 	dec 1, xbc
 	or xbc, xbc
 	jr z, MemClear_ExtRAM_OddByte
@@ -41904,7 +41904,7 @@ DSP_System_Init:	; 034C45h
 
 ; Zero-fill loop over 0x041342..0x041367 (0x26 bytes of global audio flags).
 DSP_System_Init_Clear1:
-	stib_dsp 0xE0, 0x00	; Clear byte
+	ld (xwa+), 0x00	; Clear byte
 	inc 1, bc
 	cp bc, 0x26
 	jr c, DSP_System_Init_Clear1
@@ -41918,7 +41918,7 @@ DSP_System_Init_Clear2:
 
 ; Body of the part-table zero-fill.
 DSP_System_Init_Clear2_Loop:
-	stib_dsp 0xE0, 0x00
+	ld (xwa+), 0x00
 	inc 1, bc
 	cp bc, 0x1D26
 	jr c, DSP_System_Init_Clear2_Loop

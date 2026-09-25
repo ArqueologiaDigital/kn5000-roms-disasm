@@ -4047,7 +4047,7 @@ GroupBox_KeyRelease_CheckRange:
 	add xbc, xwa
 	ld xwa, 0x274e8
 	add xwa, xbc
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp (xwa), 0x0
 	jrl z, GroupBox_ReturnZero
 	ld (xwa), 0x0

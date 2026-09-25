@@ -883,6 +883,12 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #            (0xa6/0xa2: misframed 0x00f6a6xx pointer tables in accompaniment_
 #            engine.s) and are `.byte` with a comment.  Gate 13/13; FOIL: one
 #            `ld (xde+), a` changed to `lda xbc, (xde+:1)` -> v10 1 byte differs.
+#            + 444 lines, 90 files, in a second pass: STIB_DPI / STIW_DPI's own
+#            AsmString is `stib_dsp` / `stiw_dsp`, which the first pass's table
+#            (keyed on def names) missed -- `stib_dsp 0xf0, 0x00` -> `ld (xix+),
+#            0x00`.  Found by cross-checking the table against every def with
+#            opcode C4/C5/F4/F5 in llvm-tblgen -print-records (89 defs, these 2
+#            missing).  Tree-wide census after: 0 post-increment pseudos.
 #   disp256  1,041 lines, 61 files: `(xrr+256)` / `(xrr+0x100)` /
 #            `(xrr+0x0100)` -- the retired d8-carrying-0 sentinel -- is
 #            `(xrr+0:8)`.  ⚠ 4 sites spell a REAL +256 and are left alone:

@@ -2197,7 +2197,7 @@ TextBox_HandlePaint:
 	jr ule, TextBox_SetupWordwrap
 
 TextBox_FillBufferLoop:
-	stib_dsp 0xf8, 0x00
+	ld (xiz+), 0x00
 	inc 1, bc
 	cp bc, wa
 	jr c, TextBox_FillBufferLoop
@@ -6624,7 +6624,7 @@ Gfx_DecodeImageToBuffer:
 	ld (xsp + 40), xwa
 
 ImageDecode_ClearPaletteLoop:
-	stiw_dsp 0xe5, 0x00, 0x00
+	ldw (xbc+), 0x0000
 	cp xbc, xwa
 	jr c, ImageDecode_ClearPaletteLoop
 	ld xhl, 0x56800

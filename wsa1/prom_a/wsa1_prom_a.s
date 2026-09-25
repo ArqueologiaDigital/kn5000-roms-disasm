@@ -19256,7 +19256,7 @@ BitMask32ByIndex_DeadCopy:
 	jr z, .LF8A662                                           ; F8A64E  66 12
 	ldw de, 0x7f40                                       ; F8A650  32 40 7f
 	calr sub_F8A500                                          ; F8A653  1e aa fe
-	stiw_dsp 0xf1, 0xb9, 0x00                            ; F8A656  f5 f1 02 b9 00
+	ldw (xix+), 0x00b9                            ; F8A656  f5 f1 02 b9 00
 	ldw de, 0x7f40                                       ; F8A65B  32 40 7f
 	jp sub_F8A500                                        ; F8A65E  1b 00 a5 f8
 .LF8A662:
@@ -19861,7 +19861,7 @@ sub_F8AA57:   ; entry: PanelGroupActionListPool
 	calr PanelCtrl_AssignToParamNumber                                            ; F8AA96  1e 13 00
 	pop XIX                                              ; F8AA99  5c
 	ld (xix+), a                                    ; F8AA9A  f5 f0 41
-	stib_dsp 0xf0, 0x00                                  ; F8AA9D  f5 f0 00 00
+	ld (xix+), 0x00                                  ; F8AA9D  f5 f0 00 00
 	ldw de, 0x7f40                                       ; F8AAA1  32 40 7f
 	jp sub_F8A90B                                        ; F8AAA4  1b 0b a9 f8
 .LF8AAA8:
@@ -98429,7 +98429,7 @@ sub_FBB20B:
 	add XWA,0x00007800                                   ; FBB214  e8 c8 00 78 00 00
 	ld (0x21d7:16), xwa                                 ; FBB21A  f1 d7 21 60
 	ld XIZ,0x000021d0                                    ; FBB21E  46 d0 21 00 00
-	stiw_dsp 0xf9, 0x53, 0x51                            ; FBB223  f5 f9 02 53 51
+	ldw (xiz+), 0x5153                            ; FBB223  f5 f9 02 53 51
 	ld (XIZ),0x46                                        ; FBB228  b6 00 46
 	ld XIZ,0x000021e7                                    ; FBB22B  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB230  86 3c df
@@ -98460,7 +98460,7 @@ sub_FBB20B:
 	add XWA,XBC                                          ; FBB288  e9 80
 	ld (0x21d7:16), xwa                                 ; FBB28A  f1 d7 21 60
 	ld XIZ,0x000021d0                                    ; FBB28E  46 d0 21 00 00
-	stiw_dsp 0xf9, 0x53, 0x45                            ; FBB293  f5 f9 02 53 45
+	ldw (xiz+), 0x4553                            ; FBB293  f5 f9 02 53 45
 	ld (XIZ),0x51                                        ; FBB298  b6 00 51
 	ld XIZ,0x000021e7                                    ; FBB29B  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB2A0  86 3c df
@@ -98501,7 +98501,7 @@ sub_FBB2D5:
 	add XWA,0x00007800                                   ; FBB312  e8 c8 00 78 00 00
 	ld (0x21d7:16), xwa                                 ; FBB318  f1 d7 21 60
 	ld XIZ,0x000021d0                                    ; FBB31C  46 d0 21 00 00
-	stiw_dsp 0xf9, 0x53, 0x51                            ; FBB321  f5 f9 02 53 51
+	ldw (xiz+), 0x5153                            ; FBB321  f5 f9 02 53 51
 	ld (XIZ),0x46                                        ; FBB326  b6 00 46
 	ld XIZ,0x000021e7                                    ; FBB329  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB32E  86 3c df
@@ -98523,7 +98523,7 @@ sub_FBB2D5:
 	add XWA,XBC                                          ; FBB361  e9 80
 	ld (0x21d7:16), xwa                                 ; FBB363  f1 d7 21 60
 	ld XIZ,0x000021d0                                    ; FBB367  46 d0 21 00 00
-	stiw_dsp 0xf9, 0x53, 0x45                            ; FBB36C  f5 f9 02 53 45
+	ldw (xiz+), 0x4553                            ; FBB36C  f5 f9 02 53 45
 	ld (XIZ),0x51                                        ; FBB371  b6 00 51
 	ld XIZ,0x000021e7                                    ; FBB374  46 e7 21 00 00
 	and (XIZ),0xdf                                       ; FBB379  86 3c df
@@ -106744,7 +106744,7 @@ RemoteImage_LoadHeader:
 .LFC0118:
 	cp A,0x08                                            ; FC0118  c9 cf 08
 	jr c, .LFC0126                                       ; FC011B  67 09
-	stib_dsp 0xf4, 0x07                                  ; FC011D  f5 f4 00 07
+	ld (xiy+), 0x07                                  ; FC011D  f5 f4 00 07
 	sub A,0x08                                           ; FC0121  c9 ca 08
 	jr .LFC0118                                          ; FC0124  68 f2
 .LFC0126:
@@ -106761,7 +106761,7 @@ RemoteImage_LoadHeader:
 .LFC0144:
 	cp A,0x08                                            ; FC0144  c9 cf 08
 	jr c, .LFC0152                                       ; FC0147  67 09
-	stib_dsp 0xf4, 0x07                                  ; FC0149  f5 f4 00 07
+	ld (xiy+), 0x07                                  ; FC0149  f5 f4 00 07
 	sub A,0x08                                           ; FC014D  c9 ca 08
 	jr .LFC0144                                          ; FC0150  68 f2
 .LFC0152:
@@ -170905,7 +170905,7 @@ sub_FE91C0:
 sub_FE91D2:
 	calr sub_FE9223                                      ; FE91D2  1e 4e 00
 	ld XIY,0x00601f16                                    ; FE91D5  45 16 1f 60 00
-	stib_dsp 0xf4, 0x90                                  ; FE91DA  f5 f4 00 90
+	ld (xiy+), 0x90                                  ; FE91DA  f5 f4 00 90
 	ld wa, (0x601f54:24)                                ; FE91DE  d2 54 1f 60 20
 	div A,0x60                                           ; FE91E3  c9 0a 60
 	ld (xiy+), w                                    ; FE91E6  f5 f4 40

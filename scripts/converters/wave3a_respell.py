@@ -187,6 +187,9 @@ AUTOINC.update({
     "popb_dpd": ("pop", "pop", 1, True), "popw_dpd": ("popw", "pop", 2, True),
     "stib_dpi": ("ld", "im8", 1, False), "stib_dpd": ("ld", "im8", 1, True),
     "stiw_dpi": ("ldw", "im16", 2, False),
+    # STIB_DPI / STIW_DPI's own AsmString is "stib_dsp" / "stiw_dsp" -- the
+    # table above was keyed on the def names, so the first run missed 444 sites
+    "stib_dsp": ("ld", "im8", 1, False), "stiw_dsp": ("ldw", "im16", 2, False),
     # ⚠ the SWAPPED pair: the name says store/lda, the bytes say lda/store
     "stb_dpi": ("lda", "swap_lda", 0, False), "st_dpdb": ("lda", "swap_lda", 0, True),
     "lda_dpi": ("ld", "swap_st", 1, False), "lda_dpd": ("ld", "swap_st", 1, True),

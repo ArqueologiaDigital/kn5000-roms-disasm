@@ -3162,7 +3162,7 @@ SndParam_ClearLoop:
 	lda_dri XBC, 0xe5, 0x00, 0x40
 
 SndParam_ClearHeap:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SndParam_ClearHeap
 	ldw (xde), 0x0

@@ -17038,7 +17038,7 @@ VwVariBox_Confirm:
 	lda xbc, (xde + 17)
 
 VwVariBox_Confirm_ClearBuf:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, VwVariBox_Confirm_ClearBuf
 	ld XWA, (xsp + 0x0118)

@@ -35,7 +35,7 @@ MIDI_INIT_SEQUENCES:
 	lda xbc, (xbc + 64)
 
 MidiInit_FillLoop:
-	stiw_dsp 0xe1, 0x00, 0x00
+	ldw (xwa+), 0x0000
 	cp xwa, xbc
 	jr c, MidiInit_FillLoop
 	ret

@@ -1708,7 +1708,7 @@ INIT_MEMORY_TEST__no_error:
 	ld xwa, xbc
 	inc 8, xbc	; XBC = 0x0560, the loop bound: INC #3,r encodes 8 as 0, so this is +8 not +1
 INIT_MEMORY_TEST__clear_loop:
-	stib_dsp 0xE0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, INIT_MEMORY_TEST__clear_loop
 

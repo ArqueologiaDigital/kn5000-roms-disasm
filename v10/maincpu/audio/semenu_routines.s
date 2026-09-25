@@ -79,7 +79,7 @@ SeMenu_RegisterElement_Extended:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_ClearLoop
 	lda xwa, (xsp + 10)
@@ -118,7 +118,7 @@ SeMenu_RegisterElement_Type1:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_Type1_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_Type1_ClearLoop
 	lda xwa, (xsp + 10)
@@ -150,7 +150,7 @@ SeMenu_RegisterElement_Type1_ClearLoop:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_Type1_AltLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_Type1_AltLoop
 	lda xwa, (xsp + 10)
@@ -181,7 +181,7 @@ SeMenu_InitDisplayField:
 	lda xbc, (xbc + 9)
 
 SeMenu_InitDisplayField_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_InitDisplayField_ClearLoop
 	lda xwa, (xsp + 12)
@@ -222,7 +222,7 @@ SeMenu_InitDisplayField_Alt:
 	lda xbc, (xbc + 9)
 
 SeMenu_InitDisplayField_Alt_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_InitDisplayField_Alt_ClearLoop
 	lda xwa, (xsp + 12)
@@ -267,7 +267,7 @@ SeMenu_RegisterValueDisplay:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterValueDisplay_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterValueDisplay_ClearLoop
 	lda xwa, (xsp + 10)
@@ -296,7 +296,7 @@ SeMenu_RegisterElement_Type2:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterElement_Type2_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterElement_Type2_ClearLoop
 	lda xwa, (xsp + 10)
@@ -348,7 +348,7 @@ SeMenu_RegisterParamDisplay:
 	lda xbc, (xbc + 9)
 
 SeMenu_RegisterParamDisplay_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_RegisterParamDisplay_ClearLoop
 	lda xwa, (xsp + 10)
@@ -376,7 +376,7 @@ SeMenu_RegisterParamDisplay_Data:
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
 SeMenu_RegisterParamDisplay_Data_Loop:
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	cp	xwa, xbc
 	jr	c, SeMenu_RegisterParamDisplay_Data_Loop
 	lda	xwa, (xsp+14)
@@ -423,7 +423,7 @@ SeMenu_RegisterParamDisplay_Data_Join:
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
 SeMenu_RegisterParamDisplay_Data_Loop2:
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	cp	xwa, xbc
 	jr	c, SeMenu_RegisterParamDisplay_Data_Loop2
 	lda	xwa, (xsp+14)
@@ -476,7 +476,7 @@ SeMenu_SetupDisplayObject:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetupDisplayObject_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupDisplayObject_ClearLoop
 	lda xwa, (xsp + 14)
@@ -503,7 +503,7 @@ SeMenu_SetupDisplayObject_Data:
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
 SeMenu_SetupDisplayObject_Data_Loop:
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	cp	xwa, xbc
 	jr	c, SeMenu_SetupDisplayObject_Data_Loop
 	lda	xwa, (xsp+12)
@@ -541,7 +541,7 @@ SeMenu_SetupDisplayObject_Alt1:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetupDisplayObject_Alt1_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupDisplayObject_Alt1_ClearLoop
 	lda xwa, (xsp + 10)
@@ -592,7 +592,7 @@ SeMenu_SetupDisplayObject_Alt2_Continue:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetupDisplayObject_Alt3:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupDisplayObject_Alt3
 	lda xwa, (xsp + 10)
@@ -617,7 +617,7 @@ SeMenu_ClearDisplayBuffer:
 	lda xbc, (xbc + 9)
 
 SeMenu_ClearDisplayBuffer_Loop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_ClearDisplayBuffer_Loop
 	lda xwa, (xsp + 10)
@@ -641,7 +641,7 @@ SeMenu_InitDisplayColumn:
 	lda xix, (xde + 9)
 
 SeMenu_InitDisplayColumn_Loop:
-	stib_dsp 0xec, 0x00
+	ld (xhl+), 0x00
 	cp xhl, xix
 	jr c, SeMenu_InitDisplayColumn_Loop
 	ld (xde), 0x80
@@ -663,7 +663,7 @@ SeMenu_InitDisplayColumn_Data:
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
 SeMenu_InitDisplayColumn_Data_Loop:
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	cp	xwa, xbc
 	jr	c, SeMenu_InitDisplayColumn_Data_Loop
 	lda	xwa, (xsp+10)
@@ -692,7 +692,7 @@ SeMenu_SetDisplayValue:
 	lda xbc, (xbc + 9)
 
 SeMenu_SetDisplayValue_Loop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetDisplayValue_Loop
 	lda xwa, (xsp + 10)
@@ -931,7 +931,7 @@ SeMenu_SetupMenuDisplay_ConfigObj:
 	lda xbc, (xde + 4)
 
 SeMenu_SetupMenuDisplay_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SeMenu_SetupMenuDisplay_ClearLoop
 	cp (xsp + 6), 0x0

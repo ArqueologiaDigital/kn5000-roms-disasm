@@ -3973,7 +3973,7 @@ Audio_InitAllDefaults:
 	lda xbc, (xbc + 31)
 
 AudioInit_FillLoop:
-	stib_dsp 0xe0, 0x50
+	ld (xwa+), 0x50
 	cp xwa, xbc
 	jr ule, AudioInit_FillLoop
 	call ToneGen_FlashVerify
@@ -4033,7 +4033,7 @@ Audio_FillParamBuffer:
 	lda xbc, (xbc + 31)
 
 AudioFill_Loop:
-	stib_dsp 0xe0, 0x50
+	ld (xwa+), 0x50
 	cp xwa, xbc
 	jr ule, AudioFill_Loop
 	ret
@@ -7124,15 +7124,15 @@ UIWidget_MidiStreamControl:
 	ld	wa, 0:i3
 	lda_d16	xbc, (0x93d2)
 UIWidget_MidiStreamControl_Loop:
-	stib_dsp	228, 0
-	stib_dsp	228, 0
+	ld	(xbc+), 0
+	ld	(xbc+), 0
 	inc	1, wa
 	cp	wa, 32
 	jr	c, UIWidget_MidiStreamControl_Loop
 	ld	wa, 0:i3
 	lda_d16	xbc, (0x9412)
 UIWidget_MidiStreamControl_Code_Loop:
-	stib_dsp	228, 0
+	ld	(xbc+), 0
 	inc	1, wa
 	cp	wa, 32
 	jr	c, UIWidget_MidiStreamControl_Code_Loop
@@ -8734,7 +8734,7 @@ TempoExpr_StorePartIndex:
 	ld a, 0xc0:opc
 	ld w, (0x91c9:16)
 	ld (xix+), WA
-	stiw_dsp 0xf1, 0x17, 0x00
+	ldw (xix+), 0x0017
 	ld wa, (xsp)
 	bit 7, a
 	jr z, TempoExpr_CheckHighBitW

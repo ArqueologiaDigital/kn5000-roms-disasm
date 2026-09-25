@@ -86,11 +86,11 @@ ExcDotFunc_HandlerJumpTable:
 ExcDotFunc_Loop:
 	cp	l, 0:i3
 	jr	z, ExcDotFunc_Skip
-	stib_dsp	240, 157
+	ld	(xix+), 157
 	dec	1, l
 	jr	ExcDotFunc_Join
 ExcDotFunc_Skip:
-	stib_dsp	240, 46
+	ld	(xix+), 46
 ExcDotFunc_Join:
 	inc	1, de
 	cp	de, bc

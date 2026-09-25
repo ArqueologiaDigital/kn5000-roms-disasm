@@ -257,7 +257,7 @@ FmtNum_CheckMarked:
 
 FmtNum_WriteSpacePad:
 	ld (xwa+), c
-	stib_dsp 0xe0, 0x20
+	ld (xwa+), 0x20
 	ld (xwa), 0x20
 	ret
 
@@ -277,12 +277,12 @@ FmtNum_FormatNumber:
 	jr FmtNum_WriteTensUnits
 
 FmtNum_WriteM:
-	stib_dsp 0xe0, 0x4d
+	ld (xwa+), 0x4d
 
 FmtNum_WriteTensUnits:
 	cp c, 0xa
 	jr nc, FmtNum_WriteTwoDigits
-	stib_dsp 0xe0, 0x30
+	ld (xwa+), 0x30
 	add c, 0x30
 	ld (xwa), c
 	ret

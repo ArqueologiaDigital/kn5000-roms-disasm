@@ -23619,9 +23619,9 @@ RhythmPatInit_CopyChannels:
 
 	ldir85
 
-	stib_dsp 0xf0, 0x00
+	ld (xix+), 0x00
 
-	stib_dsp 0xf0, 0x00
+	ld (xix+), 0x00
 
 	ld (xix), 0x0
 
@@ -25670,7 +25670,7 @@ Tempo_FormatBPM:
 	ld	xbc, xde
 	lda	xde, (xde+10)
 Tempo_FormatBPMDigit:
-	stib_dsp	228, 0
+	ld	(xbc+), 0
 	cp	xbc, xde
 	jr	c, Tempo_FormatBPMDigit
 	cp	a, 0:i3
@@ -33525,7 +33525,7 @@ AccPatch_VoiceAssignDataBlock_Loop3:
 	ld	c, 249:opc
 	add	xiy, 6
 AccPatch_VoiceAssignDataBlock_Loop4:
-	stib_dsp	244, 0
+	ld	(xiy+), 0
 	dec	1, c
 	cp	c, 0:i3
 	jr	ugt, AccPatch_VoiceAssignDataBlock_Loop4
@@ -34673,7 +34673,7 @@ AccBankData_CopyDataBlock:
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 AccBankData_ReInit_ScanLoop_Code_Loop:
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	cp	xwa, xbc
 	jr	c, AccBankData_ReInit_ScanLoop_Code_Loop
 	ret
@@ -34686,7 +34686,7 @@ StyleBuf_ClearEntry_Outer:
 	lda xhl, (xwa + 32)
 
 StyleBuf_ClearEntry_Inner:
-	stib_dsp 0xe8, 0x00
+	ld (xde+), 0x00
 	cp xde, xhl
 	jr c, StyleBuf_ClearEntry_Inner
 	lda xwa, (xwa + 32)
@@ -34699,7 +34699,7 @@ StyleConv_ClearWorkBuffer:
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 StyleConv_ClearWorkBuf_Loop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, StyleConv_ClearWorkBuf_Loop
 	ret
@@ -34712,7 +34712,7 @@ StyleConv_ClearEntry_Outer:
 	lda xix, (xde + 32)
 
 StyleConv_ClearEntry_Inner:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xix
 	jr c, StyleConv_ClearEntry_Inner
 	ld xwa, 0:i3
@@ -34768,7 +34768,7 @@ SoundMem_ClearRegion:
 	ld xwa, 0xffc00
 
 SoundMem_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, 0x100000
 	jr c, SoundMem_ClearLoop
 	ret
@@ -34783,7 +34783,7 @@ StyleFile_ClearTable_Outer:
 	lda xix, (xde + 100)
 
 StyleFile_ClearTable_Inner:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xix
 	jr c, StyleFile_ClearTable_Inner
 	ld xwa, 0:i3
@@ -35010,7 +35010,7 @@ StylCnvModl_InitListDisplay:
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 StylCnvModl_ClearDisplayBuf:
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	cp	xwa, xbc
 	jr	c, -8
 	ld	xwa, 14991678
@@ -35239,7 +35239,7 @@ StylCnvModl_OK_Select_ClearMem:
 	ld xwa, 0:i3
 
 StylCnvModl_OK_Select_FillLoop:
-	stib_dsp	228, 0
+	ld	(xbc+), 0
 	inc	1, xwa
 	cp	xwa, 196608
 	jr	c, StylCnvModl_OK_Select_FillLoop
@@ -36043,7 +36043,7 @@ StylCnv_Type4_Init:
 	ld	xwa, xde
 	lda	xbc, (xde+32)
 StylCnv_Type4_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, StylCnv_Type4_ClearLoop
 	ldw (xsp + 4), 0x0
@@ -36955,7 +36955,7 @@ StylCnv_Multi_InitAndClear:
 	ld	xwa, xbc
 	lda	xbc, (xbc+100)
 StylCnv_Multi_ClearLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, StylCnv_Multi_ClearLoop
 	ldw (xsp + 4), 0x0
@@ -37008,7 +37008,7 @@ StylCnv_Multi_HandleSeparator:
 	ld XWA,XBC
 	lda xbc, (xbc + 0x64)
 StylCnv_Multi_ClearSubLoop:
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	cp	xwa, xbc
 	jr	c, StylCnv_Multi_ClearSubLoop
 	incw	1, (14822:16)

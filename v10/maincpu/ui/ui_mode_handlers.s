@@ -1774,7 +1774,7 @@ EffectMode_DispatchUpdate:
 
 EffectMode_InitSwbWr_DiagMode:
 	lda xwa, (0xf9b6:16)
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	andmi8 (xwa), 0x80
 	lda xbc, (0xfdb6:16)
 	andmi8 (xbc), 0xf0
@@ -1799,7 +1799,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 EffectMode_RestoreSwbWr_NormalMode:
 	lda xwa, (0xf9b6:16)
-	stib_dsp 0xe0, 0x40
+	ld (xwa+), 0x40
 	andmi8 (xwa), 0x80
 	and (0xfdb6:16), 240
 	ld e, (xwa)

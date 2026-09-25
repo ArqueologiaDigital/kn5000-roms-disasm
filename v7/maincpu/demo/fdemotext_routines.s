@@ -2438,7 +2438,7 @@ FDemoText_TextDispatch_Loop:
 	ld	xde, xwa
 	lda	xhl, (xwa+40)
 FDemoText_TextDispatch_Loop2:
-	stib_dsp	232, 84
+	ld	(xde+), 84
 	cp	xde, xhl
 	jr	c, FDemoText_TextDispatch_Loop2
 	lda	xwa, (xwa+40)
@@ -2458,8 +2458,8 @@ FDemoText_TextDispatch_Loop2:
 FDemoText_TextDispatch_Loop3:
 	ld	xwa, 5:i3
 	ld	(xhl+), xwa
-	stiw_dsp	233, 255, 0
-	stib_dsp	228, 1
+	ldw	(xde+), 0x00ff
+	ld	(xbc+), 1
 	cp	xbc, xix
 	jr	c, FDemoText_TextDispatch_Loop3
 	ret
@@ -3021,7 +3021,7 @@ Seq_LoadNamedResource:
 	ld xwa, xbc				; XWA = buffer pointer
 	lda xbc, (xbc + 32)			; XBC = end of buffer
 Seq_FillBufferLoop:
-	stib_dsp	224, 32
+	ld	(xwa+), 32
 	cp	xwa, xbc
 	jr	c, Seq_FillBufferLoop
 	push	xiz

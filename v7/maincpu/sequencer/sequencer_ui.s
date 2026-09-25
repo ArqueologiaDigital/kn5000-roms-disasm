@@ -405,7 +405,7 @@ LyricsBox_ClearOuterLoop:
 	lda xhl, (xwa + 64)
 
 LyricsBox_ClearInnerLoop:
-	stib_dsp 0xe8, 0x00
+	ld (xde+), 0x00
 	cp xde, xhl
 	jr c, LyricsBox_ClearInnerLoop
 	lda xwa, (xwa + 64)
@@ -1181,7 +1181,7 @@ LyricsTrack_ResetBufferLoop:
 
 
 LyricsTrack_ZeroFillLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, LyricsTrack_ZeroFillLoop
 	inc 1, iz
@@ -1719,7 +1719,7 @@ MeasureBox_HandleEventF:
 	lda xbc, (xhl + 16)
 
 MeasureBox_ZeroFillLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, MeasureBox_ZeroFillLoop
 	ld (xde + 18), xhl
@@ -6084,7 +6084,7 @@ NoteEditBox_HandleFocusLost:
 
 ; NoteEditBox grid setup dispatch
 NoteEditBox_SetupGrid:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, NoteEditBox_SetupGrid
 	ld xhl, (xsp + 90)
@@ -6581,7 +6581,7 @@ NoteEditBox_EventDispatch2_Join6:
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 NoteEditBox_EventDispatch2_Loop3:
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	cp	xwa, xbc
 	jr	c, NoteEditBox_EventDispatch2_Loop3
 	ld	xwa, (xsp+12)
@@ -6651,7 +6651,7 @@ NoteEditBox_EventDispatch2_Join7:
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 NoteEditBox_EventDispatch2_Loop4:
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	cp	xwa, xbc
 	jr	c, NoteEditBox_EventDispatch2_Loop4
 	ld	(135318:24), 0
@@ -8599,7 +8599,7 @@ SqplyVal_HandleScrollEvent:
 	lda xbc, (xhl + 16)
 
 SqplyVal_ClearDrawBuffer:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SqplyVal_ClearDrawBuffer
 	ld (xde + 18), xhl
@@ -9099,7 +9099,7 @@ SqedtVal_HandleScrollEvent:
 	lda xbc, (xhl + 24)
 
 SqedtVal_ClearDrawBuffer:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SqedtVal_ClearDrawBuffer
 	ld (xde + 18), xhl
@@ -10367,7 +10367,7 @@ SqedtVal3_HandleScrollEvent:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop1:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop1
 	ld (xde + 18), xhl
@@ -10426,7 +10426,7 @@ SqedtVal3_FillBufferLoop1:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop2:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop2
 	ld (xde + 18), xhl
@@ -10485,7 +10485,7 @@ SqedtVal3_FillBufferLoop2:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop3:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop3
 	ld (xde + 18), xhl
@@ -10544,7 +10544,7 @@ SqedtVal3_FillBufferLoop3:
 	lda xbc, (xhl + 20)
 
 SqedtVal3_FillBufferLoop4:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SqedtVal3_FillBufferLoop4
 	ld (xde + 18), xhl
@@ -10751,7 +10751,7 @@ SqedtVal2_HandleScrollEvent:
 
 ; SqplyVal extra params dispatch
 SqplyVal_ExtraParams:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SqplyVal_ExtraParams
 	ld (xde + 18), xhl
@@ -11937,7 +11937,7 @@ AccIll_HandleHorizSlider:
 	lda xbc, (xbc + 20)
 
 AccIll_ClearDrawBuffer1:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, AccIll_ClearDrawBuffer1
 	ld xwa, (xsp + 4)
@@ -12007,7 +12007,7 @@ AccIll_HandleVertSlider:
 	lda xbc, (xbc + 20)
 
 AccIll_ClearDrawBuffer2:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, AccIll_ClearDrawBuffer2
 	ld xwa, (xsp + 4)
@@ -12315,7 +12315,7 @@ EffectBox_HandleScrollEvent:
 	lda xbc, (xbc + 20)
 
 EffectBox_FillBufferLoop1:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, EffectBox_FillBufferLoop1
 	ld xwa, (xsp + 4)
@@ -12365,7 +12365,7 @@ EffectBox_FillBufferLoop1:
 	lda xbc, (xbc + 20)
 
 EffectBox_FillBufferLoop2:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, EffectBox_FillBufferLoop2
 	ld xwa, (xsp + 4)
@@ -12429,7 +12429,7 @@ EffectBox_PostFillSetup:
 	ld xwa, xbc
 	lda xbc, (xbc+20)
 EffectBox_FillBufferLoop3:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, EffectBox_FillBufferLoop3
 	ld iz, 0:i3
@@ -12646,7 +12646,7 @@ EffectBox_HandleSelectEvent:
 
 ; EffectBox name setup dispatch
 EffectBox_NameSetup:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, EffectBox_NameSetup
 	ld XDE, (xsp + 0x014e)
@@ -13195,7 +13195,7 @@ Equalizer_HandleSelectEvent:
 
 ; EffectBox state dispatch
 EffectBox_StateDispatch:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, EffectBox_StateDispatch
 	ld xwa, (xsp + 22)

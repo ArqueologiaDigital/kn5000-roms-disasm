@@ -163,7 +163,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	lda	xwa, (34994:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
@@ -497,7 +497,7 @@ SLSrcBankList_FuncBody_Join4:
 	cp	xbc, 29360139
 	jrl	nz, SLSrcBankList_FuncBody_Skip13
 	lda	xwa, (34994:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
@@ -561,7 +561,7 @@ SLSrcBankList_FuncBody_Helper11:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	lda	xwa, (34994:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
@@ -913,7 +913,7 @@ SLSrcBankList_FuncBody_Helper15:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	lda	xwa, (34994:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
@@ -1534,7 +1534,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	lda	xwa, (35078:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
@@ -1884,7 +1884,7 @@ SLDstBankList_FuncBody_Helper7:
 	cp	xbc, 29360139
 	jr	nz, SLDstBankList_FuncBody_Loop2
 	lda	xwa, (35078:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
@@ -1967,7 +1967,7 @@ SLDstBankList_FuncBody_Helper8:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	lda	xwa, (35078:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
@@ -2252,7 +2252,7 @@ SLDstBankList_FuncBody_Helper10:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	lda	xwa, (35078:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
@@ -3713,18 +3713,18 @@ BuildSlotLabel:
 	jr	z, BuildSlotLabel_WriteContent
 	cpw	(xsp + 4), 0x9
 	jr	nz, BuildSlotLabel_WriteLetter
-	stib_dsp	0xf8, 0x31
+	ld	(xiz+), 0x31
 	ld	(xiz), 0x30
 	jr	BuildSlotLabel_WriteColon
 BuildSlotLabel_WriteLetter:
-	stib_dsp 0xf8, 0x20
+	ld (xiz+), 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
 BuildSlotLabel_WriteColon:
 	inc 1, xiz
-	stib_dsp 0xf8, 0x3a
+	ld (xiz+), 0x3a
 
 BuildSlotLabel_WriteContent:
 	; Disassembled from the committed romslice (no source of any kind existed):

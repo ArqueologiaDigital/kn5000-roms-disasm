@@ -2741,7 +2741,7 @@ SndParam_NotifyQuick_Data_Loop6:
 	ld	xwa, xbc
 	lda	xbc, (xbc+16384)
 SndParam_NotifyQuick_Data_Loop7:
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	cp	xwa, xbc
 	jr	c, SndParam_NotifyQuick_Data_Loop7
 	ldw	(xde), 0
@@ -2906,7 +2906,7 @@ SndParam_NotifyQuick_Data_Skip30:
 	ld	xwa, xbc
 	lda	xbc, (xbc+64)
 SndParam_NotifyQuick_Data_Loop10:
-	stiw_dsp	225, 0, 0
+	ldw	(xwa+), 0x0000
 SndParam_WidgetAppendTail:
 	cp	xwa, xbc
 	jr	c, SndParam_NotifyQuick_Data_Loop10

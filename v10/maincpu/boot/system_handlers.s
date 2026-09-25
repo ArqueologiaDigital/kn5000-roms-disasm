@@ -313,7 +313,7 @@ Boot_InitWorkRAM:
 	srl xbc, 1
 	jr z, MemCopy_DataValidation
 	ld xhl, xde
-	stiw_dsp 0xe9, 0x00, 0x00
+	ldw (xde+), 0x0000
 	dec 1, xbc
 	or xbc, xbc
 	jr z, MemCopy_DataValidation
@@ -338,7 +338,7 @@ Boot_InitWorkRAM_ZeroBlock1_Done:
 	srl xbc, 1
 	jr z, MemCopy_SetupAndDMA
 	ld xhl, xde
-	stiw_dsp 0xe9, 0x00, 0x00
+	ldw (xde+), 0x0000
 	dec 1, xbc
 	or xbc, xbc
 	jr z, MemCopy_SetupAndDMA
@@ -7007,7 +7007,7 @@ SLIDE_Decompress_4K_Init:
 	lda_dri XBC, 0xed, 0xee, 0x0f
 
 SLIDE_Decompress_4K_FillRing:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SLIDE_Decompress_4K_FillRing
 	ldw bc, 0xfee
@@ -7130,7 +7130,7 @@ SLIDE_Decompress_8K_Init:
 	lda_dri XBC, 0xed, 0xf6, 0x1f
 
 SLIDE_Decompress_8K_FillRing:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, SLIDE_Decompress_8K_FillRing
 	ldw bc, 0x1ff6

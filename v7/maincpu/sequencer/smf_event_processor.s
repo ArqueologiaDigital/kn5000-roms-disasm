@@ -2993,7 +2993,7 @@ FileOpen_ScanForColon:
 	ld xwa, 1:i3
 	sub (xsp + 16), xwa
 	ld xwa, (xsp + 16)
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	ld (xsp + 16), xwa
 	jr FileOpen_MatchDevice
 
@@ -7389,7 +7389,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Loop2:
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip10
 	cpw	(xsp+6), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip9
-	stib_dsp	232, 10
+	ld	(xde+), 10
 	ldw	(xsp+6), 0
 	decm	1, (xsp+20)
 	cpw	(xsp+22), 0
@@ -7401,7 +7401,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip9:
 	ld	xwa, (xsp+16)
 	cp	(xwa), 10
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip17
-	stib_dsp	232, 13
+	ld	(xde+), 13
 	ld	xwa, 1:i3
 	add	(xsp+16), xwa
 	ldw	(xsp+6), 1

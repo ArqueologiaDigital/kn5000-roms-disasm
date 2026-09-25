@@ -12345,7 +12345,7 @@ SoundMode_ApplyVoiceParams:
 	lda xbc, (xbc + 31)
 
 SoundMode_VoiceIterLoop:
-	stib_dsp 0xe0, 0x23
+	ld (xwa+), 0x23
 	cp xwa, xbc
 	jr ule, SoundMode_VoiceIterLoop
 	ret
@@ -12999,7 +12999,7 @@ VoiceData_ZeroFillOuter:
 	jr z, VoiceData_ZeroFillNext
 
 VoiceData_ZeroFillInner:
-	stib_dsp 0xec, 0x00
+	ld (xhl+), 0x00
 	ld e, d
 	dec 1, d
 	cp e, 0:i3
@@ -13176,7 +13176,7 @@ MidiBuf_CalcFillRange:
 	ret z
 
 MidiBuf_FillLoop:
-	stib_dsp 0xe8, 0x7f
+	ld (xde+), 0x7f
 	ld a, c
 	dec 1, c
 	cp a, 0:i3

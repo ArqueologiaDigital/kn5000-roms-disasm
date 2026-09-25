@@ -15,7 +15,7 @@ FDemo_DisplayResourceData:
 	ld	xwa, xbc
 	lda	xbc, (xbc+32)
 FDemo_DisplayResourceData_Loop:
-	stib_dsp 224, 32
+	ld (xwa+), 32
 	cp xwa, xbc
 	jr	c, FDemo_DisplayResourceData_Loop
 	push	xiz
@@ -4734,7 +4734,7 @@ FileIO_CopyString_StoreAndCont:
 	ret z
 
 FileIO_CopyString_Return:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	djnz xde, FileIO_CopyString_Return
 	ret
 
@@ -4824,18 +4824,18 @@ FileIO_FormatFileIndex:
 	inc 1, c
 	cp c, 0xa
 	jr nc, FileIO_FormatIndex_TwoDigit
-	stib_dsp 0xe0, 0x30
+	ld (xwa+), 0x30
 	jr FileIO_FormatIndex_AddChar
 
 FileIO_FormatIndex_TwoDigit:
 	cp c, 0x14
 	jr nc, FileIO_FormatIndex_AddOnes
-	stib_dsp 0xe0, 0x31
+	ld (xwa+), 0x31
 	sub c, 0xa
 	jr FileIO_FormatIndex_AddChar
 
 FileIO_FormatIndex_AddOnes:
-	stib_dsp 0xe0, 0x32
+	ld (xwa+), 0x32
 	sub c, 0x14
 
 FileIO_FormatIndex_AddChar:
@@ -4906,7 +4906,7 @@ FileIO_ReadHeader_Done:
 
 FileIO_ReadHeader_Field1:
 	inc 1, xwa
-	stib_dsp 0xe0, 0x20
+	ld (xwa+), 0x20
 	ld iy, 0:i3
 	ld iz, 0:i3
 	jr FileIO_ReadHeader_Return
@@ -7391,7 +7391,7 @@ FileIO_BuildFileExtName:
 	push xiz
 	ld xiz, xwa
 	lda xwa, (xsp + 4)
-	stib_dsp 0xe0, 0x2e
+	ld (xwa+), 0x2e
 	ld (xiz + 12), 0x0
 	lda xbc, (xiz + 8)
 	calr FileIO_CopyString

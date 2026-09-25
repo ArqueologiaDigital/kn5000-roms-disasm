@@ -2003,7 +2003,7 @@ ConvertStringsEx_Loop:
 	jr nz, ConvertStringsEx_CopyChar
 	ld a, (xde)
 	ld (xbc+), a
-	stib_dsp 0xe4, 0x34
+	ld (xbc+), 0x34
 	addmi8 (xbc), 0x30
 	jr ConvertStringsEx_Advance
 

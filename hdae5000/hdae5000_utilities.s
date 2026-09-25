@@ -156,7 +156,7 @@ HDAE5000_StrNCpy:	; 0x29AFF0
 .LMCR_b00e:
 	jr t, .LMCR_b016                       ; [68 06] jr T,0x29b016
 .LMCR_b010:
-	stib_dsp 0xf0, 0x00		; ld (XIX+),0x00
+	ld (xix+), 0x00		; ld (XIX+),0x00
 	dec	1, bc
 .LMCR_b016:
 	cp	bc, 0:i3
@@ -645,7 +645,7 @@ HDAE5000_FltDec_FractionDigits:
 	ld	xwa, xde
 	lda	xbc, (xde+18)
 .LMCR_b439:
-	stiw_dsp 0xe1, 0x00, 0x00		; ld (XWA+),0x0000
+	ldw (xwa+), 0x0000		; ld (XWA+),0x0000
 	cp	xwa, xbc
 	jr c, .LMCR_b439                       ; [67 f7] jr C,0x29b439
 	ld	wa, (xsp+6)

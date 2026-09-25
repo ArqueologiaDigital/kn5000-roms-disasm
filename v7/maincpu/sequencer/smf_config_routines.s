@@ -1666,7 +1666,7 @@ SMF_ClearFileBuffer:
 	ld xix, 0x13fa
 
 SMF_ClearBuf_Loop:
-	stiw_dsp 0xf1, 0x00, 0x00
+	ldw (xix+), 0x0000
 	djnz xwa, SMF_ClearBuf_Loop
 	pop xwa
 	pop xix

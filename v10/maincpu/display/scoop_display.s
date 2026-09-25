@@ -14254,8 +14254,8 @@ Display_BytecodeBlock_F_Tbl4:
 	pop	xix
 	cpdi16	(0x0d62), 0
 	jrl	z, Display_BytecodeBlock_F_Skip12
-	stib_dsp	240, 27
-	stib_dsp	240, 139
+	ld	(xix+), 27
+	ld	(xix+), 139
 	ldw_d16	wa, (0x0d62)
 	call	UIRender_DescriptorTable2
 	ld	xiy, 4481
@@ -14272,7 +14272,7 @@ Display_BytecodeBlock_F_Tbl4:
 Display_BytecodeBlock_F_Skip11:
 	bitda	7, (0x0d64)
 	jrl	z, Display_BytecodeBlock_F_Return
-	stib_dsp 240, 43
+	ld (xix+), 43
 Display_BytecodeBlock_F_Skip12:
 	bitda	7, (0x0d64)
 	jrl	z, Display_BytecodeBlock_F_Return

@@ -28555,7 +28555,7 @@ Strncpy_Block2:
 	jr Strncpy_Compare2
 
 Strncpy_Block3:
-	stib_dsp 0xf0, 0x00
+	ld (xix+), 0x00
 	dec 1, bc
 
 Strncpy_Compare2:

@@ -2945,7 +2945,7 @@ Flash_InitBytecodeBlock_Helper5:
 	ld	xwa, xbc
 	lda	xbc, (xbc+29)
 Flash_InitBytecodeBlock_Helper5_Loop:
-	stib_dsp 224, 32
+	ld (xwa+), 32
 	cp xwa, xbc
 	jr	c, Flash_InitBytecodeBlock_Helper5_Loop
 	ldib_erp 251, 0
@@ -3114,7 +3114,7 @@ Flash_InitBytecodeBlock_Helper11:
 	ld	xwa, xde
 	lda	xbc, (xde+29)
 Flash_StoreBaseAndInitAccPatch_Helper2_Loop:
-	stib_dsp 224, 32
+	ld (xwa+), 32
 	cp xwa, xbc
 	jr	c, Flash_StoreBaseAndInitAccPatch_Helper2_Loop
 	ldib_erp	248, 0
@@ -3571,8 +3571,8 @@ SlotTable_ExtendedOpsBlock:
 	inc	4, xde
 	lda xbc, (xbc+200)
 SlotTable_ExtendedOpsBlock_Loop:
-	stiw_dsp 234, 255, 255
-	stiw_dsp 226, 255, 255
+	ldw (xde+:4), 0xffff
+	ldw (xwa+:4), 0xffff
 	cp	xwa, xbc
 	jr	c, SlotTable_ExtendedOpsBlock_Loop
 	ret
@@ -3585,8 +3585,8 @@ Flash_InitBytecodeBlock_Helper4_Helper:
 	inc	4, xde
 	lda xbc, (xbc+200)
 SlotTable_ExtendedOpsBlock_Loop2:
-	stiw_dsp 234, 255, 255
-	stiw_dsp 226, 255, 255
+	ldw (xde+:4), 0xffff
+	ldw (xwa+:4), 0xffff
 	cp	xwa, xbc
 	jr	c, SlotTable_ExtendedOpsBlock_Loop2
 	ret
@@ -3604,8 +3604,8 @@ SlotTable_ExtendedOpsBlock_Loop3:
 	ld iy, hl
 	inc	6, iy
 	.byte	0xf3, 0x07, 0xf0, 0xf4, 0x02, 0xff, 0xff	; ld (XIX+IY),0xffff
-	stiw_dsp 234, 255, 255
-	stiw_dsp 226, 255, 255
+	ldw (xde+:4), 0xffff
+	ldw (xwa+:4), 0xffff
 	inc	2, hl
 	cp	xwa, xbc
 	jr	c, SlotTable_ExtendedOpsBlock_Loop3
@@ -3624,8 +3624,8 @@ SlotTable_ExtendedOpsBlock_Loop4:
 	ld	iy, hl
 	inc	6, iy
 	.byte	0xf3, 0x07, 0xf0, 0xf4, 0x02, 0xff, 0xff	; ld (XIX+IY),0xffff
-	stiw_dsp 234, 255, 255
-	stiw_dsp 226, 255, 255
+	ldw (xde+:4), 0xffff
+	ldw (xwa+:4), 0xffff
 	inc	2, hl
 	cp	xwa, xbc
 	jr	c, SlotTable_ExtendedOpsBlock_Loop4
@@ -5411,7 +5411,7 @@ ToneData_SetupCopyPointers:
 	lda_dri XBC, 0xe5, 0x00, 0x02
 
 ToneData_ZeroFillLoop:
-	stib_dsp 0xe0, 0x00
+	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, ToneData_ZeroFillLoop
 

@@ -76,7 +76,7 @@ NoteEditSy_DirectCopy:
 	lda_dri XBC, 0xe5, 0xa4, 0x06
 
 NoteEditSy_DirectCopyLoop:
-	stib_dsp 0xe0, 0x20
+	ld (xwa+), 0x20
 	cp xwa, xbc
 	jr c, NoteEditSy_DirectCopyLoop
 
@@ -10294,7 +10294,7 @@ SeqBuffer_ClearAndInitIteration:
 	lda xbc, (xde + 6)
 
 SeqBuffer_ClearLoop:
-	stib_dsp 0xe0, 0xff
+	ld (xwa+), 0xff
 	cp xwa, xbc
 	jr c, SeqBuffer_ClearLoop
 	lda xwa, (8182:16)
@@ -14399,8 +14399,8 @@ SeqBuf_ClearRange:
 	inc 6, xde
 
 SeqBuf_ClearLoop:
-	stib_dsp 0xe4, 0x00
-	stib_dsp 0xe0, 0x00
+	ld (xbc+), 0x00
+	ld (xwa+), 0x00
 	cp xwa, xde
 	jr c, SeqBuf_ClearLoop
 	ret
@@ -14499,7 +14499,7 @@ SeqScan_ClearNoteRange:
 	inc 6, xwa
 
 SeqScan_ClearNoteLoop:
-	stib_dsp 0xe4, 0x00
+	ld (xbc+), 0x00
 	cp xbc, xwa
 	jr c, SeqScan_ClearNoteLoop
 	ret
@@ -22355,8 +22355,8 @@ EffEdit_ValidateAndReadParams:
 	lda xde, (xde + 25)
 
 EffEdit_ValidateLoop:
-	stiw_dsp	229, 0, 0
-	stib_dsp	224, 0
+	ldw	(xbc+), 0x0000
+	ld	(xwa+), 0
 	cp	xwa, xde
 	jr	c, EffEdit_ValidateLoop	; -> 0xF457D1
 	ld	a, (35996:16)

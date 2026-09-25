@@ -168,7 +168,7 @@ SLSrcBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	lda	xwa, (0x894e:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -502,7 +502,7 @@ SLSrcBankList_FuncBody_Join4:
 	cp	xbc, 0x01c0000b
 	jrl	nz, SLSrcBankList_FuncBody_Skip11
 	lda	xwa, (0x894e:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
@@ -566,7 +566,7 @@ SLSrcBankList_FuncBody_Helper4:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	lda	xwa, (0x894e:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -918,7 +918,7 @@ SLSrcBankList_FuncBody_Helper8:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	lda	xwa, (0x894e:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -1552,7 +1552,7 @@ SLDstBankList_FuncBody:
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
 	lda	xwa, (0x89a2:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -1903,7 +1903,7 @@ SLDstBankList_FuncBody_Helper2:
 	cp	xbc, 0x01c0000b
 	jr	nz, SLDstBankList_FuncBody_Loop2
 	lda	xwa, (0x89a2:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	(xwa), 0
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
@@ -1986,7 +1986,7 @@ SLDstBankList_FuncBody_Helper3:
 	ld	(xsp+4), c
 	ld	xiz, xwa
 	lda	xwa, (0x89a2:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -2271,7 +2271,7 @@ SLDstBankList_FuncBody_Helper5:
 	ld	(xsp), c
 	ld	(xsp+2), xwa
 	lda	xwa, (0x89a2:16)
-	stib_dsp 224, 0
+	ld (xwa+), 0
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
@@ -3777,19 +3777,19 @@ BuildSlotLabel:
 	jr z, BuildSlotLabel_WriteContent
 	cpw (xsp + 4), 0x9
 	jr nz, BuildSlotLabel_WriteLetter
-	stib_dsp 0xf8, 0x31
+	ld (xiz+), 0x31
 	ld (xiz), 0x30
 	jr BuildSlotLabel_WriteColon
 
 BuildSlotLabel_WriteLetter:
-	stib_dsp 0xf8, 0x20
+	ld (xiz+), 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
 BuildSlotLabel_WriteColon:
 	inc 1, xiz
-	stib_dsp 0xf8, 0x3a
+	ld (xiz+), 0x3a
 
 BuildSlotLabel_WriteContent:
 	ld xwa, xiz

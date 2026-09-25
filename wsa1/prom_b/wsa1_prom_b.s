@@ -159749,8 +159749,8 @@ sub_F6DA12:
 	pop	xix	; F6DA24  pop XIX
 	m_cp_mi16 MW16, 0x0e60, 0x0000	; F6DA25  cp (0x0e60),0x0000
 	jr	z, sub_F6DA12_Skip2	; F6DA2B  jr Z,0xf6da68
-	stib_dsp	240, 27	; F6DA2D  ld (XIX+),0x1b
-	stib_dsp	240, 139	; F6DA31  ld (XIX+),0x8b
+	ld	(xix+), 27	; F6DA2D  ld (XIX+),0x1b
+	ld	(xix+), 139	; F6DA31  ld (XIX+),0x8b
 	ld	wa, (3680:16)	; F6DA35  ld WA,(0x0e60)
 	call	T_F41AF4	; F6DA39  call 0xf41af4
 	ld	xiy, 9825	; F6DA3D  ld XIY,0x00002661
@@ -159767,7 +159767,7 @@ sub_F6DA12:
 sub_F6DA12_Skip:
 	m_bit 7, MD16, 0x0e62	; F6DA5E  bit 7,(0x0e62)
 	jr	z, sub_F6DA12_Return	; F6DA62  jr Z,0xf6da71
-	stib_dsp	240, 43	; F6DA64  ld (XIX+),0x2b
+	ld	(xix+), 43	; F6DA64  ld (XIX+),0x2b
 sub_F6DA12_Skip2:
 	m_bit 7, MD16, 0x0e62	; F6DA68  bit 7,(0x0e62)
 	jr	z, sub_F6DA12_Return	; F6DA6C  jr Z,0xf6da71

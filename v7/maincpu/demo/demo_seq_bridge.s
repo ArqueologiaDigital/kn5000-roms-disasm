@@ -143,19 +143,19 @@ SongBank_ComputeTableOfs:
 	jr z, SongBank_CopyNameAndFinish
 	cpw (xsp + 4), 0x9
 	jr nz, SongBank_FormatTwoDigit
-	stib_dsp 0xf8, 0x31
+	ld (xiz+), 0x31
 	ld (xiz), 0x30
 	jr SongBank_AppendColon
 
 SongBank_FormatTwoDigit:
-	stib_dsp 0xf8, 0x20
+	ld (xiz+), 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
 
 SongBank_AppendColon:
 	inc 1, xiz
-	stib_dsp 0xf8, 0x3a
+	ld (xiz+), 0x3a
 
 SongBank_CopyNameAndFinish:
 	ld xwa, xiz
@@ -294,12 +294,12 @@ SongBank_LookupTableEntry:
 	jr z, SongBankLookup_BuildAudioCmd
 	cpw (xsp + 4), 0x9
 	jr nz, SongBankLookup_FormatTwoDigit
-	stib_dsp 0xf8, 0x31
+	ld (xiz+), 0x31
 	ld (xiz), 0x30
 	jr SongBankLookup_AppendColon
 
 SongBankLookup_FormatTwoDigit:
-	stib_dsp 0xf8, 0x20
+	ld (xiz+), 0x20
 	ld wa, (xsp + 4)
 	add a, 0x31
 	ld (xiz), a
@@ -308,7 +308,7 @@ SongBankLookup_AppendColon:
 	inc 1, xiz
 
 SongBankLookup_BuildAudioCmd:
-	stib_dsp	248, 58
+	ld	(xiz+), 58
 	ld	a, (xix)
 	extz	wa
 	pushw	wa

@@ -2262,7 +2262,7 @@ Sprintf_NormalizeDigits:
 	ld	xwa, xde
 	lda	xbc, (xde + 18)
 Sprintf_Normalize_ClearLoop:
-	stiw_dsp	0xe1, 0x00, 0x00
+	ldw	(xwa+), 0x0000
 	cp	xwa, xbc
 	jr	c, Sprintf_Normalize_ClearLoop
 	ld	wa, (xsp + 6)

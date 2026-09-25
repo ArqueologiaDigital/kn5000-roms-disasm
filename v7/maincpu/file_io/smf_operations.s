@@ -297,7 +297,7 @@ SmfSeqToSongNumFunc:
 	jr	SeqToSong_Return
 SeqToSong_BuildEntry:
 	lda	xwa, (32760:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	xbc, 15337276
 	call	FileIO_CopyString
 	lda	xiz, (32761:16)
@@ -328,7 +328,7 @@ SmfSeqFromSongNumFunc:
 	jr	SeqFromSong_Return
 SeqFromSong_BuildEntry:
 	lda	xwa, (32892:16)
-	stib_dsp	224, 0
+	ld	(xwa+), 0
 	ld	xbc, 15337288
 	call	FileIO_CopyString
 	lda	xiz, (32893:16)
@@ -427,7 +427,7 @@ TrimPad_PadCheck:
 	jr nc, TrimPad_NullTerminate
 
 TrimPad_PadLoop:
-	stib_dsp 0xe0, 0x20
+	ld (xwa+), 0x20
 	inc 1, ix
 	cp ix, bc
 	jr c, TrimPad_PadLoop
