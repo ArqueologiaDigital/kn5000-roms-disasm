@@ -880,7 +880,7 @@ AccPart_VoiceParamOffsets_BaseA:
 	nop
 	nop
 	jr	le, 0
-	ld_spdb h, 0
+	ld h, (-xwa0)
 	normal
 	ld	h, 5:opc
 	.byte 0x57, 0x01, 0x57
@@ -13694,7 +13694,7 @@ AccTone_LookupByProgramWrapped_Join:
 	cp	xiy, xbc
 	nop
 	ldf 233
-	stb_dpi a, 0
+	lda xbc, (xwa0+:1)
 	cp xiy, xbc
 	nop
 	ld	a, 233:opc
@@ -27436,8 +27436,8 @@ Tempo_DisplayMeasureRange:
 	lda xhl, (xwa + 16)
 
 Tempo_DisplayMeasureStart:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4
+	ld A, (xde+)
+	ld (xbc+), a
 	cp xbc, xhl
 	jr c, Tempo_DisplayMeasureStart
 	cp (0x3991:16), 0
@@ -28512,8 +28512,8 @@ DrumParam_BuildActiveMask:
 	ld xiy, 0x37b9
 
 VoiceTable_InitEntry_Store:
-	ldb_spi A, 0xf0
-	cp_spib A, 0xf4
+	ld A, (xix+)
+	cp A, (xiy+)
 	jr z, VoiceTable_InitEntry_Return
 	or (0x37c8:16), w
 
@@ -28528,8 +28528,8 @@ VoiceTable_InitEntry_Return:
 	ld xiy, 0x37c0
 
 MultiVoice_SetupChannel:
-	ldb_spi A, 0xf0
-	cp_spib A, 0xf4
+	ld A, (xix+)
+	cp A, (xiy+)
 	jr z, MultiVoice_Setup_Loop
 	or (0x37c8:16), w
 
@@ -31509,10 +31509,10 @@ CmEsyTtlFunc_Skip:
 	lda	xde, (0x37b2:16)
 	ld	xbc, 0:i3
 CmEsyTtlFunc_Loop:
-	ldb_spi	a, 244
-	lda_dpi	xbc, 240
-	ldb_spi	a, 236
-	lda_dpi	xbc, 232
+	ld	a, (xiy+)
+	ld	(xix+), a
+	ld	a, (xhl+)
+	ld	(xde+), a
 	inc	1, xbc
 	cp	xbc, 7
 	jr	c, CmEsyTtlFunc_Loop
@@ -31611,10 +31611,10 @@ CmpEsy_DeliverEventAndCheck:
 	ld	xbc, 0:i3
 ; CmpEsyTtl sub-mode B
 CmpEsyTtl_SubModeB:
-	ldb_spi	a, 244
-	lda_dpi	xbc, 240
-	ldb_spi	a, 236
-	lda_dpi	xbc, 232
+	ld	a, (xiy+)
+	ld	(xix+), a
+	ld	a, (xhl+)
+	ld	(xde+), a
 	inc 1, xbc
 	cp xbc, 0x00000007
 	jr c, CmpEsyTtl_SubModeB
@@ -33824,7 +33824,9 @@ AccDraw_Secondary_Helper4:
 	and	c, (0xf6a6:24)
 	.byte 0xa6, 0xf6
 	nop
-	cp_spiw	iz, 166
+	.byte 0xd5, 0xa6, 0xf6	; data, not code (a table of 0x00f6a6xx
+				; pointers misframed as code); was `cp_spiw iz, 166`, whose
+				; register byte 0xa6 names no TLCS-900 register (unidasm: rA6L+)
 	nop
 	.byte 0xd6, 0xa6, 0xf6
 	nop
@@ -34173,11 +34175,11 @@ AccDraw_Secondary_Helper9_Helper:
 	extz	xhl
 	sll	xhl, 2
 	add	xiy, xhl
-	ldb_spi	l, 244
+	ld	l, (xiy+)
 	ld	(xwa+4), l
-	ldb_spi	l, 244
+	ld	l, (xiy+)
 	ld	(xwa+5), l
-	ldb_spi	l, 244
+	ld	l, (xiy+)
 	ld	(xwa+6), l
 	ld	l, (xiy)
 	ld	(xwa+7), l
@@ -35776,7 +35778,7 @@ AccBankData_CompareLoop:
 	ld hl, wa
 	extz xhl
 	add xhl, xde
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	cp a, (xhl)
 	jr nz, AccBankData_Return
 	inc1b_erp 0xfb
@@ -35787,8 +35789,8 @@ AccBankData_CompareLoop:
 	ld xde, 0:i3
 
 AccBankData_CopyToExtRAM:
-	ldb_spi A, 0xf0
-	lda_dpi XBC, 0xe4
+	ld A, (xix+)
+	ld (xbc+), a
 	inc 1, xde
 	cp xde, 0x72a6
 	jr c, AccBankData_CopyToExtRAM
@@ -35983,7 +35985,7 @@ StyleConv_ClearEntry_Inner:
 	cp xwa, xix
 	jr c, StyleConv_ClearEntry_Inner
 	ld xwa, 0:i3
-	stl_dpi XWA, 0xe6
+	ld (xbc+), XWA
 	lda xde, (xde + 32)
 	cp xbc, xhl
 	jr c, StyleConv_ClearEntry_Outer
@@ -36056,7 +36058,7 @@ StyleFile_ClearTable_Inner:
 	cp xwa, xix
 	jr c, StyleFile_ClearTable_Inner
 	ld xwa, 0:i3
-	stl_dpi XWA, 0xe6
+	ld (xbc+), XWA
 	lda xde, (xde + 100)
 	cp xbc, xhl
 	jr c, StyleFile_ClearTable_Outer
@@ -37812,7 +37814,7 @@ StylCnv_Type6_Dispatch:
 
 StylCnv_Type6_ClearRegion:
 	ld xwa, 0:i3
-	stl_dpi XWA, 0xe6
+	ld (xbc+), XWA
 	cp xbc, xde
 	jr c, StylCnv_Type6_ClearRegion
 	ld xwa, (0x3d5c:16)

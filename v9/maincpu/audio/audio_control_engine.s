@@ -4659,9 +4659,9 @@ MIDI_WriteMultiByteWithHeader:
 	dec 6, xsp
 	push xiz
 	ld xiz, xwa
-	ldb_spi A, 0xf8
+	ld A, (xiz+)
 	ld (xsp + 4), a
-	ldb_spi A, 0xf8
+	ld A, (xiz+)
 	ld (xsp + 6), a
 	ld a, (xsp + 4)
 	extz wa
@@ -4707,9 +4707,9 @@ MIDI_WriteMultiByteNoHeader:
 	dec 6, xsp
 	push xiz
 	ld xiz, xwa
-	ldb_spi A, 0xf8
+	ld A, (xiz+)
 	ld (xsp + 4), a
-	ldb_spi A, 0xf8
+	ld A, (xiz+)
 	ld (xsp + 6), a
 	ld (xsp + 8), 0x0
 	cp (xsp + 6), 0x0
@@ -4963,7 +4963,7 @@ ExtData_ToneParam_DispatchHandler_Join:
 	decf
 	jr	nz, 77
 	ld	a, (xde+3)
-	lda_dpi xbc, 236
+	ld (xhl+), a
 	ld c, (xhl)
 	and c, 128
 	ld	(xhl), c
@@ -5210,8 +5210,8 @@ ExtData_ToneParam_AltBody:
 	cp	xhl, 0xffffffff
 	ret	z
 	lda	xde, (0x90ee:16)
-	ldb_spi a, 232
-	lda_dpi xbc, 236
+	ld a, (xde+)
+	ld (xhl+), a
 	ld c, (xhl)
 	and c, 128
 	ld	(xhl), c
@@ -8455,11 +8455,11 @@ MidiStream_ProcessEventBuffer:
 
 MidiStream_NextEvent:
 	ld xix, (0x91c1:16)
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp a, 0xff
 	jr z, MidiStream_BufferDone
 	ld (0x91bd:16), wa
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	ld (0x91c1:16), xix
 	ld (0x91bf:16), wa
 	ld bc, (0x91bd:16)
@@ -8467,7 +8467,7 @@ MidiStream_NextEvent:
 	ld xix, 0x91d2
 
 MidiStream_ScanForMatch:
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp a, 0xff
 	jr z, MidiStream_NextEvent
 	cp wa, bc
@@ -8476,7 +8476,7 @@ MidiStream_ScanForMatch:
 	jr MidiStream_ScanForMatch
 
 MidiStream_FoundMatch:
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp c, 0xb1
 	jr z, MidiStream_ProcessorDispatch
 	and d, a
@@ -8531,10 +8531,10 @@ MidiStream_InitFromLookup:
 	ld xix, 0x91d2
 
 MidiStreamInit_CopyLoop:
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
+	ld WA, (xiy+)
+	ld (xix+), WA
+	ld WA, (xiy+)
+	ld (xix+), WA
 	cp a, 0xff
 	jr nz, MidiStreamInit_CopyLoop
 
@@ -8545,7 +8545,7 @@ MidiStream_ProcessHandler_0:
 	ld	xix, 0x91ad
 	ld	a, 209:opc
 	ld	w, (0x91c9:16)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	a, (0x91bf:16)
 	ld	w, 255:opc
 	ld	(xix), wa
@@ -8556,7 +8556,7 @@ MidiStream_ProcessHandler_1:
 	ld	xix, 0x91ad
 	ld	a, 210:opc
 	ld	w, (0x91c9:16)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	a, (0x91c0:16)
 	ld	w, 255:opc
 	ld	(xix), wa
@@ -8567,7 +8567,7 @@ MidiStream_ProcessHandler_2:
 	ld	xix, 0x91ad
 	ld	a, 211:opc
 	ld	w, (0x91c9:16)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	a, (0x91bf:16)
 	ld	w, 255:opc
 	ld	(xix), wa
@@ -8594,7 +8594,7 @@ MidiStream_ProcessHandler_4:
 	ld	xix, 0x91ad
 	ld	a, 213:opc
 	ld	w, (0x91c9:16)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	a, (0x91bf:16)
 	ld	w, 255:opc
 	ld	(xix), wa
@@ -8621,11 +8621,11 @@ MidiStream_ProcessSeqBuffer:
 
 MidiSeqBuf_NextEvent:
 	ld xix, (0x91c1:16)
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp a, 0xff
 	jr z, MidiSeqBuf_Done
 	ld (0x91bd:16), wa
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	ld (0x91c1:16), xix
 	ld (0x91bf:16), wa
 	calr MidiSeqBuf_InitFromTable
@@ -8634,7 +8634,7 @@ MidiSeqBuf_NextEvent:
 	ld xix, 0x91d2
 
 MidiSeqBuf_ScanForMatch:
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp a, 0xff
 	jr z, MidiSeqBuf_NextEvent
 	cp wa, bc
@@ -8643,7 +8643,7 @@ MidiSeqBuf_ScanForMatch:
 	jr MidiSeqBuf_ScanForMatch
 
 MidiSeqBuf_FoundMatch:
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp c, 0xb1
 	jr z, MidiStream_ProcessorDispatchB
 	and d, a
@@ -8697,12 +8697,12 @@ MidiSeqBuf_InitFromTable:
 	ld xix, 0x91d2
 
 MidiSeqBufInit_CopyLoop:
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
+	ld WA, (xiy+)
+	ld (xix+), WA
 	cp a, 0xff
 	jr z, MidiSeqBufInit_Done
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
+	ld WA, (xiy+)
+	ld (xix+), WA
 	jr MidiSeqBufInit_CopyLoop
 
 MidiSeqBufInit_Done:
@@ -8733,7 +8733,7 @@ TempoExpr_StorePartIndex:
 	ld xix, 0x91ad
 	ld a, 0xc0:opc
 	ld w, (0x91c9:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	stiw_dsp 0xf1, 0x17, 0x00
 	ld wa, (xsp)
 	bit 7, a
@@ -8748,10 +8748,10 @@ TempoExpr_CheckHighBitW:
 	set 1, (0x91ad:16)
 
 TempoExpr_WriteAndProcess:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, (0x91c7:16)
 	ld w, 0xff:opc
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld (0x91ca:16), 7
 	calr TempoRingBuf_ProcessEntry
 	call TempoRingBuf_Consume
@@ -8858,11 +8858,11 @@ MidiStream_ProcessTempoRingBuf:
 
 TempoRing_NextEvent:
 	ld xix, (0x91c1:16)
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp a, 0xff
 	jr z, TempoRing_Done
 	ld (0x91bd:16), wa
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	ld (0x91c1:16), xix
 	ld (0x91bf:16), wa
 	calr TempoRing_ValidateState
@@ -8875,7 +8875,7 @@ TempoRing_InitAndScan:
 	ld xix, 0x91d2
 
 TempoRing_ScanForMatch:
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp a, 0xff
 	jr z, TempoRing_UpdateAndContinue
 	cp wa, bc
@@ -8884,7 +8884,7 @@ TempoRing_ScanForMatch:
 	jr TempoRing_ScanForMatch
 
 TempoRing_FoundMatch:
-	ld_spiw WA, 0xf1
+	ld WA, (xix+)
 	cp c, 0xb1
 	jr z, MidiStream_ProcessorDispatchC
 	and d, a
@@ -8965,9 +8965,9 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xix, 0x91ad
 	ld	a, 192:opc
 	ldb_d8	w, (0x91c9)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldw_d16	wa, (0x91bd)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldda32	xiy, (0x90f2)
 	extz	wa
 	sll	wa, 2
@@ -8983,10 +8983,10 @@ TempoCC_TransmitBytecodeBlock_Skip:
 	res	7, w
 	setda	1, (0x91ad)
 TempoCC_TransmitBytecodeBlock_Skip2:
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldb_d8	a, (0x91c7)
 	ld	w, 255:opc
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	stdi8	(0x91ca), 7
 	calr	TempoRingBuf_ProcessEntry
 	ret
@@ -8994,14 +8994,14 @@ MIDI_EmitRecord_B0:
 	ld	xix, 0x91ad
 	ld	a, 176:opc
 	ldb_d8	w, (0x91c9)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldw_d16	wa, (0x91bd)
 	bit	7, a
 	jr	z, MIDI_EmitRecord_B0_Skip
 	res	7, a
 	setda	2, (0x91ad)
 MIDI_EmitRecord_B0_Skip:
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldw_d16	wa, (0x91bf)
 	bit	7, a
 	jr	z, MIDI_EmitRecord_B0_Skip2
@@ -9013,10 +9013,10 @@ MIDI_EmitRecord_B0_Skip2:
 	res	7, w
 	setda	1, (0x91ad)
 MIDI_EmitRecord_B0_Skip3:
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldb_d8	a, (0x91c7)
 	ld	w, 255:opc
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	stdi8	(0x91ca), 7
 	calr	TempoRingBuf_ProcessEntry
 	ret
@@ -9024,13 +9024,13 @@ MIDI_EmitRecord_D2:
 	ld	xix, 0x91ad
 	ld	a, 210:opc
 	ldb_d8	w, (0x91c9)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldw_d16	wa, (0x91bf)
 	and	wa, 0x7f7f
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldb_d8	a, (0x91c7)
 	ld	w, 255:opc
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	stdi8	(0x91ca), 37
 	calr	TempoRingBuf_ProcessEntry
 	ret
@@ -9038,10 +9038,10 @@ MIDI_EmitRecord_D1:
 	ld	xix, 0x91ad
 	ld	a, 209:opc
 	ldb_d8	w, (0x91c9)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldb_d8	a, (0x91bf)
 	ldb_d8	w, (0x91c7)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	(xix), 255
 	stdi8	(0x91ca), 20
 	calr	TempoRingBuf_ProcessEntry
@@ -9050,10 +9050,10 @@ MIDI_EmitRecord_D3:
 	ld	xix, 0x91ad
 	ld	a, 211:opc
 	ldb_d8	w, (0x91c9)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldb_d8	a, (0x91bf)
 	ldb_d8	w, (0x91c7)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	(xix), 255
 	stdi8	(0x91ca), 4
 	calr	TempoRingBuf_ProcessEntry
@@ -9064,10 +9064,10 @@ MIDI_EmitRecord_D0:
 	ld	xix, 0x91ad
 	ld	a, 208:opc
 	ldb_d8	w, (0x91c9)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldb_d8	a, (0x91bf)
 	ldb_d8	w, (0x91c7)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	(xix), 255
 	stdi8	(0x91ca), 4
 	calr	TempoRingBuf_ProcessEntry
@@ -9077,7 +9077,7 @@ MIDI_EmitRecord_80:
 	ld	xix, 0x91ad
 	ld	a, 128:opc
 	ldb_d8	w, (0x91c9)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ldw_d16	wa, (0xfc62)
 	and	wa, 0x1ff
 	sll	w, 1
@@ -9086,7 +9086,7 @@ MIDI_EmitRecord_80:
 	set	0, w
 MIDI_EmitRecord_80_Skip:
 	res	7, a
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ld	(xix), 255
 	stdi8	(0x91ca), 4
 	calr	TempoRingBuf_ProcessEntry
@@ -9106,9 +9106,9 @@ MIDI_TransmitTempoCC:
 	ld xix, 0x91ad
 	ld a, 0xb0:opc
 	ld w, (0x91c9:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld wa, (0x91bd:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld wa, (0x91bf:16)
 	bit 7, a
 	jr z, TempoCC_CheckHighBitW
@@ -9122,7 +9122,7 @@ TempoCC_CheckHighBitW:
 	set 1, (0x91ad:16)
 
 TempoCC_WriteAndProcess:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ldw wa, 0xff7f
 	ld (xix), wa
 	ld (0x91ca:16), 135
@@ -9155,12 +9155,12 @@ TempoRing_InitPartStream:
 	ld xix, 0x91d2
 
 TempoPartStream_CopyLoop:
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
+	ld WA, (xiy+)
+	ld (xix+), WA
 	cp a, 0xff
 	jr z, TempoPartStream_Done
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
+	ld WA, (xiy+)
+	ld (xix+), WA
 	jr TempoPartStream_CopyLoop
 
 TempoPartStream_Done:
@@ -9223,7 +9223,7 @@ PartExpr_WriteToBuffer:
 	ld xix, 0x91ad
 	ld a, 0xb2:opc
 	ld w, (0x91c9:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, 0x9a:opc
 	bit 7, a
 	jr z, PartExpr_AddPartIndex
@@ -9233,7 +9233,7 @@ PartExpr_WriteToBuffer:
 PartExpr_AddPartIndex:
 	ld w, c
 	add w, 0x4
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, (0xc5a8:16)
 	bit 7, a
 	jr z, PartExpr_ReadCurrentValue
@@ -9242,10 +9242,10 @@ PartExpr_AddPartIndex:
 
 PartExpr_ReadCurrentValue:
 	ld w, 0x7f:opc
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, c
 	ld w, 0xff:opc
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld (0x91ca:16), 7
 	pushw bc
 	calr TempoRingBuf_ProcessEntry
@@ -9301,10 +9301,10 @@ PartReinit_AdvancePart:
 PartReinit_SendD2Command:
 	ld xix, 0x91b5
 	ldw wa, 0xd2
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	xor a, a
 	ld w, 0x40:opc
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, (0x91c8:16)
 	ld w, 0xff:opc
 	ld (xix), wa
@@ -9314,10 +9314,10 @@ PartReinit_SendD2Command:
 PartReinit_SendD1Command:
 	ld xix, 0x91b5
 	ldw wa, 0xd1
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, 0x0:opc
 	ld w, (0x91c8:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld (xix), 0xff
 	calr VoiceParam_DispatchByMode
 	ret
@@ -9325,10 +9325,10 @@ PartReinit_SendD1Command:
 PartReinit_SendD0Command:
 	ld xix, 0x91b5
 	ldw wa, 0xd0
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, 0x0:opc
 	ld w, (0x91c8:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld (xix), 0xff
 	calr VoiceParam_DispatchByMode
 	ret
@@ -9336,7 +9336,7 @@ PartReinit_SendD0Command:
 PartReinit_SendB0Command:
 	ld xix, 0x91b5
 	ldw wa, 0xb0
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	extz hl
 	ld l, (0x91c8:16)
 	ld xiy, 0xf1a0
@@ -9344,9 +9344,9 @@ PartReinit_SendB0Command:
 	ld xiy, VoiceMode_ParamConfigTables_0x24
 	ldb_sri A, 0x07, 0xf4, 0xec
 	ld w, 0x4:opc
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ldw wa, 0x800
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, (0x91c8:16)
 	ld w, 0xff:opc
 	ld (xix), wa
@@ -9385,7 +9385,7 @@ AudioSeq_CheckEventPending:
 AudioSeq_ReadNextEvent:
 	pushw hl
 	call SeqBuf_ReadAlternate
-	lda_dpi XSP, 0xf4
+	ld (xiy+), l
 	popw hl
 	ld hl, (xix - 10)
 	cp hl, (xix - 6)
@@ -9444,8 +9444,8 @@ VoiceMode_ParamHandler_4:
 	cp (0x91b5:16), 255
 	jrl z, MidiCtrl_NullRet
 	ld xix, 0x91b7
-	ld_spiw BC, 0xf1
-	ld_spiw DE, 0xf1
+	ld BC, (xix+)
+	ld DE, (xix+)
 	ld a, (xix)
 	ld (0x91c8:16), a
 	extz hl
@@ -9957,7 +9957,7 @@ VoiceMode3_StoreAndScan:
 	ld xiy, 0x91d2
 
 VoiceMode3_ScanLoop:
-	ld_spiw WA, 0xf5
+	ld WA, (xiy+)
 	cp a, 0xff
 	jr z, VoiceMode3_NoMatch
 	cp wa, bc
@@ -9966,7 +9966,7 @@ VoiceMode3_ScanLoop:
 	jr VoiceMode3_ScanLoop
 
 VoiceMode3_FoundMatch:
-	ld_spiw WA, 0xf5
+	ld WA, (xiy+)
 	and d, a
 	ld (xix + 2), de
 	jr nz, VoiceMode3_StoreSubMode
@@ -9993,12 +9993,12 @@ VoiceMode3_BuildChannelTable:
 	ld xix, 0x91d2
 
 VoiceMode3_CopyTableEntry:
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
+	ld WA, (xiy+)
+	ld (xix+), WA
 	cp a, 0xff
 	jr z, VoiceMode3_TableCopyDone
-	ld_spiw WA, 0xf5
-	stw_dpi WA, 0xf1
+	ld WA, (xiy+)
+	ld (xix+), WA
 	jr VoiceMode3_CopyTableEntry
 
 VoiceMode3_TableCopyDone:
@@ -10303,7 +10303,7 @@ MidiPart_FindChannelInTable:
 	ld (0x91cd:16), w
 
 MidiPart_ScanNextEntry:
-	ldb_spi A, 0xf4
+	ld A, (xiy+)
 	cp a, w
 	jr z, MidiPart_ScanDone
 	djnz xbc, MidiPart_ScanNextEntry

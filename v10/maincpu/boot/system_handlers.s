@@ -1860,7 +1860,7 @@ AudioMix_WriteChannelGroup:
 
 AudioMix_WriteChannelGroup_Loop:
 	ld (xhl), a
-	ldb_spi E, 0xe4
+	ld E, (xbc+)
 	ld (xhl + 2), e
 	inc 1, a
 	djnz8 d, AudioMix_WriteChannelGroup_Loop
@@ -1977,7 +1977,7 @@ Copy_DE_words_from_XBC_to_XWA:
 ;   BC  = 16-bit fill pattern (e.g., color | (color << 8) for 8bpp)
 ; =============================================================================
 Fill_memory_at_XWA_with_DE_words_of_BC_value:
-	stw_dpi BC, 0xe1
+	ld (xwa+), BC
 	djnz xde, Fill_memory_at_XWA_with_DE_words_of_BC_value
 	ret
 
@@ -1987,7 +1987,7 @@ Checksum_ComputeComplement:
 	add xbc, xwa
 
 Checksum_AccumulateLoop:
-	add_spil XHL, 0xe2
+	add XHL, (xwa+)
 	cp xwa, xbc
 	jr lt, Checksum_AccumulateLoop
 	cpl hl
@@ -2049,8 +2049,8 @@ TaskSched_Init:
 
 TaskSched_InitPriorityQueues:
 	ld ix, hl
-	stw_dpi IX, 0xed
-	stw_dpi IX, 0xed
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_InitPriorityQueues
 	ldw ix, 0x489
 	extz xix
@@ -2083,8 +2083,8 @@ TaskSched_InitTimerSlots:
 
 TaskSched_InitExtQueues:
 	ld ix, hl
-	stw_dpi IX, 0xed
-	stw_dpi IX, 0xed
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_InitExtQueues
 	ld xhl, TaskSched_ScreenGroupTable_0x46
 	ldw de, 0x533
@@ -2097,8 +2097,8 @@ TaskSched_InitExtQueues:
 
 TaskSched_InitExtQueues2:
 	ld ix, hl
-	stw_dpi IX, 0xed
-	stw_dpi IX, 0xed
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_InitExtQueues2
 	ldw hl, 0x567
 	extz xhl
@@ -2133,8 +2133,8 @@ TaskSched_LinkFreeSlots:
 
 TaskSched_InitLockQueues:
 	ld ix, hl
-	stw_dpi IX, 0xed
-	stw_dpi IX, 0xed
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_InitLockQueues
 	ldw hl, 0x553
 	extz xhl
@@ -2142,8 +2142,8 @@ TaskSched_InitLockQueues:
 
 TaskSched_InitMsgQueues:
 	ld ix, hl
-	stw_dpi IX, 0xed
-	stw_dpi IX, 0xed
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_InitMsgQueues
 	ld xwa, TaskSched_InitMsgQueues_0x12
 	jr TaskSched_PostInit
@@ -5262,7 +5262,7 @@ SeqDMA_MultiWrite_NoteEvent:
 
 SeqDMA_MultiWrite_NoteEvent_Loop:
 	ld xwa, (xsp + 2)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
@@ -5293,7 +5293,7 @@ SeqDMA_MultiWrite_VoiceMap:
 
 SeqDMA_MultiWrite_VoiceMap_Loop:
 	ld xwa, (xsp + 2)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
@@ -5323,7 +5323,7 @@ SeqDMA_MultiWrite_DspSysEx:
 
 SeqDMA_MultiWrite_DspSysEx_Loop:
 	ld xwa, (xsp + 2)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
@@ -5354,7 +5354,7 @@ SeqDMA_MultiWrite_SoundEdit:
 
 SeqDMA_MultiWrite_SoundEdit_Loop:
 	ld xwa, (xsp + 2)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 2), xwa
 	extz bc
 	pushw bc
@@ -5645,7 +5645,7 @@ Audio_DMA_Transfer_CheckSize:
 
 Audio_DMA_Transfer_ByteLoop:
 	ld xwa, (1498:16)
-	stb_dpi A, 0xe0
+	lda xbc, (xwa+:1)
 	ld (1498:16), xwa
 	ld a, (xbc)
 	ld (0x140000:24), a
@@ -6497,7 +6497,7 @@ Flash_FillBuffer:
 	ret ule
 
 Flash_FillBuffer_Loop:
-	stw_dpi DE, 0xe1
+	ld (xwa+), DE
 	inc 1, de
 	cp de, bc
 	jr c, Flash_FillBuffer_Loop
@@ -6524,11 +6524,11 @@ Flash_WriteBufferToChip_Loop:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, (xsp + 6)
-	stb_dpi B, 0xe5
+	lda xde, (xbc+:2)
 	ld (xsp + 6), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 2)
-	ld_spiw DE, 0xed
+	ld DE, (xhl+)
 	ld (xsp + 2), xhl
 	calr Flash_ProgramWord
 	inc 1, iz
@@ -6561,11 +6561,11 @@ Flash_WriteFromMemory_Loop:
 	ld a, (xsp + 10)
 	extz wa
 	ld xbc, (xsp + 2)
-	stb_dpi B, 0xe5
+	lda xde, (xbc+:2)
 	ld (xsp + 2), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 6)
-	ld_spiw DE, 0xed
+	ld DE, (xhl+)
 	ld (xsp + 6), xhl
 	calr Flash_ProgramWord
 	inc 1, iz
@@ -6981,7 +6981,7 @@ HDAE5000_Status_Check_Skip2:
 	ld	xiz, 0:i3
 HDAE5000_Status_Check_Loop3:
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 226
+	lda	xbc, (xwa+:4)
 	ld	(xsp+0x4), xwa
 	ld	xwa, xbc
 	ld	xbc, xiz
@@ -7036,7 +7036,7 @@ SLIDE_Decompress_4K_MainLoop:
 	jr nz, SLIDE_Decompress_4K_CheckLiteral
 	cp xhl, xix
 	jrl nc, SLIDE_Decompress_4K_Done
-	ldb_spi E, 0x34
+	ld E, (xbc3+)
 	ld a, e
 	extz wa
 	ldw_erp WA, 0x30
@@ -7048,11 +7048,11 @@ SLIDE_Decompress_4K_CheckLiteral:
 	jr z, SLIDE_Decompress_4K_CopyMatch
 	cp xhl, xix
 	jrl nc, SLIDE_Decompress_4K_Done
-	ldb_spi E, 0x34
+	ld E, (xbc3+)
 	ld a, e
 	extz wa
 	ld e, a
-	lda_dpi XIY, 0x38
+	ld (xde3+), e
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -7065,12 +7065,12 @@ SLIDE_Decompress_4K_CheckLiteral:
 SLIDE_Decompress_4K_CopyMatch:
 	cp xhl, xix
 	jr nc, SLIDE_Decompress_4K_Done
-	ldb_spi A, 0x34
+	ld A, (xbc3+)
 	extz wa
 	ldw_erp WA, 0x32
 	cp xhl, xix
 	jr nc, SLIDE_Decompress_4K_Done
-	ldb_spi A, 0x34
+	ld A, (xbc3+)
 	ldb_erp A, 0xf8
 	extz iz
 	ld wa, iz
@@ -7094,7 +7094,7 @@ SLIDE_Decompress_4K_CopyLoop:
 	ld a, (xwa)
 	extz wa
 	ld e, a
-	lda_dpi XIY, 0x38
+	ld (xde3+), e
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -7159,7 +7159,7 @@ SLIDE_Decompress_8K_MainLoop:
 	jr nz, SLIDE_Decompress_8K_CheckLiteral
 	cp xhl, xix
 	jrl nc, SLIDE_Decompress_8K_Done
-	ldb_spi E, 0x34
+	ld E, (xbc3+)
 	ld a, e
 	extz wa
 	ldw_erp WA, 0x30
@@ -7171,11 +7171,11 @@ SLIDE_Decompress_8K_CheckLiteral:
 	jr z, SLIDE_Decompress_8K_CopyMatch
 	cp xhl, xix
 	jrl nc, SLIDE_Decompress_8K_Done
-	ldb_spi E, 0x34
+	ld E, (xbc3+)
 	ld a, e
 	extz wa
 	ld e, a
-	lda_dpi XIY, 0x38
+	ld (xde3+), e
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -7188,12 +7188,12 @@ SLIDE_Decompress_8K_CheckLiteral:
 SLIDE_Decompress_8K_CopyMatch:
 	cp xhl, xix
 	jr nc, SLIDE_Decompress_8K_Done
-	ldb_spi A, 0x34
+	ld A, (xbc3+)
 	extz wa
 	ldw_erp WA, 0x32
 	cp xhl, xix
 	jr nc, SLIDE_Decompress_8K_Done
-	ldb_spi A, 0x34
+	ld A, (xbc3+)
 	ldb_erp A, 0xf8
 	extz iz
 	ld wa, iz
@@ -7217,7 +7217,7 @@ SLIDE_Decompress_8K_CopyLoop:
 	ld a, (xwa)
 	extz wa
 	ld e, a
-	lda_dpi XIY, 0x38
+	ld (xde3+), e
 	inc 1, xhl
 	ld wa, bc
 	inc 1, bc
@@ -7507,11 +7507,11 @@ FDC_WriteSectors:
 
 FDC_WriteSectors_TrackLoop:
 	ld xwa, (xsp + 14)
-	stb_dpi A, 0xe2
+	lda xbc, (xwa+:4)
 	ld (xsp + 14), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 10)
-	ld_spil XBC, 0xea
+	ld XBC, (xde+)
 	ld (xsp + 10), xde
 	call Flash_ProgramByte
 	inc1w_erp 0xfa
@@ -7549,11 +7549,11 @@ FDC_WriteSectors_FullTrackOuter:
 
 FDC_WriteSectors_FullTrackInner:
 	ld xwa, (xsp + 14)
-	stb_dpi A, 0xe2
+	lda xbc, (xwa+:4)
 	ld (xsp + 14), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 10)
-	ld_spil XBC, 0xea
+	ld XBC, (xde+)
 	ld (xsp + 10), xde
 	call Flash_ProgramByte
 	inc1w_erp 0xfa
@@ -7583,11 +7583,11 @@ FDC_WriteSectors_Remainder:
 
 FDC_WriteSectors_RemainderLoop:
 	ld xwa, (xsp + 14)
-	stb_dpi A, 0xe2
+	lda xbc, (xwa+:4)
 	ld (xsp + 14), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 10)
-	ld_spil XBC, 0xea
+	ld XBC, (xde+)
 	ld (xsp + 10), xde
 	call Flash_ProgramByte
 	inc1w_erp 0xfa
@@ -7635,11 +7635,11 @@ FDC_WriteCompressed_PartialTrackLoop:
 	ld a, (xsp + 20)
 	extz wa
 	ld xbc, (xsp + 14)
-	stb_dpi B, 0xe5
+	lda xde, (xbc+:2)
 	ld (xsp + 14), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 10)
-	ld_spiw DE, 0xed
+	ld DE, (xhl+)
 	ld (xsp + 10), xhl
 	call Flash_ProgramWord
 	inc1w_erp 0xfa
@@ -7679,11 +7679,11 @@ FDC_WriteCompressed_FullTrackInner:
 	ld a, (xsp + 20)
 	extz wa
 	ld xbc, (xsp + 14)
-	stb_dpi B, 0xe5
+	lda xde, (xbc+:2)
 	ld (xsp + 14), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 10)
-	ld_spiw DE, 0xed
+	ld DE, (xhl+)
 	ld (xsp + 10), xhl
 	call Flash_ProgramWord
 	inc1w_erp 0xfa
@@ -7715,11 +7715,11 @@ FDC_WriteCompressed_RemainderLoop:
 	ld a, (xsp + 20)
 	extz wa
 	ld xbc, (xsp + 14)
-	stb_dpi B, 0xe5
+	lda xde, (xbc+:2)
 	ld (xsp + 14), xbc
 	ld xbc, xde
 	ld xhl, (xsp + 10)
-	ld_spiw DE, 0xed
+	ld DE, (xhl+)
 	ld (xsp + 10), xhl
 	call Flash_ProgramWord
 	inc1w_erp 0xfa
@@ -8051,8 +8051,8 @@ HDAE5000_ROM_Transfer_BlockLoop:
 	ld xiy, 0x3ffff
 
 HDAE5000_ROM_Transfer_WordLoop:
-	ld_spiw DE, 0xf1
-	cp_spiw DE, 0xed
+	ld DE, (xix+)
+	cp DE, (xhl+)
 	jr nz, HDAE5000_ROM_Transfer_Return
 	ld xde, xiy
 	dec 1, xiy
@@ -8083,10 +8083,10 @@ HDAE5000_FlashWrite_BankLoop:
 
 HDAE5000_FlashWrite_WordLoop:
 	ld xwa, (xsp + 8)
-	stb_dpi A, 0xe1
+	lda xbc, (xwa+:2)
 	ld (xsp + 8), xwa
 	ld xwa, (xsp + 4)
-	ld_spiw DE, 0xe1
+	ld DE, (xwa+)
 	ld (xsp + 4), xwa
 	ld wa, 1:i3
 	call Flash_ProgramWord
@@ -8114,11 +8114,11 @@ HDAE5000_FlashVerify_BytecodeBlock_Loop:
 	ld	xiz, 0:i3
 HDAE5000_FlashVerify_BytecodeBlock_Loop2:
 	ld	xwa, (xsp+8)
-	stb_dpi a, 226
+	lda xbc, (xwa+:4)
 	ld (xsp+8), xwa
 	ld xwa, xbc
 	ld	xde, (xsp+4)
-	ld_spil	xbc, 234
+	ld	xbc, (xde+)
 	ld	(xsp+0x4), xde
 	call	Flash_ProgramByte
 	inc	1, xiz
@@ -8147,11 +8147,11 @@ HDAE5000_TableData_BankLoop:
 
 HDAE5000_TableData_WordLoop:
 	ld xwa, (xsp + 8)
-	stb_dpi A, 0xe2
+	lda xbc, (xwa+:4)
 	ld (xsp + 8), xwa
 	ld xwa, xbc
 	ld xde, (xsp + 4)
-	ld_spil XBC, 0xea
+	ld XBC, (xde+)
 	ld (xsp + 4), xde
 	call Flash_ProgramByte
 	inc 1, xiz
@@ -8372,7 +8372,7 @@ Parport_RefillBuffer_Loop:
 
 Parport_ReadByte_Emit:
 	ld xwa, (1610:16)
-	stb_dpi A, 0xe0
+	lda xbc, (xwa+:1)
 	ld (1610:16), xwa
 	ld l, (xbc)
 	extz hl
@@ -8395,7 +8395,7 @@ Flash_AccumWrite_Byte:
 	cp e, 3:i3
 	jr nz, Flash_AccumWrite_ByteDone
 	ld xwa, (1606:16)
-	stb_dpi B, 0xe2
+	lda xde, (xwa+:4)
 	ld (1606:16), xwa
 	ld xbc, (xbc)
 	ld xwa, xde
@@ -8421,7 +8421,7 @@ Flash_AccumWrite_Word:
 	cp c, 1:i3
 	jr nz, Flash_AccumWrite_WordDone
 	ld xwa, (1622:16)
-	stb_dpi A, 0xe1
+	lda xbc, (xwa+:2)
 	ld (1622:16), xwa
 	ld de, (xde)
 	ld wa, 1:i3

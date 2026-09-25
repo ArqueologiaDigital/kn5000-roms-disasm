@@ -1193,14 +1193,14 @@ Boot_HandleFactoryReset:
 
 FactoryReset_ClearDRAM:
 	ld xwa, 0:i3
-	stl_dpi XWA, 0xe6
+	ld (xbc+), XWA
 	cp xbc, 0x100000
 	jr c, FactoryReset_ClearDRAM
 	ld xbc, 0x1e0000
 
 FactoryReset_ClearSRAM:
 	ld xwa, 0:i3
-	stl_dpi XWA, 0xe6
+	ld (xbc+), XWA
 	cp xbc, 0x200000
 	jr c, FactoryReset_ClearSRAM
 	ldw (0x00ffca:24), 0x5aa5
@@ -2456,7 +2456,7 @@ TextRender_ProcessStringLoop:
 
 TextRender_CharWidthAccum:
 	ld xwa, (xsp + 30)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 30), xwa
 	sub c, 0x20
 	extz bc
@@ -3162,7 +3162,7 @@ Debug_PrintString:
 	ld xix, xwa
 
 Debug_PrintString_Loop:
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	cp a, 0:i3
 	jr z, Debug_PrintString_Done
 	push xix

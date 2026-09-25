@@ -87,7 +87,7 @@ FDTest_FillBuffer:
 	jr nc, FDTest_OpenForWrite
 
 FDTest_FillLoop:
-	stw_dpi BC, 0xe1
+	ld (xwa+), BC
 	inc 1, bc
 	cp bc, 0x400
 	jr c, FDTest_FillLoop
@@ -191,7 +191,7 @@ FDTest_VerifyData:
 	jr nc, FDTest_CompareResult
 
 FDTest_CompareLoop:
-	cpm_spiw BC, 0xe1
+	cp (xwa+), BC
 	jr z, FDTest_CompareNext
 	inc 1, iz
 

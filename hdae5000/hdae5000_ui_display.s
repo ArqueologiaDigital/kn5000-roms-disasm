@@ -552,7 +552,7 @@ HDAE5000_CopyVersionString:	; 0x28B200 (43 bytes)
 	cp ix, 7:i3
 	jr nc, HDAE5000_CopyVersionString__len
 HDAE5000_CopyVersionString__loop:
-	stb_dpi c, 0xE0		; lda XHL, XWA+ (unidasm): XHL = XWA, then XWA++
+	lda xhl, (xwa+:1)		; lda XHL, XWA+ (unidasm): XHL = XWA, then XWA++
 	ld bc, ix			; BC = current index
 	extz xbc			; zero-extend to 32 bits
 	ld xde, HDAE5000_Str_V206i		; "V2.06i"
@@ -23383,15 +23383,15 @@ HDAE5000_HD_LoadSettings:
 	ld	xde, 0x00000200
 	call HDAE5000_ATA_ReadSector
 	lda xix, (0x2006a0:24)
-	ldb_spi a, 0xf0		; ld A,(XIX+)
+	ld a, (xix+)		; ld A,(XIX+)
 	ld	(HDAE5000_RAM_QuickLoadMode:24), a
-	ldb_spi a, 0xf0		; ld A,(XIX+)
+	ld a, (xix+)		; ld A,(XIX+)
 	ld	(HDAE5000_RAM_LoadByNumberMode:24), a
-	ldb_spi a, 0xf0		; ld A,(XIX+)
+	ld a, (xix+)		; ld A,(XIX+)
 	ld	(HDAE5000_RAM_JumpAfterLoad:24), a
-	ldb_spi a, 0xf0		; ld A,(XIX+)
+	ld a, (xix+)		; ld A,(XIX+)
 	ld	(HDAE5000_RAM_LyricJump:24), a
-	ldb_spi a, 0xf0		; ld A,(XIX+)
+	ld a, (xix+)		; ld A,(XIX+)
 	ld	(HDAE5000_RAM_LyricForeColor:24), a
 	ld	a, (xix)
 	ld	(HDAE5000_RAM_LyricBackColor:24), a
@@ -23429,17 +23429,17 @@ HDAE5000_HD_SaveSettings_CopyLoop:
 .LHD_SaveSettings_CopyLoop_Skip1:
 	lda xix, (0x2006a0:24)
 	ld	a, (HDAE5000_RAM_QuickLoadMode:24)
-	lda_dpi xbc, 0xf0		; ld (XIX+),A
+	ld (xix+), a		; ld (XIX+),A
 	ld	a, (HDAE5000_RAM_LoadByNumberMode:24)
-	lda_dpi xbc, 0xf0		; ld (XIX+),A
+	ld (xix+), a		; ld (XIX+),A
 	ld	a, (HDAE5000_RAM_JumpAfterLoad:24)
-	lda_dpi xbc, 0xf0		; ld (XIX+),A
+	ld (xix+), a		; ld (XIX+),A
 	ld	a, (HDAE5000_RAM_LyricJump:24)
-	lda_dpi xbc, 0xf0		; ld (XIX+),A
+	ld (xix+), a		; ld (XIX+),A
 	ld	a, (HDAE5000_RAM_LyricForeColor:24)
-	lda_dpi xbc, 0xf0		; ld (XIX+),A
+	ld (xix+), a		; ld (XIX+),A
 	ld	a, (HDAE5000_RAM_LyricBackColor:24)
-	lda_dpi xbc, 0xf0		; ld (XIX+),A
+	ld (xix+), a		; ld (XIX+),A
 	ld	xwa, 0xffffffff
 	ld (xix), xwa                           ; ld (XIX),XWA
 	ld	xhl, 1:i3
@@ -23513,7 +23513,7 @@ HDAE5000_DoPrintf:
 	ldw	(0x239486:24), 32
 .LDSR_9b1d:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23544,7 +23544,7 @@ HDAE5000_DoPrintf:
 	setm	1, (xsp+6)
 .LDSR_9b72:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23572,7 +23572,7 @@ HDAE5000_DoPrintf:
 	ld (xsp + 0x08), wa                     ; ld (XSP+0x08),WA
 	add	(xsp+8), bc
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23587,7 +23587,7 @@ HDAE5000_DoPrintf:
 	jr nz, .LDSR_9c4a                      ; [6e 72] jr NZ,0x299c4a
 	setm	4, (xsp+6)
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23604,7 +23604,7 @@ HDAE5000_DoPrintf:
 	resm	4, (xsp+6)
 .LDSR_9c08:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23617,7 +23617,7 @@ HDAE5000_DoPrintf:
 	ld (xsp + 0x0a), wa                     ; ld (XSP+0x0a),WA
 	add	(xsp+10), bc
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23632,7 +23632,7 @@ HDAE5000_DoPrintf:
 	jr nz, .LDSR_9c63                      ; [6e 13] jr NZ,0x299c63
 	setm	5, (xsp+6)
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23642,7 +23642,7 @@ HDAE5000_DoPrintf:
 	jr nz, .LDSR_9c7c                      ; [6e 13] jr NZ,0x299c7c
 	setm	6, (xsp+6)
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23652,7 +23652,7 @@ HDAE5000_DoPrintf:
 	jr nz, .LDSR_9c93                      ; [6e 11] jr NZ,0x299c93
 	setm	7, (xsp+6)
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -23770,7 +23770,7 @@ HDAE5000_DoPrintf_Case_String:
 	jr t, .LDSR_9db7                       ; [68 13] jr T,0x299db7
 .LDSR_9da4:
 	ld xwa, (xsp + 0x10)                    ; ld XWA,(XSP+0x10)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x10), xwa                    ; ld (XSP+0x10),XWA
 	exts bc                                 ; exts BC
 	pushw bc                                ; push BC
@@ -24448,7 +24448,7 @@ HDAE5000_DoPrintf_Case_Float:
 	add	(xsp+4), wa
 HDAE5000_DoPrintf_NextChar:
 	ld xwa, (xsp + 0x52)                    ; ld XWA,(XSP+0x52)
-	ldb_spi c, 0xe0		; ld C,(XWA+)
+	ld c, (xwa+)		; ld C,(XWA+)
 	ld (xsp + 0x52), xwa                    ; ld (XSP+0x52),XWA
 	ldb_erp c, 0xf8		; ld IZL,C
 	exts	iz
@@ -24477,7 +24477,7 @@ HDAE5000_Int_To_Decimal_String:	; 0x29A3D2 (80 bytes)
 	ld xiz, xwa			; XIZ = |value|
 .LInt_To_Dec__loop:
 	ld xwa, (xsp + 12)		; get buffer state
-	stb_dpi a, 0xE0			; lda XBC, (XWA+) — advance write ptr
+	lda xbc, (xwa+:1)			; lda XBC, (XWA+) — advance write ptr
 	ld (xsp + 4), xbc		; save digit write position
 	ld (xsp + 12), xwa		; save advanced buffer ptr
 	ld xwa, xiz			; value to divide
@@ -24506,7 +24506,7 @@ HDAE5000_UInt_To_Decimal_String:	; 0x29A422 (63 bytes)
 	ld xiz, (xsp + 16)		; load unsigned value
 .LUInt_To_Dec__loop:
 	ld xwa, (xsp + 12)		; get buffer state
-	stb_dpi a, 0xE0			; lda XBC, (XWA+) — advance write ptr
+	lda xbc, (xwa+:1)			; lda XBC, (XWA+) — advance write ptr
 	ld (xsp + 4), xbc		; save digit write position
 	ld (xsp + 12), xwa		; save advanced buffer ptr
 	ld xwa, xiz			; value to divide
@@ -24540,7 +24540,7 @@ HDAE5000_Int_To_Hex_String:	; 0x29A461 (51 bytes)
 	ld xhl, (xsp + 4)		; buffer pointer
 	ld xde, (xsp + 8)		; value to convert
 .LInt_To_Hex__loop:
-	stb_dpi a, 0xEC			; lda XBC, (XHL+) — post-increment buffer ptr
+	lda xbc, (xhl+:1)			; lda XBC, (XHL+) — post-increment buffer ptr
 	ld xwa, xde
 	and xwa, 0x0000000F		; mask low nibble
 	add xwa, xix			; index into digit table
@@ -24557,7 +24557,7 @@ HDAE5000_Int_To_Octal_String:	; 0x29A494 (34 bytes)
 	ld xde, (xsp + 8)		; value to convert
 	ld xhl, (xsp + 4)		; buffer pointer
 .LInt_To_Octal__loop:
-	stb_dpi a, 0xEC			; lda XBC, (XHL+) — post-increment buffer ptr
+	lda xbc, (xhl+:1)			; lda XBC, (XHL+) — post-increment buffer ptr
 	ld xwa, xde
 	and xwa, 0x00000007		; mask low 3 bits
 	add xwa, 0x00000030		; convert to ASCII '0'-'7'
@@ -25011,7 +25011,7 @@ HDAE5000_FormatFloat_Fixed:	; 0x29A563 (805 bytes)
 	ret
 
 .LSFC_a87f:
-	cp_spib_im	224, 48                 ; cp (XWA+), 0x30
+	cp	(xwa+), 48                 ; cp (XWA+), 0x30
 	jr z, .LSFC_a877                       ; [66 f2] jr Z,0x29a877
 	ld	hl, 0:i3
 	ret
@@ -25493,7 +25493,7 @@ HDAE5000_IToA:
 .Lppi_digits_done:
 	cp ix, 0:i3			; negative flag set?
 	jr z, .Lppi_copy_digits		; → no sign needed
-	stib_dpd 0xF4, 0x2D		; ld (-XIY), '-' (pre-decrement, store minus sign)
+	ld (-xiy), 0x2D		; ld (-XIY), '-' (pre-decrement, store minus sign)
 .Lppi_copy_digits:
 	lda xwa, (xiz + 0x12)		; XWA = &scratch[18] (past null-terminator)
 	sub xwa, xiy			; XWA = string length (including null)
@@ -25720,9 +25720,9 @@ HDAE5000_MemCmp:	; 0x29AE24 (123 bytes)
 	and de, 0x0003			; DE = bytes to 4-byte alignment
 	jr z, .Lfr_aligned		; skip if already aligned
 .Lfr_byte_loop1:
-	ldb_spi l, 0xF0			; L = *(XIX++)
+	ld l, (xix+)			; L = *(XIX++)
 	extz hl				; zero-extend L to HL
-	ldb_spi a, 0xF4			; A = *(XIY++)
+	ld a, (xiy+)			; A = *(XIY++)
 	extz wa				; zero-extend A to WA
 	sub hl, wa			; compare
 	ret nz				; return if different
@@ -25734,8 +25734,8 @@ HDAE5000_MemCmp:	; 0x29AE24 (123 bytes)
 	srl bc, 2			; BC = number of 32-bit words
 	jr z, .Lfr_remainder		; skip if no full words
 .Lfr_word_loop:
-	ld_spil xhl, 0xF2		; XHL = *(XIX++) (32-bit)
-	ld_spil xwa, 0xF6		; XWA = *(XIY++) (32-bit)
+	ld xhl, (xix+)		; XHL = *(XIX++) (32-bit)
+	ld xwa, (xiy+)		; XWA = *(XIY++) (32-bit)
 	cp xhl, xwa			; compare 32-bit words
 	jr z, .Lfr_word_next		; skip if equal
 	; Words differ — find which byte differs
@@ -25760,9 +25760,9 @@ HDAE5000_MemCmp:	; 0x29AE24 (123 bytes)
 	and de, 0x0003			; DE = remaining bytes
 	ret z				; return if none
 .Lfr_byte_loop2:
-	ldb_spi l, 0xF0			; L = *(XIX++)
+	ld l, (xix+)			; L = *(XIX++)
 	extz hl				; zero-extend L to HL
-	ldb_spi a, 0xF4			; A = *(XIY++)
+	ld a, (xiy+)			; A = *(XIY++)
 	extz wa				; zero-extend A to WA
 	sub hl, wa			; compare
 	ret nz				; return if different
@@ -25816,7 +25816,7 @@ HDAE5000_MemFill:	; 29AEC7h
 	and de, 0x3	; DE = bytes to align (0-3)
 	jr z, HDAE5000_MemFill__aligned
 HDAE5000_MemFill__align_loop:
-	lda_dpi XBC, 0xF0	; ld (XIX+), A - store byte
+	ld (xix+), a	; ld (XIX+), A - store byte
 	sub bc, 0x1	; sub BC, 1 - decrement count
 	ret z	; Return if done
 	djnz xde, HDAE5000_MemFill__align_loop	; djnz DE, .align_loop
@@ -25827,13 +25827,13 @@ HDAE5000_MemFill__aligned:
 	ld w, a	; W = A (fill byte)
 	ldw_erp WA, 0xE2	; ld QWA, WA - expand to 32-bit
 HDAE5000_MemFill__fill_dwords:
-	stl_dpi XWA, 0xF2	; ld (XIX+), XWA - store 4 bytes
+	ld (xix+), XWA	; ld (XIX+), XWA - store 4 bytes
 	djnz xbc, HDAE5000_MemFill__fill_dwords	; djnz BC, .fill_dwords
 HDAE5000_MemFill__remainder:
 	and de, 0x3	; DE = remaining bytes (0-3)
 	ret z	; Return if none
 HDAE5000_MemFill__fill_bytes:
-	lda_dpi XBC, 0xF0	; ld (XIX+), A
+	ld (xix+), a	; ld (XIX+), A
 	djnz xde, HDAE5000_MemFill__fill_bytes	; djnz DE, .fill_bytes
 	ret
 
@@ -25854,8 +25854,8 @@ HDAE5000_StrCat__find_end:
 	ld xbc, (xsp + 8)	; ld XBC, (XSP+0x08) - src
 	jr HDAE5000_StrCat__copy_check
 HDAE5000_StrCat__copy_loop:
-	ldb_spi A, 0xE4	; ld A, (XBC+) - read src byte
-	lda_dpi XBC, 0xE8	; ld (XDE+), A - write to dest
+	ld A, (xbc+)	; ld A, (XBC+) - read src byte
+	ld (xde+), a	; ld (XDE+), A - write to dest
 HDAE5000_StrCat__copy_check:
 	cp (xbc), 0x0	; cp (XBC), 0 - check for null
 	jr nz, HDAE5000_StrCat__copy_loop

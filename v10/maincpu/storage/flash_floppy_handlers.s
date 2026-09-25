@@ -1948,7 +1948,7 @@ Flash_SectorWriteExecute:
 Flash_CopyMirrorLoop:
 	ld xhl, xbc
 	add xhl, 0x10000
-	ldb_spi A, 0xe4
+	ld A, (xbc+)
 	ld (xhl), a
 	cp xbc, xde
 	jr c, Flash_CopyMirrorLoop
@@ -1998,7 +1998,7 @@ Flash_WriteSectorWithMirrorCopy:
 Flash_CopyReverseMirrorLoop:
 	ld xhl, xbc
 	add xhl, 0xffff0000
-	ldb_spi A, 0xe4
+	ld A, (xbc+)
 	ld (xhl), a
 	cp xbc, xde
 	jr c, Flash_CopyReverseMirrorLoop
@@ -5423,8 +5423,8 @@ ToneData_ZeroFillLoop:
 	lda xhl, (xwa + 6)
 
 ToneData_CopyBlock1_Loop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock1_Loop
 	lda xhl, (Composer_SettingsBlock_0x60:24)
@@ -5434,8 +5434,8 @@ ToneData_CopyBlock1_Loop:
 	lda xhl, (xhl + 16)
 
 ToneData_CopyBlock2_Loop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock2_Loop
 	lda xhl, (MSP_Default_PartBankMap:24)
@@ -5445,8 +5445,8 @@ ToneData_CopyBlock2_Loop:
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock3_Loop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock3_Loop
 	lda xhl, (Composer_SettingsBlock_0x80:24)
@@ -5456,8 +5456,8 @@ ToneData_CopyBlock3_Loop:
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock4_Loop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock4_Loop
 	lda xhl, (Composer_SettingsBlock_0xC0:24)
@@ -5467,8 +5467,8 @@ ToneData_CopyBlock4_Loop:
 	lda xhl, (xhl + 64)
 
 ToneData_CopyBlock5_Loop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock5_Loop
 	ld xwa, (3226:16)
@@ -5487,8 +5487,8 @@ ToneData_ScanRegionLoop:
 	lda xiy, (xiy + 16)
 
 ToneData_CopyRegion_Inner:
-	ldb_spi A, 0xec
-	lda_dpi XBC, 0xf0
+	ld A, (xhl+)
+	ld (xix+), a
 	cp xhl, xiy
 	jr c, ToneData_CopyRegion_Inner
 

@@ -72,7 +72,7 @@ MidiSerial_WaitForData:
 
 MidiSerial_WaitLoop:
 	call SeqMain_ReadData
-	lda_dpi XSP, 0xf4
+	ld (xiy+), l
 	ld hl, (xiz - 10)
 	cp hl, (xiz - 6)
 	jr z, MidiSerial_WaitDone
@@ -1048,7 +1048,7 @@ UIState_DisplayUpdate_BitmapHandler_Helper:
 UIState_DisplayUpdate_BitmapHandler_Skip:
 	ldw	wa, 0xffff
 	ldw	bc, 16
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ld	xix, 0x9514
 	cp	(0x966d:16), 128
@@ -1057,7 +1057,7 @@ UIState_DisplayUpdate_BitmapHandler_Skip:
 UIState_DisplayUpdate_BitmapHandler_Skip2:
 	xor	wa, wa
 	ldw	bc, 64
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ld	xix, 0x94f4
 	ld	xiy, 0x9514
@@ -6646,7 +6646,7 @@ DSPCfg_VoiceSlotB_ExtractData_Loop:
 	res	7, a
 	andmi8	(xix-1), 128
 	or	(xix-1), a
-	ldb_spi	a, 236
+	ld	a, (xhl+)
 	ld	(xix), a
 	lda	xix, (xix+26)
 	cp	xhl, xiy
@@ -7348,7 +7348,7 @@ SndParam_ApplyBaseBlock_Loop:
 	ld a, (xix)
 	and a, 0xf8
 	or a, (xhl + 4)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	ld a, (xhl + 5)
 	ld (xix), a
 
@@ -7402,7 +7402,7 @@ SndParam_AllocAndCopyPreset:
 
 SndParam_CopyPreset_FillLoop:
 	ld xhl, (xbc - 5)
-	ldb_spi A, 0xec
+	ld A, (xhl+)
 	and a, 0x7
 	ld (xbc - 1), a
 	ld a, (xhl)
@@ -7542,7 +7542,7 @@ SndParam_RelocateApply_BaseLoop:
 	ld a, (xix)
 	and a, 0xf8
 	or a, (xde + 4)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	ld a, (xde + 5)
 	ld (xix), a
 
@@ -8328,7 +8328,7 @@ VoiceQueue_Append:
 	ld xbc, (0xbc54:16)
 	lda xde, (xbc + 10)
 	ld xbc, (xde)
-	stb_dpi C, 0xe4
+	lda xhl, (xbc+:1)
 	ld (xde), xbc
 	ld (xhl), a
 	ld xbc, (0xbc54:16)
@@ -8350,7 +8350,7 @@ MidiChan_DequeueVoiceEntry:
 	ld xwa, (xbc)
 	cp (xwa), 0xff
 	ret z
-	stb_dpi B, 0xe0
+	lda xde, (xwa+:1)
 	ld (xbc), xwa
 	ld l, (xde)
 	ret
@@ -8365,9 +8365,9 @@ MidiChan_NibbleLookup_Data:
 	lda	xix, (xde+10)
 MidiChan_DequeueVoiceEntry_Loop:
 	ld	xwa, (xix)
-	stb_dpi e, 224
+	lda xiy, (xwa+:1)
 	ld (xix), xwa
-	ldb_spi a, 228
+	ld a, (xbc+)
 	ld (xiy), a
 	ld wa, hl
 	dec 1, hl
@@ -9553,7 +9553,7 @@ MidiSeq_DequeueWriteField15:
 
 MidiSeq_CountEntriesLoop:
 	stb_erp C, 0xfb
-	add_spib C, 0xec
+	add C, (xhl+)
 	ldb_erp C, 0xfb
 	cp xhl, xde
 	jr nz, MidiSeq_CountEntriesLoop
@@ -9592,9 +9592,9 @@ SeqBuf_FlushNoteOffs:
 
 SeqBuf_FlushLoop:
 	ld xde, (xix)
-	stb_dpi E, 0xe8
+	lda xiy, (xde+:1)
 	ld (xix), xde
-	ldb_spi E, 0xe0
+	ld E, (xwa+)
 	ld (xiy), e
 	incw 1, (xhl)
 	ld de, bc
@@ -9646,9 +9646,9 @@ ArpQueue_Enqueue:
 
 ArpQueue_EnqueueLoop:
 	ld xde, (xix)
-	stb_dpi E, 0xe8
+	lda xiy, (xde+:1)
 	ld (xix), xde
-	ldb_spi E, 0xe0
+	ld E, (xwa+)
 	ld (xiy), e
 	incw 1, (xhl)
 	ld de, bc
@@ -9702,7 +9702,7 @@ ArpQueue_ProcessAndSort_Data_Helper2_Loop:
 	lda	xde, (xwa+1)
 	lda	xhl, (0xbccc:16)
 	ld	xbc, (xhl)
-	stb_dpi d, 228
+	lda xix, (xbc+:1)
 	ld (xhl), xbc
 	ld	c, (xix)
 	ld	(xde), c
@@ -9771,7 +9771,7 @@ ArpQueue_ComputeAndEnqueue:
 	jr z, ArpQueue_ComputeSize
 
 ArpQueue_CountLoop:
-	add_spib E, 0xec
+	add E, (xhl+)
 	cp xhl, xwa
 	jr nz, ArpQueue_CountLoop
 
@@ -9860,13 +9860,13 @@ SeqOut_TimedChunkRemainder:
 SeqVoice_ReadEntryFields_Data:
 	ld	xde, xwa
 	ld	a, (xde)
-	lda_dpi	xbc, 228
+	ld	(xbc+), a
 	ld	a, (xde+1)
-	lda_dpi	xbc, 228
+	ld	(xbc+), a
 	ld	a, (xde+2)
-	lda_dpi	xbc, 228
+	ld	(xbc+), a
 	ld	a, (xde+3)
-	lda_dpi	xbc, 228
+	ld	(xbc+), a
 	ld	(xbc), 255
 	ret
 
@@ -9874,13 +9874,13 @@ SeqVoice_StoreEntry:
 	dec 4, xsp
 	lda xbc, (xsp)
 	ld xde, (xsp + 8)
-	ldb_spi A, 0xe8
+	ld A, (xde+)
 	ld (xbc), a
 	cp a, 0xff
 	jr z, SeqVoice_StoreEntryDone
-	ldb_spi A, 0xe8
+	ld A, (xde+)
 	ld (xbc + 1), a
-	ldb_spi A, 0xe8
+	ld A, (xde+)
 	ld (xbc + 2), a
 	ld a, (xde)
 	ld (xbc + 3), a
@@ -9909,18 +9909,18 @@ SeqVoice_DispatchProcess_Data:
 	ld	(xsp+12), xwa
 SeqVoice_DispatchProcess_Data_Loop:
 	ld	xwa, (xix)
-	stb_dpi a, 224
+	lda xbc, (xwa+:1)
 	ld (xix), xwa
 	ld	c, (xbc)
 	sll	c, 4
 	ld	xwa, (xhl)
-	stb_dpi h, 224
+	lda xiz, (xwa+:1)
 	ld (xhl), xwa
 	ld	w, (xiz)
 	and	w, 15
 	xor	c, w
 	ld	xwa, (xde)
-	stb_dpi h, 224
+	lda xiz, (xwa+:1)
 	ld (xde), xwa
 	ld	(xiz), c
 	ld	xwa, (xsp+4)
@@ -10356,11 +10356,11 @@ Part_LookupByIndex:
 MIDI_PackNibbleParam:
 	lda xbc, (xwa + 6)
 	ld xwa, (xbc)
-	stb_dpi B, 0xe0
+	lda xde, (xwa+:1)
 	ld (xbc), xwa
 	ld l, (xde)
 	sll l, 4
-	stb_dpi B, 0xe0
+	lda xde, (xwa+:1)
 	ld (xbc), xwa
 	ld a, (xde)
 	and a, 0xf
@@ -10551,8 +10551,8 @@ Part_ProcessEntry_Data:
 	cp	wa, 0:i3
 	ret	z
 Part_LookupTableEntry_Loop:
-	ldb_spi a, 236
-	lda_dpi xbc, 232
+	ld a, (xhl+)
+	ld (xde+), a
 	ld wa, bc
 	dec 1, bc
 	cp	wa, 0:i3
@@ -10566,7 +10566,7 @@ Part_LookupTableEntry_Loop:
 	cp	de, 0:i3
 	jr	z, Part_LookupTableEntry_Skip
 Part_LookupTableEntry_Loop2:
-	add_spib l, 224
+	add l, (xwa+)
 	ld de, bc
 	dec 1, bc
 	cp	de, 0:i3
@@ -12445,8 +12445,8 @@ SoundMode_PostRender:
 	jr z, SoundMode_CopyBitmapDone
 
 SoundMode_CopyBitmapLoop:
-	ld_spiw WA, 0xe9
-	stw_dpi WA, 0xed
+	ld WA, (xde+)
+	ld (xhl+), WA
 	ld xwa, xbc
 	dec 1, xbc
 	or xwa, xwa
@@ -13803,7 +13803,7 @@ SeqAlt_NibbleSearch:
 	jr z, SeqAlt_NibbleSearch_NotFound
 
 SeqAlt_NibbleSearch_CompareLoop:
-	cp_spib A, 0xe4
+	cp A, (xbc+)
 	jr nz, SeqAlt_NibbleSearch_DecLoop
 	ld hl, 0:i3
 	ret

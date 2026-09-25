@@ -574,7 +574,7 @@ MidiSerial_WaitForData:
 	ld (xiy + 3), 0x0
 MidiSerial_WaitLoop:
 	call	SeqMain_ReadData
-	lda_dpi XSP, 0xf4
+	ld (xiy+), l
 	ld hl, (xiz - 10)
 	cp hl, (xiz - 6)
 	jr	z, MidiSerial_WaitDone

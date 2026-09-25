@@ -317,7 +317,7 @@ RenderFilterDisplay:
 	ld (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	ld c, (xsp)
-	lda_dpi XHL, 0xe0
+	ld (xwa+), c
 	ld (xsp + 2), xwa
 	cp (xsp), 0x0
 	jr nz, RenderFilter_CheckType1
@@ -597,7 +597,7 @@ RenderSaveFilterDisplay:
 	ld (xsp + 2), xwa
 	ld xwa, (xsp + 2)
 	ld c, (xsp)
-	lda_dpi XHL, 0xe0
+	ld (xwa+), c
 	ld (xsp + 2), xwa
 	ld a, c
 	extz wa

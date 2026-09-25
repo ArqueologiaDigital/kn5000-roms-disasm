@@ -909,7 +909,7 @@ TONE_GEN_WRITE:
 	ld d, 0x8:opc
 TONE_GEN_WRITE__write_loop:
 	ld (xhl), a
-	ldb_spi E, 0xE4
+	ld E, (xbc+)
 	ld (xhl + 2), e
 	inc 1, a
 	djnz8 d, TONE_GEN_WRITE__write_loop
@@ -1001,7 +1001,7 @@ COPY_WORDS:
 ; ==============================================================================
 
 FILL_WORDS:
-	stw_dpi BC, 0xE1	; ld (XWA+), BC
+	ld (xwa+), BC	; ld (XWA+), BC
 	djnz16 de, -6	; djnz DE, FILL_WORDS
 	ret
 
@@ -1015,7 +1015,7 @@ CHECKSUM_CALC:
 	extz xbc	; Zero-extend BC to XBC
 	add xbc, xwa	; End address = start + count
 CHECKSUM_CALC__loop:
-	add_spil XHL, 0xE2	; add XHL, (XWA+)
+	add XHL, (xwa+)	; add XHL, (XWA+)
 	cp xwa, xbc
 	jr lt, CHECKSUM_CALC__loop	; Loop while XWA < end
 	cpl hl	; Complement result
@@ -1836,7 +1836,7 @@ MEM_TEST_ROUTINE__low1_ok:
 MEM_TEST_ROUTINE__high1_ok:
 	; Restore and test pattern 2
 	ld xwa, (xsp + 6)
-	stl_dpi XWA, 0xEE	; Restore and advance
+	ld (xhl+), XWA	; Restore and advance
 	ld xwa, (xhl)
 	ld (xsp + 6), xwa
 	; Write pattern 2: 0xA5A5A5A5
@@ -1861,7 +1861,7 @@ MEM_TEST_ROUTINE__low2_ok:
 MEM_TEST_ROUTINE__high2_ok:
 	; Restore original
 	ld xwa, (xsp + 6)
-	stl_dpi XWA, 0xEE
+	ld (xhl+), XWA
 	sub xiz, 0x1
 	jr nz, MEM_TEST_ROUTINE__test_loop
 MEM_TEST_ROUTINE__region_done:
@@ -1900,7 +1900,7 @@ ROM_CHECKSUM__word_loop:
 	lda_dri XDE, 0x07, 0xF0, 0xE4
 	ld bc, (xde)	; Get current sum
 	ldw_erp BC, 0xE2
-	ld_spiw BC, 0xF5	; Read word from ROM
+	ld BC, (xiy+)	; Read word from ROM
 	addw_erp BC, 0xE2	; Add to sum
 	ld (xde), bc	; Store result
 	inc 1, xiz
@@ -1959,7 +1959,7 @@ SERIAL_INIT:
 	lda xde, (xwa + 8)
 SERIAL_INIT__check_loop:
 	stb_erp A, 0xFB
-	or_spib_rm A, 0xE4	; OR all status bytes
+	or A, (xbc+)	; OR all status bytes
 	ldb_erp A, 0xFB
 	cp xbc, xde
 	jr c, SERIAL_INIT__check_loop
@@ -2895,7 +2895,7 @@ DEBUG_OUTPUT_STRING:
 	push xiz
 	ld xix, xwa	; XIX = string pointer
 DEBUG_OUTPUT_STRING__loop:
-	ldb_spi A, 0xF0	; Load next char, increment
+	ld A, (xix+)	; Load next char, increment
 	cp a, 0:i3	; Check for null terminator
 	jr z, DEBUG_OUTPUT_STRING__done	; If null, exit
 	push xix

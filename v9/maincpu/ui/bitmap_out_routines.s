@@ -518,7 +518,7 @@ BitMapOut_CopyPreset9_Execute:
 	jr BitMapOut_CopyPreset9_CheckEnd
 
 BitMapOut_CopyPreset9_StoreLoop:
-	stb_dpi D, 0xf8
+	lda xix, (xiz+:1)
 	ld wa, iy
 	extz xwa
 	add xwa, (xsp + 82)
@@ -688,7 +688,7 @@ BitMapOut_RestoreVoiceFields:
 	add xwa, xix
 	ld xde, (xsp + 8)
 	ld a, (xwa)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld xwa, xde
 	sub xwa, xbc
 	add xwa, xix
@@ -700,7 +700,7 @@ BitMapOut_RestoreVoiceFields:
 	add xwa, xix
 	ld xde, (xsp + 4)
 	ld a, (xwa)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld xwa, xde
 	sub xwa, xbc
 	add xwa, xix
@@ -736,7 +736,7 @@ BitMapOut_RestoreVoiceFields:
 	add xwa, xix
 	ld xiy, (xsp + 12)
 	ld a, (xwa)
-	lda_dpi XBC, 0xf4
+	ld (xiy+), a
 	ld xwa, xiy
 	sub xwa, xbc
 	add xwa, xix
@@ -947,7 +947,7 @@ BitMapOut_RestoreFullVoice:
 
 BitMapOut_RestoreFull_FieldLoop:
 	inc 1, xiy
-	ldb_spi A, 0xf4
+	ld A, (xiy+)
 	ldb_erp A, 0xe6
 	inc 1, xhl
 	inc 1, xhl
@@ -985,8 +985,8 @@ BitMapOut_RestoreFull_SkipField:
 	jr BitMapOut_RestoreFull_NextField
 
 BitMapOut_RestoreFull_DefaultCopy:
-	ldb_spi A, 0xec
-	lda_dpi XBC, 0xf4
+	ld A, (xhl+)
+	ld (xiy+), a
 
 BitMapOut_RestoreFull_NextField:
 	inc 1, bc
@@ -1233,7 +1233,7 @@ BitMapOut_CopyAuxTable_Check:
 	add xwa, xde
 	ld xbc, (xsp + 8)
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	ld xwa, xbc
 	sub xwa, (xsp + 12)
 	add xwa, xde
@@ -1628,7 +1628,7 @@ BitMapOut_SelectRestore_VolCopyLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_SelectRestore_VolCopyLoop
 
@@ -1647,7 +1647,7 @@ BitMapOut_SelectRestore_EffCopyLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_SelectRestore_EffCopyLoop
 
@@ -2181,7 +2181,7 @@ BitMapOut_RestoreExtra_AuxLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_RestoreExtra_AuxLoop
 
@@ -2200,7 +2200,7 @@ BitMapOut_RestoreExtra_ConfigLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_RestoreExtra_ConfigLoop
 
@@ -2231,7 +2231,7 @@ BitMapOut_RestoreExtra_DataTableLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_RestoreExtra_DataTableLoop
 
@@ -2302,7 +2302,7 @@ BitMapOut_RestoreExtra_CtrlCopyLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_RestoreExtra_CtrlCopyLoop
 
@@ -2332,7 +2332,7 @@ BitMapOut_RestoreExtra_LevelTableLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_RestoreExtra_LevelTableLoop
 
@@ -2362,7 +2362,7 @@ BitMapOut_RestoreExtra_ExpTableLoop:
 	sub xwa, xhl
 	add xwa, xix
 	ld a, (xwa)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	cp xbc, xde
 	jr ule, BitMapOut_RestoreExtra_ExpTableLoop
 

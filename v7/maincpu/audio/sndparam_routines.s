@@ -501,7 +501,7 @@ SndParam_RW_Epilogue:
 	ld_rr8l	xwa, xbc, a
 	ld	hl, 0:i3
 SndParam_RW_HandleB1Type_Loop:
-	cp_spiw	de, 225
+	cp	de, (xwa+)
 	ret	z
 	inc	1, hl
 	cp	hl, 5:i3
@@ -2431,13 +2431,13 @@ SndParam_NotifyQuick_Data_Helper2:
 	extz	xde
 	add	xde, xbc
 	ld	a, (xiz+4)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+5)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+6)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+7)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	jr	SndParam_NotifyQuick_Data_Join3
 SndParam_NotifyQuick_Data_Skip14:
 	cpdi16	(0x9042), 508
@@ -2447,13 +2447,13 @@ SndParam_NotifyQuick_Data_Skip14:
 	extz	xde
 	add	xde, xbc
 	ld	a, (xiz+4)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+5)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+6)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+7)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 SndParam_NotifyQuick_Data_Join3:
 	ld	(xde), 255
 	incdi16	4, (0x9042)
@@ -2496,22 +2496,22 @@ SndParam_NotifyQuick_Data_Epilogue:
 	extz	xde
 	add	xde, xbc
 	ld	a, (xiz+4)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+5)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+6)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+7)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	.set	SndParam_EncodeFieldSub_Data, . + 2
 	ld	a, (xiz+8)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+9)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+10)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+11)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	jr	SndParam_NotifyQuick_Data_Join4
 SndParam_NotifyQuick_Data_Skip17:
 	cpdi16	(0x9042), 504
@@ -2521,23 +2521,23 @@ SndParam_NotifyQuick_Data_Skip17:
 	extz	xde
 	add	xde, xbc
 	ld	a, (xiz+4)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	.set	SndParam_ClampReverbTime, . + 2
 	ld	a, (xiz+5)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+6)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+7)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+8)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+9)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+10)
 	.set	SndParam_DecodeField_Data, . + 2
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 	ld	a, (xiz+11)
-	lda_dpi	xbc, 232
+	ld	(xde+), a
 SndParam_NotifyQuick_Data_Join4:
 	ld	(xde), 255
 	incdi16	8, (0x9042)
@@ -2733,7 +2733,7 @@ SndParam_NotifyQuick_Data_Helper6:
 	lda	xde, (xwa+8188)
 SndParam_NotifyQuick_Data_Loop6:
 	ld	xwa, 0:i3
-	stl_dpi	xwa, 230
+	ld	(xbc+), xwa
 	cp	xbc, xde
 	jr	c, SndParam_NotifyQuick_Data_Loop6
 	lda_24	xde, (0x380f8)

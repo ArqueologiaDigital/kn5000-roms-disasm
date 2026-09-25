@@ -867,7 +867,7 @@ FDemoText_ProbeVoiceType:
 	extz wa
 	calr FDemoText_LookupTableEntry
 	lda xbc, (xsp)
-	ldb_spi A, 0xec
+	ld A, (xhl+)
 	ld (xbc + 3), a
 	ld a, (xhl)
 	ld (xbc + 4), a
@@ -886,7 +886,7 @@ FDemoText_ByteData_ProbeHelper:
 	extz	wa
 	calr	FDemoText_LookupTableEntry
 	lda	xbc, (xsp)
-	ldb_spi	a, 236
+	ld	a, (xhl+)
 	ld	(xbc+0x3), a
 	ld	a, (xhl)
 	ld	(xbc+0x4), a
@@ -1578,7 +1578,7 @@ FDemoText_ProcessMarkup_SkipToEnd:
 	jrl z, FDemoText_ProcessMarkup_Done
 
 FDemoText_ProcessMarkup_ScanClose:
-	cp_spib_im 0xf8, 0x3e
+	cp (xiz+), 0x3e
 	jrl z, FDemoText_ProcessMarkup_Done
 	cp (xiz), 0x0
 	jr nz, FDemoText_ProcessMarkup_ScanClose
@@ -1613,7 +1613,7 @@ FDemoText_ProcessMarkup_TagTableLoop:
 	jr z, FDemoText_ProcessMarkup_Done
 
 FDemoText_ProcessMarkup_NoHandler:
-	cp_spib_im 0xf8, 0x3e
+	cp (xiz+), 0x3e
 	jr z, FDemoText_ProcessMarkup_Done
 	cp (xiz), 0x0
 	jr nz, FDemoText_ProcessMarkup_NoHandler
@@ -1968,7 +1968,7 @@ FDemoText_TextDispatch_Loop7:
 	ld	iz, hl
 	jr	FDemoText_TextDispatch_Join3
 FDemoText_TextDispatch_Skip5:
-	ldb_spi c, 224
+	ld c, (xwa+)
 	cp c, 82
 	jr	z, FDemoText_TextDispatch_Skip7
 	cp	c, 67
@@ -2411,7 +2411,7 @@ FDemoText_TextDispatch_Loop2:
 	lda	xix, (xwa+8)
 FDemoText_TextDispatch_Loop3:
 	ld	xwa, 5:i3
-	stl_dpi xwa, 238
+	ld (xhl+), xwa
 	stiw_dsp 233, 255, 0
 	stib_dsp	228, 1
 	cp	xbc, xix
@@ -2862,7 +2862,7 @@ Seq_CopyResourcePtrs:
 	lda_dri XDE, 0xe9, 0xfc, 0x01
 
 Seq_CopyPtrLoop:
-	stl_dpi XHL, 0xe6
+	ld (xbc+), XHL
 	cp xbc, xde
 	jr ule, Seq_CopyPtrLoop
 	cp wa, 0x12

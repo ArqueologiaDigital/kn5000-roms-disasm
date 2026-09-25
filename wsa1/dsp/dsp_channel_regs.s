@@ -485,7 +485,7 @@ DSP_ChannelRegs_Write8:
 	ld d, 0x08:opc                                  ; F85F6B/F9805C  24 08   eight registers
 DSP_ChannelRegs_Write8__loop:
 	ld (XBC),A                                   ; F85F6D/F9805E  b1 41   select the register / select register A
-	ldb_spi e, 0xf4                              ; F85F6F/F98060  c5 f4 25   ld E,(XIY+)
+	ld e, (xiy+)                              ; F85F6F/F98060  c5 f4 25   ld E,(XIY+)
 	ld (XBC+0x02),E                              ; F85F72/F98063  b9 02 45   write its value
 	inc 1,A                                      ; F85F75/F98066  c9 61
 	djnz8 d, DSP_ChannelRegs_Write8__loop        ; F85F77/F98068  cc 1c f3

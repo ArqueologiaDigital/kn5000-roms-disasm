@@ -3106,7 +3106,7 @@ FP_trunc_ForwardScan:
 	ld a, (xde)
 	sll a, 4
 	or a, w
-	lda_dpi XBC, 0xE4
+	ld (xbc+), a
 	dec 1, xde
 	cp xde, xiz
 	jr ugt, FP_trunc_ForwardScan
@@ -3159,7 +3159,7 @@ FP_trunc_BackScanLoop:
 	ld a, (xde)
 	srl a, 4
 	or a, w
-	lda_dpi XBC, 0xE4
+	ld (xbc+), a
 	dec 1, xde
 	cp xde, xiy
 	jr ugt, FP_trunc_BackScanLoop

@@ -349,8 +349,8 @@ Kernel_InitRam:
 	ld b, KERNEL_READY_LEVELS:opc                   ; F8561D/F98182  a=22 03 c=22 02   c: ld B,0x02
 Kernel_InitRam__ready_queues:
 	ld IX,HL                                     ; F8561F/F98184  db 8c   ld IX,HL
-	stw_dpi ix, 0xed                             ; F85621/F98186  f5 ed 54   ld (XHL+),IX   head->next = head
-	stw_dpi ix, 0xed                             ; F85624/F98189  f5 ed 54   ld (XHL+),IX   head->prev = head
+	ld (xhl+), ix                             ; F85621/F98186  f5 ed 54   ld (XHL+),IX   head->next = head
+	ld (xhl+), ix                             ; F85624/F98189  f5 ed 54   ld (XHL+),IX   head->prev = head
 	djnz8 b, Kernel_InitRam__ready_queues        ; F85627/F9818C  ca 1c f5   djnz B,0xf98184
 	ldw ix, KERNEL_TCB_BASE                      ; F8562A/F9818F  a=34 00 03 c=34 00 01   c: ld IX,0x0100   the FOUR task control blocks
 	extz XIX                                     ; F8562D/F98192  ec 12   extz XIX
@@ -379,8 +379,8 @@ Kernel_InitRam__soft_timers:
 Kernel_InitRam__sema_queues:
 Kernel_InitRam__heads_033C:   ; <- prom_a's name for this address.
 	ld IX,HL                                     ; F85669/F981CE  db 8c   ld IX,HL
-	stw_dpi ix, 0xed                             ; F8566B/F981D0  f5 ed 54   ld (XHL+),IX
-	stw_dpi ix, 0xed                             ; F8566E/F981D3  f5 ed 54   ld (XHL+),IX
+	ld (xhl+), ix                             ; F8566B/F981D0  f5 ed 54   ld (XHL+),IX
+	ld (xhl+), ix                             ; F8566E/F981D3  f5 ed 54   ld (XHL+),IX
 	djnz8 b, Kernel_InitRam__heads_033C          ; F85671/F981D6  ca 1c f5   djnz B,0xf981ce
 	ldw hl, KERNEL_NODE_POOL                     ; F85674/F981D9  a=33 84 03 c=33 50 01   c: ld HL,0x0150   EIGHT 8-byte nodes
 	extz XHL                                     ; F85677/F981DC  eb 12   extz XHL
@@ -412,16 +412,16 @@ Kernel_InitRam__free_append:
 	ld b, KERNEL_MSGQ_COUNT:opc                     ; F856BA/F9821F  a=22 04 c=22 02   c: ld B,0x02
 Kernel_InitRam__wait_queues:
 	ld IX,HL                                     ; F856BC/F98221  db 8c   ld IX,HL
-	stw_dpi ix, 0xed                             ; F856BE/F98223  f5 ed 54   ld (XHL+),IX
-	stw_dpi ix, 0xed                             ; F856C1/F98226  f5 ed 54   ld (XHL+),IX
+	ld (xhl+), ix                             ; F856BE/F98223  f5 ed 54   ld (XHL+),IX
+	ld (xhl+), ix                             ; F856C1/F98226  f5 ed 54   ld (XHL+),IX
 	djnz8 b, Kernel_InitRam__wait_queues         ; F856C4/F98229  ca 1c f5   djnz B,0xf98221
 	ldw hl, KERNEL_MSGQ_HEADS                    ; F856C7/F9822C  a=33 74 03 c=33 48 01   c: ld HL,0x0148   FOUR heads -- the message queues
 	extz XHL                                     ; F856CA/F9822F  eb 12   extz XHL
 	ld b, KERNEL_MSGQ_COUNT:opc                     ; F856CC/F98231  a=22 04 c=22 02   c: ld B,0x02
 Kernel_InitRam__msg_queues:
 	ld IX,HL                                     ; F856CE/F98233  db 8c   ld IX,HL
-	stw_dpi ix, 0xed                             ; F856D0/F98235  f5 ed 54   ld (XHL+),IX
-	stw_dpi ix, 0xed                             ; F856D3/F98238  f5 ed 54   ld (XHL+),IX
+	ld (xhl+), ix                             ; F856D0/F98235  f5 ed 54   ld (XHL+),IX
+	ld (xhl+), ix                             ; F856D3/F98238  f5 ed 54   ld (XHL+),IX
 	djnz8 b, Kernel_InitRam__msg_queues          ; F856D6/F9823B  ca 1c f5   djnz B,0xf98233
 	ld XIX,SoftTimer_Request_Boot                ; F856D9/F9823E  a=44 e0 56 f8 00 c=44 45 82 f9 00   c: ld XIX,0x00f98245   the argument for the call below
 	jr Kernel_InitRam__install                   ; F856DE/F98243  68 08   jr T,0xf9824d   step over the argument block

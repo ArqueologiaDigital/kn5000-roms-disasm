@@ -655,8 +655,8 @@ EffectMode_UpdateBitFlags_ProcessEntry:
 
 EffectMode_UpdateBitFlags_CopyByte:
 	ld xde, (xsp + 8)
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xf8
+	ld A, (xde+)
+	ld (xiz+), a
 	ld (xsp + 8), xde
 	inc 1, w
 
@@ -1160,7 +1160,7 @@ DramTest_IC10IC9_Check5A_High:
 
 DramTest_IC10IC9_WriteA5:
 	ld xwa, (xsp + 6)
-	stl_dpi XWA, 0xee
+	ld (xhl+), XWA
 	ld xwa, (xhl)
 	ld (xsp + 6), xwa
 	ld xwa, 0xa5a5a5a5
@@ -1184,7 +1184,7 @@ DramTest_IC10IC9_CheckA5_High:
 
 DramTest_IC10IC9_RestoreAndNext:
 	ld xwa, (xsp + 6)
-	stl_dpi XWA, 0xee
+	ld (xhl+), XWA
 	sub xiz, 0x1
 	jr nz, DramTest_IC10IC9_WriteLoop
 
@@ -1224,7 +1224,7 @@ SramTest_IC21_Write5A:
 	or a, (xbc)
 
 SramTest_IC21_Verify5A:
-	lda_dpi XWA, 0xf4
+	ld (xiy+), w
 	ld w, (xiy)
 	ld (xiy), 0xa5
 	cp (xiy), 0xa5
@@ -1232,7 +1232,7 @@ SramTest_IC21_Verify5A:
 	or a, (xbc)
 
 SramTest_IC21_WriteA5:
-	lda_dpi XWA, 0xf4
+	ld (xiy+), w
 	sub xix, 0x1
 	jr nz, SramTest_IC21_Write5A
 
@@ -1381,7 +1381,7 @@ RhythmRomTest_SumLoop:
 	lda_dri XDE, 0x07, 0xf0, 0xe4
 	ld bc, (xde)
 	ldw_erp BC, 0xe2
-	ld_spiw BC, 0xf5
+	ld BC, (xiy+)
 	addw_erp BC, 0xe2
 	ld (xde), bc
 	inc 1, xiz
@@ -1446,7 +1446,7 @@ CustomRomTest_SumLoop:
 	add wa, wa
 	lda_dri XBC, 0x07, 0xec, 0xe0
 	ld wa, (xbc)
-	ld_spiw IZ, 0xf1
+	ld IZ, (xix+)
 	add iz, wa
 	ld (xbc), iz
 	inc 1, xiy

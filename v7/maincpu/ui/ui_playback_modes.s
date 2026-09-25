@@ -72,7 +72,7 @@ UIStateEvt_VoiceParamHandler_Helper:
 	xor	bc, bc
 	ld	c, 16:opc
 	ld	a, 16:opc
-	cp_spib	a, 240
+	cp	a, (xix+)
 	jr	z, UIStateEvt_VoiceParamHandler_Skip5
 	djnz16	bc, -8
 	jr	UIStateEvt_VoiceParamHandler_Entry2

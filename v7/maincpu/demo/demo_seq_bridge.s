@@ -138,7 +138,7 @@ SongBank_ComputeTableOfs:
 	ld iz, wa
 	extz xiz
 	add xiz, xix
-	lda_dpi XSP, 0xf8
+	ld (xiz+), l
 	cp e, 0:i3
 	jr z, SongBank_CopyNameAndFinish
 	cpw (xsp + 4), 0x9
@@ -289,7 +289,7 @@ SongBank_LookupTableEntry:
 	ld iz, wa
 	extz xiz
 	add xiz, xhl
-	lda_dpi XHL, 0xf8
+	ld (xiz+), c
 	cp e, 0:i3
 	jr z, SongBankLookup_BuildAudioCmd
 	cpw (xsp + 4), 0x9

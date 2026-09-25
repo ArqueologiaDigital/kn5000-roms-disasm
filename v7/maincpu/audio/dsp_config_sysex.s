@@ -284,11 +284,11 @@ AssswbWr:
 	lda	xix, (0xbca0:16)
 	extz	xhl
 	add	xhl, xix
-	lda_dpi	XBC, 0xec
-	lda_dpi	XHL, 0xec
-	lda_dpi	XIY, 0xec
+	ld	(xhl+), a
+	ld	(xhl+), c
+	ld	(xhl+), e
 	ld	a, (xsp + 4)
-	lda_dpi	XBC, 0xec
+	ld	(xhl+), a
 	ld	(xhl), 0xff
 	ld	wa, (0x9042:16)
 	inc	4, wa
@@ -302,11 +302,11 @@ AddswbWr:
 	lda	xix, (0xbe9d:16)
 	extz	xhl
 	add	xhl, xix
-	lda_dpi	XBC, 0xec
-	lda_dpi	XHL, 0xec
-	lda_dpi	XIY, 0xec
+	ld	(xhl+), a
+	ld	(xhl+), c
+	ld	(xhl+), e
 	ld	a, (xsp + 4)
-	lda_dpi	XBC, 0xec
+	ld	(xhl+), a
 	ld	(xhl), 0xff
 	ld	wa, (0x9046:16)
 	inc	4, wa
@@ -326,11 +326,11 @@ SwbtWr_ScanEnd:
 SwbtWr_CheckSpace:
 	cp	xiy, xhl
 	jr	nc, SwbtWr_Done
-	lda_dpi	XBC, 0xf4
-	lda_dpi	XHL, 0xf4
-	lda_dpi	XIY, 0xf4
+	ld	(xiy+), a
+	ld	(xiy+), c
+	ld	(xiy+), e
 	ld	a, (xsp + 4)
-	lda_dpi	XBC, 0xf4
+	ld	(xiy+), a
 	ld	(xiy), 0xff
 SwbtWr_Done:
 	retd	0x2
@@ -586,10 +586,10 @@ VoiceParam_SaveReverbChorus_Loop:
 	inc	1, xde
 	ld	xwa, (xsp + 2)
 	ld	c, (xbc)
-	lda_dpi	XHL, 0xe0
+	ld	(xwa+), c
 	ld	(xsp + 2), xwa
 	ld	c, (xde)
-	lda_dpi	XHL, 0xe0
+	ld	(xwa+), c
 	ld	(xsp + 2), xwa
 	inc1b_erp	0xfb
 	cp_erpb	0xfb, 0x19
@@ -619,12 +619,12 @@ VoiceParam_RestoreReverbChorus_Loop:
 	inc	1, xhl
 	andmi8	(xde), 0xf8
 	ld	xwa, (xsp + 2)
-	ldb_spi	C, 0xe0
+	ld	C, (xwa+)
 	ld	(xsp + 2), xwa
 	and	c, 0x7
 	or	(xde), c
 	ld	xwa, (xsp + 2)
-	ldb_spi	C, 0xe0
+	ld	C, (xwa+)
 	ld	(xhl), c
 	ld	(xsp + 2), xwa
 	inc1b_erp	0xfb
@@ -702,8 +702,8 @@ BitMapOut_RenderDisplay:
 	cp	de, 0:i3
 	jr	ule, BitMapOut_RenderDisplay_Skip
 BitMapOut_CopyRegion_Loop:
-	ld_spiw	WA, 0xf1
-	stw_dpi	WA, 0xed
+	ld	WA, (xix+)
+	ld	(xhl+), WA
 	inc	1, bc
 	ld	wa, bc
 	cp	wa, de
@@ -3615,7 +3615,7 @@ DataBuf_CopyVoiceBlock24_Code_Helper2:
 	lda	xsp, (xsp - 68)
 	push	xiz
 	ldw	(xsp + 4), 0x0
-	ldb_spi	E, 0xe0
+	ld	E, (xwa+)
 	extz	de
 	ld	(xsp + 30), de
 	lda	xbc, (xwa - 1)

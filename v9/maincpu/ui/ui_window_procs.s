@@ -2262,7 +2262,7 @@ TextBox_DrawLineLoop:
 	exts xwa
 	add xwa, xiz
 	ld (xsp + 10), xwa
-	stib_dpd 0xe0, 0x00
+	ld (-xwa), 0x00
 	ld (xsp + 10), xwa
 
 TextBox_CheckMoreText:
@@ -6204,7 +6204,7 @@ SplashBMP_ValidateSize:
 
 SplashBMP_ClearPalette:
 	ld xwa, 0xff000000
-	stl_dpi XWA, 0xe6
+	ld (xbc+), XWA
 	cp xbc, xhl
 	jr c, SplashBMP_ClearPalette
 	ld xwa, 0:i3
@@ -6237,7 +6237,7 @@ SplashBMP_DecodePalette:
 	extz wa
 	extz xwa
 	add xix, xwa
-	stl_dpi XIX, 0xea
+	ld (xde+), XIX
 	ld xwa, 1:i3
 	add (xsp + 6), xwa
 	ld xbc, (xsp + 6)
@@ -6502,7 +6502,7 @@ SplashData_4bppLoop:
 	ld xhl, xbc
 	inc 1, xhl
 	add xhl, (xsp + 28)
-	ldb_spi E, 0xf0
+	ld E, (xix+)
 	ld (xsp + 10), xix
 	and e, 0xf
 	ld (xhl), e
@@ -6591,7 +6591,7 @@ SplashData_1bppLoop:
 	ld xhl, xbc
 	inc 7, xhl
 	add xhl, (xsp + 28)
-	ldb_spi E, 0xf0
+	ld E, (xix+)
 	ld (xsp + 10), xix
 	and e, 0x1
 	ld (xhl), e
@@ -6634,7 +6634,7 @@ ImageDecode_RowLoop:
 	ld iy, 0:i3
 
 ImageDecode_PixelLoop:
-	ldb_spi C, 0xec
+	ld C, (xhl+)
 	extz bc
 	add bc, bc
 	ld xwa, (xsp + 32)
@@ -6654,7 +6654,7 @@ ImageDecode_PixelLoop:
 	ld (xsp + 44), xwa
 
 ImageDecode_SecondPassSetup:
-	lda_dpi XHL, 0xe8
+	ld (xde+), c
 	inc 1, c
 	cp xde, xwa
 	jr c, ImageDecode_SecondPassSetup
@@ -6763,7 +6763,7 @@ PaletteReduce_CheckDone:
 	ld xhl, (xsp + 44)
 
 PaletteReduce_RemapPixels:
-	ldb_spi A, 0xe8
+	ld A, (xde+)
 	ldb_erp A, 0xf0
 	extz ix
 	ld b, c
@@ -8355,7 +8355,7 @@ DrawMonoBitmap_Impl_Loop2:
 	ld	bc, (xwa)
 	add	bc, (xsp+6)
 	ld	xwa, (xsp+10)
-	stw_dpi	bc, 225	; ld (xwa+), bc
+	ld	(xwa+), bc	; ld (xwa+), bc
 	ld	(xsp+14), xwa
 	ld	bc, (xde)
 	add	bc, (xsp+8)

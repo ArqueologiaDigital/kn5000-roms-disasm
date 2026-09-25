@@ -535,7 +535,7 @@ DSPCfg_SyncBitmapData:
 	ld	bc, (0x9042:16)
 	jrl	DSPCfg_CopyEntryValues_Entry
 	ld	(xsp+6), 0
-	ldb_spi	a, 248
+	ld	a, (xiz+)
 	ld	(xsp+8), a
 	ld	xwa, 2:i3
 	add	(xsp+18), xwa
@@ -835,8 +835,8 @@ ToneGen_FlashVerify:
 	ld	xde, 0x3d3000
 	ld	bc, 0:i3
 ToneGen_FlashVerifyLoop:
-	ldb_spi	A, 0xec
-	cp_spib	A, 0xe8
+	ld	A, (xhl+)
+	cp	A, (xde+)
 	jr	nz, ToneGen_FlashWriteAll
 	inc	1, bc
 	cp	bc, 3:i3
@@ -1113,8 +1113,8 @@ PanelDisplay_DispatchData:
 	lda	xhl, (0x0340e4:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop:
-	ldb_spi	a, 236
-	cp_spib	a, 232
+	ld	a, (xhl+)
+	cp	a, (xde+)
 	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 2:i3
@@ -1124,8 +1124,8 @@ PanelDisplay_DispatchByMode_Loop:
 	lda	xhl, (0x0340e6:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop2:
-	ldb_spi	a, 236
-	cp_spib	a, 232
+	ld	a, (xhl+)
+	cp	a, (xde+)
 	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 12
@@ -1134,8 +1134,8 @@ PanelDisplay_DispatchByMode_Loop2:
 	lda	xhl, (0x0340f2:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop3:
-	ldb_spi	a, 236
-	cp_spib	a, 232
+	ld	a, (xhl+)
+	cp	a, (xde+)
 	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 4:i3
@@ -1144,8 +1144,8 @@ PanelDisplay_DispatchByMode_Loop3:
 	lda	xhl, (0x0340f6:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop4:
-	ldb_spi	a, 236
-	cp_spib	a, 232
+	ld	a, (xhl+)
+	cp	a, (xde+)
 	jr	nz, PanelDisplay_DispatchByMode_Skip
 	inc	1, bc
 	cp	bc, 4:i3
@@ -1155,8 +1155,8 @@ PanelDisplay_DispatchByMode_Loop4:
 	lda	xhl, (0x0340fa:24)
 	ld	bc, 0:i3
 PanelDisplay_DispatchByMode_Loop5:
-	ldb_spi	a, 236
-	cp_spib	a, 232
+	ld	a, (xhl+)
+	cp	a, (xde+)
 	jr	z, PanelDisplay_DispatchByMode_Skip2
 PanelDisplay_DispatchByMode_Skip:
 	ld	hl, 1:i3

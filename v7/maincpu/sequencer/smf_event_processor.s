@@ -945,9 +945,9 @@ SMF_SetupActiveChannel:
 	ld (4004:16), wa
 	ld (6705:16), xix
 	ld wa, (4002:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld wa, (4004:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld (4376:16), xix
 	ld xix, (4376:16)
 	ld xiy, SMF_HeaderConstants
@@ -963,19 +963,19 @@ SMF_SetupActiveChannel:
 	ld xix, (4376:16)
 
 SMF_WaitForReady:
-	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld A, (xiy+)
+	ld (xix+), a
 	bit 7, a
 	jr nz, SMF_WaitForReady
 	ldw wa, 0x58ff
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, 0x4:opc
 	ld w, (1075:16)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ldw wa, 0x1802
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	ld a, 0x8:opc
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	ld (4376:16), xix
 	ld l, (0xfc62:16)
 	xor h, h
@@ -1013,8 +1013,8 @@ SMF_Setup_SelectTablePtr:
 	ldw bc, 0x8
 
 SMF_WriteChannelDataLoop:
-	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld A, (xiy+)
+	ld (xix+), a
 	pushw bc
 	push xiy
 	push xix
@@ -2135,18 +2135,18 @@ SMF_NoteOn_StoreVoiceData:
 	ld xix, 0x11f9
 	lda_dri XIX, 0x07, 0xf0, 0xec
 	ld a, 0x80:opc
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	ld a, (4211:16)
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	ld a, (4213:16)
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	ld a, (4216:16)
 	ld w, 0x60:opc
 	muls wa, w
 	xor hl, hl
 	ld l, (4215:16)
 	add wa, hl
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	jrl SMF_ProcessEventLoop
 
 SMF_ProgramChange_Handler:
@@ -2900,7 +2900,7 @@ FileOpen:
 	jr z, FileOpen_AllocBuffer
 
 FileOpen_ParseModeLoop:
-	ldb_spi A, 0xe4
+	ld A, (xbc+)
 	exts wa
 	cp wa, 0x64
 	jr z, FileOpen_ModeD
@@ -2986,7 +2986,7 @@ FileOpen_NormalizeName:
 
 FileOpen_ScanForColon:
 	ld xwa, (xsp + 16)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 16), xwa
 	cp c, 0x3a
 	jr nz, FileOpen_NormalizeName
@@ -3413,11 +3413,11 @@ SeqStep_FileWriteSetup_Skip2:
 SeqStep_FileWriteSetup_Skip3:
 	ld	hl, 0:i3
 	ld	xwa, (xsp+4)
-	cp_spib_im 224, 0
+	cp (xwa+), 0
 	jr	z, SeqStep_FileWriteSetup_Skip4
 SeqStep_FileWriteSetup_Loop:
 	inc	1, hl
-	cp_spib_im 224, 0
+	cp (xwa+), 0
 	jr	nz, SeqStep_FileWriteSetup_Loop
 SeqStep_FileWriteSetup_Skip4:
 	pushw	hl
@@ -4625,56 +4625,56 @@ SeqStep_FileSectorReturn:
 	ld	xwa, 22
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+13)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+15)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
 	ld	w, 0:opc
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	wa, (xiz+17)
 	srl	wa, 8
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	srl	xwa, 8
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xsp+4)
-	stb_dpi	a, 224	; = lda xbc,xwa+ (backend mnemonic is swapped)
+	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
 	srl	xwa, 0
@@ -7155,9 +7155,9 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Join3:
 SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip10:
 	decm	1, (xsp+18)
 	incw	1, (xsp+2)
-	ldb_spi	e, 228
+	ld	e, (xbc+)
 	ld	xwa, (xsp+14)
-	lda_dpi	xiy, 224	; = ld (xwa+),e (backend mnemonic is swapped)
+	ld	(xwa+), e
 	ld	(xsp+14), xwa
 	ld	xwa, (xsp+10)
 	cp	(xwa+2), e
@@ -7408,8 +7408,8 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip9:
 	jr	SeqByteBlock_StyleBitmapRef_Code_Helper7_Join4
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip17:
 	ld	xwa, (xsp+16)
-	ldb_spi	c, 224
-	lda_dpi	xhl, 232	; = ld (xde+),c (backend mnemonic is swapped)
+	ld	c, (xwa+)
+	ld	(xde+), c
 	ld	(xsp+16), xwa
 	decm	1, (xsp+20)
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Join4:
@@ -7417,14 +7417,14 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Join4:
 	jr	SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip10:
 	ld	xwa, (xsp+16)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xde), c
 	ld	(xsp+16), xwa
 	decm	1, (xsp+20)
 	incw	1, (xsp+2)
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+2)
-	cp_spib	a, 232
+	cp	a, (xde+)
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
 	cpw	(xsp+22), 0
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11
@@ -9859,8 +9859,8 @@ WildMatch_ScanLoop:
 	jr WildMatch_CheckEnd
 
 WildMatch_CopyChar:
-	ldb_spi A, 0xf8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xiz+)
+	ld (xbc+), a
 
 WildMatch_CheckEnd:
 	cp (xiz), 0x0

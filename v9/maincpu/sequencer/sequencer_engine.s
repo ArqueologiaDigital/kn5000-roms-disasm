@@ -47,8 +47,8 @@ NoteEditSy_ScanLoop:
 	lda xhl, (xhl + 13)
 
 NoteEditSy_CopyEntryLoop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8	; = ld (xde+),a (backend mnemonic is swapped)
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, NoteEditSy_CopyEntryLoop
 	inc 1, iz
@@ -636,10 +636,10 @@ SeqAcc_ProcessTempo_ReadComplete:
 	lda xiy, (xwa + 16)
 
 SeqAcc_ProcessTempo_CopyLoop:
-	ld_spiw WA, 0xed
-	stw_dpi WA, 0xf1
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8	; = ld (xde+),a (backend mnemonic is swapped)
+	ld WA, (xhl+)
+	ld (xix+), WA
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xiy
 	jr c, SeqAcc_ProcessTempo_CopyLoop
 	ld c, (0x28c5:16)
@@ -3040,8 +3040,8 @@ SeqVoice_CopyEventToSlot:
 	lda xhl, (xix + 6)
 
 SeqNote_Reconfig_DispatchLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xbc+), a
 	cp xbc, xhl
 	jr c, SeqNote_Reconfig_DispatchLoop
 	ld a, (xix)
@@ -6217,8 +6217,8 @@ SeqPart_ReadEvent_SavePos:
 	inc 6, xhl
 
 SeqPartRead_CopyLoop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8	; = ld (xde+),a (backend mnemonic is swapped)
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, SeqPartRead_CopyLoop
 	lda xsp, (xsp + 16)
@@ -7483,8 +7483,8 @@ SeqChanAssign_ReadEventData:
 	lda xhl, (xix + 6)
 
 SeqChanAssign_CopyDataLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xbc+), a
 	cp xbc, xhl
 	jr c, SeqChanAssign_CopyDataLoop
 	ld a, (xix)
@@ -7585,8 +7585,8 @@ SeqChanAssignExt_ReadEventData:
 	lda xhl, (xix + 6)
 
 SeqChanAssignExt_CopyDataLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xbc+), a
 	cp xbc, xhl
 	jr c, SeqChanAssignExt_CopyDataLoop
 	ld a, (xix)
@@ -7680,7 +7680,7 @@ SeqChanAssignExt_BuildSwapData:
 	lda_dri XDE, 0xf1, 0x80, 0x00
 	ld xwa, (xsp + 2)
 	ld bc, (xde)
-	stw_dpi BC, 0xe1
+	ld (xwa+), BC
 	ld (xsp + 6), xwa
 	lda xbc, (xde + 2)
 	ld hl, (xbc)
@@ -7741,8 +7741,8 @@ SeqChanAssign3_ReadEventData:
 	lda xhl, (xix + 6)
 
 SeqChanAssign3_CopyDataLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xbc+), a
 	cp xbc, xhl
 	jr c, SeqChanAssign3_CopyDataLoop
 	ld a, (xix)
@@ -11261,8 +11261,8 @@ SeqCh_LoadData_CopyToTable:
 	inc 6, xhl
 
 SeqCh_LoadData_CopyLoop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8	; = ld (xde+),a (backend mnemonic is swapped)
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, SeqCh_LoadData_CopyLoop
 	ldw hl, 0xffff
@@ -11317,8 +11317,8 @@ SeqCh_WriteVoiceDataToTable:
 	inc 6, xhl
 
 SeqCh_WriteData_CopyLoop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xe8	; = ld (xde+),a (backend mnemonic is swapped)
+	ld A, (xbc+)
+	ld (xde+), a
 	cp xbc, xhl
 	jr c, SeqCh_WriteData_CopyLoop
 	ld hl, 0:i3
@@ -14227,8 +14227,8 @@ SeqData_CopyBlockWithLookup:
 	lda xhl, (xwa + 16)
 
 SeqDataCopy_TransferLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xbc+), a
 	cp xbc, xhl
 	jr c, SeqDataCopy_TransferLoop
 	jr SeqDataCopy_RestoreStack
@@ -14252,8 +14252,8 @@ SeqDataCopy_ComputeAndCopy:
 	lda xhl, (xwa + 16)
 
 SeqDataCopy_TransferLoop2:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xbc+), a
 	cp xbc, xhl
 	jr c, SeqDataCopy_TransferLoop2
 
@@ -15369,8 +15369,8 @@ PartCopy16_TransferLoop:
 	lda xbc, (xbc + 16)
 
 PartCopy16_CopyWord:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xec	; = ld (xhl+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xhl+), a
 	cp xde, xbc
 	jr c, PartCopy16_CopyWord
 	ret
@@ -15409,8 +15409,8 @@ PartCopyBuf_InitCounter:
 	ld hl, 0:i3
 
 PartCopyBuf_TransferLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xe4	; = ld (xbc+),a (backend mnemonic is swapped)
+	ld A, (xde+)
+	ld (xbc+), a
 	inc 1, hl
 	cp hl, 0x520
 	jr c, PartCopyBuf_TransferLoop
@@ -16061,8 +16061,8 @@ SeqCopy2K_SetupTransfer:
 	lda xbc, (xbc + 16)
 
 SeqCopy2K_TransferLoop:
-	ldb_spi A, 0xec
-	lda_dpi XBC, 0xe8	; = ld (xde+),a (backend mnemonic is swapped)
+	ld A, (xhl+)
+	ld (xde+), a
 	cp xde, xbc
 	jr c, SeqCopy2K_TransferLoop
 	ret
@@ -25959,7 +25959,7 @@ SeqSave_WriteAndFree:
 	lda xde, (xde + 32)
 
 SeqSave_CountBlocksLoop:
-	add_spiw BC, 0xe1
+	add BC, (xwa+)
 	cp xwa, xde
 	jr c, SeqSave_CountBlocksLoop
 	sll bc, 4

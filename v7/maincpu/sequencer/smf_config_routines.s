@@ -380,7 +380,7 @@ SMF_ClearWorkArea:
 	ldw bc, 0x100
 
 SMF_ClearWork_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, SMF_ClearWork_Loop
 	pop xix
 	popw bc
@@ -407,8 +407,8 @@ SMF_OutputCommandSeq:
 	ld xix, (4376:16)
 
 SMF_OutputCmd_ReadByte:
-	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0
+	ld A, (xiy+)
+	ld (xix+), a
 	pushw wa
 	push xiy
 	call SMF_WriteByte
@@ -434,7 +434,7 @@ SMF_OutputCmd_SendFF:
 	bit 7, a
 	jr nz, SMF_OutputCmd_ReadByte
 	ld a, 0xff:opc
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	call SMF_WriteByte
 	push xwa
 	push xbc
@@ -454,7 +454,7 @@ SMF_OutputCmd_ErrorCheck2:
 SMF_OutputCmd_Send51:
 	ld xix, (4376:16)
 	ld a, 0x51:opc
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	call SMF_WriteByte
 	push xwa
 	push xbc
@@ -474,7 +474,7 @@ SMF_OutputCmd_ErrorCheck3:
 SMF_OutputCmd_Send03:
 	ld xix, (4376:16)
 	ld a, 0x3:opc
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	call SMF_WriteByte
 	push xwa
 	push xbc
@@ -494,7 +494,7 @@ SMF_OutputCmd_ErrorCheck4:
 SMF_OutputCmd_SendTempoH:
 	ld xix, (4376:16)
 	ld a, (3950:16)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	call SMF_WriteByte
 	push xwa
 	push xbc
@@ -514,7 +514,7 @@ SMF_OutputCmd_ErrorCheck5:
 SMF_OutputCmd_SendTempoM:
 	ld xix, (4376:16)
 	ld a, (3949:16)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	call SMF_WriteByte
 	push xwa
 	push xbc
@@ -534,7 +534,7 @@ SMF_OutputCmd_ErrorCheck6:
 SMF_OutputCmd_SendTempoL:
 	ld xix, (4376:16)
 	ld a, (3948:16)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	call SMF_WriteByte
 	push xwa
 	push xbc
@@ -653,8 +653,8 @@ SMF_WriteByteLoop:
 	pushw wa
 
 SMF_WriteLoop_ReadByte:
-	ldb_spi A, 0xf4
-	lda_dpi XBC, 0xf0
+	ld A, (xiy+)
+	ld (xix+), a
 	pushw wa
 	pushw hl
 	push xiy
@@ -684,7 +684,7 @@ SMF_WriteLoop_Continue:
 	jr nz, SMF_WriteLoop_ReadByte
 	popw wa
 	ld h, a
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	pushw wa
 	pushw hl
 	call SMF_WriteByte
@@ -708,7 +708,7 @@ SMF_WriteLoop_SendFF:
 SMF_WriteLoop_AfterFF:
 	ld xix, (4376:16)
 	ld a, w
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	pushw hl
 	call SMF_WriteByte
 	popw hl
@@ -735,7 +735,7 @@ SMF_WriteLoop_After51:
 	cp h, 0xd0
 	jr z, SMF_WriteLoop_Done
 	ld a, l
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	call SMF_WriteByte
 	push xwa
 	push xbc
@@ -1354,7 +1354,7 @@ SMF_ClearOutputQueue:
 	ldw wa, 0xff
 
 SMF_ClearQueue_Loop:
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	djnz xbc, SMF_ClearQueue_Loop
 	pop xix
 	ret

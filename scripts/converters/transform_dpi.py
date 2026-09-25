@@ -1,6 +1,15 @@
 #!/usr/bin/env python3
 """Transform DPI (destination post-increment) x_ mnemonics to consolidated register-operand form.
 
+⚠ HISTORICAL -- DO NOT REUSE.  The sub-opcode table below has 0x30 and 0x40
+SWAPPED: 0x30+r is LDA r32,(R+) and 0x40+r is LD (R+),r8 (MAME unidasm; the
+TLCS-900 destination table).  The backend defs it targeted carried the same
+swap, so `f5 e0 31` (lda XBC,(XWA+)) was written `stb_dpi a, 224` in ~900
+source lines until TOOLCHAIN_VERSION UPDATE 17 (2026-09-25) fixed the backend
+and scripts/converters/wave3a_respell.py autoinc respelled every site to the
+real syntax, `lda xbc, (xwa+:1)` / `ld (xde+), a`.  The pseudo mnemonics this
+emits are retired.
+
 Example transformations:
   x_dpi2_s31 0xF8     →  st_dpib A, 0xF8
   x_dpi2_s43 0xE0     →  lda_dpi XHL, 0xE0

@@ -48,3 +48,10 @@ fresh run.)
   idiom `p = q++`), llvm-mc `stb_dpi a, 224`.  The LLVM backend has the
   mnemonics of F5-prefix opcodes 0x31 and 0x41 SWAPPED (`f5 e0 41` prints as
   `lda_dpi xbc, 224` but is `ld (XWA+),A`).  Those are written as `.byte`.
+
+★ RESOLVED 2026-09-25 (TOOLCHAIN_VERSION UPDATE 17): the swapped `lda_dpi` /
+`stb_dpi` mnemonics and the missing post-increment syntax are fixed in the
+backend (llvm-project ac3f1ed19ab6); every annotated line is now spelled
+`ld (xde+), a` / `lda xbc, (xwa+:1)` and the `(backend mnemonic is swapped)`
+annotations are gone (scripts/converters/wave3a_respell.py autoinc).  The text
+above is the record of what this lane found and did.

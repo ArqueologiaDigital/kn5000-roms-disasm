@@ -761,7 +761,7 @@ Flash_ProgramSectorFromBuffer:
 	ld	xix, 0x10000                        ; FC8903  ld XIX,0x00010000
 	and	xiy, 0xFF0000                      ; FC8908  and XIY,0x00ff0000
 	ldw	bc, 0x8000                         ; FC890E  ld BC,0x8000
-	ld_spiw	wa, 0xF1                       ; FC8911  ld WA,(XIX+)
+	ld	wa, (xix+)                       ; FC8911  ld WA,(XIX+)
 	cp	wa, 0xFFFF                          ; FC8914  cp WA,0xffff
 	jr z, Flash_ProgramSectorFromBuffer__FC8933                        ; FC8918  jr Z,0xfc8933
 	ei	6                                   ; FC891A  ei 0x06
@@ -823,7 +823,7 @@ Flash_ProgramSlice1K:
 	or	xix, xwa                            ; FC895E  or XIX,XWA
 	or	xiy, xwa                            ; FC8960  or XIY,XWA
 	ldw	bc, 0x200                          ; FC8962  ld BC,0x0200
-	ld_spiw	wa, 0xF1                       ; FC8965  ld WA,(XIX+)
+	ld	wa, (xix+)                       ; FC8965  ld WA,(XIX+)
 	cp	wa, 0xFFFF                          ; FC8968  cp WA,0xffff
 	jr z, Flash_ProgramSlice1K__FC8987                        ; FC896C  jr Z,0xfc8987
 	ei	6                                   ; FC896E  ei 0x06
@@ -876,7 +876,7 @@ Flash_SectorBlankCheck:
 	and	xiy, 0xFF0000                      ; FC8992  and XIY,0x00ff0000
 	ldw	bc, 0x4000                         ; FC8998  ld BC,0x4000
 	ld	xwa, 0xFFFFFFFF                     ; FC899B  ld XWA,0xffffffff
-	cp_spil	xwa, 0xF6                      ; FC89A0  cp XWA,(XIY+)
+	cp	xwa, (xiy+)                      ; FC89A0  cp XWA,(XIY+)
 	jr nz, Flash_SectorBlankCheck__FC89AB                       ; FC89A3  jr NZ,0xfc89ab
 	djnz8	b, -8                            ; FC89A5  djnz B,0xfc89a0
 	xor	wa, wa                             ; FC89A8  xor WA,WA

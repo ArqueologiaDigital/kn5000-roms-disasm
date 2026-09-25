@@ -4705,8 +4705,8 @@ FileIO_CopyString:
 	jr z, FileIO_CopyString_Done
 
 FileIO_CopyString_Loop:
-	ldb_spi C, 0xe8
-	lda_dpi XHL, 0xe0
+	ld C, (xde+)
+	ld (xwa+), c
 	cp (xde), 0x0
 	jr nz, FileIO_CopyString_Loop
 
@@ -4719,8 +4719,8 @@ FileIO_CopyString_WriteNull:
 	jr FileIO_CopyString_CheckEnd
 
 FileIO_CopyString_Advance:
-	ldb_spi C, 0xec
-	lda_dpi XHL, 0xe0
+	ld C, (xhl+)
+	ld (xwa+), c
 	dec 1, de
 
 FileIO_CopyString_CheckEnd:
@@ -4753,8 +4753,8 @@ FileIO_BuildPath_NullDir:
 	jr z, FileIO_BuildPath_Return
 
 FileIO_BuildPath_AddSep:
-	ldb_spi C, 0xe8
-	lda_dpi XHL, 0xe0
+	ld C, (xde+)
+	ld (xwa+), c
 	cp (xde), 0x0
 	jr nz, FileIO_BuildPath_AddSep
 
@@ -4840,7 +4840,7 @@ FileIO_FormatIndex_AddOnes:
 
 FileIO_FormatIndex_AddChar:
 	add c, 0x30
-	lda_dpi XHL, 0xe0
+	ld (xwa+), c
 	ld xbc, xde
 	jrl FileIO_CopyString
 
@@ -4869,14 +4869,14 @@ FileIO_ReadHeader_ParseLoop:
 	pushw iz
 	cp de, 0x64
 	jr c, FileIO_ReadHeader_Done
-	stb_dpi D, 0xe0
+	lda xix, (xwa+:1)
 	ld hl, de
 	extz xhl
 	div hl, 0x64
 	add l, 0x30
 	ld (xix), l
 	sub de, 0x64
-	stb_dpi D, 0xe0
+	lda xix, (xwa+:1)
 	ld hl, de
 	extz xhl
 	div hl, 0xa
@@ -4890,13 +4890,13 @@ FileIO_ReadHeader_ParseLoop:
 	jr FileIO_ReadHeader_Field1
 
 FileIO_ReadHeader_Done:
-	stb_dpi D, 0xe0
+	lda xix, (xwa+:1)
 	ld hl, de
 	extz xhl
 	div hl, 0xa
 	add l, 0x30
 	ld (xix), l
-	stb_dpi C, 0xe0
+	lda xhl, (xwa+:1)
 	extz xde
 	div de, 0xa
 	stw_erp DE, 0xea
@@ -7891,7 +7891,7 @@ FileIO_FindPathSeparator:
 	jr FindPathSep_CheckChar
 
 FindPathSep_NextChar:
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	inc 1, hl
 	inc 1, xde
 

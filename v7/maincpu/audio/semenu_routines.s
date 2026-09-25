@@ -63,8 +63,8 @@ SeMenu_FlushDisplayObj:
 	lda xix, (xde + 9)
 
 SeMenu_FlushDisplayObj_CopyLoop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xec
+	ld A, (xbc+)
+	ld (xhl+), a
 	cp xbc, xix
 	jr c, SeMenu_FlushDisplayObj_CopyLoop
 	ld wa, 0:i3
@@ -2072,8 +2072,8 @@ SeMenu_FillObjTable:
 	lda xde, (xde + 25)
 
 SeMenu_FillObjTable_Loop:
-	ldb_spi A, 0xe4
-	lda_dpi XBC, 0xec
+	ld A, (xbc+)
+	ld (xhl+), a
 	cp xbc, xde
 	jr c, SeMenu_FillObjTable_Loop
 	ret
@@ -2254,8 +2254,8 @@ SeMenu_SetupPartDisplay_Loop5:
 	cp	e, 0:i3
 	ret	ule
 SeMenu_SetupPartDisplay_End_Loop:
-	ldb_spi	c, 236
-	lda_dpi	xhl, 224
+	ld	c, (xhl+)
+	ld	(xwa+), c
 	inc	1, b
 	cp	b, e
 	jr	c, SeMenu_SetupPartDisplay_End_Loop
@@ -5902,8 +5902,8 @@ SeMenu_ComputeParamTableAddr:
 	lda xbc, (xbc + 10)
 
 SeMenu_ComputeParamTableAddr_ScanLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xec
+	ld A, (xde+)
+	ld (xhl+), a
 	cp xde, xbc
 	jr c, SeMenu_ComputeParamTableAddr_ScanLoop
 	ret
@@ -5917,8 +5917,8 @@ SeMenu_ComputeParamTableAddr_Data:
 	ld	xde, xwa
 	lda	xhl, (xwa+10)
 SeMenu_ComputeParamTableAddr_Loop:
-	ldb_spi a, 232
-	lda_dpi xbc, 228
+	ld a, (xde+)
+	ld (xbc+), a
 	cp xde, xhl
 	jr c, SeMenu_ComputeParamTableAddr_Loop
 	ret

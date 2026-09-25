@@ -145,8 +145,8 @@ HDAE5000_StrNCpy:	; 0x29AFF0
 	ld	xhl, xix
 	jr t, .LMCR_b005                       ; [68 08] jr T,0x29b005
 .LMCR_affd:
-	ldb_spi a, 0xe8		; ld A,(XDE+)
-	lda_dpi xbc, 0xf0		; ld (XIX+),A
+	ld a, (xde+)		; ld A,(XDE+)
+	ld (xix+), a		; ld (XIX+),A
 	dec	1, bc
 .LMCR_b005:
 	cp	bc, 0:i3
@@ -181,7 +181,7 @@ HDAE5000_StrRev:
 .LMCR_b036:
 	ld	a, (xbc)
 	ld8_src_ri xde, l		; ld L,(XDE)
-	lda_dpi xsp, 0xe4		; ld (XBC+),L
+	ld (xbc+), l		; ld (XBC+),L
 	ld	(xde), a
 	inc 1, xiz                              ; inc 1,XIZ
 	dec	1, xde
@@ -746,7 +746,7 @@ HDAE5000_FltDec_DivBy10:
 	ld	wa, (xbc)
 	extz xwa
 	div wa, 0x000a
-	stw_dpi wa, 0xe5		; ld (XBC+),WA
+	ld (xbc+), wa		; ld (XBC+),WA
 	cp	xbc, xde
 	jr c, .LMCR_b51d                       ; [67 e0] jr C,0x29b51d
 	ret

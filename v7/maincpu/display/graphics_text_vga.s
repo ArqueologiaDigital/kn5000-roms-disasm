@@ -2003,7 +2003,7 @@ ConvertStringsEx_Loop:
 	cp (xde), 0x7e
 	jr nz, ConvertStringsEx_CopyChar
 	ld a, (xde)
-	lda_dpi XBC, 0xe4
+	ld (xbc+), a
 	stib_dsp 0xe4, 0x34
 	addmi8 (xbc), 0x30
 	jr ConvertStringsEx_Advance
@@ -2252,8 +2252,8 @@ InitPaletteRGB:
 	lda_dri XHL, 0xe1, 0x00, 0x04
 
 InitPaletteRGB_CopyLoop:
-	ld_spil XWA, 0xe6
-	stl_dpi XWA, 0xea
+	ld XWA, (xbc+)
+	ld (xde+), XWA
 	cp xbc, xhl
 	jr c, InitPaletteRGB_CopyLoop
 	ret

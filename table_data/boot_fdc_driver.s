@@ -149,7 +149,7 @@ FDC_MediaConfigAndRecalibrate__read_results:
 FDC_MediaConfigAndRecalibrate__read_next_byte:
 	calr FDC_WaitRQM	; calr 0xffdda3
 	calr FDC_ReadData	; calr 0xffd7ee
-	lda_dpi xsp, 0xf8	; ld (XIZ+),L
+	ld (xiz+), l	; ld (XIZ+),L
 FDC_MediaConfigAndRecalibrate__more_results:
 	calr FDC_ReadStatus	; calr 0xffd7e8
 	bit 7, l	; bit 0x07,L

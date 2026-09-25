@@ -489,7 +489,7 @@ WP_GetConfigName:
 	sll xbc, 4	; index * 16
 	add xhl, xbc
 	lda xhl, (xhl + 16)	; Offset to name field
-	lda_dpi XIY, 0xf8	; Store type marker
+	ld (xiz+), e	; Store type marker
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0x10	; Copy 16 bytes
@@ -512,7 +512,7 @@ WP_GetNameByOffset:
 	mul xhl, bc	; Calculate offset
 	add xix, xhl
 	lda_dri XBC, 0xf1, 0xb2, 0x00	; Offset to name field
-	lda_dpi XIY, 0xf8
+	ld (xiz+), e
 	ld xwa, xiz
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
@@ -528,7 +528,7 @@ WP_GetNameByOffset:
 WP_GetPresetName1:
 	push xiz
 	ld xiz, xwa
-	lda_dpi XIY, 0xf8
+	ld (xiz+), e
 	ld wa, bc
 	extz xwa
 	sll xwa, 2	; index * 4 (pointer size)
@@ -560,7 +560,7 @@ WP_GetBankMemName:
 	push xiz
 	ld hl, bc
 	ld xiz, xwa
-	stb_dpi A, 0xf8	; LDA XBC, XIZ+
+	lda xbc, (xiz+:1)	; LDA XBC, XIZ+
 	ld wa, (xsp + 8)
 	ld (xbc), a	; Store type marker
 	cp de, 4:i3
@@ -596,7 +596,7 @@ WP_GetBankMemName_Format:
 WP_GetPresetName3:
 	push xiz
 	ld xiz, xwa
-	lda_dpi XIY, 0xf8
+	ld (xiz+), e
 	ld wa, bc
 	extz xwa
 	sll xwa, 2
@@ -620,7 +620,7 @@ WP_GetUserName1:
 	lda xhl, (xhl + 16)
 	mul bc, 0x1d6	; Entry stride
 	add xhl, xbc
-	lda_dpi XIY, 0xf8
+	ld (xiz+), e
 	ld xwa, xiz
 	ld xbc, xhl
 	ldw de, 0x10
@@ -639,7 +639,7 @@ WP_GetUserName2:
 	ld de, bc
 	ld xiz, xwa
 	lda xbc, (0x1e4980:24)
-	lda_dpi XIY, 0xf8
+	ld (xiz+), e
 	ld xwa, xiz
 	ldw de, 0x10
 	call FileIO_CopyString_WriteNull
@@ -658,7 +658,7 @@ WP_GetUserName3:
 	lda xhl, (0x1e4aa7:24)
 	mul bc, 0x50	; Entry stride
 	add xhl, xbc
-	lda_dpi XIY, 0xf8
+	ld (xiz+), e
 	stib_dsp 0xf8, 0x20	; Space character
 	ld xwa, xiz
 	ld xbc, xhl

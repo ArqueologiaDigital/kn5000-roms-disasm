@@ -1016,7 +1016,7 @@ AudioMix_WriteChannelGroup:
 	ld	d, 8:opc
 AudioMix_WriteChannelGroup__loop:
 	ld	(xhl), a		; register-address latch
-	ldb_spi	e, 0xe4			; LD E, (XSP+)
+	ld	e, (xbc+)			; LD E, (XSP+)
 	ld	(xhl + 2), e		; data byte
 	inc	1, a
 	djnz8	d, AudioMix_WriteChannelGroup__loop
@@ -1124,7 +1124,7 @@ Boot_CopyWords:
 ; Callers: VGA_FINALIZEINITIALIZATION (boot 0xffd7bd)
 ; -----------------------------------------------------------------------------
 Boot_FillWords:
-	stw_dpi	bc, 0xe1		; LD (XWA+), BC
+	ld	(xwa+), bc		; LD (XWA+), BC
 	djnz16	de, Boot_FillWords
 	ret
 
@@ -1140,7 +1140,7 @@ Boot_ChecksumWords:
 	extz	xbc
 	add	xbc, xwa		; XBC = end address
 Boot_ChecksumWords__loop:
-	add_spil xhl, 0xe2		; ADD XHL, (XWA+)
+	add xhl, (xwa+)		; ADD XHL, (XWA+)
 	cp	xwa, xbc
 	jr	lt, Boot_ChecksumWords__loop
 	cpl	hl

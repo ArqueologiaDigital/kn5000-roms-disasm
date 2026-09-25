@@ -310,19 +310,19 @@ SysEx_DispatchByChannel_49_Entry:
 SysEx_ValidateRolandHeader:
 	cp c, 0xa
 	ret ugt
-	cp_spib_im 0xe0, 0xf0
+	cp (xwa+), 0xf0
 	ret nz
 	inc 1, xwa
-	cp_spib_im 0xe0, 0x41
+	cp (xwa+), 0x41
 	ret nz
 	inc 1, xwa
-	cp_spib_im 0xe0, 0x42
+	cp (xwa+), 0x42
 	ret nz
-	cp_spib_im 0xe0, 0x12
+	cp (xwa+), 0x12
 	ret nz
-	cp_spib_im 0xe0, 0x40
+	cp (xwa+), 0x40
 	ret nz
-	cp_spib_im 0xe0, 0x01
+	cp (xwa+), 0x01
 	ret nz
 	cp c, 0:i3
 	jr nz, SysEx_ValidateRolandHeader_NonZeroChan
@@ -341,7 +341,7 @@ SysEx_ValidateRolandHeader_NonZeroChan:
 	add xbc, 0x2e0
 
 SysEx_ValidateRolandHeader_Dispatch:
-	ldb_spi E, 0xe0
+	ld E, (xwa+)
 	cp e, 0x3a
 	jr z, SysEx_ValidateRolandHeader_Cmd3A
 	cp e, 0x38
@@ -770,11 +770,11 @@ AssswbWr:
 	lda xix, (0xbd3c:16)
 	extz xhl
 	add xhl, xix
-	lda_dpi XBC, 0xec
-	lda_dpi XHL, 0xec
-	lda_dpi XIY, 0xec
+	ld (xhl+), a
+	ld (xhl+), c
+	ld (xhl+), e
 	ld a, (xsp + 4)
-	lda_dpi XBC, 0xec
+	ld (xhl+), a
 	ld (xhl), 0xff
 	ld wa, (0x90de:16)
 	inc 4, wa
@@ -790,11 +790,11 @@ AddswbWr:
 	lda xix, (0xbf39:16)
 	extz xhl
 	add xhl, xix
-	lda_dpi XBC, 0xec
-	lda_dpi XHL, 0xec
-	lda_dpi XIY, 0xec
+	ld (xhl+), a
+	ld (xhl+), c
+	ld (xhl+), e
 	ld a, (xsp + 4)
-	lda_dpi XBC, 0xec
+	ld (xhl+), a
 	ld (xhl), 0xff
 	ld wa, (0x90e2:16)
 	inc 4, wa
@@ -818,11 +818,11 @@ SwbtWr_ScanEnd:
 SwbtWr_CheckSpace:
 	cp xiy, xhl
 	jr nc, SwbtWr_Done
-	lda_dpi XBC, 0xf4
-	lda_dpi XHL, 0xf4
-	lda_dpi XIY, 0xf4
+	ld (xiy+), a
+	ld (xiy+), c
+	ld (xiy+), e
 	ld a, (xsp + 4)
-	lda_dpi XBC, 0xf4
+	ld (xiy+), a
 	ld (xiy), 0xff
 
 SwbtWr_Done:
@@ -1102,10 +1102,10 @@ VoiceParam_SaveReverbChorus_Loop:
 	inc 1, xde
 	ld xwa, (xsp + 2)
 	ld c, (xbc)
-	lda_dpi XHL, 0xe0
+	ld (xwa+), c
 	ld (xsp + 2), xwa
 	ld c, (xde)
-	lda_dpi XHL, 0xe0
+	ld (xwa+), c
 	ld (xsp + 2), xwa
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0x19
@@ -1137,12 +1137,12 @@ VoiceParam_RestoreReverbChorus_Loop:
 	inc 1, xhl
 	andmi8 (xde), 0xf8
 	ld xwa, (xsp + 2)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 2), xwa
 	and c, 0x7
 	or (xde), c
 	ld xwa, (xsp + 2)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xhl), c
 	ld (xsp + 2), xwa
 	inc1b_erp 0xfb
@@ -1223,8 +1223,8 @@ BitMapOut_RenderDisplay:
 	jr ule, BitMapOut_CopyRegion_Done
 
 BitMapOut_CopyRegion_Loop:
-	ld_spiw WA, 0xf1
-	stw_dpi WA, 0xed
+	ld WA, (xix+)
+	ld (xhl+), WA
 	inc 1, bc
 	ld wa, bc
 	cp wa, de
@@ -4357,7 +4357,7 @@ DSPCfg_ApplyParamStructFull:
 	lda xsp, (xsp - 68)
 	push xiz
 	ldw (xsp + 4), 0x0
-	ldb_spi E, 0xe0
+	ld E, (xwa+)
 	extz de
 	ld (xsp + 30), de
 	lda xbc, (xwa - 1)

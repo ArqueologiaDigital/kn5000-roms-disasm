@@ -167,7 +167,7 @@ MidiPkt_MatchParamInTable:
 	ld xde, xbc
 	lda	xix, (0xee49e8:24)
 MidiPkt_MatchParamInTable_Loop:
-	ld_spil XHL, 0xea
+	ld XHL, (xde+)
 	cp xix, xhl
 	ret z
 	ld c, (xhl + 7)
@@ -1379,19 +1379,19 @@ SysEx_DispatchByChannel_49_Entry:
 	ret
 	cp	c, 10
 	ret	ugt
-	cp_spib_im	224, 240
+	cp	(xwa+), 240
 	ret	nz
 	inc	1, xwa
-	cp_spib_im	224, 65
+	cp	(xwa+), 65
 	ret	nz
 	inc	1, xwa
-	cp_spib_im	224, 66
+	cp	(xwa+), 66
 	ret	nz
-	cp_spib_im	224, 18
+	cp	(xwa+), 18
 	ret	nz
-	cp_spib_im	224, 64
+	cp	(xwa+), 64
 	ret	nz
-	cp_spib_im	224, 1
+	cp	(xwa+), 1
 	ret	nz
 	cp	c, 0:i3
 	jr	nz, SysEx_DispatchByChannel_49_Entry_Code_Skip
@@ -1408,7 +1408,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Skip:
 	add	xbc, xde
 	add	xbc, 0x2e0
 SysEx_DispatchByChannel_49_Entry_Code_Join:
-	ldb_spi	e, 224
+	ld	e, (xwa+)
 	cp	e, 58
 	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip4
 	cp	e, 56

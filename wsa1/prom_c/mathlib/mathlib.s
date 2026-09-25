@@ -122,7 +122,7 @@ Double_Cos:
 	jr nz, Double_Cos__FC8BDC                  ; FC8BC6  jr NZ,0xfc8bdc
 	ld	xiy, (xsp)                              ; FC8BC8  ld XIY,(XSP)
 	ld	xix, (F64_1p0:24)                     ; FC8BCA  ld XIX,(0xfcb286)
-	stl_dpi	xix, 0xF6                          ; FC8BCF  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC8BCF  ld (XIY+),XIX
 	ld	xix, (F64_1p0+4:24)                     ; FC8BD2  ld XIX,(0xfcb28a)
 	ld	(xiy), xix                              ; FC8BD7  ld (XIY),XIX
 	jrl Double_Cos__FC8C40                     ; FC8BD9  jrl T,0xfc8c40
@@ -164,7 +164,7 @@ Double_Cos__FC8C07:
 	inc	8, xsp                                 ; FC8C31  inc 0,XSP
 	ld	xiy, (xsp)                              ; FC8C33  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FC8C35  ld XIX,(XIZ+0xf0)
-	stl_dpi	xix, 0xF6                          ; FC8C38  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC8C38  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FC8C3B  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FC8C3E  ld (XIY),XIX
 Double_Cos__FC8C40:
@@ -240,7 +240,7 @@ Double_Sin__FC8C81:
 	ldw	(0xF362:24), 34                       ; FC8C9D  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC8CA4  ld XIY,(XSP)
 	ld	xix, (F64_0p0_2:24)                     ; FC8CA6  ld XIX,(0xfcb2c6)
-	stl_dpi	xix, 0xF6                          ; FC8CAB  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC8CAB  ld (XIY+),XIX
 	ld	xix, (F64_0p0_2+4:24)                     ; FC8CAE  ld XIX,(0xfcb2ca)
 	ld	(xiy), xix                              ; FC8CB3  ld (XIY),XIX
 	jrl Double_Sin__FC8EDF                     ; FC8CB5  jrl T,0xfc8edf
@@ -459,14 +459,14 @@ Double_Sin__FC8EB0:
 	call	Double_Negate                              ; FC8EBF  call 0xfca1b6
 	ld	xiy, (xsp)                              ; FC8EC3  ld XIY,(XSP)
 	ld	xix, (xiz-24)                           ; FC8EC5  ld XIX,(XIZ+0xe8)
-	stl_dpi	xix, 0xF6                          ; FC8EC8  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC8EC8  ld (XIY+),XIX
 	ld	xix, (xiz-20)                           ; FC8ECB  ld XIX,(XIZ+0xec)
 	ld	(xiy), xix                              ; FC8ECE  ld (XIY),XIX
 	jr Double_Sin__FC8EDF                      ; FC8ED0  jr T,0xfc8edf
 Double_Sin__FC8ED2:
 	ld	xiy, (xsp)                              ; FC8ED2  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FC8ED4  ld XIX,(XIZ+0x08)
-	stl_dpi	xix, 0xF6                          ; FC8ED7  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC8ED7  ld (XIY+),XIX
 	ld	xix, (xiz+12)                           ; FC8EDA  ld XIX,(XIZ+0x0c)
 	ld	(xiy), xix                              ; FC8EDD  ld (XIY),XIX
 Double_Sin__FC8EDF:
@@ -641,7 +641,7 @@ sub_FC8EE5__FC8FF5:
 sub_FC8EE5__FC9054:
 	ld	xiy, (xsp)                              ; FC9054  ld XIY,(XSP)
 	ld	xix, (F64_0p0_3:24)                     ; FC9056  ld XIX,(0xfcb30e)
-	stl_dpi	xix, 0xF6                          ; FC905B  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC905B  ld (XIY+),XIX
 	ld	xix, (F64_0p0_3+4:24)                     ; FC905E  ld XIX,(0xfcb312)
 	ld	(xiy), xix                              ; FC9063  ld (XIY),XIX
 	jrl sub_FC8EE5__FC9139                     ; FC9065  jrl T,0xfc9139
@@ -721,7 +721,7 @@ sub_FC8EE5__FC9121:
 	extpfx2 0x95, 0x11                         ; FC912A  ldirw
 	ld	xiy, (xsp)                              ; FC912C  ld XIY,(XSP)
 	ld	xix, (xiz-32)                           ; FC912E  ld XIX,(XIZ+0xe0)
-	stl_dpi	xix, 0xF6                          ; FC9131  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9131  ld (XIY+),XIX
 	ld	xix, (xiz-28)                           ; FC9134  ld XIX,(XIZ+0xe4)
 	ld	(xiy), xix                              ; FC9137  ld (XIY),XIX
 sub_FC8EE5__FC9139:
@@ -798,7 +798,7 @@ Double_Tan__FC9180:
 	ldw	(0xF362:24), 34                       ; FC919C  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC91A3  ld XIY,(XSP)
 	ld	xix, (F64_0p0_4:24)                     ; FC91A5  ld XIX,(0xfcb36e)
-	stl_dpi	xix, 0xF6                          ; FC91AA  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC91AA  ld (XIY+),XIX
 	ld	xix, (F64_0p0_4+4:24)                     ; FC91AD  ld XIX,(0xfcb372)
 	ld	(xiy), xix                              ; FC91B2  ld (XIY),XIX
 	jrl Double_Tan__FC956F                     ; FC91B4  jrl T,0xfc956f
@@ -1170,7 +1170,7 @@ Double_Tan__FC9512:
 	call	Double_Divide                              ; FC9538  call 0xfca7a5
 	ld	xiy, (xsp)                              ; FC953C  ld XIY,(XSP)
 	ld	xix, (xiz-42)                           ; FC953E  ld XIX,(XIZ+0xd6)
-	stl_dpi	xix, 0xF6                          ; FC9541  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9541  ld (XIY+),XIX
 	ld	xix, (xiz-38)                           ; FC9544  ld XIX,(XIZ+0xda)
 	ld	(xiy), xix                              ; FC9547  ld (XIY),XIX
 	jr Double_Tan__FC956F                      ; FC9549  jr T,0xfc956f
@@ -1187,7 +1187,7 @@ Double_Tan__FC954B:
 	call	Double_Divide                              ; FC955E  call 0xfca7a5
 	ld	xiy, (xsp)                              ; FC9562  ld XIY,(XSP)
 	ld	xix, (xiz-34)                           ; FC9564  ld XIX,(XIZ+0xde)
-	stl_dpi	xix, 0xF6                          ; FC9567  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9567  ld (XIY+),XIX
 	ld	xix, (xiz-30)                           ; FC956A  ld XIX,(XIZ+0xe2)
 	ld	(xiy), xix                              ; FC956D  ld (XIY),XIX
 Double_Tan__FC956F:
@@ -1491,7 +1491,7 @@ Double_Pow__FC97C8:
 Double_Pow__FC97CF:
 	ld	xiy, (xsp)                              ; FC97CF  ld XIY,(XSP)
 	ld	xix, (F64_0p0_5:24)                     ; FC97D1  ld XIX,(0xfcb3d6)
-	stl_dpi	xix, 0xF6                          ; FC97D6  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC97D6  ld (XIY+),XIX
 	ld	xix, (F64_0p0_5+4:24)                     ; FC97D9  ld XIX,(0xfcb3da)
 	ld	(xiy), xix                              ; FC97DE  ld (XIY),XIX
 	jr Double_Pow__FC983F                      ; FC97E0  jr T,0xfc983f
@@ -1510,7 +1510,7 @@ Double_Pow__FC97F7:
 	popw	bc                                    ; FC97FE  pop BC
 	ld	xiy, (xsp)                              ; FC97FF  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FC9801  ld XIX,(XIZ+0xf0)
-	stl_dpi	xix, 0xF6                          ; FC9804  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9804  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FC9807  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FC980A  ld (XIY),XIX
 	jr Double_Pow__FC983F                      ; FC980C  jr T,0xfc983f
@@ -1527,14 +1527,14 @@ Double_Pow__FC9814:
 	call	Double_Negate                              ; FC981F  call 0xfca1b6
 	ld	xiy, (xsp)                              ; FC9823  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FC9825  ld XIX,(XIZ+0xf0)
-	stl_dpi	xix, 0xF6                          ; FC9828  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9828  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FC982B  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FC982E  ld (XIY),XIX
 	jr Double_Pow__FC983F                      ; FC9830  jr T,0xfc983f
 Double_Pow__FC9832:
 	ld	xiy, (xsp)                              ; FC9832  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FC9834  ld XIX,(XIZ+0x08)
-	stl_dpi	xix, 0xF6                          ; FC9837  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9837  ld (XIY+),XIX
 	ld	xix, (xiz+12)                           ; FC983A  ld XIX,(XIZ+0x0c)
 	ld	(xiy), xix                              ; FC983D  ld (XIY),XIX
 Double_Pow__FC983F:
@@ -1595,7 +1595,7 @@ Double_Exp:
 	jr nz, Double_Exp__FC9898                  ; FC9882  jr NZ,0xfc9898
 	ld	xiy, (xsp)                              ; FC9884  ld XIY,(XSP)
 	ld	xix, (F64_2p2250738585072014em308:24)                     ; FC9886  ld XIX,(0xfcb426)
-	stl_dpi	xix, 0xF6                          ; FC988B  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC988B  ld (XIY+),XIX
 	ld	xix, (F64_2p2250738585072014em308+4:24)                     ; FC988E  ld XIX,(0xfcb42a)
 	ld	(xiy), xix                              ; FC9893  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC9895  jrl T,0xfc9bb5
@@ -1603,7 +1603,7 @@ Double_Exp__FC9898:
 	ldw	(0xF362:24), 34                       ; FC9898  ld (0x00f362),0x0022
 	ld	xiy, (xsp)                              ; FC989F  ld XIY,(XSP)
 	ld	xix, (F64_0p0_6:24)                     ; FC98A1  ld XIX,(0xfcb41e)
-	stl_dpi	xix, 0xF6                          ; FC98A6  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC98A6  ld (XIY+),XIX
 	ld	xix, (F64_0p0_6+4:24)                     ; FC98A9  ld XIX,(0xfcb422)
 	ld	(xiy), xix                              ; FC98AE  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC98B0  jrl T,0xfc9bb5
@@ -1632,7 +1632,7 @@ Double_Exp__FC98B3:
 	jr nz, Double_Exp__FC98FF                  ; FC98E9  jr NZ,0xfc98ff
 	ld	xiy, (xsp)                              ; FC98EB  ld XIY,(XSP)
 	ld	xix, (F64_8p988465674311579e307:24)                     ; FC98ED  ld XIX,(0xfcb40e)
-	stl_dpi	xix, 0xF6                          ; FC98F2  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC98F2  ld (XIY+),XIX
 	ld	xix, (F64_8p988465674311579e307+4:24)                     ; FC98F5  ld XIX,(0xfcb412)
 	ld	(xiy), xix                              ; FC98FA  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC98FC  jrl T,0xfc9bb5
@@ -1644,7 +1644,7 @@ Double_Exp__FC98FF:
 	popw	bc                                    ; FC9910  pop BC
 	ld	xiy, (xsp)                              ; FC9911  ld XIY,(XSP)
 	ld	xix, (xiz-26)                           ; FC9913  ld XIX,(XIZ+0xe6)
-	stl_dpi	xix, 0xF6                          ; FC9916  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9916  ld (XIY+),XIX
 	ld	xix, (xiz-22)                           ; FC9919  ld XIX,(XIZ+0xea)
 	ld	(xiy), xix                              ; FC991C  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC991E  jrl T,0xfc9bb5
@@ -1698,7 +1698,7 @@ Double_Exp__FC9958:
 	call	Double_Subtract                              ; FC998F  call 0xfca626
 	ld	xiy, (xsp)                              ; FC9993  ld XIY,(XSP)
 	ld	xix, (xiz-26)                           ; FC9995  ld XIX,(XIZ+0xe6)
-	stl_dpi	xix, 0xF6                          ; FC9998  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9998  ld (XIY+),XIX
 	ld	xix, (xiz-22)                           ; FC999B  ld XIX,(XIZ+0xea)
 	ld	(xiy), xix                              ; FC999E  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC99A0  jrl T,0xfc9bb5
@@ -1715,7 +1715,7 @@ Double_Exp__FC99A3:
 	call	Double_Add                              ; FC99BA  call 0xfca41f
 	ld	xiy, (xsp)                              ; FC99BE  ld XIY,(XSP)
 	ld	xix, (xiz-26)                           ; FC99C0  ld XIX,(XIZ+0xe6)
-	stl_dpi	xix, 0xF6                          ; FC99C3  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC99C3  ld (XIY+),XIX
 	ld	xix, (xiz-22)                           ; FC99C6  ld XIX,(XIZ+0xea)
 	ld	(xiy), xix                              ; FC99C9  ld (XIY),XIX
 	jrl sub_FC9ACB__FC9BB5                     ; FC99CB  jrl T,0xfc9bb5
@@ -1942,7 +1942,7 @@ sub_FC9ACB__FC9B04:
 	inc	2, xsp                                 ; FC9BA6  inc 2,XSP
 	ld	xiy, (xsp)                              ; FC9BA8  ld XIY,(XSP)
 	ld	xix, (xiz-50)                           ; FC9BAA  ld XIX,(XIZ+0xce)
-	stl_dpi	xix, 0xF6                          ; FC9BAD  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9BAD  ld (XIY+),XIX
 	ld	xix, (xiz-46)                           ; FC9BB0  ld XIX,(XIZ+0xd2)
 	ld	(xiy), xix                              ; FC9BB3  ld (XIY),XIX
 sub_FC9ACB__FC9BB5:
@@ -2022,7 +2022,7 @@ sub_FC9BBC__FC9BEC:
 sub_FC9BBC__FC9C34:
 	ld	xiy, (xsp)                              ; FC9C34  ld XIY,(XSP)
 	ld	xix, (F64_0p0_7:24)                     ; FC9C36  ld XIX,(0xfcb46e)
-	stl_dpi	xix, 0xF6                          ; FC9C3B  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9C3B  ld (XIY+),XIX
 	ld	xix, (F64_0p0_7+4:24)                     ; FC9C3E  ld XIX,(0xfcb472)
 	ld	(xiy), xix                              ; FC9C43  ld (XIY),XIX
 	jrl sub_FC9BBC__FC9CC6                     ; FC9C45  jrl T,0xfc9cc6
@@ -2065,14 +2065,14 @@ sub_FC9BBC__FC9C74:
 	call	Double_Negate                              ; FC9CA6  call 0xfca1b6
 	ld	xiy, (xsp)                              ; FC9CAA  ld XIY,(XSP)
 	ld	xix, (xiz-18)                           ; FC9CAC  ld XIX,(XIZ+0xee)
-	stl_dpi	xix, 0xF6                          ; FC9CAF  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9CAF  ld (XIY+),XIX
 	ld	xix, (xiz-14)                           ; FC9CB2  ld XIX,(XIZ+0xf2)
 	ld	(xiy), xix                              ; FC9CB5  ld (XIY),XIX
 	jr sub_FC9BBC__FC9CC6                      ; FC9CB7  jr T,0xfc9cc6
 sub_FC9BBC__FC9CB9:
 	ld	xiy, (xsp)                              ; FC9CB9  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FC9CBB  ld XIX,(XIZ+0x08)
-	stl_dpi	xix, 0xF6                          ; FC9CBE  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9CBE  ld (XIY+),XIX
 	ld	xix, (xiz+12)                           ; FC9CC1  ld XIX,(XIZ+0x0c)
 	ld	(xiy), xix                              ; FC9CC4  ld (XIY),XIX
 sub_FC9BBC__FC9CC6:
@@ -2125,7 +2125,7 @@ Double_MakeInfinity__FC9CF4:
 	pop	xix                                    ; FC9CFF  pop XIX
 	ld	xiy, (xsp)                              ; FC9D00  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FC9D02  ld XIX,(XIZ+0xf0)
-	stl_dpi	xix, 0xF6                          ; FC9D05  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9D05  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FC9D08  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FC9D0B  ld (XIY),XIX
 	pop	xiy                                    ; FC9D0D  pop XIY
@@ -2194,7 +2194,7 @@ Double_Log__FC9D67:
 	popw	bc                                    ; FC9D6E  pop BC
 	ld	xiy, (xsp)                              ; FC9D6F  ld XIY,(XSP)
 	ld	xix, (xiz-34)                           ; FC9D71  ld XIX,(XIZ+0xde)
-	stl_dpi	xix, 0xF6                          ; FC9D74  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9D74  ld (XIY+),XIX
 	ld	xix, (xiz-30)                           ; FC9D77  ld XIX,(XIZ+0xe2)
 	ld	(xiy), xix                              ; FC9D7A  ld (XIY),XIX
 	jrl Double_Log__FC9F9D                     ; FC9D7C  jrl T,0xfc9f9d
@@ -2421,7 +2421,7 @@ Double_Log__FC9EB6:
 	call	Double_Add                              ; FC9F8C  call 0xfca41f
 	ld	xiy, (xsp)                              ; FC9F90  ld XIY,(XSP)
 	ld	xix, (xiz-82)                           ; FC9F92  ld XIX,(XIZ+0xae)
-	stl_dpi	xix, 0xF6                          ; FC9F95  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FC9F95  ld (XIY+),XIX
 	ld	xix, (xiz-78)                           ; FC9F98  ld XIX,(XIZ+0xb2)
 	ld	(xiy), xix                              ; FC9F9B  ld (XIY),XIX
 Double_Log__FC9F9D:
@@ -2495,7 +2495,7 @@ sub_FC9FA3__FC9FCF:
 	extpfx4 0xB0, 0x02, 0x00, 0x00             ; FCA002  ld (XWA),0x0000
 	ld	xiy, (xsp)                              ; FCA006  ld XIY,(XSP)
 	ld	xix, (F64_0p0_9:24)                     ; FCA008  ld XIX,(0xfcb4de)
-	stl_dpi	xix, 0xF6                          ; FCA00D  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA00D  ld (XIY+),XIX
 	ld	xix, (F64_0p0_9+4:24)                     ; FCA010  ld XIX,(0xfcb4e2)
 	ld	(xiy), xix                              ; FCA015  ld (XIY),XIX
 	jrl sub_FC9FA3__FCA07E                     ; FCA017  jrl T,0xfca07e
@@ -2530,14 +2530,14 @@ sub_FC9FA3__FCA01A:
 	call	Double_Negate                              ; FCA05E  call 0xfca1b6
 	ld	xiy, (xsp)                              ; FCA062  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FCA064  ld XIX,(XIZ+0xf0)
-	stl_dpi	xix, 0xF6                          ; FCA067  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA067  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FCA06A  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FCA06D  ld (XIY),XIX
 	jr sub_FC9FA3__FCA07E                      ; FCA06F  jr T,0xfca07e
 sub_FC9FA3__FCA071:
 	ld	xiy, (xsp)                              ; FCA071  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FCA073  ld XIX,(XIZ+0x08)
-	stl_dpi	xix, 0xF6                          ; FCA076  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA076  ld (XIY+),XIX
 	ld	xix, (xiz+12)                           ; FCA079  ld XIX,(XIZ+0x0c)
 	ld	(xiy), xix                              ; FCA07C  ld (XIY),XIX
 sub_FC9FA3__FCA07E:
@@ -2584,7 +2584,7 @@ Double_Abs:
 	pop	xix                                    ; FCA0A7  pop XIX
 	ld	xiy, (xsp)                              ; FCA0A8  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FCA0AA  ld XIX,(XIZ+0xf0)
-	stl_dpi	xix, 0xF6                          ; FCA0AD  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA0AD  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FCA0B0  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FCA0B3  ld (XIY),XIX
 	pop	xiy                                    ; FCA0B5  pop XIY
@@ -2922,7 +2922,7 @@ Double_Negate:
 Double_Negate__FCA1D1:
 	ld	xiy, (xsp)                              ; FCA1D1  ld XIY,(XSP)
 	ld	xix, (xiz+8)                            ; FCA1D3  ld XIX,(XIZ+0x08)
-	stl_dpi	xix, 0xF6                          ; FCA1D6  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA1D6  ld (XIY+),XIX
 	ld	xix, (xiz+12)                           ; FCA1D9  ld XIX,(XIZ+0x0c)
 	ld	(xiy), xix                              ; FCA1DC  ld (XIY),XIX
 	pop	xiy                                    ; FCA1DE  pop XIY
@@ -3184,7 +3184,7 @@ Double_Multiply__FCA3D9:
 	ld	qbc, wa                                 ; FCA40C  ld QBC,WA
 Double_Multiply__FCA40F:
 	ld	xix, (xsp)                              ; FCA40F  ld XIX,(XSP)
-	stl_dpi	xhl, 0xF2                          ; FCA411  ld (XIX+),XHL
+	ld	(xix+), xhl                          ; FCA411  ld (XIX+),XHL
 	ld	(xix), xbc                              ; FCA414  ld (XIX),XBC
 	pop	xiy                                    ; FCA416  pop XIY
 	pop	xix                                    ; FCA417  pop XIX
@@ -3411,7 +3411,7 @@ Double_Add__FCA60C:
 	ld	qix, bc                                 ; FCA613  ld QIX,BC
 Double_Add__FCA616:
 	ld	xiy, (xsp)                              ; FCA616  ld XIY,(XSP)
-	stl_dpi	xhl, 0xF6                          ; FCA618  ld (XIY+),XHL
+	ld	(xiy+), xhl                          ; FCA618  ld (XIY+),XHL
 	ld	(xiy), xix                              ; FCA61B  ld (XIY),XIX
 	pop	xiy                                    ; FCA61D  pop XIY
 	pop	xix                                    ; FCA61E  pop XIX
@@ -3455,7 +3455,7 @@ Double_Subtract:
 	call	Double_Add                              ; FCA649  call 0xfca41f
 	ld	xiy, (xsp)                              ; FCA64D  ld XIY,(XSP)
 	ld	xix, (xiz-16)                           ; FCA64F  ld XIX,(XIZ+0xf0)
-	stl_dpi	xix, 0xF6                          ; FCA652  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA652  ld (XIY+),XIX
 	ld	xix, (xiz-12)                           ; FCA655  ld XIX,(XIZ+0xf4)
 	ld	(xiy), xix                              ; FCA658  ld (XIY),XIX
 	pop	xiy                                    ; FCA65A  pop XIY
@@ -3594,7 +3594,7 @@ Int32_ToDouble__FCA71D:
 Int32_ToDouble__FCA732:
 	ld	xiy, (xsp)                              ; FCA732  ld XIY,(XSP)
 	ld	xix, (xiz-8)                            ; FCA734  ld XIX,(XIZ+0xf8)
-	stl_dpi	xix, 0xF6                          ; FCA737  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA737  ld (XIY+),XIX
 	ld	xix, (xiz-4)                            ; FCA73A  ld XIX,(XIZ+0xfc)
 	ld	(xiy), xix                              ; FCA73D  ld (XIY),XIX
 	pop	xiy                                    ; FCA73F  pop XIY
@@ -3650,7 +3650,7 @@ UInt32_ToDouble__FCA787:
 	ld	qix, bc                                 ; FCA793  ld QIX,BC
 UInt32_ToDouble__FCA796:
 	ld	xde, (xsp)                              ; FCA796  ld XDE,(XSP)
-	stl_dpi	xiy, 0xEA                          ; FCA798  ld (XDE+),XIY
+	ld	(xde+), xiy                          ; FCA798  ld (XDE+),XIY
 	ld	(xde), xix                              ; FCA79B  ld (XDE),XIX
 	pop	xiy                                    ; FCA79D  pop XIY
 	pop	xix                                    ; FCA79E  pop XIX
@@ -3808,7 +3808,7 @@ Double_Divide__FCA8C5:
 	ld	qix, hl                                 ; FCA8F0  ld QIX,HL
 Double_Divide__FCA8F3:
 	ld	xde, (xsp)                              ; FCA8F3  ld XDE,(XSP)
-	stl_dpi	xiy, 0xEA                          ; FCA8F5  ld (XDE+),XIY
+	ld	(xde+), xiy                          ; FCA8F5  ld (XDE+),XIY
 	ld	(xde), xix                              ; FCA8F8  ld (XDE),XIX
 	pop	xiy                                    ; FCA8FA  pop XIY
 	pop	xix                                    ; FCA8FB  pop XIX
@@ -3934,7 +3934,7 @@ Int16_ToDouble__FCA9A9:
 Int16_ToDouble__FCA9BA:
 	ld	xiy, (xsp)                              ; FCA9BA  ld XIY,(XSP)
 	ld	xix, (xiz-8)                            ; FCA9BC  ld XIX,(XIZ+0xf8)
-	stl_dpi	xix, 0xF6                          ; FCA9BF  ld (XIY+),XIX
+	ld	(xiy+), xix                          ; FCA9BF  ld (XIY+),XIX
 	ld	xix, (xiz-4)                            ; FCA9C2  ld XIX,(XIZ+0xfc)
 	ld	(xiy), xix                              ; FCA9C5  ld (XIY),XIX
 	pop	xiy                                    ; FCA9C7  pop XIY
@@ -3989,7 +3989,7 @@ UInt16_ToDouble__FCAA11:
 	ld	qix, bc                                 ; FCAA1D  ld QIX,BC
 UInt16_ToDouble__FCAA20:
 	ld	xde, (xsp)                              ; FCAA20  ld XDE,(XSP)
-	stl_dpi	xiy, 0xEA                          ; FCAA22  ld (XDE+),XIY
+	ld	(xde+), xiy                          ; FCAA22  ld (XDE+),XIY
 	ld	(xde), xix                              ; FCAA25  ld (XDE),XIX
 	pop	xiy                                    ; FCAA27  pop XIY
 	pop	xix                                    ; FCAA28  pop XIX
@@ -4112,7 +4112,7 @@ Float32_ToDouble__FCAAEB:
 	ld	qix, wa                                 ; FCAAF3  ld QIX,WA
 Float32_ToDouble__FCAAF6:
 	ld	xde, (xsp)                              ; FCAAF6  ld XDE,(XSP)
-	stl_dpi	xiy, 0xEA                          ; FCAAF8  ld (XDE+),XIY
+	ld	(xde+), xiy                          ; FCAAF8  ld (XDE+),XIY
 	ld	(xde), xix                              ; FCAAFB  ld (XDE),XIX
 	pop	xiy                                    ; FCAAFD  pop XIY
 	pop	xix                                    ; FCAAFE  pop XIX

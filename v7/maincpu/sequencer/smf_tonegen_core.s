@@ -68,13 +68,13 @@ SeqTrack_ResetAllChannelSlots:
 	ldw bc, 0x8
 
 SeqTrack_ResetChannelSlots_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, SeqTrack_ResetChannelSlots_Loop
 	xor wa, wa
 	ldw bc, 0x28
 
 SeqTrack_ClearRemaining_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, SeqTrack_ClearRemaining_Loop
 	ret
 
@@ -99,13 +99,13 @@ SeqTrack_ClearPlaybackBuffers:
 	ldw bc, 0x8
 
 SeqTrack_ClearPlaybackBuf1_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, SeqTrack_ClearPlaybackBuf1_Loop
 	ld xix, 0xf82
 	ldw bc, 0x8
 
 SeqTrack_ClearPlaybackBuf2_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, SeqTrack_ClearPlaybackBuf2_Loop
 	pop xix
 	pop xbc
@@ -123,7 +123,7 @@ SeqTrack_ClearPlaybackBuf2_Loop:
 FloppyIO_ReadNextByte:
 	push xix
 	ld xix, (4376:16)
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	cp xix, 0x17f9
 	jrl ule, FloppyIO_ReadNextByte_StorePtr
 	ld l, a
@@ -178,7 +178,7 @@ SeqTrack_ClearPartParamBuffers:
 	ld xix, 0xfae
 
 SeqTrack_ClearPartParams_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, SeqTrack_ClearPartParams_Loop
 	pop xix
 	popw bc
@@ -381,7 +381,7 @@ FloppyIO_ReadTrackBuf_EarlyExit:
 	jp FloppyIO_ReadTrackBuf_Done
 
 FloppyIO_ReadTrackBuf_StoreByte:
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	bit 7, a
 	jrl nz, FloppyIO_ReadTrackBuf_ReadLoop
 	sub xix, 0x106e
@@ -847,7 +847,7 @@ SMF_ReadMidiEventToBuffer:
 	ld (4010:16), a
 	xor bc, bc
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	inc 1, c
 
 SMF_ReadMidiEvt_ReadLoop:
@@ -872,7 +872,7 @@ SMF_ReadMidiEvt_ReadFailed:
 	jp SMF_ReadMidiEvt_Done
 
 SMF_ReadMidiEvt_CheckSize:
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
@@ -899,12 +899,12 @@ FloppyIO_ReadMidiEventBytes:
 	ld l, a
 	and l, 0xf0
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	xor h, h
 	ld a, c
 
 FloppyIO_ReadMidiEvtBytes_Loop:
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	inc 1, h
 	ld c, 0x1:opc
 	cp l, 0xd0
@@ -1079,7 +1079,7 @@ SeqTrack_ClearTempoAccumulators:
 	ld xix, 0xfae
 
 SeqTrack_ClearTempoAccum_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, SeqTrack_ClearTempoAccum_Loop
 	pop xix
 	popw bc
@@ -1113,7 +1113,7 @@ SMF_MTrk_ReadFailed:
 	jrl SMF_NullRet
 
 SMF_MTrk_CompareSignature:
-	cp_spib A, 0xf4
+	cp A, (xiy+)
 	jrl z, SMF_MTrk_SignatureMatch
 	ld (3830:16), 255
 	ldw (6699:16), 49
@@ -2090,7 +2090,7 @@ SMF_ReadMidiEventWithStatus:
 	ld (4010:16), a
 	xor bc, bc
 	ld xix, 0xfab
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	inc 1, c
 
 SMF_ReadMidiStatus_ReadLoop:
@@ -2115,7 +2115,7 @@ SMF_ReadMidiStatus_ReadFailed:
 	jp SMF_ReadMidiStatus_Done
 
 SMF_ReadMidiStatus_StoreByte:
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	inc 1, c
 	ld a, (4010:16)
 	and a, 0xf0
@@ -2528,7 +2528,7 @@ FloppyIO_ClearTrackParseBuffer:
 	ld bc, 2:i3
 
 FloppyIO_ClearParseBuf_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, FloppyIO_ClearParseBuf_Loop
 	ret
 
@@ -2555,7 +2555,7 @@ FloppyIO_ReadVarLen_ReadFailed:
 	jp FloppyIO_ReadVarLen_Done
 
 FloppyIO_ReadVarLen_StoreByte:
-	lda_dpi XBC, 0xf0	; = ld (xix+),a (backend mnemonic is swapped)
+	ld (xix+), a
 	bit 7, a
 	jrl nz, FloppyIO_ReadVarLen_ReadLoop
 	sub xix, 0x106e
@@ -4262,7 +4262,7 @@ VoiceChannel_ClearParamTable:
 	ld bc, 4:i3
 
 VoiceChannel_ClearParam_Loop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, VoiceChannel_ClearParam_Loop
 	ret
 

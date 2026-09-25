@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 r"""seqeng_annotate_swapped_dpi.py -- say what `lda_dpi` / `stb_dpi` lines really do.
 
+⚠ OBSOLETE since TOOLCHAIN_VERSION UPDATE 17 (2026-09-25), kept as the record
+of what wave 2 did.  The backend now has real post-increment syntax and the
+swap is fixed (llvm-project ac3f1ed19ab6): `f5 e8 41` prints `ld (xde+), a`
+and `f5 e0 31` prints `lda xbc, (xwa+:1)`.  Every line this script annotated
+was respelled to that syntax by scripts/converters/wave3a_respell.py autoinc,
+which also removed the annotations.  Running it now finds nothing to do.
+
 QUESTION ANSWERED
 -----------------
 "Which lines in lane seqeng's files use the backend's F5-prefix (r32+) /

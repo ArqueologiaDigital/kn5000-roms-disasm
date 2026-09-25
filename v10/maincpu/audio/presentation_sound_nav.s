@@ -43,9 +43,9 @@ GroupBoxProc_StartSSFPresentation:
 	lda xwa, (xsp + 14)
 	ld c, (xbc)
 	ld (xwa + 3), c
-	ldb_spi C, 0xe8
+	ld C, (xde+)
 	ld (xwa + 2), c
-	ldb_spi C, 0xe8
+	ld C, (xde+)
 	ld (xwa + 1), c
 	ld c, (xde)
 	ld (xwa), c

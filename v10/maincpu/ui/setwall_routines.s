@@ -1424,7 +1424,7 @@ SetWall_FullReset_VoiceLoop:
 	ld c, 0x10:opc
 
 SetWall_FullReset_ClearNotes:
-	stw_dpi IY, 0xe1
+	ld (xwa+), IY
 	djnz8 c, SetWall_FullReset_ClearNotes
 	ld xwa, 0x98
 	add xwa, xde
@@ -1432,7 +1432,7 @@ SetWall_FullReset_ClearNotes:
 	ld c, 0x10:opc
 
 SetWall_FullReset_ClearCtrl:
-	lda_dpi XDE, 0xe0
+	ld (xwa+), b
 	djnz8 c, SetWall_FullReset_ClearCtrl
 	ld xwa, 0x1e
 	add xwa, xde
@@ -1452,7 +1452,7 @@ SetWall_FullReset_ClearCtrl:
 	ld c, 0x10:opc
 
 SetWall_FullReset_ClearGlobal1:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz8 c, SetWall_FullReset_ClearGlobal1
 	ld xix, 0xd0f
 	ld c, 0x10:opc

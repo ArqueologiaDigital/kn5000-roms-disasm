@@ -766,8 +766,8 @@ SeqStep_TrackChangeLoopExit:
 	ldib_erp 0xfb, 0
 
 SeqStep_TrackChangeFinish:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xec
+	ld A, (xde+)
+	ld (xhl+), a
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0xfb
 	jr c, SeqStep_TrackChangeFinish
@@ -823,8 +823,8 @@ SeqStep_TrackChangeFinal:
 	ldib_erp 0xfb, 0
 
 SeqStep_TrackChangeWriteBack:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xec
+	ld A, (xde+)
+	ld (xhl+), a
 	inc1b_erp 0xfb
 	cp_erpb 0xfb, 0xfb
 	jr c, SeqStep_TrackChangeWriteBack
@@ -1025,8 +1025,8 @@ SeqStep_MultiTrackAdvance:
 	ldib_erp 0xfa, 0
 
 SeqStep_MultiTrackInner:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xec
+	ld A, (xde+)
+	ld (xhl+), a
 	inc1b_erp 0xfa
 	cp_erpb 0xfa, 0xfb
 	jr c, SeqStep_MultiTrackInner
@@ -1095,8 +1095,8 @@ SeqStep_PartCopy:
 	ldib_erp 0xfa, 0
 
 SeqStep_PartCopyLoop:
-	ldb_spi A, 0xe8
-	lda_dpi XBC, 0xec
+	ld A, (xde+)
+	ld (xhl+), a
 	inc1b_erp 0xfa
 	cp_erpb 0xfa, 0xfb
 	jr c, SeqStep_PartCopyLoop

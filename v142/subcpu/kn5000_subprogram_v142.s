@@ -524,7 +524,7 @@ DSP_Write_Channel:	; 01FCDEh
 
 DSP_Write_Channel_Loop:
 	ld (xhl), a	; Write register address
-	ldb_spi E, 0xE4	; Get next data byte
+	ld E, (xbc+)	; Get next data byte
 	ld (xhl + 2), e	; Write data value
 	inc 1, a	; Next register
 	djnz8 d, DSP_Write_Channel_Loop
@@ -625,7 +625,7 @@ DSP_BlockCopyWords:
 ; Notes: ld (xwa+),bc stores BC then increments XWA
 ; ----------------------------------------------------------------------------
 DSP_FillMemWords:
-	stw_dpi	bc, 225
+	ld	(xwa+), bc
 	djnz16 de, DSP_FillMemWords
 	ret
 
@@ -640,7 +640,7 @@ DSP_ChecksumRange:
 	extz xbc			; Zero-extend count
 	add xbc, xwa			; XBC = end address
 DSP_ChecksumRange_Loop:
-	add_spil	xhl, 0xe2	; add xhl, (xwa+)  (add + auto-increment)
+	add	xhl, (xwa+)	; add xhl, (xwa+)  (add + auto-increment)
 	cp xwa, xbc			; Reached end?
 	jr lt, DSP_ChecksumRange_Loop
 	cpl hl				; One's complement
@@ -733,8 +733,8 @@ TaskSched_Init:
 
 TaskSched_Init_QueueHeaders:
 	ld ix, hl
-	stw_dpi IX, 0xED
-	stw_dpi IX, 0xED
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_Init_QueueHeaders
 	ldw ix, 0x1048
 	extz xix
@@ -767,8 +767,8 @@ TaskSched_Init_FreeList_A:
 
 TaskSched_Init_QueueGroup_B:
 	ld ix, hl
-	stw_dpi IX, 0xED
-	stw_dpi IX, 0xED
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_Init_QueueGroup_B
 	ld xhl, TaskSched_SemaphoreInit
 	ldw de, 0x1092
@@ -781,8 +781,8 @@ TaskSched_Init_QueueGroup_B:
 
 TaskSched_Init_QueueGroup_C:
 	ld ix, hl
-	stw_dpi IX, 0xED
-	stw_dpi IX, 0xED
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_Init_QueueGroup_C
 	ldw hl, 0x10A6
 	extz xhl
@@ -817,8 +817,8 @@ TaskSched_Init_LinkFreeNodes:
 
 TaskSched_Init_QueueGroup_D:
 	ld ix, hl
-	stw_dpi IX, 0xED
-	stw_dpi IX, 0xED
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_Init_QueueGroup_D
 	ldw hl, 0x109E
 	extz xhl
@@ -826,8 +826,8 @@ TaskSched_Init_QueueGroup_D:
 
 TaskSched_Init_QueueGroup_E:
 	ld ix, hl
-	stw_dpi IX, 0xED
-	stw_dpi IX, 0xED
+	ld (xhl+), IX
+	ld (xhl+), IX
 	djnz8 b, TaskSched_Init_QueueGroup_E
 	ld xwa, TaskSched_Init_ConfigData
 	jr TaskSched_ConfigAndDispatch
@@ -4553,7 +4553,7 @@ Voice_Build_PartSlot_List_Loop:
 	ld	de, wa
 	or	de, bc
 	ld	xwa, (xsp+10)
-	stw_dpi	de, 225
+	ld	(xwa+), de
 	ld	(xsp+10), xwa
 Voice_Build_PartSlot_List_Next:
 	inc1b_erp	251
@@ -4620,7 +4620,7 @@ Voice_BuildOutputList_Loop:
 	ld de, wa
 	or de, bc
 	ld xwa, (xsp + 10)
-	stw_dpi DE, 0xE1
+	ld (xwa+), DE
 	ld (xsp + 10), xwa
 
 Voice_BuildOutputList_Next:
@@ -4694,7 +4694,7 @@ Voice_Build_SoundingVoiceList_Loop:
 	ld_rrb	d, xiy, wa
 Voice_Build_SoundingVoiceList_ChainLoop:
 	stb_erp	a, 230
-	lda_dpi	xbc, 236
+	ld	(xhl+), a
 	ld	a, d
 	extz	wa
 	ld	iz, wa
@@ -29818,8 +29818,8 @@ BlockCopy_Words_BC_to_HL:
 	ret nc
 
 BlockCopy_Words_BC_to_HL_Loop:
-	ldb_spi C, 0xE0
-	lda_dpi XHL, 0xEC
+	ld C, (xwa+)
+	ld (xhl+), c
 	inc 1, ix
 	cp ix, de
 	jr c, BlockCopy_Words_BC_to_HL_Loop
@@ -34222,8 +34222,8 @@ DSP_MixSendConfig:
 
 ; 0x11-byte post-increment copy loop.
 DSP_MixSendConfig_CopyLoop:
-	ldb_spi A, 0xE4
-	lda_dpi XBC, 0xF8
+	ld A, (xbc+)
+	ld (xiz+), a
 	inc 1, de
 	cp de, hl
 	jr c, DSP_MixSendConfig_CopyLoop
@@ -35120,7 +35120,7 @@ DSP_VoiceParam_Dispatch_Copy:
 	jr	nc, DSP_VoiceParam_Dispatch_Return
 ; Loop body of that copy.
 DSP_VoiceParam_Dispatch_CopyLoop:
-	stb_dpi	b, 248
+	lda	xde, (xiz+:1)
 	ld	bc, ix
 	extz	xbc
 	add	xbc, xhl
@@ -35265,8 +35265,8 @@ DSP_SetCoeff_CopyLoop:
 ; Byte copy XIZ+ -> (XSP+8)+, 10 iterations.
 DSP_SetCoeff_CopyLoop_Body:
 	ld xwa, (xsp + 8)
-	ldb_spi C, 0xF8
-	lda_dpi XHL, 0xE0
+	ld C, (xiz+)
+	ld (xwa+), c
 	ld (xsp + 8), xwa
 	inc 1, de
 	cp de, hl
@@ -36265,8 +36265,8 @@ DSP_ParamWrite_BlockCopy:
 
 ; ld C,(XHL+) / ld (XDE+),C with IX as the counter.
 DSP_ParamWrite_BlockCopy_Loop:
-	ldb_spi C, 0xEC
-	lda_dpi XHL, 0xE8
+	ld C, (xhl+)
+	ld (xde+), c
 	inc 1, ix
 	cp ix, wa
 	jr c, DSP_ParamWrite_BlockCopy_Loop
@@ -42445,7 +42445,7 @@ DSP_WriteCount_Compute:
 
 ; The `add DE,(XWA+)` / `djnz` accumulation loop.
 DSP_WriteCount_Loop:
-	add_spiw DE, 0xE1
+	add DE, (xwa+)
 	djnz xbc, DSP_WriteCount_Loop
 
 ; HL = ~sum.
@@ -43682,7 +43682,7 @@ DSP_RingBuf_Enqueue:
 	lda xwa, (15206:16)
 	extz xbc
 	add xbc, xwa
-	ldb_spi A, 0xEC
+	ld A, (xhl+)
 	ld (xbc), a
 	incw 1, (15204:16)
 	inc 1, ix
@@ -43821,7 +43821,7 @@ DSP_LoadEffPreset_Loop1:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
 	ld xwa, (xsp + 6)
-	lda_dpi XSP, 0xE0
+	ld (xwa+), l
 	ld (xsp + 6), xwa
 	inc 1, iz
 	cp iz, (xsp + 4)
@@ -43848,7 +43848,7 @@ DSP_LoadEffPreset_Loop2Next:
 	ld xwa, (xsp + 10)
 	calr DSP_RingBuf_Read
 	ld xwa, (xsp + 6)
-	lda_dpi XSP, 0xE0
+	ld (xwa+), l
 	ld (xsp + 6), xwa
 	inc 1, iz
 	cp iz, (xsp + 4)
@@ -43910,7 +43910,7 @@ DSP_RingBuf_Compare_Loop:
 ; Advance the destination pointer and the index (taken on both match and mismatch).
 DSP_RingBuf_Compare_MatchPath:
 	ld xwa, (xsp + 4)
-	lda_dpi XSP, 0xE0
+	ld (xwa+), l
 	ld (xsp + 4), xwa
 	inc 1, iz
 
@@ -51108,7 +51108,7 @@ DSP_WriteLUTParamSet:
 	ld xwa, (xsp + 16)
 	ld xwa, (xwa)
 	ld (xsp + 6), xwa
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 6), xwa
 	cp c, 1:i3
 	jr z, DSP_WriteLUT_AlgoC1
@@ -52181,7 +52181,7 @@ DSP_VolumeParam_Scale:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa)
-	ldb_spi A, 0xF8
+	ld A, (xiz+)
 	cp a, 2:i3
 	jrl z, DSP_VolScale_Algo2_Seg1
 	cp a, 1:i3
@@ -53348,7 +53348,7 @@ DSP_BiquadWarp_FP:
 	ld xwa, (xsp + 86)
 	ld xwa, (xwa)
 	ld (xsp + 2), xwa
-	ldb_spi L, 0xE0
+	ld L, (xwa+)
 	ld (xsp + 2), xwa
 	and l, 0xF0
 	jr nz, DSP_BiquadWarp_ReadPrevEntry
@@ -54058,7 +54058,7 @@ DSP_VolScale_B:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa)
-	ldb_spi A, 0xF8
+	ld A, (xiz+)
 	cp a, 2:i3
 	jrl z, DSP_VolScale_B_Algo2_Seg1
 	cp a, 1:i3
@@ -54295,7 +54295,7 @@ DSP_ParamInterp_MultiStep:
 	ld (xsp + 20), xwa
 	ld xwa, (xsp + 20)
 	ld xiz, (xwa)
-	ldb_spi A, 0xF8
+	ld A, (xiz+)
 	and a, 0xF0
 	cp a, 0x20
 	jr z, DSP_ParamInterp_MultiStep_Mode0x20
@@ -54487,7 +54487,7 @@ DSP_FilterLUT_Fetch:
 	extz wa
 	ld (xsp + 2), wa
 	ld xwa, (xsp + 56)
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 56), xwa
 	and c, 0xF0
 	extz bc
@@ -55684,7 +55684,7 @@ DSP_SOS_LUT_Fetch:
 	extz wa
 	ld (xsp + 2), wa
 	ld xwa, (xsp + 40)
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 40), xwa
 	and c, 0xF0
 	ld a, c
@@ -55767,7 +55767,7 @@ DSP_SOS_LUT_CheckType2:
 	cp wa, 2:i3
 	jr nz, DSP_SOS_LUT_StoreResults
 	ld xwa, (xsp + 40)
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 40), xwa
 	and c, 0x1F
 	ld a, c
@@ -56967,7 +56967,7 @@ DSP_Bytecode_Op00_Groups5_ParamMix:
 	; 200 instructions, of which 2 needed a spelling search because
 	; llvm-mc --disassemble refuses them (it can still ASSEMBLE them).
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -56975,7 +56975,7 @@ DSP_Bytecode_Op00_Groups5_ParamMix:
 	call	DSP_DispatchCommand
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -56983,7 +56983,7 @@ DSP_Bytecode_Op00_Groups5_ParamMix:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -56997,7 +56997,7 @@ DSP_BytecodeInterpreter_Init_Loop:
 	cp	(xwa), 0
 	jrl	nz, DSP_BytecodeInterpreter_Init_Skip
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57005,7 +57005,7 @@ DSP_BytecodeInterpreter_Init_Loop:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57043,7 +57043,7 @@ DSP_BytecodeInterpreter_Init_Loop:
 	ld	xwa, (xsp+26)
 	inc	2, xwa
 	ld	(xsp+26), xwa
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57056,7 +57056,7 @@ DSP_BytecodeInterpreter_Init_Skip:
 	cp	(xwa), 10
 	jr	nz, DSP_BytecodeInterpreter_Init_Skip2
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57064,7 +57064,7 @@ DSP_BytecodeInterpreter_Init_Skip:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57072,7 +57072,7 @@ DSP_BytecodeInterpreter_Init_Skip:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57080,7 +57080,7 @@ DSP_BytecodeInterpreter_Init_Skip:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57088,7 +57088,7 @@ DSP_BytecodeInterpreter_Init_Skip:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57098,7 +57098,7 @@ DSP_BytecodeInterpreter_Init_Skip:
 	jrl	DSP_BytecodeInterpreter_Init_Join
 DSP_BytecodeInterpreter_Init_Skip2:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57180,7 +57180,7 @@ DSP_BytecodeInterpreter_Init_Join2:
 ; Exits by `jrl` to DSP_BytecodeInterpreter_CheckEnd (0x03C9CE).
 DSP_Bytecode_Op01_Groups5_Addr12:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57188,7 +57188,7 @@ DSP_Bytecode_Op01_Groups5_Addr12:
 	call	DSP_DispatchCommand
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57196,7 +57196,7 @@ DSP_Bytecode_Op01_Groups5_Addr12:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57207,7 +57207,7 @@ DSP_Bytecode_Op01_Groups5_Addr12:
 	jrl	DSP_BytecodeInterpreter_Init_Join3
 DSP_BytecodeInterpreter_Init_Loop2:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57215,7 +57215,7 @@ DSP_BytecodeInterpreter_Init_Loop2:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57254,7 +57254,7 @@ DSP_BytecodeInterpreter_Init_Loop2:
 	ld	xwa, (xsp+26)
 	inc	2, xwa
 	ld	(xsp+26), xwa
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57275,7 +57275,7 @@ DSP_BytecodeInterpreter_Init_Join3:
 ; block copy into consecutive DSP registers.  Exits to DSP_BytecodeInterpreter_CheckEnd.
 DSP_Bytecode_Op02_Groups3_Raw:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57283,7 +57283,7 @@ DSP_Bytecode_Op02_Groups3_Raw:
 	call	DSP_DispatchCommand
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57291,7 +57291,7 @@ DSP_Bytecode_Op02_Groups3_Raw:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57302,7 +57302,7 @@ DSP_Bytecode_Op02_Groups3_Raw:
 	jr	DSP_BytecodeInterpreter_Init_Join4
 DSP_BytecodeInterpreter_Init_Loop3:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57310,7 +57310,7 @@ DSP_BytecodeInterpreter_Init_Loop3:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57318,7 +57318,7 @@ DSP_BytecodeInterpreter_Init_Loop3:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57339,7 +57339,7 @@ DSP_BytecodeInterpreter_Init_Join4:
 ; byte), then a raw tail.  Accumulator at frame+0x0E.  Exits to CheckEnd.
 DSP_Bytecode_Op03_Addr16_RawTail:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57382,7 +57382,7 @@ DSP_Bytecode_Op03_Addr16_RawTail:
 	jrl	ugt, DSP_BytecodeInterpreter_CheckEnd
 DSP_BytecodeInterpreter_Init_Loop4:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57404,7 +57404,7 @@ DSP_BytecodeInterpreter_Init_Loop4:
 ; by all six handlers.
 DSP_Bytecode_Op04_CommandOnly:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57421,7 +57421,7 @@ DSP_Bytecode_Op05_Groups5_Masked:
 	; 158 instructions, of which 1 needed a spelling search because
 	; llvm-mc --disassemble refuses them (it can still ASSEMBLE them).
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57429,7 +57429,7 @@ DSP_Bytecode_Op05_Groups5_Masked:
 	call	DSP_DispatchCommand
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57437,7 +57437,7 @@ DSP_Bytecode_Op05_Groups5_Masked:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57451,7 +57451,7 @@ DSP_BytecodeInterpreter_Init_Loop5:
 	cp	(xwa), 8
 	jrl	nz, DSP_BytecodeInterpreter_Init_Skip3
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57459,7 +57459,7 @@ DSP_BytecodeInterpreter_Init_Loop5:
 	call	DSP_DispatchData
 	ld	qiz, hl
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57499,7 +57499,7 @@ DSP_BytecodeInterpreter_Init_Loop5:
 	ld	xwa, (xsp+26)
 	inc	2, xwa
 	ld	(xsp+26), xwa
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57509,7 +57509,7 @@ DSP_BytecodeInterpreter_Init_Loop5:
 	jrl	DSP_BytecodeInterpreter_Init_Join5
 DSP_BytecodeInterpreter_Init_Skip3:
 	ld	xwa, (xsp+26)
-	ldb_spi	c, 224
+	ld	c, (xwa+)
 	ld	(xsp+26), xwa
 	ld	a, c
 	extz	wa
@@ -57595,7 +57595,7 @@ DSP_Bytecode_Op0D_StateChange:
 ; group length > 1, falls into DSP_Bytecode_Op0E_DataLoop for the remaining bytes.
 DSP_Bytecode_Op0E_SendCommand:
 	ld xwa, (xsp + 26)
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 26), xwa
 	ld a, c
 	extz wa
@@ -57612,7 +57612,7 @@ DSP_Bytecode_Op0E_SendCommand:
 ; at (XSP+0x04) reaches the group length at (XSP+0x06).
 DSP_Bytecode_Op0E_DataLoop:
 	ld xwa, (xsp + 26)
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 26), xwa
 	ld a, c
 	extz wa
@@ -58286,7 +58286,7 @@ DSP_Op_Unknown_Error:
 ; No hardware access.  Fully decoded at 0x03CF07..0x03CF52.
 DSP_StreamDecode_3ByteWord:
 	ld xde, xwa
-	stb_dpi W, 0xE8
+	lda xwa, (xde+:1)
 	ld a, (xwa)
 	exts wa
 	exts xwa
@@ -58294,14 +58294,14 @@ DSP_StreamDecode_3ByteWord:
 	sla xwa, 0
 	and xwa, 0xFF000000
 	ld xhl, xwa
-	stb_dpi W, 0xE8
+	lda xwa, (xde+:1)
 	ld a, (xwa)
 	exts wa
 	exts xwa
 	ld xix, xwa
 	sla xix, 0
 	and xix, 0xFF0000
-	stb_dpi W, 0xE8
+	lda xwa, (xde+:1)
 	ld a, (xwa)
 	exts wa
 	exts xwa

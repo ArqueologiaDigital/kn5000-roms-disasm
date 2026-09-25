@@ -2673,9 +2673,9 @@ DrawIcons_Impl_RowLoop:
 	ld iy, 0:i3
 
 DrawIcons_Impl_ColLoop:
-	stb_dpi D, 0xf9
+	lda xix, (xiz+:2)
 	ld xwa, (xsp + 8)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 8), xwa
 	ld a, c
 	extz wa
@@ -3568,7 +3568,7 @@ DrawBitmapFile_Impl_LoadPalette:
 	ld xwa, 0:i3
 	ld a, (xhl + 2)
 	add xix, xwa
-	stl_dpi XIX, 0xe6
+	ld (xbc+), XIX
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	ld xde, (xsp + 12)
@@ -4066,7 +4066,7 @@ DrawString_Impl_VariableWidthLoop:
 
 DrawString_Impl_KerningLookup:
 	ld xwa, (xsp + 24)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 24), xwa
 	sub c, 0x20
 	extz bc

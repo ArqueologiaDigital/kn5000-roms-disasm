@@ -940,7 +940,7 @@ SndParam_ReadRegWord:
 	ld hl, 0:i3
 
 SndParam_ReadRegScanLoop:
-	cp_spiw DE, 0xe1
+	cp DE, (xwa+)
 	ret z
 	inc 1, hl
 	cp hl, 5:i3
@@ -2833,13 +2833,13 @@ SndParam_WidgetDispatch:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	jr SndParam_WidgetAppendTail
 
 SndParam_WidgetAppendType2:
@@ -2850,13 +2850,13 @@ SndParam_WidgetAppendType2:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 
 SndParam_WidgetAppendTail:
 	ld (xde), 0xff
@@ -2904,21 +2904,21 @@ SndParam_WidgetNotifyType1:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 8)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 9)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 10)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 11)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	jr SndParam_Widget1_AppendTail
 
 SndParam_Widget1_AppendType2:
@@ -2929,21 +2929,21 @@ SndParam_Widget1_AppendType2:
 	extz xde
 	add xde, xbc
 	ld a, (xiz + 4)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 5)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 6)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 7)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 8)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 9)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 10)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 	ld a, (xiz + 11)
-	lda_dpi XBC, 0xe8
+	ld (xde+), a
 
 SndParam_Widget1_AppendTail:
 	ld (xde), 0xff
@@ -3153,7 +3153,7 @@ SndParam_ClearHashTable:
 
 SndParam_ClearLoop:
 	ld xwa, 0:i3
-	stl_dpi XWA, 0xe6
+	ld (xbc+), XWA
 	cp xbc, xde
 	jr c, SndParam_ClearLoop
 	lda xde, (0x0380f8:24)

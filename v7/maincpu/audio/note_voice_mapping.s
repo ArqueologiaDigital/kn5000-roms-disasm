@@ -15596,13 +15596,13 @@ VoiceSlot_IterateAlloc_Block3:
 	ld	xiy, 0xce67
 	ld	xix, 0xcec7
 VoiceSlot_IterateAlloc_Block4:
-	ld_spiw	WA, 0xf5
+	ld	WA, (xiy+)
 	cp	w, 0x6b
 	jr	ugt, VoiceSlot_IterateAlloc_SetByte
 	add	w, 0xc
 VoiceSlot_IterateAlloc_SetByte:
 	ld	a, 0x40:opc
-	stw_dpi	WA, 0xf1
+	ld	(xix+), WA
 	djnz	xbc, VoiceSlot_IterateAlloc_Block4
 VoiceSlot_IterateAlloc_Return2:
 	ret
@@ -22527,7 +22527,7 @@ StoreDRAMInit_ReadBuf:
 StoreDRAMInit_ReadBuf2:
 	call	SeqBuf_VoiceMap_ReadByte
 	ld	xwa, (xsp + 8)
-	lda_dpi	XSP, 0xe0
+	ld	(xwa+), l
 	ld	(xsp + 8), xwa
 	inc	1, iz
 	cp	iz, 7:i3
@@ -22543,7 +22543,7 @@ StoreDRAMInit_ReadBuf2:
 StoreDRAMInit_ReadBuf3:
 	call	SeqBuf_VoiceMap_ReadByte
 	ld	XWA, (xsp + 0x0136)
-	lda_dpi	XSP, 0xe0
+	ld	(xwa+), l
 	stl_dri	XWA, 0xfd, 0x36, 0x01
 	inc	1, iz
 	cpw_sri_rm	IZ, 0xfd, 0x2e, 0x01
@@ -22583,8 +22583,8 @@ StoreDRAMInit_LoadDRAM:
 	ld	xde, xbc
 	lda	xbc, (xbc + 16)
 StoreDRAMInit_Block3:
-	ldb_spi	A, 0xec
-	lda_dpi	XBC, 0xe8
+	ld	A, (xhl+)
+	ld	(xde+), a
 	cp	xde, xbc
 	jr	c, StoreDRAMInit_Block3
 	ret
@@ -22593,8 +22593,8 @@ StoreDRAMInit_Block4:
 	ld	xde, xwa
 	lda	xhl, (xwa + 16)
 StoreDRAMInit_Block5:
-	ldb_spi	A, 0xe8
-	lda_dpi	XBC, 0xe4
+	ld	A, (xde+)
+	ld	(xbc+), a
 	cp	xde, xhl
 	jr	c, StoreDRAMInit_Block5
 	ret
@@ -22632,8 +22632,8 @@ SndParam_ApplyProgramChangeAsync:
 	ld	xde, (xsp + 2)
 	lda	xhl, (xwa + 17)
 ApplyProgramChangeAs_Block:
-	ldb_spi	A, 0xe4
-	lda_dpi	XBC, 0xe8
+	ld	A, (xbc+)
+	ld	(xde+), a
 	cp	xbc, xhl
 	jr	c, ApplyProgramChangeAs_Block
 ApplyProgramChangeAs_RestoreReg:
@@ -22713,8 +22713,8 @@ MidiRingBuf_WriteByte:
 	ld	xde, (xsp + 2)
 	lda	xhl, (xwa + 10)
 ApplyProgramChangeAs_Block2:
-	ldb_spi	A, 0xe4
-	lda_dpi	XBC, 0xe8
+	ld	A, (xbc+)
+	ld	(xde+), a
 	cp	xbc, xhl
 	jr	c, ApplyProgramChangeAs_Block2
 ApplyProgramChangeAs_RestoreReg2:
@@ -23799,7 +23799,7 @@ Param_SignExtendReturn_Return:
 	add	bc, bc
 	add	bc, 13
 	call	0xfd6b16
-	lda_dpi	xsp, 248
+	ld	(xiz+), l
 	ld	(xiz), 247
 	ldda32	xwa, (0xe0f7)
 	ld	bc, (xsp+0x4)
@@ -24545,7 +24545,7 @@ SendPartDataBlock_SetWord5:
 	lda	xwa, (0x1e0010:24)
 	ld	de, 0:i3
 SendPartDataBlock_Block10:
-	add_spiw	DE, 0xe1
+	add	DE, (xwa+)
 	djnz	xbc, SendPartDataBlock_Block10
 	cpl	de
 	ld	hl, de
@@ -25481,7 +25481,7 @@ SendPartDataBlock_SetWord7:
 	lda	xwa, (xbc + 16)
 	ld	hl, 0:i3
 SendPartDataBlock_Block11:
-	add_spiw	HL, 0xe1
+	add	HL, (xwa+)
 	djnz	xde, SendPartDataBlock_Block11
 	cpl	hl
 	stw_dri	HL, 0xe5, 0xa8, 0x72
@@ -25637,8 +25637,8 @@ HdaeRom_DataDispatch_Block:
 	ld	xbc, xwa
 	lda	xhl, (xwa + 16)
 HdaeRom_DataDispatch_Block2:
-	ldb_spi	A, 0xe4
-	lda_dpi	XBC, 0xe8
+	ld	A, (xbc+)
+	ld	(xde+), a
 	cp	xbc, xhl
 	jr	c, HdaeRom_DataDispatch_Block2
 	.byte 0x78, 0x3b, 0xfe
@@ -25708,8 +25708,8 @@ HdaeRom_AltHandler_Join:
 	ld	xbc, xwa
 	lda	xhl, (xwa + 16)
 HdaeRom_AltDispatch_Block:
-	ldb_spi	A, 0xe4
-	lda_dpi	XBC, 0xe8
+	ld	A, (xbc+)
+	ld	(xde+), a
 	cp	xbc, xhl
 	jr	c, HdaeRom_AltDispatch_Block
 	calr	SendPartDataBlock_SetWord7
@@ -26278,7 +26278,7 @@ ParseInt16_CheckMinus:
 ParseInt16_SkipSign:
 	inc	1, xhl
 ParseInt16_DigitLoop:
-	ldb_spi	E, 0xec
+	ld	E, (xhl+)
 	exts	de
 	ld	a, e
 	extz	wa
@@ -26322,7 +26322,7 @@ ParseInt32_CheckMinus:
 ParseInt32_SkipSign:
 	inc	1, xhl
 ParseInt32_DigitLoop:
-	ldb_spi	E, 0xec
+	ld	E, (xhl+)
 	exts	de
 	ld	a, e
 	extz	wa
@@ -26701,8 +26701,8 @@ String_Compare_Extend:
 	ld	xhl, xix
 	jr	Strncpy_Compare
 Strncpy_Block:
-	ldb_spi	A, 0xe8
-	lda_dpi	XBC, 0xf0
+	ld	A, (xde+)
+	ld	(xix+), a
 	dec	1, bc
 Strncpy_Compare:
 	cp	bc, 0:i3
@@ -26735,9 +26735,9 @@ SoundPreset_FindMatch_Helper:
 	and	de, 0x3
 	jr	z, Mem_Compare_LoadReg
 Mem_Compare_Block:
-	ldb_spi	L, 0xf0
+	ld	L, (xix+)
 	extz	hl
-	ldb_spi	A, 0xf4
+	ld	A, (xiy+)
 	extz	wa
 	sub	hl, wa
 	ret	nz
@@ -26749,8 +26749,8 @@ Mem_Compare_LoadReg:
 	srl	bc, 2
 	jr	z, Mem_Compare_MaskBits
 Mem_Compare_Block2:
-	ld_spil	XHL, 0xf2
-	ld_spil	XWA, 0xf6
+	ld	XHL, (xix+)
+	ld	XWA, (xiy+)
 	cp	xhl, xwa
 	jr	z, Mem_Compare_Block3
 	cp	hl, wa
@@ -26774,9 +26774,9 @@ Mem_Compare_MaskBits:
 	and	de, 0x3
 	ret	z
 Mem_Compare_Block4:
-	ldb_spi	L, 0xf0
+	ld	L, (xix+)
 	extz	hl
-	ldb_spi	A, 0xf4
+	ld	A, (xiy+)
 	extz	wa
 	sub	hl, wa
 	ret	nz
@@ -26825,8 +26825,8 @@ Strcat_CheckZero:
 	ld	xbc, (xsp + 8)
 	jr	Strcat_CheckZero2
 Strcat_Block:
-	ldb_spi	A, 0xe4
-	lda_dpi	XBC, 0xe8
+	ld	A, (xbc+)
+	ld	(xde+), a
 Strcat_CheckZero2:
 	cp	(xbc), 0x0
 	jr	nz, Strcat_Block
@@ -26894,7 +26894,7 @@ NumFormat_DivideAndC_Block:
 NumFormat_DivideAndC_Compare:
 	cp	ix, 0:i3
 	jr	z, NumFormat_DivideAndC_LoadAddr
-	stib_dpd	0xf4, 0x2d
+	ld	(-xiy), 0x2d
 NumFormat_DivideAndC_LoadAddr:
 	lda	xwa, (xiz + 18)
 	sub	xwa, xiy
@@ -26913,7 +26913,7 @@ NumFormat_DivideAndC_Data:
 NumFormat_DivideAndC_Data_Entry:
 	.byte	0x83, 0xf1
 	ret	z
-	cp_spib_im	236, 0
+	cp	(xhl+), 0
 	jr	nz, NumFormat_DivideAndC_Data_Entry
 	ld	xhl, 0:i3
 	ret
@@ -27148,7 +27148,7 @@ Memset:
 	and	de, 0x3
 	jr	z, Memset_LoadReg
 Memset_Block:
-	lda_dpi	XBC, 0xf0
+	ld	(xix+), a
 	sub	bc, 0x1
 	ret	z
 	djnz	xde, Memset_Block
@@ -27159,13 +27159,13 @@ Memset_LoadReg:
 	ld	w, a
 	ldw_erp	WA, 0xe2
 Memset_Block2:
-	stl_dpi	XWA, 0xf2
+	ld	(xix+), XWA
 	djnz	xbc, Memset_Block2
 Memset_MaskBits:
 	and	de, 0x3
 	ret	z
 Memset_Block3:
-	lda_dpi	XBC, 0xf0
+	ld	(xix+), a
 	djnz	xde, Memset_Block3
 	ret
 ClipBlit_Replace_Impl_Helper:

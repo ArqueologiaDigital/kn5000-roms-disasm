@@ -1673,7 +1673,7 @@ PerfMode_VolumeParam_Process_Return:
 	ld	xix, 3789
 	ld	a, 32:opc
 	ldw	bc, 27
-	lda_dpi xbc, 240
+	ld (xix+), a
 	djnz16 bc, -6
 	ld xiy, Str_VolumeEq2
 	ld	xix, 3797
@@ -2464,7 +2464,7 @@ Display_FillMemoryLoop:
 	ldw bc, 0xf
 
 Display_FillRegionLoop:
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	djnz xbc, Display_FillRegionLoop
 	popw wa
 	ret
@@ -7121,7 +7121,7 @@ PortConfig_Handler_0_Skip:
 	ld	xix, 3786
 	ldw	wa, 8224
 	ldw	bc, 15
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	pop	xix
 	popw	bc
@@ -7147,7 +7147,7 @@ PortConfig_Handler_0_Skip2:
 	ld	xix, 3669
 	ldw	bc, 96
 	xor	wa, wa
-	lda_dpi xbc, 240
+	ld (xix+), a
 	djnz16 bc, -6
 	pop xix
 	popw	bc
@@ -7382,7 +7382,7 @@ ScoopParam_ValueTable_Sub_Helper2:
 	push	xix
 	ld	xix, 3439
 	ldw	bc, 16
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	pop	xix
 	popw	bc
@@ -11635,7 +11635,7 @@ VoiceState_DataBlock2_Helper2:
 	xor	bc, bc
 	ld	c, 16:opc
 	ld	a, 16:opc
-	cp_spib a, 240
+	cp a, (xix+)
 	jrl z, VoiceState_DataBlock2_Code_Skip16
 	djnz16 bc, -9
 	jp	VoiceState_DataBlock2_0x534
@@ -12025,7 +12025,7 @@ SubCPU_ToneParamDisplay_Epilogue2:
 	ld	xix, 3789
 	ld	a, 32:opc
 	ldw	bc, 27
-	lda_dpi xbc, 240
+	ld (xix+), a
 	djnz16 bc, -6
 	ld xiy, Str_PanKeyShiftTuning
 	ld	a, (4380:16)
@@ -12052,7 +12052,7 @@ SubCPU_ToneParamDisplay_Skip3:
 	call	ParamDigit_CalrData
 	pop	xix
 	ld	a, (4480:16)
-	lda_dpi xbc, 240
+	ld (xix+), a
 	jp SubCPU_ToneParamDisplay_Join
 SubCPU_ToneParamDisplay_Skip4:
 	push	xix
@@ -12928,18 +12928,18 @@ PerfMode_ParamHandler_11_Skip56:
 	jp	SubCPU_ToneParamRet_0x8B4
 PerfMode_ParamHandler_11_Skip57:
 	ld	a, 32:opc
-	lda_dpi	xbc, 240
+	ld	(xix+), a
 	xor	a, a
-	lda_dpi	xbc, 240
+	ld	(xix+), a
 	ldb_d8	w, (0x0d43)
 	ld	a, (3396:16)
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	ret
 	pushw	bc
 	xor	wa, wa
 	ld	bc, 3:i3
 	ld	xix, 4457
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	popw	bc
 	ld	(4478:16), 1
@@ -12947,7 +12947,7 @@ PerfMode_ParamHandler_11_Skip57:
 	ld	(3952:16), a
 	ld	a, (3767:16)
 	ld	xix, 4457
-	lda_dpi	xbc, 240
+	ld	(xix+), a
 	push	xix
 	call	OscScope_Handler_7_Helper
 	pop	xix
@@ -12968,7 +12968,7 @@ PerfMode_ParamHandler_11_Join:
 	jrl	nz, PerfMode_ParamHandler_11_Skip58
 	inc	1, (4478:16)
 	ld	a, (3767:16)
-	lda_dpi	xbc, 240
+	ld	(xix+), a
 	jp	PerfMode_ParamHandler_11_Join
 PerfMode_ParamHandler_11_Skip58:
 	ld	a, (3952:16)
@@ -13043,7 +13043,7 @@ PerfMode_ParamHandler_11_Skip60:
 	extz	xix
 	add	xix, (4372:16)
 	xor	a, a
-	lda_dpi	xbc, 240
+	ld	(xix+), a
 	djnz16	bc, -6
 PerfMode_ParamHandler_11_Skip61:
 	jp	PerfMode_ParamHandler_11_Return8
@@ -13320,19 +13320,19 @@ OscScope_RenderBlock_Skip3:
 	ld	xix, 3669
 	ldw	bc, 16
 	xor	wa, wa
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
 	ld	xix, 3701
 	ldw	bc, 16
 	xor	wa, wa
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
 	ld	xix, 3733
 	ldw	bc, 16
 	xor	wa, wa
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
 	ld	xiy, 3669
@@ -13412,7 +13412,7 @@ OscScope_RenderBlock_Return:
 VoiceBank_ProcessCommand:
 	ld xix, 0xeb5
 	call VoiceBank_LoadLerpState
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	cp a, 0x81
 	jrl z, VoiceBank_CallAndReturn
 	cp a, 0x82
@@ -13429,7 +13429,7 @@ VoiceBank_CallAndLoop:
 	call VoiceBank_LoadLerpState
 	bit 7, a
 	jrl nz, VoiceBank_Ret
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	jp VoiceBank_CallAndLoop
 
 VoiceBank_Ret:
@@ -13676,14 +13676,14 @@ DisplayStr_BytecodeBlock_B:
 	ld	xix, 3786
 	ldw	wa, 8224
 	ldw	bc, 15
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ld	xiy, Str_Control
 	ld	xix, 3791
 	ld	bc, 7:i3
 	ldir85
 	ld	a, 32:opc
-	lda_dpi	xbc, 240
+	ld	(xix+), a
 	call	Display_UpdateRegion5
 	call	Display_BytecodeBlock_F_0x17C
 	call	Display_UpdateRegion3
@@ -13912,7 +13912,7 @@ DisplayStr_BytecodeBlock_D:
 	ldw	bc, 13
 	ldir85
 	ld	a, 32:opc
-	lda_dpi	xbc, 240
+	ld	(xix+), a
 	call	Display_UpdateRegion3
 	ret
 
@@ -13925,7 +13925,7 @@ DisplayStr_ClearRegion:
 	ld a, 0x20:opc
 
 DisplayStr_ClearLoop:
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	djnz xbc, DisplayStr_ClearLoop
 	pop xix
 	popw bc
@@ -13941,15 +13941,15 @@ DisplayStr_StyleSectionInit:
 	sla wa, 3
 	lda_dri XIY, 0x07, 0xf4, 0xe0
 	ldw wa, 0x2020
-	stw_dpi WA, 0xf1
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
+	ld (xix+), WA
 	ld bc, 4:i3
 	ldirw
 	ld a, 0x20:opc
 	ld bc, 3:i3
 
 DisplayStr_StyleClearLoop:
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	djnz xbc, DisplayStr_StyleClearLoop
 	call Display_UpdateRegion3
 	ret
@@ -13965,8 +13965,8 @@ DisplayStr_BytecodeBlock_E:
 	ld	bc, 4:i3
 	ldirw
 	ldw	wa, 8224
-	stw_dpi	wa, 241
-	stw_dpi	wa, 241
+	ld	(xix+), wa
+	ld	(xix+), wa
 	call	Display_UpdateRegion3
 	ret
 	; Byte data, 105 B.  Read by DisplayStr_BytecodeBlock_B (0xEFED12): `ld xiy, DisplayStr_StyleSectionNames`
@@ -14235,7 +14235,7 @@ Display_BytecodeBlock_F_Tbl4:
 	ldw	bc, 15
 	ld	xix, 0x0eca
 	ldw	wa, 8224
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
 	call	Display_UpdateRegion0
@@ -14244,7 +14244,7 @@ Display_BytecodeBlock_F_Tbl4:
 	ld	xix, 3796
 	push	xix
 	ldw	wa, 8224
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	pop	xix
 	cpdi16	(0x0d62), 0
@@ -14254,16 +14254,16 @@ Display_BytecodeBlock_F_Tbl4:
 	ldw_d16	wa, (0x0d62)
 	call	UIRender_DescriptorTable2
 	ld	xiy, 4481
-	ldb_spi	a, 244
-	lda_dpi	xbc, 240
+	ld	a, (xiy+)
+	ld	(xix+), a
 	cp	(xiy), 32
 	jrl	z, Display_BytecodeBlock_F_Skip11
-	ldb_spi	a, 244
-	lda_dpi	xbc, 240
+	ld	a, (xiy+)
+	ld	(xix+), a
 	cp	(xiy), 32
 	jrl	z, Display_BytecodeBlock_F_Skip11
-	ldb_spi	a, 244
-	lda_dpi	xbc, 240
+	ld	a, (xiy+)
+	ld	(xix+), a
 Display_BytecodeBlock_F_Skip11:
 	bitda	7, (0x0d64)
 	jrl	z, Display_BytecodeBlock_F_Return
@@ -14700,7 +14700,7 @@ ParamPopup_PartKeyShift_Skip:
 	pop	xix
 	inc	1, xix
 	ld	a, (4480:16)
-	lda_dpi xbc, 240
+	ld (xix+), a
 	ld xiy, 4481
 	ld	bc, 3:i3
 	ldir85
@@ -14741,7 +14741,7 @@ ParamPopup_PartTuning_Skip:
 	pop	xix
 	inc	1, xix
 	ld	a, (4480:16)
-	lda_dpi xbc, 240
+	ld (xix+), a
 	ld xiy, 4481
 	ld	bc, 3:i3
 	ldir85
@@ -15942,7 +15942,7 @@ ParamPopup_PartPedal_Epilogue:
 	ld	xix, 4462
 	xor	wa, wa
 	ld	bc, 3:i3
-	stw_dpi	wa, 241
+	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
 	ld	wa, (4472:16)
@@ -15994,7 +15994,7 @@ ParamPopup_PartPedal_Skip24:
 	push	xix
 	call	StringData_APCModeNames_0xAAC
 	pop	xix
-	lda_dpi xbc, 240
+	ld (xix+), a
 ParamPopup_PartPedal_Join:
 	push xix
 	call ParamPopup_PartPedal_Helper
@@ -16002,7 +16002,7 @@ ParamPopup_PartPedal_Join:
 	pop	xix
 	bit	7, a
 	jrl	nz, ParamPopup_PartPedal_Entry5
-	lda_dpi xbc, 240
+	ld (xix+), a
 	jp ParamPopup_PartPedal_Join
 ParamPopup_PartPedal_Entry5:
 	popw (0x1178:16)	; popw (0x1178)
@@ -16484,11 +16484,11 @@ Scoop_SidePanel_DrawOneSlot:
 	extz xhl
 	sll xhl, 2
 	add xiy, xhl
-	ldb_spi L, 0xf4
+	ld L, (xiy+)
 	ld (xwa + 4), l
-	ldb_spi L, 0xf4
+	ld L, (xiy+)
 	ld (xwa + 5), l
-	ldb_spi L, 0xf4
+	ld L, (xiy+)
 	ld (xwa + 6), l
 	ld l, (xiy)
 	ld (xwa + 7), l
@@ -16592,7 +16592,7 @@ Scoop_ButtonLabels_CopySlotData:
 
 Scoop_ButtonLabels_CopyLoop:
 	ld a, (xiy)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_CopyLoop
 	ld xix, 0x1192
@@ -16601,7 +16601,7 @@ Scoop_ButtonLabels_CopyLoop:
 
 Scoop_ButtonLabels_DrawRow1:
 	ld a, (xiy)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_DrawRow1
 	ld xiy, 0xe95
@@ -16609,7 +16609,7 @@ Scoop_ButtonLabels_DrawRow1:
 
 Scoop_ButtonLabels_DrawRow1_Alt:
 	ld a, (xiy)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_DrawRow1_Alt
 	pop xiy
@@ -16629,7 +16629,7 @@ Scoop_ButtonLabels_SetupPartButtons:
 
 Scoop_ButtonLabels_Part1:
 	ld a, (xiy)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_Part1
 	ld xiy, 0xe76
@@ -16637,7 +16637,7 @@ Scoop_ButtonLabels_Part1:
 
 Scoop_ButtonLabels_Part2:
 	ld a, (xiy)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_Part2
 	ld xiy, 0xe96
@@ -16645,7 +16645,7 @@ Scoop_ButtonLabels_Part2:
 
 Scoop_ButtonLabels_Part3:
 	ld a, (xiy)
-	lda_dpi XBC, 0xf0
+	ld (xix+), a
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_Part3
 	pop xiy
@@ -16665,7 +16665,7 @@ Scoop_ButtonLabels_DrawPitchLabels:
 
 Scoop_ButtonLabels_DrawPitchLabel1:
 	ld wa, (xiy)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_DrawPitchLabel1
 	pop xiy
@@ -16685,7 +16685,7 @@ Scoop_ButtonLabels_DrawAmpLabels:
 
 Scoop_ButtonLabels_DrawAmpLabel1:
 	ld wa, (xiy)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_DrawAmpLabel1
 	pop xiy
@@ -16705,7 +16705,7 @@ Scoop_ButtonLabels_DrawFilterLabels:
 
 Scoop_ButtonLabels_DrawFilterLabel1:
 	ld wa, (xiy)
-	stw_dpi WA, 0xf1
+	ld (xix+), WA
 	add xiy, 0x4
 	djnz8 c, Scoop_ButtonLabels_DrawFilterLabel1
 	pop xiy

@@ -597,7 +597,7 @@ MidiPkt_MatchParamInTable:
 	lda xix, (WidgetParam_Entry_018_0xCE:24)
 
 MidiPkt_MatchParamInTable_Loop:
-	ld_spil XHL, 0xea
+	ld XHL, (xde+)
 	cp xix, xhl
 	ret z
 	ld c, (xhl + 7)

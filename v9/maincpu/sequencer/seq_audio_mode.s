@@ -1395,15 +1395,15 @@ AccVoice_LoadAllChannelParams:
 	ret
 
 VoiceParams_LoadFiveSequential:
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	call Rhythm_SendByte
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	call Rhythm_SendByte
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	call Rhythm_SendByte
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	call Rhythm_SendByte
-	ldb_spi A, 0xf0
+	ld A, (xix+)
 	call Rhythm_SendByte
 	ret
 

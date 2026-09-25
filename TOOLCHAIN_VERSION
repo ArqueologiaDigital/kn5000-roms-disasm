@@ -871,6 +871,17 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   muldiv   1,565 lines, 113 files, 0 mismatches.  2 more sites were
 #            `div8rr h, e` (even field, no instruction; misframed pointer table
 #            in v10/v9 accompaniment_engine.s) and are now `.byte 0xcd, 0x56`.
+#   autoinc  2,363 lines, 135 files: every post-increment/pre-decrement pseudo
+#            (`ldb_spi a, 232`, `stw_dpi bc, 225` ...) is the real instruction
+#            with a `(R+)` / `(-R)` operand -- including the 909 swapped ones:
+#            `stb_dpi a, 224` -> `lda xbc, (xwa+:1)`, `lda_dpi xbc, 232` ->
+#            `ld (xde+), a` -- and the 113 `(backend mnemonic is swapped)` /
+#            `(unidasm)` annotations wave 2 appended are gone.  Bank registers
+#            spelled: `ld e, (xbc3+)`.  wsa1's MEM_XIX_PI2/PI4 bases resolved
+#            to `(xix+)`.  3 more sites had a register byte naming no register
+#            (0xa6/0xa2: misframed 0x00f6a6xx pointer tables in accompaniment_
+#            engine.s) and are `.byte` with a comment.  Gate 13/13; FOIL: one
+#            `ld (xde+), a` changed to `lda xbc, (xde+:1)` -> v10 1 byte differs.
 #
 # Two-decoder SYNTHETIC SWEEP (notes/wave3a-toolchain-probes/two_decoder_sweep.py:
 # 9,984 probes, every addressing prefix x every sub-opcode + the primary map;

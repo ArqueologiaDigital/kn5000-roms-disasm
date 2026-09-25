@@ -170,7 +170,7 @@ FDC_WaitReady_Skip8:
 FDC_WaitReady_Loop5:
 	calr	FDC_Wait_Ready_Timeout
 	calr	FDC_Read_Data
-	lda_dpi	xsp, 248
+	ld	(xiz+), l
 FDC_WaitReady_Loop6:
 	calr	FDC_Read_Status
 	bit	7, l
@@ -2213,7 +2213,7 @@ INT4_StoreResultBase:
 INT4_ReadResultLoop:
 	calr FDC_Wait_Status_Timeout
 	calr FDC_Read_Data
-	lda_dpi XSP, 0xf8
+	ld (xiz+), l
 
 INT4_WaitResultReady:
 	calr	FDC_Read_Status

@@ -8346,7 +8346,7 @@ AcTrkSw_Select:
 	ld	xwa, (xsp+10)
 	lda_rr	xwa, xwa, iz	; lda xwa, xwa+iz
 	ld	(xsp+14), xwa
-	stib_dpd	224, 0
+	ld	(-xwa), 0
 	ld	(xsp+14), xwa
 AcTrkSw_Select_Paint:
 	ld wa, (xsp + 8)
@@ -15147,7 +15147,7 @@ ScrollBar_CalcThumb:
 	calr IDCursorAdvance
 	ld xbc, (xhl)
 	ld XWA, (xsp + 0x013a)
-	stl_dpi XBC, 0xe2
+	ld (xwa+), XBC
 	push xbc
 	jr ScrollBar_ReturnAlt
 

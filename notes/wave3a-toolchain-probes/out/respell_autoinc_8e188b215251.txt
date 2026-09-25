@@ -1,0 +1,10 @@
+old llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap.da00420dba8d-a7ee33d5 sha256 a7ee33d53676
+new llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 a67c563269fc
+candidate sites: 2363; refused before assembly: 3
+verified identical: 2363   mismatched/unassemblable: 0
+  refused REFUSE:unnamed-register-byte     3
+      v10/maincpu/sequencer/accompaniment_engine.s:33827: cp_spiw	iz, 166
+      v7/maincpu/sequencer/accompaniment_engine.s:32509: cp_spdw	iz, 162
+      v9/maincpu/sequencer/accompaniment_engine.s:33827: cp_spiw	iz, 166
+files: 135
+wrote 2363 lines in 135 files

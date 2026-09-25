@@ -13128,7 +13128,7 @@ Serial1_TX_LoopBody:
 	bit 2, (SERIAL_1_VAR_1034:16)
 	jr nz, Serial1_TX_ViaRingBuf
 	ld xwa, (xsp + 6)
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 6), xwa
 	extz bc
 	ld wa, bc
@@ -13137,7 +13137,7 @@ Serial1_TX_LoopBody:
 
 Serial1_TX_ViaRingBuf:
 	ld xwa, (xsp + 6)
-	ldb_spi C, 0xE0
+	ld C, (xwa+)
 	ld (xsp + 6), xwa
 	extz bc
 	ld xwa, 0x1016

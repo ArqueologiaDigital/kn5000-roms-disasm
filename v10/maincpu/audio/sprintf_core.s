@@ -30,7 +30,7 @@ Sprintf_ParseFormatSpec:
 
 Sprintf_ReadFormatChar:
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -62,7 +62,7 @@ Sprintf_ReadFormatChar:
 
 Sprintf_StarWidth_Positive:
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -96,7 +96,7 @@ Sprintf_ParseWidthDigit:
 	ld (xsp + 8), wa
 	add (xsp + 8), bc
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -113,7 +113,7 @@ Sprintf_CheckPrecisionDot:
 	jr nz, Sprintf_CheckLengthH
 	setm 4, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -131,7 +131,7 @@ Sprintf_CheckPrecisionDot:
 
 Sprintf_StarPrecision_Applied:
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -145,7 +145,7 @@ Sprintf_ParsePrecisionDigit:
 	ld (xsp + 10), wa
 	add (xsp + 10), bc
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -162,7 +162,7 @@ Sprintf_CheckLengthH:
 	jr nz, Sprintf_CheckLengthL
 	setm 5, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -173,7 +173,7 @@ Sprintf_CheckLengthL:
 	jr nz, Sprintf_CheckLengthLL
 	setm 6, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -184,7 +184,7 @@ Sprintf_CheckLengthLL:
 	jr nz, Sprintf_DispatchType
 	setm 7, (xsp + 6)
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -318,7 +318,7 @@ Sprintf_String_PadLeftLoop:
 
 Sprintf_String_OutputChars:
 	ld xwa, (xsp + 16)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 16), xwa
 	exts bc
 	pushw bc
@@ -1081,7 +1081,7 @@ Sprintf_FormatFloat_Dispatch:
 
 Sprintf_MainLoop_ReadNext:
 	ld xwa, (xsp + 82)
-	ldb_spi C, 0xe0
+	ld C, (xwa+)
 	ld (xsp + 82), xwa
 	ldb_erp C, 0xf8
 	exts iz
@@ -1107,7 +1107,7 @@ Sprintf_IntToStr_Positive:
 
 Sprintf_IntToStr_DivLoop:
 	ld xwa, (xsp + 12)
-	stb_dpi A, 0xe0
+	lda xbc, (xwa+:1)
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
@@ -1135,7 +1135,7 @@ Sprintf_UIntToStr:
 
 Sprintf_UIntToStr_DivLoop:
 	ld xwa, (xsp + 12)
-	stb_dpi A, 0xe0
+	lda xbc, (xwa+:1)
 	ld (xsp + 4), xbc
 	ld (xsp + 12), xwa
 	ld xwa, xiz
@@ -1168,7 +1168,7 @@ Sprintf_HexToStr_TableSelected:
 	ld xde, (xsp + 8)
 
 Sprintf_HexToStr_Loop:
-	stb_dpi A, 0xec
+	lda xbc, (xhl+:1)
 	ld xwa, xde
 	and xwa, 0xf
 	add xwa, xix
@@ -1184,7 +1184,7 @@ Sprintf_OctalToStr:
 	ld xhl, (xsp + 4)
 
 Sprintf_OctalToStr_Loop:
-	stb_dpi A, 0xec
+	lda xbc, (xhl+:1)
 	ld xwa, xde
 	and xwa, 0x7
 	add xwa, 0x30
@@ -1687,7 +1687,7 @@ Sprintf_FormatFFixed_Entry:
 	ld	hl, 1:i3
 	ret
 Sprintf_FormatFFixed_Skip:
-	cp_spib_im	224, 48
+	cp	(xwa+), 48
 	jr	z, Sprintf_FormatFFixed_Entry
 	ld	hl, 0:i3
 	ret
@@ -2656,7 +2656,7 @@ Sprintf_DivByTen_Loop:
 	ld wa, (xbc)
 	extz xwa
 	div wa, 0xa
-	stw_dpi WA, 0xe5
+	ld (xbc+), WA
 	cp xbc, xde
 	jr c, Sprintf_DivByTen_Loop
 	ret
@@ -3080,7 +3080,7 @@ Sprintf_DataBlock_28E9:
 	ld	xhl, xix
 	jr	Sprintf_DataBlock_28E9_Join
 Sprintf_DataBlock_28E9_Loop:
-	stb_dpi	a, 240
+	lda	xbc, (xix+:1)
 	ld	wa, (xsp+8)
 	ld	(xbc), a
 Sprintf_DataBlock_28E9_Join:
@@ -3106,7 +3106,7 @@ Sprintf_StringLength:
 	ld wa, (xsp + 12)
 
 Sprintf_StrLen_ScanLoop:
-	cp_spdb A, 0xec
+	cp A, (-xhl)
 	jr z, Sprintf_StrLen_Return
 	djnz xbc, Sprintf_StrLen_ScanLoop
 
