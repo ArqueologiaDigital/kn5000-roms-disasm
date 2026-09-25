@@ -1131,36 +1131,53 @@ FuncNameStr_MssNameFunc:	aligned_string "MssNameFunc"
 FuncNameStr_PmNamingCheck:	aligned_string "PmNamingCheck"
 FuncNameStr_PmBankNamingCheck:	aligned_string "PmBankNamingCheck"
 FuncNameStr_PmBkNameFunc:	aligned_string "PmBkNameFunc"
+; ---------------------------------------------------------------------------
+; TOSHI CLASS INSTANCE-VARIABLE NAME TABLES (28, 0xED20C6-0xED27E3)
+; ---------------------------------------------------------------------------
+; Field +0x14 of each Toshi_Class_Table record points at one of these: the
+; names of the class's instance variables, ""-terminated, the strings
+; following each table in reverse order.  The first entry of every table is
+; commented with its class and variable count (checked against the class's
+; type-signature string by scripts/analysis/ext_lane_checks.py class).
+; !! The older labels on the tables are cited by ui_widgets/naka_master_style.c
+; and so are kept, but most name the WRONG class -- NakaParam_VariScreen is
+; NormScreen's table, NakaParam_RVariScreen is VariScreen's; the comment on
+; each first entry is authoritative.  New labels ClassVar_<class>_<var> name
+; the strings that had none.
+; ---------------------------------------------------------------------------
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED239D-0xED23AE (17 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near NakaParam_AcMstStyleAlpGridBox+7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2663-0xED267C (25 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=71% dist=9 near NakaParam_AcMstSong2GridBox+5
 NakaParam_VariScreen:
-	.long NakaParam_VariScreen_Empty
-NakaParam_VariScreen_Empty:	aligned_string ""
+	.long NakaParam_VariScreen_Empty	; NormScreen: 0 variables
+NakaParam_VariScreen_Empty:
+	aligned_string ""
 NakaParam_RVariScreen:
-	.byte 0x32, 0x21, 0xed, 0x00
-ParamStr_Table_08:
-	.long ParamStr08_func
-	.long ParamStr08_font
-	.long ParamStr08_fontcolor
-	.long ParamStr08_page
-	.long ParamStr08_varisupart
+	.long ClassVar_VariScreen_func	; VariScreen: 9 variables
+	.long ClassVar_VariScreen_font
+	.long ClassVar_VariScreen_fontcolor
+	.long ClassVar_VariScreen_page
+	.long ClassVar_VariScreen_part
+	.long ClassVar_VariScreen_varisu
 	.long ParamStr08_nowswno
 	.long ParamStr08_nowvari
 	.long ParamStr08_oldvari
 	.long ParamStr08_Empty
-ParamStr08_Empty:	aligned_string ""
-ParamStr08_oldvari:	aligned_string "oldvari"
-ParamStr08_nowvari:	aligned_string "nowvari"
+ParamStr08_Empty:
+	aligned_string ""
+ParamStr08_oldvari:
+	aligned_string "oldvari"
+ParamStr08_nowvari:
+	aligned_string "nowvari"
 ParamStr08_nowswno:
 	aligned_string "nowswno"
-	aligned_string "varisu"
-	aligned_string "part"
-	aligned_string "page"
-	aligned_string "fontcolor"
-	aligned_string "font"
-	aligned_string "func"
-
-
+ClassVar_VariScreen_varisu:	aligned_string "varisu"
+ClassVar_VariScreen_part:	aligned_string "part"
+ClassVar_VariScreen_page:	aligned_string "page"
+ClassVar_VariScreen_fontcolor:	aligned_string "fontcolor"
+ClassVar_VariScreen_font:	aligned_string "font"
+ClassVar_VariScreen_func:	aligned_string "func"
 ParamStr_Table_09:
-	.long ParamStr09_func
+	.long ParamStr09_func	; RVariScreen: 9 variables
 	.long ParamStr09_font
 	.long ParamStr09_fontcolor
 	.long ParamStr09_page
@@ -1170,159 +1187,219 @@ ParamStr_Table_09:
 	.long ParamStr09_nowvari
 	.long ParamStr09_oldvari
 	.long ParamStr09_Empty
-ParamStr09_Empty:	aligned_string ""
-ParamStr09_oldvari:	aligned_string "oldvari"
-ParamStr09_nowvari:	aligned_string "nowvari"
-ParamStr09_nowswno:	aligned_string "nowswno"
-ParamStr09_varisu:	aligned_string "varisu"
-ParamStr09_part:	aligned_string "part"
-ParamStr09_page:	aligned_string "page"
-ParamStr09_fontcolor:	aligned_string "fontcolor"
-ParamStr09_font:	aligned_string "font"
-ParamStr09_func:	aligned_string "func"
+ParamStr09_Empty:
+	aligned_string ""
+ParamStr09_oldvari:
+	aligned_string "oldvari"
+ParamStr09_nowvari:
+	aligned_string "nowvari"
+ParamStr09_nowswno:
+	aligned_string "nowswno"
+ParamStr09_varisu:
+	aligned_string "varisu"
+ParamStr09_part:
+	aligned_string "part"
+ParamStr09_page:
+	aligned_string "page"
+ParamStr09_fontcolor:
+	aligned_string "fontcolor"
+ParamStr09_font:
+	aligned_string "font"
+ParamStr09_func:
+	aligned_string "func"
 NakaParam_AcChordBox:
-	.long NakaParam_AcChordBox_Empty
-NakaParam_AcChordBox_Empty:	aligned_string ""
+	.long NakaParam_AcChordBox_Empty	; TransposeBox: 0 variables
+NakaParam_AcChordBox_Empty:
+	aligned_string ""
 NakaParam_AcFreeSplitBox:
-	.long NakaParam_AcFreeSplitBox_Empty
-NakaParam_AcFreeSplitBox_Empty:	aligned_string ""
+	.long NakaParam_AcFreeSplitBox_Empty	; ChordBox: 0 variables
+NakaParam_AcFreeSplitBox_Empty:
+	aligned_string ""
 NakaParam_AcBkNoBox:
-	.long NakaParam_AcBkNoBox_Empty
-NakaParam_AcBkNoBox_Empty:	aligned_string ""
+	.long NakaParam_AcBkNoBox_Empty	; FreeSplitBox: 0 variables
+NakaParam_AcBkNoBox_Empty:
+	aligned_string ""
 NakaParam_AcPmBkNoBox:
-	.long NakaParam_AcPmBkNoBox_Empty
-NakaParam_AcPmBkNoBox_Empty:	aligned_string ""
+	.long NakaParam_AcPmBkNoBox_Empty	; BkNoBox: 0 variables
+NakaParam_AcPmBkNoBox_Empty:
+	aligned_string ""
 NakaParam_PmBankScreen:
-	.long NakaParam_PmBankScreen_Empty
-NakaParam_PmBankScreen_Empty:	aligned_string ""
+	.long NakaParam_PmBankScreen_Empty	; PmBkNoBox: 0 variables
+NakaParam_PmBankScreen_Empty:
+	aligned_string ""
 ParamStr_Table_10:
-	.long ParamStr10_func
+	.long ParamStr10_func	; PmBankScreen: 6 variables
 	.long ParamStr10_font
 	.long ParamStr10_fontcolor
 	.long ParamStr10_page
 	.long ParamStr10_nowbank
 	.long ParamStr10_oldbank
 	.long ParamStr10_Empty
-ParamStr10_Empty:	aligned_string ""
-ParamStr10_oldbank:	aligned_string "oldbank"
-ParamStr10_nowbank:	aligned_string "nowbank"
-ParamStr10_page:	aligned_string "page"
-ParamStr10_fontcolor:	aligned_string "fontcolor"
-ParamStr10_font:	aligned_string "font"
-ParamStr10_func:	aligned_string "func"
+ParamStr10_Empty:
+	aligned_string ""
+ParamStr10_oldbank:
+	aligned_string "oldbank"
+ParamStr10_nowbank:
+	aligned_string "nowbank"
+ParamStr10_page:
+	aligned_string "page"
+ParamStr10_fontcolor:
+	aligned_string "fontcolor"
+ParamStr10_font:
+	aligned_string "font"
+ParamStr10_func:
+	aligned_string "func"
 ParamStr_Table_11:
-	.long ParamStr11_func
+	.long ParamStr11_func	; AcPmBkEditBox: 2 variables
 	.long ParamStr11_data
 	.long ParamStr11_Empty
-ParamStr11_Empty:	aligned_string ""
-ParamStr11_data:	aligned_string "data"
-ParamStr11_func:	aligned_string "func"
+ParamStr11_Empty:
+	aligned_string ""
+ParamStr11_data:
+	aligned_string "data"
+ParamStr11_func:
+	aligned_string "func"
 ParamStr_Table_12:
-	.long ParamStr12_func
+	.long ParamStr12_func	; MsaModeScreen: 5 variables
 	.long ParamStr12_font
 	.long ParamStr12_fontcolor
 	.long ParamStr12_newmsamode
 	.long ParamStr12_oldmsamode
 	.long ParamStr12_Empty
-ParamStr12_Empty:	aligned_string ""
-ParamStr12_oldmsamode:	aligned_string "oldmsamode"
-ParamStr12_newmsamode:	aligned_string "newmsamode"
-ParamStr12_fontcolor:	aligned_string "fontcolor"
-ParamStr12_font:	aligned_string "font"
-ParamStr12_func:	aligned_string "func"
-
-
+ParamStr12_Empty:
+	aligned_string ""
+ParamStr12_oldmsamode:
+	aligned_string "oldmsamode"
+ParamStr12_newmsamode:
+	aligned_string "newmsamode"
+ParamStr12_fontcolor:
+	aligned_string "fontcolor"
+ParamStr12_font:
+	aligned_string "font"
+ParamStr12_func:
+	aligned_string "func"
 ParamStr_Table_13:
-	.long ParamStr13_func
+	.long ParamStr13_func	; PmemModeBox: 5 variables
 	.long ParamStr13_font
 	.long ParamStr13_fontcolo
 	.long ParamStr13_newpmemmode
 	.long ParamStr13_oldpmemmode
 	.long ParamStr13_Empty
-ParamStr13_Empty:	aligned_string ""
-ParamStr13_oldpmemmode:	aligned_string "oldpmemmode"
-ParamStr13_newpmemmode:	aligned_string "newpmemmode"
-ParamStr13_fontcolo:	aligned_string "fontcolo"
-ParamStr13_font:	aligned_string "font"
-ParamStr13_func:	aligned_string "func"
+ParamStr13_Empty:
+	aligned_string ""
+ParamStr13_oldpmemmode:
+	aligned_string "oldpmemmode"
+ParamStr13_newpmemmode:
+	aligned_string "newpmemmode"
+ParamStr13_fontcolo:
+	aligned_string "fontcolo"
+ParamStr13_font:
+	aligned_string "font"
+ParamStr13_func:
+	aligned_string "func"
 NakaParam_IvPmemWindowPageCtl:
-	.long NakaParam_IvPmemWinPg_page
+	.long NakaParam_IvPmemWinPg_page	; IvWindowPageControl: 1 variable
 	.long NakaParam_IvPmemWinPg_Empty
-NakaParam_IvPmemWinPg_Empty:	aligned_string ""
-NakaParam_IvPmemWinPg_page:	aligned_string "page"
+NakaParam_IvPmemWinPg_Empty:
+	aligned_string ""
+NakaParam_IvPmemWinPg_page:
+	aligned_string "page"
 NakaParam_IvMstStyleWindowPgCtl:
-	.long NakaParam_IvMstStyleWinPg_page
+	.long NakaParam_IvMstStyleWinPg_page	; IvPmemWindowPageCtl: 1 variable
 	.long NakaParam_IvMstStyleWinPg_Empty
-NakaParam_IvMstStyleWinPg_Empty:	aligned_string ""
-NakaParam_IvMstStyleWinPg_page:	aligned_string "page"
+NakaParam_IvMstStyleWinPg_Empty:
+	aligned_string ""
+NakaParam_IvMstStyleWinPg_page:
+	aligned_string "page"
 NakaParam_AcTchSensGridBox:
-	.long NakaParam_AcTchSens_page
+	.long NakaParam_AcTchSens_page	; IvMstStyleWindowPgCtl: 1 variable
 	.long NakaParam_AcTchSens_Empty
-NakaParam_AcTchSens_Empty:	aligned_string ""
-NakaParam_AcTchSens_page:	aligned_string "page"
+NakaParam_AcTchSens_Empty:
+	aligned_string ""
+NakaParam_AcTchSens_page:
+	aligned_string "page"
 ParamStr_Table_14:
-	.long ParamStr14_fixedcol
+	.long ParamStr14_fixedcol	; AcTchSensGridBox: 3 variables
 	.long ParamStr14_fixedrow
 	.long ParamStr14_func
 	.long ParamStr14_Empty
-ParamStr14_Empty:	aligned_string ""
-ParamStr14_func:	aligned_string "func"
-ParamStr14_fixedrow:	aligned_string "fixedrow"
-ParamStr14_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr14_Empty:
+	aligned_string ""
+ParamStr14_func:
+	aligned_string "func"
+ParamStr14_fixedrow:
+	aligned_string "fixedrow"
+ParamStr14_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_15:
-	.long ParamStr15_fixedcol
+	.long ParamStr15_fixedcol	; AcFSWAssGridBox: 3 variables
 	.long ParamStr15_fixedrow
 	.long ParamStr15_func
 	.long ParamStr15_Empty
-ParamStr15_Empty:	aligned_string ""
-ParamStr15_func:	aligned_string "func"
-ParamStr15_fixedrow:	aligned_string "fixedrow"
-ParamStr15_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr15_Empty:
+	aligned_string ""
+ParamStr15_func:
+	aligned_string "func"
+ParamStr15_fixedrow:
+	aligned_string "fixedrow"
+ParamStr15_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_16:
-	.long ParamStr16_fixedcol
+	.long ParamStr16_fixedcol	; AcPmExpFilterGridBox: 3 variables
 	.long ParamStr16_fixedrow
 	.long ParamStr16_func
 	.long ParamStr16_Empty
-ParamStr16_Empty:	aligned_string ""
-ParamStr16_func:	aligned_string "func"
-ParamStr16_fixedrow:	aligned_string "fixedrow"
-ParamStr16_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr16_Empty:
+	aligned_string ""
+ParamStr16_func:
+	aligned_string "func"
+ParamStr16_fixedrow:
+	aligned_string "fixedrow"
+ParamStr16_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_17:
-	.long ParamStr17_fixedcol
+	.long ParamStr17_fixedcol	; AcDispTimeSetGridBox: 3 variables
 	.long ParamStr17_fixedrow
 	.long ParamStr17_func
 	.long ParamStr17_Empty
-ParamStr17_Empty:	aligned_string ""
-ParamStr17_func:	aligned_string "func"
-ParamStr17_fixedrow:	aligned_string "fixedrow"
-ParamStr17_fixedcol:	aligned_string "fixedcol"
+ParamStr17_Empty:
+	aligned_string ""
+ParamStr17_func:
+	aligned_string "func"
+ParamStr17_fixedrow:
+	aligned_string "fixedrow"
+ParamStr17_fixedcol:
+	aligned_string "fixedcol"
 NakaParam_AcMstStyleAlpGridBox:
-	.byte 0x2e, 0x24, 0xed, 0x00, 0x24, 0x24, 0xed, 0x00, 0x1e, 0x24, 0xed, 0x00, 0x16, 0x24, 0xed, 0x00
-	.byte 0x0a, 0x24, 0xed, 0x00, 0xfe, 0x23, 0xed, 0x00, 0xee, 0x23, 0xed, 0x00, 0xe2, 0x23, 0xed, 0x00
-	.byte 0xd2, 0x23, 0xed, 0x00, 0xc4, 0x23, 0xed, 0x00, 0xc2, 0x23, 0xed, 0x00
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED239D-0xED23AE (17 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near NakaParam_AcMstStyleAlpGridBox+7
+	.long ClassVar_AcMstSugAlpGridBox_fixedcol	; AcMstSugAlpGridBox: 10 variables
+	.long ClassVar_AcMstSugAlpGridBox_fixedrow
+	.long ClassVar_AcMstSugAlpGridBox_func
+	.long ClassVar_AcMstSugAlpGridBox_nowalph
+	.long ClassVar_AcMstSugAlpGridBox_nowalphtop
+	.long ClassVar_AcMstSugAlpGridBox_nowalphdtno
+	.long MstStyleAlpGrid_nowalphmaxpage
+	.long MstStyleAlpGrid_nowalphpage
+	.long MstStyleAlpGrid_nowalphselsong
+	.long MstStyleAlpGrid_nowttlselsong
+	.long MstStyleAlpGrid_Empty
 MstStyleAlpGrid_Empty:
 	aligned_string ""
-MstStyleAlpGrid_nowttlselsong:	aligned_string "nowttlselsong"
-MstStyleAlpGrid_nowalphselsong:	aligned_string "nowalphselsong"
-MstStyleAlpGrid_nowalphpage:	aligned_string "nowalphpage"
-MstStyleAlpGrid_nowalphmaxpage:	aligned_string "nowalphmaxpage"
-	aligned_string "nowalphdtno"
-	aligned_string "nowalphtop"
-	aligned_string "nowalph"
-	aligned_string "func"
-	aligned_string "fixedrow"
-	aligned_string "fixedcol"
-
-
+MstStyleAlpGrid_nowttlselsong:
+	aligned_string "nowttlselsong"
+MstStyleAlpGrid_nowalphselsong:
+	aligned_string "nowalphselsong"
+MstStyleAlpGrid_nowalphpage:
+	aligned_string "nowalphpage"
+MstStyleAlpGrid_nowalphmaxpage:
+	aligned_string "nowalphmaxpage"
+ClassVar_AcMstSugAlpGridBox_nowalphdtno:	aligned_string "nowalphdtno"
+ClassVar_AcMstSugAlpGridBox_nowalphtop:	aligned_string "nowalphtop"
+ClassVar_AcMstSugAlpGridBox_nowalph:	aligned_string "nowalph"
+ClassVar_AcMstSugAlpGridBox_func:	aligned_string "func"
+ClassVar_AcMstSugAlpGridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstSugAlpGridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_18:
-	.long ParamStr18_fixedcol
+	.long ParamStr18_fixedcol	; AcMstStyleAlpGridBox: 8 variables
 	.long ParamStr18_fixedrow
 	.long ParamStr18_func
 	.long ParamStr18_nowalph
@@ -1331,52 +1408,68 @@ ParamStr_Table_18:
 	.long ParamStr18_nowalphmaxpage
 	.long ParamStr18_nowalphpage
 	.long ParamStr18_Empty
-ParamStr18_Empty:	aligned_string ""
-ParamStr18_nowalphpage:	aligned_string "nowalphpage"
-ParamStr18_nowalphmaxpage:	aligned_string "nowalphmaxpage"
-ParamStr18_nowalphdtno:	aligned_string "nowalphdtno"
-ParamStr18_nowalphtop:	aligned_string "nowalphtop"
-ParamStr18_nowalph:	aligned_string "nowalph"
-ParamStr18_func:	aligned_string "func"
-ParamStr18_fixedrow:	aligned_string "fixedrow"
-ParamStr18_fixedcol:	aligned_string "fixedcol"
+ParamStr18_Empty:
+	aligned_string ""
+ParamStr18_nowalphpage:
+	aligned_string "nowalphpage"
+ParamStr18_nowalphmaxpage:
+	aligned_string "nowalphmaxpage"
+ParamStr18_nowalphdtno:
+	aligned_string "nowalphdtno"
+ParamStr18_nowalphtop:
+	aligned_string "nowalphtop"
+ParamStr18_nowalph:
+	aligned_string "nowalph"
+ParamStr18_func:
+	aligned_string "func"
+ParamStr18_fixedrow:
+	aligned_string "fixedrow"
+ParamStr18_fixedcol:
+	aligned_string "fixedcol"
 NakaParam_AcMstStyle1SubGridBox:
-	.byte 0x16, 0x25, 0xed, 0x00
-ParamStr_Table_19:
-	.long ParamStr19_fixedcol
+	.long ClassVar_AcMstStyle1GridBox_fixedcol	; AcMstStyle1GridBox: 6 variables
+	.long ClassVar_AcMstStyle1GridBox_fixedrow
 	.long ParamStr19_func
 	.long ParamStr19_nowstylectgdtno
 	.long ParamStr19_nowstylectgmaxpage
 	.long ParamStr19_nowstylectgpage
 	.long ParamStr19_Empty
-ParamStr19_Empty:	aligned_string ""
-ParamStr19_nowstylectgpage:	aligned_string "nowstylectgpage"
-ParamStr19_nowstylectgmaxpage:	aligned_string "nowstylectgmaxpage"
-ParamStr19_nowstylectgdtno:	aligned_string "nowstylectgdtno"
-ParamStr19_func:	aligned_string "func"
-	aligned_string "fixedrow"
-	aligned_string "fixedcol"
-
-
+ParamStr19_Empty:
+	aligned_string ""
+ParamStr19_nowstylectgpage:
+	aligned_string "nowstylectgpage"
+ParamStr19_nowstylectgmaxpage:
+	aligned_string "nowstylectgmaxpage"
+ParamStr19_nowstylectgdtno:
+	aligned_string "nowstylectgdtno"
+ParamStr19_func:
+	aligned_string "func"
+ClassVar_AcMstStyle1GridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstStyle1GridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_20:
-	.long ParamStr20_fixedcol
+	.long ParamStr20_fixedcol	; AcMstStyle1SubGridBox: 6 variables
 	.long ParamStr20_fixedrow
 	.long ParamStr20_func
 	.long ParamStr20_nowstylesubctgdtno
 	.long ParamStr20_nowstylesubctgmaxpage
 	.long ParamStr20_nowstylesubctgpage
 	.long ParamStr20_Empty
-ParamStr20_Empty:	aligned_string ""
-ParamStr20_nowstylesubctgpage:	aligned_string "nowstylesubctgpage"
-ParamStr20_nowstylesubctgmaxpage:	aligned_string "nowstylesubctgmaxpage"
-ParamStr20_nowstylesubctgdtno:	aligned_string "nowstylesubctgdtno"
-ParamStr20_func:	aligned_string "func"
-ParamStr20_fixedrow:	aligned_string "fixedrow"
-ParamStr20_fixedcol:	aligned_string "fixedcol"
-
-
+ParamStr20_Empty:
+	aligned_string ""
+ParamStr20_nowstylesubctgpage:
+	aligned_string "nowstylesubctgpage"
+ParamStr20_nowstylesubctgmaxpage:
+	aligned_string "nowstylesubctgmaxpage"
+ParamStr20_nowstylesubctgdtno:
+	aligned_string "nowstylesubctgdtno"
+ParamStr20_func:
+	aligned_string "func"
+ParamStr20_fixedrow:
+	aligned_string "fixedrow"
+ParamStr20_fixedcol:
+	aligned_string "fixedcol"
 ParamStr_Table_21:
-	.long ParamStr21_fixedcol
+	.long ParamStr21_fixedcol	; AcMstStyle2GridBox: 10 variables
 	.long ParamStr21_fixedrow
 	.long ParamStr21_func
 	.long ParamStr21_nowstylesubctgdtno
@@ -1387,34 +1480,52 @@ ParamStr_Table_21:
 	.long ParamStr21_nowstylesubsubdtno1
 	.long ParamStr21_nowstylesubsubdtno2
 	.long ParamStr21_Empty
-ParamStr21_Empty:	aligned_string ""
-ParamStr21_nowstylesubsubdtno2:	aligned_string "nowstylesubsubdtno2"
-ParamStr21_nowstylesubsubdtno1:	aligned_string "nowstylesubsubdtno1"
-ParamStr21_nowstyle:	aligned_string "nowstyle"
-ParamStr21_nowstylesubctg:	aligned_string "nowstylesubctg"
-ParamStr21_nowstylesubctgpage:	aligned_string "nowstylesubctgpage"
-ParamStr21_nowstylesubctgmaxpage:	aligned_string "nowstylesubctgmaxpage"
-ParamStr21_nowstylesubctgdtno:	aligned_string "nowstylesubctgdtno"
-ParamStr21_func:	aligned_string "func"
-ParamStr21_fixedrow:	aligned_string "fixedrow"
-ParamStr21_fixedcol:	aligned_string "fixedcol"
-NakaParam_AcMstSong2GridBox:
-	.byte 0xbe, 0x26, 0xed, 0x00, 0xb4, 0x26, 0xed, 0x00, 0xae, 0x26, 0xed, 0x00, 0x9e, 0x26, 0xed, 0x00
-	.byte 0x8c, 0x26, 0xed, 0x00, 0x7c, 0x26, 0xed, 0x00, 0x7a, 0x26, 0xed, 0x00, 0x00, 0xff
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED2663-0xED267C (25 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=71% dist=9 near NakaParam_AcMstSong2GridBox+5
-MstSong2Grid_nowsongctgpage:	aligned_string "nowsongctgpage"
-MstSong2Grid_nowsongctgmaxpage:	aligned_string "nowsongctgmaxpage"
-MstSong2Grid_nowsongctgdtno:	aligned_string "nowsongctgdtno"
-MstSong2Grid_func:	aligned_string "func"
+ParamStr21_Empty:
+	aligned_string ""
+ParamStr21_nowstylesubsubdtno2:
+	aligned_string "nowstylesubsubdtno2"
+ParamStr21_nowstylesubsubdtno1:
+	aligned_string "nowstylesubsubdtno1"
+ParamStr21_nowstyle:
+	aligned_string "nowstyle"
+ParamStr21_nowstylesubctg:
+	aligned_string "nowstylesubctg"
+ParamStr21_nowstylesubctgpage:
+	aligned_string "nowstylesubctgpage"
+ParamStr21_nowstylesubctgmaxpage:
+	aligned_string "nowstylesubctgmaxpage"
+ParamStr21_nowstylesubctgdtno:
+	aligned_string "nowstylesubctgdtno"
+ParamStr21_func:
+	aligned_string "func"
+ParamStr21_fixedrow:
 	aligned_string "fixedrow"
+ParamStr21_fixedcol:
 	aligned_string "fixedcol"
-
-
+NakaParam_AcMstSong2GridBox:
+	.long ClassVar_AcMstSong1GridBox_fixedcol	; AcMstSong1GridBox: 6 variables
+	.long ClassVar_AcMstSong1GridBox_fixedrow
+	.long MstSong2Grid_func
+	.long MstSong2Grid_nowsongctgdtno
+	.long MstSong2Grid_nowsongctgmaxpage
+	.long MstSong2Grid_nowsongctgpage
+	.long ClassVar_AcMstSong1GridBox_End
+ClassVar_AcMstSong1GridBox_End:	aligned_string ""
+MstSong2Grid_nowsongctgpage:
+	aligned_string "nowsongctgpage"
+MstSong2Grid_nowsongctgmaxpage:
+	aligned_string "nowsongctgmaxpage"
+MstSong2Grid_nowsongctgdtno:
+	aligned_string "nowsongctgdtno"
+MstSong2Grid_func:
+	aligned_string "func"
+ClassVar_AcMstSong1GridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstSong1GridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_22:
-	.long ParamStr22_fixedcol
-	.long ParamStr22_fixedrow
-	.long ParamStr22_func
-	.long ParamStr22_nowsongsubctgdtno
+	.long ClassVar_AcMstSong2GridBox_fixedcol	; AcMstSong2GridBox: 10 variables
+	.long ClassVar_AcMstSong2GridBox_fixedrow
+	.long ClassVar_AcMstSong2GridBox_func
+	.long ClassVar_AcMstSong2GridBox_nowsongsubctgdtno
 	.long ParamStr22_nowsongsubctgmaxpage
 	.long ParamStr22_nowsongsubctgpage
 	.long ParamStr22_nowsongsubctg
@@ -1422,40 +1533,53 @@ ParamStr_Table_22:
 	.long ParamStr22_nowsongsubsubdtno1
 	.long ParamStr22_nowsongsubsubdtno2
 	.long ParamStr22_Empty
-ParamStr22_Empty:	aligned_string ""
-ParamStr22_nowsongsubsubdtno2:	aligned_string "nowsongsubsubdtno2"
-ParamStr22_nowsongsubsubdtno1:	aligned_string "nowsongsubsubdtno1"
-ParamStr22_nowsong:	aligned_string "nowsong"
-ParamStr22_nowsongsubctg:	aligned_string "nowsongsubctg"
-ParamStr22_nowsongsubctgpage:	aligned_string "nowsongsubctgpage"
+ParamStr22_Empty:
+	aligned_string ""
+ParamStr22_nowsongsubsubdtno2:
+	aligned_string "nowsongsubsubdtno2"
+ParamStr22_nowsongsubsubdtno1:
+	aligned_string "nowsongsubsubdtno1"
+ParamStr22_nowsong:
+	aligned_string "nowsong"
+ParamStr22_nowsongsubctg:
+	aligned_string "nowsongsubctg"
+ParamStr22_nowsongsubctgpage:
+	aligned_string "nowsongsubctgpage"
 ParamStr22_nowsongsubctgmaxpage:
 	aligned_string "nowsongsubctgmaxpage"
-	aligned_string "nowsongsubctgdtno"
-	aligned_string "func"
-	aligned_string "fixedrow"
-	aligned_string "fixedcol"
-
-
+ClassVar_AcMstSong2GridBox_nowsongsubctgdtno:	aligned_string "nowsongsubctgdtno"
+ClassVar_AcMstSong2GridBox_func:	aligned_string "func"
+ClassVar_AcMstSong2GridBox_fixedrow:	aligned_string "fixedrow"
+ClassVar_AcMstSong2GridBox_fixedcol:	aligned_string "fixedcol"
 ParamStr_Table_23:
-	.long ParamStr23_func
+	.long ParamStr23_func	; SineWaveScreen: 5 variables
 	.long ParamStr23_font
 	.long ParamStr23_fontcolor
 	.long ParamStr23_nowswno
 	.long ParamStr23_oldswno
 	.long ParamStr23_Empty
-ParamStr23_Empty:	aligned_string ""
-ParamStr23_oldswno:	aligned_string "oldswno"
-ParamStr23_nowswno:	aligned_string "nowswno"
-ParamStr23_fontcolor:	aligned_string "fontcolor"
-ParamStr23_font:	aligned_string "font"
-ParamStr23_func:	aligned_string "func"
+ParamStr23_Empty:
+	aligned_string ""
+ParamStr23_oldswno:
+	aligned_string "oldswno"
+ParamStr23_nowswno:
+	aligned_string "nowswno"
+ParamStr23_fontcolor:
+	aligned_string "fontcolor"
+ParamStr23_font:
+	aligned_string "font"
+ParamStr23_func:
+	aligned_string "func"
 ParamStr_Table_24:
-	.long ParamStr24_page
+	.long ParamStr24_page	; IvPageOverWr: 2 variables
 	.long ParamStr24_window
 	.long ParamStr24_Empty
-ParamStr24_Empty:	aligned_string ""
-ParamStr24_window:	aligned_string "window"
-ParamStr24_page:	aligned_string "page"
+ParamStr24_Empty:
+	aligned_string ""
+ParamStr24_window:
+	aligned_string "window"
+ParamStr24_page:
+	aligned_string "page"
 
 ; ---------------------------------------------------------------------------
 ; Toshi_Class_Table -- TOSHI object-registry slot 0x162: 28 class records of
