@@ -7034,7 +7034,7 @@ DL_F02F36:
 	.ascii "4th"
 
 ; --------------------------------------------------------------------------
-; Data_F02F52 -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF02F52-0xF02F61 -- 24 bytes, EMITTED AS DATA (not promoted to code).
 ; SHRUNK 2026-09-02 from a declared 29 B: the trailing 5 declared bytes
 ; plus the 7 B .incbin that followed it were really the first record of
 ; the display list right after this object -- see
@@ -7046,18 +7046,30 @@ DL_F02F36:
 ; Measured: 41% printable ASCII; a linear decode runs 14 instructions and ends
 ;           `jp 0xf019`, with 41% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F02F52:
-	.byte	0x22, 0x2F, 0xF0, 0x00, 0x36, 0x2F, 0xF0, 0x00, 0x3D, 0x2F, 0xF0, 0x00, 0x44, 0x2F, 0xF0, 0x00	; F02F52  |"/..6/..=/..D/..|
+; DLRecordPtrs_F02F52 -- 0xF02F52-0xF02F61, 4 32-bit pointers, each to the
+;   first byte of a display-list record (op 06 len 5, op 20 len 7).  Read by:
+;   `ld XIZ,this / ld XIY,(XIZ+BC) / add BC,4 / ld XIX,(XIZ+BC) / call
+;   T_DisplayList_Run` at 0xF5BB72: entries k and k+1 bound list k.  Entry
+;   count: the object's extent over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F02F52:
+	.long	DL_F02F22	; F02F52  [0]
+	.long	DL_F02F36	; F02F56  [1]
+	.long	DL_F02F36 + 0x7	; F02F5A  [2]
+	.long	DL_F02F36 + 0xE	; F02F5E  [3]
 	.byte	0x4B, 0x2F, 0xF0, 0x00, 0x52, 0x2F, 0xF0, 0x00	; F02F62
 
 ; ------------------------------------------------------------------
 ; 0xF02F6A-0xF02F99 -- 4 display-list records, 48 bytes -- interpreter A.
 ; The FIRST record (0xF02F6A-0xF02F76, 12 B) was recovered from
-; Data_F02F52's oversized declaration (see notes/gen_prom_b_f02f52_fix_module.py);
+; DLRecordPtrs_F02F52's oversized declaration (see notes/gen_prom_b_f02f52_fix_module.py);
 ; the other 3 (0xF02F76-0xF02F99) are as follows.
 ; NOT reached by any known call shape (reachability.py: prom_b has 0
 ; bytes with start evidence) and not named by any converted record's
@@ -7068,7 +7080,7 @@ Data_F02F52:
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
 ; ------------------------------------------------------------------
-	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE, recovered from Data_F02F52's oversized declaration
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE, recovered from DLRecordPtrs_F02F52's oversized declaration
 	.long Data_F0191A
 	.short 0x0B91
 	.short 0x0003
@@ -7090,7 +7102,7 @@ Data_F02F52:
 	.short 0x000A
 
 ; --------------------------------------------------------------------------
-; Data_F02F9A -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF02F9A-0xF02FB1 -- 24 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F02F9A appears as a 32-bit word at 0xF02FAE 0xF5BB51;
 ;               converted code at 0xF5BB50 loads it as a 32-bit immediate.  No
 ;               routine-directory slot and no branch decoded in converted code
@@ -7098,13 +7110,27 @@ Data_F02F52:
 ; Measured: 38% printable ASCII; a linear decode runs 12 instructions and ends
 ;           `ld (0x00),0x00`, with 58% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F02F9A:
-	.byte	0x6A, 0x2F, 0xF0, 0x00, 0x6A, 0x2F, 0xF0, 0x00, 0x76, 0x2F, 0xF0, 0x00, 0x82, 0x2F, 0xF0, 0x00	; F02F9A  |j/..j/..v/.../..|
-	.byte	0x8E, 0x2F, 0xF0, 0x00, 0x9A, 0x2F, 0xF0, 0x00	; F02FAA  |./.../..|
+; DLRecordPtrs_F02F9A -- 0xF02F9A-0xF02FB1, 6 32-bit pointers, each to the
+;   first byte of a display-list record (op 03 len 12).  Read by: `ld XIZ,this
+;   / ld XIY,(XIZ+BC) / add BC,4 / ld XIX,(XIZ+BC) / call T_DisplayList_Run`
+;   at 0xF5BB50: entries k and k+1 bound list k.  Entry count: the object's
+;   extent over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).  The last entry, 0xF02F9A,
+;   is only the END of the last list -- this table's own address.
+; --------------------------------------------------------------------------
+DLRecordPtrs_F02F9A:
+	.long	DLRecordPtrs_F02F52 + 0x18	; F02F9A  [0]
+	.long	DLRecordPtrs_F02F52 + 0x18	; F02F9E  [1]
+	.long	DLRecordPtrs_F02F52 + 0x24	; F02FA2  [2]
+	.long	DLRecordPtrs_F02F52 + 0x30	; F02FA6  [3]
+	.long	DLRecordPtrs_F02F52 + 0x3C	; F02FAA  [4]
+	.long	DLRecordPtrs_F02F9A	; F02FAE  [5]
 
 ; === END COVER-R1 0xF02F36-0xF02FB2 ===
 
@@ -7529,7 +7555,7 @@ DL_F03169:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F03173 -- 76 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF03173-0xF031BE -- 76 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F03173 appears as a 32-bit word at 0xF5CB35 0xF5CBD0
 ;               0xF5CBE4; converted code at 0xF5CB34 0xF5CBCF 0xF5CBE3 loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
@@ -7537,16 +7563,50 @@ DL_F03169:
 ; Measured: 34% printable ASCII; a linear decode runs 36 instructions and ends
 ;           `ld WA,0x00f0`, with 28% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F03173:
-	.byte	0xE6, 0x30, 0xF0, 0x00, 0xE6, 0x30, 0xF0, 0x00, 0xE6, 0x30, 0xF0, 0x00, 0xE6, 0x30, 0xF0, 0x00	; F03173  |.0...0...0...0..|
-	.byte	0xE6, 0x30, 0xF0, 0x00, 0xE6, 0x30, 0xF0, 0x00, 0x6E, 0x30, 0xF0, 0x00, 0x6E, 0x30, 0xF0, 0x00	; F03183  |.0...0..n0..n0..|
-	.byte	0x6E, 0x30, 0xF0, 0x00, 0x8C, 0x30, 0xF0, 0x00, 0xAA, 0x30, 0xF0, 0x00, 0xC8, 0x30, 0xF0, 0x00	; F03193  |n0...0...0...0..|
-	.byte	0xE6, 0x30, 0xF0, 0x00, 0xE6, 0x30, 0xF0, 0x00, 0xE6, 0x30, 0xF0, 0x00, 0x2A, 0x30, 0xF0, 0x00	; F031A3  |.0...0...0..*0..|
-	.byte	0x3B, 0x30, 0xF0, 0x00, 0x4C, 0x30, 0xF0, 0x00, 0x5D, 0x30, 0xF0, 0x00	; F031B3  |;0..L0..]0..|
+; DLRecordPtrs_F03173 -- 0xF03173-0xF031BE, 19 32-bit pointers, each to the
+;   first byte of a display-list record (op 02 len 15, op 03 len 11, op 07 len
+;   17).  Read by: `ld XIY,this / sla 2,WA / add XIY,XWA / ld XIZ,XIY / ld
+;   XIY,(XIZ) / ld XIX,(XIZ+4)` then T_DisplayListB_Run at 0xF5CB34: XIY =
+;   entry A, XIX = entry A+1; `ld XIY,this / call
+;   RunDisplayListBFromPointerArray` at 0xF5CBCF: ONE interpreter-B record
+;   from entry A.  Its address is also used as a list end: `ld XIY,0xF03169 /
+;   ld XIX,this / call T_DisplayList_Run` at 0xF5CBE3: the END of the list
+;   that starts at 0xF03169.  Entry count: the object's extent over 4; every
+;   word is a record start (notes/promb-2026-09-25/dl_pointer_tables.py).  The
+;   callers' index ranges reach past the table: the pairing site takes A =
+;   8..19 (`cp A,0x14 / jr NC` at 0xF5CB2A, `cp A,8 / jr C` at 0xF5CB2F), so A
+;   = 18 and 19 read entry 19 / 20; the one-record site takes A + 13 for A =
+;   2..5 and 7 (`add A,0x0d` at 0xF5CB5E), so A = 7 reads entry 20.  Entries
+;   19 and 20 would be the first bytes of DL_F031BF, which the same routine
+;   runs as a list at 0xF5CB68 -- so either those values of A do not occur or
+;   the reads are garbage; entries 0..7 are read by neither site.
+; --------------------------------------------------------------------------
+DLRecordPtrs_F03173:
+	.long	DL_F030E6	; F03173  [0]
+	.long	DL_F030E6	; F03177  [1]
+	.long	DL_F030E6	; F0317B  [2]
+	.long	DL_F030E6	; F0317F  [3]
+	.long	DL_F030E6	; F03183  [4]
+	.long	DL_F030E6	; F03187  [5]
+	.long	DL_F0306E	; F0318B  [6]
+	.long	DL_F0306E	; F0318F  [7]
+	.long	DL_F0306E	; F03193  [8]
+	.long	DL_F0306E + 0x1E	; F03197  [9]
+	.long	DL_F0306E + 0x3C	; F0319B  [10]
+	.long	DL_F0306E + 0x5A	; F0319F  [11]
+	.long	DL_F030E6	; F031A3  [12]
+	.long	DL_F030E6	; F031A7  [13]
+	.long	DL_F030E6	; F031AB  [14]
+	.long	DL_OriginalStringCylinderCone	; F031AF  [15]
+	.long	DL_OriginalStringCylinderCone + 0x11	; F031B3  [16]
+	.long	DL_OriginalStringCylinderCone + 0x22	; F031B7  [17]
+	.long	DL_OriginalStringCylinderCone + 0x33	; F031BB  [18]
 
 ; === END COVER-R1 0xF03173-0xF031BF ===
 
@@ -8017,7 +8077,7 @@ DL_F03522:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F0355D -- 36 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF0355D-0xF03580 -- 36 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F0355D appears as a 32-bit word at 0xF5C137 0xF5CD9F;
 ;               converted code at 0xF5C136 0xF5CD9E loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -8025,14 +8085,31 @@ DL_F03522:
 ; Measured: 36% printable ASCII; a linear decode runs 15 instructions and ends
 ;           `ld XSP,0x0000f035`, with 36% of the bytes in spellings llvm-mc
 ;           will not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F0355D:
-	.byte	0x52, 0x35, 0xF0, 0x00, 0xDE, 0x34, 0xF0, 0x00, 0xE8, 0x34, 0xF0, 0x00, 0x02, 0x35, 0xF0, 0x00	; F0355D  |R5...4...4...5..|
-	.byte	0x0D, 0x35, 0xF0, 0x00, 0x18, 0x35, 0xF0, 0x00, 0x22, 0x35, 0xF0, 0x00, 0x3C, 0x35, 0xF0, 0x00	; F0356D  |.5...5.."5..<5..|
-	.byte	0x47, 0x35, 0xF0, 0x00	; F0357D  |G5..|
+; DLRecordPtrs_F0355D -- 0xF0355D-0xF03580, 9 32-bit pointers, each to the
+;   first byte of a display-list record (op 00 len 10, op 03 len 11, op 05 len
+;   11).  Read by: `ld XIY,this / call RunDisplayListBFromPointerArray` at
+;   0xF5CD9E: ONE interpreter-B record from entry A.  Its address is also used
+;   as a list end: `ld XIY,0xF034DE / ld XIX,this / call T_DisplayListB_Run`
+;   at 0xF5C136: the END of the list that starts at 0xF034DE.  Entry count:
+;   the object's extent over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F0355D:
+	.long	DL_F03522 + 0x30	; F0355D  [0]
+	.long	DL_F034DE	; F03561  [1]
+	.long	DL_F034E8	; F03565  [2]
+	.long	DL_F034E8 + 0x1A	; F03569  [3]
+	.long	DL_F034E8 + 0x25	; F0356D  [4]
+	.long	DL_F034E8 + 0x30	; F03571  [5]
+	.long	DL_F03522	; F03575  [6]
+	.long	DL_F03522 + 0x1A	; F03579  [7]
+	.long	DL_F03522 + 0x25	; F0357D  [8]
 
 ; === END COVER-R1 0xF0355D-0xF03581 ===
 
@@ -8298,7 +8375,7 @@ DL_F036A3:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F036C2 -- 44 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF036C2-0xF036ED -- 44 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F036C2 appears as a 32-bit word at 0xF5C1D4 0xF5C1F7
 ;               0xF5CDF7; converted code at 0xF5C1D3 0xF5C1F6 0xF5CDF6 loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
@@ -8306,19 +8383,40 @@ DL_F036A3:
 ; Measured: 46% printable ASCII; a linear decode runs 62 instructions and ends
 ;           `swi 0`, with 24% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F036C2:
-	.byte	0xB7, 0x36, 0xF0, 0x00, 0xA3, 0x36, 0xF0, 0x00, 0xAD, 0x36, 0xF0, 0x00, 0x4D, 0x36, 0xF0, 0x00	; F036C2  |.6...6...6..M6..|
-	.byte	0x3E, 0x36, 0xF0, 0x00, 0x5C, 0x36, 0xF0, 0x00, 0x33, 0x36, 0xF0, 0x00, 0x85, 0x36, 0xF0, 0x00	; F036D2  |>6..\6..36...6..|
-	.byte	0x76, 0x36, 0xF0, 0x00, 0x94, 0x36, 0xF0, 0x00, 0x6B, 0x36, 0xF0, 0x00	; F036E2  |v6...6..k6..|
+; DLRecordPtrs_F036C2 -- 0xF036C2-0xF036ED, 11 32-bit pointers, each to the
+;   first byte of a display-list record (op 00 len 10, op 02 len 15, op 03 len
+;   11, op 05 len 11).  Read by: `ld XIY,this / call
+;   RunDisplayListBFromPointerArray` at 0xF5CDF6: ONE interpreter-B record
+;   from entry A.  Its address is also used as a list end: `ld XIY,0xF03633 /
+;   ld XIX,this / call T_DisplayListB_Run` at 0xF5C1D3: the END of the list
+;   that starts at 0xF03633; `ld XIY,0xF036A3 / ld XIX,this / call
+;   T_DisplayListB_Run` at 0xF5C1F6: the END of the list that starts at
+;   0xF036A3.  Entry count: the object's extent over 4; every word is a record
+;   start (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F036C2:
+	.long	DL_F036A3 + 0x14	; F036C2  [0]
+	.long	DL_F036A3	; F036C6  [1]
+	.long	DL_F036A3 + 0xA	; F036CA  [2]
+	.long	DL_F03633 + 0x1A	; F036CE  [3]
+	.long	DL_F03633 + 0xB	; F036D2  [4]
+	.long	DL_F03633 + 0x29	; F036D6  [5]
+	.long	DL_F03633	; F036DA  [6]
+	.long	DL_F03633 + 0x52	; F036DE  [7]
+	.long	DL_F03633 + 0x43	; F036E2  [8]
+	.long	DL_F03633 + 0x61	; F036E6  [9]
+	.long	DL_F03633 + 0x38	; F036EA  [10]
 
 
 ; ------------------------------------------------------------------
 ; 0xF036EE-0xF03891 -- 51 display-list records, 420 bytes -- interpreter A
-; The 83 bytes here had been folded into Data_F036C2 above (now
+; The 83 bytes here had been folded into DLRecordPtrs_F036C2 above (now
 ; shrunk to its real 44-byte, 11-entry pointer-table extent);
 ; walking from here lands with ZERO DRIFT on the ALREADY call-
 ; verified DL_T0neLayerSoundEditTrigGer ("entered at: 0xF03892"),
@@ -11860,7 +11958,7 @@ DL_F04E42:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F04E93 -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF04E93-0xF04EAA -- 24 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F04E93 appears as a 32-bit word at 0xF5CA98 0xF5D11D;
 ;               converted code at 0xF5CA97 0xF5D11C loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -11868,13 +11966,28 @@ DL_F04E42:
 ; Measured: 46% printable ASCII; a linear decode runs 11 instructions and ends
 ;           `ld (0x00),0x00`, with 46% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F04E93:
-	.byte	0x42, 0x4E, 0xF0, 0x00, 0x4D, 0x4E, 0xF0, 0x00, 0x57, 0x4E, 0xF0, 0x00, 0x66, 0x4E, 0xF0, 0x00	; F04E93  |BN..MN..WN..fN..|
-	.byte	0x75, 0x4E, 0xF0, 0x00, 0x84, 0x4E, 0xF0, 0x00	; F04EA3  |uN...N..|
+; DLRecordPtrs_F04E93 -- 0xF04E93-0xF04EAA, 6 32-bit pointers, each to the
+;   first byte of a display-list record (op 00 len 10, op 02 len 15, op 05 len
+;   11).  Read by: `ld XIY,this / call RunDisplayListBFromPointerArray` at
+;   0xF5D11C: ONE interpreter-B record from entry A.  Its address is also used
+;   as a list end: `ld XIY,0xF04E42 / ld XIX,this / call T_DisplayListB_Run`
+;   at 0xF5CA97: the END of the list that starts at 0xF04E42.  Entry count:
+;   the object's extent over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F04E93:
+	.long	DL_F04E42	; F04E93  [0]
+	.long	DL_F04E42 + 0xB	; F04E97  [1]
+	.long	DL_F04E42 + 0x15	; F04E9B  [2]
+	.long	DL_F04E42 + 0x24	; F04E9F  [3]
+	.long	DL_F04E42 + 0x33	; F04EA3  [4]
+	.long	DL_F04E42 + 0x42	; F04EA7  [5]
 
 ; === END COVER-R1 0xF04E93-0xF04EAB ===
 
@@ -12303,7 +12416,7 @@ DL_F05063:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F0509B -- 16 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF0509B-0xF050AA -- 16 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F0509B appears as a 32-bit word at 0xF5C795 0xF5D061;
 ;               converted code at 0xF5C794 0xF5D060 loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -12311,12 +12424,26 @@ DL_F05063:
 ; Measured: 44% printable ASCII; a linear decode runs 8 instructions and ends
 ;           `ld (0x00),0x00`, with 44% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F0509B:
-	.byte	0x7D, 0x50, 0xF0, 0x00, 0x6E, 0x50, 0xF0, 0x00, 0x8C, 0x50, 0xF0, 0x00, 0x63, 0x50, 0xF0, 0x00	; F0509B  |}P..nP...P..cP..|
+; DLRecordPtrs_F0509B -- 0xF0509B-0xF050AA, 4 32-bit pointers, each to the
+;   first byte of a display-list record (op 02 len 15, op 05 len 11).  Read
+;   by: `ld XIY,this / call RunDisplayListBFromPointerArray` at 0xF5D060: ONE
+;   interpreter-B record from entry A.  Its address is also used as a list
+;   end: `ld XIY,0xF05063 / ld XIX,this / call T_DisplayListB_Run` at
+;   0xF5C794: the END of the list that starts at 0xF05063.  Entry count: the
+;   object's extent over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F0509B:
+	.long	DL_F05063 + 0x1A	; F0509B  [0]
+	.long	DL_F05063 + 0xB	; F0509F  [1]
+	.long	DL_F05063 + 0x29	; F050A3  [2]
+	.long	DL_F05063	; F050A7  [3]
 
 ; === END COVER-R1 0xF0509B-0xF050AB ===
 
@@ -13126,7 +13253,7 @@ DL_F05501:
 ; ⚠ CORRECTED: was declared 278 bytes, 2 bytes too many -- see
 ; notes/gen_prom_b_f05621_fix_module.py.  Those 2 bytes (0x17, 0x07) were
 ; the op/len header of the display-list record run that starts at 0xF0561F,
-; below, exposed by Data_F0563B's own pointer array naming that address.
+; below, exposed by DLRecordPtrs_F0563B's own pointer array naming that address.
 ; Reached from: 0x00F0550B appears as a 32-bit word at 0xF0555B 0xF0555F
 ;               0xF5C5D1 0xF5C5E4; converted code at 0xF5C5D0 0xF5C5E3 loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
@@ -13154,7 +13281,7 @@ Data_F0550B:
 
 ; ------------------------------------------------------------------
 ; 0xF0561F-0xF0563A -- 4 display-list records, 28 bytes -- interpreter A
-; The 4th of Data_F0563B's own 4 pointers names 0xF0561F exactly; the other
+; The 4th of DLRecordPtrs_F0563B's own 4 pointers names 0xF0561F exactly; the other
 ; 3 are the record starts this lane's untouched-pool round already found.
 ; Formerly the last 2 bytes of Data_F0550B plus a 5-byte unexplained
 ; fragment.  Regenerate: python3 notes/gen_prom_b_f05621_fix_module.py
@@ -13178,7 +13305,7 @@ Data_F0550B:
 	.byte 0x10	; character codes below 0x20
 
 ; --------------------------------------------------------------------------
-; Data_F0563B -- 16 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF0563B-0xF0564A -- 16 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F0563B appears as a 32-bit word at 0xF5C632; converted
 ;               code at 0xF5C631 loads it as a 32-bit immediate.  No routine-
 ;               directory slot and no branch decoded in converted code names
@@ -13186,12 +13313,24 @@ Data_F0550B:
 ; Measured: 44% printable ASCII; a linear decode runs 9 instructions and ends
 ;           `ld (0x00),0x00`, with 81% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F0563B:
-	.byte	0x1F, 0x56, 0xF0, 0x00, 0x26, 0x56, 0xF0, 0x00, 0x2D, 0x56, 0xF0, 0x00, 0x34, 0x56, 0xF0, 0x00	; F0563B  |.V..&V..-V..4V..|
+; DLRecordPtrs_F0563B -- 0xF0563B-0xF0564A, 4 32-bit pointers, each to the
+;   first byte of a display-list record (op 17 len 7).  Read by: `ld XIZ,this
+;   / ld XIY,(XIZ+DE) / ld XIX,XIY / add XIX,7` then T_DisplayList_Run at
+;   0xF5C631: entry k is ONE 7-byte list.  Entry count: the object's extent
+;   over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F0563B:
+	.long	Data_F0550B + 0x114	; F0563B  [0]
+	.long	Data_F0550B + 0x11B	; F0563F  [1]
+	.long	Data_F0550B + 0x122	; F05643  [2]
+	.long	Data_F0550B + 0x129	; F05647  [3]
 
 ; === END COVER-R1 0xF0550B-0xF0564B ===
 
@@ -16742,14 +16881,14 @@ SoundEditController_RepaintFieldPage2:
 SoundEditController_PaintHeader_Skip4:
 	ld	(9536:16), 1	; F09975  ld (0x2540),0x01
 	ld	xiy, DL_F334FE	; F0997A  ld XIY,0x00f334fe
-	ld	xix, Data_F33508	; F0997F  ld XIX,0x00f33508
+	ld	xix, DLRecordPtrs_F33508	; F0997F  ld XIX,0x00f33508
 	call	T_DisplayList_Run	; F09984  call 0xf417f0
 	ld	a, 0:opc	; F09988  ld A,0x00
 	jr	SoundEditController_PaintHeader_Return3	; F0998A  jr T,0xf099c6
 SoundEditController_PaintHeader_Skip5:
 	ld	(9536:16), 1	; F0998C  ld (0x2540),0x01
 	ld	xiy, DL_F334FE	; F09991  ld XIY,0x00f334fe
-	ld	xix, Data_F33508	; F09996  ld XIX,0x00f33508
+	ld	xix, DLRecordPtrs_F33508	; F09996  ld XIX,0x00f33508
 	call	T_DisplayList_Run	; F0999B  call 0xf417f0
 	ld	(9536:16), 0	; F0999F  ld (0x2540),0x00
 	ld	xiy, DL_F3341C	; F099A4  ld XIY,0x00f3341c
@@ -16759,7 +16898,7 @@ SoundEditController_PaintHeader_Skip5:
 	jr	SoundEditController_PaintHeader_Return3	; F099B6  jr T,0xf099c6
 SoundEditController_PaintHeader_Skip6:
 	ld	(9536:16), 0	; F099B8  ld (0x2540),0x00
-	ld	xiy, Data_F33508	; F099BD  ld XIY,0x00f33508
+	ld	xiy, DLRecordPtrs_F33508	; F099BD  ld XIY,0x00f33508
 	call	RunDisplayListBFromPointerArray	; F099C2  call 0xf09ae1
 SoundEditController_PaintHeader_Return3:
 	ret	; F099C6  ret
@@ -66543,7 +66682,7 @@ ValueGlyph_Bitmaps:
 	.ascii "4th"
 
 ; --------------------------------------------------------------------------
-; Data_F3281C -- 24 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3281C-0xF3282B -- 24 bytes, EMITTED AS DATA (not promoted to code).
 ; SHRUNK 2026-09-02 from a declared 29 B: the trailing 5 declared bytes
 ; plus the 7 B .incbin that followed it were really the first record of
 ; the display list right after this object -- see
@@ -66555,18 +66694,30 @@ ValueGlyph_Bitmaps:
 ; Measured: 21% printable ASCII; a linear decode runs 14 instructions and ends
 ;           `jp 0xf019`, with 76% of the bytes in spellings llvm-mc will not
 ;           encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3281C:
-	.byte	0x00, 0x28, 0xF3, 0x00, 0x00, 0x28, 0xF3, 0x00, 0x07, 0x28, 0xF3, 0x00, 0x0E, 0x28, 0xF3, 0x00	; F3281C  |.(...(...(...(..|
+; DLRecordPtrs_F3281C -- 0xF3281C-0xF3282B, 4 32-bit pointers, each to the
+;   first byte of a display-list record (op 20 len 7).  Read by: `ld XIZ,this
+;   / ld XIY,(XIZ+BC) / add BC,4 / ld XIX,(XIZ+BC) / call T_DisplayList_Run`
+;   at 0xF5C588: entries k and k+1 bound list k.  Entry count: the object's
+;   extent over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F3281C:
+	.long	ValueGlyph_Bitmaps + 0x91F	; F3281C  [0]
+	.long	ValueGlyph_Bitmaps + 0x91F	; F32820  [1]
+	.long	ValueGlyph_Bitmaps + 0x926	; F32824  [2]
+	.long	ValueGlyph_Bitmaps + 0x92D	; F32828  [3]
 	.byte	0x15, 0x28, 0xF3, 0x00, 0x1C, 0x28, 0xF3, 0x00	; F3282C
 
 ; ------------------------------------------------------------------
 ; 0xF32834-0xF32863 -- 4 display-list records, 48 bytes -- interpreter A.
 ; The FIRST record (0xF32834-0xF32840, 12 B) was recovered from
-; Data_F3281C's oversized declaration (see notes/gen_prom_b_f3281c_fix_module.py);
+; DLRecordPtrs_F3281C's oversized declaration (see notes/gen_prom_b_f3281c_fix_module.py);
 ; the other 3 (0xF32840-0xF32863) are as follows.
 ; NOT reached by any known call shape (reachability.py: prom_b has 0
 ; bytes with start evidence) and not named by any converted record's
@@ -66577,7 +66728,7 @@ Data_F3281C:
 ; `op < bound`.  Regenerate: python3 notes/gen_prom_b_untouched_pool_module.py
 ; --splice
 ; ------------------------------------------------------------------
-	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE, recovered from Data_F3281C's oversized declaration
+	.byte 0x03, 0x0C	; op 03, 12 bytes -> handler 0xF31ABE, recovered from DLRecordPtrs_F3281C's oversized declaration
 	.long Data_F0191A
 	.short 0x0A06
 	.short 0x0003
@@ -67160,7 +67311,7 @@ DL_F32B64:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F32B97 -- 20 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF32B97-0xF32BAA -- 20 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F32B97 appears as a 32-bit word at 0xF5D556 0xF5D6F3;
 ;               converted code at 0xF5D555 0xF5D6F2 loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -67168,13 +67319,27 @@ DL_F32B64:
 ; Measured: 40% printable ASCII; a linear decode runs 10 instructions and ends
 ;           `ld (XWA0),0x00`, with 70% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F32B97:
-	.byte	0x8C, 0x2B, 0xF3, 0x00, 0x6E, 0x2B, 0xF3, 0x00, 0x64, 0x2B, 0xF3, 0x00, 0x78, 0x2B, 0xF3, 0x00	; F32B97  |.+..n+..d+..x+..|
-	.byte	0x82, 0x2B, 0xF3, 0x00	; F32BA7  |.+..|
+; DLRecordPtrs_F32B97 -- 0xF32B97-0xF32BAA, 5 32-bit pointers, each to the
+;   first byte of a display-list record (op 00 len 10, op 03 len 11).  Read
+;   by: `ld XIY,this / call RunDisplayListBFromPointerArray` at 0xF5D6F2: ONE
+;   interpreter-B record from entry A.  Its address is also used as a list
+;   end: `ld XIY,0xF32B64 / ld XIX,this / call T_DisplayListB_Run` at
+;   0xF5D555: the END of the list that starts at 0xF32B64.  Entry count: the
+;   object's extent over 4; every word is a record start
+;   (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F32B97:
+	.long	DL_F32B64 + 0x28	; F32B97  [0]
+	.long	DL_F32B64 + 0xA	; F32B9B  [1]
+	.long	DL_F32B64	; F32B9F  [2]
+	.long	DL_F32B64 + 0x14	; F32BA3  [3]
+	.long	DL_F32B64 + 0x1E	; F32BA7  [4]
 
 ; === END COVER-R1 0xF32B97-0xF32BAB ===
 
@@ -68149,7 +68314,7 @@ DL_F334FE:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F33508 -- 48 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF33508-0xF33537 -- 48 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F33508 appears as a 32-bit word at 0xF09980 0xF09997
 ;               0xF099BE; converted code at 0xF0997F 0xF09996 0xF099BD loads
 ;               it as a 32-bit immediate.  No routine-directory slot and no
@@ -68157,14 +68322,35 @@ DL_F334FE:
 ; Measured: 38% printable ASCII; a linear decode runs 21 instructions and ends
 ;           `ld (XWA0),0x00`, with 42% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F33508:
-	.byte	0xA3, 0x34, 0xF3, 0x00, 0x1C, 0x34, 0xF3, 0x00, 0x2B, 0x34, 0xF3, 0x00, 0x3A, 0x34, 0xF3, 0x00	; F33508  |.4...4..+4..:4..|
-	.byte	0x49, 0x34, 0xF3, 0x00, 0x58, 0x34, 0xF3, 0x00, 0x67, 0x34, 0xF3, 0x00, 0x76, 0x34, 0xF3, 0x00	; F33518  |I4..X4..g4..v4..|
-	.byte	0x85, 0x34, 0xF3, 0x00, 0x94, 0x34, 0xF3, 0x00, 0xA0, 0x2F, 0xF3, 0x00, 0xA0, 0x2F, 0xF3, 0x00	; F33528  |.4...4.../.../..|
+; DLRecordPtrs_F33508 -- 0xF33508-0xF33537, 12 32-bit pointers, each to the
+;   first byte of a display-list record (op 00 len 10, op 02 len 15, op 03 len
+;   11).  Read by: `ld XIY,this / call RunDisplayListBFromPointerArray` at
+;   0xF099BD: ONE interpreter-B record from entry A.  Its address is also used
+;   as a list end: `ld XIY,0xF334FE / ld XIX,this / call T_DisplayList_Run` at
+;   0xF0997F: the END of the list that starts at 0xF334FE; `ld XIY,0xF334FE /
+;   ld XIX,this / call T_DisplayList_Run` at 0xF09996: the END of the list
+;   that starts at 0xF334FE.  Entry count: the object's extent over 4; every
+;   word is a record start (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F33508:
+	.long	DL_F3341C + 0x87	; F33508  [0]
+	.long	DL_F3341C	; F3350C  [1]
+	.long	DL_F3341C + 0xF	; F33510  [2]
+	.long	DL_F3341C + 0x1E	; F33514  [3]
+	.long	DL_F3341C + 0x2D	; F33518  [4]
+	.long	DL_F3341C + 0x3C	; F3351C  [5]
+	.long	DL_F3341C + 0x4B	; F33520  [6]
+	.long	DL_F3341C + 0x5A	; F33524  [7]
+	.long	DL_F3341C + 0x69	; F33528  [8]
+	.long	DL_F3341C + 0x78	; F3352C  [9]
+	.long	DL_F32FA0	; F33530  [10]
+	.long	DL_F32FA0	; F33534  [11]
 
 ; === END COVER-R1 0xF33508-0xF33538 ===
 
@@ -68581,7 +68767,7 @@ DL_F33796:
 ; notes/gen_prom_b_cover_round1.py --splice
 
 ; --------------------------------------------------------------------------
-; Data_F3380E -- 40 bytes, EMITTED AS DATA (not promoted to code).
+; 0xF3380E-0xF33835 -- 40 bytes, EMITTED AS DATA (not promoted to code).
 ; Reached from: 0x00F3380E appears as a 32-bit word at 0xF5C71E 0xF5D052;
 ;               converted code at 0xF5C71D 0xF5D051 loads it as a 32-bit
 ;               immediate.  No routine-directory slot and no branch decoded in
@@ -68589,14 +68775,32 @@ DL_F33796:
 ; Measured: 25% printable ASCII; a linear decode runs 18 instructions and ends
 ;           `ld SP,0x00f3`, with 78% of the bytes in spellings llvm-mc will
 ;           not encode.
-; ⚠ The extent is the reachability walk's, not the object's; the rest of
-;   this span is unreachable and stays `.incbin`.  Why this is data and
-;   not code: THE PROVENANCE SPLIT in notes/gen_prom_b_cover_round1.py.
+; ⚠ CORRECTED: that extent came from the coverage walk, not from the object;
+;   the readers below fix what the object is (notes/promb-2026-09-25/
+;   dl_pointer_tables.py).  The rest of this span is unreachable and stays
+;   `.incbin`.  Why this is data and not code: THE PROVENANCE SPLIT in
+;   notes/gen_prom_b_cover_round1.py.
 ; --------------------------------------------------------------------------
-Data_F3380E:
-	.byte	0x03, 0x38, 0xF3, 0x00, 0x96, 0x37, 0xF3, 0x00, 0xEF, 0x37, 0xF3, 0x00, 0xF9, 0x37, 0xF3, 0x00	; F3380E  |.8...7...7...7..|
-	.byte	0xAF, 0x37, 0xF3, 0x00, 0xBA, 0x37, 0xF3, 0x00, 0xC5, 0x37, 0xF3, 0x00, 0xD0, 0x37, 0xF3, 0x00	; F3381E  |.7...7...7...7..|
-	.byte	0xDB, 0x37, 0xF3, 0x00, 0xE5, 0x37, 0xF3, 0x00	; F3382E  |.7...7..|
+; DLRecordPtrs_F3380E -- 0xF3380E-0xF33835, 10 32-bit pointers, each to the
+;   first byte of a display-list record (op 00 len 10, op 02 len 15, op 03 len
+;   11, op 05 len 11).  Read by: `ld XIY,this / call
+;   RunDisplayListBFromPointerArray` at 0xF5D051: ONE interpreter-B record
+;   from entry A.  Its address is also used as a list end: `ld XIY,0xF33796 /
+;   ld XIX,this / call T_DisplayListB_Run` at 0xF5C71D: the END of the list
+;   that starts at 0xF33796.  Entry count: the object's extent over 4; every
+;   word is a record start (notes/promb-2026-09-25/dl_pointer_tables.py).
+; --------------------------------------------------------------------------
+DLRecordPtrs_F3380E:
+	.long	DL_F33796 + 0x6D	; F3380E  [0]
+	.long	DL_F33796	; F33812  [1]
+	.long	DL_F33796 + 0x59	; F33816  [2]
+	.long	DL_F33796 + 0x63	; F3381A  [3]
+	.long	DL_F33796 + 0x19	; F3381E  [4]
+	.long	DL_F33796 + 0x24	; F33822  [5]
+	.long	DL_F33796 + 0x2F	; F33826  [6]
+	.long	DL_F33796 + 0x3A	; F3382A  [7]
+	.long	DL_F33796 + 0x45	; F3382E  [8]
+	.long	DL_F33796 + 0x4F	; F33832  [9]
 
 ; === END COVER-R1 0xF3380E-0xF33836 ===
 
@@ -126637,7 +126841,7 @@ UiPaint_Ordinals_Join:
 	push	c	; F5BB49  push C
 	xor	b, b	; F5BB4B  xor B,B
 	sla	bc, 2	; F5BB4D  sla 0x02,BC
-	ld	xiz, Data_F02F9A	; F5BB50  ld XIZ,0x00f02f9a
+	ld	xiz, DLRecordPtrs_F02F9A	; F5BB50  ld XIZ,0x00f02f9a
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F5BB55  ld XIY,(XIZ+BC)
 	add	bc, 4	; F5BB5A  add BC,0x0004
 	mx_ld_rm MXL, ra_IZ, ra_BC, 4	; F5BB5E  ld XIX,(XIZ+BC)
@@ -126648,7 +126852,7 @@ UiPaint_Ordinals_Skip2:
 	push	c	; F5BB6B  push C
 	xor	b, b	; F5BB6D  xor B,B
 	sla	bc, 2	; F5BB6F  sla 0x02,BC
-	ld	xiz, Data_F02F52	; F5BB72  ld XIZ,0x00f02f52
+	ld	xiz, DLRecordPtrs_F02F52	; F5BB72  ld XIZ,0x00f02f52
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F5BB77  ld XIY,(XIZ+BC)
 	add	bc, 4	; F5BB7C  add BC,0x0004
 	mx_ld_rm MXL, ra_IZ, ra_BC, 4	; F5BB80  ld XIX,(XIZ+BC)
@@ -127337,7 +127541,7 @@ sub_F5C10A:
 	call	UiPaint_Ordinals	; F5C128  call 0xf5bb00
 	ld	(9536:16), 0	; F5C12C  ld (0x2540),0x00
 	ld	xiy, DL_F034DE	; F5C131  ld XIY,0x00f034de
-	ld	xix, Data_F0355D	; F5C136  ld XIX,0x00f0355d
+	ld	xix, DLRecordPtrs_F0355D	; F5C136  ld XIX,0x00f0355d
 	call	T_DisplayListB_Run	; F5C13B  call 0xf417f4
 	call	sub_F5C144	; F5C13F  call 0xf5c144
 	ret	; F5C143  ret
@@ -127394,7 +127598,7 @@ sub_F5C1AC:
 	call	T_DisplayList_Run	; F5C1C5  call 0xf417f0
 	ld	(9536:16), 0	; F5C1C9  ld (0x2540),0x00
 	ld	xiy, DL_F03633	; F5C1CE  ld XIY,0x00f03633
-	ld	xix, Data_F036C2	; F5C1D3  ld XIX,0x00f036c2
+	ld	xix, DLRecordPtrs_F036C2	; F5C1D3  ld XIX,0x00f036c2
 	call	T_DisplayListB_Run	; F5C1D8  call 0xf417f4
 	jr	sub_F5C144_Join	; F5C1DC  jr T,0xf5c1ff
 sub_F5C144_Skip:
@@ -127403,7 +127607,7 @@ sub_F5C144_Skip:
 	call	T_DisplayList_Run	; F5C1E8  call 0xf417f0
 	ld	(9536:16), 0	; F5C1EC  ld (0x2540),0x00
 	ld	xiy, DL_F036A3	; F5C1F1  ld XIY,0x00f036a3
-	ld	xix, Data_F036C2	; F5C1F6  ld XIX,0x00f036c2
+	ld	xix, DLRecordPtrs_F036C2	; F5C1F6  ld XIX,0x00f036c2
 	call	T_DisplayListB_Run	; F5C1FB  call 0xf417f4
 sub_F5C144_Join:
 	call	sub_F5BFBD	; F5C1FF  call 0xf5bfbd
@@ -127839,7 +128043,7 @@ sub_F5C549_Skip:
 	push	c	; F5C581  push C
 	xor	b, b	; F5C583  xor B,B
 	sla	bc, 2	; F5C585  sla 0x02,BC
-	ld	xiz, Data_F3281C	; F5C588  ld XIZ,0x00f3281c
+	ld	xiz, DLRecordPtrs_F3281C	; F5C588  ld XIZ,0x00f3281c
 	mx_ld_rm MXL, ra_IZ, ra_BC, 5	; F5C58D  ld XIY,(XIZ+BC)
 	add	bc, 4	; F5C592  add BC,0x0004
 	mx_ld_rm MXL, ra_IZ, ra_BC, 4	; F5C596  ld XIX,(XIZ+BC)
@@ -127905,7 +128109,7 @@ sub_F5C5A5_Loop:
 	ld	(9536:16), 0	; F5C629  ld (0x2540),0x00
 	push	c	; F5C62E  push C
 	push	xiy	; F5C630  push XIY
-	ld	xiz, Data_F0563B	; F5C631  ld XIZ,0x00f0563b
+	ld	xiz, DLRecordPtrs_F0563B	; F5C631  ld XIZ,0x00f0563b
 	mx_ld_rm MXL, ra_IZ, ra_DE, 5	; F5C636  ld XIY,(XIZ+DE)
 	ld	xix, xiy	; F5C63B  ld XIX,XIY
 	add	xix, 7	; F5C63D  add XIX,0x00000007
@@ -127983,7 +128187,7 @@ sub_F5C5A5_Join:
 sub_F5C5A5_Skip3:
 	ld	(9536:16), 0	; F5C713  ld (0x2540),0x00
 	ld	xiy, DL_F33796	; F5C718  ld XIY,0x00f33796
-	ld	xix, Data_F3380E	; F5C71D  ld XIX,0x00f3380e
+	ld	xix, DLRecordPtrs_F3380E	; F5C71D  ld XIX,0x00f3380e
 	call	T_DisplayListB_Run	; F5C722  call 0xf417f4
 sub_F5C5A5_Return:
 	ret	; F5C726  ret
@@ -128044,7 +128248,7 @@ sub_F5C772:
 	call	UiPaint_Ordinals	; F5C786  call 0xf5bb00
 	ld	(9536:16), 0	; F5C78A  ld (0x2540),0x00
 	ld	xiy, DL_F05063	; F5C78F  ld XIY,0x00f05063
-	ld	xix, Data_F0509B	; F5C794  ld XIX,0x00f0509b
+	ld	xix, DLRecordPtrs_F0509B	; F5C794  ld XIX,0x00f0509b
 	call	T_DisplayListB_Run	; F5C799  call 0xf417f4
 	ret	; F5C79D  ret
 sub_F5C79E:
@@ -128311,7 +128515,7 @@ sub_F5C94B_Skip5:
 	call	sub_F5C94B	; F5CA89  call 0xf5c94b
 	ld	(9536:16), 0	; F5CA8D  ld (0x2540),0x00
 	ld	xiy, DL_F04E42	; F5CA92  ld XIY,0x00f04e42
-	ld	xix, Data_F04E93	; F5CA97  ld XIX,0x00f04e93
+	ld	xix, DLRecordPtrs_F04E93	; F5CA97  ld XIX,0x00f04e93
 	call	T_DisplayListB_Run	; F5CA9C  call 0xf417f4
 	ret	; F5CAA0  ret
 sub_F5CAA1:
@@ -128373,7 +128577,7 @@ sub_F5CB1E:
 	jr	nc, sub_F5CADD_Skip5	; F5CB2D  jr NC,0xf5cb97
 	cp	a, 8	; F5CB2F  cp A,0x08
 	jr	c, sub_F5CADD_Skip	; F5CB32  jr C,0xf5cb55
-	ld	xiy, Data_F03173	; F5CB34  ld XIY,0x00f03173
+	ld	xiy, DLRecordPtrs_F03173	; F5CB34  ld XIY,0x00f03173
 	extz	xwa	; F5CB39  extz XWA
 	xor	w, w	; F5CB3B  xor W,W
 	sla	wa, 2	; F5CB3D  sla 0x02,WA
@@ -128424,7 +128628,7 @@ sub_F5CADD_Skip5:
 	jr	sub_F5CADD_Return	; F5CBC8  jr T,0xf5cbd8
 sub_F5CADD_Join:
 	ld	(9536:16), 0	; F5CBCA  ld (0x2540),0x00
-	ld	xiy, Data_F03173	; F5CBCF  ld XIY,0x00f03173
+	ld	xiy, DLRecordPtrs_F03173	; F5CBCF  ld XIY,0x00f03173
 	call	RunDisplayListBFromPointerArray	; F5CBD4  call 0xf09ae1
 sub_F5CADD_Return:
 	ret	; F5CBD8  ret
@@ -128444,7 +128648,7 @@ sub_F5CADD_Return:
 sub_F5CBD9:
 	ld	(9536:16), 2	; F5CBD9  ld (0x2540),0x02
 	ld	xiy, DL_F03169	; F5CBDE  ld XIY,0x00f03169
-	ld	xix, Data_F03173	; F5CBE3  ld XIX,0x00f03173
+	ld	xix, DLRecordPtrs_F03173	; F5CBE3  ld XIX,0x00f03173
 	call	T_DisplayList_Run	; F5CBE8  call 0xf417f0
 	ld	a, (10156:16)	; F5CBEC  ld A,(0x27ac)
 	cp	a, 0:i3	; F5CBF0  cp A,0
@@ -128612,7 +128816,7 @@ sub_F5CC64_Skip6:
 	jr	sub_F5CC64_Return3	; F5CD97  jr T,0xf5cda7
 sub_F5CC64_Join2:
 	ld	(9536:16), 0	; F5CD99  ld (0x2540),0x00
-	ld	xiy, Data_F0355D	; F5CD9E  ld XIY,0x00f0355d
+	ld	xiy, DLRecordPtrs_F0355D	; F5CD9E  ld XIY,0x00f0355d
 	call	RunDisplayListBFromPointerArray	; F5CDA3  call 0xf09ae1
 sub_F5CC64_Return3:
 	ret	; F5CDA7  ret
@@ -128641,7 +128845,7 @@ sub_F5CDD4:
 	ld	a, 0:opc	; F5CDEF  ld A,0x00
 sub_F5CC64_Skip8:
 	ld	(9536:16), 0	; F5CDF1  ld (0x2540),0x00
-	ld	xiy, Data_F036C2	; F5CDF6  ld XIY,0x00f036c2
+	ld	xiy, DLRecordPtrs_F036C2	; F5CDF6  ld XIY,0x00f036c2
 	call	RunDisplayListBFromPointerArray	; F5CDFB  call 0xf09ae1
 	ret	; F5CDFF  ret
 sub_F5CE00:
@@ -128857,14 +129061,14 @@ sub_F5CFA4_Skip4:
 	call	T_DisplayListB_Run	; F5D04B  call 0xf417f4
 	jr	sub_F5CFA4_Return	; F5D04F  jr T,0xf5d05a
 sub_F5CFA4_Skip5:
-	ld	xiy, Data_F3380E	; F5D051  ld XIY,0x00f3380e
+	ld	xiy, DLRecordPtrs_F3380E	; F5D051  ld XIY,0x00f3380e
 sub_F5CFA4_Join4:
 	call	RunDisplayListBFromPointerArray	; F5D056  call 0xf09ae1
 sub_F5CFA4_Return:
 	ret	; F5D05A  ret
 sub_F5D05B:
 	ld	(9536:16), 0	; F5D05B  ld (0x2540),0x00
-	ld	xiy, Data_F0509B	; F5D060  ld XIY,0x00f0509b
+	ld	xiy, DLRecordPtrs_F0509B	; F5D060  ld XIY,0x00f0509b
 	call	RunDisplayListBFromPointerArray	; F5D065  call 0xf09ae1
 	ret	; F5D069  ret
 sub_F5D06A:
@@ -128931,7 +129135,7 @@ sub_F5D108:
 	ret	; F5D116  ret
 sub_F5D117:
 	ld	(9536:16), 0	; F5D117  ld (0x2540),0x00
-	ld	xiy, Data_F04E93	; F5D11C  ld XIY,0x00f04e93
+	ld	xiy, DLRecordPtrs_F04E93	; F5D11C  ld XIY,0x00f04e93
 	call	RunDisplayListBFromPointerArray	; F5D121  call 0xf09ae1
 	ret	; F5D125  ret
 sub_F5D126:
@@ -129355,7 +129559,7 @@ sub_F5D519:
 	call	UiPaint_Ordinals	; F5D547  call 0xf5bb00
 	ld	(9536:16), 0	; F5D54B  ld (0x2540),0x00
 	ld	xiy, DL_F32B64	; F5D550  ld XIY,0x00f32b64
-	ld	xix, Data_F32B97	; F5D555  ld XIX,0x00f32b97
+	ld	xix, DLRecordPtrs_F32B97	; F5D555  ld XIX,0x00f32b97
 	call	T_DisplayListB_Run	; F5D55A  call 0xf417f4
 	ret	; F5D55E  ret
 sub_F5D55F:
@@ -129494,7 +129698,7 @@ sub_F5D6D4:
 	ld	a, 0:opc	; F5D6EB  ld A,0x00
 sub_F5D5C8_Skip5:
 	ld	(9536:16), 0	; F5D6ED  ld (0x2540),0x00
-	ld	xiy, Data_F32B97	; F5D6F2  ld XIY,0x00f32b97
+	ld	xiy, DLRecordPtrs_F32B97	; F5D6F2  ld XIY,0x00f32b97
 	call	RunDisplayListBFromPointerArray	; F5D6F7  call 0xf09ae1
 	ret	; F5D6FB  ret
 sub_F5D6FC:
@@ -162474,7 +162678,7 @@ sub_F6EAA8:
 	xor	h, h	; F6EACA  xor H,H
 	sla	hl, 2	; F6EACC  sla 0x02,HL
 	push	xde	; F6EACF  push XDE
-	ld	xde, 16182237	; F6EAD0  ld XDE,0x00f6ebdd
+	ld	xde, RamPtrTable_F6EBDD	; F6EAD0  ld XDE,0x00f6ebdd
 	ld_rrl	xhl, xde, hl	; F6EAD5  ld XHL,(XDE+HL)
 	pop	xde	; F6EADA  pop XDE
 	ld	wa, (xhl)	; F6EADB  ld WA,(XHL)
@@ -162546,7 +162750,7 @@ sub_F6EB6C:
 	xor	h, h	; F6EB8C  xor H,H
 	sla	hl, 2	; F6EB8E  sla 0x02,HL
 	push	xde	; F6EB91  push XDE
-	ld	xde, 16182237	; F6EB92  ld XDE,0x00f6ebdd
+	ld	xde, RamPtrTable_F6EBDD	; F6EB92  ld XDE,0x00f6ebdd
 	ld_rrl	xhl, xde, hl	; F6EB97  ld XHL,(XDE+HL)
 	pop	xde	; F6EB9C  pop XDE
 	ld	wa, (xhl)	; F6EB9D  ld WA,(XHL)
