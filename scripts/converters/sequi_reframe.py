@@ -176,7 +176,9 @@ class Ctx:
             c = c[drc.LABEL_RE.match(c).end():].strip()
         tok = re.split(r'[\s,]', c, maxsplit=1)[0] if c else ""
         if tok in self.macros:
-            return "macro", c
+            # a DATA macro (addr24 ...) is data like any `.byte`; only a
+            # code-emitting macro (RegObjTabl ...) is opaque to a re-frame
+            return ("data" if self.macros[tok] == "data" else "macro"), c
         return bk, c
 
 
@@ -194,13 +196,78 @@ def refs_elsewhere(name, defining_path):
     return n
 
 
+REGFAM = {}
+for _fam, _names in {"wa": "a w wa xwa qwa qa qw", "bc": "b c bc xbc qbc qb qc",
+                     "de": "d e de xde qde qd qe", "hl": "h l hl xhl qhl qh ql",
+                     "ix": "ix xix qix ixl ixh", "iy": "iy xiy qiy iyl iyh",
+                     "iz": "iz xiz qiz izl izh qizh qizl", "sp": "sp xsp"}.items():
+    for _n in _names.split():
+        REGFAM[_n] = _fam
+
+
+def reg_families(text):
+    t = text.split(";")[0].lower().strip()
+    t = t.split(None, 1)[1] if len(t.split(None, 1)) > 1 else ""
+    return {REGFAM[x] for x in re.findall(r'(?<![\w.$])([a-z]+)(?![\w.$:])', t) if x in REGFAM}
+
+
+def registers_agree(llvm_text, udm):
+    """The round trip cannot catch a disassembler that PRINTS the wrong
+    register for the right bytes (LLVM prints `cpda8 xbc, (0x32f6)` for
+    c1 f6 32 f1, which is `cp A,(0x32f6)`).  Compare register families
+    with unidasm's reading; an empty side (numeric register codes, SRI
+    byte operands) is not evidence either way."""
+    a, b = reg_families(llvm_text), reg_families(udm)
+    return not a or not b or a == b
+
+
+def ud_spelling(udm, raw):
+    """House-style spelling derived from unidasm's reading, for DIRECT-address
+    memory forms only (where the LLVM disassembler prints pseudo mnemonics
+    such as ldb_d8 / stdi8 / anddi8 / bitda / cpda8): `ld a, (0x32f5:16)`.
+    Returned only as a candidate; the caller re-encodes it."""
+    if not re.search(r'\(0x[0-9a-f]+\)', udm) or re.search(r'\(0x[0-9a-f]+\),\(0x', udm):
+        return None
+    pre = raw[0]
+    width = None
+    for base in (0xc0, 0xd0, 0xe0, 0xf0):
+        if base <= pre <= base + 2:
+            width = {0: "8", 1: "16", 2: "24"}[pre - base]
+    if width is None:
+        return None
+    mn, _, ops = udm.partition(" ")
+    mn = mn.lower()
+    if mn == "pushw":
+        mn = "pushm"
+    out = []
+    for op in ops.split(","):
+        op = op.strip()
+        m = re.match(r'^\((0x[0-9a-f]+)\)$', op)
+        if m:
+            out.append("(%s:%s)" % (m.group(1), width))
+        elif re.match(r'^0x[0-9a-f]+$', op):
+            v = int(op, 16)
+            out.append(op if mn in ("and", "or", "xor") or v >= 0x100 else str(v))
+        elif re.match(r'^[0-9]+$', op):
+            out.append(op)
+        else:
+            out.append(op.lower())
+    return "%s %s" % (mn, ", ".join(out))
+
+
 def fallback_spellings(udm, raw):
     """Assembler spellings for forms the LLVM DISASSEMBLER cannot decode but
     the assembler can encode.  Each candidate is only used if it re-encodes to
     the ROM bytes."""
     out = []
+    m = re.match(r'^ldw? \((0x[0-9a-f]+)\),\((0x[0-9a-f]+)\)$', udm)
+    if m and raw[0] in (0xc0, 0xc1, 0xc2, 0xd0, 0xd1, 0xd2):
+        # source-memory prefix, sub-op 0x19: ld (dst16), (src)
+        w = {0: "8", 1: "16", 2: "24"}[raw[0] & 3]
+        mn = "ld" if raw[0] < 0xd0 else "ldw"
+        out.append("%s (%s:16), (%s:%s)" % (mn, m.group(1), m.group(2), w))
     m = re.match(r'^ld \((0x[0-9a-f]+)\),\((0x[0-9a-f]+)\)$', udm)
-    if m:
+    if m and raw[0] in (0xf0, 0xf1, 0xf2):
         w = "24" if raw[0] == 0xf2 else "16" if raw[0] == 0xf1 else "8"
         out.append("ld (%s:%s), (%s:16)" % (m.group(1), w, m.group(2)))
         out.append("ldw (%s:%s), (%s:16)" % (m.group(1), w, m.group(2)))
@@ -211,6 +278,10 @@ def fallback_spellings(udm, raw):
         b = ", ".join("0x%02x" % x for x in raw[1:4])
         for form in ("%s%s_sri_rm", "%s_sri%s_rm", "%s%s_sri_mr", "%s_sri%s_mr"):
             out.append("%s %s, %s" % (form % (op, sz), reg, b))
+    m = re.match(r'^(bit|set|res) (\d+),\(X\w\w\+\w+\)$', udm)
+    if m and raw[0] == 0xf3 and len(raw) == 5:
+        b = ", ".join("0x%02x" % x for x in raw[1:4])
+        out.append("%s_dri %s, %s" % (m.group(1), m.group(2), b))
     m = re.match(r'^(\w+) \((X\w\w)\+(\w+)\),(0x[0-9a-f]+)$', udm)
     if m and raw[0] == 0xc3 and raw[1] == 0x07 and len(raw) == 6:
         op = m.group(1).lower()
@@ -218,6 +289,17 @@ def fallback_spellings(udm, raw):
         for form in ("%sib_sri", "%s_srib_im", "%sib_dri"):
             out.append("%s %s, %s" % (form % op, b, m.group(4)))
     return out
+
+
+def branch_refs(name, image):
+    """How many control transfers (jr/jrl/jp/call/calr/djnz) in the image's
+    tree name `name` as their target.  A DATA reference (`ld xix, NAME`) is
+    deliberately not counted: it says the bytes are read, not executed."""
+    r = subprocess.run(["git", "grep", "-h", "-a", "-w", "-F", name, "--",
+                        "%s/maincpu/*.s" % image], cwd=ROOT, capture_output=True, text=True)
+    pat = re.compile(r'^\s*(?:[\w.$]+:\s*)?(jr|jrl|jp|call|calr|djnz)\b[^;]*(?<![\w.$@])%s(?![\w.$@])'
+                     % re.escape(name))
+    return sum(1 for ln in r.stdout.split("\n") if pat.match(ln))
 
 
 def plan(ctx, lo, hi, allow_after_term=False):
@@ -241,13 +323,18 @@ def plan(ctx, lo, hi, allow_after_term=False):
     new = []
     for a, n, m in ud:
         got = llvm_at.get(a)
-        if got and got[0] == n and not got[1].startswith(".byte"):
+        raw = list(ctx.rom[a - BASE:a - BASE + n])
+        house = ud_spelling(m, raw)
+        if house and encode([house])[0] == raw:
+            t = house
+        elif got and got[0] == n and not got[1].startswith(".byte") \
+                and registers_agree(got[1], m):
             t = got[1]
         else:
             t = None
-            raw = list(ctx.rom[a - BASE:a - BASE + n])
             alone = VR.disassemble(bytes(raw))
-            if len(alone) == 1 and alone[0][0] == n and not alone[0][1].strip().startswith(".byte"):
+            if len(alone) == 1 and alone[0][0] == n and not alone[0][1].strip().startswith(".byte") \
+                    and registers_agree(alone[0][1], m):
                 t = alone[0][1].strip()      # LLVM framing was out of step here only
             for cand in ([] if t else fallback_spellings(m, raw)):
                 if encode([cand])[0] == raw:
@@ -361,7 +448,7 @@ def plan(ctx, lo, hi, allow_after_term=False):
                 k2 = li - 1
                 while k2 >= first_li and k2 not in ctx.span:
                     mm = LBL.match(ctx.lines[k2])
-                    if mm and refs_elsewhere(mm.group(1), ctx.path) > 0:
+                    if mm and branch_refs(mm.group(1), ctx.image) > 0:
                         labelled_target = True
                     k2 -= 1
                 if emitted_upto == a and prev_code and TERM.match(prev_code.lower()) \
@@ -498,6 +585,33 @@ def auto_spans(ctx, maxrun=4096):
     return merged
 
 
+PSEUDO = re.compile(r'^\s*(ldb_d8|stb_d8|stdi8|anddi8|ordi8|xordi8|cpda8|bitda|pushdi_w|cpdi8|'
+                    r'ldw_d8|stw_d8|stdi16|cpdi16)\b')
+
+
+def restyle(ctx):
+    """-> {li: new_line} for lines spelled with an LLVM-disassembler pseudo
+    mnemonic (ldb_d8, stdi8, bitda, cpda8, pushdi_w ...) that have a
+    house-style spelling (`ld a, (0x270c:16)`) re-encoding to the same bytes
+    AND agreeing with unidasm's registers."""
+    out = {}
+    for li, (a, e) in ctx.span.items():
+        text = ctx.lines[li]
+        m = PSEUDO.match(text)
+        if not m:
+            continue
+        c0 = drc.strip_comment(text)
+        cm = text[len(c0):]
+        raw = list(ctx.rom[a - BASE:e - BASE])
+        ud = unidasm(bytes(raw), a)
+        if len(ud) != 1 or ud[0][1] != len(raw):
+            continue
+        h = ud_spelling(ud[0][2], raw)
+        if h and encode([h])[0] == raw and registers_agree(h, ud[0][2]):
+            out[li] = "\t" + h + cm
+    return out
+
+
 def build_and_compare(image):
     r = subprocess.run(["make", "rebuilt_ROMs/kn5000_%s_program.llvm.rom" % image], cwd=ROOT,
                        capture_output=True, text=True)
@@ -520,12 +634,30 @@ def main():
     ap.add_argument("--auto", action="store_true")
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--allow-after-terminator", action="store_true")
+    ap.add_argument("--restyle", action="store_true",
+                    help="only respell LLVM pseudo mnemonics (ldb_d8, stdi8, ...) in house style")
     ap.add_argument("--drop-comment", help="regex: inline comments on DIRTY lines that the "
                     "re-frame proves false (e.g. 'cannot be spelled') are dropped, not carried")
     a = ap.parse_args()
     global DROP_COMMENT
     DROP_COMMENT = a.drop_comment
     ctx = Ctx(a.image, a.file)
+    if a.restyle:
+        rs = restyle(ctx)
+        for li, t in sorted(rs.items()):
+            print("  %5d  %-40s -> %s" % (li + 1, ctx.lines[li].strip(), t.strip()))
+        print("%d line(s) restyled" % len(rs))
+        if a.apply and rs:
+            orig = open(ctx.path, encoding="latin-1").read()
+            L = ctx.lines[:]
+            for li, t in rs.items():
+                L[li] = t
+            open(ctx.path, "w", encoding="latin-1").write("\n".join(L))
+            if not build_and_compare(a.image):
+                open(ctx.path, "w", encoding="latin-1").write(orig)
+                sys.exit("REJECTED: image differs; file restored")
+            print("VERIFIED: %s byte-identical after restyle" % a.image)
+        return
     spans = [tuple(int(x, 0) for x in s.split(":")) for s in a.span]
     if a.auto:
         spans += auto_spans(ctx)

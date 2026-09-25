@@ -13472,7 +13472,7 @@ SqplyFunc_ParamFormatData_Skip2:
 	lda	xbc, (xwa+18)
 	cp	l, 130
 	jr	nz, SqplyFunc_ParamFormatData_Skip2_Skip2
-	bitda 0, (0x28b1)
+	bit 0, (0x28b1:16)
 	jr z, SqplyFunc_ParamFormatData_Skip2_Skip
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5DA
 	jr	SqplyFunc_ParamFormatData_Skip2_Join
@@ -13485,7 +13485,7 @@ SqplyFunc_ParamFormatData_Skip2_Join:
 	jr SqplyFunc_ParamFormatData_Skip2_Join3
 SqplyFunc_ParamFormatData_Skip2_Skip2:
 	ld xbc, (xbc)
-	bitda 1, (0x28b1)
+	bit 1, (0x28b1:16)
 	jr z, SqplyFunc_ParamFormatData_Skip2_Skip3
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5E6
 	jr	SqplyFunc_ParamFormatData_Skip2_Join2
@@ -13498,7 +13498,7 @@ SqplyFunc_ParamFormatData_Skip2_Join2:
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F8
-	cpdi8 (0x283a), 0
+	cp (0x283a:16), 0
 	jr	z, SqplyFunc_ParamFormatData_Skip3
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5F2
 SqplyFunc_ParamFormatData_Skip3:
@@ -13515,11 +13515,11 @@ SqplyFunc_ParamFormatData_Skip2_Join3:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, SqplyFunc_ParamFormatData_Skip3_Skip
-	pushdi_w (0x2520)
+	pushm (0x2520:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x5FE
 	jr	SqplyFunc_ParamFormatData_Skip3_Join
 SqplyFunc_ParamFormatData_Skip3_Skip:
-	pushdi_w (0x251c)
+	pushm (0x251c:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x604
 SqplyFunc_ParamFormatData_Skip3_Join:
 	jrl	SqplyFunc_PushFormatAddr
@@ -13528,11 +13528,11 @@ SqplyFunc_ParamFormatData_Skip3_Join:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, SqplyFunc_ParamFormatData_Skip3_Skip2
-	pushdi_w (0x2522)
+	pushm (0x2522:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x60A
 	jr	SqplyFunc_ParamFormatData_Skip3_Join2
 SqplyFunc_ParamFormatData_Skip3_Skip2:
-	pushdi_w (0x251e)
+	pushm (0x251e:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x610
 SqplyFunc_ParamFormatData_Skip3_Join2:
 	jr	SqplyFunc_PushFormatAddr
@@ -13861,26 +13861,26 @@ Sqedt_ParamDispatch_Join:
 	ld_rrw hl, xix, hl
 	lda xix, (15944414:24)
 	jp_rr 8, xix, hl
-	pushdi_w (0x2610)
+	pushm (0x2610:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x674
 	jr	Sqedt_ParamDispatch_Join2
-	pushdi_w (0x261e)
+	pushm (0x261e:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x67A
 	jr	Sqedt_ParamDispatch_Join2
-	pushdi_w (0xf1d7)
+	pushm (0xf1d7:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x680
 	jr	Sqedt_ParamDispatch_Join2
-	pushdi_w (0xf1dc)
+	pushm (0xf1dc:16)
 	ld xwa, FmtStr_pct3d_4B5E
 	jr	Sqedt_ParamDispatch_Join2
-	pushdi_w (0xf1f2)
+	pushm (0xf1f2:16)
 	ld xwa, 0x00e34b64
 	jr	Sqedt_ParamDispatch_Join2
-	pushdi_w (0xf229)
+	pushm (0xf229:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x692
 	jr	Sqedt_ParamDispatch_Join2
 Sqedt_ParamDispatch_Entry:
-	pushdi_w (0x2606)
+	pushm (0x2606:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x698
 Sqedt_ParamDispatch_Join2:
 	jrl	Sqedt_ParamDispatch_Join10
@@ -13897,26 +13897,26 @@ Sqedt_ParamDispatch_Join2:
 	ld_rrw hl, xix, hl
 	lda xix, (15944534:24)
 	jp_rr 8, xix, hl
-	pushdi_w (0x2612)
+	pushm (0x2612:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E
 	jr	Sqedt_ParamDispatch_Join2_Join
-	pushdi_w (0x2620)
+	pushm (0x2620:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
 	jr	Sqedt_ParamDispatch_Join2_Join
-	pushdi_w (0x262c)
+	pushm (0x262c:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA
 	jr	Sqedt_ParamDispatch_Join2_Join
-	pushdi_w (0x2626)
+	pushm (0x2626:16)
 	ld xwa, NakaInst_3d
 	jr	Sqedt_ParamDispatch_Join2_Join
-	pushdi_w (0x25fc)
+	pushm (0x25fc:16)
 	ld	xwa, NakaInst_3d_0x6
 	jr	Sqedt_ParamDispatch_Join2_Join
-	pushdi_w (0x25fa)
+	pushm (0x25fa:16)
 	ld	xwa, NakaInst_3d_0xC
 	jr	Sqedt_ParamDispatch_Join2_Join
 Sqedt_ParamDispatch_Entry2:
-	pushdi_w (0x2608)
+	pushm (0x2608:16)
 	ld	xwa, NakaInst_3d_0x12
 Sqedt_ParamDispatch_Join2_Join:
 	jrl	Sqedt_ParamDispatch_Join10
@@ -14139,7 +14139,7 @@ Sqedt_ParamDispatch_Join7:
 	jrl	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1ea)
+	pushm (0xf1ea:16)
 	ld	xwa, NakaInst_3d_0x98
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -14147,7 +14147,7 @@ Sqedt_ParamDispatch_Join7:
 	jrl	Sqedt_ParamDispatch_Join9
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0x2628)
+	pushm (0x2628:16)
 	ld	xwa, NakaInst_3d_0x9E
 	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
@@ -14157,7 +14157,7 @@ Sqedt_ParamDispatch_Join7:
 	jr	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1ef)
+	pushm (0xf1ef:16)
 	ld	xwa, NakaInst_3d_0xA4
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -14177,7 +14177,7 @@ Sqedt_ParamDispatch_Join7:
 	jr	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1e2)
+	pushm (0xf1e2:16)
 	ld	xwa, NakaInst_3d_0xB0
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -14185,7 +14185,7 @@ Sqedt_ParamDispatch_Join7:
 	jrl	Sqedt_ParamDispatch_Join9
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0x262e)
+	pushm (0x262e:16)
 	ld	xwa, NakaInst_3d_0xB6
 	jrl	Sqedt_ParamDispatch_Join10
 	ld	xwa, (xsp+8)
@@ -14202,7 +14202,7 @@ Sqedt_ParamDispatch_Join8:
 	jrl	SqedtFunc_ModeC_Entry
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1e7)
+	pushm (0xf1e7:16)
 	ld xwa, 0x00e34c44
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -14228,7 +14228,7 @@ Sqedt_ParamDispatch_Join8:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
-	ldb_d8 a, (0x270c)
+	ld a, (0x270c:16)
 	jr Sqedt_ParamDispatch_Join8_Join
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa

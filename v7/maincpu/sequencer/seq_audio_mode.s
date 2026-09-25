@@ -47,20 +47,37 @@ AudioMode_CopyAccentFlags:
 	and	a, 61
 	ld	(12998:16), a
 	ret
-AccPedal_BytecodeBlock1:
-	.byte 0x28, 0x3d, 0xc1, 0xc7, 0x32, 0x3c, 0xfe, 0x45
-	.byte 0x00, 0x48, 0x09, 0x00, 0xed, 0xc8, 0x10, 0x00
-	.byte 0x00, 0x00, 0x85, 0x21, 0xc9, 0x33, 0x00, 0x66
-	.byte 0x05, 0xc1, 0xc7, 0x32, 0x3e, 0x01, 0x5d
-AccPedal_BytecodeBlock1_Code:
+; -----------------------------------------------------------------------------
+; AccPedal_LoadFlagFromStyleMem -- bit 0 of RAM 0x32C7 := bit 0 of the byte at
+; RAM 0x094810.  Preserves WA and XIY.  (v10: the same routine on 0x3363.)
+; 0x094800 is the RAM copy of the composer factory user-style memory
+; (technics-docs memory-map.md), so the byte read is offset 0x10 of it.
+; Sibling of AccPedal_SetFlag13155 below, which sets the same bit.
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v7 0xF533A5 -- one
+; absolute hit, at 0xF62013, is the operand bytes of `cp iy,(0x33a5)`; no
+; calr/jr/jrl lands here.  Was `.byte` until 2026-09-25
+; (notes/sequi-2026-09-25/reframe-v7-seq_audio_mode.log).
+; -----------------------------------------------------------------------------
+AccPedal_LoadFlagFromStyleMem:
+	pushw wa
+	push xiy
+	and (0x32c7:16), 0xfe
+	ld xiy, 0x00094800
+	add xiy, 16
+	ld a, (xiy)
+	bit 0, a
+	jr z, AccPedal_LoadFlagFromStyleMem_Done
+	or (0x32c7:16), 0x01
+AccPedal_LoadFlagFromStyleMem_Done:
+	pop xiy
 	popw	wa
 	ret	
 AccPedal_SetFlag13155:
 	pushw wa
 
 	push xiy
+	or (0x32c7:16), 0x01
 
-	.byte 0xc1, 0xc7, 0x32, 0x3e, 0x01	; ordi8 0x3363, 1 (v7 patched)
 
 	pop xiy
 
@@ -70,34 +87,53 @@ AccPedal_SetFlag13155:
 
 
 
-AccPedal_PartOffsetTable:
-	.byte 0x00, 0x00, 0x30, 0x00, 0x00, 0x98, 0x31, 0x00
-	.byte 0x00, 0x00, 0x33, 0x00, 0x00, 0x98, 0x34, 0x00
-	.byte 0x00, 0x00, 0x36, 0x00, 0x00, 0x98, 0x37, 0x00
-	.byte 0x00, 0x00, 0x39, 0x00
+; -----------------------------------------------------------------------------
+; AccPedal_BankBaseTableCopy -- 7 x 32-bit addresses, value-for-value the same
+; as AccVoice_BankBaseTable entries 1-7 (Custom Data Flash window).  Extent:
+; to AccPedal_ProcessAllChanges, a called routine (28 bytes = 7 longs).
+; NO READER FOUND: scripts/analysis/sequi_find_refs.py v7 --window 64 0xF533D0
+; -- the hits are the call to AccPedal_ProcessAllChanges (+28) and operand
+; bytes of unrelated instructions.  Kept as data: 0x98 at +5 does not decode.
+; -----------------------------------------------------------------------------
+AccPedal_BankBaseTableCopy:
+	.long 0x00300000
+	.long 0x00319800
+	.long 0x00330000
+	.long 0x00349800
+	.long 0x00360000
+	.long 0x00379800
+	.long 0x00390000
 
 AccPedal_ProcessAllChanges:
 	xor WA,WA
 	ld XHL,Display_FontPalette_Table_0x1D58
 	ld a, (0x0433:16)
-	.byte 0xf3, 0x07, 0xec, 0xe0, 0xc8, 0x76, 0x74, 0x00
-	.byte 0xc9, 0xd1, 0xf1, 0x5f, 0x32, 0xc8, 0x66, 0x03
-	.byte 0xc9, 0xce, 0x40
+	bit_dri 0, 0x07, 0xec, 0xe0
+	jrl z, AccPedal_ReadBankAndReturn
+	xor a, a
+	bit 0, (0x325f:16)
+	jr z, AccPedal_CheckBit1Left
+	or a, 64
 AccPedal_CheckBit1Left:
-	.byte 0xf1, 0x5f, 0x32, 0xc9, 0x66, 0x03, 0xc9, 0xce
-	.byte 0x80
+	bit 1, (0x325f:16)
+	jr z, AccPedal_CheckBit0Right
+	or a, 128
 AccPedal_CheckBit0Right:
-	.byte 0xf1, 0x61, 0x32, 0xc8, 0x66, 0x03, 0xc9, 0xce
-	.byte 0x10
+	bit 0, (0x3261:16)
+	jr z, AccPedal_CheckBit1Right
+	or a, 16
 AccPedal_CheckBit1Right:
-	.byte 0xf1, 0x61, 0x32, 0xc9, 0x66, 0x03, 0xc9, 0xce
-	.byte 0x20
+	bit 1, (0x3261:16)
+	jr z, AccPedal_CheckBit0Aux
+	or a, 32
 AccPedal_CheckBit0Aux:
-	.byte 0xf1, 0x63, 0x32, 0xc8, 0x66, 0x03, 0xc9, 0xce
-	.byte 0x04
+	bit 0, (0x3263:16)
+	jr z, AccPedal_CheckBit1Aux
+	or a, 4
 AccPedal_CheckBit1Aux:
-	.byte 0xf1, 0x63, 0x32, 0xc9, 0x66, 0x03, 0xc9, 0xce
-	.byte 0x08
+	bit 1, (0x3263:16)
+	jr z, AccPedal_ApplyChangeMask
+	or a, 8
 AccPedal_ApplyChangeMask:
 	cp a, 0:i3
 	jr z, AccPedal_CheckAuxBit2
@@ -111,9 +147,14 @@ AccPedal_ApplyChangeMask:
 	calr Rhythm_QueuePartChangeEvent
 
 AccPedal_CheckAuxBit2:
-	.byte 0xf1, 0x63, 0x32, 0xca, 0x66, 0x10, 0xc1, 0x60
-	.byte 0xfc, 0x3c, 0xfb, 0x25, 0x48, 0x24, 0x05, 0x20
-	.byte 0x00, 0x21, 0x00, 0x1e, 0x86, 0xfc
+	bit 2, (0x3263:16)
+	jr z, AccPedal_ClearAllPedalFlags
+	and (0xfc60:16), 0xfb
+	ld e, 72:opc
+	ld d, 5:opc
+	ld w, 0:opc
+	ld a, 0:opc
+	calr Rhythm_QueuePartChangeEvent
 AccPedal_ClearAllPedalFlags:
 	xor	a, a
 	ld	(12895:16), a
@@ -127,8 +168,10 @@ AccVoice_ReadBankAssign:
 	xor WA,WA
 	ld XHL,Display_FontPalette_Table_0x1D58
 	ld a, (0x0433:16)
-	.byte 0xc3, 0x07, 0xec, 0xe0, 0x21, 0xf1, 0xe7, 0x31
-	.byte 0xc8, 0x6e, 0x02, 0x21, 0x00
+	ld_rrb a, xhl, wa
+	bit 0, (0x31e7:16)
+	jr nz, AccVoice_StoreBankAssign
+	ld a, 0:opc
 AccVoice_StoreBankAssign:
 	ld	(12774:16), a
 	ret
@@ -165,15 +208,38 @@ AccChannel_StoreCurrentState:
 	and	w, 7
 	ld	(12876:16), a
 	ret
-AccChannel_BytecodeBlock2:
-	.byte 0xc1, 0x59, 0x32, 0x21, 0xc1, 0x5a, 0x32, 0xf1
-	.byte 0x6e, 0x1d, 0xc9, 0xcf, 0x80, 0x6f, 0x2e, 0xc1
-	.byte 0x5b, 0x32, 0x21, 0xc9, 0xcc, 0x7f, 0xc9, 0xcc
-	.byte 0x07, 0xc1, 0x5c, 0x32, 0x20, 0xc8, 0xcc, 0x7f
-	.byte 0xc8, 0xcc, 0x07, 0xc8, 0xf1, 0x66, 0x16, 0xc1
-	.byte 0x59, 0x32, 0x21, 0xf1, 0x4b, 0x32, 0x41, 0xc1
-	.byte 0x5b, 0x32, 0x21, 0xc8, 0xcc, 0x7f, 0xc8, 0xcc
-	.byte 0x07, 0xf1, 0x4c, 0x32, 0x41, 0x0e
+; -----------------------------------------------------------------------------
+; AccChannel_StoreStateIfChanged -- the conditional form of
+; AccChannel_StoreCurrentState (just above): when RAM 0x3259 differs from
+; 0x325A, or it is below 0x80 and the low 3 bits of 0x325B and 0x325C differ,
+; copy 0x3259 -> 0x324B and 0x325B -> 0x324C.  (v10: 0x32F5.. / 0x32E7..;
+; the `and w` masks apply to W, not to the A that is stored.)
+; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v7 0xF534E8 -> none.
+; Was `.byte` until 2026-09-25; decodes cleanly, both decoders agree.
+; -----------------------------------------------------------------------------
+AccChannel_StoreStateIfChanged:
+	ld a, (0x3259:16)
+	cp a, (0x325a:16)
+	jr nz, AccChannel_StoreStateIfChanged_Store
+	cp a, 128
+	jr nc, AccChannel_StoreStateIfChanged_Return
+	ld a, (0x325b:16)
+	and a, 127
+	and a, 7
+	ld w, (0x325c:16)
+	and w, 127
+	and w, 7
+	cp a, w
+	jr z, AccChannel_StoreStateIfChanged_Return
+AccChannel_StoreStateIfChanged_Store:
+	ld a, (0x3259:16)
+	ld (0x324b:16), a
+	ld a, (0x325b:16)
+	and w, 127
+	and w, 7
+	ld (0x324c:16), a
+AccChannel_StoreStateIfChanged_Return:
+	ret
 AccChannel_SetDirtyIfActive:
 	ld wa, (0x3247:16)
 	and W,0x07
@@ -400,39 +466,67 @@ AccChord_MaskAndContinue:
 	and a, 0x7f
 
 AccChord_DispatchVoiceChange:
-	.byte 0x1e, 0x8c, 0x02, 0xc9, 0x8b, 0xc9, 0xd1, 0xf1
-	.byte 0x6e, 0x32, 0xc8, 0x66, 0x18, 0xc1, 0xc8, 0x32
-	.byte 0xf3, 0x66, 0x12, 0xc1, 0x6e, 0x32, 0x3c, 0xfe
-	.byte 0xc1, 0x8b, 0x32, 0x3c, 0xc0, 0xc1, 0x63, 0x32
-	.byte 0x3c, 0xfe, 0xc9, 0xce, 0x04
+	calr AccPatch_SetVoiceParam
+	ld c, a
+	xor a, a
+	bit 0, (0x326e:16)
+	jr z, AccChord_CheckVoiceBit2
+	cp c, (0x32c8:16)
+	jr z, AccChord_CheckVoiceBit2
+	and (0x326e:16), 0xfe
+	and (0x328b:16), 0xc0
+	and (0x3263:16), 0xfe
+	or a, 4
 AccChord_CheckVoiceBit2:
-	.byte 0xf1, 0x6e, 0x32, 0xca, 0x66, 0x1e, 0x43, 0xb0
-	.byte 0x6b, 0xe4, 0x00, 0xf3, 0x03, 0xec, 0xe4, 0xc8
-	.byte 0x66, 0x12, 0xc1, 0x6e, 0x32, 0x3c, 0xfb, 0xc1
-	.byte 0x8b, 0x32, 0x3c, 0xc0, 0xc1, 0x63, 0x32, 0x3c
-	.byte 0xfd, 0xc9, 0xce, 0x08
+	bit 2, (0x326e:16)
+	jr z, AccChord_CheckLeftPedal0
+	ld xhl, Display_FontPalette_Table_0x1D58
+	bit_dri 0, 0x03, 0xec, 0xe4
+	jr z, AccChord_CheckLeftPedal0
+	and (0x326e:16), 0xfb
+	and (0x328b:16), 0xc0
+	and (0x3263:16), 0xfd
+	or a, 8
 AccChord_CheckLeftPedal0:
-	.byte 0xf1, 0x6d, 0x32, 0xc8, 0x66, 0x18, 0xc1, 0xcc
-	.byte 0x32, 0xf3, 0x66, 0x12, 0xc1, 0x6d, 0x32, 0x3c
-	.byte 0xfe, 0xc1, 0x8b, 0x32, 0x3c, 0xc0, 0xc1, 0x5f
-	.byte 0x32, 0x3c, 0xfe, 0xc9, 0xce, 0x40
+	bit 0, (0x326d:16)
+	jr z, AccChord_CheckLeftPedal1
+	cp c, (0x32cc:16)
+	jr z, AccChord_CheckLeftPedal1
+	and (0x326d:16), 0xfe
+	and (0x328b:16), 0xc0
+	and (0x325f:16), 0xfe
+	or a, 64
 AccChord_CheckLeftPedal1:
-	.byte 0xf1, 0x6d, 0x32, 0xc9, 0x66, 0x18, 0xc1, 0xce
-	.byte 0x32, 0xf3, 0x66, 0x12, 0xc1, 0x6d, 0x32, 0x3c
-	.byte 0xfd, 0xc1, 0x8b, 0x32, 0x3c, 0xc0, 0xc1, 0x5f
-	.byte 0x32, 0x3c, 0xfd, 0xc9, 0xce, 0x80
+	bit 1, (0x326d:16)
+	jr z, AccChord_CheckKeyChange0
+	cp c, (0x32ce:16)
+	jr z, AccChord_CheckKeyChange0
+	and (0x326d:16), 0xfd
+	and (0x328b:16), 0xc0
+	and (0x325f:16), 0xfd
+	or a, 128
 AccChord_CheckKeyChange0:
-	.byte 0xf1, 0x6f, 0x32, 0xc8, 0x66, 0x1e, 0xc1, 0xd0
-	.byte 0x32, 0xf3, 0x66, 0x18, 0xc1, 0x6f, 0x32, 0x3c
-	.byte 0xfe, 0xc1, 0x61, 0x32, 0x3c, 0xfe, 0xc9, 0xce
-	.byte 0x10, 0xf1, 0x70, 0x32, 0xc8, 0x6e, 0x05, 0xc1
-	.byte 0x8b, 0x32, 0x3c, 0xc0
+	bit 0, (0x326f:16)
+	jr z, RhythmPart_ProcessBit0
+	cp c, (0x32d0:16)
+	jr z, RhythmPart_ProcessBit0
+	and (0x326f:16), 0xfe
+	and (0x3261:16), 0xfe
+	or a, 16
+	bit 0, (0x3270:16)
+	jr nz, RhythmPart_ProcessBit0
+	and (0x328b:16), 0xc0
 RhythmPart_ProcessBit0:
-	.byte 0xf1, 0x6f, 0x32, 0xc9, 0x66, 0x1e, 0xc1, 0xd2
-	.byte 0x32, 0xf3, 0x66, 0x18, 0xc1, 0x6f, 0x32, 0x3c
-	.byte 0xfd, 0xc1, 0x61, 0x32, 0x3c, 0xfd, 0xc9, 0xce
-	.byte 0x20, 0xf1, 0x70, 0x32, 0xc8, 0x6e, 0x05, 0xc1
-	.byte 0x8b, 0x32, 0x3c, 0xc0
+	bit 1, (0x326f:16)
+	jr z, RhythmPart_ProcessBit1
+	cp c, (0x32d2:16)
+	jr z, RhythmPart_ProcessBit1
+	and (0x326f:16), 0xfd
+	and (0x3261:16), 0xfd
+	or a, 32
+	bit 0, (0x3270:16)
+	jr nz, RhythmPart_ProcessBit1
+	and (0x328b:16), 0xc0
 RhythmPart_ProcessBit1:
 	cp a, 0:i3
 	jr z, AccChord_CheckExtraDirtyBit3
@@ -445,21 +539,36 @@ RhythmPart_ProcessBit1:
 	calr Rhythm_QueuePartChangeEvent
 
 AccChord_CheckExtraDirtyBit3:
-	.byte 0xf1, 0x6e, 0x32, 0xcb, 0x66, 0x25, 0xc1, 0xca
-	.byte 0x32, 0xf3, 0x66, 0x1f, 0xc1, 0x6e, 0x32, 0x3c
-	.byte 0xf7, 0xc1, 0x8b, 0x32, 0x3c, 0xc0, 0xc1, 0x63
-	.byte 0x32, 0x3c, 0xfb, 0xc1, 0x5f, 0xfc, 0x3c, 0xfb
-	.byte 0x21, 0x00, 0x20, 0x00, 0x25, 0x48, 0x24, 0x05
-	.byte 0x1e, 0x7f, 0xf8
+	bit 3, (0x326e:16)
+	jr z, AccChord_CheckPitchDirty
+	cp c, (0x32ca:16)
+	jr z, AccChord_CheckPitchDirty
+	and (0x326e:16), 0xf7
+	and (0x328b:16), 0xc0
+	and (0x3263:16), 0xfb
+	and (0xfc5f:16), 0xfb
+	ld a, 0:opc
+	ld w, 0:opc
+	ld e, 72:opc
+	ld d, 5:opc
+	calr Rhythm_QueuePartChangeEvent
 AccChord_CheckPitchDirty:
-	.byte 0xc1, 0x8d, 0x32, 0x21, 0xc9, 0xcc, 0x3f, 0x66
-	.byte 0x2a, 0xf1, 0x5f, 0x32, 0xc8, 0x66, 0x0d, 0xc1
-	.byte 0xcc, 0x32, 0xf3, 0x66, 0x1e, 0xc1, 0x8d, 0x32
-	.byte 0x3c, 0xc0, 0x68, 0x17
+	ld a, (0x328d:16)
+	and a, 63
+	jr z, AccChord_NullRet
+	bit 0, (0x325f:16)
+	jr z, AccChord_CheckPitchLeftPedal1
+	cp c, (0x32cc:16)
+	jr z, AccChord_NullRet
+	and (0x328d:16), 0xc0
+	jr AccChord_NullRet
 AccChord_CheckPitchLeftPedal1:
-	.byte 0xf1, 0x5f, 0x32, 0xc9, 0x66, 0x11, 0x43, 0xb0
-	.byte 0x6b, 0xe4, 0x00, 0xf3, 0x03, 0xec, 0xe4, 0xc8
-	.byte 0x66, 0x05, 0xc1, 0x8d, 0x32, 0x3c, 0xc0
+	bit 1, (0x325f:16)
+	jr z, AccChord_NullRet
+	ld xhl, Display_FontPalette_Table_0x1D58
+	bit_dri 0, 0x03, 0xec, 0xe4
+	jr z, AccChord_NullRet
+	and (0x328d:16), 0xc0
 AccChord_NullRet:
 	ret
 
@@ -528,18 +637,37 @@ AccVoice_ComputeParamOffset:
 	ld	a, (12874:16)
 	extz	wa
 	sla	wa, 2
-	ld	xix, 16070995
+	ld	xix, AccVoice_BankBaseTable
 	ld_rrl	xix, xix, wa
 	add	xiy, xix
 	add	xiy, 96
 	pop	xix
 	pop	xwa
 	ret
-AccVoice_PartOffsetTable2:
-	.byte 0x00, 0x48, 0x09, 0x00, 0x00, 0x00, 0x30, 0x00
-	.byte 0x00, 0x98, 0x31, 0x00, 0x00, 0x00, 0x33, 0x00
-	.byte 0x00, 0x98, 0x34, 0x00, 0x00, 0x00, 0x36, 0x00
-	.byte 0x00, 0x98, 0x37, 0x00, 0x00, 0x00, 0x39, 0x00
+; -----------------------------------------------------------------------------
+; AccVoice_BankBaseTable -- 8 x 32-bit base addresses indexed by RAM byte
+; 0x324A (v10: 0x32E6).
+; Reader: AccVoice_ComputeParamOffset (0xF5392A, the tail of
+; AccVoice_ResolveParamAddr 0xF5391C): `ld xix, AccVoice_BankBaseTable`,
+; `ld_rrl xix, xix, wa` with wa = (0x324A)*4; the entry is added to the
+; 32-bit offset loaded from the RhythmTiming_OffsetTable entry (A clamped to
+; 0..0x1D) plus 0x60, and the sum returned in XIY -- each entry is the base
+; of a bank those offsets index into.
+; Stride 4 (`sla wa, 2`); 8 entries = 32 bytes, to AccVoice_ComputeChannelIndex.
+; Entry 0 is RAM 0x094800, the RAM copy of the composer factory user-style
+; memory (technics-docs memory-map.md); entries 1-7 lie in the Custom Data
+; Flash window 0x300000-0x3FFFFF.  Which user-style slots they are is not
+; established.
+; -----------------------------------------------------------------------------
+AccVoice_BankBaseTable:
+	.long 0x00094800
+	.long 0x00300000
+	.long 0x00319800
+	.long 0x00330000
+	.long 0x00349800
+	.long 0x00360000
+	.long 0x00379800
+	.long 0x00390000
 
 AccVoice_ComputeChannelIndex:
 	and h, 0x7
@@ -733,8 +861,8 @@ AccTuning_LoadAndApplyMaster:
 	ld bc, 7:i3
 
 	ldir85
+	call AccTuning_LoadMaster	; call AccTuning_LoadMaster (v7 addr)
 
-	.byte 0x1d, 0x4a, 0x94, 0xf5	; call AccTuning_LoadMaster (v7 addr)
 
 	pop xiy
 
@@ -766,8 +894,8 @@ AccTuning_LoadCoarseFromStyle:
 	ld xix, 12723
 
 	ld (xix), 0x40
+	call AccTuning_LoadCoarse	; call AccTuning_LoadCoarse (v7 addr)
 
-	.byte 0x1d, 0x6b, 0x94, 0xf5	; call AccTuning_LoadCoarse (v7 addr)
 
 	pop xiy
 
@@ -799,8 +927,8 @@ AccTuning_LoadFineFromStyle:
 	ld xix, 12730
 
 	ld (xix), 0xc
+	call AccTuning_LoadFine	; call AccTuning_LoadFine (v7 addr)
 
-	.byte 0x1d, 0x98, 0x94, 0xf5	; call AccTuning_LoadFine (v7 addr)
 
 	pop xiy
 
@@ -832,8 +960,8 @@ AccTuning_LoadOctaveFromStyle:
 	ld xix, 12737
 
 	ld (xix), 0x74
+	call AccTuning_LoadOctave	; call AccTuning_LoadOctave (v7 addr)
 
-	.byte 0x1d, 0xc5, 0x94, 0xf5	; call AccTuning_LoadOctave (v7 addr)
 
 	pop xiy
 
@@ -865,8 +993,8 @@ AccTuning_LoadTransposeFromStyle:
 	ld xix, 12744
 
 	ld (xix), 0x40
+	call AccTuning_LoadTranspose	; call AccTuning_LoadTranspose (v7 addr)
 
-	.byte 0x1d, 0xf2, 0x94, 0xf5	; call AccTuning_LoadTranspose (v7 addr)
 
 	pop xiy
 
@@ -972,9 +1100,9 @@ RhythmPart1_ProcessRingBuf:
 
 
 RhythmPart1_WriteDone:
-	.byte 0xc1, 0x90, 0x32, 0x3c, 0xfc	; anddi8 (0x332c), 252 (v7 patched)
+	and (0x3290:16), 0xfc	; anddi8 (0x332c), 252 (v7 patched)
+	call AccVoiceReg_WritePart1	; call AccVoiceReg_WritePart1 (v7 addr)
 
-	.byte 0x1d, 0x00, 0xc6, 0xf5	; call AccVoiceReg_WritePart1 (v7 addr)
 
 	ret
 
@@ -1409,22 +1537,74 @@ VoiceParams_LoadFiveSequential:
 	call Rhythm_SendByte
 	ret
 
-AccVoice_BytecodeBlock3:
-	.byte 0x1e, 0x0d, 0x00, 0x1e, 0x15, 0x00, 0x1e, 0x1d
-	.byte 0x00, 0x1e, 0x25, 0x00, 0x1e, 0x2d, 0x00, 0x0e
-	.byte 0xf1, 0xaa, 0x31, 0x00, 0x06, 0xf1, 0xab, 0x31
-	.byte 0x00, 0x00, 0x0e, 0xf1, 0xb1, 0x31, 0x00, 0x00
-	.byte 0xf1, 0xb2, 0x31, 0x00, 0x00, 0x0e, 0xf1, 0xb8
-	.byte 0x31, 0x00, 0x00, 0xf1, 0xb9, 0x31, 0x00, 0x00
-	.byte 0x0e, 0xf1, 0xbf, 0x31, 0x00, 0x00, 0xf1, 0xc0
-	.byte 0x31, 0x00, 0x00, 0x0e, 0xf1, 0xc6, 0x31, 0x00
-	.byte 0x00, 0xf1, 0xc7, 0x31, 0x00, 0x00, 0x0e, 0xf1
-	.byte 0x59, 0x32, 0x00, 0x0f, 0xc1, 0x5b, 0x32, 0x3c
-	.byte 0xf8, 0xc1, 0x5b, 0x32, 0x3e, 0x00, 0x0e, 0x0e
-	.byte 0x1d, 0xe5, 0x57, 0xf5, 0xf1, 0x8f, 0x32, 0x45
-	.byte 0x0e, 0xc1, 0x5a, 0xfc, 0x21, 0xc1, 0x5b, 0xfc
-	.byte 0x24, 0x1d, 0xaf, 0x57, 0xf5, 0xf1, 0x8f, 0x32
-	.byte 0x41, 0x0e
+; -----------------------------------------------------------------------------
+; Nine small routines between VoiceParams_LoadFiveSequential and
+; RhythmROM_CheckValid, `.byte` until 2026-09-25.  Both decoders agree on every
+; instruction (notes/sequi-2026-09-25/reframe-v7-seq_audio_mode.log), every
+; internal calr lands on an instruction boundary, and the calls reach the
+; independently known Rhythm_DispatchNote / Rhythm_DispatchNote_Helper.
+; NO CALLER FOUND for the five entry points nothing here calls:
+; scripts/analysis/sequi_find_refs.py v7 0xF540B9 0xF54100 0xF54110 0xF54111
+; 0xF5411A -> none (one table-data byte match).  v10 carries the same nine.
+; -----------------------------------------------------------------------------
+
+; Writes the first two bytes of the first five 7-byte records at RAM 0x31AA,
+; 0x31B1, 0x31B8, 0x31BF, 0x31C6 (record 0 byte 0 := 6, the other nine := 0).
+; v10 does the same at 0x3246.., where AccTuning_CopyAllPartsFromStyle and
+; AccVoice_LoadTuningBlock show these are the 7-byte per-part tuning records.
+AccTuning_ResetFiveParts:
+	calr AccTuning_ResetFiveParts_Rec0
+	calr AccTuning_ResetFiveParts_Rec1
+	calr AccTuning_ResetFiveParts_Rec2
+	calr AccTuning_ResetFiveParts_Rec3
+	calr AccTuning_ResetFiveParts_Rec4
+	ret
+AccTuning_ResetFiveParts_Rec0:
+	ld (0x31aa:16), 6
+	ld (0x31ab:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec1:
+	ld (0x31b1:16), 0
+	ld (0x31b2:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec2:
+	ld (0x31b8:16), 0
+	ld (0x31b9:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec3:
+	ld (0x31bf:16), 0
+	ld (0x31c0:16), 0
+	ret
+AccTuning_ResetFiveParts_Rec4:
+	ld (0x31c6:16), 0
+	ld (0x31c7:16), 0
+	ret
+
+; RAM 0x3259 := 15 and the low 3 bits of 0x325B := 0 -- the two bytes
+; AccChannel_StoreCurrentState copies out.
+AccChannel_ResetCurrentState:
+	ld (0x3259:16), 15
+	and (0x325b:16), 0xf8
+	or (0x325b:16), 0x00
+	ret
+
+AccVoice_EmptyStub:
+	ret
+
+; Stores the E that Rhythm_DispatchNote_Helper returns into RAM 0x328F.
+Rhythm_StoreDispatchHelperResult:
+	call Rhythm_DispatchNote_Helper
+	ld (0x328f:16), e
+	ret
+
+; Rhythm_DispatchNote with A = RAM 0xFC5A and D = RAM 0xFC5B; the A it
+; returns is stored into RAM 0x328F.
+Rhythm_DispatchNoteFromFC5A:
+	ld a, (0xfc5a:16)
+	ld d, (0xfc5b:16)
+	call Rhythm_DispatchNote
+	ld (0x328f:16), a
+	ret
 RhythmROM_CheckValid:
 	ld C, 0x00:opc
 	ld XWA,0xffffffff
@@ -1444,7 +1624,17 @@ RhythmROM_InvalidIncrement:
 RhythmROM_CheckDone:
 	ret
 
-RhythmROM_BytecodeBlock4:
+; -----------------------------------------------------------------------------
+; Heap_AllocAndFreeTwoBlocks -- Malloc(0x400) (pointer kept in RAM 0x34C0),
+; Malloc(0x1000), Free(second), Free(first), return.  NO CALLER FOUND:
+; scripts/analysis/sequi_find_refs.py v7 0xF54158 -> none.
+; The two callees carry misleading v7 names: 0xFF06A3
+; (`SLIDE_Decompress_4K_Init_Helper2`) is v10's Malloc (0xFF0E80) -- 63 of
+; their first 64 bytes equal, the odd one a relocated call operand -- and
+; 0xFF0315 (`SLIDE_Decompress_4K_Init_Helper`) is v10's Free (0xFF0AF2), 62/64
+; equal.  v10's copy of this routine calls Malloc / Free by name.
+; -----------------------------------------------------------------------------
+Heap_AllocAndFreeTwoBlocks:
 	ld	xwa, 1024
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper2

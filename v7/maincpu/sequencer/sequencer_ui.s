@@ -2254,7 +2254,7 @@ MeasureBoxFunc:
 	jr MeasureBoxFunc_Epilogue
 
 MeasureBoxFunc_DrawMeasure:
-	pushdi_w (0x2668)
+	pushm (0x2668:16)
 	pushw 0x00e2
 	pushw 0x6200
 	ld xwa, (xde+18)
@@ -8208,7 +8208,7 @@ NoteEdit_FormatTempoString:
 	ld	xwa, 14894708
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
-	pushdi_w (0x2784)
+	pushm (0x2784:16)
 	ld	xwa, 14894714
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
@@ -15038,7 +15038,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip2:
 	lda	xbc, (xwa+18)
 	cp	l, 130
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip4
-	bitda 0, (0x28b1)
+	bit 0, (0x28b1:16)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip3
 	ld	xwa, 14895794
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join3
@@ -15051,7 +15051,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join3:
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
 EffectBoxProc_CopyNameAndSetup_Code_Skip4:
 	ld	xbc, (xbc)
-	bitda 1, (0x28b1)
+	bit 1, (0x28b1:16)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip5
 	ld	xwa, 14895806
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join4
@@ -15081,11 +15081,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join5:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry
-	pushdi_w (0x2520)
+	pushm (0x2520:16)
 	ld	xwa, 14895830
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join6
 EffectBoxProc_CopyNameAndSetup_Code_Entry:
-	pushdi_w (0x251c)
+	pushm (0x251c:16)
 	ld	xwa, 14895836
 EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	jrl	SqplyFunc_PushFormatAddr
@@ -15094,11 +15094,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	call	GetTitleNow
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry2
-	pushdi_w (0x2522)
+	pushm (0x2522:16)
 	ld	xwa, 14895842
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join7
 EffectBoxProc_CopyNameAndSetup_Code_Entry2:
-	pushdi_w (0x251e)
+	pushm (0x251e:16)
 	ld	xwa, 14895848
 EffectBoxProc_CopyNameAndSetup_Code_Join7:
 	jr	SqplyFunc_PushFormatAddr
@@ -15425,26 +15425,26 @@ EffectBoxProc_CopyNameAndSetup_Code_Join9:
 	ld_rrw	hl, xix, hl
 	lda	xix, (15944372:24)
 	jp_rr	8, xix, hl
-	pushdi_w (0x2610)
+	pushm (0x2610:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x674
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	pushdi_w (0x261e)
+	pushm (0x261e:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x67A
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	pushdi_w (0xf1d7)
+	pushm (0xf1d7:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x680
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	pushdi_w (0xf1dc)
+	pushm (0xf1dc:16)
 	ld xwa, FmtStr_pct3d_4B5E
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	pushdi_w (0xf1f2)
+	pushm (0xf1f2:16)
 	ld xwa, 0x00e34b64
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-	pushdi_w (0xf229)
+	pushm (0xf229:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x692
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
 EffectBoxProc_CopyNameAndSetup_Code_Entry3:
-	pushdi_w (0x2606)
+	pushm (0x2606:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x698
 EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
@@ -15461,26 +15461,26 @@ EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	ld_rrw	hl, xix, hl
 	lda	xix, (15944492:24)
 	jp_rr	8, xix, hl
-	pushdi_w (0x2612)
+	pushm (0x2612:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x69E
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
-	pushdi_w (0x2620)
+	pushm (0x2620:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6A4
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
-	pushdi_w (0x262c)
+	pushm (0x262c:16)
 	ld	xwa, ExtDevice_ModeDispatch_Table_0x6AA
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
-	pushdi_w (0x2626)
+	pushm (0x2626:16)
 	ld xwa, NakaInst_3d
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
-	pushdi_w (0x25fc)
+	pushm (0x25fc:16)
 	ld	xwa, NakaInst_3d_0x6
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
-	pushdi_w (0x25fa)
+	pushm (0x25fa:16)
 	ld	xwa, NakaInst_3d_0xC
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10_Join
 EffectBoxProc_CopyNameAndSetup_Code_Entry4:
-	pushdi_w (0x2608)
+	pushm (0x2608:16)
 	ld	xwa, NakaInst_3d_0x12
 EffectBoxProc_CopyNameAndSetup_Code_Join10_Join:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
@@ -15703,7 +15703,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1ea)
+	pushm (0xf1ea:16)
 	ld	xwa, NakaInst_3d_0x98
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -15711,7 +15711,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0x2628)
+	pushm (0x2628:16)
 	ld	xwa, NakaInst_3d_0x9E
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
@@ -15721,7 +15721,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1ef)
+	pushm (0xf1ef:16)
 	ld	xwa, NakaInst_3d_0xA4
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -15741,7 +15741,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1e2)
+	pushm (0xf1e2:16)
 	ld	xwa, NakaInst_3d_0xB0
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -15749,7 +15749,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join17
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0x262e)
+	pushm (0x262e:16)
 	ld	xwa, NakaInst_3d_0xB6
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
@@ -15766,7 +15766,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	jrl	SqedtFunc_ModeC_Entry
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
-	pushdi_w (0xf1e7)
+	pushm (0xf1e7:16)
 	ld xwa, 0x00e34c44
 	push	xwa
 	ld	xwa, (xsp+10)
@@ -15792,7 +15792,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushw	3
-	ldb_d8 a, (0x270c)
+	ld a, (0x270c:16)
 	jr EffectBoxProc_CopyNameAndSetup_Code_Join16_Join
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
