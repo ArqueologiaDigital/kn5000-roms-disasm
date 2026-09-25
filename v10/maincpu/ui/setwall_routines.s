@@ -1897,10 +1897,7 @@ SetWall_ForwardSkip_Return:
 SetWall_InlineCodeBlock3:
 	ret
 	call	AccWrap_PlayModeDispatch
-	.byte 0xc1, 0xa7
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10407), 4
 	ld	wa, (0xffec:24)
 	ld	(0xf19e:16), wa
 	push	xix
@@ -2027,16 +2024,12 @@ SetWall_MiscDataAndCode_Entry:
 	cp hl, 65535
 	jr	z, 55
 	push	xhl
-	.byte 0xe7
-	ldw	ix, 7428
-	.byte 0x04
-	push	sr
-	.byte 0xf2, 0xe7
-	ldw	ix, 0xe105
-	swi	5
-	rcf
-	ld	c, 179:opc
-	divs8rr	c, l
+	push_lerp 52
+	call 15860228
+	pop_lerp 52
+	ldda32 xhl, (4349)
+	bitm 7, (xhl)
+	pop xhl
 	jr	z, 35
 	.byte 0xe7
 	ldw	ix, 0xe761

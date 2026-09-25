@@ -336,11 +336,12 @@ BitMapOut_ByteData_TransitionSeq_Skip2:
 	ld	xwa, 192
 	call	SndParam_LookupReadOnly
 	cp	hl, 1:i3
-	jr	nz, 14
+	jr	nz, BitMapOut_ByteData_TransitionSeq_Skip3
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20006
 	ld	xde, 3:i3
-	jr	12
+	jr	BitMapOut_ByteData_TransitionSeq_Join
+BitMapOut_ByteData_TransitionSeq_Skip3:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c20006
 	ld	xde, 1:i3
@@ -348,26 +349,21 @@ BitMapOut_ByteData_TransitionSeq_Join:
 	call	ApPostEvent
 	ret
 BitMapOut_ByteData_PresetCopy:
-	.byte 0xd7
-	swi	2
-	.byte 0x04, 0xc1
-	ldw	ix, 0x3f8d
-	ret
-	jr	z, 87
+	push qiz
+	cpdi8 (36148), 14
+	jr	z, BitMapOut_ByteData_PresetCopy_Skip
 	bitda 3, (36166)
-	jr nz, 81
-	.byte 0xc1
-	jrl	pl, 16320
-	normal
-	jr	nz, 74
-	calr	7325
+	jr nz, BitMapOut_ByteData_PresetCopy_Skip
+	cpdi8 (49277), 1
+	jr	nz, BitMapOut_ByteData_PresetCopy_Skip
+	calr	BitMapOut_GetRenderMode
 	bit	1, l
-	jr	nz, 60
+	jr	nz, BitMapOut_ByteData_PresetCopy_Code_Skip
 	ld	a, (0xc07e:16)
 	res	7, a
 	ldb_erp a, 251
 	cpib_erp 251, 0
-	jr z, 45
+	jr z, BitMapOut_ByteData_PresetCopy_Code_Skip
 	dec1b_erp 251
 	ld a, (49279:16)
 	res	7, a
@@ -387,6 +383,7 @@ BitMapOut_ByteData_PresetCopy_Code_Skip2:
 BitMapOut_ByteData_PresetCopy_Code_Skip:
 	ldw	wa, 130
 	calr	BitMapOut_GetRenderMode_Return
+BitMapOut_ByteData_PresetCopy_Skip:
 	resda 3, (36166)
 	pop qiz
 	ret
@@ -3367,8 +3364,8 @@ BitMapOut_DeltaEncode_Type90Final:
 BitMapOut_RefreshDisplay_CheckDirty:
 	extz	wa
 	ld	xbc, 0xf9a0
-	.byte 0x78
-	jrl	mi, 0x0ee5
+	jrl BitMapOut_CopyVoicePreset9
+	ret
 
 BitMapOut_RefreshDisplay_ClearDirty:
 	dec 8, xsp
@@ -3601,48 +3598,47 @@ BitMapOut_GetRenderMode_Return:
 
 BitMapOut_ByteData_RenderState:
 	push	xiz
-	.byte 0xc1
-	jrl	pl, 16320
-	max
-	jrl	nz, 179
+	cpdi8 (49277), 4
+	jrl	nz, BitMapOut_ByteData_RenderState_Epilogue
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)
 	and	a, 3
 	cp	a, 1:i3
-	jr	z, 29
+	jr	z, BitMapOut_ByteData_RenderState_Skip3
 	cp	a, 2:i3
-	jr	nz, 48
-	calr	65468
+	jr	nz, BitMapOut_ByteData_RenderState_Skip5
+	calr	BitMapOut_PrepareRender_CheckBit1
 	ldb_erp l, 251
 	inc1b_erp 251
 	cp_erpb 251, 9
-	jr le, 3
+	jr le, BitMapOut_ByteData_RenderState_Skip2
 	ldib_erp 251, 0
+BitMapOut_ByteData_RenderState_Skip2:
 	stb_erp a, 251
 	extz	wa
-	jr	20
-	calr	65443
-	.byte 0xc7
-	swi	3
-	cp	(xsp-57), hl
-	jr	ge, 105
-	.byte 0x04, 0xc7
-	swi	3
-	pop	sr
-	push	199
-	swi	3
-	.byte 0x89
+	jr	BitMapOut_ByteData_RenderState_Join
+BitMapOut_ByteData_RenderState_Skip3:
+	calr	BitMapOut_PrepareRender_CheckBit1
+	ldb_erp l, 251
+	dec1b_erp 251
+	jr ge, BitMapOut_ByteData_RenderState_Skip4
+	ldi_erpb 251, 9
+BitMapOut_ByteData_RenderState_Skip4:
+	stb_erp a, 251
 	extz	wa
-	calr	65428
+BitMapOut_ByteData_RenderState_Join:
+	calr	BitMapOut_PrepareRender_CheckBit2
+BitMapOut_ByteData_RenderState_Skip5:
 	call	GetTitleNow
 	cp	xhl, 0x01a000d0
-	jr	nz, 19
+	jr	nz, BitMapOut_ByteData_RenderState_Skip6
 	stb_erp e, 251
 	exts	de
 	exts	xde
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01c0000e
-	jr	67
+	jr	BitMapOut_ByteData_RenderState_Join2
+BitMapOut_ByteData_RenderState_Skip6:
 	call	GetTitleNow
 	cp	xhl, 0x01a000d1
 	jr	nz, BitMapOut_ByteData_RenderState_Skip
@@ -3663,12 +3659,14 @@ BitMapOut_ByteData_RenderState:
 	ld	xwa, 0xffffffff
 	ld	xbc, 0x01e00023
 	ld	xde, xiz
+BitMapOut_ByteData_RenderState_Join2:
 	call	ApPostEvent
 BitMapOut_ByteData_RenderState_Skip:
 	ld	xwa, 0:i3
 	ld	xbc, 0:i3
 	ld	xde, 0:i3
 	call	MainGetPmemName
+BitMapOut_ByteData_RenderState_Epilogue:
 	pop	xiz
 	ret
 BitMapOut_ByteData_DisplayUpdate:
@@ -3845,9 +3843,7 @@ BitMapOut_UpdateWidget_Done_Join:
 	jp	ToneGen_LookupByVoiceIndex
 	ret
 	dec	2, xsp
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push qiz
 	ld	(xsp+2), a
 	cp	bc, 0:i3
 	jr	ge, 11

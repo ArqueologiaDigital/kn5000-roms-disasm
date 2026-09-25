@@ -115,16 +115,13 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	inc	1, a
 	ld	w, a
 	ld	(3414:16), w
-	.byte 0xc1, 0x54
-	decf
-	push	xiz
-	.byte 0x01, 0xc1
-	jrl	ugt, 15912
-	max
-	jr	12
+	ordi8 (3412), 1
+	ordi8 (10363), 4
+	jr	UIStateEvt_VoiceParamHandler_Return2
 	anddi8 (3412), 254
 	anddi8 (10363), 251
 	xor	w, w
+UIStateEvt_VoiceParamHandler_Return2:
 	ret
 
 SeqPlay_RestoreVoiceState_Return:
@@ -367,14 +364,12 @@ PlayMode_InitFlagBlock:
 	call	PlayMode_InitFlagBlock_0x5
 	ret
 	cpdi8 (3380), 0
-	jr	nz, 9
+	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
 	call	PlayMode_InitFlagBlock_0x16
+PlayMode_InitFlagBlock_Return:
 	ret
-	.byte 0xc1, 0xac
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10412), 4
 	ld	(4420:16), 10
 	ret
 
@@ -531,14 +526,12 @@ SongMode_InitFlagBlock:
 	call	SongMode_InitFlagBlock_0x7
 	ret
 	cpdi8 (3380), 0
-	jr	nz, 9
+	jr	nz, Medley_GetPlaybackStatus_Return
 	ld	(3380:16), 1
 	call	SongMode_InitFlagBlock_0x18
+Medley_GetPlaybackStatus_Return:
 	ret
-	.byte 0xc1, 0xac
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10412), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
@@ -682,14 +675,12 @@ PartFormat_InitFlagBlock:
 	call	PartFormat_InitFlagBlock_0xA
 	ret
 	cpdi8 (3380), 0
-	jr	nz, 9
+	jr	nz, SongMode_VoiceStateDisp_Return
 	ld	(3380:16), 1
 	call	PartFormat_InitFlagBlock_0x1B
+SongMode_VoiceStateDisp_Return:
 	ret
-	.byte 0xc1, 0xac
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10412), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
@@ -736,25 +727,24 @@ PlayModeStop_InitFlagBlock:
 	ret
 	ret
 	ret
-	.byte 0xc1, 0x37, 0x8d
-	push	xsp
-	jrl	z, 1126
+	cpdi8 (36151), 118
+	jr z, PartFormat_StartPlayback_Return
 	call	PlayModeStop_InitFlagBlock_0x10
+PartFormat_StartPlayback_Return:
 	ret
 	cpdi8 (3380), 0
-	jr	nz, 9
+	jr	nz, PartFormat_StartPlayback_Return2
 	ld	(3380:16), 1
 	call	PlayModeStop_InitFlagBlock_0x21
+PartFormat_StartPlayback_Return2:
 	ret
-	.byte 0xc1, 0xac
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10412), 4
 	ld	(4420:16), 10
 	ret
 	cpdi8 (36150), 108
-	jr nz, 5
+	jr nz, PartFormat_StartPlayback_Return3
 	ld	(3380:16), 0
+PartFormat_StartPlayback_Return3:
 	ret
 
 PlayMode_StopAbortRetZero:

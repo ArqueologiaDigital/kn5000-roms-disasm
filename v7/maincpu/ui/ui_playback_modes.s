@@ -20,7 +20,7 @@ UIStateEvt_VoiceParamHandler_Join:
 	ld	w, (49123:16)
 	cp	w, 255
 	jr	nz, UIStateEvt_VoiceParamHandler_Skip2
-	.byte 0xc1, 0xea, 0x10, 0x3c, 0xfe
+	anddi8 (4330), 254
 	jrl	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip2:
 	bit	2, w
@@ -45,9 +45,9 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10
+	ordi8 (10419), 16
 	ldw	(61854:16), 0
-	.byte 0xc1, 0xa5, 0x28, 0x3c, 0xfe
+	anddi8 (10405), 254
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
 	jr	UIStateEvt_VoiceParamHandler_Return
@@ -61,7 +61,7 @@ UIStateEvt_VoiceParamHandler_Skip4:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	.byte 0xc1, 0xb3, 0x28, 0x3e, 0x10
+	ordi8 (10419), 16
 	ldw	(61854:16), 0
 	ld	(4596:16), 0
 	call	SeqPlay_CheckStartConditions
@@ -104,7 +104,8 @@ UIStateEvt_VoiceParamHandler_Join2:
 	inc	1, a
 	ld	w, a
 	ld	(3414:16), w
-	.byte 0xc1, 0x54, 0x0d, 0x3e, 0x01, 0xc1, 0x7b, 0x28, 0x3e, 0x04
+	ordi8 (3412), 1
+	ordi8 (10363), 4
 	jr	UIStateEvt_VoiceParamHandler_Return2
 UIStateEvt_VoiceParamHandler_Entry2:
 	.byte 0xc1, 0x54, 0x0d, 0x3c, 0xfe, 0xc1, 0x7b, 0x28, 0x3c, 0xfb
@@ -348,17 +349,13 @@ DispatchHandler_ClearActiveFlag:
 PlayMode_InitFlagBlock:
 	call	PlayMode_InitFlagBlock_0x5
 	ret
-	.byte 0xc1
-	ldw	ix, 0x3f0d
-	nop
-	jr	nz, 9
+	cpdi8 (3380), 0
+	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
 	call	PlayMode_InitFlagBlock_0x16
+PlayMode_InitFlagBlock_Return:
 	ret
-	.byte 0xc1, 0xac
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10412), 4
 	ld	(4420:16), 10
 	ret
 
@@ -511,17 +508,13 @@ SongMode_InitFlagBlock:
 	ret
 	call	SongMode_InitFlagBlock_0x7
 	ret
-	.byte 0xc1
-	ldw	ix, 0x3f0d
-	nop
-	jr	nz, 9
+	cpdi8 (3380), 0
+	jr	nz, Medley_GetPlaybackStatus_Return
 	ld	(3380:16), 1
 	call	SongMode_InitFlagBlock_0x18
+Medley_GetPlaybackStatus_Return:
 	ret
-	.byte 0xc1, 0xac
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10412), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
@@ -666,17 +659,13 @@ PartFormat_InitFlagBlock:
 	ret
 	call	PartFormat_InitFlagBlock_0xA
 	ret
-	.byte 0xc1
-	ldw	ix, 0x3f0d
-	nop
-	jr	nz, 9
+	cpdi8 (3380), 0
+	jr	nz, SongMode_VoiceStateDisp_Return
 	ld	(3380:16), 1
 	call	PartFormat_InitFlagBlock_0x1B
+SongMode_VoiceStateDisp_Return:
 	ret
-	.byte 0xc1, 0xac
-	pushw	wa
-	push	xiz
-	max
+	ordi8 (10412), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
