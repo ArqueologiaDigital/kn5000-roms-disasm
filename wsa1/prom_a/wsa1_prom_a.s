@@ -70334,6 +70334,21 @@ MidiIn_ControllerEnableTable:
 	.byte 0x01, 0x02, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; FA84B8
 
 ; --- 0xFA84C8-0xFA8C67  32-record parameter tables (1952 bytes) ---
+; ---------------------------------------------------------------------
+; MidiIn_CC40_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC40_Hold (0xFA645B): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6488 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xB5 for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xB5] = MidiOut_CC40_Hold: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC40_ParamTable:
 	.byte 0xb5, 0x00, 0x7f, 0xb5, 0x01, 0x7f, 0xb5, 0x02, 0x7f, 0xb5, 0x03, 0x7f   ; FA84C8
 	.byte 0xb5, 0x04, 0x7f, 0xb5, 0x05, 0x7f, 0xb5, 0x06, 0x7f, 0xb5, 0x07, 0x7f   ; FA84D4
@@ -70343,6 +70358,22 @@ MidiIn_CC40_ParamTable:
 	.byte 0xb5, 0x14, 0x7f, 0xb5, 0x15, 0x7f, 0xb5, 0x16, 0x7f, 0xb5, 0x17, 0x7f   ; FA8504
 	.byte 0xb5, 0x18, 0x7f, 0xb5, 0x19, 0x7f, 0xb5, 0x1a, 0x7f, 0xb5, 0x1b, 0x7f   ; FA8510
 	.byte 0xb5, 0x1c, 0x7f, 0xb5, 0x1d, 0x7f, 0xb5, 0x1e, 0x7f, 0xb5, 0x1f, 0x7f   ; FA851C
+; ---------------------------------------------------------------------
+; sub_FA64E5_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: sub_FA64E5 (0xFA64E5): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA64F7 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xB7 for every part, class = the part (0..31), mask 0x7F.
+; ⚠ Which controller this is is not established: its handler's slot is
+;          reached by no controller number (see that handler's header),
+;          and MidiOut_ParamNumberTable[0xB7] is MidiOut_Param_Ignore.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 sub_FA64E5_ParamTable:
 	.byte 0xb7, 0x00, 0x7f, 0xb7, 0x01, 0x7f, 0xb7, 0x02, 0x7f, 0xb7, 0x03, 0x7f   ; FA8528
 	.byte 0xb7, 0x04, 0x7f, 0xb7, 0x05, 0x7f, 0xb7, 0x06, 0x7f, 0xb7, 0x07, 0x7f   ; FA8534
@@ -70352,6 +70383,22 @@ sub_FA64E5_ParamTable:
 	.byte 0xb7, 0x14, 0x7f, 0xb7, 0x15, 0x7f, 0xb7, 0x16, 0x7f, 0xb7, 0x17, 0x7f   ; FA8564
 	.byte 0xb7, 0x18, 0x7f, 0xb7, 0x19, 0x7f, 0xb7, 0x1a, 0x7f, 0xb7, 0x1b, 0x7f   ; FA8570
 	.byte 0xb7, 0x1c, 0x7f, 0xb7, 0x1d, 0x7f, 0xb7, 0x1e, 0x7f, 0xb7, 0x1f, 0x7f   ; FA857C
+; ---------------------------------------------------------------------
+; sub_FA6526_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: sub_FA6526 (0xFA6526): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6538 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xB6 for every part, class = the part (0..31), mask 0x7F.
+; ⚠ Which controller this is is not established: its handler's slot is
+;          reached by no controller number (see that handler's header),
+;          and MidiOut_ParamNumberTable[0xB6] is MidiOut_Param_Ignore.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 sub_FA6526_ParamTable:
 	.byte 0xb6, 0x00, 0x7f, 0xb6, 0x01, 0x7f, 0xb6, 0x02, 0x7f, 0xb6, 0x03, 0x7f   ; FA8588
 	.byte 0xb6, 0x04, 0x7f, 0xb6, 0x05, 0x7f, 0xb6, 0x06, 0x7f, 0xb6, 0x07, 0x7f   ; FA8594
@@ -70361,6 +70408,21 @@ sub_FA6526_ParamTable:
 	.byte 0xb6, 0x14, 0x7f, 0xb6, 0x15, 0x7f, 0xb6, 0x16, 0x7f, 0xb6, 0x17, 0x7f   ; FA85C4
 	.byte 0xb6, 0x18, 0x7f, 0xb6, 0x19, 0x7f, 0xb6, 0x1a, 0x7f, 0xb6, 0x1b, 0x7f   ; FA85D0
 	.byte 0xb6, 0x1c, 0x7f, 0xb6, 0x1d, 0x7f, 0xb6, 0x1e, 0x7f, 0xb6, 0x1f, 0x7f   ; FA85DC
+; ---------------------------------------------------------------------
+; MidiIn_CC01_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC01_Modulation (0xFA6567): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6594 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xB2 for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xB2] = MidiOut_CC01_Modulation: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC01_ParamTable:
 	.byte 0xb2, 0x00, 0x7f, 0xb2, 0x01, 0x7f, 0xb2, 0x02, 0x7f, 0xb2, 0x03, 0x7f   ; FA85E8
 	.byte 0xb2, 0x04, 0x7f, 0xb2, 0x05, 0x7f, 0xb2, 0x06, 0x7f, 0xb2, 0x07, 0x7f   ; FA85F4
@@ -70370,6 +70432,22 @@ MidiIn_CC01_ParamTable:
 	.byte 0xb2, 0x14, 0x7f, 0xb2, 0x15, 0x7f, 0xb2, 0x16, 0x7f, 0xb2, 0x17, 0x7f   ; FA8624
 	.byte 0xb2, 0x18, 0x7f, 0xb2, 0x19, 0x7f, 0xb2, 0x1a, 0x7f, 0xb2, 0x1b, 0x7f   ; FA8630
 	.byte 0xb2, 0x1c, 0x7f, 0xb2, 0x1d, 0x7f, 0xb2, 0x1e, 0x7f, 0xb2, 0x1f, 0x7f   ; FA863C
+; ---------------------------------------------------------------------
+; MidiIn_CC07_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC07_Volume (0xFA65F1): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6621 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number = the part (0..31), class 0x03 for every part, mask 0x7F:
+;          a PART parameter.  MidiOut_ParamClassTable[0x03], which
+;          MidiOut_DispatchByClass indexes with that class, is
+;          MidiOut_CC07_Volume.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC07_ParamTable:
 	.byte 0x00, 0x03, 0x7f, 0x01, 0x03, 0x7f, 0x02, 0x03, 0x7f, 0x03, 0x03, 0x7f   ; FA8648
 	.byte 0x04, 0x03, 0x7f, 0x05, 0x03, 0x7f, 0x06, 0x03, 0x7f, 0x07, 0x03, 0x7f   ; FA8654
@@ -70379,6 +70457,21 @@ MidiIn_CC07_ParamTable:
 	.byte 0x14, 0x03, 0x7f, 0x15, 0x03, 0x7f, 0x16, 0x03, 0x7f, 0x17, 0x03, 0x7f   ; FA8684
 	.byte 0x18, 0x03, 0x7f, 0x19, 0x03, 0x7f, 0x1a, 0x03, 0x7f, 0x1b, 0x03, 0x7f   ; FA8690
 	.byte 0x1c, 0x03, 0x7f, 0x1d, 0x03, 0x7f, 0x1e, 0x03, 0x7f, 0x1f, 0x03, 0x7f   ; FA869C
+; ---------------------------------------------------------------------
+; MidiIn_CC0B_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC0B_Expression (0xFA6650): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA667D with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xB3 for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xB3] = MidiOut_CC0B_Expression: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC0B_ParamTable:
 	.byte 0xb3, 0x00, 0x7f, 0xb3, 0x01, 0x7f, 0xb3, 0x02, 0x7f, 0xb3, 0x03, 0x7f   ; FA86A8
 	.byte 0xb3, 0x04, 0x7f, 0xb3, 0x05, 0x7f, 0xb3, 0x06, 0x7f, 0xb3, 0x07, 0x7f   ; FA86B4
@@ -70388,6 +70481,22 @@ MidiIn_CC0B_ParamTable:
 	.byte 0xb3, 0x14, 0x7f, 0xb3, 0x15, 0x7f, 0xb3, 0x16, 0x7f, 0xb3, 0x17, 0x7f   ; FA86E4
 	.byte 0xb3, 0x18, 0x7f, 0xb3, 0x19, 0x7f, 0xb3, 0x1a, 0x7f, 0xb3, 0x1b, 0x7f   ; FA86F0
 	.byte 0xb3, 0x1c, 0x7f, 0xb3, 0x1d, 0x7f, 0xb3, 0x1e, 0x7f, 0xb3, 0x1f, 0x7f   ; FA86FC
+; ---------------------------------------------------------------------
+; MidiIn_CC0A_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC0A_Pan (0xFA66DA): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA66EC with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number = the part (0..31), class 0x08 for every part, mask 0x7F:
+;          a PART parameter.  MidiOut_ParamClassTable[0x08], which
+;          MidiOut_DispatchByClass indexes with that class, is
+;          MidiOut_CC0A_Pan.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC0A_ParamTable:
 	.byte 0x00, 0x08, 0x7f, 0x01, 0x08, 0x7f, 0x02, 0x08, 0x7f, 0x03, 0x08, 0x7f   ; FA8708
 	.byte 0x04, 0x08, 0x7f, 0x05, 0x08, 0x7f, 0x06, 0x08, 0x7f, 0x07, 0x08, 0x7f   ; FA8714
@@ -70397,6 +70506,22 @@ MidiIn_CC0A_ParamTable:
 	.byte 0x14, 0x08, 0x7f, 0x15, 0x08, 0x7f, 0x16, 0x08, 0x7f, 0x17, 0x08, 0x7f   ; FA8744
 	.byte 0x18, 0x08, 0x7f, 0x19, 0x08, 0x7f, 0x1a, 0x08, 0x7f, 0x1b, 0x08, 0x7f   ; FA8750
 	.byte 0x1c, 0x08, 0x7f, 0x1d, 0x08, 0x7f, 0x1e, 0x08, 0x7f, 0x1f, 0x08, 0x7f   ; FA875C
+; ---------------------------------------------------------------------
+; MidiIn_CC5D_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC5D_Effect3Depth (0xFA671B): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA672D with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number = the part (0..31), class 0x05 for every part, mask 0x7F:
+;          a PART parameter.  MidiOut_ParamClassTable[0x05], which
+;          MidiOut_DispatchByClass indexes with that class, is
+;          MidiOut_CC5D_Effect3Depth.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC5D_ParamTable:
 	.byte 0x00, 0x05, 0x7f, 0x01, 0x05, 0x7f, 0x02, 0x05, 0x7f, 0x03, 0x05, 0x7f   ; FA8768
 	.byte 0x04, 0x05, 0x7f, 0x05, 0x05, 0x7f, 0x06, 0x05, 0x7f, 0x07, 0x05, 0x7f   ; FA8774
@@ -70406,6 +70531,22 @@ MidiIn_CC5D_ParamTable:
 	.byte 0x14, 0x05, 0x7f, 0x15, 0x05, 0x7f, 0x16, 0x05, 0x7f, 0x17, 0x05, 0x7f   ; FA87A4
 	.byte 0x18, 0x05, 0x7f, 0x19, 0x05, 0x7f, 0x1a, 0x05, 0x7f, 0x1b, 0x05, 0x7f   ; FA87B0
 	.byte 0x1c, 0x05, 0x7f, 0x1d, 0x05, 0x7f, 0x1e, 0x05, 0x7f, 0x1f, 0x05, 0x7f   ; FA87BC
+; ---------------------------------------------------------------------
+; MidiIn_CC5E_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC5E_Effect4Depth (0xFA675C): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA676E with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number = the part (0..31), class 0x06 for every part, mask 0x7F:
+;          a PART parameter.  MidiOut_ParamClassTable[0x06], which
+;          MidiOut_DispatchByClass indexes with that class, is
+;          MidiOut_CC5E_Effect4Depth.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC5E_ParamTable:
 	.byte 0x00, 0x06, 0x7f, 0x01, 0x06, 0x7f, 0x02, 0x06, 0x7f, 0x03, 0x06, 0x7f   ; FA87C8
 	.byte 0x04, 0x06, 0x7f, 0x05, 0x06, 0x7f, 0x06, 0x06, 0x7f, 0x07, 0x06, 0x7f   ; FA87D4
@@ -70415,6 +70556,22 @@ MidiIn_CC5E_ParamTable:
 	.byte 0x14, 0x06, 0x7f, 0x15, 0x06, 0x7f, 0x16, 0x06, 0x7f, 0x17, 0x06, 0x7f   ; FA8804
 	.byte 0x18, 0x06, 0x7f, 0x19, 0x06, 0x7f, 0x1a, 0x06, 0x7f, 0x1b, 0x06, 0x7f   ; FA8810
 	.byte 0x1c, 0x06, 0x7f, 0x1d, 0x06, 0x7f, 0x1e, 0x06, 0x7f, 0x1f, 0x06, 0x7f   ; FA881C
+; ---------------------------------------------------------------------
+; MidiIn_CC5B_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC5B_Effect1Depth (0xFA679D): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA67AF with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number = the part (0..31), class 0x07 for every part, mask 0x7F:
+;          a PART parameter.  MidiOut_ParamClassTable[0x07], which
+;          MidiOut_DispatchByClass indexes with that class, is
+;          MidiOut_CC5B_Effect1Depth.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC5B_ParamTable:
 	.byte 0x00, 0x07, 0x7f, 0x01, 0x07, 0x7f, 0x02, 0x07, 0x7f, 0x03, 0x07, 0x7f   ; FA8828
 	.byte 0x04, 0x07, 0x7f, 0x05, 0x07, 0x7f, 0x06, 0x07, 0x7f, 0x07, 0x07, 0x7f   ; FA8834
@@ -70424,6 +70581,21 @@ MidiIn_CC5B_ParamTable:
 	.byte 0x14, 0x07, 0x7f, 0x15, 0x07, 0x7f, 0x16, 0x07, 0x7f, 0x17, 0x07, 0x7f   ; FA8864
 	.byte 0x18, 0x07, 0x7f, 0x19, 0x07, 0x7f, 0x1a, 0x07, 0x7f, 0x1b, 0x07, 0x7f   ; FA8870
 	.byte 0x1c, 0x07, 0x7f, 0x1d, 0x07, 0x7f, 0x1e, 0x07, 0x7f, 0x1f, 0x07, 0x7f   ; FA887C
+; ---------------------------------------------------------------------
+; MidiIn_CC02_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC02_Modulation2 (0xFA67E8): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6815 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xBC for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xBC] = MidiOut_CC02_Modulation2: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC02_ParamTable:
 	.byte 0xbc, 0x00, 0x7f, 0xbc, 0x01, 0x7f, 0xbc, 0x02, 0x7f, 0xbc, 0x03, 0x7f   ; FA8888
 	.byte 0xbc, 0x04, 0x7f, 0xbc, 0x05, 0x7f, 0xbc, 0x06, 0x7f, 0xbc, 0x07, 0x7f   ; FA8894
@@ -70433,6 +70605,21 @@ MidiIn_CC02_ParamTable:
 	.byte 0xbc, 0x14, 0x7f, 0xbc, 0x15, 0x7f, 0xbc, 0x16, 0x7f, 0xbc, 0x17, 0x7f   ; FA88C4
 	.byte 0xbc, 0x18, 0x7f, 0xbc, 0x19, 0x7f, 0xbc, 0x1a, 0x7f, 0xbc, 0x1b, 0x7f   ; FA88D0
 	.byte 0xbc, 0x1c, 0x7f, 0xbc, 0x1d, 0x7f, 0xbc, 0x1e, 0x7f, 0xbc, 0x1f, 0x7f   ; FA88DC
+; ---------------------------------------------------------------------
+; MidiIn_CC04_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC04_CtrlPedal (0xFA6872): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA689F with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xBD for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xBD] = MidiOut_CC04_CtrlPedal: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC04_ParamTable:
 	.byte 0xbd, 0x00, 0x7f, 0xbd, 0x01, 0x7f, 0xbd, 0x02, 0x7f, 0xbd, 0x03, 0x7f   ; FA88E8
 	.byte 0xbd, 0x04, 0x7f, 0xbd, 0x05, 0x7f, 0xbd, 0x06, 0x7f, 0xbd, 0x07, 0x7f   ; FA88F4
@@ -70442,6 +70629,21 @@ MidiIn_CC04_ParamTable:
 	.byte 0xbd, 0x14, 0x7f, 0xbd, 0x15, 0x7f, 0xbd, 0x16, 0x7f, 0xbd, 0x17, 0x7f   ; FA8924
 	.byte 0xbd, 0x18, 0x7f, 0xbd, 0x19, 0x7f, 0xbd, 0x1a, 0x7f, 0xbd, 0x1b, 0x7f   ; FA8930
 	.byte 0xbd, 0x1c, 0x7f, 0xbd, 0x1d, 0x7f, 0xbd, 0x1e, 0x7f, 0xbd, 0x1f, 0x7f   ; FA893C
+; ---------------------------------------------------------------------
+; MidiIn_CC10_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC10_RTCreatX (0xFA68FC): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6929 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xB8 for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xB8] = MidiOut_CC10_RTCreatX: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC10_ParamTable:
 	.byte 0xb8, 0x00, 0x7f, 0xb8, 0x01, 0x7f, 0xb8, 0x02, 0x7f, 0xb8, 0x03, 0x7f   ; FA8948
 	.byte 0xb8, 0x04, 0x7f, 0xb8, 0x05, 0x7f, 0xb8, 0x06, 0x7f, 0xb8, 0x07, 0x7f   ; FA8954
@@ -70451,6 +70653,21 @@ MidiIn_CC10_ParamTable:
 	.byte 0xb8, 0x14, 0x7f, 0xb8, 0x15, 0x7f, 0xb8, 0x16, 0x7f, 0xb8, 0x17, 0x7f   ; FA8984
 	.byte 0xb8, 0x18, 0x7f, 0xb8, 0x19, 0x7f, 0xb8, 0x1a, 0x7f, 0xb8, 0x1b, 0x7f   ; FA8990
 	.byte 0xb8, 0x1c, 0x7f, 0xb8, 0x1d, 0x7f, 0xb8, 0x1e, 0x7f, 0xb8, 0x1f, 0x7f   ; FA899C
+; ---------------------------------------------------------------------
+; MidiIn_CC11_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC11_RTCreatY (0xFA6986): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA69B3 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xB9 for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xB9] = MidiOut_CC11_RTCreatY: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC11_ParamTable:
 	.byte 0xb9, 0x00, 0x7f, 0xb9, 0x01, 0x7f, 0xb9, 0x02, 0x7f, 0xb9, 0x03, 0x7f   ; FA89A8
 	.byte 0xb9, 0x04, 0x7f, 0xb9, 0x05, 0x7f, 0xb9, 0x06, 0x7f, 0xb9, 0x07, 0x7f   ; FA89B4
@@ -70460,6 +70677,21 @@ MidiIn_CC11_ParamTable:
 	.byte 0xb9, 0x14, 0x7f, 0xb9, 0x15, 0x7f, 0xb9, 0x16, 0x7f, 0xb9, 0x17, 0x7f   ; FA89E4
 	.byte 0xb9, 0x18, 0x7f, 0xb9, 0x19, 0x7f, 0xb9, 0x1a, 0x7f, 0xb9, 0x1b, 0x7f   ; FA89F0
 	.byte 0xb9, 0x1c, 0x7f, 0xb9, 0x1d, 0x7f, 0xb9, 0x1e, 0x7f, 0xb9, 0x1f, 0x7f   ; FA89FC
+; ---------------------------------------------------------------------
+; MidiIn_CC12_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC12_RTCtrlX (0xFA6A10): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6A3D with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xBA for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xBA] = MidiOut_CC12_RTCtrlX: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC12_ParamTable:
 	.byte 0xba, 0x00, 0x7f, 0xba, 0x01, 0x7f, 0xba, 0x02, 0x7f, 0xba, 0x03, 0x7f   ; FA8A08
 	.byte 0xba, 0x04, 0x7f, 0xba, 0x05, 0x7f, 0xba, 0x06, 0x7f, 0xba, 0x07, 0x7f   ; FA8A14
@@ -70469,6 +70701,21 @@ MidiIn_CC12_ParamTable:
 	.byte 0xba, 0x14, 0x7f, 0xba, 0x15, 0x7f, 0xba, 0x16, 0x7f, 0xba, 0x17, 0x7f   ; FA8A44
 	.byte 0xba, 0x18, 0x7f, 0xba, 0x19, 0x7f, 0xba, 0x1a, 0x7f, 0xba, 0x1b, 0x7f   ; FA8A50
 	.byte 0xba, 0x1c, 0x7f, 0xba, 0x1d, 0x7f, 0xba, 0x1e, 0x7f, 0xba, 0x1f, 0x7f   ; FA8A5C
+; ---------------------------------------------------------------------
+; MidiIn_CC13_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC13_RTCtrlY (0xFA6A9A): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6AC7 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number 0xBB for every part, class = the part (0..31), mask 0x7F.
+;          MidiOut_ParamNumberTable[0xBB] = MidiOut_CC13_RTCtrlY: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC13_ParamTable:
 	.byte 0xbb, 0x00, 0x7f, 0xbb, 0x01, 0x7f, 0xbb, 0x02, 0x7f, 0xbb, 0x03, 0x7f   ; FA8A68
 	.byte 0xbb, 0x04, 0x7f, 0xbb, 0x05, 0x7f, 0xbb, 0x06, 0x7f, 0xbb, 0x07, 0x7f   ; FA8A74
@@ -70478,6 +70725,20 @@ MidiIn_CC13_ParamTable:
 	.byte 0xbb, 0x14, 0x7f, 0xbb, 0x15, 0x7f, 0xbb, 0x16, 0x7f, 0xbb, 0x17, 0x7f   ; FA8AA4
 	.byte 0xbb, 0x18, 0x7f, 0xbb, 0x19, 0x7f, 0xbb, 0x1a, 0x7f, 0xbb, 0x1b, 0x7f   ; FA8AB0
 	.byte 0xbb, 0x1c, 0x7f, 0xbb, 0x1d, 0x7f, 0xbb, 0x1e, 0x7f, 0xbb, 0x1f, 0x7f   ; FA8ABC
+; ---------------------------------------------------------------------
+; MidiIn_CC51_ParamTable -- 32 x 3-byte records, one per part: [number] [class] [mask].
+; Read by: MidiIn_CC51_General6 (0xFA6B24): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `ld XIX,<this>` at
+;          0xFA6B36 with HL = part*3;
+;          `ld BC,(XIX+HL)` -- C = 0xFF would skip the part -- then
+;          `inc 2,XIX / ld D,(XIX+HL)`, E = the controller value (0x1942),
+;          and BC / DE become the parameter-change record at RAM 0x1950:
+;          [number = C] [class = B] [value = E] [mask = D] -- the
+;          (0x1958) number / (0x1959) class of MidiOut_DispatchByClass.
+; Here:    number = 0x20 + the part, class 0x18, mask 0x01 for every part.
+;          MidiOut_ParamNumberTable[0x20..0x3F] are all MidiOut_CC51_General6.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC51_ParamTable:
 	.byte 0x20, 0x18, 0x01, 0x21, 0x18, 0x01, 0x22, 0x18, 0x01, 0x23, 0x18, 0x01   ; FA8AC8
 	.byte 0x24, 0x18, 0x01, 0x25, 0x18, 0x01, 0x26, 0x18, 0x01, 0x27, 0x18, 0x01   ; FA8AD4
@@ -70487,6 +70748,19 @@ MidiIn_CC51_ParamTable:
 	.byte 0x34, 0x18, 0x01, 0x35, 0x18, 0x01, 0x36, 0x18, 0x01, 0x37, 0x18, 0x01   ; FA8B04
 	.byte 0x38, 0x18, 0x01, 0x39, 0x18, 0x01, 0x3a, 0x18, 0x01, 0x3b, 0x18, 0x01   ; FA8B10
 	.byte 0x3c, 0x18, 0x01, 0x3d, 0x18, 0x01, 0x3e, 0x18, 0x01, 0x3f, 0x18, 0x01   ; FA8B1C
+; ---------------------------------------------------------------------
+; MidiIn_CC79_ParamTable -- 32 x 2-byte records, one per part: [number] [class].
+; Read by: MidiIn_CC79_ResetAllCtrl (0xFA6CBB): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `sll 1,A` and
+;          `ld XIX,<this>` at 0xFA6CC7,
+;          `ld BC,(XIX+A)` -- C = 0xFF would skip the part -- then
+;          E = the controller value (0x1942), D = 0x7F, and BC / DE become
+;          the parameter-change record at RAM 0x1950.
+; Here:    number 0xAD for every part, class = the part (0..31).
+;          MidiOut_ParamNumberTable[0xAD] = MidiOut_CC79_ResetAllCtrl: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC79_ParamTable:
 	.byte 0xad, 0x00, 0xad, 0x01, 0xad, 0x02, 0xad, 0x03, 0xad, 0x04, 0xad, 0x05   ; FA8B28
 	.byte 0xad, 0x06, 0xad, 0x07, 0xad, 0x08, 0xad, 0x09, 0xad, 0x0a, 0xad, 0x0b   ; FA8B34
@@ -70494,6 +70768,19 @@ MidiIn_CC79_ParamTable:
 	.byte 0xad, 0x12, 0xad, 0x13, 0xad, 0x14, 0xad, 0x15, 0xad, 0x16, 0xad, 0x17   ; FA8B4C
 	.byte 0xad, 0x18, 0xad, 0x19, 0xad, 0x1a, 0xad, 0x1b, 0xad, 0x1c, 0xad, 0x1d   ; FA8B58
 	.byte 0xad, 0x1e, 0xad, 0x1f   ; FA8B64
+; ---------------------------------------------------------------------
+; MidiIn_CC78_ParamTable -- 32 x 2-byte records, one per part: [number] [class].
+; Read by: MidiIn_CC78_AllSoundOff (0xFA6CF1): the part (from (0x1976)) passes
+;          `cp A,0x1F / jr ugt` (hence COUNT 32); `sll 1,A` and
+;          `ld XIX,<this>` at 0xFA6CFD,
+;          `ld BC,(XIX+A)` -- C = 0xFF would skip the part -- then
+;          E = the controller value (0x1942), D = 0x7F, and BC / DE become
+;          the parameter-change record at RAM 0x1950.
+; Here:    number 0xAE for every part, class = the part (0..31).
+;          MidiOut_ParamNumberTable[0xAE] = MidiOut_CC78_AllSoundOff: the number goes
+;          back out through the handler named for the same message.
+; (header: notes/proma-2026-09-25/gen_midiin_param_headers.py, checks R1-R4)
+; ---------------------------------------------------------------------
 MidiIn_CC78_ParamTable:
 	.byte 0xae, 0x00, 0xae, 0x01, 0xae, 0x02, 0xae, 0x03, 0xae, 0x04, 0xae, 0x05   ; FA8B68
 	.byte 0xae, 0x06, 0xae, 0x07, 0xae, 0x08, 0xae, 0x09, 0xae, 0x0a, 0xae, 0x0b   ; FA8B74
