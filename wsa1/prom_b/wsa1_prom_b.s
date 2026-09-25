@@ -35350,6 +35350,24 @@ Data_F1284A:
 ;    parameters come back WET / DRIVE / ADJUST / VOLUME.
 ; ⚠ Only byte 0 of each four-byte group is decoded, because that is the only one
 ;    0xF10FF1 reads.  Bytes 1-3 are NOT interpreted.
+; ⚠ CORRECTED 2026-09-25 (lane promb): bytes 1-3 ARE read -- by
+;    DspEffect_PaintParamEditor (0xF11057) and its siblings -- and the line above
+;    describes 0xF10FF1 only.  Per parameter p (group 4p):
+;      byte 1  the parameter's VALUE TYPE, 0x01-0x1E: stored to (0x2640) to
+;              select its units string (DLTable_HzHzHzHzHzSSSSMsMsMs row, via
+;              DLB_Records_F157A8), and times 4 it indexes ScreenTable_F13264
+;              (the value painter), ScreenDisplayLists_F132E4 (the value list)
+;              and, in sub_F1069A, ScreenTable_F131E4 (the editor).  LFO SPEED
+;              is type 0x06 ("Hz"), the delay times 0x14-0x1C ("ms"), REVERB
+;              TIME 0x1D/0x1E ("s").
+;      byte 2  a slot number, 1-based, pushed to those handlers; the 16-bit
+;              delay times take two (DELAY L = 2, DELAY R = 4), and 0xFF marks
+;              an empty group -- the end test sub_F105B8 makes.
+;      byte 3  0x00-0x07 or 0xFF: compared with the byte IndexedTable_GetByte
+;              returns for (22, (0x2797)+97), and (0x2640) becomes 1 on a
+;              match, 0 for 0xFF, else 2, before the next record is run.
+;    Re-derived, with the per-effect table, by
+;    python3 notes/promb-2026-09-25/effect_descriptor_probe.py.
 ; --------------------------------------------------------------------------
 EffectParamDescriptors_F12F24:
 	.long	RamPtrTable_F12746 + 0x2	; F12F24  [0] -> 0xF12748
@@ -38094,6 +38112,13 @@ DL_F14712:
 ;   decodable operand.  The only byte-scan hits are 4-byte windows
 ;   inside the record region at 0xF144A6-0xF146E8, so what indexes
 ;   this table is NOT established here.
+; ⚠ CORRECTED 2026-09-25 (lane promb): those five "windows" are the `+0x07`
+;   table fields of five interpreter-B string-table records that have since
+;   been typed -- three op-07 records in DL_F1449F (sources (0x2640),
+;   (0x2641), (0x2642)), and op-02 records at DL_F145EA and DL_F146E1
+;   (source (0x2640)).  Every one masks its source with 0x7F and gives 0x0010
+;   as the entry width, so the index is 0..127 over 16-byte entries: this
+;   table's shape, and its readers.
 ; Evidence: every row is re-read and re-joined against the ROM on
 ;   every emit (`--checks`), and the two edge entries and the
 ;   72/56 split are asserted.
@@ -38345,7 +38370,11 @@ DL_EffectParamPage:
 ;   17-byte rows.  They are NOT 17-byte rows: they are the separate
 ;   32 x 7 table below, and the ROM says so through a record that
 ;   points at it.  The bytes were always right; the framing was not.
-; Unknown: which parameter belongs to which effect.
+; Which parameter belongs to which effect (ANSWERED 2026-08-31, wave 8 --
+;   this line was not updated then): byte 4p of EffectParamDescriptors_F12F24's
+;   group for effect k is the ROW here of effect k's parameter p;
+;   DspEffect_LoadParamNames copies the eight rows to (0x2640)-(0x2647) for
+;   DL_EffectParamPage.  notes/FINDINGS-prom_b-dsp-effect-parameters.md.
 ; --------------------------------------------------------------------------
 EffectParamNames_F15024:
 	.ascii	"                 "	; F15024  [  0]
@@ -38464,8 +38493,14 @@ EffectParamNames_F15024:
 ;   by notes/gen_prom_b_dsp_value_lists.py --selftest; the 7-byte framing puts
 ;   every `Hz`/`s`/`ms` flush against the right-hand edge of its row, which
 ;   the previous 17-byte framing scattered across three columns.
-; Unknown: which effect parameter each row belongs to -- the same gap as the
-;   label table above it.
+; Row per parameter (ANSWERED 2026-09-25, lane promb -- this line used to
+;   leave it, and the label table's, open): the row is the parameter's VALUE
+;   TYPE, byte 4p+1 of its EffectParamDescriptors_F12F24 group --
+;   DspEffect_PaintParamEditor loads that byte, stores it to (0x2640), and runs
+;   record 15*line of DLB_Records_F157A8, whose source is (0x2640) AND 0x1F.
+;   So LFO SPEED (type 6) reads "Hz", every delay time (types 0x14-0x1C) "ms",
+;   REVERB TIME (0x1D/0x1E) "s".  python3 notes/promb-2026-09-25/
+;   effect_descriptor_probe.py prints all 56 effects.
 ; --------------------------------------------------------------------------
 ; DLTable_HzHzHzHzHzSSSSMsMsMs -- renamed from DLTable_F156C8: the object's
 ;                                 own entries are "Hz"; "Hz"; "Hz"; "Hz";
