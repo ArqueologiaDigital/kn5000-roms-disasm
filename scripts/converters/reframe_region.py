@@ -138,6 +138,8 @@ def main():
     while k1 > k0 and not pt.split_line(rows[k1 - 1][1][3])[1] and rows[k1 - 1][1][0] == hi:
         k1 -= 1
     seg = rows[k0:k1]
+    if rows[k1][1][0] != hi:
+        sys.exit("range does not end on a line boundary: next line at 0x%06X" % rows[k1][1][0])
     if seg[0][1][0] != lo:
         sys.exit("range does not start on a line boundary: first line at 0x%06X" % seg[0][1][0])
     # labels and comments of the old lines
