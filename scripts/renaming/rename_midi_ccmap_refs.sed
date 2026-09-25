@@ -30,3 +30,11 @@
 /^[[:space:]]*;/!s/\bMidiCC_Handler_BitManipulation_0x45\b/MidiCC_CC83_ValueMap/g
 /^[[:space:]]*;/!s/\bMidiCC_Handler_RangeCheck_0x3F\b/MidiCC_CC80_ValueMap/g
 /^[[:space:]]*;/!s/\bMidiCC_Handler_ChannelMapping_0x60\b/MidiCC_CC82_Records/g
+/^[[:space:]]*;/!s/\bPanelEvt_Dispatch6_TableAndHandlers_0x1\b/PanelEvt_Dispatch6_Handlers/g
+/^[[:space:]]*;/!s/\bPanelEvt_Dispatch6_TableAndHandlers_0x49\b/PanelEvt_D6Slot3_ValueMap/g
+/^[[:space:]]*;/!s/\bPanelEvt_Dispatch6_TableAndHandlers_0xAC\b/PanelEvt_D6Slot5_BitMapA/g
+/^[[:space:]]*;/!s/\bPanelEvt_Dispatch6_TableAndHandlers_0xB5\b/PanelEvt_D6Slot5_BitMapB/g
+/^[[:space:]]*;/!s/\bPanelEvt_Dispatch11_TableAndHandlers_0x1\b/PanelEvt_Dispatch11_Handlers/g
+/^[[:space:]]*;/!s/\bPanelEvt_Dispatch11_TableAndHandlers_0x5F\b/PanelEvt_D11Slot11_ValueMap/g
+/^[[:space:]]*;/!s/\bPanelEvt_Handler_4_DualValueCheck_0x77\b/MidiDispatchCC_HandlerTable/g
+/^[[:space:]]*;/!s/\bPanelEvt_Handler_4_DualValueCheck_0x377\b/MidiCC_FunctionToCCNumber/g

@@ -362,6 +362,16 @@ def render_data(rom, a, b, segs, syms):
         if sg.get("label"):
             out.append((off, sg["label"] + ":"))
         t = sg["type"]
+        if t == "code":
+            # a code stretch between data segments: decoded like kind=code
+            bnd = [int(k, 16) for k in sg.get("labels", {})]
+            for ad, tx in render_code(rom, off, off + n, bnd, syms):
+                for k2, v in sg.get("labels", {}).items():
+                    if int(k2, 16) == ad and ad != off:
+                        out.append((ad, v + ":"))
+                out.append((ad, tx))
+            off += n
+            continue
         w = {"byte": 1, "short": 2, "long": 4}[t]
         if n % w:
             raise SystemExit("segment at 0x%X: %d bytes is not a whole number of %s" % (off, n, t))
@@ -552,6 +562,18 @@ def main():
                         capture_output=True, text=True).stdout.strip()
     print("toolchain llvm-project@%s" % tc)
     img = image(a.image)
+    # every label any spec will define is known before anything is rendered,
+    # so a `.long` in one spec can name a routine labelled by another
+    for sp in specs:
+        for k, v in sp.get("labels", {}).items():
+            syms[int(k, 16)] = v["name"] if isinstance(v, dict) else v
+        o2 = int(sp["start"], 16)
+        for sg in sp.get("segments", []):
+            if sg.get("label"):
+                syms[o2] = sg["label"]
+            for k2, v in sg.get("labels", {}).items():
+                syms[int(k2, 16)] = v
+            o2 += sg["len"]
     backups = {}
     for rel in rels:
         path = os.path.join(ROOT, img["mirror"], rel)
@@ -562,8 +584,7 @@ def main():
         group = sorted([s for s in specs if s["file"] == rel], key=lambda s: -int(s["start"], 16))
         for s in group:
             st, en = int(s["start"], 16), int(s["end"], 16)
-            for k, v in s.get("labels", {}).items():
-                syms[int(k, 16)] = v["name"] if isinstance(v, dict) else v
+
             if s["kind"] == "code":
                 bnd = [int(k, 16) for k in s.get("labels", {})]
                 for i, ad in enumerate(L):

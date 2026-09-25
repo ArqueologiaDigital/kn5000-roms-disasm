@@ -1101,7 +1101,7 @@ MIDI_DispatchCC:
 	ld l, c
 	extz hl
 	sll hl, 2
-	ld xix, PanelEvt_Handler_4_DualValueCheck_0x77
+	ld xix, MidiDispatchCC_HandlerTable
 	ld_sril3 XIX, 0x07, 0xf0, 0xec
 	call (xix)
 
@@ -1185,6 +1185,12 @@ PanelEvt_CheckChanZero_Ret:
 	ret
 
 
+; PanelEvt_DispatchTable -- 16 handler pointers, second-level index = (0x964D).
+; Reader PanelEvent_DispatchByIndex (0xFD0A0D): `ld l, (0x964d) / cp l, a /
+; jr ugt <ret> / sll hl, 2 / ld xhl, (xiy+hl) / call (xhl)`; the loaders
+; PanelEvt_CheckFlag7_Dispatch_A/B/C and friends pass xiy = this table and
+; a = 0x0F, which pins 16 entries.  (0x964C)/(0x964D) and (0x964E)/(0x964F) are
+; the BC and DE that MIDI_DispatchCC stores before its own 192-entry dispatch.
 PanelEvt_DispatchTable:
 	.long PanelEvt_Handler_0_NoteOnParam
 	.long MidiCC_NullHandlerBlock
@@ -1390,124 +1396,115 @@ PanelEvt_Handler_15_ConditionalSet:
 	extz	de
 	ld	e, (0x964e:16)
 	bit	7, e
-	jr	z, 6
+	jr	z, PanelEvt_Handler_15_ConditionalSet_Skip
 	set	0, d
 	res	7, e
+PanelEvt_Handler_15_ConditionalSet_Skip:
 	call	MidiCC_ChannelDispatch_DualSend
 PanelEvt_Handler_15_ConditionalSet_Return:
 	ret
 
 PanelEvt_Dispatch6Entry:
-	ld xiy, PanelEvt_Dispatch6_TableAndHandlers_0x1
+	ld xiy, PanelEvt_Dispatch6_Handlers
 	ld a, 0x6:opc
 	calr PanelEvent_DispatchByIndex
 	ret
 
+; PanelEvt_Dispatch6_TableAndHandlers -- one 0xFF pad byte, then 7 handler
+; pointers (PanelEvt_Dispatch6_Handlers = this label + 1): PanelEvt_Dispatch6Entry
+; loads `ld xiy, PanelEvt_Dispatch6_Handlers / ld a, 6 / calr
+; PanelEvent_DispatchByIndex`, so index (0x964D) 0..6.  The two slots that are
+; not MidiCC_NullHandlerBlock / PanelEvt_Handler_0_NoteOnParam follow the table,
+; each with the value map it reads.  Previously spelled as `swi 7 / popw bc /
+; ei 253 / jrl ule, -772 ...` with the handlers misframed behind it.
 PanelEvt_Dispatch6_TableAndHandlers:
-	swi	7
-	popw	bc
-	ei	253
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	.byte 0x93
-	ld	(253:8), 0:io
-	jrl	ule, -772
-	nop
-	.byte 0xc7
-	ld	(253:8), 0:io
-	.byte 0xc7
-	ld	(253:8), 0:io
+	.byte 0xff
+PanelEvt_Dispatch6_Handlers:
+	.long PanelEvt_Handler_0_NoteOnParam
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long PanelEvt_D6Slot3_SendCC80
+	.long MidiCC_NullHandlerBlock
+	.long PanelEvt_D6Slot5_SendCC82
+	.long PanelEvt_D6Slot5_SendCC82
+; PanelEvt_D6Slot3_SendCC80 -- slot 3 of PanelEvt_Dispatch6_Handlers.  If
+; (0x964F) & 7 is non-zero and bit 5 of (0xFD59) is set, E = PanelEvt_D6Slot3_ValueMap
+; [(0x964E) & 7] and it calls MidiChannel_ConfigureController (0xFD0D13) with
+; W = 0x10: CC function 16, which MidiCC_FunctionToCCNumber sends as CC80.
+PanelEvt_D6Slot3_SendCC80:
 	ld	a, (0x964f:16)
 	and	a, 7
-	.ascii "f!Dc"
-	swi	3
-	nop
-	nop
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, e
-	ex_ff
+	jr	z, PanelEvt_D6Slot3_SendCC80_Return
+	ld	xix, 0xfb63
+	bit	5, (0xfd59:16)
+	jr	z, PanelEvt_D6Slot3_SendCC80_Return
 	ld	e, (0x964e:16)
 	and	e, 7
-	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0x49
+	ld	xiy, PanelEvt_D6Slot3_ValueMap
 	ld	e, (xiy+e)
-	ld w, 16:opc
-	calr	1110
+	ld	w, 16:opc
+	calr	MidiChannel_ConfigureController
+PanelEvt_D6Slot3_SendCC80_Return:
 	ret
-	swi	7
-	nop
-	push	sr
-	normal
-	pop	sr
-	nop
-	nop
-	nop
-	nop
-	.byte 0xf1
-	pop	xbc
-	swi	5
-	inc	6, h
-	.byte 0x54
+	.byte 0xff
+; PanelEvt_D6Slot3_ValueMap (8 x u8): (0x964E) & 7 -> the CC80 value; read by
+; PanelEvt_D6Slot3_SendCC80 with `and e, 7 / ld e, (xiy+e)`, which pins 8 entries.
+PanelEvt_D6Slot3_ValueMap:
+	.byte 0x00, 0x02, 0x01, 0x03, 0x00, 0x00, 0x00, 0x00
+; PanelEvt_D6Slot5_SendCC82 -- slot 5 (and 6) of PanelEvt_Dispatch6_Handlers.
+; Gated by bit 6 of (0xFD59); from the bits of (0x964E) that changed it may send
+; an all-off first (E = 0), then E = <map>[1-based index of the lowest set bit],
+; the map being PanelEvt_D6Slot5_BitMapA when (0x964D) == 5 and ..._BitMapB
+; otherwise; both through MidiChannel_ConfigureController with W = 0x11: CC
+; function 17, sent as CC82.
+PanelEvt_D6Slot5_SendCC82:
+	bit	6, (0xfd59:16)
+	jr	z, PanelEvt_D6Slot5_SendCC82_Return
 	ld	h, e
 	cpl	h
 	and	h, d
 	and	e, d
 	ld	l, 252:opc
-	.byte 0xc1
-	popw	iy
-	.byte 0x96
-	push	xsp
-	halt
-	jr	z, 2
+	cp	(0x964d:16), 5
+	jr	z, PanelEvt_D6Slot5_SendCC82_Skip
 	ld	l, 4:opc
+PanelEvt_D6Slot5_SendCC82_Skip:
 	and	h, l
-	jr	z, 16
+	jr	z, PanelEvt_D6Slot5_SendCC82_Skip2
 	ld	xix, 0xfbcb
 	ld	w, 17:opc
 	xor	e, e
 	pushw	hl
 	pushw	de
-	calr	1057
+	calr	MidiChannel_ConfigureController
 	popw	de
 	popw	hl
+PanelEvt_D6Slot5_SendCC82_Skip2:
 	and	e, l
-	jr	z, 41
+	jr	z, PanelEvt_D6Slot5_SendCC82_Return
 	ld	xix, 0xfbcb
 	ld	w, 17:opc
-	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0xAC
-	.byte 0xc1
-	popw	iy
-	.byte 0x96
-	push	xsp
-	halt
-	jr	z, 5
-	ld	xiy, PanelEvt_Dispatch6_TableAndHandlers_0xB5
+	ld	xiy, PanelEvt_D6Slot5_BitMapA
+	cp	(0x964d:16), 5
+	jr	z, PanelEvt_D6Slot5_SendCC82_Skip3
+	ld	xiy, PanelEvt_D6Slot5_BitMapB
+PanelEvt_D6Slot5_SendCC82_Skip3:
 	xor	a, a
+PanelEvt_D6Slot5_SendCC82_Loop:
 	inc	1, a
 	srl	e, 1
-	jr	nc, -7
+	jr	nc, PanelEvt_D6Slot5_SendCC82_Loop
 	ld	e, (xiy+a)
-	calr 1010
+	calr	MidiChannel_ConfigureController
+PanelEvt_D6Slot5_SendCC82_Return:
 	ret
-	nop
-	nop
-	nop
-	pop	sr
-	reti
-	push	sr
-	ei	1
-	halt
-	nop
-	nop
-	nop
-	pushw	0
-	nop
-	nop
-	nop
+; PanelEvt_D6Slot5_BitMapA / _BitMapB (9 x u8 each): bit position 1..8 -> the
+; CC82 value (entry 0 unused: the `inc 1, a / srl e, 1 / jr nc` loop starts
+; at 1).  Read by PanelEvt_D6Slot5_SendCC82 via `ld e, (xiy+a)`.
+PanelEvt_D6Slot5_BitMapA:
+	.byte 0x00, 0x00, 0x00, 0x03, 0x07, 0x02, 0x06, 0x01, 0x05
+PanelEvt_D6Slot5_BitMapB:
+	.byte 0x00, 0x00, 0x00, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x00
 
 PanelEvt_Dispatch3Entry_A:
 	ld xiy, PanelEvt_Dispatch3_TableAndHandlers_A
@@ -1515,16 +1512,20 @@ PanelEvt_Dispatch3Entry_A:
 	calr PanelEvent_DispatchByIndex
 	ret
 
+; PanelEvt_Dispatch3_TableAndHandlers_A -- 4 handler pointers (no pad):
+; PanelEvt_Dispatch3Entry_A loads `ld xiy, <this> / ld a, 3 / calr
+; PanelEvent_DispatchByIndex`, so index (0x964D) 0..3.  Slot 1 follows.
 PanelEvt_Dispatch3_TableAndHandlers_A:
-	jrl	ule, -772
-	nop
-	popw	sp
-	push	253
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
+	.long MidiCC_NullHandlerBlock
+	.long PanelEvt_D3ASlot1_SendCC91
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+; PanelEvt_D3ASlot1_SendCC91 -- slot 1 of PanelEvt_Dispatch3_TableAndHandlers_A.
+; If bit 7 of (0x964F) is set, takes part 25's entry of the per-part pointer
+; table at PanelEvt_Handler_4_DualValueCheck_0x5A7 (0xFFFFFFFF = none), and
+; with bit 5 of (0xFD58) set sends E = 0x7F or 0 (bit 7 of (0x964E)) through
+; MidiChannel_ConfigureController with W = 7: CC function 7, sent as CC91.
+PanelEvt_D3ASlot1_SendCC91:
 	bit	7, (0x964f:16)
 	jr	z, PanelEvt_Dispatch3Entry_A_Return
 	ld	l, 25:opc
@@ -1532,7 +1533,7 @@ PanelEvt_Dispatch3_TableAndHandlers_A:
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
-	cp xix, 4294967295
+	cp	xix, 0xffffffff
 	jr	z, PanelEvt_Dispatch3Entry_A_Return
 	bit	5, (0xfd58:16)
 	jr	z, PanelEvt_Dispatch3Entry_A_Return
@@ -1552,18 +1553,17 @@ PanelEvt_Dispatch3Entry_B:
 	calr PanelEvent_DispatchByIndex
 	ret
 
+; PanelEvt_Dispatch3_Table_B -- 4 handler pointers, all MidiCC_NullHandlerBlock:
+; PanelEvt_Dispatch3Entry_B loads `ld xiy, <this> / ld a, 3 / calr
+; PanelEvent_DispatchByIndex`.  Previously spelled `jrl ule, -772 / nop` x 4.
 PanelEvt_Dispatch3_Table_B:
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
-	jrl	ule, -772
-	nop
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
+	.long MidiCC_NullHandlerBlock
 
 PanelEvt_Dispatch11Entry:
-	ld xiy, PanelEvt_Dispatch11_TableAndHandlers_0x1
+	ld xiy, PanelEvt_Dispatch11_Handlers
 	ld a, 0xb:opc
 	calr PanelEvent_DispatchByIndex
 	ret
@@ -1578,6 +1578,7 @@ PanelEvt_Dispatch11_TableAndHandlers:
 	; the table is followed immediately by the code it points at.
 	; one pad byte; entry 0 of the table is at +1
 	.byte 0xff
+PanelEvt_Dispatch11_Handlers:
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
@@ -1589,30 +1590,31 @@ PanelEvt_Dispatch11_TableAndHandlers:
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
-	.long 0x00fd09db
+	.long PanelEvt_D11Slot11_SendCC83
+; PanelEvt_D11Slot11_SendCC83 -- slot 11 of PanelEvt_Dispatch11_Handlers.  If
+; (0x964F) & 0xC0 is non-zero and bit 2 of (0xFD51) is set, E =
+; PanelEvt_D11Slot11_ValueMap[((0x964E) & 0xC0) >> 6] through
+; MidiChannel_ConfigureController with W = 0x12: CC function 18, sent as CC83.
+PanelEvt_D11Slot11_SendCC83:
 	ld	a, (0x964f:16)
 	and	a, 192
-	jr	z, 36
+	jr	z, PanelEvt_D11Slot11_SendCC83_Return
 	ld	xix, 0xfc19
-	.byte 0xf1, 0x51
-	swi	5
-	inc	6, b
-	pop_f
+	bit	2, (0xfd51:16)
+	jr	z, PanelEvt_D11Slot11_SendCC83_Return
 	ld	e, (0x964e:16)
 	and	e, 192
 	srl	e, 6
-	ld	xiy, PanelEvt_Dispatch11_TableAndHandlers_0x5F
-	.byte 0xc3
-	pop	sr
-	.byte 0xf4, 0xe8
-	ld	e, 32:opc
-	ccf
-	calr	779
+	ld	xiy, PanelEvt_D11Slot11_ValueMap
+	ld	e, (xiy+e)
+	ld	w, 18:opc
+	calr	MidiChannel_ConfigureController
+PanelEvt_D11Slot11_SendCC83_Return:
 	ret
-	nop
-	push	sr
-	.byte 0x01
-	nop
+; PanelEvt_D11Slot11_ValueMap (4 x u8): bits 7-6 of (0x964E) -> the CC83 value;
+; `and e, 0xc0 / srl e, 6 / ld e, (xiy+e)` pins 4 entries.
+PanelEvt_D11Slot11_ValueMap:
+	.byte 0x00, 0x02, 0x01, 0x00
 
 PanelEvent_DispatchByIndex:
 	ld l, (0x964d:16)
@@ -1946,7 +1948,7 @@ MidiChanCfg_SetupParams:
 	or a, 0xb0
 	cp w, 0x2f
 	jr ugt, MidiChannel_ConfigureExit
-	ld xiz, PanelEvt_Handler_4_DualValueCheck_0x377
+	ld xiz, MidiCC_FunctionToCCNumber
 	ldb_sri W, 0x03, 0xf8, 0xe1
 	cp w, 0xff
 	jr z, MidiChannel_ConfigureExit
@@ -2513,6 +2515,7 @@ PanelEvt_Handler_4_DualValueCheck_Return:
 	; is data and WRONG about where it starts: it carved from 0xFD17AB, one byte
 	; past the entry boundary, so every record shown was a rotation of the real
 	; one. The array starts at 0xFD175E, immediately after the `ret` at 0xFD175D.
+MidiDispatchCC_HandlerTable:
 	.long PanelEvt_CheckFlag7_Dispatch_A
 	.long PanelEvt_CheckFlag7_Dispatch_B
 	.long PanelEvt_CheckFlag7_Dispatch_C
@@ -2712,6 +2715,12 @@ PanelEvt_Handler_4_DualValueCheck_Return:
 	;     cp w, 0xff / jr z, <exit>       ; 0xFF means 'no entry'
 	; => 48 bytes, stride 1, 0xFF = absent. A genuine byte table: it is printed
 	; 8 per line only to show the six 8-entry groups, not because 8 is a record.
+; MidiCC_FunctionToCCNumber: the TRANSMIT direction of MidiCC_ChannelMappingData.
+; Entry f is the controller number sent for CC function f; it is exactly the
+; inverse of that receive map (function 0 -> 0x40 = CC64, 1 -> CC1, 2 -> CC7,
+; ... 40 -> CC121, 41 -> CC120), and MidiChannel_ConfigureController builds
+; the message as status 0xB0 | channel, this byte, value E.
+MidiCC_FunctionToCCNumber:
 	.byte 0x40, 0x01, 0x07, 0x0b, 0x0a, 0x5d, 0x5e, 0x5b
 
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
