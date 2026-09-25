@@ -299,113 +299,113 @@ DSPCfg_Init_BoundsCheck:
 ; DSPCfg_InitAllEntries dispatch
 DSPCfg_InitDispatch:
 	calr	DSPCfg_InitDispatchData
-	jr	42
-	calr	58
-	jr	37
-	calr	73
-	jr	32
-	calr	86
-	jr	27
-	calr	126
-	jr	22
-	calr	166
-	jr	17
-	calr	252
-	jr	12
-	calr	330
-	jr	7
-	calr	343
-	jr	2
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper2
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper3
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper4
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper5
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper6
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper7
+	jr	DSPCfg_Init_BoundsCheck_Return
+	calr	DSPCfg_Init_BoundsCheck_Helper8
+	jr	DSPCfg_Init_BoundsCheck_Return
 ; DSPCfg_InitAllEntries finalize after dispatch
 DSPCfg_Init_Finalize:
 	ld	hl, 1:i3
+DSPCfg_Init_BoundsCheck_Return:
 	ret
 DSPCfg_InitDispatchData:
 	ld	xde, xbc
-	ld	l, (xde+1)
+	ld	l, (xde+0x1)
 	extz	hl
-	ld	c, (xde+2)
-	.byte	0xc3
-	reti
-	.byte	0xe0
-	sbc	xix, 0xe80eabdb
-	.byte	0x8a
-	ld	l, (xbc+1)
-	extz	hl
-	ld	a, (xbc+2)
-	cpl	a
-	.byte	0xc3
-	reti
-	sla	xwa, 201
+	ld	c, (xde+0x2)
+	.byte	0xc3, 0x07, 0xe0, 0xec, 0xcb	; and (XWA+HL),C
 	ld	hl, 3:i3
 	ret
-	ld	xde, xbc
-	ld	l, (xde+1)
-	extz	hl
-	ld	c, (xde+2)
-	.byte	0xc3
-	reti
-	.byte	0xe0, 0xec
-	cp	xhl, 3:i3
-	or	(xhl+14), xwa
-	.byte	0x8a
-	ld	a, (xbc+1)
-	extz	wa
-	.byte	0xf3
-	reti
-	or	xwa, xwa
-	ldw	de, 649
-	ld	l, 207:opc
-	.byte	0x89, 0x82
-	cp	(905:16), a
-	jr	ugt, 9
-	ld	a, l
-	.byte	0x82
-	cp	(1161:16), a
-	jr	nc, 9
-	cpl	l
-	and	(xde), l
-	ld	a, (xbc+5)
-	or	(xde), a
-	ld	hl, 6:i3
-	ret
+DSPCfg_Init_BoundsCheck_Helper:
 	ld	xde, xwa
-	ld	a, (xbc+1)
+	ld	l, (xbc+0x1)
+	extz	hl
+	ld	a, (xbc+0x2)
+	cpl	a
+	.byte	0xc3, 0x07, 0xe8, 0xec, 0xc9	; and (XDE+HL),A
+	ld	hl, 3:i3
+	ret
+DSPCfg_Init_BoundsCheck_Helper2:
+	ld	xde, xbc
+	ld	l, (xde+0x1)
+	extz	hl
+	ld	c, (xde+0x2)
+	.byte	0xc3, 0x07, 0xe0, 0xec, 0xeb	; or (XWA+HL),C
+	ld	hl, 3:i3
+	ret
+DSPCfg_Init_BoundsCheck_Helper3:
+	ld	xde, xwa
+	ld	a, (xbc+0x1)
 	extz	wa
-	.byte	0xf3
-	reti
-	or	xwa, xwa
-	ldw	de, 649
-	ld	l, 207:opc
-	.byte	0x89, 0x82
-	cp	(905:16), a
-	jr	ugt, 18
+	lda_rr	xde, xde, wa
+	ld	l, (xbc+0x2)
 	ld	a, l
-	.byte	0x82
-	cp	(1161:16), a
-	jr	c, 9
+	and	a, (xde)
+	cp	(xbc+0x3), a
+	jr	ugt, DSPCfg_InitDispatchData_Skip
+	ld	a, l
+	and	a, (xde)
+	cp	(xbc+0x4), a
+	jr	nc, DSPCfg_InitDispatchData_Skip2
+DSPCfg_InitDispatchData_Skip:
 	cpl	l
 	and	(xde), l
-	ld	a, (xbc+5)
+	ld	a, (xbc+0x5)
 	or	(xde), a
+DSPCfg_InitDispatchData_Skip2:
 	ld	hl, 6:i3
 	ret
+DSPCfg_Init_BoundsCheck_Helper4:
+	ld	xde, xwa
+	ld	a, (xbc+0x1)
+	extz	wa
+	lda_rr	xde, xde, wa
+	ld	l, (xbc+0x2)
+	ld	a, l
+	and	a, (xde)
+	cp	(xbc+0x3), a
+	jr	ugt, DSPCfg_InitDispatchData_Skip3
+	ld	a, l
+	and	a, (xde)
+	cp	(xbc+0x4), a
+	jr	c, DSPCfg_InitDispatchData_Skip3
+	cpl	l
+	and	(xde), l
+	ld	a, (xbc+0x5)
+	or	(xde), a
+DSPCfg_InitDispatchData_Skip3:
+	ld	hl, 6:i3
+	ret
+DSPCfg_Init_BoundsCheck_Helper5:
 	dec	6, xsp
 	pushw	iz
 	ld	xde, xbc
-	ld	c, (xde+1)
+	ld	c, (xde+0x1)
 	extz	bc
 	lda_rr	xwa, xwa, bc
 	ld	ix, 0:i3
-	lda	xbc, (xde+3)
-	ld	(xsp+2), xbc
+	lda	xbc, (xde+0x3)
+	ld	(xsp+0x2), xbc
 	ld	c, (xbc)
-	ld	(xsp+6), c
+	ld	(xsp+0x6), c
 	ldb_erp	c, 248
 	extz	iz
-	ld	l, (xde+2)
+	ld	l, (xde+0x2)
 	ld	h, l
-	.byte	0x80, 0xc6
+	and	h, (xwa)
 	ld	xiy, 5:i3
 	cp	ix, iz
 	jr	nc, DSPCfg_Init_BoundsCheck_Skip2
@@ -414,7 +414,7 @@ DSPCfg_Init_BoundsCheck_Loop:
 	add	xbc, xde
 	cp	(xbc), h
 	jr	nz, DSPCfg_Init_BoundsCheck_Skip
-	ld	a, (xsp+6)
+	ld	a, (xsp+0x6)
 	jr	DSPCfg_Init_BoundsCheck_Join
 DSPCfg_Init_BoundsCheck_Skip:
 	inc	1, ix
@@ -424,9 +424,9 @@ DSPCfg_Init_BoundsCheck_Skip:
 DSPCfg_Init_BoundsCheck_Skip2:
 	cpl	l
 	and	(xwa), l
-	ld	c, (xde+4)
+	ld	c, (xde+0x4)
 	or	(xwa), c
-	ld	xwa, (xsp+2)
+	ld	xwa, (xsp+0x2)
 	ld	a, (xwa)
 DSPCfg_Init_BoundsCheck_Join:
 	inc	5, a
@@ -435,65 +435,63 @@ DSPCfg_Init_BoundsCheck_Join:
 	popw	iz
 	inc	6, xsp
 	ret
+DSPCfg_Init_BoundsCheck_Helper6:
 	dec	4, xsp
 	pushw	iz
 	ld	xde, xbc
-	ld	c, (xde+1)
+	ld	c, (xde+0x1)
 	extz	bc
 	lda_rr	xwa, xwa, bc
 	ld	iy, 0:i3
-	lda	xbc, (xde+3)
-	ld	(xsp+2), xbc
+	lda	xbc, (xde+0x3)
+	ld	(xsp+0x2), xbc
 	ld	c, (xbc)
 	ldb_erp	c, 248
 	extz	iz
-	ld	l, (xde+2)
+	ld	l, (xde+0x2)
 	ld	h, l
-	.byte	0x80, 0xc6
+	and	h, (xwa)
 	ld	xix, 5:i3
 	cp	iy, iz
 	jr	nc, DSPCfg_Init_BoundsCheck_Join2
+DSPCfg_InitDispatchData_Loop:
 	ld	xbc, xix
 	add	xbc, xde
 	cp	(xbc), h
 	jr	nz, DSPCfg_Init_BoundsCheck_Skip3
 	cpl	l
 	and	(xwa), l
-	ld	c, (xde+4)
+	ld	c, (xde+0x4)
 	or	(xwa), c
 	jr	DSPCfg_Init_BoundsCheck_Join2
 DSPCfg_Init_BoundsCheck_Skip3:
 	inc	1, iy
 	inc	1, xix
 	cp	iy, iz
-	jr	c, -27
+	jr	c, DSPCfg_InitDispatchData_Loop
 DSPCfg_Init_BoundsCheck_Join2:
-	ld	xwa, (xsp+2)
+	ld	xwa, (xsp+0x2)
 	ld	l, (xwa)
 	inc	5, l
 	extz	hl
 	popw	iz
 	inc	4, xsp
 	ret
+DSPCfg_Init_BoundsCheck_Helper7:
 	ld	xde, xbc
-	ld	l, (xde+1)
+	ld	l, (xde+0x1)
 	extz	hl
-	ld	c, (xde+2)
-	.byte	0xf3
-	reti
-	.byte	0xe0, 0xec
-	ld	xhl, 0x890eabdb
-	.byte	0x01
-	ld	c, 217:opc
-	ccf
-	.byte	0xf3
-	reti
-	.byte	0xe0, 0xe4
-	nop
-	nop
+	ld	c, (xde+0x2)
+	st_rrb	c, xwa, hl
+	ld	hl, 3:i3
+	ret
+DSPCfg_Init_BoundsCheck_Helper8:
+	ld	c, (xbc+0x1)
+	extz	bc
+	.byte	0xf3, 0x07, 0xe0, 0xe4, 0x00, 0x00	; ld (XWA+BC),0x00
 	ld	hl, 2:i3
 	ret
-	lda	xwa, (0xf480:16)
+	lda_d16	xwa, (0xf480)
 	jrl	DSPCfg_ResetEntryByTable
 DSPCfg_ResetAuxEntries:
 	dec	4, xsp
@@ -660,17 +658,17 @@ SoundParam_NotifyMultipleChanges:
 	extz	bc
 	ld	xwa, 0:i3
 	ld	de, 0:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	c, (0x8dd2:16)
 	extz	bc
 	ld	xwa, 0x102
 	ld	de, 0:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	c, (0x8dd4:16)
 	extz	bc
 	ld	xwa, 0x103
 	ld	de, 0:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	call	BitMapOut_DetectChanges
 	jr	ToneGen_DiffScanAndUpdate
 ToneGen_DiffScanAndUpdate:
