@@ -1,0 +1,8 @@
+PtrTable_F0ED50=OldBuild_DLHandlerTables_Tail
+Data_F0EDEC=OldBuild_ValueGlyph_Quantiser
+ArrayDescriptor_F0EE6C=OldBuild_ValueGlyph_Table
+Data_F0EEE0=OldBuild_ValueGlyph_Bitmaps
+sub_F0F105_Arm_Skip=sub_F0F105_Skip
+sub_F0F105_Arm_Skip2=sub_F0F105_Skip2
+sub_F0F105_Arm_Skip3=sub_F0F105_Skip3
+sub_F0F676_Arm_Skip=sub_F0F676_Skip
