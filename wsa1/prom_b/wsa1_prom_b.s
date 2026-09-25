@@ -31087,7 +31087,7 @@ sub_F1069A_Join:
 	ret	; F1071A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F1071B
+; DspEffect_StepU8
 ; Called from: in-module: 0xF10CBD
 ; Touches: (0x2075) (0x2797) (0x28B0)
 ; Calls:   T_IndexedTable_GetPtr T_Queue2C00_Append4
@@ -31098,10 +31098,25 @@ sub_F1069A_Join:
 ;                   kind and their targets are emitted as data.  0xF1071B is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepU8 -- named 2026-09-25 (lane promb).
+;          ScreenTable_F131E4 sends value type(s) 0x01, 0x06, 0x07, 0x08,
+;          0x09, 0x0A, 0x0D, 0x0E, 0x0F, 0x10, 0x12, 0x13, 0x17, 0x19, 0x1D,
+;          0x1E here; sub_F1069A pushes (type, slot) first, so (XIZ+8) is
+;          the type and (XIZ+10) the slot of the current effect block
+;          (IndexedTable entry 97 + (0x2797)).  It steps an UNSIGNED 8-BIT
+;          value: `ld L,(XIX)` of the slot, the unsigned tests `cp L,C / jr
+;          C` (down) and `jr UGT` (up), `sub (XIX),H` / `add (XIX),H`.  The
+;          step is 1, or EffectValueRanges[type].step when (0x28B0) bit 2 is
+;          set; down when (0x28B0) bit 0 is set, else up; clamped to that
+;          record's [lower, upper].  A change is queued with
+;          T_Queue2C00_Append4 and bit 3 of (0x2075) set.  python3
+;          notes/promb-2026-09-25/name_effect_editors.py checks the bytes
+;          quoted.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F1071B:
+DspEffect_StepU8:
 	link XIZ,0xfff8	; F1071B  link XIZ,0xfff8
 	pushw	hl	; F1071F  push HL
 	pushw	de	; F10720  push DE
@@ -31109,14 +31124,14 @@ sub_F1071B:
 	ld	h, 1:opc	; F10722  ld H,0x01
 	ld	c, (10416:16)	; F10724  ld C,(0x28b0)
 	and	c, 4	; F10728  and C,0x04
-	jr	z, sub_F1071B_Skip	; F1072B  jr Z,0xf1073e
+	jr	z, DspEffect_StepU8_Skip	; F1072B  jr Z,0xf1073e
 	ld	c, 6:opc	; F1072D  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F1072F  mul BC,(XIZ+0x08)
 	extz	xbc	; F10732  extz XBC
 	inc	4, xbc	; F10734  inc 4,XBC
 	add	xbc, EffectValueRanges	; F10736  add XBC,0x00f13124
 	ld	h, (xbc)	; F1073C  ld H,(XBC)
-sub_F1071B_Skip:
+DspEffect_StepU8_Skip:
 	ld	c, 6:opc	; F1073E  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F10740  mul BC,(XIZ+0x08)
 	extz	xbc	; F10743  extz XBC
@@ -31142,29 +31157,29 @@ sub_F1071B_Skip:
 	ld	c, (10416:16)	; F1077B  ld C,(0x28b0)
 	and	c, 1	; F1077F  and C,0x01
 	popw	wa	; F10782  pop WA
-	jr	z, sub_F1071B_Skip3	; F10783  jr Z,0xf10795
+	jr	z, DspEffect_StepU8_Skip3	; F10783  jr Z,0xf10795
 	ld	c, e	; F10785  ld C,E
 	add	c, h	; F10787  add C,H
 	cp	l, c	; F10789  cp L,C
-	jr	c, sub_F1071B_Skip2	; F1078B  jr C,0xf10791
+	jr	c, DspEffect_StepU8_Skip2	; F1078B  jr C,0xf10791
 	sub	(xix), h	; F1078D  sub (XIX),H
-	jr	sub_F1071B_Join	; F1078F  jr T,0xf107a3
-sub_F1071B_Skip2:
+	jr	DspEffect_StepU8_Join	; F1078F  jr T,0xf107a3
+DspEffect_StepU8_Skip2:
 	ld	(xix), e	; F10791  ld (XIX),E
-	jr	sub_F1071B_Join	; F10793  jr T,0xf107a3
-sub_F1071B_Skip3:
+	jr	DspEffect_StepU8_Join	; F10793  jr T,0xf107a3
+DspEffect_StepU8_Skip3:
 	ld	c, d	; F10795  ld C,D
 	sub	c, h	; F10797  sub C,H
 	cp	l, c	; F10799  cp L,C
-	jr	ugt, sub_F1071B_Skip4	; F1079B  jr UGT,0xf107a1
+	jr	ugt, DspEffect_StepU8_Skip4	; F1079B  jr UGT,0xf107a1
 	add	(xix), h	; F1079D  add (XIX),H
-	jr	sub_F1071B_Join	; F1079F  jr T,0xf107a3
-sub_F1071B_Skip4:
+	jr	DspEffect_StepU8_Join	; F1079F  jr T,0xf107a3
+DspEffect_StepU8_Skip4:
 	ld	(xix), d	; F107A1  ld (XIX),D
-sub_F1071B_Join:
+DspEffect_StepU8_Join:
 	ld	h, (xix)	; F107A3  ld H,(XIX)
 	cp	h, l	; F107A5  cp H,L
-	jr	z, sub_F1071B_Skip5	; F107A7  jr Z,0xf107ca
+	jr	z, DspEffect_StepU8_Skip5	; F107A7  jr Z,0xf107ca
 	pushw	255	; F107A9  push 0x00ff
 	push	0	; F107AC  push 0x00
 	push	h	; F107AE  push H
@@ -31177,7 +31192,7 @@ sub_F1071B_Join:
 	call	T_Queue2C00_Append4	; F107C0  call 0xf42c80
 	m_set 3, MD16, 0x2075	; F107C4  set 3,(0x2075)
 	inc	8, xsp	; F107C8  inc 0,XSP
-sub_F1071B_Skip5:
+DspEffect_StepU8_Skip5:
 	pop	xix	; F107CA  pop XIX
 	popw	de	; F107CB  pop DE
 	popw	hl	; F107CC  pop HL
@@ -31185,7 +31200,7 @@ sub_F1071B_Skip5:
 	ret	; F107CF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F107D0
+; DspEffect_StepS8
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
@@ -31197,10 +31212,25 @@ sub_F1071B_Skip5:
 ;                   kind and their targets are emitted as data.  0xF107D0 is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepS8 -- named 2026-09-25 (lane promb).
+;          ScreenTable_F131E4 sends value type(s) 0x0C, 0x11 here;
+;          sub_F1069A pushes (type, slot) first, so (XIZ+8) is the type and
+;          (XIZ+10) the slot of the current effect block (IndexedTable entry
+;          97 + (0x2797)).  It steps a SIGNED 8-BIT value: the same shape as
+;          DspEffect_StepU8 but the floor test is `jr LT` (61 04 at
+;          0xF10840) -- PITCH L/R (-36..36) and FEEDBACK/RESONANCE (-99..99)
+;          are the types it serves.  The step is 1, or
+;          EffectValueRanges[type].step when (0x28B0) bit 2 is set; down
+;          when (0x28B0) bit 0 is set, else up; clamped to that record's
+;          [lower, upper].  A change is queued with T_Queue2C00_Append4 and
+;          bit 3 of (0x2075) set.  python3
+;          notes/promb-2026-09-25/name_effect_editors.py checks the bytes
+;          quoted.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F107D0:
+DspEffect_StepS8:
 	link XIZ,0xfff8	; F107D0  link XIZ,0xfff8
 	pushw	hl	; F107D4  push HL
 	pushw	de	; F107D5  push DE
@@ -31208,14 +31238,14 @@ sub_F107D0:
 	ld	h, 1:opc	; F107D7  ld H,0x01
 	ld	c, (10416:16)	; F107D9  ld C,(0x28b0)
 	and	c, 4	; F107DD  and C,0x04
-	jr	z, sub_F1071B_Skip6	; F107E0  jr Z,0xf107f3
+	jr	z, DspEffect_StepS8_Skip	; F107E0  jr Z,0xf107f3
 	ld	c, 6:opc	; F107E2  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F107E4  mul BC,(XIZ+0x08)
 	extz	xbc	; F107E7  extz XBC
 	inc	4, xbc	; F107E9  inc 4,XBC
 	add	xbc, EffectValueRanges	; F107EB  add XBC,0x00f13124
 	ld	h, (xbc)	; F107F1  ld H,(XBC)
-sub_F1071B_Skip6:
+DspEffect_StepS8_Skip:
 	ld	c, 6:opc	; F107F3  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F107F5  mul BC,(XIZ+0x08)
 	extz	xbc	; F107F8  extz XBC
@@ -31241,29 +31271,29 @@ sub_F1071B_Skip6:
 	ld	c, (10416:16)	; F10830  ld C,(0x28b0)
 	and	c, 1	; F10834  and C,0x01
 	popw	wa	; F10837  pop WA
-	jr	z, sub_F1071B_Skip8	; F10838  jr Z,0xf1084a
+	jr	z, DspEffect_StepS8_Skip3	; F10838  jr Z,0xf1084a
 	ld	c, e	; F1083A  ld C,E
 	add	c, h	; F1083C  add C,H
 	cp	l, c	; F1083E  cp L,C
-	jr	lt, sub_F1071B_Skip7	; F10840  jr LT,0xf10846
+	jr	lt, DspEffect_StepS8_Skip2	; F10840  jr LT,0xf10846
 	sub	(xix), h	; F10842  sub (XIX),H
-	jr	sub_F1071B_Join2	; F10844  jr T,0xf10858
-sub_F1071B_Skip7:
+	jr	DspEffect_StepS8_Join	; F10844  jr T,0xf10858
+DspEffect_StepS8_Skip2:
 	ld	(xix), e	; F10846  ld (XIX),E
-	jr	sub_F1071B_Join2	; F10848  jr T,0xf10858
-sub_F1071B_Skip8:
+	jr	DspEffect_StepS8_Join	; F10848  jr T,0xf10858
+DspEffect_StepS8_Skip3:
 	ld	c, d	; F1084A  ld C,D
 	sub	c, h	; F1084C  sub C,H
 	cp	l, c	; F1084E  cp L,C
-	jr	gt, sub_F1071B_Skip9	; F10850  jr GT,0xf10856
+	jr	gt, DspEffect_StepS8_Skip4	; F10850  jr GT,0xf10856
 	add	(xix), h	; F10852  add (XIX),H
-	jr	sub_F1071B_Join2	; F10854  jr T,0xf10858
-sub_F1071B_Skip9:
+	jr	DspEffect_StepS8_Join	; F10854  jr T,0xf10858
+DspEffect_StepS8_Skip4:
 	ld	(xix), d	; F10856  ld (XIX),D
-sub_F1071B_Join2:
+DspEffect_StepS8_Join:
 	ld	h, (xix)	; F10858  ld H,(XIX)
 	cp	h, l	; F1085A  cp H,L
-	jr	z, sub_F1071B_Skip10	; F1085C  jr Z,0xf1087f
+	jr	z, DspEffect_StepS8_Skip5	; F1085C  jr Z,0xf1087f
 	pushw	255	; F1085E  push 0x00ff
 	push	0	; F10861  push 0x00
 	push	h	; F10863  push H
@@ -31276,7 +31306,7 @@ sub_F1071B_Join2:
 	call	T_Queue2C00_Append4	; F10875  call 0xf42c80
 	m_set 3, MD16, 0x2075	; F10879  set 3,(0x2075)
 	inc	8, xsp	; F1087D  inc 0,XSP
-sub_F1071B_Skip10:
+DspEffect_StepS8_Skip5:
 	pop	xix	; F1087F  pop XIX
 	popw	de	; F10880  pop DE
 	popw	hl	; F10881  pop HL
@@ -31284,7 +31314,7 @@ sub_F1071B_Skip10:
 	ret	; F10884  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10885
+; DspEffect_StepU16
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
@@ -31296,10 +31326,25 @@ sub_F1071B_Skip10:
 ;                   kind and their targets are emitted as data.  0xF10885 is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepU16 -- named 2026-09-25 (lane promb).
+;          ScreenTable_F131E4 sends value type(s) 0x14, 0x15, 0x16, 0x18,
+;          0x1A, 0x1B, 0x1C here; sub_F1069A pushes (type, slot) first, so
+;          (XIZ+8) is the type and (XIZ+10) the slot of the current effect
+;          block (IndexedTable entry 97 + (0x2797)).  It steps a 16-BIT
+;          value: the bounds are read as words (`ld IX,(XBC)` at 0xF108BB)
+;          and the slot as a word (`ld BC,(XIY)` at 0xF108E8) -- the
+;          delay-time types, 0..350 / 500 / 700 ms.  The step is 1, or
+;          EffectValueRanges[type].step when (0x28B0) bit 2 is set; down
+;          when (0x28B0) bit 0 is set, else up; clamped to that record's
+;          [lower, upper].  A change is queued with T_Queue2C00_Append4 and
+;          bit 3 of (0x2075) set.  python3
+;          notes/promb-2026-09-25/name_effect_editors.py checks the bytes
+;          quoted.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F10885:
+DspEffect_StepU16:
 	link XIZ,0xffee	; F10885  link XIZ,0xffee
 	pushw	hl	; F10889  push HL
 	pushw	de	; F1088A  push DE
@@ -31307,14 +31352,14 @@ sub_F10885:
 	ldw	de, 1	; F1088C  ld DE,0x0001
 	ld	c, (10416:16)	; F1088F  ld C,(0x28b0)
 	and	c, 4	; F10893  and C,0x04
-	jr	z, sub_F1071B_Skip11	; F10896  jr Z,0xf108a9
+	jr	z, DspEffect_StepU16_Skip	; F10896  jr Z,0xf108a9
 	ld	c, 6:opc	; F10898  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F1089A  mul BC,(XIZ+0x08)
 	extz	xbc	; F1089D  extz XBC
 	inc	4, xbc	; F1089F  inc 4,XBC
 	add	xbc, EffectValueRanges	; F108A1  add XBC,0x00f13124
 	ld	de, (xbc)	; F108A7  ld DE,(XBC)
-sub_F1071B_Skip11:
+DspEffect_StepU16_Skip:
 	ld	c, 6:opc	; F108A9  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F108AB  mul BC,(XIZ+0x08)
 	extz	xbc	; F108AE  extz XBC
@@ -31343,37 +31388,37 @@ sub_F1071B_Skip11:
 	ld	c, (10416:16)	; F108F0  ld C,(0x28b0)
 	and	c, 1	; F108F4  and C,0x01
 	popw	wa	; F108F7  pop WA
-	jr	z, sub_F1071B_Skip13	; F108F8  jr Z,0xf10917
+	jr	z, DspEffect_StepU16_Skip3	; F108F8  jr Z,0xf10917
 	ld	ix, (xiz-4)	; F108FA  ld IX,(XIZ+0xfc)
 	add	ix, de	; F108FD  add IX,DE
 	ld	hl, (xiz-10)	; F108FF  ld HL,(XIZ+0xf6)
 	cp	hl, ix	; F10902  cp HL,IX
-	jr	c, sub_F1071B_Skip12	; F10904  jr C,0xf1090f
+	jr	c, DspEffect_StepU16_Skip2	; F10904  jr C,0xf1090f
 	ld	bc, hl	; F10906  ld BC,HL
 	sub	bc, de	; F10908  sub BC,DE
 	ld	(xiz-10), bc	; F1090A  ld (XIZ+0xf6),BC
-	jr	sub_F1071B_Join3	; F1090D  jr T,0xf10931
-sub_F1071B_Skip12:
+	jr	DspEffect_StepU16_Join	; F1090D  jr T,0xf10931
+DspEffect_StepU16_Skip2:
 	ld	bc, (xiz-4)	; F1090F  ld BC,(XIZ+0xfc)
 	ld	(xiz-10), bc	; F10912  ld (XIZ+0xf6),BC
-	jr	sub_F1071B_Join3	; F10915  jr T,0xf10931
-sub_F1071B_Skip13:
+	jr	DspEffect_StepU16_Join	; F10915  jr T,0xf10931
+DspEffect_StepU16_Skip3:
 	ld	bc, ix	; F10917  ld BC,IX
 	sub	bc, de	; F10919  sub BC,DE
 	ld	(xiz-12), bc	; F1091B  ld (XIZ+0xf4),BC
 	ld	hl, (xiz-10)	; F1091E  ld HL,(XIZ+0xf6)
 	cp	hl, bc	; F10921  cp HL,BC
-	jr	ugt, sub_F1071B_Skip14	; F10923  jr UGT,0xf1092e
+	jr	ugt, DspEffect_StepU16_Skip4	; F10923  jr UGT,0xf1092e
 	ld	bc, hl	; F10925  ld BC,HL
 	add	bc, de	; F10927  add BC,DE
 	ld	(xiz-10), bc	; F10929  ld (XIZ+0xf6),BC
-	jr	sub_F1071B_Join3	; F1092C  jr T,0xf10931
-sub_F1071B_Skip14:
+	jr	DspEffect_StepU16_Join	; F1092C  jr T,0xf10931
+DspEffect_StepU16_Skip4:
 	ld	(xiz-10), ix	; F1092E  ld (XIZ+0xf6),IX
-sub_F1071B_Join3:
+DspEffect_StepU16_Join:
 	ld	hl, (xiz-10)	; F10931  ld HL,(XIZ+0xf6)
 	m_cp_rm MWD+r6, 0xfe, 3	; F10934  cp HL,(XIZ+0xfe)
-	jr	z, sub_F1071B_Skip15	; F10937  jr Z,0xf1097f
+	jr	z, DspEffect_StepU16_Skip5	; F10937  jr Z,0xf1097f
 	ld	xbc, (xiz-8)	; F10939  ld XBC,(XIZ+0xf8)
 	ld	(xbc), hl	; F1093C  ld (XBC),HL
 	pushw	255	; F1093E  push 0x00ff
@@ -31401,7 +31446,7 @@ sub_F1071B_Join3:
 	m_set 3, MD16, 0x2075	; F10977  set 3,(0x2075)
 	inc	8, xsp	; F1097B  inc 0,XSP
 	inc	8, xsp	; F1097D  inc 0,XSP
-sub_F1071B_Skip15:
+DspEffect_StepU16_Skip5:
 	popw	ix	; F1097F  pop IX
 	popw	de	; F10980  pop DE
 	popw	hl	; F10981  pop HL
@@ -31409,7 +31454,7 @@ sub_F1071B_Skip15:
 	ret	; F10984  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10985
+; DspEffect_StepEqFc
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
@@ -31421,10 +31466,24 @@ sub_F1071B_Skip15:
 ;                   kind and their targets are emitted as data.  0xF10985 is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepEqFc -- named 2026-09-25 (lane promb).
+;          ScreenTable_F131E4 sends value type(s) 0x02, 0x03 here;
+;          sub_F1069A pushes (type, slot) first, so (XIZ+8) is the type and
+;          (XIZ+10) the slot of the current effect block (IndexedTable entry
+;          97 + (0x2797)).  It steps BITS 6..10 of the 16-bit word at the
+;          slot: `and BC,0x07C0 / srl 6,BC` at 0xF109F3 -- a PARAMETRIC EQ
+;          band's Fc (1..26).  The step is 1, or
+;          EffectValueRanges[type].step when (0x28B0) bit 2 is set; down
+;          when (0x28B0) bit 0 is set, else up; clamped to that record's
+;          [lower, upper].  A change is queued with T_Queue2C00_Append4 and
+;          bit 3 of (0x2075) set.  python3
+;          notes/promb-2026-09-25/name_effect_editors.py checks the bytes
+;          quoted.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F10985:
+DspEffect_StepEqFc:
 	link XIZ,0xfff2	; F10985  link XIZ,0xfff2
 	pushw	hl	; F10989  push HL
 	pushw	de	; F1098A  push DE
@@ -31432,7 +31491,7 @@ sub_F10985:
 	ld	(xiz-1), 1	; F1098C  ld (XIZ+0xff),0x01
 	ld	c, (10416:16)	; F10990  ld C,(0x28b0)
 	and	c, 4	; F10994  and C,0x04
-	jr	z, sub_F1071B_Skip16	; F10997  jr Z,0xf109ad
+	jr	z, DspEffect_StepEqFc_Skip	; F10997  jr Z,0xf109ad
 	ld	c, 6:opc	; F10999  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F1099B  mul BC,(XIZ+0x08)
 	extz	xbc	; F1099E  extz XBC
@@ -31440,7 +31499,7 @@ sub_F10985:
 	add	xbc, EffectValueRanges	; F109A2  add XBC,0x00f13124
 	ld	a, (xbc)	; F109A8  ld A,(XBC)
 	ld	(xiz-1), a	; F109AA  ld (XIZ+0xff),A
-sub_F1071B_Skip16:
+DspEffect_StepEqFc_Skip:
 	ld	c, 6:opc	; F109AD  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F109AF  mul BC,(XIZ+0x08)
 	extz	xbc	; F109B2  extz XBC
@@ -31473,30 +31532,30 @@ sub_F1071B_Skip16:
 	ld	a, (10416:16)	; F109FE  ld A,(0x28b0)
 	and	a, 1	; F10A02  and A,0x01
 	popw	iy	; F10A05  pop IY
-	jr	z, sub_F1071B_Skip18	; F10A06  jr Z,0xf10a1c
+	jr	z, DspEffect_StepEqFc_Skip3	; F10A06  jr Z,0xf10a1c
 	ld	a, e	; F10A08  ld A,E
 	m_add_rm MBD+r6, 0xff, 1	; F10A0A  add A,(XIZ+0xff)
 	cp	c, a	; F10A0D  cp C,A
-	jr	c, sub_F1071B_Skip17	; F10A0F  jr C,0xf10a18
+	jr	c, DspEffect_StepEqFc_Skip2	; F10A0F  jr C,0xf10a18
 	m_sub_rm MBD+r6, 0xff, 3	; F10A11  sub C,(XIZ+0xff)
 	ld	h, c	; F10A14  ld H,C
-	jr	sub_F1071B_Join4	; F10A16  jr T,0xf10a2e
-sub_F1071B_Skip17:
+	jr	DspEffect_StepEqFc_Join	; F10A16  jr T,0xf10a2e
+DspEffect_StepEqFc_Skip2:
 	ld	h, e	; F10A18  ld H,E
-	jr	sub_F1071B_Join4	; F10A1A  jr T,0xf10a2e
-sub_F1071B_Skip18:
+	jr	DspEffect_StepEqFc_Join	; F10A1A  jr T,0xf10a2e
+DspEffect_StepEqFc_Skip3:
 	ld	c, d	; F10A1C  ld C,D
 	m_sub_rm MBD+r6, 0xff, 3	; F10A1E  sub C,(XIZ+0xff)
 	cp	h, c	; F10A21  cp H,C
-	jr	ugt, sub_F1071B_Skip19	; F10A23  jr UGT,0xf10a2c
+	jr	ugt, DspEffect_StepEqFc_Skip4	; F10A23  jr UGT,0xf10a2c
 	ld	c, (xiz-1)	; F10A25  ld C,(XIZ+0xff)
 	add	h, c	; F10A28  add H,C
-	jr	sub_F1071B_Join4	; F10A2A  jr T,0xf10a2e
-sub_F1071B_Skip19:
+	jr	DspEffect_StepEqFc_Join	; F10A2A  jr T,0xf10a2e
+DspEffect_StepEqFc_Skip4:
 	ld	h, d	; F10A2C  ld H,D
-sub_F1071B_Join4:
+DspEffect_StepEqFc_Join:
 	cp	h, l	; F10A2E  cp H,L
-	jr	z, sub_F1071B_Skip20	; F10A30  jr Z,0xf10a91
+	jr	z, DspEffect_StepEqFc_Skip5	; F10A30  jr Z,0xf10a91
 	ld	c, h	; F10A32  ld C,H
 	extz	bc	; F10A34  extz BC
 	ld	de, bc	; F10A36  ld DE,BC
@@ -31533,7 +31592,7 @@ sub_F1071B_Join4:
 	m_set 3, MD16, 0x2075	; F10A89  set 3,(0x2075)
 	inc	8, xsp	; F10A8D  inc 0,XSP
 	inc	8, xsp	; F10A8F  inc 0,XSP
-sub_F1071B_Skip20:
+DspEffect_StepEqFc_Skip5:
 	pop	xix	; F10A91  pop XIX
 	popw	de	; F10A92  pop DE
 	popw	hl	; F10A93  pop HL
@@ -31541,7 +31600,7 @@ sub_F1071B_Skip20:
 	ret	; F10A96  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10A97
+; DspEffect_StepEqQ
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
@@ -31553,10 +31612,23 @@ sub_F1071B_Skip20:
 ;                   kind and their targets are emitted as data.  0xF10A97 is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepEqQ -- named 2026-09-25 (lane promb).
+;          ScreenTable_F131E4 sends value type(s) 0x04 here; sub_F1069A
+;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
+;          the slot of the current effect block (IndexedTable entry 97 +
+;          (0x2797)).  It steps BITS 11..15 of the word: `and BC,0xF800 /
+;          srl 11,BC` at 0xF10B05 -- a band's Q (0..31).  The step is 1, or
+;          EffectValueRanges[type].step when (0x28B0) bit 2 is set; down
+;          when (0x28B0) bit 0 is set, else up; clamped to that record's
+;          [lower, upper].  A change is queued with T_Queue2C00_Append4 and
+;          bit 3 of (0x2075) set.  python3
+;          notes/promb-2026-09-25/name_effect_editors.py checks the bytes
+;          quoted.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F10A97:
+DspEffect_StepEqQ:
 	link XIZ,0xfff2	; F10A97  link XIZ,0xfff2
 	pushw	hl	; F10A9B  push HL
 	pushw	de	; F10A9C  push DE
@@ -31564,7 +31636,7 @@ sub_F10A97:
 	ld	(xiz-1), 1	; F10A9E  ld (XIZ+0xff),0x01
 	ld	c, (10416:16)	; F10AA2  ld C,(0x28b0)
 	and	c, 4	; F10AA6  and C,0x04
-	jr	z, sub_F1071B_Skip21	; F10AA9  jr Z,0xf10abf
+	jr	z, DspEffect_StepEqQ_Skip	; F10AA9  jr Z,0xf10abf
 	ld	c, 6:opc	; F10AAB  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F10AAD  mul BC,(XIZ+0x08)
 	extz	xbc	; F10AB0  extz XBC
@@ -31572,7 +31644,7 @@ sub_F10A97:
 	add	xbc, EffectValueRanges	; F10AB4  add XBC,0x00f13124
 	ld	a, (xbc)	; F10ABA  ld A,(XBC)
 	ld	(xiz-1), a	; F10ABC  ld (XIZ+0xff),A
-sub_F1071B_Skip21:
+DspEffect_StepEqQ_Skip:
 	ld	c, 6:opc	; F10ABF  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F10AC1  mul BC,(XIZ+0x08)
 	extz	xbc	; F10AC4  extz XBC
@@ -31605,30 +31677,30 @@ sub_F1071B_Skip21:
 	ld	a, (10416:16)	; F10B10  ld A,(0x28b0)
 	and	a, 1	; F10B14  and A,0x01
 	popw	iy	; F10B17  pop IY
-	jr	z, sub_F1071B_Skip23	; F10B18  jr Z,0xf10b2e
+	jr	z, DspEffect_StepEqQ_Skip3	; F10B18  jr Z,0xf10b2e
 	ld	a, e	; F10B1A  ld A,E
 	m_add_rm MBD+r6, 0xff, 1	; F10B1C  add A,(XIZ+0xff)
 	cp	c, a	; F10B1F  cp C,A
-	jr	c, sub_F1071B_Skip22	; F10B21  jr C,0xf10b2a
+	jr	c, DspEffect_StepEqQ_Skip2	; F10B21  jr C,0xf10b2a
 	m_sub_rm MBD+r6, 0xff, 3	; F10B23  sub C,(XIZ+0xff)
 	ld	h, c	; F10B26  ld H,C
-	jr	sub_F1071B_Join5	; F10B28  jr T,0xf10b40
-sub_F1071B_Skip22:
+	jr	DspEffect_StepEqQ_Join	; F10B28  jr T,0xf10b40
+DspEffect_StepEqQ_Skip2:
 	ld	h, e	; F10B2A  ld H,E
-	jr	sub_F1071B_Join5	; F10B2C  jr T,0xf10b40
-sub_F1071B_Skip23:
+	jr	DspEffect_StepEqQ_Join	; F10B2C  jr T,0xf10b40
+DspEffect_StepEqQ_Skip3:
 	ld	c, d	; F10B2E  ld C,D
 	m_sub_rm MBD+r6, 0xff, 3	; F10B30  sub C,(XIZ+0xff)
 	cp	h, c	; F10B33  cp H,C
-	jr	ugt, sub_F1071B_Skip24	; F10B35  jr UGT,0xf10b3e
+	jr	ugt, DspEffect_StepEqQ_Skip4	; F10B35  jr UGT,0xf10b3e
 	ld	c, (xiz-1)	; F10B37  ld C,(XIZ+0xff)
 	add	h, c	; F10B3A  add H,C
-	jr	sub_F1071B_Join5	; F10B3C  jr T,0xf10b40
-sub_F1071B_Skip24:
+	jr	DspEffect_StepEqQ_Join	; F10B3C  jr T,0xf10b40
+DspEffect_StepEqQ_Skip4:
 	ld	h, d	; F10B3E  ld H,D
-sub_F1071B_Join5:
+DspEffect_StepEqQ_Join:
 	cp	h, l	; F10B40  cp H,L
-	jr	z, sub_F1071B_Skip25	; F10B42  jr Z,0xf10ba3
+	jr	z, DspEffect_StepEqQ_Skip5	; F10B42  jr Z,0xf10ba3
 	ld	c, h	; F10B44  ld C,H
 	extz	bc	; F10B46  extz BC
 	ld	de, bc	; F10B48  ld DE,BC
@@ -31665,7 +31737,7 @@ sub_F1071B_Join5:
 	m_set 3, MD16, 0x2075	; F10B9B  set 3,(0x2075)
 	inc	8, xsp	; F10B9F  inc 0,XSP
 	inc	8, xsp	; F10BA1  inc 0,XSP
-sub_F1071B_Skip25:
+DspEffect_StepEqQ_Skip5:
 	pop	xix	; F10BA3  pop XIX
 	popw	de	; F10BA4  pop DE
 	popw	hl	; F10BA5  pop HL
@@ -31673,7 +31745,7 @@ sub_F1071B_Skip25:
 	ret	; F10BA8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10BA9
+; DspEffect_StepEqGain
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: (0x2075) (0x2797) (0x28B0)
@@ -31685,10 +31757,23 @@ sub_F1071B_Skip25:
 ;                   kind and their targets are emitted as data.  0xF10BA9 is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepEqGain -- named 2026-09-25 (lane promb).
+;          ScreenTable_F131E4 sends value type(s) 0x05 here; sub_F1069A
+;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
+;          the slot of the current effect block (IndexedTable entry 97 +
+;          (0x2797)).  It steps BITS 0..5 of the word: `and L,0x3F` at
+;          0xF10C14 -- a band's G (0..48, i.e. -12.0..+12.0 dB).  The step
+;          is 1, or EffectValueRanges[type].step when (0x28B0) bit 2 is set;
+;          down when (0x28B0) bit 0 is set, else up; clamped to that
+;          record's [lower, upper].  A change is queued with
+;          T_Queue2C00_Append4 and bit 3 of (0x2075) set.  python3
+;          notes/promb-2026-09-25/name_effect_editors.py checks the bytes
+;          quoted.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F10BA9:
+DspEffect_StepEqGain:
 	link XIZ,0xfff4	; F10BA9  link XIZ,0xfff4
 	pushw	hl	; F10BAD  push HL
 	pushw	de	; F10BAE  push DE
@@ -31696,7 +31781,7 @@ sub_F10BA9:
 	ld	(xiz-1), 1	; F10BB0  ld (XIZ+0xff),0x01
 	ld	c, (10416:16)	; F10BB4  ld C,(0x28b0)
 	and	c, 4	; F10BB8  and C,0x04
-	jr	z, sub_F1071B_Skip26	; F10BBB  jr Z,0xf10bd1
+	jr	z, DspEffect_StepEqGain_Skip	; F10BBB  jr Z,0xf10bd1
 	ld	c, 6:opc	; F10BBD  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F10BBF  mul BC,(XIZ+0x08)
 	extz	xbc	; F10BC2  extz XBC
@@ -31704,7 +31789,7 @@ sub_F10BA9:
 	add	xbc, EffectValueRanges	; F10BC6  add XBC,0x00f13124
 	ld	a, (xbc)	; F10BCC  ld A,(XBC)
 	ld	(xiz-1), a	; F10BCE  ld (XIZ+0xff),A
-sub_F1071B_Skip26:
+DspEffect_StepEqGain_Skip:
 	ld	c, 6:opc	; F10BD1  ld C,0x06
 	m_mul MBD+r6, 0x08, 3	; F10BD3  mul BC,(XIZ+0x08)
 	extz	xbc	; F10BD6  extz XBC
@@ -31734,30 +31819,30 @@ sub_F1071B_Skip26:
 	ld	c, (10416:16)	; F10C19  ld C,(0x28b0)
 	and	c, 1	; F10C1D  and C,0x01
 	popw	wa	; F10C20  pop WA
-	jr	z, sub_F1071B_Skip28	; F10C21  jr Z,0xf10c37
+	jr	z, DspEffect_StepEqGain_Skip3	; F10C21  jr Z,0xf10c37
 	ld	c, e	; F10C23  ld C,E
 	m_add_rm MBD+r6, 0xff, 3	; F10C25  add C,(XIZ+0xff)
 	cp	h, c	; F10C28  cp H,C
-	jr	c, sub_F1071B_Skip27	; F10C2A  jr C,0xf10c33
+	jr	c, DspEffect_StepEqGain_Skip2	; F10C2A  jr C,0xf10c33
 	ld	c, (xiz-1)	; F10C2C  ld C,(XIZ+0xff)
 	sub	h, c	; F10C2F  sub H,C
-	jr	sub_F1071B_Join6	; F10C31  jr T,0xf10c49
-sub_F1071B_Skip27:
+	jr	DspEffect_StepEqGain_Join	; F10C31  jr T,0xf10c49
+DspEffect_StepEqGain_Skip2:
 	ld	h, e	; F10C33  ld H,E
-	jr	sub_F1071B_Join6	; F10C35  jr T,0xf10c49
-sub_F1071B_Skip28:
+	jr	DspEffect_StepEqGain_Join	; F10C35  jr T,0xf10c49
+DspEffect_StepEqGain_Skip3:
 	ld	c, d	; F10C37  ld C,D
 	m_sub_rm MBD+r6, 0xff, 3	; F10C39  sub C,(XIZ+0xff)
 	cp	h, c	; F10C3C  cp H,C
-	jr	ugt, sub_F1071B_Skip29	; F10C3E  jr UGT,0xf10c47
+	jr	ugt, DspEffect_StepEqGain_Skip4	; F10C3E  jr UGT,0xf10c47
 	ld	c, (xiz-1)	; F10C40  ld C,(XIZ+0xff)
 	add	h, c	; F10C43  add H,C
-	jr	sub_F1071B_Join6	; F10C45  jr T,0xf10c49
-sub_F1071B_Skip29:
+	jr	DspEffect_StepEqGain_Join	; F10C45  jr T,0xf10c49
+DspEffect_StepEqGain_Skip4:
 	ld	h, d	; F10C47  ld H,D
-sub_F1071B_Join6:
+DspEffect_StepEqGain_Join:
 	cp	h, l	; F10C49  cp H,L
-	jr	z, sub_F1071B_Skip30	; F10C4B  jr Z,0xf10ca9
+	jr	z, DspEffect_StepEqGain_Skip5	; F10C4B  jr Z,0xf10ca9
 	ld	c, h	; F10C4D  ld C,H
 	extz	bc	; F10C4F  extz BC
 	ld	de, bc	; F10C51  ld DE,BC
@@ -31793,7 +31878,7 @@ sub_F1071B_Join6:
 	m_set 3, MD16, 0x2075	; F10CA1  set 3,(0x2075)
 	inc	8, xsp	; F10CA5  inc 0,XSP
 	inc	8, xsp	; F10CA7  inc 0,XSP
-sub_F1071B_Skip30:
+DspEffect_StepEqGain_Skip5:
 	pop	xix	; F10CA9  pop XIX
 	popw	de	; F10CAA  pop DE
 	popw	hl	; F10CAB  pop HL
@@ -31801,11 +31886,11 @@ sub_F1071B_Skip30:
 	ret	; F10CAE  ret
 
 ; --------------------------------------------------------------------------
-; sub_F10CAF
+; DspEffect_StepSlowFast
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
-; Calls:   sub_F1071B
+; Calls:   DspEffect_StepU8
 ; Evidence (TABLE): it is an entry of a pointer table the consumer rule
 ;                   classed TRANSFER: the code that indexes that table
 ;                   fetches the entry and then transfers to it.  ⚠ Two of
@@ -31813,16 +31898,30 @@ sub_F1071B_Skip30:
 ;                   kind and their targets are emitted as data.  0xF10CAF is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Name: DspEffect_StepSlowFast -- named 2026-09-25 (lane promb).
+;          ScreenTable_F131E4 sends value type(s) 0x0B here; sub_F1069A
+;          pushes (type, slot) first, so (XIZ+8) is the type and (XIZ+10)
+;          the slot of the current effect block (IndexedTable entry 97 +
+;          (0x2797)).  It steps nothing itself: it re-pushes its two
+;          arguments and `calr DspEffect_StepU8`.  It serves type 0x0B
+;          alone, which only ROTARY SPEAKER's SLOW/FAST group carries
+;          (0..1).  The step is 1, or EffectValueRanges[type].step when
+;          (0x28B0) bit 2 is set; down when (0x28B0) bit 0 is set, else up;
+;          clamped to that record's [lower, upper].  A change is queued with
+;          T_Queue2C00_Append4 and bit 3 of (0x2075) set.  python3
+;          notes/promb-2026-09-25/name_effect_editors.py checks the bytes
+;          quoted.
+; ⚠ CORRECTED 2026-09-25: this header used to end `Unknown: what the routine
+;          is FOR.  Left as sub_XXXXXX with the gap stated, per this tree's
+;          rule that a stated gap beats a plausible guess.`
 ; --------------------------------------------------------------------------
-sub_F10CAF:
+DspEffect_StepSlowFast:
 	link XIZ,0x0000	; F10CAF  link XIZ,0x0000
 	push	0	; F10CB3  push 0x00
 	m_push MBD+r6, 0x0a	; F10CB5  push (XIZ+0x0a)
 	push	0	; F10CB8  push 0x00
 	m_push MBD+r6, 0x08	; F10CBA  push (XIZ+0x08)
-	calr	sub_F1071B	; F10CBD  calr 0xf1071b
+	calr	DspEffect_StepU8	; F10CBD  calr 0xf1071b
 	pop	xbc	; F10CC0  pop XBC
 	unlk XIZ	; F10CC1  unlk XIZ
 	ret	; F10CC3  ret
@@ -36278,8 +36377,8 @@ EffectParamDescriptors_F12F24:
 ;   effect VALUE TYPE (byte +1 of an EffectDesc_* parameter group):
 ;     +0  s16  lower bound      +2  s16  upper bound
 ;     +4  u16  the COARSE step
-; Read by: sub_F1071B (0xF1071B) and its siblings sub_F107D0, sub_F10885,
-;   sub_F10985, sub_F10A97, sub_F10BA9 -- the value editors ScreenTable_F131E4
+; Read by: DspEffect_StepU8 (0xF1071B) and its siblings DspEffect_StepS8, DspEffect_StepU16,
+;   DspEffect_StepEqFc, DspEffect_StepEqQ, DspEffect_StepEqGain -- the value editors ScreenTable_F131E4
 ;   dispatches to by type -- with `ld C,6 / mul BC,(XIZ+8)` on the type: +4
 ;   becomes the step when (0x28B0) bit 2 is set (else the step is 1), +0 the
 ;   floor and +2 the ceiling the stepped value is clamped to (0xF1078D-0xF107A1:
@@ -36370,36 +36469,36 @@ EffectValueRanges:
 ; --------------------------------------------------------------------------
 ScreenTable_F131E4:
 	.long	T_F42C70	; F131E4  [0] -> 0xF42C70
-	.long	sub_F1071B	; F131E8  [1] -> sub_F1071B
-	.long	sub_F10985	; F131EC  [2] -> sub_F10985
-	.long	sub_F10985	; F131F0  [3] -> sub_F10985
-	.long	sub_F10A97	; F131F4  [4] -> sub_F10A97
-	.long	sub_F10BA9	; F131F8  [5] -> sub_F10BA9
-	.long	sub_F1071B	; F131FC  [6] -> sub_F1071B
-	.long	sub_F1071B	; F13200  [7] -> sub_F1071B
-	.long	sub_F1071B	; F13204  [8] -> sub_F1071B
-	.long	sub_F1071B	; F13208  [9] -> sub_F1071B
-	.long	sub_F1071B	; F1320C  [10] -> sub_F1071B
-	.long	sub_F10CAF	; F13210  [11] -> sub_F10CAF
-	.long	sub_F107D0	; F13214  [12] -> sub_F107D0
-	.long	sub_F1071B	; F13218  [13] -> sub_F1071B
-	.long	sub_F1071B	; F1321C  [14] -> sub_F1071B
-	.long	sub_F1071B	; F13220  [15] -> sub_F1071B
-	.long	sub_F1071B	; F13224  [16] -> sub_F1071B
-	.long	sub_F107D0	; F13228  [17] -> sub_F107D0
-	.long	sub_F1071B	; F1322C  [18] -> sub_F1071B
-	.long	sub_F1071B	; F13230  [19] -> sub_F1071B
-	.long	sub_F10885	; F13234  [20] -> sub_F10885
-	.long	sub_F10885	; F13238  [21] -> sub_F10885
-	.long	sub_F10885	; F1323C  [22] -> sub_F10885
-	.long	sub_F1071B	; F13240  [23] -> sub_F1071B
-	.long	sub_F10885	; F13244  [24] -> sub_F10885
-	.long	sub_F1071B	; F13248  [25] -> sub_F1071B
-	.long	sub_F10885	; F1324C  [26] -> sub_F10885
-	.long	sub_F10885	; F13250  [27] -> sub_F10885
-	.long	sub_F10885	; F13254  [28] -> sub_F10885
-	.long	sub_F1071B	; F13258  [29] -> sub_F1071B
-	.long	sub_F1071B	; F1325C  [30] -> sub_F1071B
+	.long	DspEffect_StepU8	; F131E8  [1] -> DspEffect_StepU8
+	.long	DspEffect_StepEqFc	; F131EC  [2] -> DspEffect_StepEqFc
+	.long	DspEffect_StepEqFc	; F131F0  [3] -> DspEffect_StepEqFc
+	.long	DspEffect_StepEqQ	; F131F4  [4] -> DspEffect_StepEqQ
+	.long	DspEffect_StepEqGain	; F131F8  [5] -> DspEffect_StepEqGain
+	.long	DspEffect_StepU8	; F131FC  [6] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F13200  [7] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F13204  [8] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F13208  [9] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F1320C  [10] -> DspEffect_StepU8
+	.long	DspEffect_StepSlowFast	; F13210  [11] -> DspEffect_StepSlowFast
+	.long	DspEffect_StepS8	; F13214  [12] -> DspEffect_StepS8
+	.long	DspEffect_StepU8	; F13218  [13] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F1321C  [14] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F13220  [15] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F13224  [16] -> DspEffect_StepU8
+	.long	DspEffect_StepS8	; F13228  [17] -> DspEffect_StepS8
+	.long	DspEffect_StepU8	; F1322C  [18] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F13230  [19] -> DspEffect_StepU8
+	.long	DspEffect_StepU16	; F13234  [20] -> DspEffect_StepU16
+	.long	DspEffect_StepU16	; F13238  [21] -> DspEffect_StepU16
+	.long	DspEffect_StepU16	; F1323C  [22] -> DspEffect_StepU16
+	.long	DspEffect_StepU8	; F13240  [23] -> DspEffect_StepU8
+	.long	DspEffect_StepU16	; F13244  [24] -> DspEffect_StepU16
+	.long	DspEffect_StepU8	; F13248  [25] -> DspEffect_StepU8
+	.long	DspEffect_StepU16	; F1324C  [26] -> DspEffect_StepU16
+	.long	DspEffect_StepU16	; F13250  [27] -> DspEffect_StepU16
+	.long	DspEffect_StepU16	; F13254  [28] -> DspEffect_StepU16
+	.long	DspEffect_StepU8	; F13258  [29] -> DspEffect_StepU8
+	.long	DspEffect_StepU8	; F1325C  [30] -> DspEffect_StepU8
 	.long	T_F42C70	; F13260  [31] -> 0xF42C70
 
 ; --- array 1 of 4: 32 code pointers, read at 0xF110EA ---
@@ -37174,7 +37273,7 @@ DispatchTable_F1394F:
 ; The values read correctly against EffectDesc_* and EffectValueRanges: CHORUS
 ;   gets WET 99, DEPTH 30, LFO SPEED 6, WAVEFORM 0, VOLUME 84; the PARAMETRIC
 ;   EQ's six bands are one 16-bit word each (Fc, Q and G share a slot:
-;   sub_F10985, the type-2/3 editor, does `ld BC,(XIX)` and takes Fc from bits
+;   DspEffect_StepEqFc, the type-2/3 editor, does `ld BC,(XIX)` and takes Fc from bits
 ;   6..10 with `and BC,0x07C0 / srl 6,BC` at 0xF109F3).  Some
 ;   records carry values past the descriptor's last slot (DISTORTION /
 ;   OVERDRIVE / FUZZ end 00 / 01 / 02) -- bytes no editor page shows.
