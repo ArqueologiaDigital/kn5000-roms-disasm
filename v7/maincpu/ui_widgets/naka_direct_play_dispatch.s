@@ -200,6 +200,10 @@ NakaBoxEnc_PsSongSelBox:	aligned_string "c^kAAnGG"
 NakaBoxName_PsSongSelBoxProc:	aligned_string "PsSongSelBox"
 NakaBoxData_IvNamingExit:	aligned_string ""
 NakaBoxName_IvNamingExit:	aligned_string "IvNamingExit"
+; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:12): `RegObjTable 0x1600004, 0xfa44e2, 0xe20cae, 0xe208ec, 0x167`
+; = u16 22, the entry count of that class 0x1600004 (ClassProc) table, read with `ldw_da`.
+; v7 names this address as a 24-bit operand at 0xF29E58.
+Yoko_ClassCount_167:
 	.byte 0x16, 0x00
 ; Registered in v10 by InitializeYoko (sequencer/sequencer_ui.s:13): `RegObjTable 0x160000c, 0xfa58fb, 0xe20e22, 0xe20cb0, 0x1c7`
 ; = class 0x160000C (ResEventProc), 20 entries (count word at 0xE20E22), id 0x1C7.

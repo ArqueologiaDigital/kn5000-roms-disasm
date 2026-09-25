@@ -222,6 +222,10 @@ StrFld_S2cGrid_FixedCol:	aligned_string "fixedcol"
 StrDesc_PsStylCnvVer:
 	.long StrVal_Empty_PsStylCnvVer
 StrVal_Empty_PsStylCnvVer:	aligned_string ""
+; Registered in v10 by InitializeSuna (storage/flash_floppy_handlers.s:5313): `RegObjTable 0x1600004, 0xfa44e2, 0xe17322, 0xe16c86, 0x164`
+; = class 0x1600004 (ClassProc), 41 entries (count word at 0xE17322), id 0x164.
+; v7 names this address as a 24-bit operand at 0xF19629.
+Suna_ClassTable_164:
 	.long AcMemNoBoxProc
 	naka_header NAKA_TYPE_0x12
 	.short 36, 0

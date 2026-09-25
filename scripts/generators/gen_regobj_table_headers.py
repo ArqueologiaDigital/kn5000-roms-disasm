@@ -28,6 +28,7 @@ QUESTION ANSWERED
 RUN
     python3 scripts/generators/gen_regobj_table_headers.py --check     # list, change nothing
     python3 scripts/generators/gen_regobj_table_headers.py --apply v10 v9 v7
+    python3 scripts/generators/gen_regobj_table_headers.py --v7-new [--apply v7]   # after a rebuild
     make gate
 """
 import argparse
@@ -279,11 +280,72 @@ def run(v, apply_it):
     return headed
 
 
+def v7_new_labels(apply_it):
+    """Labels this script CREATED in v10 (<Module>_<Class>Table/Count_<id>) that v7 lacks:
+    add them to v7 where a v7 line starts at the same address and v7 code names
+    that address as a 24-bit operand (the v7 registration site)."""
+    names10, _ = syms("v10")
+    names7, _ = syms("v7")
+    d7 = rom("v7")
+    pat_lab = re.compile(r"^((?:Suna|Yoko|Kubo|East)_[A-Za-z]+(?:Table|Count)_[0-9A-F]+):\s*$")
+    for rel in FILES:
+        p10 = os.path.join(ROOT, "v10", "maincpu", rel)
+        l10 = open(p10, "rb").read().decode("latin-1").split("\n")
+        want = []
+        for i, l in enumerate(l10):
+            m = pat_lab.match(l)
+            if m and m.group(1) not in names7:
+                j = i - 1
+                hdr = []
+                while j >= 0 and l10[j].startswith(";"):
+                    hdr.insert(0, l10[j])
+                    j -= 1
+                hdr = [h for h in hdr if h.startswith(TAG) or h.startswith("; = ")]
+                want.append((m.group(1), names10[m.group(1)], hdr))
+        if not want:
+            continue
+        lm = line_map("v7", rel)
+        first = {}
+        for e in lm:
+            first.setdefault(e["addr"], e["line"])
+        p7 = os.path.join(ROOT, "v7", "maincpu", rel)
+        lines = open(p7, "rb").read().decode("latin-1").split("\n")
+        ins = collections.defaultdict(list)
+        for lab, a, hdr in want:
+            pat, i, sites = a.to_bytes(3, "little"), 0, []
+            while True:
+                i = d7.find(pat, i + 1)
+                if i < 0:
+                    break
+                if B + i >= 0xEF0000:
+                    sites.append(B + i)
+            if a not in first or not sites:
+                print("  v7 %s: %s (0x%06X) not added -- %s" % (
+                    rel, lab, a, "no line start" if a not in first else "no v7 operand"))
+                continue
+            k = first[a] - 1
+            ins[k] += [hdr[0].replace(TAG, "; Registered in v10 by ", 1)] + hdr[1:] + [
+                "; v7 names this address as a 24-bit operand at %s." % ", ".join("0x%06X" % x for x in sites[:3]),
+                "%s:" % lab]
+            print("  v7 %s: %s at 0x%06X" % (rel, lab, a))
+        if apply_it and ins:
+            out = []
+            for i, l in enumerate(lines):
+                out.extend(ins.get(i, []))
+                out.append(l)
+            open(p7, "wb").write("\n".join(out).encode("latin-1"))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--check", action="store_true")
     ap.add_argument("--apply", nargs="+")
+    ap.add_argument("--v7-new", action="store_true",
+                    help="only: add to v7 the labels this script created in v10 (see v7_new_labels)")
     a = ap.parse_args()
+    if a.v7_new:
+        v7_new_labels(bool(a.apply))
+        return 0
     todo = a.apply or []
     h10 = run("v10", "v10" in todo)
     if "v9" in todo or not todo:
