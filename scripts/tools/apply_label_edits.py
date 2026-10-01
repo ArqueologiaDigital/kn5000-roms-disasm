@@ -17,6 +17,9 @@ QUESTION THIS ANSWERS / WHY IT EXISTS
     - a header for a label that already has one, unless the pack says how to combine them:
       "mode": "append" (add lines at the end of the existing block -- keeps its evidence) or
       "mode": "replace" (discard it; only when the old header is shown wrong).
+  Structural children follow their parent: renaming `sub_F0001A` also renames every label
+  DEFINED as `sub_F0001A_<suffix>` (`_Join`, `_Return2`, `_Loop`, ...) to `<new>_<suffix>`,
+  under the same checks, unless the rename says "children": false.
   Renames are applied by a generated sed script (project policy: batch renames go through sed),
   written to scripts/renaming/rename_<pack-name>.sed so the change is reviewable and replayable.
   Headers are inserted with latin-1 I/O (the .s files hold raw non-UTF-8 bytes; never decode
@@ -122,6 +125,15 @@ def main():
         report.append("rename %-32s -> %-40s %4d occurrence(s)  | %s" % (o, n, refs, r.get("evidence", "")))
 
     after = {o: n for o, n in zip(olds, news)}
+    for r in renames:                       # structural children follow their parent
+        if r.get("children", True):
+            for d in list(defs):
+                if d.startswith(r["old"] + "_") and d not in after:
+                    child = r["new"] + d[len(r["old"]):]
+                    if count.get(child):
+                        errors.append("child rename %s -> %s collides with an existing name" % (d, child))
+                    after[d] = child
+                    report.append("  child %-31s -> %s" % (d, child))
     for h in headers:
         lab = h["label"]
         pre = [k for k, v in after.items() if v == lab]
