@@ -17,7 +17,7 @@
 FmmSmfLoadTitleFunc:
 	cp xbc, 0x1c00007
 	jrl z, SmfLoad_HandleOk
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, SmfLoad_Return
 	cp xde, 0x3
 	jrl z, SmfLoad_CancelCleanup
@@ -27,7 +27,7 @@ FmmSmfLoadTitleFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ldmm8 0x808a, 0x8d37
@@ -69,7 +69,7 @@ SmfLoad_CheckSlotCount:
 	cp (0x808a:16), 97
 	jrl z, SmfLoad_SendWait
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x61
@@ -77,7 +77,7 @@ SmfLoad_CheckSlotCount:
 
 SmfLoad_AbortPartial:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -97,7 +97,7 @@ SmfLoad_AbortPartial:
 
 SmfLoad_ErrorCancel:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -106,7 +106,7 @@ SmfLoad_ErrorCancel:
 SmfLoad_Success:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -129,7 +129,7 @@ SmfLoad_CallStatusDisplay:
 
 SmfLoad_SendWait:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -161,7 +161,7 @@ SmfLoad_Return:
 	ret
 
 FmmSmfSaveTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SmfSave_Return
 	cp xde, 0x3
 	jr z, SmfSave_CancelCleanup
@@ -171,7 +171,7 @@ FmmSmfSaveTitleFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8504:16), 0
@@ -184,7 +184,7 @@ FmmSmfSaveTitleFunc:
 
 SmfSave_SendWait:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -263,7 +263,7 @@ SaveFN_HandleActivate:
 	lda xwa, (0x8851:16)
 	call FileIO_GetRecordType_Extended
 	ld xwa, (0x808c:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8850
 	jr SaveFN_SendEvent
 
@@ -327,7 +327,7 @@ SeqToSong_BuildEntry:
 	ld xwa, xiz
 	call FileIO_BuildFilePath
 	ld xwa, (0x8090:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8094
 	call ApPostEvent
 
@@ -360,7 +360,7 @@ SeqFromSong_BuildEntry:
 	ld xwa, xiz
 	call FileIO_BuildFilePath
 	ld xwa, (0x8114:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8118
 	call ApPostEvent
 
@@ -385,7 +385,7 @@ SeqSongName_BuildEntry:
 	calr BuildSlotLabel
 	ld xde, xhl
 	ld xwa, (0x8198:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 
 SeqSongName_Return:
@@ -407,7 +407,7 @@ SmfLoadAs_Apply:
 	lda xbc, (DiskOp_ChannelCfgTable_0xE8:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x819c:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 
 SmfLoadAs_Return:
@@ -501,7 +501,7 @@ DispFileList_LoopBody:
 	extz xde
 	add xde, xbc
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xa
@@ -717,7 +717,7 @@ SmfFN_HandleSave:
 	cp xiz, 0x3
 	jrl nz, SmfFN_HandleOpen
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -773,7 +773,7 @@ SmfFN_Save_WriteSlot:
 
 SmfFN_Save_Finish:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -805,7 +805,7 @@ SmfFN_HandleOpen:
 	cp xiz, 0x4
 	jrl nz, SmfFN_HandleOpen2
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_GetRecordPtrAlt
@@ -816,7 +816,7 @@ SmfFN_HandleOpen:
 	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Open_Execute
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -824,7 +824,7 @@ SmfFN_HandleOpen:
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jrl SmfFN_DispatchEvent
 
@@ -848,7 +848,7 @@ SmfFN_Open_Execute:
 	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -868,7 +868,7 @@ SmfFN_HandleOpen2:
 	cp xiz, 0x32
 	jrl nz, SmfFN_HandleDelete
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -890,7 +890,7 @@ SmfFN_HandleOpen2:
 	ld (0x8504:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -916,13 +916,13 @@ SmfFN_HandleDelete:
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x7b0051
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jrl SmfFN_DispatchEvent
 
 SmfFN_Delete_Execute:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -938,7 +938,7 @@ SmfFN_Delete_Execute:
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, (0x81ac:16)
@@ -958,7 +958,7 @@ SmfFN_HandleDelete2:
 	cp xiz, 0x33
 	jr nz, SmfFN_IgnoredEvents
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -974,7 +974,7 @@ SmfFN_HandleDelete2:
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, (0x81ac:16)
@@ -1187,7 +1187,7 @@ SmfFN_RefreshIfChanged:
 	ld de, bc
 	extz xde
 	add xde, xhl
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ld wa, (0x81ac:16)
 	exts xwa
@@ -1199,7 +1199,7 @@ SmfFN_RefreshIfChanged:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x81a0:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	jr SmfFN_UpdateFilenameField
 
@@ -1319,7 +1319,7 @@ DispSeqList_LoopBody:
 	extz xde
 	add xde, xbc
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xa

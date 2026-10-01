@@ -1231,7 +1231,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue
 FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xwa, xiz
-	ld	xbc, 31457301
+	ld	xbc, EVT_GET_CONFIG_2
 	ld	xde, 0:i3
 	call	SendEvent
 	cp	(xhl), 0
@@ -1241,7 +1241,7 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	and	xwa, 4095
 	extz	xwa
 	add	xwa, 27262976
-	ld	xbc, 31457301
+	ld	xbc, EVT_GET_CONFIG_2
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, xiz
@@ -1930,17 +1930,17 @@ FDemoText_TextDispatch_Skip3:
 	lda	xsp, (xsp+28)
 	.byte	0x40
 	.long	Pad_AfterNakaData_ExternalBase
-	ld	xbc, 0x01c00002
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 5:i3
 	call	SendEvent
 	.byte	0x40
 	.long	Pad_NakaExternal_Block1
-	ld	xbc, 0x01c00002
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 5:i3
 	call	SendEvent
 	.byte	0x40
 	.long	Pad_NakaExternal_Block1
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	SendEvent
 	.byte	0x40
@@ -1949,7 +1949,7 @@ FDemoText_TextDispatch_Skip3:
 	ld	xde, 19
 	call	SendEvent
 	ld	xwa, NakaInst_Param_Field02_0x4
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	SendEvent
 	pushw	2
@@ -2062,11 +2062,11 @@ FDemoText_TextDispatch_Skip13:
 	ld	xde, 1:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9A9
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9AA
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	SendEvent
 	ld	xwa, 0xffffffff
@@ -2418,11 +2418,11 @@ FDemoText_TextDispatch_Skip11:
 	ld	xwa, xhl
 	cp	xwa, 0xffffffff
 	jr	z, FDemoText_TextDispatch_Skip12
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9AA
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	SendEvent
 FDemoText_TextDispatch_Skip12:

@@ -32,7 +32,7 @@ SLMode_HandleShow:
 	lda xbc, (StorageArea_NameTable:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x81b6:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 
 SLMode_Return:
@@ -54,7 +54,7 @@ SLDstBank_HandleShow:
 	lda xbc, (StorageAreaName_PanelMemory_0xE:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x81ba:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 
 SLDstBank_Return:
@@ -77,7 +77,7 @@ SLDstMem_HandleShow:
 	cp (0x89f8:16), 1
 	jr z, SLDstMem_ShowFromBank
 	ld xde, (xde + 16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr SLDstMem_DispatchShow
 
 SLDstMem_ShowFromBank:
@@ -85,7 +85,7 @@ SLDstMem_ShowFromBank:
 	extz bc
 	sla bc, 2
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 SLDstMem_DispatchShow:
 	call ApPostEvent
@@ -111,14 +111,14 @@ SLSrcBank_HandleShow:
 	cp (0x8a0a:16), 0
 	jr z, SLSrcBank_ShowFromIndex
 	ld xde, (xde + 16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr SLSrcBank_DispatchShow
 
 SLSrcBank_ShowFromIndex:
 	extz bc
 	sla bc, 2
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 SLSrcBank_DispatchShow:
 	call ApPostEvent
@@ -146,14 +146,14 @@ SLSrcMem_HandleShow:
 
 SLSrcMem_ShowDirect:
 	ld xde, (xde + 16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr SLSrcMem_DispatchShow
 
 SLSrcMem_ShowFromIndex:
 	extz bc
 	sla bc, 2
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 SLSrcMem_DispatchShow:
 	call ApPostEvent
@@ -194,7 +194,7 @@ SLSrcBankList_FuncBody:
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x894e
 	call	ApPostEvent
 	pop	xiz
@@ -220,7 +220,7 @@ SLSrcBankList_FuncBody_Helper:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
@@ -263,7 +263,7 @@ SLSrcBankList_FuncBody_Helper2_Skip:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	cp	(0x89fa:16), 0
 	jr	z, SLSrcBankList_FuncBody_Helper2_Epilogue
@@ -274,7 +274,7 @@ SLSrcBankList_FuncBody_Helper2_Skip:
 	call	FileIO_CopyString
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Helper2_Epilogue:
 	pop	xiz
@@ -300,7 +300,7 @@ SLSrcBankList_FuncBody_Helper3:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Helper3_Epilogue:
 	pop	xiz
@@ -388,11 +388,11 @@ SLSrcBankList_FuncBody_Skip4:
 	jrl	z, SLSrcBankList_FuncBody_Join4
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLSrcBankList_FuncBody_Join3
 SLSrcBankList_FuncBody_Skip5:
 	ld	xwa, (xsp+4)
@@ -446,11 +446,11 @@ SLSrcBankList_FuncBody_Skip7:
 	jrl	z, SLSrcBankList_FuncBody_Join4
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jr	SLSrcBankList_FuncBody_Join3
 SLSrcBankList_FuncBody_Skip8:
 	ld	xwa, (xsp+4)
@@ -464,11 +464,11 @@ SLSrcBankList_FuncBody_Skip9:
 	jr	z, SLSrcBankList_FuncBody_Join4
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 SLSrcBankList_FuncBody_Join3:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
@@ -540,20 +540,20 @@ SLSrcBankList_FuncBody_Join4:
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x894e
 	call	ApPostEvent
 	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Skip11:
 	ld	xhl, 0:i3
@@ -588,12 +588,12 @@ SLSrcBankList_FuncBody_Helper4:
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x894e
 	call	ApPostEvent
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	2, xsp
@@ -636,7 +636,7 @@ SLSrcBankList_FuncBody_Helper5_Skip:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+8)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xbc, (0x894e:16)
 	lda	xwa, (xbc+63)
@@ -648,7 +648,7 @@ SLSrcBankList_FuncBody_Helper5_Skip:
 	call	FileIO_CopyString
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+8)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jr	SLSrcBankList_FuncBody_Helper5_Join
 SLSrcBankList_FuncBody_Helper5_Skip2:
 	cpw	(xsp+0x4), 4
@@ -662,7 +662,7 @@ SLSrcBankList_FuncBody_Helper5_Skip2:
 	calr	WP_GetBankMemName
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+8)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 SLSrcBankList_FuncBody_Helper5_Join:
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Helper5_Epilogue:
@@ -699,7 +699,7 @@ SLSrcBankList_FuncBody_Helper6:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Helper6_Epilogue:
 	pop	xiz
@@ -773,11 +773,11 @@ SLSrcBankList_FuncBody_Skip14:
 	jrl	z, SLSrcBankList_FuncBody_Join9
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLSrcBankList_FuncBody_Join7
 SLSrcBankList_FuncBody_Skip15:
 	ld	xwa, (xsp+4)
@@ -831,11 +831,11 @@ SLSrcBankList_FuncBody_Skip17:
 	jr	z, SLSrcBankList_FuncBody_Join9
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jr	SLSrcBankList_FuncBody_Join7
 SLSrcBankList_FuncBody_Skip18:
 	ld	xwa, (xsp+4)
@@ -849,11 +849,11 @@ SLSrcBankList_FuncBody_Skip19:
 	jr	z, SLSrcBankList_FuncBody_Join9
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 SLSrcBankList_FuncBody_Join7:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
@@ -900,7 +900,7 @@ SLSrcBankList_FuncBody_Skip23:
 	ld	a, (xde)
 	ld	(xix), a
 	ld	xwa, 0:i3
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0:i3
 	calr	SingleLoadDstFunc
 	jr	SLSrcBankList_FuncBody_Return
@@ -933,7 +933,7 @@ SLSrcBankList_FuncBody_Helper8:
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
 	ld	xwa, (xsp+2)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x894e
 	call	ApPostEvent
 	ld	a, (xsp)
@@ -949,7 +949,7 @@ SLSrcBankList_FuncBody_Helper8:
 	calr	WP_GetPresetName3
 	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+2)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Epilogue:
 	inc	6, xsp
@@ -974,7 +974,7 @@ SLSrcBankList_FuncBody_Helper9:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x8963:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Epilogue2:
 	pop	xiz
@@ -1035,7 +1035,7 @@ SLSrcBankList_FuncBody_Helper10_Skip2:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x8978:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	cp	(0x89fa:16), 0
 	jr	z, SLSrcBankList_FuncBody_Helper10_Epilogue
@@ -1046,7 +1046,7 @@ SLSrcBankList_FuncBody_Helper10_Skip2:
 	call	FileIO_CopyString
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Helper10_Epilogue:
 	pop	xiz
@@ -1084,7 +1084,7 @@ SLSrcBankList_FuncBody_Join11:
 	calr	TrimAndPadSmfFilename
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 SLSrcBankList_FuncBody_Helper11_Epilogue:
 	pop	xiz
@@ -1190,11 +1190,11 @@ SLSrcBankList_FuncBody_Skip29:
 	jrl	z, SLSrcBankList_FuncBody_Join17
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLSrcBankList_FuncBody_Join16
 SLSrcBankList_FuncBody_Skip30:
 	ld	xwa, (xsp+4)
@@ -1294,11 +1294,11 @@ SLSrcBankList_FuncBody_Skip34:
 	jrl	z, SLSrcBankList_FuncBody_Join17
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jr	SLSrcBankList_FuncBody_Join16
 SLSrcBankList_FuncBody_Skip35:
 	ld	xwa, (xsp+4)
@@ -1312,11 +1312,11 @@ SLSrcBankList_FuncBody_Skip36:
 	jr	z, SLSrcBankList_FuncBody_Join17
 	lda	xde, (0x8963:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x898d:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 SLSrcBankList_FuncBody_Join16:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
@@ -1372,7 +1372,7 @@ SLSrcBankList_FuncBody_Loop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+2)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 4:i3
@@ -1588,12 +1588,12 @@ SLDstBankList_FuncBody:
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x89a2
 	call	ApPostEvent
 	lda	xde, (0x89b7:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
@@ -1656,11 +1656,11 @@ SLDstBankList_FuncBody_Helper_Skip:
 SLDstBankList_FuncBody_Join:
 	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
@@ -1729,11 +1729,11 @@ SLDstBankList_FuncBody_Skip3:
 	jr	z, SLDstBankList_FuncBody_Loop
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 SLDstBankList_FuncBody_Join3:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
@@ -1792,11 +1792,11 @@ SLDstBankList_FuncBody_Skip6:
 	jrl	z, SLDstBankList_FuncBody_Loop
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLDstBankList_FuncBody_Join3
 SLDstBankList_FuncBody_Skip7:
 	ld	xwa, (xsp+4)
@@ -1810,11 +1810,11 @@ SLDstBankList_FuncBody_Skip8:
 	jrl	z, SLDstBankList_FuncBody_Loop
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLDstBankList_FuncBody_Join3
 SLDstBankList_FuncBody_Skip9:
 	ld	xwa, (xsp+4)
@@ -1885,11 +1885,11 @@ SLDstBankList_FuncBody_Helper2:
 	call	FileIO_CopyString
 	lda	xde, (0x89b7:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+4)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	4, xsp
@@ -1914,12 +1914,12 @@ SLDstBankList_FuncBody_Helper2:
 	ldw	bc, 16
 	calr	TrimAndPadSmfFilename
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x89a2
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	ld	xwa, xiz
 	jr	SLDstBankList_FuncBody_Join5
@@ -1956,7 +1956,7 @@ SLDstBankList_FuncBody_Skip11:
 	jr	SLDstBankList_FuncBody_Join5
 SLDstBankList_FuncBody_Skip12:
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, xhl
 	jr	SLDstBankList_FuncBody_Join6
 SLDstBankList_FuncBody_Skip13:
@@ -1965,7 +1965,7 @@ SLDstBankList_FuncBody_Skip13:
 	cp	xde, 7
 	jr	ugt, SLDstBankList_FuncBody_Skip14
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, xhl
 SLDstBankList_FuncBody_Join6:
 	call	ApPostEvent
@@ -2008,12 +2008,12 @@ SLDstBankList_FuncBody_Helper3:
 	ld	de, 1:i3
 	calr	WP_GetPresetName1
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x89a2
 	call	ApPostEvent
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	2, xsp
@@ -2076,11 +2076,11 @@ SLDstBankList_FuncBody_Helper4_Skip2:
 SLDstBankList_FuncBody_Helper4_Join:
 	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
@@ -2149,11 +2149,11 @@ SLDstBankList_FuncBody_Skip17:
 	jr	z, SLDstBankList_FuncBody_Loop3
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 SLDstBankList_FuncBody_Join8:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
@@ -2212,11 +2212,11 @@ SLDstBankList_FuncBody_Skip20:
 	jrl	z, SLDstBankList_FuncBody_Loop3
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLDstBankList_FuncBody_Join8
 SLDstBankList_FuncBody_Skip21:
 	ld	xwa, (xsp+4)
@@ -2230,11 +2230,11 @@ SLDstBankList_FuncBody_Skip22:
 	jrl	z, SLDstBankList_FuncBody_Loop3
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLDstBankList_FuncBody_Join8
 SLDstBankList_FuncBody_Skip23:
 	ld	xwa, (xsp+4)
@@ -2302,12 +2302,12 @@ SLDstBankList_FuncBody_Helper5_Skip:
 	calr	WP_GetUserName2
 SLDstBankList_FuncBody_Join11:
 	ld	xwa, (xsp+2)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x89a2
 	call	ApPostEvent
 	lda	xde, (0x89b7:16)
 	ld	xwa, (xsp+2)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	6, xsp
 	ret
@@ -2414,11 +2414,11 @@ SLDstBankList_FuncBody_Helper6_Skip2:
 SLDstBankList_FuncBody_Helper6_Join:
 	lda	xde, (0x89cc:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, (xsp+6)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	pop	xiz
 	inc	6, xsp
@@ -2515,11 +2515,11 @@ SLDstBankList_FuncBody_Skip28:
 	jr	z, SLDstBankList_FuncBody_Loop4
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 SLDstBankList_FuncBody_Join15:
 	call	ApPostEvent
 	ld	xwa, (xsp+4)
@@ -2624,11 +2624,11 @@ SLDstBankList_FuncBody_Skip33:
 	jrl	z, SLDstBankList_FuncBody_Loop4
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLDstBankList_FuncBody_Join15
 SLDstBankList_FuncBody_Skip34:
 	ld	xwa, (xsp+4)
@@ -2642,11 +2642,11 @@ SLDstBankList_FuncBody_Skip35:
 	jrl	z, SLDstBankList_FuncBody_Loop4
 	lda	xde, (0x89b7:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	lda	xde, (0x89e1:16)
 	ld	xwa, xiz
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	jrl	SLDstBankList_FuncBody_Join15
 SLDstBankList_FuncBody_Skip36:
 	ld	xwa, (xsp+4)
@@ -2704,7 +2704,7 @@ SLDstBankList_FuncBody_Loop5:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+2)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 4:i3
@@ -2728,7 +2728,7 @@ SingleLoadDstFunc:
 	jrl z, SLDst_HandleScroll
 	cp xwa, 0x1c00017
 	jrl z, SLDst_HandleScroll
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jrl z, SLDst_HandleConfirm
 	cp xwa, 0x1c0000b
 	jr z, SLDst_HandleShow
@@ -2744,13 +2744,13 @@ SingleLoadDstFunc:
 	cp (0x89f8:16), 1
 	jr z, SLDst_ShowHide_Internal
 	ld xwa, 0x61004a
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 1:i3
 	jr SLDst_ShowHide_Dispatch
 
 SLDst_ShowHide_Internal:
 	ld xwa, 0x61004a
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 0:i3
 
 SLDst_ShowHide_Dispatch:
@@ -2883,13 +2883,13 @@ SLDst_ScrollMode4:
 	cp (0x89f8:16), 1
 	jr z, SLDst_ScrollMode4_Internal
 	ld xwa, 0x61004a
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 1:i3
 	jr SLDst_ScrollMode4_Dispatch
 
 SLDst_ScrollMode4_Internal:
 	ld xwa, 0x61004a
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 0:i3
 
 SLDst_ScrollMode4_Dispatch:
@@ -2947,7 +2947,7 @@ SLDst_ScrollDispatch:
 	cp (0x89f8:16), 4
 	jr z, SLDst_Scroll_ChildReturn
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -2967,7 +2967,7 @@ SLDst_ScrollDispatch:
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -3388,7 +3388,7 @@ CmpDst_ScrollModeA:
 	cp (0x89f8:16), 4
 	jr z, CmpDst_ScrollMode7
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -3408,7 +3408,7 @@ CmpDst_ScrollModeA:
 	calr FileIO_ValidateSignedValue
 	ld (0x7f42:16), l
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -3570,7 +3570,7 @@ CmpFile_ShowDraw:
 	ld xbc, xiz
 	call FileIO_ReadHeader_ParseLoop
 	ld xwa, (0x81fc:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8870
 
 CmpFile_ShowDispatch:
@@ -3628,7 +3628,7 @@ CmpFile_RedrawDispatch:
 	ld xbc, xiz
 	call FileIO_ReadHeader_ParseLoop
 	ld xwa, (0x81fc:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8870
 	call ApPostEvent
 	ld xwa, (xsp + 4)
@@ -3647,7 +3647,7 @@ CmpFile_Return:
 	ret
 
 FmmCmpSingleLoadFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, FmmCmpLoad_Return
 	cp xde, 0x3
 	jrl z, FmmCmpLoad_HandleAbort
@@ -3656,11 +3656,11 @@ FmmCmpSingleLoadFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x61004a
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8500:16), 0
@@ -3702,7 +3702,7 @@ FmmCmpLoad_SignalProgress:
 
 FmmCmpLoad_CloseProgress:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -3715,7 +3715,7 @@ FmmCmpLoad_CloseProgress:
 
 FmmCmpLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xb0
@@ -3726,7 +3726,7 @@ FmmCmpLoad_HandleCancel:
 
 FmmCmpLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -3736,7 +3736,7 @@ FmmCmpLoad_HandleError:
 FmmCmpLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xb0

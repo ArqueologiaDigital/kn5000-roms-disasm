@@ -385,7 +385,7 @@ PsGridBox_Paint:
 	call GetViewInstance
 	ld xiz, xhl
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 42)

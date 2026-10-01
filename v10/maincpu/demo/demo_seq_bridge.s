@@ -210,7 +210,7 @@ SeqSongName_RefreshLoop:
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xa
@@ -251,7 +251,7 @@ SongBank_StoreCurrentSong:
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ld bc, (7120:16)
 	ld wa, bc
@@ -259,7 +259,7 @@ SongBank_StoreCurrentSong:
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ldto_berp A, 0xf8
 	ld (7500:16), a
@@ -365,7 +365,7 @@ SeqSongMem_RefreshLoop:
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xa
@@ -406,7 +406,7 @@ SongBank_EventCompare:
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ld bc, (7196:16)
 	ld wa, bc
@@ -414,7 +414,7 @@ SongBank_EventCompare:
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 SeqSongMem_PostAndReturn:
 	call ApPostEvent
@@ -470,43 +470,43 @@ CDlikeSwTtl_SendEvt4_Post:
 ; Called from ui/setwall_routines.s.
 CDlikeSwTtl_SendStartEvtArg1:
 	ld	xwa, 0x8b0003
-	ld	xbc, 0x1e0009c
+	ld	xbc, EVT_POST_ACTIVATE
 	ld	xde, 1:i3
 	jp	ApPostEvent
 
 CDlikeSwTtl_SendStartEvt:
 	ld xwa, 0x8b0003
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendResetEvent:
 	ld xwa, 0x8b0000
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendStopEvtD:
 	ld xwa, 0x8b000d
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_0:
 	ld xwa, 0x8c0000
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_A:
 	ld xwa, 0x8c000a
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_13:
 	ld xwa, 0x8c0013
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jp ApPostEvent
 

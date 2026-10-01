@@ -1714,7 +1714,7 @@ RVari_OK:
 	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -1740,7 +1740,7 @@ RVari_OK_TypeF_Input8A:
 	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -1766,7 +1766,7 @@ RVari_OK_TypeF_Input8B:
 	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)

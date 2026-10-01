@@ -1059,7 +1059,7 @@ SqAftSetTtlFunc:
 	ret
 
 SqSngSelTtlFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqSngName_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1099,7 +1099,7 @@ SqSngName_ReturnZero:
 	ret
 
 SqSngNameTtlFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqTrAs_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1141,7 +1141,7 @@ SqTrAs_ReturnZero:
 SqTrAsTtlFunc:
 	cp xbc, 0x1c00007
 	jrl z, SqTrAs_EventHandler
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, CDlikeSwTtl_ReturnZero2
 	dec 2, xde
 	cp xde, 0x0
@@ -1277,7 +1277,7 @@ SqTrAsPs_ReturnZero:
 SqTrAsPsTtlFunc:
 	cp xbc, 0x1c00007
 	jr z, SqTrAsPsTtl_CaseD
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, SqTrAsPsTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1404,7 +1404,7 @@ SqTrAsPsTtl_CaseF_Skip:
 SqMdlyPlyTtlFunc:
 	cp xbc, 0x1c00007
 	jr z, SqMdlyPly_InitPlay
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, SqMdlyPly_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1483,7 +1483,7 @@ SqMdlyPly_ReturnZero:
 DkMdlyPlyTtlFunc:
 	cp xbc, 0x1c00007
 	jr z, DkMdlyPly_InitPlay
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DkMdlyPly_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1700,7 +1700,7 @@ DisplayMode_RefreshState:
 DpMdlyDocTtlFunc:
 	cp xbc, 0x1c00007
 	jr z, DpMdlyDoc_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DpMdlyDoc_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1793,7 +1793,7 @@ DpMdlyDoc_ReturnZero:
 DpMdlyPdTtlFunc:
 	cp xbc, 0x1c00007
 	jr z, DpMdlyPd_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DpMdlyPd_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1886,7 +1886,7 @@ DpMdlyPd_ReturnZero:
 DpMdlySmfTtlFunc:
 	cp xbc, 0x1c00007
 	jr z, DpMdlySmf_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DpMdlySmf_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1981,7 +1981,7 @@ DpMdlySmf_ReturnZero:
 DpMdlySmfLyrTtlFunc:
 	cp xbc, 0x1c00007
 	jrl z, DpMdlySmfLyr_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DpMdlySmfLyr_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -2757,11 +2757,11 @@ CDlikeSwTtl_PdNavReturn:
 DpDocTtlFunc:
 	cp xbc, 0x1c00009
 	jrl z, DpDoc_CaseI
-	cp xbc, 0x1c00008
+	cp xbc, EVT_ACTIVATE
 	jrl z, DpDoc_CaseG
 	cp xbc, 0x1c00007
 	jr z, DpDoc_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DpDocTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -2878,11 +2878,11 @@ DpDocTtl_ReturnZero:
 DpPdTtlFunc:
 	cp xbc, 0x1c00009
 	jrl z, DpPd_CaseI
-	cp xbc, 0x1c00008
+	cp xbc, EVT_ACTIVATE
 	jrl z, DpPd_CaseG
 	cp xbc, 0x1c00007
 	jr z, DpPd_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DpPdTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -2999,11 +2999,11 @@ DpPdTtl_ReturnZero:
 DpSmfTtlFunc:
 	cp xbc, 0x1c00009
 	jrl z, DpSmf_CaseI
-	cp xbc, 0x1c00008
+	cp xbc, EVT_ACTIVATE
 	jrl z, DpSmf_CaseG
 	cp xbc, 0x1c00007
 	jrl z, DpSmf_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, DpSmfTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -3130,11 +3130,11 @@ DpSmfTtl_ReturnZero:
 DpSmfLyrTtlFunc:
 	cp xbc, 0x1c00009
 	jrl z, DpSmfLyr_CaseC
-	cp xbc, 0x1c00008
+	cp xbc, EVT_ACTIVATE
 	jrl z, DpSmfLyr_CaseB
 	cp xbc, 0x1c00007
 	jr z, DpSmfLyr_CaseA
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, SeqStep_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -3242,7 +3242,7 @@ SeqStep_ReturnZero:
 	ret
 
 SeqStepModeFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SeqStepMode_ReturnZero
 	cp xde, 0x1
 	jr z, DpSmfLyr_CaseD
@@ -3276,7 +3276,7 @@ SeqStepMode_ReturnZero:
 	ret
 
 SqTrSelTtlFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqTrSelTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0

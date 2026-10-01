@@ -82,30 +82,30 @@ BitMapOut_ByteData_RenderA:
 	cp	a, 12
 	jr	nz, BitMapOut_ByteData_RenderA_Skip2
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	call	DeleteEvent
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000ea
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jr	BitMapOut_ByteData_RenderA_Join
 BitMapOut_ByteData_RenderA_Skip:
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	call	DeleteEvent
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000eb
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jr	BitMapOut_ByteData_RenderA_Join
 BitMapOut_ByteData_RenderA_Skip2:
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	call	DeleteEvent
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000e8
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -226,10 +226,10 @@ BitMapOut_ByteData_RenderD_Epilogue:
 	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	call	DeleteEvent
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000e9
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -250,10 +250,10 @@ BitMapOut_ByteData_RenderE:
 	cp	xhl, 0x01a000e9
 	ret	nz
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	call	DeleteEvent
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -3813,7 +3813,7 @@ BitMapOut_UpdateWidget_Done:
 	bit	5, a
 	ret	z
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000d0
 	call	ApPostEvent
 	ld	xwa, 0xffffffff
@@ -3868,7 +3868,7 @@ BitMapOut_UpdateWidget_Finalize_Loop:
 	ret
 
 OneTchFUNC:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, BitMapOut_ApplyWidgetPatch
 	dec 2, xde
 	cp xde, 0x0

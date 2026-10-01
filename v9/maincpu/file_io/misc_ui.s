@@ -106,7 +106,7 @@ SetupOk_Return:
 SetupExitFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr nz, SetupExit_Return
 	ld xde, xiz
 	call InheritedProc
@@ -126,7 +126,7 @@ SetupExitFunc:
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x1450030
@@ -231,7 +231,7 @@ TechnicsFileRename_HandleOk:
 	ld xde, 0x2743e
 	call MainFuncCall
 	ld xwa, 0x7b0000
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call PostEvent
 
@@ -335,7 +335,7 @@ SmfFileRename_HandleOk:
 	ld xde, 0x27462
 	call MainFuncCall
 	ld xwa, 0x7b0019
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call PostEvent
 
@@ -461,7 +461,7 @@ WaitingFunc:
 	ld (xsp + 68), xde
 	cp xbc, 0x1c0000b
 	jr z, WaitingFunc_DrawMessage
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, WaitingFunc_Return
 	ld xwa, (xsp + 68)
 	ld (0x02748a:24), wa
@@ -486,7 +486,7 @@ WaitingFunc_DrawMessage:
 	ld (0x02748c:24), hl
 	ld xwa, (xsp + 68)
 	lda xde, (xsp + 4)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 WaitingFunc_Return:
@@ -496,9 +496,9 @@ WaitingFunc_Return:
 	ret
 
 DiskMedleyShowHideFunc:
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, DiskMedley_Return
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, DiskMedley_Return
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e0009e
@@ -520,7 +520,7 @@ PsFileNameBoxProc:
 	jrl z, PsFileNameBox_HandleOkState
 	cp xwa, 0x1c50000
 	jrl z, PsFileNameBox_HandleCancelState
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jrl z, PsFileNameBox_HandleClose
 	cp xwa, 0x1c0001a
 	jrl z, PsFileNameBox_HandleScrollDone
@@ -532,11 +532,11 @@ PsFileNameBoxProc:
 	jrl z, PsFileNameBox_HandleScrollEvt
 	cp xwa, 0x1e50002
 	jrl z, PsFileNameBox_HandleListSelect
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jrl z, PsFileNameBox_HandleConfirm
 	cp xwa, 0x1c0000b
 	jrl z, PsFileNameBox_HandleShow
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jrl nz, PsFileNameBox_DefaultHandler
 	ld_sril XWA, (xsp + 0x00aa)
 	call GetViewInstance

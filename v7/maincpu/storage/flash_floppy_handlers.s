@@ -6675,7 +6675,7 @@ AcCmpSetGridBoxProc:
 	jrl z, CmpSetP1_GridCheck_Case1
 	cp xwa, 0x1e0008a
 	jrl z, CmpSetP1_GridCheckDispatch
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, CmpSetP1_DialGrid
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -6698,7 +6698,7 @@ CmpSetP1_DialGrid:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -6737,7 +6737,7 @@ CmpSetP1_DialGrid:
 	or xhl, xhl
 	jr z, CmpSetP1_SendAndApplyFunc
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -6795,7 +6795,7 @@ CmpSetP1_SendAndApplyFunc:
 	or xhl, xhl
 	jr z, CmpSetP1_DialDownSendApply
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -6913,7 +6913,7 @@ CmpSetP1GridCheck:
 CmpSetP1_GridCheck_EventEnc:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -6932,7 +6932,7 @@ CmpSetP1_GridCheck_EventEnc:
 	jr	CmpSetP1GridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -7083,7 +7083,7 @@ CmpSetGridCheck:
 GridCheck_Handler0:
 	call GetFocusObject	; Get UI object
 	ld xwa, xhl	; Save result in XWA
-	ld xbc, 0x1e0008f	; Event code for query
+	ld xbc, EVT_OBJECT_STATE_QUERY	; Event code for query
 	ld xde, 0:i3	; Parameter = 0
 	call SendEvent	; Query object state
 	ld xde, xhl	; Result in XDE
@@ -7100,11 +7100,11 @@ GridCheck_Handler0:
 	cp wa, 1:i3	; Check if state == 1
 	jrl nz, GridCheck_ReturnZero	; If neither, exit
 	ld xwa, 0x144000d	; Widget ID
-	ld xbc, 0x1e40008	; Event: grid check state 1 (case 0)
+	ld xbc, EVT_GRIDCHECK_RESP_A	; Event: grid check state 1 (case 0)
 	jr GridCheck_SendEvent
 GridCheck_Handler0_State2:
 	ld xwa, 0x144000d	; Widget ID
-	ld xbc, 0x1e4000a	; Event: grid check state 2 (case 0)
+	ld xbc, EVT_GRIDCHECK_RESP_B	; Event: grid check state 2 (case 0)
 	jr GridCheck_SendEvent
 
 ; =============================================================================
@@ -7115,7 +7115,7 @@ GridCheck_Handler0_State2:
 GridCheck_Handler1:
 	call GetFocusObject	; Get UI object
 	ld xwa, xhl	; Save result in XWA
-	ld xbc, 0x1e0008f	; Event code for query
+	ld xbc, EVT_OBJECT_STATE_QUERY	; Event code for query
 	ld xde, 0:i3	; Parameter = 0
 	call SendEvent	; Query object state
 	ld xde, xhl	; Result in XDE
@@ -7238,9 +7238,9 @@ CmpSetPageFunc:
 	jr z, CmpSetPage_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, CmpSetPage_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, CmpSetPage_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, CmpSetPage_ReturnZero
 	or xde, xde
 	jr nz, CmpSetPage_ReturnZero
@@ -7266,7 +7266,7 @@ AcApcToggleProc:
 	ld (xsp + 12), xwa
 	cp xiz, 0x1c0001c
 	jrl z, AcApcToggle_HandleLswMsg
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, AcApcToggle_HandleOpen
 	cp xiz, 0x1c00007
 	jr z, AcApcToggle_HandleClose
@@ -7342,7 +7342,7 @@ AcApcToggle_SendUpdate:
 	ld de, (xwa)
 	exts xde
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jrl AcApcToggle_SendEvent
 
 AcApcToggle_HandleLswMsg:
@@ -7368,12 +7368,12 @@ AcApcToggle_HandleLswMsg:
 	cpw (XWA+0x04), 0x0001
 	jr nz, AcApcToggle_SendZero
 	ld XWA,(XSP+0x0c)
-	ld XBC,0x01c0000f
+	ld XBC,EVT_INIT_HOOK
 	ld xde, 1:i3
 	jr t, AcApcToggle_SendEvent
 AcApcToggle_SendZero:
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jr AcApcToggle_SendEvent
 
@@ -7385,13 +7385,13 @@ AcApcToggle_Check83Match:
 	cpw (xwa + 4), 0x1
 	jr nz, AcApcToggle_Send83Zero
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	jr AcApcToggle_SendEvent
 
 AcApcToggle_Send83Zero:
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 
 AcApcToggle_SendEvent:
@@ -7443,9 +7443,9 @@ AcApcMdBoxProc:
 	jr z, AcApcMdBox_GetLswValue
 	cp xbc, 0x1c0000b
 	jr z, AcApcMdBox_GetLswValue
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcApcMdBox_ResetFilter
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jrl nz, AcApcMdBox_DefaultInherited
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -7558,9 +7558,9 @@ AcS2cMemNoBoxProc:
 	jr z, S2cMemNoBox_HandleScroll
 	cp xbc, 0x1c0000b
 	jr z, S2cMemNoBox_HandleScroll
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, S2cMemNoBox_HandleClose
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, S2cMemNoBox_HandleOpen
 	ld xwa, xiz
 	call InheritedProc
@@ -7592,7 +7592,7 @@ S2cMemNoBox_HandleScroll:
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	SendEvent
 S2cMemNoBox_ReturnZero:
 	ld xhl, 0:i3
@@ -7640,12 +7640,12 @@ PsS2cFmeas_SetActive:
 
 PsS2cFmeas_SendUpdateEvents:
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	ld xhl, 0:i3
 
@@ -7692,12 +7692,12 @@ PsS2cLmeas_SetActive:
 
 PsS2cLmeas_SendUpdateEvents:
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	ld xhl, 0:i3
 
@@ -7734,7 +7734,7 @@ PsSeqSongNo_HandleScroll:
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	SendEvent
 	ld	xhl, 0:i3
 PsSeqSongNo_PopReturn:
@@ -7784,12 +7784,12 @@ SndArg_GridBnk_Case0:
 ; SndArgGridBnk case 1
 SndArg_GridBnk_Case1:
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	ld xhl, 0:i3
 
@@ -7815,7 +7815,7 @@ S2cGridBoxProc:
 	jrl z, FdcFormat_GridCheck_Case1
 	cp xiz, 0x1e0008a
 	jrl z, FdcFormat_GridCheck
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, FdcFormat_DialGrid
 	sub xwa, 0x1c00017
 	cp xwa, 0x0
@@ -7838,7 +7838,7 @@ FdcFormat_DialGrid:
 	cp	(14811:16), 3
 	jrl	nz, FdcFormat_ReturnZeroJmp
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457423
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+4), xhl
@@ -7877,7 +7877,7 @@ FdcFormat_DialGrid:
 	or	xhl, xhl
 	jr	z, S2cGrid_DialDownSendApply
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457423
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	dec	1, hl
@@ -7930,7 +7930,7 @@ S2cGrid_DialDownSendApply:
 	or xhl, xhl
 	jr z, S2cGrid_DialUpSendApply
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
@@ -8011,7 +8011,7 @@ FdcFormat_GridCheck_Case2:
 FdcFormat_GridCheck_Case3:
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 12), xhl

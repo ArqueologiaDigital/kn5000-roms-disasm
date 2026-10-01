@@ -132,7 +132,7 @@ TestTitleFunc:
 	ld wa, 0:i3
 	cp xbc, 0x1c00007
 	jr z, TitleFunc_LifecycleDispatch
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, TitleFunc_Return
 	ld xwa, xde
 	dec 2, xwa
@@ -302,17 +302,17 @@ RunTestCounters_Display:
 	ld de, (0x03dcfe:24)
 	exts xde
 	ld xwa, 0x00fc0001
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ld de, (0x03dd00:24)
 	exts xde
 	ld xwa, 0x00fc0003
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ld de, (0x03dd02:24)
 	exts xde
 	ld xwa, 0x00fc0002
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	jp ApPostEvent
 
 ; CreateAndRunFDOperation -- Builds a 16-byte parameter struct on the stack,

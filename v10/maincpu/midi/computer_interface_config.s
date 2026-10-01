@@ -23,9 +23,9 @@ TtComputerConnection:
 	jr z, ComputerConnectionTitleExit
 	cp xbc, 0x1c0000b
 	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, ComputerConnectionTitleExit
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, ComputerConnectionTitleExit
 	or xde, xde
 	jr nz, ComputerConnectionTitleExit
@@ -34,7 +34,7 @@ TtComputerConnection:
 	jr nz, ComputerConnectionTitleExit
 	ld (0x7f42:16), 70
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 

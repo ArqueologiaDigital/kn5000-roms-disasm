@@ -15153,9 +15153,9 @@ S2cShowHideFunc:
 	jr z, S2cShow_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, S2cShow_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, S2cShow_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, S2cShow_ReturnZero
 	or xde, xde
 	jr nz, S2cShow_ReturnZero
@@ -15184,7 +15184,7 @@ S2cGridCheck:
 S2c_GridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -15202,7 +15202,7 @@ S2c_GridCheck_DataBlock:
 	jr	S2cGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -15291,9 +15291,9 @@ PsCmpCpFGrpBoxProc:
 	jr z, PsCmpCpFGrpBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsCmpCpFGrpBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCmpCpFGrpBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCmpCpFGrpBox_HandleEvt1
 	ld XWA, (xsp + 0x0110)
 	ld XDE, (xsp + 0x010c)
@@ -15349,12 +15349,12 @@ PsCmpCpFGrpBox_SetColorFF:
 
 PsCmpCpFGrpBox_SendNotify:
 	ld XWA, (xsp + 0x0110)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 12)
 	ld XWA, (xsp + 0x0110)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	lda xwa, (xsp + 4)
 	ldw (xwa), 0x8
@@ -15401,9 +15401,9 @@ PsCmpCpFVariBoxProc:
 	jr z, PsCmpCpFVariBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsCmpCpFVariBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCmpCpFVariBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCmpCpFVariBox_HandleEvt1
 	ld XWA, (xsp + 0x0110)
 	ld XDE, (xsp + 0x010c)
@@ -15462,12 +15462,12 @@ PsCmpCpFVariBox_SetColorFF:
 
 PsCmpCpFVariBox_SendNotify:
 	ld XWA, (xsp + 0x0110)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 12)
 	ld XWA, (xsp + 0x0110)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	call GetTitleNow
 	cp xhl, 0x1a000b8
@@ -15514,9 +15514,9 @@ PsCmpCpFPtnBoxProc:
 	jr z, PsCmpCpFPtnBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsCmpCpFPtnBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCmpCpFPtnBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCmpCpFPtnBox_HandleEvt1
 	ld XWA, (xsp + 0x010c)
 	call InheritedProc
@@ -15565,12 +15565,12 @@ PsCmpCpFPtnBox_SetColorFF:
 
 PsCmpCpFPtnBox_SendNotify:
 	ld XWA, (xsp + 0x010c)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 12)
 	ld XWA, (xsp + 0x010c)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	lda xwa, (xsp + 4)
 	ldw (xwa), 0x8
@@ -15614,9 +15614,9 @@ PsCstmCpBnkBoxProc:
 	jr z, PsCstmCpBnkBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsCstmCpBnkBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCstmCpBnkBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCstmCpBnkBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -15658,7 +15658,7 @@ PsCstmCpBnkBox_LookupAndSend:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsCstmCpBnkBox_ReturnZero:
@@ -15678,9 +15678,9 @@ PsCstmCpSwBoxProc:
 	jr z, PsCstmCpSwBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsCstmCpSwBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCstmCpSwBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCstmCpSwBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -15730,7 +15730,7 @@ PsCstmCpSwBox_SendCommand:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsCstmCpSwBox_ReturnZero:
@@ -15751,11 +15751,11 @@ PsCstmCpNameBoxProc:
 	jrl z, PsCstmCpNameBox_HandleEvt2E
 	cp xbc, 0x1e4002d
 	jrl z, PsCstmCpNameBox_HandleEvt2D
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, PsCstmCpNameBox_HandleEvtD
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCstmCpNameBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCstmCpNameBox_HandleEvt1
 	ld xwa, xiz
 	ld XDE, (xsp + 0x0104)
@@ -15815,7 +15815,7 @@ PsCstmCpNameBox_HandleEvt2D:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr PsCstmCpNameBox_SendEventJoin
 
 PsCstmCpNameBox_HandleEvt2E:
@@ -15831,7 +15831,7 @@ PsCstmCpNameBox_HandleEvt2E:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 PsCstmCpNameBox_SendEventJoin:
 	call SendEvent
@@ -15853,9 +15853,9 @@ PsCtmAttStrBoxProc:
 	jr z, PsCtmAttStrBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsCtmAttStrBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCtmAttStrBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCtmAttStrBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -15883,7 +15883,7 @@ PsCtmAttStrBox_HandleEvtBC:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsCtmAttStrBox_ReturnZero:
@@ -15903,9 +15903,9 @@ AcMemNoBoxProc:
 	jr z, AcMemNoBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, AcMemNoBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcMemNoBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcMemNoBox_HandleEvt1
 	ld XWA, (xsp + 0x010c)
 	call InheritedProc
@@ -15954,12 +15954,12 @@ AcMemNoBox_SetColorFF:
 
 AcMemNoBox_SendNotify:
 	ld XWA, (xsp + 0x010c)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 12)
 	ld XWA, (xsp + 0x010c)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	call GetTitleNow
 	cp xhl, 0x1a000b8
@@ -16009,9 +16009,9 @@ AcCmpRecBoxProc:
 	jr z, AcCmpRecBox_HandleEvtBC
 	cp xwa, 0x1c0000b
 	jr z, AcCmpRecBox_HandleEvtBC
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jr z, AcCmpRecBox_HandleEvt2
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, AcCmpRecBox_HandleEvt1
 	ld XWA, (xsp + 0x0118)
 	ld XBC, (xsp + 0x0114)
@@ -16085,7 +16085,7 @@ AcCmpRecBox_InheritAndSend:
 	call InheritedProc
 	lda xde, (xsp + 16)
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcCmpRecBox_ReturnZero:
@@ -16105,9 +16105,9 @@ PsCmpQtzBoxProc:
 	jr z, PsCmpQtzBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsCmpQtzBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsCmpQtzBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsCmpQtzBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -16141,7 +16141,7 @@ PsCmpQtzBox_HandleEvtBC:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsCmpQtzBox_ReturnZero:
@@ -16163,9 +16163,9 @@ PsCmpMeasBoxProc:
 	jr z, PsCmpMeasBox_HandleEvtBC
 	cp xiz, 0x1c0000b
 	jr z, PsCmpMeasBox_HandleEvtBC
-	cp xiz, 0x1c00002
+	cp xiz, EVT_SELECT_CONFIRM
 	jr z, PsCmpMeasBox_HandleEvt2
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, PsCmpMeasBox_HandleEvt1
 	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
@@ -16210,7 +16210,7 @@ PsCmpMeasBox_HandleEvtBC:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0108)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsCmpMeasBox_ReturnZero:
@@ -16232,9 +16232,9 @@ PsCmpMemBoxProc:
 	jr z, PsCmpMemBox_HandleEvtBC
 	cp xiz, 0x1c0000b
 	jr z, PsCmpMemBox_HandleEvtBC
-	cp xiz, 0x1c00002
+	cp xiz, EVT_SELECT_CONFIRM
 	jr z, PsCmpMemBox_HandleEvt2
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, PsCmpMemBox_HandleEvt1
 	ld XWA, (xsp + 0x0108)
 	ld xbc, xiz
@@ -16278,7 +16278,7 @@ PsCmpMemBox_HandleEvtBC:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0108)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsCmpMemBox_ReturnZero:
@@ -16301,9 +16301,9 @@ AcCmpTempoBoxProc:
 	jr z, AcCmpTempoBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, AcCmpTempoBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcCmpTempoBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcCmpTempoBox_HandleEvt1
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
@@ -16352,7 +16352,7 @@ AcCmpTempoBox_HandleEvt1C:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 CmpFunc_Return:
@@ -16424,9 +16424,9 @@ PsNameMemBoxProc:
 	jr z, PsNameMemBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsNameMemBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsNameMemBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsNameMemBox_HandleEvt1
 	ld XWA, (xsp + 0x010c)
 	call InheritedProc
@@ -16475,12 +16475,12 @@ PsNameMemBox_SetColorFF:
 
 PsNameMemBox_SendNotify:
 	ld XWA, (xsp + 0x010c)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call SendEvent
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x010c)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	call GetTitleNow
 	cp xhl, 0x1a000b8
@@ -16537,7 +16537,7 @@ AcEasyCmpGridBoxProc:
 	jrl z, EasyCmp_GridCheck_Case1
 	cp xwa, 0x1e0008a
 	jrl z, EasyCmp_GridCheck
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, EasyCmp_DialGrid
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -16560,7 +16560,7 @@ EasyCmp_DialGrid:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -16599,7 +16599,7 @@ EasyCmp_DialGrid:
 	or xhl, xhl
 	jr z, EasyCmp_SendEvt091
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
@@ -16653,7 +16653,7 @@ EasyCmp_SendEvt091:
 	or xhl, xhl
 	jr z, EasyCmp_IncSendEvt091
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
@@ -16768,7 +16768,7 @@ EasyCmpGridCheck:
 EasyCmp_GridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -16793,7 +16793,7 @@ EasyCmpGridCheck_Skip:
 	jr	EasyCmpGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -17024,9 +17024,9 @@ PsMspNameBnkProc:
 	jr z, PsMspNameBnk_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, PsMspNameBnk_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PsMspNameBnk_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, PsMspNameBnk_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -17058,7 +17058,7 @@ PsMspNameBnk_HandleEvtBC:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsMspNameBnk_SetReturnZero:
@@ -17084,13 +17084,13 @@ VwVariBoxProc:
 	jrl z, VwVariBox_OK
 	cp xiz, 0x1e0003a
 	jrl z, VwVariBox_GetText
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jrl z, VwVariBox_Confirm
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jrl z, VwVariBox_Paint
 	cp xiz, 0x1c0001c
 	jrl z, VwVariBox_Match
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, VwVariBox_Init
 	cp xiz, 0x1e0004d
 	jrl nz, VwVariBox_Default
@@ -17106,7 +17106,7 @@ VwVariBoxProc:
 	ld XWA, (xsp + 0x0114)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	jrl VwVariBox_DispatchAndReturn
 
@@ -17128,7 +17128,7 @@ VwVariBox_Init:
 	ld xbc, (xbc)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	jrl VwVariBox_DispatchAndReturn
 
@@ -17170,7 +17170,7 @@ VwVariBox_Match_ValueMismatch:
 	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xc80001
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	jr VwVariBox_Match_DispatchConfirm
 
@@ -17186,7 +17186,7 @@ VwVariBox_Match_HighIndex:
 	ld xde, 2:i3
 	call SendEvent
 	ld xwa, 0xc80001
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 
 VwVariBox_Match_DispatchConfirm:
@@ -17194,7 +17194,7 @@ VwVariBox_Match_DispatchConfirm:
 
 VwVariBox_Match_Repaint:
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	jrl VwVariBox_DispatchAndReturn
 
@@ -17225,7 +17225,7 @@ VwVariBox_Paint_DrawLabel:
 	ld wa, (xwa + 36)
 	call DrawEditSw
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl VwVariBox_DispatchAndReturn
 
@@ -17431,9 +17431,9 @@ MspBnkShow:
 	jrl z, MspBnk_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, MspBnk_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, MspBnk_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, MspBnk_ReturnZero
 	call GetTitleOld
 	ld xiz, xhl
@@ -17491,9 +17491,9 @@ AcMspBnkSlBoxProc:
 	jr z, MspBnkSlBox_HandleEvtBC
 	cp xiz, 0x1c0000b
 	jr z, MspBnkSlBox_HandleEvtBC
-	cp xiz, 0x1c00002
+	cp xiz, EVT_SELECT_CONFIRM
 	jr z, MspBnkSlBox_HandleEvt2
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jrl nz, MspBnkSlBox_DefaultHandler
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -17625,11 +17625,11 @@ PsMspBnkNameBoxProc:
 	jrl z, MspBnkNameBox_HandleEvt1C
 	cp xbc, 0x1e4001b
 	jrl z, MspBnkNameBox_HandleEvt1B
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, MspBnkNameBox_HandleEvtD
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, MspBnkNameBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jrl nz, RgpSetBnk_GridCheck_Case2
 	ld xwa, xiz
 	ld XDE, (xsp + 0x0104)
@@ -17695,7 +17695,7 @@ MspBnkNameBox_HandleEvt1B:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr MspBnk_SendEventJoin
 
 MspBnkNameBox_HandleEvt1C:
@@ -17709,7 +17709,7 @@ MspBnkNameBox_HandleEvt1C:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr MspBnk_SendEventJoin
 
 MspBnkNameBox_HandleEvt1D:
@@ -17723,7 +17723,7 @@ MspBnkNameBox_HandleEvt1D:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr MspBnk_SendEventJoin
 
 ; RgpSetBnkCheck dispatch
@@ -17738,7 +17738,7 @@ RgpSetBnk_GridCheck:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 MspBnk_SendEventJoin:
 	call SendEvent
@@ -17779,7 +17779,7 @@ MspRGrpSetGridCheck:
 MspRGrpSetGridCheck_DataBlock:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -17804,7 +17804,7 @@ MspRGrpSetGridCheck_Skip:
 	jr	MspRGrpSetGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -17920,9 +17920,9 @@ PsRgpSetBnkBoxProc:
 	jr z, RgpSetBnkBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, RgpSetBnkBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, RgpSetBnkBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, RgpSetBnkBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -17954,7 +17954,7 @@ RgpSetBnkBox_HandleEvtBC:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 RgpSetBnkBox_SetReturnZero:
@@ -18024,9 +18024,9 @@ MspRgpShowHideFunc:
 	jr z, MspRgpShow_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, MspRgpShow_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, MspRgpShow_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, MspRgpShow_ReturnZero
 	or xde, xde
 	jr nz, MspRgpShow_ReturnZero
@@ -18061,9 +18061,9 @@ PsMspMeasBoxProc:
 	jr z, MspMeasBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, MspMeasBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, MspMeasBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, MspMeasBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -18095,7 +18095,7 @@ MspMeasBox_HandleEvtBC:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 MspMeasBox_SetReturnZero:
@@ -18115,9 +18115,9 @@ PsMspMemBoxProc:
 	jr z, MspMemBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, MspMemBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, MspMemBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, MspMemBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -18158,7 +18158,7 @@ MspMemBox_ClampValue:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 MspMemBox_SetReturnZero:
@@ -18178,9 +18178,9 @@ PsMspRecBnkBoxProc:
 	jr z, MspRecBnkBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, MspRecBnkBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, MspRecBnkBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, MspRecBnkBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -18217,7 +18217,7 @@ MspRecBnkBox_CopyMemBlock:
 	lda xde, (xsp + 4)
 	ld (xde + 16), 0x0
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 MspRecBnkBox_SetReturnZero:
@@ -18237,9 +18237,9 @@ PsMspRecPadBoxProc:
 	jr z, MspRecPadBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, MspRecPadBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, MspRecPadBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, MspRecPadBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -18279,7 +18279,7 @@ AcSndArgGrid_BnkDispatch:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 ; AcSndArgGridBnk case 1
@@ -18382,7 +18382,7 @@ AcSndArgGridBoxProc:
 	jrl z, AcSndArgGrid_GetRowText
 	cp xiz, 0x1e0008a
 	jrl z, AcSndArgGrid_GetColText
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, AcSndArgGrid_Init
 	sub xwa, 0x1c00017
 	cp xwa, 0x0
@@ -18404,7 +18404,7 @@ AcSndArgGrid_Init:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 22)
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -18443,7 +18443,7 @@ AcSndArgGrid_Init:
 	or xhl, xhl
 	jr z, AcSndArgGrid_ScrollUp_NoCanScroll
 	ld xwa, (xsp + 22)
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
@@ -18511,7 +18511,7 @@ AcSndArgGrid_ScrollUp_NoCanScroll:
 	or xhl, xhl
 	jr z, AcSndArgGrid_ScrollDown_NoCanScroll
 	ld xwa, (xsp + 22)
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
@@ -18879,7 +18879,7 @@ SndArgGridCheck_Return:
 	ret
 
 SndArgTtlCheck:
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, ParamList_ReturnZero
 	call GetTitleOld
 	cp xhl, 0x1a000ee
@@ -18911,7 +18911,7 @@ PsParaListBoxProc:
 	ld xiz, xwa
 	cp xbc, 0x1e4002f
 	jrl z, SndArgGrid_CheckCase2
-	cp xbc, 0x1c0000f
+	cp xbc, EVT_INIT_HOOK
 	jrl z, ParaListBox_HandleEvtF
 	cp xbc, 0x1c0000b
 	jr z, ParaListBox_HandleEvtB
@@ -19154,9 +19154,9 @@ PsSCTxtBoxProc:
 	jr z, SCTxtBox_HandleEvtBC
 	cp xbc, 0x1c0000b
 	jr z, SCTxtBox_HandleEvtBC
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, SCTxtBox_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, SCTxtBox_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -19184,7 +19184,7 @@ SCTxtBox_HandleEvtBC:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 SCTxtBox_SetReturnZero:
@@ -19206,9 +19206,9 @@ PsSCTxtBox2Proc:
 	jr z, SCTxtBox2_HandleEvtBC
 	cp xbc, 0x1e00089
 	jr z, SCTxtBox2_HandleEvt89
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, SCTxtBox2_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, SCTxtBox2_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -19240,7 +19240,7 @@ SCTxtBox2_HandleEvtBC:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 SCTxtBox2_SetReturnZero:
@@ -19724,7 +19724,7 @@ CmpNameMenuBoxProc_Entry:
 CmpNameMenuBoxProc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, CmpNameMenu_HandleEvtD
 	ld xwa, xiz
 	call InheritedProc
@@ -19736,7 +19736,7 @@ CmpNameMenu_HandleEvtD:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 
@@ -19838,9 +19838,9 @@ PsStylCnvVerProc:
 	jr z, StylCnvVer_HandleEvtBC
 	cp xbc, 0x1e00089
 	jr z, StylCnvVer_HandleEvt89
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, StylCnvVer_HandleEvt2
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, StylCnvVer_HandleEvt1
 	ld xwa, xiz
 	call InheritedProc
@@ -19872,7 +19872,7 @@ StylCnvVer_HandleEvtBC:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 StylCnvVer_SetReturnZero:

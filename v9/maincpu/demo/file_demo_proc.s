@@ -276,7 +276,7 @@ Seq_StartWithFullInit:
 	ld xde, 0:i3
 	jrl Seq_DispatchMainFunc
 	ld xwa, NakaInst_Param_Field02_0x4
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -8423,7 +8423,7 @@ FileIO_DiskRemoved:
 	cp l, 0:i3
 	ret nz
 	ld xwa, 0x600002
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 0:i3
 	call ApPostEvent
 	ret

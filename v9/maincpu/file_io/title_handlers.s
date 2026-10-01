@@ -84,7 +84,7 @@ SetupFlash_Return:
 	ret
 
 FmmUtilityTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, FmmUtility_Return
 	cp xde, 0x3
 	jrl z, FmmUtility_HandleAbort
@@ -216,7 +216,7 @@ FmmUtility_Return:
 	ret
 
 FmmSmfUtilityTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, FmmSmfUtility_Return
 	cp xde, 0x3
 	jrl z, FmmSmfUtility_HandleAbort

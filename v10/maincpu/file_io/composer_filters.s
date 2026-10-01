@@ -20,7 +20,7 @@ FmmComposerLoadFunc:
 	jrl z, CompLoad_HandleShow
 	cp xbc, 0x1e50004
 	jrl z, CompLoad_HandleSelection
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, CompLoad_Return
 	cp xde, 0x3
 	jrl z, CompLoad_HandleAbort
@@ -30,7 +30,7 @@ FmmComposerLoadFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8500:16), 0
@@ -58,7 +58,7 @@ CompLoad_DispatchState:
 
 CompLoad_ContinueWait:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -68,7 +68,7 @@ CompLoad_ContinueWait:
 
 CompLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -87,7 +87,7 @@ CompLoad_HandleCancel:
 
 CompLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -97,7 +97,7 @@ CompLoad_HandleError:
 CompLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -184,7 +184,7 @@ CompLoad_DrawItem_Continue:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0x14
@@ -239,7 +239,7 @@ CompLoad_OpLoad:
 	cp hl, 0:i3
 	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld iz, 0:i3
@@ -262,7 +262,7 @@ CompLoad_HideButtons_Loop:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -296,7 +296,7 @@ CompLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ld de, (0x7f80:16)
 	sll de, 5
@@ -304,7 +304,7 @@ CompLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 CompLoad_DispatchWidget:
 	call ApPostEvent
@@ -447,7 +447,7 @@ LoadFilter_DrawLoop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f82:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -525,7 +525,7 @@ LoadFilter_UpdateDisplay:
 	lda xbc, (0x7f86:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x7f82:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	jrl LoadFilter_Return
 
@@ -540,7 +540,7 @@ LoadFilter_OpLoad:
 	cp hl, 0:i3
 	jrl z, LoadFilter_Return
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	call GetCurrentFileIndex
@@ -556,7 +556,7 @@ LoadFilter_OpLoad:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -668,7 +668,7 @@ SaveFilter_DrawLoop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -747,7 +747,7 @@ SaveFilter_UpdateDisplay:
 	lda xbc, (0x800a:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x8006:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jrl SaveFilter_DispatchWidget
 
 SaveFilter_SelectAll:
@@ -783,7 +783,7 @@ SaveFilter_SelectAll_Update:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -815,7 +815,7 @@ SaveFilter_DeselectAll_Loop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -849,7 +849,7 @@ SaveFilter_Save_NoPwd:
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 SaveFilter_DispatchWidget:
@@ -858,7 +858,7 @@ SaveFilter_DispatchWidget:
 
 SaveFilter_Save_Execute:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -874,7 +874,7 @@ SaveFilter_Save_Execute:
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -895,7 +895,7 @@ SaveFilter_OpFormat:
 	cp xwa, 0x32
 	jr nz, SaveFilter_ResetAll
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -911,7 +911,7 @@ SaveFilter_OpFormat:
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -955,7 +955,7 @@ SaveFilter_ResetAll_Loop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8

@@ -2765,7 +2765,7 @@ TextRender_XorMode_DrawPixel:
 ChordProc_SendRefreshEvent:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 UI_EventHandler_InitReturnZero:
@@ -2788,7 +2788,7 @@ AcChordBoxProc:
 	stl_dri XWA, 0xfd, 0x04, 0x01
 	cp xbc, 0x1c20001
 	jr z, AcChordBox_HandleChordUpdate
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcChordBox_HandleInitOrSelect
 	cp xbc, 0x1c20000
 	jr z, AcChordBox_HandleInitOrSelect
@@ -2824,7 +2824,7 @@ AcChordBox_HandleChordUpdate:
 	jr	nz, AcChordBox_ReturnZero
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+260)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	SendEvent
 AcChordBox_ReturnZero:
 	ld xhl, 0:i3

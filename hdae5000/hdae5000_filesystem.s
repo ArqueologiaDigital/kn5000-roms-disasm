@@ -238,7 +238,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld_sril	xhl, (xwa + RootFn_SendEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_DIRNO_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	lda xwa, (0x22aa68:24)
@@ -253,7 +253,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld_sril	xhl, (xwa + RootFn_SendEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_DIRNAME_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	lda xwa, (0x22aa7a:24)
@@ -268,7 +268,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld_sril	xhl, (xwa + RootFn_SendEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_FILENO_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	lda xwa, (0x22aa80:24)
@@ -283,7 +283,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld_sril	xhl, (xwa + RootFn_SendEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_FILENAME_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	jrl t, .LFS_754f                       ; [78 08 01] jrl T,0x28754f
@@ -300,7 +300,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_DIRNO_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	lda xwa, (0x22aa68:24)
@@ -315,7 +315,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_DIRNAME_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	lda xwa, (0x22aa7a:24)
@@ -330,7 +330,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_FILENO_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	lda xwa, (0x22aa80:24)
@@ -345,7 +345,7 @@ HDAE5000_Lbn_ShowEntry_Case6:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_LBN_FILENAME_BOX
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 .LFS_754f:
@@ -1483,7 +1483,7 @@ HDAE5000_FlsList_BuildPage:	; 0x287F55 (832 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
 	ld xwa, HDAE5000_OBJ_SEL_FLS		; object SEL_FLS
-	ld xbc, 0x01c0000f		; event 0x01C0000F
+	ld xbc, EVT_INIT_HOOK		; event 0x01C0000F
 	ld xde, 0xffffffff		; param 0xFFFFFFFF
 	call (xhl)		; RootFn_ApPostEvent
 	popw iz                                 ; pop iz (compact)
@@ -1789,7 +1789,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 .LFWF_8390:
@@ -1905,7 +1905,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 .LFWF_84e6:
@@ -1977,7 +1977,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0xffffffff
 	call	(xhl)
 	cp	iz, 0xffff
@@ -2017,7 +2017,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000d
+	ld	xbc, EVT_POST_INIT
 	ld	xde, 0:i3
 	call	(xhl)
 	ld	a, (xsp+32)
@@ -2028,7 +2028,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000d
+	ld	xbc, EVT_POST_INIT
 	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_8666:
@@ -2100,7 +2100,7 @@ HDAE5000_SelectFlsScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_FILE_LOAD
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_881e                      ; [78 c2 00] jrl T,0x28881e
@@ -2122,7 +2122,7 @@ HDAE5000_SelectFlsScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_HDD_FLS_NAMING
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_881e                       ; [68 72] jr T,0x28881e
@@ -2179,9 +2179,9 @@ HDAE5000_FlsLoadScreen:
 	jrl z, .LFWF_8c1a                      ; [76 bd 03] jrl Z,0x288c1a
 	cp	xbc, 0x01ca0001
 	jr z, .LFWF_88bf                       ; [66 5a] jr Z,0x2888bf
-	cp	xbc, 0x01ca0000
+	cp	xbc, EVT_DISPLAY_CALLBACK
 	jr z, .LFWF_8896                       ; [66 29] jr Z,0x288896
-	cp	xbc, 0x01c00001
+	cp	xbc, EVT_MENU_OPEN
 	jrl nz, .LFWF_8c1a                     ; [7e a4 03] jrl NZ,0x288c1a
 	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + WS_RootFnTable)
@@ -2261,7 +2261,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_Tech_lyrics
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_897a:
@@ -2325,7 +2325,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_Tech_lyrics
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_8a50:
@@ -2356,7 +2356,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 61 01] jrl T,0x288c1a
@@ -2374,7 +2374,7 @@ HDAE5000_FlsLoadScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_HDD_FLS_NAMING2
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8c1a                      ; [78 1b 01] jrl T,0x288c1a
@@ -2472,7 +2472,7 @@ HDAE5000_FlsFileLoadSwCatch:
 	ld	xwa, xiz
 	cp	xwa, 0x01c00007
 	jr z, .LFWF_8c8a                       ; [66 55] jr Z,0x288c8a
-	cp	xwa, 0x01c0000d
+	cp	xwa, EVT_POST_INIT
 	jr z, .LFWF_8c4b                       ; [66 0e] jr Z,0x288c4b
 	cp	xwa, 0x01e00085
 	jrl nz, .LFWF_8cd1                     ; [7e 8b 00] jrl NZ,0x288cd1
@@ -2493,7 +2493,7 @@ HDAE5000_FlsFileLoadSwCatch:
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	(xhl)
 	ld	xhl, 0:i3
 	jr t, .LFWF_8cea                       ; [68 60] jr T,0x288cea
@@ -2545,7 +2545,7 @@ HDAE5000_FlsEditScreen:
 	jrl z, .LFWF_8e4c                      ; [76 2e 01] jrl Z,0x288e4c
 	cp	xbc, 0x01c00007
 	jr z, .LFWF_8d4f                       ; [66 29] jr Z,0x288d4f
-	cp	xbc, 0x01c00001
+	cp	xbc, EVT_MENU_OPEN
 	jrl nz, .LFWF_8fe9                     ; [7e ba 02] jrl NZ,0x288fe9
 	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + WS_RootFnTable)
@@ -2577,7 +2577,7 @@ HDAE5000_FlsEditScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_ATTEN_DEL_FLS1
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 37 02] jrl T,0x288fe9
@@ -2586,7 +2586,7 @@ HDAE5000_FlsEditScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_ATTEN_DEL_FLS2
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 17 02] jrl T,0x288fe9
@@ -2641,7 +2641,7 @@ HDAE5000_FlsEditScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_DIR_SEL
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 75 01] jrl T,0x288fe9
@@ -2650,7 +2650,7 @@ HDAE5000_FlsEditScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_HD_PLEASE
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	(xhl)
 	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
@@ -2667,7 +2667,7 @@ HDAE5000_FlsEditScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_8fe9                      ; [78 15 01] jrl T,0x288fe9
@@ -2676,7 +2676,7 @@ HDAE5000_FlsEditScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_ERR_SAVE
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	ld	xwa, HDAE5000_OBJ_ERR_SAVE_EXIT
@@ -2758,7 +2758,7 @@ HDAE5000_FlsDel1SwCatch:
 	ld	xwa, xbc
 	cp	xwa, 0x01c00007
 	jr z, .LFWF_905e                       ; [66 64] jr Z,0x28905e
-	cp	xwa, 0x01c0000d
+	cp	xwa, EVT_POST_INIT
 	jr z, .LFWF_9025                       ; [66 23] jr Z,0x289025
 	cp	xwa, 0x01e00085
 	jr z, .LFWF_9020                       ; [66 16] jr Z,0x289020
@@ -2784,7 +2784,7 @@ HDAE5000_FlsDel1SwCatch:
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	(xhl)
 	ld	xhl, 0:i3
 	jrl t, .LFWF_90e8                      ; [78 8a 00] jrl T,0x2890e8
@@ -2814,7 +2814,7 @@ HDAE5000_FlsDel1SwCatch:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_PostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_90e6                       ; [68 1d] jr T,0x2890e6
@@ -2823,7 +2823,7 @@ HDAE5000_FlsDel1SwCatch:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_PostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_90e6:
@@ -2839,7 +2839,7 @@ HDAE5000_FlsDel2SwCatch:
 	ld	xwa, xbc
 	cp	xwa, 0x01c00007
 	jr z, .LFWF_915b                       ; [66 64] jr Z,0x28915b
-	cp	xwa, 0x01c0000d
+	cp	xwa, EVT_POST_INIT
 	jr z, .LFWF_9122                       ; [66 23] jr Z,0x289122
 	cp	xwa, 0x01e00085
 	jr z, .LFWF_911d                       ; [66 16] jr Z,0x28911d
@@ -2865,7 +2865,7 @@ HDAE5000_FlsDel2SwCatch:
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	(xhl)
 	ld	xhl, 0:i3
 	jrl t, .LFWF_91e5                      ; [78 8a 00] jrl T,0x2891e5
@@ -2895,7 +2895,7 @@ HDAE5000_FlsDel2SwCatch:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_PostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_91e3                       ; [68 1d] jr T,0x2891e3
@@ -2904,7 +2904,7 @@ HDAE5000_FlsDel2SwCatch:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_PostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_91e3:
@@ -2978,7 +2978,7 @@ HDAE5000_FlsDirSelScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_FILE_SEL
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_935a                       ; [68 7c] jr T,0x28935a
@@ -3030,7 +3030,7 @@ HDAE5000_FlsFileSelScreen:
 	jrl z, .LFWF_9468                      ; [76 ec 00] jrl Z,0x289468
 	cp	xbc, 0x01ea0006
 	jr z, .LFWF_93ad                       ; [66 29] jr Z,0x2893ad
-	cp	xbc, 0x01c00001
+	cp	xbc, EVT_MENU_OPEN
 	jrl nz, .LFWF_952a                     ; [7e 9d 01] jrl NZ,0x28952a
 	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + WS_RootFnTable)
@@ -3051,7 +3051,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_HD_PLEASE
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	(xhl)
 	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
@@ -3075,7 +3075,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_952a                      ; [78 e2 00] jrl T,0x28952a
@@ -3084,7 +3084,7 @@ HDAE5000_FlsFileSelScreen:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_ApPostEvent)
 	ld	xwa, HDAE5000_OBJ_ATTEN_OVER_FLS
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jrl t, .LFWF_952a                      ; [78 c2 00] jrl T,0x28952a
@@ -3158,7 +3158,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xwa, xbc
 	cp	xwa, 0x01c00007
 	jr z, .LFWF_959f                       ; [66 64] jr Z,0x28959f
-	cp	xwa, 0x01c0000d
+	cp	xwa, EVT_POST_INIT
 	jr z, .LFWF_9566                       ; [66 23] jr Z,0x289566
 	cp	xwa, 0x01e00085
 	jr z, .LFWF_9561                       ; [66 16] jr Z,0x289561
@@ -3184,7 +3184,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	(xhl)
 	ld	xhl, 0:i3
 	jrl t, .LFWF_9663                      ; [78 c4 00] jrl T,0x289663
@@ -3208,7 +3208,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld_sril	xhl, (xwa + RootFn_SendEvent)
 	ld	xwa, HDAE5000_OBJ_HD_PLEASE
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	(xhl)
 	calr	HDAE5000_YieldUntilSem1Zero
@@ -3227,7 +3227,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_PostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 	jr t, .LFWF_9661                       ; [68 1d] jr T,0x289661
@@ -3236,7 +3236,7 @@ HDAE5000_FlsOverWrSwCatch:
 	ld	xwa, (xwa + WS_RootFnTable)
 	ld	xhl, (xwa + RootFn_PostEvent)
 	ld	xwa, HDAE5000_OBJ_FLS_EDIT
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	(xhl)
 .LFWF_9661:
@@ -3265,7 +3265,7 @@ HDAE5000_FdList_Redisplay:	; 0x289665 (548 bytes)
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; e3 e1 24 01 23
 	ld xwa, HDAE5000_OBJ_CP_FD_VOLLABEL			; 40 de 00 7f 00
-	ld xbc, 0x01c0000f			; 41 0f 00 c0 01
+	ld xbc, EVT_INIT_HOOK			; 41 0f 00 c0 01
 	ld xde, 0xffffffff			; 42 ff ff ff ff
 	call (xhl)				; b3 e8
 
@@ -3324,7 +3324,7 @@ HDAE5000_FdList_Redisplay:	; 0x289665 (548 bytes)
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; e3 e1 24 01 23
 	ld xwa, HDAE5000_OBJ_CP_FD_LIST			; 40 d7 00 7f 00
-	ld xbc, 0x01c0000f			; 41 0f 00 c0 01
+	ld xbc, EVT_INIT_HOOK			; 41 0f 00 c0 01
 	ld xde, 0xffffffff			; 42 ff ff ff ff
 	call (xhl)				; b3 e8
 
@@ -3333,7 +3333,7 @@ HDAE5000_FdList_Redisplay:	; 0x289665 (548 bytes)
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; e3 e1 24 01 23
 	ld xwa, HDAE5000_OBJ_CP_FD_LINE1			; 40 d9 00 7f 00
-	ld xbc, 0x01c0000d			; 41 0d 00 c0 01
+	ld xbc, EVT_POST_INIT			; 41 0d 00 c0 01
 	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
 
@@ -3342,7 +3342,7 @@ HDAE5000_FdList_Redisplay:	; 0x289665 (548 bytes)
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; e3 e1 24 01 23
 	ld xwa, HDAE5000_OBJ_CP_FD_LINE2			; 40 d8 00 7f 00
-	ld xbc, 0x01c0000d			; 41 0d 00 c0 01
+	ld xbc, EVT_POST_INIT			; 41 0d 00 c0 01
 	ld xde, 0:i3				; ea a8
 	jp (xhl)				; b3 d8 — tail call
 
@@ -3400,7 +3400,7 @@ HDAE5000_CopyToHDScreen:
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; e3 e1 24 01 23
 	ld xwa, HDAE5000_OBJ_CP_FD_DIRSEL			; 40 e2 00 7f 00
-	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	ld xbc, EVT_MENU_OPEN			; 41 01 00 c0 01
 	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
 	jr t, .Lfbs_evt_done			; 68 xx
@@ -3411,7 +3411,7 @@ HDAE5000_CopyToHDScreen:
 	ld xwa, (xwa + WS_RootFnTable)             ; e3 e1 0a 0e 20
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; e3 e1 24 01 23
 	ld xwa, HDAE5000_OBJ_ATTEN_CPFD_MARK			; 40 7a 02 7f 00
-	ld xbc, 0x01c00001			; 41 01 00 c0 01
+	ld xbc, EVT_MENU_OPEN			; 41 01 00 c0 01
 	ld xde, 0:i3				; ea a8
 	call (xhl)				; b3 e8
 	jr t, .Lfbs_evt_done			; 68 xx
@@ -3770,7 +3770,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; XHL = (XWA+0x0124)
 	ld xwa, HDAE5000_OBJ_ERR_SAVE
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 	ld xwa, HDAE5000_OBJ_ERR_SAVE_EXIT
@@ -3806,7 +3806,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
 	ld xwa, HDAE5000_OBJ_ERR_NO_HK_DATA
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 3:i3
 	call (xhl)
 	ld xwa, 0x01ca0002
@@ -3916,7 +3916,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
 	ld xwa, HDAE5000_OBJ_ATTEN_CP_UNNAMED
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 	ld xwa, 0x01ca0002
@@ -3955,7 +3955,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
 	ld xwa, HDAE5000_OBJ_HD_PLEASE
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call (xhl)
 	lda xwa, (0x22abb0:24)
@@ -3969,7 +3969,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
 	ld xwa, HDAE5000_OBJ_CP_FD
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 	jrl t, .LFSD__hA_exit
@@ -3979,7 +3979,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
 	ld xwa, HDAE5000_OBJ_ATTEN_FULL_DIR
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 	ld xwa, 0x01ca0002
@@ -4023,7 +4023,7 @@ HDAE5000_CopyToHDDirSelScreen:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)
 	ld xwa, HDAE5000_OBJ_CP_FD_DIR_NAMING
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 	jr t, .LFSD__hA_exit
@@ -4177,7 +4177,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld xwa, xiz
 	cp xwa, 0x01c00007
 	jr z, .LFSD__hC_key
-	cp xwa, 0x01c0000d
+	cp xwa, EVT_POST_INIT
 	jr z, .LFSD__hC_0d
 	cp xwa, 0x01e00085
 	jrl nz, .LFSD__hC_default
@@ -4199,7 +4199,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xbc, (xbc + WS_RootFnTable)
 	ld_sril xhl, (xbc + RootFn_SendEvent)
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	ld xhl, 0:i3
 	jrl t, .LFSD__hC_exit
@@ -4232,7 +4232,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld_sril xhl, (xwa + RootFn_SendEvent)
 	ld xwa, HDAE5000_OBJ_HDD_FILE_NAMING
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 	pushw 0x0023
@@ -4253,7 +4253,7 @@ HDAE5000_WrConfirmEventCatch:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_SELECT_FILE
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 .LFSD__hC_default:			; Default: pass-through to registered handler
@@ -4285,7 +4285,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)             ; ld XWA, (XWA + 0x0E0A)
 	ld xhl, (xwa + RootFn_PostEvent)             ; ld XHL, (XWA + 0x0104)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_LSW
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 2: address 0x22ABE9, command 0x007F01D0
 	ld a, (0x22abe9:24)
@@ -4297,7 +4297,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_PMT
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 3: address 0x22ABEA, command 0x007F01D1
 	ld a, (0x22abea:24)
@@ -4309,7 +4309,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_SQT
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 4: address 0x22ABEB, command 0x007F01D2
 	ld a, (0x22abeb:24)
@@ -4321,7 +4321,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_CMP
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 5: address 0x22ABEC, command 0x007F01D3
 	ld a, (0x22abec:24)
@@ -4333,7 +4333,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_TM
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 6: address 0x22ABED, command 0x007F01D4
 	ld a, (0x22abed:24)
@@ -4345,7 +4345,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_MSP
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 7: address 0x22ABEE, command 0x007F01D5
 	ld a, (0x22abee:24)
@@ -4357,7 +4357,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_RCM
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 8: address 0x22ABEF, command 0x007F01D6
 	ld a, (0x22abef:24)
@@ -4369,7 +4369,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_MD
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	; Block 9: address 0x22ABF0, command 0x007F01E9 (tail call)
 	ld a, (0x22abf0:24)
@@ -4381,7 +4381,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
 	ld xwa, HDAE5000_OBJ_DEL_EDIT_TLX
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	jp (xhl)			; tail call (not call)
 	;
 	; Part 2: Event handler (0x28A497) — dispatches on event codes
@@ -4395,7 +4395,7 @@ HDAE5000_DelOptSwEventCatch:
 	ld xwa, xiz			; XWA = event code
 	cp xwa, 0x01c00007		; event 0x01C00007?
 	jr z, .LFS_EL__evt_07
-	cp xwa, 0x01c0000d		; event 0x01C0000D?
+	cp xwa, EVT_POST_INIT		; event 0x01C0000D?
 	jr z, .LFS_EL__evt_0d
 	cp xwa, 0x01e00085		; event 0x01E00085?
 	jrl nz, .LFS_EL__exit		; no match → exit
@@ -4416,7 +4416,7 @@ HDAE5000_DelOptSwEventCatch:
 	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xbc, (xbc + WS_RootFnTable)             ; ld XBC, (XBC + 0x0E0A)
 	ld_sril xhl, (xbc + RootFn_SendEvent)             ; ld XHL, (XBC + 0x0100)
-	ld xbc, 0x01c0000f
+	ld xbc, EVT_INIT_HOOK
 	call (xhl)
 	ld xhl, 0:i3
 	jrl t, .LFS_EL__epilogue
@@ -4440,7 +4440,7 @@ HDAE5000_DelOptSwEventCatch:
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_ApPostEvent)             ; ld XHL, (XWA + 0x0124)
 	ld xwa, HDAE5000_OBJ_ATTEN_DEL_FILE
-	ld xbc, 0x01c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call (xhl)
 	jr t, .LFS_EL__exit

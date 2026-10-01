@@ -25,7 +25,7 @@ MainTitle_InitGraphicsAndEvents:
 	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0:i3
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
@@ -33,7 +33,7 @@ MainTitle_InitGraphicsAndEvents:
 	ld xde, 0x1800001
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ef
 	jp PostEvent
 
@@ -151,7 +151,7 @@ SndParam_SendDiskMenuEvents:
 	bit	1, a
 	jr	z, CtrlPanel_CheckDiskMenuRelease
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1c00008
+	ld	xbc, EVT_ACTIVATE
 	call	ApPostEvent
 	ld	xde, xiz
 	ld	xwa, 0xffffffff
@@ -199,7 +199,7 @@ CtrlPanel_ProcessButtonPress:
 	bit	0, a
 	jr	z, CtrlPanel_CheckButtonRelease
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1c00008
+	ld	xbc, EVT_ACTIVATE
 	call	ApPostEvent
 	ld	xde, xiz
 	set	7, de
@@ -253,7 +253,7 @@ CtrlPanel_DispatchCombinedState:
 	cp xwa, 0x89
 	jr nz, CtrlPanel_HandlePortCommands
 	ld xwa, 7:i3
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr CtrlPanel_PostCombinedEvent
 
@@ -265,7 +265,7 @@ CtrlPanel_PostDisplayEvent:
 
 CtrlPanel_PostScrollEvent:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000f0
 
 CtrlPanel_PostCombinedEvent:

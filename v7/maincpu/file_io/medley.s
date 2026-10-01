@@ -52,7 +52,7 @@ SeqName_SendSlotLoop:
 	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -112,7 +112,7 @@ SeqName_CheckDiskAvail:
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 SeqName_PostAndExit:
@@ -121,7 +121,7 @@ SeqName_PostAndExit:
 
 SeqName_LoadAndPlay:
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -138,7 +138,7 @@ SeqName_LoadAndPlay:
 	ld	(33894:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -147,7 +147,7 @@ SeqName_HandleAction32:
 	cp	xde, 50
 	jr	nz, SeqName_GetCurrentIndex
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -164,7 +164,7 @@ SeqName_HandleAction32:
 	ld	(33894:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -186,7 +186,7 @@ SeqName_UpdateDisplay:
 	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	ld	bc, (33340:16)
 	ld	wa, bc
@@ -194,7 +194,7 @@ SeqName_UpdateDisplay:
 	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	jr	SeqName_PostEventExit
 SeqName_SetIndexPlaying:
 	cp (0x8462:16), 0x00
@@ -211,7 +211,7 @@ SeqName_SetIndexPlaying:
 	calr BuildSlotLabel
 	ld XDE,XHL
 	ld xwa, (0x8238:16)
-	ld XBC,0x01c0000f
+	ld XBC,EVT_INIT_HOOK
 	call ApPostEvent
 	ld bc, (0x823c:16)
 	ld WA,BC
@@ -219,7 +219,7 @@ SeqName_SetIndexPlaying:
 	calr BuildSlotLabel
 	ld XDE,XHL
 	ld xwa, (0x8238:16)
-	ld XBC,0x01c0000f
+	ld XBC,EVT_INIT_HOOK
 SeqName_PostEventExit:
 	call ApPostEvent
 	jrl SeqName_ReturnZero
@@ -306,7 +306,7 @@ FmmIntMedleyFunc:
 	jrl z, IntMed_InitSlotDisplay
 	cp XBC,0x01e50004
 	jrl z, IntMed_StoreWindowPtr
-	cp XBC,0x01c00013
+	cp XBC,EVT_CPANEL_EVENT
 	jrl nz, IntMed_Exit
 	cp XDE,0x00000003
 	jrl z, IntMed_HandleStop
@@ -464,7 +464,7 @@ IntMed_FormatSlotLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -518,7 +518,7 @@ IntMed_AssignOrderLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 IntMed_NextAssignSlot:
 	inc 1, iz
@@ -554,7 +554,7 @@ IntMed_UnmarkSlotLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 IntMed_NextUnmark:
 	inc 1, iz
@@ -597,7 +597,7 @@ IntMed_HandleSelectToggle:
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
-	ld XBC,0x01c0000f
+	ld XBC,EVT_INIT_HOOK
 	call ApPostEvent
 	jrl t, IntMed_Exit
 IntMed_RemoveFromOrder:
@@ -617,7 +617,7 @@ IntMed_RemoveFromOrder:
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
-	ld XBC,0x01c0000f
+	ld XBC,EVT_INIT_HOOK
 	call ApPostEvent
 	ldw (XSP+0x02), 0x0000
 	ld iz, 0:i3
@@ -652,7 +652,7 @@ IntMed_ReorderLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (0x823e:16)
-	ld	xbc, 0x1c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 IntMed_NextReorder:
 	inc	1, iz
@@ -756,7 +756,7 @@ DiskMed1_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33430:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -799,7 +799,7 @@ DiskMed2_FormatLoop:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33514:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 20
@@ -815,7 +815,7 @@ DiskMed_PlayNextHelper:
 	jr z, DiskMed_InitPlayOrder
 	cp XBC,0x01c00017
 	jr z, DiskMed_InitPlayOrder
-	cp XBC,0x01c00013
+	cp XBC,EVT_CPANEL_EVENT
 	jrl nz, DiskMed_ReturnZero
 	cp XDE,0x00000003
 	jrl z, DiskMed_ReturnZero
@@ -957,7 +957,7 @@ FmmDiskMedleySelectFunc:
 	jrl z, DiskSel_InitDisplay
 	cp XWA,0x01e50004
 	jrl z, DiskSel_StoreWindowPtr
-	cp XWA,0x01c00013
+	cp XWA,EVT_CPANEL_EVENT
 	jrl nz, DiskSel_Exit
 	ld XWA,(XSP+0x06)
 	cp XWA,0x00000003
@@ -979,7 +979,7 @@ FmmDiskMedleySelectFunc:
 	cpw (0x8466:16), 0x0000
 	jr ge, DiskSel_InitState
 	ld XWA,0x00600026
-	ld XBC,0x01c00001
+	ld XBC,EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	call GetEncodedFileSizeData
@@ -987,7 +987,7 @@ FmmDiskMedleySelectFunc:
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld XWA,0x00600026
-	ld XBC,0x01c00002
+	ld XBC,EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
@@ -1093,7 +1093,7 @@ DiskSel_SendFileInfo:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, qiz
 	cpw	qiz, 20
@@ -1115,7 +1115,7 @@ DiskSel_SendFileInfo:
 	ld	xde, 7798793
 	calr	DiskInfoFunc
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -1124,7 +1124,7 @@ DiskSel_SendFileInfo:
 	ld	qiz, hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
@@ -1200,7 +1200,7 @@ DiskSel_RepeatSendInfo:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, qiz
 	cpw	qiz, 20
@@ -1222,7 +1222,7 @@ DiskSel_RepeatSendInfo:
 	ld	xde, 7798793
 	calr	DiskInfoFunc
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -1231,7 +1231,7 @@ DiskSel_RepeatSendInfo:
 	ld	qiz, hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
@@ -1374,7 +1374,7 @@ DiskSel_FormatEntry:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 20
@@ -1585,14 +1585,14 @@ DiskSel_PlayFindLoop:
 	ld XBC,0x01e50002
 	call ApPostEvent
 	ld XWA,0x00600026
-	ld XBC,0x01c00001
+	ld XBC,EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_ParseDirectoryEntry
 	ld QIZ,HL
 	calr SignalProgressUpdate
 	ld XWA,0x00600026
-	ld XBC,0x01c00002
+	ld XBC,EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
@@ -1663,7 +1663,7 @@ DiskSel_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	ld	de, (33602:16)
 	sll	de, 5
@@ -1671,7 +1671,7 @@ DiskSel_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 DiskSel_PostEvent:
 	call ApPostEvent
 
@@ -1849,7 +1849,7 @@ SmfFmt_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, (xsp+0x4)
@@ -1873,7 +1873,7 @@ SmfFmt_EmptyLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -1902,7 +1902,7 @@ FmmSmfMedleyFunc:
 	jrl	z, SmfMed_RefreshDisplay
 	cp	xhl, 31784964
 	jrl	z, SmfMed_StoreWindowPtr
-	cp	xhl, 29360147
+	cp	xhl, EVT_CPANEL_EVENT
 	jrl	nz, SmfMed_Exit
 	cp	xde, 3
 	jrl	z, SmfMed_HandleStop
@@ -2071,7 +2071,7 @@ SmfMed_InitFromDisk:
 	cpw (0x8468:16), 0x0000
 	jr ge, SmfMed_InitState
 	ld XWA,0x00600026
-	ld XBC,0x01c00001
+	ld XBC,EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	call GetFileCountEncoded
@@ -2079,7 +2079,7 @@ SmfMed_InitFromDisk:
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld XWA,0x00600026
-	ld XBC,0x01c00002
+	ld XBC,EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
@@ -2382,7 +2382,7 @@ PdFmt_FormatLoop:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -2525,7 +2525,7 @@ PdName_UpdateDisplay:
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	ld	wa, (33702:16)
 	exts	xwa
@@ -2537,7 +2537,7 @@ PdName_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33698:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	jrl	PdName_ReturnZero
 PdName_RefreshPage:
@@ -2637,7 +2637,7 @@ PdFmtSlot_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, (xsp+0x4)
@@ -2661,7 +2661,7 @@ PdFmtSlot_EmptyLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -2691,7 +2691,7 @@ FmmPdMedleyFunc:
 	jrl	z, PdMed_RefreshDisplay
 	cp	xde, 31784964
 	jrl	z, PdMed_StoreWindowPtr
-	cp	xde, 29360147
+	cp	xde, EVT_CPANEL_EVENT
 	jrl	nz, PdMed_Exit
 	cp	xhl, 3
 	jrl	z, PdMed_HandleStop
@@ -2808,13 +2808,13 @@ PdMed_InitFromDisk:
 	cpw	(0x846a:16), 0
 	jr	ge, PdMed_InitState
 	ld	xwa, 0x600026
-	ld	xbc, 0x1c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	call	BuildPageRecordsAlt
 	ld	(0x846a:16), hl
 	ld	xwa, 0x600026
-	ld	xbc, 0x1c00002
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0xffffffff
@@ -3105,7 +3105,7 @@ DocDisk_TrimLoop:
 
 DocDisk_PostEvent:
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 
 DocDisk_Exit:
@@ -3151,7 +3151,7 @@ DocFmt_FormatLoop:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -3294,7 +3294,7 @@ DocName_UpdateDisplay:
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	ld	wa, (33798:16)
 	exts	xwa
@@ -3306,7 +3306,7 @@ DocName_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33794:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	jrl	DocName_ReturnZero
 DocName_RefreshPage:
@@ -3407,7 +3407,7 @@ DocFmtSlot_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, (xsp+0x4)
@@ -3431,7 +3431,7 @@ DocFmtSlot_EmptyLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -3460,7 +3460,7 @@ FmmDocMedleyFunc:
 	jrl	z, DocMed_RefreshDisplay
 	cp	xde, 31784964
 	jrl	z, DocMed_StoreWindowPtr
-	cp	xde, 29360147
+	cp	xde, EVT_CPANEL_EVENT
 	jrl	nz, DocMed_Exit
 	cp	xhl, 3
 	jrl	z, DocMed_HandleStop
@@ -3581,13 +3581,13 @@ DocMed_CheckInit:
 DocMed_InitFromDisk:
 	ldw	(33896:16), 65535
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	call	FileIO_InitFileNavigation
 	ld	(33900:16), hl
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
@@ -4544,9 +4544,9 @@ WakeUpPassword:
 	jrl z, WakeUp_StoreType
 	cp xbc, 0x1c00007
 	jr z, WakeUp_HandleOk
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, WakeUp_HandleInit
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, WakeUp_HandleDirect
 	cp xbc, 0x1e00085
 	jr z, WakeUp_Return1
@@ -4564,7 +4564,7 @@ WakeUp_HandleDirect:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, NakaInst_WaitWinCtlSmf_0xDF0
 	call SendEvent
 	jrl WakeUp_ReturnZero
@@ -4598,7 +4598,7 @@ WakeUp_HandleOk:
 	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0x600040
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr WakeUp_PostEvent
 
@@ -4614,7 +4614,7 @@ WakeUp_StoreType:
 	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0x600045
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 WakeUp_PostEvent:
@@ -4657,7 +4657,7 @@ PwdOk_HandleConfirm:
 	ld xde, 0x2741c
 	call SendEvent
 	ld xwa, 0x600040
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -4710,7 +4710,7 @@ CheckOk_HandleConfirm:
 	ld xde, 0x27424
 	call SendEvent
 	ld xwa, 0x600045
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -4765,7 +4765,7 @@ PasswordNo:
 	cp xbc, 0x1c00007
 	jr nz, PwdNo_Exit
 	ld xwa, 0x600040
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -4785,7 +4785,7 @@ CheckPasswordNo:
 	cp xbc, 0x1c00007
 	jr nz, CheckNo_HandleConfirm
 	ld xwa, 0x600045
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -4845,7 +4845,7 @@ DeleteYes:
 	cp xbc, 0x1c00007
 	jr nz, PwdChange_HandleOk
 	ld xwa, 0x7b0051
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -4869,7 +4869,7 @@ DeleteNo:
 	cp xbc, 0x1c00007
 	jr nz, PwdChange_Type1
 	ld xwa, 0x7b0051
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -4899,7 +4899,7 @@ SaveYes:
 	cp xbc, 0x1c00007
 	jr nz, PwdDel_HandleOk
 	ld xwa, 0x600037
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
@@ -4923,7 +4923,7 @@ SaveNo:
 	cp xbc, 0x1c00007
 	jr nz, PwdDel_Type1
 	ld xwa, 0x600037
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff

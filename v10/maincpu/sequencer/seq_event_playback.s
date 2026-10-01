@@ -2700,11 +2700,11 @@ InitializeEast:
 
 
 BitmapBmphk:
-	cp xbc, 0x1e000a3
+	cp xbc, EVT_ALLOC_HEIGHT
 	jr z, BitmapBmphk_ReturnA3
-	cp xbc, 0x1e000a2
+	cp xbc, EVT_ALLOC_WIDTH
 	jr z, BitmapBmphk_ReturnA2
-	cp xbc, 0x1e000a1
+	cp xbc, EVT_ALLOC_DATA_PTR
 	jr z, BitmapBmphk_ReturnA1
 	ld xhl, 0:i3
 	ret
@@ -2727,9 +2727,9 @@ TtMdmenu:
 	jr z, TtMdmenu_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, TtMdmenu_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtMdmenu_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtMdmenu_ReturnZero
 	or xde, xde
 	jr nz, TtMdmenu_ReturnZero
@@ -2753,9 +2753,9 @@ TtVocalistWorkstation:
 	jr z, TtVocalist_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, TtVocalist_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtVocalist_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtVocalist_ReturnZero
 	or xde, xde
 	jr nz, TtVocalist_ReturnZero
@@ -2788,7 +2788,7 @@ AcVocalGridBoxProc:
 	jrl z, AcVocalGrid_ViewAccess
 	cp xwa, 0x1e0008a
 	jrl z, AcVocalGrid_StringCopy
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, AcVocalGrid_DialSetup
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -2811,7 +2811,7 @@ AcVocalGrid_DialSetup:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -2850,7 +2850,7 @@ AcVocalGrid_DialSetup:
 	or xhl, xhl
 	jr z, AcVocalGrid_CheckEvent91
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -2908,7 +2908,7 @@ AcVocalGrid_CheckEvent91:
 	or xhl, xhl
 	jr z, AcVocalGrid_CheckEvent91B
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -3050,7 +3050,7 @@ VocalistGridCheck:
 VocalistGrid_DispatchData:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -3086,7 +3086,7 @@ VocalistGridCheck_Skip:
 	jr	VocalistGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -3663,11 +3663,11 @@ AcVocalist_ListSetup:
 ; AcVocalistListBoxProc dispatch
 AcVocalist_ListDispatch:
 	ld	xwa, 0xd7000c
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0:i3
 	jr	VocalistGridCheck_Join13
 	ld	xwa, 0xd7000c
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 1:i3
 VocalistGridCheck_Join13:
 	call	SendEvent
@@ -3695,7 +3695,7 @@ PsHarmOnOffBoxProc:
 	lda xix, (xsp + 8)
 	ld bc, 4:i3
 	ldirw
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jr z, PsHarm_DrawHandler
 	cp xiz, 0x1c00007
 	jr z, PsHarm_CheckMode
@@ -3922,7 +3922,7 @@ VocalistPage2OKFunc_Join4:
 	call	SoundParam_NotifyChange
 	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000ee
 VocalistPage2OKFunc_Join:
 	call	ApPostEvent
@@ -3958,7 +3958,7 @@ VocalistPage2OKFunc_Join2:
 	call	SoundParam_NotifyChange
 	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000ee
 	jr	VocalistPage2OKFunc_Join
 	ld	wa, bc
@@ -3987,7 +3987,7 @@ VocalistPage2OKFunc_Join3:
 	call	SoundParam_NotifyChange
 	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000ee
 	jrl	VocalistPage2OKFunc_Join
 	ld	wa, bc
@@ -3999,7 +3999,7 @@ VocalistPage2OKFunc_Join3:
 	call	SmfMedley_RawData
 	ld	(0x7f42:16), 35
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00016
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 0x01a000ee
 	jrl	VocalistPage2OKFunc_Join
 
@@ -4009,7 +4009,7 @@ MainVocalistPage2OKFunc:
 	call MidiSysEx_SendAllParams
 	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call ApPostEvent
 
@@ -4028,9 +4028,9 @@ RevSelFunc:
 	ld xiz, xwa
 	cp xbc, 0x1c00029
 	jr z, RevSel_HandleDial
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, RevSel_HandleConfirm
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, RevSel_HandleInit
 	cp xbc, 0x1e00085
 	jr z, RevSel_ReturnOne
@@ -4069,7 +4069,7 @@ RevSel_HandleConfirm:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, MidiPart_HarmLocalStr_0x30
 
 RevSel_SendAndRet:
@@ -4109,9 +4109,9 @@ EqSelFunc:
 	jrl z, EqSel_HandleParamChange
 	cp xbc, 0x1c00029
 	jrl z, EqSel_HandleDial
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, EqSel_HandleConfirm
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, EqSel_HandleInit
 	cp xbc, 0x1e00085
 	jr z, EqSel_ReturnOne
@@ -4159,7 +4159,7 @@ EqSel_HandleConfirm:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, MidiPart_HarmLocalStr_0x36
 	jr EqSel_SendEvent
 
@@ -4221,9 +4221,9 @@ RevEqSelFunc:
 	jrl z, RevEqSel_HandleParamChange
 	cp xbc, 0x1c00029
 	jrl z, RevEqSel_HandleDial
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, RevEqSel_HandleConfirm
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, RevEqSel_HandleInit
 	cp xbc, 0x1e00085
 	jr z, RevEqSel_ReturnOne
@@ -4271,7 +4271,7 @@ RevEqSel_HandleConfirm:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, MidiPart_HarmLocalStr_0x3C
 	jr RevEqSel_SendEvent
 
@@ -4386,7 +4386,7 @@ AcGMOnOffBoxProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, AcGMOnOff_InitHandler
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -4472,13 +4472,13 @@ GMOK_ConfirmDialog:
 	or xhl, xhl
 	jr z, GMOK_PostNoDialog
 	ld xwa, 0x580005
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr GMOK_PostEvent
 
 GMOK_PostNoDialog:
 	ld xwa, 0x58000d
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 GMOK_PostEvent:
@@ -4490,7 +4490,7 @@ GMOK_ReturnZero:
 
 GMNoFunc:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
@@ -4510,19 +4510,19 @@ GMYesFunc:
 	ld de, 1:i3
 	call MainLswPut
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call PostEvent
 	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 	ld xhl, 0:i3
 	ret
 
 TtMdGm:
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtMdGm_ReturnZero
 	call GetTitleOld
 	cp xhl, 0x1a000ee

@@ -21,7 +21,7 @@ FmmWallpaperLoadFunc:
 	jrl z, WPLoad_HandleShow
 	cp xiz, 0x1e50004
 	jrl z, WPLoad_HandleSelection
-	cp xiz, 0x1c00013
+	cp xiz, EVT_CPANEL_EVENT
 	jrl nz, WPLoad_Return
 	ld xwa, (xsp + 6)
 	cp xwa, 0x3
@@ -32,7 +32,7 @@ FmmWallpaperLoadFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8500:16), 0
@@ -60,7 +60,7 @@ WPLoad_DispatchState:
 
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -70,7 +70,7 @@ WPLoad_ContinueWait:
 
 WPLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -89,7 +89,7 @@ WPLoad_HandleCancel:
 
 WPLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -99,7 +99,7 @@ WPLoad_HandleError:
 WPLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -225,7 +225,7 @@ WPLoad_OpLoad:
 	cp xwa, 0x3
 	jr nz, WPLoad_GetSelection
 	ld xwa, 0x600026
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -237,7 +237,7 @@ WPLoad_OpLoad:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -287,7 +287,7 @@ WPLoad_UpdateDisplay:
 	ld de, bc
 	extz xde
 	add xde, xhl
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	ld wa, (0x81b4:16)
 	exts xwa
@@ -299,7 +299,7 @@ WPLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x81b0:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call ApPostEvent
 	jr WPLoad_SendState
 

@@ -401,7 +401,7 @@ SetAutoInc:
 	jr z, EventParam_FetchPoint
 	cp xhl, 0x1c00007
 	jr z, EventParam_FetchPoint
-	cp xhl, 0x1c00008
+	cp xhl, EVT_ACTIVATE
 	jrl nz, ApTimer_SetupReturn
 
 EventParam_FetchPoint:
@@ -489,11 +489,11 @@ ScreenProc:
 	jrl z, Screen_OK
 	cp xwa, 0x1c00009
 	jrl z, Screen_Deactivate
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jrl z, Screen_Paint
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jrl z, Screen_Close
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, Screen_Init
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -514,7 +514,7 @@ Screen_Init:
 	jr nz, Screen_Init_RegisterChild
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, 0x1e00014
+	ld xbc, EVT_REDRAW
 	ld xde, 0x1600033
 	call SendEvent
 	or xhl, xhl
@@ -522,12 +522,12 @@ Screen_Init:
 
 Screen_Init_CloseDeadChildren:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, xiz
 	call SendEvent
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, 0x1e00014
+	ld xbc, EVT_REDRAW
 	ld xde, 0x1600033
 	call SendEvent
 	or xhl, xhl
@@ -535,7 +535,7 @@ Screen_Init_CloseDeadChildren:
 
 Screen_Init_Setup:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, xiz
 	call SendEvent
 	ld xwa, (xsp + 12)
@@ -875,7 +875,7 @@ UI_ChangeWallPalette_Jump:
 	jp ChangeWallPalette
 
 IvScreenProc:
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jrl nz, ScreenProc
 	ld xhl, 0:i3
 	ret
@@ -884,7 +884,7 @@ TtlScreenProc:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, TtlScreen_PaintHandler
 	ld xwa, xiz
 	calr ScreenProc
@@ -1107,9 +1107,9 @@ IvDirmdScreenProc:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1c0003a
 	jr z, DirmdEmu_CaseC
-	cp xwa, 0x1c00039
+	cp xwa, EVT_BUTTON_FOCUS
 	jr z, DirmdEmu_CaseB
-	sub xbc, 0x1c00001
+	sub xbc, EVT_MENU_OPEN
 	cp xbc, 0x0
 	jrl lt, DirmdEmu_CaseE
 	cp xbc, 0xe
@@ -1141,7 +1141,7 @@ DirmdEmu_CaseC:
 	ld xiz, xhl
 	call SleepMainTask
 	ld xwa, xiz
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
@@ -1429,7 +1429,7 @@ WindowProc:
 	ld xwa, (xsp + 20)
 	cp xwa, 0x1c00028
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1c00016
+	cp xwa, EVT_HD_INIT_PARAMS
 	jrl z, WindowProc_ForwardToGroupBoxes
 	cp xwa, 0x1c00015
 	jrl z, WindowProc_ForwardToGroupBoxes
@@ -1449,7 +1449,7 @@ WindowProc:
 	jrl z, WindowField_GetValue
 	cp xwa, 0x1e00048
 	jrl z, WindowField_SetValue
-	sub xbc, 0x1c00001
+	sub xbc, EVT_MENU_OPEN
 	cp xbc, 0x0
 	jrl lt, WindowProc_DefaultHandler
 	cp xbc, 0x9
@@ -1480,7 +1480,7 @@ WindowProc_Skip:
 	cp	xwa, 0xffffffff
 	jr	z, WindowProc_Skip2
 	ld	xwa, (xsp+24)
-	ld	xbc, 0x01c00002
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	SendEvent
 WindowProc_Skip2:
@@ -1824,17 +1824,17 @@ AcNamingWindowProc:
 	cp xwa, 0x1c00019
 	jrl z, WndEvt_DispatchByEventCode
 	lda xbc, (xsp + 34)
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jrl z, WndScroll_RepaintAll
 	cp xwa, 0x1c0000e
 	jrl z, WndScroll_HandleSelectionChange
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jrl z, WndScroll_BasicWindowProc
 	cp xwa, 0x1c0000c
 	jrl z, WndScroll_InitSelectionTrack
 	cp xwa, 0x1c0000b
 	jrl z, WndScroll_InitSelectionTrack
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jrl nz, WndScroll_ForwardToWindowProc
 	or xhl, xhl
 	jr z, AcNaming_CheckDefaultWidget

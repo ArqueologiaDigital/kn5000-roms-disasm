@@ -3489,17 +3489,17 @@ PmBankScreenProc:
 	jrl z, PmBank_OK
 	cp xiz, 0x1c20002
 	jrl z, PmBank_BankChanged
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jrl z, PmBank_Confirm
 	cp xiz, 0x1c0000e
 	jrl z, PmBank_Select
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jr z, PmBank_Paint
 	cp xiz, 0x1e2000e
 	jr z, PmBank_EnumNotify
 	cp xiz, 0x1c0000b
 	jr z, PmBank_Show
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jrl nz, PmBank_Default
 	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
@@ -3522,7 +3522,7 @@ PmBank_EnumNotify:
 	ld XWA, (xsp + 0x0114)
 	ldfr_berp A, 0xfb
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	ld xde, 0:i3
@@ -3813,7 +3813,7 @@ PmBank_OK:
 
 PmBank_OK_SaveDelete:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000d1
 	call PostEvent
 	call GetTitleNow
@@ -3922,11 +3922,11 @@ SineWaveScreenProc:
 	stl_dri XWA, 0xfd, 0x18, 0x01
 	cp xiz, 0x1c00007
 	jrl z, PmBank_OnEnumNotify
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jrl z, PmBank_OnConfirm
 	cp xiz, 0x1c0000e
 	jrl z, PmBank_OnSelect
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jrl z, PmBank_OnPaint
 	cp xiz, 0x1e20017
 	jr z, PmBank_DrawRegionInfo
@@ -3934,7 +3934,7 @@ SineWaveScreenProc:
 	jr z, PmBank_OnBankChanged
 	cp xiz, 0x1c0000b
 	jr z, PmBank_InitDisplay
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jrl nz, PmBank_DefaultPassthrough
 	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
@@ -4110,7 +4110,7 @@ PmBank_OnPaint:
 	ld xde, TransposeNoteStr_C_0x64
 	call DrawString
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 
 PmBank_SendEventAndDone:
@@ -4396,7 +4396,7 @@ WallHomeEditCheck:
 	ld xwa, xbc
 	cp xbc, 0x1e00082
 	jrl z, WallHomeEditCheck_ReturnFalse
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, WallHomeEdit_EventDispatch
 	sub xwa, 0x1e0003e
 	cp xwa, 0x0
@@ -4430,7 +4430,7 @@ WallHomeEdit_EventDispatch:
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x142000f
@@ -4605,14 +4605,14 @@ MainWallSetFlashFunc:
 	jrl nz, MainWallFlash_ReturnZero
 	ld (0x7f42:16), 40
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	ldw wa, 0x8
 	call CtrlPanel_IndicatorJumpTable
 	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	jr MainWallFlash_PostEvent
 
@@ -4624,7 +4624,7 @@ MainWallFlash_DispatchAudio:
 MainWallFlash_ClearAndRestore:
 	ld (0x7f42:16), 40
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	call Gfx_ClearFrameBuffers
@@ -4642,7 +4642,7 @@ MainWallFlash_ClearAndRestore:
 	call ApPostEvent
 	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 
 MainWallFlash_PostEvent:
@@ -4662,7 +4662,7 @@ WallUsrIniFunc:
 
 WallUsrIni_PostBootEvent:
 	ld xwa, 0x48000f
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call PostEvent
 
@@ -4702,7 +4702,7 @@ WallSureShowHideFunc:
 WallUsrShowHideFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr nz, MainVariSet_ReturnZero
 	ld xde, xiz
 	call InheritedProc
@@ -4722,7 +4722,7 @@ WallUsrShowHideFunc:
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x142000f
@@ -5197,7 +5197,7 @@ MainSysCtrl_DelayInner:
 	ret
 
 CntIniFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, CntIniFunc_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -5247,9 +5247,9 @@ AcFreeSplitBoxProc:
 	jr z, AcFreeSplit_ShowHide
 	cp xbc, 0x1c0000b
 	jr z, AcFreeSplit_ShowHide
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcFreeSplit_Release
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcFreeSplit_Init
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
@@ -5328,7 +5328,7 @@ AcFreeSplit_LookupNoteLabel:
 AcFreeSplit_SendConfirmEvent:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jrl AcFreeSplit_SendEventAndReturn
 
 AcFreeSplit_CheckSecondKey:
@@ -5374,7 +5374,7 @@ AcFreeSplit_LookupSecondNote:
 AcFreeSplit_SendSecondConfirm:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 AcFreeSplit_SendEventAndReturn:
 	call SendEvent
@@ -5403,9 +5403,9 @@ AcTransposeBoxProc:
 	jr z, AcTranspose_ShowHide
 	cp xbc, 0x1c0000b
 	jr z, AcTranspose_ShowHide
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcTranspose_Release
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcTranspose_Init
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz

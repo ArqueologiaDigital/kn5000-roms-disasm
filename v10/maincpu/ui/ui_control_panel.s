@@ -91,14 +91,14 @@ MainFlashFunc:
 	jr nz, MainFlash_ReturnZero
 	ld (0x7f42:16), 37
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	ld wa, 7:i3
 	call CtrlPanel_IndicatorJumpTable
 	ld (0x7f42:16), 35
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call ApPostEvent
 	jr MainFlash_ReturnZero
@@ -181,13 +181,13 @@ AcParaStrBoxProc:
 	ld xwa, (xsp + 8)
 	cp xwa, 0x1c50000
 	jrl z, AcParaStrBox_HandleInit
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jr z, AcParaStrBox_HandleReEnable
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jr z, AcParaStrBox_HandleTimer
 	cp xwa, 0x1c0000b
 	jr z, AcParaStrBox_HandleSuspend
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, AcParaStrBox_HandleCreate
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -277,11 +277,11 @@ PsWindowToggleProc:
 	ld (xsp + 14), xbc
 	ld (xsp + 18), xwa
 	ld xwa, (xsp + 14)
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jrl z, PsWinToggle_HandleReEnable
 	cp xwa, 0x1c00007
 	jrl z, PsWinToggle_HandleOK
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, PsWinToggle_HandleCreate
 	ld xwa, (xsp + 18)
 	ld xbc, (xsp + 14)
@@ -369,24 +369,24 @@ PsWinToggle_HandleOK:
 	jr z, PsWinToggle_HideChild40
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 44)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 40)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr PsWinToggle_SendToggleEvent
 
 PsWinToggle_HideChild40:
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 40)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 44)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 PsWinToggle_SendToggleEvent:
@@ -453,13 +453,13 @@ AcFileSfxBoxProc:
 	ld (xsp + 28), xwa
 	cp xiz, 0x1c50000
 	jrl z, AcFileSfx_HandleInit
-	cp xiz, 0x1c00002
+	cp xiz, EVT_SELECT_CONFIRM
 	jrl z, AcFileSfx_HandleReEnable
 	cp xiz, 0x1e50001
 	jr z, AcFileSfx_HandleSfxEvent
 	cp xiz, 0x1c0000b
 	jr z, AcFileSfx_HandleSuspend
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, AcFileSfx_HandleCreate
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
@@ -610,7 +610,7 @@ AcMonoIndexToggleProc:
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1c00007
 	jr z, IvFocus_HandleOK
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jr z, IvFocus_HandleDestroy
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
@@ -718,9 +718,9 @@ IvOneShotTimerProc:
 	jr z, IvTimer_HandleEvent09
 	cp xiz, 0x1e0003a
 	jr z, IvTimer_HandleEvent3A
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jr z, IvTimer_HandleDestroy
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, IvTimer_HandleCreate
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -746,7 +746,7 @@ IvTimer_HandleDestroy:
 	ld xde, (xsp + 8)
 	call InheritedProc
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	jr IvTimer_ReturnZero
@@ -802,7 +802,7 @@ VwScreenTitleProc:
 	dec 8, xsp
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, VwTitle_HandleDestroy
 	ld xwa, xiz
 	call InheritedProc
@@ -1338,11 +1338,11 @@ IvIndexSwCtrlProc:
 	jr z, Slider_Case1E0006B
 	cp xiz, 0x1e0003a
 	jr z, Slider_Case1E0006A
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jr z, Slider_Case1E00067
 	cp xiz, 0x1e0003b
 	jr z, Slider_Case1E00066
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jrl nz, Slider_Error
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -1361,7 +1361,7 @@ Slider_Case1E00067:
 	ld xde, (xsp + 8)
 	call InheritedProc
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl Slider_UpdateDone
 
@@ -1549,15 +1549,15 @@ AcRotStrBoxProc:
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1c50000
 	jrl z, Scrollbar_Case1C00001
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jrl z, Scrollbar_Case1E5000A
 	cp xwa, 0x1e5000a
 	jrl z, Scrollbar_Case1E00068
 	cp xwa, 0x1c0000b
 	jr z, Scrollbar_Case1E00069
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jr z, Scrollbar_Case1E00067
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jrl nz, Scrollbar_Error
 	ld xwa, (xsp + 16)
 	call GetViewInstance
@@ -1702,9 +1702,9 @@ IvIndexSwDelayProc:
 	jr z, Bounds_Default
 	cp xbc, 0x1e0003a
 	jr z, Bounds_Case1E0006A
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, Bounds_Case1E0006B
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jrl nz, Bounds_Error
 	ld xwa, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -1731,7 +1731,7 @@ Bounds_Case1E0006B:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	jr Bounds_Done
@@ -1807,7 +1807,7 @@ IvWaitWinCtlProc:
 	jr z, Edit_Case1E00068
 	cp xbc, 0x1e0003a
 	jr z, Edit_Case1E00069
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, Edit_Case1E00067
 	ld xwa, xiz
 	call InheritedProc
@@ -1817,7 +1817,7 @@ Edit_Case1E00067:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jr Edit_Update
 
@@ -1837,7 +1837,7 @@ Edit_Case1E00068:
 	cp xwa, 0xffffffff
 	jr z, Edit_NoChange
 	ld xwa, (xbc)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr Edit_Update
 
@@ -1849,7 +1849,7 @@ Edit_Default:
 	cp xwa, 0xffffffff
 	jr z, Edit_NoChange
 	ld xwa, (xbc)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 
 Edit_Update:
@@ -2152,7 +2152,7 @@ RefreshApTask:
 	ld (0x02749e:24), xwa
 	ld (0x0274a2:24), xwa
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00008
+	ld xbc, EVT_ACTIVATE
 	call DeleteEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00007
@@ -2173,7 +2173,7 @@ RefreshApTask:
 	ld xbc, 0x1c00015
 	call DeleteEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	call DeleteEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1e000b0
@@ -2186,7 +2186,7 @@ RefreshSwEvent:
 	ld (0x02749e:24), xwa
 	ld (0x0274a2:24), xwa
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00008
+	ld xbc, EVT_ACTIVATE
 	call DeleteEvent
 	ld xwa, 0xffffffff
 	ld xbc, 0x1c00007
@@ -2744,11 +2744,11 @@ MainTitleControl:
 	cp xbc, 0x1e000ab
 	jrl z, MainTitleCtrl_HandleAB
 	ld a, (0x8d36:16)
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl z, SeqState_DemoModeHandler
 	cp xbc, 0x1c00028
 	jr z, MainTitleCtrl_SaveAndTransition
-	cp xbc, 0x1c00016
+	cp xbc, EVT_HD_INIT_PARAMS
 	jr z, MainTitleCtrl_SaveAndTransition
 	cp xbc, 0x1c00015
 	jr z, SeqState_TransitionMode
@@ -2928,13 +2928,13 @@ SoundCtrl_SendCommand:
 	dec 2, xsp
 	ld (xsp), a
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	call DeleteEvent
 	ld xde, 0:i3
 	ld e, (xsp)
 	add xde, 0x1a00000
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	call ApPostEvent
 	inc 2, xsp
 	ret
@@ -2947,7 +2947,7 @@ UI_PostRefreshEvent:
 
 UI_PostTimerResetEvent:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
@@ -3010,7 +3010,7 @@ BoxProc:
 	jr z, BoxProc_HandleB2
 	cp xbc, 0x1e000b1
 	jr z, BoxProc_HandleB1
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, BoxProc_HandleDestroy
 	ld xwa, xiz
 	call ViewableProc
@@ -3384,14 +3384,14 @@ GroupBoxProc:
 	ld xwa, xde
 	cp xwa, 0x1c00028
 	jrl z, GroupBox_HandleRefresh
-	cp xwa, 0x1c00016
+	cp xwa, EVT_HD_INIT_PARAMS
 	jrl z, GroupBox_HandleSoundCommand
 	cp xwa, 0x1c00015
 	jrl z, GroupBox_HandleModeChange
 	cp xwa, 0x1c00014
 	jr z, GroupBox_HandlePartChange
 	ld xwa, (xsp + 4)
-	sub xwa, 0x1c00001
+	sub xwa, EVT_MENU_OPEN
 	cp xwa, 0x0
 	jrl lt, GroupBox_ForwardToBoxProc
 	cp xwa, 0x9
@@ -3475,22 +3475,22 @@ GroupBox_PartChange_SendEvents:
 	call SendEvent
 	call GetTitleOld
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 3:i3
 	call SendEvent
 	call GetModeOld
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 1:i3
 	call SendEvent
 	call GetModeNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 2:i3
 	call SendEvent
 	call GetTitleNow
@@ -3499,12 +3499,12 @@ GroupBox_PartChange_SendEvents:
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 0x8
 	jrl GroupBox_NavDispatch
 
@@ -3565,12 +3565,12 @@ GroupBox_ModeChange_SendEvents:
 	call SendEvent
 	call GetTitleOld
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 3:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 2:i3
 	call SendEvent
 	call GetTitleNow
@@ -3579,12 +3579,12 @@ GroupBox_ModeChange_SendEvents:
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 0x8
 	jrl GroupBox_NavDispatch
 
@@ -3692,17 +3692,17 @@ GroupBox_SndCmd_ProcessTitle:
 	call SendEvent
 	call GetTitleOld
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 4:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 2:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 6:i3
 	call SendEvent
 	call GetTitleNow
@@ -3711,12 +3711,12 @@ GroupBox_SndCmd_ProcessTitle:
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 3:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 0x8
 	call SendEvent
 	call GetTitleNow
@@ -3796,17 +3796,17 @@ GroupBox_HandleRefresh:
 	call SendEvent
 	call GetTitleOld
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 7:i3
 	call SendEvent
 	call GetTitleOld
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 3:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 5:i3
 	call SendEvent
 	call GetTitleNow
@@ -3815,12 +3815,12 @@ GroupBox_HandleRefresh:
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xhl
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 4:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1c00013
+	ld xbc, EVT_CPANEL_EVENT
 	ld xde, 0x8
 	call SendEvent
 	call GetTitleNow

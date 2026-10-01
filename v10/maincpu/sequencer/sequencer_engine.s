@@ -20072,71 +20072,71 @@ SeqEvent_Dispatch:
 	extz wa
 	call SeqPart_CountActiveVoices
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1e
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1f
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x20
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x21
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xa
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xb
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 5:i3
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 4:i3
 	jrl AppEvent_PostEvent_Stub
 	ld wa, (0xf1d7:16)
@@ -20144,15 +20144,15 @@ SeqEvent_Dispatch:
 	dec 1, wa
 	ld (9772:16), wa
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	jrl AppEvent_PostEvent_Stub
 	ld wa, (0xf1dc:16)
@@ -20160,55 +20160,55 @@ SeqEvent_Dispatch:
 	dec 1, wa
 	ld (9766:16), wa
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 6:i3
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 7:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x9
 	jrl AppEvent_PostEvent_Stub
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xc
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xd
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xe
 	jrl AppEvent_PostEvent_Stub
 	ld wa, (0xf1ea:16)
@@ -20216,27 +20216,27 @@ SeqEvent_Dispatch:
 	dec 1, wa
 	ld (9768:16), wa
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xf
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x10
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x11
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x12
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x13
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x14
 	jrl AppEvent_PostEvent_Stub
 	ld wa, (0xf1e2:16)
@@ -20244,27 +20244,27 @@ SeqEvent_Dispatch:
 	dec 1, wa
 	ld (9774:16), wa
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x15
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x16
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x17
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x18
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x19
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1a
 	jrl AppEvent_PostEvent_Stub
 
@@ -20279,37 +20279,37 @@ AppEvent_SubHandler0:
 	ld xbc, 0x2852
 	call SeqData_CopyBlock2K
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1b
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1c
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1d
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1e
 	jr AppEvent_PostEvent_Stub
 
 AppEvent_PostDefaultEvents:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 3:i3
 
 AppEvent_PostEvent_Stub:
@@ -20348,7 +20348,7 @@ AppEvtHandler_Branch_002:
 	jrl nc, AppEvent_Epilogue
 	incm8 1, (xwa)
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0x8d36:16)
@@ -20390,7 +20390,7 @@ AppEvtHandler_Branch_004:
 	jr nc, AppEvtHandler_Branch_005
 	incw 1, (xiz)
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_005:
@@ -20401,7 +20401,7 @@ AppEvtHandler_Branch_005:
 	ld bc, (xiz)
 	ld (xwa), bc
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_006:
@@ -20451,7 +20451,7 @@ AppEvtHandler_Branch_008:
 	ld xwa, (xsp + 4)
 	incw 1, (xwa)
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_009:
@@ -20462,7 +20462,7 @@ AppEvtHandler_Branch_009:
 	ld wa, (xwa)
 	ld (xiz), wa
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 AppEvtHandler_Branch_010:
@@ -20490,7 +20490,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (9740:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 3:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (9762:16)
@@ -20499,7 +20499,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (9762:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 4:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf22e:16)
@@ -20508,7 +20508,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (0xf22e:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 5:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf1e0:16)
@@ -20517,7 +20517,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (0xf1e0:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 6:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf1f6:16)
@@ -20526,7 +20526,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (0xf1f6:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 7:i3
 	jrl AppEvtHandler_Branch_033
 	ld a, (9728:16)
@@ -20535,7 +20535,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (9728:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8
 	jrl AppEvtHandler_Branch_033
 	ld a, (9730:16)
@@ -20544,7 +20544,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (9730:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x9
 	jrl AppEvtHandler_Branch_033
 	ld a, (9750:16)
@@ -20553,7 +20553,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (9750:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xa
 	jrl AppEvtHandler_Branch_033
 	ld a, (9816:16)
@@ -20562,7 +20562,7 @@ AppEvtHandler_Branch_013:
 	inc 1, a
 	ld (9816:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xb
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf1d3:16)
@@ -20586,7 +20586,7 @@ AppEvtHandler_Branch_016:
 	ld (0xf1d3:16), 1
 AppEvtHandler_Branch_017:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xc
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf1d4:16)
@@ -20610,7 +20610,7 @@ AppEvtHandler_Branch_020:
 	ld (0xf1d4:16), 1
 AppEvtHandler_Branch_021:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xd
 	jrl AppEvtHandler_Branch_033
 	ld a, (0xf1d5:16)
@@ -20619,7 +20619,7 @@ AppEvtHandler_Branch_021:
 	inc 1, a
 	ld (0xf1d5:16), a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xe
 	jrl AppEvtHandler_Branch_033
 	sub xwa, 0xf
@@ -20685,27 +20685,27 @@ AppEvtHandler_Branch_023:
 	ld (9770:16), a
 AppEvtHandler_Branch_024:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xf
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x10
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x11
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x12
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x13
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x14
 	jrl AppEvtHandler_Branch_033
 	sub xwa, 0x15
@@ -20771,27 +20771,27 @@ AppEvtHandler_Branch_026:
 	ld (9776:16), a
 AppEvtHandler_Branch_027:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x15
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x16
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x17
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x18
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x19
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1a
 	jrl AppEvtHandler_Branch_033
 	cp xwa, 0x1e
@@ -20842,19 +20842,19 @@ AppEvtHandler_Branch_031:
 	ld (9996:16), 17
 AppEvtHandler_Branch_032:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1b
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1c
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1d
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1e
 	jr AppEvtHandler_Branch_033
 	ld a, (0x2878:16)
@@ -20867,19 +20867,19 @@ AppEvtHandler_Branch_032:
 	extz wa
 	call SeqPart_CountActiveVoices
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1f
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x20
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x21
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x22
 AppEvtHandler_Branch_033:
 	call ApDeliveryEvent
@@ -20919,7 +20919,7 @@ AppEvent_InlineHandler_Skip16:
 	jrl	ule, SeqState_DispatchEntry
 	decm8	1, (xwa)
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0:i3
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (0x8d36:16)
@@ -20961,7 +20961,7 @@ AppEvent_InlineHandler_Join9:
 	jr	ule, AppEvent_InlineHandler_Skip18
 	decm	1, (xiz)
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 1:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip18:
@@ -20972,7 +20972,7 @@ AppEvent_InlineHandler_Skip18:
 	ld	bc, (xiz)
 	ld	(xwa), bc
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 2:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip:
@@ -21022,7 +21022,7 @@ AppEvent_InlineHandler_Join:
 	ld	xwa, (xsp+4)
 	decm	1, (xwa)
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 2:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip2:
@@ -21033,7 +21033,7 @@ AppEvent_InlineHandler_Skip2:
 	ld	wa, (xwa)
 	ld	(xiz), wa
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 1:i3
 	call	ApDeliveryEvent
 AppEvent_InlineHandler_Skip3:
@@ -21061,7 +21061,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(9740:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 3:i3
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (9762:16)
@@ -21070,7 +21070,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(9762:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 4:i3
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (0xf22e:16)
@@ -21079,7 +21079,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(0xf22e:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 5:i3
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (0xf1e0:16)
@@ -21088,7 +21088,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(0xf1e0:16), a
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 6:i3
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (0xf1f6:16)
@@ -21097,7 +21097,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(0xf1f6:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 7:i3
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (9728:16)
@@ -21106,7 +21106,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(9728:16), a
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 8
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (9730:16)
@@ -21115,7 +21115,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(9730:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 9
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (9750:16)
@@ -21124,7 +21124,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(9750:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 10
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (9816:16)
@@ -21133,7 +21133,7 @@ AppEvent_InlineHandler_Skip20:
 	dec	1, a
 	ld	(9816:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 11
 	jrl	AppEvent_InlineHandler_Join8
 	ld a, (61907:16)
@@ -21157,7 +21157,7 @@ AppEvent_InlineHandler_Skip7:
 	ld	(0xf1d3:16), 16
 AppEvent_InlineHandler_Entry:
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 12
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (0xf1d4:16)
@@ -21181,7 +21181,7 @@ AppEvent_InlineHandler_Skip9:
 	ld	(0xf1d4:16), 16
 AppEvent_InlineHandler_Entry2:
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 13
 	jrl	AppEvent_InlineHandler_Join8
 	ld	a, (0xf1d5:16)
@@ -21190,7 +21190,7 @@ AppEvent_InlineHandler_Entry2:
 	dec	1, a
 	ld	(0xf1d5:16), a
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 14
 	jrl	AppEvent_InlineHandler_Join8
 	sub	xwa, 15
@@ -21256,27 +21256,27 @@ AppEvent_InlineHandler_Join4:
 	ld	(9770:16), a
 AppEvent_InlineHandler_Join5:
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 15
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 16
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 17
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 18
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 19
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 20
 	jrl	AppEvent_InlineHandler_Join8
 	sub	xwa, 21
@@ -21342,27 +21342,27 @@ AppEvent_InlineHandler_Join6:
 	ld	(9776:16), a
 AppEvent_InlineHandler_Entry3:
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 21
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 22
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 23
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 24
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 25
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 26
 	jrl	AppEvent_InlineHandler_Join8
 	cp	xwa, 30
@@ -21413,19 +21413,19 @@ AppEvent_InlineHandler_Skip14:
 	ld	(9996:16), 16
 AppEvent_InlineHandler_Entry4:
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 27
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 28
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 29
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 30
 	jr	AppEvent_InlineHandler_Join8
 	ld	a, (0x2878:16)
@@ -21438,19 +21438,19 @@ AppEvent_InlineHandler_Entry4:
 	extz	wa
 	call	SeqPart_CountActiveVoices
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 31
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 32
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 33
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 34
 AppEvent_InlineHandler_Join8:
 	call	ApDeliveryEvent
@@ -22646,12 +22646,12 @@ ApPlaySyori:
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Sequencer accompaniment event dispatch
 SeqAccomp_EventDispatch:
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ldmm8	9010, 1075
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 1:i3
 	call	ApDeliveryEvent
 	ld	a, (0x28b1:16)
@@ -22663,21 +22663,21 @@ SeqAccomp_EventDispatch:
 	jrl	SeqAccomp_SendVoiceAndReturn
 
 SeqAccomp_StartAndPostEvents:
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl SeqAccomp_StartHandler
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 9010, 1075
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	call Seq_ComputePercentClamped99
 	ld (7528:16), l
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	bit 1, (0x28b1:16)
@@ -22687,7 +22687,7 @@ SeqAccomp_StartAndPostEvents:
 	ld bc, 1:i3
 	call SetVisible
 	ld xwa, 0x850013
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 1:i3
 	jr SeqPlay_AllocPostEvent
 
@@ -22697,7 +22697,7 @@ SeqPlay_AllocHideIndicator:
 	ld bc, 0:i3
 	call SetVisible
 	ld xwa, 0x850013
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 0:i3
 
 SeqPlay_AllocPostEvent:
@@ -22712,18 +22712,18 @@ SeqPlay_AllocPostEvent:
 	ld wa, iz
 	exts xwa
 	jrl NoteEdit_ScrollCallReset
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 9010, 1075
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	call ApDeliveryEvent
 	call Seq_ComputePercentClamped99
 	ld (7528:16), l
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ld a, (0x28b2:16)
@@ -22765,19 +22765,19 @@ SeqPlay_AllocAdjustBar:
 
 SeqAcc_SendParamsAndStart:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 7:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x9
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xa
 	call ApDeliveryEvent
 	ld a, (0x28b2:16)
@@ -22797,38 +22797,38 @@ SeqAcc_SendParamsAndStart:
 	exts xwa
 	calr AppEvent_SendAccompStatus
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 3:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 4:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 5:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 6:i3
 	jrl SeqAccomp_StartHandler
 
 SeqAccomp_DispatchRhythmEvents:
 	call BmDrEdit_EnterPlayMode
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 3:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 5:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 6:i3
 	call ApDeliveryEvent
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xb
 	jrl SeqAccomp_StartHandler
 
@@ -22853,7 +22853,7 @@ SeqAccomp_SubHandlerA:
 	inc	1, wa
 	ld	(9832:16), wa
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bit	2, (1057:16)
@@ -22878,12 +22878,12 @@ ApPlaySyori_Skip13:
 	setda	1, (10417)
 	ldmm16	9832, 9504
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 3:i3
 	call	ApDeliveryEvent
 ApPlaySyori_Join9:
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 4:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bitda	2, (1057)
@@ -22900,7 +22900,7 @@ ApPlaySyori_Join9:
 	jr	ule, ApPlaySyori_Skip
 	ldmm16	9506, 9504
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 6:i3
 	jr	ApPlaySyori_Join
 ApPlaySyori_Skip2:
@@ -22914,14 +22914,14 @@ ApPlaySyori_Skip2:
 	jr	ule, ApPlaySyori_Skip
 	ldmm16	9502, 9500
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 6:i3
 ApPlaySyori_Join:
 	call	ApDeliveryEvent
 ApPlaySyori_Skip:
 	calr	NoteEditSy_SendModeScrollReset
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 5:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bitda	2, (1057)
@@ -22945,7 +22945,7 @@ ApPlaySyori_Skip3:
 ApPlaySyori_Join2:
 	calr	NoteEditSy_SendModeScrollReset
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 6:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	bitda	2, (1057)
@@ -22966,19 +22966,19 @@ ApPlaySyori_Skip5:
 	call	SeqPlay_DataBlock_BBE_0x155
 ApPlaySyori_Join3:
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 7:i3
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 8
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 9
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 10
 	jrl	SeqAccomp_StartHandler
 	cpib_erp 238, 1
@@ -22987,7 +22987,7 @@ ApPlaySyori_Join3:
 	ldmm16	61854, 10595
 	call	Audio_CheckSubsystemReady
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 11
 	call	ApDeliveryEvent
 	ldmm16	10296, 61854
@@ -23016,7 +23016,7 @@ SeqAccomp_SubHandlerB:
 	dec	1, wa
 	ld	(9832:16), wa
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0:i3
 	jrl	SeqAccomp_SubHandlerB_Code_Join
 	ldto_berp c, 239
@@ -23058,7 +23058,7 @@ ApPlaySyori_Join4:
 	call	SeqPlay_InitStartState
 ApPlaySyori_Join5:
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 4:i3
 	jrl	SeqAccomp_StartHandler
 	bitda	2, (1057)
@@ -23082,7 +23082,7 @@ ApPlaySyori_Skip8:
 ApPlaySyori_Join6:
 	calr	NoteEditSy_SendModeScrollReset
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 5:i3
 	jr	SeqAccomp_SubHandlerB_Code_Join
 	bitda	2, (1057)
@@ -23098,7 +23098,7 @@ ApPlaySyori_Join6:
 	jr	ule, SeqAccomp_SubHandlerB_Code_Entry
 	ldmm16	9504, 9506
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 5:i3
 	call	ApDeliveryEvent
 SeqAccomp_SubHandlerB_Code_Entry:
@@ -23114,7 +23114,7 @@ ApPlaySyori_Skip9:
 	jr	ule, SeqAccomp_SubHandlerB_Code_Entry2
 	ldmm16	9500, 9502
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 5:i3
 	call	ApDeliveryEvent
 SeqAccomp_SubHandlerB_Code_Entry2:
@@ -23122,7 +23122,7 @@ SeqAccomp_SubHandlerB_Code_Entry2:
 ApPlaySyori_Join7:
 	calr	NoteEditSy_SendModeScrollReset
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 6:i3
 SeqAccomp_SubHandlerB_Code_Join:
 	call	ApDeliveryEvent
@@ -23145,19 +23145,19 @@ ApPlaySyori_Skip11:
 	call	SeqPlay_DataBlock_BBE_0x19B
 ApPlaySyori_Join8:
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 7:i3
 	call	ApDeliveryEvent
 	ldda32	xwa, (10610)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 8
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 9
 	call	ApDeliveryEvent
 	ld	xwa, (0x2972:16)
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 10
 
 SeqAccomp_StartHandler:
@@ -23169,7 +23169,7 @@ SeqAccomp_StartHandler:
 	ldmm_sd24w 0xec, 0xff, 0x00, 0x9e, 0xf1
 	call Audio_CheckSubsystemReady
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xb
 	call ApDeliveryEvent
 	ldmm16 0x2838, 0xf19e
@@ -23221,7 +23221,7 @@ SeqAccomp_HandleStartStop:
 	ld bc, 0:i3
 	call SetVisible
 	ld xwa, 0x850013
-	ld xbc, 0x1e0009c
+	ld xbc, EVT_POST_ACTIVATE
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	jrl SeqAccomp_InitAndReturn
@@ -23536,36 +23536,36 @@ NoteEditSy_SendModeScrollReset:
 ; Note editor mode dispatch
 NoteEditSy_ModeDispatch:
 	ld xwa, 0x810005
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 NoteEditSy_Dispatch85:
 	ld xwa, 0x850007
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 NoteEditSy_Dispatch87:
 	ld xwa, 0x870003
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 ; NoteEditSy scroll case 3
 NoteEditSy_ScrollCase3:
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jr NoteEditSy_DeliverEvent
 
 ; NoteEditSy scroll case 4
 NoteEditSy_ScrollCase4:
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 3:i3
 	jr NoteEditSy_DeliverEvent
 
 NoteEditSy_DeliverParam7:
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 7:i3
 
 NoteEditSy_DeliverEvent:
@@ -23583,19 +23583,19 @@ SeqMode_SendStatusUpdate:
 	cp a, 0x81
 	ret nz
 	ld xwa, 0x810005
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	jr SeqMode_StatusDeliver
 
 SeqMode_Status85:
 	ld xwa, 0x850007
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	jr SeqMode_StatusDeliver
 
 SeqMode_Status87:
 	ld xwa, 0x870003
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 
 SeqMode_StatusDeliver:
@@ -23611,7 +23611,7 @@ SeqAccomp_SendStopNotify:
 
 SeqAccomp_StopNotifyDeliver:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	call ApDeliveryEvent
 	ret
@@ -23628,7 +23628,7 @@ SngSelSyori:
 	jr nz, SeqAcc_CheckLoopAndSendEvent
 	ld (0x29c6:16), xde
 	ld xwa, xde
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	jr SeqAcc_CheckLoopAndSendEvent
@@ -23679,7 +23679,7 @@ SeqAcc_CheckLoopAndSendEvent:
 	cpb_erp A, 0xfb
 	jr z, NoteEditSy_UpScrollTable
 	ld xwa, (0x29c6:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call ApDeliveryEvent
 
@@ -23836,19 +23836,19 @@ NoteEditSy_ReturnZero:
 
 NoteEditSy_SendScrollCmd0:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd1:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 1:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd2:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 2:i3
 	jp ApDeliveryEvent
 
@@ -23954,12 +23954,12 @@ NoteEditSy_SendModeScrollCmd:
 	ld xwa, (0x2972:16)
 	bit 0, (0x2742:16)
 	jr z, NoteEditSy_SendScrollCmdEdit
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x9
 	jr NoteEditSy_JumpFA9E07
 
 NoteEditSy_SendScrollCmdEdit:
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 6:i3
 
 NoteEditSy_JumpFA9E07:
@@ -23967,33 +23967,33 @@ NoteEditSy_JumpFA9E07:
 
 NoteEditSy_SendScrollCmd3:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 3:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendVelocityCmd:
 	ldmm8 0x296a, 0x278a
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xa
 	jp ApDeliveryEvent
 
 NoteEditSy_SendGateCmd:
 	ldmm8 0x296a, 0x2788
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 4:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd5:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 5:i3
 	jp ApDeliveryEvent
 
 NoteEditSy_SendScrollCmd8:
 	ld xwa, (0x2972:16)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x8
 	jp ApDeliveryEvent
 
@@ -24080,7 +24080,7 @@ NoteEditSy_SendWidgetCmdE:
 	jp ApDeliveryEvent
 
 SeqModeFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SeqErecMode_ReturnZero
 	cp xde, 0x1
 	jr z, SeqErec_ClearPlayFlags
@@ -24104,7 +24104,7 @@ SeqErecMode_ReturnZero:
 	ret
 
 SeqErecModeFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SeqErecFunc_ReturnZero
 	cp xde, 0x1
 	jr z, SeqErecFunc_SetIndicator
@@ -24124,7 +24124,7 @@ SeqErecFunc_ReturnZero:
 	ret
 
 SeqPlayModeFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SeqPlayMode_ReturnZero
 	cp xde, 0x1
 	jr z, SeqPlayMode_SaveAndCleanup
@@ -24148,7 +24148,7 @@ SeqPlayMode_ReturnZero:
 
 SeqRealModeFunc:
 	pushw iz
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, SeqAcc_ProcessedReturn
 	cp xde, 0x1
 	jr z, SeqReal_HandleActivation
@@ -24222,7 +24222,7 @@ SeqAcc_ProcessedReturn:
 	ret
 
 SeqEditModeFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SeqEdit_ReturnZero
 	cp xde, 0x1
 	jr z, SeqEdit_RestoreAndClear
@@ -24242,7 +24242,7 @@ SeqEdit_ReturnZero:
 
 SqRealRecTitleFunc:
 	pushw_erp 0xfa
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, SqRealRec_ReturnZero
 	cp xde, 0x3
 	jr z, SqRealRec_HandleExitState
@@ -24298,7 +24298,7 @@ SqRealRec_ReturnZero:
 	ret
 
 SqPlayTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqPlay_ReturnZero
 	cp xde, 0x3
 	jr z, SqPlay_HandleExitState
@@ -24325,7 +24325,7 @@ SqPlay_ReturnZero:
 	ret
 
 SqQtzTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqQtzTtl_ReturnZero
 	cp xde, 0x3
 	jr z, SqQtzTtl_ReturnZero
@@ -24344,7 +24344,7 @@ SqQtzTtl_ReturnZero:
 	ret
 
 SqMdelTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqMdelTtl_ReturnZero
 	cp xde, 0x3
 	jr z, SqMdelTtl_ReturnZero
@@ -24363,7 +24363,7 @@ SqMdelTtl_ReturnZero:
 	ret
 
 SqMersTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqMersTtl_ReturnZero
 	cp xde, 0x3
 	jr z, SqMersTtl_ReturnZero
@@ -24382,7 +24382,7 @@ SqMersTtl_ReturnZero:
 	ret
 
 SqVcngTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqVcngTtl_ReturnZero
 	cp xde, 0x3
 	jr z, SqVcngTtl_ReturnZero
@@ -24409,7 +24409,7 @@ SqNcngTitleFunc:
 	ret
 
 SqSoclTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqMcpy_ReturnZero
 	cp xde, 0x3
 	jr z, SqMcpy_ReturnZero
@@ -24422,7 +24422,7 @@ SqMcpy_ReturnZero:
 	ret
 
 SqMcpyTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqMcpyTtl_ReturnZero
 	cp xde, 0x3
 	jr z, SqMcpy_HandleExitState
@@ -24446,7 +24446,7 @@ SqMcpyTtl_ReturnZero:
 	ret
 
 SqMinsTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqMinsTtl_ReturnZero
 	cp xde, 0x3
 	jr z, SqMins_HandleExitState
@@ -24469,7 +24469,7 @@ SqMinsTtl_ReturnZero:
 	ret
 
 SqTrclTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqSngcp_ReturnZero
 	cp xde, 0x3
 	jr z, SqTrcl_HandleExitState
@@ -24488,7 +24488,7 @@ SqSngcp_ReturnZero:
 	ret
 
 SqSngcpTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqRepeat_HandleReturn
 	cp xde, 0x3
 	jr z, SqRepeat_HandleReturn
@@ -24504,7 +24504,7 @@ SqRepeat_HandleReturn:
 	ret
 
 SqTrmgTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqTrmg_ReturnZero
 	cp xde, 0x3
 	jr nz, SqTrmg_ReturnZero
@@ -24520,7 +24520,7 @@ SqAdlyTitleFunc:
 	ret
 
 SqPunchTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqPunch_HandleReturn
 	cp xde, 0x3
 	jr z, SqPunch_HandleTickOnExit
@@ -24537,7 +24537,7 @@ SqPunch_HandleReturn:
 	ret
 
 SqPunchmTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqPunchm_HandleReturn
 	cp xde, 0x3
 	jr z, SqPunchm_HandleStopOnExit
@@ -24554,7 +24554,7 @@ SqPunchm_HandleReturn:
 	ret
 
 SqNoteSelTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqNoteSel_HandleReturn
 	cp xde, 0x3
 	jr z, SqNoteSel_HandleReturn
@@ -24567,7 +24567,7 @@ SqNoteSel_HandleReturn:
 	ret
 
 SqNoteEdtTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqNoteEdt_ReturnZero
 	cp xde, 0x3
 	call z, (BmDrEdit_CleanupMelodicMode:24)
@@ -24577,7 +24577,7 @@ SqNoteEdt_ReturnZero:
 	ret
 
 SqDrmSelTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqDrmSel_HandleReturn
 	cp xde, 0x3
 	jr z, SqDrmSel_HandleReturn
@@ -24591,7 +24591,7 @@ SqDrmSel_HandleReturn:
 	ret
 
 SqDrmEdtTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqDrmEdt_ReturnZero
 	cp xde, 0x3
 	call z, (BmDrEdit_CleanupDrumMode:24)
@@ -24601,7 +24601,7 @@ SqDrmEdt_ReturnZero:
 	ret
 
 SdRevsetTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SdRevset_ReturnZero
 	cp xde, 0x3
 	jr z, SdRevset_ClearFlag
@@ -24616,7 +24616,7 @@ SdRevset_ReturnZero:
 	ret
 
 SdDspeffTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SdDspeff_ReturnZero
 	cp xde, 0x3
 	jr z, SdDspeff_ClearFlag
@@ -24631,7 +24631,7 @@ SdDspeff_ReturnZero:
 	ret
 
 SdAccillTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SdAccill_ReturnZero
 	cp xde, 0x3
 	jr z, SdAccill_ClearFlag
@@ -24646,7 +24646,7 @@ SdAccill_ReturnZero:
 	ret
 
 SqNoteCycpTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqNoteCycp_ReturnZero
 	cp xde, 0x3
 	call z, (BmDrEdit_ExitPlayMode:24)
@@ -24656,7 +24656,7 @@ SqNoteCycp_ReturnZero:
 	ret
 
 SqDrmCycpTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, SqDrmCycp_ReturnZero
 	cp xde, 0x3
 	call z, (BmDrEdit_ExitPlayMode:24)
@@ -24666,7 +24666,7 @@ SqDrmCycp_ReturnZero:
 	ret
 
 HelpModeFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jr nz, HelpMode_ReturnZero
 	cp xde, 0x1
 	jr z, HelpMode_ReturnZero
@@ -24682,7 +24682,7 @@ HelpTitleFunc:
 	ret
 
 EtmenuTitleFunc:
-	cp xbc, 0x1c00013
+	cp xbc, EVT_CPANEL_EVENT
 	jrl nz, EtmenuTtl_ReturnZero
 	cp xde, 0x7
 	jrl z, MainExe_DispatchReturn
@@ -24706,19 +24706,19 @@ EtmenuTitleFunc:
 	ld bc, 1:i3
 	call SetVisible
 	ld xwa, 0xd60003
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xd60004
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xd60005
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xd60006
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	jr EtmenuTtl_ReturnZero
@@ -25311,42 +25311,42 @@ HelpLang_DispatchDataBlock_Join:
 	cp a, 1:i3
 	jr nz, HelpLang_DispatchDataBlock_Skip4
 	ld xwa, 15138830
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BBE
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip4:
 	cp	a, 2:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip5
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BC5
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BC7
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip5:
 	cp	a, 3:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip6
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BD2
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BD4
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip6:
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BDA
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, Bitmap_MIDIConnections_2_0x3BDD
-	ld	xbc, 0x01c00001
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 0:i3
 HelpLang_DispatchDataBlock_Join2:
 	call	ApPostEvent
@@ -25355,7 +25355,7 @@ HelpLang_DispatchDataBlock_Join2:
 HelpLangChkMain:
 	cp xbc, 0x1e80070
 	jr z, HelpLang_LoadSlide
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, HelpLangChk_ReturnZero
 	cp (0x8d38:16), 231
 	jr nz, HelpLang_SetFlashAndLoadSlide
@@ -25365,13 +25365,13 @@ HelpLangChkMain:
 	cp l, 3:i3
 	jr nz, HelpLang_SetRegion5
 	ld xwa, Bitmap_MIDIConnections_2_0x3BB8
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr HelpLang_PostEvent
 
 HelpLang_SetRegion5:
 	ld xwa, Bitmap_MIDIConnections_2_0x3BB3
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 HelpLang_PostEvent:

@@ -294,7 +294,7 @@ FileName_DrawItemLoop:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	incw	1, (xsp+6)
 	cpw	(xsp + 6), 0x14
@@ -354,7 +354,7 @@ FileName_OpSave:
 	cp	hl, 0:i3
 	jrl	z, FileName_OpLoad
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, (32478:16)
@@ -369,7 +369,7 @@ FileName_OpSave:
 	ld	(32422:16), l
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
@@ -431,13 +431,13 @@ FileName_OpLoad_NoPwd:
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_Execute:
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -453,7 +453,7 @@ FileName_OpLoad_Execute:
 	ld	(33894:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
@@ -472,7 +472,7 @@ FileName_OpFormat:
 	cp	xiz, 50
 	jr	nz, FileName_OpDelete
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -488,7 +488,7 @@ FileName_OpFormat:
 	ld	(33894:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
@@ -516,7 +516,7 @@ FileName_OpDelete:
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x7b0051
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 FileName_OpDispatch:
@@ -525,7 +525,7 @@ FileName_OpDispatch:
 
 FileName_OpDelete_Execute:
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -541,7 +541,7 @@ FileName_OpDelete_Execute:
 	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -550,7 +550,7 @@ FileName_OpFormatVariant:
 	cp	xiz, 51
 	jr	nz, FileName_OpNavigate
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -566,7 +566,7 @@ FileName_OpFormatVariant:
 	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -600,7 +600,7 @@ FileName_Navigate_CheckChanged:
 	cp wa, (32478:16)
 	jr	z, FileName_GetSelection
 	ld	xwa, 6291494
-	ld	xbc, 29360129
+	ld	xbc, EVT_MENU_OPEN
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -615,7 +615,7 @@ FileName_Navigate_CheckChanged:
 	call	GetEncodedFileSizeData
 	ld	(33894:16), hl
 	ld	xwa, 6291494
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -640,7 +640,7 @@ FileName_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	ld	de, (32478:16)
 	sll	de, 5
@@ -648,7 +648,7 @@ FileName_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (32470:16)
-	ld	xbc, 29360143
+	ld	xbc, EVT_INIT_HOOK
 	call	ApPostEvent
 	ldw	(xsp+6), 0
 FileName_UpdateButtons_Loop:

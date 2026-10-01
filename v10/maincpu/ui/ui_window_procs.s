@@ -335,7 +335,7 @@ WndEvt_DispatchByEventCode_Case2:
 	ld	a, (xsp+12)
 	ld	(xbc), a
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	SendEvent
 	ld	de, (0x0274de:24)
 	extz	xde
@@ -385,7 +385,7 @@ WndEvt_EventCodeDispatch_Skip:
 	ld	a, (xsp+12)
 	ld	(xbc), a
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	SendEvent
 	ld	de, (0x0274de:24)
 	extz	xde
@@ -483,7 +483,7 @@ WndEvt_EventCodeDispatch_Skip5:
 	ld	(xwa), c
 WndEvt_EventCodeDispatch_Join:
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x0274b0
 	call	SendEvent
 	ld	de, (0x0274de:24)
@@ -544,7 +544,7 @@ WndEvt_EventCodeDispatch_Skip6:
 	ld	(xde), c
 WndEvt_EventCodeDispatch_Join2:
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x0274b0
 	call	SendEvent
 	ld	de, (0x0274de:24)
@@ -593,7 +593,7 @@ WndEvt_EventCodeDispatch_Skip7:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	SendEvent
 	ld	de, (0x0274d8:24)
 	extz	xde
@@ -635,7 +635,7 @@ WndEvt_EventCodeDispatch_Skip8:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	call	SendEvent
 	ld	de, (0x0274d8:24)
 	extz	xde
@@ -762,7 +762,7 @@ WndEvt_EventCodeDispatch_Loop4:
 	jr	c, WndEvt_EventCodeDispatch_Loop4
 WndEvt_EventCodeDispatch_Skip10_Skip2:
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x0274b0
 	call	SendEvent
 	ld	de, (0x0274d8:24)
@@ -793,7 +793,7 @@ WndEvt_EventCodeDispatch_Loop4_Skip:
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, 22
-	ld	xbc, 0x01c0000f
+	ld	xbc, EVT_INIT_HOOK
 	ld	xde, 0x0274b0
 	call	SendEvent
 	ld	xwa, (xsp+50)
@@ -842,7 +842,7 @@ WndScroll_SendSelectionEvents:
 	ld de, (0x0274da:24)
 	extz xde
 	ld xwa, (xsp + 50)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	ld wa, (0x0274da:24)
 	extz xwa
@@ -851,7 +851,7 @@ WndScroll_SendSelectionEvents:
 	add xbc, xwa
 	ld xde, (xbc)
 	ld xwa, 0x1d
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jrl WndScroll_SendAndReturn
 
 WndScroll_HandleCharInput:
@@ -863,7 +863,7 @@ WndScroll_HandleCharInput:
 	ld xbc, 0x1e00080
 	call SendEvent
 	ld xwa, 0x16
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x274b0
 	call SendEvent
 	ld bc, (0x0274d8:24)
@@ -1091,7 +1091,7 @@ ModeEditProc:
 	stl_dri XWA, 0xfd, 0x14, 0x01
 	cp xbc, 0x1c00011
 	jrl z, ModeEdit_HandleViewUpdate
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, ModeEdit_HandlePaint
 	ld XWA, (xsp + 0x0114)
 	ld XDE, (xsp + 0x0110)
@@ -1104,7 +1104,7 @@ ModeEdit_HandlePaint:
 	calr BoxProc
 	call GetModeNow
 	ld xwa, xhl
-	ld xbc, 0x1e00015
+	ld xbc, EVT_GET_CONFIG_2
 	ld xde, 0:i3
 	call SendEvent
 	push xhl
@@ -1171,14 +1171,14 @@ ModeEdit_HandleViewUpdate:
 	call SendEvent
 	ld (xiz + 38), hl
 	ld xwa, (xiz + 26)
-	ld xbc, 0x1e00015
+	ld xbc, EVT_GET_CONFIG_2
 	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 40), xhl
 	jr TitleEdit_ReturnZero
 
 ModeEdit_StoreField0:
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 30)
@@ -1186,7 +1186,7 @@ ModeEdit_StoreField0:
 	jr TitleEdit_ReturnZero
 
 ModeEdit_StoreField1:
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 34)
@@ -1194,7 +1194,7 @@ ModeEdit_StoreField1:
 	jr TitleEdit_ReturnZero
 
 ModeEdit_StoreField2:
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xiz + 38)
@@ -1203,7 +1203,7 @@ ModeEdit_StoreField2:
 
 ModeEdit_StoreField3:
 	ld xwa, (xwa)
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 40)
@@ -1224,7 +1224,7 @@ TitleEditProc:
 	stl_dri XWA, 0xfd, 0x14, 0x01
 	cp xbc, 0x1c00011
 	jrl z, TitleEdit_HandleViewUpdate
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, TitleEdit_HandlePaint
 	ld XWA, (xsp + 0x0114)
 	ld XDE, (xsp + 0x0110)
@@ -1237,7 +1237,7 @@ TitleEdit_HandlePaint:
 	calr BoxProc
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00015
+	ld xbc, EVT_GET_CONFIG_2
 	ld xde, 0:i3
 	call SendEvent
 	push xhl
@@ -1304,14 +1304,14 @@ TitleEdit_HandleViewUpdate:
 	call SendEvent
 	ld (xiz + 38), hl
 	ld xwa, (xiz + 26)
-	ld xbc, 0x1e00015
+	ld xbc, EVT_GET_CONFIG_2
 	ld xde, 0:i3
 	call SendEvent
 	ld (xiz + 40), xhl
 	jr StringBox_ReturnZero
 
 TitleEdit_StoreFieldJA:
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 30)
@@ -1319,7 +1319,7 @@ TitleEdit_StoreFieldJA:
 	jr StringBox_ReturnZero
 
 TitleEdit_StoreFieldNE:
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 34)
@@ -1327,7 +1327,7 @@ TitleEdit_StoreFieldNE:
 	jr StringBox_ReturnZero
 
 TitleEdit_StoreFieldLC:
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xiz + 38)
@@ -1336,7 +1336,7 @@ TitleEdit_StoreFieldLC:
 
 TitleEdit_StoreFieldX:
 	ld xwa, (xwa)
-	ld xbc, 0x1e0000f
+	ld xbc, EVT_RETURN_ZERO
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 40)
@@ -1354,7 +1354,7 @@ StringBoxProc:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, StringBox_HandlePaint
 	ld xwa, xiz
 	calr BoxProc
@@ -1400,7 +1400,7 @@ LabelProc:	; SysData_F9C4B6
 	lda xsp, (xsp - 12)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, Label_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
@@ -1441,7 +1441,7 @@ BitmapProc:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, Bitmap_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
@@ -1470,7 +1470,7 @@ VwUserBitmapProc:
 	lda xsp, (xsp - 10)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, VwUserBitmap_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
@@ -1488,7 +1488,7 @@ VwUserBitmap_HandlePaint:
 	ld wa, (xiz + 16)
 	ld (xbc + 2), wa
 	ld xwa, (xiz + 22)
-	ld xbc, 0x1e000a1
+	ld xbc, EVT_ALLOC_DATA_PTR
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 6), xhl
@@ -1496,12 +1496,12 @@ VwUserBitmap_HandlePaint:
 	or xwa, xwa
 	jr z, VwUserBitmap_DrawFallback
 	ld xwa, (xiz + 22)
-	ld xbc, 0x1e000a2
+	ld xbc, EVT_ALLOC_WIDTH
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), hl
 	ld xwa, (xiz + 22)
-	ld xbc, 0x1e000a3
+	ld xbc, EVT_ALLOC_HEIGHT
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 10)
@@ -1525,11 +1525,11 @@ VwUserBitmap_Epilogue:
 	ret
 
 UserBitmapCheck:
-	cp xbc, 0x1e000a3
+	cp xbc, EVT_ALLOC_HEIGHT
 	jr z, UserBitmapCheck_ReturnSize
-	cp xbc, 0x1e000a2
+	cp xbc, EVT_ALLOC_WIDTH
 	jr z, UserBitmapCheck_ReturnSize
-	cp xbc, 0x1e000a1
+	cp xbc, EVT_ALLOC_DATA_PTR
 	jr z, UserBitmapCheck_ReturnTablePtr
 	ld xhl, 0:i3
 	ret
@@ -1548,11 +1548,11 @@ VwUserBitmapByNameProc:
 	ld (xsp + 24), xde
 	ld xiz, xbc
 	ld (xsp + 28), xwa
-	cp xiz, 0x1c00002
+	cp xiz, EVT_SELECT_CONFIRM
 	jrl z, VwUserBitmapByName_HandleClose
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jr z, VwUserBitmapByName_HandlePaint
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, VwUserBitmapByName_HandleCreate
 	ld xwa, (xsp + 28)
 	ld xbc, xiz
@@ -1625,7 +1625,7 @@ IconProc:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, Icon_HandlePaint
 	ld xwa, xiz
 	call ViewableProc
@@ -1675,7 +1675,7 @@ LineProc:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, Line_HandlePaint
 	ld xwa, (xsp + 20)
 	call ViewableProc
@@ -1737,7 +1737,7 @@ FrameProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jr z, Frame_HandlePaint
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -2160,7 +2160,7 @@ TextBoxProc:
 	lda xsp, (xsp - 38)
 	push xiz
 	ld (xsp + 38), xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, TextBox_HandlePaint
 	ld xwa, (xsp + 38)
 	calr BoxProc
@@ -2327,7 +2327,7 @@ VwBoxProc:
 	jr z, VwBox_HandleGetWidth
 	cp xbc, 0x1e0004e
 	jr z, VwBox_HandleGetFocus
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jrl nz, VwBox_DefaultHandler
 	ld xwa, xiz
 	ld xde, (xsp + 12)
@@ -2415,7 +2415,7 @@ PsParaBoxProc:
 	stl_dri XWA, 0xfd, 0x14, 0x01
 	cp xbc, 0x1e0003a
 	jrl z, PsParaBox_HandleGetText
-	cp xbc, 0x1c0000f
+	cp xbc, EVT_INIT_HOOK
 	jr z, PsParaBox_HandleConfirm
 	ld XWA, (xsp + 0x0114)
 	ld XDE, (xsp + 0x0110)
@@ -2499,9 +2499,9 @@ AcLswBoxProc:
 	jr z, AcLswBox_HandleShowHide
 	cp xbc, 0x1c0000b
 	jr z, AcLswBox_HandleShowHide
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcLswBox_HandleClose
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcLswBox_HandleCreate
 	cp xbc, 0x1e0003a
 	jrl nz, AcLswBox_DefaultHandler
@@ -2576,7 +2576,7 @@ AcLswBox_HandleWriteBack:
 	ld xbc, 0x1e00083
 	call ApFuncCall
 	ld xwa, (xsp + 20)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl Ac_SendUIEvent_Common
 
@@ -2752,7 +2752,7 @@ AcRamBox_HandleWriteBack:
 	ld xbc, 0x1e00082
 	call ApFuncCall
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl AcRamBox_SendUIEvent_Common
 
@@ -2849,9 +2849,9 @@ AcTempoBoxProc:
 	jr z, AcTempoBox_HandleShowHide
 	cp xbc, 0x1c0000b
 	jr z, AcTempoBox_HandleShowHide
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcTempoBox_HandleClose
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcTempoBox_HandleCreate
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
@@ -2917,7 +2917,7 @@ AcTempoBox_CopyTempoString:
 AcTempoBox_SendConfirmEvent:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 PsRadioBox_EventReturn:
@@ -2951,9 +2951,9 @@ PsRadioBoxProc:
 	jrl z, PsRadioBox_Reset
 	cp xwa, 0x1c0000e
 	jrl z, PsRadioBox_Select
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jr z, PsRadioBox_Confirm
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jrl nz, PsRadioBox_Default
 	ld XWA, (xsp + 0x0124)
 	ld XBC, (xsp + 0x0120)
@@ -2974,7 +2974,7 @@ PsRadioBoxProc:
 
 PsRadioBox_Paint_SendConfirm:
 	ld XWA, (xsp + 0x0124)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0124)
@@ -3066,7 +3066,7 @@ PsRadioBox_Select:
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0124)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl PsRadioBox_DispatchAndReturn
 
@@ -3288,9 +3288,9 @@ PsListBoxProc:
 	jrl z, PsListBox_Reset
 	cp xbc, 0x1c0000e
 	jrl z, PsListBox_Select
-	cp xbc, 0x1c0000f
+	cp xbc, EVT_INIT_HOOK
 	jr z, PsListBox_Confirm
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jrl nz, PsListBox_Default
 	ld XWA, (xsp + 0x012a)
 	ld XDE, (xsp + 0x0126)
@@ -3301,7 +3301,7 @@ PsListBoxProc:
 	ld iz, (xwa)
 	ldw (xwa), 0xffff
 	ld XWA, (xsp + 0x012a)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	ld de, iz
@@ -3749,7 +3749,7 @@ AcListBoxProc:
 	jr z, AcListBox_ScrollUpDown
 	cp xbc, 0x1c00019
 	jr z, AcListBox_ScrollUpDown
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jrl nz, AcListBox_Default
 	ld xwa, (xsp + 12)
 	ld xde, (xsp + 8)
@@ -3899,17 +3899,17 @@ PsGridBoxProc:
 	jrl z, PsGridBox_Scroll
 	cp xwa, 0x1c0000e
 	jrl z, PsGridBox_Select
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jrl z, PsGridBox_Confirm
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jrl z, PsGridBox_Paint
 	cp xwa, 0x1c0000c
 	jrl z, PsGridBox_ShowHide
 	cp xwa, 0x1c0000b
 	jrl z, PsGridBox_ShowHide
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jrl z, PsGridBox_Close
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, PsGridBox_Init
 	sub xbc, 0x1e0008a
 	cp xbc, 0x0

@@ -28,9 +28,9 @@ AcLswFuncBoxProc:
 	jrl z, AcLswBox_HandleGetLsw
 	cp xbc, 0x1c0000b
 	jrl z, AcLswBox_HandleGetLsw
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jrl z, AcLswBox_HandleResetFilter
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jrl z, AcLswBox_OnCreateEvt
 	cp xbc, 0x1e0003d
 	jr z, AcLswBox_HandleAdd
@@ -133,7 +133,7 @@ AcLswBox_HandleValueChange:
 	ld wa, (xde + 4)
 	ld (xbc), wa
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl AudioMix_SendEventAlt
 
@@ -218,9 +218,9 @@ TtMdRealMsg:
 	jr z, TtMdRealMsg_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, TtMdRealMsg_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtMdRealMsg_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtMdRealMsg_ReturnZero
 	or xde, xde
 	jr nz, TtMdRealMsg_ReturnZero
@@ -256,9 +256,9 @@ AcLswFuncEditBoxProc:
 	jrl z, AcLswEdit_HandleGetLsw
 	cp xbc, 0x1c0000b
 	jrl z, AcLswEdit_HandleGetLsw
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jrl z, AcLswEdit_HandleResetFilter
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jrl z, AcLswEdit_HandleCreate
 	cp xbc, 0x1e0003d
 	jr z, AcLswEdit_HandleAdd
@@ -361,7 +361,7 @@ AcLswEdit_HandleValueChange:
 	ld wa, (xde + 4)
 	ld (xbc), wa
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl AudioMix_SendEvent
 
@@ -461,9 +461,9 @@ TtFadeInOut:
 	jr z, TtFadeInOut_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, TtFadeInOut_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtFadeInOut_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtFadeInOut_ReturnZero
 	or xde, xde
 	jr nz, TtFadeInOut_ReturnZero
@@ -514,7 +514,7 @@ AcFadeSetGridBoxProc:
 	jrl z, VoiceUI_GridCase1
 	cp xwa, 0x1e0008a
 	jrl z, VoiceUI_GridCase0
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, VoiceParam_ListHandler
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -537,7 +537,7 @@ VoiceParam_ListHandler:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -576,7 +576,7 @@ VoiceParam_ListHandler:
 	or xhl, xhl
 	jr z, FadeGrid_CheckFadeOut
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 1:i3
@@ -636,7 +636,7 @@ FadeGrid_CheckFadeOut:
 	or xhl, xhl
 	jr z, FadeGrid_CheckFadeOutAlt
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -782,7 +782,7 @@ FadeSetGridCheck:
 Data_FadeSetGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -805,7 +805,7 @@ Data_FadeSetGridDispatch:
 	jr	FadeSetGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -963,9 +963,9 @@ TtMdInOut:
 	jr z, TtMdInOut_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, TtMdInOut_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtMdInOut_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtMdInOut_ReturnZero
 	or xde, xde
 	jr nz, TtMdInOut_ReturnZero
@@ -994,7 +994,7 @@ AcInOutGridBoxProc:
 	jrl z, AcInOutGrid_GetRowText
 	cp xwa, 0x1e0008a
 	jrl z, AcInOutGrid_GetColText
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, AcInOutGrid_Init
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -1015,7 +1015,7 @@ AcInOutGrid_Init:
 	call	GetViewInstance
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457423
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1054,7 +1054,7 @@ AcInOutGrid_Init:
 	or	xhl, xhl
 	jr	z, AcInOutGrid_ScrollUp_CheckAlt
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457423
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	iz, hl
@@ -1131,7 +1131,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	or	xhl, xhl
 	jr	z, AcInOutGrid_ScrollDown_CheckAlt	; -> 0xF755A6
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457423
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	iz, hl
@@ -1296,7 +1296,7 @@ Data_InOutGridDispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 308 of 360 slots byte-identical
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1368,7 +1368,7 @@ InOutGridCheck_Skip:
 	jrl	InOutGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1918,9 +1918,9 @@ TtMdPreset:
 	jr z, TtMdPreset_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, TtMdPreset_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtMdPreset_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtMdPreset_ReturnZero
 	or xde, xde
 	jr nz, TtMdPreset_ReturnZero
@@ -1944,7 +1944,7 @@ IvMpstPageControlProc:
 	jr z, IvMpst_HandlePageSwitch
 	cp xwa, 0x1e0003a
 	jr z, IvMpst_HandleGetName
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jr z, IvMpst_HandleClose
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -1958,7 +1958,7 @@ IvMpst_HandleClose:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jrl IvMpst_SendEventEpilogue
 
@@ -1981,7 +1981,7 @@ IvMpst_HandlePageSwitch:
 	or xhl, xhl
 	jr z, IvMpst_CheckSecondView
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 
@@ -1993,7 +1993,7 @@ IvMpst_CheckSecondView:
 	or xhl, xhl
 	jr z, IvMpst_InheritAndCheck
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 
@@ -2009,13 +2009,13 @@ IvMpst_InheritAndCheck:
 	cp (0x024756:24), 0x00
 	jr nz, IvMpst_ActivateSecondView
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr IvMpst_SendEventEpilogue
 
 IvMpst_ActivateSecondView:
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 IvMpst_SendEventEpilogue:
@@ -2048,11 +2048,11 @@ MdPresetWithoutFunc:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr MdPresetWithout_SendCreate
 
@@ -2061,11 +2061,11 @@ MdPresetWithout_Slot2Path:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 MdPresetWithout_SendCreate:
@@ -2095,11 +2095,11 @@ MdPresetWithFunc:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	jr MdPresetWith_SendCreate
 
@@ -2108,11 +2108,11 @@ MdPresetWith_Slot2Path:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 
 MdPresetWith_SendCreate:
@@ -2247,13 +2247,13 @@ MainMpstFunc:
 	call	VocalistPage2OKFunc_Helper
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, 29360150
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 27263214
 	jr	MainMpst_PostEvent
 MainMpst_HandlePresetCopy:
 	ld	(32422:16), 37
 	ld	xwa, 4294967295
-	ld	xbc, 29360150
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 27263214
 	call	ApPostEvent
 	ld	xwa, (xsp)
@@ -2261,7 +2261,7 @@ MainMpst_HandlePresetCopy:
 	call	SndParam_AllocAndCopyPreset
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, 29360150
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 27263214
 MainMpst_PostEvent:
 	call ApPostEvent
@@ -2280,9 +2280,9 @@ TtMdExc:
 	jr	z, TtMdExc_ReturnZero
 	cp	xbc, 0x1c0000b
 	jr	z, TtMdExc_ReturnZero
-	cp	xbc, 0x1c00002
+	cp	xbc, EVT_SELECT_CONFIRM
 	jr	z, TtMdExc_HandleClose
-	cp	xbc, 0x1c00001
+	cp	xbc, EVT_MENU_OPEN
 	jr	nz, TtMdExc_ReturnZero
 	or	xde, xde
 	jr	nz, TtMdExc_ReturnZero

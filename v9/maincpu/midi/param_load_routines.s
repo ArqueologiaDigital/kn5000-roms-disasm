@@ -19,7 +19,7 @@ ParaLoadOpt_AudioFlagCheck:
 	res 0, a
 	ld (0xbd36:16), a
 	ld xwa, 0x570006
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -143,7 +143,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	res 1, a
 	ld (0xbd36:16), a
 	ld xwa, 0x570011
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -262,11 +262,11 @@ MidiFunc_SendEventReturn:
 
 ParaLoadOpt_PostDualEvent:
 	ld	xwa, 0x570006
-	ld	xbc, 0x01c00002
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x570011
-	ld	xbc, 0x01c00002
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	jp	ApPostEvent
 
@@ -275,9 +275,9 @@ TtMdParaLoad:
 	jr z, TtMdParaLoad_ReturnZero
 	cp xbc, 0x1c0000b
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtMdParaLoad_ReturnZero
 	or xde, xde
 	jr nz, TtMdParaLoad_ReturnZero
@@ -306,9 +306,9 @@ AcParaLoadOptGridBoxProc:
 	jrl z, ParaLoadOpt_GridCheck1
 	cp xwa, 0x1e0008a
 	jrl z, ParaLoadOpt_GridCheck0
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jrl z, ParaLoadOpt_GridReturn
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, ParaLoadOpt_GridHandler
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -331,7 +331,7 @@ ParaLoadOpt_GridHandler:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -383,7 +383,7 @@ ParaLoadOpt_GridReturn:
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x1430003
@@ -402,7 +402,7 @@ ParaLoadOpt_GridReturn:
 	or xhl, xhl
 	jr z, ParaLoadOpt_GridDelegateProc
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -460,7 +460,7 @@ ParaLoadOpt_GridDelegateProc:
 	or xhl, xhl
 	jr z, ParaLoadOpt_GridDelegateProc_B
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -608,7 +608,7 @@ ParaLoadOptGridCheck:
 ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)
@@ -672,7 +672,7 @@ ParaLoadOpt_PostDualEvent_Skip3:
 	jrl	ParaLoadOpt_PostDualEvent_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)

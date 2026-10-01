@@ -247,7 +247,7 @@ LyricsBox_HandleEvent9:
 
 LyricsBox_MatchedTitle:
 	ld xwa, (xsp + 48)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, xiz
 	call SendEvent
 
@@ -978,12 +978,12 @@ LyricsBoxFuncProc:
 	jr z, LyricsBoxFunc_ResetCursors
 	cp xbc, 0x1e0003a
 	jr z, LyricsBoxFunc_CopyString
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jrl nz, LyricsBoxFunc_InheritedProc
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	jr LyricsBoxFunc_SendAndReturn
 
@@ -1148,9 +1148,9 @@ SongNameBoxProc:
 	jr z, SongNameBox_HandleFocusGained
 	cp xiz, 0x1c0000b
 	jr z, SongNameBox_HandleFocusGained
-	cp xiz, 0x1c00002
+	cp xiz, EVT_SELECT_CONFIRM
 	jr z, SongNameBox_HandleSize
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jrl nz, SongNameBox_DefaultHandler
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
@@ -1179,14 +1179,14 @@ SongNameBox_HandleFocusGained:
 
 SongNameBox_HandleEvent9:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, (xsp + 20)
 	call SendEvent
 	jr DrawStringCenter_RetZero2
 
 SongNameBox_HandleEventF:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, (xsp + 20)
 	call SendEvent
 	ld xwa, (xsp + 24)
@@ -1242,9 +1242,9 @@ ComporserNameBoxProc:
 	jr z, SongNameBox2_HandleFocusGained
 	cp xiz, 0x1c0000b
 	jr z, SongNameBox2_HandleFocusGained
-	cp xiz, 0x1c00002
+	cp xiz, EVT_SELECT_CONFIRM
 	jr z, ComposerBox_HandleSize
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jrl nz, ComposerBox_DefaultHandler
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
@@ -1273,14 +1273,14 @@ SongNameBox2_HandleFocusGained:
 
 ComposerBox_HandleEvent9:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, (xsp + 20)
 	call SendEvent
 	jr DrawStringCentered_RetZero
 
 ComposerBox_HandleEventE:
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, (xsp + 20)
 	call SendEvent
 	ld xwa, (xsp + 24)
@@ -1328,7 +1328,7 @@ MeasureBoxProc:
 	ld (xsp + 58), xde
 	ld xiz, xbc
 	ld (xsp + 62), xwa
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jr z, MeasureBox_HandleEventF
 	cp xiz, 0x1c0000b
 	jr z, MeasureBox_HandleFocusGained
@@ -1457,9 +1457,9 @@ AcDiskFileNameBoxProc:
 	jr z, AcDiskFileName_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcDiskFileName_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcDiskFileName_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcDiskFileName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1496,7 +1496,7 @@ AcDiskFileName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1c66
@@ -1506,7 +1506,7 @@ AcDiskFileName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcDiskFileName_ReturnZero:
@@ -1528,9 +1528,9 @@ AcSmfFileNameBoxProc:
 	jr z, AcSmfFileName_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcSmfFileName_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcSmfFileName_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcSmfFileName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1567,7 +1567,7 @@ AcSmfFileName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1c74
@@ -1577,7 +1577,7 @@ AcSmfFileName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcSmfFileName_ReturnZero:
@@ -1599,9 +1599,9 @@ AcSmfSongNameBoxProc:
 	jr z, AcSmfSongName_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcSmfSongName_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcSmfSongName_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcSmfSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1638,7 +1638,7 @@ AcSmfSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1c88
@@ -1648,7 +1648,7 @@ AcSmfSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcSmfSongName_ReturnZero:
@@ -1670,9 +1670,9 @@ AcDocSongNameBoxProc:
 	jr z, AcDocSongName_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcDocSongName_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcDocSongName_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcDocSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1709,7 +1709,7 @@ AcDocSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1c9e
@@ -1719,7 +1719,7 @@ AcDocSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcDocSongName_ReturnZero:
@@ -1741,9 +1741,9 @@ AcDocFileNoBoxProc:
 	jr z, AcDocFileNo_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcDocFileNo_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcDocFileNo_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcDocFileNo_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1780,7 +1780,7 @@ AcDocFileNo_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1cc2
@@ -1790,7 +1790,7 @@ AcDocFileNo_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcDocFileNo_ReturnZero:
@@ -1812,9 +1812,9 @@ AcPDSongNameBoxProc:
 	jr z, AcPDSongName_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcPDSongName_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcPDSongName_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcPDSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1851,7 +1851,7 @@ AcPDSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1cac
@@ -1861,7 +1861,7 @@ AcPDSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcPDSongName_ReturnZero:
@@ -1883,9 +1883,9 @@ AcPDFileNoBoxProc:
 	jr z, AcPDFileNo_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcPDFileNo_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcPDFileNo_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcPDFileNo_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -1922,7 +1922,7 @@ AcPDFileNo_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1cc6
@@ -1932,7 +1932,7 @@ AcPDFileNo_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcPDFileNo_ReturnZero:
@@ -2020,11 +2020,11 @@ IvNamingExit_ScreenData:
 	jrl	z, IvNamingExit_ScreenData_Skip5
 	cp	xwa, 0x01e70003
 	jrl	z, IvNamingExit_ScreenData_Skip4
-	cp	xwa, 0x01c0000f
+	cp	xwa, EVT_INIT_HOOK
 	jrl	z, IvNamingExit_ScreenData_Skip2
 	cp	xwa, 0x01c0000b
 	jr	z, IvNamingExit_ScreenData_Skip
-	cp	xwa, 0x01c00001
+	cp	xwa, EVT_MENU_OPEN
 	jrl	nz, IvNamingExit_ScreenData_Skip6
 	ld	xwa, (xsp+178)
 	ld	xbc, (xsp+174)
@@ -2281,7 +2281,7 @@ AcTrAsGridBoxProc:
 	jrl z, TrAsGrid_GetDirectionLabel
 	cp xwa, 0x1e0008a
 	jrl z, TrAsGrid_GetWidgetLabel
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, TrAsGrid_HandleInit
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -2317,7 +2317,7 @@ TrAsGrid_InitDispatch:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
@@ -2355,7 +2355,7 @@ TrAsGrid_InitDispatch:
 	jr nz, TrAsGrid_ScrollDown
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	dec 3, l
@@ -2366,7 +2366,7 @@ TrAsGrid_InitDispatch:
 TrAsGrid_ScrollDown:
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	inc 5, l
@@ -2377,7 +2377,7 @@ TrAsGrid_ApplyScrollOffset:
 	calr TrAsGrid_LookupByteTable
 	ld (0x021082:24), l
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 6), hl
@@ -2479,7 +2479,7 @@ TrAsGrid_HandleOtherEvent:
 	jr nz, TrAsGrid_ScrollDown2
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	dec 1, l
@@ -2490,7 +2490,7 @@ TrAsGrid_HandleOtherEvent:
 TrAsGrid_ScrollDown2:
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	inc 7, l
@@ -2501,7 +2501,7 @@ TrAsGrid_ApplyScrollOffset2:
 	calr TrAsGrid_LookupByteTable
 	ld (0x021082:24), l
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 6), hl
@@ -2790,7 +2790,7 @@ TrAsGridCheck:
 TrAsGridCheck_Cases:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -2895,7 +2895,7 @@ TrAsGrid_CheckTrackType_Join2:
 	jrl	TrAsGrid_CheckTrackType_Join5
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -3025,7 +3025,7 @@ TrAsGridChk_HandleResizeEvent:
 	jrl nz, TrAsGridChk_ReturnZero
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3084,7 +3084,7 @@ TrAsGridChk_Part2_PushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3127,7 +3127,7 @@ TrAsGridChk_Part2_UpPushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3185,7 +3185,7 @@ TrAsGridChk_Part3_PushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3228,7 +3228,7 @@ TrAsGridChk_Part3_UpPushCmd:
 	inc 8, xsp
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (xsp + 16)
@@ -3384,7 +3384,7 @@ AcDemoSongBoxProc:
 	ld xwa, (xsp + 12)
 	cp xwa, 0x1c00007
 	jr z, AcDemoSong_HandleResize
-	cp xwa, 0x1c00002
+	cp xwa, EVT_SELECT_CONFIRM
 	jr z, AcDemoSong_HandleInit
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
@@ -3456,9 +3456,9 @@ AcCurrentSongBoxProc:
 	jr z, AcCurSongName_HandleFocusGained
 	cp xbc, 0x1c0000b
 	jr z, AcCurSongName_HandleFocusGained
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcCurSong_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcCurSong_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -3490,7 +3490,7 @@ AcCurSongName_HandleFocusGained:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 AcCurSong_ReturnZero:
@@ -3512,9 +3512,9 @@ AcCurSongNameBoxProc:
 	jr z, AcCurSongName_HandleFocusAndInit
 	cp xbc, 0x1c0000b
 	jr z, AcCurSongName_HandleFocusAndInit
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, AcCurSongName_HandleEvent1
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, AcCurSongName_HandleEvent2
 	ld xwa, xiz
 	call InheritedProc
@@ -3551,7 +3551,7 @@ AcCurSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	pushw 0x0
 	pushw 0x1c50
@@ -3561,7 +3561,7 @@ AcCurSongName_HandleEventF:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 ; SmfMuteChSelFunc title setup
@@ -3779,7 +3779,7 @@ AcMuteToggleBoxProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, AcMuteToggle_HandleInit
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -4014,9 +4014,9 @@ AcDemoMedleyDispBoxProc:
 	jr z, AcDemoMedley_HandleScrollEvent
 	cp xbc, 0x1c0000b
 	jr z, AcDemoMedley_HandleScrollEvent
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, DemoMedDsp_LoadEntry
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, DemoMedDsp_HandleDefault
 	ld xwa, xiz
 	call InheritedProc
@@ -4052,7 +4052,7 @@ DPPlayDsp_CheckEntry:
 	inc 8, xsp
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 
 ; DPPlayDspCheck return path
@@ -4506,9 +4506,9 @@ AcPanicEditSwProc:
 	ld xwa, (xsp + 4)
 	cp xwa, 0x1c00009
 	jrl z, AcPanicEditSw_HandleLostInherited
-	cp xwa, 0x1c00008
+	cp xwa, EVT_ACTIVATE
 	jr z, AcPanicEditSw_HandleFocus
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jr z, AcPanicEditSw_HandleInit
 	ld xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
@@ -4525,7 +4525,7 @@ AcPanicEditSw_HandleInit:
 	ld xde, 0:i3
 	ld e, (xhl + 40)
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	jr AcPanicEditSw_ReturnZero
 
@@ -4621,7 +4621,7 @@ AcPanicEditSw_Epilogue:
 	ret
 
 PanicFunc:
-	cp xbc, 0x1c00008
+	cp xbc, EVT_ACTIVATE
 	jr nz, PanicFunc_ReturnZero
 	ld xwa, 0x148002b
 	ld xbc, 0x1e80076
@@ -4719,9 +4719,9 @@ HelpMenuCheck_ReturnZero:
 HelpLangChkFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, HelpLangChk_CheckIzZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, HelpLang_ReturnZero
 	ld xwa, 0x1480028
 	ld xde, xiz
@@ -4748,7 +4748,7 @@ HelpLangChk_CheckIzZero:
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x1480029
@@ -4762,7 +4762,7 @@ HelpLang_ReturnZero:
 	ret
 
 EdMenuPageFunc:
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, HelpFuncCheck_Return
 	or xde, xde
 	jr nz, HelpFuncCheck_Return
@@ -4781,9 +4781,9 @@ HelpFuncCheck_Return:
 HelpFuncChkFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, HelpFunc_CheckIzZero
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jrl nz, HelpFunc_ReturnZero
 	or xiz, xiz
 	jrl nz, HelpFunc_ReturnZero
@@ -4821,7 +4821,7 @@ HelpFunc_CheckIzZero:
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000ee
 	call PostEvent
 	ld xwa, 0x1480029
@@ -4849,9 +4849,9 @@ HelpTtlProc:
 	lda xsp, (xsp - 74)
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000d
+	cp xbc, EVT_POST_INIT
 	jr z, HelpTtlProc_HandleActivation
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, HelpTtlProc_HandleActivation
 	ld xwa, xiz
 	call InheritedProc
@@ -4948,9 +4948,9 @@ IvSdrevProc:
 	ld (xsp + 8), xwa
 	cp xiz, 0x1e0003a
 	jr z, IvSdrev_CopyString
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jr z, IvSdrev_HandleFocus
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, IvSdrev_CheckParam
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -4986,7 +4986,7 @@ IvSdrev_HandleFocus:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	jr IvSdrev_ReturnZero
@@ -5016,9 +5016,9 @@ IvSddspProc:
 	ld xwa, (xsp + 6)
 	cp xwa, 0x1e0003a
 	jrl z, IvSddsp_CopyString
-	cp xwa, 0x1c0000d
+	cp xwa, EVT_POST_INIT
 	jr z, IvSddsp_HandleFocus
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, IvSddsp_CheckParam
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 6)
@@ -5063,7 +5063,7 @@ IvSddsp_HandleFocus:
 	ld xde, (xsp + 2)
 	call InheritedProc
 	ld xwa, (xsp + 10)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	jr IvSddsp_ReturnZero
@@ -5092,9 +5092,9 @@ IvSdaccProc:
 	ld (xsp + 8), xwa
 	cp xiz, 0x1e0003a
 	jr z, IvSdacc_CopyString
-	cp xiz, 0x1c0000d
+	cp xiz, EVT_POST_INIT
 	jr z, IvSdacc_HandleFocus
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, IvSdacc_CheckParam
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5130,7 +5130,7 @@ IvSdacc_HandleFocus:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0:i3
 	call SendEvent
 	jr IvSdacc_ReturnZero
@@ -5333,7 +5333,7 @@ AcIndexWideToggleProc:
 	jrl z, AcIndexToggle_HandleFocusLost
 	cp xiz, 0x1c00007
 	jr z, AcIndexToggle_HandleSelectEvent
-	cp xiz, 0x1c00001
+	cp xiz, EVT_MENU_OPEN
 	jr z, AcIndexToggle_HandleInit
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -5405,7 +5405,7 @@ AcIndexToggle_SendVisibility:
 	ld xbc, 0x1e80070
 	call ApFuncCall
 	ld xwa, Bitmap_MIDIConnections_2_0x3BB0
-	ld xbc, 0x1c0000d
+	ld xbc, EVT_POST_INIT
 	ld xde, 0:i3
 	jrl SendNoteDeleteEvent
 
@@ -5665,7 +5665,7 @@ StsAtPunchCheck_ReturnZero:
 	ret
 
 MsgToTtlProc:
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jp nz, (InheritedProc:24)
 	call InheritedProc
 	call GetTitleOld
@@ -5716,7 +5716,7 @@ NoteEditBoxProc:
 	jrl z, NoteEdit_FormatDispatch
 	cp xiz, 0x1c80004
 	jrl z, NoteEditBox_GridDispatch2
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jr z, NoteEditBox_HandleFocusLost
 	cp xiz, 0x1c0000b
 	jr z, NoteEditBox_HandleFocusGained
@@ -6058,11 +6058,11 @@ NoteEditBox_EventDispatch2_Skip3:
 	call	DrawLine
 	jrl	NoteEdit_ReturnZero
 	ld	xwa, 0x950014
-	ld	xbc, 0x01c0000d
+	ld	xbc, EVT_POST_INIT
 	ld	xde, (xsp+90)
 	jr	NoteEditBox_EventDispatch2_Join
 	ld	xwa, 0x980011
-	ld	xbc, 0x01c0000d
+	ld	xbc, EVT_POST_INIT
 	ld	xde, (xsp+90)
 NoteEditBox_EventDispatch2_Join:
 	call	SendEvent
@@ -6937,7 +6937,7 @@ SngSel2_HandleTimerResetEvent:
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	call InheritedProc
-	ld xwa, 0x1c00002
+	ld xwa, EVT_SELECT_CONFIRM
 	push xwa
 	ld xwa, 0:i3
 	push xwa
@@ -6966,7 +6966,7 @@ SngSelProc:
 	jrl z, SngSel_HandleScrollEvent
 	cp xiz, 0x1c00017
 	jrl z, SngSel_HandleScrollEvent
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jr z, SngSel_HandleEventF
 	cp xiz, 0x1c0000b
 	jr z, SngSel_HandleEventB
@@ -7150,11 +7150,11 @@ PlySngSelFunc:
 	ld xhl, xwa
 	cp xbc, 0x1c00007
 	jr z, PlySngSel_HandleSelectEvent
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, PlySngSel_HandleTimerEvent
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, PlaySong_ReturnZero
-	ld xwa, 0x1c00002
+	ld xwa, EVT_SELECT_CONFIRM
 	push xwa
 	ld xwa, 0:i3
 	push xwa
@@ -7170,7 +7170,7 @@ PlySngSel_HandleTimerEvent:
 	cp xhl, 0x1a00081
 	jr nz, PlySngSel_ClearFlagAndReturn
 	ld xwa, 0x810012
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call SendEvent
 
@@ -7185,7 +7185,7 @@ PlySngSel_HandleSelectEvent:
 	ld xwa, 0:i3
 
 PlySngSel_ResetTimerCommon:
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	push xbc
 	ld xbc, 0:i3
 	push xbc
@@ -7203,11 +7203,11 @@ PlySngSel2Func:
 	bit 2, (1057:16)
 	jr nz, EntGrid_InitDispatch
 	ld xwa, 0x810012
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 5:i3
 	call SendEvent
 	ld xwa, 0x810016
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call SendEvent
 
@@ -7234,7 +7234,7 @@ AcEntertainerGridBoxProc:
 	jrl z, EntGrid_PostReturn
 	cp xwa, 0x1e0008a
 	jrl z, EntGrid_PostEvent
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, AcEntertainer_EventDispatch
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -7257,7 +7257,7 @@ AcEntertainer_EventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -7303,7 +7303,7 @@ EntGrid_PostMainEvent:
 	or xhl, xhl
 	jr z, EntGrid_CheckOverflow1
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -7361,7 +7361,7 @@ EntGrid_CheckOverflow1:
 	or xhl, xhl
 	jr z, EntGrid_CheckOverflow2
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -7540,7 +7540,7 @@ EntertainerGridCheck:
 SndParam_Dispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+58), xhl
@@ -7592,7 +7592,7 @@ SndParam_Dispatch_Join:
 	jrl	SndParam_Dispatch_Join3
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x01e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+58), xhl
@@ -8176,7 +8176,7 @@ SqplyValProc:
 	jrl z, SqplyVal_HandleDownScrollEvent
 	cp xwa, 0x1c00017
 	jrl z, SqplyVal_HandleUpScrollEvent
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jrl z, SqplyVal_HandleScrollEvent
 	cp xwa, 0x1c0000b
 	jr z, SqplyVal_HandleInitEvent
@@ -8232,11 +8232,11 @@ SqplyVal_CheckMode81:
 	cp l, 0x81
 	jr nz, SqplyVal_DispatchUpdate
 	ld xwa, 0x810016
-	ld xbc, 0x1c00002
+	ld xbc, EVT_SELECT_CONFIRM
 	ld xde, 5:i3
 	call SendEvent
 	ld xwa, 0x810012
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	call SendEvent
 	ld (0xe38e:16), 0
@@ -8636,7 +8636,7 @@ SqplyVal_SelectTrack:
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	ld a, (xsp + 2)
 	cp a, (xsp + 4)
@@ -8654,7 +8654,7 @@ SqplyVal_SelectTrack:
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr SqplyVal_DispatchScrollCmd
 
 SqplyVal_SelectTrack_SetPart1:
@@ -8682,7 +8682,7 @@ SqplyVal_SelectTrack_NegRange:
 	exts de
 	exts xde
 	ld xwa, (xsp + 68)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 SqplyVal_DispatchScrollCmd:
 	call SendEvent
@@ -8708,7 +8708,7 @@ SqedtValProc:
 	jrl z, SqedtVal_HandleDownScrollEvent
 	cp xwa, 0x1c00017
 	jrl z, SqedtVal_HandleUpScrollEvent
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jr z, SqedtVal_HandleScrollEvent
 	cp xwa, 0x1c0000b
 	jr z, SqedtVal_HandleInitEvent
@@ -9083,7 +9083,7 @@ SqedtVal_SelectDispatch:
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	call SendEvent
 	ldto_berp A, 0xfb
 	cp a, (xsp + 2)
@@ -9101,7 +9101,7 @@ SqedtVal_SelectDispatch:
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	jr SqedtVal_DispatchScrollCmd
 
 SqedtVal_Select_NegRange:
@@ -9117,7 +9117,7 @@ SqedtVal_Select_NegRange:
 	exts de
 	exts xde
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 
 SqedtVal_DispatchScrollCmd:
 	call SendEvent
@@ -9990,7 +9990,7 @@ SqedtVal3Proc:
 	jrl z, SqedtVal3_HandleSelectEvent2
 	cp xiz, 0x1c00017
 	jrl z, SqedtVal3_HandleSelectEvent1
-	cp xiz, 0x1c0000f
+	cp xiz, EVT_INIT_HOOK
 	jr z, SqedtVal3_HandleScrollEvent
 	cp xiz, 0x1c0000b
 	jr z, SqedtVal3_HandleInitEvent
@@ -10329,7 +10329,7 @@ SqedtVal2Proc:
 	jrl z, SqedtVal2_HandleSelectEvent
 	cp xwa, 0x1c0000e
 	jrl z, SqedtVal2_HandleUpScrollEvent
-	cp xwa, 0x1c0000f
+	cp xwa, EVT_INIT_HOOK
 	jrl z, SqedtVal2_HandleScrollEvent
 	cp xwa, 0x1c0000b
 	jr z, SqedtVal2_HandleInitEvent
@@ -10832,27 +10832,27 @@ SqedtVal2_CheckModeA2:
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_CheckModeA4
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x14
 	jrl SqedtVal2_SendScrollAndDial
 
@@ -10860,45 +10860,45 @@ SqedtVal2_CheckModeA4:
 	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_DefaultScrollSend
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1a
 	jr SqedtVal2_SendScrollAndDial
 
 SqedtVal2_DefaultScrollSend:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1e
 
 SqedtVal2_SendScrollAndDial:
@@ -10948,27 +10948,27 @@ SqedtVal2_SelectCase3_ModeA2:
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_SelectCase3_ModeA4
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x14
 	jrl SqedtVal2_SelectCase3_SendDial
 
@@ -10976,45 +10976,45 @@ SqedtVal2_SelectCase3_ModeA4:
 	cp (xsp + 6), 0xa4
 	jr nz, SqedtVal2_SelectCase3_Default
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1a
 	jr SqedtVal2_SelectCase3_SendDial
 
 SqedtVal2_SelectCase3_Default:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1e
 
 SqedtVal2_SelectCase3_SendDial:
@@ -11185,19 +11185,19 @@ SqedtVal2_UpInner_SendExtra:
 	ld xbc, 0x1c0000e
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1e
 	jrl SqedtVal2_UpInner_SendDial
 
@@ -11225,53 +11225,53 @@ SqedtVal2_UpInner_SendFields:
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_UpInner_ModeA4Scroll
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x14
 	jr SqedtVal2_UpInner_SendDial
 
 SqedtVal2_UpInner_ModeA4Scroll:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1a
 
 SqedtVal2_UpInner_SendDial:
@@ -11327,19 +11327,19 @@ SqedtVal2_DownInner_CheckA8:
 
 SqedtVal2_DownInner_SendFields:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1b
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1c
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1d
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1e
 	jrl SqedtVal2_DownInner_SendDial
 
@@ -11367,53 +11367,53 @@ SqedtVal2_DownInner_SendExtra:
 	cp (xsp + 6), 0xa2
 	jr nz, SqedtVal2_DownInner_ModeA4Scroll
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0xf
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x10
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x11
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x12
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x13
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x14
 	jr SqedtVal2_DownInner_SendDial
 
 SqedtVal2_DownInner_ModeA4Scroll:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x15
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x16
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x17
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x18
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x19
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000f
+	ld xbc, EVT_INIT_HOOK
 	ld xde, 0x1a
 
 SqedtVal2_DownInner_SendDial:
@@ -13355,7 +13355,7 @@ EqOnOffFuncToggleProc:
 	ld xiz, xwa
 	cp xbc, 0x1c0001c
 	jr z, EqOnOff_CheckValue
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr z, EqOnOff_HandleToggleOn
 	ld xwa, xiz
 	call InheritedProc
@@ -15467,58 +15467,58 @@ Equalizer_CmdDispatch:
 ; Equalizer command case 0
 Equalizer_CmdCase0:
 	ld xwa, 0x900009
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jrl ParamCmd_SendAndReturnZero
 
 ; Equalizer command case 1
 Equalizer_CmdCase1:
 	ld xwa, 0x91000b
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jrl ParamCmd_SendAndReturnZero
 	ld xwa, 0x9a0006
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jrl ParamCmd_SendAndReturnZero
 	ld xwa, 0x9b000f
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0x9c000e
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0x9d000a
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0x9e000a
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0x9f0012
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0xa0000a
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0xa20009
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0xa30009
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0xa40009
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 	jr ParamCmd_SendAndReturnZero
 	ld xwa, 0xa1000a
-	ld xbc, 0x1c00001
+	ld xbc, EVT_MENU_OPEN
 	ld xde, 5:i3
 
 ParamCmd_SendAndReturnZero:
@@ -15782,7 +15782,7 @@ MimeOnOff_PostAndReturn:
 
 TrkMixerIntTtlFunc:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00016
+	ld xbc, EVT_HD_INIT_PARAMS
 	ld xde, 0x1a000a5
 	call PostEvent
 	ld xhl, 0:i3
@@ -15790,11 +15790,11 @@ TrkMixerIntTtlFunc:
 
 
 BitmapNtedt0k:
-	cp xbc, 0x1e000a3
+	cp xbc, EVT_ALLOC_HEIGHT
 	jr z, BitmapNtedt0k_GetHeight
-	cp xbc, 0x1e000a2
+	cp xbc, EVT_ALLOC_WIDTH
 	jr z, BitmapNtedt0k_GetWidth
-	cp xbc, 0x1e000a1
+	cp xbc, EVT_ALLOC_DATA_PTR
 	jr z, BitmapNtedt0k_GetAddress
 	ld xhl, 0:i3
 	ret
@@ -15813,11 +15813,11 @@ BitmapNtedt0k_GetHeight:
 
 
 BitmapNtedt0d:
-	cp xbc, 0x1e000a3
+	cp xbc, EVT_ALLOC_HEIGHT
 	jr z, BitmapNtedt0d_GetHeight
-	cp xbc, 0x1e000a2
+	cp xbc, EVT_ALLOC_WIDTH
 	jr z, BitmapNtedt0d_GetWidth
-	cp xbc, 0x1e000a1
+	cp xbc, EVT_ALLOC_DATA_PTR
 	jr z, BitmapNtedt0d_GetAddress
 	ld xhl, 0:i3
 	ret
@@ -15836,11 +15836,11 @@ BitmapNtedt0d_GetHeight:
 
 
 BitmapDredt0k:
-	cp xbc, 0x1e000a3
+	cp xbc, EVT_ALLOC_HEIGHT
 	jr z, BitmapDredt0k_GetHeight
-	cp xbc, 0x1e000a2
+	cp xbc, EVT_ALLOC_WIDTH
 	jr z, BitmapDredt0k_GetWidth
-	cp xbc, 0x1e000a1
+	cp xbc, EVT_ALLOC_DATA_PTR
 	jr z, BitmapDredt0k_GetAddress
 	ld xhl, 0:i3
 	ret
@@ -15858,11 +15858,11 @@ BitmapDredt0k_GetHeight:
 	ret
 
 BitmapDredt0d:
-	cp xbc, 0x1e000a3
+	cp xbc, EVT_ALLOC_HEIGHT
 	jr z, BitmapDredt0d_ReturnSize77
-	cp xbc, 0x1e000a2
+	cp xbc, EVT_ALLOC_WIDTH
 	jr z, BitmapDredt0d_ReturnSizeA8
-	cp xbc, 0x1e000a1
+	cp xbc, EVT_ALLOC_DATA_PTR
 	jr z, BitmapDredt0d_ReturnDataPtr
 	ld xhl, 0:i3
 	ret

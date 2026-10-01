@@ -23,9 +23,9 @@ TtComputerConnection:
 	jr	z, 60
 	cp	xbc, 29360139
 	jr	z, 52
-	cp	xbc, 29360130
+	cp	xbc, EVT_SELECT_CONFIRM
 	jr	z, 44
-	cp	xbc, 29360129
+	cp	xbc, EVT_MENU_OPEN
 	jr	nz, 36
 	or	xde, xde
 	jr	nz, 32
@@ -34,7 +34,7 @@ TtComputerConnection:
 	jr	nz, 24
 	ld	(32422:16), 70
 	ld	xwa, 4294967295
-	ld	xbc, 29360150
+	ld	xbc, EVT_HD_INIT_PARAMS
 	ld	xde, 27263214
 	call	16421701
 ComputerConnectionTitleExit:

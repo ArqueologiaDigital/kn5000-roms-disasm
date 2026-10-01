@@ -283,7 +283,7 @@ Seq_StartWithFullInit:
 	ld	xde, 0:i3
 	jrl	Seq_DispatchMainFunc
 	ld	xwa, 15597590
-	ld	xbc, 29360130
+	ld	xbc, EVT_SELECT_CONFIRM
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, 4294967295
@@ -8381,7 +8381,7 @@ FileIO_DiskRemoved:
 	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 6291458
-	ld	xbc, 31457436
+	ld	xbc, EVT_POST_ACTIVATE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ret

@@ -16,9 +16,9 @@ TtMdPcgOut:
 	jr z, TtMdPcgOut_Exit
 	cp xbc, 0x1c0000b
 	jr z, TtMdPcgOut_Exit
-	cp xbc, 0x1c00002
+	cp xbc, EVT_SELECT_CONFIRM
 	jr z, TtMdPcgOut_Exit
-	cp xbc, 0x1c00001
+	cp xbc, EVT_MENU_OPEN
 	jr nz, TtMdPcgOut_Exit
 	or xde, xde
 	jr nz, TtMdPcgOut_Exit
@@ -47,7 +47,7 @@ AcPcgOutGridBoxProc:
 	jrl z, PcgOutGrid_CopyStrBank1
 	cp xwa, 0x1e0008a
 	jrl z, PcgOutGrid_CopyStrBank0
-	cp xwa, 0x1c00001
+	cp xwa, EVT_MENU_OPEN
 	jr z, PcgOutGridBoxEventDispatch
 	sub xbc, 0x1c00017
 	cp xbc, 0x0
@@ -69,7 +69,7 @@ PcgOutGridBoxEventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -108,7 +108,7 @@ PcgOutGridBoxEventDispatch:
 	or xhl, xhl
 	jr z, PcgOutGrid_CheckAltPrev
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
@@ -162,7 +162,7 @@ PcgOutGrid_CheckAltPrev:
 	or xhl, xhl
 	jr z, PcgOutGrid_CheckAltNext
 	ld xwa, xiz
-	ld xbc, 0x1e0008f
+	ld xbc, EVT_OBJECT_STATE_QUERY
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 3:i3
@@ -297,7 +297,7 @@ PcgOutGridCheck:
 PcgOutGridCheckJumpTable:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -388,7 +388,7 @@ PcgOutGridCheckJumpTable_Skip6:
 	jrl	PcgOutGridCheckJumpTable_Join4
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1e0008f
+	ld	xbc, EVT_OBJECT_STATE_QUERY
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -888,7 +888,7 @@ PcgOutGridCheckComplete:
 	ret
 
 PcgOutSendFunc:
-	cp xbc, 0x1c00008
+	cp xbc, EVT_ACTIVATE
 	jr nz, PcgOutSendFunc_Exit
 	lda xde, (0x024752:24)
 	ld a, (0x02476a:24)
