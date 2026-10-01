@@ -67,7 +67,7 @@ if [ "$(type -t grep 2>/dev/null)" != "function" ]; then
     echo "  directly, where the hazard does not exist."
     echo "  Re-run as:  source scripts/analysis/grep_encoding_hazard_probe.sh"
     echo "  NO CONCLUSION DRAWN."
-    rm -rf "$_d"
+    rm -rf -- "${_d:?}"
     return 2 2>/dev/null || exit 2
 fi
 
@@ -85,7 +85,7 @@ for _f in ok.bin moji.bin bad.bin; do
     printf '  %-9s plain=%-7s(rc %d)  -a=%-7s(rc %d)  expect %-6s  %s\n' \
            "$_f" "$_plain" "$_prc" "$_anyb" "$_arc" "$_want" "$_st"
 done
-rm -rf "$_d"
+rm -rf -- "${_d:?}"
 
 echo
 if [ "$_fail" -ne 0 ]; then

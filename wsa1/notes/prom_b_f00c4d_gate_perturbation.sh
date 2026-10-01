@@ -26,7 +26,7 @@ set -u
 SRC=wsa1/prom_b/wsa1_prom_b.s
 [ -f "$SRC" ] || { echo "run me from the repository root (the dir with wsa1/)"; exit 2; }
 KEEP=$(mktemp); cp "$SRC" "$KEEP"
-trap 'cp "$KEEP" "$SRC"; rm -f "$KEEP"' EXIT
+trap 'cp "$KEEP" "$SRC"; rm -f -- "${KEEP:?}"' EXIT
 
 flip () {   # flip <exact old line> <exact new line>
   python3 - "$1" "$2" "$SRC" <<'PY'

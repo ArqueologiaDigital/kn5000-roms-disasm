@@ -21,7 +21,7 @@ OUT="${1:?usage: run_dsp_arm.sh <out.log.gz>}"
 OVERLAY="${OVERLAY:-$HOME/compartilhado/kn7000_mame}"
 TREE="${TREE:-$HOME/compartilhado/kn7000_mame_build}"
 EMU="${EMU:-$HOME/compartilhado/kn7000-emulator}"
-RIG="$(mktemp -d)"; trap 'rm -rf "$RIG"' EXIT
+RIG="$(mktemp -d)"; trap 'rm -rf -- "${RIG:?}"' EXIT
 mkdir -p "$RIG/cfg" "$RIG/nvram"
 
 # The DSP research build.  build.sh assembles the tree and links a binary with

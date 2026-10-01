@@ -19,4 +19,4 @@ if [ $OFF -lt 0 ]; then echo "address 0x$(printf %06X $ADDR) is below base of RO
 T=$(mktemp)
 dd if="$F" of="$T" bs=1 skip=$OFF count=$N status=none
 $UNIDASM "$T" -arch tlcs900 -basepc $(printf 0x%X $ADDR)
-rm -f "$T"
+rm -f -- "${T:?}"
