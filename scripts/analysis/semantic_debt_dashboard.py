@@ -16,6 +16,17 @@ COLUMNS (each is a count of source lines or tokens; lower is better)
            `sub_E04FB9:`, `loc_...`, `Unknown_...`, `Unk_...`, `Data_E04FB9:`, `Label_...`,
            i.e. a name that says "I am at this address" rather than what the thing is.
            Positional sub-labels of a named parent (`Foo_0x32D`, `Foo_Loop`) are NOT counted.
+  numaddr  NON-branch instruction operands that are a numeric ROM-range address
+           (0x800000 <= value < 0x1000000):
+           `lda xix, 0xeec044`, `ld xiy, 16165950`, `lda_24 xix, (0xfea84f)` -- data references
+           the branch metric above does not count (found by the 2026-10-02 review of Wave 2).
+           ROM-range only, so RAM/SFR addresses and small constants are never counted; on wsa1
+           and maincpu trees every hit is a cross-reference that should be a label.
+  numevt   instruction operands that are a numeric firmware EVENT CODE / class id
+           (0x01000000 <= value < 0x02000000: `cp xbc, 0x1e10000`, `ld xbc, 0x1c00001`).
+           CLAUDE.md "Event Code Freshness" wants these spelled as EVT_* / class constants.
+           On 2026-10-02 these were 9,230 of the 9,909 "big" operands in v10, so they are
+           counted apart from numaddr rather than inflating it.
   bytecmt  `.byte` lines whose comment carries an instruction reading (`; ld a, (xwa)`,
            `; MAME: ...`) -- code still held as bytes. An upper bound: some are data annotated
            with a decode on purpose.
@@ -46,6 +57,8 @@ TREES = {
 NUMBR = re.compile(rb'^\s*(\S+:)?\s*(jr|jrl|calr|call|jp|djnz)\s+([a-z]+,\s*)?(-?[0-9]+|0x[0-9a-fA-F]+)\s*(;.*)?$', re.M)
 ADDRLBL = re.compile(rb'^(?:LABEL|Label|label|sub|SUB|loc|LOC|Unknown|UNKNOWN|Unk|UNK|unk|Data|DATA|data|byte|word|off|Sub|Loc)_(?:0x)?[0-9A-Fa-f]{4,8}:', re.M)
 BYTECMT = re.compile(rb'^\s*(\S+:)?\s*\.byte\b[^;\n]*;\s*(?:MAME:|unidasm:|=\s*)?\s*(ld|lda|ldw|ldb|push|pop|call|calr|jp|jr|jrl|ret|reti|add|sub|and|or|xor|cp|inc|dec|bit|set|res|tset|ex|mul|div|sll|srl|sla|sra|rlc|rrc|rl|rr|ldir|lddr|ldi|ldd|swi|ei|nop|halt|link|unlk|djnz|scc|neg|cpl|extz|exts|mirr|paa|incf|decf|ldf|ldc|ldx)\b', re.M | re.I)
+NUMADDR = re.compile(rb'^\s*(?:\S+:)?\s*(?!jr\b|jrl\b|calr\b|call\b|jp\b|djnz\b|\.)([a-z_][a-z0-9_]*)\s+([^;\n]*)', re.M)
+LIT = re.compile(rb'(?<![\w.$])(0x[0-9a-fA-F]+|\d{7,})(?![\w.$])')
 FIELD = re.compile(rb'\b(?:field|unk|unknown|pad)_(?:0x)?[0-9A-Fa-f]{2,6}\b')
 TODO = re.compile(rb'(?:;|//|/\*|#).*?(?:\bTODO\b|\bFIXME\b|\bunknown\b|\bpurpose unknown\b|\?\?\?)', re.I)
 
@@ -75,7 +88,7 @@ def blobs(rev, path):
 
 
 def measure(rev, path):
-    c = dict(numbr=0, addrlbl=0, bytecmt=0, field=0, todo=0, files=0)
+    c = dict(numbr=0, numaddr=0, numevt=0, addrlbl=0, bytecmt=0, field=0, todo=0, files=0)
     for name, data in blobs(rev, path):
         c["files"] += 1
         if name.endswith(C_EXT):
@@ -83,6 +96,12 @@ def measure(rev, path):
             c["todo"] += len(TODO.findall(data))
             continue
         c["numbr"] += len(NUMBR.findall(data))
+        for m in NUMADDR.finditer(data):
+            vals = [int(x, 0) for x in LIT.findall(m.group(2))]
+            if any(0x800000 <= v < 0x1000000 for v in vals):
+                c["numaddr"] += 1
+            if any(0x1000000 <= v < 0x2000000 for v in vals):
+                c["numevt"] += 1
         c["addrlbl"] += len(ADDRLBL.findall(data))
         c["bytecmt"] += len(BYTECMT.findall(data))
         c["todo"] += len(TODO.findall(data))
@@ -97,7 +116,7 @@ def main():
     a = ap.parse_args()
     short = subprocess.run(["git", "-C", REPO, "rev-parse", "--short", a.rev],
                            capture_output=True, text=True, check=True).stdout.strip()
-    cols = ["files", "numbr", "addrlbl", "bytecmt", "field", "todo"]
+    cols = ["files", "numbr", "numaddr", "numevt", "addrlbl", "bytecmt", "field", "todo"]
     tot = dict.fromkeys(cols, 0)
     rows = []
     for t in a.trees.split(","):
