@@ -1,0 +1,172 @@
+[
+ {
+  "label": "SeMenu_Utility_FormatHex",
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "start": "0xf0ff2d",
+  "end": "0xf0ff4a",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "normal"
+  ]
+ },
+ {
+  "label": "SeMenu_Utility_FormatHex_Data",
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "start": "0xf0ff6f",
+  "end": "0xf0ff8c",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "normal"
+  ]
+ },
+ {
+  "label": "SeMenu_FilterEdit_DataBlock5",
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "start": "0xf10a7f",
+  "end": "0xf10aa4",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "normal"
+  ]
+ },
+ {
+  "label": "AccPart_VoiceParamOffsets_BaseA",
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xf56142",
+  "end": "0xf56150",
+  "uses": {
+   "data": 15
+  },
+  "absurd": [
+   "halt",
+   "normal"
+  ]
+ },
+ {
+  "label": "AccPart_VoiceParamOffsets_BaseB",
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xf56150",
+  "end": "0xf5615e",
+  "uses": {
+   "data": 5
+  },
+  "absurd": [
+   "halt"
+  ]
+ },
+ {
+  "label": "AccPart_VoiceParamOffsets_ChordA",
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xf5615e",
+  "end": "0xf5616c",
+  "uses": {
+   "data": 15
+  },
+  "absurd": [
+   "halt",
+   "max"
+  ]
+ },
+ {
+  "label": "AccPart_VoiceParamOffsets_ChordB",
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "start": "0xf5616c",
+  "end": "0xf5617a",
+  "uses": {
+   "data": 5
+  },
+  "absurd": [
+   "halt"
+  ]
+ },
+ {
+  "label": "TempoScale_8Beats",
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xf6ec08",
+  "end": "0xf6ec17",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "swi"
+  ]
+ },
+ {
+  "label": "TempoScale_7Beats",
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xf6ec17",
+  "end": "0xf6ec25",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "swi"
+  ]
+ },
+ {
+  "label": "TempoScale_6Beats",
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xf6ec25",
+  "end": "0xf6ec32",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "swi"
+  ]
+ },
+ {
+  "label": "TempoScale_5Beats",
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xf6ec32",
+  "end": "0xf6ec3e",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "swi"
+  ]
+ },
+ {
+  "label": "TempoScale_4Beats",
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xf6ec3e",
+  "end": "0xf6ec49",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "swi"
+  ]
+ },
+ {
+  "label": "TempoScale_3Beats",
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xf6ec49",
+  "end": "0xf6ec53",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "swi"
+  ]
+ },
+ {
+  "label": "TempoScale_2Beats",
+  "file": "v7/maincpu/sequencer/accompseq_routines.s",
+  "start": "0xf6ec53",
+  "end": "0xf6ec5c",
+  "uses": {
+   "data": 1
+  },
+  "absurd": [
+   "swi"
+  ]
+ }
+]

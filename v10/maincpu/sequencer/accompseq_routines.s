@@ -2153,79 +2153,30 @@ AccompSeq_TempoScaleTable:
 	.long TempoScale_7Beats
 	.long TempoScale_8Beats
 TempoScale_8Beats:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	add	a, (xbc)
-	add	a, (xbc)
-	add	a, (xbc)
-	add	d, (xbc)
+	; data, not code: TempoScale_8Beats is reached only as data (1 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
 TempoScale_7Beats:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	add	a, (xbc)
-	add	a, (xbc)
-	add	a, (xbc)
-	.byte 0x84
+	; data, not code: TempoScale_7Beats is reached only as data (1 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
 TempoScale_6Beats:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	add	a, (xbc)
-	add	a, (xbc)
-	add	d, (xbc)
+	; data, not code: TempoScale_6Beats is reached only as data (1 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
 TempoScale_5Beats:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	add	a, (xbc)
-	add	a, (xbc)
-	.byte 0x84
+	; data, not code: TempoScale_5Beats is reached only as data (1 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81, 0x81, 0x81, 0x81, 0x84
 TempoScale_4Beats:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	add	a, (xbc)
-	add	d, (xbc)
+	; data, not code: TempoScale_4Beats is reached only as data (1 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81, 0x81, 0x81, 0x84
 TempoScale_3Beats:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	.byte 0x81
-	add	d, (xbc)
+	; data, not code: TempoScale_3Beats is reached only as data (1 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81, 0x81, 0x84
 TempoScale_2Beats:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	add	d, (xbc)
+	; data, not code: TempoScale_2Beats is reached only as data (1 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x81, 0x84
 TempoScale_1Beat:
-	cp	(xwa), l
-	swi	7
-	swi	7
-	swi	7
-	add	a, (xsp)
-	.byte 0x84
-	jrl	ge, -2320
-	nop
-	jrl	-2320
-	nop
-	.long AccompSeq_InitBankIfNoError
-	.long AccompSeq_VoiceResetStub
+	; data, not code: TempoScale_1Beat is reached only as data (2 data), and its instruction decode held swi (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x80, 0xff, 0xff, 0xff, 0xff, 0x87, 0x81, 0x84, 0x79, 0xf0, 0xf6, 0x00, 0x78, 0xf0, 0xf6, 0x00
+	.byte	0x7e, 0xf0, 0xf6, 0x00, 0x78, 0xf0, 0xf6, 0x00
 
 AccompSeq_VoiceResetStub:
 	ret

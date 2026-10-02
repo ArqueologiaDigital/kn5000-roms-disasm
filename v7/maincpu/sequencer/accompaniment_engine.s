@@ -834,39 +834,17 @@ AccPart_VoiceParamDispatchTable:
 	.long AccPart_VoiceParamOffsets_ChordB
 	.long AccPart_VoiceParamOffsets_ChordB
 AccPart_VoiceParamOffsets_BaseA:
-	nop
-	nop
-	jr	le, 0
-	ld h, (-xwa0)
-	normal
-	ld	h, 5:opc
-	.byte 0x57, 0x01, 0x57
-	halt
+	; data, not code: AccPart_VoiceParamOffsets_BaseA is reached only as data (15 data), and its instruction decode held halt, normal (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x00, 0x00, 0x62, 0x00, 0xc4, 0x00, 0x26, 0x01, 0x26, 0x05, 0x57, 0x01, 0x57, 0x05
 AccPart_VoiceParamOffsets_BaseB:
-	ldw	bc, 0x9300
-	nop
-	.byte 0xf5
-	nop
-	ld	h, 1:opc
-	ld	h, 5:opc
-	.byte 0x57, 0x01, 0x57
-	halt
+	; data, not code: AccPart_VoiceParamOffsets_BaseB is reached only as data (5 data), and its instruction decode held halt (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x31, 0x00, 0x93, 0x00, 0xf5, 0x00, 0x26, 0x01, 0x26, 0x05, 0x57, 0x01, 0x57, 0x05
 AccPart_VoiceParamOffsets_ChordA:
-	nop
-	max
-	jr	le, 4
-	.byte 0xc4, 0x04
-	ld	h, 1:opc
-	ld	h, 5:opc
-	.byte 0x57, 0x01, 0x57
-	halt
+	; data, not code: AccPart_VoiceParamOffsets_ChordA is reached only as data (15 data), and its instruction decode held halt, max (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x00, 0x04, 0x62, 0x04, 0xc4, 0x04, 0x26, 0x01, 0x26, 0x05, 0x57, 0x01, 0x57, 0x05
 AccPart_VoiceParamOffsets_ChordB:
-	ldw	bc, 0x9304
-	.byte 0x04, 0xf5, 0x04
-	ld	h, 1:opc
-	ld	h, 5:opc
-	.byte 0x57, 0x01, 0x57
-	halt
+	; data, not code: AccPart_VoiceParamOffsets_ChordB is reached only as data (5 data), and its instruction decode held halt (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x31, 0x04, 0x93, 0x04, 0xf5, 0x04, 0x26, 0x01, 0x26, 0x05, 0x57, 0x01, 0x57, 0x05
 
 AccPart_LookupBoundVoiceParam:
 	ld w, a

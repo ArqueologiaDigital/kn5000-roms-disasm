@@ -9311,15 +9311,9 @@ SeMenu_Utility_FormatPercent_Data_Skip:
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex:
-	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeScreenData_0x19C0
-	ld	xix, SeScreenData_0x1ACA
-	call	SeGfx_DrawStaticList
-	.byte 0xc1, 0xae, 0x06
-	push	xsp
-	normal
-	jr	z, 4
-	call	SeMenu_Utility_CompareBlock_End
+	; data, not code: SeMenu_Utility_FormatHex is reached only as data (1 data), and its instruction decode held normal (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x1d, 0xcb, 0xfd, 0xf0, 0x45, 0x9c, 0x25, 0xf1, 0x00, 0x44, 0xa6, 0x26, 0xf1, 0x00, 0x1d, 0xd6
+	.byte	0xeb, 0xf0, 0xc1, 0xae, 0x06, 0x3f, 0x01, 0x66, 0x04, 0x1d, 0xb8, 0xfd, 0xf0
 SeMenu_Utility_FormatHex_Skip:
 	call	SeMenu_PresetManager_Data_Helper
 	call	SeMenu_PresetManager_Data_Helper2
@@ -9331,15 +9325,9 @@ SeMenu_Utility_FormatHex_Skip:
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_FormatHex_Data:
-	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeScreenData_0x1ACA
-	ld	xix, SeScreenData_0x1AE1
-	call	SeGfx_DrawStaticList
-	.byte 0xc1, 0xae, 0x06
-	push	xsp
-	normal
-	jr	z, 4
-	call	SeMenu_Utility_CompareBlock_End
+	; data, not code: SeMenu_Utility_FormatHex_Data is reached only as data (1 data), and its instruction decode held normal (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x1d, 0xcb, 0xfd, 0xf0, 0x45, 0xa6, 0x26, 0xf1, 0x00, 0x44, 0xbd, 0x26, 0xf1, 0x00, 0x1d, 0xd6
+	.byte	0xeb, 0xf0, 0xc1, 0xae, 0x06, 0x3f, 0x01, 0x66, 0x04, 0x1d, 0xb8, 0xfd, 0xf0
 SeMenu_Utility_FormatHex_Data_Skip:
 	call	SeMenu_PresetManager_Data_Helper
 	call	SeMenu_PresetManager_Data_Helper2
@@ -10243,17 +10231,10 @@ SeMenu_FilterEdit_DataBlock4:
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 SeMenu_FilterEdit_DataBlock5:
-	call	SeMenu_EqEdit_SetupHelper1
-	.byte 0xc1, 0xae, 0x06
-	push	xsp
-	normal
-	jr	z, 26
-	ld	(0x03efa8:24), 0
-	ld	xiy, SeScreenData_0x3C37
-	ld	xix, SeScreenData_0x3D17
-	call	SeGfx_DrawStaticList
-	call	SeMenu_Utility_CompareBlock_End
-	jr	41
+	; data, not code: SeMenu_FilterEdit_DataBlock5 is reached only as data (1 data), and its instruction decode held normal (scripts/converters/data_as_code_to_bytes.py).
+	.byte	0x1d, 0x1b, 0x0b, 0xf1, 0xc1, 0xae, 0x06, 0x3f, 0x01, 0x66, 0x1a, 0xf2, 0xa8, 0xef, 0x03, 0x00
+	.byte	0x00, 0x45, 0x13, 0x48, 0xf1, 0x00, 0x44, 0xf3, 0x48, 0xf1, 0x00, 0x1d, 0xd6, 0xeb, 0xf0, 0x1d
+	.byte	0xb8, 0xfd, 0xf0, 0x68, 0x29
 SeMenu_FilterEdit_DataBlock5_Skip:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x3C37
