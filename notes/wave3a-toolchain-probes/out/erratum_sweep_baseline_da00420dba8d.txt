@@ -1,0 +1,29 @@
+# Erratum evidence: the two-decoder sweep's da00420dba8d baseline under each classifier version.
+# Binaries: llvm-mc a7ee33d5 (= toolchain-snapshot/llvm-mc.snap.da00420dba8d-a7ee33d5), llvm-objdump 65b8d2e4 (wave3a-scratch/llvm-objdump.65b8).
+# (The 'toolchain:' line prints the llvm-project HEAD at run time, not the binary's commit; the sha256 is the binary.)
+
+## committed classifier (c71a6d51+; the fix round's version with the default probe set):
+##   MC=... OBJDUMP=... python3 notes/wave3a-toolchain-probes/two_decoder_sweep.py --show NONE
+toolchain: llvm-project HEAD d7752a16b6ee, llvm-mc sha256 a7ee33d53676
+probe set: register field 1
+probes: 9984
+  AGREE          2882
+  REG_DIFF       1263
+  MNEM_DIFF       304
+  LEN_DIFF          0
+  LLVM_ONLY        39
+  MAME_ONLY      2722
+  BOTH_REFUSE    2774
+  ASYM            100
+
+## the 09b760eb classifier: git show 09b760eb:notes/wave3a-toolchain-probes/two_decoder_sweep.py
+toolchain: llvm-project HEAD d7752a16b6ee, llvm-mc sha256 a7ee33d53676
+probes: 9984
+  AGREE          2882
+  REG_DIFF       1247
+  MNEM_DIFF       320
+  LEN_DIFF          0
+  LLVM_ONLY        39
+  MAME_ONLY      2722
+  BOTH_REFUSE    2774
+  ASYM            100

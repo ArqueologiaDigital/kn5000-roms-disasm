@@ -847,7 +847,10 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #                 (xbc)), `91 40` `mul xwa, (xbc)` (was mul wa, (xbc)), `d7 fa
 #                 42` `mul xde, qiz`.  The old spellings are REFUSED: `mul wa,
 #                 (xbc)` now names the byte multiply, so no alias could keep
-#                 both readings -- LOCKSTEP respell.  A byte multiply with an
+#                 both readings -- LOCKSTEP respell.  (⚠ ERRATUM 2026-10-02:
+#                 that one old spelling is NOT refused -- `mul wa, (xbc)`
+#                 assembles, as the byte multiply 81 41, as the FOIL below
+#                 shows; every other old MUL/DIV spelling is refused.)  A byte multiply with an
 #                 even register field (MAME `mul ??,A`) is refused.  ⚠ The
 #                 IMMEDIATE forms keep the prefix register (`mul a, 5` = c9 08
 #                 05) because that is MAME's text; ASL writes the result
@@ -942,6 +945,11 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   MAME_ONLY          2,722                847               992 (+145 = the
 #                                             refused even-field byte MUL/DIV)
 #   ASYM (llvm text does not re-encode) 100 -> 42 -> 42;  LEN_DIFF 0 throughout.
+#   ⚠ ERRATUM (2026-10-02): REG_DIFF / MNEM_DIFF in this table are under the
+#   classifier of disasm 09b760eb; c71a6d51 added the ldto_/ldfr_ -> ld family
+#   rule, which moves 16 ERP probes (e7 e4 88..8f / 98..9f) from MNEM_DIFF to
+#   REG_DIFF.  Under the committed classifier the da00420dba8d column reads
+#   REG_DIFF 1,263, MNEM_DIFF 304 (see UPDATE 17 ERRATA at the end).
 
 # UPDATE 17, CONTINUED (2026-09-25): the legacy spellings retired, one more
 # swapped pair found and fixed, and the pin moved to the end of the lane.
@@ -1027,7 +1035,9 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #     binary (notes/wave3a-toolchain-probes/out/gate_final_4867e03232a6.txt).
 #   * two-decoder sweep at the final pin (9,984 probes): AGREE 5,956,
 #     REG_DIFF 126, MNEM_DIFF 95, LEN_DIFF 0, LLVM_ONLY 36, MAME_ONLY 994,
-#     ASYM 40 (was 2,882 / 1,247 / 320 / 0 / 39 / 2,722 / 100 at da00420dba8d).
+#     ASYM 40 (was 2,882 / 1,263 / 304 / 0 / 39 / 2,722 / 100 at da00420dba8d
+#     under the same classifier -- this line first said 1,247 / 320, the
+#     09b760eb classifier's figures; see UPDATE 17 ERRATA).
 #
 # ⚠ WHAT IS STILL FALSE OR UNSPELLABLE (found by the sweep and the respells,
 # NOT fixed here; out/two_decoder_sweep_disagreements_4867e03232a6.tsv lists
@@ -1069,4 +1079,35 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #     direct-address pseudos (convert_direct_address_family.py --all).
 #   * `(xrr+d8)` with a raw byte 0x80..0xFF written positive still warns and
 #     takes d16 (UPDATE 11 policy; `(xrr+D:8)` now spells the d8 choice).
+
+# UPDATE 17 ERRATA (2026-10-02): what the wave 3a V1 verifier panel found
+# wrong IN THIS RECORD (the toolchain findings are UPDATE 18's).  Evidence:
+# notes/wave3a-toolchain-probes/out/erratum_*.txt and fixround/README.md.
+#
+#   * disasm 09b760eb carries the trailer `LLVM: tlcs900_backend@8e188b215251`,
+#     but its tree does not assemble under that binary (a67c5632: `mul8rr`
+#     unrecognized, `mul xbc, xiz` / `div xwa, xde` invalid -- the MUL/DIV
+#     lockstep had not happened yet) and gates 13/13 under da00420dba8d /
+#     a7ee33d5, which is what its own TOOLCHAIN_VERSION names.  Read its
+#     trailer as `LLVM: tlcs900_backend@da00420dba8d
+#     (da00420dba8da43f8d4a25051ddc4df6b37f257d)`.  The tree first builds under
+#     8e188b215251 at bc571542.  09b760eb added only notes and a probe, which
+#     is how its trailer came to name the binary the probe was measured with;
+#     a commit's trailer names the binary ITS OWN TREE builds with.
+#   * The two-decoder sweep's baseline: under the committed classifier
+#     (c71a6d51 and later) da00420dba8d gives AGREE 2,882, REG_DIFF 1,263,
+#     MNEM_DIFF 304, LEN_DIFF 0, LLVM_ONLY 39, MAME_ONLY 2,722, ASYM 100; the
+#     1,247 / 320 quoted above are the 09b760eb classifier's.  Consistent
+#     series: 1,263 -> 126 and 304 -> 95 (committed classifier) or 1,247 -> 94
+#     and 320 -> 127 (09b760eb classifier).  The conclusion does not change.
+#     Reproduced 2026-10-02 with llvm-mc a7ee33d5 + llvm-objdump 65b8d2e4.
+#   * The lda_dri sites left for wave 3b are 4,263 (as above), not "about
+#     4,399" as T1-report.json, the wave 3a README and the 08896b73 message
+#     say: 4,399 was the dry run before the 136 +256 sites were converted.
+#   * `mul wa, (xbc)`: see the erratum inline at 8e188b215251 above.
+#   * disasm 828894fa ("CLAUDE.md: the encoding-quirks table spells what the
+#     pinned assembler accepts") said every example assembled with c949d618;
+#     six did not (`ld_srib3`, `lda_dri3`, `cps` x2, `ldb`, `lds32` -- refused
+#     mnemonics), and a gotcha still described `ldada_24`.  Fixed in 152e9f67,
+#     which adds scripts/analysis/check_encoding_examples.py: 25/25 examples.
 

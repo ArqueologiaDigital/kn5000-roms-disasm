@@ -28,8 +28,21 @@ T1's `not_done` list is the starting point for the next toolchain work:
 - masked-immediate decodes still print false text;
 - ANDCF/ORCF/XORCF `#n,(mem)` have no decode;
 - LD32mi still encodes a dst 0x08 store;
-- about 4,399 `lda_dri` and about 4,600 direct-address pseudo spellings remain for 3b;
+- about 4,263 `lda_dri` and about 4,600 direct-address pseudo spellings remain for 3b
+  (this line first said 4,399, the count before the 136 +256 sites were converted;
+  see Errata);
 - 254 wsa1 "[llvm-mc cannot encode this]" tags remain.
+
+## Errata (2026-10-02, from the V1 verifier panel)
+
+- disasm `09b760eb`'s trailer names 8e188b215251, but that commit's tree builds
+  with da00420dba8d (llvm-mc a7ee33d5) -- read the trailer as
+  `LLVM: tlcs900_backend@da00420dba8d`.  TOOLCHAIN_VERSION "UPDATE 17 ERRATA".
+- The two-decoder sweep's "was" figures (REG_DIFF 1,247, MNEM_DIFF 320 at
+  da00420dba8d) are the 09b760eb classifier's; under the committed one they are
+  1,263 / 304.  `T1-report.json` is kept verbatim and still says 1,247 / 320.
+- "about 4,399 `lda_dri`" left for 3b is 4,263 (corrected above;
+  `T1-report.json` and the 08896b73 message keep the old figure).
 
 ## What each file here answers
 

@@ -1,0 +1,37 @@
+# Erratum evidence: does disasm 09b760eb's tree build with the binary its trailer names?
+# Producer: notes/wave3a-toolchain-probes/fixround/per_commit_gate.sh (V1c verifier, 2026-10-02):
+#   git archive 09b760eb | tar -x; make LLVM_MC=<binary> gate-all.  Signal: EXIT=0 and two 'PASS: every rebuilt ROM is byte-identical.'
+
+## llvm-mc a67c5632 (8e188b215251, the binary 09b760eb's trailer names)
+# commit 09b760eb  llvm-mc a67c563269fc72817bfaab561e4f8df41bfd8c629a87910c018aedafe132ce55  /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap.8e188b215251-a67c5632  2026-10-02T00:01:15+01:00
+v10/maincpu/boot/system_handlers.s:2327:2: error: unrecognized instruction mnemonic
+v10/maincpu/boot/system_handlers.s:2331:2: error: unrecognized instruction mnemonic
+v10/maincpu/boot/system_handlers.s:8361:11: error: invalid operand for instruction
+v10/maincpu/display/scoop_display.s:3338:2: error: unrecognized instruction mnemonic
+v10/maincpu/display/scoop_display.s:3340:2: error: unrecognized instruction mnemonic
+v10/maincpu/display/scoop_display.s:3348:2: error: unrecognized instruction mnemonic
+make: *** [Makefile:711: rebuilt_ROMs/kn5000_v10_program.llvm.o] Error 1
+EXIT=2
+2026-10-02T00:02:29+01:00
+
+## llvm-mc a7ee33d5 (da00420dba8d, the binary 09b760eb's own TOOLCHAIN_VERSION names)
+# commit 09b760eb  llvm-mc a7ee33d53676fa9ebb4360b5e72d1748f647f3b9e937d05f76691264d5875d5c  /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap.da00420dba8d-a7ee33d5  2026-10-02T00:01:23+01:00
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: a toolchain change rebuilds every image in both trees.
+EXIT=0
+2026-10-02T00:08:19+01:00
