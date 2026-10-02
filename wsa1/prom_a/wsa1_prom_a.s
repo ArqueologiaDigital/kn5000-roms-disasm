@@ -1771,7 +1771,7 @@
 	.set T_F42578,                                0x00F42578
 	.set T_F42580,                                0x00F42580
 	.set T_F42584,                                0x00F42584
-	.set T_F42590,                                0x00F42590
+	.set T_Disk_PortA3_Release_Call_Call,                                0x00F42590
 	.set T_F42594,                                0x00F42594
 	.set T_F425A8,                                0x00F425A8
 	.set T_F425AC,                                0x00F425AC
@@ -4171,7 +4171,7 @@ Paint_SequencerMedley:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F81048  1d 80 2e f4
 	m_cp_mi8 MB16, 0x207b, 0x13                          ; F8104C  c1 7b 20 3f 13
 	jr z, .LF81073                                       ; F81051  66 20
-	call T_F42590                                        ; F81053  1d 90 25 f4
+	call T_Disk_PortA3_Release_Call_Call                                        ; F81053  1d 90 25 f4
 	call T_F42C18                                        ; F81057  1d 18 2c f4
 	m_cp_mi8 MB16, 0x0dc1, 0x01                          ; F8105B  c1 c1 0d 3f 01
 	jr z, .LF81065                                       ; F81060  66 03
@@ -107835,7 +107835,7 @@ Msg0716_HandlerTables:
 	.long sub_FC0CFF                                 ; FC0A7A  [ 43]
 	.long sub_FC0CFF                                 ; FC0A7E  [ 44]
 	.long sub_FC0CFF                                 ; FC0A82  [ 45]
-	.long sub_FC0D08                                 ; FC0A86  [ 46]
+	.long Msg0716_Post_Trampoline_Wrap_2_Call                                 ; FC0A86  [ 46]
 	.long Msg0716_HandlerTables_Nop47                                 ; FC0A8A  [ 47]
 	.long sub_FC0D12                                 ; FC0A8E  [ 48]
 	.long sub_FC0D19                                 ; FC0A92  [ 49]
@@ -108069,7 +108069,7 @@ sub_FC0CFF:   ; entry: named by 4 `.long` operands, first at 0xFC0A76
 	m_set 4, MD16, 0x070e                                ; FC0CFF  f1 0e 07 bc
 	m_set 0, MD16, 0x070f                                ; FC0D03  f1 0f 07 b8
 	ret                                                  ; FC0D07  0e
-sub_FC0D08:   ; entry: named by 1 `.long` operand, first at 0xFC0A86
+Msg0716_Post_Trampoline_Wrap_2_Call:   ; entry: named by 1 `.long` operand, first at 0xFC0A86
 	calr Msg0716_Post_Trampoline_Wrap_2                                          ; FC0D08  1e 0b 0b
 	ret                                                  ; FC0D0B  0e
 Msg0716_HandlerTables_Nop47:   ; entry: named by 1 `.long` operand, first at 0xFC0A8A
@@ -157095,7 +157095,7 @@ sub_FE1C17:
 	ret                                                  ; FE1C1D  0e
 T_F4258C_Nop:
 	ret                                                  ; FE1C1E  0e
-sub_FE1C1F:
+Disk_PortA3_Release_Call_Call:
 	calr Disk_PortA3_Release_Call                                          ; FE1C1F  1e 3d ed
 	ret                                                  ; FE1C22  0e
 sub_FE1C23:
@@ -187516,7 +187516,7 @@ sub_FF6835:   ; entry: named by 1 `.long` operand, first at 0xFF4045
 ; ---------------------------------------------------------------------
 ScreenLeave_L0adSingleS0und:
 	call sub_FF796C                                      ; FF68CA  1d 6c 79 ff
-	call T_F42590                                        ; FF68CE  1d 90 25 f4
+	call T_Disk_PortA3_Release_Call_Call                                        ; FF68CE  1d 90 25 f4
 	ld (0x21fa:16), 0x00                                 ; FF68D2  f1 fa 21 00 00
 	ret                                                  ; FF68D7  0e
 ; ---------------------------------------------------------------------
@@ -188309,7 +188309,7 @@ sub_FF6E95:   ; entry: named by 1 `.long` operand, first at 0xFF414D
 ; ---------------------------------------------------------------------
 ScreenLeave_L0adSingleC0mbination:
 	call sub_FF796C                                      ; FF6F13  1d 6c 79 ff
-	call T_F42590                                        ; FF6F17  1d 90 25 f4
+	call T_Disk_PortA3_Release_Call_Call                                        ; FF6F17  1d 90 25 f4
 	ld (0x21fa:16), 0x00                                 ; FF6F1B  f1 fa 21 00 00
 	ret                                                  ; FF6F20  0e
 ; ---------------------------------------------------------------------
@@ -189826,7 +189826,7 @@ sub_FF798C:
 	push XIX                                             ; FF798D  3c
 	push XHL                                             ; FF798E  3b
 	push XDE                                             ; FF798F  3a
-	call T_F42590                                        ; FF7990  1d 90 25 f4
+	call T_Disk_PortA3_Release_Call_Call                                        ; FF7990  1d 90 25 f4
 	call sub_FF796C                                      ; FF7994  1d 6c 79 ff
 	ldw (0x220f:16), 0x00                                ; FF7998  f1 0f 22 02 00 00
 	ld (0x220c:16), 0x00                                 ; FF799E  f1 0c 22 00 00

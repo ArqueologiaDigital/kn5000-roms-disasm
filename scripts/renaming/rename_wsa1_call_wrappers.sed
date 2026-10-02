@@ -110,3 +110,6 @@ s/\bsub_FE095F\b/Disk_PortA3_Release_Call/g
 s/\bsub_FE8C97\b/Queue2E00_AppendRegs_0_255_4240/g
 s/\bsub_FEF89A\b/DisplayList_Run_Call/g
 s/\bsub_FF42B2\b/CallbackQueue_ResetAndRestartTask2_Call/g
+# round 2 (after the directory slots were named):
+s/\bsub_FC0D08\b/Msg0716_Post_Trampoline_Wrap_2_Call/g
+s/\bsub_FE1C1F\b/Disk_PortA3_Release_Call_Call/g

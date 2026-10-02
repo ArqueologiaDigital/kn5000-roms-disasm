@@ -1410,7 +1410,7 @@
 	.set	T_F42580_Nop, 0xFE1C16
 	.set	sub_FE1C17, 0xFE1C17
 	.set	T_F4258C_Nop, 0xFE1C1E
-	.set	sub_FE1C1F, 0xFE1C1F
+	.set	Disk_PortA3_Release_Call_Call, 0xFE1C1F
 	.set	sub_FE1C23, 0xFE1C23
 	.set	sub_FE1C27, 0xFE1C27
 	.set	sub_FE1C2B, 0xFE1C2B
@@ -89344,7 +89344,7 @@ T_F42580:	jp T_F42580_Nop  ; -> prom_a 0x61C16   x6
 T_F42584:	jp sub_FE144E  ; -> prom_a 0x6144E   x1
 T_F42588:	jp sub_FE1C17  ; -> prom_a 0x61C17
 T_F4258C:	jp T_F4258C_Nop  ; -> prom_a 0x61C1E
-T_F42590:	jp sub_FE1C1F  ; -> prom_a 0x61C1F   x4
+T_Disk_PortA3_Release_Call_Call:	jp Disk_PortA3_Release_Call_Call  ; -> prom_a 0x61C1F   x4
 T_F42594:	jp sub_FE1C23  ; -> prom_a 0x61C23   x15
 T_F42598:	jp sub_FE1C27  ; -> prom_a 0x61C27
 T_F4259C:	jp sub_FE1C2B  ; -> prom_a 0x61C2B
