@@ -16,8 +16,13 @@ COLUMNS (each is a count of source lines or tokens; lower is better)
            `sub_E04FB9:`, `loc_...`, `Unknown_...`, `Unk_...`, `Data_E04FB9:`, `Label_...`,
            i.e. a name that says "I am at this address" rather than what the thing is.
            Positional sub-labels of a named parent (`Foo_0x32D`, `Foo_Loop`) are NOT counted.
-  numaddr  NON-branch instruction operands that are a numeric ROM-range address
-           (0x800000 <= value < 0x1000000):
+  numaddr  NON-branch instruction operands that are a numeric address inside the tree's OWN
+           ROM (maincpu 0xE00000-0xFFFFFF, table data 0x800000-0x9FFFFF, HD-AE5000
+           0x280000-0x2FFFFF, prom_a 0xF80000-0xFFFFFF, prom_b 0xF00000-0xF7FFFF, prom_c
+           0xF80000-0xFFFFFF; trees with no ROM range here count 0).  Until 2026-10-02 this
+           counted any value 0x800000..0xFFFFFF, which in v10 was mostly NOT addresses --
+           packed (group << 16 | index) parameters such as `ld xwa, 0xb8001b`, the flash
+           unlock address 0x815554 = 0x800000 + 0x5555*4 -- or other ROMs' addresses:
            `lda xix, 0xeec044`, `ld xiy, 16165950`, `lda_24 xix, (0xfea84f)` -- data references
            the branch metric above does not count (found by the 2026-10-02 review of Wave 2).
            ROM-range only, so RAM/SFR addresses and small constants are never counted; on wsa1
@@ -87,6 +92,12 @@ def blobs(rev, path):
     p.wait()
 
 
+OWN_ROM = {"v10/maincpu": (0xE00000, 0xFFFFFF), "v9/maincpu": (0xE00000, 0xFFFFFF),
+           "v7/maincpu": (0xE00000, 0xFFFFFF), "table_data": (0x800000, 0x9FFFFF),
+           "hdae5000": (0x280000, 0x2FFFFF), "wsa1/prom_a": (0xF80000, 0xFFFFFF),
+           "wsa1/prom_b": (0xF00000, 0xF7FFFF), "wsa1/prom_c": (0xF80000, 0xFFFFFF)}
+
+
 def measure(rev, path):
     c = dict(numbr=0, numaddr=0, numevt=0, addrlbl=0, bytecmt=0, field=0, todo=0, files=0)
     for name, data in blobs(rev, path):
@@ -98,7 +109,8 @@ def measure(rev, path):
         c["numbr"] += len(NUMBR.findall(data))
         for m in NUMADDR.finditer(data):
             vals = [int(x, 0) for x in LIT.findall(m.group(2))]
-            if any(0x800000 <= v < 0x1000000 for v in vals):
+            lo, hi = OWN_ROM.get(path, (1, 0))
+            if any(lo <= v <= hi for v in vals):
                 c["numaddr"] += 1
             if any(0x1000000 <= v < 0x2000000 for v in vals):
                 c["numevt"] += 1
