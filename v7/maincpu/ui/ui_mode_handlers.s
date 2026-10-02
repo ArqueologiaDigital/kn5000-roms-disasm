@@ -3379,8 +3379,8 @@ MasterSetup_GetNameB_DrawString:
 	pushw	(xwa)
 	ld	xwa, (xiz+74)
 	pushw	(xwa)
-	pushw	237
-	pushw	3352
+	pushw	MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd@hi16
+	pushw	MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -3572,8 +3572,8 @@ MstStyleAlp_PadLoopCond:
 	jr	c, MstStyleAlp_AppendPadChar
 	jrl	MstStyleAlp_FinalSendEvent
 MstStyleAlp_OverflowStr:
-	pushw	237
-	pushw	3380
+	pushw	MstStyleAlp_OverflowStr_Str_Blank32@hi16
+	pushw	MstStyleAlp_OverflowStr_Str_Blank32@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
 	call	Free_Compare2
@@ -3595,8 +3595,8 @@ MstStyleAlp_CopyEntryAndPad:
 	jr t, MstStyleAlp_PadLoopCond2
 MstStyleAlp_AppendPadChar2:
 	pushw	1
-	pushw	237
-	pushw	3414
+	pushw	MstStyleAlp_AppendPadChar2_Str_Blank1@hi16
+	pushw	MstStyleAlp_AppendPadChar2_Str_Blank1@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	Strncat
@@ -4071,8 +4071,8 @@ MstStyle1Grid_PadLeft_Check:
 	jr	c, MstStyle1Grid_PadLeft_Loop
 	jr	MstStyle1Grid_CheckPlayAudio
 MstStyle1Grid_OutOfRange:
-	pushw	237
-	pushw	3446
+	pushw	MstStyle1Grid_OutOfRange_Str_Blank16@hi16
+	pushw	MstStyle1Grid_OutOfRange_Str_Blank16@lo16
 	push	xbc
 	call	Free_Compare2
 	inc	8, xsp
@@ -4090,8 +4090,8 @@ MstStyle1Grid_BottomSection:
 	jr	MstStyle1Grid_PadLeft_CheckB
 MstStyle1Grid_PadLeft_LoopB:
 	pushw	1
-	pushw	237
-	pushw	3464
+	pushw	MstStyle1Grid_PadLeft_LoopB_Str_Blank1@hi16
+	pushw	MstStyle1Grid_PadLeft_LoopB_Str_Blank1@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Strncat
@@ -4618,8 +4618,8 @@ MstStyle1Sub_GetNameB_DrawString:
 	pushw	(xwa)
 	ld	xwa, (xbc+82)
 	pushw	(xwa)
-	pushw	237
-	pushw	3480
+	pushw	MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd@hi16
+	pushw	MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -4777,8 +4777,8 @@ MstStyle1SubGrid_PadLeft_Check:
 	jr	c, MstStyle1SubGrid_PadLeft_Loop
 	jr	MstStyle1SubGrid_CheckPlayAudio
 MstStyle1SubGrid_OutOfRange:
-	pushw	237
-	pushw	3502
+	pushw	MstStyle1SubGrid_OutOfRange_Str_Blank16@hi16
+	pushw	MstStyle1SubGrid_OutOfRange_Str_Blank16@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -5906,8 +5906,8 @@ MstStyle2_GetNameB_DrawString:
 	add	xwa, (213202:24)
 	ld	xwa, (xwa)
 	push	xwa
-	pushw 237
-	pushw 3536
+	pushw MstStyle2_GetNameB_DrawString_Str_Fmts@hi16
+	pushw MstStyle2_GetNameB_DrawString_Str_Fmts@lo16
 	lda	xwa, (xsp+34)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -5932,8 +5932,8 @@ MstStyle2_GetNameB_DrawString:
 	dec	1, wa
 	cp	wa, (xhl)
 	jr	le, MstStyle2_NameB_DrawCurrent
-	pushw 237
-	pushw 3540
+	pushw MstStyle2_GetNameB_DrawString_Str_Blank17@hi16
+	pushw MstStyle2_GetNameB_DrawString_Str_Blank17@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -5945,8 +5945,8 @@ MstStyle2_NameB_DrawCurrent:
 	add	xwa, (213202:24)
 	ld	xwa, (xwa)
 	push	xwa
-	pushw	237
-	pushw	3564
+	pushw	MstStyle2_NameB_DrawCurrent_Str_Fmts@hi16
+	pushw	MstStyle2_NameB_DrawCurrent_Str_Fmts@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -5961,8 +5961,8 @@ MstStyle2_NameB_DrawLower:
 	add	xwa, (213202:24)
 	ld	xwa, (xwa)
 	push	xwa
-	pushw	237
-	pushw	3574
+	pushw	MstStyle2_NameB_DrawLower_Str_Fmts@hi16
+	pushw	MstStyle2_NameB_DrawLower_Str_Fmts@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -6037,8 +6037,8 @@ MstStyle2_NameB_Render:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	pushw 237
-	pushw 3584
+	pushw MstStyle2_NameB_Render_Str_Fmts@hi16
+	pushw MstStyle2_NameB_Render_Str_Fmts@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -6261,8 +6261,8 @@ MstGrid2_UpperHalf:
 	jr	MstGrid2_PadLeft_CheckB
 MstGrid2_PadLeft_LoopB:
 	pushw	1
-	pushw	237
-	pushw	3638
+	pushw	MstGrid2_PadLeft_LoopB_Str_Blank1@hi16
+	pushw	MstGrid2_PadLeft_LoopB_Str_Blank1@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Strncat
@@ -6307,8 +6307,8 @@ MstGrid2_LowerSection:
 	jr	MstGrid2_PadLeft_CheckC
 MstGrid2_PadLeft_LoopC:
 	pushw	1
-	pushw	237
-	pushw	3674
+	pushw	MstGrid2_PadLeft_LoopC_Str_Blank1@hi16
+	pushw	MstGrid2_PadLeft_LoopC_Str_Blank1@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Strncat
@@ -6360,8 +6360,8 @@ MstGrid2_BottomRight:
 	jr	MstGrid2_PadLeft_CheckD
 MstGrid2_PadLeft_LoopD:
 	pushw	1
-	pushw	237
-	pushw	3710
+	pushw	MstGrid2_PadLeft_LoopD_Str_Blank1@hi16
+	pushw	MstGrid2_PadLeft_LoopD_Str_Blank1@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Strncat
@@ -6959,8 +6959,8 @@ TchSensGridCheck_Skip3:
 	ldw	(xbc), 5
 	ld	(xhl), xiz
 	pushw	(xix)
-	pushw	237
-	pushw	3820
+	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d@hi16
+	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d@lo16
 	push	xiz
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -6977,8 +6977,8 @@ TchSensGridCheck_Skip4:
 	ldw	(xbc), 6
 	ld	(xhl), xiz
 	pushw	(xix)
-	pushw	237
-	pushw	3824
+	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2@hi16
+	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2@lo16
 	push	xiz
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -7004,8 +7004,8 @@ TchSensGrid_CellSelect:
 	ld XWA,0x00000100
 	call AcApcToggleProc_Helper
 	pushw hl
-	pushw 0x00ed
-	pushw 0x0ef4
+	pushw TchSensGrid_CellSelect_Str_Fmt3d@hi16
+	pushw TchSensGrid_CellSelect_Str_Fmt3d@lo16
 	lda xwa, (xsp + 0x0a)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -7046,8 +7046,8 @@ TchSensGrid_CheckCell_1_5:
 	ld	xwa, 258
 	call	AcApcToggleProc_Helper
 	pushw	hl
-	pushw	237
-	pushw	3840
+	pushw	TchSensGrid_CheckCell_1_5_Str_Fmt3d@hi16
+	pushw	TchSensGrid_CheckCell_1_5_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7065,8 +7065,8 @@ TchSensGrid_CheckCell_1_6:
 	ld	xwa, 259
 	call	AcApcToggleProc_Helper
 	pushw	hl
-	pushw	237
-	pushw	3844
+	pushw	TchSensGrid_CheckCell_1_6_Str_Fmt3d@hi16
+	pushw	TchSensGrid_CheckCell_1_6_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7742,8 +7742,8 @@ FSWAssGridCheck_Evt1C0001C:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	pushw 237
-	pushw 4590
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts@hi16
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7770,8 +7770,8 @@ FSWAssGridCheck_Skip:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	pushw 237
-	pushw 4594
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_2@hi16
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_2@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7796,8 +7796,8 @@ FSWAssGridCheck_Skip2:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	pushw 237
-	pushw 4598
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_3@hi16
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_3@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7822,8 +7822,8 @@ FSWAssGridCheck_Skip3:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	pushw 237
-	pushw 4602
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_4@hi16
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_4@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7849,8 +7849,8 @@ FSWAssGridCheck_Skip4:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	pushw 237
-	pushw 4606
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_5@hi16
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_5@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7875,8 +7875,8 @@ FSWAssGridCheck_Skip5:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	pushw 237
-	pushw 4610
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_6@hi16
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_6@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7901,8 +7901,8 @@ FSWAssGridCheck_Skip6:
 	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
-	pushw 237
-	pushw 4614
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_7@hi16
+	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_7@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7936,8 +7936,8 @@ FSWAssGrid_CellSelect:
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
-	pushw 0x00ed
-	pushw 0x120a
+	pushw FSWAssGrid_CellSelect_Str_Fmts@hi16
+	pushw FSWAssGrid_CellSelect_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -7963,8 +7963,8 @@ FSWAssGrid_CheckCell_1_3:
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
-	pushw 0x00ed
-	pushw 0x120e
+	pushw FSWAssGrid_CheckCell_1_3_Str_Fmts@hi16
+	pushw FSWAssGrid_CheckCell_1_3_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -7990,8 +7990,8 @@ FSWAssGrid_CheckCell_1_4:
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
-	pushw 0x00ed
-	pushw 0x1212
+	pushw FSWAssGrid_CheckCell_1_4_Str_Fmts@hi16
+	pushw FSWAssGrid_CheckCell_1_4_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -8017,8 +8017,8 @@ FSWAssGrid_CheckCell_1_5:
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
-	pushw 0x00ed
-	pushw 0x1216
+	pushw FSWAssGrid_CheckCell_1_5_Str_Fmts@hi16
+	pushw FSWAssGrid_CheckCell_1_5_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -8044,8 +8044,8 @@ FSWAssGrid_CheckCell_1_6:
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
-	pushw 0x00ed
-	pushw 0x121a
+	pushw FSWAssGrid_CheckCell_1_6_Str_Fmts@hi16
+	pushw FSWAssGrid_CheckCell_1_6_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -8071,8 +8071,8 @@ FSWAssGrid_CheckCell_1_7:
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
-	pushw 0x00ed
-	pushw 0x121e
+	pushw FSWAssGrid_CheckCell_1_7_Str_Fmts@hi16
+	pushw FSWAssGrid_CheckCell_1_7_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -8098,8 +8098,8 @@ FSWAssGrid_CheckCell_1_8:
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xec
 	push XWA
-	pushw 0x00ed
-	pushw 0x1222
+	pushw FSWAssGrid_CheckCell_1_8_Str_Fmts@hi16
+	pushw FSWAssGrid_CheckCell_1_8_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -8522,8 +8522,8 @@ PmExpFilter_DrawCellBank1:
 	add	bc, wa
 	inc	1, bc
 	ld	(xhl+2), bc
-	pushw 237
-	pushw 5128
+	pushw PmExpFilter_DrawCellBank1_Str_PAGE_2_3@hi16
+	pushw PmExpFilter_DrawCellBank1_Str_PAGE_2_3@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Free_Compare2
@@ -8552,8 +8552,8 @@ PmExpFilter_DrawCellBank2:
 	lda xbc, (ParamStr_Table_02:24)
 	ldl_dri xwa, 0x07, 0xe4, 0xe0
 	push XWA
-	pushw 0x00ed
-	pushw 0x1412
+	pushw PmExpFilter_DrawCellBank2_Str_Fmts@hi16
+	pushw PmExpFilter_DrawCellBank2_Str_Fmts@lo16
 	push XDE
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
@@ -9123,8 +9123,8 @@ PmExpFilterCheck_PushNameB:
 	jr PmExpFilterCheck_StrcpySend
 
 PmExpFilterCheck_PushDefault:
-	pushw 0xed
-	pushw 0x1496
+	pushw PmExpFilterCheck_PushDefault_Str_Blank3@hi16
+	pushw PmExpFilterCheck_PushDefault_Str_Blank3@lo16
 	push xde
 
 PmExpFilterCheck_StrcpySend:
@@ -9684,8 +9684,8 @@ DispTimeSetGridCheck_Evt1C0001C:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw 237
-	pushw 5458
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts@hi16
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -9788,8 +9788,8 @@ DispTimeSetGridCheck_Skip5:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	pushw 237
-	pushw 5474
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2@hi16
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2@lo16
 	push	xix
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -9884,8 +9884,8 @@ DispTimeSetCheck_TryRow4:
 	sla WA, 0x02
 	ldl_dri xwa, 0x07, 0xe8, 0xe0
 	push XWA
-	pushw 0x00ed
-	pushw 0x1572
+	pushw DispTimeSetCheck_TryRow4_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow4_Str_Fmts@lo16
 	push XBC
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
@@ -10555,8 +10555,8 @@ MssName_EventDispatch:
 	ld	xwa, (xbc)
 	or	xwa, xwa
 	jr	nz, MssNameFunc_Skip
-	pushw	237
-	pushw	5526
+	pushw	MssName_EventDispatch_Str_Memory_data@hi16
+	pushw	MssName_EventDispatch_Str_Memory_data@lo16
 	ld	xwa, (xiz+18)
 	push	xwa
 	call	Free_Compare2
@@ -10691,8 +10691,8 @@ AcPmBkNoBox_Match:
 	ld	bc, (xiz+4)
 	cp	bc, 0:i3
 	jr	nz, AcPmBkNoBox_FormatBankNo
-	pushw	237
-	pushw	5568
+	pushw	AcPmBkNoBox_Match_Str_Blank8@hi16
+	pushw	AcPmBkNoBox_Match_Str_Blank8@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -10709,8 +10709,8 @@ AcPmBkNoBox_FormatBankNo:
 	divs	bc, 8
 	inc	1, bc
 	pushw	bc
-	pushw	237
-	pushw	5578
+	pushw	AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd@hi16
+	pushw	AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -10785,8 +10785,8 @@ AcBkNoBox_Match:
 	inc	1, l
 	extz	hl
 	pushw	hl
-	pushw	237
-	pushw	5586
+	pushw	AcBkNoBox_Match_Str_Fmtd@hi16
+	pushw	AcBkNoBox_Match_Str_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -11486,8 +11486,8 @@ AcPmBkEdit_BankEdit:
 	inc 1,A
 	extz WA
 	pushw wa
-	pushw 0x00ed
-	pushw 0x15ea
+	pushw AcPmBkEdit_BankEdit_Str_Fmtd@hi16
+	pushw AcPmBkEdit_BankEdit_Str_Fmtd@lo16
 	ld XWA,(XSP+0x0e)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -12388,8 +12388,8 @@ VariScreen_DrawNameString:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5642
+	pushw VariScreen_DrawNameString_Str_Fmtd@hi16
+	pushw VariScreen_DrawNameString_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -12799,8 +12799,8 @@ VariScreen_HandleConfirm:
 	pushw wa
 	ld	xwa, (xbc+44)
 	pushw	(xwa)
-	pushw	237
-	pushw	5650
+	pushw	VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd@hi16
+	pushw	VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+298)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -12960,8 +12960,8 @@ VariScreen_ConfirmDrawNameAudio:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5662
+	pushw VariScreen_ConfirmDrawNameAudio_Str_Fmtd@hi16
+	pushw VariScreen_ConfirmDrawNameAudio_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -14016,8 +14016,8 @@ RVari_Select_CheckSameBank:
 	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	pushw	237
-	pushw	5710
+	pushw	RVari_Select_CheckSameBank_Str_Fmts@hi16
+	pushw	RVari_Select_CheckSameBank_Str_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -14137,8 +14137,8 @@ RVari_Select_CheckSameBank:
 	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	pushw	237
-	pushw	5714
+	pushw	RVari_Select_CheckSameBank_Str_Fmts_2@hi16
+	pushw	RVari_Select_CheckSameBank_Str_Fmts_2@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

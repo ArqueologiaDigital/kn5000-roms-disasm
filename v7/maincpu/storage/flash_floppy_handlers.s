@@ -6301,225 +6301,225 @@ InitializeSuna:
 	ldw WA, 0x03ed
 	call RegisterObjectTable
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc8fa
+	pushw InitializeSuna_Str_MD_CMP@hi16
+	pushw InitializeSuna_Str_MD_CMP@lo16
 	ld XWA,0x0000000e
 	ld XBC,0x01440000
 	ld XDE,0x01a000b0
 	call RegisterMode
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc902
+	pushw InitializeSuna_Str_MD_MSP@hi16
+	pushw InitializeSuna_Str_MD_MSP@lo16
 	ld XWA,0x0000000f
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x01a000ca
 	call RegisterMode
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc90a
+	pushw InitializeSuna_Str_MD_MSP_REC@hi16
+	pushw InitializeSuna_Str_MD_MSP_REC@lo16
 	ld XWA,0x00000010
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x01a000c9
 	call RegisterMode
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc916
+	pushw InitializeSuna_Str_MD_SND_ARG@hi16
+	pushw InitializeSuna_Str_MD_SND_ARG@lo16
 	ld XWA,0x00000011
 	ld XBC,0x01440016
 	ld XDE,TITLE_SNDARG
 	call RegisterMode
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc922
+	pushw InitializeSuna_Str_TT_STYLCNVWAIT@hi16
+	pushw InitializeSuna_Str_TT_STYLCNVWAIT@lo16
 	ld XWA,0x00000010
 	ld XBC,0x0144001c
 	ld XDE,0x00100000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc932
+	pushw InitializeSuna_Str_TT_STYLCNVMODL@hi16
+	pushw InitializeSuna_Str_TT_STYLCNVMODL@lo16
 	ld XWA,0x00000011
 	ld XBC,0x0144001e
 	ld XDE,0x00110000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc942
+	pushw InitializeSuna_Str_TT_STYLCNVCNVT@hi16
+	pushw InitializeSuna_Str_TT_STYLCNVCNVT@lo16
 	ld XWA,0x00000012
 	ld XBC,0x0144001f
 	ld XDE,0x00120000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc952
+	pushw InitializeSuna_Str_TT_STYLCNVSTOR@hi16
+	pushw InitializeSuna_Str_TT_STYLCNVSTOR@lo16
 	ld XWA,0x00000013
 	ld XBC,0x01440022
 	ld XDE,0x00130000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc962
+	pushw InitializeSuna_Str_TT_STYLCNVTXT@hi16
+	pushw InitializeSuna_Str_TT_STYLCNVTXT@lo16
 	ld XWA,0x00000014
 	ld XBC,0x0144001d
 	ld XDE,0x00140000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc970
+	pushw InitializeSuna_Str_TT_STYLCNVSEL@hi16
+	pushw InitializeSuna_Str_TT_STYLCNVSEL@lo16
 	ld XWA,0x00000015
 	ld XBC,0x01440020
 	ld XDE,0x00150000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc97e
+	pushw InitializeSuna_Str_TT_STYLCNVCONT@hi16
+	pushw InitializeSuna_Str_TT_STYLCNVCONT@lo16
 	ld XWA,0x00000016
 	ld XBC,0x01440021
 	ld XDE,0x00160000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc98e
+	pushw InitializeSuna_Str_TT_CMMENU@hi16
+	pushw InitializeSuna_Str_TT_CMMENU@lo16
 	ld XWA,0x000000b0
 	ld XBC,0x01440005
 	ld XDE,0x00b00000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc998
+	pushw InitializeSuna_Str_TT_CMBKSL@hi16
+	pushw InitializeSuna_Str_TT_CMBKSL@lo16
 	ld XWA,0x000000b1
 	ld XBC,0x01440003
 	ld XDE,0x00b10000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9a2
+	pushw InitializeSuna_Str_TT_CMBKSL_S@hi16
+	pushw InitializeSuna_Str_TT_CMBKSL_S@lo16
 	ld XWA,0x000000b2
 	ld XBC,0x01440004
 	ld XDE,0x00b20000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9ae
+	pushw InitializeSuna_Str_TT_CMNAME@hi16
+	pushw InitializeSuna_Str_TT_CMNAME@lo16
 	ld XWA,0x000000b3
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x00b30000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9b8
+	pushw InitializeSuna_Str_TT_CMSET@hi16
+	pushw InitializeSuna_Str_TT_CMSET@lo16
 	ld XWA,0x000000b4
 	ld XBC,0x01440001
 	ld XDE,0x00b40000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9c2
+	pushw InitializeSuna_Str_TT_CMREAL@hi16
+	pushw InitializeSuna_Str_TT_CMREAL@lo16
 	ld XWA,0x000000b5
 	ld XBC,0x01440002
 	ld XDE,0x00b50000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9cc
+	pushw InitializeSuna_Str_TT_CMSTEP@hi16
+	pushw InitializeSuna_Str_TT_CMSTEP@lo16
 	ld XWA,0x000000b6
 	ld XBC,0x01440019
 	ld XDE,0x00b60000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9d6
+	pushw InitializeSuna_Str_TT_CMBAL@hi16
+	pushw InitializeSuna_Str_TT_CMBAL@lo16
 	ld XWA,0x000000b7
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x00b70000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9e0
+	pushw InitializeSuna_Str_TT_CMPNCP@hi16
+	pushw InitializeSuna_Str_TT_CMPNCP@lo16
 	ld XWA,0x000000b8
 	ld XBC,0x01440006
 	ld XDE,0x00b80000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9ea
+	pushw InitializeSuna_Str_TT_CMSEQCP@hi16
+	pushw InitializeSuna_Str_TT_CMSEQCP@lo16
 	ld XWA,0x000000b9
 	ld XBC,0x01440008
 	ld XDE,0x00b90000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xc9f6
+	pushw InitializeSuna_Str_TT_CMEASY@hi16
+	pushw InitializeSuna_Str_TT_CMEASY@lo16
 	ld XWA,0x000000ba
 	ld XBC,0x01440007
 	ld XDE,0x00ba0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca00
+	pushw InitializeSuna_Str_TT_CMBEND@hi16
+	pushw InitializeSuna_Str_TT_CMBEND@lo16
 	ld XWA,0x000000bb
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x00bb0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca0a
+	pushw InitializeSuna_Str_TT_CMMODE@hi16
+	pushw InitializeSuna_Str_TT_CMMODE@lo16
 	ld XWA,0x000000bd
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x00bd0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca14
+	pushw InitializeSuna_Str_TT_CMCSTMCP@hi16
+	pushw InitializeSuna_Str_TT_CMCSTMCP@lo16
 	ld XWA,0x000000be
 	ld XBC,0x01440009
 	ld XDE,0x00be0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca20
+	pushw InitializeSuna_Str_TT_MSPBKSL@hi16
+	pushw InitializeSuna_Str_TT_MSPBKSL@lo16
 	ld XWA,0x000000c8
 	ld XBC,0x01440011
 	ld XDE,0x00c80000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca2c
+	pushw InitializeSuna_Str_TT_MSPREC@hi16
+	pushw InitializeSuna_Str_TT_MSPREC@lo16
 	ld XWA,0x000000c9
 	ld XBC,NAKA_MAINFUNC_MspRecTtlFunc
 	ld XDE,0x00c90000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca36
+	pushw InitializeSuna_Str_TT_MSPMENU@hi16
+	pushw InitializeSuna_Str_TT_MSPMENU@lo16
 	ld XWA,0x000000ca
 	ld XBC,0x01440012
 	ld XDE,0x00ca0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca42
+	pushw InitializeSuna_Str_TT_MSPNAME@hi16
+	pushw InitializeSuna_Str_TT_MSPNAME@lo16
 	ld XWA,0x000000cb
 	ld XBC,0x01440013
 	ld XDE,0x00cb0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca4e
+	pushw InitializeSuna_Str_TT_MSPGROUP@hi16
+	pushw InitializeSuna_Str_TT_MSPGROUP@lo16
 	ld XWA,0x000000cc
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x00cc0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca5a
+	pushw InitializeSuna_Str_TT_SNDARG@hi16
+	pushw InitializeSuna_Str_TT_SNDARG@lo16
 	ld XWA,0x000000dc
 	ld XBC,0x01440017
 	ld XDE,0x00dc0000
 	call RegisterTitle
 	pushw 0x0004
-	pushw 0x00e1
-	pushw 0xca64
+	pushw InitializeSuna_Str_TT_APCSEL@hi16
+	pushw InitializeSuna_Str_TT_APCSEL@lo16
 	ld XWA,0x000000ed
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x00ed0000
@@ -6556,8 +6556,8 @@ CmpBndRng_BoundCase:
 	jr CmpBndRng_CallStrcpy
 
 CmpBndRng_DefaultString:
-	pushw 0xe1
-	pushw 0xce12
+	pushw CmpBndRng_DefaultString_Str_ERR@hi16
+	pushw CmpBndRng_DefaultString_Str_ERR@lo16
 
 CmpBndRng_CallStrcpy:
 	push	xwa
@@ -6987,8 +6987,8 @@ UI_COMPONENT_DISPATCH:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	52964
+	pushw	UI_COMPONENT_DISPATCH_Str_Fmtd@hi16
+	pushw	UI_COMPONENT_DISPATCH_Str_Fmtd@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -7007,8 +7007,8 @@ UI_COMPONENT_DISPATCH_CASE1:
 	lda	xbc, (252430:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	pushw	225
-	pushw	52968
+	pushw	UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@hi16
+	pushw	UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
@@ -7626,8 +7626,8 @@ PsS2cFmeas_HandleScroll:
 	call	GetViewInstance
 	ld	xiz, xhl
 	push_sd16w	0xee, 0x38
-	pushw	0xe1
-	pushw	0xd584
+	pushw	PsS2cFmeas_HandleScroll_Str_Fmt3d@hi16
+	pushw	PsS2cFmeas_HandleScroll_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7678,8 +7678,8 @@ PsS2cLmeas_HandleScroll:
 	call	GetViewInstance
 	ld	xiz, xhl
 	push_sd16w	0xf0, 0x38
-	pushw	0xe1
-	pushw	0xd588
+	pushw	PsS2cLmeas_HandleScroll_Str_Fmt3d@hi16
+	pushw	PsS2cLmeas_HandleScroll_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7731,8 +7731,8 @@ PsSeqSongNo_HandleScroll:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	54668
+	pushw	PsSeqSongNo_HandleScroll_Str_SONG_Fmt2d@hi16
+	pushw	PsSeqSongNo_HandleScroll_Str_SONG_Fmt2d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

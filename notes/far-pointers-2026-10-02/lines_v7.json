@@ -1,0 +1,2122 @@
+[
+ {
+  "value": "0xe0ccca",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccce",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccd2",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccde",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cce2",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cce6",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccea",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccee",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccf2",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccfe",
+  "reader": "Scoop_EventLoop_36Entry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd02",
+  "reader": "Scoop_EventLoop_36Entry_Branch1",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd12",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd16",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd1a",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd26",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd2a",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd2e",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "label",
+  "name": "Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d",
+  "at": "includes/gui_format_strings.s:7"
+ },
+ {
+  "value": "0xe0cd32",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd36",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd3a",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd46",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd4a",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd4e",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "label",
+  "name": "Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2",
+  "at": "includes/gui_format_strings.s:9"
+ },
+ {
+  "value": "0xe0cd8a",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd8e",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "includes/gui_format_strings.s:13 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe0cd94",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdac",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdae",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "includes/gui_format_strings.s:15 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe0cdb2",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdb4",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdb8",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdba",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdbe",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "includes/gui_format_strings.s:16 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe1c8fa",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_MD_CMP",
+  "at": "ui_widgets/naka_screen_dispatch.s:1194"
+ },
+ {
+  "value": "0xe1c902",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_MD_MSP",
+  "at": "ui_widgets/naka_screen_dispatch.s:1195"
+ },
+ {
+  "value": "0xe1c90a",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_MD_MSP_REC",
+  "at": "ui_widgets/naka_screen_dispatch.s:1196"
+ },
+ {
+  "value": "0xe1c916",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_MD_SND_ARG",
+  "at": "ui_widgets/naka_screen_dispatch.s:1197"
+ },
+ {
+  "value": "0xe1c922",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_STYLCNVWAIT",
+  "at": "ui_widgets/naka_screen_dispatch.s:1198"
+ },
+ {
+  "value": "0xe1c932",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_STYLCNVMODL",
+  "at": "ui_widgets/naka_screen_dispatch.s:1199"
+ },
+ {
+  "value": "0xe1c942",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_STYLCNVCNVT",
+  "at": "ui_widgets/naka_screen_dispatch.s:1200"
+ },
+ {
+  "value": "0xe1c952",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_STYLCNVSTOR",
+  "at": "ui_widgets/naka_screen_dispatch.s:1201"
+ },
+ {
+  "value": "0xe1c962",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_STYLCNVTXT",
+  "at": "ui_widgets/naka_screen_dispatch.s:1202"
+ },
+ {
+  "value": "0xe1c970",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_STYLCNVSEL",
+  "at": "ui_widgets/naka_screen_dispatch.s:1203"
+ },
+ {
+  "value": "0xe1c97e",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_STYLCNVCONT",
+  "at": "ui_widgets/naka_screen_dispatch.s:1204"
+ },
+ {
+  "value": "0xe1c98e",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMMENU",
+  "at": "ui_widgets/naka_screen_dispatch.s:1205"
+ },
+ {
+  "value": "0xe1c998",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMBKSL",
+  "at": "ui_widgets/naka_screen_dispatch.s:1206"
+ },
+ {
+  "value": "0xe1c9a2",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMBKSL_S",
+  "at": "ui_widgets/naka_screen_dispatch.s:1207"
+ },
+ {
+  "value": "0xe1c9ae",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMNAME",
+  "at": "ui_widgets/naka_screen_dispatch.s:1208"
+ },
+ {
+  "value": "0xe1c9b8",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMSET",
+  "at": "ui_widgets/naka_screen_dispatch.s:1209"
+ },
+ {
+  "value": "0xe1c9c2",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMREAL",
+  "at": "ui_widgets/naka_screen_dispatch.s:1210"
+ },
+ {
+  "value": "0xe1c9cc",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMSTEP",
+  "at": "ui_widgets/naka_screen_dispatch.s:1211"
+ },
+ {
+  "value": "0xe1c9d6",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMBAL",
+  "at": "ui_widgets/naka_screen_dispatch.s:1212"
+ },
+ {
+  "value": "0xe1c9e0",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMPNCP",
+  "at": "ui_widgets/naka_screen_dispatch.s:1213"
+ },
+ {
+  "value": "0xe1c9ea",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMSEQCP",
+  "at": "ui_widgets/naka_screen_dispatch.s:1214"
+ },
+ {
+  "value": "0xe1c9f6",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMEASY",
+  "at": "ui_widgets/naka_screen_dispatch.s:1215"
+ },
+ {
+  "value": "0xe1ca00",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMBEND",
+  "at": "ui_widgets/naka_screen_dispatch.s:1216"
+ },
+ {
+  "value": "0xe1ca0a",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMMODE",
+  "at": "ui_widgets/naka_screen_dispatch.s:1217"
+ },
+ {
+  "value": "0xe1ca14",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_CMCSTMCP",
+  "at": "ui_widgets/naka_screen_dispatch.s:1218"
+ },
+ {
+  "value": "0xe1ca20",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_MSPBKSL",
+  "at": "ui_widgets/naka_screen_dispatch.s:1219"
+ },
+ {
+  "value": "0xe1ca2c",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_MSPREC",
+  "at": "ui_widgets/naka_screen_dispatch.s:1220"
+ },
+ {
+  "value": "0xe1ca36",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_MSPMENU",
+  "at": "ui_widgets/naka_screen_dispatch.s:1221"
+ },
+ {
+  "value": "0xe1ca42",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_MSPNAME",
+  "at": "ui_widgets/naka_screen_dispatch.s:1222"
+ },
+ {
+  "value": "0xe1ca4e",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_MSPGROUP",
+  "at": "ui_widgets/naka_screen_dispatch.s:1223"
+ },
+ {
+  "value": "0xe1ca5a",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_SNDARG",
+  "at": "ui_widgets/naka_screen_dispatch.s:1224"
+ },
+ {
+  "value": "0xe1ca64",
+  "reader": "InitializeSuna",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeSuna_Str_TT_APCSEL",
+  "at": "ui_widgets/naka_screen_dispatch.s:1225"
+ },
+ {
+  "value": "0xe1ce12",
+  "reader": "CmpBndRng_DefaultString",
+  "sites": 1,
+  "result": "label",
+  "name": "CmpBndRng_DefaultString_Str_ERR",
+  "at": "ui_widgets/naka_screen_dispatch.s:1364"
+ },
+ {
+  "value": "0xe1cee4",
+  "reader": "UI_COMPONENT_DISPATCH",
+  "sites": 1,
+  "result": "label",
+  "name": "UI_COMPONENT_DISPATCH_Str_Fmtd",
+  "at": "ui_widgets/naka_screen_dispatch.s:1434"
+ },
+ {
+  "value": "0xe1cee8",
+  "reader": "UI_COMPONENT_DISPATCH_CASE1",
+  "sites": 1,
+  "result": "label",
+  "name": "UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts",
+  "at": "ui_widgets/naka_screen_dispatch.s:1435"
+ },
+ {
+  "value": "0xe1d584",
+  "reader": "PsS2cFmeas_HandleScroll",
+  "sites": 1,
+  "result": "label",
+  "name": "PsS2cFmeas_HandleScroll_Str_Fmt3d",
+  "at": "ui_widgets/naka_screen_dispatch.s:1634"
+ },
+ {
+  "value": "0xe1d588",
+  "reader": "PsS2cLmeas_HandleScroll",
+  "sites": 1,
+  "result": "label",
+  "name": "PsS2cLmeas_HandleScroll_Str_Fmt3d",
+  "at": "ui_widgets/naka_screen_dispatch.s:1635"
+ },
+ {
+  "value": "0xe1d58c",
+  "reader": "PsSeqSongNo_HandleScroll",
+  "sites": 1,
+  "result": "label",
+  "name": "PsSeqSongNo_HandleScroll_Str_SONG_Fmt2d",
+  "at": "ui_widgets/naka_screen_dispatch.s:1636"
+ },
+ {
+  "value": "0xe1dd7a",
+  "reader": "PsCmpMeasBox_HandleEvtBC",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1dd7e",
+  "reader": "PsCmpMemBox_HandleEvtBC",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1dd82",
+  "reader": "AcCmpTempoBox_HandleEvt1C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1df12",
+  "reader": "EasyCmp_GridCheck_EventCase2",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1e2bc",
+  "reader": "RgpSetBnk_EvtEnc_SendAudioCmd",
+  "sites": 1,
+  "result": "label",
+  "name": "RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd",
+  "at": "ui_widgets/naka_screen_dispatch.s:2245"
+ },
+ {
+  "value": "0xe1e2f8",
+  "reader": "MspMeasBox_HandleEvtBC",
+  "sites": 1,
+  "result": "label",
+  "name": "MspMeasBox_HandleEvtBC_Str_MEASURE_Fmtd",
+  "at": "ui_widgets/naka_screen_dispatch.s:2252"
+ },
+ {
+  "value": "0xe1e306",
+  "reader": "MspMemBox_ClampValue",
+  "sites": 1,
+  "result": "label",
+  "name": "MspMemBox_ClampValue_Str_MEMORY_Fmt2d",
+  "at": "ui_widgets/naka_screen_dispatch.s:2253"
+ },
+ {
+  "value": "0xe1e314",
+  "reader": "AcSndArgGrid_BnkDispatch",
+  "sites": 1,
+  "result": "label",
+  "name": "AcSndArgGrid_BnkDispatch_Str_Fmtd",
+  "at": "ui_widgets/naka_screen_dispatch.s:2254"
+ },
+ {
+  "value": "0xe1ff84",
+  "reader": "CheckFDStatusLoad_DoLoad",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1ff9c",
+  "reader": "LoadExtROM_Entry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1ffb0",
+  "reader": "LoadXaprInit_Entry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1ffc6",
+  "reader": "LoadAndRunXapr_Entry",
+  "sites": 1,
+  "result": "factory_test/fd_test_data.s:414 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe200f2",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe200fc",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20108",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20110",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20118",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20202",
+  "reader": "SongBankLookup_BuildAudioCmd",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20260",
+  "reader": "InitializeYoko",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe2031c",
+  "reader": "InitializeYoko",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe208ec",
+  "reader": "InitializeYoko",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe264f0",
+  "reader": "AcCurSongName_HandleFocusGained",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe2e724",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable",
+  "at": "ui_widgets/effects_sequencer_screens.s:858"
+ },
+ {
+  "value": "0xe2e758",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_2",
+  "at": "ui_widgets/effects_sequencer_screens.s:871"
+ },
+ {
+  "value": "0xe2e78c",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_3",
+  "at": "ui_widgets/effects_sequencer_screens.s:884"
+ },
+ {
+  "value": "0xe2e800",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_4",
+  "at": "ui_widgets/effects_sequencer_screens.s:913"
+ },
+ {
+  "value": "0xe2e824",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_5",
+  "at": "ui_widgets/effects_sequencer_screens.s:922"
+ },
+ {
+  "value": "0xe2e868",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_6",
+  "at": "ui_widgets/effects_sequencer_screens.s:939"
+ },
+ {
+  "value": "0xe2e894",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_7",
+  "at": "ui_widgets/effects_sequencer_screens.s:950"
+ },
+ {
+  "value": "0xe2e8fc",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_8",
+  "at": "ui_widgets/effects_sequencer_screens.s:976"
+ },
+ {
+  "value": "0xe2e92c",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_9",
+  "at": "ui_widgets/effects_sequencer_screens.s:988"
+ },
+ {
+  "value": "0xe2e990",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_10",
+  "at": "ui_widgets/effects_sequencer_screens.s:1013"
+ },
+ {
+  "value": "0xe2e9c4",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_11",
+  "at": "ui_widgets/effects_sequencer_screens.s:1026"
+ },
+ {
+  "value": "0xe2e9d8",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_12",
+  "at": "ui_widgets/effects_sequencer_screens.s:1031"
+ },
+ {
+  "value": "0xe2ea20",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_13",
+  "at": "ui_widgets/effects_sequencer_screens.s:1049"
+ },
+ {
+  "value": "0xe2ea70",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_14",
+  "at": "ui_widgets/effects_sequencer_screens.s:1069"
+ },
+ {
+  "value": "0xe2eadc",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_15",
+  "at": "ui_widgets/effects_sequencer_screens.s:1096"
+ },
+ {
+  "value": "0xe2eaf0",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_16",
+  "at": "ui_widgets/effects_sequencer_screens.s:1101"
+ },
+ {
+  "value": "0xe2eb60",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_17",
+  "at": "ui_widgets/effects_sequencer_screens.s:1129"
+ },
+ {
+  "value": "0xe2eb84",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_18",
+  "at": "ui_widgets/effects_sequencer_screens.s:1138"
+ },
+ {
+  "value": "0xe2eb98",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_19",
+  "at": "ui_widgets/effects_sequencer_screens.s:1143"
+ },
+ {
+  "value": "0xe2ec04",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_20",
+  "at": "ui_widgets/effects_sequencer_screens.s:1170"
+ },
+ {
+  "value": "0xe2ec28",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_21",
+  "at": "ui_widgets/effects_sequencer_screens.s:1179"
+ },
+ {
+  "value": "0xe2ec64",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_22",
+  "at": "ui_widgets/effects_sequencer_screens.s:1194"
+ },
+ {
+  "value": "0xe2ecc0",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_23",
+  "at": "ui_widgets/effects_sequencer_screens.s:1217"
+ },
+ {
+  "value": "0xe2ed18",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_24",
+  "at": "ui_widgets/effects_sequencer_screens.s:1239"
+ },
+ {
+  "value": "0xe2ed5c",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_25",
+  "at": "ui_widgets/effects_sequencer_screens.s:1256"
+ },
+ {
+  "value": "0xe2eda0",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_26",
+  "at": "ui_widgets/effects_sequencer_screens.s:1273"
+ },
+ {
+  "value": "0xe2ee08",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_27",
+  "at": "ui_widgets/effects_sequencer_screens.s:1299"
+ },
+ {
+  "value": "0xe2ee4c",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_28",
+  "at": "ui_widgets/effects_sequencer_screens.s:1316"
+ },
+ {
+  "value": "0xe2ee90",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_29",
+  "at": "ui_widgets/effects_sequencer_screens.s:1333"
+ },
+ {
+  "value": "0xe2eed8",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_30",
+  "at": "ui_widgets/effects_sequencer_screens.s:1351"
+ },
+ {
+  "value": "0xe2ef18",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_31",
+  "at": "ui_widgets/effects_sequencer_screens.s:1367"
+ },
+ {
+  "value": "0xe2ef60",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "ui_widgets/effects_sequencer_screens.s:1385 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe2ef64",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "ui_widgets/effects_sequencer_screens.s:1386 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe2ef68",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_32",
+  "at": "ui_widgets/effects_sequencer_screens.s:1387"
+ },
+ {
+  "value": "0xe2ef74",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_33",
+  "at": "ui_widgets/effects_sequencer_screens.s:1390"
+ },
+ {
+  "value": "0xe2efb4",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_34",
+  "at": "ui_widgets/effects_sequencer_screens.s:1406"
+ },
+ {
+  "value": "0xe2f0ac",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_35",
+  "at": "ui_widgets/effects_sequencer_screens.s:1475"
+ },
+ {
+  "value": "0xe2f0fa",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_36",
+  "at": "ui_widgets/effects_sequencer_screens.s:1483"
+ },
+ {
+  "value": "0xe2f148",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_37",
+  "at": "ui_widgets/effects_sequencer_screens.s:1491"
+ },
+ {
+  "value": "0xe2f232",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_38",
+  "at": "ui_widgets/effects_sequencer_screens.s:1499"
+ },
+ {
+  "value": "0xe2f280",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_39",
+  "at": "ui_widgets/effects_sequencer_screens.s:1507"
+ },
+ {
+  "value": "0xe2f2ce",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_40",
+  "at": "ui_widgets/effects_sequencer_screens.s:1515"
+ },
+ {
+  "value": "0xe2f3aa",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_41",
+  "at": "ui_widgets/effects_sequencer_screens.s:1524"
+ },
+ {
+  "value": "0xe2f3e0",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_42",
+  "at": "ui_widgets/effects_sequencer_screens.s:1532"
+ },
+ {
+  "value": "0xe2f446",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_43",
+  "at": "ui_widgets/effects_sequencer_screens.s:1540"
+ },
+ {
+  "value": "0xe2f488",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_44",
+  "at": "ui_widgets/effects_sequencer_screens.s:1548"
+ },
+ {
+  "value": "0xe2f560",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_45",
+  "at": "ui_widgets/effects_sequencer_screens.s:1557"
+ },
+ {
+  "value": "0xe2f5b2",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_46",
+  "at": "ui_widgets/effects_sequencer_screens.s:1566"
+ },
+ {
+  "value": "0xe2f66a",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_47",
+  "at": "ui_widgets/effects_sequencer_screens.s:1574"
+ },
+ {
+  "value": "0xe2f6c2",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_48",
+  "at": "ui_widgets/effects_sequencer_screens.s:1582"
+ },
+ {
+  "value": "0xe2f6e0",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_49",
+  "at": "ui_widgets/effects_sequencer_screens.s:1590"
+ },
+ {
+  "value": "0xe2f758",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_50",
+  "at": "ui_widgets/effects_sequencer_screens.s:1598"
+ },
+ {
+  "value": "0xe2f7dc",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_51",
+  "at": "ui_widgets/effects_sequencer_screens.s:1606"
+ },
+ {
+  "value": "0xe2f898",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_52",
+  "at": "ui_widgets/effects_sequencer_screens.s:1614"
+ },
+ {
+  "value": "0xe2f8b6",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_53",
+  "at": "ui_widgets/effects_sequencer_screens.s:1622"
+ },
+ {
+  "value": "0xe2f966",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_54",
+  "at": "ui_widgets/effects_sequencer_screens.s:1630"
+ },
+ {
+  "value": "0xe2f99c",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_55",
+  "at": "ui_widgets/effects_sequencer_screens.s:1638"
+ },
+ {
+  "value": "0xe2f9ba",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_56",
+  "at": "ui_widgets/effects_sequencer_screens.s:1646"
+ },
+ {
+  "value": "0xe2fa64",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_57",
+  "at": "ui_widgets/effects_sequencer_screens.s:1654"
+ },
+ {
+  "value": "0xe2fa9a",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_58",
+  "at": "ui_widgets/effects_sequencer_screens.s:1662"
+ },
+ {
+  "value": "0xe2fb02",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_59",
+  "at": "ui_widgets/effects_sequencer_screens.s:1670"
+ },
+ {
+  "value": "0xe2fb9a",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_60",
+  "at": "ui_widgets/effects_sequencer_screens.s:1678"
+ },
+ {
+  "value": "0xe2fc28",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_61",
+  "at": "ui_widgets/effects_sequencer_screens.s:1686"
+ },
+ {
+  "value": "0xe2fc9a",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_62",
+  "at": "ui_widgets/effects_sequencer_screens.s:1695"
+ },
+ {
+  "value": "0xe2fd0c",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_63",
+  "at": "ui_widgets/effects_sequencer_screens.s:1704"
+ },
+ {
+  "value": "0xe2fdb4",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_64",
+  "at": "ui_widgets/effects_sequencer_screens.s:1712"
+ },
+ {
+  "value": "0xe2fe24",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_65",
+  "at": "ui_widgets/effects_sequencer_screens.s:1721"
+ },
+ {
+  "value": "0xe2fe96",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_66",
+  "at": "ui_widgets/effects_sequencer_screens.s:1730"
+ },
+ {
+  "value": "0xe2ff0c",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_67",
+  "at": "ui_widgets/effects_sequencer_screens.s:1738"
+ },
+ {
+  "value": "0xe2ff78",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_68",
+  "at": "ui_widgets/effects_sequencer_screens.s:1747"
+ },
+ {
+  "value": "0xe2fff0",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "ui_widgets/effects_sequencer_screens.s:1755 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe2fff6",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "ui_widgets/effects_sequencer_screens.s:1759 data, neither a string nor a table"
+ },
+ {
+  "value": "0xe2fffc",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_69",
+  "at": "ui_widgets/effects_sequencer_screens.s:1763"
+ },
+ {
+  "value": "0xe3000e",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_70",
+  "at": "ui_widgets/effects_sequencer_screens.s:1771"
+ },
+ {
+  "value": "0xe3009e",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_71",
+  "at": "ui_widgets/effects_sequencer_screens.s:1779"
+ },
+ {
+  "value": "0xe305d0",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "InitializeKubo_PtrTable_72",
+  "at": "ui_widgets/effects_sequencer_screens.s:1884"
+ },
+ {
+  "value": "0xe3471a",
+  "reader": "SngSelFunc_HandleEvent47",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe8004d",
+  "reader": "SeMenu_ApplyPartEdit_Entry15",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe80076",
+  "reader": "SeMenu_ApplyPartEdit_Entry15",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe952a6",
+  "reader": "LswLeftHold_DefaultStr",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9554a",
+  "reader": "IvSdpart_GetText",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9d7c6",
+  "reader": "IvMessage_GetText",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9da22",
+  "reader": "Sdtecd1_GetText",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9f872",
+  "reader": "PsMixer_CtlTypeProc1",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9f876",
+  "reader": "PsMixer_CtlTypeProc10",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea99e6",
+  "reader": "GetSoundName_DefaultString",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea9f08",
+  "reader": "ModeEdit_HandlePaint",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaa160",
+  "reader": "VwUserBitmapByName_HandlePaint",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaa17e",
+  "reader": "TextBox_DrawLineLoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaa828",
+  "reader": "AcTrkSw_Select",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaabe2",
+  "reader": "CommonIDProc_Evt1E0000A",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaadf2",
+  "reader": "DrawBitmapFile_Impl",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaae48",
+  "reader": "Gfx_LoadSplashBMP",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed0d18",
+  "reader": "MasterSetup_GetNameB_DrawString",
+  "sites": 1,
+  "result": "label",
+  "name": "MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd",
+  "at": "extensions/extension_data.s:502"
+ },
+ {
+  "value": "0xed0d32",
+  "reader": "MstStyleAlp_AppendPadChar",
+  "sites": 1,
+  "result": "extensions/extension_data.s:524 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0d34",
+  "reader": "MstStyleAlp_OverflowStr",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyleAlp_OverflowStr_Str_Blank32",
+  "at": "extensions/extension_data.s:525"
+ },
+ {
+  "value": "0xed0d56",
+  "reader": "MstStyleAlp_AppendPadChar2",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyleAlp_AppendPadChar2_Str_Blank1",
+  "at": "extensions/extension_data.s:526"
+ },
+ {
+  "value": "0xed0d74",
+  "reader": "MstStyle1Grid_CellSelect",
+  "sites": 1,
+  "result": "extensions/extension_data.s:531 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0d76",
+  "reader": "MstStyle1Grid_OutOfRange",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle1Grid_OutOfRange_Str_Blank16",
+  "at": "extensions/extension_data.s:532"
+ },
+ {
+  "value": "0xed0d88",
+  "reader": "MstStyle1Grid_PadLeft_LoopB",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle1Grid_PadLeft_LoopB_Str_Blank1",
+  "at": "extensions/extension_data.s:533"
+ },
+ {
+  "value": "0xed0d98",
+  "reader": "MstStyle1Sub_GetNameB_DrawString",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd",
+  "at": "extensions/extension_data.s:536"
+ },
+ {
+  "value": "0xed0dae",
+  "reader": "MstStyle1SubGrid_OutOfRange",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle1SubGrid_OutOfRange_Str_Blank16",
+  "at": "extensions/extension_data.s:540"
+ },
+ {
+  "value": "0xed0dd0",
+  "reader": "MstStyle2_GetNameB_DrawString",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle2_GetNameB_DrawString_Str_Fmts",
+  "at": "extensions/extension_data.s:544"
+ },
+ {
+  "value": "0xed0dd4",
+  "reader": "MstStyle2_GetNameB_DrawString",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle2_GetNameB_DrawString_Str_Blank17",
+  "at": "extensions/extension_data.s:545"
+ },
+ {
+  "value": "0xed0dec",
+  "reader": "MstStyle2_NameB_DrawCurrent",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle2_NameB_DrawCurrent_Str_Fmts",
+  "at": "extensions/extension_data.s:547"
+ },
+ {
+  "value": "0xed0df6",
+  "reader": "MstStyle2_NameB_DrawLower",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle2_NameB_DrawLower_Str_Fmts",
+  "at": "extensions/extension_data.s:549"
+ },
+ {
+  "value": "0xed0e00",
+  "reader": "MstStyle2_NameB_Render",
+  "sites": 1,
+  "result": "label",
+  "name": "MstStyle2_NameB_Render_Str_Fmts",
+  "at": "extensions/extension_data.s:551"
+ },
+ {
+  "value": "0xed0e12",
+  "reader": "MstGrid2_PadLeft_LoopA",
+  "sites": 1,
+  "result": "extensions/extension_data.s:554 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0e36",
+  "reader": "MstGrid2_PadLeft_LoopB",
+  "sites": 1,
+  "result": "label",
+  "name": "MstGrid2_PadLeft_LoopB_Str_Blank1",
+  "at": "extensions/extension_data.s:556"
+ },
+ {
+  "value": "0xed0e5a",
+  "reader": "MstGrid2_PadLeft_LoopC",
+  "sites": 1,
+  "result": "label",
+  "name": "MstGrid2_PadLeft_LoopC_Str_Blank1",
+  "at": "extensions/extension_data.s:558"
+ },
+ {
+  "value": "0xed0e7e",
+  "reader": "MstGrid2_PadLeft_LoopD",
+  "sites": 1,
+  "result": "label",
+  "name": "MstGrid2_PadLeft_LoopD_Str_Blank1",
+  "at": "extensions/extension_data.s:560"
+ },
+ {
+  "value": "0xed0ee0",
+  "reader": "TchSensGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "extensions/extension_data.s:567 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0eec",
+  "reader": "TchSensGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "TchSensGridCheck_Evt1C0001C_Str_Fmt3d",
+  "at": "extensions/extension_data.s:570"
+ },
+ {
+  "value": "0xed0ef0",
+  "reader": "TchSensGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2",
+  "at": "extensions/extension_data.s:571"
+ },
+ {
+  "value": "0xed0ef4",
+  "reader": "TchSensGrid_CellSelect",
+  "sites": 1,
+  "result": "label",
+  "name": "TchSensGrid_CellSelect_Str_Fmt3d",
+  "at": "extensions/extension_data.s:572"
+ },
+ {
+  "value": "0xed0f00",
+  "reader": "TchSensGrid_CheckCell_1_5",
+  "sites": 1,
+  "result": "label",
+  "name": "TchSensGrid_CheckCell_1_5_Str_Fmt3d",
+  "at": "extensions/extension_data.s:575"
+ },
+ {
+  "value": "0xed0f04",
+  "reader": "TchSensGrid_CheckCell_1_6",
+  "sites": 1,
+  "result": "label",
+  "name": "TchSensGrid_CheckCell_1_6_Str_Fmt3d",
+  "at": "extensions/extension_data.s:576"
+ },
+ {
+  "value": "0xed11ee",
+  "reader": "FSWAssGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGridCheck_Evt1C0001C_Str_Fmts",
+  "at": "extensions/extension_data.s:655"
+ },
+ {
+  "value": "0xed11f2",
+  "reader": "FSWAssGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_2",
+  "at": "extensions/extension_data.s:656"
+ },
+ {
+  "value": "0xed11f6",
+  "reader": "FSWAssGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_3",
+  "at": "extensions/extension_data.s:657"
+ },
+ {
+  "value": "0xed11fa",
+  "reader": "FSWAssGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_4",
+  "at": "extensions/extension_data.s:658"
+ },
+ {
+  "value": "0xed11fe",
+  "reader": "FSWAssGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_5",
+  "at": "extensions/extension_data.s:659"
+ },
+ {
+  "value": "0xed1202",
+  "reader": "FSWAssGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_6",
+  "at": "extensions/extension_data.s:660"
+ },
+ {
+  "value": "0xed1206",
+  "reader": "FSWAssGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_7",
+  "at": "extensions/extension_data.s:661"
+ },
+ {
+  "value": "0xed120a",
+  "reader": "FSWAssGrid_CellSelect",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGrid_CellSelect_Str_Fmts",
+  "at": "extensions/extension_data.s:662"
+ },
+ {
+  "value": "0xed120e",
+  "reader": "FSWAssGrid_CheckCell_1_3",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGrid_CheckCell_1_3_Str_Fmts",
+  "at": "extensions/extension_data.s:663"
+ },
+ {
+  "value": "0xed1212",
+  "reader": "FSWAssGrid_CheckCell_1_4",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGrid_CheckCell_1_4_Str_Fmts",
+  "at": "extensions/extension_data.s:664"
+ },
+ {
+  "value": "0xed1216",
+  "reader": "FSWAssGrid_CheckCell_1_5",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGrid_CheckCell_1_5_Str_Fmts",
+  "at": "extensions/extension_data.s:665"
+ },
+ {
+  "value": "0xed121a",
+  "reader": "FSWAssGrid_CheckCell_1_6",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGrid_CheckCell_1_6_Str_Fmts",
+  "at": "extensions/extension_data.s:666"
+ },
+ {
+  "value": "0xed121e",
+  "reader": "FSWAssGrid_CheckCell_1_7",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGrid_CheckCell_1_7_Str_Fmts",
+  "at": "extensions/extension_data.s:667"
+ },
+ {
+  "value": "0xed1222",
+  "reader": "FSWAssGrid_CheckCell_1_8",
+  "sites": 1,
+  "result": "label",
+  "name": "FSWAssGrid_CheckCell_1_8_Str_Fmts",
+  "at": "extensions/extension_data.s:668"
+ },
+ {
+  "value": "0xed1404",
+  "reader": "PmExpFilter_DrawCellBank1",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1408",
+  "reader": "PmExpFilter_DrawCellBank1",
+  "sites": 1,
+  "result": "label",
+  "name": "PmExpFilter_DrawCellBank1_Str_PAGE_2_3",
+  "at": "extensions/extension_data.s:713"
+ },
+ {
+  "value": "0xed1412",
+  "reader": "PmExpFilter_DrawCellBank2",
+  "sites": 1,
+  "result": "label",
+  "name": "PmExpFilter_DrawCellBank2_Str_Fmts",
+  "at": "extensions/extension_data.s:714"
+ },
+ {
+  "value": "0xed1416",
+  "reader": "PmExpFilter_DrawCellBank2",
+  "sites": 1,
+  "result": "extensions/extension_data.s:715 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed1496",
+  "reader": "PmExpFilterCheck_PushDefault",
+  "sites": 1,
+  "result": "label",
+  "name": "PmExpFilterCheck_PushDefault_Str_Blank3",
+  "at": "extensions/extension_data.s:740"
+ },
+ {
+  "value": "0xed1552",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "DispTimeSetGridCheck_Evt1C0001C_Str_Fmts",
+  "at": "extensions/extension_data.s:775"
+ },
+ {
+  "value": "0xed1556",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed155a",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed155e",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1562",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "label",
+  "name": "DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2",
+  "at": "extensions/extension_data.s:776"
+ },
+ {
+  "value": "0xed1566",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed156a",
+  "reader": "DispTimeSetCheck_CellDecode",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed156e",
+  "reader": "DispTimeSetCheck_TryRow3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1572",
+  "reader": "DispTimeSetCheck_TryRow4",
+  "sites": 1,
+  "result": "label",
+  "name": "DispTimeSetCheck_TryRow4_Str_Fmts",
+  "at": "extensions/extension_data.s:777"
+ },
+ {
+  "value": "0xed1576",
+  "reader": "DispTimeSetCheck_TryRow5",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed157a",
+  "reader": "DispTimeSetCheck_TryRow6",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed157e",
+  "reader": "DispTimeSetCheck_TryRow7",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1590",
+  "reader": "IvPageOverWr_GetName",
+  "sites": 1,
+  "result": "extensions/extension_data.s:780 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed1596",
+  "reader": "MssName_EventDispatch",
+  "sites": 1,
+  "result": "label",
+  "name": "MssName_EventDispatch_Str_Memory_data",
+  "at": "extensions/extension_data.s:781"
+ },
+ {
+  "value": "0xed15c0",
+  "reader": "AcPmBkNoBox_Match",
+  "sites": 1,
+  "result": "label",
+  "name": "AcPmBkNoBox_Match_Str_Blank8",
+  "at": "extensions/extension_data.s:784"
+ },
+ {
+  "value": "0xed15ca",
+  "reader": "AcPmBkNoBox_FormatBankNo",
+  "sites": 1,
+  "result": "label",
+  "name": "AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd",
+  "at": "extensions/extension_data.s:785"
+ },
+ {
+  "value": "0xed15d2",
+  "reader": "AcBkNoBox_Match",
+  "sites": 1,
+  "result": "label",
+  "name": "AcBkNoBox_Match_Str_Fmtd",
+  "at": "extensions/extension_data.s:786"
+ },
+ {
+  "value": "0xed15ea",
+  "reader": "AcPmBkEdit_BankEdit",
+  "sites": 1,
+  "result": "label",
+  "name": "AcPmBkEdit_BankEdit_Str_Fmtd",
+  "at": "extensions/extension_data.s:789"
+ },
+ {
+  "value": "0xed1602",
+  "reader": "GmOnOffFunc",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed160a",
+  "reader": "VariScreen_DrawNameString",
+  "sites": 1,
+  "result": "label",
+  "name": "VariScreen_DrawNameString_Str_Fmtd",
+  "at": "extensions/extension_data.s:791"
+ },
+ {
+  "value": "0xed160e",
+  "reader": "VariScreen_DrawRightNameString",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1612",
+  "reader": "VariScreen_HandleConfirm",
+  "sites": 1,
+  "result": "label",
+  "name": "VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd",
+  "at": "extensions/extension_data.s:792"
+ },
+ {
+  "value": "0xed161e",
+  "reader": "VariScreen_ConfirmDrawNameAudio",
+  "sites": 1,
+  "result": "label",
+  "name": "VariScreen_ConfirmDrawNameAudio_Str_Fmtd",
+  "at": "extensions/extension_data.s:793"
+ },
+ {
+  "value": "0xed1622",
+  "reader": "VariScreen_EnumDrawNameAudio",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed164e",
+  "reader": "RVari_Select_CheckSameBank",
+  "sites": 1,
+  "result": "label",
+  "name": "RVari_Select_CheckSameBank_Str_Fmts",
+  "at": "extensions/extension_data.s:809"
+ },
+ {
+  "value": "0xed1652",
+  "reader": "RVari_Select_CheckSameBank",
+  "sites": 1,
+  "result": "label",
+  "name": "RVari_Select_CheckSameBank_Str_Fmts_2",
+  "at": "extensions/extension_data.s:810"
+ },
+ {
+  "value": "0xed1656",
+  "reader": "RVari_SelectE_SecondItem_Draw",
+  "sites": 1,
+  "result": "label",
+  "name": "RVari_SelectE_SecondItem_Draw_Str_Fmtd",
+  "at": "extensions/extension_data.s:811"
+ },
+ {
+  "value": "0xed165a",
+  "reader": "RVari_SelectO_SecondItem_Draw",
+  "sites": 1,
+  "result": "label",
+  "name": "RVari_SelectO_SecondItem_Draw_Str_Fmtd",
+  "at": "extensions/extension_data.s:812"
+ },
+ {
+  "value": "0xed165e",
+  "reader": "RVari_ConfirmF_Item_Draw",
+  "sites": 1,
+  "result": "label",
+  "name": "RVari_ConfirmF_Item_Draw_Str_Fmts",
+  "at": "extensions/extension_data.s:813"
+ },
+ {
+  "value": "0xed1662",
+  "reader": "RVari_Confirm_TypeNotF",
+  "sites": 1,
+  "result": "label",
+  "name": "RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd",
+  "at": "extensions/extension_data.s:814"
+ },
+ {
+  "value": "0xed166e",
+  "reader": "RVari_ConfirmE_Item_Draw",
+  "sites": 1,
+  "result": "label",
+  "name": "RVari_ConfirmE_Item_Draw_Str_Fmtd",
+  "at": "extensions/extension_data.s:816"
+ },
+ {
+  "value": "0xed1672",
+  "reader": "RVari_EnumNotifyF_Item_Draw",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1676",
+  "reader": "RVari_EnumNotifyE_Item_Draw",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed167a",
+  "reader": "PmBank_BankChanged_DrawSlot",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed18b6",
+  "reader": "WallHomeEdit_PushSndAddr",
+  "sites": 1,
+  "result": "label",
+  "name": "WallHomeEdit_PushSndAddr_Str_USER",
+  "at": "extensions/extension_data.s:896"
+ },
+ {
+  "value": "0xed1bec",
+  "reader": "AcFreeSplit_ValueChanged",
+  "sites": 1,
+  "result": "label",
+  "name": "AcFreeSplit_ValueChanged_Str_Blank10",
+  "at": "extensions/extension_data.s:1002"
+ },
+ {
+  "value": "0xed1bf8",
+  "reader": "AcFreeSplit_LookupNoteLabel",
+  "sites": 1,
+  "result": "label",
+  "name": "AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts",
+  "at": "extensions/extension_data.s:1003"
+ },
+ {
+  "value": "0xed1c04",
+  "reader": "AcFreeSplit_CheckSecondKey",
+  "sites": 1,
+  "result": "label",
+  "name": "AcFreeSplit_CheckSecondKey_Str_Blank10",
+  "at": "extensions/extension_data.s:1004"
+ },
+ {
+  "value": "0xed1c10",
+  "reader": "AcFreeSplit_LookupSecondNote",
+  "sites": 1,
+  "result": "label",
+  "name": "AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts",
+  "at": "extensions/extension_data.s:1005"
+ },
+ {
+  "value": "0xed1c86",
+  "reader": "AcTranspose_ValueChanged",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1c8c",
+  "reader": "AcTranspose_FormatLabel",
+  "sites": 1,
+  "result": "label",
+  "name": "AcTranspose_FormatLabel_Str_Fmts",
+  "at": "extensions/extension_data.s:1035"
+ },
+ {
+  "value": "0xed1c92",
+  "reader": "AcChordBox_HandleChordUpdate",
+  "sites": 1,
+  "result": "label",
+  "name": "AcChordBox_HandleChordUpdate_Str_Fmts",
+  "at": "extensions/extension_data.s:1036"
+ },
+ {
+  "value": "0xed931c",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9320",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9324",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9330",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9334",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xedba1c",
+  "reader": "Display_CopyAndRenderBitmaps",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2cd8",
+  "reader": "MidiSysEx_SendAllParams",
+  "sites": 6,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2ce6",
+  "reader": "MidiSysEx_SendControlChange1",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2cea",
+  "reader": "MidiSysEx_SendProgramChange",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2cec",
+  "reader": "MidiSysEx_SendPartChanLoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf20000",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 3,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf200ff",
+  "reader": "NoteEditBox_EventDispatch2",
+  "sites": 2,
+  "result": "ui/setwall_routines.s:2027 is code"
+ },
+ {
+  "value": "0xf400f7",
+  "reader": "DrawEditSw_FinalPosition",
+  "sites": 1,
+  "result": "sequencer/sequencer_engine.s:13334 is code"
+ },
+ {
+  "value": "0xfb0000",
+  "reader": "PsMixer_CtlTypeProc2_Entry",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfb00f5",
+  "reader": "NoteEditBox_EventDispatch2",
+  "sites": 8,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfb00f7",
+  "reader": "VariScreen_HandlePaint",
+  "sites": 3,
+  "result": "ui/ui_window_procs.s:9416 is code"
+ },
+ {
+  "value": "0xfc0000",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfe0049",
+  "reader": "SeMenu_ApplyPartEdit_Entry11",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfe0061",
+  "reader": "SeMenu_ApplyPartEdit_Entry12",
+  "sites": 1,
+  "result": "audio/note_voice_mapping.s:577 is code"
+ },
+ {
+  "value": "0xff0008",
+  "reader": "PsMixer_CtlTypeProc5",
+  "sites": 3,
+  "result": "audio/note_voice_mapping.s:26079 is code"
+ },
+ {
+  "value": "0xff00f2",
+  "reader": "NoteEditBox_EventDispatch2",
+  "sites": 3,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xff00f5",
+  "reader": "Scoop_EnvelopeCalc",
+  "sites": 22,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xff00f7",
+  "reader": "VwVariBox_Confirm_NoSelection",
+  "sites": 24,
+  "result": "inside a line"
+ }
+]

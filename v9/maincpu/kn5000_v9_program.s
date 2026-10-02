@@ -2930,8 +2930,8 @@ AcChordBox_HandleChordUpdate:
 	ld xde, xiz
 	call InheritedProc
 	push xiz
-	pushw 0xed
-	pushw 0x1c92
+	pushw AcChordBox_HandleChordUpdate_Str_Fmts@hi16
+	pushw AcChordBox_HandleChordUpdate_Str_Fmts@lo16
 	lda xwa, (xsp + 12)
 	push xwa
 	call Sprintf_Locked

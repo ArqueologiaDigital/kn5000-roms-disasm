@@ -4452,8 +4452,8 @@ WallHomeEditCheck_ReturnFalse:
 	jr WallHomeEdit_PushAddr
 
 WallHomeEdit_PushSndAddr:
-	pushw 0xed
-	pushw 0x18b6
+	pushw WallHomeEdit_PushSndAddr_Str_USER@hi16
+	pushw WallHomeEdit_PushSndAddr_Str_USER@lo16
 	ld xwa, (xwa)
 	push xwa
 	jr WallHomeEdit_CallAudio
@@ -5292,8 +5292,8 @@ AcFreeSplit_ValueChanged:
 	jr nz, AcFreeSplit_CheckSecondKey
 	cpw (xiz + 4), 0x0
 	jr z, AcFreeSplit_LookupNoteLabel
-	pushw 0xed
-	pushw 0x1bec
+	pushw AcFreeSplit_ValueChanged_Str_Blank10@hi16
+	pushw AcFreeSplit_ValueChanged_Str_Blank10@lo16
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -5318,8 +5318,8 @@ AcFreeSplit_LookupNoteLabel:
 	lda xbc, (ParamStr_Table_06:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	pushw 0xed
-	pushw 0x1bf8
+	pushw AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts@hi16
+	pushw AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts@lo16
 	lda xwa, (xsp + 16)
 	push xwa
 	call Sprintf_Locked
@@ -5338,8 +5338,8 @@ AcFreeSplit_CheckSecondKey:
 	call SndParam_LookupReadOnly
 	cp hl, 0:i3
 	jr z, AcFreeSplit_LookupSecondNote
-	pushw 0xed
-	pushw 0x1c04
+	pushw AcFreeSplit_CheckSecondKey_Str_Blank10@hi16
+	pushw AcFreeSplit_CheckSecondKey_Str_Blank10@lo16
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -5364,8 +5364,8 @@ AcFreeSplit_LookupSecondNote:
 	lda xbc, (ParamStr_Table_06:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	pushw 0xed
-	pushw 0x1c10
+	pushw AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts@hi16
+	pushw AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts@lo16
 	lda xwa, (xsp + 16)
 	push xwa
 	call Sprintf_Locked
@@ -5463,6 +5463,6 @@ AcTranspose_FormatLabel:
 	lda xde, (OctaveDigitStr_0B_0x32:24)
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	push xwa
-	pushw 0xed
-	pushw 0x1c8c
+	pushw AcTranspose_FormatLabel_Str_Fmts@hi16
+	pushw AcTranspose_FormatLabel_Str_Fmts@lo16
 	push xbc

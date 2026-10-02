@@ -494,8 +494,8 @@ Str_StoreTotalSetting_EN3:
 	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
 Str_StoreTotalSetting_DE:
 	aligned_string "Speichert die gesamte Einstellung einschlieﬂlich Rhythmus, Transpose & Tempo."
-Str_StoreTotalSetting_EN:	aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
-	aligned_string "%c:%d/%d  "
+Str_StoreTotalSetting_EN:				aligned_string "Stores to total setting including Rhythm, Transpose & tempo."
+MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd:	aligned_string "%c:%d/%d  "
 ; ---------------------------------------------------------------------------
 ; Event-offset tables and screen strings of the Toshi grid/box procedures
 ; ---------------------------------------------------------------------------
@@ -518,42 +518,42 @@ Str_StoreTotalSetting_EN:	aligned_string "Stores to total setting including Rhyt
 AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (Str_StoreTotalSetting_DE_0x98)
 	.short 0x02ef, 0x051d, 0x02ef, 0x051d, 0x0827, 0x07fd, 0x07fd
 	aligned_string " "
-	aligned_string "                                "
-	aligned_string " "
+MstStyleAlp_OverflowStr_Str_Blank32:	aligned_string "                                "
+MstStyleAlp_AppendPadChar2_Str_Blank1:	aligned_string " "
 MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAlp_EventDispatch (Str_StoreTotalSetting_DE_0xCC)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x01f1, 0x01f1, 0x01f1
 AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (Str_StoreTotalSetting_DE_0xDA)
 	.short 0x0059, 0x0165, 0x0059, 0x0165, 0x0310, 0x02f8, 0x02f8
 	aligned_string " "
-	aligned_string "                "
-	aligned_string " "
+MstStyle1Grid_OutOfRange_Str_Blank16:	aligned_string "                "
+MstStyle1Grid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
 MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_EventDispatch (Str_StoreTotalSetting_DE_0xFE)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x016a, 0x0000, 0x0000
-	aligned_string "%d/%d"
+MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd:	aligned_string "%d/%d"
 AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (Str_StoreTotalSetting_DE_0x112)
 	.short 0x01cc, 0x02fa, 0x01cc, 0x02fa, 0x0529, 0x0511, 0x0511
 	aligned_string " "
-	aligned_string "                "
-	aligned_string " "
+MstStyle1SubGrid_OutOfRange_Str_Blank16:	aligned_string "                "
+MstStyle1SubGrid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
 MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (Str_StoreTotalSetting_DE_0x136)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x015e, 0x0000, 0x0000
-	aligned_string "%s:"
-	aligned_string "                 "
+MstStyle2_GetNameB_DrawString_Str_Fmts:		aligned_string "%s:"
+MstStyle2_GetNameB_DrawString_Str_Blank17:	aligned_string "                 "
 	aligned_string "     "
-	aligned_string "%s:"
+MstStyle2_NameB_DrawCurrent_Str_Fmts:	aligned_string "%s:"
 	aligned_string "TEMPO"
-	aligned_string "%s:"
+MstStyle2_NameB_DrawLower_Str_Fmts:	aligned_string "%s:"
 	aligned_string "TEMPO"
-	aligned_string "%s"
+MstStyle2_NameB_Render_Str_Fmts:	aligned_string "%s"
 AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (Str_StoreTotalSetting_DE_0x178)
 	.short 0x055a, 0x076a, 0x055a, 0x076a, 0x0bae, 0x0b96, 0x0b96
 	aligned_string " "
 	aligned_string "                                "
-	aligned_string " "
+MstGrid2_PadLeft_LoopB_Str_Blank1:	aligned_string " "
 	aligned_string "                                "
-	aligned_string " "
+MstGrid2_PadLeft_LoopC_Str_Blank1:	aligned_string " "
 	aligned_string "                                "
-	aligned_string " "
+MstGrid2_PadLeft_LoopD_Str_Blank1:	aligned_string " "
 	aligned_string "                                "
 	aligned_string "                                "
 MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_ScrollJumpTable (Str_StoreTotalSetting_DE_0x238)
@@ -563,13 +563,13 @@ AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_
 	aligned_string "%3d"
 	aligned_string "ON "
 	aligned_string "OFF"
-	aligned_string "%3d"
-	aligned_string "%3d"
-	aligned_string "%3d"
+TchSensGridCheck_Evt1C0001C_Str_Fmt3d:		aligned_string "%3d"
+TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2:	aligned_string "%3d"
+TchSensGrid_CellSelect_Str_Fmt3d:		aligned_string "%3d"
 	aligned_string "OFF"
 	aligned_string "ON "
-	aligned_string "%3d"
-	aligned_string "%3d"
+TchSensGrid_CheckCell_1_5_Str_Fmt3d:	aligned_string "%3d"
+TchSensGrid_CheckCell_1_6_Str_Fmt3d:	aligned_string "%3d"
 TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (Str_StoreTotalSetting_DE_0x27C)
 	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x02f8, 0x00fe, 0x00fe
 AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (Str_StoreTotalSetting_DE_0x28A)
@@ -648,20 +648,20 @@ CtrlAssignStr_PMemDecrement:	aligned_string "P.MEM DECREMENT "
 CtrlAssignStr_PMemIncrement:	aligned_string "P.MEM INCREMENT "
 CtrlAssignStr_Off:	aligned_string "      OFF       "
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED11EE-0xED1226 (56 B), unreached CODE-territory, was disassembled as 42 plausible-but-dead instruction lines; per=100% dist=4 near CtrlAssignStr_Off+18
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
-	aligned_string "%s"
+FSWAssGridCheck_Evt1C0001C_Str_Fmts:		aligned_string "%s"
+FSWAssGrid_EventDispatch_Entry_Str_Fmts:	aligned_string "%s"
+FSWAssGrid_EventDispatch_Entry_Str_Fmts_2:	aligned_string "%s"
+FSWAssGrid_EventDispatch_Entry_Str_Fmts_3:	aligned_string "%s"
+FSWAssGrid_EventDispatch_Entry_Str_Fmts_4:	aligned_string "%s"
+FSWAssGrid_EventDispatch_Entry_Str_Fmts_5:	aligned_string "%s"
+FSWAssGrid_EventDispatch_Entry_Str_Fmts_6:	aligned_string "%s"
+FSWAssGrid_CellSelect_Str_Fmts:			aligned_string "%s"
+FSWAssGrid_CheckCell_1_3_Str_Fmts:		aligned_string "%s"
+FSWAssGrid_CheckCell_1_4_Str_Fmts:		aligned_string "%s"
+FSWAssGrid_CheckCell_1_5_Str_Fmts:		aligned_string "%s"
+FSWAssGrid_CheckCell_1_6_Str_Fmts:		aligned_string "%s"
+FSWAssGrid_CheckCell_1_7_Str_Fmts:		aligned_string "%s"
+FSWAssGrid_CheckCell_1_8_Str_Fmts:		aligned_string "%s"
 FSWAssGridCheck_EventOffsets:	; read by FSWAssGridCheck via FSWAssGrid_EventDispatch (CtrlAssignStr_Off_0x4A)
 	.short 0x0000, 0x022f, 0x0000, 0x022f, 0x08ea, 0x045b, 0x045b
 FswAsIniFunc_EventOffsets:	; read by FswAsIniFunc via FswAsIni_EventDispatch (CtrlAssignStr_Off_0x58), six entries
@@ -706,8 +706,8 @@ ParamStr02_Midi:	aligned_string "       MIDI        "
 ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 	aligned_string "FILTER TYPE"
 	.byte 0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
-	aligned_string "PAGE 2/3"
-	.byte 0x25, 0x73, 0x00, 0xff
+PmExpFilter_DrawCellBank1_Str_PAGE_2_3:	aligned_string "PAGE 2/3"
+PmExpFilter_DrawCellBank2_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff
 	aligned_string "PAGE 3/3"
 AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (ParamStr02_Vocalist_0x44)
 	.short 0x02be, 0x03a7, 0x02be, 0x03a7, 0x054e, 0x04c8, 0x04c8
@@ -733,7 +733,7 @@ PmExpFilter_AltKeys:
 	aligned_string "OFF"
 	aligned_string "ON "
 	aligned_string "OFF"
-	aligned_string "   "
+PmExpFilterCheck_PushDefault_Str_Blank3:	aligned_string "   "
 PmExpFilterGridCheck_EventOffsets:	; read by PmExpFilterGridCheck via PmExpFilter_EventDispatch (ParamStr02_Vocalist_0xBE)
 	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x0297, 0x00fa, 0x00fa
 AcDispTimeSetGridBoxProc_EventOffsets:	; read by AcDispTimeSetGridBoxProc via PmExpFilter2_EventDispatch (ParamStr02_Vocalist_0xCC)
@@ -768,25 +768,25 @@ FadeTimeStr_Hold:	aligned_string " HOLD  "
 FadeTimeStr_Default:	aligned_string "DEFAULT"
 FadeTimeStr_Off:	aligned_string "  OFF  "
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1552-0xED1582 (48 B), unreached CODE-territory, was disassembled as 36 plausible-but-dead instruction lines; per=100% dist=4 near FadeTimeStr_Off+8
-	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
-	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
-	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2:	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+DispTimeSetCheck_TryRow4_Str_Fmts:		.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (FadeTimeStr_Off_0x38)
 	.short 0x0000, 0x0136, 0x0000, 0x0136, 0x05bc, 0x0283, 0x0283
 	aligned_string "PAGE"
-	aligned_string "Memory data "
+MssName_EventDispatch_Str_Memory_data:	aligned_string "Memory data "
 	.byte 0x20, 0x20, 0x00, 0xff, 0x20, 0x20, 0x00, 0xff, 0xa4, 0x00, 0xa4, 0x00, 0xb9, 0x00, 0xb9, 0x00
 	.byte 0xb9, 0x00, 0xa8, 0x00, 0xa4, 0x00, 0xaf, 0x00, 0xb5, 0x00, 0x00, 0x00
-	aligned_string "        "
-	aligned_string "%d-%d:"
-	.byte 0x25, 0x64, 0x3a, 0x00
-	aligned_string "PAGE 1/3"
-	aligned_string "BANK%2d:"
-	.byte 0x25, 0x64, 0x3a, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
+AcPmBkNoBox_Match_Str_Blank8:		aligned_string "        "
+AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd:	aligned_string "%d-%d:"
+AcBkNoBox_Match_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00
+PmemMode_Paint_Str_PAGE_1_3:		aligned_string "PAGE 1/3"
+AcPmBkEdit_BankChanged_Str_BANK_Fmt2d:	aligned_string "BANK%2d:"
+AcPmBkEdit_BankEdit_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
 	.byte 0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xff, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00
-	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
-	aligned_string "PAGE %d/%d"
-	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+VariScreen_DrawNameString_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd:	aligned_string "PAGE %d/%d"
+VariScreen_ConfirmDrawNameAudio_Str_Fmtd:	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 ParamStr_Table_04:
 	.long VariationStr_V1
 	.long VariationStr_V2
@@ -802,14 +802,14 @@ VariationStr_V1:
 	.byte 0x56, 0x31, 0x00, 0xff
 	aligned_string "RHYTHM"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
-	aligned_string "%s:"
-	aligned_string "%s:"
-	aligned_string "%d:"
-	aligned_string "%d:"
-	aligned_string "%s:"
-	aligned_string "PAGE %d/%d"
+RVari_Select_CheckSameBank_Str_Fmts:		aligned_string "%s:"
+RVari_Select_CheckSameBank_Str_Fmts_2:		aligned_string "%s:"
+RVari_SelectE_SecondItem_Draw_Str_Fmtd:		aligned_string "%d:"
+RVari_SelectO_SecondItem_Draw_Str_Fmtd:		aligned_string "%d:"
+RVari_ConfirmF_Item_Draw_Str_Fmts:		aligned_string "%s:"
+RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd:	aligned_string "PAGE %d/%d"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+40
-	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+RVari_ConfirmE_Item_Draw_Str_Fmtd:	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 ; SelectRect_Table: six screen rectangles {x1, y1, x2, y2}, 8 bytes each,
 ; read with `sla wa, 3` / `lda xbc, (VariationStr_V1_0x3C:24)` by PmBank_OnSelect
 ; and ToneGen_WriteParamByIndex (display/graphics_text_vga.s), which copy the
@@ -889,7 +889,7 @@ SoundCheck_Text:
 	.short 0, 86, 174, 221, 267, 313
 WallHomeEdit_Text:
 	aligned_string "DEFAULT"
-	aligned_string " USER  "
+WallHomeEdit_PushSndAddr_Str_USER:	aligned_string " USER  "
 	aligned_string " ERROR "
 	.short 156, 156, 96, 96, 96, 156, 96, 160, 167, 100
 WallMenuEdit_Text:
@@ -993,12 +993,12 @@ OctaveDigitStr_0A:	.asciz "0"
 ; ** 0xED1BE8 only became visible when the table above stopped being framed as
 ; code, so it could not be called _0B: that name (0xED1BEA) is already in use
 ; and is aliased by positional_labels.s. Hence A, C, B in address order.
-OctaveDigitStr_0C:	.asciz "0"
-OctaveDigitStr_0B:	.asciz "0"
-	aligned_string "          "
-	aligned_string "SPLIT<%s%s>"
-	aligned_string "          "
-	aligned_string "SPLIT<%s%s>"
+OctaveDigitStr_0C:					.asciz "0"
+OctaveDigitStr_0B:					.asciz "0"
+AcFreeSplit_ValueChanged_Str_Blank10:			aligned_string "          "
+AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts:	aligned_string "SPLIT<%s%s>"
+AcFreeSplit_CheckSecondKey_Str_Blank10:			aligned_string "          "
+AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts:	aligned_string "SPLIT<%s%s>"
 	.long KeyScaleNoteStr_G
 ParamStr_Table_07:
 	.long KeyScaleNoteStr_AFlat
@@ -1026,12 +1026,12 @@ KeyScaleNoteStr_B:	aligned_string "B "
 KeyScaleNoteStr_BFlat:	aligned_string "B~a0"
 KeyScaleNoteStr_A:
 	aligned_string "A "
-KeyScaleNoteStr_AFlat:	aligned_string "A~a0"
-KeyScaleNoteStr_G:	.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20, 0x20, 0x20, 0x00, 0xff
-	aligned_string "<%s>"
-	aligned_string "%s"
-ChordStr_On:	aligned_string "on"	; MainChordPre appends it when byte 0x8D44 != 0 and bit 1 of 0xCEDE is set
-ChordStr_Blank:	aligned_string "  "
+KeyScaleNoteStr_AFlat:			aligned_string "A~a0"
+KeyScaleNoteStr_G:			.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20, 0x20, 0x20, 0x00, 0xff
+AcTranspose_FormatLabel_Str_Fmts:	aligned_string "<%s>"
+AcChordBox_HandleChordUpdate_Str_Fmts:	aligned_string "%s"
+ChordStr_On:				aligned_string "on"	; MainChordPre appends it when byte 0x8D44 != 0 and bit 1 of 0xCEDE is set
+ChordStr_Blank:				aligned_string "  "
 ; ---------------------------------------------------------------------------
 ; Toshi_ApFunction_Table -- TOSHI object table: 42 "application function"
 ; code pointers + NULL (0xED1C9E-0xED1D49)

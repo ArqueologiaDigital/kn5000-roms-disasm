@@ -855,7 +855,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E28828
 	.long 0x00E2884E
 	.long 0x00000000
-	.long 0x00E28888
+InitializeKubo_PtrTable:	.long 0x00E28888
 	.long 0x00E288C4
 	.long 0x00E288EE
 	.long 0x00E28918
@@ -868,7 +868,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E28A0E
 	.long 0x00E28A24
 	.long 0x00000000
-	.long 0x00E28A3C
+InitializeKubo_PtrTable_2:	.long 0x00E28A3C
 	.long 0x00E28A76
 	.long 0x00E28AB4
 	.long 0x00E28ADA
@@ -881,7 +881,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E28BE8
 	.long 0x00E28C12
 	.long 0x00000000
-	.long 0x00E28C54
+InitializeKubo_PtrTable_3:	.long 0x00E28C54
 	.long 0x00E28C8E
 	.long 0x00E28CB4
 	.long 0x00E28CCA
@@ -910,7 +910,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E29050
 	.long 0x00E2906A
 	.long 0x00000000
-	.long 0x00E29080
+InitializeKubo_PtrTable_4:	.long 0x00E29080
 	.long 0x00E290B6
 	.long 0x00E290D6
 	.long 0x00E2911E
@@ -919,7 +919,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E291D2
 	.long 0x00E291FC
 	.long 0x00000000
-	.long 0x00E29222
+InitializeKubo_PtrTable_5:	.long 0x00E29222
 	.long 0x00E29258
 	.long 0x00E2927E
 	.long 0x00E29298
@@ -936,7 +936,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E29444
 	.long 0x00E2946E
 	.long 0x00000000
-	.long 0x00E29498
+InitializeKubo_PtrTable_6:	.long 0x00E29498
 	.long 0x00E294CA
 	.long 0x00E2950E
 	.long 0x00E29550
@@ -947,7 +947,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E296AE
 	.long 0x00E296F0
 	.long 0x00000000
-	.long 0x00E29734
+InitializeKubo_PtrTable_7:	.long 0x00E29734
 	.long 0x00E2976E
 	.long 0x00E29784
 	.long 0x00E297B0
@@ -973,7 +973,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E29A70
 	.long 0x00E29A9C
 	.long 0x00000000
-	.long 0x00E29AC2
+InitializeKubo_PtrTable_8:	.long 0x00E29AC2
 	.long 0x00E29AFC
 	.long 0x00E29B1C
 	.long 0x00E29B64
@@ -985,7 +985,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E29C94
 	.long 0x00E29CBA
 	.long 0x00000000
-	.long 0x00E29CF4
+InitializeKubo_PtrTable_9:	.long 0x00E29CF4
 	.long 0x00E29D2C
 	.long 0x00E29D42
 	.long 0x00E29D5C
@@ -1010,7 +1010,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2A050
 	.long 0x00E2A076
 	.long 0x00000000
-	.long 0x00E2A09C
+InitializeKubo_PtrTable_10:	.long 0x00E2A09C
 	.long 0x00E2A0D8
 	.long 0x00E2A102
 	.long 0x00E2A128
@@ -1023,12 +1023,12 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2A2B0
 	.long 0x00E2A2C6
 	.long 0x00000000
-	.long 0x00E2A302
+InitializeKubo_PtrTable_11:	.long 0x00E2A302
 	.long 0x00E2A338
 	.long 0x00E2A364
 	.long 0x00E2A38E
 	.long 0x00000000
-	.long 0x00E2A3A4
+InitializeKubo_PtrTable_12:	.long 0x00E2A3A4
 	.long 0x00E2A3DA
 	.long 0x00E2A404
 	.long 0x00E2A430
@@ -1046,7 +1046,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2A5D6
 	.long 0x00E2A600
 	.long 0x00000000
-	.long 0x00E2A62A
+InitializeKubo_PtrTable_13:	.long 0x00E2A62A
 	.long 0x00E2A664
 	.long 0x00E2A682
 	.long 0x00E2A69E
@@ -1066,7 +1066,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2A87A
 	.long 0x00E2A8A6
 	.long 0x00000000
-	.long 0x00E2A8D0
+InitializeKubo_PtrTable_14:	.long 0x00E2A8D0
 	.long 0x00E2A900
 	.long 0x00E2A91C
 	.long 0x00E2A940
@@ -1093,12 +1093,12 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2ADA4
 	.long 0x00E2ADBE
 	.long 0x00000000
-	.long 0x00E2ADD8
+InitializeKubo_PtrTable_15:	.long 0x00E2ADD8
 	.long 0x00E2AE0E
 	.long 0x00E2AE3C
 	.long 0x00E2AE52
 	.long 0x00000000
-	.long 0x00E2AE7C
+InitializeKubo_PtrTable_16:	.long 0x00E2AE7C
 	.long 0x00E2AEB0
 	.long 0x00E2AED8
 	.long 0x00E2AF00
@@ -1126,7 +1126,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2B222
 	.long 0x00E2B24A
 	.long 0x00000000
-	.long 0x00E2B272
+InitializeKubo_PtrTable_17:	.long 0x00E2B272
 	.long 0x00E2B2A8
 	.long 0x00E2B2DA
 	.long 0x00E2B304
@@ -1135,12 +1135,12 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2B384
 	.long 0x00E2B3CC
 	.long 0x00000000
-	.long 0x00E2B414
+InitializeKubo_PtrTable_18:	.long 0x00E2B414
 	.long 0x00E2B44A
 	.long 0x00E2B478
 	.long 0x00E2B48E
 	.long 0x00000000
-	.long 0x00E2B4B8
+InitializeKubo_PtrTable_19:	.long 0x00E2B4B8
 	.long 0x00E2B4EC
 	.long 0x00E2B514
 	.long 0x00E2B53C
@@ -1167,7 +1167,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2B836
 	.long 0x00E2B85E
 	.long 0x00000000
-	.long 0x00E2B886
+InitializeKubo_PtrTable_20:	.long 0x00E2B886
 	.long 0x00E2B8BC
 	.long 0x00E2B8EE
 	.long 0x00E2B918
@@ -1176,7 +1176,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2B998
 	.long 0x00E2B9E0
 	.long 0x00000000
-	.long 0x00E2BA28
+InitializeKubo_PtrTable_21:	.long 0x00E2BA28
 	.long 0x00E2BA5E
 	.long 0x00E2BA74
 	.long 0x00E2BA8A
@@ -1191,7 +1191,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2BBF4
 	.long 0x00E2BC1E
 	.long 0x00000000
-	.long 0x00E2BC48
+InitializeKubo_PtrTable_22:	.long 0x00E2BC48
 	.long 0x00E2BC7E
 	.long 0x00E2BC98
 	.long 0x00E2BCB2
@@ -1214,7 +1214,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2BF38
 	.long 0x00E2BF52
 	.long 0x00000000
-	.long 0x00E2BF7C
+InitializeKubo_PtrTable_23:	.long 0x00E2BF7C
 	.long 0x00E2BFB0
 	.long 0x00E2BFD6
 	.long 0x00E2C000
@@ -1236,7 +1236,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2C2E4
 	.long 0x00E2C2FE
 	.long 0x00000000
-	.long 0x00E2C328
+InitializeKubo_PtrTable_24:	.long 0x00E2C328
 	.long 0x00E2C35C
 	.long 0x00E2C382
 	.long 0x00E2C3AC
@@ -1253,7 +1253,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2C5B8
 	.long 0x00E2C5D2
 	.long 0x00000000
-	.long 0x00E2C5FC
+InitializeKubo_PtrTable_25:	.long 0x00E2C5FC
 	.long 0x00E2C636
 	.long 0x00E2C65C
 	.long 0x00E2C686
@@ -1270,7 +1270,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2C892
 	.long 0x00E2C8AC
 	.long 0x00000000
-	.long 0x00E2C8D6
+InitializeKubo_PtrTable_26:	.long 0x00E2C8D6
 	.long 0x00E2C90C
 	.long 0x00E2C92C
 	.long 0x00E2C960
@@ -1296,7 +1296,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2CC82
 	.long 0x00E2CC9C
 	.long 0x00000000
-	.long 0x00E2CCC6
+InitializeKubo_PtrTable_27:	.long 0x00E2CCC6
 	.long 0x00E2CCFE
 	.long 0x00E2CD28
 	.long 0x00E2CD4E
@@ -1313,7 +1313,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2CF5C
 	.long 0x00E2CF76
 	.long 0x00000000
-	.long 0x00E2CFA0
+InitializeKubo_PtrTable_28:	.long 0x00E2CFA0
 	.long 0x00E2CFD8
 	.long 0x00E2D002
 	.long 0x00E2D028
@@ -1330,7 +1330,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2D236
 	.long 0x00E2D250
 	.long 0x00000000
-	.long 0x00E2D27A
+InitializeKubo_PtrTable_29:	.long 0x00E2D27A
 	.long 0x00E2D2B2
 	.long 0x00E2D2DC
 	.long 0x00E2D306
@@ -1348,7 +1348,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2D48E
 	.long 0x00E2D4B8
 	.long 0x00000000
-	.long 0x00E2D4F2
+InitializeKubo_PtrTable_30:	.long 0x00E2D4F2
 	.long 0x00E2D52C
 	.long 0x00E2D552
 	.long 0x00E2D57C
@@ -1364,7 +1364,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2D746
 	.long 0x00E2D760
 	.long 0x00000000
-	.long 0x00E2D78A
+InitializeKubo_PtrTable_31:	.long 0x00E2D78A
 	.long 0x00E2D7C4
 	.long 0x00E2D7EE
 	.long 0x00E2D818
@@ -1384,10 +1384,10 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00000000
 	.long 0x00000000
 	.long 0x00000000
-	.long 0x00E2DA04
+InitializeKubo_PtrTable_32:	.long 0x00E2DA04
 	.long 0x00E2DA40
 	.long 0x00000000
-	.long 0x00E2DA60
+InitializeKubo_PtrTable_33:	.long 0x00E2DA60
 	.long 0x00E2DA96
 	.long 0x00E2DB52
 	.long 0x0003E204
@@ -1403,7 +1403,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2DCBC
 	.long 0x00E2DCEA
 	.long 0x00000000
-	.long 0x00E2DD10
+InitializeKubo_PtrTable_34:	.long 0x00E2DD10
 	.long 0x00E2DD48
 	.long 0x00E2DD62
 	.long 0x00E2DD8C
@@ -1472,7 +1472,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7108  +0x7108..+0x713e (0xe2f0ac, 54 B)
 ; [nakarest] the table itself: ResName slot 0x30a (table 0xe2f0ac, 12 entries, InitializeKubo),
 ; [nakarest] 12 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7108, 0x36
+InitializeKubo_PtrTable_35:	.incbin "includes/generated/naka_effects_seq.bin", 0x7108, 0x36
 ; [nakarest] naka_effects_seq+0x713e  +0x713e..+0x7156 (0xe2f0e2, 24 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x30a (table 0xe2f0ac, 12 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xa): "", "", "", "", "", "", ....
@@ -1480,7 +1480,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7156  +0x7156..+0x718c (0xe2f0fa, 54 B)
 ; [nakarest] the table itself: ResName slot 0x30b (table 0xe2f0fa, 12 entries, InitializeKubo),
 ; [nakarest] 12 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7156, 0x36
+InitializeKubo_PtrTable_36:	.incbin "includes/generated/naka_effects_seq.bin", 0x7156, 0x36
 ; [nakarest] naka_effects_seq+0x718c  +0x718c..+0x71a4 (0xe2f130, 24 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x30b (table 0xe2f0fa, 12 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xb): "", "", "", "", "", "", ....
@@ -1488,7 +1488,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x71a4  +0x71a4..+0x723e (0xe2f148, 154 B)
 ; [nakarest] the table itself: ResName slot 0x30c (table 0xe2f148, 37 entries, InitializeKubo),
 ; [nakarest] 37 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x71A4, 0x9A
+InitializeKubo_PtrTable_37:	.incbin "includes/generated/naka_effects_seq.bin", 0x71A4, 0x9A
 ; [nakarest] naka_effects_seq+0x723e  +0x723e..+0x728e (0xe2f1e2, 80 B)
 ; [nakarest] name strings, entries 0-36 of ResName slot 0x30c (table 0xe2f148, 37 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xc): "EqOnOff", "", "", "", "", "", ....
@@ -1496,7 +1496,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x728e  +0x728e..+0x72c4 (0xe2f232, 54 B)
 ; [nakarest] the table itself: ResName slot 0x30e (table 0xe2f232, 12 entries, InitializeKubo),
 ; [nakarest] 12 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x728E, 0x36
+InitializeKubo_PtrTable_38:	.incbin "includes/generated/naka_effects_seq.bin", 0x728E, 0x36
 ; [nakarest] naka_effects_seq+0x72c4  +0x72c4..+0x72dc (0xe2f268, 24 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x30e (table 0xe2f232, 12 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xe): "", "", "", "", "", "", ....
@@ -1504,7 +1504,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x72dc  +0x72dc..+0x7312 (0xe2f280, 54 B)
 ; [nakarest] the table itself: ResName slot 0x380 (table 0xe2f280, 12 entries, InitializeKubo),
 ; [nakarest] 12 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x72DC, 0x36
+InitializeKubo_PtrTable_39:	.incbin "includes/generated/naka_effects_seq.bin", 0x72DC, 0x36
 ; [nakarest] naka_effects_seq+0x7312  +0x7312..+0x732a (0xe2f2b6, 24 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x380 (table 0xe2f280, 12 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x80): "", "", "", "", "", "", ....
@@ -1512,7 +1512,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x732a  +0x732a..+0x73a0 (0xe2f2ce, 118 B)
 ; [nakarest] the table itself: ResName slot 0x381 (table 0xe2f2ce, 28 entries, InitializeKubo),
 ; [nakarest] 28 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x732A, 0x76
+InitializeKubo_PtrTable_40:	.incbin "includes/generated/naka_effects_seq.bin", 0x732A, 0x76
 ; [nakarest] naka_effects_seq+0x73a0  +0x73a0..+0x7406 (0xe2f344, 102 B)
 ; [nakarest] name strings, entries 0-27 of ResName slot 0x381 (table 0xe2f2ce, 28 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x81): "", "", "", "", "", "SngSelWin2",
@@ -1521,7 +1521,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7406  +0x7406..+0x742c (0xe2f3aa, 38 B)
 ; [nakarest] the table itself: ResName slot 0x382 (table 0xe2f3aa, 8 entries, InitializeKubo), 8
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7406, 0x26
+InitializeKubo_PtrTable_41:	.incbin "includes/generated/naka_effects_seq.bin", 0x7406, 0x26
 ; [nakarest] naka_effects_seq+0x742c  +0x742c..+0x743c (0xe2f3d0, 16 B)
 ; [nakarest] name strings, entries 0-7 of ResName slot 0x382 (table 0xe2f3aa, 8 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x82): "", "", "", "", "", "", ....
@@ -1529,7 +1529,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x743c  +0x743c..+0x7482 (0xe2f3e0, 70 B)
 ; [nakarest] the table itself: ResName slot 0x383 (table 0xe2f3e0, 16 entries, InitializeKubo),
 ; [nakarest] 16 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x743C, 0x46
+InitializeKubo_PtrTable_42:	.incbin "includes/generated/naka_effects_seq.bin", 0x743C, 0x46
 ; [nakarest] naka_effects_seq+0x7482  +0x7482..+0x74a2 (0xe2f426, 32 B)
 ; [nakarest] name strings, entries 0-15 of ResName slot 0x383 (table 0xe2f3e0, 16 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x83): "", "", "", "", "", "", ....
@@ -1537,7 +1537,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x74a2  +0x74a2..+0x74d0 (0xe2f446, 46 B)
 ; [nakarest] the table itself: ResName slot 0x384 (table 0xe2f446, 10 entries, InitializeKubo),
 ; [nakarest] 10 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x74A2, 0x2E
+InitializeKubo_PtrTable_43:	.incbin "includes/generated/naka_effects_seq.bin", 0x74A2, 0x2E
 ; [nakarest] naka_effects_seq+0x74d0  +0x74d0..+0x74e4 (0xe2f474, 20 B)
 ; [nakarest] name strings, entries 0-9 of ResName slot 0x384 (table 0xe2f446, 10 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x84): "", "", "", "", "", "", ....
@@ -1545,7 +1545,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x74e4  +0x74e4..+0x754e (0xe2f488, 106 B)
 ; [nakarest] the table itself: ResName slot 0x385 (table 0xe2f488, 25 entries, InitializeKubo),
 ; [nakarest] 25 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x74E4, 0x6A
+InitializeKubo_PtrTable_44:	.incbin "includes/generated/naka_effects_seq.bin", 0x74E4, 0x6A
 ; [nakarest] naka_effects_seq+0x754e  +0x754e..+0x75bc (0xe2f4f2, 110 B)
 ; [nakarest] name strings, entries 0-24 of ResName slot 0x385 (table 0xe2f488, 25 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x85): "", "", "CycClrSw", "",
@@ -1554,7 +1554,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x75bc  +0x75bc..+0x75ee (0xe2f560, 50 B)
 ; [nakarest] the table itself: ResName slot 0x386 (table 0xe2f560, 11 entries, InitializeKubo),
 ; [nakarest] 11 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x75BC, 0x32
+InitializeKubo_PtrTable_45:	.incbin "includes/generated/naka_effects_seq.bin", 0x75BC, 0x32
 ; [nakarest] naka_effects_seq+0x75ee  +0x75ee..+0x760e (0xe2f592, 32 B)
 ; [nakarest] name strings, entries 0-10 of ResName slot 0x386 (table 0xe2f560, 11 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x86): "", "", "", "MetCycRecSw", "", "",
@@ -1563,7 +1563,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x760e  +0x760e..+0x7674 (0xe2f5b2, 102 B)
 ; [nakarest] the table itself: ResName slot 0x387 (table 0xe2f5b2, 24 entries, InitializeKubo),
 ; [nakarest] 24 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x760E, 0x66
+InitializeKubo_PtrTable_46:	.incbin "includes/generated/naka_effects_seq.bin", 0x760E, 0x66
 ; [nakarest] naka_effects_seq+0x7674  +0x7674..+0x76c6 (0xe2f618, 82 B)
 ; [nakarest] name strings, entries 0-23 of ResName slot 0x387 (table 0xe2f5b2, 24 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x87): "", "", "", "", "", "", ....
@@ -1571,7 +1571,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x76c6  +0x76c6..+0x76fc (0xe2f66a, 54 B)
 ; [nakarest] the table itself: ResName slot 0x388 (table 0xe2f66a, 12 entries, InitializeKubo),
 ; [nakarest] 12 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x76C6, 0x36
+InitializeKubo_PtrTable_47:	.incbin "includes/generated/naka_effects_seq.bin", 0x76C6, 0x36
 ; [nakarest] naka_effects_seq+0x76fc  +0x76fc..+0x771e (0xe2f6a0, 34 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x388 (table 0xe2f66a, 12 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x88): "", "", "", "", "", "", ....
@@ -1579,7 +1579,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x771e  +0x771e..+0x7734 (0xe2f6c2, 22 B)
 ; [nakarest] the table itself: ResName slot 0x38d (table 0xe2f6c2, 4 entries, InitializeKubo), 4
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x771E, 0x16
+InitializeKubo_PtrTable_48:	.incbin "includes/generated/naka_effects_seq.bin", 0x771E, 0x16
 ; [nakarest] naka_effects_seq+0x7734  +0x7734..+0x773c (0xe2f6d8, 8 B)
 ; [nakarest] name strings, entries 0-3 of ResName slot 0x38d (table 0xe2f6c2, 4 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x8d): "", "", "", "".
@@ -1587,7 +1587,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x773c  +0x773c..+0x7786 (0xe2f6e0, 74 B)
 ; [nakarest] the table itself: ResName slot 0x390 (table 0xe2f6e0, 17 entries, InitializeKubo),
 ; [nakarest] 17 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x773C, 0x4A
+InitializeKubo_PtrTable_49:	.incbin "includes/generated/naka_effects_seq.bin", 0x773C, 0x4A
 ; [nakarest] naka_effects_seq+0x7786  +0x7786..+0x77b4 (0xe2f72a, 46 B)
 ; [nakarest] name strings, entries 0-16 of ResName slot 0x390 (table 0xe2f6e0, 17 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x90): "", "", "", "", "", "", ....
@@ -1595,7 +1595,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x77b4  +0x77b4..+0x7806 (0xe2f758, 82 B)
 ; [nakarest] the table itself: ResName slot 0x391 (table 0xe2f758, 19 entries, InitializeKubo),
 ; [nakarest] 19 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x77B4, 0x52
+InitializeKubo_PtrTable_50:	.incbin "includes/generated/naka_effects_seq.bin", 0x77B4, 0x52
 ; [nakarest] naka_effects_seq+0x7806  +0x7806..+0x7838 (0xe2f7aa, 50 B)
 ; [nakarest] name strings, entries 0-18 of ResName slot 0x391 (table 0xe2f758, 19 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x91): "", "", "", "", "", "", ....
@@ -1603,7 +1603,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7838  +0x7838..+0x78a6 (0xe2f7dc, 110 B)
 ; [nakarest] the table itself: ResName slot 0x393 (table 0xe2f7dc, 26 entries, InitializeKubo),
 ; [nakarest] 26 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7838, 0x6E
+InitializeKubo_PtrTable_51:	.incbin "includes/generated/naka_effects_seq.bin", 0x7838, 0x6E
 ; [nakarest] naka_effects_seq+0x78a6  +0x78a6..+0x78f4 (0xe2f84a, 78 B)
 ; [nakarest] name strings, entries 0-25 of ResName slot 0x393 (table 0xe2f7dc, 26 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x93): "", "", "", "", "", "", ....
@@ -1611,7 +1611,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x78f4  +0x78f4..+0x790a (0xe2f898, 22 B)
 ; [nakarest] the table itself: ResName slot 0x394 (table 0xe2f898, 4 entries, InitializeKubo), 4
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x78F4, 0x16
+InitializeKubo_PtrTable_52:	.incbin "includes/generated/naka_effects_seq.bin", 0x78F4, 0x16
 ; [nakarest] naka_effects_seq+0x790a  +0x790a..+0x7912 (0xe2f8ae, 8 B)
 ; [nakarest] name strings, entries 0-3 of ResName slot 0x394 (table 0xe2f898, 4 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x94): "", "", "", "".
@@ -1619,7 +1619,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7912  +0x7912..+0x7984 (0xe2f8b6, 114 B)
 ; [nakarest] the table itself: ResName slot 0x395 (table 0xe2f8b6, 27 entries, InitializeKubo),
 ; [nakarest] 27 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7912, 0x72
+InitializeKubo_PtrTable_53:	.incbin "includes/generated/naka_effects_seq.bin", 0x7912, 0x72
 ; [nakarest] naka_effects_seq+0x7984  +0x7984..+0x79c2 (0xe2f928, 62 B)
 ; [nakarest] name strings, entries 0-26 of ResName slot 0x395 (table 0xe2f8b6, 27 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x95): "", "", "", "", "", "", ....
@@ -1627,7 +1627,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x79c2  +0x79c2..+0x79e8 (0xe2f966, 38 B)
 ; [nakarest] the table itself: ResName slot 0x396 (table 0xe2f966, 8 entries, InitializeKubo), 8
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x79C2, 0x26
+InitializeKubo_PtrTable_54:	.incbin "includes/generated/naka_effects_seq.bin", 0x79C2, 0x26
 ; [nakarest] naka_effects_seq+0x79e8  +0x79e8..+0x79f8 (0xe2f98c, 16 B)
 ; [nakarest] name strings, entries 0-7 of ResName slot 0x396 (table 0xe2f966, 8 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x96): "", "", "", "", "", "", ....
@@ -1635,7 +1635,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x79f8  +0x79f8..+0x7a0e (0xe2f99c, 22 B)
 ; [nakarest] the table itself: ResName slot 0x397 (table 0xe2f99c, 4 entries, InitializeKubo), 4
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x79F8, 0x16
+InitializeKubo_PtrTable_55:	.incbin "includes/generated/naka_effects_seq.bin", 0x79F8, 0x16
 ; [nakarest] naka_effects_seq+0x7a0e  +0x7a0e..+0x7a16 (0xe2f9b2, 8 B)
 ; [nakarest] name strings, entries 0-3 of ResName slot 0x397 (table 0xe2f99c, 4 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x97): "", "", "", "".
@@ -1643,7 +1643,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7a16  +0x7a16..+0x7a84 (0xe2f9ba, 110 B)
 ; [nakarest] the table itself: ResName slot 0x398 (table 0xe2f9ba, 26 entries, InitializeKubo),
 ; [nakarest] 26 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7A16, 0x6E
+InitializeKubo_PtrTable_56:	.incbin "includes/generated/naka_effects_seq.bin", 0x7A16, 0x6E
 ; [nakarest] naka_effects_seq+0x7a84  +0x7a84..+0x7ac0 (0xe2fa28, 60 B)
 ; [nakarest] name strings, entries 0-25 of ResName slot 0x398 (table 0xe2f9ba, 26 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x98): "", "", "", "", "", "", ....
@@ -1651,7 +1651,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7ac0  +0x7ac0..+0x7ae6 (0xe2fa64, 38 B)
 ; [nakarest] the table itself: ResName slot 0x399 (table 0xe2fa64, 8 entries, InitializeKubo), 8
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7AC0, 0x26
+InitializeKubo_PtrTable_57:	.incbin "includes/generated/naka_effects_seq.bin", 0x7AC0, 0x26
 ; [nakarest] naka_effects_seq+0x7ae6  +0x7ae6..+0x7af6 (0xe2fa8a, 16 B)
 ; [nakarest] name strings, entries 0-7 of ResName slot 0x399 (table 0xe2fa64, 8 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x99): "", "", "", "", "", "", ....
@@ -1659,7 +1659,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7af6  +0x7af6..+0x7b34 (0xe2fa9a, 62 B)
 ; [nakarest] the table itself: ResName slot 0x39a (table 0xe2fa9a, 14 entries, InitializeKubo),
 ; [nakarest] 14 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7AF6, 0x3E
+InitializeKubo_PtrTable_58:	.incbin "includes/generated/naka_effects_seq.bin", 0x7AF6, 0x3E
 ; [nakarest] naka_effects_seq+0x7b34  +0x7b34..+0x7b5e (0xe2fad8, 42 B)
 ; [nakarest] name strings, entries 0-13 of ResName slot 0x39a (table 0xe2fa9a, 14 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x9a): "", "", "", "", "", "", ....
@@ -1667,7 +1667,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7b5e  +0x7b5e..+0x7bbc (0xe2fb02, 94 B)
 ; [nakarest] the table itself: ResName slot 0x39b (table 0xe2fb02, 22 entries, InitializeKubo),
 ; [nakarest] 22 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7B5E, 0x5E
+InitializeKubo_PtrTable_59:	.incbin "includes/generated/naka_effects_seq.bin", 0x7B5E, 0x5E
 ; [nakarest] naka_effects_seq+0x7bbc  +0x7bbc..+0x7bf6 (0xe2fb60, 58 B)
 ; [nakarest] name strings, entries 0-21 of ResName slot 0x39b (table 0xe2fb02, 22 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x9b): "", "", "", "", "", "", ....
@@ -1675,7 +1675,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7bf6  +0x7bf6..+0x7c50 (0xe2fb9a, 90 B)
 ; [nakarest] the table itself: ResName slot 0x39c (table 0xe2fb9a, 21 entries, InitializeKubo),
 ; [nakarest] 21 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7BF6, 0x5A
+InitializeKubo_PtrTable_60:	.incbin "includes/generated/naka_effects_seq.bin", 0x7BF6, 0x5A
 ; [nakarest] naka_effects_seq+0x7c50  +0x7c50..+0x7c84 (0xe2fbf4, 52 B)
 ; [nakarest] name strings, entries 0-20 of ResName slot 0x39c (table 0xe2fb9a, 21 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x9c): "", "", "", "", "", "", ....
@@ -1683,7 +1683,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7c84  +0x7c84..+0x7cca (0xe2fc28, 70 B)
 ; [nakarest] the table itself: ResName slot 0x39d (table 0xe2fc28, 16 entries, InitializeKubo),
 ; [nakarest] 16 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7C84, 0x46
+InitializeKubo_PtrTable_61:	.incbin "includes/generated/naka_effects_seq.bin", 0x7C84, 0x46
 ; [nakarest] naka_effects_seq+0x7cca  +0x7cca..+0x7cf6 (0xe2fc6e, 44 B)
 ; [nakarest] name strings, entries 0-15 of ResName slot 0x39d (table 0xe2fc28, 16 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x9d): "", "", "", "", "", "TrnsSureDisp",
@@ -1692,7 +1692,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7cf6  +0x7cf6..+0x7d3c (0xe2fc9a, 70 B)
 ; [nakarest] the table itself: ResName slot 0x39e (table 0xe2fc9a, 16 entries, InitializeKubo),
 ; [nakarest] 16 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7CF6, 0x46
+InitializeKubo_PtrTable_62:	.incbin "includes/generated/naka_effects_seq.bin", 0x7CF6, 0x46
 ; [nakarest] naka_effects_seq+0x7d3c  +0x7d3c..+0x7d68 (0xe2fce0, 44 B)
 ; [nakarest] name strings, entries 0-15 of ResName slot 0x39e (table 0xe2fc9a, 16 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x9e): "", "", "", "", "", "VeloSureDisp",
@@ -1701,7 +1701,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7d68  +0x7d68..+0x7dd2 (0xe2fd0c, 106 B)
 ; [nakarest] the table itself: ResName slot 0x39f (table 0xe2fd0c, 25 entries, InitializeKubo),
 ; [nakarest] 25 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7D68, 0x6A
+InitializeKubo_PtrTable_63:	.incbin "includes/generated/naka_effects_seq.bin", 0x7D68, 0x6A
 ; [nakarest] naka_effects_seq+0x7dd2  +0x7dd2..+0x7e10 (0xe2fd76, 62 B)
 ; [nakarest] name strings, entries 0-24 of ResName slot 0x39f (table 0xe2fd0c, 25 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0x9f): "", "", "", "", "", "", ....
@@ -1709,7 +1709,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7e10  +0x7e10..+0x7e56 (0xe2fdb4, 70 B)
 ; [nakarest] the table itself: ResName slot 0x3a0 (table 0xe2fdb4, 16 entries, InitializeKubo),
 ; [nakarest] 16 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7E10, 0x46
+InitializeKubo_PtrTable_64:	.incbin "includes/generated/naka_effects_seq.bin", 0x7E10, 0x46
 ; [nakarest] naka_effects_seq+0x7e56  +0x7e56..+0x7e80 (0xe2fdfa, 42 B)
 ; [nakarest] name strings, entries 0-15 of ResName slot 0x3a0 (table 0xe2fdb4, 16 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xa0): "", "", "", "", "", "AdvSureDisp",
@@ -1718,7 +1718,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7e80  +0x7e80..+0x7ec6 (0xe2fe24, 70 B)
 ; [nakarest] the table itself: ResName slot 0x3a1 (table 0xe2fe24, 16 entries, InitializeKubo),
 ; [nakarest] 16 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7E80, 0x46
+InitializeKubo_PtrTable_65:	.incbin "includes/generated/naka_effects_seq.bin", 0x7E80, 0x46
 ; [nakarest] naka_effects_seq+0x7ec6  +0x7ec6..+0x7ef2 (0xe2fe6a, 44 B)
 ; [nakarest] name strings, entries 0-15 of ResName slot 0x3a1 (table 0xe2fe24, 16 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xa1): "", "", "", "", "", "MersSureDisp",
@@ -1727,7 +1727,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7ef2  +0x7ef2..+0x7f3c (0xe2fe96, 74 B)
 ; [nakarest] the table itself: ResName slot 0x3a2 (table 0xe2fe96, 17 entries, InitializeKubo),
 ; [nakarest] 17 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7EF2, 0x4A
+InitializeKubo_PtrTable_66:	.incbin "includes/generated/naka_effects_seq.bin", 0x7EF2, 0x4A
 ; [nakarest] naka_effects_seq+0x7f3c  +0x7f3c..+0x7f68 (0xe2fee0, 44 B)
 ; [nakarest] name strings, entries 0-16 of ResName slot 0x3a2 (table 0xe2fe96, 17 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xa2): "", "", "", "", "", "", ....
@@ -1735,7 +1735,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7f68  +0x7f68..+0x7faa (0xe2ff0c, 66 B)
 ; [nakarest] the table itself: ResName slot 0x3a3 (table 0xe2ff0c, 15 entries, InitializeKubo),
 ; [nakarest] 15 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7F68, 0x42
+InitializeKubo_PtrTable_67:	.incbin "includes/generated/naka_effects_seq.bin", 0x7F68, 0x42
 ; [nakarest] naka_effects_seq+0x7faa  +0x7faa..+0x7fd4 (0xe2ff4e, 42 B)
 ; [nakarest] name strings, entries 0-14 of ResName slot 0x3a3 (table 0xe2ff0c, 15 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xa3): "", "", "", "", "", "MdelSureDisp",
@@ -1744,7 +1744,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x7fd4  +0x7fd4..+0x801e (0xe2ff78, 74 B)
 ; [nakarest] the table itself: ResName slot 0x3a4 (table 0xe2ff78, 17 entries, InitializeKubo),
 ; [nakarest] 17 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x7FD4, 0x4A
+InitializeKubo_PtrTable_68:	.incbin "includes/generated/naka_effects_seq.bin", 0x7FD4, 0x4A
 ; [nakarest] naka_effects_seq+0x801e  +0x801e..+0x804c (0xe2ffc2, 46 B)
 ; [nakarest] name strings, entries 0-16 of ResName slot 0x3a4 (table 0xe2ff78, 17 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xa4): "", "", "", "", "", "", ....
@@ -1760,7 +1760,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x8058  +0x8058..+0x8066 (0xe2fffc, 14 B)
 ; [nakarest] the table itself: ResName slot 0x3ab (table 0xe2fffc, 2 entries, InitializeKubo), 2
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8058, 0xE
+InitializeKubo_PtrTable_69:	.incbin "includes/generated/naka_effects_seq.bin", 0x8058, 0xE
 ; [nakarest] naka_effects_seq+0x8066  +0x8066..+0x806a (0xe3000a, 4 B)
 ; [nakarest] name strings, entries 0-1 of ResName slot 0x3ab (table 0xe2fffc, 2 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xab): "", "".
@@ -1768,7 +1768,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x806a  +0x806a..+0x80ac (0xe3000e, 66 B)
 ; [nakarest] the table itself: ResName slot 0x3d6 (table 0xe3000e, 15 entries, InitializeKubo),
 ; [nakarest] 15 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x806A, 0x42
+InitializeKubo_PtrTable_70:	.incbin "includes/generated/naka_effects_seq.bin", 0x806A, 0x42
 ; [nakarest] naka_effects_seq+0x80ac  +0x80ac..+0x80fa (0xe30050, 78 B)
 ; [nakarest] name strings, entries 0-14 of ResName slot 0x3d6 (table 0xe3000e, 15 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xd6): "", "", "", "", "", "", ....
@@ -1776,7 +1776,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_006700:
 ; [nakarest] naka_effects_seq+0x80fa  +0x80fa..+0x811c (0xe3009e, 34 B)
 ; [nakarest] the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries, InitializeKubo),
 ; [nakarest] 61 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x80FA, 0x22
+InitializeKubo_PtrTable_71:	.incbin "includes/generated/naka_effects_seq.bin", 0x80FA, 0x22
 ; [nakarest] Naka_Help_563_E300C0  +0x811c..+0x8123 (0xe300c0, 7 B)
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 210 of its 244 bytes
@@ -1881,7 +1881,7 @@ EmbeddedPtrTable_v10_naka_effects_seq_008600:
 	.long EtmenuTitleFunc
 	.long MainPanic
 	.long 0x00000000
-	.long 0x00E30932
+InitializeKubo_PtrTable_72:	.long 0x00E30932
 	.long 0x00E30926
 	.long 0x00E3091A
 	.long 0x00E3090E

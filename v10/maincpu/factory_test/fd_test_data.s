@@ -405,12 +405,12 @@ FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
 	aligned_string "Finishd"
 	aligned_string "Media Error"
 	.byte	0x72, 0x62, 0x00, 0xff
-	aligned_string "A:HKEXT.XAP"
+CheckFDStatusLoad_DoLoad_Str_A_HKEXT_XAP:	aligned_string "A:HKEXT.XAP"
 	aligned_string "Cannot open"
-	.ascii	"XAPR"
+LoadExtROM_Entry_Str_XAPR:	.ascii	"XAPR"
 	.byte	0x00, 0xff
 	aligned_string "Different ID"
-	aligned_string "XAPR"
+LoadXaprInit_Entry_Str_XAPR:	aligned_string "XAPR"
 	.byte 0xa9, 0xe9
 	.byte 0xf1, 0x00, 0xcd, 0xe9, 0xf1, 0x00, 0xce, 0xe9
 	.byte 0xf1, 0x00, 0xcf, 0xe9, 0xf1, 0x00, 0x58, 0x41

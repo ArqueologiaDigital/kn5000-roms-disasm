@@ -4515,13 +4515,13 @@ InitializeMurai:
 	RegObjTabl 0x1600010, ViewableProc, 0x54, Murai_ViewableTable_003, 0x3
 	RegObjTabl 0x160000f, ResNameProc, 0x54, Murai_ResNameTable_303, 0x303
 	RegObjTabl 0x1600010, ViewableProc, 0x4, Murai_ViewableTable_004, 0x4
-	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe85cf0, 0x304
+	RegObjTabl 0x160000f, ResNameProc, 0x4, InitializeMurai_PtrTable, 0x304
 	RegObjTabl 0x1600010, ViewableProc, 0x36, Murai_ViewableTable_005, 0x5
-	RegObjTabl 0x160000f, ResNameProc, 0x36, 0xe85d14, 0x305
+	RegObjTabl 0x160000f, ResNameProc, 0x36, InitializeMurai_PtrTable_2, 0x305
 	RegObjTabl 0x1600010, ViewableProc, 0x3, Murai_ViewableTable_007, 0x7
-	RegObjTabl 0x160000f, ResNameProc, 0x3, 0xe85f0a, 0x307
+	RegObjTabl 0x160000f, ResNameProc, 0x3, InitializeMurai_PtrTable_3, 0x307
 	RegObjTabl 0x1600010, ViewableProc, 0x4, Murai_ViewableTable_008, 0x8
-	RegObjTabl 0x160000f, ResNameProc, 0x4, 0xe85f2a, 0x308
+	RegObjTabl 0x160000f, ResNameProc, 0x4, InitializeMurai_PtrTable_4, 0x308
 	RegObjTabl 0x1600010, ViewableProc, 0x1d, Murai_ViewableTable_00D, 0xd
 	RegObjTabl 0x160000f, ResNameProc, 0x1d, NakaData_TechniChordStrings, 0x30d
 	RegObjTabl 0x1600010, ViewableProc, 0x4, Murai_ViewableTable_0A5, 0xa5

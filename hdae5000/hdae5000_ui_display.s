@@ -7826,12 +7826,12 @@ HDAE5000_Dir_IsBlankName:	; 0x28F9AD (62 bytes)
 	push xiz		; save XIZ
 	ld iz, wa		; IZ = tile index
 	ld	qiz, 0
-	pushw 0x002F		; push max length (47)
-	pushw 0x8DE0		; push reference string address
+	pushw HDAE5000_Dir_IsBlankName_Str_Blank16@hi16		; push max length (47)
+	pushw HDAE5000_Dir_IsBlankName_Str_Blank16@lo16		; push reference string address
 	call HDAE5000_StrLen
 	pushw hl		; push reference length
-	pushw 0x002F		; push max length
-	pushw 0x8DE0		; push reference string
+	pushw HDAE5000_Dir_IsBlankName_Str_Blank16@hi16		; push max length
+	pushw HDAE5000_Dir_IsBlankName_Str_Blank16@lo16		; push reference string
 	ld wa, iz		; restore tile index
 	extz xwa		; zero-extend
 	sll xwa, 4		; XWA *= 16
@@ -7981,13 +7981,13 @@ HDAE5000_Fls_IsBlankName:	; 0x28FAE9 (61 bytes)
 	pushw iz		; save IZ
 	ld iz, wa		; IZ = tile index
 	ldw (xsp + 2), 0x0000	; result = 0 (valid)
-	pushw 0x002F		; push max length (47)
-	pushw 0x8DF2		; push reference string address
+	pushw HDAE5000_Fls_IsBlankName_Str_Blank16@hi16		; push max length (47)
+	pushw HDAE5000_Fls_IsBlankName_Str_Blank16@lo16		; push reference string address
 	call HDAE5000_StrLen
 	inc 4, xsp		; clean up 2 args
 	pushw hl		; push reference length
-	pushw 0x002F		; push max length
-	pushw 0x8DF2		; push reference string address
+	pushw HDAE5000_Fls_IsBlankName_Str_Blank16@hi16		; push max length
+	pushw HDAE5000_Fls_IsBlankName_Str_Blank16@lo16		; push reference string address
 	ld wa, iz		; restore tile index
 	calr HDAE5000_FlsRecord_Address	; XHL = tile address
 	push xhl		; push tile address (32-bit)
@@ -11299,8 +11299,8 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+18)
 	push xwa
 	call HDAE5000_MemCopy
-	pushw 0x002f
-	pushw 0x8e9c
+	pushw HDAE5000_FdSong_CheckFiles_Str_SEQ@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_SEQ@lo16
 	lda	xwa, (xsp+34)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11323,8 +11323,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw	hl, 0xffff
 	jrl t, .LTCI_214a                      ; [78 7c 04] jrl T,0x29214a
 .LTCI_1cce:
-	pushw 0x002f
-	pushw 0x8ea2
+	pushw HDAE5000_FdSong_CheckFiles_Str_SQF@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_SQF@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11350,8 +11350,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x00, wa
 	jr z, .LTCI_1d91                       ; [66 6d] jr Z,0x291d91
-	pushw 0x002f
-	pushw 0x8ea8
+	pushw HDAE5000_FdSong_CheckFiles_Str_LSW@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_LSW@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11384,8 +11384,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x01, wa
 	jr z, .LTCI_1e08                       ; [66 6d] jr Z,0x291e08
-	pushw 0x002f
-	pushw 0x8eb2
+	pushw HDAE5000_FdSong_CheckFiles_Str_PMT@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_PMT@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11418,8 +11418,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x02, wa
 	jr z, .LTCI_1e7f                       ; [66 6d] jr Z,0x291e7f
-	pushw 0x002f
-	pushw 0x8ebc
+	pushw HDAE5000_FdSong_CheckFiles_Str_SQT@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_SQT@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11452,8 +11452,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x03, wa
 	jr z, .LTCI_1ef6                       ; [66 6d] jr Z,0x291ef6
-	pushw 0x002f
-	pushw 0x8ec6
+	pushw HDAE5000_FdSong_CheckFiles_Str_CMP@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_CMP@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11486,8 +11486,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x04, wa
 	jr z, .LTCI_1f6d                       ; [66 6d] jr Z,0x291f6d
-	pushw 0x002f
-	pushw 0x8ed0
+	pushw HDAE5000_FdSong_CheckFiles_Str_TM@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_TM@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11520,8 +11520,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x05, wa
 	jr z, .LTCI_1fe4                       ; [66 6d] jr Z,0x291fe4
-	pushw 0x002f
-	pushw 0x8ed8
+	pushw HDAE5000_FdSong_CheckFiles_Str_MSP@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_MSP@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11554,8 +11554,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x06, wa
 	jr z, .LTCI_205b                       ; [66 6d] jr Z,0x29205b
-	pushw 0x002f
-	pushw 0x8ee2
+	pushw HDAE5000_FdSong_CheckFiles_Str_RCM@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_RCM@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11588,8 +11588,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x07, wa
 	jr z, .LTCI_20d1                       ; [66 6c] jr Z,0x2920d1
-	pushw 0x002f
-	pushw 0x8eec
+	pushw HDAE5000_FdSong_CheckFiles_Str_MD@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_MD@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11622,8 +11622,8 @@ HDAE5000_FdSong_CheckFiles:
 	ldw_sri0	wa, (xsp + 0x011c)
 	bit	0x08, wa
 	jr z, .LTCI_2148                       ; [66 6d] jr Z,0x292148
-	pushw 0x002f
-	pushw 0x8ef4
+	pushw HDAE5000_FdSong_CheckFiles_Str_TLX@hi16
+	pushw HDAE5000_FdSong_CheckFiles_Str_TLX@lo16
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11853,8 +11853,8 @@ HDAE5000_CopyFdSongToHd:
 	lda	xwa, (xsp+20)
 	push xwa
 	call HDAE5000_MemCopy
-	pushw 0x002f
-	pushw 0x8efe
+	pushw HDAE5000_CopyFdSongToHd_Str_TTX@hi16
+	pushw HDAE5000_CopyFdSongToHd_Str_TTX@lo16
 	lda	xwa, (xsp+36)
 	push xwa
 	call HDAE5000_StrCpy
@@ -11962,8 +11962,8 @@ HDAE5000_CopyFdSongToHd_Lsw:	; 0x292488 (359 bytes)
 	push xwa
 	call HDAE5000_MemCopy
 	; Call 0x29AF45 with args
-	pushw 0x002F
-	pushw 0x8F08
+	pushw HDAE5000_CopyFdSongToHd_Lsw_Str_LSW@hi16
+	pushw HDAE5000_CopyFdSongToHd_Lsw_Str_LSW@lo16
 	lda xwa, (xsp + 34)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12097,8 +12097,8 @@ HDAE5000_CopyFdSongToHd_Pmt:	; 0x2925EF (425 bytes)
 	push xwa
 	call HDAE5000_MemCopy
 	; Call 0x29AF45 with args
-	pushw 0x002F
-	pushw 0x8F12
+	pushw HDAE5000_CopyFdSongToHd_Pmt_Str_PMT@hi16
+	pushw HDAE5000_CopyFdSongToHd_Pmt_Str_PMT@lo16
 	lda xwa, (xsp + 38)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12247,8 +12247,8 @@ HDAE5000_CopyFdSongToHd_Sqt:	; 0x292798 (419 bytes)
 	push xwa
 	call HDAE5000_MemCopy
 	; Call 0x29AF45 with args
-	pushw 0x002F
-	pushw 0x8F1C
+	pushw HDAE5000_CopyFdSongToHd_Sqt_Str_SQT@hi16
+	pushw HDAE5000_CopyFdSongToHd_Sqt_Str_SQT@lo16
 	lda xwa, (xsp + 40)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12393,8 +12393,8 @@ HDAE5000_CopyFdSongToHd_Cmp:	; 0x29293B (419 bytes)
 	lda xwa, (xsp + 24)
 	push xwa
 	call HDAE5000_MemCopy
-	pushw 0x002F
-	pushw 0x8F26
+	pushw HDAE5000_CopyFdSongToHd_Cmp_Str_CMP@hi16
+	pushw HDAE5000_CopyFdSongToHd_Cmp_Str_CMP@lo16
 	lda xwa, (xsp + 40)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12531,8 +12531,8 @@ HDAE5000_CopyFdSongToHd_Tm:	; 0x292ADE (288 bytes)
 	push xwa
 	call HDAE5000_MemCopy
 	; Call 0x29AF45 with args
-	pushw 0x002F
-	pushw 0x8F30
+	pushw HDAE5000_CopyFdSongToHd_Tm_Str_TM@hi16
+	pushw HDAE5000_CopyFdSongToHd_Tm_Str_TM@lo16
 	lda xwa, (xsp + 34)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12635,8 +12635,8 @@ HDAE5000_CopyFdSongToHd_Msp:	; 0x292BFE (280 bytes)
 	lda xwa, (xsp + 18)
 	push xwa
 	call HDAE5000_MemCopy
-	pushw 0x002F
-	pushw 0x8F38
+	pushw HDAE5000_CopyFdSongToHd_Msp_Str_MSP@hi16
+	pushw HDAE5000_CopyFdSongToHd_Msp_Str_MSP@lo16
 	lda xwa, (xsp + 34)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12730,8 +12730,8 @@ HDAE5000_CopyFdSongToHd_Rcm:	; 0x292D16 (419 bytes)
 	lda xwa, (xsp + 24)
 	push xwa
 	call HDAE5000_MemCopy
-	pushw 0x002F
-	pushw 0x8F42
+	pushw HDAE5000_CopyFdSongToHd_Rcm_Str_RCM@hi16
+	pushw HDAE5000_CopyFdSongToHd_Rcm_Str_RCM@lo16
 	lda xwa, (xsp + 40)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12866,8 +12866,8 @@ HDAE5000_CopyFdSongToHd_Md:	; 0x292EB9 (281 bytes)
 	lda xwa, (xsp + 18)
 	push xwa
 	call HDAE5000_MemCopy
-	pushw 0x002F
-	pushw 0x8F4C
+	pushw HDAE5000_CopyFdSongToHd_Md_Str_MD@hi16
+	pushw HDAE5000_CopyFdSongToHd_Md_Str_MD@lo16
 	lda xwa, (xsp + 34)
 	push xwa
 	call HDAE5000_StrCpy
@@ -12961,8 +12961,8 @@ HDAE5000_CopyFdSongToHd_Tlx:	; 0x292FD2 (329 bytes)
 	lda xwa, (xsp + 18)
 	push xwa
 	call HDAE5000_MemCopy
-	pushw 0x002F
-	pushw 0x8F54
+	pushw HDAE5000_CopyFdSongToHd_Tlx_Str_TLX@hi16
+	pushw HDAE5000_CopyFdSongToHd_Tlx_Str_TLX@lo16
 	lda xwa, (xsp + 34)
 	push xwa
 	call HDAE5000_StrCpy
@@ -14919,8 +14919,8 @@ HDAE5000_PPORT_Svc01_GetInfoBlockPointer:
 	calr	HDAE5000_DebugTrace
 	lda xwa, (0x238f2e:24)
 	push xwa
-	pushw 0x002f
-	pushw 0x8f7c
+	pushw HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_ppib_adr_Fmtx@hi16
+	pushw HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_ppib_adr_Fmtx@lo16
 	lda	xwa, (xsp+8)
 	push xwa
 	call HDAE5000_SPrintf
@@ -14982,8 +14982,8 @@ HDAE5000_PPORT_Svc03_SendInfosAboutHd:
 	ld	(0x238FF7:24), a
 	lda xwa, (0x2f8faa:24)
 	calr	HDAE5000_DebugTrace
-	pushw 0x002f
-	pushw 0x8fc6
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddname@hi16
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddname@lo16
 	lda	xwa, (xsp+4)
 	push xwa
 	call HDAE5000_SPrintf
@@ -14998,8 +14998,8 @@ HDAE5000_PPORT_Svc03_SendInfosAboutHd:
 	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238fe3)
 	push xwa
-	pushw 0x002f
-	pushw 0x8fd2
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddtrck_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddtrck_Fmtd@lo16
 	lda	xwa, (xsp+8)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15007,8 +15007,8 @@ HDAE5000_PPORT_Svc03_SendInfosAboutHd:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238FE7:24)
-	pushw 0x002f
-	pushw 0x8fe0
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddhead_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddhead_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15016,8 +15016,8 @@ HDAE5000_PPORT_Svc03_SendInfosAboutHd:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238FE9:24)
-	pushw 0x002f
-	pushw 0x8fee
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddsctr_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddsctr_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15025,8 +15025,8 @@ HDAE5000_PPORT_Svc03_SendInfosAboutHd:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238FEB:24)
-	pushw 0x002f
-	pushw 0x8ffc
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddscby_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddscby_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15059,8 +15059,8 @@ HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock:
 	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238f5a)
 	push xwa
-	pushw 0x002f
-	pushw 0x902e
+	pushw HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_ptr_Fmtx@hi16
+	pushw HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_ptr_Fmtx@lo16
 	lda	xwa, (xsp+8)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15068,8 +15068,8 @@ HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238F5E:24)
-	pushw 0x002f
-	pushw 0x903c
+	pushw HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_wid_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_wid_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15077,8 +15077,8 @@ HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238F60:24)
-	pushw 0x002f
-	pushw 0x904a
+	pushw HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_num_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_num_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15110,8 +15110,8 @@ HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock:
 	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238f62)
 	push xwa
-	pushw 0x002f
-	pushw 0x9082
+	pushw HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_ptr_Fmtx@hi16
+	pushw HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_ptr_Fmtx@lo16
 	lda	xwa, (xsp+8)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15119,8 +15119,8 @@ HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238F66:24)
-	pushw 0x002f
-	pushw 0x9090
+	pushw HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_wid_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_wid_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15128,8 +15128,8 @@ HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238F68:24)
-	pushw 0x002f
-	pushw 0x909e
+	pushw HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_num_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_num_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15163,8 +15163,8 @@ HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock:
 	calr	HDAE5000_DebugTrace
 	ld	xwa, (0x238f6a)
 	push xwa
-	pushw 0x002f
-	pushw 0x90d0
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ptr_Fmtx@hi16
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ptr_Fmtx@lo16
 	lda	xwa, (xsp+8)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15172,8 +15172,8 @@ HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238F6E:24)
-	pushw 0x002f
-	pushw 0x90de
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_wid_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_wid_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15181,8 +15181,8 @@ HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238F70:24)
-	pushw 0x002f
-	pushw 0x90ec
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_num_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_num_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15190,8 +15190,8 @@ HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock:
 	lda	xwa, (xsp)
 	calr	HDAE5000_DebugTrace
 	pushw	(0x238F72:24)
-	pushw 0x002f
-	pushw 0x90fa
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ent_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ent_Fmtd@lo16
 	lda	xwa, (xsp+6)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15525,8 +15525,8 @@ HDAE5000_PPORT_Svc13_SendInfosAboutSong:
 	calr	HDAE5000_DebugTrace
 	lda xwa, (0x238f4a:24)
 	push xwa
-	pushw 0x002f
-	pushw 0x91ea
+	pushw HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_dirname_Fmts@hi16
+	pushw HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_dirname_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15535,8 +15535,8 @@ HDAE5000_PPORT_Svc13_SendInfosAboutSong:
 	calr	HDAE5000_DebugTrace
 	lda xwa, (0x238f30:24)
 	push xwa
-	pushw 0x002f
-	pushw 0x91f8
+	pushw HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_sngname_Fmts@hi16
+	pushw HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_sngname_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15722,8 +15722,8 @@ HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace:
 	ld	xwa, 0:i3
 	ld	a, (0x238FF8:24)
 	push xwa
-	pushw 0x002f
-	pushw 0x92ae
+	pushw HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_work_adr_Fmtx@hi16
+	pushw HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_work_adr_Fmtx@lo16
 	lda	xwa, (xsp+8)
 	push xwa
 	call HDAE5000_SPrintf
@@ -15881,8 +15881,8 @@ HDAE5000_PPORT_Svc21_WriteOpenHD:
 	ld	a, (xsp+6)
 	extz wa                                 ; extz WA
 	pushw wa                                ; push WA
-	pushw 0x002f
-	pushw 0x92fa
+	pushw HDAE5000_PPORT_Svc21_WriteOpenHD_Str_SUFFIX_Fmtd@hi16
+	pushw HDAE5000_PPORT_Svc21_WriteOpenHD_Str_SUFFIX_Fmtd@lo16
 	lda	xwa, (xsp+14)
 	push xwa
 	call HDAE5000_SPrintf

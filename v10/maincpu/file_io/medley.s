@@ -4188,7 +4188,7 @@ InitializeCheap:
 	RegObjTable 0x1600004, ClassProc, Cheap_ClassCount_165, Cheap_ClassTable_165, 0x165
 	RegObjTable 0x160000c, ResEventProc, Cheap_ResEventCount_1C5, PtrTbl_EventNames_EA1188, 0x1c5
 	RegObjTable 0x160000d, ResMethodProc, Cheap_ResMethodCount_1E5, Cheap_ResMethodTable_1E5, 0x1e5
-	RegObjTabl 0x1600002, ApFunctionProc, 0x1d, 0xea0a56, 0x125
+	RegObjTabl 0x1600002, ApFunctionProc, 0x1d, InitializeCheap_PtrTable, 0x125
 	RegObjTabl 0x1600002, ApFunctionProc, 0x1d, PtrTbl_DiskFuncNames, 0x425
 	RegObjTabl 0x1600001, FunctionProc, 0xd, Cheap_FunctionTable_105, 0x105
 	RegObjTabl 0x1600001, FunctionProc, 0xd, PtrTbl_NakaModuleHandlers, 0x405
@@ -4205,27 +4205,27 @@ InitializeCheap:
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_064, 0x64
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea75d2, 0x364
 	RegObjTabl 0x1600010, ViewableProc, 0x3, Cheap_ViewableTable_065, 0x65
-	RegObjTabl 0x160000f, ResNameProc, 0x3, 0xea75d8, 0x365
+	RegObjTabl 0x160000f, ResNameProc, 0x3, InitializeCheap_PtrTable_2, 0x365
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_066, 0x66
-	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea75fc, 0x366
+	RegObjTabl 0x160000f, ResNameProc, 0x0, InitializeCheap_Str_Empty, 0x366
 	RegObjTabl 0x1600010, ViewableProc, 0x47, Cheap_ViewableTable_067, 0x67
-	RegObjTabl 0x160000f, ResNameProc, 0x47, 0xea7602, 0x367
+	RegObjTabl 0x160000f, ResNameProc, 0x47, InitializeCheap_PtrTable_3, 0x367
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_06A, 0x6a
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea77e4, 0x36a
 	RegObjTabl 0x1600010, ViewableProc, 0x15, Cheap_ViewableTable_06B, 0x6b
-	RegObjTabl 0x160000f, ResNameProc, 0x15, 0xea77ea, 0x36b
+	RegObjTabl 0x160000f, ResNameProc, 0x15, InitializeCheap_PtrTable_4, 0x36b
 	RegObjTabl 0x1600010, ViewableProc, 0x53, Cheap_ViewableTable_06C, 0x6c
-	RegObjTabl 0x160000f, ResNameProc, 0x53, 0xea7878, 0x36c
+	RegObjTabl 0x160000f, ResNameProc, 0x53, InitializeCheap_PtrTable_5, 0x36c
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_06D, 0x6d
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7aca, 0x36d
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_06E, 0x6e
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7ad0, 0x36e
 	RegObjTabl 0x1600010, ViewableProc, 0x15, Cheap_ViewableTable_077, 0x77
-	RegObjTabl 0x160000f, ResNameProc, 0x15, 0xea7ad6, 0x377
+	RegObjTabl 0x160000f, ResNameProc, 0x15, InitializeCheap_PtrTable_6, 0x377
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_079, 0x79
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7b8c, 0x379
 	RegObjTabl 0x1600010, ViewableProc, 0x5e, Cheap_ViewableTable_07B, 0x7b
-	RegObjTabl 0x160000f, ResNameProc, 0x5e, 0xea7b92, 0x37b
+	RegObjTabl 0x160000f, ResNameProc, 0x5e, InitializeCheap_PtrTable_7, 0x37b
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_07C, 0x7c
 	RegObjTabl 0x160000f, ResNameProc, 0x0, Cheap_ResNameTable_37C, 0x37c
 	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_07D, 0x7d

@@ -6537,7 +6537,7 @@ CmpDst_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings
 EmbeddedPtrTable_v10_naka_technichord_strings_01AB00:
 	.long 0x00F90D63
 	.long 0xFF00FF00
-	.long InsertOptionText
+InitializeCheap_PtrTable:	.long InsertOptionText
 	.long TypePriorityText
 	.long JumpInsertFunc
 	.long FilePriorityFunc

@@ -422,8 +422,8 @@ CheckFDStatusLoad_Entry:
 CheckFDStatusLoad_DoLoad:
 	lda xwa, (FDTest_String_TestTitleFunc_0x242:24)
 	push xwa
-	pushw 0xe1
-	pushw 0xff84
+	pushw CheckFDStatusLoad_DoLoad_Str_A_HKEXT_XAP@hi16
+	pushw CheckFDStatusLoad_DoLoad_Str_A_HKEXT_XAP@lo16
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
@@ -450,8 +450,8 @@ CheckFDStatusLoad_Return:
 ; into DRAM at 0x200000, checks result, jumps to extension entry point
 LoadExtROM_Entry:
 	pushw 0x4
-	pushw 0xe1
-	pushw 0xff9c
+	pushw LoadExtROM_Entry_Str_XAPR@hi16
+	pushw LoadExtROM_Entry_Str_XAPR@lo16
 	ld xwa, 0x200000
 	push xwa
 	call String_Compare
@@ -471,8 +471,8 @@ GetAprStatus_Entry:
 
 LoadXaprInit_Entry:
 	pushw 0x4	; 4 bytes
-	pushw 0xe1
-	pushw 0xffb0	; "XAPR"
+	pushw LoadXaprInit_Entry_Str_XAPR@hi16
+	pushw LoadXaprInit_Entry_Str_XAPR@lo16	; "XAPR"
 	ld xwa, 0x280000
 	push xwa
 	call String_Compare

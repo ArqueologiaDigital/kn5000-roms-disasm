@@ -18028,8 +18028,8 @@ RgpSetBnk_EvtEnc_SendAudioCmd:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	58044
+	pushw	RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd@hi16
+	pushw	RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -18230,8 +18230,8 @@ MspMeasBox_HandleEvtBC:
 	call	GetViewInstance
 	ld	wa, (32370:16)
 	pushw	wa
-	pushw	225
-	pushw	58104
+	pushw	MspMeasBox_HandleEvtBC_Str_MEASURE_Fmtd@hi16
+	pushw	MspMeasBox_HandleEvtBC_Str_MEASURE_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -18291,8 +18291,8 @@ MspMemBox_HandleEvtBC:
 MspMemBox_ClampValue:
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	58118
+	pushw	MspMemBox_ClampValue_Str_MEMORY_Fmt2d@hi16
+	pushw	MspMemBox_ClampValue_Str_MEMORY_Fmt2d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -18407,8 +18407,8 @@ AcSndArgGrid_BnkDispatch:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	58132
+	pushw	AcSndArgGrid_BnkDispatch_Str_Fmtd@hi16
+	pushw	AcSndArgGrid_BnkDispatch_Str_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

@@ -6,6 +6,9 @@
 #   2. split_blobs_at_far_pointers.py   strings / pointer tables INSIDE an .incbin slice get a
 #                                       label (and positional `.set` aliases on them retire)
 #   3. symbolize_far_pointer_pushes.py  again, for the pairs step 2 made exact
+#   4. label_far_pointer_lines.py       a pointer at the START of a data line outside any slice
+#                                       (`.include`d strings, `.long` tables) labels that line
+#   5. symbolize_far_pointer_pushes.py  again
 # with a `make all` before each step, because every step reads the image's linked ELF.
 # Needs an assembler with `@hi16`/`@lo16` (TOOLCHAIN_VERSION UPDATE 20).  Changes no byte:
 # run `make gate-all` afterwards.  Reports go to $OUT (default: $TMPDIR/far-pointer-pipeline).
@@ -28,4 +31,12 @@ done
 make all >"$OUT/make3.log" 2>&1
 for i in v10 v9 v7; do
   python3 $C/symbolize_far_pointer_pushes.py --image $i --apply --report "$OUT/pass2_$i.json"
+done
+make all >"$OUT/make4.log" 2>&1
+for i in v10 v9 v7 hdae5000 prom_a; do
+  python3 $C/label_far_pointer_lines.py --image $i --apply --report "$OUT/lines_$i.json"
+done
+make all >"$OUT/make5.log" 2>&1
+for i in v10 v9 v7 hdae5000 prom_a; do
+  python3 $C/symbolize_far_pointer_pushes.py --image $i --apply --report "$OUT/pass3_$i.json"
 done

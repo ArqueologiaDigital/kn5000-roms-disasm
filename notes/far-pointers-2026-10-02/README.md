@@ -25,6 +25,8 @@ From the repo root, on a tree whose sources still hold the numbers:
 | 1 | `scripts/converters/symbolize_far_pointer_pushes.py` | which `pushw HI / pushw LO` pairs and `Reg*` macro address arguments point EXACTLY at a symbol of the image's own ELF?  Those become `Sym@hi16 / Sym@lo16` / the label; RegTitle/RegMode are respelled to take one address |
 | 2 | `scripts/converters/split_blobs_at_far_pointers.py` | which pointers land INSIDE an `.incbin` slice on a string, a pointer table or a registered table?  The slice is cut there and the piece named after the routine that reaches it; positional aliases on a piece retire, named aliases become labels |
 | 3 | step 1 again | the pairs step 2 made exact |
+| 4 | `scripts/converters/label_far_pointer_lines.py` (added in a second commit the same day) | which remaining pointers land at the START of a data line outside any slice (`.include`d format strings, NAKA title strings, `.long` tables)?  That line gets the label, named the same way |
+| 5 | step 1 again | |
 | - | `hand_edits.py` | two comments the pipeline made false (the DSP naming-zone `.equ` block, DbMemDump_StepTable) |
 | - | `c_comment_sync.py` | the NAKA C member comments: retired alias names, and "no code reference reaches them" where the `.s` header now names readers |
 
@@ -69,9 +71,17 @@ one RegTitle string argument swapped for its neighbour) each change the v10 ROM.
   `DrawLineWithMode_Impl_Skip7+N`) are two 16-bit arguments, not pointers: never touched (they
   still count in `numfar`, an upper bound).
 
+## Second pass, the same day (steps 4-5)
+
+`label_far_pointer_lines.py` labelled 201 lines in v10, 196 in v9, 178 in v7 and 43 in
+HD-AE5000 (reports `lines_<image>.json`); step 5 then named 85 / 80 / 106 / 45 more push
+pairs and 116 / 116 / 72 macro arguments, and every RegTitle/RegMode call of v10/v9 now has a
+label, so the RegTitleHiLo/RegModeHiLo copies are gone.  `numfar` 1,227 -> 607 (v10 189,
+v9 194, v7 187, prom_a 35, prom_c 2, HD-AE5000 0).  Gate 13/13.
+
 ## Still open
 
-* ~1,200 `numfar`: targets inside `.include`d string files (`GUI_FormatStrings`), inside
-  `aligned_string` runs, inside code, or the non-pointer pairs above.
+* 607 `numfar`: targets inside a line (a multi-string `.ascii`, mid-table), on code lines,
+  data that is neither text nor a pointer table, and the non-pointer pairs above.
 * The C side still types each split run as one member (`char East_ResNames_3EC_Strings[252]`);
   the `.s` names the strings.  Splitting the C members to match is a C-retyping job.

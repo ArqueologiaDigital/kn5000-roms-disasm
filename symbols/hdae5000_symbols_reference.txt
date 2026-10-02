@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 3,932
-#   semantic names ........... 3,929 (99.9%)
+#   symbols .................. 3,975
+#   semantic names ........... 3,972 (99.9%)
 #   positional names ......... 3
 #
 HDAE5000_ROM_HEADER 00280000
@@ -3901,6 +3901,49 @@ HDAE5000_Str_Rb_Extension_Check 002E5DCA
 HDAE5000_Palette_Data 002E5DCE
 HDAE5000_Bitmap_BootSplash 002E61CE
 HDAE5000_Display_Params 002F8DCE
+HDAE5000_Dir_IsBlankName_Str_Blank16 002F8DE0
+HDAE5000_Fls_IsBlankName_Str_Blank16 002F8DF2
+HDAE5000_FdSong_CheckFiles_Str_SEQ 002F8E9C
+HDAE5000_FdSong_CheckFiles_Str_SQF 002F8EA2
+HDAE5000_FdSong_CheckFiles_Str_LSW 002F8EA8
+HDAE5000_FdSong_CheckFiles_Str_PMT 002F8EB2
+HDAE5000_FdSong_CheckFiles_Str_SQT 002F8EBC
+HDAE5000_FdSong_CheckFiles_Str_CMP 002F8EC6
+HDAE5000_FdSong_CheckFiles_Str_TM 002F8ED0
+HDAE5000_FdSong_CheckFiles_Str_MSP 002F8ED8
+HDAE5000_FdSong_CheckFiles_Str_RCM 002F8EE2
+HDAE5000_FdSong_CheckFiles_Str_MD 002F8EEC
+HDAE5000_FdSong_CheckFiles_Str_TLX 002F8EF4
+HDAE5000_CopyFdSongToHd_Str_TTX 002F8EFE
+HDAE5000_CopyFdSongToHd_Lsw_Str_LSW 002F8F08
+HDAE5000_CopyFdSongToHd_Pmt_Str_PMT 002F8F12
+HDAE5000_CopyFdSongToHd_Sqt_Str_SQT 002F8F1C
+HDAE5000_CopyFdSongToHd_Cmp_Str_CMP 002F8F26
+HDAE5000_CopyFdSongToHd_Tm_Str_TM 002F8F30
+HDAE5000_CopyFdSongToHd_Msp_Str_MSP 002F8F38
+HDAE5000_CopyFdSongToHd_Rcm_Str_RCM 002F8F42
+HDAE5000_CopyFdSongToHd_Md_Str_MD 002F8F4C
+HDAE5000_CopyFdSongToHd_Tlx_Str_TLX 002F8F54
+HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_ppib_adr_Fmtx 002F8F7C
+HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddname 002F8FC6
+HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddtrck_Fmtd 002F8FD2
+HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddhead_Fmtd 002F8FE0
+HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddsctr_Fmtd 002F8FEE
+HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddscby_Fmtd 002F8FFC
+HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_ptr_Fmtx 002F902E
+HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_wid_Fmtd 002F903C
+HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_num_Fmtd 002F904A
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_ptr_Fmtx 002F9082
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_wid_Fmtd 002F9090
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_num_Fmtd 002F909E
+HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ptr_Fmtx 002F90D0
+HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_wid_Fmtd 002F90DE
+HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_num_Fmtd 002F90EC
+HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ent_Fmtd 002F90FA
+HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_dirname_Fmts 002F91EA
+HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_sngname_Fmts 002F91F8
+HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_work_adr_Fmtx 002F92AE
+HDAE5000_PPORT_Svc21_WriteOpenHD_Str_SUFFIX_Fmtd 002F92FA
 HDAE5000_CType_Table 002F9362
 HDAE5000_DoPrintf_ConvTable 002F9462
 HDAE5000_HexDigits_Lower 002F948E

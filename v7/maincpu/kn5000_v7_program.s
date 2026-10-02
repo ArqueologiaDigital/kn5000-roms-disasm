@@ -2906,8 +2906,8 @@ AcChordBox_HandleChordUpdate:
 	ld	xde, xiz
 	call	InheritedProc
 	push	xiz
-	pushw	237
-	pushw	7314
+	pushw	AcChordBox_HandleChordUpdate_Str_Fmts@hi16
+	pushw	AcChordBox_HandleChordUpdate_Str_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

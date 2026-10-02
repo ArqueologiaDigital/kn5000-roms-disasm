@@ -17686,8 +17686,8 @@ RgpSetBnk_EvtEnc_SendAudioCmd:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xe1
-	pushw 0xe2bc
+	pushw RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd@hi16
+	pushw RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd@lo16
 	push xde
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
@@ -17881,8 +17881,8 @@ MspMeasBox_HandleEvtBC:
 	call GetViewInstance
 	ld wa, (0x7f0e:16)
 	pushw wa
-	pushw 0xe1
-	pushw 0xe2f8
+	pushw MspMeasBox_HandleEvtBC_Str_MEASURE_Fmtd@hi16
+	pushw MspMeasBox_HandleEvtBC_Str_MEASURE_Fmtd@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked
@@ -17944,8 +17944,8 @@ MspMemBox_HandleEvtBC:
 MspMemBox_ClampValue:
 	extz wa
 	pushw wa
-	pushw 0xe1
-	pushw 0xe306
+	pushw MspMemBox_ClampValue_Str_MEMORY_Fmt2d@hi16
+	pushw MspMemBox_ClampValue_Str_MEMORY_Fmt2d@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked
@@ -18065,8 +18065,8 @@ AcSndArgGrid_BnkDispatch:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xe1
-	pushw 0xe314
+	pushw AcSndArgGrid_BnkDispatch_Str_Fmtd@hi16
+	pushw AcSndArgGrid_BnkDispatch_Str_Fmtd@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked

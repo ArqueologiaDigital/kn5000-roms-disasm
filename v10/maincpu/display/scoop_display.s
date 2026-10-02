@@ -18798,8 +18798,8 @@ Scoop_EventLoop_36Entry_Join2:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd26
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18809,8 +18809,8 @@ Scoop_EventLoop_36Entry_Skip:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd2a
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18820,8 +18820,8 @@ Scoop_EventLoop_36Entry_Skip2:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd2e
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Sprintf_Locked
@@ -18837,8 +18837,8 @@ Scoop_EventLoop_36Entry_Skip11:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd32
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18848,8 +18848,8 @@ Scoop_EventLoop_36Entry_Skip3:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd36
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18859,8 +18859,8 @@ Scoop_EventLoop_36Entry_Skip4:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	0xcd3a
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18906,8 +18906,8 @@ Scoop_EventLoop_36Entry_Join3:
 	cp	a, 1:i3
 	jr	nz, Scoop_EventLoop_36Entry_Skip13
 	pushm	(xbc)
-	pushw	224
-	pushw	0xcd46
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18915,8 +18915,8 @@ Scoop_EventLoop_36Entry_Join3:
 	jr	Scoop_EventLoop_36Entry_Join4
 Scoop_EventLoop_36Entry_Skip12:
 	pushm	(xbc)
-	pushw	224
-	pushw	0xcd4a
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -18924,8 +18924,8 @@ Scoop_EventLoop_36Entry_Skip12:
 	jr	Scoop_EventLoop_36Entry_Join4
 Scoop_EventLoop_36Entry_Skip13:
 	pushm	(xbc)
-	pushw	224
-	pushw	0xcd4e
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -19136,29 +19136,6 @@ Scoop_EventLoop_12Entry_Alt_End:
 	call RegisterMode
 .endm
 
-; RegMode with the pointer as two numbers, for a call whose target has no label yet.
-.macro RegModeHiLo ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE
-	pushw \ParamA
-	pushw \ParamBhi
-	pushw \ParamBlow
-	.if \ParamC <= 7
-	ld xwa, \ParamC:i3
-	.else
-	ld xwa, \ParamC
-	.endif
-	.if \ParamD <= 7
-	ld xbc, \ParamD:i3
-	.else
-	ld xbc, \ParamD
-	.endif
-	.if \ParamE <= 7
-	ld xde, \ParamE:i3
-	.else
-	ld xde, \ParamE
-	.endif
-	call RegisterMode
-.endm
-
 
 ; The far pointer is ONE address (TOOLCHAIN_VERSION UPDATE 20: `@hi16`/`@lo16`);
 ; the compiled call pushes ParamA, then its high and low halves.
@@ -19166,29 +19143,6 @@ Scoop_EventLoop_12Entry_Alt_End:
 	pushw \ParamA
 	pushw \ParamB\()@hi16
 	pushw \ParamB\()@lo16
-	.if \ParamC <= 7
-	ld xwa, \ParamC:i3
-	.else
-	ld xwa, \ParamC
-	.endif
-	.if \ParamD <= 7
-	ld xbc, \ParamD:i3
-	.else
-	ld xbc, \ParamD
-	.endif
-	.if \ParamE <= 7
-	ld xde, \ParamE:i3
-	.else
-	ld xde, \ParamE
-	.endif
-	call RegisterTitle
-.endm
-
-; RegTitle with the pointer as two numbers, for a call whose target has no label yet.
-.macro RegTitleHiLo ParamA, ParamBhi, ParamBlow, ParamC, ParamD, ParamE
-	pushw \ParamA
-	pushw \ParamBhi
-	pushw \ParamBlow
 	.if \ParamC <= 7
 	ld xwa, \ParamC:i3
 	.else

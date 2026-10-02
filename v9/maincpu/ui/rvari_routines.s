@@ -172,8 +172,8 @@ RVari_SelectE_SecondItem_Draw:
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xed
-	pushw 0x1656
+	pushw RVari_SelectE_SecondItem_Draw_Str_Fmtd@hi16
+	pushw RVari_SelectE_SecondItem_Draw_Str_Fmtd@lo16
 	lda xwa, (xsp + 26)
 	push xwa
 	call Sprintf_Locked
@@ -370,8 +370,8 @@ RVari_SelectO_SecondItem_Draw:
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xed
-	pushw 0x165a
+	pushw RVari_SelectO_SecondItem_Draw_Str_Fmtd@hi16
+	pushw RVari_SelectO_SecondItem_Draw_Str_Fmtd@lo16
 	lda xwa, (xsp + 26)
 	push xwa
 	call Sprintf_Locked
@@ -858,8 +858,8 @@ RVari_ConfirmF_Item_Draw:
 	lda xbc, (ParamStr_Table_04:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	pushw 0xed
-	pushw 0x165e
+	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@hi16
+	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@lo16
 	lda xwa, (xsp + 28)
 	push xwa
 	call Sprintf_Locked
@@ -995,8 +995,8 @@ RVari_Confirm_TypeNotF:
 	pushw wa
 	ld xwa, (xiz + 44)
 	pushm (xwa)
-	pushw 0xed
-	pushw 0x1662
+	pushw RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd@hi16
+	pushw RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd@lo16
 	lda xwa, (xsp+284)
 	push xwa
 	call Sprintf_Locked
@@ -1149,8 +1149,8 @@ RVari_ConfirmE_Item_Draw:
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xed
-	pushw 0x166e
+	pushw RVari_ConfirmE_Item_Draw_Str_Fmtd@hi16
+	pushw RVari_ConfirmE_Item_Draw_Str_Fmtd@lo16
 	lda xwa, (xsp + 26)
 	push xwa
 	call Sprintf_Locked

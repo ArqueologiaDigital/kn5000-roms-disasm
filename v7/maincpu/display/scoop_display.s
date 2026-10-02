@@ -18956,8 +18956,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip8:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	52526
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -19060,8 +19060,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip12:
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join4
 Scoop_EventLoop_36Entry_Branch1_Code_Skip13:
 	pushm	(xbc)
-	pushw	224
-	pushw	52558
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

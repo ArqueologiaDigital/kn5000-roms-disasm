@@ -170,8 +170,8 @@ RVari_SelectE_SecondItem_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5718
+	pushw RVari_SelectE_SecondItem_Draw_Str_Fmtd@hi16
+	pushw RVari_SelectE_SecondItem_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -365,8 +365,8 @@ RVari_SelectO_SecondItem_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5722
+	pushw RVari_SelectO_SecondItem_Draw_Str_Fmtd@hi16
+	pushw RVari_SelectO_SecondItem_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -848,8 +848,8 @@ RVari_ConfirmF_Item_Draw:
 	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	pushw 237
-	pushw 5726
+	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@hi16
+	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -984,8 +984,8 @@ RVari_Confirm_TypeNotF:
 	pushw wa
 	ld XWA,(XIZ+0x2c)
 	pushm (xwa)
-	pushw 237
-	pushw 5730
+	pushw RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd@hi16
+	pushw RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd@lo16
 	lda xwa, (xsp+284)
 	push xwa
 	call Scoop_EventLoop_12Entry_Helper
@@ -1135,8 +1135,8 @@ RVari_ConfirmE_Item_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5742
+	pushw RVari_ConfirmE_Item_Draw_Str_Fmtd@hi16
+	pushw RVari_ConfirmE_Item_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
