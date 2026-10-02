@@ -1161,7 +1161,7 @@ SubCPU_Payload_DelayLoop_Short:
 	ld xiz, 0x800000
 
 SubCPU_Payload_TransferPart2:
-	ldmm_sriw 0xf9, 0x00, 0x01, 0x04, 0x04
+	ldw	(0x0404:16), (xiz+256)
 	ld xwa, xiz
 	add xwa, 0x100
 	ld xbc, 0x10000
@@ -1224,7 +1224,7 @@ Boot_HandleComboDisplay:
 	and l, 0xf
 	extz hl
 	lda xbc, (LED_patterns_indicating_firmware_version:24); LED_patterns_indicating_firmware_version table
-	ldb_sri C, 0x07, 0xe4, 0xec	; Read LED pattern from table
+	ld	c, (xbc+hl)	; Read LED pattern from table
 	extz bc
 	ld wa, 7:i3
 	call Set_LEDs			; Display version on control panel LEDs
@@ -1331,7 +1331,7 @@ GetResouceInfo:
 	ret ugt
 	add wa, wa
 	lda xix, (RESOURCE_INFO_HANDLER_OFFSETS:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (RESOURCE_INFO_HANDLERS:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Resource info handlers - 10 handlers for different resource types
@@ -2386,8 +2386,8 @@ DrawText_DeferredFreeAndReturn:
 TextRender_BeginDraw:
 	lda xsp, (xsp-314)
 	push xiz
-	stl_dri XDE, 0xfd, 0x36, 0x01
-	stl_dri XWA, 0xfd, 0x3a, 0x01
+	ld	(xsp+310), xde
+	ld	(xsp+314), xwa
 	ld XWA, (xsp + 0x0136)
 	cp (xwa), 0x0
 	jrl z, TextRender_PopAndReturn
@@ -2427,7 +2427,7 @@ TextRender_SetupColorAndFont:
 	ld XIX, (xsp + 0x0146)
 	or xix, xix
 	jr nz, TextRender_ClampNullXStart
-	dec_sriw 2, 0xfd, 0x2c, 0x01
+	decw	2, (xsp+300)
 
 TextRender_ClampNullXStart:
 	lda xhl, (xsp+298)
@@ -2543,7 +2543,7 @@ TextRender_MaxWidthReached:
 	ld wa, (xsp + 20)
 
 TextRender_AddToDrawPos:
-	add_sriw_mr WA, 0xfd, 0x32, 0x01
+	add	(xsp+306), wa
 	lda xwa, (xsp+302)
 	lda xde, (xwa + 2)
 	ld XBC, (xsp + 0x013a)
@@ -2577,7 +2577,7 @@ TextRender_ClampGlyphRight:
 	ld (xde), bc
 
 TextRender_ClampGlyphBottom:
-	ldw_sri0 BC, (xsp + 0x0142)
+	ld	bc, (xsp+322)
 	cp bc, 0xf7
 	call nz, (ColorBlit2_Impl:24)
 	lda xwa, (xsp + 38)
@@ -2590,7 +2590,7 @@ TextRender_CharEncodeAndDraw:
 	ld c, (xhl)
 	extz bc
 	lda xde, (Data_CharMapFormatBlock_0x14:24)
-	ldb_sri C, 0x07, 0xe8, 0xe4
+	ld	c, (xde+bc)
 	ld (xhl), c
 	ld xbc, (xsp + 4)
 	ld xwa, (xbc + 12)
@@ -2712,7 +2712,7 @@ TextRender_BitMask4_ShiftAndTest:
 	and wa, iy
 	jr z, TextRender_BitMask4_Return
 	andmi8 (xix), 0x60
-	ldw_sri0 DE, (xsp + 0x0144)
+	ld	de, (xsp+324)
 	ld wa, de
 	and wa, 0x9f
 	add (xix), a
@@ -2879,7 +2879,7 @@ AcChordBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_CHORD_DSP
 	jr z, AcChordBox_HandleChordUpdate
 	cp xbc, EVT_SHOW
@@ -2940,7 +2940,7 @@ MainChordPre:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Naka_MemoryC_Screens:24)
-	ld_sril3	XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xiz
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -2948,7 +2948,7 @@ MainChordPre:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (MainChordPre_PtrTable:24)
-	ld_sril3	XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xiz
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -3206,7 +3206,7 @@ SndParam_RW_ProcessResult_v7:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Naka_MainDispatch_Table_0xE20:24)
-	lda_dri	XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	ld	xwa, xiz
 	ld	bc, (xsp + 4)
 	ld	xix, (xde)

@@ -110,19 +110,19 @@ FP_DP_CmpZero64:
 	cp xiy, xde
 	jr nz, FP_DP_CmpZero64_Greater
 	lda xde, (FP_CmpResult_Equal:24)
-	ldb_sri L, 0x07, 0xE8, 0xE4
+	ld	l, (xde+bc)
 	ret
 
 ; x < 0: return LessRow[BC].
 FP_DP_CmpZero64_Less:
 	lda xde, (FP_CmpResult_Less:24)
-	ldb_sri L, 0x07, 0xE8, 0xE4
+	ld	l, (xde+bc)
 	ret
 
 ; x > 0 (and the "high words differ" shortcut): return GreaterRow[BC].
 FP_DP_CmpZero64_Greater:
 	lda xde, (FP_CmpResult_Greater:24)
-	ldb_sri L, 0x07, 0xE8, 0xE4
+	ld	l, (xde+bc)
 	ret
 
 ; Single-precision twin of FP_DP_CmpZero64: relational compare of *(float*)XWA against
@@ -135,19 +135,19 @@ FP_SP_CmpZero32:
 	jr lt, FP_SP_CmpZero32_Less
 	jr gt, FP_SP_CmpZero32_Greater
 	lda xde, (FP_CmpResult_Equal:24)
-	ldb_sri L, 0x07, 0xE8, 0xE4
+	ld	l, (xde+bc)
 	ret
 
 ; x < 0 arm.
 FP_SP_CmpZero32_Less:
 	lda xde, (FP_CmpResult_Less:24)
-	ldb_sri L, 0x07, 0xE8, 0xE4
+	ld	l, (xde+bc)
 	ret
 
 ; x > 0 arm.
 FP_SP_CmpZero32_Greater:
 	lda xde, (FP_CmpResult_Greater:24)
-	ldb_sri L, 0x07, 0xE8, 0xE4
+	ld	l, (xde+bc)
 	ret
 
 ; tan(double). C signature f(double *result, double x). Loads the exponent word of x
@@ -809,12 +809,12 @@ FP_CmpResult_Greater:
 FP_SinCos_Kernel:
 	lda xsp, (xsp - 128)
 	push xiz
-	ldw_sri0 WA, (xsp + 0x0092)
+	ld	wa, (xsp+146)
 	and wa, 0x7FF0
 	cp wa, 0x41E0
 	jr c, FP_SinCos_Kernel_InRange
 	ldw (0x040c22:24), 0x0022
-	ld_sril XWA, (xsp + 0x0088)
+	ld	xwa, (xsp+136)
 	lda xbc, (FPConst_SinCos_Kernel_Zero:24)
 	call FP_DP_Raw8Copy
 	jrl FP_SinCos_Kernel_Epilog
@@ -855,9 +855,9 @@ FP_SinCos_Kernel_Phase2:
 	ld xwa, (xsp + 64)
 	bit 0, wa
 	jr z, FP_SinCos_Kernel_Phase3
-	cpiw_sri 0xFD, 0x9C, 0x00, 0x00, 0x00
+	cpw	(xsp+156), 0x0000
 	scc16 z, wa
-	stw_dri WA, 0xFD, 0x9C, 0x00
+	ld	(xsp+156), wa
 
 ; Take |n| and, on the half-quadrant case, subtract 0.5 (0x01F6A6).
 FP_SinCos_Kernel_Phase3:
@@ -1018,7 +1018,7 @@ FP_SinCos_Kernel_Phase4:
 
 ; Apply the accumulated sign flag: if non-zero, negate the polynomial result.
 FP_SinCos_Kernel_FinalCheck:
-	cpiw_sri 0xFD, 0x9C, 0x00, 0x00, 0x00
+	cpw	(xsp+156), 0x0000
 	jr z, FP_SinCos_Kernel_FinalCopy
 	lda xwa, (xsp + 124)
 	ld xbc, xwa
@@ -1026,7 +1026,7 @@ FP_SinCos_Kernel_FinalCheck:
 
 ; Copy the kernel result to the caller's result pointer.
 FP_SinCos_Kernel_FinalCopy:
-	ld_sril XWA, (xsp + 0x0088)
+	ld	xwa, (xsp+136)
 	lda xbc, (xsp + 124)
 	call FP_DP_Raw8Copy
 
@@ -3126,7 +3126,7 @@ FP_trunc_FillPad:
 
 ; Mask the partial byte at the integer/fraction boundary.
 FP_trunc_BackScan:
-	lda_dri XDE, 0x07, 0xF0, 0xF4
+	lda	xde, (xix+iy)
 	cpw (xsp + 6), 0x0
 	jr z, FP_trunc_ZeroLow
 	ldw wa, 0x8

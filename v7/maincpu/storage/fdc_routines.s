@@ -2031,7 +2031,7 @@ FDC_CommandEntry_CopyParams:
 	jr	ugt, FDC_Handler_InvalidCommand
 	add	wa, wa
 	lda	xix, (DiskWarning_ConfirmStrings_0xC1E:24)
-	ldw_sri	WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda	xix, (FDC_HANDLER_DISPATCH_BASE:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
 FDC_HANDLER_DISPATCH_BASE:

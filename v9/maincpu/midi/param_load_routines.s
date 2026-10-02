@@ -62,7 +62,7 @@ ParaLoadOpt_CaseC:
 	jrl gt, MidiFunc_SendEvtReturnAlt
 	add wa, wa
 	lda xix, (ParaLoadOpt_AudioFlagCheck_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (ParaLoadOpt_DispatchTable_A:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -190,7 +190,7 @@ ParaLoadOpt_CaseF:
 	jrl gt, MidiFunc_SendEventReturn
 	add wa, wa
 	lda xix, (ParaLoadOpt_AudioFlagCheck_B_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (ParaLoadOpt_DispatchTable_B:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -408,7 +408,7 @@ ParaLoadOpt_GridReturn:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (ParaLoadOpt_GridReturn_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -466,7 +466,7 @@ ParaLoadOpt_GridDelegateProc:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (ParaLoadOpt_GridDelegateProc_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -856,7 +856,7 @@ VoiceUI_MiscHandler:
 	ld a, (xiz)
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa

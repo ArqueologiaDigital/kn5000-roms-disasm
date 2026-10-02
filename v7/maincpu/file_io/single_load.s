@@ -81,7 +81,7 @@ SLDstMem_ShowFromBank:
 
 	sla bc, 2
 
-	ld_sril3 XDE, 0x07, 0xe8, 0xe4
+	ld	xde, (xde+bc)
 
 	ld xbc, EVT_PARA_DRAW
 
@@ -115,7 +115,7 @@ SLSrcBank_HandleShow:
 SLSrcBank_ShowFromIndex:
 	extz bc
 	sla bc, 2
-	ld_sril3 XDE, 0x07, 0xe8, 0xe4
+	ld	xde, (xde+bc)
 	ld xbc, EVT_PARA_DRAW
 
 SLSrcBank_DispatchShow:
@@ -148,7 +148,7 @@ SLSrcMem_ShowDirect:
 SLSrcMem_ShowFromIndex:
 	extz bc
 	sla bc, 2
-	ld_sril3 XDE, 0x07, 0xe8, 0xe4
+	ld	xde, (xde+bc)
 	ld xbc, EVT_PARA_DRAW
 
 SLSrcMem_DispatchShow:
@@ -3148,7 +3148,7 @@ CmpSrc_ScrollMode6:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpSrc_HandleShow_PtrTable:24)
-	lda_dri	XHL, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld	xbc, xiz
 	ld	xde, (xsp + 4)
 	ld	xhl, (xhl)
@@ -3203,7 +3203,7 @@ CmpSrc_ScrollMode8:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpSrc_HandleShow_PtrTable:24)
-	lda_dri	XHL, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld	xbc, xiz
 	ld	xde, (xsp + 4)
 	ld	xhl, (xhl)
@@ -3322,7 +3322,7 @@ CmpDst_HandleScroll:
 	extz BC
 	sla BC, 0x02
 	lda xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_dri xhl, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld XBC,EVT_PAINT
 	ld xde, 0:i3
 	ld XHL,(XHL)
@@ -3350,7 +3350,7 @@ CmpDst_ScrollModeA:
 	extz BC
 	sla BC, 0x02
 	lda xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_dri xhl, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld XBC,(XSP+0x08)
 	ld XDE,(XSP+0x04)
 	ld XIX,(XHL)
@@ -3380,7 +3380,7 @@ CmpDst_ScrollMode7:
 	extz BC
 	sla BC, 0x02
 	lda xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_dri xhl, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld XBC,(XSP+0x08)
 	ld XDE,(XSP+0x04)
 	ld XHL,(XHL)
@@ -3402,7 +3402,7 @@ CmpDst_ScrollMode8:
 	extz BC
 	sla BC, 0x02
 	lda xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_dri xhl, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld XBC,(XSP+0x08)
 	ld XDE,(XSP+0x04)
 	ld XHL,(XHL)
@@ -3418,7 +3418,7 @@ CmpDst_ScrollMode8_NoStep:
 	extz BC
 	sla BC, 0x02
 	lda xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_dri xhl, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld XBC,(XSP+0x08)
 	ld XDE,(XSP+0x04)
 	ld XHL,(XHL)
@@ -3437,7 +3437,7 @@ CmpDst_ScrollMode5:
 	extz BC
 	sla BC, 0x02
 	lda xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_dri xhl, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld XBC,(XSP+0x08)
 	ld XDE,(XSP+0x04)
 	ld XHL,(XHL)
@@ -3458,7 +3458,7 @@ CmpDst_ScrollMode6:
 	extz BC
 	sla BC, 0x02
 	lda xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_dri xhl, 0x07, 0xe8, 0xe4
+	lda	xhl, (xde+bc)
 	ld XBC,(XSP+0x08)
 	ld XDE,(XSP+0x04)
 	ld XHL,(XHL)

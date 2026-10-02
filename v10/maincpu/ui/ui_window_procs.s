@@ -875,7 +875,7 @@ WndScroll_HandleCharInput:
 	ld c, a
 	extz bc
 	lda xhl, (CharMap_FullPermutation_0x660:24)
-	ldb_sri C, 0x07, 0xec, 0xe4
+	ld	c, (xhl+bc)
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
 	ldw (0x0274da:24), 0x0000
@@ -1087,8 +1087,8 @@ WndScroll_Epilogue:
 ModeEditProc:
 	lda xsp, (xsp-276)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x01
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+272), xde
+	ld	(xsp+276), xwa
 	cp xbc, EVT_CHANGE_PROPERTY
 	jrl z, ModeEdit_HandleViewUpdate
 	cp xbc, EVT_DRAW
@@ -1220,8 +1220,8 @@ ModeEdit_Epilogue:
 TitleEditProc:
 	lda xsp, (xsp-276)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x01
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+272), xde
+	ld	(xsp+276), xwa
 	cp xbc, EVT_CHANGE_PROPERTY
 	jrl z, TitleEdit_HandleViewUpdate
 	cp xbc, EVT_DRAW
@@ -2239,7 +2239,7 @@ TextBox_DrawLineLoop:
 	push xiz
 	call StrSearch_Init
 	inc 8, xsp
-	lda_dri XWA, 0x07, 0xf8, 0xec
+	lda	xwa, (xiz+hl)
 	ld (xsp + 10), xwa
 	ld (xwa), 0x0
 	lda xwa, (xsp + 26)
@@ -2411,8 +2411,8 @@ ViewableProc_Return:
 PsParaBoxProc:
 	lda xsp, (xsp-276)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x01
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+272), xde
+	ld	(xsp+276), xwa
 	cp xbc, EVT_GET_STRING
 	jrl z, PsParaBox_HandleGetText
 	cp xbc, EVT_PARA_DRAW
@@ -2842,7 +2842,7 @@ AcTempoBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_LSW_DATA
 	jr z, AcTempoBox_HandleConfirm
 	cp xbc, EVT_REPAINT
@@ -2931,9 +2931,9 @@ AcTempoBox_Epilogue:
 PsRadioBoxProc:
 	lda xsp, (xsp-292)
 	push xiz
-	stl_dri XDE, 0xfd, 0x1c, 0x01
-	stl_dri XBC, 0xfd, 0x20, 0x01
-	stl_dri XWA, 0xfd, 0x24, 0x01
+	ld	(xsp+284), xde
+	ld	(xsp+288), xbc
+	ld	(xsp+292), xwa
 	ld XWA, (xsp + 0x0120)
 	cp xwa, EVT_CHECK_EDIT_SW
 	jrl z, PsRadioBox_HitTest
@@ -2966,7 +2966,7 @@ PsRadioBoxProc:
 	ld xwa, (xsp + 12)
 	ld wa, (xwa + 36)
 	calr GetEditSwPoint
-	cpiw_sri 0xfd, 0x12, 0x01, 0xef, 0x00
+	cpw	(xsp+274), 0x00ef
 	jr z, PsRadioBox_Paint_SendConfirm
 	ld xwa, (xsp + 12)
 	ld wa, (xwa + 36)
@@ -3028,7 +3028,7 @@ PsRadioBox_Confirm_Draw:
 	ld c, (xbc + 34)
 	ldfr_berp C, 0xf0
 	extz ix
-	cpl_sri_rm XHL, 0xfd, 0x24, 0x01
+	cp	xhl, (xsp+292)
 	jr nz, PsRadioBox_Confirm_DrawUnfocused
 	ld xbc, (xiz)
 	push xbc
@@ -3059,7 +3059,7 @@ PsRadioBox_Select:
 	call GetViewInstance
 	ld (xsp + 12), xhl
 	calr GetDialFocus
-	cpl_sri_rm XHL, 0xfd, 0x24, 0x01
+	cp	xhl, (xsp+292)
 	jr nz, PsRadioBox_Select_GetIndex
 	ld XWA, (xsp + 0x0124)
 	ld xbc, EVT_DRAW_SELECTED
@@ -3085,7 +3085,7 @@ PsRadioBox_Reset:
 	ld XDE, (xsp + 0x011c)
 	calr VwBoxProc
 	calr GetDialFocus
-	cpl_sri_rm XHL, 0xfd, 0x24, 0x01
+	cp	xhl, (xsp+292)
 	jr nz, PsRadioBox_Reset_CheckValue
 	ld XWA, (xsp + 0x0124)
 	ld xbc, EVT_SELE_DRAW
@@ -3136,7 +3136,7 @@ PsRadioBox_Release:
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x1c, 0x01
+	cp	xwa, (xsp+284)
 	jrl nz, PsRadioBox_ReturnZero
 	ld xwa, (xhl + 38)
 	cpw (xwa), 0x0
@@ -3179,7 +3179,7 @@ PsRadioBox_SetIndex:
 	ld xwa, (xbc + 38)
 	ld wa, (xwa)
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x1c, 0x01
+	cp	xwa, (xsp+284)
 	jr z, PsRadioBox_ReturnZero
 	ld XWA, (xsp + 0x011c)
 	cp wa, 1:i3
@@ -3276,8 +3276,8 @@ AcStrRadioBox_Epilogue:
 PsListBoxProc:
 	lda xsp, (xsp-298)
 	push xiz
-	stl_dri XDE, 0xfd, 0x26, 0x01
-	stl_dri XWA, 0xfd, 0x2a, 0x01
+	ld	(xsp+294), xde
+	ld	(xsp+298), xwa
 	cp xbc, EVT_GET_STRING
 	jrl z, PsListBox_GetText
 	cp xbc, EVT_SET_SELECTED
@@ -3409,7 +3409,7 @@ PsListBox_Confirm_DrawItem:
 	pushw	(xwa)
 	pushw hl
 	calr GetDialFocus
-	cpl_sri_rm XHL, 0xfd, 0x34, 0x01
+	cp	xhl, (xsp+308)
 	scc16 z, wa
 	pushw wa
 	ld xwa, xiz
@@ -3451,7 +3451,7 @@ PsListBox_Select:
 	ld xbc, (xwa)
 	ld bc, (xbc)
 	exts xbc
-	cpl_sri_rm XBC, 0xfd, 0x26, 0x01
+	cp	xbc, (xsp+294)
 	jrl z, PsListBox_ReturnZero
 	ld xwa, (xwa)
 	cpw (xwa), 0xffff
@@ -3543,7 +3543,7 @@ PsListBox_Select_CheckDone:
 	ld xde, (xsp + 26)
 	call DrawStringReverse
 	calr GetDialFocus
-	cpl_sri_rm XHL, 0xfd, 0x2a, 0x01
+	cp	xhl, (xsp+298)
 	jr z, PsListBox_Select_UpdateCurrent
 	lda xwa, (xsp+286)
 	ld xbc, (xsp + 4)
@@ -3639,7 +3639,7 @@ PsListBox_SelectUpd_CheckDone:
 	ld a, (xwa + 34)
 	ldfr_berp A, 0xf0
 	extz ix
-	cpl_sri_rm XHL, 0xfd, 0x2a, 0x01
+	cp	xhl, (xsp+298)
 	jr nz, PsListBox_SelectUpd_DrawUnfocused
 	ld xwa, (xiz)
 	push xwa
@@ -3698,11 +3698,11 @@ PsListBox_SetIndex:
 	ld xwa, (xhl + 38)
 	ld wa, (xwa)
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x26, 0x01
+	cp	xwa, (xsp+294)
 	jr z, PsListBox_ReturnZero
 	ld wa, (xhl + 36)
 	extz xwa
-	cpl_sri_mr XWA, 0xfd, 0x26, 0x01
+	cp	(xsp+294), xwa
 	jr nc, PsListBox_ReturnZero
 	ld XWA, (xsp + 0x012a)
 	ld xbc, EVT_SELE_DRAW
@@ -3884,9 +3884,9 @@ AcListBox_Return:
 PsGridBoxProc:
 	lda xsp, (xsp-334)
 	push xiz
-	stl_dri XDE, 0xfd, 0x46, 0x01
-	stl_dri XBC, 0xfd, 0x4a, 0x01
-	stl_dri XWA, 0xfd, 0x4e, 0x01
+	ld	(xsp+326), xde
+	ld	(xsp+330), xbc
+	ld	(xsp+334), xwa
 	ld XBC, (xsp + 0x014a)
 	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, PsGridBox_Scroll
@@ -4412,7 +4412,7 @@ DrawDesignBox_CheckStyle80:
 Draw_DispatchByPartType:
 	add wa, wa
 	lda xix, (Str_No_0xB00:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (Draw_StyledBoxWithFrame:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -4906,7 +4906,7 @@ DrawDesignBox_PartGroupStyle:
 DrawPartGroup_DispatchByType:
 	add wa, wa
 	lda xix, (Str_No_0xAE0:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (DrawPartGroup_TableJump_DefaultCase:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -6342,7 +6342,7 @@ SplashScreen_Return:
 	jrl SplashBMP_Return
 
 SplashBMP_ProcessRow:
-	ldw_sri0 DE, (xsp + 0x0430)
+	ld	de, (xsp+1072)
 	ld xwa, (xsp + 26)
 	ld xbc, (xsp + 18)
 	calr Gfx_ProcessSplashData
@@ -6768,7 +6768,7 @@ PaletteReduce_RemapPixels:
 	extz ix
 	ld b, c
 	ld xwa, (xsp + 32)
-	stb_dri B, 0x07, 0xe0, 0xf0
+	ld	(xwa+ix), b
 	inc 1, c
 	cp xde, xhl
 	jr c, PaletteReduce_RemapPixels
@@ -6849,7 +6849,7 @@ PaletteReduce_UpdateMinDist:
 	ld xwa, (xsp + 16)
 	ld e, a
 	ld xwa, (xsp + 32)
-	stb_dri E, 0x07, 0xe0, 0xe4
+	ld	(xwa+bc), e
 	ld xwa, 1:i3
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
@@ -6883,7 +6883,7 @@ ImageDecode_ProcessPixels:
 	ld e, (xbc)
 	extz de
 	ld xwa, (xsp + 32)
-	ldb_sri A, 0x07, 0xe0, 0xe8
+	ld	a, (xwa+de)
 	ld (xbc), a
 	cp (xbc), 0xc0
 	jr nc, ImageDecode_PixelHighBank
@@ -6996,10 +6996,10 @@ CaptureLcd_WritePaletteOr94:
 	ld xbc, xhl
 	and xbc, SendPartDataBlock_Data2	; is this a mask for Red?
 	srl xbc, 16
-	stb_dri C, 0x07, 0xe0, 0xe8
+	ld	(xwa+de), c
 	ld bc, iz
 	sla bc, 2
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xbc, xhl
 	and xbc, 0xff00	; is this a mask for Green?
 	srl xbc, 8
@@ -7021,10 +7021,10 @@ CaptureLcd_WritePaletteNoOr94:
 	ld xbc, xhl
 	and xbc, SendPartDataBlock_Data2	; is this a mask for Red?
 	srl xbc, 16
-	stb_dri C, 0x07, 0xe0, 0xe8
+	ld	(xwa+de), c
 	ld bc, iz
 	sla bc, 2
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xbc, xhl
 	and xbc, 0xff00	; is this a mask for Green?
 	srl xbc, 8
@@ -8131,7 +8131,7 @@ ColorBlit2_Mode1_RowLoop:
 	lda xiy, (0x043c00:24)
 	add xiy, xde
 	ld bc, (xwa)
-	lda_dri XIY, 0x07, 0xf4, 0xe4
+	lda	xiy, (xiy+bc)
 	ld ix, (xwa)
 	ld xbc, (xsp + 8)
 	cp ix, (xbc)

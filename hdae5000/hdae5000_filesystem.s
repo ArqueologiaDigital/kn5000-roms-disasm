@@ -17,7 +17,7 @@ HDAE5000_Lbn_ShowEntry:	; 0x2870D6 (3711 bytes)
 	jrl ugt, .LFS_7334                     ; [7b 49 02] jrl UGT,0x287334
 	add	wa, wa
 	lda xix, (HDAE5000_Lbn_ShowEntry_CaseTable:24)
-	ldw_sri wa, 0x07, 0xF0, 0xE0	; ld WA,(XIX+WA)
+	ld	wa, (xix+wa)	; ld WA,(XIX+WA)
 	lda xix, (HDAE5000_Lbn_ShowEntry_Case0:24)
 	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
 HDAE5000_Lbn_ShowEntry_Case0:
@@ -1771,7 +1771,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds:24)
-	ld_sril3 xde, 0x07, 0xE4, 0xE0	; ld XDE,(XBC+WA)
+	ld	xde, (xbc+wa)	; ld XDE,(XBC+WA)
 	lda xwa, (0x22a058:24)
 	ld	xbc, xwa
 	ld	xwa, xde
@@ -1785,7 +1785,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds:24)
-	ld_sril3 xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
@@ -1887,7 +1887,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_2:24)
-	ld_sril3 xde, 0x07, 0xE4, 0xE0	; ld XDE,(XBC+WA)
+	ld	xde, (xbc+wa)	; ld XDE,(XBC+WA)
 	lda xwa, (0x22b020:24)
 	ld	xbc, xwa
 	ld	xwa, xde
@@ -1901,7 +1901,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_2:24)
-	ld_sril3 xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
@@ -1959,7 +1959,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_3:24)
-	ld_sril3 xde, 0x07, 0xE4, 0xE0	; ld XDE,(XBC+WA)
+	ld	xde, (xbc+wa)	; ld XDE,(XBC+WA)
 	lda xwa, (0x22a078:24)
 	ld	xbc, xwa
 	ld	xwa, xde
@@ -1973,7 +1973,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_3:24)
-	ld_sril3 xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
@@ -1990,7 +1990,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_4:24)
-	ld_sril3 xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
 	ld	bc, (xsp+2)
 	ld	de, (xsp+4)
 	pushw iz                                ; push IZ
@@ -2001,7 +2001,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_4:24)
-	ld_sril3 xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
 	pushw 0xffff
 	ldw	bc, 0xffff
 	ldw	de, 0xffff
@@ -2013,7 +2013,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_5:24)
-	ld_sril3 xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
@@ -2024,7 +2024,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	extz wa                                 ; extz WA
 	sla	wa, 0x02
 	lda xbc, (HDAE5000_FlsScreen_Refresh_ObjIds_6:24)
-	ld_sril3 xwa, 0x07, 0xE4, 0xE0	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
 	ld_sril	xhl, (xbc + RootFn_SendEvent)
@@ -3464,11 +3464,11 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	; There are no partitions.)
 	lda xsp, (xsp-300)	; lda XSP, XSP+0xFED4 (alloc ~300 bytes)
 	push xiz
-	stw_dri de, 0xFD, 0x2C, 0x01	; ld (XSP+0x012C), DE
-	stw_dri bc, 0xFD, 0x2E, 0x01	; ld (XSP+0x012E), BC
+	ld	(xsp+300), de	; ld (XSP+0x012C), DE
+	ld	(xsp+302), bc	; ld (XSP+0x012E), BC
 	ld iz, 0:i3
 .LFSD__loop:
-	cpw_sri_rm iz, 0xFD, 0x2E, 0x01	; cp IZ, (XSP+0x012E)
+	cp	iz, (xsp+302)	; cp IZ, (XSP+0x012E)
 	jrl nc, .LFSD__loop_done
 .LFSD__loop_body:
 	ld wa, iz
@@ -3512,7 +3512,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	jr nc, .LFSD__qiz_done
 .LFSD__qiz_loop:
 	ld	bc, qiz
-	ldw_sri0	wa, (xsp + 0x012c)
+	ld	wa, (xsp+300)
 	call HDAE5000_Song_IsUsed
 	cp hl, 0xffff
 	jr nz, .LFSD__qiz_found
@@ -3761,7 +3761,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	push	qiz
 	pushw 0x0000
 	pushw 0x0000
-	ldw_sri0	wa, (xsp + 0x0132)
+	ld	wa, (xsp+306)
 	call HDAE5000_CopyFdSongToHd
 	cp hl, 0xffff
 	jrl nz, .LFSD__loop_next
@@ -3835,7 +3835,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	jr t, .LFSD__exit
 .LFSD__loop_next:
 	inc 1, iz
-	cpw_sri_rm iz, 0xFD, 0x2E, 0x01	; cp IZ, (XSP+0x012E)
+	cp	iz, (xsp+302)	; cp IZ, (XSP+0x012E)
 	jrl c, .LFSD__loop_body
 .LFSD__loop_done:
 	ld hl, 0:i3
@@ -4280,7 +4280,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0	; ld XDE, (XBC + WA)
+	ld	xde, (xbc+wa)	; ld XDE, (XBC + WA)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)             ; ld XWA, (XWA + 0x0E0A)
 	ld xhl, (xwa + RootFn_PostEvent)             ; ld XHL, (XWA + 0x0104)
@@ -4292,7 +4292,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
@@ -4304,7 +4304,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
@@ -4316,7 +4316,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
@@ -4328,7 +4328,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
@@ -4340,7 +4340,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
@@ -4352,7 +4352,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
@@ -4364,7 +4364,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)
@@ -4376,7 +4376,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	extz wa
 	sla wa, 2
 	lda xbc, (HDAE5000_TextPtrs_Chr2D2D2D_OFF_DEL:24)
-	ld_sril3 xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)

@@ -742,9 +742,9 @@ PsGridBox_Select_Scroll:
 	calr GetClientBox
 	lda xbc, (xsp+318)
 	ld wa, (xbc + 2)
-	stw_dri WA, 0xfd, 0x30, 0x01
+	ld	(xsp+304), wa
 	ld wa, (xbc + 6)
-	stw_dri WA, 0xfd, 0x2c, 0x01
+	ld	(xsp+300), wa
 	ldw (xsp + 12), 0x1
 	ld xwa, (xsp + 20)
 	cpw (xwa + 38), 0x1
@@ -857,7 +857,7 @@ PsGridBox_Scroll:
 	jrl z, PsGridBox_ReturnZero
 	ld bc, de
 	exts xbc
-	cpl_sri_rm XBC, 0xfd, 0x46, 0x01
+	cp	xbc, (xsp+326)
 	jrl z, PsGridBox_ReturnZero
 	ld XWA, (xsp + 0x0146)
 	sub wa, de
@@ -946,7 +946,7 @@ PsGridBox_Scroll_CalcBounds:
 	lda xbc, (xsp+306)
 	calr GetBoxCenter
 	calr GetDialFocus
-	cpl_sri_rm XHL, 0xfd, 0x4e, 0x01
+	cp	xhl, (xsp+334)
 	jr nz, PsGridBox_Scroll_Unfocused
 	lda xbc, (xsp + 24)
 	ld xde, (xsp + 20)
@@ -1116,7 +1116,7 @@ PsGridBox_DispatchEvent:
 	jrl z, PsGridBox_ReturnZero
 	ld wa, de
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x46, 0x01
+	cp	xwa, (xsp+326)
 	jrl z, PsGridBox_ReturnZero
 	ld XWA, (xsp + 0x0146)
 	sub wa, de

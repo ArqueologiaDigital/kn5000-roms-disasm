@@ -1081,9 +1081,9 @@ PollLoop_TXCheckThreshold:
 	ld a, 0x13:opc
 	ld iy, (0x8dff:16)
 	ld xde, 0x8e01
-	stb_dri W, 0x07, 0xe8, 0xf4
+	ld	(xde+iy), w
 	calr CPanel_IncLEDPtr
-	stb_dri A, 0x07, 0xe8, 0xf4
+	ld	(xde+iy), a
 	calr CPanel_IncLEDPtr
 	ld (0x8dff:16), iy
 
@@ -1208,7 +1208,7 @@ CPanel_RX_PacketSizeCheck:
 	cp a, 2:i3
 	jrl c, CPanel_RX_Done
 
-	ldb_sri L, 0x07, 0xe8, 0xf4
+	ld	l, (xde+iy)
 	and l, 0x38
 	srl l, 1
 	xor h, h
@@ -1231,15 +1231,15 @@ CPanel_RX_PacketHandlers:
 	.long CPanel_RX_MultiBytePacket
 
 CPanel_RX_ButtonPacket:
-	ldb_sri W, 0x07, 0xe8, 0xf4
+	ld	w, (xde+iy)
 	calr CPanel_IncRXPtr
-	stb_dri W, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), w
 	calr CPanel_IncEventPtr
 	ld (0x8d94:16), w
 
-	ldb_sri A, 0x07, 0xe8, 0xf4
+	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
-	stb_dri A, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 	ld (0x8d95:16), a
 
@@ -1258,7 +1258,7 @@ BtnPkt_XORLookup:
 	mrib2 0x83, 0x31
 	xor a, (xhl)
 
-	stb_dri A, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 
 	ld (0x8d96:16), a
@@ -1268,12 +1268,12 @@ BtnPkt_XORLookup:
 	jrl CPanel_RX_ParseNext
 
 CPanel_RX_EncoderPacket:
-	ldb_sri W, 0x07, 0xe8, 0xf4
+	ld	w, (xde+iy)
 	calr CPanel_IncRXPtr
-	stb_dri W, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), w
 	calr CPanel_IncEventPtr
 	ld (0x8d94:16), w
-	ldb_sri A, 0x07, 0xe8, 0xf4
+	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
 	ld (0x8d95:16), a
 	ld c, w
@@ -1285,7 +1285,7 @@ CPanel_RX_EncoderPacket:
 	jr EncPkt_ParseNext
 
 EncPkt_WriteEvent:
-	stb_dri L, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), l
 	calr CPanel_IncEventPtr
 	ld (0x8d96:16), l
 	stib_ind 0x07, 0xf8, 0xf0, 0xff
@@ -1309,7 +1309,7 @@ EncPkt_DispatchThunk:
 
 CPanel_RX_MultiBytePacket:
 	ld w, a
-	ldb_sri A, 0x07, 0xe8, 0xf4
+	ld	a, (xde+iy)
 	ld c, a
 	and a, 0xf
 	inc 1, a
@@ -1319,7 +1319,7 @@ CPanel_RX_MultiBytePacket:
 	jrl c, CPanel_RX_Done
 
 	calr CPanel_IncRXPtr
-	ldb_sri A, 0x07, 0xe8, 0xf4
+	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
 	and a, 0x1f
 	and c, 0xc0
@@ -1340,9 +1340,9 @@ MBytePkt_AdjustAddr:
 	add xhl, 0x8e4a
 
 MBytePkt_LoopBody:
-	stb_dri W, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), w
 	calr CPanel_IncEventPtr
-	ldb_sri A, 0x07, 0xe8, 0xf4
+	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
 	bit 4, w
 	jr z, MBytePkt_WriteEventByte
@@ -1369,7 +1369,7 @@ MBytePkt_EncWriteResult:
 MBytePkt_WriteEventByte:
 
 c:
-	stb_dri A, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 	bit 4, w
 	jr nz, MBytePkt_EncFFMarker
@@ -1390,7 +1390,7 @@ MBytePkt_EncFFMarker:
 
 					; else:
 MBytePkt_CommitAndContinue:
-	stb_dri A, 0x07, 0xf8, 0xf0
+	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 	ld (xiz - 4), ix
 	decm 1, (xiz - 2)
@@ -1408,9 +1408,9 @@ MBytePkt_LoopTail:
 	jrl CPanel_RX_ParseNext
 
 CPanel_RX_SyncPacket:
-	ldb_sri A, 0x07, 0xe8, 0xf4
+	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
-	ldb_sri A, 0x07, 0xe8, 0xf4
+	ld	a, (xde+iy)
 	calr CPanel_IncRXPtr
 	ld (0x8d9d:16), iy
 	or (0x8d92:16), 8	; CP_Flags_B.3 = 1  ; UNUSED
@@ -1448,7 +1448,7 @@ LEDs_TXForwardDist:
 LEDs_TXCheckThreshold:
 	cp hl, 3:i3
 	jrl c, LEDs_Return
-	ldb_sri A, 0x07, 0xf8, 0xf0
+	ld	a, (xiz+ix)
 	and a, 0x30
 	srl a, 2
 	ld l, a
@@ -1472,13 +1472,13 @@ CPanel_LED_PacketHandlers:
 CPanel_LED_HandlePacket2:	; FC4B95 -- LED handler for packet types 0, 1, 2
 	; Transfers 2 bytes from LED event queue to LED TX buffer.
 	; Event byte 1 = row select, event byte 2 = LED pattern.
-	ldb_sri A, 0x07, 0xf8, 0xf0	; A = event queue byte 1 at (XIZ + IX)
+	ld	a, (xiz+ix)	; A = event queue byte 1 at (XIZ + IX)
 	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
-	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
+	ld	(xde+iy), a	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
-	ldb_sri W, 0x07, 0xf8, 0xf0	; W = event queue byte 2 at (XIZ + IX)
+	ld	w, (xiz+ix)	; W = event queue byte 2 at (XIZ + IX)
 	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
-	stb_dri W, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
+	ld	(xde+iy), w	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 	incw 1, (xiz - 2)		; increment pending LED byte count
@@ -1490,21 +1490,21 @@ CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
 	; Transfers variable-length data from LED event queue to LED TX buffer.
 	; Event byte 1 encodes: upper bits = row/command, lower nibble = data count.
 	; Total bytes transferred = (byte1 & 0x0f) + 2 (including the header bytes).
-	ldb_sri A, 0x07, 0xf8, 0xf0	; A = event queue byte 1 at (XIZ + IX)
+	ld	a, (xiz+ix)	; A = event queue byte 1 at (XIZ + IX)
 	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
 	ld c, a				; C = save event byte 1
 	and a, 0x0f			; A = lower nibble (data byte count)
 	add a, 2			; A = total byte count (nibble + 2)
 	ld b, a				; B = loop counter
 	ld a, c				; A = restore event byte 1
-	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
+	ld	(xde+iy), a	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	incw 1, (xiz - 2)		; increment pending LED byte count
 
 CPanel_LED_HandlePacketN__loop:	; FC4BE4 -- loop: transfer remaining bytes
-	ldb_sri A, 0x07, 0xf8, 0xf0	; A = next event queue byte at (XIZ + IX)
+	ld	a, (xiz+ix)	; A = next event queue byte at (XIZ + IX)
 	calr ToneGen_IncrementWrap128		; process byte + increment event read ptr
-	stb_dri A, 0x07, 0xe8, 0xf4	; LED buffer op at (XDE + IY)
+	ld	(xde+iy), a	; LED buffer op at (XDE + IY)
 	calr CPanel_IncLEDPtr		; increment LED write ptr (IY)
 	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 	incw 1, (xiz - 2)		; increment pending LED byte count

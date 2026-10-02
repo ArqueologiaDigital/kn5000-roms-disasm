@@ -66,7 +66,7 @@ Boot_CallInitHandlers__handler_loop:
 	lda	xde, (BootInit_EntryTable + 0x600000:24)
 	; LDA XDE, 0xFFFEF0 (init handler table)
 	; LD XBC, (XDE+BC) - load handler address from table
-	ld_sril3 xbc, 0x07, 0xE8, 0xE4
+	ld	xbc, (xde+bc)
 
 	; Call indirect call helper (address differs between ROMs)
 	; (table_data: the target is AudioMix_WriteChannelGroup, WA = i, XBC =

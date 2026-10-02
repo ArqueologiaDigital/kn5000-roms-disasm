@@ -15,7 +15,7 @@ SysEx_ClampVoiceIndex8:
 SysEx_ClampVoiceIndex8_DoLookup:
 	extz wa
 	lda xbc, (MidiPkt_EventType_Table_0x358:24)
-	ldb_sri L, 0x07, 0xe4, 0xe0
+	ld	l, (xbc+wa)
 	ret
 
 SysEx_ApplyToSlot4B_Data:
@@ -75,7 +75,7 @@ SysEx_ClampVoiceIndex128:
 SysEx_ClampVoiceIndex128_DoLookup:
 	extz wa
 	lda xbc, (MidiPkt_EventType_Table_0x360:24)
-	ldb_sri L, 0x07, 0xe4, 0xe0
+	ld	l, (xbc+wa)
 	ret
 
 SysEx_ApplyToSlot49_Data:
@@ -136,7 +136,7 @@ SysEx_ClampVoiceIndex8_49:
 SysEx_ClampVoiceIndex8_49_DoLookup:
 	extz wa
 	lda xbc, (MidiPkt_EventType_Table_0x3E0:24)
-	ldb_sri L, 0x07, 0xe4, 0xe0
+	ld	l, (xbc+wa)
 	ret
 
 SysEx_ApplyToSlot49_Format_Data:
@@ -196,7 +196,7 @@ SysEx_ClampVoiceIndex128_49:
 SysEx_ClampVoiceIndex128_49_DoLookup:
 	extz wa
 	lda xbc, (MidiPkt_EventType_Table_0x3E8:24)
-	ldb_sri L, 0x07, 0xe4, 0xe0
+	ld	l, (xbc+wa)
 	ret
 
 SysEx_DispatchByChannel:
@@ -211,7 +211,7 @@ SysEx_DispatchByChannel:
 	ret gt
 	add wa, wa
 	lda xix, (MidiPkt_EventType_Table_0x4D4:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SysEx_ChannelHandler_4B_Data:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -265,7 +265,7 @@ SysEx_DispatchByChannel_49:
 	ret gt
 	add wa, wa
 	lda xix, (MidiPkt_EventType_Table_0x538:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SysEx_ChannelHandler_49_Data:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -901,7 +901,7 @@ SwbtWr_DispatchLoop:
 	cp l, 0xbf
 	jr ugt, SwbtWr_DispatchLoop_NextEvent
 	sla hl, 2
-	ld_sril3 XHL, 0x07, 0xf0, 0xec
+	ld	xhl, (xix+hl)
 	ld wa, (xiy + 1)
 	ld c, (xiy + 3)
 
@@ -3684,7 +3684,7 @@ DSPCfg_WriteAllSlots_Direct:
 	ld wa, (xsp + 6)
 	sla wa, 2
 	lda xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld (xsp + 8), xwa
 	ld iz, 0:i3
 	jr DSPCfg_WriteAllSlots_Direct_CheckCount
@@ -3744,7 +3744,7 @@ DSPCfg_WriteAllSlots_Clamped:
 	ld wa, (xsp + 4)
 	sla wa, 2
 	lda xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld (xsp + 6), xwa
 	ld iz, 0:i3
 	jr DSPCfg_WriteAllSlots_Clamped_CheckCount
@@ -4177,7 +4177,7 @@ DSPCfg_ApplyParamStruct:
 	ld (xsp + 4), wa
 	lda xbc, (ToneKit_ParamBlock_116_0x18:24)
 	ld wa, (xsp + 4)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	ld (xsp + 6), wa
 	ld wa, (xsp + 4)
@@ -4428,7 +4428,7 @@ DSPCfg_ApplyParamStructFull_RangeCheck:
 DspConfig_EventDispatch:
 	add bc, bc
 	lda xix, (ToneKit_VoiceDispatch_Table_0x348:24)
-	ldw_sri BC, 0x07, 0xf0, 0xe4
+	ld	bc, (xix+bc)
 	lda xix, (AssSwb_SwapEntriesAndDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
@@ -5323,7 +5323,7 @@ AudioModeChange_Handler:
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld xbc, xhl
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
@@ -5365,7 +5365,7 @@ AudioSubsystem_Callback:
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld xbc, xhl
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
@@ -5436,7 +5436,7 @@ AudioVoice_Callback:
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld xbc, xhl
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
@@ -5481,7 +5481,7 @@ AudioVoiceReset_Handler:
 	extz wa
 	sla wa, 2
 	lda xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld xbc, xhl
 	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
 	cp xwa, xbc
@@ -5555,7 +5555,7 @@ UIState_ProcessMidiEvent:
 	extz wa
 	sla wa, 2
 	lda xbc, (AudioInit_VoiceDispatch_Table_0x7C:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld a, h
 	cp a, 0x16
 	jrl z, UIStateEvt_TransposeUpdate
@@ -5578,7 +5578,7 @@ UIStateEvt_PartRouting:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	add wa, wa
 	ld hl, wa
@@ -5588,7 +5588,7 @@ UIStateEvt_PartRouting:
 	and a, 0x7
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0x11C:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	and a, 0x7
 	sla a, 1
 	and_srib_im 0x07, 0xf0, 0xec, 0xf1
@@ -5605,7 +5605,7 @@ UIStateEvt_VoiceAssign:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (0xc222:16)
 	ld ix, wa
@@ -5620,7 +5620,7 @@ UIStateEvt_VoiceAssign_Reset:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (0xc222:16)
 	extz xwa
@@ -5639,7 +5639,7 @@ UIStateEvt_ToneChange:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (0xc202:16)
 	extz xwa
@@ -5654,7 +5654,7 @@ UIStateEvt_ToneChange_Set:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (0xc202:16)
 	ld ix, wa
@@ -5663,7 +5663,7 @@ UIStateEvt_ToneChange_Set:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	ld (xix), a
 	cp l, 0x13
 	jr nz, Tone_WriteEndMarker
@@ -5681,7 +5681,7 @@ UIStateEvt_DrumAssign:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (0xc222:16)
 	extz xwa
@@ -5693,7 +5693,7 @@ UIStateEvt_DrumAssign_Set:
 	ld a, l
 	extz wa
 	lda xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (0xc222:16)
 	ld de, wa
@@ -5703,7 +5703,7 @@ UIStateEvt_DrumAssign_Set:
 	extz wa
 	sla wa, 2
 	lda xbc, (AudioInit_VoiceDispatch_Table_0x7C:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld a, (xwa + 13)
 	and a, 0xf
 	ld (xde), a

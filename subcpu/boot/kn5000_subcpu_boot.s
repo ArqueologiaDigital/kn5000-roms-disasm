@@ -775,7 +775,7 @@ TONE_GEN_CHANNEL_INIT__loop:
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; BC <<= 2 (multiply by 4 for table index)
 	lda xde, (ToneGen_ChannelInit_Config:24); XDE = pointer to channel config table
-	ld_sril3 XBC, 0x07, 0xE8, 0xE4	; XBC = config[channel] (4 bytes per entry)
+	ld	xbc, (xde+bc)	; XBC = config[channel] (4 bytes per entry)
 	call TONE_GEN_WRITE	; Write config to tone generator
 	inc1b_erp 0xFB	; Increment loop counter
 	cpib_erp 0xFB, 4	; Compare counter with 4
@@ -1624,7 +1624,7 @@ CMD_Dispatch_Handler:
 	extz wa
 	sla wa, 2	; index * 4
 	lda xbc, (CmdHandler_Table:24); XBC = CmdHandler_Table
-	ld_sril3 XWA, 0x07, 0xE4, 0xE0	; Get handler address
+	ld	xwa, (xbc+wa)	; Get handler address
 	call (xwa)	; Call handler (if valid)
 	inc 6, xsp	; Clean up stack
 	ld (1304:16), 0
@@ -1804,7 +1804,7 @@ MEM_TEST_ROUTINE__next_region:
 	extz wa
 	muls wa, 0xA	; Each entry is 10 bytes (TMP94C241 encoding)
 	lda xbc, (MemTest_RegionTable:24); XBC = MemTest_RegionTable
-	lda_dri XDE, 0x07, 0xE4, 0xE0	; Point to current entry
+	lda	xde, (xbc+wa)	; Point to current entry
 	ld xhl, (xde)	; Memory start address
 	ld xiz, (xde + 4)	; Size in dwords
 	srl xiz, 3	; Convert to iteration count
@@ -1897,7 +1897,7 @@ ROM_CHECKSUM__word_loop:
 	ld c, w
 	extz bc
 	add bc, bc	; Bank offset
-	lda_dri XDE, 0x07, 0xF0, 0xE4
+	lda	xde, (xix+bc)
 	ld bc, (xde)	; Get current sum
 	ldfr_werp BC, 0xE2
 	ld BC, (xiy+)	; Read word from ROM
@@ -2220,7 +2220,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE:
 	extz bc	; Zero-extend BC
 	lda xde, (ToneGen_Velocity_Input_Curve:24); XDE = ToneGen_Velocity_Input_Curve
 	ld xhl, 0:i3	; Clear XHL
-	ldb_sri L, 0x07, 0xE8, 0xE4	; L = table[velocity_index]
+	ld	l, (xde+bc)	; L = table[velocity_index]
 	ld bc, (ToneGen_VelCurve_Pivot:24); BC = ToneGen_VelCurve_Pivot (77)
 	sub hl, bc	; HL = L - BC
 	lda xde, (ToneGen_VelCurve_ModeParams_Mode6:24); XDE = ToneGen_VelCurve_ModeParams_Mode6
@@ -2273,7 +2273,7 @@ NOTE_VELOCITY_LOOKUP_CALCULATE__use_min:
 	; Look up final velocity in curve table
 	extz bc	; Zero-extend BC (velocity 0-255)
 	lda xde, (ToneGen_Velocity_Output_Curve:24); XDE = ToneGen_Velocity_Output_Curve
-	ldb_sri C, 0x07, 0xE8, 0xE4	; C = curve[velocity]
+	ld	c, (xde+bc)	; C = curve[velocity]
 	ld (xwa + 1), c	; Store final velocity to output[1]
 	ret
 

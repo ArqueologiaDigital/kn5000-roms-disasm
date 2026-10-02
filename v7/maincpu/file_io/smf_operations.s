@@ -197,7 +197,7 @@ RenderSmfFilename:
 
 RenderSmf_CheckSeparator:
 	extz bc
-	ldb_sri C, 0x07, 0xec, 0xe4
+	ld	c, (xhl+bc)
 	and c, 0x7
 	jr nz, RenderSmf_IncIndex
 	ld (xde), 0x5f
@@ -208,7 +208,7 @@ RenderSmf_IncIndex:
 RenderSmf_LoopCheck:
 	cp ix, 0x8
 	jr ge, RenderSmf_PadCheck
-	lda_dri XDE, 0x07, 0xe0, 0xf0
+	lda	xde, (xwa+ix)
 	ld c, (xde)
 	cp c, 0:i3
 	jr nz, RenderSmf_CheckSeparator
@@ -500,7 +500,7 @@ ValidateFN_AdvancePointer:
 	inc 1, hl
 
 ValidateFN_LoopHead:
-	ldb_sri E, 0x07, 0xe0, 0xf4
+	ld	e, (xwa+iy)
 	cp e, 0:i3
 	jr z, ValidateFN_ReturnValid
 	cp hl, bc

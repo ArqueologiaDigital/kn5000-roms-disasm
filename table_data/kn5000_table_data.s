@@ -1776,13 +1776,13 @@ Flash_Reset_16bit__wait_ready:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
 	; Send unlock sequence: base+5554 = 55
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	; Send reset command: base+AAAA = F0
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xF0	; LD (XWA), 00F0h (word store)
 	; Read to complete cycle
-	ldw_sri0 WA, (xiz + 0x3232)              ; LD WA, (XIZ+3232h)
+	ld	wa, (xiz+12850)              ; LD WA, (XIZ+3232h)
 	ei 0	; 06 00 - Re-enable interrupts
 	; Check if region code = 4 (high bank exists)
 	call Get_Region_Code + 0x600000	; Get_Region_Code - returns region code in L
@@ -1794,11 +1794,11 @@ Flash_Reset_16bit__wait_ready:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xF0	; LD (XWA), 00F0h (word store)
-	ldw_sri0 WA, (xiz + 0x3232)              ; LD WA, (XIZ+3232h)
+	ld	wa, (xiz+12850)              ; LD WA, (XIZ+3232h)
 	ei 0	; 06 00
 Flash_Reset_16bit__done:
 	pop xiz	; 5e
@@ -1832,7 +1832,7 @@ Flash_ReadID_16bit__got_base:
 	add xbc, 0xAAAA	; e9 c8 aa aa 00 00
 	ldw (xbc), 0xAA	; LD (XBC), 00AAh (word store)
 	ld xde, (xsp + 4)	; LD XDE, (XSP+04h)
-	stiw_ind 0xE9, 0x54, 0x55, 0x55, 0x00	; LD (XDE+5554h), 0055h
+	ldw	(xde+21844), 0x0055	; LD (XDE+5554h), 0055h
 	ldw (xbc), 0x90	; LD (XBC), 0090h - ID command (word store)
 	; Read manufacturer ID
 	ld wa, (xde)	; 92 20
@@ -1912,7 +1912,7 @@ Flash_ProgramWord_16bit__do_program:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	ldw (xwa), 0xA0	; LD (XWA), 00A0h - Program command (word store)
 	; Write data to destination
 	ld xwa, (xsp + 6)	; LD XWA, (XSP+06h) - destination
@@ -1950,7 +1950,7 @@ Flash_ChipErase_16bit__got_base:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
 	; Byte 2: base+5554 = 55
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	; Byte 3: base+AAAA = 80
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
@@ -1960,7 +1960,7 @@ Flash_ChipErase_16bit__got_base:
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
 	; Byte 5: base+5554 = 55
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	; Byte 6: base+AAAA = 10 (chip erase command)
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
@@ -1976,14 +1976,14 @@ Flash_ChipErase_16bit__got_base:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0x80	; LD (XWA), 0080h (word store)
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0x10	; LD (XWA), 0010h (word store)
@@ -2033,14 +2033,14 @@ Flash_SectorErase_16bit__do_erase:
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0x80	; LD (XWA), 0080h (word store)
 	ld xwa, xiz	; ee 88
 	add xwa, 0xAAAA	; e8 c8 aa aa 00 00
 	ldw (xwa), 0xAA	; LD (XWA), 00AAh (word store)
-	stiw_ind 0xF9, 0x54, 0x55, 0x55, 0x00	; LD (XIZ+5554h), 0055h
+	ldw	(xiz+21844), 0x0055	; LD (XIZ+5554h), 0055h
 	; Send 0x30 to sector address
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h)
 	ldw (xwa), 0x30	; LD (XWA), 0030h - Sector erase command (word store)
@@ -2103,8 +2103,8 @@ Flash_SectorErase_16bit__check_non_region4:
 	jrl nz, Flash_SectorErase_16bit__sector_done	; JRL NZ, .sector_done
 
 	; Erase 8KB sectors at 0x4000 and 0x6000
-	stiw_ind 0xF9, 0x00, 0x40, 0x30, 0x00	; LD (XIZ+4000h), 0030h
-	stiw_ind 0xF9, 0x00, 0x60, 0x30, 0x00	; LD (XIZ+6000h), 0030h
+	ldw	(xiz+16384), 0x0030	; LD (XIZ+4000h), 0030h
+	ldw	(xiz+24576), 0x0030	; LD (XIZ+6000h), 0030h
 	ld xwa, 0x8000	; 40 00 80 00 00
 	jrl Flash_SectorErase_16bit__erase_last_sector	; JRL T, .erase_last_sector
 
@@ -2144,8 +2144,8 @@ Flash_SectorErase_16bit__check_hdae:
 	jr nz, Flash_SectorErase_16bit__sector_done	; 6e 45
 
 	; Erase 8KB boot block sectors at 0x4000 and 0x6000
-	stiw_ind 0xF9, 0x00, 0x40, 0x30, 0x00	; LD (XIZ+4000h), 0030h
-	stiw_ind 0xF9, 0x00, 0x60, 0x30, 0x00	; LD (XIZ+6000h), 0030h
+	ldw	(xiz+16384), 0x0030	; LD (XIZ+4000h), 0030h
+	ldw	(xiz+24576), 0x0030	; LD (XIZ+6000h), 0030h
 	ld xwa, 0x8000	; 40 00 80 00 00
 	jr Flash_SectorErase_16bit__erase_last_sector	; 68 28
 
@@ -3418,7 +3418,7 @@ Boot_LoadDiskData:
 	; Dispatch via jump table
 	add wa, wa	; ADD WA, WA - WA *= 2
 	lda xix, (Boot_LoadDiskData_JumpOffsets + 0x600000:24); LDA XIX, 0xFFA140 - jump table
-	ldw_sri WA, 0x07, 0xF0, 0xE0	; LD WA, (XIX+WA)
+	ld	wa, (xix+wa)	; LD WA, (XIX+WA)
 	lda xix, (Boot_LoadDiskData__ldd_Program12 + 0x600000:24); LDA XIX, 0xFFC44A - base addr
 	jp_ind 8, 0x07, 0xF0, 0xE0	; JP T, XIX+WA - dispatch
 

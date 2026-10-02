@@ -621,7 +621,7 @@ UpdSeSel_ExtendedOps_Data:
 	dec 1,E
 	extz DE
 	lda xbc, (xsp + 0x02)
-	ldb_dri c, 0x07, 0xe4, 0xe8
+	ld	c, (xbc+de)
 	extz BC
 	call SeMenu_StorePartParam
 	incb_erp 0xfb, 1
@@ -7837,7 +7837,7 @@ SeMenu_ShowPopupDialog:
 	sub hl, 0x20
 	ld xiy, SeMenu_ShowPopupDialog_Draw
 	sla hl, 2
-	ld_sril3 XIY, 0x07, 0xf4, 0xec
+	ld	xiy, (xiy+hl)
 	push xiy
 	call SeMenu_WaveformSelect_Handler
 	pop xiy
@@ -9542,7 +9542,7 @@ Data_UnknownBlock_Return:
 	xor B,B
 	sla BC, 0x02
 	ld XIZ,SeScreenData_0x2A22
-	ldl_dri xiy, 0x07, 0xf8, 0xe4
+	ld	xiy, (xiz+bc)
 	ld XIX,XIY
 	add XIX,0x00000014
 	call SeGfx_DrawStaticList
@@ -15410,12 +15410,12 @@ S2c_GridCheck_Dispatch:
 	extz WA
 	sla WA, 0x02
 	lda xbc, (StrTranspose_Minus25_0x12:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld A,(XWA)
 	extz WA
 	sla WA, 0x02
 	lda xbc, (0x03dc4e:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push XWA
 	push XDE
 	call Scoop_EventLoop_12Entry_Helper
@@ -15453,8 +15453,8 @@ PsCmpCpFGrpBox_Entry:
 PsCmpCpFGrpBoxProc:
 	lda xsp, (xsp-272)
 	push xiz
-	stl_dri XDE, 0xfd, 0x0c, 0x01
-	stl_dri XWA, 0xfd, 0x10, 0x01
+	ld	(xsp+268), xde
+	ld	(xsp+272), xwa
 	cp xbc, EVT_AP_RHY_GRP_NM
 	jr z, PsCmpCpFGrpBox_HandleEvt4
 	cp xbc, EVT_REPAINT
@@ -15560,8 +15560,8 @@ PsCmpCpFVariBox_Entry:
 PsCmpCpFVariBoxProc:
 	lda xsp, (xsp-272)
 	push xiz
-	stl_dri XDE, 0xfd, 0x0c, 0x01
-	stl_dri XWA, 0xfd, 0x10, 0x01
+	ld	(xsp+268), xde
+	ld	(xsp+272), xwa
 	cp xbc, EVT_AP_RHY_VARI_NM
 	jr z, PsCmpCpFVariBox_HandleEvt5
 	cp xbc, EVT_REPAINT
@@ -15673,7 +15673,7 @@ PsCmpCpFPtnBox_Entry:
 PsCmpCpFPtnBoxProc:
 	lda xsp, (xsp-268)
 	push xiz
-	stl_dri XWA, 0xfd, 0x0c, 0x01
+	ld	(xsp+268), xwa
 	cp xbc, EVT_REPAINT
 	jr z, PsCmpCpFPtnBox_HandleEvtBC
 	cp xbc, EVT_PAINT
@@ -15899,7 +15899,7 @@ PsCstmCpNameBox_Entry:
 PsCstmCpNameBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
-	stl_dri XDE, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xde
 	ld xiz, xwa
 	cp xbc, EVT_CSTM_T_NM_DISP
 	jrl z, PsCstmCpNameBox_HandleEvt2E
@@ -16048,7 +16048,7 @@ AcMemNoBox_Entry:
 AcMemNoBoxProc:
 	lda xsp, (xsp-268)
 	push xiz
-	stl_dri XWA, 0xfd, 0x0c, 0x01
+	ld	(xsp+268), xwa
 	cp xbc, EVT_REPAINT
 	jr z, AcMemNoBox_HandleEvtBC
 	cp xbc, EVT_PAINT
@@ -16147,9 +16147,9 @@ AcCmpRecBox_Entry:
 AcCmpRecBoxProc:
 	lda xsp, (xsp-280)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x01
-	stl_dri XBC, 0xfd, 0x14, 0x01
-	stl_dri XWA, 0xfd, 0x18, 0x01
+	ld	(xsp+272), xde
+	ld	(xsp+276), xbc
+	ld	(xsp+280), xwa
 	ld XWA, (xsp + 0x0114)
 	cp xwa, EVT_REPAINT
 	jr z, AcCmpRecBox_HandleEvtBC
@@ -16307,9 +16307,9 @@ PsCmpMeasBox_Entry:
 PsCmpMeasBoxProc:
 	lda xsp, (xsp-264)
 	push xiz
-	stl_dri XDE, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x08, 0x01
+	ld	(xsp+264), xwa
 	cp xiz, EVT_REPAINT
 	jr z, PsCmpMeasBox_HandleEvtBC
 	cp xiz, EVT_PAINT
@@ -16375,9 +16375,9 @@ PsCmpMemBox_Entry:
 PsCmpMemBoxProc:
 	lda xsp, (xsp-264)
 	push xiz
-	stl_dri XDE, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x08, 0x01
+	ld	(xsp+264), xwa
 	cp xiz, EVT_REPAINT
 	jr z, PsCmpMemBox_HandleEvtBC
 	cp xiz, EVT_PAINT
@@ -16443,7 +16443,7 @@ AcCmpTempoBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_LSW_DATA
 	jr z, AcCmpTempoBox_HandleEvt1C
 	cp xbc, EVT_REPAINT
@@ -16566,7 +16566,7 @@ PsNameMemBox_Entry:
 PsNameMemBoxProc:
 	lda xsp, (xsp-268)
 	push xiz
-	stl_dri XWA, 0xfd, 0x0c, 0x01
+	ld	(xsp+268), xwa
 	cp xbc, EVT_REPAINT
 	jr z, PsNameMemBox_HandleEvtBC
 	cp xbc, EVT_PAINT
@@ -16985,7 +16985,7 @@ EasyCmp_GridCheck_EventEnc:
 	extz WA
 	sla WA, 0x02
 	lda xbc, (0x03dc92:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push XWA
 	jr t, EasyCmp_GridCheck_EventCase1
 EasyCmp_GridEvtEnc_Case2:
@@ -17201,9 +17201,9 @@ PsMspNameBnk_End:
 VwVariBoxProc:
 	lda xsp, (xsp-280)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x01
+	ld	(xsp+280), xwa
 	cp xiz, EVT_CHECK_SELECTED
 	jrl z, VwVariBox_CanScroll
 	cp xiz, EVT_INDEX_SELECT
@@ -17228,7 +17228,7 @@ VwVariBoxProc:
 	ld xbc, (xwa)
 	ld bc, (xbc)
 	exts xbc
-	cpl_sri_rm XBC, 0xfd, 0x14, 0x01
+	cp	xbc, (xsp+276)
 	jrl z, VwVariBox_ReturnHandled
 	ld xbc, (xwa)
 	ld XWA, (xsp + 0x0114)
@@ -17531,7 +17531,7 @@ VwVariBox_Release:
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x14, 0x01
+	cp	xwa, (xsp+276)
 	jrl nz, VwVariBox_ReturnHandled
 	ld xwa, (xhl + 38)
 	cpw (xwa), 0x0
@@ -17549,7 +17549,7 @@ VwVariBox_CanScroll:
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x14, 0x01
+	cp	xwa, (xsp+276)
 	jrl nz, VwVariBox_ReturnHandled
 	ld xwa, (xhl + 38)
 	cpw (xwa), 0x1
@@ -17758,7 +17758,7 @@ MspBnkSlBox_End:
 PsMspBnkNameBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
-	stl_dri XDE, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xde
 	ld xiz, xwa
 	cp xbc, EVT_MSP_RGP2_NM_DISP
 	jrl z, RgpSetBnk_GridCheck
@@ -18003,7 +18003,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	extz WA
 	sla WA, 0x02
 	lda xbc, (PtrTbl_MusicStyleBankNames2:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push XWA
 	push XDE
 	call Scoop_EventLoop_12Entry_Helper
@@ -19022,7 +19022,7 @@ PsParaListBoxProc_Entry:
 PsParaListBoxProc:
 	lda xsp, (xsp-158)
 	push xiz
-	stl_dri XDE, 0xfd, 0x9e, 0x00
+	ld	(xsp+158), xde
 	ld xiz, xwa
 	cp xbc, EVT_SET_SELECTED_LINE
 	jrl z, SndArgGrid_CheckCase2
@@ -19031,13 +19031,13 @@ PsParaListBoxProc:
 	cp xbc, EVT_PAINT
 	jr z, ParaListBox_HandleEvtB
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x009e)
+	ld	xde, (xsp+158)
 	call InheritedProc
 	jrl SndArgGrid_CheckCase3
 
 ParaListBox_HandleEvtB:
 	ld xwa, xiz
-	ld_sril XDE, (xsp + 0x009e)
+	ld	xde, (xsp+158)
 	call InheritedProc
 	ld xwa, xiz
 	call GetViewInstance
@@ -19057,17 +19057,17 @@ ParaListBox_HandleEvtB:
 	ld (xsp + 4), bc
 	ld wa, (xde + 2)
 	inc 1, wa
-	stw_dri WA, 0xfd, 0x9c, 0x00
+	ld	(xsp+156), wa
 	ld wa, (xde + 6)
 	dec 1, wa
-	stw_dri WA, 0xfd, 0x98, 0x00
+	ld	(xsp+152), wa
 	ld iz, 1:i3
 	jr ParaListBox_DrawLineLoop_Check
 
 ParaListBox_DrawLineLoop_Body:
 	ld wa, (xsp + 4)
 	mul xwa, iz
-	ldw_sri0 BC, (xsp + 0x008e)
+	ld	bc, (xsp+142)
 	add bc, wa
 	dec 1, bc
 	lda xwa, (xsp+154:16)
@@ -19197,7 +19197,7 @@ SndArgGrid_CheckCase2:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xbc, (xhl + 38)
-	ld_sril XWA, (xsp + 0x009e)
+	ld	xwa, (xsp+158)
 	ld (xbc), wa
 
 PsParaListBoxProc_Return:

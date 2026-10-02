@@ -410,7 +410,7 @@ SwbtWr_DispatchLoop:
 	cp	l, 0xbf
 	jr	ugt, SwbtWr_DispatchLoop_NextEvent
 	sla	hl, 2
-	ld_sril3	XHL, 0x07, 0xf0, 0xec
+	ld	xhl, (xix+hl)
 	ld	wa, (xiy + 1)
 	ld	c, (xiy + 3)
 SwbtWr_DispatchLoop_ScanCallbacks:
@@ -2976,7 +2976,7 @@ DSPCfg_WriteAllSlots_Direct:
 	ld	wa, (xsp + 6)
 	sla	wa, 2
 	lda	xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
-	ld_sril3	XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld	(xsp + 8), xwa
 	ld	iz, 0:i3
 	jr	DSPCfg_WriteAllSlots_Direct_CheckCount
@@ -3032,7 +3032,7 @@ DSPCfg_WriteAllSlots_Clamped:
 	ld	wa, (xsp + 4)
 	sla	wa, 2
 	lda	xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
-	ld_sril3	XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld	(xsp + 6), xwa
 	ld	iz, 0:i3
 	jr	DSPCfg_WriteAllSlots_Clamped_CheckCount
@@ -3453,7 +3453,7 @@ DSPCfg_ApplyParamStruct:
 	ld	(xsp + 4), wa
 	lda	xbc, (ToneKit_ParamBlock_116_0x18:24)
 	ld	wa, (xsp + 4)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz	wa
 	ld	(xsp + 6), wa
 	ld	wa, (xsp + 4)
@@ -3692,7 +3692,7 @@ DSPCfg_ApplyParamStructFull_RangeCheck:
 DspConfig_EventDispatch:
 	add	bc, bc
 	lda	xix, (ToneKit_VoiceDispatch_Table_0x348:24)
-	ldw_sri	BC, 0x07, 0xf0, 0xe4
+	ld	bc, (xix+bc)
 	lda	xix, (AssSwb_SwapEntriesAndDispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xe4
 AssSwb_SwapEntriesAndDispatch:
@@ -4794,7 +4794,7 @@ AudioModeChange_Handler:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3	XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (0xfde509:24)
 	cp	xwa, xbc
@@ -4834,7 +4834,7 @@ AudioSubsystem_Callback:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3	XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (0xfde509:24)
 	cp	xwa, xbc
@@ -4887,7 +4887,7 @@ UIStateEvt_DrumAssign_Set:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
 	ld	de, wa
@@ -4897,7 +4897,7 @@ UIStateEvt_DrumAssign_Set:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x7C:24)
-	ld_sril3	XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld	a, (xwa + 13)
 	and	a, 0xf
 	ld	(xde), a

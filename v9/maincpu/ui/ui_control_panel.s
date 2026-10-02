@@ -19,7 +19,7 @@ ParaLoadOpt_BuildFromIZ1:
 	ld a, (xiz + 1)
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
@@ -36,7 +36,7 @@ ParaLoadOpt_BuildFromIZ2:
 	extz bc
 	sla bc, 2
 	ld xwa, (xsp + 4)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
+	ld	xwa, (xwa+bc)
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
@@ -53,7 +53,7 @@ ParaLoadOpt_BuildFromIZ3:
 	extz bc
 	sla bc, 2
 	ld xwa, (xsp + 4)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
+	ld	xwa, (xwa+bc)
 	push xwa
 	ld xwa, (xsp + 20)
 	push xwa
@@ -3095,7 +3095,7 @@ GetClientBox2:
 CtrlPanel_DispatchByIndex:
 	add wa, wa
 	lda xix, (DiskWarning_ConfirmStrings_0xD58:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (CtrlPanel_FrameDispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -3413,7 +3413,7 @@ CtrlPanel_FuncDispatch:
 	extz wa
 	sll wa, 1
 	ld xix, DiskWarning_ConfirmStrings_0xE56
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (GroupBox_HandlePartChange:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 

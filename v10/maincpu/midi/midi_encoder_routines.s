@@ -62,7 +62,7 @@ Encoder_ProcessModwheel:
 	srl a, 1	; Divide by 2
 	extz wa
 	lda xbc, (ENCODER_LUT_MODWHEEL:24); Lookup table address
-	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value from table
+	ld	a, (xbc+wa)	; Get processed value from table
 	ld c, (0x8ee4:16); Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare with new value
@@ -82,7 +82,7 @@ Encoder_ProcessVolume:
 	ld (0x8ecc:16), a; Store raw value
 	extz wa
 	lda xbc, (ENCODER_LUT_VOLUME:24); Lookup table address
-	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
+	ld	a, (xbc+wa)	; Get processed value
 	calr Encoder_ClampScaleAndNormalize	; Clamp to valid range
 	ld a, l
 	cp a, (0x8ef4:16)	; Compare with current
@@ -118,7 +118,7 @@ Encoder_PerformScaling:
 	extz wa
 	add wa, wa	; Double for word table index
 	lda xbc, (ENCODER_LUT_BREATH_INDEX:24); Index table
-	ldw_sri BC, 0x07, 0xe4, 0xe0	; Get index offset
+	ld	bc, (xbc+wa)	; Get index offset
 	extz xbc
 	ld xwa, xhl
 	call Math_MultiplyAccumulate	; Processing routine
@@ -140,7 +140,7 @@ Encoder_ProcessBreath:
 	ld (0x8ed4:16), a; Store raw value
 	extz wa
 	lda xbc, (ENCODER_LUT_BREATH_VALUE:24); Lookup table
-	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
+	ld	a, (xbc+wa)	; Get processed value
 	ld c, (0x379b:16); Get system mode flags
 	and c, 0xf	; Mask relevant bits
 	jr nz, Encoder_ProcessBreath_WithModeAdjustment	; If mode active, process
@@ -158,10 +158,10 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	extz bc
 	add bc, bc	; Word index
 	lda xwa, (ENCODER_LUT_BREATH_MULT:24); Multiplier table
-	ldw_sri DE, 0x07, 0xe0, 0xe4	; Get multiplier
+	ld	de, (xwa+bc)	; Get multiplier
 	mul xhl, de	; Multiply
 	lda xwa, (ENCODER_LUT_BREATH_OFFSET:24); Offset table
-	ldw_sri WA, 0x07, 0xe0, 0xe4	; Get offset
+	ld	wa, (xwa+bc)	; Get offset
 	sub hl, wa	; Subtract offset
 	add hl, 0x4080	; Add center offset
 	srl hl, 8	; Divide by 256
@@ -190,7 +190,7 @@ Encoder_ProcessFoot:
 	srl a, 1	; Divide by 2
 	extz wa
 	lda xbc, (ENCODER_LUT_FOOT:24); Lookup table
-	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
+	ld	a, (xbc+wa)	; Get processed value
 	ld c, (0x8eea:16); Get current value
 	res 7, c	; Clear change flag
 	cp c, a	; Compare
@@ -211,7 +211,7 @@ Encoder_ProcessExpression:
 	srl a, 1	; Divide by 2
 	extz wa
 	lda xbc, (ENCODER_LUT_EXPRESSION:24); Lookup table
-	ldb_sri A, 0x07, 0xe4, 0xe0	; Get processed value
+	ld	a, (xbc+wa)	; Get processed value
 	ld (0x8ee6:16), a; Store value
 	extz wa
 	ld hl, wa	; Return value in HL

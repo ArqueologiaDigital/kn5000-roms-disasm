@@ -600,16 +600,16 @@ AccompSeq_ResetCounters_Return:
 
 AccompSeq_ProcessNoteOn6:
 	ld a, (0x7e54:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	calr AccompSeq_ResolveChannel
 	ld a, (0x7e56:16)
 	ld e, a
 	call AccompSeq_CheckVelocityFlags
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e57:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e58:16)
 	cp a, 0:i3
@@ -617,28 +617,28 @@ AccompSeq_ProcessNoteOn6:
 	ld a, 0x1:opc
 
 AccompSeq_NoteOn6_VelClamp:
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e59:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
-	stb_dri E, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), e
 	calr AccompSeq_AdvanceBufferPtr
 	ld (xhl + 4), iy
 	ret
 
 AccompSeq_ProcessNoteOn8:
 	ld a, (0x7e54:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	calr AccompSeq_ResolveChannel
 	ld a, (0x7e56:16)
 	ld e, a
 	calr AccompSeq_CheckVelFlagsExtended
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e57:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e58:16)
 	cp a, 0:i3
@@ -646,33 +646,33 @@ AccompSeq_ProcessNoteOn8:
 	ld a, 0x1:opc
 
 AccompSeq_NoteOn8_VelClamp:
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e59:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e5a:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e5b:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
-	stb_dri E, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), e
 	calr AccompSeq_AdvanceBufferPtr
 	ld (xhl + 4), iy
 	ret
 
 AccompSeq_ProcessNotePorta:
 	ld a, (0x7e54:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	calr AccompSeq_ResolveChannel
 	ld a, (0x7e56:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e57:16)
 	calr AccompSeq_PortaFadeOut
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld (xhl + 4), iy
 	ld a, (0x7e54:16)
@@ -692,20 +692,20 @@ AccompSeq_NotePorta_Done:
 
 AccompSeq_ProcessNoteOn5:
 	ld a, (0x7e54:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	calr AccompSeq_ResolveChannel
 	ld a, (0x7e56:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e57:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e58:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld a, (0x7e59:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld (xhl + 4), iy
 	ld a, (0x7e54:16)
@@ -744,7 +744,7 @@ AccompSeq_ResolveCh_Store:
 AccompSeq_ResolveCh_AddOffset:
 	ld w, (1133:16)
 	add a, w
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr AccompSeq_AdvanceBufferPtr
 	ld w, (0x7dfc:16)
 	cp a, w
@@ -1247,7 +1247,7 @@ AccompSeq_LoadParams_OverrideCheck:
 	and a, 0x7
 	sll wa, 2
 	ld xiy, AccompSeq_TempoScaleTable
-	ld_sril3 XWA, 0x07, 0xf4, 0xe0
+	ld	xwa, (xiy+wa)
 	add xwa, 0x6
 	ld (0x7e2e:16), wa
 	ld (0x7e32:16), wa

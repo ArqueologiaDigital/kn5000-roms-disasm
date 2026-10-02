@@ -296,7 +296,7 @@ FDC_COMMAND_DISPATCHER:
 	jr ugt, FDC_CheckDriveCount
 	add wa, wa
 	lda xix, (DiskWarning_ConfirmStrings_0xC06:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (FDC_CMD_HANDLER_BASE:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; FDC command handler base - entry point for command 0
@@ -2044,7 +2044,7 @@ FDC_CommandEntry_CopyParams:
 	jr	ugt, FDC_Handler_InvalidCommand
 	add wa, wa
 	lda xix, (DiskWarning_ConfirmStrings_0xC1E:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (FDC_HANDLER_DISPATCH_BASE:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 

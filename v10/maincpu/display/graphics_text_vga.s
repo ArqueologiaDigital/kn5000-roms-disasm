@@ -64,7 +64,7 @@ TextRender_CheckColumnEnd:
 
 TextRender_AdvanceToNextLine:
 	ld wa, (xsp + 24)
-	add_sriw_mr WA, 0xfd, 0x2a, 0x01
+	add	(xsp+298), wa
 	incw 1, (xsp + 26)
 	ld wa, (xsp + 26)
 	cp wa, (xsp + 22)
@@ -232,13 +232,13 @@ GraphicsRender_ShortByteBlock:
 GraphicsRender_ProcessEntries:
 	lda xsp, (xsp-150)
 	push xiz
-	stl_dri XBC, 0xfd, 0x96, 0x00
+	ld	(xsp+150), xbc
 	ld xiz, xwa
 	ld xiy, GraphicsRender_ProcessEntries_PtrTable
 	lda xix, (xsp + 6)
 	ldw bc, 0x48
 	ldirw
-	cpl_sri_mr XIZ, 0xfd, 0x96, 0x00
+	cp	(xsp+150), xiz
 	jr ule, GraphicsRender_ProcessEntries_Done
 
 GraphicsRender_ProcessEntry_Loop:
@@ -257,14 +257,14 @@ VoiceMidi_EventHandler:
 	extz wa
 	sla wa, 2
 	lda xbc, (xsp + 6)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, xiz
 	ld xhl, (xbc)
 	call (xhl)
 	ld a, (xsp + 4)
 	extz wa
-	lda_dri XIZ, 0x07, 0xf8, 0xe0
-	cpl_sri_mr XIZ, 0xfd, 0x96, 0x00
+	lda	xiz, (xiz+wa)
+	cp	(xsp+150), xiz
 	jr ugt, GraphicsRender_ProcessEntry_Loop
 
 GraphicsRender_ProcessEntries_Done:
@@ -300,13 +300,13 @@ VoiceMidi_AltEventHandler:
 	extz wa
 	sla wa, 2
 	lda xbc, (xsp + 6)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, xiz
 	ld xhl, (xbc)
 	call (xhl)
 	ld a, (xsp + 4)
 	extz wa
-	lda_dri XIZ, 0x07, 0xf8, 0xe0
+	lda	xiz, (xiz+wa)
 	cp (xsp + 54), xiz
 	jr ugt, GraphicsRender_Start_EntryLoop
 
@@ -1108,7 +1108,7 @@ ColorBlit_ByteData:
 DrawText_ExtendedLayout:
 	lda xsp, (xsp-284)
 	push xiz
-	stl_dri XWA, 0xfd, 0x1c, 0x01
+	ld	(xsp+284), xwa
 	ld xiy, Str_No_0xDFE
 	lda xix, (xsp+276)
 	ld bc, 4:i3
@@ -1186,7 +1186,7 @@ DrawText_ExtLayout_NullAndDraw:
 	extz wa
 	sla wa, 2
 	lda xbc, (Str_No_0xCEE:24)
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
+	ld	xbc, (xbc+wa)
 	lda xwa, (xsp+276)
 	push xbc
 	pushw_da 0xa4, 0xef, 0x03
@@ -1342,7 +1342,7 @@ DrawFunc_Init_PushFontAndDraw:
 	extz wa
 	sla wa, 2
 	lda xbc, (Str_No_0xCEE:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	lda xwa, (xsp+264)
 	lda xbc, (xsp+260)
 	lda xde, (xsp + 4)
@@ -1756,7 +1756,7 @@ ColorBlit_PalSave_SkipShift:
 	extz hl
 	add hl, hl
 	ld xbc, (xbc + 7)
-	lda_dri XDE, 0x07, 0xe4, 0xec
+	lda	xde, (xbc+hl)
 	lda xwa, (xsp + 2)
 	ld bc, (xde)
 	ld (xwa), bc
@@ -2076,11 +2076,11 @@ CalcTotalWidth_KerningLoop_Init:
 
 CalcTotalWidth_KerningLoop:
 	ld xwa, (xsp + 4)
-	ldb_sri A, 0x07, 0xe0, 0xe8
+	ld	a, (xwa+de)
 	sub a, 0x20
 	extz wa
 	sla wa, 2
-	lda_dri XIX, 0x07, 0xf0, 0xe0
+	lda	xix, (xix+wa)
 	ld a, (xix)
 	extz wa
 	add iz, wa
@@ -3482,9 +3482,9 @@ BitMapOut:
 PmBankScreenProc:
 	lda xsp, (xsp-280)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x01
+	ld	(xsp+280), xwa
 	cp xiz, EVT_SW_IN
 	jrl z, PmBank_OK
 	cp xiz, EVT_PMBK_NAME
@@ -3563,7 +3563,7 @@ PmBank_Select:
 	ld xwa, (xhl)
 	lda xbc, (SeqChan_Map_10ch:24)
 	ld wa, (xwa)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+264)
 	call GetEditSwPoint
@@ -3595,7 +3595,7 @@ PmBank_Select_DrawFirstRow:
 	ld xwa, (xwa + 52)
 	ld wa, (xwa)
 	exts xwa
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xwa
 	ld xwa, NAKA_MAINFUNC_MainPmGet
 	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x0114)
@@ -3604,7 +3604,7 @@ PmBank_Select_DrawFirstRow:
 	ld xwa, (xwa + 48)
 	lda xbc, (SeqChan_Map_10ch:24)
 	ld wa, (xwa)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+264)
 	call GetEditSwPoint
@@ -3636,7 +3636,7 @@ PmBank_Select_DrawSecondRow:
 	ld xwa, (xwa + 48)
 	ld wa, (xwa)
 	exts xwa
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xwa
 	ld xwa, NAKA_MAINFUNC_MainPmGet
 	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x0114)
@@ -3654,7 +3654,7 @@ PmBank_Confirm:
 PmBank_Confirm_Loop:
 	ld xwa, 0:i3
 	ldto_berp A, 0xfb
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xwa
 	ld xwa, NAKA_MAINFUNC_MainPmGet
 	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x0114)
@@ -3683,14 +3683,14 @@ PmBank_BankChanged_Lookup:
 	ld a, (xwa)
 	extz wa
 	lda xbc, (SeqChan_Map_10ch:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld XWA, (xsp + 0x0114)
 	ld a, (xwa)
 	extz wa
 	lda xbc, (SeqChan_Map_10ch:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+264)
 	call GetEditSwPoint
@@ -3917,9 +3917,9 @@ PmBank_Boundary:
 SineWaveScreenProc:
 	lda xsp, (xsp-280)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x01
+	ld	(xsp+280), xwa
 	cp xiz, EVT_SW_IN
 	jrl z, PmBank_OnEnumNotify
 	cp xiz, EVT_PARA_DRAW
@@ -3989,7 +3989,7 @@ PmBank_DrawRegionInfo:
 	extz wa
 	sla wa, 2
 	lda xbc, (ParamStr_Table_05:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw SoundCheck_Text@hi16
 	pushw SoundCheck_Text@lo16
@@ -4130,7 +4130,7 @@ PmBank_OnSelect:
 	ld wa, (xwa)
 	sla wa, 3
 	lda xbc, (VariationStr_V1_0x3C:24)
-	lda_dri XIY, 0x07, 0xe4, 0xe0
+	lda	xiy, (xbc+wa)
 	lda xix, (xsp+268)
 	ld bc, 4:i3
 	ldirw
@@ -4148,7 +4148,7 @@ PmBank_OnSelect:
 	ld wa, (xwa)
 	sla wa, 3
 	lda xbc, (VariationStr_V1_0x3C:24)
-	lda_dri XIY, 0x07, 0xe4, 0xe0
+	lda	xiy, (xbc+wa)
 	lda xix, (xsp+268)
 	ld bc, 4:i3
 	ldirw
@@ -4233,7 +4233,7 @@ ToneGen_WriteParamByIndex:
 	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
 	lda xix, (TransposeNoteStr_C_0x18E:24)
-	ldw_sri BC, 0x07, 0xf0, 0xe4
+	ld	bc, (xix+bc)
 	lda xix, (ToneGen_ParamWriteDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; ToneGen_WriteParamByIndex dispatch table
@@ -5126,7 +5126,7 @@ MainSysControl:
 	jr gt, MainSysControl_PostDispatchFinalize
 	add wa, wa
 	lda xix, (TransposeNoteStr_C_0x40E:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (MainSysCtrl_DispatchTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -5240,7 +5240,7 @@ AcFreeSplitBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_LSW_DATA
 	jr z, AcFreeSplit_ValueChanged
 	cp xbc, EVT_REPAINT
@@ -5307,7 +5307,7 @@ AcFreeSplit_LookupNoteLabel:
 	divs hl, 0xc
 	sla hl, 2
 	lda xbc, (SplitNoteStr_C_0x4:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push xwa
 	ld xwa, 0x4181
 	call SndParam_LookupReadOnly
@@ -5316,7 +5316,7 @@ AcFreeSplit_LookupNoteLabel:
 	ldto_werp WA, 0xee
 	sla wa, 2
 	lda xbc, (ParamStr_Table_06:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts@hi16
 	pushw AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts@lo16
@@ -5353,7 +5353,7 @@ AcFreeSplit_LookupSecondNote:
 	divs hl, 0xc
 	sla hl, 2
 	lda xbc, (SplitNoteStr_C_0x4:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push xwa
 	ld xwa, 0x4181
 	call SndParam_LookupReadOnly
@@ -5362,7 +5362,7 @@ AcFreeSplit_LookupSecondNote:
 	ldto_werp WA, 0xee
 	sla wa, 2
 	lda xbc, (ParamStr_Table_06:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts@hi16
 	pushw AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts@lo16
@@ -5396,7 +5396,7 @@ AcTransposeBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_LSW_DATA
 	jr z, AcTranspose_ValueChanged
 	cp xbc, EVT_REPAINT
@@ -5461,7 +5461,7 @@ AcTranspose_ValueChanged:
 AcTranspose_FormatLabel:
 	sla wa, 2
 	lda xde, (OctaveDigitStr_0B_0x32:24)
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	push xwa
 	pushw AcTranspose_FormatLabel_Str_Fmts@hi16
 	pushw AcTranspose_FormatLabel_Str_Fmts@lo16

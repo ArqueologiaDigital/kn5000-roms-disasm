@@ -366,7 +366,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	cp xwa, 0xffffffff
 	jr	z, MidiPkt_EnqueueControl_3358_Return
 	lda xwa, (xsp + 4)
@@ -374,7 +374,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	ld c, (xbc)
 	extz bc
 	sla bc, 2
-	ld_sril3 XBC, 0x07, 0xec, 0xe4
+	ld	xbc, (xhl+bc)
 	ld c, (xbc)
 	ld (xwa), c
 	lda xde, (xwa + 2)
@@ -382,7 +382,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	ld c, (xbc)
 	extz bc
 	sla bc, 2
-	ld_sril3 XBC, 0x07, 0xec, 0xe4
+	ld	xbc, (xhl+bc)
 	ld c, (xbc + 1)
 	and c, 0x7
 	ld (xde), c
@@ -676,7 +676,7 @@ MidiPkt_CheckGateCondition:
 	extz bc
 	muls bc, 0x6
 	lda	xde, (MidiCtl_GateRecords:24)
-	lda_dri XDE, 0x07, 0xe8, 0xe4
+	lda	xde, (xde+bc)
 	ld xhl, (xde)
 	ld c, (xde + 4)
 	and c, (xhl)
@@ -693,7 +693,7 @@ MidiPkt_CheckGateCondition_Second:
 MidiPkt_EnqueueControl_335C:
 	muls wa, 0x6
 	lda	xbc, (ToneKit_FrequencyTable_0x3F4:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xde, (xbc)
 	ld a, (xbc + 4)
 	and a, (xde)

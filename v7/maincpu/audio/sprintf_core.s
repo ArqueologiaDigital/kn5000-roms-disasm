@@ -191,7 +191,7 @@ Sprintf_DispatchType:
 	jrl	gt, Sprintf_MainLoop_ReadNext
 	add	wa, wa
 	lda	xix, (CharMap_FullPermutation_0x760:24)
-	ldw_sri	WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda	xix, (Sprintf_Format_Percent:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
 Sprintf_Format_Percent:
@@ -469,7 +469,7 @@ Sprintf_Decimal_OutputDigits:
 	decm	1, (xsp + 12)
 	lda	xbc, (xsp + 56)
 	ld	wa, (xsp + 12)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 92)
@@ -581,7 +581,7 @@ Sprintf_Unsigned_PrecZeroLoop:
 Sprintf_Unsigned_OutputDigits:
 	dec	1, iz
 	lda	xwa, (xsp + 44)
-	ldb_sri	A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 92)
@@ -738,7 +738,7 @@ Sprintf_Hex_OutputDigits:
 	decm	1, (xsp + 18)
 	lda	xbc, (xsp + 32)
 	ld	wa, (xsp + 18)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 92)
@@ -886,7 +886,7 @@ Sprintf_Octal_PrecZeroLoop:
 Sprintf_Octal_OutputDigits:
 	dec	1, iz
 	lda	xwa, (xsp + 20)
-	ldb_sri	A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 92)
@@ -1175,7 +1175,7 @@ Sprintf_FFixed_CheckLongDoubleLimit:
 	ld	a, c
 	extz	wa
 	lda	xde, (CharMap_FullPermutation_0x660:24)
-	lda_dri	XDE, 0x07, 0xe8, 0xe0
+	lda	xde, (xde+wa)
 	bitm	1, (xde)
 	jr	z, Sprintf_FFixed_SpecNoUpperCase
 	ld	a, c
@@ -1363,7 +1363,7 @@ Sprintf_FFixed_IntegerDigits:
 	jr	Sprintf_FFixed_IntDigitLoop
 Sprintf_FFixed_IntDigitOutput:
 	ld	xwa, (xsp + 22)
-	ldb_sri	A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 14)
@@ -1441,7 +1441,7 @@ Sprintf_FFixed_FracDigits:
 	jr	Sprintf_FFixed_FracTrailLoop
 Sprintf_FFixed_FracDigitOutput:
 	ld	xwa, (xsp + 22)
-	ldb_sri	A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 14)
@@ -1513,7 +1513,7 @@ Sprintf_ESci_ApplyDefaults:
 	ld	a, (xsp + 10)
 	extz	wa
 	lda	xbc, (CharMap_FullPermutation_0x660:24)
-	lda_dri	XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	bitm	1, (xbc)
 	jr	z, Sprintf_ESci_SpecNoUpperCase
 	ld	a, (xsp + 10)
@@ -1730,7 +1730,7 @@ Sprintf_ESci_OutputMantissa:
 	jr	Sprintf_ESci_MantTrailLoop
 Sprintf_ESci_MantDigitOutput:
 	ld	xwa, (xsp + 22)
-	ldb_sri	A, 0x07, 0xe0, 0xfa
+	ld	a, (xwa+qiz)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 14)
@@ -1825,7 +1825,7 @@ Sprintf_ESci_ExpLeadZeroLoop:
 Sprintf_ESci_ExpDigitOutput:
 	dec	1, iz
 	ld	xwa, (xsp + 22)
-	ldb_sri	A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	exts	wa
 	pushw	wa
 	ld	xwa, (xsp + 14)
@@ -1893,7 +1893,7 @@ Sprintf_GGen_LoadDigits:
 	extz	xbc
 	add	xbc, (xsp + 24)
 	ld	c, (xbc)
-	stb_dri	C, 0x07, 0xe0, 0xfa
+	ld	(xwa+qiz), c
 	inc1w_erp	0xfa
 	ldto_werp	WA, 0xfa
 	cp	wa, (xsp + 8)
@@ -1961,13 +1961,13 @@ Sprintf_GGen_AdjustNegExp:
 	ldiw_erp	0xfa, 2
 Sprintf_GGen_LongDoubleDigits:
 	lda	xwa, (xsp + 10)
-	ldb_sri	A, 0x07, 0xe0, 0xfa
+	ld	a, (xwa+qiz)
 	and	a, 0xff
 	ldto_werp	DE, 0xfa
 	add	de, de
 	lda	xbc, (0x03c240:24)
 	extz	wa
-	stw_dri	WA, 0x07, 0xe4, 0xe8
+	ld	(xbc+de), wa
 	inc1w_erp	0xfa
 	cp_erpw	0xfa, 0x0a, 0x00
 	jr	lt, Sprintf_GGen_LongDoubleDigits
@@ -1989,14 +1989,14 @@ Sprintf_GGen_LoadDigitPairs:
 	andmi8	(xbc + 1), 0xf
 	ldiw_erp	0xfa, 1
 Sprintf_GGen_DigitPairLoop:
-	ldb_sri	A, 0x07, 0xe4, 0xfa
+	ld	a, (xbc+qiz)
 	and	a, 0xff
 	ldto_werp	HL, 0xfa
 	add	hl, hl
 	dec	2, hl
 	lda	xde, (0x03c244:24)
 	extz	wa
-	stw_dri	WA, 0x07, 0xe8, 0xec
+	ld	(xde+hl), wa
 ; (pre-port v7 note about the bytes at 0xFF1AC9:)
 ; Disassembled from the committed romslice (no source of any kind existed):
 ; llvm-mc round-trips these 3 B byte-exact as one instruction. v9/v10 open
@@ -2098,7 +2098,7 @@ Sprintf_GGen_ExtractResult:
 	extz	xwa
 	div	wa, 0xa
 	ldto_werp	WA, 0xe2
-	stb_dri	A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	incw	1, (xsp + 4)
 	ldiw_erp	0xfa, 1
 	jr	Sprintf_GGen_CopyLoop
@@ -2106,8 +2106,8 @@ Sprintf_GGen_CopyDigits:
 	ld	bc, de
 	inc	1, de
 	lda	xwa, (0x03c224:24)
-	ldb_sri	A, 0x07, 0xe0, 0xfa
-	stb_dri	A, 0x07, 0xec, 0xe4
+	ld	a, (xwa+qiz)
+	ld	(xhl+bc), a
 	inc1w_erp	0xfa
 Sprintf_GGen_CopyLoop:
 	ld	bc, (xsp + 6)
@@ -2117,7 +2117,7 @@ Sprintf_GGen_CopyLoop:
 	jr	lt, Sprintf_GGen_CopyDigits
 	ld	de, (xsp + 6)
 	inc	1, de
-	lda_dri	XBC, 0x07, 0xec, 0xe8
+	lda	xbc, (xhl+de)
 	cp	(xbc), 0x5
 	jr	c, Sprintf_GGen_HandleCarry
 	ld	wa, (xsp + 6)
@@ -2136,7 +2136,7 @@ Sprintf_GGen_CarryLoop:
 Sprintf_GGen_CarryCheck:
 	cpiw_erp	0xfa, 0
 	jr	z, Sprintf_GGen_ConvertToAscii
-	lda_dri	XWA, 0x07, 0xec, 0xfa
+	lda	xwa, (xhl+qiz)
 	cp	(xwa), 0x9
 	jr	ugt, Sprintf_GGen_CarryLoop
 Sprintf_GGen_ConvertToAscii:
@@ -2297,7 +2297,7 @@ Sprintf_Normalize_ExtractDigit:
 	sub	wa, (xsp + 8)
 	add	wa, wa
 	lda	xbc, (0x03c284:24)
-	ldw_sri	WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	cp	wa, 0:i3
 	jr	z, Sprintf_Normalize_MultiplyTen
 	pushw	iz
@@ -2749,7 +2749,7 @@ Sprintf_StringLength:
 	inc	4, xsp
 	inc	1, hl
 	ld	bc, hl
-	lda_dri	XHL, 0x07, 0xf8, 0xe4
+	lda	xhl, (xiz+bc)
 	cp	bc, 0:i3
 	jr	z, Sprintf_StrLen_NotFound
 	ld	wa, (xsp + 12)

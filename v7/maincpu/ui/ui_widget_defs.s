@@ -318,9 +318,9 @@ GridCheck_Return:
 PsEditBoxProc:
 	lda xsp, (xsp-540)
 	push xiz
-	stl_dri XDE, 0xfd, 0x18, 0x02
+	ld	(xsp+536), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x1c, 0x02
+	ld	(xsp+540), xwa
 	cp xiz, EVT_CHECK_SELECTED
 	jrl z, PsEditBox_CanScroll
 	cp xiz, EVT_INDEXSW_DOWN
@@ -350,7 +350,7 @@ PsEditBoxProc:
 	ld xbc, (xwa)
 	ld bc, (xbc)
 	exts xbc
-	cpl_sri_rm XBC, 0xfd, 0x18, 0x02
+	cp	xbc, (xsp+536)
 	jr z, PsEditBox_SetIndex_CheckDial
 	ld xbc, (xwa)
 	ld XWA, (xsp + 0x0218)
@@ -571,7 +571,7 @@ PsEditBox_OK:
 	call GetViewInstance
 	ld wa, (xhl + 42)
 	extz xwa
-	cpl_sri_rm XWA, 0xfd, 0x18, 0x02
+	cp	xwa, (xsp+536)
 	jr nz, PsEditBox_OK_Forward
 	ld de, (xhl + 26)
 	cp de, 0xffff
@@ -600,7 +600,7 @@ PsEditBox_Release:
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x18, 0x02
+	cp	xwa, (xsp+536)
 	jrl nz, PsEditBox_ReturnZero
 	ld xwa, (xhl + 46)
 	cpw (xwa), 0x0
@@ -653,7 +653,7 @@ PsEditBox_CanScroll:
 	call GetViewInstance
 	ld wa, (xhl + 26)
 	exts xwa
-	cpl_sri_rm XWA, 0xfd, 0x18, 0x02
+	cp	xwa, (xsp+536)
 	jrl nz, PsEditBox_ReturnZero
 	ld xwa, (xhl + 46)
 	cpw (xwa), 0x1
@@ -736,8 +736,8 @@ PsNumEditBox_Return:
 PsTblEditBoxProc:
 	lda xsp, (xsp-264)
 	push xiz
-	stl_dri XDE, 0xfd, 0x04, 0x01
-	stl_dri XBC, 0xfd, 0x08, 0x01
+	ld	(xsp+260), xde
+	ld	(xsp+264), xbc
 	ld xiz, xwa
 	ld XWA, (xsp + 0x0108)
 	cp xwa, EVT_PARA_DRAW
@@ -2485,7 +2485,7 @@ MainBitGet:
 PsMenuBoxProc:
 	lda xsp, (xsp-276)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xde
 	ld xiz, xwa
 	cp xbc, EVT_CHECK_EDIT_SW
 	jrl z, PsMenuBox_HitTest
@@ -2588,8 +2588,8 @@ PsMenuBox_Return:
 AcTitleMenuProc:
 	lda xsp, (xsp-308)
 	push xiz
-	stl_dri XDE, 0xfd, 0x30, 0x01
-	stl_dri XBC, 0xfd, 0x34, 0x01
+	ld	(xsp+304), xde
+	ld	(xsp+308), xbc
 	ld xiz, xwa
 	ld XWA, (xsp + 0x0134)
 	cp xwa, EVT_SW_IN
@@ -2639,7 +2639,7 @@ AcTitleMenu_Confirm:
 	or xwa, xwa
 	jr z, AcTitleMenu_Confirm_NoIcon
 
-	cpiw_sri 0xfd, 0x28, 0x01, 0x00, 0x00
+	cpw	(xsp+296), 0x0000
 	jr nz, AcTitleMenu_Confirm_NoIcon
 
 	ldw wa, 0x20
@@ -2649,16 +2649,16 @@ AcTitleMenu_Confirm_NoIcon:
 	ld wa, 4:i3
 
 AcTitleMenu_Confirm_SetLeft:
-	ldw_sri0 HL, (xsp + 0x011c)
+	ld	hl, (xsp+284)
 	add hl, wa
 	ld (xbc), hl
-	stw_dri HL, 0xfd, 0x14, 0x01
+	ld	(xsp+276), hl
 	lda xbc, (xsp+280)
 	ld xwa, (xde)	; also ICON ID here
 	or xwa, xwa
 	jr z, AcTitleMenu_Confirm_NoIconRight
 
-	cpiw_sri 0xfd, 0x28, 0x01, 0x00, 0x00
+	cpw	(xsp+296), 0x0000
 	jr z, AcTitleMenu_Confirm_NoIconRight
 
 	ldw wa, 0x1c
@@ -2759,10 +2759,10 @@ AcTitleMenu_Confirm_MultiLine:
 	lda_rr	xwa, xwa, de	; lda xwa, xwa+de
 AcTitleMenu_Confirm_MultiAdjust:
 	call CalcTotalWidth
-	ldw_sri0 WA, (xsp + 0x0118)
+	ld	wa, (xsp+280)
 	sub wa, hl
 	dec 5, wa
-	stw_dri WA, 0xfd, 0x2c, 0x01
+	ld	(xsp+300), wa
 
 AcTitleMenu_Confirm_RenderBottom:
 	lda xwa, (xsp+284)
@@ -2824,7 +2824,7 @@ AcTitleMenu_Confirm_RenderTop:
 
 	lda xbc, (xsp+292)
 	lda xwa, (xsp+284)
-	cpiw_sri 0xfd, 0x28, 0x01, 0x00, 0x00
+	cpw	(xsp+296), 0x0000
 	jr z, AcTitleMenu_Confirm_IconNoOrient
 	ld wa, (xwa + 4)
 	sub wa, 0x1a
@@ -3000,7 +3000,7 @@ VwMenuBox_Confirm:
 	ld xwa, (xde)
 	or xwa, xwa
 	jr z, VwMenuBox_Confirm_NoIcon
-	cpiw_sri 0xfd, 0x26, 0x01, 0x00, 0x00
+	cpw	(xsp+294), 0x0000
 	jr nz, VwMenuBox_Confirm_NoIcon
 	ldw wa, 0x20
 	jr VwMenuBox_Confirm_SetLeft
@@ -3009,15 +3009,15 @@ VwMenuBox_Confirm_NoIcon:
 	ld wa, 4:i3
 
 VwMenuBox_Confirm_SetLeft:
-	ldw_sri0 HL, (xsp + 0x011a)
+	ld	hl, (xsp+282)
 	add hl, wa
 	ld (xbc), hl
-	stw_dri HL, 0xfd, 0x12, 0x01
+	ld	(xsp+274), hl
 	lda xbc, (xsp+278)
 	ld xwa, (xde)
 	or xwa, xwa
 	jr z, VwMenuBox_Confirm_NoIconRight
-	cpiw_sri 0xfd, 0x26, 0x01, 0x00, 0x00
+	cpw	(xsp+294), 0x0000
 	jr z, VwMenuBox_Confirm_NoIconRight
 	ldw wa, 0x1c
 	jr VwMenuBox_Confirm_SetRight
@@ -3114,10 +3114,10 @@ VwMenuBox_Confirm_MultiLine:
 	lda_rr	xwa, xwa, iz	; lda xwa, xwa+iz
 VwMenuBox_Confirm_MultiAdjust:
 	call CalcTotalWidth
-	ldw_sri0 WA, (xsp + 0x0116)
+	ld	wa, (xsp+278)
 	sub wa, hl
 	dec 5, wa
-	stw_dri WA, 0xfd, 0x2a, 0x01
+	ld	(xsp+298), wa
 
 VwMenuBox_Confirm_RenderBottom:
 	lda xwa, (xsp+282)
@@ -3138,7 +3138,7 @@ VwMenuBox_Confirm_RenderBottom:
 	ld (xbc + 2), wa
 	lda xwa, (xsp+274)
 	lda xde, (xsp + 10)
-	lda_dri XDE, 0x07, 0xe8, 0xf8
+	lda	xde, (xde+iz)
 	ld xix, (xsp + 6)
 	ld xhl, (xix + 28)
 	push xhl
@@ -3153,7 +3153,7 @@ VwMenuBox_Confirm_RenderTop:
 	jrl z, VwMenuBox_ReturnZero
 	lda xbc, (xsp+290)
 	lda xwa, (xsp+282)
-	cpiw_sri 0xfd, 0x26, 0x01, 0x00, 0x00
+	cpw	(xsp+294), 0x0000
 	jr z, VwMenuBox_Confirm_IconNoOrient
 	ld wa, (xwa + 4)
 	sub wa, 0x1a
@@ -3432,8 +3432,8 @@ PsEditSwBoxProc_Epilogue2:
 ButtonState_PaintProc:
 	lda xsp, (xsp-298)
 	push xiz
-	stb_dri C, 0xfd, 0x28, 0x01
-	stl_dri XWA, 0xfd, 0x2a, 0x01
+	ld	(xsp+296), c
+	ld	(xsp+298), xwa
 	ld XWA, (xsp + 0x012a)
 	call GetViewInstance
 	ld (xsp + 4), xhl
@@ -3463,16 +3463,16 @@ ButtonState_PaintProc:
 	calr GetBoxCenter
 	lda xwa, (xsp+272)
 	lda xbc, (xsp+268)
-	cpib_sri 0xfd, 0x28, 0x01, 0x0b
+	cp	(xsp+296), 0x0b
 	jrl z, ButtonState_Paint_Default
-	cpib_sri 0xfd, 0x28, 0x01, 0x0e
+	cp	(xsp+296), 0x0e
 	jrl z, ButtonState_Paint_EventConfirm
-	cpib_sri 0xfd, 0x28, 0x01, 0x03
+	cp	(xsp+296), 0x03
 	jrl nz, ButtonState_DispatchDSP
 	ld de, 0:i3
 	call DrawLine
 	lda xwa, (xsp+280)
-	ldw_sri0 BC, (xsp + 0x0112)
+	ld	bc, (xsp+274)
 	dec 1, bc
 	ld (xwa + 6), bc
 	lda xbc, (xsp + 12)
@@ -3491,10 +3491,10 @@ ButtonState_PaintProc:
 	pushw	(xhl+22)
 	call DrawStringCentered
 	lda xwa, (xsp+280)
-	ldw_sri0 BC, (xsp + 0x0112)
+	ld	bc, (xsp+274)
 	inc 1, bc
 	ld (xwa + 2), bc
-	ldw_sri0 BC, (xsp + 0x0126)
+	ld	bc, (xsp+294)
 	ld (xwa + 6), bc
 	ld (xsp + 12), 0x98
 	lda xbc, (xsp+276)
@@ -3514,7 +3514,7 @@ ButtonState_Paint_EventConfirm:
 	ld de, 0:i3
 	call DrawLine
 	lda xwa, (xsp+280)
-	ldw_sri0 BC, (xsp + 0x0112)
+	ld	bc, (xsp+274)
 	dec 1, bc
 	ld (xwa + 6), bc
 	lda xbc, (xsp + 12)
@@ -3533,10 +3533,10 @@ ButtonState_Paint_EventConfirm:
 	pushw	(xhl+22)
 	call DrawStringCentered
 	lda xwa, (xsp+280)
-	ldw_sri0 BC, (xsp + 0x0112)
+	ld	bc, (xsp+274)
 	inc 1, bc
 	ld (xwa + 2), bc
-	ldw_sri0 BC, (xsp + 0x0126)
+	ld	bc, (xsp+294)
 	ld (xwa + 6), bc
 	ld (xsp + 12), 0x81
 	lda xbc, (xsp+276)
@@ -3562,7 +3562,7 @@ ButtonState_Paint_Default:
 	ld xbc, xiz
 	call DrawLine
 	lda xwa, (xsp+280)
-	ldw_sri0 BC, (xsp + 0x0112)
+	ld	bc, (xsp+274)
 	dec 1, bc
 	ld (xwa + 6), bc
 	lda xbc, (xsp+276)
@@ -3578,10 +3578,10 @@ ButtonState_Paint_Default:
 	ld xde, ButtonState_Paint_EventConfirm_Str_ON
 	call DrawStringCentered
 	lda xwa, (xsp+280)
-	ldw_sri0 BC, (xsp + 0x0112)
+	ld	bc, (xsp+274)
 	inc 1, bc
 	ld (xwa + 2), bc
-	ldw_sri0 BC, (xsp + 0x0126)
+	ld	bc, (xsp+294)
 	ld (xwa + 6), bc
 	lda xbc, (xsp+276)
 	calr GetBoxCenter
@@ -3601,7 +3601,7 @@ ButtonState_Paint_DrawAndReturn:
 
 ; ButtonState event dispatch via DSP handler table
 ButtonState_DispatchDSP:
-	ldb_sri0 A, (xsp + 0x0128)
+	ld	a, (xsp+296)
 	extz wa
 	cp wa, 0:i3
 	jrl mi, ButtonState_Paint_DrawAligned
@@ -3609,7 +3609,7 @@ ButtonState_DispatchDSP:
 	jrl gt, ButtonState_Paint_DrawAligned
 	add wa, wa
 	lda xix, (Str_No_0x4:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (ButtonState_DispatchDSP_InlineData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -3849,11 +3849,11 @@ AcIndexEdit_DispatchDSP:
 	cp wa, 0x10
 	jrl gt, AcIndexEdit_ReturnZeroJmp
 	lda xix, (Str_No_0x26:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	extz wa
 	sll wa, 1
 	ld xix, Str_No_0x38
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (AcIndexEdit_DispatchDSP_InlineData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -4117,7 +4117,7 @@ PsPageBoxProc:
 	lda xsp, (xsp-276)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xwa
 	cp xbc, EVT_SET_PAGE
 	jrl z, PsPageBox_SetValue
 	cp xbc, EVT_GET_PAGE_NOW
@@ -6588,7 +6588,7 @@ AcMixerVol_PartSelect_DrawIcon:
 	ld bc, (xsp + 10)
 	sla bc, 2
 	lda xde, (Str_No_0x30E:24)
-	ld_sril3 XBC, 0x07, 0xe8, 0xe4
+	ld	xbc, (xde+bc)
 	call DrawBitmapFast
 	jrl UIList_ReturnZeroJmp
 
@@ -7112,8 +7112,8 @@ DbMemDump_Select:
 	ld xwa, 0:i3
 	push xwa
 	ld xwa, 0x78
-	ld_sril XBC, (xsp + 0x0080)
-	ld_sril XDE, (xsp + 0x0080)
+	ld	xbc, (xsp+128)
+	ld	xde, (xsp+128)
 	call SetApTimer
 	jrl UI_NameCapture_ReturnSuccess
 
@@ -7322,7 +7322,7 @@ CaptureLcdCheck:
 PsCursorBoxProc:
 	lda xsp, (xsp-554)
 	push xiz
-	stl_dri XDE, 0xfd, 0x2a, 0x02
+	ld	(xsp+554), xde
 	ld xiz, xwa
 	cp xbc, EVT_SET_CURSOR
 	jrl z, PsCursorBox_SetCursor
@@ -7357,7 +7357,7 @@ PsCursorBox_Select:
 	ld xbc, (xwa)
 	ld bc, (xbc)
 	exts xbc
-	cpl_sri_rm XBC, 0xfd, 0x2a, 0x02
+	cp	xbc, (xsp+554)
 	jrl z, ScrollBox_ReturnZero
 	jrl PsCursorBox_StoreCursor
 
@@ -7372,7 +7372,7 @@ PsCursorBox_Confirm:
 	ld xwa, xiz
 	ld xbc, EVT_GET_STRING
 	call SendEvent
-	cpib_sri 0xfd, 0x12, 0x01, 0x00
+	cp	(xsp+274), 0x00
 	jr nz, PsCursorBox_Confirm_CheckCursor
 	jrl ScrollBox_ReturnZero
 
@@ -7463,7 +7463,7 @@ UI_ScrollBox_ComputeLayout:
 	ld xwa, (xwa + 36)
 	lda xbc, (xsp + 18)
 	ld wa, (xwa)
-	lda_dri XIZ, 0x07, 0xe4, 0xe0
+	lda	xiz, (xbc+wa)
 	ld (xiz + 1), 0x0
 	ld xwa, xiz
 	ld xbc, (xsp + 6)
@@ -7473,7 +7473,7 @@ UI_ScrollBox_ComputeLayout:
 	lda xwa, (xsp + 18)
 	ld xbc, (xsp + 6)
 	call CalcTotalWidth
-	ldw_sri0 BC, (xsp + 0x0212)
+	ld	bc, (xsp+530)
 	add bc, hl
 	lda xwa, (xsp+538)
 	ld (xwa), bc
@@ -7488,7 +7488,7 @@ UI_ScrollBox_ComputeLayout:
 	ld xwa, (xwa + 36)
 	lda xbc, (xsp + 18)
 	ld wa, (xwa)
-	lda_dri XIZ, 0x07, 0xe4, 0xe0
+	lda	xiz, (xbc+wa)
 	ld (xiz + 1), 0x0
 	lda xwa, (xsp+546)
 	ld bc, (xsp + 12)
@@ -7569,13 +7569,13 @@ DbDebugMenu_Init:
 	ld wa, (xwa)
 	sla wa, 2
 	lda xde, (DbDebugMenu_Init_Str_N1:24)
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	cp xwa, 0xffffffff
 	jrl z, PsMenuBox_ZeroReturn
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jrl PsMenuBox_SendEvent
@@ -7588,13 +7588,13 @@ DbDebugMenu_Close:
 	ld wa, (xwa)
 	sla wa, 2
 	lda xde, (DbDebugMenu_Init_Str_N1:24)
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_Close_CallMenu
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -7633,7 +7633,7 @@ DbDebugMenu_Confirm:
 	ld de, (xde)
 	sla de, 2
 	lda xhl, (DbDebugMenu_Confirm_PtrTable:24)
-	ld_sril3 XDE, 0x07, 0xec, 0xe8
+	ld	xde, (xhl+de)
 	ld xhl, 3:i3
 	push xhl
 	pushw 0xff
@@ -7657,13 +7657,13 @@ DbDebugMenu_OK:
 	ld wa, (xwa)
 	sla wa, 2
 	lda xde, (DbDebugMenu_Init_Str_N1:24)
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_OK_Advance
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -7678,7 +7678,7 @@ DbDebugMenu_OK_Advance:
 	ld wa, (xbc)
 	sla wa, 2
 	lda xhl, (DbDebugMenu_Confirm_PtrTable:24)
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	cp (xwa), 0x0
 	jr nz, DbDebugMenu_OK_CheckValid
 	ldw (xbc), 0x0
@@ -7688,7 +7688,7 @@ DbDebugMenu_OK_CheckValid:
 	ld wa, (xwa)
 	sla wa, 2
 	lda xbc, (DbDebugMenu_Init_Str_N1:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, (xbc)
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_OK_NoHandler
@@ -7738,9 +7738,9 @@ DbDebugMenu_Return:
 PsTrackSwitchProc:
 	lda xsp, (xsp-178)
 	push xiz
-	stl_dri XDE, 0xfd, 0xae, 0x00
+	ld	(xsp+174), xde
 	ld xde, xbc
-	stl_dri XWA, 0xfd, 0xb2, 0x00
+	ld	(xsp+178), xwa
 	ld xiy, PsTrackSwitchProc_PtrTable
 	lda xix, (xsp + 38)
 	ldw bc, 0x28
@@ -7763,21 +7763,21 @@ PsTrackSwitchProc:
 	jr z, PsTrkSw_ShowHide
 	cp xde, EVT_PAINT
 	jr z, PsTrkSw_ShowHide
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	ld xbc, xde
-	ld_sril XDE, (xsp + 0x00ae)
+	ld	xde, (xsp+174)
 	call ViewableProc
 	jrl PsTrkSw_Epilogue
 
 PsTrkSw_ShowHide:
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	ld xbc, xde
-	ld_sril XDE, (xsp + 0x00ae)
+	ld	xde, (xsp+174)
 	call ViewableProc
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	call GetViewInstance
 	ld xiz, xhl
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	ld xbc, EVT_GET_CLASS
 	ld xde, 0:i3
 	call SendEvent
@@ -7792,13 +7792,13 @@ PsTrkSw_ShowHide:
 	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	ld xwa, (xiz + 32)
 	ld de, (xwa)
 	exts xde
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 
@@ -7807,10 +7807,10 @@ PsTrkSw_ReturnZero:
 	jrl PsTrkSw_Epilogue
 
 PsTrkSw_Confirm:
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	call GetViewInstance
 	ld (xsp + 4), xhl
-	ld_sril XWA, (xsp + 0x00ae)
+	ld	xwa, (xsp+174)
 	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld bc, wa
@@ -7821,7 +7821,7 @@ PsTrkSw_Confirm:
 	ld (xwa), bc
 
 PsTrkSw_Confirm_SetSub:
-	ld_sril XBC, (xsp + 0x00ae)
+	ld	xbc, (xsp+174)
 	cp bc, 0xffff
 	jr z, PsTrkSw_Confirm_DrawGeometry
 	ld xwa, (xsp + 4)
@@ -7973,7 +7973,7 @@ PsTrkSw_Confirm_DrawSecondary:
 	ld de, (xde)
 	sla de, 2
 	lda xhl, (xsp + 38)
-	ld_sril3 XDE, 0x07, 0xec, 0xe8
+	ld	xde, (xhl+de)
 	ld xhl, 0:i3
 	push xhl
 	pushw 0x0
@@ -7981,10 +7981,10 @@ PsTrkSw_Confirm_DrawSecondary:
 	jrl PsTrkSw_DrawAndReturn
 
 PsTrkSw_Select:
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	call GetViewInstance
 	ld (xsp + 4), xhl
-	ld_sril XBC, (xsp + 0x00ae)
+	ld	xbc, (xsp+174)
 	cp bc, 0xffff
 	jr z, PsTrkSw_Select_CalcPos
 	ld xwa, (xsp + 4)
@@ -8023,7 +8023,7 @@ PsTrkSw_Select_DrawBox:
 	ld bc, (xbc)
 	sla bc, 1
 	lda xde, (xsp + 8)
-	ldw_sri BC, 0x07, 0xe8, 0xe4
+	ld	bc, (xde+bc)
 	call DrawBox
 	lda xwa, (xsp+166:16)
 	lda xbc, (xsp+146:16)
@@ -8032,7 +8032,7 @@ PsTrkSw_Select_DrawBox:
 	ld de, (xde)
 	sla de, 2
 	lda xhl, (xsp + 18)
-	ld_sril3 XDE, 0x07, 0xec, 0xe8
+	ld	xde, (xhl+de)
 	ld xhl, 0:i3
 	push xhl
 	pushw 0x0
@@ -8043,14 +8043,14 @@ PsTrkSw_DrawAndReturn:
 	jrl PsTrkSw_ReturnZero
 
 PsTrkSw_HitTest:
-	ld_sril XWA, (xsp + 0x00b2)
+	ld	xwa, (xsp+178)
 	call GetViewInstance
 	lda xwa, (xhl + 22)
 	cpw (xwa), 0x8
 	jr nc, PsTrkSw_HitTest_Track8Plus
 	ld wa, (xwa)
 	extz xwa
-	cpl_sri_rm XWA, 0xfd, 0xae, 0x00
+	cp	xwa, (xsp+174)
 	jrl nz, PsTrkSw_ReturnZero
 	jr PsTrkSw_HitTest_Match
 
@@ -8058,7 +8058,7 @@ PsTrkSw_HitTest_Track8Plus:
 	ld wa, (xwa)
 	add wa, 0x78
 	extz xwa
-	cpl_sri_rm XWA, 0xfd, 0xae, 0x00
+	cp	xwa, (xsp+174)
 	jrl nz, PsTrkSw_ReturnZero
 
 PsTrkSw_HitTest_Match:
@@ -8423,7 +8423,7 @@ AcTrkSw_ShowHide:
 	ld a, (0x0340e4:24)
 	extz wa
 	sla wa, 2
-	ld_sril3 XDE, 0x07, 0xec, 0xe0
+	ld	xde, (xhl+wa)
 	ld xwa, xiz
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
@@ -8457,10 +8457,10 @@ TrChordBoxProc:
 ObjectProc:
 	lda xsp, (xsp-144)
 	push xiz
-	stl_dri XDE, 0xfd, 0x88, 0x00
-	stl_dri XBC, 0xfd, 0x8c, 0x00
-	stl_dri XWA, 0xfd, 0x90, 0x00
-	ld_sril XWA, (xsp + 0x0090)
+	ld	(xsp+136), xde
+	ld	(xsp+140), xbc
+	ld	(xsp+144), xwa
+	ld	xwa, (xsp+144)
 	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
@@ -8471,12 +8471,12 @@ ObjectProc:
 	lda xwa, (0x027ed6:24)
 	add xwa, xbc
 	ld xix, (xwa)
-	ld_sril XWA, (xsp + 0x0090)
+	ld	xwa, (xsp+144)
 	ld xbc, EVT_GET_CLASS_SP
 	ld xde, 0:i3
 	call (xix)
 	ld xiz, xhl
-	ld_sril XWA, (xsp + 0x008c)
+	ld	xwa, (xsp+140)
 	sub xwa, EVT_GET_CLASS
 	cp xwa, 0x0
 	jrl lt, ExitWindow_Init
@@ -8729,9 +8729,9 @@ ObjectProc_Join4:
 	ld	xhl, 0:i3
 	jr	ObjectProc_Join5
 ExitWindow_Init:
-	ld_sril XWA, (xsp + 0x0090)
-	ld_sril XBC, (xsp + 0x008c)
-	ld_sril XDE, (xsp + 0x0088)
+	ld	xwa, (xsp+144)
+	ld	xbc, (xsp+140)
+	ld	xde, (xsp+136)
 	calr InheritedProc
 ObjectProc_Join5:
 	pop xiz
@@ -9177,8 +9177,8 @@ GetFocusParam:
 ClassProc:
 	lda xsp, (xsp-278)
 	push xiz
-	stl_dri XDE, 0xfd, 0x12, 0x01
-	stl_dri XBC, 0xfd, 0x16, 0x01
+	ld	(xsp+274), xde
+	ld	(xsp+278), xbc
 	ld xbc, xwa
 	srl xbc, 16
 	and xbc, 0xfff
@@ -9489,7 +9489,7 @@ TitleWidget_OK_Forward:
 	ld xbc, EVT_GET_PROP_STRING
 	call SendEvent
 	lda xwa, (xsp+146:16)
-	add_sril_rm XWA, 0xfd, 0x12, 0x01
+	add	xwa, (xsp+274)
 	ld a, (xwa)
 	sub a, 0x41
 	ld w, 0x0:opc
@@ -13665,9 +13665,9 @@ EdgeDraw_TopRight:
 RectX1Proc:
 	lda xsp, (xsp-268)
 	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
+	ld	(xsp+264), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x0c, 0x01
+	ld	(xsp+268), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, EdgeDraw_BottomLeft_Draw
 	cp xiz, EVT_GET_PROPERTY_EX
@@ -14044,10 +14044,10 @@ POINTWProc_Return:
 POINTWProc:
 	lda xsp, (xsp-132)
 	pushw iz
-	stl_dri XDE, 0xfd, 0x82, 0x00
+	ld	(xsp+130), xde
 	cp xbc, EVT_CHECK_PROP_STRING
 	jr z, EdgeVariant_B_CalcWidth
-	ld_sril XDE, (xsp + 0x0082)
+	ld	xde, (xsp+130)
 	calr CommonIDProc
 	jr EdgeVariant_C_Setup
 
@@ -14070,7 +14070,7 @@ EdgeVariant_B_CalcHeight:
 	inc 1, iy
 	ld wa, iy
 	extz xwa
-	add_sril_rm XWA, 0xfd, 0x82, 0x00
+	add	xwa, (xsp+130)
 	ld (xwa), 0x57
 	jr EdgeVariant_B_DoneAlt
 
@@ -14088,7 +14088,7 @@ EdgeVariant_B_Return:
 	add xhl, xwa
 	ld de, iy
 	extz xde
-	add_sril_rm XDE, 0xfd, 0x82, 0x00
+	add	xde, (xsp+130)
 	ld a, (xhl)
 	cp a, 0:i3
 	jr nz, EdgeVariant_B_CalcHeight
@@ -14103,9 +14103,9 @@ EdgeVariant_C_Setup:
 PointXProc:
 	lda xsp, (xsp-264)
 	push xiz
-	stl_dri XDE, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x08, 0x01
+	ld	(xsp+264), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, EdgeVariant_C_Execute
 	cp xiz, EVT_GET_PROPERTY_EX
@@ -14266,9 +14266,9 @@ IDCursorProc_Return:
 ClassIDProc:
 	lda xsp, (xsp-4372)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x11
+	ld	(xsp+4368), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ShadowBox_A_Return
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -15077,7 +15077,7 @@ FrameVariant_L_Done:
 StringProc:
 	lda xsp, (xsp-314)
 	push xiz
-	stl_dri XDE, 0xfd, 0x3a, 0x01
+	ld	(xsp+314), xde
 	ld XDE, (xsp + 0x013a)
 	inc 4, xde
 	cp xbc, EVT_SET_PROPERTY_EX
@@ -15198,7 +15198,7 @@ ScrollBar_Return:
 FontIDProc:
 	lda xsp, (xsp-264)
 	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
+	ld	(xsp+264), xde
 	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, SliderH_DrawTrack
 	cp xbc, EVT_GET_PROPERTY_EX
@@ -15319,7 +15319,7 @@ SliderH_ReturnAlt5:
 IconIDProc:
 	lda xsp, (xsp-264)
 	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
+	ld	(xsp+264), xde
 	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, SliderV_DrawTrack
 	cp xbc, EVT_GET_PROPERTY_EX
@@ -15440,7 +15440,7 @@ BitmapIDProc_Return:
 BitmapIDProc:
 	lda xsp, (xsp-264)
 	push xiz
-	stl_dri XDE, 0xfd, 0x08, 0x01
+	ld	(xsp+264), xde
 	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, DrawHelper_A_DrawTrack
 	cp xbc, EVT_GET_PROPERTY_EX
@@ -15561,9 +15561,9 @@ ApFuncIDProc_Return:
 ApFuncIDProc:
 	lda xsp, (xsp-4376)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x11
+	ld	(xsp+4376), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, DrawHelper_B_CalcRange
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -15754,9 +15754,9 @@ MainFuncIDProc_Return:
 MainFuncIDProc:
 	lda xsp, (xsp-4376)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x11
+	ld	(xsp+4376), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, DrawHelper_D_Setup
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -15947,9 +15947,9 @@ ViewIDProc_Return:
 ViewIDProc:
 	lda xsp, (xsp-4376)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x11
+	ld	(xsp+4376), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ViewID_EnumFill
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -16244,9 +16244,9 @@ ViewID_Return:
 ScreenIDProc:
 	lda xsp, (xsp-4376)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x11
+	ld	(xsp+4376), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ScreenID_EnumFill
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -16586,9 +16586,9 @@ ScreenID_Return:
 WindowIDProc:
 	lda xsp, (xsp-4376)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x11
+	ld	(xsp+4376), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, WindowID_EnumFill
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -16928,9 +16928,9 @@ WindowID_Return:
 ModeIDProc:
 	lda xsp, (xsp-4372)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x11
+	ld	(xsp+4368), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ModeID_BuildTable
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -17167,9 +17167,9 @@ ModeID_Return:
 TitleIDProc:
 	lda xsp, (xsp-4372)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x11
+	ld	(xsp+4368), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x14, 0x11
+	ld	(xsp+4372), xwa
 	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, TitleID_BuildTable
 	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
@@ -17766,7 +17766,7 @@ CommonIDProc_Epilogue:
 IDCountHelper:
 	lda xsp, (xsp-262)
 	push xiz
-	stw_dri BC, 0xfd, 0x08, 0x01
+	ld	(xsp+264), bc
 	ld xiz, xwa
 	lda xde, (xsp + 8)
 	ld xwa, xiz
@@ -17777,12 +17777,12 @@ IDCountHelper:
 	ld (xsp + 4), xhl
 	ld iz, 0:i3
 	ldiw_erp 0xfa, 0
-	cpiw_sri 0xfd, 0x08, 0x01, 0x00, 0x00
+	cpw	(xsp+264), 0x0000
 	jr ule, IDCountHelper_Done
 
 IDCountHelper_Loop:
 	lda xwa, (xsp + 8)
-	ldb_sri A, 0x07, 0xe0, 0xfa
+	ld	a, (xwa+qiz)
 	sub a, 0x41
 	ld w, 0x0:opc
 	extz xwa
@@ -17795,12 +17795,12 @@ IDCountHelper_Loop:
 	ld iz, wa
 	inc1w_erp 0xfa
 	ldto_werp WA, 0xfa
-	cpw_sri_rm WA, 0xfd, 0x08, 0x01
+	cp	wa, (xsp+264)
 	jr c, IDCountHelper_Loop
 
 IDCountHelper_Done:
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xf8
+	lda	xhl, (xwa+iz)
 	pop xiz
 	lda xsp, (xsp+262)
 	ret
@@ -18097,7 +18097,7 @@ PostEvent_FillSlot:
 	ld bc, (xsp + 4)
 	muls bc, 0xc
 	lda xwa, (0x02bc34:24)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
+	ld	xwa, (xwa+bc)
 	ld (xiz), xwa
 	cp xwa, 0xffffffff
 	jr nz, PostEvent_LinkSlot
@@ -18108,7 +18108,7 @@ PostEvent_LinkSlot:
 	ld bc, (xsp + 4)
 	muls bc, 0xc
 	lda xwa, (0x02bc34:24)
-	lda_dri XDE, 0x07, 0xe0, 0xe4
+	lda	xde, (xwa+bc)
 	ld xwa, (xsp + 10)
 	ld xbc, (xde + 4)
 	ld (xwa), xbc
@@ -18156,7 +18156,7 @@ GetEvent_ScanLoop:
 GetEvent_ScanMatch:
 	ld wa, ix
 	muls wa, 0xc
-	lda_dri XHL, 0x07, 0xf4, 0xe0
+	lda	xhl, (xiy+wa)
 	lda xde, (xhl + 4)
 	ld xwa, (xde)
 	cp xwa, (xsp + 4)
@@ -18214,7 +18214,7 @@ DeleteEvent_Prologue:
 DeleteEvent_ScanLoop:
 	ld wa, hl
 	muls wa, 0xc
-	lda_dri XIY, 0x07, 0xf0, 0xe0
+	lda	xiy, (xix+wa)
 	lda xde, (xiy + 4)
 	ld xwa, (xde)
 	cp xwa, (xsp + 8)
@@ -18542,15 +18542,15 @@ MainPostEvent_Allocate:
 	ld wa, (0x02f83a:24)
 	muls wa, 0xc
 	lda xbc, (0x02ec38:24)
-	stl_dri XIZ, 0x07, 0xe4, 0xe0
+	ld	(xbc+wa), xiz
 	ld wa, (0x02f83a:24)
 	muls wa, 0xc
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	ld xwa, (xsp + 8)
 	ld (xde + 4), xwa
 	ld wa, (0x02f83a:24)
 	muls wa, 0xc
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, (xsp + 4)
 	ld (xbc + 8), xwa
 	ld wa, (0x02f83a:24)
@@ -18594,7 +18594,7 @@ MainGetEvent_ScanDone:
 	ld bc, de
 	muls bc, 0xc
 	lda xwa, (0x02ec38:24)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	ld xwa, (xhl)
 	ld (xiz), xwa
 	ld xwa, (xsp + 8)
@@ -18644,7 +18644,7 @@ MainDeleteEvent_Prologue:
 MainDeleteEvent_ScanLoop:
 	ld wa, ix
 	muls wa, 0xc
-	lda_dri XHL, 0x07, 0xf4, 0xe0
+	lda	xhl, (xiy+wa)
 	lda xde, (xhl + 4)
 	ld xwa, (xde)
 	cp xwa, (xsp + 4)
@@ -18702,7 +18702,7 @@ MainDeleteSpecEvent_Prologue:
 MainDeleteSpecEvent_ScanLoop:
 	ld wa, hl
 	muls wa, 0xc
-	lda_dri XIY, 0x07, 0xf0, 0xe0
+	lda	xiy, (xix+wa)
 	lda xde, (xiy + 4)
 	ld xwa, (xde)
 	cp xwa, (xsp + 8)
@@ -18773,15 +18773,15 @@ ObjectSearch_Continue:
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda xbc, (0x02bc34:24)
-	stl_dri XIZ, 0x07, 0xe4, 0xe0
+	ld	(xbc+wa), xiz
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	ld xwa, (xsp + 8)
 	ld (xde + 4), xwa
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, (xsp + 4)
 	ld (xbc + 8), xwa
 	ld wa, (0x02ec36:24)
@@ -18860,15 +18860,15 @@ ApDeliveryEvent_Return:
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
 	lda xbc, (0x02bc34:24)
-	stl_dri XIZ, 0x07, 0xe4, 0xe0
+	ld	(xbc+wa), xiz
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	ld xwa, (xsp + 12)
 	ld (xde + 4), xwa
 	ld wa, (0x02ec36:24)
 	muls wa, 0xc
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, (xsp + 8)
 	ld (xbc + 8), xwa
 	ld wa, (0x02ec36:24)
@@ -18944,7 +18944,7 @@ ApTimer_VirtDispatch_Return:
 	ld wa, (0x030448:24)
 	muls wa, 0x18
 	lda xhl, (0x02f844:24)
-	lda_dri XIX, 0x07, 0xec, 0xe0
+	lda	xix, (xhl+wa)
 	lda xwa, (xix + 2)
 	cp xiz, 0xffffffff
 	jr nz, SetApTimer_Prologue
@@ -18958,7 +18958,7 @@ ApTimer_VirtDispatch_Return:
 	ldw (xwa + 2), 0xffff
 	ld wa, (0x030448:24)
 	muls wa, 0x18
-	lda_dri XHL, 0x07, 0xec, 0xe0
+	lda	xhl, (xhl+wa)
 	ld xwa, 0xffffffff
 	ld (xhl + 8), xwa
 	ld (0x030448:24), bc
@@ -18990,7 +18990,7 @@ SetApTimer_Prologue:
 	ldw (xwa + 2), 0xffff
 	ld wa, (0x030448:24)
 	muls wa, 0x18
-	lda_dri XHL, 0x07, 0xec, 0xe0
+	lda	xhl, (xhl+wa)
 	ld xwa, 0xffffffff
 	ld (xhl + 8), xwa
 	ld (0x030448:24), bc
@@ -19051,7 +19051,7 @@ RootContext_Setup:
 	ldw (xwa + 2), 0xffff
 	ld wa, (0x030448:24)
 	muls wa, 0x18
-	lda_dri XIX, 0x07, 0xec, 0xe0
+	lda	xix, (xhl+wa)
 	ld xwa, 0xffffffff
 	ld (xix + 8), xwa
 	ld (0x030448:24), bc
@@ -19150,7 +19150,7 @@ ResetApTimer_MatchPartial:
 	jr z, ResetApTimer_NotFound
 	muls iy, 0x18
 	ld xwa, (xsp + 4)
-	lda_dri XWA, 0x07, 0xe0, 0xf4
+	lda	xwa, (xwa+iy)
 	ld (xwa + 2), bc
 
 ResetApTimer_NotFound:
@@ -19159,7 +19159,7 @@ ResetApTimer_NotFound:
 	ld de, ix
 	muls de, 0x18
 	ld xwa, (xsp + 4)
-	stw_dri BC, 0x07, 0xe0, 0xe8
+	ld	(xwa+de), bc
 
 ResetApTimer_ReturnZero:
 	cp ix, (0x030448:24)
@@ -19234,7 +19234,7 @@ KillApTimer:
 KillApTimer_CheckNextEntry_Loop:
 	ld wa, ix
 	muls wa, 0x18
-	lda_dri XHL, 0x07, 0xf4, 0xe0
+	lda	xhl, (xiy+wa)
 	lda xde, (xhl + 8)
 	lda xiz, (xhl + 2)
 	cp (xde), xbc
@@ -19255,14 +19255,14 @@ KillApTimer_CheckNextEntry_Loop:
 	muls wa, 0x18
 	ld iz, wa
 	ld wa, (xhl)
-	stw_dri WA, 0x07, 0xf4, 0xf8
+	ld	(xiy+iz), wa
 
 KillApTimer_CheckNextEntry_Match:
 	cpw (xhl), 0xffff
 	jr z, KillApTimer_CheckNextEntry_Unlink
 	ld wa, (xhl)
 	muls wa, 0x18
-	lda_dri XIY, 0x07, 0xf4, 0xe0
+	lda	xiy, (xiy+wa)
 	ld wa, (xbc)
 	ld (xiy + 2), wa
 
@@ -19409,7 +19409,7 @@ DisplayCmd_Execute:
 	ret
 
 DisplayCmd_Execute_Type1:
-	ld_sril3 XHL, 0x07, 0xe8, 0xf0
+	ld	xhl, (xde+ix)
 	minc4_16 ix, 0x7c
 	ld (xde - 8), ix
 	incw 4, (xde - 2)
@@ -19424,7 +19424,7 @@ DisplayCmd_Execute_Type2:
 
 DisplayCmd_Execute_Type3:
 	ld ix, (xde - 4)
-	stl_dri XWA, 0x07, 0xe8, 0xf0
+	ld	(xde+ix), xwa
 	minc4_16 ix, 0x7c
 	ld (xde - 4), ix
 	decw	4, (xde-2)
@@ -19451,7 +19451,7 @@ DrawQueue_Alloc_Prologue:
 	ret
 
 DrawQueue_Alloc_FindSlot:
-	ld_sril3 XHL, 0x07, 0xe8, 0xf0
+	ld	xhl, (xde+ix)
 	minc4_16 ix, 0x7c
 	ld (xde - 10), ix
 	ret

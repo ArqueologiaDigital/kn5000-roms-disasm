@@ -1686,7 +1686,7 @@ PartGrid_ColumnDispatch:
 	jr gt, PartGrid_CopyHLtoBC
 	add wa, wa
 	lda xix, (MSP_Default_GroupOffsetA:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (PartGrid_ColumnJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -1742,7 +1742,7 @@ FrameSetup_ComputeGridIndex:
 	muls wa, 0x3
 	add wa, bc
 	lda xbc, (MSP_Default_ChannelMap:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	ld e, (xsp + 4)
 	cp (xsp + 4), 0x4
 	jr z, FrameSetup_SpecialCase4
@@ -1790,7 +1790,7 @@ FrameSetup_SpecialCase4:
 	ld bc, wa
 	add bc, 0x60
 	ld xwa, (xsp)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld l, (xwa + 56)
 	ld a, (xwa + 57)
 
@@ -2009,7 +2009,7 @@ Pack12BitValueWithBank:
 NoteEvent_Store:
 	extz wa
 	lda xbc, (MSP_Default_ChannelMap_0x1E:24)
-	ldb_sri L, 0x07, 0xe4, 0xe0
+	ld	l, (xbc+wa)
 	ret
 
 NoteEventBuffer_CopyToSlot:
@@ -2023,7 +2023,7 @@ NoteEventBuffer_CopyToSlot:
 	jr gt, NoteEvent_CopyCommon
 	add bc, bc
 	lda xix, (MSP_Default_GroupOffsetB:24)
-	ldw_sri BC, 0x07, 0xf0, 0xe4
+	ld	bc, (xix+bc)
 	lda xix, (NOTE_EVENT_DISPATCH_1:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Note event buffer copy dispatch - 7 cases (BC 0-6)
@@ -2070,7 +2070,7 @@ NoteEventBuffer_Store:
 	jrl gt, NoteEvent_StoreCommon
 	add wa, wa
 	lda xix, (MSP_Default_VarSize:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (NOTE_EVENT_DISPATCH_2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; Note event dispatch table 2
@@ -2263,7 +2263,7 @@ Flash_InitBytecodeBlock_Helper:
 	ld A,L
 	extz WA
 	add WA,0x0050
-	ldb_dri a, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	cp a, 0:i3
 	jr z, .Lc_f1738d
 	cp A,(XSP+0x02)
@@ -2289,7 +2289,7 @@ Flash_InitBytecodeBlock_Helper:
 	extz WA
 	add WA,WA
 	inc 2,WA
-	lda_dri xbc, 0x07, 0xf0, 0xe0
+	lda	xbc, (xix+wa)
 	cpw (XBC), 0xffff
 	jr z, .Lc_f1741e
 	cp L,0x28
@@ -2299,7 +2299,7 @@ Flash_InitBytecodeBlock_Helper:
 	extz DE
 	add DE,0x0010
 	ld xwa, (0x0c92:16)
-	ldb_dri a, 0x07, 0xe0, 0xe8
+	ld	a, (xwa+de)
 	cp a, 0:i3
 	jr z, .Lc_f173e0
 	cp A,(XSP+0x02)
@@ -2312,13 +2312,13 @@ Flash_InitBytecodeBlock_Helper:
 	inc 4,IZ
 	lda xiy, (0x07a0:16)
 	ld WA,(XBC)
-	stw_dri wa, 0x07, 0xf4, 0xf8
+	ld	(xiy+iz), wa
 	inc 6,DE
 	ld A,L
 	set 0x07,A
 	extz WA
 	or WA,0x0500
-	stw_dri wa, 0x07, 0xf4, 0xe8
+	ld	(xiy+de), wa
 	inc 1,H
 	inc 1,L
 	jr t, .Lc_f17415
@@ -3481,7 +3481,7 @@ Flash_SlotUpdateOpsBlock_Helper:
 .Lc_f17f48:
 	ld IX,WA
 	add IX,0x0010
-	ldb_dri h, 0x07, 0xe8, 0xf0
+	ld	h, (xde+ix)
 	cp h, 0:i3
 	jr z, .Lc_f17f5b
 	cp H,C
@@ -3499,7 +3499,7 @@ Flash_SlotUpdateOpsBlock_Helper:
 .Lc_f17f6a:
 	ld IX,WA
 	add IX,0x0050
-	ldb_dri h, 0x07, 0xe8, 0xf0
+	ld	h, (xde+ix)
 	cp h, 0:i3
 	jr z, .Lc_f17f7d
 	cp H,C
@@ -3528,7 +3528,7 @@ VoiceParam_AddOffset:
 	extz de
 	add hl, de
 	ld xwa, (3222:16)
-	stb_dri C, 0x07, 0xe0, 0xec
+	ld	(xwa+hl), c
 	ret
 
 DualVoice_ScanAllColumns:
@@ -3823,7 +3823,7 @@ SlotTable_Insert1748_Loop:
 	extz bc
 	add bc, bc
 	inc 2, bc
-	lda_dri XDE, 0x07, 0xec, 0xe4
+	lda	xde, (xhl+bc)
 	ld bc, (xde)
 	cp bc, wa
 	ret z
@@ -3847,7 +3847,7 @@ SlotTable_Insert1850_Loop:
 	extz bc
 	add bc, bc
 	inc 2, bc
-	lda_dri XDE, 0x07, 0xec, 0xe4
+	lda	xde, (xhl+bc)
 	ld bc, (xde)
 	cp bc, wa
 	ret z
@@ -3887,7 +3887,7 @@ Flash_WriteBackSlot_Loop:
 	add wa, wa
 	inc 2, wa
 	lda xbc, (1850:16)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	cp wa, 0xffff
 	jr z, Flash_WriteBackSlot_Erase
 	and wa, 0x7f
@@ -4701,9 +4701,9 @@ FloppyCtrl_PopIzStoreHL:
 FloppyDisk_ComputeToneParams:
 	lda xsp, (xsp-1048)
 	push xiz
-	stl_dri XDE, 0xfd, 0x10, 0x04
-	stl_dri XBC, 0xfd, 0x14, 0x04
-	stl_dri XWA, 0xfd, 0x18, 0x04
+	ld	(xsp+1040), xde
+	ld	(xsp+1044), xbc
+	ld	(xsp+1048), xwa
 	calr Flash_InitExtMemAddrs
 	ld xiy, MSP_Default_Signature3
 	lda xix, (xsp + 16)
@@ -5254,17 +5254,17 @@ ToneParam_ExtendedOpsBlock_Helper_Helper:
 	ld WA,DE
 	add WA,0x0060
 	ld xbc, (0x0c6e:16)
-	lda_dri xbc, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld (XBC+0x22),0x40
 	ld BC,WA
 	ld xwa, (0x0c6e:16)
-	lda_dri xwa, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld (XWA+0x2a),0x0c
 	ld xwa, (0x0c6e:16)
-	lda_dri xwa, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld (XWA+0x32),0x74
 	ld xwa, (0x0c6e:16)
-	lda_dri xwa, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld (XWA+0x3a),0x40
 	inc 1,L
 	add DE,0x0060
@@ -5429,7 +5429,7 @@ DualVoice_AccPatchLoop:
 	ld	de, wa
 	add	de, bc
 	lda	xwa, (MSP_Default_ChannelMap:24)
-	ldmm_srib	0x07, 0xe0, 0xe8, 0x10, 0x39
+	ld	(0x3910:16), (xwa+de)
 	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
 	cp_erpb	251, 10
@@ -5449,11 +5449,11 @@ DualVoice_ParamCompareLoop:
 	ld	bc, wa
 	add	wa, de
 	lda	xde, (MSP_Default_ChannelMap:24)
-	ldmm_srib	0x07, 0xe8, 0xe0, 0x10, 0x39
+	ld	(0x3910:16), (xde+wa)
 	ld	a, (xsp+8)
 	extz	wa
 	add	bc, wa
-	ldmm_srib	0x07, 0xe8, 0xe4, 0x11, 0x39
+	ld	(0x3911:16), (xde+bc)
 	call	DualVoice_ParamLoadDone
 	ld	a, (13588:16)
 	extz	wa
@@ -5540,7 +5540,7 @@ FileHdr_SignatureMatch:
 
 FileHdr_CopyDataLoop:
 	ld a, (xbc)
-	stb_dri A, 0xe5, 0x00, 0x02
+	ld	(xbc+512), a
 	dec 1, xbc
 	cp xbc, xde
 	jr nc, FileHdr_CopyDataLoop
@@ -6551,7 +6551,7 @@ CmpBndRng_BoundCase:
 	jr gt, CmpBndRng_DefaultString
 	sla bc, 2
 	lda xde, (0x03d992:24)
-	ld_sril3 XBC, 0x07, 0xe8, 0xe4
+	ld	xbc, (xde+bc)
 	push xbc
 	jr CmpBndRng_CallStrcpy
 
@@ -6748,7 +6748,7 @@ CmpSetP1_DialGrid:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (NoteStepDisplayData_0x38:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -6806,7 +6806,7 @@ CmpSetP1_SendAndApplyFunc:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (NoteStepDisplayData_0x4A:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -6977,7 +6977,7 @@ CmpSetP1_GridCheck_Return:
 	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
 	lda xix, (StrTimeSig_1_2_0x10:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (UI_COMPONENT_DISPATCH:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
@@ -7026,7 +7026,7 @@ UI_COMPONENT_DISPATCH_CASE3:
 UI_COMPONENT_DISPATCH_CASE2_COMMON:
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; Shift left by 2 (multiply by 4)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4	; Load entry from table
+	ld	xwa, (xwa+bc)	; Load entry from table
 	push xwa	; Push parameter
 	jr UI_COMPONENT_DISPATCH_PUSH_CALL	; Jump to push and call
 UI_COMPONENT_DISPATCH_CASE4:
@@ -7043,7 +7043,7 @@ UI_COMPONENT_DISPATCH_CASE5_SKIP:
 	and c, 0x1	; Mask C to get bit 0
 	extz bc	; Zero-extend C to BC
 	sla bc, 2	; Shift left by 2 (multiply by 4)
-	ld_sril3 XWA, 0x07, 0xec, 0xe4	; Load entry from table
+	ld	xwa, (xhl+bc)	; Load entry from table
 	push xwa	; Push parameter
 UI_COMPONENT_DISPATCH_PUSH_CALL:
 	push	xde
@@ -7185,7 +7185,7 @@ GridCheck_LookupAndSend:
 
 	sla hl, 2
 
-	ld_sril3 XWA, 0x07, 0xf8, 0xec
+	ld	xwa, (xiz+hl)
 
 	push xwa
 
@@ -7611,7 +7611,7 @@ S2cMemNoBox_End:
 PsS2cFmeasBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_REPAINT
 	jr z, PsS2cFmeas_HandleScroll
 	cp xbc, EVT_PAINT
@@ -7663,7 +7663,7 @@ PsS2cFmeas_End:
 PsS2cLmeasBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_REPAINT
 	jr z, PsS2cLmeas_HandleScroll
 	cp xbc, EVT_PAINT
@@ -7751,7 +7751,7 @@ PsSeqSongNo_End:
 PsS2cTransBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_REPAINT
 	jr z, PsS2cTrans_HandleScroll
 	cp xbc, EVT_PAINT

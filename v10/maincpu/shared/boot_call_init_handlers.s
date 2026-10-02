@@ -66,7 +66,7 @@ Boot_CallInitHandlers__handler_loop:
 	; LDA XDE, 0xfffef0 (init handler table)
 	lda	xde, (System_TimestampPointers:24)
 	; LD XBC, (XDE+BC) - load handler address from table
-	ld_sril3 xbc, 0x07, 0xe8, 0xe4
+	ld	xbc, (xde+bc)
 
 	; Call indirect call helper (address differs between ROMs)
 	call INDIRECT_CALL_HELPER

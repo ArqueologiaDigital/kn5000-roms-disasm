@@ -241,7 +241,7 @@ FileRenameFunc:
 	jr	FRename_PadLoop_Cond
 FRename_PadLoop_CheckChar:
 	extz bc
-	ldb_sri C, 0x07, 0xf0, 0xe4
+	ld	c, (xix+bc)
 	and c, 0x7
 	jr nz, FRename_PadLoop_Advance
 	ld (xde), 0x5f
@@ -252,7 +252,7 @@ FRename_PadLoop_Advance:
 FRename_PadLoop_Cond:
 	cp iy, 6:i3
 	jr ge, FRename_PadLoop_Fill
-	lda_dri XDE, 0x07, 0xec, 0xf4
+	lda	xde, (xhl+iy)
 	ld c, (xde)
 	cp c, 0:i3
 	jr nz, FRename_PadLoop_CheckChar
@@ -340,7 +340,7 @@ FileRenameSmfFunc:
 	jr	FRenameSmf_PadLoop_Cond
 FRenameSmf_PadLoop_CheckChar:
 	extz bc
-	ldb_sri C, 0x07, 0xf0, 0xe4
+	ld	c, (xix+bc)
 	and c, 0x7
 	jr nz, FRenameSmf_PadLoop_Advance
 	ld (xde), 0x5f
@@ -351,7 +351,7 @@ FRenameSmf_PadLoop_Advance:
 FRenameSmf_PadLoop_Cond:
 	cp iy, 0x8
 	jr ge, FRenameSmf_PadLoop_Fill
-	lda_dri XDE, 0x07, 0xec, 0xf4
+	lda	xde, (xhl+iy)
 	ld c, (xde)
 	cp c, 0:i3
 	jr nz, FRenameSmf_PadLoop_CheckChar
@@ -876,9 +876,9 @@ DiskName_TextChange:
 	ld	xhl, xde
 	jr	DiskName_PadLoop_Cond
 DiskName_PadLoop_CheckChar:
-	ldb_sri A, 0x07, 0xf0, 0xf4
+	ld	a, (xix+iy)
 	extz wa
-	ldb_sri A, 0x07, 0xf8, 0xe0
+	ld	a, (xiz+wa)
 	and a, 0x7
 	jr nz, DiskName_PadLoop_Advance
 	ld (xbc), 0x5f
@@ -889,7 +889,7 @@ DiskName_PadLoop_Advance:
 DiskName_PadLoop_Cond:
 	cp iy, 0xb
 	jr ge, DiskName_PadLoop_Fill
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	lda	xbc, (xhl+iy)
 	cp (xbc), 0x0
 	jr nz, DiskName_PadLoop_CheckChar
 
@@ -1156,7 +1156,7 @@ SaveFileName_TextChange:
 	jr	SaveFileName_PadLoop_Cond
 SaveFileName_PadLoop_CheckChar:
 	extz wa
-	ldb_sri A, 0x07, 0xf0, 0xe0
+	ld	a, (xix+wa)
 	and a, 0x7
 	jr nz, SaveFileName_PadLoop_Advance
 	ld (xbc), 0x5f
@@ -1167,7 +1167,7 @@ SaveFileName_PadLoop_Advance:
 SaveFileName_PadLoop_Cond:
 	cp iy, 6:i3
 	jr ge, SaveFileName_PadLoop_Fill
-	lda_dri XBC, 0x07, 0xec, 0xf4
+	lda	xbc, (xhl+iy)
 	ld a, (xbc)
 	cp a, 0:i3
 	jr nz, SaveFileName_PadLoop_CheckChar

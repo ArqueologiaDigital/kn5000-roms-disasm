@@ -727,7 +727,7 @@ GetEditSwPoint:
 	jrl ugt, EditSwParam_Default
 	add hl, hl
 	lda xix, (DiskWarning_ConfirmStrings_0xE70:24)
-	ldw_sri HL, 0x07, 0xf0, 0xec
+	ld	hl, (xix+hl)
 	lda xix, (EditSwParam_Mode0:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
 
@@ -820,7 +820,7 @@ SetWallPaper:
 	jr gt, SetWallPaper_Default
 	add wa, wa
 	lda xix, (DiskWarning_ConfirmStrings_0xE8A:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SetWallPaper_DispatchData:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 

@@ -211,7 +211,7 @@ RhythmEvt_IterateNoteOn:
 RhythmEvt_NoteOnLoop:
 	cp (XHL+0x04),IY
 	jrl z, RhythmEvt_IterDone
-	ldb_dri a, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	ld (0x33c1:16), iy
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -244,7 +244,7 @@ RhythmEvt_ApplyNoteRange:
 RhythmEvt_PostProcess:
 	calr Rhythm_VelocityCompute
 	popw iy
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -265,7 +265,7 @@ RhythmEvt_FullProcess:
 RhythmEvt_FullLoop:
 	cp (XHL+0x04),IY
 	jrl z, RhythmEvt_FullDone
-	ldb_dri a, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	cp A,0x90
 	jr nz, RhythmEvt_Full91
 	call RingBuf_AdvanceIndex
@@ -273,7 +273,7 @@ RhythmEvt_FullLoop:
 	pushw iy
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
-	ldb_dri a, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	calr Rhythm_CheckVelocityThreshold
 	bit 4, (0x3258:16)
 	jr nz, RhythmEvt_Full90_PostTransp
@@ -286,7 +286,7 @@ RhythmEvt_Full90_PostRange:
 RhythmEvt_Full90_PostTransp:
 	calr Rhythm_VelocityLookup_A
 	popw iy
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -323,13 +323,13 @@ RhythmEvt_Full91_PostTransp:
 
 	popw iy
 
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	call RingBuf_AdvanceIndex	; call RingBuf_AdvanceIndex (v7 addr)
 	ld a, (0x3394:16)	; ldb_d8 a, (0x3430) (v7 patched)
 
 
 
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr Rhythm_AdvancePosition	; calr Rhythm_AdvancePosition (v7 displacement)
 	calr Rhythm_AdvancePosition	; calr Rhythm_AdvancePosition (v7 displacement)
 	jrl RhythmEvt_FullLoop	; jrl RhythmEvt_FullLoop (v7 displacement)
@@ -401,7 +401,7 @@ Rhythm_CrossVoice_Apply:
 	ld (0x3292:16), w
 	or (0x3291:16), 0x01
 	ld XIY,AccPatch_Transpose_LookupTable_Data
-	ldb_dri w, 0x03, 0xf4, 0xe0
+	ld	w, (xiy+a)
 	sub A,W
 	pop XIY
 	ld (0x3397:16), 0x00
@@ -466,12 +466,12 @@ Rhythm_VelLookA_CheckBit3:
 	jr z, Rhythm_VelLookA_TableLookup
 	ld xiy, Rhythm_InstrMapTable_Default_0x62
 Rhythm_VelLookA_TableLookup:
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -483,7 +483,7 @@ Rhythm_VelLookA_Done:
 Rhythm_InstrBaseLookup:
 	push xiy
 	ld xiy, AccPatch_Transpose_LookupTable_Data
-	lda_dri XIY, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+a)
 	ld a, (xiy)
 	pop xiy
 	ret
@@ -641,12 +641,12 @@ Rhythm_VoiceMap_Inst2Bit2:
 	jr z, Rhythm_VoiceMap_Inst2Bit3
 	ld xiy, Rhythm_InstrMapTable_Default_0x62
 Rhythm_VoiceMap_Inst2Bit3:
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -707,12 +707,12 @@ Rhythm_VelComp_SelectTable:
 	jr z, Rhythm_VelComp_Lookup
 	ld xiy, Rhythm_VelocityTable_A_0x31
 Rhythm_VelComp_Lookup:
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -1426,7 +1426,7 @@ Rhythm_SeqResetCheck:
 	xor H,H
 	sla L, 0x02
 	ld XIY,Rhythm_SeqResetTable
-	ldl_dri xix, 0x07, 0xf4, 0xec
+	ld	xix, (xiy+hl)
 	cp XIX,0x00000000
 	jr z, Rhythm_SeqReset_UpdateFlags
 	ei 0x06
@@ -1534,7 +1534,7 @@ Rhythm_TranspMod_Done:
 Rhythm_TranspMod_BaseApply:
 	ld W,A
 	ld XIY,AccPatch_Transpose_LookupTable_Data
-	ldb_dri a, 0x03, 0xf4, 0xe0
+	ld	a, (xiy+a)
 	ld l, (0x323c:16)
 	cp L,0x30
 	jr c, Rhythm_TranspMod_BaseLookup
@@ -1542,12 +1542,12 @@ Rhythm_TranspMod_BaseApply:
 Rhythm_TranspMod_BaseLookup:
 	extz hl
 	ld xiy, Rhythm_InstrMapTable_Default_0x31
-	ldb_sri L, 0x07, 0xf4, 0xec
+	ld	l, (xiy+hl)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	ret
 

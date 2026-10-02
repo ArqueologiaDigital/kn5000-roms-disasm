@@ -129,7 +129,7 @@ Voice_InitChannelLoop:
 	extz	de
 	ld	xwa, (xsp + 4)
 	ld	c, (xbc + 1)
-	stb_dri	C, 0x07, 0xe0, 0xe8
+	ld	(xwa+de), c
 Voice_InitChannelNext:
 	incw	1, (xsp + 10)
 	cpw	(xsp + 10), 0x17
@@ -293,7 +293,7 @@ DSPCfg_Init_BoundsCheck:
 	jr	gt, DSPCfg_Init_Finalize
 	add	de, de
 	lda	xix, (NakaInst_ExtDevice_Screens_0x2B3E:24)
-	ldw_sri	DE, 0x07, 0xf0, 0xe8
+	ld	de, (xix+de)
 	lda	xix, (DSPCfg_InitDispatch:24)
 	jp_ind	8, 0x07, 0xf0, 0xe8
 ; DSPCfg_InitAllEntries dispatch
@@ -1015,7 +1015,7 @@ CtrlPanel_IndicatorJumpTable:
 	ret	gt
 	add	wa, wa
 	lda	xix, (NakaInst_ExtDevice_Screens_0x2E3C:24)
-	ldw_sri	WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda	xix, (DSPCfg_Param_CaseC:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
 ; DSP config parameter handler C
@@ -1059,7 +1059,7 @@ Audio_DispatchCommand:
 	ret	gt
 	add	wa, wa
 	lda	xix, (NakaInst_ExtDevice_Screens_0x2E4E:24)
-	ldw_sri	WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda	xix, (DSPCfg_Param_CaseD:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
 ; DSP config parameter handler D
@@ -1105,7 +1105,7 @@ PanelDisplay_DispatchByMode:
 	jrl	gt, DSPCfg_Param_Default
 	add	wa, wa
 	lda	xix, (NakaInst_ExtDevice_Screens_0x2E60:24)
-	ldw_sri	WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda	xix, (PanelDisplay_DispatchData:24)
 	jp_ind	8, 0x07, 0xf0, 0xe0
 PanelDisplay_DispatchData:
@@ -1192,7 +1192,7 @@ Encoder_SyncLoop:
 	ld	a, (0x8df0:16)
 	extz	wa
 	muls	wa, 0x3
-	ldb_sri	A, 0x07, 0xec, 0xe0
+	ld	a, (xhl+wa)
 	ld	(0x8df4:16), a
 	cp	a, 0xff
 ; (pre-port v7 note about the bytes at 0xFC4FC2:)
@@ -1218,7 +1218,7 @@ Encoder_ReadNextEntry:
 	ld	a, (0x8df0:16)
 	extz	wa
 	muls	wa, 0x3
-	lda_dri	XIY, 0x07, 0xec, 0xe0
+	lda	xiy, (xhl+wa)
 	ld	xix, 0x8ddc
 	ldi85
 	ldiw
@@ -1234,7 +1234,7 @@ Encoder_PrepareCallback:
 	jr	nz, Encoder_ResolveCallbackAddr
 	ld	xwa, Encoder_PrepareCallback_PtrTable_2
 Encoder_ResolveCallbackAddr:
-	ld_sril3	XIZ, 0x07, 0xe0, 0xe4
+	ld	xiz, (xwa+bc)
 	lda	xbc, (0x8de0:16)
 	ld	(xbc + 4), 0xaa
 	ldmi16	(xbc + 5), 0x8df4

@@ -310,7 +310,7 @@ CtrlPanel_HandleSerialPort:
 	exts wa
 	sla wa, 2
 	lda xbc, (DiskWarning_ConfirmStrings_0xC36:24)
-	ld_sril3 XDE, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld xwa, 0xffffffff
 	ld xbc, EVT_DIAL
 	jrl UIEvent_DispatchAndReturn

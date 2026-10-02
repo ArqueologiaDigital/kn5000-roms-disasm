@@ -407,7 +407,7 @@ BitMapOut_CopyPreset9_Execute:
 	extz wa
 	sla wa, 2
 	lda xbc, (WidgetStyleDataTable_0x10:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, (xbc)
 	ld xix, (xsp + 56)
 	add xix, xwa
@@ -2811,7 +2811,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	extz ix
 	ld xbc, (xhl)
 	ld a, (xde + 1)
-	stb_dri A, 0x07, 0xe4, 0xf0
+	ld	(xbc+ix), a
 	inc 1, iz
 	cp iz, 0x17
 	jr c, BitMapOut_DeltaEncode_Type90Final
@@ -3191,7 +3191,7 @@ BitMapOut_UpdateWidget_CheckType:
 	extz wa
 	sla wa, 2
 	lda xbc, (WidgetStyleDataTable_0x10:24)
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
+	ld	xbc, (xbc+wa)
 	pushw 0x10
 	lda xwa, (0xf9a2:16)
 	sub xwa, 0xf980
@@ -3213,7 +3213,7 @@ BitMapOut_UpdateWidget_TypeB:
 	extz WA
 	sla wa, 2
 	lda xde, (WidgetStyleDataTable_0x10:24)
-	ldl_dri xde, 0x07, 0xe8, 0xe0
+	ld	xde, (xde+wa)
 	pushw 0x0010
 	push XBC
 	lda xwa, (0xf9a2:16)

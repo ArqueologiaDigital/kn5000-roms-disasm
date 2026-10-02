@@ -584,7 +584,7 @@ VoiceParam_ListHandler:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (VoiceParam_ListHandler_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -642,7 +642,7 @@ FadeGrid_CheckFadeOut:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (VoiceParam_ListHandler_Table_2:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -906,7 +906,7 @@ AcInOutGrid_Handler:
 	ld wa, (xbc)
 	sla wa, 2
 	lda xbc, (Data_FadeSetGridDispatch_Table:24)
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
+	ld	xbc, (xbc+wa)
 	ld xwa, xbc
 	cp xbc, 0x2a12
 	jr z, SndParam_FormatAndDisplay
@@ -1076,7 +1076,7 @@ AcInOutGrid_Init:
 	jr	AcInOutGrid_ScrollUp_Dispatch
 AcInOutGrid_ScrollUp_AltTable:
 	lda xbc, (AcInOutGrid_ScrollUp_AltTable_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	ld bc, iz
 	sub bc, wa
 	ld de, bc
@@ -1152,7 +1152,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	jr	AcInOutGrid_ScrollDown_Dispatch	; -> 0xF75592
 AcInOutGrid_ScrollDown_AltTable:
 	lda xbc, (AcInOutGrid_ScrollDown_AltTable_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	add wa, iz
 	ld de, wa
 	extz xde
@@ -1692,7 +1692,7 @@ ParaLoadOpt_Entry:
 	jrl gt, MdPreset_ReturnZero2
 	add wa, wa
 	lda xix, (Data_InOutGridDispatch_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (Data_ParaLoadOptDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 

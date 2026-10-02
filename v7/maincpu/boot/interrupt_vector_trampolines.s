@@ -113,7 +113,7 @@ AcApcToggleProc_Helper_Skip2:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Naka_MainDispatch_Table_0xDC0:24)
-	lda_dri	XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld	xwa, (xsp + 6)
 	ld	xhl, (xbc)
 	call	(xhl)

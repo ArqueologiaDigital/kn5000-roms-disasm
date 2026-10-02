@@ -1129,7 +1129,7 @@ DramTest_IC10IC9_NextChip:
 	extz wa
 	muls wa, 0xa
 	lda xbc, (WidgetStyleDataTable_0x6FC:24)
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	ld xhl, (xde)
 	ld xiz, (xde + 4)
 	srl xiz, 3
@@ -1207,7 +1207,7 @@ SramTest_IC21_Loop:
 	extz bc
 	muls bc, 0xa
 	lda xde, (WidgetStyleDataTable_0x706:24)
-	lda_dri XDE, 0x07, 0xe8, 0xe4
+	lda	xde, (xde+bc)
 	ld xiy, (xde)
 	ld xbc, (xde + 4)
 	srl xbc, 1
@@ -1269,7 +1269,7 @@ RomTest_ProgramTableData_SumLoop:
 	extz wa
 	sla wa, 1
 	ld iy, wa
-	lda_dri XIZ, 0x07, 0xe4, 0xf4
+	lda	xiz, (xbc+iy)
 	ld wa, (xiz)
 	ldfr_werp WA, 0xf6
 	ld wa, (xhl)
@@ -1321,7 +1321,7 @@ RomTest_TableData_SumLoop:
 	extz wa
 	sla wa, 1
 	ld iy, wa
-	lda_dri XIZ, 0x07, 0xe4, 0xf4
+	lda	xiz, (xbc+iy)
 	ld wa, (xiz)
 	ldfr_werp WA, 0xf6
 	ld wa, (xhl)
@@ -1378,7 +1378,7 @@ RhythmRomTest_SumLoop:
 	ld c, w
 	extz bc
 	add bc, bc
-	lda_dri XDE, 0x07, 0xf0, 0xe4
+	lda	xde, (xix+bc)
 	ld bc, (xde)
 	ldfr_werp BC, 0xe2
 	ld BC, (xiy+)
@@ -1444,7 +1444,7 @@ CustomRomTest_SumLoop:
 	ldto_berp A, 0xe2
 	extz wa
 	add wa, wa
-	lda_dri XBC, 0x07, 0xec, 0xe0
+	lda	xbc, (xhl+wa)
 	ld wa, (xbc)
 	ld IZ, (xix+)
 	add iz, wa
@@ -2125,7 +2125,7 @@ EffectMode_SetAllLEDs_Loop:
 	extz wa
 	add wa, wa
 	lda xbc, (WidgetStyleDataTable_0x6BA:24)
-	ldw_sri BC, 0x07, 0xe4, 0xe0
+	ld	bc, (xbc+wa)
 	cp bc, 0xffff
 	jr nz, EffectMode_SetAllLEDs_SetOne
 	popw_erp 0xfa
@@ -2147,7 +2147,7 @@ LED_SetAll_BlankLoop:
 	extz wa
 	add wa, wa
 	lda xbc, (WidgetStyleDataTable_0x6BA:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	cp wa, 0xffff
 	jr nz, LED_SetAll_BlankOne
 	popw_erp 0xfa
@@ -3530,7 +3530,7 @@ MstStyleAlp_CellSelect:
 	muls WA,0x0006
 	ld BC,WA
 	ld XWA,(XSP+0x08)
-	ldl_dri xwa, 0x07, 0xe0, 0xe4
+	ld	xwa, (xwa+bc)
 	push XWA
 	ld XWA,(XSP+0x10)
 	push XWA
@@ -3585,7 +3585,7 @@ MstStyleAlp_CopyEntryAndPad:
 	muls WA,0x0006
 	ld BC,WA
 	ld XWA,(XSP+0x08)
-	ldl_dri xwa, 0x07, 0xe0, 0xe4
+	ld	xwa, (xwa+bc)
 	push XWA
 	ld XWA,(XSP+0x10)
 	push XWA
@@ -4228,7 +4228,7 @@ MstStyle1Sub_CountEntries_Loop:
 	ld a, c
 	extz wa
 	sla wa, 3
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, MstStyle1Sub_CountEntries_Done
 	inc 1, c
@@ -4306,7 +4306,7 @@ MstStyle1Sub_SubSel_CountLoop:
 	ld a, c
 	extz wa
 	sla wa, 3
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, MstStyle1Sub_SubSel_CountDone
 	inc 1, c
@@ -4952,7 +4952,7 @@ MstStyle2_CountEntries_Loop:
 	ld a, c
 	extz wa
 	sla wa, 3
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, MstStyle2_CountEntries_Done
 	inc 1, c
@@ -5001,7 +5001,7 @@ MstStyle2_CountSubEntries_LoopA:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	or xwa, xwa
 	jr z, MstStyle2_CountSubEntries_DoneA
 	inc 1, c
@@ -5035,7 +5035,7 @@ MstStyle2_CountSubEntries_LoopB:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, MstStyle2_CountSubEntries_DoneB
 	inc 1, c
@@ -5076,7 +5076,7 @@ MstStyle2_InitOdd_CountLoopA:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, MstStyle2_InitOdd_CountDoneA
 	inc 1, c
@@ -5105,7 +5105,7 @@ MstStyle2_InitOdd_CountLoopB:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, MstStyle2_InitOdd_CountDoneB
 	inc 1, c
@@ -5228,7 +5228,7 @@ MstStyle2_PageDec_CountLoop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	or xwa, xwa
 	jr z, MstStyle2_PageDec_CountDone
 	inc 1, c
@@ -5265,7 +5265,7 @@ MstStyle2_PageDec_CountLoop2:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	or xwa, xwa
 	jr z, MstStyle2_PageDec_CountDone2
 	inc 1, c
@@ -5358,7 +5358,7 @@ MstStyle2_PageInc_CountLoop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	or xwa, xwa
 	jr z, MstStyle2_PageInc_CountDone
 	inc 1, c
@@ -5400,7 +5400,7 @@ MstStyle2_PageInc_CountLoop2:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	or xwa, xwa
 	jr z, MstStyle2_PageInc_CountDone2
 	inc 1, c
@@ -5498,7 +5498,7 @@ MstStyle2_DialScrollDown_CountLoop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	or xwa, xwa
 	jr z, MstStyle2_DialScrollDown_CountDone
 	inc 1, c
@@ -5535,7 +5535,7 @@ MstStyle2_DialScrollDown_Count2Loop:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, MstStyle2_DialScrollDown_Count2Done
 	inc 1, c
@@ -5731,7 +5731,7 @@ MstStyle2_DialScroll_CountLoopD:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xf4, 0xe0
+	ld	xwa, (xiy+wa)
 	or xwa, xwa
 	jr z, MstStyle2_DialScroll_CountDoneD
 	inc 1, c
@@ -5768,7 +5768,7 @@ MstStyle2_DialScroll_CountLoopE:
 	ld a, c
 	extz wa
 	muls wa, 0x6
-	ld_sril3 XWA, 0x07, 0xec, 0xe0
+	ld	xwa, (xhl+wa)
 	or xwa, xwa
 	jr z, MstStyle2_DialScroll_CountDoneE
 	inc 1, c
@@ -7934,7 +7934,7 @@ FSWAssGrid_CellSelect:
 	extz HL
 	sla HL, 0x02
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CellSelect_Str_Fmts@hi16
 	pushw FSWAssGrid_CellSelect_Str_Fmts@lo16
@@ -7961,7 +7961,7 @@ FSWAssGrid_CheckCell_1_3:
 	extz HL
 	sla HL, 0x02
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_3_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_3_Str_Fmts@lo16
@@ -7988,7 +7988,7 @@ FSWAssGrid_CheckCell_1_4:
 	extz HL
 	sla HL, 0x02
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_4_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_4_Str_Fmts@lo16
@@ -8015,7 +8015,7 @@ FSWAssGrid_CheckCell_1_5:
 	extz HL
 	sla HL, 0x02
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_5_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_5_Str_Fmts@lo16
@@ -8042,7 +8042,7 @@ FSWAssGrid_CheckCell_1_6:
 	extz HL
 	sla HL, 0x02
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_6_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_6_Str_Fmts@lo16
@@ -8069,7 +8069,7 @@ FSWAssGrid_CheckCell_1_7:
 	extz HL
 	sla HL, 0x02
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_7_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_7_Str_Fmts@lo16
@@ -8096,7 +8096,7 @@ FSWAssGrid_CheckCell_1_8:
 	extz HL
 	sla HL, 0x02
 	lda xbc, (Str_StoreTotalSetting_DE_0x2B8:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xec
+	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_8_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_8_Str_Fmts@lo16
@@ -8330,8 +8330,8 @@ PmemPageCtl_Boundary:
 AcPmExpFilterGridBoxProc:
 	lda xsp, (xsp-292)
 	push xiz
-	stl_dri XDE, 0xfd, 0x20, 0x01
-	stl_dri XBC, 0xfd, 0x24, 0x01
+	ld	(xsp+288), xde
+	ld	(xsp+292), xbc
 	ld xiz, xwa
 	ld XBC, (xsp + 0x0124)
 	cp xbc, EVT_SW_IN
@@ -8550,7 +8550,7 @@ PmExpFilter_DrawCellBank2:
 	extz WA
 	sla WA, 0x02
 	lda xbc, (ParamStr_Table_02:24)
-	ldl_dri xwa, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push XWA
 	pushw PmExpFilter_DrawCellBank2_Str_Fmts@hi16
 	pushw PmExpFilter_DrawCellBank2_Str_Fmts@lo16
@@ -9839,7 +9839,7 @@ DispTimeSetCheck_CellDecode:
 	extz WA
 	sla WA, 0x02
 	lda xde, (ParamStr_Table_03:24)
-	ldl_dri xwa, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	push XWA
 	pushw 0x00ed
 	pushw 0x156a
@@ -9861,7 +9861,7 @@ DispTimeSetCheck_TryRow3:
 	ld a, (0x0340e8:24)
 	extz WA
 	sla WA, 0x02
-	ldl_dri xwa, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	push XWA
 	pushw 0x00ed
 	pushw 0x156e
@@ -9882,7 +9882,7 @@ DispTimeSetCheck_TryRow4:
 	ld a, (0x0340ea:24)
 	extz WA
 	sla WA, 0x02
-	ldl_dri xwa, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	push XWA
 	pushw DispTimeSetCheck_TryRow4_Str_Fmts@hi16
 	pushw DispTimeSetCheck_TryRow4_Str_Fmts@lo16
@@ -9903,7 +9903,7 @@ DispTimeSetCheck_TryRow5:
 	ld a, (0x0340ec:24)
 	extz WA
 	sla WA, 0x02
-	ldl_dri xwa, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	push XWA
 	pushw 0x00ed
 	pushw 0x1576
@@ -9924,7 +9924,7 @@ DispTimeSetCheck_TryRow6:
 	ld a, (0x0340ee:24)
 	extz WA
 	sla WA, 0x02
-	ldl_dri xwa, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	push XWA
 	pushw 0x00ed
 	pushw 0x157a
@@ -9945,7 +9945,7 @@ DispTimeSetCheck_TryRow7:
 	ld a, (0x0340f0:24)
 	extz WA
 	sla WA, 0x02
-	ldl_dri xwa, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	push XWA
 	pushw 0x00ed
 	pushw 0x157e
@@ -10638,7 +10638,7 @@ AcPmBkNoBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_LSW_DATA
 	jr z, AcPmBkNoBox_Match
 	cp xbc, EVT_REPAINT
@@ -10732,7 +10732,7 @@ AcBkNoBoxProc:
 	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
-	stl_dri XWA, 0xfd, 0x04, 0x01
+	ld	(xsp+260), xwa
 	cp xbc, EVT_LSW_DATA
 	jr z, AcBkNoBox_Match
 	cp xbc, EVT_REPAINT
@@ -10901,7 +10901,7 @@ MsaMode_Select:
 	ld xwa, (xwa + 48)
 	lda xbc, (NakaInst_Rock_Pop_0x2C:24)
 	ld wa, (xwa)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp + 8)
 	call GetEditSwPoint
@@ -10934,7 +10934,7 @@ MsaMode_Select_DrawHighlight1:
 	ld xwa, (xwa + 44)
 	lda xbc, (NakaInst_Rock_Pop_0x2C:24)
 	ld wa, (xwa)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp + 8)
 	call GetEditSwPoint
@@ -11048,9 +11048,9 @@ MsaMode_Epilogue:
 PmemModeBoxProc:
 	lda xsp, (xsp-280)
 	push xiz
-	stl_dri XDE, 0xfd, 0x14, 0x01
+	ld	(xsp+276), xde
 	ld xiz, xbc
-	stl_dri XWA, 0xfd, 0x18, 0x01
+	ld	(xsp+280), xwa
 	cp xiz, EVT_SW_IN
 	jrl z, PmemMode_OK
 	cp xiz, EVT_SELE_DRAW
@@ -11215,7 +11215,7 @@ PmemMode_Select:
 	ld xwa, (xwa + 40)
 	lda xbc, (NakaInst_Rock_Pop_0x30:24)
 	ld wa, (xwa)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+264)
 	call GetEditSwPoint
@@ -11248,7 +11248,7 @@ PmemMode_Select_DrawHighlight1:
 	ld xwa, (xwa + 36)
 	lda xbc, (NakaInst_Rock_Pop_0x30:24)
 	ld wa, (xwa)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+264)
 	call GetEditSwPoint
@@ -11353,8 +11353,8 @@ PmemMode_Epilogue:
 AcPmBkEditBoxProc:
 	lda xsp, (xsp-306)
 	push xiz
-	stl_dri XDE, 0xfd, 0x2e, 0x01
-	stl_dri XWA, 0xfd, 0x32, 0x01
+	ld	(xsp+302), xde
+	ld	(xsp+306), xwa
 	cp xbc, EVT_SW_IN
 	jrl z, AcPmBkEdit_OK
 	cp xbc, EVT_INDEXSW_DOWN
@@ -11391,7 +11391,7 @@ AcPmBkEditBoxProc:
 	ld xwa, (xwa)
 	ld w, 0x0:opc
 	extz xwa
-	stl_dri XWA, 0xfd, 0x2e, 0x01
+	ld	(xsp+302), xwa
 	ld xwa, NAKA_MAINFUNC_MainPmGet
 	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x012e)
@@ -11454,7 +11454,7 @@ AcPmBkEdit_BankChanged_UpdateLoop:
 	addb_erp A, 0xfb
 	ld w, 0x0:opc
 	extz xwa
-	stl_dri XWA, 0xfd, 0x2e, 0x01
+	ld	(xsp+302), xwa
 	ld xwa, NAKA_MAINFUNC_MainPmGet
 	ld xbc, EVT_PM_NAME_REQ
 	ld XDE, (xsp + 0x012e)
@@ -11944,9 +11944,9 @@ VariScreen_CleanupRet:
 VariScreenProc:
 	lda xsp, (xsp-566)
 	push xiz
-	stl_dri XDE, 0xfd, 0x2e, 0x02
-	stl_dri XBC, 0xfd, 0x32, 0x02
-	stl_dri XWA, 0xfd, 0x36, 0x02
+	ld	(xsp+558), xde
+	ld	(xsp+562), xbc
+	ld	(xsp+566), xwa
 	ld XWA, (xsp + 0x0232)
 	cp xwa, EVT_SW_IN
 	jrl z, VariScreen_HandleOK
@@ -12215,8 +12215,8 @@ VariScreen_CalcRowOffset:
 	exts xwa
 	divs wa, 0xa
 	ldto_werp BC, 0xe2
-	ld_sril3 XWA, 0x07, 0xec, 0xe8
-	ldb_sri A, 0x07, 0xe0, 0xe4
+	ld	xwa, (xhl+de)
+	ld	a, (xwa+bc)
 	extz wa
 	lda xbc, (xsp+546)
 	call GetEditSwPoint
@@ -12323,8 +12323,8 @@ VariScreen_DrawEditSwitch:
 	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 8)
@@ -12339,8 +12339,8 @@ VariScreen_DrawEditSwitch:
 	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+546)
 	call GetEditSwPoint
@@ -12496,8 +12496,8 @@ VariScreen_DrawRightPanel:
 	exts xwa
 	divs wa, 0xa
 	ldto_werp BC, 0xe2
-	ld_sril3 XWA, 0x07, 0xec, 0xe8
-	ldb_sri A, 0x07, 0xe0, 0xe4
+	ld	xwa, (xhl+de)
+	ld	a, (xwa+bc)
 	extz wa
 	lda xbc, (xsp+546)
 	call GetEditSwPoint
@@ -12603,8 +12603,8 @@ VariScreen_DrawRightEditSw:
 	div a, 0xa
 	ld e, w
 	extz de
-	ld_sril3 XWA, 0x07, 0xec, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xe8
+	ld	xwa, (xhl+bc)
+	ld	a, (xwa+de)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 8)
@@ -12619,8 +12619,8 @@ VariScreen_DrawRightEditSw:
 	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+546)
 	call GetEditSwPoint
@@ -12899,8 +12899,8 @@ VariScreen_ConfirmDrawEditSw:
 	lda xde, (0x03f214:24)
 	ld l, (xsp + 10)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 8)
@@ -12910,8 +12910,8 @@ VariScreen_ConfirmDrawEditSw:
 	lda xde, (0x03f214:24)
 	ld l, (xsp + 10)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+546)
 	call GetEditSwPoint
@@ -13116,8 +13116,8 @@ VariScreen_EnumHighlightColors:
 	ld XWA, (xsp + 0x022e)
 	ld l, (xwa)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 8)
@@ -13128,8 +13128,8 @@ VariScreen_EnumHighlightColors:
 	ld XWA, (xsp + 0x022e)
 	ld l, (xwa)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+546)
 	call GetEditSwPoint

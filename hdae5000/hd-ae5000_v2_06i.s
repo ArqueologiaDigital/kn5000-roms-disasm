@@ -1475,7 +1475,7 @@ HDAE5000_SelectListProc:
 	add	xbc, (xsp+16)
 	ld	wa, (xsp+20)
 	ld	c, (xbc)
-	stb_dri c, 0x07, 0xE8, 0xE0	; ld (XDE+WA),C
+	ld	(xde+wa), c	; ld (XDE+WA),C
 	incw	1, (xsp+20)
 	incw	1, (xsp+10)
 .LRF_0b6c:

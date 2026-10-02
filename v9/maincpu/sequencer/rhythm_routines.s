@@ -222,7 +222,7 @@ RhythmEvt_IterateNoteOn:
 RhythmEvt_NoteOnLoop:
 	cp (xhl + 4), iy
 	jrl z, RhythmEvt_IterDone
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	ld (0x345d:16), iy
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -243,7 +243,7 @@ RhythmEvt_NoteOn91:
 	calr Rhythm_AdvancePosition
 
 RhythmEvt_ApplyTranspose:
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	calr Rhythm_CheckVelocityThreshold
 	bit 4, (0x32f4:16)
 	jr nz, RhythmEvt_PostProcess
@@ -257,7 +257,7 @@ RhythmEvt_ApplyNoteRange:
 RhythmEvt_PostProcess:
 	calr Rhythm_VelocityCompute
 	popw iy
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -279,7 +279,7 @@ RhythmEvt_FullProcess:
 RhythmEvt_FullLoop:
 	cp (xhl + 4), iy
 	jrl z, RhythmEvt_FullDone
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	cp a, 0x90
 	jr nz, RhythmEvt_Full91
 	call RingBuf_AdvanceIndex
@@ -287,7 +287,7 @@ RhythmEvt_FullLoop:
 	pushw iy
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	calr Rhythm_CheckVelocityThreshold
 	bit 4, (0x32f4:16)
 	jr nz, RhythmEvt_Full90_PostTransp
@@ -301,7 +301,7 @@ RhythmEvt_Full90_PostRange:
 RhythmEvt_Full90_PostTransp:
 	calr Rhythm_VelocityLookup_A
 	popw iy
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr Rhythm_AdvancePosition
 	call RingBuf_AdvanceIndex
 	call RingBuf_AdvanceIndex
@@ -314,16 +314,16 @@ RhythmEvt_Full91:
 	call RingBuf_AdvanceIndex
 	pushw iy
 	call RingBuf_AdvanceIndex
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	ld (0x3430:16), a
 	calr Rhythm_AdvancePosition
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	ld (0x3433:16), a
 	call RingBuf_AdvanceIndex
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	ld (0x3434:16), a
 	call RingBuf_AdvanceIndex
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	calr Rhythm_CheckVelocityThreshold
 	bit 4, (0x32f4:16)
 	jr nz, RhythmEvt_Full91_PostTransp
@@ -337,10 +337,10 @@ RhythmEvt_Full91_PostRange:
 RhythmEvt_Full91_PostTransp:
 	calr Rhythm_VoiceMapLookup
 	popw iy
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	call RingBuf_AdvanceIndex
 	ld a, (0x3430:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr Rhythm_AdvancePosition
 	calr Rhythm_AdvancePosition
 	jrl RhythmEvt_FullLoop
@@ -408,7 +408,7 @@ Rhythm_CrossVoice_Apply:
 	ld (0x332e:16), w
 	or (0x332d:16), 1
 	ld xiy, AccPatch_Transpose_LookupTable_Data
-	ldb_sri W, 0x03, 0xf4, 0xe0
+	ld	w, (xiy+a)
 	sub a, w
 	pop xiy
 	ld (0x3433:16), 0
@@ -424,7 +424,7 @@ Rhythm_NoteRangeCheck:
 	push xiy
 	ld w, a
 	ld xiy, AccPatch_Transpose_LookupTable_Data
-	ldb_sri W, 0x03, 0xf4, 0xe0
+	ld	w, (xiy+a)
 	sub a, w
 	pop xiy
 	ld (0x3433:16), 0
@@ -475,12 +475,12 @@ Rhythm_VelLookA_CheckBit3:
 	ld xiy, Rhythm_InstrMapTable_Default_0x62
 
 Rhythm_VelLookA_TableLookup:
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -492,7 +492,7 @@ Rhythm_VelLookA_Done:
 Rhythm_InstrBaseLookup:
 	push xiy
 	ld xiy, AccPatch_Transpose_LookupTable_Data
-	lda_dri XIY, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+a)
 	ld a, (xiy)
 	pop xiy
 	ret
@@ -614,7 +614,7 @@ Rhythm_VoiceMap_ClampInstr:
 	ld xiy, Rhythm_PitchShiftTable_Default_0x31
 
 Rhythm_VoiceMap_SelectTable:
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	cp l, 0:i3
 	jr z, Rhythm_VoiceMap_ApplyBase
 	ld h, (0x3433:16)
@@ -659,12 +659,12 @@ Rhythm_VoiceMap_Inst2Bit2:
 	ld xiy, Rhythm_InstrMapTable_Default_0x62
 
 Rhythm_VoiceMap_Inst2Bit3:
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -728,12 +728,12 @@ Rhythm_VelComp_SelectTable:
 	ld xiy, Rhythm_VelocityTable_A_0x31
 
 Rhythm_VelComp_Lookup:
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	calr Rhythm_TransposeNote
 
@@ -1486,7 +1486,7 @@ Rhythm_SeqResetCheck:
 	xor h, h
 	sla l, 2
 	ld xiy, Rhythm_SeqResetTable
-	ld_sril3 XIX, 0x07, 0xf4, 0xec
+	ld	xix, (xiy+hl)
 	cp xix, 0x0
 	jr z, Rhythm_SeqReset_UpdateFlags
 	ei 6
@@ -1565,7 +1565,7 @@ Rhythm_TranspMod_ModCheck:
 
 Rhythm_TranspMod_LookupTable:
 	ld xiy, Rhythm_PitchShiftTable_Default
-	ldb_sri L, 0x03, 0xf4, 0xec
+	ld	l, (xiy+l)
 	cp l, 0:i3
 	jr z, Rhythm_TranspMod_Done
 	ld h, (0x33e6:16)
@@ -1597,7 +1597,7 @@ Rhythm_TranspMod_Done:
 Rhythm_TranspMod_BaseApply:
 	ld w, a
 	ld xiy, AccPatch_Transpose_LookupTable_Data
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	ld	a, (xiy+a)
 	ld l, (0x32d8:16)
 	cp l, 0x30
 	jr c, Rhythm_TranspMod_BaseLookup
@@ -1606,12 +1606,12 @@ Rhythm_TranspMod_BaseApply:
 Rhythm_TranspMod_BaseLookup:
 	extz hl
 	ld xiy, Rhythm_InstrMapTable_Default_0x31
-	ldb_sri L, 0x07, 0xf4, 0xec
+	ld	l, (xiy+hl)
 	extz hl
 	sla hl, 4
 	ld xiy, Rhythm_VelLookA_TableLookup_Table
-	lda_dri XIY, 0x07, 0xf4, 0xec
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	lda	xiy, (xiy+hl)
+	ld	a, (xiy+a)
 	add w, a
 	ret
 

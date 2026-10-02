@@ -68,7 +68,7 @@ FilePriorityFunc:
 	and wa, 0x1
 	sla wa, 2
 	lda xbc, (FilePriorityFunc_PtrTable:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	ld xwa, (xde + 10)
 	push xwa
@@ -418,8 +418,8 @@ DrawStr_LoopBody:
 	ld hl, bc
 	extz xhl
 	ld xwa, (xsp + 10)
-	lda_dri XIX, 0x07, 0xe0, 0xe8
-	lda_dri XWA, 0x07, 0xec, 0xe8
+	lda	xix, (xwa+de)
+	lda	xwa, (xhl+de)
 	add xwa, (xsp + 6)
 	cp iz, iy
 	jr nc, DrawStr_WrapAround
@@ -473,7 +473,7 @@ WaitingFunc_DrawMessage:
 	extz wa
 	sla wa, 2
 	lda xbc, (WaitingFunc_DrawMessage_PtrTable:24)
-	ld_sril3 XIZ, 0x07, 0xe4, 0xe0
+	ld	xiz, (xbc+wa)
 	push xiz
 	call Strlen
 	inc 4, xsp
@@ -512,10 +512,10 @@ DiskMedley_Return:
 PsFileNameBoxProc:
 	lda xsp, (xsp-170)
 	push xiz
-	stl_dri XDE, 0xfd, 0xa2, 0x00
-	stl_dri XBC, 0xfd, 0xa6, 0x00
-	stl_dri XWA, 0xfd, 0xaa, 0x00
-	ld_sril XWA, (xsp + 0x00a6)
+	ld	(xsp+162), xde
+	ld	(xsp+166), xbc
+	ld	(xsp+170), xwa
+	ld	xwa, (xsp+166)
 	cp xwa, EVT_NOT_POST_AIC
 	jrl z, PsFileNameBox_HandleOkState
 	cp xwa, EVT_NOT_PARA_DRAW
@@ -538,14 +538,14 @@ PsFileNameBoxProc:
 	jrl z, PsFileNameBox_HandleShow
 	cp xwa, EVT_SHOW
 	jrl nz, PsFileNameBox_DefaultHandler
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
 	ldw (xwa), 0x1
 	ld xwa, (xiz + 54)
 	ldw (xwa), 0x1
-	ld_sril XDE, (xsp + 0x00aa)
+	ld	xde, (xsp+170)
 	ld xwa, (xiz + 34)
 	ld xbc, EVT_PS_FILE_NAME_BOX_ID
 	call MainFuncCall
@@ -555,21 +555,21 @@ PsFileNameBoxProc:
 	jr nz, PsFileNameBox_Init_HideFirst
 	cpw (xiz + 38), 0x1
 	jr nz, PsFileNameBox_Init_HideFirst
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 	call SetDialUp
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	jr PsFileNameBox_Init_Configure
 
 PsFileNameBox_Init_HideFirst:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	call SetDialUp
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 
@@ -579,29 +579,29 @@ PsFileNameBox_Init_Configure:
 	call SetDialEnable
 
 PsFileNameBox_Init_Forward:
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	jrl PsFileNameBox_DispatchParent
 
 PsFileNameBox_HandleShow:
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld (xsp + 14), xhl
 	ld xwa, (xsp + 14)
 	ld xwa, (xwa + 34)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	call MainFuncCall
 	ld xwa, (xsp + 14)
 	cpw (xwa + 38), 0x2
 	jr lt, PsFileNameBox_CheckScrollButtons
 	lda xbc, (xsp+146:16)
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetClientBox
 	lda xde, (xsp+146:16)
 	ld bc, (xde + 4)
@@ -612,17 +612,17 @@ PsFileNameBox_HandleShow:
 	ld (xsp + 8), bc
 	ld wa, (xde + 2)
 	inc 1, wa
-	stw_dri WA, 0xfd, 0xa0, 0x00
+	ld	(xsp+160), wa
 	ld wa, (xde + 6)
 	dec 1, wa
-	stw_dri WA, 0xfd, 0x9c, 0x00
+	ld	(xsp+156), wa
 	ldw (xsp + 12), 0x1
 	jr PsFileNameBox_DrawItem_Check
 
 PsFileNameBox_DrawItem_Body:
 	ld wa, (xsp + 8)
 	mrdw3 0x9f, 0x0c, 0x40
-	ldw_sri0 BC, (xsp + 0x0092)
+	ld	bc, (xsp+146)
 	add bc, wa
 	dec 1, bc
 	lda xwa, (xsp+158:16)
@@ -648,21 +648,21 @@ PsFileNameBox_CheckScrollButtons:
 	jr nz, PsFileNameBox_Scroll_HideDown
 	cpw (xwa + 38), 0x1
 	jr nz, PsFileNameBox_Scroll_HideDown
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 	call SetDialUp
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	jr PsFileNameBox_Scroll_Apply
 
 PsFileNameBox_Scroll_HideDown:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	call SetDialUp
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 
@@ -673,7 +673,7 @@ PsFileNameBox_Scroll_Apply:
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleConfirm:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld (xsp + 10), xhl
 	ld xwa, (xsp + 10)
@@ -681,11 +681,11 @@ PsFileNameBox_HandleConfirm:
 	ld xwa, (xwa + 50)
 	cpw (xwa), 0x0
 	jrl z, PsFileNameBox_ReturnZero
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	or xwa, xwa
 	jrl z, PsFileNameBox_ReturnZero
 	ld xwa, (xsp + 10)
@@ -696,12 +696,12 @@ PsFileNameBox_HandleConfirm:
 	jrl nz, PsFileNameBox_Confirm_MultiItem
 	cpw (xhl), 0x1
 	jr nz, PsFileNameBox_Confirm_MultiItem
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetClientBox
 	lda xwa, (xsp+146:16)
 	lda xbc, (xsp+158:16)
 	call GetBoxCenter
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	inc 1, xwa
 	push xwa
 	lda xwa, (xsp + 22)
@@ -745,12 +745,12 @@ PsFileNameBox_Confirm_MultiItem:
 	ld wa, (xhl)
 	muls xwa, de
 	ld de, wa
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	ld a, (xwa)
 	exts wa
 	cp wa, de
 	jrl ge, PsFileNameBox_ReturnZero
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetClientBox
 	lda xbc, (xsp+146:16)
 	lda xwa, (xbc + 4)
@@ -770,14 +770,14 @@ PsFileNameBox_Confirm_MultiItem:
 	ld de, (xwa + 40)
 	exts xiz
 	divs xiz, de
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	ld a, (xwa)
 	exts wa
 	exts xwa
 	divs xwa, de
 	ldto_werp WA, 0xe2
 	ldfr_werp WA, 0xea
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	ld a, (xwa)
 	exts wa
 	exts xwa
@@ -803,7 +803,7 @@ PsFileNameBox_Confirm_MultiItem:
 	ld (xde), wa
 	ld wa, (xix)
 	ld (xde + 2), wa
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	inc 1, xwa
 	push xwa
 	lda xwa, (xsp + 22)
@@ -812,7 +812,7 @@ PsFileNameBox_Confirm_MultiItem:
 	inc 8, xsp
 	ld xwa, (xsp + 10)
 	ld xix, (xwa + 42)
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	ld a, (xwa)
 	ldfr_berp A, 0xf4
 	exts iy
@@ -842,73 +842,73 @@ PsFileNameBox_Confirm_Finish:
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleListSelect:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld xbc, (xhl + 42)
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	ld (xbc), wa
 	jrl PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleScrollEvt:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 34)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	call MainFuncCall
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	call InheritedProc
 	cpw (xiz + 48), 0x0
 	jrl z, PsFileNameBox_ReturnZero
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	or xwa, xwa
 	jrl nz, PsFileNameBox_ReturnZero
-	ld_sril XWA, (xsp + 0x00a6)
+	ld	xwa, (xsp+166)
 	cp xwa, EVT_INDEXSW_UP
 	jr nz, PsFileNameBox_ScrollEvt_Down
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_UP_AIC
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xde, (xsp+162)
 	jr PsFileNameBox_ScrollEvt_Send
 
 PsFileNameBox_ScrollEvt_Down:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	ld xbc, EVT_INDEXSW_DOWN_AIC
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xde, (xsp+162)
 
 PsFileNameBox_ScrollEvt_Send:
 	call SetAutoInc
 	jr PsFileNameBox_ReturnZero
 
 PsFileNameBox_HandleScrollDone:
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	call InheritedProc
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	cpw (xhl + 48), 0x0
 	jr z, PsFileNameBox_ReturnZero
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	or xwa, xwa
 	jr nz, PsFileNameBox_ReturnZero
 	ld xwa, (xhl + 54)
 	cpw (xwa), 0x0
 	jr z, PsFileNameBox_ReturnZero
-	ld_sril XBC, (xsp + 0x00a6)
+	ld	xbc, (xsp+166)
 	ld xwa, (xhl + 34)
 	cp xbc, EVT_INDEXSW_UP_AIC
 	jr nz, PsFileNameBox_ScrollDone_PairDown
 	ld xbc, EVT_INDEXSW_UP
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xde, (xsp+162)
 	jr PsFileNameBox_ScrollDone_Forward
 
 PsFileNameBox_ScrollDone_PairDown:
 	ld xbc, EVT_INDEXSW_DOWN
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xde, (xsp+162)
 
 PsFileNameBox_ScrollDone_Forward:
 	call MainFuncCall
@@ -918,20 +918,20 @@ PsFileNameBox_ReturnZero:
 	jrl PsFileNameBox_Return
 
 PsFileNameBox_HandleClose:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld xwa, (xhl + 50)
 	ldw (xwa), 0x0
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	jr PsFileNameBox_DispatchParent
 
 PsFileNameBox_HandleCancelState:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld xbc, (xhl + 50)
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	or xwa, xwa
 	jr z, PsFileNameBox_CancelState_Set
 	ldw (xbc), 0x0
@@ -941,16 +941,16 @@ PsFileNameBox_CancelState_Set:
 	ldw (xbc), 0x1
 
 PsFileNameBox_CancelState_Forward:
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	jr PsFileNameBox_DispatchParent
 
 PsFileNameBox_HandleOkState:
-	ld_sril XWA, (xsp + 0x00aa)
+	ld	xwa, (xsp+170)
 	call GetViewInstance
 	ld xbc, (xhl + 54)
-	ld_sril XWA, (xsp + 0x00a2)
+	ld	xwa, (xsp+162)
 	or xwa, xwa
 	jr z, PsFileNameBox_OkState_Set
 	ldw (xbc), 0x0
@@ -960,15 +960,15 @@ PsFileNameBox_OkState_Set:
 	ldw (xbc), 0x1
 
 PsFileNameBox_OkState_Forward:
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 	jr PsFileNameBox_DispatchParent
 
 PsFileNameBox_DefaultHandler:
-	ld_sril XWA, (xsp + 0x00aa)
-	ld_sril XBC, (xsp + 0x00a6)
-	ld_sril XDE, (xsp + 0x00a2)
+	ld	xwa, (xsp+170)
+	ld	xbc, (xsp+166)
+	ld	xde, (xsp+162)
 
 PsFileNameBox_DispatchParent:
 	call InheritedProc

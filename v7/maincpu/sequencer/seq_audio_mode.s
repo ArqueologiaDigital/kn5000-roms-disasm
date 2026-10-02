@@ -677,9 +677,9 @@ AccVoice_ComputeChannelIndex:
 	xor l, l
 	add hl, wa
 	ld xiy, RhythmROM_BankProgramLocators
-	ldw_sri WA, 0x07, 0xf4, 0xec
+	ld	wa, (xiy+hl)
 	add hl, 0x2
-	ldw_sri IY, 0x07, 0xf4, 0xec
+	ld	iy, (xiy+hl)
 	ret
 
 AccVoice_LookupWithOffset:
@@ -709,10 +709,10 @@ AccVoice_StorePatchAndLookup:
 	ld	(12767:16), wa
 	ret
 AccStyle_ReadVoiceParam:
-	ldb_sri0 W, (xiy + 0x03da)
-	ldb_sri0 A, (xiy + 0x03d0)
+	ld	w, (xiy+986)
+	ld	a, (xiy+976)
 	ld xhl, AccTone_LookupByProgram_Table
-	ldb_sri A, 0x03, 0xec, 0xe0
+	ld	a, (xhl+a)
 	ret
 
 ; ============================================================================
@@ -732,7 +732,7 @@ AccPatch_ClampedSetParam:
 	calr AccVoice_ResolveParamAddr
 	ld a, (xiy + 12)
 	ld xhl, AccTone_LookupByProgram_Table
-	ldb_sri A, 0x03, 0xec, 0xe0
+	ld	a, (xhl+a)
 	ret
 
 AccVoice_LoadTuningBlock:
@@ -1067,25 +1067,25 @@ RhythmPart1_ProcessRingBuf:
 
 	calr RhythmAccent_CopyAndUpdateRingBuf
 
-	stb_dri E, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), e
 
 	calr RingBuf_AdvanceIndex
 
-	stb_dri D, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), d
 
 	ld w, 0x0:opc
 
 	calr RingBuf_AdvanceIndex
 
-	stb_dri W, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), w
 
 	calr RingBuf_AdvanceIndex
 
-	stb_dri W, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), w
 
 	calr RingBuf_AdvanceIndex
 
-	stb_dri W, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), w
 
 	calr RingBuf_AdvanceIndex
 
@@ -1193,18 +1193,18 @@ RhythmPart2_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	stb_dri e, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), e
 	calr RingBuf_AdvanceIndex
-	stb_dri d, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), d
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3393:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3394:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3395:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld (XHL+0x04),IY
 	ld XHL,0x0000317d
@@ -1270,18 +1270,18 @@ RhythmPart3_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	stb_dri e, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), e
 	calr RingBuf_AdvanceIndex
-	stb_dri d, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), d
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3393:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3394:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3395:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld (XHL+0x04),IY
 	ld XHL,0x00003182
@@ -1328,18 +1328,18 @@ RhythmPart4_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	stb_dri e, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), e
 	calr RingBuf_AdvanceIndex
-	stb_dri d, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), d
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3393:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3394:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3395:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld (XHL+0x04),IY
 	ld XHL,0x00003187
@@ -1386,18 +1386,18 @@ RhythmPart5_ProcessRingBuf:
 	stib_ind 0x07, 0xec, 0xf4, 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
-	stb_dri e, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), e
 	calr RingBuf_AdvanceIndex
-	stb_dri d, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), d
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3393:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3394:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld a, (0x3395:16)
-	stb_dri a, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	calr RingBuf_AdvanceIndex
 	ld (XHL+0x04),IY
 	ld XHL,0x0000318c
@@ -1451,7 +1451,7 @@ BulkRead_Loop5_9Byte:
 	ld	xhl, 12592
 	xor	iy, iy
 BulkRead_Loop6_9Byte:
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	add iy, 0x9
 	cp iy, 0x48
 	jr c, BulkRead_Loop6_9Byte

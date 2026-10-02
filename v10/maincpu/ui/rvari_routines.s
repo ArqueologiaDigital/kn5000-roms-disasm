@@ -53,8 +53,8 @@ RVari_Select_CheckTypeE:
 	exts xwa
 	divs wa, 0xa
 	ldto_werp HL, 0xe2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -98,7 +98,7 @@ RVari_SelectE_FirstItem_Draw:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
+	ld	(xsp+290), 0x00
 	ld (xsp + 10), 0xff
 	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
@@ -252,8 +252,8 @@ RVari_Select_OtherItem:
 	exts xwa
 	divs wa, 0xa
 	ldto_werp HL, 0xe2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -297,7 +297,7 @@ RVari_SelectO_Item_Draw:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
+	ld	(xsp+290), 0x00
 	ld (xsp + 10), 0xff
 	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
@@ -447,8 +447,8 @@ RVari_Select_TypeNotE:
 	exts xwa
 	divs wa, 0xa
 	ldto_werp HL, 0xe2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -501,7 +501,7 @@ RVari_SelNE_FirstItem_Draw:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
+	ld	(xsp+290), 0x00
 	ld (xsp + 10), 0xff
 	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
@@ -541,8 +541,8 @@ RVari_SelNE_FirstItem_Deselect:
 	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -556,8 +556,8 @@ RVari_SelNE_FirstItem_Deselect:
 	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -616,8 +616,8 @@ RVari_SelNE_SecondItem:
 	exts xwa
 	divs wa, 0xa
 	ldto_werp HL, 0xe2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -670,7 +670,7 @@ RVari_SelNE_SecondItem_Draw:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
+	ld	(xsp+290), 0x00
 	ld (xsp + 10), 0xff
 	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
@@ -709,8 +709,8 @@ RVari_SelNE_SecondItem_Deselect:
 	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -724,8 +724,8 @@ RVari_SelNE_SecondItem_Deselect:
 	div a, 0xa
 	ld l, w
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -800,7 +800,7 @@ RVari_Confirm_TypeF_Loop:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x21, 0x01, 0x00
+	ld	(xsp+289), 0x00
 	ld (xsp + 10), 0xff
 	ld (xsp + 12), 0xf5
 	ld xwa, (xiz + 60)
@@ -819,13 +819,13 @@ RVari_ConfirmF_CheckSelected:
 	ld a, (xsp + 8)
 	extz wa
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -856,7 +856,7 @@ RVari_ConfirmF_Item_Draw:
 	extz wa
 	sla wa, 2
 	lda xbc, (ParamStr_Table_04:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@hi16
 	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@lo16
@@ -923,13 +923,13 @@ RVari_Confirm_TypeF_SubItems:
 	ld a, (xsp + 8)
 	extz wa
 	lda xbc, (NakaInst_Rock_Pop_0x28:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld a, (xsp + 8)
 	extz wa
 	lda xbc, (NakaInst_Rock_Pop_0x28:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -948,7 +948,7 @@ RVari_Confirm_TypeF_SubItems:
 	extz bc
 	sla bc, 2
 	lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)
-	ld_sril3 XHL, 0x07, 0xec, 0xe4
+	ld	xhl, (xhl+bc)
 	ld xbc, 1:i3
 	push xbc
 	pushw 0xff
@@ -1064,7 +1064,7 @@ RVari_ConfirmE_Loop:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
+	ld	(xsp+290), 0x00
 	ld (xsp + 10), 0xff
 	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
@@ -1101,8 +1101,8 @@ RVari_ConfirmE_CheckSelected:
 	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -1112,8 +1112,8 @@ RVari_ConfirmE_CheckSelected:
 	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -1234,7 +1234,7 @@ RVari_ConfirmNE_Loop:
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	stib_ind 0xfd, 0x22, 0x01, 0x00
+	ld	(xsp+290), 0x00
 	ld (xsp + 10), 0xff
 	ld (xsp + 12), 0xf5
 	ld xbc, (xiz + 44)
@@ -1266,8 +1266,8 @@ RVari_ConfirmNE_CheckSelected:
 	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -1277,8 +1277,8 @@ RVari_ConfirmNE_CheckSelected:
 	lda xde, (0x03f214:24)
 	ld l, (xsp + 8)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -1355,14 +1355,14 @@ RVari_EnumNotifyF_CheckSelected:
 	ld a, (xwa)
 	extz wa
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	call DrawEditSw
 	ld xwa, (xsp + 6)
 	ld a, (xwa)
 	extz wa
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint
@@ -1394,7 +1394,7 @@ RVari_EnumNotifyF_Item_Draw:
 	extz wa
 	sla wa, 2
 	lda xbc, (ParamStr_Table_04:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw 0xed
 	pushw 0x1672
@@ -1484,8 +1484,8 @@ RVari_EnumNotify_SetupDisplay:
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	call DrawEditSw
 	ld c, (xsp + 4)
@@ -1496,8 +1496,8 @@ RVari_EnumNotify_SetupDisplay:
 	ld xwa, (xsp + 6)
 	ld l, (xwa)
 	extz hl
-	ld_sril3 XWA, 0x07, 0xe8, 0xe4
-	ldb_sri A, 0x07, 0xe0, 0xec
+	ld	xwa, (xde+bc)
+	ld	a, (xwa+hl)
 	extz wa
 	lda xbc, (xsp+532)
 	call GetEditSwPoint

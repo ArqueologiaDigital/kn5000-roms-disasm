@@ -1,0 +1,11 @@
+{
+ "respelled": {
+  "ld_sril3 XBC, 0x07, 0xE8, 0xE4": "ld\txbc, (xde+bc)",
+  "ld_sril3 XWA, 0x07, 0xE4, 0xE0": "ld\txwa, (xbc+wa)",
+  "lda_dri XDE, 0x07, 0xE4, 0xE0": "lda\txde, (xbc+wa)",
+  "lda_dri XDE, 0x07, 0xF0, 0xE4": "lda\txde, (xix+bc)",
+  "ldb_sri C, 0x07, 0xE8, 0xE4": "ld\tc, (xde+bc)",
+  "ldb_sri L, 0x07, 0xE8, 0xE4": "ld\tl, (xde+bc)"
+ },
+ "left_forms": {}
+}

@@ -42,7 +42,7 @@ screen_group_dispatch_Skip2:
 	sla	wa, 2
 ; (v7 label VoiceInit_Dispatch stood here; dropped, see the file header)
 	lda	xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3	XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (0xfde509:24)
 	cp	xwa, xbc
@@ -85,7 +85,7 @@ DkMdlyPly_CheckState_Helper2_Join:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SystemConfig_PointerTable_0x76:24)
-	ld_sril3	XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	.byte	0xf2, 0x09, 0xe5, 0xfd, 0x30
 	cp	xwa, xbc
@@ -153,7 +153,7 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x7C:24)
-	ld_sril3	XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld	a, h
 	cp	a, 0x16
 	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip26
@@ -175,7 +175,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip4:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 ; (v7 label ScreenGroup_InitParams16 stood here; dropped, see the file header)
 	extz	wa
 	add	wa, wa
@@ -187,7 +187,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip4:
 	and	a, 0x7
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x11C:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	and	a, 0x7
 	sla	a, 1
 	and_srib_im	0x07, 0xf0, 0xec, 0xf1
@@ -205,7 +205,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip5:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
 	ld	ix, wa
@@ -221,7 +221,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip6:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
 	extz	xwa
@@ -238,7 +238,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip7:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc166:16)
 	extz	xwa
@@ -253,7 +253,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip8:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc166:16)
 	ld	ix, wa
@@ -263,7 +263,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip8:
 ; (v7 label ScreenGroup_InitWordPairsLoop stood here; dropped, see the file header)
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	ld	(xix), a
 	cp	l, 0x13
 	jr	nz, ScreenGroup_InitVoiceLoop_Code_Join4
@@ -281,7 +281,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip9:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
-	ldb_sri	A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
 	extz	xwa

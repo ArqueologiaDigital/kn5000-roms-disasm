@@ -184,7 +184,7 @@ FDC_MediaConfigAndRecalibrate__media_dispatch:
 	jrl gt, FDC_MediaStanza_Default	; jrl GT,0xffda23
 	add wa, wa	; add WA,WA
 	lda xix, (FDC_DiskTypeStanza_Offsets + 0x600000:24)	; lda XIX,0xffb496 - XIX = FDC_DiskTypeStanza_Offsets (boot alias of ROM 0x9FB496)
-	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - fetch stanza offset
+	ld	wa, (xix+wa)	; ld WA,(XIX+WA) - fetch stanza offset
 	lda xix, (FDC_MediaStanza_Type0 + 0x600000:24)	; lda XIX,0xffd9a2
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
 
@@ -310,7 +310,7 @@ FDC_ValidateRequest:
 	jr ugt, FDC_Validate_DriveTrackSector	; jr UGT,0xffdab9
 	add wa, wa	; add WA,WA
 	lda xix, (FDC_ValidateCmd_Offsets + 0x600000:24)	; lda XIX,0xffb4a2
-	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - XIX = FDC_ValidateCmd_Offsets (boot alias of ROM 0x9FB4A2)
+	ld	wa, (xix+wa)	; ld WA,(XIX+WA) - XIX = FDC_ValidateCmd_Offsets (boot alias of ROM 0x9FB4A2)
 	lda xix, (FDC_Validate_FormatParams + 0x600000:24)	; lda XIX,0xffdaab
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA - XIX = FDC_Validate_FormatParams (validator base)
 
@@ -2219,7 +2219,7 @@ FDC_Request__start:
 	jr ugt, FDC_Request__invalid_command	; jr UGT,0xffea43
 	add wa, wa	; add WA,WA
 	lda xix, (FDC_CommandDispatch_Offsets + 0x600000:24)	; lda XIX,0xffb4ba - XIX = FDC_CommandDispatch_Offsets (boot alias of ROM 0x9FB4BA)
-	ldw_sri wa, 0x07, 0xf0, 0xe0	; ld WA,(XIX+WA) - fetch stub offset (entries are 5 bytes apart)
+	ld	wa, (xix+wa)	; ld WA,(XIX+WA) - fetch stub offset (entries are 5 bytes apart)
 	lda xix, (FDC_Dispatch_Initialize + 0x600000:24)	; lda XIX,0xffea07 - XIX = FDC_Dispatch_Initialize (stub base)
 	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
 

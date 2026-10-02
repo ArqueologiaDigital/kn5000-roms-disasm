@@ -249,7 +249,7 @@ SMF_ScanChannels_Loop:
 	ld iy, bc
 	push xix
 	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xf4
+	ld	a, (xix+iy)
 	pop xix
 	cp a, 0x10
 	jr z, SMF_ScanChannels_Inactive
@@ -765,7 +765,7 @@ SMF_GetNextEvent:
 	call ToneGen_ComputeBlockPtr
 	ld xhl, (4349:16)
 	ld iy, (9830:16)
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	ret
 
 SMF_AdvancePosition:
@@ -840,7 +840,7 @@ SMF_ProcessCh_Loop:
 	jr z, SMF_ProcessCh_Next
 	push xix
 	ld xix, 0x11f9
-	lda_dri XIX, 0x07, 0xf0, 0xec
+	lda	xix, (xix+hl)
 	ld wa, (xix + 3)
 	pop xix
 	cp wa, (4229:16)
@@ -857,12 +857,12 @@ SMF_ProcessCh_Loop:
 SMF_ProcessCh_MoveToOutput:
 	push xde
 	ld xde, 0xfae
-	stb_dri C, 0x07, 0xe8, 0xf4
+	ld	(xde+iy), c
 	ld xde, 0x11f9
-	lda_dri XDE, 0x07, 0xe8, 0xec
+	lda	xde, (xde+hl)
 	ld wa, (xde + 3)
 	ld xde, 0xfae
-	lda_dri XDE, 0x07, 0xe8, 0xf4
+	lda	xde, (xde+iy)
 	ld (xde + 1), wa
 	pop xde
 	add iy, 0x3
@@ -942,7 +942,7 @@ SMF_Dispatch_DrumChannel:
 	jrl nz, SMF_HandleEventType
 	push xix
 	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xf4
+	ld	a, (xix+iy)
 	pop xix
 	xor xiy, xiy
 
@@ -994,7 +994,7 @@ SMF_Dispatch_Ch15Remap:
 	jr nz, SMF_HandleEventType
 	push xix
 	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xf4
+	ld	a, (xix+iy)
 	pop xix
 	xor xiy, xiy
 
@@ -1033,7 +1033,7 @@ SMF_HandleEventType:
 	inc 1, hl
 	push xde
 	ld xde, 0xf250
-	ldw_sri HL, 0x07, 0xe8, 0xec
+	ld	hl, (xde+hl)
 	pop xde
 	ld (0x28af:16), hl
 	ldw (9830:16), 5
@@ -1134,7 +1134,7 @@ SMF_Event_ProgramChange:
 	xor h, h
 	push xde
 	ld xde, SMF_PartAssignTable
-	ldb_sri A, 0x07, 0xe8, 0xec
+	ld	a, (xde+hl)
 	pop xde
 	xor xhl, xhl
 
@@ -1205,7 +1205,7 @@ SMF_Event_ControlChange:
 	xor h, h
 	push xde
 	ld xde, SMF_PartAssignTable
-	ldb_sri A, 0x07, 0xe8, 0xec
+	ld	a, (xde+hl)
 	pop xde
 	xor xhl, xhl
 
@@ -1369,8 +1369,8 @@ SMF_SortOutputQueue:
 SMF_Sort_OuterLoop:
 	ld xiy, 0xfae
 	ld xix, 0xfb1
-	lda_dri XIY, 0x07, 0xf4, 0xe8
-	lda_dri XIX, 0x07, 0xf0, 0xe8
+	lda	xiy, (xiy+de)
+	lda	xix, (xix+de)
 	cp (xiy), 0xff
 	jr z, SMF_Sort_Finalize
 	ld wa, (xiy + 1)
@@ -1443,7 +1443,7 @@ SMF_LookupSongBank:
 	sla xhl, 8
 	add xhl, (7514:16)
 	ld iy, (9830:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	ret
 
 SMF_AdvanceMultipleEvents:
@@ -1475,7 +1475,7 @@ SMF_Resolve_DrumCh9:
 	jrl nz, SMF_Resolve_Return
 	push xix
 	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xf4
+	ld	a, (xix+iy)
 	pop xix
 	xor xiy, xiy
 
@@ -1524,7 +1524,7 @@ SMF_Resolve_Ch15Check:
 	jr nz, SMF_Resolve_Return
 	push xix
 	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xf4
+	ld	a, (xix+iy)
 	pop xix
 	xor xiy, xiy
 
@@ -1568,7 +1568,7 @@ SMF_UpdateTempo:
 	xor hl, hl
 
 SMF_UpdateTempo_Loop:
-	ldb_sri A, 0x07, 0xf4, 0xec
+	ld	a, (xiy+hl)
 	cp a, 0xff
 	jr z, SMF_UpdateTempo_Finalize
 	xor w, w
@@ -1708,7 +1708,7 @@ SMF_GlobalCh_NonDrumCh15:
 
 SMF_GlobalCh_FreeSearch:
 	ld xix, 0xf1a0
-	ldb_sri A, 0x07, 0xf0, 0xf4
+	ld	a, (xix+iy)
 	xor xiy, xiy
 
 SMF_GlobalCh_SearchLoop:
@@ -1765,11 +1765,11 @@ SMF_LoadBank_ReadEntries:
 	add xhl, 0xab000
 	push xhl
 	ldw de, 0xaf
-	ldw_sri WA, 0x07, 0xec, 0xe8
+	ld	wa, (xhl+de)
 	ld (0xf22f:16), wa
 	pop xhl
 	ldw de, 0xb1
-	ldw_sri WA, 0x07, 0xec, 0xe8
+	ld	wa, (xhl+de)
 	ld (0xf231:16), wa
 	ld (0x00ffe3:24), 0x00
 
@@ -1859,7 +1859,7 @@ SMF_TranslateChannel:
 	ld xix, SMF_ChannelTranslationTable
 	xor hl, hl
 	ld l, a
-	ldb_sri W, 0x07, 0xf0, 0xec
+	ld	w, (xix+hl)
 	cp w, 0xff
 	jr z, SMF_Translate_Return
 	cp (4394:16), 3
@@ -1933,7 +1933,7 @@ SMF_ConfigSlot_Setup:
 SMF_ConfigSlot_EventLoop:
 	push xde
 	ld xde, (4349:16)
-	ldb_sri A, 0x07, 0xe8, 0xf0
+	ld	a, (xde+ix)
 	pop xde
 	ld w, 0xf0:opc
 	and w, a
@@ -1956,7 +1956,7 @@ SMF_ConfigSlot_EventLoop:
 SMF_ConfigSlot_DefaultHandler:
 	push xhl
 	ld xhl, (0x2881:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	pop xhl
 
 SMF_ConfigSlot_WriteAndContinue:
@@ -1975,7 +1975,7 @@ SMF_ConfigSlot_AdvanceEvent:
 	jr nz, SMF_ConfigSlot_EventLoop
 	push xde
 	ld xde, (4349:16)
-	ldb_sri A, 0x07, 0xe8, 0xf0
+	ld	a, (xde+ix)
 	pop xde
 	jr SMF_ConfigSlot_DefaultHandler
 
@@ -2022,9 +2022,9 @@ SMF_ConfigSlot_ReadDataLoop:
 	pop xiy
 	push xde
 	ld xde, (4349:16)
-	ldb_sri A, 0x07, 0xe8, 0xf0
+	ld	a, (xde+ix)
 	pop xde
-	stb_dri A, 0x07, 0xf4, 0xec
+	ld	(xiy+hl), a
 	cp hl, (4402:16)
 	jr c, SMF_ConfigSlot_ReadDataLoop
 	popw hl
@@ -2165,7 +2165,7 @@ SMF_Config_WriteOutput:
 	ld a, (xix)
 	push xhl
 	ld xhl, (0x2881:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	pop xhl
 
 SMF_Config_WriteLoop:
@@ -2175,10 +2175,10 @@ SMF_Config_WriteLoop:
 	calr SMF_AdvanceWritePtr
 	pop xhl
 	pop xix
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	push xhl
 	ld xhl, (0x2881:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	pop xhl
 	cp hl, (4402:16)
 	jr c, SMF_Config_WriteLoop
@@ -2220,13 +2220,13 @@ SMF_Config_SaveAndRestore:
 	sll hl, 1
 	push xde
 	ld xde, 0xc9e
-	ldw_sri BC, 0x07, 0xe8, 0xec
+	ld	bc, (xde+hl)
 	ld (4412:16), bc
 	ld bc, (0x288b:16)
-	stw_dri BC, 0x07, 0xe8, 0xec
+	ld	(xde+hl), bc
 	srl hl, 1
 	ld xde, 0xcbe
-	ldb_sri C, 0x07, 0xe8, 0xec
+	ld	c, (xde+hl)
 	ld (4414:16), c
 	ld bc, ix
 	bit 2, (4404:16)
@@ -2239,7 +2239,7 @@ SMF_Config_SaveAndRestore:
 	pop xix
 
 SMF_Config_GetTableEntry:
-	stb_dri C, 0x07, 0xe8, 0xec
+	ld	(xde+hl), c
 	pop xde
 	cp a, 3:i3
 	jr nz, SMF_Config_CallHandler
@@ -2253,11 +2253,11 @@ SMF_Config_CallHandler:
 	push xde
 	ld xde, 0xc9e
 	ld bc, (4412:16)
-	stw_dri BC, 0x07, 0xe8, 0xec
+	ld	(xde+hl), bc
 	srl hl, 1
 	ld xde, 0xcbe
 	ld c, (4414:16)
-	stb_dri C, 0x07, 0xe8, 0xec
+	ld	(xde+hl), c
 	pop xde
 	pop xbc
 	pop xhl
@@ -2286,7 +2286,7 @@ SMF_Config_ClearFlags:
 SMF_ConfigSlot_EndOfTrack:
 	push xhl
 	ld xhl, (0x2881:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	pop xhl
 	ld wa, (0x2887:16)
 	ld (0x289f:16), wa
@@ -2513,7 +2513,7 @@ SMF_SlotChain_ExtendedVoice:
 	add hl, 0x5
 	add hl, 0x2
 	ld xix, Naka_ToshiParam_Table_0x8C
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	jr SMF_SlotChain_ExtVoiceStore
 
 SMF_SlotChain_ExtVoiceDefault:
@@ -2610,7 +2610,7 @@ SMF_SlotParam_VolumeScale:
 	add hl, 0x7
 	add hl, 0x2
 	ld xix, Naka_ToshiParam_Table_0x8C
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	ld (xiy + 4), a
 
 SMF_SlotParam_VolumeStore:
@@ -3222,7 +3222,7 @@ SMF_SlotParam_BankLSBReturn:
 	push xix
 	ld xix, SMF_SlotParam_RPNReturn
 	ld l, (xiy + 3)
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	pop xix
 	ld (xiy + 3), a
 	ld (xiy + 2), 0xad
@@ -3233,7 +3233,7 @@ SMF_SlotParam_RPN:
 	push xix
 	ld xix, SMF_SlotParam_RPNReturn_0x1F
 	ld l, (xiy + 3)
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	pop xix
 	ld (xiy + 3), a
 	ld (xiy + 2), 0xae
@@ -3355,7 +3355,7 @@ SMF_SetupSongBankRead:
 SMF_SetupRead_Adjust:
 	push xhl
 	ld xhl, (0x2881:16)
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	pop xhl
 	cp a, 0x82
 	jr z, SMF_SetupRead_Finalize
@@ -3369,11 +3369,11 @@ SMF_SetupRead_Finalize:
 	push xde
 	ld xde, 0xf1f8
 	ld bc, (0x2887:16)
-	stw_dri BC, 0x07, 0xe8, 0xec
+	ld	(xde+hl), bc
 	srl hl, 1
 	ld xde, 0xf218
 	ld bc, iy
-	stb_dri C, 0x07, 0xe8, 0xec
+	ld	(xde+hl), c
 	pop xde
 	ret
 

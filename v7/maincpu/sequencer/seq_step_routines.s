@@ -41,7 +41,7 @@ SeqStep_NoteReadEvent:
 	jr gt, SeqStep_NoteSetOther
 	add wa, wa
 	lda xix, (SeqStep_NoteReadEvent_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SeqStep_NoteCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -308,7 +308,7 @@ SeqStep_EventPosConsumeAdvance:
 	jr gt, SeqStep_EventPosSetD3
 	add wa, wa
 	lda xix, (SeqStep_EventPosConsumeAdvance_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SeqStep_EventPosFinish:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -551,7 +551,7 @@ SeqStep_DeleteDone:
 	jrl gt, SeqStep_DeleteSetOther
 	add wa, wa
 	lda xix, (SeqStep_DeleteDone_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SeqStep_DeleteExitRestore:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -2537,7 +2537,7 @@ SeqStep_TimerDispatchA:
 	extz wa
 	sla wa, 2
 	lda xbc, (SeqStep_TimerDispatch_ProcTables:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	jp (xhl)
 
 SeqStep_TimerDispatchB:
@@ -2545,7 +2545,7 @@ SeqStep_TimerDispatchB:
 	extz wa
 	sla wa, 2
 	lda xbc, (SeqStep_TimerDispatchB_PtrTable:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	jp (xhl)
 
 SeqStep_TimerDispatchC:
@@ -2553,7 +2553,7 @@ SeqStep_TimerDispatchC:
 	extz wa
 	sla wa, 2
 	lda xbc, (SeqStep_TimerDispatchC_PtrTable:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	jp (xhl)
 
 SeqStep_PlaybackStateMachine:

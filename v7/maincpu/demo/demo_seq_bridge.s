@@ -535,7 +535,7 @@ SeqInit_LookupDispatchEntry:
 	extz wa
 	sla wa, 2
 	lda xbc, (SepaOut_Config_0_0x222:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ret
 
 SeqInit_PostDispatchEvent:
@@ -960,7 +960,7 @@ VoiceSlot_AssignToChannel:
 	xor b, b
 
 VoiceSlot_ScanLoop:
-	ldw_sri IY, 0x07, 0xf0, 0xf8
+	ld	iy, (xix+iz)
 	cp iy, 0xffff
 	jrl z, VoiceSlot_AllocNewSlot
 	ld (0x28ba:16), iy
@@ -975,10 +975,10 @@ VoiceSlot_ScanLoop:
 	ld xix, 0xc9e
 
 VoiceSlot_FindFreeEntry:
-	ldw_sri DE, 0x07, 0xf0, 0xf8
+	ld	de, (xix+iz)
 	cp de, 0xffff
 	jr nz, VoiceSlot_CheckOccupied
-	stw_dri IY, 0x07, 0xf0, 0xf8
+	ld	(xix+iz), iy
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -1007,7 +1007,7 @@ VoiceSlot_CheckOccupied:
 	add wa, bc
 	cp wa, 0xff
 	jr ugt, VoiceSlot_Overflow
-	ldw_sri IY, 0x07, 0xf0, 0xf8
+	ld	iy, (xix+iz)
 	ld (0x289f:16), iy
 	ld (0x28b6:16), wa
 	srl iz, 1
@@ -1060,9 +1060,9 @@ VoiceSlot_Overflow:
 	ld wa, iy
 	pushw de
 	ld xix, 0xf1f8
-	ldw_sri DE, 0x07, 0xf0, 0xf8
+	ld	de, (xix+iz)
 	ld (xhl + 1), de
-	stw_dri WA, 0x07, 0xf0, 0xf8
+	ld	(xix+iz), wa
 	ld iy, de
 	call SeqNode_ResolveSlotPtr
 	ld xhl, (4349:16)
@@ -1113,7 +1113,7 @@ VoiceSlot_AllocNewSlot:
 	pop xix
 	cp w, 0xff
 	jr z, VoiceSlot_SendErrorAndReset
-	stw_dri IY, 0x07, 0xf0, 0xf8
+	ld	(xix+iz), iy
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
 	add xix, xiz
@@ -1133,7 +1133,7 @@ VoiceSlot_AllocNewSlot:
 	ld xix, 0xf250
 	or_srib_im 0x07, 0xf0, 0xf8, 0x80
 	ldfr_lerp XIX, 0x38
-	lda_dri XIX, 0x07, 0xf0, 0xf8
+	lda	xix, (xix+iz)
 	stw_dri IY, 0x39, 0x01, 0x00
 	ldto_lerp XIX, 0x38
 	pop xix

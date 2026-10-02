@@ -296,7 +296,7 @@ FDemo_ProcessDisplayStateQuery:
 	jrl gt, ApPreControl_ReturnNull
 	sla de, 2
 	lda xwa, (0x024fd8:24)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe8
+	ld	xwa, (xwa+de)
 	cp (xwa), 0x0
 	jrl z, ApPreControl_ReturnNull
 
@@ -825,7 +825,7 @@ Demo_SelectEntry_LoadPattern:
 	extz wa
 	add wa, wa
 	lda xbc, (Presentation_TagStrTable_0xA4:24)
-	ldmm_srib 0x07, 0xe4, 0xe0, 0xa4, 0x28
+	ld	(0x28a4:16), (xbc+wa)
 	ret
 
 Demo_SelectEntry_DrawSecondary:
@@ -837,7 +837,7 @@ Demo_SelectEntry_DrawSecondary:
 	extz wa
 	add wa, wa
 	lda xbc, (Presentation_TagStrTable_0xA5:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	call UI_PostModeChangeEvent
 	ret
 
@@ -1033,7 +1033,7 @@ Demo_ScanPartLoop:
 	ld bc, wa
 	add bc, bc
 	lda xde, (Presentation_TagStrTable_0xD2:24)
-	ldw_sri BC, 0x07, 0xe8, 0xe4
+	ld	bc, (xde+bc)
 	and bc, (0xf19e:16)
 	jr z, Demo_ScanPartSkipToEnd
 	muls wa, 0x3
@@ -1217,7 +1217,7 @@ Demo_RecordChainScanLoop:
 	ldto_berp C, 0xfb
 	extz bc
 	ld xwa, (xsp + 4)
-	ldb_sri A, 0x07, 0xe0, 0xe4
+	ld	a, (xwa+bc)
 	cp a, 0xd
 	jr z, Demo_VoiceTypeDispatch
 	cp a, 0x10
@@ -1230,7 +1230,7 @@ Demo_RecordChainScanLoop:
 Demo_VoiceTypeDispatch:
 	add bc, bc
 	lda xwa, (Presentation_TagStrTable_0xD2:24)
-	ldw_sri WA, 0x07, 0xe0, 0xe4
+	ld	wa, (xwa+bc)
 	and wa, (xsp + 2)
 	jrl z, Demo_RecordChainLoopExit
 	ldto_berp A, 0xfb
@@ -1250,7 +1250,7 @@ Demo_VoiceTypeDispatch:
 	extz de
 	inc 1, de
 	ld xbc, (xsp + 8)
-	ldw_sri BC, 0x07, 0xe4, 0xe8
+	ld	bc, (xbc+de)
 	ld de, 0:i3
 	calr Demo_StoreRecordChainParams
 	jr RecordChain_SkipToNext
@@ -1391,7 +1391,7 @@ FileIO_CheckRegionSignature:
 	extz wa
 	sla wa, 3
 	lda xbc, (Presentation_TagStrTable_0x100:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	extz xwa
 	ld bc, 0:i3
 	call FileIO_SeekAndReadBlock
@@ -1407,8 +1407,8 @@ FileIO_CheckSig_ReadLoop:
 	extz wa
 	sla wa, 3
 	lda xbc, (Presentation_TagStrTable_0xFC:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	xwa, (xbc+wa)
+	ld	a, (xwa+iz)
 	cp l, a
 	jr z, FileIO_CheckSig_Match
 
@@ -1496,7 +1496,7 @@ FileIO_ReadValidateHdr_Loop:
 
 FileIO_ReadValidateHdr_Store:
 	lda xwa, (xsp + 2)
-	stb_dri L, 0x07, 0xe0, 0xf8
+	ld	(xwa+iz), l
 	inc 1, iz
 	cp iz, 3:i3
 	jr lt, FileIO_ReadValidateHdr_Loop
@@ -1992,7 +1992,7 @@ LoadSong8_ReadLoop:
 	cp hl, 0:i3
 	jr lt, LoadSong8_ReadDone
 	lda xwa, (xsp + 4)
-	stb_dri L, 0x07, 0xe0, 0xf8
+	ld	(xwa+iz), l
 	inc 1, iz
 	cp iz, 0x8
 	jr lt, LoadSong8_ReadLoop
@@ -2326,14 +2326,14 @@ FileDemo_RecordCallback:
 	ld wa, iz
 	muls wa, 0x6
 	lda xbc, (Presentation_TagTableEnd_0x81:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	call FileIO_WriteRecordName_Done
 	cp l, 0:i3
 	jr z, FileIO_RecordLoop_Continue
 	ld wa, iz
 	muls wa, 0x6
 	lda xbc, (Presentation_TagTableEnd_0x81:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, FileIO_RecordLoop_Continue
@@ -2819,7 +2819,7 @@ SaveAll_CheckRecordLoop:
 	ldto_werp WA, 0xfa
 	muls wa, 0x6
 	lda xbc, (Resource_Region3_Start_0x10:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, SaveAll_NextRecord
@@ -2827,7 +2827,7 @@ SaveAll_CheckRecordLoop:
 	ldto_werp WA, 0xfa
 	muls wa, 0x6
 	lda xde, (Resource_Region3_Start_0x10:24)
-	ldb_sri E, 0x07, 0xe8, 0xe0
+	ld	e, (xde+wa)
 	lda xwa, (xsp + 6)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 6)
@@ -2865,7 +2865,7 @@ FileDemo_ProcessCallback:
 	ldto_werp WA, 0xfa
 	muls wa, 0x6
 	lda xbc, (Resource_Region3_Start_0x10:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	call FileIO_FormatName_Return
 	cp l, 0:i3
 	jr z, SaveAll_ProcessNextRecord
@@ -2895,7 +2895,7 @@ SaveAll_RollbackLoop:
 	ldto_werp WA, 0xfa
 	muls wa, 0x6
 	lda xbc, (Resource_Region3_Start_0x10:24)
-	ldb_sri A, 0x07, 0xe4, 0xe0
+	ld	a, (xbc+wa)
 	call FileIO_FormatName_Return
 	cp l, 0:i3
 	jr z, SaveAll_RollbackNext
@@ -2903,7 +2903,7 @@ SaveAll_RollbackLoop:
 	ldto_werp WA, 0xfa
 	muls wa, 0x6
 	lda xde, (Resource_Region3_Start_0x10:24)
-	ldb_sri E, 0x07, 0xe8, 0xe0
+	ld	e, (xde+wa)
 	lda xwa, (xsp + 6)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 6)
@@ -3026,13 +3026,13 @@ MultiPass_SetupEntry:
 
 MultiPass_RetryLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, MultiPass_LoopNext
 	lda xbc, (xsp + 20)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 6)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 6)
@@ -3645,13 +3645,13 @@ ReadSingle_SetupEntry:
 
 ReadSingle_RetryLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, ReadSingle_LoopNext
 	lda xbc, (xsp + 18)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 4)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
@@ -3702,18 +3702,18 @@ ReadDual_SetupEntries:
 
 ReadDual_RetryLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, ReadDual_LoopNext
 	lda xbc, (xsp + 32)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 4)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 18)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
@@ -3769,19 +3769,19 @@ ReadDualEx_SetupPages:
 
 ReadDualEx_FirstLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri C, 0x07, 0xe0, 0xf8
+	ld	c, (xwa+iz)
 	ld wa, (xsp + 62)
 	call FileIO_CheckRecordByFile
 	cp l, 0:i3
 	jr z, ReadDualEx_FirstLoopNext
 	lda xbc, (xsp + 52)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 28)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 14)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 28)
@@ -3811,18 +3811,18 @@ ReadDualEx_FirstLoopNext:
 
 ReadDualEx_SecondLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, ReadDualEx_SecondLoopNext
 	lda xbc, (xsp + 52)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 28)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 14)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 28)
@@ -3850,19 +3850,19 @@ ReadDualEx_SecondLoopNext:
 
 ReadDualEx_ThirdLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri C, 0x07, 0xe0, 0xf8
+	ld	c, (xwa+iz)
 	ld wa, (xsp + 62)
 	call FileIO_CheckRecordByFile
 	cp l, 0:i3
 	jr z, ReadDualEx_ThirdLoopNext
 	lda xbc, (xsp + 52)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 28)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 42)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 14)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 28)
@@ -3904,13 +3904,13 @@ WriteVerify_InitCounters:
 
 WriteVerify_WriteLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, WriteVerify_WriteLoopNext
 	ld wa, (xsp + 4)
 	lda xbc, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri C, 0x07, 0xe4, 0xf8
+	ld	c, (xbc+iz)
 	call UpdateFileEntry
 	add (xsp + 8), xhl
 
@@ -3937,14 +3937,14 @@ WriteVerify_SetupReadback:
 
 WriteVerify_ReadbackLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri C, 0x07, 0xe0, 0xf8
+	ld	c, (xwa+iz)
 	ld wa, (xsp + 60)
 	call FileIO_CheckRecordByFile
 	cp l, 0:i3
 	jr z, WriteVerify_ReadbackNext
 	lda xbc, (xsp + 50)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 26)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 26)
@@ -3976,18 +3976,18 @@ WriteVerify_ReadbackNext:
 
 WriteVerify_CrossVerifyLoop:
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	call FileIO_CheckRecordValid
 	cp l, 0:i3
 	jr z, WriteVerify_CrossVerifyNext
 	lda xbc, (xsp + 50)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 26)
 	call FileIO_ReadHeader
 	lda xbc, (xsp + 40)
 	lda xwa, (Presentation_TagStrTable_0xF2:24)
-	ldb_sri E, 0x07, 0xe0, 0xf8
+	ld	e, (xwa+iz)
 	lda xwa, (xsp + 12)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 12)
@@ -4026,7 +4026,7 @@ GetFirstRecord_GotPage:
 SearchAndOpen:
 	lda xsp, (xsp-270)
 	pushw iz
-	stl_dri XWA, 0xfd, 0x0c, 0x01
+	ld	(xsp+268), xwa
 	call GetFirstPageBase
 	ld iz, hl
 	cp iz, 0:i3
@@ -4858,7 +4858,7 @@ FileIO_ReadHeader:
 	extz wa
 	sla wa, 2
 	lda xbc, (SeqFileType_CodeTable:24)
-	ld_sril3 XBC, 0x07, 0xe4, 0xe0
+	ld	xbc, (xbc+wa)
 	ld xwa, xiz
 	calr FileIO_BuildFilePath
 	pop xiz
@@ -5170,7 +5170,7 @@ CheckRecord_ShiftDone:
 	muls bc, 0xc
 	ld wa, bc
 	lda xbc, (0x025db8:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	and wa, de
 	cp wa, de
 	scc8 z, l
@@ -5222,7 +5222,7 @@ CheckFS_ReturnZero:
 CheckFS_ValidIndex:
 	muls wa, 0xc
 	lda xbc, (0x025db8:24)
-	ldw_sri HL, 0x07, 0xe4, 0xe0
+	ld	hl, (xbc+wa)
 	ret
 
 FileIO_GetRecordFlags:
@@ -5461,13 +5461,13 @@ GetCurrentFileType_Lookup:
 	ld wa, (0x025ea8:24)
 	muls wa, 0xc
 	lda xbc, (0x025dc2:24)
-	ldb_sri L, 0x07, 0xe4, 0xe0
+	ld	l, (xbc+wa)
 	ret
 
 UpdateFileEntry:
 	lda xsp, (xsp-300)
 	push xiz
-	stb_dri C, 0xfd, 0x2e, 0x01
+	ld	(xsp+302), c
 	ld iz, wa
 	ld xiy, Filename_TemplateArea_0x26
 	lda xix, (xsp + 20)
@@ -5491,7 +5491,7 @@ UpdateFileEntry:
 	ldto_werp BC, 0xfa
 	calr FileIO_FormatFileIndex
 	lda xbc, (xsp + 20)
-	ldb_sri0 E, (xsp + 0x012e)
+	ld	e, (xsp+302)
 	extz de
 	lda xwa, (xsp + 4)
 	calr FileIO_ReadHeader
@@ -5547,7 +5547,7 @@ ParseFileExt_MatchLoop:
 	extz wa
 	sla wa, 2
 	lda xbc, (SeqFileType_CodeTable:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld bc, iz
 	extz xbc
 	add xbc, (xsp + 4)
@@ -5629,7 +5629,7 @@ HandleFilenameChange:
 	ld bc, iz
 	muls bc, 0xc
 	lda xwa, (0x025db8:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa + 2), 0x0
 	jr nz, HandleFilenameChange_ExistingEntry
 	ld wa, iz
@@ -5641,14 +5641,14 @@ HandleFilenameChange:
 	ld bc, iz
 	muls bc, 0xc
 	lda xwa, (0x025dba:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xbc, (xsp + 10)
 	inc 2, xbc
 	ld de, 6:i3
 	calr FileIO_CopyString_WriteNull
 	muls iz, 0xc
 	lda xwa, (0x025db8:24)
-	lda_dri XWA, 0x07, 0xe0, 0xf8
+	lda	xwa, (xwa+iz)
 	ld (xwa + 8), 0x0
 	cpw (xsp + 4), 0x0
 	jr nz, HandleFilenameChange_ReturnOK
@@ -5681,7 +5681,7 @@ HandleFilenameChange_ExistingEntry:
 	jr nz, HandleFilenameChange_ReturnFail
 	lda xbc, (0x025dc2:24)
 	muls iz, 0xc
-	lda_dri XBC, 0x07, 0xe4, 0xf8
+	lda	xbc, (xbc+iz)
 	ld xwa, (xsp + 6)
 	cp xwa, 0x1388
 	jr ule, HandleFilenameChange_SmallFile
@@ -6220,7 +6220,7 @@ ReadField_ShortLoop:
 
 ReadField_StoreByte:
 	ld xwa, (xsp + 4)
-	stb_dri L, 0x07, 0xe0, 0xf8
+	ld	(xwa+iz), l
 	decm 1, (xsp + 8)
 	inc 1, iz
 	cpw (xsp + 8), 0x0
@@ -6236,7 +6236,7 @@ ReadField_LongLoop:
 	jr lt, ReadField_DiscardExtra
 	ld c, l
 	ld xwa, (xsp + 4)
-	lda_dri XWA, 0x07, 0xe0, 0xf8
+	lda	xwa, (xwa+iz)
 	cpw (xsp + 2), 0x0
 	jr z, ReadField_Long_CheckSpace
 	cp hl, 0x20
@@ -6273,7 +6273,7 @@ ReadField_TrimSpace:
 ReadField_TrimLoop:
 	dec 1, iz
 	ld xwa, (xsp + 4)
-	lda_dri XWA, 0x07, 0xe0, 0xf8
+	lda	xwa, (xwa+iz)
 	cp (xwa), 0x20
 	jr nz, ReadField_Return
 	cp iz, 0:i3
@@ -7212,7 +7212,7 @@ TrimAndFormatFilename:
 	jr le, TrimFormat_TrimTrailing
 
 TrimFormat_ScanLoop:
-	lda_dri XHL, 0x07, 0xf8, 0xf0
+	lda	xhl, (xiz+ix)
 	ld c, (xhl)
 	cp c, 0x20
 	jr nc, TrimFormat_CheckSeparator
@@ -7228,7 +7228,7 @@ TrimFormat_TrimTrailing:
 	jr lt, TrimFormat_CheckLeading
 
 TrimFormat_TrimLoop:
-	lda_dri XWA, 0x07, 0xf8, 0xf0
+	lda	xwa, (xiz+ix)
 	cp (xwa), 0x20
 	jr nz, TrimFormat_CheckLeading
 	ld (xwa), 0x0
@@ -7255,7 +7255,7 @@ TrimFormat_SkipSpaces:
 	inc 1, ix
 
 TrimFormat_SkipLoop:
-	lda_dri XBC, 0x07, 0xe0, 0xf0
+	lda	xbc, (xwa+ix)
 	cp (xbc), 0x20
 	jr z, TrimFormat_SkipSpaces
 	ld xwa, xiz
@@ -7436,7 +7436,7 @@ InitDirScan_CopyLoop:
 
 DirScan_ProcessEntry:
 	lda xwa, (0x027200:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	exts wa
 	mul wa, 0x30
 	add wa, 0xa0
@@ -7619,7 +7619,7 @@ RefreshNames_FallbackLoop:
 	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 	inc 1, iz
@@ -7633,7 +7633,7 @@ RefreshNames_CheckEnd:
 
 RefreshNames_ReadLoop:
 	lda xwa, (0x027200:24)
-	ldb_sri A, 0x07, 0xe0, 0xf8
+	ld	a, (xwa+iz)
 	exts wa
 	mul wa, 0x30
 	add wa, 0xa0
@@ -7646,7 +7646,7 @@ RefreshNames_ReadLoop:
 	muls wa, 0x52
 	ld bc, wa
 	lda xwa, (0x025ec0:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xbc, 0x30
 	call FileIO_ReadBlock
 	ld wa, iz
@@ -7665,7 +7665,7 @@ RefreshNames_ReadLoop:
 	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
@@ -7691,7 +7691,7 @@ RefreshNames_AltFallbackLoop:
 	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 	inc 1, iz
@@ -7715,7 +7715,7 @@ RefreshNames_AltReadLoop:
 	muls wa, 0x52
 	ld bc, wa
 	lda xwa, (0x025ec0:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xbc, 0x10
 	call FileIO_ReadBlock
 	ld wa, iz
@@ -7734,7 +7734,7 @@ RefreshNames_AltReadLoop:
 	sub wa, (0x271ee:24)
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	lda xwa, (xbc + 14)
 	calr FileIO_CopyString
 
@@ -7805,7 +7805,7 @@ CheckMediaWritable_Ok:
 FileIO_OpenWithBuiltPath:
 	lda xsp, (xsp-144)
 	push xiz
-	stl_dri XBC, 0xfd, 0x90, 0x00
+	ld	(xsp+144), xbc
 	ld xiz, xwa
 	lda xwa, (xsp + 4)
 	ld xbc, 0x272d2
@@ -7817,7 +7817,7 @@ FileIO_OpenWithBuiltPath:
 	ld xbc, xiz
 	calr FileIO_BuildFilePath
 	lda xwa, (xsp + 4)
-	ld_sril XBC, (xsp + 0x0090)
+	ld	xbc, (xsp+144)
 	call FileIO_OpenWithMode
 	pop xiz
 	lda xsp, (xsp+144:16)
@@ -7833,7 +7833,7 @@ FileIO_BuildFileIndex:
 
 BuildIndex_ScanLoop:
 	ld xwa, (xsp + 4)
-	lda_dri XWA, 0x07, 0xe0, 0xf8
+	lda	xwa, (xwa+iz)
 	ld xbc, BuildIndex_ScanLoop_Str_Star_Star_Star
 	ld de, 3:i3
 	calr FileIO_Search_SkipEntry
@@ -7848,7 +7848,7 @@ BuildIndex_CheckSubEntry:
 	sla bc, 5
 	addw_erp BC, 0xfa
 	lda xhl, (0x027312:24)
-	stb_dri E, 0x07, 0xec, 0xe4
+	ld	(xhl+bc), e
 	ld xbc, BuildIndex_CheckSubEntry_Str_Star_Star_Star
 	ld de, 3:i3
 	calr FileIO_Search_SkipEntry
@@ -7859,7 +7859,7 @@ BuildIndex_CheckSubEntry:
 
 BuildIndex_CheckComma:
 	ld xwa, (xsp + 4)
-	lda_dri XWA, 0x07, 0xe0, 0xf8
+	lda	xwa, (xwa+iz)
 	ld e, (xwa)
 	cp e, 0x2c
 	jr z, FileIO_StoreIndexedEntry
@@ -7934,7 +7934,7 @@ CtrlCmd_SetPathAndBuild:
 	ld (xbc), 0x0
 	calr FileIO_FindPathSeparator
 	inc 3, hl
-	lda_dri XWA, 0x07, 0xf8, 0xec
+	lda	xwa, (xiz+hl)
 
 ControlState_ProcessNext:
 	calr FileIO_BuildFileIndex
@@ -7946,8 +7946,8 @@ CtrlCmd_Return:
 FileIO_FindFirstMatch:
 	lda xsp, (xsp-276)
 	push xiz
-	stl_dri XBC, 0xfd, 0x10, 0x01
-	stl_dri XWA, 0xfd, 0x14, 0x01
+	ld	(xsp+272), xbc
+	ld	(xsp+276), xwa
 	ld XWA, (xsp + 0x0114)
 	ld (xwa), 0x0
 	ld XWA, (xsp + 0x0110)
@@ -7974,7 +7974,7 @@ FindFirst_BuildPathLoop:
 	ld wa, (xsp + 4)
 	sla wa, 5
 	lda xbc, (0x027312:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld xwa, 0x25c6c
 	calr FileIO_BuildFilePath
 	lda xbc, (xsp + 6)
@@ -8026,7 +8026,7 @@ FindFirst_Return:
 FileIO_FindNextMatch:
 	lda xsp, (xsp-270)
 	push xiz
-	stl_dri XBC, 0xfd, 0x0e, 0x01
+	ld	(xsp+270), xbc
 	ld xiz, xwa
 	ld xwa, (0x027416:24)
 	lda xbc, (xsp + 4)
@@ -8118,15 +8118,15 @@ FileIO_ExtractBasename:
 	exts wa
 	sla wa, 5
 	lda xbc, (0x027312:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ldw de, 0xffff
 	ld ix, 0:i3
 	cp (xbc), 0x0
 	jr z, ExtractBase_TruncatePath
 
 ExtractBase_ScanLoop:
-	ldb_sri A, 0x07, 0xe4, 0xf0
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	a, (xbc+ix)
+	ld	(xhl+ix), a
 	cp a, 0x5c
 	jr nz, ExtractBase_TrackSep
 	ld de, ix
@@ -8152,7 +8152,7 @@ ExtractBase_Done:
 FileIO_NormalizePath:
 	cp (xwa), 0x5c
 	scc16 z, de
-	lda_dri XBC, 0x07, 0xe0, 0xe8
+	lda	xbc, (xwa+de)
 	ld xwa, 0x272f2
 	calr FileIO_CopyString
 	ld de, 0:i3
@@ -8163,7 +8163,7 @@ NormalizePath_NextChar:
 	inc 1, de
 
 NormalizePath_CheckLoop:
-	lda_dri XWA, 0x07, 0xe4, 0xe8
+	lda	xwa, (xbc+de)
 	cp (xwa), 0x0
 	jr nz, NormalizePath_NextChar
 	cp de, 0x20
@@ -8754,7 +8754,7 @@ ValidateSigned_NextEntry:
 	inc 4, de
 
 ValidateSigned_ScanLoop:
-	lda_dri XHL, 0x07, 0xf0, 0xe8
+	lda	xhl, (xix+de)
 	cp wa, (xhl)
 	jr z, ValidateSigned_FoundMatch
 	cpw (xhl), 0x0

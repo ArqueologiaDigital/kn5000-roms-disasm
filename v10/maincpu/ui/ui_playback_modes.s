@@ -381,7 +381,7 @@ SongBank_ScanActiveVoices:
 	add xhl, 0xab0d0
 	ld xiy, xhl
 	ld b, 0x10:opc
-	cpiw_sri 0xf5, 0x4e, 0xff, 0x00, 0x00
+	cpw	(xiy-178), 0x0000
 	jr z, ScanVoice_NoneFound
 
 ScanVoice_LoopCheckBit7:
@@ -1602,7 +1602,7 @@ DkMdlyPly_SendAudioCmd:
 DkMdlyPly_VoiceScanLoop:
 	ld bc, hl
 	add bc, bc
-	ldw_sri BC, 0x07, 0xe8, 0xe4
+	ld	bc, (xde+bc)
 	and bc, wa
 	ret nz
 	inc 1, hl
@@ -1633,7 +1633,7 @@ DkMdlyPly_HandleResult:
 	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (SepaOut_Config_0_0x8E:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	ldw bc, 0x401
 	call SndParam_LookupViaEncode
 	ld iz, hl
@@ -1644,7 +1644,7 @@ DkMdlyPly_HandleResult:
 	ldto_werp WA, 0xfa
 	add wa, wa
 	lda xbc, (SepaOut_Config_0_0x8E:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	ld (0x8d3a:16), a
 	ld e, a
 	extz de
@@ -1677,7 +1677,7 @@ DisplayMode_DispatchEvents:
 	ret gt
 	add wa, wa
 	lda xix, (SepaOut_Config_0_0xCE:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (DisplayMode_BatchEventSend:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 

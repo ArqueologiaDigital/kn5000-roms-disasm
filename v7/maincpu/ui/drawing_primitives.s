@@ -264,7 +264,7 @@ DrawLine_Impl_HorzCalcNegDir:
 	ld xwa, (xsp + 66)
 	ld bc, (xwa)
 	ld xwa, (xsp + 36)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xbc, (xsp + 24)
 	add xbc, xwa
 	push xbc
@@ -463,7 +463,7 @@ DrawLine_Impl_PatternHorzNegDir:
 	ld xwa, (xsp + 68)
 	ld bc, (xwa)
 	ld xwa, (xsp + 38)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xbc, (xsp + 26)
 	add xbc, xwa
 	push xbc
@@ -528,7 +528,7 @@ DrawLine_Impl_PatternSteepLoop:
 	add xde, xwa
 	sll xde, 6
 	ld wa, (xhl)
-	lda_dri XDE, 0x07, 0xe8, 0xe0
+	lda	xde, (xde+wa)
 	ld xwa, (xsp + 36)
 	add xwa, xde
 	ld (xsp + 28), xwa
@@ -586,7 +586,7 @@ DrawLine_Impl_PatternShallowLoop:
 	sll xde, 6
 	ld xhl, (xsp + 32)
 	ld wa, (xhl)
-	lda_dri XDE, 0x07, 0xe8, 0xe0
+	lda	xde, (xde+wa)
 	ld xwa, (xsp + 36)
 	add xwa, xde
 	ld (xsp + 28), xwa
@@ -1455,7 +1455,7 @@ DrawFrame_Impl_SolidTwoSideLoop:
 	sll xhl, 6
 	ld xwa, (xsp + 44)
 	ld wa, (xwa)
-	lda_dri XDE, 0x07, 0xec, 0xe0
+	lda	xde, (xhl+wa)
 	lda xwa, (0x043c00:24)
 	ld (xsp + 38), xwa
 	add xwa, xde
@@ -1742,7 +1742,7 @@ DrawFrameEx_SingleRowLoop:
 	sll xbc, 2
 	add xbc, xix
 	sll xbc, 6
-	lda_dri XBC, 0x07, 0xe4, 0xec
+	lda	xbc, (xbc+hl)
 	cpw (xsp + 14), 0x205
 	jr z, DrawFrameEx_SingleRowXorPixel
 	cp iy, 0x201
@@ -1780,7 +1780,7 @@ DrawFrameEx_TopBottomLoop:
 	sll xbc, 2
 	add xbc, xix
 	sll xbc, 6
-	lda_dri XBC, 0x07, 0xe4, 0xec
+	lda	xbc, (xbc+hl)
 	cpw (xsp + 14), 0x205
 	jr z, DrawFrameEx_TopBottomXorPixel
 	cp iy, 0x201
@@ -1798,7 +1798,7 @@ DrawFrameEx_TopBottomLoop:
 	sll xiy, 2
 	add xiy, xbc
 	sll xiy, 6
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	lda	xbc, (xiy+hl)
 	add xix, xbc
 	ldto_berp C, 0xee
 	ld (xix), c
@@ -1851,7 +1851,7 @@ DrawFrameEx_TopBottomXorPixel:
 	sll xiy, 2
 	add xiy, xbc
 	sll xiy, 6
-	lda_dri XBC, 0x07, 0xf4, 0xec
+	lda	xbc, (xiy+hl)
 	add xix, xbc
 	ldto_berp C, 0xee
 	xor (xix), c
@@ -2764,7 +2764,7 @@ DrawIcons_Impl_ColLoop:
 	extz wa
 	add wa, wa
 	lda xbc, (Str_No_0x8DC:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	ld (xix), wa
 	inc 1, iy
 	cp iy, 0xc
@@ -3699,7 +3699,7 @@ DrawBitmapFile_Impl_ParseDimensions:
 	jr le, DrawBitmapFile_Impl_ClampHeight
 DrawBitmapFile_Impl_SkipExtraRows:
 	ld xwa, (xsp + 20)
-	add_sril_mr XWA, 0xfd, 0x34, 0x04
+	add	(xsp+1076), xwa
 	ld xwa, 1:i3
 	add (xsp + 12), xwa
 	cp (xsp + 12), xbc
@@ -3806,7 +3806,7 @@ DrawBitmapFile_Impl_RowCopy:
 
 	ld xwa, (xsp + 20)
 
-	add_sril_mr XWA, 0xfd, 0x34, 0x04
+	add	(xsp+1076), xwa
 
 	ld xwa, 1:i3
 
@@ -4040,8 +4040,8 @@ DrawString_DeferredDispatch:
 DrawString_Impl:
 	lda xsp, (xsp-316)
 	push xiz
-	stl_dri XDE, 0xfd, 0x38, 0x01
-	stl_dri XWA, 0xfd, 0x3c, 0x01
+	ld	(xsp+312), xde
+	ld	(xsp+316), xwa
 	ld XWA, (xsp + 0x0138)
 	cp (xwa), 0x0
 	jrl z, DrawString_Impl_Return
@@ -4179,7 +4179,7 @@ DrawString_Impl_KerningDone:
 	ld wa, (xsp + 16)
 
 DrawString_Impl_ComputeDirtyRect:
-	add_sriw_mr WA, 0xfd, 0x34, 0x01
+	add	(xsp+308), wa
 	lda xwa, (xsp+304)
 	lda xde, (xwa + 2)
 	ld XBC, (xsp + 0x013c)
@@ -4213,7 +4213,7 @@ DrawString_Impl_ClampDirtyRight2:
 	ld (xde), bc
 
 DrawString_Impl_FillBackground:
-	ldw_sri0 BC, (xsp + 0x0144)
+	ld	bc, (xsp+324)
 	cp bc, 0xf7
 	call nz, (DrawBox_Impl:24)
 	lda xwa, (xsp + 40)
@@ -4284,7 +4284,7 @@ DrawString_Impl_ColumnSetup:
 	sll xhl, 6
 	ld xwa, (xsp + 32)
 	ld wa, (xwa)
-	lda_dri XHL, 0x07, 0xec, 0xe0
+	lda	xhl, (xhl+wa)
 	lda xwa, (0x043c00:24)
 	add xwa, xhl
 	ld (xsp + 28), xwa
@@ -4334,7 +4334,7 @@ DrawString_Impl_TestBit:
 	extz wa
 	and wa, iz
 	jr z, DrawString_Impl_PixelAdvance
-	ldw_sri0 WA, (xsp + 0x0146)
+	ld	wa, (xsp+326)
 	ld (xix), a
 
 DrawString_Impl_PixelAdvance:
@@ -4395,8 +4395,8 @@ DrawString_Impl_Return:
 DrawStringCentered:
 	lda xsp, (xsp-270)
 	pushw iz
-	stl_dri XBC, 0xfd, 0x08, 0x01
-	stl_dri XWA, 0xfd, 0x0c, 0x01
+	ld	(xsp+264), xbc
+	ld	(xsp+268), xwa
 	lda xbc, (xsp + 4)
 	ld xwa, xde
 	call ConvertStrings
@@ -4431,8 +4431,8 @@ DrawStringCentered:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0118)
 	push xwa
-	push_sriw 0xfd, 0x1a, 0x01
-	push_sriw 0xfd, 0x1a, 0x01
+	pushw	(xsp+282)
+	pushw	(xsp+282)
 	ld XWA, (xsp + 0x0114)
 	calr DrawString
 	popw iz
@@ -4492,8 +4492,8 @@ DrawStringLeftJustify:
 DrawStringRightJustify:
 	lda xsp, (xsp-272)
 	push xiz
-	stl_dri XBC, 0xfd, 0x0c, 0x01
-	stl_dri XWA, 0xfd, 0x10, 0x01
+	ld	(xsp+268), xbc
+	ld	(xsp+272), xwa
 	lda xbc, (xsp + 8)
 	ld xwa, xde
 	call ConvertStrings
@@ -4529,8 +4529,8 @@ DrawStringRightJustify:
 	add (xbc + 2), hl
 	lda xde, (xsp + 8)
 	push xiz
-	push_sriw 0xfd, 0x1e, 0x01
-	push_sriw 0xfd, 0x1e, 0x01
+	pushw	(xsp+286)
+	pushw	(xsp+286)
 	ld XWA, (xsp + 0x0118)
 	calr DrawString
 	pop xiz

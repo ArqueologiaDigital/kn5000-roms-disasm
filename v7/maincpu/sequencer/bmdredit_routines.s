@@ -349,7 +349,7 @@ BmDrEdit_RenderHorizontal:
 	extz wa
 	add wa, wa
 	lda xbc, (BmDrEdit_RenderHorizontal_Table:24)
-	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
+	ldw	(0x27be:16), (xbc+wa)
 	ld wa, (0x27be:16)
 	inc 3, wa
 	ld (0x27c0:16), wa
@@ -368,7 +368,7 @@ BmDrEdit_RenderVertical:
 	extz wa
 	add wa, wa
 	lda xbc, (BmDrEdit_RenderVertical_Table:24)
-	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
+	ldw	(0x27be:16), (xbc+wa)
 	ld wa, (0x27be:16)
 	inc 3, wa
 	ld (0x27c0:16), wa
@@ -413,7 +413,7 @@ BmDrEdit_RenderSecondaryHoriz:
 	extz wa
 	add wa, wa
 	lda xbc, (BmDrEdit_RenderHorizontal_Table:24)
-	ldmm_sriw 0x07, 0xe4, 0xe0, 0xc6, 0x27
+	ldw	(0x27c6:16), (xbc+wa)
 	ld wa, (0x27c6:16)
 	inc 3, wa
 	ld (0x27c8:16), wa
@@ -432,7 +432,7 @@ BmDrEdit_RenderSecondaryVert:
 	extz wa
 	add wa, wa
 	lda xbc, (BmDrEdit_RenderVertical_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	ld (0x27c6:16), wa
 	inc 3, wa
 	ld (0x27c8:16), wa
@@ -1779,13 +1779,13 @@ BmDrEdit_SetupScrollRegion_MelodicMode:
 	extz wa
 	add wa, wa
 	lda xhl, (WidgetData_DrawbarPositionTable:24)
-	ldb_sri A, 0x07, 0xec, 0xe0
+	ld	a, (xhl+wa)
 	ld (xde), a
 	ld a, (0x2798:16)
 	extz wa
 	add wa, wa
 	inc 1, wa
-	ldb_sri A, 0x07, 0xec, 0xe0
+	ld	a, (xhl+wa)
 	ld (xbc), a
 	ret
 

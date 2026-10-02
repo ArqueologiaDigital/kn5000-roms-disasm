@@ -129,8 +129,8 @@ SoundBank_InitTrack_ByteFields:
 	xor	iy, iy
 SoundBank_InitTrack_WordFields:
 	ld xix, SoundBank_DefaultTrackData_0x8
-	ldw_sri WA, 0x07, 0xf0, 0xf4
-	stw_dri WA, 0x07, 0xec, 0xf4
+	ld	wa, (xix+iy)
+	ld	(xhl+iy), wa
 	add iy, 0x2
 	cp iy, 0x8
 	jr c, SoundBank_InitTrack_WordFields

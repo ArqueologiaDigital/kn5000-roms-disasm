@@ -276,7 +276,7 @@ HDAE5000_FltDec_Convert:
 	extz xbc                                ; extz XBC
 	add	xbc, (xsp+24)
 	ld	c, (xbc)
-	stb_dri c, 0x07, 0xE0, 0xFA	; ld (XWA+QIZ),C
+	ld	(xwa+qiz), c	; ld (XWA+QIZ),C
 	inc	1, qiz
 	ld	wa, qiz
 	cp	wa, (xsp+8)
@@ -344,13 +344,13 @@ HDAE5000_FltDec_Convert:
 	ld	qiz, 2
 .LMCR_b17f:
 	lda	xwa, (xsp+10)
-	ldb_sri a, 0x07, 0xE0, 0xFA	; ld A,(XWA+QIZ)
+	ld	a, (xwa+qiz)	; ld A,(XWA+QIZ)
 	and	a, 0xff
 	ld	de, qiz
 	add	de, de
 	lda xbc, (0x2394a6:24)
 	extz wa                                 ; extz WA
-	stw_dri wa, 0x07, 0xE4, 0xE8	; ld (XBC+DE),WA
+	ld	(xbc+de), wa	; ld (XBC+DE),WA
 	inc	1, qiz
 	cpw	qiz, 0x000a
 	jr lt, .LMCR_b17f                      ; [61 da] jr LT,0x29b17f
@@ -372,14 +372,14 @@ HDAE5000_FltDec_Convert:
 	and8_imm_rid8 xbc, 0x01, 0x0f		; and (XBC+0x01),0x0f
 	ld	qiz, 1
 .LMCR_b1cc:
-	ldb_sri a, 0x07, 0xE4, 0xFA	; ld A,(XBC+QIZ)
+	ld	a, (xbc+qiz)	; ld A,(XBC+QIZ)
 	and	a, 0xff
 	ld	hl, qiz
 	add	hl, hl
 	dec	2, hl
 	lda xde, (0x2394aa:24)
 	extz wa                                 ; extz WA
-	stw_dri wa, 0x07, 0xE8, 0xEC	; ld (XDE+HL),WA
+	ld	(xde+hl), wa	; ld (XDE+HL),WA
 	inc	1, qiz
 	cpw	qiz, 0x0008
 	jr lt, .LMCR_b1cc                      ; [61 db] jr LT,0x29b1cc
@@ -474,7 +474,7 @@ HDAE5000_FltDec_Convert:
 	extz xwa
 	div wa, 0x000a
 	ld	wa, qwa
-	stb_dri a, 0x07, 0xEC, 0xF0	; ld (XHL+IX),A
+	ld	(xhl+ix), a	; ld (XHL+IX),A
 	incw	1, (xsp+4)
 	ld	qiz, 1
 	jr t, .LMCR_b2f6                       ; [68 16] jr T,0x29b2f6
@@ -482,8 +482,8 @@ HDAE5000_FltDec_Convert:
 	ld	bc, de
 	inc	1, de
 	lda xwa, (0x23948a:24)
-	ldb_sri a, 0x07, 0xE0, 0xFA	; ld A,(XWA+QIZ)
-	stb_dri a, 0x07, 0xEC, 0xE4	; ld (XHL+BC),A
+	ld	a, (xwa+qiz)	; ld A,(XWA+QIZ)
+	ld	(xhl+bc), a	; ld (XHL+BC),A
 	inc	1, qiz
 .LMCR_b2f6:
 	ld	bc, (xsp+6)
@@ -493,7 +493,7 @@ HDAE5000_FltDec_Convert:
 	jr lt, .LMCR_b2e0                      ; [61 de] jr LT,0x29b2e0
 	ld	de, (xsp+6)
 	inc	1, de
-	lda_dri xbc, 0x07, 0xEC, 0xE8	; lda XBC,XHL+DE
+	lda	xbc, (xhl+de)	; lda XBC,XHL+DE
 	cp	(xbc), 0x05
 	jr c, .LMCR_b319                       ; [67 08] jr C,0x29b319
 	ld	wa, (xsp+6)
@@ -512,7 +512,7 @@ HDAE5000_FltDec_Convert:
 .LMCR_b334:
 	cp	qiz, 0
 	jr z, .LMCR_b343                       ; [66 0a] jr Z,0x29b343
-	lda_dri xwa, 0x07, 0xEC, 0xFA	; lda XWA,XHL+QIZ
+	lda	xwa, (xhl+qiz)	; lda XWA,XHL+QIZ
 	cp	(xwa), 0x09
 	jr ugt, .LMCR_b324                     ; [6b e1] jr UGT,0x29b324
 .LMCR_b343:
@@ -680,7 +680,7 @@ HDAE5000_FltDec_FractionDigits:
 	sub	wa, (xsp+8)
 	add	wa, wa
 	lda xbc, (0x2394ea:24)
-	ldw_sri wa, 0x07, 0xE4, 0xE0	; ld WA,(XBC+WA)
+	ld	wa, (xbc+wa)	; ld WA,(XBC+WA)
 	cp	wa, 0:i3
 	jr z, .LMCR_b48f                       ; [66 e5] jr Z,0x29b48f
 	pushw iz                                ; push IZ

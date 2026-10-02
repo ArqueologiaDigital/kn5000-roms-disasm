@@ -643,7 +643,7 @@ LyricsBox_DrawCurrentLine:
 
 	lda xwa, (0x020cbe:24)
 
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 
 	push xwa
 
@@ -759,7 +759,7 @@ LyricsBox_DrawSelLine:
 
 	lda xwa, (0x020cbe:24)
 
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 
 	push xwa
 
@@ -1006,7 +1006,7 @@ SongEdit_OverflowCheck:
 
 	lda xwa, (0x020cbe:24)
 
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 
 	push xwa
 
@@ -1156,7 +1156,7 @@ LyricsTrack_ResetBufferLoop:
 
 	push xde
 
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 
 	push xwa
 
@@ -3023,7 +3023,7 @@ TrAsGrid_LookupTable:
 	extz wa
 	add wa, wa
 	lda xbc, (TrAsGrid_LookupTable_Table:24)
-	ldw_sri HL, 0x07, 0xe4, 0xe0
+	ld	hl, (xbc+wa)
 	ret
 
 ; TrAsGrid_StepListValue (formerly TrAsGrid_ByteData1: it is code) -- A :=
@@ -4009,7 +4009,7 @@ SqAftSet_LookupTableEntry:
 	extz wa
 	add wa, wa
 	lda xbc, (SqAftSet_LookupTableEntry_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	ld (0x021086:24), wa
 	ret
 
@@ -6800,7 +6800,7 @@ NoteEditGrid_LoadCoordinates:
 	extz bc
 	sla bc, 3
 	lda xde, (NoteEditBox_EventDispatch2_Table:24)
-	lda_dri XDE, 0x07, 0xe8, 0xe4
+	lda	xde, (xde+bc)
 	ld bc, (xde)
 	ld (xwa), bc
 	lda xhl, (xwa + 2)
@@ -6851,7 +6851,7 @@ NoteEdit_FormatEntry:
 	extz wa
 	sll wa, 1
 	ld xix, NoteEdit_FormatEntry_CaseTable
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (NoteEditBox_GridDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -7571,7 +7571,7 @@ EntGrid_PostMainEvent:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (EntGrid_PostMainEvent_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -7629,7 +7629,7 @@ EntGrid_CheckOverflow1:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (EntGrid_PostMainEvent_Table_2:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -7974,7 +7974,7 @@ EntGridCheck_Handler:
 	ld WA,(XHL)
 	sla WA, 0x02
 	lda xbc, (SndParam_Dispatch_Table:24)
-	ldl_dri xde, 0x07, 0xe4, 0xe0
+	ld	xde, (xbc+wa)
 	ld XBC,(XSP+0x18)
 	cp XDE,0x00004e13
 	jrl z, EntGridCheck_Handle4E13
@@ -10327,17 +10327,17 @@ SqedtVal3_HandleScrollEvent:
 	ld (xsp + 4), xhl
 	lda xhl, (xsp + 54)
 	lda xde, (SqedtVal_HandleScrollEvent_Table:24)
-	ldw_sri0 WA, (xde + 0x00f8)
+	ld	wa, (xde+248)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
-	ldw_sri0 WA, (xde + 0x00fa)
+	ld	wa, (xde+250)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xe9, 0xfc, 0x00
+	add	ix, (xde+252)
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xe9, 0xfe, 0x00
+	add	ix, (xde+254)
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10386,17 +10386,17 @@ SqedtVal3_FillBufferLoop1:
 	call DrawStringLeftJustify
 	lda xhl, (xsp + 54)
 	lda xde, (SqedtVal_HandleScrollEvent_Table:24)
-	ldw_sri0 WA, (xde + 0x0100)
+	ld	wa, (xde+256)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
-	ldw_sri0 WA, (xde + 0x0102)
+	ld	wa, (xde+258)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xe9, 0x04, 0x01
+	add	ix, (xde+260)
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xe9, 0x06, 0x01
+	add	ix, (xde+262)
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10445,17 +10445,17 @@ SqedtVal3_FillBufferLoop2:
 	call DrawStringLeftJustify
 	lda xhl, (xsp + 54)
 	lda xde, (SqedtVal_HandleScrollEvent_Table:24)
-	ldw_sri0 WA, (xde + 0x0108)
+	ld	wa, (xde+264)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
-	ldw_sri0 WA, (xde + 0x010a)
+	ld	wa, (xde+266)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xe9, 0x0c, 0x01
+	add	ix, (xde+268)
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xe9, 0x0e, 0x01
+	add	ix, (xde+270)
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10504,17 +10504,17 @@ SqedtVal3_FillBufferLoop3:
 	call DrawStringLeftJustify
 	lda xhl, (xsp + 54)
 	lda xde, (SqedtVal_HandleScrollEvent_Table:24)
-	ldw_sri0 WA, (xde + 0x0110)
+	ld	wa, (xde+272)
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
-	ldw_sri0 WA, (xde + 0x0112)
+	ld	wa, (xde+274)
 	ld (xbc), wa
 	ld ix, (xhl)
-	add_sriw_rm IX, 0xe9, 0x14, 0x01
+	add	ix, (xde+276)
 	lda xwa, (xhl + 4)
 	ld (xwa), ix
 	ld ix, (xbc)
-	add_sriw_rm IX, 0xe9, 0x16, 0x01
+	add	ix, (xde+278)
 	lda xde, (xhl + 6)
 	ld (xde), ix
 	ld wa, (xwa)
@@ -10977,7 +10977,7 @@ SqedtVal2_UpScrollModeA2:
 	extz wa
 	sla wa, 3
 	lda xiy, (SqedtVal2_UpScrollModeA2_Table:24)
-	lda_dri XIY, 0x07, 0xf4, 0xe0
+	lda	xiy, (xiy+wa)
 	ld wa, (xiy + 2)
 	ld (xbc), wa
 	ld wa, (xiy)
@@ -10993,7 +10993,7 @@ SqedtVal2_UpScrollDefault:
 	extz wa
 	sla wa, 3
 	lda xiy, (SqedtVal2_UpScrollDefault_Table:24)
-	lda_dri XIY, 0x07, 0xf4, 0xe0
+	lda	xiy, (xiy+wa)
 	ld wa, (xiy + 2)
 	ld (xbc), wa
 	ld wa, (xiy)
@@ -11022,7 +11022,7 @@ SqedtVal2_DownScrollModeA2:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda xbc, (SqedtVal2_DownScrollModeA2_Table:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld wa, (xbc + 2)
 	ld (xde), wa
 	ld wa, (xbc)
@@ -11038,7 +11038,7 @@ SqedtVal2_DownScrollDefault:
 	lda xhl, (xsp + 58)
 	lda xde, (xhl + 2)
 	lda xbc, (SqedtVal2_DownScrollDefault_Table:24)
-	lda_dri XBC, 0x07, 0xe4, 0xe0
+	lda	xbc, (xbc+wa)
 	ld wa, (xbc + 2)
 	ld (xde), wa
 	ld wa, (xbc)
@@ -12135,9 +12135,9 @@ AccIll_Epilogue:
 EffectBoxProc:
 	lda xsp, (xsp-342)
 	push xiz
-	stl_dri XDE, 0xfd, 0x4e, 0x01
-	stl_dri XBC, 0xfd, 0x52, 0x01
-	stl_dri XWA, 0xfd, 0x56, 0x01
+	ld	(xsp+334), xde
+	ld	(xsp+338), xbc
+	ld	(xsp+342), xwa
 	ld xiy, EffectBoxProc_LocalInit
 	lda xix, (xsp + 12)
 	ldiw
@@ -12259,7 +12259,7 @@ EffectBox_HandleEvent1:
 	ld xbc, EVT_GET_ITEM_TOP
 	ld xde, 0:i3
 	call ApFuncCall
-	sub_sril_mr XHL, 0xfd, 0x4e, 0x01
+	sub	(xsp+334), xhl
 	ld XWA, (xsp + 0x014e)
 	cp xwa, 0x8
 	jrl nc, EffectBoxProc_ReturnZero
@@ -12350,7 +12350,7 @@ EffectBox_FillBufferLoop1:
 	divs wa, 0x2
 	ld bc, (xbc)
 	add bc, wa
-	stw_dri BC, 0xfd, 0x3a, 0x01
+	ld	(xsp+314), bc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 28)
 	ld xbc, EVT_GET_RAM_ADDRESS
@@ -12618,7 +12618,7 @@ EffectBox_HandleSelectEvent:
 	ld (xde), wa
 	lda xbc, (xix + 2)
 	ld xwa, EffectBox_PostFillSetup_Table
-	add_sril_rm XWA, 0xfd, 0x4e, 0x01
+	add	xwa, (xsp+334)
 	ld a, (xwa)
 	extz wa
 	ld (xbc), wa
@@ -14056,7 +14056,7 @@ SqplyFunc_HandlePartQuery:
 	jr gt, SqplyFunc_ReturnZero
 	add wa, wa
 	lda xix, (SqplyFunc_HandlePartQuery_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SqplyFunc_PartQueryDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -14675,7 +14675,7 @@ SeqFunc_ReturnZeroJmp:
 	jrl gt, SqedtFunc_ReturnNegOne
 	add wa, wa
 	lda xix, (SeqFunc_ReturnZeroJmp_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (Sqedt_ValueDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -14790,7 +14790,7 @@ SqedtFunc_SignExtend:
 	jrl gt, SeqFunc_ReturnZeroJmp
 	add wa, wa
 	lda xix, (SqedtFunc_SignExtend_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SeqFormat_DispatchA:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -14904,7 +14904,7 @@ SqedtFunc_StateChainB:
 	jrl gt, SqedtFunc_GetFieldAddr_BySelector
 	add wa, wa
 	lda xix, (SqedtFunc_StateChainB_CaseTable:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SeqFormat_DispatchB:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -15419,42 +15419,42 @@ DspItem0_TypeDispatch:
 	jrl DspItem0_Epilogue
 	sla bc, 1
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
 	sla wa, 1
 	ld bc, wa
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
 	ld bc, (xsp + 8)
 	sla bc, 1
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jrl DspItem0_Epilogue
 	ld bc, (xsp + 10)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 12)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 14)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 16)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
 	ld bc, (xsp + 18)
 	add bc, bc
 	ld xwa, (xsp + 4)
-	lda_dri XHL, 0x07, 0xe0, 0xe4
+	lda	xhl, (xwa+bc)
 	jr DspItem0_Epilogue
 
 DspItem0_HandleType2:
@@ -15607,7 +15607,7 @@ Equalizer_ParamByIndex:
 	add xde, Equalizer_ParamByIndex_Table
 	ld a, (xde)
 	exts wa
-	lda_dri XHL, 0x07, 0xe4, 0xe0
+	lda	xhl, (xbc+wa)
 	jrl Equalizer_PopIzRet
 
 Equalizer_ReturnParamAddr:
@@ -15655,7 +15655,7 @@ Equalizer_LookupParamString:
 	ldw wa, 0xe
 
 FormatEqParamValue:
-	ldw_sri WA, 0x07, 0xec, 0xe0
+	ld	wa, (xhl+wa)
 	extz xwa
 	ld xde, xwa
 	sll xde, 2
@@ -15828,11 +15828,11 @@ FormatParamValueStr:
 ; Equalizer format dispatch
 Equalizer_FormatDispatch:
 	lda xix, (Equalizer_FormatDispatch_Table:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	extz wa
 	sll wa, 1
 	ld xix, Equalizer_FormatDispatch_CaseTable
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (Equalizer_FormatCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -15888,7 +15888,7 @@ Equalizer_FormatDefault:
 	ld xwa, NakaData_WidgetDescriptors_0x272
 	jr FormatParamStr_CopyEnumName
 	add bc, bc
-	ldw_sri WA, 0x07, 0xe8, 0xe4
+	ld	wa, (xde+bc)
 	cp wa, 0:i3
 	jr ge, EqFormat_NegativeValue
 	neg wa
@@ -15914,7 +15914,7 @@ EqFormat_PositiveValue:
 
 FormatParamStr_CopyEnumName:
 	add BC,BC
-	ldw_dri bc, 0x07, 0xe8, 0xe4
+	ld	bc, (xde+bc)
 	extz XBC
 	ld XDE,XBC
 	sll XDE, 0x02

@@ -537,7 +537,7 @@ UIStateMachine_PrimaryDispatch:
 	ld (1041:16), a
 	sll a, 2
 	lda xhl, (UI_STATE_MACHINE_TABLE:24)
-	ld_sril3 XHL, 0x03, 0xec, 0xe0
+	ld	xhl, (xhl+a)
 	jp (xhl)
 
 ; UI state machine - primary state dispatch
@@ -570,7 +570,7 @@ UI_STATE_2_SUBSTATE:
 	and a, 0xf
 	sll a, 2
 	lda xhl, (UI_SUBSTATE_TABLE:24)
-	ld_sril3 XHL, 0x03, 0xec, 0xe0
+	ld	xhl, (xhl+a)
 	jp (xhl)
 
 ; UI sub-state dispatch table (16 entries)
@@ -977,11 +977,11 @@ TempoRingBuf_WritePair:
 	push xiy
 	lda xiy, (0x01e753:24)
 	ld hl, (xiy - 4)
-	stb_dri A, 0x07, 0xf4, 0xec
+	ld	(xiy+hl), a
 	decm 1, (xiy - 2)
 	minc1_16 hl, 0x7ff
 	ld a, (1051:16)
-	stb_dri A, 0x07, 0xf4, 0xec
+	ld	(xiy+hl), a
 	minc1_16 hl, 0x7ff
 	decm 1, (xiy - 2)
 	ld (0x01e74f:24), hl
@@ -996,10 +996,10 @@ TempoRingBuf_WritePair_Enqueue:
 	pushw ix
 	lda xhl, (1143:16)
 	ld ix, (1141:16)
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	ld a, (1051:16)
 	inc 1, ix
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	ld a, (1051:16)
 	inc 1, ix
 	ld (1141:16), ix
@@ -1279,7 +1279,7 @@ MidiEvt_ScanLoop:
 	jr MidiEvt_ScanLoop
 
 MidiEvt_FoundStatusByte:
-	ldb_sri C, 0x07, 0xec, 0xf4
+	ld	c, (xhl+iy)
 	and c, 0xf0
 	cp c, 0x90
 	jr z, MidiEvt_SetNoteOnFlag
@@ -1301,7 +1301,7 @@ MidiEvt_SetNoteOnFlag:
 MidiSerial_DataReceive:
 	bit_dri 7, 0x07, 0xec, 0xf4
 	jr z, MidiEvt_AdvancePointer
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	and a, 0xf0
 	cp a, 0x90
 	jr z, MidiEvt_SetDataFlag
@@ -1464,14 +1464,14 @@ RhythmBuf_Scan_SkipNonStatus:
 
 RhythmBuf_Scan_FoundStatus:
 	ld de, iy
-	ldb_sri C, 0x07, 0xec, 0xf4
+	ld	c, (xhl+iy)
 	and c, 0xf0
 
 RhythmBuf_Scan_CheckNext:
 	bit_dri 7, 0x07, 0xec, 0xf4
 	jr z, RhythmBuf_Scan_Advance
 	ld de, iy
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	and a, 0xf0
 	cp c, a
 	jr z, RhythmBuf_Scan_Advance
@@ -1551,14 +1551,14 @@ SeqEvt_Scan_SkipData:
 
 SeqEvt_Scan_FoundStatus:
 	ld de, iy
-	ldb_sri C, 0x07, 0xec, 0xf4
+	ld	c, (xhl+iy)
 	and c, 0xf0
 
 SeqEvt_Scan_CheckNext:
 	bit_dri 7, 0x07, 0xec, 0xf4
 	jr z, SeqEvt_Scan_Advance
 	ld de, iy
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	and a, 0xf0
 	cp c, a
 	jr z, SeqEvt_Scan_Advance
@@ -1617,7 +1617,7 @@ TempoRingBuf_Consume:
 TempoRingBuf_Consume_Loop:
 	cp hl, (1141:16)
 	jr nc, TempoRingBuf_Consume_Done
-	ldb_sri E, 0x07, 0xf0, 0xec
+	ld	e, (xix+hl)
 	calr TempoRingBuf_DequeueOne
 	inc 1, hl
 	jr TempoRingBuf_Consume_Loop
@@ -1655,7 +1655,7 @@ TempoRingBuf_DequeueOne:
 	and wa, wa
 	jr z, TempoRingBuf_DequeueOne_Done
 	ld hl, (xix - 4)
-	stb_dri E, 0x07, 0xf0, 0xec
+	ld	(xix+hl), e
 	minc1_16 hl, 0x7ff
 	dec 1, wa
 	ld (xix - 4), hl
@@ -4889,7 +4889,7 @@ RingBuf128_CheckEmpty:
 
 RingBuf128_ReadByte:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0x7f
 	ld (xde - 8), ix
 	incw 1, (xde - 2)
@@ -4932,7 +4932,7 @@ RingBuf128_WriteByte_CheckFull:
 
 RingBuf128_WriteByte_Store:
 	ld ix, (xde - 4)
-	stb_dri A, 0x07, 0xe8, 0xf0
+	ld	(xde+ix), a
 	minc1_16 ix, 0x7f
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -4957,7 +4957,7 @@ Seq_RingBuf_ReadByte:
 
 Seq_RingBuf_ReadByte_Dequeue:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0xff
 	ld (xde - 8), ix
 	incw 1, (xde - 2)
@@ -4972,7 +4972,7 @@ Seq_RingBuf_ReadByte_Large:
 
 Seq_RingBuf_ReadByte_Large_Dequeue:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0xff
 	ld (xde - 10), ix
 	ret
@@ -4986,7 +4986,7 @@ Seq_RingBuf_ReadByte_Small:
 
 Seq_RingBuf_ReadByte_Small_Dequeue:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0xff
 	ld (xde - 10), ix
 	ret
@@ -4999,7 +4999,7 @@ Seq_RingBuf_WriteByte_Small:
 
 Seq_RingBuf_WriteByte_Small_Store:
 	ld ix, (xde - 4)
-	stb_dri A, 0x07, 0xe8, 0xf0
+	ld	(xde+ix), a
 	minc1_16 ix, 0xff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5023,7 +5023,7 @@ RingBuf_CheckFull_512:
 
 RingBuf512_CheckFull_Read:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0x1ff
 	ld (xde - 8), ix
 	incw 1, (xde - 2)
@@ -5038,7 +5038,7 @@ RingBuf_CheckFull_256:
 
 RingBuf256_CheckFull_Read:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0x1ff
 	ld (xde - 10), ix
 	ret
@@ -5064,7 +5064,7 @@ Seq_RingBuf_WriteByte_512:
 
 Seq_RingBuf_WriteByte_512_Store:
 	ld ix, (xde - 4)
-	stb_dri A, 0x07, 0xe8, 0xf0
+	ld	(xde+ix), a
 	minc1_16 ix, 0x1ff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5088,7 +5088,7 @@ Seq_RingBuf_Dequeue_1024:
 
 Seq_RingBuf_Dequeue_1024_Read:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0x3ff
 	ld (xde - 8), ix
 	incw 1, (xde - 2)
@@ -5103,7 +5103,7 @@ Seq_RingBuf_ReadData:
 
 Seq_RingBuf_ReadData_Dequeue:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0x3ff
 	ld (xde - 10), ix
 	ret
@@ -5129,7 +5129,7 @@ Seq_RingBuf_WriteByte:
 
 Seq_RingBuf_WriteByte_1024_Store:
 	ld ix, (xde - 4)
-	stb_dri A, 0x07, 0xe8, 0xf0
+	ld	(xde+ix), a
 	minc1_16 ix, 0x3ff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5153,7 +5153,7 @@ Seq_RingBuf_PeekByte:
 
 Seq_RingBuf_PeekByte_Read:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0x7ff
 	ld (xde - 8), ix
 	incw 1, (xde - 2)
@@ -5181,7 +5181,7 @@ Seq_RingBuf_ReadAhead:
 
 Seq_RingBuf_ReadAhead_Read:
 	xor hl, hl
-	ldb_sri L, 0x07, 0xe8, 0xf0
+	ld	l, (xde+ix)
 	minc1_16 ix, 0x7ff
 	ld (xde - 10), ix
 	ret
@@ -5194,7 +5194,7 @@ Seq_RingBuf_WriteByte_Check:
 
 Seq_RingBuf_WriteByte_Store:
 	ld ix, (xde - 4)
-	stb_dri A, 0x07, 0xe8, 0xf0
+	ld	(xde+ix), a
 	minc1_16 ix, 0x7ff
 	ld (xde - 4), ix
 	decm 1, (xde - 2)
@@ -5979,7 +5979,7 @@ INTTC0_HANDLER:
 	extz bc
 	sla bc, 2
 	lda xde, (SeqRingBuf_WriteDispatch_Table:24)
-	lda_dri XDE, 0x07, 0xe8, 0xe4
+	lda	xde, (xde+bc)
 	ld xbc, 0x5e8
 	ld xhl, (xde)
 	call (xhl)
@@ -6100,11 +6100,11 @@ Flash_IdentifyChip_WaitReady:
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xf0
-	ldw_sri0 WA, (xiz + 0x3232)
+	ld	wa, (xiz+12850)
 	ei 0
 	call Get_Region_Code
 	cp l, 4:i3
@@ -6114,11 +6114,11 @@ Flash_IdentifyChip_WaitReady:
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xf0
-	ldw_sri0 WA, (xiz + 0x3232)
+	ld	wa, (xiz+12850)
 	ei 0
 
 Flash_IdentifyChip_Done:
@@ -6142,7 +6142,7 @@ Flash_IdentifyValidate_UseBank1:
 	add xbc, 0xaaaa
 	ldw (xbc), 0xaa
 	ld xde, (xsp + 4)
-	stiw_ind 0xe9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xde+21844), 0x0055
 	ldw (xbc), 0x90
 	ld wa, (xde)
 	ldfr_werp WA, 0xfa
@@ -6209,7 +6209,7 @@ Flash_WriteWordSeq:
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ldw (xwa), 0xa0
 	ld xwa, (xsp + 6)
 	ld bc, (xsp + 4)
@@ -6236,14 +6236,14 @@ Flash_ChipErase_UseBank1:
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0x80
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0x10
@@ -6256,14 +6256,14 @@ Flash_ChipErase_UseBank1:
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0x80
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0x10
@@ -6303,14 +6303,14 @@ Flash_EraseSector_WriteSequence:
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0x80
 	ld xwa, xiz
 	add xwa, 0xaaaa
 	ldw (xwa), 0xaa
-	stiw_ind 0xf9, 0x54, 0x55, 0x55, 0x00
+	ldw	(xiz+21844), 0x0055
 	ld xwa, (xsp + 4)
 	ldw (xwa), 0x30
 	call Get_Region_Code
@@ -6352,8 +6352,8 @@ Flash_EraseSector_CheckRegion:
 	jr nz, Flash_EraseSector_TopSector
 	cp xwa, (xsp + 4)
 	jrl nz, FlashOp_Epilogue10
-	stiw_ind 0xf9, 0x00, 0x40, 0x30, 0x00
-	stiw_ind 0xf9, 0x00, 0x60, 0x30, 0x00
+	ldw	(xiz+16384), 0x0030
+	ldw	(xiz+24576), 0x0030
 	ld xwa, 0x8000
 	jrl Flash_EraseSector_FinalWrite
 
@@ -6383,8 +6383,8 @@ Flash_EraseSector_Bank2Check:
 	jr nz, Flash_EraseSector_Bank2TopSector
 	cp xwa, (xsp + 4)
 	jr nz, FlashOp_Epilogue10
-	stiw_ind 0xf9, 0x00, 0x40, 0x30, 0x00
-	stiw_ind 0xf9, 0x00, 0x60, 0x30, 0x00
+	ldw	(xiz+16384), 0x0030
+	ldw	(xiz+24576), 0x0030
 	ld xwa, 0x8000
 	jr Flash_EraseSector_FinalWrite
 
@@ -7831,7 +7831,7 @@ Erase_and_Burn____when_disk_is_valid:
 	jrl gt, SHOW_ILLEGAL_DISK_MESSAGE
 	add wa, wa
 	lda xix, (HANDLE_UPDATE_OFFSETS:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (HANDLE_UPDATE_FILE_TYPE_ID_001h:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 

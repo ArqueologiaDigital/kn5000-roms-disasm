@@ -49,7 +49,7 @@ SeqEvt_ProcessLoop_Check:
 	jp SeqEvt_ProcessLoopRet
 
 SeqEvt_ClassifyEventType:
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ld w, a
 	cp a, 0x90
@@ -82,7 +82,7 @@ SeqEvt_TypeD0_SetCount:
 	ld (0x7e0e:16), 2
 
 SeqEvt_ReadAndDispatchEntry:
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	ld (0x7e11:16), ix
 	calr SeqEvtBuf_AdvanceReadPos
 	ld (0x7e0f:16), ix
@@ -99,7 +99,7 @@ SeqEvt_DispatchByChannel:
 
 SeqEvt_ProcessNoteOn:
 	pushw wa
-	ldb_sri W, 0x07, 0xec, 0xf0
+	ld	w, (xhl+ix)
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
@@ -163,7 +163,7 @@ SeqEvt_ProcessLoopRet:
 	ret
 
 SeqEvt_WriteNoteOff:
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	and_srib_im 0x07, 0xec, 0xf0, 0x7f
 	and a, 0xf0
 	or a, (0x7e07:16)
@@ -181,11 +181,11 @@ SeqEvt_WriteNoteOnRotating:
 	ld xix, SeqEvt_RotationOffsetTable
 	add xix, xwa
 	ld ix, (xix)
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	and_srib_im 0x07, 0xec, 0xf0, 0x7f
 	ld iz, ix
 	inc 2, ix
-	ldb_sri W, 0x07, 0xec, 0xf0
+	ld	w, (xhl+ix)
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
@@ -216,46 +216,46 @@ SeqEvt_WriteVoiceParams:
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
 	ld a, w
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	ld a, 0x0:opc
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
 	ex16 iz, ix
 	ld ix, (0x7e0f:16)
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ex16 iz, ix
 	calr SeqEvtBuf_WriteBytePreserve
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
 	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ex16 iz, ix
 	calr SeqEvtBuf_WriteBytePreserve
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
 	push xwa
 	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
-	ldb_sri W, 0x07, 0xec, 0xf0
+	ld	w, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ex16 iz, ix
 	add wa, (1134:16)
@@ -268,7 +268,7 @@ SeqEvt_AdjustNoteOctave:
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	stw_dri WA, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), wa
 	inc 2, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
@@ -280,14 +280,14 @@ SeqEvt_AdjustNoteOctave:
 SeqEvt_WriteRemainingParams:
 	pop xwa
 	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ld (0x7e0f:16), ix
 	ex16 iz, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
@@ -295,27 +295,27 @@ SeqEvt_WriteRemainingParams:
 	cp w, 0x90
 	jr z, SeqEvt_UpdateReadPosition
 	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ld (0x7e0f:16), ix
 	ex16 iz, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
 	ex16 iz, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ld (0x7e0f:16), ix
 	ex16 iz, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
 	ld xbc, (0x7e13:16)
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	ld (0x7e13:16), xhl
 	ld xhl, xbc
@@ -333,22 +333,22 @@ SeqEvt_HandleControlEvent:
 	ld ix, (0x7e0f:16)
 	cp w, 0xd0
 	jr nz, SeqEvt_HandleExtendedCtrl
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	calr SeqEvtBuf_WriteBytePreserve
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	calr SeqEvtBuf_WriteBytePreserve
 	jr SeqEvt_SaveReadPosAndRet
 
 SeqEvt_HandleExtendedCtrl:
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	calr SeqEvtBuf_WriteBytePreserve
 	pushw bc
-	ldb_sri C, 0x07, 0xec, 0xf0
+	ld	c, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	and a, 0xf
 	bit 0, c
@@ -363,7 +363,7 @@ SeqEvt_SetExtendedFlag:
 	calr SeqEvtBuf_WriteBytePreserve
 	ld a, 0x7:opc
 	calr SeqEvtBuf_WriteBytePreserve
-	ldb_sri W, 0x07, 0xec, 0xf0
+	ld	w, (xhl+ix)
 	calr SeqEvtBuf_AdvanceReadPos
 	ld a, 0x0:opc
 	bit 0, w
@@ -386,7 +386,7 @@ SeqEvt_CalcTempoOffset:
 
 SeqEvt_UpdateMinTempo:
 	ld iy, (0x7e11:16)
-	stb_dri A, 0x07, 0xec, 0xf4
+	ld	(xhl+iy), a
 	xor wa, wa
 	ld a, (0x7e0e:16)
 	add wa, (0x7e0f:16)
@@ -478,16 +478,16 @@ Voice_CheckSlotBit:
 
 Voice_ReadSlotParams:
 	ld ix, iy
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	ld (0x7e0b:16), a
 	inc 2, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	ld (0x7e0c:16), a
 	inc 1, ix
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	ld (0x7e0d:16), a
 	inc 1, ix
-	ldw_sri WA, 0x07, 0xec, 0xf0
+	ld	wa, (xhl+ix)
 	cp wa, (1134:16)
 	jr gt, Voice_SubtractBaseFreq
 	ex16 iy, iz
@@ -511,7 +511,7 @@ Voice_SubtractBaseFreq:
 	add a, 0x60
 
 Voice_StoreMetricValue:
-	stw_dri WA, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), wa
 	cp wa, (0x7e00:16)
 	jr nc, Voice_ParamComplete
 	ld (0x7e00:16), wa
@@ -531,7 +531,7 @@ Voice_DecodeNoteChannel:
 	sla hl, 1
 	push xix
 	ld xix, Voice_NoteChannelTable1_0x402
-	ldw_sri HL, 0x07, 0xf0, 0xec
+	ld	hl, (xix+hl)
 	pop xix
 	jr Voice_DecodeRet
 
@@ -545,7 +545,7 @@ Voice_DecodeNonPercussion:
 	ld hl, wa
 	push xix
 	ld xix, Voice_NoteChannelTable1_0x2
-	ldw_sri HL, 0x07, 0xf0, 0xec
+	ld	hl, (xix+hl)
 	pop xix
 
 Voice_DecodeRet:
@@ -716,7 +716,7 @@ Voice_NoteChannelGrid_Lookup:
 	xor	h, h
 	push	xix
 	ld	xix, Voice_NoteChannelTable1_0x43F
-	ldw_sri HL, 0x07, 0xf0, 0xec	; ld HL,(XIX+HL)
+	ld	hl, (xix+hl)	; ld HL,(XIX+HL)
 	pop	xix
 	ret
 ; Voice_NoteChannelTable1 +0x43F (16 rows x 8 x LE16).
@@ -752,7 +752,7 @@ Voice_DecodeNoteChannel2:
 	ld hl, wa
 	push xix
 	ld xix, Voice_NoteChannelTable2_0x2
-	ldw_sri HL, 0x07, 0xf0, 0xec
+	ld	hl, (xix+hl)
 	pop xix
 	ret
 
@@ -910,7 +910,7 @@ Voice_ClampBankIndex:
 	sla hl, 1
 	push xix
 	ld xix, Voice_BankIndexTable_0x2
-	ldw_sri HL, 0x07, 0xf0, 0xec
+	ld	hl, (xix+hl)
 	pop xix
 	ret
 
@@ -944,7 +944,7 @@ Voice_DecodeStandard:
 	ld hl, wa
 	push xix
 	ld xix, Voice_NoteParamTable_0x2
-	ldw_sri HL, 0x07, 0xf0, 0xec
+	ld	hl, (xix+hl)
 	pop xix
 
 Voice_DecodeParamRet:
@@ -1493,7 +1493,7 @@ AccPlay_SetupSoundParams:
 	ld (0x90f7:16), 23
 	call PartCtrl_WriteProgramChange
 	ld xbc, 0xff7e
-	stb_dri H, 0x03, 0xe4, 0xec
+	ld	(xbc+l), h
 
 AccPlay_SetupJumpTarget:
 	jp AccPlay_SyncParamsRet
@@ -1610,7 +1610,7 @@ AccPlay_ExtractVoiceSlot:
 	calr Util_ExtractAndShiftBits
 	ld a, 0x83:opc
 	ld hl, (0x7f12:16)
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	(xix+hl), a
 	ret
 
 AccPlay_ProcessNoteEvent:
@@ -1644,18 +1644,18 @@ AccPlay_NoteAllocAndWrite:
 	ld l, (0x7f38:16)
 	xor h, h
 	ld xix, AccPatch_Transpose_LookupTable_Data
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	xor w, w
 	sla wa, 2
 	ld hl, wa
 	ld xix, AccPlay_NoteParamTable
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	ld (0x7e54:16), a
 	inc 1, hl
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	ld (0x7e55:16), a
 	inc 1, hl
-	ldb_sri A, 0x07, 0xf0, 0xec
+	ld	a, (xix+hl)
 	ld (0x7e56:16), a
 	ld a, 0x90:opc
 	cp (0x7e54:16), 0
@@ -2458,7 +2458,7 @@ MidiSeqBuf_ScanAllEntries:
 MidiSeqBuf_ScanLoop:
 	calr TempoRingBuf_ReadLoop
 	ld xhl, 0x7f36
-	stb_dri A, 0x07, 0xec, 0xf0
+	ld	(xhl+ix), a
 	inc 1, ix
 	dec 1, bc
 	cp bc, 0:i3
@@ -2478,13 +2478,13 @@ MidiSeqBuf_ProcessEntries:
 
 MidiSeqBuf_ProcessLoop:
 	ld xhl, 0x7f36
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	push xix
 	pushw de
 	ld hl, (0x7f10:16)
 	calr Util_ExtractAndShiftBits
 	ld hl, (0x7f12:16)
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	(xix+hl), a
 	calr MidiSeqBuf_AdvancePosition
 	popw de
 	pop xix
@@ -2552,7 +2552,7 @@ MidiSeqBuf_WriteByte:
 	ld hl, (0x7f10:16)
 	calr Util_ExtractAndShiftBits
 	ld hl, (0x7f12:16)
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	(xix+hl), a
 	pop xhl
 	pop xix
 	ret
@@ -2856,7 +2856,7 @@ AcVocalGrid_DialSetup:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (AcVocalGrid_DialSetup_Table:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	sub hl, wa
 	extz xhl
 	add xhl, 0xffff0000
@@ -2914,7 +2914,7 @@ AcVocalGrid_CheckEvent91:
 	ld wa, hl
 	add wa, wa
 	lda xbc, (AcVocalGrid_DialSetup_Table_2:24)
-	ldw_sri WA, 0x07, 0xe4, 0xe0
+	ld	wa, (xbc+wa)
 	add wa, hl
 	ld de, wa
 	extz xde
@@ -3379,7 +3379,7 @@ VocalistGrid_CheckHandler:
 	add hl, wa
 	ld xde, (xsp + 8)
 	ld xwa, xde
-	ld_sril3 XWA, 0x07, 0xe0, 0xec
+	ld	xwa, (xwa+hl)
 	sub xwa, 0x2d00
 	cp xwa, 0x0
 	jrl c, AcVocalist_ReturnZero
@@ -3896,7 +3896,7 @@ MainVocalistPage1OKFunc:
 	jr ugt, VocalistPage_Handler
 	add de, de
 	lda xix, (MainVocalistPage1OKFunc_CaseTable:24)
-	ldw_sri DE, 0x07, 0xf0, 0xe8
+	ld	de, (xix+de)
 	lda xix, (VocalistPage1OK_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; MainVocalistPage1OKFunc dispatch
@@ -4621,7 +4621,7 @@ Draw_keybed_maybe_for_indicating_split_point:
 	extz bc
 	sla bc, 2
 	lda xde, (SplitPoint_BitmapTable:24)
-	ld_sril3 XBC, 0x07, 0xe8, 0xe4
+	ld	xbc, (xde+bc)
 	pushw 0x34
 	ldw de, 0x39
 	call DrawBitmapSPFast
@@ -4669,7 +4669,7 @@ SplitPoint_HandleNoteEvt:
 	ldto_werp WA, 0xe6
 	sla wa, 2
 	lda xbc, (SplitPoint_NoteNameTable:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw SplitPointFunc_LocalInit_Strings@hi16
 	pushw SplitPointFunc_LocalInit_Strings@lo16

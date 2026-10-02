@@ -630,7 +630,7 @@ ChannelFilter_BitScanLoop:
 	ldto_berp A, 0x3c
 	jr c, ChannelFilter_NextBit
 	ld iy, bc
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	cp a, 0xd
 	jr z, ChannelFilter_ClearBit
 	cp a, 0x10
@@ -2146,11 +2146,11 @@ Display_RedrawValues_Store:
 	sla hl, 1
 	push xix
 	ld xix, 0xc9e
-	ldw_sri WA, 0x07, 0xf0, 0xec
+	ld	wa, (xix+hl)
 	ld (0x28bf:16), wa
 	srl hl, 1
 	ld xix, 0xcbe
-	ldw_sri WA, 0x07, 0xf0, 0xec
+	ld	wa, (xix+hl)
 	pop xix
 	and wa, 0xff
 	ld (0x28c1:16), wa
@@ -2372,7 +2372,7 @@ Display_TitleString_Mode5:
 	sla w, 1
 	add a, w
 	xor w, w
-	lda_dri XIY, 0x07, 0xf4, 0xe0
+	lda	xiy, (xiy+wa)
 	jp String_CopyFromIY
 
 TitleString_MaskAndFormat:
@@ -2411,7 +2411,7 @@ TitleString_BuildFromBank:
 	xor b, b
 	sla bc, 3
 	ld xiy, StringData_StyleSections
-	lda_dri XIY, 0x07, 0xf4, 0xe4
+	lda	xiy, (xiy+bc)
 	ldw bc, 0x8
 	jp String_CopyFromIY
 
@@ -2867,7 +2867,7 @@ Timer_ModeDispatch:
 	sla hl, 2
 	push xix
 	ld xix, Timer_ModeSelect_Table
-	ld_sril3 XHL, 0x07, 0xf0, 0xec
+	ld	xhl, (xix+hl)
 	pop xix
 	call (xhl)
 	call Display_UpdateDirtyRegions
@@ -5646,10 +5646,10 @@ VoiceSlot_ProcessedWordRet:
 	call VoiceSlot_ComputeWordIndex
 	push xix
 	ld xix, 0xc9e
-	ldw_sri IY, 0x07, 0xf0, 0xf8
+	ld	iy, (xix+iz)
 	srl xiz, 1
 	ld xix, 0xcbe
-	ldb_sri A, 0x07, 0xf0, 0xf8
+	ld	a, (xix+iz)
 	pop xix
 	cp iy, (3583:16)
 	jrl nz, AccPedal_RereadParams
@@ -6866,7 +6866,7 @@ Interrupt_CodeDispatch:
 	sla a, 2
 	ld hl, wa
 	ld xwa, Interrupt_VectorSelect_Table
-	ld_sril3 XHL, 0x07, 0xe0, 0xec
+	ld	xhl, (xwa+hl)
 	call (xhl)
 	jp Interrupt_NullRet
 
@@ -7791,7 +7791,7 @@ MemConfig_VoiceSlotLookup:
 	popw wa
 	push xix
 	ld xix, 0xc9e
-	stw_dri WA, 0x07, 0xf0, 0xf8
+	ld	(xix+iz), wa
 	pop xix
 
 MemConfig_VoiceSlotCompare:
@@ -9514,7 +9514,7 @@ VoiceSlot_InitLoop:
 	ld xix, 0xc9e
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
-	lda_dri XIX, 0x07, 0xf0, 0xf8
+	lda	xix, (xix+iz)
 	ld iy, (xix + 32)
 	ldto_lerp XIX, 0x38
 	sla iz, 1
@@ -9525,12 +9525,12 @@ VoiceSlot_InitLoop:
 	jrl ugt, VoiceSlot_ProcessEntry
 	srl iz, 1
 	ldfr_lerp XIX, 0x38
-	lda_dri XIX, 0x07, 0xf0, 0xf8
+	lda	xix, (xix+iz)
 	ld (xix + 32), c
 	ldto_lerp XIX, 0x38
 	sla iz, 1
 	pushw iy
-	ldw_sri IY, 0x07, 0xf0, 0xf8
+	ld	iy, (xix+iz)
 	call VoiceSlot_UpdateCurrentPointer
 	popw iy
 	ld xhl, (4349:16)
@@ -9545,9 +9545,9 @@ VoiceSlot_InitLoop:
 VoiceSlot_ProcessEntry:
 	ld de, bc
 	ldw wa, 0x100
-	ldw_sri IY, 0x07, 0xf0, 0xf8
+	ld	iy, (xix+iz)
 	srl iz, 1
-	lda_dri XIX, 0x07, 0xf0, 0xf8
+	lda	xix, (xix+iz)
 	ld ix, (xix + 32)
 	and ix, 0xff
 	sub wa, ix
@@ -9564,18 +9564,18 @@ VoiceSlot_ProcessEntry:
 	sub bc, 0xfb
 	ld xix, 0xc9e
 	ldfr_lerp XIX, 0x38
-	lda_dri XIX, 0x07, 0xf0, 0xf8
+	lda	xix, (xix+iz)
 	ld (xix + 32), c
 	ldto_lerp XIX, 0x38
 	sla iz, 1
 	sub c, 0x5
-	ldw_sri IY, 0x07, 0xf0, 0xf8
+	ld	iy, (xix+iz)
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
 	ld iy, (xhl + 3)
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
-	stw_dri IY, 0x07, 0xf0, 0xf8
+	ld	(xix+iz), iy
 	ld xix, xhl
 	add xix, 0x5
 	ld xiy, (4353:16)
@@ -9719,14 +9719,14 @@ VoiceSlot_CompareRet:
 	ld b, h
 	push xix
 	ld xix, 0xc9e
-	ldw_sri IY, 0x07, 0xf0, 0xf8
+	ld	iy, (xix+iz)
 	pop xix
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
 	srl iz, 1
 	push xde
 	ld xde, 0xcbe
-	ldw_sri IX, 0x07, 0xe8, 0xf8
+	ld	ix, (xde+iz)
 	pop xde
 	and ix, 0xff
 	sla iz, 1
@@ -9737,7 +9737,7 @@ VoiceSlot_StoreAndAdvance:
 	inc 1, ix
 	cp ix, 0xff
 	jrl ugt, VoiceSlot_LoadFromTableBody
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	inc 1, c
 	cp a, 0x81
 	jrl z, VoiceSlot_CopyBlockDone
@@ -9749,10 +9749,10 @@ VoiceSlot_CopyBlock:
 	ld wa, ix
 	push xde
 	ld xde, 0xc9e
-	stw_dri IY, 0x07, 0xe8, 0xf8
+	ld	(xde+iz), iy
 	srl iz, 1
 	ld xde, 0xcbe
-	stb_dri A, 0x07, 0xe8, 0xf8
+	ld	(xde+iz), a
 	pop xde
 	sla iz, 1
 	xor w, w
@@ -9786,7 +9786,7 @@ VoiceSlot_LoadFromTable:
 VoiceSlot_LoadFromTableBody:
 	push xde
 	ld xde, 0xc9e
-	ldw_sri IY, 0x07, 0xe8, 0xf8
+	ld	iy, (xde+iz)
 	pop xde
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
@@ -9802,7 +9802,7 @@ VoiceSlot_DecCountLoop:
 	dec 1, ix
 	cp ix, 4:i3
 	jrl le, VoiceSlot_SubroutineBody
-	ldb_sri A, 0x07, 0xec, 0xf0
+	ld	a, (xhl+ix)
 	inc 1, c
 	cp a, 0x81
 	jrl z, VoiceSlot_SubroutineTable
@@ -9814,10 +9814,10 @@ VoiceSlot_CallSubroutine:
 	ld wa, ix
 	push xde
 	ld xde, 0xc9e
-	stw_dri IY, 0x07, 0xe8, 0xf8
+	ld	(xde+iz), iy
 	srl iz, 1
 	ld xde, 0xcbe
-	stb_dri A, 0x07, 0xe8, 0xf8
+	ld	(xde+iz), a
 	pop xde
 	sla iz, 1
 	xor w, w
@@ -9832,7 +9832,7 @@ VoiceSlot_SubroutineTable:
 VoiceSlot_SubroutineBody:
 	push xde
 	ld xde, 0xc9e
-	ldw_sri IY, 0x07, 0xe8, 0xf8
+	ld	iy, (xde+iz)
 	pop xde
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
@@ -9866,18 +9866,18 @@ VoiceSlot_ReadCurrentParams:
 	call VoiceSlot_ComputeWordIndex
 	push xde
 	ld xde, 0xc9e
-	ldw_sri IY, 0x07, 0xe8, 0xf8
+	ld	iy, (xde+iz)
 	pop xde
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
 	srl iz, 1
 	push xde
 	ld xde, 0xcbe
-	ldw_sri IY, 0x07, 0xe8, 0xf8
+	ld	iy, (xde+iz)
 	pop xde
 	sla iz, 1
 	and iy, 0xff
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	xor w, w
 	ret
 
@@ -9896,21 +9896,21 @@ VoiceSlot_FlagCheckDone:
 	xor w, w
 	push xde
 	ld xde, 0xc9e
-	ldw_sri IY, 0x07, 0xe8, 0xf8
+	ld	iy, (xde+iz)
 	pop xde
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
 	srl iz, 1
 	push xde
 	ld xde, 0xcbe
-	ldw_sri IY, 0x07, 0xe8, 0xf8
+	ld	iy, (xde+iz)
 	pop xde
 	sla iz, 1
 	and iy, 0xff
 	add iy, (3573:16)
 	cp iy, 0xff
 	jrl ugt, VoiceSlot_FinalCheck
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	jp VoiceSlot_FinalRetNZ
 
 VoiceSlot_FinalCheck:
@@ -9920,7 +9920,7 @@ VoiceSlot_FinalCheck:
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (4349:16)
 	ld iy, 5:i3
-	ldb_sri A, 0x07, 0xec, 0xf4
+	ld	a, (xhl+iy)
 	jp VoiceSlot_FinalRetNZ
 
 VoiceSlot_FinalDone:
@@ -11082,11 +11082,11 @@ VoiceSlot_SaveState:
 	ld xhl, xwa
 	call VoiceSlot_ComputeWordIndex
 	ld xiy, 0xc9e
-	ldw_sri WA, 0x07, 0xf4, 0xf8
+	ld	wa, (xiy+iz)
 	ld (xhl), wa
 	srl iz, 1
 	ldfr_lerp XIY, 0x38
-	lda_dri XIY, 0x07, 0xf4, 0xf8
+	lda	xiy, (xiy+iz)
 	ld a, (xiy + 32)
 	ldto_lerp XIY, 0x38
 	ld (xhl + 2), a
@@ -11140,11 +11140,11 @@ VoiceState_RestoreEntry:
 	call VoiceSlot_ComputeWordIndex
 	ld xiy, 0xc9e
 	ld wa, (xhl)
-	stw_dri WA, 0x07, 0xf4, 0xf8
+	ld	(xiy+iz), wa
 	srl iz, 1
 	ld a, (xhl + 2)
 	ldfr_lerp XIY, 0x38
-	lda_dri XIY, 0x07, 0xf4, 0xf8
+	lda	xiy, (xiy+iz)
 	ld (xiy + 32), a
 	ldto_lerp XIY, 0x38
 	ret
@@ -13451,7 +13451,7 @@ VoiceBank_LoadLerpState:
 	call DisplayStr_ComputeTableAddr
 	ld xiy, (4349:16)
 	ld ix, (0x28c1:16)
-	ldb_sri A, 0x07, 0xf4, 0xf0
+	ld	a, (xiy+ix)
 	pop xix
 	pop_lerp 0x38
 	push xiz
@@ -13944,7 +13944,7 @@ DisplayStr_StyleSectionInit:
 	xor wa, wa
 	ld a, (0x3728:16)
 	sla wa, 3
-	lda_dri XIY, 0x07, 0xf4, 0xe0
+	lda	xiy, (xiy+wa)
 	ldw wa, 0x2020
 	ld (xix+), WA
 	ld (xix+), WA
@@ -14306,7 +14306,7 @@ SNS_LoadKeyAndChord:
 	and l, 0xf
 	sla hl, 1
 	ld xiy, StringData_KeyNames
-	lda_dri XIY, 0x07, 0xf4, 0xec
+	lda	xiy, (xiy+hl)
 	ld wa, (xiy)
 	ld (xix), wa
 	xor hl, hl
@@ -14317,7 +14317,7 @@ SNS_LoadKeyAndChord:
 	ld hl, wa
 	extz xhl
 	ld xiy, Tbl_ChordTypeNames
-	lda_dri XIY, 0x07, 0xf4, 0xec
+	lda	xiy, (xiy+hl)
 	ld wa, (xiy)
 	ld (xix + 2), wa
 	ld wa, (xiy + 2)
@@ -14335,7 +14335,7 @@ SNS_LoadDurationData:
 	ld l, (3425:16)
 	sla hl, 2
 	ld xiy, Tbl_NoteValueGlyphs
-	lda_dri XIY, 0x07, 0xf4, 0xec
+	lda	xiy, (xiy+hl)
 	ld wa, (xiy)
 	ld (xix), wa
 	ld wa, (xiy + 2)
@@ -16066,14 +16066,14 @@ Scoop_InitPartDisplay:
 	ld xiy, StyleUI_ParamBlockPtrTable_0x98
 
 Scoop_SelectModeTable_2Part:
-	ld_sril3 XIY, 0x07, 0xf4, 0xec
+	ld	xiy, (xiy+hl)
 	ld xix, StyleUI_ParamBlockPtrTable_0x4C
 	cp (3429:16), 2
 	jr nz, Scoop_SelectModeTable_2Part_XIX
 	ld xix, StyleUI_ParamBlockPtrTable_0xE4
 
 Scoop_SelectModeTable_2Part_XIX:
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	call UIRender_TwoTableGeneral
 	call Scoop_CheckPartStatus
 	pop xhl
@@ -16087,7 +16087,7 @@ Scoop_SetPartIndexAndDisplay:
 	ld a, (3424:16)
 	dec 1, a
 	ld xiy, 0xf1a0
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	ld	a, (xiy+a)
 	ld (4493:16), a
 	ld xiy, SOUND_DATA_DRUM_KITS_0x3A
 	call Scoop_ConditionalCurveUpdate
@@ -16198,7 +16198,7 @@ Scoop_InitDisplayFull:
 	ld a, (3424:16)
 	dec 1, a
 	ld xiy, 0xf1a0
-	ldb_sri A, 0x03, 0xf4, 0xe0
+	ld	a, (xiy+a)
 	ld (4493:16), a
 	ld xiy, SOUND_DATA_DRUM_KITS_0x3A
 	call Scoop_ConditionalCurveUpdate
@@ -16431,13 +16431,13 @@ Scoop_SidePanel_DrawPartLoop:
 Scoop_SidePanel_DrawSlotPair:
 	xor hl, hl
 	ld l, c
-	ldb_sri L, 0x07, 0xf4, 0xec
+	ld	l, (xiy+hl)
 	and l, 0xf
 	calr Scoop_SidePanel_DrawOneSlot
 	add xix, 0x4
 	xor hl, hl
 	ld l, c
-	ldb_sri L, 0x07, 0xf4, 0xec
+	ld	l, (xiy+hl)
 	and l, 0xf0
 	srl l, 4
 	calr Scoop_SidePanel_DrawOneSlot
@@ -17403,7 +17403,7 @@ Scoop_SpecialMode_ValueEdit:
 	jr z, Scoop_SpecialMode_ValueEditEnd
 	and_srib_im 0x07, 0xf0, 0xf4, 0x7f
 	inc 1, iy
-	ldw_sri WA, 0x07, 0xf0, 0xf4
+	ld	wa, (xix+iy)
 	cp wa, 0xffff
 	jr z, Scoop_SpecialMode_ValueEditEnd
 	stiw_ind 0x07, 0xf0, 0xf4, 0xff, 0xff
@@ -17531,12 +17531,12 @@ Scoop_CurveUpdate_Finalize:
 	ld wa, hl
 	extz xwa
 	div wa, 0x28
-	stw_dri WA, 0xfd, 0x0a, 0x01
-	ldw_sri0 WA, (xsp + 0x010a)
+	ld	(xsp+266), wa
+	ld	wa, (xsp+266)
 	muls wa, 0x28
 	sub hl, wa
 	sll hl, 3
-	stw_dri HL, 0xfd, 0x08, 0x01
+	ld	(xsp+264), hl
 	ld iy, 0:i3
 	cp iy, de
 	jr nc, Scoop_EnvelopeCalc
@@ -17557,7 +17557,7 @@ Scoop_CurveUpdate_End:
 	ld a, (xhl)
 	extz wa
 	lda xhl, (StyleUI_ScreenData_CtlOnly_0x23:24)
-	ldb_sri A, 0x07, 0xec, 0xe0
+	ld	a, (xhl+wa)
 	ld (xix), a
 	inc 1, iy
 	cp iy, de
@@ -17574,24 +17574,24 @@ Scoop_EnvelopeCalc:
 	extz wa
 	sla wa, 2
 	lda xbc, (Str_No_0xCEE:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld (xsp + 4), xwa
-	dec_sriw 2, 0xfd, 0x0a, 0x01
-	ldw_sri0 WA, (xsp + 0x0108)
-	stw_dri WA, 0xfd, 0x0c, 0x01
+	decw	2, (xsp+266)
+	ld	wa, (xsp+264)
+	ld	(xsp+268), wa
 	lda xwa, (xsp + 8)
 	ld xbc, (xsp + 4)
 	call CalcTotalWidth
-	ldw_sri0 WA, (xsp + 0x0108)
+	ld	wa, (xsp+264)
 	add wa, hl
-	stw_dri WA, 0xfd, 0x10, 0x01
-	ldw_sri0 WA, (xsp + 0x010a)
-	stw_dri WA, 0xfd, 0x0e, 0x01
+	ld	(xsp+272), wa
+	ld	wa, (xsp+266)
+	ld	(xsp+270), wa
 	ld xwa, (xsp + 4)
 	call GetCharHeight
-	ldw_sri0 WA, (xsp + 0x010a)
+	ld	wa, (xsp+266)
 	add wa, hl
-	stw_dri WA, 0xfd, 0x12, 0x01
+	ld	(xsp+274), wa
 	lda xwa, (xsp+268)
 	ld xhl, xwa
 	lda xwa, (xsp+264)
@@ -17830,7 +17830,7 @@ Scoop_EnvCalc_Handler1:
 	muls	bc, 40
 	sub	hl, bc
 	sll	hl, 3
-	stw_dri HL, 0xfd, 0x00, 0x01	; ld (XSP+0x0100),HL
+	ld	(xsp+256), hl	; ld (XSP+0x0100),HL
 	ld	ix, 0:i3
 	cp	ix, de
 	jr	nc, Scoop_CurveUpdate_SegmentEnd_Skip5
@@ -17945,12 +17945,12 @@ Scoop_GlideParam_Setup:
 	ld bc, hl
 	extz xbc
 	div bc, 0x28
-	stw_dri BC, 0xfd, 0x04, 0x01
-	ldw_sri0 BC, (xsp + 0x0104)
+	ld	(xsp+260), bc
+	ld	bc, (xsp+260)
 	muls bc, 0x28
 	sub hl, bc
 	sll hl, 3
-	stw_dri HL, 0xfd, 0x02, 0x01
+	ld	(xsp+258), hl
 	ld ix, 0:i3
 	cp ix, de
 	jr nc, Scoop_GlideParam_End
@@ -17967,7 +17967,7 @@ Scoop_GlideParam_Configure:
 	ld c, (xbc)
 	extz bc
 	lda xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
-	ldb_sri C, 0x07, 0xf4, 0xe4
+	ld	c, (xiy+bc)
 	ld (xhl), c
 	inc 1, ix
 	cp ix, de
@@ -17979,26 +17979,26 @@ Scoop_GlideParam_End:
 	lda xbc, (xsp + 2)
 	add xbc, xwa
 	ld (xbc), 0x0
-	dec_sriw 2, 0xfd, 0x04, 0x01
-	ldw_sri0 WA, (xsp + 0x0102)
-	stw_dri WA, 0xfd, 0x06, 0x01
+	decw	2, (xsp+260)
+	ld	wa, (xsp+258)
+	ld	(xsp+262), wa
 	lda xwa, (xsp + 2)
 	ld xbc, 0:i3
 	call CalcTotalWidth
-	ldw_sri0 WA, (xsp + 0x0102)
+	ld	wa, (xsp+258)
 	add wa, hl
-	stw_dri WA, 0xfd, 0x0a, 0x01
-	ldw_sri0 WA, (xsp + 0x0104)
-	stw_dri WA, 0xfd, 0x08, 0x01
+	ld	(xsp+266), wa
+	ld	wa, (xsp+260)
+	ld	(xsp+264), wa
 	ld xwa, 0:i3
 	call GetCharDescent
 	ld iz, hl
 	ld xwa, 0:i3
 	call GetCharHeight
-	ldw_sri0 WA, (xsp + 0x0104)
+	ld	wa, (xsp+260)
 	add wa, hl
 	sub wa, iz
-	stw_dri WA, 0xfd, 0x0c, 0x01
+	ld	(xsp+268), wa
 	lda xwa, (xsp+262)
 	ld xhl, xwa
 	lda xwa, (xsp+258)
@@ -18034,7 +18034,7 @@ Scoop_GlideParam_Data:
 	muls	bc, 40
 	sub	hl, bc
 	sll	hl, 3
-	stw_dri HL, 0xfd, 0x00, 0x01	; ld (XSP+0x0100),HL
+	ld	(xsp+256), hl	; ld (XSP+0x0100),HL
 	ld	ix, 0:i3
 	cp	ix, de
 	jr	nc, Scoop_GlideParam_Setup_Skip
@@ -18094,7 +18094,7 @@ Scoop_GlideCalc_Handler0:
 	muls	bc, 40
 	sub	hl, bc
 	sll	hl, 3
-	stw_dri HL, 0xfd, 0x00, 0x01	; ld (XSP+0x0100),HL
+	ld	(xsp+256), hl	; ld (XSP+0x0100),HL
 	ld	ix, 0:i3
 	cp	ix, de
 	jr	nc, Scoop_GlideParam_Setup_Skip2
@@ -18286,13 +18286,13 @@ Scoop_Dispatch_CallFAB273:
 Scoop_EventLoop_12Entry:
 	lda xsp, (xsp-150)
 	push xiz
-	stl_dri XBC, 0xfd, 0x96, 0x00
+	ld	(xsp+150), xbc
 	ld xiz, xwa
 	ld xiy, StyleUI_ScreenData_CtlOnly_0x13B
 	lda xix, (xsp + 6)
 	ldw bc, 0x48
 	ldirw
-	cpl_sri_mr XIZ, 0xfd, 0x96, 0x00
+	cp	(xsp+150), xiz
 	jr ule, Scoop_EventLoop_12Entry_End
 
 Scoop_EventLoop_12Entry_Process:
@@ -18311,8 +18311,8 @@ Scoop_EventLoop_12Entry_Process:
 	call (xhl)
 	ld a, (xsp + 4)
 	extz wa
-	lda_dri XIZ, 0x07, 0xf8, 0xe0
-	cpl_sri_mr XIZ, 0xfd, 0x96, 0x00
+	lda	xiz, (xiz+wa)
+	cp	(xsp+150), xiz
 	jr ugt, Scoop_EventLoop_12Entry_Process
 
 Scoop_EventLoop_12Entry_End:
@@ -18562,7 +18562,7 @@ Scoop_EventLoop_12Entry_Join3:
 Scoop_EventLoop_36Entry:
 	lda xsp, (xsp-276)
 	pushw iz
-	stl_dri XWA, 0xfd, 0x12, 0x01
+	ld	(xsp+274), xwa
 	ld xiy, StyleUI_ScreenData_CtlOnly_0x1FF
 	lda xix, (xsp+266)
 	ld bc, 4:i3
@@ -18579,13 +18579,13 @@ Scoop_EventLoop_36Entry:
 	ld wa, bc
 	extz xwa
 	div wa, 0x28
-	stw_dri WA, 0xfd, 0x08, 0x01
-	ldw_sri0 WA, (xsp + 0x0108)
+	ld	(xsp+264), wa
+	ld	wa, (xsp+264)
 	muls wa, 0x28
 	sub bc, wa
 	sll bc, 3
-	stw_dri BC, 0xfd, 0x06, 0x01
-	dec_sriw 2, 0xfd, 0x08, 0x01
+	ld	(xsp+262), bc
+	decw	2, (xsp+264)
 	ld wa, hl
 	cp wa, 2:i3
 	jr z, Scoop_EventLoop_36Entry_Branch1
@@ -18626,28 +18626,28 @@ Scoop_EventLoop_36Entry_Branch3:
 	extz wa
 	sla wa, 2
 	lda xbc, (Str_No_0xCEE:24)
-	ld_sril3 XWA, 0x07, 0xe4, 0xe0
+	ld	xwa, (xbc+wa)
 	ld (xsp + 2), xwa
-	ldw_sri0 WA, (xsp + 0x0106)
-	stw_dri WA, 0xfd, 0x0a, 0x01
+	ld	wa, (xsp+262)
+	ld	(xsp+266), wa
 	lda xwa, (xsp + 6)
 	ld xbc, (xsp + 2)
 	call CalcTotalWidth
-	ldw_sri0 WA, (xsp + 0x0106)
+	ld	wa, (xsp+262)
 	add wa, hl
-	stw_dri WA, 0xfd, 0x0e, 0x01
-	ldw_sri0 WA, (xsp + 0x0108)
+	ld	(xsp+270), wa
+	ld	wa, (xsp+264)
 	inc 2, wa
-	stw_dri WA, 0xfd, 0x0c, 0x01
+	ld	(xsp+268), wa
 	ld xwa, (xsp + 2)
 	call GetCharDescent
 	ld iz, hl
 	ld xwa, (xsp + 2)
 	call GetCharHeight
-	ldw_sri0 WA, (xsp + 0x0108)
+	ld	wa, (xsp+264)
 	add wa, hl
 	sub wa, iz
-	stw_dri WA, 0xfd, 0x10, 0x01
+	ld	(xsp+272), wa
 	lda xwa, (xsp+266)
 	ld xhl, xwa
 	lda xwa, (xsp+262)
@@ -19058,7 +19058,7 @@ Scoop_EventLoop_12Entry_Alt_Dispatch:
 	call (xhl)
 	ld a, (xsp + 4)
 	extz wa
-	lda_dri XIZ, 0x07, 0xf8, 0xe0
+	lda	xiz, (xiz+wa)
 	cp (xsp + 54), xiz
 	jr ugt, Scoop_EventLoop_12Entry_Alt_Process
 

@@ -367,7 +367,7 @@ SongBank_ScanActiveVoices:
 	add xhl, 0xab0d0
 	ld xiy, xhl
 	ld b, 0x10:opc
-	cpiw_sri 0xf5, 0x4e, 0xff, 0x00, 0x00
+	cpw	(xiy-178), 0x0000
 	jr z, ScanVoice_NoneFound
 
 ScanVoice_LoopCheckBit7:
@@ -1565,7 +1565,7 @@ DkMdlyPly_SendAudioCmd:
 DkMdlyPly_VoiceScanLoop:
 	ld bc, hl
 	add bc, bc
-	ldw_sri BC, 0x07, 0xe8, 0xe4
+	ld	bc, (xde+bc)
 	and bc, wa
 	ret nz
 	inc 1, hl

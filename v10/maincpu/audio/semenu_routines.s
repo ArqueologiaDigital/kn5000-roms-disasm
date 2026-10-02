@@ -979,7 +979,7 @@ SeMenu_SetupMenuDisplay_Section2_End:
 	ldto_berp C, 0xfb
 	extz bc
 	lda xde, (xsp + 2)
-	lda_dri XDE, 0x07, 0xe8, 0xe4
+	lda	xde, (xde+bc)
 	pushw 0x7f
 	ldw bc, 0x17
 	calr SeMenu_RegisterElement_Extended
@@ -1475,7 +1475,7 @@ SeMenu_TransferPartValues_AltEntry:
 	ld xwa, 0x2b
 
 SeMenu_TransferPartValues_AltLoop:
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld (xde), a
 	jr SeMenu_TransferPartValues_Data
 SeMenu_TransferPartValues_EndData_Helper2:
@@ -2000,8 +2000,8 @@ SeMenu_FillEntryTable_Loop:
 	ldw bc, 0xfffa
 	add ix, bc
 	ld bc, de
-	ldb_sri C, 0x07, 0xec, 0xe4
-	stb_dri C, 0x07, 0xe0, 0xf0
+	ld	c, (xhl+bc)
+	ld	(xwa+ix), c
 	inc1b_erp 0xea
 	inc 1, de
 	ldto_berp C, 0xea
@@ -2032,8 +2032,8 @@ SeMenu_SetupPartDisplay:
 	ld hl, 0:i3
 
 SeMenu_SetupPartDisplay_Loop:
-	ldb_sri A, 0x07, 0xe4, 0xec
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	a, (xbc+hl)
+	ld	(xix+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2050,8 +2050,8 @@ SeMenu_SetupPartDisplay_Alt:
 	ld hl, 0:i3
 
 SeMenu_SetupPartDisplay_AltLoop:
-	ldb_sri A, 0x07, 0xe4, 0xec
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	a, (xbc+hl)
+	ld	(xix+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2068,8 +2068,8 @@ SeMenu_SetupPartDisplay_Mode2:
 	ld hl, 0:i3
 
 SeMenu_SetupPartDisplay_Mode2Loop:
-	ldb_sri A, 0x07, 0xe4, 0xec
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	a, (xbc+hl)
+	ld	(xix+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2086,8 +2086,8 @@ SeMenu_SetupPartDisplay_Mode3:
 	ld hl, 0:i3
 
 SeMenu_SetupPartDisplay_Mode3Loop:
-	ldb_sri A, 0x07, 0xe4, 0xec
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	a, (xbc+hl)
+	ld	(xix+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -5412,7 +5412,7 @@ SeMenu_ProcessEffect_StoreLoop:
 	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
-	ldb_sri C, 0x07, 0xe8, 0xe4
+	ld	c, (xde+bc)
 	extz bc
 	calr SeMenu_StorePartParam
 	cp_erpb 0xfb, 0x14
@@ -5465,7 +5465,7 @@ SeMenu_ProcessEffect_AltData:
 	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
-	ldb_sri C, 0x07, 0xe8, 0xe4
+	ld	c, (xde+bc)
 	extz bc
 	calr SeMenu_StorePartParam
 	cp_erpb 0xfb, 0x14
@@ -5498,7 +5498,7 @@ SeMenu_ProcessEffect_Section2:
 	ldto_berp C, 0xfb
 	inc 3, c
 	extz bc
-	ldb_sri C, 0x07, 0xe8, 0xe4
+	ld	c, (xde+bc)
 	extz bc
 	calr SeMenu_StorePartParam
 	cp_erpb 0xfb, 0x14
@@ -5555,7 +5555,7 @@ SeMenu_ApplyFilter_SetupDisplay:
 	extz wa
 	add wa, wa
 	lda xbc, (1698:16)
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	lda xhl, (xsp + 2)
 	ld c, (xhl + 15)
 	extz bc
@@ -5609,7 +5609,7 @@ SeMenu_ApplySynthParam_Alt:
 	extz wa
 	add wa, wa
 	lda xbc, (1698:16)
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	lda xhl, (xsp)
 	ld c, (xhl + 15)
 	extz bc

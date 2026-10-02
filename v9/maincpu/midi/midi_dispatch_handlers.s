@@ -30,7 +30,7 @@ MidiSerial_PumpLoop:
 	and a, 0x70
 	srl a, 2
 	ld xiz, MidiSerial_StatusHandlers
-	ld_sril3 XIZ, 0x03, 0xf8, 0xe0
+	ld	xiz, (xiz+a)
 	call (xiz)
 	jr MidiSerial_PumpLoop
 
@@ -76,7 +76,7 @@ MidiSerial_WaitLoop:
 	ld hl, (xiz - 10)
 	cp hl, (xiz - 6)
 	jr z, MidiSerial_WaitDone
-	ldb_sri A, 0x07, 0xf8, 0xec
+	ld	a, (xiz+hl)
 	bit 7, a
 	jr z, MidiSerial_WaitLoop
 
@@ -1125,7 +1125,7 @@ MIDI_DispatchCC:
 	extz hl
 	sll hl, 2
 	ld xix, MidiDispatchCC_HandlerTable
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	call (xix)
 
 MidiCC_DispatchCleanupRet:
@@ -1645,7 +1645,7 @@ PanelEvent_DispatchByIndex:
 	jr ugt, PanelEvt_DispatchByIndex_Ret
 	extz hl
 	sll hl, 2
-	ld_sril3 XHL, 0x07, 0xf4, 0xec
+	ld	xhl, (xiy+hl)
 	call (xhl)
 
 PanelEvt_DispatchByIndex_Ret:
@@ -1656,7 +1656,7 @@ MidiCC_ChannelDispatch_TableA:
 	ld l, (0x964d:16)
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, MidiCC_ChannelDispatch_TableA_Ret
 	ld de, (0x964e:16)
@@ -1672,7 +1672,7 @@ MidiCC_ChannelDispatch_Ctrl40:
 	ld xix, PanelEvt_Handler_4_DualValueCheck_0x828
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl40_ConfigExit
 	bit 0, (0xfd59:16)
@@ -1691,7 +1691,7 @@ MidiCC_ChannelDispatch_Ctrl41:
 	ld xix, PanelEvt_Handler_4_DualValueCheck_0x8A8
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, MidiCC_ChannelDispatch_Ctrl41_Ret
 	xor e, e
@@ -1722,7 +1722,7 @@ MidiCC_ChannelDispatch_CtrlFlags:
 	ld xix, PanelEvt_Handler_4_DualValueCheck_0x928
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, PanelEvent_NullRet
 	bit 6, (0xfd57:16)
@@ -1755,7 +1755,7 @@ MidiCC_ChannelDispatch_Ctrl1:
 	ld xix, PanelEvt_Handler_4_DualValueCheck_0x9A8
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl1_ConfigExit
 	bit 1, (0xfd58:16)
@@ -1774,7 +1774,7 @@ MidiCC_ChannelDispatch_Ctrl3:
 	ld xix, PanelEvt_Handler_4_DualValueCheck_0xA28
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl3_ConfigExit
 	bit 3, (0xfd58:16)
@@ -1793,7 +1793,7 @@ MidiCC_ChannelDispatch_CtrlFlags2:
 	ld xix, PanelEvt_Handler_4_DualValueCheck_0xAA8
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, PanelEvent_NullRet2
 	bit 5, (0xfd57:16)
@@ -1824,7 +1824,7 @@ MidiCC_ChannelDispatch_Ctrl0:
 	ld xix, PanelEvt_Handler_4_DualValueCheck_0xB28
 	extz hl
 	sll l, 2
-	ld_sril3 XIX, 0x07, 0xf0, 0xec
+	ld	xix, (xix+hl)
 	cp xix, 0xffffffff
 	jr z, BitMask_Ctrl0_ConfigExit
 	bit 0, (0xfd58:16)
@@ -1973,7 +1973,7 @@ MidiChanCfg_SetupParams:
 	cp w, 0x2f
 	jr ugt, MidiChannel_ConfigureExit
 	ld xiz, MidiCC_FunctionToCCNumber
-	ldb_sri W, 0x03, 0xf8, 0xe1
+	ld	w, (xiz+w)
 	cp w, 0xff
 	jr z, MidiChannel_ConfigureExit
 	ld (xiy + 0:8), wa
@@ -3103,7 +3103,7 @@ FileData_LoadFromSlot:
 	extz bc
 	sla bc, 11
 	lda xwa, (0x0ab000:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	calr DataBuf_CheckSubFormat
 	ld (0xb7ea:16), hl
 	ld a, (xsp)
@@ -3481,7 +3481,7 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	extz bc
 	sla bc, 11
 	lda xwa, (0x0ab000:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
@@ -3498,7 +3498,7 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	extz bc
 	sla bc, 11
 	lda xwa, (0x0ab000:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld (xsp + 14), xwa
 	ld xwa, 0x2e0
 	add (xsp + 14), xwa
@@ -5094,7 +5094,7 @@ DataBuf_CopyBulkBitfields_F980:
 	sla c, 3
 	andmi8 (xix), 0xf7
 	or (xix), c
-	ldcf_dri 2, 0xe1, 0xb1, 0x03
+	ldcf	2, (xwa+945)
 	scc8 c, c
 	and c, 0x1
 	sla c, 2
@@ -5102,52 +5102,52 @@ DataBuf_CopyBulkBitfields_F980:
 	or (xix), c
 	ldcfm 1, (xhl)
 	stcfm 1, (xix)
-	ldcf_dri 0, 0xe1, 0xb1, 0x03
+	ldcf	0, (xwa+945)
 	stcfm 0, (xix)
-	ldb_sri0 C, (xwa + 0x03b3)
-	stb_dri C, 0xe9, 0xb3, 0x03
-	ldb_sri0 C, (xwa + 0x03b4)
-	stb_dri C, 0xe9, 0xb4, 0x03
-	ldb_sri0 C, (xwa + 0x03b5)
-	stb_dri C, 0xe9, 0xb5, 0x03
-	ldb_sri0 C, (xwa + 0x03ba)
-	stb_dri C, 0xe9, 0xba, 0x03
-	ldb_sri0 C, (xwa + 0x03bb)
-	stb_dri C, 0xe9, 0xbb, 0x03
-	ldb_sri0 C, (xwa + 0x03bc)
-	stb_dri C, 0xe9, 0xbc, 0x03
-	ldb_sri0 C, (xwa + 0x03bd)
-	stb_dri C, 0xe9, 0xbd, 0x03
-	ldb_sri0 C, (xwa + 0x03be)
-	stb_dri C, 0xe9, 0xbe, 0x03
-	ldb_sri0 C, (xwa + 0x03bf)
-	stb_dri C, 0xe9, 0xbf, 0x03
-	ldb_sri0 C, (xwa + 0x03c0)
-	stb_dri C, 0xe9, 0xc0, 0x03
-	ldb_sri0 C, (xwa + 0x03c1)
-	stb_dri C, 0xe9, 0xc1, 0x03
-	ldb_sri0 C, (xwa + 0x03c2)
-	stb_dri C, 0xe9, 0xc2, 0x03
-	ldb_sri0 C, (xwa + 0x03c3)
-	stb_dri C, 0xe9, 0xc3, 0x03
-	ldb_sri0 C, (xwa + 0x03c4)
-	stb_dri C, 0xe9, 0xc4, 0x03
-	ldb_sri0 C, (xwa + 0x03c5)
-	stb_dri C, 0xe9, 0xc5, 0x03
-	ldb_sri0 C, (xwa + 0x03c6)
-	stb_dri C, 0xe9, 0xc6, 0x03
-	ldb_sri0 C, (xwa + 0x03c7)
-	stb_dri C, 0xe9, 0xc7, 0x03
-	ldb_sri0 C, (xwa + 0x03c8)
-	stb_dri C, 0xe9, 0xc8, 0x03
-	ldb_sri0 C, (xwa + 0x03c9)
-	stb_dri C, 0xe9, 0xc9, 0x03
-	ldb_sri0 C, (xwa + 0x03ca)
-	stb_dri C, 0xe9, 0xca, 0x03
-	ldb_sri0 A, (xwa + 0x0417)
+	ld	c, (xwa+947)
+	ld	(xde+947), c
+	ld	c, (xwa+948)
+	ld	(xde+948), c
+	ld	c, (xwa+949)
+	ld	(xde+949), c
+	ld	c, (xwa+954)
+	ld	(xde+954), c
+	ld	c, (xwa+955)
+	ld	(xde+955), c
+	ld	c, (xwa+956)
+	ld	(xde+956), c
+	ld	c, (xwa+957)
+	ld	(xde+957), c
+	ld	c, (xwa+958)
+	ld	(xde+958), c
+	ld	c, (xwa+959)
+	ld	(xde+959), c
+	ld	c, (xwa+960)
+	ld	(xde+960), c
+	ld	c, (xwa+961)
+	ld	(xde+961), c
+	ld	c, (xwa+962)
+	ld	(xde+962), c
+	ld	c, (xwa+963)
+	ld	(xde+963), c
+	ld	c, (xwa+964)
+	ld	(xde+964), c
+	ld	c, (xwa+965)
+	ld	(xde+965), c
+	ld	c, (xwa+966)
+	ld	(xde+966), c
+	ld	c, (xwa+967)
+	ld	(xde+967), c
+	ld	c, (xwa+968)
+	ld	(xde+968), c
+	ld	c, (xwa+969)
+	ld	(xde+969), c
+	ld	c, (xwa+970)
+	ld	(xde+970), c
+	ld	a, (xwa+1047)
 	and a, 0x7f
-	and_srib_im 0xe9, 0x17, 0x04, 0x80
-	or_srib_mr A, 0xe9, 0x17, 0x04
+	and	(xde+1047), 0x80
+	or	(xde+1047), a
 	ret
 
 DataBuf_CopyBulkBitfields_Large:
@@ -5879,7 +5879,7 @@ FileData_LoadAndParseType3_Continue:
 	extz bc
 	sla bc, 11
 	lda xwa, (0x0ab000:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
@@ -5896,7 +5896,7 @@ FileData_LoadAndParseType3_Continue:
 	extz bc
 	sla bc, 11
 	lda xwa, (0x0ab000:24)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld (xsp + 14), xwa
 	ld xwa, 0x2e0
 	add (xsp + 14), xwa
@@ -6465,18 +6465,18 @@ DSPCfg_ConfigureVoiceSlotA:
 	ld (xsp + 6), xbc
 	ld (xsp + 10), xwa
 	ld xwa, (xsp + 10)
-	ldcf_dri 7, 0xe1, 0x53, 0x01
+	ldcf	7, (xwa+339)
 	scc8 c, c
 	ld xde, (xsp + 6)
 	and c, 0x1
 	sla c, 7
-	and_srib_im 0xe9, 0xef, 0x02, 0x7f
-	or_srib_mr C, 0xe9, 0xef, 0x02
-	ldb_sri0 A, (xwa + 0x0155)
+	and	(xde+751), 0x7f
+	or	(xde+751), c
+	ld	a, (xwa+341)
 	and a, 0xf
 	extz wa
 	lda xbc, (NakaInst_SoundConfig_LookupTable_0x28:24)
-	ldb_sri C, 0x07, 0xe4, 0xe0
+	ld	c, (xbc+wa)
 	extz bc
 	lda xde, (xde+756)
 	ld xwa, 0x4900
@@ -6484,7 +6484,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	cp hl, 0:i3
 	jr lt, DSPCfg_ConfigureVoiceSlotB
 	ld xbc, (xsp + 6)
-	ldb_sri0 A, (xbc + 0x02f3)
+	ld	a, (xbc+755)
 	dec 1, a
 	extz wa
 	pushw wa
@@ -6497,7 +6497,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
-	ldb_sri0 A, (xwa + 0x02f4)
+	ld	a, (xwa+756)
 	ld (xbc), a
 	ld xwa, 0x4904
 	call DSPCfg_ReadParam_Map0
@@ -6530,11 +6530,11 @@ DSPCfg_VoiceSlotA_RestoreContext:
 
 DSPCfg_ConfigureVoiceSlotB:
 	ld xwa, (xsp + 10)
-	ldb_sri0 A, (xwa + 0x0152)
+	ld	a, (xwa+338)
 	srl a, 4
 	extz wa
 	lda xbc, (NakaInst_SoundConfig_LookupTable_0x38:24)
-	ldb_sri C, 0x07, 0xe4, 0xe0
+	ld	c, (xbc+wa)
 	extz bc
 	ld xwa, (xsp + 6)
 	lda xde, (xwa+782)
@@ -6543,7 +6543,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	cp hl, 0:i3
 	jrl lt, DSPCfg_VoiceSlotB_Epilog
 	ld xbc, (xsp + 6)
-	ldb_sri0 A, (xbc + 0x030d)
+	ld	a, (xbc+781)
 	dec 1, a
 	extz wa
 	pushw wa
@@ -6556,7 +6556,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	ld a, (xbc)
 	ld (xsp + 4), a
 	ld xwa, (xsp + 6)
-	ldb_sri0 A, (xwa + 0x030e)
+	ld	a, (xwa+782)
 	ld (xbc), a
 	ld xwa, 0x4b04
 	call DSPCfg_ReadParam_Map0
@@ -6582,12 +6582,12 @@ DSPCfg_VoiceSlotB_ParamLoop:
 
 DSPCfg_VoiceSlotB_MapAndWrite:
 	ld xbc, (xsp + 10)
-	ldb_sri0 C, (xbc + 0x0152)
+	ld	c, (xbc+338)
 	and c, 0xf
 	srl c, 1
 	extz bc
 	lda xde, (NakaInst_SoundConfig_LookupTable_0x48:24)
-	ldb_sri C, 0x07, 0xe8, 0xe4
+	ld	c, (xde+bc)
 	extz bc
 	ld xde, (xsp + 6)
 	lda xde, (xde+782)
@@ -6959,10 +6959,10 @@ DataBuf_CopyBulkBitfields_Large_Helper2_Loop:
 
 DataBuf_TransferSlotBitfields:
 	ld xde, xbc
-	ldb_sri0 C, (xwa + 0x02e1)
+	ld	c, (xwa+737)
 	and c, 0x30
-	and_srib_im 0xe9, 0xe1, 0x02, 0xcf
-	or_srib_mr C, 0xe9, 0xe1, 0x02
+	and	(xde+737), 0xcf
+	or	(xde+737), c
 	lda xbc, (xwa + 64)
 	ld xhl, xbc
 	lda xix, (xde + 64)
@@ -6990,10 +6990,10 @@ DataBuf_TransferSlotBitfields_Loop:
 	lda xhl, (xhl + 26)
 	cp xhl, xiy
 	jr c, DataBuf_TransferSlotBitfields_Loop
-	ldb_sri0 A, (xwa + 0x0417)
+	ld	a, (xwa+1047)
 	and a, 0x7f
-	and_srib_im 0xe9, 0x17, 0x04, 0x80
-	or_srib_mr A, 0xe9, 0x17, 0x04
+	and	(xde+1047), 0x80
+	or	(xde+1047), a
 	ret
 
 DataBuf_CheckFormatPair:
@@ -7426,7 +7426,7 @@ SndParam_CopyPreset_MaskLoop:
 	cp l, 0:i3
 	jr nz, SndParam_CopyPreset_SelectBank
 	ld xwa, 0:i3
-	stl_dri XWA, 0xf9, 0xd8, 0x00
+	ld	(xiz+216), xwa
 
 SndParam_CopyPreset_SelectBank:
 	cp (xsp + 4), 0x2
@@ -7474,7 +7474,7 @@ SndParam_GetBlockPointer:
 	extz wa
 	muls wa, 0xea
 	lda xbc, (NakaInst_SoundConfig_LookupTable_0x8A:24)
-	lda_dri XHL, 0x07, 0xe4, 0xe0
+	lda	xhl, (xbc+wa)
 	ret
 
 SndParam_GetBlockPointer_Extended:
@@ -8386,7 +8386,7 @@ MIDI_ReadChannelParam:
 	ret gt
 	add bc, bc
 	lda xix, (NakaInst_SoundConfig_LookupTable_0x17B6:24)
-	ldw_sri BC, 0x07, 0xf0, 0xe4
+	ld	bc, (xix+bc)
 	lda xix, (MidiChan_ParamDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; MIDI channel parameter read dispatch
@@ -8443,7 +8443,7 @@ SeqData_ReadFieldByIndex:
 	jr gt, SeqData_ReturnZeroField
 	add bc, bc
 	lda xix, (NakaInst_SoundConfig_LookupTable_0x17D6:24)
-	ldw_sri BC, 0x07, 0xf0, 0xe4
+	ld	bc, (xix+bc)
 	lda xix, (SeqData_FieldDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Sequence data field read dispatch
@@ -8556,7 +8556,7 @@ MidiSeq_Slot0_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	lda xwa, (WidgetParam_Entry_018_0x26:24)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
+	ld	xwa, (xwa+bc)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
 	ld bc, 1:i3
@@ -8566,7 +8566,7 @@ MidiSeq_Slot0_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	lda xwa, (WidgetParam_Entry_018_0x26:24)
-	ld_sril3 XWA, 0x07, 0xe0, 0xe4
+	ld	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 2:i3
@@ -8593,7 +8593,7 @@ MidiSeq_ScanSlot1_Loop:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot1_CheckMatch
 	ld xwa, (0xbcac:16)
@@ -8618,7 +8618,7 @@ MidiSeq_Slot1_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -8628,7 +8628,7 @@ MidiSeq_Slot1_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot1_StorePtr
@@ -8640,7 +8640,7 @@ MidiSeq_Slot1_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -8651,7 +8651,7 @@ MidiSeq_Slot1_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -8671,7 +8671,7 @@ MidiSeq_ScanSlot2_Loop:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot2_CheckMatch
 	ld xwa, (0xbcac:16)
@@ -8700,7 +8700,7 @@ MidiSeq_Slot2_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -8710,7 +8710,7 @@ MidiSeq_Slot2_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot2_StorePtr
@@ -8722,7 +8722,7 @@ MidiSeq_Slot2_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -8733,7 +8733,7 @@ MidiSeq_Slot2_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -8753,7 +8753,7 @@ MidiSeq_ScanSlot3_Loop:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot3_CheckMatch
 	ld xwa, (0xbcac:16)
@@ -8782,7 +8782,7 @@ MidiSeq_Slot3_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -8792,7 +8792,7 @@ MidiSeq_Slot3_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot3_StorePtr
@@ -8804,7 +8804,7 @@ MidiSeq_Slot3_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -8815,7 +8815,7 @@ MidiSeq_Slot3_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -8835,7 +8835,7 @@ MidiSeq_ScanSlot4_Loop:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot4_CheckMatch
 	ld xwa, (0xbcac:16)
@@ -8864,7 +8864,7 @@ MidiSeq_Slot4_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -8874,7 +8874,7 @@ MidiSeq_Slot4_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot4_StorePtr
@@ -8886,7 +8886,7 @@ MidiSeq_Slot4_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -8897,7 +8897,7 @@ MidiSeq_Slot4_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -8917,7 +8917,7 @@ MidiSeq_ScanSlot5_Loop:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot5_CheckMatch
 	ld xwa, (0xbcac:16)
@@ -8946,7 +8946,7 @@ MidiSeq_Slot5_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -8956,7 +8956,7 @@ MidiSeq_Slot5_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot5_StorePtr
@@ -8968,7 +8968,7 @@ MidiSeq_Slot5_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -8979,7 +8979,7 @@ MidiSeq_Slot5_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -8999,7 +8999,7 @@ MidiSeq_ScanSlot6_Loop:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot6_CheckMatch
 	ld xwa, (0xbcac:16)
@@ -9028,7 +9028,7 @@ MidiSeq_Slot6_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -9038,7 +9038,7 @@ MidiSeq_Slot6_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot6_StorePtr
@@ -9050,7 +9050,7 @@ MidiSeq_Slot6_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -9061,7 +9061,7 @@ MidiSeq_Slot6_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -9081,7 +9081,7 @@ MidiSeq_ScanSlot7_Loop:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	cp (xwa), 0xff
 	jr nz, MidiSeq_Slot7_CheckMatch
 	ld xwa, (0xbcac:16)
@@ -9110,7 +9110,7 @@ MidiSeq_Slot7_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -9120,7 +9120,7 @@ MidiSeq_Slot7_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot7_StorePtr
@@ -9132,7 +9132,7 @@ MidiSeq_Slot7_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -9143,7 +9143,7 @@ MidiSeq_Slot7_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -9192,7 +9192,7 @@ MidiSeq_Slot8_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -9202,7 +9202,7 @@ MidiSeq_Slot8_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_Slot8_StorePtr
@@ -9214,7 +9214,7 @@ MidiSeq_Slot8_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -9225,7 +9225,7 @@ MidiSeq_Slot8_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -9246,7 +9246,7 @@ MidiSeq_ScanSlot9_Loop:
 	muls bc, 0x6
 	ld de, bc
 	ld xbc, (xsp + 2)
-	lda_dri XBC, 0x07, 0xe4, 0xe8
+	lda	xbc, (xbc+de)
 	cp (xbc), 0xff
 	jr nz, MidiSeq_Slot9_CheckMatch
 	ld bc, 4:i3
@@ -9273,7 +9273,7 @@ MidiSeq_Slot9_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
 	ld bc, 0:i3
@@ -9283,7 +9283,7 @@ MidiSeq_Slot9_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld e, (xwa + 1)
 	cp e, 0:i3
 	jr z, MidiSeq_RestoreAndReturn
@@ -9295,7 +9295,7 @@ MidiSeq_Slot9_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa)
 	ld xwa, (0xbcac:16)
@@ -9306,7 +9306,7 @@ MidiSeq_Slot9_WriteParams:
 	muls wa, 0x6
 	ld bc, wa
 	ld xwa, (xsp + 2)
-	lda_dri XWA, 0x07, 0xe0, 0xe4
+	lda	xwa, (xwa+bc)
 	ld xwa, (xwa + 2)
 	ld e, (xwa + 1)
 	ld xwa, (0xbcac:16)
@@ -10350,7 +10350,7 @@ Part_LookupByIndex:
 	ld xbc, (0x90f2:16)
 	extz wa
 	sla wa, 2
-	ld_sril3 XHL, 0x07, 0xe4, 0xe0
+	ld	xhl, (xbc+wa)
 	ret
 
 MIDI_PackNibbleParam:
@@ -10433,7 +10433,7 @@ AssSwb_ApplyBitDescriptor:
 	extz wa
 	ld c, (xbc)
 	extz bc
-	ldb_sri E, 0x07, 0xec, 0xe4
+	ld	e, (xhl+bc)
 	extz de
 	ld l, (xix)
 	extz hl
@@ -10533,11 +10533,11 @@ Part_LookupTableEntry:
 	ld xde, (0x90f2:16)
 	extz wa
 	sla wa, 2
-	ld_sril3 XWA, 0x07, 0xe8, 0xe0
+	ld	xwa, (xde+wa)
 	cp xwa, 0xffffffff
 	jr z, Part_LookupReturnZero
 	extz bc
-	ldb_sri L, 0x07, 0xe0, 0xe4
+	ld	l, (xwa+bc)
 	ret
 
 Part_LookupReturnZero:
@@ -10675,7 +10675,7 @@ MidiSeq_UpdateToneParam:
 	call SeqData_ReadFieldByIndex
 	extz hl
 	lda xbc, (WidgetParam_Entry_018_0x84:24)
-	ldb_sri C, 0x07, 0xe4, 0xec
+	ld	c, (xbc+hl)
 	ld a, c
 	ld (0xbd00:16), c
 	cp c, (0xbd02:16)
@@ -10690,7 +10690,7 @@ MidiSeq_UpdateToneParam_Lower:
 	call SeqData_ReadFieldByIndex
 	extz hl
 	lda xbc, (WidgetParam_Entry_018_0x84:24)
-	ldb_sri C, 0x07, 0xe4, 0xec
+	ld	c, (xbc+hl)
 	ld a, c
 	ld (0xbd0c:16), c
 	cp c, (0xbd0e:16)
@@ -13311,7 +13311,7 @@ SysEx_InitiateSend:
 	ret gt
 	add wa, wa
 	lda xix, (SeqFormat_ReferenceData_0x58:24)
-	ldw_sri WA, 0x07, 0xf0, 0xe0
+	ld	wa, (xix+wa)
 	lda xix, (SysEx_SendDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
@@ -13423,7 +13423,7 @@ SeqData_DispatchHandler:
 	extz hl
 	sla hl, 2
 	lda xbc, (SeqData_SubDispatch_Table:24)
-	ld_sril3 XHL, 0x07, 0xe4, 0xec
+	ld	xhl, (xbc+hl)
 	call (xhl)
 
 SeqData_DispatchLoop:

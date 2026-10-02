@@ -523,7 +523,7 @@ LoadFilter_UpdateDisplay:
 	extz wa
 	sla wa, 4
 	lda xbc, (0x7f86:16)
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	ld xwa, (0x7f82:16)
 	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
@@ -745,7 +745,7 @@ SaveFilter_UpdateDisplay:
 	extz wa
 	sla wa, 4
 	lda xbc, (0x800a:16)
-	lda_dri XDE, 0x07, 0xe4, 0xe0
+	lda	xde, (xbc+wa)
 	ld xwa, (0x8006:16)
 	ld xbc, EVT_PARA_DRAW
 	jrl SaveFilter_DispatchWidget

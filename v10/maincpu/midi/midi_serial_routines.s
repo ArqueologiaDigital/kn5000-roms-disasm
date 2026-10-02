@@ -663,10 +663,10 @@ MIDI_QUEUE_EVENT_PAIR:
 	ei 6
 	ld xix, 0x1e753
 	ld hl, (xix - 4)
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	(xix+hl), a
 	minc1_16 hl, 0x7ff
 	ld a, (1051:16)
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	(xix+hl), a
 	minc1_16 hl, 0x7ff
 	ld (xix - 4), hl
 	decm 2, (xix - 2)
@@ -679,10 +679,10 @@ QueuePair_FifoFullReturn:
 QueuePair_LinearBufWrite:
 	ld xix, 0x477
 	ld hl, (1141:16)
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	(xix+hl), a
 	inc 1, hl
 	ld a, (1051:16)
-	stb_dri A, 0x07, 0xf0, 0xec
+	ld	(xix+hl), a
 	inc 1, hl
 	ld (1141:16), hl
 	ret
@@ -701,7 +701,7 @@ MIDI_CHANNEL_MESSAGE_DISPATCHER:
 	srl a, 2
 	xor w, w
 	ld xix, MIDI_CHANNEL_HANDLERS
-	ld_sril3 XIX, 0x07, 0xf0, 0xe0
+	ld	xix, (xix+wa)
 	jp (xix)
 ; MIDI_CHANNEL_HANDLER_JUMP_TABLE -- one 0xFF pad byte, then 8 handler pointers
 ; (MIDI_CHANNEL_HANDLERS = this label + 1), one per status-byte high nibble.
@@ -900,7 +900,7 @@ READ_COM_SELECT_SWITCH:
 	ld a, (104:16)
 	srl a, 4
 	ld xix, MidiSerial_OffsetTable
-	ldb_sri A, 0x03, 0xf0, 0xe0
+	ld	a, (xix+a)
 	ld (0xb7e0:16), a
 	ret
 
