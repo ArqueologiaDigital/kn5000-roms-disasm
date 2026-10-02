@@ -944,19 +944,20 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 3. Write the conversion, replacing the `.incbin` with instructions
 4. Build and verify: `make all` — must show 100% match for all ROMs
 
-**Known encoding mismatches requiring `.byte` workarounds:**
+**Encodings that need a spelling choice (no `.byte` workaround is needed any more).**
+These rows used to say "write `.byte`"; every spelling below assembles to the ROM's
+bytes with the pinned llvm-mc (checked with c949d618 and with the T1 fix round's
+binary, wave 3a, 2026-10-02):
 
-| ROM Pattern | Assembler Produces | Fix |
-|-------------|-------------------|-----|
-| `bf d8 37` (3 bytes) — `lda xsp, (xsp + d)` when d >= 0x80 | `f3 1d d8 00 37` (5 bytes) — uses F3 prefix with 16-bit displacement | `.byte 0xbf, d, 0x37` |
-| `2E` (1 byte) — `push iz` compact form | `de 04` (2 bytes) — uses register-prefix form | `.byte 0x2e` |
-| `4E` (1 byte) — `pop iz` compact form | `de 05` (2 bytes) — uses register-prefix form | `.byte 0x4e` |
-| `8f 00 21` (3 bytes) — `ld a, (xsp + 0x00)` | `87 21` (2 bytes) — folds zero displacement | `.byte 0x8f, 0x00, 0x21` |
+| ROM Pattern | Spelling | Why |
+|-------------|----------|-----|
+| `bf d8 37` (3 bytes) — LDA through (XSP+d8) with the byte d >= 0x80 | `lda xsp, (xsp-40)` → `bf d8 37` | (Xrr+d8) is SIGNED: write the signed value (0xd8 = -40), or `(xsp-40:8)`.  `(xsp+216)` is a different address (+216, the 5-byte d16 form `f3 fd d8 00 37`) and the assembler warns |
+| `2E` / `4E` (1 byte) — compact push / pop of a 16-bit register | `pushw iz` → `2e`, `popw iz` → `4e` | `push iz` / `pop iz` select the 2-byte register-prefix form (`de 04` / `de 05`) |
+| `8f 00 21` (3 bytes) — `ld a, (xsp + 0x00)` in the d8 form | `ld a, (xsp+0:8)` → `8f 00 21` | a plain `(xsp)` / `(xsp+0)` takes the 1-byte-shorter `87 21` |
 
-**Same pattern applies to ALL compact push/pop of 16-bit registers.** The assembler always uses the 2-byte register-prefix form, but the ROM uses 1-byte compact opcodes:
-- `push wa` (0x28), `push bc` (0x29), `push de` (0x2A), `push hl` (0x2B), `push ix` (0x2C), `push iy` (0x2D), `push iz` (0x2E), `push sp` (0x2F)
-- `pop wa` (0x48), `pop bc` (0x49), `pop de` (0x4A), `pop hl` (0x4B), `pop ix` (0x4C), `pop iy` (0x4D), `pop iz` (0x4E), `pop sp` (0x4F)
-- **Fix:** Use `.byte 0xNN` for each. The 32-bit push/pop (`push xwa` = 0x38, etc.) work correctly as 1-byte.
+**Same pattern for ALL compact push/pop of 16-bit registers:** `pushw wa` (0x28),
+`pushw bc` (0x29) ... `pushw sp` (0x2F), `popw wa` (0x48) ... `popw sp` (0x4F); `push r16` /
+`pop r16` are the 2-byte D8+r forms.  The 32-bit `push xwa` (0x38, etc.) is 1 byte either way.
 
 **Mnemonic reference for common operations:**
 
@@ -970,9 +971,9 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 | F2 LDA 24-bit address | `lda xreg, (addr:24)` (the old `ldada_24` spelling no longer exists) | `lda xwa, (0x2e2458:24)` → `f2 58 24 2e 30` |
 | E2 32-bit load from 24-bit addr | `ld xreg, (addr:24)` (was `ldda32_24`, no longer exists) | `ld xbc, (0x23a1a2:24)` → `e2 a2 a1 23 21` |
 | D2 16-bit load from 24-bit addr | `ld reg16, (addr:24)` (was `ldda16_24 xiz, ...`, which named XIZ for IZ; no longer exists) | `ld iz, (0x230e72:24)` → `d2 72 0e 23 26` |
-| E3 indexed 32-bit load | `ld_sril3 xreg, b0, b1, b2` | `ld_sril3 xbc, 0xe5, 0x0a, 0x0e` → `e3 e5 0a 0e 21` |
-| C3 indexed 8-bit load | `ld_srib3 reg, b0, b1, b2` | `ld_srib3 a, 0x07, 0xe0, 0xf0` → `c3 07 e0 f0 21` |
-| F3 DRI byte store | `lda_dri3 xreg, b0, b1, b2` | `lda_dri3 xbc, 0x07, 0xe8, 0xec` → `f3 07 e8 ec 41` |
+| E3 (Xrr+d16) 32-bit load, raw mode bytes | `ld_sril3 xreg, b0, b1, b2` (raw pseudo; the real spelling is `ld xbc, (xbc+3594)`) | `ld_sril3 xbc, 0xe5, 0x0a, 0x0e` → `e3 e5 0a 0e 21` (MAME `ld XBC,(XBC+0x0e0a)`) |
+| C3 register-indexed 8-bit load | `ld r, (xrr+rr)` (the old `ld_srib3` raw form no longer exists) | `ld a, (xwa+ix)` → `c3 07 e0 f0 21` (MAME `ld A,(XWA+IX)`) |
+| F3 register-indexed byte STORE | `ld (xrr+rr), r` | `ld (xde+hl), a` → `f3 07 e8 ec 41` (MAME `ld (XDE+HL),A`).  This row used to say `lda_dri3 xbc, ...` -- a spelling that no longer exists and named an LDA of XBC for what is a store of A |
 | F3 DRI bit test | `bit_dri N, b0, b1, b2` | `bit_dri 7, 0x07, 0xe8, 0xf0` → `f3 07 e8 f0 cf` |
 | F3 DRI set/reset bit | `set_dri N, b0, b1, b2` / `res_dri` | raw bytes |
 | D7 word ERP load imm | `ldi_werp bank, N` | raw bytes per D7 prefix |
@@ -983,17 +984,16 @@ echo "XX XX XX XX" | xxd -r -p > /tmp/bytes.bin
 | Stack store immediate | `ldmw (xsp+d), imm` | raw bytes |
 | Stack compare immediate | `cpmi16 (xsp+d), imm` | raw bytes |
 | Stack word inc/dec | `incm N, (xsp+d)` / `decm N, (xsp+d)` | raw bytes |
-| Compact compare small | `cps reg, N` | `cps hl, 0` → `db d8`, `cps l, 3` → `cf db` |
+| Compact compare small | `cp reg, N:i3` (the `cps` alias was deleted, TOOLCHAIN_VERSION UPDATE 16) | `cp hl, 0:i3` → `db d8`, `cp l, 3:i3` → `cf db` |
 | Return + deallocate | `retd imm16` | `retd 2` → `0f 02 00` |
 | Indirect call | `call (xhl)` | → `b3 e8` (2 bytes) |
-| Compact 8-bit load | `ldb reg, imm` | `ldb w, 0` → `20 00` |
+| Compact 8-bit load | `ld reg, imm:opc` (was `ldb`, deleted in UPDATE 16) | `ld w, 0:opc` → `20 00` |
 | Compact 16-bit load | `ldw reg, imm` | `ldw wa, 0x1234` → raw bytes |
-| Compact 32-bit small imm | `lds32 xreg, N` | `lds32 xhl, 0` → `eb a8` |
+| Compact 32-bit small imm | `ld xreg, N:i3` (was `lds32`, deleted in UPDATE 16) | `ld xhl, 0:i3` → `eb a8` |
 
 **Critical gotchas:**
-- `ldada_24` uses `i32imm` operand type — **cannot resolve labels**. Must use numeric addresses for absolute references.
 - `cp wa, (mem)` vs `cp (mem), wa` — opposite compare directions (register-memory vs memory-register). Wrong choice flips the carry flag behavior. Check the sub-opcode: 0xF0+r = register, mem; 0xF8+r = mem, register.  (These were the pseudos `cpda16_24` / `cpdm16_24`, deleted in TOOLCHAIN_VERSION UPDATE 17 because their 32-bit register name was encoded by index: `cpda16_24 xwa` meant WA.)
-- Stack-relative LDA with displacement >= 0x80: always use `.byte` (assembler treats d8 as signed, uses F3 5-byte form for >= 128).
+- Stack-relative LDA with a d8 byte >= 0x80: the d8 field is SIGNED, so write the signed displacement (`lda xsp, (xsp-40)` → `bf d8 37`) or force it, `(xsp-40:8)`.  `(xsp+216)` is a different address; the assembler takes the 5-byte d16 form and warns.
 - DRI/SRI raw bytes (b0, b1, b2): Copy exactly from unidasm output. Even small errors (e.g., 0xE8 vs 0xE0) cause mismatches.
 - Loop label placement: Verify jump targets against unidasm addresses. Off-by-one label positions cause displacement mismatches.
 
