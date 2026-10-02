@@ -4693,7 +4693,8 @@ SeqStep_FileTellProcess_Str_a:		.incbin "includes/generated/naka_widget_descript
 SeqStep_FileTellFinal_Str_d:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141C8, 0x2	; "d"
 SeqChan_ReadNextFromLoop_Str_Dot:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141CA, 0xC	; ".          "
 SeqStep_SectorCompareBlock_Str_r:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141D6, 0x2	; "r"
-SeqChan_ByteBlockC_Str_Empty:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141D8, 0x1E	; ""
+SeqChan_ByteBlockC_Str_Empty:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141D8, 0x1	; ""
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141D9, 0x1D	; 29 bytes after SeqChan_ByteBlockC_Str_Empty's string; unnamed (they sat under its label until 2026-10-03)
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] FDC_Format2DD_Step2_FdcCmd
 ; FDC_Format2DD_Step2_FdcCmd -- FDC command block: FDC_Format2DD_Step2

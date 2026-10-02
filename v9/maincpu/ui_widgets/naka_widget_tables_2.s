@@ -1237,7 +1237,8 @@ VocalistGrid_DispatchData_Str_2:	.incbin "includes/generated/naka_widget_tables_
 VocalistGrid_DispatchData_Str_Fmt2d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B5A, 0xC	; "    %2d    "
 VocalistGrid_DispatchData_Str_Fmt3d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B66, 0xC	; "   %3d    "
 VocalistGrid_DispatchData_Str_Fmtd:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B72, 0xC	; "     %d    "
-VocalistGrid_DispatchData_Str_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B7E, 0x18	; "     %s   "
+VocalistGrid_DispatchData_Str_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B7E, 0xC	; "     %s   "
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B8A, 0xC	; 12 bytes after VocalistGrid_DispatchData_Str_Fmts's string; unnamed (they sat under its label until 2026-10-03)
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_3
 ; VocalistGrid_DispatchData_Str_3 -- NUL-terminated string(s), 12 bytes,

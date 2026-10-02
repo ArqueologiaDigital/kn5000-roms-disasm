@@ -1175,7 +1175,8 @@ InitializeCheap_PtrTable_2:	.incbin "includes/generated/naka_disk_menu_file_io.b
 ; [nakarest] naka_disk_menu_file_io+0x6230  +0x6230..+0x6236 (0xea75fc, 6 B)
 ; [nakarest] the table itself: ResName slot 0x366 (table 0xea75fc, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
-InitializeCheap_Str_Empty:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6230, 0x6
+InitializeCheap_Str_Empty:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6230, 0x1
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6231, 0x5	; 5 bytes after InitializeCheap_Str_Empty's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_disk_menu_file_io+0x6236  +0x6236..+0x6358 (0xea7602, 290 B)
 ; [nakarest] the table itself: ResName slot 0x367 (table 0xea7602, 71 entries, InitializeCheap),
 ; [nakarest] 71 entry pointers x 4 bytes.

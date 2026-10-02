@@ -199,7 +199,8 @@ SetWallPaper_Data:
 ; [nakarest] purpose not established: layout of 30 B at 0xea9b42 not derived; readers below
 ; [nakarest] Readers: source references IvDirmdScreenProc (audio/presentation_sound_nav.s: `add
 ; [nakarest] xbc, IvDirmdScreenProc_Str_K`).
-IvDirmdScreenProc_Str_K:	.incbin "includes/generated/naka_disk_warning.bin", 0xE96, 0x1E	; "K"
+IvDirmdScreenProc_Str_K:	.incbin "includes/generated/naka_disk_warning.bin", 0xE96, 0x2	; "K"
+	.incbin "includes/generated/naka_disk_warning.bin", 0xE98, 0x1C	; 28 bytes after IvDirmdScreenProc_Str_K's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_disk_warning+0xeb4  +0xeb4..+0xec4 (0xea9b60, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xea9b60 not derived; readers below
 ; [nakarest] Readers: source references DirmdTitleFunc (audio/presentation_sound_nav.s: `ld xiy,
@@ -269,7 +270,8 @@ Data_SoundEditorCharsLayout:
 ; [nakarest] WndScroll_CheckTableEnd (ui/ui_window_procs.s: `ld xbc,
 ; [nakarest] WndScroll_ItemCountCheck_Str_Chr25`), WndScroll_HandleDialPage (ui/ui_window_procs.s:
 ; [nakarest] `ld xwa, WndScroll_ItemCountCheck_Str_Chr25`), 1 more.
-WndScroll_ItemCountCheck_Str_Chr25:	.incbin "includes/generated/naka_disk_warning.bin", 0x1232, 0xC	; "%"
+WndScroll_ItemCountCheck_Str_Chr25:	.incbin "includes/generated/naka_disk_warning.bin", 0x1232, 0x2	; "%"
+	.incbin "includes/generated/naka_disk_warning.bin", 0x1234, 0xA	; 10 bytes after WndScroll_ItemCountCheck_Str_Chr25's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_disk_warning+0x123e  +0x123e..+0x124a (0xea9eea, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xea9eea not derived; readers below
 ; [nakarest] Readers: source references AcNaming_QueryCharSet (audio/presentation_sound_nav.s:
@@ -580,7 +582,8 @@ DbDebugMenu_Confirm_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin"
 ; [nakarest] (DbDebugMenu_Init_Str_N1:24)`), DbDebugMenu_OK (ui/ui_widget_defs.s: `lda xde,
 ; [nakarest] (DbDebugMenu_Init_Str_N1:24)`), DbDebugMenu_OK_CheckValid (ui/ui_widget_defs.s: `lda xbc,
 ; [nakarest] (DbDebugMenu_Init_Str_N1:24)`).
-DbDebugMenu_Init_Str_N1:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A98, 0xC	; "1"
+DbDebugMenu_Init_Str_N1:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A98, 0x2	; "1"
+	.incbin "includes/generated/naka_disk_warning.bin", 0x1A9A, 0xA	; 10 bytes after DbDebugMenu_Init_Str_N1's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_disk_warning+0x1aa4  +0x1aa4..+0x1b44 (0xeaa750, 160 B)
 ; [nakarest] purpose not established: layout of 160 B at 0xeaa750 not derived; readers below
 ; [nakarest] Readers: source references PsTrackSwitchProc (ui/ui_widget_defs.s: `ld xiy,
@@ -688,7 +691,8 @@ EnumList_HitTest_Data:
 ; [nakarest] purpose not established: layout of 12 B at 0xeaa9c0 not derived; readers below
 ; [nakarest] Readers: source references TitleProc (ui/ui_widget_defs.s: `add xde,
 ; [nakarest] TitleProc_Str_j`).
-TitleProc_Str_j:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D14, 0xC	; "j"
+TitleProc_Str_j:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D14, 0x2	; "j"
+	.incbin "includes/generated/naka_disk_warning.bin", 0x1D16, 0xA	; 10 bytes after TitleProc_Str_j's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_disk_warning+0x1d20  +0x1d20..+0x1d3a (0xeaa9cc, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xeaa9cc not derived; readers below
 ; [nakarest] Readers: source references EnumList_Reset (ui/ui_widget_defs.s: `ld xbc,

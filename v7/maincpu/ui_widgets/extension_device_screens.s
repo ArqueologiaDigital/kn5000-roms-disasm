@@ -892,7 +892,8 @@ InitializeToshi_Str_TT_TEST3:		.incbin "includes/generated/naka_extension_device
 InitializeToshi_Str_TT_TEST4:		.incbin "includes/generated/naka_extension_device.bin", 0x22E8, 0xA	; "TT_TEST4"
 InitializeToshi_Str_TT_TEST5:		.incbin "includes/generated/naka_extension_device.bin", 0x22F2, 0xA	; "TT_TEST5"
 InitializeToshi_Str_TT_TEST6:		.incbin "includes/generated/naka_extension_device.bin", 0x22FC, 0xA	; "TT_TEST6"
-InitializeToshi_Str_TT_EXT:		.incbin "includes/generated/naka_extension_device.bin", 0x2306, 0x50E	; "TT_EXT"
+InitializeToshi_Str_TT_EXT:		.incbin "includes/generated/naka_extension_device.bin", 0x2306, 0x8	; "TT_EXT"
+	.incbin "includes/generated/naka_extension_device.bin", 0x230E, 0x506	; 1286 bytes after InitializeToshi_Str_TT_EXT's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_extension_device+0x2814  +0x2814..+0x29e0 (0xed8fe0, 460 B)
 ; [nakarest] purpose not established: layout of 460 B at 0xed8fe0 not derived; readers below
 ; [nakarest] Readers: source references DSPCfg_ResetEntryLoop (audio/tonegen_fileio_handlers.s:
@@ -934,7 +935,8 @@ ToneGen_FlashWriteAll_Data_7:	.incbin "includes/generated/naka_extension_device.
 ; [nakarest] purpose not established: layout of 718 B at 0xed933a not derived; readers below
 ; [nakarest] Readers: source references ToneGen_FlashVerify (audio/tonegen_fileio_handlers.s:
 ; [nakarest] `lda xhl, (ToneGen_FlashVerify_Str_HK:24)`).
-ToneGen_FlashVerify_Str_HK:	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0xFA	; "HK "
+ToneGen_FlashVerify_Str_HK:	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0x4	; "HK "
+	.incbin "includes/generated/naka_extension_device.bin", 0x2B72, 0xF6	; 246 bytes after ToneGen_FlashVerify_Str_HK's string; unnamed (they sat under its label until 2026-10-03)
 ToneGen_FlashWriteAll_Data:	.incbin "includes/generated/naka_extension_device.bin", 0x2C68, 0xEA
 ToneGen_FlashWriteAll_Data_2:	.incbin "includes/generated/naka_extension_device.bin", 0x2D52, 0xEA
 ; [nakarest] naka_extension_device+0x2e3c  +0x2e3c..+0x2e4e (0xed9608, 18 B)

@@ -4883,7 +4883,8 @@ FDemoText_ProcessMarkup_LookupTag_PtrTable_2:	.incbin "includes/generated/naka_t
 ; [nakarest] Text (12 B at 0xe9fdd0), first string "NONE"; no registered NAKA table points into
 ; [nakarest] it; reached through source references FDemoText_ByteData_DisplayRefresh
 ; [nakarest] (demo/fdemotext_routines.s: `lda xhl, (FDemoText_ByteData_DisplayRefresh_Str_NONE:24)`).
-FDemoText_ByteData_DisplayRefresh_Str_NONE:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19E82, 0xC	; "NONE"
+FDemoText_ByteData_DisplayRefresh_Str_NONE:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19E82, 0x6	; "NONE"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x19E88, 0x6	; 6 bytes after FDemoText_ByteData_DisplayRefresh_Str_NONE's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] ErrStr_GetInstanceID  +0x19e8e..+0x19ea6 (0xe9fddc, 24 B)
 ; [nakarest] Text (24 B at 0xe9fddc), first string "Error! (GetInstanceID)"; no registered NAKA
 ; [nakarest] table points into it; reached through source references
@@ -5196,7 +5197,8 @@ IvDrawbar_Init_SetupMode_Str_Gt:	.incbin "includes/generated/naka_technichord_st
 ; [nakarest] Readers: source references Seq_LoadDisplayResource (demo/fdemotext_routines.s: `ld
 ; [nakarest] xiy, 0x00ea0028`); 1 data word in Str_DISKNAME (at 0xea1e3c); 1 data word in
 ; [nakarest] Str_PREV_471A (at 0xea5c4e).
-Seq_LoadDisplayResource_Str_Empty:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0DA, 0x20	; ""
+Seq_LoadDisplayResource_Str_Empty:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0DA, 0x1	; ""
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0DB, 0x1F	; 31 bytes after Seq_LoadDisplayResource_Str_Empty's string; unnamed (they sat under its label until 2026-10-03)
 Seq_LoadResource_Proceed_Str_PRE:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0FA, 0x6	; ".PRE"
 ; [nakarest] naka_technichord_strings+0x1a100  +0x1a100..+0x1a104 (0xea004e, 4 B)
 ; [nakarest] Text (4 B at 0xea004e), first string "rt"; no registered NAKA table points into it;
@@ -5522,32 +5524,38 @@ LoadSecondary_OpenFile_Str_rb:	.incbin "includes/generated/naka_technichord_stri
 ; [nakarest] purpose not established: layout of 128 B at 0xea0268 not derived; readers below
 ; [nakarest] Readers: source references FileIO_OpenWithMode (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] FileIO_OpenWithMode_Str_A`).
-FileIO_OpenWithMode_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A31A, 0x80	; "A:\\"
+FileIO_OpenWithMode_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A31A, 0x4	; "A:\\"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A31E, 0x7C	; 124 bytes after FileIO_OpenWithMode_Str_A's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_technichord_strings+0x1a39a  +0x1a39a..+0x1a3aa (0xea02e8, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xea02e8 not derived; readers below
 ; [nakarest] Readers: source references FileIO_OpenDefault (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] FileIO_OpenDefault_Str_A`).
-FileIO_OpenDefault_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A39A, 0x10	; "A:\\"
+FileIO_OpenDefault_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A39A, 0x4	; "A:\\"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A39E, 0xC	; 12 bytes after FileIO_OpenDefault_Str_A's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_technichord_strings+0x1a3aa  +0x1a3aa..+0x1a3ba (0xea02f8, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xea02f8 not derived; readers below
 ; [nakarest] Readers: source references FileIO_CopyAndOpen (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] FileIO_CopyAndOpen_Str_A`).
-FileIO_CopyAndOpen_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3AA, 0x10	; "A:\\"
+FileIO_CopyAndOpen_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3AA, 0x4	; "A:\\"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3AE, 0xC	; 12 bytes after FileIO_CopyAndOpen_Str_A's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_technichord_strings+0x1a3ba  +0x1a3ba..+0x1a3ca (0xea0308, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xea0308 not derived; readers below
 ; [nakarest] Readers: source references FileIO_CopyAndOpen (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] FileIO_CopyAndOpen_Str_A_2`).
-FileIO_CopyAndOpen_Str_A_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3BA, 0x10	; "A:\\"
+FileIO_CopyAndOpen_Str_A_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3BA, 0x4	; "A:\\"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3BE, 0xC	; 12 bytes after FileIO_CopyAndOpen_Str_A_2's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_technichord_strings+0x1a3ca  +0x1a3ca..+0x1a3da (0xea0318, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xea0318 not derived; readers below
 ; [nakarest] Readers: source references FileIO_CompareFiles (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] FileIO_CompareFiles_Str_A`).
-FileIO_CompareFiles_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3CA, 0x10	; "A:\\"
+FileIO_CompareFiles_Str_A:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3CA, 0x4	; "A:\\"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3CE, 0xC	; 12 bytes after FileIO_CompareFiles_Str_A's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_technichord_strings+0x1a3da  +0x1a3da..+0x1a3f2 (0xea0328, 24 B)
 ; [nakarest] purpose not established: layout of 24 B at 0xea0328 not derived; readers below
 ; [nakarest] Readers: source references FileIO_CompareFiles (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] FileIO_CompareFiles_Str_A_2`).
-FileIO_CompareFiles_Str_A_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3DA, 0x10	; "A:\\"
+FileIO_CompareFiles_Str_A_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3DA, 0x4	; "A:\\"
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3DE, 0xC	; 12 bytes after FileIO_CompareFiles_Str_A_2's string; unnamed (they sat under its label until 2026-10-03)
 FileIO_CompareFiles_Str_wb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3EA, 0x4	; "wb"
 FileIO_Compare_Mismatch_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A3EE, 0x4	; "rb"
 ; [nakarest] SeqFileType_CodeTable  +0x1a3f2..+0x1a41a (0xea0340, 40 B)
@@ -5754,7 +5762,8 @@ BuildSecondPage_CopyRecordLoop_Str_MID:	.incbin "includes/generated/naka_technic
 ; [nakarest] purpose not established: layout of 16 B at 0xea049c not derived; readers below
 ; [nakarest] Readers: source references ValidateAndSearchFile (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] 0x00ea049c`).
-ValidateAndSearchFile_Str_Empty:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A54E, 0x10	; ""
+ValidateAndSearchFile_Str_Empty:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A54E, 0x1	; ""
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A54F, 0xF	; 15 bytes after ValidateAndSearchFile_Str_Empty's string; unnamed (they sat under its label until 2026-10-03)
 ; [nakarest] naka_technichord_strings+0x1a55e  +0x1a55e..+0x1a564 (0xea04ac, 6 B)
 ; [nakarest] Text (6 B at 0xea04ac), first string "MThd"; no registered NAKA table points into
 ; [nakarest] it; reached through source references ProcessRecord_MatchLoop1
