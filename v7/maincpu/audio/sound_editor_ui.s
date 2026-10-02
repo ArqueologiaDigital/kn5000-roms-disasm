@@ -8403,14 +8403,14 @@ SeMenu_ShowConfirmDialog_Sub:
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Sub_Skip
 	ld	(0x3efa8:24), 0
-	ld	xiy, SeScreenData_0x114A
-	ld	xix, SeScreenData_0x1154
+	ld	xiy, SeMenu_ShowConfirmDialog_Sub_Data_2
+	ld	xix, SeMenu_ShowConfirmDialog_Sub_Data_3
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_ShowConfirmDialog_Sub_Join
 SeMenu_ShowConfirmDialog_Sub_Skip:
 	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x1140
-	ld	xix, SeScreenData_0x114A
+	ld	xix, SeMenu_ShowConfirmDialog_Sub_Data_2
 	call	SeGfx_DrawStaticList
 SeMenu_ShowConfirmDialog_Sub_Join:
 	xor	xwa, xwa
@@ -9201,7 +9201,7 @@ SeMenu_Utility_CompareBlock:
 	ld	xix, SeScreenData_0x18D8
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x18ED
-	ld	xix, SeScreenData_0x1901
+	ld	xix, SeMenu_Utility_CompareBlock_Data_3
 	call	SeGfx_DrawStaticList
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_CompareBlock_Loop
@@ -9280,7 +9280,7 @@ SeMenu_Utility_FormatSigned_Data_Skip:
 	ret
 SeMenu_Utility_FormatPercent:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeScreenData_0x1901
+	ld	xiy, SeMenu_Utility_CompareBlock_Data_3
 	ld	xix, SeScreenData_0x1997
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x1997
@@ -9301,7 +9301,7 @@ SeMenu_Utility_FormatPercent_Skip:
 	ret
 SeMenu_Utility_FormatPercent_Data:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeScreenData_0x1901
+	ld	xiy, SeMenu_Utility_CompareBlock_Data_3
 	ld	xix, SeScreenData_0x1997
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x19AB
@@ -12662,17 +12662,17 @@ SeMenu_CompareAndApply_Apply_Data:
 ; evidence: SeMenu_CompareAndApply_Data4
 SeScreenData_0x113B:
 	sd_op23	0x63, 3*40+12
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x114A
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_ShowConfirmDialog_Sub_Data_2
 ; evidence: code 0xF0F395
 SeScreenData_0x1140:
 	sd_quad	0x1b, 214, 70, 263, 225
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1154
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_ShowConfirmDialog_Sub_Data_3
 ; evidence: code 0xF0F37F
-SeScreenData_0x114A:
+SeMenu_ShowConfirmDialog_Sub_Data_2:
 	sd_quad	0x1b, 158, 70, 210, 161
 ; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x117E
 ; evidence: startptrs at SeScreenData_0x1250
-SeScreenData_0x1154:
+SeMenu_ShowConfirmDialog_Sub_Data_3:
 	sd_ptext	0x17, 11, 226, 114, "TOUCH"
 	sd_ptext	0x17, 11, 232, 123, "CURVE"
 	sd_quad	0x22, 224, 70, 262, 108
@@ -12715,8 +12715,8 @@ SeScreenData_0x1226:
 ; list-start table: entry i -> a list of 42 bytes (5 entries, LE32)
 ; evidence: code 0xF0F404
 SeScreenData_0x1250:
-	.long	SeScreenData_0x1154
-	.long	SeScreenData_0x1154
+	.long	SeMenu_ShowConfirmDialog_Sub_Data_3
+	.long	SeMenu_ShowConfirmDialog_Sub_Data_3
 	.long	SeScreenData_0x117E
 	.long	SeScreenData_0x11A8
 	.long	SeScreenData_0x11D2
@@ -12966,13 +12966,13 @@ SeScreenData_0x178B:
 ; evidence: SeMenu_Utility_FormatSigned_Data
 SeScreenData_0x18D8:
 	sd_ptext	0x17, 21, 109, 30, "HIGH PASS -12dB"
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1901
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_Utility_CompareBlock_Data_3
 ; evidence: SeMenu_Utility_CompareBlock
 SeScreenData_0x18ED:
 	sd_ptext	0x17, 20, 109, 30, "LOW PASS -12dB"
 ; static record list (17 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1997
 ; evidence: SeMenu_Utility_FormatPercent, SeMenu_Utility_FormatPercent_Data
-SeScreenData_0x1901:
+SeMenu_Utility_CompareBlock_Data_3:
 	sd_ptext	0x17, 13, 67, 67, "FILTER:"
 	sd_ptext	0x17, 12, 211, 135, "CUTOFF"
 	sd_ctext	0x06, 10, 193*40+17, "FILTER"

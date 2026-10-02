@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 51,406
-#   semantic names ........... 50,400 (98.0%)
-#   positional names ......... 1,006
+#   semantic names ........... 50,403 (98.0%)
+#   positional names ......... 1,003
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -20220,8 +20220,8 @@ SeScreenData_0x1089 00F11C65
 SeMenu_CompareAndApply_Apply_Data 00F11CDC
 SeScreenData_0x113B 00F11D17
 SeScreenData_0x1140 00F11D1C
-SeScreenData_0x114A 00F11D26
-SeScreenData_0x1154 00F11D30
+SeMenu_ShowConfirmDialog_Sub_Data_2 00F11D26
+SeMenu_ShowConfirmDialog_Sub_Data_3 00F11D30
 SeScreenData_0x117E 00F11D5A
 SeScreenData_0x11A8 00F11D84
 SeScreenData_0x11D2 00F11DAE
@@ -20248,7 +20248,7 @@ SeScreenData_0x1780 00F1235C
 SeScreenData_0x178B 00F12367
 SeScreenData_0x18D8 00F124B4
 SeScreenData_0x18ED 00F124C9
-SeScreenData_0x1901 00F124DD
+SeMenu_Utility_CompareBlock_Data_3 00F124DD
 SeScreenData_0x1997 00F12573
 SeScreenData_0x19AB 00F12587
 SeScreenData_0x19C0 00F1259C
