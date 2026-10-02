@@ -48,7 +48,7 @@ Debug_OutputString:
 	push xiz
 	ld xix, xwa
 Debug_OutputString__next:
-	ld a, (xix+)		; ld A, (XIX+)
+	ld a, (xix+)
 	cp a, 0:i3
 	jr z, Debug_OutputString__done
 	push xix

@@ -137,7 +137,7 @@ RESET:
 	lda_dd8l XIX,0x80		; lda XIX,0x80
 	xor WA,WA
 RESET__clear_dram:
-	ld (xix+), WA		; ld (XIX+),WA
+	ld (xix+), WA
 	sub XBC,0x00000001
 	jr NZ,RESET__clear_dram
 

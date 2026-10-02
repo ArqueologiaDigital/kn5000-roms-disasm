@@ -140,13 +140,13 @@ HDAE5000_StrNCpy:	; 0x29AFF0
 	;   HDAE5000_Multiply, NOT this routine (43 bytes); see the labels below.
 
 	ld	bc, (xsp+12)
-	ld xde, (xsp + 0x08)                    ; ld XDE,(XSP+0x08)
-	ld xix, (xsp + 0x04)                    ; ld XIX,(XSP+0x04)
+	ld xde, (xsp + 0x08)
+	ld xix, (xsp + 0x04)
 	ld	xhl, xix
 	jr t, .LMCR_b005                       ; [68 08] jr T,0x29b005
 .LMCR_affd:
-	ld a, (xde+)		; ld A,(XDE+)
-	ld (xix+), a		; ld (XIX+),A
+	ld a, (xde+)
+	ld (xix+), a
 	dec	1, bc
 .LMCR_b005:
 	cp	bc, 0:i3
@@ -156,7 +156,7 @@ HDAE5000_StrNCpy:	; 0x29AFF0
 .LMCR_b00e:
 	jr t, .LMCR_b016                       ; [68 06] jr T,0x29b016
 .LMCR_b010:
-	ld (xix+), 0x00		; ld (XIX+),0x00
+	ld (xix+), 0x00
 	dec	1, bc
 .LMCR_b016:
 	cp	bc, 0:i3
@@ -166,11 +166,11 @@ HDAE5000_StrNCpy:	; 0x29AFF0
 HDAE5000_StrRev:
 	; strrev(s): swaps s[i] and s[strlen(s)-1-i] in place; returns XHL = s.
 	push xiz
-	ld xiz, (xsp + 0x08)                    ; ld XIZ,(XSP+0x08)
+	ld xiz, (xsp + 0x08)
 	push xiz
 	call HDAE5000_StrLen
-	inc 4, xsp                              ; inc 4,XSP
-	extz xhl                                ; extz XHL
+	inc 4, xsp
+	extz xhl
 	ld	xix, xhl
 	add	xix, xiz
 	dec	1, xix
@@ -181,30 +181,30 @@ HDAE5000_StrRev:
 .LMCR_b036:
 	ld	a, (xbc)
 	ld8_src_ri xde, l		; ld L,(XDE)
-	ld (xbc+), l		; ld (XBC+),L
+	ld (xbc+), l
 	ld	(xde), a
-	inc 1, xiz                              ; inc 1,XIZ
+	inc 1, xiz
 	dec	1, xde
 	dec	1, xix
 	cp	xiz, xix
 	jr c, .LMCR_b036                       ; [67 ed] jr C,0x29b036
 .LMCR_b049:
-	ld xhl, (xsp + 0x08)                    ; ld XHL,(XSP+0x08)
-	pop xiz                                 ; pop XIZ
+	ld xhl, (xsp + 0x08)
+	pop xiz
 	ret
 
 HDAE5000_StrUpr:
 	; strupr(s): subtracts 0x20 from every byte whose HDAE5000_CType_Table
 	; entry has bit 1 (lower case) set; returns XHL = s.
-	ld xix, (xsp + 0x04)                    ; ld XIX,(XSP+0x04)
+	ld xix, (xsp + 0x04)
 	ld	xhl, xix
 	jr t, .LMCR_b074                       ; [68 1f] jr T,0x29b074
 .LMCR_b055:
 	ld	xde, xix
 	ld	a, (xix)
-	extz wa                                 ; extz WA
+	extz wa
 	lda xbc, (HDAE5000_CType_Table:24)
-	bit	1, (xbc+wa)	; bit 1,(XBC+WA)
+	bit	1, (xbc+wa)
 	jr z, .LMCR_b06e                       ; [66 07] jr Z,0x29b06e
 	ld	a, (xix)
 	sub	a, 0x20
@@ -213,7 +213,7 @@ HDAE5000_StrUpr:
 	ld	a, (xix)
 .LMCR_b070:
 	ld	(xde), a
-	inc 1, xix                              ; inc 1,XIX
+	inc 1, xix
 .LMCR_b074:
 	cp	(xix), 0x00
 	jr nz, .LMCR_b055                      ; [6e dc] jr NZ,0x29b055
@@ -273,10 +273,10 @@ HDAE5000_FltDec_Convert:
 	ld	bc, (xsp+8)
 	dec	1, bc
 	sub	bc, qiz
-	extz xbc                                ; extz XBC
+	extz xbc
 	add	xbc, (xsp+24)
 	ld	c, (xbc)
-	ld	(xwa+qiz), c	; ld (XWA+QIZ),C
+	ld	(xwa+qiz), c
 	inc	1, qiz
 	ld	wa, qiz
 	cp	wa, (xsp+8)
@@ -290,8 +290,8 @@ HDAE5000_FltDec_Convert:
 .LMCR_b10f:
 	ld	wa, 0:i3
 .LMCR_b111:
-	ld xbc, (xsp + 0x26)                    ; ld XBC,(XSP+0x26)
-	ld (xbc), wa                            ; ld (XBC),WA
+	ld xbc, (xsp + 0x26)
+	ld (xbc), wa
 	lda	xbc, (xde+1)
 	ld	wa, (xsp+32)
 	bit	0x07, wa
@@ -302,7 +302,7 @@ HDAE5000_FltDec_Convert:
 	jr z, .LMCR_b137                       ; [66 0c] jr Z,0x29b137
 .LMCR_b12b:
 	ld8_src_ri xbc, l		; ld L,(XBC)
-	extz hl                                 ; extz HL
+	extz hl
 	ldw	wa, 0x0008
 	ldw	bc, 0x4000
 	jr t, .LMCR_b150                       ; [68 19] jr T,0x29b150
@@ -313,15 +313,15 @@ HDAE5000_FltDec_Convert:
 	jr z, .LMCR_b164                       ; [66 23] jr Z,0x29b164
 .LMCR_b141:
 	ld8_src_ri xbc, l		; ld L,(XBC)
-	and l, 0xf0		; and L,0xf0
-	extz hl                                 ; extz HL
+	and l, 0xf0
+	extz hl
 	sra	hl, 0x04
 	ld	wa, 4:i3
 	ldw	bc, 0x0400
 .LMCR_b150:
 	ld	e, (xde)
 	res	0x07, e
-	extz de                                 ; extz DE
+	extz de
 	and	a, 0x0f
 	jr z, .LMCR_b15e                       ; [66 02] jr Z,0x29b15e
 	slaa	de
@@ -332,7 +332,7 @@ HDAE5000_FltDec_Convert:
 .LMCR_b164:
 	pushw iz                                ; push IZ
 	calr	HDAE5000_FltDec_DecimalExponent
-	inc 2, xsp                              ; inc 2,XSP
+	inc 2, xsp
 	ld (xsp + 0x04), hl
 	cp	iz, 0:i3
 	jr ge, .LMCR_b174                      ; [69 03] jr GE,0x29b174
@@ -344,13 +344,13 @@ HDAE5000_FltDec_Convert:
 	ld	qiz, 2
 .LMCR_b17f:
 	lda	xwa, (xsp+10)
-	ld	a, (xwa+qiz)	; ld A,(XWA+QIZ)
+	ld	a, (xwa+qiz)
 	and	a, 0xff
 	ld	de, qiz
 	add	de, de
 	lda xbc, (0x2394a6:24)
-	extz wa                                 ; extz WA
-	ld	(xbc+de), wa	; ld (XBC+DE),WA
+	extz wa
+	ld	(xbc+de), wa
 	inc	1, qiz
 	cpw	qiz, 0x000a
 	jr lt, .LMCR_b17f                      ; [61 da] jr LT,0x29b17f
@@ -372,14 +372,14 @@ HDAE5000_FltDec_Convert:
 	and8_imm_rid8 xbc, 0x01, 0x0f		; and (XBC+0x01),0x0f
 	ld	qiz, 1
 .LMCR_b1cc:
-	ld	a, (xbc+qiz)	; ld A,(XBC+QIZ)
+	ld	a, (xbc+qiz)
 	and	a, 0xff
 	ld	hl, qiz
 	add	hl, hl
 	dec	2, hl
 	lda xde, (0x2394aa:24)
-	extz wa                                 ; extz WA
-	ld	(xde+hl), wa	; ld (XDE+HL),WA
+	extz wa
+	ld	(xde+hl), wa
 	inc	1, qiz
 	cpw	qiz, 0x0008
 	jr lt, .LMCR_b1cc                      ; [61 db] jr LT,0x29b1cc
@@ -450,15 +450,15 @@ HDAE5000_FltDec_Convert:
 	ld	bc, qiz
 	add	bc, bc
 	lda xwa, (0x2394aa:24)
-	pushw	(xwa+bc)	; pushw (XWA+BC)
+	pushw	(xwa+bc)
 	calr	HDAE5000_FltDec_FractionDigits
-	inc 4, xsp                              ; inc 4,XSP
+	inc 4, xsp
 	inc	1, qiz
 	cpw	qiz, 0x0009
 	jr lt, .LMCR_b284                      ; [61 df] jr LT,0x29b284
 	ld	de, 0:i3
 	lda xbc, (0x2394aa:24)
-	ld xhl, (xsp + 0x1c)                    ; ld XHL,(XSP+0x1c)
+	ld xhl, (xsp + 0x1c)
 	ld	wa, (xbc)
 	cp	wa, 0x0009
 	jr ule, .LMCR_b2c4                     ; [63 0d] jr ULE,0x29b2c4
@@ -474,7 +474,7 @@ HDAE5000_FltDec_Convert:
 	extz xwa
 	div wa, 0x000a
 	ld	wa, qwa
-	ld	(xhl+ix), a	; ld (XHL+IX),A
+	ld	(xhl+ix), a
 	incw	1, (xsp+4)
 	ld	qiz, 1
 	jr t, .LMCR_b2f6                       ; [68 16] jr T,0x29b2f6
@@ -482,8 +482,8 @@ HDAE5000_FltDec_Convert:
 	ld	bc, de
 	inc	1, de
 	lda xwa, (0x23948a:24)
-	ld	a, (xwa+qiz)	; ld A,(XWA+QIZ)
-	ld	(xhl+bc), a	; ld (XHL+BC),A
+	ld	a, (xwa+qiz)
+	ld	(xhl+bc), a
 	inc	1, qiz
 .LMCR_b2f6:
 	ld	bc, (xsp+6)
@@ -497,7 +497,7 @@ HDAE5000_FltDec_Convert:
 	cp	(xbc), 0x05
 	jr c, .LMCR_b319                       ; [67 08] jr C,0x29b319
 	ld	wa, (xsp+6)
-	inc	1, (xhl+wa)	; inc 1,(XHL+WA)
+	inc	1, (xhl+wa)
 .LMCR_b319:
 	ld	(xbc), 0x00
 	ld	wa, (xsp+6)
@@ -506,7 +506,7 @@ HDAE5000_FltDec_Convert:
 .LMCR_b324:
 	ld	bc, qiz
 	dec	1, bc
-	inc	1, (xhl+bc)	; inc 1,(XHL+BC)
+	inc	1, (xhl+bc)
 	ld	(xwa), 0x00
 	dec	1, qiz
 .LMCR_b334:
@@ -525,10 +525,10 @@ HDAE5000_FltDec_Convert:
 	ld	wa, qiz
 	cp	wa, de
 	jr lt, .LMCR_b348                      ; [61 f0] jr LT,0x29b348
-	ld xbc, (xsp + 0x22)                    ; ld XBC,(XSP+0x22)
+	ld xbc, (xsp + 0x22)
 	ld	wa, (xsp+4)
-	ld (xbc), wa                            ; ld (XBC),WA
-	pop xiz                                 ; pop XIZ
+	ld (xbc), wa
+	pop xiz
 	lda	xsp, (xsp+16)
 	ret
 
@@ -550,27 +550,27 @@ HDAE5000_FltDec_ShiftRightBits:
 .LMCR_b37e:
 	ld	iz, (xsp+20)
 	dec	1, iz
-	ld xiy, (xsp + 0x0e)                    ; ld XIY,(XSP+0x0e)
+	ld xiy, (xsp + 0x0e)
 	cp	iz, 0:i3
 	jr le, .LMCR_b3d9                      ; [62 4f] jr LE,0x29b3d9
-	ld (xsp + 0x04), wa                     ; ld (XSP+0x04),WA
+	ld (xsp + 0x04), wa
 	ldw (xsp + 0x02), 8
 	sub	(xsp+2), hl
 	ld	wa, iz
-	exts xwa                                ; exts XWA
+	exts xwa
 	add	xwa, xwa
 	ld	xix, xwa
 .LMCR_b39d:
-	ld (xsp + 0x06), xix                    ; ld (XSP+0x06),XIX
+	ld (xsp + 0x06), xix
 	add	(xsp+6), xiy
-	ld xbc, (xsp + 0x06)                    ; ld XBC,(XSP+0x06)
+	ld xbc, (xsp + 0x06)
 	ld	de, (xbc)
 	ld	wa, hl
 	and	a, 0x0f
 	jr z, .LMCR_b3b1                       ; [66 02] jr Z,0x29b3b1
 	srla	de
 .LMCR_b3b1:
-	ld (xbc), de                            ; ld (XBC),DE
+	ld (xbc), de
 	ld	xbc, xix
 	ld	xwa, 2:i3
 	sub	xbc, xwa
@@ -583,7 +583,7 @@ HDAE5000_FltDec_ShiftRightBits:
 	jr z, .LMCR_b3cc                       ; [66 02] jr Z,0x29b3cc
 	slla	bc
 .LMCR_b3cc:
-	ld xwa, (xsp + 0x06)                    ; ld XWA,(XSP+0x06)
+	ld xwa, (xsp + 0x06)
 	or	(xwa), bc
 	dec	1, iz
 	dec	2, xix
@@ -596,14 +596,14 @@ HDAE5000_FltDec_ShiftRightBits:
 	jr z, .LMCR_b3e4                       ; [66 02] jr Z,0x29b3e4
 	srla	bc
 .LMCR_b3e4:
-	ld (xiy), bc                            ; ld (XIY),BC
+	ld (xiy), bc
 	popw iz                                 ; pop IZ
 	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_FltDec_ShiftLeftBits:
 	; shift a limb array left by N bits, carrying each limb's high byte up
-	ld xiy, (xsp + 0x04)                    ; ld XIY,(XSP+0x04)
+	ld xiy, (xsp + 0x04)
 	and16_imm_ri xiy, 0xff, 0x00		; and (XIY),0x00ff
 	ld	ix, 1:i3
 	ld	hl, (xsp+8)
@@ -611,7 +611,7 @@ HDAE5000_FltDec_ShiftLeftBits:
 	jr t, .LMCR_b429                       ; [68 2f] jr T,0x29b429
 .LMCR_b3fa:
 	ld	de, ix
-	exts xde                                ; exts XDE
+	exts xde
 	add	xde, xde
 	add	xde, xiy
 	ld	wa, (xsp+10)
@@ -620,10 +620,10 @@ HDAE5000_FltDec_ShiftLeftBits:
 	jr z, .LMCR_b40e                       ; [66 02] jr Z,0x29b40e
 	slla	bc
 .LMCR_b40e:
-	ld (xde), bc                            ; ld (XDE),BC
+	ld (xde), bc
 	ld	wa, ix
 	dec	1, wa
-	exts xwa                                ; exts XWA
+	exts xwa
 	add	xwa, xwa
 	ld	xbc, xwa
 	add	xbc, xiy
@@ -649,7 +649,7 @@ HDAE5000_FltDec_FractionDigits:
 	cp	xwa, xbc
 	jr c, .LMCR_b439                       ; [67 f7] jr C,0x29b439
 	ld	wa, (xsp+6)
-	ld (xde + 0x10), wa                     ; ld (XDE+0x10),WA
+	ld (xde + 0x10), wa
 	ld	iz, 0:i3
 .LMCR_b44a:
 	lda xwa, (0x2394ea:24)
@@ -680,13 +680,13 @@ HDAE5000_FltDec_FractionDigits:
 	sub	wa, (xsp+8)
 	add	wa, wa
 	lda xbc, (0x2394ea:24)
-	ld	wa, (xbc+wa)	; ld WA,(XBC+WA)
+	ld	wa, (xbc+wa)
 	cp	wa, 0:i3
 	jr z, .LMCR_b48f                       ; [66 e5] jr Z,0x29b48f
 	pushw iz                                ; push IZ
 	pushw wa                                ; push WA
 	calr	HDAE5000_FltDec_AddDigit
-	inc 4, xsp                              ; inc 4,XSP
+	inc 4, xsp
 	ldw	bc, 0x0008
 	sub	bc, (xsp+8)
 	add	bc, bc
@@ -706,7 +706,7 @@ HDAE5000_FltDec_AddDigit:
 	jr ge, .LMCR_b4e4                      ; [69 0d] jr GE,0x29b4e4
 	lda xbc, (0x23948a:24)
 	ld	wa, (xsp+4)
-	add	(xbc+de), a	; add (XBC+DE),A
+	add	(xbc+de), a
 .LMCR_b4e4:
 	jr t, .LMCR_b4e8                       ; [68 02] jr T,0x29b4e8
 .LMCR_b4e6:
@@ -719,13 +719,13 @@ HDAE5000_FltDec_AddDigit:
 .LMCR_b4f5:
 	ld	bc, de
 	dec	1, bc
-	inc	1, (xwa+bc)	; inc 1,(XWA+BC)
+	inc	1, (xwa+bc)
 	ld	bc, de
 	dec	1, de
-	sub	(xwa+bc), 0x0a	; sub (XWA+BC),0x0a
+	sub	(xwa+bc), 0x0a
 .LMCR_b508:
-	cp	(xwa+de), 0x0a	; cp (XWA+DE),0x0a
-	ret lt                                  ; ret LT
+	cp	(xwa+de), 0x0a
+	ret lt
 
 	cp	de, 0:i3
 	jr gt, .LMCR_b4f5                      ; [6a e1] jr GT,0x29b4f5
@@ -733,7 +733,7 @@ HDAE5000_FltDec_AddDigit:
 
 HDAE5000_FltDec_DivBy10:
 	; divide a limb array by 10 in place (DIV per limb, remainder carried down)
-	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
+	ld xwa, (xsp + 0x04)
 	ld	xbc, xwa
 	lda	xde, (xwa+18)
 .LMCR_b51d:
@@ -746,7 +746,7 @@ HDAE5000_FltDec_DivBy10:
 	ld	wa, (xbc)
 	extz xwa
 	div wa, 0x000a
-	ld (xbc+), wa		; ld (XBC+),WA
+	ld (xbc+), wa
 	cp	xbc, xde
 	jr c, .LMCR_b51d                       ; [67 e0] jr C,0x29b51d
 	ret
@@ -757,12 +757,12 @@ HDAE5000_FltDec_MulBy10:
 	ld	ix, 0:i3
 	ld	xbc, 0:i3
 .LMCR_b543:
-	ld xhl, (xsp + 0x06)                    ; ld XHL,(XSP+0x06)
+	ld xhl, (xsp + 0x06)
 	ld	xde, xbc
 	add	xde, xhl
 	ld	wa, (xde)
 	mul	wa, 0x000a
-	ld (xde), wa                            ; ld (XDE),WA
+	ld (xde), wa
 	cp	ix, 0:i3
 	jr z, .LMCR_b583                       ; [66 2d] jr Z,0x29b583
 	ld	iz, ix
@@ -770,7 +770,7 @@ HDAE5000_FltDec_MulBy10:
 .LMCR_b55a:
 	ld	iy, iz
 	dec	1, iy
-	exts xiy                                ; exts XIY
+	exts xiy
 	add	xiy, xiy
 	add	xiy, xhl
 	srl	wa, 0x08
@@ -781,7 +781,7 @@ HDAE5000_FltDec_MulBy10:
 	cp	iz, 0:i3
 	jr le, .LMCR_b583                      ; [62 10] jr LE,0x29b583
 	ld	de, iz
-	exts xde                                ; exts XDE
+	exts xde
 	add	xde, xde
 	add	xde, xhl
 	ld	wa, (xde)
@@ -789,7 +789,7 @@ HDAE5000_FltDec_MulBy10:
 	jr ugt, .LMCR_b55a                     ; [6b d7] jr UGT,0x29b55a
 .LMCR_b583:
 	inc	1, ix
-	inc 2, xbc                              ; inc 2,XBC
+	inc 2, xbc
 	cp	ix, 0x0010
 	jr lt, .LMCR_b543                      ; [61 b6] jr LT,0x29b543
 	lda	xbc, (xhl+30)
@@ -812,9 +812,9 @@ HDAE5000_FltDec_FracMulBy10:
 	jr z, .LMCR_b5b8                       ; [66 08] jr Z,0x29b5b8
 	ld	wa, (xbc)
 	mul	wa, 0x000a
-	ld (xbc), wa                            ; ld (XBC),WA
+	ld (xbc), wa
 .LMCR_b5b8:
-	inc 2, xbc                              ; inc 2,XBC
+	inc 2, xbc
 	cp	xbc, xde
 	jr c, .LMCR_b5aa                       ; [67 ec] jr C,0x29b5aa
 	lda	xbc, (xhl+18)
@@ -826,7 +826,7 @@ HDAE5000_FltDec_FracMulBy10:
 	ld	ix, de
 	dec	2, ix
 	srl	wa, 0x08
-	add	(xhl+ix), wa	; add (XHL+IX),WA
+	add	(xhl+ix), wa
 	and16_imm_ri xbc, 0xff, 0x00		; and (XBC),0x00ff
 .LMCR_b5dc:
 	dec	2, de
@@ -844,7 +844,7 @@ HDAE5000_FltDec_NormalizeLeft:
 	jr le, .LMCR_b607                      ; [62 16] jr LE,0x29b607
 .LMCR_b5f1:
 	ld	wa, iz
-	exts xwa                                ; exts XWA
+	exts xwa
 	add	xwa, xwa
 	add	xwa, (xsp+8)
 	cpw	(xwa), 0x0000
@@ -862,10 +862,10 @@ HDAE5000_FltDec_NormalizeLeft:
 	jr t, .LMCR_b646                       ; [68 2f] jr T,0x29b646
 .LMCR_b617:
 	ld	iz, 0:i3
-	ld xbc, (xsp + 0x08)                    ; ld XBC,(XSP+0x08)
+	ld xbc, (xsp + 0x08)
 	jr t, .LMCR_b625                       ; [68 07] jr T,0x29b625
 .LMCR_b61e:
-	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
+	ld xwa, (xsp + 0x08)
 	sllw_ri xwa		; sllw (XWA)
 	inc	1, iz
 .LMCR_b625:
@@ -879,34 +879,34 @@ HDAE5000_FltDec_NormalizeLeft:
 	jr z, .LMCR_b643                       ; [66 0d] jr Z,0x29b643
 	pushw iz                                ; push IZ
 	pushm	(xsp+14)
-	ld xwa, (xsp + 0x0c)                    ; ld XWA,(XSP+0x0c)
+	ld xwa, (xsp + 0x0c)
 	push xwa
 	calr	HDAE5000_FltDec_ShiftLeftBits
 	inc 8, xsp                              ; inc 0,XSP
 .LMCR_b643:
 	add	(xsp+2), iz
 .LMCR_b646:
-	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
+	ld xwa, (xsp + 0x08)
 	ld	wa, (xwa)
 	bit	0x07, wa
 	jr z, .LMCR_b617                       ; [66 c7] jr Z,0x29b617
 	ld	hl, (xsp+2)
 .LMCR_b653:
 	popw iz                                 ; pop IZ
-	inc 2, xsp                              ; inc 2,XSP
+	inc 2, xsp
 	ret
 
 HDAE5000_FltDec_NormalizeRight:
 	; if the top limb exceeds 8 bits, shift right until it fits; HL = count
 	pushw iz                                ; push IZ
-	ld xde, (xsp + 0x06)                    ; ld XDE,(XSP+0x06)
+	ld xde, (xsp + 0x06)
 	ld	iz, 0:i3
 	ld	bc, (xsp+10)
 	cp	bc, 0:i3
 	jr le, .LMCR_b678                      ; [62 14] jr LE,0x29b678
 .LMCR_b664:
 	ld	wa, iz
-	exts xwa                                ; exts XWA
+	exts xwa
 	add	xwa, xwa
 	add	xwa, xde
 	cpw	(xwa), 0x0000
@@ -952,7 +952,7 @@ HDAE5000_FltDec_DecimalExponent:
 	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld	wa, (xsp+16)
-	exts xwa                                ; exts XWA
+	exts xwa
 	lda	xbc, (301:16)
 	call HDAE5000_Multiply
 	ld	xiz, xhl
@@ -961,31 +961,31 @@ HDAE5000_FltDec_DecimalExponent:
 	ld	xwa, xiz
 	cpl	wa
 	cpl	qwa
-	inc 1, xwa                              ; inc 1,XWA
-	ld (xsp + 0x04), xwa                    ; ld (XSP+0x04),XWA
+	inc 1, xwa
+	ld (xsp + 0x04), xwa
 	jr t, .LMCR_b6d4                       ; [68 03] jr T,0x29b6d4
 .LMCR_b6d1:
-	ld (xsp + 0x04), xiz                    ; ld (XSP+0x04),XIZ
+	ld (xsp + 0x04), xiz
 .LMCR_b6d4:
-	ld xiz, (xsp + 0x04)                    ; ld XIZ,(XSP+0x04)
+	ld xiz, (xsp + 0x04)
 	ld	xwa, xiz
 	lda	xbc, (1000:16)
 	call HDAE5000_SMod32
-	ld (xsp + 0x08), xhl                    ; ld (XSP+0x08),XHL
+	ld (xsp + 0x08), xhl
 	ld	xwa, xiz
 	lda	xbc, (1000:16)
 	call HDAE5000_SDiv32
 	ld	xiz, xhl
-	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
+	ld xwa, (xsp + 0x08)
 	cp	xwa, 0x000003d4
 	jr le, .LMCR_b6ff                      ; [62 04] jr LE,0x29b6ff
-	inc 1, xiz                              ; inc 1,XIZ
+	inc 1, xiz
 	jr t, .LMCR_b713                       ; [68 14] jr T,0x29b713
 .LMCR_b6ff:
-	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
-	or xwa, xwa                             ; or XWA,XWA
+	ld xwa, (xsp + 0x04)
+	or xwa, xwa
 	jr z, .LMCR_b713                       ; [66 0d] jr Z,0x29b713
-	ld xwa, (xsp + 0x08)                    ; ld XWA,(XSP+0x08)
+	ld xwa, (xsp + 0x08)
 	cp	xwa, 0x00000014
 	jr ge, .LMCR_b713                      ; [69 02] jr GE,0x29b713
 	dec	1, xiz
@@ -995,13 +995,13 @@ HDAE5000_FltDec_DecimalExponent:
 	ld	xwa, xiz
 	cpl	wa
 	cpl	qwa
-	inc 1, xwa                              ; inc 1,XWA
+	inc 1, xwa
 	ld	xhl, xwa
 	jr t, .LMCR_b729                       ; [68 02] jr T,0x29b729
 .LMCR_b727:
 	ld	xhl, xiz
 .LMCR_b729:
-	pop xiz                                 ; pop XIZ
+	pop xiz
 	inc 8, xsp                              ; inc 0,XSP
 	ret
 
@@ -1026,14 +1026,14 @@ HDAE5000_Multiply:	; 0x29B72D
 	add	xhl, xwa
 	ret
 
-	nop                                     ; nop
+	nop
 HDAE5000_Float_Unpack:
 	; unpack the IEEE single at (XBC) into the internal form at (XWA):
 	;   +0 s16 unbiased exponent, +2 u8 class flag (1 = zero), +3 u8 sign
 	;   (bit 7), +4 u32 mantissa with the hidden bit restored (bit 23).
 	; Returns L = class flag.
 	ld	xhl, 0:i3
-	ld xix, (xbc)                           ; ld XIX,(XBC)
+	ld xix, (xbc)
 	ld	de, qix
 	ldcf16ri 15, de		; ldcf 0x0f,DE
 	stcf	0x0f, qhl
@@ -1048,8 +1048,8 @@ HDAE5000_Float_Unpack:
 	ld	qix, de
 	sub	hl, 0x007f
 .LMUL_b76d:
-	ld (xwa), xhl                           ; ld (XWA),XHL
-	ld (xwa + 0x04), xix                    ; ld (XWA+0x04),XIX
+	ld (xwa), xhl
+	ld (xwa + 0x04), xix
 	ldto_berp l, 0xee		; ld L,QL
 	ret
 
@@ -1057,17 +1057,17 @@ HDAE5000_Float_Unpack:
 	ld	xix, 0:i3
 	ldib_erp 0xee, 1		; ld QL,1
 	jr t, .LMUL_b76d                       ; [68 f0] jr T,0x29b76d
-	nop                                     ; nop
+	nop
 HDAE5000_Float_Pack:
 	; pack the internal form at (XBC) into an IEEE single at (XWA).  Exponent
 	; overflow stores +/-0x7F7FFFFF (FLT_MAX); class flag 8 stores 0; both
 	; set errno (RAM 0x230ECA) = 34 (ERANGE) and call the hook pointer at
 	; RAM 0x23A1A8 when it is non-zero.  Zero (class 1) and exponent
 	; underflow store 0 silently.
-	ld xhl, (xbc)                           ; ld XHL,(XBC)
+	ld xhl, (xbc)
 	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LMUL_b7ac                      ; [6e 27] jr NZ,0x29b7ac
-	ld xde, (xbc + 0x04)                    ; ld XDE,(XBC+0x04)
+	ld xde, (xbc + 0x04)
 	cp	hl, 0x007f
 	jr gt, .LMUL_b7bd                      ; [6a 2f] jr GT,0x29b7bd
 	cp	hl, 0xff82
@@ -1079,7 +1079,7 @@ HDAE5000_Float_Pack:
 	orb_erp h, 0xef		; or H,QH
 	or	hl, bc
 	ld	qde, hl
-	ld (xwa), xde                           ; ld (XWA),XDE
+	ld (xwa), xde
 	ret
 
 .LMUL_b7ac:
@@ -1090,7 +1090,7 @@ HDAE5000_Float_Pack:
 	jr t, .LMUL_b7c9                       ; [68 11] jr T,0x29b7c9
 .LMUL_b7b8:
 	ld	xde, 0:i3
-	ld (xwa), xde                           ; ld (XWA),XDE
+	ld (xwa), xde
 	ret
 
 .LMUL_b7bd:
@@ -1100,34 +1100,34 @@ HDAE5000_Float_Pack:
 	ld	qde, bc
 .LMUL_b7c9:
 	ldw	(0x230ECA:24), 34
-	ld (xwa), xde                           ; ld (XWA),XDE
+	ld (xwa), xde
 	ld	xbc, (0x23a1a8)
-	or xbc, xbc                             ; or XBC,XBC
+	or xbc, xbc
 	call_cc_ri xbc, 14		; call NZ,XBC
 	ret
 
 HDAE5000_Copy8:
 	; *(double *)XWA = *(double *)XBC -- 8-byte copy.  HDAE5000_DoPrintf uses
 	; it to fetch a double va_arg for %e/%f/%g (ap += 8 first).
-	ld xix, (xbc)                           ; ld XIX,(XBC)
-	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
-	ld (xwa), xix                           ; ld (XWA),XIX
-	ld (xwa + 0x04), xiy                    ; ld (XWA+0x04),XIY
+	ld xix, (xbc)
+	ld xiy, (xbc + 0x04)
+	ld (xwa), xix
+	ld (xwa + 0x04), xiy
 	ret
 
-	nop                                     ; nop
+	nop
 HDAE5000_Copy10:
 	; 10-byte copy (XBC) -> (XWA): HDAE5000_DoPrintf's long double va_arg
 	; fetch, taken when its flag bit 7 is set (ap += 10 first).
-	ld xix, (xbc)                           ; ld XIX,(XBC)
-	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
+	ld xix, (xbc)
+	ld xiy, (xbc + 0x04)
 	ld	hl, (xbc+8)
-	ld (xwa), xix                           ; ld (XWA),XIX
-	ld (xwa + 0x04), xiy                    ; ld (XWA+0x04),XIY
-	ld (xwa + 0x08), hl                     ; ld (XWA+0x08),HL
+	ld (xwa), xix
+	ld (xwa + 0x04), xiy
+	ld (xwa + 0x08), hl
 	ret
 
-	nop                                     ; nop
+	nop
 HDAE5000_LongToFloat:
 	; *(float *)XWA = (float)*(long *)XBC.  No caller in this ROM (searched:
 	; symbolic references to this label, which did not exist before, and
@@ -1136,13 +1136,13 @@ HDAE5000_LongToFloat:
 	lda	xsp, (xsp-8)
 	ld	xiz, xwa
 	ld	xwa, xsp
-	ld xbc, (xbc)                           ; ld XBC,(XBC)
+	ld xbc, (xbc)
 	call HDAE5000_Long_To_Unpacked
 	ld	xwa, xiz
 	ld	xbc, xsp
 	call HDAE5000_Float_Pack
 	lda	xsp, (xsp+8)
-	pop xiz                                 ; pop XIZ
+	pop xiz
 	ret
 
 HDAE5000_ULongToFloat:
@@ -1151,13 +1151,13 @@ HDAE5000_ULongToFloat:
 	lda	xsp, (xsp-8)
 	ld	xiz, xwa
 	ld	xwa, xsp
-	ld xbc, (xbc)                           ; ld XBC,(XBC)
+	ld xbc, (xbc)
 	call HDAE5000_ULong_To_Unpacked
 	ld	xwa, xiz
 	ld	xbc, xsp
 	call HDAE5000_Float_Pack
 	lda	xsp, (xsp+8)
-	pop xiz                                 ; pop XIZ
+	pop xiz
 	ret
 
 HDAE5000_FloatDiv_Special:
@@ -1167,8 +1167,8 @@ HDAE5000_FloatDiv_Special:
 	; otherwise the dividend's special class stands.
 	ld	h, (xwa+2)
 	ld8_src_rid8 xbc, 0x02, l		; ld L,(XBC+0x02)
-	bit 0x00, l		; bit 0x00,L
-	ret z                                   ; ret Z
+	bit 0x00, l
+	ret z
 
 	ld	(xwa+2), 0x08
 	ret
@@ -1179,7 +1179,7 @@ HDAE5000_FloatDiv:
 	push xiz
 	lda	xsp, (xsp-20)
 	ld	xiz, xde
-	ld (xsp + 0x10), xwa                    ; ld (XSP+0x10),XWA
+	ld (xsp + 0x10), xwa
 	ld	xwa, xsp
 	call HDAE5000_Float_Unpack
 	ld	xbc, xiz
@@ -1189,11 +1189,11 @@ HDAE5000_FloatDiv:
 	ld	xwa, xsp
 	lda	xbc, (xiz)
 	call HDAE5000_Unpacked_Div
-	ld xwa, (xsp + 0x10)                    ; ld XWA,(XSP+0x10)
+	ld xwa, (xsp + 0x10)
 	ld	xbc, xsp
 	call HDAE5000_Float_Pack
 	lda	xsp, (xsp+20)
-	pop xiz                                 ; pop XIZ
+	pop xiz
 	ret
 
 HDAE5000_SDivMod32_Common:
@@ -1207,14 +1207,14 @@ HDAE5000_SDivMod32_Common:
 	ld	e, 0x01:opc
 	cpl	qwa
 	cpl	wa
-	inc 1, xwa                              ; inc 1,XWA
+	inc 1, xwa
 .LMUL_b881:
 	bit	0x0f, qbc
 	jr z, .LMUL_b891                       ; [66 0a] jr Z,0x29b891
 	or	e, 0x02
 	cpl	qbc
 	cpl	bc
-	inc 1, xbc                              ; inc 1,XBC
+	inc 1, xbc
 .LMUL_b891:
 	pushw de                                ; push DE
 	calr	HDAE5000_UDivMod32
@@ -1227,18 +1227,18 @@ HDAE5000_SDivMod32_Common:
 	jr t, .LMUL_b8a7                       ; [68 04] jr T,0x29b8a7
 .LMUL_b8a3:
 	cp	a, 3:i3
-	ret z                                   ; ret Z
+	ret z
 
 .LMUL_b8a7:
-	or xhl, xhl                             ; or XHL,XHL
-	ret z                                   ; ret Z
+	or xhl, xhl
+	ret z
 
 	cp	a, 0:i3
-	ret z                                   ; ret Z
+	ret z
 
 	cpl	qhl
 	cpl	hl
-	inc 1, xhl                              ; inc 1,XHL
+	inc 1, xhl
 	ret
 
 HDAE5000_SMod32:
@@ -1294,7 +1294,7 @@ HDAE5000_UDivMod32:	; 0x29B8C5
 	div	xwa, bc
 	ld	hl, wa
 	ld	de, qwa
-	extz xde                                ; extz XDE
+	extz xde
 	ret
 
 .LDIV_b8fe:
@@ -1311,7 +1311,7 @@ HDAE5000_UDivMod32:	; 0x29B8C5
 .LDIV_b90a:
 	ld	xhl, 1:i3
 	ld	xde, 0:i3
-	ret z                                   ; ret Z
+	ret z
 
 	dec	1, xhl
 	ld	xde, xwa
@@ -1335,7 +1335,7 @@ HDAE5000_UDivMod32:	; 0x29B8C5
 	add	xhl, xhl
 	cp	xwa, xbc
 	jr c, .LDIV_b939                       ; [67 05] jr C,0x29b939
-	set 0x00, l		; set 0x00,L
+	set 0x00, l
 	sub	xwa, xbc
 .LDIV_b939:
 	srl	xbc, 0x01
@@ -1349,11 +1349,11 @@ HDAE5000_Double_Pack:
 	; bias 0x3FF; exponent overflow and class 8 store DBL_MAX
 	; (0x7FEFFFFF FFFFFFFF) with the sign, set errno = 34 (ERANGE) and call
 	; the RAM 0x23A1A8 hook; class 1 (zero) and underflow store 0.
-	ld xhl, (xbc)                           ; ld XHL,(XBC)
+	ld xhl, (xbc)
 	cpib_erp 0xee, 0		; cp QL,0
 	jr nz, .LDIV_b97b                      ; [6e 32] jr NZ,0x29b97b
-	ld xix, (xbc + 0x08)                    ; ld XIX,(XBC+0x08)
-	ld xiy, (xbc + 0x04)                    ; ld XIY,(XBC+0x04)
+	ld xix, (xbc + 0x08)
+	ld xiy, (xbc + 0x04)
 	cp	hl, 0x03ff
 	jr gt, .LDIV_b981                      ; [6a 2c] jr GT,0x29b981
 	cp	hl, 0xfc02
@@ -1365,8 +1365,8 @@ HDAE5000_Double_Pack:
 	or	hl, qix
 	ld	qix, hl
 .LDIV_b96f:
-	ld (xwa), xiy                           ; ld (XWA),XIY
-	ld (xwa + 0x04), xix                    ; ld (XWA+0x04),XIX
+	ld (xwa), xiy
+	ld (xwa + 0x04), xix
 	ret
 
 .LDIV_b975:
@@ -1380,20 +1380,20 @@ HDAE5000_Double_Pack:
 	ldw	(0x230ECA:24), 34
 	ld	xde, 0:i3
 	dec	1, xde
-	ld (xwa), xde                           ; ld (XWA),XDE
+	ld (xwa), xde
 	ld	xde, 0x7fefffff
 	ldto_berp c, 0xef		; ld C,QH
 	orb_erp c, 0xeb		; or C,QD
 	ldfr_berp c, 0xeb		; ld QD,C
-	ld (xwa + 0x04), xde                    ; ld (XWA+0x04),XDE
+	ld (xwa + 0x04), xde
 	jr t, .LDIV_b9a1                       ; [68 00] jr T,0x29b9a1
 .LDIV_b9a1:
 	ld	xbc, (0x23a1a8)
-	or xbc, xbc                             ; or XBC,XBC
+	or xbc, xbc
 	call_cc_ri xbc, 14		; call NZ,XBC
 	ret
 
-	nop                                     ; nop
+	nop
 HDAE5000_Long_To_Unpacked:
 	; signed long XBC -> internal form at (XWA): records the sign, negates,
 	; then HDAE5000_ULong_To_Unpacked.
@@ -1403,7 +1403,7 @@ HDAE5000_Long_To_Unpacked:
 	jr nc, .LDIV_b9be                      ; [6f 07] jr NC,0x29b9be
 	cpl	qbc
 	cpl	bc
-	inc 1, xbc                              ; inc 1,XBC
+	inc 1, xbc
 .LDIV_b9be:
 	calr	HDAE5000_ULong_To_Unpacked
 	ld	(xiy+3), e
@@ -1414,7 +1414,7 @@ HDAE5000_ULong_To_Unpacked:
 	; the value is shifted to a 24-bit mantissa (rounded) and the exponent
 	; stored; XBC = 0 sets class flag 1 (zero).
 	ld	xiy, xwa
-	or xbc, xbc                             ; or XBC,XBC
+	or xbc, xbc
 	jr z, .LDIV_ba1a                       ; [66 4f] jr Z,0x29ba1a
 	bs1b	qbc
 	jr	ov, .LDIV_b9d5
@@ -1424,17 +1424,17 @@ HDAE5000_ULong_To_Unpacked:
 	bs1b16 bc		; bs1b A,BC
 .LDIV_b9d7:
 	ld	hl, 0:i3
-	ld (xiy + 0x02), hl                     ; ld (XIY+0x02),HL
-	ld l, a		; ld L,A
+	ld (xiy + 0x02), hl
+	ld l, a
 	ld_dst16_rid8 xiy, 0x00, hl		; ld (XIY+0x00),HL
-	cp l, 0x17		; cp L,0x17
+	cp l, 0x17
 	jr z, .LDIV_ba16                       ; [66 30] jr Z,0x29ba16
 	jr lt, .LDIV_ba01                      ; [61 19] jr LT,0x29ba01
-	sub l, 0x17		; sub L,0x17
-	ld a, l		; ld A,L
+	sub l, 0x17
+	ld a, l
 	srla	xbc
 	jr nc, .LDIV_ba16                      ; [6f 25] jr NC,0x29ba16
-	inc 1, xbc                              ; inc 1,XBC
+	inc 1, xbc
 	bit_erpb 0xe7, 0x00		; bit 0x00,QB
 	jr z, .LDIV_ba16                       ; [66 1d] jr Z,0x29ba16
 	srl	xbc, 0x01
@@ -1442,7 +1442,7 @@ HDAE5000_ULong_To_Unpacked:
 	jr t, .LDIV_ba16                       ; [68 15] jr T,0x29ba16
 .LDIV_ba01:
 	ld	a, 0x17:opc
-	sub a, l		; sub A,L
+	sub a, l
 	cp	a, 0x10
 	jr lt, .LDIV_ba14                      ; [61 0a] jr LT,0x29ba14
 	ld	qbc, bc
@@ -1452,14 +1452,14 @@ HDAE5000_ULong_To_Unpacked:
 .LDIV_ba14:
 	slla	xbc
 .LDIV_ba16:
-	ld (xiy + 0x04), xbc                    ; ld (XIY+0x04),XBC
+	ld (xiy + 0x04), xbc
 	ret
 
 .LDIV_ba1a:
 	ld	(xiy+2), 0x01
 	ret
 
-	nop                                     ; nop
+	nop
 HDAE5000_FloatToDouble:
 	; *(double *)XWA = (double)*(float *)XBC: Float_Unpack, widen the
 	; mantissa by three right shifts into a high/low pair, Double_Pack.
@@ -1470,7 +1470,7 @@ HDAE5000_FloatToDouble:
 	call HDAE5000_Float_Unpack
 	cp	l, 0:i3
 	jr nz, .LDIV_ba56                      ; [6e 26] jr NZ,0x29ba56
-	ld xhl, (xsp + 0x04)                    ; ld XHL,(XSP+0x04)
+	ld xhl, (xsp + 0x04)
 	ld	xde, 0:i3
 	srl	xhl, 0x01
 	stcf16ri 0, de		; stcf 0x00,DE
@@ -1481,17 +1481,17 @@ HDAE5000_FloatToDouble:
 	srl	xhl, 0x01
 	stcf16ri 0, de		; stcf 0x00,DE
 	rrc	xde
-	ld (xsp + 0x08), xhl                    ; ld (XSP+0x08),XHL
-	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
+	ld (xsp + 0x08), xhl
+	ld (xsp + 0x04), xde
 .LDIV_ba56:
 	ld	xwa, xiz
 	ld	xbc, xsp
 	call HDAE5000_Double_Pack
 	lda	xsp, (xsp+12)
-	pop xiz                                 ; pop XIZ
+	pop xiz
 	ret
 
-	nop                                     ; nop
+	nop
 HDAE5000_Unpacked_Div:
 	; (XWA) /= (XBC) on the internal form: exponents subtracted, signs
 	; XORed, mantissas divided four quotient bits per pass; special
@@ -1505,8 +1505,8 @@ HDAE5000_Unpacked_Div:
 	sub16_mem_rid8 xwa, 0x00, hl		; sub (XWA+0x00),HL
 	ld8_src_rid8 xbc, 0x03, l		; ld L,(XBC+0x03)
 	xor8_mem_rid8 xwa, 0x03, l		; xor (XWA+0x03),L
-	ld xwa, (xwa + 0x04)                    ; ld XWA,(XWA+0x04)
-	ld xbc, (xbc + 0x04)                    ; ld XBC,(XBC+0x04)
+	ld xwa, (xwa + 0x04)
+	ld xbc, (xbc + 0x04)
 	cp	xbc, 0x00800000
 	jr z, .LDIV_baf7                       ; [66 6c] jr Z,0x29baf7
 	ld	xhl, 0:i3
@@ -1522,22 +1522,22 @@ HDAE5000_Unpacked_Div:
 	cp	xwa, xiz
 	jr c, .LDIV_baa8                       ; [67 05] jr C,0x29baa8
 	sub	xwa, xiz
-	set 0x03, l		; set 0x03,L
+	set 0x03, l
 .LDIV_baa8:
 	cp	xwa, xiy
 	jr c, .LDIV_bab1                       ; [67 05] jr C,0x29bab1
 	sub	xwa, xiy
-	set 0x02, l		; set 0x02,L
+	set 0x02, l
 .LDIV_bab1:
 	cp	xwa, xix
 	jr c, .LDIV_baba                       ; [67 05] jr C,0x29baba
 	sub	xwa, xix
-	set 0x01, l		; set 0x01,L
+	set 0x01, l
 .LDIV_baba:
 	cp	xwa, xbc
 	jr c, .LDIV_bac3                       ; [67 05] jr C,0x29bac3
 	sub	xwa, xbc
-	set 0x00, l		; set 0x00,L
+	set 0x00, l
 .LDIV_bac3:
 	dec	1, e
 	jr z, .LDIV_bacf                       ; [66 08] jr Z,0x29bacf
@@ -1545,13 +1545,13 @@ HDAE5000_Unpacked_Div:
 	sll	xwa, 0x04
 	jr t, .LDIV_ba9f                       ; [68 d0] jr T,0x29ba9f
 .LDIV_bacf:
-	pop xwa                                 ; pop XWA
+	pop xwa
 	bit	0x0f, qhl
 	jr nz, .LDIV_badc                      ; [6e 06] jr NZ,0x29badc
 	sll	xhl, 0x01
 	dec1_16_rid8 xwa, 0x00		; decw 1,(XWA+0x00)
 .LDIV_badc:
-	cp l, 0x80		; cp L,0x80
+	cp l, 0x80
 	jr c, .LDIV_baef                       ; [67 0e] jr C,0x29baef
 	add	xhl, 0x00000100
 	jr nc, .LDIV_baef                      ; [6f 06] jr NC,0x29baef
@@ -1560,13 +1560,13 @@ HDAE5000_Unpacked_Div:
 .LDIV_baef:
 	srl	xhl, 0x08
 .LDIV_baf2:
-	ld (xwa + 0x04), xhl                    ; ld (XWA+0x04),XHL
-	pop xiz                                 ; pop XIZ
+	ld (xwa + 0x04), xhl
+	pop xiz
 	ret
 
 .LDIV_baf7:
 	ld	xhl, xwa
-	pop xwa                                 ; pop XWA
+	pop xwa
 	jr t, .LDIV_baf2                       ; [68 f6] jr T,0x29baf2
 
 ; ----------------------------------------------------------------------------

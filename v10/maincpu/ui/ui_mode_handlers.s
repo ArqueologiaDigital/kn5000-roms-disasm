@@ -7870,7 +7870,7 @@ FSWAssGrid_EventDispatch_Skip2:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld	xwa, (xbc+hl)	; ld xwa, (xbc+hl)
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_4@hi16
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_4@lo16
@@ -8999,7 +8999,7 @@ FSWAss_RefreshAllVoices_Loop:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	cp	xwa, (xix+bc)	; cp xwa, (xix+bc)
+	cp	xwa, (xix+bc)
 	jr	nz, FSWAss_RefreshAllVoices_Skip10
 	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1
@@ -9035,7 +9035,7 @@ FSWAss_RefreshAllVoices_Loop2:
 	ld	c, l
 	extz	bc
 	sla	bc, 2
-	cp	xwa, (xix+bc)	; cp xwa, (xix+bc)
+	cp	xwa, (xix+bc)
 	jr	nz, FSWAss_RefreshAllVoices_Skip13
 	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ldw	(xbc), 1

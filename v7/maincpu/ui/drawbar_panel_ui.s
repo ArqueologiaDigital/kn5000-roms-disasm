@@ -276,7 +276,7 @@ ComSetGridCheck_JumpTable_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	cp	xwa, (xix+iy)	; cp xwa, (xix+iy)
+	cp	xwa, (xix+iy)
 	jr	z, ComSetGridCheck_JumpTable_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -3265,7 +3265,7 @@ CtlMsgGridCheck_Loop:
 	ld	iy, ix
 	add	iy, wa
 	ld	xwa, (xiz)
-	cp	xwa, (xhl+iy)	; cp xwa, (xhl+iy)
+	cp	xwa, (xhl+iy)
 	jr	nz, CtlMsgGridCheck_Skip2
 	lda	xde, (xsp+20)
 	ld	xwa, (xsp+4)
@@ -4031,7 +4031,7 @@ MidiPartGridCheck_Evt1C00017:
 	ld	de, wa
 	add	de, hl
 	lda	xwa, (MidiSetup_EventHandler_Table:24)
-	ld	xwa, (xwa+de)	; ld xwa, (xwa+de)
+	ld	xwa, (xwa+de)
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
 	cp	wa, 3:i3
@@ -4078,7 +4078,7 @@ MidiPartGridCheck_Skip3:
 	ld	wa, hl
 	add	wa, wa
 	lda	xbc, (MidiPartGridCheck_Evt1C00017_Data:24)
-	ld	bc, (xbc+wa)	; ld bc, (xbc+wa)
+	ld	bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
 	ld	xwa, (xsp+12)
@@ -4117,7 +4117,7 @@ MidiPartGridCheck_Evt1C00018:
 	ld	de, wa
 	add	de, hl
 	lda	xwa, (MidiSetup_EventHandler_Table:24)
-	ld	xwa, (xwa+de)	; ld xwa, (xwa+de)
+	ld	xwa, (xwa+de)
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
 	cp	wa, 3:i3
@@ -4166,7 +4166,7 @@ MidiPartGridCheck_Skip7:
 	ld	wa, hl
 	add	wa, wa
 	lda	xbc, (MidiPartGridCheck_Evt1C00018_Data:24)
-	ld	bc, (xbc+wa)	; ld bc, (xbc+wa)
+	ld	bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
 	ld	xwa, (xsp+12)
@@ -4197,7 +4197,7 @@ MidiPartGridCheck_Loop:
 	ld	iy, wa
 	add	iy, de
 	lda	xhl, (MidiSetup_EventHandler_Table:24)
-	ld	xiz, (xhl+iy)	; ld xiz, (xhl+iy)
+	ld	xiz, (xhl+iy)
 	ld	xde, (xsp+34)
 	cp	(xde), xiz
 	jr	nz, MidiPartGridCheck_Skip10
@@ -4272,14 +4272,14 @@ MidiPartGridCheck_Skip12:
 	ld	iz, iy
 	inc	4, iz
 	ld	xwa, (xix)
-	cp	xwa, (xhl+iz)	; cp xwa, (xhl+iz)
+	cp	xwa, (xhl+iz)
 	jr	nz, MidiPartGridCheck_Skip13
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 2
 	ld	wa, (xde)
 	sla	wa, 2
 	lda	xbc, (Transpose_ValueDisplay_Table:24)
-	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -4293,7 +4293,7 @@ MidiPartGridCheck_Skip12:
 MidiPartGridCheck_Skip13:
 	inc	8, iy
 	ld	xwa, (xix)
-	cp	xwa, (xhl+iy)	; cp xwa, (xhl+iy)
+	cp	xwa, (xhl+iy)
 	jr	nz, MidiPartGridCheck_Skip15
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 3
@@ -15318,7 +15318,7 @@ PsMixer_CtlTypeProc1_Loop:
 	ld	(xsp+8), hl
 	sla	hl, 2
 	lda	xwa, (0x03ea38:24)
-	ld	xwa, (xwa+hl)	; ld xwa, (xwa+hl)
+	ld	xwa, (xwa+hl)
 	push	xwa
 	pushw	PsMixer_CtlTypeProc1_Data@hi16
 	pushw	PsMixer_CtlTypeProc1_Data@lo16

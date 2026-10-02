@@ -2161,7 +2161,7 @@ Wordwrap_MeasureWidth:
 	inc	8, xsp
 	ld	xwa, (xsp+6)
 	ld	bc, (xsp+4)
-	ld	(xwa+bc), 0x00	; ld (XWA+BC),0x00
+	ld	(xwa+bc), 0x00
 	ld	xwa, (xsp+6)
 	ld	xbc, (xsp+18)
 	calr	CalcTotalWidth
@@ -2235,7 +2235,7 @@ FontGlyph_ByteData_Skip2:
 	lda	xhl, (TextRender_CharEncodeAndDraw_Data:24)
 	ld	a, (xwa)
 FontGlyph_ByteData_Loop:
-	cp	(xhl+de), a	; cp (XHL+DE),A
+	cp	(xhl+de), a
 	jr	nz, FontGlyph_ByteData_Skip3
 	ld	a, e
 	ld	(xbc), a

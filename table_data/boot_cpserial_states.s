@@ -401,9 +401,9 @@ BootSerial_PollTX__inject_free:
 	ld	a, 0x10:opc
 	ld	iy, (0x0fd7:16)
 	ld	xde, 0x0fd9		; TX serial ring
-	ld	(xde+iy), w	; LD (XDE+IY), W
+	ld	(xde+iy), w
 	calr	BootSerial_TxRingAdvanceIY
-	ld	(xde+iy), a	; LD (XDE+IY), A
+	ld	(xde+iy), a
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(0x0fd7:16), iy
 BootSerial_PollTX__inject_done:
@@ -508,7 +508,7 @@ BootSerial_RX_ParsePackets__next:
 BootSerial_RX_ParsePackets__have_avail:
 	cp	a, 2:i3			; a whole frame available?
 	jrl	c, BootSerial_RxParseDone
-	ld	l, (xde+iy)	; LD L, (XDE+IY) - first frame byte
+	ld	l, (xde+iy)	; first frame byte
 	and	l, 0x38
 	srl	l, 1			; class * 4 = table offset
 	xor	h, h
@@ -546,14 +546,14 @@ BootSerial_RxPacketDispatchTable:
 ; Callers: BootSerial_RxPacketDispatchTable[0/1]
 ; -----------------------------------------------------------------------------
 BootSerial_RxPkt_TwoByteScrambled:
-	ld	w, (xde+iy)	; LD W, (XDE+IY) - first byte
+	ld	w, (xde+iy)	; first byte
 	calr	BootSerial_RxRingAdvanceIY
-	ld	(xiz+ix), w	; LD (XIZ+IX), W
+	ld	(xiz+ix), w
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(0x0f6c:16), w
-	ld	a, (xde+iy)	; LD A, (XDE+IY) - second byte
+	ld	a, (xde+iy)	; second byte
 	calr	BootSerial_RxRingAdvanceIY
-	ld	(xiz+ix), a	; LD (XIZ+IX), A
+	ld	(xiz+ix), a
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(0x0f6d:16), a
 	and	w, 0x4f			; index bits of the first byte
@@ -568,7 +568,7 @@ BootSerial_RxPkt_TwoByteScrambled__no_bias:
 BootSerial_RxPkt_TwoByteScrambled__no_carry:
 	ex8_ri	xhl, a			; swap A into the buffer slot,
 	xor	a, (xhl)		; A = old ^ new
-	ld	(xiz+ix), a	; LD (XIZ+IX), A
+	ld	(xiz+ix), a
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(0x0f6e:16), a
 	ld	(xiz - 4), ix		; commit control-ring head
@@ -586,12 +586,12 @@ BootSerial_RxPkt_TwoByteScrambled__no_carry:
 ; Callers: BootSerial_RxPacketDispatchTable[2]
 ; -----------------------------------------------------------------------------
 BootSerial_RxPkt_TwoByteDecode:
-	ld	w, (xde+iy)	; LD W, (XDE+IY) - first byte
+	ld	w, (xde+iy)	; first byte
 	calr	BootSerial_RxRingAdvanceIY
-	ld	(xiz+ix), w	; LD (XIZ+IX), W
+	ld	(xiz+ix), w
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(0x0f6c:16), w
-	ld	a, (xde+iy)	; LD A, (XDE+IY) - second byte
+	ld	a, (xde+iy)	; second byte
 	calr	BootSerial_RxRingAdvanceIY
 	ld	(0x0f6d:16), a
 	ld	c, w
@@ -602,10 +602,10 @@ BootSerial_RxPkt_TwoByteDecode:
 	ld	(0x0f75:16), iy
 	jr	t, BootSerial_RxPkt_TwoByteDecode__exit
 BootSerial_RxPkt_TwoByteDecode__store:
-	ld	(xiz+ix), l	; LD (XIZ+IX), L - decoded byte
+	ld	(xiz+ix), l	; decoded byte
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(0x0f6e:16), l
-	ld	(xiz+ix), 0xff	; LD (XIZ+IX), 0xff - terminator
+	ld	(xiz+ix), 0xff	; terminator
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(xiz - 4), ix		; commit control-ring head
 	decm	3, (xiz - 2)
@@ -678,7 +678,7 @@ BootSerial_RxPkt_VarLengthRun__no_bias:
 	extz	xhl
 	add	xhl, 0x00001022		; XHL = scramble buffer slot
 BootSerial_RxPkt_VarLengthRun__store:
-	ld	(xiz+ix), w	; LD (XIZ+IX), W - run tag
+	ld	(xiz+ix), w	; run tag
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	a, (xde+iy)	; A = payload byte
 	calr	BootSerial_RxRingAdvanceIY
@@ -703,7 +703,7 @@ BootSerial_RxPkt_VarLengthRun__drop_pair:
 BootSerial_RxPkt_VarLengthRun__decoded:
 	ld	a, (0x0f6e:16)		; A = decoded byte
 BootSerial_RxPkt_VarLengthRun__scramble:
-	ld	(xiz+ix), a	; LD (XIZ+IX), A
+	ld	(xiz+ix), a
 	calr	BootSerial_CtrlRingAdvanceIX
 	bit	4, w
 	jr	nz, BootSerial_RxPkt_VarLengthRun__raw_done
@@ -720,7 +720,7 @@ BootSerial_RxPkt_VarLengthRun__scramble:
 BootSerial_RxPkt_VarLengthRun__raw_done:
 	ld	a, 0xff:opc			; decode mode: 0xff terminator
 BootSerial_RxPkt_VarLengthRun__store_mixed:
-	ld	(xiz+ix), a	; LD (XIZ+IX), A
+	ld	(xiz+ix), a
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(xiz - 4), ix		; commit control-ring head
 	decm	1, (xiz - 2)
@@ -742,7 +742,7 @@ BootSerial_RxPkt_VarLengthRun__step:
 ; Callers: BootSerial_RxPacketDispatchTable[3/4/5]
 ; -----------------------------------------------------------------------------
 BootSerial_RxPkt_Discard:
-	ld	a, (xde+iy)	; LD A, (XDE+IY)
+	ld	a, (xde+iy)
 	calr	BootSerial_RxRingAdvanceIY
 	ld	a, (xde+iy)
 	calr	BootSerial_RxRingAdvanceIY
@@ -788,7 +788,7 @@ BootSerial_TX_EncodePackets__fwd:
 BootSerial_TX_EncodePackets__have_free:
 	cp	hl, 3:i3
 	jrl	c, BootSerial_TxEncodeDone
-	ld	a, (xiz+ix)	; LD A, (XIZ+IX) - packet tag
+	ld	a, (xiz+ix)	; packet tag
 	and	a, 0x30
 	srl	a, 2			; class * 4 = table offset
 	ld	l, a
@@ -817,13 +817,13 @@ BootSerial_TxPacketDispatchTable:
 ; Callers: BootSerial_TxPacketDispatchTable[0/1/2]
 ; -----------------------------------------------------------------------------
 BootSerial_TxPkt_TwoByte:
-	ld	a, (xiz+ix)	; LD A, (XIZ+IX)
+	ld	a, (xiz+ix)
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
-	ld	(xde+iy), a	; LD (XDE+IY), A
+	ld	(xde+iy), a
 	calr	BootSerial_TxRingAdvanceIY
-	ld	w, (xiz+ix)	; LD W, (XIZ+IX)
+	ld	w, (xiz+ix)
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
-	ld	(xde+iy), w	; LD (XDE+IY), W
+	ld	(xde+iy), w
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(xiz - 8), ix		; commit control-ring tail
 	incw	1, (xiz - 2)		; 2 slots freed
@@ -839,20 +839,20 @@ BootSerial_TxPkt_TwoByte:
 ; Callers: BootSerial_TxPacketDispatchTable[3]
 ; -----------------------------------------------------------------------------
 BootSerial_TxPkt_VarLengthRun:
-	ld	a, (xiz+ix)	; LD A, (XIZ+IX) - run header
+	ld	a, (xiz+ix)	; run header
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
 	ld	c, a
 	and	a, 0x0f
 	add	a, 2
 	ld	b, a			; B = payload count
 	ld	a, c
-	ld	(xde+iy), a	; LD (XDE+IY), A - emit header
+	ld	(xde+iy), a	; emit header
 	calr	BootSerial_TxRingAdvanceIY
 	incw	1, (xiz - 2)
 BootSerial_TxPkt_VarLengthRun__loop:
-	ld	a, (xiz+ix)	; LD A, (XIZ+IX)
+	ld	a, (xiz+ix)
 	calr	BootSerial_CtrlRingAdvanceIX_Dup
-	ld	(xde+iy), a	; LD (XDE+IY), A
+	ld	(xde+iy), a
 	calr	BootSerial_TxRingAdvanceIY
 	ld	(xiz - 8), ix		; commit control-ring tail
 	incw	1, (xiz - 2)
@@ -1124,7 +1124,7 @@ Boot_CopyWords:
 ; Callers: VGA_FINALIZEINITIALIZATION (boot 0xffd7bd)
 ; -----------------------------------------------------------------------------
 Boot_FillWords:
-	ld	(xwa+), bc		; LD (XWA+), BC
+	ld	(xwa+), bc
 	djnz16	de, Boot_FillWords
 	ret
 
@@ -1140,7 +1140,7 @@ Boot_ChecksumWords:
 	extz	xbc
 	add	xbc, xwa		; XBC = end address
 Boot_ChecksumWords__loop:
-	add xhl, (xwa+)		; ADD XHL, (XWA+)
+	add xhl, (xwa+)
 	cp	xwa, xbc
 	jr	lt, Boot_ChecksumWords__loop
 	cpl	hl

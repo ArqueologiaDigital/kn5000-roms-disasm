@@ -6786,14 +6786,14 @@ RESET:
 	ld XIX,0x00000080
 	xor XWA,XWA
 RESET__clear_iram:
-	ld (xix+), XWA		; ld (XIX+),XWA
+	ld (xix+), XWA
 	djnz16 BC,RESET__clear_iram
 
 	; --- clear work DRAM, 0x600000-0x6033FF --------------------------------
 	ld XBC,0x00000D00
 	ld XIX,0x00600000
 RESET__clear_dram_lo:
-	ld (xix+), XWA		; ld (XIX+),XWA
+	ld (xix+), XWA
 	sub XBC,0x00000001
 	jr NZ,RESET__clear_dram_lo
 
@@ -6805,7 +6805,7 @@ RESET__clear_dram_lo:
 	ld XBC,0x00003000
 	ld XIX,0x00604000
 RESET__clear_dram_hi:
-	ld (xix+), XWA		; ld (XIX+),XWA
+	ld (xix+), XWA
 	sub XBC,0x00000001
 	jr NZ,RESET__clear_dram_hi
 

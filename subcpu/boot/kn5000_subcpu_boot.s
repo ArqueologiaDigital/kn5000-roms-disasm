@@ -927,7 +927,7 @@ WRITE_TONE_REG_MULTI_CHANNEL:
 	pushw 0x1	; Push channel 1
 	calr WRITE_TONE_REG_SINGLE_CHANNEL
 	mrdl3 0xAF, 0x0A, 0x21	; ld XBC, (XSP+0x0A)
-	ld xde, xiz	; ld XDE, XIZ
+	ld xde, xiz
 	pushw 0x0	; Push channel 0
 	calr WRITE_TONE_REG_SINGLE_CHANNEL
 	ld xbc, xwa
@@ -1001,7 +1001,7 @@ COPY_WORDS:
 ; ==============================================================================
 
 FILL_WORDS:
-	ld (xwa+), BC	; ld (XWA+), BC
+	ld (xwa+), BC
 	djnz16 de, -6	; djnz DE, FILL_WORDS
 	ret
 
@@ -1015,7 +1015,7 @@ CHECKSUM_CALC:
 	extz xbc	; Zero-extend BC to XBC
 	add xbc, xwa	; End address = start + count
 CHECKSUM_CALC__loop:
-	add XHL, (xwa+)	; add XHL, (XWA+)
+	add XHL, (xwa+)
 	cp xwa, xbc
 	jr lt, CHECKSUM_CALC__loop	; Loop while XWA < end
 	cpl hl	; Complement result
@@ -2014,7 +2014,7 @@ CONTROL_PANEL_BIT_SET_CLEAR:
 
 CONTROL_PANEL_BIT_SET_CLEAR__loop:
 	lda xbc, (xsp)	; XBC = pointer to parameters
-	ld e, (xbc)	; ld E, (XBC) - Load LED/button index
+	ld e, (xbc)	; Load LED/button index
 	sub e, 0x24	; E = index - 0x24 (normalize to 0-based)
 	ld l, e	; L = normalized index
 	srl l, 3	; L = index >> 3 (byte offset)

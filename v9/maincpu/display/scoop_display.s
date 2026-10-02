@@ -1662,7 +1662,7 @@ PerfMode_VolumeParam_Process:
 	dec	1, l
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+hl), 0x0c	; cp (XIX+HL),0x0c
+	cp	(xix+hl), 0x0c
 	pop	xix
 	jrl	z, PerfMode_VolumeParam_Process_Skip
 	ld	(3567:16), 9
@@ -4221,7 +4221,7 @@ ToneParam_Evt09_BytecodeHandler_Loop12:
 	srl	xiz, 1
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+iz), 0x10	; cp (XIX+IZ),0x10
+	cp	(xix+iz), 0x10
 	pop	xix
 	jrl	z, ToneParam_Evt09_BytecodeHandler_Loop12
 	xor	wa, wa
@@ -4249,7 +4249,7 @@ ToneParam_Evt09_BytecodeHandler_Loop12:
 	ld	(xde+hl), wa
 	srl	l, 1
 	ld	xde, 3262
-	ld	(xde+hl), 0x05	; ld (XDE+HL),0x05
+	ld	(xde+hl), 0x05
 	pop	xhl
 	pop	xde
 ToneParam_Evt09_BytecodeHandler_Loop13:
@@ -4606,7 +4606,7 @@ DisplayMode_Handler_3_Loop2:
 	popw	wa
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+iz), 0x0c	; cp (XIX+IZ),0x0c
+	cp	(xix+iz), 0x0c
 	pop	xix
 	jrl	nz, DisplayMode_Handler_3_Skip19
 	bit	2, (0xfdad:16)
@@ -4816,7 +4816,7 @@ DisplayMode_Handler_3_Skip27:
 	sra	iz, 1
 	push	xde
 	ld	xde, 0xf1a0
-	cp	(xde+iz), 0x0c	; cp (XDE+IZ),0x0c
+	cp	(xde+iz), 0x0c
 	pop	xde
 	jrl	nz, DisplayMode_Handler_3_Skip28
 	bit	2, (0xfdad:16)
@@ -4843,7 +4843,7 @@ PerfMode_EventTable_0_Target1_Helper5:
 	popw	wa
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+iz), 0x0c	; cp (XIX+IZ),0x0c
+	cp	(xix+iz), 0x0c
 	pop	xix
 	jrl	nz, DisplayMode_Handler_3_Return6
 	bit	2, (0xfdad:16)
@@ -4861,7 +4861,7 @@ PerfMode_EventTable_0_Target1_Helper6:
 	popw	wa
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+iz), 0x0c	; cp (XIX+IZ),0x0c
+	cp	(xix+iz), 0x0c
 	pop	xix
 	jrl	nz, DisplayMode_Handler_3_Return7
 	bit	2, (0xfdad:16)
@@ -5479,7 +5479,7 @@ VoiceSlot_TableSetup_Helper4:
 	xor	h, h
 	push	xde
 	ld	xde, 0xf250
-	bit	7, (xde+hl)	; bit 7,(XDE+HL)
+	bit	7, (xde+hl)
 	pop	xde
 	jrl	nz, VoiceSlot_TableSetup_Skip8
 	xor	wa, wa
@@ -5571,7 +5571,7 @@ VoiceSlot_TableSetup_Helper5:
 	xor	h, h
 	push	xde
 	ld	xde, 0xf250
-	bit	7, (xde+hl)	; bit 7,(XDE+HL)
+	bit	7, (xde+hl)
 	pop	xde
 	jrl	nz, VoiceSlot_TableSetup_Skip14
 	xor	wa, wa
@@ -7205,7 +7205,7 @@ PortConfig_SetupBytecode:
 	srl	xiz, 1
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+iz), 0x0e	; cp (XIX+IZ),0x0e
+	cp	(xix+iz), 0x0e
 	pop	xix
 	jrl	nz, PortConfig_SetupBytecode_Return
 	ld	a, (3822:16)
@@ -7213,7 +7213,7 @@ PortConfig_SetupBytecode:
 	ld	(0x28be:16), a
 	push	xix
 	ld	xix, 0xf1a0
-	ld	(xix+iz), 0x0d	; ld (XIX+IZ),0x0d
+	ld	(xix+iz), 0x0d
 	pop	xix
 PortConfig_SetupBytecode_Return:
 	ret
@@ -7351,7 +7351,7 @@ PortConfig_Handler_0_Helper:
 	call	VoiceSlot_ComputeIndex
 	push	xde
 	ld	xde, 0xf250
-	bit	7, (xde+iz)	; bit 7,(XDE+IZ)
+	bit	7, (xde+iz)
 	pop	xde
 	jrl	nz, ScoopParam_ValueTable_Helper_Skip
 	call	VoiceSlot_ComputeWordIndex
@@ -7360,7 +7360,7 @@ PortConfig_Handler_0_Helper:
 	ldw	(xix+iz), 0xffff	; ld (XIX+IZ),0xffff
 	srl	iz, 1
 	ld	xix, 3262
-	ld	(xix+iz), 0x05	; ld (XIX+IZ),0x05
+	ld	(xix+iz), 0x05
 	pop	xix
 	jp	PortConfig_Handler_0_Return3
 ScoopParam_ValueTable_Helper_Skip:
@@ -7374,7 +7374,7 @@ ScoopParam_ValueTable_Helper_Skip:
 	ld	(xix+iz), de
 	srl	iz, 1
 	ld	xix, 3262
-	ld	(xix+iz), 0x05	; ld (XIX+IZ),0x05
+	ld	(xix+iz), 0x05
 	pop	xix
 	pop	xde
 PortConfig_Handler_0_Return3:
@@ -7658,7 +7658,7 @@ ClockConfig_Handler_0_Tbl2_Helper:
 	sra	iz, 1
 	push	xix
 	ld	xix, 0xf1a0
-	ld	(xix+iz), 0x0e	; ld (XIX+IZ),0x0e
+	ld	(xix+iz), 0x0e
 	pop	xix
 ScoopParam_ValueTable_Helper6_Return3:
 	ret
@@ -8097,7 +8097,7 @@ MemConfig_Handler_1_Code_Skip3:
 	jrl	ule, MemConfig_Handler_1_Skip3
 	push	xix
 	ld	xix, 0xf218
-	ld	(xix+iz), 0x05	; ld (XIX+IZ),0x05
+	ld	(xix+iz), 0x05
 	sla	iz, 1
 	ld	xix, 3230
 	ld	iy, (xix+iz)
@@ -9339,7 +9339,7 @@ ScoopParam_ValueTable_Helper9_Loop:
 	srl	xiz, 1
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+iz), 0x0d	; cp (XIX+IZ),0x0d
+	cp	(xix+iz), 0x0d
 	pop	xix
 	jrl	nz, ScoopParam_ValueTable_Helper9_Loop
 SysEx_BytecodeDispatcher_Tbl2_Sub4:
@@ -9358,7 +9358,7 @@ SysEx_BytecodeDispatcher_Tbl2_Sub4:
 	ld	(xix+iz), de
 	srl	xiz, 1
 	ld	xix, 3262
-	ld	(xix+iz), 0x05	; ld (XIX+IZ),0x05
+	ld	(xix+iz), 0x05
 	pop	xix
 SysEx_BytecodeDispatcher_Tbl2_Join3:
 	ld	a, 1:opc
@@ -9729,7 +9729,7 @@ ScoopParam_ValueTable_Helper10_Skip3:
 	xor	w, w
 	ld	iz, wa
 	ld	xix, 0xf250
-	or	(xix+iz), 0x80	; or (XIX+IZ),0x80
+	or	(xix+iz), 0x80
 	ldfr_lerp	xix, 56
 	lda	xix, (xix+iz)
 	ld	(xix+1), iy
@@ -10338,7 +10338,7 @@ VoiceSlot_FinalRetZ_Skip3:
 	ld	w, 255:opc
 	jp	VoiceSlot_FinalRetZ_Return
 VoiceSlot_FinalRetZ_Skip4:
-	cp	wa, (xix+hl)	; cp WA,(XIX+HL)
+	cp	wa, (xix+hl)
 	jrl	ule, VoiceSlot_FinalRetZ_Loop3
 	ld	w, 255:opc
 VoiceSlot_FinalRetZ_Return:
@@ -10598,7 +10598,7 @@ VoiceSlot_StatusRet_Skip4:
 	popw	wa
 	push	xix
 	ld	xix, 0xf1a0
-	cp	(xix+iz), 0x0c	; cp (XIX+IZ),0x0c
+	cp	(xix+iz), 0x0c
 	pop	xix
 	jrl	nz, VoiceSlot_StatusRet_Skip6
 	bit	2, (0xfdad:16)
@@ -11532,7 +11532,7 @@ VoiceState_DataBlock2_Skip:
 	srl	ix, 1
 	push	xde
 	ld	xde, 3262
-	cp	(xde+ix), 0x05	; cp (XDE+IX),0x05
+	cp	(xde+ix), 0x05
 	pop	xde
 	jrl	nz, VoiceState_DataBlock2_Loop
 VoiceState_DataBlock2_Skip2:
@@ -11612,7 +11612,7 @@ VoiceState_DataBlock2_Helper:
 	ld	w, 255:opc
 	push	xde
 	ld	xde, 0xf250
-	bit	7, (xde+hl)	; bit 7,(XDE+HL)
+	bit	7, (xde+hl)
 	pop	xde
 	jrl	z, ScoopParam_ValueTable_Helper11_Epilogue
 	ld	w, 0:opc
@@ -11955,7 +11955,7 @@ VoiceState_DataBlock2_Code_Skip16:
 	ld	c, 3:opc
 	mul	wa, c
 	ld	iy, wa
-	bit	7, (xhl+iy)	; bit 7,(XHL+IY)
+	bit	7, (xhl+iy)
 	jrl	z, ScoopParam_ValueTable_Helper12_Skip
 	popw	wa
 	jp	VoiceState_DataBlock2_Join3
@@ -12272,7 +12272,7 @@ SubCPU_ToneParamDisplay:
 	ld	l, (3424:16)
 	dec	1, l
 	ld	xix, 0xf1a0
-	cp	(xix+hl), 0x0c	; cp (XIX+HL),0x0c
+	cp	(xix+hl), 0x0c
 	jrl	z, SubCPU_ToneParamDisplay_Epilogue
 	ld	(3567:16), 11
 	call	Display_UpdateRegion0
@@ -12769,7 +12769,7 @@ SubCPU_ToneParamRet_Join2:
 	jrl	ugt, PerfMode_ParamHandler_11_Return3
 	push	xde
 	ld	xde, 0xf1a0
-	cp	(xde+hl), 0x10	; cp (XDE+HL),0x10
+	cp	(xde+hl), 0x10
 	pop	xde
 	jrl	nz, PerfMode_ParamHandler_11_Skip13
 	ld	w, l
@@ -12925,7 +12925,7 @@ PerfMode_ParamHandler_11_Skip22:
 	xor	h, h
 	push	xde
 	ld	xde, 0xf250
-	bit	7, (xde+hl)	; bit 7,(XDE+HL)
+	bit	7, (xde+hl)
 	pop	xde
 	jrl	z, PerfMode_ParamHandler_11_Loop
 	call	SubCPU_ToneParamRet_Helper13

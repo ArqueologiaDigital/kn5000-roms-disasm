@@ -2679,7 +2679,7 @@ AcMstStyleAlp_Boundary_Skip:
 	add	de, wa
 	muls	de, 6
 	lda	xbc, (MasterSetup_EventDispatch_Data:24)
-	ld	de, (xbc+de)	; ld de, (xbc+de)
+	ld	de, (xbc+de)
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
 	ld	xbc, EVT_OTP_CNT_SET
@@ -2719,7 +2719,7 @@ AcMstStyleAlp_Boundary_Skip3:
 	ld	(xbc), wa
 	muls	wa, 6
 	lda	xbc, (StyleSong_MasterTable:24)
-	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -3563,7 +3563,7 @@ MstStyleAlp_PadLoopCond:
 	muls	bc, 6
 	ld	wa, bc
 	lda	xbc, (StyleSong_MasterTable:24)
-	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -3618,7 +3618,7 @@ MstStyleAlp_PadLoopCond2:
 	muls	bc, 6
 	ld	wa, bc
 	lda	xbc, (StyleSong_MasterTable:24)
-	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -4062,7 +4062,7 @@ MstStyle1Grid_PadLeft_Check:
 	add	wa, (xsp+32)
 	sla	wa, 3
 	lda	xbc, (MstStyle1Grid_CellSelect_Data:24)
-	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -4084,7 +4084,7 @@ MstStyle1Grid_BottomSection:
 	add	ix, (xde)
 	sla	ix, 3
 	ld	xwa, (xsp+8)
-	ld	xwa, (xwa+ix)	; ld xwa, (xwa+ix)
+	ld	xwa, (xwa+ix)
 	push	xwa
 	push	xbc
 	call	Free_Compare2
@@ -4109,7 +4109,7 @@ MstStyle1Grid_PadLeft_CheckB:
 	add	wa, (xsp+32)
 	sla	wa, 3
 	lda	xbc, (MstStyle1Grid_CellSelect_Data:24)
-	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -9090,7 +9090,7 @@ PmExpFilterCheck_CellDecode:
 	cp	wa, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xwa, (PmExpFilter_EventDispatch_Data:24)
-	ld	xwa, (xwa+bc)	; ld xwa, (xwa+bc)
+	ld	xwa, (xwa+bc)
 	call	AcApcToggleProc_Helper
 	ld	xwa, PmExpFilterCheck_CellDecode_Str_OFF
 	cp	hl, 0:i3
@@ -13931,7 +13931,7 @@ RVari_Select:
 	divs	wa, 4
 	ld	wa, qwa
 	lda	xbc, (RVari_Select_Data:24)
-	ld	a, (xbc+wa)	; ld a, (xbc+wa)
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+532)
 	call	GetEditSwPoint

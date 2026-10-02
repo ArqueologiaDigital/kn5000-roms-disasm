@@ -2605,7 +2605,7 @@ FIFO_Engine512_Get_Marked:
 	ret
 FIFO_Engine512_Get_Marked_Skip:
 	xor	hl, hl
-	ld	l, (xde+ix)	; ld L,(XDE+IX)
+	ld	l, (xde+ix)
 	minc1_16	ix, 0x01ff	; minc1 0x01ff,IX
 	ld	(xde-10), ix
 	ret
@@ -2618,7 +2618,7 @@ FIFO_Engine512_Get_From_Mark:
 	ret
 FIFO_Engine512_Get_From_Mark_Skip:
 	xor	hl, hl
-	ld	l, (xde+ix)	; ld L,(XDE+IX)
+	ld	l, (xde+ix)
 	minc1_16	ix, 0x01ff	; minc1 0x01ff,IX
 	ld	(xde-10), ix
 	ret
@@ -18176,13 +18176,13 @@ AudioMod_Apply_BusRouting_Loop:
 	ld	l, w
 	extz	hl
 	lda	xiy, (AudioMod_BusRouting_EnableBits:24)
-	ld	l, (xiy+hl)	; ld L,(XIY+HL)
+	ld	l, (xiy+hl)
 	and	l, c
 	jrl	z, AudioMod_Apply_BusRouting_Skip2
 	ld	l, w
 	extz	hl
 	lda	xiy, (AudioMod_BusRouting_OrIXBits:24)
-	ld	l, (xiy+hl)	; ld L,(XIY+HL)
+	ld	l, (xiy+hl)
 	and	l, c
 	jr	z, AudioMod_Apply_BusRouting_Skip
 	ld	l, w
@@ -18290,7 +18290,7 @@ AudioMod_Scale_To_Part_1C_Common:
 	extz	wa
 	muls	wa, 0x11F
 	lda	xbc, (0x041384:24)
-	ld	(xbc+wa), e	; ld (XBC+WA),E
+	ld	(xbc+wa), e
 	ret
 ; Identical to AudioMod_Scale_To_Part_1C but stores to 0x041383 + part*0x11F (part+0x1B).
 AudioMod_Scale_To_Part_1B:
@@ -18321,7 +18321,7 @@ AudioMod_Scale_To_Part_1B_Common:
 	extz	wa
 	muls	wa, 0x11F
 	lda	xbc, (0x041383:24)
-	ld	(xbc+wa), e	; ld (XBC+WA),E
+	ld	(xbc+wa), e
 	ret
 ; A = part index (saved on the stack), BC = value, XDE = routing descriptor.
 ; Bipolar branch subtracts 0x2000 from the sign-extended value, unipolar branch halves it;
@@ -18360,7 +18360,7 @@ AudioMod_Apply_Porta_Curve_Join:
 	jr	gt, AudioMod_Apply_Porta_Curve_Skip
 	add	wa, wa
 	lda	xix, (AudioMod_PortaCurve_CaseOffsets:24)
-	ld	wa, (xix+wa)	; ld WA,(XIX+WA)
+	ld	wa, (xix+wa)
 	lda	xix, (AudioMod_Porta_Curve_JumpBase:24)
 	jp	t, (xix+wa)	; jp T,XIX+WA
 ; Base address of the 10-entry computed jump inside AudioMod_Apply_Porta_Curve; offsets come
@@ -18376,7 +18376,7 @@ AudioMod_Apply_Porta_Curve_Skip:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267131:24)
-	ld	a, (xbc+wa)	; ld A,(XBC+WA)
+	ld	a, (xbc+wa)
 	ld	xbc, 0:i3
 	ld	c, a
 	ld	xwa, xhl
@@ -18398,7 +18398,7 @@ AudioMod_Apply_Porta_Curve_Join3:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267141:24)
-	ld	(xbc+wa), hl	; ld (XBC+WA),HL
+	ld	(xbc+wa), hl
 	inc	2, xsp
 	ret
 ; Same descriptor convention as AudioMod_Scale_To_Part_1C but SIGNED (muls), arithmetic
@@ -18435,7 +18435,7 @@ AudioMod_Scale_To_Part_1F_Join:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267143:24)
-	ld	(xbc+wa), e	; ld (XBC+WA),E
+	ld	(xbc+wa), e
 	ret
 ; As above without the >>1; stores the byte at 0x041388 + part*0x11F (part+0x20).
 AudioMod_Scale_To_Part_20:
@@ -18469,7 +18469,7 @@ AudioMod_Scale_To_Part_20_Join:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267144:24)
-	ld	(xbc+wa), e	; ld (XBC+WA),E
+	ld	(xbc+wa), e
 	ret
 ; A = part, C = controller value, XDE = routing descriptor, plus L and W taken from the
 ; caller's stack frame (they select one of the part's four output-slot records and a
@@ -19945,7 +19945,7 @@ AudioChannel_Handler_Cmd02:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (Part_PatchRecord_Ptr:24)
-	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)
 	ld	a, (xwa+16)
 	and	a, 192
 	cp	a, 192
@@ -21506,7 +21506,7 @@ VoiceModWheel_DataTable_02A061:
 	extz	wa
 	muls	wa, 0x11F
 	lda	xbc, (Part_PatchRecord_Ptr:24)
-	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)
 	ld	a, (xwa+16)
 	and	a, 0xC0
 	cp	a, 0x40
@@ -21536,7 +21536,7 @@ VoiceModWheel_DataTable_02A061_Loop:
 	muls	wa, 3
 	ld	iy, wa
 	add	iy, 0x1D
-	ld	xwa, (xix+bc)	; ld XWA,(XIX+BC)
+	ld	xwa, (xix+bc)
 	lda	xix, (xwa+iy)	; lda XIX,XWA+IY
 	ld	wa, hl
 	ld	bc, de
@@ -34520,7 +34520,7 @@ DSP_VoiceCoeffRoute:
 	lda	xix, (Part_Record_Base:24)
 	exts	xbc
 	add	xbc, xix
-	ld	xbc, (xbc+iy)	; ld XBC,(XBC+IY)
+	ld	xbc, (xbc+iy)
 	ld	c, (xbc+2)
 	ldfr_berp	c, 0xf0	; ld IXL,C
 	extz	ix
@@ -34536,7 +34536,7 @@ DSP_VoiceCoeffRoute:
 	lda	xiy, (Part_Record_Base:24)
 	exts	xbc
 	add	xbc, xiy
-	ld	xbc, (xbc+iz)	; ld XBC,(XBC+IZ)
+	ld	xbc, (xbc+iz)
 	ld	c, (xbc+3)
 	ldfr_berp	c, 0xf4	; ld IYL,C
 	extz	iy
@@ -34551,7 +34551,7 @@ DSP_VoiceCoeffRoute:
 	lda	xbc, (Part_Record_Base:24)
 	exts	xwa
 	add	xwa, xbc
-	ld	xwa, (xwa+de)	; ld XWA,(XWA+DE)
+	ld	xwa, (xwa+de)
 	ld	a, (xwa+3)
 	extz	wa
 	and	wa, 192
@@ -34693,7 +34693,7 @@ DSP_VoiceCoeffRoute2:
 	ld	iz, bc
 	inc	3, iz
 	ld	xbc, (xiy+4)
-	ld	c, (xbc+iz)	; ld C,(XBC+IZ)
+	ld	c, (xbc+iz)
 	ldfr_berp	c, 0xf4	; ld IYL,C
 	extz	iy
 	and	iy, 127
@@ -35546,7 +35546,7 @@ DSP_SetCoeff_RouteWithCallback:
 	extz	de
 	muls	de, 287
 	lda	xhl, (Part_PatchRecord_Ptr:24)
-	ld	xhl, (xhl+de)	; ld XHL,(XHL+DE)
+	ld	xhl, (xhl+de)
 	extz	bc
 	ld	e, a
 	extz	de
@@ -35907,14 +35907,14 @@ DSP_SetCoeff_WriteParams:
 	extz	bc
 	muls	bc, 287
 	lda	xde, (Part_PatchRecord_Ptr:24)
-	ld	xbc, (xde+bc)	; ld XBC,(XDE+BC)
+	ld	xbc, (xde+bc)
 	ld	c, (xbc+16)
 	ld	(283158:24), c
 	ld	c, a
 	extz	bc
 	muls	bc, 287
 	lda	xde, (Part_PatchRecord_Ptr:24)
-	ld	xbc, (xde+bc)	; ld XBC,(XDE+BC)
+	ld	xbc, (xde+bc)
 	ld	c, (xbc+93)
 	and	c, 15
 	cp	c, 12
@@ -35922,7 +35922,7 @@ DSP_SetCoeff_WriteParams:
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (Part_PatchRecord_Ptr:24)
-	ld	xwa, (xbc+wa)	; ld XWA,(XBC+WA)
+	ld	xwa, (xbc+wa)
 	ld	a, (xwa+95)
 	ld	(283159:24), a
 	jr	DSP_SetCoeff_WriteParams_Return
@@ -42660,13 +42660,13 @@ DSP_FlushAllSlots_ForPart:
 	extz	bc
 	muls	bc, 287
 	lda	xde, (267137:24)
-	ld	c, (xde+bc)	; ld C,(XDE+BC)
+	ld	c, (xde+bc)
 	ld	e, c
 	extz	de
 	extz	wa
 	muls	wa, 287
 	lda	xbc, (267138:24)
-	ld	a, (xbc+wa)	; ld A,(XBC+WA)
+	ld	a, (xbc+wa)
 	ld	c, a
 	extz	bc
 	ld	wa, de

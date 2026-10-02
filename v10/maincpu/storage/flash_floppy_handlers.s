@@ -6081,7 +6081,7 @@ UI_COMPONENT_DISPATCH:
 	pushw wa	; Push WA as parameter
 	pushw UI_COMPONENT_DISPATCH_Str_Fmtd@hi16	; Push parameter
 	pushw UI_COMPONENT_DISPATCH_Str_Fmtd@lo16	; Push parameter
-	push xde	; Push XDE
+	push xde
 	call Sprintf_Locked	; Call handler function
 	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
 	jrl WidgetHandler_PostEventAndReturnZero	; Jump to end
@@ -6101,7 +6101,7 @@ UI_COMPONENT_DISPATCH_CASE1:
 	push xwa	; Push parameter
 	pushw UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@hi16	; Push parameter
 	pushw UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@lo16	; Push parameter
-	push xde	; Push XDE
+	push xde
 	call Sprintf_Locked	; Call handler function
 	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
 	jr WidgetHandler_PostEventAndReturnZero	; Jump to end
@@ -6138,7 +6138,7 @@ UI_COMPONENT_DISPATCH_CASE5_SKIP:
 	ld	xwa, (xhl+bc)	; Load entry from table
 	push xwa	; Push parameter
 UI_COMPONENT_DISPATCH_PUSH_CALL:
-	push xde	; Push XDE
+	push xde
 	call Sprintf_Locked	; Call handler function
 	inc 8, xsp	; Increment stack pointer
 

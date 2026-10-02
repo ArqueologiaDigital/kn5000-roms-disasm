@@ -8359,7 +8359,7 @@ DrawMonoBitmap_Impl_Loop2:
 	ld	bc, (xwa)
 	add	bc, (xsp+6)
 	ld	xwa, (xsp+10)
-	ld	(xwa+), bc	; ld (xwa+), bc
+	ld	(xwa+), bc
 	ld	(xsp+14), xwa
 	ld	bc, (xde)
 	add	bc, (xsp+8)

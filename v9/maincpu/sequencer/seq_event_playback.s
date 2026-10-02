@@ -723,7 +723,7 @@ Voice_NoteChannelGrid_Lookup:
 	xor	h, h
 	push	xix
 	ld	xix, Voice_NoteChannelGrid_Lookup_Data
-	ld	hl, (xix+hl)	; ld HL,(XIX+HL)
+	ld	hl, (xix+hl)
 	pop	xix
 	ret
 ; Voice_NoteChannelTable1 +0x43F (16 rows x 8 x LE16).
