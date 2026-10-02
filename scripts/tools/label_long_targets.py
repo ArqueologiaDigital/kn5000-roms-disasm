@@ -38,7 +38,7 @@ LONG = re.compile(r'^(?:[A-Za-z_][\w.$]*:)?\s*\.(?:long|4byte)\s+([^;]*)')
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--tree", required=True, choices=("v10", "v9", "v7", "hdae5000"))
+    ap.add_argument("--tree", required=True, choices=("v10", "v9", "v7", "hdae5000", "prom_a", "prom_b", "prom_c"))
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
     elf, src, (lo, hi) = fp.IMAGES[a.tree]
@@ -47,7 +47,9 @@ def main():
     rom_path, base = sb.ROM[a.tree]
     rom = open(os.path.join(REPO, rom_path), "rb").read()
     p = place_labels.Planner(a.tree)
-    rels = [os.path.relpath(f, p.srcroot) for f in glob.glob(os.path.join(p.srcroot, "**", "*.s"), recursive=True)]
+    own = place_labels.snb.own_prefix(p.img)          # WSA1 images share one source root
+    rels = [r for r in (os.path.relpath(f, p.srcroot) for f in glob.glob(os.path.join(p.srcroot, "**", "*.s"), recursive=True))
+            if r.startswith(own)]
     want, st = {}, collections.Counter()
     for rel in sorted(rels):
         table, k = None, 0
