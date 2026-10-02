@@ -1,0 +1,691 @@
+[
+ {
+  "name": "sub_FC3407",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC3407",
+  "lines": 50,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "opc"
+  ],
+  "mem_refs": [
+   "0x000f00",
+   "0x000ff0",
+   "0x003bcf",
+   "0x00dc0e"
+  ],
+  "header": "; ==============================================================================\n; Technics SX-WSA1R -- prom_c (CPU 2, IC28) -- 0xFC3407-0xFC856B  the field accessors and their callers\n; ==============================================================================\n;\n; 10,516 lines moved out of prom_c/wsa1_prom_c.s by notes/prom_c_split.py.  The master\n; `.include`s this file at the line the block started on, so the assembler\n; sees the same token stream in the same order and the ROM is unchanged:\n;\n;     python3 scripts/analysis/assert_byte_identical.py    <- the bytes\n;     python3 notes/pro",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC3480",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC3480",
+  "lines": 90,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x003bcf",
+   "0x00dc0e"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC3480 -- 0xFC3480..0xFC355A (219 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFA82B5 in Voice_StageRegs_0040_B__FA82A4\n; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC3480-0xFC355A\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction op",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC355B",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC355B",
+  "lines": 25,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC355B -- 0xFC355B..0xFC3594 (58 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFA82BE in Voice_StageRegs_0040_B__FA82BB\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC355B-0xFC3594\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction operand, listed by notes/gen",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC35DB",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC35DB",
+  "lines": 74,
+  "callers": [],
+  "callees": [
+   "Multiply32"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Curve_FE13D6",
+   "i3"
+  ],
+  "mem_refs": [
+   "0x000fff",
+   "0x007fff",
+   "0x00df05",
+   "0x00f2f3"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC35DB -- 0xFC35DB..0xFC369E (196 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFB1F8D in VoiceRegs_Stage_B__FB1F7B\n; Inputs:  frame `link XIZ,-6`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n;          reads 0x00F2F3\n; Calls:   0xFCB11B = Multiply32\n; Voice record: touches voice_record[+0x00(r), +0x0D(rw), +0x17(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.\n; Evidence: the listing below is the byte-identical round-t",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC36BE",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC36BE",
+  "lines": 70,
+  "callers": [],
+  "callees": [
+   "Pitch_FoldOctavesIntoRange",
+   "Sat16_0_to_7FFF"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x001505",
+   "0x00df05"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC36BE -- 0xFC36BE..0xFC376B (174 bytes)\n;\n; Called from: 3 site(s) outside this module:\n;          0xFB30EE in sub_FB2F74, 0xFB3327 in VoiceParams_Compute_D\n;          0xFB3528 in VoiceParams_Compute_D__FB33CE\n; Inputs:  frame `link XIZ,-10`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n;          reads 0x001505\n; Calls:   0xFA73EB = Pitch_FoldOctavesIntoRange, 0xFA7570 = Sat16_0_to_7FFF\n; Evidence: the listing below is the byte-identical round-trip of 0xFC36BE-0xFC376B\n;          (no",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC382A",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC382A",
+  "lines": 26,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00012c",
+   "0x001523",
+   "0x002000",
+   "0x00dc0e"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC382A -- 0xFC382A..0xFC386B (66 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFB217E in VoiceParams_Compute_B\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC382A-0xFC386B\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction operand, listed by notes/gen_prom_c_b",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC39FA",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC39FA",
+  "lines": 111,
+  "callers": [],
+  "callees": [
+   "Flash_ReadSectorToBuffer",
+   "Flash_ReprogramSector",
+   "MemCopyWords",
+   "SoundRam_ClearFourBanks"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "SoundRam_BankBases",
+   "SoundRam_BankNamePtrs",
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00016c",
+   "0x00021d",
+   "0x0002ad",
+   "0x0002c9",
+   "0x0087d2",
+   "0x010000"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC39FA -- 0xFC39FA..0xFC3B23 (298 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFC0134 in sub_FBFFD4__FC0129\n; Inputs:  frame `link XIZ,-24`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n;          reads 0xFE150F, 0xFE151F\n; Calls:   0xF9A038 = MemCopyWords, 0xFC386C = SoundRam_ClearFourBanks\n;          0xFC876C = Flash_ReprogramSector, 0xFC89AF = Flash_ReadSectorToBuffer\n; Evidence: the listing below is the byte-identical round-trip of 0xFC39FA-0xFC3B23\n;        ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC3B24",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC3B24",
+  "lines": 146,
+  "callers": [],
+  "callees": [
+   "Flash_ReadSectorToBuffer",
+   "Flash_ReprogramSector",
+   "MemCopyWords",
+   "SoundRam_ClearFourBanks"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "SoundRam_BankBases",
+   "SoundRam_BankNamePtrs",
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x000198",
+   "0x000461",
+   "0x0004a1",
+   "0x0087d2",
+   "0x008a9b",
+   "0x00b2d0",
+   "0x00b468",
+   "0x00b47d",
+   "0x00b4a8",
+   "0x010000"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC3B24 -- 0xFC3B24..0xFC3CB7 (404 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFC02BF in sub_FBFFD4__FC02AE\n; Inputs:  frame `link XIZ,-24`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n;          reads 0xFE150F, 0xFE151F\n; Calls:   0xF9A038 = MemCopyWords, 0xFC386C = SoundRam_ClearFourBanks\n;          0xFC876C = Flash_ReprogramSector, 0xFC89AF = Flash_ReadSectorToBuffer\n; Evidence: the listing below is the byte-identical round-trip of 0xFC3B24-0xFC3CB7\n;        ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC3CB8",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC3CB8",
+  "lines": 1,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC3CB8 -- 0xFC3CB8..0xFC3CB8 (1 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFBAE7D in ToneEdit_Dispatch__FBAE7D\n; Inputs:  no frame and no argument slot read.\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC3CB8-0xFC3CB8\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction operand, listed by notes/gen_prom_c_block_headers.",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC4B2E",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC4B2E",
+  "lines": 59,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x002980",
+   "0x005d23",
+   "0x007fff"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC4B2E -- 0xFC4B2E..0xFC4BB5 (136 bytes)\n;\n; Called from: 10 site(s) outside this module:\n;          0xFB0DD6 in sub_FB0B95__FB0C19, 0xFB1053 in VoiceParams_Compute_A__FB0ED5\n;          0xFB1262 in VoiceParams_Compute_A__FB10F4, 0xFB150F in VoiceParams_Compute_A__FB131D\n;          0xFB17A9 in VoiceParams_Compute_A__FB15B0, 0xFB1A7B in VoiceParams_Compute_A__FB185E\n;          0xFB1D4D in VoiceParams_Compute_A__FB1B30, 0xFB2A3C in sub_FB289A\n;          0xFB2C2B in VoiceParams_Compute_C, 0xFB2DEB in VoiceParams_Com",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC56C4",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC56C4",
+  "lines": 37,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00753e",
+   "0x00e086"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC56C4 -- 0xFC56C4..0xFC5719 (86 bytes)\n;\n; Called from: 5 site(s) outside this module:\n;          0xFB3726 in MidiNote_OnTail, 0xFB3833 in MidiNote_OffTail\n;          0xFB39BC in MidiNote_OnByPartMode__FB39B2, 0xFB3AC6 in MidiNote_OnByPartMode__FB3A95\n;          0xFB3BDF in MidiNote_OnByPartMode__FB3BAE\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC56C4-0xFC5719\n;          (",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC578C",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC578C",
+  "lines": 112,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3"
+  ],
+  "mem_refs": [
+   "0x00e082",
+   "0x00e084",
+   "0x00e086",
+   "0x00fff0",
+   "0x00fff8"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC578C -- 0xFC578C..0xFC589D (274 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFAB6BF in sub_FAB5A5__FAB6BF, 0xFAB789 in sub_FAB6D5__FAB742\n; Inputs:  no frame and no argument slot read.\n; Outputs: no absolute-addressed write.\n;          reads 0x00E082, 0x00E084, 0x00E086\n; Evidence: the listing below is the byte-identical round-trip of 0xFC578C-0xFC589D\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;     ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC6CA8",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC6CA8",
+  "lines": 26,
+  "callers": [
+   "Pack104_DispatchByResoMode_ForPart"
+  ],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00e082"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC6CA8 -- 0xFC6CA8..0xFC6CE9 (66 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFC74EC\n; Inputs:  no frame and no argument slot read.\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC6CA8-0xFC6CE9\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction operand, listed by notes/gen_prom_c_blo",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC6CEA",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC6CEA",
+  "lines": 26,
+  "callers": [
+   "Pack104_DispatchByResoMode_ForPart",
+   "sub_FC7A1F"
+  ],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00e082"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC6CEA -- 0xFC6CEA..0xFC6D2B (66 bytes)\n;\n; Called from: no site outside this module.\n;          2 site(s) inside this module:\n;          0xFC7507 0xFC7A74\n; Inputs:  no frame and no argument slot read.\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC6CEA-0xFC6D2B\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction operand, listed by notes/gen_p",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC6D2C",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC6D2C",
+  "lines": 26,
+  "callers": [
+   "Pack104_DispatchByResoMode_ForPart"
+  ],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00e082"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC6D2C -- 0xFC6D2C..0xFC6D6D (66 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFC7516\n; Inputs:  no frame and no argument slot read.\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC6D2C-0xFC6D6D\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction operand, listed by notes/gen_prom_c_blo",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC6D6E",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC6D6E",
+  "lines": 221,
+  "callers": [
+   "Pack104_DispatchByResoMode_ForPart"
+  ],
+  "callees": [
+   "Pack104_SolveCoupledDetune"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Curve_Exp2Gain_Percent_101",
+   "Curve_Exp2Gain_U8_128",
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x000200",
+   "0x00e082",
+   "0x00e093",
+   "0x00e095",
+   "0x00ff00"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC6D6E -- 0xFC6D6E..0xFC6FFC (655 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFC74F6\n; Inputs:  frame `link XIZ,-34`; no positive frame slot is read\n; Outputs: writes 0x00E093, 0x00E095\n;          reads 0x00E082\n; Calls:   0xFC4269 = Pack104_SolveCoupledDetune\n; Evidence: the listing below is the byte-identical round-trip of 0xFC6D6E-0xFC6FFC\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC6FFD",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC6FFD",
+  "lines": 193,
+  "callers": [
+   "Pack104_DispatchByResoMode_ForPart",
+   "sub_FC7A1F"
+  ],
+  "callees": [
+   "Pack104_SolveCoupledDetune"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Curve_Exp2Gain_Percent_101",
+   "Curve_Exp2Gain_U8_128",
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x000400",
+   "0x00e082",
+   "0x00e093",
+   "0x00e095",
+   "0x00ff00"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC6FFD -- 0xFC6FFD..0xFC723E (578 bytes)\n;\n; Called from: no site outside this module.\n;          2 site(s) inside this module:\n;          0xFC7502 0xFC7A6F\n; Inputs:  frame `link XIZ,-34`; no positive frame slot is read\n; Outputs: writes 0x00E093, 0x00E095\n;          reads 0x00E082\n; Calls:   0xFC4269 = Pack104_SolveCoupledDetune\n; Evidence: the listing below is the byte-identical round-trip of 0xFC6FFD-0xFC723E\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC723F",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC723F",
+  "lines": 193,
+  "callers": [
+   "Pack104_DispatchByResoMode_ForPart"
+  ],
+  "callees": [
+   "Pack104_SolveCoupledDetune"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Curve_Exp2Gain_Percent_101",
+   "Curve_Exp2Gain_U8_128",
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x000400",
+   "0x00e082",
+   "0x00e093",
+   "0x00e095",
+   "0x00ff00"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC723F -- 0xFC723F..0xFC7480 (578 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFC7511\n; Inputs:  frame `link XIZ,-34`; no positive frame slot is read\n; Outputs: writes 0x00E093, 0x00E095\n;          reads 0x00E082\n; Calls:   0xFC4269 = Pack104_SolveCoupledDetune\n; Evidence: the listing below is the byte-identical round-trip of 0xFC723F-0xFC7480\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7A1F",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7A1F",
+  "lines": 60,
+  "callers": [],
+  "callees": [
+   "sub_FC6CEA",
+   "sub_FC6FFD"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x005d23",
+   "0x00e082"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7A1F -- 0xFC7A1F..0xFC7AB3 (149 bytes)\n;\n; Called from: 9 site(s) outside this module:\n;          0xFB6CD9 in sub_FB6BA8__FB6CD1, 0xFB9537 in sub_FB9414__FB952F\n;          0xFB9781 in ToneDB_DrumSourceNameList_SelectEntry__FB9779, 0xFB9945 in ToneDB_PercSourceNameList1_SelectEntry__FB993D\n;          0xFB9AB8 in ToneDB_PercSourceNameList2_SelectEntry__FB9AB0, 0xFBCD0D in sub_FBCBA7__FBCD05\n;          0xFBD1CA in sub_FBD0A2__FBD1C2, 0xFBD569 in sub_FBD46B__FBD561\n;          0xFBD84E in sub_FBD6FC__FBD846\n; Input",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7AB4",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7AB4",
+  "lines": 76,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x005d23",
+   "0x00e082",
+   "0x00e084",
+   "0x00fff8"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7AB4 -- 0xFC7AB4..0xFC7B63 (176 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFBEB3D in sub_FBDCD3__FBEAF1, 0xFBF832 in sub_FBF280__FBF7FE\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)\n; Outputs: writes 0x00E084\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7AB4-0xFC7B63\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruct",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7B64",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7B64",
+  "lines": 72,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x005d23",
+   "0x00e082",
+   "0x00e084",
+   "0x00fff0"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7B64 -- 0xFC7B64..0xFC7C0C (169 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFBEA31 in sub_FBDCD3__FBE9B5, 0xFBF73A in sub_FBF280__FBF6C2\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)\n; Outputs: writes 0x00E084\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7B64-0xFC7C0C\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruct",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7CF9",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7CF9",
+  "lines": 63,
+  "callers": [],
+  "callees": [
+   "Slot64Pool_InitAllFree"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x000940",
+   "0x005d23",
+   "0x00753e"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7CF9 -- 0xFC7CF9..0xFC7DAE (182 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFB05D8 in ExtBoard_ProbeAndInstallBases__FB05CD\n; Inputs:  frame `link XIZ,-10`; no positive frame slot is read\n; Outputs: no absolute-addressed write.\n; Calls:   0xFC40E6 = Slot64Pool_InitAllFree\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7CF9-0xFC7DAE\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;  ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7E10",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7E10",
+  "lines": 28,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00012c",
+   "0x001523",
+   "0x00e15b",
+   "0x00e17c"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7E10 -- 0xFC7E10..0xFC7E56 (71 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFAD312 in sub_FAD2D5__FAD2FD, 0xFB652A in PartRec_ResetToDefaults\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A), (XIZ+0x0C)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7E10-0xFC7E56\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;       ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7E79",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7E79",
+  "lines": 57,
+  "callers": [],
+  "callees": [
+   "Dev10C_ReadChanReg_0100"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "i3"
+  ],
+  "mem_refs": [
+   "0x000200",
+   "0x008000",
+   "0x00e0d7",
+   "0x00e15b",
+   "0x00e19d"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7E79 -- 0xFC7E79..0xFC7F02 (138 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFADD50 in sub_FADD29__FADD3B\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFC7E57 = Dev10C_ReadChanReg_0100\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7E79-0xFC7F02\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instr",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7F03",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7F03",
+  "lines": 48,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3"
+  ],
+  "mem_refs": [
+   "0x00e0d7",
+   "0x00e15b",
+   "0x00e19d"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7F03 -- 0xFC7F03..0xFC7F79 (119 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFB0AFD in VoiceRegs_Stage_A, 0xFB1EEB in VoiceRegs_Stage_B\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Voice record: touches voice_record[+0x00(r), +0x01(rw), +0x03(r), +0x04(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7F03-0xFC7F79\n; ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7F7A",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7F7A",
+  "lines": 32,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3"
+  ],
+  "mem_refs": [
+   "0x00e0d7",
+   "0x00e19d"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7F7A -- 0xFC7F7A..0xFC7FC9 (80 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFB281B in VoiceRegs_Stage_C, 0xFB2EE4 in VoiceRegs_Stage_D\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Voice record: touches voice_record[+0x00(r), +0x01(rw), +0x03(r), +0x04(r)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceRecords_InitFromAlloc.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7F7A-0xFC7FC9\n;  ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC7FCA",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC7FCA",
+  "lines": 126,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00e000",
+   "0x00e0d7",
+   "0x00e15b",
+   "0x00e17c",
+   "0x00e19d",
+   "0x00e1dd",
+   "0x00e21d",
+   "0x00ff81"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC7FCA -- 0xFC7FCA..0xFC810B (322 bytes)\n;\n; Called from: 3 site(s) outside this module:\n;          0xFA844F in Voice_StageRegs_0900_0940_0980_AB, 0xFA9760 in Voice_StageRegs_CD\n;          0xFADD69 in sub_FADD29__FADD3B\n; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC7FCA-0xFC810B\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py befo",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC810C",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC810C",
+  "lines": 11,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00e1dd"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC810C -- 0xFC810C..0xFC8128 (29 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFA960D in Voice_StageRegs_0500_08C0_AB, 0xFA9746 in Voice_StageRegs_CD\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC810C-0xFC8128\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is a",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC8129",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC8129",
+  "lines": 21,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00e21d"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC8129 -- 0xFC8129..0xFC8163 (59 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFABAFF in Dev10C_StageRegs_0900_0940, 0xFABD14 in Dev10C_StageSixChanRegs_ForRetire\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC8129-0xFC8163\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n; ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC81B8",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC81B8",
+  "lines": 29,
+  "callers": [
+   "sub_FC81F8"
+  ],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC81B8 -- 0xFC81B8..0xFC81F7 (64 bytes)\n;\n; Called from: no site outside this module.\n;          2 site(s) inside this module:\n;          0xFC8382 0xFC83DA\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Evidence: the listing below is the byte-identical round-trip of 0xFC81B8-0xFC81F7\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;          is an instruction operand, liste",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FC81F8",
+  "file": "wsa1/prom_c/field_accessors.s",
+  "addr": "FC81F8",
+  "lines": 335,
+  "callers": [],
+  "callees": [
+   "PartRec_TallyScaledField_80_40",
+   "sub_FC81B8"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00012c",
+   "0x001523",
+   "0x00e0d7"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FC81F8 -- 0xFC81F8..0xFC856B (884 bytes)\n;\n; Called from: 6 site(s) outside this module:\n;          0xFAD8E9 in MidiCtrl_Int80, 0xFB68D1 in sub_FB6681__FB6891\n;          0xFB6B4E in sub_FB68DD__FB6B0F, 0xFB6CE2 in sub_FB6BA8__FB6CD1\n;          0xFBC4A4 in sub_FBC39D__FBC49F, 0xFC2647 in ToneMsg_Dispatch__FC262D\n; Inputs:  frame `link XIZ,-26`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFC8164 = PartRec_TallyScaledField_80_40, 0xFC81B8 = sub_FC81B8\n; Evidence: the listing",
+  "ready": false,
+  "slice": 0
+ }
+]

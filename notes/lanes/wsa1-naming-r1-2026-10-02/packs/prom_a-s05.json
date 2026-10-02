@@ -1,0 +1,1270 @@
+{
+ "name": "wsa1-naming-r1-prom_a-s05",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "renames": [
+  {
+   "old": "sub_F99E85",
+   "new": "LcdKeyRow3_GeneralMidiYesNo",
+   "evidence": "ScreenButtonRow_GeneralMidi_YesNo[74] = code 0x0A (LCD row 3), the row DL_GeneralMidiMidiYesNo labels ' YES'; commits (0x2720) bit 2 into (0x7F4D) bit 2 and posts {0x91,3,bit,4}"
+  },
+  {
+   "old": "sub_F99ED1",
+   "new": "LcdKeyRow4_GeneralMidiYesNo",
+   "evidence": "ScreenButtonRow_GeneralMidi_YesNo[75] = code 0x0B (LCD row 4), labelled ' NO'; sets page (0x2740)=0 and the redraw request (0x2071)=0x10"
+  },
+  {
+   "old": "sub_F99EE4",
+   "new": "ExitKey_GeneralMidiYesNo",
+   "evidence": "ScreenButtonRow_GeneralMidi_YesNo[79] = code 0x0F (EXIT); same body as the NO key"
+  },
+  {
+   "old": "sub_F99F04",
+   "new": "PanelMode_MidiEnter",
+   "evidence": "view-A PanelScreen_VtableTable entry 18 (0xF86F09) -> object 0xF41640 +0; mode 0x12 -> PanelMode_ToScreenIdMap = screen 0x70 (Paint_MidiMenu)"
+  },
+  {
+   "old": "sub_F99F15",
+   "new": "PanelMode_MidiLeave",
+   "evidence": "object 0xF41640 +4 (T_F41644 `jp 0xF99F15`), called by PanelScreen_CallLeave_A for mode 0x12"
+  },
+  {
+   "old": "sub_F99F24",
+   "new": "Paint_MidiMenu",
+   "evidence": "Enter (+0) of screen 0x70 (ViewB[112] -> 0xF41650); mode 0x12 shows it; title op 0x1C \"MIDI\"; its button method opens the MIDI sub-screens"
+  },
+  {
+   "old": "sub_F99F5C",
+   "new": "ScreenLeave_MidiMenu",
+   "evidence": "object 0xF41650 +4 (T_F41654 `jp 0xF99F5C`); bare ret"
+  },
+  {
+   "old": "sub_F99F5E",
+   "new": "ScreenButton_MidiMenu",
+   "evidence": "object 0xF41650 +8 (T_F41658 `jp 0xF99F5E`); indexes JumpTable_F99F96 by the panel code"
+  },
+  {
+   "old": "sub_F9A016",
+   "new": "LcdKeyRow1_MidiMenu",
+   "evidence": "JumpTable_F99F96[8] = code 0x08 (LCD row 1); arm calls MidiMenu_RequestRow1Screen"
+  },
+  {
+   "old": "sub_F9A01F",
+   "new": "LcdKeyRow2_MidiMenu",
+   "evidence": "JumpTable_F99F96[9] = code 0x09 (LCD row 2); arm calls MidiMenu_RequestRow2Screen"
+  },
+  {
+   "old": "sub_F9A028",
+   "new": "LcdKeyRow3_MidiMenu",
+   "evidence": "JumpTable_F99F96[10] = code 0x0A (LCD row 3); arm calls MidiMenu_RequestRow3Screen"
+  },
+  {
+   "old": "sub_F9A031",
+   "new": "LcdKeyRow4_MidiMenu",
+   "evidence": "JumpTable_F99F96[11] = code 0x0B (LCD row 4); arm calls MidiMenu_RequestRow4Screen"
+  },
+  {
+   "old": "sub_F9A03A",
+   "new": "ExitKey_MidiMenu",
+   "evidence": "JumpTable_F99F96[15] = code 0x0F (EXIT); arm calls MidiMenu_ExitToPowerOnMode"
+  },
+  {
+   "old": "sub_F9A044",
+   "new": "IgnoredKeys_MidiMenu",
+   "evidence": "27 of JumpTable_F99F96's 32 slots; calr MidiScreen_NopKeyHandler"
+  },
+  {
+   "old": "sub_F9A04B",
+   "new": "MidiMenu_RequestRow1Screen",
+   "evidence": "(0x2071)=0x80 with (0x2070)=0x7D (MidiTotalMode, left key) or 0xB2 (right key, row-1 caption C0NFIGURE)"
+  },
+  {
+   "old": "sub_F9A067",
+   "new": "MidiMenu_RequestRow2Screen",
+   "evidence": "(0x2070)=0x7F right / 0x7E (rack) or 0x75 (variant 1) left, (0x2071)=0x80; matches the row-2 captions of both menu lists"
+  },
+  {
+   "old": "sub_F9A090",
+   "new": "MidiMenu_RequestRow3Screen",
+   "evidence": "(0x2070)=0x79 (SysexBulkDump) right; 0x7E (I/O FILTER) left on variant 1 only; row-3 captions agree"
+  },
+  {
+   "old": "sub_F9A0B9",
+   "new": "MidiMenu_RequestRow4Screen",
+   "evidence": "(0x2070)=0x7A (GeneralMidiMode) for the right key only"
+  },
+  {
+   "old": "sub_F9A0D0",
+   "new": "MidiMenu_ExitToPowerOnMode",
+   "evidence": "(0x2071)=0x02 (mode change) with (0x2070)=0x01, the mode PanelState_Init selects"
+  },
+  {
+   "old": "sub_F9A0E7",
+   "new": "MidiSubmenu_ExitToMidiMenu",
+   "evidence": "(0x2071)=0x02 / (0x2070)=0x12 = mode 0x12 -> screen 0x70 (Paint_MidiMenu); EXIT arm of the four MIDI sub-screens"
+  },
+  {
+   "old": "sub_F9A0FE",
+   "new": "StepValue_IncDecClamped",
+   "evidence": "returns cur+1 clamped to max (dir 0) or cur-1 clamped to min; 11 callers, every MIDI-screen stepper"
+  },
+  {
+   "old": "sub_F9A132",
+   "new": "MidiScreen_NopKeyHandler",
+   "evidence": "bare ret called by the default arm of all five MIDI-screen button dispatchers"
+  },
+  {
+   "old": "sub_F9A133",
+   "new": "ByteField_WriteMaskedIfChanged",
+   "evidence": "(XIX)=((XIX)&~mask)|value unless (XIX)&mask==value; A=0 written / 1 unchanged"
+  },
+  {
+   "old": "sub_F9A165",
+   "new": "ByteField_SetOrClearMask",
+   "evidence": "flag==1 -> ByteField_WriteMaskedIfChanged(ptr, mask, mask), else (ptr, 0, mask); used by the 8 I/O-filter editors"
+  },
+  {
+   "old": "sub_F9A330",
+   "new": "ItemKeys_MidiTotalMode",
+   "evidence": "ScreenButtonHandlers_MidiTotalMode codes 0x00-0x03 and 0x11-0x14 -> MidiTotalMode_StepItem; the screen's \"ITEM\" caption (DL_F0C917)"
+  },
+  {
+   "old": "sub_F9A339",
+   "new": "ValueKeys_MidiTotalMode",
+   "evidence": "codes 0x04-0x07 and 0x15-0x18 -> MidiTotalMode_StepValue; \"VALUE\" caption; dial routed as code 4"
+  },
+  {
+   "old": "sub_F9A343",
+   "new": "IgnoredKeys_MidiTotalMode",
+   "evidence": "15 slots of ScreenButtonHandlers_MidiTotalMode -> MidiScreen_NopKeyHandler"
+  },
+  {
+   "old": "sub_F9A34A",
+   "new": "MidiTotalMode_StepItem",
+   "evidence": "steps cursor (0x2720) 0..5 with StepValue_IncDecClamped, skipping row 3 (LOCAL TOTAL) when (0xC4)==2"
+  },
+  {
+   "old": "sub_F9A3A2",
+   "new": "MidiTotalMode_StepValue",
+   "evidence": "dispatches JumpTable_F9A3C7[(0x2720)] (6 rows) to the MidiTotalMode_Edit* routines"
+  },
+  {
+   "old": "sub_F9A3DF",
+   "new": "MidiTotalMode_ValueCase_InputMode",
+   "evidence": "JumpTable_F9A3C7[0] -> MidiTotalMode_EditInputMode"
+  },
+  {
+   "old": "sub_F9A3E8",
+   "new": "MidiTotalMode_ValueCase_OutputMode",
+   "evidence": "JumpTable_F9A3C7[1] -> MidiTotalMode_EditOutputMode"
+  },
+  {
+   "old": "sub_F9A3F1",
+   "new": "MidiTotalMode_ValueCase_SingleChannel",
+   "evidence": "JumpTable_F9A3C7[2] -> MidiTotalMode_EditSingleChannel"
+  },
+  {
+   "old": "sub_F9A3FA",
+   "new": "MidiTotalMode_ValueCase_LocalTotal",
+   "evidence": "JumpTable_F9A3C7[3] -> MidiTotalMode_EditLocalTotal"
+  },
+  {
+   "old": "sub_F9A403",
+   "new": "MidiTotalMode_ValueCase_ProgChangeMode",
+   "evidence": "JumpTable_F9A3C7[4] -> MidiTotalMode_EditProgChangeMode"
+  },
+  {
+   "old": "sub_F9A40C",
+   "new": "MidiTotalMode_ValueCase_SingleChProgChange",
+   "evidence": "JumpTable_F9A3C7[5] -> MidiTotalMode_EditSingleChProgChange"
+  },
+  {
+   "old": "sub_F9A418",
+   "new": "MidiTotalMode_PaintInputMode",
+   "evidence": "(0x7F35) & 0x0F -> (0x2740) -> DL_MultiSingleOmni at IX 0x06F8, the text row of \"MIDI INPUT MODE :\""
+  },
+  {
+   "old": "sub_F9A43B",
+   "new": "MidiTotalMode_PaintOutputMode",
+   "evidence": "(0x7F35) >> 4 -> (0x2740) -> DL_MultiSingle at IX 0x0AB8, the text row of \"MIDI OUTPUT MODE:\""
+  },
+  {
+   "old": "sub_F9A461",
+   "new": "MidiTotalMode_PaintSingleChannel",
+   "evidence": "(0x7F36) & 0x0F -> (0x2740) -> DL_F0CA4D at IX 0x0E78, the text row of \"SINGLE CHANNEL  :\""
+  },
+  {
+   "old": "sub_F9A484",
+   "new": "MidiTotalMode_PaintLocalTotal",
+   "evidence": "(0x7F36) bit 5 -> (0x2740) -> DL_F0CA5C at IX 0x1238, the text row of \"LOCAL TOTAL     :\""
+  },
+  {
+   "old": "sub_F9A4B0",
+   "new": "MidiTotalMode_PaintProgChangeMode",
+   "evidence": "(0x7F32) & 0x03 -> (0x2740) -> DL_NormalTechRemap at IX 0x15F8, the text row of \"PROG CHANGE MODE:\""
+  },
+  {
+   "old": "sub_F9A4D3",
+   "new": "MidiTotalMode_PaintSingleChProgChange",
+   "evidence": "(0x7F32) bit 3 -> (0x2740) -> DL_F0CA7A at IX 0x19BD, the text row of \"SINGLE CH PROG CHANGE:\""
+  },
+  {
+   "old": "sub_F9A4F9",
+   "new": "MidiTotalMode_EditInputMode",
+   "evidence": "(0x7F35) bits 0-3, stepped 0..2 (MULTI/SINGLE/OMNI); posts {0x80,W=0x0F, D=3} via T_F41B18 and repaints with MidiTotalMode_PaintInputMode"
+  },
+  {
+   "old": "sub_F9A544",
+   "new": "MidiTotalMode_EditOutputMode",
+   "evidence": "(0x7F35) bits 4-7, stepped 0..1 (MULTI/SINGLE); posts {0x80,W=0xF0, D=3} via T_F41B18 and repaints with MidiTotalMode_PaintOutputMode"
+  },
+  {
+   "old": "sub_F9A59A",
+   "new": "MidiTotalMode_EditSingleChannel",
+   "evidence": "(0x7F36) bits 0-3, stepped 0..15; posts {0x80,W=0x0F, D=4} via T_F41B18 and repaints with MidiTotalMode_PaintSingleChannel"
+  },
+  {
+   "old": "sub_F9A5E5",
+   "new": "MidiTotalMode_EditLocalTotal",
+   "evidence": "(0x7F36) bit 5: (XIZ+8)==0 clears it (\"ON\"), otherwise sets it (\"OFF\"); posts {0x80,W=0x20, D=4} via T_F41B18 and repaints with MidiTotalMode_PaintLocalTotal"
+  },
+  {
+   "old": "sub_F9A62D",
+   "new": "MidiTotalMode_EditProgChangeMode",
+   "evidence": "(0x7F32) bits 0-1, stepped 0..1 (NORMAL/TECH; REMAP is not reachable here); posts {0x80,W=0x03, D=0} via T_F41B18 and repaints with MidiTotalMode_PaintProgChangeMode"
+  },
+  {
+   "old": "sub_F9A678",
+   "new": "MidiTotalMode_EditSingleChProgChange",
+   "evidence": "(0x7F32) bit 3: (XIZ+8)==0 sets it (COMBI), otherwise clears it (SOUND); posts {0x80,W=0x08, D=0} via T_F41B18 and repaints with MidiTotalMode_PaintSingleChProgChange"
+  },
+  {
+   "old": "sub_F9A724",
+   "new": "MidiRealtimeMessages_PaintOnOffChoices",
+   "evidence": "draws DL_OnOff (\"ON\" by row 2, \"OFF\" by row 3, right side) while item 0 (REALTIME COMMANDS) is selected"
+  },
+  {
+   "old": "sub_F9A73C",
+   "new": "MidiRealtimeMessages_PaintClockKeyGlyphs",
+   "evidence": "draws DL_F0CC75 (glyphs 0x8D/0x8E by the row-2/3 right keys) instead of ON/OFF while item 1 (CLOCK) is selected"
+  },
+  {
+   "old": "sub_F9A80E",
+   "new": "LcdKeyRow2_MidiRealtimeMessages",
+   "evidence": "ScreenButtonHandlers_MidiRealtimeMessages[9] = code 0x09 (LCD row 2) -> MidiRealtimeMessages_SetOnOrSelectCommands"
+  },
+  {
+   "old": "sub_F9A817",
+   "new": "LcdKeyRow3_MidiRealtimeMessages",
+   "evidence": "ScreenButtonHandlers_MidiRealtimeMessages[10] = code 0x0A (LCD row 3) -> MidiRealtimeMessages_SetOff"
+  },
+  {
+   "old": "sub_F9A820",
+   "new": "LcdKeyRow4_MidiRealtimeMessages",
+   "evidence": "ScreenButtonHandlers_MidiRealtimeMessages[11] = code 0x0B (LCD row 4) -> MidiRealtimeMessages_SelectClock"
+  },
+  {
+   "old": "sub_F9A829",
+   "new": "ExitKey_MidiRealtimeMessages",
+   "evidence": "ScreenButtonHandlers_MidiRealtimeMessages[15] = code 0x0F (EXIT) -> MidiSubmenu_ExitToMidiMenu"
+  },
+  {
+   "old": "sub_F9A833",
+   "new": "IgnoredKeys_MidiRealtimeMessages",
+   "evidence": "28 slots incl. [8] (LCD row 1) -> MidiScreen_NopKeyHandler"
+  },
+  {
+   "old": "sub_F9A83A",
+   "new": "MidiRealtimeMessages_SetOnOrSelectCommands",
+   "evidence": "right key: set (0x7F34) bit 2 (REALTIME COMMANDS ON, D=2) or (0x7F32) bit 2 (CLOCK MIDI, D=0) per cursor; left key: select item 0"
+  },
+  {
+   "old": "sub_F9A8E4",
+   "new": "MidiRealtimeMessages_SetOff",
+   "evidence": "right key: clear (0x7F34) bit 2 (D=2) or (0x7F32) bit 2 (CLOCK INTERNAL, D=0, then T_F40794) per cursor"
+  },
+  {
+   "old": "sub_F9A954",
+   "new": "MidiRealtimeMessages_SelectClock",
+   "evidence": "left key, cursor !=1: move the box, (0x2720)=1, MidiRealtimeMessages_PaintClockKeyGlyphs"
+  },
+  {
+   "old": "sub_F9AB09",
+   "new": "ExitKey_MidiInputOutputFilter",
+   "evidence": "ScreenButtonHandlers_MidiInputOutputFilter[15] = EXIT -> MidiSubmenu_ExitToMidiMenu"
+  },
+  {
+   "old": "sub_F9AB12",
+   "new": "ItemKeys_MidiInputOutputFilter",
+   "evidence": "codes 0x00-0x03 / 0x11-0x14 -> MidiInputOutputFilter_StepItem; dial routed as code 0"
+  },
+  {
+   "old": "sub_F9AB1B",
+   "new": "ValueKeys_MidiInputOutputFilter",
+   "evidence": "codes 0x04-0x07 / 0x15-0x18 -> MidiInputOutputFilter_StepValue"
+  },
+  {
+   "old": "sub_F9AB25",
+   "new": "IgnoredKeys_MidiInputOutputFilter",
+   "evidence": "15 slots -> MidiScreen_NopKeyHandler"
+  },
+  {
+   "old": "sub_F9AB2C",
+   "new": "MidiInputOutputFilter_StepItem",
+   "evidence": "cursor (0x2720) stepped 0..7 (8 rows, DLTable_F0CE7B's 8 boxes)"
+  },
+  {
+   "old": "sub_F9AB62",
+   "new": "MidiInputOutputFilter_StepValue",
+   "evidence": "dispatches JumpTable_F9AB84[(0x2720)] (8 rows) to the Edit* routines"
+  },
+  {
+   "old": "sub_F9ABA4",
+   "new": "MidiInputOutputFilter_ValueCase_ProgramChange",
+   "evidence": "JumpTable_F9AB84[0] -> MidiInputOutputFilter_EditProgramChange"
+  },
+  {
+   "old": "sub_F9ABEF",
+   "new": "MidiInputOutputFilter_PaintProgramChange",
+   "evidence": "(0x7F39) bit 4 -> (0x2740) -> DL_F0CDE7 (OFF/ON) at IX 0x074C, row of \"PR0GRAM CHANGE   :\""
+  },
+  {
+   "old": "sub_F9AD21",
+   "new": "MidiInputOutputFilter_EditProgramChange",
+   "evidence": "(0x7F39) bit 4 via ByteField_SetOrClearMask; posts {0x80,W=0x10, D=7}; repaints"
+  },
+  {
+   "old": "sub_F9ABAD",
+   "new": "MidiInputOutputFilter_ValueCase_BankSelect",
+   "evidence": "JumpTable_F9AB84[1] -> MidiInputOutputFilter_EditBankSelect"
+  },
+  {
+   "old": "sub_F9AC15",
+   "new": "MidiInputOutputFilter_PaintBankSelect",
+   "evidence": "(0x7F3A) bit 7 -> (0x2740) -> DL_F0CDF6 (OFF/ON) at IX 0x0A1C, row of \"BANK SELECT      :\""
+  },
+  {
+   "old": "sub_F9AD69",
+   "new": "MidiInputOutputFilter_EditBankSelect",
+   "evidence": "(0x7F3A) bit 7 via ByteField_SetOrClearMask; posts {0x80,W=0x80, D=8}; repaints"
+  },
+  {
+   "old": "sub_F9ABB6",
+   "new": "MidiInputOutputFilter_ValueCase_PitchBend",
+   "evidence": "JumpTable_F9AB84[2] -> MidiInputOutputFilter_EditPitchBend"
+  },
+  {
+   "old": "sub_F9AC3B",
+   "new": "MidiInputOutputFilter_PaintPitchBend",
+   "evidence": "(0x7F39) bit 6 -> (0x2740) -> DL_F0CE05 (OFF/ON) at IX 0x0CEC, row of \"PITCH BEND       :\""
+  },
+  {
+   "old": "sub_F9ADB1",
+   "new": "MidiInputOutputFilter_EditPitchBend",
+   "evidence": "(0x7F39) bit 6 via ByteField_SetOrClearMask; posts {0x80,W=0x40, D=7}; repaints"
+  },
+  {
+   "old": "sub_F9ABBF",
+   "new": "MidiInputOutputFilter_ValueCase_ControlChange",
+   "evidence": "JumpTable_F9AB84[3] -> MidiInputOutputFilter_EditControlChange"
+  },
+  {
+   "old": "sub_F9AC61",
+   "new": "MidiInputOutputFilter_PaintControlChange",
+   "evidence": "(0x7F39) bit 3 -> (0x2740) -> DL_F0CE14 (OFF/ON) at IX 0x0FBC, row of \"C0NTR0L CHANGE   :\""
+  },
+  {
+   "old": "sub_F9ADF9",
+   "new": "MidiInputOutputFilter_EditControlChange",
+   "evidence": "(0x7F39) bit 3 via ByteField_SetOrClearMask; posts {0x80,W=0x08, D=7}; repaints"
+  },
+  {
+   "old": "sub_F9ABC8",
+   "new": "MidiInputOutputFilter_ValueCase_ResetAllCtrl",
+   "evidence": "JumpTable_F9AB84[4] -> MidiInputOutputFilter_EditResetAllCtrl"
+  },
+  {
+   "old": "sub_F9AC87",
+   "new": "MidiInputOutputFilter_PaintResetAllCtrl",
+   "evidence": "(0x7F3B) bit 0 -> (0x2740) -> DL_F0CE23 (OFF/ON) at IX 0x128C, row of \"RESET ALL CTRL\""
+  },
+  {
+   "old": "sub_F9AE41",
+   "new": "MidiInputOutputFilter_EditResetAllCtrl",
+   "evidence": "(0x7F3B) bit 0 via ByteField_SetOrClearMask; posts {0x80,W=0x01, D=9}; repaints"
+  },
+  {
+   "old": "sub_F9ABD1",
+   "new": "MidiInputOutputFilter_ValueCase_ChannelPressure",
+   "evidence": "JumpTable_F9AB84[5] -> MidiInputOutputFilter_EditChannelPressure"
+  },
+  {
+   "old": "sub_F9ACAA",
+   "new": "MidiInputOutputFilter_PaintChannelPressure",
+   "evidence": "(0x7F39) bit 5 -> (0x2740) -> DL_F0CE32 (OFF/ON) at IX 0x155C, row of \"CHANNEL PRESSURE :\""
+  },
+  {
+   "old": "sub_F9AE89",
+   "new": "MidiInputOutputFilter_EditChannelPressure",
+   "evidence": "(0x7F39) bit 5 via ByteField_SetOrClearMask; posts {0x80,W=0x20, D=7}; repaints"
+  },
+  {
+   "old": "sub_F9ABDA",
+   "new": "MidiInputOutputFilter_ValueCase_SongSelect",
+   "evidence": "JumpTable_F9AB84[6] -> MidiInputOutputFilter_EditSongSelect"
+  },
+  {
+   "old": "sub_F9ACD0",
+   "new": "MidiInputOutputFilter_PaintSongSelect",
+   "evidence": "(0x7F33) bit 3 -> (0x2740) -> DL_F0CE41 (OFF/ON) at IX 0x182C, row of \"S0NG SELECT      :\""
+  },
+  {
+   "old": "sub_F9AED1",
+   "new": "MidiInputOutputFilter_EditSongSelect",
+   "evidence": "(0x7F33) bit 3 via ByteField_SetOrClearMask; posts {0x80,W=0x08, D=1}; repaints"
+  },
+  {
+   "old": "sub_F9ABE3",
+   "new": "MidiInputOutputFilter_ValueCase_Exclusive",
+   "evidence": "JumpTable_F9AB84[7] -> MidiInputOutputFilter_EditExclusive"
+  },
+  {
+   "old": "sub_F9ACF6",
+   "new": "MidiInputOutputFilter_PaintExclusive",
+   "evidence": "ON when (0x7F38) & 0x0F != 0 -> (0x2740) -> DL_F0CE50 (OFF/ON) at IX 0x1AFC, row of \"EXCLUSIVE        :\""
+  },
+  {
+   "old": "sub_F9AF19",
+   "new": "MidiInputOutputFilter_EditExclusive",
+   "evidence": "(0x7F38) bits 0-3 via ByteField_SetOrClearMask; posts {0x80,W=0x0F, D=6}; repaints"
+  },
+  {
+   "old": "sub_F9B118",
+   "new": "LcdKeyRow2_MidiOutProgramChange",
+   "evidence": "ScreenButtonHandlers_MidiOutProgramChange[9] = code 0x09 (LCD row 2, \"SEND\") -> MidiOutProgramChange_Send"
+  },
+  {
+   "old": "sub_F9B121",
+   "new": "ExitKey_MidiOutProgramChange",
+   "evidence": "[15] = EXIT -> MidiSubmenu_ExitToMidiMenu"
+  },
+  {
+   "old": "sub_F9B12A",
+   "new": "ItemKeys_MidiOutProgramChange",
+   "evidence": "codes 0x00-0x03 / 0x11-0x14 -> MidiOutProgramChange_StepItem"
+  },
+  {
+   "old": "sub_F9B133",
+   "new": "ValueKeys_MidiOutProgramChange",
+   "evidence": "codes 0x04-0x07 / 0x15-0x18 -> MidiOutProgramChange_StepValue; dial as code 4"
+  },
+  {
+   "old": "sub_F9B13D",
+   "new": "NumberPadKey_MidiOutProgramChange",
+   "evidence": "[27] = code 0x1B (number pad) -> MidiOutProgramChange_NumberPadEntry, its only slot"
+  },
+  {
+   "old": "sub_F9B142",
+   "new": "IgnoredKeys_MidiOutProgramChange",
+   "evidence": "13 slots -> MidiScreen_NopKeyHandler"
+  },
+  {
+   "old": "sub_F9B149",
+   "new": "MidiOutProgramChange_StepItem",
+   "evidence": "cursor (0x2720) 0..3 (MIDI CH, PROG CHANGE, BANK MSB, BANK LSB); DLBoxes_F0D061 has 4 boxes"
+  },
+  {
+   "old": "sub_F9B18A",
+   "new": "MidiOutProgramChange_StepValue",
+   "evidence": "switch on (0x2720): 0 EditMidiCh, 1 EditProgram, 2 EditBankMsb, 3 EditBankLsb"
+  },
+  {
+   "old": "sub_F9B1D5",
+   "new": "MidiOutProgramChange_Send",
+   "evidence": "right key: T_MIDI_SendBankAndProgram((0x2746),(0x2747),(0x274A)) then box the SEND caption; (0x2741)=1"
+  },
+  {
+   "old": "sub_F9B23A",
+   "new": "MidiOutProgramChange_NumberPadEntry",
+   "evidence": "switch on (0x2720): 1/2/3 -> NumberPadProgram/BankMsb/BankLsb; MIDI CH takes none"
+  },
+  {
+   "old": "sub_F9B260",
+   "new": "MidiOutProgramChange_PaintMidiCh",
+   "evidence": "(0x2746) -> (0x2740) -> DL_F0CFF6 at IX 0x0836, row of \"MIDI CH     :\""
+  },
+  {
+   "old": "sub_F9B280",
+   "new": "MidiOutProgramChange_PaintProgram",
+   "evidence": "(0x2747) + 1 -> (0x2740) -> DL_F0D005 at IX 0x0B06, row of \"PR0G CHANGE\""
+  },
+  {
+   "old": "sub_F9B2A2",
+   "new": "MidiOutProgramChange_PaintBankMsb",
+   "evidence": "(0x2748) -> (0x2740) -> DL_F0D00F at IX 0x0DD6, row of \"BANK MSB    :\""
+  },
+  {
+   "old": "sub_F9B2C2",
+   "new": "MidiOutProgramChange_PaintBankLsb",
+   "evidence": "(0x2749) -> (0x2740) -> DL_F0D019 at IX 0x10A6, row of \"BANK LSB    ;\""
+  },
+  {
+   "old": "sub_F9B2E2",
+   "new": "MidiOutProgramChange_PaintBankSelect",
+   "evidence": "draws the (BANK SEL#= ) readout of (0x274A) as 5 decimal digits, or blank + DL_OffOff when it is 0xFFFF"
+  },
+  {
+   "old": "sub_F9B399",
+   "new": "MidiOutProgramChange_EditMidiCh",
+   "evidence": "(0x2746) stepped 0..0x1F; repaint if changed"
+  },
+  {
+   "old": "sub_F9B3C7",
+   "new": "MidiOutProgramChange_EditProgram",
+   "evidence": "(0x2747) stepped 0..0x7F; T_Blink_Stop; repaint"
+  },
+  {
+   "old": "sub_F9B3EF",
+   "new": "MidiOutProgramChange_EditBankMsb",
+   "evidence": "bank not OFF: (0x2748) 0..0x7F, (0x274A)=MSB*128+LSB; repaint MSB and BANK SEL#"
+  },
+  {
+   "old": "sub_F9B43B",
+   "new": "MidiOutProgramChange_EditBankLsb",
+   "evidence": "(0x2749) 0..0x7F; down from 0 -> bank OFF (0xFFFF), up while OFF re-enables; repaint"
+  },
+  {
+   "old": "sub_F9B4A1",
+   "new": "MidiOutProgramChange_ResetState",
+   "evidence": "zeroes (0x2746)-(0x2749), (0x274A)=0xFFFF; called by the module head sub_F99818"
+  },
+  {
+   "old": "sub_F9B4BC",
+   "new": "MidiOutProgramChange_NumberPadProgram",
+   "evidence": "number-pad entry: T_AsciiDigits3_ToValue, Word_IsOutOfRange, 1..128, stored as value-1 in (0x2747); blink DL_F0D005"
+  },
+  {
+   "old": "sub_F9B51B",
+   "new": "MidiOutProgramChange_NumberPadBankMsb",
+   "evidence": "number-pad entry: T_AsciiDigits3_ToValue, Word_IsOutOfRange, 0..127 into (0x2748), only while the bank is not OFF; blink DL_F0D00F"
+  },
+  {
+   "old": "sub_F9B59E",
+   "new": "MidiOutProgramChange_NumberPadBankLsb",
+   "evidence": "number-pad entry: T_AsciiDigits3_ToValue, Word_IsOutOfRange, 0..127 into (0x2749); blink DL_F0D019"
+  },
+  {
+   "old": "sub_F9B638",
+   "new": "Word_IsOutOfRange",
+   "evidence": "A=1 if (XIZ+8) < (XIZ+0xC) or > (XIZ+0xA), else 0; 3 number-pad callers"
+  },
+  {
+   "old": "sub_F9B652",
+   "new": "MidiOutProgramChange_EnableBlinkForItem",
+   "evidence": "T_Blink_Stop then T_Blink_SetEnable(item in 1..3)"
+  }
+ ],
+ "headers": [
+  {
+   "label": "LcdKeyRow3_GeneralMidiYesNo",
+   "text": "LcdKeyRow3_GeneralMidiYesNo -- YES on the GENERAL MIDI confirm page: commit the GM-mode choice, then leave\nEvidence: ScreenButtonRow_GeneralMidi_YesNo [74] = page 1, code 0x0A (LCD row 3); \" YES\" is drawn at 0x11CA by the\n  row-3 right arrow.  Right-hand key only (W bit 7 clear).  (0x2720) bit 2 -- Paint_GeneralMidiMode's copy of\n  (0x7F4D) -- goes to (0x7F4D) bit 2 if it differs, posting {0x91,3,A,4} by T_Queue2C00_AppendRegs (as at\n  0xF818C5); then (0x2740)=0, (0x2880)=0x23, (0x274C)|=4, and (0x2070)=0xAB/(0x2071)=0x40 requests screen 0xAB.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow4_GeneralMidiYesNo",
+   "text": "LcdKeyRow4_GeneralMidiYesNo -- NO on the GENERAL MIDI confirm page: back to page 0 without touching (0x7F4D)\nEvidence: ScreenButtonRow_GeneralMidi_YesNo entry [75] = code 0x0B (LCD row 4); \" NO\" is drawn at 0x17E2 beside\n  the row-4 right arrow (0x17BF).  Right-hand key only (W bit 7 clear): (0x2740)=0 selects the page-0 row, and\n  (0x2071)=0x10 is bit 4, which PanelButton_Route (0xF86230) turns into the redraw bit of (0x2072).",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_GeneralMidiYesNo",
+   "text": "ExitKey_GeneralMidiYesNo -- EXIT on the GENERAL MIDI confirm page: back to page 0, as NO does\nEvidence: ScreenButtonRow_GeneralMidi_YesNo entry [79] = code 0x0F (EXIT); byte-for-byte the body of\n  LcdKeyRow4_GeneralMidiYesNo: guard W bit 7 clear, (0x2740)=0, (0x2071)=0x10 (redraw).",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelMode_MidiEnter",
+   "text": "PanelMode_MidiEnter -- Enter method of panel MODE 0x12 (MIDI): flag the mode change and run T_F415C8\nEvidence: view-A entry 18 of PanelScreen_VtableTable (0xF86F09) -> object 0xF41640, +0 `jp 0xF99F04`, called by\n  PanelScreen_CallEnter_A with the mode (0x2078).  PanelMode_ToScreenIdMap[0x12] = 0x70, Paint_MidiMenu's screen,\n  and MidiSubmenu_ExitToMidiMenu requests mode 0x12.  Body: `set 1,(0x2134)` (the bit PanelState_ClearOnChange\n  sets on a mode change), then T_F415C8 (sub_F9433A), XDE/XHL/XIX/XIZ kept -- the shape of mode 0x0A's Enter,\n  0xF9FED1.",
+   "mode": "insert"
+  },
+  {
+   "label": "PanelMode_MidiLeave",
+   "text": "PanelMode_MidiLeave -- Leave method of panel MODE 0x12 (MIDI): only `set 1,(0x2134)`\nEvidence: object 0xF41640's +4 slot T_F41644 is `jp 0xF99F15`; PanelScreen_CallLeave_A calls +4 with the mode that\n  stopped being current.  Same body as mode 0x0A's Leave at 0xF9FEE2.",
+   "mode": "insert"
+  },
+  {
+   "label": "Paint_MidiMenu",
+   "text": "Paint_MidiMenu -- ENTER method of screen 0x70, the MIDI menu: paints its index of MIDI sub-screens\nEvidence: ViewB [112] (0xF87101) -> object 0xF41650, +0 `jp 0xF99F24`; PanelMode_ToScreenIdMap[0x12] = 0x70. Lists\n  on the stack: site 0xF99F45 0xF0C800-0xF0C8D5 when (0xC4)==2 (\"INPUT&0UTPUT\" \"FILTER\" \"MIDI\" \"T0TAL M0DE\"\n  \"C0NFIGURE\" \"PR0G\" \"CHANGE\" \"MIDI 0UT\" \"SYSEX\" ...), else site 0xF99F37 0xF0C81F-0xF0C917 (adds \"REALTIME\"). The\n  title is op-0x1C \"MIDI\"; ScreenButton_MidiMenu's row keys request exactly the captioned screens. Named like\n  Paint_DiskMenu, after the MENU -- round 7's refusal of a CAPTION name still holds.",
+   "mode": "replace"
+  },
+  {
+   "label": "ScreenLeave_MidiMenu",
+   "text": "ScreenLeave_MidiMenu -- LEAVE method of screen 0x70 (the MIDI menu): a bare `ret`\nEvidence: object 0xF41650's +4 slot T_F41654 is `jp 0xF99F5C` (+4 is what PanelScreen_CallLeave_A/B call); the\n  same object's +0 is Paint_MidiMenu.",
+   "mode": "insert"
+  },
+  {
+   "label": "ScreenButton_MidiMenu",
+   "text": "ScreenButton_MidiMenu -- BUTTON method of screen 0x70 (the MIDI menu): dispatch the panel code via\n  JumpTable_F99F96\nEvidence: object 0xF41650's +8 slot T_F41658 is `jp 0xF99F5E` (PanelButton_Route calls +8).  H = 1 when bit 7 of\n  the forwarded flag (XIZ+0x0A) is set (pair position 0, the left-hand LCD key) and is handed to the arm.\nLive codes: 0x08-0x0B -> LcdKeyRow1..4_MidiMenu, 0x0F -> ExitKey_MidiMenu; the other 27 -> IgnoredKeys_MidiMenu.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow1_MidiMenu",
+   "text": "LcdKeyRow1_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x08 (LCD row 1):\n  MidiMenu_RequestRow1Screen(H)\nEvidence: JumpTable_F99F96 entry [8], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own\n  `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow2_MidiMenu",
+   "text": "LcdKeyRow2_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x09 (LCD row 2):\n  MidiMenu_RequestRow2Screen(H)\nEvidence: JumpTable_F99F96 entry [9], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own\n  `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow3_MidiMenu",
+   "text": "LcdKeyRow3_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x0A (LCD row 3):\n  MidiMenu_RequestRow3Screen(H)\nEvidence: JumpTable_F99F96 entry [10], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own\n  `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow4_MidiMenu",
+   "text": "LcdKeyRow4_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x0B (LCD row 4):\n  MidiMenu_RequestRow4Screen(H)\nEvidence: JumpTable_F99F96 entry [11], its only slot; the arm ends `jr 0xF9A041` into ScreenButton_MidiMenu's own\n  `popw bc / popw hl / unlk / ret`, so it is a case of that routine, not a routine of its own.",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_MidiMenu",
+   "text": "ExitKey_MidiMenu -- switch arm of ScreenButton_MidiMenu for code 0x0F (EXIT): MidiMenu_ExitToPowerOnMode(H)\nEvidence: JumpTable_F99F96 entry [15]; falls into ScreenButton_MidiMenu's shared epilogue at 0xF9A041.",
+   "mode": "insert"
+  },
+  {
+   "label": "IgnoredKeys_MidiMenu",
+   "text": "IgnoredKeys_MidiMenu -- default arm of ScreenButton_MidiMenu: calls MidiScreen_NopKeyHandler and returns\nEvidence: 27 of JumpTable_F99F96's 32 slots ([0]-[7], [12]-[14], [16]-[31]); continues at 0xF9A047, the epilogue.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiMenu_RequestRow1Screen",
+   "text": "MidiMenu_RequestRow1Screen -- MIDI menu LCD row 1: left key -> screen 0x7D (MIDI TOTAL MODE), right key -> screen\n  0xB2\nEvidence: (0x2071)=0x80 (PanelScreen_ApplyRequestForced) with (0x2070)=0x7D, replaced by 0xB2 when (XIZ+8)==0. Row\n  1 of the menu draws \"T0TAL M0DE\" at x=5 (0x05A5) and \"C0NFIGURE\" at x=23 (0x05B7); screen 0x7D's Enter is\n  Paint_MidiTotalMode, screen 0xB2 (object 0xF41868, Enter sub_FBC56B) is not yet named.\nIn: (XIZ+8) = 1 for the left-hand key (flag bit 7 set), 0 for the right-hand one.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiMenu_RequestRow2Screen",
+   "text": "MidiMenu_RequestRow2Screen -- MIDI menu LCD row 2: right -> screen 0x7F (MIDI OUT PROGRAM CHANGE); left -> 0x7E\n  (INPUT&OUTPUT FILTER) when (0xC4)==2, else 0x75 (REALTIME MESSAGES)\nEvidence: (0x2071)=0x80; `ld (XIX),0x7f` / `0x7e` / `0x75` at 0xF9A07B / 0xF9A080 / 0xF9A089 behind `cp (0xc4),2`.\n  Row-2 right of both lists reads \"PR0G\" \"CHANGE\" \"MIDI 0UT\"; row-2 left (0x0AA5) reads \"INPUT&0UTPUT\" \"FILTER\" in\n  the variant-2 list and \"REALTIME\" \"MESSAGE\" in the other.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiMenu_RequestRow3Screen",
+   "text": "MidiMenu_RequestRow3Screen -- MIDI menu LCD row 3: right -> screen 0x79 (SYSEX BULK DUMP); left -> 0x7E\n  (INPUT&OUTPUT FILTER) only when (0xC4)!=2, nothing on variant 2\nEvidence: (0x2071)=0x80 with (0x2070)=0x79 (ViewB[121] -> Paint_SysexBulkDump_Entry) or 0x7E; \"SYSEX\" \"BULK DUMP\"\n  is drawn at row-3 right (0x10CF), and \"INPUT&0UTPUT\" \"FILTER\" at row-3 left (0x10BD) only in the variant-1 list.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiMenu_RequestRow4Screen",
+   "text": "MidiMenu_RequestRow4Screen -- MIDI menu LCD row 4: right key -> screen 0x7A (GENERAL MIDI); left key does nothing\nEvidence: (0x2071)=0x80 / (0x2070)=0x7A only when (XIZ+8)==0; ViewB[122] -> Paint_GeneralMidiMode_Entry, and\n  \"GENERAL MIDI\" is drawn at row-4 right (0x17FF) with the right-edge arrow at y=0x9B.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiMenu_ExitToPowerOnMode",
+   "text": "MidiMenu_ExitToPowerOnMode -- EXIT on the MIDI menu: request panel mode 1, the mode PanelState_Init starts in\nEvidence: (0x2071)=0x02 -- the bit PanelScreen_ApplyModeChange consumes -- with (0x2070)=0x01, only when\n  (XIZ+8)==0; PanelMode_Normalise maps 1 to 1 or 2 by the same (0x7F02) test PanelState_Init makes.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiSubmenu_ExitToMidiMenu",
+   "text": "MidiSubmenu_ExitToMidiMenu -- EXIT on a MIDI sub-screen: request panel mode 0x12, i.e. back to the MIDI menu\nEvidence: (0x2071)=0x02 / (0x2070)=0x12 when (XIZ+8)==0; PanelMode_ToScreenIdMap[0x12] = 0x70, Paint_MidiMenu's\n  screen. Called from slot [15] (EXIT) of the MidiTotalMode (unlabelled arm 0xF9A327), MidiRealtimeMessages,\n  MidiInputOutputFilter and MidiOutProgramChange handler tables.",
+   "mode": "insert"
+  },
+  {
+   "label": "StepValue_IncDecClamped",
+   "text": "StepValue_IncDecClamped -- A = value+1 (dir==0) or value-1 (dir!=0), clamped to [min,max]\nEvidence: `cp H,(XIZ+0x0a) / jr c` -> `inc 1,C`, else A = max; `cp H,(XIZ+0x0c) / jr ugt` -> `dec 1,C`, else A =\n  min. 11 callers: every item and value stepper of the four MIDI sub-screens.\nIn: (XIZ+8) dir byte, (XIZ+0x0A) max, (XIZ+0x0C) min, (XIZ+0x0E) current value.  Out: A.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiScreen_NopKeyHandler",
+   "text": "MidiScreen_NopKeyHandler -- a bare `ret`: the handler the MIDI screens' default (ignored-key) arms call\nEvidence: its only callers are IgnoredKeys_MidiMenu, _MidiTotalMode, _MidiRealtimeMessages, _MidiInputOutputFilter\n  and _MidiOutProgramChange.",
+   "mode": "insert"
+  },
+  {
+   "label": "ByteField_WriteMaskedIfChanged",
+   "text": "ByteField_WriteMaskedIfChanged -- put `value` into the `mask` bits of a byte unless they already hold it\nEvidence: `and C,H / cp C,(XIZ+0x0c) / jr z` -> A=1; otherwise `cpl` the mask, `and L,H`, `or C,L`, `ld (XIX),C`,\n  `sub A,A`.\nIn: (XIZ+8) pointer, (XIZ+0x0C) value, (XIZ+0x0E) mask.  Out: A = 0 written, 1 unchanged.",
+   "mode": "insert"
+  },
+  {
+   "label": "ByteField_SetOrClearMask",
+   "text": "ByteField_SetOrClearMask -- set (flag==1) or clear (otherwise) the mask bits of a byte; A=0 if it changed\nEvidence: the `cp (XIZ+8),1` arm pushes the mask as the value, the other pushes 0, both to\n  ByteField_WriteMaskedIfChanged. Callers: the eight MidiInputOutputFilter_Edit* routines.\nIn: (XIZ+8) flag, (XIZ+0x0A) pointer, (XIZ+0x0E) mask.",
+   "mode": "insert"
+  },
+  {
+   "label": "ItemKeys_MidiTotalMode",
+   "text": "ItemKeys_MidiTotalMode -- switch arm of ScreenButton_MidiTotalMode for codes 0x00-0x03 / 0x11-0x14:\n  MidiTotalMode_StepItem(H)\nEvidence: those 8 slots of ScreenButtonHandlers_MidiTotalMode; the screen draws \"ITEM\" (DL_F0C917) over these\n  keys; the arm ends in the reader's epilogue (0xF9A340).  Named for its function, not for one control: 0x11-0x14\n  are the variant-1 `+0x11` remap of 0x00-0x03.",
+   "mode": "insert"
+  },
+  {
+   "label": "ValueKeys_MidiTotalMode",
+   "text": "ValueKeys_MidiTotalMode -- switch arm of ScreenButton_MidiTotalMode for codes 0x04-0x07 / 0x15-0x18:\n  MidiTotalMode_StepValue(H)\nEvidence: those 8 slots of ScreenButtonHandlers_MidiTotalMode; DL_F0C917 draws \"VALUE\" over them;\n  Paint_MidiTotalMode sets (0x209C)=0x04 / (0x209B)=0x84 and `set 0,(0x2075)`, so PanelEvent_Code21_Dial routes\n  the dial here as code 4.",
+   "mode": "insert"
+  },
+  {
+   "label": "IgnoredKeys_MidiTotalMode",
+   "text": "IgnoredKeys_MidiTotalMode -- default arm of ScreenButton_MidiTotalMode: MidiScreen_NopKeyHandler, then the\n  epilogue\nEvidence: 15 slots ([8]-[14], [16], [25]-[31]) of ScreenButtonHandlers_MidiTotalMode.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_StepItem",
+   "text": "MidiTotalMode_StepItem -- move the item cursor (0x2720) one row within 0..5, skipping row 3 (LOCAL TOTAL) on\n  variant 2\nEvidence: StepValue_IncDecClamped(dir = (XIZ+8)==0, max 5, min 0) stored to (0x2720), repeated once when (0xC4)==2\n  and the result is 3 -- the variant-2 list (0xF0C964-0xF0CA19) omits DL_LocalTotal.  Then `set 4,(0x2095)`, the\n  bit Paint_MidiTotalMode tests to skip its static lists.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_StepValue",
+   "text": "MidiTotalMode_StepValue -- step the value of the row under the cursor: JumpTable_F9A3C7[(0x2720)], rows 0..5\nEvidence: `ld BC,(0x2720) / cp BC,5 / jr ugt / ... add XBC,JumpTable_F9A3C7 / jp (XBC)`; the six arms call\n  MidiTotalMode_EditInputMode .. _EditSingleChProgChange in screen order.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_ValueCase_InputMode",
+   "text": "MidiTotalMode_ValueCase_InputMode -- case 0 of MidiTotalMode_StepValue: MidiTotalMode_EditInputMode(H)\nEvidence: JumpTable_F9A3C7 entry [0]; row 0 of the screen is \"MIDI INPUT MODE :\" (IX 0x06E6); the arm ends in\n  MidiTotalMode_StepValue's epilogue (0xF9A413).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_ValueCase_OutputMode",
+   "text": "MidiTotalMode_ValueCase_OutputMode -- case 1 of MidiTotalMode_StepValue: MidiTotalMode_EditOutputMode(H)\nEvidence: JumpTable_F9A3C7 entry [1]; row 1 of the screen is \"MIDI OUTPUT MODE:\" (IX 0x0AA6); the arm ends in\n  MidiTotalMode_StepValue's epilogue (0xF9A413).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_ValueCase_SingleChannel",
+   "text": "MidiTotalMode_ValueCase_SingleChannel -- case 2 of MidiTotalMode_StepValue: MidiTotalMode_EditSingleChannel(H)\nEvidence: JumpTable_F9A3C7 entry [2]; row 2 of the screen is \"SINGLE CHANNEL  :\" (IX 0x0E66); the arm ends in\n  MidiTotalMode_StepValue's epilogue (0xF9A413).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_ValueCase_LocalTotal",
+   "text": "MidiTotalMode_ValueCase_LocalTotal -- case 3 of MidiTotalMode_StepValue: MidiTotalMode_EditLocalTotal(H)\nEvidence: JumpTable_F9A3C7 entry [3]; row 3 of the screen is \"LOCAL TOTAL     :\" (IX 0x1226); the arm ends in\n  MidiTotalMode_StepValue's epilogue (0xF9A413).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_ValueCase_ProgChangeMode",
+   "text": "MidiTotalMode_ValueCase_ProgChangeMode -- case 4 of MidiTotalMode_StepValue: MidiTotalMode_EditProgChangeMode(H)\nEvidence: JumpTable_F9A3C7 entry [4]; row 4 of the screen is \"PROG CHANGE MODE:\" (IX 0x15E6); the arm ends in\n  MidiTotalMode_StepValue's epilogue (0xF9A413).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_ValueCase_SingleChProgChange",
+   "text": "MidiTotalMode_ValueCase_SingleChProgChange -- case 5 of MidiTotalMode_StepValue:\n  MidiTotalMode_EditSingleChProgChange(H)\nEvidence: JumpTable_F9A3C7 entry [5]; row 5 of the screen is \"SINGLE CH PROG CHANGE:\" (IX 0x19A6); the arm ends in\n  MidiTotalMode_StepValue's epilogue (0xF9A413).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_PaintInputMode",
+   "text": "MidiTotalMode_PaintInputMode -- draw the MIDI INPUT MODE value: (0x7F35) & 0x0F -> (0x2740), then\n  DL_MultiSingleOmni (MULTI/SINGLE/OMNI)\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x06F8, the text row of \"MIDI INPUT MODE :\" (IX\n  0x06E6) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and\n  MidiTotalMode_EditInputMode.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_PaintOutputMode",
+   "text": "MidiTotalMode_PaintOutputMode -- draw the MIDI OUTPUT MODE value: (0x7F35) >> 4 -> (0x2740), then DL_MultiSingle\n  (MULTI/SINGLE)\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x0AB8, the text row of \"MIDI OUTPUT MODE:\" (IX\n  0x0AA6) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and\n  MidiTotalMode_EditOutputMode.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_PaintSingleChannel",
+   "text": "MidiTotalMode_PaintSingleChannel -- draw the SINGLE CHANNEL value: (0x7F36) & 0x0F -> (0x2740), then DL_F0CA4D\n  (DLTable_F0CABD, \"1 - 1\"..\"2 - 16\")\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x0E78, the text row of \"SINGLE CHANNEL  :\" (IX\n  0x0E66) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and\n  MidiTotalMode_EditSingleChannel.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_PaintLocalTotal",
+   "text": "MidiTotalMode_PaintLocalTotal -- draw the LOCAL TOTAL value: (0x7F36) bit 5 -> (0x2740) -> DL_F0CA5C (0 \"ON\", 1\n  \"OFF\")\nEvidence: DL_F0CA5C reads (0x2740) through DLTable_OnOff and draws at IX 0x1238, the row of \"LOCAL TOTAL     : \"\n  (DL_LocalTotal, 0x1226).  Skipped when (0xC4)==2 -- only the variant-1 list draws DL_LocalTotal. Called by\n  Paint_MidiTotalMode and MidiTotalMode_EditLocalTotal.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_PaintProgChangeMode",
+   "text": "MidiTotalMode_PaintProgChangeMode -- draw the PROG CHANGE MODE value: (0x7F32) & 0x03 -> (0x2740), then\n  DL_NormalTechRemap (NORMAL/TECH/REMAP)\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x15F8, the text row of \"PROG CHANGE MODE:\" (IX\n  0x15E6) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and\n  MidiTotalMode_EditProgChangeMode.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_PaintSingleChProgChange",
+   "text": "MidiTotalMode_PaintSingleChProgChange -- draw the SINGLE CH PROG CHANGE value: (0x7F32) bit 3 -> (0x2740), then\n  DL_F0CA7A (DLTable_SoundCombi: SOUND/COMBI)\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x19BD, the text row of \"SINGLE CH PROG CHANGE:\"\n  (IX 0x19A6) in DL_TotalModeMidiMidiInputMode/DL_LocalTotal.  Called by Paint_MidiTotalMode and\n  MidiTotalMode_EditSingleChProgChange.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_EditInputMode",
+   "text": "MidiTotalMode_EditInputMode -- change the MIDI INPUT MODE setting; if it changed, post it and repaint\nEvidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=3, A = new bits (D =\n  the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintInputMode.\nField: (0x7F35) bits 0-3, stepped 0..2 (MULTI/SINGLE/OMNI).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_EditOutputMode",
+   "text": "MidiTotalMode_EditOutputMode -- change the MIDI OUTPUT MODE setting; if it changed, post it and repaint\nEvidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0xF0, D=3, A = new bits (D =\n  the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintOutputMode.\nField: (0x7F35) bits 4-7, stepped 0..1 (MULTI/SINGLE).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_EditSingleChannel",
+   "text": "MidiTotalMode_EditSingleChannel -- change the SINGLE CHANNEL setting; if it changed, post it and repaint\nEvidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x0F, D=4, A = new bits (D =\n  the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintSingleChannel.\nField: (0x7F36) bits 0-3, stepped 0..15.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_EditLocalTotal",
+   "text": "MidiTotalMode_EditLocalTotal -- change the LOCAL TOTAL setting; if it changed, post it and repaint\nEvidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x20, D=4, A = new bits (D =\n  the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintLocalTotal.\nField: (0x7F36) bit 5: (XIZ+8)==0 clears it (\"ON\"), otherwise sets it (\"OFF\").",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_EditProgChangeMode",
+   "text": "MidiTotalMode_EditProgChangeMode -- change the PROG CHANGE MODE setting; if it changed, post it and repaint\nEvidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x03, D=0, A = new bits (D =\n  the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintProgChangeMode.\nField: (0x7F32) bits 0-1, stepped 0..1 (NORMAL/TECH; REMAP is not reachable here).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiTotalMode_EditSingleChProgChange",
+   "text": "MidiTotalMode_EditSingleChProgChange -- change the SINGLE CH PROG CHANGE setting; if it changed, post it and\n  repaint\nEvidence: on change, T_F41B18 (-> sub_F8BF07 -> Queue2E00_AppendRegs) posts E=0x80, W=0x08, D=0, A = new bits (D =\n  the byte's offset from 0x7F32, as in every MIDI-screen editor), then MidiTotalMode_PaintSingleChProgChange.\nField: (0x7F32) bit 3: (XIZ+8)==0 sets it (COMBI), otherwise clears it (SOUND).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiRealtimeMessages_PaintOnOffChoices",
+   "text": "MidiRealtimeMessages_PaintOnOffChoices -- draw the \"ON\"/\"OFF\" right-key captions shown while REALTIME COMMANDS is\n  selected\nEvidence: one list on the stack, site 0xF9A729: 0xF0CC83-0xF0CC91 (DL_OnOff, 14 B), \"ON \" at 0x0C2B and \"OFF\" at\n  0x11CB, by the row-2/row-3 right arrows (0x0C07, 0x11A7) that _SetOnOrSelectCommands / _SetOff serve.  Called by\n  Paint_MidiRealtimeMessages when (0x2720)==0 and after item 0 is selected.  Round 7 refused a screen name for\n  ON/OFF (a field, not a screen); this names the field's role.",
+   "mode": "replace"
+  },
+  {
+   "label": "MidiRealtimeMessages_PaintClockKeyGlyphs",
+   "text": "MidiRealtimeMessages_PaintClockKeyGlyphs -- draw DL_F0CC75 in place of ON/OFF while CLOCK (item 1) is selected\nEvidence: DL_F0CC75 puts glyph 0x8D at 0x0BDB and 0x8E at 0x117B, beside the row-2/row-3 right keys; called by\n  Paint_MidiRealtimeMessages when (0x2720)!=0 and by MidiRealtimeMessages_SelectClock; (0x2540)=2 as in its\n  sibling.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow2_MidiRealtimeMessages",
+   "text": "LcdKeyRow2_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x09 (LCD row 2):\n  MidiRealtimeMessages_SetOnOrSelectCommands(H)\nEvidence: ScreenButtonHandlers_MidiRealtimeMessages entry [9], its only slot; ends in the reader's epilogue\n  (0xF9A830).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow3_MidiRealtimeMessages",
+   "text": "LcdKeyRow3_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x0A (LCD row 3):\n  MidiRealtimeMessages_SetOff(H)\nEvidence: ScreenButtonHandlers_MidiRealtimeMessages entry [10], its only slot; ends in the reader's epilogue\n  (0xF9A830).",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow4_MidiRealtimeMessages",
+   "text": "LcdKeyRow4_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x0B (LCD row 4):\n  MidiRealtimeMessages_SelectClock(H)\nEvidence: ScreenButtonHandlers_MidiRealtimeMessages entry [11], its only slot; ends in the reader's epilogue\n  (0xF9A830).",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_MidiRealtimeMessages",
+   "text": "ExitKey_MidiRealtimeMessages -- switch arm of ScreenButton_MidiRealtimeMessages for code 0x0F (EXIT):\n  MidiSubmenu_ExitToMidiMenu(H)\nEvidence: ScreenButtonHandlers_MidiRealtimeMessages entry [15], its only slot; ends in the reader's epilogue\n  (0xF9A830).",
+   "mode": "insert"
+  },
+  {
+   "label": "IgnoredKeys_MidiRealtimeMessages",
+   "text": "IgnoredKeys_MidiRealtimeMessages -- default arm of ScreenButton_MidiRealtimeMessages: MidiScreen_NopKeyHandler\nEvidence: 28 slots of ScreenButtonHandlers_MidiRealtimeMessages ([0]-[8], [12]-[14], [16]-[31]); LCD row 1 is\n  inert here.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiRealtimeMessages_SetOnOrSelectCommands",
+   "text": "MidiRealtimeMessages_SetOnOrSelectCommands -- LCD row 2: right key turns the selected item on, left selects item 0\nEvidence: DL_RealtimeCommandsClock draws (0x7F34)&4 via DLTable_OffOnOff and (0x7F32)&4 via DLTable_InternalMidi.\nBody: right key ((XIZ+8)==0): item 0 -> `set 2,(0x7F34)` (REALTIME COMMANDS ON), post {0x80,2,4,4}; item 1 -> `or\n  (0x7F32),4` (CLOCK = MIDI), post {0x80,0,4,4}, T_F40794; then repaint DL_RealtimeCommandsClock.  Left: move the\n  cursor box (DL_F0CCBA/DL_F0CCAF), (0x2720)=0, MidiRealtimeMessages_PaintOnOffChoices.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiRealtimeMessages_SetOff",
+   "text": "MidiRealtimeMessages_SetOff -- LCD row 3, right key: REALTIME COMMANDS OFF or CLOCK INTERNAL, per the selected\n  item\nEvidence: item 0 -> `res 2,(0x7F34)`, post {0x80,2,0xFB,4}; item 1 -> `and (0x7F32),0xFB`, post {0x80,0,0xFB,4},\n  then T_F40794 (sub_FAA742: reloads the tempo timer from (0x7EE2) only while (0x7F32) bit 2 is clear); repaints\n  DL_RealtimeCommandsClock.  The left-hand key does nothing.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiRealtimeMessages_SelectClock",
+   "text": "MidiRealtimeMessages_SelectClock -- LCD row 4, left key: select the CLOCK item\nEvidence: when (XIZ+8)!=0 and (0x2720)!=1: erase/draw the cursor box (DL_F0CCBA, DL_F0CCAF), (0x2720)=1, then\n  MidiRealtimeMessages_PaintClockKeyGlyphs.  \"CLOCK  :\" carries the row-4 left arrow (0x1798).",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_MidiInputOutputFilter",
+   "text": "ExitKey_MidiInputOutputFilter -- switch arm of ScreenButton_MidiInputOutputFilter for code 0x0F (EXIT):\n  MidiSubmenu_ExitToMidiMenu(H)\nEvidence: ScreenButtonHandlers_MidiInputOutputFilter entry [15]; ends in the reader's epilogue (0xF9AB22).",
+   "mode": "insert"
+  },
+  {
+   "label": "ItemKeys_MidiInputOutputFilter",
+   "text": "ItemKeys_MidiInputOutputFilter -- switch arm for codes 0x00-0x03 / 0x11-0x14: MidiInputOutputFilter_StepItem(H)\nEvidence: those 8 slots of ScreenButtonHandlers_MidiInputOutputFilter; the screen draws \"ITEM\" (DL_F0C917);\n  Paint_MidiInputOutputFilter sets (0x209C)=0x80 / (0x209B)=0x00, so the dial reaches this arm as code 0.",
+   "mode": "insert"
+  },
+  {
+   "label": "ValueKeys_MidiInputOutputFilter",
+   "text": "ValueKeys_MidiInputOutputFilter -- switch arm for codes 0x04-0x07 / 0x15-0x18: MidiInputOutputFilter_StepValue(H)\nEvidence: those 8 slots of ScreenButtonHandlers_MidiInputOutputFilter; DL_F0C917 draws \"VALUE\" over them.",
+   "mode": "insert"
+  },
+  {
+   "label": "IgnoredKeys_MidiInputOutputFilter",
+   "text": "IgnoredKeys_MidiInputOutputFilter -- default arm of ScreenButton_MidiInputOutputFilter: MidiScreen_NopKeyHandler\nEvidence: 15 slots ([8]-[14], [16], [25]-[31]) of ScreenButtonHandlers_MidiInputOutputFilter.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_StepItem",
+   "text": "MidiInputOutputFilter_StepItem -- move the item cursor (0x2720) one row within 0..7\nEvidence: StepValue_IncDecClamped(dir = (XIZ+8)==0, max 7, min 0) -> (0x2720); DL_F0CE5F boxes the row from\n  DLTable_F0CE7B's eight entries; then `set 4,(0x2095)`.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_StepValue",
+   "text": "MidiInputOutputFilter_StepValue -- toggle the filter under the cursor: JumpTable_F9AB84[(0x2720)], rows 0..7\nEvidence: `ld BC,(0x2720) / cp BC,7 / jrl ugt / ... add XBC,JumpTable_F9AB84 / jp (XBC)`.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_ProgramChange",
+   "text": "MidiInputOutputFilter_ValueCase_ProgramChange -- case 0 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditProgramChange(H)\nEvidence: JumpTable_F9AB84 entry [0]; row 0 of DL_InputOutputFilterMidiPr0gramChange is \"PR0GRAM CHANGE   :\" (IX\n  0x0739).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintProgramChange",
+   "text": "MidiInputOutputFilter_PaintProgramChange -- draw the PR0GRAM CHANGE filter state: (0x7F39) bit 4 -> (0x2740) ->\n  DL_F0CDE7 (DLTable_OffOn)\nEvidence: DL_F0CDE7 reads (0x2740) and draws at IX 0x074C, the text row of \"PR0GRAM CHANGE   :\" (IX 0x0739);\n  called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditProgramChange.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditProgramChange",
+   "text": "MidiInputOutputFilter_EditProgramChange -- set (key arg 0) or clear (0x7F39) bit 4, the PR0GRAM CHANGE filter;\n  post and repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x10, D=7, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintProgramChange.  Reached through\n  JumpTable_F9AB84[0].",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_BankSelect",
+   "text": "MidiInputOutputFilter_ValueCase_BankSelect -- case 1 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditBankSelect(H)\nEvidence: JumpTable_F9AB84 entry [1]; row 1 of DL_InputOutputFilterMidiPr0gramChange is \"BANK SELECT      :\" (IX\n  0x0A09).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintBankSelect",
+   "text": "MidiInputOutputFilter_PaintBankSelect -- draw the BANK SELECT filter state: (0x7F3A) bit 7 -> (0x2740) ->\n  DL_F0CDF6 (DLTable_OffOn)\nEvidence: DL_F0CDF6 reads (0x2740) and draws at IX 0x0A1C, the text row of \"BANK SELECT      :\" (IX 0x0A09);\n  called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditBankSelect.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditBankSelect",
+   "text": "MidiInputOutputFilter_EditBankSelect -- set (key arg 0) or clear (0x7F3A) bit 7, the BANK SELECT filter; post and\n  repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x80, D=8, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintBankSelect.  Reached through JumpTable_F9AB84[1].",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_PitchBend",
+   "text": "MidiInputOutputFilter_ValueCase_PitchBend -- case 2 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditPitchBend(H)\nEvidence: JumpTable_F9AB84 entry [2]; row 2 of DL_InputOutputFilterMidiPr0gramChange is \"PITCH BEND       :\" (IX\n  0x0CD9).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintPitchBend",
+   "text": "MidiInputOutputFilter_PaintPitchBend -- draw the PITCH BEND filter state: (0x7F39) bit 6 -> (0x2740) -> DL_F0CE05\n  (DLTable_OffOn)\nEvidence: DL_F0CE05 reads (0x2740) and draws at IX 0x0CEC, the text row of \"PITCH BEND       :\" (IX 0x0CD9);\n  called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditPitchBend.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditPitchBend",
+   "text": "MidiInputOutputFilter_EditPitchBend -- set (key arg 0) or clear (0x7F39) bit 6, the PITCH BEND filter; post and\n  repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x40, D=7, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintPitchBend.  Reached through JumpTable_F9AB84[2].",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_ControlChange",
+   "text": "MidiInputOutputFilter_ValueCase_ControlChange -- case 3 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditControlChange(H)\nEvidence: JumpTable_F9AB84 entry [3]; row 3 of DL_InputOutputFilterMidiPr0gramChange is \"C0NTR0L CHANGE   :\" (IX\n  0x0FA9).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintControlChange",
+   "text": "MidiInputOutputFilter_PaintControlChange -- draw the C0NTR0L CHANGE filter state: (0x7F39) bit 3 -> (0x2740) ->\n  DL_F0CE14 (DLTable_OffOn)\nEvidence: DL_F0CE14 reads (0x2740) and draws at IX 0x0FBC, the text row of \"C0NTR0L CHANGE   :\" (IX 0x0FA9);\n  called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditControlChange.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditControlChange",
+   "text": "MidiInputOutputFilter_EditControlChange -- set (key arg 0) or clear (0x7F39) bit 3, the C0NTR0L CHANGE filter;\n  post and repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x08, D=7, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintControlChange.  Reached through\n  JumpTable_F9AB84[3].",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_ResetAllCtrl",
+   "text": "MidiInputOutputFilter_ValueCase_ResetAllCtrl -- case 4 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditResetAllCtrl(H)\nEvidence: JumpTable_F9AB84 entry [4]; row 4 of DL_InputOutputFilterMidiPr0gramChange is \"RESET ALL CTRL\" (IX\n  0x1279).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintResetAllCtrl",
+   "text": "MidiInputOutputFilter_PaintResetAllCtrl -- draw the RESET ALL CTRL filter state: (0x7F3B) bit 0 -> (0x2740) ->\n  DL_F0CE23 (DLTable_OffOn)\nEvidence: DL_F0CE23 reads (0x2740) and draws at IX 0x128C, the text row of \"RESET ALL CTRL\" (IX 0x1279); called by\n  Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditResetAllCtrl.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditResetAllCtrl",
+   "text": "MidiInputOutputFilter_EditResetAllCtrl -- set (key arg 0) or clear (0x7F3B) bit 0, the RESET ALL CTRL filter; post\n  and repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x01, D=9, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintResetAllCtrl.  Reached through\n  JumpTable_F9AB84[4].",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_ChannelPressure",
+   "text": "MidiInputOutputFilter_ValueCase_ChannelPressure -- case 5 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditChannelPressure(H)\nEvidence: JumpTable_F9AB84 entry [5]; row 5 of DL_InputOutputFilterMidiPr0gramChange is \"CHANNEL PRESSURE :\" (IX\n  0x1549).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintChannelPressure",
+   "text": "MidiInputOutputFilter_PaintChannelPressure -- draw the CHANNEL PRESSURE filter state: (0x7F39) bit 5 -> (0x2740)\n  -> DL_F0CE32 (DLTable_OffOn)\nEvidence: DL_F0CE32 reads (0x2740) and draws at IX 0x155C, the text row of \"CHANNEL PRESSURE :\" (IX 0x1549);\n  called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditChannelPressure.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditChannelPressure",
+   "text": "MidiInputOutputFilter_EditChannelPressure -- set (key arg 0) or clear (0x7F39) bit 5, the CHANNEL PRESSURE filter;\n  post and repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x20, D=7, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintChannelPressure.  Reached through\n  JumpTable_F9AB84[5]. \u26a0 the posted A is read from (0x7F3B) & 0x20 (`ld H,(0x7f3b)` at 0xF9AEB0) while the edit\n  and D=7 name 0x7F39.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_SongSelect",
+   "text": "MidiInputOutputFilter_ValueCase_SongSelect -- case 6 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditSongSelect(H)\nEvidence: JumpTable_F9AB84 entry [6]; row 6 of DL_InputOutputFilterMidiPr0gramChange is \"S0NG SELECT      :\" (IX\n  0x1819).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintSongSelect",
+   "text": "MidiInputOutputFilter_PaintSongSelect -- draw the S0NG SELECT filter state: (0x7F33) bit 3 -> (0x2740) ->\n  DL_F0CE41 (DLTable_OffOn)\nEvidence: DL_F0CE41 reads (0x2740) and draws at IX 0x182C, the text row of \"S0NG SELECT      :\" (IX 0x1819);\n  called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditSongSelect.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditSongSelect",
+   "text": "MidiInputOutputFilter_EditSongSelect -- set (key arg 0) or clear (0x7F33) bit 3, the S0NG SELECT filter; post and\n  repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x08, D=1, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintSongSelect.  Reached through JumpTable_F9AB84[6].",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_ValueCase_Exclusive",
+   "text": "MidiInputOutputFilter_ValueCase_Exclusive -- case 7 of MidiInputOutputFilter_StepValue:\n  MidiInputOutputFilter_EditExclusive(H)\nEvidence: JumpTable_F9AB84 entry [7]; row 7 of DL_InputOutputFilterMidiPr0gramChange is \"EXCLUSIVE        :\" (IX\n  0x1AE9).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_PaintExclusive",
+   "text": "MidiInputOutputFilter_PaintExclusive -- draw the EXCLUSIVE filter state: ON when (0x7F38) & 0x0F != 0 -> (0x2740)\n  -> DL_F0CE50 (DLTable_OffOn)\nEvidence: DL_F0CE50 reads (0x2740) and draws at IX 0x1AFC, the text row of \"EXCLUSIVE        :\" (IX 0x1AE9);\n  called by Paint_MidiInputOutputFilter and MidiInputOutputFilter_EditExclusive.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiInputOutputFilter_EditExclusive",
+   "text": "MidiInputOutputFilter_EditExclusive -- set (key arg 0) or clear (0x7F38) bits 0-3, the EXCLUSIVE filter; post and\n  repaint if it changed\nEvidence: ByteField_SetOrClearMask(flag = (XIZ+8)==0, ptr, mask); on A==0 T_F41B18 posts {E=0x80, W=0x0F, D=6, A =\n  new bits} (D = byte - 0x7F32), then MidiInputOutputFilter_PaintExclusive.  Reached through JumpTable_F9AB84[7].\n  The mask is the whole low nibble: all four bits are set or cleared together.",
+   "mode": "insert"
+  },
+  {
+   "label": "LcdKeyRow2_MidiOutProgramChange",
+   "text": "LcdKeyRow2_MidiOutProgramChange -- switch arm for code 0x09 (LCD row 2, \"SEND\"): MidiOutProgramChange_Send(H)\nEvidence: ScreenButtonHandlers_MidiOutProgramChange entry [9], its only slot; \"SEND\" is drawn at 0x0BB2 beside the\n  row-2 right arrow (0x0B8F); ends in the reader's epilogue (0xF9B13A).",
+   "mode": "insert"
+  },
+  {
+   "label": "ExitKey_MidiOutProgramChange",
+   "text": "ExitKey_MidiOutProgramChange -- switch arm for code 0x0F (EXIT): MidiSubmenu_ExitToMidiMenu(H)\nEvidence: ScreenButtonHandlers_MidiOutProgramChange entry [15]; ends in the reader's epilogue (0xF9B13A).",
+   "mode": "insert"
+  },
+  {
+   "label": "ItemKeys_MidiOutProgramChange",
+   "text": "ItemKeys_MidiOutProgramChange -- switch arm for codes 0x00-0x03 / 0x11-0x14: MidiOutProgramChange_StepItem(H)\nEvidence: those 8 slots of ScreenButtonHandlers_MidiOutProgramChange; the screen draws \"ITEM\" (DL_F0C917).",
+   "mode": "insert"
+  },
+  {
+   "label": "ValueKeys_MidiOutProgramChange",
+   "text": "ValueKeys_MidiOutProgramChange -- switch arm for codes 0x04-0x07 / 0x15-0x18: MidiOutProgramChange_StepValue(H)\nEvidence: those 8 slots of ScreenButtonHandlers_MidiOutProgramChange; \"VALUE\" (DL_F0C917);\n  Paint_MidiOutProgramChange sets (0x209C)=0x04 / (0x209B)=0x84, so the dial arrives here as code 4.",
+   "mode": "insert"
+  },
+  {
+   "label": "NumberPadKey_MidiOutProgramChange",
+   "text": "NumberPadKey_MidiOutProgramChange -- switch arm for code 0x1B (the number pad):\n  MidiOutProgramChange_NumberPadEntry\nEvidence: ScreenButtonHandlers_MidiOutProgramChange entry [27], its only slot (0x1B - 0x11 = slot [10] is ignored\n  here); the callee parses the ASCII digit cells 0x2821-0x2823.  No argument is pushed; ends at 0xF9B145.",
+   "mode": "insert"
+  },
+  {
+   "label": "IgnoredKeys_MidiOutProgramChange",
+   "text": "IgnoredKeys_MidiOutProgramChange -- default arm of ScreenButton_MidiOutProgramChange: MidiScreen_NopKeyHandler\nEvidence: 13 slots ([8], [10]-[14], [16], [25], [26], [28]-[31]) of ScreenButtonHandlers_MidiOutProgramChange.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_StepItem",
+   "text": "MidiOutProgramChange_StepItem -- move the item cursor (0x2720) within 0..3 and re-arm the field blink\nEvidence: StepValue_IncDecClamped(dir = (XIZ+8)==0, max 3, min 0) -> (0x2720), then\n  MidiOutProgramChange_EnableBlinkForItem; rows: \"MIDI CH\", \"PR0G CHANGE\", \"BANK MSB\", \"BANK LSB\", boxed from\n  DLBoxes_F0D061's four entries.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_StepValue",
+   "text": "MidiOutProgramChange_StepValue -- step the field under the cursor: (0x2720) 0..3 -> Edit\n  MidiCh/Program/BankMsb/BankLsb\nEvidence: the `cp BC,0..3 / jr z` chain at 0xF9B19C-0xF9B1AA; sets bit 3 of (0x2075).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_Send",
+   "text": "MidiOutProgramChange_Send -- LCD row 2 right key (\"SEND\"): transmit Bank Select + Program Change from the fields\nEvidence: (XIZ+8)==0 -> T_MIDI_SendBankAndProgram(ch/port (0x2746), program (0x2747), bank (0x274A) or 0xFFFF);\n  then an op-03 box record (template 0xF9B692/0xF9B69A, box 0x10E,0x48-0x132,0x55 around \"SEND\") by\n  T_DisplayListB_RunOne_Stack, (0x20AB)=2, (0x2741)=1 (Paint_MidiOutProgramChange then erases it), T_Blink_Stop.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_NumberPadEntry",
+   "text": "MidiOutProgramChange_NumberPadEntry -- route a number-pad entry to the field under the cursor\nEvidence: (0x2720)==1 -> MidiOutProgramChange_NumberPadProgram, 2 -> _NumberPadBankMsb, 3 -> _NumberPadBankLsb; 0\n  (MIDI CH) is ignored.  Reached only from NumberPadKey_MidiOutProgramChange.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_PaintMidiCh",
+   "text": "MidiOutProgramChange_PaintMidiCh -- draw the MIDI CH field: (0x2746) -> (0x2740) -> DL_F0CFF6 (\"1 - 1\"..\"2 - 16\")\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x0836, the row of \"MIDI CH     :\" (IX 0x0828)\n  in DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_PaintProgram",
+   "text": "MidiOutProgramChange_PaintProgram -- draw the PR0G CHANGE field: (0x2747) + 1 -> (0x2740) -> DL_F0D005 (3-digit\n  decimal)\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x0B06, the row of \"PR0G CHANGE\" (IX 0x0AF8) in\n  DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_PaintBankMsb",
+   "text": "MidiOutProgramChange_PaintBankMsb -- draw the BANK MSB field: (0x2748) -> (0x2740) -> DL_F0D00F (3-digit decimal)\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x0DD6, the row of \"BANK MSB    :\" (IX 0x0DC8)\n  in DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_PaintBankLsb",
+   "text": "MidiOutProgramChange_PaintBankLsb -- draw the BANK LSB field: (0x2749) -> (0x2740) -> DL_F0D019 (3-digit decimal)\nEvidence: the interpreter-B record reads (0x2740) and draws at IX 0x10A6, the row of \"BANK LSB    ;\" (IX 0x1098)\n  in DL_ProgramChangeMidiOutMidi; called by Paint_MidiOutProgramChange and the field's editors.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_PaintBankSelect",
+   "text": "MidiOutProgramChange_PaintBankSelect -- draw the \"(BANK SEL#= )\" readout of (0x274A), or the bank-OFF state\nEvidence: (0x274A)==0xFFFF -> site 0xF9B30B 0xF0D02D-0xF0D036 (blanks at 0x1374) and site 0xF9B31B\n  0xF0D036-0xF0D04B (DL_OffOff: \"---\" over BANK MSB, \"OFF\" over BANK LSB and BANK SEL#); otherwise five decimal\n  digits (`divs BC,10`, `add L,0x30`) in a frame copy of the record at 0xF9B6A5, drawn at IX 0x1374 by\n  T_DisplayListB_RunOne_Stack. Round 7 refused a caption name (its first list draws `---`); this names the field.",
+   "mode": "replace"
+  },
+  {
+   "label": "MidiOutProgramChange_EditMidiCh",
+   "text": "MidiOutProgramChange_EditMidiCh -- step MIDI CH (0x2746) within 0..31 and repaint it if it changed\nEvidence: StepValue_IncDecClamped(dir=(XIZ+8), max 0x1F, min 0) -> (0x2746), then\n  MidiOutProgramChange_PaintMidiCh; bits 0-3 are the channel and bit 4 the port in MIDI_SendBankAndProgram's first\n  argument (\"1 - n\" / \"2 - n\").",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_EditProgram",
+   "text": "MidiOutProgramChange_EditProgram -- step the program number (0x2747) within 0..127 and repaint\nEvidence: StepValue_IncDecClamped(dir=(XIZ+8), max 0x7F, min 0) -> (0x2747), T_Blink_Stop,\n  MidiOutProgramChange_PaintProgram.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_EditBankMsb",
+   "text": "MidiOutProgramChange_EditBankMsb -- step BANK MSB (0x2748) within 0..127 and rebuild the bank number; inert while\n  bank is OFF\nEvidence: returns at once when (0x274A)==0xFFFF; else StepValue_IncDecClamped -> (0x2748), (0x274A) = MSB<<7 +\n  (0x2749), T_Blink_Stop, MidiOutProgramChange_PaintBankMsb and _PaintBankSelect.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_EditBankLsb",
+   "text": "MidiOutProgramChange_EditBankLsb -- step BANK LSB (0x2749); below 0 turns the bank OFF, stepping up from OFF turns\n  it on\nEvidence: LSB==0 with dir 1 -> (0x274A)=0xFFFF; OFF with dir 0 -> no step, bank rebuilt at LSB 0; otherwise\n  StepValue_IncDecClamped(max 0x7F) and (0x274A) = (0x2748)<<7 + LSB.  Then T_Blink_Stop and repaint MSB, LSB,\n  BANK SEL#.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_ResetState",
+   "text": "MidiOutProgramChange_ResetState -- channel, program, MSB, LSB = 0 and the bank number = 0xFFFF (OFF)\nEvidence: stores to (0x2746)..(0x2749) and `ldw (0x274A),0xFFFF`, the fields MidiOutProgramChange_Send transmits;\n  called only by sub_F99818, the target of the module-head `jp` at 0xF99800 that prom_b's `.long 0x00F99800`\n  (0xF4176C) names.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_NumberPadProgram",
+   "text": "MidiOutProgramChange_NumberPadProgram -- take a number-pad entry into PROG CHANGE\nEvidence: when (0x2267)&0x0F == 0x0F: (0x2826)=3, T_AsciiDigits3_ToValue, and if Word_IsOutOfRange says in range:\n  1..128, stored as value-1 in (0x2747). Then T_Blink_Command(DL_F0D005) blinks the field; a blank last digit cell\n  ((0x2823)==' ') only stops the blink.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_NumberPadBankMsb",
+   "text": "MidiOutProgramChange_NumberPadBankMsb -- take a number-pad entry into BANK MSB\nEvidence: when (0x2267)&0x0F == 0x0F: (0x2826)=3, T_AsciiDigits3_ToValue, and if Word_IsOutOfRange says in range:\n  0..127 into (0x2748), only while the bank is not OFF; (0x274A) rebuilt and BANK SEL# repainted. Then\n  T_Blink_Command(DL_F0D00F) blinks the field; a blank last digit cell ((0x2823)==' ') only stops the blink.",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_NumberPadBankLsb",
+   "text": "MidiOutProgramChange_NumberPadBankLsb -- take a number-pad entry into BANK LSB\nEvidence: when (0x2267)&0x0F == 0x0F: (0x2826)=3, T_AsciiDigits3_ToValue, and if Word_IsOutOfRange says in range:\n  0..127 into (0x2749); (0x274A) = (0x2748)<<7 + LSB (this turns an OFF bank on); MSB and BANK SEL# repainted.\n  Then T_Blink_Command(DL_F0D019) blinks the field; a blank last digit cell ((0x2823)==' ') only stops the blink.",
+   "mode": "insert"
+  },
+  {
+   "label": "Word_IsOutOfRange",
+   "text": "Word_IsOutOfRange -- A = 1 if a word is below min or above max, else 0\nEvidence: `cp BC,(XIZ+0x0c) / jr c` and `cp BC,(XIZ+0x0a) / jr ugt` -> A=1; `sub A,A` otherwise.\nIn: (XIZ+8) value, (XIZ+0x0A) max, (XIZ+0x0C) min (callers push min, max, value).",
+   "mode": "insert"
+  },
+  {
+   "label": "MidiOutProgramChange_EnableBlinkForItem",
+   "text": "MidiOutProgramChange_EnableBlinkForItem -- stop the field blink, then allow blinking only for the numeric rows 1-3\nEvidence: T_Blink_Stop, then T_Blink_SetEnable(1) for argument 1, 2 or 3 (PROG CHANGE, BANK MSB, BANK LSB -- the\n  number-pad fields), else 0.  Called by Paint_MidiOutProgramChange and _StepItem with (0x2720). \u26a0 It ends at\n  0xF9B67E; 0xF9B67F-0xF9B6EA are DL-B record templates framed as code, not part of it.",
+   "mode": "insert"
+  }
+ ],
+ "left_unnamed": [
+  {
+   "name": "sub_F99E82",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [71] (code 0x07, soft key column 8): the YES/NO page ignores this slot; a name would only restate the row header"
+  },
+  {
+   "name": "sub_F99E83",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [72] (code 0x08, LCD row 1): the YES/NO page ignores this slot; a name would only restate the row header"
+  },
+  {
+   "name": "sub_F99E84",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [73] (code 0x09, LCD row 2): the YES/NO page ignores this slot; a name would only restate the row header"
+  },
+  {
+   "name": "sub_F99EE1",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [76] (code 0x0C, LCD row 5): the YES/NO page ignores this slot; a name would only restate the row header"
+  },
+  {
+   "name": "sub_F99EE2",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [77] (code 0x0D, the -1/+1 pair, which PanelButton_Route normally diverts): the YES/NO page ignores this slot"
+  },
+  {
+   "name": "sub_F99EE3",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [78] (code 0x0E, which no wire on this panel raises): the YES/NO page ignores this slot"
+  },
+  {
+   "name": "sub_F99EF4",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [80] (code 0x10, PAGE v/^): the YES/NO page ignores this slot; a name would only restate the row header"
+  },
+  {
+   "name": "sub_F99EF5",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [81] (code 0x11, no variant-2 control; a variant-1 +0x11 remap slot, so the code names no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EF6",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [82] (code 0x12, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EF7",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [83] (code 0x13, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EF8",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [84] (code 0x14, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EF9",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [85] (code 0x15, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EFA",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [86] (code 0x16, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EFB",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [87] (code 0x17, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EFC",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [88] (code 0x18, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EFD",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [89] (code 0x19, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EFE",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [90] (code 0x1A, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99EFF",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [91] (code 0x1B, the number pad -- also 0x0A+0x11 under the variant-1 remap): ignored slot"
+  },
+  {
+   "name": "sub_F99F00",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [92] (code 0x1C, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99F01",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [93] (code 0x1D, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99F02",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [94] (code 0x1E, COMPARE -- also a variant-1 remap slot): ignored slot"
+  },
+  {
+   "name": "sub_F99F03",
+   "why": "bare `ret` in ScreenButtonRow_GeneralMidi_YesNo [95] (code 0x1F, variant-1 +0x11 remap slot, no unique control): ignored slot"
+  },
+  {
+   "name": "sub_F99F1A",
+   "why": "+8 slot (T_F41648 `jp 0xF99F1A`) of the view-A object of mode 0x12; view A is only ever called at +0/+4 (PanelScreen_CallEnter_A/CallLeave_A) and no image names 0xF41648, so its role (`set 1,(0x2134)`) is unestablished"
+  },
+  {
+   "name": "sub_F99F1F",
+   "why": "+0x0C slot (T_F4164C) of the same mode-0x12 object, body `set 1,(0x2134)`; no reader of that offset and no reference to 0xF4164C in any image"
+  },
+  {
+   "name": "sub_F99F5D",
+   "why": "+0x0C slot (T_F4165C) of the MIDI menu's screen object; bare `ret`; the five PanelScreen_VtableTable readers use only +0/+4/+8 and no image names 0xF4165C"
+  },
+  {
+   "name": "sub_F9A26E",
+   "why": "+0x0C slot (T_F41748) of the MidiTotalMode screen object; bare `ret`; no reader of offset +0x0C exists, no image names 0xF41748"
+  },
+  {
+   "name": "sub_F9A755",
+   "why": "+0x0C slot (T_F4169C) of the MidiRealtimeMessages screen object; bare `ret`; never called"
+  },
+  {
+   "name": "sub_F9AA50",
+   "why": "+0x0C slot (T_F41758) of the MidiInputOutputFilter screen object; bare `ret`; never called"
+  },
+  {
+   "name": "sub_F9B05F",
+   "why": "+0x0C slot (T_F41768) of the MidiOutProgramChange screen object; bare `ret`; never called"
+  },
+  {
+   "name": "sub_F9C0E9",
+   "why": "+0x0C slot (T_F41974) of the RE-MAP EDIT screen object: ONE byte, a bare `ret`; the 286 lines the worklist counts after it are a separate unlabelled routine at 0xF9C0EA (HandlerTable23_FA1690[0])"
+  },
+  {
+   "name": "sub_F9A4A8",
+   "why": "not a routine: a label inside MidiTotalMode_PaintLocalTotal (sub_F9A484), reached by fall-through from `lda XWA` at 0xF9A4A3; no 3-byte reference to 0xF9A4A8 in prom_a/b/c"
+  },
+  {
+   "name": "sub_F9AD8C",
+   "why": "not a routine: a label inside MidiInputOutputFilter_EditBankSelect (sub_F9AD69), after `inc 0,XSP` at 0xF9AD8A; no reference to 0xF9AD8C in any image"
+  },
+  {
+   "name": "sub_F9C054",
+   "why": "`calr sub_F9C058` veneer whose only entry is the unlabelled module-head `jp` at 0xF9C03C, which nothing names (no 3-byte reference in any image); the worklist's caller LCD_ShowLayers1And2_SaveRegs is that unlabelled jp, mis-attributed"
+  },
+  {
+   "name": "sub_F9C058",
+   "why": "clears 0x2900-0x2914 and copies ByteTable6_FA15E8 (6 zero bytes) to 0x2915-0x291A; that work area is shared by RE-MAP EDIT, COMBINATION GROUP NAMING, the drum-map error screen and others in 0xF9C000-0xFA0D7F and has no semantic owner yet -- a name would guess it"
+  }
+ ],
+ "notes": "SCOPE. Slice 5 is the MIDI-screens module 0xF99800-0xF9B6EA (head `jp sub_F99818` at 0xF99800, named by prom_b's `.long 0x00F99800` at 0xF4176C) plus the first bytes of the 0xF9C000 block. 112 renamed, 34 left. Screen map (PanelScreen_VtableTable_ViewB; its bracket index IS the screen id): 0x70 MIDI menu (new Paint_/ScreenLeave_/ScreenButton_MidiMenu), 0x75 RealtimeMessages, 0x79 SysexBulkDump, 0x7A GeneralMidiMode, 0x7D TotalMode, 0x7E InputOutputFilter, 0x7F OutProgramChange. View-A entry 18 (object 0xF41640) is panel MODE 0x12 = MIDI: PanelMode_ToScreenIdMap[0x12]=0x70, and every sub-screen's EXIT requests mode 0x12.\n\n\u2605 ANSWERS AN OPEN ITEM of FINDINGS-prom_a-panel-control-map.md \u00a77 (\"which side of a pair a handler sees\"): on the MIDI menu all four LCD-row handlers request the screen whose caption is on the LEFT half (x=5) when the forwarded flag has bit 7 SET, and the RIGHT half (x=23) when it is clear. All 7 live destinations agree, including the variant split (row-2 left is I/O FILTER in the rack list, REALTIME MESSAGE in the variant-1 list; row-3 left is inert on the rack, whose list has no caption there). So for LCD rows, bit 7 set = left-hand (CP2) key. The GM YES/NO page and Realtime screen agree: their YES/NO/ON/OFF captions sit at the right edge and their handlers act only with bit 7 clear.\n\nPATTERN / CONVENTION. Each MIDI screen's BUTTON method is a compiled-C switch. The table targets are switch ARMS (push H / calr worker / jr into the reader's epilogue), not routines. Arms with a single slot are named <Control>_<Screen>. Multi-slot arms are named ItemKeys_/ValueKeys_/IgnoredKeys_<Screen>, from the function, because codes 0x11-0x18 are variant-1 remaps; ITEM/VALUE are the screens' own captions (DL_F0C917). Workers carry function names (<Screen>_StepItem/_StepValue/_Edit<Field>/_Paint<Field>). The same scheme fits ScreenButtonRow_SysexBulkDump / _GeneralMidi_Page0 and other ITEM/VALUE screens.\n\n\u2605 CLASS-0x80 UI EVENTS = MIDI settings changes. T_F41B18 (sub_F8BC08 -> sub_F8BF07 -> Queue2E00_AppendRegs) gets E=0x80, D = byte offset into a settings block at 0x7F32, A = new bits, W = mask; all 15 editors agree. Block map (from captions + DL tables):\n- 0x7F32: b0-1 PROG CHANGE MODE, b2 CLOCK (0 INTERNAL / 1 MIDI), b3 SINGLE CH PROG CHANGE\n- 0x7F33: b3 SONG SELECT filter\n- 0x7F34: b2 REALTIME COMMANDS\n- 0x7F35: lo nibble MIDI INPUT MODE, hi nibble MIDI OUTPUT MODE\n- 0x7F36: lo nibble SINGLE CHANNEL, b5 LOCAL TOTAL (1 = OFF)\n- 0x7F38: lo nibble EXCLUSIVE filter\n- 0x7F39: b3/b4/b5/b6 = CONTROL CHANGE / PROGRAM CHANGE / CHANNEL PRESSURE / PITCH BEND filters\n- 0x7F3A: b7 BANK SELECT filter\n- 0x7F3B: b0 RESET ALL CTRL filter\n- 0x7F4D: b2 GENERAL MIDI MODE (class 0x91, D=3, Queue2C00; the boot path at 0xF818C5 posts the same record)\nLeads: name sub_F8BC08/sub_F8BF07 (\"post 4 stack words as a Queue2E00 record\") and the UiListB_Class80 handlers (one is T_MidiIn_ReqRebuild_Msg03_0A).\n\n\u26a0 POSSIBLE FIRMWARE BUG. MidiInputOutputFilter_EditChannelPressure (0xF9AE89) edits 0x7F39 bit 5 and posts D=7 (0x7F39), but reads the posted value from (0x7F3B)&0x20 (`ld H,(0x7f3b)` at 0xF9AEB0). Every sibling reads the byte it edited.\n\nMISFRAMING.\n(1) sub_F9B652's worklist extent runs past its `ret` at 0xF9B67E. 0xF9B67F-0xF9B6B4 are DL-B record templates: the box (0x10E,0x48)-(0x132,0x55) around \"SEND\", op-08 at 0xF9B687, op-03 at 0xF9B69A, op-02 at 0xF9B6A5 with IX 0x1374. They are read by ld/ldir at 0xF9AF6A/72/7E, 0xF9B1DA/E2/ED and 0xF9B2F0. 0xF9B6B5-0xF9B6EA is a second copy (op-02 IX 0x1734) with no reference in any image. All of it is framed as instructions (`jp 0x000000`, `halt`) and should be .byte data.\n(2) After the 0x0E fill, 0xF9C000 and 0xF9C017 are two unlabelled register-saving veneers (T_F415B4, T_DrawValueGlyph_24x24). 0xF9C03C is an unlabelled module head (`jp sub_F9C054` + five ret/nop slots) that nothing names; the worklist attributes it to LCD_ShowLayers1And2_SaveRegs.\n(3) sub_F9C0E9 is a single `ret`. 0xF9C0EA onward is an unlabelled routine, entry [0] of HandlerTable23_FA1690 (RE-MAP EDIT).\n(4) sub_F9A4A8 and sub_F9AD8C are mid-routine labels with no reference.\n(5) ScreenButtonHandlers_MidiTotalMode[15] is a raw `.long 0x00f9a327`. It is an unlabelled EXIT arm (push H; calr MidiSubmenu_ExitToMidiMenu) and should become ExitKey_MidiTotalMode.\n\nSCREEN-OBJECT SLOTS. Screen objects have a 4th slot (+0x0C) that no reader calls: the five vtable readers use only +0/+4/+8. Every +0x0C slot in this slice is a bare ret. View-A (mode) objects are only called at +0/+4.\n\nOTHER LEADS.\n- Data labels: JumpTable_F99F96 -> ScreenButtonHandlers_MidiMenu; JumpTable_F9A3C7 / JumpTable_F9AB84 are the TotalMode / I/O-filter value-case tables.\n- Screen 0xB2 (object 0xF41868, Enter sub_FBC56B -> sub_FBF2DE) is the MIDI \"CONFIGURE\" screen (row-1 right caption).\n- Screen 0xAB (object 0xF41604: sub_F99021/sub_F9904C/sub_F9904D) is entered by GM YES with (0x2880)=0x23, a value sub_F99021 tests.\n- sub_F99818 is the MIDI module's init: sub_F99820 (ret) + MidiOutProgramChange_ResetState.\n- T_F40794 = sub_FAA742 reloads the internal tempo timer from (0x7EE2), clamped 40..300, only when CLOCK = INTERNAL.\n- Mode 0x0A's object T_F41910 (sub_F9FED1/sub_F9FEE2) has the same Enter/Leave shape as PanelMode_Midi*.\n- The PROG CHANGE MODE stepper caps at 1, but DLTable_NormalTechRemap has REMAP at index 2, so REMAP must be set elsewhere.\n\nSCRATCH (rebuildable pack): /home/fsanches/compartilhado/disasm-lanes/wsa1-naming-r1/scratch/prom_a-s05/{names.txt,pack.py,pack.json,final.json}. Name uniqueness was checked token-wise over all of wsa1/ (0 collisions). Nothing in the repo was edited.",
+ "verified": false
+}

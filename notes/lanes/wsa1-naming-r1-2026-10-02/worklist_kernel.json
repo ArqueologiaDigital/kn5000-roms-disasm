@@ -1,0 +1,234 @@
+[
+ {
+  "name": "sub_F85B0D",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 12,
+  "callers": [],
+  "callees": [
+   "MsgQueue_Send__common"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85B1F",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 9,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85BD4",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 41,
+  "callers": [],
+  "callees": [
+   "MsgQueue_Send_NoDispatch__no_node",
+   "MsgQueue_Send_NoDispatch__wake"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "KERNEL_FREE_LIST",
+   "KERNEL_MSGQ_HEADS",
+   "KERNEL_MSGQ_WAITQ",
+   "MDD",
+   "MWD",
+   "r0",
+   "r3",
+   "r4",
+   "r5",
+   "r7"
+  ],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85C44",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 30,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "KERNEL_READY_HEADS",
+   "MDD",
+   "MWD",
+   "r0",
+   "r3",
+   "r4",
+   "r5"
+  ],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85D1C",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 35,
+  "callers": [],
+  "callees": [
+   "MsgQueue_Receive_NoBlock__empty",
+   "MsgQueue_Receive_NoBlock__ret"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "KERNEL_FREE_LIST",
+   "KERNEL_MSGQ_HEADS",
+   "MDD",
+   "MWD",
+   "r0",
+   "r3",
+   "r4",
+   "r5"
+  ],
+  "mem_refs": [
+   "0xffffffff"
+  ],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85D78",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 20,
+  "callers": [],
+  "callees": [
+   "Kernel_Dispatch"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "KERNEL_TIMERS",
+   "MBD",
+   "MDD",
+   "r0",
+   "r1",
+   "r4",
+   "r5"
+  ],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85DA2",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 2,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85DA8",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 37,
+  "callers": [],
+  "callees": [
+   "Kernel_Dispatch",
+   "Kernel_SetTaskLevel__store_only"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "KERNEL_READY_HEADS",
+   "KERNEL_TCB_BASE",
+   "MDD",
+   "MWD",
+   "r0",
+   "r3",
+   "r4",
+   "r5"
+  ],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85E02",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 34,
+  "callers": [],
+  "callees": [
+   "Kernel_SetTaskLevel_NoDispatch__store_only"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "KERNEL_READY_HEADS",
+   "KERNEL_TCB_BASE",
+   "MDD",
+   "MWD",
+   "r0",
+   "r3",
+   "r4",
+   "r5"
+  ],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85E5B",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 1,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_F85E5E",
+  "file": "wsa1/kernel/kernel.s",
+  "addr": "",
+  "lines": 22,
+  "callers": [],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "KERNEL_TCB_BASE",
+   "MDD",
+   "MWD",
+   "r0",
+   "r3",
+   "r4"
+  ],
+  "mem_refs": [],
+  "header": "",
+  "ready": true,
+  "slice": 0
+ }
+]

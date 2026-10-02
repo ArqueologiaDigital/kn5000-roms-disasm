@@ -1,0 +1,567 @@
+[
+ {
+  "name": "sub_FAC026",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC026",
+  "lines": 45,
+  "callers": [
+   "sub_FACA40",
+   "sub_FACAB7"
+  ],
+  "callees": [
+   "ChanRec_ClearHoldAndRelease",
+   "Dev10C_WriteReg_c",
+   "Voice_Retire_Mode20"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x000100",
+   "0x007f00",
+   "0x008000"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC026 -- 0xFAC026..0xFAC08C (103 bytes)\n;\n; Called from: no site outside this module.\n;          2 site(s) inside this module:\n;          0xFACA7E 0xFACB05\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFA6EA5 = ChanRec_ClearHoldAndRelease, 0xFB3D26 = Voice_Retire_Mode20\n;          0xFB732C = Dev10C_WriteReg_c\n; Voice record: touches voice_record[+0x00(r), +0x29(r), +0x2B(rw)] -- pointer through its (XIZ+0x08) argument.  Field map above VoiceR",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC08D",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC08D",
+  "lines": 214,
+  "callers": [
+   "sub_FACAB7"
+  ],
+  "callees": [
+   "ChanRec_ClearHoldAndRelease",
+   "Dev10C_SetChanReg_0180_FromArg",
+   "Voice_Retire_Mode20",
+   "Voice_StageLevel_Reg0080_AB",
+   "sub_FB7521",
+   "sub_FB762F"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "i3"
+  ],
+  "mem_refs": [
+   "0x000800",
+   "0x000840",
+   "0x001000",
+   "0x002000",
+   "0x004000",
+   "0x007000",
+   "0x00d75e",
+   "0x00ff00",
+   "0x00ff80",
+   "0x10c000"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC08D -- 0xFAC08D..0xFAC2AD (545 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFACB16\n; Inputs:  frame `link XIZ,-8`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFA6EA5 = ChanRec_ClearHoldAndRelease, 0xFAB79D = Voice_StageLevel_Reg0080_AB\n;          0xFB3D26 = Voice_Retire_Mode20, 0xFB7502 = Dev10C_SetChanReg_0180_FromArg\n;          0xFB7521 = sub_FB7521, 0xFB762F = sub_FB762F\n; Voice record: touches voice_reco",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC2AE",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC2AE",
+  "lines": 40,
+  "callers": [
+   "sub_FAC34D"
+  ],
+  "callees": [],
+  "referenced_by": [],
+  "data_refs": [
+   "Voice_OutputLevel_Table",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00151d",
+   "0x00151f",
+   "0x001521",
+   "0x00d75e"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC2AE -- 0xFAC2AE..0xFAC34C (159 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFAC3F4\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: no absolute-addressed write.\n;          reads 0x00151D, 0x00151F, 0x001521\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC2AE-0xFAC34C\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_fragment.py before insertion).  Every field above\n;    ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC34D",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC34D",
+  "lines": 85,
+  "callers": [
+   "sub_FACAB7"
+  ],
+  "callees": [
+   "Dev104_LoadStageBImage",
+   "Dev104_WriteAllChanRegs",
+   "Dev104_WriteChanReg0",
+   "Dev10C_WriteAllChanRegs",
+   "Dev10C_WriteReg_c",
+   "Pack104_StageReg_0000_ForVoice",
+   "VoiceRecords_InitFromAlloc",
+   "sub_FAC2AE"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x000800",
+   "0x000840",
+   "0x0014fe",
+   "0x003bcf",
+   "0x00d75e",
+   "0x00d7a2",
+   "0x10c000"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC34D -- 0xFAC34D..0xFAC42B (223 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFACABE\n; Inputs:  frame `link XIZ,-20`; no positive frame slot is read\n; Outputs: no absolute-addressed write.\n; Calls:   0xFAC2AE = sub_FAC2AE, 0xFB3FA0 = VoiceRecords_InitFromAlloc\n;          0xFB713A = Dev10C_WriteAllChanRegs, 0xFB732C = Dev10C_WriteReg_c\n;          0xFB77EF = Dev104_WriteAllChanRegs, 0xFB7A58 = Dev104_WriteChanReg0\n;          0xFC571A = Dev104_LoadStage",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC42C",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC42C",
+  "lines": 90,
+  "callers": [
+   "sub_FAC7EF",
+   "sub_FAC888",
+   "sub_FAC90E",
+   "sub_FAC9A6"
+  ],
+  "callees": [
+   "Dev10C_Slot2_WriteGateAndValue",
+   "Multiply32",
+   "PartRec_StageChanFreqWord_0065",
+   "PartRec_StageChanFreqWord_0067",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Voice_PitchDepth_Scale"
+  ],
+  "mem_refs": [
+   "0x00012c",
+   "0x001523",
+   "0x00d75e",
+   "0x00d79a",
+   "0x00d79e"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC42C -- 0xFAC42C..0xFAC525 (250 bytes)\n;\n; Called from: no site outside this module.\n;          4 site(s) inside this module:\n;          0xFAC831 0xFAC8C8 0xFAC960 0xFAC9FA\n; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: writes 0x00D79A, 0x00D79E\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB582A = PartRec_StageChanFreqWord_0065\n;          0xFB59D2 = PartRec_StageChanFreqWord_0067, 0xFB7C27 = Dev10C_Slot2_WriteGateAndValue\n;          0xFCB11B = Multiply32\n; Eviden",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC526",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC526",
+  "lines": 40,
+  "callers": [
+   "sub_FAC7EF"
+  ],
+  "callees": [
+   "Dev10C_Slot2_WriteGateAndValue",
+   "PartRec_StageChanFreqWord_0065",
+   "PartRec_StageChanFreqWord_0067",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00d75e",
+   "0x00d79a",
+   "0x00d79e"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC526 -- 0xFAC526..0xFAC58E (105 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFAC80D\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: writes 0x00D79A, 0x00D79E\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB582A = PartRec_StageChanFreqWord_0065\n;          0xFB59D2 = PartRec_StageChanFreqWord_0067, 0xFB7C27 = Dev10C_Slot2_WriteGateAndValue\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC526-0xFAC5",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC58F",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC58F",
+  "lines": 90,
+  "callers": [
+   "sub_FAC7EF",
+   "sub_FAC888",
+   "sub_FAC90E",
+   "sub_FAC9A6"
+  ],
+  "callees": [
+   "Dev10C_Slot3_WriteGateAndValue",
+   "Multiply32",
+   "PartRec_StageChanFreqWord_0065",
+   "PartRec_StageChanFreqWord_0067",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Voice_FilterDepth_Scale"
+  ],
+  "mem_refs": [
+   "0x00012c",
+   "0x001523",
+   "0x00d75e",
+   "0x00d79c",
+   "0x00d7a0"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC58F -- 0xFAC58F..0xFAC688 (250 bytes)\n;\n; Called from: no site outside this module.\n;          4 site(s) inside this module:\n;          0xFAC86F 0xFAC8F7 0xFAC988 0xFACA22\n; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: writes 0x00D79C, 0x00D7A0\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB582A = PartRec_StageChanFreqWord_0065\n;          0xFB59D2 = PartRec_StageChanFreqWord_0067, 0xFB7D1D = Dev10C_Slot3_WriteGateAndValue\n;          0xFCB11B = Multiply32\n; Eviden",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC689",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC689",
+  "lines": 40,
+  "callers": [
+   "sub_FAC7EF"
+  ],
+  "callees": [
+   "Dev10C_Slot3_WriteGateAndValue",
+   "PartRec_StageChanFreqWord_0065",
+   "PartRec_StageChanFreqWord_0067",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00d75e",
+   "0x00d79c",
+   "0x00d7a0"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC689 -- 0xFAC689..0xFAC6F1 (105 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFAC840\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: writes 0x00D79C, 0x00D7A0\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB582A = PartRec_StageChanFreqWord_0065\n;          0xFB59D2 = PartRec_StageChanFreqWord_0067, 0xFB7D1D = Dev10C_Slot3_WriteGateAndValue\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC689-0xFAC6",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC6F2",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC6F2",
+  "lines": 62,
+  "callers": [
+   "sub_FAC7EF",
+   "sub_FAC888",
+   "sub_FAC90E",
+   "sub_FAC9A6"
+  ],
+  "callees": [
+   "Dev10C_Slot1_StrobeGate",
+   "Multiply32",
+   "PartRec_StageChanFreqWord_006F",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00012c",
+   "0x001523",
+   "0x00d75e",
+   "0x00d798"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC6F2 -- 0xFAC6F2..0xFAC79B (170 bytes)\n;\n; Called from: no site outside this module.\n;          4 site(s) inside this module:\n;          0xFAC87D 0xFAC903 0xFAC999 0xFACA33\n; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: writes 0x00D798\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB5C77 = PartRec_StageChanFreqWord_006F\n;          0xFB7E9D = Dev10C_Slot1_StrobeGate, 0xFCB11B = Multiply32\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC6F2-0xF",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC79C",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC79C",
+  "lines": 33,
+  "callers": [
+   "sub_FAC7EF"
+  ],
+  "callees": [
+   "Dev10C_Slot1_StrobeGate",
+   "PartRec_StageChanFreqWord_006F",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00d75e",
+   "0x00d798"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC79C -- 0xFAC79C..0xFAC7EE (83 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFAC844\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: writes 0x00D798\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB5C77 = PartRec_StageChanFreqWord_006F\n;          0xFB7E9D = Dev10C_Slot1_StrobeGate\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC79C-0xFAC7EE\n;          (notes/gen_prom_c_block.py, cleared by\n;       ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC7EF",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC7EF",
+  "lines": 68,
+  "callers": [
+   "sub_FACAB7"
+  ],
+  "callees": [
+   "sub_FAC42C",
+   "sub_FAC526",
+   "sub_FAC58F",
+   "sub_FAC689",
+   "sub_FAC6F2",
+   "sub_FAC79C"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Voice_ToneRampFilter_Curve",
+   "Voice_ToneRampPitch_Curve"
+  ],
+  "mem_refs": [],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC7EF -- 0xFAC7EF..0xFAC887 (153 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFACBDC\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFAC42C = sub_FAC42C, 0xFAC526 = sub_FAC526\n;          0xFAC58F = sub_FAC58F, 0xFAC689 = sub_FAC689\n;          0xFAC6F2 = sub_FAC6F2, 0xFAC79C = sub_FAC79C\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC7EF-0xFAC887\n; ",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC888",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC888",
+  "lines": 61,
+  "callers": [
+   "sub_FACAB7"
+  ],
+  "callees": [
+   "sub_FAC42C",
+   "sub_FAC58F",
+   "sub_FAC6F2"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Voice_ToneRampFilter_Curve",
+   "i3"
+  ],
+  "mem_refs": [],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC888 -- 0xFAC888..0xFAC90D (134 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFACC04\n; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFAC42C = sub_FAC42C, 0xFAC58F = sub_FAC58F\n;          0xFAC6F2 = sub_FAC6F2\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC888-0xFAC90D\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC90E",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC90E",
+  "lines": 64,
+  "callers": [
+   "sub_FACAB7"
+  ],
+  "callees": [
+   "sub_FAC42C",
+   "sub_FAC58F",
+   "sub_FAC6F2"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Voice_ToneRampFilter_Curve",
+   "Voice_ToneRampPitch_Curve",
+   "opc"
+  ],
+  "mem_refs": [],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC90E -- 0xFAC90E..0xFAC9A5 (152 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFACC14\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFAC42C = sub_FAC42C, 0xFAC58F = sub_FAC58F\n;          0xFAC6F2 = sub_FAC6F2\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC90E-0xFAC9A5\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify_",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FAC9A6",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FAC9A6",
+  "lines": 64,
+  "callers": [
+   "sub_FACAB7"
+  ],
+  "callees": [
+   "sub_FAC42C",
+   "sub_FAC58F",
+   "sub_FAC6F2"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "Voice_ToneRampFilter_Curve",
+   "Voice_ToneRampPitch_Curve",
+   "opc"
+  ],
+  "mem_refs": [],
+  "header": "; --------------------------------------------------------------------------\n; sub_FAC9A6 -- 0xFAC9A6..0xFACA3F (154 bytes)\n;\n; Called from: no site outside this module.\n;          1 site(s) inside this module:\n;          0xFACBEC\n; Inputs:  frame `link XIZ,-4`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: no absolute-addressed write.\n; Calls:   0xFAC42C = sub_FAC42C, 0xFAC58F = sub_FAC58F\n;          0xFAC6F2 = sub_FAC6F2\n; Evidence: the listing below is the byte-identical round-trip of 0xFAC9A6-0xFACA3F\n;          (notes/gen_prom_c_block.py, cleared by\n;          notes/prom_c_verify",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FACA40",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FACA40",
+  "lines": 54,
+  "callers": [],
+  "callees": [
+   "ChanRec_ClearHoldAndRelease",
+   "VoiceQuery_Tag00_All",
+   "Voice_RecomputeAllThreeBaseCurves",
+   "Voice_Retire_Mode20",
+   "sub_FAC026",
+   "sub_FB6F2C"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "opc"
+  ],
+  "mem_refs": [
+   "0x003bcf",
+   "0x008000",
+   "0x008080"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FACA40 -- 0xFACA40..0xFACAB6 (119 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFB05F7 in Toggle14FE_AndDispatch\n; Inputs:  no frame and no argument slot read.\n; Outputs: no absolute-addressed write.\n; Calls:   0xFA6EA5 = ChanRec_ClearHoldAndRelease, 0xFABE30 = Voice_RecomputeAllThreeBaseCurves\n;          0xFAC026 = sub_FAC026, 0xFB3D09 = VoiceQuery_Tag00_All\n;          0xFB3D26 = Voice_Retire_Mode20, 0xFB6F2C = sub_FB6F2C\n; Voice record: touches voice_record[+0x00(r), +0x23(r), +0x2B(rw)] ",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FACAB7",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FACAB7",
+  "lines": 162,
+  "callers": [],
+  "callees": [
+   "ChanRec_ClearHoldAndRelease",
+   "Dev104_SetChanRegs_00C0_0100",
+   "Dev104_SetChanRegs_00C0_0100_0240",
+   "Pack104_TickPositionMovement_ForVoice",
+   "VoiceQuery_Tag00_All",
+   "Voice_Retire_Mode20",
+   "sub_FAC026",
+   "sub_FAC08D",
+   "sub_FAC34D",
+   "sub_FAC7EF",
+   "sub_FAC888",
+   "sub_FAC90E",
+   "sub_FAC9A6"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "i3",
+   "opc"
+  ],
+  "mem_refs": [
+   "0x00012c",
+   "0x001523",
+   "0x002000",
+   "0x003bcf",
+   "0x008000",
+   "0x008080",
+   "0x00d7a2"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FACAB7 -- 0xFACAB7..0xFACC3E (392 bytes)\n;\n; Called from: 1 site(s) outside this module:\n;          0xFB0601 in Toggle14FE_AndDispatch__FB05FD\n; Inputs:  frame `link XIZ,-4`; no positive frame slot is read\n; Outputs: no absolute-addressed write.\n; Calls:   0xFA6EA5 = ChanRec_ClearHoldAndRelease, 0xFAC026 = sub_FAC026\n;          0xFAC08D = sub_FAC08D, 0xFAC34D = sub_FAC34D\n;          0xFAC7EF = sub_FAC7EF, 0xFAC888 = sub_FAC888\n;          0xFAC90E = sub_FAC90E, 0xFAC9A6 = sub_FAC9A6\n;          0xFB3D09 = VoiceQue",
+  "ready": false,
+  "slice": 0
+ },
+ {
+  "name": "sub_FACC75",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FACC75",
+  "lines": 64,
+  "callers": [],
+  "callees": [
+   "Dev10C_SetChanReg_0600_b",
+   "Dev10C_SetChanReg_0640",
+   "PartRec_StageChanFreqWord_0065",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00d75e",
+   "0x00d79e",
+   "0x00d7a0"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FACC75 -- 0xFACC75..0xFACD1A (166 bytes)\n;\n; Called from: 7 site(s) outside this module:\n;          0xFBB4EA in sub_FBB4BF__FBB4E2, 0xFBB4F7 in sub_FBB4BF__FBB4E2\n;          0xFBB507 in sub_FBB4BF__FBB4FF, 0xFBB53C in sub_FBB4BF__FBB51A\n;          0xFBB670 in sub_FBB645__FBB668, 0xFBB6A7 in sub_FBB645__FBB685\n;          0xFBB6B6 in sub_FBB645__FBB6AE\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: writes 0x00D79E, 0x00D7A0\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0x",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FACD1B",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FACD1B",
+  "lines": 64,
+  "callers": [],
+  "callees": [
+   "Dev10C_Slot2_StrobeGate",
+   "Dev10C_Slot3_StrobeGate",
+   "PartRec_StageChanFreqWord_0067",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00d75e",
+   "0x00d79a",
+   "0x00d79c"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FACD1B -- 0xFACD1B..0xFACDC0 (166 bytes)\n;\n; Called from: 6 site(s) outside this module:\n;          0xFBB5A8 in sub_FBB57C__FBB5A0, 0xFBB5B5 in sub_FBB57C__FBB5A0\n;          0xFBB5C5 in sub_FBB57C__FBB5BD, 0xFBB5FB in sub_FBB57C__FBB5D9\n;          0xFBB723 in sub_FBB6F8__FBB71B, 0xFBB74C in sub_FBB6F8__FBB72A\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08), (XIZ+0x0A)\n; Outputs: writes 0x00D79A, 0x00D79C\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB59D2 = PartRec_StageChanFreqWord_0067\n; ",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FACDC1",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FACDC1",
+  "lines": 33,
+  "callers": [],
+  "callees": [
+   "Dev10C_SetChanReg_01C0_b",
+   "PartRec_StageChanFreqWord_006D",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [],
+  "mem_refs": [
+   "0x00d75e",
+   "0x00d796"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FACDC1 -- 0xFACDC1..0xFACE13 (83 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFBB513 in sub_FBB4BF__FBB50E, 0xFBB67D in sub_FBB645__FBB678\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: writes 0x00D796\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB5BAA = PartRec_StageChanFreqWord_006D\n;          0xFB7E7B = Dev10C_SetChanReg_01C0_b\n; Evidence: the listing below is the byte-identical round-trip of 0xFACDC1-0xFACE13\n;          (notes/gen_prom_c_block.py, cle",
+  "ready": true,
+  "slice": 0
+ },
+ {
+  "name": "sub_FACE14",
+  "file": "wsa1/prom_c/wsa1_prom_c.s",
+  "addr": "FACE14",
+  "lines": 33,
+  "callers": [],
+  "callees": [
+   "Dev10C_Slot1_StrobeGate",
+   "PartRec_StageChanFreqWord_006F",
+   "VoiceSlots_ListSlotsOfPart"
+  ],
+  "referenced_by": [],
+  "data_refs": [
+   "boot",
+   "data_tables",
+   "dev10c_dev104_drivers.s",
+   "dev10c_reg_writers.s",
+   "devices",
+   "eeprom.s",
+   "field_accessors.s",
+   "flash.s",
+   "mathlib",
+   "mathlib.s",
+   "midi",
+   "midi_controllers.s",
+   "note_engine.s",
+   "p7",
+   "p7_stream_pool.s",
+   "prom_c",
+   "reset_and_vectors.s",
+   "storage",
+   "tail_data_zone.s",
+   "tone_db",
+   "tone_db_module.s",
+   "touch_eq_mixer.s",
+   "voice",
+   "voice_dsp_tables.s"
+  ],
+  "mem_refs": [
+   "0x00d75e",
+   "0x00d798"
+  ],
+  "header": "; --------------------------------------------------------------------------\n; sub_FACE14 -- 0xFACE14..0xFACE66 (83 bytes)\n;\n; Called from: 2 site(s) outside this module:\n;          0xFBB5D2 in sub_FBB57C__FBB5CD, 0xFBB605 in sub_FBB57C__FBB5D9\n; Inputs:  frame `link XIZ,0`; argument slots read: (XIZ+0x08)\n; Outputs: writes 0x00D798\n; Calls:   0xFA6110 = VoiceSlots_ListSlotsOfPart, 0xFB5C77 = PartRec_StageChanFreqWord_006F\n;          0xFB7E9D = Dev10C_Slot1_StrobeGate\n; Evidence: the listing below is the byte-identical round-trip of 0xFACE14-0xFACE66\n;          (notes/gen_prom_c_block.py, clea",
+  "ready": true,
+  "slice": 0
+ }
+]

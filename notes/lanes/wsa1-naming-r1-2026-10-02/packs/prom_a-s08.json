@@ -1,0 +1,1258 @@
+{
+ "name": "wsa1-naming-r1-prom_a-s08",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "renames": [
+  {
+   "old": "sub_FAB9FD",
+   "new": "List2030_PartVolume_Apply",
+   "evidence": "JumpTable_FAB8B4[3] (class 3, via calr at 0xFAB8E9); MidiOut_ParamClassTable[3] on the same class byte = MidiOut_CC07_Volume; body pushw 0x7f / sub_FAB337 / Queue2C00_AppendStagedIfPending"
+  },
+  {
+   "old": "sub_FABAB0",
+   "new": "List2030_PartEffect3Depth_Apply",
+   "evidence": "JumpTable_FAB8B4[5]; MidiOut_ParamClassTable[5] = MidiOut_CC5D_Effect3Depth; mask 0x7F write+queue"
+  },
+  {
+   "old": "sub_FABABB",
+   "new": "List2030_PartEffect4Depth_Apply",
+   "evidence": "JumpTable_FAB8B4[6]; MidiOut_ParamClassTable[6] = MidiOut_CC5E_Effect4Depth; mask 0x7F write+queue"
+  },
+  {
+   "old": "sub_FABAC6",
+   "new": "List2030_PartEffect1Depth_Apply",
+   "evidence": "JumpTable_FAB8B4[7]; MidiOut_ParamClassTable[7] = MidiOut_CC5B_Effect1Depth; mask 0x7F write+queue"
+  },
+  {
+   "old": "sub_FABAD1",
+   "new": "List2030_PartPan_Apply",
+   "evidence": "JumpTable_FAB8B4[8]; MidiOut_ParamClassTable[8] = MidiOut_CC0A_Pan; mask 0x7F write+queue"
+  },
+  {
+   "old": "sub_FABADC",
+   "new": "List2030_PartCoarseTune_Apply",
+   "evidence": "JumpTable_FAB8B4[9]; MidiOut_ParamClassTable[9] = MidiOut_Rpn02_CoarseTune; mask 0x7F write+queue"
+  },
+  {
+   "old": "sub_FABAE7",
+   "new": "List2030_PartFineTune_Apply",
+   "evidence": "JumpTable_FAB8B4[10]; MidiOut_ParamClassTable[10] = MidiOut_Rpn01_FineTune; the ONLY sibling pushing mask 0xFF, matching MidiOut_Rpn01_FineTune's `and A,0xff` and KeyValueList_A's {part,0x0A} mask 0xFF"
+  },
+  {
+   "old": "sub_FABAF2",
+   "new": "List2030_PartBendRange_Apply",
+   "evidence": "JumpTable_FAB8B4[11]; MidiOut_ParamClassTable[11] = MidiOut_Rpn00_PitchBendRange; mask 0x7F write+queue"
+  },
+  {
+   "old": "sub_FABAFD",
+   "new": "List2030_Part20to3F_Dispatch",
+   "evidence": "Dispatch_By_60F080[32..63]; cp BC,0x18/0x19/0x1A at 0xFABB07-0xFABB13, the same three classes Evt2030_Class20to3F accepts"
+  },
+  {
+   "old": "sub_FABB29",
+   "new": "List2030_Field18_SetAllParts",
+   "evidence": "loop H=0x20..0x3F at 0xFABB2A-0xFABB43 storing (0x60F080)=H then sub_FAB337(mask 1) + Queue2C00_AppendStagedIfPending for every second-half record"
+  },
+  {
+   "old": "sub_FABB47",
+   "new": "List2030_PartField19_Apply",
+   "evidence": "class 0x19 arm of List2030_Part20to3F_Dispatch (0xFABB0D); pushw 0x3f / sub_FAB337 / append; KeyValueList key {0x20+i,0x19} mask 0x3F"
+  },
+  {
+   "old": "sub_FABB52",
+   "new": "List2030_PartField1A_Apply",
+   "evidence": "class 0x1A arm of List2030_Part20to3F_Dispatch (0xFABB13); pushw 0x3f / sub_FAB337 / append; KeyValueList key {0x20+i,0x1A} mask 0x3F"
+  },
+  {
+   "old": "sub_FABB5D",
+   "new": "List2030_Param44to46_Ignore",
+   "evidence": "Dispatch_By_60F080[68..70] (0xFAC9FA..0xFACA02); body `ret`"
+  },
+  {
+   "old": "sub_FABB60",
+   "new": "List2030_Param48_Ignore",
+   "evidence": "Dispatch_By_60F080[72] (0xFACA0A); body `ret`"
+  },
+  {
+   "old": "sub_FABB61",
+   "new": "List2030_Tempo_Dispatch",
+   "evidence": "Dispatch_By_60F080[122=0x7A]; class 0 -> List2030_Tempo_Apply; record 0x7EE2 is the 9-bit value sub_FAA742 clamps to 40..300 (default 120) and loads into TREG5"
+  },
+  {
+   "old": "sub_FABB75",
+   "new": "List2030_Tempo_Apply",
+   "evidence": "lda XIX,0x7ee2 at 0xFABB76, compare/store of both bytes, stages {0x7A,0,..,0xFF},{0x7A,1,..,0x01}, call sub_FAA742 (tempo -> `st_dd8w DE,0x32` = TREG5L) at 0xFABBC9"
+  },
+  {
+   "old": "sub_FABBCF",
+   "new": "List2030_Param90_Ignore",
+   "evidence": "Dispatch_By_60F080[144] (0xFACB2A); body `ret`"
+  },
+  {
+   "old": "sub_FABBD0",
+   "new": "List2030_Param91_Ignore",
+   "evidence": "Dispatch_By_60F080[145] (0xFACB2E); body `ret`"
+  },
+  {
+   "old": "sub_FABBD2",
+   "new": "List2030_Param60_Ignore",
+   "evidence": "Dispatch_By_60F080[96] (0xFACA6A); body `ret`"
+  },
+  {
+   "old": "sub_FABBD4",
+   "new": "List2030_Param70_Ignore",
+   "evidence": "Dispatch_By_60F080[112] (0xFACAAA); body `ret`"
+  },
+  {
+   "old": "sub_FABBD5",
+   "new": "List2030_Param72_Ignore",
+   "evidence": "Dispatch_By_60F080[114] (0xFACAB2); body `ret`"
+  },
+  {
+   "old": "sub_FABBD7",
+   "new": "List2030_Param98_Dispatch",
+   "evidence": "Dispatch_By_60F080[152=0x98]; class 1 (cp bc,1 at 0xFABBE1) -> List2030_Param98_ApplyProgram; record 0x7F02"
+  },
+  {
+   "old": "sub_FABBEB",
+   "new": "List2030_Param98_ApplyProgram",
+   "evidence": "structural twin of the class-0 (program, MidiOut_ParamClassTable[0]=MidiOut_ProgramChange) part handler sub_FAB915: same bit-4-of-(0x60F021) two-pass stash, writes record 0x7F02 fields +1,+2,+6..+8, queues {0x98,2,..,0x3F},{0x98,1,..,0x7F}; Evt2030 side of class 1 of 0x98 is gated on SINGLE CH PROG CHANGE=COMBI"
+  },
+  {
+   "old": "sub_FABCD7",
+   "new": "List2030_ParamA8_PassThrough",
+   "evidence": "Dispatch_By_60F080[168]; copies (0x60F089)/(0x60F08A) into the staged value/mask and appends, no record write (RecordPtrs[0xA8] empty)"
+  },
+  {
+   "old": "sub_FABCEF",
+   "new": "List2030_ParamB0_Dispatch",
+   "evidence": "Dispatch_By_60F080[176=0xB0]; class 0 -> List2030_ParamB0_Apply"
+  },
+  {
+   "old": "sub_FABD00",
+   "new": "List2030_ParamB0_Apply",
+   "evidence": "(0x24F1)=(0x24F3)|0x80, sub_FAB5EB, stage {0xB0,0,value,mask} at 0x60F177 and ParamChange_Notify via sub_FAA7C4 (0xFABD00-0xFABD2E)"
+  },
+  {
+   "old": "sub_FABEB4",
+   "new": "Queue2E00_FanOutToPartMask",
+   "evidence": "Queue2C00_FanOutToPartMask loop shape; per set bit H calls T_F41B18 (-> sub_F8BC08 -> sub_F8BF07 -> T_Queue2E00_AppendRegs with E/D/A/W = number/H/value/mask)"
+  },
+  {
+   "old": "sub_FABFE2",
+   "new": "ParamMsg_RefreshPartMasks",
+   "evidence": "set bit0 (0x60F0C6) / ParamMsg_ComputePartMasks / clear / call T_F40760 (sub_FA7E0C, MidiOut resend + MidiIn_RebuildPartLists)"
+  },
+  {
+   "old": "sub_FABFFF",
+   "new": "ParamMsg_ResendTwoAssignedCtrls",
+   "evidence": "record template from Gap_FAC8E6 (`ld XBC,(0xFAC8E6)` at 0xFAC007); number = ParamMsg_NumberForController((0x7F27)/(0x7F28)), value = (0x2503)/(0x2504)&0x7F, MidiIn_ControlRecord_Dispatch at 0xFAC024/0xFAC03C"
+  },
+  {
+   "old": "sub_FAC0FA",
+   "new": "ParamMsg_ComputePartMasks",
+   "evidence": "saves the 11 masks 0x60F280..0x60F2A8 to 0x60F2AC.., zeroes them, ORs BitMask32_Table[part] per receive bit of each part's second-half record (+0x0B..+0x0E) for parts in (0x4C06)"
+  },
+  {
+   "old": "sub_FAC28B",
+   "new": "ParamMsg_NumberForController",
+   "evidence": "compare chain 0xFAC294-0xFAC2CA: CC1->B2, 2->BC, 4->BD, 0x0B->B3, 0x10..0x13->B8..BB, 0x40->B5, 0x81->B4, 0x82->B1, else 0xFF -- matches the ParamMsg_Bn names"
+  },
+  {
+   "old": "sub_FAC303",
+   "new": "Ctrl_CookedCellForNumber",
+   "evidence": "sub BC,0xb1 / cp BC,0x0c -> JumpTable_FAC326; every arm loads XIY with one of the ten cooked cells of Ctrl_Normalise's RAM bank (default 0x24F5)"
+  },
+  {
+   "old": "sub_FAC35A",
+   "new": "Ctrl_CookedCellFor_B1",
+   "evidence": "JumpTable_FAC326[0]; lda XIY,0x24f4 (cooked slot 3.1)"
+  },
+  {
+   "old": "sub_FAC360",
+   "new": "Ctrl_CookedCellFor_BC",
+   "evidence": "JumpTable_FAC326[11]; lda XIY,0x24f6 (cooked slot 3.2)"
+  },
+  {
+   "old": "sub_FAC366",
+   "new": "Ctrl_CookedCellFor_BD",
+   "evidence": "JumpTable_FAC326[12]; lda XIY,0x24f2 (cooked slot 0.3)"
+  },
+  {
+   "old": "sub_FAC36C",
+   "new": "Ctrl_CookedCellFor_B8",
+   "evidence": "JumpTable_FAC326[7]; lda XIY,0x2503 (cooked slot 0.4)"
+  },
+  {
+   "old": "sub_FAC372",
+   "new": "Ctrl_CookedCellFor_B9",
+   "evidence": "JumpTable_FAC326[8]; lda XIY,0x2504 (cooked slot 0.5)"
+  },
+  {
+   "old": "sub_FAC378",
+   "new": "Ctrl_CookedCellFor_BA",
+   "evidence": "JumpTable_FAC326[9]; lda XIY,0x2505 (cooked slot 0.0)"
+  },
+  {
+   "old": "sub_FAC37E",
+   "new": "Ctrl_CookedCellFor_BB",
+   "evidence": "JumpTable_FAC326[10]; lda XIY,0x2506 (cooked slot 0.1)"
+  },
+  {
+   "old": "sub_FAC384",
+   "new": "Ctrl_CookedCellFor_B4",
+   "evidence": "JumpTable_FAC326[3]; lda XIY,0x24ff (cooked slot 0.2)"
+  },
+  {
+   "old": "sub_FAC3F3",
+   "new": "ParamMsg_ResyncParts_B1_PitchBend",
+   "evidence": "JumpTable_FAC3BF[0] (0xB1); cells 0x60F280/0x60F2AC; lost parts get {0x00,0x40} = centre 0x4000, gained parts the cooked value split LSB/MSB, via Queue2E00_FanOutToPartMask"
+  },
+  {
+   "old": "sub_FAC48A",
+   "new": "ParamMsg_ResyncParts_B2_CC01_Modulation",
+   "evidence": "JumpTable_FAC3BF[1]; cells 0x60F284/0x60F2B0 (ParamMsg_B2 cell); reset 0x00"
+  },
+  {
+   "old": "sub_FAC4D6",
+   "new": "ParamMsg_ResyncParts_BC_CC02_Modulation2",
+   "evidence": "JumpTable_FAC3BF[11]; cells 0x60F288/0x60F2B4 (ParamMsg_BC cell); reset 0x40"
+  },
+  {
+   "old": "sub_FAC522",
+   "new": "ParamMsg_ResyncParts_B8_CC10_RTCreatX",
+   "evidence": "JumpTable_FAC3BF[7]; cells 0x60F298/0x60F2C4 (ParamMsg_B8 cell); reset 0x40"
+  },
+  {
+   "old": "sub_FAC56E",
+   "new": "ParamMsg_ResyncParts_B9_CC11_RTCreatY",
+   "evidence": "JumpTable_FAC3BF[8]; cells 0x60F29C/0x60F2C8 (ParamMsg_B9 cell); reset 0x40"
+  },
+  {
+   "old": "sub_FAC5BA",
+   "new": "ParamMsg_ResyncParts_BA_CC12_RTCtrlX",
+   "evidence": "JumpTable_FAC3BF[9]; cells 0x60F2A0/0x60F2CC (ParamMsg_BA cell); reset 0x40"
+  },
+  {
+   "old": "sub_FAC606",
+   "new": "ParamMsg_ResyncParts_BB_CC13_RTCtrlY",
+   "evidence": "JumpTable_FAC3BF[10]; cells 0x60F2A4/0x60F2D0 (ParamMsg_BB cell); reset 0x40"
+  },
+  {
+   "old": "sub_FAC652",
+   "new": "ParamMsg_ResyncParts_B4_ChannelPressure",
+   "evidence": "JumpTable_FAC3BF[3]; cells 0x60F28C/0x60F2B8 (ParamMsg_B4 cell); reset 0x00"
+  },
+  {
+   "old": "sub_FAC69E",
+   "new": "ParamMsg_ResyncParts_BD_CC04_CtrlPedal",
+   "evidence": "JumpTable_FAC3BF[12]; cells 0x60F290/0x60F2BC (ParamMsg_BD cell); reset 0x00"
+  },
+  {
+   "old": "sub_FAC6EA",
+   "new": "ParamMsg_ResyncParts_B5_CC40_Hold",
+   "evidence": "JumpTable_FAC3BF[4]; cells 0x60F294/0x60F2C0 (ParamMsg_B5 cell); reset 0x00"
+  },
+  {
+   "old": "sub_FAC734",
+   "new": "ParamMsg_ResyncParts_B3_CC0B_Expression",
+   "evidence": "JumpTable_FAC3BF[2]; cells 0x60F2A8/0x60F2D4 (ParamMsg_B3 cell); reset 0x7F"
+  },
+  {
+   "old": "sub_FAC786",
+   "new": "ParamMsg_RefreshMasksOnCtrlFieldChange",
+   "evidence": "directory T_F40810 (UiEvent handler lists 0xF881B2..); calls ParamMsg_RefreshPartMasks only when number<=0x1F class 0x0D mask bit5, or number 0x20..0x3F class 0x0B..0x0E -- exactly the bits ParamMsg_ComputePartMasks reads"
+  },
+  {
+   "old": "sub_FAC7C4",
+   "new": "ParamRecord_SetPartsField18Bit0",
+   "evidence": "loop L=0x20..0x3F at 0xFAC7CA-0xFAC808: (ParamNumber_GetRecordPtr(L)+0x18) bit0 := arg bit0, stage {L,0x18,byte,0x01}, append; directory T_F4344C"
+  },
+  {
+   "old": "sub_FAC80F",
+   "new": "Queue2E00_PostParam98Fields",
+   "evidence": "if bit 4 of (0x7F02): T_F41B18 x2 posting {0x98,2,(0x7F04),0x3F} and {0x98,1,(0x7F03),0x7F} to 0x2E00 (0xFAC814-0xFAC83B); directory T_F43454"
+  },
+  {
+   "old": "sub_FAC845",
+   "new": "List2030_Param_Ignore",
+   "evidence": "default of Dispatch_By_60F080 (168 of 256 entries + all 64 __Tail words); body `ret`"
+  },
+  {
+   "old": "sub_FAC8AA",
+   "new": "ParamNumber_GetRecordPtr",
+   "evidence": "ld C,4 / mul BC,(XIZ+8) / add XBC,ParamNumber_RecordPtrs / ld XBC,(XBC) / ld XIY,XBC at 0xFAC8AE-0xFAC8BD; 15 callers test the result against 0xFFFFFFFF"
+  },
+  {
+   "old": "sub_FADBDA",
+   "new": "Evt2030_ProgChgMode3_Notify",
+   "evidence": "arm 3 of 0xFAE30E indexed by (0x7F32)&3 = PROG CHANGE MODE (sub_F9A4B0 -> DL_NormalTechRemap at 0x15F8 right after the 'PROG CHANGE MODE: ' text); maps via T_F41008 and notifies param 0x81 + class 0"
+  },
+  {
+   "old": "sub_FAE31E",
+   "new": "Evt2030_ProgChgNormal_Notify",
+   "evidence": "arm 0 (NORMAL) of 0xFAE30E; notifies {0x81,part,..} (MidiOut_BankSelect_Pair) and {part,0,(+0x3B<<3)|(+0x3C&7),0xFF}; GM drum parts 9/0x19 take the TECH arm"
+  },
+  {
+   "old": "sub_FAE36C",
+   "new": "Evt2030_ProgChgTech_Notify",
+   "evidence": "arm 1 (TECH) of 0xFAE30E; notifies {0x81,part,rec[1]&0x3F split} and {part,0,rec[0]&0x7F,0xFF}"
+  },
+  {
+   "old": "sub_FADE01",
+   "new": "Evt2030_Param98Normal_Notify",
+   "evidence": "arm 0 (NORMAL) of 0xFADDF1 in Evt2030_Class98_Op01; notifies {0x98,2,(0x7F0A) split} and {0x98,1,((0x7F08)<<3)|((0x7F09)&7),0xFF}"
+  },
+  {
+   "old": "sub_FADE2F",
+   "new": "Evt2030_Param98Tech_Notify",
+   "evidence": "arm 1 (TECH) of 0xFADDF1; notifies {0x98,2,(0x7F04)&0x3F split} and {0x98,1,(0x7F03)&0x7F,0xFF}"
+  },
+  {
+   "old": "sub_FADF87",
+   "new": "ParamApply_Param98Normal",
+   "evidence": "arm 0 (NORMAL) of 0xFADF77 (ParamApply_ByModeOfParam80, C==0x98): fills 0x7F08..0x7F0A and 0x60F010..13, T_F41024, write+publish {0x98,2,..,0x3F},{0x98,1,..,0x7F}"
+  },
+  {
+   "old": "sub_FADFD9",
+   "new": "ParamApply_Param98Tech",
+   "evidence": "arm 1 (TECH) of 0xFADF77: write+publish {0x98,2,A,0x3F} and the MIDI-in record (0x1950), T_F41028, copy (0x60F014..16) to (0x7F08..0x7F0A)"
+  },
+  {
+   "old": "sub_FAE05D",
+   "new": "ParamApply_PartProgNormal",
+   "evidence": "arm 0 (NORMAL) of 0xFAE04D (ParamApply_ByModeOfParam80, C!=0x98): program from MIDI-in record 0x1950 split E>>3/E&7 into rec[0]/rec[1] and +0x3B..+0x3D, publishes class 1 and class 0"
+  },
+  {
+   "old": "sub_FAE0FC",
+   "new": "ParamApply_PartProgTech",
+   "evidence": "arm 1 (TECH) of 0xFAE04D: rec[0]=E, rec[1]=(rec[1]&0x80)|D, +0x3B..+0x3D via T_F40790, publishes class 1 and class 0"
+  },
+  {
+   "old": "sub_FAE188",
+   "new": "ParamApply_PartProgRemap_Nop",
+   "evidence": "arm 2 (REMAP, DLTable_NormalTechRemap[2]) of 0xFAE04D and nothing else; body `ret`"
+  },
+  {
+   "old": "sub_FAE189",
+   "new": "ParamApply_PartProgMode3",
+   "evidence": "arm 3 of 0xFAE04D (value 3, no caption): pair (0x60F530)[2C] through T_F41004 into rec[0]/rec[1] and +0x3B..+0x3D, publishes class 1 and class 0"
+  },
+  {
+   "old": "sub_FAE29F",
+   "new": "ParamApply_DeriveNormal",
+   "evidence": "arm 0 (NORMAL) of 0xFAE28F in ParamApply_StorePairAndDerive: `jr 0xFAE2AA` into the TECH arm past its W 3->0 step"
+  },
+  {
+   "old": "sub_FAE2A1",
+   "new": "ParamApply_DeriveTech",
+   "evidence": "arm 1 (TECH) of 0xFAE28F: W&7 (3->0, 7->4), A = ((A>>4)&7)|(W<<3), stored at (XIZ+C)"
+  },
+  {
+   "old": "sub_FAE2D3",
+   "new": "ParamApply_DeriveRemap",
+   "evidence": "arm 2 (REMAP) of 0xFAE28F: `jr 0xFAE2D8`, stores the low byte A unchanged"
+  },
+  {
+   "old": "sub_FAE2D5",
+   "new": "ParamApply_DeriveMode3",
+   "evidence": "arm 3 of 0xFAE28F: `srl 8,WA`, stores the high byte"
+  },
+  {
+   "old": "sub_FAEA12",
+   "new": "SeqBuf_PutProgramEvent",
+   "evidence": "type 0 of 0xFAE9D0 (KeyValueList_A type 0 = key {part,class 0} only); builds {0xC0,tick,num,class,rec0,rec1,slot}, len 7, appended to sequencer ring 0x600A14 by 0xFAEC0F"
+  },
+  {
+   "old": "sub_FAEA6B",
+   "new": "SeqBuf_PutParamEvent",
+   "evidence": "type 1 of 0xFAE9D0 (generic keys: part classes 3-0x0B, 0x18-0x1A, numbers 0xAD/0xAE/0xB5-0xBD); builds {0xB0,tick,num,class,value,mask,slot}, len 7"
+  },
+  {
+   "old": "sub_FAEAC5",
+   "new": "SeqBuf_PutPitchBendEvent",
+   "evidence": "type 3 of 0xFAE9D0 (KeyValueList_A type 3 = key 0xB1 only); builds {0xD2,tick,lsb,msb,slot}"
+  },
+  {
+   "old": "sub_FAEAF4",
+   "new": "SeqBuf_PutModulationEvent",
+   "evidence": "type 4 of 0xFAE9D0 (type 4 = key 0xB2 only); builds {0xD1,tick,value,slot}"
+  },
+  {
+   "old": "sub_FAEB1D",
+   "new": "SeqBuf_PutExpressionEvent",
+   "evidence": "type 5 of 0xFAE9D0 (type 5 = key 0xB3 only); builds {0xD3,tick,value,slot}"
+  },
+  {
+   "old": "sub_FAEB46",
+   "new": "SeqBuf_PutChanPressureEvent",
+   "evidence": "type 6 of 0xFAE9D0 (type 6 = key 0xB4 only); gated by bit 0 of (0x7FC2); builds {0xD0,tick,value,slot}"
+  },
+  {
+   "old": "sub_FAEB75",
+   "new": "SeqBuf_PutTempoEvent",
+   "evidence": "type 2 of 0xFAE9D0 (KeyValueList_A32 key 0x7A only); builds {0x80,tick,(0x7EE2)&0x7F,(0x7EE2)>>7} from the tempo record"
+  },
+  {
+   "old": "sub_FAEBBC",
+   "new": "SeqBuf_LoadSlotKeyList",
+   "evidence": "if slot (0x60F31C) bit set in (0x60F318), copies KeyValueListPtrs_A[(0x603422)[slot]] list to 0x60F330 (reader cited by KeyValueListPtrs_A header), else leaves it empty"
+  },
+  {
+   "old": "sub_FAEE10",
+   "new": "SeqEvt_Ignore",
+   "evidence": "`ret`; entries 1,2,6,7 (status 0x90,0xA0,0xE0,0xF0) of 0xFAEDF0 and types 7-15 of 0xFAEE5C"
+  },
+  {
+   "old": "sub_FAEE22",
+   "new": "SeqEvt_UnpackProgramBit7",
+   "evidence": "status bit0 -> set 7,(XIX+4), bit1 -> set 7,(XIX+5) on buffer 0x60F308: inverse of SeqBuf_PutProgramEvent's flag folding; called only from SeqEvt_ApplyProgramEvent"
+  },
+  {
+   "old": "sub_FAEE36",
+   "new": "SeqEvt_ApplyParamEvent",
+   "evidence": "entry 3 (status 0xBn) of 0xFAEDF0; SeqEvt_LookupParamType then dispatch on (0x60F327)&0x0F through 0xFAEE5C"
+  },
+  {
+   "old": "sub_FAEE9D",
+   "new": "SeqEvt_WriteRecordField",
+   "evidence": "type 6 of 0xFAEE5C (KeyValueList_B type 6 = part classes 5-0x0B, 0x18-0x1A): masked write into ParamNumber_RecordPtrs[num]+class, publish, ParamChange_Notify"
+  },
+  {
+   "old": "sub_FAEF24",
+   "new": "SeqEvt_ShadowPartVolume",
+   "evidence": "type 5 of 0xFAEE5C (type 5 = key {part,3} only; class 3 = volume per MidiOut_ParamClassTable[3]): (0x60F610)[slot] = value|0x80"
+  },
+  {
+   "old": "sub_FAEF43",
+   "new": "SeqEvt_PostPartVolume",
+   "evidence": "{part,3,E,0x7F} via T_ParamRecord_WriteFieldAndStage+publish if SeqEvt_SlotApplyBit, then ParamChange_Notify; called by SeqEvt_FlushShadows' 0x60F610 sweep"
+  },
+  {
+   "old": "sub_FAEFB3",
+   "new": "SeqEvt_ApplyParamAD",
+   "evidence": "type 3 of 0xFAEE5C (KeyValueList_B type 3 = key 0xAD only): event -> (0x1950)/(0x1952)=0x7F00 -> T_F4087C ParamApply_PublishStagedAndPostSeven, then notify"
+  },
+  {
+   "old": "sub_FAF00A",
+   "new": "SeqEvt_PublishParam",
+   "evidence": "type 4 of 0xFAEE5C (type 4 = keys 0xAE, 0xB5-0xBD): publish the event's 4 bytes unchanged if SeqEvt_SlotApplyBit, then notify"
+  },
+  {
+   "old": "sub_FAF055",
+   "new": "SeqEvt_LookupParamType",
+   "evidence": "slot := byte +6, copies KeyValueListPtrs_B list (reader at 0xFAF0DB), restores bit 7 of num/value/mask from status bits 2/0/1, finds the key and stores its type in (0x60F327) or invalidates (0x60F308)"
+  },
+  {
+   "old": "sub_FAF0FE",
+   "new": "SeqEvt_ApplyTempo",
+   "evidence": "entry 0 (status 0x8n) of 0xFAEDF0; for 0x80 writes the 9-bit tempo into 0x7EE2, T_F40794 (sub_FAA742 TREG5 programmer), publishes {0x7A,0,..,0xFF}"
+  },
+  {
+   "old": "sub_FAF148",
+   "new": "SeqEvt_ApplyCtrlEvent",
+   "evidence": "entry 5 (status 0xDn) of 0xFAEDF0; SeqEvt_SelectCtrlEventSlot then status&3 through 0xFAF16C (D0 pressure, D1 mod, D2 bend, D3 expression)"
+  },
+  {
+   "old": "sub_FAF17C",
+   "new": "SeqEvt_ShadowChanPressure",
+   "evidence": "arm 0 (0xD0) of 0xFAF16C: (0x60F630)[slot] = value|0x80, flushed as 0xB4 by SeqEvt_FlushShadows"
+  },
+  {
+   "old": "sub_FAF196",
+   "new": "SeqEvt_PostChanPressure",
+   "evidence": "`ld C,0xb4` {0xB4,part,E,0x7F}: publish if SeqEvt_SlotApplyBit, then notify; called from the 0x60F630 sweep"
+  },
+  {
+   "old": "sub_FAF20B",
+   "new": "SeqEvt_ShadowModulation",
+   "evidence": "arm 1 (0xD1) of 0xFAF16C: (0x60F5B0)[slot] = value|0x80, flushed as 0xB2"
+  },
+  {
+   "old": "sub_FAF225",
+   "new": "SeqEvt_PostModulation",
+   "evidence": "`ld C,0xb2` {0xB2,part,E,0x7F}: publish if SeqEvt_SlotApplyBit, then notify; called from the 0x60F5B0 sweep"
+  },
+  {
+   "old": "sub_FAF29A",
+   "new": "SeqEvt_ShadowPitchBend",
+   "evidence": "arm 2 (0xD2) of 0xFAF16C: 16-bit (0x60F5D0)[2*slot] = word&0x7F7F|0x80, flushed as 0xB1"
+  },
+  {
+   "old": "sub_FAF2BB",
+   "new": "SeqEvt_PostPitchBend",
+   "evidence": "`ld C,0xb1` {0xB1,part,lsb,msb}: publish via T_Queue2C00_PublishStagedDrainPassB if SeqEvt_SlotApplyBit, then notify"
+  },
+  {
+   "old": "sub_FAF332",
+   "new": "SeqEvt_ShadowExpression",
+   "evidence": "arm 3 (0xD3) of 0xFAF16C: (0x60F590)[slot] = value|0x80, or with bit 7 of (0x34D1) set posts {0xB3,part,..} at once (0xFAF352)"
+  },
+  {
+   "old": "sub_FAF3F9",
+   "new": "SeqEvt_SelectCtrlEventSlot",
+   "evidence": "status&3 through 0xFAF410: slot from byte +3 (+4 for D2) into (0x60F31D), accepted only if (0x603422)[slot] is found in IdentityMap32_FAF7C7, else (0x60F308)=0xFF"
+  },
+  {
+   "old": "sub_FAF491",
+   "new": "SeqEvt_FlushShadows",
+   "evidence": "five 17-entry sweeps with bit 7 test/clear: 0x60F630->SeqEvt_PostChanPressure, 0x60F5B0->PostModulation, 0x60F5D0->PostPitchBend, 0x60F590->0xFAF352, 0x60F610->PostPartVolume"
+  },
+  {
+   "old": "sub_FAF562",
+   "new": "SeqEvt_SlotApplyBit",
+   "evidence": "carry = bit (0x60F31D) of (0x603454) (shift loop 0xFAF562-0xFAF574); all ten callers skip the write/publish on NC and notify regardless"
+  },
+  {
+   "old": "sub_FAF579",
+   "new": "Regs_SaveAllScratch",
+   "evidence": "seven `ld (0x60f090..0x60f0a8),Xrr` stores of XWA..XIZ; used around T_F40A24 in the SeqBuf append tail"
+  },
+  {
+   "old": "sub_FAF59D",
+   "new": "Regs_RestoreAllScratch",
+   "evidence": "seven loads of XWA..XIZ from 0x60F090..0x60F0A8, the inverse of Regs_SaveAllScratch"
+  },
+  {
+   "old": "sub_FAF5C1",
+   "new": "SeqEvt_ApplyProgramEvent",
+   "evidence": "entry 4 (status 0xCn) of 0xFAEDF0: writes rec +0x3B..+0x3D, rec[1], rec[0], publishes class 1 and 0, then notifies by PROG CHANGE MODE through 0xFAF6B8"
+  },
+  {
+   "old": "sub_FAF6C8",
+   "new": "SeqEvt_ProgChgNormal_Notify",
+   "evidence": "arm 0 (NORMAL) of 0xFAF6B8: notifies {0x81,part,(0x60F326) split} and {part,0,((0x60F324)<<3)|((0x60F325)&7),0xFF}"
+  },
+  {
+   "old": "sub_FAF728",
+   "new": "SeqEvt_ProgChgTech_Notify",
+   "evidence": "arm 1 (TECH) of 0xFAF6B8: notifies {0x81,part,(0x60F0BF)&0x3F split} and {part,0,(0x60F0BE)&0x7F,0xFF}"
+  },
+  {
+   "old": "sub_FB2000",
+   "new": "SysExModule_EntryThunks",
+   "evidence": "ModuleInitDirectory_F82641[10] = T_F408E0 = .long 0xFB2000; 4-byte phase slots (jp/ret+nop) like MIDI_EntryThunks; module holds SysExDump_RunSendJob and the SysEx decode walker 0xFB63FC"
+  },
+  {
+   "old": "sub_FB2018",
+   "new": "SysExModule_Phase0_ResetState",
+   "evidence": "phase-0 slot target: sub_FB818A -> sub_FB8156, which zeroes (0x60FD40..44), the dump job byte (0x60F802) and (0x60F804)"
+  },
+  {
+   "old": "sub_FB201D",
+   "new": "SysExModule_Phase3_GmNormalReset",
+   "evidence": "phase-3 slot target (`jp 0xFB201D` at 0xFB200C): call ParamApply_ResetPairTablesIfGmNormal / ret"
+  },
+  {
+   "old": "sub_FB2026",
+   "new": "ParamApply_ResetPairTablesIfGmNormal",
+   "evidence": "bit 2,(0x7f4d) (GM mode, sysex_general_midi.py) and (0x7F32)&3==0 (NORMAL) -> sub_FB56D3, which refills ParamApply_StorePairAndDerive's 0x60F530 pairs / 0x60F570 bytes"
+  },
+  {
+   "old": "sub_FB2049",
+   "new": "SysExDump_RunSendJob",
+   "evidence": "bit 7 of (0x60F802) gate, JumpTable_FB2081 on (0x60F802)&7, sub_FB2323/sub_FB27AD templates, sub_FB7DFE status; run by T_F408E4 (SEND) and sub_FB5154 (dump request), per notes/sysex-probes/README.md"
+  }
+ ],
+ "headers": [
+  {
+   "label": "List2030_PartVolume_Apply",
+   "mode": "insert",
+   "text": "List2030_PartVolume_Apply -- class 3 of a part (number 0x00-0x1F) record in the RAM 0x2030 list: write the 7-bit value into byte 3 of that part's record when it changed, and queue the change to 0x2C00\nEvidence: JumpTable_FAB8B4[3] (reached by `calr` at 0xFAB8E9), which is indexed by the record CLASS (0x60F088); MidiOut_ParamClassTable[3], indexed by the same class byte of the same 4-byte record, is MidiOut_CC07_Volume.\nBody: `pushw 0x7f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending` (0xFAB9FD-0xFABA03).  sub_FAB337 merges (0x60F089) under the pushed mask into ParamNumber_RecordPtrs[(0x60F080)] + class, compares with the old byte (0x60F08B) and only then stores, stages and ORs the mask into (0x60F083).\nThe six siblings 0xFABAB0-0xFABAF2 are byte-identical except for the pushed mask."
+  },
+  {
+   "label": "List2030_PartEffect3Depth_Apply",
+   "mode": "insert",
+   "text": "List2030_PartEffect3Depth_Apply -- class 5 of a part record in the 0x2030 list: write the 7-bit value into byte 5 of the part's record when it changed, and queue it to 0x2C00\nEvidence: JumpTable_FAB8B4[5] (calr at 0xFAB8F3); MidiOut_ParamClassTable[5] on the same class byte is MidiOut_CC5D_Effect3Depth.  Body `pushw 0x7f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`, as List2030_PartVolume_Apply."
+  },
+  {
+   "label": "List2030_PartEffect4Depth_Apply",
+   "mode": "insert",
+   "text": "List2030_PartEffect4Depth_Apply -- class 6 of a part record in the 0x2030 list: write the 7-bit value into byte 6 when it changed, and queue it to 0x2C00\nEvidence: JumpTable_FAB8B4[6] (calr at 0xFAB8F8); MidiOut_ParamClassTable[6] is MidiOut_CC5E_Effect4Depth.  Body as List2030_PartVolume_Apply, mask 0x7F."
+  },
+  {
+   "label": "List2030_PartEffect1Depth_Apply",
+   "mode": "insert",
+   "text": "List2030_PartEffect1Depth_Apply -- class 7 of a part record in the 0x2030 list: write the 7-bit value into byte 7 when it changed, and queue it to 0x2C00\nEvidence: JumpTable_FAB8B4[7] (calr at 0xFAB8FD); MidiOut_ParamClassTable[7] is MidiOut_CC5B_Effect1Depth.  Body as List2030_PartVolume_Apply, mask 0x7F."
+  },
+  {
+   "label": "List2030_PartPan_Apply",
+   "mode": "insert",
+   "text": "List2030_PartPan_Apply -- class 8 of a part record in the 0x2030 list: write the 7-bit value into byte 8 when it changed, and queue it to 0x2C00\nEvidence: JumpTable_FAB8B4[8] (calr at 0xFAB902); MidiOut_ParamClassTable[8] is MidiOut_CC0A_Pan.  Body as List2030_PartVolume_Apply, mask 0x7F."
+  },
+  {
+   "label": "List2030_PartCoarseTune_Apply",
+   "mode": "insert",
+   "text": "List2030_PartCoarseTune_Apply -- class 9 of a part record in the 0x2030 list: write the 7-bit value into byte 9 when it changed, and queue it to 0x2C00\nEvidence: JumpTable_FAB8B4[9] (calr at 0xFAB907); MidiOut_ParamClassTable[9] is MidiOut_Rpn02_CoarseTune.  Body as List2030_PartVolume_Apply, mask 0x7F."
+  },
+  {
+   "label": "List2030_PartFineTune_Apply",
+   "mode": "insert",
+   "text": "List2030_PartFineTune_Apply -- class 10 of a part record in the 0x2030 list: write the full 8-bit value into byte 0x0A when it changed, and queue it to 0x2C00\nEvidence: JumpTable_FAB8B4[10] (calr at 0xFAB90C); MidiOut_ParamClassTable[10] is MidiOut_Rpn01_FineTune.  It is the ONLY sibling that pushes mask 0x00FF (0xFABAE7), matching MidiOut_Rpn01_FineTune's `and A,0xff` on the staged mask and the 0xFF mask KeyValueList_A00 gives key {part, 0x0A}."
+  },
+  {
+   "label": "List2030_PartBendRange_Apply",
+   "mode": "insert",
+   "text": "List2030_PartBendRange_Apply -- class 11 of a part record in the 0x2030 list: write the 7-bit value into byte 0x0B when it changed, and queue it to 0x2C00\nEvidence: JumpTable_FAB8B4[11] (calr at 0xFAB911); MidiOut_ParamClassTable[11] is MidiOut_Rpn00_PitchBendRange.  Body as List2030_PartVolume_Apply, mask 0x7F."
+  },
+  {
+   "label": "List2030_Part20to3F_Dispatch",
+   "mode": "insert",
+   "text": "List2030_Part20to3F_Dispatch -- 0x2030-list handler for parameter numbers 0x20-0x3F, the second 0x20-byte half of each part record: dispatch classes 0x18, 0x19, 0x1A\nEvidence: Dispatch_By_60F080 entries 32-63 all hold it; ParamNumber_RecordPtrs[0x20+i] == [i] + 0x20 (that table's pin 3).  Body: calr sub_FAB1D8 (old byte -> (0x60F08B)), then `cp BC,0x18/0x19/0x1A` at 0xFABB07-0xFABB13 -> List2030_Field18_SetAllParts / List2030_PartField19_Apply / List2030_PartField1A_Apply; other classes do nothing.\nEvt2030_Class20to3F accepts exactly the same three classes."
+  },
+  {
+   "label": "List2030_Field18_SetAllParts",
+   "mode": "insert",
+   "text": "List2030_Field18_SetAllParts -- class 0x18 of a second-half part record: apply the record's bit 0 to byte 0x18 of ALL 32 second-half records (numbers 0x20-0x3F), queuing each change to 0x2C00\nEvidence: loop `ld H,0x20` .. `cp H,0x3f / jr ule` at 0xFABB2A-0xFABB43, each pass storing H to (0x60F080), then sub_FAB1D8, sub_FAB337 with mask 0x0001 and Queue2C00_AppendStagedIfPending.\nKeyValueList_A/B give key {0x20+i, 0x18} mask 0x01; ParamRecord_SetPartsField18Bit0 performs the same sweep from a stack argument.  Evt2030_Class20to3F's tail uses bit 0 of +0x18 to choose between fields +0x19 and +0x1A."
+  },
+  {
+   "label": "List2030_PartField19_Apply",
+   "mode": "insert",
+   "text": "List2030_PartField19_Apply -- class 0x19 of a second-half part record: write the 6-bit value into byte 0x19 when it changed, and queue it to 0x2C00\nEvidence: called only by List2030_Part20to3F_Dispatch for class 0x19 (`cp BC,0x0019` at 0xFABB0D); body `pushw 0x3f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x19} mask 0x3F, and Evt2030_Class20to3F reads (XIX+0x19) & 0x3F through BitMaskToOrdinal6, i.e. a one-hot of six."
+  },
+  {
+   "label": "List2030_PartField1A_Apply",
+   "mode": "insert",
+   "text": "List2030_PartField1A_Apply -- class 0x1A of a second-half part record: write the 6-bit value into byte 0x1A when it changed, and queue it to 0x2C00\nEvidence: called only by List2030_Part20to3F_Dispatch for class 0x1A (`cp BC,0x001a` at 0xFABB13); body `pushw 0x3f / calr sub_FAB337 / calr Queue2C00_AppendStagedIfPending`.  KeyValueList_A/B give key {0x20+i, 0x1A} mask 0x3F; Evt2030_Class20to3F reads (XIX+0x1a) & 0x3F when bit 0 of +0x18 is set."
+  },
+  {
+   "label": "List2030_Param44to46_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param44to46_Ignore -- 0x2030-list handler for parameter numbers 0x44, 0x45 and 0x46: does nothing\nEvidence: Dispatch_By_60F080 entries 68-70 (0xFAC9FA, 0xFAC9FE, 0xFACA02) hold 0x00FABB5D; the body is `ret` at 0xFABB5D (the `ret`s at 0xFABB5E-F are unreachable fill).  ParamNumber_RecordPtrs has no record for any of the three."
+  },
+  {
+   "label": "List2030_Param48_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param48_Ignore -- 0x2030-list handler for parameter number 0x48: does nothing\nEvidence: Dispatch_By_60F080[72] (0xFACA0A) is its only reference; body `ret` at 0xFABB60.  ParamNumber_RecordPtrs[0x48] is empty."
+  },
+  {
+   "label": "List2030_Tempo_Dispatch",
+   "mode": "insert",
+   "text": "List2030_Tempo_Dispatch -- 0x2030-list handler for parameter 0x7A, the tempo: class 0 goes to List2030_Tempo_Apply, any other class is ignored\nEvidence: Dispatch_By_60F080[122] (0xFACAD2) is its only reference; `cp bc,0 / jr z` at 0xFABB6B after calr sub_FAB1D8.  Parameter 0x7A's record is RAM 0x7EE2 (ParamNumber_RecordPtrs[122]), whose 9-bit value sub_FAA742 clamps to 0x28..0x12C with default 0x78 (40..300 BPM, 120) -- the tempo notes/sysex-probes/README.md pins three ways."
+  },
+  {
+   "label": "List2030_Tempo_Apply",
+   "mode": "insert",
+   "text": "List2030_Tempo_Apply -- store a new tempo into parameter 0x7A's record (RAM 0x7EE2) when it differs, queue both bytes to 0x2C00 and reprogram the tempo timer\nEvidence: `lda XIX,0x7ee2` at 0xFABB76; compares (0x60F089)/(0x60F08A) with (XIX)/(XIX+1) at 0xFABB7C/0xFABB88 and returns when both match; otherwise stores both, stages {0x7A,0,rec[0],0xFF} and {0x7A,1,rec[1],0x01} (0xFABBA4-0xFABBC6) and calls sub_FAA742 at 0xFABBC9.\nsub_FAA742 reads (0x7EE2)&0x1FF, clamps it to 40..300 (default 120) and writes 0x08583B00/(tempo*64) to TREG5 (`st_dd8w DE,0x32`; 0x32 = TREG5L in tmp95c061_sfr.inc) unless bit 2 of (0x7F32), the external-clock bit, is set."
+  },
+  {
+   "label": "List2030_Param90_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param90_Ignore -- 0x2030-list handler for parameter number 0x90: does nothing\nEvidence: Dispatch_By_60F080[144] (0xFACB2A) is its only reference; body `ret` at 0xFABBCF.  ParamNumber_RecordPtrs[0x90] is empty."
+  },
+  {
+   "label": "List2030_Param91_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param91_Ignore -- 0x2030-list handler for parameter number 0x91: does nothing\nEvidence: Dispatch_By_60F080[145] (0xFACB2E) is its only reference; body `ret` at 0xFABBD0 (0xFABBD1 is unreachable fill).  Parameter 0x91 does have a record (0x7F4A), so the list deliberately leaves it untouched here."
+  },
+  {
+   "label": "List2030_Param60_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param60_Ignore -- 0x2030-list handler for parameter number 0x60: does nothing\nEvidence: Dispatch_By_60F080[96] (0xFACA6A) is its only reference; body `ret` at 0xFABBD2 (0xFABBD3 is unreachable fill).  Parameter 0x60 has a record (0x7634)."
+  },
+  {
+   "label": "List2030_Param70_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param70_Ignore -- 0x2030-list handler for parameter number 0x70: does nothing\nEvidence: Dispatch_By_60F080[112] (0xFACAAA) is its only reference; body `ret` at 0xFABBD4.  ParamNumber_RecordPtrs[0x70] is empty."
+  },
+  {
+   "label": "List2030_Param72_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param72_Ignore -- 0x2030-list handler for parameter number 0x72: does nothing\nEvidence: Dispatch_By_60F080[114] (0xFACAB2) is its only reference; body `ret` at 0xFABBD5.  ParamNumber_RecordPtrs[0x72] is empty."
+  },
+  {
+   "label": "List2030_Param98_Dispatch",
+   "mode": "insert",
+   "text": "List2030_Param98_Dispatch -- 0x2030-list handler for parameter 0x98: class 1 goes to List2030_Param98_ApplyProgram, other classes are ignored\nEvidence: Dispatch_By_60F080[152] (0xFACB4A) is its only reference; `cp bc,1 / jr z` at 0xFABBE1 after calr sub_FAB1D8.  Parameter 0x98's record is RAM 0x7F02 (ParamNumber_RecordPtrs[152])."
+  },
+  {
+   "label": "List2030_Param98_ApplyProgram",
+   "mode": "insert",
+   "text": "List2030_Param98_ApplyProgram -- the parameter-0x98 twin of the part program-change handler sub_FAB915: stash the first value, then on the second pass write record 0x7F02's program fields and queue them to 0x2C00\nEvidence: same two-pass gate as sub_FAB915 (bit 4 of (0x60F021) at 0xFABBF1: pass 1 saves (0x60F089) to (0x60F0D0) and sets it, pass 2 clears it); then sub_FAB779 (sub_FAB658 in the part twin), ParamNumber_GetRecordPtr compared with 0x7F02 (0xFABC49-0xFABC51), and stores (XIX+1)&0x80|(0x60F185), (XIX+2)&0xC0|(0x60F186), (XIX+6..8) = value/mask/(0x60F0D0).\nQueues {0x98,2,(0x60F186),0x3F} and {0x98,1,(0x60F185),0x7F} (0xFABC9E-0xFABCCD).  Program reading: sub_FAB915 is JumpTable_FAB8B4[0], class 0, whose outbound twin is MidiOut_ParamClassTable[0] = MidiOut_ProgramChange; and the Evt2030 handler of 0x98 class 1 runs only when SINGLE CH PROG CHANGE is COMBI (bit 3 of (0x7F32))."
+  },
+  {
+   "label": "List2030_ParamA8_PassThrough",
+   "mode": "insert",
+   "text": "List2030_ParamA8_PassThrough -- 0x2030-list handler for parameter 0xA8: copy the record's value and mask into the staged record unchanged and queue it to 0x2C00, with no record write\nEvidence: Dispatch_By_60F080[168] (0xFACB8A) is its only reference; `ld (0x60f082),(0x60f089) / ld (0x60f083),(0x60f08a) / calr Queue2C00_AppendStagedIfPending` at 0xFABCD7-0xFABCEB.  ParamNumber_RecordPtrs[0xA8] is empty."
+  },
+  {
+   "label": "List2030_ParamB0_Dispatch",
+   "mode": "insert",
+   "text": "List2030_ParamB0_Dispatch -- 0x2030-list handler for parameter 0xB0: class 0 goes to List2030_ParamB0_Apply, other classes are ignored\nEvidence: Dispatch_By_60F080[176] (0xFACBAA) is its only reference; `cp bc,0 / jr z` at 0xFABCF6.  What parameter 0xB0 is stays open: MidiOut_ParamNumberTable[0xB0] is a bare `ret` (ParamShadow_SetExpression's note)."
+  },
+  {
+   "label": "List2030_ParamB0_Apply",
+   "mode": "insert",
+   "text": "List2030_ParamB0_Apply -- set (0x24F1) to the cooked control value (0x24F3) with bit 7 as pending flag, queue the pending 0xB0 bytes, then stage {0xB0,0,value,mask} at (0x60F177) and hand it to ParamChange_Notify\nEvidence: `ld C,(0x24f3) / set 7,C / ld (0x24f1),C` at 0xFABD00-0xFABD07; calr sub_FAB5EB (queues {0xB0,0,(0x24F1),0x7F} and {0xB0,1,(0x24F0),0x7F} for whichever has bit 7); stores to 0x60F177..0x60F17A and `call sub_FAA7C4` (BC/DE from 0x60F177 -> ParamChange_Notify) at 0xFABD2E.  (0x24F3) is cooked slot 3.3 of Ctrl_Normalise's RAM bank."
+  },
+  {
+   "label": "Queue2E00_FanOutToPartMask",
+   "mode": "insert",
+   "text": "Queue2E00_FanOutToPartMask -- Queue2C00_FanOutToPartMask's twin for the PENDING queue 0x2E00: for each set bit H of the 32-bit mask at (XIZ+8), append {(0x60F080), H, (0x60F089), (0x60F08A)}\nEvidence: the same H=0..0x1F / `srl 1,XIY` loop as Queue2C00_FanOutToPartMask (0xFABEBD-0xFABEF4); the append is `call T_F41B18` at 0xFABEE2, i.e. prom_b `jp sub_F8BC08` -> `calr sub_F8BF07`, which loads E/D/A/W from (XIZ+0x0C/0x0E/0x10/0x12) and calls T_Queue2E00_AppendRegs.\nCalled from: the eleven ParamMsg_ResyncParts_* arms of JumpTable_FAC3BF."
+  },
+  {
+   "label": "ParamMsg_RefreshPartMasks",
+   "mode": "insert",
+   "text": "ParamMsg_RefreshPartMasks -- recompute the eleven per-controller part masks and make MIDI out / MIDI in catch up\nEvidence: `or (0x60f0c6),1` at 0xFABFE8, calr ParamMsg_ComputePartMasks, `and (XIX),0xfe`, then `call T_F40760` at 0xFABFF5 -- prom_a sub_FA7E0C, the MidiOut 'send everything again' entry that ends in MidiIn_RebuildPartLists.\nCalled from: prom_b directory slot T_F40798 (call at 0xFC6198) and ParamMsg_RefreshMasksOnCtrlFieldChange (0xFAC7BF)."
+  },
+  {
+   "label": "ParamMsg_ResendTwoAssignedCtrls",
+   "mode": "insert",
+   "text": "ParamMsg_ResendTwoAssignedCtrls -- re-dispatch the current values of cooked control slots (0x2503) and (0x2504) as control records for the controllers assigned in (0x7F27) and (0x7F28)\nEvidence: the 4-byte local record is initialised from Gap_FAC8E6 (`ld XBC,(0xfac8e6)` at 0xFAC007, bytes {0,0,0,0x7F}); byte 0 := ParamMsg_NumberForController((0x7F27)), byte 2 := (0x2503) & 0x7F, then MidiIn_ControlRecord_Dispatch (0xFAC024); again with (0x7F28)/(0x2504) at 0xFAC027-0xFAC03C.\nMidiOut's sub_FA7E37 pairs the same two cells with the same two assignment bytes.  Called from: prom_b directory slot T_F43448; no converted caller found."
+  },
+  {
+   "label": "ParamMsg_ComputePartMasks",
+   "mode": "insert",
+   "text": "ParamMsg_ComputePartMasks -- save the eleven 32-bit per-controller part masks at 0x60F280..0x60F2A8 to 0x60F2AC.., clear them and rebuild them from the part records\nEvidence: copy-and-zero loop 0xFAC100-0xFAC12F (XIX up to 0x60F2A8); then for each part H with bit H of (0x4C06) set and bit 5 of first-half byte +0x0D clear, BitMask32_Table[H] is ORed into a cell per bit of the second-half record (ParamNumber_GetRecordPtr(H|0x20)):\n+0x0B b6 -> F280 (B1), +0x0C b1 -> F284 (B2), +0x0E b4 -> F288 (BC), +0x0B b5 -> F28C (B4), +0x0E b5 -> F290 (BD), +0x0C b0 -> F294 (B5), +0x0E b0..b3 -> F298..F2A4 (B8..BB), and F2A8 (B3) unconditionally (0xFAC13F-0xFAC283).\nCell -> number: the table in ParamMsg_B1_PitchBend's header.  Called only from ParamMsg_RefreshPartMasks."
+  },
+  {
+   "label": "ParamMsg_NumberForController",
+   "mode": "insert",
+   "text": "ParamMsg_NumberForController -- map a controller number (stack word) to its parameter number in A: 1->0xB2, 2->0xBC, 4->0xBD, 0x0B->0xB3, 0x10..0x13->0xB8..0xBB, 0x40->0xB5, 0x81->0xB4, 0x82->0xB1, anything else 0xFF\nEvidence: the compare chain at 0xFAC294-0xFAC2CA and the `ld A,0xbN` arms at 0xFAC2D2-0xFAC2FE.  Every pair agrees with the controller already named on ParamMsg_B1..ParamMsg_BD (e.g. ParamMsg_BA_CC12_RTCtrlX for 0x12); 0x81/0x82 are this table's pseudo-numbers for channel pressure and pitch bend.\nCalled from: ParamMsg_ResendTwoAssignedCtrls and the unlabelled routine at 0xFAC047."
+  },
+  {
+   "label": "Ctrl_CookedCellForNumber",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellForNumber -- return in XIY the address of the cooked control value (Ctrl_Normalise's RAM bank) that feeds parameter number (XIZ+8), 0xB1..0xBD\nEvidence: `sub BC,0x00b1 / cp BC,0x000c` at 0xFAC30E-0xFAC312 then JumpTable_FAC326; the arms load 0x24F4 (B1), 0x24FF (B4), 0x2503..0x2506 (B8..BB), 0x24F6 (BC), 0x24F2 (BD), and the default arm 0x24F5 (B2, B3, B5..B7).  All ten are listed as cooked values in Ctrl_Normalise's header.\nUsed by the unlabelled routine at 0xFAC047, which hands each cell to the JumpTable_FAC3BF dispatcher at 0xFAC391."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_B1",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_B1 -- JumpTable_FAC326[0] (number 0xB1): XIY = 0x24F4, then the shared `unlk/ret` of Ctrl_CookedCellForNumber\nEvidence: `lda XIY,0x24f4` at 0xFAC35A; 0x24F4 is cooked slot 3.1 (curve 0xF89CB4, idle 0x80) in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_BC",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_BC -- JumpTable_FAC326[11] (number 0xBC): XIY = 0x24F6, then the shared `unlk/ret`\nEvidence: `lda XIY,0x24f6` at 0xFAC360; 0x24F6 is cooked slot 3.2 in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_BD",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_BD -- JumpTable_FAC326[12] (number 0xBD): XIY = 0x24F2, then the shared `unlk/ret`\nEvidence: `lda XIY,0x24f2` at 0xFAC366; 0x24F2 is cooked slot 0.3 (the inverted raw byte) in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_B8",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_B8 -- JumpTable_FAC326[7] (number 0xB8): XIY = 0x2503, then the shared `unlk/ret`\nEvidence: `lda XIY,0x2503` at 0xFAC36C; 0x2503 is cooked slot 0.4 in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_B9",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_B9 -- JumpTable_FAC326[8] (number 0xB9): XIY = 0x2504, then the shared `unlk/ret`\nEvidence: `lda XIY,0x2504` at 0xFAC372; 0x2504 is cooked slot 0.5 in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_BA",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_BA -- JumpTable_FAC326[9] (number 0xBA): XIY = 0x2505, then the shared `unlk/ret`\nEvidence: `lda XIY,0x2505` at 0xFAC378; 0x2505 is cooked slot 0.0 in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_BB",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_BB -- JumpTable_FAC326[10] (number 0xBB): XIY = 0x2506, then the shared `unlk/ret`\nEvidence: `lda XIY,0x2506` at 0xFAC37E; 0x2506 is cooked slot 0.1 in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "Ctrl_CookedCellFor_B4",
+   "mode": "insert",
+   "text": "Ctrl_CookedCellFor_B4 -- JumpTable_FAC326[3] (number 0xB4): XIY = 0x24FF, then the shared `unlk/ret`\nEvidence: `lda XIY,0x24ff` at 0xFAC384; 0x24FF is cooked slot 0.2, the calibrated channel, in Ctrl_Normalise's slot table."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_B1_PitchBend",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_B1_PitchBend -- JumpTable_FAC3BF[0] (number 0xB1), run after the part masks were recomputed: post the pitch-bend centre to parts that LOST 0xB1 and the current value to parts that GAINED it, both into the 0x2E00 queue\nEvidence: lost = (new ^ old) & old over (0x60F280)/(0x60F2AC) at 0xFAC3F3-0xFAC3FF, posted with value 0x00 / mask 0x40 (LE 0x4000, the centre MidiOut_ChangeRecord_PitchBend also uses) through Queue2E00_FanOutToPartMask; gained = (old ^ new) & new at 0xFAC414-0xFAC41E, value from the cooked cell at (XIZ+0x0A) split into LSB/MSB, clamped to 0x7F/0x7F at 0xFAC445.\n(0x60F280) is ParamMsg_B1_PitchBend's part-mask cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_B2_CC01_Modulation",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_B2_CC01_Modulation -- JumpTable_FAC3BF[1] (number 0xB2): post 0 to parts that lost 0xB2 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F284)/(0x60F2B0) at 0xFAC48A-0xFAC4B5, reset value 0x00 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F284) is ParamMsg_B2_CC01_Modulation's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_BC_CC02_Modulation2",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_BC_CC02_Modulation2 -- JumpTable_FAC3BF[11] (number 0xBC): post 0x40 to parts that lost 0xBC and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F288)/(0x60F2B4) at 0xFAC4D6-0xFAC501, reset value 0x40 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F288) is ParamMsg_BC_CC02_Modulation2's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_B8_CC10_RTCreatX",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_B8_CC10_RTCreatX -- JumpTable_FAC3BF[7] (number 0xB8): post 0x40 to parts that lost 0xB8 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F298)/(0x60F2C4) at 0xFAC522-0xFAC54D, reset 0x40 mask 0x7F, Queue2E00_FanOutToPartMask; (0x60F298) is ParamMsg_B8_CC10_RTCreatX's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_B9_CC11_RTCreatY",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_B9_CC11_RTCreatY -- JumpTable_FAC3BF[8] (number 0xB9): post 0x40 to parts that lost 0xB9 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F29C)/(0x60F2C8) at 0xFAC56E-0xFAC599, reset 0x40 mask 0x7F; (0x60F29C) is ParamMsg_B9_CC11_RTCreatY's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_BA_CC12_RTCtrlX",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_BA_CC12_RTCtrlX -- JumpTable_FAC3BF[9] (number 0xBA): post 0x40 to parts that lost 0xBA and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F2A0)/(0x60F2CC) at 0xFAC5BA-0xFAC5E5, reset 0x40 mask 0x7F; (0x60F2A0) is ParamMsg_BA_CC12_RTCtrlX's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_BB_CC13_RTCtrlY",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_BB_CC13_RTCtrlY -- JumpTable_FAC3BF[10] (number 0xBB): post 0x40 to parts that lost 0xBB and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F2A4)/(0x60F2D0) at 0xFAC606-0xFAC631, reset 0x40 mask 0x7F; (0x60F2A4) is ParamMsg_BB_CC13_RTCtrlY's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_B4_ChannelPressure",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_B4_ChannelPressure -- JumpTable_FAC3BF[3] (number 0xB4): post 0 to parts that lost 0xB4 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F28C)/(0x60F2B8) at 0xFAC652-0xFAC67D, reset 0x00 mask 0x7F; (0x60F28C) is ParamMsg_B4_ChannelPressure's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_BD_CC04_CtrlPedal",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_BD_CC04_CtrlPedal -- JumpTable_FAC3BF[12] (number 0xBD): post 0 to parts that lost 0xBD and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F290)/(0x60F2BC) at 0xFAC69E-0xFAC6C9, reset 0x00 mask 0x7F; (0x60F290) is ParamMsg_BD_CC04_CtrlPedal's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_B5_CC40_Hold",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_B5_CC40_Hold -- JumpTable_FAC3BF[4] (number 0xB5): post 0 to parts that lost 0xB5 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F294)/(0x60F2C0) at 0xFAC6EA-0xFAC715, reset 0x00 mask 0x7F; (0x60F294) is ParamMsg_B5_CC40_Hold's cell."
+  },
+  {
+   "label": "ParamMsg_ResyncParts_B3_CC0B_Expression",
+   "mode": "insert",
+   "text": "ParamMsg_ResyncParts_B3_CC0B_Expression -- JumpTable_FAC3BF[2] (number 0xB3): post 0x7F to parts that lost 0xB3 and the cooked value (XIZ+0x0A)&0x7F to parts that gained it, into the 0x2E00 queue\nEvidence: lost/gained from (0x60F2A8)/(0x60F2D4) at 0xFAC734-0xFAC75F, reset value 0x7F mask 0x7F (`ld H,0x7f` at 0xFAC744); (0x60F2A8) is ParamMsg_B3_CC0B_Expression's cell.  The label sub_FAC74B sits inside this arm."
+  },
+  {
+   "label": "ParamMsg_RefreshMasksOnCtrlFieldChange",
+   "mode": "insert",
+   "text": "ParamMsg_RefreshMasksOnCtrlFieldChange -- UiEventList handler: run ParamMsg_RefreshPartMasks when the posted change touches a part-record field that ParamMsg_ComputePartMasks reads\nEvidence: L = (0x20BB) (record byte 0, the number) and H = (0x20B8) (byte 1, the class), per the UiEventList payload layout; numbers 0x00-0x1F need class 0x0D and bit 5 of the mask (0x20BA), numbers 0x20-0x3F need class 0x0B..0x0E and a non-zero mask (0xFAC787-0xFAC7BD) -- the same bits ParamMsg_ComputePartMasks tests.\nCalled from: directory slot T_F40810, named in the handler lists at 0xF881B2, 0xF881DA, 0xF881FE, 0xF88222, 0xF88246, 0xF8826A."
+  },
+  {
+   "label": "ParamRecord_SetPartsField18Bit0",
+   "mode": "insert",
+   "text": "ParamRecord_SetPartsField18Bit0 -- set bit 0 of byte 0x18 of every second-half part record (numbers 0x20-0x3F) to bit 0 of the stack argument, queuing each to 0x2C00\nEvidence: loop L = 0x20..0x3F at 0xFAC7CA-0xFAC808: XIX = ParamNumber_GetRecordPtr(L) + 0x18, `and (XIX),0xfe / or C,H`, stage {L,0x18,(XIX),0x01}, Queue2C00_AppendStagedIfPending.  Same field and mask as List2030_Field18_SetAllParts.\nCalled from: directory slot T_F4344C (three PanelOpTable_FCF773 handlers, 0xFD06EE, 0xFD074A, 0xFD07AF)."
+  },
+  {
+   "label": "Queue2E00_PostParam98Fields",
+   "mode": "insert",
+   "text": "Queue2E00_PostParam98Fields -- if bit 4 of parameter 0x98's record byte (0x7F02) is set, append {0x98,2,(0x7F04),0x3F} and {0x98,1,(0x7F03),0x7F} to the pending queue 0x2E00\nEvidence: `and C,0x10` on (0x7F02) at 0xFAC816; two `call T_F41B18` (the Queue2E00 stack veneer) at 0xFAC82A and 0xFAC83B.  Evt2030_Param98Tech_Notify reads the same two bytes with the same masks.\nCalled from: directory slot T_F43454 (0xF9FEC8, 0xFE20D4, prom_b 0xF48F09)."
+  },
+  {
+   "label": "List2030_Param_Ignore",
+   "mode": "insert",
+   "text": "List2030_Param_Ignore -- the default 0x2030-list handler: does nothing\nEvidence: 168 of Dispatch_By_60F080's 256 reachable entries and all 64 words of Dispatch_By_60F080__Tail are 0x00FAC845; the body is `ret` at 0xFAC845."
+  },
+  {
+   "label": "ParamNumber_GetRecordPtr",
+   "mode": "insert",
+   "text": "ParamNumber_GetRecordPtr -- XIY = ParamNumber_RecordPtrs[(XIZ+8)], 0xFFFFFFFF when the parameter number has no record\nEvidence: `ld C,0x04 / mul BC,(XIZ+0x08) / add XBC,ParamNumber_RecordPtrs / ld XBC,(XBC) / ld XIY,XBC` at 0xFAC8AE-0xFAC8BD.  15 callers, among them List2030_LoadRecord, sub_FAB337 and ParamMsg_ComputePartMasks; each compares the result with 0xFFFFFFFF.\nNote: the unlabelled routine at 0xFAC8C2 that follows returns 0x60F0E0 + 4*n for n <= 0x1F and -1 otherwise."
+  },
+  {
+   "label": "Evt2030_ProgChgMode3_Notify",
+   "mode": "replace",
+   "text": "Evt2030_ProgChgMode3_Notify -- PROG CHANGE MODE value 3 (no caption) of Evt2030_Class00to1F_Op00, a part's program change (class 0): map the part's sound bytes through T_F41008 and notify bank select (param 0x81) and program (class 0)\nEvidence: arm 3 of the 4-entry table at 0xFAE30E -- the LE32 word at 0xFAE31A reads 0x00FADBDA; reader `ld XIX,0x00fae30e` at 0xFAE301, index (0x7F32) & 3.\n(0x7F32) & 3 is PROG CHANGE MODE: sub_F9A4B0 copies it to (0x2740) and draws it with DL_NormalTechRemap at screen offset 0x15F8, right after the 18-char \"PROG CHANGE MODE: \" text at 0x15E6 of DL_TotalModeMidiMidiInputMode; DLTable_NormalTechRemap holds only NORMAL/TECH/REMAP.\nBody: unless C == 0x48, (0x60F010) = word at ParamNumber_RecordPtrs[C], (0x60F012) = C, `call T_F41008` (sub_FC2526), then ParamChange_NotifyClearSource {0x81, part, (0x60F014..15)} and {part, 0, (0x60F016), 0xFF}.  MidiOut_ParamNumberTable[129] is MidiOut_BankSelect_Pair; class 0 is MidiOut_ProgramChange."
+  },
+  {
+   "label": "Evt2030_ProgChgNormal_Notify",
+   "mode": "replace",
+   "text": "Evt2030_ProgChgNormal_Notify -- PROG CHANGE MODE NORMAL arm of Evt2030_Class00to1F_Op00: notify bank select (param 0x81) and program (class 0) from the part's second-half bytes +0x1B..+0x1D\nEvidence: arm 0 of the 4-entry table at 0xFAE30E -- the LE32 word at 0xFAE30E reads 0x00FAE31E; reader `ld XIX,0x00fae30e` at 0xFAE301, index (0x7F32) & 3, and DLTable_NormalTechRemap[0] is \"NORMAL\" (see Evt2030_ProgChgMode3_Notify).\nBody: with GM mode on (bit 2 of (0x7F4D), notes/sysex-probes/sysex_general_midi.py) parts 9 and 0x19 take the TECH arm; else XIX = ParamNumber_RecordPtrs[C|0x20], notify {0x81, part, (XIX+0x1D) split into two 7-bit halves} and {part, 0, ((XIX+0x1B)<<3)|((XIX+0x1C)&7), 0xFF} -- the bytes ParamApply_PartProgNormal stores."
+  },
+  {
+   "label": "Evt2030_ProgChgTech_Notify",
+   "mode": "replace",
+   "text": "Evt2030_ProgChgTech_Notify -- PROG CHANGE MODE TECH arm of Evt2030_Class00to1F_Op00: notify bank select (param 0x81) from record byte 1 and program (class 0) from record byte 0\nEvidence: arm 1 of the 4-entry table at 0xFAE30E -- the LE32 word at 0xFAE312 reads 0x00FAE36C; reader `ld XIX,0x00fae30e` at 0xFAE301, index (0x7F32) & 3; DLTable_NormalTechRemap[1] is \"TECH\".\nBody: XIX = ParamNumber_RecordPtrs[C]; notify {0x81, part, (XIX+1)&0x3F split} and {part, 0, (XIX)&0x7F, 0xFF}.  Also the target of Evt2030_ProgChgNormal_Notify's GM drum-part branch."
+  },
+  {
+   "label": "Evt2030_Param98Normal_Notify",
+   "mode": "replace",
+   "text": "Evt2030_Param98Normal_Notify -- PROG CHANGE MODE NORMAL arm of Evt2030_Class98_Op01: notify parameter 0x98's class 2 and class 1 values from record bytes 0x7F08..0x7F0A\nEvidence: arm 0 of the 4-entry table at 0xFADDF1 -- the LE32 word at 0xFADDF1 reads 0x00FADE01; reader `ld XIX,0x00faddf1` at 0xFADDE5, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = \"NORMAL\").\nBody: ParamChange_NotifyClearSource {0x98, 2, (0x7F0A) split into two 7-bit halves} then {0x98, 1, ((0x7F08)<<3)|((0x7F09)&7), 0xFF}; ends in the shared `ret` 0xFADE55.  The owner runs only when bit 3 of (0x7F32), SINGLE CH PROG CHANGE = COMBI, is set."
+  },
+  {
+   "label": "Evt2030_Param98Tech_Notify",
+   "mode": "replace",
+   "text": "Evt2030_Param98Tech_Notify -- PROG CHANGE MODE TECH arm of Evt2030_Class98_Op01: notify parameter 0x98's class 2 and class 1 values from record bytes 0x7F04 and 0x7F03\nEvidence: arm 1 of the 4-entry table at 0xFADDF1 -- the LE32 word at 0xFADDF5 reads 0x00FADE2F; reader `ld XIX,0x00faddf1` at 0xFADDE5, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = \"TECH\").\nBody: ParamChange_NotifyClearSource {0x98, 2, (0x7F04)&0x3F split} then {0x98, 1, (0x7F03)&0x7F, 0xFF}; the same two bytes and masks Queue2E00_PostParam98Fields posts."
+  },
+  {
+   "label": "ParamApply_Param98Normal",
+   "mode": "replace",
+   "text": "ParamApply_Param98Normal -- PROG CHANGE MODE NORMAL arm of ParamApply_ByModeOfParam80 for C == 0x98: store the packed value into record 0x7F02's bytes +6..+8, map it through T_F41024, and write+publish {0x98,2,..,0x3F} and {0x98,1,..,0x7F}\nEvidence: arm 0 of the 4-entry table at 0xFADF77 -- the LE32 word at 0xFADF77 reads 0x00FADF87; reader `ld XIX,0x00fadf77` at 0xFADF6B, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = \"NORMAL\").\nBody: (0x7F0A)=(0x60F013)=A, (0x7F09)=(0x60F011)=E&7, (0x7F08)=(0x60F010)=E>>3, (0x60F012)=0x98; call T_F41024 (sub_FC239B); T_ParamRecord_WriteFieldAndStage + T_Queue2C00_PublishStagedIfPending with (0x60F015)/0x3F and (0x60F014)/0x7F; falls into the shared `ret` 0xFAE02D."
+  },
+  {
+   "label": "ParamApply_Param98Tech",
+   "mode": "replace",
+   "text": "ParamApply_Param98Tech -- PROG CHANGE MODE TECH arm of ParamApply_ByModeOfParam80 for C == 0x98: write+publish {0x98,2,A,0x3F} and the MIDI-in record (0x1950), map through T_F41028 and copy the result to 0x7F08..0x7F0A\nEvidence: arm 1 of the 4-entry table at 0xFADF77 -- the LE32 word at 0xFADF7B reads 0x00FADFD9; reader `ld XIX,0x00fadf77` at 0xFADF6B, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = \"TECH\").\nBody: `ldw BC,0x0298` + T_ParamRecord_WriteFieldAndStage/T_Queue2C00_PublishStagedIfPending; again with BC/DE = (0x1950)/(0x1952); (0x60F010)=(0x1952), (0x60F011)=E, (0x60F012)=0x98, `call T_F41028` (sub_FC24E3); (0x60F014..16) -> (0x7F08..0x7F0A)."
+  },
+  {
+   "label": "ParamApply_PartProgNormal",
+   "mode": "replace",
+   "text": "ParamApply_PartProgNormal -- PROG CHANGE MODE NORMAL arm of ParamApply_ByModeOfParam80 for a part: apply the program in the MIDI-in record (0x1950) to part C's record and publish class 1 and class 0\nEvidence: arm 0 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE04D reads 0x00FAE05D; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = \"NORMAL\").\nBody: with GM mode on (bit 2 of (0x7F4D)) parts 9 and 0x19 take the TECH arm; else W = (0x60F570)[C], L = (E&0x7F)>>3, H = E&7 stored at second-half +0x1B/+0x1C/+0x1D, T_F4078C, rec[0] = L, rec[1] = H, publish {C,1,H,0x7F} and {C,0,L,0xFF}."
+  },
+  {
+   "label": "ParamApply_PartProgTech",
+   "mode": "replace",
+   "text": "ParamApply_PartProgTech -- PROG CHANGE MODE TECH arm of ParamApply_ByModeOfParam80 for a part: write the received program byte and bank byte straight into part C's record and publish class 1 and class 0\nEvidence: arm 1 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE051 reads 0x00FAE0FC; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = \"TECH\").\nBody: BC/DE = (0x1950)/(0x1952); bit 7 of D moves to E; rec[0] = E, rec[1] = (rec[1]&0x80)|D; T_F40790 then second-half +0x1B..+0x1D; publish {C,1,D,0x7F} and {C,0,E,0xFF}.  Also the GM drum-part branch target of ParamApply_PartProgNormal."
+  },
+  {
+   "label": "ParamApply_PartProgRemap_Nop",
+   "mode": "replace",
+   "text": "ParamApply_PartProgRemap_Nop -- PROG CHANGE MODE REMAP arm of ParamApply_ByModeOfParam80 for a part: does nothing\nEvidence: arm 2 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE055 reads 0x00FAE188, and no other entry or branch names it; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3, and DLTable_NormalTechRemap[2] is \"REMAP\".  Body: `ret`."
+  },
+  {
+   "label": "ParamApply_PartProgMode3",
+   "mode": "replace",
+   "text": "ParamApply_PartProgMode3 -- PROG CHANGE MODE value 3 (no caption) of ParamApply_ByModeOfParam80 for a part: map the stored bank pair through T_F41004 and apply the result as part C's program\nEvidence: arm 3 of the 4-entry table at 0xFAE04D -- the LE32 word at 0xFAE059 reads 0x00FAE189; reader `ld XIX,0x00fae04d` at 0xFAE03C, index (0x7F32) & 3; DLTable_NormalTechRemap has no entry 3.\nBody: (0x60F010) = (0x60F530)[2*C], (0x60F012) = DE, `call T_F41004` (sub_FC24EB), (0x60F014..15) -> rec[0]/rec[1], T_F40790 then second-half +0x1B..+0x1D, publish {C,1,D,0x7F} and {C,0,E,0xFF}."
+  },
+  {
+   "label": "ParamApply_DeriveNormal",
+   "mode": "replace",
+   "text": "ParamApply_DeriveNormal -- PROG CHANGE MODE NORMAL arm of ParamApply_StorePairAndDerive: derive the stored byte from the 7F7F pair as ((A>>4)&7)|(W<<3), W&7 with 7 -> 4\nEvidence: arm 0 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE28F reads 0x00FAE29F; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0]).\nBody: `jr 0xFAE2AA`, i.e. into ParamApply_DeriveTech past its W 3 -> 0 step; result stored at (XIZ+C) (0x60F570, or 0x60F654 for C == 0x98)."
+  },
+  {
+   "label": "ParamApply_DeriveTech",
+   "mode": "replace",
+   "text": "ParamApply_DeriveTech -- PROG CHANGE MODE TECH arm of ParamApply_StorePairAndDerive: derive the stored byte from the pair as ((A>>4)&7)|(W<<3), with W&7 mapped 3 -> 0 and 7 -> 4\nEvidence: arm 1 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE293 reads 0x00FAE2A1; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3 (DLTable_NormalTechRemap[1]).\nBody: `cp W,3 / xor W,W`, `cp W,7 / ld W,4`, pack, clear bits 3-4 when they read 0x10 and bit 0 of (0x08EC) is clear; stored at (XIZ+C) by the shared tail 0xFAE2D8."
+  },
+  {
+   "label": "ParamApply_DeriveRemap",
+   "mode": "replace",
+   "text": "ParamApply_DeriveRemap -- PROG CHANGE MODE REMAP arm of ParamApply_StorePairAndDerive: store the pair's low byte A unchanged\nEvidence: arm 2 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE297 reads 0x00FAE2D3; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3, DLTable_NormalTechRemap[2] = \"REMAP\".  Body: `jr 0xFAE2D8`, the shared `ld (XIZ+HL),A`."
+  },
+  {
+   "label": "ParamApply_DeriveMode3",
+   "mode": "replace",
+   "text": "ParamApply_DeriveMode3 -- PROG CHANGE MODE value 3 (no caption) of ParamApply_StorePairAndDerive: store the pair's high byte W\nEvidence: arm 3 of the 4-entry table at 0xFAE28F -- the LE32 word at 0xFAE29B reads 0x00FAE2D5; reader `ld XIY,0x00fae28f` at 0xFAE283, index (0x7F32) & 3.  Body: `srl 0x08,WA` then the shared `ld (XIZ+HL),A` at 0xFAE2D8."
+  },
+  {
+   "label": "SeqBuf_PutProgramEvent",
+   "mode": "replace",
+   "text": "SeqBuf_PutProgramEvent -- event type 0 of the 0x2C00-queue encoder at 0xFAE921: encode a part program change as a 7-byte 0xC0-tagged event and append it to the sequencer event ring 0x600A14\nEvidence: the LE32 word at 0xFAE9D0 reads 0x00FAEA12 (index 0); reader `ld XIX,0x00fae9d0` at 0xFAE9A6, index W & 0x0F where W is the high byte of the value word SeqBuf_LoadSlotKeyList copied from KeyValueList_A; in every A list type 0 belongs to exactly one key, {part, class 0} (program; MidiOut_ParamClassTable[0] = MidiOut_ProgramChange).\nBody: builds {0xC0, tick (0x60F31E) = (0x93), number, class, rec[0], rec[1], slot (0x60F31C)} at 0x60F300, bit 7 of rec[0]/rec[1] folded into status bits 0/1; length (0x60F31F) = 7; the tail 0xFAEC0F appends it with T_Ring600A14_PutBlock.  0x600A14 is the sequencer event ring of SeqBuf_AppendEvent (tag byte, then tick (0x93))."
+  },
+  {
+   "label": "SeqBuf_PutParamEvent",
+   "mode": "replace",
+   "text": "SeqBuf_PutParamEvent -- event type 1 of the encoder at 0xFAE921: encode a parameter change as a 7-byte 0xB0-tagged event {0xB0, tick, number, class, value, mask, slot} and append it to ring 0x600A14\nEvidence: the LE32 word at 0xFAE9D4 reads 0x00FAEA6B (index 1); reader `ld XIX,0x00fae9d0` at 0xFAE9A6.  KeyValueList_A type 1 covers part classes 3-0x0B, second-half classes 0x18-0x1A and numbers 0xAD, 0xAE, 0xB5-0xBD.\nBody: bit 7 of number / value / mask folded into status bits 2 / 0 / 1 (0xFAEA7A-0xFAEAA9), length 7, tail 0xFAEC0F.  SeqEvt_LookupParamType undoes the folding."
+  },
+  {
+   "label": "SeqBuf_PutPitchBendEvent",
+   "mode": "replace",
+   "text": "SeqBuf_PutPitchBendEvent -- event type 3 of the encoder at 0xFAE921: encode a pitch-bend change as {0xD2, tick, LSB, MSB, slot} and append it to ring 0x600A14\nEvidence: the LE32 word at 0xFAE9DC reads 0x00FAEAC5 (index 3); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 3 belongs only to key 0xB1 (ParamMsg_B1_PitchBend).  Body: `ld A,0xd2`, (0x60F312) & 0x7F7F, (0x60F31F) = 0x25 (length 5; 0x20 is the overflow flag the tail ORs into (0x34B8) when the ring is full).\nSeqEvt_ShadowPitchBend handles the same 0xD2 code on the playback side."
+  },
+  {
+   "label": "SeqBuf_PutModulationEvent",
+   "mode": "replace",
+   "text": "SeqBuf_PutModulationEvent -- event type 4 of the encoder at 0xFAE921: encode a modulation change as {0xD1, tick, value, slot} and append it to ring 0x600A14\nEvidence: the LE32 word at 0xFAE9E0 reads 0x00FAEAF4 (index 4); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 4 belongs only to key 0xB2 (ParamMsg_B2_CC01_Modulation).  Body: `ld A,0xd1`, (0x60F31F) = 0x14 (length 4, overflow flag 0x10).  SeqEvt_ShadowModulation handles 0xD1 on playback."
+  },
+  {
+   "label": "SeqBuf_PutExpressionEvent",
+   "mode": "replace",
+   "text": "SeqBuf_PutExpressionEvent -- event type 5 of the encoder at 0xFAE921: encode an expression change as {0xD3, tick, value, slot} and append it to ring 0x600A14\nEvidence: the LE32 word at 0xFAE9E4 reads 0x00FAEB1D (index 5); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 5 belongs only to key 0xB3 (ParamMsg_B3_CC0B_Expression).  Body: `ld A,0xd3`, (0x60F31F) = 4.  SeqEvt_ShadowExpression handles 0xD3 on playback."
+  },
+  {
+   "label": "SeqBuf_PutChanPressureEvent",
+   "mode": "replace",
+   "text": "SeqBuf_PutChanPressureEvent -- event type 6 of the encoder at 0xFAE921: when bit 0 of (0x7FC2) is set, encode a channel-pressure change as {0xD0, tick, value, slot} and append it to ring 0x600A14\nEvidence: the LE32 word at 0xFAE9E8 reads 0x00FAEB46 (index 6); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 6 belongs only to key 0xB4 (ParamMsg_B4_ChannelPressure).  Body: `bit 0,(0x7fc2) / jr z` gate, `ld A,0xd0`, (0x60F31F) = 4.  What bit 0 of (0x7FC2) is, is not established."
+  },
+  {
+   "label": "SeqBuf_PutTempoEvent",
+   "mode": "replace",
+   "text": "SeqBuf_PutTempoEvent -- event type 2 of the encoder at 0xFAE921: encode the current tempo (parameter 0x7A, RAM 0x7EE2) as {0x80, tick, tempo&0x7F, tempo>>7} and append it to ring 0x600A14\nEvidence: the LE32 word at 0xFAE9D8 reads 0x00FAEB75 (index 2); reader `ld XIX,0x00fae9d0` at 0xFAE9A6; KeyValueList_A type 2 belongs only to key 0x7A (KeyValueList_A32).  Body: `ld A,0x80`, `ld WA,(0x7ee2) / and WA,0x01ff`, 7-bit split, (0x60F31F) = 4.  SeqEvt_ApplyTempo decodes the same 0x80 code."
+  },
+  {
+   "label": "SeqBuf_LoadSlotKeyList",
+   "mode": "insert",
+   "text": "SeqBuf_LoadSlotKeyList -- if slot (0x60F31C) is enabled in the slot mask (0x60F318), copy KeyValueList_A for the slot's part (0x603422)[slot] to RAM 0x60F330; otherwise leave 0x60F330 empty (0xFF)\nEvidence: `ld (0x60f330),0xff`, shift loop on (0x60F318) at 0xFAEBC9-0xFAEBD6, `ld XIX,KeyValueListPtrs_A` read (the reader KeyValueListPtrs_A's header cites) and the word-copy loop 0xFAEBFB-0xFAEC0E.\n(0x60F318) is set by the unlabelled 0xFAE872 (directory T_F41F30) from (0x3000), (0x3004) or (0x1336) by the mode bytes (0x2078)/(0x207A).  Called per slot 0..16 by the 0x2C00 encoder at 0xFAE921."
+  },
+  {
+   "label": "SeqEvt_Ignore",
+   "mode": "replace",
+   "text": "SeqEvt_Ignore -- do-nothing handler for the sequencer playback events the parameter applier skips\nEvidence: the LE32 words at 0xFAEDF4, 0xFAEDF8, 0xFAEE08 and 0xFAEE0C (entries 1, 2, 6, 7 of the table at 0xFAEDF0, read by `ld XIY,0x00faedf0` at 0xFAEDE1 with index (status & 0x70) >> 4, i.e. status 0x90, 0xA0, 0xE0, 0xF0) and 0xFAEE78-0xFAEE98 (types 7-15 of the 0xFAEE5C table); body `ret`.\nThe 0x90 events in ring 0x60080A are the sequencer module's own (0xFEA579 puts 0x90, 0x7E, ...), handled elsewhere."
+  },
+  {
+   "label": "SeqEvt_UnpackProgramBit7",
+   "mode": "insert",
+   "text": "SeqEvt_UnpackProgramBit7 -- restore bit 7 of the two sound bytes of a 0xC0 event in the buffer 0x60F308: status bit 0 -> bit 7 of byte +4, status bit 1 -> bit 7 of byte +5\nEvidence: `bit 0,(XIX) / set 7,(XIX+0x04)` and `bit 1,(XIX) / set 7,(XIX+0x05)` at 0xFAEE22-0xFAEE33 with XIX = 0x60F308 -- the inverse of SeqBuf_PutProgramEvent's `res 7` + `set 0/1,(0x60f300)`.  Called only by SeqEvt_ApplyProgramEvent."
+  },
+  {
+   "label": "SeqEvt_ApplyParamEvent",
+   "mode": "replace",
+   "text": "SeqEvt_ApplyParamEvent -- playback of a 0xBn sequencer event: look its {number, class} up in the slot's KeyValueList_B and dispatch on the event type found\nEvidence: the LE32 word at 0xFAEDFC reads 0x00FAEE36 (entry 3 of the table at 0xFAEDF0, read by `ld XIY,0x00faedf0` at 0xFAEDE1, index (status & 0x70) >> 4); body calr SeqEvt_LookupParamType, then `ld L,(0x60f327) / and L,0x0f` and the 16-entry table at 0xFAEE5C (reader at 0xFAEE4E).\nKeyValueList_B uses only types 3 (key 0xAD), 4 (0xAE, 0xB5-0xBD), 5 ({part,3}) and 6 (part classes 5-0x0B, 0x18-0x1A), read straight from KeyValueList_B00..B32."
+  },
+  {
+   "label": "SeqEvt_WriteRecordField",
+   "mode": "replace",
+   "text": "SeqEvt_WriteRecordField -- type 6 of a played-back 0xBn event: masked write of {number, class, value, mask} into ParamNumber_RecordPtrs[number] + class and publish it when the slot's apply bit is set, then notify MIDI out unless the slot's output byte is 0x20\nEvidence: the LE32 word at 0xFAEE74 reads 0x00FAEE9D (index 6 of 0xFAEE5C, reader at 0xFAEE4E, index (0x60F327) & 0x0F); KeyValueList_B type 6 = part classes 5-0x0B and 0x18-0x1A.\nBody: SeqEvt_SlotApplyBit gate, `ld W,D / xor W,0xff / and A,W / and E,D / or E,A` store, T_Queue2C00_PublishStagedIfPending; then (0x60F007) = (0x603433)[slot] | 0x80 and T_ParamChange_Notify."
+  },
+  {
+   "label": "SeqEvt_ShadowPartVolume",
+   "mode": "replace",
+   "text": "SeqEvt_ShadowPartVolume -- type 5 of a played-back 0xBn event: defer a part-volume value, (0x60F610)[slot] = value | 0x80, for SeqEvt_FlushShadows\nEvidence: the LE32 word at 0xFAEE70 reads 0x00FAEF24 (index 5 of 0xFAEE5C, reader at 0xFAEE4E); KeyValueList_B type 5 belongs only to key {part, class 3}, and class 3 is volume (MidiOut_ParamClassTable[3] = MidiOut_CC07_Volume).  Body: `set 7,E / ld XIX,0x0060f610 / ld (XIX+HL),E`; SeqEvt_FlushShadows posts the array through SeqEvt_PostPartVolume with B = 3."
+  },
+  {
+   "label": "SeqEvt_PostPartVolume",
+   "mode": "insert",
+   "text": "SeqEvt_PostPartVolume -- post a deferred part volume for sequencer slot (0x60F31D): {part, 3, E, 0x7F} written into the part record and published when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20\nEvidence: part = IdentityMap32_FAF7A6[(0x603422)[slot]], `ld B,0x03 / ld D,0x7f`, SeqEvt_SlotApplyBit, T_ParamRecord_WriteFieldAndStage + T_Queue2C00_PublishStagedIfPending, then T_ParamChange_Notify (0xFAEF43-0xFAEFB0).  Class 3 is volume (MidiOut_ParamClassTable[3] = MidiOut_CC07_Volume).  Called from SeqEvt_FlushShadows' 0x60F610 sweep."
+  },
+  {
+   "label": "SeqEvt_ApplyParamAD",
+   "mode": "replace",
+   "text": "SeqEvt_ApplyParamAD -- type 3 of a played-back 0xBn event (used only by key 0xAD): load the event into the MIDI-in record (0x1950) with value/mask 0x7F00 and run ParamApply_PublishStagedAndPostSeven, then notify MIDI out\nEvidence: the LE32 word at 0xFAEE68 reads 0x00FAEFB3 (index 3 of 0xFAEE5C, reader at 0xFAEE4E); KeyValueList_B type 3 holds only key 0xAD.  Body: SeqEvt_SlotApplyBit gate, `ld (0x1950),WA` from (0x60F30A), `ldw WA,0x7f00 / ld (0x1952),WA`, `call T_F4087C` (ParamApply_PublishStagedAndPostSeven, which also posts the B1/B4/B2/B3/B5/B6/B7 reset values), (0x60F01E) := (0x60F309); then T_ParamChange_Notify."
+  },
+  {
+   "label": "SeqEvt_PublishParam",
+   "mode": "replace",
+   "text": "SeqEvt_PublishParam -- type 4 of a played-back 0xBn event: publish the event's four bytes unchanged to 0x2C00 (no record write) when the slot's apply bit is set, then notify MIDI out\nEvidence: the LE32 word at 0xFAEE6C reads 0x00FAF00A (index 4 of 0xFAEE5C, reader at 0xFAEE4E); KeyValueList_B type 4 = keys 0xAE and 0xB5-0xBD, numbers with no record.  Body: SeqEvt_SlotApplyBit gate, (0x60F080..83) := (0x60F30A..0D), T_Queue2C00_PublishStagedIfPending; T_ParamChange_Notify unless (0x603433)[slot] == 0x20."
+  },
+  {
+   "label": "SeqEvt_LookupParamType",
+   "mode": "insert",
+   "text": "SeqEvt_LookupParamType -- for the 0xBn event in 0x60F308: take the slot from byte +6, load the slot's KeyValueList_B into 0x60F330, restore bit 7 of number/value/mask from status bits 2/0/1, find the {number, class} key and leave its type in (0x60F327), or invalidate the event ((0x60F308) = 0xFF) when there is no key or its mask misses the event's mask\nEvidence: `ld A,(0x60f30e) / ld (0x60f31d),A` at 0xFAF055; .LFAF0C1 copies KeyValueListPtrs_B[(0x603422)[slot]] (reader at 0xFAF0DB, cited by that table's header); flag restore 0xFAF075-0xFAF08F; key search 0xFAF099-0xFAF0BB.\nThe inverse of SeqBuf_PutParamEvent's flag folding.  Called only by SeqEvt_ApplyParamEvent."
+  },
+  {
+   "label": "SeqEvt_ApplyTempo",
+   "mode": "replace",
+   "text": "SeqEvt_ApplyTempo -- playback of a 0x80 sequencer event: write its 9-bit tempo into parameter 0x7A's record (RAM 0x7EE2), reprogram the tempo timer and publish {0x7A, 0, tempo, 0xFF} when the slot's apply bit is set\nEvidence: the LE32 word at 0xFAEDF0 reads 0x00FAF0FE (entry 0 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); `cp (0x60f308),0x80`; `ld XIX,0x00007ee2 / and (XIX),0xfe00 / or (XIX),WA`; `call T_F40794` (sub_FAA742, the 40..300 BPM clamp that loads TREG5); `ldw (0x60f080),0x7a` + T_Queue2C00_PublishStagedIfPending.\nThe decode side of SeqBuf_PutTempoEvent."
+  },
+  {
+   "label": "SeqEvt_ApplyCtrlEvent",
+   "mode": "replace",
+   "text": "SeqEvt_ApplyCtrlEvent -- playback of a 0xDn sequencer event: validate its slot, then dispatch on status & 3 -- D0 channel pressure, D1 modulation, D2 pitch bend, D3 expression\nEvidence: the LE32 word at 0xFAEE04 reads 0x00FAF148 (entry 5 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); body calr SeqEvt_SelectCtrlEventSlot, `and A,0x03` and the 4-entry table at 0xFAF16C.\nThe four codes are the ones SeqBuf_PutChanPressureEvent / PutModulationEvent / PutPitchBendEvent / PutExpressionEvent emit for keys 0xB4 / 0xB2 / 0xB1 / 0xB3.  Also called by the slot-reset routine at 0xFAEC8A (directory T_F41F18) with synthesised D0/D1/D2 events."
+  },
+  {
+   "label": "SeqEvt_ShadowChanPressure",
+   "mode": "replace",
+   "text": "SeqEvt_ShadowChanPressure -- 0xD0 arm of SeqEvt_ApplyCtrlEvent: defer a channel-pressure value, (0x60F630)[slot] = value | 0x80\nEvidence: arm 0 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF16C reads 0x00FAF17C; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  SeqEvt_FlushShadows posts 0x60F630 through SeqEvt_PostChanPressure (`ld C,0xb4`)."
+  },
+  {
+   "label": "SeqEvt_PostChanPressure",
+   "mode": "insert",
+   "text": "SeqEvt_PostChanPressure -- post a deferred channel pressure for sequencer slot (0x60F31D): {0xB4, part, E, 0x7F} published to 0x2C00 when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20\nEvidence: `ld C,0xb4`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedIfPending, T_ParamChange_Notify (0xFAF196-0xFAF20A).  0xB4 is ParamMsg_B4_ChannelPressure.  Called from SeqEvt_FlushShadows' 0x60F630 sweep."
+  },
+  {
+   "label": "SeqEvt_ShadowModulation",
+   "mode": "replace",
+   "text": "SeqEvt_ShadowModulation -- 0xD1 arm of SeqEvt_ApplyCtrlEvent: defer a modulation value, (0x60F5B0)[slot] = value | 0x80\nEvidence: arm 1 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF170 reads 0x00FAF20B; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  SeqEvt_FlushShadows posts 0x60F5B0 through SeqEvt_PostModulation (`ld C,0xb2`); ParamShadow_FlushAll walks the same array with W = 0xB2."
+  },
+  {
+   "label": "SeqEvt_PostModulation",
+   "mode": "insert",
+   "text": "SeqEvt_PostModulation -- post a deferred modulation value for sequencer slot (0x60F31D): {0xB2, part, E, 0x7F} published when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20\nEvidence: `ld C,0xb2`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedIfPending, T_ParamChange_Notify (0xFAF225-0xFAF299).  0xB2 is ParamMsg_B2_CC01_Modulation.  Called from SeqEvt_FlushShadows' 0x60F5B0 sweep."
+  },
+  {
+   "label": "SeqEvt_ShadowPitchBend",
+   "mode": "replace",
+   "text": "SeqEvt_ShadowPitchBend -- 0xD2 arm of SeqEvt_ApplyCtrlEvent: defer a pitch-bend pair, 16-bit (0x60F5D0)[2*slot] = (word & 0x7F7F) with bit 7 of the low byte as pending flag\nEvidence: arm 2 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF174 reads 0x00FAF29A; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  SeqEvt_FlushShadows posts 0x60F5D0 through SeqEvt_PostPitchBend (`ld C,0xb1`); 0x60F5D0 is ParamShadow_SetPitchBend's 16-bit array."
+  },
+  {
+   "label": "SeqEvt_PostPitchBend",
+   "mode": "insert",
+   "text": "SeqEvt_PostPitchBend -- post a deferred pitch bend for sequencer slot (0x60F31D): {0xB1, part, LSB, MSB} published through T_Queue2C00_PublishStagedDrainPassB when the slot's apply bit is set, then notified to MIDI out unless the slot's output byte is 0x20\nEvidence: `ld C,0xb1`, `and DE,0x7f7f`; part = IdentityMap32_FAF7A6[(0x603422)[slot]]; SeqEvt_SlotApplyBit, T_Queue2C00_PublishStagedDrainPassB, T_ParamChange_Notify (0xFAF2BB-0xFAF331).  0xB1 is ParamMsg_B1_PitchBend.  Called from SeqEvt_FlushShadows' 0x60F5D0 sweep."
+  },
+  {
+   "label": "SeqEvt_ShadowExpression",
+   "mode": "replace",
+   "text": "SeqEvt_ShadowExpression -- 0xD3 arm of SeqEvt_ApplyCtrlEvent: defer an expression value, (0x60F590)[slot] = value | 0x80, unless bit 7 of (0x34D1) is set, in which case post {0xB3, part, value, 0x7F} at once\nEvidence: arm 3 of the 4-entry table at 0xFAF16C -- the LE32 word at 0xFAF178 reads 0x00FAF332; reader `ld XIX,0x00faf16c` at 0xFAF15E, index (0x60F308) & 3.  `bit 7,(0x34d1)` gate; the immediate path at 0xFAF352 loads `ld C,0xb3` and publishes/notifies like SeqEvt_PostModulation; 0x60F590 is ParamShadow_SetExpression's array.  SeqEvt_FlushShadows calls 0xFAF352 for this array."
+  },
+  {
+   "label": "SeqEvt_SelectCtrlEventSlot",
+   "mode": "insert",
+   "text": "SeqEvt_SelectCtrlEventSlot -- for a 0xDn playback event, take the slot from byte +3 (byte +4 for D2, which has two data bytes) into (0x60F31D) and accept it only if the slot's part (0x603422)[slot] is in IdentityMap32_FAF7C7 (0..0x1F); otherwise invalidate the event ((0x60F308) = 0xFF)\nEvidence: `and L,0x03` dispatch through the 4-entry table at 0xFAF410 (reader at 0xFAF404); the arms 0xFAF420/0xFAF431/0xFAF453 load L = (0x60F30B), 0xFAF442 loads L = (0x60F30C); shared search loop 0xFAF462-0xFAF48E (`djnz16` over 0x20 entries).  Called only by SeqEvt_ApplyCtrlEvent."
+  },
+  {
+   "label": "SeqEvt_FlushShadows",
+   "mode": "insert",
+   "text": "SeqEvt_FlushShadows -- for each of the 17 sequencer slots, post every deferred value (bit 7 set) and clear its flag: 0x60F630 -> SeqEvt_PostChanPressure, 0x60F5B0 -> SeqEvt_PostModulation, 0x60F5D0 (16-bit) -> SeqEvt_PostPitchBend, 0x60F590 -> the expression post at 0xFAF352, 0x60F610 -> SeqEvt_PostPartVolume\nEvidence: five `ldw BC,0x11` sweeps with `bit 7,(XIY) / res 7,(XIY)` at 0xFAF491-0xFAF55C, each setting (0x60F31D) to the slot index before the call.\nCalled from: the playback entry 0xFAED76 (directory T_F41F10) and the slot-reset routine 0xFAEC8A (T_F41F18)."
+  },
+  {
+   "label": "SeqEvt_SlotApplyBit",
+   "mode": "insert",
+   "text": "SeqEvt_SlotApplyBit -- carry = bit (0x60F31D) of the 32-bit slot mask (0x603454)\nEvidence: `ld XWA,(0x603454) / ld C,(0x60f31d) / inc 1,C / srl 0x01,XWA / djnz8` at 0xFAF562-0xFAF574, registers saved around it.  All ten callers (the SeqEvt_* handlers) `jr nc` past the record write / publish and still send the MIDI-out notify, so the bit gates the internal application only."
+  },
+  {
+   "label": "Regs_SaveAllScratch",
+   "mode": "insert",
+   "text": "Regs_SaveAllScratch -- store XWA, XBC, XDE, XHL, XIX, XIY and XIZ to RAM 0x60F090..0x60F0AB\nEvidence: seven `ld (0x60f090/94/98/9c/a0/a4/a8),Xrr` at 0xFAF579-0xFAF59C.  Called only from the SeqBuf append tail at 0xFAEC0F, before `call T_F40A24` when (0x60F01E) == 0xFF; Regs_RestoreAllScratch undoes it."
+  },
+  {
+   "label": "Regs_RestoreAllScratch",
+   "mode": "insert",
+   "text": "Regs_RestoreAllScratch -- reload XWA, XBC, XDE, XHL, XIX, XIY and XIZ from RAM 0x60F090..0x60F0AB\nEvidence: seven `ld Xrr,(0x60f090..0x60f0a8)` at 0xFAF59D-0xFAF5C0, the inverse of Regs_SaveAllScratch; called only after `call T_F40A24` in the SeqBuf append tail."
+  },
+  {
+   "label": "SeqEvt_ApplyProgramEvent",
+   "mode": "replace",
+   "text": "SeqEvt_ApplyProgramEvent -- playback of a 0xCn sequencer event: apply the recorded sound bytes to the event's part (record bytes 0/1 and second-half +0x1B..+0x1D), publish class 1 and class 0 when the slot's apply bit is set, then notify bank select / program by PROG CHANGE MODE\nEvidence: the LE32 word at 0xFAEE00 reads 0x00FAF5C1 (entry 4 of the table at 0xFAEDF0, reader `ld XIY,0x00faedf0` at 0xFAEDE1); SeqEvt_UnpackProgramBit7; `ld (XIX+0x3b),L / (XIX+0x3c),H / (XIX+0x3d),W` after T_F40790; stages {num,1,..,0x7F} and {num,0,..,0xFF}.\nThen `ld L,(0x7f32) / and L,0x03` through the 4-entry table at 0xFAF6B8: SeqEvt_ProgChgNormal_Notify, SeqEvt_ProgChgTech_Notify, nothing (REMAP and value 3).  The decode side of SeqBuf_PutProgramEvent."
+  },
+  {
+   "label": "SeqEvt_ProgChgNormal_Notify",
+   "mode": "replace",
+   "text": "SeqEvt_ProgChgNormal_Notify -- PROG CHANGE MODE NORMAL arm of SeqEvt_ApplyProgramEvent: notify bank select (param 0x81) and program (class 0) to MIDI out from the bytes just written to +0x3B..+0x3D\nEvidence: arm 0 of the 4-entry table at 0xFAF6B8 -- the LE32 word at 0xFAF6B8 reads 0x00FAF6C8; reader `ld XIX,0x00faf6b8` at 0xFAF6AB, index (0x7F32) & 3 = PROG CHANGE MODE (DLTable_NormalTechRemap[0] = \"NORMAL\").\nBody: GM drum parts 9/0x19 take the TECH arm; else T_ParamChange_Notify {0x81, part, (0x60F326) split} and {part, 0, ((0x60F324)<<3)|((0x60F325)&7), 0xFF}, with (0x60F007) = (0x603433)[slot] | 0x80."
+  },
+  {
+   "label": "SeqEvt_ProgChgTech_Notify",
+   "mode": "replace",
+   "text": "SeqEvt_ProgChgTech_Notify -- PROG CHANGE MODE TECH arm of SeqEvt_ApplyProgramEvent: notify bank select (param 0x81) from the event's byte +1 and program (class 0) from byte +0\nEvidence: arm 1 of the 4-entry table at 0xFAF6B8 -- the LE32 word at 0xFAF6BC reads 0x00FAF728; reader `ld XIX,0x00faf6b8` at 0xFAF6AB, index (0x7F32) & 3 (DLTable_NormalTechRemap[1] = \"TECH\").\nBody: T_ParamChange_Notify {0x81, part, (0x60F0BF)&0x3F split} and {part, 0, (0x60F0BE)&0x7F, 0xFF}; falls into the shared `ret` 0xFAF771."
+  },
+  {
+   "label": "SysExModule_EntryThunks",
+   "mode": "append",
+   "text": "SysExModule_EntryThunks -- module 10 of ModuleInitDirectory_F82641: the 4-byte phase slots the boot walker calls; slot 0 is `jp SysExModule_Phase0_ResetState`, slot 3 (0xFB200C) is `jp SysExModule_Phase3_GmNormalReset`, the others are `ret` + three `nop`\nEvidence: ModuleInitDirectory_F82641[10] = T_F408E0, which in prom_b is `.long 0xFB2000`; the walker at 0xF82846 adds the phase 0x00/04/08/0C/10 to that base and calls it -- the same slot idiom as MIDI_EntryThunks.\nThe module 0xFB2000-0xFB8CA5 holds SysExDump_RunSendJob (0xFB2049), the SysEx decode-tree walker at 0xFB63FC and the status reporter 0xFB7DFE (notes/sysex-probes/README.md), as well as the remote-flash reader."
+  },
+  {
+   "label": "SysExModule_Phase0_ResetState",
+   "mode": "insert",
+   "text": "SysExModule_Phase0_ResetState -- phase-0 boot slot of the SysEx module: reset its state through sub_FB818A -> sub_FB8156\nEvidence: `call sub_FB818A / ret` at 0xFB2018, reached from SysExModule_EntryThunks slot 0 (boot pass WA = 0, sub_F82832 at 0xF827DD); sub_FB818A is `calr sub_FB8156 / ret`, and sub_FB8156 runs sub_FB7F42, sub_FB7F1F, sub_FB8117 and zeroes (0x60FD40..0x60FD44), the dump job byte (0x60F802) and (0x60F804) (0xFB8156-0xFB8189).  (0x60F802) is the job byte SysExDump_RunSendJob tests (sysex_bulkdump_tx.py)."
+  },
+  {
+   "label": "SysExModule_Phase3_GmNormalReset",
+   "mode": "insert",
+   "text": "SysExModule_Phase3_GmNormalReset -- phase-3 boot slot of the SysEx module: `call ParamApply_ResetPairTablesIfGmNormal / ret`\nEvidence: 0xFB201D, reached only by `jp 0xFB201D` at 0xFB200C, slot 3 of SysExModule_EntryThunks -- the walker pass with WA = 0x0C that boot runs through sub_F8283E (0xF827FC)."
+  },
+  {
+   "label": "ParamApply_ResetPairTablesIfGmNormal",
+   "mode": "insert",
+   "text": "ParamApply_ResetPairTablesIfGmNormal -- when GM mode is on and PROG CHANGE MODE is NORMAL, refill ParamApply_StorePairAndDerive's per-part tables through sub_FB56D3\nEvidence: `bit 2,(0x7f4d)` at 0xFB2026 (GM mode, notes/sysex-probes/sysex_general_midi.py), `ld A,(0x7f32) / and A,0x03 / cp A,0` at 0xFB202C-0xFB2033 (0 = NORMAL, DLTable_NormalTechRemap[0]), `call sub_FB56D3` at 0xFB2037.\nsub_FB56D3 fills the pair table 0x60F530 with {0x00,0x1A} and the byte table 0x60F570 with 0x1A, then parts 9 and 0x19 with {0x00,0x20} / 0x20 (0xFB56DA-0xFB5769) -- the two tables ParamApply_StorePairAndDerive writes."
+  },
+  {
+   "label": "SysExDump_RunSendJob",
+   "mode": "insert",
+   "text": "SysExDump_RunSendJob -- run the pending SysEx bulk-dump transmit job: when bit 7 of (0x60F802) is set, prepare, send the category selected by (0x60F802) & 7, close the dump and report the status\nEvidence: `and C,0x80` on (0x60F802) at 0xFB204E; `set 6,(0x60fd40)`, Ring600C1E_InitIfPanelMode79, sub_FB7B0B, sub_FB2323 (the enquiry / start-transfer templates); `cp bc,5 / jr ugt` and JumpTable_FB2081 at 0xFB2070-0xFB207F; then sub_FB27AD (end-of-dump template) and sub_FB7DFE (status -> COMPLETED!/ERROR message); always `ld (0x60fd40),0` and sub_FB8156.\nRun by: prom_b T_F408E4 after the SEND row->job table 0xF99AE3 writes (0x60F802)|0x80, and by sub_FB5154 (`call 0xFB2049` at 0xFB5165) for a received dump request -- notes/sysex-probes/README.md, sysex_bulkdump_tx.py, sysex_command_map.py."
+  }
+ ],
+ "left_unnamed": [
+  {
+   "name": "sub_FABA08",
+   "why": "class-4 arm of JumpTable_FAB8B4; class 4 has no outbound handler (MidiOut_ParamClassTable[4] = MidiIn_NullHandler) and its 0xB7/0xBF value masking, 0x40/0x48 toggle-write (sub_FAB253) and sub_FAB410/sub_FAB49B calls are not decoded"
+  },
+  {
+   "name": "sub_FABBD6",
+   "why": "bare `ret` published only as prom_b directory slot T_F407F0, which has no converted caller; nothing to name"
+  },
+  {
+   "name": "sub_FABD33",
+   "why": "directory T_F40784 (prom_b 0xF4489E, 0xF44E46): clears bit 7 of (0x34D8) then sub_FAB5EB (queues pending param-0xB0 bytes (0x24F0)/(0x24F1)); what parameter 0xB0 and bit 7 of (0x34D8) mean is not established"
+  },
+  {
+   "name": "sub_FABEF4",
+   "why": "not a routine: a label on the loop-closing `jr ule` at 0xFABEF4 inside Queue2E00_FanOutToPartMask; nothing references it"
+  },
+  {
+   "name": "sub_FAC74B",
+   "why": "not a routine: a label between `ld (0x60f089),H` and `ld (0x60f08a),H` inside ParamMsg_ResyncParts_B3_CC0B_Expression; nothing references it"
+  },
+  {
+   "name": "sub_FADD87",
+   "why": "ret arm 1/2 of the table at 0xFADD77 owned by the handler at 0xFADD60, which nothing references (it sits after BitMaskToOrdinal6's 48 bytes)"
+  },
+  {
+   "name": "sub_FADD88",
+   "why": "ret arm 3 of the table at 0xFADD77 of the unreferenced handler at 0xFADD60; followed by another unreferenced handler at 0xFADD89"
+  },
+  {
+   "name": "sub_FADDA8",
+   "why": "ret arm 0 of the table at 0xFADDA0 owned by the unreferenced handler at 0xFADD89"
+  },
+  {
+   "name": "sub_FADDA9",
+   "why": "ret arm 1 of the table at 0xFADDA0 owned by the unreferenced handler at 0xFADD89"
+  },
+  {
+   "name": "sub_FADE55",
+   "why": "bare `ret` shared by arms 2 and 3 of 0xFADDF1 (REMAP and value 3) and by Evt2030_Class98_Op01's two early exits; it is that routine's return, not a handler"
+  },
+  {
+   "name": "sub_FADF08",
+   "why": "five-byte veneer to T_F40FD0 = prom_a sub_FC10DD, still unnamed; the existing header's reason (a veneer can be named no better than its target) stands"
+  },
+  {
+   "name": "sub_FAE02D",
+   "why": "bare `ret`: arms 2 and 3 of 0xFADF77 AND the early exit of ParamApply_ByModeOfParam80 (`jrl nz` when (0x7F02)&0xF0 != 0x10); the owner's return, not a REMAP handler"
+  },
+  {
+   "name": "sub_FAE30D",
+   "why": "bare `ret`: arm 2 of 0xFAE30E AND the parity-skip exit of Evt2030_Class00to1F_Op00 (`jr 0xFAE30D`); the owner's return"
+  },
+  {
+   "name": "sub_FAE800",
+   "why": "bare `ret` called from the unlabelled routine at 0xFAE84D (directory T_F41F14) and published as T_F41F2C; an empty hook whose purpose is not established"
+  },
+  {
+   "name": "sub_FAE822",
+   "why": "ret arms 5-7 of the 8-entry table at 0xFAE802 that nothing reads"
+  },
+  {
+   "name": "sub_FAE824",
+   "why": "ret arm 0 of the unread table at 0xFAE802"
+  },
+  {
+   "name": "sub_FAE825",
+   "why": "ret arm 1 of the unread table at 0xFAE802"
+  },
+  {
+   "name": "sub_FAE826",
+   "why": "ret arm 2 of the unread table at 0xFAE802"
+  },
+  {
+   "name": "sub_FAE827",
+   "why": "ret arm 3 of the unread table at 0xFAE802"
+  },
+  {
+   "name": "sub_FAE828",
+   "why": "ret arm 4 of the unread table at 0xFAE802"
+  },
+  {
+   "name": "sub_FAE829",
+   "why": "bare `ret` called from the unlabelled routine at 0xFAE84D; an empty hook (the 8-entry table after it, 0xFAE82A, is unread)"
+  },
+  {
+   "name": "sub_FAE84A",
+   "why": "the label is only the `ret` arms 5-7 of the unread table at 0xFAE82A; the 121 lines the worklist attributes to it are four unlabelled routines (0xFAE84D = T_F41F14, 0xFAE861, 0xFAE872 = T_F41F30, 0xFAE921 = T_F41F34) that need labels of their own"
+  },
+  {
+   "name": "sub_FAEA10",
+   "why": "`ret` for types 7-15 of the encoder table 0xFAE9D0; no KeyValueList_A record uses those types"
+  },
+  {
+   "name": "sub_FAEE9C",
+   "why": "`ret` for type 0 of the 0xFAEE5C table; no KeyValueList_B record uses type 0"
+  },
+  {
+   "name": "sub_FAEFB1",
+   "why": "`ret` for type 1 of the 0xFAEE5C table; no KeyValueList_B record uses type 1"
+  },
+  {
+   "name": "sub_FAEFB2",
+   "why": "`ret` for type 2 of the 0xFAEE5C table; no KeyValueList_B record uses type 2"
+  },
+  {
+   "name": "sub_FAF420",
+   "why": "three-instruction arm (D0) of SeqEvt_SelectCtrlEventSlot's table 0xFAF410: XIY/XBC setup, L = (0x60F30B), jump to the shared search at 0xFAF462; a fragment documented by its parent"
+  },
+  {
+   "name": "sub_FAF431",
+   "why": "same fragment for D1 (L = (0x60F30B)); identical to sub_FAF420 except it spells the map symbolically"
+  },
+  {
+   "name": "sub_FAF442",
+   "why": "same fragment for D2 (L = (0x60F30C), the slot after two data bytes)"
+  },
+  {
+   "name": "sub_FAF453",
+   "why": "same fragment for D3 (L = (0x60F30B)), falls into the shared search"
+  },
+  {
+   "name": "sub_FAF771",
+   "why": "bare `ret` shared by arms 2/3 of 0xFAF6B8 and by SeqEvt_ApplyProgramEvent's early exits; the owner's return"
+  },
+  {
+   "name": "sub_FAF772",
+   "why": "for params 0x61-0x63 whose record byte 0 is 0x35 it appends {0x61+k,0,0x35,0xFF} to 0x2E00 (called at the end of the slot-reset routine 0xFAEC8A); what 0x35 and params 0x61-0x63 mean is not established"
+  },
+  {
+   "name": "sub_FB2022",
+   "why": "bare `ret` published as prom_b directory slot T_F408F8; no converted caller"
+  },
+  {
+   "name": "sub_FB2023",
+   "why": "bare `ret` called from 0xFB40C7; an empty hook"
+  },
+  {
+   "name": "sub_FB2024",
+   "why": "bare `ret` called from 0xFB4218 (0xFB2025 is fill); an empty hook"
+  },
+  {
+   "name": "sub_FB203C",
+   "why": "register-saving veneer (push/pop XDE XHL XIX XIZ) around T_F415C8 = prom_a sub_F9433A, which is unnamed; a veneer can be named no better than its target"
+  }
+ ],
+ "notes": "KEY FINDING (resolves six \"stays sub_XXXXXX on purpose\" headers): (0x7F32) & 3 is the MIDI screen's PROG CHANGE MODE. sub_F9A4B0 does `ld C,(0x7F32) / and C,3 / ld (0x2740),C` and runs DisplayListB over [DL_NormalTechRemap, DL_F0CA7A), whose one record reads (0x2740) and indexes DLTable_NormalTechRemap = \"NORMAL\",\"TECH\",\"REMAP\" at screen offset IX=0x15F8 = 0x15E6 + 18, i.e. right after the \"PROG CHANGE MODE: \" text record of DL_TotalModeMidiMidiInputMode. The same check works for the neighbours: SOUND/COMBI at 0x19BD = 0x19A6 + len(\"SINGLE CH PROG CHANGE: \"), and ON/OFF at 0x1238 = 0x1226 + 18 (LOCAL TOTAL). Value 3 has no caption. The panel editor at 0xF9A62D only steps the field between 0 and 1 (sub_F9A0FE called with max 1), so REMAP and 3 can only arrive from somewhere else, such as prom_b Smf_ReadFile at 0xF6F858, which copies (0x1380)&3. This applies to all six tables (0xFAE30E, 0xFADF77, 0xFAE04D, 0xFAE28F, 0xFADDF1, 0xFAF6B8), so ParamApply_ByModeOfParam80's and ParamApply_StorePairAndDerive's \"Unknown\" lines can be closed. A second fact for other slices: bit 3 of (0x7F32) is SINGLE CH PROG CHANGE (0=SOUND, 1=COMBI) via sub_F9A4D3 and DLTable_SoundCombi. That is exactly the gate on Evt2030_Class98_Op01, so its \"Unknown: what bit 3 of (0x7F32) is\" can be answered. Bit 2 of (0x7F4D) is GM mode (sysex_general_midi.py). In NORMAL mode the GM drum parts 9 and 0x19 are sent to the TECH arm.\n\nPARAMETER 0x7A IS THE TEMPO (record 0x7EE2). sub_FAA742 (directory T_F40794, 13 refs, other slice) clamps it to 40..300 with default 120 and writes TREG5 (`st_dd8w DE,0x32`). Good lead to name it Tempo_ProgramTimer5 or similar.\n\nKeyValueList_A/B CAN NOW BE DECODED (their header says \"not claimed\"). The key is {number (low byte), class (high byte)} and the value is {mask (low), event type (high)}. Census over the 33+33 lists in ROM: A uses type 0={part,0} only, 2=0x7A only, 3=0xB1, 4=0xB2, 5=0xB3, 6=0xB4, and type 1 for everything else. B uses types 3=0xAD, 4=0xAE/0xB5-0xBD, 5={part,3}, 6=part classes 5-0x0B and 0x18-0x1A. The script is scratch-only: /home/fsanches/compartilhado/disasm-lanes/wsa1-naming-r1/scratch/prom_a-s08/kvtypes.py, and it is worth committing with the KeyValueList header fix. The encoder (0xFAE921, T_F41F34, run after List2030_TranslateToQueue2C00 via sub_FAB7E6) turns each 0x2C00 record into a tick-stamped event in the sequencer ring 0x600A14. The playback applier (0xFAED76, T_F41F10) reads ring 0x60080A, which the 0xFE8000 sequencer module fills (Ring60080A_Put at 0xFEA57C.., e.g. {0x90,0x7E,d1,d2,(0x601F00)}), and applies 0x80/0xBn/0xCn/0xDn events. (0x60F31C)/(0x60F31D) is a slot index 0..16. (0x603422)[slot] is the slot's part, and (0x603433)[slot] is its MIDI output byte (0x20 means none).\n\nCORRECTIONS / MISFRAMING LEADS (other slices):\n(1) Gap_FAC8E6's header says \"no site names 0xFAC8E6\", but `ld XBC,(0xfac8e6:24)` at 0xFAC007 (inside ParamMsg_ResendTwoAssignedCtrls) reads it. It is a 4-byte template control record {num 0, class 0, value 0, mask 0x7F}. A 3-byte census finds that site and no other.\n(2) ParamShadow_FlushAll's header claims \"Nothing else in prom_a names 0x60F590, 0x60F5B0, 0x60F5D0, 0x60F610 or 0x60F650\". That is false: SeqEvt_Shadow*, SeqEvt_FlushShadows and SeqEvt_ShadowPartVolume name the first four, plus 0x60F630, indexed by slot instead of part.\n(3) ParamShadow_SetField3: field 3 is part VOLUME. MidiOut_ParamClassTable[3] is MidiOut_CC07_Volume, and both KeyValueLists give {part,3} its own type. Candidate rename: ParamShadow_SetVolume.\n(4) The label \"Evt2030_ClassHandlers_Code_Skip\" at 0xFAEE11 is misnamed. It has nothing to do with Evt2030_ClassHandlers: it is the end-of-ring arm of the playback scanner at 0xFAED8E, which writes 0xFF at 0x2C00+(0x60F000). Likewise \"DuplicateTail_FAD3EB_Code_Return\" at 0xFADCCA is just the `ret` of Evt2030_Class20to3F.\n(5) ParamApply_PublishStagedAndPostSeven posts the controller reset values (B1 0x4000, B3 0x7F7F, the rest 0x7F00). Its only sequencer client is key 0xAD, so 0xAD looks like \"reset all controllers\". This is a lead only; it is not claimed in any name.\n\nUNLABELLED CODE THAT NEEDS LABELS (published, so the reachability walk converted it):\n- 0xFAE84D (T_F41F14, x5): init that zeroes (0x60F002), then calls FAE800, FAE829, 0xFAE8CB and 0xFAE921.\n- 0xFAE861: a Dev7F_WriteAllFourSlots twin.\n- 0xFAE872 (T_F41F30): chooses the slot mask (0x60F318).\n- 0xFAE921 (T_F41F34): the 0x2C00->SeqBuf encoder loop.\n- 0xFAEC8A (T_F41F18, x9): per-slot controller reset that synthesises D2{0,0x40}, D1 0, D0 0 and B0{B5,0x7F00}, then SeqEvt_FlushShadows, sub_FAF772 and DrainPassB.\n- 0xFAED76 (T_F41F10): the playback applier.\n- 0xFAC047: no 3-byte reference in either image, yet converted. It walks the assignments (0x7F23),(0x7F24),(0x7F29),(0x7F2A),(0x7F14) with Ctrl_CookedCellForNumber and hands each one to the JumpTable_FAC3BF dispatcher at 0xFAC391, which is also unlabelled. Together they are the 2C00/2E00 twin of MidiOut's sub_FA7E37.\n- 0xFAC8C2: returns 0x60F0E0+4n for n<=0x1F.\nThe worklist's sub_FABFFF, sub_FAC8AA and sub_FAE84A line counts include these neighbours.\n\nNAMING CONVENTIONS USED (watch for collisions at merge): List2030_* for Dispatch_By_60F080 / JumpTable_FAB8B4 entries; ParamMsg_ResyncParts_<num>_<ctl>, mirroring ParamMsg_<num>_<ctl>; Ctrl_CookedCellFor_<num>; SeqBuf_Put*Event (encoder) and SeqEvt_* (playback); *ProgChgNormal/Tech/Remap/Mode3* for the PROG CHANGE MODE arms (Mode3 = the uncaptioned value 3). The module at 0xFB2000 is called SysExModule because the sysex probes put the dump-send job (FB2049), the decode walker (FB63FC) and the status reporter (FB7DFE) inside it. It also holds the remote-flash reader. I checked every new name with a recursive `command grep -rnw` over wsa1/ and found no clashes and no duplicates within the pack. No files were edited, built or committed.",
+ "verified": false
+}
