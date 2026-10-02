@@ -1227,7 +1227,8 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xwa, xiz
 	ld	qwa, 0
 	pushw	wa
-	.long Bitmap_TechnichordBackground_2
+	push	xhl
+	pushw	233
 	pushw	0xfdd6
 	pushw	2
 	pushw	0x47f6
@@ -1276,8 +1277,8 @@ FDemoText_TextDispatch_Helper_Loop:
 	cp	hl, 0:i3
 	jr	z, FDemoText_ByteData_DisplayRefresh_Skip3
 	ld	xbc, xiz
-	.byte 0xaf, 0x04
-	.long SeqCh_FeatureDemoCallbackData
+	ld	xwa, (xsp+4)
+	sll	xwa, 16
 	add	xwa, xbc
 	calr	FDemoText_ByteData_DisplayRefresh
 	push	xhl

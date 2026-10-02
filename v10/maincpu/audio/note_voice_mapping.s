@@ -27034,13 +27034,16 @@ PmBank_DrawRegionInfo_Data:
 	ld	a, (xde+32)
 	ld	(xix), a
 	lda	xiy, (xbc+59)
-	.byte 0x8a, 0x21
-SendPartDataBlock_Data5:
-	ld	a, 181:opc
-	ld	xbc, 0xb33339b9
-	nop
-	ld	xde, 0xcfc92184
-	ld	xde, 0x41b30263
+	.set	SendPartDataBlock_Data5, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	ld	a, (xde+33)
+	ld	(xiy), a
+	lda	xhl, (xbc+57)
+	ld	(xhl), 66
+	ld	a, (xix)
+	cp	a, 66
+	jr	ule, SendPartDataBlock_Return5_Entry2_Code_Skip3
+	ld	(xhl), a
+SendPartDataBlock_Return5_Entry2_Code_Skip3:
 	ld	a, (xiy)
 	cp	(xhl), a
 	jr	ule, SendPartDataBlock_Return5_Skip10
@@ -27582,9 +27585,8 @@ TmFlashWrite_Block1_Entry_Skip:
 	add	xbc, 0x4aa7
 	ld	xwa, 0x1e0000
 	add	xwa, xbc
-	.byte 0xf3, 0xe5
-	nop
-	.asciz "x21P"
+	lda	xde, (xbc+30720)
+	ldw	bc, 80
 TmFlashWrite_Block1_Entry_Join:
 	call	InterCPU_E1_Bulk_Transfer
 	ld	a, (xsp+2)
@@ -27703,8 +27705,9 @@ TmFlash_WriteRoutine:
 	add	xhl, 0x4980
 	add	xhl, xiz
 	ld	xwa, (xsp+6)
-	.byte 0xb0
-	.ascii "c0')hT"
+	ld	(xwa), xhl
+	ldw	wa, 10535
+	jr	TmFlash_WriteRoutine_Entry_Code_Join
 TmFlash_WriteRoutine_Skip:
 	ld	(xsp+4), 255
 TmFlash_WriteRoutine_Join:
@@ -27734,8 +27737,8 @@ TmFlash_WriteRoutine_Skip2:
 	lda xbc, (xbc+18816)
 	ld xwa, (xsp+14)
 	ld (xwa), xbc
-	.ascii "0')h"
-	scf
+	ldw	wa, 10535
+	jr	TmFlash_WriteRoutine_Entry_Code_Join
 TmFlash_WriteRoutine_Entry_Code_Entry:
 	.byte 0x9f
 	ccf

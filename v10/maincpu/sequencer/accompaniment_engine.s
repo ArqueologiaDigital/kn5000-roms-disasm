@@ -13152,28 +13152,57 @@ AccTuning_ReadAndApplyOffset:
 	ret
 
 AccTuning_ComplexBytecodeData:
-	.byte 0xef, 0x6a, 0x3e, 0xf1, 0x63, 0x33, 0xc8, 0x76
-	.byte 0xb3, 0x00, 0xc1, 0x70, 0x34, 0x23, 0xcb, 0x8d
-	.byte 0xcd, 0xcc, 0x80, 0xc1, 0xd4, 0x33, 0x27, 0xcf
-	.byte 0x06, 0xcd, 0xcf, 0x80, 0x66, 0x0d, 0xc1, 0xfb
-	.byte 0x32, 0x25, 0xcd, 0x89, 0xc9, 0xcc, 0x02, 0xc9
-	.byte 0xda, 0x6e, 0x30, 0xc1, 0x12, 0x33, 0xcf, 0xc1
-	.byte 0x33, 0x04, 0x21, 0xc1, 0x6a, 0x33, 0xf1, 0x6e
-	.byte 0x0e, 0xc1, 0xd4, 0x33, 0x21, 0xc1, 0x13, 0x33
-	and	xbc, xbc
-	.ascii "k3%h"
-	.byte 0x04, 0xc1
-	.byte 0x21, 0x34, 0x25, 0xc1, 0xd4, 0x33, 0x21, 0xc9
-	.byte 0xda, 0x6e, 0x35, 0xf1, 0xd6, 0x33, 0x02, 0xfe
-	.byte 0xff, 0x68, 0x5a, 0xcb, 0xcc, 0x40, 0xcb, 0xcf
-	.byte 0x40, 0x66, 0x09, 0xcd, 0xcc, 0x01, 0xcd, 0x89
-	.byte 0xc9, 0xd9, 0x6e, 0xdf, 0xc1, 0x13, 0x33, 0xcf
-	.byte 0xc1, 0x33, 0x04, 0x21, 0xc1, 0x68, 0x33, 0xf1
-	jr nz, -51
+	dec	2, xsp
+	push	xiz
+	bit	0, (13155:16)
+	jrl	z, AccTuning_ComplexBytecodeData_Skip5
+	ld	c, (13424:16)
+	ld	e, c
+	and	e, 128
+	ld	l, (13268:16)
+	cpl	l
+	cp	e, 128
+	jr	z, AccTuning_ComplexBytecodeData_Skip
+	ld	e, (13051:16)
+	ld	a, e
+	and	a, 2
+	cp	a, 2:i3
+	jr	nz, AccTuning_ComplexBytecodeData_Skip2
+AccTuning_ComplexBytecodeData_Skip:
+	and	(13074:16), l
+	ld	a, (1075:16)
+	cp	a, (13162:16)
+	jr	nz, AccTuning_ComplexBytecodeData_Loop
+	ld	a, (13268:16)
+	or	(13075:16), a
+	ld	e, (13163:16)
+	jr	AccTuning_ComplexBytecodeData_Loop2
+AccTuning_ComplexBytecodeData_Loop:
+	ld	e, (13345:16)
+AccTuning_ComplexBytecodeData_Loop2:
+	ld	a, (13268:16)
+	cp	a, 2:i3
+	jr	nz, AccTuning_ComplexBytecodeData_Skip4
+	ldw	(13270:16), 65534
+	jr	AccTuning_ComplexBytecodeData_Join
+AccTuning_ComplexBytecodeData_Skip2:
+	and	c, 64
+	cp	c, 64
+	jr	z, AccTuning_ComplexBytecodeData_Skip3
+	and	e, 1
+	ld	a, e
+	cp	a, 1:i3
+	jr	nz, AccTuning_ComplexBytecodeData_Loop2
+AccTuning_ComplexBytecodeData_Skip3:
+	and	(13075:16), l
+	ld	a, (1075:16)
+	cp	a, (13160:16)
+	jr nz, AccTuning_ComplexBytecodeData_Loop
 	ld a, (13268:16)
 	or (13074:16), a
 	ld e, (13161:16)
-	jr -61
+	jr AccTuning_ComplexBytecodeData_Loop2
+AccTuning_ComplexBytecodeData_Skip4:
 	extz wa
 	lda	xbc, (AccTone_InlineBytecodeData_Data:24)
 	ld	l, (xbc+wa)
@@ -13186,8 +13215,10 @@ AccTuning_ComplexBytecodeData:
 	extz	hl
 	add	hl, hl
 	ldw	(13270), (xde+hl)
+AccTuning_ComplexBytecodeData_Join:
 	ldw	(13272:16), 6
 	jr	AccTuning_ComplexBytecodeData_Code_Epilogue
+AccTuning_ComplexBytecodeData_Skip5:
 	ld	xde, (13298:16)
 	lda	xwa, (xsp+4)
 	ld	c, (xde+16)
@@ -24554,14 +24585,13 @@ CmpBkslTtl_Dispatch_Helper:
 	pop	xiz
 	ret
 DrumKit_InlineCode1_Data:
-	.byte 0xc1, 0x37, 0x8d
-	push	xsp
-	ld	(xbc), xiz
-	rcf
+	cp	(36151:16), 177
+	jr	z, DrumKit_InlineCode1_Data_Skip
 	calr	DrumKit_UpdateStatusFlags_Helper2
 	ld	(0x379b:16), 64
 	and	(0x34cd:16), 191
 	calr	DrumKit_UpdateStatusFlags_Helper
+DrumKit_InlineCode1_Data_Skip:
 	and	(0xe3e2:16), 158
 	ret
 DrumKit_UpdateStatusFlags_Helper:
@@ -25162,12 +25192,9 @@ CmpSetTtl_Dispatch_Helper:
 	pop	xiz
 	ret
 RhythmVariation_Select_Entry_Data:
-	.byte 0xc1, 0x37, 0x8d
-	push	xsp
-	ld	(xix), xiz
-	jp	0x3540f1
-	nop
-	.byte 0x01
+	cp	(36151:16), 180
+	jr	z, RhythmVariation_Select_Entry_Data_Skip
+	ld	(13632:16), 1
 	call	AccPatch_GetCurrentSlotAddr
 	ld	l, (xiy+16)
 	and	l, 255
@@ -25175,6 +25202,7 @@ RhythmVariation_Select_Entry_Data:
 	and	h, 127
 	calr	TimeSig_DisplayStrings_Code_Sub2
 	calr	DrumKit_PostMidiEvents
+RhythmVariation_Select_Entry_Data_Skip:
 	calr	RhythmVariation_Select_Helper
 	ret
 
@@ -25187,11 +25215,10 @@ RhythmConfig_InlineCode2:
 	pop	xiz
 	ret
 RhythmConfig_InlineCode2_Data:
-	.byte 0xc1
-	ldw	iz, 0x3f8d
-	ld	(xix), xiz
-	pop	sr
+	cp	(36150:16), 180
+	jr	z, RhythmConfig_InlineCode2_Data_Return
 	calr	DrumKit_SendProgramChange
+RhythmConfig_InlineCode2_Data_Return:
 	ret
 
 DrumTempo_Adjust:
@@ -34254,7 +34281,14 @@ AccDraw_Secondary_Join:
 	add	xiz, xwa
 	ld	d, (xiz)
 	cp	d, 0:i3
-	.ascii "fW8;9:<=>"
+	jr	z, AccDraw_Secondary_Helper9_Skip
+	push	xwa
+	push	xhl
+	push	xbc
+	push	xde
+	push	xix
+	push	xiy
+	push	xiz
 	call	AccAudio_LockAcquire
 	pop	xiz
 	pop	xiy
@@ -34280,7 +34314,13 @@ AccDraw_Secondary_Helper9_Loop:
 	inc	1, c
 	cp	c, d
 	jr	c, AccDraw_Secondary_Helper9_Loop
-	.ascii "8;9:<=>"
+	push	xwa
+	push	xhl
+	push	xbc
+	push	xde
+	push	xix
+	push	xiy
+	push	xiz
 	call	AccAudio_LockRelease
 	pop	xiz
 	pop	xiy
@@ -34289,6 +34329,7 @@ AccDraw_Secondary_Helper9_Loop:
 	pop	xbc
 	pop	xhl
 	pop	xwa
+AccDraw_Secondary_Helper9_Skip:
 	inc	1, e
 	cp	e, 4:i3
 	jr	ge, AccDraw_Secondary_Return6

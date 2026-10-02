@@ -108,7 +108,8 @@ UIStateEvt_VoiceParamHandler_Join2:
 	or (10363:16), 4
 	jr	UIStateEvt_VoiceParamHandler_Return2
 UIStateEvt_VoiceParamHandler_Entry2:
-	.byte 0xc1, 0x54, 0x0d, 0x3c, 0xfe, 0xc1, 0x7b, 0x28, 0x3c, 0xfb
+	and	(3412:16), 254
+	and	(10363:16), 251
 	xor	w, w
 UIStateEvt_VoiceParamHandler_Return2:
 	ret
@@ -733,12 +734,22 @@ DpMdlySmfLyrTtlFunc_Helper:
 .Lc_f2093f:
 	ret
 PlayModeStop_InitFlagBlock_Helper:
-	.byte 0xc1, 0x34, 0x0d, 0x3f, 0x00, 0x6e, 0x09, 0xf1
-	.byte 0x34, 0x0d, 0x00, 0x01, 0x1d, 0x51, 0x09, 0xf2
-	.byte 0x0e, 0xc1, 0xac, 0x28, 0x3e, 0x04, 0xf1, 0x44
-	.byte	0x11, 0x00, 0x0a, 0x0e
-DpMdlySmfTtl_Dispatch_Data:	.byte	0xc1, 0x9a, 0x8c, 0x3f
-	.byte 0x6c, 0x6e, 0x05, 0xf1, 0x34, 0x0d, 0x00, 0x00
+	cp	(3380:16), 0
+	jr	nz, PlayModeStop_InitFlagBlock_Helper_Return
+	ld	(3380:16), 1
+	call	PlayModeStop_InitFlagBlock_Helper_Helper
+PlayModeStop_InitFlagBlock_Helper_Return:
+	ret
+PlayModeStop_InitFlagBlock_Helper_Helper:
+PlayModeStop_InitFlagBlock_Helper2:
+	or	(10412:16), 4
+	ld	(4420:16), 10
+	ret
+DpMdlySmfTtl_Dispatch_Data:
+	cp	(35994:16), 108
+	jr	nz, DpMdlySmfTtl_Dispatch_Data_Entry
+	ld	(3380:16), 0
+DpMdlySmfTtl_Dispatch_Data_Entry:
 	.byte 0x0e
 PlayMode_StopAbortRetZero:
 	cp (3380:16), 1
@@ -760,9 +771,9 @@ PlayModeStop_SendStopCmd:
 PlayMode_StopAndAbort:
 	and (0x28ac:16), 251
 
-	call PlayMode_SendStopEvent	; call PlayMode_SendStopEvent (v7 addr)
+	call	PlayMode_SendStopEvent	; call PlayMode_SendStopEvent (v7 addr)
 
-	call Song_AbortPlayback	; call Song_AbortPlayback (v7 addr)
+	call	Song_AbortPlayback	; call Song_AbortPlayback (v7 addr)
 
 	ret
 
@@ -3032,7 +3043,7 @@ DpSmfTtlFunc:
 ; DpSmfTtlFunc title dispatch
 DpSmfTtl_Dispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 16 of 21 slots byte-identical
-	cp (35995:16), 114	; differs from v10 here and llvm-objdump cannot read it
+	cp	(35995:16), 114	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, DpSmfTtl_ReturnZero
 	ld	(135304:24), 0
 	ldw	(135302:24), 0
@@ -3040,7 +3051,7 @@ DpSmfTtl_Dispatch:
 	calr	DisplayMode_DispatchEvents
 	calr	CDlikeSwTtl_ShowSongTitle
 	jrl	DpSmfTtl_ReturnZero
-	cp (35994:16), 114	; differs from v10 here and llvm-objdump cannot read it
+	cp	(35994:16), 114	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, DpSmfTtl_ReturnZero
 	call	CDlikeSwTtl_ShowSongTitle_Helper
 	bit	0, hl

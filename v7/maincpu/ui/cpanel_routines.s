@@ -430,11 +430,11 @@ CPanel_PollStartup:
 
 	ei 6
 
-	ldw (36097:16), 0	; stdi16 (0x8d9d), 0 (v7 patched)
+	ldw	(36097:16), 0	; stdi16 (0x8d9d), 0 (v7 patched)
 
-	ldw (36099:16), 0	; stdi16 (0x8d9f), 0 (v7 patched)
+	ldw	(36099:16), 0	; stdi16 (0x8d9f), 0 (v7 patched)
 
-	or (36086:16), 1	; ordi8 0x8d92, 1	; CP_Flags_B.0 = 1 (v7 patched)
+	or	(36086:16), 1	; ordi8 0x8d92, 1	; CP_Flags_B.0 = 1 (v7 patched)
 
 	ei 0
 
@@ -540,15 +540,15 @@ CPanel_WaitTXReady_BufferCheck:
 WaitTX_ConfigAndReturn:
 	ei 6
 
-	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 
-	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
 
 	ld (0xeb:8), 0xdd:io
 
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
+	and_sd8b_im	0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 
-	or (36086:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
+	or	(36086:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
 
 	ei 0
 
@@ -607,19 +607,19 @@ INTA_HandleCountdown:
 	jr nz, 6
 	ldw (36099:16), 92
 INTA_DecrementRXCount:
-	decw 1, (36099:16)	; decdi16 1, 0x8d9f (v7 patched)
+	decw	1, (36099:16)	; decdi16 1, 0x8d9f (v7 patched)
 
-	or (36086:16), 64	; ordi8 0x8d92, 64	; CP_Flags_B.6 = 1  ; UNUSED (v7 patched)
+	or	(36086:16), 64	; ordi8 0x8d92, 64	; CP_Flags_B.6 = 1  ; UNUSED (v7 patched)
 
-	and (36080:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
+	and	(36080:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
 
 
 
 INTA_HANDLER_END:
 	pop xwa
-	ld (0xf8:8), 0x12:io	; INTA Pin
-	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
-	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(0xf8:8), 0x12:io	; INTA Pin
+	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -654,9 +654,9 @@ MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
-	ld (0xf8:8), 0x12:io	; INTA Pin
-	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
-	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(0xf8:8), 0x12:io	; INTA Pin
+	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -674,9 +674,9 @@ LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES:
 	pop xiy
 	pop xhl
 	pop xwa
-	ld (0xf8:8), 0x12:io	; INTA Pin
-	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
-	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(0xf8:8), 0x12:io	; INTA Pin
+	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
 	reti
 
 
@@ -816,31 +816,31 @@ CPanel_SM_TXComplete:
 	or (36080:16), 2
 	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 TXComplete_BufferEmpty:
-	and (36082:16), 191	; anddi8 (0x8d8e), 191 (v7 patched)
+	and	(36082:16), 191	; anddi8 (0x8d8e), 191 (v7 patched)
 
-	ldb_d8 a, (36082)	; ldb_d8 a, (0x8d8e) (v7 patched)
+	ldb_d8	a, (36082)	; ldb_d8 a, (0x8d8e) (v7 patched)
 
 	st_dd8b A, 0x3e
 
-	and (36083:16), 191	; anddi8 (0x8d8f), 191; disable CPanel serial clk (v7 patched)
+	and	(36083:16), 191	; anddi8 (0x8d8f), 191; disable CPanel serial clk (v7 patched)
 
-	ldb_d8 a, (36083)	; ldb_d8 a, (0x8d8f) (v7 patched)
+	ldb_d8	a, (36083)	; ldb_d8 a, (0x8d8f) (v7 patched)
 
 	st_dd8b A, 0x3f
 
 	ld (0xe3:8), 0x05:io
 
-	ld (0xeb:8), 0xff:io	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
+	ld	(0xeb:8), 0xff:io	; INTTX1: M=7 | INTRX1: M=7 (meaning: disable int.req.)
 
-	ld (0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
+	ld	(0xd7:8), 0x24:io	; Internal Clock T8 (64/fc)
 
 	                 ; Divide by 4
 
 	                 ; fc = 16MHz, so fc/64/4 = 62500
 
-	and (36080:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
+	and	(36080:16), 253	; anddi8 (0x8d8c), 253; CP_Flags_A.1 = 0 (v7 patched)
 
-	jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES	; jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
+	jrl	MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES	; jrl MOST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
 
 
@@ -919,9 +919,9 @@ RXByteN_CheckDone:
 	and_sd8b_im 214, 223
 	jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES
 RXByteN_ContinueRX:
-	and (36082:16), 159	; anddi8 (0x8d8e), 159 (v7 patched)
+	and	(36082:16), 159	; anddi8 (0x8d8e), 159 (v7 patched)
 
-	ldb_d8 a, (36082)	; ldb_d8 a, (0x8d8e) (v7 patched)
+	ldb_d8	a, (36082)	; ldb_d8 a, (0x8d8e) (v7 patched)
 
 	st_dd8b A, 0x3e
 
@@ -933,36 +933,36 @@ RXByteN_ContinueRX:
 
 	ld (0xeb:8), 0x0d:io
 
-	jrl -765	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
+	jrl	-765	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
 
 
 
 
 CPanel_SM_Idle:
-	or (36086:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
+	or	(36086:16), 128	; ordi8 0x8d92, 128	; CP_Flags_B.7 = 1 (v7 patched)
 
-	jrl -773	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
+	jrl	-773	; jrl LEAST_COMMON_END_FOR_CPANEL_SERIAL_ROUTINES (v7 displacement)
 
 
 
-	and (36080:16), 252	; anddi8 (0x8d8c), 252; CP_Flags_A.0 = 0 (v7 patched)
+	and	(36080:16), 252	; anddi8 (0x8d8c), 252; CP_Flags_A.0 = 0 (v7 patched)
 
 						; CP_Flags_A.1 = 0
 
-	or (36086:16), 4	; ordi8 0x8d92, 4	; CP_Flags_B.2 = 1  : UNUSED (v7 patched)
+	or	(36086:16), 4	; ordi8 0x8d92, 4	; CP_Flags_B.2 = 1  : UNUSED (v7 patched)
 
-	ld (0xf8:8), 0x23:io	; INTTX1: Serial send 1
+	ld	(0xf8:8), 0x23:io	; INTTX1: Serial send 1
 
-	and_sd8b_im 0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
+	and_sd8b_im	0xd6, 0xdf	; RXE (bit 5) = 0: receive disable
 
 	ld (0xeb:8), 0x0f:io
 
-	ld (0xf8:8), 0x22:io	; INTRX1: Serial receive 1
+	ld	(0xf8:8), 0x22:io	; INTRX1: Serial receive 1
 
 	ld (0xe3:8), 0x07:io
 
-	ld (0xf8:8), 0x12:io	; INTA Pin
+	ld	(0xf8:8), 0x12:io	; INTA Pin
 
 	reti
 
@@ -1010,7 +1010,7 @@ PollLoop_DispatchWork:
 	calr CPanel_InitButtonState
 	jr PollLoop_CheckTXReady
 PollLoop_DoLEDUpdate:
-	calr CPanel_UpdateLEDs	; do this
+	calr	CPanel_UpdateLEDs	; do this
 				; }
 PollLoop_CheckTXReady:
 	ei 6
@@ -1163,10 +1163,14 @@ CPanel_RX_EncoderPacket:
 	ld	(36097:16), iy
 	jr	EncPkt_ParseNext	; -> 0xFC4268
 EncPkt_WriteEvent:
-	.byte 0xf3, 0x07, 0xf8, 0xf0, 0x47, 0x1e, 0x02, 0x02
-	.byte 0xf1, 0xfa, 0x8c, 0x47, 0xf3, 0x07, 0xf8, 0xf0
-	.byte 0x00, 0xff, 0x1e, 0xf5, 0x01, 0xbe, 0xfc, 0x54
-	.byte 0x9e, 0xfe, 0x6b, 0xf1, 0x01, 0x8d, 0x55
+	ld	(xiz+ix), l
+	calr	CPanel_IncEventPtr
+	ld	(36090:16), l
+	ld	(xiz+ix), 0xff
+	calr	CPanel_IncEventPtr
+	ld	(xiz-4), ix
+	decw	3, (xiz-2)
+	ld	(36097:16), iy
 EncPkt_ParseNext:
 	jrl CPanel_RX_ParseNext
 
@@ -1281,13 +1285,13 @@ CPanel_RX_SyncPacket:
 
 	ld	a, (xde+iy)
 
-	calr CPanel_IncRXPtr	; calr CPanel_IncRXPtr (v7 displacement)
+	calr	CPanel_IncRXPtr	; calr CPanel_IncRXPtr (v7 displacement)
 
-	ld (36097:16), iy	; stda16 (0x8d9d), xiy (v7 patched)
+	ld	(36097:16), iy	; stda16 (0x8d9d), xiy (v7 patched)
 
-	or (36086:16), 8	; ordi8 0x8d92, 8	; CP_Flags_B.3 = 1  ; UNUSED (v7 patched)
+	or	(36086:16), 8	; ordi8 0x8d92, 8	; CP_Flags_B.3 = 1  ; UNUSED (v7 patched)
 
-	jrl CPanel_RX_ParseNext	; jrl CPanel_RX_ParseNext (v7 displacement)
+	jrl	CPanel_RX_ParseNext	; jrl CPanel_RX_ParseNext (v7 displacement)
 
 
 
@@ -1359,15 +1363,15 @@ CPanel_LED_HandlePacket2:
 
 	calr CPanel_IncLEDPtr
 
-	ld_dst16_rid8 XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
+	ld_dst16_rid8	XIZ, -8, IX	; LD (XIZ-8), IX -- store updated event read ptr
 
 	incw 1, (xiz - 2)		; increment pending LED byte count
 
 	incw 1, (xiz - 2)		; increment pending LED byte count (+2 total)
 
-	ld (36195:16), iy	; stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR (v7 patched)
+	ld	(36195:16), iy	; stda16 (0x8dff), iy; store LED write ptr to CPANEL_LED_WRITE_PTR (v7 patched)
 
-	jrl CPanel_UpdateLEDs__check_next	; jrl CPanel_UpdateLEDs__check_next	; check for more events (v7 displacement)
+	jrl	CPanel_UpdateLEDs__check_next	; jrl CPanel_UpdateLEDs__check_next	; check for more events (v7 displacement)
 
 
 

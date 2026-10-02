@@ -691,9 +691,9 @@ SetWall_CrossTypeChange:
 
 	ld (3301:16), a
 
-	call SetWall_CrossType_Validate	; call SetWall_CrossType_Validate (v7 addr)
+	call	SetWall_CrossType_Validate	; call SetWall_CrossType_Validate (v7 addr)
 
-	call PerfMode_Handler_EvtB_Helper2_Helper11	; call Audio_CheckSubsystemReady (v7 addr)
+	call	PerfMode_Handler_EvtB_Helper2_Helper11	; call Audio_CheckSubsystemReady (v7 addr)
 
 	ret
 
@@ -2110,7 +2110,10 @@ SetWall_MiscDataAndCode_Data:
 	bitm 7, (xhl)
 	pop	xhl
 	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
-	.byte 0xe7, 0x34, 0x61, 0xe7, 0x34, 0x04
+	.byte	0xe7, 0x34, 0x61	; inc 1,XBC3
+SetWall_MiscDataAndCode_Data_Code_Join:
+SetWall_MiscDataAndCode_Data_Code_Join:
+	push_lerp	52
 	call	SetWall_MiscDataAndCode_Data_Code_Helper
 	pop_lerp 52
 	ld	xhl, (4349:16)
@@ -2120,7 +2123,7 @@ SetWall_MiscDataAndCode_Data:
 	cp	hl, 65535
 	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	.byte 0xe7, 0x34, 0x61
-	jr	-32
+	jr	SetWall_MiscDataAndCode_Data_Code_Join
 SetWall_MiscDataAndCode_Data_Code_Return:
 	ret
 SetWall_MiscDataAndCode_Data_Code_Helper:
@@ -2190,7 +2193,7 @@ SetWall_Sync_FinalUpdate:
 
 	and (0x28a7:16), 247
 
-	call SeqPlay_CheckStartConditions	; call SeqPlay_CheckStartConditions (v7 addr)
+	call	SeqPlay_CheckStartConditions	; call SeqPlay_CheckStartConditions (v7 addr)
 
 	and (0x28b1:16), 254
 

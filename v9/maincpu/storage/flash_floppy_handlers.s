@@ -1713,16 +1713,12 @@ PartGrid_OperationsBlock_Join:
 	ld	xwa, 25
 	jr	PartGrid_OperationsBlock_Join2
 PartGrid_OperationsBlock_Entry:
-	.byte 0xb9
-	.asciz " E@!"
-	nop
-	nop
+	ld	(xbc+32), e
+	ld	xwa, 33
 	jr	PartGrid_OperationsBlock_Join2
 PartGrid_OperationsBlock_Entry2:
-	.byte 0xb9
-	.asciz "(E@)"
-	nop
-	nop
+	ld	(xbc+40), e
+	ld	xwa, 41
 	jr	PartGrid_OperationsBlock_Join2
 PartGrid_OperationsBlock_Skip2:
 	ld	(xbc+48), e
@@ -1900,9 +1896,9 @@ NOTE_EVENT_DISPATCH_1:
 	jr NOTE_EVENT_COPY_COMMON
 	ld xbc, (3214:16); Case 6: Load dest pointer (falls through)
 NOTE_EVENT_COPY_COMMON:	; F1717D - Common handler
-	ld xiy, xbc	; XIY = destination pointer
-	ld xix, xwa	; XIX = source pointer
-	ldw bc, 0xb400	; BC = 0xb400 byte count
+	ld	xiy, xbc	; XIY = destination pointer
+	ld	xix, xwa	; XIX = source pointer
+	ldw	bc, 0xb400	; BC = 0xb400 byte count
 	ldirw	; Block copy words
 
 ; NoteEventBuffer copy common handler
@@ -6079,71 +6075,71 @@ CmpSetP1_GridCheck_Return:
 ; Offset table at 0xe1cef0 selects which handler to run based on WA value
 UI_COMPONENT_DISPATCH:
 	ld a, (0x34d7:16); Load byte from UI state
-	inc 1, a	; Increment by 1
-	extz wa	; Zero-extend A to WA
-	pushw wa	; Push WA as parameter
-	pushw UI_COMPONENT_DISPATCH_Str_Fmtd@hi16	; Push parameter
-	pushw UI_COMPONENT_DISPATCH_Str_Fmtd@lo16	; Push parameter
+	inc	1, a	; Increment by 1
+	extz	wa	; Zero-extend A to WA
+	pushw	wa	; Push WA as parameter
+	pushw	UI_COMPONENT_DISPATCH_Str_Fmtd@hi16	; Push parameter
+	pushw	UI_COMPONENT_DISPATCH_Str_Fmtd@lo16	; Push parameter
 	push xde
-	call Sprintf_Locked	; Call handler function
-	lda xsp, (xsp + 10)	; Clean up stack (10 bytes)
-	jrl WidgetHandler_PostEventAndReturnZero	; Jump to end
+	call	Sprintf_Locked	; Call handler function
+	lda	xsp, (xsp + 10)	; Clean up stack (10 bytes)
+	jrl	WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE1:
 	ld a, (0x34ce:16); Load byte from UI state
-	srl a, 7	; Shift right logical by 7
-	extz wa	; Zero-extend A to WA
-	sla wa, 2	; Shift left by 2 (multiply by 4)
+	srl	a, 7	; Shift right logical by 7
+	extz	wa	; Zero-extend A to WA
+	sla	wa, 2	; Shift left by 2 (multiply by 4)
 	lda xbc, (0x03d9f6:24); Load table address
 	ld	xwa, (xbc+wa)	; Load entry from table
-	push xwa	; Push parameter
+	push	xwa	; Push parameter
 	ld a, (0x34d8:16); Load byte from UI state
-	extz wa	; Zero-extend A to WA
-	sla wa, 2	; Shift left by 2 (multiply by 4)
+	extz	wa	; Zero-extend A to WA
+	sla	wa, 2	; Shift left by 2 (multiply by 4)
 	lda xbc, (0x03da0e:24); Load table address
 	ld	xwa, (xbc+wa)	; Load entry from table
-	push xwa	; Push parameter
-	pushw UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@hi16	; Push parameter
-	pushw UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@lo16	; Push parameter
+	push	xwa	; Push parameter
+	pushw	UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@hi16	; Push parameter
+	pushw	UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@lo16	; Push parameter
 	push xde
-	call Sprintf_Locked	; Call handler function
-	lda xsp, (xsp + 16)	; Clean up stack (16 bytes)
-	jr WidgetHandler_PostEventAndReturnZero	; Jump to end
+	call	Sprintf_Locked	; Call handler function
+	lda	xsp, (xsp + 16)	; Clean up stack (16 bytes)
+	jr	WidgetHandler_PostEventAndReturnZero	; Jump to end
 UI_COMPONENT_DISPATCH_CASE2:
 	ld c, (0x34e9:16); Load byte from UI state
-	ld xwa, 0x3d9c6	; Load table address
-	jr UI_COMPONENT_DISPATCH_CASE2_COMMON	; Jump to common code
+	ld	xwa, 0x3d9c6	; Load table address
+	jr	UI_COMPONENT_DISPATCH_CASE2_COMMON	; Jump to common code
 UI_COMPONENT_DISPATCH_CASE3:
 	ld a, (0x34ea:16); Load byte from UI state
-	srl a, 4	; Shift right logical by 4
-	and a, 0x1	; Mask to get bit 4
-	ld c, a	; Copy to C
-	ld xwa, 0x3d9fe	; Load table address
+	srl	a, 4	; Shift right logical by 4
+	and	a, 0x1	; Mask to get bit 4
+	ld	c, a	; Copy to C
+	ld	xwa, 0x3d9fe	; Load table address
 UI_COMPONENT_DISPATCH_CASE2_COMMON:
-	extz bc	; Zero-extend C to BC
-	sla bc, 2	; Shift left by 2 (multiply by 4)
+	extz	bc	; Zero-extend C to BC
+	sla	bc, 2	; Shift left by 2 (multiply by 4)
 	ld	xwa, (xwa+bc)	; Load entry from table
-	push xwa	; Push parameter
-	jr UI_COMPONENT_DISPATCH_PUSH_CALL	; Jump to push and call
+	push	xwa	; Push parameter
+	jr	UI_COMPONENT_DISPATCH_PUSH_CALL	; Jump to push and call
 UI_COMPONENT_DISPATCH_CASE4:
-	ld wa, 6:i3	; Load 6
-	jr UI_COMPONENT_DISPATCH_CASE5_COMMON	; Jump to common code
+	ld	wa, 6:i3	; Load 6
+	jr	UI_COMPONENT_DISPATCH_CASE5_COMMON	; Jump to common code
 UI_COMPONENT_DISPATCH_CASE5:
-	ld wa, 5:i3	; Load 5
+	ld	wa, 5:i3	; Load 5
 UI_COMPONENT_DISPATCH_CASE5_COMMON:
 	ld c, (0x34ea:16); Load byte from UI state
-	and a, 0xf	; Mask lower nibble
-	jr z, UI_COMPONENT_DISPATCH_CASE5_SKIP	; Skip shift if zero
-	srla c	; Shift A right by C
+	and	a, 0xf	; Mask lower nibble
+	jr	z, UI_COMPONENT_DISPATCH_CASE5_SKIP	; Skip shift if zero
+	srla	c	; Shift A right by C
 UI_COMPONENT_DISPATCH_CASE5_SKIP:
-	and c, 0x1	; Mask C to get bit 0
-	extz bc	; Zero-extend C to BC
-	sla bc, 2	; Shift left by 2 (multiply by 4)
+	and	c, 0x1	; Mask C to get bit 0
+	extz	bc	; Zero-extend C to BC
+	sla	bc, 2	; Shift left by 2 (multiply by 4)
 	ld	xwa, (xhl+bc)	; Load entry from table
-	push xwa	; Push parameter
+	push	xwa	; Push parameter
 UI_COMPONENT_DISPATCH_PUSH_CALL:
 	push xde
-	call Sprintf_Locked	; Call handler function
-	inc 8, xsp	; Increment stack pointer
+	call	Sprintf_Locked	; Call handler function
+	inc	8, xsp	; Increment stack pointer
 
 WidgetHandler_PostEventAndReturnZero:
 	cpw (xsp + 22), 0x4
@@ -6182,30 +6178,30 @@ CmpSetGridCheck:
 ; Queries UI object state and sends appropriate event (0x01e40008 or 0x01e4000a)
 ; =============================================================================
 GridCheck_Handler0:
-	call GetFocusObject	; Get UI object
-	ld xwa, xhl	; Save result in XWA
-	ld xbc, EVT_GET_SELECTED_CEL	; Event code for query
-	ld xde, 0:i3	; Parameter = 0
-	call SendEvent	; Query object state
-	ld xde, xhl	; Result in XDE
-	lda xwa, (xsp + 14)	; Get local var pointer
-	ld xbc, xde	; Copy result to XBC
-	srl xbc, 16	; SRL 0, XBC (clear carry)
-	ldiw_erp 0xe6, 0	; LD QBC, 0 (clear high bits)
-	ld (xwa), bc	; Store low word
-	ld (xwa + 2), de	; Store high word
-	ld wa, (xwa)	; Load state value
-	exts xde	; Sign extend DE
-	cp wa, 2:i3	; Check if state == 2
+	call	GetFocusObject	; Get UI object
+	ld	xwa, xhl	; Save result in XWA
+	ld	xbc, EVT_GET_SELECTED_CEL	; Event code for query
+	ld	xde, 0:i3	; Parameter = 0
+	call	SendEvent	; Query object state
+	ld	xde, xhl	; Result in XDE
+	lda	xwa, (xsp + 14)	; Get local var pointer
+	ld	xbc, xde	; Copy result to XBC
+	srl	xbc, 16	; SRL 0, XBC (clear carry)
+	ldiw_erp	0xe6, 0	; LD QBC, 0 (clear high bits)
+	ld	(xwa), bc	; Store low word
+	ld	(xwa + 2), de	; Store high word
+	ld	wa, (xwa)	; Load state value
+	exts	xde	; Sign extend DE
+	cp	wa, 2:i3	; Check if state == 2
 	jr z, GridCheck_Handler0_State2
-	cp wa, 1:i3	; Check if state == 1
-	jrl nz, GridCheck_ReturnZero	; If neither, exit
-	ld xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
-	ld xbc, EVT_PAN_UP	; Event: grid check state 1 (case 0)
+	cp	wa, 1:i3	; Check if state == 1
+	jrl	nz, GridCheck_ReturnZero	; If neither, exit
+	ld	xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
+	ld	xbc, EVT_PAN_UP	; Event: grid check state 1 (case 0)
 	jr GridCheck_SendEvent
 GridCheck_Handler0_State2:
-	ld xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
-	ld xbc, EVT_RLMT_UP	; Event: grid check state 2 (case 0)
+	ld	xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
+	ld	xbc, EVT_RLMT_UP	; Event: grid check state 2 (case 0)
 	jr GridCheck_SendEvent
 
 ; =============================================================================
@@ -6214,30 +6210,30 @@ GridCheck_Handler0_State2:
 ; Queries UI object state and sends appropriate event (0x01e40009 or 0x01e4000b)
 ; =============================================================================
 GridCheck_Handler1:
-	call GetFocusObject	; Get UI object
-	ld xwa, xhl	; Save result in XWA
-	ld xbc, EVT_GET_SELECTED_CEL	; Event code for query
-	ld xde, 0:i3	; Parameter = 0
-	call SendEvent	; Query object state
-	ld xde, xhl	; Result in XDE
-	lda xwa, (xsp + 14)	; Get local var pointer
-	ld xbc, xde	; Copy result to XBC
-	srl xbc, 16	; SRL 0, XBC (clear carry)
-	ldiw_erp 0xe6, 0	; LD QBC, 0 (clear high bits)
-	ld (xwa), bc	; Store low word
-	ld (xwa + 2), de	; Store high word
-	ld wa, (xwa)	; Load state value
-	exts xde	; Sign extend DE
-	cp wa, 2:i3	; Check if state == 2
+	call	GetFocusObject	; Get UI object
+	ld	xwa, xhl	; Save result in XWA
+	ld	xbc, EVT_GET_SELECTED_CEL	; Event code for query
+	ld	xde, 0:i3	; Parameter = 0
+	call	SendEvent	; Query object state
+	ld	xde, xhl	; Result in XDE
+	lda	xwa, (xsp + 14)	; Get local var pointer
+	ld	xbc, xde	; Copy result to XBC
+	srl	xbc, 16	; SRL 0, XBC (clear carry)
+	ldiw_erp	0xe6, 0	; LD QBC, 0 (clear high bits)
+	ld	(xwa), bc	; Store low word
+	ld	(xwa + 2), de	; Store high word
+	ld	wa, (xwa)	; Load state value
+	exts	xde	; Sign extend DE
+	cp	wa, 2:i3	; Check if state == 2
 	jr z, GridCheck_Handler1_State2
-	cp wa, 1:i3	; Check if state == 1
-	jr nz, GridCheck_ReturnZero	; If neither, exit
-	ld xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
-	ld xbc, EVT_PAN_DN	; Event: grid check state 1 (case 1)
+	cp	wa, 1:i3	; Check if state == 1
+	jr	nz, GridCheck_ReturnZero	; If neither, exit
+	ld	xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
+	ld	xbc, EVT_PAN_DN	; Event: grid check state 1 (case 1)
 	jr GridCheck_SendEvent
 GridCheck_Handler1_State2:
-	ld xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
-	ld xbc, EVT_RLMT_DN	; Event: grid check state 2 (case 1)
+	ld	xwa, NAKA_MAINFUNC_MainCmpSetFunc	; Widget ID
+	ld	xbc, EVT_RLMT_DN	; Event: grid check state 2 (case 1)
 	; Fall through to GridCheck_SendEvent
 
 ; =============================================================================
@@ -6245,8 +6241,8 @@ GridCheck_Handler1_State2:
 ; Sends the event in XBC with widget ID in XWA
 ; =============================================================================
 GridCheck_SendEvent:
-	call MainFuncCall	; Send event
-	jr GridCheck_ReturnZero	; Return to caller
+	call	MainFuncCall	; Send event
+	jr	GridCheck_ReturnZero	; Return to caller
 
 ; CmpSet grid check dispatch (7-entry, table 0xe1d40e)
 CmpSet_GridCheck_Dispatch:

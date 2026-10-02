@@ -3067,10 +3067,24 @@ Sprintf_MemChr:
 	ret
 
 Sprintf_DataBlock_28E9:
-	.byte 0x9f, 0x0a, 0x22, 0xaf, 0x04, 0x24, 0xec, 0x8b
-	.byte 0x68, 0x08, 0xf5, 0xf0, 0x31, 0x9f, 0x08, 0x20
-	.byte 0xb1, 0x41, 0xda, 0x88, 0xda, 0x69, 0xd8, 0xd8
-	.byte 0xb0, 0xf6, 0x84, 0x3f, 0x00, 0x6e, 0xeb, 0x0e
+	ld	de, (xsp+10)
+	ld	xix, (xsp+4)
+	ld	xhl, xix
+	jr	Sprintf_DataBlock_28E9_Join
+Sprintf_DataBlock_28E9_Loop:
+Sprintf_DataBlock_28E9_Loop:
+	lda	xbc, (xix+:1)
+	ld	wa, (xsp+8)
+	ld	(xbc), a
+Sprintf_DataBlock_28E9_Join:
+Sprintf_DataBlock_28E9_Join:
+	ld	wa, de
+	dec	1, de
+	cp	wa, 0:i3
+	ret	z
+	cp	(xix), 0
+	jr	nz, Sprintf_DataBlock_28E9_Loop
+	ret
 
 Sprintf_StringLength:
 	push xiz

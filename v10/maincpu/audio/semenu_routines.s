@@ -4815,11 +4815,8 @@ SeMenu_AltUpdate_Step3Plus_Helper:
 	ldw	wa, 247
 	jr	SeMenu_ApplyPartEdit_Entry5
 SeMenu_ApplyPartEdit_Entry4:
-	.byte 0xbf, 0x04
-	push	sr
-	ldw	wa, 0x3000
-	.byte 0xf1
-	nop
+	ldw	(xsp+4), 48
+	ldw	wa, 241
 SeMenu_ApplyPartEdit_Entry5:
 	.byte 0x97, 0x04
 	pushw	wa
@@ -6140,10 +6137,11 @@ SeMenu_OrPartConfig:
 	ret
 
 SeMenu_OrPartConfig_Data:
-	.long Pad_BeforeBitmap_Dredt0d
-	chgm	2, (xhl+14)
-	and	(0x2700e3:24), xsp
-	mul	d, 14
+	set	3, (58338:24)
+	ret
+	ld	l, (58338:24)
+	and	l, 8
+	ret
 
 SeMenu_StoreParamByte:
 	dec 1, a

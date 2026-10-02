@@ -973,7 +973,7 @@ We_seem_to_be_running_boot_ROM_code:
 	call VGA_Setup
 	pushw 0x8
 	pushw 0x3
-	ld xwa, Bitmap_1bit_Please_Wait	; "Please Wait !!"
+	ld	xwa, Bitmap_1bit_Please_Wait	; "Please Wait !!"
 	ldw bc, 0x30
 	ldw de, 0x50
 	call Draw_FlashMemUpdate_message_bitmap
@@ -1007,11 +1007,11 @@ Boot_InitPeripherals:
 
 Boot_FlashAndExtensions:
 	call Flash_InitAllBanks
-	bit_dd8 0, 0x38	;  Is the optional HD-AE5000 board present?
+	bit_dd8	0, 0x38	;  Is the optional HD-AE5000 board present?
 	jr nz, BootInit_SeqAndPanel
 	calr Get_Region_Code
 	cp l, 4:i3
-	call nz, (HDAE5000_Parport_Setup:24)	; if it is present (and this unit was sold in
+	call	nz, (HDAE5000_Parport_Setup:24)	; if it is present (and this unit was sold in
 					; a specific market region), then call the
 					; HDAE5000 PPI init code
 
@@ -1064,29 +1064,29 @@ Boot_MainSequence_Trampoline:
 User_didnt_request_flash_mem_update:
 	ld a, (1026:16); Load boot combo code
 	extz wa
-	calr Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
+	calr	Boot_HandleFactoryReset	; Reset if combo 1 + invalid checksums
 	ldw (0x00ffca:24), 0x0000
-	set_dd8 0, 0x28	; Release Sub-CPU from reset
-	call SubCPU_Init_DMA_Channels	; Initialize DMA for inter-CPU comm
+	set_dd8	0, 0x28	; Release Sub-CPU from reset
+	call	SubCPU_Init_DMA_Channels	; Initialize DMA for inter-CPU comm
 	ei 0
-	calr SubCPU_Send_Payload	; Transfer 192KB Sub-CPU firmware
-	calr SubCPU_Payload_Verify	; Verify payload checksum
+	calr	SubCPU_Send_Payload	; Transfer 192KB Sub-CPU firmware
+	calr	SubCPU_Payload_Verify	; Verify payload checksum
 	ld wa, 0:i3
-	call ScreenGroup_Dispatch	; Display initial boot screen (group 0)
+	call	ScreenGroup_Dispatch	; Display initial boot screen (group 0)
 	ei 0
 	call SelfTest_FirmwareVersionCheck
-	calr SubCPU_Payload_GetErrorFlag	; Check if payload transfer failed
-	cp hl, 0:i3	; HL=0: success, HL!=0: error
-	jr nz, Boot_PayloadError	; Branch if error occurred
-	ld wa, 1:i3	; Success: use screen group 1
+	calr	SubCPU_Payload_GetErrorFlag	; Check if payload transfer failed
+	cp	hl, 0:i3	; HL=0: success, HL!=0: error
+	jr	nz, Boot_PayloadError	; Branch if error occurred
+	ld	wa, 1:i3	; Success: use screen group 1
 	jr Boot_DisplayScreen
 
 ; Sub-CPU payload transfer or verification failed
 Boot_PayloadError:
-	ld wa, 2:i3	; Error: use screen group 2
+	ld	wa, 2:i3	; Error: use screen group 2
 
 Boot_DisplayScreen:
-	call ScreenGroup_Dispatch	; Display appropriate screen group
+	call	ScreenGroup_Dispatch	; Display appropriate screen group
 	ld (1024:16), 6
 	ld wa, 3:i3
 	call ScreenGroup_Dispatch
@@ -1094,9 +1094,9 @@ Boot_DisplayScreen:
 	ldw (0x00ffd4:24), 0x0000
 	ld a, (1026:16); Load boot combo code
 	extz wa
-	calr Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
+	calr	Boot_HandleComboDisplay	; Handle combo 2 (LEDs) or combo 3 (version screen)
 	ld wa, 4:i3
-	call Show_ScreenGroup	; Show screen group 4 (main UI initialization)
+	call	Show_ScreenGroup	; Show screen group 4 (main UI initialization)
 	calr Boot_SetConfigFlag7
 	jp MainLoop
 
@@ -1238,7 +1238,7 @@ Boot_HandleComboDisplay:
 	cp a, 2:i3
 	jr nz, Boot_HandleComboDisplay_Check3
 	; --- Combo 2: Firmware version on LEDs ---
-	call Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
+	call	Get_Firmware_Version	; Returns version byte in L (0x0a = v10)
 	and l, 0xf
 	extz hl
 	lda xbc, (LED_patterns_indicating_firmware_version:24); LED_patterns_indicating_firmware_version table
@@ -1294,7 +1294,7 @@ Boot_HandleFactoryReset:
 	; --- Factory Reset: clear all DRAM and SRAM ---
 	call ToneGen_FlashReadAndRestore
 	ei 7
-	calr Boot_ClearAllInterruptEnables	; Clear all interrupt enables
+	calr	Boot_ClearAllInterruptEnables	; Clear all interrupt enables
 	ld xbc, 0x400
 
 FactoryReset_ClearDRAM:
@@ -1350,8 +1350,11 @@ Boot_ReadFDCStatus:
 
 ; VoiceSynth command handler case 0
 VoiceSynth_CmdCase0:
-	.byte 0xc2, 0x04, 0xdd, 0x03, 0x3f, 0x00, 0xb0, 0xf6
-	.byte 0x43, 0x14, 0x00, 0x28, 0x00, 0xb3, 0xe8, 0x0e
+	cp	(253188:24), 0
+	ret	z
+	ld	xhl, 0x280014
+	call	(xhl)
+	ret
 ; VoiceSynth command handler case 1
 VoiceSynth_CmdCase1:
 ; Get resource info based on resource type (WA 0-9)
@@ -3154,7 +3157,7 @@ CPanel_RX_ProcessOrInit:
 	ei 6
 	ldw (36253:16), 0
 	ldw (36255:16), 0
-	or (36242:16), 1	; CP_Flags_B.0 = 1
+	or	(36242:16), 1	; CP_Flags_B.0 = 1
 	ei 0
 	jr CPanel_RX_Return
 				; else:

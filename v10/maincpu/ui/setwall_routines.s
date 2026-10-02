@@ -1996,7 +1996,7 @@ SetWall_MiscDataAndCode_Join:
 SetWall_MiscDataAndCode_Loop:
 	ld	a, (xix+de)
 	bit 7, a
-	jr z, 13
+	jr z, SetWall_InlineCodeBlock3_Helper_Skip
 	push	xbc
 	push	xde
 	push	xix
@@ -2004,9 +2004,9 @@ SetWall_MiscDataAndCode_Loop:
 	pop	xix
 	pop	xde
 	pop	xbc
-	.byte 0xe7
-	ldw	ix, 0xda81
-	ld	w, 0
+	.byte	0xe7, 0x34, 0x81	; add XBC,XBC3
+SetWall_InlineCodeBlock3_Helper_Skip:
+	add	de, 3
 	cp	de, 48
 	jr	c, SetWall_MiscDataAndCode_Loop
 	ld	xde, xbc
@@ -2026,9 +2026,9 @@ SetWall_MiscDataAndCode_Entry:
 	ld	(4349:16), xwa
 	ret
 SetWall_MiscDataAndCode_Data:
-	.byte 0xe7
-	ldw	ix, 0xdaa8
-	incm8	1, (xwa-40)
+	.byte	0xe7, 0x34, 0xa8	; ld XBC3,0
+	ld	wa, de
+	inc	1, wa
 	ld	hl, (xix+wa)
 	cp hl, 65535
 	jr	z, SetWall_MiscDataAndCode_Data_Code_Return

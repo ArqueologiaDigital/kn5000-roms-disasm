@@ -3227,12 +3227,11 @@ MidiChanged_ProcessGroup3_Data_Target8:
 ; v10 does not spell this byte either
 ; (pre-port v7 note about the bytes at 0xFC6DF3:)
 ; v10 does not spell this byte either
-	.byte	0xb0, 0xb5, 0xf1, 0xa5
-	pushw	wa
-	sbc	w, w
-; (pre-port v7 note about the bytes at 0xFC6DF7:)
-; v10 does not spell this byte either
-	.byte	0xf6
+	res	5, (xwa)
+	bit	0, (10405:16)
+	ret	z
+	; (pre-port v7 note about the bytes at 0xFC6DF7:)
+	; v10 does not spell this byte either
 	ld	c, (0x8c98:16)
 	cp	c, 13
 	ret	z
@@ -3289,9 +3288,8 @@ MIDI_ProcessChangedChannels_Data_Target0:
 ; (pre-port v7 note about the bytes at 0xFC6E73:)
 ; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Entry:
-	.byte	0x80
-	push	xsp
-	retd	6251
+	cp	(xwa), 15
+	jr	ugt, MIDI_ProcessChangedChannels_Data_Target0_Entry
 	ld	a, (xwa)
 	dec	8, a
 	extz	wa
@@ -3304,6 +3302,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry_Code_Join:
 	jr	ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue
 ; (pre-port v7 note about the bytes at 0xFC6E90:)
 ; v10 does not spell this byte either
+MIDI_ProcessChangedChannels_Data_Target0_Entry:
 	.byte	0x80
 	push	xsp
 	scf
@@ -3380,15 +3379,15 @@ ExtData_VoiceParam_DispatchBytecode_Entry2:
 ; (pre-port v7 note about the bytes at 0xFC6F1F:)
 ; v10 does not spell this byte either
 ExtData_VoiceParam_DispatchBytecode_Entry3:
-	.byte	0x80
-	push	xsp
-	retd	1134
+	cp	(xwa), 15
+	jr	nz, MidiChanged_ProcessGroup2_Data_Target0_Skip
 ; (pre-port v7 note about the bytes at 0xFC6F24:)
 ; v10 does not spell this byte either
 ; (pre-port v7 note about the bytes at 0xFC6F25:)
 ; v10 does not spell this byte either
 	.byte	0xb6, 0xb8
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue
+MidiChanged_ProcessGroup2_Data_Target0_Skip:
 	lda	xbc, (xiz+2)
 	ld	a, (xbc)
 	and	a, 128
@@ -4381,10 +4380,9 @@ VoiceData_ExtendedParamSetup_Loop3:
 	ld	xbc, 26
 	call	Math_MultiplyAccumulate
 	add	xhl, 20
-	.byte	0xaf, 0x06
-	or	(xhl), c
-	and	(xwa+30), c
-	pop	sr
+	add	xhl, (xsp+6)
+	ld	xwa, xhl
+	calr	MIDI_WriteMultiByteWithHeader
 	inc	1, iz
 	cp	iz, 24
 	jr	c, VoiceData_ExtendedParamSetup_Loop3
@@ -5518,36 +5516,36 @@ ExtData_ToneParam_MultiChannel_Join3:
 	ld	a, (0xfc5d:16)
 	and	a, 7
 	cp	a, 2:i3
-	jr	z, 32
+	jr	z, ExtData_ToneParam_MultiChannel_Skip11
 	cp	a, 0:i3
-	jr	z, 28
+	jr	z, ExtData_ToneParam_MultiChannel_Skip11
 	cp	a, 3:i3
-	jr	z, 9
+	jr	z, ExtData_ToneParam_MultiChannel_Skip10
 	cp	a, 1:i3
 	ret	nz
-	.byte	0xb9
-	pop	sr
-	dec	6, w
-	retd	0x93c1
-	.byte	0x90
-	push	xsp
-	normal
-	jr	nz, 8
+	bit	0, (xbc+3)
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip11
+ExtData_ToneParam_MultiChannel_Skip10:
+	cp	(37011:16), 1
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip11
 	.byte	0xf1
 	.byte 0x94, 0x90, 0xb1
 	.byte	0xf1
 	.byte 0x95, 0x90, 0xb1
+ExtData_ToneParam_MultiChannel_Skip11:
 	cp	(0x9093:16), 1
-	jr	nz, 29
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip13
 	ld	wa, 2:i3
 	calr	ExtData_ToneParam_DispatchHandler_Helper
 	bit	1, (37006:16)
-	jr	nz, 1
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip12
 	ret
+ExtData_ToneParam_MultiChannel_Skip12:
 	set	0, (36957:16)
 	res	1, (37012:16)
 	res	1, (37013:16)
 	ld	(0x908e:16), 0
+ExtData_ToneParam_MultiChannel_Skip13:
 	calr	ExtData_ToneParam_MultiChannel_Helper2
 	call	ToneGen_DispatchByMode
 	jrl	MIDI_WriteResetSequence
@@ -5709,27 +5707,22 @@ ExtData_Voice_UpdateFlags:
 ; (pre-port v7 note about the bytes at 0xFC83BD:)
 ; v10 does not spell this byte either
 ExtData_ToneParam_MultiChannel_Helper:
-	.byte	0xc1
-; (pre-port v7 note about the bytes at 0xFC83BE:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0x94, 0x90, 0x19
-; (pre-port v7 note about the bytes at 0xFC83C1:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0x8d
-; (pre-port v7 note about the bytes at 0xFC83C2:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC83C3:)
-; v10 does not spell this byte either
-	.byte	0x90, 0xc1
-; (pre-port v7 note about the bytes at 0xFC83C4:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0x95, 0x90, 0x19
-; (pre-port v7 note about the bytes at 0xFC83C7:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0x8e
-; (pre-port v7 note about the bytes at 0xFC83C8:)
-; v10 does not spell this byte either
-	.byte	0x90
+	ld	(0x908d), (37012:16)
+	; (pre-port v7 note about the bytes at 0xFC83BE:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC83C1:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC83C2:)
+	; v10 does not spell this byte either
+	; (pre-port v7 note about the bytes at 0xFC83C3:)
+	; v10 does not spell this byte either
+	ld	(0x908e), (37013:16)
+	; (pre-port v7 note about the bytes at 0xFC83C4:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC83C7:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC83C8:)
+	; v10 does not spell this byte either
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_Voice_CheckMode:
 	calr	SndParam_WriteLookupAndStore
@@ -5794,9 +5787,8 @@ ExtData_Voice_MixedHandler_Helper:
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jr	ExtData_Voice_MixedHandler_Join3
 ExtData_Voice_MixedHandler_Helper_Entry:
-	.byte	0xf1, 0x1c, 0xe3
-	dec	6, a
-	pop	xde
+	bit	1, (58140:16)
+	jr	nz, ExtData_Voice_MixedHandler_Join3
 	and	c, 3
 	jr	z, ExtData_Voice_MixedHandler_Join3
 	ld	a, (0x9094:16)
@@ -5886,13 +5878,11 @@ ExtData_Voice_FullHandler_Skip2:
 ; (pre-port v7 note about the bytes at 0xFC8532:)
 ; v10 does not spell this byte either
 ExtData_Voice_FullHandler_Entry:
-	.byte	0xf1
-	.byte 0x5d
-; (pre-port v7 note about the bytes at 0xFC8534:)
-; v10 does not spell this byte either
-	.byte	0x90
-	lda	xwa, (xbc)
-	ld	xwa, 0x0bd11e00
+	res	1, (36957:16)
+	; (pre-port v7 note about the bytes at 0xFC8534:)
+	; v10 does not spell this byte either
+	ldw	wa, 64
+	calr	ExtData_Voice_FullHandler_Helper2
 	ldw	wa, 128
 	calr	3019
 	jrl	SwbtWr_FlushAndAppendParams
@@ -6905,19 +6895,21 @@ VoiceParam_CompareAndUpdate:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	a, (0x9095:16)
-	.byte	0x87
-	and	a, (0x4866:16)
-	.byte 0x94, 0x90, 0x21
-	.byte	0x87
+	and	a, (xsp)
+	jr	z, VoiceParam_CompareAndUpdate_Epilogue
+	ld	a, (37012:16)
+	and	a, (xsp)
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xFC972C-0xFC9746 (26 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=67% dist=15 near VoiceParam_CompareAndUpdate+17
-	.byte	0xc1, 0x66, 0x40, 0xc1, 0x8b, 0x90, 0x21, 0xd8, 0x12, 0x1e, 0xbc, 0x06
-	.byte 0xeb, 0xcf, 0xff, 0xff, 0xff, 0xff, 0x66, 0x2f
-	.byte 0xc1, 0x93, 0x90, 0x21
-	.byte	0xd8, 0x12
-	.byte	0xf3
-	reti
-	or	xwa, xix
-	ldw	hl, 8583
+	jr	z, VoiceParam_CompareAndUpdate_Epilogue
+	ld	a, (37003:16)
+	extz	wa
+	calr	VoiceData_LookupPtrByIndex
+	cp	xhl, 4294967295
+	jr	z, VoiceParam_CompareAndUpdate_Epilogue
+	ld	a, (37011:16)
+	extz	wa
+	lda	xhl, (xhl+wa)
+	ld	a, (xsp)
 	cpl	a
 	.byte	0x83, 0xc1
 	or	a, (0x9094:16)

@@ -3224,7 +3224,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	extz	wa
 	call	LoadRegion1_OpenSuccess_Helper
 	lda	xwa, (0x1ed350:24)
-	add xwa, (xsp+0x04)	; F882F7 (add xwa,(xsp+0x04))
+	add	xwa, (xsp+0x04)	; F882F7 (add xwa,(xsp+0x04))
 	ld	xbc, 16
 	call	FileIO_ReadBlock
 	ld	wa, (0x1ed35d:24)
@@ -3446,8 +3446,8 @@ FileIO_ByteBlock_DemoProc1_Skip16:
 	cp	hl, 0:i3
 	jr	nz, FileIO_ByteBlock_DemoProc1_Skip17
 	call	FileIO_CloseHandle
-	.byte 0x33, 0x9a
-	.long NakaInst_WindowID_Cont
+	ldw	hl, 65434
+	jrl	FileIO_ByteBlock_DemoProc1_Epilogue5
 FileIO_ByteBlock_DemoProc1_Skip17:
 	ld	wa, (xsp+42)
 	ld	iz, (xsp+40)
@@ -4701,7 +4701,7 @@ FileIO_ValidateRecord_Return:
 	ld xbc, FileIO_ValidateRecord_Ok_Str_Under_Under_Under_Under
 	calr FileIO_CopyString
 	ld xwa, 0x271f2
-	ld xbc, FileIO_ValidateRecord_Ok_Str_MID	; pointer to "________.MID"
+	ld	xbc, FileIO_ValidateRecord_Ok_Str_MID	; pointer to "________.MID"
 	jr FileIO_CopyString
 
 FileIO_CopyString:
@@ -6674,7 +6674,7 @@ GetFileEntryByIndex_Skip:
 	call	Math_MultiplyAccumulate
 	lda	xwa, (0x25f02:24)
 	add	xwa, xhl
-	ldcf 7, (xwa)	; F8A106 (ldcf 7,(xwa))
+	ldcf	7, (xwa)	; F8A106 (ldcf 7,(xwa))
 	scc8	c, l
 	extz	hl
 GetFileEntryByIndex_Epilogue:
@@ -8804,7 +8804,8 @@ FileIO_ErrorCodeByteBlock_Entry:
 	cp	c, 96
 	jr	z, FileIO_ErrorCodeByteBlock_Loop
 	cp	c, 126
-	.asciz "f/0`"
+	jr	z, FileIO_ErrorCodeByteBlock_Loop
+	ldw	wa, 96
 	jr	FileIO_ErrorCodeByteBlock_Join
 FileIO_ErrorCodeByteBlock_Skip:
 	cp	c, 188

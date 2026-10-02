@@ -1,0 +1,188 @@
+{
+ "rows": [
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc75bb",
+   "end": "0xfc75c3"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc763e",
+   "end": "0xfc7643"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc76ea",
+   "end": "0xfc76ef"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc7f19",
+   "end": "0xfc7f21"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc89c7",
+   "end": "0xfc89d1"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc8b88",
+   "end": "0xfc8b94"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc8c34",
+   "end": "0xfc8c3a"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc8cfd",
+   "end": "0xfc8d07"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc8d49",
+   "end": "0xfc8d4f"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc9723",
+   "end": "0xfc974d"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc9822",
+   "end": "0xfc982c"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc98b9",
+   "end": "0xfc98c1"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc98e0",
+   "end": "0xfc98ea"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc9904",
+   "end": "0xfc990c"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xff00fd",
+   "end": "0xff0111"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xff05bf",
+   "end": "0xff05c7"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xff070a",
+   "end": "0xff0711"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xff074f",
+   "end": "0xff0754"
+  },
+  {
+   "file": "audio/semenu_routines.s",
+   "start": "0xf08cd9",
+   "end": "0xf08ce1"
+  },
+  {
+   "file": "audio/semenu_routines.s",
+   "start": "0xf098d1",
+   "end": "0xf098e0"
+  },
+  {
+   "file": "demo/fdemotext_routines.s",
+   "start": "0xf85244",
+   "end": "0xf85248"
+  },
+  {
+   "file": "demo/fdemotext_routines.s",
+   "start": "0xf852ba",
+   "end": "0xf852c0"
+  },
+  {
+   "file": "demo/file_demo_proc.s",
+   "start": "0xf88534",
+   "end": "0xf8853a"
+  },
+  {
+   "file": "demo/file_demo_proc.s",
+   "start": "0xf8b504",
+   "end": "0xf8b509"
+  },
+  {
+   "file": "kn5000_v10_program.s",
+   "start": "0xf1ea20",
+   "end": "0xf1ea30"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf5e3a6",
+   "end": "0xf5e41e"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf64cae",
+   "end": "0xf64cb5"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf65213",
+   "end": "0xf6521f"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf65241",
+   "end": "0xf65248"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf6a781",
+   "end": "0xf6a78a"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf6a7c8",
+   "end": "0xf6a7cf"
+  },
+  {
+   "file": "storage/flash_floppy_handlers.s",
+   "start": "0xf16fcb",
+   "end": "0xf16fdd"
+  },
+  {
+   "file": "ui/setwall_routines.s",
+   "start": "0xf20182",
+   "end": "0xf20189"
+  },
+  {
+   "file": "ui/setwall_routines.s",
+   "start": "0xf201ba",
+   "end": "0xf201c1"
+  }
+ ],
+ "conflicts": [
+  [
+   15664065,
+   "halt"
+  ],
+  [
+   15665361,
+   "halt"
+  ],
+  [
+   15597891,
+   "undecodable"
+  ]
+ ]
+}

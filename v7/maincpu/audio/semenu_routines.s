@@ -1283,8 +1283,8 @@ SeMenu_BitShiftMask_End_Loop:
 	add	(xiz), a
 SeMenu_BitShiftMask_End_Join:
 	ld	a, (xiz)
-	.byte 0x8f
-	ldw	(193:8), 4824:io
+	and	a, (xsp+10)
+	extz	wa
 	ld	c, (xsp+12)
 	extz	bc
 	calr	SeMenu_BitShiftMask
@@ -1365,8 +1365,8 @@ SeMenu_BitShiftMask_End_Loop2:
 	add	(xiz), a
 SeMenu_BitShiftMask_End_Join3:
 	ld	a, (xiz)
-	.byte 0x8f
-	ldw	(193:8), 4824:io
+	and	a, (xsp+10)
+	extz	wa
 	ld	c, (xsp+12)
 	extz	bc
 	calr	SeMenu_BitShiftMask
@@ -6154,7 +6154,8 @@ SeMenu_OrPartConfig:
 	ret
 
 SeMenu_OrPartConfig_Data:
-	.incbin "includes/romslices/v7_transplant_SeMenu_OrPartConfig_Data_head.bin"
+	set	3, (58140:24)
+	ret
 SeMenu_OrPartConfig_Data_0x6:
 	ld l, (0x00e31c:24)
 	and L,0x08

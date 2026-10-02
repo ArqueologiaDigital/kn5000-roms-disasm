@@ -1,0 +1,239 @@
+{
+ "rows": [
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc6df0",
+   "end": "0xfc6df8"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc6e73",
+   "end": "0xfc6e78"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc6f1f",
+   "end": "0xfc6f24"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc774e",
+   "end": "0xfc7756"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc81fc",
+   "end": "0xfc8206"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc83bd",
+   "end": "0xfc83c9"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc8469",
+   "end": "0xfc846f"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc8532",
+   "end": "0xfc853c"
+  },
+  {
+   "file": "audio/audio_control_engine.s",
+   "start": "0xfc8f58",
+   "end": "0xfc8f82"
+  },
+  {
+   "file": "audio/audioinit_routines.s",
+   "start": "0xfde8e8",
+   "end": "0xfde91c"
+  },
+  {
+   "file": "audio/audioinit_routines.s",
+   "start": "0xfdf6a3",
+   "end": "0xfdf6f0"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xfef923",
+   "end": "0xfef937"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xfefde2",
+   "end": "0xfefdea"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xfeff2d",
+   "end": "0xfeff34"
+  },
+  {
+   "file": "audio/note_voice_mapping.s",
+   "start": "0xfeff72",
+   "end": "0xfeff77"
+  },
+  {
+   "file": "audio/semenu_routines.s",
+   "start": "0xf06be5",
+   "end": "0xf06bea"
+  },
+  {
+   "file": "audio/semenu_routines.s",
+   "start": "0xf06c9b",
+   "end": "0xf06ca0"
+  },
+  {
+   "file": "audio/semenu_routines.s",
+   "start": "0xf098a7",
+   "end": "0xf098ad"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf0edd5",
+   "end": "0xf0eddb"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf0ee0c",
+   "end": "0xf0ee19"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1dbcd",
+   "end": "0xf1dbd5"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1dbe7",
+   "end": "0xf1dbf0"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1dd3b",
+   "end": "0xf1dd40"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1ddad",
+   "end": "0xf1ddb6"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1ddc5",
+   "end": "0xf1ddce"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1de74",
+   "end": "0xf1de7a"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1decd",
+   "end": "0xf1ded3"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1def0",
+   "end": "0xf1def6"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1df4b",
+   "end": "0xf1df51"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1df66",
+   "end": "0xf1df6b"
+  },
+  {
+   "file": "audio/sound_editor_ui.s",
+   "start": "0xf1df77",
+   "end": "0xf1df7d"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf55e04",
+   "end": "0xf55e7c"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf55f38",
+   "end": "0xf55f64"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf588d7",
+   "end": "0xf58941"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf5ec8c",
+   "end": "0xf5ecaa"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf61427",
+   "end": "0xf61432"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf62582",
+   "end": "0xf625be"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf63b3e",
+   "end": "0xf63b5b"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf65e42",
+   "end": "0xf65e5f"
+  },
+  {
+   "file": "sequencer/accompaniment_engine.s",
+   "start": "0xf6bc22",
+   "end": "0xf6bc31"
+  },
+  {
+   "file": "storage/flash_floppy_handlers.s",
+   "start": "0xf16fa1",
+   "end": "0xf16fb3"
+  },
+  {
+   "file": "ui/cpanel_routines.s",
+   "start": "0xfc4249",
+   "end": "0xfc4268"
+  },
+  {
+   "file": "ui/setwall_routines.s",
+   "start": "0xf201b6",
+   "end": "0xf201bc"
+  },
+  {
+   "file": "ui/ui_playback_modes.s",
+   "start": "0xf203e4",
+   "end": "0xf203ee"
+  },
+  {
+   "file": "ui/ui_playback_modes.s",
+   "start": "0xf20940",
+   "end": "0xf20968"
+  }
+ ],
+ "conflicts": [
+  [
+   15664023,
+   "halt"
+  ],
+  [
+   15665319,
+   "halt"
+  ]
+ ]
+}

@@ -7888,7 +7888,12 @@ SeMenu_DisplayPartValue_Data_Code_Join2:
 SeMenu_DisplayPartValue_Data_0x7F:
 	push xiz
 	ld	xiz, xsp
-	.ascii "89:;<="
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
 	ld	wa, (xiz+8)
 	ld	(1740:16), wa
 	ld	wa, (xiz+10)
@@ -7910,10 +7915,14 @@ SeMenu_DisplayPartValue_Data_0x7F:
 SeMenu_ApplyPartEdit_Helper16:
 	push	xiz
 	ld	xiz, xsp
-	.ascii "89:;<=ž"
-	ld	(32:8), 241:io
-	cpl	d
-	.byte 0x50
+	push	xwa
+	push	xbc
+	push	xde
+	push	xhl
+	push	xix
+	push	xiy
+	ld	wa, (xiz+8)
+	ld	(1740:16), wa
 	ld	wa, (xiz+10)
 	ld	(1742:16), wa
 	ld	wa, (xiz+12)
@@ -19580,18 +19589,20 @@ StylCnvStorOkFunc_DataBlock_Join2:
 	lda	xhl, (xsp+24)
 	ld	bc, (xhl+4)
 	ld	wa, bc
-	.byte 0x93
-	xor	(xwa), xde
-	ld	xwa, 0x12ee8ed8
+	sub	wa, (xhl)
+	mul	xwa, de
+	ld	iz, wa
+	extz	xiz
 	div	iz, 100
 	lda	xwa, (xhl+6)
 	ld	(xsp+12), xwa
 	lda	xde, (xhl+2)
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa)
-	.byte 0x92, 0xa0, 0x9f
-	pushw	wa
-	ld	xwa, 0x12ec8cd8
+	sub	wa, (xde)
+	mul	xwa, (xsp+40)
+	ld	ix, wa
+	extz	xix
 	div	ix, 100
 	ld	wa, bc
 	sub	wa, (xhl)
@@ -19725,10 +19736,8 @@ StylCnvStorOkFunc_DataBlock_Skip7:
 	ld	(xhl+2), wa
 	ld	bc, (xbc)
 	ld	wa, bc
-	.byte 0x9a
-	push	sr
-	or	(xwa), xwa
-	zcf
+	sub	wa, (xde+2)
+	exts	xwa
 	divs	wa, 2
 	sub	bc, wa
 	ld	(xix+2), bc
@@ -19772,18 +19781,19 @@ StylCnvStorOkFunc_DataBlock_Join5:
 	lda	xix, (xhl+4)
 	ld	bc, (xix)
 	ld	wa, bc
-	.byte 0x93
-	xor	(xwa), xde
-	ld	xwa, 0xe898fad7
-	ccf
+	sub	wa, (xhl)
+	mul	xwa, de
+	ld	qiz, wa
+	extz	xwa
 	div	wa, 100
 	ld qiz, wa
 	lda	xde, (xhl+6)
 	lda	xiy, (xhl+2)
 	ld	wa, (xde)
-	.byte 0x95, 0xa0, 0x9f
-	pushw	de
-	ld	xwa, 0x12e88ed8
+	sub	wa, (xiy)
+	mul	xwa, (xsp+42)
+	ld	iz, wa
+	extz	xwa
 	div	wa, 100
 	ld	iz, wa
 	ld	wa, bc
@@ -19854,9 +19864,8 @@ StylCnvStorOkFunc_DataBlock_Join7:
 	ld	(xwa), de
 	ld	de, (xsp+28)
 	ld	(xwa+2), de
-	.byte 0x9f
-	ld	(4:8), 159:io
-	ld	d, 34:opc
+	pushw	(xsp+8)
+	ld	de, (xsp+36)
 	calr	StylCnvStorOkFunc_DataBlock
 	lda	xwa, (xsp+22)
 	ld	bc, (xsp+14)
@@ -19888,9 +19897,8 @@ StylCnvStorOkFunc_DataBlock_Join7:
 	ld	(xwa), de
 	ld	de, (xsp+32)
 	ld	(xwa+2), de
-	.byte 0x9f
-	ld	(4:8), 159:io
-	ld	d, 34:opc
+	pushw	(xsp+8)
+	ld	de, (xsp+36)
 	calr	StylCnvStorOkFunc_DataBlock
 	lda	xiy, (xsp+14)
 	lda	xix, (xsp+22)
@@ -19902,9 +19910,8 @@ StylCnvStorOkFunc_DataBlock_Join7:
 	ldiw
 	lda	xwa, (xsp+22)
 	lda	xbc, (xsp+18)
-	.byte 0x9f
-	ld	(4:8), 159:io
-	ld	d, 34:opc
+	pushw	(xsp+8)
+	ld	de, (xsp+36)
 	calr	64626
 	lda	xwa, (xsp+26)
 	lda	xbc, (xsp+22)
@@ -19942,9 +19949,8 @@ StylCnvStorOkFunc_DataBlock_Join8:
 	add	de, bc
 	lda	xbc, (xsp+18)
 	ld	(xbc+2), de
-	.byte 0x9f
-	ld	(4:8), 159:io
-	ld	d, 34:opc
+	pushw	(xsp+8)
+	ld	de, (xsp+36)
 	calr	StylCnvStorOkFunc_DataBlock
 	lda	xwa, (xsp+22)
 	lda	xhl, (xsp+26)
@@ -19953,17 +19959,14 @@ StylCnvStorOkFunc_DataBlock_Join8:
 	ld	(xwa+2), bc
 	ld	de, (xde)
 	ld	bc, de
-	.byte 0x9b
-	push	sr
-	or	(xbc), xbc
-	zcf
+	sub	bc, (xhl+2)
+	exts	xbc
 	divs	bc, 2
 	sub	de, bc
 	lda	xbc, (xsp+18)
 	ld	(xbc+2), de
-	.byte 0x9f
-	ld	(4:8), 159:io
-	ld	d, 34:opc
+	pushw	(xsp+8)
+	ld	de, (xsp+36)
 	calr	StylCnvStorOkFunc_DataBlock
 	pop	xiz
 	lda	xsp, (xsp+32)
