@@ -2478,63 +2478,106 @@ Kubo_MainFunctionTable_148:	.incbin "includes/generated/naka_effects_seq.bin", 0
 	.long EtmenuTitleFunc
 	.long MainPanic
 	.long 0x00000000
-InitializeKubo_PtrTable_72:	.long 0x00E30932
-	.long 0x00E30926
-	.long 0x00E3091A
-	.long 0x00E3090E
-	.long 0x00E30902
-	.long 0x00E308F2
-	.long 0x00E308E2
-	.long 0x00E308D2
-	.long 0x00E308C2
-	.long 0x00E308AE
-	.long 0x00E3089E
-	.long 0x00E3088C
-	.long 0x00E3087A
-	.long 0x00E3086A
-	.long 0x00E3085A
-	.long 0x00E3084A
-	.long 0x00E3083A
-	.long 0x00E3082A
-	.long 0x00E3081A
-	.long 0x00E3080A
-	.long 0x00E307FA
-	.long 0x00E307EA
-	.long 0x00E307DA
-	.long 0x00E307C8
-	.long 0x00E307B8
-	.long 0x00E307A8
-	.long 0x00E30796
-	.long 0x00E30784
-	.long 0x00E30770
-	.long 0x00E3075C
-	.long 0x00E30750
-	.long 0x00E30742
-	.long 0x00E30730
-	.long 0x00E3071E
-	.long 0x00E3070C
-	.long 0x00E30702
-	.long 0x00E306EE
-	.long 0x00E306DA
-	.long 0x00E306CC
-	.long 0x00E306BE
-	.long 0x00E306AE
-	.long 0x00E306A0
-	.long 0x00E30690
-	.long 0x00E30686
-	.long 0x00E30684
+InitializeKubo_PtrTable_72:	.long FuncName_ApEditSyori
+	.long FuncName_MainExeCall
+	.long FuncName_EffEditMain
+	.long FuncName_ApPlaySyori_Kubo
+	.long FuncName_SeqModeFunc
+	.long FuncName_SeqRealModeFunc
+	.long FuncName_SeqPlayModeFunc
+	.long FuncName_SeqErecModeFunc
+	.long FuncName_SeqEditModeFunc
+	.long FuncName_SqRealRecTitleFunc
+	.long FuncName_SqPlayTitleFunc
+	.long FuncName_SqPunchTitleFunc
+	.long FuncName_SqPunchmTitleFunc
+	.long FuncName_SqQtzTitleFunc
+	.long FuncName_SqMdelTitleFunc
+	.long FuncName_SqMersTitleFunc
+	.long FuncName_SqVcngTitleFunc
+	.long FuncName_SqTrnsTitleFunc
+	.long FuncName_SqNcngTitleFunc
+	.long FuncName_SqSoclTitleFunc
+	.long FuncName_SqMcpyTitleFunc
+	.long FuncName_SqMinsTitleFunc
+	.long FuncName_SqTrclTitleFunc
+	.long FuncName_SqSngcpTitleFunc
+	.long FuncName_SqTrmgTitleFunc
+	.long FuncName_SqAdlyTitleFunc
+	.long FuncName_SqDrmEdtTitleFunc
+	.long FuncName_SqDrmSelTitleFunc
+	.long FuncName_SqNoteEdtTitleFunc
+	.long FuncName_SqNoteSelTitleFunc
+	.long FuncName_SngSelSyori
+	.long FuncName_NoteEditSyori
+	.long FuncName_SdRevsetTitleFunc
+	.long FuncName_SdDspeffTitleFunc
+	.long FuncName_SdAccillTitleFunc
+	.long FuncName_MimeSyori
+	.long FuncName_SqNoteCycpTitleFunc
+	.long FuncName_SqDrmCycpTitleFunc
+	.long FuncName_HelpModeFunc
+	.long FuncName_HelpTitleFunc
+	.long FuncName_HelpLangChkMain
+	.long FuncName_HelpFlashFunc
+	.long FuncName_EtmenuTitleFunc
+	.long FuncName_MainPanic
+	.long InitializeKubo_PtrTable_72_EndName
 ; [nakarest] naka_effects_seq+0x86e0  +0x86e0..+0x86e2 (0xe30684, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe30684 not derived; readers below
 ; [nakarest] Readers: source references Kubo_MainFunctionTable_148
 ; [nakarest] (ui_widgets/effects_sequencer_screens.s: `.long 0x00e30684`); 1 data word in
 ; [nakarest] Kubo_MainFunctionTable_148 (at 0xe30680).
-	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x2
+InitializeKubo_PtrTable_72_EndName:	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x2
 ; [nakarest] naka_effects_seq+0x86e2  +0x86e2..+0x899a (0xe30686, 696 B)
 ; [nakarest] name strings, entries 0-43 of MainFunction slot 0x448 (table 0xe305d0, 44 entries,
 ; [nakarest] InitializeKubo) (names for MainFunction slot 0x148): "MainPanic",
 ; [nakarest] "EtmenuTitleFunc", "HelpFlashFunc", "HelpLangChkMain", "HelpTitleFunc",
 ; [nakarest] "HelpModeFunc", ....
-	.incbin "includes/generated/naka_effects_seq.bin", 0x86E2, 0x2B8
+FuncName_MainPanic:		.incbin "includes/generated/naka_effects_seq.bin", 0x86E2, 0xA
+FuncName_EtmenuTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x86EC, 0x10
+FuncName_HelpFlashFunc:		.incbin "includes/generated/naka_effects_seq.bin", 0x86FC, 0xE
+FuncName_HelpLangChkMain:	.incbin "includes/generated/naka_effects_seq.bin", 0x870A, 0x10
+FuncName_HelpTitleFunc:		.incbin "includes/generated/naka_effects_seq.bin", 0x871A, 0xE
+FuncName_HelpModeFunc:		.incbin "includes/generated/naka_effects_seq.bin", 0x8728, 0xE
+FuncName_SqDrmCycpTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8736, 0x14
+FuncName_SqNoteCycpTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x874A, 0x14
+FuncName_MimeSyori:		.incbin "includes/generated/naka_effects_seq.bin", 0x875E, 0xA
+FuncName_SdAccillTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8768, 0x12
+FuncName_SdDspeffTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x877A, 0x12
+FuncName_SdRevsetTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x878C, 0x12
+FuncName_NoteEditSyori:		.incbin "includes/generated/naka_effects_seq.bin", 0x879E, 0xE
+FuncName_SngSelSyori:		.incbin "includes/generated/naka_effects_seq.bin", 0x87AC, 0xC
+FuncName_SqNoteSelTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x87B8, 0x14
+FuncName_SqNoteEdtTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x87CC, 0x14
+FuncName_SqDrmSelTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x87E0, 0x12
+FuncName_SqDrmEdtTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x87F2, 0x12
+FuncName_SqAdlyTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8804, 0x10
+FuncName_SqTrmgTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8814, 0x10
+FuncName_SqSngcpTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8824, 0x12
+FuncName_SqTrclTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8836, 0x10
+FuncName_SqMinsTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8846, 0x10
+FuncName_SqMcpyTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8856, 0x10
+FuncName_SqSoclTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8866, 0x10
+FuncName_SqNcngTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8876, 0x10
+FuncName_SqTrnsTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8886, 0x10
+FuncName_SqVcngTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x8896, 0x10
+FuncName_SqMersTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x88A6, 0x10
+FuncName_SqMdelTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x88B6, 0x10
+FuncName_SqQtzTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x88C6, 0x10
+FuncName_SqPunchmTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x88D6, 0x12
+FuncName_SqPunchTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x88E8, 0x12
+FuncName_SqPlayTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x88FA, 0x10
+FuncName_SqRealRecTitleFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x890A, 0x14
+FuncName_SeqEditModeFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x891E, 0x10
+FuncName_SeqErecModeFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x892E, 0x10
+FuncName_SeqPlayModeFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x893E, 0x10
+FuncName_SeqRealModeFunc:	.incbin "includes/generated/naka_effects_seq.bin", 0x894E, 0x10
+FuncName_SeqModeFunc:		.incbin "includes/generated/naka_effects_seq.bin", 0x895E, 0xC
+FuncName_ApPlaySyori_Kubo:	.incbin "includes/generated/naka_effects_seq.bin", 0x896A, 0xC
+FuncName_EffEditMain:		.incbin "includes/generated/naka_effects_seq.bin", 0x8976, 0xC
+FuncName_MainExeCall:		.incbin "includes/generated/naka_effects_seq.bin", 0x8982, 0xC
+FuncName_ApEditSyori:		.incbin "includes/generated/naka_effects_seq.bin", 0x898E, 0xC
 ; [nakarest] naka_effects_seq+0x899a  +0x899a..+0x89a2 (0xe3093e, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xe3093e not derived; readers below
 ; [nakarest] Readers: source references EntertainerGridCheck (sequencer/sequencer_ui.s: `ld xiy,

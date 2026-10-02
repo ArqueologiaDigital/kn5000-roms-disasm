@@ -327,5 +327,5 @@ Yoko_FunctionTable_107:
 ; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x407.
 ; v7 names this label's address (0xE21074) as a 24-bit operand at 0xF29F44.
 Yoko_FunctionTable_407:
-	.long 0x00e2107e	; -> "PsSongSelBoxProc" name string (next file)
+	.long FuncName_PsSongSelBoxProc	; -> "PsSongSelBoxProc" name string (next file)
 	.long NakaBoxData_PsSongSelBox

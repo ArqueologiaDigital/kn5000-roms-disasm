@@ -91,7 +91,7 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 ; ============================================================================
 
 HDAE5000_Record_SelectList:	; 0x29C0AA  class 'SelectList'
-	.long 0x2807d9                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_SelectListProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x11, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x3c, 0x20                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d972                     ; +0x0C NamePtr  -> 'SelectList'
@@ -99,7 +99,7 @@ HDAE5000_Record_SelectList:	; 0x29C0AA  class 'SelectList'
 	.long 0x23975a                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_DbMemoCl:	; 0x29C0C2  class 'DbMemoCl'
-	.long 0x28122a                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_DbMemoClProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x46, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x1a, 0x4                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d95c                     ; +0x0C NamePtr  -> 'DbMemoCl'
@@ -107,7 +107,7 @@ HDAE5000_Record_DbMemoCl:	; 0x29C0C2  class 'DbMemoCl'
 	.long 0x23978a                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_TtlScreenR:	; 0x29C0DA  class 'TtlScreenR'
-	.long 0x280489                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_TtlScreenRProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x34, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d94c                     ; +0x0C NamePtr  -> 'TtlScreenR'
@@ -115,7 +115,7 @@ HDAE5000_Record_TtlScreenR:	; 0x29C0DA  class 'TtlScreenR'
 	.long 0x239796                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_AcHddNamingWindow:	; 0x29C0F2  class 'AcHddNamingWindow'
-	.long 0x281411                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_AcHddNamingWindowProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x35, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x24, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d938                     ; +0x0C NamePtr  -> 'AcHddNamingWindow'
@@ -123,7 +123,7 @@ HDAE5000_Record_AcHddNamingWindow:	; 0x29C0F2  class 'AcHddNamingWindow'
 	.long 0x23979a                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_IvHddNaming:	; 0x29C10A  class 'IvHddNaming'
-	.long 0x282681                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_IvHddNamingProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x27, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x1a, 0x4                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d92a                     ; +0x0C NamePtr  -> 'IvHddNaming'
@@ -131,7 +131,7 @@ HDAE5000_Record_IvHddNaming:	; 0x29C10A  class 'IvHddNaming'
 	.long 0x23979e                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_HDTitleMenu:	; 0x29C122  class 'HDTitleMenu'
-	.long 0x2827a8                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_HDTitleMenuProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x1d, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x36, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d91c                     ; +0x0C NamePtr  -> 'HDTitleMenu'
@@ -139,7 +139,7 @@ HDAE5000_Record_HDTitleMenu:	; 0x29C122  class 'HDTitleMenu'
 	.long 0x2397a6                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_TtlScreenR2:	; 0x29C13A  class 'TtlScreenR2'
-	.long 0x280567                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_TtlScreenR2Proc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x34, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d90e                     ; +0x0C NamePtr  -> 'TtlScreenR2'
@@ -147,7 +147,7 @@ HDAE5000_Record_TtlScreenR2:	; 0x29C13A  class 'TtlScreenR2'
 	.long 0x2397aa                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_TtlScreenR3:	; 0x29C152  class 'TtlScreenR3'
-	.long 0x280645                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_TtlScreenR3Proc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x34, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d900                     ; +0x0C NamePtr  -> 'TtlScreenR3'
@@ -155,7 +155,7 @@ HDAE5000_Record_TtlScreenR3:	; 0x29C152  class 'TtlScreenR3'
 	.long 0x2397ae                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_AcWindowPage1:	; 0x29C16A  class 'AcWindowPage1'
-	.long 0x28043c                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_AcWindowPage1Proc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x25, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x24, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d8f0                     ; +0x0C NamePtr  -> 'AcWindowPage1'
@@ -163,7 +163,7 @@ HDAE5000_Record_AcWindowPage1:	; 0x29C16A  class 'AcWindowPage1'
 	.long 0x2397b2                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_IvScreenR2:	; 0x29C182  class 'IvScreenR2'
-	.long 0x280723                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_IvScreenR2Proc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x6a, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x22, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d8e2                     ; +0x0C NamePtr  -> 'IvScreenR2'
@@ -171,7 +171,7 @@ HDAE5000_Record_IvScreenR2:	; 0x29C182  class 'IvScreenR2'
 	.long 0x2397b6                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_AcLanguageText1:	; 0x29C19A  class 'AcLanguageText1'
-	.long 0x28b554                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_AcLanguageText1Proc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x66, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d8d0                     ; +0x0C NamePtr  -> 'AcLanguageText1'
@@ -179,7 +179,7 @@ HDAE5000_Record_AcLanguageText1:	; 0x29C19A  class 'AcLanguageText1'
 	.long 0x2397ba                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_LyricBox:	; 0x29C1B2  class 'LyricBox'
-	.long 0x28cd08                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_LyricBoxProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x11, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x2e, 0x12                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d8c4                     ; +0x0C NamePtr  -> 'LyricBox'
@@ -187,7 +187,7 @@ HDAE5000_Record_LyricBox:	; 0x29C1B2  class 'LyricBox'
 	.long 0x2397be                     ; +0x14 ParamListPtr (RAM)
 
 HDAE5000_Record_FDFileSelect:	; 0x29C1CA  class 'FDFileSelect'
-	.long 0x28e61b                     ; +0x00 ProcPtr (== named routine in this tree)
+	.long HDAE5000_FDFileSelectProc                     ; +0x00 ProcPtr (== named routine in this tree)
 	.short 0x27, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
 	.short 0x20, 0xa                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
 	.long 0x29d8ae                     ; +0x0C NamePtr  -> 'FDFileSelect'

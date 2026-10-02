@@ -317,5 +317,5 @@ Yoko_FunctionTable_107:
 ; Registered by InitializeYoko (sequencer/sequencer_ui.s:18): `RegObjTabl 0x1600001, FunctionProc, 0x1, 0xe21074, 0x407`
 ; = class 0x1600001 (FunctionProc), 1 entries (immediate count), id 0x407.
 Yoko_FunctionTable_407:
-	.long 0x00e2107e	; -> "PsSongSelBoxProc" name string (next file)
+	.long FuncName_PsSongSelBoxProc	; -> "PsSongSelBoxProc" name string (next file)
 	.long NakaBoxData_PsSongSelBox

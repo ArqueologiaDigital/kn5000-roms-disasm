@@ -182,7 +182,7 @@ NakaBoxData_PsSongSelBox:
 ; [nakarest] naka_direct_play+0x2  +0x2..+0x14 (0xe2107e, 18 B)
 ; [nakarest] name string, entry 0 of Function slot 0x407 (table 0xe21074, 1 entries,
 ; [nakarest] InitializeYoko) (names for Function slot 0x107): "PsSongSelBoxProc".
-	.incbin "includes/generated/naka_direct_play.bin", 0x2, 0x12
+FuncName_PsSongSelBoxProc:	.incbin "includes/generated/naka_direct_play.bin", 0x2, 0x12
 ; [nakarest] naka_direct_play+0x14  +0x14..+0x50 (0xe21090, 60 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x6f (table 0xe240ac, 43 entries,
 ; [nakarest] InitializeYoko) ("DpSmf"): TtlScreen (42 B). 1 text the records point at (Viewable

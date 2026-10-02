@@ -46,4 +46,21 @@ FDC_POST_OP ...).  An unused, undocumented constant never wins -- many are the A
 NakaWidget_* names are settled by the record's captions (NakaWidget_Perf2Flute is retired: the
 record's caption is "Guitar", the firmware's name "DemoSong8").
 
-Numeric own-ROM `.long` values in v10 after both passes: 304 (from 1,028).
+Numeric own-ROM `.long` values in v10 after both passes: still 422, NOT the 304 that commit
+fab299d3 claimed -- that figure was predicted, not measured: the constant pass placed labels
+but did not rewrite the `.long`s that point at them.
+
+## Rewriting the `.long`s, and the name strings (same day, next commit)
+
+* `scripts/tools/symbolize_long_pointers.py --tree <t> --apply`: a numeric own-ROM value on a
+  `.long` with a column-0 label at that address becomes the label.  First run: v10/v9/v7 114
+  each, hdae5000 13 (tabledata, prom_a/b/c: 0).
+* `scripts/tools/label_naka_names.py --tree <t> --apply`: the strings the registered name
+  tables point at (ResName entry k = name of record k -> `<record label>_Name`; function name
+  tables -> `FuncName_<name>`; end markers -> `<table>_EndName`), only where a numeric `.long`
+  points: v10 237 placed (231 slice cuts, 6 line starts), v9 236, v7 236; then the symbolizer
+  again: v10 237, v9 236, v7 236.
+
+Measured after (long_pointer_census.py --tree v10): 71 -- 53 inside slices (the style
+browser's variation and style-name records), 13 at code line starts, 1 at a data line start,
+4 at positional aliases.

@@ -1013,70 +1013,70 @@ Cheap_ResNameTable_360:	.incbin "includes/generated/naka_disk_menu_file_io.bin",
 ; [nakarest] the table itself: ResName slot 0x361 (table 0xea7228, 128 entries,
 ; [nakarest] InitializeCheap), 128 entry pointers x 4 bytes.
 Cheap_ResNameTable_361:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x5E5C, 0xA4
-	.long 0x00EA754A
-	.long 0x00EA7548
-	.long 0x00EA7546
-	.long 0x00EA7544
-	.long 0x00EA7542
-	.long 0x00EA7540
-	.long 0x00EA753E
-	.long 0x00EA753C
-	.long 0x00EA753A
-	.long 0x00EA7538
-	.long 0x00EA7536
-	.long 0x00EA752A
-	.long 0x00EA7528
-	.long 0x00EA7518
-	.long 0x00EA7516
-	.long 0x00EA7514
-	.long 0x00EA7512
-	.long 0x00EA7510
-	.long 0x00EA750E
-	.long 0x00EA750C
-	.long 0x00EA750A
-	.long 0x00EA7508
-	.long 0x00EA7506
-	.long 0x00EA7504
-	.long 0x00EA7502
-	.long 0x00EA7500
-	.long 0x00EA74FE
-	.long 0x00EA74FC
-	.long 0x00EA74FA
-	.long 0x00EA74F8
-	.long 0x00EA74F6
-	.long 0x00EA74F4
-	.long 0x00EA74F2
+	.long NakaWidget_DiskLoad_41_Label_Name
+	.long NakaWidget_DiskLoad_42_Label_Name
+	.long NakaWidget_DiskLoad_43_Label_Name
+	.long NakaWidget_DiskLoad_44_Label_Name
+	.long NakaWidget_DiskLoad_45_Label_Name
+	.long NakaWidget_DiskLoad_46_Label_Name
+	.long NakaWidget_DiskLoad_47_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_48_Line_Name
+	.long NakaWidget_DiskLoad_49_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_50_VwScreenTitle_Name
+	.long NakaWidget_DiskLoad_51_Label_Name
+	.long NakaWidget_DiskLoadP3_Name
+	.long NakaWidget_DiskLoad_53_VwScreenTitle_Name
+	.long NakaWidget_SingleLoadSwCtl_Name
+	.long NakaWidget_DiskLoad_55_IvIndexSwDelay_Name
+	.long NakaWidget_DiskLoad_56_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_57_Label_Name
+	.long NakaWidget_DiskLoad_58_Arrow_Name
+	.long NakaWidget_DiskLoad_59_AcIndexWideES_Name
+	.long NakaWidget_DiskLoad_60_AcIndexWideES_Name
+	.long NakaWidget_DiskLoad_61_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_62_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_63_AcIndexWideES_Name
+	.long NakaWidget_DiskLoad_64_AcIndexWideES_Name
+	.long NakaWidget_DiskLoad_65_AcParaStrBox_Name
+	.long NakaWidget_DiskLoad_66_Label_Name
+	.long NakaWidget_DiskLoad_67_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_68_Label_Name
+	.long NakaWidget_DiskLoad_69_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_70_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_71_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_72_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_73_PsFileNameBox_Name
 	.long 0x00EA74E0
-	.long 0x00EA74D4
-	.long 0x00EA74D2
-	.long 0x00EA74D0
-	.long 0x00EA74CE
-	.long 0x00EA74CC
-	.long 0x00EA74CA
-	.long 0x00EA74C8
-	.long 0x00EA74C6
-	.long 0x00EA74C4
-	.long 0x00EA74C2
-	.long 0x00EA74C0
-	.long 0x00EA74BE
-	.long 0x00EA74BC
-	.long 0x00EA74BA
-	.long 0x00EA74B8
-	.long 0x00EA74B6
-	.long 0x00EA74B4
-	.long 0x00EA74B2
-	.long 0x00EA74B0
-	.long 0x00EA74AE
-	.long 0x00EA749C
-	.long 0x00EA749A
-	.long 0x00EA7498
-	.long 0x00EA7496
-	.long 0x00EA7484
-	.long 0x00EA7482
-	.long 0x00EA7480
-	.long 0x00EA747E
-	.long 0x00EA747C
-	.long 0x00EA747A
+	.long NakaWidget_DiskLoadSMF_Name
+	.long NakaWidget_DiskLoad_76_AcTitleMenu_Name
+	.long NakaWidget_DiskLoad_77_AcIndexWideES_Name
+	.long NakaWidget_DiskLoad_78_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_79_Label_Name
+	.long NakaWidget_DiskLoad_80_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_81_Label_Name
+	.long NakaWidget_DiskLoad_82_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_83_Label_Name
+	.long NakaWidget_DiskLoad_84_PsWindowToggle_Name
+	.long NakaWidget_DiskLoad_85_Label_Name
+	.long NakaWidget_DiskLoad_86_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_87_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_88_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_89_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_90_PsFileNameBox_Name
+	.long NakaWidget_DiskLoad_91_IvMainEditSw_Name
+	.long NakaWidget_DiskLoad_92_IvExit_Name
+	.long NakaWidget_DiskLoad_93_IvIndexSwDelay_Name
+	.long NakaWidget_DiskLoad_94_AcIndexEditSw_Name
+	.long NakaWidget_SongNameSmfLdWin_Name
+	.long NakaWidget_DiskLoad_96_AcParaStrBox_Name
+	.long NakaWidget_DiskLoad_97_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_98_Label_Name
+	.long NakaWidget_DiskInfoSmfLdWin_Name
+	.long NakaWidget_DiskLoad_100_Label_Name
+	.long NakaWidget_DiskLoad_101_AcParaStrBox_Name
+	.long NakaWidget_DiskLoad_102_AcParaStrBox_Name
+	.long NakaWidget_DiskLoad_103_AcIndexEditSw_Name
+	.long NakaWidget_DiskLoad_104_Label_Name
 ; [nakarest] naka_disk_menu_file_io+0x6000  +0x6000..+0x6062 (0xea73cc, 98 B)
 ; [nakarest] 6 B at 0xea7428: the end marker of ResName slot 0x361 (table 0xea7228, 128 entries, InitializeCheap) -- entry 128, a pointer to the empty string right after it ("", 00 ff), as every ResName table ends.
 ; [nakarest] Continues the table itself: ResName slot 0x361 (table 0xea7228, 128 entries,
@@ -1087,7 +1087,70 @@ Cheap_ResNameTable_361:	.incbin "includes/generated/naka_disk_menu_file_io.bin",
 ; [nakarest] name strings, entries 0-127 of ResName slot 0x361 (table 0xea7228, 128 entries,
 ; [nakarest] InitializeCheap) (names for Viewable slot 0x61): "", "CmpSingleLoadSwCtl", "", "",
 ; [nakarest] "", "", ....
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6062, 0x198
+	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6062, 0x4C
+NakaWidget_DiskLoad_104_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60AE, 0x2
+NakaWidget_DiskLoad_103_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60B0, 0x2
+NakaWidget_DiskLoad_102_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60B2, 0x2
+NakaWidget_DiskLoad_101_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60B4, 0x2
+NakaWidget_DiskLoad_100_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60B6, 0x2
+NakaWidget_DiskInfoSmfLdWin_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60B8, 0x12
+NakaWidget_DiskLoad_98_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60CA, 0x2
+NakaWidget_DiskLoad_97_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60CC, 0x2
+NakaWidget_DiskLoad_96_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60CE, 0x2
+NakaWidget_SongNameSmfLdWin_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60D0, 0x12
+NakaWidget_DiskLoad_94_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60E2, 0x2
+NakaWidget_DiskLoad_93_IvIndexSwDelay_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60E4, 0x2
+NakaWidget_DiskLoad_92_IvExit_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60E6, 0x2
+NakaWidget_DiskLoad_91_IvMainEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60E8, 0x2
+NakaWidget_DiskLoad_90_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60EA, 0x2
+NakaWidget_DiskLoad_89_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60EC, 0x2
+NakaWidget_DiskLoad_88_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60EE, 0x2
+NakaWidget_DiskLoad_87_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60F0, 0x2
+NakaWidget_DiskLoad_86_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60F2, 0x2
+NakaWidget_DiskLoad_85_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60F4, 0x2
+NakaWidget_DiskLoad_84_PsWindowToggle_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60F6, 0x2
+NakaWidget_DiskLoad_83_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60F8, 0x2
+NakaWidget_DiskLoad_82_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60FA, 0x2
+NakaWidget_DiskLoad_81_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60FC, 0x2
+NakaWidget_DiskLoad_80_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x60FE, 0x2
+NakaWidget_DiskLoad_79_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6100, 0x2
+NakaWidget_DiskLoad_78_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6102, 0x2
+NakaWidget_DiskLoad_77_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6104, 0x2
+NakaWidget_DiskLoad_76_AcTitleMenu_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6106, 0x2
+NakaWidget_DiskLoadSMF_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6108, 0x1E
+NakaWidget_DiskLoad_73_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6126, 0x2
+NakaWidget_DiskLoad_72_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6128, 0x2
+NakaWidget_DiskLoad_71_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x612A, 0x2
+NakaWidget_DiskLoad_70_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x612C, 0x2
+NakaWidget_DiskLoad_69_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x612E, 0x2
+NakaWidget_DiskLoad_68_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6130, 0x2
+NakaWidget_DiskLoad_67_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6132, 0x2
+NakaWidget_DiskLoad_66_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6134, 0x2
+NakaWidget_DiskLoad_65_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6136, 0x2
+NakaWidget_DiskLoad_64_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6138, 0x2
+NakaWidget_DiskLoad_63_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x613A, 0x2
+NakaWidget_DiskLoad_62_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x613C, 0x2
+NakaWidget_DiskLoad_61_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x613E, 0x2
+NakaWidget_DiskLoad_60_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6140, 0x2
+NakaWidget_DiskLoad_59_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6142, 0x2
+NakaWidget_DiskLoad_58_Arrow_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6144, 0x2
+NakaWidget_DiskLoad_57_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6146, 0x2
+NakaWidget_DiskLoad_56_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6148, 0x2
+NakaWidget_DiskLoad_55_IvIndexSwDelay_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x614A, 0x2
+NakaWidget_SingleLoadSwCtl_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x614C, 0x10
+NakaWidget_DiskLoad_53_VwScreenTitle_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x615C, 0x2
+NakaWidget_DiskLoadP3_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x615E, 0xC
+NakaWidget_DiskLoad_51_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x616A, 0x2
+NakaWidget_DiskLoad_50_VwScreenTitle_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x616C, 0x2
+NakaWidget_DiskLoad_49_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x616E, 0x2
+NakaWidget_DiskLoad_48_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6170, 0x2
+NakaWidget_DiskLoad_47_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6172, 0x2
+NakaWidget_DiskLoad_46_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6174, 0x2
+NakaWidget_DiskLoad_45_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6176, 0x2
+NakaWidget_DiskLoad_44_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6178, 0x2
+NakaWidget_DiskLoad_43_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x617A, 0x2
+NakaWidget_DiskLoad_42_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x617C, 0x2
+NakaWidget_DiskLoad_41_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x617E, 0x7C
 ; [nakarest] naka_disk_menu_file_io+0x61fa  +0x61fa..+0x6200 (0xea75c6, 6 B)
 ; [nakarest] the table itself: ResName slot 0x362 (table 0xea75c6, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
@@ -1136,79 +1199,140 @@ InitializeCheap_PtrTable_4:	.incbin "includes/generated/naka_disk_menu_file_io.b
 ; [nakarest] the table itself: ResName slot 0x36c (table 0xea7878, 83 entries, InitializeCheap),
 ; [nakarest] 83 entry pointers x 4 bytes.
 InitializeCheap_PtrTable_5:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x64AC, 0x54
-	.long 0x00EA7A8E
-	.long 0x00EA7A8C
-	.long 0x00EA7A8A
-	.long 0x00EA7A7E
-	.long 0x00EA7A7C
-	.long 0x00EA7A7A
-	.long 0x00EA7A78
-	.long 0x00EA7A66
-	.long 0x00EA7A64
-	.long 0x00EA7A62
-	.long 0x00EA7A60
-	.long 0x00EA7A4E
-	.long 0x00EA7A4C
-	.long 0x00EA7A4A
-	.long 0x00EA7A48
-	.long 0x00EA7A46
-	.long 0x00EA7A44
-	.long 0x00EA7A32
-	.long 0x00EA7A30
-	.long 0x00EA7A2E
-	.long 0x00EA7A2C
-	.long 0x00EA7A2A
-	.long 0x00EA7A28
-	.long 0x00EA7A26
-	.long 0x00EA7A24
-	.long 0x00EA7A22
-	.long 0x00EA7A20
-	.long 0x00EA7A1E
-	.long 0x00EA7A1C
-	.long 0x00EA7A1A
-	.long 0x00EA7A18
-	.long 0x00EA7A16
-	.long 0x00EA7A14
-	.long 0x00EA7A12
-	.long 0x00EA7A10
-	.long 0x00EA7A0E
-	.long 0x00EA7A0C
-	.long 0x00EA7A0A
-	.long 0x00EA7A08
-	.long 0x00EA7A06
-	.long 0x00EA79F4
-	.long 0x00EA79F2
-	.long 0x00EA79F0
-	.long 0x00EA79EE
-	.long 0x00EA79EC
-	.long 0x00EA79EA
-	.long 0x00EA79E8
-	.long 0x00EA79E6
-	.long 0x00EA79E4
-	.long 0x00EA79E2
-	.long 0x00EA79E0
-	.long 0x00EA79DE
-	.long 0x00EA79DC
-	.long 0x00EA79DA
-	.long 0x00EA79D8
-	.long 0x00EA79D6
-	.long 0x00EA79D4
-	.long 0x00EA79D2
-	.long 0x00EA79D0
-	.long 0x00EA79CE
-	.long 0x00EA79CC
-	.long 0x00EA79CA
-	.long 0x00EA79C8
+	.long NakaWidget_DiskSmfDirectPlay_21_IvOneShotTimer_Name
+	.long NakaWidget_DiskSmfDirectPlay_22_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_23_Label_Name
+	.long NakaWidget_SmfMidiOut_Name
+	.long NakaWidget_DiskSmfDirectPlay_25_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_26_IvIndexSwDelay_Name
+	.long NakaWidget_DiskSmfDirectPlay_27_AcIndexEditSw_Name
+	.long NakaWidget_SongNameDPSmfWin_Name
+	.long NakaWidget_DiskSmfDirectPlay_29_AcParaStrBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_30_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_31_Label_Name
+	.long NakaWidget_DiskInfoDPSmfWin_Name
+	.long NakaWidget_DiskSmfDirectPlay_33_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_34_AcParaStrBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_35_AcParaStrBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_36_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_37_Label_Name
+	.long NakaWidget_DiskDocDirectPlay_Name
+	.long NakaWidget_DiskSmfDirectPlay_39_PsFileNameBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_40_PsFileNameBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_41_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_42_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_43_AcIndexWideES_Name
+	.long NakaWidget_DiskSmfDirectPlay_44_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_45_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_46_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_47_IvOneShotTimer_Name
+	.long NakaWidget_DiskSmfDirectPlay_48_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_49_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_50_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_51_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_52_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_53_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_54_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_55_AcMonoIndexToggle_Name
+	.long NakaWidget_DiskSmfDirectPlay_56_AcParaStrBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_57_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_58_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_59_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_60_Label_Name
+	.long NakaWidget_DiskPdDirectPlay_Name
+	.long NakaWidget_DiskSmfDirectPlay_62_PsFileNameBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_63_PsFileNameBox_Name
+	.long NakaWidget_DiskSmfDirectPlay_64_AcIndexWideES_Name
+	.long NakaWidget_DiskSmfDirectPlay_65_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_66_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_67_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_68_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_69_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_70_IvOneShotTimer_Name
+	.long NakaWidget_DiskSmfDirectPlay_71_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_72_AcMonoIndexToggle_Name
+	.long NakaWidget_DiskSmfDirectPlay_73_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_74_AcIndexEditSw_Name
+	.long NakaWidget_DiskSmfDirectPlay_75_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_76_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_77_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_78_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_79_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_80_Line_Name
+	.long NakaWidget_DiskSmfDirectPlay_81_Label_Name
+	.long NakaWidget_DiskSmfDirectPlay_82_Label_Name
+	.long InitializeCheap_PtrTable_5_EndName
 ; [nakarest] naka_disk_menu_file_io+0x65fc  +0x65fc..+0x65fe (0xea79c8, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xea79c8 not derived; readers below
 ; [nakarest] Readers: source references InitializeCheap_PtrTable_5
 ; [nakarest] (ui_widgets/disk_menu_file_io_screens.s: `.long 0x00ea79c8`); 1 data word in
 ; [nakarest] InitializeCheap_PtrTable_5 (at 0xea79c4).
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FC, 0x2
+InitializeCheap_PtrTable_5_EndName:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FC, 0x2
 ; [nakarest] naka_disk_menu_file_io+0x65fe  +0x65fe..+0x66fe (0xea79ca, 256 B)
 ; [nakarest] name strings, entries 0-82 of ResName slot 0x36c (table 0xea7878, 83 entries,
 ; [nakarest] InitializeCheap) (names for Viewable slot 0x6c): "", "", "", "", "", "", ....
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FE, 0x100
+NakaWidget_DiskSmfDirectPlay_82_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FE, 0x2
+NakaWidget_DiskSmfDirectPlay_81_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6600, 0x2
+NakaWidget_DiskSmfDirectPlay_80_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6602, 0x2
+NakaWidget_DiskSmfDirectPlay_79_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6604, 0x2
+NakaWidget_DiskSmfDirectPlay_78_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6606, 0x2
+NakaWidget_DiskSmfDirectPlay_77_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6608, 0x2
+NakaWidget_DiskSmfDirectPlay_76_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x660A, 0x2
+NakaWidget_DiskSmfDirectPlay_75_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x660C, 0x2
+NakaWidget_DiskSmfDirectPlay_74_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x660E, 0x2
+NakaWidget_DiskSmfDirectPlay_73_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6610, 0x2
+NakaWidget_DiskSmfDirectPlay_72_AcMonoIndexToggle_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6612, 0x2
+NakaWidget_DiskSmfDirectPlay_71_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6614, 0x2
+NakaWidget_DiskSmfDirectPlay_70_IvOneShotTimer_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6616, 0x2
+NakaWidget_DiskSmfDirectPlay_69_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6618, 0x2
+NakaWidget_DiskSmfDirectPlay_68_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x661A, 0x2
+NakaWidget_DiskSmfDirectPlay_67_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x661C, 0x2
+NakaWidget_DiskSmfDirectPlay_66_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x661E, 0x2
+NakaWidget_DiskSmfDirectPlay_65_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6620, 0x2
+NakaWidget_DiskSmfDirectPlay_64_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6622, 0x2
+NakaWidget_DiskSmfDirectPlay_63_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6624, 0x2
+NakaWidget_DiskSmfDirectPlay_62_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6626, 0x2
+NakaWidget_DiskPdDirectPlay_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6628, 0x12
+NakaWidget_DiskSmfDirectPlay_60_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x663A, 0x2
+NakaWidget_DiskSmfDirectPlay_59_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x663C, 0x2
+NakaWidget_DiskSmfDirectPlay_58_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x663E, 0x2
+NakaWidget_DiskSmfDirectPlay_57_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6640, 0x2
+NakaWidget_DiskSmfDirectPlay_56_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6642, 0x2
+NakaWidget_DiskSmfDirectPlay_55_AcMonoIndexToggle_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6644, 0x2
+NakaWidget_DiskSmfDirectPlay_54_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6646, 0x2
+NakaWidget_DiskSmfDirectPlay_53_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6648, 0x2
+NakaWidget_DiskSmfDirectPlay_52_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x664A, 0x2
+NakaWidget_DiskSmfDirectPlay_51_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x664C, 0x2
+NakaWidget_DiskSmfDirectPlay_50_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x664E, 0x2
+NakaWidget_DiskSmfDirectPlay_49_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6650, 0x2
+NakaWidget_DiskSmfDirectPlay_48_Line_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6652, 0x2
+NakaWidget_DiskSmfDirectPlay_47_IvOneShotTimer_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6654, 0x2
+NakaWidget_DiskSmfDirectPlay_46_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6656, 0x2
+NakaWidget_DiskSmfDirectPlay_45_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6658, 0x2
+NakaWidget_DiskSmfDirectPlay_44_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x665A, 0x2
+NakaWidget_DiskSmfDirectPlay_43_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x665C, 0x2
+NakaWidget_DiskSmfDirectPlay_42_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x665E, 0x2
+NakaWidget_DiskSmfDirectPlay_41_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6660, 0x2
+NakaWidget_DiskSmfDirectPlay_40_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6662, 0x2
+NakaWidget_DiskSmfDirectPlay_39_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6664, 0x2
+NakaWidget_DiskDocDirectPlay_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6666, 0x12
+NakaWidget_DiskSmfDirectPlay_37_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6678, 0x2
+NakaWidget_DiskSmfDirectPlay_36_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x667A, 0x2
+NakaWidget_DiskSmfDirectPlay_35_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x667C, 0x2
+NakaWidget_DiskSmfDirectPlay_34_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x667E, 0x2
+NakaWidget_DiskSmfDirectPlay_33_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6680, 0x2
+NakaWidget_DiskInfoDPSmfWin_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6682, 0x12
+NakaWidget_DiskSmfDirectPlay_31_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6694, 0x2
+NakaWidget_DiskSmfDirectPlay_30_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6696, 0x2
+NakaWidget_DiskSmfDirectPlay_29_AcParaStrBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6698, 0x2
+NakaWidget_SongNameDPSmfWin_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x669A, 0x12
+NakaWidget_DiskSmfDirectPlay_27_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66AC, 0x2
+NakaWidget_DiskSmfDirectPlay_26_IvIndexSwDelay_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66AE, 0x2
+NakaWidget_DiskSmfDirectPlay_25_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66B0, 0x2
+NakaWidget_SmfMidiOut_Name:				.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66B2, 0xC
+NakaWidget_DiskSmfDirectPlay_23_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66BE, 0x2
+NakaWidget_DiskSmfDirectPlay_22_Label_Name:		.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66C0, 0x2
+NakaWidget_DiskSmfDirectPlay_21_IvOneShotTimer_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66C2, 0x3C
 ; [nakarest] naka_disk_menu_file_io+0x66fe  +0x66fe..+0x6704 (0xea7aca, 6 B)
 ; [nakarest] the table itself: ResName slot 0x36d (table 0xea7aca, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.

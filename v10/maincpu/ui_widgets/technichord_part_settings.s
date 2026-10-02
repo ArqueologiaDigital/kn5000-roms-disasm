@@ -650,70 +650,70 @@ Murai_ResNameTable_302:	.incbin "includes/generated/naka_technichord_part.bin", 
 ; [nakarest] the table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries, InitializeMurai),
 ; [nakarest] 84 entry pointers x 4 bytes.
 Murai_ResNameTable_303:	.incbin "includes/generated/naka_technichord_part.bin", 0x3DC0, 0x40
-	.long 0x00E85CB4
-	.long 0x00E85CB2
-	.long 0x00E85CB0
-	.long 0x00E85CAE
-	.long 0x00E85CAC
-	.long 0x00E85CAA
-	.long 0x00E85CA8
-	.long 0x00E85CA6
-	.long 0x00E85CA4
-	.long 0x00E85CA2
-	.long 0x00E85CA0
-	.long 0x00E85C9E
-	.long 0x00E85C9C
-	.long 0x00E85C90
-	.long 0x00E85C8E
-	.long 0x00E85C8C
-	.long 0x00E85C8A
-	.long 0x00E85C88
-	.long 0x00E85C86
-	.long 0x00E85C84
-	.long 0x00E85C82
-	.long 0x00E85C80
-	.long 0x00E85C7E
-	.long 0x00E85C7C
-	.long 0x00E85C7A
-	.long 0x00E85C78
-	.long 0x00E85C76
-	.long 0x00E85C6C
-	.long 0x00E85C6A
-	.long 0x00E85C68
-	.long 0x00E85C66
-	.long 0x00E85C5C
-	.long 0x00E85C5A
-	.long 0x00E85C58
-	.long 0x00E85C56
-	.long 0x00E85C54
-	.long 0x00E85C52
-	.long 0x00E85C50
-	.long 0x00E85C46
-	.long 0x00E85C44
-	.long 0x00E85C42
-	.long 0x00E85C40
-	.long 0x00E85C3E
-	.long 0x00E85C3C
-	.long 0x00E85C32
-	.long 0x00E85C30
-	.long 0x00E85C2E
-	.long 0x00E85C2C
-	.long 0x00E85C2A
-	.long 0x00E85C20
-	.long 0x00E85C1E
-	.long 0x00E85C1C
-	.long 0x00E85C1A
-	.long 0x00E85C10
-	.long 0x00E85C0E
-	.long 0x00E85C0C
-	.long 0x00E85C0A
-	.long 0x00E85C00
-	.long 0x00E85BFE
-	.long 0x00E85BFC
-	.long 0x00E85BFA
-	.long 0x00E85BF0
-	.long 0x00E85BEE
-	.long 0x00E85BEC
+	.long NakaWidget_Sdpart_16_AcStrRadioBox_Name
+	.long NakaWidget_Sdpart_17_AcStrRadioBox_Name
+	.long NakaWidget_Sdpart_18_AcStrRadioBox_Name
+	.long NakaWidget_Sdpart_19_AcStrRadioBox_Name
+	.long NakaWidget_Sdpart_20_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_21_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_22_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_23_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_24_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_25_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_26_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_27_VwEditSwBox_Name
+	.long NakaWidget_Sdpart_28_IvSdpart_Name
+	.long NakaWidget_SdpartMain_Name
+	.long NakaWidget_Sdpart_30_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_31_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_32_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_33_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_34_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_35_VwBox_Name
+	.long NakaWidget_Sdpart_36_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_37_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_38_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_39_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_40_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_41_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_42_AcVolPartEditBox_Name
+	.long NakaWidget_SdpartVol_Name
+	.long NakaWidget_Sdpart_44_AcIndexEditSw_Name
+	.long NakaWidget_Sdpart_45_VwBox_Name
+	.long NakaWidget_Sdpart_46_AcVolPartEditBox_Name
+	.long NakaWidget_SdpartPan_Name
+	.long NakaWidget_Sdpart_48_VwBox_Name
+	.long NakaWidget_Sdpart_49_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_50_Label_Name
+	.long NakaWidget_Sdpart_51_AcLswPartPan_Name
+	.long NakaWidget_Sdpart_52_AcIndexEditSw_Name
+	.long NakaWidget_Sdpart_53_VwBox_Name
+	.long NakaWidget_SdpartEff_Name
+	.long NakaWidget_Sdpart_55_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_56_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_57_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_58_AcIndexEditSw_Name
+	.long NakaWidget_Sdpart_59_VwBox_Name
+	.long NakaWidget_SdpartSus_Name
+	.long NakaWidget_Sdpart_61_AcIndexEditSw_Name
+	.long NakaWidget_Sdpart_62_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_63_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_64_VwBox_Name
+	.long NakaWidget_SdpartKey_Name
+	.long NakaWidget_Sdpart_66_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_67_AcIndexEditSw_Name
+	.long NakaWidget_Sdpart_68_VwBox_Name
+	.long NakaWidget_SdpartTun_Name
+	.long NakaWidget_Sdpart_70_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_71_AcIndexEditSw_Name
+	.long NakaWidget_Sdpart_72_VwBox_Name
+	.long NakaWidget_SdpartBnd_Name
+	.long NakaWidget_Sdpart_74_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_75_AcIndexEditSw_Name
+	.long NakaWidget_Sdpart_76_VwBox_Name
+	.long NakaWidget_SdpartOth_Name
+	.long NakaWidget_Sdpart_78_AcLswPartEditBox_Name
+	.long NakaWidget_Sdpart_79_AcLswPartEditBox_Name
 ; [nakarest] naka_technichord_part+0x3f00  +0x3f00..+0x3f16 (0xe85bce, 22 B)
 ; [nakarest] 6 B at 0xe85bde: the end marker of ResName slot 0x303 (table 0xe85a8e, 84 entries, InitializeMurai) -- entry 84, a pointer to the empty string right after it ("", 00 ff), as every ResName table ends.
 ; [nakarest] Continues the table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries,
@@ -723,7 +723,71 @@ Murai_ResNameTable_303:	.incbin "includes/generated/naka_technichord_part.bin", 
 ; [nakarest] naka_technichord_part+0x3f16  +0x3f16..+0x4022 (0xe85be4, 268 B)
 ; [nakarest] name strings, entries 0-83 of ResName slot 0x303 (table 0xe85a8e, 84 entries,
 ; [nakarest] InitializeMurai) (names for Viewable slot 0x3): "", "", "", "", "", "", ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3F16, 0x10C
+	.incbin "includes/generated/naka_technichord_part.bin", 0x3F16, 0x8
+NakaWidget_Sdpart_79_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F1E, 0x2
+NakaWidget_Sdpart_78_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F20, 0x2
+NakaWidget_SdpartOth_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F22, 0xA
+NakaWidget_Sdpart_76_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F2C, 0x2
+NakaWidget_Sdpart_75_AcIndexEditSw_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F2E, 0x2
+NakaWidget_Sdpart_74_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F30, 0x2
+NakaWidget_SdpartBnd_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F32, 0xA
+NakaWidget_Sdpart_72_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F3C, 0x2
+NakaWidget_Sdpart_71_AcIndexEditSw_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F3E, 0x2
+NakaWidget_Sdpart_70_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F40, 0x2
+NakaWidget_SdpartTun_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F42, 0xA
+NakaWidget_Sdpart_68_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F4C, 0x2
+NakaWidget_Sdpart_67_AcIndexEditSw_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F4E, 0x2
+NakaWidget_Sdpart_66_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F50, 0x2
+NakaWidget_SdpartKey_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F52, 0xA
+NakaWidget_Sdpart_64_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F5C, 0x2
+NakaWidget_Sdpart_63_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F5E, 0x2
+NakaWidget_Sdpart_62_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F60, 0x2
+NakaWidget_Sdpart_61_AcIndexEditSw_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F62, 0x2
+NakaWidget_SdpartSus_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F64, 0xA
+NakaWidget_Sdpart_59_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F6E, 0x2
+NakaWidget_Sdpart_58_AcIndexEditSw_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F70, 0x2
+NakaWidget_Sdpart_57_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F72, 0x2
+NakaWidget_Sdpart_56_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F74, 0x2
+NakaWidget_Sdpart_55_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F76, 0x2
+NakaWidget_SdpartEff_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F78, 0xA
+NakaWidget_Sdpart_53_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F82, 0x2
+NakaWidget_Sdpart_52_AcIndexEditSw_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F84, 0x2
+NakaWidget_Sdpart_51_AcLswPartPan_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F86, 0x2
+NakaWidget_Sdpart_50_Label_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F88, 0x2
+NakaWidget_Sdpart_49_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F8A, 0x2
+NakaWidget_Sdpart_48_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F8C, 0x2
+NakaWidget_SdpartPan_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F8E, 0xA
+NakaWidget_Sdpart_46_AcVolPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F98, 0x2
+NakaWidget_Sdpart_45_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3F9A, 0x2
+NakaWidget_Sdpart_44_AcIndexEditSw_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3F9C, 0x2
+NakaWidget_SdpartVol_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3F9E, 0xA
+NakaWidget_Sdpart_42_AcVolPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FA8, 0x2
+NakaWidget_Sdpart_41_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FAA, 0x2
+NakaWidget_Sdpart_40_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FAC, 0x2
+NakaWidget_Sdpart_39_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FAE, 0x2
+NakaWidget_Sdpart_38_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FB0, 0x2
+NakaWidget_Sdpart_37_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FB2, 0x2
+NakaWidget_Sdpart_36_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FB4, 0x2
+NakaWidget_Sdpart_35_VwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FB6, 0x2
+NakaWidget_Sdpart_34_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FB8, 0x2
+NakaWidget_Sdpart_33_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FBA, 0x2
+NakaWidget_Sdpart_32_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FBC, 0x2
+NakaWidget_Sdpart_31_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FBE, 0x2
+NakaWidget_Sdpart_30_AcLswPartEditBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FC0, 0x2
+NakaWidget_SdpartMain_Name:			.incbin "includes/generated/naka_technichord_part.bin", 0x3FC2, 0xC
+NakaWidget_Sdpart_28_IvSdpart_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FCE, 0x2
+NakaWidget_Sdpart_27_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FD0, 0x2
+NakaWidget_Sdpart_26_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FD2, 0x2
+NakaWidget_Sdpart_25_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FD4, 0x2
+NakaWidget_Sdpart_24_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FD6, 0x2
+NakaWidget_Sdpart_23_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FD8, 0x2
+NakaWidget_Sdpart_22_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FDA, 0x2
+NakaWidget_Sdpart_21_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FDC, 0x2
+NakaWidget_Sdpart_20_VwEditSwBox_Name:		.incbin "includes/generated/naka_technichord_part.bin", 0x3FDE, 0x2
+NakaWidget_Sdpart_19_AcStrRadioBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FE0, 0x2
+NakaWidget_Sdpart_18_AcStrRadioBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FE2, 0x2
+NakaWidget_Sdpart_17_AcStrRadioBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FE4, 0x2
+NakaWidget_Sdpart_16_AcStrRadioBox_Name:	.incbin "includes/generated/naka_technichord_part.bin", 0x3FE6, 0x3C
 ; [nakarest] naka_technichord_part+0x4022  +0x4022..+0x4038 (0xe85cf0, 22 B)
 ; [nakarest] the table itself: ResName slot 0x304 (table 0xe85cf0, 4 entries, InitializeMurai),
 ; [nakarest] 4 entry pointers x 4 bytes.
