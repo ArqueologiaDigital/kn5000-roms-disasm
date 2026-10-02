@@ -132,9 +132,9 @@ SeqEvt_FindFreeSlotLoop:
 	jr	nc, SeqEvt_AllocateNewSlot
 	.byte 0xf3, 0x07, 0xec, 0xf0, 0xcf	; bit 7,(xhl+ix)
 	jr	nz, SeqEvt_AdvanceFreeSlotIdx
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
-	ldda32	xbc, (32119)
+	ld	xbc, (32119:16)
 	jr	SeqEvt_WriteEventAndContinue
 SeqEvt_AdvanceFreeSlotIdx:
 	add	ix, (0x7d66:16)
@@ -192,9 +192,9 @@ SeqEvt_WriteNoteOnRotating:
 	ld	iz, ix
 	inc	2, ix
 	ld_rrb	w, xhl, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
-	ldda32	xbc, (32119)
+	ld	xbc, (32119:16)
 	and	a, 240
 	or	a, (0x7d6b:16)
 	calr	SeqEvtBuf_WriteBytePreserve
@@ -204,11 +204,11 @@ SeqEvt_WriteNoteOnRotating:
 	calr	SeqEvtBuf_WriteBytePreserve
 	ld	ix, iz
 	pop	xwa
-	adddi8	(32110), 2
+	add	(32110:16), 2
 	ldb_d8	a, (32110)
 	cp	a, (0x7d6a:16)
 	jr	c, SeqEvt_RotateIndexDone
-	stdi8	(32110), 0
+	ld	(32110:16), 0
 SeqEvt_RotateIndexDone:
 	ld a, w
 	and a, 0xf0
@@ -235,27 +235,27 @@ SeqEvt_WriteVoiceParams:
 	calr	SeqEvtBuf_AdvanceReadPos
 	ex16	iz, ix
 	calr	SeqEvtBuf_WriteBytePreserve
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
-	ldda32	xbc, (32119)
+	ld	xbc, (32119:16)
 	st_rrb	a, xhl, ix
 	inc	1, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
-	ldda32	xbc, (32119)
+	ld	xbc, (32119:16)
 	ex16	iz, ix
 	ld_rrb	a, xhl, ix
 	calr	SeqEvtBuf_AdvanceReadPos
 	ex16	iz, ix
 	calr	SeqEvtBuf_WriteBytePreserve
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
-	ldda32	xbc, (32119)
+	ld	xbc, (32119:16)
 	st_rrb	a, xhl, ix
 	inc	1, ix
-	stda32	(32119), xhl
+	ld	(32119:16), xhl
 	ld	xhl, xbc
-	ldda32	xbc, (32119)
+	ld	xbc, (32119:16)
 	push	xwa
 	ex16	iz, ix
 	ld_rrb	a, xhl, ix
@@ -388,7 +388,7 @@ SeqEvt_UpdateMinTempo:
 	xor	wa, wa
 	ldb_d8	a, (32114)
 	add	wa, (0x7d73:16)
-	stda16	(32115), wa
+	ld	(32115:16), wa
 	ld	ix, wa
 	cp	ix, (xhl+2)
 	jr	ugt, SeqEvt_HandleBufferWrap
@@ -401,7 +401,7 @@ SeqEvt_HandleBufferWrap:
 	add ix, (xhl + 0:8)
 
 	; stda16 (0x7e0f), xix (v7 patched)
-	stda16	(32115), ix
+	ld	(32115:16), ix
 
 
 
@@ -514,7 +514,7 @@ Voice_StoreMetricValue:
 	st_rrw	wa, xhl, ix
 	cp	wa, (0x7d64:16)
 	jr	nc, Voice_ParamComplete
-	stda16	(32100), wa
+	ld	(32100:16), wa
 Voice_ParamComplete:
 	add	iy, (0x7d66:16)
 	jp	Voice_ScanLoop
@@ -1125,7 +1125,7 @@ AccPlay_StartNewAccomp:
 	jr AccPlay_ContinueMainLoop
 
 AccPlay_CheckPrevRunning:
-	cpdi8	(32368), 0
+	cp	(32368:16), 0
 	jr	z, AccPlay_StopSequencer
 	calr	AccPlay_MainUpdateLoop
 	jr	AccPlay_ContinueMainLoop
@@ -1134,19 +1134,19 @@ AccPlay_StopSequencer:
 
 AccPlay_ContinueMainLoop:
 	calr	AccPlay_MonitorParamState
-	bitda	0, (32409)
+	bit	0, (32409:16)
 	jr	z, AccPlay_UpdateStateFlags
-	anddi8	(32409), 254
+	and	(32409:16), 254
 	calr	AccPlay_CheckAndToggle
 AccPlay_UpdateStateFlags:
 	ldb_d8	a, (32367)
 	stb_d8	(32368), a
-	bitda	2, (32377)
+	bit	2, (32377:16)
 	jr	z, AccPlay_DispatchRet
-	cpdi8	(35994), 1
+	cp	(35994:16), 1
 	jr	nz, AccPlay_DispatchRet
-	anddi8	(32377), 251
-	stdi8	(32422), 15
+	and	(32377:16), 251
+	ld	(32422:16), 15
 	call	DrumVoice_NotifyEE
 AccPlay_DispatchRet:
 	ret
@@ -1187,7 +1187,7 @@ AccPlay_InitializeStart:
 	ld	xbc, 0:i3
 	ld	xde, 0:i3
 	call	CtrlPanel_IndicatorDispatch
-	stdi8	(36530), 4
+	ld	(36530:16), 4
 	ret
 AccPlay_MainUpdateLoop:
 	call AccWrap_PlayModeDispatch
@@ -1242,7 +1242,7 @@ AccPlay_PostEvent9E_Disable:
 
 AccPlay_SetIndicatorAndRet:
 	; ordi8 0x7f15, 1 (v7 patched)
-	ordi8	(32377), 1
+	or	(32377:16), 1
 
 	ld xhl, 0x1e880a
 
@@ -1295,7 +1295,7 @@ TempoEvt_ReadAndClassify:
 	and	w, 240
 	stb_d8	(32184), a
 	stb_d8	(32185), w
-	bitda	7, (32378)
+	bit	7, (32378:16)
 	jr	z, TempoEvt_DispatchEvent
 	cp	a, 129
 	jr	nz, TempoEvt_CheckHighBit
@@ -1323,7 +1323,7 @@ TempoEvt_CheckHighBit:
 	ld	a, l
 	cp	a, 72
 	jr	c, TempoEvt_ContinueProcessing
-	ordi8	(32377), 16
+	or	(32377:16), 16
 	ldb_d8	a, (32184)
 	ldb_d8	w, (32185)
 	jr	TempoEvt_DispatchEvent
@@ -1390,15 +1390,15 @@ AccPlay_PostLoopCleanup:
 	ret
 
 AccPlay_StopIfRunning:
-	bitda	0, (32377)
+	bit	0, (32377:16)
 	jr	z, AccPlay_StopRet
-	bitda	2, (1056)
+	bit	2, (1056:16)
 	jr	nz, AccPlay_StopRet
 	call	Seq_DispatcherEntry
-	anddi8	(13132), 254
-	ordi8	(13361), 128
+	and	(13132:16), 254
+	or	(13361:16), 128
 	call	Seq_DispatcherEntry
-	anddi8	(32377), 254
+	and	(32377:16), 254
 AccPlay_StopRet:
 	ret
 
@@ -1437,7 +1437,7 @@ Voice_ReleaseChainLoop:
 	ldw	(xix+1), 65535
 	ldw	(xix+3), 65535
 	andmi8	(xix), 127
-	incdi16	1, (32124)
+	incw	1, (32124:16)
 	cp	hl, 65535
 	jr	z, Voice_ReleaseChainDone
 	jr	Voice_ReleaseChainLoop
@@ -1535,14 +1535,14 @@ AccPlay_AllocateVoiceSlot:
 	ld HL,WA
 	calr Util_ExtractAndShiftBits
 	ormi8	(xix), 128
-	decdi16	1, (32124)
+	decw	1, (32124:16)
 	pop	xiy
 	ld	(xiy+3), wa
 	ld	l, 1:opc
 	or	(xiy+0:8), l
-	stda16	(32372), wa
+	ld	(32372:16), wa
 	ld	wa, 6:i3
-	stda16	(32374), wa
+	ld	(32374:16), wa
 	ldb_d8	a, (64866)
 	ldb_d8	w, (64867)
 	ld	(xiy+9), wa
@@ -1662,7 +1662,7 @@ AccPlay_NoteAllocAndWrite:
 	ld_rrb	a, xix, hl
 	stb_d8	(32186), a
 	ld	a, 144:opc
-	cpdi8	(32184), 0
+	cp	(32184:16), 0
 	jr	z, AccPlay_NoteWriteStatusByte
 	ld	a, 145:opc
 ; AccPlay_NoteWriteStatusByte (was AccPlay_NoteSetType91): A = 0x90, or 0x91
@@ -1700,7 +1700,7 @@ AccPlay_NoteWriteStatusByte:
 	ld	a, 0:opc
 	calr	MidiSeqBuf_WriteByte
 	calr	MidiSeqBuf_AdvancePosition
-	cpdi8	(32184), 0
+	cp	(32184:16), 0
 	jr	z, AccPlay_NoteAllocRet
 	ldb_d8	a, (32185)
 	calr	MidiSeqBuf_WriteByte
@@ -2434,9 +2434,9 @@ MidiSeqBuf_ScanLoop:
 	dec	1, bc
 	cp	bc, 0:i3
 	jr	nz, MidiSeqBuf_ScanLoop
-	bitda	4, (32377)
+	bit	4, (32377:16)
 	jr	z, MidiSeqBuf_ScanDone
-	anddi8	(32377), 239
+	and	(32377:16), 239
 	ld	(xhl+1), 0
 MidiSeqBuf_ScanDone:
 	ret
@@ -2478,12 +2478,12 @@ MidiSeqBuf_AdvancePosition:
 	ld	de, hl
 	calr	Util_ExtractAndShiftBits
 	ld	(xix+3), wa
-	stda16	(32372), wa
+	ld	(32372:16), wa
 	ld	hl, wa
 	calr	Util_ExtractAndShiftBits
 	ld	(xix+1), de
 	ormi8	(xix), 128
-	decdi16	1, (32124)
+	decw	1, (32124:16)
 	ld	wa, 6:i3
 	pop	xhl
 	pop	xde
@@ -5250,7 +5250,7 @@ AccWrap_SetMinVelocity:
 	ld c, a
 
 	; cpdi8 (0x8d38), 236 (v7 patched)
-	cpdi8	(35996), 236
+	cp	(35996:16), 236
 
 	ret nz
 

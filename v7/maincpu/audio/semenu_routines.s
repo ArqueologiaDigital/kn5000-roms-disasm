@@ -2330,7 +2330,7 @@ SeMenu_SetupPartDisplay_End_Skip5:
 SeMenu_SetupPartDisplay_End_Skip6:
 	ld	xwa, (xsp+14)
 	ld	(xwa), 0
-	stdi8	(0x6ad), 0
+	ld	(0x6ad:16), 0
 SeMenu_SetupPartDisplay_End_Epilogue:
 	pop	qiz
 	lda	xsp, (xsp+16)
@@ -2342,13 +2342,13 @@ SeMenu_SetupPartDisplay_End_Epilogue:
 	cp	a, 15
 	ret	ugt
 	extz	wa
-	lda_24	xde, (0x20bf3)
+	lda	xde, (0x20bf3:24)
 	st_rrb	c, xde, wa
 	ret
 	cp	a, 15
 	ret	ugt
 	extz	wa
-	lda_24	xde, (0x20bf3)
+	lda	xde, (0x20bf3:24)
 	ld_rrb	a, xde, wa
 	ld	(xbc), a
 	ret
@@ -2404,7 +2404,7 @@ SeMenu_ApplyPartEdit_Helper5:
 	ret
 SeMenu_ApplyPartEdit_Helper5_Skip:
 	extz	wa
-	lda_24	xde, (GUI_DisplayStructData_0x1129)
+	lda	xde, (GUI_DisplayStructData_0x1129:24)
 	ld_rrb	a, xde, wa
 	ld	(xbc), a
 	ret
@@ -2414,7 +2414,7 @@ SeMenu_ApplyPartEdit_Helper5_Skip:
 	jr	SeMenu_ApplyPartEdit_Helper5_Join
 SeMenu_ApplyPartEdit_Helper5_Skip2:
 	extz	wa
-	lda_24	xde, (GUI_DisplayStructData_0x118A)
+	lda	xde, (GUI_DisplayStructData_0x118A:24)
 	ld_rrb	a, xde, wa
 	ld	(xbc), a
 SeMenu_ApplyPartEdit_Helper5_Join:
@@ -6708,7 +6708,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda xsp, (xsp + 0x12)
 	ret
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_CopyWriteUpdate_Helper3)
+	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -6999,7 +6999,7 @@ SeMenu_RefreshPartDisplay_Join4:
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_Data2_0x292
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_CopyWriteUpdate_Helper3)
+	jp	nz, (SeMenu_CopyWriteUpdate_Helper3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent

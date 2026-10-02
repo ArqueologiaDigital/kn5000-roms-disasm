@@ -2441,7 +2441,7 @@ SLDstBankList_FuncBody_Helper6_Join:
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
 	ld	xwa, 0:i3
-	stda32	(0x81ec), xwa
+	ld	(0x81ec:16), xwa
 	jrl	SLDstBankList_FuncBody_Loop4
 SLDstBankList_FuncBody_Skip24:
 	ld	l, (0x8a08:16)
@@ -2539,7 +2539,7 @@ SLDstBankList_FuncBody_Skip29:
 	inc	1, a
 	cp	a, (0xea0a14:24)
 	jr	nc, SLDstBankList_FuncBody_Skip31
-	ldb_da	e, (0xea0a12)
+	ld	e, (0xea0a12:24)
 	ld	a, e
 	add	a, e
 	cp	c, a

@@ -1436,10 +1436,10 @@ FDC_CMD_EXEC_Skip3:
 	ldw_d16	wa, (0x89ac)
 	cp	wa, (0x8a70:16)
 	jr	ule, FDC_CMD_EXEC_Entry3
-	stdi16	(0x89ac), 1
+	ldw	(0x89ac:16), 1
 FDC_CMD_EXEC_Entry3:
 	ldmm16	0x8a74, 0x89ac
-	stdi16	(0x8980), 0
+	ldw	(0x8980:16), 0
 	cp	(0x89d0:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip5
 	ldw	(0x8982:16), 1024
@@ -1483,7 +1483,7 @@ FDC_CMD_EXEC_Skip7:
 	calr	FDC_CmdRecalibrate_Helper3
 FDC_CMD_EXEC_Entry:
 	ldmm16	0x89ae, 0x8a76
-	decdi8	1, (0x89cc)
+	dec	1, (0x89cc:16)
 	ldb_d8	a, (0x89cc)
 	cp	a, 0:i3
 	jr	nz, FDC_CMD_EXEC_Entry2
@@ -1537,10 +1537,10 @@ FDC_CMD_EXEC_Skip9:
 	ldw_d16	wa, (0x89ac)
 	cp	wa, (0x8a70:16)
 	jr	ule, FDC_CMD_EXEC_Entry5
-	stdi16	(0x89ac), 1
+	ldw	(0x89ac:16), 1
 FDC_CMD_EXEC_Entry5:
 	ldmm16	0x8a74, 0x89ac
-	stdi16	(0x8980), 0
+	ldw	(0x8980:16), 0
 	cp	(0x89d0:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip11
 	ldw	(0x8982:16), 1024
@@ -1583,7 +1583,7 @@ FDC_CMD_EXEC_Skip13:
 	ld	(0x8a68:16), 255
 	calr	FDC_CmdRecalibrate_Helper3
 	ldmm16	0x89ae, 0x8a76
-	decdi8	1, (0x89cc)
+	dec	1, (0x89cc:16)
 	ldb_d8	a, (0x89cc)
 	cp	a, 0:i3
 	jr	nz, FDC_CMD_EXEC_Join5
@@ -1709,7 +1709,7 @@ FDC_MC_EXIT:
 ; [v10] Tail: DMA transfer initiation and multi-sector retry logic.
 ; [v10] Uses (R+d16) addressing for buffer and state access. 536 bytes.
 	cp	(0x8988:16), 0
-	call_24	nz, (0xf967c3)
+	call	nz, (0xf967c3:24)
 	calr	FDC_CmdRecalibrate
 	ld	(0x8a68:16), 255
 	ret
@@ -2130,7 +2130,7 @@ FDC_ByteTransfer_PIO:
 	inc	1, xhl
 	ld	(0x89b2:16), xhl
 FDC_CommandEntry_Join:
-	subdi16	(0x8980), 1
+	subw	(0x8980:16), 1
 	ret	nz
 	calr	FDC_Pulse_PH0
 	calr	FDC_Port_Reset_Or_Noop

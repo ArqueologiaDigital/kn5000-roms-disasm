@@ -24,21 +24,21 @@ UIStateEvt_VoiceParamHandler_Skip:
 UIStateEvt_VoiceParamHandler_Skip2:
 	ld	a, (0xc07d:16)
 	cp	a, 3:i3
-	jp_24 nz, (15860660)
+	jp nz, (15860660:24)
 	ldb_d8 a, (49278)
 	ld	w, (0xc07f:16)
 	cp	w, 255
 	jr	nz, UIStateEvt_VoiceParamHandler_Skip4
-	anddi8 (4330), 254
+	and (4330:16), 254
 	jrl	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip4:
 	bit	2, w
 	jr	nz, UIStateEvt_VoiceParamHandler_Skip5
 	jr	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip5:
-	bitda 0, (4330)
+	bit 0, (4330:16)
 	jr z, UIStateEvt_VoiceParamHandler_Skip6
-	anddi8 (4330), 254
+	and (4330:16), 254
 	jr	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip6:
 	and	a, w
@@ -54,9 +54,9 @@ UIStateEvt_VoiceParamHandler_Skip6:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	ordi8 (10419), 16
+	or (10419:16), 16
 	ldw	(0xf19e:16), 0
-	anddi8 (10405), 254
+	and (10405:16), 254
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
 	jr	UIStateEvt_VoiceParamHandler_Return
@@ -70,7 +70,7 @@ UIStateEvt_VoiceParamHandler_Skip7:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	ordi8 (10419), 16
+	or (10419:16), 16
 	ldw	(0xf19e:16), 0
 	ld	(4596:16), 0
 	call	SeqPlay_CheckStartConditions
@@ -114,12 +114,12 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	inc	1, a
 	ld	w, a
 	ld	(3414:16), w
-	ordi8 (3412), 1
-	ordi8 (10363), 4
+	or (3412:16), 1
+	or (10363:16), 4
 	jr	UIStateEvt_VoiceParamHandler_Return2
 UIStateEvt_VoiceParamHandler_Join:
-	anddi8 (3412), 254
-	anddi8 (10363), 251
+	and (3412:16), 254
+	and (10363:16), 251
 	xor	w, w
 UIStateEvt_VoiceParamHandler_Return2:
 	ret
@@ -363,13 +363,13 @@ DispatchHandler_ClearActiveFlag:
 PlayMode_InitFlagBlock:
 	call	PlayMode_InitFlagBlock_0x5
 	ret
-	cpdi8 (3380), 0
+	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
 	call	PlayMode_InitFlagBlock_0x16
 PlayMode_InitFlagBlock_Return:
 	ret
-	ordi8 (10412), 4
+	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
 
@@ -525,13 +525,13 @@ SongMode_InitFlagBlock:
 	ret
 	call	SongMode_InitFlagBlock_0x7
 	ret
-	cpdi8 (3380), 0
+	cp (3380:16), 0
 	jr	nz, Medley_GetPlaybackStatus_Return
 	ld	(3380:16), 1
 	call	SongMode_InitFlagBlock_0x18
 Medley_GetPlaybackStatus_Return:
 	ret
-	ordi8 (10412), 4
+	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
@@ -674,13 +674,13 @@ PartFormat_InitFlagBlock:
 	ret
 	call	PartFormat_InitFlagBlock_0xA
 	ret
-	cpdi8 (3380), 0
+	cp (3380:16), 0
 	jr	nz, SongMode_VoiceStateDisp_Return
 	ld	(3380:16), 1
 	call	PartFormat_InitFlagBlock_0x1B
 SongMode_VoiceStateDisp_Return:
 	ret
-	ordi8 (10412), 4
+	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
@@ -727,21 +727,21 @@ PlayModeStop_InitFlagBlock:
 	ret
 	ret
 	ret
-	cpdi8 (36151), 118
+	cp (36151:16), 118
 	jr z, PartFormat_StartPlayback_Return
 	call	PlayModeStop_InitFlagBlock_0x10
 PartFormat_StartPlayback_Return:
 	ret
-	cpdi8 (3380), 0
+	cp (3380:16), 0
 	jr	nz, PartFormat_StartPlayback_Return2
 	ld	(3380:16), 1
 	call	PlayModeStop_InitFlagBlock_0x21
 PartFormat_StartPlayback_Return2:
 	ret
-	ordi8 (10412), 4
+	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
-	cpdi8 (36150), 108
+	cp (36150:16), 108
 	jr nz, PartFormat_StartPlayback_Return3
 	ld	(3380:16), 0
 PartFormat_StartPlayback_Return3:
@@ -790,7 +790,7 @@ PlayModeStop_ClearFlagBlock:
 	ret
 	ret
 	ret
-	cpdi8 (36150), 108
+	cp (36150:16), 108
 	jr nz, PlayMode_SendCommand6C_Return
 	ld	(3380:16), 0
 PlayMode_SendCommand6C_Return:

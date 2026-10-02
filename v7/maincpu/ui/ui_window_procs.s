@@ -7060,7 +7060,7 @@ CaptureLcd:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+20)
 	ld	xwa, 1:i3
-	addl_da	(0x03044a), xwa
+	add	(0x03044a:24), xwa
 	call	GetDiskSizeInfo
 	call	GetEncodedFileSizeData
 	lda	xwa, (xsp+2)

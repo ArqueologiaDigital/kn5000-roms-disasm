@@ -4034,9 +4034,9 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	cp	wa, 5:i3
 	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
-	lda_24	xix, (0xee6384)
+	lda	xix, (0xee6384:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfdced3)
+	lda	xix, (0xfdced3:24)
 	jp_rr	8, xix, wa
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
@@ -5725,7 +5725,7 @@ UIStateEvt_TransposeUpdate:
 	jr	z, UIStateEvt_TransposeUpdate_Clear
 	ld	a, l
 	extz	wa
-	lda_24	xbc, (0xee8df4)
+	lda	xbc, (0xee8df4:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
@@ -5740,7 +5740,7 @@ UIStateEvt_TransposeUpdate:
 UIStateEvt_TransposeUpdate_Clear:
 	ld	a, l
 	extz	wa
-	lda_24	xbc, (0xee8df4)
+	lda	xbc, (0xee8df4:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
@@ -5748,7 +5748,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	lda_d16	xbc, (0xc1ff)
 	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x00	; ld (XBC+WA),0x00
 UIStateEvt_TransposeUpdate_Apply:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_ParamEdit_Data:
 	pushw	iz
@@ -5759,9 +5759,9 @@ UIStateEvt_ParamEdit_Data:
 	cp	wa, 6:i3
 	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
-	lda_24	xix, (0xee8e48)
+	lda	xix, (0xee8e48:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfde2cf)
+	lda	xix, (0xfde2cf:24)
 	jp_rr	8, xix, wa
 	ldb_d8	a, (0xc07f)
 	and	a, 7
@@ -5773,13 +5773,13 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join
 UIStateEvt_ParamEdit_Data_Skip:
@@ -5792,7 +5792,7 @@ UIStateEvt_ParamEdit_Data_Skip:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join
 UIStateEvt_ParamEdit_Data_Skip2:
@@ -5800,7 +5800,7 @@ UIStateEvt_ParamEdit_Data_Skip2:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 UIStateEvt_ParamEdit_Data_Join:
 	ldw_d16	wa, (0xc596)
@@ -5815,52 +5815,52 @@ UIStateEvt_ParamEdit_Data_Join:
 UIStateEvt_ParamEdit_Data_Skip3:
 	call	AudioInit_RefreshToneBank
 UIStateEvt_ParamEdit_Data_Skip4:
-	anddi16	(0xc596), 0xffe8
+	andw	(0xc596:16), 0xffe8
 	or	(0xc596:16), iz
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
 	jr	z, UIStateEvt_ParamEdit_Data_Skip5
-	stdi8	(0xc5a0), 31
+	ld	(0xc5a0:16), 31
 	jr	UIStateEvt_ParamEdit_Data_Entry
 UIStateEvt_ParamEdit_Data_Skip5:
-	stdi8	(0xc5a0), 16
+	ld	(0xc5a0:16), 16
 UIStateEvt_ParamEdit_Data_Entry:
-	bitda	3, (0xc07f)
+	bit	3, (0xc07f:16)
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
-	bitda	3, (0xc07e)
+	bit	3, (0xc07e:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip6
-	ordi16	(0xc596), 16
+	orw	(0xc596:16), 16
 	jr	UIStateEvt_ParamEdit_Data_Join2
 UIStateEvt_ParamEdit_Data_Skip6:
-	anddi16	(0xc596), 0xffef
+	andw	(0xc596:16), 0xffef
 UIStateEvt_ParamEdit_Data_Join2:
-	ordi16	(0xc59a), 0x2000
-	ordi16	(0xc594), 4
+	orw	(0xc59a:16), 0x2000
+	orw	(0xc594:16), 4
 	jrl	UIStateEvt_ParamEdit_Data_Epilogue
-	bitda	6, (0xc07f)
+	bit	6, (0xc07f:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip8
-	bitda	6, (0xc07e)
+	bit	6, (0xc07e:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip7
-	ordi16	(0xc596), 0x400
+	orw	(0xc596:16), 0x400
 	jr	UIStateEvt_ParamEdit_Data_Join3
 UIStateEvt_ParamEdit_Data_Skip7:
-	anddi16	(0xc596), 0xfbff
+	andw	(0xc596:16), 0xfbff
 UIStateEvt_ParamEdit_Data_Join3:
-	ordi16	(0xc59a), 0x4000
-	ordi16	(0xc594), 4
+	orw	(0xc59a:16), 0x4000
+	orw	(0xc594:16), 4
 UIStateEvt_ParamEdit_Data_Skip8:
-	bitda	4, (0xc07f)
+	bit	4, (0xc07f:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip10
-	anddi16	(0xc596), 0xf7ff
-	bitda	4, (0xc07e)
+	andw	(0xc596:16), 0xf7ff
+	bit	4, (0xc07e:16)
 	jr	z, UIStateEvt_ParamEdit_Data_Skip9
-	ordi16	(0xc596), 0x800
+	orw	(0xc596:16), 0x800
 	jr	UIStateEvt_ParamEdit_Data_Join4
 UIStateEvt_ParamEdit_Data_Skip9:
-	anddi16	(0xc596), 0xf7ff
+	andw	(0xc596:16), 0xf7ff
 UIStateEvt_ParamEdit_Data_Join4:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 UIStateEvt_ParamEdit_Data_Skip10:
 	ldb_d8	a, (0xc07f)
 	and	a, 7
@@ -5872,13 +5872,13 @@ UIStateEvt_ParamEdit_Data_Skip10:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join5
 UIStateEvt_ParamEdit_Data_Skip11:
@@ -5890,7 +5890,7 @@ UIStateEvt_ParamEdit_Data_Skip11:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join5
 UIStateEvt_ParamEdit_Data_Skip12:
@@ -5898,24 +5898,24 @@ UIStateEvt_ParamEdit_Data_Skip12:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 UIStateEvt_ParamEdit_Data_Join5:
-	anddi16	(0xc596), 0xffe8
+	andw	(0xc596:16), 0xffe8
 	or	(0xc596:16), iz
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
 	jr	z, UIStateEvt_ParamEdit_Data_Skip13
-	stdi8	(0xc5a0), 31
+	ld	(0xc5a0:16), 31
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
 UIStateEvt_ParamEdit_Data_Skip13:
-	stdi8	(0xc5a0), 16
+	ld	(0xc5a0:16), 16
 	jr	110
 	ldb_d8	a, (0xc07f)
 	and	a, 252
 	jr	z, 30
-	bitda	0, (0x3284)
+	bit	0, (0x3284:16)
 	jr	nz, 18
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
@@ -5923,20 +5923,20 @@ UIStateEvt_ParamEdit_Data_Skip13:
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
 	jr	nz, 0
-	ordi16	(0xc594), 4
-	bitda	1, (0xc07f)
+	orw	(0xc594:16), 4
+	bit	1, (0xc07f:16)
 	jr	z, 65
-	bitda	1, (0xfc5f)
+	bit	1, (0xfc5f:16)
 	jr	z, 12
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
-	call_24	z, (0xfdf5f5)
-	ordi16	(0xc594), 4
+	call	z, (0xfdf5f5:24)
+	orw	(0xc594:16), 4
 	jr	39
 	ldb_d8	a, (0xc07f)
 	and	a, 252
 	jr	z, 30
-	bitda	0, (0x3284)
+	bit	0, (0x3284:16)
 	jr	nz, 18
 	ldw_d16	wa, (0xc596)
 	bit	9, wa
@@ -5944,7 +5944,7 @@ UIStateEvt_ParamEdit_Data_Skip13:
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
 	jr	nz, 0
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz
 	ret
@@ -5956,73 +5956,73 @@ UIStateEvt_VolumeMixer_Data:
 	cp	wa, 5:i3
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (0xee8e56)
+	lda	xix, (0xee8e56:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfde538)
+	lda	xix, (0xfde538:24)
 	jp_rr	8, xix, wa
 	ldb_d8	a, (0xc07f)
 	and	a, 31
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip
-	anddi8	(0xc1fe), 252
+	and	(0xc1fe:16), 252
 	ldb_d8	a, (0xc07e)
 	and	a, 3
 	or	(0xc1fe:16), a
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 UIStateEvt_VolumeMixer_Data_Skip:
 	ldw_d16	wa, (0xc594)
 	bit	4, wa
 	ret	z
-	stdi8	(0xc1fe), 0
-	ordi16	(0xc59a), 4
+	ld	(0xc1fe:16), 0
+	orw	(0xc59a:16), 4
 	ret
 	ldb_d8	a, (0xc07f)
 	and	a, 31
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip3
-	bitda	1, (0xc07e)
+	bit	1, (0xc07e:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip2
-	ordi16	(0xc596), 32
+	orw	(0xc596:16), 32
 	jr	UIStateEvt_VolumeMixer_Data_Join2
 UIStateEvt_VolumeMixer_Data_Skip2:
-	anddi16	(0xc596), 0xffdf
+	andw	(0xc596:16), 0xffdf
 	ldw_d16	wa, (0xc596)
 	and	wa, 7
-	call_24	z, (0xfdf5f5)
+	call	z, (0xfdf5f5:24)
 UIStateEvt_VolumeMixer_Data_Join2:
-	resda	2, (0xc1fe)
+	res	2, (0xc1fe:16)
 	ldb_d8	a, (0xc07e)
 	and	a, 2
 	ld	c, a
 	add	a, c
 	or	(0xc1fe:16), a
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 UIStateEvt_VolumeMixer_Data_Skip3:
 	ldw_d16	wa, (0xc594)
 	bit	4, wa
 	ret	z
-	stdi8	(0xc1fe), 0
-	ordi16	(0xc59a), 4
+	ld	(0xc1fe:16), 0
+	orw	(0xc59a:16), 4
 	ret
-	bitda	0, (0xc07f)
+	bit	0, (0xc07f:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
-	bitda	0, (0xc07e)
+	bit	0, (0xc07e:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry
-	ordi16	(0xc596), 128
+	orw	(0xc596:16), 128
 	jr	UIStateEvt_VolumeMixer_Data_Join3
 UIStateEvt_VolumeMixer_Data_Entry:
-	anddi16	(0xc596), 0xff7f
+	andw	(0xc596:16), 0xff7f
 UIStateEvt_VolumeMixer_Data_Join3:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 UIStateEvt_VolumeMixer_Data_Entry2:
-	bitda	1, (0xc07f)
+	bit	1, (0xc07f:16)
 	ret	z
-	bitda	1, (0xc07e)
+	bit	1, (0xc07e:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip4
-	ordi16	(0xc596), 8
+	orw	(0xc596:16), 8
 	jr	UIStateEvt_VolumeMixer_Data_Join4
 UIStateEvt_VolumeMixer_Data_Skip4:
-	anddi16	(0xc596), 0xfff7
+	andw	(0xc596:16), 0xfff7
 UIStateEvt_VolumeMixer_Data_Join4:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 	ldb_d8	a, (0xc07f)
 	and	a, 255
@@ -6033,7 +6033,7 @@ UIStateEvt_VolumeMixer_Data_Join4:
 UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
-	lda_24	xbc, (0xee8d74)
+	lda	xbc, (0xee8d74:24)
 	ld_rrl	xwa, xbc, wa
 	bitm	0, (xwa+0x16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip5
@@ -6062,12 +6062,12 @@ UIStateEvt_VolumeMixer_Data_Join:
 	cp	de, 26
 	jr	lt, UIStateEvt_VolumeMixer_Data_Loop
 UIStateEvt_VolumeMixer_Data_Skip6:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 	ldb_d8	a, (0xc07f)
 	and	a, 255
 	ret	z
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 	ret
 UIStateEvt_EffectSelect_Data:
@@ -6098,21 +6098,21 @@ UIStateEvt_EffectSelect_Data:
 	ldb_d8	a, (0xfd03)
 	res	7, a
 	stb_d8	(0xc5a2), a
-	ordi16	(0xc59a), 0x400
+	orw	(0xc59a:16), 0x400
 	jr	UIStateEvt_EffectSelect_Data_Join
 UIStateEvt_EffectSelect_Data_Skip5:
-	stdi8	(0xc5a2), 55
-	ordi16	(0xc59a), 0x400
+	ld	(0xc5a2:16), 55
+	orw	(0xc59a:16), 0x400
 	jr	UIStateEvt_EffectSelect_Data_Join
 UIStateEvt_EffectSelect_Data_Skip6:
-	stdi8	(0xc5a2), 60
-	ordi16	(0xc59a), 0x400
+	ld	(0xc5a2:16), 60
+	orw	(0xc59a:16), 0x400
 	jr	UIStateEvt_EffectSelect_Data_Join
 UIStateEvt_EffectSelect_Data_Skip7:
-	stdi8	(0xc5a2), 67
-	ordi16	(0xc59a), 0x400
+	ld	(0xc5a2:16), 67
+	orw	(0xc59a:16), 0x400
 UIStateEvt_EffectSelect_Data_Join:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip:
 	ldb_d8	a, (0xc07f)
@@ -6126,19 +6126,19 @@ UIStateEvt_EffectSelect_Data_Skip:
 	res	7, a
 	stb_d8	(0xc5a2), a
 UIStateEvt_EffectSelect_Data_Skip8:
-	ordi16	(0xc59a), 0x400
-	ordi16	(0xc594), 4
+	orw	(0xc59a:16), 0x400
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip2:
 	ldb_d8	a, (0xc07f)
 	and	a, 255
 	ret	z
-	bitda	5, (0xfd50)
+	bit	5, (0xfd50:16)
 	ret	z
 	ldb_d8	a, (0xc07e)
 	and	a, 255
 	extz	wa
-	lda_24	xbc, (0xee8e1c)
+	lda	xbc, (0xee8e1c:24)
 	ld_rrb	e, xbc, wa
 	ld	hl, 0:i3
 	cp	hl, 26
@@ -6159,7 +6159,7 @@ UIStateEvt_EffectSelect_Data_Loop:
 	cp	hl, 26
 	jr	c, UIStateEvt_EffectSelect_Data_Loop
 UIStateEvt_EffectSelect_Data_Skip9:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip3:
 	ldb_d8	a, (0xc07f)
@@ -6168,7 +6168,7 @@ UIStateEvt_EffectSelect_Data_Skip3:
 	ldb_d8	a, (0xc07e)
 	and	a, 255
 	stb_d8	(0xe9c0), a
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip4:
 	ldb_d8	a, (0xc07f)
@@ -6177,22 +6177,22 @@ UIStateEvt_EffectSelect_Data_Skip4:
 	ldb_d8	a, (0xc07e)
 	and	a, 15
 	stb_d8	(0xe9be), a
-	ordi16	(0xc59a), 0x4000
-	ordi16	(0xc594), 4
+	orw	(0xc59a:16), 0x4000
+	orw	(0xc594:16), 4
 	ret
 ; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
 UIStateEvt_PlayModeGuard_Data:
-	cpdi8	(0xc07d), 2
+	cp	(0xc07d:16), 2
 	ret	nz
-	bitda	6, (0xc07e)
+	bit	6, (0xc07e:16)
 	jr	z, UIStateEvt_PlayModeGuard_ClearBit
-	ordi16	(0xc596), 0x2000
+	orw	(0xc596:16), 0x2000
 	ret
 UIStateEvt_PlayModeGuard_ClearBit:
-	anddi16	(0xc596), 0xdfff
+	andw	(0xc596:16), 0xdfff
 	call	Voice_UpdatePlayModeState
 	cp	hl, 255
-	call_24	nz, (0xfe12b8)
+	call	nz, (0xfe12b8:24)
 	call	NoteMap_FindBestMatch
 	cp	hl, 255
 	ret	z
@@ -6214,14 +6214,14 @@ UIStateEvt_ChannelConfig_Data:
 	ret	z
 	cp	a, 0:i3
 	ret	nz
-	bitda	6, (0xc07f)
+	bit	6, (0xc07f:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry
-	ordi16	(0xc59c), 8
-	ordi16	(0xc594), 4
+	orw	(0xc59c:16), 8
+	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry:
-	bitda	5, (0xc07f)
+	bit	5, (0xc07f:16)
 	ret	z
-	bitda	5, (0xc07e)
+	bit	5, (0xc07e:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip
 	ld	de, 0:i3
 	cp	de, 26
@@ -6237,7 +6237,7 @@ UIStateEvt_ChannelConfig_Data_Loop2:
 	ldb_d8	a, (0xfd04)
 	and	a, 255
 	extz	wa
-	lda_24	xbc, (0xee8e1c)
+	lda	xbc, (0xee8e1c:24)
 	ld_rrb	a, xbc, wa
 	and	a, 15
 	sla	a, 4
@@ -6263,56 +6263,56 @@ UIStateEvt_ChannelConfig_Data_Loop:
 	cp	de, 26
 	jr	c, UIStateEvt_ChannelConfig_Data_Loop
 UIStateEvt_ChannelConfig_Data_Join:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry2:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry3:
-	bitda	0, (0xc07f)
+	bit	0, (0xc07f:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry4
-	bitda	0, (0xc07e)
+	bit	0, (0xc07e:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip4
-	resda	4, (0xc322)
-	ordi16	(0xc59c), 8
+	res	4, (0xc322:16)
+	orw	(0xc59c:16), 8
 	jr	UIStateEvt_ChannelConfig_Data_Join2
 UIStateEvt_ChannelConfig_Data_Skip4:
-	setda	4, (0xc322)
-	ordi16	(0xc59c), 8
+	set	4, (0xc322:16)
+	orw	(0xc59c:16), 8
 UIStateEvt_ChannelConfig_Data_Join2:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry4:
-	bitda	2, (0xc07f)
+	bit	2, (0xc07f:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry6
-	bitda	2, (0xc07e)
+	bit	2, (0xc07e:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry5
-	setda	6, (0xc342)
-	setda	6, (0xc344)
-	setda	6, (0xc346)
-	setda	6, (0xc348)
-	setda	6, (0xc34a)
-	setda	6, (0xc34c)
+	set	6, (0xc342:16)
+	set	6, (0xc344:16)
+	set	6, (0xc346:16)
+	set	6, (0xc348:16)
+	set	6, (0xc34a:16)
+	set	6, (0xc34c:16)
 	jr	UIStateEvt_ChannelConfig_Data_Join3
 UIStateEvt_ChannelConfig_Data_Entry5:
-	resda	6, (0xc342)
-	resda	6, (0xc344)
-	resda	6, (0xc346)
-	resda	6, (0xc348)
-	resda	6, (0xc34a)
-	resda	6, (0xc34c)
-	ordi16	(0xc59c), 8
+	res	6, (0xc342:16)
+	res	6, (0xc344:16)
+	res	6, (0xc346:16)
+	res	6, (0xc348:16)
+	res	6, (0xc34a:16)
+	res	6, (0xc34c:16)
+	orw	(0xc59c:16), 8
 UIStateEvt_ChannelConfig_Data_Join3:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry6:
-	bitda	6, (0xc07f)
+	bit	6, (0xc07f:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry7
-	ordi16	(0xc59c), 8
-	ordi16	(0xc594), 4
+	orw	(0xc59c:16), 8
+	orw	(0xc594:16), 4
 UIStateEvt_ChannelConfig_Data_Entry7:
-	bitda	7, (0xc07f)
+	bit	7, (0xc07f:16)
 	ret	z
-	ordi16	(0xc59c), 8
-	ordi16	(0xc594), 4
+	orw	(0xc59c:16), 8
+	orw	(0xc594:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Skip5:
 	ld	xwa, 0x5000
@@ -6323,17 +6323,17 @@ UIStateEvt_ChannelConfig_Data_Skip5:
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip2
 	cp	hl, 0:i3
 	ret	nz
-	stdi8	(0xc362), 0
-	stdi8	(0xc363), 255
+	ld	(0xc362:16), 0
+	ld	(0xc363:16), 255
 	ret
 UIStateEvt_ChannelConfig_Data_Skip2:
 	ld	xwa, 0x5001
 	call	SndParam_LookupReadOnly
 	stb_d8	(0xc362), l
-	stdi8	(0xc363), 255
+	ld	(0xc363:16), 255
 	ret
 UIStateEvt_ChannelConfig_Data_Skip3:
-	stdi8	(0xc362), 0
+	ld	(0xc362:16), 0
 	ld	xwa, 0x5002
 	call	SndParam_LookupReadOnly
 	stb_d8	(0xc363), l
@@ -6345,16 +6345,16 @@ UIStateEvt_MuteToggle_Data:
 	ldb_d8	a, (0xc07d)
 	cp	a, 16
 	ret	nz
-	bitda	0, (0xc07f)
+	bit	0, (0xc07f:16)
 	ret	z
-	bitda	0, (0xc07e)
+	bit	0, (0xc07e:16)
 	jr	z, UIStateEvt_MuteToggle_Data_Skip
-	ordi16	(0xc594), 1
+	orw	(0xc594:16), 1
 	jr	UIStateEvt_MuteToggle_Data_Join
 UIStateEvt_MuteToggle_Data_Skip:
-	anddi16	(0xc594), 0xfffe
+	andw	(0xc594:16), 0xfffe
 UIStateEvt_MuteToggle_Data_Join:
-	ordi16	(0xc594), 4
+	orw	(0xc594:16), 4
 	ret
 	ret
 

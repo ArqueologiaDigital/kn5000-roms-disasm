@@ -143,7 +143,7 @@ SndParam_ProbeEntry_Skip2:
 	ld	e, (xwa+15)
 	extz	de
 	sla	de, 2
-	lda_24	xhl, (Naka_MainDispatch_Table_0xE20)
+	lda	xhl, (Naka_MainDispatch_Table_0xE20:24)
 	exts	xde
 	add	xde, xhl
 	ld	xix, (xde)
@@ -362,7 +362,7 @@ SndParam_ResolveOscEntry_Helper_Skip6:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (Naka_MainDispatch_Table_0xE50)
+	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
 	ld	l, (xwa+5)
 	extz	hl
 	ld_rrl	xwa, xde, bc
@@ -379,7 +379,7 @@ SndParam_ResolveOscEntry_Helper_Skip7:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (Naka_MainDispatch_Table_0xE50)
+	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xde, xde, bc
 	or	xde, xde
 	ret	z
@@ -403,7 +403,7 @@ SndParam_RW_ExactMatch:
 SndParam_RW_CheckFirstMatch:
 	ld	c, e
 	sla	c, 2
-	lda_24	xhl, (Naka_SubDispatch_A_Table_0x28)
+	lda	xhl, (Naka_SubDispatch_A_Table_0x28:24)
 	.set	SndParam_RW_ChainNext, . + 3
 	ld_rr8l	xbc, xhl, c
 	ld	c, (xbc)
@@ -438,7 +438,7 @@ SndParam_RW_ChainCheckFirst:
 	.set	SndParam_RW_FoundCallback, . + 1
 	sla	wa, 2
 	.set	SndParam_RW_ChainContinue, . + 3
-	lda_24	xde, (Naka_MainDispatch_Table_0xE50)
+	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xde, xde, wa
 SndParam_RW_NoEntry:
 	or	xde, xde
@@ -458,7 +458,7 @@ SndParam_RW_ProcessResult:
 SndParam_RW_ExactMatch_Skip2:
 	ld	a, (xbc+11)
 	sla	a, 2
-	lda_24	xbc, (Naka_SubDispatch_B_Table)
+	lda	xbc, (Naka_SubDispatch_B_Table:24)
 	ld_rr8l	xbc, xbc, a
 	cp	l, (xbc+1)
 	jr	nz, SndParam_RW_ExactMatch_Skip3
@@ -483,7 +483,7 @@ SndParam_RegisterSimple_Data_Helper:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (Naka_MainDispatch_Table_0xE50)
+	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xde, xde, bc
 	or	xde, xde
 SndParam_RW_Success:
@@ -497,7 +497,7 @@ SndParam_RW_Epilogue:
 	ld_rrw	de, xde, bc
 	ld	a, (xwa+11)
 	sla	a, 2
-	lda_24	xbc, (Naka_SubDispatch_B_Table_0x4)
+	lda	xbc, (Naka_SubDispatch_B_Table_0x4:24)
 	ld_rr8l	xwa, xbc, a
 	ld	hl, 0:i3
 SndParam_RW_HandleB1Type_Loop:
@@ -512,7 +512,7 @@ SndParam_RW_HandleB1Type_Loop:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (Naka_MainDispatch_Table_0xE50)
+	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xix, xde, bc
 	or	xix, xix
 	jr	z, SndParam_RW_HandleB1Type_Join
@@ -551,7 +551,7 @@ SndParam_RW_HandleB1Type_Join:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xbc, wa
 	or	xwa, xwa
 	ret	z
@@ -577,7 +577,7 @@ SndParam_RW_HandleB1Type_Join:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xhl, (Naka_MainDispatch_Table_0xE50)
+	lda	xhl, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xhl, xhl, wa
 	or	xhl, xhl
 	jrl	z, SndParam_RW_HandleB1Type_Skip10
@@ -661,7 +661,7 @@ SndParam_RW_HandleB1Type_Skip9:
 	ld	(xhl+7), a
 	jr	SndParam_RW_HandleB1Type_Join3
 SndParam_RW_HandleB1Type_Skip10:
-	stdi16	(0x9644), 65535
+	ldw	(0x9644:16), 65535
 	.set	SndParam_DMA_ProbeEntry, . + 1
 SndParam_RW_HandleB1Type_Join3:
 	ld	xhl, 38468
@@ -680,7 +680,7 @@ SndParam_DMA_ExtractFields:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xix, (Naka_MainDispatch_Table_0xE50)
+	lda	xix, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xix, wa
 	ld	(xsp+2), xwa
 	or	xwa, xwa
@@ -753,7 +753,7 @@ SndParam_ResolveWidgetVariant2_Data_Join:
 	ld	(xbc+7), a
 	jr	SndParam_ResolveWidgetVariant2_Data_Join2
 SndParam_ResolveWidgetVariant2_Data_Skip:
-	stdi16	(0x9650), 65535
+	ldw	(0x9650:16), 65535
 SndParam_ResolveWidgetVariant2_Data_Join2:
 	ld	xhl, 38480
 	popw	iz
@@ -802,7 +802,7 @@ SndParam_ResolveWidgetVariant2_Data_Return:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
 	or	xwa, xwa
@@ -815,7 +815,7 @@ SndParam_ResolveWidgetVariant2_Data_Return:
 	.set	SndParam_ReturnNotFound, . + 1
 	sla	a, 2
 	.set	SndParam_ReadRegField, . + 2
-	lda_24	xbc, (Naka_SubDispatch_B_Table)
+	lda	xbc, (Naka_SubDispatch_B_Table:24)
 	ld_rr8l	xbc, xbc, a
 	ld	xwa, 1:i3
 	cp	l, (xbc)
@@ -887,7 +887,7 @@ SndParam_ResolveWidgetVariant2_Data_Skip6:
 	ld	(xbc+7), a
 	jr	SndParam_ResolveWidgetVariant2_Data_Join4
 SndParam_ResolveWidgetVariant2_Data_Skip7:
-	stdi16	(0x9668), 65535
+	ldw	(0x9668:16), 65535
 SndParam_ResolveWidgetVariant2_Data_Join4:
 	ld	xhl, 38504
 	pop	xiz
@@ -903,7 +903,7 @@ SndParam_RegisterSimple_Data_Helper2:
 SndParam_CompareShifted:
 	extz	bc
 	sla	bc, 2
-	lda_24	xix, (Naka_MainDispatch_Table_0xE50)
+	lda	xix, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xiz, xix, bc
 	or	xiz, xiz
 	jrl	z, SndParam_ResolveWidgetVariant2_Data_Skip11
@@ -931,7 +931,7 @@ SndParam_ResolveWidgetVariant2_Data_Skip8:
 SndParam_ResolveWidgetVariant2_Data_Skip9:
 	ld	c, (xwa+11)
 	sla	c, 2
-	lda_24	xiy, (Naka_SubDispatch_B_Table_0x4)
+	lda	xiy, (Naka_SubDispatch_B_Table_0x4:24)
 	ld_rr8l	xiy, xiy, c
 	exts	xde
 	add	xde, xde
@@ -971,7 +971,7 @@ SndParam_ResolveWidgetVariant2_Data_Skip10:
 	ld	(xix+11), a
 	jr	SndParam_ResolveWidgetVariant2_Data_Join5
 SndParam_ResolveWidgetVariant2_Data_Skip11:
-	stdi16	(0x9674), 65535
+	ldw	(0x9674:16), 65535
 SndParam_ResolveWidgetVariant2_Data_Join5:
 	ld	xhl, 38516
 	pop	xiz
@@ -993,7 +993,7 @@ SndParam_ResolveWidgetVariant2_Data_Join5:
 	extz	wa
 SndParam_ReadRegAddress:
 	sla	wa, 2
-	lda_24	xix, (Naka_MainDispatch_Table_0xE50)
+	lda	xix, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xix, wa
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1103,7 +1103,7 @@ SndParam_RegisterEntry_Data_Skip5:
 	ld	(xde+7), c
 	jr	SndParam_RegisterEntry_Data_Join3
 SndParam_RegisterEntry_Data_Skip6:
-	stdi16	(0x9680), 65535
+	ldw	(0x9680:16), 65535
 SndParam_RegisterEntry_Data_Join3:
 	ld	xhl, 38528
 	lda	xsp, (xsp+18)
@@ -1118,7 +1118,7 @@ SndParam_RegisterEntry_Data_Join3:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	.set	SndParam_RegisterEntryAlt_Data, . + 2
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
@@ -1134,7 +1134,7 @@ SndParam_RegisterEntry_Data_Skip7:
 	jr	nc, SndParam_RegisterEntry_Data_Skip8
 	ld	l, a
 SndParam_RegisterEntry_Data_Skip8:
-	lda_24	xbc, (NakaInst_Param_IdxA0_01_0x12)
+	lda	xbc, (NakaInst_Param_IdxA0_01_0x12:24)
 	ld	a, (xde+11)
 	cp	a, 255
 	jr	z, SndParam_RegisterEntry_Data_Skip9
@@ -1246,7 +1246,7 @@ SndParam_RegisterEntry_Data_Skip16:
 	ld	(xix+7), a
 	jr	SndParam_RegisterEntry_Data_Join8
 SndParam_RegisterEntry_Data_Skip17:
-	stdi16	(0x968c), 65535
+	ldw	(0x968c:16), 65535
 SndParam_RegisterEntry_Data_Join8:
 	ld	xhl, 38540
 	pop	xiz
@@ -1262,7 +1262,7 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xiz, xbc, wa
 	or	xiz, xiz
 	jr	z, SndParam_RegisterMultiField_Data_Skip3
@@ -1312,7 +1312,7 @@ SndParam_RegisterMultiField_Data_Skip2:
 	ld	(xiy), 255
 	jr	SndParam_RegisterMultiField_Data_Join2
 SndParam_RegisterMultiField_Data_Skip3:
-	stdi16	(0x9698), 65535
+	ldw	(0x9698:16), 65535
 SndParam_RegisterMultiField_Data_Join2:
 	ld	xhl, 38552
 	pop	xiz
@@ -1335,7 +1335,7 @@ SndParam_RegisterMultiField_Data_Join2:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xiz, xbc, wa
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterLinked_Data_Skip
@@ -1436,7 +1436,7 @@ SndParam_RegisterLinked_Data:
 	ld	(xbc+7), a
 	jr	SndParam_RegisterLinked_Data_Join
 SndParam_RegisterLinked_Data_Skip:
-	stdi16	(0x96b0), 65535
+	ldw	(0x96b0:16), 65535
 SndParam_RegisterLinked_Data_Join:
 	ld	xhl, 38576
 	pop	xiz
@@ -1452,7 +1452,7 @@ SndParam_RegisterLinked_Data_Join:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xiz, xbc, wa
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterLinked_Data_Skip8
@@ -1547,7 +1547,7 @@ SndParam_RegisterLinked_Data_Join2:
 	ld	(xbc+7), a
 	jr	SndParam_RegisterLinked_Data_Join3
 SndParam_RegisterLinked_Data_Skip8:
-	stdi16	(0x96bc), 65535
+	ldw	(0x96bc:16), 65535
 	.set	SndParam_RegisterLinked2_Data, . + 3
 SndParam_RegisterLinked_Data_Join3:
 	ld	xhl, 38588
@@ -1562,7 +1562,7 @@ SndParam_RegisterLinked_Data_Join3:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1576,7 +1576,7 @@ SndParam_RegisterLinked_Data_Join3:
 	ld	xwa, (xsp+12)
 	ld	a, (xwa+11)
 	sla	a, 2
-	lda_24	xbc, (Naka_SubDispatch_B_Table)
+	lda	xbc, (Naka_SubDispatch_B_Table:24)
 	ld_rr8l	xbc, xbc, a
 	cpw	(xsp+10), 0
 	jr	lt, SndParam_RegisterLinked_Data_Skip9
@@ -1672,7 +1672,7 @@ SndParam_RegisterLinked_Data_Join5:
 	ld	(xix+7), a
 	jr	SndParam_RegisterLinked_Data_Join6
 SndParam_RegisterLinked_Data_Skip15:
-	stdi16	(0x96c8), 65535
+	ldw	(0x96c8:16), 65535
 SndParam_RegisterLinked_Data_Join6:
 	ld	xhl, 38600
 	lda	xsp, (xsp+16)
@@ -1686,7 +1686,7 @@ SndParam_RegisterLinked_Data_Join6:
 SndParam_RegisterSimple_Data:
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xbc, wa
 	or	xwa, xwa
 	jr	z, SndParam_RegisterSimple_Data_Skip3
@@ -1709,9 +1709,9 @@ SndParam_RegisterSimple_Data_Skip2:
 	ld	xwa, xiz
 	ld	de, (xsp+4)
 	calr	SndParam_RegisterSimple_Data_Helper2
-	stda32	(0x96d4), xhl
+	ld	(0x96d4:16), xhl
 SndParam_RegisterSimple_Data_Skip3:
-	ldda32	xhl, (0x96d4)
+	ld	xhl, (0x96d4:16)
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -1724,7 +1724,7 @@ SndParam_RegisterSimple_Data_Skip3:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1754,7 +1754,7 @@ SndParam_RegisterSimple_Data_Skip3:
 	.byte	0xcb,	0xff
 SndParam_RegisterSimple_Data_Skip4:
 	ld	w, c
-	lda_24	xbc, (NakaInst_Param_IdxA0_01_0x12)
+	lda	xbc, (NakaInst_Param_IdxA0_01_0x12:24)
 	ld	a, (xde+11)
 	cp	a, 255
 SndParam_RegisterChained_Data:
@@ -1847,7 +1847,7 @@ SndParam_RegisterChained_Data_Skip7:
 	ld	(xde+7), a
 	jr	SndParam_RegisterChained_Data_Join4
 SndParam_RegisterChained_Data_Skip8:
-	stdi16	(0x96d8), 65535
+	ldw	(0x96d8:16), 65535
 SndParam_RegisterChained_Data_Join4:
 	ld	xhl, 38616
 	lda	xsp, (xsp+20)
@@ -1860,7 +1860,7 @@ SndParam_RegisterChained_Data_Join4:
 	ld	a, (xde)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xbc, wa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterChained_Data_Skip11
@@ -1920,7 +1920,7 @@ SndParam_RegisterChained_Data_Skip10:
 	ld	(xwa), 255
 	jr	SndParam_RegisterChained_Data_Join6
 SndParam_RegisterChained_Data_Skip11:
-	stdi16	(0x96e4), 65535
+	ldw	(0x96e4:16), 65535
 SndParam_RegisterChained_Data_Join6:
 	ld	xhl, 38628
 	popw	iz
@@ -1936,7 +1936,7 @@ SndParam_RegisterChained_Data_Join6:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Naka_MainDispatch_Table_0xE50)
+	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
 	or	xwa, xwa
@@ -2042,7 +2042,7 @@ SndParam_RegisterComplex_Data_Skip5:
 	ld	(xiz+7), a
 	jr	SndParam_RegisterComplex_Data_Join2
 SndParam_RegisterComplex_Data_Skip6:
-	stdi16	(0x96f0), 65535
+	ldw	(0x96f0:16), 65535
 SndParam_RegisterComplex_Data_Join2:
 	ld	xhl, 38640
 SndParam_RegisterComplex_Data_Epilogue:
@@ -2077,7 +2077,7 @@ SndParam_RegisterComplex_Data_Skip9:
 	ld	xbc, xwa
 	ld	a, (xbc+11)
 	sla	a, 2
-	lda_24	xde, (Naka_SubDispatch_B_Table)
+	lda	xde, (Naka_SubDispatch_B_Table:24)
 	ld_rr8l	xde, xde, a
 	ld	xwa, 1:i3
 	cp	l, (xde)
@@ -2097,7 +2097,7 @@ SndParam_RegisterComplex_Data_Skip11:
 	and	l, a
 	extz	hl
 	ret
-	ldl_da	xwa, (Naka_MainDispatch_Table_0xF70)
+	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2149,7 +2149,7 @@ SndParam_NotifyQuick_Data_Skip3:
 SndParam_NotifyQuick_Data_Skip4:
 	ld	a, (xde+11)
 	sla	a, 2
-	lda_24	xbc, (Naka_SubDispatch_B_Table)
+	lda	xbc, (Naka_SubDispatch_B_Table:24)
 	ld_rr8l	xbc, xbc, a
 	cp	l, (xbc+1)
 	jr	nz, SndParam_NotifyQuick_Data_Skip5
@@ -2166,7 +2166,7 @@ SndParam_NotifyQuick_Data_Join:
 	ld	l, (xbc)
 	extz	hl
 	ret
-	ldl_da	xwa, (Naka_MainDispatch_Table_0xF70)
+	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2215,7 +2215,7 @@ SndParam_NotifyQuick_Data_Skip7:
 	ld	xde, xwa
 	ld	a, (xde+11)
 	sla	a, 2
-	lda_24	xbc, (Naka_SubDispatch_B_Table)
+	lda	xbc, (Naka_SubDispatch_B_Table:24)
 	ld_rr8l	xbc, xbc, a
 	ld	xwa, 1:i3
 	cp	l, (xbc)
@@ -2424,8 +2424,8 @@ SndParam_NotifyQuick_Data_Helper2:
 	jr	z, SndParam_NotifyQuick_Data_Skip14
 	cp	hl, 1:i3
 	jr	nz, SndParam_NotifyQuick_Data_Epilogue
-	cpdi16	(0x9042), 508
-	call_24	nc, (SwbtWr_ReinitBothBanks)
+	cpw	(0x9042:16), 508
+	call	nc, (SwbtWr_ReinitBothBanks:24)
 	lda_d16	xbc, (0xbca0)
 	ldw_d16	de, (0x9042)
 	extz	xde
@@ -2440,8 +2440,8 @@ SndParam_NotifyQuick_Data_Helper2:
 	ld	(xde+), a
 	jr	SndParam_NotifyQuick_Data_Join3
 SndParam_NotifyQuick_Data_Skip14:
-	cpdi16	(0x9042), 508
-	call_24	nc, (SwbtWr_ReinitOutputBank)
+	cpw	(0x9042:16), 508
+	call	nc, (SwbtWr_ReinitOutputBank:24)
 	lda_d16	xbc, (0xbca0)
 	ldw_d16	de, (0x9042)
 	extz	xde
@@ -2456,7 +2456,7 @@ SndParam_NotifyQuick_Data_Skip14:
 	ld	(xde+), a
 SndParam_NotifyQuick_Data_Join3:
 	ld	(xde), 255
-	incdi16	4, (0x9042)
+	incw	4, (0x9042:16)
 	jr	SndParam_NotifyQuick_Data_Epilogue
 SndParam_NotifyQuick_Data_Skip15:
 	pushw	ix
@@ -2489,8 +2489,8 @@ SndParam_NotifyQuick_Data_Epilogue:
 	cp	wa, 1:i3
 	jrl	nz, SndParam_NotifyQuick_Data_Epilogue2
 	.set	SndParam_EncodeFieldDirect_Data, . + 2
-	cpdi16	(0x9042), 504
-	call_24	nc, (SwbtWr_ReinitBothBanks)
+	cpw	(0x9042:16), 504
+	call	nc, (SwbtWr_ReinitBothBanks:24)
 	lda_d16	xbc, (0xbca0)
 	ldw_d16	de, (0x9042)
 	extz	xde
@@ -2514,8 +2514,8 @@ SndParam_NotifyQuick_Data_Epilogue:
 	ld	(xde+), a
 	jr	SndParam_NotifyQuick_Data_Join4
 SndParam_NotifyQuick_Data_Skip17:
-	cpdi16	(0x9042), 504
-	call_24	nc, (SwbtWr_ReinitOutputBank)
+	cpw	(0x9042:16), 504
+	call	nc, (SwbtWr_ReinitOutputBank:24)
 	lda_d16	xbc, (0xbca0)
 	ldw_d16	de, (0x9042)
 	extz	xde
@@ -2540,7 +2540,7 @@ SndParam_NotifyQuick_Data_Skip17:
 	ld	(xde+), a
 SndParam_NotifyQuick_Data_Join4:
 	ld	(xde), 255
-	incdi16	8, (0x9042)
+	incw	8, (0x9042:16)
 	jr	SndParam_NotifyQuick_Data_Epilogue2
 SndParam_NotifyQuick_Data_Skip18:
 	ld	e, (xiy)
@@ -2628,7 +2628,7 @@ SndParam_ReturnInvalid:
 	add	xhl, 0x10000
 	ret
 SndParam_NotifyQuick_Data_Helper3:
-	lda_24	xbc, (0x34100)
+	lda	xbc, (0x34100:24)
 	ld	xwa, xbc
 	lda	xde, (xbc+16376)
 SndParam_NotifyQuick_Data_Loop2:
@@ -2736,7 +2736,7 @@ SndParam_NotifyQuick_Data_Loop6:
 	ld	(xbc+), xwa
 	cp	xbc, xde
 	jr	c, SndParam_NotifyQuick_Data_Loop6
-	lda_24	xde, (0x380f8)
+	lda	xde, (0x380f8:24)
 	lda	xbc, (xde+2)
 	ld	xwa, xbc
 	lda	xbc, (xbc+16384)
@@ -2881,7 +2881,7 @@ SndParam_NotifyQuick_Data_Join7:
 SndParam_NotifyQuick_Data_Helper9:
 	cp	wa, 0:i3
 	jr	z, SndParam_NotifyQuick_Data_Skip29
-	lda_24	xbc, (0x380f8)
+	lda	xbc, (0x380f8:24)
 	ld	de, (xbc)
 	add	de, wa
 	.set	SndParam_WidgetAppendType2, . + 1
@@ -2919,13 +2919,13 @@ SndParam_WidgetAppendType2_Code_Loop:
 SndParam_WidgetCallType3:
 	ldb_d8	a, (0xd0)
 	.set	SndParam_WidgetCallType4, . + 3
-	stdi8	(0x423), 0
+	ld	(0x423:16), 0
 	.set	SndParam_WidgetDispatchDone, . + 3
-	anddi8	(0x427), 189
+	and	(0x427:16), 189
 SndParam_WidgetNotifyType1:
-	setda	3, (0x427)
-	stdi8	(0x432), 0
-	incdi8	1, (0xb742)
+	set	3, (0x427:16)
+	ld	(0x432:16), 0
+	inc	1, (0xb742:16)
 	popw	wa
 	reti
 	pushw	wa
@@ -2941,34 +2941,34 @@ SndParam_WidgetNotifyType1:
 	jr	nz, SndParam_WidgetNotifyType1_Skip4
 	bit	3, a
 	jr	z, SndParam_WidgetNotifyType1_Skip5
-	resda	3, (0x429)
-	bitda	4, (0xfd50)
+	res	3, (0x429:16)
+	bit	4, (0xfd50:16)
 	jr	nz, SndParam_WidgetNotifyType1_Loop
-	stdi8	(0xd0), 252
+	ld	(0xd0:16), 252
 	jr	SndParam_WidgetNotifyType1_Join
 SndParam_WidgetNotifyType1_Skip:
-	resda	0, (0x429)
-	bitda	4, (0xfd50)
+	res	0, (0x429:16)
+	bit	4, (0xfd50:16)
 	jr	nz, SndParam_WidgetNotifyType1_Loop
-	stdi8	(0xd0), 248
+	ld	(0xd0:16), 248
 	jr	SndParam_WidgetNotifyType1_Join
 SndParam_WidgetNotifyType1_Skip2:
-	resda	4, (0x429)
+	res	4, (0x429:16)
 SndParam_WidgetNotifyType1_Loop:
-	stdi8	(0xd0), 254
+	ld	(0xd0:16), 254
 	jr	SndParam_WidgetNotifyType1_Join
 SndParam_WidgetNotifyType1_Skip3:
-	resda	1, (0x429)
-	bitda	4, (0xfd50)
+	res	1, (0x429:16)
+	bit	4, (0xfd50:16)
 	jr	nz, SndParam_WidgetNotifyType1_Loop
-	stdi8	(0xd0), 250
+	ld	(0xd0:16), 250
 	jr	SndParam_WidgetNotifyType1_Join
 SndParam_WidgetNotifyType1_Skip4:
-	resda	2, (0x429)
-	bitda	4, (0xfd50)
+	res	2, (0x429:16)
+	bit	4, (0xfd50:16)
 	jr	nz, SndParam_WidgetNotifyType1_Loop
 	.set	SndParam_Widget1_AppendType2, . + 3
-	stdi8	(0xd0), 251
+	ld	(0xd0:16), 251
 	jr	SndParam_WidgetNotifyType1_Join
 SndParam_WidgetNotifyType1_Skip5:
 	call	SeqBuf_MidiOut_ReadByte
@@ -2982,7 +2982,7 @@ SndParam_WidgetNotifyType1_Join:
 	call	SeqBuf_MidiOut_CheckEmpty
 	and	hl, hl
 	jr	nz, SndParam_WidgetNotifyType1_Epilogue
-	stdi8	(0xea), 253
+	ld	(0xea:16), 253
 SndParam_WidgetNotifyType1_Epilogue:
 	popw	hl
 	popw	wa
@@ -3000,7 +3000,7 @@ SndParam_WidgetNotifyType1_Epilogue:
 	push	xiy
 	push	xiz
 	ldb_d8	a, (0xd0)
-	stdi8	(0x425), 0
+	ld	(0x425:16), 0
 SndParam_Widget1_AppendTail:
 	dec	2, xsp
 	ld	(xsp), a
@@ -3037,8 +3037,8 @@ SndParam_Widget1_CallType3:
 	jr	SndParam_Widget1_AppendType2_Join
 SndParam_Widget1_AppendType2_Skip:
 	stb_d8	(0x423), a
-	anddi8	(0x427), 189
-	bitda	0, (0x432)
+	and	(0x427:16), 189
+	bit	0, (0x432:16)
 	jr	z, SndParam_Widget1_AppendType2_Join
 	.byte 0xf1, 0x32, 0x04, 0xc9
 	jr	z, SndParam_Widget1_AppendType2_Skip2

@@ -2567,7 +2567,7 @@ AccPlay_InitAndStartLoop:
 	ret
 
 AccPlay_ToggleCodeFragment:
-	cpdi8	(32523), 0
+	cp	(32523:16), 0
 	jr	z, AccPlay_ToggleCodeFragment_Code_Return
 	ld	(0x7f0b:16), 0
 	call	TempoRingBuf_ReInitAndRet
@@ -3928,7 +3928,7 @@ VocalistPage2OKFunc_Join:
 	call	ApPostEvent
 	ld	(0x7f40:16), 1
 	call	MidiSysEx_SendAllParams
-	stdi8	(32576), 0
+	ld	(32576:16), 0
 
 ; Vocalist page handler
 VocalistPage_Handler:

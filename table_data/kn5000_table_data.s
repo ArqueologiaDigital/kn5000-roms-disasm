@@ -3568,7 +3568,7 @@ Boot_BlinkLED__led_delay:
 ; Address: 0x9FC54B
 ; =============================================================================
 LED_ToggleBit2:
-	chgda_24 2, (1441796); CHG 2, (0x160004) - toggle bit 2
+	chg 2, (1441796:24); CHG 2, (0x160004) - toggle bit 2
 	ld xwa, 0x249F0	; LD XWA, 0x000249F0 (150000)
 	calr Boot_DelayLoop	; CALR Boot_DelayLoop
 	jr LED_ToggleBit2	; 68 f1
@@ -3578,7 +3578,7 @@ LED_ToggleBit2:
 ; Address: 0x9FC55A
 ; =============================================================================
 LED_ToggleBit3:
-	chgda_24 3, (1441796); CHG 3, (0x160004) - toggle bit 3
+	chg 3, (1441796:24); CHG 3, (0x160004) - toggle bit 3
 	ld xwa, 0x249F0	; LD XWA, 0x000249F0
 	calr Boot_DelayLoop	; CALR Boot_DelayLoop
 	jr LED_ToggleBit3	; 68 f1

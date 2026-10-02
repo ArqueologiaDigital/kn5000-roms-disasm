@@ -7699,7 +7699,7 @@ SeGfx_BoundOp06:
 
 
 SeMenu_NameEditor_End:
-	cpdi8	(0xc07d), 4
+	cp	(0xc07d:16), 4
 	jr	nz, SeMenu_NameEditor_End_Code_Return
 	ld	a, (0xc07f:16)
 	and	a, 64
@@ -7707,7 +7707,7 @@ SeMenu_NameEditor_End:
 	ld	a, (0xc07e:16)
 	and	a, 64
 	sla	a, 1
-	cpdi8	(0x8d38), 33
+	cp	(0x8d38:16), 33
 	jr	nz, SeMenu_NameEditor_End_Skip
 	ld	w, (1642:16)
 	and	w, 127
@@ -7716,7 +7716,7 @@ SeMenu_NameEditor_End:
 	call	SeMenu_NameEdit_CheckBit7
 	jr	SeMenu_NameEditor_End_Code_Return
 SeMenu_NameEditor_End_Skip:
-	cpdi8	(0x8d38), 58
+	cp	(0x8d38:16), 58
 	jr	nz, SeMenu_NameEditor_End_Code_Return
 	ld	w, (1632:16)
 	and	w, 127
@@ -7847,7 +7847,7 @@ SeMenu_DisplayPartValue_Data_Code_Join2:
 	push	xix
 	push	xiy
 	ld	wa, (xiz+8)
-	stda16	(0x6cc), wa
+	ld	(0x6cc:16), wa
 	ld	wa, (xiz+10)
 	ld	(1742:16), wa
 	ld	wa, (xiz+12)
@@ -8043,11 +8043,11 @@ SeMenu_ShowConfirmDialog_Data:
 	push	xix
 	push	xiy
 	push	xiz
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x0833
 	ld	xix, SeScreenData_0x085A
 	call	SeGfx_DrawStaticList
-	cpdi8	(0x65c), 0
+	cp	(0x65c:16), 0
 	jr	z, SeMenu_ShowConfirmDialog_Data_Code_Skip6
 	ld	xiy, SeScreenData_0x085A
 	ld	xix, SeScreenData_0x0864
@@ -8073,7 +8073,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Join4:
 	push	xix
 	push	xiy
 	push	xiz
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x06DB
@@ -8172,12 +8172,12 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	ld	(1740:16), ix
-	adddi16	(0x6cc), 196
+	addw	(0x6cc:16), 196
 	ld	(1744:16), ix
-	adddi16	(0x6d0), 200
+	addw	(0x6d0:16), 200
 	ld	(1742:16), iy
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 12
+	addw	(0x6d2:16), 12
 	call	SeGfx_StaticOp09_FromBuf
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
@@ -8185,29 +8185,29 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	ld	(1740:16), ix
 	ld	(1744:16), ix
 	ld	(1742:16), iy
-	subdi16	(0x6ce), 5
+	subw	(0x6ce:16), 5
 	ld	(1746:16), iy
-	subdi16	(0x6d2), 1
+	subw	(0x6d2:16), 1
 	call	SeGfx_StaticOp09_FromBuf
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	ld	(1740:16), ix
-	subdi16	(0x6cc), 8
-	stda16	(0x6d0), ix
+	subw	(0x6cc:16), 8
+	ld	(0x6d0:16), ix
 	ld	(1742:16), iy
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 12
+	addw	(0x6d2:16), 12
 	call	SeGfx_StaticOp09_FromBuf
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	ld	(1740:16), ix
-	subdi16	(0x6cc), 5
+	subw	(0x6cc:16), 5
 	ld	(1744:16), ix
-	subdi16	(0x6d0), 3
+	subw	(0x6d0:16), 3
 	ld	(1742:16), iy
-	adddi16	(0x6ce), 1
+	addw	(0x6ce:16), 1
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 7
+	addw	(0x6d2:16), 7
 	call	SeGfx_StaticOp09_FromBuf
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
@@ -8215,28 +8215,28 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	ld	(1740:16), ix
 	ld	(1744:16), ix
 	ld	(1742:16), iy
-	adddi16	(0x6ce), 1
+	addw	(0x6ce:16), 1
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 11
+	addw	(0x6d2:16), 11
 	call	SeGfx_StaticOp02_FromBuf
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	ld	(1740:16), ix
-	adddi16	(0x6cc), 28
+	addw	(0x6cc:16), 28
 	ld	(1744:16), ix
-	adddi16	(0x6d0), 171
+	addw	(0x6d0:16), 171
 	ld	(1742:16), iy
-	adddi16	(0x6ce), 13
+	addw	(0x6ce:16), 13
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 14
+	addw	(0x6d2:16), 14
 	call	SeGfx_StaticOp09_FromBuf
 	ret
 	ld	(1740:16), ix
 	ld	(1744:16), ix
 	ld	(1742:16), iy
-	subdi16	(0x6ce), 5
+	subw	(0x6ce:16), 5
 	ld	(1746:16), iy
-	subdi16	(0x6d2), 1
+	subw	(0x6d2:16), 1
 	pushw	ix
 	pushw	iy
 	call	SeGfx_StaticOp02_FromBuf
@@ -8245,9 +8245,9 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	ld	(1740:16), ix
 	ld	(1742:16), iy
 	ld	(1744:16), ix
-	adddi16	(0x6d0), 28
+	addw	(0x6d0:16), 28
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 12
+	addw	(0x6d2:16), 12
 	pushw	ix
 	pushw	iy
 	call	SeGfx_StaticOp09_FromBuf
@@ -8263,10 +8263,10 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	add	(0x6cc:16), hl
 	ld	(1744:16), ix
 	add	(0x6d0:16), de
-	stda16	(0x6ce), iy
-	adddi16	(0x6ce), 1
+	ld	(0x6ce:16), iy
+	addw	(0x6ce:16), 1
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 7
+	addw	(0x6d2:16), 7
 	push	c
 	push	xiz
 	pushw	ix
@@ -8283,9 +8283,9 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	ld	(1740:16), ix
 	ld	(1744:16), ix
 	ld	(1742:16), iy
-	adddi16	(0x6ce), 1
+	addw	(0x6ce:16), 1
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 11
+	addw	(0x6d2:16), 11
 	push	c
 	pushw	ix
 	pushw	iy
@@ -8313,7 +8313,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	ldf	0
 	pop_f
 	nop
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, 22
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x114A
@@ -8327,7 +8327,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	xor	xwa, xwa
 	ld	a, (1629:16)
 	sla	wa, 2
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip2
 	ld	xiz, SeScreenData_0x1284
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join
@@ -8340,7 +8340,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Join:
 	ld	(1734:16), wa
 	ld	wa, (xiz+2)
 	ld	(1736:16), wa
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip3
 	ld	xiz, 1634
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join2
@@ -8352,7 +8352,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Join2:
 	add	xiz, xwa
 	call	SeMenu_ShowConfirmDialog_Data_0x4A9
 	pop	xwa
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip4
 	ld	xiz, SeScreenData_0x1264
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join3
@@ -8373,24 +8373,24 @@ SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	ld	(1740:16), ix
-	adddi16	(0x6cc), 1
+	addw	(0x6cc:16), 1
 	ld	(1744:16), ix
-	adddi16	(0x6d0), 37
+	addw	(0x6d0:16), 37
 	ld	(1742:16), iy
-	adddi16	(0x6ce), 1
+	addw	(0x6ce:16), 1
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 37
+	addw	(0x6d2:16), 37
 	call	SeGfx_StaticOp1B_FromBuf
 	ld	ix, (1734:16)
 	ld	iy, (1736:16)
 	ld	(1740:16), ix
-	adddi16	(0x6cc), 1
+	addw	(0x6cc:16), 1
 	ld	(1744:16), ix
-	adddi16	(0x6d0), 38
+	addw	(0x6d0:16), 38
 	ld	(1742:16), iy
-	adddi16	(0x6ce), 38
+	addw	(0x6ce:16), 38
 	ld	(1746:16), iy
-	adddi16	(0x6d2), 1
+	addw	(0x6d2:16), 1
 	call	SeGfx_StaticOp00_FromBuf
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Return
 SeMenu_ShowConfirmDialog_Data_Code_Skip5:
@@ -8490,7 +8490,7 @@ SeMenu_WaveformSelect_Data_Skip2:
 SeMenu_WaveformSelect_Data_Return:
 	ret
 	ld	(0x03efa8:24), 0
-	cpdi8	(0x661), 1
+	cp	(0x661:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip3
 	ld	xiy, SeScreenData_0x0685
 	ld	xix, SeScreenData_0x06B1
@@ -8526,7 +8526,7 @@ SeMenu_WaveformSelect_Data_Loop:
 SeMenu_WaveformSelect_Data_Return3:
 	ret
 SeMenu_PresetManager_Init:
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_PresetManager_Init_Skip
 	call	SeMenu_WaveformSelect_Data_0x6D
 	jrl	SeMenu_PresetManager_Init_Code_Return
@@ -8625,7 +8625,7 @@ SeMenu_PresetManager_SaveApply:
 	ret
 SeMenu_PresetManager_Data:
 	call	SeMenu_PresetManager_Data_0x1AF
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_PresetManager_Data_Skip
 	ld	xiy, SeScreenData_0x4256
 	ld	xix, SeScreenData_0x441A
@@ -8649,7 +8649,7 @@ SeMenu_PresetManager_Data_Join:
 	call	SeMenu_BankEdit_LoopHelper
 	call	SeMenu_PresetManager_Data_0x1C4
 	ret
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_PresetManager_Data_Skip2
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x0B7E
@@ -8692,7 +8692,7 @@ SeMenu_PresetManager_Data_Skip2:
 	djnz8	c, -84
 	ret
 	ld	(0x03efa8:24), 0
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, 4
 	ld	c, 2:opc
 	jr	2
@@ -9045,7 +9045,7 @@ SeMenu_Utility_CopyBlock_Join:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	ld	(0x03efa8:24), 0
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_CopyBlock_Skip2
 	ld	xiy, SeScreenData_0x24C8
 	ld	xix, SeScreenData_0x250E
@@ -9179,7 +9179,7 @@ SeMenu_Utility_FormatSigned_Data:
 	ld	xiy, SeScreenData_0x18D8
 	ld	xix, SeScreenData_0x18ED
 	call	SeGfx_DrawStaticList
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_FormatSigned_Data_Skip
 	call	SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_FormatSigned_Data_Skip:
@@ -9200,7 +9200,7 @@ SeMenu_Utility_FormatPercent:
 	ld	xiy, SeScreenData_0x1997
 	ld	xix, SeScreenData_0x19AB
 	call	SeGfx_DrawStaticList
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_FormatPercent_Skip
 	call	SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_FormatPercent_Skip:
@@ -9221,7 +9221,7 @@ SeMenu_Utility_FormatPercent_Data:
 	ld	xiy, SeScreenData_0x19AB
 	ld	xix, SeScreenData_0x19C0
 	call	SeGfx_DrawStaticList
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_FormatPercent_Data_Skip
 	call	SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_FormatPercent_Data_Skip:
@@ -9239,7 +9239,7 @@ SeMenu_Utility_FormatHex:
 	ld	xiy, SeScreenData_0x19C0
 	ld	xix, SeScreenData_0x1ACA
 	call	SeGfx_DrawStaticList
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_FormatHex_Skip
 	call	SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_FormatHex_Skip:
@@ -9257,7 +9257,7 @@ SeMenu_Utility_FormatHex_Data:
 	ld	xiy, SeScreenData_0x1ACA
 	ld	xix, SeScreenData_0x1AE1
 	call	SeGfx_DrawStaticList
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_FormatHex_Data_Skip
 	call	SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_FormatHex_Data_Skip:
@@ -9559,7 +9559,7 @@ Data_UnknownBlock:
 	jr	nc, Data_UnknownBlock_Skip9
 	jr	Data_UnknownBlock_Join2
 Data_UnknownBlock_Skip8:
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeScreenData_0x2964
 	ld	xix, SeScreenData_0x296E
 	call	SeGfx_DrawStaticList
@@ -9599,7 +9599,7 @@ Data_UnknownBlock_Return:
 	add xix, 20
 	call	SeGfx_DrawStaticList
 	ret
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, Data_UnknownBlock_Skip10
 	cp	a, 3:i3
 	jr	c, Data_UnknownBlock_Skip11
@@ -9616,7 +9616,7 @@ Data_UnknownBlock_Skip11:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Join5
 	call	SeMenu_ShowConfirmDialog_Data_0x408
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip12
 	ld	(0x03efa8:24), 1
 	ld	xiy, SeScreenData_0x244E
@@ -9631,7 +9631,7 @@ Data_UnknownBlock_Join4:
 	ld	a, 0:opc
 Data_UnknownBlock_Join5:
 	ld	(0x03efa8:24), 0
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip13
 	ld	xiy, SeScreenData_0x241A
 	jr	Data_UnknownBlock_Join6
@@ -9644,7 +9644,7 @@ Data_UnknownBlock_Join6:
 	ld	xiy, SeScreenData_0x24B8
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip14
 	ld	xiy, SeScreenData_0x250E
 	jr	Data_UnknownBlock_Join7
@@ -9780,7 +9780,7 @@ Data_UnknownBlock_Skip7:
 	call	SeGfx_StaticOp07_Text
 	ret
 	ld	(0x03efa8:24), 0
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip16
 	ld	xiy, SeScreenData_0x2C35
 	ld	xix, SeScreenData_0x2C57
@@ -9795,9 +9795,9 @@ Data_UnknownBlock_Skip16:
 	ld	xix, SeScreenData_0x2E3A
 	call	SeGfx_DrawStaticList
 Data_UnknownBlock_Join9:
-	cpdi8	(0x662), 16
+	cp	(0x662:16), 16
 	jr	z, Data_UnknownBlock_Skip25
-	cpdi8	(0x662), 2
+	cp	(0x662:16), 2
 	jr	z, Data_UnknownBlock_Skip17
 	ld	xiy, SeScreenData_0x2E44
 	ld	xix, SeScreenData_0x2E4E
@@ -9843,9 +9843,9 @@ Data_UnknownBlock_Skip18:
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	cpdi8	(0x662), 13
+	cp	(0x662:16), 13
 	jr	z, Data_UnknownBlock_Skip19
-	cpdi8	(0x662), 2
+	cp	(0x662:16), 2
 	jr	z, Data_UnknownBlock_Skip20
 	ld	xiy, SeScreenData_0x2E58
 	ld	xix, SeScreenData_0x2E74
@@ -9876,9 +9876,9 @@ Data_UnknownBlock_Skip22:
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 0
-	cpdi8	(0x662), 13
+	cp	(0x662:16), 13
 	jr	z, Data_UnknownBlock_Skip23
-	cpdi8	(0x662), 2
+	cp	(0x662:16), 2
 	jr	z, Data_UnknownBlock_Skip24
 	ld	xiy, SeScreenData_0x2E58
 	ld	xix, SeScreenData_0x2E74
@@ -10153,7 +10153,7 @@ SeMenu_FilterEdit_DataBlock4:
 	ret
 SeMenu_FilterEdit_DataBlock5:
 	call	SeMenu_EqEdit_SetupHelper1
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_FilterEdit_DataBlock5_Skip
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x3C37

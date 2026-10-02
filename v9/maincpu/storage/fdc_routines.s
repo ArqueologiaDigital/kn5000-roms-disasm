@@ -1448,10 +1448,10 @@ FDC_CMD_EXEC_Skip3:
 	ldw_d16	wa, (0x8a48)
 	cp	wa, (0x8b0c:16)
 	jr	ule, FDC_CMD_EXEC_Skip4
-	stdi16	(0x8a48), 1
+	ldw	(0x8a48:16), 1
 FDC_CMD_EXEC_Skip4:
 	ldmm16	0x8b10, 0x8a48
-	stdi16	(0x8a1c), 0
+	ldw	(0x8a1c:16), 0
 	cp	(0x8a6c:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip5
 	ldw	(0x8a1e:16), 1024
@@ -1495,7 +1495,7 @@ FDC_CMD_EXEC_Skip7:
 	calr	FDC_CMD_EXEC_Helper5
 FDC_CMD_EXEC_Entry:
 	ldmm16	0x8a4a, 0x8b12
-	decdi8	1, (0x8a68)
+	dec	1, (0x8a68:16)
 	ldb_d8	a, (0x8a68)
 	cp	a, 0:i3
 	jr	nz, FDC_CMD_EXEC_Entry2
@@ -1549,10 +1549,10 @@ FDC_CMD_EXEC_Skip9:
 	ldw_d16	wa, (0x8a48)
 	cp	wa, (0x8b0c:16)
 	jr	ule, FDC_CMD_EXEC_Skip10
-	stdi16	(0x8a48), 1
+	ldw	(0x8a48:16), 1
 FDC_CMD_EXEC_Skip10:
 	ldmm16	0x8b10, 0x8a48
-	stdi16	(0x8a1c), 0
+	ldw	(0x8a1c:16), 0
 	cp	(0x8a6c:16), 2
 	jr	nz, FDC_CMD_EXEC_Skip11
 	ldw	(0x8a1e:16), 1024
@@ -1595,7 +1595,7 @@ FDC_CMD_EXEC_Skip13:
 	ld	(0x8b04:16), 255
 	calr	FDC_CMD_EXEC_Helper5
 	ldmm16	0x8a4a, 0x8b12
-	decdi8	1, (0x8a68)
+	dec	1, (0x8a68:16)
 	ldb_d8	a, (0x8a68)
 	cp	a, 0:i3
 	jr	nz, FDC_CMD_EXEC_Join5
@@ -1720,7 +1720,7 @@ FDC_MODE_CONFIG_Join2:
 ; Uses (R+d16) addressing for buffer and state access. 536 bytes.
 FDC_MC_EXIT:
 	cp	(0x8a24:16), 0
-	call_24	nz, (0xf96bd0)
+	call	nz, (0xf96bd0:24)
 	calr	FDC_CmdRecalibrate
 	ld	(0x8b04:16), 255
 	ret
@@ -2176,7 +2176,7 @@ FDC_ByteTransfer_PIO:
 	inc	1, xhl
 	ld	(0x8a4e:16), xhl
 FDC_CommandEntry_Join:
-	subdi16	(0x8a1c), 1
+	subw	(0x8a1c:16), 1
 	ret	nz
 	calr	FDC_Pulse_PH0
 	calr	FDC_Port_Reset_Or_Noop

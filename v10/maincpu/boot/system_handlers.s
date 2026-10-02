@@ -1666,7 +1666,7 @@ TempoRingBuf_Consume_Done:
 	ret
 
 TempoRingBuf_BytecodeSnippet:
-	bitda	0, (0x459)
+	bit	0, (0x459:16)
 	jr	nz, TempoRingBuf_Consume_Skip
 	ld	e, 129:opc
 	calr	TempoRingBuf_DequeueOne
@@ -1677,7 +1677,7 @@ TempoRingBuf_Consume_Skip:
 	ld	hl, (1141:16)
 	.byte	0xf3, 0x07, 0xf0, 0xec, 0x00, 0x81	; ld (XIX+HL),0x81
 	inc	1, hl
-	stda16	(0x475), hl
+	ld	(0x475:16), hl
 	pop	xix
 	ret
 
@@ -3376,7 +3376,7 @@ Stop_and_Clear_8bit_Timer_3:
 SeqBuf_BytecodeSnippet:
 	incw	1, (1475:16)
 	ret
-	decdi16	1, (0x5c3)
+	decw	1, (0x5c3:16)
 	ret
 SeqBuf_ReadByte:
 	pushw ix
@@ -3805,7 +3805,7 @@ SeqEvtBuf_InlineBytecode:
 	ldw	hl, 0xffff
 SeqEvtBuf_WriteByte_Return:
 	ret
-	ldw_da	hl, (0x1f26f)
+	ld	hl, (0x1f26f:24)
 	ret
 SeqEvtBuf_Init:
 	pushw ix
@@ -6106,7 +6106,7 @@ INTTC0_HANDLER_Join2:
 	ret
 	ld	de, (1033:16)
 INTTC0_HANDLER_Entry:
-	bitda	7, (0x620)
+	bit	7, (0x620:16)
 	jr	nz, INTTC0_HANDLER_Skip4
 	ld	hl, 0:i3
 	ret
@@ -6119,7 +6119,7 @@ INTTC0_HANDLER_Skip4:
 	ld	(256:16), 0
 	ld	(1506:16), 0
 	set_dd8	1, 104
-	resda	7, (0x620)
+	res	7, (0x620:16)
 	inc	1, (0xe364:16)
 	ldw	hl, 0xffff
 	ret
@@ -7988,13 +7988,13 @@ PortWrite_BusyWait:
 	jr BusyWait_XWA_Cycles
 
 LED_Toggle_Bit2_Loop:
-	chgda_24 2, (0x160004)
+	chg 2, (0x160004:24)
 	ld xwa, 0x249f0
 	calr BusyWait_XWA_Cycles
 	jr LED_Toggle_Bit2_Loop
 
 LED_Toggle_Bit3_Loop:
-	chgda_24 3, (0x160004)
+	chg 3, (0x160004:24)
 	ld xwa, 0x249f0
 	calr BusyWait_XWA_Cycles
 	jr LED_Toggle_Bit3_Loop
@@ -8188,14 +8188,14 @@ HDAE5000_TableData_Write_Loop:
 	call	HDAE5000_Detect
 	cp	xhl, 0xffffffff
 	jr	nz, HDAE5000_TableData_Write_Skip
-	setda_24	2, (0x160004)
+	set	2, (0x160004:24)
 	ldib_erp	251, 1
 HDAE5000_TableData_Write_Skip:
 	ld	wa, 1:i3
 	call	Flash_IdentifyAndValidateChip
 	cp	hl, 0xffff
 	jr	nz, HDAE5000_TableData_Write_Skip2
-	setda_24	3, (0x160004)
+	set	3, (0x160004:24)
 	ldib_erp	251, 1
 	jr	HDAE5000_TableData_Write_Join
 HDAE5000_TableData_Write_Skip2:
@@ -8210,8 +8210,8 @@ HDAE5000_TableData_Write_Skip3:
 	ld	xbc, 0xa00000
 	calr	TableData_ROM_Verify
 	or	xhl, xhl
-	call_24	nz, (0xef3dbb)
-	lda_24	xwa, (0x300000)
+	call	nz, (0xef3dbb:24)
+	lda	xwa, (0x300000:24)
 	ld	xbc, xwa
 	add	xbc, 0x100000
 	calr	TableData_ROM_Verify
@@ -8230,31 +8230,31 @@ HDAE5000_Init_BytecodeBlock_Code_Loop:
 	jr	z, HDAE5000_Init_BytecodeBlock_Code_Loop
 HDAE5000_TableData_Write_Skip5:
 	ld	(0x160004:24), 0
-	setda_24	0, (0x160004)
+	set	0, (0x160004:24)
 	calr	HDAE5000_FlashVerify_BytecodeBlock
-	resda_24	0, (0x160004)
+	res	0, (0x160004:24)
 	ld	xwa, 0xdbba0
 	calr	BusyWait_XWA_Cycles
-	setda_24	0, (0x160004)
+	set	0, (0x160004:24)
 	calr	HDAE5000_TableData_Write_Helper
-	resda_24	0, (0x160004)
-	setda_24	1, (0x160004)
+	res	0, (0x160004:24)
+	set	1, (0x160004:24)
 	pushw	3
 	ld	xwa, 0x800000
 	ld	xbc, 0x280000
 	ld	de, 0:i3
 	calr	HDAE5000_ROM_Transfer
 	or	xhl, xhl
-	call_24	nz, (0xef4890)
+	call	nz, (0xef4890:24)
 	pushw	1
 	ld	xwa, 0x300000
 	ld	xbc, 0x200000
 	ld	de, 0:i3
 	calr	HDAE5000_ROM_Transfer
 	or	xhl, xhl
-	call_24	nz, (0xef489f)
-	stib_da	(0x160000), 7
-	ldl_da	xwa, (0x2fffc0)
+	call	nz, (0xef489f:24)
+	ld	(0x160000:24), 7
+	ld	xwa, (0x2fffc0:24)
 	cp	xwa, 0x5f746b68
 	jr	z, HDAE5000_TableData_Write_Skip6
 	pop	qiz

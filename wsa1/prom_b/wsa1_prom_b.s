@@ -162780,7 +162780,7 @@ sub_F6EA57:
 	ld	l, (4058:16)	; F6EA65  ld L,(0x0fda)
 	sla	hl, 2	; F6EA69  sla 0x02,HL
 	xor	wa, wa	; F6EA6C  xor WA,WA
-	ldda32	xiy, (4060)	; F6EA6E  ld XIY,(0x0fdc)
+	ld	xiy, (4060:16)	; F6EA6E  ld XIY,(0x0fdc)
 	ld_rrb	a, xiy, hl	; F6EA72  ld A,(XIY+HL)
 	and	a, 96	; F6EA77  and A,0x60
 	cp	a, 0:i3	; F6EA7A  cp A,0
@@ -162806,7 +162806,7 @@ sub_F6EA57_Return:
 ;   0x0FA7; sets (0x1010) = 1 when there is none.
 sub_F6EAA8:
 	ld	(4112:16), 0	; F6EAA8  ld (0x1010),0x00
-	adddi16	(4058), 2	; F6EAAD  add (0x0fda),0x0002
+	addw	(4058:16), 2	; F6EAAD  add (0x0fda),0x0002
 	ld	c, (4051:16)	; F6EAB3  ld C,(0x0fd3)
 	sla	c, 1	; F6EAB7  sla 0x01,C
 	cp	(4058:16), c	; F6EABA  cp (0x0fda),C
@@ -162840,7 +162840,7 @@ sub_F6EAA8_Skip:
 	ld	e, (3942:16)	; F6EB04  ld E,(0x0f66)
 sub_F6EAA8_Skip2:
 	ld	(4051:16), e	; F6EB08  ld (0x0fd3),E
-	stda32	(4060), xwa	; F6EB0C  ld (0x0fdc),XWA
+	ld	(4060:16), xwa	; F6EB0C  ld (0x0fdc),XWA
 	ld	(4064:16), l	; F6EB10  ld (0x0fe0),L
 	xor	b, b	; F6EB14  xor B,B
 	sub	(4058:16), bc	; F6EB16  sub (0x0fda),BC
@@ -162855,7 +162855,7 @@ sub_F6EB1B:
 	ld	l, (4058:16)	; F6EB29  ld L,(0x0fda)
 	sla	hl, 2	; F6EB2D  sla 0x02,HL
 	xor	wa, wa	; F6EB30  xor WA,WA
-	ldda32	xiy, (4060)	; F6EB32  ld XIY,(0x0fdc)
+	ld	xiy, (4060:16)	; F6EB32  ld XIY,(0x0fdc)
 	ld_rrb	a, xiy, hl	; F6EB36  ld A,(XIY+HL)
 	and	a, 96	; F6EB3B  and A,0x60
 	cp	a, 0:i3	; F6EB3E  cp A,0
@@ -162878,7 +162878,7 @@ sub_F6EB1B_Return:
 ; sub_F6EB6C -- UNREACHED: sub_F6EAA8's shape, advancing (0x0FDA) by 1.
 sub_F6EB6C:
 	ld	(4112:16), 0	; F6EB6C  ld (0x1010),0x00
-	incdi16	1, (4058)	; F6EB71  incw 1,(0x0fda)
+	incw	1, (4058:16)	; F6EB71  incw 1,(0x0fda)
 	ld	c, (4051:16)	; F6EB75  ld C,(0x0fd3)
 	sla	c, 1	; F6EB79  sla 0x01,C
 	cp	(4058:16), c	; F6EB7C  cp (0x0fda),C
@@ -162912,7 +162912,7 @@ sub_F6EB6C_Skip:
 	ld	e, (3942:16)	; F6EBC6  ld E,(0x0f66)
 sub_F6EB6C_Skip2:
 	ld	(4051:16), e	; F6EBCA  ld (0x0fd3),E
-	stda32	(4060), xwa	; F6EBCE  ld (0x0fdc),XWA
+	ld	(4060:16), xwa	; F6EBCE  ld (0x0fdc),XWA
 	ld	(4064:16), l	; F6EBD2  ld (0x0fe0),L
 	xor	b, b	; F6EBD6  xor B,B
 	sub	(4058:16), bc	; F6EBD8  sub (0x0fda),BC

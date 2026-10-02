@@ -429,8 +429,8 @@ DrawText_LayoutAndRender_Variant1_Skip:
 	lda	xwa, (xsp+270)
 	ld	xbc, 1:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -487,8 +487,8 @@ DrawText_LayoutAndRender_Variant1_Skip2:
 	lda	xwa, (xsp+270)
 	ld	xbc, 2:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -540,8 +540,8 @@ DrawText_LayoutAndRender_Variant1_Skip3:
 	lda	xwa, (xsp+270)
 	ld	xbc, 3:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -593,8 +593,8 @@ DrawText_LayoutAndRender_Variant1_Skip4:
 	lda	xwa, (xsp+270)
 	ld	xbc, 4:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -651,8 +651,8 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	lda	xwa, (xsp+270)
 	ld	xbc, 6:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -1047,13 +1047,13 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	(xbc+6), wa
 	ld	a, (0x03efa8:24)
 	ldfr_berp	a, 251
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
 	calr	ColorBlit
 	ldto_berp	a, 251
-	stb_da	(0x3efa8), a
+	ld	(0x3efa8:24), a
 	pop	qiz
 	inc	8, xsp
 	ret
@@ -1458,8 +1458,8 @@ DrawFunc_Init_Join8:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1515,8 +1515,8 @@ DrawFunc_Init_Join3:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1575,8 +1575,8 @@ DrawFunc_Init_Join4:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1674,8 +1674,8 @@ DrawFunc_Init_Join9:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1728,8 +1728,8 @@ DrawFunc_Init_Join7:
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)

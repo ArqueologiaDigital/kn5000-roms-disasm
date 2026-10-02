@@ -322,7 +322,7 @@ Scoop_SoundEditorData_Epilogue36:
 	lda	xsp, (xsp+18)
 	ret
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_BitShiftMask_End_0x1A3)
+	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -581,7 +581,7 @@ Scoop_SoundEditorData_Skip9:
 	inc	8, xsp
 	ret
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_BitShiftMask_End_0x1A3)
+	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -1640,7 +1640,7 @@ Scoop_SoundEditorData_Join20:
 	ld	bc, 0:i3
 	jp	SeMenu_ApplyPartEdit_Data2_0x292
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_BitShiftMask_End_0x1A3)
+	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -2153,7 +2153,7 @@ Scoop_SoundEditorData_Helper2_Join5:
 	ld	bc, 5:i3
 	call	SeMenu_TransferPartValues_EndData_0x169
 	cp	l, 1:i3
-	call_24	z, (SeMenu_ApplyPartEdit_Data2_0x19BD)
+	call	z, (SeMenu_ApplyPartEdit_Data2_0x19BD:24)
 	ld	wa, 6:i3
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+18)
@@ -2201,7 +2201,7 @@ Scoop_SoundEditorData_Helper2_Join6:
 	ld	bc, 4:i3
 	call	SeMenu_TransferPartValues_EndData_0x169
 	cp	l, 1:i3
-	call_24	z, (SeMenu_ApplyPartEdit_Data2_0x19BD)
+	call	z, (SeMenu_ApplyPartEdit_Data2_0x19BD:24)
 	ld	wa, 7:i3
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+18)
@@ -2249,7 +2249,7 @@ Scoop_SoundEditorData_Helper2_Join7:
 	ld	bc, 5:i3
 	call	SeMenu_TransferPartValues_EndData_0x169
 	cp	l, 1:i3
-	call_24	z, (SeMenu_ApplyPartEdit_Data2_0x19BD)
+	call	z, (SeMenu_ApplyPartEdit_Data2_0x19BD:24)
 	ldw	wa, 8
 	call	SeMenu_SetupPartDisplay_End_0x1F6
 	lda	xsp, (xsp+18)
@@ -3347,7 +3347,7 @@ Scoop_SoundEditorData_Skip44:
 	inc	8, xsp
 	ret
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_BitShiftMask_End_0x1A3)
+	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
 	ldw	wa, 55
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -3620,7 +3620,7 @@ Scoop_SoundEditorData_Join47:
 	ld	bc, 2:i3
 	jp	SeMenu_ApplyPartEdit_Data2_0x292
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_BitShiftMask_End_0x1A3)
+	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
 	ldw	wa, 55
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent

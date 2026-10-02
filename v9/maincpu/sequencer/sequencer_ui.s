@@ -7561,7 +7561,7 @@ SndParam_Dispatch:
 	add	wa, wa
 	lda	xix, (ExtDevice_ModeDispatch_Table_0x308:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (0xf30429)
+	lda xix, (0xf30429:24)
 	jp_rr 8, xix, wa
 	ld xbc, (xsp+62)
 	sla de, 2
@@ -7613,7 +7613,7 @@ SndParam_Dispatch_Join:
 	add	wa, wa
 	lda	xix, (ExtDevice_ModeDispatch_Table_0x2F6:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (0xf304d5)
+	lda xix, (0xf304d5:24)
 	jp_rr 8, xix, wa
 	ld xde, (xsp+62)
 	sla hl, 2

@@ -3310,9 +3310,9 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	cp	wa, 5:i3
 	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
-	lda_24	xix, (0xee6384)
+	lda	xix, (0xee6384:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfdc702)
+	lda	xix, (0xfdc702:24)
 	jp_rr	8, xix, wa
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
@@ -4908,7 +4908,7 @@ UIStateEvt_DrumAssign_Notify:
 	jr	z, UIStateEvt_TransposeUpdate_Clear
 	ld	a, l
 	extz	wa
-	lda_24	xbc, (0xee8df4)
+	lda	xbc, (0xee8df4:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
@@ -4924,7 +4924,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	ld	a, l
 	extz	wa
 	.set	Audio_CheckSubsystemReady, . + 4	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
-	lda_24	xbc, (0xee8df4)
+	lda	xbc, (0xee8df4:24)
 ; Audio_CheckSubsystemReady is kept at this address only for ui_widgets/widget_dispatch.s; v10's Audio_CheckSubsystemReady is the code at 0xFDD69E
 	ld_rrb	a, xbc, wa
 	extz	wa
@@ -4933,7 +4933,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	lda_d16	xbc, (0xc163)
 	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x00	; ld (XBC+WA),0x00
 UIStateEvt_TransposeUpdate_Apply:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 ; v10 name for this address: UIStateEvt_ParamEdit_Data -- not a label here: v7 defines that name outside this span (= 0xFDDEF1)
 	pushw	iz
@@ -4944,9 +4944,9 @@ UIStateEvt_TransposeUpdate_Apply:
 	cp	wa, 6:i3
 	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
-	lda_24	xix, (0xee8e48)
+	lda	xix, (0xee8e48:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfddafe)
+	lda	xix, (0xfddafe:24)
 	jp_rr	8, xix, wa
 	ldb_d8	a, (0xbfe3)
 	and	a, 7
@@ -4958,13 +4958,13 @@ UIStateEvt_TransposeUpdate_Apply:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join
 AudioDispatch_CheckStereoMode_Code_Skip:
@@ -4977,7 +4977,7 @@ AudioDispatch_CheckStereoMode_Code_Skip:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join
 AudioDispatch_CheckStereoMode_Code_Skip2:
@@ -4985,7 +4985,7 @@ AudioDispatch_CheckStereoMode_Code_Skip2:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 AudioDispatch_CheckStereoMode_Code_Join:
 	ldw_d16	wa, (0xc4fa)
@@ -5000,52 +5000,52 @@ AudioDispatch_CheckStereoMode_Code_Join:
 AudioDispatch_CheckStereoMode_Code_Skip3:
 	call	AudioInit_RefreshToneBank
 AudioDispatch_CheckStereoMode_Code_Skip4:
-	anddi16	(0xc4fa), 0xffe8
+	andw	(0xc4fa:16), 0xffe8
 	or	(0xc4fa:16), iz
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip5
-	stdi8	(0xc504), 31
+	ld	(0xc504:16), 31
 	jr	UIStateEvt_ParamEdit_Data_Entry
 AudioDispatch_CheckStereoMode_Code_Skip5:
-	stdi8	(0xc504), 16
+	ld	(0xc504:16), 16
 UIStateEvt_ParamEdit_Data_Entry:
-	bitda	3, (0xbfe3)
+	bit	3, (0xbfe3:16)
 	jrl	z, UIStateEvt_ParamEdit_Data_Epilogue
-	bitda	3, (0xbfe2)
+	bit	3, (0xbfe2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip6
-	ordi16	(0xc4fa), 16
+	orw	(0xc4fa:16), 16
 	jr	AudioDispatch_CheckStereoMode_Code_Join2
 AudioDispatch_CheckStereoMode_Code_Skip6:
-	anddi16	(0xc4fa), 0xffef
+	andw	(0xc4fa:16), 0xffef
 AudioDispatch_CheckStereoMode_Code_Join2:
-	ordi16	(0xc4fe), 0x2000
-	ordi16	(0xc4f8), 4
+	orw	(0xc4fe:16), 0x2000
+	orw	(0xc4f8:16), 4
 	jrl	UIStateEvt_ParamEdit_Data_Epilogue
-	bitda	6, (0xbfe3)
+	bit	6, (0xbfe3:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip8
-	bitda	6, (0xbfe2)
+	bit	6, (0xbfe2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip7
-	ordi16	(0xc4fa), 0x400
+	orw	(0xc4fa:16), 0x400
 	jr	AudioDispatch_CheckStereoMode_Code_Join3
 AudioDispatch_CheckStereoMode_Code_Skip7:
-	anddi16	(0xc4fa), 0xfbff
+	andw	(0xc4fa:16), 0xfbff
 AudioDispatch_CheckStereoMode_Code_Join3:
-	ordi16	(0xc4fe), 0x4000
-	ordi16	(0xc4f8), 4
+	orw	(0xc4fe:16), 0x4000
+	orw	(0xc4f8:16), 4
 AudioDispatch_CheckStereoMode_Code_Skip8:
-	bitda	4, (0xbfe3)
+	bit	4, (0xbfe3:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip10
-	anddi16	(0xc4fa), 0xf7ff
-	bitda	4, (0xbfe2)
+	andw	(0xc4fa:16), 0xf7ff
+	bit	4, (0xbfe2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip9
-	ordi16	(0xc4fa), 0x800
+	orw	(0xc4fa:16), 0x800
 	jr	AudioDispatch_CheckStereoMode_Code_Join4
 AudioDispatch_CheckStereoMode_Code_Skip9:
-	anddi16	(0xc4fa), 0xf7ff
+	andw	(0xc4fa:16), 0xf7ff
 AudioDispatch_CheckStereoMode_Code_Join4:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 AudioDispatch_CheckStereoMode_Code_Skip10:
 	ldb_d8	a, (0xbfe3)
 	and	a, 7
@@ -5057,13 +5057,13 @@ AudioDispatch_CheckStereoMode_Code_Skip10:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join5
 AudioDispatch_CheckStereoMode_Code_Skip11:
@@ -5075,7 +5075,7 @@ AudioDispatch_CheckStereoMode_Code_Skip11:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join5
 AudioDispatch_CheckStereoMode_Code_Skip12:
@@ -5083,24 +5083,24 @@ AudioDispatch_CheckStereoMode_Code_Skip12:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda_24	xbc, (0xee8e28)
+	lda	xbc, (0xee8e28:24)
 	ld_rrw	iz, xbc, wa
 AudioDispatch_CheckStereoMode_Code_Join5:
-	anddi16	(0xc4fa), 0xffe8
+	andw	(0xc4fa:16), 0xffe8
 	or	(0xc4fa:16), iz
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip13
-	stdi8	(0xc504), 31
+	ld	(0xc504:16), 31
 	jr	UIStateEvt_ParamEdit_Data_Epilogue
 AudioDispatch_CheckStereoMode_Code_Skip13:
-	stdi8	(0xc504), 16
+	ld	(0xc504:16), 16
 	jr	110
 	ldb_d8	a, (0xbfe3)
 	and	a, 252
 	jr	z, 30
-	bitda	0, (0x31e8)
+	bit	0, (0x31e8:16)
 	jr	nz, 18
 	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
@@ -5108,21 +5108,21 @@ AudioDispatch_CheckStereoMode_Code_Skip13:
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
 	jr	nz, 0
-	ordi16	(0xc4f8), 4
-	bitda	1, (0xbfe3)
+	orw	(0xc4f8:16), 4
+	bit	1, (0xbfe3:16)
 	jr	z, 65
-	bitda	1, (0xfc5f)
+	bit	1, (0xfc5f:16)
 	jr	z, 12
 	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
-	call_24	z, (0xfdee26)
-	ordi16	(0xc4f8), 4
+	call	z, (0xfdee26:24)
+	orw	(0xc4f8:16), 4
 	.set	UIStateEvt_PartRouting, . + 1	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
 	jr	39
 	ldb_d8	a, (0xbfe3)
 	and	a, 252
 	jr	z, 30
-	bitda	0, (0x31e8)
+	bit	0, (0x31e8:16)
 	jr	nz, 18
 	ldw_d16	wa, (0xc4fa)
 	bit	9, wa
@@ -5130,7 +5130,7 @@ AudioDispatch_CheckStereoMode_Code_Skip13:
 	ldb_d8	a, (0xfc5f)
 	and	a, 252
 	jr	nz, 0
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 UIStateEvt_ParamEdit_Data_Epilogue:
 	popw	iz
 	ret
@@ -5142,73 +5142,73 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	cp	wa, 5:i3
 	ret	gt
 	add	wa, wa
-	lda_24	xix, (0xee8e56)
+	lda	xix, (0xee8e56:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfddd67)
+	lda	xix, (0xfddd67:24)
 	jp_rr	8, xix, wa
 	ldb_d8	a, (0xbfe3)
 	and	a, 31
 	jr	z, UIStateEvt_PartRouting_Code_Skip
-	anddi8	(0xc162), 252
+	and	(0xc162:16), 252
 	ldb_d8	a, (0xbfe2)
 	and	a, 3
 	or	(0xc162:16), a
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 UIStateEvt_PartRouting_Code_Skip:
 	ldw_d16	wa, (0xc4f8)
 	bit	4, wa
 	ret	z
-	stdi8	(0xc162), 0
-	ordi16	(0xc4fe), 4
+	ld	(0xc162:16), 0
+	orw	(0xc4fe:16), 4
 	ret
 	ldb_d8	a, (0xbfe3)
 	and	a, 31
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip15
-	bitda	1, (0xbfe2)
+	bit	1, (0xbfe2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip14
-	ordi16	(0xc4fa), 32
+	orw	(0xc4fa:16), 32
 	jr	AudioDispatch_CheckStereoMode_Code_Join6
 AudioDispatch_CheckStereoMode_Code_Skip14:
-	anddi16	(0xc4fa), 0xffdf
+	andw	(0xc4fa:16), 0xffdf
 	ldw_d16	wa, (0xc4fa)
 	and	wa, 7
-	call_24	z, (0xfdee26)
+	call	z, (0xfdee26:24)
 AudioDispatch_CheckStereoMode_Code_Join6:
-	resda	2, (0xc162)
+	res	2, (0xc162:16)
 	ldb_d8	a, (0xbfe2)
 	and	a, 2
 	ld	c, a
 	add	a, c
 	or	(0xc162:16), a
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 AudioDispatch_CheckStereoMode_Code_Skip15:
 	ldw_d16	wa, (0xc4f8)
 	bit	4, wa
 	ret	z
-	stdi8	(0xc162), 0
-	ordi16	(0xc4fe), 4
+	ld	(0xc162:16), 0
+	orw	(0xc4fe:16), 4
 	ret
-	bitda	0, (0xbfe3)
+	bit	0, (0xbfe3:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry2
-	bitda	0, (0xbfe2)
+	bit	0, (0xbfe2:16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Entry
-	ordi16	(0xc4fa), 128
+	orw	(0xc4fa:16), 128
 	jr	AudioDispatch_CheckStereoMode_Code_Join7
 UIStateEvt_VolumeMixer_Data_Entry:
-	anddi16	(0xc4fa), 0xff7f
+	andw	(0xc4fa:16), 0xff7f
 AudioDispatch_CheckStereoMode_Code_Join7:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 UIStateEvt_VolumeMixer_Data_Entry2:
-	bitda	1, (0xbfe3)
+	bit	1, (0xbfe3:16)
 	ret	z
-	bitda	1, (0xbfe2)
+	bit	1, (0xbfe2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip16
-	ordi16	(0xc4fa), 8
+	orw	(0xc4fa:16), 8
 	jr	AudioDispatch_CheckStereoMode_Code_Join8
 AudioDispatch_CheckStereoMode_Code_Skip16:
-	anddi16	(0xc4fa), 0xfff7
+	andw	(0xc4fa:16), 0xfff7
 AudioDispatch_CheckStereoMode_Code_Join8:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 	ldb_d8	a, (0xbfe3)
 	and	a, 255
@@ -5219,7 +5219,7 @@ AudioDispatch_CheckStereoMode_Code_Join8:
 UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
-	lda_24	xbc, (0xee8d74)
+	lda	xbc, (0xee8d74:24)
 	ld_rrl	xwa, xbc, wa
 	bitm	0, (xwa+0x16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip17
@@ -5250,12 +5250,12 @@ UIStateEvt_VolumeMixer_Data_Join:
 	jr	lt, UIStateEvt_VolumeMixer_Data_Loop
 ; UIStateEvt_TransposeUpdate is kept at this address only for kn5000_v7_program.s, ui_widgets/widget_dispatch.s; v10's UIStateEvt_TransposeUpdate is the code at 0xFDDA79
 AudioDispatch_CheckStereoMode_Code_Skip18:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 	ldb_d8	a, (0xbfe3)
 	and	a, 255
 	ret	z
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 	ret
 ; v10 name for this address: UIStateEvt_EffectSelect_Data -- not a label here: v7 defines that name outside this span (= 0xFDE2C6)
@@ -5286,21 +5286,21 @@ AudioDispatch_CheckStereoMode_Code_Skip18:
 	ldb_d8	a, (0xfd03)
 	res	7, a
 	stb_d8	(0xc506), a
-	ordi16	(0xc4fe), 0x400
+	orw	(0xc4fe:16), 0x400
 	jr	AudioDispatch_CheckStereoMode_Code_Join9
 AudioDispatch_CheckStereoMode_Code_Skip19:
-	stdi8	(0xc506), 55
-	ordi16	(0xc4fe), 0x400
+	ld	(0xc506:16), 55
+	orw	(0xc4fe:16), 0x400
 	jr	AudioDispatch_CheckStereoMode_Code_Join9
 AudioDispatch_CheckStereoMode_Code_Skip20:
-	stdi8	(0xc506), 60
-	ordi16	(0xc4fe), 0x400
+	ld	(0xc506:16), 60
+	orw	(0xc4fe:16), 0x400
 	jr	AudioDispatch_CheckStereoMode_Code_Join9
 AudioDispatch_CheckStereoMode_Code_Skip21:
-	stdi8	(0xc506), 67
-	ordi16	(0xc4fe), 0x400
+	ld	(0xc506:16), 67
+	orw	(0xc4fe:16), 0x400
 AudioDispatch_CheckStereoMode_Code_Join9:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip:
 	ldb_d8	a, (0xbfe3)
@@ -5314,19 +5314,19 @@ UIStateEvt_EffectSelect_Data_Skip:
 	res	7, a
 	stb_d8	(0xc506), a
 AudioDispatch_CheckStereoMode_Code_Skip22:
-	ordi16	(0xc4fe), 0x400
-	ordi16	(0xc4f8), 4
+	orw	(0xc4fe:16), 0x400
+	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip2:
 	ldb_d8	a, (0xbfe3)
 	and	a, 255
 	ret	z
-	bitda	5, (0xfd50)
+	bit	5, (0xfd50:16)
 	ret	z
 	ldb_d8	a, (0xbfe2)
 	and	a, 255
 	extz	wa
-	lda_24	xbc, (0xee8e1c)
+	lda	xbc, (0xee8e1c:24)
 	ld_rrb	e, xbc, wa
 	ld	hl, 0:i3
 	cp	hl, 26
@@ -5347,7 +5347,7 @@ UIStateEvt_EffectSelect_Data_Loop:
 	cp	hl, 26
 	jr	c, UIStateEvt_EffectSelect_Data_Loop
 AudioDispatch_CheckStereoMode_Code_Skip23:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip3:
 	ldb_d8	a, (0xbfe3)
@@ -5356,7 +5356,7 @@ UIStateEvt_EffectSelect_Data_Skip3:
 	ldb_d8	a, (0xbfe2)
 	and	a, 255
 	stb_d8	(0xe8fa), a
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_EffectSelect_Data_Skip4:
 	ldb_d8	a, (0xbfe3)
@@ -5365,22 +5365,22 @@ UIStateEvt_EffectSelect_Data_Skip4:
 	ldb_d8	a, (0xbfe2)
 	and	a, 15
 	stb_d8	(0xe8f8), a
-	ordi16	(0xc4fe), 0x4000
-	ordi16	(0xc4f8), 4
+	orw	(0xc4fe:16), 0x4000
+	orw	(0xc4f8:16), 4
 	ret
 ; v10 name for this address: UIStateEvt_PlayModeGuard_Data -- not a label here: v7 defines that name outside this span (= 0xFDE3FE)
 ; --- Guard/dispatch: check flags, set/clear bits, conditional calls (54 bytes) ---
-	cpdi8	(0xbfe1), 2
+	cp	(0xbfe1:16), 2
 	ret	nz
-	bitda	6, (0xbfe2)
+	bit	6, (0xbfe2:16)
 	jr	z, UIStateEvt_PlayModeGuard_ClearBit
-	ordi16	(0xc4fa), 0x2000
+	orw	(0xc4fa:16), 0x2000
 	ret
 UIStateEvt_PlayModeGuard_ClearBit:
-	anddi16	(0xc4fa), 0xdfff
+	andw	(0xc4fa:16), 0xdfff
 	call	Voice_UpdatePlayModeState
 	cp	hl, 255
-	call_24	nz, (0xfe0ae9)
+	call	nz, (0xfe0ae9:24)
 	call	NoteMap_FindBestMatch
 	cp	hl, 255
 	ret	z
@@ -5402,14 +5402,14 @@ UIStateEvt_PlayModeGuard_ClearBit:
 	ret	z
 	cp	a, 0:i3
 	ret	nz
-	bitda	6, (0xbfe3)
+	bit	6, (0xbfe3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry
-	ordi16	(0xc500), 8
-	ordi16	(0xc4f8), 4
+	orw	(0xc500:16), 8
+	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry:
-	bitda	5, (0xbfe3)
+	bit	5, (0xbfe3:16)
 	ret	z
-	bitda	5, (0xbfe2)
+	bit	5, (0xbfe2:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip
 	ld	de, 0:i3
 	cp	de, 26
@@ -5425,7 +5425,7 @@ AudioDispatch_CheckStereoMode_Code_Loop:
 	ldb_d8	a, (0xfd04)
 	and	a, 255
 	extz	wa
-	lda_24	xbc, (0xee8e1c)
+	lda	xbc, (0xee8e1c:24)
 	ld_rrb	a, xbc, wa
 	and	a, 15
 	sla	a, 4
@@ -5451,56 +5451,56 @@ UIStateEvt_ChannelConfig_Data_Loop:
 	cp	de, 26
 	jr	c, UIStateEvt_ChannelConfig_Data_Loop
 AudioDispatch_CheckStereoMode_Code_Join10:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry2:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 UIStateEvt_ChannelConfig_Data_Entry3:
-	bitda	0, (0xbfe3)
+	bit	0, (0xbfe3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry4
-	bitda	0, (0xbfe2)
+	bit	0, (0xbfe2:16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip24
-	resda	4, (0xc286)
-	ordi16	(0xc500), 8
+	res	4, (0xc286:16)
+	orw	(0xc500:16), 8
 	jr	AudioDispatch_CheckStereoMode_Code_Join11
 AudioDispatch_CheckStereoMode_Code_Skip24:
-	setda	4, (0xc286)
-	ordi16	(0xc500), 8
+	set	4, (0xc286:16)
+	orw	(0xc500:16), 8
 AudioDispatch_CheckStereoMode_Code_Join11:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry4:
-	bitda	2, (0xbfe3)
+	bit	2, (0xbfe3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry6
-	bitda	2, (0xbfe2)
+	bit	2, (0xbfe2:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry5
-	setda	6, (0xc2a6)
-	setda	6, (0xc2a8)
-	setda	6, (0xc2aa)
-	setda	6, (0xc2ac)
-	setda	6, (0xc2ae)
-	setda	6, (0xc2b0)
+	set	6, (0xc2a6:16)
+	set	6, (0xc2a8:16)
+	set	6, (0xc2aa:16)
+	set	6, (0xc2ac:16)
+	set	6, (0xc2ae:16)
+	set	6, (0xc2b0:16)
 	jr	AudioDispatch_CheckStereoMode_Code_Join12
 UIStateEvt_ChannelConfig_Data_Entry5:
-	resda	6, (0xc2a6)
-	resda	6, (0xc2a8)
-	resda	6, (0xc2aa)
-	resda	6, (0xc2ac)
-	resda	6, (0xc2ae)
-	resda	6, (0xc2b0)
-	ordi16	(0xc500), 8
+	res	6, (0xc2a6:16)
+	res	6, (0xc2a8:16)
+	res	6, (0xc2aa:16)
+	res	6, (0xc2ac:16)
+	res	6, (0xc2ae:16)
+	res	6, (0xc2b0:16)
+	orw	(0xc500:16), 8
 AudioDispatch_CheckStereoMode_Code_Join12:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry6:
-	bitda	6, (0xbfe3)
+	bit	6, (0xbfe3:16)
 	jr	z, UIStateEvt_ChannelConfig_Data_Entry7
-	ordi16	(0xc500), 8
-	ordi16	(0xc4f8), 4
+	orw	(0xc500:16), 8
+	orw	(0xc4f8:16), 4
 UIStateEvt_ChannelConfig_Data_Entry7:
-	bitda	7, (0xbfe3)
+	bit	7, (0xbfe3:16)
 	ret	z
-	ordi16	(0xc500), 8
-	ordi16	(0xc4f8), 4
+	orw	(0xc500:16), 8
+	orw	(0xc4f8:16), 4
 	ret
 AudioDispatch_CheckStereoMode_Code_Skip25:
 	ld	xwa, 0x5000
@@ -5511,17 +5511,17 @@ AudioDispatch_CheckStereoMode_Code_Skip25:
 	jr	z, UIStateEvt_ChannelConfig_Data_Skip2
 	cp	hl, 0:i3
 	ret	nz
-	stdi8	(0xc2c6), 0
-	stdi8	(0xc2c7), 255
+	ld	(0xc2c6:16), 0
+	ld	(0xc2c7:16), 255
 	ret
 UIStateEvt_ChannelConfig_Data_Skip2:
 	ld	xwa, 0x5001
 	call	AcApcToggleProc_Helper
 	stb_d8	(0xc2c6), l
-	stdi8	(0xc2c7), 255
+	ld	(0xc2c7:16), 255
 	ret
 UIStateEvt_ChannelConfig_Data_Skip3:
-	stdi8	(0xc2c6), 0
+	ld	(0xc2c6:16), 0
 	ld	xwa, 0x5002
 	call	AcApcToggleProc_Helper
 	stb_d8	(0xc2c7), l
@@ -5533,16 +5533,16 @@ UIStateEvt_ChannelConfig_Data_Skip3:
 	ldb_d8	a, (0xbfe1)
 	cp	a, 16
 	ret	nz
-	bitda	0, (0xbfe3)
+	bit	0, (0xbfe3:16)
 	ret	z
-	bitda	0, (0xbfe2)
+	bit	0, (0xbfe2:16)
 	jr	z, UIStateEvt_MuteToggle_Data_Skip
-	ordi16	(0xc4f8), 1
+	orw	(0xc4f8:16), 1
 	jr	UIStateEvt_MuteToggle_Data_Join
 UIStateEvt_MuteToggle_Data_Skip:
-	anddi16	(0xc4f8), 0xfffe
+	andw	(0xc4f8:16), 0xfffe
 UIStateEvt_MuteToggle_Data_Join:
-	ordi16	(0xc4f8), 4
+	orw	(0xc4f8:16), 4
 	ret
 	ret
 	.include "audio/audioinit_routines.s"

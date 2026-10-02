@@ -444,7 +444,7 @@ CDlikeSwTtl_ReturnZeroStub2:
 ; n = (0xCDF) + 2 when bit 0 of (0xCE0) is clear, (0xCDF) - 6 when it is set.
 ; Called twice from ui/setwall_routines.s.
 CDlikeSwTtl_SendEvt4:
-	bitda	0, (0xce0)
+	bit	0, (0xce0:16)
 	jr	nz, CDlikeSwTtl_SendEvt4_Bit0Set
 	ldb_d8	a, (0xcdf)
 	inc	2, a

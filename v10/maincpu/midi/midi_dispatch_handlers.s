@@ -11777,8 +11777,8 @@ SeqChan_StepCmd_Field11_Data:
 	ld	wa, 4:i3
 	call	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	call_24	nz, (0xfd6c8d)
-	ldda32	xwa, (0xbcac)
+	call	nz, (0xfd6c8d:24)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
@@ -11796,8 +11796,8 @@ SeqChan_StepCmd_Field12_Data:
 	ld	wa, 4:i3
 	call	AccWrap_ReturnZero
 	cp	hl, 0xffff
-	call_24	nz, (0xfd6c8d)
-	ldda32	xwa, (0xbcac)
+	call	nz, (0xfd6c8d:24)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
 	cp	l, 0:i3
@@ -11816,8 +11816,8 @@ SeqChan_StepCmd_Field13Write:
 	ld	wa, 4:i3
 	call AccWrap_ReturnZero
 	cp hl, 0xffff
-	call_24	nz, (0xfd6c8d)
-	ldda32	xwa, (0xbcac)
+	call	nz, (0xfd6c8d:24)
+	ld	xwa, (0xbcac:16)
 	; --- Section 2: reload XWA, setup BC, call, check L ---
 	ldw bc, 0x000f
 	call SeqData_ReadFieldByIndex
@@ -13555,7 +13555,7 @@ SeqData_FormatOutput_Data:
 	bit	4, (0xfd50:16)
 	ret	nz
 	calr	SeqData_FormatOutput_Data_Helper
-	cpdi16	(0x90de), 0
+	cpw	(0x90de:16), 0
 	ret	z
 	push	xde
 	push	xhl
@@ -13594,7 +13594,7 @@ SeqData_FormatOutput_Data_Helper:
 	ret
 SeqData_FormatOutput_Data_Helper_Join:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -13627,7 +13627,7 @@ SeqData_FormatOutput_Data_Code_Epilogue:
 	ret
 SeqData_FormatOutput_Data_Helper_Join2:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -13660,7 +13660,7 @@ SeqData_FormatOutput_Data_Code_Epilogue2:
 	ret
 SeqData_FormatOutput_Data_Helper_Join3:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -13695,7 +13695,7 @@ SeqData_FormatOutput_Data_Helper_Return:
 	ret
 SeqData_FormatOutput_Data_Helper_Join4:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -13728,7 +13728,7 @@ SeqData_FormatOutput_Data_Code_Epilogue4:
 	ret
 SeqData_FormatOutput_Data_Helper_Join5:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -13761,7 +13761,7 @@ SeqData_FormatOutput_Data_Code_Epilogue5:
 	ret
 SeqData_FormatOutput_Data_Helper_Helper:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -13980,7 +13980,7 @@ SeqAlt_DescriptorBlock_Data:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, xwa
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue4
@@ -14015,7 +14015,7 @@ SeqAlt_NibbleSearch_Epilogue4:
 	ret
 	push	xiz
 	ld	xiz, xwa
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue5
@@ -14043,7 +14043,7 @@ SeqAlt_NibbleSearch_Epilogue5:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	lda	xbc, (xsp+4)
 	ld	(xbc+2), l
@@ -14070,7 +14070,7 @@ SeqAlt_NibbleSearch_Epilogue5:
 	jr	z, SeqAlt_NibbleSearch_Epilogue
 	ld	a, (xiz+6)
 	ld	(xsp+4), a
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14093,7 +14093,7 @@ SeqAlt_NibbleSearch_Skip7:
 SeqAlt_NibbleSearch_Skip:
 	ld	a, (xiz+6)
 	ld	(xbc), a
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14121,7 +14121,7 @@ SeqAlt_NibbleSearch_Epilogue:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	(xsp+10), xwa
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	ld	(xsp+4), l
 	ld	xde, (xsp+10)
@@ -14131,12 +14131,12 @@ SeqAlt_NibbleSearch_Epilogue:
 	ld	c, (xsp+4)
 	cp	c, (xde+10)
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue2
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	ldfr_berp	l, 248
 	extz	iz
 	sll	iz, 8
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	extz	hl
 	or	iz, hl
@@ -14144,7 +14144,7 @@ SeqAlt_NibbleSearch_Epilogue:
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue2
 	srl	iz, 4
 	and	iz, 63
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14178,7 +14178,7 @@ SeqAlt_NibbleSearch_Epilogue2:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	ld	(xsp+8), l
 	ld	a, (xiz+9)
@@ -14195,7 +14195,7 @@ SeqAlt_NibbleSearch_Epilogue2:
 	lda	xbc, (0xee4e20:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14258,7 +14258,7 @@ SeqAlt_NibbleSearch_Epilogue6:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	call	MIDI_PackNibbleParam
 	cp	(xiz+9), l
 	jr	ugt, SeqAlt_NibbleSearch_Epilogue3
@@ -14285,7 +14285,7 @@ SeqAlt_NibbleSearch_Skip3:
 SeqAlt_NibbleSearch_Join2:
 	ld	a, (xiz+6)
 	ld	(xsp+4), a
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ldw	bc, 10
 	call	SeqData_ReadFieldByIndex
 	sub	l, 32
@@ -14310,7 +14310,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	inc	4, xsp
 	ret
 	ret
-	ldda32	xwa, (0xbc54)
+	ld	xwa, (0xbc54:16)
 	lda	xwa, (xwa+14)
 	call	Param_SignExtendRetu_Data_0x4C3
 	cp	hl, 0:i3
@@ -14318,7 +14318,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	ld	xwa, MidiPkt_EventType_Table_0x560
 	ld	bc, 5:i3
 	call	ArpQueue_Enqueue
-	ldda32	xwa, (0xbc5c)
+	ld	xwa, (0xbc5c:16)
 	call	SeqOut_FlushTimedBuffer
 	call	ArpQueue_SwapBuffers
 	ret
@@ -14732,7 +14732,7 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	ret
 VoiceParam_AssSwb_MultiBlock_Data_Join:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -14765,7 +14765,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue:
 	ret
 VoiceParam_AssSwb_MultiBlock_Data_Join2:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -14798,7 +14798,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue2:
 	ret
 VoiceParam_AssSwb_MultiBlock_Data_Join3:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -14833,7 +14833,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Return:
 	ret
 VoiceParam_AssSwb_MultiBlock_Data_Join4:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -14866,7 +14866,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue4:
 	ret
 VoiceParam_AssSwb_MultiBlock_Data_Join5:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251
@@ -14899,7 +14899,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue5:
 	ret
 VoiceParam_AssSwb_MultiBlock_Data_Helper:
 	push	qiz
-	ldda32	xwa, (0xbcac)
+	ld	xwa, (0xbcac:16)
 	ld	bc, 2:i3
 	call	SeqData_ReadFieldByIndex
 	ldfr_berp	l, 251

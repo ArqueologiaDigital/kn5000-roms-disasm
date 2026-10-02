@@ -1963,7 +1963,7 @@ UIState_KeyScan_Dispatch:
 	ldb_d8 a, (35996)
 	extz wa
 	sla wa, 2
-	lda_24 xbc, (SSF_PresentationGateTable)
+	lda xbc, (SSF_PresentationGateTable:24)
 	ld_rrl xix, xbc, wa
 	or xix, xix
 	ret z
@@ -2861,19 +2861,19 @@ MainTitleCtrl_HandleBB:
 	ld (0x0274a6:24), wa
 
 MainTitleCtrl_CheckSecondTimer:
-	ldw_da wa, (160942)
+	ld wa, (160942:24)
 	cp wa, 0:i3
 	jr z, UIWidget_ReturnZero
 	dec 1, wa
-	stw_da (160942), wa
+	ld (160942:24), wa
 	cp wa, 0:i3
 	jr nz, UIWidget_ReturnZero
-	cpw_da (160940), 0
+	cpw (160940:24), 0
 	jr z, MainTitleCtrl_ClearIndicatorBit
-	setda 0, (36544)
+	set 0, (36544:16)
 	jr MainTitleCtrl_SetIndicator60
 MainTitleCtrl_ClearIndicatorBit:
-	resda 0, (36544)	; resda 0, 0x8f5c (v7 patched)
+	res 0, (36544:16)	; resda 0, 0x8f5c (v7 patched)
 
 
 

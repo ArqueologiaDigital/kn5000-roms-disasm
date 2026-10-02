@@ -694,7 +694,7 @@ SMF_SysEx_CheckBlockLimit:
 	ld	xiy, 4206
 	.byte 0x85, 0x11	; ldir
 	call	SysEx_ReadBytesLoop_Init
-	cpdi8	(6880), 255
+	cp	(6880:16), 255
 	jr	z, 19
 	ld	xwa, 6753
 	ld	xbc, 0:i3
@@ -787,11 +787,11 @@ SMF_LoadBank_ClearAndPrepare:
 SMF_SeekAndPreparePlayback:
 	bit	15, hl
 	jr	nz, SMF_RestoreTimerState
-	anddi8	(36076), 254
+	and	(36076:16), 254
 	call	SMF_CalcFilePosition
 	push	xwa
 	push	xbc
-	ldda32	xbc, (6705)
+	ld	xbc, (6705:16)
 	sub	xbc, 5114
 	ld	xwa, xbc
 	ld	xbc, 0:i3
@@ -812,10 +812,10 @@ SMF_Seek_WritePosition:
 	pop xwa
 
 SMF_RestoreTimerState:
-	bitda	0, (10405)
+	bit	0, (10405:16)
 	jr	z, 15
-	ldw_da	wa, (65516)
-	stda16	(61854), wa
+	ld	wa, (65516:24)
+	ld	(61854:16), wa
 	push	xhl
 	call	16635550
 	pop	xhl
@@ -1097,7 +1097,7 @@ SMF_WriteChannelNoteData:
 	ld	(4359:16), a
 	ld	a, (xiy+7)
 	ld	(4332:16), a
-	anddi8	(10359), 15
+	and	(10359:16), 15
 	ld	l, (10359:16)
 	xor	h, h
 	push	xix
@@ -3324,7 +3324,7 @@ SeqStep_FileReadReturn_Skip:
 SeqStep_FileReadReturn_Skip2:
 	bitm	0, (xbc+4)
 	jr	nz, SeqStep_FileReadReturn_Skip3
-	stiw_da	(124220), 13
+	ldw	(124220:24), 13
 	ld	xhl, 0:i3
 	jr	SeqStep_FileReadReturn_Epilogue
 SeqStep_FileReadReturn_Skip3:
@@ -3407,7 +3407,7 @@ SeqStep_FileWriteSetup_Skip:
 SeqStep_FileWriteSetup_Skip2:
 	bitm	1, (xbc+4)
 	jr	nz, SeqStep_FileWriteSetup_Skip3
-	stiw_da	(124220), 13
+	ldw	(124220:24), 13
 	ldw	hl, 0xffff
 	ret
 SeqStep_FileWriteSetup_Skip3:
@@ -3674,7 +3674,7 @@ SeqStep_ByteBlockF245:
 	ldw	hl, 0xffff
 	jr	FileOpenDefault_Epilogue
 FileOpenDefault_Skip3:
-	cpw_da	(124220), 5
+	cpw	(124220:24), 5
 	jr	z, FileOpenDefault_Skip4
 	ldw	hl, 0xffff
 	jr	FileOpenDefault_Epilogue
@@ -5334,7 +5334,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper:
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	z, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip22
-	lda_24	xwa, (135706)
+	lda	xwa, (135706:24)
 	ld	(xsp+16), xwa
 	ld	iz, 0:i3
 	cp	iz, 10
@@ -6887,7 +6887,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip8:
 	or	xhl, xhl
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Skip9
 	ldw	(xiz+6), 10
-	stiw_da	(124220), 10
+	ldw	(124220:24), 10
 	ld	hl, 0:i3
 	jrl	SeqByteBlock_StyleBitmapRef_Code_Epilogue4
 SeqByteBlock_StyleBitmapRef_Code_Skip9:
@@ -7497,7 +7497,7 @@ SeqChan_ValidateAndDispatch:
 	ld	xwa, (xiz+34)
 	resm	3, (xwa+22)
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip15:
-	cpib_da	(254690), 0
+	cp	(254690:24), 0
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Entry
 	ld	hl, 0:i3
 	jr	SeqByteBlock_StyleBitmapRef_Code_Epilogue7
@@ -8103,7 +8103,7 @@ SeqChan_ByteBlockD_Skip3:
 SeqChan_ByteBlockD_Helper_Skip4:
 	ldw	(xsp+4), 1
 SeqChan_ByteBlockD_Entry3:
-	cpw_da	(141086), 1
+	cpw	(141086:24), 1
 	jr	lt, SeqChan_ByteBlockD_Helper_Skip5
 	ld	hl, 0:i3
 	jr	SeqChan_ByteBlockD_Epilogue
@@ -9994,13 +9994,13 @@ FileIO_ReadDirEntry_Body:
 	jr	ge, FileIO_ReadDirEntry_End
 	ld	wa, (xiz)
 	muls	wa, 44
-	lda_24	xbc, (144808)
+	lda	xbc, (144808:24)
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3f, 0xfe, 0xfe	; cp (xbc+wa),0xfefe
 	jr	z, FileIO_ReadDirEntry_End
 	pushw	20
 	ld	wa, (xiz)
 	muls	wa, 44
-	lda_24	xbc, (144782)
+	lda	xbc, (144782:24)
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -10013,7 +10013,7 @@ FileIO_ReadDirEntry_Body:
 	ld	(xwa+26), 0
 	ld	wa, (xiz)
 	muls	wa, 44
-	lda_24	xbc, (144806)
+	lda	xbc, (144806:24)
 	ld_rrw	bc, xbc, wa
 	extz	xbc
 	ld	xwa, (xsp+4)
@@ -10030,7 +10030,7 @@ FileIO_ReadDirEntry_Return:
 	ret
 
 SndTable_ByteBlock_ReadOps:
-	cpib_da	(254956), 0
+	cp	(254956:24), 0
 	jr	nz, SndTable_ByteBlock_ReadOps_Code_Entry
 	ld	xbc, (0x2357a:24)
 	push	xbc
@@ -10054,7 +10054,7 @@ SndTable_ByteBlock_ReadOps_Skip:
 	ldw	hl, 0xffff
 	ret
 SndTable_ByteBlock_ReadOps_Code_Entry:
-	cpib_da	(254956), 1
+	cp	(254956:24), 1
 	jr	nz, SndTable_ByteBlock_ReadOps_Skip2
 	calr	FDC_SectorCmd_ByteBlock
 	extz	hl
@@ -10541,19 +10541,19 @@ FileIO_ReadDir_CopyEntries:
 FileIO_ReadDir_CopyLoop:
 	ld	wa, iz
 	muls	wa, 44
-	lda_24	xbc, (144808)
+	lda	xbc, (144808:24)
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3f, 0xfe, 0xfe	; cp (xbc+wa),0xfefe
 	jr	z, 50
 	pushw	20
 	ld	wa, iz
 	muls	wa, 44
-	lda_24	xbc, (144782)
+	lda	xbc, (144782:24)
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
 	ld	wa, iz
 	muls	wa, 20
-	lda_24	xbc, (141106)
+	lda	xbc, (141106:24)
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -10620,7 +10620,7 @@ SeqDispatch_InitWithPayload:
 
 SeqDispatch_PostInit:
 	; anddi8 (0x32f3), 254 (v7 patched)
-	anddi8	(12887), 254
+	and	(12887:16), 254
 
 	ret
 
@@ -10773,7 +10773,7 @@ SeqCtl_StorePedalFlags:
 	srl	a, 4
 	stb_d8	(12905), a
 	xor	a, a
-	bitda	2, (64941)
+	bit	2, (64941:16)
 	jr	nz, SeqCtl_StoreKeyMask
 	or	a, 63
 SeqCtl_StoreKeyMask:
@@ -10898,7 +10898,7 @@ AccKey_ScanAndSetDirty:
 	push xbc
 
 	; anddi8 (0x3284), 253 (v7 patched)
-	anddi8	(12776), 253
+	and	(12776:16), 253
 
 	ld a, 0x1:opc
 
@@ -10921,7 +10921,7 @@ AccKey_ScanLoop:
 AccKey_FoundActiveKey:
 	and	wa, (0xf19e:16)
 	jr	z, AccKey_ScanDone
-	ordi8	(12776), 2
+	or	(12776:16), 2
 AccKey_ScanDone:
 	pop xbc
 	ret
@@ -10965,13 +10965,13 @@ AccChord_CheckKeyFlags:
 	jr nz, AccChord_CheckUIStateExit
 
 AccChord_SetDefaultKeys:
-	stdi8	(12859), 0
-	stdi8	(12860), 1
-	stdi8	(36006), 1
-	bitda	4, (13390)
+	ld	(12859:16), 0
+	ld	(12860:16), 1
+	ld	(36006:16), 1
+	bit	4, (13390:16)
 	jr	z, AccChord_ReadChannelKeys
-	stdi8	(12860), 5
-	stdi8	(36006), 5
+	ld	(12860:16), 5
+	ld	(36006:16), 5
 AccChord_ReadChannelKeys:
 	ld	a, (13389:16)
 	and	a, 15
@@ -10980,9 +10980,9 @@ AccChord_ReadChannelKeys:
 	ld	(36004:16), a
 	ld	(12862:16), a
 AccChord_CheckUIStateExit:
-	cpdi8	(35992), 14
+	cp	(35992:16), 14
 	jr	z, AccChord_CheckModeAndUpdate
-	cpdi8	(12885), 14
+	cp	(12885:16), 14
 	jr	nz, AccChord_CheckModeAndUpdate
 	ldb_d8	a, (52803)
 	stb_d8	(36006), a
@@ -11028,7 +11028,7 @@ AccChord_CompareNoteC:
 	and	a, 7
 	cp	a, 0:i3
 	jr	z, AccChord_ReadKeysRet
-	bitda	1, (12776)
+	bit	1, (12776:16)
 	jr	z, AccChord_ReadKeysRet
 	call	BitMapOut_CheckDiskAndApply
 	jr	AccChord_ReadKeysRet

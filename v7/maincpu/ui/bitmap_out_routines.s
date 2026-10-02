@@ -179,9 +179,9 @@ BitMapOut_ByteData_RenderD:
 	call	GetTitleNow
 	cp xhl, TITLE_SVARI
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
-	cpdi8 (49124), 144
+	cp (49124:16), 144
 	jr nz, BitMapOut_ByteData_RenderD_Epilogue
-	cpdi8 (49121), 16	; (at +1) differs from v10 here
+	cp (49121:16), 16	; (at +1) differs from v10 here
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	ld	a, (35998:16)
 	extz	wa
@@ -220,7 +220,7 @@ BitMapOut_ByteData_RenderD_Epilogue:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	cpdi8 (49121), 0	; (at +1) differs from v10 here
+	cp (49121:16), 0	; (at +1) differs from v10 here
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -240,9 +240,9 @@ BitMapOut_ByteData_RenderE:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	cpdi8 (49121), 0	; (at +1) differs from v10 here
+	cp (49121:16), 0	; (at +1) differs from v10 here
 	ret	nz
-	cpdi8 (49124), 72
+	cp (49124:16), 72
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -300,9 +300,9 @@ BitMapOut_ByteData_TransitionSeq:
 	call	GetTitleNow
 	cp	xhl, TITLE_NORMAL
 	ret	nz
-	cpdi8 (49124), 152
+	cp (49124:16), 152
 	ret nz
-	cpdi8 (49121), 11	; (at +1) differs from v10 here
+	cp (49121:16), 11	; (at +1) differs from v10 here
 	ret nz
 	ld	a, (49122:16)
 	and	a, (49123:16)
@@ -311,7 +311,7 @@ BitMapOut_ByteData_TransitionSeq:
 	jr	z, BitMapOut_ByteData_TransitionSeq_Skip
 	cp	a, 128
 	jr	nz, BitMapOut_ByteData_TransitionSeq_Skip2
-	resda 0, (36544)	; (at +1) differs from v10 here
+	res 0, (36544:16)	; (at +1) differs from v10 here
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
@@ -319,7 +319,7 @@ BitMapOut_ByteData_TransitionSeq:
 	ld	xde, 5:i3
 	jr	BitMapOut_ByteData_TransitionSeq_Join
 BitMapOut_ByteData_TransitionSeq_Skip:
-	resda 0, (36544)	; (at +1) differs from v10 here
+	res 0, (36544:16)	; (at +1) differs from v10 here
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
@@ -327,7 +327,7 @@ BitMapOut_ByteData_TransitionSeq_Skip:
 	ld	xde, 6:i3
 	jr	BitMapOut_ByteData_TransitionSeq_Join
 BitMapOut_ByteData_TransitionSeq_Skip2:
-	setda 0, (36544)	; (at +1) differs from v10 here
+	set 0, (36544:16)	; (at +1) differs from v10 here
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 192
@@ -347,11 +347,11 @@ BitMapOut_ByteData_TransitionSeq_Join:
 	ret
 BitMapOut_ByteData_PresetCopy:
 	push qiz
-	cpdi8 (35992), 14
+	cp (35992:16), 14
 	jr z, BitMapOut_ByteData_PresetCopy_Skip2
-	bitda 3, (36010)
+	bit 3, (36010:16)
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip2
-	cpdi8 (49121), 1
+	cp (49121:16), 1
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip2
 	calr BitMapOut_GetRenderMode
 	bit 1, l
@@ -381,7 +381,7 @@ BitMapOut_ByteData_PresetCopy_Join:
 	ldw wa, 130
 	calr BitMapOut_GetRenderMode_Return
 BitMapOut_ByteData_PresetCopy_Skip2:
-	resda 3, (36010)
+	res 3, (36010:16)
 	pop qiz
 	ret
 BitMapOut_CopyVoicePreset9:
@@ -1795,7 +1795,7 @@ BitMapOut_DeltaEncode_Init:
 	jrl BitMapOut_DeltaEncode_CheckBounds
 
 BitMapOut_DeltaEncode_ReadEntry:
-	anddi8 (36010), 252	; anddi8 (0x8d46), 252 (v7 patched)
+	and (36010:16), 252	; anddi8 (0x8d46), 252 (v7 patched)
 
 	ld wa, iz
 
@@ -2211,7 +2211,7 @@ BitMapOut_DeltaEncode_TypeDefaultB:
 	res 7, a
 	cp a, w
 	jrl z, BitMapOut_DeltaEncode_HelperReturn
-	bitda 0, (36010)
+	bit 0, (36010:16)
 	jrl nz, BitMapOut_DeltaEncode_HelperReturn
 	ld de, hl
 	inc 1, hl
@@ -2260,7 +2260,7 @@ BitMapOut_DeltaEncode_TypeDefaultB:
 	inc 1, hl
 	jr BitMapOut_DeltaEncode_HelperCheckEnd
 BitMapOut_DeltaEncode_TypeDefaultC:
-	setda 0, (36010)	; setda 0, 0x8d46 (v7 patched)
+	set 0, (36010:16)	; setda 0, 0x8d46 (v7 patched)
 
 	ld bc, hl
 
@@ -2360,7 +2360,7 @@ BitMapOut_DeltaEncode_HelperCheckEnd:
 	ld (xwa), 0xff
 
 BitMapOut_DeltaEncode_HelperReturn:
-	setda 6, (36010)	; setda 6, 0x8d46 (v7 patched)
+	set 6, (36010:16)	; setda 6, 0x8d46 (v7 patched)
 
 	pop xiz
 
@@ -2462,7 +2462,7 @@ BitMapOut_DeltaEncode_Type48Loop:
 	res 7, a
 	cp a, c
 	jrl z, BitMapOut_DeltaEncode_Type48Return
-	bitda 0, (36010)
+	bit 0, (36010:16)
 	jrl nz, BitMapOut_DeltaEncode_Type48Return
 	ld bc, hl
 	inc 1, hl
@@ -2512,7 +2512,7 @@ BitMapOut_DeltaEncode_Type48Loop:
 	inc 1, hl
 	jr BitMapOut_DeltaEncode_Type48Epilog
 BitMapOut_DeltaEncode_Type48End:
-	setda 0, (36010)	; setda 0, 0x8d46 (v7 patched)
+	set 0, (36010:16)	; setda 0, 0x8d46 (v7 patched)
 
 	ld bc, hl
 
@@ -3315,7 +3315,7 @@ OneTchFUNC:
 	lda xix, (BitMapOut_ByteData_WidgetTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
 BitMapOut_ByteData_WidgetTable:
-	resda 7, (46918)	; resda	7, 0xb7e2 (v7 patched)
+	res 7, (46918:16)	; resda	7, 0xb7e2 (v7 patched)
 
 	push	xde
 

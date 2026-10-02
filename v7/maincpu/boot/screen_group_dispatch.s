@@ -52,11 +52,11 @@ screen_group_dispatch_Skip2:
 	call	0xfde7d8
 screen_group_dispatch_Skip3:
 	jp	AudioInit_DispatchChanges
-	bitda	0, (0xfc69)
+	bit	0, (0xfc69:16)
 	ret	z
 ; (v7 label ScreenGroup_WidgetLoop stood here; dropped, see the file header)
-	ordi16	(0xc4fa), 128
-	ordi16	(0xc4f8), 4
+	orw	(0xc4fa:16), 128
+	orw	(0xc4f8:16), 4
 	calr	65095
 	ret
 DkMdlyPly_CheckState_Helper2:

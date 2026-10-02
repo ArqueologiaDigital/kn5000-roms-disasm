@@ -169,7 +169,7 @@ DrawLine_Impl_CopyStartPos:
 	lda xix, (xsp+56)
 	ldiw
 	ldiw
-	lda_24 xwa, (OFFSCREEN_BUFFER_1)
+	lda xwa, (OFFSCREEN_BUFFER_1:24)
 	ld (xsp+36), xwa
 	ld (xsp+20), xwa
 	ld xwa, (xsp+4)
@@ -1496,7 +1496,7 @@ DrawFrame_Impl_PatternSetup:
 	exts xwa
 	ld xbc, (xsp+40)
 	add xbc, xwa
-	addda32_24 xbc, (197714)
+	add xbc, (197714:24)
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp+44)
@@ -1518,7 +1518,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	exts xwa
 	ld xbc, (xsp+40)
 	add xbc, xwa
-	addda32_24 xbc, (197714)
+	add xbc, (197714:24)
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp+44)
@@ -1542,7 +1542,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	sll xbc, 6
 	ld xwa, xbc
 	add xwa, xde
-	addda32_24 xwa, (197714)
+	add xwa, (197714:24)
 	push xwa
 	ld wa, (xhl)
 	exts xwa
@@ -3985,7 +3985,7 @@ DrawString_DeferredPath:
 	ldw wa, 28
 	calr DrawQueue_Alloc
 	ld xiz, xhl
-	lda_24 xwa, (DrawString_Return_0x7)
+	lda xwa, (DrawString_Return_0x7:24)
 	ld (xhl), xwa
 	ld xwa, (xsp+16)
 	ld xiy, xwa

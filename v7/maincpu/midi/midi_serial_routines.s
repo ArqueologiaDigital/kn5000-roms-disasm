@@ -272,7 +272,7 @@ MIDI_QUEUE_EVENT_TO_SEQUENCER:
 	ret
 QueueToSeq_OverflowFlag:
 	set 2, (1063:16)
-	incdi8	1, (0xb741)
+	inc	1, (0xb741:16)
 	ret
 ChanDisp_AwaitSecondDataByte:
 	set 6, (1063:16)
@@ -312,7 +312,7 @@ ChanDisp_NoteOnZeroReturn:
 	ret
 ChanDisp_QueueOverflowSet:
 	set 2, (1063:16)
-	incdi8	1, (0xb741)
+	inc	1, (0xb741:16)
 	ret
 MIDI_SYSTEM_EXCLUSIVE_HANDLER:
 	ld (1059:16), 0
@@ -658,7 +658,7 @@ MidiRx_ChannelMsgDispatch:
 	jr	z, MidiRx_ChannelMsgDispatch_Return
 	ld	(0x95cd:16), a
 	ld	(0x95cf:16), a
-	incdi8	1, (0x95cc)
+	inc	1, (0x95cc:16)
 	xor	h, h
 	ld	l, (0x95cc:16)
 	ld	xix, 0x9478
@@ -671,7 +671,7 @@ MidiRx_ChannelMsgDispatch:
 	ld	xix, MidiCC_LowRange_Table
 	ld	xix, (xix+hl)
 	call (xix)
-	decdi8	1, (0x95cf)
+	dec	1, (0x95cf:16)
 	jr nz, -54
 MidiRx_ChannelMsgDispatch_Return:
 	ret
@@ -803,8 +803,8 @@ MidiCC_Handler_BitManipulation_Skip:
 	ld d, 192:opc
 	ld	a, (0x959b:16)
 	ld	(0x95ac:16), a
-	stda16	(0x95a8), bc
-	stda16	(0x95aa), de
+	ld	(0x95a8:16), bc
+	ld	(0x95aa:16), de
 	call	VoiceMode_ParamConfigTables_0xB68
 MidiCC_Handler_BitManipulation_Return:
 	ret
@@ -834,8 +834,8 @@ MidiCC_Handler_PairedParamA:
 	ld	d, 255:opc
 	ld	a, (0x959b:16)
 	ld	(0x95ac:16), a
-	stda16	(0x95a8), bc
-	stda16	(0x95aa), de
+	ld	(0x95a8:16), bc
+	ld	(0x95aa:16), de
 	call	MidiStream_ExtendedDispatch_0x298
 MidiCC_Handler_PairedParamA_Return:
 	ret
@@ -855,8 +855,8 @@ MidiCC_Handler_PairedParamB:
 	ld	e, 255:opc
 	ld	a, (0x959b:16)
 	ld	(0x95ac:16), a
-	stda16	(0x95a8), bc
-	stda16	(0x95aa), de
+	ld	(0x95a8:16), bc
+	ld	(0x95aa:16), de
 	call	MidiStream_ExtendedDispatch_0x298
 MidiCC_Handler_PairedParamB_Return:
 	ret
@@ -877,8 +877,8 @@ MidiCC_Handler_RangeCheck_Skip:
 	ld	d, 7:opc
 	ld	a, (0x959b:16)
 	ld	(0x95ac:16), a
-	stda16	(0x95a8), bc
-	stda16	(0x95aa), de
+	ld	(0x95a8:16), bc
+	ld	(0x95aa:16), de
 	call	MidiStream_ApplyPendingParams
 MidiCC_Handler_RangeCheck_Return:
 	ret

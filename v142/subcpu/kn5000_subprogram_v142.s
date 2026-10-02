@@ -2954,19 +2954,19 @@ E2_Start_Transfer:
 	ldw	wa, 10
 	.byte	0xd8, 0x2e, 0x48	; ldc cr[0x48],WA -- word to control register 0x48 (unidasm prints it as
 				; `unknown`); the DMAC2 count per this routine's header.  No llvm-mc spelling.
-	stdi8	(0x102), 22
+	ld	(0x102:16), 22
 	set_dd8	2, T8RUN
-	setda	7, (0x4fe)
+	set	7, (0x4fe:16)
 ; Tail of InterCPU_E2_DMA_Transfer: spins on DMA_XFER_STATE (0x10E8) until the micro-DMA
 ; channel-2 completion ISR (0x020F01) zeroes it. NO TIMEOUT -- see the findings.
 ; 2026-09-25: CODE, converted from a .byte run (scripts/converters/convert_v142_byte_block.py:
 ; llvm-mc and unidasm agree on every instruction boundary; each instruction re-assembles to its
 ; own bytes, the few llvm-mc cannot spell stay .byte with unidasm's reading as a comment).
 InterCPU_E2_Wait_DMA_Done:
-	cpdi8	(0x10e8), 0
+	cp	(0x10e8:16), 0
 	ret	z
 InterCPU_E2_Wait_DMA_Done_Spin:
-	cpdi8	(0x10e8), 0
+	cp	(0x10e8:16), 0
 	jr	nz, InterCPU_E2_Wait_DMA_Done_Spin
 	ret
 

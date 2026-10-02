@@ -3330,7 +3330,7 @@ SeqStep_FileReadReturn_Skip:
 SeqStep_FileReadReturn_Skip2:
 	bitm	0, (xbc+4)
 	jr	nz, SeqStep_FileReadReturn_Skip3
-	stiw_da	(124220), 13
+	ldw	(124220:24), 13
 	ld	xhl, 0:i3
 	jr	SeqStep_FileReadReturn_Epilogue
 SeqStep_FileReadReturn_Skip3:
@@ -3413,7 +3413,7 @@ SeqStep_FileWriteSetup_Skip:
 SeqStep_FileWriteSetup_Skip2:
 	bitm	1, (xbc+4)
 	jr	nz, SeqStep_FileWriteSetup_Skip3
-	stiw_da	(124220), 13
+	ldw	(124220:24), 13
 	ldw	hl, 0xffff
 	ret
 SeqStep_FileWriteSetup_Skip3:
@@ -3682,7 +3682,7 @@ SeqStep_ByteBlockF245:
 	ldw	hl, 0xffff
 	jr	FileOpenDefault_Epilogue
 FileOpenDefault_Skip3:
-	cpw_da	(124220), 5
+	cpw	(124220:24), 5
 	jr	z, FileOpenDefault_Skip4
 	ldw	hl, 0xffff
 	jr	FileOpenDefault_Epilogue
@@ -6905,7 +6905,7 @@ SeqByteBlock_PathNormalize_Skip23:
 	or	xhl, xhl
 	jr	nz, SeqByteBlock_PathNormalize_Skip24
 	ldw	(xiz+6), 10
-	stiw_da	(124220), 10
+	ldw	(124220:24), 10
 	ld	hl, 0:i3
 	jrl	SeqByteBlock_PathNormalize_Epilogue8
 SeqByteBlock_PathNormalize_Skip24:
@@ -7514,7 +7514,7 @@ SeqChan_ValidateAndDispatch:
 	ld	xwa, (xiz+34)
 	resm	3, (xwa+22)
 SeqByteBlock_PathNormalize_Helper10_Skip15:
-	cpib_da	(254690), 0
+	cp	(254690:24), 0
 	jr	nz, SeqByteBlock_PathNormalize_Entry3
 	ld	hl, 0:i3
 	jr	SeqByteBlock_PathNormalize_Epilogue11
@@ -8121,7 +8121,7 @@ SeqChan_ByteBlockD_Skip3:
 SeqChan_ByteBlockD_Helper_Skip4:
 	ldw	(xsp+4), 1
 SeqChan_ByteBlockD_Entry3:
-	cpw_da	(141086), 1
+	cpw	(141086:24), 1
 	jr	lt, SeqChan_ByteBlockD_Helper_Skip5
 	ld	hl, 0:i3
 	jr	SeqChan_ByteBlockD_Epilogue
@@ -10042,7 +10042,7 @@ FileIO_ReadDirEntry_Return:
 	ret
 
 SndTable_ByteBlock_ReadOps:
-	cpib_da	(254956), 0
+	cp	(254956:24), 0
 	jr	nz, SndTable_ByteBlock_ReadOps_Code_Entry
 	ld	xbc, (0x2357a:24)
 	push	xbc
@@ -10066,7 +10066,7 @@ SndTable_ByteBlock_ReadOps_Skip:
 	ldw	hl, 0xffff
 	ret
 SndTable_ByteBlock_ReadOps_Code_Entry:
-	cpib_da	(254956), 1
+	cp	(254956:24), 1
 	jr	nz, SndTable_ByteBlock_ReadOps_Skip2
 	calr	FDC_SectorCmd_ByteBlock
 	extz	hl

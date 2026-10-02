@@ -3118,7 +3118,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	cp	wa, 16
 	jr	gt, SndParamF9A541_ResBit7_Code_Epilogue
 	add	wa, wa
-	lda_24	xix, (0xeda62c)
+	lda	xix, (0xeda62c:24)
 ; (pre-port v7 note about the bytes at 0xFC6D8E:)
 ; v10 does not spell this byte either
 	ld_rrw	wa, xix, wa
@@ -3126,7 +3126,7 @@ ExtData_VoiceParam_DispatchBytecode:
 ; v10 does not spell this byte either
 ; (pre-port v7 note about the bytes at 0xFC6D91:)
 ; v10 does not spell this byte either
-	lda_24	xix, (0xfc6d9d)
+	lda	xix, (0xfc6d9d:24)
 ; (pre-port v7 note about the bytes at 0xFC6D94:)
 ; differs from v10 here and llvm-objdump cannot read it
 	jp_rr	8, xix, wa
@@ -3156,7 +3156,7 @@ ExtData_VoiceParam_DispatchBytecode:
 ; (pre-port v7 note about the bytes at 0xFC6DB1:)
 ; v10 does not spell this byte either
 	setm	7, (xde)
-	cpdi8	(0x26fc), 1
+	cp	(0x26fc:16), 1
 	jr	nz, SndParamF9A541_ResBit7_Code_Epilogue
 ; (pre-port v7 note about the bytes at 0xFC6DB8:)
 ; v10 does not spell this byte either
@@ -3212,7 +3212,7 @@ SndParamF9A541_ResBit7_Code_Epilogue:
 	lda_d16	xwa, (0x8e7c)
 ; (pre-port v7 note about the bytes at 0xFC6DDF:)
 ; differs from v10 here and llvm-objdump cannot read it
-	cpdi8	(0x32f4), 0
+	cp	(0x32f4:16), 0
 	jr	z, ExtData_VoiceParam_DispatchBytecode_Entry
 ; (pre-port v7 note about the bytes at 0xFC6DE6:)
 ; v10 does not spell this byte either
@@ -6861,11 +6861,11 @@ UIState_RenderBitmapData:
 	add	xwa, xde
 	ld	(xwa), c
 UIState_RenderBitmapData_Skip:
-	cpdi8	(0xbfe1), 12
+	cp	(0xbfe1:16), 12
 	jr	nz, UIState_RenderBitmapData_Skip2
-	bitda	4, (0xbfe3)
+	bit	4, (0xbfe3:16)
 	jr	z, UIState_RenderBitmapData_Skip2
-	bitda	4, (0xbfe2)
+	bit	4, (0xbfe2:16)
 	jr	nz, UIState_RenderBitmapData_Skip2
 	ldb_d8	a, (0xbfe4)
 	extz	wa
@@ -6874,11 +6874,11 @@ UIState_RenderBitmapData_Skip:
 	ld	de, 0:i3
 	call	UIState_CheckAndRenderBitmap_Helper
 UIState_RenderBitmapData_Skip2:
-	cpdi8	(0xbfe1), 4
+	cp	(0xbfe1:16), 4
 	ret	nz
-	bitda	5, (0xbfe3)
+	bit	5, (0xbfe3:16)
 	ret	z
-	bitda	5, (0xbfe2)
+	bit	5, (0xbfe2:16)
 	ret	nz
 	ldb_d8	a, (0xbfe4)
 	extz	wa
@@ -7328,18 +7328,18 @@ BankFlush_CheckChannel1:
 	calr	SwbtWr_FlushAndAppendParams
 	ret
 UIWidget_MidiStreamControl:
-	cpdi8	(0xbfe1), 0
+	cp	(0xbfe1:16), 0
 	ret	nz
 	ldb_d8	a, (0xbfe3)
 	and	a, 3
-	call_24	nz, (0xfc92a1)
-	bitda	2, (0xbfe3)
+	call	nz, (0xfc92a1:24)
+	bit	2, (0xbfe3:16)
 	ret	z
-	bitda	2, (0xbfe2)
+	bit	2, (0xbfe2:16)
 	ret	nz
-	setda	4, (0x905d)
+	set	4, (0x905d:16)
 	call	SeqTimer_UpdateTempoReg
-	resda	4, (0x905d)
+	res	4, (0x905d:16)
 	ret
 	ld	wa, 0:i3
 	lda_d16	xbc, (0x9336)
@@ -8577,7 +8577,7 @@ MidiStream_CmdPedalNotify_Helper2:
 	pop	xbc
 	pop	xwa
 	ret
-	stda16	(0x90d3), hl
+	ld	(0x90d3:16), hl
 ;
 	push	xwa
 	push	xbc
@@ -9104,7 +9104,7 @@ TempoCC_TransmitBytecodeBlock:
 	ld	(xix+), wa
 	ldw_d16	wa, (0x9121)
 	ld	(xix+), wa
-	ldda32	xiy, (0x9056)
+	ld	xiy, (0x9056:16)
 	extz	wa
 	sll	wa, 2
 	ld_rrl	xiy, xiy, wa
@@ -9112,18 +9112,18 @@ TempoCC_TransmitBytecodeBlock:
 	bit	7, a
 	jr	z, TempoCC_TransmitBytecodeBlock_Skip
 	res	7, a
-	setda	0, (0x9111)
+	set	0, (0x9111:16)
 TempoCC_TransmitBytecodeBlock_Skip:
 	bit	7, w
 	jr	z, TempoCC_TransmitBytecodeBlock_Skip2
 	res	7, w
-	setda	1, (0x9111)
+	set	1, (0x9111:16)
 TempoCC_TransmitBytecodeBlock_Skip2:
 	ld	(xix+), wa
 	ldb_d8	a, (0x912b)
 	ld	w, 255:opc
 	ld	(xix+), wa
-	stdi8	(0x912e), 7
+	ld	(0x912e:16), 7
 	calr	TempoRingBuf_ProcessEntry
 	ret
 MIDI_EmitRecord_B0:
@@ -9135,25 +9135,25 @@ MIDI_EmitRecord_B0:
 	bit	7, a
 	jr	z, MIDI_EmitRecord_B0_Skip
 	res	7, a
-	setda	2, (0x9111)
+	set	2, (0x9111:16)
 MIDI_EmitRecord_B0_Skip:
 	ld	(xix+), wa
 	ldw_d16	wa, (0x9123)
 	bit	7, a
 	jr	z, MIDI_EmitRecord_B0_Skip2
 	res	7, a
-	setda	0, (0x9111)
+	set	0, (0x9111:16)
 MIDI_EmitRecord_B0_Skip2:
 	bit	7, w
 	jr	z, MIDI_EmitRecord_B0_Skip3
 	res	7, w
-	setda	1, (0x9111)
+	set	1, (0x9111:16)
 MIDI_EmitRecord_B0_Skip3:
 	ld	(xix+), wa
 	ldb_d8	a, (0x912b)
 	ld	w, 255:opc
 	ld	(xix+), wa
-	stdi8	(0x912e), 7
+	ld	(0x912e:16), 7
 	calr	TempoRingBuf_ProcessEntry
 	ret
 MIDI_EmitRecord_D2:
@@ -9167,7 +9167,7 @@ MIDI_EmitRecord_D2:
 	ldb_d8	a, (0x912b)
 	ld	w, 255:opc
 	ld	(xix+), wa
-	stdi8	(0x912e), 37
+	ld	(0x912e:16), 37
 	calr	TempoRingBuf_ProcessEntry
 	ret
 MIDI_EmitRecord_D1:
@@ -9179,7 +9179,7 @@ MIDI_EmitRecord_D1:
 	ldb_d8	w, (0x912b)
 	ld	(xix+), wa
 	ld	(xix), 255
-	stdi8	(0x912e), 20
+	ld	(0x912e:16), 20
 	calr	TempoRingBuf_ProcessEntry
 	ret
 MIDI_EmitRecord_D3:
@@ -9191,11 +9191,11 @@ MIDI_EmitRecord_D3:
 	ldb_d8	w, (0x912b)
 	ld	(xix+), wa
 	ld	(xix), 255
-	stdi8	(0x912e), 4
+	ld	(0x912e:16), 4
 	calr	TempoRingBuf_ProcessEntry
 	ret
 MIDI_EmitRecord_D0:
-	bitda_24	0, (0xffc2)
+	bit	0, (0xffc2:24)
 	jr	z, MIDI_EmitRecord_D0_Return
 	ld	xix, 0x9111
 	ld	a, 208:opc
@@ -9205,7 +9205,7 @@ MIDI_EmitRecord_D0:
 	ldb_d8	w, (0x912b)
 	ld	(xix+), wa
 	ld	(xix), 255
-	stdi8	(0x912e), 4
+	ld	(0x912e:16), 4
 	calr	TempoRingBuf_ProcessEntry
 MIDI_EmitRecord_D0_Return:
 	ret
@@ -9224,7 +9224,7 @@ MIDI_EmitRecord_80_Skip:
 	res	7, a
 	ld	(xix+), wa
 	ld	(xix), 255
-	stdi8	(0x912e), 4
+	ld	(0x912e:16), 4
 	calr	TempoRingBuf_ProcessEntry
 	ret
 MIDI_TransmitTempoCC:
@@ -9836,7 +9836,7 @@ VoiceMode3_EvType6:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 0xffffffff
 	jr	z, VoiceMode3_DispatchTable_Code_Return2
@@ -9849,12 +9849,12 @@ VoiceMode3_EvType6:
 	and	e, d
 	or	e, a
 	st_rrb	e, xix, hl
-	stda16	(0x908b), bc
-	stda16	(0x908d), de
+	ld	(0x908b:16), bc
+	ld	(0x908d:16), de
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-	cpdi16	(0x911b), 0x398
+	cpw	(0x911b:16), 0x398
 	jr	nz, VoiceMode3_DispatchTable_Code_Skip4
-	setda	3, (0x8cb6)
+	set	3, (0x8cb6:16)
 VoiceMode3_DispatchTable_Code_Skip4:
 	extz	hl
 	ldb_d8	l, (0x912c)
@@ -9899,9 +9899,9 @@ MidiPartCC_WriteAndDispatch:
 	ld	xix, VoiceMode_ParamConfigTables_0x24
 	ld_rrb	c, xix, hl
 	ld	b, 3:opc
-	stda16	(0x90bf), bc
+	ld	(0x90bf:16), bc
 	ld	d, 127:opc
-	stda16	(0x90c1), de
+	ld	(0x90c1:16), de
 MidiPartCC_WriteAndDispatch_Skip:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiPartCC_CheckAndGuard
@@ -9929,14 +9929,14 @@ MIDI_PartCC_DispatchExit:
 	ret
 MidiVoice_DataBlockHandler:
 	ld	xiy, 0x911b
-	stdi8	(0x9048), 0
+	ld	(0x9048:16), 0
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiVoice_DataBlockHandler_Skip
-	ordi8	(0x9048), 32
+	or	(0x9048:16), 32
 	ld	wa, (xiy)
-	stda16	(0x908b), wa
+	ld	(0x908b:16), wa
 	ld	wa, (xiy+0x2)
-	stda16	(0x908d), wa
+	ld	(0x908d:16), wa
 MidiVoice_DataBlockHandler_Skip:
 	extz	hl
 	ldb_d8	l, (0x912c)
@@ -9944,14 +9944,14 @@ MidiVoice_DataBlockHandler_Skip:
 	ld_rrb	a, xix, hl
 	cp	a, 16
 	jr	z, MidiVoice_DataBlockHandler_Skip4
-	bitda	4, (0xfd50)
+	bit	4, (0xfd50:16)
 	jr	nz, MidiVoice_DataBlockHandler_Skip4
 	or	(0x9048:16), a
-	ordi8	(0x9048), 192
+	or	(0x9048:16), 192
 	ld	wa, (xiy)
-	stda16	(0x908b), wa
+	ld	(0x908b:16), wa
 	ld	wa, (xiy+0x2)
-	stda16	(0x908d), wa
+	ld	(0x908d:16), wa
 MidiVoice_DataBlockHandler_Skip4:
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ret
@@ -9989,9 +9989,9 @@ VoiceMode3_EvType3:
 	ld	a, 0:opc
 	stb_d8	(0x95a8), a
 	ldw_d16	wa, (0x911b)
-	stda16	(0x95a8), wa
+	ld	(0x95a8:16), wa
 	ldw	wa, 0x7f00
-	stda16	(0x95aa), wa
+	ld	(0x95aa:16), wa
 	call	VoiceMode3_DispatchTable_Code_Helper
 	ldb_d8	a, (0x911a)
 	stb_d8	(0x905c), a
@@ -10013,9 +10013,9 @@ VoiceMode3_EvType4:
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, MidiVoice_DataBlockHandler_Skip3
 	ldw_d16	wa, (0x911b)
-	stda16	(0x908b), wa
+	ld	(0x908b:16), wa
 	ldw_d16	wa, (0x911d)
-	stda16	(0x908d), wa
+	ld	(0x908d:16), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 MidiVoice_DataBlockHandler_Skip3:
 	extz	hl
@@ -11379,7 +11379,7 @@ MidiStream_HandleChanPressure:
 	jr	z, MidiStream_HandleChanPressure_Skip
 ; (pre-port v7 note about the bytes at 0xFCC1B1:)
 ; llvm-mc cannot spell this byte
-	bitda	1, (0x905d)
+	bit	1, (0x905d:16)
 ; (pre-port v7 note about the bytes at 0xFCC1B5:)
 ; -> 0xFCC1BA
 	jr	z, MidiStream_HandleChanPressure_Skip
@@ -11393,7 +11393,7 @@ MidiStream_HandleChanPressure_Skip:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	ld	l, b
 	ld_rr8b	e, xix, l
@@ -11407,7 +11407,7 @@ MidiStream_HandleSysMsg:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	ld	l, b
 	ld_rr8b	e, xix, l
@@ -11439,7 +11439,7 @@ MidiStream_SysExJumpTable:
 MidiStream_SysExNop:
 	ret
 MidiStream_SysExData:
-	cpdi8	(0x8c98), 14
+	cp	(0x8c98:16), 14
 	jr	z, 18
 	and	d, 7
 	jr	z, MidiStream_SysExData_Return
@@ -11528,9 +11528,9 @@ MidiStream_CmdMaskedDone:
 	ret
 ; --- Routine 2: conditional E/D setup, dec E, call FCA1FE (36 bytes) ---
 MidiStream_CmdPedalNotify:
-	cpdi8	(0x8c98), 14
+	cp	(0x8c98:16), 14
 	jr	z, MidiStream_CmdPedalDone
-	bitda	3, (0xfd50)
+	bit	3, (0xfd50:16)
 	jr	z, MidiStream_CmdPedalDone
 	and	e, 127
 	jr	z, MidiStream_CmdPedalDone
@@ -11582,27 +11582,27 @@ MidiStream_PartSelectDone:
 ; v10 name for this address: MidiStream_ExtendedDispatch -- not a label here: v7 defines that name outside this span (= 0xFCC351)
 MidiStream_CmdPedalNotify_Helper3:
 	ret
-	cpdi8	(0x95a8), 20
+	cp	(0x95a8:16), 20
 	jr	nz, MidiStream_CmdPedalNotify_Skip
-	stdi8	(0x95a8), 72
+	ld	(0x95a8:16), 72
 	ld	c, 72:opc
 MidiStream_CmdPedalNotify_Skip:
-	cpdi8	(0x8c98), 14
+	cp	(0x8c98:16), 14
 	jr	z, MidiStream_CmdPedalNotify_Skip2
-	cpdi8	(0x8c98), 17
+	cp	(0x8c98:16), 17
 	jr	nz, MidiStream_CmdPedalNotify_Skip3
 MidiStream_CmdPedalNotify_Skip2:
 	cp	c, 72
 	jr	z, MidiStream_CmdPedalNotify_Return
 MidiStream_CmdPedalNotify_Skip3:
-	stdi8	(0x905c), 255
+	ld	(0x905c:16), 255
 	cp	c, 0:i3
 	jr	nz, MidiStream_CmdPedalNotify_Skip4
-	bitda	3, (0xfd50)
+	bit	3, (0xfd50:16)
 	jr	z, MidiStream_CmdPedalNotify_Skip4
-	cpdi8	(0x8c98), 14
+	cp	(0x8c98:16), 14
 	jr	z, MidiStream_CmdPedalNotify_Return
-	cpdi8	(0x8c98), 17
+	cp	(0x8c98:16), 17
 	jr	z, MidiStream_CmdPedalNotify_Return
 	cp	e, 80
 	jr	nc, MidiStream_CmdPedalNotify_Return
@@ -11646,7 +11646,7 @@ MidiStream_ExtDispatch_Mode0:
 	xor	h, h
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return
@@ -11695,7 +11695,7 @@ MidiStream_ExtDispatch_Mode1:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return2
@@ -11725,7 +11725,7 @@ MidiStream_ExtDispatch_Mode3:
 	extz	hl
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return3
@@ -11735,8 +11735,8 @@ MidiStream_ExtDispatch_Mode3:
 	sll	hl, 1
 	ld	xiy, 0x9336
 	ld_rrw	wa, xiy, hl
-	stda16	(0x904e), wa
-	stda16	(0x9050), de
+	ld	(0x904e:16), wa
+	ld	(0x9050:16), de
 	call	MidiStream_CmdPedalNotify_Helper2
 	ldw_d16	de, (0x9052)
 	ldb_d8	c, (0x95a8)
@@ -11750,15 +11750,15 @@ MidiStream_ExtendedDispatch_Helper:
 	pushw	hl
 	pushw	bc
 	pushw	de
-	setda	0, (0x905e)
+	set	0, (0x905e:16)
 	calr	MidiStream_ExtendedDispatch_Helper_Helper
-	bitda	1, (0x905e)
+	bit	1, (0x905e:16)
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue
 	stb_d8	(0x905b), c
 	xor	h, h
 	ld	l, c
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	ld	(xix), e
 	andmi8	(xix+0x1), 128
@@ -11769,17 +11769,17 @@ MidiStream_ExtendedDispatch_Helper:
 	call	MIDI_SetupChannelParams
 	ld	a, c
 	ld	w, 1:opc
-	stda16	(0x908b), wa
+	ld	(0x908b:16), wa
 	ld	a, b
 	ld	w, 127:opc
-	stda16	(0x908d), wa
+	ld	(0x908d:16), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ld	a, c
 	ld	w, 0:opc
-	stda16	(0x908b), wa
+	ld	(0x908b:16), wa
 	ld	a, e
 	ld	w, 255:opc
-	stda16	(0x908d), wa
+	ld	(0x908d:16), wa
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	cp	c, 72
 	jr	z, MidiStream_ExtendedDispatch_Epilogue
@@ -11797,10 +11797,10 @@ MidiStream_ExtendedDispatch_Helper_Helper:
 	pushw	hl
 	pushw	bc
 	pushw	de
-	anddi8	(0x905e), 253
-	bitda	0, (0x905e)
+	and	(0x905e:16), 253
+	bit	0, (0x905e:16)
 	jr	z, MidiStream_ExtendedDispatch_Helper_Skip2
-	anddi8	(0x905e), 254
+	and	(0x905e:16), 254
 	stb_d8	(0x905b), c
 	ld	l, e
 	ld	h, b
@@ -11846,7 +11846,7 @@ MidiStream_ExtendedDispatch_Helper_Join:
 	pop_a
 	jr	nz, MidiStream_ExtendedDispatch_Epilogue2
 MidiStream_ExtendedDispatch_Helper_Entry:
-	setda	1, (0x905e)
+	set	1, (0x905e:16)
 MidiStream_ExtendedDispatch_Epilogue2:
 	popw	de
 	popw	bc
@@ -11861,10 +11861,10 @@ MidiStream_ExtendedDispatch_Helper_Helper2:
 MidiStream_ExtendedDispatch_Helper_Skip3:
 	rcf
 	ret
-	cpdi8	(0x95a8), 72
+	cp	(0x95a8:16), 72
 	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip4
-	stdi8	(0x95a8), 20
-	cpdi8	(0x8c98), 14
+	ld	(0x95a8:16), 20
+	cp	(0x8c98:16), 14
 	jrl	z, MidiStream_ExtendedDispatch_Helper_Return
 MidiStream_ExtendedDispatch_Helper_Skip4:
 	ldw_d16	bc, (0x95a8)
@@ -11935,7 +11935,7 @@ MidiStream_ExtendedDispatch_Helper_Return:
 ; (pre-port v7 note about the bytes at 0xFCC699:)
 ; === v7-specific block: MidiStream_HandleRunningStatus (919 bytes) ===
 MidiStream_HandleRunningStatus:
-	bitda	3, (0xfd50)
+	bit	3, (0xfd50:16)
 	jr	z, MidiStream_HandleRunningStatus_Skip
 	cp	c, 0:i3
 	jr	z, MidiStream_HandleRunningStatus_Return
@@ -11984,7 +11984,7 @@ MidiStream_HandleRunningStatus_Skip3:
 	extz	hl
 	ldb_d8	l, (0x90bf)
 	sll	hl, 2
-	ldda32	xix, (0x9056)
+	ld	xix, (0x9056:16)
 	ld_rrl	xix, xix, hl
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_HandleRunningStatus_Return2
@@ -12286,7 +12286,7 @@ MidiStream_HandleRunningStatus_Skip6:
 	jr	nc, MidiStream_HandleRunningStatus_Skip8
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (0xee10ec)
+	lda	xde, (0xee10ec:24)
 	lda_rr	xhl, xde, bc
 	ld	bc, (xsp+0xc)
 	ld	de, (xsp+0xa)
@@ -12320,7 +12320,7 @@ MidiStream_HandleRunningStatus_Skip9:
 	jr	nc, MidiStream_HandleRunningStatus_Loop2
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (0xee1148)
+	lda	xde, (0xee1148:24)
 	lda_rr	xde, xde, bc
 	ld	bc, (xsp+0xc)
 	ld	xhl, (xde)
@@ -12404,7 +12404,7 @@ MidiStream_HandleRunningStatus_Skip11:
 	jr	nc, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (0xee1110)
+	lda	xbc, (0xee1110:24)
 	lda_rr	xhl, xbc, wa
 	ld	xwa, (xsp+0x6)
 	ld	bc, (xsp+0xc)

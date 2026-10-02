@@ -5027,7 +5027,7 @@ VoiceSynth_Algo_MultiPath:
 	ld	a, 209:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	sla	xiy, 1
 	push	xix
@@ -5041,13 +5041,13 @@ VoiceSynth_Algo_MultiPath:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiPath_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
@@ -5128,7 +5128,7 @@ VoiceSynth_Algo_MultiStage:
 	ld	a, 176:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceSynth_Algo_MultiStage_Return
 	sla	xiy, 1
 	push	xix
@@ -5142,7 +5142,7 @@ VoiceSynth_Algo_MultiStage:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	l, (4011:16)
 	and	l, 15
@@ -5151,7 +5151,7 @@ VoiceSynth_Algo_MultiStage:
 	push	xix
 	ld	xix, SeqTrack_ChannelMapIdentity
 	ld_rrb	a, xix, hl
-	cpdi8	(4600), 1
+	cp	(4600:16), 1
 	jr	z, VoiceSynth_Algo_MultiStage_Skip
 	ld	xix, SeqTrack_ChannelMapIdentity_0x10
 	ld_rrb a, xix, hl
@@ -5160,25 +5160,25 @@ VoiceSynth_Algo_MultiStage_Skip:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, 8:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_MultiStage_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
@@ -5194,7 +5194,7 @@ VoiceSynth_Algo_PitchModulated:
 	ld	a, 211:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	sla	xiy, 1
 	push	xix
@@ -5208,17 +5208,17 @@ VoiceSynth_Algo_PitchModulated:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	ld	a, (4013:16)
-	cpdi8	(4600), 2
+	cp	(4600:16), 2
 	jr	nz, VoiceSynth_Algo_PitchModulated_Skip
 	call	VoiceSynth_ConditionalUpdate_Helper
 VoiceSynth_Algo_PitchModulated_Skip:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_PitchModulated_Return
 	call	ToneGen_SetSustainBit
 	call	ToneGen_WriteChannelRegs
@@ -5246,7 +5246,7 @@ VoiceSynth_Algo_PitchShift:
 	or	a, w
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	sla	iy, 1
 	push	xix
@@ -5260,13 +5260,13 @@ VoiceSynth_Algo_PitchShift:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	push	xiy
 	ld	a, (4013:16)
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jr	nz, VoiceSynth_Algo_PitchShift_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
@@ -5313,14 +5313,14 @@ VoiceParam_ReadUpdate_6_Skip2:
 VoiceParam_ReadUpdate_6_Return:
 	ret
 VoiceParam_ReadUpdate_7:
-	bitda	0, (4236)
+	bit	0, (4236:16)
 	jr	nz, VoiceParam_ReadUpdate_7_Skip
 	call	VoiceChannel_SetRecordField3
 	ld	(4323:16), 0
 VoiceParam_ReadUpdate_7_Skip:
 	ld	(4233:16), 3
 	ld	a, (4013:16)
-	cpdi8	(4600), 2
+	cp	(4600:16), 2
 	jr	nz, VoiceParam_ReadUpdate_7_Skip2
 	call	VoiceSynth_ConditionalUpdate_Helper
 VoiceParam_ReadUpdate_7_Skip2:
@@ -5337,7 +5337,7 @@ VoiceParam_ReadUpdate_10:
 	ld	a, 176:opc
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	sla	iy, 1
 	push	xix
@@ -5351,32 +5351,32 @@ VoiceParam_ReadUpdate_10:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, (4011:16)
 	and	a, 15
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, 8:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, (4013:16)
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	ld	a, 127:opc
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_10_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams
@@ -5395,7 +5395,7 @@ VoiceParam_ReadUpdate_11:
 	or	a, w
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_11_Return
 	sla	xiy, 1
 	push	xix
@@ -5409,17 +5409,17 @@ VoiceParam_ReadUpdate_11:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_11_Return
 	ld	a, (4013:16)
-	cpdi8	(4600), 2
+	cp	(4600:16), 2
 	jr	nz, VoiceParam_ReadUpdate_11_Skip
 	call	VoiceSynth_ConditionalUpdate_Helper
 VoiceParam_ReadUpdate_11_Skip:
 	push	xiy
 	call	SoundGen_UpdateAndRefresh
 	pop	xiy
-	cpdi8	(4323), 0
+	cp	(4323:16), 0
 	jrl	nz, VoiceParam_ReadUpdate_11_Return
 	call	ToneGen_SetSustainBit
 	call	SoundGen_WriteVoiceParams

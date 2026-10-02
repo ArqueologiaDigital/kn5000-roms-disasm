@@ -5412,7 +5412,7 @@ Scoop_SoundEditorData_Helper:
 	ld	c, (xsp+2)
 	extz	bc
 	sla	bc, 2
-	lda_24	xde, (ToneGen_ParamTable_0x216)
+	lda	xde, (ToneGen_ParamTable_0x216:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -5898,9 +5898,9 @@ Scoop_SoundEditorData_Helper_Epilogue8:
 	cp	wa, 11
 	jr	gt, Scoop_SoundEditorData_Helper_Epilogue9
 	add	wa, wa
-	lda_24	xix, (ToneGen_ParamTable_0x2EE)
+	lda	xix, (ToneGen_ParamTable_0x2EE:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xf0dc61)
+	lda	xix, (0xf0dc61:24)
 	jp_rr	8, xix, wa
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
@@ -5960,9 +5960,9 @@ Scoop_SoundEditorData_Helper_Epilogue9:
 	cp	wa, 9
 	jr	gt, Scoop_SoundEditorData_Helper_Epilogue10
 	add	wa, wa
-	lda_24	xix, (ToneGen_ParamTable_0x306)
+	lda	xix, (ToneGen_ParamTable_0x306:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xf0dd0c)
+	lda	xix, (0xf0dd0c:24)
 	jp_rr	8, xix, wa
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
@@ -6013,9 +6013,9 @@ Scoop_SoundEditorData_Helper_Epilogue10:
 	cp	wa, 5:i3
 	jr	gt, Scoop_SoundEditorData_Helper_Epilogue11
 	add	wa, wa
-	lda_24	xix, (ToneGen_ParamTable_0x31A)
+	lda	xix, (ToneGen_ParamTable_0x31A:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xf0dd9d)
+	lda	xix, (0xf0dd9d:24)
 	jp_rr	8, xix, wa
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
@@ -7344,7 +7344,7 @@ SeMenu_ValueEditor_Redraw:
 SeMenu_ValueEditor_Complete:
 	cp	e, 18
 	jr	nz, SeMenu_ValueEditor_Data3
-	cpdi8	(0x8c9c), 32
+	cp	(0x8c9c:16), 32
 	jr	nz, SeMenu_ValueEditor_Data3
 	ld	a, (xbc)
 	cp	a, 32
@@ -7672,7 +7672,7 @@ SeGfx_BoundOp06:
 
 
 SeMenu_NameEditor_End:
-	cpdi8	(0xbfe1), 4
+	cp	(0xbfe1:16), 4
 	jr	nz, SeMenu_NameEditor_End_Return
 	ldb_d8	a, (0xbfe3)
 	and	a, 64
@@ -7680,7 +7680,7 @@ SeMenu_NameEditor_End:
 	ldb_d8	a, (0xbfe2)
 	and	a, 64
 	sla	a, 1
-	cpdi8	(0x8c9c), 33
+	cp	(0x8c9c:16), 33
 	jr	nz, SeMenu_NameEditor_End_Skip
 	ldb_d8	w, (0x66a)
 	and	w, 127
@@ -7689,13 +7689,13 @@ SeMenu_NameEditor_End:
 	call	SeMenu_NameEdit_CheckBit7
 	jr	SeMenu_NameEditor_End_Return
 SeMenu_NameEditor_End_Skip:
-	cpdi8	(0x8c9c), 58
+	cp	(0x8c9c:16), 58
 	jr	nz, SeMenu_NameEditor_End_Return
 	ldb_d8	w, (0x660)
 	and	w, 127
 	or	w, a
 	stb_d8	(0x660), w
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x4C6D
 	call	SeGfx_DrawBoundRecord
 SeMenu_NameEditor_End_Return:
@@ -7927,7 +7927,7 @@ SeMenu_ShowConfirmDialog:
 	sla HL, 0x02
 	ld_rrl	xiy, xiy, hl
 	call	(xiy)
-	ordi8	(0xe31c), 8
+	or	(0xe31c:16), 8
 	pop	xiy
 	pop	xix
 	pop	xhl
@@ -8075,7 +8075,7 @@ SeMenu_PresetManager_Data_Helper2_Skip:
 	pop	c
 SeMenu_PresetManager_Data_Helper2_Join:
 	djnz8	c, -84
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeBitmap_EnvCurve5_0x4A6
 	ld	xix, SeBitmap_EnvCurve5_0x4B0
 	call	SeGfx_DrawStaticList
@@ -8099,14 +8099,14 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	push	xix
 	push	xiy
 	ld	wa, (xiz+8)
-	stda16	(0x6cc), wa
+	ld	(0x6cc:16), wa
 	ld	wa, (xiz+10)
-	stda16	(0x6ce), wa
+	ld	(0x6ce:16), wa
 	ld	wa, (xiz+12)
-	stda16	(0x6d0), wa
+	ld	(0x6d0:16), wa
 	ld	wa, (xiz+14)
-	stda16	(0x6d2), wa
-	stib_da	(0x3efa8), 0
+	ld	(0x6d2:16), wa
+	ld	(0x3efa8:24), 0
 	call	SeGfx_StaticOp1B_FromBuf
 	pop	xiy
 	pop	xix
@@ -8223,12 +8223,12 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	add XIZ,0x00000004
 	ld (0x06cc:16), ix
 	add	(0x6cc:16), hl
-	stda16	(0x6d0), ix
+	ld	(0x6d0:16), ix
 	add	(0x6d0:16), de
-	stda16	(0x6ce), iy
-	adddi16	(0x6ce), 1
-	stda16	(0x6d2), iy
-	adddi16	(0x6d2), 7
+	ld	(0x6ce:16), iy
+	addw	(0x6ce:16), 1
+	ld	(0x6d2:16), iy
+	addw	(0x6d2:16), 7
 	push	c
 	push	xiz
 	pushw	ix
@@ -8242,12 +8242,12 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	jr	nz, .Lc_f0f2e0
 	ld	c, 6:opc
 	add	ix, 4
-	stda16	(0x6cc), ix
-	stda16	(0x6d0), ix
-	stda16	(0x6ce), iy
-	adddi16	(0x6ce), 1
-	stda16	(0x6d2), iy
-	adddi16	(0x6d2), 11
+	ld	(0x6cc:16), ix
+	ld	(0x6d0:16), ix
+	ld	(0x6ce:16), iy
+	addw	(0x6ce:16), 1
+	ld	(0x6d2:16), iy
+	addw	(0x6d2:16), 11
 	push	c
 	pushw	ix
 	pushw	iy
@@ -8275,21 +8275,21 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	pop_f
 	nop
 UpdSeSel_DetailedUpdate_Helper4_Helper_Sub:
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, 22
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0xD82
 	ld	xix, SeBitmap_EnvCurve5_0xD8C
 	call	SeGfx_DrawStaticList
 	jr	20
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0xD78
 	ld	xix, SeBitmap_EnvCurve5_0xD82
 	call	SeGfx_DrawStaticList
 	xor	xwa, xwa
 	ldb_d8	a, (0x65d)
 	sla	wa, 2
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip
 	ld	xiz, SeBitmap_EnvCurve5_0xEBC
 	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join
@@ -8299,10 +8299,10 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Join:
 	push	xwa
 	add	xiz, xwa
 	ld	wa, (xiz)
-	stda16	(0x6c6), wa
+	ld	(0x6c6:16), wa
 	ld	wa, (xiz+2)
-	stda16	(0x6c8), wa
-	cpdi8	(0x6ae), 1
+	ld	(0x6c8:16), wa
+	cp	(0x6ae:16), 1
 	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip2
 	ld	xiz, 1634
 	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join2
@@ -8314,7 +8314,7 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Join2:
 	add	xiz, xwa
 	call	SeMenu_ShowConfirmDialog_Data_0x4A9
 	pop	xwa
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip3
 	ld	xiz, SeBitmap_EnvCurve5_0xE9C
 	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join3
@@ -8334,25 +8334,25 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Join3:
 	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip4
 	ldw_d16	ix, (0x6c6)
 	ldw_d16	iy, (0x6c8)
-	stda16	(0x6cc), ix
-	adddi16	(0x6cc), 1
-	stda16	(0x6d0), ix
-	adddi16	(0x6d0), 37
-	stda16	(0x6ce), iy
-	adddi16	(0x6ce), 1
-	stda16	(0x6d2), iy
-	adddi16	(0x6d2), 37
+	ld	(0x6cc:16), ix
+	addw	(0x6cc:16), 1
+	ld	(0x6d0:16), ix
+	addw	(0x6d0:16), 37
+	ld	(0x6ce:16), iy
+	addw	(0x6ce:16), 1
+	ld	(0x6d2:16), iy
+	addw	(0x6d2:16), 37
 	call	SeGfx_StaticOp1B_FromBuf
 	ldw_d16	ix, (0x6c6)
 	ldw_d16	iy, (0x6c8)
-	stda16	(0x6cc), ix
-	adddi16	(0x6cc), 1
-	stda16	(0x6d0), ix
-	adddi16	(0x6d0), 38
-	stda16	(0x6ce), iy
-	adddi16	(0x6ce), 38
-	stda16	(0x6d2), iy
-	adddi16	(0x6d2), 1
+	ld	(0x6cc:16), ix
+	addw	(0x6cc:16), 1
+	ld	(0x6d0:16), ix
+	addw	(0x6d0:16), 38
+	ld	(0x6ce:16), iy
+	addw	(0x6ce:16), 38
+	ld	(0x6d2:16), iy
+	addw	(0x6d2:16), 1
 	call	SeGfx_StaticOp00_FromBuf
 	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Return
 UpdSeSel_DetailedUpdate_Helper4_Helper_Skip4:
@@ -8419,13 +8419,13 @@ SeMenu_WaveformSelect_Apply:
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_WaveformSelect_Data:
-	cpdi8	(0x6b8), 1
+	cp	(0x6b8:16), 1
 	jr	nz, SeMenu_WaveformSelect_Data_Skip
 	call	SeMenu_WaveformSelect_Apply
 	jr	SeMenu_WaveformSelect_Data_Return
 SeMenu_WaveformSelect_Data_Skip:
-	stib_da	(0x3efa8), 0
-	cpdi8	(0x6ae), 1
+	ld	(0x3efa8:24), 0
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip2
 	ld	xiy, SeBitmap_EnvCurve5_0x19A
 	ld	xix, SeBitmap_EnvCurve5_0x2BD
@@ -8441,11 +8441,11 @@ SeMenu_WaveformSelect_Data_Skip2:
 	ld	xix, Data_Dispatch_Entry_0x39
 	call	SeGfx_DrawBoundList
 	call	SeMenu_WaveformSelect_Data_0x99
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, FlashWrite_BlockRef_Type6_0x561
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeGfx_DrawStaticList
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 SeMenu_WaveformSelect_Data_Return:
 	ret
 	ld (0x03efa8:24), 0x00
@@ -8461,7 +8461,7 @@ SeMenu_WaveformSelect_Data_Return:
 	call SeGfx_DrawStaticList
 .Lc_f0f5a4:
 	ret
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	a, 13:opc
 SeMenu_WaveformSelect_Data_Loop:
 	push_a
@@ -8480,12 +8480,12 @@ SeMenu_WaveformSelect_Data_Loop:
 	cp	d, 0:i3
 	jr	z, SeMenu_WaveformSelect_Data_Return2
 	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 SeMenu_WaveformSelect_Data_Return2:
 	ret
 SeMenu_PresetManager_Init:
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_PresetManager_Init_Skip
 	call	SeMenu_WaveformSelect_Data_0x6D
 	jrl	SeMenu_PresetManager_Init_Code_Return
@@ -8549,8 +8549,8 @@ SeMenu_PresetManager_Init_Code_Skip2:
 SeMenu_PresetManager_Init_Code_Return:
 	ret
 SeMenu_PresetManager_Load:
-	stib_da	(0x3efa8), 0
-	cpdi8	(0x6ae), 1
+	ld	(0x3efa8:24), 0
+	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_PresetManager_End
 	ld	xiy, 0xf16145
 	ld	xix, 0xf1620f
@@ -9063,7 +9063,7 @@ SeMenu_Utility_CompareBlock:
 	ld	xiy, SeBitmap_EnvCurve5_0x1525
 	ld	xix, SeBitmap_EnvCurve5_0x1539
 	call	SeGfx_DrawStaticList
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_CompareBlock_Loop
 	call	SeMenu_Utility_CompareBlock_End
 SeMenu_Utility_CompareBlock_Loop:
@@ -9507,20 +9507,20 @@ Data_UnknownBlock:
 	jr	nc, Data_UnknownBlock_Skip4
 	jr	Data_UnknownBlock_Join
 Data_UnknownBlock_Skip:
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeScreenData_0x2964
 	ld	xix, SeScreenData_0x296E
 	call	SeGfx_DrawStaticList
 	call	Data_UnknownBlock_0x6E
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip2:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x28AA
 	ld	xix, SeScreenData_0x28C3
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Skip3:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x287D
 	ld	xix, SeScreenData_0x2896
 	call	SeGfx_DrawBoundList
@@ -9529,7 +9529,7 @@ Data_UnknownBlock_Skip4:
 	call	SeMenu_PresetBrowser_Data_0x98
 	jr	Data_UnknownBlock_Return
 Data_UnknownBlock_Join:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x290C
 	call	SeMenu_PatchEdit_Dispatch_Helper
 Data_UnknownBlock_Return:
@@ -9547,7 +9547,7 @@ Data_UnknownBlock_Return:
 	add XIX,0x00000014
 	call SeGfx_DrawStaticList
 	ret
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	nz, Data_UnknownBlock_Skip5
 	cp	a, 3:i3
 	jr	c, Data_UnknownBlock_Skip6
@@ -9564,22 +9564,22 @@ Data_UnknownBlock_Skip6:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Join4
 	call	SeMenu_ShowConfirmDialog_Data_0x408
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip7
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x10F
 	ld	xix, SeMenu_CompareScreen_DataTable_0x119
 	jr	Data_UnknownBlock_Join3
 Data_UnknownBlock_Skip7:
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, DrumDetailEdit_Menu_Table_0x2C6
 	ld	xix, DrumDetailEdit_Menu_Table_0x2D0
 Data_UnknownBlock_Join3:
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 Data_UnknownBlock_Join4:
-	stib_da	(0x3efa8), 0
-	cpdi8	(0x6ae), 1
+	ld	(0x3efa8:24), 0
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip8
 	ld	xiy, SeMenu_CompareScreen_DataTable_0xDB
 	jr	Data_UnknownBlock_Join5
@@ -9588,18 +9588,18 @@ Data_UnknownBlock_Skip8:
 Data_UnknownBlock_Join5:
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x179
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
-	cpdi8	(0x6ae), 1
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip9
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x1CF
 	jr	Data_UnknownBlock_Join6
 Data_UnknownBlock_Skip9:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip10
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, DrumDetailEdit_Menu_Table_0x32A
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	call	SeMenu_Utility_CopyBlock_Helper
@@ -9607,65 +9607,65 @@ Data_UnknownBlock_Skip9:
 Data_UnknownBlock_Skip10:
 	ld	xiy, DrumDetailEdit_Menu_Table_0x32A
 Data_UnknownBlock_Join6:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 Data_UnknownBlock_Return2:
 	ret
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x278
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip11
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x1DDA
 	ld	xix, SeBitmap_EnvCurve5_0x1DF8
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return3
 Data_UnknownBlock_Skip11:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x1DF8
 	call	SeMenu_PatchEdit_Dispatch_Helper
 Data_UnknownBlock_Return3:
 	ret
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip12
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x1DDA
 	ld	xix, SeBitmap_EnvCurve5_0x1DF8
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return4
 Data_UnknownBlock_Skip12:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x1DF8
 	call	SeMenu_PatchEdit_Dispatch_Helper
 Data_UnknownBlock_Return4:
 	ret
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x1E87
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x1E87
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeBitmap_EnvCurve5_0x1EE8
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip13
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x10
 	ld	xix, SeMenu_CompareScreen_DataTable_0x24
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 Data_UnknownBlock_Skip13:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeMenu_CompareScreen_DataTable_0x24
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x2B12
 	ld	xix, SeScreenData_0x2C0A
 	call	SeGfx_DrawStaticList
@@ -9727,14 +9727,14 @@ Data_UnknownBlock_Skip15:
 	sub	xiy, 4
 	call	SeGfx_StaticOp07_Text
 	ret
-	stib_da	(0x3efa8), 0
-	cpdi8	(0x6ae), 1
+	ld	(0x3efa8:24), 0
+	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip16
 	ld	xiy, SeScreenData_0x2C35
 	ld	xix, SeScreenData_0x2C57
 	call	SeGfx_DrawStaticList
 Data_UnknownBlock_Skip16:
-	stib_da	(0x3efa8), 0
+	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x2C57
 	ld	xix, SeScreenData_0x2E3A
 	call	SeGfx_DrawStaticList
@@ -9743,9 +9743,9 @@ Data_UnknownBlock_Skip16:
 	ld	xix, SeScreenData_0x2E3A
 	call	SeGfx_DrawStaticList
 Data_UnknownBlock_Join9:
-	cpdi8	(0x662), 16
+	cp	(0x662:16), 16
 	jr	z, Data_UnknownBlock_Skip17
-	cpdi8	(0x662), 2
+	cp	(0x662:16), 2
 	jr	z, Data_UnknownBlock_Skip18
 	ld	xiy, SeScreenData_0x2E44
 	ld	xix, SeScreenData_0x2E4E
@@ -9786,14 +9786,14 @@ Data_UnknownBlock_Return5:
 	cp	a, 2:i3
 	jr	z, Data_UnknownBlock_Skip23
 Data_UnknownBlock_Skip19:
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeScreenData_0x2EB6
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
-	stib_da	(0x3efa8), 0
-	cpdi8	(0x662), 13
+	ld	(0x3efa8:24), 0
+	cp	(0x662:16), 13
 	jr	z, Data_UnknownBlock_Skip20
-	cpdi8	(0x662), 2
+	cp	(0x662:16), 2
 	jr	z, Data_UnknownBlock_Skip21
 	ld	xiy, SeScreenData_0x2E58
 	ld	xix, SeScreenData_0x2E74
@@ -9810,7 +9810,7 @@ Data_UnknownBlock_Join10:
 	call	Data_UnknownBlock_0x46B
 	jr	Data_UnknownBlock_Return6
 Data_UnknownBlock_Skip22:
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeScreenData_0x2EAC
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
@@ -9819,14 +9819,14 @@ Data_UnknownBlock_Skip22:
 	call	Data_UnknownBlock_0x46B
 	jr	Data_UnknownBlock_Return6
 Data_UnknownBlock_Skip23:
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	xiy, SeScreenData_0x2EAC
 	ld	xix, SeScreenData_0x2EC0
 	call	SeGfx_DrawStaticList
-	stib_da	(0x3efa8), 0
-	cpdi8	(0x662), 13
+	ld	(0x3efa8:24), 0
+	cp	(0x662:16), 13
 	jr	z, Data_UnknownBlock_Skip24
-	cpdi8	(0x662), 2
+	cp	(0x662:16), 2
 	jr	z, Data_UnknownBlock_Skip25
 	ld	xiy, SeScreenData_0x2E58
 	ld	xix, SeScreenData_0x2E74
@@ -9853,17 +9853,17 @@ Data_UnknownBlock_Return6:
 	ld	l, w
 	sla	hl, 1
 	ld_rrw	ix, xiz, hl
-	stda16	(0x6cc), ix
+	ld	(0x6cc:16), ix
 	add	ix, 8
-	stda16	(0x6d0), ix
+	ld	(0x6d0:16), ix
 	ld	xiz, SeScreenData_0x2F60
 	xor	hl, hl
 	ld	l, a
 	sla	hl, 1
 	ld_rrw	ix, xiz, hl
-	stda16	(0x6ce), ix
+	ld	(0x6ce:16), ix
 	add	ix, 14
-	stda16	(0x6d2), ix
+	ld	(0x6d2:16), ix
 	call	SeGfx_StaticOp05_FromBuf
 	.byte 0x0e
 SeMenu_PresetInit_Main:
@@ -10156,8 +10156,8 @@ SeMenu_EqEdit_Dispatch:
 	jr	z, SeMenu_EqEdit_SetConstA
 	cp	a, 12
 	jr	nz, SeMenu_EqEdit_DefaultPath
-	stib_da	(0x3efa8), 0
-	cpdi8	(0x6ae), 1
+	ld	(0x3efa8:24), 0
+	cp	(0x6ae:16), 1
 	jr	z, SeMenu_EqEdit_DrawTable
 	ld	xiy, SeScreenData_0x3DD3
 	ld	xix, SeScreenData_0x3DF1
@@ -15505,9 +15505,9 @@ PsCmpCpFGrpBox_HandleEvt4:
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
-	cpdi8	(0x390b), 0
+	cp	(0x390b:16), 0
 	jr	nz, PsCmpCpFGrpBox_SetColorFF
-	cpdi8	(0x39e4), 0
+	cp	(0x39e4:16), 0
 	jr	nz, PsCmpCpFGrpBox_SetColorFF
 	ldw	(xbc), 0
 	ldw	(xwa), 255
@@ -15615,9 +15615,9 @@ PsCmpCpFVariBox_HandleEvt5:
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
-	cpdi8	(0x390b), 1
+	cp	(0x390b:16), 1
 	jr	nz, PsCmpCpFVariBox_SetColorFF
-	cpdi8	(0x39e4), 0
+	cp	(0x39e4:16), 0
 	jr	nz, PsCmpCpFVariBox_SetColorFF
 	ldw	(xbc), 0
 	ldw	(xwa), 255
@@ -15863,7 +15863,7 @@ PsCstmCpSwBox_HandleEvtBC:
 	cp	(xhl+36), 0
 	jr	nz, PsCstmCpSwBox_ReadParam2
 	ld	xwa, StrRhySlot_MemoryA_0x12
-	cpdi8	(0x391a), 10
+	cp	(0x391a:16), 10
 	jr	nc, PsCstmCpSwBox_PushTableAddr0
 	ld	xwa, StrRhySlot_MemoryA_0xA
 PsCstmCpSwBox_PushTableAddr0:
@@ -15930,7 +15930,7 @@ PsCstmCpNameBox_CallInherited:
 	jrl PsCtmAtt_ReturnZero
 
 PsCstmCpNameBox_HandleEvtD:
-	cpdi8	(0x39e2), 0
+	cp	(0x39e2:16), 0
 	jrl	nz, PsCtmAtt_ReturnZero
 	ld	xwa, xiz
 	ld	xde, (xsp+260)
@@ -18103,9 +18103,9 @@ MspRGrpSetBnkFunc:
 	push	qiz
 	cp	xbc, EVT_SW_IN
 	jr	nz, MspRGrpSetBnk_ReturnZero
-	cpdi8	(0x7ea1), 0
+	cp	(0x7ea1:16), 0
 	jr	nz, MspRGrpSetBnk_SetToZero
-	stdi8	(0x7ea1), 1
+	ld	(0x7ea1:16), 1
 	jr	MspRGrpSetBnk_UpdateLsw
 MspRGrpSetBnk_SetToZero:
 	ld	(32417:16), 0
@@ -18343,7 +18343,7 @@ MspRecBnkBox_HandleEvtBC:
 	ld	xwa, xiz
 	call	GetViewInstance
 	ld	xwa, 0x1e8a80
-	cpdi8	(0x7e78), 5
+	cp	(0x7e78:16), 5
 	jr	ule, MspRecBnkBox_CopyMemBlock
 	.byte 0x40, 0x90, 0x8a, 0x1e, 0x00
 MspRecBnkBox_CopyMemBlock:
@@ -19000,7 +19000,7 @@ SndArgTtlCheck:
 	call	GetTitleOld
 	cp	xhl, TITLE_MESAGE
 	jr	nz, ParamList_ReturnZero
-	cpdi8	(0x3303), 1
+	cp	(0x3303:16), 1
 	jr	nz, ParamList_ReturnZero
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_SET_NOT_DRAW_FLAG

@@ -676,13 +676,13 @@ Demo_SelectEntry_ByteTable:
 Demo_SelectEntry_ByteTable_Code_Entry:
 	res	3, (0x28ad:16)
 	cp	(35996:16), 228
-	call_24	nz, (0xf229c7)
+	call	nz, (0xf229c7:24)
 	calr	Demo_PreSetupAndScan
 	calr	Demo_WaitForDisplayBit
 	ldw	(154500:24), 1
 	ld	(36530:16), 4
 	cp	(35996:16), 228
-	call_24	nz, (0xf22a23)
+	call	nz, (0xf22a23:24)
 	ld	a, (10404:16)
 	extz	wa
 	jp	Seq_DispatchEventType6
@@ -8712,7 +8712,7 @@ FileIO_ErrorCodeByteBlock:
 	ret	z
 	cp	(49121:16), 65
 	ret	nz
-	bitda	0, (0xbfe3)
+	bit	0, (0xbfe3:16)
 	ret	z
 	ld	c, (35994:16)
 	cp	c, 16
@@ -8720,7 +8720,7 @@ FileIO_ErrorCodeByteBlock:
 	cp	c, 22
 	ret	ule
 FileIO_ErrorCodeByteBlock_Entry:
-	bitda	0, (0xbfe2)
+	bit	0, (0xbfe2:16)
 	jr	z, FileIO_ErrorCodeByteBlock_Skip5
 	cp	(35992:16), 6
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip
@@ -8758,9 +8758,9 @@ FileIO_ErrorCodeByteBlock_Skip5:
 	ld	a, (213234:24)
 	cp	(35992:16), 1
 	jr	nz, FileIO_ErrorCodeByteBlock_Skip7
-	bitda	2, (0x420)
+	bit	2, (0x420:16)
 	ret	nz
-	bitda	2, (0x41f)
+	bit	2, (0x41f:16)
 	ret	nz
 	ld	c, a
 	cp	a, 0:i3

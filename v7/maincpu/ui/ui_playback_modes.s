@@ -20,7 +20,7 @@ UIStateEvt_VoiceParamHandler_Join:
 	ld	w, (49123:16)
 	cp	w, 255
 	jr	nz, UIStateEvt_VoiceParamHandler_Skip2
-	anddi8 (4330), 254
+	and (4330:16), 254
 	jrl	UIStateEvt_VoiceParamHandler_Return
 UIStateEvt_VoiceParamHandler_Skip2:
 	bit	2, w
@@ -45,9 +45,9 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	ordi8 (10419), 16
+	or (10419:16), 16
 	ldw	(61854:16), 0
-	anddi8 (10405), 254
+	and (10405:16), 254
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
 	jr	UIStateEvt_VoiceParamHandler_Return
@@ -61,7 +61,7 @@ UIStateEvt_VoiceParamHandler_Skip4:
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
-	ordi8 (10419), 16
+	or (10419:16), 16
 	ldw	(61854:16), 0
 	ld	(4596:16), 0
 	call	SeqPlay_CheckStartConditions
@@ -104,8 +104,8 @@ UIStateEvt_VoiceParamHandler_Join2:
 	inc	1, a
 	ld	w, a
 	ld	(3414:16), w
-	ordi8 (3412), 1
-	ordi8 (10363), 4
+	or (3412:16), 1
+	or (10363:16), 4
 	jr	UIStateEvt_VoiceParamHandler_Return2
 UIStateEvt_VoiceParamHandler_Entry2:
 	.byte 0xc1, 0x54, 0x0d, 0x3c, 0xfe, 0xc1, 0x7b, 0x28, 0x3c, 0xfb
@@ -349,13 +349,13 @@ DispatchHandler_ClearActiveFlag:
 PlayMode_InitFlagBlock:
 	call	PlayMode_InitFlagBlock_0x5
 	ret
-	cpdi8 (3380), 0
+	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
 	call	PlayMode_InitFlagBlock_0x16
 PlayMode_InitFlagBlock_Return:
 	ret
-	ordi8 (10412), 4
+	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
 
@@ -508,13 +508,13 @@ SongMode_InitFlagBlock:
 	ret
 	call	SongMode_InitFlagBlock_0x7
 	ret
-	cpdi8 (3380), 0
+	cp (3380:16), 0
 	jr	nz, Medley_GetPlaybackStatus_Return
 	ld	(3380:16), 1
 	call	SongMode_InitFlagBlock_0x18
 Medley_GetPlaybackStatus_Return:
 	ret
-	ordi8 (10412), 4
+	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
@@ -659,13 +659,13 @@ PartFormat_InitFlagBlock:
 	ret
 	call	PartFormat_InitFlagBlock_0xA
 	ret
-	cpdi8 (3380), 0
+	cp (3380:16), 0
 	jr	nz, SongMode_VoiceStateDisp_Return
 	ld	(3380:16), 1
 	call	PartFormat_InitFlagBlock_0x1B
 SongMode_VoiceStateDisp_Return:
 	ret
-	ordi8 (10412), 4
+	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
 	ld	(3380:16), 0
@@ -1173,16 +1173,16 @@ SQTR_DISPATCH_TABLE_2_CASE1:
 	pop xix
 	pop xhl
 	pop xde
-	resda 0, (36544)
+	res 0, (36544:16)
 	ldw wa, 96
 	call CtrlPanel_SetIndicatorBit
 	jr CDlikeSwTtl_ReturnZero2
 SQTR_DISPATCH_TABLE_2_CASE2:
-	cpdi8 (35994), 139
+	cp (35994:16), 139
 	jr nz, CDlikeSwTtl_ReturnZero2
-	cpdi8 (32422), 35
+	cp (32422:16), 35
 	scc z, bc
-	cpdi8 (35997), 238
+	cp (35997:16), 238
 	scc z, wa
 	and wa, bc
 	jr z, SQTR_DISPATCH_TABLE_2_CASE5
@@ -1636,9 +1636,9 @@ DisplayMode_DispatchEvents:
 	cp wa, 6:i3
 	ret gt
 	add wa, wa
-	lda_24 xix, (SepaOut_Config_0_0xCE)
+	lda xix, (SepaOut_Config_0_0xCE:24)
 	ld_rrw wa, xix, wa
-	lda_24 xix, (DisplayMode_BatchEventSend)
+	lda xix, (DisplayMode_BatchEventSend:24)
 	jp_rr 8, xix, wa
 DisplayMode_BatchEventSend:
 	ld	xwa, 0x6f000a
@@ -1900,10 +1900,10 @@ DpMdlySmfTtlFunc:
 	jp_ind 8, 0x07, 0xf0, 0xe8
 ; DpMdlySmfTtlFunc title dispatch
 DpMdlySmfTtl_Dispatch:
-	cpdi8 (35995), 118
+	cp (35995:16), 118
 	jr z, DpMdlySmfTtlFunc_Skip
-	stib_da (135304), 0
-	stiw_da (135302), 0
+	ld (135304:24), 0
+	ldw (135302:24), 0
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 DpMdlySmfTtlFunc_Skip:
@@ -2372,7 +2372,7 @@ CDlikeSwTtl_ShowSongTitle:
 	call	CDlikeSwTtl_ShowSongTitle_Helper2
 	ld	wa, hl
 	cp	wa, 0:i3
-	jp_24 nz, (SongMode_VoiceStateDisp)
+	jp nz, (SongMode_VoiceStateDisp:24)
 	calr	SeqRecPlay_EnableRecordOnly
 	ld	(4437:16), 0
 	ret
@@ -2395,9 +2395,9 @@ CDlikeSwTtl_ShowDocTitle:
 	call CDlikeSwTtl_ShowSongTitle_Helper2
 	ld wa, hl
 	cp wa, 0:i3
-	jp_24 nz, (SongMode_VoiceStateDisp)
+	jp nz, (SongMode_VoiceStateDisp:24)
 	calr 4452
-	stdi8 (4437), 0
+	ld (4437:16), 0
 	ret
 CDlikeSwTtl_ShowPdTitle:
 	call CDlikeSwTtl_ShowSongTitle_Helper
@@ -2418,9 +2418,9 @@ CDlikeSwTtl_ShowPdTitle:
 	call CDlikeSwTtl_ShowSongTitle_Helper2
 	ld wa, hl
 	cp wa, 0:i3
-	jp_24 nz, (SongMode_VoiceStateDisp)
+	jp nz, (SongMode_VoiceStateDisp:24)
 	calr 4384
-	stdi8 (4437), 0
+	ld (4437:16), 0
 	ret
 CDlikeSwTtl_SongBit1Check:
 	call	16693163
@@ -3018,7 +3018,7 @@ DpSmfTtlFunc:
 ; DpSmfTtlFunc title dispatch
 DpSmfTtl_Dispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 16 of 21 slots byte-identical
-	cpdi8 (35995), 114	; differs from v10 here and llvm-objdump cannot read it
+	cp (35995:16), 114	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, 255
 	ld	(135304:24), 0
 	ldw	(135302:24), 0
@@ -3026,7 +3026,7 @@ DpSmfTtl_Dispatch:
 	calr	61829
 	calr	63632
 	jrl	230
-	cpdi8 (35994), 114	; differs from v10 here and llvm-objdump cannot read it
+	cp (35994:16), 114	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, 222
 	call	16693163
 	bit	0, hl

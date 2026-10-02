@@ -11224,7 +11224,7 @@ IvSoftverProc:
 Softver_ShowHide:
 	ld	xwa, xiz
 	call	InheritedProc
-	pushdi_24	(0xeb7930)
+	pushw	(0xeb7930:24)
 	pushw	233
 	pushw	56894
 	lda	xwa, (xsp+10)
@@ -12366,8 +12366,8 @@ AudioCtrl_PageHandler:
 	ld XWA,(XSP+0x52)
 	cp XWA,0x0000008f
 	jrl	nz, AudioCtrl_CheckEventF
-	incdi16_24	8, (0x024790)
-	incdi16_24	1, (0x024794)
+	incw	8, (0x024790:24)
+	incw	1, (0x024794:24)
 	ld	wa, (0x024790:24)
 	calr	PsMixer_ReadWordArrayEntry
 	ld	qiz, hl

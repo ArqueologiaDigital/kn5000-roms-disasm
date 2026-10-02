@@ -1778,9 +1778,9 @@ EffectMode_ResetDiagMode:
 	calr	EffectMode_RestoreSwbWr_NormalMode
 EffectMode_DispatchUpdate:
 	cp	(0x8c9a:16), 0xf8
-	call_24	z, (EffectMode_HandleTimerEvents)
+	call	z, (EffectMode_HandleTimerEvents:24)
 	cp	(0x8c9a:16), 0xf7
-	call_24	z, (EffectMode_ModeChangeTransition)
+	call	z, (EffectMode_ModeChangeTransition:24)
 	cp	(0x8c9a:16), 0xfb
 	ret	nz
 	calr	EffectMode_RunDiagSequence
@@ -10019,7 +10019,7 @@ NormScreenProc:
 NormScreen_InitHandler:
 	ld	xwa, xiz
 	call	GetViewInstance
-	cpib_da	(0x0340e6), 0
+	cp	(0x0340e6:24), 0
 	jr	z, NormScreen_ClearBit
 	ld	a, (36076:16)
 	extz	wa

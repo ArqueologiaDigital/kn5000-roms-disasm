@@ -71,7 +71,7 @@ BitMapOut_ByteData_RenderA:
 	call	GetTitleNow
 	cp	xhl, TITLE_TEST3
 	ret	z
-	cpdi8 (49277), 0
+	cp (49277:16), 0
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -123,7 +123,7 @@ BitMapOut_ByteData_RenderB:
 	ld	a, (0xc080:16)
 	cp a, (36154:16)
 	jrl nz, BitMapOut_ByteData_RenderB_Epilogue
-	cpdi8 (49277), 0
+	cp (49277:16), 0
 	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -179,9 +179,9 @@ BitMapOut_ByteData_RenderD:
 	call	GetTitleNow
 	cp	xhl, TITLE_SVARI
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
-	cpdi8 (49280), 144
+	cp (49280:16), 144
 	jr nz, BitMapOut_ByteData_RenderD_Epilogue
-	cpdi8 (49277), 16
+	cp (49277:16), 16
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	ld	a, (0x8d3a:16)
 	extz	wa
@@ -220,7 +220,7 @@ BitMapOut_ByteData_RenderD_Epilogue:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	cpdi8 (49277), 0
+	cp (49277:16), 0
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -239,9 +239,9 @@ BitMapOut_ByteData_RenderE:
 	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
 	ret	z
-	cpdi8 (49277), 0
+	cp (49277:16), 0
 	ret	nz
-	cpdi8 (49280), 72
+	cp (49280:16), 72
 	ret	nz
 	calr	BitMapOut_ByteData_DiskCheck
 	cp	l, 0:i3
@@ -303,9 +303,9 @@ BitMapOut_ByteData_TransitionSeq:
 	call	GetTitleNow
 	cp	xhl, TITLE_NORMAL
 	ret	nz
-	cpdi8 (49280), 152
+	cp (49280:16), 152
 	ret nz
-	cpdi8 (49277), 11
+	cp (49277:16), 11
 	ret nz
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)
@@ -314,7 +314,7 @@ BitMapOut_ByteData_TransitionSeq:
 	jr	z, BitMapOut_ByteData_TransitionSeq_Skip
 	cp	a, 128
 	jr	nz, BitMapOut_ByteData_TransitionSeq_Skip2
-	resda 0, (36700)
+	res 0, (36700:16)
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0xffffffff
@@ -322,7 +322,7 @@ BitMapOut_ByteData_TransitionSeq:
 	ld	xde, 5:i3
 	jr	BitMapOut_ByteData_TransitionSeq_Join
 BitMapOut_ByteData_TransitionSeq_Skip:
-	resda 0, (36700)
+	res 0, (36700:16)
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 0xffffffff
@@ -330,7 +330,7 @@ BitMapOut_ByteData_TransitionSeq_Skip:
 	ld	xde, 6:i3
 	jr	BitMapOut_ByteData_TransitionSeq_Join
 BitMapOut_ByteData_TransitionSeq_Skip2:
-	setda 0, (36700)
+	set 0, (36700:16)
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 192
@@ -350,11 +350,11 @@ BitMapOut_ByteData_TransitionSeq_Join:
 	ret
 BitMapOut_ByteData_PresetCopy:
 	push qiz
-	cpdi8 (36148), 14
+	cp (36148:16), 14
 	jr	z, BitMapOut_ByteData_PresetCopy_Skip
-	bitda 3, (36166)
+	bit 3, (36166:16)
 	jr nz, BitMapOut_ByteData_PresetCopy_Skip
-	cpdi8 (49277), 1
+	cp (49277:16), 1
 	jr	nz, BitMapOut_ByteData_PresetCopy_Skip
 	calr	BitMapOut_GetRenderMode
 	bit	1, l
@@ -384,7 +384,7 @@ BitMapOut_ByteData_PresetCopy_Code_Skip:
 	ldw	wa, 130
 	calr	BitMapOut_GetRenderMode_Return
 BitMapOut_ByteData_PresetCopy_Skip:
-	resda 3, (36166)
+	res 3, (36166:16)
 	pop qiz
 	ret
 
@@ -3598,7 +3598,7 @@ BitMapOut_GetRenderMode_Return:
 
 BitMapOut_ByteData_RenderState:
 	push	xiz
-	cpdi8 (49277), 4
+	cp (49277:16), 4
 	jrl	nz, BitMapOut_ByteData_RenderState_Epilogue
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)
@@ -3806,7 +3806,7 @@ BitMapOut_UpdateWidget_Done:
 	call	GetTitleNow
 	cp	xhl, TITLE_PMNAME
 	jr	z, BitMapOut_UpdateWidget_Done_Skip
-	cpdi8 (49277), 5
+	cp (49277:16), 5
 	ret	nz
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)
@@ -3821,7 +3821,7 @@ BitMapOut_UpdateWidget_Done:
 	ld	xde, 1:i3
 	jr	BitMapOut_UpdateWidget_Done_Join
 BitMapOut_UpdateWidget_Done_Skip:
-	cpdi8 (49277), 5
+	cp (49277:16), 5
 	ret	nz
 	ld	a, (0xc07e:16)
 	and	a, (0xc07f:16)

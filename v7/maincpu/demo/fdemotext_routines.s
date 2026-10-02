@@ -59,7 +59,7 @@ FDemoText_ByteData_VoiceProbeB:
 	res	7, a
 	cp	a, 0:i3
 	ret	z
-	setda_24	6, (0x247ee)
+	set	6, (0x247ee:24)
 	ret
 FDemoText_ByteData_VoiceProbeC:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 31 of 44 slots byte-identical
@@ -75,9 +75,9 @@ FDemoText_ByteData_VoiceProbeC:
 	add	wa, wa
 	lda	xix, (DemoDiskPrompt_English1_0x96:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xf84397)
+	lda	xix, (0xf84397:24)
 	jp_rr	8, xix, wa
-	setda_24	6, (0x247ec)
+	set	6, (0x247ec:24)
 	ret
 	ld	xwa, DemoDiskPrompt_English1_0x8E
 ; differs from v10 here and llvm-objdump cannot read it
@@ -2101,7 +2101,7 @@ FDemoText_TextDispatch_Skip15:
 	cp	de, 1:i3
 	jr	z, FDemoText_TextDispatch_Skip16
 	cp	de, 0:i3
-	call_24	z, (0xf85ac6)
+	call	z, (0xf85ac6:24)
 FDemoText_TextDispatch_Skip16:
 	ld	hl, 0:i3
 	ret
@@ -2150,9 +2150,9 @@ FDemoText_TextDispatch_Skip19:
 	lda	xbc, (0x025b40:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+0x4), xwa
-	ldw_da	wa, (0x25b60)
+	ld	wa, (0x25b60:24)
 	sla	wa, 1
-	lda_24	xbc, (0x25b62)
+	lda	xbc, (0x25b62:24)
 	ld_rrw	wa, xbc, wa
 	ld	(xsp+0x8), wa
 	ld	iz, 0:i3
@@ -2231,7 +2231,7 @@ FDemoText_TextDispatch_Skip21:
 	lda	xde, (0x025b40:24)
 	ld	xwa, (xsp+4)
 	st_rrl	xwa, xde, bc
-	ldw_da	bc, (0x25b60)
+	ld	bc, (0x25b60:24)
 	sla	bc, 1
 	lda	xde, (0x025b62:24)
 	ld	wa, (xsp+8)
@@ -2259,9 +2259,9 @@ FDemoText_TextDispatch_Skip23:
 	lda	xde, (0x025b40:24)
 	ld	xwa, 5:i3
 	st_rrl	xwa, xde, bc
-	ldw_da	wa, (0x25b60)
+	ld	wa, (0x25b60:24)
 	sla	wa, 1
-	lda_24	xbc, (0x25b62)
+	lda	xbc, (0x25b62:24)
 	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x02, 0xff, 0x00
 FDemoText_TextDispatch_Skip9:
 	ld	hl, 0:i3
@@ -2350,7 +2350,7 @@ FDemoText_TextDispatch_Skip25:
 FDemoText_TextDispatch_Skip28:
 	ld	xwa, xbc
 	cp	(xbc), 0
-	call_24	nz, (0xf864f9)
+	call	nz, (0xf864f9:24)
 FDemoText_TextDispatch_Join10:
 	ld	hl, 0:i3
 	pop	xiz

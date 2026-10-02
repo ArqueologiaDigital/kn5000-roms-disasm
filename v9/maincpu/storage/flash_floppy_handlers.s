@@ -1283,7 +1283,7 @@ Flash_InitBytecodeBlock_Loop:
 	ld	(0x39ae:16), xwa
 	ld	xwa, (3186:16)
 	ld	(0x39b2:16), xwa
-	resda	0, (0x35b0)
+	res	0, (0x35b0:16)
 	ldib_erp	251, 0
 Flash_InitBytecodeBlock_Loop2:
 	ld	e, (xsp+12)
@@ -1401,7 +1401,7 @@ Flash_InitBytecodeBlock_Loop4:
 	ld	(0x39ae:16), xhl
 	ld	xwa, (3186:16)
 	ld	(0x39b2:16), xwa
-	resda	0, (0x35b0)
+	res	0, (0x35b0:16)
 	ldib_erp	251, 0
 Flash_InitBytecodeBlock_Loop5:
 	ld	e, (xsp+6)
@@ -5078,7 +5078,7 @@ ToneParam_ExtendedOpsBlock_Skip30:
 ToneParam_ExtendedOpsBlock_Helper3:
 	pushw	iz
 	ld	iz, 0:i3
-	resda	0, (0x35b0)
+	res	0, (0x35b0:16)
 	call	DualVoice_ParamLoadDone
 	ld	a, (0x35b0:16)
 	extz	wa
@@ -5128,11 +5128,11 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	ldfr_berp c, 250
 	ld	c, (0x34ef:16)
 	ldfr_berp	c, 249
-	ldda32	xbc, (0xc6e)
+	ld	xbc, (0xc6e:16)
 	ld	(0x34ed), (xbc+0x70)
-	ldda32	xbc, (0xc6e)
+	ld	xbc, (0xc6e:16)
 	ld	(0x34ee), (xbc+0x71)
-	stdi8	(0x34ef), 4
+	ld	(0x34ef:16), 4
 	ld	(0x34d6:16), 12
 	ld	wa, hl
 	calr	ToneParam_ExtendedOpsBlock_Helper4
@@ -5158,9 +5158,9 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	xbc, (3182:16)
 	ld	(0x34ed), (xbc+0x1f0)
-	ldda32	xbc, (0xc6e)
+	ld	xbc, (0xc6e:16)
 	ld	(0x34ee), (xbc+0x1f1)
-	stdi8	(0x34ef), 4
+	ld	(0x34ef:16), 4
 	ld	(0x34d6:16), 18
 	ld	wa, hl
 	calr	ToneParam_ExtendedOpsBlock_Helper4
@@ -5186,9 +5186,9 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 	calr	ToneParam_ExtendedOpsBlock_Helper4
 	ld	xbc, (3182:16)
 	ld	(0x34ed), (xbc+0x370)
-	ldda32	xbc, (0xc6e)
+	ld	xbc, (0xc6e:16)
 	ld	(0x34ee), (xbc+0x371)
-	stdi8	(0x34ef), 4
+	ld	(0x34ef:16), 4
 	ld	(0x34d6:16), 24
 	ld	wa, hl
 	calr	ToneParam_ExtendedOpsBlock_Helper4
@@ -5223,7 +5223,7 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2:
 ToneParam_ExtendedOpsBlock_Helper4:
 	pushw	iz
 	ld	iz, wa
-	setda	0, (0x34d1)
+	set	0, (0x34d1:16)
 	call	0xf63149
 	ldb_d8	a, (0x35b0)
 	extz	wa

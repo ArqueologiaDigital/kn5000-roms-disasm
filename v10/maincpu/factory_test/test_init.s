@@ -25,11 +25,11 @@
 	ld xwa, \ParamA
 	.endif
 	ld (xsp + 0:8), xwa
-	lda_24 xwa, (\ParamB)
+	lda xwa, (\ParamB:24)
 	ld (xsp + 4), xwa
 	ld wa, (\ParamC:24)	; was `ldw_da xwa, ...`: d2 nn nn nn 20 loads WA, not XWA
 	ld (xsp + 8), wa
-	lda_24 xwa, (\ParamD)
+	lda xwa, (\ParamD:24)
 	ld (xsp + 10), xwa
 	mri_d2 0xb7, 0x30
 	ld xbc, xwa
@@ -49,10 +49,10 @@
 	ld xwa, \ParamA
 	.endif
 	ld (xsp + 0:8), xwa
-	lda_24 xwa, (\ParamB)
+	lda xwa, (\ParamB:24)
 	ld (xsp + 4), xwa
 	ldw (xsp + 8), \ParamC
-	lda_24 xwa, (\ParamD)
+	lda xwa, (\ParamD:24)
 	ld (xsp + 10), xwa
 	mri_d2 0xb7, 0x30
 	ld xbc, xwa
@@ -67,7 +67,7 @@
 
 .macro RegTitleHama ParamA, ParamB, ParamC, ParamD, ParamE
 	pushw \ParamA
-	lda_24 xwa, (\ParamB)
+	lda xwa, (\ParamB:24)
 	push xwa
 	.if \ParamC <= 7
 	ld xwa, \ParamC:i3

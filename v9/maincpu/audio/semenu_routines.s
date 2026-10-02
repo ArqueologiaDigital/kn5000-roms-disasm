@@ -6616,7 +6616,7 @@ SeMenu_RefreshPartDisplay_Join3:
 	lda	xsp, (xsp+18)
 	ret
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_BitShiftMask_End_0x1A3)
+	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -6907,7 +6907,7 @@ SeMenu_RefreshPartDisplay_Join7:
 	ld	bc, 1:i3
 	jp	SeMenu_ApplyPartEdit_Data2_0x292
 	cp	a, 0:i3
-	jp_24	nz, (SeMenu_BitShiftMask_End_0x1A3)
+	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent

@@ -430,8 +430,8 @@ DrawText_LayoutAndRender_Variant1_Skip:
 	lda	xwa, (xsp+270)
 	ld	xbc, 1:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -488,8 +488,8 @@ DrawText_LayoutAndRender_Variant1_Skip2:
 	lda	xwa, (xsp+270)
 	ld	xbc, 2:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -541,8 +541,8 @@ DrawText_LayoutAndRender_Variant1_Skip3:
 	lda	xwa, (xsp+270)
 	ld	xbc, 3:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -594,8 +594,8 @@ DrawText_LayoutAndRender_Variant1_Skip4:
 	lda	xwa, (xsp+270)
 	ld	xbc, 4:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -652,8 +652,8 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	lda	xwa, (xsp+270)
 	ld	xbc, 6:i3
 	push	xbc
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	ld	xbc, (xsp+14)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
@@ -1049,13 +1049,13 @@ AccDraw_Secondary_Helper19:
 	ld	(xbc+6), wa
 	ld	a, (0x03efa8:24)
 	ldfr_berp	a, 251
-	stib_da	(0x3efa8), 1
+	ld	(0x3efa8:24), 1
 	ld	de, (0x03efa4:24)
 	ld	xwa, xbc
 	ld	bc, de
 	calr	ColorBlit
 	ldto_berp	a, 251
-	stb_da	(0x3efa8), a
+	ld	(0x3efa8:24), a
 	pop	qiz
 	inc	8, xsp
 	ret
@@ -1343,14 +1343,14 @@ DrawFunc_Init_PushFontAndDraw:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Str_No_0xCEE)
+	lda	xbc, (Str_No_0xCEE:24)
 	ld_rrl	xhl, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1453,14 +1453,14 @@ DrawFunc_Init_Join4:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda_24	xbc, (Str_No_0xCEE)
+	lda	xbc, (Str_No_0xCEE:24)
 	ld_rrl	xhl, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1517,8 +1517,8 @@ AccDraw_Secondary_Helper20:
 	lda xbc, (xsp + 0x0104)
 	lda xde, (xsp + 0x04)
 	push XHL
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1570,15 +1570,15 @@ AccDraw_Secondary_Helper20_Join:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda_24	xbc, (Str_No_0xDEE)
+	lda	xbc, (Str_No_0xDEE:24)
 	ld	xhl, 0:i3
 	ld_rrb	l, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1669,15 +1669,15 @@ AccDraw_Secondary_Helper20_Join5:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda_24	xbc, (Str_No_0xDEE)
+	lda	xbc, (Str_No_0xDEE:24)
 	ld	xhl, 0:i3
 	ld_rrb	l, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -1723,15 +1723,15 @@ AccDraw_Secondary_Helper20_Join7:
 	ld	a, (xiz+6)
 	and	a, 15
 	extz	wa
-	lda_24	xbc, (Str_No_0xDEE)
+	lda	xbc, (Str_No_0xDEE:24)
 	ld	xhl, 0:i3
 	ld_rrb	l, xbc, wa
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
 	push	xhl
-	pushdi_24	(0x3efa4)
-	pushdi_24	(0x3efa2)
+	pushw	(0x3efa4:24)
+	pushw	(0x3efa2:24)
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
@@ -5299,7 +5299,7 @@ AcFreeSplit_ValueChanged:
 	ld	xde, xiz
 	call	InheritedProc
 	ld	xwa, (xiz)
-	stl_da	(0x340c0), xwa
+	ld	(0x340c0:24), xwa
 	cp	xwa, 16768
 	jr	nz, AcFreeSplit_CheckSecondKey
 	cpw	(xiz+4), 0
@@ -5457,7 +5457,7 @@ AcTranspose_ValueChanged:
 	ld	wa, (xiz+4)
 	cp	wa, 5:i3
 	jr	nz, AcTranspose_FormatLabel
-	cpdi8	(0x8ca0), 0
+	cp	(0x8ca0:16), 0
 	jr	nz, AcTranspose_FormatLabel
 	pushw	237
 	pushw	7302

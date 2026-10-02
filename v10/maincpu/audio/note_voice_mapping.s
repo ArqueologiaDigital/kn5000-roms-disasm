@@ -15795,16 +15795,16 @@ VoiceSlot_LoadResult_LoadReg:
 	pop xix
 	ret
 VoiceSlot_LoadResult_Data:
-	ldb_da	c, (0xcee5)
+	ld	c, (0xcee5:24)
 	ld	b, c
 	calr	Voice_ComputeNoteBitPosition
 	ld	xiy, SoundEffect_Dispatch_Table_0x103C
 	calr	ComputeNoteBitPositi_StoreDRAM
 	cp	a, 0:i3
 	jr	z, Voice_UpdateNoteBitmap_Skip
-	ordi8_24	(0xcede), 16
-	anddi8_24	(0xcede), 127
-	anddi8_24	(0xcede), 249
+	or	(0xcede:24), 16
+	and	(0xcede:24), 127
+	and	(0xcede:24), 249
 	jr	Voice_UpdateNoteBitmap_Return
 Voice_UpdateNoteBitmap_Skip:
 	ld	a, 0:opc
@@ -16898,19 +16898,19 @@ Chord_EvalAltNoteBuffer:
 	push	xiy
 	push	xiz
 ; index row
-	ldb_da	a, (0xcede)
+	ld	a, (0xcede:24)
 	stb_d8	(0xcec0), a
-	ldb_da	a, (0xcedf)
+	ld	a, (0xcedf:24)
 	stb_d8	(0xcec1), a
-	ldb_da	a, (0xcee0)
+	ld	a, (0xcee0:24)
 	stb_d8	(0xcec2), a
-	ldb_da	a, (0xcee1)
+	ld	a, (0xcee1:24)
 	stb_d8	(0xcec3), a
-	ldb_da	a, (0xcee2)
+	ld	a, (0xcee2:24)
 	stb_d8	(0xcec4), a
-	ldb_da	a, (0xcee3)
+	ld	a, (0xcee3:24)
 	stb_d8	(0xcec5), a
-	ldb_da	a, (0xcee4)
+	ld	a, (0xcee4:24)
 	stb_d8	(0xcec6), a
 	ld	xiy, 0xcee5
 	ld	xix, 0xceca
@@ -16920,21 +16920,21 @@ Chord_EvalAltNoteBuffer:
 	ld	xix, 0xcee5
 	ldw	bc, 10
 	ldir85
-	cpib_da	(0xcee5), 2
+	cp	(0xcee5:24), 2
 	jrl	ule, VoiceSlot_CheckAndApply_LoadReg_Skip3
 	calr	Voice_UpdateNoteBitmap
 	cp	w, 0:i3
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Entry
-	decdi8_24	1, (0xcee5)
+	dec	1, (0xcee5:24)
 	calr	Voice_UpdateNoteBitmap
-	incdi8_24	1, (0xcee5)
+	inc	1, (0xcee5:24)
 	jr	VoiceSlot_CheckAndApply_LoadReg_Entry
 	cp	w, 0:i3
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Entry
-	ldb_da	a, (0xcee2)
-	ldb_da	w, (0xcee3)
+	ld	a, (0xcee2:24)
+	ld	w, (0xcee3:24)
 VoiceSlot_CheckAndApply_LoadReg_Entry:
-	bitda_24	6, (0xcede)
+	bit	6, (0xcede:24)
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Skip
 	.byte	0xd7, 0x3e, 0x9a	; ld QHL3,DE
 	ldw_d16	de, (0xc596)
@@ -16943,7 +16943,7 @@ VoiceSlot_CheckAndApply_LoadReg_Entry:
 	jr	nz, VoiceSlot_CheckAndApply_LoadReg_Skip2
 	jr	VoiceSlot_CheckAndApply_LoadReg_Join
 VoiceSlot_CheckAndApply_LoadReg_Skip:
-	ldb_da	l, (0xcee5)
+	ld	l, (0xcee5:24)
 	xor	h, h
 	dec	1, hl
 	ld	xiz, 0xcee6
@@ -16958,33 +16958,33 @@ VoiceSlot_CheckAndApply_LoadReg_Join:
 VoiceSlot_CheckAndApply_LoadReg_Skip2:
 	calr	NoteDisplay_LookupBitmap
 VoiceSlot_CheckAndApply_LoadReg_Join2:
-	ldb_da	a, (0xcedf)
+	ld	a, (0xcedf:24)
 	stb_d8	(0xceb6), a
-	ldb_da	a, (0xcee0)
+	ld	a, (0xcee0:24)
 	stb_d8	(0xceb7), a
-	ldb_da	a, (0xcee1)
+	ld	a, (0xcee1:24)
 	stb_d8	(0xceb8), a
-	ldb_da	a, (0xcede)
+	ld	a, (0xcede:24)
 	stb_d8	(0xceb9), a
 	jr	VoiceSlot_CheckAndApply_LoadReg_Join3
 VoiceSlot_CheckAndApply_LoadReg_Skip3:
-	stdi8	(0xceb6), 0
-	stdi8	(0xceb7), 0
+	ld	(0xceb6:16), 0
+	ld	(0xceb7:16), 0
 VoiceSlot_CheckAndApply_LoadReg_Join3:
 	ldb_d8	a, (0xcec0)
-	stb_da	(0xcede), a
+	ld	(0xcede:24), a
 	ldb_d8	a, (0xcec1)
-	stb_da	(0xcedf), a
+	ld	(0xcedf:24), a
 	ldb_d8	a, (0xcec2)
-	stb_da	(0xcee0), a
+	ld	(0xcee0:24), a
 	ldb_d8	a, (0xcec3)
-	stb_da	(0xcee1), a
+	ld	(0xcee1:24), a
 	ldb_d8	a, (0xcec4)
-	stb_da	(0xcee2), a
+	ld	(0xcee2:24), a
 	ldb_d8	a, (0xcec5)
-	stb_da	(0xcee3), a
+	ld	(0xcee3:24), a
 	ldb_d8	a, (0xcec6)
-	stb_da	(0xcee4), a
+	ld	(0xcee4:24), a
 	ld	xiy, 0xceca
 	ld	xix, 0xcee5
 	ldw	bc, 10
@@ -17178,9 +17178,9 @@ UIState_ProcessKeyEvent:
 	cp	wa, 12
 	jrl	gt, SndParam_ProcessEntry_Epilogue
 	add	wa, wa
-	lda_24	xix, (0xeec044)
+	lda	xix, (0xeec044:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfea84f)
+	lda	xix, (0xfea84f:24)
 	jp_rr	8, xix, wa
 	ld	a, (xsp+0x3)
 	and	a, 255
@@ -17564,9 +17564,9 @@ HdaeRom_TableEntry2:
 	cp	wa, 7:i3
 	jrl	gt, HdaeRom_TableEntry2_Epilogue
 	add	wa, wa
-	lda_24	xix, (0xeec05e)
+	lda	xix, (0xeec05e:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfeac14)
+	lda	xix, (0xfeac14:24)
 	jp_rr	8, xix, wa
 	ld	a, (xsp+0x3)
 	and	a, 255
@@ -17823,7 +17823,7 @@ HdaeRom_AltCheckResult_Epilogue:
 	add	xwa, xbc
 	ld	a, (xwa)
 	extz	wa
-	lda_24	xbc, (0xee8ea2)
+	lda	xbc, (0xee8ea2:24)
 	ld_rrb	e, xbc, wa
 	ld	a, e
 	cp	a, 1:i3
@@ -19336,9 +19336,9 @@ SendEpilogue_Data_Helper:
 	cp	wa, 6:i3
 	jr	gt, SeqVoice_CheckAndRet_Data_Skip12
 	add	wa, wa
-	lda_24	xix, (0xeec168)
+	lda	xix, (0xeec168:24)
 	ld_rrw	wa, xix, wa
-	lda_24	xix, (0xfebd57)
+	lda	xix, (0xfebd57:24)
 	jp_rr	8, xix, wa
 SeqVoice_CheckAndRet_Data_Skip10:
 	ld	hl, 0:i3
@@ -22541,10 +22541,10 @@ Dispatch_Data_Skip4:
 	ld	xiz, xwa
 	cp	xiz, 0x100
 	jr	nc, Dispatch_Data_Entry
-	resda	0, (0xfc63)
+	res	0, (0xfc63:16)
 	jr	Dispatch_Data_Join
 Dispatch_Data_Entry:
-	setda	0, (0xfc63)
+	set	0, (0xfc63:16)
 Dispatch_Data_Join:
 	ld	wa, iz
 	ld	bc, wa
@@ -25442,38 +25442,38 @@ Param_SignExtendReturn_Return:
 	ret
 	dec	2, xsp
 	push	xiz
-	stda32	(0xe193), xwa
+	ld	(0xe193:16), xwa
 	ld	(xwa), 240
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+0x1), 80
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+0x2), 44
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+0x3), 4
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+0x4), 0
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	(xwa+0x5), 17
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	calr	Param_SignExtendReturn_Helper
 	ld	(xsp+0x4), hl
 	ld	wa, (xsp+0x4)
 	exts	xwa
 	add	xwa, xwa
-	ldda32	xbc, (0xe193)
+	ld	xbc, (0xe193:16)
 	add	xbc, xwa
 	add	xbc, 12
 	ld	xiz, xbc
 	inc	1, xiz
 	ld	(xbc), 0
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 13
 	call	0xfd72e7
 	ld	(xiz+), l
 	ld	(xiz), 247
-	ldda32	xwa, (0xe193)
+	ld	xwa, (0xe193:16)
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 15
@@ -25517,7 +25517,7 @@ Param_SignExtendReturn_Return:
 	jr	nz, Param_SignExtendReturn_Join6
 	cp	xhl, 0x1d6
 	jr	ugt, Param_SignExtendReturn_Skip22
-	stda32	(0xe193), xiz
+	ld	(0xe193:16), xiz
 	ld	wa, 3:i3
 	ld	bc, (xsp+0x6)
 	ld	xde, xiz
@@ -27912,9 +27912,9 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	cp	hl, 5:i3
 	jrl	gt, TmFlash_BulkTransferToSubCPU_Skip5
 	add	hl, hl
-	lda_24	xix, (0xeed76b)
+	lda	xix, (0xeed76b:24)
 	ld_rrw	hl, xix, hl
-	lda_24	xix, (0xff08a9)
+	lda	xix, (0xff08a9:24)
 	jp_rr	8, xix, hl
 	ld	xwa, xbc
 	ld	xbc, 0x1d6

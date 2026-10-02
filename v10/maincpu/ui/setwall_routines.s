@@ -12,7 +12,7 @@ SetWall_X:
 	ret
 
 SetWall_JumpStubData:
-	anddi8 (3296), 254
+	and (3296:16), 254
 	ld	(3295:16), 0
 	call	CDlikeSwTtl_SendStartEvt
 	call	SetWall_UpdateSlotIndex
@@ -32,7 +32,7 @@ SetWall_InlineCodeBlock:
 	ret
 MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
-	cpdi8 (3295), 7
+	cp (3295:16), 7
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
 MiddleFuncCall_DispatchData_Code_Helper_Skip:
@@ -47,7 +47,7 @@ MiddleFuncCall_DispatchData_Code_Helper_Skip2:
 	ret
 MiddleFuncCall_DispatchData_Code_Helper2:
 	call	SetWall_InlineCodeBlock2
-	cpdi8 (3295), 8
+	cp (3295:16), 8
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
 	call	CDlikeSwTtl_DispatchData_0x6
 MiddleFuncCall_DispatchData_Code_Helper2_Skip:
@@ -1893,7 +1893,7 @@ SetWall_ForwardSkip_Return:
 SetWall_InlineCodeBlock3:
 	ret
 	call	AccWrap_PlayModeDispatch
-	ordi8 (10407), 4
+	or (10407:16), 4
 	ld	wa, (0xffec:24)
 	ld	(0xf19e:16), wa
 	push	xix
@@ -1915,7 +1915,7 @@ SetWall_ForwardSkip_Loop2:
 	popw	bc
 	pop	xix
 	ret
-	anddi8 (10407), 251
+	and (10407:16), 251
 	xor	wa, wa
 	ld	a, 76:opc
 	call	CtrlPanel_SetIndicatorBit
@@ -1953,9 +1953,9 @@ SetWall_MiscDataAndCode:
 	ld	xiy, 4441
 	ldw	bc, 16
 	ldir85
-	cpdi8 (36150), 143
+	cp (36150:16), 143
 	jr	z, SetWall_MiscDataAndCode_Skip
-	cpdi8 (36150), 167
+	cp (36150:16), 167
 	jr	z, SetWall_MiscDataAndCode_Skip2
 SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc
@@ -2023,7 +2023,7 @@ SetWall_MiscDataAndCode_Entry:
 	push_lerp 52
 	call 15860228
 	pop_lerp 52
-	ldda32 xhl, (4349)
+	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	pop xhl
 	jr	z, 35
@@ -2032,7 +2032,7 @@ SetWall_MiscDataAndCode_Entry:
 	ldw	ix, 7428
 	max
 	push	sr
-	call_24 lt, (341223)
+	call lt, (341223:24)
 	swi	5
 	rcf
 	ld	c, 179:opc

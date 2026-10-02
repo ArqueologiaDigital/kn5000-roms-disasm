@@ -1057,7 +1057,7 @@ LyricsTrack_ReadAndParse:
 	jr	c, LyricsTrack_CheckEmpty
 	ld	(134767:24), 0
 LyricsTrack_CheckEmpty:
-	lda_24 xwa, (0x20e4e)
+	lda xwa, (0x20e4e:24)
 	cp (xwa), 0
 	ret z
 	push xwa
@@ -1065,7 +1065,7 @@ LyricsTrack_CheckEmpty:
 	inc 4, xsp
 	dec 1, hl
 	extz xhl
-	lda_24 xwa, (0x20e4e)
+	lda xwa, (0x20e4e:24)
 	ld xde, xwa
 	add xde, xhl
 	ld c, (xde)
@@ -1254,7 +1254,7 @@ LyricsFile_CheckLinefeed:
 LyricsFile_InsertNormalChar:
 	add wa, (xbc)
 	cpib_sri 0x07, 0xec, 0xe0, 0x0d
-	call_24 z, (LyricsTrack_ResetAllBuffers)
+	call z, (LyricsTrack_ResetAllBuffers:24)
 	pushw 0x0002
 	pushw 0x0f4e
 	call LyricsTrack_ReadAndParse_Helper2
@@ -1262,16 +1262,16 @@ LyricsFile_InsertNormalChar:
 	pushw iz
 	pushw 0x0002
 	pushw 0x0f4e
-	lda_24 xwa, (0x20e42)
+	lda xwa, (0x20e42:24)
 	ld bc, (xwa+2)
 	sla bc, 6
 	add bc, (xwa)
-	lda_24 xwa, (0x20cbe)
+	lda xwa, (0x20cbe:24)
 	lda_rr xwa, xwa, bc
 	push xwa
 	call 16712982
 	lda xsp, (xsp+14)
-	lda_24 xwa, (0x20e42)
+	lda xwa, (0x20e42:24)
 	ld bc, iz
 	add bc, (xwa)
 	ld (xwa), bc
@@ -1280,11 +1280,11 @@ LyricsFile_InsertNormalChar:
 	ld xde, 0:i3
 	call SendEvent
 	call UpdateScreen
-	lda_24 xwa, (0x20e42)
+	lda xwa, (0x20e42:24)
 	ld bc, (xwa+2)
 	sla bc, 6
 	add bc, (xwa)
-	lda_24 xwa, (0x20cbe)
+	lda xwa, (0x20cbe:24)
 	cpib_sri 0x07, 0xe0, 0xe4, 0x0d
 	jr nz, LyricsBox_PopIzRet
 LyricsFile_ResetBuffers:
@@ -15288,7 +15288,7 @@ DspItem0_DisplayEffectName:
 	ldw	(xsp+18), 0
 DspItem0_DisplayParamNames:
 	pushw 0x0011
-	ldb_da a, (0x21098)
+	ld a, (0x21098:24)
 	extz wa
 	add wa, (xsp+20)
 	lda_d16 xbc, (0x29ac)
@@ -15297,7 +15297,7 @@ DspItem0_DisplayParamNames:
 	ld a, (xwa)
 	extz wa
 	muls wa, 17
-	lda_24 xbc, (DspParamName_00_Blank)
+	lda xbc, (DspParamName_00_Blank:24)
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -15315,7 +15315,7 @@ DspItem0_DisplayParamNames:
 	ldw (xsp+18), 0
 DspItem0_DisplayParamValues:
 	pushw 0x0002
-	ldb_da a, (0x21098)
+	ld a, (0x21098:24)
 	extz wa
 	add wa, (xsp+20)
 	lda_d16 xbc, (0x29ac)
@@ -15324,7 +15324,7 @@ DspItem0_DisplayParamValues:
 	ld a, (xwa)
 	extz wa
 	add wa, wa
-	lda_24 xbc, (DspParamUnit_Table)
+	lda xbc, (DspParamUnit_Table:24)
 	exts xwa
 	add xwa, xbc
 	push xwa
