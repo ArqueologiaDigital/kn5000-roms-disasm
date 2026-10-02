@@ -7454,11 +7454,11 @@ ClipBlit_Replace_ScanlineLoop:
 	call Math_AbsInt16
 	add hl, hl
 	lda	xwa, (ClipBlit_Replace_ScanlineLoop_Data:24)
-	ld_rrw	de, xwa, hl
+	ld	de, (xwa+hl)
 	ldw bc, 0x001e
 	sub bc, de
 	ld xwa, (xsp + 18)
-	lda_rr	xhl, xwa, bc
+	lda	xhl, (xwa+bc)
 	ld xwa, (xsp + 14)
 	exts xbc
 	add xbc, xwa
@@ -7575,7 +7575,7 @@ ClipBlit_Direct_CalcVRAMAddr:
 	add xbc, xde
 	sll xbc, 6
 	ld wa, (xsp + 2)
-	lda_rr	xhl, xbc, wa
+	lda	xhl, (xbc+wa)
 	lda	xwa, (0x043c00:24)
 	add xwa, xhl
 	ld (xsp + 16), xwa

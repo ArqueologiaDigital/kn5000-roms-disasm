@@ -4906,7 +4906,7 @@ RingBuf128_ReadAlt_CheckEmpty:
 	ret
 RingBuf128_ReadAlt_Dequeue:
 	xor hl, hl
-	ld_rrb	l, xde, ix
+	ld	l, (xde+ix)
 	.byte	0xdc, 0x38, 0x7f, 0x00	; minc1 0x007f,IX
 	ld (xde-10), ix
 	ret
@@ -4919,7 +4919,7 @@ RingBuf128_ReadAlt2_CheckEmpty:
 	ret
 RingBuf128_ReadAlt2_Dequeue:
 	xor hl, hl
-	ld_rrb	l, xde, ix
+	ld	l, (xde+ix)
 	.byte	0xdc, 0x38, 0x7f, 0x00	; minc1 0x007f,IX
 	ld (xde-10), ix
 	ret
@@ -5052,7 +5052,7 @@ RingBuf512_ReadAlt_ByteBlock:
 	ret
 RingBuf512_ReadAlt_ByteBlock_Skip:
 	xor	hl, hl
-	ld_rrb	l, xde, ix
+	ld	l, (xde+ix)
 	.byte	0xdc, 0x38, 0xff, 0x01	; minc1 0x01ff,IX
 	ld	(xde-10), ix
 	ret
@@ -5117,7 +5117,7 @@ RingBuf1024_ReadAlt_ByteBlock:
 	ret
 RingBuf1024_ReadAlt_ByteBlock_Skip:
 	xor	hl, hl
-	ld_rrb	l, xde, ix
+	ld	l, (xde+ix)
 	.byte	0xdc, 0x38, 0xff, 0x03	; minc1 0x03ff,IX
 	ld	(xde-10), ix
 	ret
@@ -5168,7 +5168,7 @@ Seq_RingBuf_WriteByte_Data:
 	ret
 Seq_RingBuf_WriteByte_Data_Skip:
 	xor	hl, hl
-	ld_rrb	l, xde, ix
+	ld	l, (xde+ix)
 	.byte	0xdc, 0x38, 0xff, 0x07	; minc1 0x07ff,IX
 	ld	(xde-10), ix
 	ret

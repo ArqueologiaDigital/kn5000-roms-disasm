@@ -173,7 +173,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x894f:16)
@@ -237,7 +237,7 @@ SLSrcBankList_FuncBody_Helper2:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8979:16)
@@ -513,7 +513,7 @@ SLSrcBankList_FuncBody_Join4:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8964:16)
@@ -571,7 +571,7 @@ SLSrcBankList_FuncBody_Helper4:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x894f:16)
@@ -616,7 +616,7 @@ SLSrcBankList_FuncBody_Helper5:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8979:16)
@@ -923,7 +923,7 @@ SLSrcBankList_FuncBody_Helper8:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x894f:16)
@@ -992,7 +992,7 @@ SLSrcBankList_FuncBody_Helper10:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8979:16)
@@ -1557,7 +1557,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89a3:16)
@@ -1612,7 +1612,7 @@ SLDstBankList_FuncBody_Helper:
 	ld	bc, wa
 	sla	bc, 2
 	lda	xwa, (xde+43)
-	ld_rrl	xbc, xhl, bc
+	ld	xbc, (xhl+bc)
 	inc	1, xbc
 	cp	(0x89fa:16), 0
 	jr	z, SLDstBankList_FuncBody_Helper_Skip
@@ -1856,7 +1856,7 @@ SLDstBankList_FuncBody_Helper2:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89b8:16)
@@ -1991,7 +1991,7 @@ SLDstBankList_FuncBody_Helper3:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89a3:16)
@@ -2030,7 +2030,7 @@ SLDstBankList_FuncBody_Helper4:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
@@ -2276,7 +2276,7 @@ SLDstBankList_FuncBody_Helper5:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda_d16	xwa, (0x89a3)
@@ -2325,7 +2325,7 @@ SLDstBankList_FuncBody_Helper6:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
@@ -2351,7 +2351,7 @@ SLDstBankList_FuncBody_Helper6_Skip:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
@@ -2385,7 +2385,7 @@ SLDstBankList_FuncBody_Helper6_Skip2:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)

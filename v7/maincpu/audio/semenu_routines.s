@@ -1661,30 +1661,30 @@ UpdSeSel_DetailedUpdate_Helper3:
 	cp	a, 5:i3
 	jr	z, SeMenu_TransferPartValues_EndData_Skip16
 	cp	a, 2:i3
-	jr	nz, 12
+	jr	nz, UpdSeSel_DetailedUpdate_Helper3_Skip
 	ld	a, 24:opc
-	jr	10
+	jr	UpdSeSel_DetailedUpdate_Helper3_Join
 SeMenu_TransferPartValues_EndData_Skip16:
 	ld	a, 33:opc
-	jr	6
+	jr	UpdSeSel_DetailedUpdate_Helper3_Join
 SeMenu_TransferPartValues_EndData_Skip17:
 	ld	a, 36:opc
-	jr	2
+	jr	UpdSeSel_DetailedUpdate_Helper3_Join
+UpdSeSel_DetailedUpdate_Helper3_Skip:
 	ld	a, 21:opc
+UpdSeSel_DetailedUpdate_Helper3_Join:
 	ld	(xbc), a
 	ret
 SeMenu_ApplyPartEdit_Helper2:
 	lda	xsp, (xsp-22)
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	ld	(xsp+20), c
 	ld	(xsp+22), a
 	lda	xwa, (xsp+14)
-	calr	9966
+	calr	SeMenu_LoadObjEntries
 	lda	xbc, (xsp+16)
 	ldw	wa, 11
-	calr	64629
+	calr	SeMenu_LoadPartParam
 	lda	xwa, (xsp+2)
 	ld	c, (xsp+16)
 	ld	(xwa), c
@@ -1875,7 +1875,7 @@ SeMenu_TransferPartValues_EndData_Join6:
 	extz	wa
 	ld	c, (xsp+6)
 	extz	bc
-	calr	64194
+	calr	SeMenu_StorePartParam
 	ld	a, (xsp)
 	extz	wa
 	pushw	wa
@@ -1887,9 +1887,7 @@ SeMenu_TransferPartValues_EndData_Epilogue4:
 	ret
 SeMenu_ApplyPartEdit_Helper4:
 	lda	xsp, (xsp-12)
-	.byte 0xd7
-	swi	2
-	.byte 0x04
+	push	qiz
 	ld	(xsp+10), c
 	ld	(xsp+12), a
 	cp	(xsp+12), 1
@@ -1922,24 +1920,25 @@ SeMenu_ApplyPartEdit_Helper4:
 	ldfr_berp l, 251
 	ldto_berp a, 251
 	and a, 3
-	.byte 0xc7
-	swi	2
-	.byte 0x99, 0x8f
-	ldw	(63:8), 0x6e00:io
-	ex_ff
+	ldfr_berp	a, 250
+	cp	(xsp+10), 0
+	jr	nz, SeMenu_ApplyPartEdit_Helper4_Skip2
 	cpib_erp 250, 0
-	jr z, 27
+	jr z, SeMenu_ApplyPartEdit_Helper4_Skip3
 	cpib_erp 250, 1
-	jr	nz, 5
+	jr	nz, SeMenu_ApplyPartEdit_Helper4_Skip
 	ldib_erp 250, 3
-	jr	30
+	jr	SeMenu_TransferPartValues_EndData_Join7
+SeMenu_ApplyPartEdit_Helper4_Skip:
 	cpib_erp 250, 3
-	jr nz, 25
-	jr	116
+	jr nz, SeMenu_TransferPartValues_EndData_Join7
+	jr	SeMenu_TransferPartValues_EndData_Epilogue5
+SeMenu_ApplyPartEdit_Helper4_Skip2:
 	cpib_erp 250, 0
 	jr z, SeMenu_TransferPartValues_EndData_Epilogue5
 	cpib_erp 250, 3
 	jr nz, SeMenu_TransferPartValues_EndData_Skip25
+SeMenu_ApplyPartEdit_Helper4_Skip3:
 	ldib_erp 250, 1
 	jr	SeMenu_TransferPartValues_EndData_Join7
 SeMenu_TransferPartValues_EndData_Skip25:
@@ -2164,8 +2163,8 @@ SeMenu_SetupPartDisplay_End:
 	lda xix, (134131:24)
 	ld hl, 0:i3
 SeMenu_SetupPartDisplay_Loop2:
-	ld_rrb a, xix, hl
-	st_rrb a, xbc, hl
+	ld	a, (xix+hl)
+	ld	(xbc+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2180,8 +2179,8 @@ SeMenu_SetupPartDisplay_Skip:
 	lda xix, (134147:24)
 	ld hl, 0:i3
 SeMenu_SetupPartDisplay_Loop3:
-	ld_rrb a, xix, hl
-	st_rrb a, xbc, hl
+	ld	a, (xix+hl)
+	ld	(xbc+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2196,8 +2195,8 @@ SeMenu_SetupPartDisplay_Skip2:
 	lda xix, (134163:24)
 	ld hl, 0:i3
 SeMenu_SetupPartDisplay_Loop4:
-	ld_rrb a, xix, hl
-	st_rrb a, xbc, hl
+	ld	a, (xix+hl)
+	ld	(xbc+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2212,8 +2211,8 @@ SeMenu_SetupPartDisplay_Skip3:
 	lda xix, (134179:24)
 	ld hl, 0:i3
 SeMenu_SetupPartDisplay_Loop5:
-	ld_rrb a, xix, hl
-	st_rrb a, xbc, hl
+	ld	a, (xix+hl)
+	ld	(xbc+hl), a
 	inc 1, w
 	inc 1, hl
 	cp w, e
@@ -2350,13 +2349,13 @@ SeMenu_SetupPartDisplay_End_Epilogue:
 	ret	ugt
 	extz	wa
 	lda	xde, (0x20bf3:24)
-	st_rrb	c, xde, wa
+	ld	(xde+wa), c
 	ret
 	cp	a, 15
 	ret	ugt
 	extz	wa
 	lda	xde, (0x20bf3:24)
-	ld_rrb	a, xde, wa
+	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
 SeMenu_SetupPartDisplay_End_Helper:
@@ -2412,7 +2411,7 @@ SeMenu_ApplyPartEdit_Helper5:
 SeMenu_ApplyPartEdit_Helper5_Skip:
 	extz	wa
 	lda	xde, (GUI_DisplayStructData_0x1129:24)
-	ld_rrb	a, xde, wa
+	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
 	cp	a, 130
@@ -2422,7 +2421,7 @@ SeMenu_ApplyPartEdit_Helper5_Skip:
 SeMenu_ApplyPartEdit_Helper5_Skip2:
 	extz	wa
 	lda	xde, (GUI_DisplayStructData_0x118A:24)
-	ld_rrb	a, xde, wa
+	ld	a, (xde+wa)
 	ld	(xbc), a
 SeMenu_ApplyPartEdit_Helper5_Join:
 	cp	(xbc), 95
@@ -4825,7 +4824,7 @@ SeMenu_CopyWriteUpdate_Helper7:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (GUI_DisplayStructData_0x111D:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	ld	(xsp), wa
 	ldw	(xsp+2), 20
 	.byte 0x8f, 0x1a, 0x3f, 0x00
@@ -5423,14 +5422,14 @@ SeMenu_ApplyPartEdit_Join37:
 	extz	wa
 	add	wa, wa
 	lda	xde, (1698:16)
-	st_rrw	bc, xde, wa
+	ld	(xde+wa), bc
 	ret
 SeMenu_CopyWriteUpdate_Helper9:
 	dec	1, a
 	extz	wa
 	add	wa, wa
 	lda	xde, (1698:16)
-	ld_rrw	wa, xde, wa
+	ld	wa, (xde+wa)
 	ld	(xbc), wa
 	ret
 	ld	(1706:16), wa
@@ -5687,34 +5686,33 @@ SeMenu_ApplySynthParam_Data:
 	ld	(xsp+6), xde
 	ld	(xsp+10), c
 	cp	a, 1:i3
-	jr	nz, 6
+	jr	nz, SeMenu_ApplySynthParam_Data_Skip2
 	ldi_erpb 250, 12
-	jr	12
+	jr	SeMenu_ApplySynthParam_Data_Join2
+SeMenu_ApplySynthParam_Data_Skip2:
 	ldi_erpb 250, 18
 	cp	a, 3:i3
-	jr	nz, 4
+	jr	nz, SeMenu_ApplySynthParam_Data_Join2
 	ldi_erpb 250, 17
+SeMenu_ApplySynthParam_Data_Join2:
 	ld	iz, 0:i3
-	.byte 0xc7
-	swi	3
-	.byte 0xa8, 0x8f
-	ldw	(63:8), 0x6300:io
-	ld	w, 199:opc
-	swi	2
-	cp	(xbc-57), c
-	xor	(xbc), w
-	ccf
+	ldib_erp	251, 0
+	cp	(xsp+10), 0
+	jr	ule, SeMenu_ApplySynthParam_Data_Skip3
+SeMenu_ApplySynthParam_Data_Loop:
+	ldto_berp	a, 250
+	addb_erp	a, 251
+	extz	wa
 	lda	xbc, (xsp+4)
-	calr	54767
+	calr	SeMenu_LoadPartParam
 	ld	a, (xsp+4)
 	extz	wa
 	add	iz, wa
-	.byte 0xc7
-	swi	3
-	jr	lt, -57
-	swi	3
-	.byte 0x89, 0x8f
-	ldw	(241:8), 0xe067:io
+	inc1b_erp	251
+	ldto_berp	a, 251
+	cp	a, (xsp+10)
+	jr	c, SeMenu_ApplySynthParam_Data_Loop
+SeMenu_ApplySynthParam_Data_Skip3:
 	ld	xwa, (xsp+6)
 	ld	(xwa), iz
 	pop	xiz
@@ -5726,12 +5724,13 @@ SeMenu_CopyWriteUpdate_Helper12:
 	ld	xiz, xde
 	lda	xde, (xsp+4)
 	cp	a, 3:i3
-	jr	nz, 11
+	jr	nz, SeMenu_CopyWriteUpdate_Helper12_Skip
 	add	c, 14
 	extz	bc
 	ld	wa, bc
 	ld	xbc, xde
 	jr	SeMenu_ApplySynthParam_Data_Join
+SeMenu_CopyWriteUpdate_Helper12_Skip:
 	cp	a, 1:i3
 	jr	nz, SeMenu_ApplySynthParam_Data_Skip
 	inc	7, c
@@ -6272,12 +6271,12 @@ SeMenu_StoreEffectCoeff_Data_Loop:
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+34)
-	lda_rr xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	calr SeMenu_StoreEffectParam_Data
 	ld	a, (xsp)
 	extz	wa
 	lda	xbc, (xsp+26)
-	lda_rr xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	calr SeMenu_StoreEffectCoeff_Data
 	incm8	1, (xsp)
 	.byte 0x87
@@ -6309,11 +6308,11 @@ SeMenu_StoreEffectCoeff_Data_Loop:
 SeMenu_StoreEffectCoeff_Data_Loop2:
 	ld	l, (xsp)
 	extz	hl
-	lda_rr xiy, xde, hl
+	lda	xiy, (xde+hl)
 	ld	a, (xiy)
 	ldfr_berp	a, 238
 	lda	xwa, (xsp+26)
-	lda_rr xix, xwa, hl
+	lda	xix, (xwa+hl)
 	ld w, (xix)
 	sla	w, 1
 	ldto_berp a, 238
@@ -6322,7 +6321,7 @@ SeMenu_StoreEffectCoeff_Data_Loop2:
 	ldfr_berp a, 238
 	ld	(xiy), a
 	lda	xwa, (xsp+22)
-	ld_rrb l, xwa, hl
+	ld	l, (xwa+hl)
 	ldto_berp a, 238
 	cp	a, l
 	jr	ule, SeMenu_StoreEffectCoeff_Data_Join
@@ -6356,17 +6355,14 @@ SeMenu_StoreEffectCoeff_Data_Join:
 	lda	xde, (xsp+38)
 	ld	wa, 0:i3
 	ld	bc, 1:i3
-	calr	54052
+	calr	SeMenu_TransferPartValues
 	ld	(xsp), 0
 SeMenu_StoreEffectCoeff_Data_Loop3:
 	ld	e, (xsp)
 	extz	de
 	lda	xbc, (xsp+18)
 	ld	a, (xsp+38)
-	.byte 0xc3
-	reti
-	.byte 0xe4
-	add	xbc, xwa
+	add	a, (xbc+de)
 	ld	c, a
 	extz	bc
 	lda	xwa, (xsp+30)
@@ -6374,7 +6370,7 @@ SeMenu_StoreEffectCoeff_Data_Loop3:
 	add	xde, xwa
 	pushw	255
 	ld	wa, 0:i3
-	calr	51048
+	calr	SeMenu_RegisterElement_Extended
 	incm8	1, (xsp)
 	.byte 0x87
 	push	xsp

@@ -2989,15 +2989,15 @@ MainChordPre_AppendChordSuffix:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (258808:24)
-	ld_rrl	xbc, xbc, wa
+	ld	xbc, (xbc+wa)
 	ld	a, (36004:16)
 	extz	wa
 	sla	wa, 2
-	ld_rrl	xbc, xbc, wa
+	ld	xbc, (xbc+wa)
 	ld	a, (36008:16)
 	extz	wa
 	sla	wa, 2
-	ld_rrl	xbc, xbc, wa
+	ld	xbc, (xbc+wa)
 	push	xbc
 	push	xiz
 	call	FileIO_CheckPathAndVolumeLabel_Helper

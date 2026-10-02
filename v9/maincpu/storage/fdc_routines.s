@@ -206,9 +206,9 @@ FDC_WaitReady_Skip10:
 	jrl	gt, FDC_WaitReady_Skip11
 	add	wa, wa
 	lda	xix, (FDC_WaitReady_Data:24)
-	ld_rrw wa, xix, wa
+	ld	wa, (xix+wa)
 	lda xix, (FDC_CONFIG_VERIFY_Code:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 FDC_CONFIG_VERIFY_Code:
 	ld (35436:16), 0
 	ldw	(0x8a22:16), 0

@@ -1514,7 +1514,7 @@ SeqPlay_RestartWithVoiceConfig_Skip8:
 	extz	wa
 	sla	wa, 3
 	lda_d16	xbc, (9016)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	ld	wa, (xbc)
 	cp	wa, (0x41c:16)
 	jr	nz, SeqPlay_PopIzSkip6Ret
@@ -9673,7 +9673,7 @@ PartDetect_SingleVoiceFound:
 PartDetect_LookupAndApply:
 	extz	hl
 	lda	xbc, (PartDetect_LookupAndApply_Table:24)
-	ld_rrb	e, xbc, hl
+	ld	e, (xbc+hl)
 	set	0, (9954:16)
 	ld	(0x8c9e:16), e
 	extz	de
@@ -11063,7 +11063,7 @@ SeqVoiceSingle_FoundOrDone:
 SeqVoiceSingle_LookupAndApply:
 	extz	hl
 	lda	xbc, (PartDetect_LookupAndApply_Table:24)
-	ld_rrb	e, xbc, hl
+	ld	e, (xbc+hl)
 	set	0, (9954:16)
 	ld	(0x8c9e:16), e
 	extz	de
@@ -11183,7 +11183,7 @@ SeqChLoad_SetupAndCopy:
 	extz	wa
 	sla	wa, 2
 	lda_d16	xbc, (9184)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	ld	wa, (xbc)
 	ld	(xde), wa
 	ld	wa, (xbc+2)
@@ -11290,7 +11290,7 @@ SeqCh_LoadChannelConfig_Skip7:
 	extz	wa
 	sla	wa, 3
 	lda_d16	xhl, (9332)
-	lda_rr	xhl, xhl, wa
+	lda	xhl, (xhl+wa)
 	ld	wa, (xhl)
 	ld	(xde), wa
 SeqCh_LoadChannelConfig_Join2:
@@ -14813,8 +14813,8 @@ SeqPlay_ComputeOffsets:
 	lda	xix, (xbc+2)
 	ld	wa, iz
 	add	wa, wa
-	lda_rr	xde, xde, wa
-	lda_rr	xiy, xiy, wa
+	lda	xde, (xde+wa)
+	lda	xiy, (xiy+wa)
 	ld	xwa, (xsp+4)
 	cp	xwa, (xsp+8)
 	jrl	ule, SeqPlay_HandleSmallerDelta
@@ -14927,12 +14927,12 @@ SeqPlay_HandleSmallerDelta:
 	extz	bc
 	add	bc, bc
 	lda_d16	xwa, (10446)
-	ld_rrw	wa, xwa, bc
+	ld	wa, (xwa+bc)
 	ld	(xde), wa
 	ldw	(xde+2), 5
 	lda_d16	xde, (10292)
 	lda_d16	xwa, (10478)
-	ld_rrw	wa, xwa, bc
+	ld	wa, (xwa+bc)
 	ld	(xde), wa
 	extz	hl
 	lda_d16	xwa, (10510)
@@ -15751,7 +15751,7 @@ PartSubBlk_ComputeAddr:
 
 PartSubBlk_WriteAndCheck:
 	extz	bc
-	lda_rr	xwa, xhl, bc
+	lda	xwa, (xhl+bc)
 	ld	(xwa-1), e
 	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 Part_ReadSubBlock32:
@@ -15792,7 +15792,7 @@ PartSubBlk48_ComputeAddr:
 
 PartSubBlk48_WriteAndCheck:
 	extz	bc
-	lda_rr	xwa, xhl, bc
+	lda	xwa, (xhl+bc)
 	ld	(xwa-1), e
 	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 Part_VoiceSearchBlock:
@@ -15810,7 +15810,7 @@ Part_WriteSubBlock48_Skip:
 	add	xde, xwa
 Part_WriteSubBlock48_Join:
 	extz	bc
-	lda_rr	xwa, xde, bc
+	lda	xwa, (xde+bc)
 	ld	l, (xwa-1)
 	ret
 
@@ -20124,7 +20124,7 @@ SeqEvent_MainHandler:
 	lda xix, (SeqEvent_MainHandler_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SeqEvent_Dispatch:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SeqEvent_Dispatch:
 	call SeqData_CopyBlockWithLookup
 	ld a, (0x2878:16)
@@ -20402,7 +20402,7 @@ AppEvtHandler_Branch_001:
 AppEvtHandler_Branch_002:
 	sll	wa, 2
 	lda	xix, (AppEvtHandler_Branch_002_RamPtrs:24)
-	ld_rrl	xwa, xix, wa
+	ld	xwa, (xix+wa)
 	cp	(xwa), 17
 	jrl	nc, AppEvent_Epilogue
 	incm8	1, (xwa)
@@ -20419,9 +20419,9 @@ AppEvtHandler_Branch_002:
 	jr	gt, AppEvtHandler_Branch_003
 	add	wa, wa
 	lda	xix, (AppEvtHandler_Branch_002_CaseTable:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (AppEvtHandler_Branch_002_0x4B:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 	lda_d16	xiz, (9744)
 	lda_d16	xwa, (9746)
 	jr	AppEvtHandler_Branch_004
@@ -20479,9 +20479,9 @@ AppEvtHandler_Branch_006:
 	jr	gt, AppEvtHandler_Branch_007	; -> 0xF442AC
 	add	wa, wa
 	lda	xix, (AppEvtHandler_Branch_006_CaseTable:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (AppEvtHandler_Branch_006_0x3B:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 	lda	xiz, (9744:16)
 	lda	xwa, (9746:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
@@ -20972,7 +20972,7 @@ AppEvent_InlineHandler_Skip:
 AppEvent_InlineHandler_Skip2:
 	sll	wa, 2
 	lda	xix, (AppEvent_SubDispatch_RamPtrs:24)
-	ld_rrl	xwa, xix, wa
+	ld	xwa, (xix+wa)
 	cp	(xwa), 1
 	jrl	ule, SeqState_DispatchEntry
 	decm8	1, (xwa)
@@ -20989,9 +20989,9 @@ AppEvent_InlineHandler_Skip2:
 	jr	gt, AppEvent_InlineHandler_Skip3
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table_2:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (AppEvent_SubDispatch_Code:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 AppEvent_SubDispatch_Code:
 	lda	xiz, (9744:16)
 	lda	xwa, (9746:16)
@@ -21050,9 +21050,9 @@ AppEvent_InlineHandler_Skip5:
 	jr	gt, AppEvent_InlineHandler_Skip6
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (AppEvent_SubDispatch_Code_2:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 AppEvent_SubDispatch_Code_2:
 	lda	xiz, (9744:16)
 	lda	xwa, (9746:16)
@@ -21262,7 +21262,7 @@ AppEvent_InlineHandler_Join6:
 	add	xwa, AppEvent_SubDispatch_CaseTable_2
 	ld	wa, (xwa)
 	lda	xix, (AppEvent_SubDispatch_0x3A6:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 	ld	a, (61929:16)
 	cp	a, 1:i3
 	jrl	ule, AppEvent_InlineHandler_Join8
@@ -21348,7 +21348,7 @@ AppEvent_InlineHandler_Join8:
 	add	xwa, AppEvent_SubDispatch_CaseTable
 	ld	wa, (xwa)
 	lda	xix, (AppEvent_SubDispatch_0x4CC:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 	ld	a, (61921:16)
 	cp	a, 1:i3
 	jrl	ule, AppEvent_InlineHandler_Join10
@@ -21960,7 +21960,7 @@ EffEdit_ParamChangeA:
 	ld	wa, (10614:16)
 	extz	wa
 	lda	xde, (EffEdit_ParamChangeA_Table_2:24)
-	ld_rrb	e, xde, wa
+	ld	e, (xde+wa)
 	lda	xwa, (EffEdit_ParamChangeA_Table:24)
 	cp	e, 0:i3
 	jr	ge, EffEdit_ParamAPositive
@@ -22536,7 +22536,7 @@ EffEdit_ReadParamC_Loop:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (10616:16)
-	st_rrw	hl, xbc, wa
+	ld	(xbc+wa), hl
 	inc1b_erp	251
 	cp_erpb	251, 8
 	jr	c, EffEdit_ReadParamC_Loop
@@ -22572,7 +22572,7 @@ EffEdit_ReadParamD6_Loop:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (10616:16)
-	st_rrw	hl, xbc, wa
+	ld	(xbc+wa), hl
 	ld	xwa, 0:i3
 	ldto_berp	a, 251
 	add	xwa, 19984
@@ -22728,9 +22728,9 @@ ApPlaySyori:
 	jrl	gt, AppEvent_ReturnZero	; -> 0xF4636D
 	add	bc, bc
 	lda	xix, (ApPlaySyori_CaseTable:24)
-	ld_rrw	bc, xix, bc
+	ld	bc, (xix+bc)
 	lda	xix, (SeqAccomp_EventDispatch:24)
-	jp_rr	8, xix, bc
+	jp	t, (xix+bc)
 SeqAccomp_EventDispatch:
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
@@ -23605,9 +23605,9 @@ NoteEditSy_SendModeScrollReset:
 	ret	gt
 	add	bc, bc
 	lda	xix, (NoteEditSy_SendModeScrollReset_CaseTable:24)
-	ld_rrw	bc, xix, bc
+	ld	bc, (xix+bc)
 	lda	xix, (NoteEditSy_ModeDispatch:24)
-	jp_rr	8, xix, bc
+	jp	t, (xix+bc)
 NoteEditSy_ModeDispatch:
 	ld xwa, 0x810005
 	ld xbc, EVT_PARA_DRAW
@@ -24811,9 +24811,9 @@ MainExeCall:
 	jrl	gt, MainExe_ReturnZero	; -> 0xF4750A
 	add	wa, wa
 	lda	xix, (MainExeCall_CaseTable:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (MainExe_HandleD6:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 MainExe_HandleD6:
 	call	NoteMap_ProcessAndMerge
 	call	MIDI_BroadcastControlChange
@@ -25344,7 +25344,7 @@ HelpLang_DispatchDataBlock_Skip3:
 HelpLang_DispatchDataBlock_Skip4:
 	ld	xwa, HelpLang_ByteTable0
 HelpLang_DispatchDataBlock_Join:
-	ld_rrb	a, xwa, bc
+	ld	a, (xwa+bc)
 	cp	a, 1:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip5
 	ld	xwa, HelpLang_DispatchDataBlock_Data

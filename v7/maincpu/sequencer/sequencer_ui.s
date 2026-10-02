@@ -317,12 +317,12 @@ TrAsSureLangCheck:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (TrAsSureLangCheck_PtrTable_2:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	a, (4438:16)
 	extz	wa
 	sla	wa, 2
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	a, (3295:16)
 	inc	1, a
@@ -332,7 +332,7 @@ TrAsSureLangCheck:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (TrAsSureLangCheck_PtrTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	2
 	pushw	3252
@@ -1267,7 +1267,7 @@ LyricsFile_InsertNormalChar:
 	sla bc, 6
 	add bc, (xwa)
 	lda xwa, (0x20cbe:24)
-	lda_rr xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	push xwa
 	call CmpNamingCheck_Helper
 	lda xsp, (xsp+14)
@@ -3034,7 +3034,7 @@ TrAsGrid_LookupTable:
 TrAsGrid_StepListValue:
 	extz	wa
 	lda	xde, (TrAsGrid_ByteData1_Table:24)
-	ld_rrb a, xde, wa
+	ld	a, (xde+wa)
 	cp c, 0:i3
 	jr nz, TrAsGrid_StepListValue_Skip
 	cp a, 19
@@ -3048,7 +3048,7 @@ TrAsGrid_StepListValue_Skip:
 TrAsGrid_StepListValue_Join:
 	extz	wa
 	ld	xbc, TrAsGrid_ByteData1_Table_2
-	ld_rrb l, xbc, wa
+	ld	l, (xbc+wa)
 	ret
 
 TrAsGrid_CheckTrackType:
@@ -3366,7 +3366,7 @@ TrAsGridChk_Part1_SendAudio:
 	extz	hl
 	sla	hl, 2
 	ld	xbc, TrAsGridChk_Part1_SendAudio_PtrTable
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -3980,7 +3980,7 @@ SqAftSetFunc:
 	ld	wa, (xde+8)
 	sla	wa, 2
 	lda	xbc, (SqAftSetFunc_PtrTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+10)
 	push	xwa
@@ -5214,7 +5214,7 @@ HelpTtlFunc_ClampMin:
 HelpTtlFunc_LookupSlide:
 	sll	wa, 2
 	lda	xix, (HelpTtlFunc_LookupSlide_PtrTable:24)
-	ld_rrl	xwa, xix, wa
+	ld	xwa, (xix+wa)
 	push	xwa
 	ld	xwa, (xde+18)
 	push	xwa
@@ -6181,7 +6181,7 @@ NoteEditBox_EventDispatch2_Skip:
 	extz	bc
 	sla	bc, 3
 	lda	xde, (NoteEditBox_EventDispatch2_Table:24)
-	lda_rr	xde, xde, bc
+	lda	xde, (xde+bc)
 	ld	bc, (xde)
 	ld	(xwa), bc
 	lda	xhl, (xwa+2)
@@ -6216,7 +6216,7 @@ NoteEditBox_EventDispatch2_Skip2:
 	extz	wa
 	sla	wa, 3
 	lda	xbc, (NoteEditBox_EventDispatch2_Table:24)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
@@ -6269,7 +6269,7 @@ NoteEditBox_EventDispatch2_Skip3:
 	extz	wa
 	sla	wa, 3
 	lda	xbc, (NoteEditBox_EventDispatch2_Table:24)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	ld	wa, (xbc+2)
 	ld	(xde), wa
 	ld	hl, (xix)
@@ -6352,7 +6352,7 @@ NoteEditBox_EventDispatch2_Loop:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (NoteEditBox_EventDispatch2_Table_2:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	ld	(xsp+28), wa
 	ld	xde, 0:i3
 	ldto_berp	e, 251
@@ -6445,7 +6445,7 @@ NoteEditBox_EventDispatch2_Loop2:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (NoteEditBox_EventDispatch2_Table_3:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	ld	(xsp+28), wa
 	ld	xde, 0:i3
 	ldto_berp	e, 251
@@ -7818,22 +7818,22 @@ SndParam_Dispatch:
 	jrl	gt, SndParam_ReturnZero
 	add	wa, wa
 	lda	xix, (SndParam_Dispatch_PtrTable_2:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SndParam_Dispatch_Code:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 SndParam_Dispatch_Code:
 	ld	xbc, (xsp+62)
 	sla	de, 2
 	cp	xbc, EVT_INDEXSW_UP_AIC
 	jr	nz, SndParam_Dispatch_Skip
 	lda	xbc, (SndParam_Dispatch_Table:24)
-	ld_rrl	xwa, xbc, de
+	ld	xwa, (xbc+de)
 	ld	bc, 4:i3
 	ld	de, 4:i3
 	jr	SndParam_Dispatch_Join
 SndParam_Dispatch_Skip:
 	lda	xbc, (SndParam_Dispatch_Table:24)
-	ld_rrl	xwa, xbc, de
+	ld	xwa, (xbc+de)
 	ld	bc, 1:i3
 	ld	de, 4:i3
 SndParam_Dispatch_Join:
@@ -7871,14 +7871,14 @@ SndParam_Dispatch_Join:
 	jrl	gt, SndParam_ReturnZero
 	add	wa, wa
 	lda	xix, (SndParam_Dispatch_PtrTable:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SndParam_Dispatch_Code_2:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 SndParam_Dispatch_Code_2:
 	ld	xde, (xsp+62)
 	sla	hl, 2
 	lda	xwa, (SndParam_Dispatch_Table:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	cp	xde, EVT_INDEXSW_DOWN_AIC
 	jr	nz, SndParam_Dispatch_Skip2
 	ldw	bc, 65532
@@ -14133,9 +14133,9 @@ Sqedt_ParamDispatch:
 	jr	gt, Sqedt_ParamDispatch_Skip
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_3:24)
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (Sqedt_ParamDispatch_Code:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 Sqedt_ParamDispatch_Code:
 	ld	a, (9742:16)
 	jr	Sqedt_ParamDispatch_Join
@@ -14163,9 +14163,9 @@ Sqedt_ParamDispatch_Join:
 	jr	gt, Sqedt_ParamDispatch_Entry
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_2:24)
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (Sqedt_ParamDispatch_Code_2:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 Sqedt_ParamDispatch_Code_2:
 	pushm (0x2610:16)
 	ld	xwa, Sqedt_ParamDispatch_Str
@@ -14200,9 +14200,9 @@ Sqedt_ParamDispatch_Join2:
 	jr	gt, Sqedt_ParamDispatch_Entry2
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable:24)
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (Sqedt_ParamDispatch_Code_3:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 Sqedt_ParamDispatch_Code_3:
 	pushm (0x2612:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_6
@@ -14694,9 +14694,9 @@ Sqedt_ValueDispatch:
 	jrl	gt, SqedtFunc_ReturnNegOne
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable_3:24)
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (Sqedt_ValueDispatch_0x28:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 	ld	l, 0:opc
 	jrl	SqedtFunc_SignExtendAndReturn
 	ld	l, 12:opc
@@ -14709,9 +14709,9 @@ Sqedt_ValueDispatch:
 	jrl	gt, SqedtFunc_ReturnNegOne
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable_2:24)
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (Sqedt_ValueDispatch_0x58:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 	ld	l, 1:opc
 	jr	SqedtFunc_SignExtendAndReturn
 	extz	hl
@@ -14722,9 +14722,9 @@ Sqedt_ValueDispatch:
 	jr	gt, SqedtFunc_ReturnNegOne
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable:24)
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (Sqedt_ValueDispatch_0x82:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 	ld	l, 2:opc
 	jr	SqedtFunc_SignExtendAndReturn
 	ld	l, 13:opc
@@ -14836,9 +14836,9 @@ SeqFormat_DispatchA_Join:
 	jrl	gt, SeqFunc_ReturnZeroJmp
 	add	wa, wa
 	lda	xix, (SeqFormat_DispatchA_CaseTable:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SeqFormat_DispatchA_0x70:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 15

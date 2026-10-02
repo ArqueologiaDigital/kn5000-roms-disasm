@@ -303,7 +303,7 @@ CtrlPanel_HandleSerialPort:
 	exts	wa
 	sla	wa, 2
 	lda	xbc, (CtrlPanel_HandleSerialPort_Data:24)
-	ld_rrl	xde, xbc, wa
+	ld	xde, (xbc+wa)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_DIAL
 	jrl	UIEvent_DispatchAndReturn

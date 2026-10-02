@@ -813,7 +813,7 @@ BitMapOut_CopyROMToWorkspace:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	0
 	pushw	63904

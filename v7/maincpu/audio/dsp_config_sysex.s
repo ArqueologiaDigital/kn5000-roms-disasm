@@ -2267,10 +2267,7 @@ DSPCfg_Data_003:
 	lda	xbc, (DSPCfg_LookupAndExtract_PtrTable:24)
 	mul	iz, 6
 	ld	xwa, xiz
-	.byte	0xe3
-	reti
-	.byte	0xe4
-	add	xwa, xix
+	add	xwa, (xbc+hl)
 	lda	xbc, (xsp+10)
 	lda	xde, (xsp+8)
 	lda	xhl, (xsp+4)
@@ -3313,9 +3310,9 @@ EffEdit_DSPConfigBlock_Helper:
 	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
 	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (DSPCfg_WriteAllSlots_Combined_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 DSPCfg_WriteAllSlots_Combined_Code:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
@@ -4915,7 +4912,7 @@ AudioDispatch_CheckStereoMode_Code_Skip26:
 	ld	a, l
 	extz	wa
 	lda	xbc, (PartIndex_ByteMap:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	add	wa, wa
 	ld	bc, wa
@@ -4924,7 +4921,7 @@ AudioDispatch_CheckStereoMode_Code_Skip26:
 	ldb_d8	a, (0xfc6a)
 	and	a, 255
 	sub	a, 64
-	st_rrb	a, xde, bc
+	ld	(xde+bc), a
 	jr	UIStateEvt_TransposeUpdate_Apply
 UIStateEvt_TransposeUpdate_Clear:
 	ld	a, l
@@ -4932,7 +4929,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	.set	Audio_CheckSubsystemReady, . + 4	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
 	lda	xbc, (PartIndex_ByteMap:24)
 ; Audio_CheckSubsystemReady is kept at this address only for ui_widgets/widget_dispatch.s; v10's Audio_CheckSubsystemReady is the code at 0xFDD69E
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	add	wa, wa
 	add	wa, 228
@@ -4951,9 +4948,9 @@ UIStateEvt_TransposeUpdate_Apply:
 	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
 	lda	xix, (ParamEdit_SwitchOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code:
 	ldb_d8	a, (0xbfe3)
 	and	a, 7
@@ -4966,7 +4963,7 @@ UIStateEvt_TransposeUpdate_Apply_Code:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
@@ -4993,7 +4990,7 @@ AudioDispatch_CheckStereoMode_Code_Skip2:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 AudioDispatch_CheckStereoMode_Code_Join:
 	ldw_d16	wa, (0xc4fa)
 	and	wa, 6
@@ -5065,7 +5062,7 @@ AudioDispatch_CheckStereoMode_Code_Skip10:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
@@ -5091,7 +5088,7 @@ AudioDispatch_CheckStereoMode_Code_Skip12:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 AudioDispatch_CheckStereoMode_Code_Join5:
 	andw	(0xc4fa:16), 0xffe8
 	or	(0xc4fa:16), iz
@@ -5150,9 +5147,9 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	ret	gt
 	add	wa, wa
 	lda	xix, (VolumeMixer_SwitchOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code_2:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code_2:
 	ldb_d8	a, (0xbfe3)
 	and	a, 31
@@ -5228,7 +5225,7 @@ UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
 	lda	xbc, (PartRecord_RamPtrTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	bitm	0, (xwa+0x16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip17
 	ld	wa, de
@@ -5335,7 +5332,7 @@ UIStateEvt_EffectSelect_Data_Skip2:
 	and	a, 255
 	extz	wa
 	lda	xbc, (EffectSelect_StepTable:24)
-	ld_rrb	e, xbc, wa
+	ld	e, (xbc+wa)
 	ld	hl, 0:i3
 	cp	hl, 26
 	jr	nc, AudioDispatch_CheckStereoMode_Code_Skip23
@@ -5434,7 +5431,7 @@ AudioDispatch_CheckStereoMode_Code_Loop:
 	and	a, 255
 	extz	wa
 	lda	xbc, (EffectSelect_StepTable:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	and	a, 15
 	sla	a, 4
 	andmi8	(xhl), 15

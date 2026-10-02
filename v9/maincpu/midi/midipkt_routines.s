@@ -1329,7 +1329,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	lda	xix, (MidiPkt_SendBankSelect_Send_Data:24)
 	ld	hl, (xix+hl)
 	lda xix, (MidiPkt_SendBankSelect_Send_Code:24)
-	jp_rr 8, xix, hl
+	jp	t, (xix+hl)
 MidiPkt_SendBankSelect_Send_Code:
 	jr	MidiPkt_SysExBulkTransfer_Data_Join
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join3

@@ -1800,7 +1800,7 @@ BmDrEdit_TestPartTableEntry:
 	extz wa
 	sla wa, 2
 	lda xbc, (BmDrEdit_TestPartTableEntry_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	cp (xwa), 240
 	jr c, BmDrEdit_TestPartTableEntry_Below
 	ld hl, 0:i3

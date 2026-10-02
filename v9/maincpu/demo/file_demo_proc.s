@@ -2264,7 +2264,7 @@ LoadRegion4_ReadByteLoop:
 	cp hl, 0:i3
 	jr lt, LoadRegion4_ReadDone
 	lda xwa, (xsp + 2)
-	st_rrb	l, xwa, iz
+	ld	(xwa+iz), l
 	inc 1, iz
 	cp iz, 0x0010				; loop 16 times
 	jr lt, LoadRegion4_ReadByteLoop
@@ -8835,7 +8835,7 @@ FileIO_ErrorCodeByteBlock_Skip4:
 	ld	a, (0x340f2:24)
 	extz	wa
 	lda	xbc, (FileIO_ErrorCodeByteBlock_Entry_Data:24)
-	ld_rrb a, xbc, wa
+	ld	a, (xbc+wa)
 	cp a, 119
 	jr	z, FileIO_ErrorCodeByteBlock_Skip5
 	cp	a, 108
@@ -8864,7 +8864,7 @@ FileIO_ErrorCodeByteBlock_Skip6:
 	ld	a, c
 	extz	wa
 	lda	xbc, (FileIO_ErrorCodeByteBlock_Entry_Data:24)
-	ld_rrb a, xbc, wa
+	ld	a, (xbc+wa)
 	cp a, 119
 	jr	z, FileIO_ErrorCodeByteBlock_Skip7
 	cp	a, 108

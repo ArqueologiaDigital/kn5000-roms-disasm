@@ -96,21 +96,20 @@ UIStateEvt_VoiceParamHandler_Skip3:
 	.byte 0xde
 	pushw	de
 	ld	a, b
-	jr c, 45
+	jr c, UIStateEvt_VoiceParamHandler_Join
 	pushw wa
 	ld xhl, 62032
 	ld	c, 3:opc
 	mul	wa, c
 	ld	iy, wa
-	.byte 0xf3
-	reti
-	cp	xix, xix
-	inc	6, l
-	pop	sr
+	bit	7, (xhl+iy)
+	jr	z, UIStateEvt_VoiceParamHandler_Skip8
 	popw	wa
-	jr	3
+	jr	UIStateEvt_VoiceParamHandler_Join2
+UIStateEvt_VoiceParamHandler_Skip8:
 	popw	wa
-	jr	20
+	jr	UIStateEvt_VoiceParamHandler_Join
+UIStateEvt_VoiceParamHandler_Join2:
 	inc	1, a
 	ld	w, a
 	ld	(3414:16), w
@@ -255,7 +254,7 @@ Part_LookupParam:
 	xor b, b
 	ld iy, bc
 	ld e, c
-	ld_rrb	a, xhl, iy
+	ld	a, (xhl+iy)
 	ld	(3423:16), a
 	inc 1, e
 	ld	(3424:16), e
@@ -1192,7 +1191,7 @@ SQTR_DISPATCH_TABLE_2:
 	pop xix
 	pop xhl
 	pop xde
-	set 0, (0x8f5c:16)	; F20DAD: LD (XIX+5Ch), 0B8h (TMP94C241 encoding)
+	set	0, (0x8f5c:16)	; F20DAD: LD (XIX+5Ch), 0B8h (TMP94C241 encoding)
 	ldw wa, 0x60
 	call CtrlPanel_SetIndicatorBit
 	ldmmb_dd24 0x82, 0x10, 0x02, 0x73, 0x28
@@ -1207,7 +1206,7 @@ SQTR_DISPATCH_TABLE_2_CASE1:
 	pop xix
 	pop xhl
 	pop xde
-	res 0, (0x8f5c:16)	; F20DCD: LD (XIX+5Ch), 0B0h (TMP94C241 encoding)
+	res	0, (0x8f5c:16)	; F20DCD: LD (XIX+5Ch), 0B0h (TMP94C241 encoding)
 	ldw wa, 0x60
 	call CtrlPanel_SetIndicatorBit
 	jr CDlikeSwTtl_ReturnZero2
@@ -1419,13 +1418,13 @@ SqTrAsPsTtl_CaseF:
 	cp	wa, 13
 	jr	gt, SqTrAsPsTtl_CaseF_Skip
 	lda	xix, (SepaOut_Config_0_0x44:24)
-	ld_rrw wa, xix, wa
+	ld	wa, (xix+wa)
 	extz wa
 	sll	wa, 1
 	ld	xix, SepaOut_Config_0_0x52
-	ld_rrw wa, xix, wa
+	ld	wa, (xix+wa)
 	lda xix, (SqTrAsPsTtl_CaseF_Skip:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 SqTrAsPsTtl_CaseF_Skip:
 	push	xde
 	push	xhl
@@ -2225,7 +2224,7 @@ NameGetFuncCall_Dispatch:
 	ld	(xwa+20), 0
 	ldw	de, 19
 NameGetFuncCall_Loop:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip2
 	ld (xbc), 0
@@ -2264,7 +2263,7 @@ NameGetFuncCall_Skip2:
 	ld	(xwa+12), 0
 	ldw	de, 11
 NameGetFuncCall_Loop2:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip3
 	ld (xbc), 0
@@ -2302,7 +2301,7 @@ NameGetFuncCall_Skip3:
 	ld	(xwa+20), 0
 	ldw	de, 19
 NameGetFuncCall_Loop3:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip4
 	ld (xbc), 0
@@ -2332,7 +2331,7 @@ NameGetFuncCall_Skip4:
 	ld	(xwa+20), 0
 	ldw	de, 19
 NameGetFuncCall_Loop4:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip5
 	ld (xbc), 0

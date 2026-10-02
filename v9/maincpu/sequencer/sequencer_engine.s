@@ -15730,7 +15730,7 @@ Part_WriteSubBlock48_Skip:
 	add	xde, xwa
 Part_WriteSubBlock48_Join:
 	extz	bc
-	lda_rr	xwa, xde, bc
+	lda	xwa, (xde+bc)
 	ld	l, (xwa-1)
 	ret
 
@@ -20918,7 +20918,7 @@ AppEvent_InlineHandler_Skip15:
 AppEvent_InlineHandler_Skip16:
 	sll	wa, 2
 	lda	xix, (AppEvent_SubDispatch_RamPtrs:24)
-	ld_rrl	xwa, xix, wa
+	ld	xwa, (xix+wa)
 	cp	(xwa), 1
 	jrl	ule, SeqState_DispatchEntry
 	decm8	1, (xwa)
@@ -20935,9 +20935,9 @@ AppEvent_InlineHandler_Skip16:
 	jr	gt, AppEvent_InlineHandler_Skip17
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table_2:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (AppEvent_SubDispatch_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 AppEvent_SubDispatch_Code:
 	lda_d16	xiz, (9744)
 	lda	xwa, (9746:16)
@@ -20996,9 +20996,9 @@ AppEvent_InlineHandler_Skip:
 	jr	gt, AppEvent_InlineHandler_Skip19
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (AppEvent_SubDispatch_Code_2:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 AppEvent_SubDispatch_Code_2:
 	lda_d16	xiz, (9744)
 	lda_d16	xwa, (9746)
@@ -21208,7 +21208,7 @@ AppEvent_InlineHandler_Entry2:
 	add	xwa, AppEvent_SubDispatch_CaseTable_2
 	ld	wa, (xwa)
 	lda	xix, (AppEvent_SubDispatch_0x3A6:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 	ld a, (61929:16)
 	cp a, 1:i3
 	jrl ule, AppEvent_InlineHandler_Join5
@@ -21294,7 +21294,7 @@ AppEvent_InlineHandler_Join5:
 	add	xwa, AppEvent_SubDispatch_CaseTable
 	ld	wa, (xwa)
 	lda	xix, (AppEvent_SubDispatch_0x4CC:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 	ld a, (61921:16)
 	cp a, 1:i3
 	jrl ule, AppEvent_InlineHandler_Entry3
@@ -25313,7 +25313,7 @@ HelpLang_DispatchDataBlock_Entry:
 HelpLang_DispatchDataBlock_Skip3:
 	ld	xwa, HelpLang_ByteTable0
 HelpLang_DispatchDataBlock_Join:
-	ld_rrb a, xwa, bc
+	ld	a, (xwa+bc)
 	cp a, 1:i3
 	jr nz, HelpLang_DispatchDataBlock_Skip4
 	ld xwa, HelpLang_DispatchDataBlock_Data

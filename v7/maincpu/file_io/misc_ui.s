@@ -67,7 +67,7 @@ FilePriorityFunc:
 	and	wa, 1
 	sla	wa, 2
 	lda	xbc, (FilePriorityFunc_PtrTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+10)
 	push	xwa

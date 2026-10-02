@@ -75,7 +75,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 LLVM = os.environ.get("LLVM_BIN", os.path.expanduser("~/compartilhado/llvm-project/build/bin"))
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
 BASE = 0xE00000
-SCRATCH = os.environ.get("SCOOP_SCRATCH", "/tmp/claude-1000/lane-scoop")
+SCRATCH = os.environ.get("SCOOP_SCRATCH", os.path.join(os.environ.get("TMPDIR", "/tmp"), "lane-scoop"))  # TMPDIR: /tmp is a small tmpfs here
+os.makedirs(SCRATCH, exist_ok=True)
 LABEL_RE = re.compile(r'^([A-Za-z_.$][\w.$]*):')
 
 

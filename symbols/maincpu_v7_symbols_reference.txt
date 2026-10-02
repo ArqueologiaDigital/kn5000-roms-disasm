@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,712
-#   semantic names ........... 49,573 (95.9%)
+#   symbols .................. 51,738
+#   semantic names ........... 49,599 (95.9%)
 #   positional names ......... 2,139
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -19071,6 +19071,8 @@ SeMenu_TransferPartValues_EndData_0xC0 00F06E64
 UpdSeSel_DetailedUpdate_Helper3 00F06E64
 SeMenu_TransferPartValues_EndData_Skip16 00F06E74
 SeMenu_TransferPartValues_EndData_Skip17 00F06E78
+UpdSeSel_DetailedUpdate_Helper3_Skip 00F06E7C
+UpdSeSel_DetailedUpdate_Helper3_Join 00F06E7E
 SeMenu_ApplyPartEdit_Helper2 00F06E81
 SeMenu_TransferPartValues_EndData_Skip18 00F06EE9
 SeMenu_TransferPartValues_EndData_Join3 00F06EEF
@@ -19093,6 +19095,9 @@ SeMenu_TransferPartValues_EndData_Join5 00F07016
 SeMenu_TransferPartValues_EndData_Join6 00F07018
 SeMenu_TransferPartValues_EndData_Epilogue4 00F07050
 SeMenu_ApplyPartEdit_Helper4 00F07054
+SeMenu_ApplyPartEdit_Helper4_Skip 00F070C0
+SeMenu_ApplyPartEdit_Helper4_Skip2 00F070C7
+SeMenu_ApplyPartEdit_Helper4_Skip3 00F070D1
 SeMenu_TransferPartValues_EndData_Skip25 00F070D6
 SeMenu_TransferPartValues_EndData_Join7 00F070DE
 SeMenu_TransferPartValues_EndData_Skip26 00F0711E
@@ -19366,7 +19371,12 @@ SeMenu_ApplyFilter_SetupDisplay 00F0943A
 SeMenu_ApplySynthParam 00F0946B
 SeMenu_ApplySynthParam_Alt 00F09496
 SeMenu_ApplySynthParam_Data 00F094EA
+SeMenu_ApplySynthParam_Data_Skip2 00F094FD
+SeMenu_ApplySynthParam_Data_Join2 00F09509
+SeMenu_ApplySynthParam_Data_Loop 00F09514
+SeMenu_ApplySynthParam_Data_Skip3 00F09534
 SeMenu_CopyWriteUpdate_Helper12 00F0953D
+SeMenu_CopyWriteUpdate_Helper12_Skip 00F09554
 SeMenu_ApplySynthParam_Data_Skip 00F09562
 SeMenu_ApplySynthParam_Data_Join 00F0956B
 SeMenu_SetSelectedRow 00F09577
@@ -45592,6 +45602,7 @@ UIState_Mode0or1 00FC7381
 UIState_Mode3 00FC7388
 UIState_Mode4 00FC738F
 UIState_ProcessExtendedMode 00FC7396
+UIState_ProcessExtendedMode_Skip 00FC73DA
 UIStateEvt_NullHandler 00FC73EF
 UIState_SwitchForMidiFlags 00FC73F0
 UIState_MidiMode6 00FC7406
@@ -45623,6 +45634,7 @@ VoiceData_InitDone 00FC76B3
 VoiceData_ExtendedParamSetup 00FC76B7
 VoiceData_ExtendedParamSetup_0x27 00FC76DE
 VoiceData_ExtendedParamSetup_0x40 00FC76F7
+VoiceData_ExtendedParamSetup_Loop3 00FC770B
 VoiceData_ExtendedParamSetup_0xAF 00FC7766
 VoiceData_ExtendedParamSetup_Loop 00FC78BC
 VoiceData_ExtendedParamSetup_Loop2 00FC78E0
@@ -45699,6 +45711,8 @@ ExtData_ToneParam_MultiChannel_Skip7 00FC81B5
 ExtData_ToneParam_MultiChannel_Join 00FC81C6
 ExtData_ToneParam_MultiChannel_Join2 00FC81CB
 ExtData_ToneParam_MultiChannel_Join3 00FC81CF
+ExtData_ToneParam_MultiChannel_Skip8 00FC8297
+ExtData_ToneParam_MultiChannel_Skip9 00FC82A3
 MIDI_WriteResetSequence 00FC82CC
 ExtData_Voice_UpdateFlags 00FC8384
 ExtData_ToneParam_MultiChannel_Helper 00FC83BD
@@ -45708,7 +45722,10 @@ ExtData_Voice_RetEntry 00FC83E4
 ExtData_Voice_MixedHandler 00FC83E5
 ExtData_Voice_MixedHandler_Skip 00FC83F6
 ExtData_Voice_MixedHandler_Join 00FC83FA
+ExtData_Voice_MixedHandler_Skip5 00FC8446
+ExtData_Voice_MixedHandler_Join4 00FC844B
 ExtData_Voice_MixedHandler_Helper 00FC8453
+ExtData_Voice_MixedHandler_Helper_Entry 00FC8469
 ExtData_Voice_MixedHandler_Skip2 00FC8499
 ExtData_Voice_MixedHandler_Join2 00FC84AD
 ExtData_Voice_MixedHandler_Skip3 00FC84B2
@@ -45722,6 +45739,11 @@ ExtData_Voice_FullHandler_Join 00FC850B
 ExtData_Voice_FullHandler_Skip2 00FC851F
 ExtData_Voice_FullHandler_Entry 00FC8532
 ExtData_Voice_FullHandler_Helper 00FC8545
+ExtData_Voice_FullHandler_Helper_Code_Skip 00FC8579
+ExtData_Voice_FullHandler_Helper_Code_Join 00FC857C
+ExtData_Voice_FullHandler_Helper_Code_Entry 00FC857E
+ExtData_Voice_FullHandler_Helper_Code_Skip2 00FC859F
+ExtData_Voice_FullHandler_Helper_Code_Skip3 00FC85B2
 ExtData_Voice_CopyAndJump 00FC85B9
 ExtData_Voice_CompareAndDispatch 00FC85C8
 ExtData_Voice_CompareAndDispatch_Skip 00FC85D7
@@ -49234,10 +49256,13 @@ AllocCheckNoteOn_Data 00FE23DF
 NoteMap_AddEntry_Skip 00FE2431
 NoteMap_AddEntry_Loop 00FE2445
 NoteMap_AddEntry_Skip2 00FE2466
+NoteMap_AddEntry_Skip7 00FE2472
 NoteMap_AddEntry_Skip3 00FE24AC
 NoteMap_AddEntry_Skip4 00FE24DB
+NoteMap_AddEntry_Skip8 00FE2514
 NoteMap_AddEntry_Loop2 00FE2526
 NoteMap_AddEntry_Skip5 00FE2549
+NoteMap_AddEntry_Skip9 00FE2552
 NoteMap_AddEntry_Skip6 00FE2578
 NoteMap_AddEntry_Epilogue 00FE259E
 NoteMap_CollectAndFindBestVoice 00FE25A5
@@ -50395,6 +50420,7 @@ SendSinglePacket_DoGetPlayS 00FEBD8D
 SendSinglePacket_Epilogue 00FEBDA6
 SendSinglePacket_Data 00FEBDAB
 SendSinglePacket_Data_Code_Skip 00FEBDDD
+SendSinglePacket_Data_Code_Epilogue 00FEBE02
 SendSinglePacket_WriteReg 00FEBE07
 SendSinglePacket_DoReadNext 00FEBE3D
 SendSinglePacket_Block 00FEBE4D

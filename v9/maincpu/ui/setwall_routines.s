@@ -86,7 +86,7 @@ SetWall_InlineCodeBlock_Sub:
 	xor	w, w
 	ld	a, (3295:16)
 	ld	iy, wa
-	ld_rrb a, xhl, iy
+	ld	a, (xhl+iy)
 	cp a, 13
 	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	cp	a, 16
@@ -588,7 +588,7 @@ SetWall_InlineCodeBlock2:
 	ld	iy, wa
 	push	xde
 	ld	xde, 0xf1a0
-	ld_rrb a, xde, iy
+	ld	a, (xde+iy)
 	pop xde
 	cp a, (10355:16)
 	jr	nz, SetWall_InlineCodeBlock2_Skip
@@ -599,14 +599,14 @@ SetWall_InlineCodeBlock2_Skip:
 	ld	iy, wa
 	push	xde
 	ld	xde, SetWall_CompareAndSwap_Data
-	ld_rrb c, xde, iy
+	ld	c, (xde+iy)
 	ld a, (3295:16)
 	ld iy, wa
 	ld	xde, 0xf1a0
-	ld_rrb a, xde, iy
+	ld	a, (xde+iy)
 	ld iy, wa
 	ld	xde, SetWall_CompareAndSwap_Data
-	ld_rrb a, xde, iy
+	ld	a, (xde+iy)
 	pop xde
 	and	a, c
 	cp	a, 0:i3
@@ -1911,7 +1911,7 @@ SetWall_ForwardSkip_Loop2:
 	xor	bc, bc
 	ld	c, (0x286b:16)
 	ld	a, (0x286c:16)
-	st_rrb a, xix, bc
+	ld	(xix+bc), a
 	inc 1, bc
 	cp bc, 10
 	jr lt, SetWall_ForwardSkip_Loop2
@@ -1985,7 +1985,7 @@ SetWall_MiscDataAndCode_Join:
 	xor	xbc, xbc
 	xor	de, de
 SetWall_MiscDataAndCode_Loop:
-	ld_rrb a, xix, de
+	ld	a, (xix+de)
 	bit 7, a
 	jr z, 13
 	push	xbc
@@ -2020,35 +2020,33 @@ SetWall_MiscDataAndCode_Data:
 	.byte 0xe7
 	ldw	ix, 0xdaa8
 	incm8	1, (xwa-40)
-	ld_rrw hl, xix, wa
+	ld	hl, (xix+wa)
 	cp hl, 65535
-	jr	z, 55
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	push	xhl
 	push_lerp 52
-	call 15860228
+	call SetWall_MiscDataAndCode_Data_Code_Helper
 	pop_lerp 52
 	ld xhl, (4349:16)
 	bitm 7, (xhl)
 	pop xhl
-	jr	z, 35
-	.byte 0xe7
-	ldw	ix, 0xe761
-	ldw	ix, 7428
-	max
-	push	sr
-	call lt, (341223:24)
-	swi	5
-	rcf
-	ld	c, 179:opc
-	inc	6, l
-	ret
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
+	.byte	0xe7, 0x34, 0x61	; inc 1,XBC3
+SetWall_MiscDataAndCode_Data_Code_Join:
+	push_lerp	52
+	call	SetWall_MiscDataAndCode_Data_Code_Helper
+	pop_lerp	52
+	ld	xhl, (4349:16)
+	bit	7, (xhl)
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	ld	hl, (xhl+3)
-	cp	hl, 0xffff
-	jr	z, 5
-	.byte 0xe7
-	ldw	ix, 0x6861
-	.byte 0xe0
+	cp	hl, 65535
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
+	.byte	0xe7, 0x34, 0x61	; inc 1,XBC3
+	jr	SetWall_MiscDataAndCode_Data_Code_Join
+SetWall_MiscDataAndCode_Data_Code_Return:
 	ret
+SetWall_MiscDataAndCode_Data_Code_Helper:
 	push	xiy
 	ld	xiy, (7514:16)
 	extz	xhl

@@ -2489,7 +2489,7 @@ SeMenu_CopyWriteUpdate_Loop:
 	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	ld	xwa, xbc
 	call	SeMenu_CopyWriteUpdate_Helper19
 	inc1b_erp	251
@@ -5014,7 +5014,7 @@ SeMenu_CopyWriteUpdate_Epilogue28:
 	.byte 0xc7, 0xe2, 0x99
 	extz	wa
 	lda	xde, (xsp+12)
-	lda_rr xbc, xde, wa
+	lda	xbc, (xde+wa)
 	cp	l, 0:i3
 	jr	nz, SeMenu_CopyWriteUpdate_Skip35
 	ld	xde, xbc
@@ -5063,7 +5063,7 @@ SeMenu_CopyWriteUpdate_Join24:
 	ldto_berp	a, 226
 	extz	wa
 	lda	xhl, (xsp+12)
-	lda_rr	xde, xhl, wa
+	lda	xde, (xhl+wa)
 	ld	c, (xde)
 	cp	c, 127
 	jr	z, SeMenu_CopyWriteUpdate_Skip38
@@ -5072,7 +5072,7 @@ SeMenu_CopyWriteUpdate_Join24:
 	ldfr_berp	a, 240
 	extz	ix
 	inc	1, c
-	st_rrb	c, xhl, ix
+	ld	(xhl+ix), c
 SeMenu_CopyWriteUpdate_Skip38:
 	ld	a, (xde)
 	ld	(xsp+4), a
@@ -5098,13 +5098,13 @@ SeMenu_CopyWriteUpdate_Join25:
 	addb_erp	a, 251
 	ldfr_berp	a, 226
 	extz	wa
-	lda_rr	xiy, xhl, wa
+	lda	xiy, (xhl+wa)
 	ld	c, (xiy)
 	ld	b, c
 	ldto_berp	a, 226
 	inc	1, a
 	extz	wa
-	lda_rr	xix, xhl, wa
+	lda	xix, (xhl+wa)
 	ld	a, (xix)
 	ldfr_berp	a, 226
 	ldto_berp	w, 251
@@ -5899,9 +5899,9 @@ Scoop_SoundEditorData_Helper_Epilogue8:
 	jr	gt, Scoop_SoundEditorData_Helper_Epilogue9
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x2EE:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SeMenu_CopyWriteUpdate_Step3_Code:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
@@ -5962,9 +5962,9 @@ Scoop_SoundEditorData_Helper_Epilogue9:
 	jr	gt, Scoop_SoundEditorData_Helper_Epilogue10
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x306:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code_2:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SeMenu_CopyWriteUpdate_Step3_Code_2:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
@@ -6016,9 +6016,9 @@ Scoop_SoundEditorData_Helper_Epilogue10:
 	jr	gt, Scoop_SoundEditorData_Helper_Epilogue11
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x31A:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code_3:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SeMenu_CopyWriteUpdate_Step3_Code_3:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
@@ -6500,7 +6500,7 @@ Scoop_SoundEditorData_Helper_Loop3:
 	ld	bc, wa
 	extz	xbc
 	lda	xde, (xsp+4)
-	lda_rr	xde, xde, wa
+	lda	xde, (xde+wa)
 	pushw	127
 	ld	wa, 0:i3
 	call	SeMenu_SetupDisplayObject_Alt1
@@ -6662,7 +6662,7 @@ Scoop_SoundEditorData_Helper_Loop5:
 	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	call	SeMenu_SetupPartDisplay_End_0x1C6
 	inc1b_erp	251
 	cp_erpb	251, 15
@@ -6695,8 +6695,8 @@ Scoop_SoundEditorData_Helper_Loop5:
 Scoop_SoundEditorData_Helper_Loop6:
 	ld	iy, hl
 	ld	wa, de
-	ld_rrb	a, xix, wa
-	st_rrb	a, xix, iy
+	ld	a, (xix+wa)
+	ld	(xix+iy), a
 	inc1b_erp	251
 	dec	1, hl
 	dec	1, de
@@ -6713,7 +6713,7 @@ Scoop_SoundEditorData_Helper_Skip29:
 	ld	c, (xsp+24)
 	extz	bc
 	lda	xwa, (xsp+6)
-	ld_rrb	a, xwa, bc
+	ld	a, (xwa+bc)
 	extz	wa
 	lda	xbc, (xsp+4)
 	call	SeMenu_SetupPartDisplay_End_0x24D
@@ -6740,7 +6740,7 @@ Scoop_SoundEditorData_Helper_Loop7:
 	ldto_berp	a, 251
 	extz	wa
 	lda	xbc, (xsp+6)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	call	SeMenu_SetupPartDisplay_End_0x1C6
 	inc1b_erp	251
 	cp_erpb	251, 15
@@ -6766,8 +6766,8 @@ Scoop_SoundEditorData_Helper_Loop8:
 	ldw	wa, 65535
 	add	ix, wa
 	ld	wa, bc
-	ld_rrb	a, xde, wa
-	st_rrb	a, xde, ix
+	ld	a, (xde+wa)
+	ld	(xde+ix), a
 	inc1b_erp	251
 	inc	1, bc
 	ldto_berp	a, 251
@@ -6785,7 +6785,7 @@ Scoop_SoundEditorData_Helper_Skip30:
 	ld	c, (xsp+24)
 	extz	bc
 	lda	xwa, (xsp+6)
-	ld_rrb	a, xwa, bc
+	ld	a, (xwa+bc)
 	extz	wa
 	lda	xbc, (xsp+4)
 	call	SeMenu_SetupPartDisplay_End_0x24D
@@ -6999,7 +6999,7 @@ Scoop_SoundEditorData_Helper_Loop10:
 	ldto_berp	a, 250
 	extz	wa
 	lda	xbc, (xsp+28)
-	lda_rr	xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	call	SeMenu_SetupPartDisplay_End_0x1C6
 	inc1b_erp	250
 	cp_erpb	250, 15
@@ -7114,7 +7114,7 @@ Scoop_SoundEditorData_Helper_Skip38:
 	ld	a, (xsp+6)
 	extz	wa
 	lda	xbc, (xsp+10)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+8)
 	call	SeMenu_SetupPartDisplay_End_0x24D
@@ -7269,7 +7269,7 @@ SeMenu_PopupDialog_Close_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (ToneGen_ParamTable_0x326:24)
-	ld_rrl	xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	call	(xhl)
 SeMenu_ValueEditor_Init:
 	.byte 0xc1, 0x9c, 0x8c, 0x3f, 0x20	; cpdi8 (0x8d38), 32 (v7 patched)
@@ -7421,7 +7421,7 @@ SeMenu_ListSelector_HandleInput:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (ToneGen_ParamTable_0x326:24)
-	ld_rrl	xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	call	(xhl)
 	jr	SeMenu_ListSelector_ScrollDown	; -> 0xF0EB3B
 SeMenu_ListSelector_HandleInput_Data:
@@ -7931,7 +7931,7 @@ SeMenu_ShowConfirmDialog:
 	sub HL,0x0020
 	ld XIY,SeMenu_ShowConfirmDialog_Data
 	sla HL, 0x02
-	ld_rrl	xiy, xiy, hl
+	ld	xiy, (xiy+hl)
 	call	(xiy)
 	or	(0xe31c:16), 8
 	pop	xiy
@@ -8066,9 +8066,9 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeMenu_ShowConfirmDialog_Data_3
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
 	jr	SeMenu_PresetManager_Data_Helper2_Join
@@ -8077,9 +8077,9 @@ SeMenu_PresetManager_Data_Helper2_Skip:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeMenu_ShowConfirmDialog_Data_2
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
 SeMenu_PresetManager_Data_Helper2_Join:
@@ -8370,7 +8370,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip5:
 	ld	xiz, SeEnvCurve_BitmapTable
 	xor	w, w
 	sll	wa, 2
-	ld_rrl	xiy, xiz, wa
+	ld	xiy, (xiz+wa)
 	ldw_d16	wa, (0x6c6)
 	div	a, 8
 	xor	w, w
@@ -8641,9 +8641,9 @@ SeMenu_PresetBrowser_Init_Helper:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0BF6
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 	jr	SeMenu_PresetManager_Data_Join2
@@ -8652,9 +8652,9 @@ SeMenu_PresetManager_Data_Entry:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0BAE
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 SeMenu_PresetManager_Data_Join2:
@@ -8678,9 +8678,9 @@ SeMenu_PresetManager_Data_Join2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0CD2
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 	jr	SeMenu_PresetManager_Data_Join3
@@ -8689,9 +8689,9 @@ SeMenu_PresetManager_Data_Entry2:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0C5A
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 SeMenu_PresetManager_Data_Join3:
@@ -8709,9 +8709,9 @@ SeMenu_PresetManager_Data_Join3:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0D4E
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 	jr	SeMenu_PresetManager_Data_Join4
@@ -8720,9 +8720,9 @@ SeMenu_PresetManager_Data_Entry3:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x0D14
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 SeMenu_PresetManager_Data_Join4:
@@ -8797,9 +8797,9 @@ SeMenu_PresetBrowser_Data:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x3869
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 	jr	SeMenu_PresetBrowser_Data_Code_Join
@@ -8808,9 +8808,9 @@ SeMenu_PresetBrowser_Data_Code_Entry:
 	xor	b, b
 	sla	bc, 2
 	ld	xiz, SeScreenData_0x3821
-	ld_rrl	xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	add	bc, 4
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
 SeMenu_PresetBrowser_Data_Code_Join:
@@ -8846,10 +8846,10 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	xor	d, d
 	sla	de, 2
 	ld	xiz, SeScreenData_0x29A0
-	ld_rrl	xiy, xiz, de
+	ld	xiy, (xiz+de)
 	pushw	de
 	add	de, 4
-	ld_rrl	xix, xiz, de
+	ld	xix, (xiz+de)
 	call	SeGfx_DrawStaticList
 	popw	de
 	pop	xiy
@@ -8859,7 +8859,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	.byte 0xcb, 0x04
 	push	xiy
 	ld	xiz, SeScreenData_0x2B02
-	ld_rrl	xiy, xiz, de
+	ld	xiy, (xiz+de)
 	ld	xix, xiy
 	add	xix, 7
 	pushw	de
@@ -8875,7 +8875,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	xor	w, w
 	mul	a, 10
 	ld	xiz, SeScreenData_0x2AD6
-	ld_rrl	xiy, xiz, de
+	ld	xiy, (xiz+de)
 	extz	xwa
 	add	xiy, xwa
 	ld	xix, xiy
@@ -8888,7 +8888,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	push	c
 	push	xiy
 	ld	xiz, SeScreenData_0x2920
-	ld_rrl	xiy, xiz, de
+	ld	xiy, (xiz+de)
 	pushw	de
 	call	SeGfx_DrawBoundRecord
 	popw	de
@@ -8898,7 +8898,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	.byte 0xcb, 0x04
 	push	xiy
 	ld	xiz, SeScreenData_0x3881
-	ld_rrl	xiy, xiz, de
+	ld	xiy, (xiz+de)
 	ld	xix, xiy
 	add	xix, 20
 	call	SeGfx_DrawStaticList
@@ -9280,7 +9280,7 @@ SeMenu_NameEdit_DataBlock1_Join:
 	ld	xiz, SeScreenData_0x4ECB
 	ld	c, (1648:16)
 	sla	bc, 2
-	ld_rrl	xix, xiz, bc
+	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	ld	a, (1648:16)
 	cp	a, 10
@@ -9363,7 +9363,7 @@ SeMenu_PatchEdit_DataBlock:
 	ld	xiz, SeScreenData_0x4E9B
 	ld	c, (1648:16)
 	sla	bc, 2
-	ld_rrl xiy, xiz, bc
+	ld	xiy, (xiz+bc)
 	jr SeMenu_PatchEdit_DataBlock_Join
 SeMenu_PatchEdit_DataBlock_Skip:
 	ld	xiy, SeScreenData_0x4C6D
@@ -9882,7 +9882,7 @@ Data_UnknownBlock_Return6:
 	xor	hl, hl
 	ld	l, w
 	sla	hl, 1
-	ld_rrw	ix, xiz, hl
+	ld	ix, (xiz+hl)
 	ld	(0x6cc:16), ix
 	add	ix, 8
 	ld	(0x6d0:16), ix
@@ -9890,7 +9890,7 @@ Data_UnknownBlock_Return6:
 	xor	hl, hl
 	ld	l, a
 	sla	hl, 1
-	ld_rrw	ix, xiz, hl
+	ld	ix, (xiz+hl)
 	ld	(0x6ce:16), ix
 	add	ix, 14
 	ld	(0x6d2:16), ix
@@ -15774,7 +15774,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (PsCmpCpFPtnBox_HandleEvtBC_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -15876,7 +15876,7 @@ PsCstmCpBnkBox_LookupAndSend:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (PtrTbl_RhySlotLongNames:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -16149,7 +16149,7 @@ AcMemNoBox_HandleEvtBC:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (AcMemNoBox_HandleEvtBC_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -16353,7 +16353,7 @@ PsCmpQtzBox_HandleEvtBC:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (PtrTbl_NotePositionStrs:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -16667,7 +16667,7 @@ PsNameMemBox_HandleEvtBC:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (PtrTbl_StyleVarGroupCodes:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -17247,7 +17247,7 @@ PsMspNameBnk_HandleEvtBC:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (PtrTbl_MspCompileBankLabels:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -17319,11 +17319,11 @@ VwVariBox_Init:
 
 	ld XDE, (xsp + 0x0114)
 
-	call	0xfa3ffc	; InheritedProc (v7 addr)
+	call	InheritedProc	; InheritedProc (v7 addr)
 
 	ld XWA, (xsp + 0x0118)
 
-	call	0xfa5e59	; GetViewInstance (v7 addr)
+	call	GetViewInstance	; GetViewInstance (v7 addr)
 
 	ld a, (xhl + 42)
 
@@ -17518,7 +17518,7 @@ VwVariBox_GetText_LookupAudio:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (PtrTbl_MusicStyleBankNames:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xsp+280)
 	push	xwa
@@ -18149,7 +18149,7 @@ RgpSetBnkBox_HandleEvtBC:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (RgpSetBnkBox_HandleEvtBC_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa

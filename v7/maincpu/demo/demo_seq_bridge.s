@@ -629,9 +629,9 @@ SqTrSel_CaseG:
 	ret	gt
 	add	wa, wa
 	lda	xix, (SepaOut_Config_0_0x26A:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SqTrSel_CaseG_JumpTable:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SqTrSel_CaseG_JumpTable:
 	; --- Jump table entries + 4 register-save call thunks ---
 	jrl CDlikeSwTtl_SongBit1Check

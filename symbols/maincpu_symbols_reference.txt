@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 51,669
-#   semantic names ........... 49,423 (95.7%)
+#   symbols .................. 51,747
+#   semantic names ........... 49,501 (95.7%)
 #   positional names ......... 2,246
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -19317,11 +19317,16 @@ SeMenu_ApplyPartEdit_Helper7_Skip 00F085AB
 SeMenu_ApplyPartEdit_Helper7_Join2 00F085B7
 SeMenu_ApplyPartEdit_Skip19 00F08639
 SeMenu_ApplyPartEdit_Join12 00F08645
+SeMenu_ApplyPartEdit_Helper7_Skip4 00F086C8
+SeMenu_ApplyPartEdit_Helper7_Join3 00F086D4
 SeMenu_ApplyPartEdit_Helper7_Skip2 00F086F4
 SeMenu_ApplyPartEdit_Helper7_Skip3 00F086FA
 SeMenu_ApplyPartEdit_Skip20 00F08703
 SeMenu_ApplyPartEdit_Join13 00F08706
 SeMenu_ApplyPartEdit_Skip21 00F087BC
+SeMenu_ApplyPartEdit_Helper7_Skip5 00F08814
+SeMenu_ApplyPartEdit_Helper7_Join4 00F08820
+SeMenu_ApplyPartEdit_Helper7_Epilogue 00F08857
 SeMenu_ApplyPartEdit_Helper8 00F0885C
 SeMenu_ApplyPartEdit_Helper8_Skip 00F0886F
 SeMenu_ApplyPartEdit_Helper8_Skip2 00F08877
@@ -19936,9 +19941,15 @@ SeMenu_CopyWriteUpdate_Epilogue23 00F0D38E
 SeMenu_CopyWriteUpdate_Skip62 00F0D422
 SeMenu_CopyWriteUpdate_Join13 00F0D424
 SeMenu_CopyWriteUpdate_Skip29 00F0D430
+SeMenu_CopyWriteUpdate_Skip88 00F0D452
+SeMenu_CopyWriteUpdate_Skip89 00F0D462
+SeMenu_CopyWriteUpdate_Skip90 00F0D468
 SeMenu_CopyWriteUpdate_Join14 00F0D46A
 SeMenu_CopyWriteUpdate_Skip63 00F0D48F
 SeMenu_CopyWriteUpdate_Loop4 00F0D497
+SeMenu_CopyWriteUpdate_Loop7 00F0D499
+SeMenu_CopyWriteUpdate_Skip91 00F0D4B0
+SeMenu_CopyWriteUpdate_Join42 00F0D4B6
 SeMenu_CopyWriteUpdate_Skip64 00F0D507
 SeMenu_CopyWriteUpdate_Skip65 00F0D517
 SeMenu_CopyWriteUpdate_Skip66 00F0D51B
@@ -20046,9 +20057,13 @@ SeMenu_CopyWriteUpdate_Data_Epilogue5 00F0E3AB
 SeMenu_CopyWriteUpdate_Data_Join4 00F0E3AE
 SeMenu_CopyWriteUpdate_Data_Epilogue6 00F0E411
 SeMenu_CopyWriteUpdate_Data_Join5 00F0E414
+SeMenu_CopyWriteUpdate_Entry6_Code_Loop 00F0E426
+SeMenu_CopyWriteUpdate_Entry6_Code_Loop2 00F0E486
 SeMenu_CopyWriteUpdate_Data_Skip3 00F0E4A3
+SeMenu_CopyWriteUpdate_Entry6_Code_Epilogue 00F0E4E4
 SeMenu_CopyWriteUpdate_Data_Epilogue4_Join 00F0E4EB
 SeMenu_CopyWriteUpdate_Data_Skip3_Loop 00F0E4FD
+SeMenu_CopyWriteUpdate_Entry6_Code_Loop3 00F0E540
 SeMenu_CopyWriteUpdate_Data_Skip3_Skip 00F0E55F
 SeMenu_CopyWriteUpdate_Data_Epilogue4_Join2 00F0E5AC
 SeMenu_CopyWriteUpdate_Data_Skip3_Join 00F0E5D7
@@ -20065,6 +20080,19 @@ SeMenu_CopyWriteUpdate_Data_Epilogue9_Epilogue 00F0E72D
 SeMenu_CopyWriteUpdate_Helper 00F0E730
 SeMenu_CopyWriteUpdate_Data_Epilogue9_Loop 00F0E736
 SeMenu_CopyWriteUpdate_Data_Loop_Join 00F0E775
+SeMenu_CopyWriteUpdate_Helper_Loop 00F0E791
+SeMenu_CopyWriteUpdate_Helper_Loop2 00F0E7BC
+SeMenu_CopyWriteUpdate_Helper_Skip 00F0E7D6
+SeMenu_CopyWriteUpdate_Helper_Loop3 00F0E7DD
+SeMenu_CopyWriteUpdate_Helper_Skip2 00F0E7E0
+SeMenu_CopyWriteUpdate_Helper_Skip3 00F0E7ED
+SeMenu_CopyWriteUpdate_Helper_Loop4 00F0E7F7
+SeMenu_CopyWriteUpdate_Helper_Skip4 00F0E813
+SeMenu_CopyWriteUpdate_Helper_Loop5 00F0E83D
+SeMenu_CopyWriteUpdate_Helper_Skip5 00F0E852
+SeMenu_CopyWriteUpdate_Helper_Loop6 00F0E892
+SeMenu_CopyWriteUpdate_Helper_Skip6 00F0E8A6
+SeMenu_CopyWriteUpdate_Helper_Epilogue 00F0E8DF
 SeMenu_CopyWriteUpdate_Data_Skip5 00F0E8EF
 SeMenu_CopyWriteUpdate_Data_Join7 00F0E8F4
 SeMenu_CopyWriteUpdate_Data_Skip6 00F0E903
@@ -22310,6 +22338,9 @@ SetWall_MiscDataAndCode_Join 00F2016A
 SetWall_MiscDataAndCode_Loop 00F2016E
 SetWall_MiscDataAndCode_Entry 00F201B0
 SetWall_MiscDataAndCode_Data 00F201BA
+SetWall_MiscDataAndCode_Data_Code_Join 00F201E3
+SetWall_MiscDataAndCode_Data_Code_Return 00F20203
+SetWall_MiscDataAndCode_Data_Code_Helper 00F20204
 SetWall_SyncToneGenToDRAM 00F2021A
 SetWall_Sync_CheckPanelBit 00F2026C
 SetWall_Sync_PanelOff 00F20286
@@ -22327,6 +22358,8 @@ UIStateEvt_VoiceParamHandler_Skip7 00F20383
 UIStateEvt_VoiceParamHandler_Return 00F203B4
 UIStateEvt_VoiceParamHandler_0xC9 00F203B5
 UIStateEvt_VoiceParamHandler_Skip3 00F203CA
+UIStateEvt_VoiceParamHandler_Skip8 00F203F7
+UIStateEvt_VoiceParamHandler_Join2 00F203FA
 UIStateEvt_VoiceParamHandler_Join 00F2040E
 UIStateEvt_VoiceParamHandler_Return2 00F2041A
 SeqPlay_RestoreVoiceState_Return 00F2041B
@@ -34090,6 +34123,7 @@ CmpSong_MainHandler 00F699BC
 MainCmpSetFunc 00F699BC
 MainCmpSet_Dispatch 00F69A0C
 MainCmpSetFunc_Skip 00F69AE9
+MainCmpSetFunc_Skip2 00F69B1F
 MainCmpSetFunc_Join 00F69B43
 CmpSong_VariantA 00F69B47
 MainEsCmpFunc 00F69B4C
@@ -43913,7 +43947,9 @@ BitMapOut_UpdateWidget_Done_0x8A 00FB62B5
 BitMapOut_UpdateWidget_Done_0x8B 00FB62B6
 BitMapOut_UpdateWidget_Done_0x98 00FB62C3
 BitMapOut_UpdateWidget_Done_0x99 00FB62C4
+BitMapOut_UpdateWidget_Done_Skip2 00FB62DB
 BitMapOut_UpdateWidget_Finalize_Loop 00FB62DE
+BitMapOut_UpdateWidget_Done_Epilogue 00FB62FA
 OneTchFUNC 00FB6300
 BitMapOut_ByteData_WidgetTable 00FB632E
 BitMapOut_ApplyWidgetPatch 00FB6346
@@ -45605,7 +45641,11 @@ FileIO_BytecodeData_Code_Skip77 00FC65BA
 FileIO_BytecodeData_Code_Join22 00FC65BD
 ExtDev_SndParam_Block48_Var04_B 00FC65C3
 FileIO_BytecodeData_Code_Skip78 00FC65DF
+NakaData_WidgetInit1_Code_Join 00FC65E2
 ExtDev_SndParam_Write98_Block 00FC65E8
+NakaData_WidgetInit1_Code_Skip 00FC6618
+NakaData_WidgetInit1_Code_Join2 00FC661B
+NakaData_WidgetInit1_Code_Epilogue 00FC6623
 ExtDev_SndParam_Block98_Var40 00FC6625
 ExtDev_SndParam_BlockA9_Var02 00FC664A
 ExtDev_SndParam_Block98_Var80 00FC6677
@@ -45616,6 +45656,9 @@ ExtDev_SndParam_ConfigAndWrite 00FC66C1
 FileIO_BytecodeData_Code_Join24 00FC6703
 ExtDev_SndParam_Block14_Dual 00FC670E
 ExtDev_SndParam_Write48_Block 00FC6732
+NakaData_WidgetInit1_Code_Skip2 00FC675E
+NakaData_WidgetInit1_Code_Join3 00FC6761
+NakaData_WidgetInit1_Code_Epilogue2 00FC6769
 ExtDev_SndParam_Block48_Var02 00FC676B
 FileIO_BytecodeData_Code_Skip80 00FC678E
 FileIO_BytecodeData_Code_Join25 00FC6791
@@ -45624,8 +45667,12 @@ FileIO_BytecodeData_Code_Skip81 00FC67B3
 FileIO_BytecodeData_Code_Join26 00FC67B6
 ExtDev_SndParam_DispatchAndWriteA8 00FC67BC
 FileIO_BytecodeData_Code_Skip82 00FC67E0
+NakaData_WidgetInit1_Code_Skip3 00FC67E2
+NakaData_WidgetInit1_Code_Epilogue3 00FC6813
 ExtDev_SndParam_DispatchAndWriteA8_Alt 00FC6815
 FileIO_BytecodeData_Code_Skip83 00FC6839
+NakaData_WidgetInit1_Code_Skip4 00FC683B
+NakaData_WidgetInit1_Code_Epilogue4 00FC686C
 ExtDev_SndParam_MultiReg_Iterate 00FC686E
 ExtDev_SndParam_DispatchComplex 00FC688C
 FileIO_BytecodeData_Code_Skip84 00FC68B5
@@ -45890,6 +45937,7 @@ UIState_Mode0or1 00FC7B4C
 UIState_Mode3 00FC7B53
 UIState_Mode4 00FC7B5A
 UIState_ProcessExtendedMode 00FC7B61
+UIState_ProcessExtendedMode_Skip 00FC7BA5
 UIStateEvt_NullHandler 00FC7BBA
 UIState_SwitchForMidiFlags 00FC7BBB
 UIState_MidiMode6 00FC7BD1
@@ -45921,6 +45969,7 @@ VoiceData_InitDone 00FC7E7E
 VoiceData_ExtendedParamSetup 00FC7E82
 VoiceData_ExtendedParamSetup_0x27 00FC7EA9
 VoiceData_ExtendedParamSetup_0x40 00FC7EC2
+VoiceData_ExtendedParamSetup_Loop3 00FC7ED6
 VoiceData_ExtendedParamSetup_0xAF 00FC7F31
 VoiceData_ExtendedParamSetup_Loop 00FC8087
 VoiceData_ExtendedParamSetup_Loop2 00FC80AB
@@ -45983,6 +46032,7 @@ ExtData_ToneParam_AltDispatch_Helper 00FC87C4
 ExtData_ToneParam_AltEntry 00FC87D3
 ExtData_ToneParam_AltBody 00FC87D4
 ExtData_ToneParam_AltBody_Code 00FC87FD
+ExtData_ToneParam_AltBody_Skip2 00FC888D
 ExtData_ToneParam_AltBody_Skip 00FC88CF
 ExtData_ToneParam_AltBody_Epilogue 00FC88F7
 ExtData_ToneParam_MultiChannel 00FC88F9
@@ -45996,6 +46046,8 @@ ExtData_ToneParam_MultiChannel_Skip7 00FC8980
 ExtData_ToneParam_MultiChannel_Join 00FC8991
 ExtData_ToneParam_MultiChannel_Join2 00FC8996
 ExtData_ToneParam_MultiChannel_Join3 00FC899A
+ExtData_ToneParam_MultiChannel_Skip8 00FC8A62
+ExtData_ToneParam_MultiChannel_Skip9 00FC8A6E
 MIDI_WriteResetSequence 00FC8A97
 ExtData_Voice_UpdateFlags 00FC8B4F
 ExtData_ToneParam_MultiChannel_Helper 00FC8B88
@@ -46005,7 +46057,10 @@ ExtData_Voice_RetEntry 00FC8BAF
 ExtData_Voice_MixedHandler 00FC8BB0
 ExtData_Voice_MixedHandler_Skip 00FC8BC1
 ExtData_Voice_MixedHandler_Join 00FC8BC5
+ExtData_Voice_MixedHandler_Skip5 00FC8C11
+ExtData_Voice_MixedHandler_Join4 00FC8C16
 ExtData_Voice_MixedHandler_Helper 00FC8C1E
+ExtData_Voice_MixedHandler_Helper_Entry 00FC8C34
 ExtData_Voice_MixedHandler_Skip2 00FC8C64
 ExtData_Voice_MixedHandler_Join2 00FC8C78
 ExtData_Voice_MixedHandler_Skip3 00FC8C7D
@@ -46019,6 +46074,11 @@ ExtData_Voice_FullHandler_Join 00FC8CD6
 ExtData_Voice_FullHandler_Skip2 00FC8CEA
 ExtData_Voice_FullHandler_Entry 00FC8CFD
 ExtData_Voice_FullHandler_Helper 00FC8D10
+ExtData_Voice_FullHandler_Helper_Code_Skip 00FC8D44
+ExtData_Voice_FullHandler_Helper_Code_Join 00FC8D47
+ExtData_Voice_FullHandler_Helper_Code_Entry 00FC8D49
+ExtData_Voice_FullHandler_Helper_Code_Skip2 00FC8D6A
+ExtData_Voice_FullHandler_Helper_Code_Skip3 00FC8D7D
 ExtData_Voice_CopyAndJump 00FC8D84
 ExtData_Voice_CompareAndDispatch 00FC8D93
 ExtData_Voice_CompareAndDispatch_Skip 00FC8DA2
@@ -46103,6 +46163,7 @@ VoiceParam_CompareAndUpdate 00FC971B
 ExtData_ToneParam_DispatchHandler_Helper2 00FC9772
 SwbtWr_WriteParamBlock_Skip 00FC9807
 SwbtWr_WriteParamBlock_Epilogue 00FC9817
+ExtData_ToneParam_AltBody_Helper 00FC981A
 SwbtWr_WriteParamBlock_Skip2 00FC9858
 SwbtWr_WriteParamBlock_Epilogue2 00FC9868
 ExtData_ToneParam_DispatchHandler_Helper3 00FC986B
@@ -46377,6 +46438,7 @@ MIDI_PartCC_DispatchExit 00FCB229
 MidiVoice_DataBlockHandler 00FCB22A
 MidiVoice_DataBlockHandler_Skip 00FCB24C
 VoiceMode3_EvType2 00FCB282
+VoiceMode3_EvType2_Skip 00FCB2AC
 MidiVoice_DataBlockHandler_Return 00FCB2D5
 VoiceMode3_EvType3 00FCB2D6
 MidiVoice_DataBlockHandler_Skip2 00FCB2FD
@@ -46706,6 +46768,13 @@ SndParam_RegisterLinked_Data_Join2 00FCE065
 SndParam_RegisterLinked2_Data 00FCE06E
 SndParam_RegisterLinked2_Data_Skip2 00FCE0A1
 SndParam_RegisterLinked2_Data_Skip3 00FCE0AA
+SndParam_RegisterLinked2_Data_Skip6 00FCE0C1
+SndParam_RegisterLinked2_Data_Join3 00FCE0C3
+SndParam_RegisterLinked2_Data_Loop 00FCE0D0
+SndParam_RegisterLinked2_Data_Skip7 00FCE0DD
+SndParam_RegisterLinked2_Data_Skip8 00FCE0E4
+SndParam_RegisterLinked2_Data_Join4 00FCE0E7
+SndParam_RegisterLinked2_Data_Skip9 00FCE0F5
 SndParam_RegisterLinked2_Data_Skip4 00FCE105
 SndParam_RegisterLinked2_Data_Join2 00FCE110
 SndParam_RegisterLinked2_Data_Skip 00FCE190
@@ -46739,6 +46808,11 @@ SndParam_NotifyQuick_Data_Skip 00FCE5F7
 SndParam_NotifyQuick_Data_Skip2 00FCE602
 SndParam_NotifyQuick_Data_Skip3 00FCE60E
 SndParam_RegisterDual_Data 00FCE616
+SndParam_RegisterDual_Data_Loop 00FCE6A8
+SndParam_RegisterDual_Data_Skip3 00FCE6B5
+SndParam_RegisterDual_Data_Skip4 00FCE6BC
+SndParam_RegisterDual_Data_Join3 00FCE6BF
+SndParam_RegisterDual_Data_Skip5 00FCE6D0
 SndParam_RegisterDual_Data_Skip 00FCE6E0
 SndParam_RegisterDual_Data_Join 00FCE6EB
 SndParam_RegisterDual_Data_Skip2 00FCE752
@@ -49271,10 +49345,13 @@ AllocCheckNoteOn_Data 00FE2BAE
 NoteMap_AddEntry_Skip 00FE2C00
 NoteMap_AddEntry_Loop 00FE2C14
 NoteMap_AddEntry_Skip2 00FE2C35
+NoteMap_AddEntry_Skip7 00FE2C41
 NoteMap_AddEntry_Skip3 00FE2C7B
 NoteMap_AddEntry_Skip4 00FE2CAA
+NoteMap_AddEntry_Skip8 00FE2CE3
 NoteMap_AddEntry_Loop2 00FE2CF5
 NoteMap_AddEntry_Skip5 00FE2D18
+NoteMap_AddEntry_Skip9 00FE2D21
 NoteMap_AddEntry_Skip6 00FE2D47
 NoteMap_AddEntry_Epilogue 00FE2D6D
 NoteMap_CollectAndFindBestVoice 00FE2D74
@@ -50416,6 +50493,7 @@ SendSinglePacket_DoGetPlayS 00FEC55C
 SendSinglePacket_Epilogue 00FEC575
 SendSinglePacket_Data 00FEC57A
 SendSinglePacket_Data_Code_Skip 00FEC5AC
+SendSinglePacket_Data_Code_Epilogue 00FEC5D1
 SendSinglePacket_WriteReg 00FEC5D6
 SendSinglePacket_DoReadNext 00FEC60C
 SendSinglePacket_Block 00FEC61C

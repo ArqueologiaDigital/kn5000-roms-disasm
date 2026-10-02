@@ -1,0 +1,844 @@
+{
+ "rows": [
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 4049,
+   "addr": "0xfe23e2",
+   "end": "0xfe23f2",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 4141,
+   "addr": "0xfe24ca",
+   "result": "refused: no resync / undecodable"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 4164,
+   "addr": "0xfe2502",
+   "end": "0xfe250b",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 4187,
+   "addr": "0xfe2538",
+   "result": "refused: new decode absurd"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 13968,
+   "addr": "0xfe8a53",
+   "end": "0xfe8a58",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 14857,
+   "addr": "0xfe92b1",
+   "end": "0xfe92cc",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 14872,
+   "addr": "0xfe92c6",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 15128,
+   "addr": "0xfe9559",
+   "end": "0xfe9569",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 19128,
+   "addr": "0xfebded",
+   "end": "0xfebdf2",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 21563,
+   "addr": "0xfed4f5",
+   "end": "0xfed4f9",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 23241,
+   "addr": "0xfee3e2",
+   "end": "0xfee3e6",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 24855,
+   "addr": "0xfef49b",
+   "end": "0xfef4a6",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/note_voice_mapping.s",
+   "line": 24946,
+   "addr": "0xfef597",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/dsp_config_sysex.s",
+   "line": 2270,
+   "addr": "0xfdbcfe",
+   "end": "0xfdbd03",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/dsp_config_sysex.s",
+   "line": 4883,
+   "addr": "0xfdd776",
+   "result": "refused: no resync / undecodable"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 1511,
+   "addr": "0xfc5e31",
+   "end": "0xfc5e38",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 1682,
+   "addr": "0xfc5f77",
+   "end": "0xfc5f7e",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 1784,
+   "addr": "0xfc6024",
+   "end": "0xfc602b",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 1847,
+   "addr": "0xfc607d",
+   "end": "0xfc6084",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 4009,
+   "addr": "0xfc73b5",
+   "end": "0xfc73c7",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 4042,
+   "addr": "0xfc73da",
+   "end": "0xfc73ee",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 4439,
+   "addr": "0xfc7769",
+   "end": "0xfc776c",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 4478,
+   "addr": "0xfc77d8",
+   "end": "0xfc77f1",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5127,
+   "addr": "0xfc7df8",
+   "result": "refused: new decode absurd"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5247,
+   "addr": "0xfc7eaf",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5465,
+   "addr": "0xfc8097",
+   "end": "0xfc809d",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5481,
+   "addr": "0xfc80be",
+   "end": "0xfc80c2",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5627,
+   "addr": "0xfc8208",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5635,
+   "addr": "0xfc821c",
+   "end": "0xfc822f",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5658,
+   "addr": "0xfc825a",
+   "result": "refused: no resync / undecodable"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5666,
+   "addr": "0xfc826b",
+   "end": "0xfc828d",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5674,
+   "addr": "0xfc827e",
+   "end": "0xfc828d",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5696,
+   "addr": "0xfc82ae",
+   "end": "0xfc82bd",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5886,
+   "addr": "0xfc843d",
+   "end": "0xfc8444",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 5979,
+   "addr": "0xfc8511",
+   "end": "0xfc8516",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 6033,
+   "addr": "0xfc856e",
+   "end": "0xfc8574",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 6067,
+   "addr": "0xfc85a4",
+   "end": "0xfc85c5",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 6073,
+   "addr": "0xfc85ae",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 6109,
+   "addr": "0xfc85f3",
+   "end": "0xfc85ff",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 6182,
+   "addr": "0xfc86d4",
+   "end": "0xfc86ec",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 6945,
+   "addr": "0xfc8e90",
+   "end": "0xfc8e98",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 11092,
+   "addr": "0xfcbe76",
+   "end": "0xfcbe7f",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/audio_control_engine.s",
+   "line": 11160,
+   "addr": "0xfcbf4f",
+   "end": "0xfcbf56",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/demo/fdemotext_routines.s",
+   "line": 2120,
+   "addr": "0xf85654",
+   "result": "refused: old decode looked sane"
+  },
+  {
+   "file": "v7/maincpu/audio/sound_editor_ui.s",
+   "line": 19570,
+   "addr": "0xf1dc96",
+   "result": "refused: new decode absurd"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 1298,
+   "addr": "0xf06bd6",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 1420,
+   "addr": "0xf06ccd",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 1678,
+   "addr": "0xf06e84",
+   "end": "0xf06e87",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 1801,
+   "addr": "0xf06f92",
+   "result": "refused: context before not clean code"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 1890,
+   "addr": "0xf07057",
+   "end": "0xf0705a",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 1925,
+   "addr": "0xf070a8",
+   "end": "0xf070b1",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 5698,
+   "addr": "0xf0950b",
+   "end": "0xf0951c",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 5712,
+   "addr": "0xf09529",
+   "end": "0xf09534",
+   "result": "candidate"
+  },
+  {
+   "file": "v7/maincpu/audio/semenu_routines.s",
+   "line": 6366,
+   "addr": "0xf09a30",
+   "end": "0xf09a35",
+   "result": "candidate"
+  }
+ ],
+ "specs": {
+  "v7/maincpu/audio/note_voice_mapping.s": [
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFE23E2",
+    "end": "0xFE23F2",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 16
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFE2502",
+    "end": "0xFE250B",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 9
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFE8A53",
+    "end": "0xFE8A58",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 5
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFE92B1",
+    "end": "0xFE92CC",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 27
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFE9559",
+    "end": "0xFE9569",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 16
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFEBDED",
+    "end": "0xFEBDF2",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 5
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFED4F5",
+    "end": "0xFED4F9",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 4
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFEE3E2",
+    "end": "0xFEE3E6",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 4
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/note_voice_mapping.s",
+    "start": "0xFEF49B",
+    "end": "0xFEF4A6",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 11
+     }
+    ],
+    "applied": true
+   }
+  ],
+  "v7/maincpu/audio/dsp_config_sysex.s": [
+   {
+    "file": "v7/maincpu/audio/dsp_config_sysex.s",
+    "start": "0xFDBCFE",
+    "end": "0xFDBD03",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 5
+     }
+    ],
+    "applied": true
+   }
+  ],
+  "v7/maincpu/audio/audio_control_engine.s": [
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC5E31",
+    "end": "0xFC5E38",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 7
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC5F77",
+    "end": "0xFC5F7E",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 7
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC6024",
+    "end": "0xFC602B",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 7
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC607D",
+    "end": "0xFC6084",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 7
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC73B5",
+    "end": "0xFC73C7",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 18
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC73DA",
+    "end": "0xFC73EE",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 20
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC7769",
+    "end": "0xFC776C",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 3
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC77D8",
+    "end": "0xFC77F1",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 25
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC8097",
+    "end": "0xFC809D",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 6
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC80BE",
+    "end": "0xFC80C2",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 4
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC821C",
+    "end": "0xFC822F",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 19
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC826B",
+    "end": "0xFC828D",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 34
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC827E",
+    "end": "0xFC828D",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 15
+     }
+    ]
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC82AE",
+    "end": "0xFC82BD",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 15
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC843D",
+    "end": "0xFC8444",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 7
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC8511",
+    "end": "0xFC8516",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 5
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC856E",
+    "end": "0xFC8574",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 6
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC85A4",
+    "end": "0xFC85C5",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 33
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC85F3",
+    "end": "0xFC85FF",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 12
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC86D4",
+    "end": "0xFC86EC",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 24
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFC8E90",
+    "end": "0xFC8E98",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 8
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFCBE76",
+    "end": "0xFCBE7F",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 9
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/audio_control_engine.s",
+    "start": "0xFCBF4F",
+    "end": "0xFCBF56",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 7
+     }
+    ],
+    "applied": true
+   }
+  ],
+  "v7/maincpu/audio/semenu_routines.s": [
+   {
+    "file": "v7/maincpu/audio/semenu_routines.s",
+    "start": "0xF06E84",
+    "end": "0xF06E87",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 3
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/semenu_routines.s",
+    "start": "0xF07057",
+    "end": "0xF0705A",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 3
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/semenu_routines.s",
+    "start": "0xF070A8",
+    "end": "0xF070B1",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 9
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/semenu_routines.s",
+    "start": "0xF0950B",
+    "end": "0xF0951C",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 17
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/semenu_routines.s",
+    "start": "0xF09529",
+    "end": "0xF09534",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 11
+     }
+    ],
+    "applied": true
+   },
+   {
+    "file": "v7/maincpu/audio/semenu_routines.s",
+    "start": "0xF09A30",
+    "end": "0xF09A35",
+    "segments": [
+     {
+      "kind": "code",
+      "len": 5
+     }
+    ],
+    "applied": true
+   }
+  ]
+ }
+}

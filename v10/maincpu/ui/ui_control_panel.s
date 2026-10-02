@@ -1945,7 +1945,7 @@ UIState_KeyScan_Dispatch:
 	extz wa					; Zero-extend to 16-bit
 	sla wa, 2				; state * 4 (pointer table stride)
 	lda xbc, (SSF_PresentationGateTable:24); Base of state->key-map pointer table
-	ld_rrl	xix, xbc, wa
+	ld	xix, (xbc+wa)
 	or xix, xix				; Test if pointer is null
 	ret z					; Return if no key map for this state
 	cpw (xix), 0xfffe			; Check for PASS-THROUGH marker

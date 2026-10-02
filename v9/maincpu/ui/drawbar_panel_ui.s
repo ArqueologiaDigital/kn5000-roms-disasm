@@ -216,7 +216,7 @@ ComSetGridCheck_Evt1C00017:
 	ld	wa, (xsp+6)
 	sla	wa, 2
 	lda	xbc, (ComSetGridCheck_JumpTable_Table:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	cp	xwa, 8705
 	jrl	z, UI_ReturnZero
 	cp	xwa, 8709
@@ -225,7 +225,7 @@ ComSetGridCheck_JumpTable_Skip:
 	ld	bc, (xsp+6)
 	sla	bc, 2
 	lda	xwa, (ComSetGridCheck_JumpTable_Table:24)
-	ld_rrl	xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	ComSetGridCheck_JumpTable_Join
@@ -252,7 +252,7 @@ ComSetGridCheck_Evt1C00018:
 	ld	wa, (xsp+6)
 	sla	wa, 2
 	lda	xbc, (ComSetGridCheck_JumpTable_Table:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	cp	xwa, 8705
 	jrl	z, UI_ReturnZero
 	cp	xwa, 8709
@@ -261,7 +261,7 @@ ComSetGridCheck_JumpTable_Skip2:
 	ld	bc, (xsp+6)
 	sla	bc, 2
 	lda	xwa, (ComSetGridCheck_JumpTable_Table:24)
-	ld_rrl	xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	ldw	bc, 0xffff
 	ld	de, 2:i3
 ComSetGridCheck_JumpTable_Join:
@@ -3232,7 +3232,7 @@ CtlMsgGridCheck_Evt1C00017:
 	ld	de, wa
 	add	de, bc
 	lda	xwa, (CtlMsgGridCheck_Table:24)
-	ld_rrl	xwa, xwa, de
+	ld	xwa, (xwa+de)
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	CtlMsgGridCheck_Entry
@@ -3260,7 +3260,7 @@ CtlMsgGridCheck_Evt1C00018:
 	ld	de, wa
 	add	de, bc
 	lda	xwa, (CtlMsgGridCheck_Table:24)
-	ld_rrl	xwa, xwa, de
+	ld	xwa, (xwa+de)
 	ldw	bc, 0xffff
 	ld	de, 2:i3
 CtlMsgGridCheck_Entry:
@@ -4058,7 +4058,7 @@ MidiPartGridCheck_Evt1C00017:
 	ld	de, wa
 	add	de, hl
 	lda	xwa, (MidiSetup_EventHandler_Table:24)
-	ld_rrl	xwa, xwa, de
+	ld	xwa, (xwa+de)
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
 	cp	wa, 3:i3
@@ -4105,7 +4105,7 @@ MidiPartGridCheck_Skip3:
 	ld	wa, hl
 	add	wa, wa
 	lda	xbc, (MidiPartGridCheck_Evt1C00017_Data:24)
-	ld_rrw	bc, xbc, wa
+	ld	bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
 	ld	xwa, (xsp+12)
@@ -4144,7 +4144,7 @@ MidiPartGridCheck_Evt1C00018:
 	ld	de, wa
 	add	de, hl
 	lda	xwa, (MidiSetup_EventHandler_Table:24)
-	ld_rrl	xwa, xwa, de
+	ld	xwa, (xwa+de)
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
 	cp	wa, 3:i3
@@ -4193,7 +4193,7 @@ MidiPartGridCheck_Skip7:
 	ld	wa, hl
 	add	wa, wa
 	lda	xbc, (MidiPartGridCheck_Evt1C00018_Data:24)
-	ld_rrw	bc, xbc, wa
+	ld	bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
 	ld	xwa, (xsp+12)
@@ -4224,7 +4224,7 @@ MidiPartGridCheck_Loop:
 	ld	iy, wa
 	add	iy, de
 	lda	xhl, (MidiSetup_EventHandler_Table:24)
-	ld_rrl	xiz, xhl, iy
+	ld	xiz, (xhl+iy)
 	ld	xde, (xsp+34)
 	cp	(xde), xiz
 	jr	nz, MidiPartGridCheck_Skip10
@@ -4307,7 +4307,7 @@ MidiPartGridCheck_Skip12:
 	ld	wa, (xde)
 	sla	wa, 2
 	lda	xbc, (Transpose_ValueDisplay_Table:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xsp+12)
 	push	xwa
@@ -11164,7 +11164,7 @@ AcWelcomScreen_RenderBytecode:
 	ld	bc, iz
 	muls	bc, 12
 	lda	xwa, (0x03ea0c:24)
-	lda_rr	xwa, xwa, bc	; lda xwa, xwa+bc
+	lda	xwa, (xwa+bc)	; lda xwa, xwa+bc
 	cpw	(xwa+10), 65535
 	jr	z, AcWelcomScreen_RenderBytecode_Skip4
 	cp	iz, 65535
@@ -11202,7 +11202,7 @@ AcWelcomScreen_RenderBytecode_Skip4:
 	add	xiy, xbc
 	sll	xiy, 2
 	add	xiy, (0x024786:24)
-	lda_rr	xix, xwa, iz	; lda xix, xwa+iz
+	lda	xix, (xwa+iz)	; lda xix, xwa+iz
 	ld	bc, 6:i3
 	ldirw
 	jrl	AcWelcomScreen_Select_NextStep
@@ -13214,7 +13214,7 @@ PsMixer_CtlTypeProc5_Skip:
 	lda	xwa, (0x3eab0:24)
 	ld	de, (xsp+4)
 	sla	de, 2
-	ld_rrl xde, xwa, de
+	ld	xde, (xwa+de)
 	lda xwa, (xsp+20)
 	ld hl, (xsp+14)
 	cp hl, (149392:24)
@@ -13246,7 +13246,7 @@ PsMixer_CtlTypeProc5_Skip3:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+4)
 	exts	xde
@@ -13353,7 +13353,7 @@ PsMixer_CtlTypeProc6_Skip:
 	ld	de, (xsp+4)
 	sla	de, 2
 	lda	xhl, (0x3eab0:24)
-	ld_rrl xde, xhl, de
+	ld	xde, (xhl+de)
 	ld xhl, 3:i3
 	push	xhl
 	pushw	0
@@ -13364,7 +13364,7 @@ PsMixer_CtlTypeProc6_Skip:
 	lda	xwa, (0x03eb88:24)
 	ld	de, (xsp+14)
 	sla	de, 2
-	ld_rrl	xde, xwa, de	; ld xde, (xwa+de)
+	ld	xde, (xwa+de)	; ld xde, (xwa+de)
 	lda	xwa, (xsp+20)
 	ld	hl, (xsp+14)
 	cp	hl, (0x024790:24)
@@ -13396,7 +13396,7 @@ PsMixer_CtlTypeProc6_Skip3:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+4)
 	exts	xde
@@ -13521,7 +13521,7 @@ PsMixer_CtlTypeProc3_Skip2:
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+6), xwa
 	lda xwa, (xsp+62)
 	ld bc, (xsp+10)
@@ -13619,7 +13619,7 @@ PsMixer_CtlTypeProc3_Join2:
 	ld	wa, (xde)
 	sra	wa, 3
 	sla	wa, 2
-	ld_rrw wa, xbc, wa
+	ld	wa, (xbc+wa)
 	add (xhl), wa
 	ld wa, (xde)
 	sra	wa, 3
@@ -13651,7 +13651,7 @@ PsMixer_CtlTypeProc3_Skip6:
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
 	exts	xde
@@ -13719,7 +13719,7 @@ PsMixer_CtlTypeProc3_Skip8:
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
 	exts	xde
@@ -13841,7 +13841,7 @@ PsMixer_CtlTypeProc7_Skip2:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
 	ld bc, (xsp+12)
@@ -13929,7 +13929,7 @@ PsMixer_CtlTypeProc7_Skip5:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
 	exts xde
@@ -13994,7 +13994,7 @@ PsMixer_CtlTypeProc7_Skip7:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
 	exts xde
@@ -14112,7 +14112,7 @@ PsMixer_CtlTypeProc4_Skip2:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+6), xwa
 	lda xwa, (xsp+66)
 	ld bc, (xsp+10)
@@ -14223,7 +14223,7 @@ PsMixer_CtlTypeProc4_Skip7:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
 	exts	xde
@@ -14345,7 +14345,7 @@ PsMixer_CtlTypeProc9_Skip2:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
 	ld bc, (xsp+12)
@@ -14461,7 +14461,7 @@ PsMixer_CtlTypeProc9_Skip6:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
 	exts xde
@@ -14690,7 +14690,7 @@ PsMixer_CtlTypeProc2_Join:
 	ld	wa, (xhl)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+12), xwa
 	ld de, (xsp+6)
 	exts xde
@@ -14898,7 +14898,7 @@ PsMixer_CtlTypeProc1_Loop:
 	ld	(xsp+8), hl
 	sla	hl, 2
 	lda	xwa, (0x3ea38:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	pushw	PsMixer_CtlTypeProc1_Data@hi16
 	pushw	PsMixer_CtlTypeProc1_Data@lo16
@@ -14940,7 +14940,7 @@ PsMixer_CtlTypeProc1_Skip2:
 	ld	(xsp+8), hl
 	add	hl, hl
 	lda	xwa, (IvSdpart_ShowHide_Data:24)
-	ld_rrw de, xwa, hl
+	ld	de, (xwa+hl)
 	exts xde
 	ld	xwa, NAKA_MAINFUNC_MainGetSoundName
 	ld	xbc, EVT_GET_SOUND_NAME
@@ -14960,7 +14960,7 @@ PsMixer_CtlTypeProc1_Loop2:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	ld	(xsp+14), xwa
 	cp	xwa, NAKA_APFUNC_LswSound
 	jrl	nz, PsMixer_CtlTypeProc1_Skip6
@@ -15051,7 +15051,7 @@ PsMixer_CtlTypeProc1_Skip7:
 	ld	wa, (xiz)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+14), xwa
 	ld de, (xsp+8)
 	exts xde
@@ -15154,7 +15154,7 @@ PsMixer_CtlTypeProc10_Loop:
 	ld	wa, iz
 	sla	wa, 2
 	lda	xbc, (0x3eb28:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw	PsMixer_CtlTypeProc10_Data@hi16
 	pushw	PsMixer_CtlTypeProc10_Data@lo16
@@ -15211,7 +15211,7 @@ PsMixer_CtlTypeProc8_Skip:
 	ld	wa, (xwa)
 	sla	wa, 2
 	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp+10), xwa
 	ld de, (xsp+8)
 	exts xde

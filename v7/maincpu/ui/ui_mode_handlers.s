@@ -2002,7 +2002,7 @@ EffectMode_DiagSeq_AnimFrame:
 	extz	wa
 	lda	xbc, (EffectMode_DiagSeq_AnimFrame_Data:24)
 	ld	xde, 0:i3
-	ld_rrb	e, xbc, wa
+	ld	e, (xbc+wa)
 	add	xde, TITLE_PS
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -2629,7 +2629,7 @@ AcMstStyleAlp_Boundary:
 	add	xbc, AcMstStyleAlpGridBoxProc_Data
 	ld	bc, (xbc)
 	lda	xix, (AcMstStyleAlp_Boundary_Skip:24)
-	jp_rr	8, xix, bc	; jp t, xix+bc
+	jp	t, (xix+bc)	; jp t, xix+bc
 AcMstStyleAlp_Boundary_Skip:
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
@@ -2679,7 +2679,7 @@ AcMstStyleAlp_Boundary_Skip:
 	add	de, wa
 	muls	de, 6
 	lda	xbc, (MasterSetup_EventDispatch_Data:24)
-	ld_rrw	de, xbc, de	; ld de, (xbc+de)
+	ld	de, (xbc+de)	; ld de, (xbc+de)
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
 	ld	xbc, EVT_OTP_CNT_SET
@@ -2719,7 +2719,7 @@ AcMstStyleAlp_Boundary_Skip3:
 	ld	(xbc), wa
 	muls	wa, 6
 	lda	xbc, (StyleSong_MasterTable:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -2825,7 +2825,7 @@ MasterSetup_DialTurn_ScrollUp:
 	ld	wa, (xwa)
 	muls	wa, 6
 	lda	xde, (StyleSong_MasterTable:24)
-	ld_rrl	xwa, xde, wa
+	ld	xwa, (xde+wa)
 	push	xwa
 	push	xbc
 	call	Free_Compare2
@@ -2940,7 +2940,7 @@ MasterSetup_ScrollUp_Search_Done:
 	dec	1, wa
 	ld	(xbc), wa
 	muls	wa, 6
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	push	xde
 	call	Free_Compare2
@@ -3164,7 +3164,7 @@ MasterSetup_FallbackEvent:
 	ld	xwa, (xix)
 	ld	wa, (xwa)
 	muls	wa, 6
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -3477,7 +3477,7 @@ MstStyleAlp_EventDispatch:
 	add	de, wa
 	muls	de, 6
 	lda	xbc, (MasterSetup_EventDispatch_Data:24)
-	ld_rrw	de, xbc, de
+	ld	de, (xbc+de)
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
 	ld	xbc, EVT_OTP_CNT_SET
@@ -3563,7 +3563,7 @@ MstStyleAlp_PadLoopCond:
 	muls	bc, 6
 	ld	wa, bc
 	lda	xbc, (StyleSong_MasterTable:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -3618,7 +3618,7 @@ MstStyleAlp_PadLoopCond2:
 	muls	bc, 6
 	ld	wa, bc
 	lda	xbc, (StyleSong_MasterTable:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -4037,7 +4037,7 @@ MstStyle1Grid_CellSelect:
 	add	ix, wa
 	sla	ix, 3
 	ld	xwa, (xsp+8)
-	ld_rrl	xwa, xwa, ix
+	ld	xwa, (xwa+ix)
 	push	xwa
 	push	xbc
 	call	Free_Compare2
@@ -4062,7 +4062,7 @@ MstStyle1Grid_PadLeft_Check:
 	add	wa, (xsp+32)
 	sla	wa, 3
 	lda	xbc, (MstStyle1Grid_CellSelect_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -4084,7 +4084,7 @@ MstStyle1Grid_BottomSection:
 	add	ix, (xde)
 	sla	ix, 3
 	ld	xwa, (xsp+8)
-	ld_rrl	xwa, xwa, ix	; ld xwa, (xwa+ix)
+	ld	xwa, (xwa+ix)	; ld xwa, (xwa+ix)
 	push	xwa
 	push	xbc
 	call	Free_Compare2
@@ -4109,7 +4109,7 @@ MstStyle1Grid_PadLeft_CheckB:
 	add	wa, (xsp+32)
 	sla	wa, 3
 	lda	xbc, (MstStyle1Grid_CellSelect_Data:24)
-	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
+	ld	xwa, (xbc+wa)	; ld xwa, (xbc+wa)
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	inc	4, xsp
@@ -7383,7 +7383,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10374
 	ld	de, 2:i3
@@ -7408,7 +7408,7 @@ FSWAssGrid_EventDispatch_Skip4:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10376
 	ld	de, 2:i3
@@ -7433,7 +7433,7 @@ FSWAssGrid_EventDispatch_Skip5:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10378
 	ld	de, 2:i3
@@ -7458,7 +7458,7 @@ FSWAssGrid_EventDispatch_Skip6:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10380
 	ld	de, 2:i3
@@ -7483,7 +7483,7 @@ FSWAssGrid_EventDispatch_Skip7:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10382
 	ld	de, 2:i3
@@ -7508,7 +7508,7 @@ FSWAssGrid_EventDispatch_Skip8:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10384
 	ld	de, 2:i3
@@ -7533,7 +7533,7 @@ FSWAssGrid_EventDispatch_Skip9:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10368
 	ld	de, 2:i3
@@ -7570,7 +7570,7 @@ FSWAssGridCheck_Evt1C00018:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10374
 	ld	de, 2:i3
@@ -7595,7 +7595,7 @@ FSWAssGridCheck_Entry7:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10376
 	ld	de, 2:i3
@@ -7620,7 +7620,7 @@ FSWAssGridCheck_Entry8:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10378
 	ld	de, 2:i3
@@ -7645,7 +7645,7 @@ FSWAssGridCheck_Entry9:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10380
 	ld	de, 2:i3
@@ -7670,7 +7670,7 @@ FSWAssGridCheck_Entry10:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10382
 	ld	de, 2:i3
@@ -7695,7 +7695,7 @@ FSWAssGridCheck_Entry11:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10384
 	ld	de, 2:i3
@@ -7720,7 +7720,7 @@ FSWAssGridCheck_Entry12:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FswAssign_FunctionCodes:24)
-	ld_rrb	c, xbc, hl
+	ld	c, (xbc+hl)
 	extz	bc
 	ld	xwa, 10368
 	ld	de, 2:i3
@@ -7743,7 +7743,7 @@ FSWAssGridCheck_Evt1C0001C:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FswAssign_FunctionNames:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts@hi16
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts@lo16
@@ -7771,7 +7771,7 @@ FSWAssGridCheck_Skip:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FswAssign_FunctionNames:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_2@hi16
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_2@lo16
@@ -7797,7 +7797,7 @@ FSWAssGridCheck_Skip2:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FswAssign_FunctionNames:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_3@hi16
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_3@lo16
@@ -7823,7 +7823,7 @@ FSWAssGridCheck_Skip3:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FswAssign_FunctionNames:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_4@hi16
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_4@lo16
@@ -7850,7 +7850,7 @@ FSWAssGridCheck_Skip4:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FswAssign_FunctionNames:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_5@hi16
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_5@lo16
@@ -7876,7 +7876,7 @@ FSWAssGridCheck_Skip5:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FswAssign_FunctionNames:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_6@hi16
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_6@lo16
@@ -7902,7 +7902,7 @@ FSWAssGridCheck_Skip6:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FswAssign_FunctionNames:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_7@hi16
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_7@lo16
@@ -8485,7 +8485,7 @@ PmExpFilter_DrawCellBank1:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_01:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	PmExpFilter_DrawCellBank1_Str_Fmts@hi16
 	pushw	PmExpFilter_DrawCellBank1_Str_Fmts@lo16
@@ -8905,7 +8905,7 @@ PmExpFilter_EventDispatch:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ldw	bc, 65535
 	ld	de, 2:i3
 	jrl	PmExpFilterGridCheck_Join
@@ -8915,7 +8915,7 @@ PmExpFilterGridCheck_Skip:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ldw	bc, 65535
 	ld	de, 2:i3
 	jr	PmExpFilterGridCheck_Join
@@ -8950,7 +8950,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	PmExpFilterGridCheck_Join
@@ -8960,7 +8960,7 @@ PmExpFilterGridCheck_Skip2:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
 PmExpFilterGridCheck_Join:
@@ -9090,7 +9090,7 @@ PmExpFilterCheck_CellDecode:
 	cp	wa, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xwa, (PmExpFilter_EventDispatch_Data:24)
-	ld_rrl	xwa, xwa, bc	; ld xwa, (xwa+bc)
+	ld	xwa, (xwa+bc)	; ld xwa, (xwa+bc)
 	call	AcApcToggleProc_Helper
 	ld	xwa, PmExpFilterCheck_CellDecode_Str_OFF
 	cp	hl, 0:i3
@@ -9113,7 +9113,7 @@ PmExpFilterCheck_AltDecode:
 	cp	wa, 10
 	jr	gt, PmExpFilterCheck_PushDefault	; -> 0xFBBC1E
 	lda	xwa, (PmExpFilter_AltKeys:24)
-	ld_rrl	xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	call	AcApcToggleProc_Helper
 	lda	xbc, (xsp)
 	ld	xwa, PmExpFilterCheck_AltDecode_Str_OFF
@@ -13931,7 +13931,7 @@ RVari_Select:
 	divs	wa, 4
 	ld	wa, qwa
 	lda	xbc, (RVari_Select_Data:24)
-	ld_rrb	a, xbc, wa	; ld a, (xbc+wa)
+	ld	a, (xbc+wa)	; ld a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+532)
 	call	GetEditSwPoint
@@ -13986,7 +13986,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	lda	xbc, (RVari_Select_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	call	DrawEditSw
 	ld	xwa, (xiz+64)
@@ -13995,7 +13995,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	lda	xbc, (RVari_Select_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+532)
 	call	GetEditSwPoint
@@ -14017,7 +14017,7 @@ RVari_Select_CheckSameBank:
 	ld	wa, qwa
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_04:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	RVari_Select_CheckSameBank_Str_Fmts@hi16
 	pushw	RVari_Select_CheckSameBank_Str_Fmts@lo16
@@ -14069,7 +14069,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	lda	xbc, (RVari_Select_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+532)
 	call	GetEditSwPoint
@@ -14107,7 +14107,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	lda	xbc, (RVari_Select_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	call	DrawEditSw
 	ld	xwa, (xiz+60)
@@ -14116,7 +14116,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	lda	xbc, (RVari_Select_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+532)
 	call	GetEditSwPoint
@@ -14138,7 +14138,7 @@ RVari_Select_CheckSameBank:
 	ld	wa, qwa
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_04:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	RVari_Select_CheckSameBank_Str_Fmts_2@hi16
 	pushw	RVari_Select_CheckSameBank_Str_Fmts_2@lo16
@@ -14178,7 +14178,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	lda	xbc, (RVari_Select_CheckSameBank_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+532)
 	call	GetEditSwPoint
@@ -14212,7 +14212,7 @@ RVari_Select_CheckSameBank:
 	extz	de
 	sla	de, 2
 	lda	xhl, (RVari_Select_CheckSameBank_PtrTable:24)
-	ld_rrl	xde, xhl, de
+	ld	xde, (xhl+de)
 	ld	xhl, 1:i3
 	push	xhl
 	pushw	255
@@ -14223,7 +14223,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	lda	xbc, (RVari_Select_CheckSameBank_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (xsp+532)
 	call	GetEditSwPoint
@@ -14257,7 +14257,7 @@ RVari_Select_CheckSameBank:
 	extz	de
 	sla	de, 2
 	lda	xhl, (RVari_Select_CheckSameBank_PtrTable:24)
-	ld_rrl	xde, xhl, de
+	ld	xde, (xhl+de)
 	ld	xhl, 1:i3
 	push	xhl
 	pushw	0

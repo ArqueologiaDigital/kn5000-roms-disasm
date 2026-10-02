@@ -3079,14 +3079,14 @@ VocalistGridCheck_Skip:
 	ld	ix, bc
 	add	ix, wa
 	lda	xde, (VocalistGridCheck_Table:24)
-	ld_rrl xwa, xde, ix
+	ld	xwa, (xde+ix)
 	cp xwa, 4294967295
 	jrl	z, AcVocalist_ReturnZero
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	ld_rrl xwa, xde, bc
+	ld	xwa, (xde+bc)
 	ld bc, 1:i3
 	ld de, 2:i3
 	jr	VocalistGridCheck_Join
@@ -3115,14 +3115,14 @@ VocalistGridCheck_Skip15:
 	ld	ix, bc
 	add	ix, wa
 	lda	xde, (VocalistGridCheck_Table:24)
-	ld_rrl xwa, xde, ix
+	ld	xwa, (xde+ix)
 	cp xwa, 4294967295
 	jrl	z, AcVocalist_ReturnZero
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	ld_rrl xwa, xde, bc
+	ld	xwa, (xde+bc)
 	ldw bc, 65535
 	ld	de, 2:i3
 VocalistGridCheck_Join:
@@ -3179,7 +3179,7 @@ VocalistGridCheck_Join16:
 	add	xwa, MidiPart_ColWidthData
 	ld	wa, (xwa)
 	lda	xix, (VocalistGrid_DispatchData_0x160:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 	ld wa, (xbc)
 	cp wa, 16
 	jr	z, VocalistGridCheck_Skip2
@@ -3242,7 +3242,7 @@ VocalistGridCheck_Join3:
 	ld	wa, (xbc)
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push xwa
 	pushw	VocalistGrid_DispatchData_Str_Fmts@hi16
 	pushw	VocalistGrid_DispatchData_Str_Fmts@lo16
@@ -3324,20 +3324,20 @@ VocalistGridCheck_Join6:
 	divs	wa, 12
 	sla	wa, 2
 	lda	xhl, (MidiPart_OctaveTable:24)
-	ld_rrl xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push xwa
 	exts	xde
 	divs	de, 12
 	ld wa, qde
 	sla	wa, 2
 	lda	xde, (MidiPart_NoteNameTable:24)
-	ld_rrl xwa, xde, wa
+	ld	xwa, (xde+wa)
 	push xwa
 	and	bc, 128
 	sra	bc, 7
 	sla	bc, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
-	ld_rrl xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	push xwa
 	pushw	VocalistGrid_DispatchData_Str_Fmts_Fmts_Fmts@hi16
 	pushw	VocalistGrid_DispatchData_Str_Fmts_Fmts_Fmts@lo16
@@ -3466,7 +3466,7 @@ VocalistGridCheck_Join8:
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (MidiPart_NoteNameTable:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	pushw	VocalistGrid_CheckDispData_Str_Fmts@hi16
 	pushw	VocalistGrid_CheckDispData_Str_Fmts@lo16
@@ -3550,7 +3550,7 @@ VocalistGridCheck_Join11:
 	divs	hl, 12
 	sla	hl, 2
 	lda	xbc, (MidiPart_OctaveTable:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	ld	xwa, 0x2d0d
 	call	SndParam_LookupReadOnly
@@ -3559,13 +3559,13 @@ VocalistGridCheck_Join11:
 	ld wa, qhl
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push xwa
 	ld	xwa, 0x2d0e
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts@hi16
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts@lo16
@@ -3584,7 +3584,7 @@ VocalistGridCheck_Join11:
 	divs	hl, 12
 	sla	hl, 2
 	lda	xbc, (MidiPart_OctaveTable:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	ld	xwa, 0x2d11
 	call	SndParam_LookupReadOnly
@@ -3593,13 +3593,13 @@ VocalistGridCheck_Join11:
 	ld wa, qhl
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push xwa
 	ld	xwa, 0x2d12
 	call	SndParam_LookupReadOnly
 	sla	hl, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
-	ld_rrl xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push xwa
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts_2@hi16
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts_2@lo16
@@ -3617,7 +3617,7 @@ VocalistGridCheck_Join11:
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	ld_rrl	xwa, xde, bc
+	ld	xwa, (xde+bc)
 	call	SndParam_LookupReadOnly
 	ld	xwa, VocalistGrid_DispatchData_Str_17
 	cp	hl, 0:i3

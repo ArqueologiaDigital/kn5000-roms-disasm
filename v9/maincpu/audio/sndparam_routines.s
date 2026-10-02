@@ -803,8 +803,8 @@ SndParam_DecodeMidiAddr_Skip2:
 	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
 	ld	l, (xwa+5)
 	extz	hl
-	ld_rrl	xwa, xde, bc
-	lda_rr	xwa, xwa, hl
+	ld	xwa, (xde+bc)
+	lda	xwa, (xwa+hl)
 	ld	(xsp+4), xwa
 SndParam_DecodeMidiAddr_Skip3:
 	ld	xhl, (xsp+4)
@@ -1029,7 +1029,7 @@ SndParam_RegisterEntry_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xhl, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xhl, xhl, wa
+	ld	xhl, (xhl+wa)
 	or xhl, xhl
 	jrl	z, SndParam_RegisterEntry_Data_Skip3
 	ld	a, (xde+7)
@@ -1070,7 +1070,7 @@ SndParam_RegisterEntry_Data_Skip:
 	lda	xiy, (xde+5)
 	ld	a, (xiy)
 	extz	wa
-	lda_rr xiz, xhl, wa
+	lda	xiz, (xhl+wa)
 	ld w, (xiz)
 	ldfr_berp w, 231
 	ld c, (xix)
@@ -1083,7 +1083,7 @@ SndParam_RegisterEntry_Data_Skip:
 	ld	(xiz), w
 	ld	a, (xiy)
 	extz	wa
-	lda_rr xhl, xhl, wa
+	lda	xhl, (xhl+wa)
 	ld c, (xhl)
 	orb_erp	c, 230
 	ld	(xhl), c
@@ -1124,7 +1124,7 @@ SndParam_RegisterEntryAlt_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xwa, xix, wa
+	ld	xwa, (xix+wa)
 	ld (xsp+2), xwa
 	or xwa, xwa
 	jrl	z, SndParam_RegisterEntryAlt_Data_Skip2
@@ -1172,14 +1172,10 @@ SndParam_RegisterEntryAlt_Data_Skip:
 	ld	iz, wa
 	cpl	c
 	ld	xwa, (xsp+2)
-	.byte 0xc3
-	reti
-	.byte 0xe0
-	swi	0
-	add	c, c
-	ld	c, 217:opc
-	ccf
-	lda_rr xhl, xwa, bc
+	and	(xwa+iz), c
+	ld	c, (xhl)
+	extz	bc
+	lda	xhl, (xwa+bc)
 	ld a, (xhl)
 	orb_erp	a, 230
 	ld	(xhl), a
@@ -1246,7 +1242,7 @@ SndParam_RegisterMultiField_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterMultiField_Data_Skip2
@@ -1257,7 +1253,7 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	ld_rr8l	xbc, xbc, a
+	ld	xbc, (xbc+a)
 	ld	xwa, 1:i3
 	cp	l, (xbc)
 	jr	c, 2
@@ -1337,7 +1333,7 @@ SndParam_RegisterBitfield_Data:
 	extz	bc
 	sla	bc, 2
 	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xiz, xix, bc
+	ld	xiz, (xix+bc)
 	or xiz, xiz
 	jrl	z, SndParam_RegisterBitfield_Data_Skip3
 	ld	xiy, SndParam_ResetDefaultTable_Data
@@ -1361,7 +1357,7 @@ SndParam_RegisterBitfield_Data_Skip2:
 	ld	c, (xwa+11)
 	sla	c, 2
 	lda	xiy, (SndParam_ReadRegWord_Data:24)
-	ld_rr8l xiy, xiy, c
+	ld	xiy, (xiy+c)
 	exts xde
 	add	xde, xde
 	add	xde, xiy
@@ -1417,7 +1413,7 @@ SndParam_RegisterLinked_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xwa, xix, wa
+	ld	xwa, (xix+wa)
 	ld (xsp), xwa
 	or xwa, xwa
 	jrl	z, SndParam_RegisterLinked_Data_Skip4
@@ -1500,7 +1496,7 @@ SndParam_RegisterLinked_Data_Skip2:
 	ld	c, (xix)
 	extz	bc
 	ld	xwa, (xsp)
-	lda_rr xix, xwa, bc
+	lda	xix, (xwa+bc)
 	ld c, (xix)
 	orb_erp	c, 230
 	ld	(xix), c
@@ -1538,7 +1534,7 @@ SndParam_RegisterLinked2_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterLinked2_Data_Skip5
@@ -1555,46 +1551,50 @@ SndParam_RegisterLinked2_Data_Skip3:
 	lda	xbc, (SndParam_ResetDefaultTable_Data_2:24)
 	ld	a, (xde+11)
 	cp	a, 255
-	jr	z, 10
+	jr	z, SndParam_RegisterLinked2_Data_Skip6
 	sla	a, 2
-	ld_rr8l xiy, xbc, a
-	jr 2
+	ld	xiy, (xbc+a)
+	jr SndParam_RegisterLinked2_Data_Join3
+SndParam_RegisterLinked2_Data_Skip6:
 	ld	xiy, (xbc)
+SndParam_RegisterLinked2_Data_Join3:
 	extz	hl
 	ld	xix, xiy
 	ld	bc, 0:i3
 	cpw	(xiy+4), 0
-	jr	le, 20
+	jr	le, SndParam_RegisterLinked2_Data_Skip8
+SndParam_RegisterLinked2_Data_Loop:
 	ld	xwa, (xix)
-	.byte 0xc3
-	reti
-	.byte 0xe0, 0xe4
-	ldx
-	jr	nz, 4
+	cp	l, (xwa+bc)
+	jr	nz, SndParam_RegisterLinked2_Data_Skip7
 	ld	wa, bc
-	jr	10
+	jr	SndParam_RegisterLinked2_Data_Join4
+SndParam_RegisterLinked2_Data_Skip7:
 	inc	1, bc
 	.byte 0x9c, 0x04, 0xf1
-	jr	lt, -20
+	jr	lt, SndParam_RegisterLinked2_Data_Loop
+SndParam_RegisterLinked2_Data_Skip8:
 	ld	wa, (xix+7)
+SndParam_RegisterLinked2_Data_Join4:
 	ld	xhl, xiy
 	ld	bc, wa
 	cp	wa, 0:i3
-	jr	ge, 6
+	jr	ge, SndParam_RegisterLinked2_Data_Skip9
 	ld	xwa, (xhl)
 	ld	l, (xwa)
 	jr	SndParam_RegisterLinked2_Data_Join2
+SndParam_RegisterLinked2_Data_Skip9:
 	ld	wa, (xhl+4)
 	cp	bc, wa
 	jr	ge, SndParam_RegisterLinked2_Data_Skip4
 	ld	xwa, (xhl)
-	ld_rrb l, xwa, bc
+	ld	l, (xwa+bc)
 	jr SndParam_RegisterLinked2_Data_Join2
 SndParam_RegisterLinked2_Data_Skip4:
 	ld bc, wa
 	dec	1, bc
 	ld	xwa, (xhl)
-	ld_rrb	l, xwa, bc
+	ld	l, (xwa+bc)
 SndParam_RegisterLinked2_Data_Join2:
 	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38696
@@ -1674,7 +1674,7 @@ SndParam_RegisterSimple_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xiz, xbc, wa
+	ld	xiz, (xbc+wa)
 	or xiz, xiz
 	jr	z, SndParam_RegisterSimple_Data_Skip3
 	ld	xiy, SndParam_ResetDefaultTable_Data
@@ -1749,7 +1749,7 @@ SndParam_RegisterChained_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xiz, xbc, wa
+	ld	xiz, (xbc+wa)
 	or xiz, xiz
 	jrl	z, SndParam_RegisterChained_Data_Skip
 	ld	xiy, SndParam_ResetDefaultTable_Data
@@ -1760,7 +1760,7 @@ SndParam_RegisterChained_Data:
 	ld	(xsp+10), xwa
 	ld	a, (xwa)
 	extz	wa
-	lda_rr xix, xiz, wa
+	lda	xix, (xiz+wa)
 	ld a, (xix)
 	ldfr_berp	a, 234
 	extz	wa
@@ -1823,7 +1823,7 @@ SndParam_RegisterChained_Data:
 	ld	xwa, (xsp+10)
 	ld	a, (xwa)
 	extz	wa
-	lda_rr xhl, xiz, wa
+	lda	xhl, (xiz+wa)
 	ld a, (xhl)
 	or	a, e
 	ld	(xhl), a
@@ -1861,7 +1861,7 @@ SndParam_RegisterChained2_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xiz, xbc, wa
+	ld	xiz, (xbc+wa)
 	or xiz, xiz
 	jrl	z, SndParam_RegisterChained2_Data_Skip
 	ld	xiy, SndParam_ResetDefaultTable_Data
@@ -1872,7 +1872,7 @@ SndParam_RegisterChained2_Data:
 	ld	(xsp+8), xwa
 	ld	a, (xwa)
 	extz	wa
-	lda_rr xix, xiz, wa
+	lda	xix, (xiz+wa)
 	ld a, (xix)
 	ldfr_berp a, 238
 	ldto_berp c, 238
@@ -1934,7 +1934,7 @@ SndParam_RegisterChained2_Data:
 	ld	xwa, (xsp+8)
 	ld	a, (xwa)
 	extz	wa
-	lda_rr xhl, xiz, wa
+	lda	xhl, (xiz+wa)
 	ld a, (xhl)
 	or	a, e
 	ld	(xhl), a
@@ -1967,7 +1967,7 @@ SndParam_RegisterComplex_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp), xwa
 	or xwa, xwa
 	jrl	z, SndParam_RegisterComplex_Data_Skip2
@@ -1981,7 +1981,7 @@ SndParam_RegisterComplex_Data:
 	ld	a, (xwa+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	ld_rr8l	xbc, xbc, a
+	ld	xbc, (xbc+a)
 	cpw	(xsp+10), 0
 	jr	lt, SndParam_RegisterComplex_Data_Skip3
 	ld	a, (xbc)
@@ -2024,7 +2024,7 @@ SndParam_RegisterComplex_Data_Skip:
 	ld	l, (xwa)
 	extz	hl
 	ld	xwa, (xsp)
-	ld_rrb a, xwa, hl
+	ld	a, (xwa+hl)
 	ldfr_berp a, 234
 	lda xix, (38756:16)
 	lda xhl, (xix+6)
@@ -2058,7 +2058,7 @@ SndParam_RegisterComplex_Data_Skip:
 	ld	c, (xwa)
 	extz	bc
 	ld	xwa, (xsp)
-	st_rrb	e, xwa, bc
+	ld	(xwa+bc), e
 	jr	SndParam_RegisterComplex_Data_Join2
 SndParam_RegisterComplex_Data_Skip6:
 	cp	(xbc+6), 1
@@ -2091,7 +2091,7 @@ SndParam_NotifyQuick_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	or xwa, xwa
 	jr	z, SndParam_NotifyQuick_Data_Skip3
 	ld	xwa, xiz
@@ -2130,7 +2130,7 @@ SndParam_RegisterDual_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld (xsp), xwa
 	or xwa, xwa
 	jrl	z, SndParam_RegisterDual_Data_Skip2
@@ -2147,7 +2147,7 @@ SndParam_RegisterDual_Data:
 	ld	l, (xwa)
 	ld	h, l
 	ld	xwa, (xsp)
-	ld_rrb a, xwa, bc
+	ld	a, (xwa+bc)
 	ldfr_berp a, 238
 	andb_erp h, 238
 	ld	c, h
@@ -2163,7 +2163,7 @@ SndParam_RegisterDual_Data:
 	cp	a, 255
 	jr	z, 10
 	sla	a, 2
-	ld_rr8l xiy, xbc, a
+	ld	xiy, (xbc+a)
 	jr 2
 	ld	xiy, (xbc)
 	ld	a, w
@@ -2172,38 +2172,40 @@ SndParam_RegisterDual_Data:
 	ld	w, a
 	ld	de, 0:i3
 	cpw	(xiy+4), 0
-	jr	le, 20
+	jr	le, SndParam_RegisterDual_Data_Skip4
+SndParam_RegisterDual_Data_Loop:
 	ld	xbc, (xix)
-	.byte 0xc3
-	reti
-	.byte 0xe4
-	cp	xwa, xwa
-	jr	nz, 4
+	cp	w, (xbc+de)
+	jr	nz, SndParam_RegisterDual_Data_Skip3
 	ld	wa, de
-	jr	10
+	jr	SndParam_RegisterDual_Data_Join3
+SndParam_RegisterDual_Data_Skip3:
 	inc	1, de
 	.byte 0x9c, 0x04, 0xf2
-	jr	lt, -20
+	jr	lt, SndParam_RegisterDual_Data_Loop
+SndParam_RegisterDual_Data_Skip4:
 	ld	wa, (xix+7)
+SndParam_RegisterDual_Data_Join3:
 	add	wa, (xsp+18)
 	ld	xde, xiy
 	ld	bc, wa
 	cp	wa, 0:i3
-	jr	ge, 6
+	jr	ge, SndParam_RegisterDual_Data_Skip5
 	ld	xwa, (xde)
 	ld	e, (xwa)
 	jr	SndParam_RegisterDual_Data_Join
+SndParam_RegisterDual_Data_Skip5:
 	ld	wa, (xde+4)
 	cp	bc, wa
 	jr	ge, SndParam_RegisterDual_Data_Skip
 	ld	xwa, (xde)
-	ld_rrb e, xwa, bc
+	ld	e, (xwa+bc)
 	jr SndParam_RegisterDual_Data_Join
 SndParam_RegisterDual_Data_Skip:
 	ld bc, wa
 	dec	1, bc
 	ld	xwa, (xde)
-	ld_rrb e, xwa, bc
+	ld	e, (xwa+bc)
 SndParam_RegisterDual_Data_Join:
 	ldto_berp b, 238
 	ldto_berp a, 238
@@ -2230,7 +2232,7 @@ SndParam_RegisterDual_Data_Join:
 	extz	hl
 	ld	xwa, (xsp)
 	ldto_berp c, 230
-	st_rrb c, xwa, hl
+	ld	(xwa+hl), c
 	ldto_berp a, 230
 	cp a, b
 	jr	z, SndParam_RegisterDual_Data_Join2
@@ -2260,7 +2262,7 @@ SndParam_RegisterOffset_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	or xwa, xwa
 	jrl	z, SndParam_RegisterOffset_Data_Skip3
 	ld	xiy, SndParam_ResetDefaultTable_Data
@@ -2336,7 +2338,7 @@ SndParam_RegisterWide_Data:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterWide_Data_Skip4
@@ -2349,7 +2351,7 @@ SndParam_RegisterWide_Data:
 	ld	c, (xwa)
 	extz	bc
 	ld	xwa, (xsp+4)
-	lda_rr xix, xwa, bc
+	lda	xix, (xwa+bc)
 	ld l, (xix)
 	ld	c, l
 	extz	bc
@@ -2425,7 +2427,7 @@ SndParam_RegisterWide_Data_Skip3:
 	ld	c, (xiy)
 	extz	bc
 	ld	xwa, (xsp+4)
-	lda_rr xix, xwa, bc
+	lda	xix, (xwa+bc)
 	ld c, (xix)
 	or	c, l
 	ld	(xix), c
@@ -2476,7 +2478,7 @@ SndParam_EncodeFieldSub_Data:
 	ld	a, (xbc+11)
 	sla	a, 2
 	lda	xde, (Naka_SubDispatch_B_Table:24)
-	ld_rr8l	xde, xde, a
+	ld	xde, (xde+a)
 	ld	xwa, 1:i3
 	cp	l, (xde)
 	jr	c, 2
@@ -2546,7 +2548,7 @@ SndParam_DecodeFieldAlt_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	ld_rr8l	xbc, xbc, a
+	ld	xbc, (xbc+a)
 	cp	l, (xbc+1)
 	jr	nz, 4
 	ld	xwa, 3:i3
@@ -2613,7 +2615,7 @@ SndParam_WriteFieldSub_Data:
 	ld	a, (xde+11)
 	sla	a, 2
 	lda	xbc, (Naka_SubDispatch_B_Table:24)
-	ld_rr8l	xbc, xbc, a
+	ld	xbc, (xbc+a)
 	ld	xwa, 1:i3
 	cp	l, (xbc)
 	jr	c, 2
@@ -2667,7 +2669,7 @@ SndParam_WriteViaHash_Data:
 	extz	wa
 	add	wa, wa
 	lda	xde, (0x9798:16)
-	st_rrw bc, xde, wa
+	ld	(xde+wa), bc
 	ld	hl, 0:i3
 	ret
 SndParam_BatchUpdate_Data:
@@ -2698,7 +2700,7 @@ SndParam_BatchUpdate_Data:
 	ld	c, (xbc)
 	extz	bc
 	add	bc, bc
-	ld_rrw bc, xix, bc
+	ld	bc, (xix+bc)
 	and bc, 127
 	ld	(xwa+4), c
 	call	SndParam_FetchOscTableEntry
@@ -2719,7 +2721,7 @@ SndParam_BatchUpdate_Data_Skip:
 	ld	a, (xbc)
 	extz	wa
 	add	wa, wa
-	ld_rrw wa, xix, wa
+	ld	wa, (xix+wa)
 	and wa, 7
 	sll	a, 4
 	ldfr_berp a, 250
@@ -2738,7 +2740,7 @@ SndParam_BatchUpdate_Data_Skip2:
 	ld	c, (xbc)
 	extz	bc
 	add	bc, bc
-	ld_rrw bc, xix, bc
+	ld	bc, (xix+bc)
 	and bc, 127
 	ld	(xwa+4), c
 	call	SndParam_ComputeVoiceIndex

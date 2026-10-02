@@ -242,7 +242,7 @@ Part_LookupParam:
 	xor b, b
 	ld iy, bc
 	ld e, c
-	ld_rrb	a, xhl, iy
+	ld	a, (xhl+iy)
 	ld	(3423:16), a
 	inc 1, e
 	ld	(3424:16), e
@@ -1385,13 +1385,13 @@ SqTrAsPsTtl_CaseF:
 	cp	wa, 13
 	jr	gt, SqTrAsPsTtl_CaseF_Skip
 	lda	xix, (SepaOut_Config_0_0x44:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	extz	wa
 	sll	wa, 1
 	ld	xix, SepaOut_Config_0_0x52
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SqTrAsPsTtl_CaseF_Skip:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 SqTrAsPsTtl_CaseF_Skip:
 	push	xde
 	push	xhl
@@ -1597,7 +1597,7 @@ DkMdlyPly_HandleResult:
 	ld	wa, qiz
 	add	wa, wa
 	lda	xbc, (SepaOut_Config_0_0x8E:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	ldw	bc, 1025
 	call	DkMdlyPly_CheckState_Helper
 	ld	iz, hl
@@ -1608,7 +1608,7 @@ DkMdlyPly_HandleResult:
 	ld	wa, qiz
 	add	wa, wa
 	lda	xbc, (SepaOut_Config_0_0x8E:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	ld	(35998:16), a
 	ld	e, a
 	extz	de
@@ -1639,9 +1639,9 @@ DisplayMode_DispatchEvents:
 	ret gt
 	add wa, wa
 	lda xix, (SepaOut_Config_0_0xCE:24)
-	ld_rrw wa, xix, wa
+	ld	wa, (xix+wa)
 	lda xix, (DisplayMode_BatchEventSend:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 DisplayMode_BatchEventSend:
 	ld	xwa, 0x6f000a
 	ld	xbc, EVT_SET_PARAM
@@ -2177,7 +2177,7 @@ NameGetFuncCall_Dispatch:
 	ld	(xwa+20), 0
 	ldw	de, 19
 NameGetFuncCall_Loop:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip2
 	ld (xbc), 0
@@ -2216,7 +2216,7 @@ NameGetFuncCall_Skip2:
 	ld	(xwa+12), 0
 	ldw	de, 11
 NameGetFuncCall_Loop2:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip3
 	ld (xbc), 0
@@ -2254,7 +2254,7 @@ NameGetFuncCall_Skip3:
 	ld	(xwa+20), 0
 	ldw	de, 19
 NameGetFuncCall_Loop3:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip4
 	ld (xbc), 0
@@ -2284,7 +2284,7 @@ NameGetFuncCall_Skip4:
 	ld	(xwa+20), 0
 	ldw	de, 19
 NameGetFuncCall_Loop4:
-	lda_rr xbc, xwa, de
+	lda	xbc, (xwa+de)
 	cp (xbc), 32
 	jr nz, NameGetFuncCall_Skip5
 	ld (xbc), 0

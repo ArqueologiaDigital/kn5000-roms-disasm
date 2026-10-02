@@ -29,7 +29,7 @@ SLMode_HandleShow:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (StorageArea_NameTable:24)
-	ld_rrl	xde, xbc, wa
+	ld	xde, (xbc+wa)
 	ld	xwa, (33050:16)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
@@ -49,7 +49,7 @@ SLDstBank_HandleShow:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xde, xbc, wa
+	ld	xde, (xbc+wa)
 	ld	xwa, (33054:16)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
@@ -168,7 +168,7 @@ SLSrcBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (34995:16)
@@ -232,7 +232,7 @@ SLSrcBankList_FuncBody_Helper9:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35037:16)
@@ -508,7 +508,7 @@ SLSrcBankList_FuncBody_Join4:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35016:16)
@@ -566,7 +566,7 @@ SLSrcBankList_FuncBody_Helper11:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (34995:16)
@@ -611,7 +611,7 @@ SLSrcBankList_FuncBody_Helper12:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35037:16)
@@ -918,7 +918,7 @@ SLSrcBankList_FuncBody_Helper15:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (34995:16)
@@ -987,7 +987,7 @@ SLSrcBankList_FuncBody_Helper17:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35037:16)
@@ -1409,7 +1409,7 @@ SLSrc_HandleShow:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
@@ -1436,7 +1436,7 @@ SLSrc_ScrollMode5_Dispatch:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
@@ -1464,7 +1464,7 @@ SLSrc_ScrollMode6_Dispatch:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
@@ -1482,7 +1482,7 @@ SLSrc_ScrollMode7:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
@@ -1499,7 +1499,7 @@ SLSrc_ScrollMode8:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
@@ -1512,7 +1512,7 @@ SLSrc_ScrollMode40:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+4)
 	ld	xde, xiz
 	ld	xhl, (xhl)
@@ -1539,7 +1539,7 @@ SLDstBankList_FuncBody:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35079:16)
@@ -1594,7 +1594,7 @@ SLDstBankList_FuncBody_Helper6:
 	ld	bc, wa
 	sla	bc, 2
 	lda	xwa, (xde+43)
-	ld_rrl	xbc, xhl, bc
+	ld	xbc, (xhl+bc)
 	inc	1, xbc
 	cp	(35166:16), 0
 	jr	z, SLDstBankList_FuncBody_Skip
@@ -1837,7 +1837,7 @@ SLDstBankList_FuncBody_Helper7:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35100:16)
@@ -1972,7 +1972,7 @@ SLDstBankList_FuncBody_Helper8:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35079:16)
@@ -2011,7 +2011,7 @@ SLDstBankList_FuncBody_Helper9:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35121:16)
@@ -2257,7 +2257,7 @@ SLDstBankList_FuncBody_Helper10:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35079:16)
@@ -2306,7 +2306,7 @@ SLDstBankList_FuncBody_Helper11:
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35121:16)
@@ -2332,7 +2332,7 @@ SLDstBankList_FuncBody_Skip30:
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35121:16)
@@ -2366,7 +2366,7 @@ SLDstBankList_FuncBody_Skip31:
 	ld	c, (35164:16)
 	extz	bc
 	sla	bc, 2
-	ld_rrl	xbc, xde, bc
+	ld	xbc, (xde+bc)
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (35121:16)
@@ -2784,7 +2784,7 @@ SLDst_HandleShow:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -2800,7 +2800,7 @@ SLDst_HandleConfirm:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	ld	xhl, (xhl)
@@ -2837,7 +2837,7 @@ SLDst_HandleScroll:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	ld	xhl, (xhl)
@@ -2899,7 +2899,7 @@ SLDst_ScrollMode4_Dispatch:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	ld	xhl, (xhl)
@@ -2927,7 +2927,7 @@ SLDst_ScrollDispatch:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xix, (xhl)
@@ -2958,7 +2958,7 @@ SLDst_Scroll_ChildReturn:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -2974,7 +2974,7 @@ SLDst_Scroll_SubMode:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -2995,7 +2995,7 @@ SLDst_Scroll_SubMode2:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3012,7 +3012,7 @@ SLDst_Scroll_SubMode3:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3027,7 +3027,7 @@ SLDst_Scroll_SubMode4:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3045,7 +3045,7 @@ SLDst_Scroll_SubMode5:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3063,7 +3063,7 @@ SLDst_Scroll_SubMode6:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SLDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3108,7 +3108,7 @@ CmpSrc_HandleShow:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, xiz
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3127,7 +3127,7 @@ CmpSrc_HandleScroll:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, xiz
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3164,7 +3164,7 @@ CmpSrc_ScrollMode6_NoStep:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, xiz
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3183,7 +3183,7 @@ CmpSrc_ScrollMode7:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, xiz
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3217,7 +3217,7 @@ CmpSrc_ScrollMode40:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpSrc_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, xiz
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)
@@ -3287,7 +3287,7 @@ CmpDst_HandleShow:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (CmpDst_HandleShow_PtrTable:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	xbc, (xsp+8)
 	ld	xde, (xsp+4)
 	ld	xhl, (xhl)

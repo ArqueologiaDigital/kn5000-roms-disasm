@@ -985,11 +985,11 @@ AccompSeq_PortaFadeOut_Helper_Helper:
 	ei	6
 	ld	iy, (xhl+4)
 	ld	bc, (xhl+2)
-	st_rrb	e, xiy, hl
+	ld	(xiy+hl), e
 	calr	AccompSeq_AdvanceBufferPtr
-	st_rrb	d, xiy, hl
+	ld	(xiy+hl), d
 	calr	AccompSeq_AdvanceBufferPtr
-	st_rrb	a, xiy, hl
+	ld	(xiy+hl), a
 	calr	AccompSeq_AdvanceBufferPtr
 	ld	(xhl+4), iy
 	ei	0
@@ -1096,7 +1096,7 @@ AccompSeq_ProcessAfterNote_Skip2:
 	xor	w, w
 	ld	hl, wa
 	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A
-	ld_rrb h, xix, hl
+	ld	h, (xix+hl)
 	ld l, (64786:16)
 	cp l, 17
 	jr	z, AccompSeq_ProcessAfterNote_Return
@@ -1113,9 +1113,9 @@ AccompSeq_ProcessAfterNote_Skip3:
 	add	xix, 16
 AccompSeq_ProcessAfterNote_Skip4:
 	sll	h, 1
-	ld_rr8b l, xix, h
+	ld	l, (xix+h)
 	inc 1, h
-	ld_rr8b h, xix, h
+	ld	h, (xix+h)
 	cp l, 14
 	jr	ugt, AccompSeq_ProcessAfterNote_Return
 AccompSeq_ProcessAfterNote_Skip5:

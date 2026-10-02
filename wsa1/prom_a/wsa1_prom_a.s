@@ -22853,7 +22853,7 @@ sub_F8C485:   ; entry: DispatchTable_F8C2B2 id=0x0004
 	and A,0x0f                                    ; F8C4A2  c9 cc 0f
 	sla a, 0x01                                   ; F8C4A5  c9 ec 01
 	ld XIY,BitmaskTable_F8C4B8                    ; F8C4A8  45 b8 c4 f8 00
-	ld_rr8w wa, xiy, a                            ; F8C4AD  d3 03 f4 e0 20
+	ld	wa, (xiy+a)                            ; F8C4AD  d3 03 f4 e0 20
 	.byte 0xc3, 0x03, 0xf0, 0xe0, 0xe8            ; F8C4B2  c3 03 f0 e0 e8
 .LF8C4B7:
 	ret                                           ; F8C4B7  0e
@@ -23037,7 +23037,7 @@ sub_F8C652:   ; entry: DispatchTable_F8C2B2 id=0x0080
 	ld XIY,PointerTable_F8C687                    ; F8C661  45 87 c6 f8 00
 	ld a, (0x2250:16)                            ; F8C666  c1 50 22 21
 	sla a, 0x02                                   ; F8C66A  c9 ec 02
-	ld_rr8l xiy, xiy, a                           ; F8C66D  e3 03 f4 e0 25
+	ld	xiy, (xiy+a)                           ; F8C66D  e3 03 f4 e0 25
 	ld W,(XIY+0x19)                               ; F8C672  8d 19 20
 	and W,0x3f                                    ; F8C675  c8 cc 3f
 	bit 0,(XIY+0x18)                              ; F8C678  bd 18 c8
@@ -23138,19 +23138,19 @@ sub_F8C77D:   ; entry: DispatchTable_F8C2B2 id=0x0200
 .LF8C815:
 	ret                                           ; F8C815  0e
 	ld XIY,0x000020d0                             ; F8C816  45 d0 20 00 00
-	ld_rr8b a, xiy, w                             ; F8C81B  c3 03 f4 e1 21
+	ld	a, (xiy+w)                             ; F8C81B  c3 03 f4 e1 21
 	ld XIY,0x000020d0                             ; F8C820  45 d0 20 00 00
 	ex8 a, c                                      ; F8C825  cb b9
 	scf                                           ; F8C827  11
 	.byte 0xf1, 0x9b, 0x21, 0x2a                  ; F8C828  f1 9b 21 2a
 	jr c, .LF8C837                                ; F8C82C  67 09
 	or C,B                                        ; F8C82E  ca e3
-	st_rr8b c, xiy, w                             ; F8C830  f3 03 f4 e1 43
+	ld	(xiy+w), c                             ; F8C830  f3 03 f4 e1 43
 	jr .LF8C841                                   ; F8C835  68 0a
 .LF8C837:
 	xor B,0xff                                    ; F8C837  ca cd ff
 	and C,B                                       ; F8C83A  ca c3
-	st_rr8b c, xiy, w                             ; F8C83C  f3 03 f4 e1 43
+	ld	(xiy+w), c                             ; F8C83C  f3 03 f4 e1 43
 .LF8C841:
 	ret                                           ; F8C841  0e
 sub_F8C842:   ; entry: prom_b routine directory
@@ -25024,16 +25024,16 @@ MemCopyWords:
 	jr c, .LF8E731                                ; F8E713  67 1c
 	jr z, .LF8E723                                ; F8E715  66 0c
 	add (xix-4), bc                               ; F8E717  9c fc 89
-	lda_rr xix, xix, de                           ; F8E71A  f3 07 f0 e8 34
+	lda	xix, (xix+de)                           ; F8E71A  f3 07 f0 e8 34
 	ldir85                                        ; F8E71F  85 11
 	jr .LF8E747                                   ; F8E721  68 24
 .LF8E723:
 	ldw (xix-4), 0x00                             ; F8E723  bc fc 02 00 00
-	lda_rr xix, xix, de                           ; F8E728  f3 07 f0 e8 34
+	lda	xix, (xix+de)                           ; F8E728  f3 07 f0 e8 34
 	ldir85                                        ; F8E72D  85 11
 	jr .LF8E747                                   ; F8E72F  68 16
 .LF8E731:
-	lda_rr xix, xix, de                           ; F8E731  f3 07 f0 e8 34
+	lda	xix, (xix+de)                           ; F8E731  f3 07 f0 e8 34
 	ld DE,BC                                      ; F8E736  d9 8a
 	ld BC,WA                                      ; F8E738  d8 89
 	sub DE,WA                                     ; F8E73A  d8 a2

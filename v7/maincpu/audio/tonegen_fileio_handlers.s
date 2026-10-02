@@ -350,7 +350,7 @@ DSPCfg_Init_BoundsCheck_Helper3:
 	ld	xde, xwa
 	ld	a, (xbc+0x1)
 	extz	wa
-	lda_rr	xde, xde, wa
+	lda	xde, (xde+wa)
 	ld	l, (xbc+0x2)
 	ld	a, l
 	and	a, (xde)
@@ -372,7 +372,7 @@ DSPCfg_Init_BoundsCheck_Helper4:
 	ld	xde, xwa
 	ld	a, (xbc+0x1)
 	extz	wa
-	lda_rr	xde, xde, wa
+	lda	xde, (xde+wa)
 	ld	l, (xbc+0x2)
 	ld	a, l
 	and	a, (xde)
@@ -395,7 +395,7 @@ DSPCfg_Init_BoundsCheck_Helper5:
 	ld	xde, xbc
 	ld	c, (xde+0x1)
 	extz	bc
-	lda_rr	xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	ld	ix, 0:i3
 	lda	xbc, (xde+0x3)
 	ld	(xsp+0x2), xbc
@@ -441,7 +441,7 @@ DSPCfg_Init_BoundsCheck_Helper6:
 	ld	xde, xbc
 	ld	c, (xde+0x1)
 	extz	bc
-	lda_rr	xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	ld	iy, 0:i3
 	lda	xbc, (xde+0x3)
 	ld	(xsp+0x2), xbc
@@ -482,7 +482,7 @@ DSPCfg_Init_BoundsCheck_Helper7:
 	ld	l, (xde+0x1)
 	extz	hl
 	ld	c, (xde+0x2)
-	st_rrb	c, xwa, hl
+	ld	(xwa+hl), c
 	ld	hl, 3:i3
 	ret
 DSPCfg_Init_BoundsCheck_Helper8:

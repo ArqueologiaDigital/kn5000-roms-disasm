@@ -168,7 +168,7 @@ AccVoice_ReadBankAssign:
 	xor WA,WA
 	ld XHL,AccStyle_ApplyExt_SkipClamp_Table
 	ld a, (0x0433:16)
-	ld_rrb a, xhl, wa
+	ld	a, (xhl+wa)
 	bit 0, (0x31e7:16)
 	jr nz, AccVoice_StoreBankAssign
 	ld a, 0:opc
@@ -638,7 +638,7 @@ AccVoice_ComputeParamOffset:
 	extz	wa
 	sla	wa, 2
 	ld	xix, AccVoice_BankBaseTable
-	ld_rrl	xix, xix, wa
+	ld	xix, (xix+wa)
 	add	xiy, xix
 	add	xiy, 96
 	pop	xix
@@ -705,7 +705,7 @@ AccVoice_StorePatchAndLookup:
 	ld	(1075:16), a
 	ld	xhl, AccVoice_LookupTableAddress_Table
 	sla	a, 1
-	ld_rr8w	wa, xhl, a
+	ld	wa, (xhl+a)
 	ld	(12767:16), wa
 	ret
 AccStyle_ReadVoiceParam:
@@ -1133,7 +1133,7 @@ RhythmAccent_StorePosition:
 RhythmAccent_AddAndCompare:
 	ld	w, (1122:16)
 	add	a, w
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	calr	RingBuf_AdvanceIndex
 	ld	w, (13018:16)
 	cp	a, w
@@ -1416,35 +1416,35 @@ AccompVoice_BulkReadRegisters:
 	ld	xhl, 12280
 	xor	iy, iy
 BulkRead_Loop1_6Byte:
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	add	iy, 6
 	cp	iy, 48
 	jr	c, BulkRead_Loop1_6Byte	; -> 0xF53F55
 	ld	xhl, 12328
 	xor	iy, iy
 BulkRead_Loop2_6Byte:
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	add	iy, 6
 	cp	iy, 48
 	jr	c, BulkRead_Loop2_6Byte	; -> 0xF53F6B
 	ld	xhl, 12376
 	xor	iy, iy
 BulkRead_Loop3_9Byte:
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	add	iy, 9
 	cp	iy, 72
 	jr	c, BulkRead_Loop3_9Byte	; -> 0xF53F81
 	ld	xhl, 12448
 	xor	iy, iy
 BulkRead_Loop4_9Byte:
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	add	iy, 9
 	cp	iy, 72
 	jr	c, BulkRead_Loop4_9Byte	; -> 0xF53F97
 	ld	xhl, 12520
 	xor	iy, iy
 BulkRead_Loop5_9Byte:
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	add	iy, 9
 	cp	iy, 72
 	jr	c, BulkRead_Loop5_9Byte	; -> 0xF53FAD

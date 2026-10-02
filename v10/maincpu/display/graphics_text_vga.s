@@ -1268,7 +1268,7 @@ DrawText_ExtendedLayout_Skip:
 	and	a, 15
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
-	ld_rrb	c, xbc, wa
+	ld	c, (xbc+wa)
 	extz	bc
 	extz	xbc
 	lda	xwa, (xsp+276)
@@ -1453,7 +1453,7 @@ DrawFunc_Init_Join8:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
-	ld_rrl	xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1510,7 +1510,7 @@ DrawFunc_Init_Join3:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
-	ld_rrl xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1570,7 +1570,7 @@ DrawFunc_Init_Join4:
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld	xhl, 0:i3
-	ld_rrb l, xbc, wa
+	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1669,7 +1669,7 @@ DrawFunc_Init_Join9:
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld	xhl, 0:i3
-	ld_rrb	l, xbc, wa
+	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1723,7 +1723,7 @@ DrawFunc_Init_Join7:
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld	xhl, 0:i3
-	ld_rrb l, xbc, wa
+	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1840,7 +1840,7 @@ ColorBlit_WithPaletteSave_Skip2:
 	extz	hl
 	add	hl, hl
 	ld	xbc, (xbc+7)
-	lda_rr xde, xbc, hl
+	lda	xde, (xbc+hl)
 	lda xwa, (xsp)
 	ld	bc, (xde)
 	ld	(xwa), bc
@@ -2229,7 +2229,7 @@ FontGlyph_ByteData:
 	ld	a, (xwa)
 	extz	wa
 	lda	xde, (TextRender_CharEncodeAndDraw_Data:24)
-	ld_rrb	a, xde, wa
+	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
 	ld	e, (xwa)

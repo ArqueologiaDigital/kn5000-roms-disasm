@@ -231,7 +231,7 @@ RhythmEvt_NoteOn91:
 	calr Rhythm_AdvancePosition
 
 RhythmEvt_ApplyTranspose:
-	ld_rrb a, xhl, iy
+	ld	a, (xhl+iy)
 	calr Rhythm_CheckVelocityThreshold
 	bit 4, (0x3258:16)
 	jr nz, RhythmEvt_PostProcess
@@ -299,16 +299,16 @@ RhythmEvt_Full91:
 	call RingBuf_AdvanceIndex
 	pushw iy
 	call RingBuf_AdvanceIndex
-	ld_rrb a, xhl, iy
+	ld	a, (xhl+iy)
 	ld (0x3394:16), a
 	calr Rhythm_AdvancePosition
-	ld_rrb a, xhl, iy
+	ld	a, (xhl+iy)
 	ld (0x3397:16), a
 	call RingBuf_AdvanceIndex
-	ld_rrb a, xhl, iy
+	ld	a, (xhl+iy)
 	ld (0x3398:16), a
 	call RingBuf_AdvanceIndex
-	ld_rrb a, xhl, iy
+	ld	a, (xhl+iy)
 	calr Rhythm_CheckVelocityThreshold
 	bit 4, (0x3258:16)
 	jr nz, RhythmEvt_Full91_PostTransp
@@ -420,7 +420,7 @@ Rhythm_NoteRangeCheck:
 	push XIY
 	ld W,A
 	ld XIY,AccPatch_Transpose_LookupTable_Data
-	ld_rr8b	w, xiy, a
+	ld	w, (xiy+a)
 	sub	a, w
 	pop	xiy
 	ld	(13207:16), 0
@@ -602,7 +602,7 @@ Rhythm_VoiceMap_ClampInstr:
 	jr z, Rhythm_VoiceMap_SelectTable
 	ld xiy, Rhythm_VoiceMap_ClampInstr_Data
 Rhythm_VoiceMap_SelectTable:
-	ld_rr8b	l, xiy, l
+	ld	l, (xiy+l)
 	cp	l, 0:i3
 	jr	z, Rhythm_VoiceMap_ApplyBase	; -> 0xF54E1F
 	ld	h, (13207:16)
@@ -1508,7 +1508,7 @@ Rhythm_TranspMod_ModCheck:
 Rhythm_TranspMod_LookupTable:
 .Lc_f55706:
 	ld XIY,Rhythm_PitchShiftTable_Default
-	ld_rr8b l, xiy, l
+	ld	l, (xiy+l)
 	cp l, 0:i3
 	jr z, Rhythm_TranspMod_Done
 	ld h, (0x334a:16)

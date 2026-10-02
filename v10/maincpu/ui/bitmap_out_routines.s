@@ -3836,21 +3836,19 @@ BitMapOut_UpdateWidget_Done_Join:
 	ret
 	extz	wa
 	cp	bc, 0:i3
-	.byte 0xf2
-	scc16	pl, wa
-	swi	4
-	.byte 0xd1
+	jp	lt, (VoiceData_InitAndCopyParams:24)
 	jp	ToneGen_LookupByVoiceIndex
 	ret
 	dec	2, xsp
 	push qiz
 	ld	(xsp+2), a
 	cp	bc, 0:i3
-	jr	ge, 11
+	jr	ge, BitMapOut_UpdateWidget_Done_Skip2
 	ld	a, (xsp+2)
 	extz	wa
 	call	VoiceData_ExtendedParamSetup
-	jr	31
+	jr	BitMapOut_UpdateWidget_Done_Epilogue
+BitMapOut_UpdateWidget_Done_Skip2:
 	ldib_erp 251, 0
 BitMapOut_UpdateWidget_Finalize_Loop:
 	ldto_berp c, 251
@@ -3863,6 +3861,7 @@ BitMapOut_UpdateWidget_Finalize_Loop:
 	inc1b_erp 251
 	cp_erpb 251, 8
 	jr c, BitMapOut_UpdateWidget_Finalize_Loop
+BitMapOut_UpdateWidget_Done_Epilogue:
 	pop qiz
 	inc	2, xsp
 	ret

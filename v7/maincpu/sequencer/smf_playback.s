@@ -117,13 +117,13 @@ SoundBank_InitTrack_Loop:
 
 SoundBank_InitTrack_ByteFields:
 	ld	xix, SoundBank_DefaultTrackData
-	ld_rrb	a, xix, iy
-	st_rrb	a, xhl, iy
+	ld	a, (xix+iy)
+	ld	(xhl+iy), a
 	inc	1, iy
 	cp	iy, 7:i3
 	jr	ule, SoundBank_InitTrack_ByteFields
 	ld	a, (36302:16)
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	ld	xhl, 20
 	add	xhl, xde
 	xor	iy, iy

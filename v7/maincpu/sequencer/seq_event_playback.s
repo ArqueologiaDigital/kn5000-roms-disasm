@@ -47,7 +47,7 @@ SeqEvt_ProcessLoop_Check:
 	jp SeqEvt_ProcessLoopRet
 
 SeqEvt_ClassifyEventType:
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ld	w, a
 	cp	a, 144
@@ -75,7 +75,7 @@ SeqEvt_CheckTypeD0:
 SeqEvt_TypeD0_SetCount:
 	ld	(32114:16), 2
 SeqEvt_ReadAndDispatchEntry:
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	ld	(32117:16), ix
 	calr	SeqEvtBuf_AdvanceReadPos
 	ld	(32115:16), ix
@@ -187,11 +187,11 @@ SeqEvt_WriteNoteOnRotating:
 	ld XIX,SeqEvt_RotationOffsetTable
 	add XIX,XWA
 	ld IX,(XIX)
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	and	(xhl+ix), 0x7f
 	ld	iz, ix
 	inc	2, ix
-	ld_rrb	w, xhl, ix
+	ld	w, (xhl+ix)
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
@@ -231,36 +231,36 @@ SeqEvt_WriteVoiceParams:
 	ld xbc, (0x7d77:16)
 	ex16	iz, ix
 	ldw_d16	ix, (32115)
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ex16	iz, ix
 	calr	SeqEvtBuf_WriteBytePreserve
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
-	st_rrb	a, xhl, ix
+	ld	(xhl+ix), a
 	inc	1, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	ex16	iz, ix
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ex16	iz, ix
 	calr	SeqEvtBuf_WriteBytePreserve
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
-	st_rrb	a, xhl, ix
+	ld	(xhl+ix), a
 	inc	1, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	push	xwa
 	ex16	iz, ix
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
-	ld_rrb	w, xhl, ix
+	ld	w, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ex16	iz, ix
 	add	wa, (0x46e:16)
@@ -272,7 +272,7 @@ SeqEvt_AdjustNoteOctave:
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
-	st_rrw	wa, xhl, ix
+	ld	(xhl+ix), wa
 	inc	2, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
@@ -283,14 +283,14 @@ SeqEvt_AdjustNoteOctave:
 SeqEvt_WriteRemainingParams:
 	pop	xwa
 	ex16	iz, ix
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ld	(32115:16), ix
 	ex16	iz, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
-	st_rrb	a, xhl, ix
+	ld	(xhl+ix), a
 	inc	1, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
@@ -298,27 +298,27 @@ SeqEvt_WriteRemainingParams:
 	cp	w, 144
 	jr	z, SeqEvt_UpdateReadPosition	; -> 0xF70A5A
 	ex16	iz, ix
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ld	(32115:16), ix
 	ex16	iz, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
-	st_rrb	a, xhl, ix
+	ld	(xhl+ix), a
 	inc	1, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
 	ex16	iz, ix
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ld	(32115:16), ix
 	ex16	iz, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
 	ld	xbc, (32119:16)
-	st_rrb	a, xhl, ix
+	ld	(xhl+ix), a
 	inc	1, ix
 	ld	(32119:16), xhl
 	ld	xhl, xbc
@@ -363,7 +363,7 @@ SeqEvt_SetExtendedFlag:
 	calr	SeqEvtBuf_WriteBytePreserve
 	ld	a, 7:opc
 	calr	SeqEvtBuf_WriteBytePreserve
-	ld_rrb	w, xhl, ix
+	ld	w, (xhl+ix)
 	calr	SeqEvtBuf_AdvanceReadPos
 	ld	a, 0:opc
 	bit	0, w
@@ -384,7 +384,7 @@ SeqEvt_CalcTempoOffset:
 SeqEvt_UpdateMinTempo:
 .Lc_f70aef:
 	ld iy, (0x7d75:16)
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	xor	wa, wa
 	ldb_d8	a, (32114)
 	add	wa, (0x7d73:16)
@@ -479,16 +479,16 @@ Voice_CheckSlotBit:
 
 Voice_ReadSlotParams:
 	ld	ix, iy
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	stb_d8	(32111), a
 	inc	2, ix
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	stb_d8	(32112), a
 	inc	1, ix
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	stb_d8	(32113), a
 	inc	1, ix
-	ld_rrw	wa, xhl, ix
+	ld	wa, (xhl+ix)
 	cp	wa, (0x46e:16)
 	jr	gt, Voice_SubtractBaseFreq
 	ex16	iy, iz
@@ -511,7 +511,7 @@ Voice_SubtractBaseFreq:
 	add a, 0x60
 
 Voice_StoreMetricValue:
-	st_rrw	wa, xhl, ix
+	ld	(xhl+ix), wa
 	cp	wa, (0x7d64:16)
 	jr	nc, Voice_ParamComplete
 	ld	(32100:16), wa
@@ -1501,7 +1501,7 @@ AccPlay_SetupSoundParams:
 	ld (0x905b:16), 0x17
 	call PartCtrl_WriteProgramChange
 	ld XBC,0x0000ff7e
-	st_rr8b	h, xbc, l
+	ld	(xbc+l), h
 AccPlay_SetupJumpTarget:
 	jp AccPlay_SyncParamsRet
 AccPlay_SyncVoiceParams:
@@ -1654,18 +1654,18 @@ AccPlay_NoteAllocAndWrite:
 	ldb_d8	l, (32412)
 	xor	h, h
 	ld	xix, AccPatch_Transpose_LookupTable_Data
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	xor	w, w
 	sla	wa, 2
 	ld	hl, wa
 	ld	xix, AccPlay_NoteParamTable
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	stb_d8	(32184), a
 	inc	1, hl
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	stb_d8	(32185), a
 	inc	1, hl
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	stb_d8	(32186), a
 	ld	a, 144:opc
 	cp	(32184:16), 0
@@ -2435,7 +2435,7 @@ MidiSeqBuf_ScanAllEntries:
 MidiSeqBuf_ScanLoop:
 	calr	TempoRingBuf_ReadLoop
 	ld	xhl, 32410
-	st_rrb	a, xhl, ix
+	ld	(xhl+ix), a
 	inc	1, ix
 	dec	1, bc
 	cp	bc, 0:i3
@@ -2454,13 +2454,13 @@ MidiSeqBuf_ProcessEntries:
 MidiSeqBuf_ProcessLoop:
 .Lc_f7266f:
 	ld XHL,0x00007e9a
-	ld_rrb	a, xhl, ix
+	ld	a, (xhl+ix)
 	push	xix
 	pushw	de
 	ldw_d16	hl, (32372)
 	calr	Util_ExtractAndShiftBits
 	ldw_d16	hl, (32374)
-	st_rrb	a, xix, hl
+	ld	(xix+hl), a
 	calr	MidiSeqBuf_AdvancePosition
 	popw	de
 	pop	xix
@@ -3642,14 +3642,14 @@ VocalistGridCheck_Skip:
 	ld	ix, bc
 	add	ix, wa
 	lda	xde, (VocalistGridCheck_Table:24)
-	ld_rrl	xwa, xde, ix
+	ld	xwa, (xde+ix)
 	cp	xwa, 4294967295
 	jrl	z, AcVocalist_ReturnZero
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	ld_rrl	xwa, xde, bc
+	ld	xwa, (xde+bc)
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	VocalistGridCheck_Join
@@ -3678,14 +3678,14 @@ VocalistGridCheck_Skip2:
 	ld	ix, bc
 	add	ix, wa
 	lda	xde, (VocalistGridCheck_Table:24)
-	ld_rrl	xwa, xde, ix
+	ld	xwa, (xde+ix)
 	cp	xwa, 4294967295
 	jrl	z, AcVocalist_ReturnZero
 	ld	wa, (xhl)
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	ld_rrl	xwa, xde, bc
+	ld	xwa, (xde+bc)
 	ldw	bc, 65535
 	ld	de, 2:i3
 VocalistGridCheck_Join:
@@ -3742,7 +3742,7 @@ VocalistGridCheck_Join4:
 	add	xwa, MidiPart_ColWidthData
 	ld	wa, (xwa)
 	lda	xix, (VocalistGrid_DispatchData_0x160:24)
-	jp_rr 8, xix, wa
+	jp	t, (xix+wa)
 	ld	wa, (xbc)
 	cp	wa, 16
 	jr	z, VocalistGridCheck_Skip5
@@ -3805,7 +3805,7 @@ VocalistGridCheck_Join6:
 	ld	wa, (xbc)
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw VocalistGrid_DispatchData_Str_Fmts@hi16
 	pushw VocalistGrid_DispatchData_Str_Fmts@lo16
@@ -3887,20 +3887,20 @@ VocalistGridCheck_Join9:
 	divs	wa, 12
 	sla	wa, 2
 	lda	xhl, (MidiPart_OctaveTable:24)
-	ld_rrl	xwa, xhl, wa
+	ld	xwa, (xhl+wa)
 	push	xwa
 	exts	xde
 	divs	de, 12
 	ld	wa, qde
 	sla	wa, 2
 	lda	xde, (MidiPart_NoteNameTable:24)
-	ld_rrl	xwa, xde, wa
+	ld	xwa, (xde+wa)
 	push	xwa
 	and	bc, 128
 	sra	bc, 7
 	sla	bc, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
-	ld_rrl	xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	push	xwa
 	pushw VocalistGrid_DispatchData_Str_Fmts_Fmts_Fmts@hi16
 	pushw VocalistGrid_DispatchData_Str_Fmts_Fmts_Fmts@lo16
@@ -4027,7 +4027,7 @@ VocalistGridCheck_Join11:
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (MidiPart_NoteNameTable:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	pushw	VocalistGrid_CheckDispData_Str_Fmts@hi16
 	pushw	VocalistGrid_CheckDispData_Str_Fmts@lo16
@@ -4111,7 +4111,7 @@ VocalistGridCheck_Join14:
 	divs	hl, 12
 	sla	hl, 2
 	lda	xbc, (MidiPart_OctaveTable:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 11533
 	call	AcApcToggleProc_Helper
@@ -4120,13 +4120,13 @@ VocalistGridCheck_Join14:
 	ld	wa, qhl
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, 11534
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts@hi16
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts@lo16
@@ -4145,7 +4145,7 @@ VocalistGridCheck_Join14:
 	divs	hl, 12
 	sla	hl, 2
 	lda	xbc, (MidiPart_OctaveTable:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 11537
 	call	AcApcToggleProc_Helper
@@ -4154,13 +4154,13 @@ VocalistGridCheck_Join14:
 	ld	wa, qhl
 	sla	wa, 2
 	lda	xbc, (MidiPart_NoteNameTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, 11538
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
 	lda	xwa, (VocalistGrid_DispatchData_PtrTable:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	push	xwa
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts_2@hi16
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts_2@lo16
@@ -4178,7 +4178,7 @@ VocalistGridCheck_Join14:
 	sla	wa, 2
 	dec	4, wa
 	add	bc, wa
-	ld_rrl	xwa, xde, bc
+	ld	xwa, (xde+bc)
 	call	AcApcToggleProc_Helper
 	ld	xwa, VocalistGrid_DispatchData_Str_17
 	cp	hl, 0:i3
@@ -5224,7 +5224,7 @@ SplitPoint_HandleNoteEvt:
 	ld	wa, qbc
 	sla	wa, 2
 	lda	xbc, (SplitPoint_NoteNameTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw SplitPointFunc_LocalInit_Strings@hi16
 	pushw SplitPointFunc_LocalInit_Strings@lo16

@@ -382,7 +382,7 @@ SmfLoadAs_Apply:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SmfLoadAs_Apply_PtrTable:24)
-	ld_rrl	xde, xbc, wa
+	ld	xde, (xbc+wa)
 	ld	xwa, (33024:16)
 	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
@@ -536,7 +536,7 @@ FmmSmfFileNameFunc:
 	ld	de, (xde)
 	lda	xix, (FmmSmfFileNameFunc_Code:24)
 SmfFN_JumpTable:
-	jp_rr 8, xix, de
+	jp	t, (xix+de)
 FmmSmfFileNameFunc_Code:
 	ld	(33028:16), xbc
 	ld	xwa, 0:i3

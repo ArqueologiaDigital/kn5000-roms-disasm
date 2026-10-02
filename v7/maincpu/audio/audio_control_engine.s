@@ -180,7 +180,7 @@ FileIO_BytecodeData_Code_Skip8:
 FileIO_BytecodeData_Code_Skip9:
 	ld	xwa, FileIO_BytecodeData_Data_5
 FileIO_BytecodeData_Code_Join2:
-	ld_rrb	a, xwa, hl
+	ld	a, (xwa+hl)
 	ld	(xde), a
 	jr	FileIO_BytecodeData_Code_Join
 FileIO_BytecodeData_Code_Skip10:
@@ -450,7 +450,7 @@ FileIO_BytecodeData_Code_Skip28:
 	jrl	nz, FileIO_BytecodeData_Code_Epilogue9
 	ld	xwa, FileIO_BytecodeData_Data_6
 FileIO_BytecodeData_Code_Join7:
-	ld_rrb	a, xwa, hl
+	ld	a, (xwa+hl)
 	ld	(xde), a
 	cp	a, 17
 	jr	ule, FileIO_BytecodeData_Code_Skip31
@@ -567,7 +567,7 @@ FileIO_BytecodeData_Code_Skip38:
 	jr	nz, FileIO_BytecodeData_Code_Epilogue10
 	ld	xwa, FileIO_BytecodeData_Data_9
 FileIO_BytecodeData_Code_Join8:
-	ld_rrb	a, xwa, hl
+	ld	a, (xwa+hl)
 	ld	(xde), a
 	ld	c, a
 	cp	c, 15
@@ -790,7 +790,7 @@ FileIO_BytecodeData_Code_Entry6:
 	call	Util_FindLowestSetBit
 	extz	hl
 	lda	xbc, (FileIO_BytecodeData_Data_12:24)
-	ld_rrb	a, xbc, hl
+	ld	a, (xbc+hl)
 	ld	(xiz+2), a
 	ld	(0x8c9e:16), a
 	ld	(xiz+3), 255
@@ -986,18 +986,18 @@ FileIO_BytecodeData_Code_Epilogue22:
 	cp	hl, 17
 	jr	nz, FileIO_BytecodeData_Code_Skip61
 	lda	xde, (FileIO_BytecodeData_Data_13:24)
-	ld_rrb	c, xde, bc
+	ld	c, (xde+bc)
 	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable:24)
-	lda_rr	xde, xde, wa
+	lda	xde, (xde+wa)
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
 	call	(xhl)
 	jr	FileIO_BytecodeData_Code_Join12
 FileIO_BytecodeData_Code_Skip60:
 	lda	xde, (FileIO_BytecodeData_Data_14:24)
-	ld_rrb	c, xde, bc
+	ld	c, (xde+bc)
 	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable_2:24)
-	lda_rr	xde, xde, wa
+	lda	xde, (xde+wa)
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
 	call	(xhl)
@@ -1049,7 +1049,7 @@ FileIO_BytecodeData_Code_Epilogue23:
 	ldto_berp	a, 251
 	extz	wa
 	lda	xhl, (FileIO_BytecodeData_Data_15:24)
-	ld_rrb	a, xhl, wa
+	ld	a, (xhl+wa)
 	ld	(xbc), a
 	ld	(xde), 48
 	.byte	0xf1, 0xb6, 0x8c, 0xbb
@@ -1259,7 +1259,7 @@ FileIO_BytecodeData_Code_Helper3:
 FileIO_BytecodeData_Code_Helper4:
 	extz	bc
 	lda	xde, (FileIO_BytecodeData_Data_16:24)
-	ld_rrb	e, xde, bc
+	ld	e, (xde+bc)
 	cp	e, 22
 	ret	ugt
 	extz	de
@@ -1508,10 +1508,8 @@ ExtDev_SndParam_Write98_Block:
 	call	DkMdlyPly_CheckState_Helper
 	cp	hl, 1:i3
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Epilogue
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90
-	ld	(xbc-74), 152
+	set	1, (36957:16)
+	ld	(xiz), 152
 	ld	(xiz+1), 2
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
@@ -1679,10 +1677,8 @@ ExtDev_SndParam_Write48_Block:
 	call	AcApcToggleProc_Helper
 	cp	hl, 0:i3
 	jr	nz, FileIO_BytecodeData_Code_Helper4_Epilogue2
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90
-	ld	(xbc-74), 72
+	set	1, (36957:16)
+	ld	(xiz), 72
 	ld	(xiz+1), 4
 	lda	xbc, (xiz+2)
 	lda	xde, (xiz+3)
@@ -1781,12 +1777,10 @@ FileIO_BytecodeData_Code_Helper4_Skip7:
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue3
 ; (pre-port v7 note about the bytes at 0xFC6024:)
 ; llvm-mc cannot spell this byte
-	.byte	0xf1
-	.byte 0x5d
-; (pre-port v7 note about the bytes at 0xFC6026:)
-; llvm-mc cannot spell this byte
-	.byte	0x90
-	ld	(xbc-74), 168
+	set	1, (36957:16)
+	; (pre-port v7 note about the bytes at 0xFC6026:)
+	; llvm-mc cannot spell this byte
+	ld	(xiz), 168
 	ld	(xiz+1), 4
 	lda	xde, (xiz+2)
 	lda	xhl, (xiz+3)
@@ -1844,12 +1838,10 @@ FileIO_BytecodeData_Code_Helper4_Skip8:
 	jr	z, FileIO_BytecodeData_Code_Helper4_Epilogue4
 ; (pre-port v7 note about the bytes at 0xFC607D:)
 ; llvm-mc cannot spell this byte
-	.byte	0xf1
-	.byte 0x5d
-; (pre-port v7 note about the bytes at 0xFC607F:)
-; llvm-mc cannot spell this byte
-	.byte	0x90
-	ld	(xbc-74), 168
+	set	1, (36957:16)
+	; (pre-port v7 note about the bytes at 0xFC607F:)
+	; llvm-mc cannot spell this byte
+	ld	(xiz), 168
 	ld	(xiz+1), 4
 	lda	xde, (xiz+2)
 	lda	xhl, (xiz+3)
@@ -1941,11 +1933,11 @@ FileIO_BytecodeData_Code_Helper4_Epilogue5:
 	extz	wa
 	sla	wa, 2
 	lda	xde, (ExtDev_SndParam_DispatchComplex_PtrTable:24)
-	ld_rrl	xde, xde, wa
+	ld	xde, (xde+wa)
 	or	xde, xde
 	jr	z, FileIO_BytecodeData_Code_Epilogue36
 	extz	hl
-	ld_rrb	a, xde, hl
+	ld	a, (xde+hl)
 	ld	(xbc), a
 	cp	a, 255
 	jr	z, FileIO_BytecodeData_Code_Epilogue36
@@ -2788,7 +2780,7 @@ SndParam_TableLookup_Via4100:
 	ld	xwa, 0x00004100
 	call	AcApcToggleProc_Helper
 	lda	xwa, (SndParam_TableLookup_Via4100_Data:24)
-	ld_rrb	a, xwa, hl
+	ld	a, (xwa+hl)
 	and	a, 0x07
 	sla	a, 4
 	andmi8	(xiz+10), 143
@@ -3122,7 +3114,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Data:24)
 ; (pre-port v7 note about the bytes at 0xFC6D8E:)
 ; v10 does not spell this byte either
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 ; (pre-port v7 note about the bytes at 0xFC6D90:)
 ; v10 does not spell this byte either
 ; (pre-port v7 note about the bytes at 0xFC6D91:)
@@ -3130,7 +3122,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Code:24)
 ; (pre-port v7 note about the bytes at 0xFC6D94:)
 ; differs from v10 here and llvm-objdump cannot read it
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 ; (pre-port v7 note about the bytes at 0xFC6D9A:)
 ; v10 does not spell this byte either
 ; (pre-port v7 note about the bytes at 0xFC6D9B:)
@@ -4002,73 +3994,54 @@ UIState_ProcessExtendedMode:
 	ret	gt
 	add	wa, wa
 	lda	xix, (UIState_ProcessExtendedMode_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (0xfc73ba:24)
 ; (pre-port v7 note about the bytes at 0xFC73B5:)
 ; v10 does not spell this byte either
-	.byte	0xf3
-	reti
-; (pre-port v7 note about the bytes at 0xFC73B7:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC73B8:)
-; v10 does not spell this byte either
-	.byte	0xf0, 0xe0
-	xor	bc, wa
-; (pre-port v7 note about the bytes at 0xFC73BB:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0xa2
-; (pre-port v7 note about the bytes at 0xFC73BC:)
-; v10 does not spell this byte either
-	.byte	0x8e
-	push	xiz
-	pop	sr
-	push	sr
+	jp	t, (xix+wa)
+	; (pre-port v7 note about the bytes at 0xFC73B7:)
+	; v10 does not spell this byte either
+	; (pre-port v7 note about the bytes at 0xFC73B8:)
+	; v10 does not spell this byte either
+	orw	(36514:16), 515
+	; (pre-port v7 note about the bytes at 0xFC73BB:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC73BC:)
+	; v10 does not spell this byte either
 	ret
-; (pre-port v7 note about the bytes at 0xFC73C1:)
-; v10 does not spell this byte either
-	.byte	0xd1
-; (pre-port v7 note about the bytes at 0xFC73C2:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0xa2, 0x8e, 0x3e, 0xfc
-	nop
+	; (pre-port v7 note about the bytes at 0xFC73C1:)
+	; v10 does not spell this byte either
+	orw	(36514:16), 252
+	; (pre-port v7 note about the bytes at 0xFC73C2:)
+	; differs from v10 here and llvm-objdump cannot read it
 	ret
 	ld	xwa, 0x028080
-	call	0xfccc66
+	call	AcApcToggleProc_Helper
 	cp	l, 0:i3
-	jr	z, 5
+	jr	z, UIState_ProcessExtendedMode_Skip
 	ld	(0xffc8:24), l
 ; (pre-port v7 note about the bytes at 0xFC73DA:)
 ; v10 does not spell this byte either
-	.byte	0xd1
-; (pre-port v7 note about the bytes at 0xFC73DB:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0xa2
-; (pre-port v7 note about the bytes at 0xFC73DC:)
-; v10 does not spell this byte either
-	.byte	0x8e
-	push	xiz
-	nop
-	normal
+UIState_ProcessExtendedMode_Skip:
+	orw	(36514:16), 256
+	; (pre-port v7 note about the bytes at 0xFC73DB:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC73DC:)
+	; v10 does not spell this byte either
 	ret
-; (pre-port v7 note about the bytes at 0xFC73E1:)
-; v10 does not spell this byte either
-	.byte	0xd1
-; (pre-port v7 note about the bytes at 0xFC73E2:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0xa6, 0x8e, 0x3e, 0x10, 0x00
+	; (pre-port v7 note about the bytes at 0xFC73E1:)
+	; v10 does not spell this byte either
+	orw	(36518:16), 16
+	; (pre-port v7 note about the bytes at 0xFC73E2:)
+	; differs from v10 here and llvm-objdump cannot read it
 	ret
-; (pre-port v7 note about the bytes at 0xFC73E8:)
-; v10 does not spell this byte either
-	.byte	0xd1
-; (pre-port v7 note about the bytes at 0xFC73E9:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0xa2
-; (pre-port v7 note about the bytes at 0xFC73EA:)
-; v10 does not spell this byte either
-	.byte	0x8e
-	push	xiz
-	nop
-	push	sr
+	; (pre-port v7 note about the bytes at 0xFC73E8:)
+	; v10 does not spell this byte either
+	orw	(36514:16), 512
+	; (pre-port v7 note about the bytes at 0xFC73E9:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC73EA:)
+	; v10 does not spell this byte either
 	ret
 UIStateEvt_NullHandler:
 	ret
@@ -4397,6 +4370,7 @@ VoiceData_ExtendedParamSetup:
 	lda	xwa, (0xf9a0:16)
 	ld	(xsp+6), xwa
 	ld	iz, 0:i3
+VoiceData_ExtendedParamSetup_Loop3:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 26
@@ -4430,15 +4404,13 @@ VoiceData_ExtendedParamSetup:
 	pop	sr
 	inc	1, iz
 	cp	iz, 24
-	jr	c, -83
+	jr	c, VoiceData_ExtendedParamSetup_Loop3
 	call	Voice_InitAllChannelEntries
 	popw	iz
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-10)
-	.byte	0xd7
-	swi	2
-	.byte	0x04
+	push	qiz
 	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
 	ld	(xsp+4), xwa
 	lda	xwa, (0xf9a0:16)
@@ -4450,13 +4422,13 @@ VoiceData_ExtendedParamSetup:
 	ld	ix, wa
 	add	ix, 20
 	ld	xwa, (xsp+8)
-	lda_rr	xhl, xwa, ix
+	lda	xhl, (xwa+ix)
 	lda	xde, (xhl+14)
 	ld	c, (xde)
 	and	c, 248
 	ld	(xde), c
 	ld	xwa, (xsp+4)
-	lda_rr	xwa, xwa, ix
+	lda	xwa, (xwa+ix)
 	ld	a, (xwa+14)
 	and	a, 7
 	or	c, a
@@ -4475,18 +4447,15 @@ VoiceData_ExtendedParamSetup:
 	ld	bc, wa
 	add	bc, 20
 	ld	xwa, (xsp+6)
-	.byte	0xf3
-	reti
-	.byte	0xe0, 0xe4
-	ldw	wa, 4024
-	ldw	wa, 0xaf38
-	ret
-	ld	w, 243:opc
-	reti
-	.byte	0xe0, 0xe4
-	ldw	wa, 4024
-	.byte	0x30, 0x38, 0x1d	; bytecode param 0x1d38
-	.byte 0xbc, 0x05, 0xff
+	lda	xwa, (xwa+bc)
+	lda	xwa, (xwa+15)
+	push	xwa
+	ld	xwa, (xsp+14)
+	lda	xwa, (xwa+bc)
+	lda	xwa, (xwa+15)
+	; bytecode param 0x1d38
+	push	xwa
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ldi_erpb	251, 13
 	ld	a, (xsp+2)
@@ -4496,12 +4465,12 @@ VoiceData_ExtendedParamSetup:
 	ld	bc, hl
 	add	bc, 20
 	ld	xde, (xsp+8)
-	ld_rrb	a, xde, bc
+	ld	a, (xde+bc)
 	extz	wa
 	ldto_berp	c, 251
 	extz	bc
 	add	hl, bc
-	lda_rr	xde, xde, hl
+	lda	xde, (xde+hl)
 	ld	e, (xde+22)
 	extz	de
 	pushw	255
@@ -4534,7 +4503,7 @@ VoiceData_ExtendedParamSetup:
 	ld	de, bc
 	add	de, 944
 	ld	xwa, (xsp+8)
-	ld_rrb	e, xwa, de
+	ld	e, (xwa+de)
 	extz	de
 	pushw	255
 	ldw	wa, 128
@@ -4590,7 +4559,7 @@ VoiceData_ExtendedParamSetup_Loop2:
 	ld	hl, wa
 	add	hl, 20
 	ld	xwa, (xsp+8)
-	lda_rr	xix, xwa, hl
+	lda	xix, (xwa+hl)
 	lda	xde, (xix+14)
 	ld	c, (xde)
 	and	c, 248
@@ -5067,9 +5036,9 @@ ExtData_ToneParam_DispatchHandler:
 	ret	gt
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_DispatchHandler_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (ExtData_ToneParam_DispatchHandler_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 ExtData_ToneParam_DispatchHandler_Code:
 	jr	ExtData_ToneParam_DispatchHandler_Join
 	jrl	ExtData_Voice_CheckMode3_Helper
@@ -5361,9 +5330,9 @@ ExtData_ToneParam_AltDispatch:
 	ret	gt
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_AltDispatch_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (ExtData_ToneParam_AltDispatch_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 ; (pre-port v7 note about the bytes at 0xFC7FC8:)
 ; -> 0xFC7FD2
 ExtData_ToneParam_AltDispatch_Code:
@@ -5418,9 +5387,9 @@ ExtData_ToneParam_AltBody:
 	ret	gt
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_AltBody_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (ExtData_ToneParam_AltBody_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 ExtData_ToneParam_AltBody_Code:
 	jr	15
 	jr	112
@@ -5462,11 +5431,7 @@ ExtData_ToneParam_AltBody_Code:
 	ld	(0x908e:16), 127
 	calr	SwbtWr_FlushAndAppendParams
 	ld	(0x908c:16), 0
-	.byte	0xc1
-	.byte 0x52, 0x90
-	pop_f
-	.byte 0x8d
-	.byte	0x90
+	ld	(0x908d), (36946:16)
 	ld	(0x908e:16), 255
 	calr	SwbtWr_FlushAndAppendParams
 	ret
@@ -5478,9 +5443,7 @@ ExtData_ToneParam_AltBody_Code:
 	and	a, 7
 	jr	z, ExtData_ToneParam_AltBody_Skip2
 	call	ToneGen_DispatchByMode
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90, 0xb8
+	set	0, (36957:16)
 ExtData_ToneParam_AltBody_Skip2:
 	calr	SwbtWr_FlushAndAppendParams
 	jrl	MIDI_WriteResetSequence
@@ -5632,16 +5595,12 @@ ExtData_ToneParam_MultiChannel_Join3:
 	jr	nz, 29
 	ld	wa, 2:i3
 	calr	ExtData_ToneParam_DispatchHandler_Helper
-	.byte	0xf1
-	.byte 0x8e, 0x90, 0xc9
+	bit	1, (37006:16)
 	jr	nz, 1
 	ret
-	.byte	0xf1
-	.byte 0x5d
-	.byte	0x90
-	.byte 0xb8, 0xf1, 0x94
-	.byte	0x90, 0xb1, 0xf1
-	.byte 0x95, 0x90, 0xb1
+	set	0, (36957:16)
+	res	1, (37012:16)
+	res	1, (37013:16)
 	ld	(0x908e:16), 0
 	calr	7
 	call	ToneGen_DispatchByMode
@@ -5663,43 +5622,35 @@ ExtData_ToneParam_MultiChannel_Join3:
 	extz	bc
 	ld	a, (0x9095:16)
 	cpl	a
-	.byte	0xc3
-	reti
-	or	xix, xix
-	and	a, a
-	.byte 0x93, 0x90, 0x23
+	and	(xhl+bc), a
+	ld	c, (37011:16)
 	extz	bc
-	ld	a, (0x9094:16)
-	and	a, (0x9095:16)
-	.byte	0xc3
-	reti
-	or	xix, xix
-	add	xhl, xbc
-	ld	c, 203:opc
-	dec	6, wa
-	ret
-	.byte	0x8b, 0x01
-	push	xsp
-	nop
-	jr	nz, 8
+	ld	a, (37012:16)
+	and	a, (37013:16)
+	or	(xhl+bc), a
+	ld	c, (xhl)
+	cp	c, 0:i3
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip8
+	cp	(xhl+1), 0
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip8
 	ld	(xix), 0
 	ld	(xix+1), 0
 	ret
+ExtData_ToneParam_MultiChannel_Skip8:
 	ld	a, (xix)
 	and	a, 3
-	jr	nz, 5
+	jr	nz, ExtData_ToneParam_MultiChannel_Skip9
 	bit	1, c
 	ret	z
+ExtData_ToneParam_MultiChannel_Skip9:
 	lda	xde, (0xfc66:16)
 	extz	wa
 	lda	xbc, (ExtData_ToneParam_MultiChannel_Data:24)
-	.byte	0xc3
-	reti
-	.byte	0xe4, 0xe0
-	ld	c, 178:opc
-	ld	xhl, 0xc921018a
-	.byte	0xee
-	ld	(216:8), 18:io
+	ld	c, (xbc+wa)
+	ld	(xde), c
+	ld	a, (xde+1)
+	sll	a, 8
+	extz	wa
 	extz	bc
 	add	bc, wa
 	cp	bc, (0x90c7:16)
@@ -5878,19 +5829,16 @@ ExtData_Voice_MixedHandler_Join:
 	ld	a, (0x9094:16)
 	and	a, (0x9095:16)
 	bit	0, a
-	jr	z, 23
+	jr	z, ExtData_Voice_MixedHandler_Skip5
 	ld	a, (0xfd02:16)
 	and	a, 3
 	extz	wa
 	lda	xbc, (ExtData_Voice_MixedHandler_Data:24)
-	.byte	0xc3
-	reti
-	.byte	0xe4, 0xe0
-	pop_f
-	.byte 0xbc
-	.byte	0x8e
-	jr	5
+	ld	(0x8ebc), (xbc+wa)
+	jr	ExtData_Voice_MixedHandler_Join4
+ExtData_Voice_MixedHandler_Skip5:
 	ld	(0x8ebc:16), 0
+ExtData_Voice_MixedHandler_Join4:
 	ldw	wa, 69
 	call	CtrlPanel_SetIndicatorBit
 	ret
@@ -5899,10 +5847,11 @@ ExtData_Voice_MixedHandler_Helper:
 	ld	a, c
 	and	a, 255
 	cp	a, 255
-	jr	nz, 8
+	jr	nz, ExtData_Voice_MixedHandler_Helper_Entry
 	ldw	wa, 255
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
 	jr	ExtData_Voice_MixedHandler_Join3
+ExtData_Voice_MixedHandler_Helper_Entry:
 	.byte	0xf1, 0x1c, 0xe3
 	dec	6, a
 	pop	xde
@@ -5976,13 +5925,11 @@ ExtData_Voice_FullHandler_Join:
 	calr	ExtData_Voice_FullHandler_Helper2
 ; (pre-port v7 note about the bytes at 0xFC8511:)
 ; v10 does not spell this byte either
-	.byte	0xc1
-; (pre-port v7 note about the bytes at 0xFC8512:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0x96, 0x90, 0x3c
-; (pre-port v7 note about the bytes at 0xFC8515:)
-; v10 does not spell this byte either
-	.byte	0x80
+	and	(37014:16), 128
+	; (pre-port v7 note about the bytes at 0xFC8512:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC8515:)
+	; v10 does not spell this byte either
 	ldw	wa, 127
 	calr	VoiceParam_CompareAndUpdate
 	jrl	SwbtWr_FlushAndAppendParams
@@ -6027,24 +5974,24 @@ ExtData_Voice_FullHandler_Helper:
 	ld	a, c
 	and	a, 192
 	cp	a, 192
-	jr	nz, 16
+	jr	nz, ExtData_Voice_FullHandler_Helper_Code_Entry
 ; (pre-port v7 note about the bytes at 0xFC856E:)
 ; v10 does not spell this byte either
-	.byte	0xf1
-; (pre-port v7 note about the bytes at 0xFC856F:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0x8e
-; (pre-port v7 note about the bytes at 0xFC8570:)
-; v10 does not spell this byte either
-	.byte	0x90
-	inc	6, l
-	halt
+	bit	7, (37006:16)
+	; (pre-port v7 note about the bytes at 0xFC856F:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC8570:)
+	; v10 does not spell this byte either
+	jr	z, ExtData_Voice_FullHandler_Helper_Code_Skip
 	res	6, c
-	jr	3
+	jr	ExtData_Voice_FullHandler_Helper_Code_Join
+ExtData_Voice_FullHandler_Helper_Code_Skip:
 	res	7, c
+ExtData_Voice_FullHandler_Helper_Code_Join:
 	ld	(xde), c
 ; (pre-port v7 note about the bytes at 0xFC857E:)
 ; v10 does not spell this byte either
+ExtData_Voice_FullHandler_Helper_Code_Entry:
 	.byte	0x82
 	pop_f
 ; (pre-port v7 note about the bytes at 0xFC8580:)
@@ -6057,37 +6004,34 @@ ExtData_Voice_FullHandler_Helper:
 	ldto_berp	a, 251
 	and	a, 128
 	cp	a, l
-	jr	z, 7
+	jr	z, ExtData_Voice_FullHandler_Helper_Code_Skip2
 	set	7, c
 	ld	(0x908e:16), c
+ExtData_Voice_FullHandler_Helper_Code_Skip2:
 	ld	c, (xde)
 	and	c, 64
 ; (pre-port v7 note about the bytes at 0xFC85A4:)
 ; v10 does not spell this byte either
-	.byte	0xc7
-	swi	3
-	and	(xbc-55), d
-	ld	xwa, 0x0466f1cb
-; (pre-port v7 note about the bytes at 0xFC85AE:)
-; v10 does not spell this byte either
-	.byte	0xf1
-; (pre-port v7 note about the bytes at 0xFC85AF:)
-; differs from v10 here and llvm-objdump cannot read it
-	.byte 0x8e
-; (pre-port v7 note about the bytes at 0xFC85B0:)
-; v10 does not spell this byte either
-; (pre-port v7 note about the bytes at 0xFC85B1:)
-; v10 does not spell this byte either
-	.byte	0x90, 0xbe
+	ldto_berp	a, 251
+	and	a, 64
+	cp	a, c
+	jr	z, ExtData_Voice_FullHandler_Helper_Code_Skip3
+	; (pre-port v7 note about the bytes at 0xFC85AE:)
+	; v10 does not spell this byte either
+	set	6, (37006:16)
+	; (pre-port v7 note about the bytes at 0xFC85AF:)
+	; differs from v10 here and llvm-objdump cannot read it
+	; (pre-port v7 note about the bytes at 0xFC85B0:)
+	; v10 does not spell this byte either
+	; (pre-port v7 note about the bytes at 0xFC85B1:)
+	; v10 does not spell this byte either
+ExtData_Voice_FullHandler_Helper_Code_Skip3:
 	calr	SwbtWr_FlushAndAppendParams
 	pop	qiz
 	ret
 ExtData_Voice_CopyAndJump:
-	.byte	0xc1
-	.byte 0x94, 0x90, 0x19, 0x8d
-	.byte	0x90, 0xc1
-	.byte 0x95, 0x90, 0x19, 0x8e
-	.byte	0x90
+	ld	(0x908d), (37012:16)
+	ld	(0x908e), (37013:16)
 	jrl	SwbtWr_FlushAndAppendParams
 ExtData_Voice_CompareAndDispatch:
 	ld	a, (0x9093:16)
@@ -6106,11 +6050,8 @@ ExtData_Voice_CompareAndDispatch_Helper:
 	calr	Audio_FlushPendingBankSelects
 	ld	(0x90e2:16), 176
 	ld	(0x90e3:16), 0
-	.byte	0xc1
-	.byte 0x94, 0x90, 0x19
-	.byte	0xe4, 0x90, 0xc1
-	.byte 0x95, 0x90, 0x19
-	.byte	0xe5, 0x90
+	ld	(0x90e4), (37012:16)
+	ld	(0x90e5), (37013:16)
 	jp	MIDI_LoadParamsAndDispatchCC
 MidiChannel_ResetAndConfigure:
 	res	7, (0x28ae:16)
@@ -6179,16 +6120,10 @@ MidiChannel_ResetAndConfigure_Entry:
 	ld	(0x908d:16), a
 	ld	(0x908e:16), 127
 	calr	SwbtWr_FlushAndAppendParams
-	.byte	0xc1
-	.byte 0x8b, 0x90
-	pop_f
-	.byte 0xe2, 0x90, 0xc1, 0x8c
-	.byte	0x90
-	pop_f
-	.byte 0xe3, 0x90, 0xc1, 0x94, 0x90, 0x19
-	.byte	0xe4, 0x90, 0xc1
-	.byte 0x95, 0x90, 0x19
-	.byte	0xe5, 0x90
+	ld	(0x90e2), (37003:16)
+	ld	(0x90e3), (37004:16)
+	ld	(0x90e4), (37012:16)
+	ld	(0x90e5), (37013:16)
 	call	MIDI_LoadParamsAndDispatchCC
 	ret
 MidiCh_IterateVolume_Forward:
@@ -6942,11 +6877,8 @@ SndParam_WriteLookupAndStore:
 	ret	z
 	ld	a, (0x9093:16)
 	extz	wa
-	.byte	0xc3
-	reti
-	or	xwa, xix
-	pop_f
-	.byte 0x96, 0x90, 0x0e
+	ld	(0x9096), (xhl+wa)
+	ret
 SwbtWr_FlushAndAppendParams:
 	cp	(0x908e:16), 0
 	ret	z
@@ -7105,7 +7037,7 @@ ExtData_ToneParam_DispatchHandler_Helper2:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue
 	ld	a, (0x9093:16)
 	extz	wa
-	lda_rr	xhl, xhl, wa
+	lda	xhl, (xhl+wa)
 	ld	c, (xsp)
 	cpl	c
 	ld	e, c
@@ -7138,7 +7070,7 @@ ExtData_ToneParam_AltBody_Helper:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue2
 	ld	a, (0x9093:16)
 	extz	wa
-	lda_rr	xhl, xhl, wa
+	lda	xhl, (xhl+wa)
 	ld	c, (xsp)
 	cpl	c
 	ld	e, c
@@ -7173,7 +7105,7 @@ ExtData_ToneParam_DispatchHandler_Helper3:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue3
 	ld	a, (0x9093:16)
 	extz	wa
-	lda_rr	xhl, xhl, wa
+	lda	xhl, (xhl+wa)
 	ld	e, (xhl)
 	.byte	0x87, 0xc5
 	ld	c, (0x90b7:16)
@@ -7215,7 +7147,7 @@ ExtData_Voice_FullHandler_Helper2:
 	jr	z, SwbtWr_WriteParamBlock_Epilogue4
 	ld	a, (0x9093:16)
 	extz	wa
-	lda_rr	xhl, xhl, wa
+	lda	xhl, (xhl+wa)
 	ld	a, (xsp)
 	cpl	a
 	.byte	0x83
@@ -7686,7 +7618,7 @@ VoiceData_DistributeToChannels_Join:
 	.byte	0x87, 0xf1
 	jr	ugt, VoiceData_DistributeToChannels_Skip
 	extz	wa
-	ld_rrb	a, xhl, wa
+	ld	a, (xhl+wa)
 	ld	(xsp+2), a
 VoiceData_DistributeToChannels_Skip:
 	ld	l, (xsp+2)
@@ -9114,7 +9046,7 @@ TempoCC_TransmitBytecodeBlock:
 	ld	xiy, (0x9056:16)
 	extz	wa
 	sll	wa, 2
-	ld_rrl	xiy, xiy, wa
+	ld	xiy, (xiy+wa)
 	ld	wa, (xiy)
 	bit	7, a
 	jr	z, TempoCC_TransmitBytecodeBlock_Skip
@@ -9662,7 +9594,7 @@ MidiCtrl_ModeDispatch_Table:
 	xor	h, h
 	ld	l, (0x912c:16)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	set	7, a
 	ld	(0x9049:16), a
 	ld	bc, (0x90bf:16)
@@ -9683,7 +9615,7 @@ VoiceMode_ParamHandler_4_Skip:
 	extz	hl
 	ld	l, (0x912c:16)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	set	7, a
 	ld	(0x9049:16), a
 	ld	c, (0x90bf:16)
@@ -9714,7 +9646,7 @@ VoiceMode_ParamHandler_4_Skip2:
 	extz	hl
 	ld	l, (0x912c:16)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	set	7, a
 	ld	(0x9049:16), a
 	ld	c, (0x90bf:16)
@@ -9800,7 +9732,7 @@ VoiceMode3_EvType0:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0xf1a0
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 14
 	jr	nz, VoiceMode3_DispatchTable_Code_Skip
 	ld	b, 4:opc
@@ -9825,7 +9757,7 @@ VoiceMode3_DispatchTable_Code_Skip3:
 	cp	(xix+hl), 0x0f
 	jr	nz, VoiceMode3_DispatchTable_Code_Return
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 16
 	jr	z, VoiceMode3_DispatchTable_Code_Return
 	set	7, a
@@ -9845,18 +9777,18 @@ VoiceMode3_EvType6:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
 	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	extz	hl
 	ld	l, b
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	ld	w, d
 	xor	w, 255
 	and	a, w
 	and	e, d
 	or	e, a
-	st_rrb	e, xix, hl
+	ld	(xix+hl), e
 	ld	(0x908b:16), bc
 	ld	(0x908d:16), de
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
@@ -9867,7 +9799,7 @@ VoiceMode3_DispatchTable_Code_Skip4:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0xf1a0
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 15
 	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	cp	a, 14
@@ -9875,7 +9807,7 @@ VoiceMode3_DispatchTable_Code_Skip4:
 	cp	a, 13
 	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 16
 	jr	z, VoiceMode3_DispatchTable_Code_Return2
 	set	7, a
@@ -9897,15 +9829,15 @@ VoiceMode3_EvType5:
 	jr	z, MidiPartCC_WriteAndDispatch_Skip
 	set	7, e
 	ld	xix, 0x9416
-	st_rrb	e, xix, hl
+	ld	(xix+hl), e
 	ret
 MidiPartCC_WriteAndDispatch:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0xf1a0
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	ld	xix, PartReinit_SendB0Command_Data
-	ld_rrb	c, xix, hl
+	ld	c, (xix+hl)
 	ld	b, 3:opc
 	ld	(0x90bf:16), bc
 	ld	d, 127:opc
@@ -9919,13 +9851,13 @@ MidiPartCC_CheckAndGuard:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0xf1a0
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 14
 	jr	z, MIDI_PartCC_DispatchExit
 	cp	a, 13
 	jr	z, MIDI_PartCC_DispatchExit
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 16
 	jr	z, MIDI_PartCC_DispatchExit
 	set	7, a
@@ -9949,7 +9881,7 @@ MidiVoice_DataBlockHandler_Skip:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 16
 	jr	z, MidiVoice_DataBlockHandler_Skip4
 	bit	4, (0xfd50:16)
@@ -9980,7 +9912,7 @@ VoiceMode3_EvType2_Skip:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 16
 	jr	z, MidiVoice_DataBlockHandler_Return
 	set	7, a
@@ -10007,7 +9939,7 @@ MidiVoice_DataBlockHandler_Skip2:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 16
 	jr	z, MidiVoice_DataBlockHandler_Return2
 	set	7, a
@@ -10029,7 +9961,7 @@ MidiVoice_DataBlockHandler_Skip3:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	a, 16
 	jr	z, MidiVoice_DataBlockHandler_Return3
 	set	7, a
@@ -10454,7 +10386,7 @@ MidiNoteVel_Handler_0_Skip:
 	xor	h, h
 	ld	l, (0x912c:16)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	set	7, a
 	ld	(0x9049:16), a
 	ldw	bc, 20
@@ -10476,7 +10408,7 @@ MidiNoteVel_Handler_1_Skip:
 	extz	hl
 	ld	l, (0x912c:16)
 	ld	xix, 0x9032
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	set	7, a
 	ld	(0x9049:16), a
 	ldw	bc, 20
@@ -11050,7 +10982,7 @@ MidiCC_Handler_BitManipulation_Code_Helper:
 	jr	ugt, MidiStream_ApplyPendingParams_Return
 	set	7, e
 	ld	xix, 0x9416
-	st_rr8b	e, xix, c
+	ld	(xix+c), e
 	jr	MidiStream_ApplyPendingParams_Return
 MidiStream_ApplyPendingParams_Skip:
 	ld	(0x905c:16), 255
@@ -11070,7 +11002,7 @@ MidiStream_ApplyPendingParams_Skip2:
 	jr	ugt, MidiStream_ApplyPendingParams_Return2
 	set	7, e
 	ld	xix, 0x9396
-	st_rr8b	e, xix, b
+	ld	(xix+b), e
 MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
@@ -11081,7 +11013,7 @@ MidiCC_Handler_BitManipulation_Code_Helper2:
 	set	7, e
 	ld	xix, 0x93d6
 	sll	b, 1
-	st_rr8w	de, xix, b
+	ld	(xix+b), de
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
@@ -11089,10 +11021,9 @@ MidiCC_Handler_BitManipulation_Code_Helper2:
 	jr	ugt, MidiStream_ApplyPendingParams_Return2
 	set	7, e
 	ld	xix, 0x93b6
-	.byte	0xf3
-	pop	sr
-	.byte	0xf0, 0xe5
-	ld	xiy, 0x04d21e0e
+	ld	(xix+b), e
+	ret
+	calr	MidiStream_ExtendedDispatch
 	ret
 MidiCC_Handler_BitManipulation_Code_Helper3:
 	ld	(0x905c:16), 255
@@ -11157,11 +11088,9 @@ VoiceMode3_DispatchTable_Code_Helper:
 	ld	l, (0x95a9:16)
 	sla	hl, 1
 	ld	xix, 0x95d8
-	.byte	0xf3
-	reti
-	stiw_d8	236, 127, 127
+	.byte	0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f	; ld (XIX+HL),0x7f7f
 	ret
-	calr	1015
+	calr	MidiStream_CmdPedalNotify_Helper3
 	ret
 MidiCC_Handler_BitManipulation_Code_Helper5:
 	ld	bc, (0x95a8:16)
@@ -11171,7 +11100,7 @@ MidiCC_Handler_BitManipulation_Code_Helper5:
 	ld	(0x908d:16), de
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ret
-	calr	985
+	calr	MidiStream_CmdPedalNotify_Helper3
 	ret
 MidiCC_Handler_BitManipulation_Code_Helper6:
 	ld	(0x905c:16), 255
@@ -11309,7 +11238,7 @@ MidiStream_StatusPrecheck:
 	jr	ugt, MidiStream_HandleNoteCC
 	sll	hl, 2
 	ld	xix, MidiStream_StatusJumpTable
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	jp	(xix)
 ; Jump table: 12 x .long code pointer.  Reader MidiStream_StatusPrecheck:
 ;   extz hl / ld l, b / cp l, 11 / jr ugt, MidiStream_HandleNoteCC
@@ -11341,7 +11270,7 @@ MidiStream_HandleNoteCC_Body:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	ld	wa, (xix)
 	ld	(0x904e:16), wa
 	pushw	wa
@@ -11377,9 +11306,9 @@ MidiStream_HandlePgmChange:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	ld	l, b
-	ld_rr8b	e, xix, l
+	ld	e, (xix+l)
 	and	e, 127
 	ld	d, 127:opc
 	call	MIDI_ClearGuardAndDispatchCC
@@ -11409,9 +11338,9 @@ MidiStream_HandleChanPressure_Skip:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	ld	l, b
-	ld_rr8b	e, xix, l
+	ld	e, (xix+l)
 	and	d, 72
 	call	MIDI_ClearGuardAndDispatchCC
 MidiStream_HandleChanPressure_Return:
@@ -11423,9 +11352,9 @@ MidiStream_HandleSysMsg:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	ld	l, b
-	ld_rr8b	e, xix, l
+	ld	e, (xix+l)
 	call	MIDI_ClearGuardAndDispatchCC
 MidiStream_HandleSysMsg_Return:
 	ret
@@ -11440,7 +11369,7 @@ MidiStream_RecType48_SysExDispatch:
 	jr	ugt, MidiStream_SysExNop
 	sll	hl, 2
 	ld	xix, MidiStream_SysExJumpTable
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	jp	(xix)
 ; Jump table: 4 x .long code pointer.  Reader MidiStream_RecType48_SysExDispatch:
 ;   extz hl / ld l, b / cp l, 3:i3 / jr ugt, MidiStream_SysExNop / sll hl, 2
@@ -11475,7 +11404,7 @@ MidiStream_RecType60_CtrlDispatch:
 	jr	ugt, MidiStream_CtrlNop
 	sll	hl, 2
 	ld	xix, MidiStream_CtrlJumpTable
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	jp	(xix)
 ; Jump table: 2 x .long code pointer.  Reader MidiStream_RecType60_CtrlDispatch:
 ;   extz hl / ld l, b / cp l, 1:i3 / jr ugt, MidiStream_CtrlNop / sll hl, 2
@@ -11508,7 +11437,7 @@ MidiStream_RecType98_CmdDispatch:
 	jr	ugt, MidiStream_CmdNop
 	sll	hl, 2
 	ld	xix, MidiStream_CmdJumpTable
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	jp	(xix)
 ; Jump table: 12 x .long code pointer.  Reader MidiStream_RecType98_CmdDispatch:
 ;   extz hl / ld l, b / cp l, 11 / jr ugt, MidiStream_CmdNop / sll hl, 2
@@ -11635,7 +11564,7 @@ MidiStream_CmdPedalNotify_Skip4:
 	and	l, 3
 	sla	l, 2
 	ld	xix, MidiStream_ExtendedDispatch_Data
-	ld_rr8l	xix, xix, l
+	ld	xix, (xix+l)
 	call	(xix)
 MidiStream_ExtDispatch_Mode2Ret:
 	ret
@@ -11663,7 +11592,7 @@ MidiStream_ExtDispatch_Mode0:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return
 	ld	a, 17:opc
@@ -11693,7 +11622,7 @@ MidiStream_ExtendedDispatch_Join:
 	ld	l, 20:opc
 MidiStream_ExtendedDispatch_Skip3:
 	ld	xiy, 0x9376
-	ld_rrb	h, xiy, hl
+	ld	h, (xiy+hl)
 	cp	h, a
 	jr	ugt, MidiStream_ExtendedDispatch_Return
 	ld	l, e
@@ -11712,7 +11641,7 @@ MidiStream_ExtDispatch_Mode1:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return2
 	extz	hl
@@ -11722,7 +11651,7 @@ MidiStream_ExtDispatch_Mode1:
 	ld	l, 20:opc
 MidiStream_ExtendedDispatch_Skip4:
 	ld	xiy, 0x9376
-	ld_rrb	d, xiy, hl
+	ld	d, (xiy+hl)
 	bit	7, d
 	jr	z, MidiStream_ExtendedDispatch_Skip5
 	res	7, d
@@ -11742,7 +11671,7 @@ MidiStream_ExtDispatch_Mode3:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_ExtendedDispatch_Return3
 	extz	hl
@@ -11750,7 +11679,7 @@ MidiStream_ExtDispatch_Mode3:
 	ld	d, c
 	sll	hl, 1
 	ld	xiy, 0x9336
-	ld_rrw	wa, xiy, hl
+	ld	wa, (xiy+hl)
 	ld	(0x904e:16), wa
 	ld	(0x9050:16), de
 	call	MidiStream_CmdPedalNotify_Helper2
@@ -11775,7 +11704,7 @@ MidiStream_ExtendedDispatch_Helper:
 	ld	l, c
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	ld	(xix), e
 	andmi8	(xix+0x1), 128
 	or	(xix+0x1), b
@@ -11893,23 +11822,23 @@ MidiStream_ExtendedDispatch_Helper_Skip4:
 	cp	e, 255
 	jr	z, MidiStream_ExtendedDispatch_Helper_Skip5
 	res	7, e
-	st_rrb	e, xix, hl
+	ld	(xix+hl), e
 	jr	MidiStream_ExtendedDispatch_Join2
 MidiStream_ExtendedDispatch_Helper_Skip5:
 	res	7, d
 	inc	1, xix
-	st_rrb	d, xix, hl
+	ld	(xix+hl), d
 	dec	1, xix
 MidiStream_ExtendedDispatch_Join2:
-	ld_rrw	wa, xix, hl
+	ld	wa, (xix+hl)
 	and	wa, 0x7f7f
-	st_rrw	wa, xix, hl
+	ld	(xix+hl), wa
 	srl	hl, 1
 	ldb_d8	b, (0xfd50)
 	and	b, 3
 	sll	b, 2
 	ld	xiy, MidiStream_ExtDispatch_Mode3_Data
-	ld_rr8l	xiy, xiy, b
+	ld	xiy, (xiy+b)
 	jp	(xiy)
 ; MIDI-mode jump table: 4 x .long code pointer, indexed by bits 0-1 of RAM
 ; 0xFD50.  Reader: the code just above (v7 0xFCC642) --
@@ -11944,7 +11873,7 @@ MidiStream_ExtendedDispatch_Helper_Skip7:
 MidiStream_ExtDispatch_ModeJump3:
 	srl	wa, 8
 MidiStream_ExtendedDispatch_Helper_Join2:
-	st_rrb	a, xiz, hl
+	ld	(xiz+hl), a
 MidiStream_ExtendedDispatch_Helper_Return:
 	ret
 	calr	MidiStream_CmdPedalNotify_Helper3
@@ -11961,7 +11890,7 @@ MidiStream_HandleRunningStatus_Skip:
 	and	l, 3
 	sll	hl, 2
 	ld	xix, MidiStream_HandleRunningStatus_Data
-	ld_rr8l	xix, xix, l
+	ld	xix, (xix+l)
 	jp	(xix)
 MidiStream_HandleRunningStatus_Return:
 	ret
@@ -12003,7 +11932,7 @@ MidiStream_HandleRunningStatus_Skip3:
 	ldb_d8	l, (0x90bf)
 	sll	hl, 2
 	ld	xix, (0x9056:16)
-	ld_rrl	xix, xix, hl
+	ld	xix, (xix+hl)
 	cp	xix, 0xffffffff
 	jr	z, MidiStream_HandleRunningStatus_Return2
 	ld	e, (xix)
@@ -12305,7 +12234,7 @@ MidiStream_HandleRunningStatus_Skip6:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SndParam_RegisterHandlers:24)
-	lda_rr	xhl, xde, bc
+	lda	xhl, (xde+bc)
 	ld	bc, (xsp+0xc)
 	ld	de, (xsp+0xa)
 	ld	xhl, (xhl)
@@ -12339,7 +12268,7 @@ MidiStream_HandleRunningStatus_Skip9:
 	extz	bc
 	sla	bc, 2
 	lda	xde, (SndParam_WriteHandlers:24)
-	lda_rr	xde, xde, bc
+	lda	xde, (xde+bc)
 	ld	bc, (xsp+0xc)
 	ld	xhl, (xde)
 	call	(xhl)
@@ -12424,7 +12353,7 @@ MidiStream_HandleRunningStatus_Skip11:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_Register2Handlers:24)
-	lda_rr	xhl, xbc, wa
+	lda	xhl, (xbc+wa)
 	ld	xwa, (xsp+0x6)
 	ld	bc, (xsp+0xc)
 	ld	de, (xsp+0xa)

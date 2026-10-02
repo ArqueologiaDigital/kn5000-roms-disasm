@@ -215,9 +215,9 @@ FDC_WaitReady_Skip10:
 	jrl	gt, FDC_WaitReady_Skip11
 	add	wa, wa
 	lda	xix, (FDC_WaitReady_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (FDC_CONFIG_VERIFY_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 FDC_CONFIG_VERIFY_Code:
 	ld	(0x89d0:16), 0
 	ldw	(0x8986:16), 0
@@ -302,9 +302,9 @@ FDC_COMMAND_DISPATCHER:
 	jr	ugt, FDC_CheckDriveCount	; -> 0xF969D7
 	add	wa, wa
 	lda	xix, (FDC_COMMAND_DISPATCHER_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (FDC_CMD_HANDLER_BASE:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 FDC_CMD_HANDLER_BASE:
 	calr	FDC_SetupFormatParams
 	ld	l, (35208:16)

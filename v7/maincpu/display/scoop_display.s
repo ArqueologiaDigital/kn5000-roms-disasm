@@ -790,7 +790,7 @@ SoundEvt_ModeDispatch:
 	sla	hl, 2
 	push	xix
 	ld	xix, SoundEvt_ModeDispatch_Tbl
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call (xhl)
 SoundEvt_LongPacketHandler_Return:
@@ -817,7 +817,7 @@ SoundEvt_LongPacketHandler_DispatchTbl_Target1:
 	ld	(3821:16), a
 	push	xhl
 	ld	xhl, ScoopDisp_HandlerData2
-	ld_rrl	xiy, xhl, iy
+	ld	xiy, (xhl+iy)
 	pop	xhl
 	call (xiy)
 	ld	wa, (13950:16)
@@ -867,7 +867,7 @@ SoundEvt_LongPacketHandler_DispatchTbl_Target2:
 	stb_d8	(0x0eed), a
 	push	xhl
 	ld	xhl, SoundEvt_LongPacketHandler_DispatchTbl2
-	ld_rrl	xiy, xhl, iy
+	ld	xiy, (xhl+iy)
 	pop	xhl
 	call	(xiy)
 	ldw_d16	wa, (0x367e)
@@ -959,7 +959,7 @@ DefaultHandler_Ret_Skip3:
 	sla	hl, 2
 	push	xix
 	ld	xix, ScoopDisp_DispatchTable_Small
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call (xhl)
 	jp	DefaultHandler_Ret_Return
@@ -1035,7 +1035,7 @@ DisplayMode_Dispatch_Mode1:
 	ld	iy, de
 	push	xhl
 	ld	xhl, PerfMode_ParamHandler_Table
-	ld_rrl xiy, xhl, iy
+	ld	xiy, (xhl+iy)
 	pop xhl
 	call	(xiy)
 	or	(0x0dd3:16), 1
@@ -1112,7 +1112,7 @@ DisplayMode_Dispatch_Mode3:
 	ld	iy, de
 	push	xhl
 	ld	xhl, PerfMode_JumpTable_Extended
-	ld_rrl	xiy, xhl, iy
+	ld	xiy, (xhl+iy)
 	pop	xhl
 	call	(xiy)
 	ret
@@ -1146,7 +1146,7 @@ PerfMode_ParamHandler_0:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_0
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 PerfMode_ParamHandler_0_Return:
@@ -1244,7 +1244,7 @@ PerfMode_ParamHandler_1:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_1
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 PerfMode_ParamHandler_1_Return:
@@ -1326,7 +1326,7 @@ PerfMode_ParamHandler_2:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_ParamHandler_2_DispatchTbl
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_ParamHandler_2_Return:
@@ -1376,7 +1376,7 @@ PerfMode_ParamHandler_3:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_3
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_ParamHandler_3_Return:
@@ -1433,7 +1433,7 @@ PerfMode_ParamHandler_4:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_StringData_4
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_ParamHandler_4_Return:
@@ -1483,7 +1483,7 @@ PerfMode_ParamHandler_5:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_5
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_ParamHandler_5_Return:
@@ -1532,7 +1532,7 @@ PerfMode_ParamHandler_7:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_ParamHandler_7_DispatchTbl
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 PerfMode_ParamHandler_7_Return:
@@ -1591,7 +1591,7 @@ PerfMode_ParamHandler_8:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_7
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_ParamHandler_8_Return:
@@ -1664,7 +1664,7 @@ PerfMode_VolumeParam_Process:
 	push	xix
 	ld	xix, 61856
 	; v10 does not spell this byte either
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	sla	hl, 2
@@ -1676,7 +1676,7 @@ PerfMode_VolumeParam_Process:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	pop	xix
@@ -1731,7 +1731,7 @@ PerfMode_ParamHandler_9:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_9
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 PerfMode_ParamHandler_9_Return:
@@ -1785,10 +1785,10 @@ PerfMode_Evt04_VolumeHandler:
 	xor	h, h
 	push	xix
 	ld	xix, 0xf1a0
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	sla	hl, 2
 	ld	xix, PerfMode_VoiceAddressTable
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	ld	(xhl), a
 	pop	xix
 	ldb_d8	e, (0x8c9e)
@@ -1855,7 +1855,7 @@ PerfMode_ParamHandler_10:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_EventTable_10
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_ParamHandler_10_Return:
@@ -2022,7 +2022,7 @@ UIState_PerfModeEntry:
 	sla	hl, 2
 	push	xix
 	ld	xix, UIState_EventTable
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 UIState_PerfModeEntry_Return:
@@ -2186,11 +2186,11 @@ Display_RedrawValues_Store:
 	sla	hl, 1
 	push	xix
 	ld	xix, 3230
-	ld_rrw	wa, xix, hl
+	ld	wa, (xix+hl)
 	ld	(10431:16), wa
 	srl	hl, 1
 	ld	xix, 3262
-	ld_rrw	wa, xix, hl
+	ld	wa, (xix+hl)
 	pop	xix
 	and	wa, 255
 	ld	(10433:16), wa
@@ -2542,7 +2542,7 @@ PerfMode_BytecodeBody_A:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_StringData_A
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_BytecodeBody_A_Return:
@@ -2592,7 +2592,7 @@ PerfMode_BytecodeEntry_B:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_DispatchTable_B
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 PerfMode_BytecodeEntry_B_Return:
@@ -2641,7 +2641,7 @@ PerfMode_BytecodeEntry_C:
 	sla	hl, 2
 	push	xix
 	ld	xix, PerfMode_DispatchTable_C
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 PerfMode_BytecodeEntry_C_Return:
@@ -2834,7 +2834,7 @@ PerfMode_Handler_EvtB_Skip7:
 	ld	iy, wa
 	push	xde
 	ld	xde, PerfMode_Handler_EvtB_Data
-	ld_rrb	a, xde, iy
+	ld	a, (xde+iy)
 	pop	xde
 	and	a, 3
 	xor	w, w
@@ -2842,7 +2842,7 @@ PerfMode_Handler_EvtB_Skip7:
 	ld	iy, wa
 	push	xhl
 	ld	xhl, ScoopDisp_DispatchTable_Extended
-	ld_rrl	xiy, xhl, iy
+	ld	xiy, (xhl+iy)
 	pop	xhl
 	call (xiy)
 	ld	a, (49122:16)
@@ -4247,14 +4247,14 @@ PerfMode_Handler_EvtB_Helper2_Helper:
 	inc	1, wa
 	push	xde
 	ld	xde, 0xf250
-	ld_rrw	wa, xde, wa
+	ld	wa, (xde+wa)
 	push	xhl
 	xor	hl, hl
 	ldb_d8	l, (0x0eee)
 	dec	1, l
 	sla	l, 1
 	ld	xde, 0x0c9e
-	st_rrw	wa, xde, hl
+	ld	(xde+hl), wa
 	srl	l, 1
 	ld	xde, 0x0cbe
 	ld	(xde+hl), 0x05	; ld (XDE+HL),0x05
@@ -4423,7 +4423,7 @@ Display_ModeHandler:
 	sla hl, 2
 	push xix
 	ld xix, DisplayMode_DispatchTable
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 	ret
@@ -4598,7 +4598,7 @@ DisplayMode_Handler_3_Loop3:
 	ld	(xix), a
 	ld	a, (3415:16)
 	ld	(xix+1), a
-	ld_rrb a, xiy, hl
+	ld	a, (xiy+hl)
 	ld	(xix+2), a
 	pushw	wa
 	call	VoiceSlot_ComputeWordIndex
@@ -4618,7 +4618,7 @@ DisplayMode_Handler_3_Skip10:
 DisplayMode_Handler_3_Join2:
 	ld	(13948:16), a
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	a, (xiy+8)
 	ldto_lerp	xiy, 56
 	ld	(xix+3), a
@@ -4694,10 +4694,10 @@ DisplayMode_Handler_3_Entry:
 	xor	h, h
 	ld	xiy, 3542
 	ld	a, (13201:16)
-	st_rrb	a, xiy, hl
+	ld	(xiy+hl), a
 	ld	a, (13202:16)
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	(xiy+8), a
 	ldto_lerp	xiy, 56
 	inc	1, l
@@ -5136,7 +5136,7 @@ Timer_ParamCompareAlt_Helper6:
 	sla	hl, 2
 	push	xix
 	ld	xix, DMA_ChannelSelect_Table
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 DisplayMode_Handler_3_Helper9_Return8:
@@ -5304,11 +5304,11 @@ VoiceSlot_TableSetup:
 	sla	hl, 1
 	push	xde
 	ld	xde, 0x0c9e
-	st_rrw	wa, xde, hl
+	ld	(xde+hl), wa
 	ldb_d8	a, (0x0dec)
 	srl	hl, 1
 	ld	xde, 0x0cbe
-	st_rrb	a, xde, hl
+	ld	(xde+hl), a
 	pop	xde
 	ld	xix, 0x3696
 	push	xix
@@ -5332,14 +5332,14 @@ VoiceSlot_TableSetup:
 	sla	hl, 1
 	push	xde
 	ld	xde, 0x0c9e
-	ld_rrw	wa, xde, hl
+	ld	wa, (xde+hl)
 	pop	xde
 	cp	wa, (0x0dea:16)
 	jrl	nz, VoiceSlot_TableSetup_Skip4
 	srl	hl, 1
 	push	xde
 	ld	xde, 0x0cbe
-	ld_rrb	a, xde, hl
+	ld	a, (xde+hl)
 	pop	xde
 	cp	a, (0x0ded:16)
 	jrl	nz, VoiceSlot_TableSetup_Skip4
@@ -5364,7 +5364,7 @@ VoiceSlot_TableSetup_Skip2:
 	srl	xiz, 1
 	push	xde
 	ld	xde, 0x0cbe
-	ld_rrb	a, xde, iz
+	ld	a, (xde+iz)
 	pop	xde
 	push	xix
 	call	VoiceSlot_DispatchRet
@@ -5377,14 +5377,14 @@ VoiceSlot_TableSetup_Skip2:
 	sla	hl, 1
 	push	xde
 	ld	xde, 0x0c9e
-	ld_rrw	wa, xde, hl
+	ld	wa, (xde+hl)
 	pop	xde
 	cp	wa, (0x0dea:16)
 	jrl	nz, VoiceSlot_TableSetup_Skip4
 	srl	hl, 1
 	push	xde
 	ld	xde, 0x0cbe
-	ld_rrb	a, xde, hl
+	ld	a, (xde+hl)
 	pop	xde
 	cp	a, (0x0ded:16)
 	jrl	nz, VoiceSlot_TableSetup_Skip4
@@ -5946,7 +5946,7 @@ VoiceCtrl_ParamSetupBytecode_Skip:
 VoiceCtrl_ParamSetupBytecode_Skip2:
 	ld	xiy, 3471
 	ld	wa, 2:i3
-	ld_rrw	wa, xiy, wa
+	ld	wa, (xiy+wa)
 	cp	a, 72
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Skip4
 	cp	w, 5:i3
@@ -5960,7 +5960,7 @@ VoiceCtrl_ParamSetupBytecode_Skip3:
 	dec	1, l
 	push	xix
 	ld	xix, 61856
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	pop	xix
 	pop	xhl
 	cp	a, 15
@@ -6029,7 +6029,7 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 	xor	h, h
 	push	xix
 	ld	xix, VoiceCtrl_ParamSetupBytecode_Data
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	pop	xix
 	cp	l, 255
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Loop
@@ -6037,7 +6037,7 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 	ld	l, a
 	push	xde
 	ld	xde, VoiceCtrl_ParamSetupBytecode_Data_2
-	ld_rrb	l, xde, hl
+	ld	l, (xde+hl)
 	pop	xde
 	cp	l, 255
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Loop
@@ -6050,7 +6050,7 @@ VoiceCtrl_ParamSetupBytecode_Loop:
 	jp	VoiceCtrl_ParamSetupBytecode_0x1E4
 VoiceCtrl_ParamSetupBytecode_Join:
 	ld	xhl, VoiceCtrl_ParamSetupBytecode_Tbl
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
 VoiceCtrl_ParamSetupBytecode_Skip11:
 	ldfr_berp	a, 60
@@ -6168,7 +6168,7 @@ VoiceCtrl_ParamSetupBytecode_Skip16:
 	add	a, 8
 VoiceCtrl_ParamSetupBytecode_Skip17:
 	ld	xhl, SysInit_SendAllNotesAndReset_Tbl
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	ld	(13964:16), a
 	push	xwa
 	push	xhl
@@ -6455,7 +6455,7 @@ VoiceCtrl_ParamSetupBytecode_Helper7:
 	ld	c, 255:opc
 	push	xix
 	ld	xix, 61856
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	pop	xix
 	cp	l, 16
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Skip26
@@ -6475,7 +6475,7 @@ VoiceCtrl_ParamSetupBytecode_Helper8:
 	ld	iy, wa
 	push	xde
 	ld	xde, SerialPort_ModeSelect_Table
-	ld_rrl	xiy, xde, iy
+	ld	xiy, (xde+iy)
 	pop	xde
 	call (xiy)
 	pop	xhl
@@ -6608,10 +6608,10 @@ SerialPort_ModeHandler_0_Skip5:
 	xor	h, h
 	push	xix
 	ld	xix, ScoopParam_ValueTable
-	ld_rrw	de, xix, hl
+	ld	de, (xix+hl)
 	ld	l, (13945:16)
 	sla	l, 1
-	ld_rrw	bc, xix, hl
+	ld	bc, (xix+hl)
 	pop	xix
 	add	de, bc
 	ld	wa, de
@@ -6723,8 +6723,8 @@ Timer_ParamCompareAlt_Helper7:
 SerialPort_ModeHandler_0_Loop:
 	ld	wa, bc
 	ld	xhl, 0x0d6f
-	ld_rr8b	a, xhl, a
-	lda_rr	xhl, xhl, bc
+	ld	a, (xhl+a)
+	lda	xhl, (xhl+bc)
 	ld	(xhl), 255
 	ld	e, a
 	cp	a, 255
@@ -6752,7 +6752,7 @@ SerialPort_ModeHandler_0_Skip9:
 	cp	a, 15
 	jrl	ugt, SerialPort_ModeHandler_0_Skip10
 	ld	xhl, SerialPort_ModeHandler_0_Tbl
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	ld	w, 3:opc
 	jp	SerialPort_ModeHandler_0_Join5
 SerialPort_ModeHandler_0_Skip10:
@@ -6769,9 +6769,9 @@ SerialPort_ModeHandler_0_Skip11:
 	xor	h, h
 	push	xix
 	ld	xix, SerialPort_ModeHandler_0_Data
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	ld	xix, SerialPort_ModeHandler_0_Data2
-	ld_rrb	w, xix, hl
+	ld	w, (xix+hl)
 	pop	xix
 	cp	a, 255
 	jrl	nz, SerialPort_ModeHandler_0_Join5
@@ -7175,7 +7175,7 @@ PortConfig_SetupBytecode_Return:
 	ld	hl, wa
 	push	xix
 	ld	xix, PortConfig_Select_Table
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 	ret
@@ -7316,10 +7316,10 @@ PortConfig_Handler_0_Skip3:
 	push	xix
 	ld	xix, 62032
 	inc	1, iz
-	ld_rrw	de, xix, iz
+	ld	de, (xix+iz)
 	call	VoiceSlot_ComputeWordIndex
 	ld	xix, 3230
-	st_rrw	de, xix, iz
+	ld	(xix+iz), de
 	srl	iz, 1
 	ld	xix, 3262
 	ld	(xix+iz), 0x05	; ld (XIX+IZ),0x05
@@ -7334,10 +7334,10 @@ PortConfig_Handler_0_Helper4:
 	srl	xiz, 1
 	push	xix
 	ld	xix, 61856
-	ld_rrb	a, xix, iz
+	ld	a, (xix+iz)
 	pop	xix
 	ld	xhl, PortConfig_DataTable_A
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	ld	(3429:16), a
 	ret
 	; Byte data, 24 B.  Read by PortConfig_Handler_0 (0xEFA53B): `ld xhl, PortConfig_DataTable_A`
@@ -7392,7 +7392,7 @@ PerfMode_Handler_EvtB_Helper2_Helper5:
 	ld	xhl, PortConfig_Handler_0_Tbl
 	ld	a, (3429:16)
 	and	a, 3
-	ld_rr8b a, xhl, a
+	ld	a, (xhl+a)
 	ld (3567:16), a
 	ret
 	; Byte data, 4 B.  Read by PortConfig_Handler_0 (0xEFA53B): `ld xhl, PortConfig_Handler_0_Tbl`
@@ -7713,7 +7713,7 @@ SysEx_BytecodeDispatcher_Skip:
 	xor	h, h
 	push	xix
 	ld	xix, SysInit_BytecodeBlock
-	ld_rrb	w, xix, hl
+	ld	w, (xix+hl)
 	pop	xix
 	or	w, 2
 	push	xhl
@@ -7721,7 +7721,7 @@ SysEx_BytecodeDispatcher_Skip:
 	pop	xhl
 	push	xde
 	ld	xde, SysEx_BytecodeDispatcher_Data
-	ld_rrb	w, xde, hl
+	ld	w, (xde+hl)
 	pop	xde
 	ld	(3425:16), w
 	ld	(3432:16), 1
@@ -7746,7 +7746,7 @@ SysEx_BytecodeDispatcher_Skip2:
 	sla	hl, 2
 	push	xix
 	ld	xix, MemoryConfig_Handler_Table
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call (xhl)
 	jp	SysEx_BytecodeDispatcher_Join
@@ -7801,7 +7801,7 @@ MemoryConfig_Handler_Table:
 	ld (XIX),A
 	ld a, (0x0d57:16)
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	add	a, (xiy+2)
 	ldto_lerp	xiy, 56
 	ld	(xix+1), a
@@ -7813,7 +7813,7 @@ MemoryConfig_Handler_Table:
 SysEx_BytecodeDispatcher_Skip7:
 	ld	(xix+3), a
 	xor	w, w
-	ld_rrb	a, xiy, hl
+	ld	a, (xiy+hl)
 	bit	7, a
 	jrl	z, SysEx_BytecodeDispatcher_Skip8
 	ormi8	(xix), 1
@@ -7822,7 +7822,7 @@ SysEx_BytecodeDispatcher_Skip7:
 SysEx_BytecodeDispatcher_Skip8:
 	ld	(xix+4), a
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	a, (xiy+1)
 	ldto_lerp	xiy, 56
 	bit	7, a
@@ -7852,7 +7852,7 @@ SysEx_BytecodeDispatcher_Skip9:
 	pop	xwa
 	pop	xiy
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	w, (xiy+3)
 	ldto_lerp	xiy, 56
 	ret
@@ -8284,7 +8284,7 @@ MemConfig_Handler_4_Helper2:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_JumpTable_Main
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 	ret
@@ -8314,7 +8314,7 @@ SndDispatch_Handler_1:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_SubTable_1
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 SndDispatch_Handler_1_Return:
@@ -8340,7 +8340,7 @@ SndDispatch_Handler_2:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_SubTable_2
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 SndDispatch_Handler_2_Return:
@@ -8366,7 +8366,7 @@ SndDispatch_TableEntryBegin:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_BytecodeString
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 SndDispatch_TableEntryBegin_Return:
@@ -8396,7 +8396,7 @@ SndDispatch_Handler_3:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_SubTable_4
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 SndDispatch_Handler_3_Return:
@@ -8422,7 +8422,7 @@ SndDispatch_Handler_4:
 	ld	hl, wa
 	push	xix
 	ld	xix, SndDispatch_Handler_4_DispatchTbl
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 SndDispatch_Handler_4_Return:
@@ -8909,7 +8909,7 @@ SystemInit_Handler_Table_0x18:
 	push	xhl
 	ld	a, l
 	ld	xhl, SysInit_SendAllNotesAndReset_Tbl
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	stb_d8	(0x368c), a
 	ld	(0x0d5e:16), 16
 	call	VoiceCtrl_ParamSetupBytecode_Helper8
@@ -8995,7 +8995,7 @@ SysEx_BytecodeDispatcher_Helper2:
 	extz	xhl
 	push	xix
 	ld	xix, SystemInit_StepHandler_0_Tbl
-	ld_rrw	de, xix, hl
+	ld	de, (xix+hl)
 	pop	xix
 SysEx_BytecodeDispatcher_Helper2_Sub:
 	xor	a, a
@@ -9064,7 +9064,7 @@ SysEx_BytecodeDispatcher_Helper3_Skip:
 	sla	hl, 2
 	push	xde
 	ld	xde, SystemInit_StepHandler_0_Tbl
-	lda_rr	xde, xde, hl
+	lda	xde, (xde+hl)
 	ld	bc, (xde+2)
 	pop	xde
 	ld	l, c
@@ -9212,14 +9212,14 @@ SysEx_BytecodeDispatcher_Helper4_Skip6:
 	call	VoiceSlot_ComputeWordIndex
 	push	xix
 	ld	xix, 0xf1f8
-	ld_rrw	wa, xix, iz
+	ld	wa, (xix+iz)
 	ld	xix, 0x0c9e
-	st_rrw	wa, xix, iz
+	ld	(xix+iz), wa
 	srl	xiz, 1
 	ld	xix, 0xf218
-	ld_rrb	a, xix, iz
+	ld	a, (xix+iz)
 	ld	xix, 0x0cbe
-	st_rrb	a, xix, iz
+	ld	(xix+iz), a
 	pop	xix
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
@@ -9271,7 +9271,7 @@ SysEx_BytecodeDispatcher_Helper4_Loop:
 	call	VoiceSlot_ComputeWordIndex
 	push	xix
 	ld	xix, 0x0c9e
-	st_rrw	de, xix, iz
+	ld	(xix+iz), de
 	srl	xiz, 1
 	ld	xix, 0x0cbe
 	ld	(xix+iz), 0x05	; ld (XIX+IZ),0x05
@@ -9396,11 +9396,11 @@ SysEx_BytecodeDispatcher_Helper4_Skip15:
 	ld hl, (0x9046:16)
 	ld	(xix+hl), wa
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, hl
+	lda	xix, (xix+hl)
 	ld	(xix+2), de
 	ldto_lerp	xix, 56
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, hl
+	lda	xix, (xix+hl)
 	ld	(xix+4), 255
 	ldto_lerp	xix, 56
 	add	hl, 4
@@ -9479,26 +9479,26 @@ DisplayMode_Handler_3_Helper16:
 	call	VoiceSlot_ComputeWordIndex
 	ld	xix, 0xf1f8
 	xor	b, b
-	ld_rrw	iy, xix, iz
+	ld	iy, (xix+iz)
 	cp	iy, 65535
 	jrl	z, DisplayMode_Handler_3_Helper16_Skip3
 	ld	(0x28ba:16), iy
 	srl	xiz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	a, (xix+32)
 	ldto_lerp	xix, 56
 	xor	w, w
 	sla	iz, 1
 	ld	(0x28bc:16), wa
 	ld	xix, 0x0c9e
-	ld_rrw	de, xix, iz
+	ld	de, (xix+iz)
 	cp	de, 65535
 	jrl	nz, DisplayMode_Handler_3_Helper16_Skip
-	st_rrw	iy, xix, iz
+	ld	(xix+iz), iy
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+32), 5
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -9506,7 +9506,7 @@ DisplayMode_Handler_3_Helper16:
 DisplayMode_Handler_3_Helper16_Skip:
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	iy, (xix+32)
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -9515,7 +9515,7 @@ DisplayMode_Handler_3_Helper16_Skip:
 	ld	xix, 0xf1f8
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	a, (xix+32)
 	ldto_lerp	xix, 56
 	xor	w, w
@@ -9523,12 +9523,12 @@ DisplayMode_Handler_3_Helper16_Skip:
 	add	wa, bc
 	cp	wa, 255
 	jrl	ugt, DisplayMode_Handler_3_Helper16_Skip2
-	ld_rrw	iy, xix, iz
+	ld	iy, (xix+iz)
 	ld	(0x289f:16), iy
 	ld	(0x28b6:16), wa
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+32), a
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -9564,7 +9564,7 @@ DisplayMode_Handler_3_Helper16_Skip2:
 	srl	iz, 1
 	ldw_d16	wa, (0x28b6)
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+32), a
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -9575,9 +9575,9 @@ DisplayMode_Handler_3_Helper16_Skip2:
 	ld	wa, iy
 	pushw	de
 	ld	xix, 0xf1f8
-	ld_rrw	de, xix, iz
+	ld	de, (xix+iz)
 	ld	(xhl+1), de
-	st_rrw	wa, xix, iz
+	ld	(xix+iz), wa
 	ld	iy, de
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (0x10fd:16)
@@ -9613,10 +9613,10 @@ DisplayMode_Handler_3_Helper16_Skip3:
 	pop	xix
 	cp	w, 255
 	jrl	z, DisplayMode_Handler_3_Helper16_Loop
-	st_rrw	iy, xix, iz
+	ld	(xix+iz), iy
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+32), 5
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -9634,7 +9634,7 @@ DisplayMode_Handler_3_Helper16_Skip3:
 	ld	xix, 0xf250
 	or	(xix+iz), 0x80	; or (XIX+IZ),0x80
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+1), iy
 	ldto_lerp	xix, 56
 	pop	xiy
@@ -9735,11 +9735,11 @@ VoiceSlot_RetZ:
 	ld	c, w
 	call	VoiceSlot_ComputeWordIndex
 	ld	xix, 3230
-	ld_rrw iy, xix, iz
+	ld	iy, (xix+iz)
 	ld (10399:16), iy
 	srl	iz, 1
 	ldfr_lerp xix, 56
-	lda_rr xix, xix, iz
+	lda	xix, (xix+iz)
 	ld a, (xix+32)
 	ldto_lerp xix, 56
 	xor	w, w
@@ -9759,10 +9759,10 @@ VoiceSlot_RetZ_Skip:
 	sub	wa, 251
 	jp	VoiceSlot_RetZ_0x39
 	ld	xix, 0xf1f8
-	ld_rrw	de, xix, iz
+	ld	de, (xix+iz)
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	a, (xix+32)
 	ldto_lerp	xix, 56
 	xor	w, w
@@ -9788,7 +9788,7 @@ VoiceSlot_RetZ_Skip:
 	jrl	le, VoiceSlot_RetZ_Skip2
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+32), a
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -9804,13 +9804,13 @@ VoiceSlot_RetZ_Skip3:
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (4349:16)
 	ld	de, (xhl+1)
-	st_rrw de, xix, iz
+	ld	(xix+iz), de
 	ld	iy, de
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (4349:16)
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+32), a
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -10101,18 +10101,18 @@ VoiceSlot_FinalRetZ_0x1E:
 	extz	xiz
 	push	xix
 	ld	xix, 3230
-	ld_rrw	iy, xix, iz
+	ld	iy, (xix+iz)
 	pop	xix
 	call	VoiceSlot_UpdateCurrentPointer
 	srl	iz, 1
 	push	xix
 	ld	xix, 3262
-	ld_rrw	iy, xix, iz
+	ld	iy, (xix+iz)
 	pop	xix
 	and	iy, 255
 	sla	iz, 1
 	ld	xhl, (4349:16)
-	ld_rrb	a, xhl, iy
+	ld	a, (xhl+iy)
 	popw	de
 	pop	xhl
 	ret
@@ -10144,18 +10144,18 @@ MemConfig_Handler_5_Code_Helper13:
 	call	VoiceSlot_ComputeWordIndex
 	push	xde
 	ld	xde, 3230
-	ld_rrw	iy, xde, iz
+	ld	iy, (xde+iz)
 	pop	xde
 	call	VoiceSlot_UpdateCurrentPointer
 	srl	iz, 1
 	push	xde
 	ld	xde, 3262
-	ld_rrw	iy, xde, iz
+	ld	iy, (xde+iz)
 	pop	xde
 	sla	iz, 1
 	and	iy, 255
 	ld	xhl, (4349:16)
-	st_rrb	w, xhl, iy
+	ld	(xhl+iy), w
 	ret
 Timer_ModeHandler_0_Helper6:
 	ld	a, (3822:16)
@@ -10169,26 +10169,26 @@ Timer_ModeHandler_0_Helper6:
 	ld	iz, bc
 	ld	xix, 3230
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, hl
+	lda	xix, (xix+hl)
 	add	e, (xix+32)
 	ldto_lerp	xix, 56
 	adc	d, 0
 	cp	de, 255
 	jrl	ugt, VoiceSlot_FinalRetZ_Skip2
-	ld_rrw	bc, xix, iz
+	ld	bc, (xix+iz)
 	ld	xix, 61944
 	cp	bc, (xix+iz)
 	jrl	z, VoiceSlot_FinalRetZ_Skip
 VoiceSlot_FinalRetZ_Loop:
 	push	xwa
 	ld	xwa, 3262
-	st_rrb	e, xwa, hl
+	ld	(xwa+hl), e
 	pop	xwa
 	ld	w, 0:opc
 	ret
 VoiceSlot_FinalRetZ_Skip:
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, hl
+	lda	xix, (xix+hl)
 	cp	e, (xix+32)
 	ldto_lerp	xix, 56
 	jrl	ule, VoiceSlot_FinalRetZ_Loop
@@ -10204,7 +10204,7 @@ VoiceSlot_FinalRetZ_Skip2:
 	ld	de, qwa
 	inc	1, wa
 	ld	bc, wa
-	ld_rrw	iy, xix, iz
+	ld	iy, (xix+iz)
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (4349:16)
 	ld	iy, (xhl+3)
@@ -10220,10 +10220,10 @@ VoiceSlot_FinalRetZ_Loop2:
 	jrl	z, VoiceSlot_FinalRetZ_Entry
 VoiceSlot_FinalRetZ_Loop3:
 	ld	xix, 3230
-	st_rrw	iy, xix, iz
+	ld	(xix+iz), iy
 	srl	iz, 1
 	ldfr_lerp	xix, 56
-	lda_rr	xix, xix, iz
+	lda	xix, (xix+iz)
 	ld	(xix+32), e
 	ldto_lerp	xix, 56
 	sla	iz, 1
@@ -10523,7 +10523,7 @@ VoiceSlot_StatusRet_Skip7:
 	sla	a, 1
 	or	a, e
 	ld	xhl, VoiceSlot_StatusRet_Tbl2
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	stb_d8	(0x0d61), a
 	call	SNS_Init_Startup
 	jp	VoiceSlot_StatusRet_0x8A0
@@ -11185,7 +11185,7 @@ VoiceSlot_StatusRet_Skip87:
 Display_ModePopupDispatch:
 	ldb_d8	a, (0x0d65)
 	ld	xhl, Display_ModePopupIds
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	stb_d8	(0x0def), a
 	call	Display_UpdateRegion0
 	ldb_d8	l, (0x0d65)
@@ -11194,7 +11194,7 @@ Display_ModePopupDispatch:
 	extz	xhl
 	push	xix
 	ld	xix, Display_ModePopupDispatch_Tbl
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 	ret
@@ -11317,12 +11317,12 @@ VoiceState_DataBlock2:
 	ld	xix, xwa
 	call	VoiceSlot_ComputeWordIndex
 	ld	xiy, 3230
-	ld_rrw	wa, xiy, iz
+	ld	wa, (xiy+iz)
 	cp	(xix), wa
 	jrl	nz, VoiceState_DataBlock2_Join
 	srl	iz, 1
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, iz
+	lda	xiy, (xiy+iz)
 	ld	a, (xiy+32)
 	ldto_lerp	xiy, 56
 	cp	(xix+2), a
@@ -11623,11 +11623,11 @@ VoiceState_DataBlock2_Helper8:
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	ld_rrw wa, xde, hl
+	ld	wa, (xde+hl)
 	ld	(10431:16), wa
 	srl	hl, 1
 	ld	xde, 3262
-	ld_rrb	a, xde, hl
+	ld	a, (xde+hl)
 	pop	xde
 	xor	w, w
 	ld	(10433:16), wa
@@ -11695,10 +11695,10 @@ VoiceState_DataBlock2_Loop7:
 	call	VoiceSlot_ComputeWordIndex
 	push	xde
 	ld	xde, 3230
-	ld_rrw	iy, xde, iz
+	ld	iy, (xde+iz)
 	srl	iz, 1
 	ld	xde, 3262
-	ld_rrb	a, xde, iz
+	ld	a, (xde+iz)
 	pop	xde
 	cp iy, (3583:16)
 	jrl	nz, VoiceState_DataBlock2_Skip13
@@ -11742,11 +11742,11 @@ VoiceState_DataBlock2_Helper9:
 	call	VoiceSlot_ComputeWordIndex
 	push	xde
 	ld	xde, 3230
-	ld_rrw	iy, xde, iz
+	ld	iy, (xde+iz)
 	ld	(10431:16), iy
 	srl	iz, 1
 	ld	xde, 3262
-	ld_rrb	a, xde, iz
+	ld	a, (xde+iz)
 	pop	xde
 	xor	w, w
 	ld	(10433:16), wa
@@ -11820,7 +11820,7 @@ VoiceState_DataBlock2_Skip19:
 	sla	iy, 1
 	push	xix
 	ld	xix, VoiceState_DataBlock2_Tbl
-	ld_rrw	bc, xix, iy
+	ld	bc, (xix+iy)
 	pop	xix
 	and	bc, (65516:24)
 	cp	bc, 0:i3
@@ -12182,7 +12182,7 @@ SubCPU_ToneParamDisplay_Skip2:
 	ld	l, (4380:16)
 	exts	hl
 	ld	xiy, SubCPU_ToneDispatch_0x50
-	ld_rrb	a, xiy, hl
+	ld	a, (xiy+hl)
 	ld	(xix+3), a
 	pop	xiy
 	pop	xix
@@ -12222,7 +12222,7 @@ SubCPU_ToneParamDisplay_Helper3:
 	sla	w, 1
 	add	a, w
 	xor	w, w
-	lda_rr	xiy, xiy, wa
+	lda	xiy, (xiy+wa)
 	ld	xix, 3791
 	ldw	bc, 10
 	ldir85
@@ -12365,7 +12365,7 @@ SubCPU_ToneClearRegion:
 	sla	hl, 2
 	push	xix
 	ld	xix, DisplayMode_DispatchTable
-	ld_rrl	xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
 	jp	SubCPU_ToneClearRegion_0x62
@@ -12391,7 +12391,7 @@ PerfMode_ParamHandler_11:
 	sla	hl, 2
 	push	xix
 	ld	xix, SubCPU_ToneParamRet
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	call	(xhl)
 PerfMode_ParamHandler_11_Return:
@@ -12527,7 +12527,7 @@ PerfMode_ParamHandler_11_Skip7:
 	push	xde
 	ld	xde, 0xf250
 	add	xde, 1
-	ld_rrw	hl, xde, hl
+	ld	hl, (xde+hl)
 	pop	xde
 	ld	(0x28bf:16), hl
 	ldw	(0x28c1:16), 5
@@ -13070,15 +13070,15 @@ PerfMode_ParamHandler_11_Return5:
 	ld	xiy, 0x1169
 	ld	xix, xiy
 	inc	1, xix
-	lda_rr	xiy, xiy, de
-	lda_rr	xix, xix, de
+	lda	xiy, (xiy+de)
+	lda	xix, (xix+de)
 	ld	a, (xiy)
 	ld	w, (xix)
 	cp	a, w
 	jrl	c, PerfMode_ParamHandler_11_Skip53
 	inc	1, xix
 	ld	xhl, 0x1169
-	lda_rr	xhl, xhl, bc
+	lda	xhl, (xhl+bc)
 	cp	xix, xhl
 	jrl	ugt, PerfMode_ParamHandler_11_Skip54
 	jp	SubCPU_ToneParamRet_0x85D
@@ -13096,7 +13096,7 @@ PerfMode_ParamHandler_11_Skip54:
 	xor	hl, hl
 	ldb_d8	l, (0x0ec4)
 	sla	l, 2
-	lda_rr	xix, xix, hl
+	lda	xix, (xix+hl)
 	xor	wa, wa
 	ld	a, (xix)
 	and	a, 96
@@ -13278,7 +13278,7 @@ PerfMode_ParamHandler_11_Skip62:
 	extz	xhl
 	push	xde
 	ld	xde, OscScope_HandlerTable
-	ld_rrl	xhl, xde, hl
+	ld	xhl, (xde+hl)
 	pop	xde
 	call	(xhl)
 	ret
@@ -13441,7 +13441,7 @@ MemConfig_Handler_4_Helper_Helper2:
 	sla	hl, 1
 	push	xde
 	ld	xde, 3230
-	ld_rrw wa, xde, hl
+	ld	wa, (xde+hl)
 	pop	xde
 	cp	wa, 0xffff
 	jrl	z, OscScope_RenderBlock_Skip2
@@ -13688,20 +13688,20 @@ DisplayStr_BytecodeBlock_A:
 	sla	hl, 2
 	xor	wa, wa
 	ld	xiy, (0x1114:16)
-	ld_rrb	a, xiy, hl
+	ld	a, (xiy+hl)
 	and	a, 96
 	cp	a, 0:i3
 	jrl	nz, DisplayStr_BytecodeBlock_A_Skip
 	ld	a, 32:opc
-	st_rrb	a, xiy, hl
+	ld	(xiy+hl), a
 DisplayStr_BytecodeBlock_A_Skip:
 	xor	wa, wa
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	(xiy+1), 3
 	ldto_lerp	xiy, 56
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	(xiy+2), wa
 	ldto_lerp	xiy, 56
 	call	DisplayStr_BytecodeBlock_A_0x53
@@ -13721,7 +13721,7 @@ DisplayStr_BytecodeBlock_A_Return:
 	sla	hl, 2
 	push	xde
 	ld	xde, DisplayStr_BytecodeBlock_A_Tbl
-	ld_rrl	xhl, xde, hl
+	ld	xhl, (xde+hl)
 	pop	xde
 	ld	wa, (xhl)
 	cp	wa, 0:i3
@@ -13756,20 +13756,20 @@ DisplayStr_BytecodeBlock_A_Code_Return:
 	sla	hl, 2
 	xor	wa, wa
 	ld	xiy, (4372:16)
-	ld_rrb	a, xiy, hl
+	ld	a, (xiy+hl)
 	and	a, 96
 	cp	a, 0:i3
 	jrl	nz, DisplayStr_BytecodeBlock_A_Code_Skip3
 	ld	a, 32:opc
-	st_rrb	a, xiy, hl
+	ld	(xiy+hl), a
 DisplayStr_BytecodeBlock_A_Code_Skip3:
 	xor	wa, wa
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	(xiy+1), 4
 	ldto_lerp	xiy, 56
 	ldfr_lerp	xiy, 56
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	(xiy+2), wa
 	ldto_lerp	xiy, 56
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
@@ -13790,7 +13790,7 @@ DisplayStr_BytecodeBlock_A_Code_Helper:
 	sla	hl, 2
 	push	xde
 	ld	xde, DisplayStr_BytecodeBlock_A_Tbl
-	ld_rrl	xhl, xde, hl
+	ld	xhl, (xde+hl)
 	pop	xde
 	ld	wa, (xhl)
 	cp	wa, 0:i3
@@ -14139,7 +14139,7 @@ DisplayStr_StyleSectionInit:
 	xor WA,WA
 	ld a, (0x368c:16)
 	sla WA, 0x03
-	lda_rr	xiy, xiy, wa
+	lda	xiy, (xiy+wa)
 	ldw	wa, 8224
 	ld	(xix+), wa
 	ld	(xix+), wa
@@ -14161,7 +14161,7 @@ SerialPort_ModeHandler_0_Helper:
 	ld l, (0x368c:16)
 	sla XHL, 0x03
 	ld XIY,DisplayStr_StyleSectionNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldirw
 	ldw	wa, 8224
@@ -14215,7 +14215,7 @@ Display_BytecodeBlock_F_Sub_Helper:
 	ld	xiy, Display_BytecodeBlock_F_Data
 	ld	a, (4539:16)
 	ld	xhl, Display_BytecodeBlock_F_Tbl
-	ld_rr8b	a, xhl, a
+	ld	a, (xhl+a)
 	exts	wa
 	cp	(4539:16), 23
 	jrl	nz, Display_BytecodeBlock_F_Skip
@@ -14304,7 +14304,7 @@ Display_BytecodeBlock_F_Sub:
 	ld	l, (13956:16)
 	and	l, 7
 	sla	hl, 3
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	wa, (xiy)
 	ld	(xix), wa
 	ld	wa, (xiy+2)
@@ -14609,7 +14609,7 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	and L,0x0f
 	sla HL, 0x02
 	ld XIY,Tbl_NoteValueNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	wa, (xiy)
 	ld	(xix+0:8), wa
 	ld	w, (xiy+2)
@@ -14622,7 +14622,7 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	muls	wa, l
 	ld	hl, wa
 	ld	xiy, Tbl_NoteValuePlusNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	wa, (xiy+0:8)
 	ld	(xix+0:8), wa
 	ld	wa, (xiy+2)
@@ -14635,7 +14635,7 @@ PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	and	l, 3
 	sla	hl, 2
 	ld	xiy, Tbl_ArticulationNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	wa, (xiy+0:8)
 	ld	(xix+0:8), wa
 	ld	wa, (xiy+2)
@@ -14733,14 +14733,14 @@ Disp_ShowNoteNameAndVelocity_Skip:
 	xor	bc, bc
 	ld	c, w
 	sla	bc, 1
-	lda_rr	xiy, xiy, bc
+	lda	xiy, (xiy+bc)
 	ld	bc, (xiy)
 	ld	(xix), bc
 	ld	xiy, Tbl_OctaveNames
 	xor	bc, bc
 	ld	c, a
 	sla	bc, 1
-	lda_rr	xiy, xiy, bc
+	lda	xiy, (xiy+bc)
 	ld	wa, (xiy)
 	ld	(xix+2), wa
 	xor	wa, wa
@@ -14787,7 +14787,7 @@ ParamPopup_PartVolume_Skip:
 	xor H,H
 	sla HL, 0x02
 	ld XIY,StringData_PartNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ed1
 	ld	bc, 4:i3
 	ldir85
@@ -14828,7 +14828,7 @@ ParamPopup_PartPanpot_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3793
 	ld	bc, 4:i3
 	ldir85
@@ -14866,7 +14866,7 @@ ParamPopup_PartKeyShift_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
@@ -14907,7 +14907,7 @@ ParamPopup_PartTuning_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
@@ -14948,7 +14948,7 @@ ParamPopup_PartBendSense_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ecf
 	ld	bc, 4:i3
 	ldir85
@@ -14985,7 +14985,7 @@ ParamPopup_PartSustain_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
@@ -14999,7 +14999,7 @@ ParamPopup_PartSustain_Skip:
 	ld	l, 4:opc
 ParamPopup_PartSustain_Skip2:
 	ld	xiy, Str_OnOffPair
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15027,7 +15027,7 @@ ParamPopup_PartDspEffectOff_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
@@ -15038,7 +15038,7 @@ ParamPopup_PartDspEffectOff_Skip:
 	xor	hl, hl
 	ld	l, 4:opc
 	ld	xiy, Str_OnOffPair
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15061,7 +15061,7 @@ ParamPopup_PartEffect_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
@@ -15075,7 +15075,7 @@ ParamPopup_PartEffect_Skip:
 	ld	l, 4:opc
 ParamPopup_PartEffect_Skip2:
 	ld	xiy, Str_OnOffPair
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15097,7 +15097,7 @@ ParamPopup_PartDspEffectLevel_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
@@ -15131,7 +15131,7 @@ ParamPopup_PartReverb_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld xix, 3791
 	ld	bc, 4:i3
 	ldir85
@@ -15294,7 +15294,7 @@ ParamPopup_ApcMode_Skip:
 	xor	h, h
 	sla	hl, 4
 	ld	xiy, StringData_APCModeNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ecf
 	ldw	bc, 16
 	ldir85
@@ -15363,7 +15363,7 @@ ParamPopup_AccompPart_Skip:
 	xor	h, h
 	sla	hl, 4
 	ld	xiy, Tbl_AccompPartNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ecf
 	ldw	bc, 16
 	ldir85
@@ -15482,11 +15482,11 @@ ParamPopup_KeyNameBracketed_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, Tbl_KeyNamesBracketed
-	ld_rrw	wa, xiy, hl
+	ld	wa, (xiy+hl)
 	ld	(xix), wa
 	add	hl, 2
 	add	xix, 2
-	ld_rrw	wa, xiy, hl
+	ld	wa, (xiy+hl)
 	ld	(xix), wa
 	call	Display_UpdateRegion3
 	ret
@@ -15519,7 +15519,7 @@ ParamPopup_AccompVolume_Skip:
 	ld	bc, hl
 	sla	hl, 4
 	ld	xiy, Tbl_AccompVolumeLabels
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ecf
 	ldw	bc, 16
 	ldir85
@@ -15568,7 +15568,7 @@ ParamPopup_PartTremolo_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ecf
 	ld	bc, 4:i3
 	ldir85
@@ -15582,7 +15582,7 @@ ParamPopup_PartTremolo_Skip:
 	ld	l, 4:opc
 ParamPopup_PartTremolo_Skip2:
 	ld	xiy, Str_OnOffPair
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 3:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15621,7 +15621,7 @@ ParamPopup_TotalReverb_Skip:
 	ld	l, 4:opc
 ParamPopup_TotalReverb_Skip2:
 	ld	xiy, Str_OnOffPair
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15645,7 +15645,7 @@ ParamPopup_PartTimbre_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ed1
 	ld	bc, 4:i3
 	ldir85
@@ -15659,7 +15659,7 @@ ParamPopup_PartTimbre_Skip:
 	add	l, h
 	xor	h, h
 	ld	xiy, Tbl_TimbreNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 6:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15694,7 +15694,7 @@ ParamPopup_Msa_Skip:
 	and	l, 7
 	sla	hl, 2
 	ld	xiy, Tbl_MsaStates
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15733,10 +15733,10 @@ Tbl_MsaStates:
 	call	VoiceSlot_ComputeWordIndex
 	push	xhl
 	ld	xhl, 0x0c9e
-	ld_rrw	ix, xhl, iz
+	ld	ix, (xhl+iz)
 	sra	iz, 1
 	ld	xhl, 0x0cbe
-	ld_rrb	a, xhl, iz
+	ld	a, (xhl+iz)
 	pop	xhl
 	push	xhl
 	ld	xhl, 0x0dff
@@ -15777,11 +15777,11 @@ ParamPopup_Msa_Skip4:
 	call	VoiceSlot_ComputeWordIndex
 	push	xhl
 	ld	xhl, 0x0c9e
-	ld_rrw	ix, xhl, iz
+	ld	ix, (xhl+iz)
 	ld	(0x28bf:16), ix
 	sra	iz, 1
 	ld	xhl, 0x0cbe
-	ld_rrb	a, xhl, iz
+	ld	a, (xhl+iz)
 	pop	xhl
 	xor	w, w
 	ld	(0x28c1:16), wa
@@ -15824,7 +15824,7 @@ ParamPopup_PartPedal_Skip2:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, StringData_PartNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	xix, 0x0ed1
 	ld	bc, 4:i3
 	ldir85
@@ -15833,7 +15833,7 @@ ParamPopup_PartPedal_Skip2:
 	sub	l, 181
 	mul	l, 10
 	ld	xiy, Tbl_PedalNames
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ldw	bc, 10
 	ldir85
 	inc	1, xix
@@ -15856,7 +15856,7 @@ ParamPopup_PartPedal_Skip3:
 	ld	hl, 4:i3
 ParamPopup_PartPedal_Skip4:
 	ld	xiy, Str_OnOffPair
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -16164,7 +16164,7 @@ ParamPopup_PartPedal_Skip27:
 	call	DisplayStr_ComputeTableAddr
 	ld	xhl, (0x10fd:16)
 	ldw_d16	iy, (0x1178)
-	ld_rrb	a, xhl, iy
+	ld	a, (xhl+iy)
 	ret
 	pushdi_w	(0x117a)
 	pushdi_w	(0x1178)
@@ -17821,7 +17821,7 @@ Scoop_CurveUpdate_SegmentEnd_Loop:
 	ld	a, (xhl)
 	extz	wa
 	lda	xhl, (StyleUI_ScreenData_CtlOnly_0x23:24)
-	ld_rrb a, xhl, wa
+	ld	a, (xhl+wa)
 	ld (xix), a
 	inc 1, iy
 	cp iy, de
@@ -17837,7 +17837,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	decm	2, (xsp+268)
 	ld	wa, (xsp+266)
@@ -17893,7 +17893,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip3:
 	extz	wa
 	add	wa, wa
 	ld	xbc, (xbc+7)
-	lda_rr xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	ld wa, (xbc)
 	extz	xwa
 	div	wa, 40
@@ -17936,7 +17936,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip4:
 	extz	wa
 	add	wa, wa
 	ld	xbc, (xbc+7)
-	lda_rr xbc, xbc, wa
+	lda	xbc, (xbc+wa)
 	ld wa, (xbc)
 	ld (xsp+0:8), wa
 	ld	wa, (xbc+2)
@@ -18010,7 +18010,7 @@ Scoop_CurveUpdate_SegmentEnd_Loop2:
 	ld	c, (xbc)
 	extz	bc
 	lda	xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
-	ld_rrb c, xiy, bc
+	ld	c, (xiy+bc)
 	ld (xhl), c
 	inc 1, ix
 	cp ix, de
@@ -18214,7 +18214,7 @@ Scoop_GlideParam_Setup_Loop:
 	ld	c, (xbc)
 	extz	bc
 	lda	xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
-	ld_rrb c, xiy, bc
+	ld	c, (xiy+bc)
 	ld (xhl), c
 	inc 1, ix
 	cp ix, de
@@ -18561,7 +18561,7 @@ Scoop_EventLoop_12Entry_Join:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
-	ld_rrl	xix, xbc, wa
+	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	lda	xwa, (xsp+260)
@@ -18711,7 +18711,7 @@ Scoop_EventLoop_12Entry_Join3:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
-	ld_rrl	xix, xbc, wa
+	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	lda	xwa, (xsp+260)
@@ -18904,7 +18904,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
-	ld_rrl	xix, xbc, wa
+	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	lda	xwa, (xsp+260)
@@ -19044,7 +19044,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join3:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
-	ld_rrl	xix, xbc, wa
+	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	lda	xwa, (xsp+260)
@@ -19109,7 +19109,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join4:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
-	ld_rrl	xix, xbc, wa
+	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
 	lda	xwa, (xsp+260)
@@ -19182,7 +19182,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip15:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
-	ld_rrl	xix, xbc, wa
+	ld	xix, (xbc+wa)
 	lda	xwa, (xsp+266)
 	ld	xhl, xwa
 	lda	xwa, (xsp+262)

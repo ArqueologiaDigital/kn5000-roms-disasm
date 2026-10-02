@@ -4046,17 +4046,12 @@ NoteMap_AllocCheckNoteOn:
 	ret
 AllocCheckNoteOn_Data:
 	lda	xsp, (xsp-10)
-	.byte	0xd7
-	swi	2
-	.byte	0x04
+	push	qiz
 	ld	(xsp+2), e
 	ld	(xsp+4), xbc
 	ld	(xsp+8), xwa
-	.byte	0x8f
-	push	sr
-	push	xsp
-	pop_a
-	jr	nz, 126
+	cp	(xsp+2), 21
+	jr	nz, NoteMap_AddEntry_Skip7
 	ld	xwa, (xsp+8)
 	ld	bc, 0:i3
 	call	NoteMap_FindEntry
@@ -4104,6 +4099,7 @@ NoteMap_AddEntry_Skip2:
 	cp_erpb	251, 16
 	jr	c, NoteMap_AddEntry_Loop
 	jrl	NoteMap_AddEntry_Epilogue
+NoteMap_AddEntry_Skip7:
 	ld	xwa, (xsp+4)
 	ld	c, (xsp+2)
 	cp	c, (xwa+182)
@@ -4154,27 +4150,26 @@ NoteMap_AddEntry_Skip4:
 	ld	e, (xwa)
 	ld	a, e
 	cp	a, 255
-	jr	z, 34
+	jr	z, NoteMap_AddEntry_Skip8
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, wa
 	ld	bc, wa
 	add	bc, 292
 	ld	xwa, (xsp+4)
-	.byte	0xf3
-	reti
-	.byte	0xe0, 0xe4
-	inc	6, e
-	pushw	0x8bcd
+	bit	5, (xwa+bc)
+	jr	z, NoteMap_AddEntry_Skip8
+	ld	c, e
 	extz	bc
 	ld	xwa, (xsp+8)
 	call	Voice_ScanAndEmitMidiEvents
+NoteMap_AddEntry_Skip8:
 	ld	wa, (0xc4fc:16)
 	bit	9, wa
-	jr	z, 53
+	jr	z, NoteMap_AddEntry_Skip9
 	ldib_erp	251, 0
 	cp_erpb	251, 16
-	jr	nc, 44
+	jr	nc, NoteMap_AddEntry_Skip9
 NoteMap_AddEntry_Loop2:
 	ldto_berp	a, 251
 	extz	wa
@@ -4195,6 +4190,7 @@ NoteMap_AddEntry_Skip5:
 	inc1b_erp	251
 	cp_erpb	251, 16
 	jr	c, NoteMap_AddEntry_Loop2
+NoteMap_AddEntry_Skip9:
 	ld	a, (xsp+2)
 	extz	wa
 	add	wa, 68
@@ -13965,10 +13961,9 @@ SoundFX_Handler_7:
 	lda	xbc, (SoundFX_Handler_7_Data:24)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3
-; SoundFX_Handler_1_LoadReg is kept at this address only for ui_widgets/widget_dispatch.s; v10's SoundFX_Handler_1_LoadReg is the code at 0xFE863A
-SoundFX_Handler_1_LoadReg:
-	.byte 0x07, 0xe0, 0xe8, 0x30
+	.set	SoundFX_Handler_1_LoadReg, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	lda	xwa, (xwa+de)
+	; SoundFX_Handler_1_LoadReg is kept at this address only for ui_widgets/widget_dispatch.s; v10's SoundFX_Handler_1_LoadReg is the code at 0xFE863A
 	ld	c, (xwa + 2)
 	ld	a, (0xce0e:16)
 	sub	a, c
@@ -14641,11 +14636,11 @@ ComputeNoteBitPositi_Data:
 	pushw	bc
 	ld	xiz, 0xce4a
 	ld	l, (xiz)
-	ld_rrb	w, xiz, iy
+	ld	w, (xiz+iy)
 	sub	l, h
 	xor	h, h
 	ld	xiz, Chord_Tables + 0xd
-	ld_rrb	c, xiz, hl
+	ld	c, (xiz+hl)
 	dec	1, c
 	ldfr_berp	a, 60
 	ld	a, c
@@ -14854,24 +14849,11 @@ VoiceSlot_LoadResult_Data2:
 	xor	h, h
 	dec	1, hl
 	ld	xiz, 0xce4a
-	.byte	0xc3
-	reti
-	swi	0
-	.byte	0xec
-	ld	l, 70:opc
-	.byte	0x87
-	.byte 0x9b, 0xfe
-	nop
-	.byte	0xc3
-	reti
-	swi	0
-	.byte	0xec
-	ld	w, 194:opc
-	.byte 0x42, 0xce, 0x00, 0x3e
-	rcf
-	.byte	0xc2
-	.byte 0x42, 0xce, 0x00, 0x3c
-	.byte	0x7f
+	ld	l, (xiz+hl)
+	ld	xiz, 0xfe9b87
+	ld	w, (xiz+hl)
+	or	(52802:24), 16
+	and	(52802:24), 127
 	ret
 VoiceSlot_LoadResult_Block3:
 	calr	Audio_NullRet2_Prologue
@@ -15125,14 +15107,11 @@ NoteBuffer_CompactEn_Data:
 	sub	w, a
 	cp	w, 12
 	jr	ugt, VoiceSlot_CheckPitchIntervals_Entry
-	.byte	0xc2
-	.byte 0x42, 0xce, 0x00, 0x3c
-	ldx
+	and	(52802:24), 247
 	jr	VoiceSlot_CheckPitchIntervals_Return
 VoiceSlot_CheckPitchIntervals_Entry:
-	.byte	0xc2
-	.byte 0x42, 0xce, 0x00, 0x3e
-	ld	(104:8), 0:io
+	or	(52802:24), 8
+	jr	VoiceSlot_CheckPitchIntervals_Return
 VoiceSlot_CheckPitchIntervals_Return:
 	ret
 NoteBuffer_CompactEn_Block2:
@@ -15852,7 +15831,7 @@ VoiceSlot_CheckAndApply_LoadReg_Skip:
 	dec	1, hl
 	ld	xiz, 0xce4a
 	ld	d, (xiz)
-	ld_rrb	e, xiz, hl
+	ld	e, (xiz+hl)
 	sub	d, e
 	cp	d, 12
 	jr	nc, VoiceSlot_CheckAndApply_LoadReg_Skip2
@@ -16072,9 +16051,9 @@ SndParam_Init:
 	jrl	gt, SndParam_ProcessEntry_Epilogue
 	add	wa, wa
 	lda	xix, (KeyEvent_SwitchOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SndParam_Init_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SndParam_Init_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
@@ -16461,9 +16440,9 @@ HdaeRom_TableEntry2:
 	jrl	gt, HdaeRom_TableEntry2_Epilogue
 	add	wa, wa
 	lda	xix, (HdaeRomEntry2_SwitchOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (HdaeRom_TableEntry2_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 HdaeRom_TableEntry2_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
@@ -16724,7 +16703,7 @@ HdaeRom_AltCheckResult_Epilogue:
 	ld	a, (xwa)
 	extz	wa
 	lda	xbc, (AudioInit_SlotOrderMap:24)
-	ld_rrb	e, xbc, wa
+	ld	e, (xbc+wa)
 	ld	a, e
 	cp	a, 1:i3
 	jr	z, HdaeRom_AltCheckResult_Skip
@@ -17310,9 +17289,9 @@ SendEpilogue_Data_Skip7:
 	jrl	ugt, SendEpilogue_Data_Join
 	add	wa, wa
 	lda	xix, (MIDI_SendEpilogue_Data_2:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (MIDI_SendEpilogue_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 MIDI_SendEpilogue_Code:
 	ldto_berp	a, 248
 	extz	wa
@@ -17389,9 +17368,9 @@ SendEpilogue_Data_Skip14:
 	jrl	ugt, SendEpilogue_Data_Join
 	add	wa, wa
 	lda	xix, (MIDI_SendEpilogue_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (MIDI_SendEpilogue_Code_2:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 MIDI_SendEpilogue_Code_2:
 	ldw	wa, 127
 	cp	iz, 0:i3
@@ -17440,7 +17419,7 @@ SendEpilogue_Data_Skip16:
 	add	wa, 164
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	ld_rrb	a, xwa, iz
+	ld	a, (xwa+iz)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -17482,7 +17461,7 @@ SendEpilogue_Data_Skip17:
 	add	wa, 164
 	ld	bc, wa
 	ld	xwa, (xsp+4)
-	ld_rrb	a, xwa, iz
+	ld	a, (xwa+iz)
 	extz	wa
 	ld	de, wa
 	ldw	wa, 80
@@ -18120,9 +18099,9 @@ SndPart_SetParam_Helper2:
 	jr	gt, SeqVoice_CheckAndRet_Data_Skip9
 	add	wa, wa
 	lda	xix, (SeqVoice_CheckAndRet_Prologue_Data_15:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SeqVoice_CheckAndRet_Data_Skip:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SeqVoice_CheckAndRet_Data_Skip:
 	lda	xhl, (SeqVoice_CheckAndRet_Prologue_Data:24)
 	jr	SeqVoice_CheckAndRet_Data_Return
@@ -18190,9 +18169,9 @@ SendEpilogue_Data_Helper:
 	jr	gt, SeqVoice_CheckAndRet_Data_Skip12
 	add	wa, wa
 	lda	xix, (SendEpilogueC_SwitchOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SeqVoice_CheckAndRet_Data_Skip10:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SeqVoice_CheckAndRet_Data_Skip10:
 	ld	hl, 0:i3
 	.ascii	"hE3@ÿh@3Aÿh;3Bÿh6Û«h2Û¬h.Û­h*"	;
@@ -18386,9 +18365,9 @@ MIDI_WriteChannelData_Block:
 	ret	gt
 	add	wa, wa
 	lda	xix, (SendAllSoundOff_Flush_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (SendAllSoundOff_Flush_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 SendAllSoundOff_Flush_Code:
 	ld	l, 1:opc
 	ret
@@ -19117,7 +19096,7 @@ SendSinglePacket_Data:
 	call	SeqBuf2_WriteBytes
 	inc	6, xsp
 	ei	0x00
-	jr	37
+	jr	SendSinglePacket_Data_Code_Epilogue
 SendSinglePacket_Data_Code_Skip:
 	ld	a, (xiz)
 	and	a, 15
@@ -19125,16 +19104,15 @@ SendSinglePacket_Data_Code_Skip:
 	add	wa, wa
 	lda	xbc, (xsp+4)
 	ld	de, (0xe92d:16)
-	.byte	0xd3
-	reti
-	.byte	0xe4, 0xe0, 0xc2
-	jr	nz, 14
+	and	de, (xbc+wa)
+	jr	nz, SendSinglePacket_Data_Code_Epilogue
 	ei	0x06
 	push	xiz
 	pushm	(xsp+40)
 	call	SeqMain_WriteBytes
 	inc	6, xsp
 	ei	0x00
+SendSinglePacket_Data_Code_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+34)
 	ret
@@ -20892,7 +20870,7 @@ MidiSysMsg_Handler_Loop2:
 	jrl	Dispatch_Epilogue
 MidiSysMsg_Handler_Skip3:
 	lda	xwa, (xsp+4)
-	st_rrb	l, xwa, iz
+	ld	(xwa+iz), l
 	inc	1, iz
 	cp	iz, 1:i3
 	jr	lt, MidiSysMsg_Handler_Loop2
@@ -20915,7 +20893,7 @@ MidiSysMsg_Handler_Loop3:
 	jrl	Dispatch_Epilogue
 MidiSysMsg_Handler_Skip5:
 	lda	xwa, (xsp+4)
-	st_rrb	l, xwa, iz
+	ld	(xwa+iz), l
 	inc	1, iz
 	cp	iz, 2:i3
 	jr	lt, MidiSysMsg_Handler_Loop3
@@ -20952,7 +20930,7 @@ MidiSysMsg_Handler_Loop5:
 	jrl	Dispatch_Epilogue
 MidiSysMsg_Handler_Skip8:
 	lda	xwa, (xsp+4)
-	st_rrb	l, xwa, iz
+	ld	(xwa+iz), l
 	inc	1, iz
 	cp	iz, 2:i3
 	jr	lt, MidiSysMsg_Handler_Loop5
@@ -21560,10 +21538,9 @@ VoiceReset_Return_Block:
 	ld	(xsp + 5), a
 	ld	iz, 2:i3
 VoiceReset_Return_LoadDRAM:
-	.byte 0xc1
-; Dispatch_Prologue is kept at this address only for audio/sound_data_synth.c; v10's Dispatch_Prologue is the code at 0xFED0DC
-Dispatch_Prologue:
-	.byte 0x02, 0xd0, 0x21
+	.set	Dispatch_Prologue, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	a, (53250:16)
+	; Dispatch_Prologue is kept at this address only for audio/sound_data_synth.c; v10's Dispatch_Prologue is the code at 0xFED0DC
 	and	a, 0xf0
 	cp	a, 0xc0
 	jr	z, VoiceReset_Return_Block2
@@ -22033,7 +22010,7 @@ Seq_CalcAddrOffset_Loop:
 	jr	Seq_CalcAddrOffset_Epilogue
 Seq_CalcAddrOffset_Skip:
 	ld	xwa, (xsp+2)
-	st_rrb	l, xwa, iz
+	ld	(xwa+iz), l
 	inc	1, iz
 	ld	wa, iz
 	.byte	0x9f, 0x06, 0xf0
@@ -23062,7 +23039,7 @@ MidiNoteOn_SetupVoiceA_Code_Helper:
 SndParam_CompactLookupStub:
 	extz	wa
 	lda	xbc, (SndParam_CompactLookupStub_Data:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	ld	l, a
 	ret
@@ -23238,10 +23215,9 @@ SndParam_LookupTableConverge:
 	extz	hl
 	muls	hl, 0x18
 	add	hl, bc
-	.byte 0xf1
-; ApplyProgramChangeAs_LoadDRAM2 is kept at this address only for audio/sound_data_flute.c, audio/sound_data_piano.c; v10's ApplyProgramChangeAs_LoadDRAM2 is the code at 0xFEDFC9
-ApplyProgramChangeAs_LoadDRAM2:
-	.byte 0x4b, 0xeb, 0x31
+	.set	ApplyProgramChangeAs_LoadDRAM2, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	lda	xbc, (60235:16)
+	; ApplyProgramChangeAs_LoadDRAM2 is kept at this address only for audio/sound_data_flute.c, audio/sound_data_piano.c; v10's ApplyProgramChangeAs_LoadDRAM2 is the code at 0xFEDFC9
 	ld	xbc, (xbc+hl)
 	ld	xwa, 0:i3
 	ld	a, (xsp)
@@ -23334,7 +23310,7 @@ Param_SignExtendReturn_Helper3:
 	add	xhl, Param_SignExtendReturn_Data_5
 	ld	hl, (xhl)
 	lda	xix, (Param_SignExtendRetu_Data_0x69:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -23359,9 +23335,9 @@ ApplyProgramChange_LoadDRAM:
 	extz	hl
 	sll	hl, 1
 	ld	xix, Param_SignExtendReturn_Data_4
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (ApplyProgramChange_LoadDRAM_Code:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 ApplyProgramChange_LoadDRAM_Code:
 	ld	a, (xsp)
 	exts	wa
@@ -23424,9 +23400,9 @@ Param_SignExtendReturn_Skip3:
 	extz	bc
 	sll	bc, 1
 	ld	xix, Param_SignExtendReturn_Data_2
-	ld_rrw	bc, xix, bc
+	ld	bc, (xix+bc)
 	lda	xix, (Param_SignExtendReturn_Skip4:24)
-	jp_rr	8, xix, bc
+	jp	t, (xix+bc)
 Param_SignExtendReturn_Skip4:
 	ld	a, (xsp)
 	exts	wa
@@ -23524,7 +23500,7 @@ SndParam_LookupAndDispatch:
 	add	xhl, Param_SignExtendReturn_Data_10
 	ld	hl, (xhl)
 	lda	xix, (Param_SignExtendRetu_Data_0x264:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
@@ -23553,9 +23529,9 @@ Param_SignExtendReturn_Skip7:
 	extz	wa
 	sll	wa, 1
 	ld	xix, Param_SignExtendReturn_Data_9
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (Param_SignExtendReturn_Skip8:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 Param_SignExtendReturn_Skip8:
 	pushw	127
 	pushw	32
@@ -23616,9 +23592,9 @@ Param_SignExtendReturn_Skip10:
 	extz	bc
 	sll	bc, 1
 	ld	xix, Param_SignExtendReturn_Data_7
-	ld_rrw	bc, xix, bc
+	ld	bc, (xix+bc)
 	lda	xix, (Param_SignExtendReturn_Skip11:24)
-	jp_rr	8, xix, bc
+	jp	t, (xix+bc)
 Param_SignExtendReturn_Skip11:
 	pushw	127
 	pushw	32
@@ -24653,8 +24629,8 @@ SendPartDataBlock_Return5_Loop:
 	ld	de, bc
 	add	de, 33
 	ld	xwa, (xsp+10)
-	ld_rrb	a, xwa, de
-	st_rrb	a, xiz, hl
+	ld	a, (xwa+de)
+	ld	(xiz+hl), a
 	inc1b_erp	230
 	inc	1, bc
 	cp_erpb	230, 8
@@ -24664,7 +24640,7 @@ SendPartDataBlock_Return5_Loop:
 	ldw	(xsp+6), 0
 	ld	wa, (xsp+6)
 	add	wa, 102
-	lda_rr	xbc, xiz, wa
+	lda	xbc, (xiz+wa)
 	ld	de, (xsp+8)
 	add	de, 41
 	ld	xwa, (xsp+10)
@@ -24842,7 +24818,7 @@ HdaeRom_DataHandler_Helper:
 	srl	c, 4
 	extz	bc
 	lda	xhl, (SendPartDataBlock_DoGetError_Data:24)
-	ld_rrb	c, xhl, bc
+	ld	c, (xhl+bc)
 	ldfr_berp	c, 240
 	ldto_berp	d, 240
 	sll	d, 6
@@ -24852,19 +24828,15 @@ HdaeRom_DataHandler_Helper:
 	ldfr_berp	c, 240
 	srl	c, 4
 	extz	bc
-	.byte	0xc3
-	reti
-	or	xix, xix
-	ld	c, 199:opc
-	.byte	0xf0
-	or	(xhl-53), iz
-	.byte	0x04
+	ld	c, (xhl+bc)
+	ldfr_berp	c, 240
+	sll	c, 4
 	or	d, c
 	and	e, 15
 	ldfr_berp	e, 240
 	ldto_berp	c, 240
 	extz	bc
-	ld_rrb	c, xhl, bc
+	ld	c, (xhl+bc)
 	ldfr_berp	c, 240
 	sll	c, 2
 	or	d, c
@@ -24882,27 +24854,27 @@ SendPartDataBlock_Return5_Loop2:
 SendPartDataBlock_Return5_Loop3:
 	ld	de, hl
 	add	de, 40
-	lda_rr	xbc, xwa, de
+	lda	xbc, (xwa+de)
 	ld	c, (xbc+17)
 	ldfr_berp	c, 240
-	lda_rr	xiy, xwa, de
-	lda_rr	xbc, xwa, de
+	lda	xiy, (xwa+de)
+	lda	xbc, (xwa+de)
 	ld	c, (xbc+16)
 	ld	(xiy+17), c
-	lda_rr	xiy, xwa, de
-	lda_rr	xbc, xwa, de
+	lda	xiy, (xwa+de)
+	lda	xbc, (xwa+de)
 	ld	c, (xbc+15)
 	ld	(xiy+16), c
-	lda_rr	xiy, xwa, de
-	lda_rr	xbc, xwa, de
+	lda	xiy, (xwa+de)
+	lda	xbc, (xwa+de)
 	ld	c, (xbc+14)
 	ld	(xiy+15), c
-	lda_rr	xiy, xwa, de
-	lda_rr	xbc, xwa, de
+	lda	xiy, (xwa+de)
+	lda	xbc, (xwa+de)
 	ld	c, (xbc+13)
 	ld	(xiy+14), c
-	lda_rr	xiy, xwa, de
-	lda_rr	xbc, xwa, de
+	lda	xiy, (xwa+de)
+	lda	xbc, (xwa+de)
 	ld	c, (xbc+12)
 	ld	(xiy+13), c
 	exts	xde
@@ -25091,8 +25063,8 @@ HdaeRom_DataHandler_Helper2_Loop:
 	add	hl, 32
 	ld	xwa, (xsp+0x16)
 	ld	xbc, (xsp+0x1a)
-	ld_rrb	a, xwa, hl
-	st_rrb	a, xbc, ix
+	ld	a, (xwa+hl)
+	ld	(xbc+ix), a
 	incm8	1, (xsp+0x4)
 	inc	1, de
 	cp	(xsp+0x4), 8
@@ -26159,9 +26131,9 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	jrl	gt, TmFlash_BulkTransferToSubCPU_Skip5
 	add	hl, hl
 	lda	xix, (TmFlashBulkB_SwitchOffsets:24)
-	ld_rrw	hl, xix, hl
+	ld	hl, (xix+hl)
 	lda	xix, (VoiceParam_DispatchTable1_Code:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 VoiceParam_DispatchTable1_Code:
 	ld	xwa, xbc
 	ld	xbc, 0x1d6

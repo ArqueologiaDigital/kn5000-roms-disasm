@@ -235,23 +235,21 @@ SysEx_ChannelHandler_4B_Data:
 	cp	c, 8
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_Data_5
-	jr	32
+	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 8
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_Data_6
-	jr	20
+	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_Data_7
-	jr	9
+	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_Data_8
 SysEx_DispatchByChannel_Entry:
-	.byte 0xd3
-	reti
-	.byte 0xe0, 0xe8
-	ld	c, 14:opc
+	ld	hl, (xwa+de)
+	ret
 
 SysEx_DispatchByChannel_49:
 	ldw hl, 0xd8f0
@@ -289,23 +287,21 @@ SysEx_ChannelHandler_49_Data:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_49_Data_5
-	jr	31
+	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_49_Data_6
-	jr	20
+	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_49_Data_7
-	jr	9
+	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 6:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_49_Data_8
 SysEx_DispatchByChannel_49_Entry:
-	.byte 0xd3
-	reti
-	.byte 0xe0, 0xe8
-	ld	c, 14:opc
+	ld	hl, (xwa+de)
+	ret
 
 SysEx_ValidateRolandHeader:
 	cp c, 0xa
@@ -1688,13 +1684,13 @@ MIDI_BroadcastCC_CommLoop:
 
 CompIface_SendActiveSensing:
 	ld a, (0xb7e0:16)
-	cp a, 0:i3	; MIDI
+	cp	a, 0:i3	; MIDI
 	ret z
-	cp a, 3:i3	;  PC2
+	cp	a, 3:i3	;  PC2
 	jr z, CompIface_SendActiveSensing_PC2
-	cp a, 2:i3	;  PC1
+	cp	a, 2:i3	;  PC1
 	jr z, CompIface_SendActiveSensing_PC1MAC
-	cp a, 1:i3	;  MAC
+	cp	a, 1:i3	;  MAC
 	ret nz
 
 CompIface_SendActiveSensing_PC1MAC:
@@ -2911,15 +2907,12 @@ DSPCfg_Data_003:
 	push	xiz
 	ld	iz, wa
 	ld	xwa, xbc
-	calr	65182
+	calr	DSPCfg_GetParamCount
 	sla	hl, 2
 	lda	xbc, (DSPCfg_LookupAndExtract_PtrTable:24)
 	mul	iz, 6
 	ld	xwa, xiz
-	.byte 0xe3
-	reti
-	.byte 0xe4
-	add	xwa, xix
+	add	xwa, (xbc+hl)
 	lda	xbc, (xsp+10)
 	lda	xde, (xsp+8)
 	lda	xhl, (xsp+4)
@@ -4028,9 +4021,9 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
 	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (DSPCfg_Data_ParamDispatch_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 DSPCfg_Data_ParamDispatch_Code:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
@@ -5723,7 +5716,7 @@ UIStateEvt_TransposeUpdate:
 	ld	a, l
 	extz	wa
 	lda	xbc, (PartIndex_ByteMap:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	add	wa, wa
 	ld	bc, wa
@@ -5732,13 +5725,13 @@ UIStateEvt_TransposeUpdate:
 	ldb_d8	a, (0xfc6a)
 	and	a, 255
 	sub	a, 64
-	st_rrb	a, xde, bc
+	ld	(xde+bc), a
 	jr	UIStateEvt_TransposeUpdate_Apply
 UIStateEvt_TransposeUpdate_Clear:
 	ld	a, l
 	extz	wa
 	lda	xbc, (PartIndex_ByteMap:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	extz	wa
 	add	wa, wa
 	add	wa, 228
@@ -5757,9 +5750,9 @@ UIStateEvt_ParamEdit_Data:
 	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
 	lda	xix, (ParamEdit_SwitchOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code:
 	ldb_d8	a, (0xc07f)
 	and	a, 7
@@ -5772,7 +5765,7 @@ UIStateEvt_TransposeUpdate_Apply_Code:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
@@ -5799,7 +5792,7 @@ UIStateEvt_ParamEdit_Data_Skip2:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 UIStateEvt_ParamEdit_Data_Join:
 	ldw_d16	wa, (0xc596)
 	and	wa, 6
@@ -5871,7 +5864,7 @@ UIStateEvt_ParamEdit_Data_Skip10:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
@@ -5897,7 +5890,7 @@ UIStateEvt_ParamEdit_Data_Skip12:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	ld_rrw	iz, xbc, wa
+	ld	iz, (xbc+wa)
 UIStateEvt_ParamEdit_Data_Join5:
 	andw	(0xc596:16), 0xffe8
 	or	(0xc596:16), iz
@@ -5955,9 +5948,9 @@ UIStateEvt_VolumeMixer_Data:
 	ret	gt
 	add	wa, wa
 	lda	xix, (VolumeMixer_SwitchOffsets:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code_2:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 UIStateEvt_TransposeUpdate_Apply_Code_2:
 	ldb_d8	a, (0xc07f)
 	and	a, 31
@@ -6033,7 +6026,7 @@ UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
 	lda	xbc, (PartRecord_RamPtrTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	bitm	0, (xwa+0x16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip5
 	ld	wa, de
@@ -6138,7 +6131,7 @@ UIStateEvt_EffectSelect_Data_Skip2:
 	and	a, 255
 	extz	wa
 	lda	xbc, (EffectSelect_StepTable:24)
-	ld_rrb	e, xbc, wa
+	ld	e, (xbc+wa)
 	ld	hl, 0:i3
 	cp	hl, 26
 	jr	nc, UIStateEvt_EffectSelect_Data_Skip9
@@ -6237,7 +6230,7 @@ UIStateEvt_ChannelConfig_Data_Loop2:
 	and	a, 255
 	extz	wa
 	lda	xbc, (EffectSelect_StepTable:24)
-	ld_rrb	a, xbc, wa
+	ld	a, (xbc+wa)
 	and	a, 15
 	sla	a, 4
 	andmi8	(xhl), 15

@@ -1089,7 +1089,7 @@ SMF_ScanChannel_PopAndWrite:
 	pop xhl
 	jrl SMF_FinishChannelAndGetNextEvent
 SMF_WriteChannelNoteData:
-	lda_rr	xiy, xiy, hl
+	lda	xiy, (xiy+hl)
 	ld	c, (xiy+0:8)
 	ld	d, (xiy+1)
 	ld	b, (xiy+3)
@@ -1103,7 +1103,7 @@ SMF_WriteChannelNoteData:
 	xor	h, h
 	push	xix
 	ld	xix, 61856
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	pop	xix
 	cp	(4324:16), 255
 	jrl	nz, SMF_WriteNote_AltPath
@@ -2205,9 +2205,9 @@ SMF_ProgramChange_ProcessPatch:
 	xor	hl, hl
 	ld	l, (4213:16)
 	ld	xix, 61856
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	ld	xix, SMF_ProgramChange_ProcessPatch_Data
-	ld_rrb	l, xix, hl
+	ld	l, (xix+hl)
 	ld	(6748:16), l
 	pop	xix
 	ld	xwa, 6743
@@ -3555,13 +3555,13 @@ SeqStep_FileCloseInner_Loop:
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	or xwa, xwa
 	jr	z, SeqStep_FileCloseInner_Skip3
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	cp xwa, 4294967295
 	jr	z, SeqStep_FileCloseInner_Skip3
 	ld	xwa, (xsp+4)
@@ -3570,12 +3570,12 @@ SeqStep_FileCloseInner_Loop:
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push xwa
 	ld wa, qiz
 	sla wa, 2
 	lda	xbc, (0x210b4:24)
-	ld_rrl xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld xwa, (xwa+14)
 	ld xwa, (xwa+36)
 	call	(xwa)
@@ -5296,7 +5296,7 @@ FatPath_Next83Component_StoreChar:
 	ld	xbc, (xiz)
 	ld	xwa, (xsp+8)
 	ld	c, (xbc)
-	st_rrb	c, xwa, de
+	ld	(xwa+de), c
 	ld	xwa, 1:i3
 	add	(xiz), xwa
 FatPath_Next83Component_NextChar:
@@ -5997,7 +5997,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper2_Skip:
 	ld	bc, wa
 	add	bc, 26
 	ld	xwa, (xsp+4)
-	lda_rr	xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	push	xwa
 	lda	xwa, (xiz+52)
 	push	xwa
@@ -7315,7 +7315,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip12:
 	add	bc, 26
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+34)
-	lda_rr	xde, xwa, bc
+	lda	xde, (xwa+bc)
 	ld	xwa, (xsp+12)
 	bitm	2, (xwa+3)
 	jrl	nz, SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip8
@@ -7337,7 +7337,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Join2:
 	lda	xsp, (xsp+10)
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
-	lda_rr	xwa, xwa, iz
+	lda	xwa, (xwa+iz)
 	ld	(xsp+16), xwa
 	add	(xsp+2), iz
 	ld	bc, iz
@@ -7372,7 +7372,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip6:
 SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip7:
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
-	lda_rr	xwa, xwa, iz
+	lda	xwa, (xwa+iz)
 	ld	(xsp+16), xwa
 	add	(xsp+2), iz
 	ld	bc, iz
@@ -7706,7 +7706,7 @@ SeqChan_WritePatchData:
 	sla	bc, 2
 	lda	xde, (0x210b4:24)
 	ld	xwa, 0:i3
-	st_rrl xwa, xde, bc
+	ld	(xde+bc), xwa
 	ld xwa, xiz
 	push	xwa
 	call	SeqStep_FreeMemory
@@ -10022,7 +10022,7 @@ FileIO_ReadDirEntry_Body:
 	ld	wa, (xiz)
 	muls	wa, 44
 	lda	xbc, (144806:24)
-	ld_rrw	bc, xbc, wa
+	ld	bc, (xbc+wa)
 	extz	xbc
 	ld	xwa, (xsp+4)
 	ld	(xwa+2), xbc

@@ -721,7 +721,7 @@ AccompSeq_ResolveCh_Store:
 AccompSeq_ResolveCh_AddOffset:
 	ld	w, (1133:16)
 	add	a, w
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	calr	AccompSeq_AdvanceBufferPtr
 	ld	w, (32096:16)
 	cp	a, w
@@ -956,11 +956,11 @@ AccompSeq_ManualMidi_ClearFlags_Code_Helper2:
 	ei	0x06
 	ld	iy, (xhl+4)
 	ld	bc, (xhl+2)
-	st_rrb	e, xiy, hl
+	ld	(xiy+hl), e
 	calr	AccompSeq_AdvanceBufferPtr
-	st_rrb	d, xiy, hl
+	ld	(xiy+hl), d
 	calr	AccompSeq_AdvanceBufferPtr
-	st_rrb	a, xiy, hl
+	ld	(xiy+hl), a
 	calr	AccompSeq_AdvanceBufferPtr
 	ld	(xhl+4), iy
 	ei	0x00
@@ -1067,7 +1067,7 @@ AccompSeq_ProcessAfterNote_Skip2:
 	xor	w, w
 	ld	hl, wa
 	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A
-	ld_rrb	h, xix, hl
+	ld	h, (xix+hl)
 	ld	l, (64786:16)
 	cp	l, 17
 	jr	z, AccompSeq_ProcessAfterNote_Return
@@ -1084,9 +1084,9 @@ AccompSeq_ProcessAfterNote_Skip3:
 	add	xix, 16
 AccompSeq_ProcessAfterNote_Skip4:
 	sll	h, 1
-	ld_rr8b	l, xix, h
+	ld	l, (xix+h)
 	inc	1, h
-	ld_rr8b	h, xix, h
+	ld	h, (xix+h)
 	cp	l, 14
 	jr	ugt, AccompSeq_ProcessAfterNote_Return
 AccompSeq_ProcessAfterNote_Skip5:
@@ -1210,7 +1210,7 @@ AccompSeq_LoadParams_OverrideCheck:
 	and	a, 7
 	sll	wa, 2
 	ld	xiy, AccompSeq_TempoScaleTable
-	ld_rrl	xwa, xiy, wa
+	ld	xwa, (xiy+wa)
 	add	xwa, 6
 	ld	(0x7d92:16), wa
 	ld	(0x7d96:16), wa

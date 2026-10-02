@@ -3464,7 +3464,7 @@ MstStyleAlp_EventDispatch:
 	add	de, wa
 	muls	de, 6
 	lda	xbc, (MasterSetup_EventDispatch_Data:24)
-	ld_rrw	de, xbc, de
+	ld	de, (xbc+de)
 	extz	xde
 	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
 	ld	xbc, EVT_OTP_CNT_SET
@@ -7403,7 +7403,7 @@ FSWAssGrid_EventDispatch:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2886
 	ld	de, 2:i3
@@ -7428,7 +7428,7 @@ FSWAssGrid_EventDispatch_Skip4:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2888
 	ld	de, 2:i3
@@ -7453,7 +7453,7 @@ FSWAssGrid_EventDispatch_Skip5:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288a
 	ld	de, 2:i3
@@ -7478,7 +7478,7 @@ FSWAssGrid_EventDispatch_Skip6:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288c
 	ld	de, 2:i3
@@ -7503,7 +7503,7 @@ FSWAssGrid_EventDispatch_Skip7:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288e
 	ld	de, 2:i3
@@ -7528,7 +7528,7 @@ FSWAssGrid_EventDispatch_Skip8:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2890
 	ld	de, 2:i3
@@ -7553,7 +7553,7 @@ FSWAssGrid_EventDispatch_Skip9:
 	inc	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2880
 	ld	de, 2:i3
@@ -7590,7 +7590,7 @@ FSWAssGridCheck_Evt1C00018:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2886
 	ld	de, 2:i3
@@ -7615,7 +7615,7 @@ FSWAssGrid_EventDispatch_Skip10:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2888
 	ld	de, 2:i3
@@ -7640,7 +7640,7 @@ FSWAssGrid_EventDispatch_Skip11:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288a
 	ld	de, 2:i3
@@ -7665,7 +7665,7 @@ FSWAssGrid_EventDispatch_Skip12:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288c
 	ld	de, 2:i3
@@ -7690,7 +7690,7 @@ FSWAssGrid_EventDispatch_Skip13:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288e
 	ld	de, 2:i3
@@ -7715,7 +7715,7 @@ FSWAssGrid_EventDispatch_Skip14:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2890
 	ld	de, 2:i3
@@ -7740,7 +7740,7 @@ FSWAssGrid_EventDispatch_Skip15:
 	dec	1, l
 	extz	hl
 	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
-	ld_rrb c, xbc, hl
+	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2880
 	ld	de, 2:i3
@@ -7763,7 +7763,7 @@ FSWAssGridCheck_Evt1C0001C:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGridCheck_Evt1C0001C_Str_Fmts@hi16
 	pushw	FSWAssGridCheck_Evt1C0001C_Str_Fmts@lo16
@@ -7791,7 +7791,7 @@ FSWAssGrid_EventDispatch_Entry:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts@hi16
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts@lo16
@@ -7817,7 +7817,7 @@ FSWAssGrid_EventDispatch_Entry_Skip:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_2@hi16
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_2@lo16
@@ -7843,7 +7843,7 @@ FSWAssGrid_EventDispatch_Skip:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_3@hi16
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_3@lo16
@@ -7870,7 +7870,7 @@ FSWAssGrid_EventDispatch_Skip2:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld_rrl	xwa, xbc, hl	; ld xwa, (xbc+hl)
+	ld	xwa, (xbc+hl)	; ld xwa, (xbc+hl)
 	push	xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_4@hi16
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_4@lo16
@@ -7896,7 +7896,7 @@ FSWAssGrid_EventDispatch_Skip3:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_5@hi16
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_5@lo16
@@ -7922,7 +7922,7 @@ FSWAssGrid_EventDispatch_Skip3_Skip:
 	extz	hl
 	sla	hl, 2
 	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
-	ld_rrl xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_6@hi16
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_6@lo16
@@ -8928,7 +8928,7 @@ PmExpFilter_EventDispatch:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ldw	bc, 0xffff
 	ld	de, 2:i3
 	jrl	FSWAss_RefreshAllVoices_Join
@@ -8938,7 +8938,7 @@ FSWAss_RefreshAllVoices_Skip:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ldw	bc, 0xffff
 	ld	de, 2:i3
 	jr	FSWAss_RefreshAllVoices_Join
@@ -8970,7 +8970,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jr	FSWAss_RefreshAllVoices_Join
@@ -8980,7 +8980,7 @@ FSWAss_RefreshAllVoices_Skip2:
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
 	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
 FSWAss_RefreshAllVoices_Join:

@@ -5019,7 +5019,7 @@ VoiceSynth_Algo_SimpleStore:
 	ldb_d8	a, (4013)
 	push	xix
 	ld	xix, 3954
-	st_rrb	a, xix, iy
+	ld	(xix+iy), a
 	pop	xix
 	ret
 VoiceSynth_Algo_MultiPath:
@@ -5035,7 +5035,7 @@ VoiceSynth_Algo_MultiPath:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	ld_rrw wa, xix, iy
+	ld	wa, (xix+iy)
 	pop xix
 	srl	xiy, 1
 	push	xiy
@@ -5064,7 +5064,7 @@ VoiceSynth_Algo_ChannelConfig:
 	and	iy, 15
 	push	xix
 	ld	xix, 4275
-	ld_rrb l, xix, iy
+	ld	l, (xix+iy)
 	pop xix
 	cp	l, 255
 	jr	z, VoiceSynth_Algo_ChannelConfig_Return
@@ -5073,14 +5073,14 @@ VoiceSynth_Algo_ChannelConfig:
 	sla	hl, 2
 	push	xix
 	ld	xix, VoiceSynth_DataEntry_PtrTable
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	ld	a, (4013:16)
 	xor	b, b
 	ld	ix, bc
 	push	xiy
 	ld	xiy, VoiceChannel_ParamLimitTable
-	ld_rrb e, xiy, ix
+	ld	e, (xiy+ix)
 	pop xiy
 	cp	a, e
 	jr	ule, VoiceSynth_Algo_ChannelConfig_Skip
@@ -5094,7 +5094,7 @@ VoiceSynth_Algo_ChannelConfig_Skip:
 	pop	xiy
 	pop	xhl
 VoiceSynth_Algo_ChannelConfig_Skip2:
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	call	VoiceChannel_LookupParams
 VoiceSynth_Algo_ChannelConfig_Return:
 	ret
@@ -5136,7 +5136,7 @@ VoiceSynth_Algo_MultiStage:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	ld_rrw wa, xix, iy
+	ld	wa, (xix+iy)
 	pop xix
 	srl	xiy, 1
 	push	xiy
@@ -5153,11 +5153,11 @@ VoiceSynth_Algo_MultiStage:
 	extz	xhl
 	push	xix
 	ld	xix, SeqTrack_ChannelMapIdentity
-	ld_rrb	a, xix, hl
+	ld	a, (xix+hl)
 	cp	(4600:16), 1
 	jr	z, VoiceSynth_Algo_MultiStage_Skip
 	ld	xix, MidiSysEx_CC_LookupPartMap_Data
-	ld_rrb a, xix, hl
+	ld	a, (xix+hl)
 VoiceSynth_Algo_MultiStage_Skip:
 	pop xix
 	push	xiy
@@ -5202,7 +5202,7 @@ VoiceSynth_Algo_PitchModulated:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	ld_rrw wa, xix, iy
+	ld	wa, (xix+iy)
 	pop xix
 	srl	xiy, 1
 	push	xiy
@@ -5234,7 +5234,7 @@ VoiceSynth_Algo_DirectStore:
 	ldb_d8	a, (4013)
 	push	xix
 	ld	xix, 3954
-	st_rrb	a, xix, iy
+	ld	(xix+iy), a
 	pop	xix
 	ret
 VoiceSynth_Algo_PitchShift:
@@ -5254,7 +5254,7 @@ VoiceSynth_Algo_PitchShift:
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
-	ld_rrw wa, xix, iy
+	ld	wa, (xix+iy)
 	pop xix
 	srl	iy, 1
 	push	xiy
@@ -5281,7 +5281,7 @@ VoiceParam_ReadUpdate_6:
 	and	iy, 15
 	push	xix
 	ld	xix, 4275
-	ld_rrb l, xix, iy
+	ld	l, (xix+iy)
 	pop xix
 	cp	l, 255
 	jr	z, VoiceParam_ReadUpdate_6_Return
@@ -5290,14 +5290,14 @@ VoiceParam_ReadUpdate_6:
 	sla	hl, 2
 	push	xix
 	ld	xix, VoiceSynth_DataEntry_PtrTable
-	ld_rrl xhl, xix, hl
+	ld	xhl, (xix+hl)
 	pop xix
 	ld	a, (4013:16)
 	xor	b, b
 	ld	ix, bc
 	push	xiy
 	ld	xiy, VoiceChannel_ParamLimitTable
-	ld_rrb e, xiy, ix
+	ld	e, (xiy+ix)
 	pop xiy
 	cp	a, e
 	jr	ule, VoiceParam_ReadUpdate_6_Skip
@@ -5311,7 +5311,7 @@ VoiceParam_ReadUpdate_6_Skip:
 	popw	iy
 	pop	xhl
 VoiceParam_ReadUpdate_6_Skip2:
-	st_rrb	a, xhl, iy
+	ld	(xhl+iy), a
 	call	VoiceChannel_LookupParams
 VoiceParam_ReadUpdate_6_Return:
 	ret
@@ -5345,7 +5345,7 @@ VoiceParam_ReadUpdate_10:
 	sla	iy, 1
 	push	xix
 	ld	xix, 4014
-	ld_rrw wa, xix, iy
+	ld	wa, (xix+iy)
 	pop xix
 	srl	iy, 1
 	push	xiy
@@ -5403,7 +5403,7 @@ VoiceParam_ReadUpdate_11:
 	sla	xiy, 1
 	push	xix
 	ld	xix, 4014
-	ld_rrw wa, xix, iy
+	ld	wa, (xix+iy)
 	pop xix
 	srl	xiy, 1
 	push	xiy

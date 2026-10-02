@@ -1331,7 +1331,7 @@ Data_InOutGridDispatch:
 	lda	xix, (Data_InOutGridDispatch_CaseTable_3:24)
 	ld	bc, (xix+bc)
 	lda	xix, (Data_InOutGridDispatch_Code:24)
-	jp_rr	8, xix, bc
+	jp	t, (xix+bc)
 Data_InOutGridDispatch_Code:
 	ld	xwa, 0x2100
 	ld	bc, 1:i3
@@ -1399,7 +1399,7 @@ InOutGridCheck_Skip:
 	lda	xix, (Data_InOutGridDispatch_CaseTable_2:24)
 	ld	bc, (xix+bc)
 	lda	xix, (Data_InOutGridDispatch_Code_2:24)
-	jp_rr	8, xix, bc
+	jp	t, (xix+bc)
 Data_InOutGridDispatch_Code_2:
 	ld	xwa, 0x2100
 	ldw	bc, 0xffff

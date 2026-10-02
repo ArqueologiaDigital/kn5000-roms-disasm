@@ -12802,7 +12802,7 @@ SeqData_FormatOutput_Data_Helper:
 	lda	xix, (SeqDataFmt_SwitchOffsets:24)
 	ld	hl, (xix+hl)
 	lda	xix, (SeqData_FormatOutput_Default_Code:24)
-	jp_rr 8, xix, hl
+	jp	t, (xix+hl)
 SeqData_FormatOutput_Default_Code:
 	jr	SeqData_FormatOutput_Data_Helper_Join
 	jr	SeqData_FormatOutput_Data_Helper_Join2
@@ -13888,7 +13888,7 @@ VoiceParam_MultiMode_StubRet:
 	lda	xix, (AssSwbMulti_SwitchOffsets:24)
 	ld	hl, (xix+hl)
 	lda	xix, (VoiceParam_MultiMode_StubRet_Code:24)
-	jp_rr	8, xix, hl
+	jp	t, (xix+hl)
 VoiceParam_MultiMode_StubRet_Code:
 	jr	SeqAlt_DescriptorBlock_Data_Join
 	jr	SeqAlt_DescriptorBlock_Data_Join2

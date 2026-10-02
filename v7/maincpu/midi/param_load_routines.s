@@ -184,7 +184,7 @@ ParaLoadOpt_CaseF:
 	lda	xix, (ParaLoadOpt_AudioFlagCheck_B_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda	xix, (ParaLoadOpt_DispatchTable_B:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 ParaLoadOpt_DispatchTable_B:
 	ld	(0x024760:24), 0
 	ld	(0x024762:24), 0

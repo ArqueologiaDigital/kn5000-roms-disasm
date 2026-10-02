@@ -1344,7 +1344,7 @@ DrawFrame_Impl_ClipYMax:
 	pushm (xsp+42)
 	ld bc, (xwa)
 	ld xwa, (xsp+40)
-	lda_rr xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
@@ -1361,7 +1361,7 @@ DrawFrame_Impl_SolidTwoEdges:
 	pushm (xsp+42)
 	ld bc, (xwa)
 	ld xwa, (xsp+40)
-	lda_rr xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
@@ -1500,7 +1500,7 @@ DrawFrame_Impl_PatternSetup:
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp+44)
-	lda_rr xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
@@ -1522,7 +1522,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	push xbc
 	ld bc, (xde)
 	ld xwa, (xsp+44)
-	lda_rr xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc

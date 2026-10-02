@@ -2380,7 +2380,7 @@ BitEditCheck:
 	and	wa, 1
 	sla	wa, 2
 	lda	xbc, (BitEditCheck_PtrTable:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xde+10)
 	push	xwa
@@ -2756,7 +2756,7 @@ AcTitleMenu_Confirm_MultiLine:
 	cp	hl, iz
 	jr	ugt, AcTitleMenu_Confirm_MultiAdjust
 	ld	de, (xsp+6)
-	lda_rr	xwa, xwa, de	; lda xwa, xwa+de
+	lda	xwa, (xwa+de)	; lda xwa, xwa+de
 AcTitleMenu_Confirm_MultiAdjust:
 	call CalcTotalWidth
 	ld	wa, (xsp+280)
@@ -3098,7 +3098,7 @@ VwMenuBox_Confirm_MultiLine:
 	jr	z, VwMenuBox_Confirm_RenderBottom
 	cpw	(xbc), 0
 	jr	z, VwMenuBox_Confirm_RenderBottom
-	lda_rr	xwa, xde, iz	; lda xwa, xde+iz
+	lda	xwa, (xde+iz)	; lda xwa, xde+iz
 	push	xwa
 	call	LyricsTrack_ReadAndParse_Helper2
 	ld	qiz, hl
@@ -3111,7 +3111,7 @@ VwMenuBox_Confirm_MultiLine:
 	lda	xwa, (xsp+10)
 	cp	hl, qiz
 	jr	ugt, VwMenuBox_Confirm_MultiAdjust
-	lda_rr	xwa, xwa, iz	; lda xwa, xwa+iz
+	lda	xwa, (xwa+iz)	; lda xwa, xwa+iz
 VwMenuBox_Confirm_MultiAdjust:
 	call CalcTotalWidth
 	ld	wa, (xsp+278)
@@ -8323,7 +8323,7 @@ AcTrkSw_Select:
 	call	DrawEditSw_CopyVariant_Code_Helper
 	inc	8, xsp
 	ld	xwa, (xsp+10)
-	lda_rr	xwa, xwa, hl	; lda xwa, xwa+hl
+	lda	xwa, (xwa+hl)	; lda xwa, xwa+hl
 	ld	(xsp+14), xwa
 	ld	(xwa), 0
 	lda	xwa, (xsp+28)
@@ -8344,7 +8344,7 @@ AcTrkSw_Select:
 	ld	xwa, (xsp+14)
 	ld	(xwa), 13
 	ld	xwa, (xsp+10)
-	lda_rr	xwa, xwa, iz	; lda xwa, xwa+iz
+	lda	xwa, (xwa+iz)	; lda xwa, xwa+iz
 	ld	(xsp+14), xwa
 	ld	(-xwa), 0
 	ld	(xsp+14), xwa
@@ -18317,7 +18317,7 @@ DeleteSpecEvent_ScanLoop:
 	ld bc, ix				; BC = current index
 	muls bc, 0x000c				; BC = index * 12 (entry size)
 	lda xwa, (0x02bc34:24); XWA = base of registration table
-	lda_rr	xwa, xwa, bc
+	lda	xwa, (xwa+bc)
 	lda xbc, (xwa + 4)			; XBC = pointer to entry+4 (event code)
 	ld xde, (xbc)				; XDE = registered event code
 	cp xde, EVT_ASSSWB			; compare with key press event

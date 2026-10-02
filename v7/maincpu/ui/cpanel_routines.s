@@ -993,9 +993,9 @@ PollLoop_TXCheckThreshold:
 	ld	a, 19:opc
 	ld	iy, (36195:16)
 	ld	xde, 36197
-	st_rrb	w, xde, iy
+	ld	(xde+iy), w
 	calr	CPanel_IncLEDPtr
-	st_rrb	a, xde, iy
+	ld	(xde+iy), a
 	calr	CPanel_IncLEDPtr
 	ld	(36195:16), iy
 PollLoop_DispatchWork:
@@ -1116,14 +1116,14 @@ CPanel_RX_PacketHandlers:
 	.long CPanel_RX_MultiBytePacket
 
 CPanel_RX_ButtonPacket:
-	ld_rrb	w, xde, iy
+	ld	w, (xde+iy)
 	calr	CPanel_IncRXPtr
-	st_rrb	w, xiz, ix
+	ld	(xiz+ix), w
 	calr	CPanel_IncEventPtr
 	ld	(36088:16), w
-	ld_rrb	a, xde, iy
+	ld	a, (xde+iy)
 	calr	CPanel_IncRXPtr
-	st_rrb	a, xiz, ix
+	ld	(xiz+ix), a
 	calr	CPanel_IncEventPtr
 	ld	(36089:16), a
 	and	w, 79
@@ -1139,7 +1139,7 @@ BtnPkt_AddOffset:
 BtnPkt_XORLookup:
 	ex (xhl), a
 	xor a, (xhl)
-	st_rrb a, xiz, ix
+	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 	stb_d8 (36090), a
 	ld (xiz-4), ix
@@ -1147,12 +1147,12 @@ BtnPkt_XORLookup:
 	ld (36097:16), iy
 	jrl CPanel_RX_ParseNext
 CPanel_RX_EncoderPacket:
-	ld_rrb	w, xde, iy
+	ld	w, (xde+iy)
 	calr	CPanel_IncRXPtr
-	st_rrb	w, xiz, ix
+	ld	(xiz+ix), w
 	calr	CPanel_IncEventPtr
 	ld	(36088:16), w
-	ld_rrb	a, xde, iy
+	ld	a, (xde+iy)
 	calr	CPanel_IncRXPtr
 	ld	(36089:16), a
 	ld	c, w
@@ -1239,7 +1239,7 @@ MBytePkt_EncWriteResult:
 MBytePkt_WriteEventByte:
 
 c:
-	st_rrb a, xiz, ix
+	ld	(xiz+ix), a
 	calr CPanel_IncEventPtr
 	bit 4, w
 	jr nz, MBytePkt_EncFFMarker
@@ -1387,9 +1387,9 @@ CPanel_LED_HandlePacketN:	; FC4BC5 -- LED handler for packet type 3
 	incw 1, (xiz - 2)		; increment pending LED byte count
 
 CPanel_LED_HandlePacketN__loop:
-	ld_rrb	a, xiz, ix
+	ld	a, (xiz+ix)
 	calr	ToneGen_IncrementWrap128
-	st_rrb	a, xde, iy
+	ld	(xde+iy), a
 	calr	CPanel_IncLEDPtr
 	ld	(xiz-8), ix
 	incw	1, (xiz-2)

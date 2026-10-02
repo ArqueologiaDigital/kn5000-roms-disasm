@@ -1270,7 +1270,7 @@ DrawText_ExtendedLayout_Skip:
 	and	a, 15
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
-	ld_rrb	c, xbc, wa
+	ld	c, (xbc+wa)
 	extz	bc
 	extz	xbc
 	lda	xwa, (xsp+276)
@@ -1344,7 +1344,7 @@ DrawFunc_Init_PushFontAndDraw:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
-	ld_rrl	xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1454,7 +1454,7 @@ DrawFunc_Init_Join4:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
-	ld_rrl	xhl, xbc, wa
+	ld	xhl, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1572,7 +1572,7 @@ AccDraw_Secondary_Helper20_Join:
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld	xhl, 0:i3
-	ld_rrb	l, xbc, wa
+	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1671,7 +1671,7 @@ AccDraw_Secondary_Helper20_Join5:
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld	xhl, 0:i3
-	ld_rrb	l, xbc, wa
+	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1725,7 +1725,7 @@ AccDraw_Secondary_Helper20_Join7:
 	extz	wa
 	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld	xhl, 0:i3
-	ld_rrb	l, xbc, wa
+	ld	l, (xbc+wa)
 	lda	xwa, (xsp+264)
 	lda	xbc, (xsp+260)
 	lda	xde, (xsp+4)
@@ -1841,7 +1841,7 @@ ColorBlit_Variant_ByteData_Skip2:
 	extz	hl
 	add	hl, hl
 	ld	xbc, (xbc+7)
-	lda_rr xde, xbc, hl
+	lda	xde, (xbc+hl)
 	lda xwa, (xsp)
 	ld	bc, (xde)
 	ld	(xwa), bc
@@ -2207,7 +2207,7 @@ FontGlyph_ByteData:
 	ld	a, (xwa)
 	extz	wa
 	lda	xde, (TextRender_CharEncodeAndDraw_Data:24)
-	ld_rrb	a, xde, wa
+	ld	a, (xde+wa)
 	ld	(xbc), a
 	ret
 SeMenu_CopyWriteUpdate_Helper19:
@@ -4000,7 +4000,7 @@ PmBank_DrawRegionInfo:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_05:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw SoundCheck_Text@hi16
 	pushw SoundCheck_Text@lo16
@@ -5145,9 +5145,9 @@ MainSysControl:
 	jr	gt, MainSysControl_PostDispatchFinalize
 	add	wa, wa
 	lda	xix, (MainSysControl_Data:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (MainSysCtrl_DispatchTable:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 MainSysCtrl_DispatchTable:
 	ld	wa, 2:i3
 	call	Boot_InitPeripherals_Helper
@@ -5319,7 +5319,7 @@ AcFreeSplit_LookupNoteLabel:
 	divs	hl, 12
 	sla	hl, 2
 	lda	xbc, (AcFreeSplit_LookupNoteLabel_Data:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 16769
 	call	AcApcToggleProc_Helper
@@ -5328,7 +5328,7 @@ AcFreeSplit_LookupNoteLabel:
 	ld	wa, qhl
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_06:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts@hi16
 	pushw	AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts@lo16
@@ -5363,7 +5363,7 @@ AcFreeSplit_LookupSecondNote:
 	divs	hl, 12
 	sla	hl, 2
 	lda	xbc, (AcFreeSplit_LookupNoteLabel_Data:24)
-	ld_rrl	xwa, xbc, hl
+	ld	xwa, (xbc+hl)
 	push	xwa
 	ld	xwa, 16769
 	call	AcApcToggleProc_Helper
@@ -5372,7 +5372,7 @@ AcFreeSplit_LookupSecondNote:
 	ld	wa, qhl
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_06:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw	AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts@hi16
 	pushw	AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts@lo16

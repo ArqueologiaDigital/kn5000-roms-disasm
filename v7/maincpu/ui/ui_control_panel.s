@@ -18,7 +18,7 @@ ParaLoadOpt_BuildFromIZ1:
 	ld	a, (xiz+1)
 	extz	wa
 	sla	wa, 2
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
@@ -34,7 +34,7 @@ ParaLoadOpt_BuildFromIZ2:
 	extz	bc
 	sla	bc, 2
 	ld	xwa, (xsp+4)
-	ld_rrl	xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	push	xwa
 	ld	xwa, (xsp+20)
 	push	xwa
@@ -1964,7 +1964,7 @@ UIState_KeyScan_Dispatch:
 	extz wa
 	sla wa, 2
 	lda xbc, (SSF_PresentationGateTable:24)
-	ld_rrl xix, xbc, wa
+	ld	xix, (xbc+wa)
 	or xix, xix
 	ret z
 	cpw (xix), 65534

@@ -37,7 +37,7 @@ FDemoText_ByteData_VoiceProbeA:
 	ret	nz
 FDemoText_ByteData_VoiceProbeA_Skip:
 	lda	xbc, (FDemoText_ByteData_VoiceProbeA_Data:24)
-	ld_rrb a, xbc, wa
+	ld	a, (xbc+wa)
 	or (149486:24), a
 	ret
 FDemoText_ByteData_VoiceProbeA_Skip2:
@@ -48,7 +48,7 @@ FDemoText_ByteData_VoiceProbeA_Skip2:
 	ld	a, (0xc080:16)
 	extz	wa
 	lda	xbc, (FDemoText_ByteData_VoiceProbeA_Data:24)
-	ld_rrb a, xbc, wa
+	ld	a, (xbc+wa)
 	or (149490:24), a
 	ret
 FDemoText_ByteData_VoiceProbeB:
@@ -72,9 +72,9 @@ FDemoText_ByteData_VoiceProbeC:
 	ret	gt
 	add	wa, wa
 	lda	xix, (FDemoText_ByteData_VoiceProbeC_Data_3:24)
-	ld_rrw	wa, xix, wa
+	ld	wa, (xix+wa)
 	lda	xix, (FDemoText_ByteData_VoiceProbeC_Code:24)
-	jp_rr	8, xix, wa
+	jp	t, (xix+wa)
 FDemoText_ByteData_VoiceProbeC_Code:
 	set	6, (0x247ec:24)
 	ret
@@ -86,7 +86,7 @@ FDemoText_ByteData_VoiceProbeC_Code:
 	ld	a, e
 	extz	wa
 	lda	xbc, (FDemoText_ByteData_VoiceProbeC_Data:24)
-	ld_rrb a, xbc, wa
+	ld	a, (xbc+wa)
 	or (149484:24), a
 FDemoText_ByteData_VoiceProbeC_Skip:
 	ld a, (49279:16)
@@ -95,7 +95,7 @@ FDemoText_ByteData_VoiceProbeC_Skip:
 	ld	xwa, FDemoText_ByteData_VoiceProbeC_Data_2
 FDemoText_ByteData_VoiceProbeC_Join:
 	extz	de
-	ld_rrb a, xwa, de
+	ld	a, (xwa+de)
 	or (149484:24), a
 	ret
 
@@ -1342,7 +1342,7 @@ FDemoText_ByteData_DisplayRefresh_Skip5:
 	jrl	FDemoText_ByteData_DisplayRefresh_Epilogue3
 FDemoText_ByteData_DisplayRefresh_Skip6:
 	ld	xbc, (xsp+12)
-	ld_rrb a, xbc, iz
+	ld	a, (xbc+iz)
 	extz wa
 	cp	wa, hl
 	jr	nz, Seq_LoadDisplayResource_Helper_Loop3
@@ -1407,7 +1407,7 @@ FDemoText_ByteData_DisplayRefresh_Skip9:
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue3
 Seq_LoadDisplayResource_Helper_Skip3:
 	ld	xbc, (xsp+28)
-	ld_rrb a, xbc, iz
+	ld	a, (xbc+iz)
 	extz wa
 	cp	wa, hl
 	jr	nz, Seq_LoadDisplayResource_Helper_Loop5
@@ -1719,7 +1719,7 @@ FDemoText_ByteData_TextRenderer:
 	jr	z, FDemoText_ByteData_TextRenderer_Skip2
 FDemoText_ByteData_TextRenderer_Loop:
 	ld	xde, (xsp+2)
-	lda_rr xwa, xde, iz
+	lda	xwa, (xde+iz)
 	ld xbc, xwa
 	cp	(xwa), 61
 	jr	nz, FDemoText_ByteData_TextRenderer_Skip3
@@ -1731,13 +1731,13 @@ FDemoText_ByteData_TextRenderer_Loop:
 	inc	8, xsp
 	inc	1, iz
 	ld	xde, (xsp+2)
-	lda_rr xwa, xde, iz
+	lda	xwa, (xde+iz)
 	ld xbc, xwa
 	ld	a, (xwa)
 	cp	a, 34
 	jr	nz, FDemoText_ByteData_TextRenderer_Skip
 	inc	1, iz
-	lda_rr xwa, xde, iz
+	lda	xwa, (xde+iz)
 	push xwa
 	ld xwa, (xsp+22)
 	push xwa
@@ -1849,7 +1849,7 @@ FDemoText_TextDispatch_Join2:
 	ld bc, qiz
 	sla bc, 2
 	lda	xwa, (FileType_NameTable:24)
-	ld_rrl	xbc, xwa, bc
+	ld	xbc, (xwa+bc)
 	cp	(xbc), 0
 	jr	nz, FDemoText_TextDispatch_Loop5
 	inc	1, iz
@@ -1997,7 +1997,7 @@ FDemoText_TextDispatch_Join7:
 	ld bc, qiz
 	sla bc, 2
 	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable:24)
-	ld_rrl	xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop7
 	incw	1, (xsp+4)
@@ -2039,7 +2039,7 @@ FDemoText_TextDispatch_Skip14:
 	sla	bc, 2
 	lda	xde, (0x024fd8:24)
 	ld	xwa, (0x0249d4:24)
-	st_rrl xwa, xde, bc
+	ld	(xde+bc), xwa
 FDemoText_TextDispatch_Join4:
 	ld hl, 0:i3
 	pop xiz
@@ -2103,12 +2103,12 @@ FDemoText_TextDispatch_Skip19:
 	ld	wa, (0x025b3e:24)
 	sla	wa, 2
 	lda	xbc, (0x025b40:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	ld	(xsp+0x4), xwa
 	ld	wa, (0x25b60:24)
 	sla	wa, 1
 	lda	xbc, (0x25b62:24)
-	ld_rrw	wa, xbc, wa
+	ld	wa, (xbc+wa)
 	ld	(xsp+0x8), wa
 	ld	iz, 0:i3
 	cpw	(xsp+0x94), 0
@@ -2145,7 +2145,7 @@ FDemoText_TextDispatch_Loop9:
 	jr	gt, FDemoText_TextDispatch_Skip8
 	sla	hl, 2
 	lda	xwa, (FDemoText_ByteData_LayoutEngine_Data_4:24)
-	ld_rrl	xwa, xwa, hl
+	ld	xwa, (xwa+hl)
 	ld	(xsp+0x4), xwa
 	jr	FDemoText_TextDispatch_Skip8
 FDemoText_TextDispatch_Skip20:
@@ -2163,7 +2163,7 @@ FDemoText_TextDispatch_Join8:
 	ld bc, qiz
 	sla bc, 2
 	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable_2:24)
-	ld_rrl	xwa, xwa, bc
+	ld	xwa, (xwa+bc)
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop9
 	inc	1, iz
@@ -2185,12 +2185,12 @@ FDemoText_TextDispatch_Skip21:
 	sla	bc, 2
 	lda	xde, (0x025b40:24)
 	ld	xwa, (xsp+4)
-	st_rrl	xwa, xde, bc
+	ld	(xde+bc), xwa
 	ld	bc, (0x25b60:24)
 	sla	bc, 1
 	lda	xde, (0x025b62:24)
 	ld	wa, (xsp+8)
-	st_rrw wa, xde, bc
+	ld	(xde+bc), wa
 FDemoText_TextDispatch_Skip22:
 	ld	hl, 0:i3
 	pop	xiz
@@ -2213,7 +2213,7 @@ FDemoText_TextDispatch_Skip23:
 	sla	bc, 2
 	lda	xde, (0x025b40:24)
 	ld	xwa, 5:i3
-	st_rrl	xwa, xde, bc
+	ld	(xde+bc), xwa
 	ld	wa, (0x25b60:24)
 	sla	wa, 1
 	lda	xbc, (0x25b62:24)
@@ -2285,7 +2285,7 @@ FDemoText_TextDispatch_Join9:
 	ld bc, qiz
 	sla bc, 2
 	lda	xwa, (ImgAttr_NameTable:24)
-	ld_rrl	xbc, xwa, bc
+	ld	xbc, (xwa+bc)
 	cp	(xbc), 0
 	jr	nz, FDemoText_TextDispatch_Loop13
 	inc	1, iz
@@ -2355,7 +2355,7 @@ FDemoText_TextDispatch_Join5:
 	ld bc, qiz
 	sla bc, 2
 	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable_3:24)
-	ld_rrl	xbc, xwa, bc
+	ld	xbc, (xwa+bc)
 	cp	(xbc), 0
 	jr	nz, FDemoText_TextDispatch_Loop11
 	inc	1, iz
@@ -2727,13 +2727,13 @@ FDemoText_ByteData_LayoutB:
 	ld	wa, (0x025b3e:24)
 	sla	wa, 2
 	lda	xbc, (0x025b40:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	call	GetCharHeight
 	ld	iz, hl
 	ld	wa, (0x025b3e:24)
 	sla	wa, 2
 	lda	xbc, (0x025b40:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	call	GetCharDescent
 	sub	iz, hl
 	lda	xde, (0x025b3c:24)
@@ -2772,7 +2772,7 @@ FDemoText_RenderTextLine_Join:
 	calr	FDemoText_CalcTextExtent
 	lda	xbc, (0x025b74:24)
 	ld	wa, (0x025b72:24)
-	ld_rrb a, xbc, wa
+	ld	a, (xbc+wa)
 	lda xbc, (xsp+8)
 	cp a, 2:i3
 	jr z, FDemoText_RenderTextLine_Skip2

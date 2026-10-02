@@ -999,7 +999,7 @@ DiskInfo_RenderStrings:
 	ld	wa, (33892:16)
 	sla	wa, 2
 	lda	xbc, (DiskType_CodeTable:24)
-	ld_rrl	xbc, xbc, wa
+	ld	xbc, (xbc+wa)
 	ld	xwa, 34610
 	call	FileIO_CopyString
 	ld	xwa, 34610

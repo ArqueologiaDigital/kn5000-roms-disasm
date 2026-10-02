@@ -846,7 +846,7 @@ RVari_ConfirmF_Item_Draw:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_04:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@hi16
 	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@lo16
@@ -1379,7 +1379,7 @@ RVari_EnumNotifyF_Item_Draw:
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (ParamStr_Table_04:24)
-	ld_rrl	xwa, xbc, wa
+	ld	xwa, (xbc+wa)
 	push	xwa
 	pushw RVari_EnumNotifyF_Item_Draw_Str_Fmts@hi16
 	pushw RVari_EnumNotifyF_Item_Draw_Str_Fmts@lo16

@@ -102,7 +102,7 @@ SetWall_UpdateSlotIndex_Sub:
 	xor	w, w
 	ld	a, (3295:16)
 	ld	iy, wa
-	ld_rrb a, xhl, iy
+	ld	a, (xhl+iy)
 	cp a, 13
 	jr	z, 17
 	cp	a, 16
@@ -632,7 +632,7 @@ SetWall_InlineCodeBlock2:
 	ld	iy, wa
 	push	xde
 	ld	xde, 0xf1a0
-	ld_rrb a, xde, iy
+	ld	a, (xde+iy)
 	pop xde
 	cp a, (10355:16)
 	jr	nz, SetWall_InlineCodeBlock2_Skip
@@ -643,14 +643,14 @@ SetWall_InlineCodeBlock2_Skip:
 	ld	iy, wa
 	push	xde
 	ld	xde, SetWall_InlineCodeBlock_0xCD
-	ld_rrb c, xde, iy
+	ld	c, (xde+iy)
 	ld a, (3295:16)
 	ld iy, wa
 	ld	xde, 0xf1a0
-	ld_rrb a, xde, iy
+	ld	a, (xde+iy)
 	ld iy, wa
 	ld	xde, SetWall_InlineCodeBlock_0xCD
-	ld_rrb a, xde, iy
+	ld	a, (xde+iy)
 	pop xde
 	and	a, c
 	cp	a, 0:i3
@@ -1978,7 +1978,7 @@ SetWall_ForwardSkip_Loop2:
 	xor	bc, bc
 	ld	c, (0x286b:16)
 	ld	a, (0x286c:16)
-	st_rrb a, xix, bc
+	ld	(xix+bc), a
 	inc 1, bc
 	cp bc, 10
 	jr lt, SetWall_ForwardSkip_Loop2
@@ -2055,7 +2055,7 @@ SetWall_MiscDataAndCode_Join:
 	xor	xbc, xbc
 	xor	de, de
 SetWall_MiscDataAndCode_Loop:
-	ld_rrb	a, xix, de
+	ld	a, (xix+de)
 	bit	7, a
 	jr	z, SetWall_MiscDataAndCode_Skip4
 	push	xbc
@@ -2090,7 +2090,7 @@ SetWall_MiscDataAndCode_Data:
 	.byte 0xe7, 0x34, 0xa8
 	ld	wa, de
 	inc	1, wa
-	ld_rrw	hl, xix, wa
+	ld	hl, (xix+wa)
 	cp	hl, 65535
 	jr	z, SetWall_MiscDataAndCode_Return2
 	push	xhl
