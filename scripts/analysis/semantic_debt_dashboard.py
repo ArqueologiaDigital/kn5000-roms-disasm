@@ -34,7 +34,8 @@ COLUMNS (each is a count of source lines or tokens; lower is better)
            counted apart from numaddr rather than inflating it.
   numdata  numeric addresses inside the tree's own ROM in DATA: values on `.long` / `.4byte`
            lines (`.long 0x00EB2AAE` in a pointer table) and absolute address constants
-           (`.set BmpFile_i18_bmp, 0xeb2a16`).  numaddr above sees instruction operands only;
+           written `.set` (`.set BmpFile_i18_bmp, 0xeb2a16`; a hand-written `.equ` names a
+           hardware constant and is not counted).  numaddr above sees instruction operands only;
            this column was added on 2026-10-02, when v10 held 1,028 such `.long` values and
            600 such constants (notes/data-pointer-symbolization-2026-10-02/).
   numfar   numeric FAR POINTERS into the tree's own ROM that the operand columns cannot see,
@@ -86,7 +87,10 @@ REG_ADDR_ARGS = {b"RegObjTable": (1, 2, 3), b"RegObjTabl": (1, 3), b"RegObjTable
                  b"RegTitle": (1,), b"RegModeHiLo": (1,), b"RegTitleHiLo": (1,)}
 NUMLIT = re.compile(rb'^(0x[0-9a-fA-F]+|\d+)$')
 DATALONG = re.compile(rb'^[ \t]*(?:[A-Za-z_.$][\w.$]*:)?[ \t]*\.(?:long|4byte)[ \t]+([^;\n]*)', re.M)
-ABSSET = re.compile(rb'^[ \t]*\.(?:set|equ)[ \t]+[A-Za-z_]\w*[ \t]*,[ \t]*(0x[0-9a-fA-F]+)[ \t]*(?:;.*)?$', re.M)
+# `.set` only: the conversion emitted its address constants as `.set NAME, 0xADDR`; a hand-written
+# `.equ` (TABLE_DATA_ROM__BASE_ADDR, TD_FLASH_BASE, a flash command word that merely falls in the
+# range) names a hardware constant and is not debt.
+ABSSET = re.compile(rb'^[ \t]*\.set[ \t]+[A-Za-z_]\w*[ \t]*,[ \t]*(0x[0-9a-fA-F]+)[ \t]*(?:;.*)?$', re.M)
 POSALIAS = re.compile(rb'^\s*\.(?:set|equ)\s+[A-Za-z_][\w.$]*_0x[0-9A-Fa-f]+\s*,\s*[A-Za-z_][\w.$]*\s*\+', re.M)
 FIELD = re.compile(rb'\b(?:field|unk|unknown|pad)_(?:0x)?[0-9A-Fa-f]{2,6}\b')
 TODO = re.compile(rb'(?:;|//|/\*|#).*?(?:\bTODO\b|\bFIXME\b|\bunknown\b|\bpurpose unknown\b|\?\?\?)', re.I)
