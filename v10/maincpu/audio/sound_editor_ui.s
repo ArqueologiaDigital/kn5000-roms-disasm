@@ -14973,7 +14973,7 @@ S2cGridCheck:
 	add xwa, StrBeatOff_0x4
 	ld wa, (xwa)
 	lda xix, (S2c_GridCheck_DataBlock:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 S2c_GridCheck_DataBlock:
 	call	GetFocusObject
@@ -16342,7 +16342,7 @@ AcEasyCmpGridBoxProc:
 	add xbc, StyleVarGrp_AEnd2b_0x2
 	ld bc, (xbc)
 	lda xix, (EasyCmp_DialGrid:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; EasyCmp dial grid dispatch (7-entry, table 0xe1de4c)
 EasyCmp_DialGrid:
@@ -16557,7 +16557,7 @@ EasyCmpGridCheck:
 	add xwa, StrGenre_8Beat_0x1A
 	ld wa, (xwa)
 	lda xix, (EasyCmp_GridCheck_DataBlock:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 EasyCmp_GridCheck_DataBlock:
 	call	GetFocusObject
@@ -16705,7 +16705,7 @@ MspNameBnkFunc:
 	add xwa, StrBankShort_User1_0xA
 	ld wa, (xwa)
 	lda xix, (EasyCmp_GridEvtCase_Default:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 EasyCmp_GridEvtCase_Default:
 	ld	xwa, (xde+14)
@@ -17568,7 +17568,7 @@ MspRGrpSetGridCheck:
 	add xwa, StrMsBankLong2_Effect1_0x18
 	ld wa, (xwa)
 	lda xix, (MspRGrpSetGridCheck_DataBlock:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 MspRGrpSetGridCheck_DataBlock:
 	call	GetFocusObject
@@ -18108,7 +18108,7 @@ MspPlayModeFunc:
 	add xwa, StrInstantStart_0x12
 	ld wa, (xwa)
 	lda xix, (MspPlayModeFunc_DataBlock:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 MspPlayModeFunc_DataBlock:
 	ld	wa, 0:i3
@@ -18187,7 +18187,7 @@ AcSndArgGridBoxProc:
 	add xwa, StrInstantStart_0x2C
 	ld wa, (xwa)
 	lda xix, (AcSndArgGrid_Init:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 AcSndArgGrid_Init:
 	ld xwa, (xsp + 22)
@@ -18535,7 +18535,7 @@ SndArgGridCheck:
 	add xwa, StrInstantStart_0x3A
 	ld wa, (xwa)
 	lda xix, (SndArgGridCheck_JumpTableFallthrough:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SndArgGridCheck_JumpTableFallthrough:
 	jrl	t, SndArgGridCheck_Return
@@ -18909,7 +18909,7 @@ StylCnvStorBnkSel:
 	add xde, MsgBox_AttentionHeader
 	ld de, (xde)
 	lda xix, (StylCnvStorBnkSel_DataBlock:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 
 StylCnvStorBnkSel_DataBlock:
 	ld	xwa, (xhl+14)

@@ -169,7 +169,7 @@ MIDI_QUEUE_TRACK_EVENT:
 	and wa, wa
 	jr	z, QueueTrack_FifoWriteOrClear
 	ld hl, (xix - 4)
-	stib_ind 0x07, 0xf0, 0xec, 0x81
+	ld	(xix+hl), 0x81
 	minc1_16 hl, 0x7ff
 	dec 1, wa
 	ld (xix - 4), hl
@@ -181,7 +181,7 @@ QueueTrack_FifoWriteOrClear:
 QueueTrack_LinearBufWrite:
 	ld xix, 0x477
 	ld hl, (1141:16)
-	stib_ind 0x07, 0xf0, 0xec, 0x81
+	ld	(xix+hl), 0x81
 	inc 1, hl
 	ld (1141:16), hl
 	ret
@@ -545,7 +545,7 @@ MidiSerial_PumpDone:
 	call	MidiStream_LoadAllPresets
 	ld	xix, 0xbca0
 	ld	hl, (0x9042:16)
-	stib_ind 0x07, 0xf0, 0xec, 0xff
+	ld	(xix+hl), 0xff
 MidiSerial_Return:
 	ret
 ; MidiSerial_StatusTable -- one 0xFF pad byte, then 8 handler pointers indexed by

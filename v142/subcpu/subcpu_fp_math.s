@@ -3119,7 +3119,7 @@ FP_trunc_ForwardScan:
 
 ; Zero the bytes above the retained integer bits.
 FP_trunc_FillPad:
-	stib_ind 0x07, 0xF0, 0xE0, 0x00
+	ld	(xix+wa), 0x00
 	dec 1, wa
 	cp wa, iy
 	jr gt, FP_trunc_FillPad

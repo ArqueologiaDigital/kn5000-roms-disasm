@@ -4197,13 +4197,13 @@ BmDrEdit_CalcEventPos_IncrementSearch:
 	jr ge, BmDrEdit_CalcEventPos_InitBackward
 
 BmDrEdit_CalcEventPos_CompareLoop:
-	cpb_sri_rm E, 0x07, 0xe4, 0xec
+	cp	e, (xbc+hl)
 	jr nz, BmDrEdit_CalcEventPos_IncrementSearch
 
 BmDrEdit_CalcEventPos_InitBackward:
 	ld de, 0:i3
 	dec 1, hl
-	cpib_sri 0x07, 0xe4, 0xec, 0x00
+	cp	(xbc+hl), 0x00
 	jr z, BmDrEdit_CalcEventPos_CheckZero
 	jr BmDrEdit_StoreEventPositionAndReturn
 
@@ -4213,7 +4213,7 @@ BmDrEdit_CalcEventPos_BackwardLoop:
 	jr lt, BmDrEdit_StoreEventPositionAndReturn
 
 BmDrEdit_CalcEventPos_CheckZero:
-	cpib_sri 0x07, 0xe4, 0xec, 0x00
+	cp	(xbc+hl), 0x00
 	jr z, BmDrEdit_CalcEventPos_BackwardLoop
 
 BmDrEdit_StoreEventPositionAndReturn:

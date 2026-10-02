@@ -729,7 +729,7 @@ GetEditSwPoint:
 	lda xix, (DiskWarning_ConfirmStrings_0xE70:24)
 	ld	hl, (xix+hl)
 	lda xix, (EditSwParam_Mode0:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 
 ; GetEditSwPoint handler: mode 0 (value=0x2b)
 EditSwParam_Mode0:
@@ -822,7 +822,7 @@ SetWallPaper:
 	lda xix, (DiskWarning_ConfirmStrings_0xE8A:24)
 	ld	wa, (xix+wa)
 	lda xix, (SetWallPaper_DispatchData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SetWallPaper_DispatchData:
 	cpw	(0x0340fe:24), 0
@@ -1118,7 +1118,7 @@ IvDirmdScreenProc:
 	add xbc, IvDirmdScreenProc_Str_K
 	ld bc, (xbc)
 	lda xix, (DirmdEmu_CaseB:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; DirmdEmulator dispatch case B
 DirmdEmu_CaseB:
@@ -1311,7 +1311,7 @@ DirmdEmulator:
 	add xbc, DiskWarning_ConfirmStrings_0xF12
 	ld bc, (xbc)
 	lda xix, (DirmdEmulator_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 DirmdEmulator_Dispatch:
 	push	xde
 	push	xhl
@@ -1458,7 +1458,7 @@ WindowProc:
 	add xbc, DiskWarning_ConfirmStrings_0xF32
 	ld bc, (xbc)
 	lda xix, (WindowProc_EventDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; WindowProc event dispatch
 WindowProc_EventDispatch:
 	ld	xwa, (xsp+24)

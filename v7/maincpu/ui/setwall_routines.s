@@ -866,7 +866,7 @@ SetWall_ParseStream_ReadEvent:
 	jrl nz, SetWall_ParseStream_Return
 	push xde
 	ld xde, (4349:16)
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jrl nz, SetWall_ParseStream_MainLoop
 	push xde
@@ -929,7 +929,7 @@ SetWall_ParseStream_C0_Read:
 	inc 1, c
 	push xde
 	ld xde, (4349:16)
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jrl nz, SetWall_ParseStream_MainLoop
 	push xde
@@ -1036,7 +1036,7 @@ SetWall_ParseStream_B0_Write:
 	inc 1, c
 	push xde
 	ld xde, (4349:16)
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jrl nz, SetWall_ParseStream_MainLoop
 	push xde
@@ -1472,9 +1472,9 @@ SetWall_FullReset_SlotLoop:
 	xor iy, iy
 
 SetWall_FullReset_VoiceLoop:
-	stib_ind 0x07, 0xe0, 0xf4, 0x00
+	ld	(xwa+iy), 0x00
 	inc 1, iy
-	stiw_ind 0x07, 0xe0, 0xf4, 0xff, 0xff
+	ldw	(xwa+iy), 0xffff
 	inc 2, iy
 	cp iy, 0x30
 	jr c, SetWall_FullReset_VoiceLoop
@@ -1533,7 +1533,7 @@ SetWall_SingleSlotResolve:
 	ld iy, wa
 	push xde
 	ld xde, 0xf250
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jr nz, SetWall_SingleSlot_LoadPos
 	ld (0x287a:16), 1
@@ -1902,15 +1902,15 @@ SetWall_ForwardSkip_Loop:
 	cp (0x288e:16), c
 	jr z, SetWall_ForwardSkip_TargetFound
 	ld xhl, (4349:16)
-	cpib_sri 0x07, 0xec, 0xf4, 0x82
+	cp	(xhl+iy), 0x82
 	jr nz, SetWall_ForwardSkip_CheckType
 	or (0x287b:16), 32
 	jr SetWall_ForwardSkip_Return
 
 SetWall_ForwardSkip_CheckType:
-	cpib_sri 0x07, 0xec, 0xf4, 0x81
+	cp	(xhl+iy), 0x81
 	jr z, SetWall_ForwardSkip_Type81
-	cpib_sri 0x07, 0xec, 0xf4, 0x84
+	cp	(xhl+iy), 0x84
 	jr z, SetWall_ForwardSkip_Type84
 	call SetWall_StreamAdvanceBounded
 	cp (0x287a:16), 0
@@ -1932,13 +1932,13 @@ SetWall_ForwardSkip_Type81:
 
 SetWall_ForwardSkip_TargetFound:
 	ld xhl, (4349:16)
-	cpib_sri 0x07, 0xec, 0xf4, 0x82
+	cp	(xhl+iy), 0x82
 	jr nz, SetWall_ForwardSkip_Check84
 	or (0x287b:16), 32
 	jr SetWall_ForwardSkip_Return
 
 SetWall_ForwardSkip_Check84:
-	cpib_sri 0x07, 0xec, 0xf4, 0x84
+	cp	(xhl+iy), 0x84
 	jr nz, SetWall_ForwardSkip_SaveState
 	ld iy, 5:i3
 	ld xhl, (0x288f:16)

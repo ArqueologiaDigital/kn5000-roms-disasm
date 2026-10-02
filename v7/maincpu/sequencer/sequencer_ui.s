@@ -932,7 +932,7 @@ SongEdit_OverflowCheck:
 
 	add wa, (xix)
 
-	stib_ind 0x07, 0xe4, 0xe0, 0x0d
+	ld	(xbc+wa), 0x0d
 
 	ld wa, (xix)
 
@@ -946,7 +946,7 @@ SongEdit_OverflowCheck:
 
 	add wa, (xix)
 
-	stib_ind 0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 
 	ld wa, (xix)
 
@@ -1095,14 +1095,14 @@ LyricsTrack_HandleSingleChar:
 	sla wa, 6
 	add wa, (xde)
 	lda xhl, (0x020cbe:24)
-	stib_ind 0x07, 0xec, 0xe0, 0x0d
+	ld	(xhl+wa), 0x0d
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
 	ld wa, (xbc)
 	sla wa, 6
 	add wa, (xde)
-	stib_ind 0x07, 0xec, 0xe0, 0x00
+	ld	(xhl+wa), 0x00
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
@@ -1236,7 +1236,7 @@ LyricsFile_CheckFirstByte:
 	ld de, (xbc + 2)
 	sla de, 6
 	add de, (xbc)
-	cpib_sri 0x07, 0xec, 0xe8, 0x0d
+	cp	(xhl+de), 0x0d
 	jrl z, LyricsFile_ResetBuffers
 	jrl LyricsBox_PopIzRet
 
@@ -1247,13 +1247,13 @@ LyricsFile_CheckLinefeed:
 	cp e, 0xa
 	jr nz, LyricsFile_InsertNormalChar
 	add wa, (xbc)
-	cpib_sri 0x07, 0xec, 0xe0, 0x0d
+	cp	(xhl+wa), 0x0d
 	jr z, LyricsFile_ResetBuffers
 	jr LyricsBox_PopIzRet
 
 LyricsFile_InsertNormalChar:
 	add wa, (xbc)
-	cpib_sri 0x07, 0xec, 0xe0, 0x0d
+	cp	(xhl+wa), 0x0d
 	call z, (LyricsTrack_ResetAllBuffers:24)
 	pushw 0x0002
 	pushw 0x0f4e
@@ -1285,7 +1285,7 @@ LyricsFile_InsertNormalChar:
 	sla bc, 6
 	add bc, (xwa)
 	lda xwa, (0x20cbe:24)
-	cpib_sri 0x07, 0xe0, 0xe4, 0x0d
+	cp	(xwa+bc), 0x0d
 	jr nz, LyricsBox_PopIzRet
 LyricsFile_ResetBuffers:
 	calr LyricsTrack_ResetAllBuffers
@@ -1396,14 +1396,14 @@ LyricsBoxFunc_HandleSingleChar:
 	sla wa, 6
 	add wa, (xde)
 	lda xhl, (0x020cbe:24)
-	stib_ind 0x07, 0xec, 0xe0, 0x0d
+	ld	(xhl+wa), 0x0d
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
 	ld wa, (xbc)
 	sla wa, 6
 	add wa, (xde)
-	stib_ind 0x07, 0xec, 0xe0, 0x00
+	ld	(xhl+wa), 0x00
 	ld wa, (xde)
 	inc 1, wa
 	ld (xde), wa
@@ -2608,7 +2608,7 @@ AcTrAsGridBoxProc:
 	add xbc, AcTrAsGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (TrAsGrid_HandleInit:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 TrAsGrid_HandleInit:
 	ld	xwa, 192
@@ -3096,7 +3096,7 @@ TrAsGridCheck:
 	add xwa, TrAsGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (TrAsGridCheck_Cases:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Case bodies of the `jp_ind` switch in TrAsGridCheck (events 0x1C00017-0x1C0001D; word offsets at TrAsGridCheck_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
@@ -3897,7 +3897,7 @@ SmfMuteChSelFunc:
 	add xbc, SmfMuteChSelFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (MuteChSel_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; SmfMuteChSelFunc dispatch
 MuteChSel_Dispatch:
 	ld	xwa, (xde+14)
@@ -3938,7 +3938,7 @@ SqTrAsPsSongFunc:
 	add xbc, SqTrAsPsSongFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (SqTrAsPsSong_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; SqTrAsPsSongFunc dispatch
 SqTrAsPsSong_Dispatch:
 	ld	xwa, (xde+14)
@@ -4028,7 +4028,7 @@ MuteChSetFunc:
 	add xwa, MuteChSetFunc_CaseTable
 	ld wa, (xwa)
 	lda xix, (MuteChSet_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; MuteChSetFunc dispatch
 MuteChSet_Dispatch:
@@ -4373,7 +4373,7 @@ DemoMedDspCheck:
 	add xwa, DemoMedDspCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (DemoMedDsp_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DemoMedDspCheck dispatch
 DemoMedDsp_Dispatch:
@@ -4421,7 +4421,7 @@ DPPlayDspCheck:
 	add xwa, DPPlayDspCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (DPPlayDsp_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DPPlayDspCheck dispatch
 DPPlayDsp_Dispatch:
@@ -4469,7 +4469,7 @@ DPPauseDspCheck:
 	add xwa, DPPauseDspCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (DPPauseDsp_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DPPauseDspCheck dispatch
 DPPauseDsp_Dispatch:
@@ -6099,7 +6099,7 @@ NoteEditBox_SetupGrid:
 	add xhl, NoteEditBox_SetupGrid_CaseTable
 	ld hl, (xhl)
 	lda xix, (NoteEditBox_EventDispatch1:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; NoteEditBoxProc event dispatch 1
 NoteEditBox_EventDispatch1:
 	ld	xwa, (xbc)
@@ -6168,7 +6168,7 @@ NoteEditBox_GridDispatch2:
 	add xwa, NoteEditBox_GridDispatch2_CaseTable
 	ld wa, (xwa)
 	lda xix, (NoteEditBox_EventDispatch2:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 NoteEditBox_EventDispatch2:
 	call	GetTitleNow
 	ld	(xsp+10), 3
@@ -6853,7 +6853,7 @@ NoteEdit_FormatEntry:
 	ld xix, NoteEdit_FormatEntry_CaseTable
 	ld	wa, (xix+wa)
 	lda xix, (NoteEditBox_GridDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; NoteEditBoxProc grid check dispatch
 NoteEditBox_GridDispatch:
@@ -6904,7 +6904,7 @@ NoteEditFunc:
 	add xwa, NoteEditFunc_CaseTable
 	ld wa, (xwa)
 	lda xix, (NoteEdit_FormatTempo:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 NoteEdit_FormatTempo:
 	ld	xiz, xde
@@ -7085,7 +7085,7 @@ NoteEdit_GetParamValue:
 	add xde, NoteEdit_GetParamValue_CaseTable
 	ld de, (xde)
 	lda xix, (NoteEdit_GetParamValue_Cases:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; Case bodies of the `jp_ind` switch in NoteEdit_GetParamValue (xde-1 = 0..13; word offsets at NoteEdit_GetParamValue_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
@@ -7507,7 +7507,7 @@ AcEntertainerGridBoxProc:
 	add xbc, AcEntertainerGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (AcEntertainer_EventDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; AcEntertainerGridBoxProc event dispatch
 AcEntertainer_EventDispatch:
@@ -7794,7 +7794,7 @@ EntertainerGridCheck:
 	add xwa, EntertainerGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (SndParam_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 SndParam_Dispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7912,7 +7912,7 @@ SndParam_Dispatch_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	cpl_sri_rm xwa, 0x07, 0xf0, 0xf4
+	cp	xwa, (xix+iy)
 	jr	z, SndParam_Dispatch_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -8676,7 +8676,7 @@ SqplyVal_HandleExtraParams:
 	add xhl, SqplyVal_HandleExtraParams_CaseTable
 	ld hl, (xhl)
 	lda xix, (SqplyVal_ParamCases:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; Case bodies of the `jp_ind` switch in the SqplyVal handler above (index 0..7; word offsets at SqplyVal_HandleExtraParams_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
@@ -9110,7 +9110,7 @@ SqedtVal_ClearDrawBuffer:
 	add xwa, SqedtVal_ClearDrawBuffer_CaseTable
 	ld wa, (xwa)
 	lda xix, (SqedtVal_ParamCases:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Case bodies of the `jp_ind` switch in the SqedtVal handler above (index 0..14; word offsets at SqedtVal_ClearDrawBuffer_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
@@ -10767,7 +10767,7 @@ SqplyVal_ExtraParams:
 	add xhl, SqplyVal_ExtraParams_CaseTable
 	ld hl, (xhl)
 	lda xix, (AccIll_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; AccIll_HandleEditorLoad dispatch
 AccIll_Dispatch:
 	ld	xwa, (xbc)
@@ -12671,7 +12671,7 @@ EffectBox_NameSetup:
 	add xhl, EffectBox_NameSetup_CaseTable
 	ld hl, (xhl)
 	lda xix, (EffectBox_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; EffectBoxProc dispatch
 EffectBox_Dispatch:
 	ld	xwa, (xbc)
@@ -13220,7 +13220,7 @@ EffectBox_StateDispatch:
 	add xbc, EffectBox_StateDispatch_CaseTable
 	ld bc, (xbc)
 	lda xix, (SeqAccomp_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; SeqAccomp editor load dispatch
 SeqAccomp_Dispatch:
 	ld	xbc, EVT_GET_EQ1_STR
@@ -13727,7 +13727,7 @@ SqplyFunc:
 	add xhl, SqplyFunc_CaseTable
 	ld hl, (xhl)
 	lda xix, (SqplyFunc_FormatCases:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; Case bodies of the `jp_ind` switch in the SqplyFunc handler above (events 0x1E8003E-0x1E80047; word offsets at SqplyFunc_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
@@ -13920,7 +13920,7 @@ SqplyFunc_HandleGetValue:
 	add xwa, SqplyFunc_HandleGetValue_CaseTable
 	ld wa, (xwa)
 	lda xix, (SqplyFunc_GetValueDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SqplyFunc_GetValueDispatch:
 	ld xhl, 0:i3
@@ -14058,7 +14058,7 @@ SqplyFunc_HandlePartQuery:
 	lda xix, (SqplyFunc_HandlePartQuery_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SqplyFunc_PartQueryDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SqplyFunc_PartQueryDispatch:
 	ld	l, 1:opc
@@ -14116,7 +14116,7 @@ SqedtFunc:
 	add xde, SqedtFunc_CaseTable
 	ld de, (xde)
 	lda xix, (Sqedt_ParamDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; SqedtFunc parameter dispatch
 Sqedt_ParamDispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 406 of 484 slots byte-identical
@@ -14677,7 +14677,7 @@ SeqFunc_ReturnZeroJmp:
 	lda xix, (SeqFunc_ReturnZeroJmp_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (Sqedt_ValueDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; SqedtFunc value dispatch
 Sqedt_ValueDispatch:
@@ -14792,7 +14792,7 @@ SqedtFunc_SignExtend:
 	lda xix, (SqedtFunc_SignExtend_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SeqFormat_DispatchA:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Sequencer format dispatch A
 SeqFormat_DispatchA:
@@ -14906,7 +14906,7 @@ SqedtFunc_StateChainB:
 	lda xix, (SqedtFunc_StateChainB_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SeqFormat_DispatchB:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Sequencer format dispatch B
 SeqFormat_DispatchB:
@@ -15267,7 +15267,7 @@ DspItem0CngFunc:
 	add xiy, DspItem0CngFunc_CaseTable
 	ld iy, (xiy)
 	lda xix, (DspItem0_DisplayEffectName:24)
-	jp_ind 8, 0x07, 0xf0, 0xf4
+	jp	t, (xix+iy)
 
 DspItem0_DisplayEffectName:
 	ld	(xsp), xde
@@ -15411,7 +15411,7 @@ DspItem0_TypeChangeHandler:
 	add xde, DspItem0_TypeChangeHandler_CaseTable
 	ld de, (xde)
 	lda xix, (DspItem0_TypeDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 
 ; DspItem0 type change dispatch
 DspItem0_TypeDispatch:
@@ -15512,7 +15512,7 @@ EqualizerCngFunc:
 	add xwa, EqualizerCngFunc_CaseTable
 	ld wa, (xwa)
 	lda xix, (Equalizer_DispatchA:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; EqualizerCngFunc dispatch A
 Equalizer_DispatchA:
@@ -15528,7 +15528,7 @@ Equalizer_DispatchA:
 	add xwa, Equalizer_DispatchA_CaseTable
 	ld wa, (xwa)
 	lda xix, (Equalizer_DispatchB:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; --- EQ_7Band_ParamLookup: Look up equalizer parameters for 7 frequency bands ---
 ; Seven entry points, one per EQ band. Each reads a 16-bit index from
@@ -15720,7 +15720,7 @@ Equalizer_CmdDispatch:
 	add xwa, Equalizer_CmdDispatch_CaseTable
 	ld wa, (xwa)
 	lda xix, (Equalizer_CmdCase0:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Equalizer command case 0
 Equalizer_CmdCase0:
@@ -15834,7 +15834,7 @@ Equalizer_FormatDispatch:
 	ld xix, Equalizer_FormatDispatch_CaseTable
 	ld	wa, (xix+wa)
 	lda xix, (Equalizer_FormatCases:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Case bodies of the `jp_ind` switch in Equalizer_FormatDispatch (word offsets at Equalizer_FormatDispatch_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
@@ -15934,7 +15934,7 @@ Equalizer_CopyFixedString:
 	jr	Equalizer_PadSpaceAndReturn
 PrepareAudioParam:
 	add bc, bc
-	push_sriw 0x07, 0xe8, 0xe4
+	pushw	(xde+bc)
 	ld xwa, PrepareAudioParam_Str
 
 SendAudioCommand:

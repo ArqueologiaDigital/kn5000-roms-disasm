@@ -683,7 +683,7 @@ AudioInit_CheckVoiceChanged:
 	ld	a, d
 	extz	wa
 	lda	xix, (AudioInit_VoiceDispatch_Table_0x1AA:24)
-	cpib_sri	0x07, 0xf0, 0xe0, 0xff
+	cp	(xix+wa), 0xff
 	jr	z, AudioInit_VoiceUnchanged
 	ld	a, e
 	extz	wa
@@ -1004,7 +1004,7 @@ AudioInit_CheckExternalBit3:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
-	or_sriw_rm	DE, 0x07, 0xe4, 0xe0
+	or	de, (xbc+wa)
 	jr	AudioInit_ApplyOutputRouting
 AudioInit_NoTypeE_CheckD:
 	ld	wa, (0xc4fc:16)
@@ -1017,7 +1017,7 @@ AudioInit_NoTypeE_CheckD:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0x130:24)
-	or_sriw_rm	DE, 0x07, 0xe4, 0xe0
+	or	de, (xbc+wa)
 	jr	AudioInit_ApplyOutputRouting
 AudioInit_DefaultOutputRouting:
 	ld	a, (0xfc5d:16)

@@ -527,7 +527,7 @@ AcFadeSetGridBoxProc:
 	add xbc, AcFadeSetGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (VoiceParam_ListHandler:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; Voice parameter list handler
 VoiceParam_ListHandler:
@@ -782,7 +782,7 @@ FadeSetGridCheck:
 	add xwa, FadeSetGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (Data_FadeSetGridDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 Data_FadeSetGridDispatch:
 	call	GetFocusObject
@@ -844,7 +844,7 @@ FadeSetGridCheck_Loop:
 	ld	iy, bc
 	sla	iy, 2
 	ld	xwa, (xiz)
-	.byte 0xe3, 0x07, 0xf0, 0xf4, 0xf0	; cp xwa,(xix+iy) -- the backend cannot spell this form
+	cp	xwa, (xix+iy)	; the backend cannot spell this form
 	jr	z, FadeSetGridCheck_Skip4
 	inc	1, bc
 	ld	(xde), bc
@@ -1015,7 +1015,7 @@ AcInOutGridBoxProc:
 	add xbc, AcInOutGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (AcInOutGrid_Init:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 AcInOutGrid_Init:
 	ld xwa, (xsp + 16)
@@ -1305,7 +1305,7 @@ InOutGridCheck:
 	add xwa, InOutGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (Data_InOutGridDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 Data_InOutGridDispatch:
 	call	GetFocusObject
@@ -1699,7 +1699,7 @@ ParaLoadOpt_Entry:
 	lda xix, (Data_InOutGridDispatch_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (Data_ParaLoadOptDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 Data_ParaLoadOptDispatch:
 	ld	xwa, 8448

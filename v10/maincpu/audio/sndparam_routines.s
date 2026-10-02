@@ -961,7 +961,7 @@ SndParam_ReadRegBitfield:
 	extz bc
 	ld de, bc
 	inc 1, de
-	bit_dri 2, 0x07, 0xf0, 0xe8
+	bit	2, (xix+de)
 	jr nz, SndParam_BitfieldPendingWrite
 	ld	l, (xix+bc)
 	ld c, (xwa + 6)

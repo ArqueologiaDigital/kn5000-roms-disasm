@@ -19,8 +19,14 @@ QUESTION THIS ANSWERS / JOB IT DOES
   the report says exactly which spellings the backend still lacks.  Every replacement is
   proven by step 4 before it is written; `make gate-all` proves the whole tree again.
 
+  --bytes: the same, for `.byte` lines that hold one instruction (CLAUDE.md "Native
+  Instructions Over .byte"): a `.byte` line of numbers whose comment starts with a mnemonic,
+  with CODE on both sides (the nearest non-blank, non-label lines before and after are
+  instructions), whose bytes unidasm reads as exactly one instruction of that mnemonic.  A
+  comment that only repeated the mnemonic is dropped; any other comment is kept.
+
 USAGE
-  python3 scripts/converters/respell_raw_pseudos.py --tree v10/maincpu [--apply] [--report OUT]
+  python3 scripts/converters/respell_raw_pseudos.py --tree v10/maincpu [--bytes] [--apply] [--report OUT]
 """
 import argparse
 import collections
@@ -38,6 +44,19 @@ MC = os.path.expanduser("~/compartilhado/llvm-project/build/bin/llvm-mc")
 UNIDASM = os.path.expanduser("~/compartilhado/tools/unidasm")
 REGS = set("a w b c d e h l wa bc de hl ix iy iz sp xwa xbc xde xhl xix xiy xiz xsp "
            "qwa qbc qde qhl qix qiy qiz qw qa qb qc qd qe qh ql ixl ixh iyl iyh izl izh".split())
+BYTES = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)\.byte(?P<ws>\s+)'
+                   r'(?P<ops>(?:0x[0-9a-fA-F]{1,2}|\d{1,3})(?:\s*,\s*(?:0x[0-9a-fA-F]{1,2}|\d{1,3}))*)'
+                   r'(?P<post>\s*;\s*(?:MAME:|unidasm:)?\s*(?P<cm>[a-z]+)\b.*)$', re.I)
+
+
+def line_kind(l):
+    c = l.split(";")[0].strip()
+    c = re.sub(r'^[A-Za-z_.$][\w.$]*:\s*', '', c)
+    if not c:
+        return "none"
+    return "data" if c.startswith(".") else "code"
+
+
 LINE = re.compile(r'^(?P<pre>\s*(?:[A-Za-z_.$][\w.$]*:)?\s*)(?P<mn>[a-z]\w*_(?:sri|dri|ind|sril)\w*)'
                   r'(?P<ws>\s+)(?P<ops>[^;]*?)(?P<post>\s*(?:;.*)?)$', re.I)
 
@@ -105,8 +124,9 @@ def candidates(text):
         return []
     mn, ops = m.group(1).lower(), m.group(2)
     ops = re.sub(r'\b([A-Z]{1,3}\d?)\b', lambda x: x.group(1).lower(), ops)
-    if mn == "jp" and ops.startswith("t,"):          # `jp T,XIX+WA` = jump through (xix+wa)
-        ops = ops[2:]
+    if mn in ("jp", "call") and re.match(r'^[a-z]+,\s*x\w\w\+', ops):
+        cc, rest = ops.split(",", 1)                    # `jp T,XIX+WA` = jp t, (xix+wa)
+        ops = "%s, (%s)" % (cc, rest.strip())
     if mn == "lda" and "," in ops and "(" not in ops.split(",", 1)[1]:
         a, b = ops.split(",", 1)
         ops = "%s,(%s)" % (a, b)
@@ -156,7 +176,10 @@ def main():
     ap.add_argument("--tree", required=True)
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--report")
+    ap.add_argument("--bytes", action="store_true", help="one-instruction .byte lines instead")
     a = ap.parse_args()
+    if a.bytes:
+        return bytes_mode(a)
     files = sorted(glob.glob(os.path.join(REPO, a.tree, "**", "*.s"), recursive=True))
     sites = []                                          # (file, line index, match)
     texts = {}
@@ -211,6 +234,82 @@ def main():
         print("  left: %4d unique  %s" % (n, form))
     if a.report:
         json.dump({"respelled": best, "left_forms": report}, open(a.report, "w"), indent=1)
+    return 0
+
+
+def comment_tail(post, cm, insn):
+    """What is left of a `.byte` line's comment once the instruction is written out: the
+    mnemonic, a restatement of the operands and a "[not in LLVM]" marker (now false) go."""
+    rest = re.sub(r'^\s*;\s*(?:MAME:|unidasm:)?\s*' + re.escape(cm) + r'\b', "", post).strip()
+    rest = re.sub(r'\s*[\[(]\s*not in LLVM\s*[\])]', "", rest, flags=re.I).strip()
+    ops = insn.split("\t", 1)[1] if "\t" in insn else ""
+    norm = lambda x: re.sub(r'[\s:]|0x0*', "", x.lower())
+    if ops and norm(rest).startswith(norm(ops)):
+        k, acc = 0, ""
+        while k < len(rest) and norm(acc) != norm(ops):
+            acc += rest[k]
+            k += 1
+        rest = rest[k:].strip(" ,;-")
+    return "\t; " + rest.lstrip("; ") if rest else ""
+
+
+def bytes_mode(a):
+    files = sorted(glob.glob(os.path.join(REPO, a.tree, "**", "*.s"), recursive=True))
+    sites, texts = [], {}
+    for f in files:
+        L = open(f, "rb").read().decode("latin-1").split("\n")
+        texts[f] = L
+        for i, l in enumerate(L):
+            m = BYTES.match(l)
+            if not m:
+                continue
+            j = i - 1
+            while j >= 0 and line_kind(L[j]) == "none":
+                j -= 1
+            k = i + 1
+            while k < len(L) and line_kind(L[k]) == "none":
+                k += 1
+            if j >= 0 and k < len(L) and line_kind(L[j]) == "code" and line_kind(L[k]) == "code":
+                b = bytes(int(x, 0) for x in re.split(r'\s*,\s*', m.group("ops")))
+                sites.append((f, i, m, b))
+    stats, report = collections.Counter(), collections.Counter()
+    with tempfile.TemporaryDirectory(dir=os.environ.get("TMPDIR")) as tmp:
+        seqs = sorted({b for _, _, _, b in sites})
+        readings = dict(zip(seqs, unidasm(seqs, tmp)))
+        cand, owner = [], []
+        for b in seqs:
+            r = readings.get(b)
+            if r:
+                for c in candidates(r):
+                    cand.append(c)
+                    owner.append(b)
+        got = assemble(cand, tmp) if cand else []
+    best = {}
+    for c, b, g in zip(cand, owner, got):
+        if b not in best and g == b:
+            best[b] = c
+    changed = collections.Counter()
+    for f, i, m, b in sites:
+        r = readings.get(b) or ""
+        um = r.split(" ")[0].lower()
+        cm = m.group("cm").lower()
+        if b not in best or not (um == cm or um.rstrip("wbl") == cm.rstrip("wbl")):
+            stats["left"] += 1
+            report[(cm, r)] += 1
+            continue
+        tail = comment_tail(m.group("post"), m.group("cm"), best[b])
+        texts[f][i] = m.group("pre") + best[b] + tail
+        changed[f] += 1
+        stats["respelled"] += 1
+    if a.apply:
+        for f in changed:
+            open(f, "wb").write("\n".join(texts[f]).encode("latin-1"))
+    print("tree %s (.byte): %s, %d files%s" % (a.tree, dict(stats), len(changed), "" if a.apply else " (dry run)"))
+    for (cm, r), n in report.most_common(15):
+        print("  left: %3d  comment %-6s unidasm %s" % (n, cm, r))
+    if a.report:
+        json.dump({"respelled": {b.hex(" "): c for b, c in best.items()},
+                   "left": ["%s | %s" % k for k in report]}, open(a.report, "w"), indent=1)
     return 0
 
 

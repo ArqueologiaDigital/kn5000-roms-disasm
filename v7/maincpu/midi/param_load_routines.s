@@ -62,7 +62,7 @@ ParaLoadOpt_CaseC:
 	lda xix, (ParaLoadOpt_AudioFlagCheck_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (ParaLoadOpt_DispatchTable_A:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ParaLoadOpt_DispatchTable_A:
 	ld	(0x024760:24), 0
@@ -310,7 +310,7 @@ AcParaLoadOptGridBoxProc:
 	add xbc, AcParaLoadOptGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ParaLoadOpt_GridHandler:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; ParaLoadOpt grid handler
 ParaLoadOpt_GridHandler:
@@ -591,7 +591,7 @@ ParaLoadOptGridCheck:
 	add xde, ParaLoadOptGridCheck_CaseTable
 	ld de, (xde)
 	lda xix, (ParaLoadOpt_GridDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl

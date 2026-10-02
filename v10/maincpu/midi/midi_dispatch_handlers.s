@@ -38,7 +38,7 @@ MidiSerial_PumpDone:
 	call MidiStream_LoadAllPresets
 	ld xix, 0xbd3c
 	ld hl, (0x90de:16)
-	stib_ind 0x07, 0xf0, 0xec, 0xff
+	ld	(xix+hl), 0xff
 
 MidiSerial_Return:
 	ret
@@ -836,7 +836,7 @@ MidiCC_Handler_ExpressionParam:
 	sll	hl, 1
 	ld	xix, 0x9674
 	; cp (xix+hl),0x8081 -- the backend cannot spell this form
-	.byte 0xd3, 0x07, 0xf0, 0xec, 0x3f, 0x81, 0x80	; cp (xix+hl),0x8081 -- the backend cannot spell this form
+	cpw	(xix+hl), 0x8081	; the backend cannot spell this form
 	jr	nz, MidiCC_Handler_ExpressionParam_Return
 	bit	1, (0xfd57:16)
 	jr	z, MidiCC_Handler_ExpressionParam_Return
@@ -872,7 +872,7 @@ MidiCC_Handler_DirectStoreA:
 	cp wa, 65535
 	jr	nz, MidiCC_Handler_DirectStoreA_Return
 	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
+	ldw	(xix+hl), 0x7f7f	; the backend cannot spell this form
 MidiCC_Handler_DirectStoreA_Return:
 	ret
 MidiCC_Handler_DirectStoreB:
@@ -889,7 +889,7 @@ MidiCC_Handler_DirectStoreB:
 	jr	nz, MidiCC_Handler_DirectStoreB_Return
 	dec	1, xix
 	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
-	.byte 0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f	; ld (xix+hl),0x7f7f -- the backend cannot spell this form
+	ldw	(xix+hl), 0x7f7f	; the backend cannot spell this form
 MidiCC_Handler_DirectStoreB_Return:
 	ret
 MidiCC_Handler_ParamDispatch:
@@ -2376,8 +2376,8 @@ MidiCC_PartTargets_Unread_B:
 	.byte 0xbd, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_Func12..15 (+0x560, +0x5C0, +0x620, +0x680): functions
-; 12-15, readers MidiCC_RxFunc12 (0xFD009F), _11 (0xFD00E0), _12
-; (0xFD0121), _13 (0xFD0162), all -> MidiStream_DispatchData_0xD0.  No
+; 12-15, readers MidiCC_RxFunc12 (0xFD009F), MidiCC_RxFunc13 (0xFD00E0),
+; MidiCC_RxFunc14 (0xFD0121), MidiCC_RxFunc15 (0xFD0162), all -> MidiStream_DispatchData_0xD0.  No
 ; controller maps to these functions in MidiCC_ChannelMappingData.
 MidiCC_PartTargets_Func12:
 	.byte 0xb8, 0x00, 0x7f, 0xb8, 0x01, 0x7f, 0xb8, 0x02, 0x7f, 0xb8, 0x03, 0x7f
@@ -8388,7 +8388,7 @@ MIDI_ReadChannelParam:
 	lda xix, (NakaInst_SoundConfig_LookupTable_0x17B6:24)
 	ld	bc, (xix+bc)
 	lda xix, (MidiChan_ParamDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; MIDI channel parameter read dispatch
 MidiChan_ParamDispatch:
 	ld	(xwa), e
@@ -8445,7 +8445,7 @@ SeqData_ReadFieldByIndex:
 	lda xix, (NakaInst_SoundConfig_LookupTable_0x17D6:24)
 	ld	bc, (xix+bc)
 	lda xix, (SeqData_FieldDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; Sequence data field read dispatch
 SeqData_FieldDispatch:
 	ld	l, (xwa)
@@ -10387,11 +10387,11 @@ MidiTG_WriteRegByDescriptor:
 	extz iy
 	ld a, (xix)
 	cpl a
-	and_srib_mr A, 0x07, 0xec, 0xf4
+	and	(xhl+iy), a
 	ld c, (xbc)
 	extz bc
 	ld a, (xde)
-	or_srib_mr A, 0x07, 0xec, 0xe4
+	or	(xhl+bc), a
 	jr MidiTG_WriteReg_Return
 
 MidiTG_WriteReg_NoEntry:
@@ -10423,12 +10423,12 @@ AssSwb_ApplyBitDescriptor:
 	extz iy
 	ld a, (xix)
 	cpl a
-	and_srib_mr A, 0x07, 0xec, 0xf4
+	and	(xhl+iy), a
 	ld a, (xbc)
 	ldfr_berp A, 0xf4
 	extz iy
 	ld a, (xde)
-	or_srib_mr A, 0x07, 0xec, 0xf4
+	or	(xhl+iy), a
 	ld a, (xiz)
 	extz wa
 	ld c, (xbc)
@@ -10472,12 +10472,12 @@ AssSwb_ProcessLoop_Data:
 	extz	iy
 	ld	wa, (xhl)
 	cpl	a
-	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xc9	; and (xbc+iy),a -- the backend cannot spell this form
+	and	(xbc+iy), a	; the backend cannot spell this form
 	ld	a, (xde)
 	ldfr_berp	a, 244
 	extz	iy
 	ld	wa, (xix)
-	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xe9	; or (xbc+iy),a -- the backend cannot spell this form
+	or	(xbc+iy), a	; the backend cannot spell this form
 	ld	a, (xde)
 	extz	wa
 	ld	iy, wa
@@ -10485,7 +10485,7 @@ AssSwb_ProcessLoop_Data:
 	ld	wa, (xhl)
 	srl	wa, 8
 	cpl	a
-	.byte 0xc3, 0x07, 0xe4, 0xf4, 0xc9	; and (xbc+iy),a -- the backend cannot spell this form
+	and	(xbc+iy), a	; the backend cannot spell this form
 	ld	a, (xde)
 	extz	wa
 	ld	iy, wa
@@ -10493,7 +10493,7 @@ AssSwb_ProcessLoop_Data:
 	ld	wa, (xix)
 	srl	wa, 8
 	ld	xix, (xsp+6)
-	.byte 0xc3, 0x07, 0xf0, 0xf4, 0xe9	; or (xix+iy),a -- the backend cannot spell this form
+	or	(xix+iy), a	; the backend cannot spell this form
 	ld	a, (xiz)
 	extz	wa
 	ld	c, (xde)
@@ -13313,7 +13313,7 @@ SysEx_InitiateSend:
 	lda xix, (SeqFormat_ReferenceData_0x58:24)
 	ld	wa, (xix+wa)
 	lda xix, (SysEx_SendDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; SysEx send dispatch
 SysEx_SendDispatch:

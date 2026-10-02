@@ -972,11 +972,12 @@ binary, wave 3a, 2026-10-02):
 | F2 LDA 24-bit address | `lda xreg, (addr:24)` (the old `ldada_24` spelling no longer exists) | `lda xwa, (0x2e2458:24)` → `f2 58 24 2e 30` |
 | E2 32-bit load from 24-bit addr | `ld xreg, (addr:24)` (was `ldda32_24`, no longer exists) | `ld xbc, (0x23a1a2:24)` → `e2 a2 a1 23 21` |
 | D2 16-bit load from 24-bit addr | `ld reg16, (addr:24)` (was `ldda16_24 xiz, ...`, which named XIZ for IZ; no longer exists) | `ld iz, (0x230e72:24)` → `d2 72 0e 23 26` |
-| E3 (Xrr+d16) 32-bit load, raw mode bytes | `ld_sril3 xreg, b0, b1, b2` (raw pseudo; the real spelling is `ld xbc, (xbc+3594)`) | `ld_sril3 xbc, 0xe5, 0x0a, 0x0e` → `e3 e5 0a 0e 21` (MAME `ld XBC,(XBC+0x0e0a)`) |
+| E3 (Xrr+d16) 32-bit load | `ld xbc, (xbc+3594)` (the raw pseudo `ld_sril3 xbc, 0xe5, 0x0a, 0x0e` is retired from the trees: `scripts/converters/respell_raw_pseudos.py`) | `e3 e5 0a 0e 21` (MAME `ld XBC,(XBC+0x0e0a)`) |
 | C3 register-indexed 8-bit load | `ld r, (xrr+rr)` (the old `ld_srib3` raw form no longer exists) | `ld a, (xwa+ix)` → `c3 07 e0 f0 21` (MAME `ld A,(XWA+IX)`) |
 | F3 register-indexed byte STORE | `ld (xrr+rr), r` | `ld (xde+hl), a` → `f3 07 e8 ec 41` (MAME `ld (XDE+HL),A`).  This row used to say `lda_dri3 xbc, ...` -- a spelling that no longer exists and named an LDA of XBC for what is a store of A |
-| F3 DRI bit test | `bit_dri N, b0, b1, b2` | `bit_dri 7, 0x07, 0xe8, 0xf0` → `f3 07 e8 f0 cf` |
-| F3 DRI set/reset bit | `set_dri N, b0, b1, b2` / `res_dri` | raw bytes |
+| Bit test on a register-indexed operand | `bit 7, (xde+ix)` (TOOLCHAIN_VERSION UPDATE 21; was `bit_dri 7, 0x07, 0xe8, 0xf0`) | `f3 07 e8 f0 cf` |
+| Set/reset/chg/tset on a register-indexed operand | `set 6, (xbc+wa)` / `res` / `chg` / `tset` (UPDATE 21) | `f3 07 e4 e0 be` |
+| Any ALU / inc / dec / push / ex / ld-immediate on `(xrr+rr)` | `cp (xhl+iy), 0x7b`, `cpw (xwa+bc), 0xffff`, `add xde, (xwa+bc)`, `incw 1, (xwa+bc)`, `ld (xiy+hl), 0x81`, `pushw (xbc+wa)` (UPDATE 21; MUL/DIV, the 8-bit-index `(xrr+r8)` and previous-bank `(xrr+qrr)` variants of these are still missing) | `c3 07 ec f4 3f 7b` |
 | D7 word ERP load imm | `ldi_werp bank, N` | raw bytes per D7 prefix |
 | D7 word ERP reg copy | `ldto_werp reg, bank` (reg <- bank reg, 0x88+r) / `ldfr_werp reg, bank` (bank reg <- reg, 0x98+r); byte forms `ldto_berp` / `ldfr_berp`.  The old `stw_erp`/`ldw_erp`/`stb_erp`/`ldb_erp` read BACKWARDS and are deleted (UPDATE 17) | `ldto_werp wa, 0x30` → `d7 30 88` (ld WA,RWA3) |
 | D7 word ERP compare | `cp_werp reg, bank` | raw bytes per D7 prefix |

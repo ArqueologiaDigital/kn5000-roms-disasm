@@ -109,7 +109,7 @@ SeqEvt_SlotScanLoop:
 	jr	c, SeqEvt_CheckSlotActive
 	jr	SeqEvt_AfterSlotScan
 SeqEvt_CheckSlotActive:
-	bit_dri 7, 0x07, 0xec, 0xf0
+	bit	7, (xhl+ix)
 	jr z, SeqEvt_AdvanceSlotIndex
 	ld xiy, xhl
 	and xix, 0xffff
@@ -130,7 +130,7 @@ SeqEvt_AfterSlotScan:
 SeqEvt_FindFreeSlotLoop:
 	cp	ix, (0x7d68:16)
 	jr	nc, SeqEvt_AllocateNewSlot
-	.byte 0xf3, 0x07, 0xec, 0xf0, 0xcf	; bit 7,(xhl+ix)
+	bit	7, (xhl+ix)
 	jr	nz, SeqEvt_AdvanceFreeSlotIdx
 	ld	(32119:16), xhl
 	ld	xhl, xbc
@@ -160,7 +160,7 @@ SeqEvt_ProcessLoopRet:
 SeqEvt_WriteNoteOff:
 	ld	a, (xhl+ix)
 
-	and_srib_im 0x07, 0xec, 0xf0, 0x7f
+	and	(xhl+ix), 0x7f
 
 	and a, 0xf0
 
@@ -188,7 +188,7 @@ SeqEvt_WriteNoteOnRotating:
 	add XIX,XWA
 	ld IX,(XIX)
 	ld_rrb	a, xhl, ix
-	.byte 0xc3, 0x07, 0xec, 0xf0, 0x3c, 0x7f	; and (xhl+ix),0x7f
+	and	(xhl+ix), 0x7f
 	ld	iz, ix
 	inc	2, ix
 	ld_rrb	w, xhl, ix
@@ -473,7 +473,7 @@ Voice_ScanLoop:
 	jr	c, Voice_CheckSlotBit
 	jp	Voice_ScanLoopDone
 Voice_CheckSlotBit:
-	bit_dri 7, 0x07, 0xec, 0xf4
+	bit	7, (xhl+iy)
 	jr nz, Voice_ReadSlotParams
 	jr Voice_ParamComplete
 
@@ -502,7 +502,7 @@ Voice_ReadSlotParams:
 	ld	a, 0:opc
 	calr	SeqEvtBuf_WriteBytePreserve
 	ex16	iy, iz
-	.byte 0xc3, 0x07, 0xec, 0xf4, 0x3c, 0x7f	; and (xhl+iy),0x7f
+	and	(xhl+iy), 0x7f
 	jr	Voice_ParamComplete
 Voice_SubtractBaseFreq:
 	sub wa, (1134:16)
@@ -3365,7 +3365,7 @@ AcVocalGridBoxProc:
 	add xbc, AcVocalGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (AcVocalGrid_DialSetup:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; AcVocalGridBoxProc dial setup handler
 AcVocalGrid_DialSetup:
@@ -3609,7 +3609,7 @@ VocalistGridCheck:
 	add xwa, VocalistGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (VocalistGrid_DispatchData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 VocalistGrid_DispatchData:
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3950,7 +3950,7 @@ VocalistGrid_CheckHandler:
 	add xwa, VocalistGrid_DispatchData_CaseTable
 	ld wa, (xwa)
 	lda xix, (VocalistGrid_CheckDispData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 VocalistGrid_CheckDispData:
 	ld	xwa, 11520
@@ -4219,7 +4219,7 @@ AcVocalist_ListSetup:
 	add xhl, AcVocalist_ListSetup_CaseTable
 	ld hl, (xhl)
 	lda xix, (AcVocalist_ListDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; AcVocalistListBoxProc dispatch
 AcVocalist_ListDispatch:
 	ld	xwa, 0xd7000c
@@ -4458,7 +4458,7 @@ MainVocalistPage1OKFunc:
 	lda xix, (MainVocalistPage1OKFunc_CaseTable:24)
 	ld	de, (xix+de)
 	lda xix, (VocalistPage1OK_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; MainVocalistPage1OKFunc dispatch
 VocalistPage1OK_Dispatch:
 	call	VocalistPage2OKFunc_Helper2

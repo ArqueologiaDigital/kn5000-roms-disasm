@@ -2151,7 +2151,7 @@ Wordwrap_MeasureWidth:
 	inc	8, xsp
 	ld	xwa, (xsp+6)
 	ld	bc, (xsp+4)
-	stib_ind 0x07, 0xe0, 0xe4, 0x00	; ld (XWA+BC),0x00
+	ld	(xwa+bc), 0x00	; ld (XWA+BC),0x00
 	ld	xwa, (xsp+6)
 	ld	xbc, (xsp+18)
 	calr	CalcTotalWidth
@@ -2225,7 +2225,7 @@ HexCharToNibble_Skip2:
 	lda	xhl, (Data_CharMapFormatBlock_0x14:24)
 	ld	a, (xwa)
 HexCharToNibble_Loop:
-	cpb_sri_mr A, 0x07, 0xec, 0xe8	; cp (XHL+DE),A
+	cp	(xhl+de), a	; cp (XHL+DE),A
 	jr	nz, HexCharToNibble_Skip3
 	ld	a, e
 	ld	(xbc), a
@@ -4245,7 +4245,7 @@ ToneGen_WriteParamByIndex:
 	lda xix, (TransposeNoteStr_C_0x18E:24)
 	ld	bc, (xix+bc)
 	lda xix, (ToneGen_ParamWriteDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; ToneGen_WriteParamByIndex dispatch table
 ToneGen_ParamWriteDispatch:
 	lda	xix, (xsp+6)
@@ -4417,7 +4417,7 @@ WallHomeEditCheck:
 	add xwa, TransposeNoteStr_C_0x1B2
 	ld wa, (xwa)
 	lda xix, (WallHomeEdit_EventDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; WallHomeEditCheck event dispatch
 WallHomeEdit_EventDispatch:
@@ -4504,7 +4504,7 @@ WallMenuEditCheck:
 	add xwa, TransposeNoteStr_C_0x1DE
 	ld wa, (xwa)
 	lda xix, (WallMenuEdit_EventDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; WallMenuEditCheck event dispatch
 WallMenuEdit_EventDispatch:
@@ -4555,7 +4555,7 @@ WallOthEditCheck:
 	add xwa, TransposeNoteStr_C_0x20A
 	ld wa, (xwa)
 	lda xix, (WallOthEdit_EventDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; WallOthEditCheck event dispatch
 WallOthEdit_EventDispatch:
@@ -5223,7 +5223,7 @@ CntIniFunc:
 	add xde, TransposeNoteStr_C_0x420
 	ld de, (xde)
 	lda xix, (CntIniFunc_EventDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; CntIniFunc event dispatch
 CntIniFunc_EventDispatch:
 	call	AccWrap_PlayModeDispatch

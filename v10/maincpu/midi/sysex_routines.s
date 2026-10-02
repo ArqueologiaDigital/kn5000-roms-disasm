@@ -73,7 +73,7 @@ ExcDotFunc:
 	add xbc, ExcDotFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcDotFunc_HandlerJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ExcDotFunc_HandlerJumpTable:
 	ld	xix, (xde+18)
 	ld	xbc, (xde+14)
@@ -124,7 +124,7 @@ ExcPmemFunc:
 	add xbc, ExcPmemFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcPmemFunc_HandlerJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ExcPmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -164,7 +164,7 @@ ExcSmemFunc:
 	add xbc, ExcSmemFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcSmemFunc_HandlerJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ExcSmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -204,7 +204,7 @@ ExcCompFunc:
 	add xbc, ExcCompFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcCompFunc_HandlerJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ExcCompFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -244,7 +244,7 @@ ExcSeqFunc:
 	add xbc, ExcSeqFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcSeqFunc_HandlerJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ExcSeqFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -284,7 +284,7 @@ ExcMspFunc:
 	add xbc, ExcMspFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcMspFunc_HandlerJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ExcMspFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2

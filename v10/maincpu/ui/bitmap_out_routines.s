@@ -3879,7 +3879,7 @@ OneTchFUNC:
 	add xde, WidgetStyleDataTable_0x362
 	ld de, (xde)
 	lda xix, (BitMapOut_ByteData_WidgetTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 BitMapOut_ByteData_WidgetTable:
 	res	7, (0xb7e2:16)
 	push	xde

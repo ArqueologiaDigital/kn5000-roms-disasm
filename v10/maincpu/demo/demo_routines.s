@@ -82,7 +82,7 @@ DemoStyleTtlFunc:
 	add xde, SepaOut_Config_0_0x1DE
 	ld de, (xde)
 	lda xix, (DemoStyle_DispatchTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 DemoStyle_DispatchTable:
 	push	xde
 	push	xhl
@@ -163,7 +163,7 @@ DemoSoundTtlFunc:
 	add xde, SepaOut_Config_0_0x1EA
 	ld de, (xde)
 	lda xix, (DemoSound_DispatchTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 DemoSound_DispatchTable:
 	push	xde
 	push	xhl
@@ -244,7 +244,7 @@ DemoRhyTtlFunc:
 	add xde, SepaOut_Config_0_0x1F6
 	ld de, (xde)
 	lda xix, (DemoRhythm_DispatchTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 DemoRhythm_DispatchTable:
 	push	xde
 	push	xhl

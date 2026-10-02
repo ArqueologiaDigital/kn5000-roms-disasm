@@ -220,7 +220,7 @@ FDemoText_ProcessOutputChannels:
 	ld	a, (xwa+de)
 	and a, (0x0247ee:24)
 	jr z, FDemoText_ProcessOutput_CheckFlags
-	or_srib_rm C, 0x07, 0xec, 0xe8
+	or	c, (xhl+de)
 	ld (0x0247ec:24), c
 
 FDemoText_ProcessOutput_CheckFlags:
@@ -1346,7 +1346,7 @@ FDemoText_ByteData_DisplayRefresh_Skip6:
 	cp	wa, hl
 	jr	nz, Seq_LoadDisplayResource_Helper_Loop3
 	inc	1, iz
-	.byte	0xc3, 0x07, 0xe4, 0xf8, 0x3f, 0x00	; cp (XBC+IZ),0x00
+	cp	(xbc+iz), 0x00
 	jr	nz, Seq_LoadDisplayResource_Helper_Loop2
 	ldw	(xsp+2), 0
 Seq_LoadDisplayResource_Helper_Skip:
@@ -1411,7 +1411,7 @@ Seq_LoadDisplayResource_Helper_Skip3:
 	cp	wa, hl
 	jr	nz, Seq_LoadDisplayResource_Helper_Loop5
 	inc	1, iz
-	.byte	0xc3, 0x07, 0xe4, 0xf8, 0x3f, 0x00	; cp (XBC+IZ),0x00
+	cp	(xbc+iz), 0x00
 	jr	nz, Seq_LoadDisplayResource_Helper_Loop4
 	ldw	(xsp+2), 1
 	ld	xwa, (xsp+20)
@@ -1760,7 +1760,7 @@ FDemoText_ByteData_TextRenderer_Skip:
 FDemoText_ByteData_TextRenderer_Skip3:
 	inc	1, iz
 	ld	xwa, (xsp+2)
-	.byte	0xc3, 0x07, 0xe0, 0xf8, 0x3f, 0x00	; cp (XWA+IZ),0x00
+	cp	(xwa+iz), 0x00
 	jr	nz, FDemoText_ByteData_TextRenderer_Loop
 FDemoText_ByteData_TextRenderer_Skip2:
 	ld	xwa, (xsp+2)
@@ -2090,7 +2090,7 @@ FDemoText_TextDispatch_Skip17:
 FDemoText_TextDispatch_Skip18:
 	lda	xbc, (0x025b74:24)
 	ld	wa, (0x025b72:24)
-	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x01	; ld (XBC+WA),0x01
+	ld	(xbc+wa), 0x01
 FDemoText_TextDispatch_Skip19:
 	ld	hl, 0:i3
 	ret
@@ -2216,7 +2216,7 @@ FDemoText_TextDispatch_Skip23:
 	ld	wa, (0x25b60:24)
 	sla	wa, 1
 	lda	xbc, (0x25b62:24)
-	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x02, 0xff, 0x00	; ld (XBC+WA),0x00ff
+	ldw	(xbc+wa), 0x00ff
 FDemoText_TextDispatch_Skip9:
 	ld	hl, 0:i3
 	ret
@@ -2464,7 +2464,7 @@ FDemoText_CalcTextExtent:
 FDemoText_CalcExtent_ScanLoop:
 	ld bc, wa
 	add bc, ix
-	cpib_sri 0x07, 0xe8, 0xe4, 0x54
+	cp	(xde+bc), 0x54
 	jr nz, FDemoText_CalcExtent_Done
 	inc 8, hl
 	inc 1, ix
@@ -2518,7 +2518,7 @@ FDemoText_UpdateCursorPosition:
 FDemoText_FindCursor_SearchLeft:
 	dec 1, iz
 	dec 1, de
-	cpib_sri 0x07, 0xf0, 0xe8, 0x54
+	cp	(xix+de), 0x54
 	jr nz, FDemoText_FindCursor_LeftDone
 	ld iy, iz
 	cp iz, 0:i3
@@ -2533,7 +2533,7 @@ FDemoText_FindCursor_LeftDone:
 FDemoText_FindCursor_SearchRight:
 	ld bc, hl
 	add bc, iz
-	cpib_sri 0x07, 0xf0, 0xe4, 0x54
+	cp	(xix+bc), 0x54
 	jr nz, FDemoText_FindCursor_RightNext
 	ld iy, iz
 	jr FDemoText_FindCursor_StoreResult
@@ -2692,7 +2692,7 @@ FDemoText_Layout_DrawText:
 	ld de, (0x025b60:24)
 	sla de, 1
 	lda xhl, (0x025b62:24)
-	push_sriw 0x07, 0xec, 0xe8
+	pushw	(xhl+de)
 	pushw 0xf7
 	ld xde, (xsp + 24)
 	call DrawString

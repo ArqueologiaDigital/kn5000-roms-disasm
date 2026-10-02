@@ -2033,7 +2033,7 @@ FDC_CommandEntry_CopyParams:
 	lda	xix, (DiskWarning_ConfirmStrings_0xC1E:24)
 	ld	wa, (xix+wa)
 	lda	xix, (FDC_HANDLER_DISPATCH_BASE:24)
-	jp_ind	8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 FDC_HANDLER_DISPATCH_BASE:
 	calr FDC_InitSequence_Full
 	jr FDC_Handler_ExitStatus

@@ -944,7 +944,7 @@ TempoRingBuf_Write:
 	and wa, wa
 	jr z, TempoRingBuf_Write_Dequeue
 	ld hl, (xiy - 4)
-	stib_ind 0x07, 0xf4, 0xec, 0x81
+	ld	(xiy+hl), 0x81
 	minc1_16 hl, 0x7ff
 	dec 1, wa
 	ld (xiy - 4), hl
@@ -959,7 +959,7 @@ TempoRingBuf_Write_Enqueue:
 	pushw ix
 	lda xhl, (1143:16)
 	ld ix, (1141:16)
-	stib_ind 0x07, 0xec, 0xf0, 0x81
+	ld	(xhl+ix), 0x81
 	inc 1, ix
 	ld (1141:16), ix
 	popw ix
@@ -1270,7 +1270,7 @@ Seq_ProcessMidiEvent:
 	ld iz, bc
 
 MidiEvt_ScanLoop:
-	bit_dri 7, 0x07, 0xec, 0xf4
+	bit	7, (xhl+iy)
 	jr nz, MidiEvt_FoundStatusByte
 	inc 1, iz
 	minc1_16 iy, 0x3ff
@@ -1292,14 +1292,14 @@ MidiEvt_FoundStatusByte:
 	minc1_16 iy, 0x3ff
 	cp iy, ix
 	jr z, MidiSerial_BufferWrap
-	cpib_sri 0x07, 0xec, 0xf4, 0x7b
+	cp	(xhl+iy), 0x7b
 	jr c, MidiSerial_DataReceive
 
 MidiEvt_SetNoteOnFlag:
 	ld b, 0x1:opc
 
 MidiSerial_DataReceive:
-	bit_dri 7, 0x07, 0xec, 0xf4
+	bit	7, (xhl+iy)
 	jr z, MidiEvt_AdvancePointer
 	ld	a, (xhl+iy)
 	and a, 0xf0
@@ -1315,7 +1315,7 @@ MidiSerial_DataReceive:
 	minc1_16 iy, 0x3ff
 	cp iy, ix
 	jr z, MidiSerial_BufferWrap
-	cpib_sri 0x07, 0xec, 0xf4, 0x7b
+	cp	(xhl+iy), 0x7b
 	ld iz, wa
 	ld iy, de
 	jr c, MidiEvt_ClearDataFlag
@@ -1455,7 +1455,7 @@ RhythmBuf_ScanForNoteOn:
 	ld ix, (xhl - 4)
 
 RhythmBuf_Scan_SkipNonStatus:
-	bit_dri 7, 0x07, 0xec, 0xf4
+	bit	7, (xhl+iy)
 	jr nz, RhythmBuf_Scan_FoundStatus
 	minc1_16 iy, 0x1ff
 	cp iy, ix
@@ -1468,7 +1468,7 @@ RhythmBuf_Scan_FoundStatus:
 	and c, 0xf0
 
 RhythmBuf_Scan_CheckNext:
-	bit_dri 7, 0x07, 0xec, 0xf4
+	bit	7, (xhl+iy)
 	jr z, RhythmBuf_Scan_Advance
 	ld de, iy
 	ld	a, (xhl+iy)
@@ -1542,7 +1542,7 @@ SeqEvt_ScanForNoteOn:
 	ld ix, (xhl - 4)
 
 SeqEvt_Scan_SkipData:
-	bit_dri 7, 0x07, 0xec, 0xf4
+	bit	7, (xhl+iy)
 	jr nz, SeqEvt_Scan_FoundStatus
 	minc1_16 iy, 0xff
 	cp iy, ix
@@ -1555,7 +1555,7 @@ SeqEvt_Scan_FoundStatus:
 	and c, 0xf0
 
 SeqEvt_Scan_CheckNext:
-	bit_dri 7, 0x07, 0xec, 0xf4
+	bit	7, (xhl+iy)
 	jr z, SeqEvt_Scan_Advance
 	ld de, iy
 	ld	a, (xhl+iy)
@@ -1640,7 +1640,7 @@ TempoRingBuf_Consume_Skip:
 	push	xix
 	lda	xix, (1143:16)
 	ld	hl, (1141:16)
-	.byte	0xf3, 0x07, 0xf0, 0xec, 0x00, 0x81	; ld (XIX+HL),0x81
+	ld	(xix+hl), 0x81
 	inc	1, hl
 	ld	(0x475:16), hl
 	pop	xix
@@ -7833,7 +7833,7 @@ Erase_and_Burn____when_disk_is_valid:
 	lda xix, (HANDLE_UPDATE_OFFSETS:24)
 	ld	wa, (xix+wa)
 	lda xix, (HANDLE_UPDATE_FILE_TYPE_ID_001h:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 
 ; "Technics KN5000 Program DATA FILE 1/2"

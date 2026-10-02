@@ -2261,7 +2261,7 @@ TEST2FUNC:
 ;   3 -> TableDispatch_Return3
 ;   4 -> TableDispatch_Return3
 ;   5 -> TableDispatch_Return3
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; TEST2FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST2FUNC_DispatchReturn:
 	calr	EffectMode_ByteData_DiagEvents
@@ -2290,7 +2290,7 @@ TEST3FUNC:
 ;   3 -> TableDispatch_Return4
 ;   4 -> TableDispatch_Return4
 ;   5 -> TableDispatch_Return4
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; TEST3FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST3FUNC_DispatchReturn:
 	calr	TEST3FUNC_Helper
@@ -2319,7 +2319,7 @@ TEST4FUNC:
 ;   3 -> TableDispatch_Return5
 ;   4 -> TableDispatch_Return5
 ;   5 -> TableDispatch_Return5
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; TEST4FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST4FUNC_DispatchReturn:
 	calr	EffectMode_ModeChangeTransition
@@ -2348,7 +2348,7 @@ TEST6FUNC:
 ;   3 -> TableDispatch_Return
 ;   4 -> TableDispatch_Return
 ;   5 -> TableDispatch_Return
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; TEST6FUNC event dispatch return (6-entry, event 0x1c00013)
 TEST6FUNC_DispatchReturn:
 	calr	FDC_CommandAndPostEvent
@@ -3450,7 +3450,7 @@ MstStyleAlpGridCheck:
 ;   0x1c0001b -> EffectMode_SendEvent_Return
 ;   0x1c0001c -> EffectMode_SendEvent_Return
 ;   0x1c0001d -> EffectMode_SendEvent_Return
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; MstStyleAlpGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d58)
 MstStyleAlp_EventDispatch:
@@ -3675,7 +3675,7 @@ AcMstStyle1GridBoxProc:
 ;   0x1c0001b -> MstStyle_InheritedProc_Fallback
 ;   0x1c0001c -> MstStyle_ForwardToChild
 ;   0x1c0001d -> MstStyle_ForwardToChild
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; MasterStyle event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d66)
 MstStyle_EventDispatch:
@@ -3986,7 +3986,7 @@ MstStyle1GridCheck:
 ;   0x1c0001b -> MstStyle1Grid_Epilogue
 ;   0x1c0001c -> MstStyle1Grid_EventDispatch
 ;   0x1c0001d -> MstStyle1Grid_EventDispatch
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; MstStyle1GridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d8a)
 MstStyle1Grid_EventDispatch:
@@ -4172,7 +4172,7 @@ AcMstStyle1SubGridBoxProc:
 ;   0x1c0001b -> MstStyle1Sub_InheritedFallback
 ;   0x1c0001c -> MstStyle1Sub_ForwardToChild
 ;   0x1c0001d -> MstStyle1Sub_ForwardToChild
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; MstStyle1 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0d9e)
 MstStyle1_EventDispatch:
@@ -4682,7 +4682,7 @@ MstStyle1SubGridCheck:
 ;   0x1c0001b -> MstStyle1SubGrid_Epilogue
 ;   0x1c0001c -> MstStyle1Sub_EventDispatch
 ;   0x1c0001d -> MstStyle1Sub_EventDispatch
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; MstStyle1SubGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0dc2)
 MstStyle1Sub_EventDispatch:
@@ -4890,7 +4890,7 @@ AcMstStyle2GridBoxProc:
 ;   0x1c0001b -> MstStyle2_InheritedFallback
 ;   0x1c0001c -> MstStyle2_ForwardToChild
 ;   0x1c0001d -> MstStyle2_ForwardToChild
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; MstStyle1 subpage event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0e04)
 MstStyle1Page_EventDispatch:
@@ -6102,7 +6102,7 @@ MstStyle2GridCheck:
 ;   0x1c0001b -> MstGrid2_Return
 ;   0x1c0001c -> MstGrid2_Return
 ;   0x1c0001d -> MstGrid2_Return
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 MstGrid2_ScrollJumpTable:
 	call	GetFocusObject
@@ -6549,7 +6549,7 @@ AcTchSensGridBoxProc:
 ;   0x1c0001b -> TchSens_InheritedFallback
 ;   0x1c0001c -> AcTchSensGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> AcTchSensGridBoxProc_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; MstStyle2 event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0ed2)
 MstStyle2_EventDispatch:
@@ -6804,7 +6804,7 @@ TchSensGridCheck:
 ;   0x1c0001b -> TchSensGrid_ReturnZero
 ;   0x1c0001c -> TchSensGridCheck_Evt1C0001C
 ;   0x1c0001d -> TchSensGridCheck_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 TchSensGrid_EventDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7118,7 +7118,7 @@ AcFSWAssGridBoxProc:
 ;   0x1c0001b -> FSWAss_InheritedFallback
 ;   0x1c0001c -> AcFSWAssGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> AcFSWAssGridBoxProc_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; TouchSensitivity event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed0f16)
 TchSens_EventDispatch:
@@ -7347,7 +7347,7 @@ FSWAssGridCheck:
 ;   0x1c0001b -> AudioTable_ReturnZero
 ;   0x1c0001c -> FSWAssGridCheck_Evt1C0001C
 ;   0x1c0001d -> FSWAssGridCheck_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 FSWAssGrid_EventDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -8124,7 +8124,7 @@ AudioTable_FindMatchIndex:
 AudioTable_FindMatch_Loop:
 	ld c, l
 	extz bc
-	cpb_sri_rm A, 0x07, 0xe8, 0xe4
+	cp	a, (xde+bc)
 	ret z
 	inc 1, l
 	cp l, 0x1e
@@ -8151,7 +8151,7 @@ FswAsIniFunc:
 ;   3 -> SeqLoadFunc_ReturnZero
 ;   4 -> SeqLoadFunc_ReturnZero
 ;   5 -> SeqLoadFunc_ReturnZero
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; FswAsIniFunc event dispatch (6-entry, event 0x1c00013, table 0xed1234)
 FswAsIni_EventDispatch:
 	calr	FSWAss_CheckAndNotify
@@ -8367,7 +8367,7 @@ AcPmExpFilterGridBoxProc:
 ;   0x1c0001b -> PmExpFilter_DefaultInherited
 ;   0x1c0001c -> AcPmExpFilterGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> AcPmExpFilterGridBoxProc_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; IvPmemWindowPageCtl event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed1420)
 PmemPageCtl_EventDispatch:
@@ -8867,7 +8867,7 @@ PmExpFilterGridCheck:
 ;   0x1c0001b -> SeqLoad_StoreReturnZero
 ;   0x1c0001c -> PmExpFilterGridCheck_Evt1C0001C
 ;   0x1c0001d -> PmExpFilterGridCheck_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; PmExpFilterGridCheck event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed149a)
 PmExpFilter_EventDispatch:
@@ -8980,7 +8980,7 @@ PmExpFilterGridCheck_Loop:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4
+	cp	xwa, (xix+bc)
 	jr	nz, PmExpFilterGridCheck_Skip4
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
@@ -9026,7 +9026,7 @@ PmExpFilterGridCheck_Loop2:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
-	cpl_sri_rm	xwa, 0x07, 0xf0, 0xe4
+	cp	xwa, (xix+bc)
 	jr	nz, PmExpFilterGridCheck_Skip7
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
@@ -9186,7 +9186,7 @@ AcDispTimeSetGridBoxProc:
 ;   0x1c0001b -> DispTimeSet_DefaultInherited
 ;   0x1c0001c -> AcDispTimeSetGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> AcDispTimeSetGridBoxProc_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; PmExpFilter event dispatch (7-entry, events 0x1c00017-0x1c0001d, table 0xed14a8)
 PmExpFilter2_EventDispatch:
@@ -9445,7 +9445,7 @@ DispTimeSetGridCheck:
 ;   0x1c0001b -> DispTimeSet_ReturnZero
 ;   0x1c0001c -> DispTimeSetGridCheck_Evt1C0001C
 ;   0x1c0001d -> DispTimeSetGridCheck_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 DispTimeSet_EventDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -10547,7 +10547,7 @@ MssNameFunc:
 ;   0x1e00045 -> MssNameFunc_Evt1E00045
 ;   0x1e00046 -> MssNameFunc_Evt1E00046
 ;   0x1e00047 -> MssName_EventDispatch
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; MssNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ac)
 MssName_EventDispatch:
 	ld	xiz, xde
@@ -11836,7 +11836,7 @@ PmBkNameFunc:
 ;   0x1e00045 -> PmBkName_DataBytes
 ;   0x1e00046 -> PmBkNameFunc_Evt1E0003E
 ;   0x1e00047 -> PmBkName_EventDispatch
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; PmBkNameFunc event dispatch (10-entry, event 0x1c00013, table 0xed15ee)
 PmBkName_EventDispatch:
 	ret

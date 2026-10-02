@@ -302,7 +302,7 @@ FDTestDialogProc:
 	add xwa, FDTest_String_TestTitleFunc_0x1F6
 	ld wa, (xwa)
 	lda xix, (FDTestDlg_DefaultCase:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 FDTestDlg_DefaultCase:
 	ld xhl, 0:i3

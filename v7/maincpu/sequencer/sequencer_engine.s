@@ -2081,7 +2081,7 @@ SeqPlay_InitDemo_PartShiftDone:
 	extz bc
 	sla bc, 3
 	lda xde, (9016:16)
-	stiw_ind 0x07, 0xe8, 0xe4, 0x00, 0x00
+	ldw	(xde+bc), 0x0000
 	call SeqData_ParseSequenceStream
 
 SeqPlay_InitDemo_PartLoopNext:
@@ -4118,7 +4118,7 @@ SeqNoteCh_CheckStatusByte:
 	extz bc
 	sla bc, 3
 	lda xwa, (9018:16)
-	cpib_sri 0x07, 0xe0, 0xe4, 0x82
+	cp	(xwa+bc), 0x82
 	jrl nz, SeqNote_ReturnNotProcessed
 	ld (xsp + 6), 0x0
 
@@ -4248,7 +4248,7 @@ SeqNote_HandleMasterChannel:
 	dec 1, a
 	extz wa
 	sla wa, 3
-	stiw_ind 0x07, 0xf0, 0xe0, 0xff, 0xff
+	ldw	(xix+wa), 0xffff
 	ld a, (0xfc5f:16)
 	and a, 0x30
 	jr nz, SeqNote_ReturnNotProcessed
@@ -4285,7 +4285,7 @@ SeqNoteCh_HandleAccompVoice:
 	extz bc
 	sla bc, 3
 	lda xwa, (9016:16)
-	stiw_ind 0x07, 0xe0, 0xe4, 0xf0, 0xff
+	ldw	(xwa+bc), 0xfff0
 
 SeqNote_ReturnNotProcessed:
 	ld l, 0x0:opc
@@ -10282,7 +10282,7 @@ SeqBufInsert_RelinkPrev:
 SeqBufInsert_UpdateHeadAndClear:
 	ld (xix), a
 	lda xwa, (8197:16)
-	stib_ind 0x07, 0xe0, 0xf4, 0xff
+	ld	(xwa+iy), 0xff
 	pop xiz
 	ret
 
@@ -10388,7 +10388,7 @@ NoteMap_RemoveHeadEntry:
 	jr z, NoteMap_RemoveHead_ClearTail
 	extz de
 	muls de, 0x9
-	stib_ind 0x07, 0xe4, 0xe8, 0xff
+	ld	(xbc+de), 0xff
 	ret
 
 NoteMap_RemoveHead_ClearTail:
@@ -11207,7 +11207,7 @@ SeqCh_LoadChannelConfig_Skip:
 	dec	1, a
 	extz	wa
 	sla	wa, 3
-	.byte 0xd3, 0x07, 0xf0, 0xe0, 0x61	; incw 1,(xix+wa)
+	incw	1, (xix+wa)
 	jr	SeqCh_LoadChannelConfig_Join
 SeqCh_LoadChannelConfig_Skip2:
 	ld	e, (xsp+16)
@@ -20384,7 +20384,7 @@ AppEvent_ChainDispatch1:
 	add xbc, AppEvent_ChainDispatch1_CaseTable
 	ld bc, (xbc)
 	lda xix, (APP_EVENT_HANDLER_TABLE:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; Application event handler dispatch table
 ; Handles up to 32 event types (XBC 0-0x1f), used by ApDeliveryEvent system
 ; Each handler increments counters, sends notifications via CALL 0FA9E07h
@@ -20689,7 +20689,7 @@ AppEvtHandler_Branch_021:
 	add xwa, AppEvtHandler_Branch_021_CaseTable
 	ld wa, (xwa)
 	lda xix, (AppEvtHandler_Branch_021_0x5E:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 	ld a, (0xf1e9:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_024
@@ -20775,7 +20775,7 @@ AppEvtHandler_Branch_024:
 	add xwa, AppEvtHandler_Branch_024_CaseTable
 	ld wa, (xwa)
 	lda xix, (AppEvtHandler_Branch_024_0x97:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 	ld a, (0xf1e1:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_027
@@ -20957,7 +20957,7 @@ AppEvent_InlineHandler:
 	add xbc, AppEvent_InlineHandler_CaseTable
 	ld bc, (xbc)
 	lda xix, (AppEvent_SubDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 AppEvent_SubDispatch:
 	ld	a, (35994:16)
 	extz	wa
@@ -21768,7 +21768,7 @@ SeqState_LabelDispatch:
 	lda xix, (SeqState_LabelDispatch_CaseTable:24)
 	ld	bc, (xix+bc)
 	lda xix, (SoundData_HandlerDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; Sound data handler dispatch
 SoundData_HandlerDispatch:
 	call	PartParam_Handler_00
@@ -22924,7 +22924,7 @@ SeqAccomp_ParamDelivery:
 	add xwa, SeqAccomp_ParamDelivery_CaseTable
 	ld wa, (xwa)
 	lda xix, (SeqAccomp_SubHandlerA:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Sequencer accompaniment sub-handler A
 SeqAccomp_SubHandlerA:
@@ -23085,7 +23085,7 @@ SeqAccomp_SubChain:
 	add xwa, SeqAccomp_SubChain_CaseTable
 	ld wa, (xwa)
 	lda xix, (SeqAccomp_SubHandlerB:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Sequencer accompaniment sub-handler B
 SeqAccomp_SubHandlerB:
@@ -23799,7 +23799,7 @@ NoteEditSy_HandleUpScroll:
 	add xde, NoteEditSy_HandleUpScroll_CaseTable
 	ld de, (xde)
 	lda xix, (NoteEditSy_UpScroll_Param0:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 
 NoteEditSy_UpScroll_Param0:
 	call BmDrEdit_CheckScrollBusy
@@ -23860,7 +23860,7 @@ NoteEditSy_HandleDownScroll:
 	add xde, NoteEditSy_HandleDownScroll_CaseTable
 	ld de, (xde)
 	lda xix, (NoteEditSy_DownScroll_Param0:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 
 NoteEditSy_DownScroll_Param0:
 	call BmDrEdit_CheckScrollBusyAlt
@@ -26007,7 +26007,7 @@ SeqSave_WritePartDataLoop:
 	add a, 0xd1
 	ld w, 0x0:opc
 	extz xwa
-	cpiw_sri 0x07, 0xe8, 0xe4, 0x00, 0x00
+	cpw	(xde+bc), 0x0000
 	jr nz, SeqSave_WritePartInner
 	ldw bc, 0xffff
 	calr FileIO_SeekAndRead16BitValue
@@ -26043,7 +26043,7 @@ SeqSave_WritePartInner:
 	add de, de
 	lda xhl, (0x29ce:16)
 	ld bc, (xsp + 6)
-	add_sriw_rm BC, 0x07, 0xec, 0xe8
+	add	bc, (xhl+de)
 	calr FileIO_SeekAndRead16BitValue
 	ld xiz, xhl
 	cp xiz, 0x0
@@ -26292,7 +26292,7 @@ SeqSave_VoiceSizePartLoop:
 	extz wa
 	add wa, wa
 	lda xbc, (0x29ce:16)
-	stiw_ind 0x07, 0xe4, 0xe0, 0x00, 0x00
+	ldw	(xbc+wa), 0x0000
 	ld a, (xsp + 4)
 	inc 1, a
 	extz wa
@@ -26317,7 +26317,7 @@ SeqSave_VoiceSizeChainLoop:
 	extz bc
 	add bc, bc
 	lda xde, (0x29ce:16)
-	inc_sriw 1, 0x07, 0xe8, 0xe4
+	incw	1, (xde+bc)
 	incw 1, (xsp + 2)
 	call PartCtrl_ReadWord
 	ld wa, hl
@@ -26408,7 +26408,7 @@ SeqLoad_ReadPartDataBlock:
 	extz	wa
 	add	wa, wa
 	lda	xde, (0x29ce:16)
-	.byte 0xd3, 0x07, 0xe8, 0xe0, 0x3f, 0x00, 0x00	; cp (xde+wa),0x0000
+	cpw	(xde+wa), 0x0000
 	jr	nz, FileIO_SeekAndRead16BitValue_Skip2
 	ld	xhl, 0:i3
 	jrl	FileIO_SeekAndRead16BitValue_Epilogue
@@ -26473,7 +26473,7 @@ FileIO_SeekAndRead16BitValue_Join:
 	add	bc, (xsp+8)
 	dec	1, bc
 	ld	wa, (xsp+8)
-	.byte 0xd3, 0x07, 0xe8, 0xec, 0xf0	; cp wa,(xde+hl)
+	cp	wa, (xde+hl)
 	jr	c, FileIO_SeekAndRead16BitValue_Loop2
 	ld	xwa, (xsp+4)
 	calr	FileIO_SeekAndRead16BitValue
@@ -26815,11 +26815,11 @@ SeqStep_PostEventReturn:
 	ld a, (9696:16)
 	extz wa
 	add wa, wa
-	stiw_ind 0x07, 0xf0, 0xe0, 0xff, 0xff
+	ldw	(xix+wa), 0xffff
 	ld a, (9696:16)
 	extz wa
 	add wa, wa
-	stiw_ind 0x07, 0xec, 0xe0, 0xff, 0xff
+	ldw	(xhl+wa), 0xffff
 	ld a, (9696:16)
 	extz wa
 	extz xwa
@@ -32614,7 +32614,7 @@ SeqPart_VelocityCurveCalc:
 	lda xix, (SeqPart_VelocityCurveCalc_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SeqPart_VelCurveData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SeqPart_VelCurveData:
 	ld	(9792:16), 48

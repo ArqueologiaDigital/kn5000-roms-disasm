@@ -204,7 +204,7 @@ HDAE5000_StrUpr:
 	ld	a, (xix)
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
-	bit_dri 1, 0x07, 0xE4, 0xE0	; bit 1,(XBC+WA)
+	bit	1, (xbc+wa)	; bit 1,(XBC+WA)
 	jr z, .LMCR_b06e                       ; [66 07] jr Z,0x29b06e
 	ld	a, (xix)
 	sub	a, 0x20
@@ -254,8 +254,8 @@ HDAE5000_FltDec_Convert:
 	add	bc, bc
 	lda xde, (0x2394ea:24)
 	lda xwa, (0x2394aa:24)
-	stiw_ind 0x07, 0xE0, 0xE4, 0x00, 0x00	; ld (XWA+BC),0x0000
-	stiw_ind 0x07, 0xE8, 0xE4, 0x00, 0x00	; ld (XDE+BC),0x0000
+	ldw	(xwa+bc), 0x0000	; ld (XWA+BC),0x0000
+	ldw	(xde+bc), 0x0000	; ld (XDE+BC),0x0000
 	inc	1, qiz
 	cpw	qiz, 0x0020
 	jr lt, .LMCR_b09f                      ; [61 d9] jr LT,0x29b09f
@@ -450,7 +450,7 @@ HDAE5000_FltDec_Convert:
 	ld	bc, qiz
 	add	bc, bc
 	lda xwa, (0x2394aa:24)
-	push_sriw 0x07, 0xE0, 0xE4	; pushw (XWA+BC)
+	pushw	(xwa+bc)	; pushw (XWA+BC)
 	calr	HDAE5000_FltDec_FractionDigits
 	inc 4, xsp                              ; inc 4,XSP
 	inc	1, qiz
@@ -497,7 +497,7 @@ HDAE5000_FltDec_Convert:
 	cp	(xbc), 0x05
 	jr c, .LMCR_b319                       ; [67 08] jr C,0x29b319
 	ld	wa, (xsp+6)
-	inc_srib 1, 0x07, 0xEC, 0xE0	; inc 1,(XHL+WA)
+	inc	1, (xhl+wa)	; inc 1,(XHL+WA)
 .LMCR_b319:
 	ld	(xbc), 0x00
 	ld	wa, (xsp+6)
@@ -506,7 +506,7 @@ HDAE5000_FltDec_Convert:
 .LMCR_b324:
 	ld	bc, qiz
 	dec	1, bc
-	inc_srib 1, 0x07, 0xEC, 0xE4	; inc 1,(XHL+BC)
+	inc	1, (xhl+bc)	; inc 1,(XHL+BC)
 	ld	(xwa), 0x00
 	dec	1, qiz
 .LMCR_b334:
@@ -691,7 +691,7 @@ HDAE5000_FltDec_FractionDigits:
 	sub	bc, (xsp+8)
 	add	bc, bc
 	lda xwa, (0x2394ea:24)
-	stiw_ind 0x07, 0xE0, 0xE4, 0x00, 0x00	; ld (XWA+BC),0x0000
+	ldw	(xwa+bc), 0x0000	; ld (XWA+BC),0x0000
 	cp	iz, 0x0020
 	jrl le, .LMCR_b44a                     ; [72 7e ff] jrl LE,0x29b44a
 .LMCR_b4cc:
@@ -706,7 +706,7 @@ HDAE5000_FltDec_AddDigit:
 	jr ge, .LMCR_b4e4                      ; [69 0d] jr GE,0x29b4e4
 	lda xbc, (0x23948a:24)
 	ld	wa, (xsp+4)
-	add_srib_mr a, 0x07, 0xE4, 0xE8	; add (XBC+DE),A
+	add	(xbc+de), a	; add (XBC+DE),A
 .LMCR_b4e4:
 	jr t, .LMCR_b4e8                       ; [68 02] jr T,0x29b4e8
 .LMCR_b4e6:
@@ -719,12 +719,12 @@ HDAE5000_FltDec_AddDigit:
 .LMCR_b4f5:
 	ld	bc, de
 	dec	1, bc
-	inc_srib 1, 0x07, 0xE0, 0xE4	; inc 1,(XWA+BC)
+	inc	1, (xwa+bc)	; inc 1,(XWA+BC)
 	ld	bc, de
 	dec	1, de
-	sub_srib_im 0x07, 0xE0, 0xE4, 0x0A	; sub (XWA+BC),0x0a
+	sub	(xwa+bc), 0x0a	; sub (XWA+BC),0x0a
 .LMCR_b508:
-	cpib_sri 0x07, 0xE0, 0xE8, 0x0A	; cp (XWA+DE),0x0a
+	cp	(xwa+de), 0x0a	; cp (XWA+DE),0x0a
 	ret lt                                  ; ret LT
 
 	cp	de, 0:i3
@@ -826,7 +826,7 @@ HDAE5000_FltDec_FracMulBy10:
 	ld	ix, de
 	dec	2, ix
 	srl	wa, 0x08
-	add_sriw_mr wa, 0x07, 0xEC, 0xF0	; add (XHL+IX),WA
+	add	(xhl+ix), wa	; add (XHL+IX),WA
 	and16_imm_ri xbc, 0xff, 0x00		; and (XBC),0x00ff
 .LMCR_b5dc:
 	dec	2, de

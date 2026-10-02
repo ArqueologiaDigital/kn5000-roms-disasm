@@ -278,7 +278,7 @@ MdSetupLoadFunc:
 	add xhl, MdSetupLoadFunc_CaseTable
 	ld hl, (xhl)
 	lda xix, (SetupLoadOptionJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 SetupLoadOptionJumpTable:
 	ld	xwa, (xde+14)
 	and	xwa, 2

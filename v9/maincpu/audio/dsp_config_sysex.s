@@ -213,7 +213,7 @@ SysEx_DispatchByChannel:
 	lda xix, (MidiPkt_EventType_Table_0x4D4:24)
 	ld	wa, (xix+wa)
 	lda xix, (SysEx_ChannelHandler_4B_Data:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SysEx_ChannelHandler_4B_Data:
 	cp	c, 5:i3
@@ -267,7 +267,7 @@ SysEx_DispatchByChannel_49:
 	lda xix, (MidiPkt_EventType_Table_0x538:24)
 	ld	wa, (xix+wa)
 	lda xix, (SysEx_ChannelHandler_49_Data:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SysEx_ChannelHandler_49_Data:
 	cp	c, 5:i3
@@ -4430,7 +4430,7 @@ DspConfig_EventDispatch:
 	lda xix, (ToneKit_VoiceDispatch_Table_0x348:24)
 	ld	bc, (xix+bc)
 	lda xix, (AssSwb_SwapEntriesAndDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 AssSwb_SwapEntriesAndDispatch:
 	ldw (xsp + 4), 0xffff
@@ -5591,8 +5591,8 @@ UIStateEvt_PartRouting:
 	ld	a, (xbc+wa)
 	and a, 0x7
 	sla a, 1
-	and_srib_im 0x07, 0xf0, 0xec, 0xf1
-	or_srib_mr A, 0x07, 0xf0, 0xec
+	and	(xix+hl), 0xf1
+	or	(xix+hl), a
 	orw (0xc594:16), 4
 	ret
 
@@ -5740,7 +5740,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	add	wa, wa
 	add	wa, 228
 	lda_d16	xbc, (0xc1ff)
-	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x00	; ld (XBC+WA),0x00
+	ld	(xbc+wa), 0x00
 UIStateEvt_TransposeUpdate_Apply:
 	orw	(0xc594:16), 4
 	ret
@@ -5774,7 +5774,7 @@ UIStateEvt_ParamEdit_Data:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	UIStateEvt_ParamEdit_Data_Join
 UIStateEvt_ParamEdit_Data_Skip:
 	ldw_d16	wa, (0xc598)
@@ -5787,7 +5787,7 @@ UIStateEvt_ParamEdit_Data_Skip:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	UIStateEvt_ParamEdit_Data_Join
 UIStateEvt_ParamEdit_Data_Skip2:
 	ldb_d8	a, (0xfc5d)
@@ -5873,7 +5873,7 @@ UIStateEvt_ParamEdit_Data_Skip10:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	UIStateEvt_ParamEdit_Data_Join5
 UIStateEvt_ParamEdit_Data_Skip11:
 	ldw_d16	wa, (0xc598)
@@ -5885,7 +5885,7 @@ UIStateEvt_ParamEdit_Data_Skip11:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	UIStateEvt_ParamEdit_Data_Join5
 UIStateEvt_ParamEdit_Data_Skip12:
 	ldb_d8	a, (0xfc5d)

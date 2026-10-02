@@ -635,7 +635,7 @@ MIDI_QUEUE_TRACK_EVENT:
 	and wa, wa
 	jr z, QueueTrack_FifoWriteOrClear
 	ld hl, (xix - 4)
-	stib_ind 0x07, 0xf0, 0xec, 0x81
+	ld	(xix+hl), 0x81
 	minc1_16 hl, 0x7ff
 	dec 1, wa
 	ld (xix - 4), hl
@@ -649,7 +649,7 @@ QueueTrack_FifoWriteOrClear:
 QueueTrack_LinearBufWrite:
 	ld xix, 0x477
 	ld hl, (1141:16)
-	stib_ind 0x07, 0xf0, 0xec, 0x81
+	ld	(xix+hl), 0x81
 	inc 1, hl
 	ld (1141:16), hl
 	ret

@@ -190,8 +190,8 @@ ScreenGroup_InitVoiceLoop_Code_Skip4:
 	ld	a, (xbc+wa)
 	and	a, 0x7
 	sla	a, 1
-	and_srib_im	0x07, 0xf0, 0xec, 0xf1
-	or_srib_mr	A, 0x07, 0xf0, 0xec
+	and	(xix+hl), 0xf1
+	or	(xix+hl), a
 ; (v7 label ScreenGroup_InitParams8 stood here; dropped, see the file header)
 	orw	(0xc4f8:16), 4
 	ret

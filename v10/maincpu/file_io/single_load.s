@@ -320,7 +320,7 @@ SLSrcBankList_FuncBody_Helper3_Epilogue:
 	jr	z, SLSrcBankList_FuncBody_Skip
 	ld	a, (0x89fc:16)
 	extz	wa
-	.byte	0xc2, 0x52, 0x09, 0xea, 0x51	; div WA,(0xea0952)
+	div	wa, (0xea0952:24)
 	ld	(0x89fc:16), w
 SLSrcBankList_FuncBody_Skip:
 	ld	c, (PtrTbl_DrumKitNames_0x7A:24)

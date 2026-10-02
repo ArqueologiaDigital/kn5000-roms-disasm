@@ -2592,7 +2592,7 @@ MainPmanControl:
 	add xwa, DiskWarning_ConfirmStrings_0xD4C
 	ld wa, (xwa)
 	lda xix, (MainPmanCtrl_DispatchTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; MainPmanControl's six switch cases, not a table: it takes event - 0x1E00057 as
 ; the case, `ld wa,(<offset word>)` from the six s16 at 0xEA99F8 (0, 17, 34, 100,
@@ -3097,7 +3097,7 @@ CtrlPanel_DispatchByIndex:
 	lda xix, (DiskWarning_ConfirmStrings_0xD58:24)
 	ld	wa, (xix+wa)
 	lda xix, (CtrlPanel_FrameDispatchTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 CtrlPanel_FrameDispatchTable:
 	ld	xde, 4:i3
@@ -3415,7 +3415,7 @@ CtrlPanel_FuncDispatch:
 	ld xix, DiskWarning_ConfirmStrings_0xE56
 	ld	wa, (xix+wa)
 	lda xix, (GroupBox_HandlePartChange:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 GroupBox_HandlePartChange:
 	call GetTitleNow

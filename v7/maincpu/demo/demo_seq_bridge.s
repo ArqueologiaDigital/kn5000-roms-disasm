@@ -21,7 +21,7 @@ MiddleFuncCall:
 	add xwa, SepaOut_Config_0_0x202
 	ld wa, (xwa)
 	lda xix, (MiddleFuncCall_DispatchData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 MiddleFuncCall_DispatchData:
 	.byte 0xf1, 0xa4
@@ -1131,7 +1131,7 @@ VoiceSlot_AllocNewSlot:
 	xor w, w
 	ld iz, wa
 	ld xix, 0xf250
-	or_srib_im 0x07, 0xf0, 0xf8, 0x80
+	or	(xix+iz), 0x80
 	ldfr_lerp XIX, 0x38
 	lda	xix, (xix+iz)
 	stw_dri IY, 0x39, 0x01, 0x00

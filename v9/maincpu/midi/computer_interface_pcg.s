@@ -58,7 +58,7 @@ AcPcgOutGridBoxProc:
 	add xbc, AcPcgOutGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (PcgOutGridBoxEventDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 PcgOutGridBoxEventDispatch:
 	ld xwa, xiz
@@ -293,7 +293,7 @@ PcgOutGridCheck:
 	add xwa, PcgOutGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (PcgOutGridCheckJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 PcgOutGridCheckJumpTable:
 	call	GetFocusObject
 	ld	xwa, xhl

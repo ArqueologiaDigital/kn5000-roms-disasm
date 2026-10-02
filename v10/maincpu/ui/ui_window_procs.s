@@ -272,7 +272,7 @@ WndEvt_DispatchByEventCode:
 ;   6 -> WndEvt_DispatchByEventCode_Case6
 ;   7 -> WndEvt_DispatchByEventCode_Case7
 ;   8 -> WndEvt_DispatchByEventCode_Case8
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Window event dispatch by event code
 WndEvt_EventCodeDispatch:
@@ -3930,7 +3930,7 @@ PsGridBoxProc:
 ;   0x1e0008f -> 0xf9e8ed
 ;   0x1e00090 -> PsGridBox_Default
 ;   0x1e00091 -> 0xf9e90d
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 	.include "ui/psgridbox_routines.s"
 	.include "ui/ui_widget_defs.s"
@@ -4414,7 +4414,7 @@ Draw_DispatchByPartType:
 	lda xix, (Str_No_0xB00:24)
 	ld	wa, (xix+wa)
 	lda xix, (Draw_StyledBoxWithFrame:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 Draw_StyledBoxWithFrame:
 	lda xwa, (xsp + 62)
@@ -4908,7 +4908,7 @@ DrawPartGroup_DispatchByType:
 	lda xix, (Str_No_0xAE0:24)
 	ld	wa, (xix+wa)
 	lda xix, (DrawPartGroup_TableJump_DefaultCase:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 DrawPartGroup_TableJump_DefaultCase:
 	ld iz, 0:i3
@@ -6638,7 +6638,7 @@ ImageDecode_PixelLoop:
 	extz bc
 	add bc, bc
 	ld xwa, (xsp + 32)
-	inc_sriw 1, 0x07, 0xe0, 0xe4
+	incw	1, (xwa+bc)
 	inc 1, iy
 	cp iy, 0x140
 	jr lt, ImageDecode_PixelLoop

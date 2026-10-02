@@ -605,7 +605,7 @@ BootSerial_RxPkt_TwoByteDecode__store:
 	ld	(xiz+ix), l	; LD (XIZ+IX), L - decoded byte
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(0x0f6e:16), l
-	stib_ind 0x07, 0xf8, 0xf0, 0xff	; LD (XIZ+IX), 0xff - terminator
+	ld	(xiz+ix), 0xff	; LD (XIZ+IX), 0xff - terminator
 	calr	BootSerial_CtrlRingAdvanceIX
 	ld	(xiz - 4), ix		; commit control-ring head
 	decm	3, (xiz - 2)

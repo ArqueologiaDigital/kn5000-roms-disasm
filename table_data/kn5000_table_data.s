@@ -3420,7 +3420,7 @@ Boot_LoadDiskData:
 	lda xix, (Boot_LoadDiskData_JumpOffsets + 0x600000:24); LDA XIX, 0xFFA140 - jump table
 	ld	wa, (xix+wa)	; LD WA, (XIX+WA)
 	lda xix, (Boot_LoadDiskData__ldd_Program12 + 0x600000:24); LDA XIX, 0xFFC44A - base addr
-	jp_ind 8, 0x07, 0xF0, 0xE0	; JP T, XIX+WA - dispatch
+	jp	t, (xix+wa)	; JP T, XIX+WA - dispatch
 
 ; Disk type 1 handler, "Program DATA FILE 1/2" (0x9FC44A): copies disk 1 to
 ; 0x800000, asks for disk 2 (type 2) and copies it to 0x900000

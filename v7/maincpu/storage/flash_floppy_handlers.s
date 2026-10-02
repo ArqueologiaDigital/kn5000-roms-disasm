@@ -1688,7 +1688,7 @@ PartGrid_ColumnDispatch:
 	lda xix, (MSP_Default_GroupOffsetA:24)
 	ld	wa, (xix+wa)
 	lda xix, (PartGrid_ColumnJumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 PartGrid_ColumnJumpTable:
 	ld	xhl, (3190:16)
@@ -2025,7 +2025,7 @@ NoteEventBuffer_CopyToSlot:
 	lda xix, (MSP_Default_GroupOffsetB:24)
 	ld	bc, (xix+bc)
 	lda xix, (NOTE_EVENT_DISPATCH_1:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; Note event buffer copy dispatch - 7 cases (BC 0-6)
 ; Selects destination buffer pointer based on case, then copies 46080 bytes
 ; Offset table at 0xe16128
@@ -2072,7 +2072,7 @@ NoteEventBuffer_Store:
 	lda xix, (MSP_Default_VarSize:24)
 	ld	wa, (xix+wa)
 	lda xix, (NOTE_EVENT_DISPATCH_2:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 ; Note event dispatch table 2
 ; 7 cases (WA 0-6), offset table at 0xe16136
 NOTE_EVENT_DISPATCH_2:
@@ -3694,7 +3694,7 @@ SlotTable_InitBank1748:
 SlotTable_InitBank1748_Loop:
 	ld de, wa
 	inc 2, de
-	stiw_ind 0x07, 0xe4, 0xe8, 0xff, 0xff
+	ldw	(xbc+de), 0xffff
 	inc 1, l
 	inc 2, wa
 	cp l, 0x32
@@ -3710,7 +3710,7 @@ SlotTable_InitBank1850:
 SlotTable_InitBank1850_Loop:
 	ld de, wa
 	inc 2, de
-	stiw_ind 0x07, 0xe4, 0xe8, 0xff, 0xff
+	ldw	(xbc+de), 0xffff
 	inc 1, l
 	inc 2, wa
 	cp l, 0x32
@@ -3758,7 +3758,7 @@ Flash_InitBytecodeBlock_Helper11_Helper:
 Flash_InitBytecodeBlock_Helper11_Helper_Loop:
 	ld iy, hl
 	inc	6, iy
-	.byte	0xf3, 0x07, 0xf0, 0xf4, 0x02, 0xff, 0xff	; ld (XIX+IY),0xffff
+	ldw	(xix+iy), 0xffff
 	ldw (xde+:4), 0xffff
 	ldw (xwa+:4), 0xffff
 	inc	2, hl
@@ -3778,7 +3778,7 @@ Flash_InitBytecodeBlock_Helper7_Helper:
 Flash_InitBytecodeBlock_Helper7_Helper_Loop:
 	ld	iy, hl
 	inc	6, iy
-	.byte	0xf3, 0x07, 0xf0, 0xf4, 0x02, 0xff, 0xff	; ld (XIX+IY),0xffff
+	ldw	(xix+iy), 0xffff
 	ldw (xde+:4), 0xffff
 	ldw (xwa+:4), 0xffff
 	inc	2, hl
@@ -3793,7 +3793,7 @@ Flash_InitBytecodeBlock_Helper_Helper_Helper:
 Flash_InitBytecodeBlock_Helper_Helper_Helper_Loop:
 	ld	de, wa
 	inc	2, de
-	.byte	0xf3, 0x07, 0xe4, 0xe8, 0x02, 0xff, 0xff	; ld (XBC+DE),0xffff
+	ldw	(xbc+de), 0xffff
 	inc	1, l
 	inc	2, wa
 	cp	l, 50
@@ -3807,7 +3807,7 @@ Flash_InitBytecodeBlock_Helper9_Helper_Helper3:
 Flash_InitBytecodeBlock_Helper9_Helper_Helper3_Loop:
 	ld	de, wa
 	inc	2, de
-	.byte	0xf3, 0x07, 0xe4, 0xe8, 0x02, 0xff, 0xff	; ld (XBC+DE),0xffff
+	ldw	(xbc+de), 0xffff
 	inc	1, l
 	inc	2, wa
 	cp	l, 50
@@ -4002,7 +4002,7 @@ Flash_InitBytecodeBlock_Helper_Helper_Helper2:
 	add WA,WA
 	inc 2,WA
 	lda xbc, (0x0c02:16)
-	stiw_ind 0x07, 0xe4, 0xe0, 0x01, 0x00
+	ldw	(xbc+wa), 0x0001
 .Lc_f18430:
 	incb_erp 0xfa, 1
 	cps_erpb 0xfa, 4
@@ -6691,7 +6691,7 @@ AcCmpSetGridBoxProc:
 	add xbc, NoteStepDisplayData_0x5C
 	ld bc, (xbc)
 	lda xix, (CmpSetP1_DialGrid:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; CmpSetP1 dial grid dispatch (7-entry, table 0xe1ce3a)
 CmpSetP1_DialGrid:
@@ -6912,7 +6912,7 @@ CmpSetP1GridCheck:
 	add xwa, StrTimeSig_1_2_0x20
 	ld wa, (xwa)
 	lda xix, (CmpSetP1_GridCheck_EventEnc:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; CmpSetP1 grid check event encoding dispatch
 CmpSetP1_GridCheck_EventEnc:
@@ -6979,7 +6979,7 @@ CmpSetP1_GridCheck_Return:
 	lda xix, (StrTimeSig_1_2_0x10:24)
 	ld	wa, (xix+wa)
 	lda xix, (UI_COMPONENT_DISPATCH:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 ; UI component dispatch table - handles cases 0-7 for grid/focus handling
 ; Offset table at 0xe1cef0 selects which handler to run based on WA value
 UI_COMPONENT_DISPATCH:
@@ -7078,7 +7078,7 @@ CmpSetGridCheck:
 	add xwa, StrPanLeft64_0xA
 	ld wa, (xwa)
 	lda xix, (GridCheck_Handler0:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; =============================================================================
 ; GridCheck_Handler0 - Grid/Check widget handler for cases 0 and 2
@@ -7218,7 +7218,7 @@ GridCheck_LookupSndParam:
 	sla	de, 2
 	lda	xhl, (RhythmTiming_OffsetTable:24)
 	ld	xix, 0x94860
-	add_sril_rm	XIX, 0x07, 0xec, 0xe8
+	add	xix, (xhl+de)
 	sll	xbc, 3
 	add	xbc, 0x10
 	add	xbc, xix
@@ -7831,7 +7831,7 @@ S2cGridBoxProc:
 	add xwa, StrTranspose_Minus25_0x4
 	ld wa, (xwa)
 	lda xix, (FdcFormat_DialGrid:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 FdcFormat_DialGrid:
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz

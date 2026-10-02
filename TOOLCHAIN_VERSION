@@ -7,18 +7,25 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: b2487ca69ec7 (b2487ca69ec7f81adf5f3d50631e55b11e539f9d)
+Commit: a3a81863f87d (a3a81863f87d4fbd5a9b728ec12d7a55da456360)
 Date: 2026-10-02
-Subject: [TLCS900] `sym@hi16` / `sym@lo16`: the two halves of a far pointer in a 16-bit immediate
+Subject: [TLCS900] The register-indexed operand (xrr+rr) on every memory operation
 
-Binary: llvm-mc sha256 54f7d5fd6253f1a79bb276ef1f5be895d6cca57688a0f91ae100b147a430a9df
+Binary: llvm-mc sha256 118bb4d6766e60b3a76bd04cf7b085871aa10094e27db784b2dea665f3b1f975
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
         built FROM SCRATCH from the committed, clean tree (every TLCS900
         object, .inc and library deleted, the binaries removed,
         CCACHE_DISABLE=1) -- twice, same sha, as for llvm-objdump
-        2cba2988ae9a (preserved as llvm-objdump.snap.b2487ca69ec7-2cba2988),
-        llc d6cc55a57866, clang-21 5e230599b005, lld 613da9751da5,
-        llvm-objcopy a0ca58d07b78 and llvm-nm 882286a716d4 from the same tree.
+        5cc4cc67173c (preserved as llvm-objdump.snap.a3a81863f87d-5cc4cc67),
+        llc fcee5dd7eb48, clang-21 b3d99725832c, lld 5fa5665c0956,
+        llvm-objcopy f84eb6d7665d and llvm-nm 05865ae366f8 from the same tree.
+
+⚠ PIN PROMOTED ON 2026-10-02 (UPDATE 21, register-indexed operations):
+  b2487ca69ec7 / 54f7d5fd -> a3a81863f87d / 118bb4d6.  The tree now writes
+  `cp (xhl+iy), 0x7b`, `bit 7, (xde+ix)`, `incw 1, (xwa+bc)` ... which no
+  earlier binary parses, so tree and pin move in one commit.  Prior snapshot
+  kept at llvm-mc.snap.b2487ca69ec7-54f7d5fd.  The LLVM: trailer is now
+  a3a81863f87d.
 
 ⚠ PIN PROMOTED ON 2026-10-02 (UPDATE 20, far pointers):
   12b3a5571450 / 9ed604e1 -> b2487ca69ec7 / 54f7d5fd.  The tree now writes
@@ -1367,3 +1374,32 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #     neighbour, each change the v10 ROM.
 #
 # ⚠ STILL OPEN after UPDATE 20: UPDATE 19's list, unchanged.
+
+# UPDATE 21 (2026-10-02): THE REGISTER-INDEXED OPERAND ON EVERY MEMORY OPERATION.
+#
+#   llvm-project a3a81863f87d (one commit):
+#   * `(xrr+rr)` (prefix c3/d3/e3/f3, mode byte 07, base and index register-file
+#     addresses) was modelled for ld / lda / the stores / jp / call only.  Now
+#     also: ALU add adc sub sbc and xor or cp `op r,(m)`, `op (m),r`, `op (m),#`
+#     / `opw (m),#`; `ld (m),#8` / `ldw (m),#16`; bit set res chg tset ldcf stcf;
+#     inc/incw/dec/decw; push/pushw; ex (m),r.  New format SriRRCount (3-bit
+#     count or bit field: SriRRUnary's 4-bit cc mask would turn `inc 8` into a
+#     dec); SriRRImm takes one multi-byte immediate.  Ranges checked by the
+#     parser.  MUL/DIV and the (xrr+r8) / (xrr+qrr) variants of these are absent.
+#   * Tests: MC/TLCS900/reg-indexed-ops.s (every encoding = MAME unidasm's
+#     reading); direct-addr-width-errors.s now uses mul/div as its
+#     still-undefined R+R example.  TLCS900 lit 109/109.
+#
+#   disasm (the commit that promotes this pin):
+#   * scripts/converters/respell_raw_pseudos.py (notes/raw-pseudo-respell-
+#     2026-10-02/): round 1, with the UPDATE 20 binary, respelled 10,929
+#     raw-byte pseudo lines (99f3c837); round 2, with this one, 2,207 more:
+#     v10 656, v9 657, v7 612, v142 181, HD-AE5000 96, table data 5.
+#   * --bytes: one-instruction `.byte` lines with code on both sides whose
+#     comment names the mnemonic unidasm reads, the same proof: 73 v10, 73 v9,
+#     73 v7, 8 v142 (`.byte 0xb0, 0xb0 ; res 0, (xwa) [not in LLVM]` ->
+#     `res 0, (xwa)`); comments that only restated the instruction dropped.
+#   * Gate: make gate-all 13/13 with llvm-mc 118bb4d6.
+#
+# ⚠ STILL OPEN after UPDATE 21: UPDATE 19's list, with `bit n, (xrr+rr)` now
+#   done; MUL/DIV and the 8-bit / previous-bank index on the operations above.

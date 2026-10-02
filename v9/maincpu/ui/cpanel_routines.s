@@ -1288,7 +1288,7 @@ EncPkt_WriteEvent:
 	ld	(xiz+ix), l
 	calr CPanel_IncEventPtr
 	ld (0x8d96:16), l
-	stib_ind 0x07, 0xf8, 0xf0, 0xff
+	ld	(xiz+ix), 0xff
 	calr CPanel_IncEventPtr
 	ld (xiz - 4), ix
 	decm 3, (xiz - 2)

@@ -875,7 +875,7 @@ SMF_ScanChannelLoop:
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xec, 0x10
+	cp	(xix+hl), 0x10
 	pop xix
 	jr z, SMF_LoopNextChannel
 	ld a, l
@@ -883,7 +883,7 @@ SMF_ScanChannelLoop:
 	add l, a
 	push xde
 	ld xde, 0xf250
-	bit_dri 7, 0x07, 0xe8, 0xec
+	bit	7, (xde+hl)
 	pop xde
 	jr nz, SMF_FoundActiveChannel
 
@@ -920,7 +920,7 @@ SMF_InitChannelScan:
 SMF_FindFirstActiveChannel:
 	push xde
 	ld xde, 0xf250
-	bit_dri 7, 0x07, 0xe8, 0xec
+	bit	7, (xde+hl)
 	pop xde
 	jr nz, SMF_SetupActiveChannel
 	add hl, 0x3
@@ -2008,7 +2008,7 @@ SMF_SystemExclusive_Handler:
 	xor h, h
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xec, 0x0f
+	cp	(xix+hl), 0x0f
 	pop xix
 	jrl z, SMF_ProcessEventLoop
 	ld c, (4212:16)
@@ -2063,7 +2063,7 @@ SMF_NoteOn_Handler:
 SMF_NoteOn_FindVoiceSlot:
 	push xde
 	ld xde, 0x11f9
-	bit_dri 7, 0x07, 0xe8, 0xec
+	bit	7, (xde+hl)
 	pop xde
 	jr z, SMF_NoteOn_SlotFound
 	add hl, 0x5
@@ -3344,7 +3344,7 @@ SeqStep_FileReadReturn_Skip3:
 	ld	xwa, (xwa+8)
 	call	(xwa)
 	lda	xsp, (xsp+10)
-	.byte 0xf3, 0x07, 0xf8, 0xec, 0x00, 0x00	; ld (xiz+hl),0x00
+	ld	(xiz+hl), 0x00
 	cp	hl, 0:i3
 	jr	z, SeqStep_FileReadReturn_Skip4
 	ld	xhl, xiz
@@ -3460,7 +3460,7 @@ SeqStep_FileCloseInner:
 	extz wa
 	sla wa, 2
 	lda xbc, (0x0210b4:24)
-	cpl_sri_mr XIZ, 0x07, 0xe4, 0xe0
+	cp	(xbc+wa), xiz
 	jr z, SeqStep_FileCloseProcess
 
 SeqStep_FileCloseCheck:
@@ -9328,7 +9328,7 @@ GetDiskFreeSpace:
 	lda xix, (GetDiskFreeSpace_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (GetDiskFreeSpace_JumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 GetDiskFreeSpace_JumpTable:
 	ld	hl, 0:i3
@@ -9384,7 +9384,7 @@ GetVolumeLabel:
 	lda xix, (GetVolumeLabel_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (GetVolumeLabel_JumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 GetVolumeLabel_JumpTable:
 	ld	xhl, 0:i3
@@ -9534,7 +9534,7 @@ FileIO_ParseLoop_CheckChar:
 	cp (xwa), 0x5c
 	jr nz, FileIO_ParseLoop_CopyChar
 	lda xwa, (xsp + 4)
-	stib_ind 0x07, 0xe0, 0xe8, 0x00
+	ld	(xwa+de), 0x00
 	ld xwa, (xsp + 18)
 	cp (xwa), 0x0
 	jr z, FileIO_ParseLoop_AppendSlash
@@ -9884,14 +9884,14 @@ WildMatch_FillName:
 
 WildMatch_NameLoop:
 	lda xwa, (xsp + 4)
-	cpib_sri 0x07, 0xe0, 0xe4, 0x2a
+	cp	(xwa+bc), 0x2a
 	jr nz, WildMatch_NameNext
 	cp bc, 0x8
 	jr ge, WildMatch_NameNext
 
 WildMatch_StarFillName:
 	lda xwa, (xsp + 4)
-	stib_ind 0x07, 0xe0, 0xe4, 0x3f
+	ld	(xwa+bc), 0x3f
 	inc 1, bc
 	cp bc, 0x8
 	jr lt, WildMatch_StarFillName
@@ -9908,14 +9908,14 @@ WildMatch_FillExt:
 
 WildMatch_ExtLoop:
 	lda xwa, (xsp + 4)
-	cpib_sri 0x07, 0xe0, 0xe4, 0x2a
+	cp	(xwa+bc), 0x2a
 	jr nz, WildMatch_ExtNext
 	cp bc, 0xb
 	jr ge, WildMatch_ExtNext
 
 WildMatch_StarFillExt:
 	lda xwa, (xsp + 4)
-	stib_ind 0x07, 0xe0, 0xe4, 0x3f
+	ld	(xwa+bc), 0x3f
 	inc 1, bc
 	cp bc, 0xb
 	jr lt, WildMatch_StarFillExt
@@ -10006,7 +10006,7 @@ FileIO_ReadDirEntry_Body:
 	ld wa, (xiz)
 	muls wa, 0x2c
 	lda xbc, (0x0235a8:24)
-	cpiw_sri 0x07, 0xe4, 0xe0, 0xfe, 0xfe
+	cpw	(xbc+wa), 0xfefe
 	jr z, FileIO_ReadDirEntry_End
 	pushw 0x14
 	ld wa, (xiz)
@@ -10555,7 +10555,7 @@ FileIO_ReadDir_CopyLoop:
 	ld wa, iz
 	muls wa, 0x2c
 	lda xbc, (0x0235a8:24)
-	cpiw_sri 0x07, 0xe4, 0xe0, 0xfe, 0xfe
+	cpw	(xbc+wa), 0xfefe
 	jr z, FileIO_FillRemainingEntries
 	pushw 0x14
 	ld wa, iz

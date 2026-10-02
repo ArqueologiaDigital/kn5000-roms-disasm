@@ -317,7 +317,7 @@ DSPCfg_Init_BoundsCheck:
 	lda xix, (NakaInst_ExtDevice_Screens_0x2B3E:24)
 	ld	de, (xix+de)
 	lda xix, (DSPCfg_InitDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DSPCfg_InitAllEntries dispatch
 DSPCfg_InitDispatch:
 	calr	DSPCfg_InitDispatchData
@@ -349,7 +349,7 @@ DSPCfg_InitDispatchData:
 	ld	l, (xde+0x1)
 	extz	hl
 	ld	c, (xde+0x2)
-	.byte	0xc3, 0x07, 0xe0, 0xec, 0xcb	; and (XWA+HL),C
+	and	(xwa+hl), c
 	ld	hl, 3:i3
 	ret
 DSPCfg_Init_BoundsCheck_Helper:
@@ -358,7 +358,7 @@ DSPCfg_Init_BoundsCheck_Helper:
 	extz	hl
 	ld	a, (xbc+0x2)
 	cpl	a
-	.byte	0xc3, 0x07, 0xe8, 0xec, 0xc9	; and (XDE+HL),A
+	and	(xde+hl), a
 	ld	hl, 3:i3
 	ret
 DSPCfg_Init_BoundsCheck_Helper2:
@@ -366,7 +366,7 @@ DSPCfg_Init_BoundsCheck_Helper2:
 	ld	l, (xde+0x1)
 	extz	hl
 	ld	c, (xde+0x2)
-	.byte	0xc3, 0x07, 0xe0, 0xec, 0xeb	; or (XWA+HL),C
+	or	(xwa+hl), c
 	ld	hl, 3:i3
 	ret
 DSPCfg_Init_BoundsCheck_Helper3:
@@ -511,7 +511,7 @@ DSPCfg_Init_BoundsCheck_Helper7:
 DSPCfg_Init_BoundsCheck_Helper8:
 	ld	c, (xbc+0x1)
 	extz	bc
-	.byte	0xf3, 0x07, 0xe0, 0xe4, 0x00, 0x00	; ld (XWA+BC),0x00
+	ld	(xwa+bc), 0x00
 	ld	hl, 2:i3
 	ret
 	lda_d16	xwa, (0xf480)
@@ -1063,7 +1063,7 @@ CtrlPanel_IndicatorJumpTable:
 	lda xix, (NakaInst_ExtDevice_Screens_0x2E3C:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSPCfg_Param_CaseC:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DSP config parameter handler C
 DSPCfg_Param_CaseC:
@@ -1109,7 +1109,7 @@ Audio_DispatchCommand:
 	lda xix, (NakaInst_ExtDevice_Screens_0x2E4E:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSPCfg_Param_CaseD:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DSP config parameter handler D
 DSPCfg_Param_CaseD:
@@ -1157,7 +1157,7 @@ PanelDisplay_DispatchByMode:
 	lda xix, (NakaInst_ExtDevice_Screens_0x2E60:24)
 	ld	wa, (xix+wa)
 	lda xix, (PanelDisplay_DispatchData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 PanelDisplay_DispatchData:
 	ld	xde, 0x3d3400

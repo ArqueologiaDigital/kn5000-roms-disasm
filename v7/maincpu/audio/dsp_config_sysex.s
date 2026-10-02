@@ -3694,7 +3694,7 @@ DspConfig_EventDispatch:
 	lda	xix, (ToneKit_VoiceDispatch_Table_0x348:24)
 	ld	bc, (xix+bc)
 	lda	xix, (AssSwb_SwapEntriesAndDispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 AssSwb_SwapEntriesAndDispatch:
 	ldw	(xsp + 4), 0xffff
 	jrl	DSPCfg_Epilogue
@@ -4615,47 +4615,47 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Helper:
 DataBuf_CopyVoiceBlock24_Code_Helper2_Loop2:
 	ld	wa, de
 	inc	4, wa
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, 0x24
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, 0x44
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, 0x64
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, 0x64
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0xe4
-	res_dri	7, 0x07, 0xe4, 0xe0
+	res	7, (xbc+wa)
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0xe4
-	and_srib_im	0x07, 0xe4, 0xe0, 0x8f
+	and	(xbc+wa), 0x8f
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
-	res_dri	7, 0x07, 0xe4, 0xe0
+	res	7, (xbc+wa)
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
-	set_dri	6, 0x07, 0xe4, 0xe0
+	set	6, (xbc+wa)
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
-	set_dri	5, 0x07, 0xe4, 0xe0
+	set	5, (xbc+wa)
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
-	res_dri	4, 0x07, 0xe4, 0xe0
+	res	4, (xbc+wa)
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
-	and_srib_im	0x07, 0xe4, 0xe0, 0xf1
+	and	(xbc+wa), 0xf1
 	ld	wa, de
 	add	wa, wa
 	add	wa, 0x124
@@ -4672,13 +4672,13 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Skip3:
 DataBuf_CopyVoiceBlock24_Code_Helper2_Loop3:
 	ld	wa, de
 	add	wa, 0x84
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, 0x94
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, 0xa4
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	inc	1, de
 	cp	de, 0x10
 	jr	lt, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop3
@@ -4689,10 +4689,10 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Skip4:
 DataBuf_CopyVoiceBlock24_Code_Helper2_Loop4:
 	ld	wa, de
 	add	wa, 0xb4
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld	wa, de
 	add	wa, 0xbc
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	inc	1, de
 	cp	de, 0x8
 	jr	lt, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop4
@@ -4704,11 +4704,11 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Loop5:
 	ld	wa, de
 	sla	wa, 2
 	add	wa, 0xc4
-	res_dri	7, 0x07, 0xe4, 0xe0
+	res	7, (xbc+wa)
 	ld	wa, de
 	sla	wa, 2
 	add	wa, 0xc4
-	or_srib_im	0x07, 0xe4, 0xe0, 0x7f
+	or	(xbc+wa), 0x7f
 	ld	wa, de
 	sla	wa, 2
 	add	wa, 0xc4
@@ -4936,7 +4936,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	add	wa, wa
 	add	wa, 228
 	lda_d16	xbc, (0xc163)
-	.byte	0xf3, 0x07, 0xe4, 0xe0, 0x00, 0x00	; ld (XBC+WA),0x00
+	ld	(xbc+wa), 0x00
 UIStateEvt_TransposeUpdate_Apply:
 	orw	(0xc4f8:16), 4
 	ret
@@ -4970,7 +4970,7 @@ UIStateEvt_TransposeUpdate_Apply:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	AudioDispatch_CheckStereoMode_Code_Join
 AudioDispatch_CheckStereoMode_Code_Skip:
 	ldw_d16	wa, (0xc4fc)
@@ -4983,7 +4983,7 @@ AudioDispatch_CheckStereoMode_Code_Skip:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	AudioDispatch_CheckStereoMode_Code_Join
 AudioDispatch_CheckStereoMode_Code_Skip2:
 	ldb_d8	a, (0xfc5d)
@@ -5069,7 +5069,7 @@ AudioDispatch_CheckStereoMode_Code_Skip10:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	AudioDispatch_CheckStereoMode_Code_Join5
 AudioDispatch_CheckStereoMode_Code_Skip11:
 	ldw_d16	wa, (0xc4fc)
@@ -5081,7 +5081,7 @@ AudioDispatch_CheckStereoMode_Code_Skip11:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (ParamEdit_WordTable:24)
-	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
+	or	iz, (xbc+wa)
 	jr	AudioDispatch_CheckStereoMode_Code_Join5
 AudioDispatch_CheckStereoMode_Code_Skip12:
 	ldb_d8	a, (0xfc5d)

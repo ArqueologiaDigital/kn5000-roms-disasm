@@ -191,7 +191,7 @@ ComSetGridCheck:
 ;   0x1c0001b -> UI_ReturnZero
 ;   0x1c0001c -> ComSetGridCheck_Evt1C0001C
 ;   0x1c0001d -> ComSetGridCheck_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ComSetGridCheck_Evt1C00017:
 	call	GetFocusObject
@@ -280,7 +280,7 @@ ComSetGridCheck_JumpTable_Loop:
 	sla	iy, 2
 	ld	xwa, (xiz)
 	; cp xwa, (xix+iy)
-	cpl_sri_rm	xwa, 0x07, 0xf0, 0xf4	; cp xwa, (xix+iy)
+	cp	xwa, (xix+iy)	; cp xwa, (xix+iy)
 	jr	z, ComSetGridCheck_JumpTable_Skip3
 	inc	1, bc
 	ld	(xde), bc
@@ -543,7 +543,7 @@ AcPmemOutLGridBoxProc:
 ;   0x1c0001b -> AcPmemOutL_ForwardToBase
 ;   0x1c0001c -> AcPmemOutLGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> AcPmemOutLGridBoxProc_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 AcPmemOutL_Init:
 	ld xwa, (xsp + 16)
@@ -864,7 +864,7 @@ AcPmemOutRGridBoxProc:
 ;   0x1c0001b -> AcPmemOutR_ForwardToBase
 ;   0x1c0001c -> AcPmemOutRGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> AcPmemOutRGridBoxProc_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 AcPmemOutR_Init:
 	ld xwa, (xsp + 16)
@@ -1179,7 +1179,7 @@ PmemOutLGridCheck:
 ;   0x1c0001b -> PmemOutGrid_ReturnZero
 ;   0x1c0001c -> PmemOutGrid_ReturnZero
 ;   0x1c0001d -> PmemOutLGridCheck_Evt1C0001D
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 PmemOutLGridCheck_Evt1C00017:
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1938,7 +1938,7 @@ PmemOutRGridCheck:
 ;   0x1c0001b -> TtMdCtlMsg_ReturnZero2
 ;   0x1c0001c -> TtMdCtlMsg_ReturnZero2
 ;   0x1c0001d -> PmemOutRGridCheck_Evt1C0001D
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; TtMdCtlMsg event dispatch (7-entry, table 0xe80272)
 
 ; -----------------------------------------------------------------------------
@@ -2767,7 +2767,7 @@ AcCtlMsgGridBoxProc:
 ;   0x1c0001b -> AcCtlMsgGrid_ForwardToBase
 ;   0x1c0001c -> AcCtlMsgGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> AcCtlMsgGridBoxProc_Evt1C0001C
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 AcCtlMsgGrid_Init:
 	ld xwa, (xsp + 32)
@@ -3206,7 +3206,7 @@ CtlMsgGridCheck:
 ;   0x1c0001b -> CtlMsgGrid_ReturnZero
 ;   0x1c0001c -> CtlMsgGridCheck_Evt1C0001C
 ;   0x1c0001d -> CtlMsgGrid_ReturnZero
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 CtlMsgGridCheck_Evt1C00017:
 	call	GetFocusObject
@@ -3285,7 +3285,7 @@ CtlMsgGridCheck_Loop:
 	add	iy, wa
 	ld	xwa, (xiz)
 	; cp xwa, (xhl+iy)
-	cpl_sri_rm	xwa, 0x07, 0xec, 0xf4	; cp xwa, (xhl+iy)
+	cp	xwa, (xhl+iy)	; cp xwa, (xhl+iy)
 	jr	nz, CtlMsgGridCheck_Skip2
 	lda	xde, (xsp+20)
 	ld	xwa, (xsp+4)
@@ -3444,7 +3444,7 @@ AcMidiPartGridBoxProc:
 ;   0x1c0001b -> MidiSetup_GridBoxCase4
 ;   0x1c0001c -> AcMidiPartGridBoxProc_Evt1C0001C
 ;   0x1c0001d -> MidiPart_ReturnZeroJmp
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; MidiSetup title case 3
 MidiSetup_TtlCase3:
@@ -4029,7 +4029,7 @@ MidiPartGridCheck:
 ;   0x1c0001b -> MidiSetup_ReturnZero
 ;   0x1c0001c -> MidiPartGridCheck_Evt1C0001C
 ;   0x1c0001d -> MidiSetup_ReturnZero
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 MidiPartGridCheck_Evt1C00017:
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4300,7 +4300,7 @@ MidiPartGridCheck_Skip12:
 	inc	4, iz
 	ld	xwa, (xix)
 	; cp xwa, (xhl+iz)
-	cpl_sri_rm	xwa, 0x07, 0xec, 0xf8	; cp xwa, (xhl+iz)
+	cp	xwa, (xhl+iz)	; cp xwa, (xhl+iz)
 	jr	nz, MidiPartGridCheck_Skip13
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 2
@@ -4322,7 +4322,7 @@ MidiPartGridCheck_Skip13:
 	inc	8, iy
 	ld	xwa, (xix)
 	; cp xwa, (xhl+iy)
-	cpl_sri_rm	xwa, 0x07, 0xec, 0xf4	; cp xwa, (xhl+iy)
+	cp	xwa, (xhl+iy)	; cp xwa, (xhl+iy)
 	jr	nz, MidiPartGridCheck_Skip15
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 3
@@ -4940,7 +4940,7 @@ IvSdpartProc:
 ;   0x1c0001e -> IvSdpart_ForwardToBase
 ;   0x1c0001f -> IvSdpart_ForwardToBase
 ;   0x1c00020 -> IvSdpartProc_Evt1C00020
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 IvSdpart_Init:
 	ld xwa, (xsp + 8)
@@ -8767,7 +8767,7 @@ IvMesageProc:
 	ld wa, (0x02478c:24)
 	muls wa, 0xe
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
-	cpiw_sri 0x07, 0xe4, 0xe0, 0x05, 0x00
+	cpw	(xbc+wa), 0x0005
 	jrl nz, IvMessageStrcpyReturn
 	ld xwa, 0xffffffff
 	ld xbc, EVT_SET_KEEP
@@ -8791,7 +8791,7 @@ IvMessage_Paint:
 	ld wa, (0x02478c:24)
 	muls wa, 0xe
 	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
-	cpiw_sri 0x07, 0xe4, 0xe0, 0x05, 0x00
+	cpw	(xbc+wa), 0x0005
 	call nz, (DrawWall:24)
 	ld xwa, xiz
 	ld xbc, EVT_PARA_DRAW
@@ -8924,14 +8924,14 @@ PleaseWait_GetText:
 
 PleaseWait_DotFillLoop:
 	ld xwa, (xsp + 8)
-	stib_ind 0x07, 0xe0, 0xec, 0x2e
+	ld	(xwa+hl), 0x2e
 	inc 1, hl
 	cp hl, de
 	jr lt, PleaseWait_DotFillLoop
 
 PleaseWait_BuildScrollStr:
 	ld xiy, (xsp + 8)
-	stib_ind 0x07, 0xf4, 0xec, 0x00
+	ld	(xiy+hl), 0x00
 	ld ix, de
 	add ix, ix
 	ld wa, (0x02477a:24)
@@ -9197,7 +9197,7 @@ MsgHeader_BuildLoop:
 	ld de, (xsp + 8)
 	extz xde
 	sll xde, 2
-	add_sril_rm XDE, 0x07, 0xe0, 0xe4
+	add	xde, (xwa+bc)
 	ld xwa, (xde)
 	push xwa
 	call Strlen
@@ -11151,7 +11151,7 @@ AcWelcomScreen_Select:
 	lda xix, (Bitmap_DigitD_0x11D6:24)
 	ld	hl, (xix+hl)
 	lda xix, (AcWelcomScreen_RenderBytecode:24)
-	jp_ind 8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 AcWelcomScreen_RenderBytecode:
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_SET_KEEP
@@ -11568,7 +11568,7 @@ PsMixerControlProc:
 ;   0x1c0001e -> PsMixerControlProc_Evt1C0001E
 ;   0x1c0001f -> PsMixer_ControlReturn
 ;   0x1c00020 -> PsMixerControlProc_Evt1C00020
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 ; PsMixerControlProc control handler dispatch (10-entry)
 PsMixer_ControlHandler:
@@ -17749,7 +17749,7 @@ DemoMenu_WorkspaceFunc:
 	lda xix, (KeyShiftStr_Zero_0x5E:24)
 	ld	wa, (xix+wa)
 	lda xix, (DemoMenu_WorkspaceDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DemoMenu workspace dispatch (6-entry, table 0xe9f984)
 DemoMenu_WorkspaceDispatch:
@@ -17807,7 +17807,7 @@ DemoMenu_DescriptorFunc:
 	lda xix, (KeyShiftStr_Zero_0x6A:24)
 	ld	wa, (xix+wa)
 	lda xix, (DemoDesc_DispatchTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 DemoDesc_DispatchTable:
 	ld	hl, (0x247e0:24)
@@ -18542,7 +18542,7 @@ AcPresentationControlProc:
 ;   0x1c0000a -> AcPresCtrl_DefaultCase
 ;   0x1c0000b -> AcPresent_ReturnZeroJmp
 ;   0x1c0000c -> AcPresent_ReturnZeroJmp
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; AcPresentationControlProc event dispatch (11-entry, table 0xe9f9b2)
 AcPresCtrl_EventDispatch:
 	; --- AcPresentationControlProc jump table handler body ---

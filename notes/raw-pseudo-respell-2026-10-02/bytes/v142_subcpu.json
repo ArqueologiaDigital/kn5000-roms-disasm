@@ -1,0 +1,17 @@
+{
+ "respelled": {
+  "d3 07 e4 e0 3c fd ff": "andw\t(xbc+wa), 0xfffd",
+  "d3 07 e4 e0 3c fe ff": "andw\t(xbc+wa), 0xfffe",
+  "d3 07 e4 e0 3c ff bf": "andw\t(xbc+wa), 0xbfff",
+  "f3 07 e0 e8 ca": "bit\t2, (xwa+de)",
+  "f3 07 e0 e8 cb": "bit\t3, (xwa+de)",
+  "f3 07 e8 f4 ce": "bit\t6, (xde+iy)",
+  "f3 07 e8 f4 cf": "bit\t7, (xde+iy)",
+  "ff": "swi\t7"
+ },
+ "left": [
+  "ldc | ldc DMAS2,XHL",
+  "ldc | ldc unknown,WA",
+  "fill | swi 7"
+ ]
+}

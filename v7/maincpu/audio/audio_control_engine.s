@@ -2279,7 +2279,7 @@ MidiCC_Finalize:
 	ld	a, (0x8e28:16)
 	extz	wa
 	muls	wa, 0x3
-	stib_ind	0x07, 0xe8, 0xe0, 0xff
+	ld	(xde+wa), 0xff
 MidiCC_Return:
 	jr	MIDI_PopIzRet
 MidiCC_ReturnClean:
@@ -2292,7 +2292,7 @@ MidiCC_ReturnClean:
 	ld	a, (0x8e28:16)
 	extz	wa
 	muls	wa, 0x3
-	stib_ind	0x07, 0xe8, 0xe0, 0xff
+	ld	(xde+wa), 0xff
 	call	SeqStep_TimerDispatchC
 MIDI_PopIzRet:
 	pop	xiz
@@ -2684,7 +2684,7 @@ SndParam_SetResBit0_Via028100:
 	setm	0, (xwa)
 	jr	t, SndParam028100_Done
 SndParam028100_ResBit0:
-	.byte	0xb0, 0xb0	; res 0, (xwa)  [not in LLVM]
+	res	0, (xwa)
 SndParam028100_Done:
 	pop	xiz
 	ret
@@ -2704,7 +2704,7 @@ SndParam028101_SetBit1:
 	setm	1, (xiz+4)
 	jr	t, SndParam028101_Done
 SndParam028101_ResBit1:
-	.byte	0xbe, 0x04, 0xb1	; res 1, (xiz+4)  [not in LLVM]
+	res	1, (xiz+4)
 SndParam028101_Done:
 	pop	xiz
 	ret
@@ -2724,7 +2724,7 @@ SndParam028102_SetBit2:
 	setm	2, (xiz+4)
 	jr	t, SndParam028102_Done
 SndParam028102_ResBit2:
-	.byte	0xbe, 0x04, 0xb2	; res 2, (xiz+4)  [not in LLVM]
+	res	2, (xiz+4)
 SndParam028102_Done:
 	pop	xiz
 	ret
@@ -2744,7 +2744,7 @@ SndParam028102_SetBit3:
 	setm	3, (xiz+4)
 	jr	t, SndParam028102_Done2
 SndParam028102_ResBit3:
-	.byte	0xbe, 0x04, 0xb3	; res 3, (xiz+4)  [not in LLVM]
+	res	3, (xiz+4)
 SndParam028102_Done2:
 	pop	xiz
 	ret
@@ -2760,7 +2760,7 @@ SndParam_SetResBit3_Via4002:
 	setm	3, (xwa)
 	jr	t, SndParam4002_Done
 SndParam4002_ResBit3:
-	.byte	0xb0, 0xb3	; res 3, (xwa)  [not in LLVM]
+	res	3, (xwa)
 SndParam4002_Done:
 	pop	xiz
 	ret
@@ -2776,7 +2776,7 @@ SndParam_SetResBit4_Via4004:
 	setm	4, (xwa)
 	jr	t, SndParam4004_Done
 SndParam4004_ResBit4:
-	.byte	0xb0, 0xb4	; res 4, (xwa)  [not in LLVM]
+	res	4, (xwa)
 SndParam4004_Done:
 	pop	xiz
 	ret
@@ -2809,7 +2809,7 @@ SndParam_SetResBit1_ViaPartCC5E:
 	setm	1, (xwa)
 	jr	t, SndParamCC5E_Done
 SndParamCC5E_ResBit1:
-	.byte	0xb0, 0xb1	; res 1, (xwa)  [not in LLVM]
+	res	1, (xwa)
 SndParamCC5E_Done:
 	pop	xiz
 	ret
@@ -2835,7 +2835,7 @@ SndParamCC5D_ResBit2:
 	resm	2, (xiz+6)
 	jr	t, SndParamCC5D_Done
 SndParamCC5D_SetBit2:
-	.byte	0xbe, 0x06, 0xba	; set 2, (xiz+6)  [not in LLVM]
+	set	2, (xiz+6)
 SndParamCC5D_Done:
 	pop	xiz
 	ret
@@ -2854,7 +2854,7 @@ SndParam_SetResBit0_ViaPartCC40:
 	setm	0, (xwa)
 	jr	t, SndParamCC40_Done
 SndParamCC40_ResBit0:
-	.byte	0xb0, 0xb0	; res 0, (xwa)  [not in LLVM]
+	res	0, (xwa)
 SndParamCC40_Done:
 	pop	xiz
 	ret
@@ -2895,7 +2895,7 @@ SndParam_SetResBit0_Via028103:
 	setm	0, (xwa)
 	jr	t, SndParam028103_Done
 SndParam028103_ResBit0:
-	.byte	0xb0, 0xb0	; res 0, (xwa)  [not in LLVM]
+	res	0, (xwa)
 SndParam028103_Done:
 	pop	xiz
 	ret
@@ -2911,7 +2911,7 @@ SndParam_SetResBit5_Via028080:
 	resm	5, (xwa)
 	jr	t, SndParam028080_Done
 SndParam028080_SetBit5:
-	.byte	0xb0, 0xbd	; set 5, (xwa)  [not in LLVM]
+	set	5, (xwa)
 SndParam028080_Done:
 	pop	xiz
 	ret
@@ -2961,7 +2961,7 @@ SndParam_SetResBit7_Via4200:
 	setm	7, (xwa)
 	jr	t, SndParam4200_Done
 SndParam4200_ResBit7:
-	.byte	0xb0, 0xb7	; res 7, (xwa)  [not in LLVM]
+	res	7, (xwa)
 SndParam4200_Done:
 	pop	xiz
 	ret
@@ -3009,7 +3009,7 @@ SndParam_SetResBit4_Via0400:
 	setm	4, (xwa)
 	jr	t, SndParam0400_Done
 SndParam0400_ResBit4:
-	.byte	0xb0, 0xb4	; res 4, (xwa)  [not in LLVM]
+	res	4, (xwa)
 SndParam0400_Done:
 	pop	xiz
 	ret
@@ -3027,7 +3027,7 @@ SndParam_SetResBit7_ViaSelection:
 	resm	7, (xiz)
 	jr	t, CtrlPanel_SetResBit7_Ret
 SndParamSelect_SetBit7:
-	.byte	0xb6, 0xbf	; set 7, (xiz)  [not in LLVM]
+	set	7, (xiz)
 CtrlPanel_SetResBit7_Ret:
 	pop	xiz
 	ret
@@ -3042,7 +3042,7 @@ SndParam_SetResBit7_ViaF9A541:
 	setm	7, (xwa)
 	jr	t, SndParamF9A541_Done
 SndParamF9A541_ResBit7:
-	.byte	0xb0, 0xb7	; res 7, (xwa)  [not in LLVM]
+	res	7, (xwa)
 SndParamF9A541_Done:
 	pop	xiz
 	ret
@@ -3483,7 +3483,7 @@ CtrlPanel_SetResBit6_ViaLookup:
 	setm	6, (xiz)
 	jr	t, CtrlPanel_Bit6Done
 CtrlPanel_ResBit6:
-	.byte	0xb6, 0xb6	; res 6, (xiz)  [not in LLVM]
+	res	6, (xiz)
 CtrlPanel_Bit6Done:
 	pop	xiz
 	ret
@@ -3560,7 +3560,7 @@ CtrlPanel_SetResBit0_ViaLookup4:
 	setm	0, (xwa)
 	jr	t, CtrlPanelLookup4_Done
 CtrlPanelLookup4_ResBit0:
-	.byte	0xb0, 0xb0	; res 0, (xwa)  [not in LLVM]
+	res	0, (xwa)
 CtrlPanelLookup4_Done:
 	pop	xiz
 	ret
@@ -3578,7 +3578,7 @@ CtrlPanel_SetResBit1_ViaLookup56:
 	setm	1, (xwa)
 	jr	t, CtrlPanelLookup56_Done
 CtrlPanelLookup56_ResBit1:
-	.byte	0xb0, 0xb1	; res 1, (xwa)  [not in LLVM]
+	res	1, (xwa)
 CtrlPanelLookup56_Done:
 	pop	xiz
 	ret
@@ -3596,7 +3596,7 @@ CtrlPanel_SetResBit2_ViaLookup50:
 	setm	2, (xwa)
 	jr	t, CtrlPanelLookup50_Done
 CtrlPanelLookup50_ResBit2:
-	.byte	0xb0, 0xb2	; res 2, (xwa)  [not in LLVM]
+	res	2, (xwa)
 CtrlPanelLookup50_Done:
 	pop	xiz
 	ret
@@ -3614,7 +3614,7 @@ CtrlPanel_SetResBit3_ViaLookup52:
 	setm	3, (xwa)
 	jr	t, CtrlPanelLookup52_Done
 CtrlPanelLookup52_ResBit3:
-	.byte	0xb0, 0xb3	; res 3, (xwa)  [not in LLVM]
+	res	3, (xwa)
 CtrlPanelLookup52_Done:
 	pop	xiz
 	ret
@@ -3666,7 +3666,7 @@ CtrlPanel_SetResBit0_ViaLookup4C:
 	setm	0, (xwa)
 	jr	t, CtrlPanelLookup4C_Done
 CtrlPanelLookup4C_ResBit0:
-	.byte	0xb0, 0xb0	; res 0, (xwa)  [not in LLVM]
+	res	0, (xwa)
 CtrlPanelLookup4C_Done:
 	pop	xiz
 	ret
@@ -3682,7 +3682,7 @@ CtrlPanel_SetResBit7_ViaLookup4C:
 	setm	7, (xiz)
 	jr	t, CtrlPanelBit7_Done
 CtrlPanelBit7_Res:
-	.byte	0xb6, 0xb7	; res 7, (xiz)  [not in LLVM]
+	res	7, (xiz)
 CtrlPanelBit7_Done:
 	pop	xiz
 	ret
@@ -3698,7 +3698,7 @@ CtrlPanel_SetResBit5_ViaLookup4C:
 	setm	5, (xiz)
 	jr	t, CtrlPanelBit5_Done
 CtrlPanelBit5_Res:
-	.byte	0xb6, 0xb5	; res 5, (xiz)  [not in LLVM]
+	res	5, (xiz)
 CtrlPanelBit5_Done:
 	pop	xiz
 	ret
@@ -3714,7 +3714,7 @@ CtrlPanel_SetResBit6_ViaLookup4C:
 	setm	6, (xiz)
 	jr	t, CtrlPanelBit6_Done
 CtrlPanelBit6_Res:
-	.byte	0xb6, 0xb6	; res 6, (xiz)  [not in LLVM]
+	res	6, (xiz)
 CtrlPanelBit6_Done:
 	pop	xiz
 	ret
@@ -4811,11 +4811,11 @@ BitmapTable_CheckOffset:
 	extz	bc
 	ld	a, (xix)
 	cpl	a
-	and_srib_mr	A, 0x07, 0xf4, 0xe4
+	and	(xiy+bc), a
 	ld	c, (xde)
 	extz	bc
 	ld	a, (xhl)
-	or_srib_mr	A, 0x07, 0xf4, 0xe4
+	or	(xiy+bc), a
 BitmapTable_NextEntry:
 	incw	1, (xsp + 4)
 	cpw	(xsp + 4), 0x1
@@ -9552,7 +9552,7 @@ VoiceMode_ParamHandler_1:
 AudioSeq_FlushAndTerminate:
 	ld	xix, 0xbca0
 	ld	hl, (0x9042:16)
-	stib_ind	0x07, 0xf0, 0xec, 0xff
+	ld	(xix+hl), 0xff
 	ret
 VoiceMode_ParamHandler_4:
 	calr	VoiceMode_CheckPendingFlags
@@ -9814,7 +9814,7 @@ VoiceMode3_DispatchTable_Code_Skip3:
 	extz	hl
 	ldb_d8	l, (0x911f)
 	ld	xix, 0xf1a0
-	cpib_sri	0x07, 0xf0, 0xec, 0x0f
+	cp	(xix+hl), 0x0f
 	jr	nz, VoiceMode3_DispatchTable_Code_Return
 	ld	xix, 0x9032
 	ld_rrb	a, xix, hl
@@ -9885,7 +9885,7 @@ VoiceMode3_EvType5:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0xf1a0
-	cpib_sri	0x07, 0xf0, 0xec, 0x0f
+	cp	(xix+hl), 0x0f
 	jr	z, MidiPartCC_WriteAndDispatch_Skip
 	set	7, e
 	ld	xix, 0x9416
@@ -9959,7 +9959,7 @@ VoiceMode3_EvType2:
 	extz	hl
 	ldb_d8	l, (0x912c)
 	ld	xix, 0xf1a0
-	cpib_sri	0x07, 0xf0, 0xec, 0x0f
+	cp	(xix+hl), 0x0f
 	jr	nz, MidiVoice_DataBlockHandler_Return
 	call	PartCtrl_CheckBitmaskBit
 	jr	nc, VoiceMode3_EvType2_Skip
@@ -10415,7 +10415,7 @@ MidiPart_ChannelDispatch:
 	extz	hl
 	ld	l, (0x912c:16)
 	ld	xix, 0xf1a0
-	cpib_sri	0x07, 0xf0, 0xec, 0x10
+	cp	(xix+hl), 0x10
 	jrl	nz, MidiNoteVel_Handler_2
 	ld	xix, 0x9032
 	ld	a, (xix+hl)

@@ -146,7 +146,7 @@ MainPreControl:
 	add xbc, Presentation_TagStrTable_0x72
 	ld bc, (xbc)
 	lda xix, (MainPreControl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; MainPreControl dispatch (11-entry, table 0xea007a)
 MainPreControl_Dispatch:
 	ldw	(0x0251d8:24), 0
@@ -221,7 +221,7 @@ ApPreControl:
 	add xwa, Presentation_TagStrTable_0x88
 	ld wa, (xwa)
 	lda xix, (Seq_PostMelodyEvent:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 Seq_PostMelodyEvent:
 	ld xwa, NAKA_MAINFUNC_MainPreControl
@@ -1038,7 +1038,7 @@ Demo_ScanPartLoop:
 	jr z, Demo_ScanPartSkipToEnd
 	muls wa, 0x3
 	lda xbc, (0xf250:16)
-	bit_dri 7, 0x07, 0xe4, 0xe0
+	bit	7, (xbc+wa)
 	jr z, Demo_ScanPartSkipToEnd
 	ld a, l
 	inc 1, a
@@ -1238,7 +1238,7 @@ Demo_VoiceTypeDispatch:
 	ld c, a
 	extz bc
 	ld xwa, (xsp + 8)
-	bit_dri 7, 0x07, 0xe0, 0xe4
+	bit	7, (xwa+bc)
 	jrl z, Demo_RecordChainLoopExit
 	ld a, (xsp + 14)
 	extz wa
@@ -1425,7 +1425,7 @@ FileIO_CheckSig_LoopTest:
 	sla wa, 3
 	lda xbc, (Presentation_TagStrTable_0x102:24)
 	ld de, iz
-	cpw_sri_rm DE, 0x07, 0xe4, 0xe0
+	cp	de, (xbc+wa)
 	jr c, FileIO_CheckSig_ReadLoop
 
 FileIO_CheckSig_Return:
@@ -5949,7 +5949,7 @@ ValidateFileRange_SecondPage:
 	sub wa, bc
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
-	cpib_sri 0x07, 0xe4, 0xe0, 0x00
+	cp	(xbc+wa), 0x00
 	jr nz, ValidateFileRange_Found
 	ld hl, 2:i3
 	ret
@@ -6264,7 +6264,7 @@ ReadField_DiscardLoop:
 
 ReadField_Terminate:
 	ld xwa, (xsp + 4)
-	stib_ind 0x07, 0xe0, 0xf8, 0x00
+	ld	(xwa+iz), 0x00
 	jr ReadField_TrimLoop
 
 ReadField_TrimSpace:
@@ -7020,7 +7020,7 @@ ValidateRange_CheckEmpty:
 	sub wa, bc
 	muls wa, 0x52
 	lda xbc, (0x025ec0:24)
-	cpib_sri 0x07, 0xe4, 0xe0, 0x00
+	cp	(xbc+wa), 0x00
 	jr nz, ValidateRange_IsValid
 	ld hl, 2:i3
 	ret
@@ -7205,7 +7205,7 @@ TrimAndFormatFilename:
 	lda xsp, (xsp - 128)
 	push xiz
 	ld xiz, xbc
-	stib_ind 0x07, 0xf8, 0xe0, 0x00
+	ld	(xiz+wa), 0x00
 	ld ix, 0:i3
 	cp wa, 0:i3
 	jr le, TrimFormat_TrimTrailing
@@ -7364,7 +7364,7 @@ ValidateRangeAlt_CheckEmpty:
 	sub wa, bc
 	muls wa, 0x52
 	lda xbc, (0x025eb2:24)
-	cpib_sri 0x07, 0xe4, 0xe0, 0x00
+	cp	(xbc+wa), 0x00
 	jr nz, ValidateRangeAlt_IsValid
 	ld hl, 2:i3
 	ret
@@ -7873,7 +7873,7 @@ FileIO_StoreIndexedEntry:
 	sla wa, 5
 	addw_erp WA, 0xfa
 	lda xbc, (0x027312:24)
-	stib_ind 0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 	inc 1, (0x27412:24)
 	inc 1, iz
 	cp iz, 0x80
@@ -8132,14 +8132,14 @@ ExtractBase_ScanLoop:
 
 ExtractBase_TrackSep:
 	inc 1, ix
-	cpib_sri 0x07, 0xe4, 0xf0, 0x00
+	cp	(xbc+ix), 0x00
 	jr nz, ExtractBase_ScanLoop
 
 ExtractBase_TruncatePath:
 	cp de, 0:i3
 	jr le, ExtractBase_ClearAll
 	inc 1, de
-	stib_ind 0x07, 0xec, 0xe8, 0x00
+	ld	(xhl+de), 0x00
 	jr ExtractBase_Done
 
 ExtractBase_ClearAll:
@@ -8170,7 +8170,7 @@ NormalizePath_CheckLoop:
 	cp de, 0:i3
 	ret le
 	dec 1, de
-	cpib_sri 0x07, 0xe4, 0xe8, 0x5c
+	cp	(xbc+de), 0x5c
 	ret z
 	ld (xwa), 0x5c
 	ret
@@ -8209,7 +8209,7 @@ ValidateMode_InPage:
 	sub wa, bc
 	muls wa, 0xe
 	lda xbc, (0x02723c:24)
-	cpib_sri 0x07, 0xe4, 0xe0, 0x00
+	cp	(xbc+wa), 0x00
 	jr nz, ValidateMode_Valid
 	ld hl, 2:i3
 	ret

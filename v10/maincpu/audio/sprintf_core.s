@@ -105,7 +105,7 @@ Sprintf_CheckIfDigit:
 	ldto_berp A, 0xf8
 	extz wa
 	lda xbc, (CharMap_FullPermutation_0x660:24)
-	bit_dri 2, 0x07, 0xe4, 0xe0
+	bit	2, (xbc+wa)
 	jr nz, Sprintf_ParseWidthDigit
 
 Sprintf_CheckPrecisionDot:
@@ -154,7 +154,7 @@ Sprintf_CheckPrecisionDigit:
 	ldto_berp A, 0xf8
 	extz wa
 	lda xbc, (CharMap_FullPermutation_0x660:24)
-	bit_dri 2, 0x07, 0xe4, 0xe0
+	bit	2, (xbc+wa)
 	jr nz, Sprintf_ParsePrecisionDigit
 
 Sprintf_CheckLengthH:
@@ -208,7 +208,7 @@ Sprintf_DispatchType:
 	lda xix, (CharMap_FullPermutation_0x760:24)
 	ld	wa, (xix+wa)
 	lda xix, (Sprintf_Format_Percent:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 Sprintf_Format_Percent:
 	ld wa, (xsp + 6)
@@ -1342,7 +1342,7 @@ Sprintf_FFixed_RoundCheck:
 	cp iz, wa
 	jr ge, Sprintf_FFixed_AfterRound
 	ld xwa, (xsp + 22)
-	cpib_sri 0x07, 0xe0, 0xf8, 0x34
+	cp	(xwa+iz), 0x34
 	jr le, Sprintf_FFixed_AfterRound
 	cp iz, 0:i3
 	jr ge, Sprintf_FFixed_RoundLoop
@@ -1350,15 +1350,15 @@ Sprintf_FFixed_RoundCheck:
 
 Sprintf_FFixed_RoundCarry:
 	ld xwa, (xsp + 22)
-	stib_ind 0x07, 0xe0, 0xf8, 0x30
+	ld	(xwa+iz), 0x30
 
 Sprintf_FFixed_RoundLoop:
 	dec 1, iz
 	ld xwa, (xsp + 22)
-	inc_srib 1, 0x07, 0xe0, 0xf8
+	inc	1, (xwa+iz)
 	cp iz, 0:i3
 	jr le, Sprintf_FFixed_AfterRound
-	cpib_sri 0x07, 0xe0, 0xf8, 0x39
+	cp	(xwa+iz), 0x39
 	jr gt, Sprintf_FFixed_RoundCarry
 
 Sprintf_FFixed_AfterRound:
@@ -1400,7 +1400,7 @@ Sprintf_FFixed_StripZeroLoop:
 
 Sprintf_FFixed_StripZeroCheck:
 	ld xwa, (xsp + 22)
-	cpib_sri 0x07, 0xe0, 0xf8, 0x30
+	cp	(xwa+iz), 0x30
 	jr z, Sprintf_FFixed_StripZeroLoop
 
 Sprintf_FFixed_ComputeOutputLen:
@@ -1740,7 +1740,7 @@ Sprintf_ESci_RoundCheck:
 	ldto_werp DE, 0xfa
 	dec1w_erp 0xfa
 	ld xwa, (xsp + 22)
-	cpib_sri 0x07, 0xe0, 0xe8, 0x34
+	cp	(xwa+de), 0x34
 	jr gt, Sprintf_ESci_RoundLoop
 	jr Sprintf_ESci_AfterRound
 
@@ -1931,7 +1931,7 @@ Sprintf_ESci_MantissaDigits:
 	ld c, (xsp + 10)
 	extz bc
 	lda xwa, (CharMap_FullPermutation_0x660:24)
-	bit_dri 1, 0x07, 0xe0, 0xe4
+	bit	1, (xwa+bc)
 	jr z, Sprintf_ESci_MantissaNoCase
 	ld a, (xsp + 10)
 	sub a, 0x20
@@ -2006,7 +2006,7 @@ Sprintf_ESci_MantTrailLoop:
 	ld c, (xsp + 10)
 	extz bc
 	lda xwa, (CharMap_FullPermutation_0x660:24)
-	bit_dri 1, 0x07, 0xe0, 0xe4
+	bit	1, (xwa+bc)
 	jr z, Sprintf_ESci_ExpNoCase
 	ld a, (xsp + 10)
 	sub a, 0x20
@@ -2117,8 +2117,8 @@ Sprintf_GGen_ClearArrays:
 	add bc, bc
 	lda xde, (0x03c284:24)
 	lda xwa, (0x03c244:24)
-	stiw_ind 0x07, 0xe0, 0xe4, 0x00, 0x00
-	stiw_ind 0x07, 0xe8, 0xe4, 0x00, 0x00
+	ldw	(xwa+bc), 0x0000
+	ldw	(xde+bc), 0x0000
 	inc1w_erp 0xfa
 	cp_erpw 0xfa, 0x20, 0x00
 	jr lt, Sprintf_GGen_ClearArrays
@@ -2338,7 +2338,7 @@ Sprintf_GGen_RoundLoop:
 	ldto_werp BC, 0xfa
 	add bc, bc
 	lda xwa, (0x03c244:24)
-	push_sriw 0x07, 0xe0, 0xe4
+	pushw	(xwa+bc)
 	calr Sprintf_NormalizeDigits
 	inc 4, xsp
 	inc1w_erp 0xfa
@@ -2388,7 +2388,7 @@ Sprintf_GGen_CopyLoop:
 	cp (xbc), 0x5
 	jr c, Sprintf_GGen_HandleCarry
 	ld wa, (xsp + 6)
-	inc_srib 1, 0x07, 0xec, 0xe0
+	inc	1, (xhl+wa)
 
 Sprintf_GGen_HandleCarry:
 	ld (xbc), 0x0
@@ -2399,7 +2399,7 @@ Sprintf_GGen_HandleCarry:
 Sprintf_GGen_CarryLoop:
 	ldto_werp BC, 0xfa
 	dec 1, bc
-	inc_srib 1, 0x07, 0xec, 0xe4
+	inc	1, (xhl+bc)
 	ld (xwa), 0x0
 	dec1w_erp 0xfa
 
@@ -2598,7 +2598,7 @@ Sprintf_Normalize_ExtractDigit:
 	sub bc, (xsp + 8)
 	add bc, bc
 	lda xwa, (0x03c284:24)
-	stiw_ind 0x07, 0xe0, 0xe4, 0x00, 0x00
+	ldw	(xwa+bc), 0x0000
 	cp iz, 0x20
 	jrl le, Sprintf_Normalize_MainLoop
 
@@ -2612,7 +2612,7 @@ Sprintf_InsertCarry:
 	jr ge, Sprintf_InsertCarry_Clamp
 	lda xbc, (0x03c224:24)
 	ld wa, (xsp + 4)
-	add_srib_mr A, 0x07, 0xe4, 0xe8
+	add	(xbc+de), a
 
 Sprintf_InsertCarry_Clamp:
 	jr Sprintf_InsertCarry_Check
@@ -2629,13 +2629,13 @@ Sprintf_InsertCarry_Check:
 Sprintf_InsertCarry_Propagate:
 	ld bc, de
 	dec 1, bc
-	inc_srib 1, 0x07, 0xe0, 0xe4
+	inc	1, (xwa+bc)
 	ld bc, de
 	dec 1, de
-	sub_srib_im 0x07, 0xe0, 0xe4, 0x0a
+	sub	(xwa+bc), 0x0a
 
 Sprintf_InsertCarry_PropCheck:
-	cpib_sri 0x07, 0xe0, 0xe8, 0x0a
+	cp	(xwa+de), 0x0a
 	ret lt
 	cp de, 0:i3
 	jr gt, Sprintf_InsertCarry_Propagate
@@ -2742,7 +2742,7 @@ Sprintf_BCDMul_CarryLoop:
 	ld ix, de
 	dec 2, ix
 	srl wa, 8
-	add_sriw_mr WA, 0x07, 0xec, 0xf0
+	add	(xhl+ix), wa
 	andmi16 (xbc), 0xff
 
 Sprintf_BCDMul_Next:

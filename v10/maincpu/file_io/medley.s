@@ -1070,7 +1070,7 @@ DiskSel_FileAvailable:
 
 DiskSel_MarkUnavail:
 	lda xwa, (0x8926:16)
-	stib_ind 0x07, 0xe0, 0xf8, 0xff
+	ld	(xwa+iz), 0xff
 
 DiskSel_NextFile:
 	inc 1, iz
@@ -1511,7 +1511,7 @@ DiskSel_HandleToggle:
 	ld iz, 0:i3
 
 DiskSel_FindMarkedLoop:
-	cpib_sri 0x07, 0xec, 0xf8, 0xfe
+	cp	(xhl+iz), 0xfe
 	jr z, DiskSel_ToggleStart
 	inc 1, iz
 	cp iz, 0x14
@@ -3257,7 +3257,7 @@ DocDisk_CopyLoop:
 
 DocDisk_TerminateStr:
 	ld xde, xbc
-	stib_ind 0x07, 0xe4, 0xf0, 0x00
+	ld	(xbc+ix), 0x00
 	jr DocDisk_TrimLoop
 
 DocDisk_ClearTrailing:

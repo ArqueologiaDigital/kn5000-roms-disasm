@@ -1348,7 +1348,7 @@ GetResouceInfo:
 	lda xix, (RESOURCE_INFO_HANDLER_OFFSETS:24)
 	ld	wa, (xix+wa)
 	lda xix, (RESOURCE_INFO_HANDLERS:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 ; Resource info handlers - 10 handlers for different resource types
 RESOURCE_INFO_HANDLERS:
 	lda xwa, (63872:16)

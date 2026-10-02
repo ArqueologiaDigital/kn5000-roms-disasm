@@ -242,7 +242,7 @@ SMF_ScanChannels_Loop:
 	jr c, SMF_ScanChannels_Inactive
 	push xde
 	ld xde, 0xf250
-	bit_dri 7, 0x07, 0xe8, 0xec
+	bit	7, (xde+hl)
 	pop xde
 	jr z, SMF_ScanChannels_Inactive
 	xor b, b
@@ -294,7 +294,7 @@ SMF_CountActive_Loop:
 	ld iy, wa
 	push xde
 	ld xde, 0xf250
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jr z, SMF_CountActive_Next
 	inc 1, l
@@ -326,14 +326,14 @@ SMF_FindFree_CheckPart:
 	xor h, h
 	push xix
 	ld xix, 0xf250
-	bit_dri 7, 0x07, 0xf0, 0xec
+	bit	7, (xix+hl)
 	pop xix
 	jr z, SMF_FindFree_Next
 	xor xhl, xhl
 	ld l, c
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xec, 0x10
+	cp	(xix+hl), 0x10
 	pop xix
 	jr z, SMF_FindFree_Next
 	inc 1, c
@@ -350,7 +350,7 @@ SMF_AssignRemainingChannels:
 	ld iz, bc
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf8, 0x10
+	cp	(xix+iz), 0x10
 	pop xix
 	jr z, SMF_AssignRemaining_Next
 	ld (9858:16), c
@@ -835,7 +835,7 @@ SMF_ProcessChannels:
 SMF_ProcessCh_Loop:
 	push xix
 	ld xix, 0x11f9
-	bit_dri 7, 0x07, 0xf0, 0xec
+	bit	7, (xix+hl)
 	pop xix
 	jr z, SMF_ProcessCh_Next
 	push xix
@@ -917,7 +917,7 @@ SMF_DispatchEvent:
 	and (4331:16), 254
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0f
+	cp	(xix+iy), 0x0f
 	pop xix
 	jr nz, SMF_Dispatch_CheckDrumMode
 	or (4331:16), 1
@@ -929,7 +929,7 @@ SMF_Dispatch_CheckDrumMode:
 	ld (4324:16), 255
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr nz, SMF_Dispatch_DrumChannel
 	ld (4008:16), 9
@@ -959,12 +959,12 @@ SMF_Dispatch_DrumSearch:
 	jr c, SMF_Dispatch_DrumFound
 	push xix
 	ld xix, 0xf1a0
-	cpb_sri_mr A, 0x07, 0xf0, 0xf4
+	cp	(xix+iy), a
 	pop xix
 	jr z, SMF_Dispatch_DrumFound
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr z, SMF_Dispatch_DrumFound
 	inc 1, iy
@@ -981,7 +981,7 @@ SMF_Dispatch_DrumFound:
 SMF_Dispatch_NoDrumMode:
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr nz, SMF_Dispatch_Ch15Remap
 	ld (4008:16), 15
@@ -1011,12 +1011,12 @@ SMF_Dispatch_Ch15Search:
 	jr c, SMF_Dispatch_DrumFound
 	push xix
 	ld xix, 0xf1a0
-	cpb_sri_mr A, 0x07, 0xf0, 0xf4
+	cp	(xix+iy), a
 	pop xix
 	jr z, SMF_Dispatch_Ch15Found
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr z, SMF_Dispatch_Ch15Found
 	inc 1, iy
@@ -1141,7 +1141,7 @@ SMF_Event_ProgramChange:
 SMF_ProgChg_SearchPart:
 	push xix
 	ld xix, 0xf1a0
-	cpb_sri_mr A, 0x07, 0xf0, 0xec
+	cp	(xix+hl), a
 	pop xix
 	jr z, SMF_ProgChg_Found
 
@@ -1212,7 +1212,7 @@ SMF_Event_ControlChange:
 SMF_CtrlChg_SearchPart:
 	push xix
 	ld xix, 0xf1a0
-	cpb_sri_mr A, 0x07, 0xf0, 0xec
+	cp	(xix+hl), a
 	pop xix
 	jr z, SMF_CtrlChg_Found
 
@@ -1464,7 +1464,7 @@ SMF_ResolveChannel:
 	jr nz, SMF_Resolve_NoDrum
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr nz, SMF_Resolve_DrumCh9
 	ld a, 0x9:opc
@@ -1492,12 +1492,12 @@ SMF_Resolve_DrumSearch:
 	jr c, SMF_Resolve_DrumFound
 	push xix
 	ld xix, 0xf1a0
-	cpb_sri_mr A, 0x07, 0xf0, 0xf4
+	cp	(xix+iy), a
 	pop xix
 	jr z, SMF_Resolve_DrumFound
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr z, SMF_Resolve_DrumFound
 	inc 1, iy
@@ -1513,7 +1513,7 @@ SMF_Resolve_DrumFound:
 SMF_Resolve_NoDrum:
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr nz, SMF_Resolve_Ch15Check
 	ld a, 0xf:opc
@@ -1541,12 +1541,12 @@ SMF_Resolve_Ch15Search:
 	jr c, SMF_Resolve_Ch15Found
 	push xix
 	ld xix, 0xf1a0
-	cpb_sri_mr A, 0x07, 0xf0, 0xf4
+	cp	(xix+iy), a
 	pop xix
 	jr z, SMF_Resolve_Ch15Found
 	push xix
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	pop xix
 	jr z, SMF_Resolve_Ch15Found
 	inc 1, iy
@@ -1623,7 +1623,7 @@ SMF_UpdateTempo_Encode:
 	pop xhl
 	push xde
 	ld xde, 0x11f9
-	and_srib_im 0x07, 0xe8, 0xf0, 0x3f
+	and	(xde+ix), 0x3f
 	pop xde
 	add hl, 0x3
 	cp hl, 0x60
@@ -1681,7 +1681,7 @@ SMF_ResolveGlobalChannel:
 	xor iy, iy
 	ld iy, (0x2877:16)
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	jr nz, SMF_GlobalCh_NoDrum
 
 SMF_GlobalCh_DrumMode:
@@ -1723,10 +1723,10 @@ SMF_GlobalCh_SearchLoop:
 	ldto_berp A, 0x3c
 	jr c, SMF_GlobalCh_Found
 	ld xix, 0xf1a0
-	cpb_sri_mr A, 0x07, 0xf0, 0xf4
+	cp	(xix+iy), a
 	jr z, SMF_GlobalCh_Found
 	ld xix, 0xf1a0
-	cpib_sri 0x07, 0xf0, 0xf4, 0x0c
+	cp	(xix+iy), 0x0c
 	jr z, SMF_GlobalCh_Found
 	inc 1, iy
 	cp iy, 0xf
@@ -1970,7 +1970,7 @@ SMF_ConfigSlot_AdvanceEvent:
 	jrl nz, SMF_ConfigSlot_Return
 	push xde
 	ld xde, (4349:16)
-	bit_dri 7, 0x07, 0xe8, 0xf0
+	bit	7, (xde+ix)
 	pop xde
 	jr nz, SMF_ConfigSlot_EventLoop
 	push xde

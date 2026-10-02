@@ -1463,7 +1463,7 @@ HDAE5000_SelectListProc:
 	jr nz, .LRF_0b4f                       ; [6e 16] jr NZ,0x280b4f
 	lda	xbc, (xsp+22)
 	ld	wa, (xsp+20)
-	stib_ind 0x07, 0xE4, 0xE0, 0x00	; ld (XBC+WA),0x00
+	ld	(xbc+wa), 0x00	; ld (XBC+WA),0x00
 	incw	1, (xsp+10)
 	ldw (xsp + 0x14), 0
 	jr t, .LRF_0b79                        ; [68 2a] jr T,0x280b79
@@ -2665,7 +2665,7 @@ HDAE5000_AcHddNamingWindowProc:
 	add	xwa, HDAE5000_AcHddNamingWindowProc_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_AcHddNamingWindowProc_Case1:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_AcHddNamingWindowProc_Case1:
 	cpw	(0x22A028:24), 0
 	jrl z, .LRF_21da                       ; [76 d1 07] jrl Z,0x2821da
@@ -3371,7 +3371,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	a, (xbc)
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
-	bit_dri 0, 0x07, 0xE4, 0xE0	; bit 0,(XBC+WA)
+	bit	0, (xbc+wa)	; bit 0,(XBC+WA)
 	jr z, .LRF_2345                        ; [66 24] jr Z,0x282345
 	ldw	(0x22A02A:24), 0
 	ld	wa, (0x22A028:24)
@@ -3391,7 +3391,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	a, (xbc)
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
-	bit_dri 1, 0x07, 0xE4, 0xE0	; bit 1,(XBC+WA)
+	bit	1, (xbc+wa)	; bit 1,(XBC+WA)
 	jr z, .LRF_2387                        ; [66 24] jr Z,0x282387
 	ldw	(0x22A02A:24), 1
 	ld	wa, (0x22A028:24)
@@ -3411,7 +3411,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld	a, (xbc)
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
-	bit_dri 2, 0x07, 0xE4, 0xE0	; bit 2,(XBC+WA)
+	bit	2, (xbc+wa)	; bit 2,(XBC+WA)
 	jr z, .LRF_23d2                        ; [66 2d] jr Z,0x2823d2
 	cpw	(0x22A02A:24), 2
 	jr nz, .LRF_23b5                       ; [6e 07] jr NZ,0x2823b5

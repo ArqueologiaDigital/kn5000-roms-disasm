@@ -202,7 +202,7 @@ SmfSave_Return:
 
 RenderSmfFilename:
 	extz bc
-	stib_ind 0x07, 0xe0, 0xe4, 0x00
+	ld	(xwa+bc), 0x00
 	ld ix, 0:i3
 	lda xhl, (CharMap_FullPermutation_0x660:24)
 	jr RenderSmf_LoopCheck
@@ -230,7 +230,7 @@ RenderSmf_PadCheck:
 	ret ge
 
 RenderSmf_PadLoop:
-	stib_ind 0x07, 0xe0, 0xf0, 0x5f
+	ld	(xwa+ix), 0x5f
 	inc 1, ix
 	cp ix, 0x8
 	jr lt, RenderSmf_PadLoop
@@ -561,7 +561,7 @@ FmmSmfFileNameFunc:
 	add xde, Str_SmfConvert_GmToGm_0x1E
 	ld de, (xde)
 	lda xix, (SmfFN_JumpTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 SmfFN_JumpTable:
 	ld	(0x81a0:16), xbc
 	ld	xwa, 0:i3

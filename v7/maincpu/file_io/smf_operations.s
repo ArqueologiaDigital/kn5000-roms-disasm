@@ -190,7 +190,7 @@ SmfSave_Return:
 
 RenderSmfFilename:
 	extz bc
-	stib_ind 0x07, 0xe0, 0xe4, 0x00
+	ld	(xwa+bc), 0x00
 	ld ix, 0:i3
 	lda xhl, (CharMap_FullPermutation_0x660:24)
 	jr RenderSmf_LoopCheck
@@ -218,7 +218,7 @@ RenderSmf_PadCheck:
 	ret ge
 
 RenderSmf_PadLoop:
-	stib_ind 0x07, 0xe0, 0xf0, 0x5f
+	ld	(xwa+ix), 0x5f
 	inc 1, ix
 	cp ix, 0x8
 	jr lt, RenderSmf_PadLoop

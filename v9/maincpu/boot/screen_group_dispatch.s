@@ -112,47 +112,47 @@ ScreenGroup_InitState:
 ScreenGroup_InitVoiceLoop:
 	ld wa, de
 	inc 4, wa
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, 0x24
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, 0x44
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, 0x64
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, 0x64
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, wa
 	add wa, 0xe4
-	res_dri 7, 0x07, 0xe4, 0xe0
+	res	7, (xbc+wa)
 	ld wa, de
 	add wa, wa
 	add wa, 0xe4
-	and_srib_im 0x07, 0xe4, 0xe0, 0x8f
+	and	(xbc+wa), 0x8f
 	ld wa, de
 	add wa, wa
 	add wa, 0x124
-	res_dri 7, 0x07, 0xe4, 0xe0
+	res	7, (xbc+wa)
 	ld wa, de
 	add wa, wa
 	add wa, 0x124
-	set_dri 6, 0x07, 0xe4, 0xe0
+	set	6, (xbc+wa)
 	ld wa, de
 	add wa, wa
 	add wa, 0x124
-	set_dri 5, 0x07, 0xe4, 0xe0
+	set	5, (xbc+wa)
 	ld wa, de
 	add wa, wa
 	add wa, 0x124
-	res_dri 4, 0x07, 0xe4, 0xe0
+	res	4, (xbc+wa)
 	ld wa, de
 	add wa, wa
 	add wa, 0x124
-	and_srib_im 0x07, 0xe4, 0xe0, 0xf1
+	and	(xbc+wa), 0xf1
 	ld wa, de
 	add wa, wa
 	add wa, 0x124
@@ -171,13 +171,13 @@ ScreenGroup_InitParams16:
 ScreenGroup_InitParam16Loop:
 	ld wa, de
 	add wa, 0x84
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, 0x94
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, 0xa4
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	inc 1, de
 	cp de, 0x10
 	jr lt, ScreenGroup_InitParam16Loop
@@ -190,10 +190,10 @@ ScreenGroup_InitParams8:
 ScreenGroup_InitParam8Loop:
 	ld wa, de
 	add wa, 0xb4
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ld wa, de
 	add wa, 0xbc
-	stib_ind 0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	inc 1, de
 	cp de, 0x8
 	jr lt, ScreenGroup_InitParam8Loop
@@ -207,11 +207,11 @@ ScreenGroup_InitParam8ComplexLoop:
 	ld wa, de
 	sla wa, 2
 	add wa, 0xc4
-	res_dri 7, 0x07, 0xe4, 0xe0
+	res	7, (xbc+wa)
 	ld wa, de
 	sla wa, 2
 	add wa, 0xc4
-	or_srib_im 0x07, 0xe4, 0xe0, 0x7f
+	or	(xbc+wa), 0x7f
 	ld wa, de
 	sla wa, 2
 	add wa, 0xc4

@@ -868,7 +868,7 @@ RhythmMidi_DispatchByStatus:
 	sub	a, 0x10
 	extz	wa
 	lda	xbc, (xsp + 6)
-	cpib_sri	0x07, 0xe4, 0xe0, 0x00
+	cp	(xbc+wa), 0x00
 	jr	nz, RhythmMidi_NoteOn_Remap98
 	lda	xwa, (xsp + 18)
 	ld	xbc, xwa
@@ -893,7 +893,7 @@ RhythmMidi_NoteOn_Remap98:
 	sub	a, 0x10
 	extz	wa
 	lda	xbc, (xsp + 6)
-	stib_ind	0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 	jrl	RhythmMidi_CC_UpdateOutput
 RhythmMidi_HandleCC:
 	ld	a, (xsp + 21)
@@ -942,7 +942,7 @@ RhythmMidi_CC7D_PartLoop:
 	ldto_berp	A, 0xfb
 	extz	wa
 	lda	xbc, (xsp + 6)
-	cpib_sri	0x07, 0xe4, 0xe0, 0x00
+	cp	(xbc+wa), 0x00
 	jr	z, RhythmMidi_CC7D_PartNext
 	ldto_berp	A, 0xfb
 	ld	(xsp + 21), a
@@ -962,7 +962,7 @@ RhythmMidi_CC7D_PartLoop:
 	ldto_berp	A, 0xfb
 	extz	wa
 	lda	xbc, (xsp + 6)
-	stib_ind	0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 RhythmMidi_CC7D_PartNext:
 	inc1b_erp	0xfb
 	cpib_erp	0xfb, 5
@@ -990,7 +990,7 @@ RhythmMidi_CC_Default:
 	sub	a, 0x10
 	extz	wa
 	lda	xbc, (xsp + 6)
-	stib_ind	0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 	jr	RhythmMidi_CC_UpdateOutput
 RhythmMidi_CC_Standard:
 	ld	a, (xsp + 21)
@@ -1001,7 +1001,7 @@ RhythmMidi_CC_Standard:
 	sub	a, 0x10
 	extz	wa
 	lda	xbc, (xsp + 6)
-	stib_ind	0x07, 0xe4, 0xe0, 0x01
+	ld	(xbc+wa), 0x01
 RhythmMidi_CC_UpdateOutput:
 	lda	xwa, (xsp + 12)
 	ld	xde, xwa
@@ -1019,7 +1019,7 @@ RhythmMidi_CC_PostLoop:
 	ldto_berp	A, 0xfb
 	extz	wa
 	lda	xbc, (xsp + 6)
-	cpib_sri	0x07, 0xe4, 0xe0, 0x00
+	cp	(xbc+wa), 0x00
 	jr	z, RhythmMidi_CC_PostNext
 	ldto_berp	A, 0xfb
 	ld	(xsp + 21), a
@@ -1189,13 +1189,13 @@ VoiceInit_ChannelLoop:
 	extz	wa
 	add	wa, wa
 	add	wa, 0x124
-	bit_dri	6, 0x07, 0xf8, 0xe0
+	bit	6, (xiz+wa)
 	jrl	z, VoiceProcess_NextChannel
 	ld	a, (xsp + 6)
 	extz	wa
 	add	wa, wa
 	add	wa, 0x124
-	bit_dri	4, 0x07, 0xf8, 0xe0
+	bit	4, (xiz+wa)
 	jr	nz, VoiceInit_LookupTableAndAssign
 	lda	xwa, (xsp+336)
 	ld	xbc, xwa
@@ -1630,7 +1630,7 @@ VoiceEvent_TypeDispatch:
 	lda	xix, (CharMap_ValueData_B_0x2E:24)
 	ld	wa, (xix+wa)
 	lda	xix, (VoiceEvent_Dispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 ; Voice event handler dispatch (14-entry, table 0xee8f06)
 VoiceEvent_Dispatch:
 	ld	a, l
@@ -2689,12 +2689,12 @@ VoiceLinks_SkipEmpty:
 	extz	wa
 	muls	wa, 0x3
 	lda	xbc, (0xc52f:16)
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	ldto_berp	A, 0xfb
 	extz	wa
 	muls	wa, 0x3
 	lda	xbc, (0xc530:16)
-	stib_ind	0x07, 0xe4, 0xe0, 0xff
+	ld	(xbc+wa), 0xff
 	decw	1, (0xe8f4:16)
 	jr	MidiEvent_NoteLoopAdvance
 VoiceLinks_SkipEmpty_LoadIter:
@@ -3970,7 +3970,7 @@ AllocCheckChannel_LoadParam:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp + 4)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, AllocCheckChannel_LoadDRAM
 	ld	c, e
 	extz	bc
@@ -4388,7 +4388,7 @@ CollectAllocVoice_CheckDuplicate:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp+168)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, CollectAllocVoice_EmitCheck
 	lda	xwa, (xsp + 2)
 	ld	c, e
@@ -5251,7 +5251,7 @@ AllocVoiceEntry_Cont_LoadParam:
 	extz	wa
 	add	wa, wa
 	add	wa, 0x124
-	bit_dri	5, 0x07, 0xf8, 0xe0
+	bit	5, (xiz+wa)
 	jr	z, AllocVoiceEntry_Cont_LoadParam2
 	extz	bc
 	ld	xwa, (xsp + 6)
@@ -5394,7 +5394,7 @@ LookupAllocAndStore_LoadParam:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp+166)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, NoteMap_StoreAllocResult
 	lda	xwa, (xsp)
 	ld	c, e
@@ -5448,7 +5448,7 @@ ProcessRhythmNoteOn_LoadParam:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp + 2)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, ProcessRhythmNoteOn_Epilogue
 	ld	c, e
 	extz	bc
@@ -5512,7 +5512,7 @@ LookupAndAllocVoice_LoadFromStack:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp+166)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, Voice_SetParam_Return
 	lda	xwa, (xsp)
 	ld	c, e
@@ -5599,7 +5599,7 @@ ProcessRhythmRemap_LoadFromStack:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp+166)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, NoteMap_ProcessNoteOff_Done
 	lda	xwa, (xsp)
 	ld	c, e
@@ -5802,7 +5802,7 @@ InitVoiceSlots_CheckDualLayer:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp+172)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, NoteMap_PopIz_StoreAC
 	cp	(xsp+170), 0x02
 	jr	nz, InitVoiceSlots_EmitMidi
@@ -5905,7 +5905,7 @@ AssignVoiceParams_CheckDualLayer:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp+172)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, NoteMap_PopRetFA_StoreAE4
 	cp	(xsp+170), 0x02
 	jr	nz, AssignVoiceParams_Ch_LoadAddr
@@ -6099,7 +6099,7 @@ AllocateVoice_Compare:
 	ld	bc, wa
 	add	bc, 0x124
 	ld	xwa, (xsp+172)
-	bit_dri	5, 0x07, 0xe0, 0xe4
+	bit	5, (xwa+bc)
 	jr	z, NoteMap_PopIz_StoreAC2
 	cp	(xsp+170), 0x02
 	jr	nz, AllocateVoice_LoadAddr3
@@ -6411,7 +6411,7 @@ LookupTableEntries_LoadReg3:
 	ld	iz, bc
 	sla	iz, 3
 	ld	c, (xwa + 2)
-	cpb_sri_rm	C, 0x07, 0xf0, 0xf8
+	cp	c, (xix+iz)
 	jr	z, LookupTableEntries_Epilogue
 LookupTableEntries_LoadReg4:
 	ld	c, l
@@ -6478,7 +6478,7 @@ ClaimVoiceSlot_LoadIdx:
 	extz	iy
 	sla	iy, 3
 	ld	c, (xde + 2)
-	cpb_sri_rm	C, 0x07, 0xf0, 0xf4
+	cp	c, (xix+iy)
 	jrl	nz, ClaimVoiceSlot_LoadIdx2
 	cp	hl, 0x20
 	jrl	nc, NoteMap_StoreEntryAndReturn
@@ -6582,7 +6582,7 @@ ClaimVoiceSlot_LoadIdx3:
 	extz	iy
 	sla	iy, 3
 	ld	c, (xde + 2)
-	cpb_sri_rm	C, 0x07, 0xf0, 0xf4
+	cp	c, (xix+iy)
 	jrl	nz, ClaimVoiceSlot_LoadIdx4
 	ldto_berp	C, 0xe6
 	ldfr_berp	C, 0xf4
@@ -6752,7 +6752,7 @@ LookupVoice_ScanEntries:
 	ld	iz, bc
 	sla	iz, 3
 	ld	c, (xix + 2)
-	cpb_sri_rm	C, 0x07, 0xf4, 0xf8
+	cp	c, (xiy+iz)
 	jrl	nz, LookupVoice_AdvanceAndCheck
 	cp	hl, 0x20
 	jrl	nc, NoteMap_StoreResultAndReturn
@@ -6842,7 +6842,7 @@ LookupVoice_InstrScanEntries:
 	ld	iz, bc
 	sla	iz, 3
 	ld	c, (xix + 2)
-	cpb_sri_rm	C, 0x07, 0xf4, 0xf8
+	cp	c, (xiy+iz)
 	jrl	nz, LookupVoice_InstrSca_LoadReg
 	ld	c, e
 	extz	bc
@@ -7040,7 +7040,7 @@ EmitNoteData_Process_LoadReg:
 	sla	ix, 3
 	ld	xwa, (xsp+172)
 	ld	a, (xwa + 2)
-	cpb_sri_rm	A, 0x07, 0xe8, 0xf0
+	cp	a, (xde+ix)
 	jrl	nz, NoteMap_EmitNoteData_Process
 	ld	a, c
 	extz	wa
@@ -7248,13 +7248,13 @@ AllocNewVoiceEntry_LoadParam:
 	add	bc, bc
 	lda	xde, (0xc58f:16)
 	ld	a, (xix+hl)
-	cpb_sri_rm	A, 0x07, 0xe8, 0xe4
+	cp	a, (xde+bc)
 	jrl	ule, AllocNewVoiceEntry_LoadParam2
 	ld	a, (xsp + 10)
 	extz	wa
 	add	wa, wa
 	lda	xbc, (0xc58f:16)
-	inc_srib	1, 0x07, 0xe4, 0xe0
+	inc	1, (xbc+wa)
 	ldto_berp	A, 0xfb
 	extz	wa
 	ld	de, wa
@@ -7392,7 +7392,7 @@ AllocNewVoiceEntry_LoadParam3:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (0xc58f:16)
-	dec_srib	1, 0x07, 0xe4, 0xe0
+	dec	1, (xbc+wa)
 	ld	wa, (xsp + 2)
 	extz	xwa
 	ld	xbc, xwa
@@ -8204,13 +8204,13 @@ FindEntry_LoadParam:
 	add	bc, bc
 	lda	xde, (0xc9cf:16)
 	ld	a, (xix+hl)
-	cpb_sri_rm	A, 0x07, 0xe8, 0xe4
+	cp	a, (xde+bc)
 	jrl	ule, FindEntry_LoadParam2
 	ld	a, (xsp + 10)
 	extz	wa
 	add	wa, wa
 	lda	xbc, (0xc9cf:16)
-	inc_srib	1, 0x07, 0xe4, 0xe0
+	inc	1, (xbc+wa)
 	ldto_berp	A, 0xfb
 	extz	wa
 	ld	de, wa
@@ -8348,7 +8348,7 @@ FindEntry_LoadParam3:
 	extz	wa
 	add	wa, wa
 	lda	xbc, (0xc9cf:16)
-	dec_srib	1, 0x07, 0xe4, 0xe0
+	dec	1, (xbc+wa)
 	ld	wa, (xsp + 2)
 	extz	xwa
 	ld	xbc, xwa
@@ -8475,7 +8475,7 @@ FindEntry_AdvanceSlo_LoadReg:
 	extz	wa
 	sla	wa, 3
 	lda	xbc, (0xc9de:16)
-	cpb_sri_mr	E, 0x07, 0xe4, 0xe0
+	cp	(xbc+wa), e
 	jr	nz, FindEntry_AdvanceSlo_LoadReg2
 	ld	wa, hl
 	add	wa, wa
@@ -8699,7 +8699,7 @@ FindBestFreeVoice_Ad_LoadReg:
 	extz	wa
 	sla	wa, 3
 	lda	xbc, (0xc9de:16)
-	cpb_sri_mr	L, 0x07, 0xe4, 0xe0
+	cp	(xbc+wa), l
 	jr	nz, FindBestFreeVoice_Ad_LoadReg2
 	ld	wa, de
 	add	wa, wa
@@ -9933,7 +9933,7 @@ UpdateChannelTuning_LoadDRAM:
 	extz	wa
 	sla	wa, 3
 	lda	xhl, (0xc5ce:16)
-	cpb_sri_mr	C, 0x07, 0xec, 0xe0
+	cp	(xhl+wa), c
 	jr	nz, SelectTone_Continue_SetByteFF
 	cp	e, 2:i3
 	jr	z, UpdateChannelTuning_LoadDRAM3
@@ -12573,7 +12573,7 @@ RhythmBuf_EventDispatchLoop:
 	lda	xix, (CharMap_ValueData_B_0xD6:24)
 	ld	wa, (xix+wa)
 	lda	xix, (Rhythm_ProcessEventDispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 Rhythm_ProcessEventDispatch:
 	call	RhythmBuf_ReadAlternate
 	ld	(xsp + 6), hl
@@ -13049,7 +13049,7 @@ SeqPart_EmitPercussionNote_Skip:
 	lda	xix, (CharMap_ValueData_B_0xE8:24)
 	ld	wa, (xix+wa)
 	lda	xix, (0xfe81d9:24)
-	jp_ind	8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 ; v10 name for this address: SeqPerformance_EventDispatch -- not a label here: v7 keeps that name at 0xFE85F3 for ui_widgets/widget_dispatch.s
 ; Sequence performance event dispatch (6-entry, table 0xee8fc0)
 	ld	wa, (xsp+4)
@@ -14565,7 +14565,7 @@ VoiceSlot_StoreParams_LoadReg4:
 	ld	l, (xiz+hl)
 	dec	1, hl
 	ld	xiz, 0xfe903d
-	or_srib_rm	A, 0x07, 0xf8, 0xec
+	or	a, (xiz+hl)
 VoiceSlot_StoreParams_Increment:
 	inc	2, iy
 	djnz16	bc, VoiceSlot_StoreParams_LoadReg4
@@ -15457,13 +15457,13 @@ InitPartAllocState_TestBit242:
 	ld	wa, (xiz+hl)
 	ld	l, b
 	sla	hl, 1
-	or_sriw_rm	WA, 0x07, 0xf8, 0xec
+	or	wa, (xiz+hl)
 	ld	l, e
 	sla	hl, 1
-	or_sriw_rm	WA, 0x07, 0xf8, 0xec
+	or	wa, (xiz+hl)
 	ld	l, d
 	sla	hl, 1
-	or_sriw_rm	WA, 0x07, 0xf8, 0xec
+	or	wa, (xiz+hl)
 	ld	xiy, 0xce4a
 	ld	c, (0xce49:24)
 	xor	b, b
@@ -15924,7 +15924,7 @@ VoiceSlot_CheckAndApply_Increment:
 	exw_erp	IZ, 0x38
 	cpb_sri_mr	W, 0x39, 0x01, 0x00
 	jr	le, VoiceSlot_CheckAndApply_Increment
-	ex_sriw	WA, 0x07, 0xf8, 0xf0
+	ex	(xiz+ix), wa
 	jr	VoiceSlot_CheckAndApply_Increment
 VoiceSlot_CheckAndApply_Block:
 	ld	(xiz+iy), wa
@@ -19071,7 +19071,7 @@ SendSinglePacket_LoadReg:
 	add	wa, wa
 	lda	xbc, (xsp + 4)
 	ld	de, (0xe92d:16)
-	and_sriw_rm	DE, 0x07, 0xe4, 0xe0
+	and	de, (xbc+wa)
 	jr	nz, SendSinglePacket_DoGetPlayS
 	ei	6
 	push	xiz
@@ -19840,7 +19840,7 @@ SeqFile_ReadTrackDat_LoadIter:
 	jr	SeqFile_ReadTrackDat_RestoreReg
 SeqFile_ReadTrackDat_LoadParam:
 	ld	xwa, (xsp + 2)
-	stib_ind	0x07, 0xe0, 0xf8, 0x00
+	ld	(xwa+iz), 0x00
 SeqFile_ReadTrackDat_RestoreReg:
 	popw	iz
 	inc	4, xsp
@@ -19869,7 +19869,7 @@ SeqFile_ValidateAndS_LoadIter:
 	jr	SeqFile_ValidateAndS_RestoreReg
 SeqFile_ValidateAndS_LoadParam:
 	ld	xwa, (xsp + 2)
-	stib_ind	0x07, 0xe0, 0xf8, 0x00
+	ld	(xwa+iz), 0x00
 SeqFile_ValidateAndS_RestoreReg:
 	popw	iz
 	inc	4, xsp
@@ -20842,7 +20842,7 @@ MidiSysMsg_Handler:
 	lda	xix, (SoundEffect_Dispatch_Table_0x13E0:24)
 	ld	wa, (xix+wa)
 	lda	xix, (MidiSysMsg_Dispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 ; MIDI system message dispatch (15-entry, table 0xeec1e8)
 MidiSysMsg_Dispatch:
 	calr	FileIO_ReadNextRecord
@@ -21951,7 +21951,7 @@ InitTrackSlots_LoopBody:
 	ld	wa, de
 	inc	6, wa
 	lda	xbc, (0xd00c:16)
-	stib_ind	0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 	inc	1, de
 InitTrackSlots_LoopCheck:
 	ld	wa, de
@@ -22085,7 +22085,7 @@ SysexRingBuf_ClearLoop:
 	ld	wa, de
 	inc	6, wa
 	lda	xbc, (0xd812:16)
-	stib_ind	0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 	inc	1, de
 SysexRingBuf_ClearCheck:
 	ld	wa, de
@@ -22211,7 +22211,7 @@ MidiRingBuf_ClearLoop:
 	ld	wa, de
 	inc	6, wa
 	lda	xbc, (0xe018:16)
-	stib_ind	0x07, 0xe4, 0xe0, 0x00
+	ld	(xbc+wa), 0x00
 	inc	1, de
 MidiRingBuf_ClearCheck:
 	ld	wa, de
@@ -23147,7 +23147,7 @@ SndParam_LookupByChannel:
 	lda	xix, (CharMap_FullPermutation_0x2AE:24)
 	ld	wa, (xix+wa)
 	lda	xix, (SndParam_TypeDispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 ; Sound parameter type dispatch (6-entry, table 0xeed3c6)
 SndParam_TypeDispatch:
 	extz	hl
@@ -23212,7 +23212,7 @@ SndParam_OffsetHandler:
 	lda	xix, (CharMap_FullPermutation_0x2BA:24)
 	ld	de, (xix+de)
 	lda	xix, (SndParam_OffsetDispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; Sound parameter offset dispatch (6-entry, table 0xeed3d2)
 SndParam_OffsetDispatch:
 	ldw	bc, 0x10
@@ -24562,7 +24562,7 @@ SendPartDataBlock_LoadReg:
 	ld	c, w
 	extz	bc
 	ld	a, (xhl+bc)
-	cpb_sri_rm	A, 0x07, 0xe8, 0xe4
+	cp	a, (xde+bc)
 	jr	nz, SendPartDataBlock_Compare
 	inc	1, w
 	cp	w, 0x10
@@ -25509,7 +25509,7 @@ HdaeRom_DataHandler:
 	lda	xix, (HdaeRom_DispatchOffsetTable:24)
 	ld	hl, (xix+hl)
 	lda	xix, (HdaeRom_DataDispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRom_DispatchOffsetTable)
 HdaeRom_DataDispatch:
 	ld	(xsp+6), xbc
@@ -25700,7 +25700,7 @@ HdaeRom_AltHandler:
 	lda	xix, (HdaeRom_AltDispatchOffsetTable:24)
 	ld	hl, (xix+hl)
 	lda	xix, (HdaeRom_AltDispatch:24)
-	jp_ind	8, 0x07, 0xf0, 0xec
+	jp	t, (xix+hl)
 ; HDAE5000 extension ROM alt dispatch (6-entry, table HdaeRom_AltDispatchOffsetTable)
 HdaeRom_AltDispatch:
 	ld	xwa, 0x1e0000
@@ -25817,7 +25817,7 @@ TmFlashWrite_Block1_Entry:
 	extz	bc
 	cp	de, 0:i3
 	jr	lt, TmFlashWrite_Block1_Entry_Skip2
-	.byte	0x8f, 0x02, 0x3f, 0x40	; cp (xsp+2), 0x40
+	cp	(xsp+2), 0x40
 	jr	nc, TmFlashWrite_Block1_Entry_Skip
 	calr	HdaeRom_DataHandler
 	calr	HdaeRom_DataDispatch_Block
@@ -26080,7 +26080,7 @@ TmFlash_BulkTransferToSubCPU_Skip2:
 	lda	xix, (CharMap_FullPermutation_0x647:24)
 	ld	hl, (xix+hl)
 	lda	xix, (VoiceParam_DispatchTable1:24)
-	.byte	0xf3, 0x07, 0xf0, 0xec, 0xd8	; jp (xix + hl) SRI dispatch
+	jp	t, (xix+hl)	; (xix + hl) SRI dispatch
 VoiceParam_DispatchTable1:
 	ld	xbc, 470
 	jr	TmFlash_BulkTransferToSubCPU_Join
@@ -26273,7 +26273,7 @@ ParseInt16_SkipWhitespace:
 ParseInt16_CheckWhitespace:
 	ld	a, (xhl)
 	extz	wa
-	bit_dri	3, 0x07, 0xe4, 0xe0
+	bit	3, (xbc+wa)
 	jr	nz, ParseInt16_SkipWhitespace
 	cp	(xhl), 0x2d
 	jr	nz, ParseInt16_CheckMinus
@@ -26289,7 +26289,7 @@ ParseInt16_DigitLoop:
 	exts	de
 	ld	a, e
 	extz	wa
-	bit_dri	2, 0x07, 0xe4, 0xe0
+	bit	2, (xbc+wa)
 	jr	z, ParseInt16_ApplySign
 	sub	de, 0x30
 	muls	iy, 0xa
@@ -26317,7 +26317,7 @@ ParseInt32_SkipWhitespace:
 ParseInt32_CheckWhitespace:
 	ld	a, (xhl)
 	extz	wa
-	bit_dri	3, 0x07, 0xe4, 0xe0
+	bit	3, (xbc+wa)
 	jr	nz, ParseInt32_SkipWhitespace
 	cp	(xhl), 0x2d
 	jr	nz, ParseInt32_CheckMinus
@@ -26333,7 +26333,7 @@ ParseInt32_DigitLoop:
 	exts	de
 	ld	a, e
 	extz	wa
-	bit_dri	2, 0x07, 0xe4, 0xe0
+	bit	2, (xbc+wa)
 	jr	z, ParseInt32_ApplySign
 	sub	de, 0x30
 	ld	wa, de

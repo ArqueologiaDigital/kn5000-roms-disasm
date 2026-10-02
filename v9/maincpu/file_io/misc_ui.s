@@ -25,7 +25,7 @@ JumpInsertFunc:
 	add xbc, DiskWarning_ConfirmStrings_0xA38
 	ld bc, (xbc)
 	lda xix, (JumpInsert_DispatchBody:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
@@ -442,7 +442,7 @@ DrawStr_LoopCheck:
 
 DrawStr_Epilogue:
 	ld xwa, (xsp + 10)
-	stib_ind 0x07, 0xe0, 0xe8, 0x00
+	ld	(xwa+de), 0x00
 	ld hl, 0:i3
 	ld de, (xsp + 2)
 	inc 1, bc

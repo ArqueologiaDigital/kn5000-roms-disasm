@@ -1,0 +1,8 @@
+{
+ "respelled": {
+  "jp_ind 8, 0x07, 0xF0, 0xE0": "jp\tt, (xix+wa)",
+  "jp_ind 8, 0x07, 0xf0, 0xe0": "jp\tt, (xix+wa)",
+  "stib_ind 0x07, 0xf8, 0xf0, 0xff": "ld\t(xiz+ix), 0xff"
+ },
+ "left_forms": {}
+}

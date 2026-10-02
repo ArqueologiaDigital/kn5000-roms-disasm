@@ -1070,7 +1070,7 @@ SqSngSelTtlFunc:
 	add xde, SepaOut_Config_0_0x14
 	ld de, (xde)
 	lda xix, (SqTrAs_CondCheck:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 
 ; SqTrAs conditional voice check
 SqTrAs_CondCheck:
@@ -1110,7 +1110,7 @@ SqSngNameTtlFunc:
 	add xde, SepaOut_Config_0_0x20
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_1:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 
 ; Sequencer track dispatch table 1 - Handler for SqTrAsTtlFunc, 6 cases (XDE 0-5)
 SQTR_DISPATCH_TABLE_1:
@@ -1152,7 +1152,7 @@ SqTrAsTtlFunc:
 	add xde, SepaOut_Config_0_0x2C
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_2:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; Sequencer track dispatch table 2 - SqTrAsTtlFunc handler
 ; 6 dispatch cases (XDE 0-5)
 SQTR_DISPATCH_TABLE_2:
@@ -1288,7 +1288,7 @@ SqTrAsPsTtlFunc:
 	add xde, SepaOut_Config_0_0x38
 	ld de, (xde)
 	lda xix, (SqTrAsPsTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 SqTrAsPsTtl_Dispatch:
 	push xde
 	push xhl
@@ -1415,7 +1415,7 @@ SqMdlyPlyTtlFunc:
 	add xde, SepaOut_Config_0_0x56
 	ld de, (xde)
 	lda xix, (SqMdlyPlyTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 SqMdlyPlyTtl_Dispatch:
 	push xde
 	push xhl
@@ -1494,7 +1494,7 @@ DkMdlyPlyTtlFunc:
 	add xde, SepaOut_Config_0_0x62
 	ld de, (xde)
 	lda xix, (DkMdlyPlyTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 DkMdlyPlyTtl_Dispatch:
 	push xde
 	push xhl
@@ -1711,7 +1711,7 @@ DpMdlyDocTtlFunc:
 	add xde, SepaOut_Config_0_0xDC
 	ld de, (xde)
 	lda xix, (DpMdlyDocTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpMdlyDocTtlFunc title dispatch
 DpMdlyDocTtl_Dispatch:
 	ldw	(0x021086:24), 0
@@ -1804,7 +1804,7 @@ DpMdlyPdTtlFunc:
 	add xde, SepaOut_Config_0_0xE8
 	ld de, (xde)
 	lda xix, (DpMdlyPdTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpMdlyPdTtlFunc title dispatch
 DpMdlyPdTtl_Dispatch:
 	ldw	(0x021086:24), 0
@@ -1897,7 +1897,7 @@ DpMdlySmfTtlFunc:
 	add xde, SepaOut_Config_0_0xF4
 	ld de, (xde)
 	lda xix, (DpMdlySmfTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpMdlySmfTtlFunc title dispatch
 DpMdlySmfTtl_Dispatch:
 	cp (35995:16), 118
@@ -1992,7 +1992,7 @@ DpMdlySmfLyrTtlFunc:
 	add xde, SepaOut_Config_0_0x100
 	ld de, (xde)
 	lda xix, (DpMdlySmfLyrTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpMdlySmfLyrTtlFunc title dispatch
 DpMdlySmfLyrTtl_Dispatch:
 	ld	a, (35995:16)
@@ -2097,7 +2097,7 @@ NameGetFuncCall:
 	add xbc, SepaOut_Config_0_0x13A
 	ld bc, (xbc)
 	lda xix, (NameGetFuncCall_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ; NameGetFuncCall dispatch
 NameGetFuncCall_Dispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 184 of 235 slots byte-identical
@@ -2772,7 +2772,7 @@ DpDocTtlFunc:
 	add xde, SepaOut_Config_0_0x16A
 	ld de, (xde)
 	lda xix, (DpDocTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpDocTtlFunc title dispatch
 DpDocTtl_Dispatch:
 	ldw	(135302:24), 0
@@ -2807,7 +2807,7 @@ DpDoc_CaseA:
 	add xwa, SepaOut_Config_0_0x156
 	ld wa, (xwa)
 	lda xix, (DpDoc_CaseB:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DpDocTtl case B
 DpDoc_CaseB:
@@ -2894,7 +2894,7 @@ DpPdTtlFunc:
 	add xde, SepaOut_Config_0_0x18A
 	ld de, (xde)
 	lda xix, (DpPdTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpPdTtlFunc title dispatch
 DpPdTtl_Dispatch:
 	ldw	(135302:24), 0
@@ -2929,7 +2929,7 @@ DpPd_CaseA:
 	add xwa, SepaOut_Config_0_0x176
 	ld wa, (xwa)
 	lda xix, (DpPd_CaseB:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DpPdTtl case B
 DpPd_CaseB:
@@ -3016,7 +3016,7 @@ DpSmfTtlFunc:
 	add xde, SepaOut_Config_0_0x1AA
 	ld de, (xde)
 	lda xix, (DpSmfTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpSmfTtlFunc title dispatch
 DpSmfTtl_Dispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 16 of 21 slots byte-identical
@@ -3061,7 +3061,7 @@ DpSmf_CaseA:
 	add xwa, SepaOut_Config_0_0x196
 	ld wa, (xwa)
 	lda xix, (DpSmf_CaseB:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; DpSmfTtl case B
 DpSmf_CaseB:
@@ -3148,7 +3148,7 @@ DpSmfLyrTtlFunc:
 	add xde, SepaOut_Config_0_0x1B6
 	ld de, (xde)
 	lda xix, (DpSmfLyrTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 ; DpSmfLyrTtlFunc title dispatch
 DpSmfLyrTtl_Dispatch:
 	ld	xwa, 0x6f0026
@@ -3290,7 +3290,7 @@ SqTrSelTtlFunc:
 	add xde, SepaOut_Config_0_0x1C2
 	ld de, (xde)
 	lda xix, (SqTrSelTtl_Dispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 SqTrSelTtl_Dispatch:
 	push xde
 	push xhl

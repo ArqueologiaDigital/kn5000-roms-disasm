@@ -277,7 +277,7 @@ TestTitleFunc:
 	add xwa, FDTest_String_TestTitleFunc_0xD0
 	ld wa, (xwa)
 	lda xix, (TitleFunc_ActionDispatch:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; User action dispatch table (event 0x1c00013, xde=2..6)
 ; Each entry loads a string address and calls FDTest_PrintDiag, then exits
@@ -309,7 +309,7 @@ TitleFunc_LifecycleDispatch:
 	add xwa, FDTest_String_TestTitleFunc_0xC0
 	ld wa, (xwa)
 	lda xix, (TitleFunc_LifecycleTable:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Title lifecycle dispatch table (event 0x1c00007, xde=0..6)
 ; 0=new: print+call 0xf97edb, 1=old: send event+call 0xfaa257

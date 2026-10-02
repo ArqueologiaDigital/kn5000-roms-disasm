@@ -40,7 +40,7 @@ AcGridBoxProc:
 ;   0x1c0001b -> AcGridBox_Default
 ;   0x1c0001c -> AcGridBox_CellSelect
 ;   0x1c0001d -> AcGridBox_CellSelect
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 AcGridBox_Init:
 	ld xwa, (xsp + 16)
@@ -259,7 +259,7 @@ GridCheck:
 ;   0x1c0001b -> GridCheck_Return
 ;   0x1c0001c -> GridCheck_JumpEnd
 ;   0x1c0001d -> GridCheck_JumpEnd
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 GridCheck_JumpEnd:
 	jr	t, GridCheck_Return
@@ -2014,7 +2014,7 @@ RamEditCheck:
 ;   0x1e00045 -> RamEditCheck_Evt1E00045
 ;   0x1e00046 -> RamEditCheck_Evt1E0003E
 ;   0x1e00047 -> RamEditCheck_JumpStart
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 RamEditCheck_JumpStart:
 	ld	xwa, (xde+14)
@@ -2734,7 +2734,7 @@ AcTitleMenu_Confirm_MultiLine:
 	ld	hl, (xsp+6)
 	dec	1, hl
 	lda	xde, (xsp+12)
-	.byte	0xf3, 0x07, 0xe8, 0xec, 0x00, 0x00	; ld (xde+hl), 0x00
+	ld	(xde+hl), 0x00
 	ld	xwa, (xwa)
 	or	xwa, xwa
 	jr	z, AcTitleMenu_Confirm_RenderBottom
@@ -3092,7 +3092,7 @@ VwMenuBox_Confirm_MultiLine:
 	ld	hl, iz
 	dec	1, hl
 	lda	xde, (xsp+10)
-	.byte	0xf3, 0x07, 0xe8, 0xec, 0x00, 0x00	; ld (xde+hl), 0x00
+	ld	(xde+hl), 0x00
 	ld	xwa, (xwa)
 	or	xwa, xwa
 	jr	z, VwMenuBox_Confirm_RenderBottom
@@ -3611,7 +3611,7 @@ ButtonState_DispatchDSP:
 	lda xix, (Str_No_0x4:24)
 	ld	wa, (xix+wa)
 	lda xix, (ButtonState_DispatchDSP_InlineData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ButtonState_DispatchDSP_InlineData:
 	lda	xde, (xsp+12)
@@ -3855,7 +3855,7 @@ AcIndexEdit_DispatchDSP:
 	ld xix, Str_No_0x38
 	ld	wa, (xix+wa)
 	lda xix, (AcIndexEdit_DispatchDSP_InlineData:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 AcIndexEdit_DispatchDSP_InlineData:
 	ld	de, (xsp+4)
@@ -8508,7 +8508,7 @@ ObjectProc:
 ;   0x1e00021 -> ObjectProc_Evt1E00021
 ;   0x1e00022 -> ObjectProc_Evt1E00022
 ;   0x1e00023 -> ObjectProc_Evt1E00023
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 AcTrkSw_Return:
 	ld	xhl, xiz
 	jrl	ObjectProc_Join5
@@ -9238,7 +9238,7 @@ ClassProc:
 ;   0x1e00005 -> ClassProc_Evt1E00005
 ;   0x1e00006 -> ClassProc_Evt1E00006
 ;   0x1e00007 -> ClassProc_Evt1E00007
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 ;-----------------------------------------------------------------------------
 ; ClassProc_EventHandlers - Dispatch table for UI event types
 ;
@@ -9823,7 +9823,7 @@ ModeProc:
 ;   0x1e0002e -> ModeProc_Evt1E0002E
 ;   0x1e0002f -> ModeProc_Evt1E0002F
 ;   0x1e00030 -> ModeProc_Evt1E00030
-	jp_ind 8, 0x07, 0xf0, 0xe4
+	jp	t, (xix+bc)
 
 NakaWidget_ReturnConst_0x1600006:
 	ld xhl, NAKA_CLASS_Mode
@@ -10242,7 +10242,7 @@ TitleProc:
 ;   0x1e00033 -> TitleProc_Evt1E00033
 ;   0x1e00034 -> TitleProc_Evt1E00034
 ;   0x1e00035 -> TitleProc_Evt1E00035
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 
 ; TitleProc event dispatch
 TitleProc_EventDispatch:
@@ -11393,7 +11393,7 @@ ViewableProc:
 ;   0x1c0000f -> Viewable_ReturnZero
 ;   0x1c00010 -> Viewable_DefaultDispatch
 ;   0x1c00011 -> Viewable_ReturnZero
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 Viewable_GetClassProc:
 	ld wa, bc
@@ -17610,7 +17610,7 @@ CommonIDProc:
 ;   0x1e0000c -> CommonIDProc_Evt1E0000C
 ;   0x1e0000d -> CommonIDProc_Evt1E0000D
 ;   0x1e0000e -> CommonIDProc_Evt1E0000E
-	jp_ind 8, 0x07, 0xf0, 0xe8
+	jp	t, (xix+de)
 CommonIDProc_Evt1E0000D:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
@@ -18999,7 +18999,7 @@ SetApTimer_Prologue:
 
 SetApTimer_Allocate:
 	muls bc, 0x18
-	stiw_ind 0x07, 0xe8, 0xe4, 0xff, 0xff
+	ldw	(xde+bc), 0xffff
 	jrl SetApTimer_Return
 
 ; RootContext setup handler
@@ -19058,7 +19058,7 @@ RootContext_Setup:
 	cp bc, 0xffff
 	jr z, ApTimer_VirtualDispatch
 	muls bc, 0x18
-	stiw_ind 0x07, 0xec, 0xe4, 0xff, 0xff
+	ldw	(xhl+bc), 0xffff
 
 ; ApTimer dispatcher
 ApTimer_VirtualDispatch:

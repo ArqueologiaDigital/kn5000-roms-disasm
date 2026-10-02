@@ -43,7 +43,7 @@ SeqStep_NoteReadEvent:
 	lda xix, (SeqStep_NoteReadEvent_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SeqStep_NoteCases:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 ; Case bodies of the `jp_ind` switch in the dispatcher above (event byte 0x80-0x86; word offsets at SeqStep_NoteReadEvent_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
@@ -310,7 +310,7 @@ SeqStep_EventPosConsumeAdvance:
 	lda xix, (SeqStep_EventPosConsumeAdvance_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SeqStep_EventPosFinish:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SeqStep_EventPosFinish:
 	bit	0, (0x271e:16)
@@ -553,7 +553,7 @@ SeqStep_DeleteDone:
 	lda xix, (SeqStep_DeleteDone_CaseTable:24)
 	ld	wa, (xix+wa)
 	lda xix, (SeqStep_DeleteExitRestore:24)
-	jp_ind 8, 0x07, 0xf0, 0xe0
+	jp	t, (xix+wa)
 
 SeqStep_DeleteExitRestore:
 	mrdw5 0x9f, 0x04, 0x19, 0xaf, 0x28
@@ -2243,7 +2243,7 @@ SeqStep_ParseRhythm:
 	extz de
 	lda xhl, (SeqStep_ParseRhythm_ByteMap:24)
 	ld a, (4340:16)
-	cpb_sri_rm A, 0x07, 0xec, 0xe8
+	cp	a, (xhl+de)
 	jr z, SeqStep_ParseRhythmLoop
 	res 0, c
 	res 2, c

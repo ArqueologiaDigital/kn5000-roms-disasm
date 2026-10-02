@@ -278,7 +278,7 @@ FRename_PadLoop_Fill:
 	ld xbc, xwa
 
 FRename_FillLoop:
-	stib_ind 0x07, 0xe4, 0xf4, 0x5f
+	ld	(xbc+iy), 0x5f
 	inc 1, iy
 	cp iy, 6:i3
 	jr lt, FRename_FillLoop
@@ -381,7 +381,7 @@ FRenameSmf_PadLoop_Fill:
 	ld xbc, xwa
 
 FRenameSmf_FillLoop:
-	stib_ind 0x07, 0xe4, 0xf4, 0x5f
+	ld	(xbc+iy), 0x5f
 	inc 1, iy
 	cp iy, 0x8
 	jr lt, FRenameSmf_FillLoop
@@ -939,7 +939,7 @@ DiskName_PadLoop_Fill:
 	ld xwa, xde
 
 DiskName_FillLoop:
-	stib_ind 0x07, 0xe0, 0xf4, 0x5f
+	ld	(xwa+iy), 0x5f
 	inc 1, iy
 	cp iy, 0xb
 	jr lt, DiskName_FillLoop
@@ -1232,7 +1232,7 @@ SaveFileName_PadLoop_Fill:
 	ld xwa, xde
 
 SaveFileName_FillLoop:
-	stib_ind 0x07, 0xe0, 0xf4, 0x5f
+	ld	(xwa+iy), 0x5f
 	inc 1, iy
 	cp iy, 6:i3
 	jr lt, SaveFileName_FillLoop

@@ -329,7 +329,7 @@ SeqTrack_AssignChannel_Loop:
 	ldw (xhl + 3), 0xffff
 	popw wa
 	ld xhl, 0xf250
-	or_srib_im 0x07, 0xec, 0xf4, 0x80
+	or	(xhl+iy), 0x80
 	push xhl
 	lda	xhl, (xhl+iy)
 	ldfr_lerp XHL, 0x38
@@ -342,7 +342,7 @@ SeqTrack_AssignChannel_Loop:
 	ld c, (5113:16)
 	push xiy
 	ld iy, bc
-	stiw_ind 0x07, 0xec, 0xf4, 0x05, 0x00
+	ldw	(xhl+iy), 0x0005
 	pop xiy
 	add iy, 0x3
 	add ix, 0x2
@@ -589,7 +589,7 @@ SeqTrack_UpdateChannelVolumes:
 SeqTrack_UpdateVolumes_Loop:
 	push xix
 	ld xix, 0x11f9
-	bit_dri 7, 0x07, 0xf0, 0xf4
+	bit	7, (xix+iy)
 	pop xix
 	jrl z, SeqTrack_UpdateVolumes_Next
 	call SeqTrack_ComputeScaledDelta
@@ -801,7 +801,7 @@ Voice_ActivateChannels_Loop:
 	add iy, hl
 	push xde
 	ld xde, 0xf250
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jrl z, Voice_ActivateChannels_Next
 	ld iy, hl
@@ -1054,7 +1054,7 @@ SMF_VoiceSetup_AssignToTrack:
 	sla iy, 1
 	add iy, hl
 	ld xhl, 0xf250
-	or_srib_im 0x07, 0xec, 0xf4, 0x80
+	or	(xhl+iy), 0x80
 	ldfr_lerp XHL, 0x38
 	lda	xhl, (xhl+iy)
 	ld (xhl + 1), wa
@@ -1065,7 +1065,7 @@ SMF_VoiceSetup_AssignToTrack:
 	ld xhl, 0xcbe
 	ld iy, (4237:16)
 	call SoundGen_ClampVoiceIndexMin1
-	stiw_ind 0x07, 0xec, 0xf4, 0x05, 0x00
+	ldw	(xhl+iy), 0x0005
 
 SMF_VoiceSetup_Exit:
 	ret
@@ -2071,7 +2071,7 @@ SeqTrack_ReleaseVoiceAtEndOfTrack:
 	add iy, hl
 	push xde
 	ld xde, 0xf250
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jrl z, SeqTrack_ReleaseVoice_Done
 	ld iy, (4237:16)
@@ -2223,7 +2223,7 @@ SetWall_InitVoiceSlots:
 	muls l, 0x3
 	push xiy
 	ld xiy, 0xf250
-	or_srib_im 0x07, 0xf4, 0xec, 0x80
+	or	(xiy+hl), 0x80
 	inc 1, xhl
 	ld	(xiy+hl), ix
 	pop xiy
@@ -2331,18 +2331,18 @@ VoiceChannel_ResetSlotByIndex:
 	ld iy, hl
 	muls_erpb 0xf4, 0x03
 	ld xix, 0xf250
-	and_srib_im 0x07, 0xf0, 0xf4, 0x7f
+	and	(xix+iy), 0x7f
 	inc 1, iy
-	stiw_ind 0x07, 0xf0, 0xf4, 0xff, 0xff
+	ldw	(xix+iy), 0xffff
 	ld xix, 0xcbe
-	stib_ind 0x07, 0xf0, 0xec, 0x05
+	ld	(xix+hl), 0x05
 	ld xix, 0xf218
-	stib_ind 0x07, 0xf0, 0xec, 0x05
+	ld	(xix+hl), 0x05
 	sla hl, 1
 	ld xix, 0xc9e
-	stiw_ind 0x07, 0xf0, 0xec, 0xff, 0xff
+	ldw	(xix+hl), 0xffff
 	ld xix, 0xf1f8
-	stiw_ind 0x07, 0xf0, 0xec, 0xff, 0xff
+	ldw	(xix+hl), 0xffff
 	pop xix
 	ret
 
@@ -2489,7 +2489,7 @@ ToneGen_SyncBitmap_Loop:
 	ldto_berp A, 0x3c
 	jrl c, ToneGen_UpdateBlocks_NextChannel
 	ld xix, 0xf250
-	bit_dri 7, 0x07, 0xf0, 0xec
+	bit	7, (xix+hl)
 	jrl z, ToneGen_UpdateBlocks_NextChannel
 	ld xix, 0xf250
 	lda	xix, (xix+hl)
@@ -2500,7 +2500,7 @@ ToneGen_SyncBitmap_Loop:
 	ld	(xix+iy), wa
 	srl iy, 1
 	ld xix, 0xcbe
-	stib_ind 0x07, 0xf0, 0xf4, 0x05
+	ld	(xix+iy), 0x05
 
 ToneGen_UpdateBlocks_NextChannel:
 	inc 1, c
@@ -4061,18 +4061,18 @@ VoiceChannel_ClearRegisters:
 	muls_erpb 0xf4, 0x03
 	push xix
 	ld xix, 0xf250
-	and_srib_im 0x07, 0xf0, 0xf4, 0x7f
+	and	(xix+iy), 0x7f
 	inc 1, iy
-	stiw_ind 0x07, 0xf0, 0xf4, 0xff, 0xff
+	ldw	(xix+iy), 0xffff
 	ld xix, 0xcbe
-	stib_ind 0x07, 0xf0, 0xec, 0x05
+	ld	(xix+hl), 0x05
 	ld xix, 0xf218
-	stib_ind 0x07, 0xf0, 0xec, 0x05
+	ld	(xix+hl), 0x05
 	sla hl, 1
 	ld xix, 0xc9e
-	stiw_ind 0x07, 0xf0, 0xec, 0xff, 0xff
+	ldw	(xix+hl), 0xffff
 	ld xix, 0xf1f8
-	stiw_ind 0x07, 0xf0, 0xec, 0xff, 0xff
+	ldw	(xix+hl), 0xffff
 	pop xix
 	ret
 
@@ -4178,7 +4178,7 @@ Scoop_HandleEqualCompare:
 	cp c, 0x82
 	jr nz, Scoop_Equal_AdvanceAndRevalidate
 	ld xhl, (4349:16)
-	stib_ind 0x07, 0xec, 0xf0, 0x82
+	ld	(xhl+ix), 0x82
 	ld (0x27d2:16), 255
 	ld wa, (3308:16)
 	ld (0x289f:16), wa
@@ -4190,7 +4190,7 @@ Scoop_HandleEqualCompare:
 
 Scoop_Equal_AdvanceAndRevalidate:
 	ld xhl, (4349:16)
-	stib_ind 0x07, 0xec, 0xf0, 0x81
+	ld	(xhl+ix), 0x81
 	call VoiceChannel_AdvanceIndex
 	ld xhl, (4349:16)
 	push xix
@@ -4241,7 +4241,7 @@ VoiceChannel_ValidateAndLoop:
 	ld xhl, (4349:16)
 	push xde
 	ld xde, 0x17fa
-	bit_dri 7, 0x07, 0xe8, 0xf4
+	bit	7, (xde+iy)
 	pop xde
 	jr nz, VoiceChannel_FindNext_StoreAndUpdate
 	push xde
@@ -4617,7 +4617,7 @@ VoiceChannel_ClearChannelFlags:
 	ld iy, bc
 	push xix
 	ld xix, 0x10b3
-	stib_ind 0x07, 0xf0, 0xf4, 0xff
+	ld	(xix+iy), 0xff
 	pop xix
 	ret
 
@@ -4665,7 +4665,7 @@ VoiceChannel_NoteOn_ClearSlot:
 	ld iy, bc
 	push xix
 	ld xix, 0x10b3
-	stib_ind 0x07, 0xf0, 0xf4, 0xff
+	ld	(xix+iy), 0xff
 	xor c, c
 	ld xix, 0x10c3
 	ld	(xix+iy), c
@@ -4724,7 +4724,7 @@ VoiceChannel_NoteOff_ClearSlot:
 	ld iy, bc
 	push xix
 	ld xix, 0x10b3
-	stib_ind 0x07, 0xf0, 0xf4, 0xff
+	ld	(xix+iy), 0xff
 	xor c, c
 	ld xix, 0x10c3
 	ld	(xix+iy), c
@@ -4980,7 +4980,7 @@ ToneGen_ValidateVoiceLoop:
 	ld xhl, (4349:16)
 	push xix
 	ld xix, 0x18fa
-	bit_dri 7, 0x07, 0xf0, 0xf4
+	bit	7, (xix+iy)
 	pop xix
 	jr nz, ToneGen_AdvValidate_StoreAndDone
 	push xix

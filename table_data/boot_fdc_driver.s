@@ -186,7 +186,7 @@ FDC_MediaConfigAndRecalibrate__media_dispatch:
 	lda xix, (FDC_DiskTypeStanza_Offsets + 0x600000:24)	; lda XIX,0xffb496 - XIX = FDC_DiskTypeStanza_Offsets (boot alias of ROM 0x9FB496)
 	ld	wa, (xix+wa)	; ld WA,(XIX+WA) - fetch stanza offset
 	lda xix, (FDC_MediaStanza_Type0 + 0x600000:24)	; lda XIX,0xffd9a2
-	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 
 ; -----------------------------------------------------------------------------
 ; FDC_MediaStanza_Type0..Type5 / _Default - media-type configuration stanzas
@@ -312,7 +312,7 @@ FDC_ValidateRequest:
 	lda xix, (FDC_ValidateCmd_Offsets + 0x600000:24)	; lda XIX,0xffb4a2
 	ld	wa, (xix+wa)	; ld WA,(XIX+WA) - XIX = FDC_ValidateCmd_Offsets (boot alias of ROM 0x9FB4A2)
 	lda xix, (FDC_Validate_FormatParams + 0x600000:24)	; lda XIX,0xffdaab
-	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA - XIX = FDC_Validate_FormatParams (validator base)
+	jp	t, (xix+wa)	; jp T,XIX+WA - XIX = FDC_Validate_FormatParams (validator base)
 
 ; -----------------------------------------------------------------------------
 ; FDC_Validate_FormatParams (+0x00) - cmd 0: check + program the geometry
@@ -2221,7 +2221,7 @@ FDC_Request__start:
 	lda xix, (FDC_CommandDispatch_Offsets + 0x600000:24)	; lda XIX,0xffb4ba - XIX = FDC_CommandDispatch_Offsets (boot alias of ROM 0x9FB4BA)
 	ld	wa, (xix+wa)	; ld WA,(XIX+WA) - fetch stub offset (entries are 5 bytes apart)
 	lda xix, (FDC_Dispatch_Initialize + 0x600000:24)	; lda XIX,0xffea07 - XIX = FDC_Dispatch_Initialize (stub base)
-	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 
 ; -----------------------------------------------------------------------------
 ; FDC_Dispatch_* - the twelve command execution stubs

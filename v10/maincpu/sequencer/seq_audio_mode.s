@@ -107,7 +107,7 @@ AccPedal_ProcessAllChanges:
 	xor wa, wa
 	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	ld a, (1075:16)
-	bit_dri 0, 0x07, 0xec, 0xe0
+	bit	0, (xhl+wa)
 	jrl z, AccPedal_ReadBankAndReturn
 	xor a, a
 	bit 0, (0x32fb:16)
@@ -779,13 +779,13 @@ AccVoice_LoadTuningBlock:
 	push xix
 	ld xix, 0x3246
 	ldw wa, 0x9
-	stib_ind 0x07, 0xf0, 0xe0, 0x40
+	ld	(xix+wa), 0x40
 	ldw wa, 0x10
-	stib_ind 0x07, 0xf0, 0xe0, 0x0c
+	ld	(xix+wa), 0x0c
 	ldw wa, 0x17
-	stib_ind 0x07, 0xf0, 0xe0, 0x74
+	ld	(xix+wa), 0x74
 	ldw wa, 0x1e
-	stib_ind 0x07, 0xf0, 0xe0, 0x40
+	ld	(xix+wa), 0x40
 	pop xix
 	pop xwa
 	pop xiy
@@ -952,7 +952,7 @@ RhythmPart1_ProcessRingBuf:
 	ld xhl, 0x2a94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
-	stib_ind 0x07, 0xec, 0xf4, 0xc0
+	ld	(xhl+iy), 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
 	ld	(xhl+iy), e
@@ -1062,7 +1062,7 @@ RhythmPart2_ProcessRingBuf:
 	ld xhl, 0x2c94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
-	stib_ind 0x07, 0xec, 0xf4, 0xc0
+	ld	(xhl+iy), 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
 	ld	(xhl+iy), e
@@ -1137,7 +1137,7 @@ RhythmPart3_ProcessRingBuf:
 	ld xhl, 0x2d94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
-	stib_ind 0x07, 0xec, 0xf4, 0xc0
+	ld	(xhl+iy), 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
 	ld	(xhl+iy), e
@@ -1192,7 +1192,7 @@ RhythmPart4_ProcessRingBuf:
 	ld xhl, 0x2e94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
-	stib_ind 0x07, 0xec, 0xf4, 0xc0
+	ld	(xhl+iy), 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
 	ld	(xhl+iy), e
@@ -1247,7 +1247,7 @@ RhythmPart5_ProcessRingBuf:
 	ld xhl, 0x2f94
 	ld iy, (xhl + 4)
 	ld bc, (xhl + 2)
-	stib_ind 0x07, 0xec, 0xf4, 0xc0
+	ld	(xhl+iy), 0xc0
 	calr RingBuf_AdvanceIndex
 	calr RhythmAccent_CopyAndUpdateRingBuf
 	ld	(xhl+iy), e

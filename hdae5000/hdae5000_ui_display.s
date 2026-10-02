@@ -1030,7 +1030,7 @@ HDAE5000_AcLanguageText1Proc:
 	lda xix, (HDAE5000_LangText_CaseTable:24)
 	ld	wa, (xix+wa)	; ld WA,(XIX+WA)
 	lda xix, (HDAE5000_AcLanguageText1Proc_Msg001:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_AcLanguageText1Proc_Msg001:
 	cpw	(xsp+4), 0x0001
 	jr nz, .LUIH_b6f3                      ; [6e 10] jr NZ,0x28b6f3
@@ -3237,7 +3237,7 @@ HDAE5000_LyricBoxProc:
 	add	xwa, HDAE5000_LyricBoxProc_CaseTable1
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_LyricBoxProc_Ev01C0000D:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_LyricBoxProc_Ev01C0000D:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld xbc, (xsp + 0x0a)                    ; ld XBC,(XSP+0x0a)
@@ -3835,7 +3835,7 @@ HDAE5000_LyricBoxProc_Ev01CA0005:
 	add	xwa, HDAE5000_LyricBoxProc_CaseTable2
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_LyricBoxProc_Case0_2:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_LyricBoxProc_Case0_2:
 	ld xwa, (xsp + 0x0e)                    ; ld XWA,(XSP+0x0e)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
@@ -4154,7 +4154,7 @@ HDAE5000_Lyrics_PlayToPosition:	; 0x28D6D1 (938 bytes)
 	ld xhl, 2295822		; XHL = 0x0023080E
 	add xhl, xwa			; XHL += XWA*2
 	ld wa, (xhl)			; WA = offset table[position]
-	add_sriw_rm wa, 0x07, 0xe8, 0xe4	; WA += (XDE + BC)
+	add	wa, (xde+bc)	; WA += (XDE + BC)
 	ld (0x23087a:24), wa; (0x23087A) = WA
 	; (0x23087C) = width entry of the current line
 	ld a, (0x2304ee:24); A = (0x2304EE)
@@ -6228,7 +6228,7 @@ HDAE5000_FDFileSelectProc:
 	ld xix, HDAE5000_FDFileSelectProc_KeyCaseTable		; offset table base
 	ld	wa, (xix+wa)	; WA = (XIX+WA) — load jump offset
 	lda xix, (.Lsc_07_btn_down:24); base = .Lsc_07_btn_down
-	jp_ind 8, 0x07, 0xf0, 0xe0	; jp T, XIX+WA
+	jp	t, (xix+wa)	; jp T, XIX+WA
 
 	; --- Down button handler ---
 .Lsc_07_btn_down:
@@ -6982,7 +6982,7 @@ HDAE5000_VarInt_Decode:		; 0x28F3BD
 	extz xwa			; XWA = payload (zero-extended to 32-bit)
 	add xhl, xwa			; accumulate: XHL += payload
 
-	bit_dri 7, 0x07, 0xe8, 0xf0	; test continuation bit of data[IX]
+	bit	7, (xde+ix)	; test continuation bit of data[IX]
 	jr nz, .Lvd_continue
 	; Continuation=0 → this was the last byte, decoding complete
 	ldto_berp a, 0xf0		; A = IXL (byte index)
@@ -15875,7 +15875,7 @@ HDAE5000_PPORT_Svc21_WriteOpenHD:
 	ld	a, (xsp+6)
 	extz wa                                 ; extz WA
 	add	wa, 0x001a
-	stib_ind 0x07, 0xE4, 0xE0, 0x01	; ld (XBC+WA),0x01
+	ld	(xbc+wa), 0x01	; ld (XBC+WA),0x01
 	ldw (xsp + 0x04), 0
 .LDS_4e94:
 	ld	a, (xsp+6)
@@ -18829,7 +18829,7 @@ HDAE5000_PPORT_ClearPacket:	; 0x296A9C (26 bytes)
 .Lprc_loop:
 	cp bc, 0x0100		; compare BC with 256
 	jr z, .Lprc_done	; if BC == 256, done
-	stib_ind 0x07, 0xF0, 0xE4, 0x00	; ld (XIX+BC), 0x00
+	ld	(xix+bc), 0x00	; ld (XIX+BC), 0x00
 	inc 1, bc		; BC++
 	jr t, .Lprc_loop	; always loop back
 .Lprc_done:
@@ -20342,7 +20342,7 @@ HDAE5000_HD_InitTables:				; 0x29797F
 	pushw bc
 	ldw wa, 26
 	add bc, wa			; offset = counter + 26
-	stib_ind 0x07, 0xF0, 0xE4, 0x00	; ld (XIX+BC), 0x00
+	ld	(xix+bc), 0x00	; ld (XIX+BC), 0x00
 	popw bc
 	inc 1, bc
 	jp .Lhciv_zeros_loop
@@ -20392,7 +20392,7 @@ HDAE5000_HD_InitTables:				; 0x29797F
 .Lhciv_col_loop:			; 0x297A4F
 	cp bc, 16			; 16 bytes per row
 	jp z, (.Lhciv_next_row:24)		; jp Z, .Lhciv_next_row
-	stib_ind 0x07, 0xF0, 0xE4, 0x20	; ld (XIX+BC), 0x20
+	ld	(xix+bc), 0x20	; ld (XIX+BC), 0x20
 	inc 1, bc
 	jp .Lhciv_col_loop
 .Lhciv_next_row:			; 0x297A64
@@ -20499,7 +20499,7 @@ HDAE5000_HD_WriteTables_Next:	; 0x297AD2 (836 bytes)
 	cp bc, 512			; compared all 512 bytes?
 	jp z, (.Lhdd_verify_next1:24)		; jp Z, .Lhdd_verify_next1
 	ld	xwa, (xix+bc)	; XWA = (XIX+BC)
-	cpl_sri_rm xwa, 0x07, 0xF4, 0xE4	; cp XWA, (XIY+BC)
+	cp	xwa, (xiy+bc)	; cp XWA, (XIY+BC)
 	jp nz, (.Lhdd_error1:24)		; jp NZ, .Lhdd_error1
 	inc 4, bc			; 4 bytes at a time
 	jp .Lhdd_compare_loop1
@@ -20613,7 +20613,7 @@ HDAE5000_HD_ReadTables:			; 0x297BE9
 	cp bc, 512
 	jp z, (.Lhdd_verify_next2:24)		; jp Z, .Lhdd_verify_next2
 	ld	xwa, (xix+bc)	; XWA = (XIX+BC)
-	cpl_sri_rm xwa, 0x07, 0xF4, 0xE4	; cp XWA, (XIY+BC)
+	cp	xwa, (xiy+bc)	; cp XWA, (XIY+BC)
 	jp nz, (.Lhdd_error2:24)		; jp NZ, .Lhdd_error2
 	inc 4, bc
 	jp .Lhdd_compare_loop2
@@ -21563,7 +21563,7 @@ HDAE5000_HD_Format_CompareLoop:
 	cp	bc, 0x0200
 	jp	z, (.LHD_Format_CompareLoop_Skip1:24)
 	ld	xwa, (xix+bc)	; ld XWA,(XIX+BC)
-	cpl_sri_rm xwa, 0x07, 0xF4, 0xE4	; cp XWA,(XIY+BC)
+	cp	xwa, (xiy+bc)	; cp XWA,(XIY+BC)
 	jr z, .LDSR_875a                       ; [66 0a] jr Z,0x29875a
 	ld	(HDAE5000_RAM_AtaError:24), 4
 	jp HDAE5000_HD_Format_Exit                             ; jp 0x29888a
@@ -21801,7 +21801,7 @@ HDAE5000_NameList5_Contains_CharLoop:
 	cp	xhl, 0x0000001a
 	jp	z, (.LNameList5_Contains_CharLoop_Skip2:24)
 	ld	a, (xiy+hl)	; ld A,(XIY+HL)
-	cpb_sri_mr a, 0x07, 0xF0, 0xEC	; cp (XIX+HL),A
+	cp	(xix+hl), a	; cp (XIX+HL),A
 	jp	nz, (.LNameList5_Contains_CharLoop_Skip1:24)
 	inc 1, xhl                              ; inc 1,XHL
 	jp HDAE5000_NameList5_Contains_CharLoop                             ; jp 0x2989ad
@@ -21823,7 +21823,7 @@ HDAE5000_Name26_IsBlank:
 HDAE5000_Name26_IsBlank_Loop:
 	cp	xbc, 0x0000001a
 	jp	z, (.LName26_IsBlank_Skip1:24)
-	cpib_sri 0x07, 0xF0, 0xE4, 0x20	; cp (XIX+BC),0x20
+	cp	(xix+bc), 0x20	; cp (XIX+BC),0x20
 	jp	nz, (.LName26_IsBlank_Skip2:24)
 	inc 1, xbc                              ; inc 1,XBC
 	jp HDAE5000_Name26_IsBlank_Loop                             ; jp 0x2989e4
@@ -21861,7 +21861,7 @@ HDAE5000_Field12_FillZeros:
 HDAE5000_Field12_FillZeros_Loop:
 	cp	bc, 0x000c
 	jp	z, (.LField12_FillZeros_Skip1:24)
-	stib_ind 0x07, 0xF0, 0xE4, 0x30	; ld (XIX+BC),0x30
+	ld	(xix+bc), 0x30	; ld (XIX+BC),0x30
 	inc	1, bc
 	jp HDAE5000_Field12_FillZeros_Loop                             ; jp 0x298a34
 .LField12_FillZeros_Skip1:
@@ -21878,7 +21878,7 @@ HDAE5000_Field12_FillSpaces:
 HDAE5000_Field12_FillSpaces_Loop:
 	cp	bc, 0x000c
 	jp	z, (.LField12_FillSpaces_Skip1:24)
-	stib_ind 0x07, 0xF0, 0xE4, 0x20	; ld (XIX+BC),0x20
+	ld	(xix+bc), 0x20	; ld (XIX+BC),0x20
 	inc	1, bc
 	jp HDAE5000_Field12_FillSpaces_Loop                             ; jp 0x298a55
 .LField12_FillSpaces_Skip1:
@@ -21893,7 +21893,7 @@ HDAE5000_Field12_FillSpaces_Loop:
 HDAE5000_DeadLib_Fill40Spaces_Loop:
 	cp	bc, 0x0028
 	jp	z, (.LField12_FillSpaces_Skip2:24)
-	stib_ind 0x07, 0xF0, 0xE4, 0x20	; ld (XIX+BC),0x20
+	ld	(xix+bc), 0x20	; ld (XIX+BC),0x20
 	inc	1, bc
 	jp HDAE5000_DeadLib_Fill40Spaces_Loop                             ; jp 0x298a76
 .LField12_FillSpaces_Skip2:
@@ -23580,7 +23580,7 @@ HDAE5000_DoPrintf:
 	ldto_berp a, 0xf8		; ld A,IZL
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
-	bit_dri 2, 0x07, 0xE4, 0xE0	; bit 2,(XBC+WA)
+	bit	2, (xbc+wa)	; bit 2,(XBC+WA)
 	jr nz, .LDSR_9ba0                      ; [6e ce] jr NZ,0x299ba0
 .LDSR_9bd2:
 	cp	iz, 0x002e
@@ -23625,7 +23625,7 @@ HDAE5000_DoPrintf:
 	ldto_berp a, 0xf8		; ld A,IZL
 	extz wa                                 ; extz WA
 	lda xbc, (HDAE5000_CType_Table:24)
-	bit_dri 2, 0x07, 0xE4, 0xE0	; bit 2,(XBC+WA)
+	bit	2, (xbc+wa)	; bit 2,(XBC+WA)
 	jr nz, .LDSR_9c18                      ; [6e ce] jr NZ,0x299c18
 .LDSR_9c4a:
 	cp	iz, 0x0068
@@ -23675,7 +23675,7 @@ HDAE5000_DoPrintf:
 	lda xix, (HDAE5000_DoPrintf_ConvTable:24)
 	ld	wa, (xix+wa)	; ld WA,(XIX+WA)
 	lda xix, (HDAE5000_DoPrintf_Case_Char:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_DoPrintf_Case_Char:
 	ld	wa, (xsp+6)
 	bit	0x01, wa
@@ -24712,21 +24712,21 @@ HDAE5000_FormatFloat_Fixed:	; 0x29A563 (805 bytes)
 	cp	iz, wa
 	jr ge, .LSFC_a600                      ; [69 30] jr GE,0x29a600
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
-	cpib_sri 0x07, 0xE0, 0xF8, 0x34	; cp (XWA+IZ),0x34
+	cp	(xwa+iz), 0x34	; cp (XWA+IZ),0x34
 	jr le, .LSFC_a600                      ; [62 25] jr LE,0x29a600
 	cp	iz, 0:i3
 	jr ge, .LSFC_a5ea                      ; [69 0b] jr GE,0x29a5ea
 	jr t, .LSFC_a600                       ; [68 1f] jr T,0x29a600
 .LSFC_a5e1:
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
-	stib_ind 0x07, 0xE0, 0xF8, 0x30	; ld (XWA+IZ),0x30
+	ld	(xwa+iz), 0x30	; ld (XWA+IZ),0x30
 .LSFC_a5ea:
 	dec	1, iz
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
-	inc_srib 1, 0x07, 0xE0, 0xF8	; inc 1,(XWA+IZ)
+	inc	1, (xwa+iz)	; inc 1,(XWA+IZ)
 	cp	iz, 0:i3
 	jr le, .LSFC_a600                      ; [62 08] jr LE,0x29a600
-	cpib_sri 0x07, 0xE0, 0xF8, 0x39	; cp (XWA+IZ),0x39
+	cp	(xwa+iz), 0x39	; cp (XWA+IZ),0x39
 	jr gt, .LSFC_a5e1                      ; [6a e1] jr GT,0x29a5e1
 .LSFC_a600:
 	ld	e, (xde)
@@ -24761,7 +24761,7 @@ HDAE5000_FormatFloat_Fixed:	; 0x29A563 (805 bytes)
 	decm	1, (xsp+20)
 .LSFC_a63e:
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
-	cpib_sri 0x07, 0xE0, 0xF8, 0x30	; cp (XWA+IZ),0x30
+	cp	(xwa+iz), 0x30	; cp (XWA+IZ),0x30
 	jr z, .LSFC_a639                       ; [66 f0] jr Z,0x29a639
 .LSFC_a649:
 	ld	wa, (xsp+16)
@@ -25068,7 +25068,7 @@ HDAE5000_FormatFloat_Exp:	; 0x29A888 (848 bytes)
 	ld	de, qiz
 	dec	1, qiz
 	ld xwa, (xsp + 0x16)                    ; ld XWA,(XSP+0x16)
-	cpib_sri 0x07, 0xE0, 0xE8, 0x34	; cp (XWA+DE),0x34
+	cp	(xwa+de), 0x34	; cp (XWA+DE),0x34
 	jr gt, .LSFO_a90a                      ; [6a 0e] jr GT,0x29a90a
 	jr t, .LSFO_a91f                       ; [68 21] jr T,0x29a91f
 .LSFO_a8fe:
@@ -25231,7 +25231,7 @@ HDAE5000_FormatFloat_Exp:	; 0x29A888 (848 bytes)
 	ld	c, (xsp+10)
 	extz bc                                 ; extz BC
 	lda xwa, (HDAE5000_CType_Table:24)
-	bit_dri 1, 0x07, 0xE0, 0xE4	; bit 1,(XWA+BC)
+	bit	1, (xwa+bc)	; bit 1,(XWA+BC)
 	jr z, .LSFO_aa92                       ; [66 08] jr Z,0x29aa92
 	ld	a, (xsp+10)
 	sub	a, 0x20
@@ -25299,7 +25299,7 @@ HDAE5000_FormatFloat_Exp:	; 0x29A888 (848 bytes)
 	ld	c, (xsp+10)
 	extz bc                                 ; extz BC
 	lda xwa, (HDAE5000_CType_Table:24)
-	bit_dri 1, 0x07, 0xE0, 0xE4	; bit 1,(XWA+BC)
+	bit	1, (xwa+bc)	; bit 1,(XWA+BC)
 	jr z, .LSFO_ab38                       ; [66 08] jr Z,0x29ab38
 	ld	a, (xsp+10)
 	sub	a, 0x20

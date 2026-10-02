@@ -90,7 +90,7 @@ HDAE5000_FdList_Scan:	; 0x282E8D (1126 bytes)
 	ld wa, hl					; db 88
 	add wa, 0x0100				; d8 c8 00 01
 	lda xbc, (0x22aa9c:24); f2 9c aa 22 31
-	stib_ind 0x07, 0xE4, 0xE0, 0x01	; ld (xbc+wa), 0x01
+	ld	(xbc+wa), 0x01	; ld (xbc+wa), 0x01
 	pushw 0x0006					; 0b 06 00
 	lda xwa, (xsp + 0x10)			; bf 10 30
 	push xwa					; 38
@@ -113,7 +113,7 @@ HDAE5000_FdList_Scan:	; 0x282E8D (1126 bytes)
 	ld wa, hl					; db 88
 	add wa, 0x0100				; d8 c8 00 01
 	lda xbc, (0x22aa9c:24); f2 9c aa 22 31
-	stib_ind 0x07, 0xE4, 0xE0, 0x01	; ld (xbc+wa), 0x01
+	ld	(xbc+wa), 0x01	; ld (xbc+wa), 0x01
 	pushw 0x0006					; 0b 06 00
 	lda xwa, (xsp + 0x10)			; bf 10 30
 	push xwa					; 38
@@ -639,7 +639,7 @@ HDAE5000_HDAETitleFunc:
 	add xwa, HDAE5000_HDAETitleFunc_CaseTable			; e8 c8 ac 23 2e 00 — add table base
 	ld wa, (xwa)				; 90 20 — load 16-bit jump offset
 	lda xix, (.Lri_jt_base:24); f2 4b 35 28 34 — jump base
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp t, (xix+wa) — F3 indexed jump
+	jp	t, (xix+wa)	; jp t, (xix+wa) — F3 indexed jump
 
 	; === Case 2: main setup — read/write, format, init filesystem ===
 .Lri_jt_base:					; 0x28354B (jump table base)
@@ -1471,7 +1471,7 @@ HDAE5000_FILE_LOAD_Screen:
 	add	xwa, HDAE5000_FILE_LOAD_Screen_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_FILE_LOAD_Screen_Ev01C00001:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_FILE_LOAD_Screen_Ev01C00001:
 	ld	xwa, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xwa, (xwa + WS_RootFnTable)
@@ -3182,7 +3182,7 @@ HDAE5000_SeparateOutputModeCheck:
 	add xwa, HDAE5000_SeparateOutputModeCheck_CaseTable		; + jump table base
 	ld wa, (xwa)			; WA = offset
 	lda xix, (.LHD_SC__h1_case9:24); XIX = dispatch base (h1_case9)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
+	jp	t, (xix+wa)	; jp (XIX + WA)
 .LHD_SC__h1_case9:			; case 9 (offset 0x0000): PPI block copy
 	ld xwa, (xde + 0x0e)
 	sll xwa, 2
@@ -3251,7 +3251,7 @@ HDAE5000_SeparateDrumPartCheck:
 	add xwa, HDAE5000_SeparateDrumPartCheck_CaseTable		; jump table 2
 	ld wa, (xwa)
 	lda xix, (.LHD_SC__h2_case9:24); XIX = dispatch base (h2_case9)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
+	jp	t, (xix+wa)	; jp (XIX + WA)
 .LHD_SC__h2_case9:			; case 9: PPI block copy
 	ld xwa, (xde + 0x0e)
 	sll xwa, 2
@@ -3320,7 +3320,7 @@ HDAE5000_SeparateBassPartCheck:
 	add xwa, HDAE5000_SeparateBassPartCheck_CaseTable		; jump table 3
 	ld wa, (xwa)
 	lda xix, (.LHD_SC__h3_case9:24); XIX = dispatch base (h3_case9)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
+	jp	t, (xix+wa)	; jp (XIX + WA)
 .LHD_SC__h3_case9:			; case 9: PPI block copy
 	ld xwa, (xde + 0x0e)
 	sll xwa, 2
@@ -3487,7 +3487,7 @@ HDAE5000_SaveOptNameCheck:
 	add xwa, HDAE5000_SaveOptNameCheck_CaseTable		; jump table base
 	ld wa, (xwa + 0)		; load offset from table
 	lda xix, (.Lhbi_case0:24); base of case handlers (0x2853D6)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T, XIX+WA
+	jp	t, (xix+wa)	; jp T, XIX+WA
 .Lhbi_case0:
 	; Case 0: PPI block copy from device
 	pushw 0x0023
@@ -3794,7 +3794,7 @@ HDAE5000_FileOptNameCheck:
 	add	xwa, HDAE5000_FileOptNameCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_FileOptNameCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_FileOptNameCheck_Ev01E00047:
 	ld	xiz, xde
 	ld	wa, (HDAE5000_RAM_CurDir:24)
@@ -3853,7 +3853,7 @@ HDAE5000_SfxLswBitCheck:
 	add	xwa, HDAE5000_SfxLswBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxLswBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxLswBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -3928,7 +3928,7 @@ HDAE5000_SfxPmtBitCheck:
 	add	xwa, HDAE5000_SfxPmtBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxPmtBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxPmtBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4003,7 +4003,7 @@ HDAE5000_SfxSqtBitCheck:
 	add	xwa, HDAE5000_SfxSqtBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxSqtBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxSqtBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4078,7 +4078,7 @@ HDAE5000_SfxCmpBitCheck:
 	add	xwa, HDAE5000_SfxCmpBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxCmpBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxCmpBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4153,7 +4153,7 @@ HDAE5000_SfxTmBitCheck:
 	add	xwa, HDAE5000_SfxTmBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxTmBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxTmBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4228,7 +4228,7 @@ HDAE5000_SfxMspBitCheck:
 	add	xwa, HDAE5000_SfxMspBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxMspBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxMspBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4303,7 +4303,7 @@ HDAE5000_SfxRcmBitCheck:
 	add	xwa, HDAE5000_SfxRcmBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxRcmBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxRcmBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4378,7 +4378,7 @@ HDAE5000_SfxMdBitCheck:
 	add	xwa, HDAE5000_SfxMdBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxMdBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxMdBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4454,7 +4454,7 @@ HDAE5000_SfxTlxBitCheck:
 	add	xwa, HDAE5000_SfxTlxBitCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_SfxTlxBitCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_SfxTlxBitCheck_Ev01E00047:
 	ld	xiz, xde
 	ld xwa, (xiz + 0x0e)                    ; ld XWA,(XIZ+0x0e)
@@ -4544,7 +4544,7 @@ HDAE5000_WriteProtectEditCheck:
 	add	xwa, HDAE5000_WriteProtectEditCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_WriteProtectEditCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_WriteProtectEditCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4603,7 +4603,7 @@ HDAE5000_LyricJumpEditCheck:
 	add	xwa, HDAE5000_LyricJumpEditCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_LyricJumpEditCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_LyricJumpEditCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	push xwa
@@ -4691,7 +4691,7 @@ HDAE5000_LyricForeColorCheck:
 	add	xwa, HDAE5000_LyricForeColorCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_LyricForeColorCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_LyricForeColorCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4750,7 +4750,7 @@ HDAE5000_LyricBackColorCheck:
 	add	xwa, HDAE5000_LyricBackColorCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_LyricBackColorCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_LyricBackColorCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4809,7 +4809,7 @@ HDAE5000_WriteConfirmEditCheck:
 	add	xwa, HDAE5000_WriteConfirmEditCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_WriteConfirmEditCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_WriteConfirmEditCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	sll	xwa, 0x02
@@ -4865,7 +4865,7 @@ HDAE5000_QuickLoadModeEditCheck:
 	add	xwa, HDAE5000_QuickLoadModeEditCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_QuickLoadModeEditCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_QuickLoadModeEditCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	push xwa
@@ -4917,7 +4917,7 @@ HDAE5000_LoadByNumberModeEditCheck:
 	add	xwa, HDAE5000_LoadByNumberModeEditCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_LoadByNumberModeEditCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_LoadByNumberModeEditCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	push xwa
@@ -4969,7 +4969,7 @@ HDAE5000_JumpAfterLoadModeEditCheck:
 	add	xwa, HDAE5000_JumpAfterLoadModeEditCheck_CaseTable
 	ld	wa, (xwa)
 	lda xix, (HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047:24)
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp T,XIX+WA
+	jp	t, (xix+wa)	; jp T,XIX+WA
 HDAE5000_JumpAfterLoadModeEditCheck_Ev01E00047:
 	ld xwa, (xde + 0x0e)                    ; ld XWA,(XDE+0x0e)
 	push xwa
@@ -5412,7 +5412,7 @@ HDAE5000_AttenHDFormatSwCatch:
 	add xwa, HDAE5000_AttenHDFormatSwCatch_CaseTable			; jump table base
 	ld wa, (xwa)				; WA = offset
 	lda xix, (HDAE5000_AttenHDFormatSwCatch_Case0:24); dispatch base
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
+	jp	t, (xix+wa)	; jp (XIX + WA)
 	; Case 0: bit test → call with 0/1
 HDAE5000_AttenHDFormatSwCatch_Case0:
 	bit 0x07, iz
@@ -5681,7 +5681,7 @@ HDAE5000_Lbn_StepDigit:	; 0x286A28 (1064 bytes)
 	lda xix, (HDAE5000_Lbn_StepDigit_CaseTable:24); jump table base
 	ld	wa, (xix+wa)	; ld WA, (XIX + WA)
 	lda xix, (HDAE5000_Lbn_StepDigit_Case0:24); dispatch base
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
+	jp	t, (xix+wa)	; jp (XIX + WA)
 	; Case 0 (offset 0x0000): jump to FS_Init directly
 HDAE5000_Lbn_StepDigit_Case0:
 	jrl t, .LHD_SR__cleanup
@@ -5854,7 +5854,7 @@ HDAE5000_LBNPage1SwCatch:
 	add xwa, HDAE5000_LBNPage1SwCatch_CaseTable
 	ld wa, (xwa)
 	lda xix, (HDAE5000_LBNPage1SwCatch_Case12:24); dispatch base
-	jp_ind 8, 0x07, 0xF0, 0xE0	; jp (XIX + WA)
+	jp	t, (xix+wa)	; jp (XIX + WA)
 	; Case 0: re-init FS
 HDAE5000_LBNPage1SwCatch_Case12:
 	pushw 0x0001
