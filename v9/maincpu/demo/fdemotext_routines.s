@@ -1894,7 +1894,7 @@ FDemoText_TextDispatch_Skip3:
 	ld	xde, 5:i3
 	call	SendEvent
 	ld	xwa, Pad_NakaExternal_Block1
-	ld	xbc, 0x1c00001
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	SendEvent
 	ld	xwa, Pad_NakaExternal_Block1
