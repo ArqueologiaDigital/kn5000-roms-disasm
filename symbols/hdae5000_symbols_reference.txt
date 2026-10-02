@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 4,064
-#   semantic names ........... 4,061 (99.9%)
+#   symbols .................. 4,090
+#   semantic names ........... 4,087 (99.9%)
 #   positional names ......... 3
 #
 HDAE5000_ROM_HEADER 00280000
@@ -1232,6 +1232,32 @@ HDAE5000_Record_IvScreenR2 0029C182
 HDAE5000_Record_AcLanguageText1 0029C19A
 HDAE5000_Record_LyricBox 0029C1B2
 HDAE5000_Record_FDFileSelect 0029C1CA
+ClassSig_FDFileSelect 0029D8AA
+ClassName_FDFileSelect 0029D8AE
+ClassSig_LyricBox 0029D8BC
+ClassName_LyricBox 0029D8C4
+ClassSig_AcLanguageText1 0029D8CE
+ClassName_AcLanguageText1 0029D8D0
+ClassSig_IvScreenR2 0029D8E0
+ClassName_IvScreenR2 0029D8E2
+ClassSig_AcWindowPage1 0029D8EE
+ClassName_AcWindowPage1 0029D8F0
+ClassSig_TtlScreenR3 0029D8FE
+ClassName_TtlScreenR3 0029D900
+ClassSig_TtlScreenR2 0029D90C
+ClassName_TtlScreenR2 0029D90E
+ClassSig_HDTitleMenu 0029D91A
+ClassName_HDTitleMenu 0029D91C
+ClassSig_IvHddNaming 0029D928
+ClassName_IvHddNaming 0029D92A
+ClassSig_AcHddNamingWindow 0029D936
+ClassName_AcHddNamingWindow 0029D938
+ClassSig_TtlScreenR 0029D94A
+ClassName_TtlScreenR 0029D94C
+ClassSig_DbMemoCl 0029D958
+ClassName_DbMemoCl 0029D95C
+ClassSig_SelectList 0029D966
+ClassName_SelectList 0029D972
 HDAE5000_RECORD_COUNT 0029D97E
 HDAE5000_Str_EV_DrawFDText 0029D980
 HDAE5000_Str_EV_InitFDFileSelect 0029D98E

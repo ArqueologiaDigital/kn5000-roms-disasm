@@ -61,13 +61,19 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 ;                                already-named *Proc routine in this tree for all
 ;                                13 records (e.g. record 7 -> HDAE5000_TtlScreenR3Proc
 ;                                at 0x280645, byte-identical address)
-;   +0x04  .short Field_04       varies per record (0x11-0x6a); UNDECODED
-;   +0x06  .short Field_06       0x0160 in all 13 records; UNDECODED.  [INFERENCE]
-;                                matches the high half of 0x01600004, the class id
-;                                (ClassProc) this whole table is registered under in
-;                                HDAE5000_Handler_Registration -- not traced further
-;   +0x08  .short Field_08       varies per record (0x1a-0x3c); UNDECODED
-;   +0x0A  .short Field_0A       varies per record (0x00-0x20); UNDECODED
+;   +0x04  .long  parent         the parent CLASS ID (0x0160_00xx: a class of the main
+;                                CPU's root class table, NAKA_CLASS_*) -- the class
+;                                definition layout of the main CPU's class system
+;                                (scripts/analysis/nakarest_objtab_map.py, THE CLASS
+;                                SYSTEM): proc, parent, allsize, selfsize, name,
+;                                propdata, propname.  Once Field_04 / Field_06
+;                                (UNDECODED); decoded 2026-10-02.
+;   +0x08  .short allsize        record size of an instance, the parent's included
+;   +0x0A  .short selfsize       bytes this class adds (its own fields)
+;                                Proved for all 13 by notes/hdae-class-records-2026-10-02/
+;                                hdae_class_fields_probe.py: selfsize == the summed
+;                                sizes of the signature's characters, and allsize ==
+;                                the parent's allsize + selfsize.
 ;   +0x0C  .long  NamePtr        -> class name string, in the pool below
 ;   +0x10  .long  SigPtr         -> parameter type-signature string (may be empty);
 ;                                signature length == parameter count, matching
@@ -90,108 +96,108 @@ HDAE5000_RECORD_TABLE:	; 0x29C0AA
 ;    hdae5000_init_data.s, for all 13 records with no exception
 ; ============================================================================
 
-HDAE5000_Record_SelectList:	; 0x29C0AA  class 'SelectList'
+HDAE5000_Record_SelectList:	; class 'SelectList'
 	.long HDAE5000_SelectListProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x11, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x3c, 0x20                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d972                     ; +0x0C NamePtr  -> 'SelectList'
-	.long 0x29d966                     ; +0x10 SigPtr   -> 'c^ksAAnGGmA' (11 params)
+	.long NAKA_CLASS_VwBox		; +0x04 parent class
+	.short 60, 32			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_SelectList                     ; +0x0C NamePtr  -> 'SelectList'
+	.long ClassSig_SelectList                     ; +0x10 SigPtr   -> 'c^ksAAnGGmA' (11 params)
 	.long 0x23975a                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_DbMemoCl:	; 0x29C0C2  class 'DbMemoCl'
+HDAE5000_Record_DbMemoCl:	; class 'DbMemoCl'
 	.long HDAE5000_DbMemoClProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x46, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x1a, 0x4                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d95c                     ; +0x0C NamePtr  -> 'DbMemoCl'
-	.long 0x29d958                     ; +0x10 SigPtr   -> '^^' (2 params)
+	.long NAKA_CLASS_DbMemo		; +0x04 parent class
+	.short 26, 4			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_DbMemoCl                     ; +0x0C NamePtr  -> 'DbMemoCl'
+	.long ClassSig_DbMemoCl                     ; +0x10 SigPtr   -> '^^' (2 params)
 	.long 0x23978a                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_TtlScreenR:	; 0x29C0DA  class 'TtlScreenR'
+HDAE5000_Record_TtlScreenR:	; class 'TtlScreenR'
 	.long HDAE5000_TtlScreenRProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x34, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d94c                     ; +0x0C NamePtr  -> 'TtlScreenR'
-	.long 0x29d94a                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_TtlScreen		; +0x04 parent class
+	.short 42, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_TtlScreenR                     ; +0x0C NamePtr  -> 'TtlScreenR'
+	.long ClassSig_TtlScreenR                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x239796                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_AcHddNamingWindow:	; 0x29C0F2  class 'AcHddNamingWindow'
+HDAE5000_Record_AcHddNamingWindow:	; class 'AcHddNamingWindow'
 	.long HDAE5000_AcHddNamingWindowProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x35, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x24, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d938                     ; +0x0C NamePtr  -> 'AcHddNamingWindow'
-	.long 0x29d936                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_Window		; +0x04 parent class
+	.short 36, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_AcHddNamingWindow                     ; +0x0C NamePtr  -> 'AcHddNamingWindow'
+	.long ClassSig_AcHddNamingWindow                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x23979a                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_IvHddNaming:	; 0x29C10A  class 'IvHddNaming'
+HDAE5000_Record_IvHddNaming:	; class 'IvHddNaming'
 	.long HDAE5000_IvHddNamingProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x27, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x1a, 0x4                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d92a                     ; +0x0C NamePtr  -> 'IvHddNaming'
-	.long 0x29d928                     ; +0x10 SigPtr   -> 'j' (1 params)
+	.long NAKA_CLASS_PsInvisibleBox		; +0x04 parent class
+	.short 26, 4			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_IvHddNaming                     ; +0x0C NamePtr  -> 'IvHddNaming'
+	.long ClassSig_IvHddNaming                     ; +0x10 SigPtr   -> 'j' (1 params)
 	.long 0x23979e                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_HDTitleMenu:	; 0x29C122  class 'HDTitleMenu'
+HDAE5000_Record_HDTitleMenu:	; class 'HDTitleMenu'
 	.long HDAE5000_HDTitleMenuProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x1d, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x36, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d91c                     ; +0x0C NamePtr  -> 'HDTitleMenu'
-	.long 0x29d91a                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_AcTitleMenu		; +0x04 parent class
+	.short 54, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_HDTitleMenu                     ; +0x0C NamePtr  -> 'HDTitleMenu'
+	.long ClassSig_HDTitleMenu                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x2397a6                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_TtlScreenR2:	; 0x29C13A  class 'TtlScreenR2'
+HDAE5000_Record_TtlScreenR2:	; class 'TtlScreenR2'
 	.long HDAE5000_TtlScreenR2Proc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x34, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d90e                     ; +0x0C NamePtr  -> 'TtlScreenR2'
-	.long 0x29d90c                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_TtlScreen		; +0x04 parent class
+	.short 42, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_TtlScreenR2                     ; +0x0C NamePtr  -> 'TtlScreenR2'
+	.long ClassSig_TtlScreenR2                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x2397aa                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_TtlScreenR3:	; 0x29C152  class 'TtlScreenR3'
+HDAE5000_Record_TtlScreenR3:	; class 'TtlScreenR3'
 	.long HDAE5000_TtlScreenR3Proc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x34, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d900                     ; +0x0C NamePtr  -> 'TtlScreenR3'
-	.long 0x29d8fe                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_TtlScreen		; +0x04 parent class
+	.short 42, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_TtlScreenR3                     ; +0x0C NamePtr  -> 'TtlScreenR3'
+	.long ClassSig_TtlScreenR3                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x2397ae                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_AcWindowPage1:	; 0x29C16A  class 'AcWindowPage1'
+HDAE5000_Record_AcWindowPage1:	; class 'AcWindowPage1'
 	.long HDAE5000_AcWindowPage1Proc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x25, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x24, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d8f0                     ; +0x0C NamePtr  -> 'AcWindowPage1'
-	.long 0x29d8ee                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_AcWindowPage		; +0x04 parent class
+	.short 36, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_AcWindowPage1                     ; +0x0C NamePtr  -> 'AcWindowPage1'
+	.long ClassSig_AcWindowPage1                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x2397b2                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_IvScreenR2:	; 0x29C182  class 'IvScreenR2'
+HDAE5000_Record_IvScreenR2:	; class 'IvScreenR2'
 	.long HDAE5000_IvScreenR2Proc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x6a, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x22, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d8e2                     ; +0x0C NamePtr  -> 'IvScreenR2'
-	.long 0x29d8e0                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_IvScreen		; +0x04 parent class
+	.short 34, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_IvScreenR2                     ; +0x0C NamePtr  -> 'IvScreenR2'
+	.long ClassSig_IvScreenR2                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x2397b6                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_AcLanguageText1:	; 0x29C19A  class 'AcLanguageText1'
+HDAE5000_Record_AcLanguageText1:	; class 'AcLanguageText1'
 	.long HDAE5000_AcLanguageText1Proc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x66, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x2a, 0x0                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d8d0                     ; +0x0C NamePtr  -> 'AcLanguageText1'
-	.long 0x29d8ce                     ; +0x10 SigPtr   -> '' (0 params)
+	.long NAKA_CLASS_AcLanguageText		; +0x04 parent class
+	.short 42, 0			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_AcLanguageText1                     ; +0x0C NamePtr  -> 'AcLanguageText1'
+	.long ClassSig_AcLanguageText1                     ; +0x10 SigPtr   -> '' (0 params)
 	.long 0x2397ba                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_LyricBox:	; 0x29C1B2  class 'LyricBox'
+HDAE5000_Record_LyricBox:	; class 'LyricBox'
 	.long HDAE5000_LyricBoxProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x11, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x2e, 0x12                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d8c4                     ; +0x0C NamePtr  -> 'LyricBox'
-	.long 0x29d8bc                     ; +0x10 SigPtr   -> 'mc^^c^' (6 params)
+	.long NAKA_CLASS_VwBox		; +0x04 parent class
+	.short 46, 18			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_LyricBox                     ; +0x0C NamePtr  -> 'LyricBox'
+	.long ClassSig_LyricBox                     ; +0x10 SigPtr   -> 'mc^^c^' (6 params)
 	.long 0x2397be                     ; +0x14 ParamListPtr (RAM)
 
-HDAE5000_Record_FDFileSelect:	; 0x29C1CA  class 'FDFileSelect'
+HDAE5000_Record_FDFileSelect:	; class 'FDFileSelect'
 	.long HDAE5000_FDFileSelectProc                     ; +0x00 ProcPtr (== named routine in this tree)
-	.short 0x27, 0x160                 ; +0x04 Field_04, +0x06 Field_06 (UNDECODED, see header)
-	.short 0x20, 0xa                 ; +0x08 Field_08, +0x0A Field_0A (UNDECODED, see header)
-	.long 0x29d8ae                     ; +0x0C NamePtr  -> 'FDFileSelect'
-	.long 0x29d8aa                     ; +0x10 SigPtr   -> 'Gnn' (3 params)
+	.long NAKA_CLASS_PsInvisibleBox		; +0x04 parent class
+	.short 32, 10			; +0x08 allsize, +0x0A selfsize
+	.long ClassName_FDFileSelect                     ; +0x0C NamePtr  -> 'FDFileSelect'
+	.long ClassSig_FDFileSelect                     ; +0x10 SigPtr   -> 'Gnn' (3 params)
 	.long 0x2397da                     ; +0x14 ParamListPtr (RAM)
 
 ; ---------------------------------------------------------------------------
@@ -202,46 +208,72 @@ HDAE5000_Record_FDFileSelect:	; 0x29C1CA  class 'FDFileSelect'
 ; ---------------------------------------------------------------------------
 ; string pool referenced by NamePtr/SigPtr above, in reverse record order
 ; ---------------------------------------------------------------------------
+ClassSig_FDFileSelect:
 	.asciz "Gnn"			; 0x29D8AA
+ClassName_FDFileSelect:
 	.asciz "FDFileSelect"			; 0x29D8AE
 	.zero 1			; 0x29D8BB (unreferenced pad)
+ClassSig_LyricBox:
 	.asciz "mc^^c^"			; 0x29D8BC
 	.zero 1			; 0x29D8C3 (unreferenced pad)
+ClassName_LyricBox:
 	.asciz "LyricBox"			; 0x29D8C4
 	.zero 1			; 0x29D8CD (unreferenced pad)
+ClassSig_AcLanguageText1:
 	.byte 0x00			; 0x29D8CE (SigPtr target of AcLanguageText1, empty signature)
 	.zero 1			; 0x29D8CF (unreferenced pad)
+ClassName_AcLanguageText1:
 	.asciz "AcLanguageText1"			; 0x29D8D0
+ClassSig_IvScreenR2:
 	.byte 0x00			; 0x29D8E0 (SigPtr target of IvScreenR2, empty signature)
 	.zero 1			; 0x29D8E1 (unreferenced pad)
+ClassName_IvScreenR2:
 	.asciz "IvScreenR2"			; 0x29D8E2
 	.zero 1			; 0x29D8ED (unreferenced pad)
+ClassSig_AcWindowPage1:
 	.byte 0x00			; 0x29D8EE (SigPtr target of AcWindowPage1, empty signature)
 	.zero 1			; 0x29D8EF (unreferenced pad)
+ClassName_AcWindowPage1:
 	.asciz "AcWindowPage1"			; 0x29D8F0
+ClassSig_TtlScreenR3:
 	.byte 0x00			; 0x29D8FE (SigPtr target of TtlScreenR3, empty signature)
 	.zero 1			; 0x29D8FF (unreferenced pad)
+ClassName_TtlScreenR3:
 	.asciz "TtlScreenR3"			; 0x29D900
+ClassSig_TtlScreenR2:
 	.byte 0x00			; 0x29D90C (SigPtr target of TtlScreenR2, empty signature)
 	.zero 1			; 0x29D90D (unreferenced pad)
+ClassName_TtlScreenR2:
 	.asciz "TtlScreenR2"			; 0x29D90E
+ClassSig_HDTitleMenu:
 	.byte 0x00			; 0x29D91A (SigPtr target of HDTitleMenu, empty signature)
 	.zero 1			; 0x29D91B (unreferenced pad)
+ClassName_HDTitleMenu:
 	.asciz "HDTitleMenu"			; 0x29D91C
+ClassSig_IvHddNaming:
 	.asciz "j"			; 0x29D928
+ClassName_IvHddNaming:
 	.asciz "IvHddNaming"			; 0x29D92A
+ClassSig_AcHddNamingWindow:
 	.byte 0x00			; 0x29D936 (SigPtr target of AcHddNamingWindow, empty signature)
 	.zero 1			; 0x29D937 (unreferenced pad)
+ClassName_AcHddNamingWindow:
 	.asciz "AcHddNamingWindow"			; 0x29D938
+ClassSig_TtlScreenR:
 	.byte 0x00			; 0x29D94A (SigPtr target of TtlScreenR, empty signature)
 	.zero 1			; 0x29D94B (unreferenced pad)
+ClassName_TtlScreenR:
 	.asciz "TtlScreenR"			; 0x29D94C
 	.zero 1			; 0x29D957 (unreferenced pad)
+ClassSig_DbMemoCl:
 	.asciz "^^"			; 0x29D958
 	.zero 1			; 0x29D95B (unreferenced pad)
+ClassName_DbMemoCl:
 	.asciz "DbMemoCl"			; 0x29D95C
 	.zero 1			; 0x29D965 (unreferenced pad)
+ClassSig_SelectList:
 	.asciz "c^ksAAnGGmA"			; 0x29D966
+ClassName_SelectList:
 	.asciz "SelectList"			; 0x29D972
 	.zero 1			; 0x29D97D (unreferenced pad)
 HDAE5000_RECORD_COUNT:	; 0x29D97E

@@ -1,0 +1,56 @@
+[
+ {
+  "value": "0x01600011",
+  "name": "NAKA_CLASS_VwBox",
+  "meaning": "NAKA class id 0x0160:11 = class \"VwBox\" (parent Viewable, allsize 28, selfsize 6, fields \"^_A\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x01600046",
+  "name": "NAKA_CLASS_DbMemo",
+  "meaning": "NAKA class id 0x0160:46 = class \"DbMemo\" (parent Viewable, allsize 22, selfsize 0, fields \"\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x01600034",
+  "name": "NAKA_CLASS_TtlScreen",
+  "meaning": "NAKA class id 0x0160:34 = class \"TtlScreen\" (parent Screen, allsize 42, selfsize 8, fields \"Xb\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x01600035",
+  "name": "NAKA_CLASS_Window",
+  "meaning": "NAKA class id 0x0160:35 = class \"Window\" (parent GroupBox, allsize 36, selfsize 10, fields \"Grr\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x01600027",
+  "name": "NAKA_CLASS_PsInvisibleBox",
+  "meaning": "NAKA class id 0x0160:27 = class \"PsInvisibleBox\" (parent Viewable, allsize 22, selfsize 0, fields \"\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x0160001D",
+  "name": "NAKA_CLASS_AcTitleMenu",
+  "meaning": "NAKA class id 0x0160:1D = class \"AcTitleMenu\" (parent PsMenuBox, allsize 54, selfsize 12, fields \"Xab\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x01600025",
+  "name": "NAKA_CLASS_AcWindowPage",
+  "meaning": "NAKA class id 0x0160:25 = class \"AcWindowPage\" (parent PsPageBox, allsize 36, selfsize 4, fields \"AA\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x0160006A",
+  "name": "NAKA_CLASS_IvScreen",
+  "meaning": "NAKA class id 0x0160:6A = class \"IvScreen\" (parent Screen, allsize 34, selfsize 0, fields \"\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ },
+ {
+  "value": "0x01600066",
+  "name": "NAKA_CLASS_AcLanguageText",
+  "meaning": "NAKA class id 0x0160:66 = class \"AcLanguageText\" (parent PsTextBox, allsize 42, selfsize 4, fields \"j\"): root class table, registry slot 0x160 (InitializeRoot). Parent of HD-AE5000 classes (hdae5000_data_tables.s). Derived by scripts/analysis/nakarest_objtab_map.py.",
+  "confidence": "derived"
+ }
+]
