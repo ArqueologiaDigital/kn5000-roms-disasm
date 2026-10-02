@@ -25156,6 +25156,10 @@ DrumVoice_NotifyEE_Return10:
 	.byte 0x00, 0x00, 0xf1, 0xf6, 0x38, 0x00, 0x00, 0xf1
 	.byte 0xf7, 0x38, 0x00, 0x00, 0xf1, 0xf8, 0x38, 0x00
 	.byte 0x00, 0xf1, 0xf9, 0x38, 0x00, 0x00, 0x0e, 0x0e
+; TimeSig_CallProc -- WA = index 0..23 (`cp de, 23 / ret ugt`), BC bit 7 = a flag
+; passed on in A; calls TimeSig_ProcTable[index] (`ld xde, TimeSig_ProcTable / add
+; xde, xbc / ld xhl, (xde) / call (xhl)`).
+TimeSig_CallProc:
 	ld DE,WA
 	cp DE,0x0017
 	ret UGT
@@ -26700,7 +26704,7 @@ VoiceSlot_DispatchByType:
 	nop
 	pushw	wa
 	pushw	hl
-	call	TimeSig_DisplayStrings_0x935
+	call	TimeSig_CallProc
 	inc	4, xsp
 	ret
 

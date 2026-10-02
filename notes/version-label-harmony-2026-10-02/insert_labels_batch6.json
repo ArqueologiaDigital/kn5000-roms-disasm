@@ -1,0 +1,6 @@
+[
+ {"name": "TimeSig_CallProc", "v10": "0xF6623E", "alias": "TimeSig_DisplayStrings_0x935",
+  "header": ["; TimeSig_CallProc -- WA = index 0..23 (`cp de, 23 / ret ugt`), BC bit 7 = a flag",
+             "; passed on in A; calls TimeSig_ProcTable[index] (`ld xde, TimeSig_ProcTable / add",
+             "; xde, xbc / ld xhl, (xde) / call (xhl)`)."]}
+]

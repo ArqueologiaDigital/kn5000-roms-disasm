@@ -1966,7 +1966,6 @@
 	.set TimeSig_DisplayStrings_0x8AB, TimeSig_DisplayStrings + 2219
 	.set TimeSig_DisplayStrings_0x8DE, TimeSig_DisplayStrings + 2270
 	.set TimeSig_DisplayStrings_0x8E2, TimeSig_DisplayStrings + 2274
-	.set TimeSig_DisplayStrings_0x935, TimeSig_DisplayStrings + 2357
 	.set Timer_ModeHandler_0_0x107, Timer_ModeHandler_0 + 263
 	.set Timer_ModeHandler_0_0x13, Timer_ModeHandler_0 + 19
 	.set Timer_ModeHandler_0_0x189, Timer_ModeHandler_0 + 393

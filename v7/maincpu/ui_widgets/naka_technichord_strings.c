@@ -1674,7 +1674,7 @@ typedef struct __attribute__((packed)) {
     char txt_Veuillez_selectionner_le_Panel[80];
     char txt_Bitte_wahlen_Sie_den_Panel[84];
     char str_647[54];
-    /* the IvMesage message catalog: 80 records + an all-zero terminator (see msg_record_t) */
+    /* the IvMesage message catalog: 80 records + a terminator {0, 0xFFFFFFFF, 0, 0} (both pointers 0; see msg_record_t) */
     msg_record_t IvMesage_Catalog[81];
     /* the 6 window object ids `kind` selects: Viewable slot 0xEE elements 0x14 NoMessage, 0x02 Completed, 0x05 Reminder, 0x09 Error, 0x0D Other, 0x16 PleaseWait (all class Window) */
     uint32_t IvMesage_Windows[6];

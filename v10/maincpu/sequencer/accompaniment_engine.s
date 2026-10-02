@@ -26775,6 +26775,10 @@ TimeSig_DisplayStrings_Code_Return11:
 	ld	(0x3995:16), 0
 	ret
 	ret
+; TimeSig_CallProc -- WA = index 0..23 (`cp de, 23 / ret ugt`), BC bit 7 = a flag
+; passed on in A; calls TimeSig_ProcTable[index] (`ld xde, TimeSig_ProcTable / add
+; xde, xbc / ld xhl, (xde) / call (xhl)`).
+TimeSig_CallProc:
 	ld	de, wa
 	cp	de, 23
 	ret	ugt
@@ -28333,7 +28337,7 @@ VoiceSlot_DispatchByType:
 	nop
 	pushw	wa
 	pushw	hl
-	call	TimeSig_DisplayStrings_0x935
+	call	TimeSig_CallProc
 	inc	4, xsp
 	ret
 

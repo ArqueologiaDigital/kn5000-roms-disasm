@@ -2,10 +2,14 @@
  * naka_types.h — C struct definitions for NAKA UI widget descriptors
  *
  * The KN5000 uses a data-driven UI framework ("NAKA") where screen layouts
- * are described by packed widget descriptors. Each descriptor starts with a
- * 4-byte header: { type, 0x00, 0x60, 0x01 }.
+ * are described by packed widget records.  Every NAKA record starts with its
+ * CLASS ID, a little-endian u32 0x016S_KKKK: registry slot S (0x160 for the
+ * main CPU's class table, 0x16A for the HD-AE5000's), class-table entry KKKK --
+ * the NAKA_CLASS_* constants of shared/event_codes.s.  naka_header_t below is
+ * the legacy BYTE view of that id ({ entry, 0x00, 0x60, 0x01 } for slot 0x160),
+ * and its "type" byte is the class-table entry.
  *
- * 94 widget types are defined (see macros.s). This header provides packed
+ * 94 widget classes are used (see macros.s). This header provides packed
  * C structs for the most common types, enabling readable initializers
  * instead of raw .byte sequences.
  *

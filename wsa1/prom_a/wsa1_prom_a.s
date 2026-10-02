@@ -78163,7 +78163,9 @@ Gap_FAC8E6:
 ; Evidence for the entries being addresses: all 256 lie in 0xF80000-0xFFFFFF;
 ;          25 distinct values; 168 of the 256 are 0x00FAC845, and the byte at
 ;          0xFAC845 is 0x0E = `ret`, i.e. the default handler does nothing.
-;          The 24 real handlers lie in 0xFAB894-0xFABE0D, inside this module.
+;          The other 24 distinct handlers lie in 0xFAB894-0xFABE0D, inside this
+;          module -- nine of them (types 0x44-0x46, 0x48, 0x60, 0x70, 0x72, 0x90,
+;          0x91) are a lone `ret` too, so only 15 do anything.
 ;          All five numbers come from notes/prom_a_byte_checks.py, checks named
 ;          "Dispatch_By_60F080:".
 ; Index:   (0x60F080) is written by other code in this module too -- 0xFAC39B
@@ -78181,8 +78183,11 @@ Gap_FAC8E6:
 ;              dispatches again on the record's CLASS, JumpTable_FAB8B4
 ;   0x20-0x3F  sub_FABAFD -- the other half of each part record
 ;              (ParamNumber_RecordPtrs, pin 3)
-;   0x44, 0x45, 0x46, 0x48, 0x60, 0x70, 0x72, 0x7A, 0x90, 0x91, 0x98, 0xA8, 0xB0 -- one handler
-;              each, not decoded here
+;   0x7A, 0x98, 0xA8, 0xB0 -- one handler each (0xFABB61, 0xFABBD7, 0xFABCD7,
+;              0xFABCEF), not decoded here
+;   0x44-0x46, 0x48, 0x60, 0x70, 0x72, 0x90, 0x91 -- EMPTY handlers, a lone `ret`
+;              each (0xFABB5D/60/CF/D0/D2/D4/D5; checked against the ROM), i.e.
+;              ignored like the other 168
 ;   0xB1-0xB5, 0xB8-0xBD -- the eleven MIDI controllers, ParamMsg_B1_PitchBend
 ;              and its block header
 ;   the other 168 numbers: sub_FAC845, one `ret`.

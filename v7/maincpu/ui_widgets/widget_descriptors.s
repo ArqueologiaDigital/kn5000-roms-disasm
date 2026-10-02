@@ -5216,8 +5216,10 @@ AccTone_ExtendAndDispatch_PopRet_Table:
 ; [naka_s_headers] TimeSig_ProcTable
 ; TimeSig_ProcTable -- 24 u32 code addresses (Tempo_AdjustStartMeasure,
 ; Tempo_AdjustEndMeasure, Tempo_AdjustQuantize, Tempo_AdjustEffect,
-; ...). TimeSig_DisplayStrings (v10/v9 0xf65909, v7 0xf65505): `ld
-; xde,<this>; add xde,xbc; ld xhl,(xde); call (xhl)`.
+; ...). Read by TimeSig_CallProc (v10/v9 0xf6623e, v7 0xf65e3a; reached
+; until 2026-10-02 only as the alias TimeSig_DisplayStrings_0x935): `ld
+; xde,<this>; add xde,xbc; ld xhl,(xde); call (xhl)`, after `cp de, 23 / ret ugt`
+; -- which is what bounds the table at 24 entries.
 ;
 ; Typed in naka_widget_descriptors.c as uint32_t TimeSig_ProcTable[24].
 ; -----------------------------------------------------------------------------

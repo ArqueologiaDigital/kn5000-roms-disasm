@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 48,481
-#   semantic names ........... 45,057 (92.9%)
-#   positional names ......... 3,424
+#   semantic names ........... 45,058 (92.9%)
+#   positional names ......... 3,423
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -30006,7 +30006,7 @@ TimeSig_DisplayStrings_0x8A0 00F65DA5
 TimeSig_DisplayStrings_0x8AB 00F65DB0
 TimeSig_DisplayStrings_0x8DE 00F65DE3
 TimeSig_DisplayStrings_0x8E2 00F65DE7
-TimeSig_DisplayStrings_0x935 00F65E3A
+TimeSig_CallProc 00F65E3A
 Tempo_AdjustStartMeasure 00F65E5F
 Tempo_StartMeasureDec 00F65E84
 Tempo_StartMeasureSync 00F65E90
