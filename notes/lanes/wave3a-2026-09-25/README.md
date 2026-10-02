@@ -42,6 +42,33 @@ d7752a16b6ee, disasm 83a3b70d..(the pin commit), pin d7752a16b6ee / llvm-mc
 c39a1525.  TOOLCHAIN_VERSION UPDATE 18 is the record; the probes are in
 `notes/wave3a-toolchain-probes/fixround/` and their figures in `../out/`.
 
+### Re-verification after the fix round (V1:reverify, 2026-10-02)
+
+Every one of the twelve panel issues was confirmed fixed: the original evidence was
+reproduced at the old pin, and shown to be gone at d7752a16b6ee. The SP round trip is clean,
+with **ASYM 0 over 2,555,184 whole-field probes** in all seven families. The gate is 13/13 and
+llvm-lit TLCS900 is 102/102. **Still open** (verdict ISSUES -- the workflow allows one fix
+round, so these were not fixed):
+- **major:** comments beside lines that 83a3b70d respelled (`djnz xRR` -> `djnz16 rr`,
+  `inc 0` -> `inc 8`) still state the retired meaning. Same class as the +256 comment that
+  157bd9d8 fixed.
+- **major:** 808088a74bc9 (bit numbers / counts must fit their field) does not cover the
+  raw-operand bit and condition pseudos. Out-of-range values still assemble silently, often to
+  a different operation, and a direct address is silently truncated.
+- **minor:**
+  - 1,276 `srl/sll/sla/sra r, 0` lines, where the CPU shifts 16. This is the twin of the 1,700
+    `inc 0` lines.
+  - Register names the CPU has (as MAME prints them, e.g. `QA`) still parse as symbols.
+  - The bank-register diagnostic overstates the hardware.
+  - Forward-referenced values are not range-checked.
+  - ERP raw register bytes are truncated, or crash llvm-mc when symbolic.
+  - `(xrr+sp)` is refused.
+  - About 15 analysis scripts match `djnz\b`, which no longer sees the 624 `djnz16` lines.
+  - Documentation leftovers.
+
+Full returns: `v1-2026-10-02/panel_fix_reverify.json` (the three lenses, the fix report, the
+re-verification). The script is `v1-2026-10-02/wave3a-v1-resume.js`.
+
 ## Errata (2026-10-02, from the V1 verifier panel)
 
 - disasm `09b760eb`'s trailer names 8e188b215251, but that commit's tree builds
@@ -71,20 +98,22 @@ outputs stayed in `~/compartilhado/disasm-lanes/wave3a-scratch/verify-T1/` and a
 by re-running the scripts: `records.json` 25 MB, `tree_audit.tsv` 5 MB and
 `out_{autoinc,disp,direct,muldiv,erp,ei}.tsv`.
 
-## Next steps (in order)
+## Next steps (in order) -- revised 2026-10-02
 
-1. **Re-run V1** on the current pin. The workflow cannot be resumed from another session
-   (`resumeFromRunId` is session-scoped). Instead, edit `workflows/wave3a-toolchain.js` to
-   start at `phase('V1 verify')` and seed `t1` from `T1-report.json`. The tools in
-   `v1-interrupted/` are a head start, not a verdict.
-2. If V1 finds blockers, run a T1 fix round (the script's own loop). Otherwise go to T2, then V2.
-3. Then Wave 3b, the parallel lanes on the new toolchain: `WAVE3-PLAN.md` section 3b, plus the
-   items appended at the end of `notes/lanes/wave2-2026-09-25/WAVE3-LEADS.md` after the docs
-   catch-up (event-code names, the HD-AE5000 signature header, the tone-DB inverse check).
-4. **Owed blog post** (mame-blog `posts/kn7000/`, after part 266, which promised this): the Wave 2 results
-   (strict 64.15% -> 95.04%, the four semantic merge conflicts) and T1's semantic backend fixes
-   (the `di` alias, post-increment operands, true register names, the extended-register LD direction).
-   Not written: work stopped first.
+1. ~~Re-run V1~~ done; ~~T1 fix round~~ done (UPDATE 18, pin d7752a16b6ee).
+2. A second fix round for the re-verification's two majors (stale comments beside the
+   83a3b70d respells; out-of-range bit/condition pseudos) and the `sll/srl/sla/sra r, 0`
+   respell. Then **T2** (missing spellings / decodes, plus T1's remaining false-text
+   items) and **V2**. The task texts are in `workflows/wave3a-toolchain.js`. Split T2 into a
+   backend stage and a tree-wide respell stage, each verified, as
+   `../WAVE3B-PLAN-2026-10-02.md` describes.
+3. Then Wave 3b (`../WAVE3B-PLAN-2026-10-02.md`). Its inputs now exist:
+   - the Wave 2 claims review (`../wave2-2026-09-25/claims-review/`);
+   - `scripts/analysis/claims_lint.py` (`notes/claims-lint-2026-10-02/`);
+   - the per-lane census worklists;
+   - the event-code catalog (applied: de617909);
+   - the unverified wsa1 naming packs (`../wsa1-naming-r1-2026-10-02/`).
+4. **Owed blog post** (mame-blog `posts/kn7000/`, after part 266): the Wave 2 results, T1 and
+   its fix round, the claims review (483/682) and the event-code catalog.
 5. Lane scratch and `TMPDIR` go to `~/compartilhado/tmp/<project>-<topic>/` or
-   `~/compartilhado/disasm-lanes/`, never `/tmp` (owner's standing rule since 2026-09-25).
-   Tell every sub-agent the same.
+   `~/compartilhado/disasm-lanes/`, never `/tmp`. Deletion paths are written `"${VAR:?}"`.
