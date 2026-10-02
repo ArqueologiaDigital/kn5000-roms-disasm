@@ -327,7 +327,7 @@ Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 ; base 0x01FB76 + offset (`lda_24 xix,0x00f460 / ldw_sri BC / lda_24 xix,0x01fb76 / jp_ind`).
 ; Contents 0x0000, 0x0008, 0x000C, 0x0010, 0x0018, 0x0021 -- all six resolve exactly onto existing
 ; symbols: AUDIO_PLAYNOTE_VARIANT_1 (0x01FB76), _VARIANT_2 (0x01FB7E), _VARIANT_3 (0x01FB82),
-; LABEL_01FB86, LABEL_01FB8E, LABEL_01FB97. That six-way landing is what proves the decoding.
+; AudioTick_Variant_4, AudioTick_Variant_5, AudioTick_Variant_6. That six-way landing is what proves the decoding.
 AudioTick_CaseOffsets:
 	.short Audio_PlayNote_Variant_1 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_1
 	.short Audio_PlayNote_Variant_2 - Audio_PlayNote_Variant_1	; Audio_PlayNote_Variant_2

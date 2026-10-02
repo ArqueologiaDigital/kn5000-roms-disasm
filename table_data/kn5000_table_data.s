@@ -320,7 +320,7 @@ Compressed_Preset_Data_LZSS:
 	; - The payload may come from different addresses in Stage 1 vs Stage 2 boot
 	; - Further analysis needed to trace the full SubCPU payload transfer path
 	;
-	; Referenced by LABEL_EF41E3 in maincpu via SubCPU_Send_Payload.
+	; Referenced by SLIDE_Parse_Header in maincpu via SubCPU_Send_Payload.
 	; If decompression fails, firmware falls back to data at 0x830000.
 	;
 	; CORRECTED 2026-09-25: the two lines above do not hold for this block.

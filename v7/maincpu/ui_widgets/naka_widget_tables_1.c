@@ -1081,14 +1081,14 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint8_t TrAsGrid_LookupTable_Table[32];
     /* ---------------------------------------------------------------------
-     * TrAsGrid_ByteData1_Table -- read by TrAsGrid_ByteData1 (v10/v9
+     * TrAsGrid_ByteData1_Table -- read by TrAsGrid_StepListValue (v10/v9
      * 0xF2C41A, v7 0xF2C3F0) (`lda xde,
      * (NakaWidgetPtrTbl_SmfDp_0x23B8:24)`). 20 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t TrAsGrid_ByteData1_Table[20];
     /* ---------------------------------------------------------------------
-     * TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_ByteData1 (v10/v9
+     * TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_StepListValue (v10/v9
      * 0xF2C41A, v7 0xF2C3F0) (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x23CC`). 20
      * bytes to the next object; the layout beyond that access is not
      * established.
@@ -1194,7 +1194,7 @@ typedef struct __attribute__((packed)) {
      * TrAsGridCheck_CaseTable -- jump table of a compiled `switch` in
      * TrAsGridCheck (v10/v9 0xF2C477, v7 0xF2C44D) (`add xwa,
      * NakaWidgetPtrTbl_SmfDp_0x2420`): 7 u16 case offsets from
-     * TrAsGridChk_ByteData.
+     * TrAsGridCheck_Cases.
      * --------------------------------------------------------------------- */
     uint16_t TrAsGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------

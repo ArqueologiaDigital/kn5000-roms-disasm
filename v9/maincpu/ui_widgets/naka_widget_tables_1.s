@@ -1144,7 +1144,7 @@ TrAsGrid_LookupTable_Table:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x23F2, 0x20
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_ByteData1_Table
-; TrAsGrid_ByteData1_Table -- read by TrAsGrid_ByteData1 (v10/v9
+; TrAsGrid_ByteData1_Table -- read by TrAsGrid_StepListValue (v10/v9
 ; 0xf2c41a, v7 0xf2c3f0) (`lda xde,
 ; (NakaWidgetPtrTbl_SmfDp_0x23b8:24)`). 20 bytes to the next object; the
 ; layout beyond that access is not established.
@@ -1156,7 +1156,7 @@ TrAsGrid_ByteData1_Table:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x2412, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_ByteData1_Table_2
-; TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_ByteData1 (v10/v9
+; TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_StepListValue (v10/v9
 ; 0xf2c41a, v7 0xf2c3f0) (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x23cc`). 20
 ; bytes to the next object; the layout beyond that access is not
 ; established.
@@ -1347,7 +1347,7 @@ TrAsGridChk_Part3_UpCheckType0_Str:
 ; TrAsGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; TrAsGridCheck (v10/v9 0xf2c477, v7 0xf2c44d) (`add xwa,
 ; NakaWidgetPtrTbl_SmfDp_0x2420`): 7 u16 case offsets from
-; TrAsGridChk_ByteData.
+; TrAsGridCheck_Cases.
 ;
 ; Typed in naka_widget_tables_1.c as uint16_t
 ; TrAsGridCheck_CaseTable[7].

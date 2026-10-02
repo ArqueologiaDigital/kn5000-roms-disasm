@@ -58948,7 +58948,7 @@ FP_dcmp_AlignPad:	; 03D2ABh
 	.byte 0xff
 
 ; ----------------------------------------------------------------------------
-; ToneGen_Compare_Voice - Compare two voice parameter blocks
+; FP_dcmp - Compare two voice parameter blocks
 ; Entry: XWA = voice 1 pointer, XBC = voice 2 pointer, DE = comparison type
 ; Exit:  HL = comparison result (0 = different, 1 = same, or lookup value)
 ; Notes: Compares 8-byte voice blocks at XWA and XBC
@@ -59022,7 +59022,7 @@ FP_dcmp_Greater:	; 03D2FBh - voice 1 > voice 2
 	ret
 
 ; ----------------------------------------------------------------------------
-; ToneGen_Compare_Voice_32 - Compare two 32-bit voice parameters
+; FP_fcmp - Compare two 32-bit voice parameters
 ; Entry: XWA = voice 1 pointer, XBC = voice 2 pointer, DE = comparison type
 ; Exit:  HL = comparison result
 ; Notes: Simplified version comparing only first 4 bytes

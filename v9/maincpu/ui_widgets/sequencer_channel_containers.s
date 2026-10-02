@@ -22,7 +22,7 @@ Naka_DrawbarOrgan_Screens:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0xFA
 ; [nakarest] naka_sequencer_channels+0x79a  +0x79a..+0x7a8 (0xeee812, 14 B)
 ; [nakarest] purpose not established: layout of 14 B at 0xeee812 not derived; readers below
-; [nakarest] Readers: source references AudioCtrl_DataBlock_Join4 (ui/drawbar_panel_ui.s: `.long
+; [nakarest] Readers: source references PsMixer_CtlTypeProc3_Join (ui/drawbar_panel_ui.s: `.long
 ; [nakarest] Pad_AfterNaka_DrawbarOrgan_Screens`); work-RAM image: Boot_InitWorkRAM copies these
 ; [nakarest] bytes to RAM 0x3e46e..0x3e47c (its ld xde/xhl/xbc + ldir blocks); no literal RAM
 ; [nakarest] reference into that copy was found.
@@ -333,7 +333,7 @@ Naka_DrawbarReg_Table:
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM
 ; [nakarest] 0x0e3e8..0x0e870 (its ld xde/xhl/xbc + ldir blocks), where they are read by
 ; [nakarest] AllocNewVoiceEntry_LoadParam3 (audio/note_voice_mapping.s: `lda xde, (0xe82e:16)`),
-; [nakarest] AudioCtrl_DataBlock_Skip40 (ui/drawbar_panel_ui.s: `cp xwa, 0xe808`),
+; [nakarest] PsMixer_CtlTypeProc2_Skip7 (ui/drawbar_panel_ui.s: `cp xwa, 0xe808`),
 ; [nakarest] EffEdit_DSPConfigBlock_Skip3 (sequencer/sequencer_engine.s: `retd 0xe800`),
 ; [nakarest] FlashWrite_BlockRef_Type6 (storage/flash_floppy_handlers.s: `ldw (9:8),
 ; [nakarest] 0xe400:io`), 19 more.

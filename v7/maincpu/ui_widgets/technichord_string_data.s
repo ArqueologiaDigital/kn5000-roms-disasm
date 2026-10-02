@@ -1026,19 +1026,19 @@ MixerPartTable_Start:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF35C, 0x78
 ; [nakarest] naka_technichord_strings+0xf3d4  +0xf3d4..+0xf458 (0xe95322, 132 B)
 ; [nakarest] purpose not established: layout of 132 B at 0xe95322 not derived; readers below
-; [nakarest] Readers: source references AudioCtrl_DataBlock_Skip13 (ui/drawbar_panel_ui.s: `lda
-; [nakarest] xbc, (MixerPartTable_Start_0x80:24)`), AudioCtrl_DataBlock_Skip14
+; [nakarest] Readers: source references PsMixer_CtlTypeProc3_Skip6 (ui/drawbar_panel_ui.s: `lda
+; [nakarest] xbc, (MixerPartTable_Start_0x80:24)`), PsMixer_CtlTypeProc3_Skip8
 ; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (MixerPartTable_Start_0x80:24)`),
-; [nakarest] AudioCtrl_DataBlock_Skip16 (ui/drawbar_panel_ui.s: `lda xbc,
-; [nakarest] (MixerPartTable_Start_0x80:24)`), AudioCtrl_DataBlock_Skip19
+; [nakarest] PsMixer_CtlTypeProc7_Skip2 (ui/drawbar_panel_ui.s: `lda xbc,
+; [nakarest] (MixerPartTable_Start_0x80:24)`), PsMixer_CtlTypeProc7_Skip5
 ; [nakarest] (ui/drawbar_panel_ui.s: `lda xbc, (MixerPartTable_Start_0x80:24)`), 15 more.
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF3D4, 0x84
 ; [nakarest] naka_technichord_strings+0xf458  +0xf458..+0xf45c (0xe953a6, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xe953a6 not derived; readers below
-; [nakarest] Readers: source references AudioCtrl_DataBlock_Join17 (ui/drawbar_panel_ui.s: `ld
-; [nakarest] xwa, (MixerPartTable_Start_0x104:24)`), AudioCtrl_DataBlock_Skip37
+; [nakarest] Readers: source references PsMixer_CtlTypeProc9_Join3 (ui/drawbar_panel_ui.s: `ld
+; [nakarest] xwa, (MixerPartTable_Start_0x104:24)`), PsMixer_CtlTypeProc2_Skip2
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, (MixerPartTable_Start_0x104:24)`),
-; [nakarest] AudioCtrl_DataBlock_Skip39 (ui/drawbar_panel_ui.s: `ld xwa,
+; [nakarest] PsMixer_CtlTypeProc2_Skip5 (ui/drawbar_panel_ui.s: `ld xwa,
 ; [nakarest] (MixerPartTable_Start_0x104:24)`).
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF458, 0x4
 ; [nakarest] naka_technichord_strings+0xf45c  +0xf45c..+0xf47c (0xe953aa, 32 B)
@@ -1057,8 +1057,8 @@ MixerPartTable_Start:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0xF47C, 0x4
 ; [nakarest] naka_technichord_strings+0xf480  +0xf480..+0xf4bc (0xe953ce, 60 B)
 ; [nakarest] purpose not established: layout of 60 B at 0xe953ce not derived; readers below
-; [nakarest] Readers: source references AudioCtrl_DataBlock_Skip44 (ui/drawbar_panel_ui.s: `lda
-; [nakarest] xwa, (MixerPartTable_Start_0x12C:24)`), AudioCtrl_DataBlock_Skip45
+; [nakarest] Readers: source references PsMixer_CtlTypeProc1_Skip2 (ui/drawbar_panel_ui.s: `lda
+; [nakarest] xwa, (MixerPartTable_Start_0x12C:24)`), PsMixer_CtlTypeProc1_Skip3
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, MixerPartTable_Start_0x12C`),
 ; [nakarest] AudioCtrl_SetupPartDisplay (ui/drawbar_panel_ui.s: `lda xbc,
 ; [nakarest] (MixerPartTable_Start_0x12C:24)`), IvSdpart_Match_HitTest (ui/drawbar_panel_ui.s:
@@ -4389,12 +4389,12 @@ MidiParam_MixerCfgData:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x198B6, 0x28
 ; [nakarest] naka_technichord_strings+0x198de  +0x198de..+0x1991e (0xe9f82c, 64 B)
 ; [nakarest] purpose not established: layout of 64 B at 0xe9f82c not derived; readers below
-; [nakarest] Readers: source references AudioCtrl_DataBlock_Join5 (ui/drawbar_panel_ui.s: `lda
+; [nakarest] Readers: source references PsMixer_CtlTypeProc3_Join2 (ui/drawbar_panel_ui.s: `lda
 ; [nakarest] xbc, (MidiParam_MixerCfgData_0x2A:24)`).
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x198DE, 0x40
 ; [nakarest] naka_technichord_strings+0x1991e  +0x1991e..+0x1992c (0xe9f86c, 14 B)
 ; [nakarest] Text (14 B at 0xe9f86c), first string "MUTE"; no registered NAKA table points into
-; [nakarest] it; reached through source references AudioCtrl_DataBlock_Entry
+; [nakarest] it; reached through source references PsMixer_CtlTypeProc2_Entry
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xde, MidiParam_MixerCfgData_0x6A`).
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1991E, 0xE
 ; [nakarest] naka_technichord_strings+0x1992c  +0x1992c..+0x1993e (0xe9f87a, 18 B)

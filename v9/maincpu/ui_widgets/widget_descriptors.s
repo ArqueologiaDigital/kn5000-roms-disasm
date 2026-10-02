@@ -1667,7 +1667,7 @@ NoteEdit_FormatChordType_Str:
 ; NoteEdit_GetParamValue_CaseTable -- jump table of a compiled `switch`
 ; in NoteEdit_GetParamValue (v10/v9 0xf2fc64, v7 0xf2fc3a) (`add xde,
 ; ExtDevice_ModeDispatch_Table_0x200`): 14 u16 case offsets from
-; NoteEdit_ParamJumpTable.
+; NoteEdit_GetParamValue_Cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; NoteEdit_GetParamValue_CaseTable[14].
@@ -1893,7 +1893,7 @@ EntertainerGridCheck_CaseTable_Strings:
 ; SqplyVal_HandleExtraParams_CaseTable -- jump table of a compiled
 ; `switch` in SqplyVal_HandleExtraParams (v10/v9 0xf30cbf, v7 0xf30c95)
 ; (`add xhl, ExtDevice_ModeDispatch_Table_0x334`): 8 u16 case offsets
-; from SqplyVal_ExtraParamsData.
+; from SqplyVal_ParamCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SqplyVal_HandleExtraParams_CaseTable[8].
@@ -1905,7 +1905,7 @@ SqplyVal_HandleExtraParams_CaseTable:
 ; SqedtVal_ClearDrawBuffer_CaseTable -- jump table of a compiled
 ; `switch` in SqedtVal_ClearDrawBuffer (v10/v9 0xf311c6, v7 0xf3119c)
 ; (`add xwa, ExtDevice_ModeDispatch_Table_0x344`): 15 u16 case offsets
-; from SqedtVal_DrawParamsData.
+; from SqedtVal_ParamCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SqedtVal_ClearDrawBuffer_CaseTable[15].
@@ -2310,7 +2310,7 @@ Sqedt_ParamDispatch_Table_4:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str
 ; SqplyFunc_ParamFormatData_Str -- NUL-terminated string(s), 4 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5c4`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2321,7 +2321,7 @@ SqplyFunc_ParamFormatData_Str:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_2
 ; SqplyFunc_ParamFormatData_Str_2 -- NUL-terminated string(s), 4 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5c8`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2332,7 +2332,7 @@ SqplyFunc_ParamFormatData_Str_2:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_3
 ; SqplyFunc_ParamFormatData_Str_3 -- NUL-terminated string(s), 4 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5cc`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2343,7 +2343,7 @@ SqplyFunc_ParamFormatData_Str_3:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_4
 ; SqplyFunc_ParamFormatData_Str_4 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5d0`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2354,7 +2354,7 @@ SqplyFunc_ParamFormatData_Str_4:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_5
 ; SqplyFunc_ParamFormatData_Str_5 -- NUL-terminated string(s), 4 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5d6`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2365,7 +2365,7 @@ SqplyFunc_ParamFormatData_Str_5:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_6
 ; SqplyFunc_ParamFormatData_Str_6 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5da`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2376,7 +2376,7 @@ SqplyFunc_ParamFormatData_Str_6:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_7
 ; SqplyFunc_ParamFormatData_Str_7 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5e0`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2387,7 +2387,7 @@ SqplyFunc_ParamFormatData_Str_7:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_8
 ; SqplyFunc_ParamFormatData_Str_8 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5e6`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2398,7 +2398,7 @@ SqplyFunc_ParamFormatData_Str_8:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_9
 ; SqplyFunc_ParamFormatData_Str_9 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5ec`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2409,7 +2409,7 @@ SqplyFunc_ParamFormatData_Str_9:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_10
 ; SqplyFunc_ParamFormatData_Str_10 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5f2`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2420,7 +2420,7 @@ SqplyFunc_ParamFormatData_Str_10:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_11
 ; SqplyFunc_ParamFormatData_Str_11 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5f8`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2431,7 +2431,7 @@ SqplyFunc_ParamFormatData_Str_11:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_12
 ; SqplyFunc_ParamFormatData_Str_12 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x5fe`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2442,7 +2442,7 @@ SqplyFunc_ParamFormatData_Str_12:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_13
 ; SqplyFunc_ParamFormatData_Str_13 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x604`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2453,7 +2453,7 @@ SqplyFunc_ParamFormatData_Str_13:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_14
 ; SqplyFunc_ParamFormatData_Str_14 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x60a`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2464,7 +2464,7 @@ SqplyFunc_ParamFormatData_Str_14:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_ParamFormatData_Str_15
 ; SqplyFunc_ParamFormatData_Str_15 -- NUL-terminated string(s), 6 bytes,
-; used by SqplyFunc_ParamFormatData (v10/v9 0xf346ed, v7 0xf346c3) (`ld
+; used by SqplyFunc_FormatCases (v10/v9 0xf346ed, v7 0xf346c3) (`ld
 ; xwa, ExtDevice_ModeDispatch_Table_0x610`).
 ;
 ; Typed in naka_widget_descriptors.c as char
@@ -2556,7 +2556,7 @@ SqplyFunc_HandleGetValue_CaseTable:
 ; SqplyFunc_CaseTable -- jump table of a compiled `switch` in SqplyFunc
 ; (v10/v9 0xf34655, v7 0xf3462b) (`add xhl,
 ; ExtDevice_ModeDispatch_Table_0x660`): 10 u16 case offsets from
-; SqplyFunc_ParamFormatData.
+; SqplyFunc_FormatCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SqplyFunc_CaseTable[10].
@@ -3222,7 +3222,7 @@ Equalizer_FormatDispatch_Table:
 ; Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
 ; `switch` in Equalizer_FormatDispatch (v10/v9 0xf35b62, v7 0xf35b38)
 ; (`ld xix, NakaInst_2d_0x204`): 18 u16 case offsets from
-; EqFormat_DispatchTable.
+; Equalizer_FormatCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Equalizer_FormatDispatch_CaseTable[18].
@@ -4464,7 +4464,7 @@ SeqPart_VelocityCurveCalc_CaseTable:
 ; SeqStep_NoteReadEvent_CaseTable -- jump table of a compiled `switch`
 ; in SeqStep_NoteReadEvent (v10/v9 0xf4ce61, v7 0xf4ca77) (`lda xix,
 ; (Display_FontPalette_Table_0x7e:24)`): case k jumps to
-; SeqStep_NoteByteBlock + entry[k] (`lda xix,(SeqStep_NoteByteBlock);
+; SeqStep_NoteCases + entry[k] (`lda xix,(SeqStep_NoteCases);
 ; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t

@@ -761,7 +761,7 @@ FP_SP_Sub_Done:
 	ret
 
 ; ----------------------------------------------------------------------------
-; ToneGen_Compare_Tables - Lookup tables for voice comparison results
+; FP_CmpResult_Pad - Lookup tables for voice comparison results
 ; 0x03D978: Equal result table (6 bytes)
 ; 0x03D97E: Less-than result table (6 bytes)
 ; 0x03D984: Greater-than result table (6 bytes)

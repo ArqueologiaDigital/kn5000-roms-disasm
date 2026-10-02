@@ -844,7 +844,7 @@ typedef struct __attribute__((packed)) {
      * NoteEdit_GetParamValue_CaseTable -- jump table of a compiled `switch`
      * in NoteEdit_GetParamValue (v10/v9 0xF2FC64, v7 0xF2FC3A) (`add xde,
      * ExtDevice_ModeDispatch_Table_0x200`): 14 u16 case offsets from
-     * NoteEdit_ParamJumpTable.
+     * NoteEdit_GetParamValue_Cases.
      * --------------------------------------------------------------------- */
     uint16_t NoteEdit_GetParamValue_CaseTable[14];
     /* ---------------------------------------------------------------------
@@ -976,14 +976,14 @@ typedef struct __attribute__((packed)) {
      * SqplyVal_HandleExtraParams_CaseTable -- jump table of a compiled
      * `switch` in SqplyVal_HandleExtraParams (v10/v9 0xF30CBF, v7 0xF30C95)
      * (`add xhl, ExtDevice_ModeDispatch_Table_0x334`): 8 u16 case offsets
-     * from SqplyVal_ExtraParamsData.
+     * from SqplyVal_ParamCases.
      * --------------------------------------------------------------------- */
     uint16_t SqplyVal_HandleExtraParams_CaseTable[8];
     /* ---------------------------------------------------------------------
      * SqedtVal_ClearDrawBuffer_CaseTable -- jump table of a compiled
      * `switch` in SqedtVal_ClearDrawBuffer (v10/v9 0xF311C6, v7 0xF3119C)
      * (`add xwa, ExtDevice_ModeDispatch_Table_0x344`): 15 u16 case offsets
-     * from SqedtVal_DrawParamsData.
+     * from SqedtVal_ParamCases.
      * --------------------------------------------------------------------- */
     uint16_t SqedtVal_ClearDrawBuffer_CaseTable[15];
     /* ---------------------------------------------------------------------
@@ -1218,91 +1218,91 @@ typedef struct __attribute__((packed)) {
     uint8_t Sqedt_ParamDispatch_Table_4[106];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str -- NUL-terminated string(s), 4 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5C4`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_2 -- NUL-terminated string(s), 4 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5C8`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_2[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_3 -- NUL-terminated string(s), 4 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5CC`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_3[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_4 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5D0`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_4[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_5 -- NUL-terminated string(s), 4 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5D6`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_5[4];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_6 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5DA`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_6[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_7 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5E0`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_7[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_8 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5E6`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_8[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_9 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5EC`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_9[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_10 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5F2`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_10[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_11 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5F8`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_11[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_12 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x5FE`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_12[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_13 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x604`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_13[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_14 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x60A`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_14[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_ParamFormatData_Str_15 -- NUL-terminated string(s), 6 bytes,
-     * used by SqplyFunc_ParamFormatData (v10/v9 0xF346ED, v7 0xF346C3) (`ld
+     * used by SqplyFunc_FormatCases (v10/v9 0xF346ED, v7 0xF346C3) (`ld
      * xwa, ExtDevice_ModeDispatch_Table_0x610`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_ParamFormatData_Str_15[6];
@@ -1354,7 +1354,7 @@ typedef struct __attribute__((packed)) {
      * SqplyFunc_CaseTable -- jump table of a compiled `switch` in SqplyFunc
      * (v10/v9 0xF34655, v7 0xF3462B) (`add xhl,
      * ExtDevice_ModeDispatch_Table_0x660`): 10 u16 case offsets from
-     * SqplyFunc_ParamFormatData.
+     * SqplyFunc_FormatCases.
      * --------------------------------------------------------------------- */
     uint16_t SqplyFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
@@ -1724,7 +1724,7 @@ typedef struct __attribute__((packed)) {
      * Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
      * `switch` in Equalizer_FormatDispatch (v10/v9 0xF35B62, v7 0xF35B38)
      * (`ld xix, NakaInst_2d_0x204`): 18 u16 case offsets from
-     * EqFormat_DispatchTable.
+     * Equalizer_FormatCases.
      * --------------------------------------------------------------------- */
     uint16_t Equalizer_FormatDispatch_CaseTable[18];
     /* ---------------------------------------------------------------------
