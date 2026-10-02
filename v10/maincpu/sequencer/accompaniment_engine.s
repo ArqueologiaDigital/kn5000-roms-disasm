@@ -30028,7 +30028,7 @@ VoiceSlot_Init_Process_Return:
 ; CmpMenuTtlFunc setup
 CmpMenuTtl_Setup:
 CmpModeFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, DrumKitExit_ReturnZero
 	cp xde, 0x1
 	jr z, CmpMenuTtl_InitTitle
@@ -30063,9 +30063,9 @@ DrumKitExit_ReturnZero:
 ; CmpMenuTtlFunc main handler
 CmpMenuTtl_MainHandler:
 CmpMenuTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, CmpMenuTtl_SpecialKeys
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, CmpMenuTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -30121,9 +30121,9 @@ CmpMenuTtl_ReturnZero:
 ; CmpSetTtlFunc main handler
 CmpSetTtl_MainHandler:
 CmpSetTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, CmpSetTtl_ModeSwitch
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CmpReal_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -30141,7 +30141,7 @@ CmpSetTtl_Dispatch:
 	jrl	z, CmpReal_ReturnZero
 	call	RhythmVariation_InlineCode_0x17B
 	ld	xwa, 0xb40007
-	ld	xbc, 0x01e0008e
+	ld	xbc, EVT_SET_SELECTED_CEL
 	ld	xde, 0xffff0001
 	call	ApDeliveryEvent
 	jrl	CmpReal_ReturnZero
@@ -30276,9 +30276,9 @@ CmpReal_ReturnZero:
 ; CmpRealTtlFunc entry
 CmpRealTtl_Entry:
 CmpRealTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, CmpRealTtl_MajorDispatch
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CmpBk_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -30342,23 +30342,23 @@ CmpRealTtl_RhythmVar0:
 	pop xhl
 	pop xde
 	ld xwa, 0xb50019
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001b
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001a
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb50018
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001c
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jrl CmpBk_DeliverEvent
 
@@ -30375,23 +30375,23 @@ CmpRealTtl_RhythmVar1:
 	pop xhl
 	pop xde
 	ld xwa, 0xb50019
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001b
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001a
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb50018
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001c
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jrl CmpBk_DeliverEvent
 
@@ -30408,23 +30408,23 @@ CmpRealTtl_RhythmVar2:
 	pop xhl
 	pop xde
 	ld xwa, 0xb50019
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001b
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001a
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb50018
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001c
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jrl CmpBk_DeliverEvent
 
@@ -30441,23 +30441,23 @@ CmpRealTtl_RhythmVar3:
 	pop xhl
 	pop xde
 	ld xwa, 0xb50019
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001b
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001a
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb50018
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001c
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jrl CmpBk_DeliverEvent
 
@@ -30474,23 +30474,23 @@ CmpRealTtl_RhythmVar4:
 	pop xhl
 	pop xde
 	ld xwa, 0xb50019
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001b
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001a
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb50018
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001c
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jr CmpBk_DeliverEvent
 	set 1, (0x34cf:16)
@@ -30505,7 +30505,7 @@ CmpRealTtl_RhythmVar4:
 	pop xhl
 	pop xde
 	ld xwa, 0xb5001d
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jr CmpBk_DeliverEvent
 	push xde
@@ -30518,23 +30518,23 @@ CmpRealTtl_RhythmVar4:
 	pop xhl
 	pop xde
 	ld xwa, 0xb50019
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001b
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001a
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb50018
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb5001c
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 
 CmpBk_DeliverEvent:
@@ -30546,9 +30546,9 @@ CmpBk_ReturnZero:
 ; CmpOffsetFunc dispatch
 CmpOffset_Dispatch:
 CmpBkslTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, CmpBkslTtl_Mode1
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CmpBksl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -30751,9 +30751,9 @@ CmpBksl_ReturnZero:
 ; CmpBksl_STtlFunc main handler
 CmpBkslSTtl_MainHandler:
 CmpBksl_STtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, CmpBkslSTtl_DirectMode
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DisplayFunc_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -30910,7 +30910,7 @@ CmpBkslSTtl_FillIn8:
 CmpBkslSTtl_EventPost:
 	ld (0x350c:16), 1
 	ld xwa, 0xb20012
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	jr DisplayFunc_ReturnZero
@@ -30933,9 +30933,9 @@ DisplayFunc_ReturnZero:
 ; CmpNcpTtlFunc main handler
 CmpNcpTtl_MainHandler:
 CmpNcpTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, CmpNcpTtl_SpecialMode7
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CmEsy_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -31050,11 +31050,11 @@ CmpNcpTtl_Dispatch2:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip2
 	ld	(0x3a80:16), 0
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31065,15 +31065,15 @@ CmpNcpTtl_Dispatch2:
 	call	UI_PostDialRangeEvent
 CmpNcpTtl_Dispatch_Code_Skip2:
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 	ld	wa, 1:i3
@@ -31092,11 +31092,11 @@ CmpNcpTtl_Dispatch_Code_Skip2:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip3
 	ld	(0x3a80:16), 0
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31107,15 +31107,15 @@ CmpNcpTtl_Dispatch_Code_Skip2:
 	call	UI_PostDialRangeEvent
 CmpNcpTtl_Dispatch_Code_Skip3:
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 	ld	wa, 1:i3
@@ -31134,11 +31134,11 @@ CmpNcpTtl_Dispatch_Code_Skip3:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip4
 	ld	(0x3a80:16), 0
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31156,33 +31156,33 @@ CmpNcpTtl_Dispatch_Code_Skip4:
 	cp	a, 0:i3
 	jrl	nz, CmEsy_ReturnZero
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 CmpNcpTtl_Dispatch_Code_Skip5:
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 CmpNcpTtl_Dispatch_Code_Skip6:
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 	ld	wa, 1:i3
@@ -31201,11 +31201,11 @@ CmpNcpTtl_Dispatch_Code_Skip6:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip7
 	ld	(0x3a80:16), 0
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31223,33 +31223,33 @@ CmpNcpTtl_Dispatch_Code_Skip7:
 	cp	a, 0:i3
 	jrl	nz, CmEsy_ReturnZero
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 CmpNcpTtl_Dispatch_Code_Skip8:
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 CmpNcpTtl_Dispatch_Code_Skip9:
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 	push	xde
@@ -31266,15 +31266,15 @@ CmpNcpTtl_Dispatch_Code_Skip9:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip13
 	ld	(0x3a80:16), 1
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31285,11 +31285,11 @@ CmpNcpTtl_Dispatch_Code_Skip9:
 	call	UI_PostDialRangeEvent
 CmpNcpTtl_Dispatch_Code_Skip13:
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 	.ascii ":;<> €"
@@ -31302,15 +31302,15 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip14
 	ld	(0x3a80:16), 1
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31321,11 +31321,11 @@ CmpNcpTtl_Dispatch_Code_Skip13:
 	call	UI_PostDialRangeEvent
 CmpNcpTtl_Dispatch_Code_Skip14:
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 	ld	wa, 1:i3
@@ -31344,15 +31344,15 @@ CmpNcpTtl_Dispatch_Code_Skip14:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip15
 	ld	(0x3a80:16), 1
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31368,24 +31368,24 @@ CmpNcpTtl_Dispatch_Code_Skip15:
 	cp	a, 0:i3
 	jrl	nz, CmEsy_ReturnZero
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 CmpNcpTtl_Dispatch_Code_Skip10:
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	CmpNcpTtl_Dispatch_Code_Join2
 	ld	wa, 1:i3
@@ -31404,15 +31404,15 @@ CmpNcpTtl_Dispatch_Code_Skip10:
 	jr	z, CmpNcpTtl_Dispatch_Code_Skip16
 	ld	(0x3a80:16), 1
 	ld	xwa, 0xb8001e
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	wa, 1:i3
@@ -31428,24 +31428,24 @@ CmpNcpTtl_Dispatch_Code_Skip16:
 	cp	a, 0:i3
 	jr	nz, CmEsy_ReturnZero
 	ld	xwa, 0xb8001a
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jr	CmpNcpTtl_Dispatch_Code_Join2
 CmpNcpTtl_Dispatch_Code_Skip11:
 	ld	xwa, 0xb8001b
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb80012
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 CmpNcpTtl_Dispatch_Code_Join2:
 	call	ApDeliveryEvent
@@ -31458,9 +31458,9 @@ CmEsy_ReturnZero:
 ; CmEsyTtlFunc main handler
 CmpEsyTtl_MainHandler:
 CmEsyTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, CmpEsyTtl_Mode1
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, S2cTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -31498,7 +31498,7 @@ CmEsyTtlFunc_Skip:
 	pop	xde
 	ld	(0x34f1:16), 0
 	ld	xwa, 0xba000a
-	ld	xbc, 0x01e0008e
+	ld	xbc, EVT_SET_SELECTED_CEL
 	ld	xde, 0xffff0002
 	jrl	CmpEsy_DeliverEventAndCheck
 	cp	(0x37b9:16), 255
@@ -31570,7 +31570,7 @@ CmEsyTtl_Dispatch2:
 	pop xhl
 	pop xde
 	ld xwa, 0x00ba0009
-	ld xbc, 0x01c0000b
+	ld xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr t, CmpEsy_DeliverEventAndCheck
 	ld	wa, 1:i3
@@ -31586,7 +31586,7 @@ CmEsyTtl_Dispatch2:
 	pop xhl
 	pop xde
 	ld xwa, 0x00ba0009
-	ld xbc, 0x01c0000b
+	ld xbc, EVT_PAINT
 	ld	xde, 0:i3
 CmpEsy_DeliverEventAndCheck:
 	call ApDeliveryEvent
@@ -31645,9 +31645,9 @@ S2cTtl_ReturnZero:
 ; CmpEsyTtl sub-mode E dispatch
 CmpEsyTtl_SubModeE:
 S2cTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, CmpEsyTtl_E_Var1
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CstmCp_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -31664,7 +31664,7 @@ S2cTtl_Dispatch:
 	cp	(0x8d37:16), 185
 	jr	z, S2cTtlFunc_Skip
 	ld	xwa, 0xb90021
-	ld	xbc, 0x01e0008e
+	ld	xbc, EVT_SET_SELECTED_CEL
 	ld	xde, 0xffff0002
 	call	ApDeliveryEvent
 S2cTtlFunc_Skip:
@@ -31735,29 +31735,29 @@ CmpEsy_E_DispatchDataBlock:
 	cp	(0x3a77:16), 0
 	jr	nz, S2cTtlFunc_Skip4
 	ld	xwa, 0xb9001c
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb9001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	TtlFunc_SendEventAndReturn
 S2cTtlFunc_Skip4:
 	ld	(0x3a77:16), 0
 	ld	xwa, 0xb9001c
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb9001f
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb90018
-	ld	xbc, 0x01c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xb90021
-	ld	xbc, 0x01e40031
+	ld	xbc, EVT_CLR_GRID_HANTEN
 	ld	xde, 0:i3
 	jrl	TtlFunc_SendEventAndReturn
 
@@ -31776,30 +31776,30 @@ CmpEsyTtl_E_Var2:
 	cp (0x3a77:16), 0
 	jr nz, CmpEsy_E_Var2_StoreMeasure
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 
 CmpEsy_E_Var2_StoreMeasure:
 	ld (0x3a77:16), 0
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90021
-	ld xbc, 0x1e40031
+	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 	ld wa, 1:i3
@@ -31815,30 +31815,30 @@ CmpEsy_E_Var2_StoreMeasure:
 	cp (0x3a77:16), 1
 	jr nz, CmpEsy_E_EndMeasure_Store
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 
 CmpEsy_E_EndMeasure_Store:
 	ld (0x3a77:16), 1
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90021
-	ld xbc, 0x1e40031
+	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 
@@ -31857,30 +31857,30 @@ S2cTtl_MainHandler:
 	cp (0x3a77:16), 1
 	jr nz, CmpEsy_Main_EndMeasure_Store
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 
 CmpEsy_Main_EndMeasure_Store:
 	ld (0x3a77:16), 1
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90021
-	ld xbc, 0x1e40031
+	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 	ld wa, 1:i3
@@ -31896,26 +31896,26 @@ CmpEsy_Main_EndMeasure_Store:
 	cp (0x3a77:16), 2
 	jr nz, CmpEsy_Quantize_Store
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 
 CmpEsy_Quantize_Store:
 	ld (0x3a77:16), 2
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90021
-	ld xbc, 0x1e40031
+	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jrl TtlFunc_SendEventAndReturn
 
@@ -31934,26 +31934,26 @@ S2cTtl_SecondaryHandler:
 	cp (0x3a77:16), 2
 	jr nz, CmpEsy_SecQuantize_Store
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jr TtlFunc_SendEventAndReturn
 
 CmpEsy_SecQuantize_Store:
 	ld (0x3a77:16), 2
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90021
-	ld xbc, 0x1e40031
+	ld xbc, EVT_CLR_GRID_HANTEN
 	ld xde, 0:i3
 	jr TtlFunc_SendEventAndReturn
 	ld wa, 1:i3
@@ -31961,7 +31961,7 @@ CmpEsy_SecQuantize_Store:
 	ld wa, 0:i3
 	call Tempo_IncrementTimeSigNum
 	ld xwa, 0xb9001e
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jr TtlFunc_SendEventAndReturn
 	ld wa, 1:i3
@@ -31969,7 +31969,7 @@ CmpEsy_SecQuantize_Store:
 	ld wa, 0:i3
 	call Tempo_DecrementTimeSigNum
 	ld xwa, 0xb9001e
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 
 TtlFunc_SendEventAndReturn:
@@ -31984,9 +31984,9 @@ CstmCp_ReturnZero:
 ; CstmCpTtl record dispatch
 CstmCpTtl_RecDispatch:
 CstmCpTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, CstmCpTtl_RecMode1
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CstmCp_ReturnZero2
 	dec 2, xde
 	cp xde, 0x0
@@ -32016,12 +32016,12 @@ CstmCpTtlFunc_Skip2:
 	cp	(0x39b6:16), 3
 	jr	nc, CstmCpTtlFunc_Skip3
 	ld	xwa, 0xbe0011
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	jrl	CstmCpTtlFunc_Join2
 CstmCpTtlFunc_Skip3:
 	ld	xwa, 0xbe0019
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	jrl	CstmCpTtlFunc_Join2
 	ld	a, (0x3a7e:16)
@@ -32033,12 +32033,12 @@ CstmCpTtlFunc_Skip4:
 	cp	(0x39b6:16), 3
 	jr	nc, CstmCpTtlFunc_Skip5
 	ld	xwa, 0xbe0011
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	jrl	CstmCpTtlFunc_Join2
 CstmCpTtlFunc_Skip5:
 	ld	xwa, 0xbe0019
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	jrl	t, CstmCpTtlFunc_Join2
 
@@ -32076,11 +32076,11 @@ CstmCpTtlFunc_Skip6:
 	inc	1, a
 	ld	(0x39b6:16), a
 	ld	xwa, 0xbe0003
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe0004
-	ld	xbc, EVT_POST_INIT
+	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
 	cp	(0x3a7e:16), 0
@@ -32098,11 +32098,11 @@ CstmCpTtlFunc_Skip7:
 	dec	1, a
 	ld	(0x39b6:16), a
 	ld	xwa, 0xbe0003
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe0004
-	ld	xbc, EVT_POST_INIT
+	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
 	cp	(0x3a7e:16), 0
@@ -32112,27 +32112,27 @@ CstmCpTtlFunc_Skip7:
 	ld	(0x39b6:16), c
 	ld	(0x39b7:16), a
 	ld	xwa, 0xbe0003
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe000b
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe000d
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe000e
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe0004
-	ld	xbc, EVT_POST_INIT
+	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe000f
-	ld	xbc, EVT_POST_INIT
+	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jrl	CstmCpTtlFunc_Join
 	cp	(0x3a7e:16), 0
@@ -32150,11 +32150,11 @@ CstmCpTtlFunc_Skip8:
 	inc	1, a
 	ld	(0x39b7:16), a
 	ld	xwa, 0xbe000b
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe000f
-	ld	xbc, EVT_POST_INIT
+	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 	jr	CstmCpTtlFunc_Join
 	cp	(0x3a7e:16), 0
@@ -32172,11 +32172,11 @@ CstmCpTtlFunc_Skip9:
 	dec	1, a
 	ld	(0x39b7:16), a
 	ld	xwa, 0xbe000b
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ld	xwa, 0xbe000f
-	ld	xbc, EVT_POST_INIT
+	ld	xbc, EVT_DRAW
 	ld	xde, 0:i3
 CstmCpTtlFunc_Join:
 	call	ApDeliveryEvent
@@ -32195,7 +32195,7 @@ CstmCpTtlFunc_Skip10:
 	jrl	nz, CstmCp_ReturnZero2
 	ld	(0x3a7e:16), 0
 	ld	xwa, 0xffffffff
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(0x7f42:16), 35
@@ -32234,7 +32234,7 @@ CstmCpTtlFunc_Skip12:
 	jr	CstmCpTtlFunc_Join3
 CstmCpTtlFunc_Skip13:
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01e00079
+	ld	xbc, EVT_INTERRUPT_EXIT
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	cp	(0x39b6:16), 3
@@ -32244,7 +32244,7 @@ CstmCpTtlFunc_Skip13:
 CstmCpTtlFunc_Skip14:
 	ld	(0x3a7e:16), 2
 	ld	xwa, 0xbe0019
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 CstmCpTtlFunc_Join2:
 	call	ApPostEvent
@@ -32258,7 +32258,7 @@ CstmCpTtlFunc_Skip15:
 	jr	nz, CstmCp_ReturnZero2
 	ld	(0x3a7e:16), 0
 	ld	xwa, 0xffffffff
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(0x7f42:16), 35
@@ -32271,7 +32271,7 @@ CstmCp_ReturnZero2:
 	ret
 
 CstmCp_StyleDataBlock:
-	cp	xbc, 0x01e40016
+	cp	xbc, EVT_CSTM_CP_OK
 	jr	nz, CstmCpTtlFunc_Skip16
 	ld	a, (0x39b6:16)
 	extz	wa
@@ -32300,9 +32300,9 @@ MainCstmNameFunc:
 	lda xix, (xsp + 4)
 	ldw bc, 0x3c
 	ldirw
-	cp xde, 0x1e4002c
+	cp xde, EVT_CSTM_T_NM_GET
 	jr z, CstmName_HandleEvent2C
-	cp xde, 0x1e4002b
+	cp xde, EVT_CSTM_F_NM_GET
 	jrl nz, CstmName_ReturnZero
 	pushw 0x11
 	call Malloc
@@ -32323,11 +32323,11 @@ MainCstmNameFunc:
 	ld (xiz + 15), 0x0
 	ld (xiz + 16), 0x0
 	ld xwa, 0xbe0004
-	ld xbc, 0x1e4002d
+	ld xbc, EVT_CSTM_F_NM_DISP
 	ld xde, xiz
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, xiz
 	jr CstmName_PostEventAndReturn
 
@@ -32351,11 +32351,11 @@ CstmName_HandleEvent2C:
 	ld (xiz + 15), 0x0
 	ld (xiz + 16), 0x0
 	ld xwa, 0xbe000f
-	ld xbc, 0x1e4002e
+	ld xbc, EVT_CSTM_T_NM_DISP
 	ld xde, xiz
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, xiz
 
 CstmName_PostEventAndReturn:
@@ -32373,9 +32373,9 @@ MainS2cFunc:
 	ld (xsp), xde
 	ld xwa, (xsp)
 	dec 2, a
-	cp xbc, 0x1e40011
+	cp xbc, EVT_S2C_TR_DN
 	jr z, S2cFunc_HandleEvent11
-	cp xbc, 0x1e40010
+	cp xbc, EVT_S2C_TR_UP
 	jrl nz, EventDelivery_ReturnZero
 	ld (0x3990:16), a
 	ld wa, 0:i3
@@ -32385,21 +32385,21 @@ MainS2cFunc:
 	extz xde
 	add xde, 0x10000
 	ld xwa, 0xb90021
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call ApDeliveryEvent
 	cp (0x3a77:16), 3
 	jrl z, EventDelivery_ReturnZero
 	ld (0x3a77:16), 3
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jr S2cFunc_DeliverAndReturn
 
@@ -32412,21 +32412,21 @@ S2cFunc_HandleEvent11:
 	extz xde
 	add xde, 0x10000
 	ld xwa, 0xb90021
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call ApDeliveryEvent
 	cp (0x3a77:16), 3
 	jr z, EventDelivery_ReturnZero
 	ld (0x3a77:16), 3
 	ld xwa, 0xb9001c
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb9001f
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xb90018
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 
 S2cFunc_DeliverAndReturn:
@@ -32440,9 +32440,9 @@ __pad_F69788:
 
 MiddleNameFunc:
 	lda xwa, (0x34bc:16)
-	cp xbc, 0x1e40001
+	cp xbc, EVT_MSP_NAME_SET
 	jr z, MiddleName_HandleEvent01
-	cp xbc, 0x1e40000
+	cp xbc, EVT_CMP_NAME_SET
 	jr nz, MiddleName_ReturnZero
 	push xde
 	push xwa
@@ -32499,14 +32499,14 @@ MiddleName_ReturnZero:
 __pad_F697FE:
 
 MiddleCmpClrFunc:
-	cp xbc, 0x1e40007
+	cp xbc, EVT_CMP_CLR_NO
 	jr z, MiddleCmpClr_HandleEvent07
-	cp xbc, 0x1e40006
+	cp xbc, EVT_CMP_CLR_YES
 	jr nz, MiddleCmpClr_ReturnZero
 	set 2, (0x34cd:16)
 	ld (0x350c:16), 0
 	ld xwa, 0xb20012
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 35
@@ -32517,11 +32517,11 @@ MiddleCmpClrFunc:
 MiddleCmpClr_HandleEvent07:
 	ld (0x350c:16), 0
 	ld xwa, 0xb20012
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xb20000
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 
@@ -32538,9 +32538,9 @@ MainCmpCpFunc:
 	lda xix, (xsp + 10)
 	ld bc, 6:i3
 	ldirw
-	cp xde, 0x1e40003
+	cp xde, EVT_RHY_VARI_NM_GET
 	jr z, MainCmpCp_HandleEvent03
-	cp xde, 0x1e40002
+	cp xde, EVT_RHY_GRP_NM_GET
 	jrl nz, MainCmpSet_Case4
 	pushw 0x11
 	call Malloc
@@ -32566,11 +32566,11 @@ MainCmpCpFunc:
 	lda xsp, (xsp + 10)
 	ld (xiz + 16), 0x0
 	ld xwa, 0xb8001e
-	ld xbc, 0x1e40004
+	ld xbc, EVT_AP_RHY_GRP_NM
 	ld xde, xiz
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, xiz
 	jrl MainCmpSet_Case3
 
@@ -32640,7 +32640,7 @@ MainCmpCp_MemCopyAndFinalize:
 	cp a, 0xb8
 	jr nz, MainCmpSet_Init
 	ld xwa, 0xb8001f
-	ld xbc, 0x1e40005
+	ld xbc, EVT_AP_RHY_VARI_NM
 	ld xde, xiz
 	jr MainCmpSet_Case1
 
@@ -32649,7 +32649,7 @@ MainCmpSet_Init:
 	cp a, 0xdc
 	jr nz, MainCmpSet_Case2
 	ld xwa, 0xdc0002
-	ld xbc, 0x1e40005
+	ld xbc, EVT_AP_RHY_VARI_NM
 	ld xde, xiz
 
 ; MainCmpSetFunc case 1
@@ -32659,7 +32659,7 @@ MainCmpSet_Case1:
 ; MainCmpSetFunc case 2
 MainCmpSet_Case2:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, xiz
 
 ; MainCmpSetFunc case 3
@@ -32687,7 +32687,7 @@ MainCmpSetFunc:
 	ld xhl, xbc
 	ld xwa, (xsp)
 	ld c, a
-	sub xhl, EVT_GRIDCHECK_RESP_A
+	sub xhl, EVT_PAN_UP
 	cp xhl, 0x0
 	jrl lt, CmpSong_VariantA
 	cp xhl, 0x7
@@ -32714,7 +32714,7 @@ MainCmpSet_Dispatch:
 	extz	xde
 	add	xde, 0x010000
 	ld	xwa, 0xb4000e
-	ld	xbc, 0x01e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jrl	MainCmpSetFunc_Join
 	ld	xwa, (xsp)
 	sll	xwa, 3
@@ -32731,7 +32731,7 @@ MainCmpSet_Dispatch:
 	extz	xde
 	add	xde, 0x010000
 	ld	xwa, 0xb4000e
-	ld	xbc, 0x01e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jrl	MainCmpSetFunc_Join
 	ld	xwa, (xsp)
 	sll	xwa, 3
@@ -32748,7 +32748,7 @@ MainCmpSet_Dispatch:
 	extz	xde
 	add	xde, 0x020000
 	ld	xwa, 0xb4000e
-	ld	xbc, 0x01e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jrl	MainCmpSetFunc_Join
 	ld	xwa, (xsp)
 	sll	xwa, 3
@@ -32765,7 +32765,7 @@ MainCmpSet_Dispatch:
 	extz	xde
 	add	xde, 0x020000
 	ld	xwa, 0xb4000e
-	ld	xbc, 0x01e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jr	MainCmpSetFunc_Join
 	ld	a, c
 	ld	(0x3540:16), c
@@ -32789,7 +32789,7 @@ MainCmpSetFunc_Skip:
 	extz	xde
 	add	xde, 0x010000
 	ld	xwa, 0xb40007
-	ld	xbc, 0x01e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jr	MainCmpSetFunc_Join
 	ld	a, c
 	ld	(0x3540:16), c
@@ -32809,7 +32809,7 @@ MainCmpSetFunc_Skip:
 	extz	xde
 	add	xde, 0x010000
 	ld	xwa, 0xb40007
-	ld	xbc, 0x01e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 MainCmpSetFunc_Join:
 	call	ApDeliveryEvent
 
@@ -32826,13 +32826,13 @@ MainEsCmpFunc:
 	ld xde, (xsp)
 	ld a, e
 	dec 2, a
-	cp xbc, 0x1e4002a
+	cp xbc, EVT_ES_CMP_VARI_DN
 	jrl z, EsCmp_HandleEvent2A
-	cp xbc, 0x1e40029
+	cp xbc, EVT_ES_CMP_VARI_UP
 	jrl z, EsCmp_HandleEvent29
-	cp xbc, 0x1e40028
+	cp xbc, EVT_ES_CMP_STYL_DN
 	jr z, EsCmp_HandleEvent28
-	cp xbc, 0x1e40027
+	cp xbc, EVT_ES_CMP_STYL_UP
 	jrl nz, EsCmp_ReturnZero
 	ld (0x39b8:16), a
 	push xde
@@ -32849,14 +32849,14 @@ MainEsCmpFunc:
 	extz xde
 	add xde, 0x10000
 	ld xwa, 0xba000a
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call ApDeliveryEvent
 	ld xwa, (xsp)
 	ld de, wa
 	extz xde
 	add xde, 0x20000
 	ld xwa, 0xba000a
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	jrl MspBksl_EventDeliver
 
 EsCmp_HandleEvent28:
@@ -32876,14 +32876,14 @@ EsCmp_HandleEvent28:
 	extz xde
 	add xde, 0x10000
 	ld xwa, 0xba000a
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call ApDeliveryEvent
 	ld xwa, (xsp)
 	ld de, wa
 	extz xde
 	add xde, 0x20000
 	ld xwa, 0xba000a
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	jr MspBksl_EventDeliver
 
 EsCmp_HandleEvent29:
@@ -32903,7 +32903,7 @@ EsCmp_HandleEvent29:
 	extz xde
 	add xde, 0x20000
 	ld xwa, 0xba000a
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	jr MspBksl_EventDeliver
 
 EsCmp_HandleEvent2A:
@@ -32923,7 +32923,7 @@ EsCmp_HandleEvent2A:
 	extz xde
 	add xde, 0x20000
 	ld xwa, 0xba000a
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 
 MspBksl_EventDeliver:
 	call ApDeliveryEvent
@@ -32947,7 +32947,7 @@ SoundCtrl_SendAccTempo:
 	cp (0x8d38:16), 181
 	ret nz
 	ld xwa, 0xb5001e
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ret
@@ -32957,7 +32957,7 @@ SoundCtrl_SendTempoScaled:
 	ret nz
 	calr SoundCtrl_CalcScaledTempo
 	ld xwa, 0xb50002
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ret
@@ -33019,7 +33019,7 @@ AccSeq_DeliverC9_0009:
 	cp (0x8d38:16), 201
 	ret nz
 	ld xwa, 0xc90009
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ret
@@ -33028,7 +33028,7 @@ AccSeq_DeliverC9_000A:
 	cp (0x8d38:16), 201
 	ret nz
 	ld xwa, 0xc9000a
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ret
@@ -33053,13 +33053,13 @@ MainMspRgpSetFunc:
 	ld xix, xwa
 	add xix, xiy
 	lda xwa, (xix + 1)
-	cp xbc, 0x1e40015
+	cp xbc, EVT_RGP_PAD_DN
 	jr z, MspMenuTtl_Case1
-	cp xbc, 0x1e40014
+	cp xbc, EVT_RGP_PAD_UP
 	jr z, MspMenuTtl_Init
-	cp xbc, 0x1e40013
+	cp xbc, EVT_RGP_BNK_DN
 	jr z, MspRgpSet_HandleEvent13
-	cp xbc, 0x1e40012
+	cp xbc, EVT_RGP_BNK_UP
 	jrl nz, AccBass_ReturnZero
 	cp (0x7f0b:16), 0
 	jr nz, AccBass_ReturnZero
@@ -33070,7 +33070,7 @@ MainMspRgpSetFunc:
 	inc 1, a
 	ld (xbc), a
 	ld xwa, 0xcc0003
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	ld xde, xhl
 	jr AccBass_EventDeliver
 
@@ -33084,7 +33084,7 @@ MspRgpSet_HandleEvent13:
 	dec 1, a
 	ld (xbc), a
 	ld xwa, 0xcc0003
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	ld xde, xhl
 	jr AccBass_EventDeliver
 
@@ -33099,7 +33099,7 @@ MspMenuTtl_Init:
 	inc 1, a
 	ld (xbc), a
 	ld xwa, 0xcc0003
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	jr AccBass_EventDeliver
 
 ; MspMenuTtlFunc case 1
@@ -33113,7 +33113,7 @@ MspMenuTtl_Case1:
 	dec 1, a
 	ld (xbc), a
 	ld xwa, 0xcc0003
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 
 AccBass_EventDeliver:
 	call ApDeliveryEvent
@@ -33124,7 +33124,7 @@ AccBass_ReturnZero:
 ; MspMenuTtlFunc case 2
 MspMenuTtl_Case2:
 MspMenuTtlFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, MspNameTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -33179,7 +33179,7 @@ MspNameTtl_ReturnZero:
 ; MspNameTtlFunc mode 1
 MspNameTtl_Mode1:
 MspNameTtlFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, MspRecMode_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -33205,7 +33205,7 @@ MspNameTtlFunc_Skip:
 	cp	(0x8d37:16), 204
 	jr	z, MspRecMode_ReturnZero
 	ld	xwa, 0xcc0003
-	ld	xbc, 0x01e0008e
+	ld	xbc, EVT_SET_SELECTED_CEL
 	ld	xde, 0xffff0002
 	call	ApDeliveryEvent
 
@@ -33215,7 +33215,7 @@ MspRecMode_ReturnZero:
 ; MspNameTtlFunc mode 2
 MspNameTtl_Mode2:
 MspRecModeFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, MspNameTtl_Mode4
 	cp xde, 0x1
 	jr z, MspNameTtl_Mode3
@@ -33233,9 +33233,9 @@ MspNameTtl_Mode4:
 ; MspNameTtlFunc mode 5
 MspNameTtl_Mode5:
 MspRecTtlFunc:
-	cp xbc, 0x1e4001f
+	cp xbc, EVT_MSP_PLY_MD_SET
 	jrl z, MspRecTtl_SubA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, MspRecTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -33309,13 +33309,13 @@ MspRecTtl_ReturnZero:
 
 AccSeq_PostEvent9E_Enable:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	jp ApPostEvent
 
 AccSeq_PostEvent9E_Disable:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	jp ApPostEvent
 AccSeq_DcModeDataBlock:
@@ -33324,14 +33324,14 @@ AccSeq_DcModeDataBlock:
 	xor	(xiy+63), d
 	ret	nz
 	ld	xwa, 0xdc0005
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
 	ret
 ; SndArgTtlFunc sub-handler A
 SndArgTtl_SubA:
 SndArgModeFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, AccStyle_ExitReturn
 	cp xde, 0x1
 	jr z, SndArgTtl_SubB
@@ -33366,7 +33366,7 @@ AccStyle_ExitReturn:
 ; SndArgTtlFunc sub-handler C
 SndArgTtl_SubC:
 SndArgTtlFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, SndArgTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -33383,7 +33383,7 @@ SndArgTtl_Dispatch:
 	cp	(0x8d37:16), 220
 	jr	z, SndArgTtlFunc_Skip
 	ld	xwa, 0xdc0005
-	ld	xbc, 0x01e0008e
+	ld	xbc, EVT_SET_SELECTED_CEL
 	ld	xde, 0xffff0002
 	call	ApDeliveryEvent
 SndArgTtlFunc_Skip:
@@ -33469,12 +33469,12 @@ SndArgNm_CheckChannelDone:
 	ld (xsp + 2), xwa
 	dec 4, xhl
 	ld xwa, (xsp + 74)
-	cp xwa, 0x1e40024
+	cp xwa, EVT_SET_PT_SEL
 	jrl z, SndArgNm_HandleEvent24
 	add xhl, xix
-	cp xwa, 0x1e40021
+	cp xwa, EVT_ARG_CHO_GET
 	jrl z, SndArgNm_HandleEvent21
-	cp xwa, 0x1e40020
+	cp xwa, EVT_ARG_TONE_NM_GET
 	jrl nz, SndArgNm_ReturnZero
 	ld xix, xhl
 	ld a, (xhl)
@@ -33523,7 +33523,7 @@ SndArgNm_ProcessEntry:
 	extz xde
 	add xde, 0x10000
 	ld xwa, 0xdc0005
-	ld xbc, 0x1e40022
+	ld xbc, EVT_ARG_TONE_NM_DISP
 	jrl SndArgNm_DeliverAndReturn
 
 SndArgNm_HandleEvent21:
@@ -33574,7 +33574,7 @@ SndArgNm_DeliverEvent:
 	extz xde
 	add xde, 0x20000
 	ld xwa, 0xdc0005
-	ld xbc, 0x1e40023
+	ld xbc, EVT_ARG_CHO_DISP
 
 SndArgNm_DeliverAndReturn:
 	call ApDeliveryEvent
@@ -36112,7 +36112,7 @@ PostEventSetup_Send:
 	ld de, bc
 	extz xde
 	add xde, xhl
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	inc1w_erp 0xfa
 	ldto_werp WA, 0xfa
@@ -36126,9 +36126,9 @@ DialCalc_Return:
 __pad_F6C160:
 
 StylCnvWaitTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, AccChord_ReturnZero
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, AccChord_ReturnZero
 	cp xde, 0x3
 	jr z, StylCnvWait_HandleClose
@@ -36175,9 +36175,9 @@ AccChord_ReturnZero:
 __pad_F6C1DE:
 
 StylCnvTxtTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, StylCnvTxt_ReturnZero
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, StylCnvTxt_ReturnZero
 	cp xde, 0x3
 	jr z, StylCnvTxt_HandleClose
@@ -36208,9 +36208,9 @@ StylCnvModlTtlFunc:
 	ld de, (0x3d04:16)
 	ld iz, de
 	ld wa, (0x3a82:16)
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, StylCnvModl_HandleOK
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, StylCnvModl_Return
 	cp xhl, 0x4
 	jrl z, StylCnvModl_HandleOpenItem
@@ -36285,7 +36285,7 @@ StylCnvModl_PadStoreChar:
 StylCnvModl_InitListDisplay:
 	ldw (0x3d04:16), 0
 	ld xwa, 0x110002
-	ld xbc, 0x1e4002f
+	ld xbc, EVT_SET_SELECTED_LINE
 	ld xde, 0:i3
 	call ApPostEvent
 	lda xbc, (0x3f68:16)
@@ -36348,7 +36348,7 @@ StylCnvModl_CopyDefaultName:
 
 StylCnvModl_DrawListUI:
 	ld xwa, 0x110007
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	lda xwa, (xsp + 4)
@@ -36435,7 +36435,7 @@ StylCnvModl_OK_UpdateDisplay:
 	ldto_werp DE, 0xe6
 	extz xde
 	ld xwa, 0x110002
-	ld xbc, 0x1e4002f
+	ld xbc, EVT_SET_SELECTED_LINE
 	call ApPostEvent
 	ld de, (0x3d04:16)
 	ld bc, de
@@ -36452,7 +36452,7 @@ StylCnvModl_OK_UpdateDisplay:
 	extz xde
 	add xde, xwa
 	ld xwa, 0x110002
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x3d04:16)
 	mul de, 0x25
@@ -36460,7 +36460,7 @@ StylCnvModl_OK_UpdateDisplay:
 	extz xde
 	add xde, xwa
 	ld xwa, 0x110002
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	jrl StylCnvModl_Return
 
@@ -36642,9 +36642,9 @@ StylCnvCnvtTtlFunc:
 	ld hl, (0x3d04:16)
 	ld iz, hl
 	ld ix, (0x3a82:16)
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, StylCnvCnvt_HandleOK
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, StylCnvCnvt_Return
 	cp xde, 0x4
 	jrl z, StylCnvCnvt_HandleOpenItem
@@ -36711,7 +36711,7 @@ StylCnvCnvt_PadStoreChar:
 StylCnvCnvt_InitListDisplay:
 	ldw (0x3d04:16), 0
 	ld xwa, 0x120002
-	ld xbc, 0x1e4002f
+	ld xbc, EVT_SET_SELECTED_LINE
 	ld xde, 0:i3
 	call ApPostEvent
 	jrl StylCnvCnvt_Return
@@ -36778,7 +36778,7 @@ StylCnvCnvt_OK_UpdateDisplay:
 	ldto_werp DE, 0xe6
 	extz xde
 	ld xwa, 0x120002
-	ld xbc, 0x1e4002f
+	ld xbc, EVT_SET_SELECTED_LINE
 	call ApPostEvent
 	ld de, (0x3d04:16)
 	ld bc, de
@@ -36795,7 +36795,7 @@ StylCnvCnvt_OK_UpdateDisplay:
 	extz xde
 	add xde, xwa
 	ld xwa, 0x120002
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x3d04:16)
 	mul de, 0x25
@@ -36803,7 +36803,7 @@ StylCnvCnvt_OK_UpdateDisplay:
 	extz xde
 	add xde, xwa
 	ld xwa, 0x120002
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	jrl StylCnvCnvt_Return
 
@@ -36908,9 +36908,9 @@ StylCnvSelTtlFunc:
 	ld ix, (0x3d04:16)
 	ld iz, ix
 	ld bc, (0x3a82:16)
-	cp xhl, 0x1c00007
+	cp xhl, EVT_SW_IN
 	jr z, StylCnvSel_HandleOK
-	cp xhl, EVT_CPANEL_EVENT
+	cp xhl, EVT_ACTIVATE_STATE
 	jrl nz, StylCnvSel_Return
 	cp xde, 0x4
 	jr z, StylCnvSel_HandleOpenItem
@@ -36925,7 +36925,7 @@ StylCnvSelTtlFunc:
 	calr DialUI_PostInitEvents
 	ldw (0x3d04:16), 0
 	ld xwa, 0x150002
-	ld xbc, 0x1e4002f
+	ld xbc, EVT_SET_SELECTED_LINE
 	ld xde, 0:i3
 	call ApPostEvent
 	jrl StylCnvSel_Return
@@ -36991,7 +36991,7 @@ StylCnvSel_OK_UpdateDisplay:
 	ldto_werp DE, 0xe6
 	extz xde
 	ld xwa, 0x150002
-	ld xbc, 0x1e4002f
+	ld xbc, EVT_SET_SELECTED_LINE
 	call ApPostEvent
 	ld de, (0x3d04:16)
 	ld bc, de
@@ -37008,7 +37008,7 @@ StylCnvSel_OK_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, 0x150002
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld wa, (0x3d04:16)
 	mul wa, 0x25
@@ -37017,7 +37017,7 @@ StylCnvSel_OK_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, 0x150002
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	jrl StylCnvSel_Return
 
@@ -37097,9 +37097,9 @@ StylCnvSel_Return:
 StylCnvSel_End:
 
 StylCnvContTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, StylCnvCont_HandleOK
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, AccRhythm_ReturnZero
 	cp xde, 0x3
 	jr z, StylCnvCont_HandleClose
@@ -37159,7 +37159,7 @@ AccRhythm_ReturnZero:
 __pad_F6CBDE:
 
 StylCnvStorTtlFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, StylCnvStor_ReturnZero
 	cp xde, 0x3
 	jr z, StylCnvStor_HandleClose

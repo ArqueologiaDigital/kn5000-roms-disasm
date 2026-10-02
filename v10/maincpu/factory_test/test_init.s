@@ -130,9 +130,9 @@ TestTitleFunc:
 	push xiz
 	ld xiz, xwa
 	ld wa, 0:i3
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, TitleFunc_LifecycleDispatch
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, TitleFunc_Return
 	ld xwa, xde
 	dec 2, xwa
@@ -188,7 +188,7 @@ TitleFunc_LifecycleTable:
 	calr FDTest_PrintDiag
 	call Reset_Floppy_Disk_Controller_0x12
 	jr TitleFunc_Return
-	ld xwa, 0x01c00007
+	ld xwa, EVT_SW_IN
 	push xwa
 	ld xwa, 2:i3
 	push xwa
@@ -203,7 +203,7 @@ TitleFunc_LifecycleTable:
 	lda xwa, (FDTest_String_TestTitleFunc_0x8C:24)
 	calr FDTest_PrintDiag
 	calr RunTestCounters_Entry
-	ld xwa, 0x01c00007
+	ld xwa, EVT_SW_IN
 	push xwa
 	ld xwa, 2:i3
 	push xwa
@@ -302,17 +302,17 @@ RunTestCounters_Display:
 	ld de, (0x03dcfe:24)
 	exts xde
 	ld xwa, 0x00fc0001
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd00:24)
 	exts xde
 	ld xwa, 0x00fc0003
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd02:24)
 	exts xde
 	ld xwa, 0x00fc0002
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jp ApPostEvent
 
 ; CreateAndRunFDOperation -- Builds a 16-byte parameter struct on the stack,
@@ -372,16 +372,16 @@ RegHamaTitle2_Entry:
 SendEvent_Entry:
 	ld xde, xwa
 	ld xwa, 0xffffffff
-	ld xbc, 0x01c00025
+	ld xbc, EVT_MEMO_DRAW
 	jp SendEvent
 
 ; HamaEventDispatcher -- Dispatches events for HAMA subsystem
 ; Handles 0x1c00007 (title lifecycle) and 0x1e00085 (extension event)
 ; For 0x1c00007: dispatches on xde (0x8a=file ops, 0x8b=extension bootstrap)
 HamaEvtDisp_Entry:
-	cp xbc, 0x01c00007
+	cp xbc, EVT_SW_IN
 	jr z, HamaEvtDisp_LifecycleCheck
-	cp xbc, 0x01e00085
+	cp xbc, EVT_ARE_YOU_CLASS_PROC
 	jr nz, HamaEvtDisp_Return
 	ld xhl, 0:i3
 	ret

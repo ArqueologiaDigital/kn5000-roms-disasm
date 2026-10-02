@@ -30,15 +30,15 @@
 
 ExcSendFunc:
 	ld xhl, xde
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, ExcSendFunc_InvalidParam_Exit
 	ld xwa, 0x570003
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	exts xhl
-	ld xwa, 0x1430001
-	ld xbc, 0x1e30001
+	ld xwa, NAKA_MAINFUNC_MainExcSend
+	ld xbc, EVT_EXC_SEND
 	ld xde, xhl
 	call MainFuncCall
 
@@ -47,7 +47,7 @@ ExcSendFunc_InvalidParam_Exit:
 	ret
 
 MainExcSend:
-	cp xbc, 0x1e30001
+	cp xbc, EVT_EXC_SEND
 	jr nz, MainExcSend_UnexpectedMessageType_Exit
 	cp xde, 0x6
 	jr c, MainExcSend_ClampIndexToRange
@@ -63,7 +63,7 @@ MainExcSend_UnexpectedMessageType_Exit:
 	ret
 
 ExcDotFunc:
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, ExcDotFunc_InvalidIndex_Exit
 	cp xbc, 0x9
@@ -114,7 +114,7 @@ ExcDotFunc_HandlerJumpTable_Ext:
 ExcPmemFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, ExcPmemFunc_InvalidIndex_Exit
 	cp xbc, 0x9
@@ -153,7 +153,7 @@ ExcPmemFunc_Return:
 ExcSmemFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, ExcSmemFunc_InvalidIndex_Exit
 	cp xbc, 0x9
@@ -192,7 +192,7 @@ ExcSmemFunc_Return:
 ExcCompFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, ExcCompFunc_InvalidIndex_Exit
 	cp xbc, 0x9
@@ -231,7 +231,7 @@ ExcCompFunc_Return:
 ExcSeqFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, ExcSeqFunc_InvalidIndex_Exit
 	cp xbc, 0x9
@@ -270,7 +270,7 @@ ExcSeqFunc_Return:
 ExcMspFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, ExcMspFunc_InvalidIndex_Exit
 	cp xbc, 0x9

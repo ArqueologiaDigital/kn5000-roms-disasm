@@ -42,7 +42,7 @@
 ; =============================================================================
 
 SeMenuModeFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	ret nz
 	cp xde, 0x1
 	jr z, SeMenuModeFunc_Handler

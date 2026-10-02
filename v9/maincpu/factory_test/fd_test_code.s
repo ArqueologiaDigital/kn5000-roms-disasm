@@ -298,9 +298,9 @@ FDTestDialogProc:
 	lda xsp, (xsp - 264)
 	ld (xsp + 8), 0x0
 	ld xwa, xbc
-	cp xwa, 0x1e0008d
+	cp xwa, EVT_REQUEST_GRID_DRAW
 	jr z, FDTestDlg_FormatDisplay
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jr lt, FDTestDlg_Unhandled
 	cp xwa, 0x6
@@ -328,7 +328,7 @@ FDTestDlg_FormatDisplay:
 	ld xbc, xwa
 	ld xwa, xhl
 	ld xde, xbc
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 	ld xhl, 0:i3
 	jr FDTestDlg_Return
@@ -351,7 +351,7 @@ HamaListProc:
 	push xiz
 	ld xiz, xde
 	ld xde, xbc
-	cp xde, 0x1e00086
+	cp xde, EVT_SET_STRING
 	jr z, HamaList_HandleSelect
 	ld xde, xiz
 	call InheritedProc

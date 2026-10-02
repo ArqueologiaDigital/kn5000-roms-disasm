@@ -19,7 +19,7 @@ ParaLoadOpt_AudioFlagCheck:
 	res 0, a
 	ld (0xbd36:16), a
 	ld xwa, 0x570006
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -31,7 +31,7 @@ ParaLoadOpt_CaseA:
 	ld a, (xsp + 2)
 	ld (0x02475c:24), a
 	ld xwa, 0x570010
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -43,7 +43,7 @@ ParaLoadOpt_CaseB:
 	ld a, (xsp)
 	ld (0x02475e:24), a
 	ld xwa, 0x570010
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -73,57 +73,57 @@ ParaLoadOpt_DispatchTable_A:
 	ld	(0x024766:24), 0
 	ld	(0x024768:24), 0
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024760:24), 1
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024760:24), 3
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024762:24), 1
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024762:24), 3
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024764:24), 1
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024764:24), 3
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024766:24), 1
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024766:24), 3
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024768:24), 1
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_Join
 	ld	(0x024768:24), 3
 	ld	xwa, 0x57000a
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 ParaLoadOpt_AudioFlagCheck_Join:
 	call	ApPostEvent
@@ -143,7 +143,7 @@ ParaLoadOpt_AudioFlagCheck_B:
 	res 1, a
 	ld (0xbd36:16), a
 	ld xwa, 0x570011
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -157,7 +157,7 @@ ParaLoadOpt_CaseD:
 	ld a, (xsp + 2)
 	ld (0x02475c:24), a
 	ld xwa, 0x57001b
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -171,7 +171,7 @@ ParaLoadOpt_CaseE:
 	ld a, (xsp)
 	ld (0x02475e:24), a
 	ld xwa, 0x57001b
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	ld xde, 0:i3
 	call ApPostEvent
 
@@ -201,57 +201,57 @@ ParaLoadOpt_DispatchTable_B:
 	ld	(0x024766:24), 0
 	ld	(0x024768:24), 0
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024760:24), 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024760:24), 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024762:24), 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jrl	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024762:24), 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024764:24), 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024764:24), 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024766:24), 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024766:24), 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024768:24), 2
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	ParaLoadOpt_AudioFlagCheck_B_Join
 	ld	(0x024768:24), 3
 	ld	xwa, 0x570015
-	ld	xbc, 0x01c0000b
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 ParaLoadOpt_AudioFlagCheck_B_Join:
 	call	ApPostEvent
@@ -262,22 +262,22 @@ MidiFunc_SendEventReturn:
 
 ParaLoadOpt_PostDualEvent:
 	ld	xwa, 0x570006
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x570011
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	jp	ApPostEvent
 
 TtMdParaLoad:
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, TtMdParaLoad_ReturnZero
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtMdParaLoad_ReturnZero
 	or xde, xde
 	jr nz, TtMdParaLoad_ReturnZero
@@ -299,18 +299,18 @@ AcParaLoadOptGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, ParaLoadOpt_GridCheck2
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, ParaLoadOpt_GridCheck1
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, ParaLoadOpt_GridCheck0
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jrl z, ParaLoadOpt_GridReturn
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, ParaLoadOpt_GridHandler
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, ParaLoadOpt_GridCheck3
 	cp xbc, 0x6
@@ -331,7 +331,7 @@ ParaLoadOpt_GridHandler:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -344,7 +344,7 @@ ParaLoadOpt_GridHandler:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -355,7 +355,7 @@ ParaLoadOpt_GridHandler:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialDown
 	ld wa, 1:i3
 	jrl ParaLoadOpt_SetDialAndReturn
@@ -374,20 +374,20 @@ ParaLoadOpt_GridReturn:
 	cp hl, 0:i3
 	jrl z, AccFunc_ReturnZeroJmp
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000ee
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_MESAGE
 	call PostEvent
-	ld xwa, 0x1430003
-	ld xbc, 0x1e30006
+	ld xwa, NAKA_MAINFUNC_MainFlashFunc
+	ld xbc, EVT_EAST_FLASH_LOAD
 	ld xde, (xsp + 12)
 	call MainFuncCall
 	jrl AccFunc_ReturnZeroJmp
@@ -396,13 +396,13 @@ ParaLoadOpt_GridReturn:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, ParaLoadOpt_GridDelegateProc
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -413,7 +413,7 @@ ParaLoadOpt_GridReturn:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -424,7 +424,7 @@ ParaLoadOpt_GridReturn:
 
 ParaLoadOpt_GridDelegateProc:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -440,11 +440,11 @@ ParaLoadOpt_GridDelegateProc:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -454,13 +454,13 @@ ParaLoadOpt_GridDelegateProc:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, ParaLoadOpt_GridDelegateProc_B
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -472,7 +472,7 @@ ParaLoadOpt_GridDelegateProc:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -482,7 +482,7 @@ ParaLoadOpt_GridDelegateProc:
 
 ParaLoadOpt_GridDelegateProc_B:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -498,11 +498,11 @@ ParaLoadOpt_GridDelegateProc_B:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -591,10 +591,10 @@ ParaLoadOptGridCheck:
 	lda xwa, (xiy + 2)
 	lda xix, (xiy + 4)
 	ld (xsp + 12), xix
-	cp xde, 0x1e0008d
+	cp xde, EVT_REQUEST_GRID_DRAW
 	jrl z, VoiceUI_MiscHandler
 	ld xde, (xsp + 16)
-	sub xde, 0x1c00017
+	sub xde, EVT_INDEXSW_UP
 	cp xde, 0x0
 	jrl lt, ParaLoadOpt_ReturnZero
 	cp xde, 0x6
@@ -608,7 +608,7 @@ ParaLoadOptGridCheck:
 ParaLoadOpt_GridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)
@@ -672,7 +672,7 @@ ParaLoadOpt_PostDualEvent_Skip3:
 	jrl	ParaLoadOpt_PostDualEvent_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	lda	xwa, (xsp+20)
@@ -767,7 +767,7 @@ ParaLoadOpt_PostDualEvent_Join:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	ParaLoadOptSendEvtReturn
 ParaLoadOpt_PostDualEvent_Skip5:
 	lda	xhl, (xbc+1)
@@ -787,7 +787,7 @@ ParaLoadOpt_PostDualEvent_Skip5:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	ParaLoadOptSendEvtReturn
 ParaLoadOpt_PostDualEvent_Skip6:
 	lda	xhl, (xbc+2)
@@ -807,7 +807,7 @@ ParaLoadOpt_PostDualEvent_Skip6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	ParaLoadOptSendEvtReturn
 ParaLoadOpt_PostDualEvent_Skip7:
 	inc	3, xbc
@@ -827,7 +827,7 @@ ParaLoadOpt_PostDualEvent_Skip7:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+20)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	ParaLoadOptSendEvtReturn
 
 ; Voice UI misc handler

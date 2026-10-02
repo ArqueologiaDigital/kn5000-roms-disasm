@@ -269,7 +269,7 @@ This ensures the documentation website always reflects the latest extracted imag
 
 **When new firmware event codes are discovered or existing codes are better understood, ALL of the following must be updated:**
 
-1. **Assembly source** -- Add/update `EVT_*` `.equ` constants in `hdae5000/hd-ae5000_v2_06i.s` and `maincpu/kn5000_v10_program.s`; replace raw hex values with symbolic names (e.g., `EVT_INIT_HOOK`)
+1. **Assembly source** -- Add/update `EVT_*` `.equ` constants in each tree's `shared/event_codes.s` (`v10/maincpu`, `v9/maincpu`, `v7/maincpu`, `hdae5000`), named after the firmware's own `EV_*`/`MT_*` name tables (catalog: `notes/event-codes-2026-10-02/`; apply with `scripts/tools/apply_event_constants.py`); replace raw hex values with symbolic names (e.g., `EVT_PARA_DRAW`)
 2. **Event codes reference page** -- Update `../technics-docs/event-codes.md` with new codes, dispatch paths, and descriptions
 3. **HDAE5000 homebrew page** -- Update `../technics-docs/hdae5000-homebrew.md` if the discovery affects handler registration or activation flow
 4. **Mines project** -- Update `../../Mines/CLAUDE.md` if applicable

@@ -137,7 +137,7 @@ FDemo_DisplayResourceData_Return:
 	ret
 
 MainPreControl:
-	sub xbc, 0x1e10003
+	sub xbc, EVT_READ_PRESENTATION_REQ
 	cp xbc, 0x0
 	jr lt, MainPreControl_ReturnNull
 	cp xbc, 0xa
@@ -164,21 +164,21 @@ FDemo_DisplayCtrlJumpHandler:
 	calr Seq_LoadDisplayResource			; load display resource (format validation)
 	exts xhl				; sign-extend result
 	ld xwa, 0xffffffff			; broadcast target
-	ld xbc, 0x01c10001			; event code
+	ld xbc, EVT_READ_PRESENTATION			; event code
 	ld xde, xhl				; result as param
 	jr FDemo_DispatchEventPost				; dispatch
 	ld xwa, xde				; workspace
 	calr FDemo_DisplayResourceData			; load alternate display resource
 	exts xhl
 	ld xwa, 0xffffffff
-	ld xbc, 0x01c10003			; event code 3
+	ld xbc, EVT_READ_SONG			; event code 3
 	ld xde, xhl
 	jr FDemo_DispatchEventPost
 	ld xwa, xde				; workspace
 	calr Seq_LoadNamedResource			; load named display resource
 	exts xhl
 	ld xwa, 0xffffffff
-	ld xbc, 0x01c10002			; event code 2
+	ld xbc, EVT_READ_ACTION			; event code 2
 	ld xde, xhl
 FDemo_DispatchEventPost:
 	call ApPostEvent				; dispatch event
@@ -199,20 +199,20 @@ ApPreControl:
 	push xiz
 	ld xiz, xde
 	ld xwa, xbc
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl z, Seq_GetControlBlock
-	cp xbc, 0x1e1000b
+	cp xbc, EVT_EXIST_PRESENTATION
 	jrl z, Seq_ReadStartFlag
-	cp xbc, 0x1e1000d
+	cp xbc, EVT_EXIT_PRESENTATION
 	jrl z, Seq_PostMelodyEventAlt
 	ld de, iz
-	cp xbc, 0x1c00006
+	cp xbc, EVT_ACTION
 	jrl z, FDemo_ProcessDisplayStateQuery
-	cp xbc, 0x1e10007
+	cp xbc, EVT_EXEC_PRESENTATION_REQ
 	jr z, Seq_StartWithFullInit
-	cp xbc, 0x1e1000c
+	cp xbc, EVT_INIT_PRESENTATION
 	jr z, Seq_PostMelodyEvent
-	sub xwa, 0x1c10001
+	sub xwa, EVT_READ_PRESENTATION
 	cp xwa, 0x0
 	jr lt, ApPreControl_ReturnNull
 	cp xwa, 0x6
@@ -224,7 +224,7 @@ ApPreControl:
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
 Seq_PostMelodyEvent:
-	ld xwa, 0x1410000
+	ld xwa, NAKA_MAINFUNC_MainPreControl
 	ld xde, xiz
 
 Seq_DispatchMainFunc:
@@ -260,27 +260,27 @@ Seq_StartWithFullInit:
 	push xiz
 	call Strcpy
 	lda xsp, (xsp + 14)
-	ld xwa, 0x1410000
-	ld xbc, 0x1e10004
+	ld xwa, NAKA_MAINFUNC_MainPreControl
+	ld xbc, EVT_READ_ACTION_REQ
 	ld xde, xiz
 	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
+	ld xwa, NAKA_MAINFUNC_MainAutoFree
+	ld xbc, EVT_AUTO_FREE
 	ld xde, xiz
 	jr Seq_DispatchMainFunc
 	ld (0x025b7c:24), de
 	cp de, 0:i3
 	jr lt, ApPreControl_ReturnNull
-	ld xwa, 0x1410000
-	ld xbc, 0x1e10006
+	ld xwa, NAKA_MAINFUNC_MainPreControl
+	ld xbc, EVT_START_PRESENTATION
 	ld xde, 0:i3
 	jrl Seq_DispatchMainFunc
 	ld xwa, NakaInst_Param_Field02_0x4
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	ld wa, iz
@@ -309,7 +309,7 @@ FDemo_DisplayStateQueryLoop:
 	jrl ApPreControl_ReturnNull
 
 Seq_PostMelodyEventAlt:
-	ld xwa, 0x1410000
+	ld xwa, NAKA_MAINFUNC_MainPreControl
 	ld xde, xiz
 	jrl Seq_DispatchMainFunc
 
@@ -343,7 +343,7 @@ Banner_ReturnZero:
 FDemo_LoadRegsAndPostEvent:
 	; --- Routine 2: load regs, jp FA9D58 (23 bytes) ---
 	ld xwa, 0xffffffff
-	ld xbc, 0x01c10007
+	ld xbc, EVT_EXEC_PRESENTATION
 	ld xde, 0x00ea009e
 	jp ApPostEvent
 
@@ -8424,7 +8424,7 @@ FileIO_DiskRemoved:
 	cp l, 0:i3
 	ret nz
 	ld xwa, 0x600002
-	ld xbc, EVT_POST_ACTIVATE
+	ld xbc, EVT_SET_VISIBLE
 	ld xde, 0:i3
 	call ApPostEvent
 	ret
@@ -8913,7 +8913,7 @@ FileIO_MedleyDispatchByMode:
 	cp a, 0x79
 	jr nz, MedleyDisp_ModeSmf
 	ld xwa, 0:i3
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xd
 	jrl FmmIntMedleyFunc
 
@@ -8921,7 +8921,7 @@ MedleyDisp_ModeSmf:
 	cp a, 0x6c
 	jr nz, MedleyDisp_ModeDoc
 	ld xwa, 0:i3
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xd
 	jrl FmmSmfMedleyFunc
 
@@ -8929,7 +8929,7 @@ MedleyDisp_ModeDoc:
 	cp a, 0x6d
 	jr nz, MedleyDisp_ModePd
 	ld xwa, 0:i3
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xd
 	jp FmmDocMedleyFunc
 
@@ -8937,7 +8937,7 @@ MedleyDisp_ModePd:
 	cp a, 0x6e
 	jr nz, MedleyDisp_ModeDisk
 	ld xwa, 0:i3
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xd
 	jrl FmmPdMedleyFunc
 
@@ -8945,7 +8945,7 @@ MedleyDisp_ModeDisk:
 	cp a, 0x77
 	ret nz
 	ld xwa, 0:i3
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xd
 	calr FmmDiskMedleySelectFunc
 	ret

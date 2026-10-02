@@ -12,13 +12,13 @@ MainGetSoundName:
 	push xiz
 	ld (xsp + 20), xde
 	ld xwa, (xsp + 20)
-	cp xbc, 0x1e000a9
+	cp xbc, EVT_ADD_SOUND_SW_NO
 	jrl z, Sound_Navigate_Entry
-	cp xbc, 0x1e000a8
+	cp xbc, EVT_SET_SOUND_SW_NO
 	jrl z, Sound_SetSelection
-	cp xbc, 0x1e00061
+	cp xbc, EVT_GET_SOUND_SW_NO
 	jrl z, SoundLookup_ByCategory
-	cp xbc, 0x1e0005e
+	cp xbc, EVT_GET_SOUND_NAME
 	jrl nz, Sound_Navigate_Return
 	pushw 0x6
 	call Malloc
@@ -66,15 +66,15 @@ GetSoundName_DefaultString:
 
 GetSoundName_DispatchResult:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00020
+	ld xbc, EVT_SOUND_NAME
 	ld xde, (xsp + 6)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 6)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 10)
 	jr SoundLookup_DispatchAndReturn
 
@@ -105,7 +105,7 @@ SoundLookup_ByCategory:
 	extz xde
 	add xde, xbc
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00023
+	ld xbc, EVT_SOUND_SW_NO
 
 SoundLookup_DispatchAndReturn:
 	call ApPostEvent
@@ -351,7 +351,7 @@ GetSoundBankCount_DoLookup:
 MainGetRhythmName:
 	dec 4, xsp
 	pushw_erp 0xfa
-	cp xbc, 0x1e0005f
+	cp xbc, EVT_GET_RHYTHM_NAME
 	jrl nz, MainGetRhythmName_Return
 	ld xwa, 0x28000
 	call SndParam_LookupReadOnly
@@ -393,11 +393,11 @@ MainGetRhythmName:
 	ld xwa, (xsp + 2)
 	ld (xwa + 13), 0x0
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00021
+	ld xbc, EVT_RHYTHM_NAME
 	ld xde, (xsp + 2)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 2)
 	call ApPostEvent
 
@@ -464,15 +464,15 @@ MainGetPmemName_StoreResult:
 	ld (xwa + 4), xbc
 	ld (xbc + 17), 0x0
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00022
+	ld xbc, EVT_PMEM_NAME
 	ld xde, (xsp + 2)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 2)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 6)
 	call ApPostEvent
 	ld xhl, 0:i3
@@ -485,9 +485,9 @@ MainTrSwControl:
 	ld (xsp), xde
 	ld xwa, (xsp)
 	extz wa
-	cp xbc, 0x1e00093
+	cp xbc, EVT_TOGGLE_TRACK_SWITCH
 	jr z, MainTrSwControl_HandleChannel
-	cp xbc, 0x1e00092
+	cp xbc, EVT_REQUEST_TRACK_SWITCH
 	jr nz, MainTrSwControl_Return
 	call SeqVoice_DispatchEventToHandler
 	ld xwa, (xsp)

@@ -1082,7 +1082,7 @@ SqAftSetTtlFunc:
 	ret
 
 SqSngSelTtlFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, SqSngName_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1122,7 +1122,7 @@ SqSngName_ReturnZero:
 	ret
 
 SqSngNameTtlFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, SqTrAs_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1162,9 +1162,9 @@ SqTrAs_ReturnZero:
 	ret
 
 SqTrAsTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, SqTrAs_EventHandler
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CDlikeSwTtl_ReturnZero2
 	dec 2, xde
 	cp xde, 0x0
@@ -1180,7 +1180,7 @@ SqTrAsTtlFunc:
 ; 6 dispatch cases (XDE 0-5)
 SQTR_DISPATCH_TABLE_2:
 	ld xwa, 0x8b0004
-	ld xbc, 0x1e0008e
+	ld xbc, EVT_SET_SELECTED_CEL
 	ld xde, 0xffff0002
 	call ApPostEvent
 	push xde
@@ -1221,7 +1221,7 @@ SQTR_DISPATCH_TABLE_2_CASE2:
 	and wa, bc
 	jr z, SQTR_DISPATCH_TABLE_2_CASE5
 	ld xwa, 0x8b0004
-	ld xbc, 0x1e0008e
+	ld xbc, EVT_SET_SELECTED_CEL
 	ld xde, 0xffff0002
 	call ApPostEvent
 	jr CDlikeSwTtl_ReturnZero2
@@ -1256,7 +1256,7 @@ CDlikeSwTtl_ReturnZero2:
 	ret
 
 SqTrAsSureFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, SqTrAsPs_ReturnZero
 	cp xde, 0xf
 	jr z, SqTrAsPsTtl_CaseB
@@ -1309,9 +1309,9 @@ SqTrAsPs_ReturnZero:
 	ret
 
 SqTrAsPsTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, SqTrAsPsTtl_CaseD
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, SqTrAsPsTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1334,15 +1334,15 @@ SqTrAsPsTtl_Dispatch:
 	pop	xhl
 	pop	xde
 	ld	xwa, 0x8c0004
-	ld	xbc, 0x01e0004d
+	ld	xbc, EVT_SET_SELECTED
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	xwa, 0x8c0005
-	ld	xbc, 0x01e0004d
+	ld	xbc, EVT_SET_SELECTED
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x8c0006
-	ld	xbc, 0x01e0004d
+	ld	xbc, EVT_SET_SELECTED
 	ld	xde, 0:i3
 	call	ApPostEvent
 	jr SqTrAsPsTtl_ReturnZero
@@ -1376,7 +1376,7 @@ SqTrAsPsTtl_ReturnZero:
 	ret
 
 SqTrAsPsSureFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, SetWall_ReturnZero
 	cp xde, 0xb
 	jr z, SqTrAsPsTtl_CaseE
@@ -1439,9 +1439,9 @@ SqTrAsPsTtl_CaseF_Skip:
 	ret
 
 SqMdlyPlyTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, SqMdlyPly_InitPlay
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, SqMdlyPly_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1518,9 +1518,9 @@ SqMdlyPly_ReturnZero:
 	ret
 
 DkMdlyPlyTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DkMdlyPly_InitPlay
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DkMdlyPly_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1688,51 +1688,51 @@ DisplayMode_DispatchEvents:
 ; Event IDs encode mode/sub-function: 0x6f000a, 0x70000x, 0x73000c, etc.
 DisplayMode_BatchEventSend:
 	ld	xwa, 0x6f000a
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jrl	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x73000c
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jrl	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x700007
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x700008
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x700009
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x74000a
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x74000b
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x74000c
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x710007
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x710008
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	jr	DisplayMode_DispatchEvents_Join
 	ld	xwa, 0x750009
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0x75000a
-	ld	xbc, 0x01e0003b
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, 0:i3
 DisplayMode_DispatchEvents_Join:
 	call	ApPostEvent
@@ -1745,9 +1745,9 @@ DisplayMode_RefreshState:
 	jp FileIO_ReadChunk
 
 DpMdlyDocTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DpMdlyDoc_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlyDoc_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1838,9 +1838,9 @@ DpMdlyDoc_ReturnZero:
 	ret
 
 DpMdlyPdTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DpMdlyPd_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlyPd_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -1931,9 +1931,9 @@ DpMdlyPd_ReturnZero:
 	ret
 
 DpMdlySmfTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DpMdlySmf_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlySmf_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -2028,9 +2028,9 @@ DpMdlySmf_ReturnZero:
 	ret
 
 DpMdlySmfLyrTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, DpMdlySmfLyr_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpMdlySmfLyr_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -2076,7 +2076,7 @@ DpMdlySmfLyrTtlFunc_Skip2:
 	pop xde
 DpMdlySmfLyrTtlFunc_Join:
 	ld xwa, 7274534
-	ld	xbc, 0x01c7000a
+	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
 	jr	t, DpMdlySmfLyrTtlFunc_Join2
 	push xde
@@ -2091,7 +2091,7 @@ DpMdlySmfLyrTtlFunc_Join:
 	calr	SqTrAsPsTtl_CaseF
 	jr DpMdlySmfLyr_ReturnZero
 	ld xwa, 7274534
-	ld	xbc, 0x01c7000a
+	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
 DpMdlySmfLyrTtlFunc_Join2:
 	call	ApPostEvent
@@ -2139,7 +2139,7 @@ DpMdlySmfLyr_ReturnZero:
 	ret
 
 NameGetFuncCall:
-	sub xbc, 0x1e7000d
+	sub xbc, EVT_GET_CUR_SONG_NAME
 	cp xbc, 0x0
 	jrl lt, NameGetFunc_Entry
 	cp xbc, 0xd
@@ -2171,7 +2171,7 @@ NameGetFuncCall_Dispatch:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+24)
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70000
+	ld	xbc, EVT_CUR_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndex
@@ -2189,7 +2189,7 @@ NameGetFuncCall_Dispatch:
 	lda	xsp, (xsp+14)
 	ld	(7283:16), 0
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70001
+	ld	xbc, EVT_DISK_FILE_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	call	GetFirstPageBase
@@ -2209,7 +2209,7 @@ NameGetFuncCall_Dispatch:
 	ld	(xwa+16), 0
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70002
+	ld	xbc, EVT_SMF_FILE_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	pushw	20
@@ -2234,7 +2234,7 @@ NameGetFuncCall_Loop:
 NameGetFuncCall_Skip2:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70003
+	ld	xbc, EVT_SMF_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	call	FileIO_GetCurrentFileIndex_Alt
@@ -2248,7 +2248,7 @@ NameGetFuncCall_Skip2:
 	lda	xsp, (xsp+10)
 	ld	(7365:16), 0
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70006
+	ld	xbc, EVT_DOC_FILE_NO
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	pushw	12
@@ -2273,7 +2273,7 @@ NameGetFuncCall_Loop2:
 NameGetFuncCall_Skip3:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70005
+	ld	xbc, EVT_DOC_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndexAlt
@@ -2287,7 +2287,7 @@ NameGetFuncCall_Skip3:
 	lda	xsp, (xsp+10)
 	ld	(7369:16), 0
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70008
+	ld	xbc, EVT_PD_FILE_NO
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	call	GetCurrentFileIndexAlt
@@ -2311,7 +2311,7 @@ NameGetFuncCall_Loop3:
 NameGetFuncCall_Skip4:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c70007
+	ld	xbc, EVT_PD_SONG_NAME
 	ld	xde, 0:i3
 	jrl	NameGetFuncCall_Join2
 	call	GetFirstPageBase
@@ -2341,7 +2341,7 @@ NameGetFuncCall_Loop4:
 NameGetFuncCall_Skip5:
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c7000f
+	ld	xbc, EVT_SONG_WRITE
 	ld	xde, 0:i3
 	jr	NameGetFuncCall_Join2
 	call	GetFirstPageBase
@@ -2373,7 +2373,7 @@ NameGetFuncCall_Join:
 	ld	xwa, 0x021064
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c7000e
+	ld	xbc, EVT_COMPOSER_WRITE
 	ld	xde, 0:i3
 NameGetFuncCall_Join2:
 	call	ApPostEvent
@@ -2384,7 +2384,7 @@ NameGetFunc_Entry:
 	ret
 
 CDlikeSwTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, CDlikeSwTtl_ReturnZero
 	cp xde, 0x85
 	jr z, CDlikeSwTtl_ReturnZero
@@ -2406,7 +2406,7 @@ CDlikeSwTtl_ShowSongTitle:
 	bit 0, hl
 	ret nz
 	ld xwa, 0x720006
-	ld xbc, 0x1c70010
+	ld xbc, EVT_LYRICS_PLAY_START_INI
 	ld xde, 0:i3
 	call ApPostEvent
 	pushw 0xc
@@ -2484,7 +2484,7 @@ CDlikeSwTtl_SongBit1Check:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
 	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
+	ld xbc, EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
 	jr CDlikeSwTtl_JumpToFA9D58
 
@@ -2495,7 +2495,7 @@ CDlikeSwTtl_SongBit0Check:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
 	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
+	ld xbc, EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
 
 CDlikeSwTtl_JumpToFA9D58:
@@ -2616,7 +2616,7 @@ CDlikeSwTtl_SongNavDispatch:
 	jr z, CDlikeSwTtl_SongNavBit0
 	call Song_AbortPlayback
 	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
+	ld xbc, EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, iz
@@ -2626,19 +2626,19 @@ CDlikeSwTtl_SongNavDispatch:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e7000f
+	ld xbc, EVT_GET_SMF_FILE_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70010
+	ld xbc, EVT_GET_SMF_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70019
+	ld xbc, EVT_GET_LYRICS_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e7001a
+	ld xbc, EVT_GET_COMPOSER_NAME
 	ld xde, 0:i3
 	jr CDlikeSwTtl_SongNavFinishNames
 
@@ -2648,7 +2648,7 @@ CDlikeSwTtl_SongNavBit0:
 	jr z, CDlikeSwTtl_SongNavNoRedraw
 	call Song_AbortPlayback
 	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
+	ld xbc, EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, iz
@@ -2658,19 +2658,19 @@ CDlikeSwTtl_SongNavBit0:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e7000f
+	ld xbc, EVT_GET_SMF_FILE_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70010
+	ld xbc, EVT_GET_SMF_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70019
+	ld xbc, EVT_GET_LYRICS_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e7001a
+	ld xbc, EVT_GET_COMPOSER_NAME
 	ld xde, 0:i3
 
 CDlikeSwTtl_SongNavFinishNames:
@@ -2686,19 +2686,19 @@ CDlikeSwTtl_SongNavNoRedraw:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e7000f
+	ld xbc, EVT_GET_SMF_FILE_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70010
+	ld xbc, EVT_GET_SMF_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70019
+	ld xbc, EVT_GET_LYRICS_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e7001a
+	ld xbc, EVT_GET_COMPOSER_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 
@@ -2719,11 +2719,11 @@ CDlikeSwTtl_DocNavDispatch:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70013
+	ld xbc, EVT_GET_DOC_FILE_NO
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70012
+	ld xbc, EVT_GET_DOC_SONG_NAME
 	ld xde, 0:i3
 	jr CDlikeSwTtl_DocNavFinishNames
 
@@ -2738,11 +2738,11 @@ CDlikeSwTtl_DocNavBit0:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70013
+	ld xbc, EVT_GET_DOC_FILE_NO
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70012
+	ld xbc, EVT_GET_DOC_SONG_NAME
 	ld xde, 0:i3
 
 CDlikeSwTtl_DocNavFinishNames:
@@ -2757,11 +2757,11 @@ CDlikeSwTtl_DocNavNoRedraw:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70013
+	ld xbc, EVT_GET_DOC_FILE_NO
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70012
+	ld xbc, EVT_GET_DOC_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 
@@ -2782,11 +2782,11 @@ CDlikeSwTtl_PdNavDispatch:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70015
+	ld xbc, EVT_GET_PD_FILE_NO
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70014
+	ld xbc, EVT_GET_PD_SONG_NAME
 	ld xde, 0:i3
 	jr CDlikeSwTtl_PdNavFinishNames
 
@@ -2801,11 +2801,11 @@ CDlikeSwTtl_PdNavBit0:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70015
+	ld xbc, EVT_GET_PD_FILE_NO
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70014
+	ld xbc, EVT_GET_PD_SONG_NAME
 	ld xde, 0:i3
 
 CDlikeSwTtl_PdNavFinishNames:
@@ -2820,11 +2820,11 @@ CDlikeSwTtl_PdNavNoRedraw:
 	calr DisplayMode_RefreshState
 	calr DisplayMode_DispatchEvents
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70015
+	ld xbc, EVT_GET_PD_FILE_NO
 	ld xde, 0:i3
 	calr NameGetFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e70014
+	ld xbc, EVT_GET_PD_SONG_NAME
 	ld xde, 0:i3
 	calr NameGetFuncCall
 
@@ -2833,13 +2833,13 @@ CDlikeSwTtl_PdNavReturn:
 	ret
 
 DpDocTtlFunc:
-	cp xbc, 0x1c00009
+	cp xbc, EVT_SW_OFF
 	jrl z, DpDoc_CaseI
-	cp xbc, EVT_ACTIVATE
+	cp xbc, EVT_SW_ON
 	jrl z, DpDoc_CaseG
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DpDoc_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpDocTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -2960,13 +2960,13 @@ DpDocTtl_ReturnZero:
 	ret
 
 DpPdTtlFunc:
-	cp xbc, 0x1c00009
+	cp xbc, EVT_SW_OFF
 	jrl z, DpPd_CaseI
-	cp xbc, EVT_ACTIVATE
+	cp xbc, EVT_SW_ON
 	jrl z, DpPd_CaseG
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DpPd_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpPdTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -3087,13 +3087,13 @@ DpPdTtl_ReturnZero:
 	ret
 
 DpSmfTtlFunc:
-	cp xbc, 0x1c00009
+	cp xbc, EVT_SW_OFF
 	jrl z, DpSmf_CaseI
-	cp xbc, EVT_ACTIVATE
+	cp xbc, EVT_SW_ON
 	jrl z, DpSmf_CaseG
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, DpSmf_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DpSmfTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -3123,7 +3123,7 @@ DpSmfTtl_Dispatch:
 	calr	SeqRecPlay_DisableBoth
 	call	Song_AbortPlayback
 	ld	xwa, 0x6f0026
-	ld	xbc, 0x01c70009
+	ld	xbc, EVT_LYRICS_ALL_CLEAR
 	ld	xde, 0:i3
 	call	ApPostEvent
 DpSmfTtlFunc_Skip:
@@ -3223,13 +3223,13 @@ DpSmfTtl_ReturnZero:
 	ret
 
 DpSmfLyrTtlFunc:
-	cp xbc, 0x1c00009
+	cp xbc, EVT_SW_OFF
 	jrl z, DpSmfLyr_CaseC
-	cp xbc, EVT_ACTIVATE
+	cp xbc, EVT_SW_ON
 	jrl z, DpSmfLyr_CaseB
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DpSmfLyr_CaseA
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, SeqStep_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -3244,13 +3244,13 @@ DpSmfLyrTtlFunc:
 ; DpSmfLyrTtlFunc title dispatch
 DpSmfLyrTtl_Dispatch:
 	ld	xwa, 0x6f0026
-	ld	xbc, 0x01c7000a
+	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
 	jr	DpSmfLyrTtlFunc_Join
 	calr	SqTrAsPsTtl_CaseF
 	jrl	SeqStep_ReturnZero
 	ld	xwa, 0x6f0026
-	ld	xbc, 0x01c7000a
+	ld	xbc, EVT_LYRICS_ALL_DRAW
 	ld	xde, 0:i3
 DpSmfLyrTtlFunc_Join:
 	call	ApPostEvent
@@ -3339,7 +3339,7 @@ SeqStep_ReturnZero:
 	ret
 
 SeqStepModeFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, SeqStepMode_ReturnZero
 	cp xde, 0x1
 	jr z, DpSmfLyr_CaseD
@@ -3373,7 +3373,7 @@ SeqStepMode_ReturnZero:
 	ret
 
 SqTrSelTtlFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, SqTrSelTtl_ReturnZero
 	dec 2, xde
 	cp xde, 0x0

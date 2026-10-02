@@ -14,15 +14,15 @@ AcGridBoxProc:
 	ld xiz, xbc
 	ld (xsp + 16), xwa
 	ld xwa, xiz
-	cp xiz, 0x1e0008d
+	cp xiz, EVT_REQUEST_GRID_DRAW
 	jrl z, AcGridBox_CellSelect
-	cp xiz, 0x1e0008b
+	cp xiz, EVT_GET_FIXED_ROW_STR
 	jrl z, AcGridBox_GetRowText
-	cp xiz, 0x1e0008a
+	cp xiz, EVT_GET_FIXED_COL_STR
 	jrl z, AcGridBox_GetColText
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jr z, AcGridBox_Init
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, AcGridBox_Default
 	cp xwa, 0x6
@@ -51,7 +51,7 @@ AcGridBox_Init:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -64,7 +64,7 @@ AcGridBox_Init:
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	calr SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -75,7 +75,7 @@ AcGridBox_Init:
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	calr SetDialDown
 	ld wa, 1:i3
 	jrl AcGridBox_EnableDials
@@ -85,31 +85,31 @@ AcGridBoxProc_Evt1C00017:
 	ld xde, (xsp + 12)
 	calr PsGridBoxProc
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcGridBox_ScrollUp_Alt
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00019
+	ld xbc, EVT_INDEXSW_UP_AIC
 	ld xde, (xsp + 12)
 	calr SetAutoInc
 	jrl AcGridBox_ReturnZero
 
 AcGridBox_ScrollUp_Alt:
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -121,15 +121,15 @@ AcGridBox_ScrollUp_Alt:
 	ld xde, (xsp + 12)
 	call ApFuncCall
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00019
+	ld xbc, EVT_INDEXSW_UP_AIC
 	ld xde, (xsp + 12)
 	calr SetAutoInc
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	calr SetDialUp
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	calr SetDialDown
 	ld wa, 1:i3
@@ -140,31 +140,31 @@ AcGridBoxProc_Evt1C00018:
 	ld xde, (xsp + 12)
 	calr PsGridBoxProc
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcGridBox_ScrollDown_Alt
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0001a
+	ld xbc, EVT_INDEXSW_DOWN_AIC
 	ld xde, (xsp + 12)
 	calr SetAutoInc
 	jrl AcGridBox_ReturnZero
 
 AcGridBox_ScrollDown_Alt:
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -176,15 +176,15 @@ AcGridBox_ScrollDown_Alt:
 	ld xde, (xsp + 12)
 	call ApFuncCall
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0001a
+	ld xbc, EVT_INDEXSW_DOWN_AIC
 	ld xde, (xsp + 12)
 	calr SetAutoInc
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	calr SetDialUp
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	calr SetDialDown
 	ld wa, 1:i3
@@ -238,10 +238,10 @@ AcGridBox_Return:
 GridCheck:
 	lda xsp, (xsp - 18)
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jr z, GridCheck_CellSelect
 	ld xhl, 0:i3
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jr lt, GridCheck_Return
 	cp xwa, 0x6
@@ -303,7 +303,7 @@ GridCheck_CellSelect:
 
 	lda xde, (xsp + 10)
 
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 
 	call	SendEvent
 
@@ -321,27 +321,27 @@ PsEditBoxProc:
 	stl_dri XDE, 0xfd, 0x18, 0x02
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x1c, 0x02
-	cp xiz, 0x1e0003c
+	cp xiz, EVT_CHECK_SELECTED
 	jrl z, PsEditBox_CanScroll
-	cp xiz, 0x1c00018
+	cp xiz, EVT_INDEXSW_DOWN
 	jrl z, PsEditBox_ScrollDown
-	cp xiz, 0x1c00017
+	cp xiz, EVT_INDEXSW_UP
 	jrl z, PsEditBox_ScrollUp
-	cp xiz, 0x1c0001b
+	cp xiz, EVT_INDEX_SELECT
 	jrl z, PsEditBox_Release
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jrl z, PsEditBox_OK
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jrl z, PsEditBox_GetText
-	cp xiz, EVT_INIT_HOOK
+	cp xiz, EVT_PARA_DRAW
 	jrl z, PsEditBox_Confirm
-	cp xiz, 0x1c0000e
+	cp xiz, EVT_SELE_DRAW
 	jrl z, PsEditBox_Select
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jrl z, PsEditBox_Paint
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jrl z, PsEditBox_Init
-	cp xiz, 0x1e0004d
+	cp xiz, EVT_SET_SELECTED
 	jrl nz, PsEditBox_Default
 	ld XWA, (xsp + 0x021c)
 	call GetViewInstance
@@ -356,11 +356,11 @@ PsEditBoxProc:
 	ld XWA, (xsp + 0x0218)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x021c)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 
@@ -373,12 +373,12 @@ PsEditBox_SetIndex_CheckDial:
 	ld de, (xiz + 26)
 	exts xde
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	calr SetDialUp
 	ld de, (xiz + 26)
 	exts xde
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	calr SetDialDown
 	ld wa, 1:i3
 	jr PsEditBox_Init_EnableDials
@@ -399,12 +399,12 @@ PsEditBox_Init:
 	ld de, (xiz + 26)
 	exts xde
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	calr SetDialUp
 	ld de, (xiz + 26)
 	exts xde
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	calr SetDialDown
 	ld wa, 1:i3
 
@@ -472,7 +472,7 @@ PsEditBox_Paint:
 	ld	xde, xhl
 	call	DrawStringAlignment
 	ld	xwa, (xsp+540)
-	ld	xbc, 29360142
+	ld	xbc, EVT_SELE_DRAW
 	ld	xde, 0:i3
 	jrl	PsEditBox_Dispatch
 PsEditBox_Select:
@@ -484,7 +484,7 @@ PsEditBox_Select:
 	ld de, (xwa)
 	exts xde
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1e0004e
+	ld xbc, EVT_DRAW_SELECTED
 	jrl PsEditBox_Dispatch
 
 PsEditBox_Confirm:
@@ -524,7 +524,7 @@ PsEditBox_Confirm:
 	or	xwa, xwa
 	jr	nz, PsEditBox_Confirm_CopyText
 	ld	xwa, (xsp+540)
-	ld	xbc, 0x1e0003a
+	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	cp	(xsp+12), 0
 	jr	nz, PsEditBox_Confirm_Render
@@ -578,10 +578,10 @@ PsEditBox_OK:
 	jr z, PsEditBox_OK_Forward
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001b
+	ld xbc, EVT_INDEX_SELECT
 	call SendEvent
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1e0004d
+	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
 	jr PsEditBox_Dispatch
 
@@ -606,7 +606,7 @@ PsEditBox_Release:
 	cpw (xwa), 0x0
 	jrl z, PsEditBox_ReturnZero
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1e0004d
+	ld xbc, EVT_SET_SELECTED
 	ld xde, 0:i3
 
 PsEditBox_Dispatch:
@@ -619,13 +619,13 @@ PsEditBox_ScrollUp:
 	ld XDE, (xsp + 0x0218)
 	calr VwBoxProc
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld XDE, (xsp + 0x0218)
 	call SendEvent
 	or xhl, xhl
 	jrl z, PsEditBox_ReturnZero
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1c00019
+	ld xbc, EVT_INDEXSW_UP_AIC
 	ld XDE, (xsp + 0x0218)
 	jr PsEditBox_SetAutoInc
 
@@ -635,13 +635,13 @@ PsEditBox_ScrollDown:
 	ld XDE, (xsp + 0x0218)
 	calr VwBoxProc
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld XDE, (xsp + 0x0218)
 	call SendEvent
 	or xhl, xhl
 	jrl z, PsEditBox_ReturnZero
 	ld XWA, (xsp + 0x021c)
-	ld xbc, 0x1c0001a
+	ld xbc, EVT_INDEXSW_DOWN_AIC
 	ld XDE, (xsp + 0x0218)
 
 PsEditBox_SetAutoInc:
@@ -681,7 +681,7 @@ PsNumEditBoxProc:
 	ld (xsp + 38), xbc
 	ld (xsp + 42), xwa
 	ld xwa, (xsp + 38)
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jr z, PsNumEditBox_Confirm
 	ld xwa, (xsp + 42)
 	ld xbc, (xsp + 38)
@@ -740,7 +740,7 @@ PsTblEditBoxProc:
 	stl_dri XBC, 0xfd, 0x08, 0x01
 	ld xiz, xwa
 	ld XWA, (xsp + 0x0108)
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jr z, PsTblEditBox_Confirm
 	ld xwa, xiz
 	ld XBC, (xsp + 0x0108)
@@ -755,7 +755,7 @@ PsTblEditBox_Confirm:
 	ld XWA, (xsp + 0x0104)
 	ld (xde), xwa
 	ld xwa, (xhl + 50)
-	ld xbc, 0x1e0004c
+	ld xbc, EVT_GET_TABLE_STRING
 	call ApFuncCall
 	lda xde, (xsp + 4)
 	ld xwa, xiz
@@ -769,7 +769,7 @@ PsTblEditBox_Return:
 	ret
 
 PasTableCheck:
-	cp	xbc, 31457356
+	cp	xbc, EVT_GET_TABLE_STRING
 	jr	nz, PasTableCheck_Return
 	ld	xwa, (xde)
 	sll	xwa, 2
@@ -789,23 +789,23 @@ AcOnOffBoxProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcOnOff_ScrollDown
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcOnOff_ScrollUp
-	cp xbc, 0x1e0006b
+	cp xbc, EVT_GET_PARAM
 	jr z, AcOnOff_GetValue
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jr z, AcOnOff_SetValue
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, AcOnOff_GetText
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jrl nz, AcOnOff_Default
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	calr PsEditBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcOnOff_Dispatch
 
@@ -838,7 +838,7 @@ AcOnOff_SetValue:
 	ld xwa, (xsp + 4)
 	ld (xbc), wa
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jr AcOnOff_Dispatch
 
@@ -855,13 +855,13 @@ AcOnOff_ScrollUp:
 	ld xde, (xsp + 4)
 	calr PsEditBoxProc
 	ld xwa, xiz
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcOnOff_ReturnZero
 	ld xwa, xiz
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	jr AcOnOff_Dispatch
 
@@ -870,13 +870,13 @@ AcOnOff_ScrollDown:
 	ld xde, (xsp + 4)
 	calr PsEditBoxProc
 	ld xwa, xiz
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcOnOff_ReturnZero
 	ld xwa, xiz
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 
 AcOnOff_Dispatch:
@@ -901,29 +901,29 @@ AcNumEditBoxProc:
 	push xiz
 	ld (xsp + 28), xde
 	ld (xsp + 32), xwa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcNumEdit_ScrollDown
-	cp xbc, 0x1c0001a
+	cp xbc, EVT_INDEXSW_DOWN_AIC
 	jrl z, AcNumEdit_AutoIncDown
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcNumEdit_ScrollUp
-	cp xbc, 0x1c00019
+	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcNumEdit_AutoIncUp
-	cp xbc, 0x1e0006b
+	cp xbc, EVT_GET_PARAM
 	jrl z, AcNumEdit_GetValue
-	cp xbc, 0x1e0003d
+	cp xbc, EVT_CALC_PARAM
 	jrl z, AcNumEdit_AddDelta
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jrl z, AcNumEdit_SetValue
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, AcNumEdit_GetText
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jrl nz, AcNumEdit_Default
 	ld xwa, (xsp + 32)
 	ld xde, (xsp + 28)
 	calr PsEditBoxProc
 	ld xwa, (xsp + 32)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcNumEdit_Dispatch
 AcNumEdit_GetText:
@@ -970,7 +970,7 @@ AcNumEdit_SetValue:
 	ld xwa, (xsp + 28)
 	ld (xbc), wa
 	ld xwa, (xsp + 32)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcNumEdit_Dispatch
 
@@ -992,7 +992,7 @@ AcNumEdit_AddDelta:
 	add de, wa
 	ld (xbc), de
 	ld xwa, (xsp + 32)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcNumEdit_Dispatch
 
@@ -1007,7 +1007,7 @@ AcNumEdit_AddDelta_Negative:
 	add de, wa
 	ld (xbc), de
 	ld xwa, (xsp + 32)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcNumEdit_Dispatch
 
@@ -1027,7 +1027,7 @@ AcNumEdit_AutoIncUp:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 28)
 	call SendEvent
 	or xhl, xhl
@@ -1035,7 +1035,7 @@ AcNumEdit_AutoIncUp:
 	ld de, (xiz + 60)
 	exts xde
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jrl AcNumEdit_Dispatch
 
 AcNumEdit_ScrollUp:
@@ -1046,7 +1046,7 @@ AcNumEdit_ScrollUp:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 28)
 	call SendEvent
 	or xhl, xhl
@@ -1054,7 +1054,7 @@ AcNumEdit_ScrollUp:
 	ld de, (xiz + 62)
 	exts xde
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jr AcNumEdit_Dispatch
 
 AcNumEdit_AutoIncDown:
@@ -1065,7 +1065,7 @@ AcNumEdit_AutoIncDown:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 28)
 	call SendEvent
 	or xhl, xhl
@@ -1074,7 +1074,7 @@ AcNumEdit_AutoIncDown:
 	neg de
 	exts xde
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jr AcNumEdit_Dispatch
 
 AcNumEdit_ScrollDown:
@@ -1085,7 +1085,7 @@ AcNumEdit_ScrollDown:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 28)
 	call SendEvent
 	or xhl, xhl
@@ -1094,7 +1094,7 @@ AcNumEdit_ScrollDown:
 	neg de
 	exts xde
 	ld xwa, (xsp + 32)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 
 AcNumEdit_Dispatch:
 	call SendEvent
@@ -1118,38 +1118,38 @@ AcLswEditBoxProc:
 	push xiz
 	ld (xsp + 22), xde
 	ld (xsp + 26), xwa
-	cp xbc, 0x1c00031
+	cp xbc, EVT_INDEXSW_BOTH
 	jrl z, AcLswEdit_ResetBtn
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcLswEdit_ScrollDown
-	cp xbc, 0x1c0001a
+	cp xbc, EVT_INDEXSW_DOWN_AIC
 	jrl z, AcLswEdit_AutoIncDown
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcLswEdit_ScrollUp
-	cp xbc, 0x1c00019
+	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcLswEdit_AutoIncUp
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jrl z, AcLswEdit_Match
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jrl z, AcLswEdit_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl z, AcLswEdit_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jrl z, AcLswEdit_Close
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jrl z, AcLswEdit_Init
-	cp xbc, 0x1e0003d
+	cp xbc, EVT_CALC_PARAM
 	jrl z, AcLswEdit_AddDelta
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jr z, AcLswEdit_SetValue
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, AcLswEdit_Default
 	ld xwa, (xsp + 26)
 	call GetViewInstance
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00040
+	ld xbc, EVT_GET_LSW_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xde, (xsp + 10)
@@ -1161,7 +1161,7 @@ AcLswEditBoxProc:
 	ld xwa, (xsp + 22)
 	ld (xde + 8), xwa
 	ld xwa, (xbc + 50)
-	ld xbc, 0x1e00042
+	ld xbc, EVT_GET_LSW_STRING
 	call ApFuncCall
 	jrl AcLswEdit_ReturnZero
 
@@ -1170,14 +1170,14 @@ AcLswEdit_SetValue:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00040
+	ld xbc, EVT_GET_LSW_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 22)
 	ld (xsp + 8), wa
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00041
+	ld xbc, EVT_GET_LSW_OUTPUT
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 4)
@@ -1191,14 +1191,14 @@ AcLswEdit_AddDelta:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00040
+	ld xbc, EVT_GET_LSW_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 22)
 	ld (xsp + 8), wa
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00041
+	ld xbc, EVT_GET_LSW_OUTPUT
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 4)
@@ -1227,7 +1227,7 @@ AcLswEdit_ShowHide:
 	ld xwa, (xsp + 26)
 	call GetViewInstance
 	ld xwa, (xhl + 50)
-	ld xbc, 0x1e00040
+	ld xbc, EVT_GET_LSW_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), xhl
@@ -1244,7 +1244,7 @@ AcLswEdit_Match:
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00040
+	ld xbc, EVT_GET_LSW_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 22)
@@ -1259,10 +1259,10 @@ AcLswEdit_Match:
 	ld de, (xwa)
 	exts xde
 	ld xwa, (xhl + 50)
-	ld xbc, 0x1e00083
+	ld xbc, EVT_LSW_DATA_REQ
 	call ApFuncCall
 	ld xwa, (xsp + 26)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcLswEdit_Dispatch
 
@@ -1274,19 +1274,19 @@ AcLswEdit_AutoIncUp:
 	call GetViewInstance
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 22)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcLswEdit_ReturnZero
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e0003e
+	ld xbc, EVT_GET_LARGE_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jrl AcLswEdit_Dispatch
 
 AcLswEdit_ScrollUp:
@@ -1297,19 +1297,19 @@ AcLswEdit_ScrollUp:
 	call GetViewInstance
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 22)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcLswEdit_ReturnZero
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e0003f
+	ld xbc, EVT_GET_SMALL_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jrl AcLswEdit_Dispatch
 
 AcLswEdit_AutoIncDown:
@@ -1320,21 +1320,21 @@ AcLswEdit_AutoIncDown:
 	call GetViewInstance
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 22)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcLswEdit_ReturnZero
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e0003e
+	ld xbc, EVT_GET_LARGE_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, xhl
 	jrl AcLswEdit_Dispatch
 
@@ -1346,21 +1346,21 @@ AcLswEdit_ScrollDown:
 	call GetViewInstance
 	ld (xsp + 6), xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 22)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcLswEdit_ReturnZero
 	ld xwa, (xsp + 6)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e0003f
+	ld xbc, EVT_GET_SMALL_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, xhl
 	jr AcLswEdit_Dispatch
 
@@ -1369,7 +1369,7 @@ AcLswEdit_ResetBtn:
 	ld xde, (xsp + 22)
 	calr PsEditBoxProc
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 22)
 	call SendEvent
 	or xhl, xhl
@@ -1378,18 +1378,18 @@ AcLswEdit_ResetBtn:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e000b8
+	ld xbc, EVT_CHECK_INIT_DATA
 	ld xde, 0:i3
 	call ApFuncCall
 	or xhl, xhl
 	jr z, AcLswEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e000b9
+	ld xbc, EVT_GET_INIT_DATA
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 
 AcLswEdit_Dispatch:
 	call SendEvent
@@ -1411,17 +1411,17 @@ AcLswEdit_Return:
 LswEditCheck:
 	push	xiz
 	ld	xiz, xwa
-	cp	xbc, 0x1e00083
+	cp	xbc, EVT_LSW_DATA_REQ
 	jr	z, LswEditCheck_NotHandled
-	cp	xbc, 0x1e0003f
+	cp	xbc, EVT_GET_SMALL_STEP
 	jr	z, LswEditCheck_StepOne
-	cp	xbc, 0x1e0003e
+	cp	xbc, EVT_GET_LARGE_STEP
 	jr	z, LswEditCheck_StepFour
-	cp	xbc, 0x1e00041
+	cp	xbc, EVT_GET_LSW_OUTPUT
 	jr	z, LswEditCheck_StepOne
-	cp	xbc, 0x1e00040
+	cp	xbc, EVT_GET_LSW_ADDRESS
 	jr	z, LswEditCheck_GetAddr
-	cp	xbc, 0x1e00042
+	cp	xbc, EVT_GET_LSW_STRING
 	jr	nz, LswEditCheck_NotHandled
 	pushw	(xde+4)
 	pushw	234
@@ -1469,12 +1469,12 @@ MainLswPut:
 	ld	(xiz+6), wa
 	ld	xwa, 0:i3
 	ld	(xiz+8), xwa
-	ld	xwa, 20971522
-	ld	xbc, 31457367
+	ld	xwa, NAKA_MAINFUNC_MainPmanControl
+	ld	xbc, EVT_LSW_PUT
 	ld	xde, xiz
 	call	MainFuncCall
-	ld	xwa, 20971523
-	ld	xbc, 31457315
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	MainFuncCall
 	ld	hl, 0:i3
@@ -1505,12 +1505,12 @@ MainLswPartPut:
 	ld	(xwa+6), bc
 	ld	xbc, 0:i3
 	ld	(xwa+8), xbc
-	ld	xwa, 20971522
-	ld	xbc, 31457370
+	ld	xwa, NAKA_MAINFUNC_MainPmanControl
+	ld	xbc, EVT_LSW_PART_PUT
 	ld	xde, (xsp+2)
 	call	MainFuncCall
-	ld	xwa, 20971523
-	ld	xbc, 31457315
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+2)
 	call	MainFuncCall
 	ld	hl, 0:i3
@@ -1535,12 +1535,12 @@ MainLswAdd:
 	ld	(xiz+6), wa
 	ld	xwa, 0:i3
 	ld	(xiz+8), xwa
-	ld	xwa, 20971522
-	ld	xbc, 31457368
+	ld	xwa, NAKA_MAINFUNC_MainPmanControl
+	ld	xbc, EVT_LSW_ADD
 	ld	xde, xiz
 	call	MainFuncCall
-	ld	xwa, 20971523
-	ld	xbc, 31457315
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	MainFuncCall
 	ld	hl, 0:i3
@@ -1571,12 +1571,12 @@ MainLswPartAdd:
 	ld	(xwa+6), bc
 	ld	xbc, 0:i3
 	ld	(xwa+8), xbc
-	ld	xwa, 20971522
-	ld	xbc, 31457371
+	ld	xwa, NAKA_MAINFUNC_MainPmanControl
+	ld	xbc, EVT_LSW_PART_ADD
 	ld	xde, (xsp+2)
 	call	MainFuncCall
-	ld	xwa, 20971523
-	ld	xbc, 31457315
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+2)
 	call	MainFuncCall
 	ld	hl, 0:i3
@@ -1610,17 +1610,17 @@ MainLswGet:
 
 	ld (xiz + 8), xwa
 
-	ld xwa, 0x1400002
+	ld xwa, NAKA_MAINFUNC_MainPmanControl
 
-	ld xbc, 0x1e00059
+	ld xbc, EVT_LSW_GET
 
 	ld xde, xiz
 
 	call	FuncCall
 
-	ld xwa, 0x1400003
+	ld xwa, NAKA_MAINFUNC_MainAutoFree
 
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 
 	ld xde, xiz
 
@@ -1677,17 +1677,17 @@ MainLswPartGet:
 
 	ld (xwa + 8), xbc
 
-	ld xwa, 0x1400002
+	ld xwa, NAKA_MAINFUNC_MainPmanControl
 
-	ld xbc, 0x1e0005c
+	ld xbc, EVT_LSW_PART_GET
 
 	ld xde, (xsp + 2)
 
 	call	FuncCall
 
-	ld xwa, 0x1400003
+	ld xwa, NAKA_MAINFUNC_MainAutoFree
 
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 
 	ld xde, (xsp + 2)
 
@@ -1718,31 +1718,31 @@ AcRamEditBoxProc:
 	push xiz
 	ld (xsp + 30), xde
 	ld (xsp + 34), xwa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcRamEdit_ScrollDown
-	cp xbc, 0x1c0001a
+	cp xbc, EVT_INDEXSW_DOWN_AIC
 	jrl z, AcRamEdit_AutoIncDown
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcRamEdit_ScrollUp
-	cp xbc, 0x1c00019
+	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcRamEdit_AutoIncUp
-	cp xbc, 0x1c0001d
+	cp xbc, EVT_RAM_DATA
 	jrl z, AcRamEdit_Assign
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jrl z, AcRamEdit_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl z, AcRamEdit_ShowHide
-	cp xbc, 0x1e0003d
+	cp xbc, EVT_CALC_PARAM
 	jrl z, AcRamEdit_AddDelta
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jr z, AcRamEdit_SetValue
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, AcRamEdit_Default
 	ld xwa, (xsp + 34)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -1753,7 +1753,7 @@ AcRamEditBoxProc:
 	ld xwa, (xsp + 30)
 	ld (xde + 18), xwa
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00047
+	ld xbc, EVT_GET_RAM_STRING
 	call ApFuncCall
 	jrl AcRamEdit_ReturnZero
 
@@ -1763,13 +1763,13 @@ AcRamEdit_SetValue:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00046
+	ld xbc, EVT_GET_RAM_SIZE
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 8)
@@ -1778,13 +1778,13 @@ AcRamEdit_SetValue:
 	ld (xwa + 14), xbc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00043
+	ld xbc, EVT_GET_MAX
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 14), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00044
+	ld xbc, EVT_GET_MIN
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 8)
@@ -1798,13 +1798,13 @@ AcRamEdit_AddDelta:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00046
+	ld xbc, EVT_GET_RAM_SIZE
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 8)
@@ -1813,13 +1813,13 @@ AcRamEdit_AddDelta:
 	ld (xwa + 14), xbc
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00043
+	ld xbc, EVT_GET_MAX
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 14), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00044
+	ld xbc, EVT_GET_MIN
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 8)
@@ -1835,12 +1835,12 @@ AcRamEdit_ShowHide:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00046
+	ld xbc, EVT_GET_RAM_SIZE
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 4)
@@ -1856,7 +1856,7 @@ AcRamEdit_Assign:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xix, (xsp + 30)
@@ -1870,10 +1870,10 @@ AcRamEdit_Assign:
 	ld xwa, (xde)
 	ld xde, (xwa)
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00082
+	ld xbc, EVT_RAM_DATA_REQ
 	call ApFuncCall
 	ld xwa, (xsp + 34)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcRamEdit_Dispatch
 
@@ -1885,18 +1885,18 @@ AcRamEdit_AutoIncUp:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 30)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcRamEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003e
+	ld xbc, EVT_GET_LARGE_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jrl AcRamEdit_Dispatch
 
 AcRamEdit_ScrollUp:
@@ -1907,18 +1907,18 @@ AcRamEdit_ScrollUp:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 30)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcRamEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003f
+	ld xbc, EVT_GET_SMALL_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jrl AcRamEdit_Dispatch
 
 AcRamEdit_AutoIncDown:
@@ -1929,20 +1929,20 @@ AcRamEdit_AutoIncDown:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 30)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcRamEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003e
+	ld xbc, EVT_GET_LARGE_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, xhl
 	jr AcRamEdit_Dispatch
 
@@ -1954,20 +1954,20 @@ AcRamEdit_ScrollDown:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 30)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcRamEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003f
+	ld xbc, EVT_GET_SMALL_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
 	ld xwa, (xsp + 34)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, xhl
 
 AcRamEdit_Dispatch:
@@ -1991,9 +1991,9 @@ RamEditCheck:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1e00082
+	cp xbc, EVT_RAM_DATA_REQ
 	jr z, RamEditCheck_NotHandled
-	sub xwa, 0x1e0003e
+	sub xwa, EVT_GET_LARGE_STEP
 	cp xwa, 0x0
 	jr lt, RamEditCheck_NotHandled
 	cp xwa, 0x9
@@ -2073,17 +2073,17 @@ MainRamPut:
 
 	ldirw
 
-	ld xwa, 0x1400008
+	ld xwa, NAKA_MAINFUNC_MainRamControl
 
-	ld xbc, 0x1e00069
+	ld xbc, EVT_RAM_PUT
 
 	ld xde, (xsp + 4)
 
 	call	MainFuncCall
 
-	ld xwa, 0x1400003
+	ld xwa, NAKA_MAINFUNC_MainAutoFree
 
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 
 	ld xde, (xsp + 4)
 
@@ -2122,17 +2122,17 @@ MainRamAdd:
 
 	ldirw
 
-	ld xwa, 0x1400008
+	ld xwa, NAKA_MAINFUNC_MainRamControl
 
-	ld xbc, 0x1e0006a
+	ld xbc, EVT_RAM_ADD
 
 	ld xde, (xsp + 4)
 
 	call	MainFuncCall
 
-	ld xwa, 0x1400003
+	ld xwa, NAKA_MAINFUNC_MainAutoFree
 
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 
 	ld xde, (xsp + 4)
 
@@ -2164,12 +2164,12 @@ MainRamGet:
 	ld	(xiz+10), xwa
 	ld	(xiz+14), xwa
 	ld	(xiz+18), xwa
-	ld	xwa, 20971528
-	ld	xbc, 31457384
+	ld	xwa, NAKA_MAINFUNC_MainRamControl
+	ld	xbc, EVT_RAM_GET
 	ld	xde, xiz
 	call	MainFuncCall
-	ld	xwa, 20971523
-	ld	xbc, 31457315
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	MainFuncCall
 	pop	xiz
@@ -2180,27 +2180,27 @@ AcBitEditBoxProc:
 	push xiz
 	ld (xsp + 22), xde
 	ld (xsp + 26), xwa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcBitEdit_ScrollDown
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcBitEdit_ScrollUp
-	cp xbc, 0x1c00024
+	cp xbc, EVT_BIT_DATA
 	jrl z, AcBitEdit_Assign
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jrl z, AcBitEdit_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl z, AcBitEdit_ShowHide
-	cp xbc, 0x1e0003d
+	cp xbc, EVT_CALC_PARAM
 	jr z, AcBitEdit_SetValue
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jr z, AcBitEdit_SetValue
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, AcBitEdit_Default
 	ld xwa, (xsp + 26)
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00063
+	ld xbc, EVT_GET_BIT_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xde, (xsp + 8)
@@ -2211,7 +2211,7 @@ AcBitEditBoxProc:
 	ld xwa, (xsp + 22)
 	ld (xde + 10), xwa
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00062
+	ld xbc, EVT_GET_BIT_STRING
 	call ApFuncCall
 	jrl AcBitEdit_ReturnZero
 
@@ -2220,12 +2220,12 @@ AcBitEdit_SetValue:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00063
+	ld xbc, EVT_GET_BIT_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 8), xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00064
+	ld xbc, EVT_GET_BIT
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 8)
@@ -2243,12 +2243,12 @@ AcBitEdit_ShowHide:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00063
+	ld xbc, EVT_GET_BIT_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 4), xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00064
+	ld xbc, EVT_GET_BIT
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xbc, xhl
@@ -2265,7 +2265,7 @@ AcBitEdit_Assign:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00063
+	ld xbc, EVT_GET_BIT_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 22)
@@ -2274,7 +2274,7 @@ AcBitEdit_Assign:
 	jrl nz, AcBitEdit_ReturnZero
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00064
+	ld xbc, EVT_GET_BIT
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, (xsp + 22)
@@ -2285,7 +2285,7 @@ AcBitEdit_Assign:
 	ld wa, (xde + 8)
 	ld (xbc), wa
 	ld xwa, (xsp + 26)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcBitEdit_Dispatch
 
@@ -2297,25 +2297,25 @@ AcBitEdit_ScrollUp:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 22)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcBitEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00065
+	ld xbc, EVT_GET_DIRECTION
 	ld xde, 0:i3
 	call ApFuncCall
 	or xhl, xhl
 	jr z, AcBitEdit_ScrollUp_SetOne
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 	jr AcBitEdit_Dispatch
 
 AcBitEdit_ScrollUp_SetOne:
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	jr AcBitEdit_Dispatch
 
@@ -2327,25 +2327,25 @@ AcBitEdit_ScrollDown:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 22)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcBitEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00065
+	ld xbc, EVT_GET_DIRECTION
 	ld xde, 0:i3
 	call ApFuncCall
 	or xhl, xhl
 	jr z, AcBitEdit_ScrollDown_SetZero
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	jr AcBitEdit_Dispatch
 
 AcBitEdit_ScrollDown_SetZero:
 	ld xwa, (xsp + 26)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 
 AcBitEdit_Dispatch:
@@ -2368,13 +2368,13 @@ AcBitEdit_Return:
 BitEditCheck:
 	push	xiz
 	ld	xiz, xwa
-	cp	xbc, 31457381
+	cp	xbc, EVT_GET_DIRECTION
 	jr	z, BitEditCheck_NotHandled	; -> 0xF9FD76
-	cp	xbc, 31457380
+	cp	xbc, EVT_GET_BIT
 	jr	z, BitEditCheck_GetMask	; -> 0xF9FD6F
-	cp	xbc, 31457379
+	cp	xbc, EVT_GET_BIT_ADDRESS
 	jr	z, BitEditCheck_GetAddr	; -> 0xF9FD68
-	cp	xbc, 31457378
+	cp	xbc, EVT_GET_BIT_STRING
 	jr	nz, BitEditCheck_NotHandled	; -> 0xF9FD76
 	ld	wa, (xde+8)
 	and	wa, 1
@@ -2416,12 +2416,12 @@ MainBitPut:
 	push	xwa
 	call	16713148
 	lda	xsp, (xsp+12)
-	ld	xwa, 20971527
-	ld	xbc, 31457383
+	ld	xwa, NAKA_MAINFUNC_MainBitControl
+	ld	xbc, EVT_BIT_PUT
 	ld	xde, (xsp+4)
 	call	16402006
-	ld	xwa, 20971523
-	ld	xbc, 31457315
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+4)
 	call	16402006
 	pop	xiz
@@ -2458,17 +2458,17 @@ MainBitGet:
 
 	ld (xiz + 10), xwa
 
-	ld xwa, 0x1400007
+	ld xwa, NAKA_MAINFUNC_MainBitControl
 
-	ld xbc, 0x1e00066
+	ld xbc, EVT_BIT_GET
 
 	ld xde, xiz
 
 	call	MainFuncCall
 
-	ld xwa, 0x1400003
+	ld xwa, NAKA_MAINFUNC_MainAutoFree
 
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 
 	ld xde, xiz
 
@@ -2487,13 +2487,13 @@ PsMenuBoxProc:
 	push xiz
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xwa
-	cp xbc, 0x1e00053
+	cp xbc, EVT_CHECK_EDIT_SW
 	jrl z, PsMenuBox_HitTest
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, PsMenuBox_Confirm
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, PsMenuBox_Paint
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, PsMenuBox_GetText
 	ld xwa, xiz
 	ld XDE, (xsp + 0x0114)
@@ -2533,7 +2533,7 @@ PsMenuBox_Confirm:
 	or xwa, xwa
 	jr nz, PsMenuBox_Confirm_CopyText
 	ld xwa, xiz
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	call SendEvent
 	cp (xsp + 8), 0x0
 	jr nz, PsMenuBox_Confirm_Render
@@ -2571,7 +2571,7 @@ PsMenuBox_HitTest:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld XDE, (xsp + 0x0114)
 	call SendEvent
 	ld wa, (xiz + 36)
@@ -2592,11 +2592,11 @@ AcTitleMenuProc:
 	stl_dri XBC, 0xfd, 0x34, 0x01
 	ld xiz, xwa
 	ld XWA, (xsp + 0x0134)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jrl z, AcTitleMenu_OK
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jr z, AcTitleMenu_Confirm
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, AcTitleMenu_Paint
 	ld xwa, xiz
 	ld XBC, (xsp + 0x0134)
@@ -2609,7 +2609,7 @@ AcTitleMenu_Paint:
 	ld XDE, (xsp + 0x0130)
 	calr PsMenuBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcTitleMenu_OK_Dispatch
 
@@ -2875,7 +2875,7 @@ AcTitleMenu_OK:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld XDE, (xsp + 0x0130)
 	call SendEvent
 	cp hl, 0:i3
@@ -2885,53 +2885,53 @@ AcTitleMenu_OK:
 	cp xwa, 0xffffffff
 	jrl z, AcTitleMenu_OK_Default
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x160001d
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_AcTitleMenu
 	call SendEvent
 	cp xhl, 0x1
 	jr nz, AcTitleMenu_OK_CheckMode
 	ld xwa, (xsp + 8)
 	ld xde, (xwa + 46)
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
+	ld xbc, EVT_CHANGE_TITLE
 	jr AcTitleMenu_OK_Dispatch
 
 AcTitleMenu_OK_CheckMode:
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600040
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_AcModeMenu
 	call SendEvent
 	cp xhl, 0x1
 	jr nz, AcTitleMenu_OK_CheckScreen
 	ld xwa, (xsp + 8)
 	ld xde, (xwa + 46)
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00014
+	ld xbc, EVT_CHANGE_MODE
 	jr AcTitleMenu_OK_Dispatch
 
 AcTitleMenu_OK_CheckScreen:
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600041
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_AcScreenMenu
 	call SendEvent
 	cp xhl, 0x1
 	jr nz, AcTitleMenu_OK_CheckWindow
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 46)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr AcTitleMenu_OK_Dispatch
 
 AcTitleMenu_OK_CheckWindow:
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600042
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_AcWindowMenu
 	call SendEvent
 	cp xhl, 0x1
 	jr nz, AcTitleMenu_OK_Done
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 46)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 AcTitleMenu_OK_Dispatch:
@@ -2958,9 +2958,9 @@ VwMenuBoxProc:
 	lda_dri XSP, 0xfd, 0xd6, 0xfe
 	push xiz
 	ld xiz, xwa
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, VwMenuBox_Confirm
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, VwMenuBox_Paint
 	ld xwa, xiz
 	calr PsMenuBoxProc
@@ -2970,7 +2970,7 @@ VwMenuBox_Paint:
 	ld xwa, xiz
 	calr PsMenuBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	jrl VwMenuBox_ReturnZero
@@ -3211,15 +3211,15 @@ PsEditSwBoxProc:
 	push xiz
 	ld (xsp + 20), xde
 	ld xiz, xwa
-	cp xbc, EVT_POST_ACTIVATE
+	cp xbc, EVT_SET_VISIBLE
 	jrl z, PsEditSwBox_Repaint
-	cp xbc, 0x1e00053
+	cp xbc, EVT_CHECK_EDIT_SW
 	jr z, PsEditSwBox_HitTest
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, PsEditSwBox_Confirm
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, PsEditSwBox_Paint
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, PsEditSwBox_GetText
 	ld xwa, xiz
 	ld xde, (xsp + 20)
@@ -3264,7 +3264,7 @@ PsEditSwBox_HitTest:
 	cp hl, 0:i3
 	jrl z, PsEditSwBox_ReturnZero
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, (xsp + 20)
 	call SendEvent
 	ld xwa, (xsp + 4)
@@ -3284,7 +3284,7 @@ PsEditSwBox_Repaint:
 	cp hl, 0:i3
 	jr z, PsEditSwBox_Repaint_UpdateBounds
 	ld xwa, xiz
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call SendEvent
 	jr PsEditSwBox_ReturnZero
@@ -3616,7 +3616,7 @@ ButtonState_DispatchDSP:
 ButtonState_DispatchDSP_InlineData:
 	lda	xde, (xsp+12)
 	ld	xwa, (xsp+298)
-	ld	xbc, 31457338
+	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	jr	ButtonState_Paint_DrawAligned
 	ld	xwa, 15377130
@@ -3675,9 +3675,9 @@ PsWideESBoxProc:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), xde
-	cp xbc, 0x1e00053
+	cp xbc, EVT_CHECK_EDIT_SW
 	jrl z, PsWideESBox_GetRange
-	cp xbc, 0x1e00052
+	cp xbc, EVT_SET_EDIT_SW_RECT
 	jr z, PsWideESBox_GetEditRange
 	ld xde, (xsp + 20)
 	calr PsEditSwBoxProc
@@ -3746,7 +3746,7 @@ PsWideESBox_GetRange_SwapMax:
 
 PsWideESBox_GetRange_SendEvent:
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, (xsp + 20)
 	call SendEvent
 	cpw_erp HL, 0xfa
@@ -3767,11 +3767,11 @@ AcIndexEditSwProc:
 	ld (xsp + 10), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 10)
-	cp xwa, 0x1c00030
+	cp xwa, EVT_SW_BOTH
 	jrl z, AcIndexEdit_Reset
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jr z, AcIndexEdit_OK
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, AcIndexEdit_Paint
 	ld xwa, xiz
 	ld xbc, (xsp + 10)
@@ -3784,8 +3784,8 @@ AcIndexEdit_Paint:
 	ld xde, (xsp + 6)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600021
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_PsWideESBox
 	call SendEvent
 	or xhl, xhl
 	jr z, AcIndexEdit_Paint_AltOffset
@@ -3794,7 +3794,7 @@ AcIndexEdit_Paint:
 	ld xde, 0:i3
 	ld e, (xhl + 40)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jrl AcIndexEdit_SendAndReturn
 
 AcIndexEdit_Paint_AltOffset:
@@ -3803,7 +3803,7 @@ AcIndexEdit_Paint_AltOffset:
 	ld xde, 0:i3
 	ld e, (xhl + 38)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jrl AcIndexEdit_SendAndReturn
 
 AcIndexEdit_OK:
@@ -3812,21 +3812,21 @@ AcIndexEdit_OK:
 	cp hl, 0:i3
 	jrl z, AcIndexEdit_Fallthrough
 	ld xwa, xiz
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 6)
 	call SendEvent
 	cp hl, 0:i3
 	jrl z, AcIndexEdit_Fallthrough
 	ld xwa, xiz
-	ld xbc, 0x1e00051
+	ld xbc, EVT_GET_INDEX
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0xffff
 	jrl z, AcIndexEdit_ReturnZeroJmp
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600021
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_PsWideESBox
 	call SendEvent
 	or xhl, xhl
 	jr z, AcIndexEdit_OK_AltView
@@ -3864,21 +3864,21 @@ AcIndexEdit_DispatchDSP_InlineData:
 	bit	7, wa
 	jr	z, ButtonState_PaintProc_Skip
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00018
+	ld	xbc, EVT_INDEXSW_DOWN
 	jrl	AcIndexEdit_SendAndReturn
 ButtonState_PaintProc_Skip:
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00017
+	ld	xbc, EVT_INDEXSW_UP
 	jrl	AcIndexEdit_SendAndReturn
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00017
+	ld	xbc, EVT_INDEXSW_UP
 	jrl	AcIndexEdit_SendAndReturn
 	ld	de, (xsp+4)
 	exts	xde
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01c00018
+	ld	xbc, EVT_INDEXSW_DOWN
 	jr	t, AcIndexEdit_SendAndReturn
 
 AcIndexEdit_Fallthrough:
@@ -3893,31 +3893,31 @@ AcIndexEdit_Reset:
 	cp hl, 0:i3
 	jr z, AcIndexEdit_FallthroughAlt
 	ld xwa, xiz
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 6)
 	call SendEvent
 	cp hl, 0:i3
 	jr z, AcIndexEdit_FallthroughAlt
 	ld xwa, xiz
-	ld xbc, 0x1e00051
+	ld xbc, EVT_GET_INDEX
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), hl
 	cpw (xsp + 4), 0xffff
 	jr z, AcIndexEdit_ReturnZeroJmp
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	ld xde, (xsp + 6)
 	call SendEvent
 	ld xde, (xsp + 6)
 	set 7, de
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	call SendEvent
 	ld de, (xsp + 4)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00031
+	ld xbc, EVT_INDEXSW_BOTH
 
 AcIndexEdit_SendAndReturn:
 	call SendEvent
@@ -3946,9 +3946,9 @@ AcFuncEditSwProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jr z, AcFuncEdit_OK
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, AcFuncEdit_Paint
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -3961,8 +3961,8 @@ AcFuncEdit_Paint:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600021
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_PsWideESBox
 	call SendEvent
 	or xhl, xhl
 	jr z, AcFuncEdit_Paint_AltOffset
@@ -3971,7 +3971,7 @@ AcFuncEdit_Paint:
 	ld xde, 0:i3
 	ld e, (xhl + 40)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jr AcFuncEdit_Paint_SendConfirm
 
 AcFuncEdit_Paint_AltOffset:
@@ -3980,7 +3980,7 @@ AcFuncEdit_Paint_AltOffset:
 	ld xde, 0:i3
 	ld e, (xhl + 38)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 
 AcFuncEdit_Paint_SendConfirm:
 	call SendEvent
@@ -3992,14 +3992,14 @@ AcFuncEdit_OK:
 	cp hl, 0:i3
 	jr z, AcFuncEdit_Fallthrough
 	ld xwa, xiz
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 4)
 	call SendEvent
 	cp hl, 0:i3
 	jr z, AcFuncEdit_Fallthrough
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600021
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_PsWideESBox
 	call SendEvent
 	or xhl, xhl
 	jr z, AcFuncEdit_OK_AltFunc
@@ -4042,9 +4042,9 @@ VwEditSwBoxProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, VwEditSwBox_GetText
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, VwEditSwBox_Paint
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -4056,8 +4056,8 @@ VwEditSwBox_Paint:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600021
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_PsWideESBox
 	call SendEvent
 	or xhl, xhl
 	jr z, VwEditSwBox_Paint_AltOffset
@@ -4066,7 +4066,7 @@ VwEditSwBox_Paint:
 	ld xde, 0:i3
 	ld e, (xhl + 40)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jr VwEditSwBox_Paint_SendConfirm
 
 VwEditSwBox_Paint_AltOffset:
@@ -4075,7 +4075,7 @@ VwEditSwBox_Paint_AltOffset:
 	ld xde, 0:i3
 	ld e, (xhl + 38)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 
 VwEditSwBox_Paint_SendConfirm:
 	call SendEvent
@@ -4083,8 +4083,8 @@ VwEditSwBox_Paint_SendConfirm:
 
 VwEditSwBox_GetText:
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600021
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_PsWideESBox
 	call SendEvent
 	or xhl, xhl
 	jr z, VwEditSwBox_GetText_AltView
@@ -4118,19 +4118,19 @@ PsPageBoxProc:
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x14, 0x01
-	cp xbc, 0x1e0007f
+	cp xbc, EVT_SET_PAGE
 	jrl z, PsPageBox_SetValue
-	cp xbc, 0x1e00056
+	cp xbc, EVT_GET_PAGE_NOW
 	jrl z, PsPageBox_GetValue
-	cp xbc, 0x1e00055
+	cp xbc, EVT_GET_PAGE_MAX
 	jrl z, PsPageBox_ReturnOne
-	cp xbc, 0x1e00054
+	cp xbc, EVT_GET_PAGE_MIN
 	jrl z, PsPageBox_ReturnOne
-	cp xbc, 0x1e00053
+	cp xbc, EVT_CHECK_EDIT_SW
 	jrl z, PsPageBox_HitTest
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, PsPageBox_Confirm
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jrl nz, PsPageBox_Default
 	ld XWA, (xsp + 0x0114)
 	ld xde, xiz
@@ -4151,7 +4151,7 @@ UI_VwBox_SendCurrentValue:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	call SendEvent
 	jrl UIVwBox_ZeroReturn
 
@@ -4170,7 +4170,7 @@ PsPageBox_Confirm:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	call	SendEvent
 
 PsPageBox_Confirm_DrawValue:
@@ -4178,7 +4178,7 @@ PsPageBox_Confirm_DrawValue:
 	ld	xwa, (xwa+28)
 	ld	iz, (xwa)
 	ld	xwa, (xsp+276)
-	ld	xbc, 0x1e00055
+	ld	xbc, EVT_GET_PAGE_MAX
 	ld	xde, 0:i3
 	call	SendEvent
 	pushw	hl
@@ -4207,7 +4207,7 @@ PsPageBox_Confirm_DrawValue:
 	jr	UIVwBox_ZeroReturn
 PsPageBox_HitTest:
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, xiz
 	call SendEvent
 	cp xhl, 0x10
@@ -4254,13 +4254,13 @@ AcWindowPageProc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, AcWindowPage_OK
-	cp xiz, 0x1e00055
+	cp xiz, EVT_GET_PAGE_MAX
 	jr z, AcWindowPage_GetMax
-	cp xiz, 0x1e00054
+	cp xiz, EVT_GET_PAGE_MIN
 	jr z, AcWindowPage_GetMin
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jr z, AcWindowPage_Paint
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -4273,7 +4273,7 @@ AcWindowPage_Paint:
 	ld xde, (xsp + 8)
 	calr PsPageBoxProc
 	ld xwa, (xsp + 12)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcWindowPage_SendConfirm
 
@@ -4298,13 +4298,13 @@ AcWindowPage_OK:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 8)
 	call SendEvent
 	cp hl, 0:i3
 	jr z, AcWindowPage_Default
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e00056
+	ld xbc, EVT_GET_PAGE_NOW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 4)
@@ -4324,7 +4324,7 @@ AcWindowPage_OK_DecrWrap:
 AcWindowPage_OK_DecrDone:
 	exts xhl
 	ld xwa, (xsp + 12)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, xhl
 	jr AcWindowPage_SendConfirm
 
@@ -4340,7 +4340,7 @@ AcWindowPage_OK_IncrWrap:
 AcWindowPage_OK_IncrDone:
 	exts xhl
 	ld xwa, (xsp + 12)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, xhl
 
 AcWindowPage_SendConfirm:
@@ -4367,19 +4367,19 @@ PsToggleBoxProc:
 	push xiz
 	ld (xsp + 24), xde
 	ld (xsp + 28), xwa
-	cp xbc, EVT_POST_ACTIVATE
+	cp xbc, EVT_SET_VISIBLE
 	jrl z, PsToggleBox_Repaint
-	cp xbc, 0x1e0006b
+	cp xbc, EVT_GET_PARAM
 	jrl z, PsToggleBox_GetValue
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jrl z, PsToggleBox_SetValue
-	cp xbc, 0x1e0006c
+	cp xbc, EVT_TOGGLE_PARAM
 	jrl z, PsToggleBox_Toggle
-	cp xbc, 0x1e00053
+	cp xbc, EVT_CHECK_EDIT_SW
 	jrl z, PsToggleBox_HitTest
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, PsToggleBox_Confirm
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jrl nz, PsToggleBox_Default
 	ld xwa, (xsp + 28)
 	ld xde, (xsp + 24)
@@ -4400,7 +4400,7 @@ PsToggleBox_Paint_SendConfirm:
 	ld de, (xwa)
 	exts xde
 	ld xwa, (xsp + 28)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jrl PsToggleBox_SetValue_Dispatch
 
 PsToggleBox_Confirm:
@@ -4491,7 +4491,7 @@ PsToggleBox_HitTest:
 	cp hl, 0:i3
 	jrl z, PsToggleBox_ReturnZero
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, (xsp + 24)
 	call SendEvent
 	ld xwa, (xsp + 4)
@@ -4511,13 +4511,13 @@ PsToggleBox_Toggle:
 	cpw (xwa), 0x0
 	jr z, PsToggleBox_Toggle_SetOn
 	ld xwa, (xsp + 28)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jr PsToggleBox_Toggle_Dispatch
 
 PsToggleBox_Toggle_SetOn:
 	ld xwa, (xsp + 28)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 1:i3
 
 PsToggleBox_Toggle_Dispatch:
@@ -4533,7 +4533,7 @@ PsToggleBox_SetValue:
 	cp wa, (xbc)
 	jrl z, PsToggleBox_ReturnZero
 	ld xwa, (xsp + 28)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, (xsp + 24)
 
 PsToggleBox_SetValue_Dispatch:
@@ -4559,7 +4559,7 @@ PsToggleBox_Repaint:
 	cp hl, 0:i3
 	jr z, PsToggleBox_Repaint_UpdateBounds
 	ld xwa, (xsp + 28)
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call SendEvent
 	jr PsToggleBox_ReturnZero
@@ -4613,7 +4613,7 @@ AcFuncToggleProc:
 	ld (xsp + 12), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 12)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jr z, AcFuncToggle_OK
 	ld xwa, xiz
 	ld xbc, (xsp + 12)
@@ -4625,13 +4625,13 @@ AcFuncToggle_OK:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, xiz
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 8)
 	call SendEvent
 	cp hl, 0:i3
 	jr z, AcFuncToggle_Default
 	ld xwa, xiz
-	ld xbc, 0x1e0006c
+	ld xbc, EVT_TOGGLE_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	ld xbc, (xsp + 4)
@@ -4639,7 +4639,7 @@ AcFuncToggle_OK:
 	ld de, (xwa)
 	exts xde
 	ld xwa, (xbc + 40)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	call ApFuncCall
 	ld xhl, 0:i3
 	jr AcFuncToggle_Return
@@ -4663,15 +4663,15 @@ AcIndexToggleProc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1e00050
+	cp xiz, EVT_CHECK_INDEX
 	jrl z, AcIndexToggle_CanScrollEvt
-	cp xiz, 0x1e00051
+	cp xiz, EVT_GET_INDEX
 	jrl z, AcIndexToggle_GetIndex
-	cp xiz, 0x1c0002a
+	cp xiz, EVT_YOU_ARE_SELECTED
 	jrl z, AcIndexToggle_Select
-	cp xiz, 0x1c0001b
+	cp xiz, EVT_INDEX_SELECT
 	jrl z, AcIndexToggle_Release
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, AcIndexToggle_OK
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -4687,7 +4687,7 @@ AcIndexToggle_OK:
 	cp hl, 0:i3
 	jr z, AcIndexToggle_OK_Default
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 8)
 	call SendEvent
 	cp hl, 0:i3
@@ -4698,12 +4698,12 @@ AcIndexToggle_OK:
 	jr z, AcIndexToggle_OK_SetValue
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001b
+	ld xbc, EVT_INDEX_SELECT
 	call SendEvent
 
 AcIndexToggle_OK_SetValue:
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	call SendEvent
 	ld xwa, (xsp + 4)
@@ -4715,7 +4715,7 @@ AcIndexToggle_OK_SetValue:
 	ld xde, xwa
 	add xde, xbc
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00029
+	ld xbc, EVT_I_AM_SELECTED
 	jrl AcIndexToggle_Dispatch
 
 AcIndexToggle_OK_Default:
@@ -4742,7 +4742,7 @@ AcIndexToggle_Release:
 	cpw (xwa), 0x0
 	jr z, AcIndexToggle_ReturnZero
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 	jr AcIndexToggle_Dispatch
 
@@ -4769,10 +4769,10 @@ AcIndexToggle_Select:
 	jr nz, AcIndexToggle_ReturnZero
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001b
+	ld xbc, EVT_INDEX_SELECT
 	call SendEvent
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 
 AcIndexToggle_Dispatch:
@@ -4807,9 +4807,9 @@ PsWideToggleProc:
 	lda xsp, (xsp - 20)
 	push xiz
 	ld (xsp + 20), xde
-	cp xbc, 0x1e00053
+	cp xbc, EVT_CHECK_EDIT_SW
 	jrl z, PsWideToggle_HitTest
-	cp xbc, 0x1e00052
+	cp xbc, EVT_SET_EDIT_SW_RECT
 	jr z, PsWideToggle_GetBounds
 	ld xde, (xsp + 20)
 	calr PsToggleBoxProc
@@ -4878,7 +4878,7 @@ PsWideToggle_HitTest_SwapOrder:
 
 PsWideToggle_HitTest_Check:
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, (xsp + 20)
 	call SendEvent
 	cpw_erp HL, 0xfa
@@ -4893,11 +4893,11 @@ PsWideToggle_Return:
 	ret
 
 PsInvisibleBoxProc:
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, PsInvisibleBox_GetText
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, PsInvisibleBox_ReturnZero
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, PsInvisibleBox_ReturnZero
 	jp ViewableProc
 
@@ -4914,11 +4914,11 @@ IvPageControlProc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1c0001e
+	cp xiz, EVT_PAGE_CHANGE
 	jr z, IvPageControl_PageChange
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr z, IvPageControl_GetText
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jr z, IvPageControl_Paint
 	ld xwa, (xsp + 12)
 	ld xbc, xiz
@@ -4932,7 +4932,7 @@ IvPageControl_Paint:
 	ld xde, (xsp + 8)
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 12)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jr IvPageControl_Dispatch
 
@@ -4950,14 +4950,14 @@ IvPageControl_PageChange:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 24)
-	ld xbc, 0x1e00094
+	ld xbc, EVT_CHECK_SHOW_WINDOW
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPageControl_PageChange_Init
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 24)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 
@@ -4972,7 +4972,7 @@ IvPageControl_PageChange_Init:
 	cp xwa, (xsp + 8)
 	jr nz, IvPageControl_ReturnZero
 	ld xwa, (xbc + 24)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 IvPageControl_Dispatch:
@@ -4991,23 +4991,23 @@ IvMainEditSwProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00034
+	cp xbc, EVT_SEND_SW_BOTH
 	jrl z, IvMainEditSw_BtnRecord
-	cp xbc, 0x1c00033
+	cp xbc, EVT_SEND_SW_OFF
 	jr z, IvMainEditSw_BtnDelete
-	cp xbc, 0x1c00032
+	cp xbc, EVT_SEND_SW_ON
 	jr z, IvMainEditSw_BtnCancel
-	cp xbc, 0x1c0002b
+	cp xbc, EVT_SEND_SW_IN
 	jr z, IvMainEditSw_BtnOK
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, IvMainEditSw_GetText
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr nz, IvMainEditSw_Default
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	jr IvMainEditSw_ReturnZero
@@ -5024,7 +5024,7 @@ IvMainEditSw_BtnOK:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 22)
-	ld xbc, 0x1c00007
+	ld xbc, EVT_SW_IN
 	ld xde, (xsp + 4)
 	jr IvMainEditSw_DispatchChild
 
@@ -5032,7 +5032,7 @@ IvMainEditSw_BtnCancel:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 22)
-	ld xbc, EVT_ACTIVATE
+	ld xbc, EVT_SW_ON
 	ld xde, (xsp + 4)
 	jr IvMainEditSw_DispatchChild
 
@@ -5040,7 +5040,7 @@ IvMainEditSw_BtnDelete:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 22)
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	ld xde, (xsp + 4)
 	jr IvMainEditSw_DispatchChild
 
@@ -5048,7 +5048,7 @@ IvMainEditSw_BtnRecord:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 22)
-	ld xbc, 0x1c00030
+	ld xbc, EVT_SW_BOTH
 	ld xde, (xsp + 4)
 
 IvMainEditSw_DispatchChild:
@@ -5071,11 +5071,11 @@ IvMainEditSw_Return:
 IvExitProc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1e00053
+	cp xbc, EVT_CHECK_EDIT_SW
 	jr z, IvExit_HitTest
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, IvExit_GetText
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, IvExit_Paint
 	ld xwa, xiz
 	calr PsInvisibleBoxProc
@@ -5085,7 +5085,7 @@ IvExit_Paint:
 	ld xwa, xiz
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	jr IvExit_ReturnZero
@@ -5116,9 +5116,9 @@ IvExitModeProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jr z, IvExitMode_OK
-	cp xwa, 0x1e0003a
+	cp xwa, EVT_GET_STRING
 	jr z, IvExitMode_GetText
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -5139,33 +5139,33 @@ IvExitMode_OK:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvExitMode_OK_Forward
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, IvExitMode_OK_SaveCheck
 	ld xde, (xiz + 22)
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00014
+	ld xbc, EVT_CHANGE_MODE
 	call PostEvent
 	jr IvExitMode_OK_Forward
 
 IvExitMode_OK_SaveCheck:
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00079
+	ld xbc, EVT_INTERRUPT_EXIT
 	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 0:i3
 	call SendEvent
 
@@ -5189,9 +5189,9 @@ IvExitScreenProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jr z, IvExitScreen_OK
-	cp xwa, 0x1e0003a
+	cp xwa, EVT_GET_STRING
 	jr z, IvExitScreen_GetText
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -5212,20 +5212,20 @@ IvExitScreen_OK:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvExitScreen_OK_Forward
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, IvExitScreen_OK_SaveCheck
 	ld xwa, (xiz + 22)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 	jr IvExitScreen_OK_Forward
@@ -5233,12 +5233,12 @@ IvExitScreen_OK:
 IvExitScreen_OK_SaveCheck:
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00079
+	ld xbc, EVT_INTERRUPT_EXIT
 	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 0:i3
 	call SendEvent
 
@@ -5261,9 +5261,9 @@ IvExitWindowProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, IvExitWindow_OK
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr z, IvExitWindow_GetText
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5281,24 +5281,24 @@ IvExitWindow_GetText:
 	jr	IvExitWindow_Return
 IvExitWindow_OK:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, IvExitWindow_OK_Forward
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, IvExitWindow_OK_SaveCheck
 	ld xwa, 0xffffffff
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	jr IvExitWindow_OK_Forward
@@ -5306,12 +5306,12 @@ IvExitWindow_OK:
 IvExitWindow_OK_SaveCheck:
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00079
+	ld xbc, EVT_INTERRUPT_EXIT
 	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 0:i3
 	call SendEvent
 
@@ -5335,9 +5335,9 @@ IvFixWinProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, IvFixWin_Init
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, IvFixWin_Paint
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -5351,7 +5351,7 @@ IvFixWin_Paint:
 	ld xde, (xsp + 4)
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, Str_No_0x6E
 	jr IvFixWin_Dispatch
 
@@ -5392,11 +5392,11 @@ IvNamingProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, EVT_SELECT_CONFIRM
+	cp xiz, EVT_HIDE
 	jr z, IvNaming_Close
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jr z, IvNaming_Init
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jr z, IvNaming_Paint
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5410,7 +5410,7 @@ IvNaming_Paint:
 	ld xde, (xsp + 4)
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 8)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, Str_No_0x74
 	jr IvNaming_Dispatch
 
@@ -5423,7 +5423,7 @@ IvNaming_Init:
 	call GetViewInstance
 	ld xde, (xhl + 22)
 	ld xwa, 0xa
-	ld xbc, 0x1e0007b
+	ld xbc, EVT_SET_AP_FUNCTION
 	call SendEvent
 	ld xwa, 0xa
 	ld xbc, xiz
@@ -5459,11 +5459,11 @@ NamingCheck:
 	push	xiz
 	ld	xiz, xwa
 	lda	xwa, (257902:24)
-	cp	xbc, 31457404
+	cp	xbc, EVT_GET_STRING_LENGTH
 	jr	z, NamingCheck_GetStrLen
-	cp	xbc, 31457412
+	cp	xbc, EVT_GET_NAMING_MODE
 	jr	z, NamingCheck_NotHandled
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jr	nz, NamingCheck_NotHandled
 	push	xwa
 	push	xde
@@ -5491,9 +5491,9 @@ IvTrackSwitchProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, IvTrackSwitch_Init
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, IvTrackSwitch_Paint
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -5507,7 +5507,7 @@ IvTrackSwitch_Paint:
 	ld xde, (xsp + 4)
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, Str_No_0x7A
 	jr IvTrackSwitch_Dispatch
 
@@ -5567,7 +5567,7 @@ IvCatchEvent_Lookup:
 	add xhl, xde
 	ld xiz, (xhl)
 	ld xix, xiz
-	ld xbc, 0x1e00085
+	ld xbc, EVT_ARE_YOU_CLASS_PROC
 	ld xde, 0:i3
 	call (xix)
 	or xhl, xhl
@@ -5599,9 +5599,9 @@ IvCatchEvent_Return:
 DefaultClassProc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, DefaultClass_Paint
-	cp xbc, 0x1e00085
+	cp xbc, EVT_ARE_YOU_CLASS_PROC
 	jr z, DefaultClass_ReturnOne
 	ld xwa, xiz
 	call InheritedProc
@@ -5615,7 +5615,7 @@ DefaultClass_Paint:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, Str_No_0x80
 	call SendEvent
 	ld xhl, 0:i3
@@ -5630,15 +5630,15 @@ IvInterruptProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e000b6
+	cp xiz, EVT_INTERRUPT_OFF
 	jrl z, IvInterrupt_CheckActive
-	cp xiz, 0x1e0009d
+	cp xiz, EVT_GET_INTERRUPT_TIME
 	jrl z, IvInterrupt_GetInterval
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr z, IvInterrupt_GetText
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jr z, IvInterrupt_Paint
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jr z, IvInterrupt_Init
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5648,7 +5648,7 @@ IvInterruptProc:
 
 IvInterrupt_Init:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1e0009d
+	ld xbc, EVT_GET_INTERRUPT_TIME
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 1:i3
@@ -5672,7 +5672,7 @@ IvInterrupt_Paint:
 	ld xde, (xsp + 4)
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 8)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	jr IvInterrupt_ReturnZero
@@ -5697,7 +5697,7 @@ IvInterrupt_GetInterval:
 
 IvInterrupt_CheckActive:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1e0009d
+	ld xbc, EVT_GET_INTERRUPT_TIME
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 0:i3
@@ -5710,9 +5710,9 @@ ReminderProc_Return:
 	ret
 
 IvIntReminderProc:
-	cp	xbc, 31457437
+	cp	xbc, EVT_GET_INTERRUPT_TIME
 	jr	z, IvIntReminder_GetInterval
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41890
@@ -5727,9 +5727,9 @@ IvIntReminder_GetInterval:
 	ret
 
 IvIntCompleteProc:
-	cp	xbc, 31457437
+	cp	xbc, EVT_GET_INTERRUPT_TIME
 	jr	z, IvIntComplete_GetInterval
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41896
@@ -5744,9 +5744,9 @@ IvIntComplete_GetInterval:
 	ret
 
 IvIntErrorProc:
-	cp	xbc, 31457437
+	cp	xbc, EVT_GET_INTERRUPT_TIME
 	jr	z, IvIntError_GetInterval
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41902
@@ -5766,13 +5766,13 @@ IvIntVariProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0009d
+	cp xiz, EVT_GET_INTERRUPT_TIME
 	jr z, IvIntVari_GetInterval
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr z, IvIntVari_GetText
-	cp xiz, EVT_SELECT_CONFIRM
+	cp xiz, EVT_HIDE
 	jr z, IvIntVari_Close
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jr z, IvIntVari_Init
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5820,9 +5820,9 @@ IvIntVari_Return:
 	ret
 
 IvIntEasySetProc:
-	cp	xbc, 31457437
+	cp	xbc, EVT_GET_INTERRUPT_TIME
 	jr	z, IvIntEasySet_GetInterval
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
 	pushw	234
 	pushw	41914
@@ -5842,13 +5842,13 @@ IvIntWelcomeProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0009d
+	cp xiz, EVT_GET_INTERRUPT_TIME
 	jr z, IvIntWelcome_ReturnOne
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr z, IvIntWelcome_GetText
-	cp xiz, EVT_SELECT_CONFIRM
+	cp xiz, EVT_HIDE
 	jr z, IvIntWelcome_Close
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jr z, IvIntWelcome_Init
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -5900,24 +5900,24 @@ IvShowHideProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, IvShowHide_ProcessSpecialEvent
-	cp xiz, 0x1c0000c
+	cp xiz, EVT_REPAINT
 	jr z, IvShowHide_ProcessSpecialEvent
-	cp xiz, 0x1c0000b
+	cp xiz, EVT_PAINT
 	jr z, IvShowHide_ProcessSpecialEvent
-	cp xiz, EVT_SELECT_CONFIRM
+	cp xiz, EVT_HIDE
 	jr z, IvShowHide_ProcessSpecialEvent
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jr z, IvShowHide_ProcessSpecialEvent
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jr nz, IvShowHide_Default
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
 	ld xde, (xsp + 4)
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 8)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, Str_No_0xB0
 	call SendEvent
 	jr IvShowHide_ReturnZero
@@ -5954,19 +5954,19 @@ AcSoundNameProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00020
+	cp xbc, EVT_SOUND_NAME
 	jrl z, AcSoundName_VolumeChange
-	cp xbc, 0x1c0002f
+	cp xbc, EVT_PART_SELECT
 	jrl z, AcSoundName_ResetPart
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jr z, AcSoundName_PartChange
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, AcSoundName_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, AcSoundName_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, AcSoundName_Close
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jrl nz, AcSoundName_Default
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -5991,15 +5991,15 @@ AcSoundName_ShowHide:
 	jr z, AcSoundName_ShowHide_DefaultPart
 	ld de, (xwa)
 	extz xde
-	ld xwa, 0x1400004
-	ld xbc, 0x1e0005e
+	ld xwa, NAKA_MAINFUNC_MainGetSoundName
+	ld xbc, EVT_GET_SOUND_NAME
 	jrl AcRhythm_SendPartEvent
 
 AcSoundName_ShowHide_DefaultPart:
 	call GetPartSelect
 	extz xhl
-	ld xwa, 0x1400004
-	ld xbc, 0x1e0005e
+	ld xwa, NAKA_MAINFUNC_MainGetSoundName
+	ld xbc, EVT_GET_SOUND_NAME
 	ld xde, xhl
 	jrl AcRhythm_SendPartEvent
 
@@ -6026,8 +6026,8 @@ AcSoundName_PartChange:
 	jrl nz, AcRhythm_ReturnZeroJmp
 
 AcSoundName_PartChange_SendEvent:
-	ld xwa, 0x1400004
-	ld xbc, 0x1e0005e
+	ld xwa, NAKA_MAINFUNC_MainGetSoundName
+	ld xbc, EVT_GET_SOUND_NAME
 	jr AcRhythm_SendPartEvent
 
 AcSoundName_PartChange_DefaultPart:
@@ -6049,8 +6049,8 @@ AcSoundName_PartChange_DefaultPart:
 AcSoundName_PartChange_DefaultSend:
 	call GetPartSelect
 	extz xhl
-	ld xwa, 0x1400004
-	ld xbc, 0x1e0005e
+	ld xwa, NAKA_MAINFUNC_MainGetSoundName
+	ld xbc, EVT_GET_SOUND_NAME
 	ld xde, xhl
 	jr AcRhythm_SendPartEvent
 
@@ -6064,8 +6064,8 @@ AcSoundName_ResetPart:
 	jr nz, AcRhythm_ReturnZeroJmp
 	call GetPartSelect
 	extz xhl
-	ld xwa, 0x1400004
-	ld xbc, 0x1e0005e
+	ld xwa, NAKA_MAINFUNC_MainGetSoundName
+	ld xbc, EVT_GET_SOUND_NAME
 	ld xde, xhl
 
 AcRhythm_SendPartEvent:
@@ -6087,7 +6087,7 @@ AcSoundName_VolumeChange:
 	jr nz, AcRhythm_ReturnZeroJmp
 	ld xde, (xde + 2)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jr AcSoundName_VolumeChange_SendConfirm
 
 AcSoundName_VolumeChange_DefaultPart:
@@ -6097,7 +6097,7 @@ AcSoundName_VolumeChange_DefaultPart:
 	jr nz, AcRhythm_ReturnZeroJmp
 	ld xde, (xwa + 2)
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 
 AcSoundName_VolumeChange_SendConfirm:
 	call SendEvent
@@ -6121,17 +6121,17 @@ AcRhythmNameProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00021
+	cp xbc, EVT_RHYTHM_NAME
 	jrl z, AcRhythmName_Confirm
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jr z, AcRhythmName_PartChange
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, AcRhythmName_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, AcRhythmName_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, AcRhythmName_Close
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, AcRhythmName_Default
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -6149,8 +6149,8 @@ AcRhythmName_ShowHide:
 	ld xwa, xiz
 	ld xde, (xsp + 4)
 	calr PsParaBoxProc
-	ld xwa, 0x1400005
-	ld xbc, 0x1e0005f
+	ld xwa, NAKA_MAINFUNC_MainGetRhythmName
+	ld xbc, EVT_GET_RHYTHM_NAME
 	ld xde, 0:i3
 	jr AcRhythmName_CallMainFunc
 
@@ -6167,8 +6167,8 @@ AcRhythmName_PartChange:
 	jr nz, PsParaBox_ZeroReturn
 
 AcRhythmName_PartChange_Send:
-	ld xwa, 0x1400005
-	ld xbc, 0x1e0005f
+	ld xwa, NAKA_MAINFUNC_MainGetRhythmName
+	ld xbc, EVT_GET_RHYTHM_NAME
 	ld xde, 0:i3
 
 AcRhythmName_CallMainFunc:
@@ -6180,7 +6180,7 @@ AcRhythmName_Confirm:
 	ld xde, (xsp + 4)
 	calr PsParaBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, (xsp + 4)
 	call SendEvent
 
@@ -6203,17 +6203,17 @@ AcPmemNameProc:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 44), xwa
-	cp xbc, 0x1c00022
+	cp xbc, EVT_PMEM_NAME
 	jr z, AcPmemName_Confirm
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jr z, AcPmemName_PartChange
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, AcPmemName_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, AcPmemName_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, AcPmemName_Close
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jrl nz, AcPmemName_Default
 	ld xwa, (xsp + 44)
 	ld xde, xiz
@@ -6231,8 +6231,8 @@ AcPmemName_ShowHide:
 	ld xwa, (xsp + 44)
 	ld xde, xiz
 	calr PsParaBoxProc
-	ld xwa, 0x1400006
-	ld xbc, 0x1e00060
+	ld xwa, NAKA_MAINFUNC_MainGetPmemName
+	ld xbc, EVT_GET_PMEM_NAME
 	ld xde, 0:i3
 	jr AcPmemName_CallMainFunc
 
@@ -6243,8 +6243,8 @@ AcPmemName_PartChange:
 	ld xwa, (xiz)
 	cp xwa, 0x300
 	jrl nz, PsParaBox_EventReturn
-	ld xwa, 0x1400006
-	ld xbc, 0x1e00060
+	ld xwa, NAKA_MAINFUNC_MainGetPmemName
+	ld xbc, EVT_GET_PMEM_NAME
 	ld xde, 0:i3
 
 AcPmemName_CallMainFunc:
@@ -6307,7 +6307,7 @@ AcPmemName_Confirm_EmptySlot:
 AcPmemName_Confirm_SendEvent:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 44)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 
 PsParaBox_EventReturn:
@@ -6331,29 +6331,29 @@ AcMixerVolProc:
 	ld (xsp + 40), xbc
 	ld (xsp + 44), xwa
 	ld xwa, (xsp + 40)
-	cp xwa, 0x1e00061
+	cp xwa, EVT_GET_SOUND_SW_NO
 	jrl z, AcMixerVol_EncoderUpdate
-	cp xwa, 0x1c00030
+	cp xwa, EVT_SW_BOTH
 	jrl z, AcMixerVol_Reset
-	cp xwa, 0x1c00027
+	cp xwa, EVT_SW_IN_AIC
 	jrl z, AcMixerVol_FastScroll
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jrl z, AcMixerVol_OK
-	cp xwa, 0x1c0001c
+	cp xwa, EVT_LSW_DATA
 	jrl z, AcMixerVol_ValueChange
-	cp xwa, 0x1c00023
+	cp xwa, EVT_SOUND_SW_NO
 	jrl z, AcMixerVol_PartSelect
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jrl z, AcMixerVol_Confirm
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, AcMixerVol_Paint
-	cp xwa, 0x1c0000c
+	cp xwa, EVT_REPAINT
 	jr z, AcMixerVol_ShowHide
-	cp xwa, 0x1c0000b
+	cp xwa, EVT_PAINT
 	jr z, AcMixerVol_ShowHide
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jr z, AcMixerVol_Close
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jrl nz, AcMixerVol_DefaultForward
 	ld xwa, (xsp + 44)
 	ld xbc, (xsp + 40)
@@ -6423,14 +6423,14 @@ AcMixerVol_Paint:
 	pushw 0x8
 	call DrawStringCentered
 	ld xwa, (xsp + 44)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld de, (xwa + 28)
 	extz xde
 	ld xwa, (xsp + 44)
-	ld xbc, 0x1e00061
+	ld xbc, EVT_GET_SOUND_SW_NO
 	jrl UIList_SendEvent
 
 AcMixerVol_Confirm:
@@ -6617,7 +6617,7 @@ AcMixerVol_ValueChange:
 
 AcMixerVol_ValueChange_Match:
 	ld xwa, (xsp + 44)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl UIList_SendEvent
 
@@ -6635,7 +6635,7 @@ AcMixerVol_ValueChange_CheckAddr:
 
 AcMixerVol_ValueChange_SendUpdate:
 	ld xwa, (xsp + 44)
-	ld xbc, 0x1e00061
+	ld xbc, EVT_GET_SOUND_SW_NO
 	jrl UIList_SendEvent
 
 AcMixerVol_OK:
@@ -6643,7 +6643,7 @@ AcMixerVol_OK:
 	call GetViewInstance
 	ld (XSP+0x08),XHL
 	ld XWA,0x02600024
-	ld XBC,0x01e00029
+	ld XBC,EVT_MAKE_EDIT_SW_ID
 	ld XDE,(XSP+0x24)
 	call SendEvent
 	ld XBC,(XSP+0x08)
@@ -6679,7 +6679,7 @@ AcMixerVol_OK:
 	ld bc, 0:i3
 	calr MainLswPut
 	ld XWA,(XSP+0x2c)
-	ld XBC,0x01c00027
+	ld XBC,EVT_SW_IN_AIC
 	ld XDE,(XSP+0x24)
 	jr t, AcMixerVol_OK_SetAutoInc
 AcMixerVol_OK_Mute:
@@ -6706,7 +6706,7 @@ AcMixerVol_OK_Increment:
 AcMixerVol_OK_ApplyDelta:
 	calr MainLswAdd
 	ld xwa, (xsp + 44)
-	ld xbc, 0x1c00027
+	ld xbc, EVT_SW_IN_AIC
 	ld xde, (xsp + 36)
 
 AcMixerVol_OK_SetAutoInc:
@@ -6724,7 +6724,7 @@ AcMixerVol_FastScroll:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, (xsp + 36)
 	call SendEvent
 	ld wa, (xiz + 30)
@@ -6769,7 +6769,7 @@ AcMixerVol_Reset:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, (xsp + 36)
 	call SendEvent
 	ld xwa, (xsp + 8)
@@ -6778,13 +6778,13 @@ AcMixerVol_Reset:
 	cp xwa, xhl
 	jr nz, AcMixerVol_Reset_Fallthrough
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	ld xde, (xsp + 36)
 	call SendEvent
 	ld xde, (xsp + 36)
 	set 7, de
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 28)
@@ -6834,7 +6834,7 @@ AcMixerVol_EncoderUpdate:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+44)
-	ld	xbc, 29360163
+	ld	xbc, EVT_SOUND_SW_NO
 UIList_SendEvent:
 	call SendEvent
 
@@ -6857,9 +6857,9 @@ AcMixerVol_Return:
 
 ScrollDelta_ComputeDirection:
 	ld	hl, de
-	cp	xwa, 0x01c00027
+	cp	xwa, EVT_SW_IN_AIC
 	jr	z, AcPmemName_Confirm_Code_Skip
-	cp	xwa, 0x01c00007
+	cp	xwa, EVT_SW_IN
 	jr	nz, AcPmemName_Confirm_Code_Skip3
 	ld	hl, (xsp+4)
 	bit	7, bc
@@ -6881,9 +6881,9 @@ DbMemoProc:
 	push xiz
 	ld (xsp + 102), xde
 	ld (xsp + 106), xwa
-	cp xbc, 0x1c00025
+	cp xbc, EVT_MEMO_DRAW
 	jr z, DbMemo_DrawContent
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, DbMemo_Paint
 	ld xwa, (xsp + 106)
 	ld xde, (xsp + 102)
@@ -6914,7 +6914,7 @@ DbMemo_Paint:
 	ld de, 7:i3
 	call DrawDesignBox
 	ld xwa, (xsp + 106)
-	ld xbc, 0x1c00025
+	ld xbc, EVT_MEMO_DRAW
 	ld xde, Str_No_0x3A4
 	call SendEvent
 
@@ -7028,11 +7028,11 @@ FDemoText_ByteData_DisplayRefresh_Helper:
 	call	Free_Compare2
 	lda	xsp, (xsp+14)
 	ld	xwa, 4294967295
-	ld	xbc, 29360165
+	ld	xbc, EVT_MEMO_DRAW
 	ld	xde, xiz
 	call	PostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	PostEvent
 	pop	xiz
@@ -7050,15 +7050,15 @@ DbMemoryDumpProc:
 	ld (xsp + 116), xbc
 	ld (xsp + 120), xwa
 	ld xwa, (xsp + 116)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jrl z, DbMemDump_OK
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jrl z, DbMemDump_Confirm
-	cp xwa, 0x1c0000e
+	cp xwa, EVT_SELE_DRAW
 	jrl z, DbMemDump_Select
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, DbMemDump_Paint
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jr z, DbMemDump_Close
 	ld xwa, (xsp + 120)
 	ld xbc, (xsp + 116)
@@ -7097,17 +7097,17 @@ DbMemDump_Paint:
 	ld de, 7:i3
 	call DrawDesignBox
 	ld xwa, (xsp + 120)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	jrl UI_NameCapture_ReturnSuccess
 
 DbMemDump_Select:
 	ld xwa, (xsp + 120)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, 0x1c0000e
+	ld xwa, EVT_SELE_DRAW
 	push xwa
 	ld xwa, 0:i3
 	push xwa
@@ -7249,7 +7249,7 @@ DbMemDump_Confirm_SanitizeNext:
 	.set DbMemDump_StepTable, Str_No + 996
 DbMemDump_OK:
 	ld xwa, 0x2600024
-	ld xbc, 0x1e00029
+	ld xbc, EVT_MAKE_EDIT_SW_ID
 	ld xde, (xsp + 112)
 	call SendEvent
 	ld xwa, xhl
@@ -7297,7 +7297,7 @@ DbMemDump_OK_ClampAndConfirm:
 	ld xwa, NakaData_RomEnd
 	and (xbc), xwa
 	ld xwa, (xsp + 120)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 120)
@@ -7314,7 +7314,7 @@ DbMemDump_Return:
 	ret
 
 CaptureLcdCheck:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	call z, (CaptureLcd:24)
 	ld xhl, 0:i3
 	ret
@@ -7324,13 +7324,13 @@ PsCursorBoxProc:
 	push xiz
 	stl_dri XDE, 0xfd, 0x2a, 0x02
 	ld xiz, xwa
-	cp xbc, 0x1e00080
+	cp xbc, EVT_SET_CURSOR
 	jrl z, PsCursorBox_SetCursor
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, PsCursorBox_Confirm
-	cp xbc, 0x1c0000e
+	cp xbc, EVT_SELE_DRAW
 	jr z, PsCursorBox_Select
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, PsCursorBox_Init
 	ld xwa, xiz
 	ld XDE, (xsp + 0x022a)
@@ -7370,7 +7370,7 @@ PsCursorBox_Confirm:
 	or xwa, xwa
 	jr nz, PsCursorBox_Confirm_CopyText
 	ld xwa, xiz
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	call SendEvent
 	cpib_sri 0xfd, 0x12, 0x01, 0x00
 	jr nz, PsCursorBox_Confirm_CheckCursor
@@ -7542,15 +7542,15 @@ DbDebugMenuProc:
 	ld (xsp + 24), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 24)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jrl z, DbDebugMenu_OK
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jrl z, DbDebugMenu_Confirm
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jrl z, DbDebugMenu_Paint
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jr z, DbDebugMenu_Close
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, DbDebugMenu_Init
 	ld xwa, xiz
 	ld xbc, (xsp + 24)
@@ -7576,7 +7576,7 @@ DbDebugMenu_Init:
 	ld wa, (xwa)
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jrl PsMenuBox_SendEvent
 
@@ -7595,7 +7595,7 @@ DbDebugMenu_Close:
 	ld wa, (xwa)
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 
@@ -7612,7 +7612,7 @@ DbDebugMenu_Paint:
 	ld xde, (xsp + 20)
 	calr PsMenuBoxProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl PsMenuBox_SendEvent
 
@@ -7643,7 +7643,7 @@ DbDebugMenu_Confirm:
 
 DbDebugMenu_OK:
 	ld xwa, xiz
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 20)
 	call SendEvent
 	cp hl, 0:i3
@@ -7664,7 +7664,7 @@ DbDebugMenu_OK:
 	ld wa, (xwa)
 	sla wa, 2
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 
@@ -7693,13 +7693,13 @@ DbDebugMenu_OK_CheckValid:
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_OK_NoHandler
 	ld xwa, (xbc)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr PsMenuBox_SendEvent
 
 DbDebugMenu_OK_NoHandler:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	jr PsMenuBox_SendEvent
 
@@ -7708,11 +7708,11 @@ DbDebugMenu_OK_HitTestFail:
 	cp xwa, 0xf
 	jr nz, DbDebugMenu_Default
 	ld xwa, 7:i3
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 
 PsMenuBox_SendEvent:
@@ -7753,15 +7753,15 @@ PsTrackSwitchProc:
 	lda xix, (xsp + 8)
 	ld bc, 5:i3
 	ldirw
-	cp xde, 0x1e00053
+	cp xde, EVT_CHECK_EDIT_SW
 	jrl z, PsTrkSw_HitTest
-	cp xde, 0x1c0000e
+	cp xde, EVT_SELE_DRAW
 	jrl z, PsTrkSw_Select
-	cp xde, EVT_INIT_HOOK
+	cp xde, EVT_PARA_DRAW
 	jrl z, PsTrkSw_Confirm
-	cp xde, 0x1c0000c
+	cp xde, EVT_REPAINT
 	jr z, PsTrkSw_ShowHide
-	cp xde, 0x1c0000b
+	cp xde, EVT_PAINT
 	jr z, PsTrkSw_ShowHide
 	ld_sril XWA, (xsp + 0x00b2)
 	ld xbc, xde
@@ -7778,10 +7778,10 @@ PsTrkSw_ShowHide:
 	call GetViewInstance
 	ld xiz, xhl
 	ld_sril XWA, (xsp + 0x00b2)
-	ld xbc, 0x1e00010
+	ld xbc, EVT_GET_CLASS
 	ld xde, 0:i3
 	call SendEvent
-	cp xhl, 0x1600058
+	cp xhl, NAKA_CLASS_PsTrackSwitch
 	jr nz, PsTrkSw_ReturnZero
 	ld xwa, (xiz + 28)
 	ld bc, (xwa)
@@ -7793,13 +7793,13 @@ PsTrkSw_ShowHide:
 	ld xde, xwa
 	add xde, xbc
 	ld_sril XWA, (xsp + 0x00b2)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	ld xwa, (xiz + 32)
 	ld de, (xwa)
 	exts xde
 	ld_sril XWA, (xsp + 0x00b2)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 
 PsTrkSw_ReturnZero:
@@ -8113,15 +8113,15 @@ AcTrackSwitchProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1c0002e
+	cp xiz, EVT_TRSW_COMMAND
 	jrl z, AcTrkSw_OK
-	cp xiz, 0x1c0002d
+	cp xiz, EVT_TRSW_PART
 	jrl z, AcTrkSw_ReturnZero
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, AcTrkSw_SpecialDispatch
-	cp xiz, 0x1c0000c
+	cp xiz, EVT_REPAINT
 	jr z, AcTrkSw_Catchall
-	cp xiz, 0x1c0000b
+	cp xiz, EVT_PAINT
 	jr z, AcTrkSw_Catchall
 	ld xwa, (xsp + 8)
 	ld xbc, xiz
@@ -8137,13 +8137,13 @@ AcTrkSw_Catchall:
 	call GetViewInstance
 	ld de, (xhl + 22)
 	extz xde
-	ld xwa, 0x140000a
-	ld xbc, 0x1e00092
+	ld xwa, NAKA_MAINFUNC_MainTrSwControl
+	ld xbc, EVT_REQUEST_TRACK_SWITCH
 	jr AcTrkSw_SpecialDispatch_CheckPart
 
 AcTrkSw_SpecialDispatch:
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1e00053
+	ld xbc, EVT_CHECK_EDIT_SW
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
@@ -8152,8 +8152,8 @@ AcTrkSw_SpecialDispatch:
 	call GetViewInstance
 	ld de, (xhl + 22)
 	extz xde
-	ld xwa, 0x140000a
-	ld xbc, 0x1e00093
+	ld xwa, NAKA_MAINFUNC_MainTrSwControl
+	ld xbc, EVT_TOGGLE_TRACK_SWITCH
 
 AcTrkSw_SpecialDispatch_CheckPart:
 	call MainFuncCall
@@ -8192,7 +8192,7 @@ AcTrkSw_ReturnZero:
 	ld xde, xwa
 	add xde, xbc
 	ld xwa, (xsp + 8)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jr AcTrkSw_OK_SendConfirm
 
 AcTrkSw_OK:
@@ -8212,7 +8212,7 @@ AcTrkSw_OK:
 	ld de, wa
 	exts xde
 	ld xwa, (xsp + 8)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 
 AcTrkSw_OK_SendConfirm:
 	call SendEvent
@@ -8230,9 +8230,9 @@ PsTextBoxProc:
 	push xiz
 	ld (xsp + 40), xde
 	ld xiz, xwa
-	cp xbc, 0x1e00089
+	cp xbc, EVT_GET_STR_PTR
 	jrl z, AcTrkSw_Select_HighTrack
-	cp xbc, EVT_INIT_HOOK
+	cp xbc, EVT_PARA_DRAW
 	jr z, AcTrkSw_Reset
 	ld xwa, xiz
 	ld xde, (xsp + 40)
@@ -8255,7 +8255,7 @@ AcTrkSw_Reset:
 	or xwa, xwa
 	jr nz, AcTrkSw_Reset_UpdateIndex
 	ld xwa, xiz
-	ld xbc, 0x1e00089
+	ld xbc, EVT_GET_STR_PTR
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 16), xhl
@@ -8403,9 +8403,9 @@ AcTrkSw_Select_DrawTrack:
 AcLanguageTextProc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1e00089
+	cp xbc, EVT_GET_STR_PTR
 	jr z, AcTrkSw_ShowHide_CheckDirty
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, AcTrkSw_ShowHide
 	ld xwa, xiz
 	calr PsTextBoxProc
@@ -8417,7 +8417,7 @@ AcTrkSw_ShowHide:
 	ld xwa, xiz
 	call GetViewInstance
 	ld xwa, (xhl + 38)
-	ld xbc, 0x1e0009f
+	ld xbc, EVT_GET_LANGUAGE_PTR
 	ld xde, 0:i3
 	call ApFuncCall
 	ld a, (0x0340e4:24)
@@ -8425,7 +8425,7 @@ AcTrkSw_ShowHide:
 	sla wa, 2
 	ld_sril3 XDE, 0x07, 0xec, 0xe0
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	ld xhl, 0:i3
 	jr AcTrkSw_ShowHide_Refresh
@@ -8438,7 +8438,7 @@ AcTrkSw_ShowHide_Refresh:
 	ret
 
 LanguageCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, ObjectProc_ClassDispatch
 	lda xhl, (Str_No_0x52E:24)
 	ret
@@ -8472,12 +8472,12 @@ ObjectProc:
 	add xwa, xbc
 	ld xix, (xwa)
 	ld_sril XWA, (xsp + 0x0090)
-	ld xbc, EVT_IDENTITY
+	ld xbc, EVT_GET_CLASS_SP
 	ld xde, 0:i3
 	call (xix)
 	ld xiz, xhl
 	ld_sril XWA, (xsp + 0x008c)
-	sub xwa, 0x1e00010
+	sub xwa, EVT_GET_CLASS
 	cp xwa, 0x0
 	jrl lt, ExitWindow_Init
 	cp xwa, 0x13
@@ -8514,40 +8514,40 @@ AcTrkSw_Return:
 	jrl	ObjectProc_Join5
 ObjectProc_Evt1E00011:
 	ld	xwa, xiz
-	ld	xbc, EVT_GET_HL
+	ld	xbc, EVT_GET_PARENT_CLASS_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
 ObjectProc_Evt1E00013:
 	ld	xwa, xiz
-	ld	xbc, EVT_GET_IZ
+	ld	xbc, EVT_GET_PROCEDURE_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
 ObjectProc_Evt1E00021:
 	ld	xwa, xiz
-	ld	xbc, EVT_GET_CONFIG
+	ld	xbc, EVT_GET_INSTANCE_SIZE_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
 ObjectProc_Evt1E00012:
 	ld	xwa, xiz
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
 ObjectProc_Evt1E00014:
 	ld	xwa, xiz
-	ld	xbc, 31457284
+	ld	xbc, EVT_CHECK_CLASS_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
 ObjectProc_Evt1E00019:
 	ld	xwa, (xsp+136)
 	ld	(xwa), 0
 	ld	xwa, xiz
-	ld	xbc, 31457285
+	ld	xbc, EVT_GET_PROP_STRING_EX
 	ld	xde, (xsp+136)
 	calr	ClassProc
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+144)
-	ld	xbc, EVT_REDRAW
-	ld	xde, 23068688
+	ld	xbc, EVT_CHECK_CLASS
+	ld	xde, NAKA_CLASS_Viewable
 	call	SendEvent
 	or	xhl, xhl
 	jr	z, ObjectProc_Skip
@@ -8562,13 +8562,13 @@ ObjectProc_Skip:
 	jrl	ObjectProc_Join5
 ObjectProc_Evt1E00017:
 	ld	xwa, xiz
-	ld	xbc, 31457286
+	ld	xbc, EVT_GET_PROP_COUNT_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
 ObjectProc_Evt1E00018:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	lda	xbc, (xsp+8)
 	ld	xhl, xbc
@@ -8602,13 +8602,13 @@ ObjectProc_Skip3:
 	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, xiz
-	ld	xbc, 31457287
+	ld	xbc, EVT_GET_PROP_NAME_SP
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join3
 ObjectProc_Evt1E0001A:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	ld	xwa, (xsp+136)
 	ld	bc, (xwa+8)
@@ -8620,13 +8620,13 @@ ObjectProc_Evt1E0001A:
 	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 39845888
-	ld	xbc, 31457288
+	ld	xbc, EVT_COPY_PROPERTY_EX
 	ld	xde, (xsp+136)
 	jrl	ObjectProc_Join2
 ObjectProc_Evt1E0001B:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8638,13 +8638,13 @@ ObjectProc_Evt1E0001B:
 	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 39845888
-	ld	xbc, 31457289
+	ld	xbc, EVT_DUMP_PROPERTY_EX
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join2
 ObjectProc_Evt1E0001C:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8656,13 +8656,13 @@ ObjectProc_Evt1E0001C:
 	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 39845888
-	ld	xbc, 31457290
+	ld	xbc, EVT_DUMP_POINTER_EX
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join2
 ObjectProc_Evt1E0001D:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8674,7 +8674,7 @@ ObjectProc_Evt1E0001D:
 	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 39845888
-	ld	xbc, 31457291
+	ld	xbc, EVT_GET_PROPERTY_EX
 	ld	xde, (xsp+136)
 ObjectProc_Join2:
 	call	SendEvent
@@ -8682,7 +8682,7 @@ ObjectProc_Join2:
 ObjectProc_Evt1E0001E:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	ld	xbc, (xsp+144)
 	ld	xwa, (xsp+136)
@@ -8694,18 +8694,18 @@ ObjectProc_Evt1E0001E:
 	ld	w, 0:opc
 	extz	xwa
 	add	xwa, 39845888
-	ld	xbc, 31457292
+	ld	xbc, EVT_SET_PROPERTY_EX
 	ld	xde, (xsp+136)
 	call	SendEvent
 	jr	ObjectProc_Join5
 ObjectProc_Evt1E0001F:
 	ld	xwa, xiz
-	ld	xbc, EVT_KEYPRESS
+	ld	xbc, EVT_GET_PROP_DATA_SP
 	ld	xde, (xsp+136)
 	jr	ObjectProc_Join3
 ObjectProc_Evt1E00020:
 	ld	xwa, xiz
-	ld	xbc, EVT_INPUT
+	ld	xbc, EVT_GET_PROP_DATA_COUNT_SP
 	ld	xde, (xsp+136)
 ObjectProc_Join3:
 	calr	ClassProc
@@ -8713,7 +8713,7 @@ ObjectProc_Join3:
 ObjectProc_Evt1E00022:
 	lda	xde, (xsp+8)
 	ld	xwa, (xsp+144)
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	lda	xwa, (xsp+8)
 	add	xwa, (xsp+136)
@@ -8787,7 +8787,7 @@ ExitWindow_OK:
 	cp xwa, xde
 	jr c, ExitWindow_OK
 	lda xbc, (xsp + 2)
-	ld xwa, 0x1600005
+	ld xwa, NAKA_CLASS_SupportClass
 	ld (xbc), xwa
 	lda xwa, (SupportClassProc:24)
 	ld (xbc + 4), xwa
@@ -8797,7 +8797,7 @@ ExitWindow_OK:
 	ldw wa, 0x260
 	calr RegisterObjectTable
 	lda xbc, (xsp + 2)
-	ld xwa, 0x1600006
+	ld xwa, NAKA_CLASS_Mode
 	ld (xbc), xwa
 	lda xwa, (ModeProc:24)
 	ld (xbc + 4), xwa
@@ -8807,7 +8807,7 @@ ExitWindow_OK:
 	ldw wa, 0x180
 	calr RegisterObjectTable
 	lda xbc, (xsp + 2)
-	ld xwa, 0x1600007
+	ld xwa, NAKA_CLASS_Title
 	ld (xbc), xwa
 	lda xwa, (TitleProc:24)
 	ld (xbc + 4), xwa
@@ -8820,7 +8820,7 @@ ExitWindow_OK:
 
 ExitWindow_Return:
 	lda xbc, (xsp + 2)
-	ld xwa, 0x1600010
+	ld xwa, NAKA_CLASS_Viewable
 	ld (xbc), xwa
 	lda xwa, (ViewableProc:24)
 	ld (xbc + 4), xwa
@@ -9200,9 +9200,9 @@ ClassProc:
 	ld XIX, (xsp + 0x0116)
 	ld (xsp + 14), xix
 	lda_dri XDE, 0xfd, 0x92, 0x00
-	cp xix, EVT_INPUT
+	cp xix, EVT_GET_PROP_DATA_COUNT_SP
 	jrl z, TitleWidget_OK_Forward
-	cp xix, EVT_KEYPRESS
+	cp xix, EVT_GET_PROP_DATA_SP
 	jrl z, TitleWidget_OK
 	ld bc, (xsp + 8)
 	extz xbc
@@ -9211,15 +9211,15 @@ ClassProc:
 	add xhl, xbc
 	sll xhl, 3
 	add xhl, (xsp + 4)
-	cp xix, EVT_RETURN_ZERO
+	cp xix, EVT_GET_INSTANCE
 	jr z, TitleWidget_Paint
 	ld xbc, xix
-	cp xbc, EVT_GET_CONFIG_2
+	cp xbc, EVT_GET_NAME
 	jr z, ClassProc_Event_LoadFromOffset
 	ld xiz, xhl
 	inc 4, xhl
 	ld xbc, (xsp + 14)
-	sub xbc, EVT_IDENTITY
+	sub xbc, EVT_GET_CLASS_SP
 	cp xbc, 0x0
 	jrl lt, TitleWidget_OK_AdvanceDone
 	cp xbc, 0x7
@@ -9319,7 +9319,7 @@ TitleWidget_Select:
 	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
-	ld xbc, 0x1e00025
+	ld xbc, EVT_CHECK_PROP_STRING
 	call SendEvent
 	ld xwa, 1:i3
 	add (xsp + 10), xwa
@@ -9351,12 +9351,12 @@ TitleWidget_Confirm:
 	cp	xbc, 4294967295
 	jrl	z, ClassProc_ReturnZeroJmp
 	ld	xwa, xbc
-	ld	xbc, 31457285
+	ld	xbc, EVT_GET_PROP_STRING_EX
 	ld	xde, (xsp+274)
 	calr	ClassProc
 	jrl	ClassProc_ReturnZeroJmp
 ClassProc_Evt1E00006:
-	ld	xbc, 31457305
+	ld	xbc, EVT_GET_PROP_STRING
 	call	SendEvent
 	lda	xwa, (xsp+146)
 	push	xwa
@@ -9369,7 +9369,7 @@ ClassProc_Evt1E00007:
 	cp	xbc, 4294967295
 	jr	z, TitleWidget_Confirm_DrawLayout
 	ld	xwa, xbc
-	ld	xbc, 31457287
+	ld	xbc, EVT_GET_PROP_NAME_SP
 	ld	xde, (xsp+274)
 	calr	ClassProc
 TitleWidget_Confirm_DrawLayout:
@@ -9398,7 +9398,7 @@ TitleWidget_Confirm_DrawRow:
 	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
-	ld xbc, 0x1e00025
+	ld xbc, EVT_CHECK_PROP_STRING
 	call SendEvent
 	ld xwa, 1:i3
 	add (xsp + 10), xwa
@@ -9440,7 +9440,7 @@ TitleWidget_Confirm_DrawRowNext:
 	extz XWA
 	add XWA,0x02600000
 	lda xde, (xsp + 0x12)
-	ld XBC,0x01e00026
+	ld XBC,EVT_GET_PROP_MEMBER
 	call SendEvent
 	add (XSP+0x0e),XHL
 	ld XBC,(XSP+0x0112)
@@ -9471,7 +9471,7 @@ ClassProc_ReturnZeroJmp:
 	jr ClassProc_ReturnWithStatus
 
 TitleWidget_OK:
-	ld xbc, 0x1e00019
+	ld xbc, EVT_GET_PROP_STRING
 	call SendEvent
 	lda_dri XBC, 0xfd, 0x92, 0x00
 	ld XWA, (xsp + 0x0112)
@@ -9481,12 +9481,12 @@ TitleWidget_OK:
 	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
-	ld xbc, EVT_KEYPRESS
+	ld xbc, EVT_GET_PROP_DATA_SP
 	ld XDE, (xsp + 0x0112)
 	jr TitleWidget_OK_Advance
 
 TitleWidget_OK_Forward:
-	ld xbc, 0x1e00019
+	ld xbc, EVT_GET_PROP_STRING
 	call SendEvent
 	lda_dri XWA, 0xfd, 0x92, 0x00
 	add_sril_rm XWA, 0xfd, 0x12, 0x01
@@ -9495,7 +9495,7 @@ TitleWidget_OK_Forward:
 	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
-	ld xbc, EVT_INPUT
+	ld xbc, EVT_GET_PROP_DATA_COUNT_SP
 	ld XDE, (xsp + 0x0112)
 
 TitleWidget_OK_Advance:
@@ -9537,13 +9537,13 @@ SupportClassProc:
 	add xhl, xiz
 	sll xhl, 2
 	add xhl, xiy
-	cp xbc, 0x1e00027
+	cp xbc, EVT_GET_PROP_SIZE
 	jr z, TitleWidget_Default
-	cp xbc, EVT_RETURN_ZERO
+	cp xbc, EVT_GET_INSTANCE
 	jr z, SupportClass_PopIzRet
-	cp xbc, EVT_IDENTITY
+	cp xbc, EVT_GET_CLASS_SP
 	jr nz, SupportClass_VirtualDispatch
-	ld xhl, 0x1600005
+	ld xhl, NAKA_CLASS_SupportClass
 	jr SupportClass_PopIzRet
 
 TitleWidget_Default:
@@ -9553,7 +9553,7 @@ TitleWidget_Default:
 
 ; SupportClass virtual dispatch with type check
 SupportClass_VirtualDispatch:
-	cp xix, 0x1600005
+	cp xix, NAKA_CLASS_SupportClass
 	jr z, TitleWidget_Return
 	ld xix, (xhl)
 	call (xix)
@@ -9588,22 +9588,22 @@ FunctionProc:
 	ld xix, (xix + 10)
 	extz xde
 	sll xde, 2
-	cp xbc, EVT_GET_CONFIG_2
+	cp xbc, EVT_GET_NAME
 	jr z, FunctionProc_Dispatch
 	ld xhl, xde
 	add xhl, xix
-	cp xbc, 0x1e0002a
+	cp xbc, EVT_GET_FUNCTION
 	jr z, ResourceWidget_Init_Loop
-	cp xbc, EVT_RETURN_ZERO
+	cp xbc, EVT_GET_INSTANCE
 	jr z, FuncProc_PopIzSkip4Ret
-	cp xbc, EVT_IDENTITY
+	cp xbc, EVT_GET_CLASS_SP
 	jr z, ResourceWidget_Init
 	ld xde, (xsp + 4)
 	calr ObjectProc
 	jr FuncProc_PopIzSkip4Ret
 
 ResourceWidget_Init:
-	ld xhl, 0x1600001
+	ld xhl, NAKA_CLASS_Function
 	jr FuncProc_PopIzSkip4Ret
 
 ResourceWidget_Init_Loop:
@@ -9655,11 +9655,11 @@ FuncCall:
 	ret
 
 ApFunctionProc:
-	cp xbc, EVT_GET_CONFIG_2
+	cp xbc, EVT_GET_NAME
 	jr z, ApFuncCall_VirtualDispatch
-	cp xbc, EVT_IDENTITY
+	cp xbc, EVT_GET_CLASS_SP
 	jrl nz, FunctionProc
-	ld xhl, 0x1600002
+	ld xhl, NAKA_CLASS_ApFunction
 	ret
 
 ; ApFuncCall object ID lookup dispatch
@@ -9693,8 +9693,8 @@ ApFuncCall:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600002
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_ApFunction
 	call SendEvent
 	or xhl, xhl
 	jr z, ResourceWidget_ReturnZero
@@ -9734,11 +9734,11 @@ DefaultFunction:
 	ret
 
 MainFunctionProc:
-	cp xbc, EVT_GET_CONFIG_2
+	cp xbc, EVT_GET_NAME
 	jr z, MainFuncCall_DispatchDSP
-	cp xbc, EVT_IDENTITY
+	cp xbc, EVT_GET_CLASS_SP
 	jrl nz, FunctionProc
-	ld xhl, 0x1600003
+	ld xhl, NAKA_CLASS_MainFunction
 	ret
 
 ; MainFuncCall DSP variant dispatch
@@ -9796,17 +9796,17 @@ ModeProc:
 	ld xbc, (xbc)
 	ld (xsp + 4), xbc
 	ld xbc, xiz
-	cp xiz, EVT_CPANEL_EVENT
+	cp xiz, EVT_ACTIVATE_STATE
 	jrl z, ObjectEnum_Default
-	cp xiz, 0x1c00014
+	cp xiz, EVT_CHANGE_MODE
 	jrl z, ObjectEnum_Close
-	cp xiz, EVT_GET_CONFIG_2
+	cp xiz, EVT_GET_NAME
 	jrl z, ObjectEnum_Init
-	cp xiz, EVT_RETURN_ZERO
+	cp xiz, EVT_GET_INSTANCE
 	jr z, NakaWidget_Return
-	cp xiz, EVT_IDENTITY
+	cp xiz, EVT_GET_CLASS_SP
 	jr z, NakaWidget_ReturnConst_0x1600006
-	sub xbc, 0x1e0002b
+	sub xbc, EVT_GET_MODE_PROC
 	cp xbc, 0x0
 	jrl lt, GetMode_DispatchDSP
 	cp xbc, 0x5
@@ -9826,7 +9826,7 @@ ModeProc:
 	jp_ind 8, 0x07, 0xf0, 0xe4
 
 NakaWidget_ReturnConst_0x1600006:
-	ld xhl, 0x1600006
+	ld xhl, NAKA_CLASS_Mode
 	jrl GetMode_Epilogue10
 
 NakaWidget_Return:
@@ -9847,7 +9847,7 @@ ModeProc_Evt1E0002B:
 	add xbc, xbc
 	add xbc, (xsp + 4)
 	ld xwa, (xbc)
-	ld xbc, 0x1e0002a
+	ld xbc, EVT_GET_FUNCTION
 	ld xde, 0:i3
 	call SendEvent
 	jrl GetMode_Epilogue10
@@ -9902,11 +9902,11 @@ ModeProc_Evt1E0002F:
 
 ObjectEnum_Close:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000b0
+	ld xbc, EVT_REFRESH_AP_TASK
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (0x03ef8a:24)
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
@@ -9914,11 +9914,11 @@ ObjectEnum_Close:
 
 ObjectEnum_Destroy:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00028
+	ld xbc, EVT_RETURN_TITLE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (0x03ef8a:24)
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
@@ -9930,7 +9930,7 @@ ObjectEnum_Paint:
 	lda xbc, (0x027ed2:24)
 	cp xwa, xde
 	jr nz, ObjectEnum_OK
-	ld xwa, 0x1800001
+	ld xwa, NAKA_MODE_MD_NORMAL
 	ld (xsp + 10), xwa
 	ldw (xsp + 8), 0x1
 	ld XWA, (xbc + 0x150a)
@@ -9958,9 +9958,9 @@ ObjectEnum_OK:
 	jr ObjectEnum_OK_DispatchInline
 
 ObjectEnum_OK_Dispatch:
-	ld xwa, 0x1800000
+	ld xwa, NAKA_MODE_MD_PS
 	ld (0x03ef82:24), xwa
-	ld xwa, 0x1a00000
+	ld xwa, TITLE_PS
 	ld (0x03ef8a:24), xwa
 ObjectEnum_OK_DispatchInline:
 	ld	xwa, (257930:24)
@@ -9987,15 +9987,15 @@ ObjectEnum_OK_DispatchInline:
 	ld	xwa, 4294967295
 	ld	(xhl+14), xwa
 	ld	xde, (257922:24)
-	ld	xwa, 20971521
-	ld	xbc, 29360148
+	ld	xwa, NAKA_MAINFUNC_MainTitleControl
+	ld	xbc, EVT_CHANGE_MODE
 	calr	MainFuncCall
 	ld	xde, (257930:24)
-	ld	xwa, 20971521
-	ld	xbc, 29360149
+	ld	xwa, NAKA_MAINFUNC_MainTitleControl
+	ld	xbc, EVT_CHANGE_TITLE
 	calr	MainFuncCall
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	SendEvent
 	jr	ObjectEnum_Return
@@ -10011,7 +10011,7 @@ ObjectEnum_Default:
 	ld xbc, xiz
 	ld xde, (xsp + 10)
 	calr MainFuncCall
-	ld xwa, 0x1400001
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
 	ld xbc, xiz
 	ld xde, (xsp + 10)
 	calr MainFuncCall
@@ -10063,7 +10063,7 @@ UnregisteredMode:
 	add xwa, xwa
 	ld xbc, 0x328fc
 	add xbc, xwa
-	ld xwa, 0x1200000
+	ld xwa, NAKA_APFUNC_DefaultFunction
 	ld (xbc), xwa
 	ld xwa, 0xffffffff
 	ld (xbc + 4), xwa
@@ -10124,7 +10124,7 @@ UnregisteredTitle:
 	call	InitializeKubo_Helper
 	ld	xbc, 207548
 	add	xbc, xhl
-	ld	xwa, 18874368
+	ld	xwa, NAKA_APFUNC_DefaultFunction
 	ld	(xbc), xwa
 	ld	xwa, 4294967295
 	ld	(xbc+4), xwa
@@ -10168,9 +10168,9 @@ TitleProc:
 	ld wa, (0x02bc30:24)
 	and wa, 0x11
 	ld (xsp + 28), wa
-	cp xiz, EVT_CPANEL_EVENT
+	cp xiz, EVT_ACTIVATE_STATE
 	jrl z, EnumList_HitTest_Match
-	cp xiz, 0x1e000b7
+	cp xiz, EVT_EASY_SET_GO
 	jrl z, EnumList_HitTest
 	ld xwa, (xsp + 30)
 	sll xwa, 3
@@ -10179,53 +10179,53 @@ TitleProc:
 	ld xbc, Str_No_0x602
 	add xbc, xwa
 	ld xwa, (xbc + 8)
-	cp xiz, 0x1e000a6
+	cp xiz, EVT_EASY_SET_OFF
 	jrl z, EnumList_OK_ScrollUp_Wrap
-	cp xiz, 0x1e000a5
+	cp xiz, EVT_EASY_SET_ON
 	jrl z, EnumList_OK_ScrollDown_Done
-	cp xiz, 0x1e0009e
+	cp xiz, EVT_SET_NOT_DRAW_FLAG
 	jrl z, EnumList_OK_ScrollDown
-	cp xiz, 0x1e0007a
+	cp xiz, EVT_IS_INTERRUPT
 	jrl z, EnumList_OK_Next
-	cp xiz, 0x1e0009b
+	cp xiz, EVT_TOGGLE_HOLD
 	jrl z, EnumList_Return
-	cp xiz, 0x1e0009a
+	cp xiz, EVT_SET_HOLD
 	jrl z, EnumList_Paint
-	cp xiz, 0x1e000aa
+	cp xiz, EVT_CHECK_HOLD
 	jrl z, EnumList_Confirm_Forward
-	cp xiz, 0x1e000b3
+	cp xiz, EVT_SET_KEEP
 	jrl z, EnumList_ValueChange_A
-	cp xiz, 0x1e00098
+	cp xiz, EVT_INTERRUPT_HOLD
 	jrl z, EnumList_PartChange_B
-	cp xiz, 0x1e00079
+	cp xiz, EVT_INTERRUPT_EXIT
 	jrl z, EnumList_ShowHide_B
 	ld wa, (0x02bc32:24)
 	exts xwa
 	ld (xsp + 18), xwa
 	ld wa, (xsp + 28)
 	ld (xsp + 28), wa
-	cp xiz, 0x1e00078
+	cp xiz, EVT_RESET_INTERRUPT_TIME
 	jrl z, EnumList_ShowHide_A
-	cp xiz, 0x1e00099
+	cp xiz, EVT_SET_INTERRUPT_TIME
 	jrl z, EnumList_Close
-	cp xiz, 0x1e00077
+	cp xiz, EVT_SET_RETURN_SCREEN
 	jrl z, EnumList_Init_TypeB
-	cp xiz, 0x1e00076
+	cp xiz, EVT_GET_RETURN_SCREEN
 	jrl z, EnumList_Init
 	ld xwa, (0x03ef8a:24)
-	cp xiz, 0x1c00028
+	cp xiz, EVT_RETURN_TITLE
 	jrl z, EventDispatch_Return
-	cp xiz, EVT_HD_INIT_PARAMS
+	cp xiz, EVT_INTERRUPT_TITLE
 	jrl z, EventDispatch_OK
-	cp xiz, 0x1c00015
+	cp xiz, EVT_CHANGE_TITLE
 	jrl z, EventDispatch_SelectMatch
-	cp xiz, EVT_GET_CONFIG_2
+	cp xiz, EVT_GET_NAME
 	jrl z, EventDispatch_Select
-	cp xiz, EVT_RETURN_ZERO
+	cp xiz, EVT_GET_INSTANCE
 	jr z, EventDispatch_ScanLoop
-	cp xiz, EVT_IDENTITY
+	cp xiz, EVT_GET_CLASS_SP
 	jr z, TitleProc_EventDispatch
-	sub xde, 0x1e00030
+	sub xde, EVT_GET_USER_ID
 	cp xde, 0x0
 	jrl lt, EnumList_Select_Send
 	cp xde, 0x5
@@ -10246,7 +10246,7 @@ TitleProc:
 
 ; TitleProc event dispatch
 TitleProc_EventDispatch:
-	ld xhl, 0x1600007
+	ld xhl, NAKA_CLASS_Title
 	jrl	TitleFunc_Epilogue34
 
 EventDispatch_ScanLoop:
@@ -10263,7 +10263,7 @@ TitleProc_Evt1E00031:
 	call	InitializeKubo_Helper
 	add	xhl, (xsp+4)
 	ld	xwa, (xhl)
-	ld	xbc, 0x1e0002a
+	ld	xbc, EVT_GET_FUNCTION
 	ld	xde, 0:i3
 	call	SendEvent
 	jrl	TitleFunc_Epilogue34
@@ -10320,7 +10320,7 @@ TitleProc_Evt1E00035:
 
 
 EventDispatch_SelectMatch:
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
@@ -10328,11 +10328,11 @@ EventDispatch_SelectMatch:
 
 EventDispatch_SelectDone:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00028
+	ld xbc, EVT_RETURN_TITLE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (0x03ef8a:24)
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
@@ -10353,7 +10353,7 @@ EventDispatch_ConfirmHandler:
 	ld	(0x03ef8a:24), xwa
 	jr	EventDispatch_ConfirmForward
 EventDispatch_ConfirmSetup:
-	ld xwa, 0x1a00000
+	ld xwa, TITLE_PS
 	ld (0x03ef8a:24), xwa
 
 EventDispatch_ConfirmForward:
@@ -10362,8 +10362,8 @@ EventDispatch_ConfirmForward:
 	ld xwa, 0xffffffff
 	ld (xhl + 14), xwa
 	ld xde, (0x03ef8a:24)
-	ld xwa, 0x1400001
-	ld xbc, 0x1c00015
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_CHANGE_TITLE
 	jrl EnumList_OK_CheckHitTest
 
 EventDispatch_OK:
@@ -10381,11 +10381,11 @@ EventDispatch_OK:
 	add XHL,(XSP+0x04)
 	ld WA,(XHL+0x12)
 	exts XWA
-	add XWA,0x01a00000
+	add XWA,TITLE_PS
 	ld (XSP+0x08),XWA
 	ld WA,(XHL+0x14)
 	exts XWA
-	add XWA,0x01a00000
+	add XWA,TITLE_PS
 	ld (XSP+0x12),XWA
 	ld XWA,(XSP+0x08)
 	srl XWA, 0x00
@@ -10457,7 +10457,7 @@ EventDispatch_OKDone:
 	ld	(0x03ef8a:24), xwa
 	jr	EventDispatch_DefaultProc
 EventDispatch_Default:
-	ld xwa, 0x1a00000
+	ld xwa, TITLE_PS
 	ld (0x03ef8a:24), xwa
 
 EventDispatch_DefaultProc:
@@ -10513,9 +10513,9 @@ EventDispatch_DefaultProc:
 
 	ld xde, (0x03ef8a:24)
 
-	ld xwa, 0x1400001
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
 
-	ld xbc, EVT_HD_INIT_PARAMS
+	ld xbc, EVT_INTERRUPT_TITLE
 
 	calr	MainFuncCall
 
@@ -10550,7 +10550,7 @@ EventDispatch_Return:
 	ld XWA,(XWA+0x0a)
 	ld (XSP+0x04),XWA
 	ld XWA,(XSP+0x22)
-	ld XBC,0x01e0009a
+	ld XBC,EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	wa, (xsp+12)
@@ -10566,11 +10566,11 @@ EventDispatch_Return:
 	ld	(257934:24), xwa
 	ld	wa, (xbc)
 	exts	xwa
-	add	xwa, 27262976
+	add	xwa, TITLE_PS
 	ld	(257930:24), xwa
 	ld	xde, xwa
-	ld	xwa, 20971521
-	ld	xbc, 29360168
+	ld	xwa, NAKA_MAINFUNC_MainTitleControl
+	ld	xbc, EVT_RETURN_TITLE
 	calr	MainFuncCall
 	ld	wa, (xsp+12)
 	extz	xwa
@@ -10612,7 +10612,7 @@ EventDispatch_Return:
 	ldw	(xhl+20), 65535
 	ld	wa, (179250:24)
 	exts	xwa
-	ld	xbc, 29360168
+	ld	xbc, EVT_RETURN_TITLE
 	push	xbc
 	ld	xbc, 0:i3
 	push	xbc
@@ -10682,7 +10682,7 @@ EnumList_Close:
 
 	jrl	nz, TitleProc_ReturnZero	; jrl nz, TitleProc_ReturnZero (v7 displacement)
 
-	ld xwa, 0x1c00028
+	ld xwa, EVT_RETURN_TITLE
 
 	push xwa
 
@@ -10719,7 +10719,7 @@ EnumList_ShowHide_A:
 
 	jrl	nz, TitleProc_ReturnZero	; jrl nz, TitleProc_ReturnZero (v7 displacement)
 
-	ld xwa, 0x1c00028
+	ld xwa, EVT_RETURN_TITLE
 
 	push xwa
 
@@ -10749,7 +10749,7 @@ EnumList_ShowHide_B:
 	jrl z, TitleProc_ReturnZero
 	cpw (XSP+0x1c), 0x0000
 	jr nz, EnumList_PartChange_A
-	ld XWA,0x01c00028
+	ld XWA,EVT_RETURN_TITLE
 	push XWA
 	ld xwa, 0:i3
 	push XWA
@@ -10759,7 +10759,7 @@ EnumList_ShowHide_B:
 	call ResetApTimer
 	jrl t, TitleProc_ReturnZero
 EnumList_PartChange_A:
-	ld xwa, 0x1c00028
+	ld xwa, EVT_RETURN_TITLE
 	push xwa
 	ld xwa, 0:i3
 	push xwa
@@ -10769,7 +10769,7 @@ EnumList_PartChange_A:
 	call ResetApTimer
 	cp hl, 0:i3
 	jrl nz, TitleProc_ReturnZero
-	ld xwa, 0x1c00028
+	ld xwa, EVT_RETURN_TITLE
 	push xwa
 	ld xwa, 0:i3
 	push xwa
@@ -10793,7 +10793,7 @@ EnumList_PartChange_B:
 
 	jrl z, TitleProc_ReturnZero
 
-	ld xwa, 0x1c00028
+	ld xwa, EVT_RETURN_TITLE
 
 	push xwa
 
@@ -10824,7 +10824,7 @@ EnumList_ValueChange_A:
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, EnumList_ValueChange_B
-	ld XWA,0x01c00028
+	ld XWA,EVT_RETURN_TITLE
 	push XWA
 	ld xwa, 0:i3
 	push XWA
@@ -10845,7 +10845,7 @@ EnumList_ValueChange_Done:
 	add	xhl, (xsp+4)
 	cpw	(xhl+18), 65535
 	jr	z, EnumList_Confirm_Init
-	ld	xwa, 0x1c00028
+	ld	xwa, EVT_RETURN_TITLE
 	push	xwa
 	ld	xwa, 0:i3
 	push	xwa
@@ -10855,7 +10855,7 @@ EnumList_ValueChange_Done:
 	call	ResetApTimer
 	cp	hl, 0:i3
 	jr	nz, EnumList_Confirm_Init
-	ld	xwa, 0x1c00028
+	ld	xwa, EVT_RETURN_TITLE
 	push	xwa
 	ld	xwa, 0:i3
 	push	xwa
@@ -10886,7 +10886,7 @@ EnumList_Paint:
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, EnumList_Paint_DrawEntry
-	ld XWA,0x01c00028
+	ld XWA,EVT_RETURN_TITLE
 	push XWA
 	ld xwa, 0:i3
 	push XWA
@@ -10907,7 +10907,7 @@ EnumList_Paint_Loop:
 	add	xhl, (xsp+4)
 	cpw	(xhl+18), 65535
 	jr	z, EnumList_ReturnZero
-	ld	xwa, 0x1c00028
+	ld	xwa, EVT_RETURN_TITLE
 	push	xwa
 	ld	xwa, 0:i3
 	push	xwa
@@ -10917,7 +10917,7 @@ EnumList_Paint_Loop:
 	call	ResetApTimer
 	cp	hl, 0:i3
 	jr	nz, EnumList_ReturnZero
-	ld	xwa, 0x1c00028
+	ld	xwa, EVT_RETURN_TITLE
 	push	xwa
 	ld	xwa, 0:i3
 	push	xwa
@@ -10940,7 +10940,7 @@ EnumList_Return:
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, TitleProc_ToggleFlag
-	ld XWA,0x01c00028
+	ld XWA,EVT_RETURN_TITLE
 	push XWA
 	ld xwa, 0:i3
 	push XWA
@@ -10950,7 +10950,7 @@ EnumList_Return:
 	call ResetApTimer
 	cp hl, 0:i3
 	jr nz, TitleProc_ToggleFlag
-	ld XWA,0x01c00028
+	ld XWA,EVT_RETURN_TITLE
 	push XWA
 	ld xwa, 0:i3
 	push XWA
@@ -10968,7 +10968,7 @@ EnumList_OK:
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, TitleProc_ToggleFlag
-	ld XWA,0x01c00028
+	ld XWA,EVT_RETURN_TITLE
 	push XWA
 	ld xwa, 0:i3
 	push XWA
@@ -10981,8 +10981,8 @@ TitleProc_ToggleFlag:
 	xor de, 0x1
 	ld (0x02bc30:24), de
 	extz xde
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ba
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_SET_TITLE_FLAG
 
 EnumList_OK_CheckHitTest:
 	calr MainFuncCall
@@ -11023,7 +11023,7 @@ EnumList_OK_ScrollDown_Wrap:
 
 EnumList_OK_ScrollDown_Done:
 	ld xbc, (xbc)
-	ld xde, 0x1e000b7
+	ld xde, EVT_EASY_SET_GO
 	push xde
 	ld xde, (xsp + 34)
 	push xde
@@ -11035,7 +11035,7 @@ EnumList_OK_ScrollUp:
 
 EnumList_OK_ScrollUp_Wrap:
 	ld xbc, (xbc)
-	ld xde, 0x1e000b7
+	ld xde, EVT_EASY_SET_GO
 	push xde
 	ld xde, (xsp + 34)
 	push xde
@@ -11053,7 +11053,7 @@ EnumList_OK_ScrollUp_Done:
 	add xbc, xwa
 	ld xwa, (xbc + 8)
 	ld xbc, (xbc)
-	ld xde, 0x1e000b7
+	ld xde, EVT_EASY_SET_GO
 	push xde
 	ld xde, (xsp + 34)
 	push xde
@@ -11065,7 +11065,7 @@ EnumList_OK_ScrollUp_Done:
 
 EnumList_HitTest:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000b7
+	ld xbc, EVT_EASY_SET_GO
 	call DeleteEvent
 	ld xbc, (xsp + 30)
 	sll xbc, 3
@@ -11074,18 +11074,18 @@ EnumList_HitTest:
 	lda xwa, (Str_No_0x606:24)
 	add xwa, xbc
 	ld xwa, (xwa)
-	cp xwa, 0x1c00015
+	cp xwa, EVT_CHANGE_TITLE
 	jr nz, EnumList_HitTest_Loop
 	calr GetModeNow
-	cp xhl, 0x1800001
+	cp xhl, NAKA_MODE_MD_NORMAL
 	jrl z, TitleProc_ReturnZero
 
 EnumList_HitTest_Loop:
 	calr GetModeNow
-	cp xhl, 0x1800013
+	cp xhl, NAKA_MODE_MD_DEMO
 	jrl z, TitleProc_ReturnZero
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 0:i3
 	call SendEvent
 	ldw wa, 0x20
@@ -11116,7 +11116,7 @@ EnumList_HitTest_Match:
 	ld XBC,XIZ
 	ld XDE,(XSP+0x1e)
 	calr MainFuncCall
-	ld XWA,0x01400001
+	ld XWA,NAKA_MAINFUNC_MainTitleControl
 	ld XBC,XIZ
 	ld XDE,(XSP+0x1e)
 	calr MainFuncCall
@@ -11135,7 +11135,7 @@ EnumList_HitTest_Match:
 EnumList_HitTest_NoMatch:
 .Lc_fa53fd:
 	ld XWA,0xffffffff
-	ld XBC,EVT_BUTTON_FOCUS
+	ld XBC,EVT_NEW_TITLE
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, (0x02bc30:24)
@@ -11153,7 +11153,7 @@ EnumList_HitTest_NoMatch:
 	jr t, TitleProc_ReturnZero
 EnumList_Select:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0003a
+	ld xbc, EVT_OLD_TITLE
 	ld xde, 0:i3
 	call SendEvent
 
@@ -11233,8 +11233,8 @@ TitleProc_SetResourceDirtyFlag:
 	or (0x02bc30:24), wa
 	ld de, (0x02bc30:24)
 	extz xde
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ba
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_SET_TITLE_FLAG
 	jrl MainFuncCall
 
 TitleProc_ClearResourceDirtyFlag:
@@ -11242,8 +11242,8 @@ TitleProc_ClearResourceDirtyFlag:
 	and (0x02bc30:24), wa
 	ld de, (0x02bc30:24)
 	extz xde
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ba
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_SET_TITLE_FLAG
 	jrl MainFuncCall
 
 ResEventProc:
@@ -11263,11 +11263,11 @@ ResEventProc:
 	lda xhl, (0x027edc:24)
 	add xhl, xix
 	ld xhl, (xhl)
-	cp xbc, EVT_GET_CONFIG_2
+	cp xbc, EVT_GET_NAME
 	jr z, EnumList_Reset_Return
-	cp xbc, EVT_IDENTITY
+	cp xbc, EVT_GET_CLASS_SP
 	jrl nz, ObjectProc
-	ld xhl, 0x160000c
+	ld xhl, NAKA_CLASS_ResEvent
 	ret
 
 EnumList_Reset_Return:
@@ -11295,11 +11295,11 @@ ResMethodProc:
 	lda xhl, (0x027edc:24)
 	add xhl, xix
 	ld xhl, (xhl)
-	cp xbc, EVT_GET_CONFIG_2
+	cp xbc, EVT_GET_NAME
 	jr z, ViewableProc_VirtualDispatch
-	cp xbc, EVT_IDENTITY
+	cp xbc, EVT_GET_CLASS_SP
 	jrl nz, ObjectProc
-	ld xhl, 0x160000d
+	ld xhl, NAKA_CLASS_ResMethod
 	ret
 
 ; ViewableProc object dispatch helper
@@ -11321,25 +11321,25 @@ ViewableProc:
 	ld (xsp + 6), xiy
 	ld xwa, (xsp + 16)
 	lda xbc, (xsp + 12)
-	cp xiy, 0x1e00052
+	cp xiy, EVT_SET_EDIT_SW_RECT
 	jrl z, Viewable_GetBoundsY
-	cp xiy, 0x1e0004f
+	cp xiy, EVT_SET_MENU_RECT
 	jrl z, Viewable_GetBoundsX
-	cp xiy, 0x1e000b5
+	cp xiy, EVT_SEARCH_LINK
 	jrl z, Viewable_MatchClass
-	cp xiy, 0x1e00024
+	cp xiy, EVT_SEARCH_CLASS
 	jrl z, Viewable_Dispatch
-	cp xiy, EVT_POST_ACTIVATE
+	cp xiy, EVT_SET_VISIBLE
 	jrl z, Viewable_SetVisible
-	cp xiy, 0x1e00039
+	cp xiy, EVT_GET_PREVVIEW
 	jrl z, Viewable_GetClass
-	cp xiy, 0x1e00038
+	cp xiy, EVT_GET_NEXTVIEW
 	jrl z, Viewable_GetChild
-	cp xiy, 0x1e00037
+	cp xiy, EVT_GET_SUBVIEW
 	jrl z, Viewable_GetOwner
-	cp xiy, 0x1e00036
+	cp xiy, EVT_GET_SUPERVIEW
 	jrl z, Viewable_GetParent
-	cp xiy, EVT_RETURN_ZERO
+	cp xiy, EVT_GET_INSTANCE
 	jrl z, Viewable_GetInstance
 	ld xwa, xiz
 	lda xde, (0x027ed2:24)
@@ -11358,24 +11358,24 @@ ViewableProc:
 	ld xwa, xde
 	add xwa, xhl
 	ld xix, (xwa + 10)
-	cp xiy, 0x1e00016
+	cp xiy, EVT_SET_NAME
 	jrl z, Viewable_SetName
 	ld hl, (xsp + 10)
 	extz xhl
 	sll xhl, 2
 	ld xwa, xiy
-	cp xwa, EVT_GET_CONFIG_2
+	cp xwa, EVT_GET_NAME
 	jrl z, Viewable_GetName
-	cp xwa, 0x1c00037
+	cp xwa, EVT_DELIVERY_EVENT
 	jrl z, Viewable_PostEvent
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jr z, Viewable_InitClose
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, Viewable_InitClose
-	cp xwa, EVT_IDENTITY
+	cp xwa, EVT_GET_CLASS_SP
 	jr z, Viewable_GetClassProc
 	ld xwa, (xsp + 6)
-	sub xwa, 0x1c0000b
+	sub xwa, EVT_PAINT
 	cp xwa, 0x0
 	jrl lt, Viewable_DefaultDispatch
 	cp xwa, 0x6
@@ -11434,7 +11434,7 @@ ViewableProc_Evt1C0000B:
 	cp hl, 0:i3
 	jr z, Viewable_Show_DispatchChild
 	ld xwa, xiz
-	ld xbc, EVT_POST_INIT
+	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xiz
@@ -11461,7 +11461,7 @@ ViewableProc_Evt1C0000C:
 	cp hl, 0:i3
 	jr z, Viewable_ReturnZero
 	ld xwa, xiz
-	ld xbc, EVT_POST_INIT
+	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xiz
@@ -11469,7 +11469,7 @@ ViewableProc_Evt1C0000C:
 	ld xwa, xhl
 	cp xwa, 0xffffffff
 	jr z, Viewable_ReturnZero
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, (xsp + 16)
 
 Viewable_Show_DispatchTail:
@@ -11605,7 +11605,7 @@ Viewable_SetVisible:
 
 Viewable_Dispatch:
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
+	ld xbc, EVT_CHECK_CLASS
 	ld xde, (xsp + 16)
 	call SendEvent
 	or xhl, xhl
@@ -12383,9 +12383,9 @@ SetBox:
 	ret
 
 ResNameProc:
-	cp xbc, EVT_IDENTITY
+	cp xbc, EVT_GET_CLASS_SP
 	jrl nz, ObjectProc
-	ld xhl, 0x160000f
+	ld xhl, NAKA_CLASS_ResName
 	ret
 
 ResourceProc:
@@ -12412,11 +12412,11 @@ swordProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, BoxStyle0_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, BoxStyle0_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, BoxStyle0_CalcWidth
 
 BoxStyle0_Setup:
@@ -12462,11 +12462,11 @@ uwordProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, BoxStyle1_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, BoxStyle1_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, BoxStyle1_CalcWidth
 
 BoxStyle1_Setup:
@@ -12512,11 +12512,11 @@ ucharProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, BoxStyle2_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, BoxStyle2_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, BoxStyle2_CalcWidth
 
 BoxStyle2_Setup:
@@ -12562,11 +12562,11 @@ scharProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, BoxStyle3_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, BoxStyle3_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, BoxStyle3_CalcWidth
 
 BoxStyle3_Setup:
@@ -12613,11 +12613,11 @@ slongProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, BoxStyle4_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, BoxStyle4_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, BoxStyle4_CalcWidth
 
 BoxStyle4_Setup:
@@ -12662,11 +12662,11 @@ ulongProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, BoxStyle5_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, BoxStyle5_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, BoxStyle5_CalcWidth
 
 BoxStyle5_Setup:
@@ -12711,11 +12711,11 @@ boolProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, BoxStyle6_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, BoxStyle6_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, BoxStyle6_CalcWidth
 
 BoxStyle6_Setup:
@@ -12761,19 +12761,19 @@ pBoolProc:
 	ld	(xsp+264), xde
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
-	cp	xiz, 31457292
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, BoxStyle7_Execute
-	cp	xiz, 31457291
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, BoxStyle7_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
-	cp	xiz, 31457289
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jr	z, BoxStyle7_CalcWidth
-	cp	xiz, 31457290
+	cp	xiz, EVT_DUMP_POINTER_EX
 	jr	z, BoxStyle7_Setup
-	cp	xiz, 31457288
+	cp	xiz, EVT_COPY_PROPERTY_EX
 	jrl	nz, BoxStyle7_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
@@ -12798,7 +12798,7 @@ BoxStyle7_Setup:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -12815,7 +12815,7 @@ BoxStyle7_CalcWidth:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -12881,19 +12881,19 @@ pSwordProc:
 	ld	(xsp+264), xde
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
-	cp	xiz, 31457292
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, BoxStyle8_Execute
-	cp	xiz, 31457291
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, BoxStyle8_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
-	cp	xiz, 31457289
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jr	z, BoxStyle8_CalcWidth
-	cp	xiz, 31457290
+	cp	xiz, EVT_DUMP_POINTER_EX
 	jr	z, BoxStyle8_Setup
-	cp	xiz, 31457288
+	cp	xiz, EVT_COPY_PROPERTY_EX
 	jrl	nz, BoxStyle8_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
@@ -12918,7 +12918,7 @@ BoxStyle8_Setup:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -12935,7 +12935,7 @@ BoxStyle8_CalcWidth:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13001,19 +13001,19 @@ pUwordProc:
 	ld	(xsp+264), xde
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
-	cp	xiz, 31457292
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, BoxStyle9_Execute
-	cp	xiz, 31457291
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, BoxStyle9_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
-	cp	xiz, 31457289
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jr	z, BoxStyle9_CalcWidth
-	cp	xiz, 31457290
+	cp	xiz, EVT_DUMP_POINTER_EX
 	jr	z, BoxStyle9_Setup
-	cp	xiz, 31457288
+	cp	xiz, EVT_COPY_PROPERTY_EX
 	jrl	nz, BoxStyle9_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
@@ -13038,7 +13038,7 @@ BoxStyle9_Setup:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13055,7 +13055,7 @@ BoxStyle9_CalcWidth:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13121,19 +13121,19 @@ pScharProc:
 	ld	(xsp+264), xde
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
-	cp	xiz, 31457292
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, BoxStyle10_Execute
-	cp	xiz, 31457291
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, BoxStyle10_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
-	cp	xiz, 31457289
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jr	z, BoxStyle10_CalcWidth
-	cp	xiz, 31457290
+	cp	xiz, EVT_DUMP_POINTER_EX
 	jr	z, BoxStyle10_Setup
-	cp	xiz, 31457288
+	cp	xiz, EVT_COPY_PROPERTY_EX
 	jrl	nz, BoxStyle10_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
@@ -13158,7 +13158,7 @@ BoxStyle10_Setup:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13175,7 +13175,7 @@ BoxStyle10_CalcWidth:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13242,19 +13242,19 @@ pUcharProc:
 	ld	(xsp+264), xde
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
-	cp	xiz, 31457292
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, BoxStyle11_Execute
-	cp	xiz, 31457291
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, BoxStyle11_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
-	cp	xiz, 31457289
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jr	z, BoxStyle11_CalcWidth
-	cp	xiz, 31457290
+	cp	xiz, EVT_DUMP_POINTER_EX
 	jr	z, BoxStyle11_Setup
-	cp	xiz, 31457288
+	cp	xiz, EVT_COPY_PROPERTY_EX
 	jrl	nz, BoxStyle11_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
@@ -13279,7 +13279,7 @@ BoxStyle11_Setup:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13296,7 +13296,7 @@ BoxStyle11_CalcWidth:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13362,19 +13362,19 @@ pSlongProc:
 	ld	(xsp+264), xde
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
-	cp	xiz, 31457292
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, BoxStyle12_Execute
-	cp	xiz, 31457291
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, BoxStyle12_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
 	lda	xde, (xwa+8)
-	cp	xiz, 31457289
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jr	z, BoxStyle12_CalcWidth
-	cp	xiz, 31457290
+	cp	xiz, EVT_DUMP_POINTER_EX
 	jr	z, BoxStyle12_Setup
-	cp	xiz, 31457288
+	cp	xiz, EVT_COPY_PROPERTY_EX
 	jrl	nz, BoxStyle12_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
@@ -13399,7 +13399,7 @@ BoxStyle12_Setup:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13416,7 +13416,7 @@ BoxStyle12_CalcWidth:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13481,19 +13481,19 @@ pUlongProc:
 	ld	(xsp+264), xde
 	ld	xiz, xbc
 	ld	(xsp+268), xwa
-	cp	xiz, 31457292
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, BoxStyle13_Execute
-	cp	xiz, 31457291
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, BoxStyle13_CalcHeight
 	lda	xhl, (xsp+8)
 	ld	xwa, (xsp+264)
 	lda	xbc, (xwa+4)
-	cp	xiz, 31457289
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jr	z, BoxStyle13_CalcWidth
 	lda	xde, (xwa+8)
-	cp	xiz, 31457290
+	cp	xiz, EVT_DUMP_POINTER_EX
 	jr	z, BoxStyle13_Setup
-	cp	xiz, 31457288
+	cp	xiz, EVT_COPY_PROPERTY_EX
 	jrl	nz, BoxStyle13_CalcHeight2
 	ld	xwa, (xbc)
 	ld	bc, (xde)
@@ -13518,7 +13518,7 @@ BoxStyle13_Setup:
 	ld (xsp + 4), xiz
 	ld (xbc), xhl
 	ld xwa, (xde)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13536,7 +13536,7 @@ BoxStyle13_CalcWidth:
 	ld (xbc), xhl
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
-	ld xbc, 0x1e00018
+	ld xbc, EVT_GET_PROP_NAME
 	ld XDE, (xsp + 0x0108)
 	call SendEvent
 	ld XWA, (xsp + 0x0108)
@@ -13598,7 +13598,7 @@ BoxStyle13_DoneAlt:
 RECTWProc:
 	lda xsp, (xsp - 128)
 	push xiz
-	cp xbc, 0x1e00025
+	cp xbc, EVT_CHECK_PROP_STRING
 	jr z, EdgeDraw_TopLeft
 	calr CommonIDProc
 	jr EdgeDraw_TopRight
@@ -13668,17 +13668,17 @@ RectX1Proc:
 	stl_dri XDE, 0xfd, 0x08, 0x01
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x0c, 0x01
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, EdgeDraw_BottomLeft_Draw
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, EdgeDraw_BottomLeft_Inner
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, EdgeDraw_BottomLeft_Inner
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jr z, EdgeDraw_TopRight_Done
-	cp xiz, 0x1e00026
+	cp xiz, EVT_GET_PROP_MEMBER
 	jr z, EdgeDraw_TopRight_Inner
-	cp xiz, 0x1e00025
+	cp xiz, EVT_CHECK_PROP_STRING
 	jr z, EdgeDraw_BottomLeft
 	jr EdgeDraw_BottomLeft_Done
 
@@ -13762,15 +13762,15 @@ RectY1Proc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, EdgeDraw_BottomRight_Done
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, EdgeDraw_BottomRight_Check
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, EdgeDraw_BottomRight_Check
-	cp xiz, 0x1e00026
+	cp xiz, EVT_GET_PROP_MEMBER
 	jr z, EdgeDraw_BottomRight
-	cp xiz, 0x1e00025
+	cp xiz, EVT_CHECK_PROP_STRING
 	jr z, EdgeDraw_BottomRight_Inner
 	jr EdgeDraw_BottomRight_Draw
 
@@ -13836,15 +13836,15 @@ RectX2Proc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, TabDraw_TopEdge_Done
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, TabDraw_TopEdge_CalcHeight
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, TabDraw_TopEdge_Inner
-	cp xiz, 0x1e00026
+	cp xiz, EVT_GET_PROP_MEMBER
 	jr z, TabDraw_TopEdge
-	cp xiz, 0x1e00025
+	cp xiz, EVT_CHECK_PROP_STRING
 	jr nz, TabDraw_TopEdge_CalcWidth
 	jr TabDraw_TopEdge_Execute
 
@@ -13936,17 +13936,17 @@ RectY2Proc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, EdgeVariant_A_Return
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, EdgeVariant_A_Execute
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, EdgeVariant_A_CalcHeight
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jr z, EdgeVariant_A_CalcWidth
-	cp xiz, 0x1e00026
+	cp xiz, EVT_GET_PROP_MEMBER
 	jr z, EdgeVariant_A_Setup
-	cp xiz, 0x1e00025
+	cp xiz, EVT_CHECK_PROP_STRING
 	jr nz, EdgeVariant_A_CalcHeight2
 	jr EdgeVariant_A_Done
 
@@ -14045,7 +14045,7 @@ POINTWProc:
 	lda_dri XSP, 0xfd, 0x7c, 0xff
 	pushw iz
 	stl_dri XDE, 0xfd, 0x82, 0x00
-	cp xbc, 0x1e00025
+	cp xbc, EVT_CHECK_PROP_STRING
 	jr z, EdgeVariant_B_CalcWidth
 	ld_sril XDE, (xsp + 0x0082)
 	calr CommonIDProc
@@ -14106,17 +14106,17 @@ PointXProc:
 	stl_dri XDE, 0xfd, 0x04, 0x01
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x08, 0x01
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, EdgeVariant_C_Execute
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, EdgeVariant_C_InnerFill
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, EdgeVariant_C_InnerFill
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jr z, EdgeVariant_C_CalcHeight
-	cp xiz, 0x1e00026
+	cp xiz, EVT_GET_PROP_MEMBER
 	jr z, EdgeVariant_C_CalcWidth
-	cp xiz, 0x1e00025
+	cp xiz, EVT_CHECK_PROP_STRING
 	jr z, EdgeVariant_C_CheckInner
 	jr EdgeVariant_C_CalcHeight2
 
@@ -14192,17 +14192,17 @@ PointYProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ShadowBox_A_Execute
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, ShadowBox_A_InnerFill
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, ShadowBox_A_InnerFill
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jr z, ShadowBox_A_CalcWidth
-	cp xiz, 0x1e00026
+	cp xiz, EVT_GET_PROP_MEMBER
 	jr z, ShadowBox_A_Setup
-	cp xiz, 0x1e00025
+	cp xiz, EVT_CHECK_PROP_STRING
 	jr z, ShadowBox_A_CheckInner
 	jr ShadowBox_A_CalcHeight
 
@@ -14269,11 +14269,11 @@ ClassIDProc:
 	stl_dri XDE, 0xfd, 0x10, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x14, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ShadowBox_A_Return
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, ShadowBox_A_Return
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr nz, ShadowBox_A_DrawEdge
 
 ShadowBox_A_Return:
@@ -14314,17 +14314,17 @@ ShadowBox_A_DrawInner:
 	jr ule, ShadowBox_A_CheckAlt
 
 ShadowBox_A_DrawEdge:
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, ShadowBox_B_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, ShadowBox_B_CalcWidth
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, ShadowBox_B_CalcWidth
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jr z, ShadowBox_B_Prologue
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, ShadowBox_B_Setup
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jrl nz, ShadowBox_C_Return
 	ld XIZ, (xsp + 0x1110)
 	ld xwa, (xiz + 8)
@@ -14332,7 +14332,7 @@ ShadowBox_A_DrawEdge:
 	lda_dri XBC, 0xfd, 0x10, 0x01
 	add xbc, xwa
 	ld xwa, (xbc)
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 	jr ShadowBox_B_CheckInner
 
@@ -14364,7 +14364,7 @@ ShadowBox_B_CalcWidth:
 	ld xbc, (xhl)
 	ld (xiz), xbc
 	ld xwa, xbc
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 
 ShadowBox_B_CheckInner:
@@ -14395,7 +14395,7 @@ ShadowBox_B_Execute:
 	lda	xbc, (xsp+276)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ClassProc
 	push	xhl
@@ -14452,11 +14452,11 @@ ViewFlagProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_A_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_A_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_A_CalcWidth
 
 FrameVariant_A_Setup:
@@ -14502,11 +14502,11 @@ ColorIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_B_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_B_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_B_CalcWidth
 
 FrameVariant_B_Setup:
@@ -14552,11 +14552,11 @@ BorderIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_C_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_C_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_C_CalcWidth
 
 FrameVariant_C_Setup:
@@ -14602,11 +14602,11 @@ AlignmentIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_D_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_D_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_D_CalcWidth
 
 FrameVariant_D_Setup:
@@ -14652,11 +14652,11 @@ EditSwStyleIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_E_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_E_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_E_CalcWidth
 
 FrameVariant_E_Setup:
@@ -14702,13 +14702,13 @@ EditSwIDProc:
 	ld (xsp + 8), xde
 	ld xiz, xbc
 	ld (xsp + 12), xwa
-	cp xiz, 0x1e00029
+	cp xiz, EVT_MAKE_EDIT_SW_ID
 	jr z, FrameVariant_F_CheckAlt
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_F_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_F_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_F_CalcWidth
 
 FrameVariant_F_Setup:
@@ -14780,11 +14780,11 @@ LineModeIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_G_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_G_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_G_CalcWidth
 
 FrameVariant_G_Setup:
@@ -14830,11 +14830,11 @@ FrameIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_H_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_H_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_H_CalcWidth
 
 FrameVariant_H_Setup:
@@ -14880,11 +14880,11 @@ UserIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_I_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_I_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_I_CalcWidth
 
 FrameVariant_I_Setup:
@@ -14930,11 +14930,11 @@ PartIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_J_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_J_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_J_CalcWidth
 
 FrameVariant_J_Setup:
@@ -14980,11 +14980,11 @@ TrackIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_K_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_K_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_K_CalcWidth
 
 FrameVariant_K_Setup:
@@ -15030,11 +15030,11 @@ IntTimeIDProc:
 	ld (xsp + 4), xde
 	ld xiz, xbc
 	ld (xsp + 8), xwa
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, FrameVariant_L_CalcHeight
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, FrameVariant_L_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr nz, FrameVariant_L_CalcWidth
 
 FrameVariant_L_Setup:
@@ -15080,15 +15080,15 @@ StringProc:
 	stl_dri XDE, 0xfd, 0x3a, 0x01
 	ld XDE, (xsp + 0x013a)
 	inc 4, xde
-	cp xbc, 0x1e0000c
+	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, ScrollBar_Draw
-	cp xbc, 0x1e0000b
+	cp xbc, EVT_GET_PROPERTY_EX
 	jrl z, ScrollBar_CalcThumb
-	cp xbc, 0x1e00009
+	cp xbc, EVT_DUMP_PROPERTY_EX
 	jrl z, ScrollBar_CalcThumb
-	cp xbc, 0x1e00028
+	cp xbc, EVT_MAKE_DUMP
 	jr z, ScrollBar_CalcRange
-	cp xbc, 0x1e00008
+	cp xbc, EVT_COPY_PROPERTY_EX
 	jr z, ScrollBar_Setup
 	ld XDE, (xsp + 0x013a)
 	calr CommonIDProc
@@ -15199,17 +15199,17 @@ FontIDProc:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x08, 0x01
-	cp xbc, 0x1e0000c
+	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, SliderH_DrawTrack
-	cp xbc, 0x1e0000b
+	cp xbc, EVT_GET_PROPERTY_EX
 	jr z, SliderH_CalcRange
-	cp xbc, 0x1e00009
+	cp xbc, EVT_DUMP_PROPERTY_EX
 	jr z, SliderH_CalcRange
-	cp xbc, 0x1e00028
+	cp xbc, EVT_MAKE_DUMP
 	jr z, SliderH_Prologue
-	cp xbc, EVT_INPUT
+	cp xbc, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, SliderH_Setup
-	cp xbc, EVT_KEYPRESS
+	cp xbc, EVT_GET_PROP_DATA_SP
 	jrl nz, SliderH_ReturnAlt4
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
@@ -15320,17 +15320,17 @@ IconIDProc:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x08, 0x01
-	cp xbc, 0x1e0000c
+	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, SliderV_DrawTrack
-	cp xbc, 0x1e0000b
+	cp xbc, EVT_GET_PROPERTY_EX
 	jr z, SliderV_CalcRange
-	cp xbc, 0x1e00009
+	cp xbc, EVT_DUMP_PROPERTY_EX
 	jr z, SliderV_CalcRange
-	cp xbc, 0x1e00028
+	cp xbc, EVT_MAKE_DUMP
 	jr z, SliderV_Prologue
-	cp xbc, EVT_INPUT
+	cp xbc, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, SliderV_Setup
-	cp xbc, EVT_KEYPRESS
+	cp xbc, EVT_GET_PROP_DATA_SP
 	jrl nz, SliderV_Return
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
@@ -15441,17 +15441,17 @@ BitmapIDProc:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
 	push xiz
 	stl_dri XDE, 0xfd, 0x08, 0x01
-	cp xbc, 0x1e0000c
+	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, DrawHelper_A_DrawTrack
-	cp xbc, 0x1e0000b
+	cp xbc, EVT_GET_PROPERTY_EX
 	jr z, DrawHelper_A_CalcRange
-	cp xbc, 0x1e00009
+	cp xbc, EVT_DUMP_PROPERTY_EX
 	jr z, DrawHelper_A_CalcRange
-	cp xbc, 0x1e00028
+	cp xbc, EVT_MAKE_DUMP
 	jr z, DrawHelper_A_Prologue
-	cp xbc, EVT_INPUT
+	cp xbc, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, DrawHelper_A_Setup
-	cp xbc, EVT_KEYPRESS
+	cp xbc, EVT_GET_PROP_DATA_SP
 	jrl nz, DrawHelper_A_Return
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
@@ -15564,11 +15564,11 @@ ApFuncIDProc:
 	stl_dri XDE, 0xfd, 0x14, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, DrawHelper_B_CalcRange
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, DrawHelper_B_CalcRange
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr nz, DrawHelper_B_ReturnAlt
 
 DrawHelper_B_CalcRange:
@@ -15609,17 +15609,17 @@ DrawHelper_B_ReturnZero:
 	jr ule, DrawHelper_B_CalcThumb
 
 DrawHelper_B_ReturnAlt:
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, DrawHelper_C_DrawTrack
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, DrawHelper_C_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, DrawHelper_C_Setup
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jr z, DrawHelper_B_FinishAlt
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, DrawHelper_B_Finish
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jrl nz, DrawHelper_C_Return
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
@@ -15628,7 +15628,7 @@ DrawHelper_B_ReturnAlt:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xbc)
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 	jr DrawHelper_C_CalcRange
 
@@ -15662,7 +15662,7 @@ DrawHelper_C_Setup:
 	ld xbc, (xhl)
 	ld (xwa), xbc
 	ld xwa, (xwa)
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 
 DrawHelper_C_CalcRange:
@@ -15694,7 +15694,7 @@ DrawHelper_C_ReturnZero:
 	lda	xbc, (xsp+276)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ApFunctionProc
 	ld	xwa, (xsp+4)
@@ -15757,11 +15757,11 @@ MainFuncIDProc:
 	stl_dri XDE, 0xfd, 0x14, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, DrawHelper_D_Setup
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, DrawHelper_D_Setup
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr nz, DrawHelper_D_ReturnAlt
 
 DrawHelper_D_Setup:
@@ -15802,17 +15802,17 @@ DrawHelper_D_ReturnZero:
 	jr ule, DrawHelper_D_CalcRange
 
 DrawHelper_D_ReturnAlt:
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, DrawHelper_E_DrawTrack
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jr z, DrawHelper_E_Setup
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, DrawHelper_E_Setup
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jr z, DrawHelper_D_FinishAlt
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, DrawHelper_D_Finish
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jrl nz, DrawHelper_E_Return
 	ld XWA, (xsp + 0x1114)
 	ld (xsp + 4), xwa
@@ -15821,7 +15821,7 @@ DrawHelper_D_ReturnAlt:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xbc)
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 	jr DrawHelper_E_CalcRange
 
@@ -15855,7 +15855,7 @@ DrawHelper_E_Setup:
 	ld xbc, (xhl)
 	ld (xwa), xbc
 	ld xwa, (xwa)
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 
 DrawHelper_E_CalcRange:
@@ -15887,7 +15887,7 @@ DrawHelper_E_ReturnZero:
 	lda	xbc, (xsp+276)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	MainFunctionProc
 	ld	xwa, (xsp+4)
@@ -15950,11 +15950,11 @@ ViewIDProc:
 	stl_dri XDE, 0xfd, 0x14, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ViewID_EnumFill
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, ViewID_EnumFill
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr nz, ViewID_EventSwitch
 
 ViewID_EnumFill:
@@ -16005,17 +16005,17 @@ ViewID_EnumFill_OuterNext:
 	jr	ule, ViewID_EnumFill_OuterLoop
 
 ViewID_EventSwitch:
-	cp	xiz, 0x1e0000c
+	cp	xiz, EVT_SET_PROPERTY_EX
 	jrl	z, ViewID_EnumOpen
-	cp	xiz, 0x1e0000b
+	cp	xiz, EVT_GET_PROPERTY_EX
 	jrl	z, ViewID_GetCurrent
-	cp	xiz, 0x1e00009
+	cp	xiz, EVT_DUMP_PROPERTY_EX
 	jrl	z, ViewID_GetCurrent
-	cp	xiz, 0x1e00028
+	cp	xiz, EVT_MAKE_DUMP
 	jrl	z, ViewID_GetInfoStr
-	cp	xiz, EVT_INPUT
+	cp	xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jrl	z, ViewID_EnumCount
-	cp	xiz, EVT_KEYPRESS
+	cp	xiz, EVT_GET_PROP_DATA_SP
 	jrl	nz, ViewID_Default
 	ld	xwa, (xsp+4372)
 	ld	(xsp+4), xwa
@@ -16035,7 +16035,7 @@ ViewID_Select_Lookup:
 	lda	xbc, (xsp+276)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ViewableProc
 	cp	(xhl), 0
@@ -16055,8 +16055,8 @@ ViewID_Select_NoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, (xsp+4)
@@ -16117,7 +16117,7 @@ ViewID_GetCurrent:
 	ld	xbc, xwa
 	add	xbc, (xde)
 	ld	xwa, xbc
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ViewableProc
 	cp	(xhl), 0
@@ -16137,8 +16137,8 @@ ViewID_GetCurrent_NoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xbc, (xsp+4)
@@ -16184,7 +16184,7 @@ ViewID_EnumOpen_ScanLoop:
 	lda	xbc, (xsp+276)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ViewableProc
 	ld	xwa, (xsp+4)
@@ -16247,11 +16247,11 @@ ScreenIDProc:
 	stl_dri XDE, 0xfd, 0x14, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ScreenID_EnumFill
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, ScreenID_EnumFill
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jrl nz, ScreenID_EventSwitch
 
 ScreenID_EnumFill:
@@ -16279,8 +16279,8 @@ ScreenID_EnumFill_InnerLoop:
 	ld xwa, (xsp + 8)
 	sll xwa, 0
 	add xwa, (xsp + 12)
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600033
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_Screen
 	call SendEvent
 	or xhl, xhl
 	jr z, ScreenID_EnumFill_InnerNext
@@ -16310,17 +16310,17 @@ ScreenID_EnumFill_OuterNext:
 	jr ule, ScreenID_EnumFill_OuterLoop
 
 ScreenID_EventSwitch:
-	cp XIZ,0x01e0000c
+	cp XIZ,EVT_SET_PROPERTY_EX
 	jrl z, ScreenID_EnumOpen
-	cp XIZ,0x01e0000b
+	cp XIZ,EVT_GET_PROPERTY_EX
 	jrl z, ScreenID_GetCurrent
-	cp XIZ,0x01e00009
+	cp XIZ,EVT_DUMP_PROPERTY_EX
 	jrl z, ScreenID_GetCurrent
-	cp XIZ,0x01e00028
+	cp XIZ,EVT_MAKE_DUMP
 	jrl z, ScreenID_ReturnZero
-	cp XIZ,EVT_INPUT
+	cp XIZ,EVT_GET_PROP_DATA_COUNT_SP
 	jrl z, ScreenID_EnumCount
-	cp XIZ,EVT_KEYPRESS
+	cp XIZ,EVT_GET_PROP_DATA_SP
 	jrl nz, ScreenID_Default
 	ld XWA,(XSP+0x1114)
 	ld (XSP+0x04),XWA
@@ -16341,7 +16341,7 @@ ScreenID_Select_Lookup:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ViewableProc
 	cp	(xhl), 0
@@ -16365,8 +16365,8 @@ ScreenID_Select_NoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, (xsp+4)
@@ -16403,7 +16403,7 @@ ScreenID_GetCurrent:
 	jr z, ScreenID_GetCurrent_None
 	ld XBC,XDE
 	ld XWA,(XBC)
-	ld XBC,EVT_GET_CONFIG_2
+	ld XBC,EVT_GET_NAME
 	ld xde, 0:i3
 	call ViewableProc
 	cp (XHL),0x00
@@ -16423,8 +16423,8 @@ ScreenID_GetCurrent_NoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xbc, (xsp+4)
@@ -16468,7 +16468,7 @@ ScreenID_EnumOpen_ScanLoop:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ViewableProc
 	cp	(xhl), 0
@@ -16490,8 +16490,8 @@ ScreenID_EnumOpen_ScanNoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, (xsp+8)
@@ -16589,11 +16589,11 @@ WindowIDProc:
 	stl_dri XDE, 0xfd, 0x14, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, WindowID_EnumFill
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, WindowID_EnumFill
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jrl nz, WindowID_EventSwitch
 
 WindowID_EnumFill:
@@ -16621,8 +16621,8 @@ WindowID_EnumFill_InnerLoop:
 	ld xwa, (xsp + 8)
 	sll xwa, 0
 	add xwa, (xsp + 12)
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600035
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_Window
 	call SendEvent
 	or xhl, xhl
 	jr z, WindowID_EnumFill_InnerNext
@@ -16652,17 +16652,17 @@ WindowID_EnumFill_OuterNext:
 	jr ule, WindowID_EnumFill_OuterLoop
 
 WindowID_EventSwitch:
-	cp XIZ,0x01e0000c
+	cp XIZ,EVT_SET_PROPERTY_EX
 	jrl z, WindowID_EnumOpen
-	cp XIZ,0x01e0000b
+	cp XIZ,EVT_GET_PROPERTY_EX
 	jrl z, WindowID_GetCurrent
-	cp XIZ,0x01e00009
+	cp XIZ,EVT_DUMP_PROPERTY_EX
 	jrl z, WindowID_GetCurrent
-	cp XIZ,0x01e00028
+	cp XIZ,EVT_MAKE_DUMP
 	jrl z, WindowID_ReturnZero
-	cp XIZ,EVT_INPUT
+	cp XIZ,EVT_GET_PROP_DATA_COUNT_SP
 	jrl z, WindowID_EnumCount
-	cp XIZ,EVT_KEYPRESS
+	cp XIZ,EVT_GET_PROP_DATA_SP
 	jrl nz, WindowID_Default
 	ld XWA,(XSP+0x1114)
 	ld (XSP+0x04),XWA
@@ -16683,7 +16683,7 @@ WindowID_Select_Lookup:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ViewableProc
 	cp	(xhl), 0
@@ -16707,8 +16707,8 @@ WindowID_Select_NoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, (xsp+4)
@@ -16745,7 +16745,7 @@ WindowID_GetCurrent:
 	jr z, WindowID_GetCurrent_None
 	ld XBC,XDE
 	ld XWA,(XBC)
-	ld XBC,EVT_GET_CONFIG_2
+	ld XBC,EVT_GET_NAME
 	ld xde, 0:i3
 	call ViewableProc
 	cp (XHL),0x00
@@ -16765,8 +16765,8 @@ WindowID_GetCurrent_NoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xbc, (xsp+4)
@@ -16810,7 +16810,7 @@ WindowID_EnumOpen_ScanLoop:
 	lda XBC,(XSP+0x0114)
 	add XBC,XWA
 	ld XWA,(XBC)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	ViewableProc
 	cp	(xhl), 0
@@ -16832,8 +16832,8 @@ WindowID_EnumOpen_ScanNoName:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, (xsp+8)
@@ -16931,11 +16931,11 @@ ModeIDProc:
 	stl_dri XDE, 0xfd, 0x10, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x14, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, ModeID_BuildTable
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, ModeID_BuildTable
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr nz, ModeID_EventDispatch
 
 ModeID_BuildTable:
@@ -16976,15 +16976,15 @@ ModeID_BuildTable_NextGroup:
 	jr ule, ModeID_BuildTable_OuterLoop
 
 ModeID_EventDispatch:
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, ModeID_EnumOpen
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jrl z, ModeID_GetNext
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, ModeID_GetCurrent
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, ModeID_EnumCount
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr z, ModeID_EnumFill
 	ld XWA, (xsp + 0x1114)
 	ld xbc, xiz
@@ -16999,7 +16999,7 @@ ModeID_EnumFill:
 	lda	xbc, (xsp+272)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xbc, (xiz+4)
@@ -17029,7 +17029,7 @@ ModeID_GetCurrent:
 	ld xbc, (xhl)
 	ld (xiz), xbc
 	ld xwa, xbc
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 	call SendEvent
 	cp (xhl), 0x0
@@ -17057,7 +17057,7 @@ ModeID_GetNext:
 	ld XBC,(XHL)
 	ld (XIZ),XBC
 	ld XWA,XBC
-	ld XBC,EVT_GET_CONFIG_2
+	ld XBC,EVT_GET_NAME
 	ld xde, 0:i3
 	call SendEvent
 	lda xwa, (xiz + 0x04)
@@ -17101,7 +17101,7 @@ ModeID_EnumOpen_SearchLoop:
 	lda	xbc, (xsp+272)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	push	xhl
@@ -17170,11 +17170,11 @@ TitleIDProc:
 	stl_dri XDE, 0xfd, 0x10, 0x11
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x14, 0x11
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jr z, TitleID_BuildTable
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, TitleID_BuildTable
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr nz, TitleID_EventDispatch
 
 TitleID_BuildTable:
@@ -17215,15 +17215,15 @@ TitleID_BuildTable_NextGroup:
 	jr ule, TitleID_BuildTable_OuterLoop
 
 TitleID_EventDispatch:
-	cp xiz, 0x1e0000c
+	cp xiz, EVT_SET_PROPERTY_EX
 	jrl z, TitleID_EnumOpen
-	cp xiz, 0x1e0000b
+	cp xiz, EVT_GET_PROPERTY_EX
 	jrl z, TitleID_GetNext
-	cp xiz, 0x1e00009
+	cp xiz, EVT_DUMP_PROPERTY_EX
 	jr z, TitleID_GetCurrent
-	cp xiz, EVT_INPUT
+	cp xiz, EVT_GET_PROP_DATA_COUNT_SP
 	jr z, TitleID_EnumCount
-	cp xiz, EVT_KEYPRESS
+	cp xiz, EVT_GET_PROP_DATA_SP
 	jr z, TitleID_EnumFill
 	ld XWA, (xsp + 0x1114)
 	ld xbc, xiz
@@ -17238,7 +17238,7 @@ TitleID_EnumFill:
 	lda	xbc, (xsp+272)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xbc, (xiz+4)
@@ -17268,7 +17268,7 @@ TitleID_GetCurrent:
 	ld xbc, (xhl)
 	ld (xiz), xbc
 	ld xwa, xbc
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 	call SendEvent
 	cp (xhl), 0x0
@@ -17296,7 +17296,7 @@ TitleID_GetNext:
 	ld XBC,(XHL)
 	ld (XIZ),XBC
 	ld XWA,XBC
-	ld XBC,EVT_GET_CONFIG_2
+	ld XBC,EVT_GET_NAME
 	ld xde, 0:i3
 	call SendEvent
 	lda xwa, (xiz + 0x04)
@@ -17340,7 +17340,7 @@ TitleID_EnumOpen_SearchLoop:
 	lda	xbc, (xsp+272)
 	add	xbc, xwa
 	ld	xwa, (xbc)
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	push	xhl
@@ -17410,17 +17410,17 @@ NameProc:
 	ld xbc, xwa
 	lda xhl, (xiz + 4)
 	ld xwa, (xiz + 8)
-	cp xde, 0x1e0000c
+	cp xde, EVT_SET_PROPERTY_EX
 	jr z, ConstFlagProc_Init
-	cp xde, 0x1e0000b
+	cp xde, EVT_GET_PROPERTY_EX
 	jr z, NameProc_GetText_CopyStr
-	cp xde, 0x1e00009
+	cp xde, EVT_DUMP_PROPERTY_EX
 	jr z, NameProc_GetText
-	cp xde, 0x1e00028
+	cp xde, EVT_MAKE_DUMP
 	jr z, NameProc_Init_SetPtr
-	cp xde, 0x1e00026
+	cp xde, EVT_GET_PROP_MEMBER
 	jr z, NameProc_Init
-	cp xde, 0x1e00025
+	cp xde, EVT_CHECK_PROP_STRING
 	jr z, NameProc_Return
 	ld xwa, xbc
 	ld xbc, xde
@@ -17446,7 +17446,7 @@ NameProc_GetText:
 	jr NameProc_ReturnZero
 
 NameProc_GetText_CopyStr:
-	ld xbc, EVT_GET_CONFIG_2
+	ld xbc, EVT_GET_NAME
 	ld xde, 0:i3
 	call SendEvent
 	push xhl
@@ -17465,7 +17465,7 @@ NameProc_Return:
 
 ConstFlagProc_Init:
 	ld xde, (xhl)
-	ld xbc, 0x1e00016
+	ld xbc, EVT_SET_NAME
 	call SendEvent
 
 ConstFlagProc_ReturnZero:
@@ -17477,17 +17477,17 @@ ConstFlagProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld (xsp + 8), xwa
-	cp xbc, 0x1e0000c
+	cp xbc, EVT_SET_PROPERTY_EX
 	jrl z, ConstFlagProc_Default_Result
-	cp xbc, 0x1e0000b
+	cp xbc, EVT_GET_PROPERTY_EX
 	jr z, ConstFlagProc_Default
-	cp xbc, 0x1e00009
+	cp xbc, EVT_DUMP_PROPERTY_EX
 	jr z, ConstFlagProc_SetValue_Check
-	cp xbc, 0x1e00028
+	cp xbc, EVT_MAKE_DUMP
 	jr z, ConstFlagProc_GetValue_Set
-	cp xbc, 0x1e00026
+	cp xbc, EVT_GET_PROP_MEMBER
 	jr z, ConstFlagProc_GetValue
-	cp xbc, 0x1e00025
+	cp xbc, EVT_CHECK_PROP_STRING
 	jr z, ConstFlagProc_Default_Forward
 	ld xwa, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -17526,7 +17526,7 @@ ConstFlagProc_Default:
 	ld xwa, (xsp + 4)
 	ld (xwa + 8), xhl
 	ld xwa, (xsp + 8)
-	ld xbc, EVT_KEYPRESS
+	ld xbc, EVT_GET_PROP_DATA_SP
 	ld xde, (xsp + 4)
 	call SendEvent
 
@@ -17579,20 +17579,20 @@ CommonIDProc:
 	ld xiz, xbc
 	ld (xsp + 20), xwa
 	ld xwa, (xsp + 20)
-	ld xbc, EVT_RETURN_ZERO
+	ld xbc, EVT_GET_INSTANCE
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 12), xhl
 	ld xde, xiz
-	cp xiz, 0x1e00028
+	cp xiz, EVT_MAKE_DUMP
 	jrl z, CommonIDProc_ReturnZero
-	cp xiz, 0x1e00026
+	cp xiz, EVT_GET_PROP_MEMBER
 	jr z, CommonIDProc_CheckAvail
-	cp xiz, 0x1e00025
+	cp xiz, EVT_CHECK_PROP_STRING
 	jrl z, CommonIDProc_ReturnZero
 	ld xwa, (xsp + 12)
 	lda xbc, (xwa + 4)
-	sub xde, 0x1e00008
+	sub xde, EVT_COPY_PROPERTY_EX
 	cp xde, 0x0
 	jrl lt, CommonIDProc_Default
 	cp xde, 0x6
@@ -17770,7 +17770,7 @@ IDCountHelper:
 	ld xiz, xwa
 	lda xde, (xsp + 8)
 	ld xwa, xiz
-	ld xbc, 0x1e00019
+	ld xbc, EVT_GET_PROP_STRING
 	call SendEvent
 	ld xwa, xiz
 	call GetViewInstance
@@ -17787,7 +17787,7 @@ IDCountHelper_Loop:
 	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
-	ld xbc, 0x1e00027
+	ld xbc, EVT_GET_PROP_SIZE
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, iz
@@ -17811,7 +17811,7 @@ IDCursorAdvance:
 	ld (xsp + 2), xwa
 	ld xwa, (xwa + 8)
 	lda xde, (xsp + 10)
-	ld xbc, 0x1e00019
+	ld xbc, EVT_GET_PROP_STRING
 	call SendEvent
 	ld xwa, 0:i3
 	ld (xsp + 6), xwa
@@ -17826,7 +17826,7 @@ IDCursorAdvance_Loop:
 	ld w, 0x0:opc
 	extz xwa
 	add xwa, 0x2600000
-	ld xbc, 0x1e00027
+	ld xbc, EVT_GET_PROP_SIZE
 	ld xde, 0:i3
 	call SendEvent
 	add (xsp + 6), xhl
@@ -17839,7 +17839,7 @@ IDCursorAdvance_Check:
 	cp xbc, (xwa)
 	jr c, IDCursorAdvance_Loop
 	ld xwa, (xwa + 8)
-	ld xbc, EVT_RETURN_ZERO
+	ld xbc, EVT_GET_INSTANCE
 	ld xde, 0:i3
 	call SendEvent
 	add xhl, (xsp + 6)
@@ -17888,7 +17888,7 @@ EventHandler_ObjectDispatch:
 	ld (0x02bc20:24), xwa
 	ld xwa, (xsp + 8)
 	ld xix, xhl
-	ld xbc, EVT_IDENTITY
+	ld xbc, EVT_GET_CLASS_SP
 	ld xde, 0:i3
 	call (xix)
 	ld (0x02bc14:24), xhl
@@ -17971,7 +17971,7 @@ EventRoute_ObjectDispatch:
 	ld (xsp + 4), xwa
 	ld xix, xhl
 	ld xwa, xiz
-	ld xbc, EVT_IDENTITY
+	ld xbc, EVT_GET_CLASS_SP
 	ld xde, 0:i3
 	call (xix)
 	ld (0x02bc14:24), xhl
@@ -18163,7 +18163,7 @@ GetEvent_ScanMatch:
 	jr nz, GetEvent_ScanDone
 	cp (xhl), xiz
 	jr nz, GetEvent_ScanDone
-	ld xwa, 0x1c00000
+	ld xwa, EVT_NONE
 	ld (xde), xwa
 
 GetEvent_ScanDone:
@@ -18224,7 +18224,7 @@ DeleteEvent_ScanLoop:
 	ld xwa, (xiy + 8)
 	cp xwa, (xsp + 4)
 	jr nz, ObjectSearch_ContinueLoop2
-	ld xwa, 0x1c00000
+	ld xwa, EVT_NONE
 	ld (xde), xwa
 
 ObjectSearch_ContinueLoop2:
@@ -18320,7 +18320,7 @@ DeleteSpecEvent_ScanLoop:
 	lda_rr	xwa, xwa, bc
 	lda xbc, (xwa + 4)			; XBC = pointer to entry+4 (event code)
 	ld xde, (xbc)				; XDE = registered event code
-	cp xde, 0x01c00038			; compare with key press event
+	cp xde, EVT_ASSSWB			; compare with key press event
 	jr nz, DeleteSpecEvent_Match			; no match, skip this entry
 	; --- Event code matches: check filter ---
 	lda xde, (xwa + 8)			; XDE = pointer to entry+8 (filter)
@@ -18331,7 +18331,7 @@ DeleteSpecEvent_ScanLoop:
 	cp xiy, xwa				; compare filter with event param upper bits
 	jr nz, DeleteSpecEvent_Match			; no match
 	; --- Filter matches: update registration and accumulate bits ---
-	ld xwa, 0x01c00000			; mark as active (clear low 16 bits)
+	ld xwa, EVT_NONE			; mark as active (clear low 16 bits)
 	ld (xbc), xwa				; write updated event code to entry+4
 	ld xwa, (xde)				; reload filter value
 	ld xbc, xwa				; copy to XBC
@@ -18472,8 +18472,8 @@ MainSendEvent:
 ; MainPostEvent queued dispatch with validation
 MainPostEvent_VirtualDispatch:
 	ld xwa, xiz
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600003
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_MainFunction
 	calr SendEvent
 	or xhl, xhl
 	jr z, MainPostEvent_ReturnZero
@@ -18651,7 +18651,7 @@ MainDeleteEvent_ScanLoop:
 	jr nz, MainDeleteEvent_Match
 	cp (xhl), xiz
 	jr nz, MainDeleteEvent_Match
-	ld xwa, 0x1c00000
+	ld xwa, EVT_NONE
 	ld (xde), xwa
 
 MainDeleteEvent_Match:
@@ -18712,7 +18712,7 @@ MainDeleteSpecEvent_ScanLoop:
 	ld xwa, (xiy + 8)
 	cp xwa, (xsp + 4)
 	jr nz, ObjectSearch_ContinueLoop
-	ld xwa, 0x1c00000
+	ld xwa, EVT_NONE
 	ld (xde), xwa
 
 ObjectSearch_ContinueLoop:
@@ -18847,7 +18847,7 @@ ApDeliveryEvent_Deliver:
 	ld	xwa, (xsp+8)
 	ld	(xhl+8), xwa
 	ld	xiz, 4294967295
-	ld	xwa, 29360183
+	ld	xwa, EVT_DELIVERY_EVENT
 	ld	(xsp+12), xwa
 	ld	(xsp+8), xhl
 	jr	ApDeliveryEvent_Return
@@ -18890,7 +18890,7 @@ ApTimer_ScanLoop:
 	or xwa, xwa
 	jr z, ApTimer_Deliver
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 4)
 	calr ApPostEvent
 
@@ -19014,7 +19014,7 @@ RootContext_Setup:
 	ld (0x02bc20:24), xwa
 	ld xix, xde
 	ld xwa, xiz
-	ld xbc, EVT_IDENTITY
+	ld xbc, EVT_GET_CLASS_SP
 	ld xde, 0:i3
 	call (xix)
 	ld (0x02bc14:24), xhl

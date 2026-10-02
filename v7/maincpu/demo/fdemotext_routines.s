@@ -7,7 +7,7 @@
 ; =============================================================================
 
 FDemoText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, FDemoText_ReturnNull
 	lda xhl, (DemoDisk_LangPromptTable:24)
 	ret
@@ -1231,7 +1231,7 @@ FDemoText_ByteData_DisplayRefresh:
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue
 FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xwa, xiz
-	ld	xbc, EVT_GET_CONFIG_2
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	cp	(xhl), 0
@@ -1240,8 +1240,8 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	srl	xwa, 0
 	and	xwa, 4095
 	extz	xwa
-	add	xwa, 27262976
-	ld	xbc, EVT_GET_CONFIG_2
+	add	xwa, TITLE_PS
+	ld	xbc, EVT_GET_NAME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, xiz
@@ -1930,26 +1930,26 @@ FDemoText_TextDispatch_Skip3:
 	lda	xsp, (xsp+28)
 	.byte	0x40
 	.long	Pad_AfterNakaData_ExternalBase
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 5:i3
 	call	SendEvent
 	.byte	0x40
 	.long	Pad_NakaExternal_Block1
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 5:i3
 	call	SendEvent
 	.byte	0x40
 	.long	Pad_NakaExternal_Block1
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	SendEvent
 	.byte	0x40
 	.long	Pad_NakaExternal_Block1
-	ld	xbc, 0x01c10005
+	ld	xbc, EVT_START_SONG
 	ld	xde, 19
 	call	SendEvent
 	ld	xwa, NakaInst_Param_Field02_0x4
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent
 	pushw	2
@@ -1964,12 +1964,12 @@ FDemoText_TextDispatch_Skip3:
 	push	xiz
 	call	Free_Compare2
 	lda	xsp, (xsp+14)
-	ld	xwa, 0x01410000
-	ld	xbc, 0x01e10005
+	ld	xwa, NAKA_MAINFUNC_MainPreControl
+	ld	xbc, EVT_READ_SONG_REQ
 	ld	xde, xiz
 	call	MainFuncCall
-	ld	xwa, 0x01400003
-	ld	xbc, 0x01e00023
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	MainFuncCall
 FDemoText_TextDispatch_Skip4:
@@ -2058,19 +2058,19 @@ FDemoText_TextDispatch_Skip13:
 	jr	nz, FDemoText_TextDispatch_Join4
 	calr	FDemoText_TextDispatch_Helper2
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01e0009e
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9A9
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9AA
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	SendEvent
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x01e0009e
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	SendEvent
 	call	DrawWall
@@ -2418,11 +2418,11 @@ FDemoText_TextDispatch_Skip11:
 	ld	xwa, xhl
 	cp	xwa, 0xffffffff
 	jr	z, FDemoText_TextDispatch_Skip12
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, Bitmap_Dredt0d_0x9AA
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	SendEvent
 FDemoText_TextDispatch_Skip12:
@@ -2947,12 +2947,12 @@ Seq_InitializeAndStart:
 	push	xiz
 	call	Free_Compare2
 	lda	xsp, (xsp+14)
-	ld	xwa, 21037056
-	ld	xbc, 31522819
+	ld	xwa, NAKA_MAINFUNC_MainPreControl
+	ld	xbc, EVT_READ_PRESENTATION_REQ
 	ld	xde, xiz
 	call	MainFuncCall
-	ld	xwa, 20971523
-	ld	xbc, 31457315
+	ld	xwa, NAKA_MAINFUNC_MainAutoFree
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	MainFuncCall
 	pop	xiz

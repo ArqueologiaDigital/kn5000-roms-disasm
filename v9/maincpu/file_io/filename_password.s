@@ -14,14 +14,14 @@ FmmPasswordFunc:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	ld wa, iz
-	cp xbc, 0x1e50010
+	cp xbc, EVT_CHECK_PASSWORD3
 	jrl z, Password_HandleLoadEvent
 	lda xde, (0x8a0c:16)
-	cp xbc, 0x1e5000f
+	cp xbc, EVT_CHECK_PASSWORD2
 	jrl z, Password_HandleSaveEvent
-	cp xbc, 0x1e5000e
+	cp xbc, EVT_CHECK_PASSWORD
 	jr z, Password_HandleDeleteEvent
-	cp xbc, 0x1e5000d
+	cp xbc, EVT_SET_PASSWORD
 	jrl nz, Password_Return
 	call CheckAnySlotHasData
 	cp l, 0:i3
@@ -60,7 +60,7 @@ Password_HandleDeleteEvent:
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 4:i3
 	jr Password_ForwardToFileName
 
@@ -73,7 +73,7 @@ Password_Delete_CheckLoadOnly:
 	jr z, Password_Delete_CheckSaveOnly
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 4:i3
 	jr Password_ForwardToFileName
 
@@ -86,7 +86,7 @@ Password_Delete_CheckSaveOnly:
 	jr z, Password_ShowErrorStatus
 	set 6, (0x8a0d:16)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 4:i3
 
 Password_ForwardToFileName:
@@ -112,7 +112,7 @@ Password_HandleSaveEvent:
 	setm 7, (xwa)
 	setm 6, (xwa)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xa
 	jr Password_ForwardToSaveFilter
 
@@ -125,7 +125,7 @@ Password_Save_CheckLoadOnly:
 	jr z, Password_Save_CheckSaveOnly
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xa
 	jr Password_ForwardToSaveFilter
 
@@ -138,7 +138,7 @@ Password_Save_CheckSaveOnly:
 	jr z, Password_SaveErrorStatus
 	set 6, (0x8a0d:16)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0xa
 
 Password_ForwardToSaveFilter:
@@ -156,7 +156,7 @@ Password_HandleLoadEvent:
 	jr z, Password_LoadErrorStatus
 	set 7, (0x8a0d:16)
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 4:i3
 	calr FmmSeqSongNameFunc
 	jr Password_Return
@@ -247,15 +247,15 @@ FmmFileNameFunc:
 	ld (xsp + 8), xbc
 	ld xbc, xiz
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1e50000
+	cp xwa, EVT_GET_FILE_SFX
 	jrl z, FileName_HandleRegister
-	cp xwa, 0x1c00018
+	cp xwa, EVT_INDEXSW_DOWN
 	jrl z, FileName_HandleScroll
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jrl z, FileName_HandleScroll
-	cp xwa, 0x1c0000b
+	cp xwa, EVT_PAINT
 	jr z, FileName_HandleShow
-	cp xwa, 0x1e50004
+	cp xwa, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, FileName_Return
 	ld (0x7f72:16), xbc
 	call GetCurrentFileIndex
@@ -264,14 +264,14 @@ FmmFileNameFunc:
 	jr lt, FileName_ListSelect_Negative
 	exts xhl
 	ld xwa, (0x7f72:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld xde, xhl
 	jr FileName_ListSelect_Forward
 
 FileName_ListSelect_Negative:
 	ldw (0x7f7a:16), 0
 	ld xwa, (0x7f72:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 
 FileName_ListSelect_Forward:
@@ -313,7 +313,7 @@ FileName_DrawItemLoop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	incw 1, (xsp + 6)
 	cpw (xsp + 6), 0x14
@@ -327,7 +327,7 @@ FileName_HandleScroll:
 	or xiz, xiz
 	jr nz, FileName_PageUp
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c00018
+	cp xwa, EVT_INDEXSW_DOWN
 	jr nz, FileName_ScrollUp
 	cpw (xsp + 6), 0x13
 	jrl ge, FileName_GetSelection
@@ -335,7 +335,7 @@ FileName_HandleScroll:
 	jr FileName_ScrollApply
 
 FileName_ScrollUp:
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jrl nz, FileName_GetSelection
 	cpw (xsp + 6), 0x0
 	jrl le, FileName_GetSelection
@@ -374,7 +374,7 @@ FileName_OpSave:
 	cp hl, 0:i3
 	jrl z, FileName_OpLoad
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, (0x7f7a:16)
@@ -389,11 +389,11 @@ FileName_OpSave:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	cpw (0xf19e:16), 0
@@ -421,7 +421,7 @@ FileName_OpSave_ShowCode1:
 FileName_OpSave_CallHandler:
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -439,7 +439,7 @@ FileName_OpLoad:
 	ld xde, 0:i3
 	ld e, (0x8a0c:16)
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50004
+	ld xbc, EVT_WAKEUP_PASSWORD
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_NoPwd:
@@ -449,17 +449,17 @@ FileName_OpLoad_NoPwd:
 	cp (0x0340ea:24), 0x00
 	jr z, FileName_OpLoad_Execute
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jrl FileName_OpDispatch
 
 FileName_OpLoad_Execute:
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -475,17 +475,17 @@ FileName_OpLoad_Execute:
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -495,7 +495,7 @@ FileName_OpFormat:
 	cp xiz, 0x32
 	jr nz, FileName_OpDelete
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -511,17 +511,17 @@ FileName_OpFormat:
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -536,11 +536,11 @@ FileName_OpDelete:
 	cp (0x0340ea:24), 0x00
 	jr z, FileName_OpDelete_Execute
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x7b0051
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 FileName_OpDispatch:
@@ -549,7 +549,7 @@ FileName_OpDispatch:
 
 FileName_OpDelete_Execute:
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -565,7 +565,7 @@ FileName_OpDelete_Execute:
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -575,7 +575,7 @@ FileName_OpFormatVariant:
 	cp xiz, 0x33
 	jr nz, FileName_OpNavigate
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -591,7 +591,7 @@ FileName_OpFormatVariant:
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -605,7 +605,7 @@ FileName_OpNavigate:
 	jrl z, FileName_GetSelection
 	ld xbc, (xsp + 8)
 	ld wa, (0x7f7a:16)
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr nz, FileName_Navigate_ScrollUp
 	ld bc, wa
 	cp wa, 0x13
@@ -615,7 +615,7 @@ FileName_OpNavigate:
 	jr FileName_Navigate_CheckChanged
 
 FileName_Navigate_ScrollUp:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, FileName_Navigate_CheckChanged
 	ld bc, wa
 	cp wa, 0:i3
@@ -628,7 +628,7 @@ FileName_Navigate_CheckChanged:
 	cp wa, (0x7f7a:16)
 	jr z, FileName_GetSelection
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -643,7 +643,7 @@ FileName_Navigate_CheckChanged:
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -662,7 +662,7 @@ FileName_UpdateDisplay:
 	ld de, (0x7f7a:16)
 	exts xde
 	ld xwa, (0x7f72:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call ApPostEvent
 	ld de, (xsp + 4)
 	sll de, 5
@@ -670,7 +670,7 @@ FileName_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x7f7a:16)
 	sll de, 5
@@ -678,7 +678,7 @@ FileName_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f72:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ldw (xsp + 6), 0x0
 
@@ -744,14 +744,14 @@ FileName_Callback_Send:
 	ld de, iz
 	extz xde
 	ld xwa, (0x7f76:16)
-	ld xbc, 0x1e50001
+	ld xbc, EVT_SET_FILE_SFX
 	jr FileName_DispatchWidget
 
 FileName_Callback_Simple:
 	call FileIO_FormatName_Done
 	extz xhl
 	ld xwa, (0x7f76:16)
-	ld xbc, 0x1e50001
+	ld xbc, EVT_SET_FILE_SFX
 	ld xde, xhl
 	jr FileName_DispatchWidget
 
@@ -786,14 +786,14 @@ FileName_Register_Send:
 	ld de, iz
 	extz xde
 	ld xwa, (0x7f76:16)
-	ld xbc, 0x1e50001
+	ld xbc, EVT_SET_FILE_SFX
 	jr FileName_DispatchWidget
 
 FileName_Register_Simple:
 	call FileIO_FormatName_Done
 	extz xhl
 	ld xwa, (0x7f76:16)
-	ld xbc, 0x1e50001
+	ld xbc, EVT_SET_FILE_SFX
 	ld xde, xhl
 
 FileName_DispatchWidget:

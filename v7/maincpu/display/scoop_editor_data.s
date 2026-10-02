@@ -50,7 +50,7 @@ Scoop_SoundEditorData_Join:
 	jr	Scoop_SoundEditorData_Join
 Scoop_SoundEditorData_Skip:
 	ld	xwa, 0:i3
-	ld	xbc, 29360135
+	ld	xbc, EVT_SW_IN
 	jp	DeleteEvent
 	jp	SeMenu_CopyWriteUpdate_Return2
 	dec 4,XSP

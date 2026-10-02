@@ -32,7 +32,7 @@
 ; =============================================================================
 
 DemoModeFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, DemoModeFunc_Exit
 	cp xde, 0x1
 	jr z, DemoModeFunc_Initialize
@@ -69,9 +69,9 @@ DemoMenuTtlFunc:
 	ret
 
 DemoStyleTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DemoStyle_InputHandler
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DemoStyleTtlFunc_Exit
 	dec 2, xde
 	cp xde, 0x0
@@ -150,9 +150,9 @@ DemoStyleTtlFunc_Exit:
 	ret
 
 DemoSoundTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DemoSound_InputHandler
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DemoSoundTtlFunc_Exit
 	dec 2, xde
 	cp xde, 0x0
@@ -231,9 +231,9 @@ DemoSoundTtlFunc_Exit:
 	ret
 
 DemoRhyTtlFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, DemoRhythm_InputHandler
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, DemoRhyTtlFunc_Exit
 	dec 2, xde
 	cp xde, 0x0

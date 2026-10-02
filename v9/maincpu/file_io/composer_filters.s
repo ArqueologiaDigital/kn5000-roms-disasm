@@ -12,15 +12,15 @@
 FmmComposerLoadFunc:
 	dec 2, xsp
 	pushw iz
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, CompLoad_HandleScroll
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, CompLoad_HandleScroll
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl z, CompLoad_HandleShow
-	cp xbc, 0x1e50004
+	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl z, CompLoad_HandleSelection
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, CompLoad_Return
 	cp xde, 0x3
 	jrl z, CompLoad_HandleAbort
@@ -30,7 +30,7 @@ FmmComposerLoadFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8500:16), 0
@@ -58,27 +58,27 @@ CompLoad_DispatchState:
 
 CompLoad_ContinueWait:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	jrl CompLoad_DispatchWidget
 
 CompLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
@@ -87,7 +87,7 @@ CompLoad_HandleCancel:
 
 CompLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -97,17 +97,17 @@ CompLoad_HandleError:
 CompLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
@@ -129,14 +129,14 @@ CompLoad_HandleSelection:
 	jr lt, CompLoad_Selection_Negative
 	exts xhl
 	ld xwa, (0x7f7c:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld xde, xhl
 	jrl CompLoad_DispatchWidget
 
 CompLoad_Selection_Negative:
 	ldw (0x7f80:16), 0
 	ld xwa, (0x7f7c:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	jrl CompLoad_DispatchWidget
 
@@ -184,7 +184,7 @@ CompLoad_DrawItem_Continue:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0x14
@@ -196,7 +196,7 @@ CompLoad_HandleScroll:
 	ld (xsp + 2), wa
 	or xde, xde
 	jr nz, CompLoad_PageScroll
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr nz, CompLoad_ScrollUp
 	cp wa, 0x13
 	jrl ge, CompLoad_GetSelection
@@ -204,7 +204,7 @@ CompLoad_HandleScroll:
 	jr CompLoad_StorePosition
 
 CompLoad_ScrollUp:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl nz, CompLoad_GetSelection
 	cp wa, 0:i3
 	jrl le, CompLoad_GetSelection
@@ -239,7 +239,7 @@ CompLoad_OpLoad:
 	cp hl, 0:i3
 	jr z, CompLoad_GetSelection
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld iz, 0:i3
@@ -262,17 +262,17 @@ CompLoad_HideButtons_Loop:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -288,7 +288,7 @@ CompLoad_UpdateDisplay:
 	ld de, (0x7f80:16)
 	exts xde
 	ld xwa, (0x7f7c:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call ApPostEvent
 	ld de, (xsp + 2)
 	sll de, 5
@@ -296,7 +296,7 @@ CompLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x7f80:16)
 	sll de, 5
@@ -304,7 +304,7 @@ CompLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f7c:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 
 CompLoad_DispatchWidget:
 	call ApPostEvent
@@ -417,13 +417,13 @@ RenderFilter_CopyAndReturn:
 FmmLoadFilterFunc:
 	dec 6, xsp
 	ld (xsp + 2), xde
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr z, LoadFilter_HandleScroll
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr z, LoadFilter_HandleScroll
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, LoadFilter_HandleShow
-	cp xbc, 0x1e50004
+	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, LoadFilter_Return
 	ld xwa, (xsp + 2)
 	ld (0x7f82:16), xwa
@@ -447,7 +447,7 @@ LoadFilter_DrawLoop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x7f82:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -458,7 +458,7 @@ LoadFilter_HandleScroll:
 	ld xwa, (xsp + 2)
 	cp xwa, 0x8
 	jrl nc, LoadFilter_OpLoad
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, LoadFilter_ScrollDown
 	cp xwa, 0x1
 	jr nz, LoadFilter_ScrollUp_CheckZero
@@ -525,7 +525,7 @@ LoadFilter_UpdateDisplay:
 	lda xbc, (0x7f86:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x7f82:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	jrl LoadFilter_Return
 
@@ -540,7 +540,7 @@ LoadFilter_OpLoad:
 	cp hl, 0:i3
 	jrl z, LoadFilter_Return
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	call GetCurrentFileIndex
@@ -556,11 +556,11 @@ LoadFilter_OpLoad:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	cpw (0xf19e:16), 0
@@ -588,7 +588,7 @@ LoadFilter_Load_ShowCode1:
 LoadFilter_Load_CallHandler:
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -638,13 +638,13 @@ RenderSaveFilter_CopyAndReturn:
 FmmSaveFilterFunc:
 	dec 6, xsp
 	ld (xsp + 2), xde
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr z, SaveFilter_HandleScroll
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr z, SaveFilter_HandleScroll
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, SaveFilter_HandleShow
-	cp xbc, 0x1e50004
+	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, SaveFilter_Return
 	ld xwa, (xsp + 2)
 	ld (0x8006:16), xwa
@@ -668,7 +668,7 @@ SaveFilter_DrawLoop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -681,7 +681,7 @@ SaveFilter_HandleScroll:
 	jrl nc, SaveFilter_SelectAll
 	cp xwa, 0x1
 	jr nz, SaveFilter_ScrollOther
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, SaveFilter_ScrollDown
 	call FileIO_GetRecordAttr_Check
 	cp l, 0:i3
@@ -721,7 +721,7 @@ SaveFilter_ScrollDown_Unlock:
 SaveFilter_ScrollOther:
 	ld xwa, (xsp + 2)
 	extz wa
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, SaveFilter_UnlockFilter
 
 SaveFilter_LockFilter:
@@ -747,7 +747,7 @@ SaveFilter_UpdateDisplay:
 	lda xbc, (0x800a:16)
 	lda_dri XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x8006:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jrl SaveFilter_DispatchWidget
 
 SaveFilter_SelectAll:
@@ -783,7 +783,7 @@ SaveFilter_SelectAll_Update:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -815,7 +815,7 @@ SaveFilter_DeselectAll_Loop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8
@@ -835,7 +835,7 @@ SaveFilter_OpSave:
 	ld xde, 0:i3
 	ld e, (0x8a0c:16)
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50004
+	ld xbc, EVT_WAKEUP_PASSWORD
 	jr SaveFilter_DispatchWidget
 
 SaveFilter_Save_NoPwd:
@@ -845,11 +845,11 @@ SaveFilter_Save_NoPwd:
 	cp (0x0340ea:24), 0x00
 	jr z, SaveFilter_Save_Execute
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 SaveFilter_DispatchWidget:
@@ -858,7 +858,7 @@ SaveFilter_DispatchWidget:
 
 SaveFilter_Save_Execute:
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -874,17 +874,17 @@ SaveFilter_Save_Execute:
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -895,7 +895,7 @@ SaveFilter_OpFormat:
 	cp xwa, 0x32
 	jr nz, SaveFilter_ResetAll
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -911,17 +911,17 @@ SaveFilter_OpFormat:
 	ld (0x8502:16), hl
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld wa, 1:i3
 	call UI_PostPartChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -955,7 +955,7 @@ SaveFilter_ResetAll_Loop:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x8006:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	incw 1, (xsp)
 	cpw (xsp), 0x8

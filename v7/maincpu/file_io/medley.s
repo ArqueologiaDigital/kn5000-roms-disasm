@@ -19,18 +19,18 @@
 
 FmmSeqSongNameFunc:
 	pushw iz
-	cp XBC,0x01e50003
+	cp XBC,EVT_GET_SELECTED_FILE_NUMBER
 	jrl z, SeqName_GetIndexReturn
 	ld hl, (0x823c:16)
-	cp XBC,0x01e50002
+	cp XBC,EVT_SET_SELECTED_FILE_NUMBER
 	jrl z, SeqName_SetIndexPlaying
-	cp XBC,0x01c00018
+	cp XBC,EVT_INDEXSW_DOWN
 	jr z, SeqName_HandleNavigation
-	cp XBC,0x01c00017
+	cp XBC,EVT_INDEXSW_UP
 	jr z, SeqName_HandleNavigation
-	cp XBC,0x01c0000b
+	cp XBC,EVT_PAINT
 	jr z, SeqName_InitAllSlots
-	cp XBC,0x01e50004
+	cp XBC,EVT_PS_FILE_NAME_BOX_ID
 	jr nz, SeqName_ReturnZero
 	ld (0x8238:16), xde
 	cp (0x8462:16), 0x00
@@ -40,7 +40,7 @@ SeqName_SendCurrentIndex:
 	ld	de, (33340:16)
 	extz	xde
 	ld	xwa, (33336:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	jrl	SeqName_PostEventExit
 SeqName_InitAllSlots:
 	ld iz, 0:i3
@@ -52,7 +52,7 @@ SeqName_SendSlotLoop:
 	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -68,14 +68,14 @@ SeqName_HandleNavigation:
 	jr	nz, SeqName_HandlePlayAction
 	cp	(33890:16), 0
 	jr	nz, SeqName_HandlePlayAction
-	cp	xbc, 29360152
+	cp	xbc, EVT_INDEXSW_DOWN
 	jr	nz, SeqName_CheckPrevKey
 	cp	wa, 9
 	jrl	nc, SeqName_GetCurrentIndex
 	inc	1, wa
 	jr	SeqName_UpdateIndex
 SeqName_CheckPrevKey:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl nz, SeqName_GetCurrentIndex
 	cp wa, 0:i3
 	jrl z, SeqName_GetCurrentIndex
@@ -99,7 +99,7 @@ SeqName_HandlePlayAction:
 	ld	(xwa), 0x1
 	ld	xde, 1:i3
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1c50004
+	ld	xbc, EVT_WAKEUP_PASSWORD
 	jr	SeqName_PostAndExit
 SeqName_CheckDiskAvail:
 	call CheckFileSystemStatus
@@ -108,11 +108,11 @@ SeqName_CheckDiskAvail:
 	cp (0x0340ea:24), 0x00
 	jr z, SeqName_LoadAndPlay
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 SeqName_PostAndExit:
@@ -121,7 +121,7 @@ SeqName_PostAndExit:
 
 SeqName_LoadAndPlay:
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -138,7 +138,7 @@ SeqName_LoadAndPlay:
 	ld	(33894:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -147,7 +147,7 @@ SeqName_HandleAction32:
 	cp	xde, 50
 	jr	nz, SeqName_GetCurrentIndex
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -164,7 +164,7 @@ SeqName_HandleAction32:
 	ld	(33894:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -178,7 +178,7 @@ SeqName_UpdateDisplay:
 	jrl	z, SeqName_ReturnZero
 	extz	xde
 	ld	xwa, (33336:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call	ApPostEvent
 	ld	wa, iz
 	ld	bc, iz
@@ -186,7 +186,7 @@ SeqName_UpdateDisplay:
 	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	ld	bc, (33340:16)
 	ld	wa, bc
@@ -194,7 +194,7 @@ SeqName_UpdateDisplay:
 	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33336:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	jr	SeqName_PostEventExit
 SeqName_SetIndexPlaying:
 	cp (0x8462:16), 0x00
@@ -203,7 +203,7 @@ SeqName_SetIndexPlaying:
 	ld (0x823c:16), de
 	extz XDE
 	ld xwa, (0x8238:16)
-	ld XBC,0x01e50002
+	ld XBC,EVT_SET_SELECTED_FILE_NUMBER
 	call ApPostEvent
 	ld WA,IZ
 	ld BC,IZ
@@ -211,7 +211,7 @@ SeqName_SetIndexPlaying:
 	calr BuildSlotLabel
 	ld XDE,XHL
 	ld xwa, (0x8238:16)
-	ld XBC,EVT_INIT_HOOK
+	ld XBC,EVT_PARA_DRAW
 	call ApPostEvent
 	ld bc, (0x823c:16)
 	ld WA,BC
@@ -219,7 +219,7 @@ SeqName_SetIndexPlaying:
 	calr BuildSlotLabel
 	ld XDE,XHL
 	ld xwa, (0x8238:16)
-	ld XBC,EVT_INIT_HOOK
+	ld XBC,EVT_PARA_DRAW
 SeqName_PostEventExit:
 	call ApPostEvent
 	jrl SeqName_ReturnZero
@@ -293,20 +293,20 @@ FmmIntMedleyFunc:
 	dec 0,XSP
 	pushw iz
 	ld (XSP+0x06),XWA
-	cp XBC,0x01e5000a
+	cp XBC,EVT_WAKE_UP_NOW
 	jrl z, IntMed_CheckContinue
 	ld XWA,XDE
-	cp XBC,0x01e50008
+	cp XBC,EVT_I_WILL_WAKE_UP
 	jrl z, IntMed_StoreDelayFlag
-	cp XBC,0x01c00018
+	cp XBC,EVT_INDEXSW_DOWN
 	jrl z, IntMed_HandleNavToggle
-	cp XBC,0x01c00017
+	cp XBC,EVT_INDEXSW_UP
 	jrl z, IntMed_HandleNavToggle
-	cp XBC,0x01c0000b
+	cp XBC,EVT_PAINT
 	jrl z, IntMed_InitSlotDisplay
-	cp XBC,0x01e50004
+	cp XBC,EVT_PS_FILE_NAME_BOX_ID
 	jrl z, IntMed_StoreWindowPtr
-	cp XBC,EVT_CPANEL_EVENT
+	cp XBC,EVT_ACTIVATE_STATE
 	jrl nz, IntMed_Exit
 	cp XDE,0x00000003
 	jrl z, IntMed_HandleStop
@@ -364,7 +364,7 @@ IntMed_FindCurrentSong:
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+6)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	calr	FmmSeqSongNameFunc
 	ldto_berp	a, 248
 	extz	wa
@@ -373,7 +373,7 @@ IntMed_FindCurrentSong:
 	ld	xwa, (33346:16)
 	or	xwa, xwa
 	jrl	z, IntMed_Exit
-	ld	xbc, 31784969
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 30
 	jr	IntMed_PostDelayEvent
 IntMed_NextSongSearch:
@@ -396,7 +396,7 @@ IntMed_PlayFromStart:
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+6)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	calr	FmmSeqSongNameFunc
 	ldto_berp	a, 248
 	extz	wa
@@ -405,7 +405,7 @@ IntMed_PlayFromStart:
 	ld	xwa, (33346:16)
 	or	xwa, xwa
 	jrl	z, IntMed_Exit
-	ld	xbc, 31784969
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 30
 IntMed_PostDelayEvent:
 	call ApPostEvent
@@ -464,7 +464,7 @@ IntMed_FormatSlotLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -518,7 +518,7 @@ IntMed_AssignOrderLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 IntMed_NextAssignSlot:
 	inc 1, iz
@@ -554,7 +554,7 @@ IntMed_UnmarkSlotLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33342:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 IntMed_NextUnmark:
 	inc 1, iz
@@ -568,7 +568,7 @@ IntMed_HandleSelectToggle:
 	cp (0x8462:16), 0x00
 	jrl nz, IntMed_HandleRepeatToggle
 	ld XWA,(XSP+0x06)
-	ld XBC,0x01e50003
+	ld XBC,EVT_GET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	calr FmmSeqSongNameFunc
 	ld IZ,HL
@@ -597,7 +597,7 @@ IntMed_HandleSelectToggle:
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
-	ld XBC,EVT_INIT_HOOK
+	ld XBC,EVT_PARA_DRAW
 	call ApPostEvent
 	jrl t, IntMed_Exit
 IntMed_RemoveFromOrder:
@@ -617,7 +617,7 @@ IntMed_RemoveFromOrder:
 	extz XDE
 	add XDE,XBC
 	ld xwa, (0x823e:16)
-	ld XBC,EVT_INIT_HOOK
+	ld XBC,EVT_PARA_DRAW
 	call ApPostEvent
 	ldw (XSP+0x02), 0x0000
 	ld iz, 0:i3
@@ -652,7 +652,7 @@ IntMed_ReorderLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (0x823e:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 IntMed_NextReorder:
 	inc	1, iz
@@ -664,7 +664,7 @@ IntMed_NextReorder:
 IntMed_HandleRepeatToggle:
 	cp	xde, 12
 	jr	nz, IntMed_HandlePlay
-	cp	xbc, 29360151
+	cp	xbc, EVT_INDEXSW_UP
 	jr	nz, IntMed_SetRepeatOff
 	ld	(34818:16), 1
 	jrl	IntMed_Exit
@@ -688,14 +688,14 @@ IntMed_StartPlayLoop:
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+6)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	calr	FmmSeqSongNameFunc
 	ldto_berp	a, 248
 	extz	wa
 	call	SongBank_SwitchAndUpdateTempo
 	inc	1, (34816:16)
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 122
@@ -714,7 +714,7 @@ IntMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, IntMed_Exit
 	ld XWA,0xffffffff
-	ld XBC,0x01e0009a
+	ld XBC,EVT_SET_HOLD
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw WA, 0x007a
@@ -727,9 +727,9 @@ IntMed_Exit:
 
 FmmDiskMedley1Func:
 	pushw	iz
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, DiskMed1_InitLoop
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, DiskMed1_Exit
 	ld	(33430:16), xde
 	jr	DiskMed1_Exit
@@ -756,7 +756,7 @@ DiskMed1_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (33430:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -768,9 +768,9 @@ DiskMed1_Exit:
 
 FmmDiskMedley2Func:
 	pushw	iz
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, DiskMed2_InitLoop
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, DiskMed2_Exit
 	ld	(33514:16), xde
 	jr	DiskMed2_Exit
@@ -799,7 +799,7 @@ DiskMed2_FormatLoop:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33514:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 20
@@ -811,11 +811,11 @@ DiskMed2_Exit:
 
 DiskMed_PlayNextHelper:
 	pushw iz
-	cp XBC,0x01c00018
+	cp XBC,EVT_INDEXSW_DOWN
 	jr z, DiskMed_InitPlayOrder
-	cp XBC,0x01c00017
+	cp XBC,EVT_INDEXSW_UP
 	jr z, DiskMed_InitPlayOrder
-	cp XBC,EVT_CPANEL_EVENT
+	cp XBC,EVT_ACTIVATE_STATE
 	jrl nz, DiskMed_ReturnZero
 	cp XDE,0x00000003
 	jrl z, DiskMed_ReturnZero
@@ -949,15 +949,15 @@ FmmDiskMedleySelectFunc:
 	ld (XSP+0x0a),XBC
 	ld (XSP+0x0e),XWA
 	ld XWA,(XSP+0x0a)
-	cp XWA,0x01c00018
+	cp XWA,EVT_INDEXSW_DOWN
 	jrl z, DiskSel_HandleNavigation
-	cp XWA,0x01c00017
+	cp XWA,EVT_INDEXSW_UP
 	jrl z, DiskSel_HandleNavigation
-	cp XWA,0x01c0000b
+	cp XWA,EVT_PAINT
 	jrl z, DiskSel_InitDisplay
-	cp XWA,0x01e50004
+	cp XWA,EVT_PS_FILE_NAME_BOX_ID
 	jrl z, DiskSel_StoreWindowPtr
-	cp XWA,EVT_CPANEL_EVENT
+	cp XWA,EVT_ACTIVATE_STATE
 	jrl nz, DiskSel_Exit
 	ld XWA,(XSP+0x06)
 	cp XWA,0x00000003
@@ -969,17 +969,17 @@ FmmDiskMedleySelectFunc:
 	cp (0x8c9b:16), 0x78
 	jrl z, DiskSel_CheckPlaying
 	ld XWA,0xffffffff
-	ld XBC,0x01e0009e
+	ld XBC,EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
-	ld XBC,0x01c0000a
+	ld XBC,EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	cpw (0x8466:16), 0x0000
 	jr ge, DiskSel_InitState
 	ld XWA,0x00600026
-	ld XBC,EVT_MENU_OPEN
+	ld XBC,EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	call GetEncodedFileSizeData
@@ -987,11 +987,11 @@ FmmDiskMedleySelectFunc:
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld XWA,0x00600026
-	ld XBC,EVT_SELECT_CONFIRM
+	ld XBC,EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
-	ld XBC,0x01c0000a
+	ld XBC,EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	calr SignalProgressUpdate
@@ -1039,11 +1039,11 @@ DiskSel_CheckPlaying:
 	cp	l, 1:i3
 	jr	nz, DiskSel_CheckFinished
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 120
@@ -1052,11 +1052,11 @@ DiskSel_CheckFinished:
 	cp	l, 2:i3
 	jrl	nz, DiskSel_Exit	; -> 0xF927FA
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29360138
+	ld	xbc, EVT_ALL_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	a, (34976:16)
@@ -1083,7 +1083,7 @@ DiskSel_FindSongLoop:
 	ld de, (0x8342:16)
 	exts XDE
 	ld xwa, (0x833e:16)
-	ld XBC,0x01e50002
+	ld XBC,EVT_SET_SELECTED_FILE_NUMBER
 	call ApPostEvent
 	ld QIZ,0
 DiskSel_SendFileInfo:
@@ -1093,29 +1093,29 @@ DiskSel_SendFileInfo:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, qiz
 	cpw	qiz, 20
 	jr	lt, DiskSel_SendFileInfo
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	FmmDiskMedley1Func
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	FmmDiskMedley2Func
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 7798792
 	calr	DiskNameFunc
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 7798793
 	calr	DiskInfoFunc
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -1124,11 +1124,11 @@ DiskSel_SendFileInfo:
 	ld	qiz, hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29360138
+	ld	xbc, EVT_ALL_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	cp	qiz, 0
@@ -1145,13 +1145,13 @@ DiskSel_SendFileInfo:
 DiskSel_PlayNext:
 	inc	1, (34976:16)
 	ld	xwa, (xsp+14)
-	ld	xbc, 29360151
+	ld	xbc, EVT_INDEXSW_UP
 	ld	xde, 13
 	calr	DiskMed_PlayNextHelper
 	cp	l, 1:i3
 	jr	nz, DiskSel_NextSongLoop
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 120
@@ -1190,7 +1190,7 @@ DiskSel_RepeatFindLoop:
 	ld de, (0x8342:16)
 	exts XDE
 	ld xwa, (0x833e:16)
-	ld XBC,0x01e50002
+	ld XBC,EVT_SET_SELECTED_FILE_NUMBER
 	call ApPostEvent
 	ld QIZ,0
 DiskSel_RepeatSendInfo:
@@ -1200,29 +1200,29 @@ DiskSel_RepeatSendInfo:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, qiz
 	cpw	qiz, 20
 	jr	lt, DiskSel_RepeatSendInfo
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	FmmDiskMedley1Func
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	FmmDiskMedley2Func
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 7798792
 	calr	DiskNameFunc
 	ld	xwa, 0:i3
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 7798793
 	calr	DiskInfoFunc
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -1231,11 +1231,11 @@ DiskSel_RepeatSendInfo:
 	ld	qiz, hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29360138
+	ld	xbc, EVT_ALL_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	cp	qiz, 0
@@ -1252,13 +1252,13 @@ DiskSel_RepeatSendInfo:
 DiskSel_RepeatPlayNext:
 	inc	1, (34976:16)
 	ld	xwa, (xsp+14)
-	ld	xbc, 29360151
+	ld	xbc, EVT_INDEXSW_UP
 	ld	xde, 13
 	calr	DiskMed_PlayNextHelper
 	cp	l, 1:i3
 	jr	nz, DiskSel_RepeatNext
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 120
@@ -1278,17 +1278,17 @@ DiskSel_HandleError:
 	cp	l, 0:i3
 	jr	nz, DiskSel_ShowError
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29360138
+	ld	xbc, EVT_ALL_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	jrl	DiskSel_Exit
 DiskSel_ShowError:
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(32422:16), 14
@@ -1302,7 +1302,7 @@ DiskSel_HandleStopEvent:
 DiskSel_PostStopEvent:
 	calr CancelOperationCleanup
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	jrl DiskSel_PostEvent
 
@@ -1315,13 +1315,13 @@ DiskSel_StoreWindowPtr:
 	jr	lt, DiskSel_DefaultIndex
 	exts	xhl
 	ld	xwa, (33598:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, xhl
 	jrl	DiskSel_PostEvent
 DiskSel_DefaultIndex:
 	ldw	(33602:16), 0
 	ld	xwa, (33598:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, 0:i3
 	jrl	DiskSel_PostEvent
 DiskSel_InitDisplay:
@@ -1374,7 +1374,7 @@ DiskSel_FormatEntry:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 20
@@ -1390,14 +1390,14 @@ DiskSel_HandleNavigation:
 	cp (0x8462:16), 0x00
 	jr nz, DiskSel_CheckPage
 	ld XWA,XBC
-	cp XBC,0x01c00018
+	cp XBC,EVT_INDEXSW_DOWN
 	jr nz, DiskSel_CheckPrevKey
 	cp DE,0x0013
 	jrl ge, DiskSel_GetCurrentIndex
 	inc 1,DE
 	jr t, DiskSel_SaveIndex
 DiskSel_CheckPrevKey:
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jrl nz, DiskSel_GetCurrentIndex
 	cp de, 0:i3
 	jrl le, DiskSel_GetCurrentIndex
@@ -1473,11 +1473,11 @@ DiskSel_NextUnmark:
 
 DiskSel_RefreshDisplay:
 	ld xwa, 0:i3
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	calr FmmDiskMedley1Func
 	ld xwa, 0:i3
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jr DiskSel_RefreshBoth
 
@@ -1522,11 +1522,11 @@ DiskSel_NextReorder:
 
 DiskSel_RefreshAfterSelect:
 	ld xwa, 0:i3
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	calr FmmDiskMedley1Func
 	ld xwa, 0:i3
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 
 DiskSel_RefreshBoth:
@@ -1537,7 +1537,7 @@ DiskSel_HandleRepeat:
 	ld	xwa, (xsp+6)
 	cp	xwa, 12
 	jr	nz, DiskSel_HandlePlayStart
-	cp	xbc, 29360151
+	cp	xbc, EVT_INDEXSW_UP
 	jr	nz, DiskSel_SetRepeatOff
 	ld	(34978:16), 1
 	jrl	DiskSel_GetCurrentIndex
@@ -1582,21 +1582,21 @@ DiskSel_PlayFindLoop:
 	ld de, (0x8342:16)
 	exts XDE
 	ld xwa, (0x833e:16)
-	ld XBC,0x01e50002
+	ld XBC,EVT_SET_SELECTED_FILE_NUMBER
 	call ApPostEvent
 	ld XWA,0x00600026
-	ld XBC,EVT_MENU_OPEN
+	ld XBC,EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_ParseDirectoryEntry
 	ld QIZ,HL
 	calr SignalProgressUpdate
 	ld XWA,0x00600026
-	ld XBC,EVT_SELECT_CONFIRM
+	ld XBC,EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
-	ld XBC,0x01c0000a
+	ld XBC,EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	cp QIZ,0
@@ -1623,7 +1623,7 @@ DiskSel_PlayNextSong:
 	cp	l, 1:i3
 	jr	nz, DiskSel_PlayNextLoop
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e0009a
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 0x78
@@ -1639,7 +1639,7 @@ DiskSel_HandleAllCheck:
 	ld	xwa, (xsp+6)
 	cp	xwa, 14
 	jr	nz, DiskSel_GetCurrentIndex
-	cp	xbc, 29360151
+	cp	xbc, EVT_INDEXSW_UP
 	jr	nz, DiskSel_SetAllOff
 	ld	(34980:16), 1
 	jr	DiskSel_GetCurrentIndex
@@ -1655,7 +1655,7 @@ DiskSel_UpdateDisplay:
 	ld	de, (33602:16)
 	exts	xde
 	ld	xwa, (33598:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call	ApPostEvent
 	ld	de, (xsp+4)
 	sll	de, 5
@@ -1663,7 +1663,7 @@ DiskSel_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	ld	de, (33602:16)
 	sll	de, 5
@@ -1671,7 +1671,7 @@ DiskSel_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33598:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 DiskSel_PostEvent:
 	call ApPostEvent
 
@@ -1805,7 +1805,7 @@ SmfMed_FormatSlotList:
 	ld iz, bc
 	ld (xsp + 6), xwa
 	ld xwa, 0:i3
-	ld xbc, 0x1e50003
+	ld xbc, EVT_GET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	calr FmmSmfFileNameFunc
 	ldfr_werp HL, 0xfa
@@ -1849,7 +1849,7 @@ SmfFmt_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, (xsp+0x4)
@@ -1873,7 +1873,7 @@ SmfFmt_EmptyLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -1888,21 +1888,21 @@ FmmSmfMedleyFunc:
 	pushw	iz
 	ld	xhl, xbc
 	ld	(xsp+2), xwa
-	cp	xhl, 31784970
+	cp	xhl, EVT_WAKE_UP_NOW
 	jrl	z, SmfMed_CheckContinue
 	ld	xwa, xde
-	cp	xhl, 31784968
+	cp	xhl, EVT_I_WILL_WAKE_UP
 	jrl	z, SmfMed_StoreDelayFlag
 	ld	bc, (33692:16)
-	cp	xhl, 29360152
+	cp	xhl, EVT_INDEXSW_DOWN
 	jrl	z, SmfMed_HandleNavToggle
-	cp	xhl, 29360151
+	cp	xhl, EVT_INDEXSW_UP
 	jrl	z, SmfMed_HandleNavToggle
-	cp	xhl, 29360139
+	cp	xhl, EVT_PAINT
 	jrl	z, SmfMed_RefreshDisplay
-	cp	xhl, 31784964
+	cp	xhl, EVT_PS_FILE_NAME_BOX_ID
 	jrl	z, SmfMed_StoreWindowPtr
-	cp	xhl, EVT_CPANEL_EVENT
+	cp	xhl, EVT_ACTIVATE_STATE
 	jrl	nz, SmfMed_Exit
 	cp	xde, 3
 	jrl	z, SmfMed_HandleStop
@@ -1988,7 +1988,7 @@ SmfMed_FindSongLoop:
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+2)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	calr	FmmSmfFileNameFunc
 	ld	xwa, (33684:16)
 	ld	bc, (33692:16)
@@ -1999,7 +1999,7 @@ SmfMed_FindSongLoop:
 	ld	xwa, (33688:16)
 	or	xwa, xwa
 	jrl	z, SmfMed_Exit
-	ld	xbc, 31784969
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 30
 	jr	SmfMed_PostDelayEvent
 SmfMed_NextSong:
@@ -2028,7 +2028,7 @@ SmfMed_RepeatFindLoop:
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+2)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	calr	FmmSmfFileNameFunc
 	ld	xwa, (33684:16)
 	ld	bc, (33692:16)
@@ -2039,7 +2039,7 @@ SmfMed_RepeatFindLoop:
 	ld	xwa, (33688:16)
 	or	xwa, xwa
 	jrl	z, SmfMed_Exit
-	ld	xbc, 31784969
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 30
 SmfMed_PostDelayEvent:
 	call ApPostEvent
@@ -2066,12 +2066,12 @@ SmfMed_InitFromDisk:
 	ld xde, 0:i3
 	ld e, (0x88a8:16)
 	ld XWA,0x006c0018
-	ld XBC,0x01e0003b
+	ld XBC,EVT_SET_PARAM
 	call ApPostEvent
 	cpw (0x8468:16), 0x0000
 	jr ge, SmfMed_InitState
 	ld XWA,0x00600026
-	ld XBC,EVT_MENU_OPEN
+	ld XBC,EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	call GetFileCountEncoded
@@ -2079,11 +2079,11 @@ SmfMed_InitFromDisk:
 	call FileIO_SearchAndLoadFile
 	call GetEncodedFreeSpaceData
 	ld XWA,0x00600026
-	ld XBC,EVT_SELECT_CONFIRM
+	ld XBC,EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld XWA,0xffffffff
-	ld XBC,0x01c0000a
+	ld XBC,EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	calr SignalProgressUpdate
@@ -2206,7 +2206,7 @@ SmfMed_HandleSelectToggle:
 	cp	(0x8462:16), 0
 	jr	nz, SmfMed_HandleRepeat
 	ld	xwa, (xsp + 2)
-	ld	xbc, 0x1e50003
+	ld	xbc, EVT_GET_SELECTED_FILE_NUMBER
 	ld	xde, 0:i3
 	calr	FmmSmfFileNameFunc
 	ld	iz, hl
@@ -2261,7 +2261,7 @@ SmfMed_CallFormatSlots:
 SmfMed_HandleRepeat:
 	cp	xde, 12
 	jr	nz, SmfMed_HandlePlay
-	cp	xhl, 29360151
+	cp	xhl, EVT_INDEXSW_UP
 	jr	nz, SmfMed_SetRepeatOff
 	ld	(34952:16), 1
 	jrl	SmfMed_Exit
@@ -2289,13 +2289,13 @@ SmfMed_PlayFindLoop:
 	ld	de, iz
 	extz	xde
 	ld	xwa, (xsp+2)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	calr	FmmSmfFileNameFunc
 	inc	1, (34950:16)
 	ld	wa, iz
 	call	GetFileEntryByIndex
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 115
@@ -2310,14 +2310,14 @@ SmfMed_CheckAutoPlay:
 	cp	(33890:16), 0
 	jr	nz, SmfMed_Exit
 	ld	xwa, (xsp+2)
-	ld	xbc, 31784963
+	ld	xbc, EVT_GET_SELECTED_FILE_NUMBER
 	ld	xde, 0:i3
 	calr	FmmSmfFileNameFunc
 	ld	iz, hl
 	ld	wa, iz
 	call	GetFileEntryByIndex
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 111
@@ -2329,7 +2329,7 @@ SmfMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, SmfMed_Exit
 	ld XWA,0xffffffff
-	ld XBC,0x01e0009a
+	ld XBC,EVT_SET_HOLD
 	ld xde, 0:i3
 	call ApPostEvent
 	ld a, (0x839e:16)
@@ -2382,7 +2382,7 @@ PdFmt_FormatLoop:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -2394,22 +2394,22 @@ FmmPdFileNameFunc:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa
-	cp	xbc, 31784963
+	cp	xbc, EVT_GET_SELECTED_FILE_NUMBER
 	jrl	z, PdName_GetIndexReturn
 	ld	wa, (33702:16)
 	ld	iz, wa
-	cp	xbc, 31784962
+	cp	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	jrl	z, PdName_SetIndexPlaying
 	ld	hl, wa
 	exts	xhl
 	divs	hl, 10
-	cp	xbc, 29360152
+	cp	xbc, EVT_INDEXSW_DOWN
 	jr	z, PdName_HandleNavigation
-	cp	xbc, 29360151
+	cp	xbc, EVT_INDEXSW_UP
 	jr	z, PdName_HandleNavigation
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, PdName_RefreshList
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, PdName_ReturnZero
 	ld	(33698:16), xde
 	call	GetCurrentFileIndexAlt
@@ -2424,7 +2424,7 @@ PdName_UpdateIndex:
 	ld	de, qwa
 	exts	xde
 	ld	xwa, (33698:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	jrl	PdName_PostEvent
 PdName_RefreshList:
 	muls	hl, 10
@@ -2440,7 +2440,7 @@ PdName_HandleNavigation:
 	jr	nz, PdName_CheckPageUp
 	cp	(0x8462:16), 0
 	jr	nz, PdName_CheckPageUp
-	cp	xbc, 0x1c00018
+	cp	xbc, EVT_INDEXSW_DOWN
 	jr	nz, PdName_CheckPrevKey
 	ld	bc, wa
 	inc	1, bc
@@ -2449,7 +2449,7 @@ PdName_HandleNavigation:
 	inc	1, wa
 	jr	PdName_SaveIndex
 PdName_CheckPrevKey:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, PdName_GetCurrentIndex
 	cp wa, 0:i3
 	jr le, PdName_GetCurrentIndex
@@ -2505,7 +2505,7 @@ PdName_UpdateDisplay:
 	ld	de, qwa
 	exts	xde
 	ld	xwa, (33698:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call	ApPostEvent
 	ld	bc, (33702:16)
 	exts	xbc
@@ -2525,7 +2525,7 @@ PdName_UpdateDisplay:
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	ld	wa, (33702:16)
 	exts	xwa
@@ -2537,14 +2537,14 @@ PdName_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33698:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	jrl	PdName_ReturnZero
 PdName_RefreshPage:
 	muls bc, 0xa
 	calr PdMed_FormatFileList
 	ld xwa, (xsp + 2)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	calr FmmPdMedleyFunc
 	jrl PdName_ReturnZero
@@ -2571,7 +2571,7 @@ PdName_SetIndexPlaying:
 
 	ld xwa, (33698:16)
 
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 
 
 
@@ -2593,7 +2593,7 @@ PdMed_FormatSlotList:
 	ld iz, bc
 	ld (xsp + 6), xwa
 	ld xwa, 0:i3
-	ld xbc, 0x1e50003
+	ld xbc, EVT_GET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	calr FmmPdFileNameFunc
 	ldfr_werp HL, 0xfa
@@ -2637,7 +2637,7 @@ PdFmtSlot_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, (xsp+0x4)
@@ -2661,7 +2661,7 @@ PdFmtSlot_EmptyLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -2677,21 +2677,21 @@ FmmPdMedleyFunc:
 	ld	xhl, xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	cp	xde, 31784970
+	cp	xde, EVT_WAKE_UP_NOW
 	jrl	z, PdMed_CheckContinue
 	ld	xwa, xhl
-	cp	xde, 31784968
+	cp	xde, EVT_I_WILL_WAKE_UP
 	jrl	z, PdMed_StoreDelayFlag
 	ld	bc, (33792:16)
-	cp	xde, 29360152
+	cp	xde, EVT_INDEXSW_DOWN
 	jrl	z, PdMed_HandleNavToggle
-	cp	xde, 29360151
+	cp	xde, EVT_INDEXSW_UP
 	jrl	z, PdMed_HandleNavToggle
-	cp	xde, 29360139
+	cp	xde, EVT_PAINT
 	jrl	z, PdMed_RefreshDisplay
-	cp	xde, 31784964
+	cp	xde, EVT_PS_FILE_NAME_BOX_ID
 	jrl	z, PdMed_StoreWindowPtr
-	cp	xde, EVT_CPANEL_EVENT
+	cp	xde, EVT_ACTIVATE_STATE
 	jrl	nz, PdMed_Exit
 	cp	xhl, 3
 	jrl	z, PdMed_HandleStop
@@ -2732,7 +2732,7 @@ PdMed_FindSongLoop:
 	jr	nz, PdMed_NextSong
 	extz	xhl
 	ld	xwa, xiz
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, xhl
 	calr	FmmPdFileNameFunc
 	ld	xwa, (33784:16)
@@ -2742,7 +2742,7 @@ PdMed_FindSongLoop:
 	ld	xwa, (33788:16)
 	or	xwa, xwa
 	jrl	z, PdMed_Exit
-	ld	xbc, 31784969
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 30
 	jr	PdMed_PostDelayEvent
 PdMed_NextSong:
@@ -2767,7 +2767,7 @@ PdMed_RepeatFindLoop:
 	jr	nz, PdMed_RepeatNext
 	extz	xhl
 	ld	xwa, xiz
-	ld	xbc, 0x1e50002
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, xhl
 	calr	FmmPdFileNameFunc
 	ld	xwa, (0x83f8:16)
@@ -2777,7 +2777,7 @@ PdMed_RepeatFindLoop:
 	ld	xwa, (0x83fc:16)
 	or	xwa, xwa
 	jrl	z, PdMed_Exit
-	ld	xbc, 0x1e50009
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 0x1e
 PdMed_PostDelayEvent:
 	call ApPostEvent
@@ -2808,17 +2808,17 @@ PdMed_InitFromDisk:
 	cpw	(0x846a:16), 0
 	jr	ge, PdMed_InitState
 	ld	xwa, 0x600026
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	call	BuildPageRecordsAlt
 	ld	(0x846a:16), hl
 	ld	xwa, 0x600026
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1c0000a
+	ld	xbc, EVT_ALL_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	call	SignalProgressUpdate
@@ -2936,7 +2936,7 @@ PdMed_HandleSelectToggle:
 	cp (0x8462:16), 0x00
 	jr nz, PdMed_HandleRepeat
 	ld XWA,XIZ
-	ld XBC,0x01e50003
+	ld XBC,EVT_GET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	calr FmmPdFileNameFunc
 	lda xix, (0x8804:16)
@@ -2989,7 +2989,7 @@ PdMed_CallFormatSlots:
 PdMed_HandleRepeat:
 	cp	xhl, 12
 	jr	nz, PdMed_HandlePlay
-	cp	xde, 29360151
+	cp	xde, EVT_INDEXSW_UP
 	jr	nz, PdMed_SetRepeatOff
 	ld	(34952:16), 1
 	jrl	PdMed_Exit
@@ -3016,12 +3016,12 @@ PdMed_PlayFindLoop:
 	ld	(33890:16), 1
 	extz	xhl
 	ld	xwa, xiz
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, xhl
 	calr	FmmPdFileNameFunc
 	inc	1, (34950:16)
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 117
@@ -3036,7 +3036,7 @@ PdMed_CheckAutoPlay:
 	cp	(33890:16), 0
 	jr	nz, PdMed_Exit
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 113
@@ -3048,7 +3048,7 @@ PdMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, PdMed_Exit
 	ld XWA,0xffffffff
-	ld XBC,0x01e0009a
+	ld XBC,EVT_SET_HOLD
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw WA, 0x0075
@@ -3064,7 +3064,7 @@ DocDiskNameFunc_Entry:
 DocDiskNameFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr nz, DocDisk_Exit
 	call FileIO_SearchAndLoadFile
 	ld ix, 0:i3
@@ -3105,7 +3105,7 @@ DocDisk_TrimLoop:
 
 DocDisk_PostEvent:
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 
 DocDisk_Exit:
@@ -3151,7 +3151,7 @@ DocFmt_FormatLoop:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -3163,22 +3163,22 @@ FmmDocFileNameFunc:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa
-	cp	xbc, 31784963
+	cp	xbc, EVT_GET_SELECTED_FILE_NUMBER
 	jrl	z, DocName_GetIndexReturn
 	ld	wa, (33798:16)
 	ld	iz, wa
-	cp	xbc, 31784962
+	cp	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	jrl	z, DocName_SetIndexPlaying
 	ld	hl, wa
 	exts	xhl
 	divs	hl, 10
-	cp	xbc, 29360152
+	cp	xbc, EVT_INDEXSW_DOWN
 	jr	z, DocName_HandleNavigation
-	cp	xbc, 29360151
+	cp	xbc, EVT_INDEXSW_UP
 	jr	z, DocName_HandleNavigation
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, DocName_RefreshList
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, DocName_ReturnZero
 	ld	(33794:16), xde
 	call	FileIO_GetCurrentFileIndex_Alt
@@ -3193,7 +3193,7 @@ DocName_UpdateIndex:
 	ld	de, qwa
 	exts	xde
 	ld	xwa, (33794:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	jrl	DocName_PostEvent
 DocName_RefreshList:
 	muls	hl, 10
@@ -3209,7 +3209,7 @@ DocName_HandleNavigation:
 	jr	nz, DocName_CheckPageUp
 	cp	(0x8462:16), 0
 	jr	nz, DocName_CheckPageUp
-	cp	xbc, 0x1c00018
+	cp	xbc, EVT_INDEXSW_DOWN
 	jr	nz, DocName_CheckPrevKey
 	ld	bc, wa
 	inc	1, bc
@@ -3218,7 +3218,7 @@ DocName_HandleNavigation:
 	inc	1, wa
 	jr	DocName_SaveIndex
 DocName_CheckPrevKey:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, DocName_GetCurrentIndex
 	cp wa, 0:i3
 	jr le, DocName_GetCurrentIndex
@@ -3274,7 +3274,7 @@ DocName_UpdateDisplay:
 	ld	de, qwa
 	exts	xde
 	ld	xwa, (33794:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call	ApPostEvent
 	ld	bc, (33798:16)
 	exts	xbc
@@ -3294,7 +3294,7 @@ DocName_UpdateDisplay:
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	ld	wa, (33798:16)
 	exts	xwa
@@ -3306,14 +3306,14 @@ DocName_UpdateDisplay:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33794:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	jrl	DocName_ReturnZero
 DocName_RefreshPage:
 	muls bc, 0xa
 	calr DocMed_FormatFileList
 	ld xwa, (xsp + 2)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	calr FmmDocMedleyFunc
 	jrl DocName_ReturnZero
@@ -3340,7 +3340,7 @@ DocName_SetIndexPlaying:
 
 	ld xwa, (33794:16)
 
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 
 
 
@@ -3363,7 +3363,7 @@ DocMed_FormatSlotList:
 	ld iz, bc
 	ld (xsp + 6), xwa
 	ld xwa, 0:i3
-	ld xbc, 0x1e50003
+	ld xbc, EVT_GET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	calr FmmDocFileNameFunc
 	ldfr_werp HL, 0xfa
@@ -3407,7 +3407,7 @@ DocFmtSlot_FormatLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, (xsp+0x4)
@@ -3431,7 +3431,7 @@ DocFmtSlot_EmptyLoop:
 	extz	xde
 	add	xde, xwa
 	ld	xwa, (xsp+6)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -3446,21 +3446,21 @@ FmmDocMedleyFunc:
 	ld	xhl, xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	cp	xde, 31784970
+	cp	xde, EVT_WAKE_UP_NOW
 	jrl	z, DocMed_CheckContinue
 	ld	xwa, xhl
-	cp	xde, 31784968
+	cp	xde, EVT_I_WILL_WAKE_UP
 	jrl	z, DocMed_StoreDelayFlag
 	ld	bc, (33888:16)
-	cp	xde, 29360152
+	cp	xde, EVT_INDEXSW_DOWN
 	jrl	z, DocMed_HandleNavToggle
-	cp	xde, 29360151
+	cp	xde, EVT_INDEXSW_UP
 	jrl	z, DocMed_HandleNavToggle
-	cp	xde, 29360139
+	cp	xde, EVT_PAINT
 	jrl	z, DocMed_RefreshDisplay
-	cp	xde, 31784964
+	cp	xde, EVT_PS_FILE_NAME_BOX_ID
 	jrl	z, DocMed_StoreWindowPtr
-	cp	xde, EVT_CPANEL_EVENT
+	cp	xde, EVT_ACTIVATE_STATE
 	jrl	nz, DocMed_Exit
 	cp	xhl, 3
 	jrl	z, DocMed_HandleStop
@@ -3501,7 +3501,7 @@ DocMed_FindSongLoop:
 	jr	nz, DocMed_NextSong
 	extz	xhl
 	ld	xwa, xiz
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, xhl
 	calr	FmmDocFileNameFunc
 	ld	xwa, (33880:16)
@@ -3511,7 +3511,7 @@ DocMed_FindSongLoop:
 	ld	xwa, (33884:16)
 	or	xwa, xwa
 	jrl	z, DocMed_Exit
-	ld	xbc, 31784969
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 30
 	jr	DocMed_PostDelayEvent
 DocMed_NextSong:
@@ -3536,7 +3536,7 @@ DocMed_RepeatFindLoop:
 	jr	nz, DocMed_RepeatNext
 	extz	xhl
 	ld	xwa, xiz
-	ld	xbc, 0x1e50002
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, xhl
 	calr	FmmDocFileNameFunc
 	ld	xwa, (0x8458:16)
@@ -3546,7 +3546,7 @@ DocMed_RepeatFindLoop:
 	ld	xwa, (0x845c:16)
 	or	xwa, xwa
 	jrl	z, DocMed_Exit
-	ld	xbc, 0x1e50009
+	ld	xbc, EVT_WAKE_UP_TIME
 	ld	xde, 0x1e
 DocMed_PostDelayEvent:
 	call ApPostEvent
@@ -3581,17 +3581,17 @@ DocMed_CheckInit:
 DocMed_InitFromDisk:
 	ldw	(33896:16), 65535
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	call	FileIO_InitFileNavigation
 	ld	(33900:16), hl
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29360138
+	ld	xbc, EVT_ALL_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	call	SignalProgressUpdate
@@ -3709,7 +3709,7 @@ DocMed_HandleSelectToggle:
 	cp (0x8462:16), 0x00
 	jr nz, DocMed_HandleRepeat
 	ld XWA,XIZ
-	ld XBC,0x01e50003
+	ld XBC,EVT_GET_SELECTED_FILE_NUMBER
 	ld xde, 0:i3
 	calr FmmDocFileNameFunc
 	lda xix, (0x8804:16)
@@ -3762,7 +3762,7 @@ DocMed_CallFormatSlots:
 DocMed_HandleRepeat:
 	cp	xhl, 12
 	jr	nz, DocMed_HandlePlay
-	cp	xde, 29360151
+	cp	xde, EVT_INDEXSW_UP
 	jr	nz, DocMed_SetRepeatOff
 	ld	(34952:16), 1
 	jrl	DocMed_Exit
@@ -3789,12 +3789,12 @@ DocMed_PlayFindLoop:
 	ld	(33890:16), 1
 	extz	xhl
 	ld	xwa, xiz
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	ld	xde, xhl
 	calr	FmmDocFileNameFunc
 	inc	1, (34950:16)
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 116
@@ -3809,11 +3809,11 @@ DocMed_CheckAutoPlay:
 	cp	(33890:16), 0
 	jr	nz, DocMed_Exit
 	ld	xwa, xiz
-	ld	xbc, 31784963
+	ld	xbc, EVT_GET_SELECTED_FILE_NUMBER
 	ld	xde, 0:i3
 	calr	FmmDocFileNameFunc
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 112
@@ -3825,7 +3825,7 @@ DocMed_CheckContinue:
 	cp (0x8462:16), 0x00
 	jr z, DocMed_Exit
 	ld XWA,0xffffffff
-	ld XBC,0x01e0009a
+	ld XBC,EVT_SET_HOLD
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw WA, 0x0074
@@ -3979,7 +3979,7 @@ CheckSlotIndexValid:
 InitializeCheap:
 	lda xsp, (xsp - 0x0e)
 	lda XBC, (XSP)
-	ld XWA,0x01600004
+	ld XWA,NAKA_CLASS_Class
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
@@ -3990,7 +3990,7 @@ InitializeCheap:
 	ldw WA, 0x0165
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000c
+	ld XWA,NAKA_CLASS_ResEvent
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
@@ -4001,7 +4001,7 @@ InitializeCheap:
 	ldw WA, 0x01c5
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000d
+	ld XWA,NAKA_CLASS_ResMethod
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
@@ -4012,7 +4012,7 @@ InitializeCheap:
 	ldw WA, 0x01e5
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600002
+	ld XWA,NAKA_CLASS_ApFunction
 	ld (XBC),XWA
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -4022,7 +4022,7 @@ InitializeCheap:
 	ldw WA, 0x0125
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600002
+	ld XWA,NAKA_CLASS_ApFunction
 	ld (XBC),XWA
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -4032,7 +4032,7 @@ InitializeCheap:
 	ldw WA, 0x0425
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600001
+	ld XWA,NAKA_CLASS_Function
 	ld (XBC),XWA
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -4042,7 +4042,7 @@ InitializeCheap:
 	ldw WA, 0x0105
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600001
+	ld XWA,NAKA_CLASS_Function
 	ld (XBC),XWA
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -4052,7 +4052,7 @@ InitializeCheap:
 	ldw WA, 0x0405
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600003
+	ld XWA,NAKA_CLASS_MainFunction
 	ld (XBC),XWA
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -4062,7 +4062,7 @@ InitializeCheap:
 	ldw WA, 0x0145
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600003
+	ld XWA,NAKA_CLASS_MainFunction
 	ld (XBC),XWA
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -4072,7 +4072,7 @@ InitializeCheap:
 	ldw WA, 0x0445
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4082,7 +4082,7 @@ InitializeCheap:
 	ldw WA, 0x0060
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4092,7 +4092,7 @@ InitializeCheap:
 	ldw WA, 0x0360
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4102,7 +4102,7 @@ InitializeCheap:
 	ldw WA, 0x0061
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4112,7 +4112,7 @@ InitializeCheap:
 	ldw WA, 0x0361
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4122,7 +4122,7 @@ InitializeCheap:
 	ldw WA, 0x0062
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4132,7 +4132,7 @@ InitializeCheap:
 	ldw WA, 0x0362
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4142,7 +4142,7 @@ InitializeCheap:
 	ldw WA, 0x0063
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4152,7 +4152,7 @@ InitializeCheap:
 	ldw WA, 0x0363
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4162,7 +4162,7 @@ InitializeCheap:
 	ldw WA, 0x0064
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4172,7 +4172,7 @@ InitializeCheap:
 	ldw WA, 0x0364
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4182,7 +4182,7 @@ InitializeCheap:
 	ldw WA, 0x0065
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4192,7 +4192,7 @@ InitializeCheap:
 	ldw WA, 0x0365
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4202,7 +4202,7 @@ InitializeCheap:
 	ldw WA, 0x0066
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4212,7 +4212,7 @@ InitializeCheap:
 	ldw WA, 0x0366
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4222,7 +4222,7 @@ InitializeCheap:
 	ldw WA, 0x0067
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4232,7 +4232,7 @@ InitializeCheap:
 	ldw WA, 0x0367
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4242,7 +4242,7 @@ InitializeCheap:
 	ldw WA, 0x006a
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4252,7 +4252,7 @@ InitializeCheap:
 	ldw WA, 0x036a
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4262,7 +4262,7 @@ InitializeCheap:
 	ldw WA, 0x006b
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4272,7 +4272,7 @@ InitializeCheap:
 	ldw WA, 0x036b
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4282,7 +4282,7 @@ InitializeCheap:
 	ldw WA, 0x006c
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4292,7 +4292,7 @@ InitializeCheap:
 	ldw WA, 0x036c
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4302,7 +4302,7 @@ InitializeCheap:
 	ldw WA, 0x006d
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4312,7 +4312,7 @@ InitializeCheap:
 	ldw WA, 0x036d
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4322,7 +4322,7 @@ InitializeCheap:
 	ldw WA, 0x006e
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4332,7 +4332,7 @@ InitializeCheap:
 	ldw WA, 0x036e
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4342,7 +4342,7 @@ InitializeCheap:
 	ldw WA, 0x0077
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4352,7 +4352,7 @@ InitializeCheap:
 	ldw WA, 0x0377
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4362,7 +4362,7 @@ InitializeCheap:
 	ldw WA, 0x0079
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4372,7 +4372,7 @@ InitializeCheap:
 	ldw WA, 0x0379
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4382,7 +4382,7 @@ InitializeCheap:
 	ldw WA, 0x007b
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4392,7 +4392,7 @@ InitializeCheap:
 	ldw WA, 0x037b
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4402,7 +4402,7 @@ InitializeCheap:
 	ldw WA, 0x007c
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4412,7 +4412,7 @@ InitializeCheap:
 	ldw WA, 0x037c
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4422,7 +4422,7 @@ InitializeCheap:
 	ldw WA, 0x007d
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4432,7 +4432,7 @@ InitializeCheap:
 	ldw WA, 0x037d
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4442,7 +4442,7 @@ InitializeCheap:
 	ldw WA, 0x007e
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4452,7 +4452,7 @@ InitializeCheap:
 	ldw WA, 0x037e
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -4462,7 +4462,7 @@ InitializeCheap:
 	ldw WA, 0x00bc
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -4475,7 +4475,7 @@ InitializeCheap:
 	pushw 0x00ea
 	pushw 0x7ee8
 	ld	xwa, 6:i3
-	ld	xbc, 0x1200000
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 0x1a00060
 	call	RegisterMode
 	RegTitle	0x5, 0xea, 0x7ef0, 0x60, 0x1200000, 0x600000
@@ -4501,7 +4501,7 @@ InitializeCheap:
 	lda	xsp, (xsp + 14)
 	ret
 PasswordText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PasswordText_Exit
 	lda xhl, (NakaInst_WaitWinCtlSmf_0x7C8:24)
 	ret
@@ -4511,7 +4511,7 @@ PasswordText_Exit:
 	ret
 
 CheckPasswordText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckPwd_Exit
 	ld a, (0x02748e:24)
 	cp a, 2:i3
@@ -4540,15 +4540,15 @@ WakeUpPassword:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c50004
+	cp xbc, EVT_WAKEUP_PASSWORD
 	jrl z, WakeUp_StoreType
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, WakeUp_HandleOk
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, WakeUp_HandleInit
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, WakeUp_HandleDirect
-	cp xbc, 0x1e00085
+	cp xbc, EVT_ARE_YOU_CLASS_PROC
 	jr z, WakeUp_Return1
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -4564,7 +4564,7 @@ WakeUp_HandleDirect:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, NakaInst_WaitWinCtlSmf_0xDF0
 	call SendEvent
 	jrl WakeUp_ReturnZero
@@ -4581,7 +4581,7 @@ WakeUp_HandleOk:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, 0x670001
-	ld xbc, 0x1e00056
+	ld xbc, EVT_GET_PAGE_NOW
 	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x3
@@ -4594,11 +4594,11 @@ WakeUp_HandleOk:
 	jr nz, WakeUp_ReturnZero
 	ld (0x02741a:24), 0x00
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0x600040
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr WakeUp_PostEvent
 
@@ -4610,11 +4610,11 @@ WakeUp_StoreType:
 	ld xwa, (xsp + 4)
 	ld (0x02748e:24), a
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0x600045
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 WakeUp_PostEvent:
@@ -4631,13 +4631,13 @@ WakeUp_Exit:
 PasswordOk:
 	push	xiz
 	ld	xiz, xwa
-	cp	xbc, 29360135
+	cp	xbc, EVT_SW_IN
 	jr	z, PwdOk_HandleConfirm
-	cp	xbc, 31457404
+	cp	xbc, EVT_GET_STRING_LENGTH
 	jr	z, PwdOk_Return2
-	cp	xbc, 31457412
+	cp	xbc, EVT_GET_NAMING_MODE
 	jr	z, PwdOk_ReturnZero
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jr	nz, PwdOk_ReturnZero
 	pushw	234
 	pushw	35830
@@ -4653,25 +4653,25 @@ PwdOk_Return2:
 PwdOk_HandleConfirm:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	ld xde, 0x2741c
 	call SendEvent
 	ld xwa, 0x600040
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	ld de, (0x02741c:24)
 	extz xde
-	ld xwa, 0x1450038
-	ld xbc, 0x1e5000d
+	ld xwa, NAKA_MAINFUNC_FmmPasswordFunc
+	ld xbc, EVT_SET_PASSWORD
 	call MainFuncCall
 
 PwdOk_ReturnZero:
@@ -4684,13 +4684,13 @@ PwdOk_Exit:
 CheckPasswordOk:
 	push	xiz
 	ld	xiz, xwa
-	cp	xbc, 29360135
+	cp	xbc, EVT_SW_IN
 	jr	z, CheckOk_HandleConfirm
-	cp	xbc, 31457404
+	cp	xbc, EVT_GET_STRING_LENGTH
 	jr	z, CheckOk_Return2
-	cp	xbc, 31457412
+	cp	xbc, EVT_GET_NAMING_MODE
 	jrl	z, CheckOk_ReturnZero
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jrl	nz, CheckOk_ReturnZero
 	pushw	234
 	pushw	35834
@@ -4706,23 +4706,23 @@ CheckOk_Return2:
 CheckOk_HandleConfirm:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	ld xde, 0x27424
 	call SendEvent
 	ld xwa, 0x600045
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0x670001
-	ld xbc, 0x1e00056
+	ld xbc, EVT_GET_PAGE_NOW
 	ld xde, 0:i3
 	call SendEvent
 	lda xwa, (0x027424:24)
@@ -4730,8 +4730,8 @@ CheckOk_HandleConfirm:
 	jr nz, CheckOk_Type2
 	ld de, (xwa)
 	extz xde
-	ld xwa, 0x1450038
-	ld xbc, 0x1e5000e
+	ld xwa, NAKA_MAINFUNC_FmmPasswordFunc
+	ld xbc, EVT_CHECK_PASSWORD
 	jr CheckOk_CallFunc
 
 CheckOk_Type2:
@@ -4739,8 +4739,8 @@ CheckOk_Type2:
 	jr nz, CheckOk_Type3
 	ld de, (xwa)
 	extz xde
-	ld xwa, 0x1450038
-	ld xbc, 0x1e5000f
+	ld xwa, NAKA_MAINFUNC_FmmPasswordFunc
+	ld xbc, EVT_CHECK_PASSWORD2
 	jr CheckOk_CallFunc
 
 CheckOk_Type3:
@@ -4748,8 +4748,8 @@ CheckOk_Type3:
 	jr nz, CheckOk_ReturnZero
 	ld de, (xwa)
 	extz xde
-	ld xwa, 0x1450038
-	ld xbc, 0x1e50010
+	ld xwa, NAKA_MAINFUNC_FmmPasswordFunc
+	ld xbc, EVT_CHECK_PASSWORD3
 
 CheckOk_CallFunc:
 	call MainFuncCall
@@ -4762,18 +4762,18 @@ CheckOk_Exit:
 	ret
 
 PasswordNo:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, PwdNo_Exit
 	ld xwa, 0x600040
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 
@@ -4782,18 +4782,18 @@ PwdNo_Exit:
 	ret
 
 CheckPasswordNo:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, CheckNo_HandleConfirm
 	ld xwa, 0x600045
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 
@@ -4802,7 +4802,7 @@ CheckNo_HandleConfirm:
 	ret
 
 DiskAttention:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type1
 	lda xhl, (NakaInst_WaitWinCtlSmf_0xDFE:24)
 	ret
@@ -4812,7 +4812,7 @@ CheckNo_Type1:
 	ret
 
 DiskSure:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type2
 	lda xhl, (NakaInst_WaitWinCtlSmf_0xE5C:24)
 	ret
@@ -4822,7 +4822,7 @@ CheckNo_Type2:
 	ret
 
 FormatText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type3
 	lda xhl, (DiskWarning_ConfirmStrings_0x30:24)
 	ret
@@ -4832,7 +4832,7 @@ CheckNo_Type3:
 	ret
 
 DeleteText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_CallFunc
 	lda xhl, (DiskWarning_ConfirmStrings_0x1C4:24)
 	ret
@@ -4842,22 +4842,22 @@ CheckNo_CallFunc:
 	ret
 
 DeleteYes:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, PwdChange_HandleOk
 	ld xwa, 0x7b0051
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0x33
 	call PostEvent
 
@@ -4866,18 +4866,18 @@ PwdChange_HandleOk:
 	ret
 
 DeleteNo:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, PwdChange_Type1
 	ld xwa, 0x7b0051
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 
@@ -4886,7 +4886,7 @@ PwdChange_Type1:
 	ret
 
 SaveText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PwdChange_CallFunc
 	lda xhl, (DiskWarning_ConfirmStrings_0x47E:24)
 	ret
@@ -4896,22 +4896,22 @@ PwdChange_CallFunc:
 	ret
 
 SaveYes:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, PwdDel_HandleOk
 	ld xwa, 0x600037
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0x32
 	call PostEvent
 
@@ -4920,18 +4920,18 @@ PwdDel_HandleOk:
 	ret
 
 SaveNo:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, PwdDel_Type1
 	ld xwa, 0x600037
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 
@@ -4940,7 +4940,7 @@ PwdDel_Type1:
 	ret
 
 InsertOptionText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PwdDel_Type2
 	lda xhl, (DiskWarning_ConfirmStrings_0x790:24)
 	ret
@@ -4950,7 +4950,7 @@ PwdDel_Type2:
 	ret
 
 TypePriorityText:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PwdDel_CallFunc
 	lda xhl, (DiskWarning_ConfirmStrings_0x8AC:24)
 	ret

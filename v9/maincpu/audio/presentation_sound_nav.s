@@ -11,11 +11,11 @@
 	ld xde, (xsp + 30)
 	set 7, de
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	call SendEvent
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1c00034
+	ld xbc, EVT_SEND_SW_BOTH
 	call SendEvent
 
 ; Builds an SSF presentation workspace and sends event 0x1c0001c via direct
@@ -33,7 +33,7 @@
 GroupBoxProc_StartSSFPresentation:
 	ld xwa, (xsp + 38)
 	call SetRootObject
-	ld xwa, 0x1c0001c
+	ld xwa, EVT_LSW_DATA
 	call SetRootEvent
 	lda xwa, (xsp + 18)
 	call SetRootParam
@@ -69,7 +69,7 @@ GroupBoxProc_SSFItemLoop:
 	ld xwa, 0:i3
 	ld (xde + 8), xwa
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001c
+	ld xbc, EVT_LSW_DATA
 	call SendEvent
 	lda xwa, (xsp + 14)
 	lda xbc, (xsp + 10)
@@ -106,14 +106,14 @@ GroupBox_CancelBack_Loop:
 	ld xhl, xbc
 	ld xwa, (xsp + 38)
 	ld (xbc + 2), xwa
-	ld xwa, 0x1c00007
+	ld xwa, EVT_SW_IN
 	ld (xbc + 6), xwa
 	ld (xbc + 10), xix
 	lda xwa, (xde + 14)
 	add xiy, xwa
 	ld xwa, (xsp + 38)
 	ld (xiy + 2), xwa
-	ld xwa, 0x1c00007
+	ld xwa, EVT_SW_IN
 	ld (xiy + 6), xwa
 	ld wa, iz
 	add wa, 0x80
@@ -125,7 +125,7 @@ GroupBox_CancelBack_Loop:
 	cp (xwa), 0x0
 	jr nz, GroupBox_CancelBack_ActivateSecondary
 	ld (xwa), 0x1
-	ld xwa, 0x1c00026
+	ld xwa, EVT_AUTO_INC
 	push xwa
 	ld xwa, (xsp + 8)
 	push xwa
@@ -150,7 +150,7 @@ GroupBox_CancelBack_ActivateSecondary:
 	cp (xwa), 0x0
 	jrl nz, GroupBox_CancelBack_LoopNext
 	ld (xwa), 0x1
-	ld xwa, 0x1c00026
+	ld xwa, EVT_AUTO_INC
 	push xwa
 	ld wa, iz
 	add wa, 0x80
@@ -170,7 +170,7 @@ GroupBox_CancelBack_Deactivate:
 	cp (xwa), 0x0
 	jr z, GroupBox_CancelBack_DeactivateSecondary
 	ld (xwa), 0x0
-	ld xwa, 0x1c00026
+	ld xwa, EVT_AUTO_INC
 	push xwa
 	push xix
 	ld xwa, 0x10
@@ -194,7 +194,7 @@ GroupBox_CancelBack_DeactivateSecondary:
 	cp (xwa), 0x0
 	jr z, GroupBox_CancelBack_LoopNext
 	ld (xwa), 0x0
-	ld xwa, 0x1c00026
+	ld xwa, EVT_AUTO_INC
 	push xwa
 	ld wa, iz
 	add wa, 0x80
@@ -224,7 +224,7 @@ GroupBox_DialEnable:
 GroupBox_DialDown:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1c00007
+	ld xbc, EVT_SW_IN
 	calr SetDialDown
 	jrl GroupBox_ReturnZero
 
@@ -234,7 +234,7 @@ GroupBox_DialDown:
 GroupBox_DialUp:
 	ld xde, (xsp + 30)
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1c00007
+	ld xbc, EVT_SW_IN
 	calr SetDialUp
 	jrl GroupBox_ReturnZero
 
@@ -270,7 +270,7 @@ GroupBox_NavUpDown:
 	ld (0x03ef6a:24), xwa
 	call InitializeTimer
 	ld xwa, (xsp + 38)
-	ld xbc, 0x1e000b4
+	ld xbc, EVT_REFRESH_SW_EVENT
 	ld xde, 0:i3
 
 GroupBox_NavDispatch:
@@ -290,7 +290,7 @@ GroupBox_CloseAll_Loop:
 	cp (xbc), 0x0
 	jr z, GroupBox_CloseAll_Secondary
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	call SendEvent
 
 GroupBox_CloseAll_Secondary:
@@ -309,7 +309,7 @@ GroupBox_CloseAll_Secondary:
 	add de, 0x80
 	extz xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	call SendEvent
 
 GroupBox_CloseAll_Next:
@@ -358,7 +358,7 @@ SetDialFocus:
 	ret z
 	ld (0x03ef6a:24), xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0002c
+	ld xbc, EVT_CHANGE_DIAL_FOCUS
 	call SendEvent
 	ret
 
@@ -407,13 +407,13 @@ SetAutoInc:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	call GetRootEvent
-	cp xhl, 0x1c00026
+	cp xhl, EVT_AUTO_INC
 	jr z, EventParam_FetchPoint
-	cp xhl, 0x1c00009
+	cp xhl, EVT_SW_OFF
 	jr z, EventParam_FetchPoint
-	cp xhl, 0x1c00007
+	cp xhl, EVT_SW_IN
 	jr z, EventParam_FetchPoint
-	cp xhl, EVT_ACTIVATE
+	cp xhl, EVT_SW_ON
 	jrl nz, ApTimer_SetupReturn
 
 EventParam_FetchPoint:
@@ -469,7 +469,7 @@ EventParam_FetchPoint:
 	lda xwa, (0x0274e9:24)
 	add xwa, xhl
 	ld (xwa), 0x1
-	ld xwa, 0x1c00026
+	ld xwa, EVT_AUTO_INC
 	push xwa
 	ld xwa, (xsp + 6)
 	push xwa
@@ -489,23 +489,23 @@ ScreenProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1e0004a
+	cp xwa, EVT_GET_PARENT_WINDOW
 	jrl z, Screen_GetDefault
-	cp xwa, 0x1e00048
+	cp xwa, EVT_SET_PARENT_WINDOW
 	jrl z, Screen_ReturnZero
-	cp xwa, 0x1e0004b
+	cp xwa, EVT_GET_CHILD_WINDOW
 	jrl z, Screen_GetStoredValue
-	cp xwa, 0x1e00049
+	cp xwa, EVT_SET_CHILD_WINDOW
 	jrl z, Screen_SetStoredValue
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jrl z, Screen_OK
-	cp xwa, 0x1c00009
+	cp xwa, EVT_SW_OFF
 	jrl z, Screen_Deactivate
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jrl z, Screen_Paint
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jrl z, Screen_Close
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, Screen_Init
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -519,35 +519,35 @@ Screen_Init_RegisterChild:
 Screen_Init:
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, 0x1e0004b
+	ld xbc, EVT_GET_CHILD_WINDOW
 	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0xffffffff
 	jr nz, Screen_Init_RegisterChild
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600033
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_Screen
 	call SendEvent
 	or xhl, xhl
 	jr nz, Screen_Init_Setup
 
 Screen_Init_CloseDeadChildren:
 	ld xwa, 0xffffffff
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, xiz
 	call SendEvent
 	call GetCurrentTarget
 	ld xwa, xhl
-	ld xbc, EVT_REDRAW
-	ld xde, 0x1600033
+	ld xbc, EVT_CHECK_CLASS
+	ld xde, NAKA_CLASS_Screen
 	call SendEvent
 	or xhl, xhl
 	jr z, Screen_Init_CloseDeadChildren
 
 Screen_Init_Setup:
 	ld xwa, 0xffffffff
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, xiz
 	call SendEvent
 	ld xwa, (xsp + 12)
@@ -573,13 +573,13 @@ Screen_Init_SetWall:
 	cp hl, 0:i3
 	call nz, (SleepMainTask:24)
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e000b1
+	ld xbc, EVT_GET_BOX_BORDER
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
 	calr SetWallPaper
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e000b2
+	ld xbc, EVT_GET_BOX_COLOR
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -590,7 +590,7 @@ Screen_Init_SetWall:
 	call GetTitleNow
 	ld xwa, xhl
 	ld xde, (xsp + 12)
-	ld xbc, 0x1e00077
+	ld xbc, EVT_SET_RETURN_SCREEN
 	call SendEvent
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -655,8 +655,8 @@ Screen_OK:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 12)
-	ld xbc, 0x1e00024
-	ld xde, 0x1600047
+	ld xbc, EVT_SEARCH_CLASS
+	ld xde, NAKA_CLASS_IvExit
 	call SendEvent
 	or xhl, xhl
 	jr nz, Screen_OK_Forward
@@ -664,28 +664,28 @@ Screen_OK:
 	jr nz, Screen_OK_Forward
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr nz, Screen_OK_NavUp
 	ld xwa, (xsp + 4)
 	ld xde, (xwa + 26)
-	cp xde, 0x1a00000
+	cp xde, TITLE_PS
 	jr z, Screen_OK_Forward
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
+	ld xbc, EVT_CHANGE_TITLE
 	jr Screen_OK_PostAndDispatch
 
 Screen_OK_NavUp:
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00079
+	ld xbc, EVT_INTERRUPT_EXIT
 	ld xde, 0:i3
 	call SendEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 0:i3
 
 Screen_OK_PostAndDispatch:
@@ -889,7 +889,7 @@ UI_ChangeWallPalette_Jump:
 	jp ChangeWallPalette
 
 IvScreenProc:
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jrl nz, ScreenProc
 	ld xhl, 0:i3
 	ret
@@ -898,7 +898,7 @@ TtlScreenProc:
 	lda xsp, (xsp - 12)
 	push xiz
 	ld xiz, xwa
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, TtlScreen_PaintHandler
 	ld xwa, xiz
 	calr ScreenProc
@@ -916,8 +916,8 @@ TtlScreen_PaintHandler:
 	ld bc, 4:i3
 	ldirw
 	ld xwa, xiz
-	ld xbc, 0x1e00024
-	ld xde, 0x1600024
+	ld xbc, EVT_SEARCH_CLASS
+	ld xde, NAKA_CLASS_PsPageBox
 	call SendEvent
 	or xhl, xhl
 	scc16 nz, de
@@ -1116,14 +1116,14 @@ IvDirmdScreenProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xbc, (xsp + 8)
-	cp xbc, 0x1e000b1
+	cp xbc, EVT_GET_BOX_BORDER
 	jrl z, DirmdEmu_CaseD
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c0003a
+	cp xwa, EVT_OLD_TITLE
 	jr z, DirmdEmu_CaseC
-	cp xwa, EVT_BUTTON_FOCUS
+	cp xwa, EVT_NEW_TITLE
 	jr z, DirmdEmu_CaseB
-	sub xbc, EVT_MENU_OPEN
+	sub xbc, EVT_SHOW
 	cp xbc, 0x0
 	jrl lt, DirmdEmu_CaseE
 	cp xbc, 0xe
@@ -1149,13 +1149,13 @@ DirmdEmu_CaseC:
 	calr ScreenProc
 	call GetTitleOld
 	ld xwa, xhl
-	ld xbc, 0x1e00032
+	ld xbc, EVT_GET_TITLE_PROC_ID
 	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
 	call SleepMainTask
 	ld xwa, xiz
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, (xsp + 4)
 	call FuncCall
 	call WakeUpMainTask
@@ -1176,7 +1176,7 @@ DirmdEmu_CaseC:
 	ldw (0x0276c4:24), 0x0001
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00032
+	ld xbc, EVT_GET_TITLE_PROC_ID
 	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
@@ -1195,7 +1195,7 @@ IvDirmd_ForwardToScreen:
 	jr TaskWake_ZeroReturn
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00032
+	ld xbc, EVT_GET_TITLE_PROC_ID
 	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
@@ -1214,7 +1214,7 @@ TaskWake_ZeroReturn:
 	jr ugt, IvDirmd_ForwardAndReturn
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00032
+	ld xbc, EVT_GET_TITLE_PROC_ID
 	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
@@ -1318,7 +1318,7 @@ DirmdEmulator_Entry:
 DirmdEmulator:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1c00000
+	sub xbc, EVT_NONE
 	cp xbc, 0x0
 	jrl lt, DirmdEmu_DefaultCase
 	cp xbc, 0xf
@@ -1440,32 +1440,32 @@ WindowProc:
 	ld (xsp + 20), xbc
 	ld (xsp + 24), xwa
 	ld xbc, (xsp + 20)
-	cp xbc, 0x1c0001f
+	cp xbc, EVT_DIAL
 	jrl z, WindowProc_ForwardToGroupBoxes
 	ld xwa, (xsp + 20)
-	cp xwa, 0x1c00028
+	cp xwa, EVT_RETURN_TITLE
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, EVT_HD_INIT_PARAMS
+	cp xwa, EVT_INTERRUPT_TITLE
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1c00015
+	cp xwa, EVT_CHANGE_TITLE
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1c00014
+	cp xwa, EVT_CHANGE_MODE
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1c0003b
+	cp xwa, EVT_SW_IN_MODE
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1c00026
+	cp xwa, EVT_AUTO_INC
 	jrl z, WindowProc_ForwardToGroupBoxes
-	cp xwa, 0x1e00094
+	cp xwa, EVT_CHECK_SHOW_WINDOW
 	jrl z, WindowField_GetChildCount
-	cp xwa, 0x1e0004b
+	cp xwa, EVT_GET_CHILD_WINDOW
 	jrl z, WindowField_ReadValue
-	cp xwa, 0x1e00049
+	cp xwa, EVT_SET_CHILD_WINDOW
 	jrl z, WindowField_Focus
-	cp xwa, 0x1e0004a
+	cp xwa, EVT_GET_PARENT_WINDOW
 	jrl z, WindowField_GetValue
-	cp xwa, 0x1e00048
+	cp xwa, EVT_SET_PARENT_WINDOW
 	jrl z, WindowField_SetValue
-	sub xbc, EVT_MENU_OPEN
+	sub xbc, EVT_SHOW
 	cp xbc, 0x0
 	jrl lt, WindowProc_DefaultHandler
 	cp xbc, 0x9
@@ -1496,14 +1496,14 @@ WindowProc_Skip:
 	cp	xwa, 0xffffffff
 	jr	z, WindowProc_Skip2
 	ld	xwa, (xsp+24)
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	SendEvent
 WindowProc_Skip2:
 	call	GetCurrentTarget
 	ld	xiz, xhl
 	ld	xwa, xiz
-	ld	xbc, 0x01e0004b
+	ld	xbc, EVT_GET_CHILD_WINDOW
 	ld	xde, 0:i3
 	call	SendEvent
 	cp	xhl, 0xffffffff
@@ -1511,7 +1511,7 @@ WindowProc_Skip2:
 WindowProc_Loop:
 	ld	xiz, xhl
 	ld	xwa, xiz
-	ld	xbc, 0x01e0004b
+	ld	xbc, EVT_GET_CHILD_WINDOW
 	ld	xde, 0:i3
 	call	SendEvent
 	cp	xhl, 0xffffffff
@@ -1519,7 +1519,7 @@ WindowProc_Loop:
 WindowProc_Skip3:
 	ld	xde, (xsp+24)
 	ld	xwa, xiz
-	ld	xbc, 0x01e00049
+	ld	xbc, EVT_SET_CHILD_WINDOW
 	call	SendEvent
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+28)
@@ -1573,7 +1573,7 @@ WindowProc_Skip6:
 	ld	xwa, (xde+32)
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
-	ld	xbc, 0x01e00049
+	ld	xbc, EVT_SET_CHILD_WINDOW
 	call	SendEvent
 WindowProc_Skip7:
 	ld	xde, (xsp+12)
@@ -1584,7 +1584,7 @@ WindowProc_Skip7:
 	ld	xwa, (xde+28)
 	ld	xde, (xwa)
 	ld	xwa, (xbc)
-	ld	xbc, 0x01e00048
+	ld	xbc, EVT_SET_PARENT_WINDOW
 	call	SendEvent
 WindowProc_Skip8:
 	call	GetCurrentTarget
@@ -1815,42 +1815,42 @@ AcNamingWindowProc:
 	ld (xsp + 46), xbc
 	ld (xsp + 50), xwa
 	ld xwa, (xsp + 46)
-	cp xwa, 0x1c00029
+	cp xwa, EVT_I_AM_SELECTED
 	jrl z, WndScroll_HandleDialPage
-	cp xwa, 0x1e00081
+	cp xwa, EVT_SET_CHARA
 	jrl z, WndScroll_HandleCharSet
-	cp xwa, 0x1e00080
+	cp xwa, EVT_SET_CURSOR
 	jrl z, WndScroll_HandleCharInput
 	ld xhl, (xsp + 42)
 	ld de, hl
-	cp xwa, 0x1e0007f
+	cp xwa, EVT_SET_PAGE
 	jrl z, WndScroll_HandleIndexChange
-	cp xwa, 0x1e0007b
+	cp xwa, EVT_SET_AP_FUNCTION
 	jrl z, WndScroll_StoreCallerPtr
-	cp xwa, 0x1e0003a
+	cp xwa, EVT_GET_STRING
 	jrl z, WndScroll_CopyFromSource
-	cp xwa, 0x1e00086
+	cp xwa, EVT_SET_STRING
 	jrl z, WndScroll_CopyStringAndSend
-	cp xwa, 0x1c00018
+	cp xwa, EVT_INDEXSW_DOWN
 	jrl z, WndEvt_DispatchByEventCode
-	cp xwa, 0x1c0001a
+	cp xwa, EVT_INDEXSW_DOWN_AIC
 	jrl z, WndEvt_DispatchByEventCode
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jrl z, WndEvt_DispatchByEventCode
-	cp xwa, 0x1c00019
+	cp xwa, EVT_INDEXSW_UP_AIC
 	jrl z, WndEvt_DispatchByEventCode
 	lda xbc, (xsp + 34)
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jrl z, WndScroll_RepaintAll
-	cp xwa, 0x1c0000e
+	cp xwa, EVT_SELE_DRAW
 	jrl z, WndScroll_HandleSelectionChange
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jrl z, WndScroll_BasicWindowProc
-	cp xwa, 0x1c0000c
+	cp xwa, EVT_REPAINT
 	jrl z, WndScroll_InitSelectionTrack
-	cp xwa, 0x1c0000b
+	cp xwa, EVT_PAINT
 	jrl z, WndScroll_InitSelectionTrack
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jrl nz, WndScroll_ForwardToWindowProc
 	or xhl, xhl
 	jr z, AcNaming_CheckDefaultWidget
@@ -1864,14 +1864,14 @@ AcNaming_CheckDefaultWidget:
 	ld xwa, (0x0274d2:24)
 	or xwa, xwa
 	jr nz, AcNaming_InitScrollState
-	ld xwa, 0x1200005
+	ld xwa, NAKA_APFUNC_NamingCheck
 	ld (0x0274d2:24), xwa
 
 AcNaming_InitScrollState:
 	ldw (0x0274d8:24), 0x0000
 	ldw (0x0274da:24), 0x0000
 	ld xwa, (0x0274d2:24)
-	ld xbc, 0x1e0007c
+	ld xbc, EVT_GET_STRING_LENGTH
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (0x0274d6:24), hl
@@ -1881,7 +1881,7 @@ AcNaming_InitScrollState:
 
 AcNaming_QueryCharSet:
 	ld xwa, (0x0274d2:24)
-	ld xbc, 0x1e00084
+	ld xbc, EVT_GET_NAMING_MODE
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (0x0274e2:24), hl
