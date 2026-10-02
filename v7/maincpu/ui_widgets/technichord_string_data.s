@@ -1043,7 +1043,8 @@ Str_Mixer_ON:
 ; [nakarest] Text (8 B at 0xe952a2), first string "OFF"; no registered NAKA table points into
 ; [nakarest] it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc0).
 MixerPartTable_Start:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0xF354, 0x8
+	.incbin "includes/generated/naka_technichord_strings.bin", 0xF354, 0x4
+LswLeftHold_DefaultStr_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF358, 0x4
 ; [nakarest] naka_technichord_strings+0xf35c  +0xf35c..+0xf3d4 (0xe952aa, 120 B)
 ; [nakarest] purpose not established: layout of 120 B at 0xe952aa not derived; readers below
 ; [nakarest] Readers: source references LswAfterTouch (ui/drawbar_panel_ui.s: `lda xhl,
@@ -1247,7 +1248,8 @@ Str_PartName_Right2:
 ; [nakarest] Text (16 B at 0xe95540), first string " RIGHT 1 "; no registered NAKA table points
 ; [nakarest] into it; reached through 1 data word in MixerPart_NamePtrTable (at 0xeeecc8).
 Str_PartName_Right1:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5F2, 0x10
+	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5F2, 0xA
+IvSdpart_GetText_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0xF5FC, 0x6
 ; [nakarest] naka_technichord_strings+0xf602  +0xf602..+0xf616 (0xe95550, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xe95550 not derived; readers below
 ; [nakarest] Readers: source references IvSdpartProc (ui/drawbar_panel_ui.s: `add xwa,
@@ -2598,7 +2600,8 @@ IvMesageProc_Data:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x173F2, 0x6
 MsgHeader_BuildLoop_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x173F8, 0x4	; 2 x 32-bit pointer
 CheckMsg_IncrementCheck_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x173FC, 0x464
-IvMesageProc_PtrTable:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17860, 0x1C	; 6 x 32-bit pointer
+IvMesageProc_PtrTable:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17860, 0x18	; 6 x 32-bit pointer
+IvMessage_GetText_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17878, 0x4
 ; [nakarest] naka_technichord_strings+0x1787c  +0x1787c..+0x17894 (0xe9d7ca, 24 B)
 ; [nakarest] purpose not established: layout of 24 B at 0xe9d7ca not derived; readers below
 ; [nakarest] Readers: source references PleaseWait_BuildScrollStr (ui/drawbar_panel_ui.s: `lda
@@ -2846,7 +2849,8 @@ Sdtecd_GetText_Str_TeCd:	.incbin "includes/generated/naka_technichord_strings.bi
 ; [nakarest] (IvSdtecd1Proc_Data:24)`).
 IvSdtecd1Proc_Data:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x17A7E, 0x38
-Sdtecd1_ScrollDown_Lookup_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17AB6, 0x24
+Sdtecd1_ScrollDown_Lookup_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x17AB6, 0x1E
+Sdtecd1_GetText_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x17AD4, 0x6
 ; [nakarest] Naka_TechniChord1_Screens  +0x17ada..+0x17b1e (0xe9da28, 68 B)
 ; [nakarest] purpose not established: layout of 68 B at 0xe9da28 not derived; readers below
 ; [nakarest] Readers: source references LswOrchestrator (ui/drawbar_panel_ui.s: `lda xde,
@@ -4495,7 +4499,9 @@ PsMixer_CtlTypeProc3_Data:
 ; [nakarest] it; reached through source references PsMixer_CtlTypeProc2_Entry
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xde, PsMixer_CtlTypeProc2_Entry_Data`).
 PsMixer_CtlTypeProc2_Entry_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1991E, 0xE
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1991E, 0x6
+PsMixer_CtlTypeProc1_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19924, 0x4
+PsMixer_CtlTypeProc10_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19928, 0x4
 ; [nakarest] naka_technichord_strings+0x1992c  +0x1992c..+0x1993e (0xe9f87a, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xe9f87a not derived; readers below
 ; [nakarest] Readers: source references IvDrawbar1_OK_ComputeNewValue (ui/drawbar_panel_ui.s:

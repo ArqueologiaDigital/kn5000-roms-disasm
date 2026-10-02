@@ -27070,6 +27070,7 @@ SendPartDataBlock_Data4:
 	ld	a, (xde+32)
 	ld	(xix), a
 	lda	xiy, (xbc+59)
+NoteEditBox_EventDispatch2_Data_2:
 	.byte 0x8a, 0x21
 SendPartDataBlock_Data5:
 	ld	a, 181:opc

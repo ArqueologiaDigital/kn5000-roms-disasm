@@ -3561,8 +3561,8 @@ DrawBitmapFile_Impl:
 	ld (XSP+0x0434),XBC
 	ld (XSP+0x0438),XWA
 	pushw 0x0002
-	pushw 0x00ea
-	pushw 0xadf2
+	pushw DrawBitmapFile_Impl_Data@hi16
+	pushw DrawBitmapFile_Impl_Data@lo16
 	ld XWA,(XSP+0x043a)
 	push XWA
 	call SLIDE_Parse_Header_Helper

@@ -17621,8 +17621,8 @@ Scoop_EnvelopeCalc:
 	ld xde, xwa
 	ld xwa, (xsp + 4)
 	push xwa
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	ld xwa, xhl
 	call DrawString
 	pop xiz
@@ -17723,8 +17723,8 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	ld	xde, xwa
 	ld	xwa, (xsp+4)
 	push	xwa
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	pop	xiz
@@ -17886,8 +17886,8 @@ Scoop_CurveUpdate_SegmentEnd_Skip5:
 	ld	xde, xwa
 	ld	xwa, 6:i3
 	push	xwa
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	lda	xsp, (xsp+268)
@@ -18028,8 +18028,8 @@ Scoop_GlideParam_End:
 	ld xde, xwa
 	ld xwa, 0:i3
 	push xwa
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	ld xwa, xhl
 	call DrawString
 	popw iz
@@ -18090,8 +18090,8 @@ Scoop_GlideParam_Setup_Skip:
 	ld	xde, xwa
 	ld	xwa, 1:i3
 	push	xwa
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	lda	xsp, (xsp+268)
@@ -18147,8 +18147,8 @@ Scoop_GlideParam_Setup_Skip2:
 	ld	xde, xwa
 	ld	xwa, 2:i3
 	push	xwa
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	lda	xsp, (xsp+268)
@@ -18424,8 +18424,8 @@ Scoop_EventLoop_12Entry_Join:
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
 	push	xix
-	pushw 255
-	pushw 245
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	pop	xiz
@@ -18572,8 +18572,8 @@ Scoop_EventLoop_12Entry_Join3:
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
 	push	xix
-	pushw 255
-	pushw 245
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	pop	xiz
@@ -18677,8 +18677,8 @@ Scoop_EventLoop_36Entry_Branch3:
 	ld xde, xwa
 	ld xwa, (xsp + 2)
 	push xwa
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	ld xwa, xhl
 	call DrawString
 	popw iz
@@ -18760,8 +18760,8 @@ Scoop_EventLoop_36Entry_Join:
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
 	push	xix
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	pop	xiz
@@ -18900,8 +18900,8 @@ Scoop_EventLoop_36Entry_Join3:
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
 	push	xix
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	pop	xiz
@@ -18965,8 +18965,8 @@ Scoop_EventLoop_36Entry_Join4:
 	lda	xwa, (xsp+4)
 	ld	xde, xwa
 	push	xix
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	pop	xiz
@@ -19038,8 +19038,8 @@ Scoop_EventLoop_36Entry_Skip15:
 	lda	xwa, (xsp+6)
 	ld	xde, xwa
 	push	xix
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	ld	xwa, xhl
 	call	DrawString
 	pop	xiz

@@ -38,8 +38,8 @@ GetSoundName_BuildString:
 	ld	(xwa+16), 0
 	jr	GetSoundName_DispatchResult	; -> 0xF98941
 GetSoundName_DefaultString:
-	pushw	234
-	pushw	39398
+	pushw	GetSoundName_DefaultString_Data@hi16
+	pushw	GetSoundName_DefaultString_Data@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	Free_Compare2

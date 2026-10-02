@@ -277,8 +277,8 @@ GridCheck_CellSelect:
 	ld (xbc + 4), xde
 	pushw	(xwa)
 	pushw	(xbc)
-	pushw 0xea
-	pushw 0xa266
+	pushw GridCheck_CellSelect_Data@hi16
+	pushw GridCheck_CellSelect_Data@lo16
 	push xde
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
@@ -6426,8 +6426,8 @@ AcMixerVol_Confirm:
 	addiw_da (xwa + 6), 0x12
 	ld xde, 3:i3
 	push xde
-	pushw 0xfb
-	pushw 0x0
+	pushw PsMixer_CtlTypeProc2_Data_2@hi16
+	pushw PsMixer_CtlTypeProc2_Data_2@lo16
 	pushw 0x0
 	pushw 0x1
 	ld xde, AcMixerVol_Confirm_Str_MUTE
@@ -8215,8 +8215,8 @@ AcTrkSw_Reset_DrawTrack:
 	jrl ule, AcTrkSw_Select_CheckTrackNum
 
 AcTrkSw_Select:
-	pushw 0xea
-	pushw 0xa828
+	pushw AcTrkSw_Select_Data@hi16
+	pushw AcTrkSw_Select_Data@lo16
 	ld xwa, (xsp + 14)
 	push xwa
 	call StrSearch_Init
@@ -17462,8 +17462,8 @@ CommonIDProc_CheckAvail:
 CommonIDProc_Evt1E0000A:
 	ld xwa, (xsp + 16)
 	ld (xsp + 4), xwa
-	pushw 0xea
-	pushw 0xabe2
+	pushw CommonIDProc_Evt1E0000A_Data@hi16
+	pushw CommonIDProc_Evt1E0000A_Data@lo16
 CommonIDProc_Join:
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)

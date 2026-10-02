@@ -13406,7 +13406,7 @@ OscScope_RefreshLoop:
 	ld	c, a
 	ld	e, w
 	cp	c, 0:i3
-	jrl	z, OscScope_DrawWaveform_Code_Skip2
+	jrl	z, OscScope_RefreshLoop_Skip
 	ld	a, 96:opc
 	muls	wa, c
 	sub (3778:16), wa
@@ -13419,7 +13419,7 @@ OscScope_RefreshLoop:
 	cp	(0x0ef6:16), 0
 	jrl	nz, OscScope_Handler_7_Return
 	djnz16	bc, -19
-OscScope_DrawWaveform_Code_Skip2:
+OscScope_RefreshLoop_Skip:
 	cp	e, 0:i3
 	jrl	z, OscScope_Handler_7_Return
 	cp	(0x0f70:16), 48
@@ -13447,7 +13447,7 @@ MemConfig_Handler_4_Helper_Helper2:
 	jrl	z, OscScope_RenderBlock_Skip2
 	cp	wa, 0:i3
 	jrl	z, OscScope_RenderBlock_Skip2
-OscScope_DrawWaveform_Code_Loop:
+OscScope_RefreshLoop_Loop:
 	push	xhl
 	push	xbc
 	push	xde
@@ -13465,7 +13465,7 @@ OscScope_DrawWaveform_Code_Loop:
 	cp	c, 2:i3
 	jrl	ugt, OscScope_RenderBlock_Skip
 	cp	a, 129
-	jrl	z, OscScope_DrawWaveform_Code_Loop
+	jrl	z, OscScope_RefreshLoop_Loop
 	cp	a, 130
 	jrl	z, OscScope_RenderBlock_Skip2
 OscScope_RenderBlock:
@@ -18969,8 +18969,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join2:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	52518
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -18980,8 +18980,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip7:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	52522
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -19008,8 +19008,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip9:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	52530
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -19019,8 +19019,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip10:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	52534
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -19030,8 +19030,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip11:
 	ld	a, e
 	extz	wa
 	pushw	wa
-	pushw	224
-	pushw	52538
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -19077,8 +19077,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join3:
 	cp	a, 1:i3
 	jr	nz, Scoop_EventLoop_36Entry_Branch1_Code_Skip13
 	pushm	(xbc)
-	pushw	224
-	pushw	52550
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -19086,8 +19086,8 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join3:
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join4
 Scoop_EventLoop_36Entry_Branch1_Code_Skip12:
 	pushm	(xbc)
-	pushw	224
-	pushw	52554
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3@hi16
+	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

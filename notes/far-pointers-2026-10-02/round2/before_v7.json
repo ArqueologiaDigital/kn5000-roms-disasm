@@ -1,0 +1,1094 @@
+[
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 4727,
+  "value": "0xedba1c",
+  "result": "inside SndParamRam_DefaultImage+0x620"
+ },
+ {
+  "file": "v7/maincpu/audio/presentation_sound_nav.s",
+  "line": 1037,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/audio/presentation_sound_nav.s",
+  "line": 1046,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/audio/presentation_sound_nav.s",
+  "line": 1055,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/audio/semenu_routines.s",
+  "line": 4600,
+  "value": "0xfe0049",
+  "result": "inside AccNoteOn_EmitVoiceLoop_Check+0x10"
+ },
+ {
+  "file": "v7/maincpu/audio/semenu_routines.s",
+  "line": 4687,
+  "value": "0xfe0061",
+  "result": "inside AccNoteOn_EmitVoiceLoop_Check+0x28"
+ },
+ {
+  "file": "v7/maincpu/audio/semenu_routines.s",
+  "line": 5205,
+  "value": "0xe80076",
+  "result": "inside NakaInst_GM+0x6"
+ },
+ {
+  "file": "v7/maincpu/audio/semenu_routines.s",
+  "line": 5331,
+  "value": "0xe8004d",
+  "result": "inside ComSetGridCheck_JumpTable_Str+0x3"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 16418,
+  "value": "0xe1dd7a",
+  "result": "inside StrNotePos_Off+0x4"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 16485,
+  "value": "0xe1dd7e",
+  "result": "inside StrNotePos_Off+0x8"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 16558,
+  "value": "0xe1dd82",
+  "result": "inside StrNotePos_Off+0xc"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 17070,
+  "value": "0xe1df12",
+  "result": "inside EasyCmp_GridCheck_EventEnc_Str_OFF+0x4"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 17487,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_navigation.s",
+  "line": 41,
+  "value": "0xea99e6",
+  "result": "inside SndParam_SendDiskMenuEvents_Data+0x80"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 876,
+  "value": "0xed931c",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x12"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 881,
+  "value": "0xed9324",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x1a"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 888,
+  "value": "0xed9330",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x26"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 894,
+  "value": "0xed9320",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x16"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 900,
+  "value": "0xed9334",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x2a"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 936,
+  "value": "0xed9324",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x1a"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 943,
+  "value": "0xed9330",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x26"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 949,
+  "value": "0xed9320",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x16"
+ },
+ {
+  "file": "v7/maincpu/audio/tonegen_fileio_handlers.s",
+  "line": 955,
+  "value": "0xed9334",
+  "result": "inside DSPCfg_Init_BoundsCheck_Data+0x2a"
+ },
+ {
+  "file": "v7/maincpu/demo/demo_seq_bridge.s",
+  "line": 315,
+  "value": "0xe20202",
+  "result": "inside SepaOut_Config_0_0x202+0x1a"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 3737,
+  "value": "0xed167a",
+  "result": "inside RVari_ConfirmE_Item_Draw_Str_Fmtd+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 4029,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 4055,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 4076,
+  "value": "0xfb00f7",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x6"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 4097,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 4118,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 5463,
+  "value": "0xed1c86",
+  "result": "inside KeyScaleNoteStr_G+0x4"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 17766,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 17868,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18030,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18172,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18234,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18291,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18528,
+  "value": "0xe0ccca",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1CB+0x8"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18539,
+  "value": "0xe0ccce",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1CB+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18550,
+  "value": "0xe0ccd2",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1CB+0x10"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18570,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18639,
+  "value": "0xe0ccde",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1DF+0x8"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18650,
+  "value": "0xe0cce2",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1DF+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18661,
+  "value": "0xe0cce6",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1DF+0x10"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18678,
+  "value": "0xe0ccea",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1DF+0x14"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18689,
+  "value": "0xe0ccee",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1DF+0x18"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18700,
+  "value": "0xe0ccf2",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1DF+0x1c"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18720,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18760,
+  "value": "0xe0ccfe",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1FF+0x8"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18769,
+  "value": "0xe0cd02",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x1FF+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18830,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18871,
+  "value": "0xe0cd12",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x213+0x8"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18882,
+  "value": "0xe0cd16",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x213+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18893,
+  "value": "0xe0cd1a",
+  "result": "inside StyleUI_ScreenData_CtlOnly_0x213+0x10"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18913,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18972,
+  "value": "0xe0cd26",
+  "result": "inside GUI_FormatStrings+0x8"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 18983,
+  "value": "0xe0cd2a",
+  "result": "inside GUI_FormatStrings+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19011,
+  "value": "0xe0cd32",
+  "result": "inside Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d+0x4"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19022,
+  "value": "0xe0cd36",
+  "result": "inside Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d+0x8"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19033,
+  "value": "0xe0cd3a",
+  "result": "inside Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19053,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19080,
+  "value": "0xe0cd46",
+  "result": "inside Scoop_EventLoop_36Entry_Branch3_Data+0x8"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19089,
+  "value": "0xe0cd4a",
+  "result": "inside Scoop_EventLoop_36Entry_Branch3_Data+0xc"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19118,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19191,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19338,
+  "value": "0xe0cdac",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19338,
+  "value": "0xe0cd94",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19339,
+  "value": "0xe0cdb2",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19340,
+  "value": "0xe0cdb8",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19340,
+  "value": "0xe0cdb4",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19341,
+  "value": "0xe0cd8a",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 19343,
+  "value": "0xe0cdba",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 558,
+  "value": "0xe1ff84",
+  "result": "inside CheckFDStatusLoad_DoLoad_Str_rb+0x4"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 586,
+  "value": "0xe1ff9c",
+  "result": "inside CheckFDStatusLoad_DoLoad_Str_Cannot_open+0xc"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 607,
+  "value": "0xe1ffb0",
+  "result": "inside LoadExtROM_Entry_Str_Different_ID+0xe"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 635,
+  "value": "0xe1ffc6",
+  "result": "inside FDTest_String_TestTitleFunc_PtrTable+0x10"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7098,
+  "value": "0xee2cd8",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16da"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7126,
+  "value": "0xee2cd8",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16da"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7170,
+  "value": "0xee2cea",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16ec"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7202,
+  "value": "0xee2ce6",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16e8"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7234,
+  "value": "0xee2ce6",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16e8"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7273,
+  "value": "0xee2cd8",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16da"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7303,
+  "value": "0xee2cd8",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16da"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7348,
+  "value": "0xee2cd8",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16da"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7395,
+  "value": "0xee2cd8",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16da"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 7457,
+  "value": "0xee2cec",
+  "result": "inside NakaInst_SoundConfig_LookupTable_0x8A+0x16ee"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 4344,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 4351,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 4383,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 3792,
+  "value": "0xe264f0",
+  "result": "inside VoiceConfig_LoadTableB_Table+0x6"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6143,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6256,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6309,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6428,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6521,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6702,
+  "value": "0xff00f2",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x63"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6710,
+  "value": "0xf200ff",
+  "result": "inside MiddleFuncCall_DispatchData_Code_Helper5+0x38"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 6754,
+  "value": "0xf200ff",
+  "result": "inside MiddleFuncCall_DispatchData_Code_Helper5+0x38"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 7377,
+  "value": "0xe3471a",
+  "result": "inside NoteEditFunc_CaseTable_Strings+0x6"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 11,
+  "value": "0xe208ec",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 14,
+  "value": "0xe20260",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 15,
+  "value": "0xe2031c",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 4579,
+  "value": "0x3df10",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 4580,
+  "value": "0x3df14",
+  "result": "macro arg, no symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 5286,
+  "value": "0xe952a6",
+  "result": "inside MixerPartTable_Start+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 5647,
+  "value": "0xe9554a",
+  "result": "inside Str_PartName_Right1+0xa"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 9191,
+  "value": "0xe9d7c6",
+  "result": "inside IvMesageProc_PtrTable+0x18"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 10051,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 10096,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 10362,
+  "value": "0xe9da22",
+  "result": "inside Sdtecd1_ScrollDown_Lookup_Data+0x1e"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11615,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11623,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 13363,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 13576,
+  "value": "0xff00f2",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x63"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 13577,
+  "value": "0xf20000",
+  "result": "inside SetWall_ForwardSkip_CheckType+0x18"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 13584,
+  "value": "0xff0008",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Skip2+0x3d"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 13732,
+  "value": "0xff00f2",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x63"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 13733,
+  "value": "0xf20000",
+  "result": "inside SetWall_ForwardSkip_CheckType+0x18"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 13740,
+  "value": "0xff0008",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Skip2+0x3d"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 15027,
+  "value": "0xfb0000",
+  "result": "inside DrawLineWithMode_Impl_Skip20+0x23"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 15319,
+  "value": "0xe9f872",
+  "result": "inside PsMixer_CtlTypeProc2_Entry_Data+0x6"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 15578,
+  "value": "0xe9f876",
+  "result": "inside PsMixer_CtlTypeProc2_Entry_Data+0xa"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 18379,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/drawing_primitives.s",
+  "line": 3564,
+  "value": "0xeaadf2",
+  "result": "inside DrawIcons_Impl_ColLoop_Data+0x200"
+ },
+ {
+  "file": "v7/maincpu/ui/rvari_routines.s",
+  "line": 943,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/rvari_routines.s",
+  "line": 1382,
+  "value": "0xed1672",
+  "result": "inside RVari_ConfirmE_Item_Draw_Str_Fmtd+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/rvari_routines.s",
+  "line": 1551,
+  "value": "0xed1676",
+  "result": "inside RVari_ConfirmE_Item_Draw_Str_Fmtd+0x8"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_control_panel.s",
+  "line": 553,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_control_panel.s",
+  "line": 561,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 3395,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 3546,
+  "value": "0xed0d32",
+  "result": "inside AcMstStyleAlpGridBoxProc_EventOffsets+0xe"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 4049,
+  "value": "0xed0d74",
+  "result": "inside AcMstStyle1GridBoxProc_EventOffsets+0xe"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 4635,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 5923,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 5997,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 6018,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 6054,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 6223,
+  "value": "0xed0e12",
+  "result": "inside AcMstStyle2GridBoxProc_EventOffsets+0xe"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 6920,
+  "value": "0xed0ee0",
+  "result": "inside AcTchSensGridBoxProc_EventOffsets+0xe"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 8447,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 8468,
+  "value": "0xfb00f5",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 8490,
+  "value": "0xed1404",
+  "result": "inside PmExpFilter_Repaint_Str_ON_OFF+0x8"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 8596,
+  "value": "0xed1416",
+  "result": "inside PmExpFilter_DrawCellBank2_Str_Fmts+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9715,
+  "value": "0xed1556",
+  "result": "inside DispTimeSetGridCheck_Evt1C0001C_Str_Fmts+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9742,
+  "value": "0xed155a",
+  "result": "inside DispTimeSetGridCheck_Evt1C0001C_Str_Fmts+0x8"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9767,
+  "value": "0xed155e",
+  "result": "inside DispTimeSetGridCheck_Evt1C0001C_Str_Fmts+0xc"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9817,
+  "value": "0xed1566",
+  "result": "inside DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9847,
+  "value": "0xed156a",
+  "result": "inside DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2+0x8"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9869,
+  "value": "0xed156e",
+  "result": "inside DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2+0xc"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9911,
+  "value": "0xed1576",
+  "result": "inside DispTimeSetCheck_TryRow4_Str_Fmts+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9932,
+  "value": "0xed157a",
+  "result": "inside DispTimeSetCheck_TryRow4_Str_Fmts+0x8"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 9953,
+  "value": "0xed157e",
+  "result": "inside DispTimeSetCheck_TryRow4_Str_Fmts+0xc"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 10302,
+  "value": "0xed1590",
+  "result": "inside DispTimeSetGridCheck_EventOffsets+0xe"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 11521,
+  "value": "0xff00f5",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x66"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 11877,
+  "value": "0xed1602",
+  "result": "inside PmBkNameFunc_Data+0x14"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 12091,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 12130,
+  "value": "0xfb00f7",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x6"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 12157,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 12673,
+  "value": "0xed160e",
+  "result": "inside VariScreen_DrawNameString_Str_Fmtd+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 13179,
+  "value": "0xed1622",
+  "result": "inside VariScreen_ConfirmDrawNameAudio_Str_Fmtd+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 13862,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 13904,
+  "value": "0xfb00f7",
+  "result": "inside DrawLineWithMode_Impl_Join8+0x6"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 14218,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_playback_modes.s",
+  "line": 2119,
+  "value": "0xe200f2",
+  "result": "inside SepaOut_FormatData_Tail+0x5"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_playback_modes.s",
+  "line": 2120,
+  "value": "0xf20000",
+  "result": "inside SetWall_ForwardSkip_CheckType+0x18"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_playback_modes.s",
+  "line": 2136,
+  "value": "0xe200fc",
+  "result": "inside SepaOut_FormatData_Tail+0xf"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_playback_modes.s",
+  "line": 2137,
+  "value": "0xfc0000",
+  "result": "inside RVari_ConfirmE_Loop+0x2a"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_playback_modes.s",
+  "line": 2154,
+  "value": "0xe20108",
+  "result": "inside SepaOut_FormatData_Tail+0x1b"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_playback_modes.s",
+  "line": 2195,
+  "value": "0xe20110",
+  "result": "inside SepaOut_FormatData_Tail+0x23"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_playback_modes.s",
+  "line": 2234,
+  "value": "0xe20118",
+  "result": "inside SepaOut_FormatData_Tail+0x2b"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_widget_defs.s",
+  "line": 4454,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_widget_defs.s",
+  "line": 6422,
+  "value": "0xff0008",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Skip2+0x3d"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_widget_defs.s",
+  "line": 6540,
+  "value": "0xfb0000",
+  "result": "inside DrawLineWithMode_Impl_Skip20+0x23"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_widget_defs.s",
+  "line": 7639,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_widget_defs.s",
+  "line": 8319,
+  "value": "0xeaa828",
+  "result": "inside PsTrkSw_Confirm_DrawGeometry_Str_Fmtd+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_widget_defs.s",
+  "line": 17634,
+  "value": "0xeaabe2",
+  "result": "inside ConstFlagProc_SetValue_Check_Str_Empty+0x2"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 274,
+  "value": "0xff00f7",
+  "result": "inside TmFlash_BulkTransferToSubCPU_Epilogue2+0x68"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 1219,
+  "value": "0xea9f08",
+  "result": "inside WndEvt_DispatchByEventCode_Data+0x12"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 1689,
+  "value": "0xeaa160",
+  "result": "inside UserBitmapCheck_ReturnTablePtr_Data+0x240"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 2249,
+  "value": "0xf400f7",
+  "result": "inside SeqVoice_ValidateState_StoreChannel+0x18"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 2335,
+  "value": "0xeaa17e",
+  "result": "inside DrawEditSw_SelectVariantC_Str_N81+0x4"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 6239,
+  "value": "0xeaae48",
+  "result": "inside Draw_DispatchByPartType_Data+0x32"
+ }
+]

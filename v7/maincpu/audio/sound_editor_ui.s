@@ -16415,8 +16415,8 @@ PsCmpMeasBox_HandleEvtBC:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	56698
+	pushw	PsCmpMeasBox_HandleEvtBC_Str_Fmtd@hi16
+	pushw	PsCmpMeasBox_HandleEvtBC_Str_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16482,8 +16482,8 @@ PsCmpMemBox_HandleEvtBC:
 	ld	a, (14607:16)
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	56702
+	pushw	PsCmpMemBox_HandleEvtBC_Str_Fmt2d@hi16
+	pushw	PsCmpMemBox_HandleEvtBC_Str_Fmt2d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16555,8 +16555,8 @@ AcCmpTempoBox_HandleEvt1C:
 	cp	xwa, 4
 	jr	nz, CmpFunc_Return
 	pushm	(xiz+4)
-	pushw	225
-	pushw	56706
+	pushw	AcCmpTempoBox_HandleEvt1C_Str_Fmt3d@hi16
+	pushw	AcCmpTempoBox_HandleEvt1C_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -17067,8 +17067,8 @@ EasyCmp_GridCheck_EventCase1:
 EasyCmp_GridCheck_EventCase2:
 	extz	wa
 	pushw	wa
-	pushw	225
-	pushw	57106
+	pushw	EasyCmp_GridCheck_EventCase2_Str_Fmt3d@hi16
+	pushw	EasyCmp_GridCheck_EventCase2_Str_Fmt3d@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)

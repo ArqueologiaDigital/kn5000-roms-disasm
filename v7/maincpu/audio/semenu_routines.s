@@ -4684,8 +4684,8 @@ SeMenu_ApplyPartEdit_Entry12:
 	.byte 0x8f, 0x12, 0x3f, 0x00
 	jr	nz, SeMenu_ApplyPartEdit_Skip45
 	pushw 97
-	pushw 254
-	pushw 97
+	pushw SeMenu_ApplyPartEdit_AltStore_Data_3@hi16
+	pushw SeMenu_ApplyPartEdit_AltStore_Data_3@lo16
 	pushw 48
 	call	SeMenu_DisplayPartValue_Data_0x7F
 	pushw	121
@@ -5202,8 +5202,8 @@ UpdSeSel_DetailedUpdate_Helper6:
 	ld	iz, (xsp+6)
 SeMenu_ApplyPartEdit_Skip60:
 	pushw 171
-	pushw 232
-	pushw 118
+	pushw SeMenu_ApplyPartEdit_AltStore_Data_2@hi16
+	pushw SeMenu_ApplyPartEdit_AltStore_Data_2@lo16
 	pushw 67
 	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
@@ -5328,8 +5328,8 @@ SeMenu_ApplyPartEdit_Join35:
 	scc	c, a
 	ld	(xsp+4), a
 	pushw 130
-	pushw 232
-	pushw 77
+	pushw SeMenu_ApplyPartEdit_AltStore_Data@hi16
+	pushw SeMenu_ApplyPartEdit_AltStore_Data@lo16
 	pushw 67
 	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp

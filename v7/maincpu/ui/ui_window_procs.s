@@ -1216,8 +1216,8 @@ ModeEdit_HandlePaint:
 	call	GetModeNow
 	ld	qhl, 0
 	pushw	hl
-	pushw	234
-	pushw	40712
+	pushw	ModeEdit_HandlePaint_Data@hi16
+	pushw	ModeEdit_HandlePaint_Data@lo16
 	lda	xwa, (xsp+14)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -1686,8 +1686,8 @@ VwUserBitmapByName_HandlePaint:
 	lda	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
-	pushw	234
-	pushw	41312
+	pushw	VwUserBitmapByName_HandlePaint_Data@hi16
+	pushw	VwUserBitmapByName_HandlePaint_Data@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -2246,8 +2246,8 @@ DrawEditSw_FinalPosition:
 	lda xde, (xsp + 2)
 	ld xhl, 0:i3
 	push xhl
-	pushw 0xf4
-	pushw 0xf7
+	pushw DrawEditSw_FinalPosition_Data@hi16
+	pushw DrawEditSw_FinalPosition_Data@lo16
 	call DrawString
 
 DrawEditSw_SkipDraw:
@@ -2332,8 +2332,8 @@ TextBox_SetupWordwrap:
 	jrl ule, TextBox_FreeBuffer
 
 TextBox_DrawLineLoop:
-	pushw 0x00ea
-	pushw 0xa17e
+	pushw TextBox_DrawLineLoop_Data@hi16
+	pushw TextBox_DrawLineLoop_Data@lo16
 	push XIZ
 	call DrawEditSw_CopyVariant_Code_Helper
 	inc	8, xsp
@@ -6236,8 +6236,8 @@ Gfx_LoadSplashBMP:
 	cp IZ,0x000e
 	jrl nz, SplashScreen_Return
 	pushw 0x0002
-	pushw 0x00ea
-	pushw 0xae48
+	pushw Gfx_LoadSplashBMP_Data@hi16
+	pushw Gfx_LoadSplashBMP_Data@lo16
 	lda xwa, (xsp + 0x0450)
 	push XWA
 	call SLIDE_Parse_Header_Helper
@@ -8903,6 +8903,7 @@ DrawLineWithMode_Impl_Join2:
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
 	jr	nz, DrawLineWithMode_Impl_Skip5
+PsMixer_CtlTypeProc2_Data_2:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
 	jrl	z, DrawLineWithMode_Impl_Epilogue
@@ -9417,6 +9418,7 @@ DrawLineWithMode_Impl_Skip25:
 DrawLineWithMode_Impl_Join8:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
+PmBank_OnPaint_Data:
 	ld	xwa, (xsp+8)
 	sra	xwa, 16
 	ld	(xde), wa

@@ -555,8 +555,8 @@ CheckFDStatusLoad_Entry:
 CheckFDStatusLoad_DoLoad:
 	lda xwa, (CheckFDStatusLoad_DoLoad_Str_rb:24)
 	push xwa
-	pushw 0xe1
-	pushw 0xff84
+	pushw CheckFDStatusLoad_DoLoad_Str_A_HKEXT_XAP@hi16
+	pushw CheckFDStatusLoad_DoLoad_Str_A_HKEXT_XAP@lo16
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
@@ -583,8 +583,8 @@ CheckFDStatusLoad_Return:
 ; into DRAM at 0x200000, checks result, jumps to extension entry point
 LoadExtROM_Entry:
 	pushw	4
-	pushw	225
-	pushw	65436
+	pushw	CheckFDStatusLoad_Transfer_Str_XAPR@hi16
+	pushw	CheckFDStatusLoad_Transfer_Str_XAPR@lo16
 	ld	xwa, 2097152
 	push	xwa
 	call	SLIDE_Parse_Header_Helper
@@ -604,8 +604,8 @@ GetAprStatus_Entry:
 
 LoadXaprInit_Entry:
 	pushw	4
-	pushw	225
-	pushw	65456
+	pushw	LoadExtROM_JumpEntry_Str_XAPR@hi16
+	pushw	LoadExtROM_JumpEntry_Str_XAPR@lo16
 	ld	xwa, 2621440
 	push	xwa
 	call	SLIDE_Parse_Header_Helper
@@ -632,8 +632,8 @@ CallExtIfActive_Entry:
 
 LoadAndRunXapr_Entry:
 	pushw	4
-	pushw	225
-	pushw	65478
+	pushw	LoadExtROM_JumpEntry_Data@hi16
+	pushw	LoadExtROM_JumpEntry_Data@lo16
 	ld	xwa, 2621440
 	push	xwa
 	call	SLIDE_Parse_Header_Helper

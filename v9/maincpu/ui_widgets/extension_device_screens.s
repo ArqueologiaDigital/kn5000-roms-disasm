@@ -925,7 +925,12 @@ Voice_InitChannelLoop_Data:
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
 ; [nakarest] (DSPCfg_Init_BoundsCheck_Data:24)`).
 DSPCfg_Init_BoundsCheck_Data:
-	.incbin "includes/generated/naka_extension_device.bin", 0x2B3E, 0x30
+	.incbin "includes/generated/naka_extension_device.bin", 0x2B3E, 0x12
+ToneGen_FlashWriteAll_Data_3:	.incbin "includes/generated/naka_extension_device.bin", 0x2B50, 0x4
+ToneGen_FlashWriteAll_Data_4:	.incbin "includes/generated/naka_extension_device.bin", 0x2B54, 0x4
+ToneGen_FlashWriteAll_Data_5:	.incbin "includes/generated/naka_extension_device.bin", 0x2B58, 0xC
+ToneGen_FlashWriteAll_Data_6:	.incbin "includes/generated/naka_extension_device.bin", 0x2B64, 0x4
+ToneGen_FlashWriteAll_Data_7:	.incbin "includes/generated/naka_extension_device.bin", 0x2B68, 0x6
 ; [nakarest] naka_extension_device+0x2b6e  +0x2b6e..+0x2c68 (0xed933a, 250 B)
 ; [nakarest] purpose not established: layout of 250 B at 0xed933a not derived; readers below
 ; [nakarest] Readers: source references ToneGen_FlashVerify (audio/tonegen_fileio_handlers.s:

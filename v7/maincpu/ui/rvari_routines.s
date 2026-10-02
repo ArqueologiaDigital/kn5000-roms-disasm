@@ -1379,8 +1379,8 @@ RVari_EnumNotifyF_Item_Draw:
 	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	pushw 237
-	pushw 5746
+	pushw RVari_EnumNotifyF_Item_Draw_Str_Fmts@hi16
+	pushw RVari_EnumNotifyF_Item_Draw_Str_Fmts@lo16
 	lda	xwa, (xsp+284)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -1548,8 +1548,8 @@ RVari_EnumNotifyE_Item_Draw:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5750
+	pushw RVari_EnumNotifyE_Item_Draw_Str_Fmtd@hi16
+	pushw RVari_EnumNotifyE_Item_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+282)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

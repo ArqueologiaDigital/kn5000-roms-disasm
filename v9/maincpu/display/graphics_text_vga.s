@@ -3721,8 +3721,8 @@ PmBank_BankChanged_DrawSlot:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xed
-	pushw 0x167a
+	pushw PmBank_BankChanged_DrawSlot_Str_Fmtd@hi16
+	pushw PmBank_BankChanged_DrawSlot_Str_Fmtd@lo16
 	lda xwa, (xsp + 14)
 	push xwa
 	call Sprintf_Locked
@@ -4063,8 +4063,8 @@ PmBank_OnPaint:
 	ld (xwa + 6), de
 	ld xde, 3:i3
 	push xde
-	pushw 0xfb
-	pushw 0xf7
+	pushw PmBank_OnPaint_Data@hi16
+	pushw PmBank_OnPaint_Data@lo16
 	ld xde, PmBank_OnPaint_Str_Select_the_mode_by_sound_button
 	call DrawString
 	lda xbc, (xsp+264)
@@ -5451,8 +5451,8 @@ AcTranspose_ValueChanged:
 	jr nz, AcTranspose_FormatLabel
 	cp (0x8d3c:16), 0
 	jr nz, AcTranspose_FormatLabel
-	pushw 0xed
-	pushw 0x1c86
+	pushw AcTranspose_ValueChanged_Str_Blank4@hi16
+	pushw AcTranspose_ValueChanged_Str_Blank4@lo16
 	push xbc
 	call Strcpy
 	inc 8, xsp

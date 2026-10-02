@@ -3378,8 +3378,8 @@ MasterSetup_GetNameB_DrawString:
 	lda xde, (xsp + 12)
 	ld xhl, 1:i3
 	push xhl
-	pushw 0xfb
-	pushw 0xf5
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 	call DrawString
 	jr SeqFile_ReturnZeroJmp2
 AcMstStyleAlpGridBoxProc_Evt1C0001C:
@@ -3531,8 +3531,8 @@ MstStyleAlp_CellSelect:
 
 MstStyleAlp_AppendPadChar:
 	pushw 0x1
-	pushw 0xed
-	pushw 0xd32
+	pushw MstStyleAlp_AppendPadChar_Data@hi16
+	pushw MstStyleAlp_AppendPadChar_Data@lo16
 	lda xwa, (xsp + 22)
 	push xwa
 	call Strncat
@@ -4043,8 +4043,8 @@ MstStyle1Grid_CellSelect:
 
 MstStyle1Grid_PadLeft_Loop:
 	pushw 0x1
-	pushw 0xed
-	pushw 0xd74
+	pushw MstStyle1Grid_CellSelect_Data_2@hi16
+	pushw MstStyle1Grid_CellSelect_Data_2@lo16
 	lda xwa, (xsp + 18)
 	push xwa
 	call Strncat
@@ -4636,8 +4636,8 @@ MstStyle1Sub_GetNameB_DrawString:
 	lda xde, (xsp + 12)
 	ld xhl, 6:i3
 	push xhl
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	call DrawString
 	jr SeqFile_ReturnZeroJmp
 
@@ -4748,8 +4748,8 @@ MstStyle1SubGrid_CellSelect:
 
 MstStyle1SubGrid_PadLeft_Loop:
 	pushw 0x1
-	pushw 0xed
-	pushw 0xdac
+	pushw MstStyle1SubGrid_CellSelect_Data@hi16
+	pushw MstStyle1SubGrid_CellSelect_Data@lo16
 	lda xwa, (xsp + 14)
 	push xwa
 	call Strncat
@@ -5914,8 +5914,8 @@ MstStyle2_GetNameB_DrawString:
 	lda xde, (xsp + 18)
 	ld xhl, 0:i3
 	push xhl
-	pushw 0xfb
-	pushw 0xf5
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 	call DrawString
 	ld xbc, (xiz + 82)
 	ld xwa, (xiz + 78)
@@ -5991,8 +5991,8 @@ MstStyle2_NameB_Render:
 	lda xde, (xsp + 18)
 	ld xhl, 0:i3
 	push xhl
-	pushw 0xfb
-	pushw 0xf5
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 	call DrawString
 	lda xbc, (xsp + 36)
 	ldw (xbc), 0x10b
@@ -6012,8 +6012,8 @@ MstStyle2_NameB_Render:
 	lda xde, (xsp + 12)
 	ld xhl, 0:i3
 	push xhl
-	pushw 0xfb
-	pushw 0xf5
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 	call DrawString
 	lda xhl, (xsp + 36)
 	ldw (xhl), 0x91
@@ -6219,8 +6219,8 @@ MstGrid2_CellSelect:
 
 MstGrid2_PadLeft_LoopA:
 	pushw 0x1
-	pushw 0xed
-	pushw 0xe12
+	pushw MstGrid2_PadLeft_LoopA_Data@hi16
+	pushw MstGrid2_PadLeft_LoopA_Data@lo16
 	lda xwa, (xsp + 26)
 	push xwa
 	call Strncat
@@ -6929,8 +6929,8 @@ TchSensGridCheck_Evt1C0001C:
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	pushw	(xix)	; FBABB9 (pushw (xix))
-	pushw	237
-	pushw	3808
+	pushw	TchSensGridCheck_Evt1C0001C_Data@hi16
+	pushw	TchSensGridCheck_Evt1C0001C_Data@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -8468,8 +8468,8 @@ PmExpFilter_Repaint:
 	ld (xwa + 6), de
 	ld xde, 0:i3
 	push xde
-	pushw 0xfb
-	pushw 0xf5
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 	ld xde, PmExpFilter_Repaint_Str_FILTER_TYPE
 	call DrawString
 	lda xbc, (xsp + 12)
@@ -8489,8 +8489,8 @@ PmExpFilter_Repaint:
 	ld (xwa + 6), de
 	ld xde, 0:i3
 	push xde
-	pushw 0xfb
-	pushw 0xf5
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 	ld xde, PmExpFilter_Repaint_Str_ON_OFF
 	call DrawString
 	ld (xsp + 10), 0x0
@@ -8512,8 +8512,8 @@ PmExpFilter_DrawCellBank1:
 	lda xbc, (ParamStr_Table_01:24)
 	ld	xwa, (xbc+wa)
 	push xwa
-	pushw 0xed
-	pushw 0x1404
+	pushw PmExpFilter_DrawCellBank1_Str_Fmts@hi16
+	pushw PmExpFilter_DrawCellBank1_Str_Fmts@lo16
 	push xde
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
@@ -8618,8 +8618,8 @@ PmExpFilter_DrawCellBank2:
 	add bc, wa
 	inc 1, bc
 	ld (xhl + 2), bc
-	pushw 0xed
-	pushw 0x1416
+	pushw PmExpFilter_DrawCellBank2_Data@hi16
+	pushw PmExpFilter_DrawCellBank2_Data@lo16
 	lda xwa, (xsp + 28)
 	push xwa
 	call Strcpy
@@ -9713,8 +9713,8 @@ FSWAss_RefreshAllVoices_Skip4:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw	237
-	pushw	5462
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@hi16
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9740,8 +9740,8 @@ FSWAss_RefreshAllVoices_Skip5:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw	237
-	pushw	5466
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@hi16
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9765,8 +9765,8 @@ FSWAss_RefreshAllVoices_Skip6:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw	237
-	pushw	5470
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@hi16
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@lo16
 	push	xbc
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9815,8 +9815,8 @@ FSWAss_RefreshAllVoices_Skip8:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	pushw	237
-	pushw	5478
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@hi16
+	pushw	DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@lo16
 	push	xix
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -9846,8 +9846,8 @@ DispTimeSetCheck_CellDecode:
 	lda xde, (ParamStr_Table_03:24)
 	ld	xwa, (xde+wa)
 	push xwa
-	pushw 0xed
-	pushw 0x156a
+	pushw DispTimeSetCheck_CellDecode_Str_Fmts@hi16
+	pushw DispTimeSetCheck_CellDecode_Str_Fmts@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
@@ -9868,8 +9868,8 @@ DispTimeSetCheck_TryRow3:
 	sla wa, 2
 	ld	xwa, (xde+wa)
 	push xwa
-	pushw 0xed
-	pushw 0x156e
+	pushw DispTimeSetCheck_TryRow3_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow3_Str_Fmts@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
@@ -9910,8 +9910,8 @@ DispTimeSetCheck_TryRow5:
 	sla wa, 2
 	ld	xwa, (xde+wa)
 	push xwa
-	pushw 0xed
-	pushw 0x1576
+	pushw DispTimeSetCheck_TryRow5_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow5_Str_Fmts@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
@@ -9931,8 +9931,8 @@ DispTimeSetCheck_TryRow6:
 	sla wa, 2
 	ld	xwa, (xde+wa)
 	push xwa
-	pushw 0xed
-	pushw 0x157a
+	pushw DispTimeSetCheck_TryRow6_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow6_Str_Fmts@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
@@ -9952,8 +9952,8 @@ DispTimeSetCheck_TryRow7:
 	sla wa, 2
 	ld	xwa, (xde+wa)
 	push xwa
-	pushw 0xed
-	pushw 0x157e
+	pushw DispTimeSetCheck_TryRow7_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow7_Str_Fmts@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
@@ -10300,8 +10300,8 @@ IvPageOverWr_KeyPress:
 	jrl IvPageOverWr_SendAndReturn
 
 IvPageOverWr_GetName:
-	pushw 0xed
-	pushw 0x1590
+	pushw IvPageOverWr_GetName_Data@hi16
+	pushw IvPageOverWr_GetName_Data@lo16
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -11457,8 +11457,8 @@ AcPmBkEdit_BankEdit:
 AcPmBkEdit_BankEdit_DrawDiff:
 	ld xbc, 0:i3
 	push xbc
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	ld xbc, xde
 	ld xde, xhl
 
@@ -11816,8 +11816,8 @@ GmOnOffFunc:
 	cp xbc, EVT_GET_LSW_STRING
 	jrl nz, GmOnOff_DefaultReturn
 	pushw	(xde+4)
-	pushw 0xed
-	pushw 0x1602
+	pushw GmOnOffFunc_Data@hi16
+	pushw GmOnOffFunc_Data@lo16
 	ld xwa, (xde + 8)
 	push xwa
 	call Sprintf_Locked
@@ -12071,8 +12071,8 @@ VariScreen_HandlePaint:
 	lda xde, (xsp+290)
 	ld xhl, 0:i3
 	push xhl
-	pushw 0xfb
-	pushw 0xf7
+	pushw PmBank_OnPaint_Data@hi16
+	pushw PmBank_OnPaint_Data@lo16
 	call DrawString
 	lda xbc, (xsp+546)
 	ldw (xbc), 0x90
@@ -12620,8 +12620,8 @@ VariScreen_DrawRightNameString:
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xed
-	pushw 0x160e
+	pushw VariScreen_DrawRightNameString_Str_Fmtd@hi16
+	pushw VariScreen_DrawRightNameString_Str_Fmtd@lo16
 	lda xwa, (xsp + 40)
 	push xwa
 	call Sprintf_Locked
@@ -13132,8 +13132,8 @@ VariScreen_EnumDrawNameAudio:
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xed
-	pushw 0x1622
+	pushw VariScreen_EnumDrawNameAudio_Str_Fmtd@hi16
+	pushw VariScreen_EnumDrawNameAudio_Str_Fmtd@lo16
 	lda xwa, (xsp + 40)
 	push xwa
 	call Sprintf_Locked
@@ -13859,8 +13859,8 @@ RVari_Paint:
 	ld (xwa + 6), hl
 	ld xhl, 0:i3
 	push xhl
-	pushw 0xfb
-	pushw 0xf7
+	pushw PmBank_OnPaint_Data@hi16
+	pushw PmBank_OnPaint_Data@lo16
 	call DrawString
 	ld XWA, (xsp + 0x0228)
 	ld xbc, EVT_PARA_DRAW

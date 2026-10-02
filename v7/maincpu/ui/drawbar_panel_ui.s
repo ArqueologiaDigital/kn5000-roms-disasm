@@ -5283,8 +5283,8 @@ LswLeftHold_Case42:
 	jr LswLeftHold_CopyAndReturn
 
 LswLeftHold_DefaultStr:
-	pushw 0xe9
-	pushw 0x52a6
+	pushw LswLeftHold_DefaultStr_Data@hi16
+	pushw LswLeftHold_DefaultStr_Data@lo16
 
 LswLeftHold_CopyAndReturn:
 	push	xwa
@@ -5644,8 +5644,8 @@ IvSdpart_DispatchEvent:
 	jr IvSdpart_ReturnHandled
 
 IvSdpart_GetText:
-	pushw	233
-	pushw	21834
+	pushw	IvSdpart_GetText_Data@hi16
+	pushw	IvSdpart_GetText_Data@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -9188,8 +9188,8 @@ IvMessage_SelectionChange:
 	jr IvMessage_Epilogue
 
 IvMessage_GetText:
-	pushw	233
-	pushw	55238
+	pushw	IvMessage_GetText_Data@hi16
+	pushw	IvMessage_GetText_Data@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -10359,8 +10359,8 @@ Sdtecd1_SendEventReturn:
 	jr IvSdtecd1_ReturnDefault
 
 Sdtecd1_GetText:
-	pushw	233
-	pushw	55842
+	pushw	Sdtecd1_GetText_Data@hi16
+	pushw	Sdtecd1_GetText_Data@lo16
 	push	xiz
 	call	Free_Compare2
 	inc	8, xsp
@@ -13581,8 +13581,8 @@ PsMixer_CtlTypeProc5_Skip:
 PsMixer_CtlTypeProc5_Skip2:
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	255
-	pushw	8
+	pushw	PsMixer_CtlTypeProc5_Data@hi16
+	pushw	PsMixer_CtlTypeProc5_Data@lo16
 	pushw	0
 	pushw	0
 PsMixer_CtlTypeProc5_Join:
@@ -13737,8 +13737,8 @@ PsMixer_CtlTypeProc6_Skip:
 PsMixer_CtlTypeProc6_Skip2:
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	255
-	pushw	8
+	pushw	PsMixer_CtlTypeProc5_Data@hi16
+	pushw	PsMixer_CtlTypeProc5_Data@lo16
 	pushw	0
 	pushw	0
 PsMixer_CtlTypeProc6_Join:
@@ -15316,8 +15316,8 @@ PsMixer_CtlTypeProc1_Loop:
 	lda	xwa, (0x03ea38:24)
 	ld_rrl	xwa, xwa, hl	; ld xwa, (xwa+hl)
 	push	xwa
-	pushw	233
-	pushw	63602
+	pushw	PsMixer_CtlTypeProc1_Data@hi16
+	pushw	PsMixer_CtlTypeProc1_Data@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -15575,8 +15575,8 @@ PsMixer_CtlTypeProc10_Loop:
 	lda	xbc, (256808:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	pushw	233
-	pushw	63606
+	pushw	PsMixer_CtlTypeProc10_Data@hi16
+	pushw	PsMixer_CtlTypeProc10_Data@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper

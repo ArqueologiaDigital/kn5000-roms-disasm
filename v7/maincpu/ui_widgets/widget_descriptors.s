@@ -1813,7 +1813,8 @@ NoteEditFunc_CaseTable:
 ;   pointer); SngSelFunc_HandleEvent47 (0xF2FF1B, pushw far pointer)
 ; -----------------------------------------------------------------------------
 NoteEditFunc_CaseTable_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38B4, 0xA
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38B4, 0x6
+SngSelFunc_HandleEvent47_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38BA, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EntGrid_PostMainEvent_Table
 ; EntGrid_PostMainEvent_Table -- read by EntGrid_PostMainEvent (v10/v9

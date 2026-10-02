@@ -6419,8 +6419,8 @@ AcMixerVol_Paint:
 	ld xde, (xhl)
 	ld xhl, 3:i3
 	push xhl
-	pushw 0xff
-	pushw 0x8
+	pushw PsMixer_CtlTypeProc5_Data@hi16
+	pushw PsMixer_CtlTypeProc5_Data@lo16
 	call DrawStringCentered
 	ld xwa, (xsp + 44)
 	ld xbc, EVT_PARA_DRAW
@@ -8316,8 +8316,8 @@ AcTrkSw_Reset_DrawTrack:
 	cp	bc, 0:i3
 	jrl	ule, AcTrkSw_Select_CheckTrackNum
 AcTrkSw_Select:
-	pushw	234
-	pushw	43048
+	pushw	AcTrkSw_Select_Data@hi16
+	pushw	AcTrkSw_Select_Data@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	DrawEditSw_CopyVariant_Code_Helper
@@ -17631,8 +17631,8 @@ CommonIDProc_CheckAvail:
 CommonIDProc_Evt1E0000A:
 	ld	xwa, (xsp+16)
 	ld	(xsp+4), xwa
-	pushw 234
-	pushw 44002
+	pushw CommonIDProc_Evt1E0000A_Data@hi16
+	pushw CommonIDProc_Evt1E0000A_Data@lo16
 CommonIDProc_Join:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)

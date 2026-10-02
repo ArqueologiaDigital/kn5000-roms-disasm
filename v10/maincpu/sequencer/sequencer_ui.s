@@ -3482,8 +3482,8 @@ AcCurSongName_HandleFocusGained:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xe2
-	pushw 0x64f0
+	pushw AcCurSongName_HandleFocusGained_Data@hi16
+	pushw AcCurSongName_HandleFocusGained_Data@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked
@@ -5866,8 +5866,8 @@ NoteEditBoxProc_SetupGridDisplay_Join:
 	lda xde, (xsp + 36)
 	ld xhl, 0:i3
 	push xhl
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	call DrawStringLeftJustify
 	jrl NoteEdit_ReturnZero
 
@@ -5981,8 +5981,8 @@ NoteEditBox_EventDispatch2_Skip2:
 	lda	xde, (xsp+36)
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	251
-	pushw	245
+	pushw	NoteEditBox_EventDispatch2_Data@hi16
+	pushw	NoteEditBox_EventDispatch2_Data@lo16
 	call	DrawStringLeftJustify
 NoteEditBox_EventDispatch2_Skip3:
 	ld	xwa, (xsp+12)
@@ -6034,8 +6034,8 @@ NoteEditBox_EventDispatch2_Skip3:
 	lda	xde, (xsp+36)
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	251
-	pushw	245
+	pushw	NoteEditBox_EventDispatch2_Data@hi16
+	pushw	NoteEditBox_EventDispatch2_Data@lo16
 	jrl	NoteEditBox_EventDispatch2_Join7
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+26)
@@ -6153,8 +6153,8 @@ NoteEditBox_EventDispatch2_Join3:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	call	DrawStringLeftJustify
 	inc1b_erp 251
 	cp_erpb 251, 11
@@ -6246,8 +6246,8 @@ NoteEditBox_EventDispatch2_Join5:
 	lda	xde, (xsp+36)
 	ld	xhl, (xsp+4)
 	push	xhl
-	pushw	255
-	pushw	245
+	pushw	PmBank_DrawRegionInfo_Data@hi16
+	pushw	PmBank_DrawRegionInfo_Data@lo16
 	call	DrawStringLeftJustify
 	inc1b_erp 251
 	cp_erpb 251, 8
@@ -6427,8 +6427,8 @@ NoteEditBox_EventDispatch2_Loop5:
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	255
-	pushw	242
+	pushw	NoteEditBox_EventDispatch2_Data_2@hi16
+	pushw	NoteEditBox_EventDispatch2_Data_2@lo16
 	jr	NoteEditBox_EventDispatch2_Join8
 NoteEditBox_EventDispatch2_Skip8:
 	lda	xwa, (xsp+28)
@@ -7109,8 +7109,8 @@ SngSelFunc_HandleEvent47:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xe3
-	pushw 0x471a
+	pushw SngSelFunc_HandleEvent47_Data@hi16
+	pushw SngSelFunc_HandleEvent47_Data@lo16
 	ld xwa, (xiz + 18)
 	inc 4, xwa
 	push xwa

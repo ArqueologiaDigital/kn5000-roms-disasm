@@ -4867,8 +4867,8 @@ LswLeftHold_Case42:
 	jr LswLeftHold_CopyAndReturn
 
 LswLeftHold_DefaultStr:
-	pushw 0xe9
-	pushw 0x52a6
+	pushw LswLeftHold_DefaultStr_Data@hi16
+	pushw LswLeftHold_DefaultStr_Data@lo16
 
 LswLeftHold_CopyAndReturn:
 	push xwa
@@ -5230,8 +5230,8 @@ IvSdpart_DispatchEvent:
 	jr IvSdpart_ReturnHandled
 
 IvSdpart_GetText:
-	pushw 0xe9
-	pushw 0x554a
+	pushw IvSdpart_GetText_Data@hi16
+	pushw IvSdpart_GetText_Data@lo16
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -8816,8 +8816,8 @@ IvMessage_SelectionChange:
 	jr IvMessage_Epilogue
 
 IvMessage_GetText:
-	pushw 0xe9
-	pushw 0xd7c6
+	pushw IvMessage_GetText_Data@hi16
+	pushw IvMessage_GetText_Data@lo16
 	push xde
 	call Strcpy
 	inc 8, xsp
@@ -9992,8 +9992,8 @@ Sdtecd1_SendEventReturn:
 	jr IvSdtecd1_ReturnDefault
 
 Sdtecd1_GetText:
-	pushw 0xe9
-	pushw 0xda22
+	pushw Sdtecd1_GetText_Data@hi16
+	pushw Sdtecd1_GetText_Data@lo16
 	push xiz
 	call Strcpy
 	inc 8, xsp
@@ -13221,8 +13221,8 @@ PsMixer_CtlTypeProc5_Skip:
 	jr nz, PsMixer_CtlTypeProc5_Skip2
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	255
-	pushw	242
+	pushw	NoteEditBox_EventDispatch2_Data_2@hi16
+	pushw	NoteEditBox_EventDispatch2_Data_2@lo16
 	pushw	0
 	pushw	0
 	jr	PsMixer_CtlTypeProc5_Join
@@ -13371,8 +13371,8 @@ PsMixer_CtlTypeProc6_Skip:
 	jr	nz, PsMixer_CtlTypeProc6_Skip2
 	ld	xhl, 3:i3
 	push	xhl
-	pushw	255
-	pushw	242
+	pushw	NoteEditBox_EventDispatch2_Data_2@hi16
+	pushw	NoteEditBox_EventDispatch2_Data_2@lo16
 	pushw	0
 	pushw	0
 	jr	PsMixer_CtlTypeProc6_Join
@@ -14616,8 +14616,8 @@ PsMixer_CtlTypeProc2_Entry:
 	addw	(xwa+6), 0x12
 	ld	xde, 3:i3
 	push	xde
-	pushw	251
-	pushw	0
+	pushw	PsMixer_CtlTypeProc2_Data_2@hi16
+	pushw	PsMixer_CtlTypeProc2_Data_2@lo16
 	pushw	0
 	pushw	1
 	ld	xde, PsMixer_CtlTypeProc2_Entry_Data
@@ -14900,8 +14900,8 @@ PsMixer_CtlTypeProc1_Loop:
 	lda	xwa, (0x3ea38:24)
 	ld_rrl xwa, xwa, hl
 	push xwa
-	pushw	233
-	pushw	0xf872
+	pushw	PsMixer_CtlTypeProc1_Data@hi16
+	pushw	PsMixer_CtlTypeProc1_Data@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Sprintf_Locked
@@ -15156,8 +15156,8 @@ PsMixer_CtlTypeProc10_Loop:
 	lda	xbc, (0x3eb28:24)
 	ld_rrl xwa, xbc, wa
 	push xwa
-	pushw	233
-	pushw	0xf876
+	pushw	PsMixer_CtlTypeProc10_Data@hi16
+	pushw	PsMixer_CtlTypeProc10_Data@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Sprintf_Locked

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,538
-#   semantic names ........... 49,292 (95.6%)
+#   symbols .................. 51,600
+#   semantic names ........... 49,354 (95.6%)
 #   positional names ......... 2,246
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -2684,6 +2684,7 @@ NumStr_3 00E1CE02
 NumStr_2 00E1CE06
 NumStr_1 00E1CE0A
 NumStr_0 00E1CE0E
+CmpBndRng_DefaultString_Str_ERR 00E1CE12
 CmpSetP1_DialGrid_Data 00E1CE16
 CmpSetP1_SendAndApplyFunc_Data 00E1CE28
 AcCmpSetGridBoxProc_Data 00E1CE3A
@@ -2887,6 +2888,7 @@ StrStyleSect_A_Vari3 00E1D56C
 StrStyleSect_A_Vari2 00E1D574
 StrStyleSect_A_Vari1 00E1D57C
 PsS2cFmeas_HandleScroll_Str_Fmt3d 00E1D584
+PsS2cLmeas_HandleScroll_Str_Fmt3d 00E1D588
 PsSeqSongNo_HandleScroll_Str_SONG_Fmt2d 00E1D58C
 PtrTbl_TransposeStrs 00E1D598
 StrTranspose_Plus24 00E1D660
@@ -3071,6 +3073,9 @@ StrNotePos_AcFlatB8 00E1DD60
 StrNotePos_AdNatural 00E1DD68
 StrNotePos_AdFlatB8 00E1DD6E
 StrNotePos_Off 00E1DD76
+PsCmpMeasBox_HandleEvtBC_Str_Fmtd 00E1DD7A
+PsCmpMemBox_HandleEvtBC_Str_Fmt2d 00E1DD7E
+AcCmpTempoBox_HandleEvt1C_Str_Fmt3d 00E1DD82
 PtrTbl_StyleVarGroupCodes 00E1DD86
 StyleVarGrp_CEnd2 00E1DE0A
 StyleVarGrp_BEnd2 00E1DE0C
@@ -3117,6 +3122,7 @@ StrGenre_DancePop 00E1DED8
 StrGenre_16Beat 00E1DEEA
 StrGenre_8Beat 00E1DEFC
 EasyCmp_GridCheck_EventEnc_Str_OFF 00E1DF0E
+EasyCmp_GridCheck_EventCase2_Str_Fmt3d 00E1DF12
 EasyCmpGridCheck_Data 00E1DF16
 MspNameBnkFunc_Data 00E1DF24
 StrBankShort_Compile2 00E1DF34
@@ -3482,6 +3488,7 @@ LoadExtROM_Entry_Str_XAPR 00E1FF9C
 LoadExtROM_Entry_Str_Different_ID 00E1FFA2
 LoadXaprInit_Entry_Str_XAPR 00E1FFB0
 WidgetDispatch_FDTestPtrTable 00E1FFB6
+LoadExtROM_JumpEntry_Data 00E1FFC6
 ResInfo_GetResourceListPtr_Str_TEST 00E1FFCC
 RESOURCE_INFO_HANDLER_OFFSETS 00E1FFD2
 SepaOut_Config_0 00E1FFE6
@@ -4194,6 +4201,7 @@ TrAsGridCheck_CaseTable 00E264D0
 VoiceConfig_LookupByScreenType_Table 00E264DE
 VoiceConfig_LoadTableA_Table 00E264E4
 VoiceConfig_LoadTableB_Table 00E264EA
+AcCurSongName_HandleFocusGained_Data 00E264F0
 AcCurSongName_HandleEventF_Str_Blank22 00E264F8
 MuteChSel_Dispatch_PtrTable 00E26510
 MuteChSel_Dispatch_Strings 00E26550
@@ -5548,6 +5556,7 @@ NoteEdit_FormatChordType_Str 00E346D4
 NoteEdit_GetParamValue_CaseTable 00E346D8
 NoteEditFunc_CaseTable 00E346F4
 NoteEditFunc_CaseTable_Strings 00E34714
+SngSelFunc_HandleEvent47_Data 00E3471A
 EntGrid_PostMainEvent_Table 00E3471E
 EntGrid_PostMainEvent_Table_2 00E34730
 AcEntertainerGridBoxProc_CaseTable 00E34742
@@ -6720,12 +6729,14 @@ NakaToggle_OnOff_Data 00E80040
 ComSetGridCheck_JumpTable_Table_2 00E80044
 NakaInst_OFF_E80048 00E80048
 ComSetGridCheck_JumpTable_Str 00E8004A
+SeMenu_ApplyPartEdit_AltStore_Data 00E8004D
 ComSetGridCheck_JumpTable_Str_2 00E80050
 NakaInst_NORMAL 00E8005A
 Str_AL 00E8005F
 ComSetGridCheck_JumpTable_Str_3 00E80064
 ComSetGridCheck_JumpTable_Table_3 00E8006E
 NakaInst_GM 00E80070
+SeMenu_ApplyPartEdit_AltStore_Data_2 00E80076
 ComSetGridCheck_JumpTable_Str_4 00E80078
 ComSetGridCheck_ParamDisplay_Str 00E80082
 ComSetGridCheck_ParamDisplay_Str_2 00E80088
@@ -7475,6 +7486,7 @@ Bitmap_TechnichordBackground_2 00E90B3B
 Bitmap_KN5000_Logo 00E9367E
 Str_Mixer_ON 00E9529E
 MixerPartTable_Start 00E952A2
+LswLeftHold_DefaultStr_Data 00E952A6
 SdpartUpdatePartUI_Data 00E952AA
 PsMixer_MidiScanOuterLoop_Data 00E95322
 PsMixer_CtlTypeProc2_Data 00E953A6
@@ -7511,6 +7523,7 @@ Str_PartName_Part4 00E9551E
 Str_PartName_Left 00E9552A
 Str_PartName_Right2 00E95536
 Str_PartName_Right1 00E95540
+IvSdpart_GetText_Data 00E9554A
 IvSdpartProc_Data 00E95550
 SdpartUpdatePartUI_Confirm_Str_Dash_Dash_Dash_Dash 00E95564
 LswSound_Str_Dash_Dash_Dash_Dash 00E95576
@@ -7807,6 +7820,7 @@ IvMesageProc_Data 00E9D340
 MsgHeader_BuildLoop_PtrTable 00E9D346
 CheckMsg_IncrementCheck_Data 00E9D34A
 IvMesageProc_PtrTable 00E9D7AE
+IvMessage_GetText_Data 00E9D7C6
 PleaseWait_GetText_PtrTable 00E9D7CA
 NakaInst_SILAHKAN_TUNGGU 00E9D7E2
 NakaInst_PLEASE_WAIT 00E9D7F4
@@ -7851,6 +7865,7 @@ AccordionX_GetText_Str_Acdn 00E9D9C0
 Sdtecd_GetText_Str_TeCd 00E9D9C6
 IvSdtecd1Proc_Data 00E9D9CC
 Sdtecd1_ScrollDown_Lookup_Data 00E9DA04
+Sdtecd1_GetText_Data 00E9DA22
 Naka_TechniChord1_Screens 00E9DA28
 NakaInst_CONDUCTOR 00E9DA6C
 NakaInst_PART_16_E9DA76 00E9DA76
@@ -8088,6 +8103,8 @@ MidiParam_MixerCfgData 00E9F802
 AcTrackMixerProc_Data 00E9F804
 PsMixer_CtlTypeProc3_Data 00E9F82C
 PsMixer_CtlTypeProc2_Entry_Data 00E9F86C
+PsMixer_CtlTypeProc1_Data 00E9F872
+PsMixer_CtlTypeProc10_Data 00E9F876
 IvDrawbar1_LoadVals_Data 00E9F87A
 MemDraw_ParamLoopBody_Data 00E9F88C
 KeyShift_DisplayStrTable 00E9F8AA
@@ -9322,6 +9339,7 @@ FDC_COMMAND_DISPATCHER_Data 00EA98B2
 FDC_CommandEntry_CopyParams_Data 00EA98CA
 CtrlPanel_HandleSerialPort_Data 00EA98E2
 SndParam_SendDiskMenuEvents_Data 00EA9966
+GetSoundName_DefaultString_Data 00EA99E6
 MainPmanControl_Data 00EA99F8
 CtrlPanel_DispatchByIndex_Data 00EA9A04
 GroupBox_HandleStateCompare_Data 00EA9A5A
@@ -9343,14 +9361,17 @@ Data_SoundEditorCharsLayout 00EA9ED2
 WndScroll_ItemCountCheck_Str_Chr25 00EA9EDE
 AcNaming_QueryCharSet_PtrTable 00EA9EEA
 WndEvt_DispatchByEventCode_Data 00EA9EF6
+ModeEdit_HandlePaint_Data 00EA9F08
 TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts 00EA9F14
 UserBitmapCheck_ReturnTablePtr_Data 00EA9F20
+VwUserBitmapByName_HandlePaint_Data 00EAA160
 EditSw_ByteData_Str_N7f 00EAA166
 EditSw_ByteData_Str_N80 00EAA16A
 EditSw_ByteData_Str_N81 00EAA16E
 DrawEditSw_Str_N7f 00EAA172
 DrawEditSw_SelectVariantA_Str_N80 00EAA176
 DrawEditSw_SelectVariantC_Str_N81 00EAA17A
+TextBox_DrawLineLoop_Data 00EAA17E
 AcTempoBox_MatchTempoID_Str_aa_Fmt3d 00EAA180
 AcTempoBox_CopyTempoString_Str_aa 00EAA188
 PsListBox_GetText_Str_No_My_Car_Day_Memory_AyaSam 00EAA190
@@ -9359,6 +9380,7 @@ PsGridBox_Scroll_Render_Str_PART_CHANNEL_OCTAVE_LOCAL 00EAA1F2
 PsGridBox_Scroll_Render_Str_RIGHT1_RIGHT2_LEFT_PART4_PART5 00EAA212
 PsGridBoxProc_Data 00EAA248
 AcGridBoxProc_Data 00EAA258
+GridCheck_CellSelect_Data 00EAA266
 GridCheck_Data 00EAA26C
 PsNumEditBox_Confirm_Str_Chr25 00EAA27A
 PsNumEditBox_Confirm_Str_Fmtd 00EAA27C
@@ -9428,6 +9450,7 @@ PsTrackSwitchProc_PtrTable 00EAA750
 PsTrackSwitchProc_PtrTable_2 00EAA7F0
 PsTrackSwitchProc_Data 00EAA81A
 PsTrkSw_Confirm_DrawGeometry_Str_Fmtd 00EAA824
+AcTrkSw_Select_Data 00EAA828
 AcTrkSw_Select_HighTrack_Str_PsTextBox 00EAA82A
 AcTrkSw_ShowHide_CheckDirty_Str_AcLanguageText 00EAA834
 LanguageCheck_PtrTable 00EAA844
@@ -9522,10 +9545,13 @@ NameProc_GetText_Str_Empty 00EAABD4
 ConstFlagProc_GetValue_Str_romram 00EAABD6
 ConstFlagProc_GetValue_Set_Data 00EAABDE
 ConstFlagProc_SetValue_Check_Str_Empty 00EAABE0
+CommonIDProc_Evt1E0000A_Data 00EAABE2
 CommonIDProc_Data 00EAABE4
 DrawIcons_Impl_ColLoop_Data 00EAABF2
+DrawBitmapFile_Impl_Data 00EAADF2
 DrawPartGroup_DispatchByType_Data 00EAADF6
 Draw_DispatchByPartType_Data 00EAAE16
+Gfx_LoadSplashBMP_Data 00EAAE48
 CaptureLcd_Str_BM 00EAAE4C
 CaptureLcd_Str_HKLCD_Fmt3d_BMP 00EAAE50
 CaptureLcd_Str_wb 00EAAE5E
@@ -11437,12 +11463,14 @@ Str_StoreTotalSetting_EN 00ED0CDA
 MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd 00ED0D18
 AcMstStyleAlpGridBoxProc_Data 00ED0D24
 AcMstStyleAlpGridBoxProc_EventOffsets 00ED0D24
+MstStyleAlp_AppendPadChar_Data 00ED0D32
 MstStyleAlp_OverflowStr_Str_Blank32 00ED0D34
 MstStyleAlp_AppendPadChar2_Str_Blank1 00ED0D56
 MstStyleAlpGridCheck_Data 00ED0D58
 MstStyleAlpGridCheck_EventOffsets 00ED0D58
 AcMstStyle1GridBoxProc_Data 00ED0D66
 AcMstStyle1GridBoxProc_EventOffsets 00ED0D66
+MstStyle1Grid_CellSelect_Data_2 00ED0D74
 MstStyle1Grid_OutOfRange_Str_Blank16 00ED0D76
 MstStyle1Grid_PadLeft_LoopB_Str_Blank1 00ED0D88
 MstStyle1GridCheck_Data 00ED0D8A
@@ -11450,6 +11478,7 @@ MstStyle1GridCheck_EventOffsets 00ED0D8A
 MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd 00ED0D98
 AcMstStyle1SubGridBoxProc_Data 00ED0D9E
 AcMstStyle1SubGridBoxProc_EventOffsets 00ED0D9E
+MstStyle1SubGrid_CellSelect_Data 00ED0DAC
 MstStyle1SubGrid_OutOfRange_Str_Blank16 00ED0DAE
 MstStyle1SubGrid_PadLeft_LoopB_Str_Blank1 00ED0DC0
 MstStyle1SubGridCheck_Data 00ED0DC2
@@ -11464,6 +11493,7 @@ MstStyle2_NameB_DrawLower_Str_TEMPO 00ED0DFA
 MstStyle2_NameB_Render_Str_Fmts 00ED0E00
 AcMstStyle2GridBoxProc_Data 00ED0E04
 AcMstStyle2GridBoxProc_EventOffsets 00ED0E04
+MstGrid2_PadLeft_LoopA_Data 00ED0E12
 MstGrid2_OutOfRange_LowCol_Str_Blank32 00ED0E14
 MstGrid2_PadLeft_LoopB_Str_Blank1 00ED0E36
 MstGrid2_OutOfRange_HighCol_Str_Blank32 00ED0E38
@@ -11476,6 +11506,7 @@ MstStyle2GridCheck_Data 00ED0EC4
 MstStyle2GridCheck_EventOffsets 00ED0EC4
 AcTchSensGridBoxProc_Data 00ED0ED2
 AcTchSensGridBoxProc_EventOffsets 00ED0ED2
+TchSensGridCheck_Evt1C0001C_Data 00ED0EE0
 TchSensGridCheck_Evt1C0001C_Str_ON 00ED0EE4
 TchSensGridCheck_Evt1C0001C_Str_OFF 00ED0EE8
 TchSensGridCheck_Evt1C0001C_Str_Fmt3d 00ED0EEC
@@ -11564,8 +11595,10 @@ ParamStr02_Midi 00ED13C8
 ParamStr02_Vocalist 00ED13DC
 PmExpFilter_Repaint_Str_FILTER_TYPE 00ED13F0
 PmExpFilter_Repaint_Str_ON_OFF 00ED13FC
+PmExpFilter_DrawCellBank1_Str_Fmts 00ED1404
 PmExpFilter_DrawCellBank1_Str_PAGE_2_3 00ED1408
 PmExpFilter_DrawCellBank2_Str_Fmts 00ED1412
+PmExpFilter_DrawCellBank2_Data 00ED1416
 AcPmExpFilterGridBoxProc_Data 00ED1420
 AcPmExpFilterGridBoxProc_EventOffsets 00ED1420
 PmExpFilter_CellKeys 00ED142E
@@ -11600,10 +11633,20 @@ FadeTimeStr_Hold 00ED153A
 FadeTimeStr_Default 00ED1542
 FadeTimeStr_Off 00ED154A
 DispTimeSetGridCheck_Evt1C0001C_Str_Fmts 00ED1552
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3 00ED1556
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4 00ED155A
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5 00ED155E
 DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2 00ED1562
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6 00ED1566
+DispTimeSetCheck_CellDecode_Str_Fmts 00ED156A
+DispTimeSetCheck_TryRow3_Str_Fmts 00ED156E
 DispTimeSetCheck_TryRow4_Str_Fmts 00ED1572
+DispTimeSetCheck_TryRow5_Str_Fmts 00ED1576
+DispTimeSetCheck_TryRow6_Str_Fmts 00ED157A
+DispTimeSetCheck_TryRow7_Str_Fmts 00ED157E
 DispTimeSetGridCheck_Data 00ED1582
 DispTimeSetGridCheck_EventOffsets 00ED1582
+IvPageOverWr_GetName_Data 00ED1590
 MssName_EventDispatch_Str_Memory_data 00ED1596
 MssName_EventDispatch_Str_Blank2 00ED15A4
 MssName_EventDispatch_Str_Blank2_2 00ED15A8
@@ -11615,10 +11658,13 @@ PmemMode_Paint_Str_PAGE_1_3 00ED15D6
 AcPmBkEdit_BankChanged_Str_BANK_Fmt2d 00ED15E0
 AcPmBkEdit_BankEdit_Str_Fmtd 00ED15EA
 PmBkNameFunc_Data 00ED15EE
+GmOnOffFunc_Data 00ED1602
 VariScreen_HandlePaint_Str_SOUND 00ED1604
 VariScreen_DrawNameString_Str_Fmtd 00ED160A
+VariScreen_DrawRightNameString_Str_Fmtd 00ED160E
 VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd 00ED1612
 VariScreen_ConfirmDrawNameAudio_Str_Fmtd 00ED161E
+VariScreen_EnumDrawNameAudio_Str_Fmtd 00ED1622
 ParamStr_Table_04 00ED1626
 VariationStr_V4 00ED1636
 VariationStr_V3 00ED163A
@@ -11632,6 +11678,9 @@ RVari_SelectO_SecondItem_Draw_Str_Fmtd 00ED165A
 RVari_ConfirmF_Item_Draw_Str_Fmts 00ED165E
 RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd 00ED1662
 RVari_ConfirmE_Item_Draw_Str_Fmtd 00ED166E
+RVari_EnumNotifyF_Item_Draw_Str_Fmts 00ED1672
+RVari_EnumNotifyE_Item_Draw_Str_Fmtd 00ED1676
+PmBank_BankChanged_DrawSlot_Str_Fmtd 00ED167A
 PmBank_OnSelect_Data 00ED167E
 SelectRect_Table 00ED167E
 ParamStr_Table_05 00ED16AE
@@ -11729,6 +11778,7 @@ KeyScaleNoteStr_BFlat 00ED1C72
 KeyScaleNoteStr_A 00ED1C78
 KeyScaleNoteStr_AFlat 00ED1C7C
 KeyScaleNoteStr_G 00ED1C82
+AcTranspose_ValueChanged_Str_Blank4 00ED1C86
 AcTranspose_FormatLabel_Str_Fmts 00ED1C8C
 AcChordBox_HandleChordUpdate_Str_Fmts 00ED1C92
 ChordStr_On 00ED1C96
@@ -12599,6 +12649,11 @@ DSPCfg_Init_Entry0_Data 00ED91AC
 ToneGen_ApplyMaskTable_Data 00ED92D8
 Voice_InitChannelLoop_Data 00ED92F2
 DSPCfg_Init_BoundsCheck_Data 00ED930A
+ToneGen_FlashWriteAll_Data_3 00ED931C
+ToneGen_FlashWriteAll_Data_4 00ED9320
+ToneGen_FlashWriteAll_Data_5 00ED9324
+ToneGen_FlashWriteAll_Data_6 00ED9330
+ToneGen_FlashWriteAll_Data_7 00ED9334
 ToneGen_FlashVerify_Str_HK 00ED933A
 ToneGen_FlashWriteAll_Data 00ED9434
 ToneGen_FlashWriteAll_Data_2 00ED951E
@@ -12695,6 +12750,7 @@ DataBuf_InitSlotFromPreset_Str_ZZ 00EDB3DC
 DataSlot_HeaderTemplate 00EDB3DC
 SMF_SlotChain_ExtendedVoice_Data 00EDB3FC
 SndParamRam_DefaultImage 00EDB3FC
+Display_CopyAndRenderBitmaps_Str_HK 00EDBA1C
 SndParam_ResetDefaultTable_Data 00EDBA2C
 SndParam_RW_Fail_Data 00EDBA38
 SndParam_InitHashFillLoop_Data 00EDBA3C
@@ -43218,10 +43274,13 @@ DrawLineWithMode_Impl_Skip3 00FAFFD2
 DrawLineWithMode_Impl_Join 00FAFFDC
 DrawLineWithMode_Impl_Skip4 00FAFFF2
 DrawLineWithMode_Impl_Join2 00FAFFF4
+PsMixer_CtlTypeProc2_Data_2 00FB0000
 DrawLineWithMode_Impl_Skip5 00FB0008
 DrawLineWithMode_Impl_Loop 00FB00B6
 DrawLineWithMode_Impl_Skip6 00FB00D7
 DrawLineWithMode_Impl_Skip7 00FB00EF
+NoteEditBox_EventDispatch2_Data 00FB00F5
+PmBank_OnPaint_Data 00FB00F7
 DrawLineWithMode_Impl_Loop2 00FB010A
 DrawLineWithMode_Impl_Skip8 00FB0125
 DrawLineWithMode_Impl_Skip9 00FB013F
@@ -48811,6 +48870,7 @@ AudioInit_PartAssign_Next 00FE0018
 AudioInit_PartAssign_Return 00FE0021
 AudioInit_ComparePartConfig 00FE0023
 AudioInit_PartConfig_Loop 00FE002D
+SeMenu_ApplyPartEdit_AltStore_Data_3 00FE0049
 AudioInit_PartConfig_SameVoice 00FE007A
 AudioInit_PartConfig_NotReverb 00FE00DF
 AudioInit_PartConfig_CheckCarry 00FE00EE
@@ -50939,6 +50999,8 @@ SendPartDataBlock_Return5_Skip7 00FF0094
 SendPartDataBlock_Return5_Skip8 00FF009C
 SendPartDataBlock_Return5_Skip9 00FF00A4
 SendPartDataBlock_Data4 00FF00C0
+NoteEditBox_EventDispatch2_Data_2 00FF00F2
+PmBank_DrawRegionInfo_Data 00FF00F5
 SendPartDataBlock_Data5 00FF00FF
 SendPartDataBlock_Return5_Skip10 00FF0119
 SendPartDataBlock_InitVal4 00FF012E

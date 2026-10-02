@@ -1396,8 +1396,8 @@ RVari_EnumNotifyF_Item_Draw:
 	lda xbc, (ParamStr_Table_04:24)
 	ld	xwa, (xbc+wa)
 	push xwa
-	pushw 0xed
-	pushw 0x1672
+	pushw RVari_EnumNotifyF_Item_Draw_Str_Fmts@hi16
+	pushw RVari_EnumNotifyF_Item_Draw_Str_Fmts@lo16
 	lda xwa, (xsp+284)
 	push xwa
 	call Sprintf_Locked
@@ -1567,8 +1567,8 @@ RVari_EnumNotifyE_Item_Draw:
 	extz wa
 	add wa, bc
 	pushw wa
-	pushw 0xed
-	pushw 0x1676
+	pushw RVari_EnumNotifyE_Item_Draw_Str_Fmtd@hi16
+	pushw RVari_EnumNotifyE_Item_Draw_Str_Fmtd@lo16
 	lda xwa, (xsp+282)
 	push xwa
 	call Sprintf_Locked

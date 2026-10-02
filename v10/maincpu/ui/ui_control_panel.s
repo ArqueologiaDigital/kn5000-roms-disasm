@@ -539,16 +539,16 @@ AcFileSfx_DrawLoop:
 	ld xde, (xhl)
 	ld xhl, (xix)
 	push xhl
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 	jr AcFileSfx_CallDrawString
 
 AcFileSfx_DrawDefault:
 	ld xde, (xhl)
 	ld xhl, (xix)
 	push xhl
-	pushw 0xff
-	pushw 0xf5
+	pushw PmBank_DrawRegionInfo_Data@hi16
+	pushw PmBank_DrawRegionInfo_Data@lo16
 
 AcFileSfx_CallDrawString:
 	call DrawString

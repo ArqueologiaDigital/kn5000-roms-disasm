@@ -27060,7 +27060,9 @@ SendPartDataBlock_Data4:
 	ld	(xbc+55), a
 	ld	a, (xde+31)
 	ld	(xbc+60), a
+NoteEditBox_EventDispatch2_Data_2:
 	lda	xix, (xbc+58)
+PmBank_DrawRegionInfo_Data:
 	ld	a, (xde+32)
 	ld	(xix), a
 	lda	xiy, (xbc+59)

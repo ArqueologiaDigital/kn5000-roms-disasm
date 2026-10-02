@@ -526,6 +526,7 @@ MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd:	aligned_string "%c:%d/%d  "
 AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (AcMstStyleAlpGridBoxProc_Data)
 AcMstStyleAlpGridBoxProc_Data:
 	.short 0x02ef, 0x051d, 0x02ef, 0x051d, 0x0827, 0x07fd, 0x07fd
+MstStyleAlp_AppendPadChar_Data:
 	aligned_string " "
 MstStyleAlp_OverflowStr_Str_Blank32:	aligned_string "                                "
 MstStyleAlp_AppendPadChar2_Str_Blank1:	aligned_string " "
@@ -535,6 +536,7 @@ MstStyleAlpGridCheck_Data:
 AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (AcMstStyle1GridBoxProc_Data)
 AcMstStyle1GridBoxProc_Data:
 	.short 0x0059, 0x0165, 0x0059, 0x0165, 0x0310, 0x02f8, 0x02f8
+MstStyle1Grid_CellSelect_Data_2:
 	aligned_string " "
 MstStyle1Grid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1Grid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
@@ -545,6 +547,7 @@ MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd:	aligned_string "%d/%d"
 AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (AcMstStyle1SubGridBoxProc_Data)
 AcMstStyle1SubGridBoxProc_Data:
 	.short 0x01cc, 0x02fa, 0x01cc, 0x02fa, 0x0529, 0x0511, 0x0511
+MstStyle1SubGrid_CellSelect_Data:
 	aligned_string " "
 MstStyle1SubGrid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1SubGrid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
@@ -565,6 +568,7 @@ MstStyle2_NameB_Render_Str_Fmts:	aligned_string "%s"
 AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (AcMstStyle2GridBoxProc_Data)
 AcMstStyle2GridBoxProc_Data:
 	.short 0x055a, 0x076a, 0x055a, 0x076a, 0x0bae, 0x0b96, 0x0b96
+MstGrid2_PadLeft_LoopA_Data:
 	aligned_string " "
 MstGrid2_OutOfRange_LowCol_Str_Blank32:
 	aligned_string "                                "
@@ -585,6 +589,7 @@ MstStyle2GridCheck_Data:
 AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (AcTchSensGridBoxProc_Data)
 AcTchSensGridBoxProc_Data:
 	.short 0x006a, 0x0127, 0x006a, 0x0127, 0x0234, 0x020c, 0x020c
+TchSensGridCheck_Evt1C0001C_Data:
 	aligned_string "%3d"
 TchSensGridCheck_Evt1C0001C_Str_ON:
 	aligned_string "ON "
@@ -742,9 +747,11 @@ ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
 PmExpFilter_Repaint_Str_FILTER_TYPE:
 	aligned_string "FILTER TYPE"
 PmExpFilter_Repaint_Str_ON_OFF:
-	.byte 0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+	.byte	0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x00, 0xff
+PmExpFilter_DrawCellBank1_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 PmExpFilter_DrawCellBank1_Str_PAGE_2_3:	aligned_string "PAGE 2/3"
 PmExpFilter_DrawCellBank2_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff
+PmExpFilter_DrawCellBank2_Data:
 	aligned_string "PAGE 3/3"
 AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (AcPmExpFilterGridBoxProc_Data)
 AcPmExpFilterGridBoxProc_Data:
@@ -818,12 +825,22 @@ FadeTimeStr_Hold:	aligned_string " HOLD  "
 FadeTimeStr_Default:	aligned_string "DEFAULT"
 FadeTimeStr_Off:	aligned_string "  OFF  "
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1552-0xED1582 (48 B), unreached CODE-territory, was disassembled as 36 plausible-but-dead instruction lines; per=100% dist=4 near FadeTimeStr_Off+8
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2:	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
-DispTimeSetCheck_TryRow4_Str_Fmts:		.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetCheck_CellDecode_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetCheck_TryRow3_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetCheck_TryRow4_Str_Fmts:		.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetCheck_TryRow5_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetCheck_TryRow6_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
+DispTimeSetCheck_TryRow7_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (DispTimeSetGridCheck_Data)
 DispTimeSetGridCheck_Data:
 	.short 0x0000, 0x0136, 0x0000, 0x0136, 0x05bc, 0x0283, 0x0283
+IvPageOverWr_GetName_Data:
 	aligned_string "PAGE"
 MssName_EventDispatch_Str_Memory_data:	aligned_string "Memory data "
 MssName_EventDispatch_Str_Blank2:
@@ -838,11 +855,14 @@ PmemMode_Paint_Str_PAGE_1_3:		aligned_string "PAGE 1/3"
 AcPmBkEdit_BankChanged_Str_BANK_Fmt2d:	aligned_string "BANK%2d:"
 AcPmBkEdit_BankEdit_Str_Fmtd:		.byte	0x25, 0x64, 0x3a, 0x00
 PmBkNameFunc_Data:	.byte	0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
-	.byte	0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xff
+	.byte	0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00
+GmOnOffFunc_Data:	.byte	0x00, 0xff
 VariScreen_HandlePaint_Str_SOUND:	.byte	0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00
-VariScreen_DrawNameString_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+VariScreen_DrawNameString_Str_Fmtd:		.byte	0x25, 0x64, 0x3a, 0x00
+VariScreen_DrawRightNameString_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
 VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd:	aligned_string "PAGE %d/%d"
-VariScreen_ConfirmDrawNameAudio_Str_Fmtd:	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+VariScreen_ConfirmDrawNameAudio_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
+VariScreen_EnumDrawNameAudio_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
 ParamStr_Table_04:
 	.long VariationStr_V1
 	.long VariationStr_V2
@@ -866,7 +886,10 @@ RVari_SelectO_SecondItem_Draw_Str_Fmtd:		aligned_string "%d:"
 RVari_ConfirmF_Item_Draw_Str_Fmts:		aligned_string "%s:"
 RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd:	aligned_string "PAGE %d/%d"
 	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near RVari_Paint_Str_RHYTHM+40
-RVari_ConfirmE_Item_Draw_Str_Fmtd:	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
+RVari_ConfirmE_Item_Draw_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
+RVari_EnumNotifyF_Item_Draw_Str_Fmts:	.byte	0x25, 0x73, 0x3a, 0x00
+RVari_EnumNotifyE_Item_Draw_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
+PmBank_BankChanged_DrawSlot_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
 ; SelectRect_Table: six screen rectangles {x1, y1, x2, y2}, 8 bytes each,
 ; read with `sla wa, 3` / `lda xbc, (PmBank_OnSelect_Data:24)` by PmBank_OnSelect
 ; and ToneGen_WriteParamByIndex (display/graphics_text_vga.s), which copy the
@@ -1114,7 +1137,8 @@ KeyScaleNoteStr_BFlat:	aligned_string "B~a0"
 KeyScaleNoteStr_A:
 	aligned_string "A "
 KeyScaleNoteStr_AFlat:			aligned_string "A~a0"
-KeyScaleNoteStr_G:			.byte 0x47, 0x20, 0x00, 0xff, 0x20, 0x20, 0x20, 0x20, 0x00, 0xff
+KeyScaleNoteStr_G:			.byte	0x47, 0x20, 0x00, 0xff
+AcTranspose_ValueChanged_Str_Blank4:	.byte	0x20, 0x20, 0x20, 0x20, 0x00, 0xff
 AcTranspose_FormatLabel_Str_Fmts:	aligned_string "<%s>"
 AcChordBox_HandleChordUpdate_Str_Fmts:	aligned_string "%s"
 ChordStr_On:				aligned_string "on"	; MainChordPre appends it when byte 0x8D44 != 0 and bit 1 of 0xCEDE is set
@@ -3290,7 +3314,8 @@ SMF_SlotChain_ExtendedVoice_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x49, 0x10
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x9a, 0x1a, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0x48, 0x4b
+	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff
+Display_CopyAndRenderBitmaps_Str_HK:	.byte	0x48, 0x4b
 	.byte 0x20, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xc0, 0x03, 0x50
 ; Naka_ToshiParam_Table + 0x6BC / 0x6C8 / 0x6CC: three templates the
 ; audio/sndparam_routines.s code copies with ldirw / ldiw:

@@ -4542,8 +4542,8 @@ SeMenu_ApplyPartEdit_Helper11:
 	ld	(xsp+28), c
 	ld	(xsp+30), a
 	pushw	121
-	pushw	254
-	pushw	73
+	pushw	SeMenu_ApplyPartEdit_AltStore_Data_3@hi16
+	pushw	SeMenu_ApplyPartEdit_AltStore_Data_3@lo16
 	pushw	48
 	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
@@ -5146,8 +5146,8 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join6:
 	ld	iz, (xsp+6)
 SeMenu_ApplyPartEdit_Entry5_Code_Skip12:
 	pushw	171
-	pushw	232
-	pushw	118
+	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@hi16
+	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@lo16
 	pushw	67
 	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
@@ -5272,8 +5272,8 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip16:
 	scc8	c, a
 	ld	(xsp+4), a
 	pushw	130
-	pushw	232
-	pushw	77
+	pushw	SeMenu_ApplyPartEdit_AltStore_Data@hi16
+	pushw	SeMenu_ApplyPartEdit_AltStore_Data@lo16
 	pushw	67
 	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp

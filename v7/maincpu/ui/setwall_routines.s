@@ -2026,6 +2026,7 @@ MiddleFuncCall_DispatchData_Code_Helper5:
 	ldir85
 	cp	(35994:16), 143
 	jr	z, SetWall_MiscDataAndCode_Skip
+NoteEditBox_EventDispatch2_Data:
 	cp	(35994:16), 167
 	jr	z, SetWall_MiscDataAndCode_Skip2
 SetWall_MiscDataAndCode_Skip:

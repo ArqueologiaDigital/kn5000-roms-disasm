@@ -5640,8 +5640,8 @@ CmpBndRng_BoundCase:
 	jr CmpBndRng_CallStrcpy
 
 CmpBndRng_DefaultString:
-	pushw 0xe1
-	pushw 0xce12
+	pushw CmpBndRng_DefaultString_Str_ERR@hi16
+	pushw CmpBndRng_DefaultString_Str_ERR@lo16
 
 CmpBndRng_CallStrcpy:
 	push xwa
@@ -6764,8 +6764,8 @@ PsS2cLmeas_HandleScroll:
 	call GetViewInstance
 	ld xiz, xhl
 	push_sd16w 0x8c, 0x39
-	pushw 0xe1
-	pushw 0xd588
+	pushw PsS2cLmeas_HandleScroll_Str_Fmt3d@hi16
+	pushw PsS2cLmeas_HandleScroll_Str_Fmt3d@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked

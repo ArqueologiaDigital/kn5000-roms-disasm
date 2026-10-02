@@ -3789,8 +3789,8 @@ AcCurSongName_HandleFocusGained:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	226
-	pushw	25840
+	pushw	AcCurSongName_HandleFocusGained_Data@hi16
+	pushw	AcCurSongName_HandleFocusGained_Data@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -6707,8 +6707,8 @@ NoteEditBox_EventDispatch2_Skip8:
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
-	pushw 242
-	pushw 255
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 NoteEditBox_EventDispatch2_Join8:
 	call	DrawStringLeftJustify
 	lda	xix, (xsp+28)
@@ -6751,8 +6751,8 @@ NoteEditBox_EventDispatch2_Join8:
 	lda	xde, (xsp+36)
 	ld	xhl, 3:i3
 	push	xhl
-	pushw 242
-	pushw 255
+	pushw NoteEditBox_EventDispatch2_Data@hi16
+	pushw NoteEditBox_EventDispatch2_Data@lo16
 	call	DrawStringLeftJustify
 	ld	a, (135318:24)
 	inc	1, a
@@ -7374,8 +7374,8 @@ SngSelFunc_HandleEvent47:
 	inc	1, a
 	extz	wa
 	pushw	wa
-	pushw	227
-	pushw	18202
+	pushw	SngSelFunc_HandleEvent47_Data@hi16
+	pushw	SngSelFunc_HandleEvent47_Data@lo16
 	ld	xwa, (xiz+18)
 	inc	4, xwa
 	push	xwa

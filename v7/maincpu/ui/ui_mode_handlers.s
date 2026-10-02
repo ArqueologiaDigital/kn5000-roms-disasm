@@ -3543,8 +3543,8 @@ MstStyleAlp_CellSelect:
 	jr t, MstStyleAlp_PadLoopCond
 MstStyleAlp_AppendPadChar:
 	pushw	1
-	pushw	237
-	pushw	3378
+	pushw	MstStyleAlp_AppendPadChar_Data@hi16
+	pushw	MstStyleAlp_AppendPadChar_Data@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	Strncat
@@ -4046,8 +4046,8 @@ MstStyle1Grid_CellSelect:
 	jr	MstStyle1Grid_PadLeft_Check
 MstStyle1Grid_PadLeft_Loop:
 	pushw	1
-	pushw	237
-	pushw	3444
+	pushw	MstStyle1Grid_CellSelect_Data_2@hi16
+	pushw	MstStyle1Grid_CellSelect_Data_2@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Strncat
@@ -6220,8 +6220,8 @@ MstGrid2_CellSelect:
 	jr	MstGrid2_PadLeft_CheckA
 MstGrid2_PadLeft_LoopA:
 	pushw	1
-	pushw	237
-	pushw	3602
+	pushw	MstGrid2_PadLeft_LoopA_Data@hi16
+	pushw	MstGrid2_PadLeft_LoopA_Data@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	Strncat
@@ -6917,8 +6917,8 @@ TchSensGridCheck_Evt1C0001C:
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
 	pushw	(xix)
-	pushw	237
-	pushw	3808
+	pushw	TchSensGridCheck_Evt1C0001C_Data@hi16
+	pushw	TchSensGridCheck_Evt1C0001C_Data@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -8487,8 +8487,8 @@ PmExpFilter_DrawCellBank1:
 	lda	xbc, (ParamStr_Table_01:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
-	pushw	237
-	pushw	5124
+	pushw	PmExpFilter_DrawCellBank1_Str_Fmts@hi16
+	pushw	PmExpFilter_DrawCellBank1_Str_Fmts@lo16
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -8593,8 +8593,8 @@ PmExpFilter_DrawCellBank2:
 	add	bc, wa
 	inc	1, bc
 	ld	(xhl+2), bc
-	pushw 237
-	pushw 5142
+	pushw PmExpFilter_DrawCellBank2_Data@hi16
+	pushw PmExpFilter_DrawCellBank2_Data@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Free_Compare2
@@ -9712,8 +9712,8 @@ DispTimeSetGridCheck_Skip2:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw 237
-	pushw 5462
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@hi16
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -9739,8 +9739,8 @@ DispTimeSetGridCheck_Skip3:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw 237
-	pushw 5466
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@hi16
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -9764,8 +9764,8 @@ DispTimeSetGridCheck_Skip4:
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
-	pushw 237
-	pushw 5470
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@hi16
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -9814,8 +9814,8 @@ DispTimeSetGridCheck_Skip6:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
-	pushw 237
-	pushw 5478
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@hi16
+	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@lo16
 	push	xix
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -9844,8 +9844,8 @@ DispTimeSetCheck_CellDecode:
 	lda xde, (ParamStr_Table_03:24)
 	ld	xwa, (xde+wa)
 	push XWA
-	pushw 0x00ed
-	pushw 0x156a
+	pushw DispTimeSetCheck_CellDecode_Str_Fmts@hi16
+	pushw DispTimeSetCheck_CellDecode_Str_Fmts@lo16
 	push XBC
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
@@ -9866,8 +9866,8 @@ DispTimeSetCheck_TryRow3:
 	sla WA, 0x02
 	ld	xwa, (xde+wa)
 	push XWA
-	pushw 0x00ed
-	pushw 0x156e
+	pushw DispTimeSetCheck_TryRow3_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow3_Str_Fmts@lo16
 	push XBC
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
@@ -9908,8 +9908,8 @@ DispTimeSetCheck_TryRow5:
 	sla WA, 0x02
 	ld	xwa, (xde+wa)
 	push XWA
-	pushw 0x00ed
-	pushw 0x1576
+	pushw DispTimeSetCheck_TryRow5_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow5_Str_Fmts@lo16
 	push XBC
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
@@ -9929,8 +9929,8 @@ DispTimeSetCheck_TryRow6:
 	sla WA, 0x02
 	ld	xwa, (xde+wa)
 	push XWA
-	pushw 0x00ed
-	pushw 0x157a
+	pushw DispTimeSetCheck_TryRow6_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow6_Str_Fmts@lo16
 	push XBC
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
@@ -9950,8 +9950,8 @@ DispTimeSetCheck_TryRow7:
 	sla WA, 0x02
 	ld	xwa, (xde+wa)
 	push XWA
-	pushw 0x00ed
-	pushw 0x157e
+	pushw DispTimeSetCheck_TryRow7_Str_Fmts@hi16
+	pushw DispTimeSetCheck_TryRow7_Str_Fmts@lo16
 	push XBC
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp + 0x0c)
@@ -10299,8 +10299,8 @@ IvPageOverWr_KeyPress:
 	jrl IvPageOverWr_SendAndReturn
 
 IvPageOverWr_GetName:
-	pushw	237
-	pushw	5520
+	pushw	IvPageOverWr_GetName_Data@hi16
+	pushw	IvPageOverWr_GetName_Data@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -11874,8 +11874,8 @@ GmOnOffFunc:
 	cp	xbc, EVT_GET_LSW_STRING
 	jrl	nz, GmOnOff_DefaultReturn
 	pushw	(xde+4)
-	pushw	237
-	pushw	5634
+	pushw	GmOnOffFunc_Data@hi16
+	pushw	GmOnOffFunc_Data@lo16
 	ld	xwa, (xde+8)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -12127,8 +12127,8 @@ VariScreen_HandlePaint:
 	lda	xde, (xsp+290)
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	251
-	pushw	247
+	pushw	PmBank_OnPaint_Data@hi16
+	pushw	PmBank_OnPaint_Data@lo16
 	call	DrawString
 	lda	xbc, (xsp+546)
 	ldw	(xbc), 144
@@ -12670,8 +12670,8 @@ VariScreen_DrawRightNameString:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5646
+	pushw VariScreen_DrawRightNameString_Str_Fmtd@hi16
+	pushw VariScreen_DrawRightNameString_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -13176,8 +13176,8 @@ VariScreen_EnumDrawNameAudio:
 	extz	wa
 	add	wa, bc
 	pushw	wa
-	pushw 237
-	pushw 5666
+	pushw VariScreen_EnumDrawNameAudio_Str_Fmtd@hi16
+	pushw VariScreen_EnumDrawNameAudio_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -13901,8 +13901,8 @@ RVari_Paint:
 	ld	(xwa+6), hl
 	ld	xhl, 0:i3
 	push	xhl
-	pushw	251
-	pushw	247
+	pushw	PmBank_OnPaint_Data@hi16
+	pushw	PmBank_OnPaint_Data@lo16
 	call	DrawString
 	ld	xwa, (xsp+552)
 	ld	xbc, EVT_PARA_DRAW

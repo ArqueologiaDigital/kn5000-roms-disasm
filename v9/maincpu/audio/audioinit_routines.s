@@ -2274,6 +2274,7 @@ AudioInit_PartConfig_Loop:
 	ld a, (xwa)
 	cp a, (xde)
 	jr z, AudioInit_PartConfig_SameVoice
+SeMenu_ApplyPartEdit_AltStore_Data_3:
 	ldto_berp A, 0xf8
 	ld l, a
 	extz hl

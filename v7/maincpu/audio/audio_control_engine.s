@@ -4724,8 +4724,8 @@ Display_RegionDone:
 Display_CopyAndRenderBitmaps:
 	pushw	iz
 	pushw	0x10
-	pushw	0xed
-	pushw	0xba1c
+	pushw	Display_CopyAndRenderBitmaps_Str_HK@hi16
+	pushw	Display_CopyAndRenderBitmaps_Str_HK@lo16
 	pushw	0x1e
 	pushw	0xd350
 	call	Mem_Copy

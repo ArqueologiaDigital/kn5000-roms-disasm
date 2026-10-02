@@ -15975,8 +15975,8 @@ PsCmpMeasBox_HandleEvtBC:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xe1
-	pushw 0xdd7a
+	pushw PsCmpMeasBox_HandleEvtBC_Str_Fmtd@hi16
+	pushw PsCmpMeasBox_HandleEvtBC_Str_Fmtd@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked
@@ -16043,8 +16043,8 @@ PsCmpMemBox_HandleEvtBC:
 	ld a, (0x39ab:16)
 	extz wa
 	pushw wa
-	pushw 0xe1
-	pushw 0xdd7e
+	pushw PsCmpMemBox_HandleEvtBC_Str_Fmt2d@hi16
+	pushw PsCmpMemBox_HandleEvtBC_Str_Fmt2d@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked
@@ -16117,8 +16117,8 @@ AcCmpTempoBox_HandleEvt1C:
 	cp xwa, 0x4
 	jr nz, CmpFunc_Return
 	pushm (xiz + 4)
-	pushw 0xe1
-	pushw 0xdd82
+	pushw AcCmpTempoBox_HandleEvt1C_Str_Fmt3d@hi16
+	pushw AcCmpTempoBox_HandleEvt1C_Str_Fmt3d@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked
@@ -16643,8 +16643,8 @@ EasyCmp_GridCheck_EventCase1:
 EasyCmp_GridCheck_EventCase2:
 	extz wa
 	pushw wa
-	pushw 0xe1
-	pushw 0xdf12
+	pushw EasyCmp_GridCheck_EventCase2_Str_Fmt3d@hi16
+	pushw EasyCmp_GridCheck_EventCase2_Str_Fmt3d@lo16
 	push xde
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)

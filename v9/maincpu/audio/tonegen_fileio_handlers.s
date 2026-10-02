@@ -914,32 +914,32 @@ ToneGen_FlashWriteAll:
 	push xiz
 	call Memset
 	pushw 0x2
-	pushw 0xed
-	pushw 0x931c
+	pushw ToneGen_FlashWriteAll_Data_3@hi16
+	pushw ToneGen_FlashWriteAll_Data_3@lo16
 	push xiz
 	call Mem_Copy
 	pushw 0xc
-	pushw 0xed
-	pushw 0x9324
+	pushw ToneGen_FlashWriteAll_Data_5@hi16
+	pushw ToneGen_FlashWriteAll_Data_5@lo16
 	lda xwa, (xiz + 16)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 28)
 	pushw 0x4
-	pushw 0xed
-	pushw 0x9330
+	pushw ToneGen_FlashWriteAll_Data_6@hi16
+	pushw ToneGen_FlashWriteAll_Data_6@lo16
 	lda xwa, (xiz + 32)
 	push xwa
 	call Mem_Copy
 	pushw 0x4
-	pushw 0xed
-	pushw 0x9320
+	pushw ToneGen_FlashWriteAll_Data_4@hi16
+	pushw ToneGen_FlashWriteAll_Data_4@lo16
 	lda xwa, (xiz + 48)
 	push xwa
 	call Mem_Copy
 	pushw 0x6
-	pushw 0xed
-	pushw 0x9334
+	pushw ToneGen_FlashWriteAll_Data_7@hi16
+	pushw ToneGen_FlashWriteAll_Data_7@lo16
 	lda xwa, (xiz + 64)
 	push xwa
 	call Mem_Copy
@@ -976,27 +976,27 @@ ToneGen_FlashReadAndRestore:
 	push xiz
 	call Mem_Copy
 	pushw 0xc
-	pushw 0xed
-	pushw 0x9324
+	pushw ToneGen_FlashWriteAll_Data_5@hi16
+	pushw ToneGen_FlashWriteAll_Data_5@lo16
 	lda xwa, (xiz + 16)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 28)
 	pushw 0x4
-	pushw 0xed
-	pushw 0x9330
+	pushw ToneGen_FlashWriteAll_Data_6@hi16
+	pushw ToneGen_FlashWriteAll_Data_6@lo16
 	lda xwa, (xiz + 32)
 	push xwa
 	call Mem_Copy
 	pushw 0x4
-	pushw 0xed
-	pushw 0x9320
+	pushw ToneGen_FlashWriteAll_Data_4@hi16
+	pushw ToneGen_FlashWriteAll_Data_4@lo16
 	lda xwa, (xiz + 48)
 	push xwa
 	call Mem_Copy
 	pushw 0x6
-	pushw 0xed
-	pushw 0x9334
+	pushw ToneGen_FlashWriteAll_Data_7@hi16
+	pushw ToneGen_FlashWriteAll_Data_7@lo16
 	lda xwa, (xiz + 64)
 	push xwa
 	call Mem_Copy

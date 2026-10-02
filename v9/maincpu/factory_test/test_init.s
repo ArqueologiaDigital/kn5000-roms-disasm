@@ -500,8 +500,8 @@ CallExtIfActive_Entry:
 
 LoadAndRunXapr_Entry:
 	pushw 0x4	; 4 bytes
-	pushw 0xe1
-	pushw 0xffc6	; "XAPR"
+	pushw LoadExtROM_JumpEntry_Data@hi16
+	pushw LoadExtROM_JumpEntry_Data@lo16	; "XAPR"
 	ld xwa, 0x280000
 	push xwa
 	call String_Compare

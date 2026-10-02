@@ -1111,8 +1111,8 @@ ModeEdit_HandlePaint:
 	call GetModeNow
 	ldiw_erp 0xee, 0
 	pushw hl
-	pushw 0xea
-	pushw 0x9f08
+	pushw ModeEdit_HandlePaint_Data@hi16
+	pushw ModeEdit_HandlePaint_Data@lo16
 	lda xwa, (xsp + 14)
 	push xwa
 	call Sprintf_Locked
@@ -1583,8 +1583,8 @@ VwUserBitmapByName_HandlePaint:
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
-	pushw 0xea
-	pushw 0xa160
+	pushw VwUserBitmapByName_HandlePaint_Data@hi16
+	pushw VwUserBitmapByName_HandlePaint_Data@lo16
 	lda xwa, (xsp + 16)
 	push xwa
 	call Strcat
@@ -2234,8 +2234,8 @@ TextBox_SetupWordwrap:
 	jrl ule, TextBox_FreeBuffer
 
 TextBox_DrawLineLoop:
-	pushw 0xea
-	pushw 0xa17e
+	pushw TextBox_DrawLineLoop_Data@hi16
+	pushw TextBox_DrawLineLoop_Data@lo16
 	push xiz
 	call StrSearch_Init
 	inc 8, xsp
@@ -6149,8 +6149,8 @@ Gfx_LoadSplashBMP:
 	cp iz, 0xe
 	jrl nz, SplashScreen_Return
 	pushw 0x2
-	pushw 0xea
-	pushw 0xae48
+	pushw Gfx_LoadSplashBMP_Data@hi16
+	pushw Gfx_LoadSplashBMP_Data@lo16
 	lda xwa, (xsp+1104)
 	push xwa
 	call String_Compare
@@ -8815,6 +8815,7 @@ DrawLineWithMode_Impl_Join2:
 	ld	xwa, (xsp+4)
 	or	xwa, xwa
 	jr	nz, DrawLineWithMode_Impl_Skip5
+PsMixer_CtlTypeProc2_Data_2:
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
 	jrl	z, DrawLineWithMode_Impl_Epilogue
@@ -8904,7 +8905,9 @@ DrawLineWithMode_Impl_Skip7:
 	ld	wa, (xde)
 	exts	xwa
 	ld	xix, xbc
+NoteEditBox_EventDispatch2_Data:
 	add	xix, xwa
+PmBank_OnPaint_Data:
 	add	xix, (0x030452:24)
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+8)
