@@ -1084,7 +1084,8 @@ StyleVar_EasyJazzWaltz:
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Suited_To_Jazz_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE30E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE30E, 0x22
+StyleVar_FiftiesRock:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE330, 0x1E
 ; [nakarest] NakaInst_Rock_Fall_155  +0xe34e..+0xe416 (0xec550c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Rock &
 ; [nakarest] Fall! 155"; "Teddy Boy Brass 155"; "Skiffle Keys 155"; "Ham & Rock 155"; ....
@@ -1092,7 +1093,8 @@ NakaInst_Suited_To_Jazz_150:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Rock_Fall_155:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE34E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE34E, 0x88
+StyleVar_PianoRAndRoll:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE3D6, 0x40
 ; [nakarest] NakaInst_Hard_Blown_R_R_150  +0xe416..+0xe4de (0xec55d4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Hard
 ; [nakarest] Blown R&R 150"; "Jerry Lee's Keys 150"; "Slap Back Rock 150"; "Modern Boogie 154";
@@ -1100,7 +1102,8 @@ NakaInst_Rock_Fall_155:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Hard_Blown_R_R_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE416, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE416, 0x66
+StyleVar_ItsBoogieTime:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE47C, 0x62
 ; [nakarest] NakaInst_Boogie_Band_154  +0xe4de..+0xe5a6 (0xec569c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Boogie
 ; [nakarest] Band 154"; "Oh Boy Vocals 154"; "Jailhouse Brass 158"; "Blue Suede Rock 158"; ....
@@ -1108,14 +1111,16 @@ NakaInst_Hard_Blown_R_R_150:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Boogie_Band_154:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE4DE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE4DE, 0x44
+StyleVar_RockabillyBand:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE522, 0x84
 ; [nakarest] NakaInst_Don_t_Do_It_158  +0xe5a6..+0xe5e6 (0xec5764, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Don't
 ; [nakarest] Do It! 158". variation table of 1 style: {u32 title, u16 id} x n + an all-zero
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Don_t_Do_It_158:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE5A6, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE5A6, 0x22
+StyleVar_BoogieTime:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE5C8, 0x1E
 ; [nakarest] NakaInst_Barry_s_Boogie_150  +0xe5e6..+0xe6ae (0xec57a4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Barry's Boogie 150"; "Shuffle Horns 150"; "Accordion Rock 150"; "Alto Sax Shuffle
@@ -1123,7 +1128,8 @@ NakaInst_Don_t_Do_It_158:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Barry_s_Boogie_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE5E6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE5E6, 0x88
+StyleVar_SlowDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE66E, 0x40
 ; [nakarest] NakaInst_Twin_E_P_Ballad_67  +0xe6ae..+0xe776 (0xec586c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Twin
 ; [nakarest] E.P.Ballad 67"; "Sweet Soprano 67"; "Ballad Guitar 67"; "Runaway Organ 144"; ....
@@ -1131,7 +1137,8 @@ NakaInst_Barry_s_Boogie_150:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Twin_E_P_Ballad_67:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE6AE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE6AE, 0x66
+StyleVar_SwingingSixties:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE714, 0x62
 ; [nakarest] NakaInst_Solid_Surfin_144  +0xe776..+0xe83e (0xec5934, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Solid
 ; [nakarest] Surfin' 144"; "Ocean Vocals 144"; "Liverpool Roads 154"; "Mersey Beat 154"; ....
@@ -1139,14 +1146,16 @@ NakaInst_Twin_E_P_Ballad_67:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Solid_Surfin_144:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE776, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE776, 0x44
+StyleVar_LiverpoolBeat:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE7BA, 0x84
 ; [nakarest] NakaInst_Monkeying_About_154  +0xe83e..+0xe87e (0xec59fc, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Monkeying About 154". variation table of 1 style: {u32 title, u16 id} x n + an
 ; [nakarest] all-zero entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a
 ; [nakarest] time from 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Monkeying_About_154:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE83E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE83E, 0x22
+StyleVar_60sRock:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE860, 0x1E
 ; [nakarest] NakaInst_I_Want_To_B3_150  +0xe87e..+0xe946 (0xec5a3c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "I Want
 ; [nakarest] To B3 150"; "Sax,Drums+R&Roll 150"; "Sixties Strat 150"; "Memphis Keys 150"; ....
@@ -1154,7 +1163,8 @@ NakaInst_Monkeying_About_154:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_I_Want_To_B3_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE87E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE87E, 0x88
+StyleVar_CaliforniaPop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE906, 0x40
 ; [nakarest] NakaInst_Santa_Monica_Way_150  +0xe946..+0xea0e (0xec5b04, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Santa
 ; [nakarest] Monica Way 150"; "Easy Bacharach! 150"; "San Jose Route 150"; "70's Glamour 129";
@@ -1162,7 +1172,8 @@ NakaInst_I_Want_To_B3_150:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Santa_Monica_Way_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE946, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE946, 0x66
+StyleVar_70sFoxDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE9AC, 0x62
 ; [nakarest] NakaInst_Handbag_Dance_129  +0xea0e..+0xead6 (0xec5bcc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Handbag Dance! 129"; "Wunder Pops 129"; "70's Synth Rock 136"; "Platform Wheels
@@ -1170,14 +1181,16 @@ NakaInst_Santa_Monica_Way_150:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Handbag_Dance_129:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEA0E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEA0E, 0x44
+StyleVar_GlamrockPiano:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEA52, 0x84
 ; [nakarest] NakaInst_Elton_s_Piano_136  +0xead6..+0xeb16 (0xec5c94, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Elton's
 ; [nakarest] Piano 136". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Elton_s_Piano_136:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEAD6, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEAD6, 0x22
+StyleVar_70sHits:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEAF8, 0x1E
 ; [nakarest] NakaInst_Dire_Strats_138_EC5CD4  +0xeb16..+0xebde (0xec5cd4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Dire
 ; [nakarest] Strats 138"; "Knopfler Tribute 138"; "Ricky's Strat 138"; "70's Fantasy 138"; ....
@@ -1185,7 +1198,8 @@ NakaInst_Elton_s_Piano_136:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Dire_Strats_138_EC5CD4:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEB16, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEB16, 0x88
+StyleVar_70sPowerRock:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEB9E, 0x40
 ; [nakarest] NakaInst_C_P_On_Stage_145  +0xebde..+0xeca6 (0xec5d9c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "C.P.
 ; [nakarest] On Stage 145"; "Emerson Keys 145"; "Mellow & Shuffle 145"; "Shuffle Organ 144";
@@ -1193,7 +1207,8 @@ NakaInst_Dire_Strats_138_EC5CD4:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_C_P_On_Stage_145:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEBDE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEBDE, 0x66
+StyleVar_EuroPopShuffle:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEC44, 0x62
 ; [nakarest] NakaInst_Pop_Leader_144  +0xeca6..+0xed6e (0xec5e64, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Pop
 ; [nakarest] Leader 144"; "Shuffle Synth 144"; "Sax Production 106"; "EP Of The 80's 106"; ....
@@ -1201,14 +1216,16 @@ NakaInst_C_P_On_Stage_145:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Pop_Leader_144:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xECA6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xECA6, 0x44
+StyleVar_80sLoveSongs:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xECEA, 0x84
 ; [nakarest] NakaInst_Analogue_Ballad_106  +0xed6e..+0xedae (0xec5f2c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Analogue Ballad 106". variation table of 1 style: {u32 title, u16 id} x n + an
 ; [nakarest] all-zero entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a
 ; [nakarest] time from 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Analogue_Ballad_106:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xED6E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xED6E, 0x22
+StyleVar_InTheEighties:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xED90, 0x1E
 ; [nakarest] NakaInst_Italy_Pop_Organ_118  +0xedae..+0xee76 (0xec5f6c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Italy
 ; [nakarest] Pop Organ 118"; "Pop Angel 118"; "80's Pop Sax 118"; "Fade Guitar Pop 118"; ....
@@ -1216,7 +1233,8 @@ NakaInst_Analogue_Ballad_106:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Italy_Pop_Organ_118:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEDAE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEDAE, 0x88
+StyleVar_PopBeat:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEE36, 0x40
 ; [nakarest] NakaInst_Pop_Horns_111  +0xee76..+0xef3e (0xec6034, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Pop
 ; [nakarest] Horns 111"; "Driving Pop 111"; "Pop Guitar FX 111"; "Beat Brass 116"; ....
@@ -1224,7 +1242,8 @@ NakaInst_Italy_Pop_Organ_118:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Pop_Horns_111:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEE76, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEE76, 0x66
+StyleVar_8BeatGroove:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEEDC, 0x62
 ; [nakarest] NakaInst_Sax_Rock_116  +0xef3e..+0xf006 (0xec60fc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Sax
 ; [nakarest] Rock 116"; "Groovy Keys 116"; "Pop Orchestra 78"; "Pop Starts 78"; .... variation
@@ -1232,14 +1251,16 @@ NakaInst_Pop_Horns_111:
 ; [nakarest] StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the MstStyle2_*
 ; [nakarest] count loops.
 NakaInst_Sax_Rock_116:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEF3E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEF3E, 0x44
+StyleVar_80sPopBallads:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEF82, 0x84
 ; [nakarest] NakaInst_Ballad_Warmth_78  +0xf006..+0xf046 (0xec61c4, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Ballad
 ; [nakarest] Warmth 78". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Ballad_Warmth_78:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF006, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF006, 0x22
+StyleVar_RockGig:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF028, 0x1E
 ; [nakarest] NakaInst_Everybody_Rock_131  +0xf046..+0xf10e (0xec6204, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Everybody Rock! 131"; "Rolling Wheels 131"; "88 Rock Keys 131"; "Stage Rock Band
@@ -1247,7 +1268,8 @@ NakaInst_Ballad_Warmth_78:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Everybody_Rock_131:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF046, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF046, 0x88
+StyleVar_HeavyMetal:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF0CE, 0x40
 ; [nakarest] NakaInst_Deep_Hammond_142  +0xf10e..+0xf1d6 (0xec62cc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Deep
 ; [nakarest] Hammond 142"; "Distort It! 142"; "Solid Feedback 142"; "Rock Fanfare 148"; ....
@@ -1255,7 +1277,8 @@ NakaInst_Everybody_Rock_131:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Deep_Hammond_142:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF10E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF10E, 0x66
+StyleVar_HeavyShuffle:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF174, 0x62
 ; [nakarest] NakaInst_Hard_Analogue_148_EC6394  +0xf1d6..+0xf29e (0xec6394, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Hard
 ; [nakarest] Analogue 148"; "Clean Metal 148"; "Ballad Overdrive 74"; "Synth For Rock 74"; ....
@@ -1263,14 +1286,16 @@ NakaInst_Deep_Hammond_142:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Hard_Analogue_148_EC6394:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF1D6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF1D6, 0x44
+StyleVar_PowerBallad:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF21A, 0x84
 ; [nakarest] NakaInst_Heavy_Harmonica_74_EC645C  +0xf29e..+0xf2de (0xec645c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Heavy
 ; [nakarest] Harmonica 74". variation table of 1 style: {u32 title, u16 id} x n + an all-zero
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Heavy_Harmonica_74_EC645C:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF29E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF29E, 0x22
+StyleVar_LAPop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF2C0, 0x1E
 ; [nakarest] NakaInst_Digital_Swing_92  +0xf2de..+0xf3a6 (0xec649c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Digital Swing 92"; "Cool Midi Grand 92"; "L.A. Warmth 92"; "Acoustic Groove 92";
@@ -1278,7 +1303,8 @@ NakaInst_Heavy_Harmonica_74_EC645C:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Digital_Swing_92:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF2DE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF2DE, 0x88
+StyleVar_GentleSwingRock:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF366, 0x40
 ; [nakarest] NakaInst_Blues_Harp_Swing_62  +0xf3a6..+0xf42a (0xec6564, 132 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Blues
 ; [nakarest] Harp Swing 62"; "Like Sunday? 62"; "Mellow Groove 62". variation table of 1 style:
@@ -1286,7 +1312,8 @@ NakaInst_Digital_Swing_92:
 ; [nakarest] StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the MstStyle2_*
 ; [nakarest] count loops.
 NakaInst_Blues_Harp_Swing_62:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF3A6, 0x84
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF3A6, 0x66
+StyleVar_CoolFusion:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF40C, 0x1E
 ; [nakarest] NakaInst_L_A_Strings_92  +0xf42a..+0xf46e (0xec65e8, 68 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "L.A.
 ; [nakarest] Strings 92"; "Fusion Talk 92".
@@ -1299,7 +1326,8 @@ NakaInst_L_A_Strings_92:
 ; [nakarest] StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the MstStyle2_*
 ; [nakarest] count loops.
 NakaInst_Synth_Guitar_Pop_92:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF46E, 0x84
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF46E, 0x44
+StyleVar_JazzPop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF4B2, 0x40
 ; [nakarest] NakaInst_Wide_Hornsection_100  +0xf4f2..+0xf536 (0xec66b0, 68 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Wide
 ; [nakarest] Hornsection 100"; "Cool Guitar Duet 100".
@@ -1311,7 +1339,8 @@ NakaInst_Wide_Hornsection_100:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Mad_Tabs_100:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF536, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF536, 0x22
+StyleVar_PopFusion:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF558, 0x1E
 ; [nakarest] NakaInst_Key_Grooves_102  +0xf576..+0xf5ba (0xec6734, 68 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Key
 ; [nakarest] Grooves 102"; "Cool Pop Guitar 102".
@@ -1324,7 +1353,8 @@ NakaInst_Key_Grooves_102:
 ; [nakarest] StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the MstStyle2_*
 ; [nakarest] count loops.
 NakaInst_George_B_Unison_102:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF5BA, 0x84
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF5BA, 0x44
+StyleVar_EasyGroovin:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF5FE, 0x40
 ; [nakarest] NakaInst_L_A_Synth_85  +0xf63e..+0xf706 (0xec67fc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "L.A.
 ; [nakarest] Synth 85"; "West Coast Sax 85"; "Benson Groove 85"; "Old & New Funk 96"; ....
@@ -1332,7 +1362,8 @@ NakaInst_George_B_Unison_102:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_L_A_Synth_85:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF63E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF63E, 0x66
+StyleVar_ChartFusion:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF6A4, 0x62
 ; [nakarest] NakaInst_Funk_Keys_96  +0xf706..+0xf7ce (0xec68c4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Funk
 ; [nakarest] Keys 96"; "Al J's Synth 96"; "Groovin' Horns 97"; "80's Synth Funk 97"; ....
@@ -1340,14 +1371,16 @@ NakaInst_L_A_Synth_85:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Funk_Keys_96:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF706, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF706, 0x44
+StyleVar_CoolFunk:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF74A, 0x84
 ; [nakarest] NakaInst_Yuppie_Keys_97  +0xf7ce..+0xf80e (0xec698c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Yuppie
 ; [nakarest] Keys 97". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Yuppie_Keys_97:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF7CE, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF7CE, 0x22
+StyleVar_StraightFunk:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xF7F0, 0x1E
 ; [nakarest] NakaInst_Sweeping_Bridge_110  +0xf80e..+0xf896 (0xec69cc, 136 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Sweeping Bridge 110"; "Olympic Groove 110"; "Synth Funk 110"; "Funky Talk 110".
@@ -1556,7 +1589,8 @@ StyleVar_LatinFestival:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Dance_Surround_124_EC74F4:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10336, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10336, 0x66
+StyleVar_JLastHitparade:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1039C, 0x62
 ; [nakarest] NakaInst_Last_Starparade_120  +0x103fe..+0x104c6 (0xec75bc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Last
 ; [nakarest] Starparade! 120"; "Last At First 120"; "The Party Band 111"; "James' Orchestra
@@ -1564,14 +1598,16 @@ NakaInst_Dance_Surround_124_EC74F4:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Last_Starparade_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x103FE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x103FE, 0x44
+StyleVar_LastArrangement:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10442, 0x84
 ; [nakarest] NakaInst_Party_Flautist_111  +0x104c6..+0x10506 (0xec7684, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Party
 ; [nakarest] Flautist 111". variation table of 1 style: {u32 title, u16 id} x n + an all-zero
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Party_Flautist_111:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x104C6, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x104C6, 0x22
+StyleVar_GermanSchlager_2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x104E8, 0x1E
 ; [nakarest] NakaInst_German_HitParade_120  +0x10506..+0x105ce (0xec76c4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "German-HitParade 120"; "Flippers-Guitars 120"; "Ricky K.Pop 120"; "Ibo To Ibiza!
@@ -1579,7 +1615,8 @@ NakaInst_Party_Flautist_111:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_German_HitParade_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10506, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10506, 0x88
+StyleVar_AllNightParty:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1058E, 0x40
 ; [nakarest] NakaInst_Ady_s_PartyOrgan_125_EC778C  +0x105ce..+0x10696 (0xec778c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Ady's
 ; [nakarest] PartyOrgan 125"; "German FolkParty 125"; "Happy Woodpecker 125"; "Fair Sea Organ
@@ -1587,7 +1624,8 @@ NakaInst_German_HitParade_120:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Ady_s_PartyOrgan_125_EC778C:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x105CE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x105CE, 0x66
+StyleVar_PopOrganMarch:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10634, 0x62
 ; [nakarest] NakaInst_Pop_Of_The_Bells_125  +0x10696..+0x1075e (0xec7854, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Pop Of
 ; [nakarest] The Bells 125"; "Piccolo Pop 125"; "Bridge Party 116"; "No Lyrics Needed 116"; ....
@@ -1595,14 +1633,16 @@ NakaInst_Ady_s_PartyOrgan_125_EC778C:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Pop_Of_The_Bells_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10696, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10696, 0x44
+StyleVar_EurovisionHits:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x106DA, 0x84
 ; [nakarest] NakaInst_Puppet_March_116  +0x1075e..+0x1079e (0xec791c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Puppet
 ; [nakarest] March 116". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Puppet_March_116:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1075E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1075E, 0x22
+StyleVar_EuroPartyPop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10780, 0x1E
 ; [nakarest] NakaInst_Party_Space_120  +0x1079e..+0x10866 (0xec795c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Party
 ; [nakarest] Space 120"; "String Pops 120"; "Party Accordion 120"; "Pop Accordion 120"; ....
@@ -1610,7 +1650,8 @@ NakaInst_Puppet_March_116:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Party_Space_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1079E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1079E, 0x88
+StyleVar_GermanOldies:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10826, 0x40
 ; [nakarest] NakaInst_Orgel_Pops_111  +0x10866..+0x1092e (0xec7a24, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Orgel
 ; [nakarest] Pops 111"; "Party Pop Stack 111"; "Synth Party 111"; "50's Section 133"; ....
@@ -1618,7 +1659,8 @@ NakaInst_Party_Space_120:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Orgel_Pops_111:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10866, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10866, 0x66
+StyleVar_GoldenOldies:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x108CC, 0x62
 ; [nakarest] NakaInst_Anka_Rock_133  +0x1092e..+0x109f6 (0xec7aec, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Anka
 ; [nakarest] Rock 133"; "The Old Bars 133"; "Party Partners 115"; "Alto Duet Party 115"; ....
@@ -1626,14 +1668,16 @@ NakaInst_Orgel_Pops_111:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Anka_Rock_133:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1092E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1092E, 0x44
+StyleVar_BeerBarrelPolka:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10972, 0x84
 ; [nakarest] NakaInst_Party_Register_115  +0x109f6..+0x10a36 (0xec7bb4, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Party
 ; [nakarest] Register 115". variation table of 1 style: {u32 title, u16 id} x n + an all-zero
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Party_Register_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x109F6, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x109F6, 0x22
+StyleVar_DoTheHokie:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10A18, 0x1E
 ; [nakarest] NakaInst_Shake_It_All_162  +0x10a36..+0x10afe (0xec7bf4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Shake
 ; [nakarest] It All.... 162"; "Dancing Bellows 162"; "Old Party Dance 162"; "Turn 162"; ....
@@ -1641,7 +1685,8 @@ NakaInst_Party_Register_115:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Shake_It_All_162:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10A36, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10A36, 0x88
+StyleVar_DancingBirdies:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10ABE, 0x40
 ; [nakarest] NakaInst_Chords_Birds_100  +0x10afe..+0x10bc6 (0xec7cbc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Chords
 ; [nakarest] & Birds 100"; "Bird-Voices 100"; "Birdy-Accordion 100"; "London's Bigbone 134";
@@ -1649,7 +1694,8 @@ NakaInst_Shake_It_All_162:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Chords_Birds_100:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10AFE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10AFE, 0x66
+StyleVar_PubSingalong:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10B64, 0x62
 ; [nakarest] NakaInst_Banjo_Sing_Song_134  +0x10bc6..+0x10c8e (0xec7d84, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Banjo
 ; [nakarest] Sing Song 134"; "Cockney Clarinet 134"; "Dance Craze Sax 132"; "88 In Line! 132";
@@ -1657,14 +1703,16 @@ NakaInst_Chords_Birds_100:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Banjo_Sing_Song_134:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10BC6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10BC6, 0x44
+StyleVar_LineDanceCraze:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10C0A, 0x84
 ; [nakarest] NakaInst_Fiddle_Dance_132  +0x10c8e..+0x10cce (0xec7e4c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Fiddle
 ; [nakarest] Dance 132". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Fiddle_Dance_132:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10C8E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10C8E, 0x22
+StyleVar_BarnDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10CB0, 0x1E
 ; [nakarest] NakaInst_Symphony_Hoedown_206  +0x10cce..+0x10d96 (0xec7e8c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Symphony Hoedown 206"; "Hoedown Frets 206"; "Oklahoma Dance 206"; "Country Dance
@@ -1672,7 +1720,8 @@ NakaInst_Fiddle_Dance_132:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Symphony_Hoedown_206:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10CCE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10CCE, 0x88
+StyleVar_HillbillyJoe:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10D56, 0x40
 ; [nakarest] NakaInst_Techno_Ranger_138  +0x10d96..+0x10e5e (0xec7f54, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Techno
 ; [nakarest] Ranger 138"; "Dance Cowboy 138"; "Banjo Dance 138"; "Oktober Party 150"; ....
@@ -1680,7 +1729,8 @@ NakaInst_Symphony_Hoedown_206:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Techno_Ranger_138:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10D96, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10D96, 0x66
+StyleVar_BavarianParty:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10DFC, 0x62
 ; [nakarest] NakaInst_The_Zillertaler_150  +0x10e5e..+0x10f26 (0xec801c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "The
 ; [nakarest] Zillertaler 150"; "Auf Gehts! 150"; "Bavaria To Tyrol 195"; "Munich Brass 195";
@@ -1688,14 +1738,16 @@ NakaInst_Techno_Ranger_138:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_The_Zillertaler_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10E5E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10E5E, 0x44
+StyleVar_MunichFestival:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10EA2, 0x84
 ; [nakarest] NakaInst_Sepp_s_Clarinet_195  +0x10f26..+0x10f66 (0xec80e4, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Sepp's
 ; [nakarest] Clarinet 195". variation table of 1 style: {u32 title, u16 id} x n + an all-zero
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Sepp_s_Clarinet_195:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10F26, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10F26, 0x22
+StyleVar_MerryChristmas:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x10F48, 0x1E
 ; [nakarest] NakaInst_Miseltoe_Melody_75  +0x10f66..+0x10fee (0xec8124, 136 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Miseltoe Melody 75"; "Carol Singers 75"; "Yuletide Strings 75"; "Santa's Helpers
@@ -1844,7 +1896,8 @@ StyleVar_BluesAlley:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x11710, 0x1E
 SoundName_MournfulTenor:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1172E, 0x88
 StyleSound_BluesAlley_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x117B6, 0x40
-SoundName_HymnBand:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x117F6, 0xC8
+SoundName_HymnBand:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x117F6, 0x66
+StyleVar_LiftYourSoul:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1185C, 0x62
 SoundName_PreachTheWord:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x118BE, 0x44
 ; [nakarest] StyleVar_DayOfRest  +0x11902..+0x11986 (0xec8ac0, 132 B)
 ; [nakarest] variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry (the record
@@ -2554,7 +2607,8 @@ NakaInst_Tango_Marcato_120:
 ; [nakarest] 130"; "Italian Tango 130"; ....
 StyleVar_TangoDAmour:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13E9E, 0x40
-SoundName_LushTango:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13EDE, 0xC8
+SoundName_LushTango:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13EDE, 0x66
+StyleVar_TangoPianist:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13F44, 0x62
 SoundName_AstorsTango:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13FA6, 0x44
 ; [nakarest] StyleVar_LastDanceWaltz  +0x13fea..+0x1406e (0xecb1a8, 132 B)
 ; [nakarest] variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry (the record
@@ -2579,7 +2633,8 @@ StyleVar_QuickWaltz:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14090, 0x1E
 SoundName_SymphonicWaltz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x140AE, 0x88
 StyleSound_QuickWaltz_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14136, 0x40
-SoundName_NotStrauss:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x14176, 0xC8
+SoundName_NotStrauss:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x14176, 0x66
+StyleVar_WalzerTime:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x141DC, 0x62
 SoundName_BavarianFlutes:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1423E, 0x44
 ; [nakarest] StyleVar_PartyVienna  +0x14282..+0x14306 (0xecb440, 132 B)
 ; [nakarest] variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry (the record
@@ -2595,7 +2650,8 @@ StyleVar_PartyVienna:
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Ball_Gown_Waltz_171:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14306, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14306, 0x22
+StyleVar_StadiumEvents:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14328, 0x1E
 ; [nakarest] NakaInst_Full_Brass_Band_115_ECB504  +0x14346..+0x1440e (0xecb504, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Full
 ; [nakarest] Brass Band 115"; "Marching Sax 115"; "Highschool Band 115"; "Fife & Drums 115";
@@ -2603,7 +2659,8 @@ NakaInst_Ball_Gown_Waltz_171:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Full_Brass_Band_115_ECB504:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14346, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14346, 0x88
+StyleVar_SousaMarches:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x143CE, 0x40
 ; [nakarest] NakaInst_Alto_Marchpast_115  +0x1440e..+0x144d6 (0xecb5cc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Alto
 ; [nakarest] Marchpast 115"; "By The Left 115"; "Liberty March 115"; "Festive March 109"; ....
@@ -2611,7 +2668,8 @@ NakaInst_Full_Brass_Band_115_ECB504:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Alto_Marchpast_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1440E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1440E, 0x66
+StyleVar_GermanTradition:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14474, 0x62
 ; [nakarest] NakaInst_OktoberFest_109  +0x144d6..+0x1459e (0xecb694, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "OktoberFest 109"; "Munich Horns 109"; "Moik's Marchshow 120"; "Ernst & Friends
@@ -2619,14 +2677,16 @@ NakaInst_Alto_Marchpast_115:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_OktoberFest_109:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x144D6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x144D6, 0x44
+StyleVar_Musikantenstadl:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1451A, 0x84
 ; [nakarest] NakaInst_At_The_Eger_120_ECB75C  +0x1459e..+0x145de (0xecb75c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "At The
 ; [nakarest] Eger 120". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_At_The_Eger_120_ECB75C:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1459E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1459E, 0x22
+StyleVar_StandardPolka:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x145C0, 0x1E
 ; [nakarest] NakaInst_Marching_Polka_124  +0x145de..+0x146a6 (0xecb79c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Marching Polka 124"; "Lederhosen Dance 124"; "Folk Polka 124"; "Polka Partners
@@ -2634,7 +2694,8 @@ NakaInst_At_The_Eger_120_ECB75C:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Marching_Polka_124:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x145DE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x145DE, 0x88
+StyleVar_ModernPolka:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14666, 0x40
 ; [nakarest] NakaInst_Wedding_Party_135  +0x146a6..+0x1476e (0xecb864, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Wedding Party 135"; "Bellow Shake Hit 135"; "Alpine Accordion 135"; "Harmonic
@@ -2642,7 +2703,8 @@ NakaInst_Marching_Polka_124:
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Wedding_Party_135:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x146A6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x146A6, 0x66
+StyleVar_GermanPolka:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1470C, 0x62
 ; [nakarest] NakaInst_Alpine_Combo_125_ECB92C  +0x1476e..+0x14836 (0xecb92c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Alpine
 ; [nakarest] Combo 125"; "German Clarinet 125"; "Eire Squeezebox 120"; "Chieftain's Jig 120";
@@ -2650,14 +2712,16 @@ NakaInst_Wedding_Party_135:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Alpine_Combo_125_ECB92C:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1476E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1476E, 0x44
+StyleVar_CeilidhBand:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x147B2, 0x84
 ; [nakarest] NakaInst_Emerald_Flute_120  +0x14836..+0x14876 (0xecb9f4, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Emerald
 ; [nakarest] Flute 120". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Emerald_Flute_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14836, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14836, 0x22
+StyleVar_HighlandDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14858, 0x1E
 ; [nakarest] NakaInst_Scottish_Band_172  +0x14876..+0x1493e (0xecba34, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Scottish Band 172"; "Bonnie Whistles 172"; "Caber Dance! 172"; "Jimmy's Reel 172";
@@ -2665,7 +2729,8 @@ NakaInst_Emerald_Flute_120:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Scottish_Band_172:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14876, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14876, 0x88
+StyleVar_34ConcertTime:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x148FE, 0x40
 ; [nakarest] NakaInst_Waltzing_Concert_169  +0x1493e..+0x14a06 (0xecbafc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Waltzing Concert 169"; "Strauss & Co 169"; "Vienna Woods 169"; "Ski Lodge Waltz
@@ -2673,7 +2738,8 @@ NakaInst_Scottish_Band_172:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Waltzing_Concert_169:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1493E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1493E, 0x66
+StyleVar_MunichWaltz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x149A4, 0x62
 ; [nakarest] NakaInst_Matterhorn_Waltz_197  +0x14a06..+0x14ace (0xecbbc4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Matterhorn Waltz 197"; "Alpine Guitar 197"; "Dance The Mazurka 150"; "Folk Waltz
@@ -2681,14 +2747,16 @@ NakaInst_Waltzing_Concert_169:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Matterhorn_Waltz_197:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14A06, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14A06, 0x44
+StyleVar_EastEuroWaltz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14A4A, 0x84
 ; [nakarest] NakaInst_Mazurka_Clarinet_150  +0x14ace..+0x14b0e (0xecbc8c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Mazurka
 ; [nakarest] Clarinet 150". variation table of 1 style: {u32 title, u16 id} x n + an all-zero
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Mazurka_Clarinet_150:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14ACE, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14ACE, 0x22
+StyleVar_GermanWaltz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14AF0, 0x1E
 ; [nakarest] NakaInst_Tiroler_Harp_190  +0x14b0e..+0x14bd6 (0xecbccc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Tiroler Harp 190"; "Bandoneon Waltz 190"; "Waltzer Band 190"; "Klarinette Waltz
@@ -2696,7 +2764,8 @@ NakaInst_Mazurka_Clarinet_150:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Tiroler_Harp_190:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14B0E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14B0E, 0x88
+StyleVar_IslandRomance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14B96, 0x40
 ; [nakarest] NakaInst_Waikiki_Voices_101  +0x14bd6..+0x14c9e (0xecbd94, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Waikiki Voices 101"; "Island Delight 101"; "Island Flute 101"; "Honolulu Strings
@@ -2704,7 +2773,8 @@ NakaInst_Tiroler_Harp_190:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Waikiki_Voices_101:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14BD6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14BD6, 0x66
+StyleVar_HawaiianDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14C3C, 0x62
 ; [nakarest] NakaInst_Hula_Dance_130  +0x14c9e..+0x14d66 (0xecbe5c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Hula
 ; [nakarest] Dance 130"; "Island Whistle 130"; "Entertaining Rag 130"; "Play The Sting! 130";
@@ -2712,14 +2782,16 @@ NakaInst_Waikiki_Voices_101:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Hula_Dance_130:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14C9E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14C9E, 0x44
+StyleVar_OldRagtime:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14CE2, 0x84
 ; [nakarest] NakaInst_Syncopated_Wood_130  +0x14d66..+0x14da6 (0xecbf24, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Syncopated Wood 130". variation table of 1 style: {u32 title, u16 id} x n + an
 ; [nakarest] all-zero entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a
 ; [nakarest] time from 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Syncopated_Wood_130:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14D66, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14D66, 0x22
+StyleVar_RagtimeBand:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14D88, 0x1E
 ; [nakarest] NakaInst_Maple_Leaf_Piano_180  +0x14da6..+0x14e6e (0xecbf64, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Maple
 ; [nakarest] Leaf Piano 180"; "Ragtime Duet 180"; "Ragedy Sax 180"; "Banjo Ragtime 180"; ....
@@ -2727,7 +2799,8 @@ NakaInst_Syncopated_Wood_130:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Maple_Leaf_Piano_180:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14DA6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14DA6, 0x88
+StyleVar_NewOrleansJazz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14E2E, 0x40
 ; [nakarest] NakaInst_Barber_Shop_Jazz_196_ECC02C  +0x14e6e..+0x14f36 (0xecc02c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Barber
 ; [nakarest] Shop Jazz 196"; "Bourbon Street 196"; "Trad Jazz Band 196"; "Alexander's Band 185";
@@ -2735,7 +2808,8 @@ NakaInst_Maple_Leaf_Piano_180:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Barber_Shop_Jazz_196_ECC02C:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14E6E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14E6E, 0x66
+StyleVar_SoundsOfDixie:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14ED4, 0x62
 ; [nakarest] NakaInst_Liquorice_Dixie_185  +0x14f36..+0x14ffe (0xecc0f4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Liquorice Dixie 185"; "Dixie Bone 185"; "Bouzouki Masters 120"; "Zorba's Band
@@ -2743,14 +2817,16 @@ NakaInst_Barber_Shop_Jazz_196_ECC02C:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Liquorice_Dixie_185:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14F36, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14F36, 0x44
+StyleVar_GreekDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14F7A, 0x84
 ; [nakarest] NakaInst_Never_On_A_120  +0x14ffe..+0x1503e (0xecc1bc, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Never
 ; [nakarest] On A? 120". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Never_On_A_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14FFE, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14FFE, 0x22
+StyleVar_MoscowAtNight:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15020, 0x1E
 ; [nakarest] NakaInst_Cossack_Strings_141  +0x1503e..+0x15106 (0xecc1fc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Cossack Strings 141"; "Baltic Reeds 141"; "Moscow Mandolins 141"; "Vladivar
@@ -2758,7 +2834,8 @@ NakaInst_Never_On_A_120:
 ; [nakarest] all-zero entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a
 ; [nakarest] time from 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Cossack_Strings_141:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1503E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1503E, 0x88
+StyleVar_KingsOfGypsy:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x150C6, 0x40
 ; [nakarest] NakaInst_Hungarian_Duet_115  +0x15106..+0x151ce (0xecc2c4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Hungarian Duet 115"; "Gypsy Melody 115"; "Goulash Dance 115"; "Great Accordions
@@ -2766,7 +2843,8 @@ NakaInst_Cossack_Strings_141:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Hungarian_Duet_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15106, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15106, 0x66
+StyleVar_SpanishFolklore:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1516C, 0x62
 ; [nakarest] NakaInst_Spider_Dance_128  +0x151ce..+0x15296 (0xecc38c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Spider
 ; [nakarest] Dance 128"; "Ole Guitar 128"; "Tex Mex Mix 112"; "Cucaracha Duo 112"; ....
@@ -2774,14 +2852,16 @@ NakaInst_Hungarian_Duet_115:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Spider_Dance_128:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x151CE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x151CE, 0x44
+StyleVar_MariachiBand:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15212, 0x84
 ; [nakarest] NakaInst_Jalapeno_Bellows_112  +0x15296..+0x152d6 (0xecc454, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Jalapeno Bellows 112". variation table of 1 style: {u32 title, u16 id} x n + an
 ; [nakarest] all-zero entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a
 ; [nakarest] time from 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Jalapeno_Bellows_112:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15296, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15296, 0x22
+StyleVar_70sFolkMusic:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x152B8, 0x1E
 ; [nakarest] NakaInst_Solid_Distortion_122  +0x152d6..+0x1535e (0xecc494, 136 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Solid
 ; [nakarest] Distortion 122"; "Penny Folk Song 122"; "Steeleye Guitar 122"; "Folk Fiddles 122".
@@ -2995,7 +3075,8 @@ StyleVar_CountryHits:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Hard_Country_160:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15DFE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15DFE, 0x66
+StyleVar_RomanticBossa:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15E64, 0x62
 ; [nakarest] NakaInst_Ham_Bossa_66  +0x15ec6..+0x15f8e (0xecd084, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Ham &
 ; [nakarest] Bossa 66"; "Siesta Guitars 66"; "Bossa Society 68"; "Getz Bossa 68"; .... variation
@@ -3003,14 +3084,16 @@ NakaInst_Hard_Country_160:
 ; [nakarest] StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the MstStyle2_*
 ; [nakarest] count loops.
 NakaInst_Ham_Bossa_66:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15EC6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15EC6, 0x44
+StyleVar_BossaPianist:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15F0A, 0x84
 ; [nakarest] NakaInst_Latin_Tines_68  +0x15f8e..+0x15fce (0xecd14c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Latin
 ; [nakarest] Tines 68". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Latin_Tines_68:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15F8E, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15F8E, 0x22
+StyleVar_MellowBossa:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15FB0, 0x1E
 ; [nakarest] NakaInst_Modern_Bossa_74  +0x15fce..+0x16096 (0xecd18c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Modern
 ; [nakarest] Bossa 74"; "Bossa Duet 74"; "Meditating Sax 74"; "Ipenema Flute 74"; .... variation
@@ -3018,7 +3101,8 @@ NakaInst_Latin_Tines_68:
 ; [nakarest] StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the MstStyle2_*
 ; [nakarest] count loops.
 NakaInst_Modern_Bossa_74:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15FCE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x15FCE, 0x88
+StyleVar_RhumbaEspana:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16056, 0x40
 ; [nakarest] NakaInst_Julio_s_Romance_119  +0x16096..+0x1615e (0xecd254, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Julio's Romance 119"; "Carmen's Octaves 119"; "Mellow Rhumba 119"; "Elegant Keys
@@ -3026,7 +3110,8 @@ NakaInst_Modern_Bossa_74:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Julio_s_Romance_119:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16096, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16096, 0x66
+StyleVar_CocktailPianist:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x160FC, 0x62
 ; [nakarest] NakaInst_Besame_Strings_120_ECD31C  +0x1615e..+0x16226 (0xecd31c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Besame
 ; [nakarest] Strings 120"; "Mediterranean! 120"; "Beguine Register 117"; "Besame Unison 117";
@@ -3034,14 +3119,16 @@ NakaInst_Julio_s_Romance_119:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Besame_Strings_120_ECD31C:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1615E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1615E, 0x44
+StyleVar_RomanticBeguine:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x161A2, 0x84
 ; [nakarest] NakaInst_Amor_Reed_117_ECD3E4  +0x16226..+0x16266 (0xecd3e4, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Amor
 ; [nakarest] Reed 117". variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Amor_Reed_117_ECD3E4:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16226, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16226, 0x22
+StyleVar_RomanticDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16248, 0x1E
 ; [nakarest] NakaInst_Bolero_Orchestra_120_ECD424  +0x16266..+0x1632e (0xecd424, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Bolero
 ; [nakarest] Orchestra 120"; "Latin Love Song 120"; "Bolero Keys 120"; "Not Ravel's..... 120";
@@ -3049,7 +3136,8 @@ NakaInst_Amor_Reed_117_ECD3E4:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Bolero_Orchestra_120_ECD424:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16266, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16266, 0x88
+StyleVar_LatinLoungeBar:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x162EE, 0x40
 ; [nakarest] NakaInst_Holiday_Rhumba_115  +0x1632e..+0x163f6 (0xecd4ec, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Holiday Rhumba 115"; "Fantasy Rhumba 115"; "Spanish Romance 115"; "Puente's
@@ -3057,7 +3145,8 @@ NakaInst_Bolero_Orchestra_120_ECD424:
 ; [nakarest] all-zero entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a
 ; [nakarest] time from 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Holiday_Rhumba_115:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1632E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1632E, 0x66
+StyleVar_TitosChaCha:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16394, 0x62
 ; [nakarest] NakaInst_Pepito_For_Pepe_130  +0x163f6..+0x164be (0xecd5b4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Pepito
 ; [nakarest] For Pepe 130"; "Two Cups Of Cha! 130"; "Last Latin Brass 129"; "Ambros Saxes 129";
@@ -3065,14 +3154,16 @@ NakaInst_Holiday_Rhumba_115:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_Pepito_For_Pepe_130:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x163F6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x163F6, 0x44
+StyleVar_MamboBand:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1643A, 0x84
 ; [nakarest] NakaInst_Mambo_Bravisimo_129  +0x164be..+0x164fe (0xecd67c, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Mambo
 ; [nakarest] Bravisimo 129". variation table of 1 style: {u32 title, u16 id} x n + an all-zero
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Mambo_Bravisimo_129:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x164BE, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x164BE, 0x22
+StyleVar_NewMamboMood:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x164E0, 0x1E
 ; [nakarest] NakaInst_Modern_Ballroom_134  +0x164fe..+0x165c6 (0xecd6bc, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Modern
 ; [nakarest] Ballroom 134"; "Mambo Mania! 134"; "Do The Mambo! 134"; "Sax Mamboist 134"; ....
@@ -3080,7 +3171,8 @@ NakaInst_Mambo_Bravisimo_129:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Modern_Ballroom_134:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x164FE, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x164FE, 0x88
+StyleVar_ItsMamboTime:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16586, 0x40
 ; [nakarest] NakaInst_Saxy_Mambo_132  +0x165c6..+0x1668e (0xecd784, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Saxy
 ; [nakarest] Mambo 132"; "Mambo Jambo! 132"; "Seville Octaves 132"; "Fall For Cumbia 90"; ....
@@ -3088,7 +3180,8 @@ NakaInst_Modern_Ballroom_134:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Saxy_Mambo_132:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x165C6, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x165C6, 0x66
+StyleVar_CumbiaBand:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1662C, 0x62
 ; [nakarest] NakaInst_Cumbia_Sol_90  +0x1668e..+0x16756 (0xecd84c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Cumbia
 ; [nakarest] Sol 90"; "Sunshine Alto 90"; "Jamaican Voices 83"; "Island Duet 83"; .... variation
@@ -3096,14 +3189,16 @@ NakaInst_Saxy_Mambo_132:
 ; [nakarest] StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the MstStyle2_*
 ; [nakarest] count loops.
 NakaInst_Cumbia_Sol_90:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1668E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1668E, 0x44
+StyleVar_HolidayMood:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x166D2, 0x84
 ; [nakarest] NakaInst_Caribbean_Flute_83  +0x16756..+0x16796 (0xecd914, 64 B)
 ; [nakarest] variation title (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Caribbean Flute 83". variation table of 1 style: {u32 title, u16 id} x n + an
 ; [nakarest] all-zero entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a
 ; [nakarest] time from 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Caribbean_Flute_83:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16756, 0x40
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16756, 0x22
+StyleVar_SambaParade:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16778, 0x1E
 ; [nakarest] NakaInst_Brazil_Fanfare_114  +0x16796..+0x1685e (0xecd954, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "Brazil
 ; [nakarest] Fanfare 114"; "Samba Soloist 114"; "Festival Horns 114"; "Rio De Samba 114"; ....
@@ -3111,7 +3206,8 @@ NakaInst_Caribbean_Flute_83:
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
 ; [nakarest] MstStyle2_* count loops.
 NakaInst_Brazil_Fanfare_114:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16796, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16796, 0x88
+StyleVar_LatinFestival_2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1681E, 0x40
 ; [nakarest] NakaInst_Sunshine_Sax_120  +0x1685e..+0x16926 (0xecda1c, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Sunshine Sax 120"; "Merengue Party 120"; "Time To Merengue 120"; "Tropical Bridge
@@ -3119,7 +3215,8 @@ NakaInst_Brazil_Fanfare_114:
 ; [nakarest] (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6
 ; [nakarest] by the MstStyle2_* count loops.
 NakaInst_Sunshine_Sax_120:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1685E, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1685E, 0x66
+StyleVar_ModernRio:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x168C4, 0x62
 ; [nakarest] NakaInst_12_String_Samba_108  +0x16926..+0x169ee (0xecdae4, 200 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout): "12
 ; [nakarest] String Samba 108"; "Deep in Brazil 108"; "Toreador Band 125"; "Gitarero-Ole!! 125";
@@ -3127,7 +3224,8 @@ NakaInst_Sunshine_Sax_120:
 ; [nakarest] record shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by
 ; [nakarest] the MstStyle2_* count loops.
 NakaInst_12_String_Samba_108:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16926, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16926, 0x44
+StyleVar_CastanetDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1696A, 0x84
 ; [nakarest] NakaInst_Torero_s_Trumpet_125  +0x169ee..+0x17132 (0xecdbac, 1860 B)
 ; [nakarest] variation titles (32 characters + NUL + 0xff, the StyleSong_Titles layout):
 ; [nakarest] "Torero's Trumpet 125"; "Beach Party Song 152"; "Coconut Frets 152"; "Calypso Steel
@@ -3135,17 +3233,28 @@ NakaInst_12_String_Samba_108:
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Torero_s_Trumpet_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x169EE, 0x40
-SoundName_BeachPartySong:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16A2E, 0xC8
-SoundName_CubanReeds:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16AF6, 0xC8
-SoundName_LatinoPiccolo:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16BBE, 0xC8
-SoundName_JamaicanBars:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16C86, 0x40
-SoundName_SambaUnion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16CC6, 0xC8
-SoundName_NewOrganSamba:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16D8E, 0xC8
-SoundName_NiceKeroncong:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16E56, 0xC8
-SoundName_EasyDangdut:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16F1E, 0x40
-SoundName_PadangBeat:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16F5E, 0xC8
-SoundName_RastaVoice:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17026, 0xC8
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x169EE, 0x22
+StyleVar_CaribbeanNights:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16A10, 0x1E
+SoundName_BeachPartySong:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16A2E, 0x88
+StyleVar_SalsaPicante:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16AB6, 0x40
+SoundName_CubanReeds:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16AF6, 0x66
+StyleVar_SambaAmor:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16B5C, 0x62
+SoundName_LatinoPiccolo:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16BBE, 0x44
+StyleVar_ModernCaribbean:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16C02, 0x84
+SoundName_JamaicanBars:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16C86, 0x22
+StyleVar_ModernSamba:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16CA8, 0x1E
+SoundName_SambaUnion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16CC6, 0x88
+StyleVar_SambaFusion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16D4E, 0x40
+SoundName_NewOrganSamba:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16D8E, 0x66
+StyleVar_IndonesianFolk:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16DF4, 0x62
+SoundName_NiceKeroncong:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16E56, 0x44
+StyleVar_Dangdut:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16E9A, 0x84
+SoundName_EasyDangdut:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16F1E, 0x22
+StyleVar_Talempong:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16F40, 0x1E
+SoundName_PadangBeat:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16F5E, 0x88
+StyleVar_SynthReggae:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16FE6, 0x40
+SoundName_RastaVoice:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17026, 0x66
+StyleVar_JamaicanSwing:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1708C, 0x62
 SoundName_MarleysDrums:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x170EE, 0x44
 ; [nakarest] StyleGroup_ModernDance_Table  +0x17132..+0x17232 (0xece2f0, 256 B)
 ; [nakarest] group table of the MstStyle browser, group 0: {u32 style name, u32 variation table}
@@ -3285,14 +3394,47 @@ NakaInst_German_Schlager:
 ; [nakarest] 0x0340d6. style name strings (16 characters): "Straight Funk", "Cool Funk", "Chart
 ; [nakarest] Fusion", "Easy Groovin'", "Pop Fusion", "Jazz Pop", ....
 StyleGroup_RockPop_PairTable:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17460, 0x202
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17460, 0x110
+NakaInst_Straight_Funk:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17570, 0x12
+NakaInst_Cool_Funk:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17582, 0x12
+NakaInst_Chart_Fusion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17594, 0x12
+NakaInst_Easy_Groovin:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x175A6, 0x12
+NakaInst_Pop_Fusion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x175B8, 0x12
+NakaInst_Jazz_Pop:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x175CA, 0x12
+NakaInst_Cool_Fusion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x175DC, 0x12
+NakaInst_Gentle_SwingRock:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x175EE, 0x12
+NakaInst_L_A_Pop:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17600, 0x12
+NakaInst_Power_Ballad:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17612, 0x12
+NakaInst_Heavy_Shuffle:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17624, 0x12
+NakaInst_Heavy_Metal:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17636, 0x12
+NakaInst_Rock_Gig:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17648, 0x12
+NakaInst_80s_Pop_Ballads:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1765A, 0x8
 ; [nakarest] NakaInst_Ballads  +0x17662..+0x177c2 (0xece820, 352 B)
 ; [nakarest] Continues style name string (16 characters): "80's Pop Ballads" (starts 0xece818,
 ; [nakarest] 10 of its 18 bytes are here or later). style name strings (16 characters): "8 Beat
 ; [nakarest] Groove", "Pop Beat", "In The Eighties", "80's Love Songs", "Euro Pop Shuffle",
 ; [nakarest] "70's Power Rock", ....
 NakaInst_Ballads:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17662, 0x160
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17662, 0xA
+NakaInst_8_Beat_Groove:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1766C, 0x12
+NakaInst_Pop_Beat:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1767E, 0x12
+NakaInst_In_The_Eighties:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17690, 0x12
+NakaInst_80s_Love_Songs:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x176A2, 0x12
+NakaInst_Euro_Pop_Shuffle:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x176B4, 0x12
+NakaInst_70s_Power_Rock:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x176C6, 0x12
+NakaInst_70s_Hits:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x176D8, 0x12
+NakaInst_Glamrock_Piano:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x176EA, 0x12
+NakaInst_70s_Fox_Dance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x176FC, 0x12
+NakaInst_California_Pop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1770E, 0x12
+NakaInst_60s_Rock:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17720, 0x12
+NakaInst_Liverpool_Beat:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17732, 0x12
+NakaInst_Swinging_Sixties:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17744, 0x12
+NakaInst_Slow_Dance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17756, 0x12
+NakaInst_Boogie_Time:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17768, 0x12
+NakaInst_Rockabilly_Band:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1777A, 0x12
+NakaInst_Its_Boogie_Time:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1778C, 0x12
+NakaInst_Piano_R_And_Roll:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1779E, 0x12
+NakaInst_Fifties_Rock:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x177B0, 0x12
 ; [nakarest] StyleGroup_PopBallad_Table  +0x177c2..+0x17852 (0xece980, 144 B)
 ; [nakarest] group table of the MstStyle browser, group 2: {u32 style name, u32 variation table}
 ; [nakarest] x n + an all-zero entry; MstStyle*_CountEntries walk it 8 bytes at a time until +0
@@ -3376,7 +3518,26 @@ NakaInst_British_DancePop:
 ; [nakarest] Festival", "Bavarian Party", "Hillbilly Joe", "Barn Dance", "Line Dance Craze",
 ; [nakarest] ....
 StyleGroup_PartyMusic_PairTable:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17984, 0x1F6
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17984, 0xA0
+NakaInst_Merry_Christmas:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A24, 0x12
+NakaInst_Munich_Festival:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A36, 0x12
+NakaInst_Bavarian_Party:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A48, 0x12
+NakaInst_Hillbilly_Joe:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A5A, 0x12
+NakaInst_Barn_Dance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A6C, 0x12
+NakaInst_Line_Dance_Craze:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A7E, 0x12
+NakaInst_Pub_Singalong:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17A90, 0x12
+NakaInst_Dancing_Birdies:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17AA2, 0x12
+NakaInst_Do_The_Hokie:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17AB4, 0x12
+NakaInst_BeerBarrel_Polka:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17AC6, 0x12
+NakaInst_Golden_Oldies:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17AD8, 0x12
+NakaInst_German_Oldies:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17AEA, 0x12
+NakaInst_Euro_Party_Pop:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17AFC, 0x12
+NakaInst_Eurovision_Hits:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17B0E, 0x12
+NakaInst_Pop_Organ_March:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17B20, 0x12
+NakaInst_All_Night_Party:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17B32, 0x12
+NakaInst_German_Schlager_2:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17B44, 0x12
+NakaInst_Last_Arrangement:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17B56, 0x12
+NakaInst_J_Last_Hitparade:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x17B68, 0x12
 ; [nakarest] StyleGroup_Swing_Table  +0x17b7a..+0x17c12 (0xeced38, 152 B)
 ; [nakarest] group table of the MstStyle browser, group 4: {u32 style name, u32 variation table}
 ; [nakarest] x n + an all-zero entry; MstStyle*_CountEntries walk it 8 bytes at a time until +0
@@ -3592,7 +3753,8 @@ NakaInst_All_Aboard:
 ; [nakarest] NakaInst_Steady_Swingband  +0x18046..+0x1806a (0xecf204, 36 B)
 ; [nakarest] style name strings (16 characters): "Steady Swingband", "Up Tempo Bigband".
 NakaInst_Steady_Swingband:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18046, 0x24
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18046, 0x12
+NakaInst_Up_Tempo_Bigband:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18058, 0x12
 ; [nakarest] StyleGroup_JazzCombo_Table  +0x1806a..+0x1816a (0xecf228, 256 B)
 ; [nakarest] group table of the MstStyle browser, group 6: {u32 style name, u32 variation table}
 ; [nakarest] x n + an all-zero entry; MstStyle*_CountEntries walk it 8 bytes at a time until +0
@@ -3731,7 +3893,32 @@ NakaInst_Musical_Overture:
 ; [nakarest] 0x0340d6. style name strings (16 characters): "70's Folk Music", "Mariachi band",
 ; [nakarest] "Spanish Folklore", "Kings of Gypsy", "Moscow At Night", "Greek Dance", ....
 StyleGroup_TradFolk_PairTable:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18398, 0x292
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18398, 0xD0
+NakaInst_70s_Folk_Music:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18468, 0x12
+NakaInst_Mariachi_band:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1847A, 0x12
+NakaInst_Spanish_Folklore:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1848C, 0x12
+NakaInst_Kings_of_Gypsy:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1849E, 0x12
+NakaInst_Moscow_At_Night:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x184B0, 0x12
+NakaInst_Greek_Dance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x184C2, 0x12
+NakaInst_Sounds_of_Dixie:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x184D4, 0x12
+NakaInst_New_Orleans_Jazz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x184E6, 0x12
+NakaInst_Ragtime_Band:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x184F8, 0x12
+NakaInst_Old_Ragtime:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1850A, 0x12
+NakaInst_Hawaiian_Dance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1851C, 0x12
+NakaInst_Island_Romance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1852E, 0x12
+NakaInst_German_Waltz:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18540, 0x12
+NakaInst_East_Euro_Waltz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18552, 0x12
+NakaInst_Munich_Waltz:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18564, 0x12
+NakaInst_3_4_Concert_Time:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18576, 0x12
+NakaInst_Highland_Dance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18588, 0x12
+NakaInst_Ceilidh_Band:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1859A, 0x12
+NakaInst_German_Polka:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x185AC, 0x12
+NakaInst_Modern_Polka:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x185BE, 0x12
+NakaInst_Standard_Polka:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x185D0, 0x12
+NakaInst_Musikantenstadl:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x185E2, 0x12
+NakaInst_German_Tradition:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x185F4, 0x12
+NakaInst_Sousa_Marches:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18606, 0x12
+NakaInst_Stadium_Events:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18618, 0x12
 ; [nakarest] StyleGroup_WorldMusic_Table  +0x1862a..+0x186ba (0xecf7e8, 144 B)
 ; [nakarest] group table of the MstStyle browser, group 8: {u32 style name, u32 variation table}
 ; [nakarest] x n + an all-zero entry; MstStyle*_CountEntries walk it 8 bytes at a time until +0
@@ -3814,65 +4001,93 @@ NakaInst_Bluegrass_Time:
 ; [nakarest] 0x0340d6.
 StyleGroup_LatinWorld_PairTable:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x187EC, 0x14
-	.long 0x00ECD16E
-	.long 0x00ECFC5C
-	.long 0x00ECD214
-	.long 0x00ECFC4A
-	.long 0x00ECD2BA
-	.long 0x00ECFC38
-	.long 0x00ECD360
-	.long 0x00ECFC26
-	.long 0x00ECD406
-	.long 0x00ECFC14
-	.long 0x00ECD4AC
-	.long 0x00ECFC02
-	.long 0x00ECD552
-	.long 0x00ECFBF0
-	.long 0x00ECD5F8
-	.long 0x00ECFBDE
-	.long 0x00ECD69E
-	.long 0x00ECFBCC
-	.long 0x00ECD744
-	.long 0x00ECFBBA
-	.long 0x00ECD7EA
-	.long 0x00ECFBA8
-	.long 0x00ECD890
-	.long 0x00ECFB96
-	.long 0x00ECD936
-	.long 0x00ECFB84
-	.long 0x00ECD9DC
-	.long 0x00ECFB72
-	.long 0x00ECDA82
-	.long 0x00ECFB60
-	.long 0x00ECDB28
-	.long 0x00ECFB4E
-	.long 0x00ECDBCE
-	.long 0x00ECFB3C
-	.long 0x00ECDC74
-	.long 0x00ECFB2A
-	.long 0x00ECDD1A
-	.long 0x00ECFB18
-	.long 0x00ECDDC0
-	.long 0x00ECFB06
-	.long 0x00ECDE66
-	.long 0x00ECFAF4
-	.long 0x00ECDF0C
-	.long 0x00ECFAE2
-	.long 0x00ECDFB2
-	.long 0x00ECFAD0
-	.long 0x00ECE058
-	.long 0x00ECFABE
-	.long 0x00ECE0FE
-	.long 0x00ECFAAC
-	.long 0x00ECE1A4
-	.long 0x00ECFA9A
-	.long 0x00ECE24A
+	.long StyleVar_MellowBossa
+	.long NakaInst_Rhumba_Espana
+	.long StyleVar_RhumbaEspana
+	.long NakaInst_Cocktail_Pianist
+	.long StyleVar_CocktailPianist
+	.long NakaInst_Romantic_Beguine
+	.long StyleVar_RomanticBeguine
+	.long NakaInst_Romantic_Dance
+	.long StyleVar_RomanticDance
+	.long NakaInst_Latin_Lounge_Bar
+	.long StyleVar_LatinLoungeBar
+	.long NakaInst_Titos_Cha_Cha
+	.long StyleVar_TitosChaCha
+	.long NakaInst_Mambo_Band
+	.long StyleVar_MamboBand
+	.long NakaInst_New_Mambo_Mood
+	.long StyleVar_NewMamboMood
+	.long NakaInst_Its_Mambo_Time
+	.long StyleVar_ItsMamboTime
+	.long NakaInst_Cumbia_Band
+	.long StyleVar_CumbiaBand
+	.long NakaInst_Holiday_Mood
+	.long StyleVar_HolidayMood
+	.long NakaInst_Samba_Parade
+	.long StyleVar_SambaParade
+	.long NakaInst_Latin_Festival
+	.long StyleVar_LatinFestival_2
+	.long NakaInst_Modern_Rio
+	.long StyleVar_ModernRio
+	.long NakaInst_Castanet_Dance
+	.long StyleVar_CastanetDance
+	.long NakaInst_Caribbean_Nights
+	.long StyleVar_CaribbeanNights
+	.long NakaInst_Salsa_Picante
+	.long StyleVar_SalsaPicante
+	.long NakaInst_Samba_Amor
+	.long StyleVar_SambaAmor
+	.long NakaInst_Modern_Caribbean
+	.long StyleVar_ModernCaribbean
+	.long NakaInst_Modern_Samba
+	.long StyleVar_ModernSamba
+	.long NakaInst_Samba_Fusion
+	.long StyleVar_SambaFusion
+	.long NakaInst_Indonesian_Folk
+	.long StyleVar_IndonesianFolk
+	.long NakaInst_Dangdut
+	.long StyleVar_Dangdut
+	.long NakaInst_Talempong
+	.long StyleVar_Talempong
+	.long NakaInst_Synth_Reggae
+	.long StyleVar_SynthReggae
+	.long NakaInst_Jamaican_Swing
+	.long StyleVar_JamaicanSwing
 	.long 0x00000000
 	.long 0x00000000
 ; [nakarest] naka_style_bitmaps+0x188dc  +0x188dc..+0x18ae6 (0xecfa9a, 522 B)
 ; [nakarest] style name strings (16 characters): "Jamaican Swing", "Synth Reggae", "Talempong",
 ; [nakarest] "Dangdut", "Indonesian Folk", "Samba Fusion", ....
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x188DC, 0x20A
+NakaInst_Jamaican_Swing:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x188DC, 0x12
+NakaInst_Synth_Reggae:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x188EE, 0x12
+NakaInst_Talempong:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18900, 0x12
+NakaInst_Dangdut:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18912, 0x12
+NakaInst_Indonesian_Folk:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18924, 0x12
+NakaInst_Samba_Fusion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18936, 0x12
+NakaInst_Modern_Samba:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18948, 0x12
+NakaInst_Modern_Caribbean:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1895A, 0x12
+NakaInst_Samba_Amor:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1896C, 0x12
+NakaInst_Salsa_Picante:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x1897E, 0x12
+NakaInst_Caribbean_Nights:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18990, 0x12
+NakaInst_Castanet_Dance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x189A2, 0x12
+NakaInst_Modern_Rio:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x189B4, 0x12
+NakaInst_Latin_Festival:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x189C6, 0x12
+NakaInst_Samba_Parade:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x189D8, 0x12
+NakaInst_Holiday_Mood:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x189EA, 0x12
+NakaInst_Cumbia_Band:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x189FC, 0x12
+NakaInst_Its_Mambo_Time:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A0E, 0x12
+NakaInst_New_Mambo_Mood:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A20, 0x12
+NakaInst_Mambo_Band:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A32, 0x12
+NakaInst_Titos_Cha_Cha:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A44, 0x12
+NakaInst_Latin_Lounge_Bar:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A56, 0x12
+NakaInst_Romantic_Dance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A68, 0x12
+NakaInst_Romantic_Beguine:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A7A, 0x12
+NakaInst_Cocktail_Pianist:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A8C, 0x12
+NakaInst_Rhumba_Espana:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18A9E, 0x12
+NakaInst_Mellow_Bossa:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AB0, 0x12
+NakaInst_Bossa_Pianist:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AC2, 0x12
+NakaInst_Romantic_Bossa:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AD4, 0x12
 ; [nakarest] naka_style_bitmaps+0x18ae6  +0x18ae6..+0x18aea (0xecfca4, 4 B)
 ; [nakarest] the root of the MstStyle browser tree (0xecfca4): 10 x {u32 group name, u32 group
 ; [nakarest] table}. MstStyle1_EventDispatch, MstStyle1Sub_HandleSubSelect and
