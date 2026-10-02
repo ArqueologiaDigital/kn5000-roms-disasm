@@ -2696,7 +2696,7 @@ sub_F80384:
 	call T_DisplayList_Run                               ; F803C3  1d f0 17 f4
 .LF803C7:
 	ret                                                  ; F803C7  0e
-sub_F803C8:
+ScreenLeave_S0ngC0py_Nop:
 	ret                                                  ; F803C8  0e
 	call T_F42A14                                        ; F803C9  1d 14 2a f4
 	call sub_F802EC                                      ; F803CD  1d ec 02 f8
@@ -2844,7 +2844,7 @@ sub_F804EC:
 	ret                                                  ; F8051B  0e
 	ret                                                  ; F8051C  0e
 	ret                                                  ; F8051D  0e
-sub_F8051E:
+ButtonTable_N0teChange_207EZero_Nop7:
 	ret                                                  ; F8051E  0e
 	bit 0x07,W                                           ; F8051F  c8 33 07
 	jr z, .LF80534                                       ; F80522  66 10
@@ -3167,7 +3167,7 @@ Paint_MeasureC0py:
 	ld XIY,DL_F3BC93                                     ; F807C2  45 93 bc f3 00
 	ld XIX,DL_F3BCCB                                     ; F807C7  44 cb bc f3 00
 	call T_DisplayList_Run                               ; F807CC  1d f0 17 f4
-	calr sub_F80808                                      ; F807D0  1e 35 00
+	calr Paint_MeasureC0py_Nop                                      ; F807D0  1e 35 00
 	jr .LF807F1                                          ; F807D3  68 1c
 .LF807D5:
 	ld XIY,DL_F3BD90                                     ; F807D5  45 90 bd f3 00
@@ -3183,7 +3183,7 @@ Paint_MeasureC0py:
 	call T_DisplayListB_Run                              ; F80800  1d f4 17 f4
 	calr 0xdae0                                          ; F80804  1e e0 da
 	ret                                                  ; F80807  0e
-sub_F80808:
+Paint_MeasureC0py_Nop:
 	ret                                                  ; F80808  0e
 sub_F80809:
 	call T_F429DC                                        ; F80809  1d dc 29 f4
@@ -3237,7 +3237,7 @@ sub_F80809:
 	ld (0x12ff:16), a                                   ; F80883  f1 ff 12 41
 	calr sub_F8099D                                      ; F80887  1e 13 01
 	calr sub_F80891                                      ; F8088A  1e 04 00
-	calr sub_F80808                                      ; F8088D  1e 78 ff
+	calr Paint_MeasureC0py_Nop                                      ; F8088D  1e 78 ff
 .LF80890:
 	ret                                                  ; F80890  0e
 ; sub_F80891 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -3282,7 +3282,7 @@ sub_F80891:
 	ld (0x12ff:16), a                                   ; F808D8  f1 ff 12 41
 	calr sub_F8099D                                      ; F808DC  1e be 00
 	calr sub_F80891                                      ; F808DF  1e af ff
-	calr sub_F80808                                      ; F808E2  1e 23 ff
+	calr Paint_MeasureC0py_Nop                                      ; F808E2  1e 23 ff
 .LF808E5:
 	ret                                                  ; F808E5  0e
 	bit 0x07,W                                           ; F808E6  c8 33 07
@@ -3302,7 +3302,7 @@ sub_F80891:
 	ld (0x12ff:16), a                                   ; F8090D  f1 ff 12 41
 	calr sub_F8099D                                      ; F80911  1e 89 00
 	calr sub_F80891                                      ; F80914  1e 7a ff
-	calr sub_F80808                                      ; F80917  1e ee fe
+	calr Paint_MeasureC0py_Nop                                      ; F80917  1e ee fe
 .LF8091A:
 	ret                                                  ; F8091A  0e
 	ret                                                  ; F8091B  0e
@@ -3554,7 +3554,7 @@ Paint_MeasureInsert:
 	ld XIY,DL_F3BEBF                                     ; F80B1F  45 bf be f3 00
 	ld XIX,DL_F3BEF7                                     ; F80B24  44 f7 be f3 00
 	call T_DisplayList_Run                               ; F80B29  1d f0 17 f4
-	calr sub_F80B65                                      ; F80B2D  1e 35 00
+	calr Paint_MeasureInsert_Nop                                      ; F80B2D  1e 35 00
 	jr .LF80B4E                                          ; F80B30  68 1c
 .LF80B32:
 	ld XIY,DL_F3BD90                                     ; F80B32  45 90 bd f3 00
@@ -3570,7 +3570,7 @@ Paint_MeasureInsert:
 	call T_DisplayListB_Run                              ; F80B5D  1d f4 17 f4
 	calr 0xd783                                          ; F80B61  1e 83 d7
 	ret                                                  ; F80B64  0e
-sub_F80B65:
+Paint_MeasureInsert_Nop:
 	ret                                                  ; F80B65  0e
 sub_F80B66:
 	call T_F429AC                                        ; F80B66  1d ac 29 f4
@@ -3624,7 +3624,7 @@ sub_F80B66:
 	ld (0x12ff:16), a                                   ; F80BE0  f1 ff 12 41
 	calr sub_F80CFB                                      ; F80BE4  1e 14 01
 	calr sub_F80BEE                                      ; F80BE7  1e 04 00
-	calr sub_F80B65                                      ; F80BEA  1e 78 ff
+	calr Paint_MeasureInsert_Nop                                      ; F80BEA  1e 78 ff
 .LF80BED:
 	ret                                                  ; F80BED  0e
 ; sub_F80BEE -- a display-list painter whose SCREEN IS NOT ESTABLISHED
@@ -3670,7 +3670,7 @@ sub_F80C04:
 	ld (0x12ff:16), a                                   ; F80C35  f1 ff 12 41
 	calr sub_F80CFB                                      ; F80C39  1e bf 00
 	calr sub_F80BEE                                      ; F80C3C  1e af ff
-	calr sub_F80B65                                      ; F80C3F  1e 23 ff
+	calr Paint_MeasureInsert_Nop                                      ; F80C3F  1e 23 ff
 .LF80C42:
 	ret                                                  ; F80C42  0e
 	bit 0x07,W                                           ; F80C43  c8 33 07
@@ -3690,7 +3690,7 @@ sub_F80C04:
 	ld (0x12ff:16), a                                   ; F80C6A  f1 ff 12 41
 	calr sub_F80CFB                                      ; F80C6E  1e 8a 00
 	calr sub_F80BEE                                      ; F80C71  1e 7a ff
-	calr sub_F80B65                                      ; F80C74  1e ee fe
+	calr Paint_MeasureInsert_Nop                                      ; F80C74  1e ee fe
 .LF80C77:
 	ret                                                  ; F80C77  0e
 	ret                                                  ; F80C78  0e
@@ -5784,11 +5784,11 @@ Data_F82000:
 	.long 0x00000080                                 ; F82008  [  2]
 	.long 0x00000080                                 ; F8200C  [  3]
 	jp Ring_InitAllFourteen                                        ; F82010  1b d4 25 f8
-	jp sub_F8262F                                        ; F82014  1b 2f 26 f8
+	jp Data_F82000_Nop                                        ; F82014  1b 2f 26 f8
 	jp Var7FC1_Clear                                        ; F82018  1b 28 26 f8
-	jp sub_F8262F                                        ; F8201C  1b 2f 26 f8
-	jp sub_F8262F                                        ; F82020  1b 2f 26 f8
-	jp sub_F8262F                                        ; F82024  1b 2f 26 f8
+	jp Data_F82000_Nop                                        ; F8201C  1b 2f 26 f8
+	jp Data_F82000_Nop                                        ; F82020  1b 2f 26 f8
+	jp Data_F82000_Nop                                        ; F82024  1b 2f 26 f8
 sub_F82028:
 	ei 0x00                                              ; F82028  06 00
 	jr .LF8203B                                          ; F8202A  68 0f
@@ -6150,10 +6150,10 @@ sub_F822D4:
 	add (xhl-2), wa                                      ; F823A0  9b fe 88
 	ret                                                  ; F823A3  0e
 sub_F823A4:
-	calr sub_F823AB                                      ; F823A4  1e 04 00
+	calr sub_F823A4_Nop                                      ; F823A4  1e 04 00
 	calr sub_F823E2                                      ; F823A7  1e 38 00
 	ret                                                  ; F823AA  0e
-sub_F823AB:
+sub_F823A4_Nop:
 	ret                                                  ; F823AB  0e
 ; ---------------------------------------------------------------------
 ; Queue2C00_DrainPassAB -- run pass A and pass B over the 0x2C00 event
@@ -6524,9 +6524,9 @@ Ring_InitAllFourteen:
 Var7FC1_Clear:
 	ld (0x7fc1:16), 0x00                                 ; F82628  f1 c1 7f 00 00
 	ret                                                  ; F8262D  0e
-sub_F8262E:
+T_F4001C_Nop:
 	ret                                                  ; F8262E  0e
-sub_F8262F:
+Data_F82000_Nop:
 	ret                                                  ; F8262F  0e
 sub_F82630:
 	calr sub_F82832                                          ; F82630  1e ff 01
@@ -18451,7 +18451,7 @@ sub_F8A000_Join:
 sub_F8A023:
 	calr sub_F8A028                                      ; F8A023  1e 02 00
 	ret                                                  ; F8A026  0e
-sub_F8A027:
+T_F40618_Nop:
 	ret                                                  ; F8A027  0e
 sub_F8A028:
 	ld XIY,0x0000219b                                    ; F8A028  45 9b 21 00 00
@@ -22453,9 +22453,9 @@ CmdList_F8C086:
 	.byte 0x10, 0x3a, 0x21, 0x00, 0x00, 0x80, 0x00  ; F8C086  record 0
 	.byte 0x10, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C08D  record 1
 	.byte 0xff  ; F8C094  terminator
-sub_F8C095:   ; entry: prom_b routine directory
+T_F40684_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F8C095  0e
-sub_F8C096:   ; entry: prom_b routine directory
+T_F40688_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F8C096  0e
 sub_F8C097:   ; entry: prom_b routine directory
 	ld a, (0x20b8:16)                                   ; F8C097  c1 b8 20 21
@@ -22474,7 +22474,7 @@ CmdList_F8C0A4:
 	.byte 0x08, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0A4  record 0
 	.byte 0x07, 0x16, 0x21, 0x00, 0x00, 0x44, 0x00  ; F8C0AB  record 1
 	.byte 0xff  ; F8C0B2  terminator
-sub_F8C0B3:   ; entry: prom_b routine directory
+T_F40690_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F8C0B3  0e
 sub_F8C0B4:   ; entry: prom_b routine directory
 	ld a, (0x20b8:16)                                   ; F8C0B4  c1 b8 20 21
@@ -23207,14 +23207,14 @@ sub_F8C846:   ; entry: prom_b routine directory
 ; 0xF8C861 `ld W,(XIX+W)`, then .LF8C86A stores W and A into the ring at RAM
 ; 0x2BA0 -- the packet [wire][mask] (FINDINGS-prom_a-for-the-mame-driver.md 3).
 ; COUNT 11 is the extent between the two reader-named bases, and after the
-; second one sub_F8C8C2 begins; the unused tail entries are 0x00.
+; second one T_F4066C_Nop begins; the unused tail entries are 0x00.
 ; Was framed as code (`m_and_rm`, `xor D,0`, `and (0xc9c2),b`, `nop`s).
 ; ---------------------------------------------------------------------
 PanelLedWireMap_Variant1:
 	.byte 0xc0, 0xc1, 0xc2, 0xc4, 0xc5, 0xc9, 0xcc, 0xcd, 0x00, 0x00, 0x00  ; F8C8AC
 PanelLedWireMap_Variant2:
 	.byte 0xc1, 0xc2, 0xc9, 0xca, 0xcb, 0xcc, 0xc3, 0x00, 0x00, 0x00, 0x00  ; F8C8B7
-sub_F8C8C2:   ; entry: prom_b routine directory
+T_F4066C_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F8C8C2  0e
 sub_F8C8C3:   ; entry: prom_b routine directory
 	m_cp_mi8 MB8, 0xc4, 0x02                             ; F8C8C3  c0 c4 3f 02
@@ -31707,14 +31707,14 @@ sub_F90B8E:
 	calr 0x64                                            ; F90C0B  1e 64 00
 	calr 0x376d                                          ; F90C0E  1e 6d 37
 	ret                                                  ; F90C11  0e
-sub_F90C12:
+T_F41504_Nop:
 	ret                                                  ; F90C12  0e
 sub_F90C13:
 	.byte 0xd1, 0x34, 0x21, 0x3e, 0x02, 0x00             ; F90C13  d1 34 21 3e 02 00   or (0x2134),0x0002
 	calr sub_F90C21                                            ; F90C19  1e 05 00
 	calr sub_F943B6                                          ; F90C1C  1e 97 37
 	ret                                                  ; F90C1F  0e
-sub_F90C20:
+T_F4150C_Nop:
 	ret                                                  ; F90C20  0e
 sub_F90C21:
 	ld a, (0x7f02:16)                                   ; F90C21  c1 02 7f 21
@@ -31809,14 +31809,14 @@ DisplayListPtrs_F90CD8:
 	.long sub_F9139B                                 ; F90CF0  [  6]
 	.long sub_F913B1                                 ; F90CF4  [  7]
 	.long sub_F913FB                                 ; F90CF8  [  8]
-	.long sub_F91405                                 ; F90CFC  [  9]
-	.long sub_F91406                                 ; F90D00  [ 10]
+	.long DisplayListPtrs_F90CD8_Nop9                                 ; F90CFC  [  9]
+	.long DisplayListPtrs_F90CD8_Nop10                                 ; F90D00  [ 10]
 	.long sub_F91407                                 ; F90D04  [ 11]
-	.long sub_F91433                                 ; F90D08  [ 12]
-	.long sub_F91434                                 ; F90D0C  [ 13]
-	.long sub_F91435                                 ; F90D10  [ 14]
+	.long DisplayListPtrs_F90CD8_Nop12                                 ; F90D08  [ 12]
+	.long DisplayListPtrs_F90CD8_Nop13                                 ; F90D0C  [ 13]
+	.long DisplayListPtrs_F90CD8_Nop14                                 ; F90D10  [ 14]
 	.long sub_F91436                                 ; F90D14  [ 15]
-	.long sub_F91441                                 ; F90D18  [ 16]
+	.long DisplayListPtrs_F90CD8_Nop16                                 ; F90D18  [ 16]
 	.long sub_F91442                                 ; F90D1C  [ 17]
 	.long sub_F9144F                                 ; F90D20  [ 18]
 	.long sub_F9145F                                 ; F90D24  [ 19]
@@ -31825,13 +31825,13 @@ DisplayListPtrs_F90CD8:
 	.long sub_F91483                                 ; F90D30  [ 22]
 	.long sub_F91493                                 ; F90D34  [ 23]
 	.long sub_F91497                                 ; F90D38  [ 24]
-	.long sub_F914A7                                 ; F90D3C  [ 25]
-	.long sub_F914A8                                 ; F90D40  [ 26]
-	.long sub_F914A9                                 ; F90D44  [ 27]
-	.long sub_F914AA                                 ; F90D48  [ 28]
-	.long sub_F914AB                                 ; F90D4C  [ 29]
-	.long sub_F914AC                                 ; F90D50  [ 30]
-	.long sub_F914AD                                 ; F90D54  [ 31]
+	.long DisplayListPtrs_F90CD8_Nop25                                 ; F90D3C  [ 25]
+	.long DisplayListPtrs_F90CD8_Nop26                                 ; F90D40  [ 26]
+	.long DisplayListPtrs_F90CD8_Nop27                                 ; F90D44  [ 27]
+	.long DisplayListPtrs_F90CD8_Nop28                                 ; F90D48  [ 28]
+	.long DisplayListPtrs_F90CD8_Nop29                                 ; F90D4C  [ 29]
+	.long DisplayListPtrs_F90CD8_Nop30                                 ; F90D50  [ 30]
+	.long DisplayListPtrs_F90CD8_Nop31                                 ; F90D54  [ 31]
 sub_F90D58:
 	ld a, (0x207c:16)                                   ; F90D58  c1 7c 20 21
 	cp (0x207d:16), a                                    ; F90D5C  c1 7d 20 f9
@@ -32488,9 +32488,9 @@ sub_F913FB:   ; entry: named by 1 `.long` operand, first at 0xF90CF8
 	call T_F42E68                                        ; F91400  1d 68 2e f4
 .LF91404:
 	ret                                                  ; F91404  0e
-sub_F91405:   ; entry: named by 1 `.long` operand, first at 0xF90CFC
+DisplayListPtrs_F90CD8_Nop9:   ; entry: named by 1 `.long` operand, first at 0xF90CFC
 	ret                                                  ; F91405  0e
-sub_F91406:   ; entry: named by 1 `.long` operand, first at 0xF90D00
+DisplayListPtrs_F90CD8_Nop10:   ; entry: named by 1 `.long` operand, first at 0xF90D00
 	ret                                                  ; F91406  0e
 sub_F91407:   ; entry: named by 2 `.long` operands, first at 0xF90D04
 	call sub_F9454D                                        ; F91407  1d 4d 45 f9
@@ -32513,11 +32513,11 @@ sub_F91407:   ; entry: named by 2 `.long` operands, first at 0xF90D04
 	call T_List2030_AppendRegs                           ; F9142E  1d 40 0f f4
 .LF91432:
 	ret                                                  ; F91432  0e
-sub_F91433:   ; entry: named by 1 `.long` operand, first at 0xF90D08
+DisplayListPtrs_F90CD8_Nop12:   ; entry: named by 1 `.long` operand, first at 0xF90D08
 	ret                                                  ; F91433  0e
-sub_F91434:   ; entry: named by 1 `.long` operand, first at 0xF90D0C
+DisplayListPtrs_F90CD8_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF90D0C
 	ret                                                  ; F91434  0e
-sub_F91435:   ; entry: named by 1 `.long` operand, first at 0xF90D10
+DisplayListPtrs_F90CD8_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF90D10
 	ret                                                  ; F91435  0e
 sub_F91436:   ; entry: named by 1 `.long` operand, first at 0xF90D14
 	m_and_mi8 MB16, 0x2075, 0xf7                         ; F91436  c1 75 20 3c f7
@@ -32525,7 +32525,7 @@ sub_F91436:   ; entry: named by 1 `.long` operand, first at 0xF90D14
 	jr nz, .LF91440                                      ; F9143E  6e 00
 .LF91440:
 	ret                                                  ; F91440  0e
-sub_F91441:   ; entry: named by 1 `.long` operand, first at 0xF90D18
+DisplayListPtrs_F90CD8_Nop16:   ; entry: named by 1 `.long` operand, first at 0xF90D18
 	ret                                                  ; F91441  0e
 sub_F91442:   ; entry: named by 2 `.long` operands, first at 0xF90D1C
 	add W,0x06                                           ; F91442  c8 c8 06
@@ -32572,19 +32572,19 @@ sub_F91497:   ; entry: named by 1 `.long` operand, first at 0xF90D38
 	add W,0x03                                           ; F914A0  c8 c8 03
 .LF914A3:
 	jp sub_F913B1_Join                                        ; F914A3  1b bd 13 f9
-sub_F914A7:   ; entry: named by 2 `.long` operands, first at 0xF90D3C
+DisplayListPtrs_F90CD8_Nop25:   ; entry: named by 2 `.long` operands, first at 0xF90D3C
 	ret                                                  ; F914A7  0e
-sub_F914A8:   ; entry: named by 1 `.long` operand, first at 0xF90D40
+DisplayListPtrs_F90CD8_Nop26:   ; entry: named by 1 `.long` operand, first at 0xF90D40
 	ret                                                  ; F914A8  0e
-sub_F914A9:   ; entry: named by 1 `.long` operand, first at 0xF90D44
+DisplayListPtrs_F90CD8_Nop27:   ; entry: named by 1 `.long` operand, first at 0xF90D44
 	ret                                                  ; F914A9  0e
-sub_F914AA:   ; entry: named by 1 `.long` operand, first at 0xF90D48
+DisplayListPtrs_F90CD8_Nop28:   ; entry: named by 1 `.long` operand, first at 0xF90D48
 	ret                                                  ; F914AA  0e
-sub_F914AB:   ; entry: named by 1 `.long` operand, first at 0xF90D4C
+DisplayListPtrs_F90CD8_Nop29:   ; entry: named by 1 `.long` operand, first at 0xF90D4C
 	ret                                                  ; F914AB  0e
-sub_F914AC:   ; entry: named by 1 `.long` operand, first at 0xF90D50
+DisplayListPtrs_F90CD8_Nop30:   ; entry: named by 1 `.long` operand, first at 0xF90D50
 	ret                                                  ; F914AC  0e
-sub_F914AD:   ; entry: named by 1 `.long` operand, first at 0xF90D54
+DisplayListPtrs_F90CD8_Nop31:   ; entry: named by 1 `.long` operand, first at 0xF90D54
 	ret                                                  ; F914AD  0e
 sub_F914AE:
 	ret                                                  ; F914AE  0e
@@ -32646,13 +32646,13 @@ DisplayListPtrs_F914FB:
 	.long sub_F9134A                                 ; F9150F  [  5]
 	.long sub_F9139B                                 ; F91513  [  6]
 	.long sub_F920E1                                 ; F91517  [  7]
-	.long sub_F92CE6                                 ; F9151B  [  8]
-	.long sub_F92CE6                                 ; F9151F  [  9]
-	.long sub_F92CE6                                 ; F91523  [ 10]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9151B  [  8]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9151F  [  9]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F91523  [ 10]
 	.long sub_F91407                                 ; F91527  [ 11]
-	.long sub_F92CE6                                 ; F9152B  [ 12]
-	.long sub_F92CE6                                 ; F9152F  [ 13]
-	.long sub_F92CE6                                 ; F91533  [ 14]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9152B  [ 12]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9152F  [ 13]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F91533  [ 14]
 	.long sub_F9231E                                 ; F91537  [ 15]
 	.long sub_F9233A                                 ; F9153B  [ 16]
 	.long sub_F91442                                 ; F9153F  [ 17]
@@ -32663,13 +32663,13 @@ DisplayListPtrs_F914FB:
 	.long sub_F91483                                 ; F91553  [ 22]
 	.long sub_F91493                                 ; F91557  [ 23]
 	.long sub_F923D4                                 ; F9155B  [ 24]
-	.long sub_F914A7                                 ; F9155F  [ 25]
-	.long sub_F923E5                                 ; F91563  [ 26]
-	.long sub_F923E6                                 ; F91567  [ 27]
-	.long sub_F923E7                                 ; F9156B  [ 28]
-	.long sub_F923E8                                 ; F9156F  [ 29]
-	.long sub_F923E9                                 ; F91573  [ 30]
-	.long sub_F923EA                                 ; F91577  [ 31]
+	.long DisplayListPtrs_F90CD8_Nop25                                 ; F9155F  [ 25]
+	.long DisplayListPtrs_F914FB_Nop26                                 ; F91563  [ 26]
+	.long DisplayListPtrs_F914FB_Nop27                                 ; F91567  [ 27]
+	.long DisplayListPtrs_F914FB_Nop28                                 ; F9156B  [ 28]
+	.long DisplayListPtrs_F914FB_Nop29                                 ; F9156F  [ 29]
+	.long DisplayListPtrs_F914FB_Nop30                                 ; F91573  [ 30]
+	.long DisplayListPtrs_F914FB_Nop31                                 ; F91577  [ 31]
 ; ---------------------------------------------------------------------
 ; DisplayListPtrs_F9157B -- 32 LE32 pointers, the (0x2687) == 0 arm
 ; Read by: 0xF914ED `ld XIX,0x00F9157B`, the taken arm of the `jr z` at
@@ -32689,9 +32689,9 @@ DisplayListPtrs_F9157B:
 	.long sub_F9224F                                 ; F9159F  [  9]
 	.long sub_F92293                                 ; F915A3  [ 10]
 	.long sub_F922D7                                 ; F915A7  [ 11]
-	.long sub_F9231B                                 ; F915AB  [ 12]
-	.long sub_F9231C                                 ; F915AF  [ 13]
-	.long sub_F9231D                                 ; F915B3  [ 14]
+	.long DisplayListPtrs_F9157B_Nop12                                 ; F915AB  [ 12]
+	.long DisplayListPtrs_F9157B_Nop13                                 ; F915AF  [ 13]
+	.long DisplayListPtrs_F9157B_Nop14                                 ; F915B3  [ 14]
 	.long sub_F9231E                                 ; F915B7  [ 15]
 	.long sub_F9233A                                 ; F915BB  [ 16]
 	.long sub_F92364                                 ; F915BF  [ 17]
@@ -32702,13 +32702,13 @@ DisplayListPtrs_F9157B:
 	.long sub_F923B4                                 ; F915D3  [ 22]
 	.long sub_F923C4                                 ; F915D7  [ 23]
 	.long sub_F923D4                                 ; F915DB  [ 24]
-	.long sub_F923E4                                 ; F915DF  [ 25]
-	.long sub_F923E5                                 ; F915E3  [ 26]
-	.long sub_F923E6                                 ; F915E7  [ 27]
-	.long sub_F923E7                                 ; F915EB  [ 28]
-	.long sub_F923E8                                 ; F915EF  [ 29]
-	.long sub_F923E9                                 ; F915F3  [ 30]
-	.long sub_F923EA                                 ; F915F7  [ 31]
+	.long DisplayListPtrs_F9157B_Nop25                                 ; F915DF  [ 25]
+	.long DisplayListPtrs_F914FB_Nop26                                 ; F915E3  [ 26]
+	.long DisplayListPtrs_F914FB_Nop27                                 ; F915E7  [ 27]
+	.long DisplayListPtrs_F914FB_Nop28                                 ; F915EB  [ 28]
+	.long DisplayListPtrs_F914FB_Nop29                                 ; F915EF  [ 29]
+	.long DisplayListPtrs_F914FB_Nop30                                 ; F915F3  [ 30]
+	.long DisplayListPtrs_F914FB_Nop31                                 ; F915F7  [ 31]
 sub_F915FB:
 	ld a, (0x207c:16)                                   ; F915FB  c1 7c 20 21
 	cp (0x207d:16), a                                    ; F915FF  c1 7d 20 f9
@@ -33953,11 +33953,11 @@ sub_F922F9:   ; entry: named by 1 `ld` operand, first at 0xF922E6
 	ld XIX,0x00f296d6                                    ; F92311  44 d6 96 f2 00
 	call T_DisplayList_Run                               ; F92316  1d f0 17 f4
 	ret                                                  ; F9231A  0e
-sub_F9231B:   ; entry: named by 1 `.long` operand, first at 0xF915AB
+DisplayListPtrs_F9157B_Nop12:   ; entry: named by 1 `.long` operand, first at 0xF915AB
 	ret                                                  ; F9231B  0e
-sub_F9231C:   ; entry: named by 1 `.long` operand, first at 0xF915AF
+DisplayListPtrs_F9157B_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF915AF
 	ret                                                  ; F9231C  0e
-sub_F9231D:   ; entry: named by 1 `.long` operand, first at 0xF915B3
+DisplayListPtrs_F9157B_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF915B3
 	ret                                                  ; F9231D  0e
 sub_F9231E:   ; entry: named by 2 `.long` operands, first at 0xF91537
 	m_and_mi8 MB16, 0x2075, 0xf7                         ; F9231E  c1 75 20 3c f7
@@ -34040,19 +34040,19 @@ sub_F923D4:   ; entry: named by 2 `.long` operands, first at 0xF9155B
 	add W,0x06                                           ; F923DD  c8 c8 06
 .LF923E0:
 	jp sub_F920E1_Join                                        ; F923E0  1b ec 20 f9
-sub_F923E4:   ; entry: named by 1 `.long` operand, first at 0xF915DF
+DisplayListPtrs_F9157B_Nop25:   ; entry: named by 1 `.long` operand, first at 0xF915DF
 	ret                                                  ; F923E4  0e
-sub_F923E5:   ; entry: named by 2 `.long` operands, first at 0xF91563
+DisplayListPtrs_F914FB_Nop26:   ; entry: named by 2 `.long` operands, first at 0xF91563
 	ret                                                  ; F923E5  0e
-sub_F923E6:   ; entry: named by 2 `.long` operands, first at 0xF91567
+DisplayListPtrs_F914FB_Nop27:   ; entry: named by 2 `.long` operands, first at 0xF91567
 	ret                                                  ; F923E6  0e
-sub_F923E7:   ; entry: named by 2 `.long` operands, first at 0xF9156B
+DisplayListPtrs_F914FB_Nop28:   ; entry: named by 2 `.long` operands, first at 0xF9156B
 	ret                                                  ; F923E7  0e
-sub_F923E8:   ; entry: named by 2 `.long` operands, first at 0xF9156F
+DisplayListPtrs_F914FB_Nop29:   ; entry: named by 2 `.long` operands, first at 0xF9156F
 	ret                                                  ; F923E8  0e
-sub_F923E9:   ; entry: named by 2 `.long` operands, first at 0xF91573
+DisplayListPtrs_F914FB_Nop30:   ; entry: named by 2 `.long` operands, first at 0xF91573
 	ret                                                  ; F923E9  0e
-sub_F923EA:   ; entry: named by 2 `.long` operands, first at 0xF91577
+DisplayListPtrs_F914FB_Nop31:   ; entry: named by 2 `.long` operands, first at 0xF91577
 	ret                                                  ; F923EA  0e
 sub_F923EB:
 	ret                                                  ; F923EB  0e
@@ -34429,7 +34429,7 @@ InstallPainter_SoundGroupMenu_Entry:
 ; Was `sub_F92714`.
 ; ---------------------------------------------------------------------
 ScreenLeave_SoundGroupMenu:
-	calr sub_F92A54                                          ; F92714  1e 3d 03
+	calr ScreenLeave_SoundGroupMenu_Nop                                          ; F92714  1e 3d 03
 	ret                                                  ; F92717  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_SoundGroupMenu -- the BUTTON method of the screen object at
@@ -34468,32 +34468,32 @@ DisplayListPtrs_F92726:
 	.long sub_F92B3E                                 ; F92732  [  3]
 	.long sub_F92B83                                 ; F92736  [  4]
 	.long sub_F92C08                                 ; F9273A  [  5]
-	.long sub_F92C1F                                 ; F9273E  [  6]
-	.long sub_F92C20                                 ; F92742  [  7]
+	.long DisplayListPtrs_F92726_Nop6                                 ; F9273E  [  6]
+	.long DisplayListPtrs_F92726_Nop7                                 ; F92742  [  7]
 	.long sub_F92C21                                 ; F92746  [  8]
 	.long sub_F92C25                                 ; F9274A  [  9]
 	.long sub_F92C29                                 ; F9274E  [ 10]
-	.long sub_F92C2D                                 ; F92752  [ 11]
-	.long sub_F92C2E                                 ; F92756  [ 12]
-	.long sub_F92C2F                                 ; F9275A  [ 13]
-	.long sub_F92C30                                 ; F9275E  [ 14]
+	.long DisplayListPtrs_F92726_Nop11                                 ; F92752  [ 11]
+	.long DisplayListPtrs_F92726_Nop12                                 ; F92756  [ 12]
+	.long DisplayListPtrs_F92726_Nop13                                 ; F9275A  [ 13]
+	.long DisplayListPtrs_F92726_Nop14                                 ; F9275E  [ 14]
 	.long sub_F92C31                                 ; F92762  [ 15]
-	.long sub_F92CE6                                 ; F92766  [ 16]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92766  [ 16]
 	.long sub_F92A55                                 ; F9276A  [ 17]
 	.long sub_F92AA1                                 ; F9276E  [ 18]
 	.long sub_F92AED                                 ; F92772  [ 19]
 	.long sub_F92B3E                                 ; F92776  [ 20]
 	.long sub_F92B83                                 ; F9277A  [ 21]
 	.long sub_F92C08                                 ; F9277E  [ 22]
-	.long sub_F92C1F                                 ; F92782  [ 23]
-	.long sub_F92C20                                 ; F92786  [ 24]
-	.long sub_F92CE6                                 ; F9278A  [ 25]
-	.long sub_F92CE6                                 ; F9278E  [ 26]
-	.long sub_F92CE6                                 ; F92792  [ 27]
-	.long sub_F92CE6                                 ; F92796  [ 28]
-	.long sub_F92CE6                                 ; F9279A  [ 29]
-	.long sub_F92CE6                                 ; F9279E  [ 30]
-	.long sub_F92CE6                                 ; F927A2  [ 31]
+	.long DisplayListPtrs_F92726_Nop6                                 ; F92782  [ 23]
+	.long DisplayListPtrs_F92726_Nop7                                 ; F92786  [ 24]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9278A  [ 25]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9278E  [ 26]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92792  [ 27]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92796  [ 28]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9279A  [ 29]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9279E  [ 30]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F927A2  [ 31]
 ; InstallPainter_SoundGroupMenu -- paints the screen whose own text reads "SOUND", "GROUP", "MENU"
 ;
 ; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
@@ -34764,7 +34764,7 @@ sub_F92A40:
 	ld XIX,0x00f2bb0d                                    ; F92A4A  44 0d bb f2 00
 	call T_DisplayList_Run                               ; F92A4F  1d f0 17 f4
 	ret                                                  ; F92A53  0e
-sub_F92A54:
+ScreenLeave_SoundGroupMenu_Nop:
 	ret                                                  ; F92A54  0e
 sub_F92A55:
 	calr sub_F93187                                          ; F92A55  1e 2f 07
@@ -34959,9 +34959,9 @@ sub_F92C08:   ; entry: named by 2 `.long` operands, first at 0xF9273A
 	m_or_mi8 MB16, 0x2075, 0x80                          ; F92C19  c1 75 20 3e 80
 .LF92C1E:
 	ret                                                  ; F92C1E  0e
-sub_F92C1F:   ; entry: named by 2 `.long` operands, first at 0xF9273E
+DisplayListPtrs_F92726_Nop6:   ; entry: named by 2 `.long` operands, first at 0xF9273E
 	ret                                                  ; F92C1F  0e
-sub_F92C20:   ; entry: named by 2 `.long` operands, first at 0xF92742
+DisplayListPtrs_F92726_Nop7:   ; entry: named by 2 `.long` operands, first at 0xF92742
 	ret                                                  ; F92C20  0e
 sub_F92C21:   ; entry: named by 1 `.long` operand, first at 0xF92746
 	calr sub_F92F7F                                          ; F92C21  1e 5b 03
@@ -34972,13 +34972,13 @@ sub_F92C25:   ; entry: named by 1 `.long` operand, first at 0xF9274A
 sub_F92C29:   ; entry: named by 1 `.long` operand, first at 0xF9274E
 	calr sub_F92F7F                                          ; F92C29  1e 53 03
 	ret                                                  ; F92C2C  0e
-sub_F92C2D:   ; entry: named by 1 `.long` operand, first at 0xF92752
+DisplayListPtrs_F92726_Nop11:   ; entry: named by 1 `.long` operand, first at 0xF92752
 	ret                                                  ; F92C2D  0e
-sub_F92C2E:   ; entry: named by 1 `.long` operand, first at 0xF92756
+DisplayListPtrs_F92726_Nop12:   ; entry: named by 1 `.long` operand, first at 0xF92756
 	ret                                                  ; F92C2E  0e
-sub_F92C2F:   ; entry: named by 1 `.long` operand, first at 0xF9275A
+DisplayListPtrs_F92726_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF9275A
 	ret                                                  ; F92C2F  0e
-sub_F92C30:   ; entry: named by 1 `.long` operand, first at 0xF9275E
+DisplayListPtrs_F92726_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF9275E
 	ret                                                  ; F92C30  0e
 sub_F92C31:   ; entry: named by 1 `.long` operand, first at 0xF92762
 	bit 0x07,W                                           ; F92C31  c8 33 07
@@ -35027,7 +35027,7 @@ InstallPainter_GroupSoundDisplayHold_Entry:
 ; Was `sub_F92C54`.
 ; ---------------------------------------------------------------------
 ScreenLeave_GroupSoundDisplayHold:
-	calr sub_F92F23                                          ; F92C54  1e cc 02
+	calr ScreenLeave_GroupSoundDisplayHold_Nop                                          ; F92C54  1e cc 02
 	ret                                                  ; F92C57  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_GroupSoundDisplayHold -- the BUTTON method of the screen
@@ -35070,7 +35070,7 @@ ScreenButton_GroupSoundDisplayHold:
 ; the CALLEE's bound, not from the run length -- and the two agree in all four.
 ; ==============================================================================
 sub_F92C62:
-	calr sub_F93123                                          ; F92C62  1e be 04
+	calr sub_F92C62_Nop                                          ; F92C62  1e be 04
 	ret                                                  ; F92C65  0e
 ; ---------------------------------------------------------------------
 ; ScreenButtonHandlers_GroupSoundDisplayHold -- 32 LE32 pointers
@@ -35107,10 +35107,10 @@ ScreenButtonHandlers_GroupSoundDisplayHold:
 	.long sub_F92FB2                                 ; F92C8E  [ 10]
 	.long sub_F92FBC                                 ; F92C92  [ 11]
 	.long .LF92FC6                                   ; F92C96  [ 12]
-	.long sub_F93069                                 ; F92C9A  [ 13]
-	.long sub_F9306A                                 ; F92C9E  [ 14]
+	.long ScreenButtonHandlers_GroupSoundDisplayHold_Nop13                                 ; F92C9A  [ 13]
+	.long ScreenButtonHandlers_GroupSoundDisplayHold_Nop14                                 ; F92C9E  [ 14]
 	.long sub_F9306B                                 ; F92CA2  [ 15]
-	.long sub_F92CE6                                 ; F92CA6  [ 16]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92CA6  [ 16]
 	.long sub_F92F24                                 ; F92CAA  [ 17]
 	.long sub_F92F28                                 ; F92CAE  [ 18]
 	.long sub_F92F2C                                 ; F92CB2  [ 19]
@@ -35119,14 +35119,14 @@ ScreenButtonHandlers_GroupSoundDisplayHold:
 	.long sub_F92F38                                 ; F92CBE  [ 22]
 	.long sub_F92F4F                                 ; F92CC2  [ 23]
 	.long sub_F92F67                                 ; F92CC6  [ 24]
-	.long sub_F92CE6                                 ; F92CCA  [ 25]
-	.long sub_F92CE6                                 ; F92CCE  [ 26]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92CCA  [ 25]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92CCE  [ 26]
 	.long sub_F9308E                                 ; F92CD2  [ 27]
-	.long sub_F92CE6                                 ; F92CD6  [ 28]
-	.long sub_F92CE6                                 ; F92CDA  [ 29]
-	.long sub_F92CE6                                 ; F92CDE  [ 30]
-	.long sub_F92CE6                                 ; F92CE2  [ 31]
-sub_F92CE6:   ; entry: named by 67 `.long` operands, first at 0xF9151B
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92CD6  [ 28]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92CDA  [ 29]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92CDE  [ 30]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F92CE2  [ 31]
+DisplayListPtrs_F914FB_Nop8:   ; entry: named by 67 `.long` operands, first at 0xF9151B
 	ret                                                  ; F92CE6  0e
 ; InstallPainter_GroupSoundDisplayHold -- paints the screen whose own text reads "GROUP:", "SOUND", "DISPLAY"
 ;
@@ -35374,7 +35374,7 @@ sub_F92F16:
 	sla ix, 0x01                                         ; F92F1A  dc ec 01
 	mx_ld_rm MXW, ra_IZ, ra_IX, r4                       ; F92F1D  d3 07 f8 f0 24
 	ret                                                  ; F92F22  0e
-sub_F92F23:
+ScreenLeave_GroupSoundDisplayHold_Nop:
 	ret                                                  ; F92F23  0e
 sub_F92F24:   ; entry: named by 2 `.long` operands, first at 0xF92C66
 	calr sub_F92A55                                          ; F92F24  1e 2e fb
@@ -35517,9 +35517,9 @@ sub_F9304F:   ; entry: named by 2 `ld` operands, first at 0xF93003
 	popw wa                                              ; F93064  48
 	calr sub_F92E76                                      ; F93065  1e 0e fe
 	ret                                                  ; F93068  0e
-sub_F93069:   ; entry: named by 1 `.long` operand, first at 0xF92C9A
+ScreenButtonHandlers_GroupSoundDisplayHold_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF92C9A
 	ret                                                  ; F93069  0e
-sub_F9306A:   ; entry: named by 1 `.long` operand, first at 0xF92C9E
+ScreenButtonHandlers_GroupSoundDisplayHold_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF92C9E
 	ret                                                  ; F9306A  0e
 sub_F9306B:   ; entry: named by 1 `.long` operand, first at 0xF92CA2
 	bit 0x07,W                                           ; F9306B  c8 33 07
@@ -35596,7 +35596,7 @@ sub_F93109:   ; entry: named by 2 `ld` operands, first at 0xF930F6
 	call T_Blink_Command                                 ; F9311C  1d 20 2e f4
 	inc 4,XSP                                            ; F93120  ef 64
 	ret                                                  ; F93122  0e
-sub_F93123:
+sub_F92C62_Nop:
 	ret                                                  ; F93123  0e
 ; sub_F93124 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -36180,7 +36180,7 @@ InstallPainter_CombinationGroupMenu_Entry:
 ; Was `sub_F93545`.
 ; ---------------------------------------------------------------------
 ScreenLeave_CombinationGroupMenu:
-	calr sub_F93707                                          ; F93545  1e bf 01
+	calr ScreenLeave_CombinationGroupMenu_Nop                                          ; F93545  1e bf 01
 	ret                                                  ; F93548  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_CombinationGroupMenu -- the BUTTON method of the screen object
@@ -36225,37 +36225,37 @@ sub_F93553:
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_CombinationGroupMenu:
 	.long sub_F93708                                 ; F93557  [  0]
-	.long sub_F93740                                 ; F9355B  [  1]
-	.long sub_F93741                                 ; F9355F  [  2]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop1                                 ; F9355B  [  1]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop2                                 ; F9355F  [  2]
 	.long sub_F93742                                 ; F93563  [  3]
 	.long sub_F93780                                 ; F93567  [  4]
 	.long sub_F937DB                                 ; F9356B  [  5]
-	.long sub_F937F2                                 ; F9356F  [  6]
-	.long sub_F937F3                                 ; F93573  [  7]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop6                                 ; F9356F  [  6]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop7                                 ; F93573  [  7]
 	.long sub_F937F4                                 ; F93577  [  8]
 	.long sub_F937F8                                 ; F9357B  [  9]
 	.long sub_F937FC                                 ; F9357F  [ 10]
-	.long sub_F93800                                 ; F93583  [ 11]
-	.long sub_F93801                                 ; F93587  [ 12]
-	.long sub_F93802                                 ; F9358B  [ 13]
-	.long sub_F93803                                 ; F9358F  [ 14]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop11                                 ; F93583  [ 11]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop12                                 ; F93587  [ 12]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop13                                 ; F9358B  [ 13]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop14                                 ; F9358F  [ 14]
 	.long sub_F93804                                 ; F93593  [ 15]
-	.long sub_F92CE6                                 ; F93597  [ 16]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F93597  [ 16]
 	.long sub_F93708                                 ; F9359B  [ 17]
-	.long sub_F93740                                 ; F9359F  [ 18]
-	.long sub_F93741                                 ; F935A3  [ 19]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop1                                 ; F9359F  [ 18]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop2                                 ; F935A3  [ 19]
 	.long sub_F93742                                 ; F935A7  [ 20]
 	.long sub_F93780                                 ; F935AB  [ 21]
 	.long sub_F937DB                                 ; F935AF  [ 22]
-	.long sub_F937F2                                 ; F935B3  [ 23]
-	.long sub_F937F3                                 ; F935B7  [ 24]
-	.long sub_F92CE6                                 ; F935BB  [ 25]
-	.long sub_F92CE6                                 ; F935BF  [ 26]
-	.long sub_F92CE6                                 ; F935C3  [ 27]
-	.long sub_F92CE6                                 ; F935C7  [ 28]
-	.long sub_F92CE6                                 ; F935CB  [ 29]
-	.long sub_F92CE6                                 ; F935CF  [ 30]
-	.long sub_F92CE6                                 ; F935D3  [ 31]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop6                                 ; F935B3  [ 23]
+	.long ScreenButtonHandlers_CombinationGroupMenu_Nop7                                 ; F935B7  [ 24]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F935BB  [ 25]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F935BF  [ 26]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F935C3  [ 27]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F935C7  [ 28]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F935CB  [ 29]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F935CF  [ 30]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F935D3  [ 31]
 ; InstallPainter_CombinationGroupMenu -- paints the screen whose own text reads "COMBINATION GROUP MENU", "1.", "9."
 ;
 ; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
@@ -36383,7 +36383,7 @@ sub_F936DA:   ; entry: named by 1 `ld` operand, first at 0xF9361E
 	ld a, 0x0c:opc                                          ; F93703  21 0c
 	swi 7                                                ; F93705  ff
 	ret                                                  ; F93706  0e
-sub_F93707:
+ScreenLeave_CombinationGroupMenu_Nop:
 	ret                                                  ; F93707  0e
 sub_F93708:
 	ld a, (0x216a:16)                                   ; F93708  c1 6a 21 21
@@ -36406,9 +36406,9 @@ sub_F93708:
 	m_or_mi8 MB16, 0x2071, 0x10                          ; F9373A  c1 71 20 3e 10
 .LF9373F:
 	ret                                                  ; F9373F  0e
-sub_F93740:   ; entry: named by 2 `.long` operands, first at 0xF9355B
+ScreenButtonHandlers_CombinationGroupMenu_Nop1:   ; entry: named by 2 `.long` operands, first at 0xF9355B
 	ret                                                  ; F93740  0e
-sub_F93741:   ; entry: named by 2 `.long` operands, first at 0xF9355F
+ScreenButtonHandlers_CombinationGroupMenu_Nop2:   ; entry: named by 2 `.long` operands, first at 0xF9355F
 	ret                                                  ; F93741  0e
 sub_F93742:
 	ld a, (0x216a:16)                                   ; F93742  c1 6a 21 21
@@ -36484,9 +36484,9 @@ sub_F937DB:   ; entry: named by 2 `.long` operands, first at 0xF9356B
 	m_or_mi8 MB16, 0x2075, 0x80                          ; F937EC  c1 75 20 3e 80
 .LF937F1:
 	ret                                                  ; F937F1  0e
-sub_F937F2:   ; entry: named by 2 `.long` operands, first at 0xF9356F
+ScreenButtonHandlers_CombinationGroupMenu_Nop6:   ; entry: named by 2 `.long` operands, first at 0xF9356F
 	ret                                                  ; F937F2  0e
-sub_F937F3:   ; entry: named by 2 `.long` operands, first at 0xF93573
+ScreenButtonHandlers_CombinationGroupMenu_Nop7:   ; entry: named by 2 `.long` operands, first at 0xF93573
 	ret                                                  ; F937F3  0e
 sub_F937F4:
 	calr sub_F93B33                                          ; F937F4  1e 3c 03
@@ -36497,13 +36497,13 @@ sub_F937F8:   ; entry: named by 1 `.long` operand, first at 0xF9357B
 sub_F937FC:   ; entry: named by 1 `.long` operand, first at 0xF9357F
 	calr sub_F93B33                                          ; F937FC  1e 34 03
 	ret                                                  ; F937FF  0e
-sub_F93800:   ; entry: named by 1 `.long` operand, first at 0xF93583
+ScreenButtonHandlers_CombinationGroupMenu_Nop11:   ; entry: named by 1 `.long` operand, first at 0xF93583
 	ret                                                  ; F93800  0e
-sub_F93801:   ; entry: named by 1 `.long` operand, first at 0xF93587
+ScreenButtonHandlers_CombinationGroupMenu_Nop12:   ; entry: named by 1 `.long` operand, first at 0xF93587
 	ret                                                  ; F93801  0e
-sub_F93802:   ; entry: named by 1 `.long` operand, first at 0xF9358B
+ScreenButtonHandlers_CombinationGroupMenu_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF9358B
 	ret                                                  ; F93802  0e
-sub_F93803:   ; entry: named by 1 `.long` operand, first at 0xF9358F
+ScreenButtonHandlers_CombinationGroupMenu_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF9358F
 	ret                                                  ; F93803  0e
 sub_F93804:   ; entry: named by 1 `.long` operand, first at 0xF93593
 	bit 0x07,W                                           ; F93804  c8 33 07
@@ -36552,7 +36552,7 @@ InstallPainter_GroupCombiDisplayHold_Entry:
 ; Was `sub_F93827`.
 ; ---------------------------------------------------------------------
 ScreenLeave_GroupCombiDisplayHold:
-	calr sub_F93ADD                                          ; F93827  1e b3 02
+	calr ScreenLeave_GroupCombiDisplayHold_Nop                                          ; F93827  1e b3 02
 	ret                                                  ; F9382A  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_GroupCombiDisplayHold -- the BUTTON method of the screen
@@ -36597,8 +36597,8 @@ sub_F93835:
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_GroupCombiDisplayHold:
 	.long sub_F93ADE                                 ; F93839  [  0]
-	.long sub_F93AE2                                 ; F9383D  [  1]
-	.long sub_F93AE3                                 ; F93841  [  2]
+	.long ScreenButtonHandlers_GroupCombiDisplayHold_Nop1                                 ; F9383D  [  1]
+	.long ScreenButtonHandlers_GroupCombiDisplayHold_Nop2                                 ; F93841  [  2]
 	.long sub_F93AE4                                 ; F93845  [  3]
 	.long sub_F93AE8                                 ; F93849  [  4]
 	.long sub_F93AEC                                 ; F9384D  [  5]
@@ -36609,25 +36609,25 @@ ScreenButtonHandlers_GroupCombiDisplayHold:
 	.long sub_F93B61                                 ; F93861  [ 10]
 	.long sub_F93B6B                                 ; F93865  [ 11]
 	.long .LF93B75                                   ; F93869  [ 12]
-	.long sub_F93C18                                 ; F9386D  [ 13]
-	.long sub_F93C19                                 ; F93871  [ 14]
+	.long ScreenButtonHandlers_GroupCombiDisplayHold_Nop13                                 ; F9386D  [ 13]
+	.long ScreenButtonHandlers_GroupCombiDisplayHold_Nop14                                 ; F93871  [ 14]
 	.long sub_F93C1A                                 ; F93875  [ 15]
-	.long sub_F92CE6                                 ; F93879  [ 16]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F93879  [ 16]
 	.long sub_F93ADE                                 ; F9387D  [ 17]
-	.long sub_F93AE2                                 ; F93881  [ 18]
-	.long sub_F93AE3                                 ; F93885  [ 19]
+	.long ScreenButtonHandlers_GroupCombiDisplayHold_Nop1                                 ; F93881  [ 18]
+	.long ScreenButtonHandlers_GroupCombiDisplayHold_Nop2                                 ; F93885  [ 19]
 	.long sub_F93AE4                                 ; F93889  [ 20]
 	.long sub_F93AE8                                 ; F9388D  [ 21]
 	.long sub_F93AEC                                 ; F93891  [ 22]
 	.long sub_F93B03                                 ; F93895  [ 23]
 	.long sub_F93B1B                                 ; F93899  [ 24]
-	.long sub_F92CE6                                 ; F9389D  [ 25]
-	.long sub_F92CE6                                 ; F938A1  [ 26]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9389D  [ 25]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F938A1  [ 26]
 	.long sub_F93C3D                                 ; F938A5  [ 27]
-	.long sub_F92CE6                                 ; F938A9  [ 28]
-	.long sub_F92CE6                                 ; F938AD  [ 29]
-	.long sub_F92CE6                                 ; F938B1  [ 30]
-	.long sub_F92CE6                                 ; F938B5  [ 31]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F938A9  [ 28]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F938AD  [ 29]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F938B1  [ 30]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F938B5  [ 31]
 ; InstallPainter_GroupCombiDisplayHold -- paints the screen whose own text reads "GROUP:", "COMBI.", "DISPLAY"
 ;
 ; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
@@ -36866,14 +36866,14 @@ sub_F93A3C:
 	ld a, 0x0c:opc                                          ; F93AD9  21 0c
 	swi 7                                                ; F93ADB  ff
 	ret                                                  ; F93ADC  0e
-sub_F93ADD:
+ScreenLeave_GroupCombiDisplayHold_Nop:
 	ret                                                  ; F93ADD  0e
 sub_F93ADE:   ; entry: named by 2 `.long` operands, first at 0xF93839
 	calr sub_F93708                                          ; F93ADE  1e 27 fc
 	ret                                                  ; F93AE1  0e
-sub_F93AE2:   ; entry: named by 2 `.long` operands, first at 0xF9383D
+ScreenButtonHandlers_GroupCombiDisplayHold_Nop1:   ; entry: named by 2 `.long` operands, first at 0xF9383D
 	ret                                                  ; F93AE2  0e
-sub_F93AE3:   ; entry: named by 2 `.long` operands, first at 0xF93841
+ScreenButtonHandlers_GroupCombiDisplayHold_Nop2:   ; entry: named by 2 `.long` operands, first at 0xF93841
 	ret                                                  ; F93AE3  0e
 sub_F93AE4:   ; entry: named by 2 `.long` operands, first at 0xF93845
 	calr sub_F93742                                          ; F93AE4  1e 5b fc
@@ -37006,9 +37006,9 @@ sub_F93BFE:   ; entry: named by 2 `ld` operands, first at 0xF93BB2
 	popw wa                                              ; F93C13  48
 	calr sub_F92E76                                          ; F93C14  1e 5f f2
 	ret                                                  ; F93C17  0e
-sub_F93C18:   ; entry: named by 1 `.long` operand, first at 0xF9386D
+ScreenButtonHandlers_GroupCombiDisplayHold_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF9386D
 	ret                                                  ; F93C18  0e
-sub_F93C19:   ; entry: named by 1 `.long` operand, first at 0xF93871
+ScreenButtonHandlers_GroupCombiDisplayHold_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF93871
 	ret                                                  ; F93C19  0e
 sub_F93C1A:   ; entry: named by 1 `.long` operand, first at 0xF93875
 	bit 0x07,W                                           ; F93C1A  c8 33 07
@@ -37492,7 +37492,7 @@ sub_F94078:
 	calr sub_F9410E                                            ; F94078  1e 93 00
 	ret                                                  ; F9407B  0e
 sub_F9407C:
-	calr sub_F94261                                          ; F9407C  1e e2 01
+	calr sub_F9407C_Nop                                          ; F9407C  1e e2 01
 	ret                                                  ; F9407F  0e
 sub_F94080:
 	ld XIX,DisplayListPtrs_F9408E                        ; F94080  44 8e 40 f9 00
@@ -37519,38 +37519,38 @@ sub_F9408A:
 ; Evidence: as ScreenButtonHandlers_GroupSoundDisplayHold.
 ; ---------------------------------------------------------------------
 DisplayListPtrs_F9408E:
-	.long sub_F92CE6                                 ; F9408E  [  0]
-	.long sub_F92CE6                                 ; F94092  [  1]
-	.long sub_F92CE6                                 ; F94096  [  2]
-	.long sub_F92CE6                                 ; F9409A  [  3]
-	.long sub_F92CE6                                 ; F9409E  [  4]
-	.long sub_F92CE6                                 ; F940A2  [  5]
-	.long sub_F92CE6                                 ; F940A6  [  6]
-	.long sub_F92CE6                                 ; F940AA  [  7]
-	.long sub_F92CE6                                 ; F940AE  [  8]
-	.long sub_F92CE6                                 ; F940B2  [  9]
-	.long sub_F92CE6                                 ; F940B6  [ 10]
-	.long sub_F92CE6                                 ; F940BA  [ 11]
-	.long sub_F92CE6                                 ; F940BE  [ 12]
-	.long sub_F92CE6                                 ; F940C2  [ 13]
-	.long sub_F92CE6                                 ; F940C6  [ 14]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9408E  [  0]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F94092  [  1]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F94096  [  2]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9409A  [  3]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9409E  [  4]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940A2  [  5]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940A6  [  6]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940AA  [  7]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940AE  [  8]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940B2  [  9]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940B6  [ 10]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940BA  [ 11]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940BE  [ 12]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940C2  [ 13]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940C6  [ 14]
 	.long sub_F94261__F94262                                 ; F940CA  [ 15]
-	.long sub_F92CE6                                 ; F940CE  [ 16]
-	.long sub_F92CE6                                 ; F940D2  [ 17]
-	.long sub_F92CE6                                 ; F940D6  [ 18]
-	.long sub_F92CE6                                 ; F940DA  [ 19]
-	.long sub_F92CE6                                 ; F940DE  [ 20]
-	.long sub_F92CE6                                 ; F940E2  [ 21]
-	.long sub_F92CE6                                 ; F940E6  [ 22]
-	.long sub_F92CE6                                 ; F940EA  [ 23]
-	.long sub_F92CE6                                 ; F940EE  [ 24]
-	.long sub_F92CE6                                 ; F940F2  [ 25]
-	.long sub_F92CE6                                 ; F940F6  [ 26]
-	.long sub_F92CE6                                 ; F940FA  [ 27]
-	.long sub_F92CE6                                 ; F940FE  [ 28]
-	.long sub_F92CE6                                 ; F94102  [ 29]
-	.long sub_F92CE6                                 ; F94106  [ 30]
-	.long sub_F92CE6                                 ; F9410A  [ 31]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940CE  [ 16]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940D2  [ 17]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940D6  [ 18]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940DA  [ 19]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940DE  [ 20]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940E2  [ 21]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940E6  [ 22]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940EA  [ 23]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940EE  [ 24]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940F2  [ 25]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940F6  [ 26]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940FA  [ 27]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F940FE  [ 28]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F94102  [ 29]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F94106  [ 30]
+	.long DisplayListPtrs_F914FB_Nop8                                 ; F9410A  [ 31]
 sub_F9410E:
 	calr sub_F94112                                      ; F9410E  1e 01 00
 	ret                                                  ; F94111  0e
@@ -37720,7 +37720,7 @@ LCD_DrawAllInitialSettingMessage__F9422C:
 	ld a, 0x01:opc                                          ; F9425D  21 01
 	swi 7                                                ; F9425F  ff
 	ret                                                  ; F94260  0e
-sub_F94261:
+sub_F9407C_Nop:
 	ret                                                  ; F94261  0e
 sub_F94261__F94262:
 	ld a, (0x7f02:16)                                   ; F94262  c1 02 7f 21
@@ -39308,9 +39308,9 @@ sub_F955F8:
 .LF95644:
 	pop XIX                                              ; F95644  5c
 	ret                                                  ; F95645  0e
-sub_F95646:
+T_F40150_Nop:
 	ret                                                  ; F95646  0e
-sub_F95647:
+T_F40154_Nop:
 	ret                                                  ; F95647  0e
 sub_F95648:
 	call sub_F94DF8                                      ; F95648  1d f8 4d f9
@@ -39320,7 +39320,7 @@ sub_F95648:
 	calr sub_F95158                                          ; F95654  1e 01 fb
 	popw bc                                              ; F95657  49
 	ret                                                  ; F95658  0e
-sub_F95659:
+T_F4015C_Nop:
 	ret                                                  ; F95659  0e
 sub_F9565A:
 	ld c, (0x207b:16)                                   ; F9565A  c1 7b 20 23
@@ -39329,7 +39329,7 @@ sub_F9565A:
 	call T_F413C0                                        ; F95664  1d c0 13 f4
 .LF95668:
 	ret                                                  ; F95668  0e
-sub_F95669:
+T_F40164_Nop:
 	ret                                                  ; F95669  0e
 sub_F9566A:
 	push XIX                                             ; F9566A  3c
@@ -39425,11 +39425,11 @@ sub_F956F9:
 	popw de                                              ; F9572E  4a
 	popw hl                                              ; F9572F  4b
 	ret                                                  ; F95730  0e
-sub_F95731:
+T_F4016C_Nop:
 	ret                                                  ; F95731  0e
-sub_F95732:
+T_F40170_Nop:
 	ret                                                  ; F95732  0e
-sub_F95733:
+T_F40174_Nop:
 	ret                                                  ; F95733  0e
 ; ---------------------------------------------------------------------
 ; Paint_GateArrayCheck -- paints the service screen whose own text reads "GATE ARRAY CHECK"
@@ -39460,7 +39460,7 @@ sub_F95733:
 ; ---------------------------------------------------------------------
 Paint_GateArrayCheck:
 	call T_CallbackQueue_ResetAndRestartTask2            ; F95734  1d 80 2e f4
-	calr sub_F95646                                          ; F95738  1e 0b ff
+	calr T_F40150_Nop                                          ; F95738  1e 0b ff
 	ld c, (0x207d:16)                                   ; F9573B  c1 7d 20 23
 	m_cp_rm MB16, 0x207c, r3                             ; F9573F  c1 7c 20 f3
 	jr z, .LF95764                                           ; F95743  66 1f
@@ -39525,7 +39525,7 @@ ScreenLeave_GateArrayCheck:
 ; ---------------------------------------------------------------------
 ScreenButton_GateArrayCheck:
 	ret                                                  ; F95766  0e
-sub_F95767:
+T_F400DC_Nop:
 	ret                                                  ; F95767  0e
 ; ---------------------------------------------------------------------
 ; Paint_PanelCpuCheck -- paints the service screen whose own text reads "PANEL CPU CHECK"
@@ -39620,7 +39620,7 @@ ScreenLeave_PanelCpuCheck:
 ; ---------------------------------------------------------------------
 ScreenButton_PanelCpuCheck:
 	ret                                                  ; F95796  0e
-sub_F95797:
+T_F400EC_Nop:
 	ret                                                  ; F95797  0e
 ; ---------------------------------------------------------------------
 ; Paint_SineWaveCheckMode -- paints the service screen whose own text reads "SINE WAVE CHECK" / "CHECK MODE"
@@ -39890,7 +39890,7 @@ sub_F95971:   ; entry: screen button-handler table
 .LF9598D:
 	popw hl                                              ; F9598D  4b
 	ret                                                  ; F9598E  0e
-sub_F9598F:
+T_F400FC_Nop:
 	ret                                                  ; F9598F  0e
 ; ---------------------------------------------------------------------
 ; Paint_PanelSwLedCheck -- paints the service screen whose own text reads "PANEL SW&LED CHECK"
@@ -39985,23 +39985,23 @@ ScreenLeave_PanelSwLedCheck:
 ; ---------------------------------------------------------------------
 ScreenButton_PanelSwLedCheck:
 	ret                                                  ; F959BE  0e
-sub_F959BF:
+T_F4010C_Nop:
 	ret                                                  ; F959BF  0e
-sub_F959C0:
+T_F40110_Nop:
 	ret                                                  ; F959C0  0e
-sub_F959C1:
+T_F40114_Nop:
 	ret                                                  ; F959C1  0e
-sub_F959C2:
+T_F40118_Nop:
 	ret                                                  ; F959C2  0e
-sub_F959C3:
+T_F4011C_Nop:
 	ret                                                  ; F959C3  0e
-sub_F959C4:
+T_F40120_Nop:
 	ret                                                  ; F959C4  0e
-sub_F959C5:
+T_F40124_Nop:
 	ret                                                  ; F959C5  0e
-sub_F959C6:
+T_F40128_Nop:
 	ret                                                  ; F959C6  0e
-sub_F959C7:
+T_F4012C_Nop:
 	ret                                                  ; F959C7  0e
 sub_F959C8:
 	ld c, (0x2095:16)                                   ; F959C8  c1 95 20 23
@@ -40014,7 +40014,7 @@ sub_F959C8__F959D1:
 	calr sub_F95C2D                                          ; F959D9  1e 51 02
 	call LCD_ShowLayers1And2_StackFrame                                      ; F959DC  1d 3c 4c f9
 	ret                                                  ; F959E0  0e
-sub_F959E1:
+T_F40134_Nop:
 	ret                                                  ; F959E1  0e
 sub_F959E2:
 	link XIZ,0x0000                                      ; F959E2  ee 0c 00 00
@@ -40236,7 +40236,7 @@ sub_F95BCA:   ; entry: screen button-handler table
 sub_F95BCA__F95C11:
 	unlk XIZ                                             ; F95C11  ee 0d
 	ret                                                  ; F95C13  0e
-sub_F95C14:
+T_F4013C_Nop:
 	ret                                                  ; F95C14  0e
 sub_F95C15:   ; entry: screen button-handler table
 	link XIZ,0x0000                                      ; F95C15  ee 0c 00 00
@@ -40247,7 +40247,7 @@ sub_F95C15:   ; entry: screen button-handler table
 .LF95C29:
 	unlk XIZ                                             ; F95C29  ee 0d
 	ret                                                  ; F95C2B  0e
-sub_F95C2C:   ; entry: screen button-handler table
+ScreenButtonHandlers_SineWaveCheckMode_Nop0:   ; entry: screen button-handler table
 	ret                                                  ; F95C2C  0e
 sub_F95C2D:
 	push XIX                                             ; F95C2D  3c
@@ -40332,43 +40332,43 @@ sub_F95C2D__F95C83:
 ;          table and the stray byte open.  Both are answered there.
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_SineWaveCheckMode:
-	.long sub_F95C2C                               ; F95C95  [code 0x00]
-	.long sub_F95C2C                               ; F95C99  [code 0x01]
-	.long sub_F95C2C                               ; F95C9D  [code 0x02]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95C95  [code 0x00]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95C99  [code 0x01]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95C9D  [code 0x02]
 	.long sub_F958C9                               ; F95CA1  [code 0x03]
 	.long sub_F95901                               ; F95CA5  [code 0x04]
 	.long sub_F95939                               ; F95CA9  [code 0x05]
-	.long sub_F95C2C                               ; F95CAD  [code 0x06]
-	.long sub_F95C2C                               ; F95CB1  [code 0x07]
-	.long sub_F95C2C                               ; F95CB5  [code 0x08]
-	.long sub_F95C2C                               ; F95CB9  [code 0x09]
-	.long sub_F95C2C                               ; F95CBD  [code 0x0A]
-	.long sub_F95C2C                               ; F95CC1  [code 0x0B]
-	.long sub_F95C2C                               ; F95CC5  [code 0x0C]
-	.long sub_F95C2C                               ; F95CC9  [code 0x0D]
-	.long sub_F95C2C                               ; F95CCD  [code 0x0E]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CAD  [code 0x06]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CB1  [code 0x07]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CB5  [code 0x08]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CB9  [code 0x09]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CBD  [code 0x0A]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CC1  [code 0x0B]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CC5  [code 0x0C]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CC9  [code 0x0D]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CCD  [code 0x0E]
 	.long sub_F95C15                               ; F95CD1  [code 0x0F]
-	.long sub_F95C2C                               ; F95CD5  [code 0x10]
-	.long sub_F95C2C                               ; F95CD9  [code 0x11]
-	.long sub_F95C2C                               ; F95CDD  [code 0x12]
-	.long sub_F95C2C                               ; F95CE1  [code 0x13]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CD5  [code 0x10]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CD9  [code 0x11]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CDD  [code 0x12]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CE1  [code 0x13]
 	.long sub_F958C9                               ; F95CE5  [code 0x14]
 	.long sub_F95901                               ; F95CE9  [code 0x15]
 	.long sub_F95939                               ; F95CED  [code 0x16]
-	.long sub_F95C2C                               ; F95CF1  [code 0x17]
-	.long sub_F95C2C                               ; F95CF5  [code 0x18]
-	.long sub_F95C2C                               ; F95CF9  [code 0x19]
-	.long sub_F95C2C                               ; F95CFD  [code 0x1A]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CF1  [code 0x17]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CF5  [code 0x18]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CF9  [code 0x19]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95CFD  [code 0x1A]
 	.long sub_F95971                               ; F95D01  [code 0x1B]
-	.long sub_F95C2C                               ; F95D05  [code 0x1C]
-	.long sub_F95C2C                               ; F95D09  [code 0x1D]
-	.long sub_F95C2C                               ; F95D0D  [code 0x1E]
-	.long sub_F95C2C                               ; F95D11  [code 0x1F]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D05  [code 0x1C]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D09  [code 0x1D]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D0D  [code 0x1E]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D11  [code 0x1F]
 
 ; ---------------------------------------------------------------------
 ; ScreenObjF40130_ButtonHandlers -- 32 LE32 handlers, one per panel event
 ;          code, for the screen object at prom_b 0xF40130 (+0 sub_F959C8,
-;          +4 sub_F959E1, +8 sub_F959E2).
+;          +4 T_F40134_Nop, +8 sub_F959E2).
 ; Read by: sub_F959E2 (0xF959E2, slot T_F40138), the same five instructions
 ;          as ScreenButton_SineWaveCheckMode with this base at 0xF95A05.
 ;          19 slots are the default 0xF95C2C.
@@ -40381,32 +40381,32 @@ ScreenObjF40130_ButtonHandlers:
 	.long sub_F95B24                               ; F95D21  [code 0x03]
 	.long sub_F95B77                               ; F95D25  [code 0x04]
 	.long sub_F95BCA                               ; F95D29  [code 0x05]
-	.long sub_F95C2C                               ; F95D2D  [code 0x06]
-	.long sub_F95C2C                               ; F95D31  [code 0x07]
-	.long sub_F95C2C                               ; F95D35  [code 0x08]
-	.long sub_F95C2C                               ; F95D39  [code 0x09]
-	.long sub_F95C2C                               ; F95D3D  [code 0x0A]
-	.long sub_F95C2C                               ; F95D41  [code 0x0B]
-	.long sub_F95C2C                               ; F95D45  [code 0x0C]
-	.long sub_F95C2C                               ; F95D49  [code 0x0D]
-	.long sub_F95C2C                               ; F95D4D  [code 0x0E]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D2D  [code 0x06]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D31  [code 0x07]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D35  [code 0x08]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D39  [code 0x09]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D3D  [code 0x0A]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D41  [code 0x0B]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D45  [code 0x0C]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D49  [code 0x0D]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D4D  [code 0x0E]
 	.long sub_F95C15                               ; F95D51  [code 0x0F]
-	.long sub_F95C2C                               ; F95D55  [code 0x10]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D55  [code 0x10]
 	.long sub_F95A1A                               ; F95D59  [code 0x11]
 	.long sub_F95A7A                               ; F95D5D  [code 0x12]
 	.long sub_F95AD1                               ; F95D61  [code 0x13]
 	.long sub_F95B24                               ; F95D65  [code 0x14]
 	.long sub_F95B77                               ; F95D69  [code 0x15]
 	.long sub_F95BCA                               ; F95D6D  [code 0x16]
-	.long sub_F95C2C                               ; F95D71  [code 0x17]
-	.long sub_F95C2C                               ; F95D75  [code 0x18]
-	.long sub_F95C2C                               ; F95D79  [code 0x19]
-	.long sub_F95C2C                               ; F95D7D  [code 0x1A]
-	.long sub_F95C2C                               ; F95D81  [code 0x1B]
-	.long sub_F95C2C                               ; F95D85  [code 0x1C]
-	.long sub_F95C2C                               ; F95D89  [code 0x1D]
-	.long sub_F95C2C                               ; F95D8D  [code 0x1E]
-	.long sub_F95C2C                               ; F95D91  [code 0x1F]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D71  [code 0x17]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D75  [code 0x18]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D79  [code 0x19]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D7D  [code 0x1A]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D81  [code 0x1B]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D85  [code 0x1C]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D89  [code 0x1D]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D8D  [code 0x1E]
+	.long ScreenButtonHandlers_SineWaveCheckMode_Nop0                               ; F95D91  [code 0x1F]
 
 ; ---------------------------------------------------------------------
 ; ScreenButtonHandlers_StaleCopy -- 1 byte + 59 LE32: a copy of BOTH tables
@@ -40553,7 +40553,7 @@ ScreenButtonHandlers_StaleCopy:
 ; Boundaries: notes/reachability.py's walk, frozen against this file's own output.
 ; Labels are sub_XXXXXX by design: this round is COVERAGE, naming is a later goal.
 ; This text was assembled and byte-compared with the ROM before printing.
-sub_F96018:   ; entry: prom_b routine directory
+T_F401D4_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F96018  0e
 sub_F96019:   ; entry: prom_b routine directory
 	calr .LF96024                                        ; F96019  1e 08 00
@@ -40561,11 +40561,11 @@ sub_F96019:   ; entry: prom_b routine directory
 sub_F9601D:   ; entry: prom_b routine directory
 	calr .LF9604E                                        ; F9601D  1e 2e 00
 	ret                                                  ; F96020  0e
-sub_F96021:   ; entry: prom_b routine directory
+T_F401E8_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F96021  0e
-sub_F96022:   ; entry: prom_b routine directory
+T_F401EC_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F96022  0e
-sub_F96023:   ; entry: prom_b routine directory
+T_F401F0_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F96023  0e
 .LF96024:
 	ld a, (0x7f4a:16)                                   ; F96024  c1 4a 7f 21
@@ -40768,9 +40768,9 @@ sub_F961F1:   ; entry: reachable-run entry
 	jr .LF96256                                          ; F96254  68 00
 .LF96256:
 	ret                                                  ; F96256  0e
-sub_F96257:   ; entry: prom_b routine directory
+T_F401E0_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F96257  0e
-sub_F96258:   ; entry: prom_b routine directory
+T_F401E4_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F96258  0e
 
 ; 0xF96259-0xF96400 -- 424 bytes of 0x0E (RET), module padding.
@@ -40804,7 +40804,7 @@ sub_F96258:   ; entry: prom_b routine directory
 sub_F96418:   ; entry: prom_b routine directory
 	call 0xf96432                                        ; F96418  1d 32 64 f9
 	ret                                                  ; F9641C  0e
-sub_F9641D:   ; entry: prom_b routine directory
+T_F40218_Nop:   ; entry: prom_b routine directory
 	ret                                                  ; F9641D  0e
 sub_F9641E:   ; entry: prom_b routine directory
 	call 0xf9646a                                        ; F9641E  1d 6a 64 f9
@@ -44698,7 +44698,7 @@ sub_F99021:
 	call T_Kernel_SemaSignal_StackArg                    ; F99045  1d c0 2d f4
 	inc 6,XSP                                            ; F99049  ef 66
 	ret                                                  ; F9904B  0e
-sub_F9904C:
+T_F41608_Nop:
 	ret                                                  ; F9904C  0e
 sub_F9904D:
 	link XIZ,0x0000                                      ; F9904D  ee 0c 00 00
@@ -44734,7 +44734,7 @@ sub_F99085:   ; entry: MessageScreen_ArgHandlers[15]
 .LF99094:
 	unlk XIZ                                             ; F99094  ee 0d
 	ret                                                  ; F99096  0e
-sub_F99097:
+T_F41610_Nop:
 	ret                                                  ; F99097  0e
 sub_F99098:
 	link XIZ,0xfff4                                      ; F99098  ee 0c f4 ff
@@ -45098,32 +45098,32 @@ sub_F99400:
 	nop                                                  ; F99816  00
 	nop                                                  ; F99817  00
 sub_F99400_Join:
-	calr sub_F99820                                      ; F99818  1e 05 00
+	calr sub_F99400_Nop                                      ; F99818  1e 05 00
 	call sub_F9B4A1                                      ; F9981B  1d a1 b4 f9
 	ret                                                  ; F9981F  0e
-sub_F99820:
+sub_F99400_Nop:
 	ret                                                  ; F99820  0e
-sub_F99821:
+T_F41660_Nop:
 	ret                                                  ; F99821  0e
-sub_F99822:
+T_F416E0_Nop:
 	ret                                                  ; F99822  0e
-sub_F99823:
+T_F416F0_Nop:
 	ret                                                  ; F99823  0e
-sub_F99824:
+T_F41700_Nop:
 	ret                                                  ; F99824  0e
-sub_F99825:
+T_F41670_Nop:
 	ret                                                  ; F99825  0e
-sub_F99826:
+T_F41680_Nop:
 	ret                                                  ; F99826  0e
-sub_F99827:
+T_F416A0_Nop:
 	ret                                                  ; F99827  0e
-sub_F99828:
+T_F416B0_Nop:
 	ret                                                  ; F99828  0e
 	ret                                                  ; F99829  0e
 	ret                                                  ; F9982A  0e
-sub_F9982B:
+T_F416C0_Nop:
 	ret                                                  ; F9982B  0e
-sub_F9982C:
+T_F416D0_Nop:
 	ret                                                  ; F9982C  0e
 ; ---------------------------------------------------------------------
 ; Paint_SysexBulkDump_Entry -- a PURE WRAPPER for Paint_SysexBulkDump: it IS that
@@ -45190,7 +45190,7 @@ ScreenButton_SysexBulkDump_Entry:
 	ld e, (0x2740:16)                                   ; F9983A  c1 40 27 25
 	call T_F41B0C                                        ; F9983E  1d 0c 1b f4
 	ret                                                  ; F99842  0e
-sub_F99843:
+T_F4171C_Nop:
 	ret                                                  ; F99843  0e
 ; ---------------------------------------------------------------------
 ; Paint_GeneralMidiMode_Entry -- a PURE WRAPPER for Paint_GeneralMidiMode: it IS that
@@ -45257,7 +45257,7 @@ ScreenButton_GeneralMidiMode_Entry:
 	ld e, (0x2740:16)                                   ; F99851  c1 40 27 25
 	call T_F41B0C                                        ; F99855  1d 0c 1b f4
 	ret                                                  ; F99859  0e
-sub_F9985A:
+T_F4172C_Nop:
 	ret                                                  ; F9985A  0e
 ; ---------------------------------------------------------------------
 ; Paint_Sending_Entry -- a PURE WRAPPER for Paint_Sending: it IS that
@@ -45289,7 +45289,7 @@ Paint_Sending_Entry:
 Paint_SystemExclusivePleaseWait_Entry:
 	calr Paint_SystemExclusivePleaseWait                                          ; F9985F  1e 3f 04
 	ret                                                  ; F99862  0e
-sub_F99863:
+T_F41738_Nop:
 	ret                                                  ; F99863  0e
 sub_F99864:
 	bit 0x07,W                                           ; F99864  c8 33 07
@@ -45328,38 +45328,38 @@ sub_F99864:
 ;          (notes/proma-2026-09-25/gen_button_rows.py, checks W1-W5)
 ; ---------------------------------------------------------------------
 ScreenButtonRow_SysexBulkDump:
-	.long sub_F99A5E                                 ; F99870  [  0]
-	.long sub_F99A5F                                 ; F99874  [  1]
-	.long sub_F99A60                                 ; F99878  [  2]
-	.long sub_F99A61                                 ; F9987C  [  3]
-	.long sub_F99A62                                 ; F99880  [  4]
-	.long sub_F99A63                                 ; F99884  [  5]
-	.long sub_F99A64                                 ; F99888  [  6]
-	.long sub_F99A65                                 ; F9988C  [  7]
+	.long ScreenButtonRow_SysexBulkDump_Nop0                                 ; F99870  [  0]
+	.long ScreenButtonRow_SysexBulkDump_Nop1                                 ; F99874  [  1]
+	.long ScreenButtonRow_SysexBulkDump_Nop2                                 ; F99878  [  2]
+	.long ScreenButtonRow_SysexBulkDump_Nop3                                 ; F9987C  [  3]
+	.long ScreenButtonRow_SysexBulkDump_Nop4                                 ; F99880  [  4]
+	.long ScreenButtonRow_SysexBulkDump_Nop5                                 ; F99884  [  5]
+	.long ScreenButtonRow_SysexBulkDump_Nop6                                 ; F99888  [  6]
+	.long ScreenButtonRow_SysexBulkDump_Nop7                                 ; F9988C  [  7]
 	.long sub_F99A66                                 ; F99890  [  8]
 	.long sub_F99A8F                                 ; F99894  [  9]
 	.long sub_F99A8F__F99AEB                                 ; F99898  [ 10]
 	.long sub_F99B14                                 ; F9989C  [ 11]
 	.long sub_F99B3D                                 ; F998A0  [ 12]
-	.long sub_F99B6C                                 ; F998A4  [ 13]
-	.long sub_F99B6D                                 ; F998A8  [ 14]
+	.long ScreenButtonRow_SysexBulkDump_Nop13                                 ; F998A4  [ 13]
+	.long ScreenButtonRow_SysexBulkDump_Nop14                                 ; F998A8  [ 14]
 	.long sub_F99B6E                                 ; F998AC  [ 15]
-	.long sub_F99B72                                 ; F998B0  [ 16]
-	.long sub_F99B73                                 ; F998B4  [ 17]
-	.long sub_F99B74                                 ; F998B8  [ 18]
-	.long sub_F99B75                                 ; F998BC  [ 19]
-	.long sub_F99B76                                 ; F998C0  [ 20]
-	.long sub_F99B77                                 ; F998C4  [ 21]
-	.long sub_F99B78                                 ; F998C8  [ 22]
-	.long sub_F99B79                                 ; F998CC  [ 23]
-	.long sub_F99B7A                                 ; F998D0  [ 24]
-	.long sub_F99B7B                                 ; F998D4  [ 25]
-	.long sub_F99B7C                                 ; F998D8  [ 26]
-	.long sub_F99B7D                                 ; F998DC  [ 27]
-	.long sub_F99B7E                                 ; F998E0  [ 28]
-	.long sub_F99B7F                                 ; F998E4  [ 29]
-	.long sub_F99B80                                 ; F998E8  [ 30]
-	.long sub_F99B81                                 ; F998EC  [ 31]
+	.long ScreenButtonRow_SysexBulkDump_Nop16                                 ; F998B0  [ 16]
+	.long ScreenButtonRow_SysexBulkDump_Nop17                                 ; F998B4  [ 17]
+	.long ScreenButtonRow_SysexBulkDump_Nop18                                 ; F998B8  [ 18]
+	.long ScreenButtonRow_SysexBulkDump_Nop19                                 ; F998BC  [ 19]
+	.long ScreenButtonRow_SysexBulkDump_Nop20                                 ; F998C0  [ 20]
+	.long ScreenButtonRow_SysexBulkDump_Nop21                                 ; F998C4  [ 21]
+	.long ScreenButtonRow_SysexBulkDump_Nop22                                 ; F998C8  [ 22]
+	.long ScreenButtonRow_SysexBulkDump_Nop23                                 ; F998CC  [ 23]
+	.long ScreenButtonRow_SysexBulkDump_Nop24                                 ; F998D0  [ 24]
+	.long ScreenButtonRow_SysexBulkDump_Nop25                                 ; F998D4  [ 25]
+	.long ScreenButtonRow_SysexBulkDump_Nop26                                 ; F998D8  [ 26]
+	.long ScreenButtonRow_SysexBulkDump_Nop27                                 ; F998DC  [ 27]
+	.long ScreenButtonRow_SysexBulkDump_Nop28                                 ; F998E0  [ 28]
+	.long ScreenButtonRow_SysexBulkDump_Nop29                                 ; F998E4  [ 29]
+	.long ScreenButtonRow_SysexBulkDump_Nop30                                 ; F998E8  [ 30]
+	.long ScreenButtonRow_SysexBulkDump_Nop31                                 ; F998EC  [ 31]
 ; ---------------------------------------------------------------------
 ; ScreenButtonRow_GeneralMidi_Page0 -- 32 handlers, GeneralMidiMode's main
 ;          page: ScreenButton_GeneralMidiMode_Entry's base, row (0x2740) = 0,
@@ -45370,38 +45370,38 @@ ScreenButtonRow_SysexBulkDump:
 ; (notes/proma-2026-09-25/gen_button_rows.py)
 ; ---------------------------------------------------------------------
 ScreenButtonRow_GeneralMidi_Page0:
-	.long sub_F99DD5                                 ; F998F0  [ 32]
-	.long sub_F99DD6                                 ; F998F4  [ 33]
-	.long sub_F99DD7                                 ; F998F8  [ 34]
-	.long sub_F99DD8                                 ; F998FC  [ 35]
-	.long sub_F99DD9                                 ; F99900  [ 36]
-	.long sub_F99DDA                                 ; F99904  [ 37]
-	.long sub_F99DDB                                 ; F99908  [ 38]
-	.long sub_F99DDC                                 ; F9990C  [ 39]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop0                                 ; F998F0  [ 32]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop1                                 ; F998F4  [ 33]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop2                                 ; F998F8  [ 34]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop3                                 ; F998FC  [ 35]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop4                                 ; F99900  [ 36]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop5                                 ; F99904  [ 37]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop6                                 ; F99908  [ 38]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop7                                 ; F9990C  [ 39]
 	.long sub_F99DDD                                 ; F99910  [ 40]
-	.long sub_F99DF3                                 ; F99914  [ 41]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop9                                 ; F99914  [ 41]
 	.long sub_F99DF4                                 ; F99918  [ 42]
 	.long sub_F99E2C                                 ; F9991C  [ 43]
-	.long sub_F99E64                                 ; F99920  [ 44]
-	.long sub_F99E65                                 ; F99924  [ 45]
-	.long sub_F99E66                                 ; F99928  [ 46]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop12                                 ; F99920  [ 44]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop13                                 ; F99924  [ 45]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop14                                 ; F99928  [ 46]
 	.long sub_F99E67                                 ; F9992C  [ 47]
-	.long sub_F99E6B                                 ; F99930  [ 48]
-	.long sub_F99E6C                                 ; F99934  [ 49]
-	.long sub_F99E6D                                 ; F99938  [ 50]
-	.long sub_F99E6E                                 ; F9993C  [ 51]
-	.long sub_F99E6F                                 ; F99940  [ 52]
-	.long sub_F99E70                                 ; F99944  [ 53]
-	.long sub_F99E71                                 ; F99948  [ 54]
-	.long sub_F99E72                                 ; F9994C  [ 55]
-	.long sub_F99E73                                 ; F99950  [ 56]
-	.long sub_F99E74                                 ; F99954  [ 57]
-	.long sub_F99E75                                 ; F99958  [ 58]
-	.long sub_F99E76                                 ; F9995C  [ 59]
-	.long sub_F99E77                                 ; F99960  [ 60]
-	.long sub_F99E78                                 ; F99964  [ 61]
-	.long sub_F99E79                                 ; F99968  [ 62]
-	.long sub_F99E7A                                 ; F9996C  [ 63]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop16                                 ; F99930  [ 48]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop17                                 ; F99934  [ 49]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop18                                 ; F99938  [ 50]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop19                                 ; F9993C  [ 51]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop20                                 ; F99940  [ 52]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop21                                 ; F99944  [ 53]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop22                                 ; F99948  [ 54]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop23                                 ; F9994C  [ 55]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop24                                 ; F99950  [ 56]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop25                                 ; F99954  [ 57]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop26                                 ; F99958  [ 58]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop27                                 ; F9995C  [ 59]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop28                                 ; F99960  [ 60]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop29                                 ; F99964  [ 61]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop30                                 ; F99968  [ 62]
+	.long ScreenButtonRow_GeneralMidi_Page0_Nop31                                 ; F9996C  [ 63]
 ; ---------------------------------------------------------------------
 ; ScreenButtonRow_GeneralMidi_YesNo -- 32 handlers, GeneralMidiMode's YES/NO
 ;          page: row (0x2740) = 1 of ScreenButton_GeneralMidiMode_Entry, drawn
@@ -45410,38 +45410,38 @@ ScreenButtonRow_GeneralMidi_Page0:
 ; (notes/proma-2026-09-25/gen_button_rows.py)
 ; ---------------------------------------------------------------------
 ScreenButtonRow_GeneralMidi_YesNo:
-	.long sub_F99E7B                                 ; F99970  [ 64]
-	.long sub_F99E7C                                 ; F99974  [ 65]
-	.long sub_F99E7D                                 ; F99978  [ 66]
-	.long sub_F99E7E                                 ; F9997C  [ 67]
-	.long sub_F99E7F                                 ; F99980  [ 68]
-	.long sub_F99E80                                 ; F99984  [ 69]
-	.long sub_F99E81                                 ; F99988  [ 70]
-	.long sub_F99E82                                 ; F9998C  [ 71]
-	.long sub_F99E83                                 ; F99990  [ 72]
-	.long sub_F99E84                                 ; F99994  [ 73]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop0                                 ; F99970  [ 64]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop1                                 ; F99974  [ 65]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop2                                 ; F99978  [ 66]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop3                                 ; F9997C  [ 67]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop4                                 ; F99980  [ 68]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop5                                 ; F99984  [ 69]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop6                                 ; F99988  [ 70]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop7                                 ; F9998C  [ 71]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop8                                 ; F99990  [ 72]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop9                                 ; F99994  [ 73]
 	.long sub_F99E85                                 ; F99998  [ 74]
 	.long sub_F99ED1                                 ; F9999C  [ 75]
-	.long sub_F99EE1                                 ; F999A0  [ 76]
-	.long sub_F99EE2                                 ; F999A4  [ 77]
-	.long sub_F99EE3                                 ; F999A8  [ 78]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop12                                 ; F999A0  [ 76]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop13                                 ; F999A4  [ 77]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop14                                 ; F999A8  [ 78]
 	.long sub_F99EE4                                 ; F999AC  [ 79]
-	.long sub_F99EF4                                 ; F999B0  [ 80]
-	.long sub_F99EF5                                 ; F999B4  [ 81]
-	.long sub_F99EF6                                 ; F999B8  [ 82]
-	.long sub_F99EF7                                 ; F999BC  [ 83]
-	.long sub_F99EF8                                 ; F999C0  [ 84]
-	.long sub_F99EF9                                 ; F999C4  [ 85]
-	.long sub_F99EFA                                 ; F999C8  [ 86]
-	.long sub_F99EFB                                 ; F999CC  [ 87]
-	.long sub_F99EFC                                 ; F999D0  [ 88]
-	.long sub_F99EFD                                 ; F999D4  [ 89]
-	.long sub_F99EFE                                 ; F999D8  [ 90]
-	.long sub_F99EFF                                 ; F999DC  [ 91]
-	.long sub_F99F00                                 ; F999E0  [ 92]
-	.long sub_F99F01                                 ; F999E4  [ 93]
-	.long sub_F99F02                                 ; F999E8  [ 94]
-	.long sub_F99F03                                 ; F999EC  [ 95]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop16                                 ; F999B0  [ 80]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop17                                 ; F999B4  [ 81]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop18                                 ; F999B8  [ 82]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop19                                 ; F999BC  [ 83]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop20                                 ; F999C0  [ 84]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop21                                 ; F999C4  [ 85]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop22                                 ; F999C8  [ 86]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop23                                 ; F999CC  [ 87]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop24                                 ; F999D0  [ 88]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop25                                 ; F999D4  [ 89]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop26                                 ; F999D8  [ 90]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop27                                 ; F999DC  [ 91]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop28                                 ; F999E0  [ 92]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop29                                 ; F999E4  [ 93]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop30                                 ; F999E8  [ 94]
+	.long ScreenButtonRow_GeneralMidi_YesNo_Nop31                                 ; F999EC  [ 95]
 ; ------------------------------------------------------------------------------
 ; 0xF999F0-0xF99A03 -- LCD_ScreenRedraw_Begin and LCD_ScreenRedraw_End
 ;
@@ -45504,21 +45504,21 @@ sub_F99A4E:
 	m_and_mi8 MB16, 0x2094, 0xbf                         ; F99A58  c1 94 20 3c bf
 .LF99A5D:
 	ret                                                  ; F99A5D  0e
-sub_F99A5E:   ; entry: named by 1 `.long` operand, first at 0xF99870
+ScreenButtonRow_SysexBulkDump_Nop0:   ; entry: named by 1 `.long` operand, first at 0xF99870
 	ret                                                  ; F99A5E  0e
-sub_F99A5F:   ; entry: named by 1 `.long` operand, first at 0xF99874
+ScreenButtonRow_SysexBulkDump_Nop1:   ; entry: named by 1 `.long` operand, first at 0xF99874
 	ret                                                  ; F99A5F  0e
-sub_F99A60:   ; entry: named by 1 `.long` operand, first at 0xF99878
+ScreenButtonRow_SysexBulkDump_Nop2:   ; entry: named by 1 `.long` operand, first at 0xF99878
 	ret                                                  ; F99A60  0e
-sub_F99A61:   ; entry: named by 1 `.long` operand, first at 0xF9987C
+ScreenButtonRow_SysexBulkDump_Nop3:   ; entry: named by 1 `.long` operand, first at 0xF9987C
 	ret                                                  ; F99A61  0e
-sub_F99A62:   ; entry: named by 1 `.long` operand, first at 0xF99880
+ScreenButtonRow_SysexBulkDump_Nop4:   ; entry: named by 1 `.long` operand, first at 0xF99880
 	ret                                                  ; F99A62  0e
-sub_F99A63:   ; entry: named by 1 `.long` operand, first at 0xF99884
+ScreenButtonRow_SysexBulkDump_Nop5:   ; entry: named by 1 `.long` operand, first at 0xF99884
 	ret                                                  ; F99A63  0e
-sub_F99A64:   ; entry: named by 1 `.long` operand, first at 0xF99888
+ScreenButtonRow_SysexBulkDump_Nop6:   ; entry: named by 1 `.long` operand, first at 0xF99888
 	ret                                                  ; F99A64  0e
-sub_F99A65:   ; entry: named by 1 `.long` operand, first at 0xF9988C
+ScreenButtonRow_SysexBulkDump_Nop7:   ; entry: named by 1 `.long` operand, first at 0xF9988C
 	ret                                                  ; F99A65  0e
 sub_F99A66:   ; entry: named by 1 `.long` operand, first at 0xF99890
 	bit 0x07,W                                           ; F99A66  c8 33 07
@@ -45607,44 +45607,44 @@ sub_F99B3D:   ; entry: named by 1 `.long` operand, first at 0xF998A0
 	call T_F4181C                                        ; F99B67  1d 1c 18 f4
 .LF99B6B:
 	ret                                                  ; F99B6B  0e
-sub_F99B6C:   ; entry: named by 1 `.long` operand, first at 0xF998A4
+ScreenButtonRow_SysexBulkDump_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF998A4
 	ret                                                  ; F99B6C  0e
-sub_F99B6D:   ; entry: named by 1 `.long` operand, first at 0xF998A8
+ScreenButtonRow_SysexBulkDump_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF998A8
 	ret                                                  ; F99B6D  0e
 sub_F99B6E:   ; entry: named by 1 `.long` operand, first at 0xF998AC
 	calr sub_F99864                                          ; F99B6E  1e f3 fc
 	ret                                                  ; F99B71  0e
-sub_F99B72:   ; entry: named by 1 `.long` operand, first at 0xF998B0
+ScreenButtonRow_SysexBulkDump_Nop16:   ; entry: named by 1 `.long` operand, first at 0xF998B0
 	ret                                                  ; F99B72  0e
-sub_F99B73:   ; entry: named by 1 `.long` operand, first at 0xF998B4
+ScreenButtonRow_SysexBulkDump_Nop17:   ; entry: named by 1 `.long` operand, first at 0xF998B4
 	ret                                                  ; F99B73  0e
-sub_F99B74:   ; entry: named by 1 `.long` operand, first at 0xF998B8
+ScreenButtonRow_SysexBulkDump_Nop18:   ; entry: named by 1 `.long` operand, first at 0xF998B8
 	ret                                                  ; F99B74  0e
-sub_F99B75:   ; entry: named by 1 `.long` operand, first at 0xF998BC
+ScreenButtonRow_SysexBulkDump_Nop19:   ; entry: named by 1 `.long` operand, first at 0xF998BC
 	ret                                                  ; F99B75  0e
-sub_F99B76:   ; entry: named by 1 `.long` operand, first at 0xF998C0
+ScreenButtonRow_SysexBulkDump_Nop20:   ; entry: named by 1 `.long` operand, first at 0xF998C0
 	ret                                                  ; F99B76  0e
-sub_F99B77:   ; entry: named by 1 `.long` operand, first at 0xF998C4
+ScreenButtonRow_SysexBulkDump_Nop21:   ; entry: named by 1 `.long` operand, first at 0xF998C4
 	ret                                                  ; F99B77  0e
-sub_F99B78:   ; entry: named by 1 `.long` operand, first at 0xF998C8
+ScreenButtonRow_SysexBulkDump_Nop22:   ; entry: named by 1 `.long` operand, first at 0xF998C8
 	ret                                                  ; F99B78  0e
-sub_F99B79:   ; entry: named by 1 `.long` operand, first at 0xF998CC
+ScreenButtonRow_SysexBulkDump_Nop23:   ; entry: named by 1 `.long` operand, first at 0xF998CC
 	ret                                                  ; F99B79  0e
-sub_F99B7A:   ; entry: named by 1 `.long` operand, first at 0xF998D0
+ScreenButtonRow_SysexBulkDump_Nop24:   ; entry: named by 1 `.long` operand, first at 0xF998D0
 	ret                                                  ; F99B7A  0e
-sub_F99B7B:   ; entry: named by 1 `.long` operand, first at 0xF998D4
+ScreenButtonRow_SysexBulkDump_Nop25:   ; entry: named by 1 `.long` operand, first at 0xF998D4
 	ret                                                  ; F99B7B  0e
-sub_F99B7C:   ; entry: named by 1 `.long` operand, first at 0xF998D8
+ScreenButtonRow_SysexBulkDump_Nop26:   ; entry: named by 1 `.long` operand, first at 0xF998D8
 	ret                                                  ; F99B7C  0e
-sub_F99B7D:   ; entry: named by 1 `.long` operand, first at 0xF998DC
+ScreenButtonRow_SysexBulkDump_Nop27:   ; entry: named by 1 `.long` operand, first at 0xF998DC
 	ret                                                  ; F99B7D  0e
-sub_F99B7E:   ; entry: named by 1 `.long` operand, first at 0xF998E0
+ScreenButtonRow_SysexBulkDump_Nop28:   ; entry: named by 1 `.long` operand, first at 0xF998E0
 	ret                                                  ; F99B7E  0e
-sub_F99B7F:   ; entry: named by 1 `.long` operand, first at 0xF998E4
+ScreenButtonRow_SysexBulkDump_Nop29:   ; entry: named by 1 `.long` operand, first at 0xF998E4
 	ret                                                  ; F99B7F  0e
-sub_F99B80:   ; entry: named by 1 `.long` operand, first at 0xF998E8
+ScreenButtonRow_SysexBulkDump_Nop30:   ; entry: named by 1 `.long` operand, first at 0xF998E8
 	ret                                                  ; F99B80  0e
-sub_F99B81:   ; entry: named by 1 `.long` operand, first at 0xF998EC
+ScreenButtonRow_SysexBulkDump_Nop31:   ; entry: named by 1 `.long` operand, first at 0xF998EC
 	ret                                                  ; F99B81  0e
 ; Paint_Sending -- paints the screen whose own text reads "SENDING"
 ;
@@ -45959,21 +45959,21 @@ sub_F99DC6:
 	call T_F425DC                                        ; F99DD0  1d dc 25 f4
 .LF99DD4:
 	ret                                                  ; F99DD4  0e
-sub_F99DD5:   ; entry: named by 1 `.long` operand, first at 0xF998F0
+ScreenButtonRow_GeneralMidi_Page0_Nop0:   ; entry: named by 1 `.long` operand, first at 0xF998F0
 	ret                                                  ; F99DD5  0e
-sub_F99DD6:   ; entry: named by 1 `.long` operand, first at 0xF998F4
+ScreenButtonRow_GeneralMidi_Page0_Nop1:   ; entry: named by 1 `.long` operand, first at 0xF998F4
 	ret                                                  ; F99DD6  0e
-sub_F99DD7:   ; entry: named by 1 `.long` operand, first at 0xF998F8
+ScreenButtonRow_GeneralMidi_Page0_Nop2:   ; entry: named by 1 `.long` operand, first at 0xF998F8
 	ret                                                  ; F99DD7  0e
-sub_F99DD8:   ; entry: named by 1 `.long` operand, first at 0xF998FC
+ScreenButtonRow_GeneralMidi_Page0_Nop3:   ; entry: named by 1 `.long` operand, first at 0xF998FC
 	ret                                                  ; F99DD8  0e
-sub_F99DD9:   ; entry: named by 1 `.long` operand, first at 0xF99900
+ScreenButtonRow_GeneralMidi_Page0_Nop4:   ; entry: named by 1 `.long` operand, first at 0xF99900
 	ret                                                  ; F99DD9  0e
-sub_F99DDA:   ; entry: named by 1 `.long` operand, first at 0xF99904
+ScreenButtonRow_GeneralMidi_Page0_Nop5:   ; entry: named by 1 `.long` operand, first at 0xF99904
 	ret                                                  ; F99DDA  0e
-sub_F99DDB:   ; entry: named by 1 `.long` operand, first at 0xF99908
+ScreenButtonRow_GeneralMidi_Page0_Nop6:   ; entry: named by 1 `.long` operand, first at 0xF99908
 	ret                                                  ; F99DDB  0e
-sub_F99DDC:   ; entry: named by 1 `.long` operand, first at 0xF9990C
+ScreenButtonRow_GeneralMidi_Page0_Nop7:   ; entry: named by 1 `.long` operand, first at 0xF9990C
 	ret                                                  ; F99DDC  0e
 sub_F99DDD:   ; entry: named by 1 `.long` operand, first at 0xF99910
 	m_bit 1, MD16, 0x274c                                ; F99DDD  f1 4c 27 c9
@@ -45984,7 +45984,7 @@ sub_F99DDD:   ; entry: named by 1 `.long` operand, first at 0xF99910
 	ld (0x2071:16), 0x10                                 ; F99DED  f1 71 20 00 10
 .LF99DF2:
 	ret                                                  ; F99DF2  0e
-sub_F99DF3:   ; entry: named by 1 `.long` operand, first at 0xF99914
+ScreenButtonRow_GeneralMidi_Page0_Nop9:   ; entry: named by 1 `.long` operand, first at 0xF99914
 	ret                                                  ; F99DF3  0e
 sub_F99DF4:   ; entry: named by 1 `.long` operand, first at 0xF99918
 	bit 0x07,W                                           ; F99DF4  c8 33 07
@@ -46020,66 +46020,66 @@ sub_F99E2C:   ; entry: named by 1 `.long` operand, first at 0xF9991C
 	m_or_mi8 MB16, 0x274c, 0x02                          ; F99E5E  c1 4c 27 3e 02
 .LF99E63:
 	ret                                                  ; F99E63  0e
-sub_F99E64:   ; entry: named by 1 `.long` operand, first at 0xF99920
+ScreenButtonRow_GeneralMidi_Page0_Nop12:   ; entry: named by 1 `.long` operand, first at 0xF99920
 	ret                                                  ; F99E64  0e
-sub_F99E65:   ; entry: named by 1 `.long` operand, first at 0xF99924
+ScreenButtonRow_GeneralMidi_Page0_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF99924
 	ret                                                  ; F99E65  0e
-sub_F99E66:   ; entry: named by 1 `.long` operand, first at 0xF99928
+ScreenButtonRow_GeneralMidi_Page0_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF99928
 	ret                                                  ; F99E66  0e
 sub_F99E67:   ; entry: named by 1 `.long` operand, first at 0xF9992C
 	calr sub_F99864                                          ; F99E67  1e fa f9
 	ret                                                  ; F99E6A  0e
-sub_F99E6B:   ; entry: named by 1 `.long` operand, first at 0xF99930
+ScreenButtonRow_GeneralMidi_Page0_Nop16:   ; entry: named by 1 `.long` operand, first at 0xF99930
 	ret                                                  ; F99E6B  0e
-sub_F99E6C:   ; entry: named by 1 `.long` operand, first at 0xF99934
+ScreenButtonRow_GeneralMidi_Page0_Nop17:   ; entry: named by 1 `.long` operand, first at 0xF99934
 	ret                                                  ; F99E6C  0e
-sub_F99E6D:   ; entry: named by 1 `.long` operand, first at 0xF99938
+ScreenButtonRow_GeneralMidi_Page0_Nop18:   ; entry: named by 1 `.long` operand, first at 0xF99938
 	ret                                                  ; F99E6D  0e
-sub_F99E6E:   ; entry: named by 1 `.long` operand, first at 0xF9993C
+ScreenButtonRow_GeneralMidi_Page0_Nop19:   ; entry: named by 1 `.long` operand, first at 0xF9993C
 	ret                                                  ; F99E6E  0e
-sub_F99E6F:   ; entry: named by 1 `.long` operand, first at 0xF99940
+ScreenButtonRow_GeneralMidi_Page0_Nop20:   ; entry: named by 1 `.long` operand, first at 0xF99940
 	ret                                                  ; F99E6F  0e
-sub_F99E70:   ; entry: named by 1 `.long` operand, first at 0xF99944
+ScreenButtonRow_GeneralMidi_Page0_Nop21:   ; entry: named by 1 `.long` operand, first at 0xF99944
 	ret                                                  ; F99E70  0e
-sub_F99E71:   ; entry: named by 1 `.long` operand, first at 0xF99948
+ScreenButtonRow_GeneralMidi_Page0_Nop22:   ; entry: named by 1 `.long` operand, first at 0xF99948
 	ret                                                  ; F99E71  0e
-sub_F99E72:   ; entry: named by 1 `.long` operand, first at 0xF9994C
+ScreenButtonRow_GeneralMidi_Page0_Nop23:   ; entry: named by 1 `.long` operand, first at 0xF9994C
 	ret                                                  ; F99E72  0e
-sub_F99E73:   ; entry: named by 1 `.long` operand, first at 0xF99950
+ScreenButtonRow_GeneralMidi_Page0_Nop24:   ; entry: named by 1 `.long` operand, first at 0xF99950
 	ret                                                  ; F99E73  0e
-sub_F99E74:   ; entry: named by 1 `.long` operand, first at 0xF99954
+ScreenButtonRow_GeneralMidi_Page0_Nop25:   ; entry: named by 1 `.long` operand, first at 0xF99954
 	ret                                                  ; F99E74  0e
-sub_F99E75:   ; entry: named by 1 `.long` operand, first at 0xF99958
+ScreenButtonRow_GeneralMidi_Page0_Nop26:   ; entry: named by 1 `.long` operand, first at 0xF99958
 	ret                                                  ; F99E75  0e
-sub_F99E76:   ; entry: named by 1 `.long` operand, first at 0xF9995C
+ScreenButtonRow_GeneralMidi_Page0_Nop27:   ; entry: named by 1 `.long` operand, first at 0xF9995C
 	ret                                                  ; F99E76  0e
-sub_F99E77:   ; entry: named by 1 `.long` operand, first at 0xF99960
+ScreenButtonRow_GeneralMidi_Page0_Nop28:   ; entry: named by 1 `.long` operand, first at 0xF99960
 	ret                                                  ; F99E77  0e
-sub_F99E78:   ; entry: named by 1 `.long` operand, first at 0xF99964
+ScreenButtonRow_GeneralMidi_Page0_Nop29:   ; entry: named by 1 `.long` operand, first at 0xF99964
 	ret                                                  ; F99E78  0e
-sub_F99E79:   ; entry: named by 1 `.long` operand, first at 0xF99968
+ScreenButtonRow_GeneralMidi_Page0_Nop30:   ; entry: named by 1 `.long` operand, first at 0xF99968
 	ret                                                  ; F99E79  0e
-sub_F99E7A:   ; entry: named by 1 `.long` operand, first at 0xF9996C
+ScreenButtonRow_GeneralMidi_Page0_Nop31:   ; entry: named by 1 `.long` operand, first at 0xF9996C
 	ret                                                  ; F99E7A  0e
-sub_F99E7B:   ; entry: named by 1 `.long` operand, first at 0xF99970
+ScreenButtonRow_GeneralMidi_YesNo_Nop0:   ; entry: named by 1 `.long` operand, first at 0xF99970
 	ret                                                  ; F99E7B  0e
-sub_F99E7C:   ; entry: named by 1 `.long` operand, first at 0xF99974
+ScreenButtonRow_GeneralMidi_YesNo_Nop1:   ; entry: named by 1 `.long` operand, first at 0xF99974
 	ret                                                  ; F99E7C  0e
-sub_F99E7D:   ; entry: named by 1 `.long` operand, first at 0xF99978
+ScreenButtonRow_GeneralMidi_YesNo_Nop2:   ; entry: named by 1 `.long` operand, first at 0xF99978
 	ret                                                  ; F99E7D  0e
-sub_F99E7E:   ; entry: named by 1 `.long` operand, first at 0xF9997C
+ScreenButtonRow_GeneralMidi_YesNo_Nop3:   ; entry: named by 1 `.long` operand, first at 0xF9997C
 	ret                                                  ; F99E7E  0e
-sub_F99E7F:   ; entry: named by 1 `.long` operand, first at 0xF99980
+ScreenButtonRow_GeneralMidi_YesNo_Nop4:   ; entry: named by 1 `.long` operand, first at 0xF99980
 	ret                                                  ; F99E7F  0e
-sub_F99E80:   ; entry: named by 1 `.long` operand, first at 0xF99984
+ScreenButtonRow_GeneralMidi_YesNo_Nop5:   ; entry: named by 1 `.long` operand, first at 0xF99984
 	ret                                                  ; F99E80  0e
-sub_F99E81:   ; entry: named by 1 `.long` operand, first at 0xF99988
+ScreenButtonRow_GeneralMidi_YesNo_Nop6:   ; entry: named by 1 `.long` operand, first at 0xF99988
 	ret                                                  ; F99E81  0e
-sub_F99E82:   ; entry: named by 1 `.long` operand, first at 0xF9998C
+ScreenButtonRow_GeneralMidi_YesNo_Nop7:   ; entry: named by 1 `.long` operand, first at 0xF9998C
 	ret                                                  ; F99E82  0e
-sub_F99E83:   ; entry: named by 1 `.long` operand, first at 0xF99990
+ScreenButtonRow_GeneralMidi_YesNo_Nop8:   ; entry: named by 1 `.long` operand, first at 0xF99990
 	ret                                                  ; F99E83  0e
-sub_F99E84:   ; entry: named by 1 `.long` operand, first at 0xF99994
+ScreenButtonRow_GeneralMidi_YesNo_Nop9:   ; entry: named by 1 `.long` operand, first at 0xF99994
 	ret                                                  ; F99E84  0e
 sub_F99E85:   ; entry: named by 1 `.long` operand, first at 0xF99998
 	bit 0x07,W                                           ; F99E85  c8 33 07
@@ -46116,11 +46116,11 @@ sub_F99ED1:   ; entry: named by 1 `.long` operand, first at 0xF9999C
 	ld (0x2071:16), 0x10                                 ; F99EDB  f1 71 20 00 10
 .LF99EE0:
 	ret                                                  ; F99EE0  0e
-sub_F99EE1:   ; entry: named by 1 `.long` operand, first at 0xF999A0
+ScreenButtonRow_GeneralMidi_YesNo_Nop12:   ; entry: named by 1 `.long` operand, first at 0xF999A0
 	ret                                                  ; F99EE1  0e
-sub_F99EE2:   ; entry: named by 1 `.long` operand, first at 0xF999A4
+ScreenButtonRow_GeneralMidi_YesNo_Nop13:   ; entry: named by 1 `.long` operand, first at 0xF999A4
 	ret                                                  ; F99EE2  0e
-sub_F99EE3:   ; entry: named by 1 `.long` operand, first at 0xF999A8
+ScreenButtonRow_GeneralMidi_YesNo_Nop14:   ; entry: named by 1 `.long` operand, first at 0xF999A8
 	ret                                                  ; F99EE3  0e
 sub_F99EE4:   ; entry: named by 1 `.long` operand, first at 0xF999AC
 	bit 0x07,W                                           ; F99EE4  c8 33 07
@@ -46129,37 +46129,37 @@ sub_F99EE4:   ; entry: named by 1 `.long` operand, first at 0xF999AC
 	ld (0x2071:16), 0x10                                 ; F99EEE  f1 71 20 00 10
 .LF99EF3:
 	ret                                                  ; F99EF3  0e
-sub_F99EF4:   ; entry: named by 1 `.long` operand, first at 0xF999B0
+ScreenButtonRow_GeneralMidi_YesNo_Nop16:   ; entry: named by 1 `.long` operand, first at 0xF999B0
 	ret                                                  ; F99EF4  0e
-sub_F99EF5:   ; entry: named by 1 `.long` operand, first at 0xF999B4
+ScreenButtonRow_GeneralMidi_YesNo_Nop17:   ; entry: named by 1 `.long` operand, first at 0xF999B4
 	ret                                                  ; F99EF5  0e
-sub_F99EF6:   ; entry: named by 1 `.long` operand, first at 0xF999B8
+ScreenButtonRow_GeneralMidi_YesNo_Nop18:   ; entry: named by 1 `.long` operand, first at 0xF999B8
 	ret                                                  ; F99EF6  0e
-sub_F99EF7:   ; entry: named by 1 `.long` operand, first at 0xF999BC
+ScreenButtonRow_GeneralMidi_YesNo_Nop19:   ; entry: named by 1 `.long` operand, first at 0xF999BC
 	ret                                                  ; F99EF7  0e
-sub_F99EF8:   ; entry: named by 1 `.long` operand, first at 0xF999C0
+ScreenButtonRow_GeneralMidi_YesNo_Nop20:   ; entry: named by 1 `.long` operand, first at 0xF999C0
 	ret                                                  ; F99EF8  0e
-sub_F99EF9:   ; entry: named by 1 `.long` operand, first at 0xF999C4
+ScreenButtonRow_GeneralMidi_YesNo_Nop21:   ; entry: named by 1 `.long` operand, first at 0xF999C4
 	ret                                                  ; F99EF9  0e
-sub_F99EFA:   ; entry: named by 1 `.long` operand, first at 0xF999C8
+ScreenButtonRow_GeneralMidi_YesNo_Nop22:   ; entry: named by 1 `.long` operand, first at 0xF999C8
 	ret                                                  ; F99EFA  0e
-sub_F99EFB:   ; entry: named by 1 `.long` operand, first at 0xF999CC
+ScreenButtonRow_GeneralMidi_YesNo_Nop23:   ; entry: named by 1 `.long` operand, first at 0xF999CC
 	ret                                                  ; F99EFB  0e
-sub_F99EFC:   ; entry: named by 1 `.long` operand, first at 0xF999D0
+ScreenButtonRow_GeneralMidi_YesNo_Nop24:   ; entry: named by 1 `.long` operand, first at 0xF999D0
 	ret                                                  ; F99EFC  0e
-sub_F99EFD:   ; entry: named by 1 `.long` operand, first at 0xF999D4
+ScreenButtonRow_GeneralMidi_YesNo_Nop25:   ; entry: named by 1 `.long` operand, first at 0xF999D4
 	ret                                                  ; F99EFD  0e
-sub_F99EFE:   ; entry: named by 1 `.long` operand, first at 0xF999D8
+ScreenButtonRow_GeneralMidi_YesNo_Nop26:   ; entry: named by 1 `.long` operand, first at 0xF999D8
 	ret                                                  ; F99EFE  0e
-sub_F99EFF:   ; entry: named by 1 `.long` operand, first at 0xF999DC
+ScreenButtonRow_GeneralMidi_YesNo_Nop27:   ; entry: named by 1 `.long` operand, first at 0xF999DC
 	ret                                                  ; F99EFF  0e
-sub_F99F00:   ; entry: named by 1 `.long` operand, first at 0xF999E0
+ScreenButtonRow_GeneralMidi_YesNo_Nop28:   ; entry: named by 1 `.long` operand, first at 0xF999E0
 	ret                                                  ; F99F00  0e
-sub_F99F01:   ; entry: named by 1 `.long` operand, first at 0xF999E4
+ScreenButtonRow_GeneralMidi_YesNo_Nop29:   ; entry: named by 1 `.long` operand, first at 0xF999E4
 	ret                                                  ; F99F01  0e
-sub_F99F02:   ; entry: named by 1 `.long` operand, first at 0xF999E8
+ScreenButtonRow_GeneralMidi_YesNo_Nop30:   ; entry: named by 1 `.long` operand, first at 0xF999E8
 	ret                                                  ; F99F02  0e
-sub_F99F03:   ; entry: named by 1 `.long` operand, first at 0xF999EC
+ScreenButtonRow_GeneralMidi_YesNo_Nop31:   ; entry: named by 1 `.long` operand, first at 0xF999EC
 	ret                                                  ; F99F03  0e
 sub_F99F04:
 	m_set 1, MD16, 0x2134                                ; F99F04  f1 34 21 b9
@@ -46223,9 +46223,9 @@ sub_F99F24:
 	call T_F42E14                                        ; F99F55  1d 14 2e f4
 	inc 8,XSP                                            ; F99F59  ef 60
 	ret                                                  ; F99F5B  0e
-sub_F99F5C:
+T_F41654_Nop:
 	ret                                                  ; F99F5C  0e
-sub_F99F5D:
+T_F4165C_Nop:
 	ret                                                  ; F99F5D  0e
 sub_F99F5E:
 	link XIZ,0x0000                                      ; F99F5E  ee 0c 00 00
@@ -46332,7 +46332,7 @@ sub_F9A03A:   ; entry: named by 1 `.long` operand, first at 0xF99FD2
 	popw bc                                              ; F9A041  49
 	jr .LF9A047                                          ; F9A042  68 03
 sub_F9A044:   ; entry: named by 27 `.long` operands, first at 0xF99F96
-	calr sub_F9A132                                      ; F9A044  1e eb 00
+	calr sub_F9A044_Nop                                      ; F9A044  1e eb 00
 .LF9A047:
 	popw hl                                              ; F9A047  4b
 	unlk XIZ                                             ; F9A048  ee 0d
@@ -46435,7 +46435,7 @@ sub_F9A0FE:
 	popw hl                                              ; F9A12E  4b
 	unlk XIZ                                             ; F9A12F  ee 0d
 	ret                                                  ; F9A131  0e
-sub_F9A132:
+sub_F9A044_Nop:
 	ret                                                  ; F9A132  0e
 sub_F9A133:
 	link XIZ,0x0000                                      ; F9A133  ee 0c 00 00
@@ -46624,7 +46624,7 @@ Paint_MidiTotalMode:
 ; ---------------------------------------------------------------------
 ScreenLeave_MidiTotalMode:
 	ret                                                  ; F9A26D  0e
-sub_F9A26E:
+T_F41748_Nop:
 	ret                                                  ; F9A26E  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_MidiTotalMode -- the BUTTON method of the screen object at
@@ -46739,7 +46739,7 @@ sub_F9A339:   ; entry: named by 8 `.long` operands, first at 0xF9A2B7
 	popw bc                                              ; F9A340  49
 	jr .LF9A346                                          ; F9A341  68 03
 sub_F9A343:   ; entry: named by 15 `.long` operands, first at 0xF9A2C7
-	calr sub_F9A132                                          ; F9A343  1e ec fd
+	calr sub_F9A044_Nop                                          ; F9A343  1e ec fd
 .LF9A346:
 	popw hl                                              ; F9A346  4b
 	unlk XIZ                                             ; F9A347  ee 0d
@@ -47265,7 +47265,7 @@ sub_F9A73C:
 ; ---------------------------------------------------------------------
 ScreenLeave_MidiRealtimeMessages:
 	ret                                                  ; F9A754  0e
-sub_F9A755:
+T_F4169C_Nop:
 	ret                                                  ; F9A755  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_MidiRealtimeMessages -- the BUTTON method of the screen object
@@ -47383,7 +47383,7 @@ sub_F9A829:   ; entry: named by 1 `.long` operand, first at 0xF9A7CA
 	popw bc                                              ; F9A830  49
 	jr .LF9A836                                          ; F9A831  68 03
 sub_F9A833:   ; entry: named by 28 `.long` operands, first at 0xF9A78E
-	calr sub_F9A132                                          ; F9A833  1e fc f8
+	calr sub_F9A044_Nop                                          ; F9A833  1e fc f8
 .LF9A836:
 	popw hl                                              ; F9A836  4b
 	unlk XIZ                                             ; F9A837  ee 0d
@@ -47628,7 +47628,7 @@ Paint_MidiInputOutputFilter:
 ; ---------------------------------------------------------------------
 ScreenLeave_MidiInputOutputFilter:
 	ret                                                  ; F9AA4F  0e
-sub_F9AA50:
+T_F41758_Nop:
 	ret                                                  ; F9AA50  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_MidiInputOutputFilter -- the BUTTON method of the screen
@@ -47741,7 +47741,7 @@ sub_F9AB1B:   ; entry: named by 8 `.long` operands, first at 0xF9AA99
 	popw bc                                              ; F9AB22  49
 	jr .LF9AB28                                          ; F9AB23  68 03
 sub_F9AB25:   ; entry: named by 15 `.long` operands, first at 0xF9AAA9
-	calr sub_F9A132                                          ; F9AB25  1e 0a f6
+	calr sub_F9A044_Nop                                          ; F9AB25  1e 0a f6
 .LF9AB28:
 	popw hl                                              ; F9AB28  4b
 	unlk XIZ                                             ; F9AB29  ee 0d
@@ -48365,7 +48365,7 @@ Paint_MidiOutProgramChange:
 ; ---------------------------------------------------------------------
 ScreenLeave_MidiOutProgramChange:
 	ret                                                  ; F9B05E  0e
-sub_F9B05F:
+T_F41768_Nop:
 	ret                                                  ; F9B05F  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_MidiOutProgramChange -- the BUTTON method of the screen object
@@ -48487,7 +48487,7 @@ sub_F9B13D:   ; entry: named by 1 `.long` operand, first at 0xF9B104
 	calr sub_F9B23A                                      ; F9B13D  1e fa 00
 	jr .LF9B145                                          ; F9B140  68 03
 sub_F9B142:   ; entry: named by 13 `.long` operands, first at 0xF9B0B8
-	calr sub_F9A132                                          ; F9B142  1e ed ef
+	calr sub_F9A044_Nop                                          ; F9B142  1e ed ef
 .LF9B145:
 	popw hl                                              ; F9B145  4b
 	unlk XIZ                                             ; F9B146  ee 0d
@@ -49364,7 +49364,7 @@ Screen_ReMapEdit_Button:
 	pop XBC                                              ; F9C0E5  59
 	unlk XIZ                                             ; F9C0E6  ee 0d
 	ret                                                  ; F9C0E8  0e
-sub_F9C0E9:
+T_F41974_Nop:
 	ret                                                  ; F9C0E9  0e
 	link XIZ,0xffee                                      ; F9C0EA  ee 0c ee ff
 	push XIX                                             ; F9C0EE  3c
@@ -50316,7 +50316,7 @@ sub_F9C9F4:
 	call T_Kernel_SemaSignal_StackArg                    ; F9CA05  1d c0 2d f4
 	inc 6,XSP                                            ; F9CA09  ef 66
 	ret                                                  ; F9CA0B  0e
-sub_F9CA0C:
+T_F4197C_Nop:
 	ret                                                  ; F9CA0C  0e
 sub_F9CA0D:
 	link XIZ,0x0000                                      ; F9CA0D  ee 0c 00 00
@@ -50334,7 +50334,7 @@ sub_F9CA0D:
 	pop XBC                                              ; F9CA30  59
 	unlk XIZ                                             ; F9CA31  ee 0d
 	ret                                                  ; F9CA33  0e
-sub_F9CA34:
+T_F41984_Nop:
 	ret                                                  ; F9CA34  0e
 	pushw hl                                             ; F9CA35  2b
 	push XIX                                             ; F9CA36  3c
@@ -50558,7 +50558,7 @@ Screen_SoundGroupNaming_Button:
 	pop XBC                                              ; F9CB76  59
 	unlk XIZ                                             ; F9CB77  ee 0d
 	ret                                                  ; F9CB79  0e
-sub_F9CB7A:
+T_F4268C_Nop:
 	ret                                                  ; F9CB7A  0e
 sub_F9CB7B:
 	lda xbc, (Descriptor9_FA1AA6:24)                     ; F9CB7B  f2 a6 1a fa 31
@@ -51189,7 +51189,7 @@ Screen_CombinationGroupNaming_Button:
 	pop XBC                                              ; F9CFDE  59
 	unlk XIZ                                             ; F9CFDF  ee 0d
 	ret                                                  ; F9CFE1  0e
-sub_F9CFE2:
+T_F4269C_Nop:
 	ret                                                  ; F9CFE2  0e
 sub_F9CFE3:
 	lda xbc, (Descriptor9_FA1AB8:24)                     ; F9CFE3  f2 b8 1a fa 31
@@ -51748,7 +51748,7 @@ sub_F9D404:
 .LF9D42F:
 	unlk XIZ                                             ; F9D42F  ee 0d
 	ret                                                  ; F9D431  0e
-sub_F9D432:
+T_F426AC_Nop:
 	ret                                                  ; F9D432  0e
 sub_F9D433:
 	link XIZ,0xfff7                                      ; F9D433  ee 0c f7 ff
@@ -52969,7 +52969,7 @@ sub_F9DF91:
 	calr sub_F9E5FD                                      ; F9DFC4  1e 36 06
 	calr sub_F9E7B3                                      ; F9DFC7  1e e9 07
 	ret                                                  ; F9DFCA  0e
-sub_F9DFCB:
+T_F426B4_Nop:
 	ret                                                  ; F9DFCB  0e
 sub_F9DFCC:
 	link XIZ,0x0000                                      ; F9DFCC  ee 0c 00 00
@@ -52987,7 +52987,7 @@ sub_F9DFCC:
 	pop XBC                                              ; F9DFEF  59
 	unlk XIZ                                             ; F9DFF0  ee 0d
 	ret                                                  ; F9DFF2  0e
-sub_F9DFF3:
+T_F426BC_Nop:
 	ret                                                  ; F9DFF3  0e
 sub_F9DFF4:
 	link XIZ,0xfff7                                      ; F9DFF4  ee 0c f7 ff
@@ -54267,7 +54267,7 @@ sub_F9EB75:
 	inc 4,XSP                                            ; F9EBE9  ef 64
 	pop XIX                                              ; F9EBEB  5c
 	ret                                                  ; F9EBEC  0e
-sub_F9EBED:
+T_F4199C_Nop:
 	ret                                                  ; F9EBED  0e
 sub_F9EBEE:
 	link XIZ,0x0000                                      ; F9EBEE  ee 0c 00 00
@@ -54285,7 +54285,7 @@ sub_F9EBEE:
 	pop XBC                                              ; F9EC11  59
 	unlk XIZ                                             ; F9EC12  ee 0d
 	ret                                                  ; F9EC14  0e
-sub_F9EC15:
+T_F419A4_Nop:
 	ret                                                  ; F9EC15  0e
 	lda xbc, (Descriptor9_FA1B24:24)                     ; F9EC16  f2 24 1b fa 31
 	push XBC                                             ; F9EC1B  39
@@ -54454,7 +54454,7 @@ sub_F9ED44:
 	inc 4,XSP                                            ; F9ED9D  ef 64
 	pop XIX                                              ; F9ED9F  5c
 	ret                                                  ; F9EDA0  0e
-sub_F9EDA1:
+T_F4198C_Nop:
 	ret                                                  ; F9EDA1  0e
 sub_F9EDA2:
 	link XIZ,0x0000                                      ; F9EDA2  ee 0c 00 00
@@ -54472,7 +54472,7 @@ sub_F9EDA2:
 	pop XBC                                              ; F9EDC5  59
 	unlk XIZ                                             ; F9EDC6  ee 0d
 	ret                                                  ; F9EDC8  0e
-sub_F9EDC9:
+T_F41994_Nop:
 	ret                                                  ; F9EDC9  0e
 	lda xbc, (Descriptor3_FA1B4E:24)                     ; F9EDCA  f2 4e 1b fa 31
 	push XBC                                             ; F9EDCF  39
@@ -54582,7 +54582,7 @@ sub_F9EEAB:
 	call T_Kernel_SemaSignal_StackArg                    ; F9EED8  1d c0 2d f4
 	inc 6,XSP                                            ; F9EEDC  ef 66
 	ret                                                  ; F9EEDE  0e
-sub_F9EEDF:
+T_F434C4_Nop:
 	ret                                                  ; F9EEDF  0e
 sub_F9EEE0:
 	link XIZ,0x0000                                      ; F9EEE0  ee 0c 00 00
@@ -54600,7 +54600,7 @@ sub_F9EEE0:
 	pop XBC                                              ; F9EF03  59
 	unlk XIZ                                             ; F9EF04  ee 0d
 	ret                                                  ; F9EF06  0e
-sub_F9EF07:
+T_F434CC_Nop:
 	ret                                                  ; F9EF07  0e
 	lda xbc, (Descriptor3_FA1B57:24)                     ; F9EF08  f2 57 1b fa 31
 	push XBC                                             ; F9EF0D  39
@@ -54642,7 +54642,7 @@ sub_F9EF07:
 sub_F9EF6C:
 	call T_F42F68                                        ; F9EF6C  1d 68 2f f4
 	ret                                                  ; F9EF70  0e
-sub_F9EF71:
+T_F4195C_Nop:
 	ret                                                  ; F9EF71  0e
 sub_F9EF72:
 	link XIZ,0x0000                                      ; F9EF72  ee 0c 00 00
@@ -54652,7 +54652,7 @@ sub_F9EF72:
 	pop XBC                                              ; F9EF80  59
 	unlk XIZ                                             ; F9EF81  ee 0d
 	ret                                                  ; F9EF83  0e
-sub_F9EF84:
+T_F41964_Nop:
 	ret                                                  ; F9EF84  0e
 ; ---------------------------------------------------------------------
 ; Screen_DrumsMapNaming_Enter -- the Enter method of the DRUMS MAP / NAMING screen: sets
@@ -54799,7 +54799,7 @@ Screen_DrumsMapNaming_Button:
 .LF9F031:
 	unlk XIZ                                             ; F9F031  ee 0d
 	ret                                                  ; F9F033  0e
-sub_F9F034:
+T_F419C4_Nop:
 	ret                                                  ; F9F034  0e
 sub_F9F035:
 	lda xbc, (Descriptor9_FA1B5A:24)                     ; F9F035  f2 5a 1b fa 31
@@ -56469,7 +56469,7 @@ sub_F9FEE7:
 	call T_Kernel_SemaSignal_StackArg                    ; F9FEF8  1d c0 2d f4
 	inc 6,XSP                                            ; F9FEFC  ef 66
 	ret                                                  ; F9FEFE  0e
-sub_F9FEFF:
+T_F4191C_Nop:
 	ret                                                  ; F9FEFF  0e
 sub_F9FF00:
 	link XIZ,0x0000                                      ; F9FF00  ee 0c 00 00
@@ -56487,7 +56487,7 @@ sub_F9FF00:
 	pop XBC                                              ; F9FF23  59
 	unlk XIZ                                             ; F9FF24  ee 0d
 	ret                                                  ; F9FF26  0e
-sub_F9FF27:
+T_F41924_Nop:
 	ret                                                  ; F9FF27  0e
 	pushw hl                                             ; F9FF28  2b
 	push XIX                                             ; F9FF29  3c
@@ -56640,7 +56640,7 @@ sub_FA0054:
 sub_FA007B:
 	call T_F42F4C                                        ; FA007B  1d 4c 2f f4
 	ret                                                  ; FA007F  0e
-sub_FA0080:
+T_F419AC_Nop:
 	ret                                                  ; FA0080  0e
 sub_FA0081:
 	link XIZ,0x0000                                      ; FA0081  ee 0c 00 00
@@ -56650,7 +56650,7 @@ sub_FA0081:
 	pop XBC                                              ; FA008F  59
 	unlk XIZ                                             ; FA0090  ee 0d
 	ret                                                  ; FA0092  0e
-sub_FA0093:
+T_F419B4_Nop:
 	ret                                                  ; FA0093  0e
 sub_FA0094:
 	ld c, (0x207a:16)                                   ; FA0094  c1 7a 20 23
@@ -56680,7 +56680,7 @@ sub_FA0094:
 	call T_Kernel_SemaSignal_StackArg                    ; FA00E2  1d c0 2d f4
 	inc 6,XSP                                            ; FA00E6  ef 66
 	ret                                                  ; FA00E8  0e
-sub_FA00E9:
+T_F4192C_Nop:
 	ret                                                  ; FA00E9  0e
 sub_FA00EA:
 	link XIZ,0x0000                                      ; FA00EA  ee 0c 00 00
@@ -56698,7 +56698,7 @@ sub_FA00EA:
 	pop XBC                                              ; FA010D  59
 	unlk XIZ                                             ; FA010E  ee 0d
 	ret                                                  ; FA0110  0e
-sub_FA0111:
+T_F41934_Nop:
 	ret                                                  ; FA0111  0e
 	ld c, (0x78a2:16)                                   ; FA0112  c1 a2 78 23
 	cp C,0x80                                            ; FA0116  cb cf 80
@@ -57371,7 +57371,7 @@ sub_FA0689:
 	popw hl                                              ; FA079D  4b
 	unlk XIZ                                             ; FA079E  ee 0d
 	ret                                                  ; FA07A0  0e
-sub_FA07A1:
+T_F4193C_Nop:
 	ret                                                  ; FA07A1  0e
 sub_FA07A2:
 	link XIZ,0x0000                                      ; FA07A2  ee 0c 00 00
@@ -57402,7 +57402,7 @@ sub_FA07A2:
 	pop XIY                                              ; FA07E6  5d
 	unlk XIZ                                             ; FA07E7  ee 0d
 	ret                                                  ; FA07E9  0e
-sub_FA07EA:
+T_F41944_Nop:
 	ret                                                  ; FA07EA  0e
 	lda xbc, (Descriptor9_FA1E91:24)                     ; FA07EB  f2 91 1e fa 31
 	push XBC                                             ; FA07F0  39
@@ -58153,7 +58153,7 @@ sub_FA0EEA:
 	pop XBC                                              ; FA0F0D  59
 	unlk XIZ                                             ; FA0F0E  ee 0d
 	ret                                                  ; FA0F10  0e
-sub_FA0F11:
+T_F41954_Nop:
 	ret                                                  ; FA0F11  0e
 	push XIX                                             ; FA0F12  3c
 	lda xix, (0x26f1:16)                                ; FA0F13  f1 f1 26 34
@@ -58597,7 +58597,7 @@ sub_FA12DD:
 	pop XBC                                              ; FA1300  59
 	unlk XIZ                                             ; FA1301  ee 0d
 	ret                                                  ; FA1303  0e
-sub_FA1304:
+T_F4267C_Nop:
 	ret                                                  ; FA1304  0e
 	ld bc, (0x207e:16)                                 ; FA1305  d1 7e 20 21
 	extz BC                                              ; FA1309  d9 12
@@ -66174,8 +66174,8 @@ MidiIn_ControllerHandlerTable:
 	.long MidiIn_CC11_RTCreatY                  ; FA62EC  [13]   -> MidiIn_CC11_RTCreatY
 	.long MidiIn_CC12_RTCtrlX                   ; FA62F0  [14]   -> MidiIn_CC12_RTCtrlX
 	.long MidiIn_CC13_RTCtrlY                   ; FA62F4  [15]   -> MidiIn_CC13_RTCtrlY
-	.long sub_FA6459                            ; FA62F8  [16]   -> sub_FA6459
-	.long sub_FA645A                            ; FA62FC  [17]   -> sub_FA645A
+	.long MidiIn_ControllerHandlerTable_Nop16                            ; FA62F8  [16]   -> MidiIn_ControllerHandlerTable_Nop16
+	.long MidiIn_ControllerHandlerTable_Nop17                            ; FA62FC  [17]   -> MidiIn_ControllerHandlerTable_Nop17
 	.long MidiIn_CC51_General6                  ; FA6300  [18]   -> MidiIn_CC51_General6
 	.long MidiIn_NullHandler                    ; FA6304  [19]   -> MidiIn_NullHandler
 	.long MidiIn_NullHandler                    ; FA6308  [20]   -> MidiIn_NullHandler
@@ -66322,7 +66322,7 @@ MidiIn_CC00_BankSelMSB:   ; entry: MidiIn_ControllerHandlerTable[24]
 	ret                                           ; FA6458  0e
 
 ; ---------------------------------------------------------------------
-; sub_FA6459 -- MidiIn_ControllerHandlerTable[16]
+; MidiIn_ControllerHandlerTable_Nop16 -- MidiIn_ControllerHandlerTable[16]
 ;
 ; Called from: that table only.
 ; Unknown: MidiIn_ControllerNumberToIndex sends NO controller
@@ -66332,11 +66332,11 @@ MidiIn_CC00_BankSelMSB:   ; entry: MidiIn_ControllerHandlerTable[24]
 ;          on the OUTBOUND side, so it is one witness and this
 ;          file's rule is two.  Named sub_ deliberately.
 ; ---------------------------------------------------------------------
-sub_FA6459:   ; entry: MidiIn_ControllerHandlerTable[16]
+MidiIn_ControllerHandlerTable_Nop16:   ; entry: MidiIn_ControllerHandlerTable[16]
 	ret                                           ; FA6459  0e
 
 ; ---------------------------------------------------------------------
-; sub_FA645A -- MidiIn_ControllerHandlerTable[17]
+; MidiIn_ControllerHandlerTable_Nop17 -- MidiIn_ControllerHandlerTable[17]
 ;
 ; Called from: that table only.
 ; Unknown: MidiIn_ControllerNumberToIndex sends NO controller
@@ -66346,7 +66346,7 @@ sub_FA6459:   ; entry: MidiIn_ControllerHandlerTable[16]
 ;          on the OUTBOUND side, so it is one witness and this
 ;          file's rule is two.  Named sub_ deliberately.
 ; ---------------------------------------------------------------------
-sub_FA645A:   ; entry: MidiIn_ControllerHandlerTable[17]
+MidiIn_ControllerHandlerTable_Nop17:   ; entry: MidiIn_ControllerHandlerTable[17]
 	ret                                           ; FA645A  0e
 
 ; ---------------------------------------------------------------------
@@ -67892,7 +67892,7 @@ MidiIn_AfterRebuild:   ; entry: call from 0xFA6F1D
 ; --- 0xFA7034-0xFA7073  pointer table (64 bytes) ---
 MidiIn_AfterRebuildTable:
 	.long MidiIn_AfterRebuild_Nop               ; FA7034  [0]   -> MidiIn_AfterRebuild_Nop
-	.long sub_FA7075                            ; FA7038  [1]   -> sub_FA7075
+	.long MidiIn_AfterRebuildTable_Nop1                            ; FA7038  [1]   -> MidiIn_AfterRebuildTable_Nop1
 	.long MidiIn_ResetChannelRouteTable         ; FA703C  [2]   -> MidiIn_ResetChannelRouteTable
 	.long MidiIn_AfterRebuild_Nop               ; FA7040  [3]   -> MidiIn_AfterRebuild_Nop
 	.long MidiIn_AfterRebuild_Nop               ; FA7044  [4]   -> MidiIn_AfterRebuild_Nop
@@ -67911,7 +67911,7 @@ MidiIn_AfterRebuild_Nop:   ; entry: MidiIn_AfterRebuildTable[0,3-15]
 	ret                                           ; FA7074  0e
 
 ; ---------------------------------------------------------------------
-; sub_FA7075 -- MidiIn_AfterRebuildTable[1]
+; MidiIn_AfterRebuildTable_Nop1 -- MidiIn_AfterRebuildTable[1]
 ;
 ; Called from: MidiIn_AfterRebuildTable[1], selected by (0x7F35) & 0x0F.
 ; Evidence: it walks 0x1800 from the entry named by (0x7F36) & 0x1F,
@@ -67920,7 +67920,7 @@ MidiIn_AfterRebuild_Nop:   ; entry: MidiIn_AfterRebuildTable[0,3-15]
 ; Unknown: which list element is being inserted, and for what.  Named
 ;          sub_ deliberately.
 ; ---------------------------------------------------------------------
-sub_FA7075:   ; entry: MidiIn_AfterRebuildTable[1]
+MidiIn_AfterRebuildTable_Nop1:   ; entry: MidiIn_AfterRebuildTable[1]
 	ret                                           ; FA7075  0e
 	ld XIX,0x00001800                             ; FA7076  44 00 18 00 00
 	xor XHL,XHL                                   ; FA707B  eb d3
@@ -68567,10 +68567,10 @@ MidiOut_CC51_General6:   ; entry: MidiOut_ParamNumberTable[32-63]
 ; --- 0xFA7520-0xFA752F  pointer table (16 bytes) ---
 MidiOut_CC51_General6_JumpTable_FA7520:
 	.long MidiIn_NullHandler                    ; FA7520  [232]   -> MidiIn_NullHandler
-	.long sub_FA7530                            ; FA7524  [233]   -> sub_FA7530
+	.long MidiOut_CC51_General6_JumpTable_FA7520_Nop1                            ; FA7524  [233]   -> MidiOut_CC51_General6_JumpTable_FA7520_Nop1
 	.long MidiIn_NullHandler                    ; FA7528  [234]   -> MidiIn_NullHandler
 	.long MidiIn_NullHandler                    ; FA752C  [235]   -> MidiIn_NullHandler
-sub_FA7530:   ; entry: 0xFA7520[1]
+MidiOut_CC51_General6_JumpTable_FA7520_Nop1:   ; entry: 0xFA7520[1]
 	ret                                           ; FA7530  0e
 sub_FA7531:   ; entry: MidiOut_ParamNumberTable[112]
 	ld XIY,sub_FA7531_JumpTable_FA753C                             ; FA7531  45 3c 75 fa 00
@@ -68744,7 +68744,7 @@ MidiOut_CC78_AllSoundOff:   ; entry: MidiOut_ParamNumberTable[174]
 	calr .LFA7BF3                                 ; FA7679  1e 77 05
 .LFA767C:
 	ret                                           ; FA767C  0e
-sub_FA767D:   ; entry: MidiOut_ParamNumberTable[176]
+MidiOut_ParamNumberTable_Nop176:   ; entry: MidiOut_ParamNumberTable[176]
 	ret                                           ; FA767D  0e
 .LFA767E:
 ; ---------------------------------------------------------------------
@@ -72059,7 +72059,7 @@ MidiOut_ParamNumberTable:
 	.long MidiOut_CC79_ResetAllCtrl             ; FA8F7C  [173]
 	.long MidiOut_CC78_AllSoundOff              ; FA8F80  [174]
 	.long MidiOut_Param_Ignore                  ; FA8F84  [175]
-	.long sub_FA767D                            ; FA8F88  [176]
+	.long MidiOut_ParamNumberTable_Nop176                            ; FA8F88  [176]
 	.long MidiOut_PitchBend                     ; FA8F8C  [177]
 	.long MidiOut_CC01_Modulation               ; FA8F90  [178]
 	.long MidiOut_CC0B_Expression               ; FA8F94  [179]
@@ -74152,11 +74152,11 @@ Queue2C00_PublishStagedDrainPassB:
 	popw hl                                              ; FAA5A1  4b
 	popw wa                                              ; FAA5A2  48
 	ret                                                  ; FAA5A3  0e
-sub_FAA5A4:
+T_F407BC_Nop:
 	ret                                                  ; FAA5A4  0e
-sub_FAA5A5:
+T_F407C0_Nop:
 	ret                                                  ; FAA5A5  0e
-sub_FAA5A6:
+T_F407C8_Nop:
 	ret                                                  ; FAA5A6  0e
 ; ---------------------------------------------------------------------
 ; ParamRecord_WriteFieldIfChanged -- the same masked write as
@@ -74400,11 +74400,11 @@ sub_FAA6B1:
 	pop XBC                                              ; FAA719  59
 	pop XWA                                              ; FAA71A  58
 	ret                                                  ; FAA71B  0e
-sub_FAA71C:
+T_F407E0_Nop:
 	ret                                                  ; FAA71C  0e
-sub_FAA71D:
+T_F407E8_Nop:
 	ret                                                  ; FAA71D  0e
-sub_FAA71E:
+T_F407E4_Nop:
 	ret                                                  ; FAA71E  0e
 sub_FAA71F:
 	pushw de                                             ; FAA71F  2a
@@ -74462,7 +74462,7 @@ sub_FAA742:
 	pop XWA                                              ; FAA7A9  58
 .LFAA7AA:
 	ret                                                  ; FAA7AA  0e
-sub_FAA7AB:
+T_F407A4_Nop:
 	ret                                                  ; FAA7AB  0e
 	ret                                                  ; FAA7AC  0e
 	push XIZ                                             ; FAA7AD  3e
@@ -74546,7 +74546,7 @@ sub_FAA82A:
 	ld (0x60f01e:24), 0x7f                             ; FAA86D  f2 1e f0 60 00 7f
 	lda xbc, (ParamNumber_RecordPtrs:24)                 ; FAA873  f2 ea cd fa 31
 	ld (0x60f018:24), xbc                               ; FAA878  f2 18 f0 60 61
-	calr sub_FAAC0E                                      ; FAA87D  1e 8e 03
+	calr sub_FAA82A_Nop                                      ; FAA87D  1e 8e 03
 	popw hl                                              ; FAA880  4b
 	ret                                                  ; FAA881  0e
 sub_FAA882:
@@ -74965,7 +74965,7 @@ sub_FAABD9:
 	popw hl                                              ; FAAC0A  4b
 	unlk XIZ                                             ; FAAC0B  ee 0d
 	ret                                                  ; FAAC0D  0e
-sub_FAAC0E:
+sub_FAA82A_Nop:
 	ret                                                  ; FAAC0E  0e
 sub_FAAC0F:
 	link XIZ,0xfffc                                      ; FAAC0F  ee 0c fc ff
@@ -76041,9 +76041,9 @@ sub_FAB49B:
 	popw hl                                              ; FAB5E5  4b
 	unlk XIZ                                             ; FAB5E6  ee 0d
 	ret                                                  ; FAB5E8  0e
-sub_FAB5E9:
+T_F407A8_Nop:
 	ret                                                  ; FAB5E9  0e
-sub_FAB5EA:
+T_F407A0_Nop:
 	ret                                                  ; FAB5EA  0e
 sub_FAB5EB:
 	push XIX                                             ; FAB5EB  3c
@@ -76079,10 +76079,10 @@ sub_FAB643:
 sub_FAB64E:
 	and C,0x03                                           ; FAB64E  cb cc 03
 	jr z, .LFAB656                                       ; FAB651  66 03
-	calr sub_FAB657                                      ; FAB653  1e 01 00
+	calr T_F407C4_Nop                                      ; FAB653  1e 01 00
 .LFAB656:
 	ret                                                  ; FAB656  0e
-sub_FAB657:
+T_F407C4_Nop:
 	ret                                                  ; FAB657  0e
 sub_FAB658:
 	pushw hl                                             ; FAB658  2b
@@ -76637,11 +76637,11 @@ sub_FABB52:
 	calr Queue2C00_AppendStagedIfPending                                          ; FABB58  1e b0 f6
 	popw bc                                              ; FABB5B  49
 	ret                                                  ; FABB5C  0e
-sub_FABB5D:   ; entry: named by 3 `.long` operands, first at 0xFAC9FA
+Dispatch_By_60F080_Nop68:   ; entry: named by 3 `.long` operands, first at 0xFAC9FA
 	ret                                                  ; FABB5D  0e
 	ret                                                  ; FABB5E  0e
 	ret                                                  ; FABB5F  0e
-sub_FABB60:   ; entry: named by 1 `.long` operand, first at 0xFACA0A
+Dispatch_By_60F080_Nop72:   ; entry: named by 1 `.long` operand, first at 0xFACA0A
 	ret                                                  ; FABB60  0e
 sub_FABB61:   ; entry: named by 1 `.long` operand, first at 0xFACAD2
 	calr sub_FAB1D8                                          ; FABB61  1e 74 f6
@@ -76684,19 +76684,19 @@ sub_FABB75:
 .LFABBCD:
 	pop XIX                                              ; FABBCD  5c
 	ret                                                  ; FABBCE  0e
-sub_FABBCF:   ; entry: named by 1 `.long` operand, first at 0xFACB2A
+Dispatch_By_60F080_Nop144:   ; entry: named by 1 `.long` operand, first at 0xFACB2A
 	ret                                                  ; FABBCF  0e
-sub_FABBD0:   ; entry: named by 1 `.long` operand, first at 0xFACB2E
+Dispatch_By_60F080_Nop145:   ; entry: named by 1 `.long` operand, first at 0xFACB2E
 	ret                                                  ; FABBD0  0e
 	ret                                                  ; FABBD1  0e
-sub_FABBD2:   ; entry: named by 1 `.long` operand, first at 0xFACA6A
+Dispatch_By_60F080_Nop96:   ; entry: named by 1 `.long` operand, first at 0xFACA6A
 	ret                                                  ; FABBD2  0e
 	ret                                                  ; FABBD3  0e
-sub_FABBD4:   ; entry: named by 1 `.long` operand, first at 0xFACAAA
+Dispatch_By_60F080_Nop112:   ; entry: named by 1 `.long` operand, first at 0xFACAAA
 	ret                                                  ; FABBD4  0e
-sub_FABBD5:   ; entry: named by 1 `.long` operand, first at 0xFACAB2
+Dispatch_By_60F080_Nop114:   ; entry: named by 1 `.long` operand, first at 0xFACAB2
 	ret                                                  ; FABBD5  0e
-sub_FABBD6:
+T_F407F0_Nop:
 	ret                                                  ; FABBD6  0e
 sub_FABBD7:   ; entry: named by 1 `.long` operand, first at 0xFACB4A
 	calr sub_FAB1D8                                          ; FABBD7  1e fe f5
@@ -78051,7 +78051,7 @@ sub_FAC80F:
 .LFAC843:
 	pop XIX                                              ; FAC843  5c
 	ret                                                  ; FAC844  0e
-sub_FAC845:   ; entry: named by 232 `.long` operands, first at 0xFAC9EA
+Dispatch_By_60F080_Nop64:   ; entry: named by 232 `.long` operands, first at 0xFAC9EA
 	ret                                                  ; FAC845  0e
 ; ---------------------------------------------------------------------
 ; Queue2C00_AppendStaged -- store the staged record (0x60F080), (0x60F081),
@@ -78190,7 +78190,7 @@ Gap_FAC8E6:
 ;              ignored like the other 168
 ;   0xB1-0xB5, 0xB8-0xBD -- the eleven MIDI controllers, ParamMsg_B1_PitchBend
 ;              and its block header
-;   the other 168 numbers: sub_FAC845, one `ret`.
+;   the other 168 numbers: Dispatch_By_60F080_Nop64, one `ret`.
 ; (checks M1-M8: notes/proma-2026-09-25/gen_param_list_headers.py)
 ; ---------------------------------------------------------------------
 Dispatch_By_60F080:
@@ -78258,198 +78258,198 @@ Dispatch_By_60F080:
 	.long sub_FABAFD                                 ; FAC9DE  [ 61]
 	.long sub_FABAFD                                 ; FAC9E2  [ 62]
 	.long sub_FABAFD                                 ; FAC9E6  [ 63]
-	.long sub_FAC845                                 ; FAC9EA  [ 64]
-	.long sub_FAC845                                 ; FAC9EE  [ 65]
-	.long sub_FAC845                                 ; FAC9F2  [ 66]
-	.long sub_FAC845                                 ; FAC9F6  [ 67]
-	.long sub_FABB5D                                 ; FAC9FA  [ 68]
-	.long sub_FABB5D                                 ; FAC9FE  [ 69]
-	.long sub_FABB5D                                 ; FACA02  [ 70]
-	.long sub_FAC845                                 ; FACA06  [ 71]
-	.long sub_FABB60                                 ; FACA0A  [ 72]
-	.long sub_FAC845                                 ; FACA0E  [ 73]
-	.long sub_FAC845                                 ; FACA12  [ 74]
-	.long sub_FAC845                                 ; FACA16  [ 75]
-	.long sub_FAC845                                 ; FACA1A  [ 76]
-	.long sub_FAC845                                 ; FACA1E  [ 77]
-	.long sub_FAC845                                 ; FACA22  [ 78]
-	.long sub_FAC845                                 ; FACA26  [ 79]
-	.long sub_FAC845                                 ; FACA2A  [ 80]
-	.long sub_FAC845                                 ; FACA2E  [ 81]
-	.long sub_FAC845                                 ; FACA32  [ 82]
-	.long sub_FAC845                                 ; FACA36  [ 83]
-	.long sub_FAC845                                 ; FACA3A  [ 84]
-	.long sub_FAC845                                 ; FACA3E  [ 85]
-	.long sub_FAC845                                 ; FACA42  [ 86]
-	.long sub_FAC845                                 ; FACA46  [ 87]
-	.long sub_FAC845                                 ; FACA4A  [ 88]
-	.long sub_FAC845                                 ; FACA4E  [ 89]
-	.long sub_FAC845                                 ; FACA52  [ 90]
-	.long sub_FAC845                                 ; FACA56  [ 91]
-	.long sub_FAC845                                 ; FACA5A  [ 92]
-	.long sub_FAC845                                 ; FACA5E  [ 93]
-	.long sub_FAC845                                 ; FACA62  [ 94]
-	.long sub_FAC845                                 ; FACA66  [ 95]
-	.long sub_FABBD2                                 ; FACA6A  [ 96]
-	.long sub_FAC845                                 ; FACA6E  [ 97]
-	.long sub_FAC845                                 ; FACA72  [ 98]
-	.long sub_FAC845                                 ; FACA76  [ 99]
-	.long sub_FAC845                                 ; FACA7A  [100]
-	.long sub_FAC845                                 ; FACA7E  [101]
-	.long sub_FAC845                                 ; FACA82  [102]
-	.long sub_FAC845                                 ; FACA86  [103]
-	.long sub_FAC845                                 ; FACA8A  [104]
-	.long sub_FAC845                                 ; FACA8E  [105]
-	.long sub_FAC845                                 ; FACA92  [106]
-	.long sub_FAC845                                 ; FACA96  [107]
-	.long sub_FAC845                                 ; FACA9A  [108]
-	.long sub_FAC845                                 ; FACA9E  [109]
-	.long sub_FAC845                                 ; FACAA2  [110]
-	.long sub_FAC845                                 ; FACAA6  [111]
-	.long sub_FABBD4                                 ; FACAAA  [112]
-	.long sub_FAC845                                 ; FACAAE  [113]
-	.long sub_FABBD5                                 ; FACAB2  [114]
-	.long sub_FAC845                                 ; FACAB6  [115]
-	.long sub_FAC845                                 ; FACABA  [116]
-	.long sub_FAC845                                 ; FACABE  [117]
-	.long sub_FAC845                                 ; FACAC2  [118]
-	.long sub_FAC845                                 ; FACAC6  [119]
-	.long sub_FAC845                                 ; FACACA  [120]
-	.long sub_FAC845                                 ; FACACE  [121]
+	.long Dispatch_By_60F080_Nop64                                 ; FAC9EA  [ 64]
+	.long Dispatch_By_60F080_Nop64                                 ; FAC9EE  [ 65]
+	.long Dispatch_By_60F080_Nop64                                 ; FAC9F2  [ 66]
+	.long Dispatch_By_60F080_Nop64                                 ; FAC9F6  [ 67]
+	.long Dispatch_By_60F080_Nop68                                 ; FAC9FA  [ 68]
+	.long Dispatch_By_60F080_Nop68                                 ; FAC9FE  [ 69]
+	.long Dispatch_By_60F080_Nop68                                 ; FACA02  [ 70]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA06  [ 71]
+	.long Dispatch_By_60F080_Nop72                                 ; FACA0A  [ 72]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA0E  [ 73]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA12  [ 74]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA16  [ 75]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA1A  [ 76]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA1E  [ 77]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA22  [ 78]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA26  [ 79]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA2A  [ 80]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA2E  [ 81]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA32  [ 82]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA36  [ 83]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA3A  [ 84]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA3E  [ 85]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA42  [ 86]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA46  [ 87]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA4A  [ 88]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA4E  [ 89]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA52  [ 90]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA56  [ 91]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA5A  [ 92]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA5E  [ 93]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA62  [ 94]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA66  [ 95]
+	.long Dispatch_By_60F080_Nop96                                 ; FACA6A  [ 96]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA6E  [ 97]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA72  [ 98]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA76  [ 99]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA7A  [100]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA7E  [101]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA82  [102]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA86  [103]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA8A  [104]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA8E  [105]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA92  [106]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA96  [107]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA9A  [108]
+	.long Dispatch_By_60F080_Nop64                                 ; FACA9E  [109]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAA2  [110]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAA6  [111]
+	.long Dispatch_By_60F080_Nop112                                 ; FACAAA  [112]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAAE  [113]
+	.long Dispatch_By_60F080_Nop114                                 ; FACAB2  [114]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAB6  [115]
+	.long Dispatch_By_60F080_Nop64                                 ; FACABA  [116]
+	.long Dispatch_By_60F080_Nop64                                 ; FACABE  [117]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAC2  [118]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAC6  [119]
+	.long Dispatch_By_60F080_Nop64                                 ; FACACA  [120]
+	.long Dispatch_By_60F080_Nop64                                 ; FACACE  [121]
 	.long sub_FABB61                                 ; FACAD2  [122]
-	.long sub_FAC845                                 ; FACAD6  [123]
-	.long sub_FAC845                                 ; FACADA  [124]
-	.long sub_FAC845                                 ; FACADE  [125]
-	.long sub_FAC845                                 ; FACAE2  [126]
-	.long sub_FAC845                                 ; FACAE6  [127]
-	.long sub_FAC845                                 ; FACAEA  [128]
-	.long sub_FAC845                                 ; FACAEE  [129]
-	.long sub_FAC845                                 ; FACAF2  [130]
-	.long sub_FAC845                                 ; FACAF6  [131]
-	.long sub_FAC845                                 ; FACAFA  [132]
-	.long sub_FAC845                                 ; FACAFE  [133]
-	.long sub_FAC845                                 ; FACB02  [134]
-	.long sub_FAC845                                 ; FACB06  [135]
-	.long sub_FAC845                                 ; FACB0A  [136]
-	.long sub_FAC845                                 ; FACB0E  [137]
-	.long sub_FAC845                                 ; FACB12  [138]
-	.long sub_FAC845                                 ; FACB16  [139]
-	.long sub_FAC845                                 ; FACB1A  [140]
-	.long sub_FAC845                                 ; FACB1E  [141]
-	.long sub_FAC845                                 ; FACB22  [142]
-	.long sub_FAC845                                 ; FACB26  [143]
-	.long sub_FABBCF                                 ; FACB2A  [144]
-	.long sub_FABBD0                                 ; FACB2E  [145]
-	.long sub_FAC845                                 ; FACB32  [146]
-	.long sub_FAC845                                 ; FACB36  [147]
-	.long sub_FAC845                                 ; FACB3A  [148]
-	.long sub_FAC845                                 ; FACB3E  [149]
-	.long sub_FAC845                                 ; FACB42  [150]
-	.long sub_FAC845                                 ; FACB46  [151]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAD6  [123]
+	.long Dispatch_By_60F080_Nop64                                 ; FACADA  [124]
+	.long Dispatch_By_60F080_Nop64                                 ; FACADE  [125]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAE2  [126]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAE6  [127]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAEA  [128]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAEE  [129]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAF2  [130]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAF6  [131]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAFA  [132]
+	.long Dispatch_By_60F080_Nop64                                 ; FACAFE  [133]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB02  [134]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB06  [135]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB0A  [136]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB0E  [137]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB12  [138]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB16  [139]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB1A  [140]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB1E  [141]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB22  [142]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB26  [143]
+	.long Dispatch_By_60F080_Nop144                                 ; FACB2A  [144]
+	.long Dispatch_By_60F080_Nop145                                 ; FACB2E  [145]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB32  [146]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB36  [147]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB3A  [148]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB3E  [149]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB42  [150]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB46  [151]
 	.long sub_FABBD7                                 ; FACB4A  [152]
-	.long sub_FAC845                                 ; FACB4E  [153]
-	.long sub_FAC845                                 ; FACB52  [154]
-	.long sub_FAC845                                 ; FACB56  [155]
-	.long sub_FAC845                                 ; FACB5A  [156]
-	.long sub_FAC845                                 ; FACB5E  [157]
-	.long sub_FAC845                                 ; FACB62  [158]
-	.long sub_FAC845                                 ; FACB66  [159]
-	.long sub_FAC845                                 ; FACB6A  [160]
-	.long sub_FAC845                                 ; FACB6E  [161]
-	.long sub_FAC845                                 ; FACB72  [162]
-	.long sub_FAC845                                 ; FACB76  [163]
-	.long sub_FAC845                                 ; FACB7A  [164]
-	.long sub_FAC845                                 ; FACB7E  [165]
-	.long sub_FAC845                                 ; FACB82  [166]
-	.long sub_FAC845                                 ; FACB86  [167]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB4E  [153]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB52  [154]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB56  [155]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB5A  [156]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB5E  [157]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB62  [158]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB66  [159]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB6A  [160]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB6E  [161]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB72  [162]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB76  [163]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB7A  [164]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB7E  [165]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB82  [166]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB86  [167]
 	.long sub_FABCD7                                 ; FACB8A  [168]
-	.long sub_FAC845                                 ; FACB8E  [169]
-	.long sub_FAC845                                 ; FACB92  [170]
-	.long sub_FAC845                                 ; FACB96  [171]
-	.long sub_FAC845                                 ; FACB9A  [172]
-	.long sub_FAC845                                 ; FACB9E  [173]
-	.long sub_FAC845                                 ; FACBA2  [174]
-	.long sub_FAC845                                 ; FACBA6  [175]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB8E  [169]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB92  [170]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB96  [171]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB9A  [172]
+	.long Dispatch_By_60F080_Nop64                                 ; FACB9E  [173]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBA2  [174]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBA6  [175]
 	.long sub_FABCEF                                 ; FACBAA  [176]
 	.long ParamMsg_B1_PitchBend                                 ; FACBAE  [177]
 	.long ParamMsg_B2_CC01_Modulation                                 ; FACBB2  [178]
 	.long ParamMsg_B3_CC0B_Expression                                 ; FACBB6  [179]
 	.long ParamMsg_B4_ChannelPressure                                 ; FACBBA  [180]
 	.long ParamMsg_B5_CC40_Hold                                 ; FACBBE  [181]
-	.long sub_FAC845                                 ; FACBC2  [182]
-	.long sub_FAC845                                 ; FACBC6  [183]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBC2  [182]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBC6  [183]
 	.long ParamMsg_B8_CC10_RTCreatX                                 ; FACBCA  [184]
 	.long ParamMsg_B9_CC11_RTCreatY                                 ; FACBCE  [185]
 	.long ParamMsg_BA_CC12_RTCtrlX                                 ; FACBD2  [186]
 	.long ParamMsg_BB_CC13_RTCtrlY                                 ; FACBD6  [187]
 	.long ParamMsg_BC_CC02_Modulation2                                 ; FACBDA  [188]
 	.long ParamMsg_BD_CC04_CtrlPedal                                 ; FACBDE  [189]
-	.long sub_FAC845                                 ; FACBE2  [190]
-	.long sub_FAC845                                 ; FACBE6  [191]
-	.long sub_FAC845                                 ; FACBEA  [192]
-	.long sub_FAC845                                 ; FACBEE  [193]
-	.long sub_FAC845                                 ; FACBF2  [194]
-	.long sub_FAC845                                 ; FACBF6  [195]
-	.long sub_FAC845                                 ; FACBFA  [196]
-	.long sub_FAC845                                 ; FACBFE  [197]
-	.long sub_FAC845                                 ; FACC02  [198]
-	.long sub_FAC845                                 ; FACC06  [199]
-	.long sub_FAC845                                 ; FACC0A  [200]
-	.long sub_FAC845                                 ; FACC0E  [201]
-	.long sub_FAC845                                 ; FACC12  [202]
-	.long sub_FAC845                                 ; FACC16  [203]
-	.long sub_FAC845                                 ; FACC1A  [204]
-	.long sub_FAC845                                 ; FACC1E  [205]
-	.long sub_FAC845                                 ; FACC22  [206]
-	.long sub_FAC845                                 ; FACC26  [207]
-	.long sub_FAC845                                 ; FACC2A  [208]
-	.long sub_FAC845                                 ; FACC2E  [209]
-	.long sub_FAC845                                 ; FACC32  [210]
-	.long sub_FAC845                                 ; FACC36  [211]
-	.long sub_FAC845                                 ; FACC3A  [212]
-	.long sub_FAC845                                 ; FACC3E  [213]
-	.long sub_FAC845                                 ; FACC42  [214]
-	.long sub_FAC845                                 ; FACC46  [215]
-	.long sub_FAC845                                 ; FACC4A  [216]
-	.long sub_FAC845                                 ; FACC4E  [217]
-	.long sub_FAC845                                 ; FACC52  [218]
-	.long sub_FAC845                                 ; FACC56  [219]
-	.long sub_FAC845                                 ; FACC5A  [220]
-	.long sub_FAC845                                 ; FACC5E  [221]
-	.long sub_FAC845                                 ; FACC62  [222]
-	.long sub_FAC845                                 ; FACC66  [223]
-	.long sub_FAC845                                 ; FACC6A  [224]
-	.long sub_FAC845                                 ; FACC6E  [225]
-	.long sub_FAC845                                 ; FACC72  [226]
-	.long sub_FAC845                                 ; FACC76  [227]
-	.long sub_FAC845                                 ; FACC7A  [228]
-	.long sub_FAC845                                 ; FACC7E  [229]
-	.long sub_FAC845                                 ; FACC82  [230]
-	.long sub_FAC845                                 ; FACC86  [231]
-	.long sub_FAC845                                 ; FACC8A  [232]
-	.long sub_FAC845                                 ; FACC8E  [233]
-	.long sub_FAC845                                 ; FACC92  [234]
-	.long sub_FAC845                                 ; FACC96  [235]
-	.long sub_FAC845                                 ; FACC9A  [236]
-	.long sub_FAC845                                 ; FACC9E  [237]
-	.long sub_FAC845                                 ; FACCA2  [238]
-	.long sub_FAC845                                 ; FACCA6  [239]
-	.long sub_FAC845                                 ; FACCAA  [240]
-	.long sub_FAC845                                 ; FACCAE  [241]
-	.long sub_FAC845                                 ; FACCB2  [242]
-	.long sub_FAC845                                 ; FACCB6  [243]
-	.long sub_FAC845                                 ; FACCBA  [244]
-	.long sub_FAC845                                 ; FACCBE  [245]
-	.long sub_FAC845                                 ; FACCC2  [246]
-	.long sub_FAC845                                 ; FACCC6  [247]
-	.long sub_FAC845                                 ; FACCCA  [248]
-	.long sub_FAC845                                 ; FACCCE  [249]
-	.long sub_FAC845                                 ; FACCD2  [250]
-	.long sub_FAC845                                 ; FACCD6  [251]
-	.long sub_FAC845                                 ; FACCDA  [252]
-	.long sub_FAC845                                 ; FACCDE  [253]
-	.long sub_FAC845                                 ; FACCE2  [254]
-	.long sub_FAC845                                 ; FACCE6  [255]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBE2  [190]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBE6  [191]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBEA  [192]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBEE  [193]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBF2  [194]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBF6  [195]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBFA  [196]
+	.long Dispatch_By_60F080_Nop64                                 ; FACBFE  [197]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC02  [198]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC06  [199]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC0A  [200]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC0E  [201]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC12  [202]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC16  [203]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC1A  [204]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC1E  [205]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC22  [206]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC26  [207]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC2A  [208]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC2E  [209]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC32  [210]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC36  [211]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC3A  [212]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC3E  [213]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC42  [214]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC46  [215]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC4A  [216]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC4E  [217]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC52  [218]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC56  [219]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC5A  [220]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC5E  [221]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC62  [222]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC66  [223]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC6A  [224]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC6E  [225]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC72  [226]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC76  [227]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC7A  [228]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC7E  [229]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC82  [230]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC86  [231]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC8A  [232]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC8E  [233]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC92  [234]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC96  [235]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC9A  [236]
+	.long Dispatch_By_60F080_Nop64                                 ; FACC9E  [237]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCA2  [238]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCA6  [239]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCAA  [240]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCAE  [241]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCB2  [242]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCB6  [243]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCBA  [244]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCBE  [245]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCC2  [246]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCC6  [247]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCCA  [248]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCCE  [249]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCD2  [250]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCD6  [251]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCDA  [252]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCDE  [253]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCE2  [254]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCE6  [255]
 ; ---------------------------------------------------------------------
 ; Dispatch_By_60F080__Tail -- 64 more words, ALL 0x00FAC845, unreachable
 ;
@@ -78466,70 +78466,70 @@ Dispatch_By_60F080:
 ;   reader can form reaches them.
 ; ---------------------------------------------------------------------
 Dispatch_By_60F080__Tail:
-	.long sub_FAC845                                 ; FACCEA  [  0]
-	.long sub_FAC845                                 ; FACCEE  [  1]
-	.long sub_FAC845                                 ; FACCF2  [  2]
-	.long sub_FAC845                                 ; FACCF6  [  3]
-	.long sub_FAC845                                 ; FACCFA  [  4]
-	.long sub_FAC845                                 ; FACCFE  [  5]
-	.long sub_FAC845                                 ; FACD02  [  6]
-	.long sub_FAC845                                 ; FACD06  [  7]
-	.long sub_FAC845                                 ; FACD0A  [  8]
-	.long sub_FAC845                                 ; FACD0E  [  9]
-	.long sub_FAC845                                 ; FACD12  [ 10]
-	.long sub_FAC845                                 ; FACD16  [ 11]
-	.long sub_FAC845                                 ; FACD1A  [ 12]
-	.long sub_FAC845                                 ; FACD1E  [ 13]
-	.long sub_FAC845                                 ; FACD22  [ 14]
-	.long sub_FAC845                                 ; FACD26  [ 15]
-	.long sub_FAC845                                 ; FACD2A  [ 16]
-	.long sub_FAC845                                 ; FACD2E  [ 17]
-	.long sub_FAC845                                 ; FACD32  [ 18]
-	.long sub_FAC845                                 ; FACD36  [ 19]
-	.long sub_FAC845                                 ; FACD3A  [ 20]
-	.long sub_FAC845                                 ; FACD3E  [ 21]
-	.long sub_FAC845                                 ; FACD42  [ 22]
-	.long sub_FAC845                                 ; FACD46  [ 23]
-	.long sub_FAC845                                 ; FACD4A  [ 24]
-	.long sub_FAC845                                 ; FACD4E  [ 25]
-	.long sub_FAC845                                 ; FACD52  [ 26]
-	.long sub_FAC845                                 ; FACD56  [ 27]
-	.long sub_FAC845                                 ; FACD5A  [ 28]
-	.long sub_FAC845                                 ; FACD5E  [ 29]
-	.long sub_FAC845                                 ; FACD62  [ 30]
-	.long sub_FAC845                                 ; FACD66  [ 31]
-	.long sub_FAC845                                 ; FACD6A  [ 32]
-	.long sub_FAC845                                 ; FACD6E  [ 33]
-	.long sub_FAC845                                 ; FACD72  [ 34]
-	.long sub_FAC845                                 ; FACD76  [ 35]
-	.long sub_FAC845                                 ; FACD7A  [ 36]
-	.long sub_FAC845                                 ; FACD7E  [ 37]
-	.long sub_FAC845                                 ; FACD82  [ 38]
-	.long sub_FAC845                                 ; FACD86  [ 39]
-	.long sub_FAC845                                 ; FACD8A  [ 40]
-	.long sub_FAC845                                 ; FACD8E  [ 41]
-	.long sub_FAC845                                 ; FACD92  [ 42]
-	.long sub_FAC845                                 ; FACD96  [ 43]
-	.long sub_FAC845                                 ; FACD9A  [ 44]
-	.long sub_FAC845                                 ; FACD9E  [ 45]
-	.long sub_FAC845                                 ; FACDA2  [ 46]
-	.long sub_FAC845                                 ; FACDA6  [ 47]
-	.long sub_FAC845                                 ; FACDAA  [ 48]
-	.long sub_FAC845                                 ; FACDAE  [ 49]
-	.long sub_FAC845                                 ; FACDB2  [ 50]
-	.long sub_FAC845                                 ; FACDB6  [ 51]
-	.long sub_FAC845                                 ; FACDBA  [ 52]
-	.long sub_FAC845                                 ; FACDBE  [ 53]
-	.long sub_FAC845                                 ; FACDC2  [ 54]
-	.long sub_FAC845                                 ; FACDC6  [ 55]
-	.long sub_FAC845                                 ; FACDCA  [ 56]
-	.long sub_FAC845                                 ; FACDCE  [ 57]
-	.long sub_FAC845                                 ; FACDD2  [ 58]
-	.long sub_FAC845                                 ; FACDD6  [ 59]
-	.long sub_FAC845                                 ; FACDDA  [ 60]
-	.long sub_FAC845                                 ; FACDDE  [ 61]
-	.long sub_FAC845                                 ; FACDE2  [ 62]
-	.long sub_FAC845                                 ; FACDE6  [ 63]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCEA  [  0]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCEE  [  1]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCF2  [  2]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCF6  [  3]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCFA  [  4]
+	.long Dispatch_By_60F080_Nop64                                 ; FACCFE  [  5]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD02  [  6]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD06  [  7]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD0A  [  8]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD0E  [  9]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD12  [ 10]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD16  [ 11]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD1A  [ 12]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD1E  [ 13]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD22  [ 14]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD26  [ 15]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD2A  [ 16]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD2E  [ 17]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD32  [ 18]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD36  [ 19]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD3A  [ 20]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD3E  [ 21]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD42  [ 22]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD46  [ 23]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD4A  [ 24]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD4E  [ 25]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD52  [ 26]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD56  [ 27]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD5A  [ 28]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD5E  [ 29]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD62  [ 30]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD66  [ 31]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD6A  [ 32]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD6E  [ 33]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD72  [ 34]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD76  [ 35]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD7A  [ 36]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD7E  [ 37]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD82  [ 38]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD86  [ 39]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD8A  [ 40]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD8E  [ 41]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD92  [ 42]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD96  [ 43]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD9A  [ 44]
+	.long Dispatch_By_60F080_Nop64                                 ; FACD9E  [ 45]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDA2  [ 46]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDA6  [ 47]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDAA  [ 48]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDAE  [ 49]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDB2  [ 50]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDB6  [ 51]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDBA  [ 52]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDBE  [ 53]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDC2  [ 54]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDC6  [ 55]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDCA  [ 56]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDCE  [ 57]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDD2  [ 58]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDD6  [ 59]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDDA  [ 60]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDDE  [ 61]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDE2  [ 62]
+	.long Dispatch_By_60F080_Nop64                                 ; FACDE6  [ 63]
 ; ---------------------------------------------------------------------
 ; ParamNumber_RecordPtrs -- 256 LE32 words: the WORK-RAM address of the
 ;                           record that parameter number k's fields live
@@ -80066,11 +80066,11 @@ BitMaskToOrdinal6:
 ; --- 0xFADD77-0xFADD87  pointer table (16 bytes) ---
 BitMaskToOrdinal6_JumpTable_FADD77:
 	.long Evt2030_Class00to1F_Op00 ; -> Evt2030_Class00to1F_Op00   ; FADD77
-	.long sub_FADD87   ; -> sub_FADD87   ; FADD7B
-	.long sub_FADD87   ; -> sub_FADD87   ; FADD7F
-	.long sub_FADD88   ; -> sub_FADD88   ; FADD83
+	.long BitMaskToOrdinal6_JumpTable_FADD77_Nop1   ; -> BitMaskToOrdinal6_JumpTable_FADD77_Nop1   ; FADD7B
+	.long BitMaskToOrdinal6_JumpTable_FADD77_Nop1   ; -> BitMaskToOrdinal6_JumpTable_FADD77_Nop1   ; FADD7F
+	.long BitMaskToOrdinal6_JumpTable_FADD77_Nop3   ; -> BitMaskToOrdinal6_JumpTable_FADD77_Nop3   ; FADD83
 ; ---------------------------------------------------------------------
-; sub_FADD87 -- arm 1, 2 of the 4-entry jump table at 0xFADD77
+; BitMaskToOrdinal6_JumpTable_FADD77_Nop1 -- arm 1, 2 of the 4-entry jump table at 0xFADD77
 ;
 ; Called from: the reader `ld XIX,0x00fadd77` at 0xFADD6B, through XIX/XIY.
 ;          Index: B, bounded by `cp L,3` at 0xFADD64.
@@ -80081,10 +80081,10 @@ BitMaskToOrdinal6_JumpTable_FADD77:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names B, bounded by `cp L,3` at 0xFADD64, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FADD87:   ; entry: pointer-table entry
+BitMaskToOrdinal6_JumpTable_FADD77_Nop1:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FADD88 -- arm 3 of the 4-entry jump table at 0xFADD77
+; BitMaskToOrdinal6_JumpTable_FADD77_Nop3 -- arm 3 of the 4-entry jump table at 0xFADD77
 ;
 ; Called from: the reader `ld XIX,0x00fadd77` at 0xFADD6B, through XIX/XIY.
 ;          Index: B, bounded by `cp L,3` at 0xFADD64.
@@ -80095,22 +80095,22 @@ sub_FADD87:   ; entry: pointer-table entry
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names B, bounded by `cp L,3` at 0xFADD64, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FADD88:   ; entry: pointer-table entry
+BitMaskToOrdinal6_JumpTable_FADD77_Nop3:   ; entry: pointer-table entry
 	ret
 	extz HL
 	ld L,B
 	cp l, 0x01:i3
-	jr ugt, sub_FADDA8
+	jr ugt, sub_FADD88_JumpTable_FADDA0_Nop0
 	sll hl, 0x02
 	ld XIX,sub_FADD88_JumpTable_FADDA0
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADDA0-0xFADDA8  pointer table (8 bytes) ---
 sub_FADD88_JumpTable_FADDA0:
-	.long sub_FADDA8   ; -> sub_FADDA8   ; FADDA0
-	.long sub_FADDA9   ; -> sub_FADDA9   ; FADDA4
+	.long sub_FADD88_JumpTable_FADDA0_Nop0   ; -> sub_FADD88_JumpTable_FADDA0_Nop0   ; FADDA0
+	.long sub_FADD88_JumpTable_FADDA0_Nop1   ; -> sub_FADD88_JumpTable_FADDA0_Nop1   ; FADDA4
 ; ---------------------------------------------------------------------
-; sub_FADDA8 -- arm 0 of the 2-entry jump table at 0xFADDA0
+; sub_FADD88_JumpTable_FADDA0_Nop0 -- arm 0 of the 2-entry jump table at 0xFADDA0
 ;
 ; Called from: the reader `ld XIX,0x00fadda0` at 0xFADD94, through XIX/XIY.
 ;          Index: B, bounded by `cp L,1` at 0xFADD8D.
@@ -80121,10 +80121,10 @@ sub_FADD88_JumpTable_FADDA0:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names B, bounded by `cp L,1` at 0xFADD8D, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FADDA8:   ; entry: pointer-table entry
+sub_FADD88_JumpTable_FADDA0_Nop0:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FADDA9 -- arm 1 of the 2-entry jump table at 0xFADDA0
+; sub_FADD88_JumpTable_FADDA0_Nop1 -- arm 1 of the 2-entry jump table at 0xFADDA0
 ;
 ; Called from: the reader `ld XIX,0x00fadda0` at 0xFADD94, through XIX/XIY.
 ;          Index: B, bounded by `cp L,1` at 0xFADD8D.
@@ -80135,7 +80135,7 @@ sub_FADDA8:   ; entry: pointer-table entry
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names B, bounded by `cp L,1` at 0xFADD8D, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FADDA9:   ; entry: pointer-table entry
+sub_FADD88_JumpTable_FADDA0_Nop1:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_Class98 -- the 0xFAD800 module's handler for event class 0x98
@@ -80191,10 +80191,10 @@ Evt2030_Class98_Op00:   ; entry: pointer-table entry
 ; ---------------------------------------------------------------------
 Evt2030_Class98_Op01:   ; entry: pointer-table entry
 	m_bit 3, MD16, 0x7f32
-	jrl z, sub_FADE55
+	jrl z, Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2
 	inc 0x01, (0x1965:16)
 	m_bit 0, MD16, 0x1965
-	jr nz, sub_FADE55
+	jr nz, Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2
 	ld l, (0x7f32:16)
 	and L,0x03
 	sll l, 0x02
@@ -80205,8 +80205,8 @@ Evt2030_Class98_Op01:   ; entry: pointer-table entry
 Evt2030_Class98_Op01_JumpTable_FADDF1:
 	.long sub_FADE01   ; -> sub_FADE01   ; FADDF1
 	.long sub_FADE2F   ; -> sub_FADE2F   ; FADDF5
-	.long sub_FADE55   ; -> sub_FADE55   ; FADDF9
-	.long sub_FADE55   ; -> sub_FADE55   ; FADDFD
+	.long Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; -> Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; FADDF9
+	.long Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; -> Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2   ; FADDFD
 ; ---------------------------------------------------------------------
 ; sub_FADE01 -- arm 0 of the 4-entry jump table at 0xFADDF1
 ;
@@ -80272,7 +80272,7 @@ sub_FADE2F:   ; entry: pointer-table entry
 	call T_ParamChange_NotifyClearSource
 .LFADE55:
 ; ---------------------------------------------------------------------
-; sub_FADE55 -- arm 2, 3 of the 4-entry jump table at 0xFADDF1
+; Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2 -- arm 2, 3 of the 4-entry jump table at 0xFADDF1
 ;
 ; Called from: the reader `ld XIX,0x00faddf1` at 0xFADDE5, through XIX/XIY.
 ;          Index: (0x7F32) & 3.
@@ -80288,7 +80288,7 @@ sub_FADE2F:   ; entry: pointer-table entry
 ;          label stays sub_XXXXXX.  A stated gap beats a
 ;          plausible guess.
 ; ---------------------------------------------------------------------
-sub_FADE55:   ; entry: pointer-table entry
+Evt2030_Class98_Op01_JumpTable_FADDF1_Nop2:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; Evt2030_ClassB1_Fwd -- event class 0xB1: hand the record straight
@@ -80618,7 +80618,7 @@ ParamApply_ByModeOfParam80:
 	ld a, (0x7f02:16)
 	and A,0xf0
 	cp A,0x10
-	jrl nz, sub_FAE02D
+	jrl nz, ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2
 	ld wa, (0x60f652:24)
 	and WA,0x7f7f
 	srl a, 0x04
@@ -80645,8 +80645,8 @@ ParamApply_ByModeOfParam80:
 ParamApply_ByModeOfParam80_JumpTable_FADF77:
 	.long sub_FADF87   ; -> sub_FADF87   ; FADF77
 	.long sub_FADFD9   ; -> sub_FADFD9   ; FADF7B
-	.long sub_FAE02D   ; -> sub_FAE02D   ; FADF7F
-	.long sub_FAE02D   ; -> sub_FAE02D   ; FADF83
+	.long ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; -> ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; FADF7F
+	.long ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; -> ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2   ; FADF83
 ; ---------------------------------------------------------------------
 ; sub_FADF87 -- arm 0 of the 4-entry jump table at 0xFADF77
 ;
@@ -80731,7 +80731,7 @@ sub_FADFD9:   ; entry: pointer-table entry
 	ld (0x7f0a:16), a
 .LFAE02D:
 ; ---------------------------------------------------------------------
-; sub_FAE02D -- arm 2, 3 of the 4-entry jump table at 0xFADF77
+; ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2 -- arm 2, 3 of the 4-entry jump table at 0xFADF77
 ;
 ; Called from: the reader `ld XIX,0x00fadf77` at 0xFADF6B, through XIX/XIY.
 ;          Index: (0x7F32) & 3.
@@ -80747,7 +80747,7 @@ sub_FADFD9:   ; entry: pointer-table entry
 ;          label stays sub_XXXXXX.  A stated gap beats a
 ;          plausible guess.
 ; ---------------------------------------------------------------------
-sub_FAE02D:   ; entry: pointer-table entry
+ParamApply_ByModeOfParam80_JumpTable_FADF77_Nop2:   ; entry: pointer-table entry
 	ret
 	calr Dev7F_WriteAllFourSlots
 	ret
@@ -80765,7 +80765,7 @@ Dev7F_WriteAllFourSlots_Skip:
 Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D:
 	.long sub_FAE05D   ; -> sub_FAE05D   ; FAE04D
 	.long sub_FAE0FC   ; -> sub_FAE0FC   ; FAE051
-	.long sub_FAE188   ; -> sub_FAE188   ; FAE055
+	.long Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2   ; -> Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2   ; FAE055
 	.long sub_FAE189   ; -> sub_FAE189   ; FAE059
 ; ---------------------------------------------------------------------
 ; sub_FAE05D -- arm 0 of the 4-entry jump table at 0xFAE04D
@@ -80900,7 +80900,7 @@ sub_FAE0FC:   ; entry: pointer-table entry
 .LFAE187:
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE188 -- arm 2 of the 4-entry jump table at 0xFAE04D
+; Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2 -- arm 2 of the 4-entry jump table at 0xFAE04D
 ;
 ; Called from: the reader `ld XIX,0x00fae04d` at 0xFAE03C, through XIX/XIY.
 ;          Index: (0x7F32) & 3.
@@ -80916,7 +80916,7 @@ sub_FAE0FC:   ; entry: pointer-table entry
 ;          label stays sub_XXXXXX.  A stated gap beats a
 ;          plausible guess.
 ; ---------------------------------------------------------------------
-sub_FAE188:   ; entry: pointer-table entry
+Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D_Nop2:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; sub_FAE189 -- arm 3 of the 4-entry jump table at 0xFAE04D
@@ -81167,7 +81167,7 @@ Evt2030_Class00to1F_Op00:   ; entry: pointer-table entry
 	jp (xix)
 .LFAE30D:
 ; ---------------------------------------------------------------------
-; sub_FAE30D -- arm 2 of the 4-entry jump table at 0xFAE30E
+; sub_FAE30D_JumpTable_FAE30E_Nop2 -- arm 2 of the 4-entry jump table at 0xFAE30E
 ;
 ; Called from: the reader `ld XIX,0x00fae30e` at 0xFAE301, through XIX/XIY.
 ;          Index: (0x7F32) & 3.
@@ -81183,13 +81183,13 @@ Evt2030_Class00to1F_Op00:   ; entry: pointer-table entry
 ;          label stays sub_XXXXXX.  A stated gap beats a
 ;          plausible guess.
 ; ---------------------------------------------------------------------
-sub_FAE30D:   ; entry: pointer-table entry
+sub_FAE30D_JumpTable_FAE30E_Nop2:   ; entry: pointer-table entry
 	ret
 ; --- 0xFAE30E-0xFAE31E  pointer table (16 bytes) ---
 sub_FAE30D_JumpTable_FAE30E:
 	.long sub_FAE31E   ; -> sub_FAE31E   ; FAE30E
 	.long sub_FAE36C   ; -> sub_FAE36C   ; FAE312
-	.long sub_FAE30D   ; -> sub_FAE30D   ; FAE316
+	.long sub_FAE30D_JumpTable_FAE30E_Nop2   ; -> sub_FAE30D_JumpTable_FAE30E_Nop2   ; FAE316
 	.long sub_FADBDA   ; -> sub_FADBDA   ; FAE31A
 ; ---------------------------------------------------------------------
 ; sub_FAE31E -- arm 0 of the 4-entry jump table at 0xFAE30E
@@ -81520,21 +81520,21 @@ Evt2030_ClassHandlers:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; FAE7D0
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; FAE7E0
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff   ; FAE7F0
-sub_FAE800:
+T_F41F2C_Nop:
 	ret
 ; --- 0xFAE801-0xFAE802  align (1 bytes) ---
 	.byte 0x00   ; FAE801
 ; --- 0xFAE802-0xFAE822  pointer table (32 bytes) ---
-	.long sub_FAE824   ; -> sub_FAE824   ; FAE802
-	.long sub_FAE825   ; -> sub_FAE825   ; FAE806
-	.long sub_FAE826   ; -> sub_FAE826   ; FAE80A
-	.long sub_FAE827   ; -> sub_FAE827   ; FAE80E
-	.long sub_FAE828   ; -> sub_FAE828   ; FAE812
-	.long sub_FAE822   ; -> sub_FAE822   ; FAE816
-	.long sub_FAE822   ; -> sub_FAE822   ; FAE81A
-	.long sub_FAE822   ; -> sub_FAE822   ; FAE81E
+	.long sub_FAE800_Nop0   ; -> sub_FAE800_Nop0   ; FAE802
+	.long sub_FAE800_Nop1   ; -> sub_FAE800_Nop1   ; FAE806
+	.long sub_FAE800_Nop2   ; -> sub_FAE800_Nop2   ; FAE80A
+	.long sub_FAE800_Nop3   ; -> sub_FAE800_Nop3   ; FAE80E
+	.long sub_FAE800_Nop4   ; -> sub_FAE800_Nop4   ; FAE812
+	.long sub_FAE800_Nop5   ; -> sub_FAE800_Nop5   ; FAE816
+	.long sub_FAE800_Nop5   ; -> sub_FAE800_Nop5   ; FAE81A
+	.long sub_FAE800_Nop5   ; -> sub_FAE800_Nop5   ; FAE81E
 ; ---------------------------------------------------------------------
-; sub_FAE822 -- arm 5, 6, 7 of the 8-entry jump table at 0xFAE802
+; sub_FAE800_Nop5 -- arm 5, 6, 7 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -81545,11 +81545,11 @@ sub_FAE800:
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE822:   ; entry: pointer-table entry
+sub_FAE800_Nop5:   ; entry: pointer-table entry
 	ret
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE824 -- arm 0 of the 8-entry jump table at 0xFAE802
+; sub_FAE800_Nop0 -- arm 0 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -81560,10 +81560,10 @@ sub_FAE822:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE824:   ; entry: pointer-table entry
+sub_FAE800_Nop0:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE825 -- arm 1 of the 8-entry jump table at 0xFAE802
+; sub_FAE800_Nop1 -- arm 1 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -81574,10 +81574,10 @@ sub_FAE824:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE825:   ; entry: pointer-table entry
+sub_FAE800_Nop1:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE826 -- arm 2 of the 8-entry jump table at 0xFAE802
+; sub_FAE800_Nop2 -- arm 2 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -81588,10 +81588,10 @@ sub_FAE825:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE826:   ; entry: pointer-table entry
+sub_FAE800_Nop2:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE827 -- arm 3 of the 8-entry jump table at 0xFAE802
+; sub_FAE800_Nop3 -- arm 3 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -81602,10 +81602,10 @@ sub_FAE826:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE827:   ; entry: pointer-table entry
+sub_FAE800_Nop3:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAE828 -- arm 4 of the 8-entry jump table at 0xFAE802
+; sub_FAE800_Nop4 -- arm 4 of the 8-entry jump table at 0xFAE802
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -81616,9 +81616,9 @@ sub_FAE827:   ; entry: pointer-table entry
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE828:   ; entry: pointer-table entry
+sub_FAE800_Nop4:   ; entry: pointer-table entry
 	ret
-sub_FAE829:
+T_F41F3C_Nop:
 	ret
 ; --- 0xFAE82A-0xFAE84A  pointer table (32 bytes) ---
 	.long sub_FAEA12   ; -> sub_FAEA12   ; FAE82A
@@ -81626,11 +81626,11 @@ sub_FAE829:
 	.long sub_FAEAC5   ; -> sub_FAEAC5   ; FAE832
 	.long sub_FAEAF4   ; -> sub_FAEAF4   ; FAE836
 	.long sub_FAEB1D   ; -> sub_FAEB1D   ; FAE83A
-	.long sub_FAE84A   ; -> sub_FAE84A   ; FAE83E
-	.long sub_FAE84A   ; -> sub_FAE84A   ; FAE842
-	.long sub_FAE84A   ; -> sub_FAE84A   ; FAE846
+	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE83E
+	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE842
+	.long sub_FAE829_Nop5   ; -> sub_FAE829_Nop5   ; FAE846
 ; ---------------------------------------------------------------------
-; sub_FAE84A -- arm 0, 1, 2 of the 3-entry jump table at 0xFAE83E
+; sub_FAE829_Nop5 -- arm 0, 1, 2 of the 3-entry jump table at 0xFAE83E
 ;
 ; Called from: NOTHING -- no instruction in prom_a loads this table, through XIX/XIY.
 ;          Index: -- no reader found --.
@@ -81641,13 +81641,13 @@ sub_FAE829:
 ; Unknown:  everything.  Nothing loads the table, so nothing
 ;          is known to reach this arm at all.
 ; ---------------------------------------------------------------------
-sub_FAE84A:   ; entry: pointer-table entry
+sub_FAE829_Nop5:   ; entry: pointer-table entry
 	ret
 	ret
 	ret
 	ldw (0x60f002:24), 0x00
-	calr sub_FAE800
-	calr sub_FAE829
+	calr T_F41F2C_Nop
+	calr T_F41F3C_Nop
 	calr .LFAE8CB
 	calr .LFAE921
 	ret
@@ -81792,17 +81792,17 @@ sub_FAE84A_JumpTable_FAE9D0:
 	.long sub_FAEAF4   ; -> sub_FAEAF4   ; FAE9E0
 	.long sub_FAEB1D   ; -> sub_FAEB1D   ; FAE9E4
 	.long sub_FAEB46   ; -> sub_FAEB46   ; FAE9E8
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAE9EC
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAE9F0
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAE9F4
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAE9F8
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAE9FC
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAEA00
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAEA04
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAEA08
-	.long sub_FAEA10   ; -> sub_FAEA10   ; FAEA0C
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9EC
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9F0
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9F4
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9F8
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAE9FC
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAEA00
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAEA04
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAEA08
+	.long sub_FAE84A_JumpTable_FAE9D0_Nop7   ; -> sub_FAE84A_JumpTable_FAE9D0_Nop7   ; FAEA0C
 ; ---------------------------------------------------------------------
-; sub_FAEA10 -- arm 7, 8, 9, 10, 11, 12, 13, 14, 15 of the 16-entry jump table at 0xFAE9D0
+; sub_FAE84A_JumpTable_FAE9D0_Nop7 -- arm 7, 8, 9, 10, 11, 12, 13, 14, 15 of the 16-entry jump table at 0xFAE9D0
 ;
 ; Called from: the reader `ld XIX,0x00fae9d0` at 0xFAE9A6, through XIX/XIY.
 ;          Index: W & 0x0F.
@@ -81813,7 +81813,7 @@ sub_FAE84A_JumpTable_FAE9D0:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names W & 0x0F, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEA10:   ; entry: pointer-table entry
+sub_FAE84A_JumpTable_FAE9D0_Nop7:   ; entry: pointer-table entry
 	ret
 	ret
 ; ---------------------------------------------------------------------
@@ -82234,15 +82234,15 @@ sub_FAEBBC:
 ; --- 0xFAEDF0-0xFAEE10  pointer table (32 bytes) ---
 sub_FAEBBC_JumpTable_FAEDF0:
 	.long sub_FAF0FE   ; -> sub_FAF0FE   ; FAEDF0
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEDF4
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEDF8
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEDF4
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEDF8
 	.long sub_FAEE36   ; -> sub_FAEE36   ; FAEDFC
 	.long sub_FAF5C1   ; -> sub_FAF5C1   ; FAEE00
 	.long sub_FAF148   ; -> sub_FAF148   ; FAEE04
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE08
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE0C
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE08
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE0C
 ; ---------------------------------------------------------------------
-; sub_FAEE10 -- arm 1, 2, 6, 7 of the 8-entry jump table at 0xFAEDF0
+; sub_FAEBBC_JumpTable_FAEDF0_Nop1 -- arm 1, 2, 6, 7 of the 8-entry jump table at 0xFAEDF0
 ;
 ; Called from: the reader `ld XIY,0x00faedf0` at 0xFAEDE1, through XIX/XIY.
 ;          Index: ((0x60F308) & 0x70) >> 2.
@@ -82253,7 +82253,7 @@ sub_FAEBBC_JumpTable_FAEDF0:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names ((0x60F308) & 0x70) >> 2, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEE10:   ; entry: pointer-table entry
+sub_FAEBBC_JumpTable_FAEDF0_Nop1:   ; entry: pointer-table entry
 	ret
 Evt2030_ClassHandlers_Code_Skip:
 	ld XIX,0x00002c00
@@ -82300,24 +82300,24 @@ sub_FAEE36:   ; entry: pointer-table entry
 	.byte 0x00   ; FAEE5B
 ; --- 0xFAEE5C-0xFAEE9C  pointer table (64 bytes) ---
 sub_FAEE36_JumpTable_FAEE5C:
-	.long sub_FAEE9C   ; -> sub_FAEE9C   ; FAEE5C
-	.long sub_FAEFB1   ; -> sub_FAEFB1   ; FAEE60
-	.long sub_FAEFB2   ; -> sub_FAEFB2   ; FAEE64
+	.long sub_FAEE36_JumpTable_FAEE5C_Nop0   ; -> sub_FAEE36_JumpTable_FAEE5C_Nop0   ; FAEE5C
+	.long sub_FAEE36_JumpTable_FAEE5C_Nop1   ; -> sub_FAEE36_JumpTable_FAEE5C_Nop1   ; FAEE60
+	.long sub_FAEE36_JumpTable_FAEE5C_Nop2   ; -> sub_FAEE36_JumpTable_FAEE5C_Nop2   ; FAEE64
 	.long sub_FAEFB3   ; -> sub_FAEFB3   ; FAEE68
 	.long sub_FAF00A   ; -> sub_FAF00A   ; FAEE6C
 	.long sub_FAEF24   ; -> sub_FAEF24   ; FAEE70
 	.long sub_FAEE9D   ; -> sub_FAEE9D   ; FAEE74
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE78
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE7C
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE80
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE84
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE88
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE8C
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE90
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE94
-	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEE98
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE78
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE7C
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE80
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE84
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE88
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE8C
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE90
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE94
+	.long sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; -> sub_FAEBBC_JumpTable_FAEDF0_Nop1   ; FAEE98
 ; ---------------------------------------------------------------------
-; sub_FAEE9C -- arm 0 of the 16-entry jump table at 0xFAEE5C
+; sub_FAEE36_JumpTable_FAEE5C_Nop0 -- arm 0 of the 16-entry jump table at 0xFAEE5C
 ;
 ; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
 ;          Index: (0x60F327) & 0x0F.
@@ -82328,7 +82328,7 @@ sub_FAEE36_JumpTable_FAEE5C:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEE9C:   ; entry: pointer-table entry
+sub_FAEE36_JumpTable_FAEE5C_Nop0:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; sub_FAEE9D -- arm 6 of the 16-entry jump table at 0xFAEE5C
@@ -82435,7 +82435,7 @@ sub_FAEF43:
 .LFAEFB0:
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAEFB1 -- arm 1 of the 16-entry jump table at 0xFAEE5C
+; sub_FAEE36_JumpTable_FAEE5C_Nop1 -- arm 1 of the 16-entry jump table at 0xFAEE5C
 ;
 ; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
 ;          Index: (0x60F327) & 0x0F.
@@ -82446,10 +82446,10 @@ sub_FAEF43:
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEFB1:   ; entry: pointer-table entry
+sub_FAEE36_JumpTable_FAEE5C_Nop1:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
-; sub_FAEFB2 -- arm 2 of the 16-entry jump table at 0xFAEE5C
+; sub_FAEE36_JumpTable_FAEE5C_Nop2 -- arm 2 of the 16-entry jump table at 0xFAEE5C
 ;
 ; Called from: the reader `ld XIX,0x00faee5c` at 0xFAEE4E, through XIX/XIY.
 ;          Index: (0x60F327) & 0x0F.
@@ -82460,7 +82460,7 @@ sub_FAEFB1:   ; entry: pointer-table entry
 ; Unknown:  what the selector means.  Nothing in the tree
 ;          names (0x60F327) & 0x0F, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
-sub_FAEFB2:   ; entry: pointer-table entry
+sub_FAEE36_JumpTable_FAEE5C_Nop2:   ; entry: pointer-table entry
 	ret
 ; ---------------------------------------------------------------------
 ; sub_FAEFB3 -- arm 3 of the 16-entry jump table at 0xFAEE5C
@@ -83128,7 +83128,7 @@ sub_FAF59D:
 sub_FAF5C1:   ; entry: pointer-table entry
 	calr sub_FAEE22
 	m_cp_mi8 MB24, 0x60f308, 0xff
-	jrl z, sub_FAF771
+	jrl z, sub_FAF5C1_JumpTable_FAF6B8_Nop2
 	ld XIX,0x0060f30a
 	ld bc, (xix+)
 	ld de, (xix+)
@@ -83140,7 +83140,7 @@ sub_FAF5C1:   ; entry: pointer-table entry
 	ld xix, (0x60f018:24)
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	cp XIX,0xffffffff
-	jrl z, sub_FAF771
+	jrl z, sub_FAF5C1_JumpTable_FAF6B8_Nop2
 	ld (0x60f0bc:24), bc
 	ld (0x60f0be:24), de
 	ld (0x60f01d:24), c
@@ -83181,7 +83181,7 @@ sub_FAF5C1:   ; entry: pointer-table entry
 	ld XIX,0x00603433
 	mx_ld_rm MXB, ra_IX, ra_HL, r1
 	cp A,0x20
-	jrl z, sub_FAF771
+	jrl z, sub_FAF5C1_JumpTable_FAF6B8_Nop2
 	set 0x07,A
 	ld (0x60f007:24), a
 	extz HL
@@ -83197,8 +83197,8 @@ sub_FAF5C1:   ; entry: pointer-table entry
 sub_FAF5C1_JumpTable_FAF6B8:
 	.long sub_FAF6C8   ; -> sub_FAF6C8   ; FAF6B8
 	.long sub_FAF728   ; -> sub_FAF728   ; FAF6BC
-	.long sub_FAF771   ; -> sub_FAF771   ; FAF6C0
-	.long sub_FAF771   ; -> sub_FAF771   ; FAF6C4
+	.long sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; -> sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; FAF6C0
+	.long sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; -> sub_FAF5C1_JumpTable_FAF6B8_Nop2   ; FAF6C4
 ; ---------------------------------------------------------------------
 ; sub_FAF6C8 -- arm 0 of the 4-entry jump table at 0xFAF6B8
 ;
@@ -83287,7 +83287,7 @@ sub_FAF728:   ; entry: pointer-table entry
 	call T_ParamChange_Notify
 .LFAF771:
 ; ---------------------------------------------------------------------
-; sub_FAF771 -- arm 2, 3 of the 4-entry jump table at 0xFAF6B8
+; sub_FAF5C1_JumpTable_FAF6B8_Nop2 -- arm 2, 3 of the 4-entry jump table at 0xFAF6B8
 ;
 ; Called from: the reader `ld XIX,0x00faf6b8` at 0xFAF6AB, through XIX/XIY.
 ;          Index: (0x7F32) & 3.
@@ -83303,7 +83303,7 @@ sub_FAF728:   ; entry: pointer-table entry
 ;          label stays sub_XXXXXX.  A stated gap beats a
 ;          plausible guess.
 ; ---------------------------------------------------------------------
-sub_FAF771:   ; entry: pointer-table entry
+sub_FAF5C1_JumpTable_FAF6B8_Nop2:   ; entry: pointer-table entry
 	ret
 sub_FAF772:
 	m_cp_mi8 MB16, 0x7642, 0x35
@@ -84832,7 +84832,7 @@ PatchList_RecordBytes2B_Ptr:
 ;   as the immediately preceding call, two with it two calls back in the same
 ;   block (0xFB2560, 0xFB275B), three one call deeper inside sub_FC1C77 /
 ;   sub_FC2112 / sub_FC21D0.  The fifteenth, 0xFB6FD1, reaches the wait after
-;   `call sub_FB7E9A` (which is a bare `ret` at 0xFB7E9A) and `calr sub_FB7025`,
+;   `call sub_FB2877_Nop` (which is a bare `ret` at 0xFB7E9A) and `calr sub_FB7025`,
 ;   and neither of those touches 0xF40EF0 -- so what it is waiting on is NOT
 ;   established.
 ;   And the SOURCE handed to the builder is not always remote flash: the eight
@@ -84876,11 +84876,11 @@ sub_FB2000_Join:
 sub_FB201D:
 	call sub_FB2026                                      ; FB201D  1d 26 20 fb
 	ret                                                  ; FB2021  0e
-sub_FB2022:
+T_F408F8_Nop:
 	ret                                                  ; FB2022  0e
-sub_FB2023:
+sub_FB3C34_Nop:
 	ret                                                  ; FB2023  0e
-sub_FB2024:
+sub_FB3C34_Nop2:
 	ret                                                  ; FB2024  0e
 	ret                                                  ; FB2025  0e
 sub_FB2026:
@@ -84950,7 +84950,7 @@ sub_FB2099:   ; entry: named by 1 `.long` operand, first at 0xFB2081
 	call sub_FB22CD                                      ; FB2099  1d cd 22 fb
 	jr .LFB20BB                                          ; FB209D  68 1c
 sub_FB209F:   ; entry: named by 1 `.long` operand, first at 0xFB2085
-	call sub_FB22E6                                      ; FB209F  1d e6 22 fb
+	call sub_FB209F_Nop                                      ; FB209F  1d e6 22 fb
 	jr .LFB20BB                                          ; FB20A3  68 16
 sub_FB20A5:   ; entry: named by 1 `.long` operand, first at 0xFB2089
 	call sub_FB22E7                                      ; FB20A5  1d e7 22 fb
@@ -85212,7 +85212,7 @@ sub_FB22CD:
 	m_res 3, MD24, 0x60fd40                              ; FB22DF  f2 40 fd 60 b3
 	pop XBC                                              ; FB22E4  59
 	ret                                                  ; FB22E5  0e
-sub_FB22E6:
+sub_FB209F_Nop:
 	ret                                                  ; FB22E6  0e
 sub_FB22E7:
 	lda xbc, (0x60fce8:24)                               ; FB22E7  f2 e8 fc 60 31
@@ -85821,7 +85821,7 @@ sub_FB2877:
 	inc 6,XSP                                            ; FB2885  ef 66
 	cp a, 0x00:i3                                          ; FB2887  c9 d8
 	jr nz, .LFB28BC                                      ; FB2889  6e 31
-	call sub_FB7E9A                                      ; FB288B  1d 9a 7e fb
+	call sub_FB2877_Nop                                      ; FB288B  1d 9a 7e fb
 	ld xbc, (0x60fcd8:24)                               ; FB288F  e2 d8 fc 60 21
 	ld H,(XBC)                                           ; FB2894  81 26
 	cp H,0x22                                            ; FB2896  ce cf 22
@@ -86019,13 +86019,13 @@ sub_FB28BE:
 	inc 6,XSP                                            ; FB2A88  ef 66
 	cp a, 0x00:i3                                          ; FB2A8A  c9 d8
 	jr nz, .LFB2AAB                                      ; FB2A8C  6e 1d
-	call sub_FB7EE3                                      ; FB2A8E  1d e3 7e fb
+	call sub_FB28BE_Nop5                                      ; FB2A8E  1d e3 7e fb
 	lda xbc, (0x60fd08:24)                               ; FB2A92  f2 08 fd 60 31
 	push XBC                                             ; FB2A97  39
-	call sub_FB753D                                      ; FB2A98  1d 3d 75 fb
+	call sub_FB28BE_Nop                                      ; FB2A98  1d 3d 75 fb
 	lda xbc, (0x60fd18:24)                               ; FB2A9C  f2 18 fd 60 31
 	push XBC                                             ; FB2AA1  39
-	call sub_FB766C                                      ; FB2AA2  1d 6c 76 fb
+	call sub_FB28BE_Nop2                                      ; FB2AA2  1d 6c 76 fb
 	calr sub_FB2D72                                      ; FB2AA6  1e c9 02
 	jr .LFB2ABB                                          ; FB2AA9  68 10
 .LFB2AAB:
@@ -86046,7 +86046,7 @@ sub_FB28BE:
 	jr nz, .LFB2AE2                                      ; FB2AD0  6e 10
 	lda xbc, (0x60fd18:24)                               ; FB2AD2  f2 18 fd 60 31
 	push XBC                                             ; FB2AD7  39
-	call sub_FB766D                                      ; FB2AD8  1d 6d 76 fb
+	call sub_FB28BE_Nop3                                      ; FB2AD8  1d 6d 76 fb
 	calr sub_FB2DAC                                      ; FB2ADC  1e cd 02
 	pop XIY                                              ; FB2ADF  5d
 	jr .LFB2AF4                                          ; FB2AE0  68 12
@@ -86068,7 +86068,7 @@ sub_FB28BE:
 	jr nz, .LFB2B1D                                      ; FB2B07  6e 14
 	lda xbc, (0x60fd18:24)                               ; FB2B09  f2 18 fd 60 31
 	push XBC                                             ; FB2B0E  39
-	call sub_FB766E                                      ; FB2B0F  1d 6e 76 fb
+	call sub_FB28BE_Nop4                                      ; FB2B0F  1d 6e 76 fb
 	call sub_FB741A                                      ; FB2B13  1d 1a 74 fb
 	calr sub_FB2DE6                                      ; FB2B17  1e cc 02
 	pop XIY                                              ; FB2B1A  5d
@@ -86696,7 +86696,7 @@ sub_FB2F35:
 	m_res 4, MD24, 0x60fd40                              ; FB3107  f2 40 fd 60 b4
 	calr sub_FB317E                                      ; FB310C  1e 6f 00
 	calr sub_FB31CC                                      ; FB310F  1e ba 00
-	calr sub_FB3201                                      ; FB3112  1e ec 00
+	calr sub_FB2F35_Nop                                      ; FB3112  1e ec 00
 	calr sub_FB3202                                      ; FB3115  1e ea 00
 	calr sub_FB3223                                      ; FB3118  1e 08 01
 	inc 8,XSP                                            ; FB311B  ef 60
@@ -86816,7 +86816,7 @@ sub_FB31CC:
 	pop XIX                                              ; FB31FD  5c
 	unlk XIZ                                             ; FB31FE  ee 0d
 	ret                                                  ; FB3200  0e
-sub_FB3201:
+sub_FB2F35_Nop:
 	ret                                                  ; FB3201  0e
 sub_FB3202:
 	m_bit 4, MD24, 0x60fd41                              ; FB3202  f2 41 fd 60 cc
@@ -86879,7 +86879,7 @@ sub_FB3251:
 	ret                                                  ; FB327C  0e
 	call sub_FB7ED2                                      ; FB327D  1d d2 7e fb
 	ret                                                  ; FB3281  0e
-	call sub_FB7EE4                                      ; FB3282  1d e4 7e fb
+	call sub_FB3251_Nop                                      ; FB3282  1d e4 7e fb
 	ret                                                  ; FB3286  0e
 	call sub_FB7EE5                                      ; FB3287  1d e5 7e fb
 	ret                                                  ; FB328B  0e
@@ -87174,7 +87174,7 @@ sub_FB353D:   ; entry: named by 1 `.long` operand, first at 0xFB351F
 	calr sub_FB35FC                                      ; FB353D  1e bc 00
 	jr .LFB3554                                          ; FB3540  68 12
 sub_FB3542:   ; entry: named by 1 `.long` operand, first at 0xFB3523
-	calr sub_FB3650                                      ; FB3542  1e 0b 01
+	calr sub_FB3542_Nop                                      ; FB3542  1e 0b 01
 	jr .LFB3554                                          ; FB3545  68 0d
 sub_FB3547:   ; entry: named by 1 `.long` operand, first at 0xFB3527
 	calr sub_FB3651                                      ; FB3547  1e 07 01
@@ -87300,7 +87300,7 @@ sub_FB35FC:
 	popw hl                                              ; FB364C  4b
 	unlk XIZ                                             ; FB364D  ee 0d
 	ret                                                  ; FB364F  0e
-sub_FB3650:
+sub_FB3542_Nop:
 	ret                                                  ; FB3650  0e
 sub_FB3651:
 	link XIZ,0xfffc                                      ; FB3651  ee 0c fc ff
@@ -88443,7 +88443,7 @@ sub_FB3C34:
 	dec 1,XBC                                            ; FB40C2  e9 69
 	m_or_mi8 MBI+r1, 0, 0x80                             ; FB40C4  81 3e 80
 .LFB40C7:
-	call sub_FB2023                                      ; FB40C7  1d 23 20 fb
+	call sub_FB3C34_Nop                                      ; FB40C7  1d 23 20 fb
 	pop XIX                                              ; FB40CB  5c
 	popw hl                                              ; FB40CC  4b
 	unlk XIZ                                             ; FB40CD  ee 0d
@@ -88585,7 +88585,7 @@ sub_FB3C34:
 	ld c, (0x60f812:24)                                 ; FB420F  c2 12 f8 60 23
 	cp C,H                                               ; FB4214  ce f3
 	jr ugt, .LFB421C                                     ; FB4216  6b 04
-	call sub_FB2024                                      ; FB4218  1d 24 20 fb
+	call sub_FB3C34_Nop2                                      ; FB4218  1d 24 20 fb
 .LFB421C:
 	pop XIX                                              ; FB421C  5c
 	popw hl                                              ; FB421D  4b
@@ -88700,7 +88700,7 @@ sub_FB42F7:   ; entry: named by 1 `.long` operand, first at 0xFB42D9
 	calr sub_FB43B6                                      ; FB42F7  1e bc 00
 	jr .LFB430E                                          ; FB42FA  68 12
 sub_FB42FC:   ; entry: named by 1 `.long` operand, first at 0xFB42DD
-	calr sub_FB440A                                      ; FB42FC  1e 0b 01
+	calr sub_FB42FC_Nop                                      ; FB42FC  1e 0b 01
 	jr .LFB430E                                          ; FB42FF  68 0d
 sub_FB4301:   ; entry: named by 1 `.long` operand, first at 0xFB42E1
 	calr sub_FB440B                                      ; FB4301  1e 07 01
@@ -88827,7 +88827,7 @@ sub_FB43B6:
 	popw hl                                              ; FB4406  4b
 	unlk XIZ                                             ; FB4407  ee 0d
 	ret                                                  ; FB4409  0e
-sub_FB440A:
+sub_FB42FC_Nop:
 	ret                                                  ; FB440A  0e
 sub_FB440B:
 	link XIZ,0xfffc                                      ; FB440B  ee 0c fc ff
@@ -89558,7 +89558,7 @@ sub_FB4AA4:
 	ld (xiz-8), xix                                      ; FB4AF4  be f8 64
 	lda xbc, (xiz-12)                                    ; FB4AF7  be f4 31
 	push XBC                                             ; FB4AFA  39
-	calr sub_FB4F8D                                      ; FB4AFB  1e 8f 04
+	calr sub_FB4AA4_Nop                                      ; FB4AFB  1e 8f 04
 	inc 8,XSP                                            ; FB4AFE  ef 60
 	pop XIX                                              ; FB4B00  5c
 	unlk XIZ                                             ; FB4B01  ee 0d
@@ -90047,7 +90047,7 @@ sub_FB4ED4:
 	unlk XIZ                                             ; FB4F89  ee 0d
 	ret                                                  ; FB4F8B  0e
 	ret                                                  ; FB4F8C  0e
-sub_FB4F8D:
+sub_FB4AA4_Nop:
 	ret                                                  ; FB4F8D  0e
 	ret                                                  ; FB4F8E  0e
 sub_FB4F8F:
@@ -90985,7 +90985,7 @@ sub_FB58CC:
 	calr sub_FB5A17                                      ; FB58CF  1e 45 01
 	calr sub_FB56D3                                      ; FB58D2  1e fe fd
 	calr sub_FB5B6A                                      ; FB58D5  1e 92 02
-	calr sub_FB5B96                                      ; FB58D8  1e bb 02
+	calr sub_FB58CC_Nop                                      ; FB58D8  1e bb 02
 	calr sub_FB5B97                                      ; FB58DB  1e b9 02
 	calr sub_FB5BC3                                      ; FB58DE  1e e2 02
 	calr sub_FB5BEF                                      ; FB58E1  1e 0b 03
@@ -90995,7 +90995,7 @@ sub_FB58CC:
 	calr sub_FB5C9F                                      ; FB58ED  1e af 03
 	calr sub_FB5CCB                                      ; FB58F0  1e d8 03
 	calr sub_FB5CF7                                      ; FB58F3  1e 01 04
-	calr sub_FB5D01                                      ; FB58F6  1e 08 04
+	calr sub_FB58CC_Nop2                                      ; FB58F6  1e 08 04
 	calr sub_FB5D02                                      ; FB58F9  1e 06 04
 	calr sub_FB5D38                                      ; FB58FC  1e 39 04
 	calr sub_FB558F                                      ; FB58FF  1e 8d fc
@@ -91104,7 +91104,7 @@ sub_FB5972:
 	calr sub_FB5E2C                                      ; FB59F1  1e 38 04
 	calr sub_FB5E5E                                      ; FB59F4  1e 67 04
 	calr sub_FB5E90                                      ; FB59F7  1e 96 04
-	calr sub_FB5EC2                                      ; FB59FA  1e c5 04
+	calr sub_FB5972_Nop                                      ; FB59FA  1e c5 04
 	calr sub_FB5EC3                                      ; FB59FD  1e c3 04
 	ret                                                  ; FB5A00  0e
 sub_FB5A01:
@@ -91255,7 +91255,7 @@ sub_FB5B6A:
 	pop XIX                                              ; FB5B92  5c
 	unlk XIZ                                             ; FB5B93  ee 0d
 	ret                                                  ; FB5B95  0e
-sub_FB5B96:
+sub_FB58CC_Nop:
 	ret                                                  ; FB5B96  0e
 sub_FB5B97:
 	link XIZ,0xfffc                                      ; FB5B97  ee 0c fc ff
@@ -91429,7 +91429,7 @@ sub_FB5CF7:
 	ld (0x2744:16), 0x00                                 ; FB5CF7  f1 44 27 00 00
 	call T_F40840                                        ; FB5CFC  1d 40 08 f4
 	ret                                                  ; FB5D00  0e
-sub_FB5D01:
+sub_FB58CC_Nop2:
 	ret                                                  ; FB5D01  0e
 sub_FB5D02:
 	pushw hl                                             ; FB5D02  2b
@@ -91640,7 +91640,7 @@ sub_FB5E90:
 	jr ule, .LFB5EA5                                     ; FB5EBE  63 e5
 	pop XIX                                              ; FB5EC0  5c
 	ret                                                  ; FB5EC1  0e
-sub_FB5EC2:
+sub_FB5972_Nop:
 	ret                                                  ; FB5EC2  0e
 sub_FB5EC3:
 	pushw hl                                             ; FB5EC3  2b
@@ -93640,7 +93640,7 @@ sub_FB6F6B:
 	ld A,(XBC+0x04)                                      ; FB6F7C  89 04 21
 	cp a, 0x00:i3                                          ; FB6F7F  c9 d8
 	jr nz, .LFB6FB1                                      ; FB6F81  6e 2e
-	call sub_FB7E9A                                      ; FB6F83  1d 9a 7e fb
+	call sub_FB2877_Nop                                      ; FB6F83  1d 9a 7e fb
 	calr sub_FB7025                                      ; FB6F87  1e 9b 00
 	calr sub_FB7040                                      ; FB6F8A  1e b3 00
 	calr sub_FB70AE                                      ; FB6F8D  1e 1e 01
@@ -93669,7 +93669,7 @@ sub_FB6FB2:
 	ld A,(XBC+0x04)                                      ; FB6FC3  89 04 21
 	cp a, 0x00:i3                                          ; FB6FC6  c9 d8
 	jr nz, .LFB7023                                      ; FB6FC8  6e 59
-	call sub_FB7E9A                                      ; FB6FCA  1d 9a 7e fb
+	call sub_FB2877_Nop                                      ; FB6FCA  1d 9a 7e fb
 	calr sub_FB7025                                      ; FB6FCE  1e 54 00
 	call T_Link_WaitBlockDone                            ; FB6FD1  1d 3c 12 f4
 	cp WA,0xffff                                         ; FB6FD5  d8 cf ff ff
@@ -94241,7 +94241,7 @@ sub_FB751A:
 	pop XIX                                              ; FB7539  5c
 	unlk XIZ                                             ; FB753A  ee 0d
 	ret                                                  ; FB753C  0e
-sub_FB753D:
+sub_FB28BE_Nop:
 	ret                                                  ; FB753D  0e
 sub_FB753E:
 	link XIZ,0xfff8                                      ; FB753E  ee 0c f8 ff
@@ -94360,11 +94360,11 @@ sub_FB7649:
 	pop XIX                                              ; FB7668  5c
 	unlk XIZ                                             ; FB7669  ee 0d
 	ret                                                  ; FB766B  0e
-sub_FB766C:
+sub_FB28BE_Nop2:
 	ret                                                  ; FB766C  0e
-sub_FB766D:
+sub_FB28BE_Nop3:
 	ret                                                  ; FB766D  0e
-sub_FB766E:
+sub_FB28BE_Nop4:
 	ret                                                  ; FB766E  0e
 sub_FB766F:
 	link XIZ,0x0000                                      ; FB766F  ee 0c 00 00
@@ -95254,7 +95254,7 @@ sub_FB7E7C:
 	m_res 6, MD24, 0x60fd42                              ; FB7E94  f2 42 fd 60 b6
 .LFB7E99:
 	ret                                                  ; FB7E99  0e
-sub_FB7E9A:
+sub_FB2877_Nop:
 	ret                                                  ; FB7E9A  0e
 sub_FB7E9B:
 	push XDE                                             ; FB7E9B  3a
@@ -95299,9 +95299,9 @@ sub_FB7ED2:
 	pop XHL                                              ; FB7EE0  5b
 	pop XDE                                              ; FB7EE1  5a
 	ret                                                  ; FB7EE2  0e
-sub_FB7EE3:
+sub_FB28BE_Nop5:
 	ret                                                  ; FB7EE3  0e
-sub_FB7EE4:
+sub_FB3251_Nop:
 	ret                                                  ; FB7EE4  0e
 sub_FB7EE5:
 	push XDE                                             ; FB7EE5  3a
@@ -100060,7 +100060,7 @@ sub_FBC573:
 	pop XBC                                              ; FBC580  59
 	unlk XIZ                                             ; FBC581  ee 0d
 	ret                                                  ; FBC583  0e
-sub_FBC584:
+T_F41874_Nop:
 	ret                                                  ; FBC584  0e
 sub_FBC585:
 	calr sub_FBF2E2                                          ; FBC585  1e 5a 2d
@@ -100076,7 +100076,7 @@ sub_FBC58D:
 	pop XBC                                              ; FBC59A  59
 	unlk XIZ                                             ; FBC59B  ee 0d
 	ret                                                  ; FBC59D  0e
-sub_FBC59E:
+T_F41A34_Nop:
 	ret                                                  ; FBC59E  0e
 sub_FBC59F:
 	calr sub_FBF18B                                          ; FBC59F  1e e9 2b
@@ -100092,15 +100092,15 @@ sub_FBC5A7:
 	pop XBC                                              ; FBC5B4  59
 	unlk XIZ                                             ; FBC5B5  ee 0d
 	ret                                                  ; FBC5B7  0e
-sub_FBC5B8:
+T_F41A44_Nop:
 	ret                                                  ; FBC5B8  0e
-sub_FBC5B9:
+T_F41A88_Nop:
 	ret                                                  ; FBC5B9  0e
-sub_FBC5BA:
+T_F41A8C_Nop:
 	ret                                                  ; FBC5BA  0e
-sub_FBC5BB:
+T_F41A90_Nop:
 	ret                                                  ; FBC5BB  0e
-sub_FBC5BC:
+T_F41A94_Nop:
 	ret                                                  ; FBC5BC  0e
 sub_FBC5BD:
 	calr sub_FBFEB9                                          ; FBC5BD  1e f9 38
@@ -100128,7 +100128,7 @@ sub_FBC5C5:
 	pop XBC                                              ; FBC5D2  59
 	unlk XIZ                                             ; FBC5D3  ee 0d
 	ret                                                  ; FBC5D5  0e
-sub_FBC5D6:
+T_F41884_Nop:
 	ret                                                  ; FBC5D6  0e
 sub_FBC5D7:
 	calr sub_FBFDC0                                          ; FBC5D7  1e e6 37
@@ -100144,7 +100144,7 @@ sub_FBC5DF:
 	pop XBC                                              ; FBC5EC  59
 	unlk XIZ                                             ; FBC5ED  ee 0d
 	ret                                                  ; FBC5EF  0e
-sub_FBC5F0:
+T_F418B4_Nop:
 	ret                                                  ; FBC5F0  0e
 sub_FBC5F1:
 	ld bc, (0x207c:16)                                 ; FBC5F1  d1 7c 20 21
@@ -100738,7 +100738,7 @@ sub_FBCB40:
 	call T_Kernel_SemaSignal_StackArg                    ; FBCB7A  1d c0 2d f4
 	inc 6,XSP                                            ; FBCB7E  ef 66
 	ret                                                  ; FBCB80  0e
-sub_FBCB81:
+T_F4184C_Nop:
 	ret                                                  ; FBCB81  0e
 sub_FBCB82:
 	link XIZ,0x0000                                      ; FBCB82  ee 0c 00 00
@@ -100756,7 +100756,7 @@ sub_FBCB82:
 	pop XBC                                              ; FBCBA5  59
 	unlk XIZ                                             ; FBCBA6  ee 0d
 	ret                                                  ; FBCBA8  0e
-sub_FBCBA9:
+T_F41854_Nop:
 	ret                                                  ; FBCBA9  0e
 	pushw hl                                             ; FBCBAA  2b
 	push XIX                                             ; FBCBAB  3c
@@ -101088,18 +101088,18 @@ sub_FBCDFC:
 	pop XIX                                              ; FBCEE5  5c
 	ret                                                  ; FBCEE6  0e
 sub_FBCEE7:
-	calr sub_FBCEF7                                      ; FBCEE7  1e 0d 00
+	calr T_F4185C_Nop                                      ; FBCEE7  1e 0d 00
 	ret                                                  ; FBCEEA  0e
 sub_FBCEEB:
-	calr sub_FBCEF7                                      ; FBCEEB  1e 09 00
+	calr T_F4185C_Nop                                      ; FBCEEB  1e 09 00
 	ret                                                  ; FBCEEE  0e
 sub_FBCEEF:
-	calr sub_FBCEF7                                      ; FBCEEF  1e 05 00
+	calr T_F4185C_Nop                                      ; FBCEEF  1e 05 00
 	ret                                                  ; FBCEF2  0e
 sub_FBCEF3:
-	calr sub_FBCEF7                                      ; FBCEF3  1e 01 00
+	calr T_F4185C_Nop                                      ; FBCEF3  1e 01 00
 	ret                                                  ; FBCEF6  0e
-sub_FBCEF7:
+T_F4185C_Nop:
 	ret                                                  ; FBCEF7  0e
 sub_FBCEF8:
 	link XIZ,0x0000                                      ; FBCEF8  ee 0c 00 00
@@ -101159,15 +101159,15 @@ sub_FBCF3C:
 .LFBCF7A:
 	unlk XIZ                                             ; FBCF7A  ee 0d
 	ret                                                  ; FBCF7C  0e
-sub_FBCF7D:
+T_F41894_Nop:
 	ret                                                  ; FBCF7D  0e
-sub_FBCF7E:
+T_F418A4_Nop:
 	ret                                                  ; FBCF7E  0e
-sub_FBCF7F:
+T_F41A54_Nop:
 	ret                                                  ; FBCF7F  0e
-sub_FBCF80:
+T_F41A64_Nop:
 	ret                                                  ; FBCF80  0e
-sub_FBCF81:
+T_F41864_Nop:
 	ret                                                  ; FBCF81  0e
 	link XIZ,0xfff6                                      ; FBCF82  ee 0c f6 ff
 	pushw hl                                             ; FBCF86  2b
@@ -102675,9 +102675,9 @@ sub_FBDD91:
 	unlk XIZ                                             ; FBDDCF  ee 0d
 	ret                                                  ; FBDDD1  0e
 sub_FBDDD2:
-	calr sub_FBDDD6                                      ; FBDDD2  1e 01 00
+	calr T_F418C4_Nop                                      ; FBDDD2  1e 01 00
 	ret                                                  ; FBDDD5  0e
-sub_FBDDD6:
+T_F418C4_Nop:
 	ret                                                  ; FBDDD6  0e
 	pushw hl                                             ; FBDDD7  2b
 	ld l, (0x28b1:16)                                   ; FBDDD8  c1 b1 28 27
@@ -104627,16 +104627,16 @@ sub_FBEED9:
 	m_set 7, MD16, 0x2071                                ; FBEED9  f1 71 20 bf
 	ld (0x2070:16), 0x34                                 ; FBEEDD  f1 70 20 00 34
 	ret                                                  ; FBEEE2  0e
-sub_FBEEE3:
+T_F41A0C_Nop:
 	ret                                                  ; FBEEE3  0e
-sub_FBEEE4:
+T_F41A10_Nop:
 	ret                                                  ; FBEEE4  0e
-sub_FBEEE5:
+T_F41A14_Nop:
 	ret                                                  ; FBEEE5  0e
 sub_FBEEE6:
 	call T_F42F4C                                        ; FBEEE6  1d 4c 2f f4
 	ret                                                  ; FBEEEA  0e
-sub_FBEEEB:
+T_F41A6C_Nop:
 	ret                                                  ; FBEEEB  0e
 sub_FBEEEC:
 	link XIZ,0x0000                                      ; FBEEEC  ee 0c 00 00
@@ -104662,7 +104662,7 @@ sub_FBEEEC:
 	popw hl                                              ; FBEF17  4b
 	unlk XIZ                                             ; FBEF18  ee 0d
 	ret                                                  ; FBEF1A  0e
-sub_FBEF1B:
+T_F41A74_Nop:
 	ret                                                  ; FBEF1B  0e
 ; ---------------------------------------------------------------------
 ; Screen_CombinationNaming_Enter -- the Enter method of the COMBINATION NAMING screen: sets
@@ -104787,7 +104787,7 @@ Screen_CombinationNaming_Button:
 .LFBEFAD:
 	unlk XIZ                                             ; FBEFAD  ee 0d
 	ret                                                  ; FBEFAF  0e
-sub_FBEFB0:
+T_F41AA4_Nop:
 	ret                                                  ; FBEFB0  0e
 	ld c, (0x28b0:16)                                   ; FBEFB1  c1 b0 28 23
 	and C,0x01                                           ; FBEFB5  cb cc 01
@@ -105325,9 +105325,9 @@ sub_FBF453:
 .LFBF491:
 	unlk XIZ                                             ; FBF491  ee 0d
 	ret                                                  ; FBF493  0e
-	calr sub_FBF498                                      ; FBF494  1e 01 00
+	calr sub_FBF453_Nop                                      ; FBF494  1e 01 00
 	ret                                                  ; FBF497  0e
-sub_FBF498:
+sub_FBF453_Nop:
 	ret                                                  ; FBF498  0e
 	pushw hl                                             ; FBF499  2b
 	pushw de                                             ; FBF49A  2a
@@ -105982,7 +105982,7 @@ sub_FBFAB0:
 	call T_Kernel_SemaSignal_StackArg                    ; FBFAEA  1d c0 2d f4
 	inc 6,XSP                                            ; FBFAEE  ef 66
 	ret                                                  ; FBFAF0  0e
-sub_FBFAF1:
+T_F41A1C_Nop:
 	ret                                                  ; FBFAF1  0e
 sub_FBFAF2:
 	link XIZ,0x0000                                      ; FBFAF2  ee 0c 00 00
@@ -106010,7 +106010,7 @@ sub_FBFAF2:
 .LFBFB30:
 	unlk XIZ                                             ; FBFB30  ee 0d
 	ret                                                  ; FBFB32  0e
-sub_FBFB33:
+T_F41A24_Nop:
 	ret                                                  ; FBFB33  0e
 	push XIX                                             ; FBFB34  3c
 	lda xix, (0x28b0:16)                                ; FBFB35  f1 b0 28 34
@@ -106857,7 +106857,7 @@ RemoteImage_LoadHeader:
 	call T_Link_WaitBlockDone                            ; FC0188  1d 3c 12 f4
 .LFC018C:
 	ret                                                  ; FC018C  0e
-sub_FC018D:
+T_F40FF4_Nop:
 	ret                                                  ; FC018D  0e
 sub_FC018E:
 	calr sub_FC019B                                      ; FC018E  1e 0a 00
@@ -106964,7 +106964,7 @@ sub_FC0227:
 	call T_Queue2E00_AppendRegs                          ; FC024A  1d 3c 0f f4
 .LFC024E:
 	ret                                                  ; FC024E  0e
-sub_FC024F:
+T_F40FF8_Nop:
 	ret                                                  ; FC024F  0e
 sub_FC0250:
 	ld XIZ,Msg0716_ObjectRecords                         ; FC0250  46 90 08 fc 00
@@ -107375,22 +107375,22 @@ sub_FC0641:
 	ld a, 0x1a:opc                                          ; FC064B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC064D  1e 40 03
 	ret                                                  ; FC0650  0e
-sub_FC0651:
+T_F410F0_Nop:
 	ret                                                  ; FC0651  0e
 	ret                                                  ; FC0652  0e
-sub_FC0653:
+T_F410F4_Nop:
 	ret                                                  ; FC0653  0e
-sub_FC0654:
+T_F410F8_Nop:
 	ret                                                  ; FC0654  0e
-sub_FC0655:
+T_F410FC_Nop:
 	ret                                                  ; FC0655  0e
-sub_FC0656:
+T_F41100_Nop:
 	ret                                                  ; FC0656  0e
-sub_FC0657:
+T_F41104_Nop:
 	ret                                                  ; FC0657  0e
-sub_FC0658:
+T_F41108_Nop:
 	ret                                                  ; FC0658  0e
-sub_FC0659:
+T_F4110C_Nop:
 	ret                                                  ; FC0659  0e
 sub_FC065A:
 	m_set 0, MD16, 0x070e                                ; FC065A  f1 0e 07 b8
@@ -107408,37 +107408,37 @@ sub_FC0675:
 	m_set 3, MD16, 0x070e                                ; FC0675  f1 0e 07 bb
 	m_set 0, MD16, 0x070f                                ; FC0679  f1 0f 07 b8
 	ret                                                  ; FC067D  0e
-sub_FC067E:
+T_F41120_Nop:
 	ret                                                  ; FC067E  0e
-sub_FC067F:
+T_F41124_Nop:
 	ret                                                  ; FC067F  0e
-sub_FC0680:
+T_F41128_Nop:
 	ret                                                  ; FC0680  0e
-sub_FC0681:
+T_F4112C_Nop:
 	ret                                                  ; FC0681  0e
-sub_FC0682:
+T_F41130_Nop:
 	ret                                                  ; FC0682  0e
-sub_FC0683:
+T_F41134_Nop:
 	ret                                                  ; FC0683  0e
-sub_FC0684:
+T_F41138_Nop:
 	ret                                                  ; FC0684  0e
-sub_FC0685:
+T_F4113C_Nop:
 	ret                                                  ; FC0685  0e
 sub_FC0686:
 	ld XIY,Msg0716_HandlerTables+0xA4                    ; FC0686  45 72 0a fc 00
 	ld a, 0x06:opc                                          ; FC068B  21 06
 	calr Msg0716_DispatchIndex_Twin                                          ; FC068D  1e 1f 03
 	ret                                                  ; FC0690  0e
-sub_FC0691:
+T_F41144_Nop:
 	ret                                                  ; FC0691  0e
 sub_FC0692:
 	ld XIY,Msg0716_HandlerTables+0x118                   ; FC0692  45 e6 0a fc 00
 	ld a, 0x02:opc                                          ; FC0697  21 02
 	calr Msg0716_DispatchIndex_Twin                                          ; FC0699  1e 13 03
 	ret                                                  ; FC069C  0e
-sub_FC069D:
+T_F4114C_Nop:
 	ret                                                  ; FC069D  0e
-sub_FC069E:
+T_F41150_Nop:
 	ret                                                  ; FC069E  0e
 sub_FC069F:
 	ld XIY,Msg0716_HandlerTables+0x124                   ; FC069F  45 f2 0a fc 00
@@ -107460,23 +107460,23 @@ sub_FC06C0:
 	ld a, 0x04:opc                                          ; FC06C5  21 04
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06C7  1e e5 02
 	ret                                                  ; FC06CA  0e
-sub_FC06CB:
+T_F41164_Nop:
 	ret                                                  ; FC06CB  0e
 sub_FC06CC:
-	calr sub_FC0E55                                          ; FC06CC  1e 86 07
+	calr sub_FC06CC_Nop                                          ; FC06CC  1e 86 07
 	ret                                                  ; FC06CF  0e
 sub_FC06D0:
 	ld XIY,Msg0716_HandlerTables+0x174                   ; FC06D0  45 42 0b fc 00
 	ld a, 0x13:opc                                          ; FC06D5  21 13
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06D7  1e d5 02
 	ret                                                  ; FC06DA  0e
-sub_FC06DB:
+T_F41170_Nop:
 	ret                                                  ; FC06DB  0e
-sub_FC06DC:
+T_F41174_Nop:
 	ret                                                  ; FC06DC  0e
-sub_FC06DD:
+T_F41178_Nop:
 	ret                                                  ; FC06DD  0e
-sub_FC06DE:
+T_F4117C_Nop:
 	ret                                                  ; FC06DE  0e
 sub_FC06DF:
 	ld XIX,0x00000716                                    ; FC06DF  44 16 07 00 00
@@ -107559,9 +107559,9 @@ sub_FC078A:
 	calr sub_FC15C5                                          ; FC07AB  1e 17 0e
 .LFC07AE:
 	ret                                                  ; FC07AE  0e
-sub_FC07AF:
+T_F42508_Nop:
 	ret                                                  ; FC07AF  0e
-sub_FC07B0:
+T_F4250C_Nop:
 	ret                                                  ; FC07B0  0e
 sub_FC07B1:
 	ld XIX,0x00000716                                    ; FC07B1  44 16 07 00 00
@@ -107791,7 +107791,7 @@ Msg0716_DispatchIndex_Twin:
 Msg0716_HandlerTables:
 	.long sub_FC0BDA                                 ; FC09CE  [  0]
 	.long sub_FC0BFD                                 ; FC09D2  [  1]
-	.long sub_FC0C1F                                 ; FC09D6  [  2]
+	.long Msg0716_HandlerTables_Nop2                                 ; FC09D6  [  2]
 	.long sub_FC0C20                                 ; FC09DA  [  3]
 	.long sub_FC0C50                                 ; FC09DE  [  4]
 	.long sub_FC0C70                                 ; FC09E2  [  5]
@@ -107802,41 +107802,41 @@ Msg0716_HandlerTables:
 	.long sub_FC0CB2                                 ; FC09F6  [ 10]
 	.long sub_FC0CBC                                 ; FC09FA  [ 11]
 	.long sub_FC0CC6                                 ; FC09FE  [ 12]
-	.long sub_FC0CD6                                 ; FC0A02  [ 13]
-	.long sub_FC0CD7                                 ; FC0A06  [ 14]
-	.long sub_FC0CD7                                 ; FC0A0A  [ 15]
-	.long sub_FC0CD7                                 ; FC0A0E  [ 16]
+	.long Msg0716_HandlerTables_Nop13                                 ; FC0A02  [ 13]
+	.long Msg0716_HandlerTables_Nop14                                 ; FC0A06  [ 14]
+	.long Msg0716_HandlerTables_Nop14                                 ; FC0A0A  [ 15]
+	.long Msg0716_HandlerTables_Nop14                                 ; FC0A0E  [ 16]
 	.long sub_FC0CD8                                 ; FC0A12  [ 17]
 	.long sub_FC0CD8                                 ; FC0A16  [ 18]
-	.long sub_FC0CE2                                 ; FC0A1A  [ 19]
-	.long sub_FC0CE2                                 ; FC0A1E  [ 20]
-	.long sub_FC0CE2                                 ; FC0A22  [ 21]
-	.long sub_FC0CE2                                 ; FC0A26  [ 22]
-	.long sub_FC0CE2                                 ; FC0A2A  [ 23]
-	.long sub_FC0CE2                                 ; FC0A2E  [ 24]
-	.long sub_FC0CE2                                 ; FC0A32  [ 25]
-	.long sub_FC0CE2                                 ; FC0A36  [ 26]
-	.long sub_FC0CE2                                 ; FC0A3A  [ 27]
-	.long sub_FC0CE2                                 ; FC0A3E  [ 28]
-	.long sub_FC0CE2                                 ; FC0A42  [ 29]
-	.long sub_FC0CE2                                 ; FC0A46  [ 30]
-	.long sub_FC0CE2                                 ; FC0A4A  [ 31]
-	.long sub_FC0CE2                                 ; FC0A4E  [ 32]
-	.long sub_FC0CE2                                 ; FC0A52  [ 33]
-	.long sub_FC0CE2                                 ; FC0A56  [ 34]
-	.long sub_FC0CE2                                 ; FC0A5A  [ 35]
-	.long sub_FC0CE2                                 ; FC0A5E  [ 36]
-	.long sub_FC0CE2                                 ; FC0A62  [ 37]
-	.long sub_FC0CE2                                 ; FC0A66  [ 38]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A1A  [ 19]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A1E  [ 20]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A22  [ 21]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A26  [ 22]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A2A  [ 23]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A2E  [ 24]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A32  [ 25]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A36  [ 26]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A3A  [ 27]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A3E  [ 28]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A42  [ 29]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A46  [ 30]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A4A  [ 31]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A4E  [ 32]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A52  [ 33]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A56  [ 34]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A5A  [ 35]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A5E  [ 36]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A62  [ 37]
+	.long Msg0716_HandlerTables_Nop19                                 ; FC0A66  [ 38]
 	.long sub_FC0CE3                                 ; FC0A6A  [ 39]
 	.long sub_FC0CED                                 ; FC0A6E  [ 40]
-	.long sub_FC0CFE                                 ; FC0A72  [ 41]
+	.long Msg0716_HandlerTables_Nop41                                 ; FC0A72  [ 41]
 	.long sub_FC0CFF                                 ; FC0A76  [ 42]
 	.long sub_FC0CFF                                 ; FC0A7A  [ 43]
 	.long sub_FC0CFF                                 ; FC0A7E  [ 44]
 	.long sub_FC0CFF                                 ; FC0A82  [ 45]
 	.long sub_FC0D08                                 ; FC0A86  [ 46]
-	.long sub_FC0D0C                                 ; FC0A8A  [ 47]
+	.long Msg0716_HandlerTables_Nop47                                 ; FC0A8A  [ 47]
 	.long sub_FC0D12                                 ; FC0A8E  [ 48]
 	.long sub_FC0D19                                 ; FC0A92  [ 49]
 	.long sub_FC0D2F                                 ; FC0A96  [ 50]
@@ -107852,74 +107852,74 @@ Msg0716_HandlerTables:
 	.long sub_FC0D2F                                 ; FC0ABE  [ 60]
 	.long sub_FC0D2F                                 ; FC0AC2  [ 61]
 	.long sub_FC0DC5                                 ; FC0AC6  [ 62]
-	.long sub_FC0DD2                                 ; FC0ACA  [ 63]
+	.long Msg0716_HandlerTables_Nop63                                 ; FC0ACA  [ 63]
 	.long sub_FC0DD3                                 ; FC0ACE  [ 64]
-	.long sub_FC0DE0                                 ; FC0AD2  [ 65]
-	.long sub_FC0DE0                                 ; FC0AD6  [ 66]
-	.long sub_FC0DE0                                 ; FC0ADA  [ 67]
-	.long sub_FC0DE0                                 ; FC0ADE  [ 68]
-	.long sub_FC0DE0                                 ; FC0AE2  [ 69]
-	.long sub_FC0DE1                                 ; FC0AE6  [ 70]
-	.long sub_FC0DE1                                 ; FC0AEA  [ 71]
-	.long sub_FC0DE2                                 ; FC0AEE  [ 72]
+	.long Msg0716_HandlerTables_Nop65                                 ; FC0AD2  [ 65]
+	.long Msg0716_HandlerTables_Nop65                                 ; FC0AD6  [ 66]
+	.long Msg0716_HandlerTables_Nop65                                 ; FC0ADA  [ 67]
+	.long Msg0716_HandlerTables_Nop65                                 ; FC0ADE  [ 68]
+	.long Msg0716_HandlerTables_Nop65                                 ; FC0AE2  [ 69]
+	.long Msg0716_HandlerTables_Nop70                                 ; FC0AE6  [ 70]
+	.long Msg0716_HandlerTables_Nop70                                 ; FC0AEA  [ 71]
+	.long Msg0716_HandlerTables_Nop72                                 ; FC0AEE  [ 72]
 	.long sub_FC0DE3                                 ; FC0AF2  [ 73]
 	.long sub_FC0DE7                                 ; FC0AF6  [ 74]
-	.long sub_FC0DEB                                 ; FC0AFA  [ 75]
-	.long sub_FC0DEC                                 ; FC0AFE  [ 76]
-	.long sub_FC0DED                                 ; FC0B02  [ 77]
-	.long sub_FC0DED                                 ; FC0B06  [ 78]
-	.long sub_FC0DED                                 ; FC0B0A  [ 79]
-	.long sub_FC0DED                                 ; FC0B0E  [ 80]
-	.long sub_FC0DED                                 ; FC0B12  [ 81]
-	.long sub_FC0DED                                 ; FC0B16  [ 82]
-	.long sub_FC0DED                                 ; FC0B1A  [ 83]
-	.long sub_FC0DED                                 ; FC0B1E  [ 84]
-	.long sub_FC0DED                                 ; FC0B22  [ 85]
-	.long sub_FC0DED                                 ; FC0B26  [ 86]
-	.long sub_FC0DED                                 ; FC0B2A  [ 87]
+	.long Msg0716_HandlerTables_Nop75                                 ; FC0AFA  [ 75]
+	.long Msg0716_HandlerTables_Nop76                                 ; FC0AFE  [ 76]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B02  [ 77]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B06  [ 78]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B0A  [ 79]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B0E  [ 80]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B12  [ 81]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B16  [ 82]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B1A  [ 83]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B1E  [ 84]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B22  [ 85]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B26  [ 86]
+	.long Msg0716_HandlerTables_Nop77                                 ; FC0B2A  [ 87]
 	.long sub_FC0DEE                                 ; FC0B2E  [ 88]
 	.long sub_FC0E00                                 ; FC0B32  [ 89]
 	.long sub_FC0E09                                 ; FC0B36  [ 90]
 	.long sub_FC0E12                                 ; FC0B3A  [ 91]
-	.long sub_FC0E1F                                 ; FC0B3E  [ 92]
-	.long sub_FC0E20                                 ; FC0B42  [ 93]
-	.long sub_FC0E20                                 ; FC0B46  [ 94]
-	.long sub_FC0E20                                 ; FC0B4A  [ 95]
-	.long sub_FC0E20                                 ; FC0B4E  [ 96]
-	.long sub_FC0E20                                 ; FC0B52  [ 97]
-	.long sub_FC0E20                                 ; FC0B56  [ 98]
-	.long sub_FC0E20                                 ; FC0B5A  [ 99]
-	.long sub_FC0E20                                 ; FC0B5E  [100]
-	.long sub_FC0E20                                 ; FC0B62  [101]
-	.long sub_FC0E20                                 ; FC0B66  [102]
-	.long sub_FC0E20                                 ; FC0B6A  [103]
-	.long sub_FC0E20                                 ; FC0B6E  [104]
-	.long sub_FC0E20                                 ; FC0B72  [105]
-	.long sub_FC0E20                                 ; FC0B76  [106]
-	.long sub_FC0E20                                 ; FC0B7A  [107]
-	.long sub_FC0E20                                 ; FC0B7E  [108]
-	.long sub_FC0E20                                 ; FC0B82  [109]
-	.long sub_FC0E20                                 ; FC0B86  [110]
+	.long Msg0716_HandlerTables_Nop92                                 ; FC0B3E  [ 92]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B42  [ 93]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B46  [ 94]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B4A  [ 95]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B4E  [ 96]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B52  [ 97]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B56  [ 98]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B5A  [ 99]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B5E  [100]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B62  [101]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B66  [102]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B6A  [103]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B6E  [104]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B72  [105]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B76  [106]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B7A  [107]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B7E  [108]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B82  [109]
+	.long Msg0716_HandlerTables_Nop93                                 ; FC0B86  [110]
 	.long sub_FC0E21                                 ; FC0B8A  [111]
 	.long sub_FC0E36                                 ; FC0B8E  [112]
 	.long sub_FC0E4A                                 ; FC0B92  [113]
 	.long sub_FC0E4E                                 ; FC0B96  [114]
-	.long sub_FC0E52                                 ; FC0B9A  [115]
-	.long sub_FC0E52                                 ; FC0B9E  [116]
-	.long sub_FC0E52                                 ; FC0BA2  [117]
-	.long sub_FC0E52                                 ; FC0BA6  [118]
-	.long sub_FC0E52                                 ; FC0BAA  [119]
-	.long sub_FC0E52                                 ; FC0BAE  [120]
-	.long sub_FC0E52                                 ; FC0BB2  [121]
-	.long sub_FC0E52                                 ; FC0BB6  [122]
-	.long sub_FC0E52                                 ; FC0BBA  [123]
-	.long sub_FC0E52                                 ; FC0BBE  [124]
-	.long sub_FC0E52                                 ; FC0BC2  [125]
-	.long sub_FC0E52                                 ; FC0BC6  [126]
-	.long sub_FC0E52                                 ; FC0BCA  [127]
-	.long sub_FC0E52                                 ; FC0BCE  [128]
-	.long sub_FC0E53                                 ; FC0BD2  [129]
-	.long sub_FC0E54                                 ; FC0BD6  [130]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0B9A  [115]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0B9E  [116]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BA2  [117]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BA6  [118]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BAA  [119]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BAE  [120]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BB2  [121]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BB6  [122]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BBA  [123]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BBE  [124]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BC2  [125]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BC6  [126]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BCA  [127]
+	.long Msg0716_HandlerTables_Nop115                                 ; FC0BCE  [128]
+	.long Msg0716_HandlerTables_Nop129                                 ; FC0BD2  [129]
+	.long Msg0716_HandlerTables_Nop130                                 ; FC0BD6  [130]
 sub_FC0BDA:   ; entry: named by 1 `.long` operand, first at 0xFC09CE
 	m_ld_rm MLD+r6, 0x00, r5                             ; FC0BDA  ae 00 25
 	ld BC,(XIZ+0x04)                                     ; FC0BDD  9e 04 21
@@ -107948,7 +107948,7 @@ sub_FC0BFD:   ; entry: named by 1 `.long` operand, first at 0xFC09D2
 .LFC0C1A:
 	m_set 0, MD16, 0x070f                                ; FC0C1A  f1 0f 07 b8
 	ret                                                  ; FC0C1E  0e
-sub_FC0C1F:   ; entry: named by 1 `.long` operand, first at 0xFC09D6
+Msg0716_HandlerTables_Nop2:   ; entry: named by 1 `.long` operand, first at 0xFC09D6
 	ret                                                  ; FC0C1F  0e
 sub_FC0C20:   ; entry: named by 1 `.long` operand, first at 0xFC09DA
 	m_ld_rm MLD+r6, 0x00, r5                             ; FC0C20  ae 00 25
@@ -108034,16 +108034,16 @@ sub_FC0CC6:   ; entry: named by 1 `.long` operand, first at 0xFC09FE
 	calr sub_FC159C                                          ; FC0CD2  1e c7 08
 .LFC0CD5:
 	ret                                                  ; FC0CD5  0e
-sub_FC0CD6:   ; entry: named by 1 `.long` operand, first at 0xFC0A02
+Msg0716_HandlerTables_Nop13:   ; entry: named by 1 `.long` operand, first at 0xFC0A02
 	ret                                                  ; FC0CD6  0e
-sub_FC0CD7:   ; entry: named by 3 `.long` operands, first at 0xFC0A06
+Msg0716_HandlerTables_Nop14:   ; entry: named by 3 `.long` operands, first at 0xFC0A06
 	ret                                                  ; FC0CD7  0e
 sub_FC0CD8:   ; entry: named by 2 `.long` operands, first at 0xFC0A12
 	ld A,(XIZ+0x06)                                      ; FC0CD8  8e 06 21
 	ld (XIX+0x01),A                                      ; FC0CDB  bc 01 41
 	calr sub_FC1726                                          ; FC0CDE  1e 45 0a
 	ret                                                  ; FC0CE1  0e
-sub_FC0CE2:   ; entry: named by 20 `.long` operands, first at 0xFC0A1A
+Msg0716_HandlerTables_Nop19:   ; entry: named by 20 `.long` operands, first at 0xFC0A1A
 	ret                                                  ; FC0CE2  0e
 sub_FC0CE3:   ; entry: named by 1 `.long` operand, first at 0xFC0A6A
 	ld A,(XIZ+0x06)                                      ; FC0CE3  8e 06 21
@@ -108063,7 +108063,7 @@ sub_FC0CED:   ; entry: named by 1 `.long` operand, first at 0xFC0A6E
 	ret                                                  ; FC0CFB  0e
 	ret                                                  ; FC0CFC  0e
 	ret                                                  ; FC0CFD  0e
-sub_FC0CFE:   ; entry: named by 1 `.long` operand, first at 0xFC0A72
+Msg0716_HandlerTables_Nop41:   ; entry: named by 1 `.long` operand, first at 0xFC0A72
 	ret                                                  ; FC0CFE  0e
 sub_FC0CFF:   ; entry: named by 4 `.long` operands, first at 0xFC0A76
 	m_set 4, MD16, 0x070e                                ; FC0CFF  f1 0e 07 bc
@@ -108072,7 +108072,7 @@ sub_FC0CFF:   ; entry: named by 4 `.long` operands, first at 0xFC0A76
 sub_FC0D08:   ; entry: named by 1 `.long` operand, first at 0xFC0A86
 	calr sub_FC1816                                          ; FC0D08  1e 0b 0b
 	ret                                                  ; FC0D0B  0e
-sub_FC0D0C:   ; entry: named by 1 `.long` operand, first at 0xFC0A8A
+Msg0716_HandlerTables_Nop47:   ; entry: named by 1 `.long` operand, first at 0xFC0A8A
 	ret                                                  ; FC0D0C  0e
 	ret                                                  ; FC0D0D  0e
 	ret                                                  ; FC0D0E  0e
@@ -108218,7 +108218,7 @@ sub_FC0DC5:   ; entry: named by 1 `.long` operand, first at 0xFC0AC6
 	calr sub_FC1B34                                          ; FC0DCE  1e 63 0d
 .LFC0DD1:
 	ret                                                  ; FC0DD1  0e
-sub_FC0DD2:   ; entry: named by 1 `.long` operand, first at 0xFC0ACA
+Msg0716_HandlerTables_Nop63:   ; entry: named by 1 `.long` operand, first at 0xFC0ACA
 	ret                                                  ; FC0DD2  0e
 sub_FC0DD3:   ; entry: named by 1 `.long` operand, first at 0xFC0ACE
 	ld a, (0x20ba:16)                                   ; FC0DD3  c1 ba 20 21
@@ -108227,23 +108227,23 @@ sub_FC0DD3:   ; entry: named by 1 `.long` operand, first at 0xFC0ACE
 	calr sub_FC1B4D                                          ; FC0DDC  1e 6e 0d
 .LFC0DDF:
 	ret                                                  ; FC0DDF  0e
-sub_FC0DE0:   ; entry: named by 5 `.long` operands, first at 0xFC0AD2
+Msg0716_HandlerTables_Nop65:   ; entry: named by 5 `.long` operands, first at 0xFC0AD2
 	ret                                                  ; FC0DE0  0e
-sub_FC0DE1:   ; entry: named by 2 `.long` operands, first at 0xFC0AE6
+Msg0716_HandlerTables_Nop70:   ; entry: named by 2 `.long` operands, first at 0xFC0AE6
 	ret                                                  ; FC0DE1  0e
-sub_FC0DE2:   ; entry: named by 1 `.long` operand, first at 0xFC0AEE
+Msg0716_HandlerTables_Nop72:   ; entry: named by 1 `.long` operand, first at 0xFC0AEE
 	ret                                                  ; FC0DE2  0e
 sub_FC0DE3:   ; entry: named by 1 `.long` operand, first at 0xFC0AF2
 	calr sub_FC17AE                                          ; FC0DE3  1e c8 09
 	ret                                                  ; FC0DE6  0e
 sub_FC0DE7:   ; entry: named by 1 `.long` operand, first at 0xFC0AF6
-	calr sub_FC1787                                          ; FC0DE7  1e 9d 09
+	calr sub_FC0DE7_Nop                                          ; FC0DE7  1e 9d 09
 	ret                                                  ; FC0DEA  0e
-sub_FC0DEB:   ; entry: named by 1 `.long` operand, first at 0xFC0AFA
+Msg0716_HandlerTables_Nop75:   ; entry: named by 1 `.long` operand, first at 0xFC0AFA
 	ret                                                  ; FC0DEB  0e
-sub_FC0DEC:   ; entry: named by 1 `.long` operand, first at 0xFC0AFE
+Msg0716_HandlerTables_Nop76:   ; entry: named by 1 `.long` operand, first at 0xFC0AFE
 	ret                                                  ; FC0DEC  0e
-sub_FC0DED:   ; entry: named by 11 `.long` operands, first at 0xFC0B02
+Msg0716_HandlerTables_Nop77:   ; entry: named by 11 `.long` operands, first at 0xFC0B02
 	ret                                                  ; FC0DED  0e
 sub_FC0DEE:   ; entry: named by 1 `.long` operand, first at 0xFC0B2E
 	ld a, (0x20ba:16)                                   ; FC0DEE  c1 ba 20 21
@@ -108266,9 +108266,9 @@ sub_FC0E12:   ; entry: named by 1 `.long` operand, first at 0xFC0B3A
 	ld (XIX+0x01),0x20                                   ; FC0E17  bc 01 00 20
 	calr sub_FC151B                                          ; FC0E1B  1e fd 06
 	ret                                                  ; FC0E1E  0e
-sub_FC0E1F:   ; entry: named by 1 `.long` operand, first at 0xFC0B3E
+Msg0716_HandlerTables_Nop92:   ; entry: named by 1 `.long` operand, first at 0xFC0B3E
 	ret                                                  ; FC0E1F  0e
-sub_FC0E20:   ; entry: named by 18 `.long` operands, first at 0xFC0B42
+Msg0716_HandlerTables_Nop93:   ; entry: named by 18 `.long` operands, first at 0xFC0B42
 	ret                                                  ; FC0E20  0e
 sub_FC0E21:   ; entry: named by 1 `.long` operand, first at 0xFC0B8A
 	ld XIY,0x00000600                                    ; FC0E21  45 00 06 00 00
@@ -108290,13 +108290,13 @@ sub_FC0E4A:   ; entry: named by 1 `.long` operand, first at 0xFC0B92
 sub_FC0E4E:   ; entry: named by 1 `.long` operand, first at 0xFC0B96
 	calr sub_FC178B                                          ; FC0E4E  1e 3a 09
 	ret                                                  ; FC0E51  0e
-sub_FC0E52:   ; entry: named by 14 `.long` operands, first at 0xFC0B9A
+Msg0716_HandlerTables_Nop115:   ; entry: named by 14 `.long` operands, first at 0xFC0B9A
 	ret                                                  ; FC0E52  0e
-sub_FC0E53:   ; entry: named by 1 `.long` operand, first at 0xFC0BD2
+Msg0716_HandlerTables_Nop129:   ; entry: named by 1 `.long` operand, first at 0xFC0BD2
 	ret                                                  ; FC0E53  0e
-sub_FC0E54:   ; entry: named by 1 `.long` operand, first at 0xFC0BD6
+Msg0716_HandlerTables_Nop130:   ; entry: named by 1 `.long` operand, first at 0xFC0BD6
 	ret                                                  ; FC0E54  0e
-sub_FC0E55:
+sub_FC06CC_Nop:
 	ret                                                  ; FC0E55  0e
 sub_FC0E56:
 	m_bit 0, MD16, 0x070f                                ; FC0E56  f1 0f 07 c8
@@ -108426,9 +108426,9 @@ sub_FC0F85:
 .LFC0FBB:
 	ret                                                  ; FC0FBB  0e
 	ret                                                  ; FC0FBC  0e
-sub_FC0FBD:
+T_F40FB8_Nop:
 	ret                                                  ; FC0FBD  0e
-sub_FC0FBE:
+T_F40FBC_Nop:
 	ret                                                  ; FC0FBE  0e
 	ret                                                  ; FC0FBF  0e
 	ret                                                  ; FC0FC0  0e
@@ -108558,9 +108558,9 @@ sub_FC1042:
 	jr .LFC10C3                                          ; FC10D7  68 ea
 .LFC10D9:
 	ret                                                  ; FC10D9  0e
-sub_FC10DA:
+T_F40FE4_Nop:
 	ret                                                  ; FC10DA  0e
-sub_FC10DB:
+T_F40FE0_Nop:
 	ret                                                  ; FC10DB  0e
 	ret                                                  ; FC10DC  0e
 sub_FC10DD:
@@ -109321,7 +109321,7 @@ sub_FC1726:
 	ldw bc, 0x04                                         ; FC1780  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1783  1e 94 02
 	ret                                                  ; FC1786  0e
-sub_FC1787:
+sub_FC0DE7_Nop:
 	ret                                                  ; FC1787  0e
 	ret                                                  ; FC1788  0e
 	ret                                                  ; FC1789  0e
@@ -109570,7 +109570,7 @@ sub_FC1975:
 	ldw bc, 0x04                                         ; FC19D5  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC19D8  1e 3f 00
 	ret                                                  ; FC19DB  0e
-sub_FC19DC:
+T_F40FD8_Nop:
 	ret                                                  ; FC19DC  0e
 	ret                                                  ; FC19DD  0e
 	ret                                                  ; FC19DE  0e
@@ -109999,7 +109999,7 @@ sub_FC1C77:
 ; ---------------------------------------------------------------------
 Msg0716_Str_CombiName:
 	.byte 0x43, 0x6f, 0x6d, 0x62, 0x69, 0x20, 0x4e, 0x61, 0x6d, 0x65, 0x20, 0x2a, 0x2a, 0x2a, 0x2a, 0x2a  ; FC1CC1
-sub_FC1CD1:
+T_F40FC8_Nop:
 	ret                                                  ; FC1CD1  0e
 	ret                                                  ; FC1CD2  0e
 	ret                                                  ; FC1CD3  0e
@@ -112961,7 +112961,7 @@ sub_FC546A:
 	jp (xix)                                             ; FC54B3  b4 d8
 .LFC54B5:
 	call sub_FC6153                                      ; FC54B5  1d 53 61 fc
-	call sub_FC61A5                                      ; FC54B9  1d a5 61 fc
+	call sub_FC546A_Nop                                      ; FC54B9  1d a5 61 fc
 	call sub_FC5C7C                                      ; FC54BD  1d 7c 5c fc
 	popw bc                                              ; FC54C1  49
 .LFC54C2:
@@ -112991,7 +112991,7 @@ sub_FC54C6:
 	jp (xix)                                             ; FC5505  b4 d8
 .LFC5507:
 	call sub_FC6153                                      ; FC5507  1d 53 61 fc
-	call sub_FC61A5                                      ; FC550B  1d a5 61 fc
+	call sub_FC546A_Nop                                      ; FC550B  1d a5 61 fc
 	call sub_FC5C7C                                      ; FC550F  1d 7c 5c fc
 	popw bc                                              ; FC5513  49
 .LFC5514:
@@ -113020,7 +113020,7 @@ sub_FC5518:
 	jp (xix)                                             ; FC5553  b4 d8
 .LFC5555:
 	call sub_FC6153                                      ; FC5555  1d 53 61 fc
-	call sub_FC61A5                                      ; FC5559  1d a5 61 fc
+	call sub_FC546A_Nop                                      ; FC5559  1d a5 61 fc
 	call sub_FC5C7C                                      ; FC555D  1d 7c 5c fc
 	popw bc                                              ; FC5561  49
 .LFC5562:
@@ -113056,7 +113056,7 @@ sub_FC5566:
 	jp (xix)                                             ; FC55B7  b4 d8
 .LFC55B9:
 	call sub_FC6153                                      ; FC55B9  1d 53 61 fc
-	call sub_FC61A5                                      ; FC55BD  1d a5 61 fc
+	call sub_FC546A_Nop                                      ; FC55BD  1d a5 61 fc
 	call sub_FC5C7C                                      ; FC55C1  1d 7c 5c fc
 	popw bc                                              ; FC55C5  49
 .LFC55C6:
@@ -113409,11 +113409,11 @@ sub_FC57F0:
 	popw de                                              ; FC5969  4a
 	popw hl                                              ; FC596A  4b
 	ret                                                  ; FC596B  0e
-sub_FC596C:
+T_F411E8_Nop:
 	ret                                                  ; FC596C  0e
-sub_FC596D:
+T_F411C8_Nop:
 	ret                                                  ; FC596D  0e
-sub_FC596E:
+T_F411CC_Nop:
 	ret                                                  ; FC596E  0e
 sub_FC596F:
 	push XIX                                             ; FC596F  3c
@@ -113569,9 +113569,9 @@ sub_FC5AAE:   ; entry: named by 1 `.long` operand, first at 0xFC59FF
 	popw de                                              ; FC5AC7  4a
 	popw hl                                              ; FC5AC8  4b
 	ret                                                  ; FC5AC9  0e
-sub_FC5ACA:
+T_F411D8_Nop:
 	ret                                                  ; FC5ACA  0e
-sub_FC5ACB:
+T_F411DC_Nop:
 	ret                                                  ; FC5ACB  0e
 sub_FC5ACC:
 	push XIX                                             ; FC5ACC  3c
@@ -113610,7 +113610,7 @@ sub_FC5ACC:
 .LFC5B23:
 	pop XIX                                              ; FC5B23  5c
 	ret                                                  ; FC5B24  0e
-sub_FC5B25:
+T_F411E4_Nop:
 	ret                                                  ; FC5B25  0e
 sub_FC5B26:
 	pushw hl                                             ; FC5B26  2b
@@ -114311,7 +114311,7 @@ sub_FC6153:
 	popw hl                                              ; FC61A1  4b
 	unlk XIZ                                             ; FC61A2  ee 0d
 	ret                                                  ; FC61A4  0e
-sub_FC61A5:
+sub_FC546A_Nop:
 	ret                                                  ; FC61A5  0e
 sub_FC61A6:
 	link XIZ,0xffeb                                      ; FC61A6  ee 0c eb ff
@@ -114932,7 +114932,7 @@ Ram3800_Start_Entry:
 ; ---------------------------------------------------------------------
 Ram3800_Start:
 	calr Ram3800_InitAll                                 ; FC8018  1e 05 00
-	call sub_FC80E1                                      ; FC801B  1d e1 80 fc
+	call Ram3800_Start_Nop                                      ; FC801B  1d e1 80 fc
 	ret                                                  ; FC801F  0e
 ; ---------------------------------------------------------------------
 ; Ram3800_InitAll -- the module's C-runtime initialiser, all four blocks
@@ -115050,17 +115050,17 @@ sub_FC80AC:
 	pop XIX                                              ; FC80D9  5c
 	pop XIZ                                              ; FC80DA  5e
 	ret                                                  ; FC80DB  0e
-sub_FC80DC:
+T_F413E4_Nop:
 	ret                                                  ; FC80DC  0e
-sub_FC80DD:
+T_F413E8_Nop:
 	ret                                                  ; FC80DD  0e
-sub_FC80DE:
+T_F413EC_Nop:
 	ret                                                  ; FC80DE  0e
-sub_FC80DF:
+T_F413F0_Nop:
 	ret                                                  ; FC80DF  0e
-sub_FC80E0:
+T_F413F4_Nop:
 	ret                                                  ; FC80E0  0e
-sub_FC80E1:
+Ram3800_Start_Nop:
 	ret                                                  ; FC80E1  0e
 sub_FC80E2:
 	link XIZ,0xfd2c                                      ; FC80E2  ee 0c 2c fd
@@ -116282,7 +116282,7 @@ sub_FC8CE0:
 	unlk XIZ                                             ; FC8D42  ee 0d
 	ret                                                  ; FC8D44  0e
 sub_FC8D45:
-	calr sub_FC8EFE                                          ; FC8D45  1e b6 01
+	calr sub_FC8D45_Nop                                          ; FC8D45  1e b6 01
 	ret                                                  ; FC8D48  0e
 sub_FC8D49:
 	link XIZ,0xfffa                                      ; FC8D49  ee 0c fa ff
@@ -116361,7 +116361,7 @@ sub_FC8DE6:   ; entry: named by 1 `.long` operand, first at 0xFC8DB6
 	pushw hl                                             ; FC8DEA  2b
 	push 0x00                                            ; FC8DEB  09 00
 	push H                                               ; FC8DED  ce 04
-	call sub_FC9726                                      ; FC8DEF  1d 26 97 fc
+	call sub_FC8DE6_Nop                                      ; FC8DEF  1d 26 97 fc
 	jr .LFC8E5C                                          ; FC8DF3  68 67
 sub_FC8DF5:   ; entry: named by 1 `.long` operand, first at 0xFC8DBA
 	push 0x00                                            ; FC8DF5  09 00
@@ -116385,7 +116385,7 @@ sub_FC8E13:   ; entry: named by 1 `.long` operand, first at 0xFC8DC2
 	pushw hl                                             ; FC8E17  2b
 	push 0x00                                            ; FC8E18  09 00
 	push H                                               ; FC8E1A  ce 04
-	call sub_FC9853                                      ; FC8E1C  1d 53 98 fc
+	call sub_FC8E13_Nop                                      ; FC8E1C  1d 53 98 fc
 	jr .LFC8E5C                                          ; FC8E20  68 3a
 sub_FC8E22:   ; entry: named by 1 `.long` operand, first at 0xFC8DC6
 	push 0x00                                            ; FC8E22  09 00
@@ -116500,7 +116500,7 @@ sub_FC8E7B:
 	popw hl                                              ; FC8EFA  4b
 	unlk XIZ                                             ; FC8EFB  ee 0d
 	ret                                                  ; FC8EFD  0e
-sub_FC8EFE:
+sub_FC8D45_Nop:
 	ret                                                  ; FC8EFE  0e
 	link XIZ,0xfff8                                      ; FC8EFF  ee 0c f8 ff
 	pushw hl                                             ; FC8F03  2b
@@ -117363,7 +117363,7 @@ sub_FC9528:
 	popw hl                                              ; FC9722  4b
 	unlk XIZ                                             ; FC9723  ee 0d
 	ret                                                  ; FC9725  0e
-sub_FC9726:
+sub_FC8DE6_Nop:
 	ret                                                  ; FC9726  0e
 sub_FC9727:
 	link XIZ,0xfed8                                      ; FC9727  ee 0c d8 fe
@@ -117502,7 +117502,7 @@ sub_FC97F1:
 	popw hl                                              ; FC984F  4b
 	unlk XIZ                                             ; FC9850  ee 0d
 	ret                                                  ; FC9852  0e
-sub_FC9853:
+sub_FC8E13_Nop:
 	ret                                                  ; FC9853  0e
 sub_FC9854:
 	link XIZ,0xfed8                                      ; FC9854  ee 0c d8 fe
@@ -123017,8 +123017,8 @@ ScreenCode80_Handlers:
 ;          says Dispatch_Code80 makes 0xC0+k the same entry as 0xA0+k.
 ScreenCodeC0_Handlers:
 	.long sub_FDD437                              ; FCFD67  [ 0]
-	.long sub_FDD7F7                              ; FCFD6B  [ 1]
-	.long sub_FDD7F8                              ; FCFD6F  [ 2]
+	.long T_F41F7C_Nop                              ; FCFD6B  [ 1]
+	.long T_F41F8C_Nop                              ; FCFD6F  [ 2]
 	.long ToneEditPage_A3_PositionParameter       ; FCFD73  [ 3]
 	.long ToneEditPage_A4_PositionMovement        ; FCFD77  [ 4]
 	.long ToneEditPage_A5_FittingMutingTuning     ; FCFD7B  [ 5]
@@ -123028,7 +123028,7 @@ ScreenCodeC0_Handlers:
 	.long ScreenCode_Nop                          ; FCFD8B  [ 9]
 	.long sub_FDD272                              ; FCFD8F  [10]
 	.long sub_FDD27F                              ; FCFD93  [11]
-	.long sub_FDD436                              ; FCFD97  [12]
+	.long T_F42340_Nop                              ; FCFD97  [12]
 	.long sub_FDBBD6                              ; FCFD9B  [13]
 	.long ScreenCode_Nop                          ; FCFD9F  [14]
 	.long ScreenCode_Nop                          ; FCFDA3  [15]
@@ -130138,9 +130138,9 @@ ToneEditPage_A0_KeyDispatch:
 .LFD3DF5:
 	unlk XIZ                                             ; FD3DF5  ee 0d
 	ret                                                  ; FD3DF7  0e
-sub_FD3DF8:
+T_F41F84_Nop:
 	ret                                                  ; FD3DF8  0e
-sub_FD3DF9:
+T_F41F94_Nop:
 	ret                                                  ; FD3DF9  0e
 ToneEditPage_A3_KeyDispatch:
 	link XIZ,0xfffc                                      ; FD3DFA  ee 0c fc ff
@@ -148405,7 +148405,7 @@ sub_FDD420:
 	popw hl                                              ; FDD432  4b
 	unlk XIZ                                             ; FDD433  ee 0d
 	ret                                                  ; FDD435  0e
-sub_FDD436:
+T_F42340_Nop:
 	ret                                                  ; FDD436  0e
 sub_FDD437:
 	link XIZ,0xffec                                      ; FDD437  ee 0c ec ff
@@ -148825,9 +148825,9 @@ sub_FDD437:
 	popw hl                                              ; FDD7F3  4b
 	unlk XIZ                                             ; FDD7F4  ee 0d
 	ret                                                  ; FDD7F6  0e
-sub_FDD7F7:
+T_F41F7C_Nop:
 	ret                                                  ; FDD7F7  0e
-sub_FDD7F8:
+T_F41F8C_Nop:
 	ret                                                  ; FDD7F8  0e
 ; ---------------------------------------------------------------------
 ; ToneEditPage_A3_PositionParameter -- the SOUND EDIT MODELING page whose
@@ -149946,7 +149946,7 @@ sub_FDE0F7:
 	popw hl                                              ; FDE14D  4b
 	unlk XIZ                                             ; FDE14E  ee 0d
 	ret                                                  ; FDE150  0e
-sub_FDE151:
+T_F433E0_Nop:
 	ret                                                  ; FDE151  0e
 sub_FDE152:
 	pushw 0x00                                           ; FDE152  0b 00 00
@@ -149954,7 +149954,7 @@ sub_FDE152:
 	call Var27DB_Clear                                      ; FDE159  1d 13 77 fd
 	popw bc                                              ; FDE15D  49
 	ret                                                  ; FDE15E  0e
-sub_FDE15F:
+T_F41F68_Nop:
 	ret                                                  ; FDE15F  0e
 sub_FDE160:
 	pushw 0x00                                           ; FDE160  0b 00 00
@@ -149962,7 +149962,7 @@ sub_FDE160:
 	call Var27DB_Clear                                      ; FDE167  1d 13 77 fd
 	popw bc                                              ; FDE16B  49
 	ret                                                  ; FDE16C  0e
-sub_FDE16D:
+T_F42008_Nop:
 	ret                                                  ; FDE16D  0e
 sub_FDE16E:
 	pushw 0x00                                           ; FDE16E  0b 00 00
@@ -149970,7 +149970,7 @@ sub_FDE16E:
 	call Var27DB_Clear                                      ; FDE175  1d 13 77 fd
 	popw bc                                              ; FDE179  49
 	ret                                                  ; FDE17A  0e
-sub_FDE17B:
+T_F42018_Nop:
 	ret                                                  ; FDE17B  0e
 sub_FDE17C:
 	pushw 0x00                                           ; FDE17C  0b 00 00
@@ -149978,7 +149978,7 @@ sub_FDE17C:
 	call Var27DB_Clear                                      ; FDE183  1d 13 77 fd
 	popw bc                                              ; FDE187  49
 	ret                                                  ; FDE188  0e
-sub_FDE189:
+T_F42028_Nop:
 	ret                                                  ; FDE189  0e
 sub_FDE18A:
 	pushw 0x00                                           ; FDE18A  0b 00 00
@@ -149986,7 +149986,7 @@ sub_FDE18A:
 	call Var27DB_Clear                                      ; FDE191  1d 13 77 fd
 	popw bc                                              ; FDE195  49
 	ret                                                  ; FDE196  0e
-sub_FDE197:
+T_F42038_Nop:
 	ret                                                  ; FDE197  0e
 sub_FDE198:
 	pushw 0x00                                           ; FDE198  0b 00 00
@@ -149994,7 +149994,7 @@ sub_FDE198:
 	call Var27DB_Clear                                      ; FDE19F  1d 13 77 fd
 	popw bc                                              ; FDE1A3  49
 	ret                                                  ; FDE1A4  0e
-sub_FDE1A5:
+T_F42048_Nop:
 	ret                                                  ; FDE1A5  0e
 sub_FDE1A6:
 	pushw 0x00                                           ; FDE1A6  0b 00 00
@@ -150002,7 +150002,7 @@ sub_FDE1A6:
 	call Var27DB_Clear                                      ; FDE1AD  1d 13 77 fd
 	popw bc                                              ; FDE1B1  49
 	ret                                                  ; FDE1B2  0e
-sub_FDE1B3:
+T_F42058_Nop:
 	ret                                                  ; FDE1B3  0e
 sub_FDE1B4:
 	pushw 0x00                                           ; FDE1B4  0b 00 00
@@ -150017,7 +150017,7 @@ sub_FDE1C2:
 	call Var27DB_Clear                                      ; FDE1C9  1d 13 77 fd
 	popw bc                                              ; FDE1CD  49
 	ret                                                  ; FDE1CE  0e
-sub_FDE1CF:
+T_F42078_Nop:
 	ret                                                  ; FDE1CF  0e
 sub_FDE1D0:
 	pushw 0x00                                           ; FDE1D0  0b 00 00
@@ -150025,7 +150025,7 @@ sub_FDE1D0:
 	call Var27DB_Clear                                      ; FDE1D7  1d 13 77 fd
 	popw bc                                              ; FDE1DB  49
 	ret                                                  ; FDE1DC  0e
-sub_FDE1DD:
+T_F42068_Nop:
 	ret                                                  ; FDE1DD  0e
 sub_FDE1DE:
 	pushw 0x00                                           ; FDE1DE  0b 00 00
@@ -150033,7 +150033,7 @@ sub_FDE1DE:
 	call Var27DB_Clear                                      ; FDE1E5  1d 13 77 fd
 	popw bc                                              ; FDE1E9  49
 	ret                                                  ; FDE1EA  0e
-sub_FDE1EB:
+T_F42098_Nop:
 	ret                                                  ; FDE1EB  0e
 sub_FDE1EC:
 	pushw 0x00                                           ; FDE1EC  0b 00 00
@@ -150041,7 +150041,7 @@ sub_FDE1EC:
 	call Var27DB_Clear                                      ; FDE1F3  1d 13 77 fd
 	popw bc                                              ; FDE1F7  49
 	ret                                                  ; FDE1F8  0e
-sub_FDE1F9:
+T_F420A8_Nop:
 	ret                                                  ; FDE1F9  0e
 sub_FDE1FA:
 	pushw 0x00                                           ; FDE1FA  0b 00 00
@@ -150049,7 +150049,7 @@ sub_FDE1FA:
 	call Var27DB_Clear                                      ; FDE201  1d 13 77 fd
 	popw bc                                              ; FDE205  49
 	ret                                                  ; FDE206  0e
-sub_FDE207:
+T_F420B8_Nop:
 	ret                                                  ; FDE207  0e
 sub_FDE208:
 	pushw 0x00                                           ; FDE208  0b 00 00
@@ -150057,7 +150057,7 @@ sub_FDE208:
 	call Var27DB_Clear                                      ; FDE20F  1d 13 77 fd
 	popw bc                                              ; FDE213  49
 	ret                                                  ; FDE214  0e
-sub_FDE215:
+T_F42168_Nop:
 	ret                                                  ; FDE215  0e
 sub_FDE216:
 	pushw 0x00                                           ; FDE216  0b 00 00
@@ -150065,7 +150065,7 @@ sub_FDE216:
 	call Var27DB_Clear                                      ; FDE21D  1d 13 77 fd
 	popw bc                                              ; FDE221  49
 	ret                                                  ; FDE222  0e
-sub_FDE223:
+T_F42178_Nop:
 	ret                                                  ; FDE223  0e
 sub_FDE224:
 	pushw 0x00                                           ; FDE224  0b 00 00
@@ -150073,7 +150073,7 @@ sub_FDE224:
 	call Var27DB_Clear                                      ; FDE22B  1d 13 77 fd
 	popw bc                                              ; FDE22F  49
 	ret                                                  ; FDE230  0e
-sub_FDE231:
+T_F42188_Nop:
 	ret                                                  ; FDE231  0e
 sub_FDE232:
 	pushw 0x00                                           ; FDE232  0b 00 00
@@ -150081,7 +150081,7 @@ sub_FDE232:
 	call Var27DB_Clear                                      ; FDE239  1d 13 77 fd
 	popw bc                                              ; FDE23D  49
 	ret                                                  ; FDE23E  0e
-sub_FDE23F:
+T_F42198_Nop:
 	ret                                                  ; FDE23F  0e
 sub_FDE240:
 	pushw 0x00                                           ; FDE240  0b 00 00
@@ -150089,7 +150089,7 @@ sub_FDE240:
 	call Var27DB_Clear                                      ; FDE247  1d 13 77 fd
 	popw bc                                              ; FDE24B  49
 	ret                                                  ; FDE24C  0e
-sub_FDE24D:
+T_F421A8_Nop:
 	ret                                                  ; FDE24D  0e
 sub_FDE24E:
 	pushw 0x00                                           ; FDE24E  0b 00 00
@@ -150097,7 +150097,7 @@ sub_FDE24E:
 	call Var27DB_Clear                                      ; FDE255  1d 13 77 fd
 	popw bc                                              ; FDE259  49
 	ret                                                  ; FDE25A  0e
-sub_FDE25B:
+T_F420C8_Nop:
 	ret                                                  ; FDE25B  0e
 sub_FDE25C:
 	pushw 0x00                                           ; FDE25C  0b 00 00
@@ -150105,7 +150105,7 @@ sub_FDE25C:
 	call Var27DB_Clear                                      ; FDE263  1d 13 77 fd
 	popw bc                                              ; FDE267  49
 	ret                                                  ; FDE268  0e
-sub_FDE269:
+T_F420D8_Nop:
 	ret                                                  ; FDE269  0e
 sub_FDE26A:
 	pushw 0x00                                           ; FDE26A  0b 00 00
@@ -150113,7 +150113,7 @@ sub_FDE26A:
 	call Var27DB_Clear                                      ; FDE271  1d 13 77 fd
 	popw bc                                              ; FDE275  49
 	ret                                                  ; FDE276  0e
-sub_FDE277:
+T_F420E8_Nop:
 	ret                                                  ; FDE277  0e
 sub_FDE278:
 	pushw 0x00                                           ; FDE278  0b 00 00
@@ -150121,7 +150121,7 @@ sub_FDE278:
 	call Var27DB_Clear                                      ; FDE27F  1d 13 77 fd
 	popw bc                                              ; FDE283  49
 	ret                                                  ; FDE284  0e
-sub_FDE285:
+T_F420F8_Nop:
 	ret                                                  ; FDE285  0e
 sub_FDE286:
 	pushw 0x00                                           ; FDE286  0b 00 00
@@ -150129,7 +150129,7 @@ sub_FDE286:
 	call Var27DB_Clear                                      ; FDE28D  1d 13 77 fd
 	popw bc                                              ; FDE291  49
 	ret                                                  ; FDE292  0e
-sub_FDE293:
+T_F42108_Nop:
 	ret                                                  ; FDE293  0e
 sub_FDE294:
 	pushw 0x00                                           ; FDE294  0b 00 00
@@ -150137,7 +150137,7 @@ sub_FDE294:
 	call Var27DB_Clear                                      ; FDE29B  1d 13 77 fd
 	popw bc                                              ; FDE29F  49
 	ret                                                  ; FDE2A0  0e
-sub_FDE2A1:
+T_F42118_Nop:
 	ret                                                  ; FDE2A1  0e
 sub_FDE2A2:
 	pushw 0x00                                           ; FDE2A2  0b 00 00
@@ -150145,7 +150145,7 @@ sub_FDE2A2:
 	call Var27DB_Clear                                      ; FDE2A9  1d 13 77 fd
 	popw bc                                              ; FDE2AD  49
 	ret                                                  ; FDE2AE  0e
-sub_FDE2AF:
+T_F42128_Nop:
 	ret                                                  ; FDE2AF  0e
 sub_FDE2B0:
 	pushw 0x00                                           ; FDE2B0  0b 00 00
@@ -150153,7 +150153,7 @@ sub_FDE2B0:
 	call Var27DB_Clear                                      ; FDE2B7  1d 13 77 fd
 	popw bc                                              ; FDE2BB  49
 	ret                                                  ; FDE2BC  0e
-sub_FDE2BD:
+T_F42138_Nop:
 	ret                                                  ; FDE2BD  0e
 sub_FDE2BE:
 	pushw 0x00                                           ; FDE2BE  0b 00 00
@@ -150161,7 +150161,7 @@ sub_FDE2BE:
 	call Var27DB_Clear                                      ; FDE2C5  1d 13 77 fd
 	popw bc                                              ; FDE2C9  49
 	ret                                                  ; FDE2CA  0e
-sub_FDE2CB:
+T_F42148_Nop:
 	ret                                                  ; FDE2CB  0e
 sub_FDE2CC:
 	pushw 0x00                                           ; FDE2CC  0b 00 00
@@ -150169,15 +150169,15 @@ sub_FDE2CC:
 	call Var27DB_Clear                                      ; FDE2D3  1d 13 77 fd
 	popw bc                                              ; FDE2D7  49
 	ret                                                  ; FDE2D8  0e
-sub_FDE2D9:
+T_F42158_Nop:
 	ret                                                  ; FDE2D9  0e
-sub_FDE2DA:
+T_F42364_Nop:
 	ret                                                  ; FDE2DA  0e
-sub_FDE2DB:
+T_F4236C_Nop:
 	ret                                                  ; FDE2DB  0e
-sub_FDE2DC:
+T_F42374_Nop:
 	ret                                                  ; FDE2DC  0e
-sub_FDE2DD:
+T_F4237C_Nop:
 	ret                                                  ; FDE2DD  0e
 	pushw 0x00                                           ; FDE2DE  0b 00 00
 	call Var27DA_Set                                      ; FDE2E1  1d 05 77 fd
@@ -150191,7 +150191,7 @@ sub_FDE2EC:
 	call Var27DB_Clear                                      ; FDE2F3  1d 13 77 fd
 	popw bc                                              ; FDE2F7  49
 	ret                                                  ; FDE2F8  0e
-sub_FDE2F9:
+T_F433DC_Nop:
 	ret                                                  ; FDE2F9  0e
 sub_FDE2FA:
 	pushw 0x00                                           ; FDE2FA  0b 00 00
@@ -150199,7 +150199,7 @@ sub_FDE2FA:
 	call Var27DB_Clear                                      ; FDE301  1d 13 77 fd
 	popw bc                                              ; FDE305  49
 	ret                                                  ; FDE306  0e
-sub_FDE307:
+T_F4235C_Nop:
 	ret                                                  ; FDE307  0e
 sub_FDE308:
 	pushw 0x00                                           ; FDE308  0b 00 00
@@ -150207,7 +150207,7 @@ sub_FDE308:
 	call Var27DB_Clear                                      ; FDE30F  1d 13 77 fd
 	popw bc                                              ; FDE313  49
 	ret                                                  ; FDE314  0e
-sub_FDE315:
+T_F4232C_Nop:
 	ret                                                  ; FDE315  0e
 sub_FDE316:
 	pushw 0x00                                           ; FDE316  0b 00 00
@@ -150215,7 +150215,7 @@ sub_FDE316:
 	call Var27DB_Clear                                      ; FDE31D  1d 13 77 fd
 	popw bc                                              ; FDE321  49
 	ret                                                  ; FDE322  0e
-sub_FDE323:
+T_F4233C_Nop:
 	ret                                                  ; FDE323  0e
 sub_FDE324:
 	pushw 0x00                                           ; FDE324  0b 00 00
@@ -150223,7 +150223,7 @@ sub_FDE324:
 	call Var27DB_Clear                                      ; FDE32B  1d 13 77 fd
 	popw bc                                              ; FDE32F  49
 	ret                                                  ; FDE330  0e
-sub_FDE331:
+T_F4234C_Nop:
 	ret                                                  ; FDE331  0e
 sub_FDE332:
 	pushw 0x00                                           ; FDE332  0b 00 00
@@ -150231,7 +150231,7 @@ sub_FDE332:
 	call Var27DB_Clear                                      ; FDE339  1d 13 77 fd
 	popw bc                                              ; FDE33D  49
 	ret                                                  ; FDE33E  0e
-sub_FDE33F:
+T_F41F78_Nop:
 	ret                                                  ; FDE33F  0e
 sub_FDE340:
 	pushw 0x00                                           ; FDE340  0b 00 00
@@ -150239,7 +150239,7 @@ sub_FDE340:
 	call Var27DB_Clear                                      ; FDE347  1d 13 77 fd
 	popw bc                                              ; FDE34B  49
 	ret                                                  ; FDE34C  0e
-sub_FDE34D:
+T_F41F88_Nop:
 	ret                                                  ; FDE34D  0e
 sub_FDE34E:
 	pushw 0x00                                           ; FDE34E  0b 00 00
@@ -150247,7 +150247,7 @@ sub_FDE34E:
 	call Var27DB_Clear                                      ; FDE355  1d 13 77 fd
 	popw bc                                              ; FDE359  49
 	ret                                                  ; FDE35A  0e
-sub_FDE35B:
+T_F41F98_Nop:
 	ret                                                  ; FDE35B  0e
 ; ---------------------------------------------------------------------
 ; ToneEditPage_A3_Leave -- the LEAVE method of the screen object at
@@ -150276,7 +150276,7 @@ ToneEditPage_A3_Leave:
 	call Var27DB_Clear                                      ; FDE363  1d 13 77 fd
 	popw bc                                              ; FDE367  49
 	ret                                                  ; FDE368  0e
-sub_FDE369:
+T_F41FA8_Nop:
 	ret                                                  ; FDE369  0e
 ; ---------------------------------------------------------------------
 ; ToneEditPage_A4_Leave -- the LEAVE method of the screen object at
@@ -150305,7 +150305,7 @@ ToneEditPage_A4_Leave:
 	call Var27DB_Clear                                      ; FDE371  1d 13 77 fd
 	popw bc                                              ; FDE375  49
 	ret                                                  ; FDE376  0e
-sub_FDE377:
+T_F41FB8_Nop:
 	ret                                                  ; FDE377  0e
 ; ---------------------------------------------------------------------
 ; ToneEditPage_A5_Leave -- the LEAVE method of the screen object at
@@ -150334,7 +150334,7 @@ ToneEditPage_A5_Leave:
 	call Var27DB_Clear                                      ; FDE37F  1d 13 77 fd
 	popw bc                                              ; FDE383  49
 	ret                                                  ; FDE384  0e
-sub_FDE385:
+T_F41FC8_Nop:
 	ret                                                  ; FDE385  0e
 ; ---------------------------------------------------------------------
 ; ToneEditPage_A6_Leave -- the LEAVE method of the screen object at
@@ -150361,7 +150361,7 @@ ToneEditPage_A6_Leave:
 	call Var27DB_Clear                                      ; FDE38D  1d 13 77 fd
 	popw bc                                              ; FDE391  49
 	ret                                                  ; FDE392  0e
-sub_FDE393:
+T_F41FD8_Nop:
 	ret                                                  ; FDE393  0e
 ; ---------------------------------------------------------------------
 ; ToneEditPage_A7_Leave -- the LEAVE method of the screen object at
@@ -150390,7 +150390,7 @@ ToneEditPage_A7_Leave:
 	call Var27DB_Clear                                      ; FDE39B  1d 13 77 fd
 	popw bc                                              ; FDE39F  49
 	ret                                                  ; FDE3A0  0e
-sub_FDE3A1:
+T_F41FE8_Nop:
 	ret                                                  ; FDE3A1  0e
 sub_FDE3A2:
 	pushw 0x00                                           ; FDE3A2  0b 00 00
@@ -150398,7 +150398,7 @@ sub_FDE3A2:
 	call Var27DB_Clear                                      ; FDE3A9  1d 13 77 fd
 	popw bc                                              ; FDE3AD  49
 	ret                                                  ; FDE3AE  0e
-sub_FDE3AF:
+T_F41FF8_Nop:
 	ret                                                  ; FDE3AF  0e
 sub_FDE3B0:
 	pushw 0x00                                           ; FDE3B0  0b 00 00
@@ -150406,7 +150406,7 @@ sub_FDE3B0:
 	call Var27DB_Clear                                      ; FDE3B7  1d 13 77 fd
 	popw bc                                              ; FDE3BB  49
 	ret                                                  ; FDE3BC  0e
-sub_FDE3BD:
+T_F433EC_Nop:
 	ret                                                  ; FDE3BD  0e
 sub_FDE3BE:
 	link XIZ,0xfffc                                      ; FDE3BE  ee 0c fc ff
@@ -153811,13 +153811,13 @@ sub_FDFEC2:
 ;     may sit on a byte coincidence rather than a real entry point; the byte gate
 ;     cannot tell, and neither can this file.
 sub_FE0000:
-	jp sub_FE0018                                        ; FE0000  1b 18 00 fe
-	jp sub_FE0018                                        ; FE0004  1b 18 00 fe
-	jp sub_FE0018                                        ; FE0008  1b 18 00 fe
+	jp sub_FE0000_Nop                                        ; FE0000  1b 18 00 fe
+	jp sub_FE0000_Nop                                        ; FE0004  1b 18 00 fe
+	jp sub_FE0000_Nop                                        ; FE0008  1b 18 00 fe
 	jp sub_FE1C12                                        ; FE000C  1b 12 1c fe
-	jp sub_FE0018                                        ; FE0010  1b 18 00 fe
-	jp sub_FE0018                                        ; FE0014  1b 18 00 fe
-sub_FE0018:
+	jp sub_FE0000_Nop                                        ; FE0010  1b 18 00 fe
+	jp sub_FE0000_Nop                                        ; FE0014  1b 18 00 fe
+sub_FE0000_Nop:
 	ret                                                  ; FE0018  0e
 sub_FE0019:
 	push XIZ                                             ; FE0019  3e
@@ -154651,7 +154651,7 @@ sub_FE0527:
 	m_push MB24, 0x001735                                ; FE054A  c2 35 17 00 04
 	calr sub_FE0970                                          ; FE054F  1e 1e 04
 	calr Disk_PortA3_Release                                          ; FE0552  1e a2 13
-	calr sub_FE2FC7                                          ; FE0555  1e 6f 2a
+	calr sub_FE0527_Nop                                          ; FE0555  1e 6f 2a
 	popw bc                                              ; FE0558  49
 .LFE0559:
 	popw hl                                              ; FE0559  4b
@@ -155135,9 +155135,9 @@ sub_FE0941:
 	jr le, .LFE0945                                           ; FE0959  62 ea
 	pop XHL                                              ; FE095B  5b
 	ret                                                  ; FE095C  0e
-sub_FE095D:
+sub_FE1D52_Nop:
 	ret                                                  ; FE095D  0e
-sub_FE095E:
+sub_FE1D52_Nop2:
 	ret                                                  ; FE095E  0e
 sub_FE095F:
 	calr Disk_PortA3_Release                                          ; FE095F  1e 95 0f
@@ -155271,7 +155271,7 @@ sub_FE09BE:
 	popw bc                                              ; FE0A8F  49
 .LFE0A90:
 	calr Disk_PortA3_Release                                          ; FE0A90  1e 64 0e
-	calr sub_FE152D                                          ; FE0A93  1e 97 0a
+	calr sub_FE09BE_Nop                                          ; FE0A93  1e 97 0a
 	pop XIX                                              ; FE0A96  5c
 	popw hl                                              ; FE0A97  4b
 	ret                                                  ; FE0A98  0e
@@ -156353,7 +156353,7 @@ sub_FE1522:
 	calr sub_FE14E9                                          ; FE1528  1e be ff
 	popw bc                                              ; FE152B  49
 	ret                                                  ; FE152C  0e
-sub_FE152D:
+sub_FE09BE_Nop:
 	ret                                                  ; FE152D  0e
 sub_FE152E:
 	pushw hl                                             ; FE152E  2b
@@ -156565,7 +156565,7 @@ sub_FE1705:
 	and (XIX),0xfb                                       ; FE170A  84 3c fb
 	m_set 4, MD16, 0x34d4                                ; FE170D  f1 d4 34 bc
 	and (XIX),0xf7                                       ; FE1711  84 3c f7
-	calr sub_FE152D                                          ; FE1714  1e 16 fe
+	calr sub_FE09BE_Nop                                          ; FE1714  1e 16 fe
 	pop XIX                                              ; FE1717  5c
 	ret                                                  ; FE1718  0e
 sub_FE1719:
@@ -156679,7 +156679,7 @@ sub_FE1838:
 	unlk XIZ                                             ; FE185E  ee 0d
 	ret                                                  ; FE1860  0e
 	ret                                                  ; FE1861  0e
-sub_FE1862:
+sub_FE237B_Nop:
 	ret                                                  ; FE1862  0e
 sub_FE1863:
 	pushw hl                                             ; FE1863  2b
@@ -156798,7 +156798,7 @@ Disk_PortA3_Release:
 .LFE1906:
 	ret                                                  ; FE1906  0e
 sub_FE1907:
-	calr sub_FE152D                                          ; FE1907  1e 23 fc
+	calr sub_FE09BE_Nop                                          ; FE1907  1e 23 fc
 	ld (0x1736:24), 0x08                               ; FE190A  f2 36 17 00 00 08
 	pushw 0x08                                           ; FE1910  0b 08 00
 	call T_F40FDC                                        ; FE1913  1d dc 0f f4
@@ -157087,13 +157087,13 @@ sub_FE1C0B:
 sub_FE1C12:
 	calr sub_FE2F39                                          ; FE1C12  1e 24 13
 	ret                                                  ; FE1C15  0e
-sub_FE1C16:
+T_F42580_Nop:
 	ret                                                  ; FE1C16  0e
 sub_FE1C17:
 	calr sub_FE09BE                                          ; FE1C17  1e a4 ed
 	calr Ring_InitTenOfFourteen                                          ; FE1C1A  1e 0c 01
 	ret                                                  ; FE1C1D  0e
-sub_FE1C1E:
+T_F4258C_Nop:
 	ret                                                  ; FE1C1E  0e
 sub_FE1C1F:
 	calr sub_FE095F                                          ; FE1C1F  1e 3d ed
@@ -157228,7 +157228,7 @@ sub_FE1CE0:
 	calr sub_FE07E0                                          ; FE1CE0  1e fd ea
 	ret                                                  ; FE1CE3  0e
 sub_FE1CE4:
-	calr sub_FE2F38                                          ; FE1CE4  1e 51 12
+	calr sub_FE1CE4_Nop                                          ; FE1CE4  1e 51 12
 	ret                                                  ; FE1CE7  0e
 	ret                                                  ; FE1CE8  0e
 ; ---------------------------------------------------------------------
@@ -157324,11 +157324,11 @@ sub_FE1D52:
 	ld C,(XIX)                                           ; FE1D5E  84 23
 	cp c, 0x00:i3                                          ; FE1D60  cb d8
 	jr nz, .LFE1DB5                                          ; FE1D62  6e 51
-	calr sub_FE095D                                          ; FE1D64  1e f6 eb
+	calr sub_FE1D52_Nop                                          ; FE1D64  1e f6 eb
 	calr sub_FE2430                                          ; FE1D67  1e c6 06
 	calr sub_FE1E3C                                            ; FE1D6A  1e cf 00
 	ld H,A                                               ; FE1D6D  c9 8e
-	calr sub_FE095E                                          ; FE1D6F  1e ec eb
+	calr sub_FE1D52_Nop2                                          ; FE1D6F  1e ec eb
 	cp h, 0x01:i3                                          ; FE1D72  ce d9
 	jrl nz, .LFE1E20                                         ; FE1D74  7e a9 00
 	calr sub_FE202F                                          ; FE1D77  1e b5 02
@@ -157359,11 +157359,11 @@ sub_FE1D52:
 	ld C,(XIX)                                           ; FE1DB5  84 23
 	cp c, 0x04:i3                                          ; FE1DB7  cb dc
 	jr nz, .LFE1DCC                                          ; FE1DB9  6e 11
-	calr sub_FE095D                                          ; FE1DBB  1e 9f eb
+	calr sub_FE1D52_Nop                                          ; FE1DBB  1e 9f eb
 	calr sub_FE1E3C                                            ; FE1DBE  1e 7b 00
 	calr sub_FE2430                                          ; FE1DC1  1e 6c 06
 	ld H,A                                               ; FE1DC4  c9 8e
-	calr sub_FE095E                                          ; FE1DC6  1e 95 eb
+	calr sub_FE1D52_Nop2                                          ; FE1DC6  1e 95 eb
 	jrl .LFE1E20                                             ; FE1DC9  78 54 00
 .LFE1DCC:
 	ld C,(XIX)                                           ; FE1DCC  84 23
@@ -158013,7 +158013,7 @@ sub_FE237B:
 	ld A,H                                               ; FE23A9  ce 89
 	jr .LFE23BA                                              ; FE23AB  68 0d
 .LFE23AD:
-	calr sub_FE1862                                          ; FE23AD  1e b2 f4
+	calr sub_FE237B_Nop                                          ; FE23AD  1e b2 f4
 	calr sub_FE0150                                          ; FE23B0  1e 9d dd
 	ld (0x2243:16), 0x01                                 ; FE23B3  f1 43 22 00 01
 	ld a, 0x01:opc                                          ; FE23B8  21 01
@@ -158212,14 +158212,14 @@ sub_FE2531:
 	calr sub_FE28B3                                          ; FE255B  1e 55 03
 	ld H,A                                               ; FE255E  c9 8e
 .LFE2560:
-	calr sub_FE095D                                          ; FE2560  1e fa e3
+	calr sub_FE1D52_Nop                                          ; FE2560  1e fa e3
 	cp h, 0x03:i3                                          ; FE2563  ce db
 	jr nz, .LFE256F                                          ; FE2565  6e 08
 	calr sub_FE26E2                                          ; FE2567  1e 78 01
 	calr sub_FE28D5                                          ; FE256A  1e 68 03
 	ld H,A                                               ; FE256D  c9 8e
 .LFE256F:
-	calr sub_FE095E                                          ; FE256F  1e ec e3
+	calr sub_FE1D52_Nop2                                          ; FE256F  1e ec e3
 	cp h, 0x03:i3                                          ; FE2572  ce db
 	jr nz, .LFE257B                                          ; FE2574  6e 05
 	calr sub_FE2993                                          ; FE2576  1e 1a 04
@@ -158238,7 +158238,7 @@ sub_FE2531:
 	ld H,A                                               ; FE2593  c9 8e
 	jrl .LFE25FA                                             ; FE2595  78 62 00
 .LFE2598:
-	calr sub_FE095D                                          ; FE2598  1e c2 e3
+	calr sub_FE1D52_Nop                                          ; FE2598  1e c2 e3
 	ld C,(XIX)                                           ; FE259B  84 23
 	cp c, 0x04:i3                                          ; FE259D  cb dc
 	jr nz, .LFE25A9                                          ; FE259F  6e 08
@@ -158246,7 +158246,7 @@ sub_FE2531:
 	calr sub_FE28D5                                          ; FE25A4  1e 2e 03
 	ld H,A                                               ; FE25A7  c9 8e
 .LFE25A9:
-	calr sub_FE095E                                          ; FE25A9  1e b2 e3
+	calr sub_FE1D52_Nop2                                          ; FE25A9  1e b2 e3
 	ld C,(XIX)                                           ; FE25AC  84 23
 	cp c, 0x03:i3                                          ; FE25AE  cb db
 	jr nz, .LFE25B7                                          ; FE25B0  6e 05
@@ -158982,7 +158982,7 @@ sub_FE2CBF:
 sub_FE2CC7:
 	push XIX                                             ; FE2CC7  3c
 	lda xix, (0x21e7:16)                                ; FE2CC8  f1 e7 21 34
-	calr sub_FE2FEA                                          ; FE2CCC  1e 1b 03
+	calr sub_FE2CC7_Nop                                          ; FE2CCC  1e 1b 03
 	calr sub_FE2EAF                                          ; FE2CCF  1e dd 01
 	calr sub_FE2F86                                          ; FE2CD2  1e b1 02
 	ld (0x21d0:16), 0x53                                 ; FE2CD5  f1 d0 21 00 53
@@ -159248,7 +159248,7 @@ sub_FE2EF9:
 .LFE2F36:
 	pop XIX                                              ; FE2F36  5c
 	ret                                                  ; FE2F37  0e
-sub_FE2F38:
+sub_FE1CE4_Nop:
 	ret                                                  ; FE2F38  0e
 sub_FE2F39:
 	pushw hl                                             ; FE2F39  2b
@@ -159319,7 +159319,7 @@ sub_FE2FB9:
 sub_FE2FC0:
 	ldw (0x2216:16), 0x145a                              ; FE2FC0  f1 16 22 02 5a 14
 	ret                                                  ; FE2FC6  0e
-sub_FE2FC7:
+sub_FE0527_Nop:
 	ret                                                  ; FE2FC7  0e
 sub_FE2FC8:
 	ld bc, (0x2880:16)                                 ; FE2FC8  d1 80 28 21
@@ -159342,7 +159342,7 @@ sub_FE2FC8:
 sub_FE2FE7:
 	ld a, 0x01:opc                                          ; FE2FE7  21 01
 	ret                                                  ; FE2FE9  0e
-sub_FE2FEA:
+sub_FE2CC7_Nop:
 	ret                                                  ; FE2FEA  0e
 	ret                                                  ; FE2FEB  0e
 	nop                                                  ; FE2FEC  00
@@ -167597,7 +167597,7 @@ sub_FE6E84:
 	ld B,(XIX+0x03)                                      ; FE6F86  8c 03 22
 sub_FE6F89:
 	ld (xiz-4), b                                        ; FE6F89  be fc 42
-	calr sub_FE71CE                                          ; FE6F8C  1e 3f 02
+	calr sub_FE6F89_Nop                                          ; FE6F8C  1e 3f 02
 	ldw bc, 0x76a0                                       ; FE6F8F  31 a0 76
 	sub BC,0x7600                                        ; FE6F92  d9 ca 00 76
 	pushw bc                                             ; FE6F96  29
@@ -167897,7 +167897,7 @@ sub_FE715E:
 	pop XIX                                              ; FE71CA  5c
 	unlk XIZ                                             ; FE71CB  ee 0d
 	ret                                                  ; FE71CD  0e
-sub_FE71CE:
+sub_FE6F89_Nop:
 	ret                                                  ; FE71CE  0e
 	ret                                                  ; FE71CF  0e
 	.byte 0x50                                           ; FE71D0  50
@@ -168833,7 +168833,7 @@ sub_FE8026:
 	ld (0x95:8), 0x01:io                                      ; FE8039  08 95 01
 	ei 0x00                                              ; FE803C  06 00
 	ret                                                  ; FE803E  0e
-sub_FE803F:
+sub_FE9CFC_Nop:
 	ret                                                  ; FE803F  0e
 sub_FE8040:
 	call T_F411B8                                        ; FE8040  1d b8 11 f4
@@ -168858,15 +168858,15 @@ sub_FE8040:
 ; ---------------------------------------------------------------------
 ScreenLeave_DrumEditPartSelect:
 	ret                                                  ; FE8045  0e
-	jp sub_FE805E                                        ; FE8046  1b 5e 80 fe
-	jp sub_FE805E                                        ; FE804A  1b 5e 80 fe
+	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE8046  1b 5e 80 fe
+	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE804A  1b 5e 80 fe
 	jp sub_FE833F                                        ; FE804E  1b 3f 83 fe
-	jp sub_FE805E                                        ; FE8052  1b 5e 80 fe
+	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE8052  1b 5e 80 fe
 	jp sub_FE833F                                        ; FE8056  1b 3f 83 fe
-	jp sub_FE805E                                        ; FE805A  1b 5e 80 fe
-sub_FE805E:
+	jp ScreenLeave_DrumEditPartSelect_Nop                                        ; FE805A  1b 5e 80 fe
+ScreenLeave_DrumEditPartSelect_Nop:
 	ret                                                  ; FE805E  0e
-sub_FE805F:
+T_F402B8_Nop:
 	ret                                                  ; FE805F  0e
 ; ---------------------------------------------------------------------
 ; ScreenButton_Sequencer -- the BUTTON method of the screen object at
@@ -168954,25 +168954,25 @@ ScreenDispatch_FE8077:
 	.long sub_FE819B                                 ; FE809F  [ 10]
 	.long sub_FE81B3                                 ; FE80A3  [ 11]
 	.long sub_FE81CB                                 ; FE80A7  [ 12]
-	.long sub_FE81D3                                 ; FE80AB  [ 13]
-	.long sub_FE81D3                                 ; FE80AF  [ 14]
+	.long ScreenDispatch_FE8077_Nop13                                 ; FE80AB  [ 13]
+	.long ScreenDispatch_FE8077_Nop13                                 ; FE80AF  [ 14]
 	.long sub_FE81D4                                 ; FE80B3  [ 15]
-	.long sub_FE81E5                                 ; FE80B7  [ 16]
-	.long sub_FE81E5                                 ; FE80BB  [ 17]
-	.long sub_FE81E5                                 ; FE80BF  [ 18]
-	.long sub_FE81E5                                 ; FE80C3  [ 19]
-	.long sub_FE81E5                                 ; FE80C7  [ 20]
-	.long sub_FE81E5                                 ; FE80CB  [ 21]
-	.long sub_FE81E5                                 ; FE80CF  [ 22]
-	.long sub_FE81E5                                 ; FE80D3  [ 23]
-	.long sub_FE81E5                                 ; FE80D7  [ 24]
-	.long sub_FE81E5                                 ; FE80DB  [ 25]
-	.long sub_FE81E5                                 ; FE80DF  [ 26]
-	.long sub_FE81E5                                 ; FE80E3  [ 27]
-	.long sub_FE81E5                                 ; FE80E7  [ 28]
-	.long sub_FE81E5                                 ; FE80EB  [ 29]
-	.long sub_FE81E5                                 ; FE80EF  [ 30]
-	.long sub_FE81E5                                 ; FE80F3  [ 31]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80B7  [ 16]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80BB  [ 17]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80BF  [ 18]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80C3  [ 19]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80C7  [ 20]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80CB  [ 21]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80CF  [ 22]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80D3  [ 23]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80D7  [ 24]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80DB  [ 25]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80DF  [ 26]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80E3  [ 27]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80E7  [ 28]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80EB  [ 29]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80EF  [ 30]
+	.long ScreenDispatch_FE8077_Nop16                                 ; FE80F3  [ 31]
 ; ---------------------------------------------------------------------
 ; LCD_ScreenRedraw_Begin_Copy -- a second, byte-identical copy of LCD_ScreenRedraw_Begin
 ;
@@ -169130,7 +169130,7 @@ sub_FE81CB:   ; entry: named by 1 `.long` operand, first at 0xFE80A7
 	jr .LFE81D2                                          ; FE81D0  68 00
 .LFE81D2:
 	ret                                                  ; FE81D2  0e
-sub_FE81D3:   ; entry: named by 2 `.long` operands, first at 0xFE80AB
+ScreenDispatch_FE8077_Nop13:   ; entry: named by 2 `.long` operands, first at 0xFE80AB
 	ret                                                  ; FE81D3  0e
 sub_FE81D4:   ; entry: named by 1 `.long` operand, first at 0xFE80B3
 	bit 0x07,W                                           ; FE81D4  c8 33 07
@@ -169138,12 +169138,12 @@ sub_FE81D4:   ; entry: named by 1 `.long` operand, first at 0xFE80B3
 	ldw (0x2070:16), 0x0201                              ; FE81D9  f1 70 20 02 01 02
 	jr .LFE81E4                                          ; FE81DF  68 03
 .LFE81E1:
-	calr sub_FE81E6                                      ; FE81E1  1e 02 00
+	calr sub_FE81D4_Nop                                      ; FE81E1  1e 02 00
 .LFE81E4:
 	ret                                                  ; FE81E4  0e
-sub_FE81E5:   ; entry: named by 16 `.long` operands, first at 0xFE80B7
+ScreenDispatch_FE8077_Nop16:   ; entry: named by 16 `.long` operands, first at 0xFE80B7
 	ret                                                  ; FE81E5  0e
-sub_FE81E6:
+sub_FE81D4_Nop:
 	ret                                                  ; FE81E6  0e
 ; sub_FE81E7 -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
@@ -169782,15 +169782,15 @@ ScreenDispatch_FE857C:
 	.long sub_FE86E9                                 ; FE8590  [  5]
 	.long sub_FE8711                                 ; FE8594  [  6]
 	.long sub_FE8739                                 ; FE8598  [  7]
-	.long sub_FE8761                                 ; FE859C  [  8]
-	.long sub_FE8761                                 ; FE85A0  [  9]
-	.long sub_FE8761                                 ; FE85A4  [ 10]
-	.long sub_FE8761                                 ; FE85A8  [ 11]
-	.long sub_FE8761                                 ; FE85AC  [ 12]
-	.long sub_FE8761                                 ; FE85B0  [ 13]
-	.long sub_FE8761                                 ; FE85B4  [ 14]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE859C  [  8]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A0  [  9]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A4  [ 10]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE85A8  [ 11]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE85AC  [ 12]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE85B0  [ 13]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE85B4  [ 14]
 	.long sub_FE8762                                 ; FE85B8  [ 15]
-	.long sub_FE8761                                 ; FE85BC  [ 16]
+	.long ScreenDispatch_FE857C_Nop8                                 ; FE85BC  [ 16]
 	.long sub_FE85FC__FE8621                                 ; FE85C0  [ 17]
 	.long sub_FE8649                                 ; FE85C4  [ 18]
 	.long sub_FE8671                                 ; FE85C8  [ 19]
@@ -169799,13 +169799,13 @@ ScreenDispatch_FE857C:
 	.long sub_FE86E9                                 ; FE85D4  [ 22]
 	.long sub_FE8711                                 ; FE85D8  [ 23]
 	.long sub_FE8739                                 ; FE85DC  [ 24]
-	.long sub_FE8772                                 ; FE85E0  [ 25]
-	.long sub_FE8772                                 ; FE85E4  [ 26]
-	.long sub_FE8772                                 ; FE85E8  [ 27]
-	.long sub_FE8772                                 ; FE85EC  [ 28]
-	.long sub_FE8772                                 ; FE85F0  [ 29]
-	.long sub_FE8772                                 ; FE85F4  [ 30]
-	.long sub_FE8772                                 ; FE85F8  [ 31]
+	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E0  [ 25]
+	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E4  [ 26]
+	.long ScreenDispatch_FE857C_Nop25                                 ; FE85E8  [ 27]
+	.long ScreenDispatch_FE857C_Nop25                                 ; FE85EC  [ 28]
+	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F0  [ 29]
+	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F4  [ 30]
+	.long ScreenDispatch_FE857C_Nop25                                 ; FE85F8  [ 31]
 sub_FE85FC:
 	xor A,A                                              ; FE85FC  c9 d1
 	ret                                                  ; FE85FE  0e
@@ -169998,7 +169998,7 @@ sub_FE8739:   ; entry: named by 2 `.long` operands, first at 0xFE8598
 	call sub_FE8773                                      ; FE875C  1d 73 87 fe
 .LFE8760:
 	ret                                                  ; FE8760  0e
-sub_FE8761:   ; entry: named by 8 `.long` operands, first at 0xFE859C
+ScreenDispatch_FE857C_Nop8:   ; entry: named by 8 `.long` operands, first at 0xFE859C
 	ret                                                  ; FE8761  0e
 sub_FE8762:   ; entry: named by 1 `.long` operand, first at 0xFE85B8
 	bit 0x07,W                                           ; FE8762  c8 33 07
@@ -170006,9 +170006,9 @@ sub_FE8762:   ; entry: named by 1 `.long` operand, first at 0xFE85B8
 	ldw (0x2070:16), 0x801a                              ; FE8767  f1 70 20 02 1a 80
 	ret                                                  ; FE876D  0e
 .LFE876E:
-	calr sub_FE81E6                                          ; FE876E  1e 75 fa
+	calr sub_FE81D4_Nop                                          ; FE876E  1e 75 fa
 	ret                                                  ; FE8771  0e
-sub_FE8772:   ; entry: named by 7 `.long` operands, first at 0xFE85E0
+ScreenDispatch_FE857C_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE85E0
 	ret                                                  ; FE8772  0e
 sub_FE8773:
 	ld (0x601f00:24), bc                                ; FE8773  f2 00 1f 60 51
@@ -170467,7 +170467,7 @@ sub_FE8CA7:
 	ld (0x60341e:24), xwa                               ; FE8CAC  f2 1e 34 60 60
 	pop XWA                                              ; FE8CB1  58
 	ret                                                  ; FE8CB2  0e
-sub_FE8CB3:
+T_F402D8_Nop:
 	ret                                                  ; FE8CB3  0e
 sub_FE8CB4:
 	calr sub_FE8CEE                                      ; FE8CB4  1e 37 00
@@ -171786,11 +171786,11 @@ ScreenDispatch_FE9A4A:
 	.long sub_FE9B3E                                 ; FE9A6E  [  9]
 	.long sub_FE9B4C                                 ; FE9A72  [ 10]
 	.long sub_FE9B5A                                 ; FE9A76  [ 11]
-	.long sub_FE9B5E                                 ; FE9A7A  [ 12]
-	.long sub_FE9B5E                                 ; FE9A7E  [ 13]
-	.long sub_FE9B5E                                 ; FE9A82  [ 14]
+	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A7A  [ 12]
+	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A7E  [ 13]
+	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A82  [ 14]
 	.long sub_FE9B5F                                 ; FE9A86  [ 15]
-	.long sub_FE9B5E                                 ; FE9A8A  [ 16]
+	.long ScreenDispatch_FE9A4A_Nop12                                 ; FE9A8A  [ 16]
 	.long sub_FE9B6C                                 ; FE9A8E  [ 17]
 	.long sub_FE9B70                                 ; FE9A92  [ 18]
 	.long sub_FE9B74                                 ; FE9A96  [ 19]
@@ -171799,13 +171799,13 @@ ScreenDispatch_FE9A4A:
 	.long sub_FE9B80                                 ; FE9AA2  [ 22]
 	.long sub_FE9B84                                 ; FE9AA6  [ 23]
 	.long sub_FE9B88                                 ; FE9AAA  [ 24]
-	.long sub_FE9B8C                                 ; FE9AAE  [ 25]
-	.long sub_FE9B8C                                 ; FE9AB2  [ 26]
-	.long sub_FE9B8C                                 ; FE9AB6  [ 27]
-	.long sub_FE9B8C                                 ; FE9ABA  [ 28]
-	.long sub_FE9B8C                                 ; FE9ABE  [ 29]
-	.long sub_FE9B8C                                 ; FE9AC2  [ 30]
-	.long sub_FE9B8C                                 ; FE9AC6  [ 31]
+	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AAE  [ 25]
+	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AB2  [ 26]
+	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AB6  [ 27]
+	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9ABA  [ 28]
+	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9ABE  [ 29]
+	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC2  [ 30]
+	.long ScreenDispatch_FE9A4A_Nop25                                 ; FE9AC6  [ 31]
 sub_FE9ACA:   ; entry: named by 1 `.long` operand, first at 0xFE9A4A
 	ld (0x209c:16), 0x00                                 ; FE9ACA  f1 9c 20 00 00
 	ld (0x209b:16), 0x80                                 ; FE9ACF  f1 9b 20 00 80
@@ -171862,7 +171862,7 @@ sub_FE9B4C:   ; entry: named by 1 `.long` operand, first at 0xFE9A72
 sub_FE9B5A:   ; entry: named by 1 `.long` operand, first at 0xFE9A76
 	calr sub_FEAA20                                          ; FE9B5A  1e c3 0e
 	ret                                                  ; FE9B5D  0e
-sub_FE9B5E:   ; entry: named by 4 `.long` operands, first at 0xFE9A7A
+ScreenDispatch_FE9A4A_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9A7A
 	ret                                                  ; FE9B5E  0e
 sub_FE9B5F:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 	bit 0x07,W                                           ; FE9B5F  c8 33 07
@@ -171870,7 +171870,7 @@ sub_FE9B5F:   ; entry: named by 1 `.long` operand, first at 0xFE9A86
 	calr sub_FEAA86                                          ; FE9B64  1e 1f 0f
 	ret                                                  ; FE9B67  0e
 .LFE9B68:
-	calr sub_FE81E6                                          ; FE9B68  1e 7b e6
+	calr sub_FE81D4_Nop                                          ; FE9B68  1e 7b e6
 	ret                                                  ; FE9B6B  0e
 sub_FE9B6C:   ; entry: named by 1 `.long` operand, first at 0xFE9A8E
 	calr sub_FEAA94                                          ; FE9B6C  1e 25 0f
@@ -171896,7 +171896,7 @@ sub_FE9B84:   ; entry: named by 1 `.long` operand, first at 0xFE9AA6
 sub_FE9B88:   ; entry: named by 1 `.long` operand, first at 0xFE9AAA
 	calr sub_FEADFB                                          ; FE9B88  1e 70 12
 	ret                                                  ; FE9B8B  0e
-sub_FE9B8C:   ; entry: named by 7 `.long` operands, first at 0xFE9AAE
+ScreenDispatch_FE9A4A_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9AAE
 	ret                                                  ; FE9B8C  0e
 sub_FE9B8D:
 	cp HL,0x001f                                         ; FE9B8D  db cf 1f 00
@@ -171930,11 +171930,11 @@ ScreenDispatch_FE9BA4:
 	.long sub_FE9C8E                                 ; FE9BC8  [  9]
 	.long sub_FE9C9C                                 ; FE9BCC  [ 10]
 	.long sub_FE9CAA                                 ; FE9BD0  [ 11]
-	.long sub_FE9CAE                                 ; FE9BD4  [ 12]
-	.long sub_FE9CAE                                 ; FE9BD8  [ 13]
-	.long sub_FE9CAE                                 ; FE9BDC  [ 14]
+	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BD4  [ 12]
+	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BD8  [ 13]
+	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BDC  [ 14]
 	.long sub_FE9CAF                                 ; FE9BE0  [ 15]
-	.long sub_FE9CAE                                 ; FE9BE4  [ 16]
+	.long ScreenDispatch_FE9BA4_Nop12                                 ; FE9BE4  [ 16]
 	.long sub_FE9CBC                                 ; FE9BE8  [ 17]
 	.long sub_FE9CC0                                 ; FE9BEC  [ 18]
 	.long sub_FE9CC4                                 ; FE9BF0  [ 19]
@@ -171942,14 +171942,14 @@ ScreenDispatch_FE9BA4:
 	.long sub_FE9CCC                                 ; FE9BF8  [ 21]
 	.long sub_FE9CD0                                 ; FE9BFC  [ 22]
 	.long sub_FE9CD4                                 ; FE9C00  [ 23]
-	.long sub_FE9CD8                                 ; FE9C04  [ 24]
-	.long sub_FE9CD9                                 ; FE9C08  [ 25]
-	.long sub_FE9CD9                                 ; FE9C0C  [ 26]
-	.long sub_FE9CD9                                 ; FE9C10  [ 27]
-	.long sub_FE9CD9                                 ; FE9C14  [ 28]
-	.long sub_FE9CD9                                 ; FE9C18  [ 29]
-	.long sub_FE9CD9                                 ; FE9C1C  [ 30]
-	.long sub_FE9CD9                                 ; FE9C20  [ 31]
+	.long ScreenDispatch_FE9BA4_Nop24                                 ; FE9C04  [ 24]
+	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C08  [ 25]
+	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C0C  [ 26]
+	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C10  [ 27]
+	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C14  [ 28]
+	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C18  [ 29]
+	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C1C  [ 30]
+	.long ScreenDispatch_FE9BA4_Nop25                                 ; FE9C20  [ 31]
 sub_FE9C24:   ; entry: named by 1 `.long` operand, first at 0xFE9BA4
 	ld (0x209c:16), 0x00                                 ; FE9C24  f1 9c 20 00 00
 	ld (0x209b:16), 0x80                                 ; FE9C29  f1 9b 20 00 80
@@ -172004,7 +172004,7 @@ sub_FE9C9C:   ; entry: named by 1 `.long` operand, first at 0xFE9BCC
 sub_FE9CAA:   ; entry: named by 1 `.long` operand, first at 0xFE9BD0
 	calr sub_FEAA20                                      ; FE9CAA  1e 73 0d
 	ret                                                  ; FE9CAD  0e
-sub_FE9CAE:   ; entry: named by 4 `.long` operands, first at 0xFE9BD4
+ScreenDispatch_FE9BA4_Nop12:   ; entry: named by 4 `.long` operands, first at 0xFE9BD4
 	ret                                                  ; FE9CAE  0e
 sub_FE9CAF:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 	bit 0x07,W                                           ; FE9CAF  c8 33 07
@@ -172012,7 +172012,7 @@ sub_FE9CAF:   ; entry: named by 1 `.long` operand, first at 0xFE9BE0
 	calr sub_FEAA8D                                      ; FE9CB4  1e d6 0d
 	ret                                                  ; FE9CB7  0e
 .LFE9CB8:
-	calr sub_FE81E6                                          ; FE9CB8  1e 2b e5
+	calr sub_FE81D4_Nop                                          ; FE9CB8  1e 2b e5
 	ret                                                  ; FE9CBB  0e
 sub_FE9CBC:   ; entry: named by 1 `.long` operand, first at 0xFE9BE8
 	calr sub_FEAA94                                      ; FE9CBC  1e d5 0d
@@ -172035,9 +172035,9 @@ sub_FE9CD0:   ; entry: named by 1 `.long` operand, first at 0xFE9BFC
 sub_FE9CD4:   ; entry: named by 1 `.long` operand, first at 0xFE9C00
 	calr sub_FEADFB                                      ; FE9CD4  1e 24 11
 	ret                                                  ; FE9CD7  0e
-sub_FE9CD8:   ; entry: named by 1 `.long` operand, first at 0xFE9C04
+ScreenDispatch_FE9BA4_Nop24:   ; entry: named by 1 `.long` operand, first at 0xFE9C04
 	ret                                                  ; FE9CD8  0e
-sub_FE9CD9:   ; entry: named by 7 `.long` operands, first at 0xFE9C08
+ScreenDispatch_FE9BA4_Nop25:   ; entry: named by 7 `.long` operands, first at 0xFE9C08
 	ret                                                  ; FE9CD9  0e
 sub_FE9CDA:
 	m_or_mi8 MB16, 0x2075, 0x08                          ; FE9CDA  c1 75 20 3e 08
@@ -172062,7 +172062,7 @@ sub_FE9CFC:
 	calr sub_FE9D2E                                      ; FE9D0E  1e 1d 00
 	ret                                                  ; FE9D11  0e
 .LFE9D12:
-	calr sub_FE803F                                          ; FE9D12  1e 2a e3
+	calr sub_FE9CFC_Nop                                          ; FE9D12  1e 2a e3
 	ret                                                  ; FE9D15  0e
 sub_FE9D16:
 	ld wa, (0x601f3f:24)                                ; FE9D16  d2 3f 1f 60 20
@@ -172072,7 +172072,7 @@ sub_FE9D16:
 	calr sub_FE9D2E                                      ; FE9D26  1e 05 00
 	ret                                                  ; FE9D29  0e
 .LFE9D2A:
-	calr sub_FE803F                                          ; FE9D2A  1e 12 e3
+	calr sub_FE9CFC_Nop                                          ; FE9D2A  1e 12 e3
 	ret                                                  ; FE9D2D  0e
 sub_FE9D2E:
 	calr sub_FEF778                                          ; FE9D2E  1e 47 5a
@@ -173414,7 +173414,7 @@ sub_FEAAB6:
 sub_FEAADB:
 	ret                                                  ; FEAADB  0e
 .LFEAADC:
-	calr sub_FE803F                                          ; FEAADC  1e 60 d5
+	calr sub_FE9CFC_Nop                                          ; FEAADC  1e 60 d5
 	ret                                                  ; FEAADF  0e
 sub_FEAAE0:
 	ld wa, (0x601f3f:24)                                ; FEAAE0  d2 3f 1f 60 20
@@ -173433,7 +173433,7 @@ sub_FEAAE0:
 	ldw (0x601f3f:24), 0x01                             ; FEAB01  f2 3f 1f 60 02 01 00
 	jr .LFEAAFD                                          ; FEAB08  68 f3
 .LFEAB0A:
-	calr sub_FE803F                                          ; FEAB0A  1e 32 d5
+	calr sub_FE9CFC_Nop                                          ; FEAB0A  1e 32 d5
 	ret                                                  ; FEAB0D  0e
 sub_FEAB0E:
 	m_or_mi8 MB16, 0x2075, 0x08                          ; FEAB0E  c1 75 20 3e 08
@@ -181922,7 +181922,7 @@ ExitKey_DiskMenu:
 .LFF4404:
 	unlk XIZ                                             ; FF4404  ee 0d
 	ret                                                  ; FF4406  0e
-sub_FF4407:
+T_F42270_Nop:
 	ret                                                  ; FF4407  0e
 ; ---------------------------------------------------------------------
 ; Paint_MidiFileDirectPlay -- paints the screen whose own text reads "MIDI FILE DIRECT PLAY"
@@ -182478,7 +182478,7 @@ ExitKey_MidiFileDirectPlay:
 .LFF4758:
 	unlk XIZ                                             ; FF4758  ee 0d
 	ret                                                  ; FF475A  0e
-sub_FF475B:
+T_F42280_Nop:
 	ret                                                  ; FF475B  0e
 sub_FF475C:
 	link XIZ,0x0000                                      ; FF475C  ee 0c 00 00
@@ -183674,7 +183674,7 @@ ExitKey_DiskL0adFile:
 .LFF4FF6:
 	unlk XIZ                                             ; FF4FF6  ee 0d
 	ret                                                  ; FF4FF8  0e
-sub_FF4FF9:
+T_F423AC_Nop:
 	ret                                                  ; FF4FF9  0e
 ; ---------------------------------------------------------------------
 ; Paint_MidiFileL0ad -- paints the screen whose own text reads "MIDI FILE L0AD"
@@ -184346,7 +184346,7 @@ ExitKey_MidiFileL0ad:
 .LFF5486:
 	unlk XIZ                                             ; FF5486  ee 0d
 	ret                                                  ; FF5488  0e
-sub_FF5489:
+T_F4240C_Nop:
 	ret                                                  ; FF5489  0e
 ; ---------------------------------------------------------------------
 ; PageDispatch_DiskSaveFile -- run Dispatch_FF3A00's entry for the CURRENT
@@ -185594,7 +185594,7 @@ ExitKey_DiskSaveFile_Page5:
 .LFF5C3A:
 	unlk XIZ                                             ; FF5C3A  ee 0d
 	ret                                                  ; FF5C3C  0e
-sub_FF5C3D:
+T_F423BC_Nop:
 	ret                                                  ; FF5C3D  0e
 ; ---------------------------------------------------------------------
 ; PageDispatch_MidiFileSave -- run Dispatch_FF3D29's entry for the CURRENT
@@ -186812,7 +186812,7 @@ LcdKeyRow4_MidiFileSave_Page3:
 .LFF650E:
 	unlk XIZ                                             ; FF650E  ee 0d
 	ret                                                  ; FF6510  0e
-sub_FF6511:
+T_F423CC_Nop:
 	ret                                                  ; FF6511  0e
 ; ---------------------------------------------------------------------
 ; Paint_FloppyDiskFormatSelectType -- paints the screen whose own text reads "FLOPPY DISK FORMAT" / "Select the F0RMAT type for your disk."
@@ -187062,7 +187062,7 @@ ExitKey_MidiFileSave_Page4:
 .LFF660F:
 	unlk XIZ                                             ; FF660F  ee 0d
 	ret                                                  ; FF6611  0e
-sub_FF6612:
+T_F423DC_Nop:
 	ret                                                  ; FF6612  0e
 ; ---------------------------------------------------------------------
 ; Paint_FloppyDiskFormatAreYouSure -- paints the "FLOPPY DISK FORMAT" confirmation whose own text reads "ATTENTION!" / "Are You Sure?"
@@ -187332,7 +187332,7 @@ ExitKey_MidiFileSave_Page5:
 .LFF6729:
 	unlk XIZ                                             ; FF6729  ee 0d
 	ret                                                  ; FF672B  0e
-sub_FF672C:
+T_F423FC_Nop:
 	ret                                                  ; FF672C  0e
 ; ---------------------------------------------------------------------
 ; PageDispatch_L0adSingleS0und -- run Dispatch_FF4041's entry for the CURRENT
@@ -188156,7 +188156,7 @@ ExitKey_L0adSingleS0und_Pages0_1:
 .LFF6DB3:
 	unlk XIZ                                             ; FF6DB3  ee 0d
 	ret                                                  ; FF6DB5  0e
-sub_FF6DB6:
+T_F423EC_Nop:
 	ret                                                  ; FF6DB6  0e
 ; ---------------------------------------------------------------------
 ; PageDispatch_L0adSingleC0mbination -- run Dispatch_FF4149's entry for the
@@ -188558,7 +188558,7 @@ ExitKey_L0adSingleC0mbination_Pages0_1:
 .LFF7080:
 	unlk XIZ                                             ; FF7080  ee 0d
 	ret                                                  ; FF7082  0e
-sub_FF7083:
+T_F42428_Nop:
 	ret                                                  ; FF7083  0e
 sub_FF7084:
 	link XIZ,0xfffc                                      ; FF7084  ee 0c fc ff

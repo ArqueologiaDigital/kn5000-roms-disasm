@@ -85,7 +85,7 @@ V = [
  (0xF00000, 0x1A, "CODE", None,
   "five `jp 0x00F00014` slots -- the image's own entry-vector block -- followed "
   "by the two routines they name.  Every jump target is inside the span."),
- (0xF0003A, 0x02, "TRAILER", None, "after sub_F0001A's `ret`, before sub_F0003C"),
+ (0xF0003A, 0x02, "TRAILER", None, "after T_F409B0_Nop's `ret`, before sub_F0003C"),
  (0xF00097, 0x02, "TRAILER", None, "after sub_F0003C's `ret`, before sub_F00099"),
  (0xF000E3, 0x02, "TRAILER", None, "after sub_F00099's `ret`, before Data_F000E5"),
  (0xF000E6, 0x22, "PTRTAB4", (0xF000E5, 0xF00105),

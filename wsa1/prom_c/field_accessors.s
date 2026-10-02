@@ -1396,7 +1396,7 @@ sub_FC3B24__FC3C3D:
 	unlk32 xiz                                 ; FC3CB5  unlk XIZ
 	ret                                        ; FC3CB7  ret
 ; --------------------------------------------------------------------------
-; sub_FC3CB8 -- 0xFC3CB8..0xFC3CB8 (1 bytes)
+; ToneEdit_Dispatch__FBAE7D_Nop -- 0xFC3CB8..0xFC3CB8 (1 bytes)
 ;
 ; Called from: 1 site(s) outside this module:
 ;          0xFBAE7D in ToneEdit_Dispatch__FBAE7D
@@ -1410,7 +1410,7 @@ sub_FC3B24__FC3C3D:
 ; Unknown:  what the routine is FOR.  Nothing here reads the meaning of a field,
 ;          so the name is an address.
 ; --------------------------------------------------------------------------
-sub_FC3CB8:
+ToneEdit_Dispatch__FBAE7D_Nop:
 	ret                                        ; FC3CB8  ret
 
 ; ============================================================================

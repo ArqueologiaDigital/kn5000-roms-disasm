@@ -893,9 +893,9 @@ def structure():
     LABELS[0xFA701C] = "MidiIn_AfterRebuild"
     LABELS[0xFA7034] = "MidiIn_AfterRebuildTable"
     LABELS[0xFA7074] = "MidiIn_AfterRebuild_Nop"
-    LABELS[0xFA7075] = "sub_FA7075"
+    LABELS[0xFA7075] = "MidiIn_AfterRebuildTable_Nop1"
     H(0xFA7075,
-      "sub_FA7075 -- MidiIn_AfterRebuildTable[1]",
+      "MidiIn_AfterRebuildTable_Nop1 -- MidiIn_AfterRebuildTable[1]",
       "",
       "Called from: MidiIn_AfterRebuildTable[1], selected by (0x7F35) & 0x0F.",
       "Evidence: it walks 0x1800 from the entry named by (0x7F36) & 0x1F,",

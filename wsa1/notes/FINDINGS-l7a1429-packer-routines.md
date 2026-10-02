@@ -247,7 +247,7 @@ reason each still stands is recorded here rather than left to be re-derived.
 | `sub_FC35DB`, `sub_FC36BE`, `sub_FC382A`, `sub_FC4B2E` | voice-parameter helpers under `VoiceParams_Compute_*`; no contact with the globals. |
 | `sub_FC7E10`, `sub_FC7E79`, `sub_FC7F03`, `sub_FC7F7A`, `sub_FC7FCA`, `sub_FC810C`, `sub_FC8129`, `sub_FC81B8`, `sub_FC81F8` | the `0x0010C000` voice-register and part-record side; `sub_FC7E79` calls `Dev10C_ReadChanReg_0100`, and the `Voice_StageRegs_*` / `Dev10C_Stage*` callers name the other device. |
 | `sub_FC7CF9` | reached from `ExtBoard_ProbeAndInstallBases`; its only tie here is that it initialises the slot pool. |
-| `sub_FC3CB8` | one byte, a bare `ret`. |
+| `ToneEdit_Dispatch__FBAE7D_Nop` | one byte, a bare `ret`. |
 | `sub_FC4140`, `sub_FC4269` | arithmetic: `Divide32_Signed` and a 1,087-byte routine over `Math_Sin_Q11` / `Math_Cos_Q11` / `Math_Atan_Q11` / `Math_Exp2_Q11`. `sub_FC4269` *is* reached from the RESO MODE arms, but naming it needs §2.2's answer. |
 
 ### 2.2 On the path, but the purpose is not established

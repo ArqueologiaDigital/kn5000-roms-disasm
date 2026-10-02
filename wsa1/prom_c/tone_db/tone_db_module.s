@@ -5104,7 +5104,7 @@ ToneStage_EnsurePartLoaded__FBAC20:
 ;          0xFC2E4B = sub_FC2E4B, 0xFC2F1A = sub_FC2F1A
 ;          0xFC2FE9 = sub_FC2FE9, 0xFC30B7 = sub_FC30B7
 ;          0xFC3178 = sub_FC3178, 0xFC31BF = sub_FC31BF
-;          0xFC386C = SoundRam_ClearFourBanks, 0xFC3CB8 = sub_FC3CB8
+;          0xFC386C = SoundRam_ClearFourBanks, 0xFC3CB8 = ToneEdit_Dispatch__FBAE7D_Nop
 ; Arms:    19 computed-goto arm(s) inside this routine: 0xFBAC37 0xFBAC49 0xFBAC67 0xFBAC85 0xFBACA3 0xFBACC1 0xFBACDF 0xFBAD14 0xFBAD49 0xFBAD77 0xFBAD9A 0xFBADC8 0xFBADDA 0xFBAE08 0xFBAE3D 0xFBAE72 0xFBAE7D 0xFBAE84 0xFBAEAD
 ; Evidence: the listing below is the byte-identical round-trip of 0xFBAC24-0xFBAF37
 ;          (notes/gen_prom_c_block.py, cleared by
@@ -5411,7 +5411,7 @@ ToneEdit_Dispatch__FBAE72:
 	popw	bc                                    ; FBAE79  pop BC
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAE7A  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAE7D:
-	call	sub_FC3CB8                              ; FBAE7D  call 0xfc3cb8
+	call	ToneEdit_Dispatch__FBAE7D_Nop                              ; FBAE7D  call 0xfc3cb8
 	jrl ToneEdit_Dispatch__FBAF34                     ; FBAE81  jrl T,0xfbaf34
 ToneEdit_Dispatch__FBAE84:
 	ld	c, (0xD733:24)                         ; FBAE84  ld C,(0x00d733)

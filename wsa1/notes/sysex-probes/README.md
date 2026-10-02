@@ -792,7 +792,7 @@ mismatches), so the instruction boundaries are the tree's, not a guess.
   one byte before a real routine of the same shape, which is why the script
   asserts the entry byte rather than trusting a name.
 * **0x1D is a dump request for job 1**, and `JumpTable_FB2081[1]` runs
-  `sub_FB22E6`, a single `ret` — the one job slot with no body. The other
+  `sub_FB209F_Nop`, a single `ret` — the one job slot with no body. The other
   four request arms carry jobs 4/3/2/5, which are in the SEND menu's own
   row→job table.
 * **0x06 is below the session loop's floor**: `cp a,0x07 / jr c` at
@@ -845,7 +845,7 @@ of range, and to the sender's own prefill `08 07 F7`.
    descriptor writer — it is the run-time length decoder. Asserting that
    every routine 0x11 calls is a stub fails on it.
 2. A routine that is "a single `ret`" must be tested by its **entry byte**,
-   not by its name: `sub_FB753D` and `sub_FB753E` differ by one byte and one
+   not by its name: `sub_FB28BE_Nop` and `sub_FB753E` differ by one byte and one
    of them is the SEQUENCER's real descriptor writer.
 3. The parse record is **double buffered** (`0x60FCD8` and `0x60FCDC` swap in
    `sub_FB8028`), which is why a data handler reads the session step out of

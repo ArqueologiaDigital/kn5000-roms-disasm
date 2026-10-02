@@ -156,7 +156,7 @@ regardless of which caller ran.
 > `notes/prom_a_xref.py`'s 22 candidates is still `.incbin`: `0xF98977`.
 
 **What is unknown.** `0xFB6FD1` is the odd one out: it reaches the wait after
-`call sub_FB7E9A` — which is a bare `ret` at `0xFB7E9A`, i.e. a stub — and
+`call sub_FB2877_Nop` — which is a bare `ret` at `0xFB7E9A`, i.e. a stub — and
 `calr sub_FB7025`, whose body (`0xFB7025-0xFB703F`) only calls `sub_FB6E7F`, a
 RAM ring-buffer writer. Nothing on that path touches `0xF40EF0`. What transfer
 this site believes is in flight is not established. `INTTC3_LinkDmaDone`'s three

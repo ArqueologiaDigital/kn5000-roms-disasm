@@ -142,7 +142,7 @@ def splice_one(off, size, new_lines):
 
 def null_check(b):
     """~4 KB of prom_b that is NOT display-list text (mostly still `.incbin`,
-    plus the two hand-verified code routines sub_F0001A/sub_F0003C): scan
+    plus the two hand-verified code routines T_F409B0_Nop/sub_F0003C): scan
     every (start, candidate-end) window and see how often DL.walk() self-
     frames it.  A SINGLE record spanning the whole window is a weak
     coincidence (op<0x24 and len==window-size is not much of a filter, and

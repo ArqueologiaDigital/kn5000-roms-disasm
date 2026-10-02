@@ -211,10 +211,10 @@
 ;     python3 scripts/converters/symbolize_wsa1_rom_addresses.py --check-equates
 ; Never edit by hand: re-run the tool with --apply, which rewrites this block.
 	.set	Paint_S0ngC0py, 0xF80261
-	.set	sub_F803C8, 0xF803C8
+	.set	ScreenLeave_S0ngC0py_Nop, 0xF803C8
 	.set	Paint_N0teChange, 0xF80439
 	.set	sub_F804EC, 0xF804EC
-	.set	sub_F8051E, 0xF8051E
+	.set	ButtonTable_N0teChange_207EZero_Nop7, 0xF8051E
 	.set	Paint_MeasureC0py, 0xF8076C
 	.set	sub_F80809, 0xF80809
 	.set	Paint_MeasureInsert, 0xF80AC9
@@ -237,7 +237,7 @@
 	.set	sub_F82407, 0xF82407
 	.set	sub_F82557, 0xF82557
 	.set	Ring601850_ServiceIfNotEmpty, 0xF825C7
-	.set	sub_F8262E, 0xF8262E
+	.set	T_F4001C_Nop, 0xF8262E
 	.set	sub_F82630, 0xF82630
 	.set	sub_F82634, 0xF82634
 	.set	sub_F82638, 0xF82638
@@ -432,7 +432,7 @@
 	.set	Ctrl_Nop_Ret, 0xF89804
 	.set	sub_F8A000, 0xF8A000
 	.set	sub_F8A023, 0xF8A023
-	.set	sub_F8A027, 0xF8A027
+	.set	T_F40618_Nop, 0xF8A027
 	.set	sub_F8A81D, 0xF8A81D
 	.set	sub_F8BC00, 0xF8BC00
 	.set	sub_F8BC04, 0xF8BC04
@@ -452,10 +452,10 @@
 	.set	sub_F8C032, 0xF8C032
 	.set	sub_F8C04E, 0xF8C04E
 	.set	sub_F8C071, 0xF8C071
-	.set	sub_F8C095, 0xF8C095
-	.set	sub_F8C096, 0xF8C096
+	.set	T_F40684_Nop, 0xF8C095
+	.set	T_F40688_Nop, 0xF8C096
 	.set	sub_F8C097, 0xF8C097
-	.set	sub_F8C0B3, 0xF8C0B3
+	.set	T_F40690_Nop, 0xF8C0B3
 	.set	sub_F8C0B4, 0xF8C0B4
 	.set	sub_F8C0D0, 0xF8C0D0
 	.set	sub_F8C18B, 0xF8C18B
@@ -463,7 +463,7 @@
 	.set	sub_F8C3FB, 0xF8C3FB
 	.set	sub_F8C842, 0xF8C842
 	.set	sub_F8C846, 0xF8C846
-	.set	sub_F8C8C2, 0xF8C8C2
+	.set	T_F4066C_Nop, 0xF8C8C2
 	.set	sub_F8C8C3, 0xF8C8C3
 	.set	Task2_CallbackDispatcher, 0xF8DA00
 	.set	CallbackQueue_Post, 0xF8DA16
@@ -484,9 +484,9 @@
 	.set	Link_WaitBlockDone, 0xF8E66D
 	.set	LCD_EntryThunks, 0xF8E800
 	.set	SWI7_ServiceCall_Dispatch, 0xF8E9A5
-	.set	sub_F90C12, 0xF90C12
+	.set	T_F41504_Nop, 0xF90C12
 	.set	sub_F90C13, 0xF90C13
-	.set	sub_F90C20, 0xF90C20
+	.set	T_F4150C_Nop, 0xF90C20
 	.set	sub_F90C21, 0xF90C21
 	.set	sub_F90C72, 0xF90C72
 	.set	sub_F90CC2, 0xF90CC2
@@ -529,54 +529,54 @@
 	.set	sub_F95137, 0xF95137
 	.set	sub_F952FC, 0xF952FC
 	.set	sub_F95444, 0xF95444
-	.set	sub_F95646, 0xF95646
-	.set	sub_F95647, 0xF95647
+	.set	T_F40150_Nop, 0xF95646
+	.set	T_F40154_Nop, 0xF95647
 	.set	sub_F95648, 0xF95648
-	.set	sub_F95659, 0xF95659
+	.set	T_F4015C_Nop, 0xF95659
 	.set	sub_F9565A, 0xF9565A
-	.set	sub_F95669, 0xF95669
+	.set	T_F40164_Nop, 0xF95669
 	.set	sub_F9566A, 0xF9566A
-	.set	sub_F95731, 0xF95731
-	.set	sub_F95732, 0xF95732
-	.set	sub_F95733, 0xF95733
+	.set	T_F4016C_Nop, 0xF95731
+	.set	T_F40170_Nop, 0xF95732
+	.set	T_F40174_Nop, 0xF95733
 	.set	Paint_GateArrayCheck, 0xF95734
 	.set	ScreenLeave_GateArrayCheck, 0xF95765
 	.set	ScreenButton_GateArrayCheck, 0xF95766
-	.set	sub_F95767, 0xF95767
+	.set	T_F400DC_Nop, 0xF95767
 	.set	Paint_PanelCpuCheck, 0xF95768
 	.set	ScreenLeave_PanelCpuCheck, 0xF95795
 	.set	ScreenButton_PanelCpuCheck, 0xF95796
-	.set	sub_F95797, 0xF95797
+	.set	T_F400EC_Nop, 0xF95797
 	.set	Paint_SineWaveCheckMode, 0xF95798
 	.set	ScreenLeave_SineWaveCheckMode, 0xF95890
 	.set	ScreenButton_SineWaveCheckMode, 0xF95891
-	.set	sub_F9598F, 0xF9598F
+	.set	T_F400FC_Nop, 0xF9598F
 	.set	Paint_PanelSwLedCheck, 0xF95990
 	.set	ScreenLeave_PanelSwLedCheck, 0xF959BD
 	.set	ScreenButton_PanelSwLedCheck, 0xF959BE
-	.set	sub_F959BF, 0xF959BF
-	.set	sub_F959C0, 0xF959C0
-	.set	sub_F959C1, 0xF959C1
-	.set	sub_F959C2, 0xF959C2
-	.set	sub_F959C3, 0xF959C3
-	.set	sub_F959C4, 0xF959C4
-	.set	sub_F959C5, 0xF959C5
-	.set	sub_F959C6, 0xF959C6
-	.set	sub_F959C7, 0xF959C7
+	.set	T_F4010C_Nop, 0xF959BF
+	.set	T_F40110_Nop, 0xF959C0
+	.set	T_F40114_Nop, 0xF959C1
+	.set	T_F40118_Nop, 0xF959C2
+	.set	T_F4011C_Nop, 0xF959C3
+	.set	T_F40120_Nop, 0xF959C4
+	.set	T_F40124_Nop, 0xF959C5
+	.set	T_F40128_Nop, 0xF959C6
+	.set	T_F4012C_Nop, 0xF959C7
 	.set	sub_F959C8, 0xF959C8
-	.set	sub_F959E1, 0xF959E1
+	.set	T_F40134_Nop, 0xF959E1
 	.set	sub_F959E2, 0xF959E2
-	.set	sub_F95C14, 0xF95C14
-	.set	sub_F96018, 0xF96018
+	.set	T_F4013C_Nop, 0xF95C14
+	.set	T_F401D4_Nop, 0xF96018
 	.set	sub_F96019, 0xF96019
 	.set	sub_F9601D, 0xF9601D
-	.set	sub_F96021, 0xF96021
-	.set	sub_F96022, 0xF96022
-	.set	sub_F96023, 0xF96023
-	.set	sub_F96257, 0xF96257
-	.set	sub_F96258, 0xF96258
+	.set	T_F401E8_Nop, 0xF96021
+	.set	T_F401EC_Nop, 0xF96022
+	.set	T_F401F0_Nop, 0xF96023
+	.set	T_F401E0_Nop, 0xF96257
+	.set	T_F401E4_Nop, 0xF96258
 	.set	sub_F96418, 0xF96418
-	.set	sub_F9641D, 0xF9641D
+	.set	T_F40218_Nop, 0xF9641D
 	.set	sub_F9641E, 0xF9641E
 	.set	sub_F96423, 0xF96423
 	.set	sub_F96428, 0xF96428
@@ -589,100 +589,100 @@
 	.set	sub_F9898E, 0xF9898E
 	.set	sub_F98ADE, 0xF98ADE
 	.set	sub_F99021, 0xF99021
-	.set	sub_F9904C, 0xF9904C
+	.set	T_F41608_Nop, 0xF9904C
 	.set	sub_F9904D, 0xF9904D
-	.set	sub_F99097, 0xF99097
+	.set	T_F41610_Nop, 0xF99097
 	.set	sub_F99098, 0xF99098
 	.set	sub_F99400, 0xF99400
-	.set	sub_F99821, 0xF99821
-	.set	sub_F99822, 0xF99822
-	.set	sub_F99823, 0xF99823
-	.set	sub_F99824, 0xF99824
-	.set	sub_F99825, 0xF99825
-	.set	sub_F99826, 0xF99826
-	.set	sub_F99827, 0xF99827
-	.set	sub_F99828, 0xF99828
-	.set	sub_F9982B, 0xF9982B
-	.set	sub_F9982C, 0xF9982C
+	.set	T_F41660_Nop, 0xF99821
+	.set	T_F416E0_Nop, 0xF99822
+	.set	T_F416F0_Nop, 0xF99823
+	.set	T_F41700_Nop, 0xF99824
+	.set	T_F41670_Nop, 0xF99825
+	.set	T_F41680_Nop, 0xF99826
+	.set	T_F416A0_Nop, 0xF99827
+	.set	T_F416B0_Nop, 0xF99828
+	.set	T_F416C0_Nop, 0xF9982B
+	.set	T_F416D0_Nop, 0xF9982C
 	.set	Paint_SysexBulkDump_Entry, 0xF9982D
 	.set	ScreenLeave_SysexBulkDump_Entry, 0xF99831
 	.set	ScreenButton_SysexBulkDump_Entry, 0xF99835
-	.set	sub_F99843, 0xF99843
+	.set	T_F4171C_Nop, 0xF99843
 	.set	Paint_GeneralMidiMode_Entry, 0xF99844
 	.set	ScreenLeave_GeneralMidiMode_Entry, 0xF99848
 	.set	ScreenButton_GeneralMidiMode_Entry, 0xF9984C
-	.set	sub_F9985A, 0xF9985A
+	.set	T_F4172C_Nop, 0xF9985A
 	.set	Paint_Sending_Entry, 0xF9985B
 	.set	Paint_SystemExclusivePleaseWait_Entry, 0xF9985F
-	.set	sub_F99863, 0xF99863
+	.set	T_F41738_Nop, 0xF99863
 	.set	sub_F99F04, 0xF99F04
 	.set	sub_F99F15, 0xF99F15
 	.set	sub_F99F1A, 0xF99F1A
 	.set	sub_F99F1F, 0xF99F1F
 	.set	sub_F99F24, 0xF99F24
-	.set	sub_F99F5C, 0xF99F5C
-	.set	sub_F99F5D, 0xF99F5D
+	.set	T_F41654_Nop, 0xF99F5C
+	.set	T_F4165C_Nop, 0xF99F5D
 	.set	sub_F99F5E, 0xF99F5E
 	.set	Paint_MidiTotalMode, 0xF9A1A8
 	.set	ScreenLeave_MidiTotalMode, 0xF9A26D
-	.set	sub_F9A26E, 0xF9A26E
+	.set	T_F41748_Nop, 0xF9A26E
 	.set	ScreenButton_MidiTotalMode, 0xF9A26F
 	.set	Paint_MidiRealtimeMessages, 0xF9A6C0
 	.set	ScreenLeave_MidiRealtimeMessages, 0xF9A754
-	.set	sub_F9A755, 0xF9A755
+	.set	T_F4169C_Nop, 0xF9A755
 	.set	ScreenButton_MidiRealtimeMessages, 0xF9A756
 	.set	Paint_MidiInputOutputFilter, 0xF9A998
 	.set	ScreenLeave_MidiInputOutputFilter, 0xF9AA4F
-	.set	sub_F9AA50, 0xF9AA50
+	.set	T_F41758_Nop, 0xF9AA50
 	.set	ScreenButton_MidiInputOutputFilter, 0xF9AA51
 	.set	Paint_MidiOutProgramChange, 0xF9AF61
 	.set	ScreenLeave_MidiOutProgramChange, 0xF9B05E
-	.set	sub_F9B05F, 0xF9B05F
+	.set	T_F41768_Nop, 0xF9B05F
 	.set	ScreenButton_MidiOutProgramChange, 0xF9B060
 	.set	Screen_ReMapEdit_Enter, 0xF9C087
 	.set	Screen_ReMapEdit_Leave, 0xF9C0C1
 	.set	Screen_ReMapEdit_Button, 0xF9C0C2
-	.set	sub_F9C0E9, 0xF9C0E9
+	.set	T_F41974_Nop, 0xF9C0E9
 	.set	sub_F9C9F4, 0xF9C9F4
-	.set	sub_F9CA0C, 0xF9CA0C
+	.set	T_F4197C_Nop, 0xF9CA0C
 	.set	sub_F9CA0D, 0xF9CA0D
-	.set	sub_F9CA34, 0xF9CA34
+	.set	T_F41984_Nop, 0xF9CA34
 	.set	Screen_SoundGroupNaming_Enter, 0xF9CB00
 	.set	Screen_SoundGroupNaming_Leave, 0xF9CB52
 	.set	Screen_SoundGroupNaming_Button, 0xF9CB53
-	.set	sub_F9CB7A, 0xF9CB7A
+	.set	T_F4268C_Nop, 0xF9CB7A
 	.set	Screen_CombinationGroupNaming_Enter, 0xF9CF68
 	.set	Screen_CombinationGroupNaming_Leave, 0xF9CFBA
 	.set	Screen_CombinationGroupNaming_Button, 0xF9CFBB
-	.set	sub_F9CFE2, 0xF9CFE2
+	.set	T_F4269C_Nop, 0xF9CFE2
 	.set	sub_F9D3BA, 0xF9D3BA
 	.set	sub_F9D3F4, 0xF9D3F4
 	.set	sub_F9D404, 0xF9D404
-	.set	sub_F9D432, 0xF9D432
+	.set	T_F426AC_Nop, 0xF9D432
 	.set	sub_F9DF91, 0xF9DF91
-	.set	sub_F9DFCB, 0xF9DFCB
+	.set	T_F426B4_Nop, 0xF9DFCB
 	.set	sub_F9DFCC, 0xF9DFCC
-	.set	sub_F9DFF3, 0xF9DFF3
+	.set	T_F426BC_Nop, 0xF9DFF3
 	.set	sub_F9EB75, 0xF9EB75
-	.set	sub_F9EBED, 0xF9EBED
+	.set	T_F4199C_Nop, 0xF9EBED
 	.set	sub_F9EBEE, 0xF9EBEE
-	.set	sub_F9EC15, 0xF9EC15
+	.set	T_F419A4_Nop, 0xF9EC15
 	.set	sub_F9ED34, 0xF9ED34
-	.set	sub_F9EDA1, 0xF9EDA1
+	.set	T_F4198C_Nop, 0xF9EDA1
 	.set	sub_F9EDA2, 0xF9EDA2
-	.set	sub_F9EDC9, 0xF9EDC9
+	.set	T_F41994_Nop, 0xF9EDC9
 	.set	sub_F9EEAB, 0xF9EEAB
-	.set	sub_F9EEDF, 0xF9EEDF
+	.set	T_F434C4_Nop, 0xF9EEDF
 	.set	sub_F9EEE0, 0xF9EEE0
-	.set	sub_F9EF07, 0xF9EF07
+	.set	T_F434CC_Nop, 0xF9EF07
 	.set	sub_F9EF6C, 0xF9EF6C
-	.set	sub_F9EF71, 0xF9EF71
+	.set	T_F4195C_Nop, 0xF9EF71
 	.set	sub_F9EF72, 0xF9EF72
-	.set	sub_F9EF84, 0xF9EF84
+	.set	T_F41964_Nop, 0xF9EF84
 	.set	Screen_DrumsMapNaming_Enter, 0xF9EF85
 	.set	Screen_DrumsMapNaming_Leave, 0xF9EFF6
 	.set	Screen_DrumsMapNaming_Button, 0xF9F006
-	.set	sub_F9F034, 0xF9F034
+	.set	T_F419C4_Nop, 0xF9F034
 	.set	sub_F9F457, 0xF9F457
 	.set	sub_F9F5E8, 0xF9F5E8
 	.set	sub_F9F65B, 0xF9F65B
@@ -695,31 +695,31 @@
 	.set	sub_F9FED1, 0xF9FED1
 	.set	sub_F9FEE2, 0xF9FEE2
 	.set	sub_F9FEE7, 0xF9FEE7
-	.set	sub_F9FEFF, 0xF9FEFF
+	.set	T_F4191C_Nop, 0xF9FEFF
 	.set	sub_F9FF00, 0xF9FF00
-	.set	sub_F9FF27, 0xF9FF27
+	.set	T_F41924_Nop, 0xF9FF27
 	.set	sub_FA0054, 0xFA0054
 	.set	sub_FA007B, 0xFA007B
-	.set	sub_FA0080, 0xFA0080
+	.set	T_F419AC_Nop, 0xFA0080
 	.set	sub_FA0081, 0xFA0081
-	.set	sub_FA0093, 0xFA0093
+	.set	T_F419B4_Nop, 0xFA0093
 	.set	sub_FA0094, 0xFA0094
-	.set	sub_FA00E9, 0xFA00E9
+	.set	T_F4192C_Nop, 0xFA00E9
 	.set	sub_FA00EA, 0xFA00EA
-	.set	sub_FA0111, 0xFA0111
+	.set	T_F41934_Nop, 0xFA0111
 	.set	sub_FA0689, 0xFA0689
-	.set	sub_FA07A1, 0xFA07A1
+	.set	T_F4193C_Nop, 0xFA07A1
 	.set	sub_FA07A2, 0xFA07A2
-	.set	sub_FA07EA, 0xFA07EA
+	.set	T_F41944_Nop, 0xFA07EA
 	.set	sub_FA0D10, 0xFA0D10
 	.set	sub_FA0DF3, 0xFA0DF3
 	.set	sub_FA0E4D, 0xFA0E4D
 	.set	sub_FA0EEA, 0xFA0EEA
-	.set	sub_FA0F11, 0xFA0F11
+	.set	T_F41954_Nop, 0xFA0F11
 	.set	sub_FA129D, 0xFA129D
 	.set	sub_FA12CE, 0xFA12CE
 	.set	sub_FA12DD, 0xFA12DD
-	.set	sub_FA1304, 0xFA1304
+	.set	T_F4267C_Nop, 0xFA1304
 	.set	MIDI_EntryThunks, 0xFA5400
 	.set	MIDI_RX_ErrorReset, 0xFA5418
 	.set	MIDI_TX_Ready, 0xFA542F
@@ -747,20 +747,20 @@
 	.set	sub_FAA47E, 0xFAA47E
 	.set	Queue2C00_PublishStagedIfPending, 0xFAA4A0
 	.set	Queue2C00_PublishStagedDrainPassB, 0xFAA550
-	.set	sub_FAA5A4, 0xFAA5A4
-	.set	sub_FAA5A5, 0xFAA5A5
-	.set	sub_FAA5A6, 0xFAA5A6
+	.set	T_F407BC_Nop, 0xFAA5A4
+	.set	T_F407C0_Nop, 0xFAA5A5
+	.set	T_F407C8_Nop, 0xFAA5A6
 	.set	ParamChange_NotifyClearSource, 0xFAA5FE
 	.set	ParamChange_Notify, 0xFAA604
 	.set	ParamRecord_WriteFieldAndStage, 0xFAA623
 	.set	ParamRecord_WriteFieldAndStage_Copy, 0xFAA66A
 	.set	sub_FAA6B1, 0xFAA6B1
-	.set	sub_FAA71C, 0xFAA71C
-	.set	sub_FAA71D, 0xFAA71D
-	.set	sub_FAA71E, 0xFAA71E
+	.set	T_F407E0_Nop, 0xFAA71C
+	.set	T_F407E8_Nop, 0xFAA71D
+	.set	T_F407E4_Nop, 0xFAA71E
 	.set	sub_FAA71F, 0xFAA71F
 	.set	sub_FAA742, 0xFAA742
-	.set	sub_FAA7AB, 0xFAA7AB
+	.set	T_F407A4_Nop, 0xFAA7AB
 	.set	sub_FAA967, 0xFAA967
 	.set	sub_FAAA8F, 0xFAAA8F
 	.set	sub_FAAAB1, 0xFAAAB1
@@ -769,16 +769,16 @@
 	.set	sub_FAABB3, 0xFAABB3
 	.set	sub_FAAE2A, 0xFAAE2A
 	.set	sub_FAAF91, 0xFAAF91
-	.set	sub_FAB5E9, 0xFAB5E9
-	.set	sub_FAB5EA, 0xFAB5EA
+	.set	T_F407A8_Nop, 0xFAB5E9
+	.set	T_F407A0_Nop, 0xFAB5EA
 	.set	sub_FAB643, 0xFAB643
-	.set	sub_FAB657, 0xFAB657
+	.set	T_F407C4_Nop, 0xFAB657
 	.set	sub_FAB658, 0xFAB658
 	.set	sub_FAB6D7, 0xFAB6D7
 	.set	sub_FAB728, 0xFAB728
 	.set	sub_FAB779, 0xFAB779
 	.set	sub_FAB7E6, 0xFAB7E6
-	.set	sub_FABBD6, 0xFABBD6
+	.set	T_F407F0_Nop, 0xFABBD6
 	.set	sub_FABD33, 0xFABD33
 	.set	MidiIn_ControlRecord_Dispatch, 0xFABEFB
 	.set	sub_FABFE2, 0xFABFE2
@@ -804,10 +804,10 @@
 	.set	sub_FADF08, 0xFADF08
 	.set	ParamApply_ByModeOfParam80, 0xFADF1E
 	.set	ParamApply_StorePairAndDerive, 0xFAE223
-	.set	sub_FAE800, 0xFAE800
-	.set	sub_FAE829, 0xFAE829
+	.set	T_F41F2C_Nop, 0xFAE800
+	.set	T_F41F3C_Nop, 0xFAE829
 	.set	sub_FB2000, 0xFB2000
-	.set	sub_FB2022, 0xFB2022
+	.set	T_F408F8_Nop, 0xFB2022
 	.set	sub_FB2049, 0xFB2049
 	.set	sub_FB20CE, 0xFB20CE
 	.set	sub_FB21CB, 0xFB21CB
@@ -851,35 +851,35 @@
 	.set	sub_FBC56B, 0xFBC56B
 	.set	sub_FBC56F, 0xFBC56F
 	.set	sub_FBC573, 0xFBC573
-	.set	sub_FBC584, 0xFBC584
+	.set	T_F41874_Nop, 0xFBC584
 	.set	sub_FBC585, 0xFBC585
 	.set	sub_FBC589, 0xFBC589
 	.set	sub_FBC58D, 0xFBC58D
-	.set	sub_FBC59E, 0xFBC59E
+	.set	T_F41A34_Nop, 0xFBC59E
 	.set	sub_FBC59F, 0xFBC59F
 	.set	sub_FBC5A3, 0xFBC5A3
 	.set	sub_FBC5A7, 0xFBC5A7
-	.set	sub_FBC5B8, 0xFBC5B8
-	.set	sub_FBC5B9, 0xFBC5B9
-	.set	sub_FBC5BA, 0xFBC5BA
-	.set	sub_FBC5BB, 0xFBC5BB
-	.set	sub_FBC5BC, 0xFBC5BC
+	.set	T_F41A44_Nop, 0xFBC5B8
+	.set	T_F41A88_Nop, 0xFBC5B9
+	.set	T_F41A8C_Nop, 0xFBC5BA
+	.set	T_F41A90_Nop, 0xFBC5BB
+	.set	T_F41A94_Nop, 0xFBC5BC
 	.set	sub_FBC5BD, 0xFBC5BD
 	.set	Var2075_ClrBit7_Entry, 0xFBC5C1
 	.set	sub_FBC5C5, 0xFBC5C5
-	.set	sub_FBC5D6, 0xFBC5D6
+	.set	T_F41884_Nop, 0xFBC5D6
 	.set	sub_FBC5D7, 0xFBC5D7
 	.set	sub_FBC5DB, 0xFBC5DB
 	.set	sub_FBC5DF, 0xFBC5DF
-	.set	sub_FBC5F0, 0xFBC5F0
+	.set	T_F418B4_Nop, 0xFBC5F0
 	.set	sub_FBC5F1, 0xFBC5F1
 	.set	sub_FBC64F, 0xFBC64F
 	.set	sub_FBCB06, 0xFBCB06
 	.set	sub_FBCB31, 0xFBCB31
 	.set	sub_FBCB40, 0xFBCB40
-	.set	sub_FBCB81, 0xFBCB81
+	.set	T_F4184C_Nop, 0xFBCB81
 	.set	sub_FBCB82, 0xFBCB82
-	.set	sub_FBCBA9, 0xFBCBA9
+	.set	T_F41854_Nop, 0xFBCBA9
 	.set	sub_FBCDEC, 0xFBCDEC
 	.set	sub_FBCDF0, 0xFBCDF0
 	.set	sub_FBCDF4, 0xFBCDF4
@@ -889,17 +889,17 @@
 	.set	sub_FBCEEB, 0xFBCEEB
 	.set	sub_FBCEEF, 0xFBCEEF
 	.set	sub_FBCEF3, 0xFBCEF3
-	.set	sub_FBCEF7, 0xFBCEF7
+	.set	T_F4185C_Nop, 0xFBCEF7
 	.set	sub_FBCEF8, 0xFBCEF8
 	.set	sub_FBCF09, 0xFBCF09
 	.set	sub_FBCF1A, 0xFBCF1A
 	.set	sub_FBCF2B, 0xFBCF2B
 	.set	sub_FBCF3C, 0xFBCF3C
-	.set	sub_FBCF7D, 0xFBCF7D
-	.set	sub_FBCF7E, 0xFBCF7E
-	.set	sub_FBCF7F, 0xFBCF7F
-	.set	sub_FBCF80, 0xFBCF80
-	.set	sub_FBCF81, 0xFBCF81
+	.set	T_F41894_Nop, 0xFBCF7D
+	.set	T_F418A4_Nop, 0xFBCF7E
+	.set	T_F41A54_Nop, 0xFBCF7F
+	.set	T_F41A64_Nop, 0xFBCF80
+	.set	T_F41864_Nop, 0xFBCF81
 	.set	sub_FBDB91, 0xFBDB91
 	.set	sub_FBDB95, 0xFBDB95
 	.set	sub_FBDD0D, 0xFBDD0D
@@ -907,36 +907,36 @@
 	.set	sub_FBDD80, 0xFBDD80
 	.set	sub_FBDD91, 0xFBDD91
 	.set	sub_FBDDD2, 0xFBDDD2
-	.set	sub_FBDDD6, 0xFBDDD6
+	.set	T_F418C4_Nop, 0xFBDDD6
 	.set	sub_FBECC3, 0xFBECC3
 	.set	sub_FBED02, 0xFBED02
 	.set	sub_FBEDBE, 0xFBEDBE
 	.set	sub_FBEE83, 0xFBEE83
 	.set	sub_FBEED9, 0xFBEED9
-	.set	sub_FBEEE3, 0xFBEEE3
-	.set	sub_FBEEE4, 0xFBEEE4
-	.set	sub_FBEEE5, 0xFBEEE5
+	.set	T_F41A0C_Nop, 0xFBEEE3
+	.set	T_F41A10_Nop, 0xFBEEE4
+	.set	T_F41A14_Nop, 0xFBEEE5
 	.set	sub_FBEEE6, 0xFBEEE6
-	.set	sub_FBEEEB, 0xFBEEEB
+	.set	T_F41A6C_Nop, 0xFBEEEB
 	.set	sub_FBEEEC, 0xFBEEEC
-	.set	sub_FBEF1B, 0xFBEF1B
+	.set	T_F41A74_Nop, 0xFBEF1B
 	.set	Screen_CombinationNaming_Enter, 0xFBEF1C
 	.set	Screen_CombinationNaming_Leave, 0xFBEF75
 	.set	Screen_CombinationNaming_Button, 0xFBEF76
-	.set	sub_FBEFB0, 0xFBEFB0
+	.set	T_F41AA4_Nop, 0xFBEFB0
 	.set	sub_FBFAB0, 0xFBFAB0
-	.set	sub_FBFAF1, 0xFBFAF1
+	.set	T_F41A1C_Nop, 0xFBFAF1
 	.set	sub_FBFAF2, 0xFBFAF2
-	.set	sub_FBFB33, 0xFBFB33
+	.set	T_F41A24_Nop, 0xFBFB33
 	.set	Msg0716_InitAllRecords_Entry, 0xFC0000
-	.set	sub_FC018D, 0xFC018D
+	.set	T_F40FF4_Nop, 0xFC018D
 	.set	sub_FC01B1, 0xFC01B1
 	.set	sub_FC01C7, 0xFC01C7
 	.set	sub_FC01DD, 0xFC01DD
 	.set	sub_FC01F3, 0xFC01F3
 	.set	sub_FC0206, 0xFC0206
 	.set	sub_FC020F, 0xFC020F
-	.set	sub_FC024F, 0xFC024F
+	.set	T_F40FF8_Nop, 0xFC024F
 	.set	sub_FC0250, 0xFC0250
 	.set	sub_FC0260, 0xFC0260
 	.set	sub_FC0270, 0xFC0270
@@ -1004,42 +1004,42 @@
 	.set	sub_FC0621, 0xFC0621
 	.set	sub_FC0631, 0xFC0631
 	.set	sub_FC0641, 0xFC0641
-	.set	sub_FC0651, 0xFC0651
-	.set	sub_FC0653, 0xFC0653
-	.set	sub_FC0654, 0xFC0654
-	.set	sub_FC0655, 0xFC0655
-	.set	sub_FC0656, 0xFC0656
-	.set	sub_FC0657, 0xFC0657
-	.set	sub_FC0658, 0xFC0658
-	.set	sub_FC0659, 0xFC0659
+	.set	T_F410F0_Nop, 0xFC0651
+	.set	T_F410F4_Nop, 0xFC0653
+	.set	T_F410F8_Nop, 0xFC0654
+	.set	T_F410FC_Nop, 0xFC0655
+	.set	T_F41100_Nop, 0xFC0656
+	.set	T_F41104_Nop, 0xFC0657
+	.set	T_F41108_Nop, 0xFC0658
+	.set	T_F4110C_Nop, 0xFC0659
 	.set	sub_FC065A, 0xFC065A
 	.set	sub_FC0663, 0xFC0663
 	.set	sub_FC066C, 0xFC066C
 	.set	sub_FC0675, 0xFC0675
-	.set	sub_FC067E, 0xFC067E
-	.set	sub_FC067F, 0xFC067F
-	.set	sub_FC0680, 0xFC0680
-	.set	sub_FC0681, 0xFC0681
-	.set	sub_FC0682, 0xFC0682
-	.set	sub_FC0683, 0xFC0683
-	.set	sub_FC0684, 0xFC0684
-	.set	sub_FC0685, 0xFC0685
+	.set	T_F41120_Nop, 0xFC067E
+	.set	T_F41124_Nop, 0xFC067F
+	.set	T_F41128_Nop, 0xFC0680
+	.set	T_F4112C_Nop, 0xFC0681
+	.set	T_F41130_Nop, 0xFC0682
+	.set	T_F41134_Nop, 0xFC0683
+	.set	T_F41138_Nop, 0xFC0684
+	.set	T_F4113C_Nop, 0xFC0685
 	.set	sub_FC0686, 0xFC0686
-	.set	sub_FC0691, 0xFC0691
+	.set	T_F41144_Nop, 0xFC0691
 	.set	sub_FC0692, 0xFC0692
-	.set	sub_FC069D, 0xFC069D
-	.set	sub_FC069E, 0xFC069E
+	.set	T_F4114C_Nop, 0xFC069D
+	.set	T_F41150_Nop, 0xFC069E
 	.set	sub_FC069F, 0xFC069F
 	.set	sub_FC06AA, 0xFC06AA
 	.set	sub_FC06B5, 0xFC06B5
 	.set	sub_FC06C0, 0xFC06C0
-	.set	sub_FC06CB, 0xFC06CB
+	.set	T_F41164_Nop, 0xFC06CB
 	.set	sub_FC06CC, 0xFC06CC
 	.set	sub_FC06D0, 0xFC06D0
-	.set	sub_FC06DB, 0xFC06DB
-	.set	sub_FC06DC, 0xFC06DC
-	.set	sub_FC06DD, 0xFC06DD
-	.set	sub_FC06DE, 0xFC06DE
+	.set	T_F41170_Nop, 0xFC06DB
+	.set	T_F41174_Nop, 0xFC06DC
+	.set	T_F41178_Nop, 0xFC06DD
+	.set	T_F4117C_Nop, 0xFC06DE
 	.set	sub_FC06DF, 0xFC06DF
 	.set	sub_FC06F4, 0xFC06F4
 	.set	sub_FC06FF, 0xFC06FF
@@ -1047,8 +1047,8 @@
 	.set	sub_FC0749, 0xFC0749
 	.set	sub_FC075E, 0xFC075E
 	.set	sub_FC078A, 0xFC078A
-	.set	sub_FC07AF, 0xFC07AF
-	.set	sub_FC07B0, 0xFC07B0
+	.set	T_F42508_Nop, 0xFC07AF
+	.set	T_F4250C_Nop, 0xFC07B0
 	.set	sub_FC07B1, 0xFC07B1
 	.set	sub_FC07D6, 0xFC07D6
 	.set	sub_FC07FB, 0xFC07FB
@@ -1057,10 +1057,10 @@
 	.set	sub_FC086A, 0xFC086A
 	.set	sub_FC0E56, 0xFC0E56
 	.set	sub_FC0E6B, 0xFC0E6B
-	.set	sub_FC0FBD, 0xFC0FBD
-	.set	sub_FC0FBE, 0xFC0FBE
-	.set	sub_FC10DA, 0xFC10DA
-	.set	sub_FC10DB, 0xFC10DB
+	.set	T_F40FB8_Nop, 0xFC0FBD
+	.set	T_F40FBC_Nop, 0xFC0FBE
+	.set	T_F40FE4_Nop, 0xFC10DA
+	.set	T_F40FE0_Nop, 0xFC10DB
 	.set	sub_FC10DD, 0xFC10DD
 	.set	sub_FC10FA, 0xFC10FA
 	.set	sub_FC1116, 0xFC1116
@@ -1069,10 +1069,10 @@
 	.set	sub_FC188F, 0xFC188F
 	.set	sub_FC18AA, 0xFC18AA
 	.set	sub_FC18B2, 0xFC18B2
-	.set	sub_FC19DC, 0xFC19DC
+	.set	T_F40FD8_Nop, 0xFC19DC
 	.set	sub_FC1B81, 0xFC1B81
 	.set	sub_FC1C59, 0xFC1C59
-	.set	sub_FC1CD1, 0xFC1CD1
+	.set	T_F40FC8_Nop, 0xFC1CD1
 	.set	sub_FC1D92, 0xFC1D92
 	.set	sub_FC1E68, 0xFC1E68
 	.set	sub_FC2035, 0xFC2035
@@ -1096,22 +1096,22 @@
 	.set	sub_FC5566, 0xFC5566
 	.set	sub_FC55CA, 0xFC55CA
 	.set	sub_FC57F0, 0xFC57F0
-	.set	sub_FC596C, 0xFC596C
-	.set	sub_FC596D, 0xFC596D
-	.set	sub_FC596E, 0xFC596E
+	.set	T_F411E8_Nop, 0xFC596C
+	.set	T_F411C8_Nop, 0xFC596D
+	.set	T_F411CC_Nop, 0xFC596E
 	.set	sub_FC596F, 0xFC596F
 	.set	sub_FC59AC, 0xFC59AC
-	.set	sub_FC5ACA, 0xFC5ACA
-	.set	sub_FC5ACB, 0xFC5ACB
+	.set	T_F411D8_Nop, 0xFC5ACA
+	.set	T_F411DC_Nop, 0xFC5ACB
 	.set	sub_FC5ACC, 0xFC5ACC
-	.set	sub_FC5B25, 0xFC5B25
+	.set	T_F411E4_Nop, 0xFC5B25
 	.set	Ram3800_Start_Entry, 0xFC8000
 	.set	Ram3800_InitDataImage, 0xFC807D
-	.set	sub_FC80DC, 0xFC80DC
-	.set	sub_FC80DD, 0xFC80DD
-	.set	sub_FC80DE, 0xFC80DE
-	.set	sub_FC80DF, 0xFC80DF
-	.set	sub_FC80E0, 0xFC80E0
+	.set	T_F413E4_Nop, 0xFC80DC
+	.set	T_F413E8_Nop, 0xFC80DD
+	.set	T_F413EC_Nop, 0xFC80DE
+	.set	T_F413F0_Nop, 0xFC80DF
+	.set	T_F413F4_Nop, 0xFC80E0
 	.set	sub_FC80E2, 0xFC80E2
 	.set	sub_FC8448, 0xFC8448
 	.set	sub_FC87AE, 0xFC87AE
@@ -1141,8 +1141,8 @@
 	.set	sub_FD2852, 0xFD2852
 	.set	sub_FD28B2, 0xFD28B2
 	.set	ToneEditPage_A0_KeyDispatch, 0xFD3DA7
-	.set	sub_FD3DF8, 0xFD3DF8
-	.set	sub_FD3DF9, 0xFD3DF9
+	.set	T_F41F84_Nop, 0xFD3DF8
+	.set	T_F41F94_Nop, 0xFD3DF9
 	.set	ToneEditPage_A3_KeyDispatch, 0xFD3DFA
 	.set	ToneEditPage_A4_KeyDispatch, 0xFD3E4B
 	.set	ToneEditPage_A5_KeyDispatch, 0xFD3E9C
@@ -1282,106 +1282,106 @@
 	.set	sub_FDD0D4, 0xFDD0D4
 	.set	sub_FDD272, 0xFDD272
 	.set	sub_FDD27F, 0xFDD27F
-	.set	sub_FDD436, 0xFDD436
+	.set	T_F42340_Nop, 0xFDD436
 	.set	sub_FDD437, 0xFDD437
-	.set	sub_FDD7F7, 0xFDD7F7
-	.set	sub_FDD7F8, 0xFDD7F8
+	.set	T_F41F7C_Nop, 0xFDD7F7
+	.set	T_F41F8C_Nop, 0xFDD7F8
 	.set	ToneEditPage_A3_PositionParameter, 0xFDD7F9
 	.set	ToneEditPage_A4_PositionMovement, 0xFDD958
 	.set	ToneEditPage_A5_FittingMutingTuning, 0xFDDA1C
 	.set	ToneEditPage_A6_TouchDepth, 0xFDDC3A
 	.set	ToneEditPage_A7_ResoModeKeyFollow, 0xFDDDAA
 	.set	sub_FDDF36, 0xFDDF36
-	.set	sub_FDE151, 0xFDE151
+	.set	T_F433E0_Nop, 0xFDE151
 	.set	sub_FDE152, 0xFDE152
-	.set	sub_FDE15F, 0xFDE15F
+	.set	T_F41F68_Nop, 0xFDE15F
 	.set	sub_FDE160, 0xFDE160
-	.set	sub_FDE16D, 0xFDE16D
+	.set	T_F42008_Nop, 0xFDE16D
 	.set	sub_FDE16E, 0xFDE16E
-	.set	sub_FDE17B, 0xFDE17B
+	.set	T_F42018_Nop, 0xFDE17B
 	.set	sub_FDE17C, 0xFDE17C
-	.set	sub_FDE189, 0xFDE189
+	.set	T_F42028_Nop, 0xFDE189
 	.set	sub_FDE18A, 0xFDE18A
-	.set	sub_FDE197, 0xFDE197
+	.set	T_F42038_Nop, 0xFDE197
 	.set	sub_FDE198, 0xFDE198
-	.set	sub_FDE1A5, 0xFDE1A5
+	.set	T_F42048_Nop, 0xFDE1A5
 	.set	sub_FDE1A6, 0xFDE1A6
-	.set	sub_FDE1B3, 0xFDE1B3
+	.set	T_F42058_Nop, 0xFDE1B3
 	.set	sub_FDE1B4, 0xFDE1B4
 	.set	sub_FDE1C2, 0xFDE1C2
-	.set	sub_FDE1CF, 0xFDE1CF
+	.set	T_F42078_Nop, 0xFDE1CF
 	.set	sub_FDE1D0, 0xFDE1D0
-	.set	sub_FDE1DD, 0xFDE1DD
+	.set	T_F42068_Nop, 0xFDE1DD
 	.set	sub_FDE1DE, 0xFDE1DE
-	.set	sub_FDE1EB, 0xFDE1EB
+	.set	T_F42098_Nop, 0xFDE1EB
 	.set	sub_FDE1EC, 0xFDE1EC
-	.set	sub_FDE1F9, 0xFDE1F9
+	.set	T_F420A8_Nop, 0xFDE1F9
 	.set	sub_FDE1FA, 0xFDE1FA
-	.set	sub_FDE207, 0xFDE207
+	.set	T_F420B8_Nop, 0xFDE207
 	.set	sub_FDE208, 0xFDE208
-	.set	sub_FDE215, 0xFDE215
+	.set	T_F42168_Nop, 0xFDE215
 	.set	sub_FDE216, 0xFDE216
-	.set	sub_FDE223, 0xFDE223
+	.set	T_F42178_Nop, 0xFDE223
 	.set	sub_FDE224, 0xFDE224
-	.set	sub_FDE231, 0xFDE231
+	.set	T_F42188_Nop, 0xFDE231
 	.set	sub_FDE232, 0xFDE232
-	.set	sub_FDE23F, 0xFDE23F
+	.set	T_F42198_Nop, 0xFDE23F
 	.set	sub_FDE240, 0xFDE240
-	.set	sub_FDE24D, 0xFDE24D
+	.set	T_F421A8_Nop, 0xFDE24D
 	.set	sub_FDE24E, 0xFDE24E
-	.set	sub_FDE25B, 0xFDE25B
+	.set	T_F420C8_Nop, 0xFDE25B
 	.set	sub_FDE25C, 0xFDE25C
-	.set	sub_FDE269, 0xFDE269
+	.set	T_F420D8_Nop, 0xFDE269
 	.set	sub_FDE26A, 0xFDE26A
-	.set	sub_FDE277, 0xFDE277
+	.set	T_F420E8_Nop, 0xFDE277
 	.set	sub_FDE278, 0xFDE278
-	.set	sub_FDE285, 0xFDE285
+	.set	T_F420F8_Nop, 0xFDE285
 	.set	sub_FDE286, 0xFDE286
-	.set	sub_FDE293, 0xFDE293
+	.set	T_F42108_Nop, 0xFDE293
 	.set	sub_FDE294, 0xFDE294
-	.set	sub_FDE2A1, 0xFDE2A1
+	.set	T_F42118_Nop, 0xFDE2A1
 	.set	sub_FDE2A2, 0xFDE2A2
-	.set	sub_FDE2AF, 0xFDE2AF
+	.set	T_F42128_Nop, 0xFDE2AF
 	.set	sub_FDE2B0, 0xFDE2B0
-	.set	sub_FDE2BD, 0xFDE2BD
+	.set	T_F42138_Nop, 0xFDE2BD
 	.set	sub_FDE2BE, 0xFDE2BE
-	.set	sub_FDE2CB, 0xFDE2CB
+	.set	T_F42148_Nop, 0xFDE2CB
 	.set	sub_FDE2CC, 0xFDE2CC
-	.set	sub_FDE2D9, 0xFDE2D9
-	.set	sub_FDE2DA, 0xFDE2DA
-	.set	sub_FDE2DB, 0xFDE2DB
-	.set	sub_FDE2DC, 0xFDE2DC
-	.set	sub_FDE2DD, 0xFDE2DD
+	.set	T_F42158_Nop, 0xFDE2D9
+	.set	T_F42364_Nop, 0xFDE2DA
+	.set	T_F4236C_Nop, 0xFDE2DB
+	.set	T_F42374_Nop, 0xFDE2DC
+	.set	T_F4237C_Nop, 0xFDE2DD
 	.set	sub_FDE2EC, 0xFDE2EC
-	.set	sub_FDE2F9, 0xFDE2F9
+	.set	T_F433DC_Nop, 0xFDE2F9
 	.set	sub_FDE2FA, 0xFDE2FA
-	.set	sub_FDE307, 0xFDE307
+	.set	T_F4235C_Nop, 0xFDE307
 	.set	sub_FDE308, 0xFDE308
-	.set	sub_FDE315, 0xFDE315
+	.set	T_F4232C_Nop, 0xFDE315
 	.set	sub_FDE316, 0xFDE316
-	.set	sub_FDE323, 0xFDE323
+	.set	T_F4233C_Nop, 0xFDE323
 	.set	sub_FDE324, 0xFDE324
-	.set	sub_FDE331, 0xFDE331
+	.set	T_F4234C_Nop, 0xFDE331
 	.set	sub_FDE332, 0xFDE332
-	.set	sub_FDE33F, 0xFDE33F
+	.set	T_F41F78_Nop, 0xFDE33F
 	.set	sub_FDE340, 0xFDE340
-	.set	sub_FDE34D, 0xFDE34D
+	.set	T_F41F88_Nop, 0xFDE34D
 	.set	sub_FDE34E, 0xFDE34E
-	.set	sub_FDE35B, 0xFDE35B
+	.set	T_F41F98_Nop, 0xFDE35B
 	.set	ToneEditPage_A3_Leave, 0xFDE35C
-	.set	sub_FDE369, 0xFDE369
+	.set	T_F41FA8_Nop, 0xFDE369
 	.set	ToneEditPage_A4_Leave, 0xFDE36A
-	.set	sub_FDE377, 0xFDE377
+	.set	T_F41FB8_Nop, 0xFDE377
 	.set	ToneEditPage_A5_Leave, 0xFDE378
-	.set	sub_FDE385, 0xFDE385
+	.set	T_F41FC8_Nop, 0xFDE385
 	.set	ToneEditPage_A6_Leave, 0xFDE386
-	.set	sub_FDE393, 0xFDE393
+	.set	T_F41FD8_Nop, 0xFDE393
 	.set	ToneEditPage_A7_Leave, 0xFDE394
-	.set	sub_FDE3A1, 0xFDE3A1
+	.set	T_F41FE8_Nop, 0xFDE3A1
 	.set	sub_FDE3A2, 0xFDE3A2
-	.set	sub_FDE3AF, 0xFDE3AF
+	.set	T_F41FF8_Nop, 0xFDE3AF
 	.set	sub_FDE3B0, 0xFDE3B0
-	.set	sub_FDE3BD, 0xFDE3BD
+	.set	T_F433EC_Nop, 0xFDE3BD
 	.set	sub_FDE3BE, 0xFDE3BE
 	.set	sub_FDE41E, 0xFDE41E
 	.set	sub_FDE47E, 0xFDE47E
@@ -1407,9 +1407,9 @@
 	.set	sub_FE1BFB, 0xFE1BFB
 	.set	sub_FE1C03, 0xFE1C03
 	.set	sub_FE1C0B, 0xFE1C0B
-	.set	sub_FE1C16, 0xFE1C16
+	.set	T_F42580_Nop, 0xFE1C16
 	.set	sub_FE1C17, 0xFE1C17
-	.set	sub_FE1C1E, 0xFE1C1E
+	.set	T_F4258C_Nop, 0xFE1C1E
 	.set	sub_FE1C1F, 0xFE1C1F
 	.set	sub_FE1C23, 0xFE1C23
 	.set	sub_FE1C27, 0xFE1C27
@@ -1461,7 +1461,7 @@
 	.set	sub_FE8005, 0xFE8005
 	.set	sub_FE8026, 0xFE8026
 	.set	ScreenLeave_DrumEditPartSelect, 0xFE8045
-	.set	sub_FE805F, 0xFE805F
+	.set	T_F402B8_Nop, 0xFE805F
 	.set	ScreenButton_Sequencer, 0xFE8060
 	.set	sub_FE810B, 0xFE810B
 	.set	sub_FE8116, 0xFE8116
@@ -1477,7 +1477,7 @@
 	.set	sub_FE88AA, 0xFE88AA
 	.set	sub_FE8C1F, 0xFE8C1F
 	.set	sub_FE8C3A, 0xFE8C3A
-	.set	sub_FE8CB3, 0xFE8CB3
+	.set	T_F402D8_Nop, 0xFE8CB3
 	.set	sub_FE9A33, 0xFE9A33
 	.set	sub_FE9B8D, 0xFE9B8D
 	.set	sub_FF42B7, 0xFF42B7
@@ -1487,44 +1487,44 @@
 	.set	Paint_DiskMenu, 0xFF42CD
 	.set	ScreenLeave_DiskMenu, 0xFF431B
 	.set	PanelButtonDispatch_DiskMenu, 0xFF431C
-	.set	sub_FF4407, 0xFF4407
+	.set	T_F42270_Nop, 0xFF4407
 	.set	Paint_MidiFileDirectPlay, 0xFF4408
 	.set	ScreenLeave_MidiFileDirectPlay, 0xFF457C
 	.set	PanelButtonDispatch_MidiFileDirectPlay, 0xFF4596
-	.set	sub_FF475B, 0xFF475B
+	.set	T_F42280_Nop, 0xFF475B
 	.set	Paint_DiskL0adFile, 0xFF4786
 	.set	sub_FF48F0, 0xFF48F0
 	.set	ScreenLeave_DiskL0adFile, 0xFF4986
 	.set	PanelButtonDispatch_DiskL0adFile, 0xFF4995
-	.set	sub_FF4FF9, 0xFF4FF9
+	.set	T_F423AC_Nop, 0xFF4FF9
 	.set	Paint_MidiFileL0ad, 0xFF4FFA
 	.set	ScreenLeave_MidiFileL0ad, 0xFF520C
 	.set	PanelButtonDispatch_MidiFileL0ad, 0xFF522F
-	.set	sub_FF5489, 0xFF5489
+	.set	T_F4240C_Nop, 0xFF5489
 	.set	PageDispatch_DiskSaveFile, 0xFF548A
 	.set	ScreenLeave_DiskSaveFile, 0xFF571F
 	.set	PanelButtonDispatch_DiskSaveFile, 0xFF572E
-	.set	sub_FF5C3D, 0xFF5C3D
+	.set	T_F423BC_Nop, 0xFF5C3D
 	.set	PageDispatch_MidiFileSave, 0xFF5C3E
 	.set	ScreenLeave_MidiFileSave, 0xFF5EAE
 	.set	PanelButtonDispatch_MidiFileSave, 0xFF5ED1
-	.set	sub_FF6511, 0xFF6511
+	.set	T_F423CC_Nop, 0xFF6511
 	.set	Paint_FloppyDiskFormatSelectType, 0xFF6512
 	.set	ScreenLeave_FloppyDiskFormatSelectType, 0xFF654F
 	.set	PanelButtonDispatch_FloppyDiskFormatSelectType, 0xFF6550
-	.set	sub_FF6612, 0xFF6612
+	.set	T_F423DC_Nop, 0xFF6612
 	.set	Paint_FloppyDiskFormatAreYouSure, 0xFF6613
 	.set	ScreenLeave_FloppyDiskFormatAreYouSure, 0xFF66A9
 	.set	PanelButtonDispatch_FloppyDiskFormatAreYouSure, 0xFF66AA
-	.set	sub_FF672C, 0xFF672C
+	.set	T_F423FC_Nop, 0xFF672C
 	.set	PageDispatch_L0adSingleS0und, 0xFF672D
 	.set	ScreenLeave_L0adSingleS0und, 0xFF68CA
 	.set	PanelButtonDispatch_L0adSingleS0und, 0xFF68D8
-	.set	sub_FF6DB6, 0xFF6DB6
+	.set	T_F423EC_Nop, 0xFF6DB6
 	.set	PageDispatch_L0adSingleC0mbination, 0xFF6DB7
 	.set	ScreenLeave_L0adSingleC0mbination, 0xFF6F13
 	.set	PanelButtonDispatch_L0adSingleC0mbination, 0xFF6F21
-	.set	sub_FF7083, 0xFF7083
+	.set	T_F42428_Nop, 0xFF7083
 	.set	sub_FF70B6, 0xFF70B6
 	.set	sub_FF70D8, 0xFF70D8
 ; <<< END prom_a ADDRESS EQUATES
@@ -1593,17 +1593,16 @@ wsa1_prom_b_Join:
 	ret	; F00019  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0001A
+; T_F409B0_Nop
 ; Reached from: routine-directory slot T_F409B0, each holding `jp 0x00F0001A`
 ;               (the slots are re-read from the ROM on every emit).
 ; Extent:  32 bytes, 12 instructions, ends `ret`.  The walk marks exactly
 ;          0xF0001A-0xF00039.  5 bytes (16%) sit in spellings llvm-mc cannot
 ;          encode and stay `.byte` with the MAME text in the comment.
-; Unknown: what the routine is for.  ★ COVERAGE ROUND: this pass converts
-;          reachable bytes and defers every semantic question, so the label
-;          stays sub_XXXXXX with the gap stated.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F409B0_Nop after what reaches it
+;          (was sub_F0001A; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0001A:
+T_F409B0_Nop:
 	ret	; F0001A  ret
 sub_F0001A_Join:
 	m_bit 0, MD24, 0x60501b	; F0001B  bit 0,(0x60501b)
@@ -1621,7 +1620,7 @@ sub_F0001A_Return:
 	ret	; F00039  ret
 
 ; --- 0xF0003A-0xF0003B, 2 B, converted by lane promB6 (TRAILER).
-;     after sub_F0001A's `ret`, before sub_F0003C
+;     after T_F409B0_Nop's `ret`, before sub_F0003C
 ;     Evidence checked by scripts/analysis/prom_b_small_span_convert.py --check
 	.byte	0x00, 0x00	; F0003A  routine trailer
 
@@ -4103,7 +4102,7 @@ PtrArray_F014EE:
 	.long	0x00FDE1AC	; F01666
 	.long	0x00FDA7CE	; F0166A
 	.long	0x00FDA7CE	; F0166E
-	.long	sub_FDE1EB	; F01672
+	.long	T_F42098_Nop	; F01672
 	.long	0x00FDE1D2	; F01676
 	.long	0x00000000	; F0167A
 	.long	0x00FDA7CE	; F0167E
@@ -19593,16 +19592,16 @@ sub_F0AA61_Skip:
 	ret	; F0AAB1  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AAB2
+; T_F433E8_Nop
 ; Called from: T_F433E8 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F433E8 holds `jp 0x00F0AAB2`, and 0xF0AAB2 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F433E8_Nop after what reaches it
+;          (was sub_F0AAB2; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0AAB2:		; <- T_F433E8
+T_F433E8_Nop:		; <- T_F433E8
 	ret	; F0AAB2  ret
 
 ; --------------------------------------------------------------------------
@@ -19693,16 +19692,16 @@ sub_F0AAF9_Skip:
 	ret	; F0AB49  ret
 
 ; --------------------------------------------------------------------------
-; sub_F0AB4A
+; T_F42348_Nop
 ; Called from: T_F42348 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F42348 holds `jp 0x00F0AB4A`, and 0xF0AB4A is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42348_Nop after what reaches it
+;          (was sub_F0AB4A; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0AB4A:		; <- T_F42348
+T_F42348_Nop:		; <- T_F42348
 	ret	; F0AB4A  ret
 
 ; --------------------------------------------------------------------------
@@ -28261,7 +28260,7 @@ sub_F0F281:
 	extz	bc	; F0F285  extz BC
 	extz	xbc	; F0F287  extz XBC
 	cp	bc, 5:i3	; F0F289  cp BC,5
-	jr	ugt, sub_F0F2DE	; F0F28B  jr UGT,0xf0f2de
+	jr	ugt, DispatchTable_F0F29A_Nop4	; F0F28B  jr UGT,0xf0f2de
 	sll	bc, 2	; F0F28D  sll 0x02,BC
 	add	xbc, DispatchTable_F0F29A	; F0F290  add XBC,0x00f0f29a
 	ld	xbc, (xbc)	; F0F296  ld XBC,(XBC)
@@ -28294,8 +28293,8 @@ DispatchTable_F0F29A:
 	.long	sub_F0F2DB	; F0F29E  [1] -> sub_F0F2DB
 	.long	sub_F0F2DB	; F0F2A2  [2] -> sub_F0F2DB
 	.long	sub_F0F2DB	; F0F2A6  [3] -> sub_F0F2DB
-	.long	sub_F0F2DE	; F0F2AA  [4] -> sub_F0F2DE
-	.long	sub_F0F2DE	; F0F2AE  [5] -> sub_F0F2DE
+	.long	DispatchTable_F0F29A_Nop4	; F0F2AA  [4] -> DispatchTable_F0F29A_Nop4
+	.long	DispatchTable_F0F29A_Nop4	; F0F2AE  [5] -> DispatchTable_F0F29A_Nop4
 
 
 ; --------------------------------------------------------------------------
@@ -28316,17 +28315,17 @@ DispatchTable_F0F29A:
 ; --------------------------------------------------------------------------
 sub_F0F2B2:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F2B2  cp (0x2798),0x00
-	jr	nz, sub_F0F2DE	; F0F2B7  jr NZ,0xf0f2de
+	jr	nz, DispatchTable_F0F29A_Nop4	; F0F2B7  jr NZ,0xf0f2de
 	m_cp_mi8 MB16, 0x2076, 0x17	; F0F2B9  cp (0x2076),0x17
-	jr	nz, sub_F0F2DE	; F0F2BE  jr NZ,0xf0f2de
+	jr	nz, DispatchTable_F0F29A_Nop4	; F0F2BE  jr NZ,0xf0f2de
 	call	T_F42E6C	; F0F2C0  call 0xf42e6c
 	cp	a, 2:i3	; F0F2C4  cp A,2
-	jr	z, sub_F0F2DE	; F0F2C6  jr Z,0xf0f2de
+	jr	z, DispatchTable_F0F29A_Nop4	; F0F2C6  jr Z,0xf0f2de
 	calr	sub_F10222	; F0F2C8  calr 0xf10222
 	m_set 0, MD16, 0x2791	; F0F2CB  set 0,(0x2791)
 	ld	(8347:16), 128	; F0F2CF  ld (0x209b),0x80  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(8348:16), 0	; F0F2D4  ld (0x209c),0x00  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
-	jr	sub_F0F2DE	; F0F2D9  jr T,0xf0f2de
+	jr	DispatchTable_F0F29A_Nop4	; F0F2D9  jr T,0xf0f2de
 
 ; --------------------------------------------------------------------------
 ; sub_F0F2DB
@@ -28348,7 +28347,7 @@ sub_F0F2DB:
 	calr	DspEffect_MoveCursor	; F0F2DB  calr 0xf105b8
 
 ; --------------------------------------------------------------------------
-; sub_F0F2DE
+; DispatchTable_F0F29A_Nop4
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -28359,10 +28358,10 @@ sub_F0F2DB:
 ;                   kind and their targets are emitted as data.  0xF0F2DE is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F29A_Nop4 after what reaches it
+;          (was sub_F0F2DE; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0F2DE:
+DispatchTable_F0F29A_Nop4:
 	ret	; F0F2DE  ret
 
 ; --------------------------------------------------------------------------
@@ -28385,7 +28384,7 @@ sub_F0F2DF:
 	extz	bc	; F0F2E3  extz BC
 	extz	xbc	; F0F2E5  extz XBC
 	cp	bc, 5:i3	; F0F2E7  cp BC,5
-	jr	ugt, sub_F0F32D	; F0F2E9  jr UGT,0xf0f32d
+	jr	ugt, DispatchTable_F0F2F8_Nop0	; F0F2E9  jr UGT,0xf0f32d
 	sll	bc, 2	; F0F2EB  sll 0x02,BC
 	add	xbc, DispatchTable_F0F2F8	; F0F2EE  add XBC,0x00f0f2f8
 	ld	xbc, (xbc)	; F0F2F4  ld XBC,(XBC)
@@ -28414,7 +28413,7 @@ sub_F0F2DF:
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
 DispatchTable_F0F2F8:
-	.long	sub_F0F32D	; F0F2F8  [0] -> sub_F0F32D
+	.long	DispatchTable_F0F2F8_Nop0	; F0F2F8  [0] -> DispatchTable_F0F2F8_Nop0
 	.long	sub_F0F310	; F0F2FC  [1] -> sub_F0F310
 	.long	sub_F0F310	; F0F300  [2] -> sub_F0F310
 	.long	sub_F0F310	; F0F304  [3] -> sub_F0F310
@@ -28468,7 +28467,7 @@ sub_F0F315:
 	pop	xiy	; F0F32C  pop XIY
 
 ; --------------------------------------------------------------------------
-; sub_F0F32D
+; DispatchTable_F0F2F8_Nop0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -28479,10 +28478,10 @@ sub_F0F315:
 ;                   kind and their targets are emitted as data.  0xF0F32D is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F2F8_Nop0 after what reaches it
+;          (was sub_F0F32D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0F32D:
+DispatchTable_F0F2F8_Nop0:
 	ret	; F0F32D  ret
 
 ; --------------------------------------------------------------------------
@@ -28638,7 +28637,7 @@ sub_F0F395:
 	extz	bc	; F0F399  extz BC
 	extz	xbc	; F0F39B  extz XBC
 	cp	bc, 5:i3	; F0F39D  cp BC,5
-	jr	ugt, sub_F0F3EB	; F0F39F  jr UGT,0xf0f3eb
+	jr	ugt, DispatchTable_F0F3AE_Nop4	; F0F39F  jr UGT,0xf0f3eb
 	sll	bc, 2	; F0F3A1  sll 0x02,BC
 	add	xbc, DispatchTable_F0F3AE	; F0F3A4  add XBC,0x00f0f3ae
 	ld	xbc, (xbc)	; F0F3AA  ld XBC,(XBC)
@@ -28671,8 +28670,8 @@ DispatchTable_F0F3AE:
 	.long	sub_F0F3E8	; F0F3B2  [1] -> sub_F0F3E8
 	.long	sub_F0F3E8	; F0F3B6  [2] -> sub_F0F3E8
 	.long	sub_F0F3E8	; F0F3BA  [3] -> sub_F0F3E8
-	.long	sub_F0F3EB	; F0F3BE  [4] -> sub_F0F3EB
-	.long	sub_F0F3EB	; F0F3C2  [5] -> sub_F0F3EB
+	.long	DispatchTable_F0F3AE_Nop4	; F0F3BE  [4] -> DispatchTable_F0F3AE_Nop4
+	.long	DispatchTable_F0F3AE_Nop4	; F0F3C2  [5] -> DispatchTable_F0F3AE_Nop4
 
 
 ; --------------------------------------------------------------------------
@@ -28693,7 +28692,7 @@ DispatchTable_F0F3AE:
 ; --------------------------------------------------------------------------
 sub_F0F3C6:
 	m_cp_mi8 MB16, 0x2798, 0x00	; F0F3C6  cp (0x2798),0x00
-	jr	z, sub_F0F3EB	; F0F3CB  jr Z,0xf0f3eb
+	jr	z, DispatchTable_F0F3AE_Nop4	; F0F3CB  jr Z,0xf0f3eb
 	pushw	0	; F0F3CD  push 0x0000
 	pushw	33	; F0F3D0  push 0x0021
 	call	T_F418D0	; F0F3D3  call 0xf418d0
@@ -28701,7 +28700,7 @@ sub_F0F3C6:
 	ld	(8347:16), 131	; F0F3DB  ld (0x209b),0x83  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	ld	(8348:16), 3	; F0F3E0  ld (0x209c),0x03  <- arms prom_a PanelButton_Accept's substitution for panel button code 0x0D (0xF86615); see the 0xF7D2D8 banner
 	pop	xiy	; F0F3E5  pop XIY
-	jr	sub_F0F3EB	; F0F3E6  jr T,0xf0f3eb
+	jr	DispatchTable_F0F3AE_Nop4	; F0F3E6  jr T,0xf0f3eb
 
 ; --------------------------------------------------------------------------
 ; sub_F0F3E8
@@ -28723,7 +28722,7 @@ sub_F0F3E8:
 	calr	DspEffect_MoveCursor	; F0F3E8  calr 0xf105b8
 
 ; --------------------------------------------------------------------------
-; sub_F0F3EB
+; DispatchTable_F0F3AE_Nop4
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -28734,10 +28733,10 @@ sub_F0F3E8:
 ;                   kind and their targets are emitted as data.  0xF0F3EB is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F3AE_Nop4 after what reaches it
+;          (was sub_F0F3EB; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0F3EB:
+DispatchTable_F0F3AE_Nop4:
 	ret	; F0F3EB  ret
 
 ; --------------------------------------------------------------------------
@@ -29138,7 +29137,7 @@ sub_F0F4FD:
 	extz	bc	; F0F501  extz BC
 	extz	xbc	; F0F503  extz XBC
 	cp	bc, 5:i3	; F0F505  cp BC,5
-	jr	ugt, sub_F0F535	; F0F507  jr UGT,0xf0f535
+	jr	ugt, DispatchTable_F0F516_Nop0	; F0F507  jr UGT,0xf0f535
 	sll	bc, 2	; F0F509  sll 0x02,BC
 	add	xbc, DispatchTable_F0F516	; F0F50C  add XBC,0x00f0f516
 	ld	xbc, (xbc)	; F0F512  ld XBC,(XBC)
@@ -29167,12 +29166,12 @@ sub_F0F4FD:
 ; Unknown: what the handlers do.  Each is sub_XXXXXX.
 ; --------------------------------------------------------------------------
 DispatchTable_F0F516:
-	.long	sub_F0F535	; F0F516  [0] -> sub_F0F535
+	.long	DispatchTable_F0F516_Nop0	; F0F516  [0] -> DispatchTable_F0F516_Nop0
 	.long	sub_F0F52E	; F0F51A  [1] -> sub_F0F52E
 	.long	sub_F0F52E	; F0F51E  [2] -> sub_F0F52E
 	.long	sub_F0F52E	; F0F522  [3] -> sub_F0F52E
-	.long	sub_F0F535	; F0F526  [4] -> sub_F0F535
-	.long	sub_F0F535	; F0F52A  [5] -> sub_F0F535
+	.long	DispatchTable_F0F516_Nop0	; F0F526  [4] -> DispatchTable_F0F516_Nop0
+	.long	DispatchTable_F0F516_Nop0	; F0F52A  [5] -> DispatchTable_F0F516_Nop0
 
 
 ; --------------------------------------------------------------------------
@@ -29196,7 +29195,7 @@ sub_F0F52E:
 	m_set 0, MD16, 0x2791	; F0F531  set 0,(0x2791)
 
 ; --------------------------------------------------------------------------
-; sub_F0F535
+; DispatchTable_F0F516_Nop0
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29207,10 +29206,10 @@ sub_F0F52E:
 ;                   kind and their targets are emitted as data.  0xF0F535 is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F516_Nop0 after what reaches it
+;          (was sub_F0F535; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0F535:
+DispatchTable_F0F516_Nop0:
 	ret	; F0F535  ret
 
 ; --------------------------------------------------------------------------
@@ -29236,7 +29235,7 @@ sub_F0F536:
 	extz	bc	; F0F543  extz BC
 	extz	xbc	; F0F545  extz XBC
 	cp	bc, 5:i3	; F0F547  cp BC,5
-	jr	ugt, sub_F0F59E	; F0F549  jr UGT,0xf0f59e
+	jr	ugt, DispatchTable_F0F558_Nop4	; F0F549  jr UGT,0xf0f59e
 	sll	bc, 2	; F0F54B  sll 0x02,BC
 	add	xbc, DispatchTable_F0F558	; F0F54E  add XBC,0x00f0f558
 	ld	xbc, (xbc)	; F0F554  ld XBC,(XBC)
@@ -29271,8 +29270,8 @@ DispatchTable_F0F558:
 	.long	sub_F0F579	; F0F55C  [1] -> sub_F0F579
 	.long	sub_F0F579	; F0F560  [2] -> sub_F0F579
 	.long	sub_F0F579	; F0F564  [3] -> sub_F0F579
-	.long	sub_F0F59E	; F0F568  [4] -> sub_F0F59E
-	.long	sub_F0F59E	; F0F56C  [5] -> sub_F0F59E
+	.long	DispatchTable_F0F558_Nop4	; F0F568  [4] -> DispatchTable_F0F558_Nop4
+	.long	DispatchTable_F0F558_Nop4	; F0F56C  [5] -> DispatchTable_F0F558_Nop4
 
 
 ; --------------------------------------------------------------------------
@@ -29294,7 +29293,7 @@ DispatchTable_F0F558:
 sub_F0F570:
 	calr	3074	; F0F570  calr 0xf10175
 	m_set 0, MD16, 0x2791	; F0F573  set 0,(0x2791)
-	jr	sub_F0F59E	; F0F577  jr T,0xf0f59e
+	jr	DispatchTable_F0F558_Nop4	; F0F577  jr T,0xf0f59e
 
 ; --------------------------------------------------------------------------
 ; sub_F0F579
@@ -29325,12 +29324,12 @@ sub_F0F579:
 	pushw	bc	; F0F593  push BC
 	calr	sub_F1156B	; F0F594  calr 0xf1156b
 	inc	8, xsp	; F0F597  inc 0,XSP
-	jr	sub_F0F59E	; F0F599  jr T,0xf0f59e
+	jr	DispatchTable_F0F558_Nop4	; F0F599  jr T,0xf0f59e
 sub_F0F579_Skip:
 	calr	sub_F1018F	; F0F59B  calr 0xf1018f
 
 ; --------------------------------------------------------------------------
-; sub_F0F59E
+; DispatchTable_F0F558_Nop4
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29341,10 +29340,10 @@ sub_F0F579_Skip:
 ;                   kind and their targets are emitted as data.  0xF0F59E is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F558_Nop4 after what reaches it
+;          (was sub_F0F59E; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0F59E:
+DispatchTable_F0F558_Nop4:
 	ret	; F0F59E  ret
 
 ; --------------------------------------------------------------------------
@@ -29860,7 +29859,7 @@ sub_F0F6EF:
 	extz	bc	; F0F6F3  extz BC
 	extz	xbc	; F0F6F5  extz XBC
 	cp	bc, 5:i3	; F0F6F7  cp BC,5
-	jr	ugt, sub_F0F75A	; F0F6F9  jr UGT,0xf0f75a
+	jr	ugt, DispatchTable_F0F708_Nop4	; F0F6F9  jr UGT,0xf0f75a
 	sll	bc, 2	; F0F6FB  sll 0x02,BC
 	add	xbc, DispatchTable_F0F708	; F0F6FE  add XBC,0x00f0f708
 	ld	xbc, (xbc)	; F0F704  ld XBC,(XBC)
@@ -29893,8 +29892,8 @@ DispatchTable_F0F708:
 	.long	sub_F0F74A	; F0F70C  [1] -> sub_F0F74A
 	.long	sub_F0F74A	; F0F710  [2] -> sub_F0F74A
 	.long	sub_F0F74A	; F0F714  [3] -> sub_F0F74A
-	.long	sub_F0F75A	; F0F718  [4] -> sub_F0F75A
-	.long	sub_F0F75A	; F0F71C  [5] -> sub_F0F75A
+	.long	DispatchTable_F0F708_Nop4	; F0F718  [4] -> DispatchTable_F0F708_Nop4
+	.long	DispatchTable_F0F708_Nop4	; F0F71C  [5] -> DispatchTable_F0F708_Nop4
 
 
 ; --------------------------------------------------------------------------
@@ -29916,17 +29915,17 @@ DispatchTable_F0F708:
 sub_F0F720:
 	ld	c, (10416:16)	; F0F720  ld C,(0x28b0)
 	and	c, 1	; F0F724  and C,0x01
-	jr	z, sub_F0F75A	; F0F727  jr Z,0xf0f75a
+	jr	z, DispatchTable_F0F708_Nop4	; F0F727  jr Z,0xf0f75a
 	m_cp_mi8 MB16, 0x2076, 0x17	; F0F729  cp (0x2076),0x17
-	jr	nz, sub_F0F75A	; F0F72E  jr NZ,0xf0f75a
+	jr	nz, DispatchTable_F0F708_Nop4	; F0F72E  jr NZ,0xf0f75a
 	call	T_F42E6C	; F0F730  call 0xf42e6c
 	cp	a, 2:i3	; F0F734  cp A,2
-	jr	z, sub_F0F75A	; F0F736  jr Z,0xf0f75a
+	jr	z, DispatchTable_F0F708_Nop4	; F0F736  jr Z,0xf0f75a
 	m_cp_mi8 MB16, 0x2798, 0x01	; F0F738  cp (0x2798),0x01
-	jr	z, sub_F0F75A	; F0F73D  jr Z,0xf0f75a
+	jr	z, DispatchTable_F0F708_Nop4	; F0F73D  jr Z,0xf0f75a
 	ld	(10136:16), 1	; F0F73F  ld (0x2798),0x01
 	m_set 4, MD16, 0x2071	; F0F744  set 4,(0x2071)
-	jr	sub_F0F75A	; F0F748  jr T,0xf0f75a
+	jr	DispatchTable_F0F708_Nop4	; F0F748  jr T,0xf0f75a
 
 ; --------------------------------------------------------------------------
 ; sub_F0F74A
@@ -29947,12 +29946,12 @@ sub_F0F720:
 sub_F0F74A:
 	ld	c, (10416:16)	; F0F74A  ld C,(0x28b0)
 	and	c, 1	; F0F74E  and C,0x01
-	jr	z, sub_F0F75A	; F0F751  jr Z,0xf0f75a
+	jr	z, DispatchTable_F0F708_Nop4	; F0F751  jr Z,0xf0f75a
 	calr	sub_F10CC4	; F0F753  calr 0xf10cc4
 	m_set 0, MD16, 0x2791	; F0F756  set 0,(0x2791)
 
 ; --------------------------------------------------------------------------
-; sub_F0F75A
+; DispatchTable_F0F708_Nop4
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -29963,10 +29962,10 @@ sub_F0F74A:
 ;                   kind and their targets are emitted as data.  0xF0F75A is
 ;                   an instruction boundary of this transcription, re-
 ;                   asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F0F708_Nop4 after what reaches it
+;          (was sub_F0F75A; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F0F75A:
+DispatchTable_F0F708_Nop4:
 	ret	; F0F75A  ret
 
 ; --------------------------------------------------------------------------
@@ -87437,12 +87436,12 @@ T_F40014:	jp sub_F82028  ; -> prom_a 0x02028
 ; Evidence: slot 0xF40018 is `jp 0xF823AC`; prom_a 0xF823AC carries the label
 ;           Queue2C00_DrainPassAB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Queue2C00_DrainPassAB:	jp Queue2C00_DrainPassAB  ; F40018 (was T_F40018) -> prom_a 0x023AC   x16
-T_F4001C:	jp sub_F8262E  ; -> prom_a 0x0262E
+T_F4001C:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 ; Evidence: slot 0xF40020 is `jp 0xF825C7`; prom_a 0xF825C7 carries the label
 ;           Ring601850_ServiceIfNotEmpty (graded CONTENT).  DERIVATIVE name.
 T_Ring601850_ServiceIfNotEmpty:	jp Ring601850_ServiceIfNotEmpty  ; F40020 (was T_F40020) -> prom_a 0x025C7
 T_F40024:	jp sub_F82557  ; -> prom_a 0x02557   x2
-T_F40028:	jp sub_F8262E  ; -> prom_a 0x0262E
+T_F40028:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 T_F4002C:	jp sub_F82630  ; -> prom_a 0x02630
 T_F40030:	jp sub_F82634  ; -> prom_a 0x02634
 T_F40034:	jp sub_F82638  ; -> prom_a 0x02638   x2
@@ -87450,13 +87449,13 @@ T_F40034:	jp sub_F82638  ; -> prom_a 0x02638   x2
 ;           Queue2C00_DrainPassB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Queue2C00_DrainPassB:	jp Queue2C00_DrainPassB  ; F40038 (was T_F40038) -> prom_a 0x023C8   x21
 T_F4003C:	jp sub_F82407  ; -> prom_a 0x02407
-T_F40040:	jp sub_F8262E  ; -> prom_a 0x0262E
-T_F40044:	jp sub_F8262E  ; -> prom_a 0x0262E
-T_F40048:	jp sub_F8262E  ; -> prom_a 0x0262E
-T_F4004C:	jp sub_F8262E  ; -> prom_a 0x0262E
-T_F40050:	jp sub_F8262E  ; -> prom_a 0x0262E
-T_F40054:	jp sub_F8262E  ; -> prom_a 0x0262E
-T_F40058:	jp sub_F8262E  ; -> prom_a 0x0262E
+T_F40040:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
+T_F40044:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
+T_F40048:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
+T_F4004C:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
+T_F40050:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
+T_F40054:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
+T_F40058:	jp T_F4001C_Nop  ; -> prom_a 0x0262E
 T_F4005C:	jp sub_F827C8  ; -> prom_a 0x027C8
 	.fill 0x40, 1, 0x0E  ; 0xF40060: 64 x ret
 ; --- the SWI7 pair.  prom_a's vector table sends SWI7 (0xFFFF1C) here, not to a
@@ -87477,65 +87476,65 @@ T_SWI7_ServiceCall_Dispatch:	jp SWI7_ServiceCall_Dispatch  ; F400A4 (was T_F400A
 T_Paint_GateArrayCheck:	jp Paint_GateArrayCheck  ; F400D0 (was T_F400D0) -> prom_a 0x15734
 T_F400D4:	jp ScreenLeave_GateArrayCheck  ; -> prom_a 0x15765
 T_F400D8:	jp ScreenButton_GateArrayCheck  ; -> prom_a 0x15766
-T_F400DC:	jp sub_F95767  ; -> prom_a 0x15767
+T_F400DC:	jp T_F400DC_Nop  ; -> prom_a 0x15767
 ; Evidence: slot 0xF400E0 is `jp 0xF95768`; prom_a 0xF95768 carries the label
 ;           Paint_PanelCpuCheck (graded CONTENT).  DERIVATIVE name.
 T_Paint_PanelCpuCheck:	jp Paint_PanelCpuCheck  ; F400E0 (was T_F400E0) -> prom_a 0x15768
 T_F400E4:	jp ScreenLeave_PanelCpuCheck  ; -> prom_a 0x15795
 T_F400E8:	jp ScreenButton_PanelCpuCheck  ; -> prom_a 0x15796
-T_F400EC:	jp sub_F95797  ; -> prom_a 0x15797
+T_F400EC:	jp T_F400EC_Nop  ; -> prom_a 0x15797
 ; Evidence: slot 0xF400F0 is `jp 0xF95798`; prom_a 0xF95798 carries the label
 ;           Paint_SineWaveCheckMode (graded CONTENT).  DERIVATIVE name.
 T_Paint_SineWaveCheckMode:	jp Paint_SineWaveCheckMode  ; F400F0 (was T_F400F0) -> prom_a 0x15798
 T_F400F4:	jp ScreenLeave_SineWaveCheckMode  ; -> prom_a 0x15890
 T_F400F8:	jp ScreenButton_SineWaveCheckMode  ; -> prom_a 0x15891
-T_F400FC:	jp sub_F9598F  ; -> prom_a 0x1598F
+T_F400FC:	jp T_F400FC_Nop  ; -> prom_a 0x1598F
 ; Evidence: slot 0xF40100 is `jp 0xF95990`; prom_a 0xF95990 carries the label
 ;           Paint_PanelSwLedCheck (graded CONTENT).  DERIVATIVE name.
 T_Paint_PanelSwLedCheck:	jp Paint_PanelSwLedCheck  ; F40100 (was T_F40100) -> prom_a 0x15990
 T_F40104:	jp ScreenLeave_PanelSwLedCheck  ; -> prom_a 0x159BD
 T_F40108:	jp ScreenButton_PanelSwLedCheck  ; -> prom_a 0x159BE
-T_F4010C:	jp sub_F959BF  ; -> prom_a 0x159BF
-T_F40110:	jp sub_F959C0  ; -> prom_a 0x159C0
-T_F40114:	jp sub_F959C1  ; -> prom_a 0x159C1
-T_F40118:	jp sub_F959C2  ; -> prom_a 0x159C2
-T_F4011C:	jp sub_F959C3  ; -> prom_a 0x159C3
-T_F40120:	jp sub_F959C4  ; -> prom_a 0x159C4
-T_F40124:	jp sub_F959C5  ; -> prom_a 0x159C5
-T_F40128:	jp sub_F959C6  ; -> prom_a 0x159C6
-T_F4012C:	jp sub_F959C7  ; -> prom_a 0x159C7
+T_F4010C:	jp T_F4010C_Nop  ; -> prom_a 0x159BF
+T_F40110:	jp T_F40110_Nop  ; -> prom_a 0x159C0
+T_F40114:	jp T_F40114_Nop  ; -> prom_a 0x159C1
+T_F40118:	jp T_F40118_Nop  ; -> prom_a 0x159C2
+T_F4011C:	jp T_F4011C_Nop  ; -> prom_a 0x159C3
+T_F40120:	jp T_F40120_Nop  ; -> prom_a 0x159C4
+T_F40124:	jp T_F40124_Nop  ; -> prom_a 0x159C5
+T_F40128:	jp T_F40128_Nop  ; -> prom_a 0x159C6
+T_F4012C:	jp T_F4012C_Nop  ; -> prom_a 0x159C7
 T_F40130:	jp sub_F959C8  ; -> prom_a 0x159C8
-T_F40134:	jp sub_F959E1  ; -> prom_a 0x159E1
+T_F40134:	jp T_F40134_Nop  ; -> prom_a 0x159E1
 T_F40138:	jp sub_F959E2  ; -> prom_a 0x159E2
-T_F4013C:	jp sub_F95C14  ; -> prom_a 0x15C14
+T_F4013C:	jp T_F4013C_Nop  ; -> prom_a 0x15C14
 T_F40140:	.long 0x00F94C00	; ptr -> 0xF94C00 (prom_a 0x14C00)
 T_F40144:	jp sub_F95137  ; -> prom_a 0x15137   x1
 T_F40148:	jp sub_F952FC  ; -> prom_a 0x152FC   x1
 T_F4014C:	jp sub_F95444  ; -> prom_a 0x15444   x1
-T_F40150:	jp sub_F95646  ; -> prom_a 0x15646
-T_F40154:	jp sub_F95647  ; -> prom_a 0x15647
+T_F40150:	jp T_F40150_Nop  ; -> prom_a 0x15646
+T_F40154:	jp T_F40154_Nop  ; -> prom_a 0x15647
 T_F40158:	jp sub_F95648  ; -> prom_a 0x15648
-T_F4015C:	jp sub_F95659  ; -> prom_a 0x15659
+T_F4015C:	jp T_F4015C_Nop  ; -> prom_a 0x15659
 T_F40160:	jp sub_F9565A  ; -> prom_a 0x1565A
-T_F40164:	jp sub_F95669  ; -> prom_a 0x15669
+T_F40164:	jp T_F40164_Nop  ; -> prom_a 0x15669
 T_F40168:	jp sub_F9566A  ; -> prom_a 0x1566A
-T_F4016C:	jp sub_F95731  ; -> prom_a 0x15731
-T_F40170:	jp sub_F95732  ; -> prom_a 0x15732
-T_F40174:	jp sub_F95733  ; -> prom_a 0x15733
+T_F4016C:	jp T_F4016C_Nop  ; -> prom_a 0x15731
+T_F40170:	jp T_F40170_Nop  ; -> prom_a 0x15732
+T_F40174:	jp T_F40174_Nop  ; -> prom_a 0x15733
 	.fill 0x58, 1, 0x0E  ; 0xF40178: 88 x ret
 T_F401D0:	.long 0x00F96000	; ptr -> 0xF96000 (prom_a 0x16000)
-T_F401D4:	jp sub_F96018  ; -> prom_a 0x16018   x6
+T_F401D4:	jp T_F401D4_Nop  ; -> prom_a 0x16018   x6
 T_F401D8:	jp sub_F96019  ; -> prom_a 0x16019   x5
 T_F401DC:	jp sub_F9601D  ; -> prom_a 0x1601D   x3
-T_F401E0:	jp sub_F96257  ; -> prom_a 0x16257
-T_F401E4:	jp sub_F96258  ; -> prom_a 0x16258
-T_F401E8:	jp sub_F96021  ; -> prom_a 0x16021   x1
-T_F401EC:	jp sub_F96022  ; -> prom_a 0x16022   x1
-T_F401F0:	jp sub_F96023  ; -> prom_a 0x16023
+T_F401E0:	jp T_F401E0_Nop  ; -> prom_a 0x16257
+T_F401E4:	jp T_F401E4_Nop  ; -> prom_a 0x16258
+T_F401E8:	jp T_F401E8_Nop  ; -> prom_a 0x16021   x1
+T_F401EC:	jp T_F401EC_Nop  ; -> prom_a 0x16022   x1
+T_F401F0:	jp T_F401F0_Nop  ; -> prom_a 0x16023
 	.fill 0x1C, 1, 0x0E  ; 0xF401F4: 28 x ret
 T_F40210:	.long 0x00F96400	; ptr -> 0xF96400 (prom_a 0x16400)
 T_F40214:	jp sub_F96418  ; -> prom_a 0x16418   x2
-T_F40218:	jp sub_F9641D  ; -> prom_a 0x1641D
+T_F40218:	jp T_F40218_Nop  ; -> prom_a 0x1641D
 T_F4021C:	jp sub_F9641E  ; -> prom_a 0x1641E   x5
 T_F40220:	jp sub_F96423  ; -> prom_a 0x16423   x2
 T_F40224:	jp sub_F96428  ; -> prom_a 0x16428   x8
@@ -87560,7 +87559,7 @@ T_F402A8:	jp sub_FE8116  ; -> prom_a 0x68116
 T_Paint_Sequencer:	jp Paint_Sequencer  ; F402AC (was T_F402AC) -> prom_a 0x6812C
 T_F402B0:	jp ScreenLeave_Sequencer  ; -> prom_a 0x68165
 T_F402B4:	jp ScreenButton_Sequencer  ; -> prom_a 0x68060
-T_F402B8:	jp sub_FE805F  ; -> prom_a 0x6805F
+T_F402B8:	jp T_F402B8_Nop  ; -> prom_a 0x6805F
 ; Evidence: slot 0xF402BC is `jp 0xFE836F`; prom_a 0xFE836F carries the label
 ;           ShowScreen_NoteEditPartSelect (graded CONTENT).  DERIVATIVE name.
 T_ShowScreen_NoteEditPartSelect:	jp ShowScreen_NoteEditPartSelect  ; F402BC (was T_F402BC) -> prom_a 0x6836F
@@ -87570,7 +87569,7 @@ T_F402C8:	jp ScreenLeave_NoteEditPartSelect  ; -> prom_a 0x68564
 T_F402CC:	jp sub_FE88AA  ; -> prom_a 0x688AA
 T_F402D0:	jp sub_FE8C3A  ; -> prom_a 0x68C3A
 T_F402D4:	jp sub_FE9A33  ; -> prom_a 0x69A33
-T_F402D8:	jp sub_FE8CB3  ; -> prom_a 0x68CB3
+T_F402D8:	jp T_F402D8_Nop  ; -> prom_a 0x68CB3
 ; Evidence: slot 0xF402DC is `jp 0xFE83A3`; prom_a 0xFE83A3 carries the label
 ;           ShowScreen_DrumEditPartSelect (graded CONTENT).  DERIVATIVE name.
 T_ShowScreen_DrumEditPartSelect:	jp ShowScreen_DrumEditPartSelect  ; F402DC (was T_F402DC) -> prom_a 0x683A3
@@ -87596,7 +87595,7 @@ T_Ctrl_Nop_Ret:	jp Ctrl_Nop_Ret  ; F405F4 (was T_F405F4) -> prom_a 0x09804
 	.fill 0x18, 1, 0x0E  ; 0xF405F8: 24 x ret
 T_F40610:	.long sub_F8A000	; ptr -> 0xF8A000 (prom_a 0x0A000)
 T_F40614:	jp sub_F8A023  ; -> prom_a 0x0A023   x1
-T_F40618:	jp sub_F8A027  ; -> prom_a 0x0A027
+T_F40618:	jp T_F40618_Nop  ; -> prom_a 0x0A027
 	.fill 0x14, 1, 0x0E  ; 0xF4061C: 20 x ret
 T_F40630:	.long 0x00F8A800	; ptr -> 0xF8A800 (prom_a 0x0A800)
 T_F40634:	jp sub_F8A81D  ; -> prom_a 0x0A81D   x1
@@ -87604,16 +87603,16 @@ T_F40634:	jp sub_F8A81D  ; -> prom_a 0x0A81D   x1
 T_F40660:	.long sub_F8C000	; ptr -> 0xF8C000 (prom_a 0x0C000)
 T_F40664:	jp sub_F8C18B  ; -> prom_a 0x0C18B   x2
 T_F40668:	jp sub_F8C338  ; -> prom_a 0x0C338   x1
-T_F4066C:	jp sub_F8C8C2  ; -> prom_a 0x0C8C2
+T_F4066C:	jp T_F4066C_Nop  ; -> prom_a 0x0C8C2
 T_F40670:	jp sub_F8C846  ; -> prom_a 0x0C846   x2
 T_F40674:	jp sub_F8C8C3  ; -> prom_a 0x0C8C3   x1
 T_F40678:	jp sub_F8C842  ; -> prom_a 0x0C842   x2
 T_F4067C:	jp sub_F8C032  ; -> prom_a 0x0C032
 T_F40680:	jp sub_F8C071  ; -> prom_a 0x0C071
-T_F40684:	jp sub_F8C095  ; -> prom_a 0x0C095
-T_F40688:	jp sub_F8C096  ; -> prom_a 0x0C096
+T_F40684:	jp T_F40684_Nop  ; -> prom_a 0x0C095
+T_F40688:	jp T_F40688_Nop  ; -> prom_a 0x0C096
 T_F4068C:	jp sub_F8C097  ; -> prom_a 0x0C097
-T_F40690:	jp sub_F8C0B3  ; -> prom_a 0x0C0B3
+T_F40690:	jp T_F40690_Nop  ; -> prom_a 0x0C0B3
 T_F40694:	jp sub_F8C0B4  ; -> prom_a 0x0C0B4
 T_F40698:	jp sub_F8C04E  ; -> prom_a 0x0C04E
 T_F4069C:	jp sub_F8C0D0  ; -> prom_a 0x0C0D0
@@ -87685,9 +87684,9 @@ T_F40790:	jp sub_FAA43A  ; -> prom_a 0x2A43A   x6
 T_F40794:	jp sub_FAA742  ; -> prom_a 0x2A742   x13
 T_F40798:	jp sub_FABFE2  ; -> prom_a 0x2BFE2   x1
 T_F4079C:	jp sub_FAB643  ; -> prom_a 0x2B643
-T_F407A0:	jp sub_FAB5EA  ; -> prom_a 0x2B5EA   x4
-T_F407A4:	jp sub_FAA7AB  ; -> prom_a 0x2A7AB   x6
-T_F407A8:	jp sub_FAB5E9  ; -> prom_a 0x2B5E9
+T_F407A0:	jp T_F407A0_Nop  ; -> prom_a 0x2B5EA   x4
+T_F407A4:	jp T_F407A4_Nop  ; -> prom_a 0x2A7AB   x6
+T_F407A8:	jp T_F407A8_Nop  ; -> prom_a 0x2B5E9
 T_F407AC:	jp sub_FAAB28  ; -> prom_a 0x2AB28   x2
 T_F407B0:	jp sub_FAAAB5  ; -> prom_a 0x2AAB5   x2
 ; Evidence: slot 0xF407B4 is `jp 0xFAA4A0`; prom_a 0xFAA4A0 carries the label
@@ -87696,10 +87695,10 @@ T_Queue2C00_PublishStagedIfPending:	jp Queue2C00_PublishStagedIfPending  ; F407B
 ; Evidence: slot 0xF407B8 is `jp 0xFAA550`; prom_a 0xFAA550 carries the label
 ;           Queue2C00_PublishStagedDrainPassB, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_Queue2C00_PublishStagedDrainPassB:	jp Queue2C00_PublishStagedDrainPassB  ; F407B8 (was T_F407B8) -> prom_a 0x2A550   x11
-T_F407BC:	jp sub_FAA5A4  ; -> prom_a 0x2A5A4
-T_F407C0:	jp sub_FAA5A5  ; -> prom_a 0x2A5A5
-T_F407C4:	jp sub_FAB657  ; -> prom_a 0x2B657
-T_F407C8:	jp sub_FAA5A6  ; -> prom_a 0x2A5A6
+T_F407BC:	jp T_F407BC_Nop  ; -> prom_a 0x2A5A4
+T_F407C0:	jp T_F407C0_Nop  ; -> prom_a 0x2A5A5
+T_F407C4:	jp T_F407C4_Nop  ; -> prom_a 0x2B657
+T_F407C8:	jp T_F407C8_Nop  ; -> prom_a 0x2A5A6
 ; Evidence: slot 0xF407CC is `jp 0xFAA5FE`; prom_a 0xFAA5FE carries the label
 ;           ParamChange_NotifyClearSource, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_ParamChange_NotifyClearSource:	jp ParamChange_NotifyClearSource  ; F407CC (was T_F407CC) -> prom_a 0x2A5FE   x26
@@ -87713,11 +87712,11 @@ T_ParamRecord_WriteFieldAndStage:	jp ParamRecord_WriteFieldAndStage  ; F407D4 (w
 ;           ParamRecord_WriteFieldAndStage_Copy, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_ParamRecord_WriteFieldAndStage_Copy:	jp ParamRecord_WriteFieldAndStage_Copy  ; F407D8 (was T_F407D8) -> prom_a 0x2A66A   x2
 T_F407DC:	jp sub_FAA6B1  ; -> prom_a 0x2A6B1
-T_F407E0:	jp sub_FAA71C  ; -> prom_a 0x2A71C
-T_F407E4:	jp sub_FAA71E  ; -> prom_a 0x2A71E
-T_F407E8:	jp sub_FAA71D  ; -> prom_a 0x2A71D   x1
+T_F407E0:	jp T_F407E0_Nop  ; -> prom_a 0x2A71C
+T_F407E4:	jp T_F407E4_Nop  ; -> prom_a 0x2A71E
+T_F407E8:	jp T_F407E8_Nop  ; -> prom_a 0x2A71D   x1
 T_F407EC:	jp sub_FAA71F  ; -> prom_a 0x2A71F   x3
-T_F407F0:	jp sub_FABBD6  ; -> prom_a 0x2BBD6
+T_F407F0:	jp T_F407F0_Nop  ; -> prom_a 0x2BBD6
 T_F407F4:	jp sub_FAB658  ; -> prom_a 0x2B658   x6
 T_F407F8:	jp sub_FAB6D7  ; -> prom_a 0x2B6D7
 T_F407FC:	jp sub_FAA45C  ; -> prom_a 0x2A45C   x1
@@ -87756,7 +87755,7 @@ T_F408E8:	jp sub_FB20CE  ; -> prom_a 0x320CE   x1
 T_F408EC:	jp sub_FB3355  ; -> prom_a 0x33355   x2
 T_F408F0:	jp sub_FB590A  ; -> prom_a 0x3590A
 T_F408F4:	jp sub_FB5EE9  ; -> prom_a 0x35EE9
-T_F408F8:	jp sub_FB2022  ; -> prom_a 0x32022
+T_F408F8:	jp T_F408F8_Nop  ; -> prom_a 0x32022
 T_F408FC:	jp sub_FB50EE  ; -> prom_a 0x350EE
 T_F40900:	jp sub_FB4B7D  ; -> prom_a 0x34B7D   x1
 T_F40904:	jp sub_FB21CB  ; -> prom_a 0x321CB   x1
@@ -87782,7 +87781,7 @@ T_F409A0:	jp sub_F0001A_Join  ; -> prom_b 0x0001B
 T_F409A4:	jp sub_F00293  ; -> prom_b 0x00293   x1
 T_F409A8:	jp sub_F002C9  ; -> prom_b 0x002C9   x2
 T_F409AC:	jp sub_F000B9  ; -> prom_b 0x000B9   x29
-T_F409B0:	jp sub_F0001A  ; -> prom_b 0x0001A
+T_F409B0:	jp T_F409B0_Nop  ; -> prom_b 0x0001A
 T_F409B4:	jp sub_F001C9  ; -> prom_b 0x001C9   x1
 	.fill 0x8, 1, 0x0E  ; 0xF409B8: 8 x ret
 T_F409C0:	.long T_F44000	; ptr -> 0xF44000 (prom_b 0x44000)
@@ -87908,8 +87907,8 @@ T_F40C94:	jp sub_F4D026  ; -> prom_b 0x4D026   x2
 T_F40C98:	jp sub_F4D651  ; -> prom_b 0x4D651
 	.fill 0x14, 1, 0x0E  ; 0xF40C9C: 20 x ret
 T_F40CB0:	jp sub_F4E000  ; -> prom_b 0x4E000
-T_F40CB4:	jp sub_F4E524  ; -> prom_b 0x4E524   x14
-T_F40CB8:	jp sub_F4E591  ; -> prom_b 0x4E591
+T_F40CB4:	jp T_F40CB4_Nop  ; -> prom_b 0x4E524   x14
+T_F40CB8:	jp T_F40CB8_Nop  ; -> prom_b 0x4E591
 T_F40CBC:	jp sub_F4E525  ; -> prom_b 0x4E525
 T_F40CC0:	jp sub_F4E1B2  ; -> prom_b 0x4E1B2   x1
 T_F40CC4:	jp sub_F4E56F  ; -> prom_b 0x4E56F   x24
@@ -88096,32 +88095,32 @@ T_PanelEvent_NoOp_T40F94:	jp PanelEvent_NoOp_T40F94  ; F40F94 (was T_F40F94) -> 
 	.fill 0x18, 1, 0x0E  ; 0xF40F98: 24 x ret
 T_F40FB0:	.long Msg0716_InitAllRecords_Entry	; ptr -> 0xFC0000 (prom_a 0x40000)
 T_F40FB4:	jp sub_FC0E56  ; -> prom_a 0x40E56
-T_F40FB8:	jp sub_FC0FBD  ; -> prom_a 0x40FBD
-T_F40FBC:	jp sub_FC0FBE  ; -> prom_a 0x40FBE
+T_F40FB8:	jp T_F40FB8_Nop  ; -> prom_a 0x40FBD
+T_F40FBC:	jp T_F40FBC_Nop  ; -> prom_a 0x40FBE
 	ret  ; 0xF40FC0: 1 x ret
 	.fill 0x3, 1, 0x00  ; 0xF40FC1: 3 x nop
 	ret  ; 0xF40FC4: 1 x ret
 	.fill 0x3, 1, 0x00  ; 0xF40FC5: 3 x nop
-T_F40FC8:	jp sub_FC1CD1  ; -> prom_a 0x41CD1
+T_F40FC8:	jp T_F40FC8_Nop  ; -> prom_a 0x41CD1
 T_F40FCC:	jp sub_FC0E6B  ; -> prom_a 0x40E6B
 T_F40FD0:	jp sub_FC10DD  ; -> prom_a 0x410DD   x2
 T_F40FD4:	jp sub_FC10FA  ; -> prom_a 0x410FA
-T_F40FD8:	jp sub_FC19DC  ; -> prom_a 0x419DC
+T_F40FD8:	jp T_F40FD8_Nop  ; -> prom_a 0x419DC
 T_F40FDC:	jp sub_FC18AA  ; -> prom_a 0x418AA   x1
-T_F40FE0:	jp sub_FC10DB  ; -> prom_a 0x410DB
-T_F40FE4:	jp sub_FC10DA  ; -> prom_a 0x410DA
+T_F40FE0:	jp T_F40FE0_Nop  ; -> prom_a 0x410DB
+T_F40FE4:	jp T_F40FE4_Nop  ; -> prom_a 0x410DA
 T_F40FE8:	jp sub_FC2213  ; -> prom_a 0x42213
 T_F40FEC:	jp sub_FC0206  ; -> prom_a 0x40206   x3
 T_F40FF0:	jp sub_FC01F3  ; -> prom_a 0x401F3   x2
-T_F40FF4:	jp sub_FC018D  ; -> prom_a 0x4018D   x1
-T_F40FF8:	jp sub_FC024F  ; -> prom_a 0x4024F
+T_F40FF4:	jp T_F40FF4_Nop  ; -> prom_a 0x4018D   x1
+T_F40FF8:	jp T_F40FF8_Nop  ; -> prom_a 0x4024F
 T_F40FFC:	jp sub_FC22BA  ; -> prom_a 0x422BA   x3
 T_F41000:	jp sub_FC2403  ; -> prom_a 0x42403   x4
 T_F41004:	jp sub_FC24EB  ; -> prom_a 0x424EB   x4
 T_F41008:	jp sub_FC2526  ; -> prom_a 0x42526   x7
 T_F4100C:	jp sub_FC188F  ; -> prom_a 0x4188F   x1
 T_F41010:	jp sub_FC1B81  ; -> prom_a 0x41B81   x9
-T_F41014:	jp sub_FC1CD1  ; -> prom_a 0x41CD1
+T_F41014:	jp T_F40FC8_Nop  ; -> prom_a 0x41CD1
 T_F41018:	jp sub_FC2035  ; -> prom_a 0x42035   x3
 ; Evidence: slot 0xF4101C is `jp 0xFC2222`; prom_a 0xFC2222 carries the label
 ;           SoundGroup_MaxMemberIndex_Get (graded CONTENT).  DERIVATIVE name.
@@ -88178,42 +88177,42 @@ T_F410E0:	jp sub_FC0410  ; -> prom_a 0x40410
 T_F410E4:	jp sub_FC0420  ; -> prom_a 0x40420
 T_F410E8:	jp sub_FC0430  ; -> prom_a 0x40430
 T_F410EC:	jp sub_FC0440  ; -> prom_a 0x40440
-T_F410F0:	jp sub_FC0651  ; -> prom_a 0x40651
-T_F410F4:	jp sub_FC0653  ; -> prom_a 0x40653
-T_F410F8:	jp sub_FC0654  ; -> prom_a 0x40654
-T_F410FC:	jp sub_FC0655  ; -> prom_a 0x40655
-T_F41100:	jp sub_FC0656  ; -> prom_a 0x40656
-T_F41104:	jp sub_FC0657  ; -> prom_a 0x40657
-T_F41108:	jp sub_FC0658  ; -> prom_a 0x40658
-T_F4110C:	jp sub_FC0659  ; -> prom_a 0x40659
+T_F410F0:	jp T_F410F0_Nop  ; -> prom_a 0x40651
+T_F410F4:	jp T_F410F4_Nop  ; -> prom_a 0x40653
+T_F410F8:	jp T_F410F8_Nop  ; -> prom_a 0x40654
+T_F410FC:	jp T_F410FC_Nop  ; -> prom_a 0x40655
+T_F41100:	jp T_F41100_Nop  ; -> prom_a 0x40656
+T_F41104:	jp T_F41104_Nop  ; -> prom_a 0x40657
+T_F41108:	jp T_F41108_Nop  ; -> prom_a 0x40658
+T_F4110C:	jp T_F4110C_Nop  ; -> prom_a 0x40659
 T_F41110:	jp sub_FC065A  ; -> prom_a 0x4065A
 T_F41114:	jp sub_FC0663  ; -> prom_a 0x40663
 T_F41118:	jp sub_FC066C  ; -> prom_a 0x4066C
 T_F4111C:	jp sub_FC0675  ; -> prom_a 0x40675
-T_F41120:	jp sub_FC067E  ; -> prom_a 0x4067E
-T_F41124:	jp sub_FC067F  ; -> prom_a 0x4067F
-T_F41128:	jp sub_FC0680  ; -> prom_a 0x40680
-T_F4112C:	jp sub_FC0681  ; -> prom_a 0x40681
-T_F41130:	jp sub_FC0682  ; -> prom_a 0x40682
-T_F41134:	jp sub_FC0683  ; -> prom_a 0x40683
-T_F41138:	jp sub_FC0684  ; -> prom_a 0x40684
-T_F4113C:	jp sub_FC0685  ; -> prom_a 0x40685
+T_F41120:	jp T_F41120_Nop  ; -> prom_a 0x4067E
+T_F41124:	jp T_F41124_Nop  ; -> prom_a 0x4067F
+T_F41128:	jp T_F41128_Nop  ; -> prom_a 0x40680
+T_F4112C:	jp T_F4112C_Nop  ; -> prom_a 0x40681
+T_F41130:	jp T_F41130_Nop  ; -> prom_a 0x40682
+T_F41134:	jp T_F41134_Nop  ; -> prom_a 0x40683
+T_F41138:	jp T_F41138_Nop  ; -> prom_a 0x40684
+T_F4113C:	jp T_F4113C_Nop  ; -> prom_a 0x40685
 T_F41140:	jp sub_FC0686  ; -> prom_a 0x40686
-T_F41144:	jp sub_FC0691  ; -> prom_a 0x40691
+T_F41144:	jp T_F41144_Nop  ; -> prom_a 0x40691
 T_F41148:	jp sub_FC0692  ; -> prom_a 0x40692
-T_F4114C:	jp sub_FC069D  ; -> prom_a 0x4069D
-T_F41150:	jp sub_FC069E  ; -> prom_a 0x4069E
+T_F4114C:	jp T_F4114C_Nop  ; -> prom_a 0x4069D
+T_F41150:	jp T_F41150_Nop  ; -> prom_a 0x4069E
 T_F41154:	jp sub_FC069F  ; -> prom_a 0x4069F
 T_F41158:	jp sub_FC06AA  ; -> prom_a 0x406AA
 T_F4115C:	jp sub_FC06B5  ; -> prom_a 0x406B5
 T_F41160:	jp sub_FC06C0  ; -> prom_a 0x406C0
-T_F41164:	jp sub_FC06CB  ; -> prom_a 0x406CB
+T_F41164:	jp T_F41164_Nop  ; -> prom_a 0x406CB
 T_F41168:	jp sub_FC06CC  ; -> prom_a 0x406CC
 T_F4116C:	jp sub_FC06D0  ; -> prom_a 0x406D0
-T_F41170:	jp sub_FC06DB  ; -> prom_a 0x406DB
-T_F41174:	jp sub_FC06DC  ; -> prom_a 0x406DC
-T_F41178:	jp sub_FC06DD  ; -> prom_a 0x406DD
-T_F4117C:	jp sub_FC06DE  ; -> prom_a 0x406DE
+T_F41170:	jp T_F41170_Nop  ; -> prom_a 0x406DB
+T_F41174:	jp T_F41174_Nop  ; -> prom_a 0x406DC
+T_F41178:	jp T_F41178_Nop  ; -> prom_a 0x406DD
+T_F4117C:	jp T_F4117C_Nop  ; -> prom_a 0x406DE
 T_F41180:	jp sub_FC06DF  ; -> prom_a 0x406DF
 T_F41184:	jp 0xFC0427  ; -> prom_a 0x40427
 T_F41188:	jp Msg0716_DispatchIndex_Entry  ; -> prom_a 0x4043C
@@ -88230,15 +88229,15 @@ T_F411B8:	jp sub_FC54C6  ; -> prom_a 0x454C6   x43
 T_F411BC:	jp sub_FC5518  ; -> prom_a 0x45518   x15
 T_F411C0:	jp sub_FC55CA  ; -> prom_a 0x455CA
 T_F411C4:	jp sub_FC57F0  ; -> prom_a 0x457F0
-T_F411C8:	jp sub_FC596D  ; -> prom_a 0x4596D
-T_F411CC:	jp sub_FC596E  ; -> prom_a 0x4596E
+T_F411C8:	jp T_F411C8_Nop  ; -> prom_a 0x4596D
+T_F411CC:	jp T_F411CC_Nop  ; -> prom_a 0x4596E
 T_F411D0:	jp sub_FC596F  ; -> prom_a 0x4596F
 T_F411D4:	jp sub_FC59AC  ; -> prom_a 0x459AC
-T_F411D8:	jp sub_FC5ACA  ; -> prom_a 0x45ACA
-T_F411DC:	jp sub_FC5ACB  ; -> prom_a 0x45ACB
+T_F411D8:	jp T_F411D8_Nop  ; -> prom_a 0x45ACA
+T_F411DC:	jp T_F411DC_Nop  ; -> prom_a 0x45ACB
 T_F411E0:	jp sub_FC5ACC  ; -> prom_a 0x45ACC
-T_F411E4:	jp sub_FC5B25  ; -> prom_a 0x45B25
-T_F411E8:	jp sub_FC596C  ; -> prom_a 0x4596C
+T_F411E4:	jp T_F411E4_Nop  ; -> prom_a 0x45B25
+T_F411E8:	jp T_F411E8_Nop  ; -> prom_a 0x4596C
 T_F411EC:	jp sub_FC5566  ; -> prom_a 0x45566   x7
 	.fill 0x40, 1, 0x0E  ; 0xF411F0: 64 x ret
 ; Evidence: slot 0xF41230 is `jp 0xF8E320`; prom_a 0xF8E320 carries the label
@@ -88277,11 +88276,11 @@ T_F413D4:	jp sub_FC8D49  ; -> prom_a 0x48D49   x2
 T_F413D8:	jp sub_FCB2F0  ; -> prom_a 0x4B2F0   x1
 T_F413DC:	jp sub_FCAD7C  ; -> prom_a 0x4AD7C   x2
 T_F413E0:	jp sub_FC8E7B  ; -> prom_a 0x48E7B   x2
-T_F413E4:	jp sub_FC80DC  ; -> prom_a 0x480DC   x3
-T_F413E8:	jp sub_FC80DD  ; -> prom_a 0x480DD   x1
-T_F413EC:	jp sub_FC80DE  ; -> prom_a 0x480DE
-T_F413F0:	jp sub_FC80DF  ; -> prom_a 0x480DF
-T_F413F4:	jp sub_FC80E0  ; -> prom_a 0x480E0
+T_F413E4:	jp T_F413E4_Nop  ; -> prom_a 0x480DC   x3
+T_F413E8:	jp T_F413E8_Nop  ; -> prom_a 0x480DD   x1
+T_F413EC:	jp T_F413EC_Nop  ; -> prom_a 0x480DE
+T_F413F0:	jp T_F413F0_Nop  ; -> prom_a 0x480DF
+T_F413F4:	jp T_F413F4_Nop  ; -> prom_a 0x480E0
 T_F413F8:	jp sub_FC8448  ; -> prom_a 0x48448   x1
 T_F413FC:	jp sub_FC8FD7  ; -> prom_a 0x48FD7   x8
 T_F41400:	jp sub_FC9016  ; -> prom_a 0x49016   x4
@@ -88294,9 +88293,9 @@ T_F414C0:	jp sub_F4CADA  ; -> prom_b 0x4CADA   x1
 T_F414C4:	jp sub_F4CA92  ; -> prom_b 0x4CA92   x1
 	.fill 0x38, 1, 0x0E  ; 0xF414C8: 56 x ret
 T_F41500:	jp 0xF90C00  ; -> prom_a 0x10C00
-T_F41504:	jp sub_F90C12  ; -> prom_a 0x10C12
+T_F41504:	jp T_F41504_Nop  ; -> prom_a 0x10C12
 T_F41508:	jp sub_F90C13  ; -> prom_a 0x10C13
-T_F4150C:	jp sub_F90C20  ; -> prom_a 0x10C20
+T_F4150C:	jp T_F4150C_Nop  ; -> prom_a 0x10C20
 T_F41510:	jp sub_F94078  ; -> prom_a 0x14078
 T_F41514:	jp sub_F9407C  ; -> prom_a 0x1407C
 T_F41518:	jp sub_F94080  ; -> prom_a 0x14080
@@ -88347,93 +88346,93 @@ T_F415C8:	jp sub_F9433A  ; -> prom_a 0x1433A   x10
 	.fill 0x34, 1, 0x0E  ; 0xF415CC: 52 x ret
 T_F41600:	jp sub_F99098  ; -> prom_a 0x19098   x13
 T_F41604:	jp sub_F99021  ; -> prom_a 0x19021
-T_F41608:	jp sub_F9904C  ; -> prom_a 0x1904C
+T_F41608:	jp T_F41608_Nop  ; -> prom_a 0x1904C
 T_F4160C:	jp sub_F9904D  ; -> prom_a 0x1904D
-T_F41610:	jp sub_F99097  ; -> prom_a 0x19097
+T_F41610:	jp T_F41610_Nop  ; -> prom_a 0x19097
 	.fill 0x2C, 1, 0x0E  ; 0xF41614: 44 x ret
 T_F41640:	jp sub_F99F04  ; -> prom_a 0x19F04
 T_F41644:	jp sub_F99F15  ; -> prom_a 0x19F15
 T_F41648:	jp sub_F99F1A  ; -> prom_a 0x19F1A
 T_F4164C:	jp sub_F99F1F  ; -> prom_a 0x19F1F
 T_F41650:	jp sub_F99F24  ; -> prom_a 0x19F24
-T_F41654:	jp sub_F99F5C  ; -> prom_a 0x19F5C
+T_F41654:	jp T_F41654_Nop  ; -> prom_a 0x19F5C
 T_F41658:	jp sub_F99F5E  ; -> prom_a 0x19F5E
-T_F4165C:	jp sub_F99F5D  ; -> prom_a 0x19F5D
-T_F41660:	jp sub_F99821  ; -> prom_a 0x19821
-T_F41664:	jp sub_F99821  ; -> prom_a 0x19821
-T_F41668:	jp sub_F99821  ; -> prom_a 0x19821
-T_F4166C:	jp sub_F99821  ; -> prom_a 0x19821
-T_F41670:	jp sub_F99825  ; -> prom_a 0x19825
-T_F41674:	jp sub_F99825  ; -> prom_a 0x19825
-T_F41678:	jp sub_F99825  ; -> prom_a 0x19825
-T_F4167C:	jp sub_F99825  ; -> prom_a 0x19825
-T_F41680:	jp sub_F99826  ; -> prom_a 0x19826
-T_F41684:	jp sub_F99826  ; -> prom_a 0x19826
-T_F41688:	jp sub_F99826  ; -> prom_a 0x19826
-T_F4168C:	jp sub_F99826  ; -> prom_a 0x19826
+T_F4165C:	jp T_F4165C_Nop  ; -> prom_a 0x19F5D
+T_F41660:	jp T_F41660_Nop  ; -> prom_a 0x19821
+T_F41664:	jp T_F41660_Nop  ; -> prom_a 0x19821
+T_F41668:	jp T_F41660_Nop  ; -> prom_a 0x19821
+T_F4166C:	jp T_F41660_Nop  ; -> prom_a 0x19821
+T_F41670:	jp T_F41670_Nop  ; -> prom_a 0x19825
+T_F41674:	jp T_F41670_Nop  ; -> prom_a 0x19825
+T_F41678:	jp T_F41670_Nop  ; -> prom_a 0x19825
+T_F4167C:	jp T_F41670_Nop  ; -> prom_a 0x19825
+T_F41680:	jp T_F41680_Nop  ; -> prom_a 0x19826
+T_F41684:	jp T_F41680_Nop  ; -> prom_a 0x19826
+T_F41688:	jp T_F41680_Nop  ; -> prom_a 0x19826
+T_F4168C:	jp T_F41680_Nop  ; -> prom_a 0x19826
 ; Evidence: slot 0xF41690 is `jp 0xF9A6C0`; prom_a 0xF9A6C0 carries the label
 ;           Paint_MidiRealtimeMessages (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiRealtimeMessages:	jp Paint_MidiRealtimeMessages  ; F41690 (was T_F41690) -> prom_a 0x1A6C0
 T_F41694:	jp ScreenLeave_MidiRealtimeMessages  ; -> prom_a 0x1A754
 T_F41698:	jp ScreenButton_MidiRealtimeMessages  ; -> prom_a 0x1A756
-T_F4169C:	jp sub_F9A755  ; -> prom_a 0x1A755
-T_F416A0:	jp sub_F99827  ; -> prom_a 0x19827
-T_F416A4:	jp sub_F99827  ; -> prom_a 0x19827
-T_F416A8:	jp sub_F99827  ; -> prom_a 0x19827
-T_F416AC:	jp sub_F99827  ; -> prom_a 0x19827
-T_F416B0:	jp sub_F99828  ; -> prom_a 0x19828
-T_F416B4:	jp sub_F99828  ; -> prom_a 0x19828
-T_F416B8:	jp sub_F99828  ; -> prom_a 0x19828
-T_F416BC:	jp sub_F99828  ; -> prom_a 0x19828
-T_F416C0:	jp sub_F9982B  ; -> prom_a 0x1982B
-T_F416C4:	jp sub_F9982B  ; -> prom_a 0x1982B
-T_F416C8:	jp sub_F9982B  ; -> prom_a 0x1982B
-T_F416CC:	jp sub_F9982B  ; -> prom_a 0x1982B
-T_F416D0:	jp sub_F9982C  ; -> prom_a 0x1982C
-T_F416D4:	jp sub_F9982C  ; -> prom_a 0x1982C
-T_F416D8:	jp sub_F9982C  ; -> prom_a 0x1982C
-T_F416DC:	jp sub_F9982C  ; -> prom_a 0x1982C
-T_F416E0:	jp sub_F99822  ; -> prom_a 0x19822
-T_F416E4:	jp sub_F99822  ; -> prom_a 0x19822
-T_F416E8:	jp sub_F99822  ; -> prom_a 0x19822
-T_F416EC:	jp sub_F99822  ; -> prom_a 0x19822
-T_F416F0:	jp sub_F99823  ; -> prom_a 0x19823
-T_F416F4:	jp sub_F99823  ; -> prom_a 0x19823
-T_F416F8:	jp sub_F99823  ; -> prom_a 0x19823
-T_F416FC:	jp sub_F99823  ; -> prom_a 0x19823
-T_F41700:	jp sub_F99824  ; -> prom_a 0x19824
-T_F41704:	jp sub_F99824  ; -> prom_a 0x19824
-T_F41708:	jp sub_F99824  ; -> prom_a 0x19824
-T_F4170C:	jp sub_F99824  ; -> prom_a 0x19824
+T_F4169C:	jp T_F4169C_Nop  ; -> prom_a 0x1A755
+T_F416A0:	jp T_F416A0_Nop  ; -> prom_a 0x19827
+T_F416A4:	jp T_F416A0_Nop  ; -> prom_a 0x19827
+T_F416A8:	jp T_F416A0_Nop  ; -> prom_a 0x19827
+T_F416AC:	jp T_F416A0_Nop  ; -> prom_a 0x19827
+T_F416B0:	jp T_F416B0_Nop  ; -> prom_a 0x19828
+T_F416B4:	jp T_F416B0_Nop  ; -> prom_a 0x19828
+T_F416B8:	jp T_F416B0_Nop  ; -> prom_a 0x19828
+T_F416BC:	jp T_F416B0_Nop  ; -> prom_a 0x19828
+T_F416C0:	jp T_F416C0_Nop  ; -> prom_a 0x1982B
+T_F416C4:	jp T_F416C0_Nop  ; -> prom_a 0x1982B
+T_F416C8:	jp T_F416C0_Nop  ; -> prom_a 0x1982B
+T_F416CC:	jp T_F416C0_Nop  ; -> prom_a 0x1982B
+T_F416D0:	jp T_F416D0_Nop  ; -> prom_a 0x1982C
+T_F416D4:	jp T_F416D0_Nop  ; -> prom_a 0x1982C
+T_F416D8:	jp T_F416D0_Nop  ; -> prom_a 0x1982C
+T_F416DC:	jp T_F416D0_Nop  ; -> prom_a 0x1982C
+T_F416E0:	jp T_F416E0_Nop  ; -> prom_a 0x19822
+T_F416E4:	jp T_F416E0_Nop  ; -> prom_a 0x19822
+T_F416E8:	jp T_F416E0_Nop  ; -> prom_a 0x19822
+T_F416EC:	jp T_F416E0_Nop  ; -> prom_a 0x19822
+T_F416F0:	jp T_F416F0_Nop  ; -> prom_a 0x19823
+T_F416F4:	jp T_F416F0_Nop  ; -> prom_a 0x19823
+T_F416F8:	jp T_F416F0_Nop  ; -> prom_a 0x19823
+T_F416FC:	jp T_F416F0_Nop  ; -> prom_a 0x19823
+T_F41700:	jp T_F41700_Nop  ; -> prom_a 0x19824
+T_F41704:	jp T_F41700_Nop  ; -> prom_a 0x19824
+T_F41708:	jp T_F41700_Nop  ; -> prom_a 0x19824
+T_F4170C:	jp T_F41700_Nop  ; -> prom_a 0x19824
 T_F41710:	jp Paint_SysexBulkDump_Entry  ; -> prom_a 0x1982D
 T_F41714:	jp ScreenLeave_SysexBulkDump_Entry  ; -> prom_a 0x19831
 T_F41718:	jp ScreenButton_SysexBulkDump_Entry  ; -> prom_a 0x19835
-T_F4171C:	jp sub_F99843  ; -> prom_a 0x19843
+T_F4171C:	jp T_F4171C_Nop  ; -> prom_a 0x19843
 T_F41720:	jp Paint_GeneralMidiMode_Entry  ; -> prom_a 0x19844
 T_F41724:	jp ScreenLeave_GeneralMidiMode_Entry  ; -> prom_a 0x19848
 T_F41728:	jp ScreenButton_GeneralMidiMode_Entry  ; -> prom_a 0x1984C
-T_F4172C:	jp sub_F9985A  ; -> prom_a 0x1985A
+T_F4172C:	jp T_F4172C_Nop  ; -> prom_a 0x1985A
 T_F41730:	jp Paint_Sending_Entry  ; -> prom_a 0x1985B   x1
 T_F41734:	jp Paint_SystemExclusivePleaseWait_Entry  ; -> prom_a 0x1985F   x1
-T_F41738:	jp sub_F99863  ; -> prom_a 0x19863
+T_F41738:	jp T_F41738_Nop  ; -> prom_a 0x19863
 ; Evidence: slot 0xF4173C is `jp 0xF9A1A8`; prom_a 0xF9A1A8 carries the label
 ;           Paint_MidiTotalMode (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiTotalMode:	jp Paint_MidiTotalMode  ; F4173C (was T_F4173C) -> prom_a 0x1A1A8
 T_F41740:	jp ScreenLeave_MidiTotalMode  ; -> prom_a 0x1A26D
 T_F41744:	jp ScreenButton_MidiTotalMode  ; -> prom_a 0x1A26F
-T_F41748:	jp sub_F9A26E  ; -> prom_a 0x1A26E
+T_F41748:	jp T_F41748_Nop  ; -> prom_a 0x1A26E
 ; Evidence: slot 0xF4174C is `jp 0xF9A998`; prom_a 0xF9A998 carries the label
 ;           Paint_MidiInputOutputFilter (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiInputOutputFilter:	jp Paint_MidiInputOutputFilter  ; F4174C (was T_F4174C) -> prom_a 0x1A998
 T_F41750:	jp ScreenLeave_MidiInputOutputFilter  ; -> prom_a 0x1AA4F
 T_F41754:	jp ScreenButton_MidiInputOutputFilter  ; -> prom_a 0x1AA51
-T_F41758:	jp sub_F9AA50  ; -> prom_a 0x1AA50
+T_F41758:	jp T_F41758_Nop  ; -> prom_a 0x1AA50
 ; Evidence: slot 0xF4175C is `jp 0xF9AF61`; prom_a 0xF9AF61 carries the label
 ;           Paint_MidiOutProgramChange (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiOutProgramChange:	jp Paint_MidiOutProgramChange  ; F4175C (was T_F4175C) -> prom_a 0x1AF61
 T_F41760:	jp ScreenLeave_MidiOutProgramChange  ; -> prom_a 0x1B05E
 T_F41764:	jp ScreenButton_MidiOutProgramChange  ; -> prom_a 0x1B060
-T_F41768:	jp sub_F9B05F  ; -> prom_a 0x1B05F
+T_F41768:	jp T_F41768_Nop  ; -> prom_a 0x1B05F
 T_F4176C:	.long 0x00F99800	; ptr -> 0xF99800 (prom_a 0x19800)
 	.fill 0x80, 1, 0x0E  ; 0xF41770: 128 x ret
 ; --- the two display-list interpreters.  These are the two busiest slots in the
@@ -88484,37 +88483,37 @@ T_DrawValueGlyph_24x24:	jp DrawValueGlyph_24x24  ; F41834 (was T_F41834) -> prom
 T_F41840:	jp sub_FBCB06  ; -> prom_a 0x3CB06
 T_F41844:	jp sub_FBCB31  ; -> prom_a 0x3CB31
 T_F41848:	jp sub_FBCB40  ; -> prom_a 0x3CB40
-T_F4184C:	jp sub_FBCB81  ; -> prom_a 0x3CB81
+T_F4184C:	jp T_F4184C_Nop  ; -> prom_a 0x3CB81
 T_F41850:	jp sub_FBCB82  ; -> prom_a 0x3CB82
-T_F41854:	jp sub_FBCBA9  ; -> prom_a 0x3CBA9
+T_F41854:	jp T_F41854_Nop  ; -> prom_a 0x3CBA9
 T_F41858:	jp sub_FBCDFC  ; -> prom_a 0x3CDFC
-T_F4185C:	jp sub_FBCEF7  ; -> prom_a 0x3CEF7
+T_F4185C:	jp T_F4185C_Nop  ; -> prom_a 0x3CEF7
 T_F41860:	jp sub_FBCF3C  ; -> prom_a 0x3CF3C
-T_F41864:	jp sub_FBCF81  ; -> prom_a 0x3CF81
+T_F41864:	jp T_F41864_Nop  ; -> prom_a 0x3CF81
 T_F41868:	jp sub_FBC56B  ; -> prom_a 0x3C56B
 T_F4186C:	jp sub_FBC56F  ; -> prom_a 0x3C56F
 T_F41870:	jp sub_FBC573  ; -> prom_a 0x3C573
-T_F41874:	jp sub_FBC584  ; -> prom_a 0x3C584
+T_F41874:	jp T_F41874_Nop  ; -> prom_a 0x3C584
 T_F41878:	jp sub_FBC5BD  ; -> prom_a 0x3C5BD
 T_F4187C:	jp Var2075_ClrBit7_Entry  ; -> prom_a 0x3C5C1
 T_F41880:	jp sub_FBC5C5  ; -> prom_a 0x3C5C5
-T_F41884:	jp sub_FBC5D6  ; -> prom_a 0x3C5D6
+T_F41884:	jp T_F41884_Nop  ; -> prom_a 0x3C5D6
 T_F41888:	jp sub_FBCDEC  ; -> prom_a 0x3CDEC
 T_F4188C:	jp sub_FBCEE7  ; -> prom_a 0x3CEE7
 T_F41890:	jp sub_FBCEF8  ; -> prom_a 0x3CEF8
-T_F41894:	jp sub_FBCF7D  ; -> prom_a 0x3CF7D
+T_F41894:	jp T_F41894_Nop  ; -> prom_a 0x3CF7D
 T_F41898:	jp sub_FBCDF0  ; -> prom_a 0x3CDF0
 T_F4189C:	jp sub_FBCEEB  ; -> prom_a 0x3CEEB
 T_F418A0:	jp sub_FBCF09  ; -> prom_a 0x3CF09
-T_F418A4:	jp sub_FBCF7E  ; -> prom_a 0x3CF7E
+T_F418A4:	jp T_F418A4_Nop  ; -> prom_a 0x3CF7E
 T_F418A8:	jp sub_FBC5D7  ; -> prom_a 0x3C5D7
 T_F418AC:	jp sub_FBC5DB  ; -> prom_a 0x3C5DB
 T_F418B0:	jp sub_FBC5DF  ; -> prom_a 0x3C5DF
-T_F418B4:	jp sub_FBC5F0  ; -> prom_a 0x3C5F0
+T_F418B4:	jp T_F418B4_Nop  ; -> prom_a 0x3C5F0
 T_F418B8:	jp sub_FBDB95  ; -> prom_a 0x3DB95
 T_F418BC:	jp sub_FBDD11  ; -> prom_a 0x3DD11
 T_F418C0:	jp sub_FBDD91  ; -> prom_a 0x3DD91
-T_F418C4:	jp sub_FBDDD6  ; -> prom_a 0x3DDD6
+T_F418C4:	jp T_F418C4_Nop  ; -> prom_a 0x3DDD6
 T_F418C8:	jp sub_FBC5F1  ; -> prom_a 0x3C5F1
 T_F418CC:	jp sub_FBC64F  ; -> prom_a 0x3C64F
 T_F418D0:	jp sub_FBB800  ; -> prom_a 0x3B800   x3
@@ -88524,92 +88523,92 @@ T_F418D8:	jp sub_FBEE83  ; -> prom_a 0x3EE83
 T_F41910:	jp sub_F9FED1  ; -> prom_a 0x1FED1
 T_F41914:	jp sub_F9FEE2  ; -> prom_a 0x1FEE2
 T_F41918:	jp sub_F9FEE7  ; -> prom_a 0x1FEE7
-T_F4191C:	jp sub_F9FEFF  ; -> prom_a 0x1FEFF
+T_F4191C:	jp T_F4191C_Nop  ; -> prom_a 0x1FEFF
 T_F41920:	jp sub_F9FF00  ; -> prom_a 0x1FF00
-T_F41924:	jp sub_F9FF27  ; -> prom_a 0x1FF27
+T_F41924:	jp T_F41924_Nop  ; -> prom_a 0x1FF27
 T_F41928:	jp sub_FA0094  ; -> prom_a 0x20094
-T_F4192C:	jp sub_FA00E9  ; -> prom_a 0x200E9
+T_F4192C:	jp T_F4192C_Nop  ; -> prom_a 0x200E9
 T_F41930:	jp sub_FA00EA  ; -> prom_a 0x200EA
-T_F41934:	jp sub_FA0111  ; -> prom_a 0x20111
+T_F41934:	jp T_F41934_Nop  ; -> prom_a 0x20111
 T_F41938:	jp sub_FA0689  ; -> prom_a 0x20689
-T_F4193C:	jp sub_FA07A1  ; -> prom_a 0x207A1
+T_F4193C:	jp T_F4193C_Nop  ; -> prom_a 0x207A1
 T_F41940:	jp sub_FA07A2  ; -> prom_a 0x207A2
-T_F41944:	jp sub_FA07EA  ; -> prom_a 0x207EA
+T_F41944:	jp T_F41944_Nop  ; -> prom_a 0x207EA
 T_F41948:	jp sub_FA0DF3  ; -> prom_a 0x20DF3
 T_F4194C:	jp sub_FA0E4D  ; -> prom_a 0x20E4D
 T_F41950:	jp sub_FA0EEA  ; -> prom_a 0x20EEA
-T_F41954:	jp sub_FA0F11  ; -> prom_a 0x20F11
+T_F41954:	jp T_F41954_Nop  ; -> prom_a 0x20F11
 T_F41958:	jp sub_F9EF6C  ; -> prom_a 0x1EF6C
-T_F4195C:	jp sub_F9EF71  ; -> prom_a 0x1EF71
+T_F4195C:	jp T_F4195C_Nop  ; -> prom_a 0x1EF71
 T_F41960:	jp sub_F9EF72  ; -> prom_a 0x1EF72
-T_F41964:	jp sub_F9EF84  ; -> prom_a 0x1EF84
+T_F41964:	jp T_F41964_Nop  ; -> prom_a 0x1EF84
 T_F41968:	jp Screen_ReMapEdit_Enter  ; -> prom_a 0x1C087
 T_F4196C:	jp Screen_ReMapEdit_Leave  ; -> prom_a 0x1C0C1
 T_F41970:	jp Screen_ReMapEdit_Button  ; -> prom_a 0x1C0C2
-T_F41974:	jp sub_F9C0E9  ; -> prom_a 0x1C0E9
+T_F41974:	jp T_F41974_Nop  ; -> prom_a 0x1C0E9
 T_F41978:	jp sub_F9C9F4  ; -> prom_a 0x1C9F4
-T_F4197C:	jp sub_F9CA0C  ; -> prom_a 0x1CA0C
+T_F4197C:	jp T_F4197C_Nop  ; -> prom_a 0x1CA0C
 T_F41980:	jp sub_F9CA0D  ; -> prom_a 0x1CA0D
-T_F41984:	jp sub_F9CA34  ; -> prom_a 0x1CA34
+T_F41984:	jp T_F41984_Nop  ; -> prom_a 0x1CA34
 T_F41988:	jp sub_F9ED34  ; -> prom_a 0x1ED34
-T_F4198C:	jp sub_F9EDA1  ; -> prom_a 0x1EDA1
+T_F4198C:	jp T_F4198C_Nop  ; -> prom_a 0x1EDA1
 T_F41990:	jp sub_F9EDA2  ; -> prom_a 0x1EDA2
-T_F41994:	jp sub_F9EDC9  ; -> prom_a 0x1EDC9
+T_F41994:	jp T_F41994_Nop  ; -> prom_a 0x1EDC9
 T_F41998:	jp sub_F9EB75  ; -> prom_a 0x1EB75
-T_F4199C:	jp sub_F9EBED  ; -> prom_a 0x1EBED
+T_F4199C:	jp T_F4199C_Nop  ; -> prom_a 0x1EBED
 T_F419A0:	jp sub_F9EBEE  ; -> prom_a 0x1EBEE
-T_F419A4:	jp sub_F9EC15  ; -> prom_a 0x1EC15
+T_F419A4:	jp T_F419A4_Nop  ; -> prom_a 0x1EC15
 T_F419A8:	jp sub_FA007B  ; -> prom_a 0x2007B
-T_F419AC:	jp sub_FA0080  ; -> prom_a 0x20080
+T_F419AC:	jp T_F419AC_Nop  ; -> prom_a 0x20080
 T_F419B0:	jp sub_FA0081  ; -> prom_a 0x20081
-T_F419B4:	jp sub_FA0093  ; -> prom_a 0x20093
+T_F419B4:	jp T_F419B4_Nop  ; -> prom_a 0x20093
 T_F419B8:	jp Screen_DrumsMapNaming_Enter  ; -> prom_a 0x1EF85
 T_F419BC:	jp Screen_DrumsMapNaming_Leave  ; -> prom_a 0x1EFF6
 T_F419C0:	jp Screen_DrumsMapNaming_Button  ; -> prom_a 0x1F006
-T_F419C4:	jp sub_F9F034  ; -> prom_a 0x1F034
+T_F419C4:	jp T_F419C4_Nop  ; -> prom_a 0x1F034
 	.fill 0x38, 1, 0x0E  ; 0xF419C8: 56 x ret
 T_F41A00:	jp sub_FBECC3  ; -> prom_a 0x3ECC3
 T_F41A04:	jp sub_FBED02  ; -> prom_a 0x3ED02
 T_F41A08:	jp sub_FBEED9  ; -> prom_a 0x3EED9
-T_F41A0C:	jp sub_FBEEE3  ; -> prom_a 0x3EEE3
-T_F41A10:	jp sub_FBEEE4  ; -> prom_a 0x3EEE4
-T_F41A14:	jp sub_FBEEE5  ; -> prom_a 0x3EEE5
+T_F41A0C:	jp T_F41A0C_Nop  ; -> prom_a 0x3EEE3
+T_F41A10:	jp T_F41A10_Nop  ; -> prom_a 0x3EEE4
+T_F41A14:	jp T_F41A14_Nop  ; -> prom_a 0x3EEE5
 T_F41A18:	jp sub_FBFAB0  ; -> prom_a 0x3FAB0
-T_F41A1C:	jp sub_FBFAF1  ; -> prom_a 0x3FAF1
+T_F41A1C:	jp T_F41A1C_Nop  ; -> prom_a 0x3FAF1
 T_F41A20:	jp sub_FBFAF2  ; -> prom_a 0x3FAF2
-T_F41A24:	jp sub_FBFB33  ; -> prom_a 0x3FB33
+T_F41A24:	jp T_F41A24_Nop  ; -> prom_a 0x3FB33
 T_F41A28:	jp sub_FBC585  ; -> prom_a 0x3C585
 T_F41A2C:	jp sub_FBC589  ; -> prom_a 0x3C589
 T_F41A30:	jp sub_FBC58D  ; -> prom_a 0x3C58D
-T_F41A34:	jp sub_FBC59E  ; -> prom_a 0x3C59E
+T_F41A34:	jp T_F41A34_Nop  ; -> prom_a 0x3C59E
 T_F41A38:	jp sub_FBC59F  ; -> prom_a 0x3C59F
 T_F41A3C:	jp sub_FBC5A3  ; -> prom_a 0x3C5A3
 T_F41A40:	jp sub_FBC5A7  ; -> prom_a 0x3C5A7
-T_F41A44:	jp sub_FBC5B8  ; -> prom_a 0x3C5B8
+T_F41A44:	jp T_F41A44_Nop  ; -> prom_a 0x3C5B8
 T_F41A48:	jp sub_FBCDF4  ; -> prom_a 0x3CDF4
 T_F41A4C:	jp sub_FBCEEF  ; -> prom_a 0x3CEEF
 T_F41A50:	jp sub_FBCF1A  ; -> prom_a 0x3CF1A
-T_F41A54:	jp sub_FBCF7F  ; -> prom_a 0x3CF7F
+T_F41A54:	jp T_F41A54_Nop  ; -> prom_a 0x3CF7F
 T_F41A58:	jp sub_FBCDF8  ; -> prom_a 0x3CDF8
 T_F41A5C:	jp sub_FBCEF3  ; -> prom_a 0x3CEF3
 T_F41A60:	jp sub_FBCF2B  ; -> prom_a 0x3CF2B
-T_F41A64:	jp sub_FBCF80  ; -> prom_a 0x3CF80
+T_F41A64:	jp T_F41A64_Nop  ; -> prom_a 0x3CF80
 T_F41A68:	jp sub_FBEEE6  ; -> prom_a 0x3EEE6
-T_F41A6C:	jp sub_FBEEEB  ; -> prom_a 0x3EEEB
+T_F41A6C:	jp T_F41A6C_Nop  ; -> prom_a 0x3EEEB
 T_F41A70:	jp sub_FBEEEC  ; -> prom_a 0x3EEEC
-T_F41A74:	jp sub_FBEF1B  ; -> prom_a 0x3EF1B
+T_F41A74:	jp T_F41A74_Nop  ; -> prom_a 0x3EF1B
 T_F41A78:	jp sub_FBDB91  ; -> prom_a 0x3DB91
 T_F41A7C:	jp sub_FBDD0D  ; -> prom_a 0x3DD0D
 T_F41A80:	jp sub_FBDD80  ; -> prom_a 0x3DD80
 T_F41A84:	jp sub_FBDDD2  ; -> prom_a 0x3DDD2
-T_F41A88:	jp sub_FBC5B9  ; -> prom_a 0x3C5B9
-T_F41A8C:	jp sub_FBC5BA  ; -> prom_a 0x3C5BA
-T_F41A90:	jp sub_FBC5BB  ; -> prom_a 0x3C5BB
-T_F41A94:	jp sub_FBC5BC  ; -> prom_a 0x3C5BC
+T_F41A88:	jp T_F41A88_Nop  ; -> prom_a 0x3C5B9
+T_F41A8C:	jp T_F41A8C_Nop  ; -> prom_a 0x3C5BA
+T_F41A90:	jp T_F41A90_Nop  ; -> prom_a 0x3C5BB
+T_F41A94:	jp T_F41A94_Nop  ; -> prom_a 0x3C5BC
 T_F41A98:	jp Screen_CombinationNaming_Enter  ; -> prom_a 0x3EF1C
 T_F41A9C:	jp Screen_CombinationNaming_Leave  ; -> prom_a 0x3EF75
 T_F41AA0:	jp Screen_CombinationNaming_Button  ; -> prom_a 0x3EF76
-T_F41AA4:	jp sub_FBEFB0  ; -> prom_a 0x3EFB0
+T_F41AA4:	jp T_F41AA4_Nop  ; -> prom_a 0x3EFB0
 	.fill 0x48, 1, 0x0E  ; 0xF41AA8: 72 x ret
 T_F41AF0:	jp sub_F8BCAF  ; -> prom_a 0x0BCAF   x35
 T_F41AF4:	jp sub_F8BC8A  ; -> prom_a 0x0BC8A   x2
@@ -89044,11 +89043,11 @@ T_F41F1C:	jp 0xFAEC78  ; -> prom_a 0x2EC78
 T_F41F20:	jp 0xFAF48F  ; -> prom_a 0x2F48F
 T_F41F24:	jp 0xFAEBAA  ; -> prom_a 0x2EBAA
 T_F41F28:	jp 0xFAF490  ; -> prom_a 0x2F490
-T_F41F2C:	jp sub_FAE800  ; -> prom_a 0x2E800
+T_F41F2C:	jp T_F41F2C_Nop  ; -> prom_a 0x2E800
 T_F41F30:	jp 0xFAE872  ; -> prom_a 0x2E872   x1
 T_F41F34:	jp 0xFAE921  ; -> prom_a 0x2E921   x1
 T_F41F38:	jp 0xFAE84C  ; -> prom_a 0x2E84C
-T_F41F3C:	jp sub_FAE829  ; -> prom_a 0x2E829
+T_F41F3C:	jp T_F41F3C_Nop  ; -> prom_a 0x2E829
 	.fill 0x10, 1, 0x0E  ; 0xF41F40: 16 x ret
 	.fill 0x4, 1, 0x00  ; 0xF41F50: 4 x nop
 T_F41F54:	jp sub_FDAC6B  ; -> prom_a 0x5AC6B
@@ -89056,151 +89055,151 @@ T_F41F58:	jp sub_FDACBD  ; -> prom_a 0x5ACBD
 T_F41F5C:	jp sub_FDAD44  ; -> prom_a 0x5AD44
 T_F41F60:	jp sub_FDE152  ; -> prom_a 0x5E152
 T_F41F64:	jp sub_FCFDA7  ; -> prom_a 0x4FDA7
-T_F41F68:	jp sub_FDE15F  ; -> prom_a 0x5E15F
+T_F41F68:	jp T_F41F68_Nop  ; -> prom_a 0x5E15F
 T_F41F6C:	jp sub_FDD437  ; -> prom_a 0x5D437
 T_F41F70:	jp sub_FDE332  ; -> prom_a 0x5E332
 T_F41F74:	jp ToneEditPage_A0_KeyDispatch  ; -> prom_a 0x53DA7
-T_F41F78:	jp sub_FDE33F  ; -> prom_a 0x5E33F
-T_F41F7C:	jp sub_FDD7F7  ; -> prom_a 0x5D7F7
+T_F41F78:	jp T_F41F78_Nop  ; -> prom_a 0x5E33F
+T_F41F7C:	jp T_F41F7C_Nop  ; -> prom_a 0x5D7F7
 T_F41F80:	jp sub_FDE340  ; -> prom_a 0x5E340
-T_F41F84:	jp sub_FD3DF8  ; -> prom_a 0x53DF8
-T_F41F88:	jp sub_FDE34D  ; -> prom_a 0x5E34D
-T_F41F8C:	jp sub_FDD7F8  ; -> prom_a 0x5D7F8
+T_F41F84:	jp T_F41F84_Nop  ; -> prom_a 0x53DF8
+T_F41F88:	jp T_F41F88_Nop  ; -> prom_a 0x5E34D
+T_F41F8C:	jp T_F41F8C_Nop  ; -> prom_a 0x5D7F8
 T_F41F90:	jp sub_FDE34E  ; -> prom_a 0x5E34E
-T_F41F94:	jp sub_FD3DF9  ; -> prom_a 0x53DF9
-T_F41F98:	jp sub_FDE35B  ; -> prom_a 0x5E35B
+T_F41F94:	jp T_F41F94_Nop  ; -> prom_a 0x53DF9
+T_F41F98:	jp T_F41F98_Nop  ; -> prom_a 0x5E35B
 T_F41F9C:	jp ToneEditPage_A3_PositionParameter  ; -> prom_a 0x5D7F9
 T_F41FA0:	jp ToneEditPage_A3_Leave  ; -> prom_a 0x5E35C
 T_F41FA4:	jp ToneEditPage_A3_KeyDispatch  ; -> prom_a 0x53DFA
-T_F41FA8:	jp sub_FDE369  ; -> prom_a 0x5E369
+T_F41FA8:	jp T_F41FA8_Nop  ; -> prom_a 0x5E369
 T_F41FAC:	jp ToneEditPage_A4_PositionMovement  ; -> prom_a 0x5D958
 T_F41FB0:	jp ToneEditPage_A4_Leave  ; -> prom_a 0x5E36A
 T_F41FB4:	jp ToneEditPage_A4_KeyDispatch  ; -> prom_a 0x53E4B
-T_F41FB8:	jp sub_FDE377  ; -> prom_a 0x5E377
+T_F41FB8:	jp T_F41FB8_Nop  ; -> prom_a 0x5E377
 T_F41FBC:	jp ToneEditPage_A5_FittingMutingTuning  ; -> prom_a 0x5DA1C
 T_F41FC0:	jp ToneEditPage_A5_Leave  ; -> prom_a 0x5E378
 T_F41FC4:	jp ToneEditPage_A5_KeyDispatch  ; -> prom_a 0x53E9C
-T_F41FC8:	jp sub_FDE385  ; -> prom_a 0x5E385
+T_F41FC8:	jp T_F41FC8_Nop  ; -> prom_a 0x5E385
 T_F41FCC:	jp ToneEditPage_A6_TouchDepth  ; -> prom_a 0x5DC3A
 T_F41FD0:	jp ToneEditPage_A6_Leave  ; -> prom_a 0x5E386
 T_F41FD4:	jp ToneEditPage_A6_KeyDispatch  ; -> prom_a 0x53EED
-T_F41FD8:	jp sub_FDE393  ; -> prom_a 0x5E393
+T_F41FD8:	jp T_F41FD8_Nop  ; -> prom_a 0x5E393
 T_F41FDC:	jp ToneEditPage_A7_ResoModeKeyFollow  ; -> prom_a 0x5DDAA
 T_F41FE0:	jp ToneEditPage_A7_Leave  ; -> prom_a 0x5E394
 T_F41FE4:	jp ToneEditPage_A7_KeyDispatch  ; -> prom_a 0x53F3E
-T_F41FE8:	jp sub_FDE3A1  ; -> prom_a 0x5E3A1
+T_F41FE8:	jp T_F41FE8_Nop  ; -> prom_a 0x5E3A1
 T_F41FEC:	jp sub_FDDF36  ; -> prom_a 0x5DF36
 T_F41FF0:	jp sub_FDE3A2  ; -> prom_a 0x5E3A2
 T_F41FF4:	jp ToneEditPage_A8_KeyDispatch  ; -> prom_a 0x53F8F
-T_F41FF8:	jp sub_FDE3AF  ; -> prom_a 0x5E3AF
+T_F41FF8:	jp T_F41FF8_Nop  ; -> prom_a 0x5E3AF
 T_F41FFC:	jp sub_FDB22F  ; -> prom_a 0x5B22F
 T_F42000:	jp sub_FDE160  ; -> prom_a 0x5E160
 T_F42004:	jp sub_F0A000  ; -> prom_b 0x0A000
-T_F42008:	jp sub_FDE16D  ; -> prom_a 0x5E16D
+T_F42008:	jp T_F42008_Nop  ; -> prom_a 0x5E16D
 T_F4200C:	jp sub_FDB38C  ; -> prom_a 0x5B38C
 T_F42010:	jp sub_FDE16E  ; -> prom_a 0x5E16E
 T_F42014:	jp sub_F0A051  ; -> prom_b 0x0A051
-T_F42018:	jp sub_FDE17B  ; -> prom_a 0x5E17B
+T_F42018:	jp T_F42018_Nop  ; -> prom_a 0x5E17B
 T_F4201C:	jp sub_FDB44D  ; -> prom_a 0x5B44D
 T_F42020:	jp sub_FDE17C  ; -> prom_a 0x5E17C
 T_F42024:	jp sub_F0A0B1  ; -> prom_b 0x0A0B1
-T_F42028:	jp sub_FDE189  ; -> prom_a 0x5E189
+T_F42028:	jp T_F42028_Nop  ; -> prom_a 0x5E189
 T_F4202C:	jp sub_FDB529  ; -> prom_a 0x5B529
 T_F42030:	jp sub_FDE18A  ; -> prom_a 0x5E18A
 T_F42034:	jp sub_F0A111  ; -> prom_b 0x0A111
-T_F42038:	jp sub_FDE197  ; -> prom_a 0x5E197
+T_F42038:	jp T_F42038_Nop  ; -> prom_a 0x5E197
 T_F4203C:	jp sub_FDB693  ; -> prom_a 0x5B693
 T_F42040:	jp sub_FDE198  ; -> prom_a 0x5E198
 T_F42044:	jp sub_FD2751  ; -> prom_a 0x52751
-T_F42048:	jp sub_FDE1A5  ; -> prom_a 0x5E1A5
+T_F42048:	jp T_F42048_Nop  ; -> prom_a 0x5E1A5
 T_F4204C:	jp sub_FDB8D9  ; -> prom_a 0x5B8D9
 T_F42050:	jp sub_FDE1A6  ; -> prom_a 0x5E1A6
 T_F42054:	jp sub_FD27A2  ; -> prom_a 0x527A2
-T_F42058:	jp sub_FDE1B3  ; -> prom_a 0x5E1B3
+T_F42058:	jp T_F42058_Nop  ; -> prom_a 0x5E1B3
 T_F4205C:	jp sub_FDB9AB  ; -> prom_a 0x5B9AB
 T_F42060:	jp sub_FDE1B4  ; -> prom_a 0x5E1B4
 T_F42064:	jp sub_FD27F2  ; -> prom_a 0x527F2
-T_F42068:	jp sub_FDE1DD  ; -> prom_a 0x5E1DD
+T_F42068:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
 T_F4206C:	jp sub_FDBAE7  ; -> prom_a 0x5BAE7
 T_F42070:	jp sub_FDE1C2  ; -> prom_a 0x5E1C2
 T_F42074:	jp sub_FD2852  ; -> prom_a 0x52852
-T_F42078:	jp sub_FDE1CF  ; -> prom_a 0x5E1CF
+T_F42078:	jp T_F42078_Nop  ; -> prom_a 0x5E1CF
 T_F4207C:	jp sub_FDBBC3  ; -> prom_a 0x5BBC3
 T_F42080:	jp sub_FDE1D0  ; -> prom_a 0x5E1D0
 T_F42084:	jp sub_FD28B2  ; -> prom_a 0x528B2
-T_F42088:	jp sub_FDE1DD  ; -> prom_a 0x5E1DD
+T_F42088:	jp T_F42068_Nop  ; -> prom_a 0x5E1DD
 T_F4208C:	jp sub_FDBBD6  ; -> prom_a 0x5BBD6
 T_F42090:	jp sub_FDE1DE  ; -> prom_a 0x5E1DE
 T_F42094:	jp sub_FD053D  ; -> prom_a 0x5053D
-T_F42098:	jp sub_FDE1EB  ; -> prom_a 0x5E1EB
+T_F42098:	jp T_F42098_Nop  ; -> prom_a 0x5E1EB
 T_F4209C:	jp sub_FDBEDE  ; -> prom_a 0x5BEDE
 T_F420A0:	jp sub_FDE1EC  ; -> prom_a 0x5E1EC
 T_F420A4:	jp sub_FD058E  ; -> prom_a 0x5058E
-T_F420A8:	jp sub_FDE1F9  ; -> prom_a 0x5E1F9
+T_F420A8:	jp T_F420A8_Nop  ; -> prom_a 0x5E1F9
 T_F420AC:	jp sub_FDC0E1  ; -> prom_a 0x5C0E1
 T_F420B0:	jp sub_FDE1FA  ; -> prom_a 0x5E1FA
 T_F420B4:	jp sub_F0AA61  ; -> prom_b 0x0AA61
-T_F420B8:	jp sub_FDE207  ; -> prom_a 0x5E207
+T_F420B8:	jp T_F420B8_Nop  ; -> prom_a 0x5E207
 T_F420BC:	jp sub_FDC0ED  ; -> prom_a 0x5C0ED
 T_F420C0:	jp sub_FDE24E  ; -> prom_a 0x5E24E
 T_F420C4:	jp sub_FDE3BE  ; -> prom_a 0x5E3BE
-T_F420C8:	jp sub_FDE25B  ; -> prom_a 0x5E25B
+T_F420C8:	jp T_F420C8_Nop  ; -> prom_a 0x5E25B
 T_F420CC:	jp sub_FDC27B  ; -> prom_a 0x5C27B
 T_F420D0:	jp sub_FDE25C  ; -> prom_a 0x5E25C
 T_F420D4:	jp sub_FDE41E  ; -> prom_a 0x5E41E
-T_F420D8:	jp sub_FDE269  ; -> prom_a 0x5E269
+T_F420D8:	jp T_F420D8_Nop  ; -> prom_a 0x5E269
 T_F420DC:	jp sub_FDC2A7  ; -> prom_a 0x5C2A7
 T_F420E0:	jp sub_FDE26A  ; -> prom_a 0x5E26A
 T_F420E4:	jp sub_FDE47E  ; -> prom_a 0x5E47E
-T_F420E8:	jp sub_FDE277  ; -> prom_a 0x5E277
+T_F420E8:	jp T_F420E8_Nop  ; -> prom_a 0x5E277
 T_F420EC:	jp sub_FDC2CF  ; -> prom_a 0x5C2CF
 T_F420F0:	jp sub_FDE278  ; -> prom_a 0x5E278
 T_F420F4:	jp sub_FDE4DE  ; -> prom_a 0x5E4DE
-T_F420F8:	jp sub_FDE285  ; -> prom_a 0x5E285
+T_F420F8:	jp T_F420F8_Nop  ; -> prom_a 0x5E285
 T_F420FC:	jp sub_FDC2F7  ; -> prom_a 0x5C2F7
 T_F42100:	jp sub_FDE286  ; -> prom_a 0x5E286
 T_F42104:	jp sub_FDE53E  ; -> prom_a 0x5E53E
-T_F42108:	jp sub_FDE293  ; -> prom_a 0x5E293
+T_F42108:	jp T_F42108_Nop  ; -> prom_a 0x5E293
 T_F4210C:	jp sub_FDC317  ; -> prom_a 0x5C317
 T_F42110:	jp sub_FDE294  ; -> prom_a 0x5E294
 T_F42114:	jp sub_FDE59E  ; -> prom_a 0x5E59E
-T_F42118:	jp sub_FDE2A1  ; -> prom_a 0x5E2A1
+T_F42118:	jp T_F42118_Nop  ; -> prom_a 0x5E2A1
 T_F4211C:	jp sub_FDC333  ; -> prom_a 0x5C333
 T_F42120:	jp sub_FDE2A2  ; -> prom_a 0x5E2A2
 T_F42124:	jp sub_FDE5EF  ; -> prom_a 0x5E5EF
-T_F42128:	jp sub_FDE2AF  ; -> prom_a 0x5E2AF
+T_F42128:	jp T_F42128_Nop  ; -> prom_a 0x5E2AF
 T_F4212C:	jp sub_FDC405  ; -> prom_a 0x5C405
 T_F42130:	jp sub_FDE2B0  ; -> prom_a 0x5E2B0
 T_F42134:	jp sub_FDE64F  ; -> prom_a 0x5E64F
-T_F42138:	jp sub_FDE2BD  ; -> prom_a 0x5E2BD
+T_F42138:	jp T_F42138_Nop  ; -> prom_a 0x5E2BD
 T_F4213C:	jp sub_FDC4C6  ; -> prom_a 0x5C4C6
 T_F42140:	jp sub_FDE2BE  ; -> prom_a 0x5E2BE
 T_F42144:	jp sub_FDE6AF  ; -> prom_a 0x5E6AF
-T_F42148:	jp sub_FDE2CB  ; -> prom_a 0x5E2CB
+T_F42148:	jp T_F42148_Nop  ; -> prom_a 0x5E2CB
 T_F4214C:	jp sub_FDC5A2  ; -> prom_a 0x5C5A2
 T_F42150:	jp sub_FDE2CC  ; -> prom_a 0x5E2CC
 T_F42154:	jp sub_FDE70F  ; -> prom_a 0x5E70F
-T_F42158:	jp sub_FDE2D9  ; -> prom_a 0x5E2D9
+T_F42158:	jp T_F42158_Nop  ; -> prom_a 0x5E2D9
 T_F4215C:	jp sub_FDC5B5  ; -> prom_a 0x5C5B5
 T_F42160:	jp sub_FDE208  ; -> prom_a 0x5E208
 T_F42164:	jp sub_FD0AA5  ; -> prom_a 0x50AA5
-T_F42168:	jp sub_FDE215  ; -> prom_a 0x5E215
+T_F42168:	jp T_F42168_Nop  ; -> prom_a 0x5E215
 T_F4216C:	jp sub_FDC84C  ; -> prom_a 0x5C84C
 T_F42170:	jp sub_FDE216  ; -> prom_a 0x5E216
 T_F42174:	jp sub_FD0AF6  ; -> prom_a 0x50AF6
-T_F42178:	jp sub_FDE223  ; -> prom_a 0x5E223
+T_F42178:	jp T_F42178_Nop  ; -> prom_a 0x5E223
 T_F4217C:	jp sub_FDC95B  ; -> prom_a 0x5C95B
 T_F42180:	jp sub_FDE224  ; -> prom_a 0x5E224
 T_F42184:	jp sub_FD0B47  ; -> prom_a 0x50B47
-T_F42188:	jp sub_FDE231  ; -> prom_a 0x5E231
+T_F42188:	jp T_F42188_Nop  ; -> prom_a 0x5E231
 T_F4218C:	jp sub_FDCA77  ; -> prom_a 0x5CA77
 T_F42190:	jp sub_FDE232  ; -> prom_a 0x5E232
 T_F42194:	jp sub_FD0BA7  ; -> prom_a 0x50BA7
-T_F42198:	jp sub_FDE23F  ; -> prom_a 0x5E23F
+T_F42198:	jp T_F42198_Nop  ; -> prom_a 0x5E23F
 T_F4219C:	jp sub_FDCB93  ; -> prom_a 0x5CB93
 T_F421A0:	jp sub_FDE240  ; -> prom_a 0x5E240
 T_F421A4:	jp sub_FD0C07  ; -> prom_a 0x50C07
-T_F421A8:	jp sub_FDE24D  ; -> prom_a 0x5E24D
+T_F421A8:	jp T_F421A8_Nop  ; -> prom_a 0x5E24D
 	.fill 0xA4, 1, 0x0E  ; 0xF421AC: 164 x ret
 T_F42250:	.long 0x00FF75B6	; ptr -> 0xFF75B6 (prom_a 0x775B6)
 T_F42254:	jp sub_FF42B7  ; -> prom_a 0x742B7
@@ -89210,38 +89209,38 @@ T_F42260:	jp sub_FF42C9  ; -> prom_a 0x742C9
 T_F42264:	jp Paint_DiskMenu  ; -> prom_a 0x742CD
 T_F42268:	jp ScreenLeave_DiskMenu  ; -> prom_a 0x7431B
 T_F4226C:	jp PanelButtonDispatch_DiskMenu  ; -> prom_a 0x7431C
-T_F42270:	jp sub_FF4407  ; -> prom_a 0x74407
+T_F42270:	jp T_F42270_Nop  ; -> prom_a 0x74407
 ; Evidence: slot 0xF42274 is `jp 0xFF4408`; prom_a 0xFF4408 carries the label
 ;           Paint_MidiFileDirectPlay (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiFileDirectPlay:	jp Paint_MidiFileDirectPlay  ; F42274 (was T_F42274) -> prom_a 0x74408
 T_F42278:	jp ScreenLeave_MidiFileDirectPlay  ; -> prom_a 0x7457C
 T_F4227C:	jp PanelButtonDispatch_MidiFileDirectPlay  ; -> prom_a 0x74596
-T_F42280:	jp sub_FF475B  ; -> prom_a 0x7475B
+T_F42280:	jp T_F42280_Nop  ; -> prom_a 0x7475B
 	.fill 0x9C, 1, 0x0E  ; 0xF42284: 156 x ret
 T_F42320:	jp sub_FDD272  ; -> prom_a 0x5D272
 T_F42324:	jp sub_FDE308  ; -> prom_a 0x5E308
 T_F42328:	jp sub_F0AAB3  ; -> prom_b 0x0AAB3
-T_F4232C:	jp sub_FDE315  ; -> prom_a 0x5E315
+T_F4232C:	jp T_F4232C_Nop  ; -> prom_a 0x5E315
 T_F42330:	jp sub_FDD27F  ; -> prom_a 0x5D27F
 T_F42334:	jp sub_FDE316  ; -> prom_a 0x5E316
 T_F42338:	jp sub_F0AAF9  ; -> prom_b 0x0AAF9
-T_F4233C:	jp sub_FDE323  ; -> prom_a 0x5E323
-T_F42340:	jp sub_FDD436  ; -> prom_a 0x5D436
+T_F4233C:	jp T_F4233C_Nop  ; -> prom_a 0x5E323
+T_F42340:	jp T_F42340_Nop  ; -> prom_a 0x5D436
 T_F42344:	jp sub_FDE324  ; -> prom_a 0x5E324
-T_F42348:	jp sub_F0AB4A  ; -> prom_b 0x0AB4A
-T_F4234C:	jp sub_FDE331  ; -> prom_a 0x5E331
+T_F42348:	jp T_F42348_Nop  ; -> prom_b 0x0AB4A
+T_F4234C:	jp T_F4234C_Nop  ; -> prom_a 0x5E331
 T_F42350:	jp sub_FDD0D4  ; -> prom_a 0x5D0D4
 T_F42354:	jp sub_FDE2FA  ; -> prom_a 0x5E2FA
 T_F42358:	jp sub_F0A90E  ; -> prom_b 0x0A90E
-T_F4235C:	jp sub_FDE307  ; -> prom_a 0x5E307
+T_F4235C:	jp T_F4235C_Nop  ; -> prom_a 0x5E307
 T_F42360:	jp sub_FDCDE0  ; -> prom_a 0x5CDE0
-T_F42364:	jp sub_FDE2DA  ; -> prom_a 0x5E2DA
+T_F42364:	jp T_F42364_Nop  ; -> prom_a 0x5E2DA
 T_F42368:	jp sub_F0A95F  ; -> prom_b 0x0A95F
-T_F4236C:	jp sub_FDE2DB  ; -> prom_a 0x5E2DB
+T_F4236C:	jp T_F4236C_Nop  ; -> prom_a 0x5E2DB
 T_F42370:	jp sub_FDCFEB  ; -> prom_a 0x5CFEB
-T_F42374:	jp sub_FDE2DC  ; -> prom_a 0x5E2DC
+T_F42374:	jp T_F42374_Nop  ; -> prom_a 0x5E2DC
 T_F42378:	jp sub_F0A9BF  ; -> prom_b 0x0A9BF
-T_F4237C:	jp sub_FDE2DD  ; -> prom_a 0x5E2DD
+T_F4237C:	jp T_F4237C_Nop  ; -> prom_a 0x5E2DD
 ; Evidence: slot 0xF42380 is `jp 0xFD2504`; prom_a 0xFD2504 carries the label
 ;           Ring608A0A_DrainAll (graded CONTENT).  DERIVATIVE name.
 T_Ring608A0A_DrainAll:	jp Ring608A0A_DrainAll  ; F42380 (was T_F42380) -> prom_a 0x52504   x2
@@ -89251,44 +89250,44 @@ T_Ring608A0A_DrainAll:	jp Ring608A0A_DrainAll  ; F42380 (was T_F42380) -> prom_a
 T_Paint_DiskL0adFile:	jp Paint_DiskL0adFile  ; F423A0 (was T_F423A0) -> prom_a 0x74786
 T_F423A4:	jp ScreenLeave_DiskL0adFile  ; -> prom_a 0x74986
 T_F423A8:	jp PanelButtonDispatch_DiskL0adFile  ; -> prom_a 0x74995
-T_F423AC:	jp sub_FF4FF9  ; -> prom_a 0x74FF9
+T_F423AC:	jp T_F423AC_Nop  ; -> prom_a 0x74FF9
 T_F423B0:	jp PageDispatch_DiskSaveFile  ; -> prom_a 0x7548A
 T_F423B4:	jp ScreenLeave_DiskSaveFile  ; -> prom_a 0x7571F
 T_F423B8:	jp PanelButtonDispatch_DiskSaveFile  ; -> prom_a 0x7572E
-T_F423BC:	jp sub_FF5C3D  ; -> prom_a 0x75C3D
+T_F423BC:	jp T_F423BC_Nop  ; -> prom_a 0x75C3D
 T_F423C0:	jp PageDispatch_MidiFileSave  ; -> prom_a 0x75C3E
 T_F423C4:	jp ScreenLeave_MidiFileSave  ; -> prom_a 0x75EAE
 T_F423C8:	jp PanelButtonDispatch_MidiFileSave  ; -> prom_a 0x75ED1
-T_F423CC:	jp sub_FF6511  ; -> prom_a 0x76511
+T_F423CC:	jp T_F423CC_Nop  ; -> prom_a 0x76511
 ; Evidence: slot 0xF423D0 is `jp 0xFF6512`; prom_a 0xFF6512 carries the label
 ;           Paint_FloppyDiskFormatSelectType (graded CONTENT).  DERIVATIVE name.
 T_Paint_FloppyDiskFormatSelectType:	jp Paint_FloppyDiskFormatSelectType  ; F423D0 (was T_F423D0) -> prom_a 0x76512
 T_F423D4:	jp ScreenLeave_FloppyDiskFormatSelectType  ; -> prom_a 0x7654F
 T_F423D8:	jp PanelButtonDispatch_FloppyDiskFormatSelectType  ; -> prom_a 0x76550
-T_F423DC:	jp sub_FF6612  ; -> prom_a 0x76612
+T_F423DC:	jp T_F423DC_Nop  ; -> prom_a 0x76612
 T_F423E0:	jp PageDispatch_L0adSingleS0und  ; -> prom_a 0x7672D
 T_F423E4:	jp ScreenLeave_L0adSingleS0und  ; -> prom_a 0x768CA
 T_F423E8:	jp PanelButtonDispatch_L0adSingleS0und  ; -> prom_a 0x768D8
-T_F423EC:	jp sub_FF6DB6  ; -> prom_a 0x76DB6
+T_F423EC:	jp T_F423EC_Nop  ; -> prom_a 0x76DB6
 ; Evidence: slot 0xF423F0 is `jp 0xFF6613`; prom_a 0xFF6613 carries the label
 ;           Paint_FloppyDiskFormatAreYouSure (graded CONTENT).  DERIVATIVE name.
 T_Paint_FloppyDiskFormatAreYouSure:	jp Paint_FloppyDiskFormatAreYouSure  ; F423F0 (was T_F423F0) -> prom_a 0x76613
 T_F423F4:	jp ScreenLeave_FloppyDiskFormatAreYouSure  ; -> prom_a 0x766A9
 T_F423F8:	jp PanelButtonDispatch_FloppyDiskFormatAreYouSure  ; -> prom_a 0x766AA
-T_F423FC:	jp sub_FF672C  ; -> prom_a 0x7672C
+T_F423FC:	jp T_F423FC_Nop  ; -> prom_a 0x7672C
 ; Evidence: slot 0xF42400 is `jp 0xFF4FFA`; prom_a 0xFF4FFA carries the label
 ;           Paint_MidiFileL0ad (graded CONTENT).  DERIVATIVE name.
 T_Paint_MidiFileL0ad:	jp Paint_MidiFileL0ad  ; F42400 (was T_F42400) -> prom_a 0x74FFA
 T_F42404:	jp ScreenLeave_MidiFileL0ad  ; -> prom_a 0x7520C
 T_F42408:	jp PanelButtonDispatch_MidiFileL0ad  ; -> prom_a 0x7522F
-T_F4240C:	jp sub_FF5489  ; -> prom_a 0x75489
+T_F4240C:	jp T_F4240C_Nop  ; -> prom_a 0x75489
 T_F42410:	jp sub_FF70B6  ; -> prom_a 0x770B6   x1
 T_F42414:	jp sub_FF70D8  ; -> prom_a 0x770D8   x1
 T_F42418:	jp sub_FF48F0  ; -> prom_a 0x748F0   x1
 T_F4241C:	jp PageDispatch_L0adSingleC0mbination  ; -> prom_a 0x76DB7
 T_F42420:	jp ScreenLeave_L0adSingleC0mbination  ; -> prom_a 0x76F13
 T_F42424:	jp PanelButtonDispatch_L0adSingleC0mbination  ; -> prom_a 0x76F21
-T_F42428:	jp sub_FF7083  ; -> prom_a 0x77083
+T_F42428:	jp T_F42428_Nop  ; -> prom_a 0x77083
 	.fill 0x44, 1, 0x0E  ; 0xF4242C: 68 x ret
 T_F42470:	jp sub_FC0450  ; -> prom_a 0x40450
 T_F42474:	jp sub_FC0460  ; -> prom_a 0x40460
@@ -89328,8 +89327,8 @@ T_F424F8:	jp sub_FC0724  ; -> prom_a 0x40724
 T_F424FC:	jp sub_FC0749  ; -> prom_a 0x40749
 T_F42500:	jp sub_FC075E  ; -> prom_a 0x4075E
 T_F42504:	jp sub_FC078A  ; -> prom_a 0x4078A
-T_F42508:	jp sub_FC07AF  ; -> prom_a 0x407AF
-T_F4250C:	jp sub_FC07B0  ; -> prom_a 0x407B0
+T_F42508:	jp T_F42508_Nop  ; -> prom_a 0x407AF
+T_F4250C:	jp T_F4250C_Nop  ; -> prom_a 0x407B0
 T_F42510:	jp sub_FC07B1  ; -> prom_a 0x407B1
 T_F42514:	jp sub_FC07D6  ; -> prom_a 0x407D6
 T_F42518:	jp sub_FC07FB  ; -> prom_a 0x407FB
@@ -89341,10 +89340,10 @@ T_F42570:	.long sub_FE0000	; ptr -> 0xFE0000 (prom_a 0x60000)
 T_F42574:	jp sub_FE1BCE  ; -> prom_a 0x61BCE   x8
 T_F42578:	jp sub_FE1BDE  ; -> prom_a 0x61BDE   x8
 T_F4257C:	jp sub_FE152E  ; -> prom_a 0x6152E   x5
-T_F42580:	jp sub_FE1C16  ; -> prom_a 0x61C16   x6
+T_F42580:	jp T_F42580_Nop  ; -> prom_a 0x61C16   x6
 T_F42584:	jp sub_FE144E  ; -> prom_a 0x6144E   x1
 T_F42588:	jp sub_FE1C17  ; -> prom_a 0x61C17
-T_F4258C:	jp sub_FE1C1E  ; -> prom_a 0x61C1E
+T_F4258C:	jp T_F4258C_Nop  ; -> prom_a 0x61C1E
 T_F42590:	jp sub_FE1C1F  ; -> prom_a 0x61C1F   x4
 T_F42594:	jp sub_FE1C23  ; -> prom_a 0x61C23   x15
 T_F42598:	jp sub_FE1C27  ; -> prom_a 0x61C27
@@ -89394,23 +89393,23 @@ T_F42664:	jp sub_F38843  ; -> prom_b 0x38843   x1
 T_F42670:	jp sub_FA129D  ; -> prom_a 0x2129D
 T_F42674:	jp sub_FA12CE  ; -> prom_a 0x212CE
 T_F42678:	jp sub_FA12DD  ; -> prom_a 0x212DD
-T_F4267C:	jp sub_FA1304  ; -> prom_a 0x21304
+T_F4267C:	jp T_F4267C_Nop  ; -> prom_a 0x21304
 T_F42680:	jp Screen_SoundGroupNaming_Enter  ; -> prom_a 0x1CB00
 T_F42684:	jp Screen_SoundGroupNaming_Leave  ; -> prom_a 0x1CB52
 T_F42688:	jp Screen_SoundGroupNaming_Button  ; -> prom_a 0x1CB53
-T_F4268C:	jp sub_F9CB7A  ; -> prom_a 0x1CB7A
+T_F4268C:	jp T_F4268C_Nop  ; -> prom_a 0x1CB7A
 T_F42690:	jp Screen_CombinationGroupNaming_Enter  ; -> prom_a 0x1CF68
 T_F42694:	jp Screen_CombinationGroupNaming_Leave  ; -> prom_a 0x1CFBA
 T_F42698:	jp Screen_CombinationGroupNaming_Button  ; -> prom_a 0x1CFBB
-T_F4269C:	jp sub_F9CFE2  ; -> prom_a 0x1CFE2
+T_F4269C:	jp T_F4269C_Nop  ; -> prom_a 0x1CFE2
 T_F426A0:	jp sub_F9D3BA  ; -> prom_a 0x1D3BA
 T_F426A4:	jp sub_F9D3F4  ; -> prom_a 0x1D3F4
 T_F426A8:	jp sub_F9D404  ; -> prom_a 0x1D404
-T_F426AC:	jp sub_F9D432  ; -> prom_a 0x1D432
+T_F426AC:	jp T_F426AC_Nop  ; -> prom_a 0x1D432
 T_F426B0:	jp sub_F9DF91  ; -> prom_a 0x1DF91
-T_F426B4:	jp sub_F9DFCB  ; -> prom_a 0x1DFCB
+T_F426B4:	jp T_F426B4_Nop  ; -> prom_a 0x1DFCB
 T_F426B8:	jp sub_F9DFCC  ; -> prom_a 0x1DFCC
-T_F426BC:	jp sub_F9DFF3  ; -> prom_a 0x1DFF3
+T_F426BC:	jp T_F426BC_Nop  ; -> prom_a 0x1DFF3
 	.fill 0x20, 1, 0x0E  ; 0xF426C0: 32 x ret
 T_F426E0:	jp sub_F608D0  ; -> prom_b 0x608D0   x3
 T_F426E4:	jp sub_F6079A  ; -> prom_b 0x6079A   x2
@@ -89514,7 +89513,7 @@ T_BStore_AppendBytes_Veneer:	jp BStore_AppendBytes_Veneer  ; F42894 (was T_F4289
 T_F428B0:	jp sub_F7AA00  ; -> prom_b 0x7AA00   x1
 T_F428B4:	jp sub_F7AA02  ; -> prom_b 0x7AA02   x1
 T_F428B8:	jp sub_F7AA29  ; -> prom_b 0x7AA29   x1
-T_F428BC:	jp sub_F7AA88  ; -> prom_b 0x7AA88   x1
+T_F428BC:	jp T_F428BC_Nop  ; -> prom_b 0x7AA88   x1
 T_F428C0:	jp sub_F7AA89  ; -> prom_b 0x7AA89   x1
 T_F428C4:	jp sub_F7AAAF  ; -> prom_b 0x7AAAF   x1
 T_F428C8:	jp sub_F7AADD  ; -> prom_b 0x7AADD   x1
@@ -89647,7 +89646,7 @@ T_F42ABC:	jp sub_F7C5F6  ; -> prom_b 0x7C5F6   x1
 	.fill 0x84, 1, 0x0E  ; 0xF42AEC: 132 x ret
 T_F42B70:	jp sub_F65C51  ; -> prom_b 0x65C51   x1
 T_F42B74:	jp sub_F6609C  ; -> prom_b 0x6609C
-T_F42B78:	jp sub_F660EC  ; -> prom_b 0x660EC
+T_F42B78:	jp T_F42B78_Nop  ; -> prom_b 0x660EC
 T_F42B7C:	jp sub_F66246  ; -> prom_b 0x66246   x2
 T_F42B80:	jp sub_F66251  ; -> prom_b 0x66251   x1
 T_F42B84:	jp sub_F6625C  ; -> prom_b 0x6625C   x1
@@ -89673,14 +89672,14 @@ T_F42BD0:	jp sub_F6614E  ; -> prom_b 0x6614E   x1
 T_F42BD4:	jp sub_F66191  ; -> prom_b 0x66191   x1
 T_F42BD8:	jp sub_F66201  ; -> prom_b 0x66201   x1
 T_F42BDC:	jp sub_F66522  ; -> prom_b 0x66522
-T_F42BE0:	jp sub_F6656D  ; -> prom_b 0x6656D
+T_F42BE0:	jp T_F42BE0_Nop  ; -> prom_b 0x6656D
 T_F42BE4:	jp sub_F66522_Join  ; -> prom_b 0x6652C   x1
 T_F42BE8:	jp sub_F6655D  ; -> prom_b 0x6655D   x1
 T_F42BEC:	jp sub_F6657A  ; -> prom_b 0x6657A   x1
 T_F42BF0:	jp sub_F66598  ; -> prom_b 0x66598
 T_F42BF4:	jp sub_F6656E  ; -> prom_b 0x6656E   x1
 T_F42BF8:	jp sub_F665B4  ; -> prom_b 0x665B4   x1
-T_F42BFC:	jp sub_F665F1  ; -> prom_b 0x665F1
+T_F42BFC:	jp T_F42BFC_Nop  ; -> prom_b 0x665F1
 T_F42C00:	jp sub_F665F2  ; -> prom_b 0x665F2   x1
 T_F42C04:	jp sub_F665FF  ; -> prom_b 0x665FF   x1
 T_F42C08:	jp sub_F6660C  ; -> prom_b 0x6660C   x1
@@ -89689,7 +89688,7 @@ T_F42C10:	jp sub_F66639  ; -> prom_b 0x66639   x1
 T_F42C14:	jp sub_F66658  ; -> prom_b 0x66658   x1
 T_F42C18:	jp sub_F6633A  ; -> prom_b 0x6633A   x2
 T_F42C1C:	jp sub_F66382  ; -> prom_b 0x66382   x1
-T_F42C20:	jp sub_F663D6  ; -> prom_b 0x663D6
+T_F42C20:	jp T_F42C20_Nop  ; -> prom_b 0x663D6
 T_F42C24:	jp sub_F66415  ; -> prom_b 0x66415   x1
 T_F42C28:	jp sub_F663D7  ; -> prom_b 0x663D7   x1
 T_F42C2C:	jp sub_F6645A  ; -> prom_b 0x6645A   x1
@@ -89864,14 +89863,14 @@ T_Blink_GetState:	jp Blink_GetState  ; F42E30 (was T_F42E30) -> prom_b 0x0E835  
 	.fill 0xC, 1, 0x0E  ; 0xF42E34: 12 x ret
 T_F42E40:	.long RetStub_F53000	; ptr -> 0xF53000 (prom_b 0x53000)
 T_F42E44:	jp sub_F53025  ; -> prom_b 0x53025
-T_F42E48:	jp sub_F53029  ; -> prom_b 0x53029
+T_F42E48:	jp T_F42E48_Nop  ; -> prom_b 0x53029
 ; Evidence: slot 0xF42E4C is `jp 0xF5302A`; prom_b 0xF5302A carries the label
 ;           DrawbarScreen_Dispatch, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
 T_DrawbarScreen_Dispatch:	jp DrawbarScreen_Dispatch  ; F42E4C (was T_F42E4C) -> prom_b 0x5302A
-T_F42E50:	jp sub_F53051  ; -> prom_b 0x53051
+T_F42E50:	jp T_F42E50_Nop  ; -> prom_b 0x53051
 T_F42E54:	jp sub_F53DCC  ; -> prom_b 0x53DCC
-T_F42E58:	jp sub_F5301A  ; -> prom_b 0x5301A
-T_F42E5C:	jp sub_F5301A  ; -> prom_b 0x5301A
+T_F42E58:	jp T_F42E58_Nop  ; -> prom_b 0x5301A
+T_F42E5C:	jp T_F42E58_Nop  ; -> prom_b 0x5301A
 T_F42E60:	jp sub_F53DF4  ; -> prom_b 0x53DF4
 T_F42E64:	jp sub_F53E04  ; -> prom_b 0x53E04   x1
 T_F42E68:	jp sub_F541FF  ; -> prom_b 0x541FF   x3
@@ -89907,8 +89906,8 @@ T_F42EDC:	jp sub_F6AF58  ; -> prom_b 0x6AF58   x1
 T_F42EE0:	jp sub_F68787  ; -> prom_b 0x68787
 T_F42EE4:	jp sub_F67470  ; -> prom_b 0x67470
 T_F42EE8:	jp sub_F67434  ; -> prom_b 0x67434
-T_F42EEC:	jp sub_F687EC  ; -> prom_b 0x687EC
-T_F42EF0:	jp sub_F6AB8E  ; -> prom_b 0x6AB8E
+T_F42EEC:	jp T_F42EEC_Nop  ; -> prom_b 0x687EC
+T_F42EF0:	jp T_F42EF0_Nop  ; -> prom_b 0x6AB8E
 T_F42EF4:	jp sub_F6C625  ; -> prom_b 0x6C625
 T_F42EF8:	jp sub_F6747D  ; -> prom_b 0x6747D   x1
 T_F42EFC:	jp sub_F67479  ; -> prom_b 0x67479   x2
@@ -90189,7 +90188,7 @@ T_ScreenNull_SequencerMedley:	jp ScreenNull_SequencerMedley  ; F4315C (was T_F43
 T_F43160:	jp sub_F7D2B4  ; -> prom_b 0x7D2B4
 T_F43164:	jp sub_F7D2B9  ; -> prom_b 0x7D2B9
 T_F43168:	jp sub_F7D2BE  ; -> prom_b 0x7D2BE
-T_F4316C:	jp sub_F7D2C5  ; -> prom_b 0x7D2C5
+T_F4316C:	jp T_F4316C_Nop  ; -> prom_b 0x7D2C5
 ; Evidence: slot 0xF43170 is `jp 0xF7D28A`; prom_b 0xF7D28A carries the label
 ;           ScreenEnter_StepRecordPartSelect (graded CONTENT).  DERIVATIVE name.
 T_ScreenEnter_StepRecordPartSelect:	jp ScreenEnter_StepRecordPartSelect  ; F43170 (was T_F43170) -> prom_b 0x7D28A
@@ -90251,7 +90250,7 @@ T_F431CC:	jp Veneer_F81E7E  ; -> prom_b 0x7D015   x4
 T_F431D0:	jp sub_F7D2C6  ; -> prom_b 0x7D2C6
 T_F431D4:	jp sub_F7D2CB  ; -> prom_b 0x7D2CB
 T_F431D8:	jp sub_F7D2D0  ; -> prom_b 0x7D2D0
-T_F431DC:	jp sub_F7D2D7  ; -> prom_b 0x7D2D7
+T_F431DC:	jp T_F431DC_Nop  ; -> prom_b 0x7D2D7
 	.fill 0xE0, 1, 0x0E  ; 0xF431E0: 224 x ret
 T_F432C0:	jp sub_F65000  ; -> prom_b 0x65000   x2
 T_F432C4:	jp sub_F65003  ; -> prom_b 0x65003   x2
@@ -90286,11 +90285,11 @@ T_F433C0:	jp sub_FE02AB  ; -> prom_a 0x602AB
 T_F433D0:	jp sub_FDD02D  ; -> prom_a 0x5D02D
 T_F433D4:	jp sub_FDE2EC  ; -> prom_a 0x5E2EC
 T_F433D8:	jp sub_F0AA10  ; -> prom_b 0x0AA10
-T_F433DC:	jp sub_FDE2F9  ; -> prom_a 0x5E2F9
-T_F433E0:	jp sub_FDE151  ; -> prom_a 0x5E151
+T_F433DC:	jp T_F433DC_Nop  ; -> prom_a 0x5E2F9
+T_F433E0:	jp T_F433E0_Nop  ; -> prom_a 0x5E151
 T_F433E4:	jp sub_FDE3B0  ; -> prom_a 0x5E3B0
-T_F433E8:	jp sub_F0AAB2  ; -> prom_b 0x0AAB2
-T_F433EC:	jp sub_FDE3BD  ; -> prom_a 0x5E3BD
+T_F433E8:	jp T_F433E8_Nop  ; -> prom_b 0x0AAB2
+T_F433EC:	jp T_F433EC_Nop  ; -> prom_a 0x5E3BD
 	.fill 0x10, 1, 0x0E  ; 0xF433F0: 16 x ret
 T_F43400:	jp sub_F9F5E8  ; -> prom_a 0x1F5E8   x1
 T_F43404:	jp sub_F9F65B  ; -> prom_a 0x1F65B   x3
@@ -90328,21 +90327,21 @@ T_F434A0:	jp DspParam_WriteByNumber  ; -> prom_b 0x11C30   x2
 T_F434A4:	jp DspParam_ReadByNumber  ; -> prom_b 0x1220B   x2
 	.fill 0x18, 1, 0x0E  ; 0xF434A8: 24 x ret
 T_F434C0:	jp sub_F9EEAB  ; -> prom_a 0x1EEAB
-T_F434C4:	jp sub_F9EEDF  ; -> prom_a 0x1EEDF
+T_F434C4:	jp T_F434C4_Nop  ; -> prom_a 0x1EEDF
 T_F434C8:	jp sub_F9EEE0  ; -> prom_a 0x1EEE0
-T_F434CC:	jp sub_F9EF07  ; -> prom_a 0x1EF07
+T_F434CC:	jp T_F434CC_Nop  ; -> prom_a 0x1EF07
 T_F434D0:	jp sub_F9FDC8  ; -> prom_a 0x1FDC8
 T_F434D4:	jp sub_FA0D10  ; -> prom_a 0x20D10   x1
 	.fill 0x8, 1, 0x0E  ; 0xF434D8: 8 x ret
 T_F434E0:	jp sub_F4C46A  ; -> prom_b 0x4C46A
 T_F434E4:	jp sub_F4C4B0  ; -> prom_b 0x4C4B0
 T_F434E8:	jp sub_F4C4B5  ; -> prom_b 0x4C4B5
-T_F434EC:	jp sub_F4C4DC  ; -> prom_b 0x4C4DC
+T_F434EC:	jp T_F434EC_Nop  ; -> prom_b 0x4C4DC
 T_F434F0:	jp sub_F4C3F2  ; -> prom_b 0x4C3F2
 T_F434F4:	jp sub_F4C42E  ; -> prom_b 0x4C42E
 	.fill 0xB08, 1, 0x0E  ; 0xF434F8: 2824 x ret
 T_F44000:	jp sub_F44042  ; -> prom_b 0x44042
-T_F44004:	jp sub_F4425F  ; -> prom_b 0x4425F
+T_F44004:	jp T_F44004_Nop  ; -> prom_b 0x4425F
 T_F44008:	jp sub_F44095  ; -> prom_b 0x44095
 T_F4400C:	jp sub_F440C4  ; -> prom_b 0x440C4
 T_F44010:	jp sub_F44095  ; -> prom_b 0x44095
@@ -90886,17 +90885,17 @@ sub_F44237:
 	ret	; F4425E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4425F
+; T_F44004_Nop
 ; Called from: T_F44004 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F44004 holds `jp 0x00F4425F`, and 0xF4425F is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F44004_Nop after what reaches it
+;          (was sub_F4425F; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F4425F:		; <- T_F44004
+T_F44004_Nop:		; <- T_F44004
 	ret	; F4425F  ret
 
 ; --------------------------------------------------------------------------
@@ -94734,12 +94733,12 @@ Dispatch_3629:
 	.long	sub_F45EAF	; [0] -> sub_F45EAF
 	.long	sub_F45ED2	; [1] -> sub_F45ED2
 	.long	sub_F45EF2	; [2] -> sub_F45EF2
-	.long	sub_F45EAE	; [3] -> sub_F45EAE
-	.long	sub_F45EAE	; [4] -> sub_F45EAE
+	.long	Dispatch_3629_Nop3	; [3] -> Dispatch_3629_Nop3
+	.long	Dispatch_3629_Nop3	; [4] -> Dispatch_3629_Nop3
 
 
 ; --------------------------------------------------------------------------
-; sub_F45EAE
+; Dispatch_3629_Nop3
 ; Called from: dispatch entry Dispatch_3629[3, 4]
 ; Touches: nothing with an absolute address
 ; Evidence: the label is here because it is the address BOTH
@@ -94747,10 +94746,10 @@ Dispatch_3629:
 ;           that table -- so it is where the table ends and the code
 ;           resumes; the address is an instruction boundary of this
 ;           transcription (re-asserted on every emit)
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named Dispatch_3629_Nop3 after what reaches it
+;          (was sub_F45EAE; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F45EAE:
+Dispatch_3629_Nop3:
 	ret	; F45EAE  ret
 
 ; --------------------------------------------------------------------------
@@ -96889,7 +96888,7 @@ sub_F483B2_Return:
 ; sub_F4840E
 ; Called from: in-module: 0xF47C88 0xF47CA7 0xF4810C
 ; Touches: (0x345C) (0x345E)
-; Calls:   T_F40C54 sub_F48463
+; Calls:   T_F40C54 sub_F4840E_Nop
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4840E is an instruction boundary.
 ;           The name IS the address.
@@ -96901,7 +96900,7 @@ sub_F4840E:
 	jr	sub_F4840E_Return	; F48412  jr T,0xf48414
 sub_F4840E_Return:
 	ret	; F48414  ret
-	calr	sub_F48463	; F48415  calr 0xf48463
+	calr	sub_F4840E_Nop	; F48415  calr 0xf48463
 	xor	xhl, xhl	; F48418  xor XHL,XHL
 	ld	hl, (13404:16)	; F4841A  ld HL,(0x345c)
 	dec	1, xhl	; F4841E  dec 1,XHL
@@ -96915,7 +96914,7 @@ sub_F4840E_Return:
 ; sub_F4842F
 ; Called from: in-module: 0xF47CA4 0xF48109
 ; Touches: (0x345C) (0x345E)
-; Calls:   T_F40C50 sub_F48463
+; Calls:   T_F40C50 sub_F4840E_Nop
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF4842F is an instruction boundary.
 ;           The name IS the address.
@@ -96930,7 +96929,7 @@ sub_F4842F_Return:
 	ld	wa, (13406:16)	; F48436  ld WA,(0x345e)
 	cp	wa, 255	; F4843A  cp WA,0x00ff
 	jr	nz, sub_F4842F_Skip	; F4843E  jr NZ,0xf4845c
-	calr	sub_F48463	; F48440  calr 0xf48463
+	calr	sub_F4840E_Nop	; F48440  calr 0xf48463
 	xor	xhl, xhl	; F48443  xor XHL,XHL
 	ld	hl, (13404:16)	; F48445  ld HL,(0x345c)
 	dec	1, xhl	; F48449  dec 1,XHL
@@ -96947,16 +96946,16 @@ sub_F4842F_Join:
 	ret	; F48462  ret
 
 ; --------------------------------------------------------------------------
-; sub_F48463
+; sub_F4840E_Nop
 ; Called from: in-module: 0xF48415 0xF48440
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF48463 is an instruction boundary.
 ;           The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F4840E_Nop after what reaches it
+;          (was sub_F48463; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F48463:
+sub_F4840E_Nop:
 	ret	; F48463  ret
 
 ; --------------------------------------------------------------------------
@@ -103264,7 +103263,7 @@ sub_F4C4B5_Resume:
 	ret	; F4C4DB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4C4DC
+; T_F434EC_Nop
 ; Called from: T_F434EC (x0)
 ; Touches: (0x2070) (0x2071) (0x2075) (0x2092) (0x209A) (0x2250) (0x2540)
 ;          (0x2640) (0x2870) (0x28B0) +1 more
@@ -103273,10 +103272,10 @@ sub_F4C4B5_Resume:
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F434EC_Nop after what reaches it
+;          (was sub_F4C4DC; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F4C4DC:		; <- T_F434EC
+T_F434EC_Nop:		; <- T_F434EC
 	ret	; F4C4DC  ret
 sub_F4C4DD:
 	pushw	hl	; F4C4DD  push HL
@@ -106212,17 +106211,17 @@ sub_F4E50B:
 	ret	; F4E523  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4E524
+; T_F40CB4_Nop
 ; Called from: T_F40CB4 (x14)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F40CB4 holds `jp 0x00F4E524`, and 0xF4E524 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F40CB4_Nop after what reaches it
+;          (was sub_F4E524; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F4E524:		; <- T_F40CB4
+T_F40CB4_Nop:		; <- T_F40CB4
 	ret	; F4E524  ret
 
 ; --------------------------------------------------------------------------
@@ -106306,17 +106305,17 @@ sub_F4E545_Return2:
 	ret	; F4E590  ret
 
 ; --------------------------------------------------------------------------
-; sub_F4E591
+; T_F40CB8_Nop
 ; Called from: T_F40CB8 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F40CB8 holds `jp 0x00F4E591`, and 0xF4E591 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F40CB8_Nop after what reaches it
+;          (was sub_F4E591; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F4E591:		; <- T_F40CB8
+T_F40CB8_Nop:		; <- T_F40CB8
 	ret	; F4E591  ret
 
 ; --------------------------------------------------------------------------
@@ -109754,19 +109753,19 @@ RetStub_F53000:
 	nop	; F53014  nop
 	nop	; F53015  nop
 RetStub_F53000_Join:
-	calr	sub_F541FE	; F53016  calr 0xf541fe
+	calr	RetStub_F53000_Nop	; F53016  calr 0xf541fe
 	ret	; F53019  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5301A
+; T_F42E58_Nop
 ; Called from: thunk slot T_F42E58; thunk slot T_F42E5C
 ; Evidence: 0xF5301A is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42E58_Nop after what reaches it
+;          (was sub_F5301A; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F5301A:		; <- T_F42E58, T_F42E5C
+T_F42E58_Nop:		; <- T_F42E58, T_F42E5C
 	ret	; F5301A  ret
 	m_set 1, MD16, 0x2134	; F5301B  set 1,(0x2134)
 	ret	; F5301F  ret
@@ -109787,15 +109786,15 @@ sub_F53025:		; <- T_F42E44
 	ret	; F53028  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53029
+; T_F42E48_Nop
 ; Called from: thunk slot T_F42E48
 ; Evidence: 0xF53029 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42E48_Nop after what reaches it
+;          (was sub_F53029; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F53029:		; <- T_F42E48
+T_F42E48_Nop:		; <- T_F42E48
 	ret	; F53029  ret
 
 ; --------------------------------------------------------------------------
@@ -109828,15 +109827,15 @@ DrawbarScreen_Dispatch_Resume:
 	ret	; F53050  ret
 
 ; --------------------------------------------------------------------------
-; sub_F53051
+; T_F42E50_Nop
 ; Called from: thunk slot T_F42E50
 ; Evidence: 0xF53051 is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42E50_Nop after what reaches it
+;          (was sub_F53051; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F53051:		; <- T_F42E50
+T_F42E50_Nop:		; <- T_F42E50
 	ret	; F53051  ret
 
 ; --------------------------------------------------------------------------
@@ -112759,15 +112758,15 @@ sub_F5418E_Loop:
 	ret	; F541FD  ret
 
 ; --------------------------------------------------------------------------
-; sub_F541FE
+; RetStub_F53000_Nop
 ; Called from: call from 0xF53016
 ; Evidence: 0xF541FE is an instruction boundary of this transcription, re-
 ;           asserted on every emit, and the reference above names it.  That
 ;           is ALL the name rests on -- the name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named RetStub_F53000_Nop after what reaches it
+;          (was sub_F541FE; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F541FE:
+RetStub_F53000_Nop:
 	ret	; F541FE  ret
 
 ; --------------------------------------------------------------------------
@@ -126693,7 +126692,7 @@ DispatchTable_F5B8F8:
 	.long sub_F5C1AC	; [0xA7]  <- also selector 0xC7
 	.long sub_F5C210	; [0xA8]  <- also selector 0xC8
 	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
-	.long sub_F5D29A	; [0xAA]  <- also selector 0xCA
+	.long DispatchTable_F5B8F8_Nop42	; [0xAA]  <- also selector 0xCA
 	.long sub_F5D29B	; [0xAB]  <- also selector 0xCB
 	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_PaintPage1	; [0xAD]  <- also selector 0xCD
@@ -126790,7 +126789,7 @@ DispatchTable_F5B9F8:
 	.long sub_F5CDD4	; [0xA7]  <- also selector 0xC7
 	.long sub_F5CE00	; [0xA8]  <- also selector 0xC8
 	.long sub_F5BE5A + 0xBD	; [0xA9]   (default `ret`)  <- also selector 0xC9
-	.long sub_F5D40D	; [0xAA]  <- also selector 0xCA
+	.long DispatchTable_F5B9F8_Nop42	; [0xAA]  <- also selector 0xCA
 	.long sub_F5D2D5	; [0xAB]  <- also selector 0xCB
 	.long sub_F5BE5A + 0xBD	; [0xAC]   (default `ret`)  <- also selector 0xCC
 	.long SoundEditController_RepaintFieldPage1	; [0xAD]  <- also selector 0xCD
@@ -129418,7 +129417,7 @@ sub_F5D199_Skip6:
 	call	sub_F5D3C6	; F5D295  call 0xf5d3c6
 sub_F5D199_Return:
 	ret	; F5D299  ret
-sub_F5D29A:
+DispatchTable_F5B8F8_Nop42:
 	ret	; F5D29A  ret
 sub_F5D29B:
 	ld	(9536:16), 0	; F5D29B  ld (0x2540),0x00
@@ -129523,8 +129522,8 @@ sub_F5D199_Return2:
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D3C6 is an instruction boundary.
 ;           The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F5B9F8_Nop42 after what reaches it
+;          (was sub_F5D40D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
 sub_F5D3C6:
 	xor	wa, wa	; F5D3C6  xor WA,WA
@@ -129549,7 +129548,7 @@ sub_F5D3C6:
 	ld	a, 5:opc	; F5D409  ld A,0x05
 	swi	7	; F5D40B  swi 7
 	ret	; F5D40C  ret
-sub_F5D40D:
+DispatchTable_F5B9F8_Nop42:
 	ret	; F5D40D  ret
 sub_F5D40E:
 	call	sub_F5C49F	; F5D40E  call 0xf5c49f
@@ -142128,7 +142127,7 @@ sub_F65C00:		; <- T_F42BB4
 ; sub_F65C0D
 ; Called from: T_F42BB8 (x1)
 ; Touches: (0x212E) (0x2130) (0x2160)
-; Calls:   sub_F665B3 sub_F65C27
+; Calls:   sub_F65C0D_Nop sub_F65C27
 ; Evidence: thunk slot T_F42BB8 holds `jp 0x00F65C0D`, and 0xF65C0D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -142140,7 +142139,7 @@ sub_F65C0D:		; <- T_F42BB8
 	m_and_mi16 MW16, 0x2130, 0xfeff	; F65C0D  and (0x2130),0xfeff
 	m_or_mi16 MW16, 0x212e, 0x0100	; F65C13  or (0x212e),0x0100
 	ldw	(8544:16), 0	; F65C19  ld (0x2160),0x0000
-	calr	sub_F665B3	; F65C1F  calr 0xf665b3
+	calr	sub_F65C0D_Nop	; F65C1F  calr 0xf665b3
 	call	sub_F65C27	; F65C22  call 0xf65c27
 	ret	; F65C26  ret
 
@@ -142847,17 +142846,17 @@ sub_F660A0_Epilogue:
 	ret	; F660EB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F660EC
+; T_F42B78_Nop
 ; Called from: T_F42B78 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F42B78 holds `jp 0x00F660EC`, and 0xF660EC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42B78_Nop after what reaches it
+;          (was sub_F660EC; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F660EC:		; <- T_F42B78
+T_F42B78_Nop:		; <- T_F42B78
 	ret	; F660EC  ret
 
 ; --------------------------------------------------------------------------
@@ -143335,17 +143334,17 @@ sub_F662F7_Return2:
 	ret	; F663D5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F663D6
+; T_F42C20_Nop
 ; Called from: T_F42C20 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F42C20 holds `jp 0x00F663D6`, and 0xF663D6 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42C20_Nop after what reaches it
+;          (was sub_F663D6; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F663D6:		; <- T_F42C20
+T_F42C20_Nop:		; <- T_F42C20
 	ret	; F663D6  ret
 
 ; --------------------------------------------------------------------------
@@ -143597,17 +143596,17 @@ sub_F662F7_Return7:
 	ret	; F6656C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6656D
+; T_F42BE0_Nop
 ; Called from: T_F42BE0 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F42BE0 holds `jp 0x00F6656D`, and 0xF6656D is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42BE0_Nop after what reaches it
+;          (was sub_F6656D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6656D:		; <- T_F42BE0
+T_F42BE0_Nop:		; <- T_F42BE0
 	ret	; F6656D  ret
 
 ; --------------------------------------------------------------------------
@@ -143677,16 +143676,16 @@ sub_F662F7_Return10:
 	ret	; F665B2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F665B3
+; sub_F65C0D_Nop
 ; Called from: in-module: 0xF65C1F
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF665B3 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F65C0D_Nop after what reaches it
+;          (was sub_F665B3; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F665B3:
+sub_F65C0D_Nop:
 	ret	; F665B3  ret
 
 ; --------------------------------------------------------------------------
@@ -143723,17 +143722,17 @@ sub_F662F7_Return11:
 	ret	; F665F0  ret
 
 ; --------------------------------------------------------------------------
-; sub_F665F1
+; T_F42BFC_Nop
 ; Called from: T_F42BFC (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F42BFC holds `jp 0x00F665F1`, and 0xF665F1 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42BFC_Nop after what reaches it
+;          (was sub_F665F1; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F665F1:		; <- T_F42BFC
+T_F42BFC_Nop:		; <- T_F42BFC
 	ret	; F665F1  ret
 
 ; --------------------------------------------------------------------------
@@ -144364,7 +144363,7 @@ sub_F6742C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F67430:
-	jp	sub_F6B005	; F67430  jp 0xf6b005
+	jp	sub_F67430_Nop	; F67430  jp 0xf6b005
 
 ; --------------------------------------------------------------------------
 ; sub_F67434
@@ -144378,7 +144377,7 @@ sub_F67430:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F67434:		; <- T_F42EE8
-	jp	sub_F6B2ED	; F67434  jp 0xf6b2ed
+	jp	sub_F67434_Nop	; F67434  jp 0xf6b2ed
 
 ; --------------------------------------------------------------------------
 ; sub_F67438
@@ -144417,8 +144416,8 @@ sub_F6743C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F67440:
-	jp	sub_F6C529	; F67440  jp 0xf6c529
-	jp	sub_F6C8F3	; F67444  jp 0xf6c8f3
+	jp	sub_F67440_Nop	; F67440  jp 0xf6c529
+	jp	sub_F67440_Nop2	; F67444  jp 0xf6c8f3
 
 ; --------------------------------------------------------------------------
 ; sub_F67448
@@ -144496,7 +144495,7 @@ sub_F67458:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6745C:
-	jp	sub_F6E607	; F6745C  jp 0xf6e607
+	jp	sub_F6745C_Nop	; F6745C  jp 0xf6e607
 
 ; --------------------------------------------------------------------------
 ; sub_F67460
@@ -144509,7 +144508,7 @@ sub_F6745C:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F67460:
-	jp	sub_F6E60B	; F67460  jp 0xf6e60b
+	jp	sub_F67460_Nop	; F67460  jp 0xf6e60b
 
 ; --------------------------------------------------------------------------
 ; sub_F67464
@@ -144522,7 +144521,7 @@ sub_F67460:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F67464:
-	jp	sub_F6E627	; F67464  jp 0xf6e627
+	jp	sub_F67464_Nop	; F67464  jp 0xf6e627
 
 ; --------------------------------------------------------------------------
 ; sub_F67468
@@ -144692,10 +144691,10 @@ sub_F674AD_Return:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F674CE:
-	.long	sub_F675CB	; F674CE  [0] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F674CE  [0] -> ret stub
 	.long	sub_F674DE	; F674D2  [1] -> 0xF674DE
 	.long	sub_F67558	; F674D6  [2] -> 0xF67558
-	.long	sub_F675CB	; F674DA  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F674DA  [3] -> ret stub
 
 sub_F674DE:
 	and	w, 3	; F674DE  and W,0x03
@@ -144764,7 +144763,7 @@ DispatchTable_F67548:
 	.long	sub_F6A304	; F67548  [0] -> sub_F6A304
 	.long	sub_F68B70	; F6754C  [1] -> sub_F68B70
 	.long	sub_F6740C	; F67550  [2] -> sub_F6740C
-	.long	sub_F675CB	; F67554  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67554  [3] -> ret stub
 
 sub_F67558:
 	and	w, 3	; F67558  and W,0x03
@@ -144828,12 +144827,12 @@ sub_F67558_Return:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F675BB:
-	.long	sub_F675CB	; F675BB  [0] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F675BB  [0] -> ret stub
 	.long	sub_F68B70	; F675BF  [1] -> sub_F68B70
 	.long	sub_F6740C	; F675C3  [2] -> sub_F6740C
-	.long	sub_F675CB	; F675C7  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F675C7  [3] -> ret stub
 
-sub_F675CB:
+DispatchTable_F674CE_Nop0:
 	ret	; F675CB  ret
 
 ; --------------------------------------------------------------------------
@@ -144885,21 +144884,21 @@ sub_F675CC_Return:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F675F3:
-	.long	sub_F67603	; F675F3  [0] -> 0xF67603
+	.long	DispatchTable_F675F3_Nop0	; F675F3  [0] -> 0xF67603
 	.long	sub_F676B6	; F675F7  [1] -> 0xF676B6
 	.long	sub_F676B6	; F675FB  [2] -> 0xF676B6
 	.long	sub_F6776F	; F675FF  [3] -> 0xF6776F
 
-sub_F67603:
+DispatchTable_F675F3_Nop0:
 	ret	; F67603  ret
 sub_F67604:
 	m_or_mi8 MB16, 0x2075, 0x08	; F67604  or (0x2075),0x08
 	bit	7, w	; F67609  bit 0x07,W
 	jr	z, sub_F67604_Skip	; F6760C  jr Z,0xf67612
-	calr	sub_F6B1D7	; F6760E  calr 0xf6b1d7
+	calr	sub_F67604_Nop	; F6760E  calr 0xf6b1d7
 	ret	; F67611  ret
 sub_F67604_Skip:
-	calr	sub_F6B1D9	; F67612  calr 0xf6b1d9
+	calr	sub_F67604_Nop2	; F67612  calr 0xf6b1d9
 	ret	; F67615  ret
 
 ; --------------------------------------------------------------------------
@@ -144936,37 +144935,37 @@ sub_F67604_Skip:
 ; --------------------------------------------------------------------------
 DispatchTable_F67616:
 	.long	sub_F67604	; F67616  [0] -> 0xF67604
-	.long	sub_F675CB	; F6761A  [1] -> ret stub
-	.long	sub_F675CB	; F6761E  [2] -> ret stub
-	.long	sub_F675CB	; F67622  [3] -> ret stub
-	.long	sub_F675CB	; F67626  [4] -> ret stub
-	.long	sub_F675CB	; F6762A  [5] -> ret stub
-	.long	sub_F675CB	; F6762E  [6] -> ret stub
-	.long	sub_F675CB	; F67632  [7] -> ret stub
-	.long	sub_F675CB	; F67636  [8] -> ret stub
-	.long	sub_F675CB	; F6763A  [9] -> ret stub
-	.long	sub_F675CB	; F6763E  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6761A  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6761E  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67622  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67626  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6762A  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6762E  [6] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67632  [7] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67636  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6763A  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6763E  [10] -> ret stub
 	.long	sub_F688F0	; F67642  [11] -> 0xF688F0
-	.long	sub_F675CB	; F67646  [12] -> ret stub
-	.long	sub_F675CB	; F6764A  [13] -> ret stub
-	.long	sub_F675CB	; F6764E  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67646  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6764A  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6764E  [14] -> ret stub
 	.long	sub_F67696	; F67652  [15] -> 0xF67696
-	.long	sub_F675CB	; F67656  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67656  [16] -> ret stub
 	.long	sub_F67604	; F6765A  [17] -> 0xF67604
-	.long	sub_F675CB	; F6765E  [18] -> ret stub
-	.long	sub_F675CB	; F67662  [19] -> ret stub
-	.long	sub_F675CB	; F67666  [20] -> ret stub
-	.long	sub_F675CB	; F6766A  [21] -> ret stub
-	.long	sub_F675CB	; F6766E  [22] -> ret stub
-	.long	sub_F675CB	; F67672  [23] -> ret stub
-	.long	sub_F675CB	; F67676  [24] -> ret stub
-	.long	sub_F675CB	; F6767A  [25] -> ret stub
-	.long	sub_F675CB	; F6767E  [26] -> ret stub
-	.long	sub_F675CB	; F67682  [27] -> ret stub
-	.long	sub_F675CB	; F67686  [28] -> ret stub
-	.long	sub_F675CB	; F6768A  [29] -> ret stub
-	.long	sub_F675CB	; F6768E  [30] -> ret stub
-	.long	sub_F675CB	; F67692  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6765E  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67662  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67666  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6766A  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6766E  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67672  [23] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67676  [24] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6767A  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6767E  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67682  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67686  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6768A  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6768E  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67692  [31] -> ret stub
 
 sub_F67696:
 	bit	7, w	; F67696  bit 0x07,W
@@ -145061,12 +145060,12 @@ DispatchTable_F67723:
 	.long	0x00F67DCF	; F67747  [9] -> 0xF67DCF
 	.long	sub_F67F7C	; F6774B  [10] -> 0xF67F7C
 	.long	sub_F6CBD4	; F6774F  [11] -> 0xF6CBD4
-	.long	sub_F675CB	; F67753  [12] -> ret stub
-	.long	sub_F675CB	; F67757  [13] -> ret stub
-	.long	sub_F675CB	; F6775B  [14] -> ret stub
-	.long	sub_F675CB	; F6775F  [15] -> ret stub
-	.long	sub_F675CB	; F67763  [16] -> ret stub
-	.long	sub_F675CB	; F67767  [17] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67753  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67757  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6775B  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6775F  [15] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67763  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67767  [17] -> ret stub
 	.long	sub_F686DB	; F6776B  [18] -> 0xF686DB
 
 sub_F6776F:
@@ -145102,18 +145101,18 @@ sub_F6776F:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F67789:
-	.long	sub_F675CB	; F67789  [0] -> ret stub
-	.long	sub_F675CB	; F6778D  [1] -> ret stub
-	.long	sub_F675CB	; F67791  [2] -> ret stub
-	.long	sub_F675CB	; F67795  [3] -> ret stub
-	.long	sub_F675CB	; F67799  [4] -> ret stub
-	.long	sub_F675CB	; F6779D  [5] -> ret stub
-	.long	sub_F675CB	; F677A1  [6] -> ret stub
-	.long	sub_F675CB	; F677A5  [7] -> ret stub
-	.long	sub_F675CB	; F677A9  [8] -> ret stub
-	.long	sub_F675CB	; F677AD  [9] -> ret stub
-	.long	sub_F675CB	; F677B1  [10] -> ret stub
-	.long	sub_F675CB	; F677B5  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67789  [0] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6778D  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67791  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67795  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67799  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6779D  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F677A1  [6] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F677A5  [7] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F677A9  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F677AD  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F677B1  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F677B5  [11] -> ret stub
 	.long	sub_F67404	; F677B9  [12] -> 0xF67404
 	.long	sub_F67408	; F677BD  [13] -> 0xF67408
 	.long	sub_F67408	; F677C1  [14] -> 0xF67408
@@ -145180,11 +145179,11 @@ DispatchTable_F677EF:
 	.long	sub_F68F62	; F67813  [9] -> sub_F68F62
 	.long	sub_F6C8F8	; F67817  [10] -> 0xF6C8F8
 	.long	sub_F68DE1	; F6781B  [11] -> 0xF68DE1
-	.long	sub_F675CB	; F6781F  [12] -> ret stub
-	.long	sub_F675CB	; F67823  [13] -> ret stub
-	.long	sub_F675CB	; F67827  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6781F  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67823  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67827  [14] -> ret stub
 	.long	sub_F67696	; F6782B  [15] -> 0xF67696
-	.long	sub_F675CB	; F6782F  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6782F  [16] -> ret stub
 	.long	sub_F678F8	; F67833  [17] -> 0xF678F8
 	.long	sub_F69867	; F67837  [18] -> 0xF69867
 	.long	sub_F69AB0	; F6783B  [19] -> 0xF69AB0
@@ -145193,13 +145192,13 @@ DispatchTable_F677EF:
 	.long	sub_F678A9	; F67847  [22] -> 0xF678A9
 	.long	sub_F6748D	; F6784B  [23] -> 0xF6748D
 	.long	sub_F6749D	; F6784F  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67853  [25] -> ret stub
-	.long	sub_F675CB	; F67857  [26] -> ret stub
-	.long	sub_F675CB	; F6785B  [27] -> ret stub
-	.long	sub_F675CB	; F6785F  [28] -> ret stub
-	.long	sub_F675CB	; F67863  [29] -> ret stub
-	.long	sub_F675CB	; F67867  [30] -> ret stub
-	.long	sub_F675CB	; F6786B  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67853  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67857  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6785B  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6785F  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67863  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67867  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6786B  [31] -> ret stub
 
 sub_F6786F:
 	m_or_mi8 MB16, 0x2075, 0x08	; F6786F  or (0x2075),0x08
@@ -145351,37 +145350,37 @@ sub_F6791E_Skip:
 ; --------------------------------------------------------------------------
 DispatchTable_F67939:
 	.long	sub_F678F8	; F67939  [0] -> 0xF678F8
-	.long	sub_F675CB	; F6793D  [1] -> ret stub
-	.long	sub_F675CB	; F67941  [2] -> ret stub
-	.long	sub_F675CB	; F67945  [3] -> ret stub
-	.long	sub_F675CB	; F67949  [4] -> ret stub
-	.long	sub_F675CB	; F6794D  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6793D  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67941  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67945  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67949  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6794D  [5] -> ret stub
 	.long	sub_F6748D	; F67951  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67955  [7] -> 0xF6749D
 	.long	sub_F67D6F	; F67959  [8] -> 0xF67D6F
 	.long	sub_F68F62	; F6795D  [9] -> sub_F68F62
 	.long	sub_F6C8F8	; F67961  [10] -> 0xF6C8F8
-	.long	sub_F675CB	; F67965  [11] -> ret stub
-	.long	sub_F675CB	; F67969  [12] -> ret stub
-	.long	sub_F675CB	; F6796D  [13] -> ret stub
-	.long	sub_F675CB	; F67971  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67965  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67969  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6796D  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67971  [14] -> ret stub
 	.long	sub_F67696	; F67975  [15] -> 0xF67696
-	.long	sub_F675CB	; F67979  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67979  [16] -> ret stub
 	.long	sub_F678F8	; F6797D  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67981  [18] -> ret stub
-	.long	sub_F675CB	; F67985  [19] -> ret stub
-	.long	sub_F675CB	; F67989  [20] -> ret stub
-	.long	sub_F675CB	; F6798D  [21] -> ret stub
-	.long	sub_F675CB	; F67991  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67981  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67985  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67989  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6798D  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67991  [22] -> ret stub
 	.long	sub_F6748D	; F67995  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67999  [24] -> 0xF6749D
-	.long	sub_F675CB	; F6799D  [25] -> ret stub
-	.long	sub_F675CB	; F679A1  [26] -> ret stub
-	.long	sub_F675CB	; F679A5  [27] -> ret stub
-	.long	sub_F675CB	; F679A9  [28] -> ret stub
-	.long	sub_F675CB	; F679AD  [29] -> ret stub
-	.long	sub_F675CB	; F679B1  [30] -> ret stub
-	.long	sub_F675CB	; F679B5  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6799D  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679A1  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679A5  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679A9  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679AD  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679B1  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679B5  [31] -> ret stub
 
 sub_F679B9:
 	ld	hl, bc	; F679B9  ld HL,BC
@@ -145430,37 +145429,37 @@ sub_F679B9_Return:
 ; --------------------------------------------------------------------------
 DispatchTable_F679D3:
 	.long	sub_F678F8	; F679D3  [0] -> 0xF678F8
-	.long	sub_F675CB	; F679D7  [1] -> ret stub
-	.long	sub_F675CB	; F679DB  [2] -> ret stub
-	.long	sub_F675CB	; F679DF  [3] -> ret stub
-	.long	sub_F675CB	; F679E3  [4] -> ret stub
-	.long	sub_F675CB	; F679E7  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679D7  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679DB  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679DF  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679E3  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679E7  [5] -> ret stub
 	.long	sub_F6748D	; F679EB  [6] -> 0xF6748D
 	.long	sub_F6749D	; F679EF  [7] -> 0xF6749D
 	.long	sub_F67D6F	; F679F3  [8] -> 0xF67D6F
-	.long	sub_F675CB	; F679F7  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F679F7  [9] -> ret stub
 	.long	sub_F694DF	; F679FB  [10] -> sub_F694DF
 	.long	sub_F694D0	; F679FF  [11] -> sub_F694D0
-	.long	sub_F675CB	; F67A03  [12] -> ret stub
-	.long	sub_F675CB	; F67A07  [13] -> ret stub
-	.long	sub_F675CB	; F67A0B  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A03  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A07  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A0B  [14] -> ret stub
 	.long	sub_F67696	; F67A0F  [15] -> 0xF67696
-	.long	sub_F675CB	; F67A13  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A13  [16] -> ret stub
 	.long	sub_F678F8	; F67A17  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67A1B  [18] -> ret stub
-	.long	sub_F675CB	; F67A1F  [19] -> ret stub
-	.long	sub_F675CB	; F67A23  [20] -> ret stub
-	.long	sub_F675CB	; F67A27  [21] -> ret stub
-	.long	sub_F675CB	; F67A2B  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A1B  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A1F  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A23  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A27  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A2B  [22] -> ret stub
 	.long	sub_F6748D	; F67A2F  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67A33  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67A37  [25] -> ret stub
-	.long	sub_F675CB	; F67A3B  [26] -> ret stub
-	.long	sub_F675CB	; F67A3F  [27] -> ret stub
-	.long	sub_F675CB	; F67A43  [28] -> ret stub
-	.long	sub_F675CB	; F67A47  [29] -> ret stub
-	.long	sub_F675CB	; F67A4B  [30] -> ret stub
-	.long	sub_F675CB	; F67A4F  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A37  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A3B  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A3F  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A43  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A47  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A4B  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A4F  [31] -> ret stub
 
 sub_F67A53:
 	ld	hl, bc	; F67A53  ld HL,BC
@@ -145517,37 +145516,37 @@ sub_F67A6D_Skip:
 ; --------------------------------------------------------------------------
 DispatchTable_F67A7A:
 	.long	sub_F678F8	; F67A7A  [0] -> 0xF678F8
-	.long	sub_F675CB	; F67A7E  [1] -> ret stub
-	.long	sub_F675CB	; F67A82  [2] -> ret stub
-	.long	sub_F675CB	; F67A86  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A7E  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A82  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A86  [3] -> ret stub
 	.long	sub_F67A6D	; F67A8A  [4] -> 0xF67A6D
-	.long	sub_F675CB	; F67A8E  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67A8E  [5] -> ret stub
 	.long	sub_F6748D	; F67A92  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67A96  [7] -> 0xF6749D
 	.long	sub_F67D6F	; F67A9A  [8] -> 0xF67D6F
 	.long	sub_F68F62	; F67A9E  [9] -> sub_F68F62
-	.long	sub_F675CB	; F67AA2  [10] -> ret stub
-	.long	sub_F675CB	; F67AA6  [11] -> ret stub
-	.long	sub_F675CB	; F67AAA  [12] -> ret stub
-	.long	sub_F675CB	; F67AAE  [13] -> ret stub
-	.long	sub_F675CB	; F67AB2  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AA2  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AA6  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AAA  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AAE  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AB2  [14] -> ret stub
 	.long	sub_F67696	; F67AB6  [15] -> 0xF67696
-	.long	sub_F675CB	; F67ABA  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67ABA  [16] -> ret stub
 	.long	sub_F678F8	; F67ABE  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67AC2  [18] -> ret stub
-	.long	sub_F675CB	; F67AC6  [19] -> ret stub
-	.long	sub_F675CB	; F67ACA  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AC2  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AC6  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67ACA  [20] -> ret stub
 	.long	sub_F67A6D	; F67ACE  [21] -> 0xF67A6D
-	.long	sub_F675CB	; F67AD2  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AD2  [22] -> ret stub
 	.long	sub_F6748D	; F67AD6  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67ADA  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67ADE  [25] -> ret stub
-	.long	sub_F675CB	; F67AE2  [26] -> ret stub
-	.long	sub_F675CB	; F67AE6  [27] -> ret stub
-	.long	sub_F675CB	; F67AEA  [28] -> ret stub
-	.long	sub_F675CB	; F67AEE  [29] -> ret stub
-	.long	sub_F675CB	; F67AF2  [30] -> ret stub
-	.long	sub_F675CB	; F67AF6  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67ADE  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AE2  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AE6  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AEA  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AEE  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AF2  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67AF6  [31] -> ret stub
 
 sub_F67AFA:
 	ld	hl, bc	; F67AFA  ld HL,BC
@@ -145596,37 +145595,37 @@ sub_F67AFA_Return:
 ; --------------------------------------------------------------------------
 DispatchTable_F67B14:
 	.long	sub_F678F8	; F67B14  [0] -> 0xF678F8
-	.long	sub_F675CB	; F67B18  [1] -> ret stub
-	.long	sub_F675CB	; F67B1C  [2] -> ret stub
-	.long	sub_F675CB	; F67B20  [3] -> ret stub
-	.long	sub_F675CB	; F67B24  [4] -> ret stub
-	.long	sub_F675CB	; F67B28  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B18  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B1C  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B20  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B24  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B28  [5] -> ret stub
 	.long	sub_F6748D	; F67B2C  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67B30  [7] -> 0xF6749D
-	.long	sub_F675CB	; F67B34  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B34  [8] -> ret stub
 	.long	sub_F68F62	; F67B38  [9] -> sub_F68F62
-	.long	sub_F675CB	; F67B3C  [10] -> ret stub
-	.long	sub_F675CB	; F67B40  [11] -> ret stub
-	.long	sub_F675CB	; F67B44  [12] -> ret stub
-	.long	sub_F675CB	; F67B48  [13] -> ret stub
-	.long	sub_F675CB	; F67B4C  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B3C  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B40  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B44  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B48  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B4C  [14] -> ret stub
 	.long	sub_F67696	; F67B50  [15] -> 0xF67696
-	.long	sub_F675CB	; F67B54  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B54  [16] -> ret stub
 	.long	sub_F678F8	; F67B58  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67B5C  [18] -> ret stub
-	.long	sub_F675CB	; F67B60  [19] -> ret stub
-	.long	sub_F675CB	; F67B64  [20] -> ret stub
-	.long	sub_F675CB	; F67B68  [21] -> ret stub
-	.long	sub_F675CB	; F67B6C  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B5C  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B60  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B64  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B68  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B6C  [22] -> ret stub
 	.long	sub_F6748D	; F67B70  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67B74  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67B78  [25] -> ret stub
-	.long	sub_F675CB	; F67B7C  [26] -> ret stub
-	.long	sub_F675CB	; F67B80  [27] -> ret stub
-	.long	sub_F675CB	; F67B84  [28] -> ret stub
-	.long	sub_F675CB	; F67B88  [29] -> ret stub
-	.long	sub_F675CB	; F67B8C  [30] -> ret stub
-	.long	sub_F675CB	; F67B90  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B78  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B7C  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B80  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B84  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B88  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B8C  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67B90  [31] -> ret stub
 
 sub_F67B94:
 	ld	hl, bc	; F67B94  ld HL,BC
@@ -145675,37 +145674,37 @@ sub_F67B94_Return:
 ; --------------------------------------------------------------------------
 DispatchTable_F67BAE:
 	.long	sub_F678F8	; F67BAE  [0] -> 0xF678F8
-	.long	sub_F675CB	; F67BB2  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BB2  [1] -> ret stub
 	.long	sub_F6CD8C	; F67BB6  [2] -> 0xF6CD8C
-	.long	sub_F675CB	; F67BBA  [3] -> ret stub
-	.long	sub_F675CB	; F67BBE  [4] -> ret stub
-	.long	sub_F675CB	; F67BC2  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BBA  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BBE  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BC2  [5] -> ret stub
 	.long	sub_F6748D	; F67BC6  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67BCA  [7] -> 0xF6749D
-	.long	sub_F675CB	; F67BCE  [8] -> ret stub
-	.long	sub_F675CB	; F67BD2  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BCE  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BD2  [9] -> ret stub
 	.long	sub_F6CDAD	; F67BD6  [10] -> 0xF6CDAD
 	.long	sub_F6CD74_Skip2	; F67BDA  [11] -> 0xF6CDD0
-	.long	sub_F675CB	; F67BDE  [12] -> ret stub
-	.long	sub_F675CB	; F67BE2  [13] -> ret stub
-	.long	sub_F675CB	; F67BE6  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BDE  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BE2  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BE6  [14] -> ret stub
 	.long	sub_F67696	; F67BEA  [15] -> 0xF67696
-	.long	sub_F675CB	; F67BEE  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BEE  [16] -> ret stub
 	.long	sub_F678F8	; F67BF2  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67BF6  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BF6  [18] -> ret stub
 	.long	sub_F6CD8C	; F67BFA  [19] -> 0xF6CD8C
-	.long	sub_F675CB	; F67BFE  [20] -> ret stub
-	.long	sub_F675CB	; F67C02  [21] -> ret stub
-	.long	sub_F675CB	; F67C06  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67BFE  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C02  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C06  [22] -> ret stub
 	.long	sub_F6748D	; F67C0A  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67C0E  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67C12  [25] -> ret stub
-	.long	sub_F675CB	; F67C16  [26] -> ret stub
-	.long	sub_F675CB	; F67C1A  [27] -> ret stub
-	.long	sub_F675CB	; F67C1E  [28] -> ret stub
-	.long	sub_F675CB	; F67C22  [29] -> ret stub
-	.long	sub_F675CB	; F67C26  [30] -> ret stub
-	.long	sub_F675CB	; F67C2A  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C12  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C16  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C1A  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C1E  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C22  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C26  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C2A  [31] -> ret stub
 
 sub_F67C2E:
 	ld	hl, bc	; F67C2E  ld HL,BC
@@ -145762,37 +145761,37 @@ sub_F67C48_Skip:
 ; --------------------------------------------------------------------------
 DispatchTable_F67C55:
 	.long	sub_F678F8	; F67C55  [0] -> 0xF678F8
-	.long	sub_F675CB	; F67C59  [1] -> ret stub
-	.long	sub_F675CB	; F67C5D  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C59  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C5D  [2] -> ret stub
 	.long	sub_F67C48	; F67C61  [3] -> 0xF67C48
-	.long	sub_F675CB	; F67C65  [4] -> ret stub
-	.long	sub_F675CB	; F67C69  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C65  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C69  [5] -> ret stub
 	.long	sub_F6748D	; F67C6D  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67C71  [7] -> 0xF6749D
-	.long	sub_F675CB	; F67C75  [8] -> ret stub
-	.long	sub_F675CB	; F67C79  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C75  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C79  [9] -> ret stub
 	.long	sub_F68F62	; F67C7D  [10] -> sub_F68F62
 	.long	sub_F688F0	; F67C81  [11] -> 0xF688F0
-	.long	sub_F675CB	; F67C85  [12] -> ret stub
-	.long	sub_F675CB	; F67C89  [13] -> ret stub
-	.long	sub_F675CB	; F67C8D  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C85  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C89  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C8D  [14] -> ret stub
 	.long	sub_F67696	; F67C91  [15] -> 0xF67696
-	.long	sub_F675CB	; F67C95  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C95  [16] -> ret stub
 	.long	sub_F678F8	; F67C99  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67C9D  [18] -> ret stub
-	.long	sub_F675CB	; F67CA1  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67C9D  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CA1  [19] -> ret stub
 	.long	sub_F67C48	; F67CA5  [20] -> 0xF67C48
-	.long	sub_F675CB	; F67CA9  [21] -> ret stub
-	.long	sub_F675CB	; F67CAD  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CA9  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CAD  [22] -> ret stub
 	.long	sub_F6748D	; F67CB1  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67CB5  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67CB9  [25] -> ret stub
-	.long	sub_F675CB	; F67CBD  [26] -> ret stub
-	.long	sub_F675CB	; F67CC1  [27] -> ret stub
-	.long	sub_F675CB	; F67CC5  [28] -> ret stub
-	.long	sub_F675CB	; F67CC9  [29] -> ret stub
-	.long	sub_F675CB	; F67CCD  [30] -> ret stub
-	.long	sub_F675CB	; F67CD1  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CB9  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CBD  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CC1  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CC5  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CC9  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CCD  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CD1  [31] -> ret stub
 
 sub_F67CD5:
 	ld	hl, bc	; F67CD5  ld HL,BC
@@ -145841,37 +145840,37 @@ sub_F67CD5_Return:
 ; --------------------------------------------------------------------------
 DispatchTable_F67CEF:
 	.long	sub_F678F8	; F67CEF  [0] -> 0xF678F8
-	.long	sub_F675CB	; F67CF3  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CF3  [1] -> ret stub
 	.long	sub_F6CD3D	; F67CF7  [2] -> 0xF6CD3D
-	.long	sub_F675CB	; F67CFB  [3] -> ret stub
-	.long	sub_F675CB	; F67CFF  [4] -> ret stub
-	.long	sub_F675CB	; F67D03  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CFB  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67CFF  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D03  [5] -> ret stub
 	.long	sub_F6748D	; F67D07  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67D0B  [7] -> 0xF6749D
-	.long	sub_F675CB	; F67D0F  [8] -> ret stub
-	.long	sub_F675CB	; F67D13  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D0F  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D13  [9] -> ret stub
 	.long	sub_F68F62	; F67D17  [10] -> sub_F68F62
 	.long	sub_F688F0	; F67D1B  [11] -> 0xF688F0
-	.long	sub_F675CB	; F67D1F  [12] -> ret stub
-	.long	sub_F675CB	; F67D23  [13] -> ret stub
-	.long	sub_F675CB	; F67D27  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D1F  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D23  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D27  [14] -> ret stub
 	.long	sub_F67696	; F67D2B  [15] -> 0xF67696
-	.long	sub_F675CB	; F67D2F  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D2F  [16] -> ret stub
 	.long	sub_F678F8	; F67D33  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67D37  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D37  [18] -> ret stub
 	.long	sub_F6CD3D	; F67D3B  [19] -> 0xF6CD3D
-	.long	sub_F675CB	; F67D3F  [20] -> ret stub
-	.long	sub_F675CB	; F67D43  [21] -> ret stub
-	.long	sub_F675CB	; F67D47  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D3F  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D43  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D47  [22] -> ret stub
 	.long	sub_F6748D	; F67D4B  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67D4F  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67D53  [25] -> ret stub
-	.long	sub_F675CB	; F67D57  [26] -> ret stub
-	.long	sub_F675CB	; F67D5B  [27] -> ret stub
-	.long	sub_F675CB	; F67D5F  [28] -> ret stub
-	.long	sub_F675CB	; F67D63  [29] -> ret stub
-	.long	sub_F675CB	; F67D67  [30] -> ret stub
-	.long	sub_F675CB	; F67D6B  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D53  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D57  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D5B  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D5F  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D63  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D67  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67D6B  [31] -> ret stub
 
 sub_F67D6F:
 	bit	7, w	; F67D6F  bit 0x07,W
@@ -145986,37 +145985,37 @@ MsgLine_Volume_Return:
 ; --------------------------------------------------------------------------
 DispatchTable_F67DE9:
 	.long	sub_F678F8	; F67DE9  [0] -> 0xF678F8
-	.long	sub_F675CB	; F67DED  [1] -> ret stub
-	.long	sub_F675CB	; F67DF1  [2] -> ret stub
-	.long	sub_F675CB	; F67DF5  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67DED  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67DF1  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67DF5  [3] -> ret stub
 	.long	sub_F67E69	; F67DF9  [4] -> 0xF67E69
-	.long	sub_F675CB	; F67DFD  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67DFD  [5] -> ret stub
 	.long	sub_F6748D	; F67E01  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67E05  [7] -> 0xF6749D
-	.long	sub_F675CB	; F67E09  [8] -> ret stub
-	.long	sub_F675CB	; F67E0D  [9] -> ret stub
-	.long	sub_F675CB	; F67E11  [10] -> ret stub
-	.long	sub_F675CB	; F67E15  [11] -> ret stub
-	.long	sub_F675CB	; F67E19  [12] -> ret stub
-	.long	sub_F675CB	; F67E1D  [13] -> ret stub
-	.long	sub_F675CB	; F67E21  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E09  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E0D  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E11  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E15  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E19  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E1D  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E21  [14] -> ret stub
 	.long	sub_F67696	; F67E25  [15] -> 0xF67696
-	.long	sub_F675CB	; F67E29  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E29  [16] -> ret stub
 	.long	sub_F678F8	; F67E2D  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67E31  [18] -> ret stub
-	.long	sub_F675CB	; F67E35  [19] -> ret stub
-	.long	sub_F675CB	; F67E39  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E31  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E35  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E39  [20] -> ret stub
 	.long	sub_F67E69	; F67E3D  [21] -> 0xF67E69
-	.long	sub_F675CB	; F67E41  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E41  [22] -> ret stub
 	.long	sub_F6748D	; F67E45  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67E49  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67E4D  [25] -> ret stub
-	.long	sub_F675CB	; F67E51  [26] -> ret stub
-	.long	sub_F675CB	; F67E55  [27] -> ret stub
-	.long	sub_F675CB	; F67E59  [28] -> ret stub
-	.long	sub_F675CB	; F67E5D  [29] -> ret stub
-	.long	sub_F675CB	; F67E61  [30] -> ret stub
-	.long	sub_F675CB	; F67E65  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E4D  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E51  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E55  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E59  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E5D  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E61  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67E65  [31] -> ret stub
 
 sub_F67E69:
 	m_or_mi8 MB16, 0x2075, 0x08	; F67E69  or (0x2075),0x08
@@ -146195,37 +146194,37 @@ sub_F67F68_Return2:
 ; --------------------------------------------------------------------------
 DispatchTable_F67F96:
 	.long	sub_F678F8	; F67F96  [0] -> 0xF678F8
-	.long	sub_F675CB	; F67F9A  [1] -> ret stub
-	.long	sub_F675CB	; F67F9E  [2] -> ret stub
-	.long	sub_F675CB	; F67FA2  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67F9A  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67F9E  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FA2  [3] -> ret stub
 	.long	sub_F68016	; F67FA6  [4] -> 0xF68016
-	.long	sub_F675CB	; F67FAA  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FAA  [5] -> ret stub
 	.long	sub_F6748D	; F67FAE  [6] -> 0xF6748D
 	.long	sub_F6749D	; F67FB2  [7] -> 0xF6749D
 	.long	sub_F67D6F	; F67FB6  [8] -> 0xF67D6F
 	.long	sub_F68F62	; F67FBA  [9] -> sub_F68F62
-	.long	sub_F675CB	; F67FBE  [10] -> ret stub
-	.long	sub_F675CB	; F67FC2  [11] -> ret stub
-	.long	sub_F675CB	; F67FC6  [12] -> ret stub
-	.long	sub_F675CB	; F67FCA  [13] -> ret stub
-	.long	sub_F675CB	; F67FCE  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FBE  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FC2  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FC6  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FCA  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FCE  [14] -> ret stub
 	.long	sub_F67696	; F67FD2  [15] -> 0xF67696
-	.long	sub_F675CB	; F67FD6  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FD6  [16] -> ret stub
 	.long	sub_F678F8	; F67FDA  [17] -> 0xF678F8
-	.long	sub_F675CB	; F67FDE  [18] -> ret stub
-	.long	sub_F675CB	; F67FE2  [19] -> ret stub
-	.long	sub_F675CB	; F67FE6  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FDE  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FE2  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FE6  [20] -> ret stub
 	.long	sub_F68016	; F67FEA  [21] -> 0xF68016
-	.long	sub_F675CB	; F67FEE  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FEE  [22] -> ret stub
 	.long	sub_F6748D	; F67FF2  [23] -> 0xF6748D
 	.long	sub_F6749D	; F67FF6  [24] -> 0xF6749D
-	.long	sub_F675CB	; F67FFA  [25] -> ret stub
-	.long	sub_F675CB	; F67FFE  [26] -> ret stub
-	.long	sub_F675CB	; F68002  [27] -> ret stub
-	.long	sub_F675CB	; F68006  [28] -> ret stub
-	.long	sub_F675CB	; F6800A  [29] -> ret stub
-	.long	sub_F675CB	; F6800E  [30] -> ret stub
-	.long	sub_F675CB	; F68012  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FFA  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F67FFE  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68002  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68006  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6800A  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6800E  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68012  [31] -> ret stub
 
 sub_F68016:
 	ld	a, (4696:16)	; F68016  ld A,(0x1258)
@@ -146522,37 +146521,37 @@ sub_F68234_Return2:
 ; --------------------------------------------------------------------------
 DispatchTable_F6828B:
 	.long	sub_F6830B	; F6828B  [0] -> sub_F6830B
-	.long	sub_F675CB	; F6828F  [1] -> ret stub
-	.long	sub_F675CB	; F68293  [2] -> ret stub
-	.long	sub_F675CB	; F68297  [3] -> ret stub
-	.long	sub_F675CB	; F6829B  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6828F  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68293  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68297  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6829B  [4] -> ret stub
 	.long	sub_F6A1BB	; F6829F  [5] -> 0xF6A1BB
 	.long	sub_F6A1B4	; F682A3  [6] -> 0xF6A1B4
-	.long	sub_F675CB	; F682A7  [7] -> ret stub
-	.long	sub_F675CB	; F682AB  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682A7  [7] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682AB  [8] -> ret stub
 	.long	sub_F68F5B	; F682AF  [9] -> 0xF68F5B
-	.long	sub_F675CB	; F682B3  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682B3  [10] -> ret stub
 	.long	sub_F688F0	; F682B7  [11] -> 0xF688F0
-	.long	sub_F675CB	; F682BB  [12] -> ret stub
-	.long	sub_F675CB	; F682BF  [13] -> ret stub
-	.long	sub_F675CB	; F682C3  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682BB  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682BF  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682C3  [14] -> ret stub
 	.long	sub_F67696	; F682C7  [15] -> 0xF67696
-	.long	sub_F675CB	; F682CB  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682CB  [16] -> ret stub
 	.long	sub_F6830B	; F682CF  [17] -> sub_F6830B
-	.long	sub_F675CB	; F682D3  [18] -> ret stub
-	.long	sub_F675CB	; F682D7  [19] -> ret stub
-	.long	sub_F675CB	; F682DB  [20] -> ret stub
-	.long	sub_F675CB	; F682DF  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682D3  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682D7  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682DB  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682DF  [21] -> ret stub
 	.long	sub_F6A1BB	; F682E3  [22] -> 0xF6A1BB
 	.long	sub_F6A1B4	; F682E7  [23] -> 0xF6A1B4
-	.long	sub_F675CB	; F682EB  [24] -> ret stub
-	.long	sub_F675CB	; F682EF  [25] -> ret stub
-	.long	sub_F675CB	; F682F3  [26] -> ret stub
-	.long	sub_F675CB	; F682F7  [27] -> ret stub
-	.long	sub_F675CB	; F682FB  [28] -> ret stub
-	.long	sub_F675CB	; F682FF  [29] -> ret stub
-	.long	sub_F675CB	; F68303  [30] -> ret stub
-	.long	sub_F675CB	; F68307  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682EB  [24] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682EF  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682F3  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682F7  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682FB  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F682FF  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68303  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68307  [31] -> ret stub
 
 
 ; --------------------------------------------------------------------------
@@ -146615,7 +146614,7 @@ sub_F6833E:
 ; Called from: in-module: 0xF6833E
 ; Touches: (0x0C90) (0x0E5C) (0x0F5E) (0x0F64) (0x0FD4) (0x0FD6) (0x1006)
 ;          (0x106C) (0x12B2) (0x345C)
-; Calls:   sub_F68575 sub_F684FA T_BStore_StubTable sub_F6746C sub_F68574 sub_F68504
+; Calls:   sub_F68575 sub_F684FA T_BStore_StubTable sub_F6746C sub_F68354_Nop sub_F68504
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68354 is an instruction
 ;           boundary.  The name IS the address.
@@ -146645,7 +146644,7 @@ sub_F68354_Skip:
 	ld	(4054:16), iy	; F68394  ld (0x0fd6),IY
 	calr	sub_F6746C	; F68398  calr 0xf6746c
 	ld	xix, 4114	; F6839B  ld XIX,0x00001012
-	calr	sub_F68574	; F683A0  calr 0xf68574
+	calr	sub_F68354_Nop	; F683A0  calr 0xf68574
 	ld	c, 0:opc	; F683A3  ld C,0x00
 	calr	sub_F68504	; F683A5  calr 0xf68504
 	ld	a, (4102:16)	; F683A8  ld A,(0x1006)
@@ -146671,7 +146670,7 @@ sub_F68354_Return:
 ; Called from: in-module: 0xF68331 0xF68341
 ; Touches: (0x0C90) (0x0E5C) (0x0F60) (0x0F65) (0x0FD4) (0x0FD6) (0x1006)
 ;          (0x1008) (0x106C) (0x12B2)
-; Calls:   sub_F6A20F sub_F6857E sub_F684FA T_BStore_StubTable sub_F6746C sub_F68574
+; Calls:   sub_F6A20F sub_F6857E sub_F684FA T_BStore_StubTable sub_F6746C sub_F68354_Nop
 ;          sub_F68504
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF683D4 is an instruction
@@ -146711,7 +146710,7 @@ sub_F683D4_Skip:
 	ld	(4054:16), wa	; F68433  ld (0x0fd6),WA
 	calr	sub_F6746C	; F68437  calr 0xf6746c
 	ld	xix, 4144	; F6843A  ld XIX,0x00001030
-	calr	sub_F68574	; F6843F  calr 0xf68574
+	calr	sub_F68354_Nop	; F6843F  calr 0xf68574
 	ld	c, 2:opc	; F68442  ld C,0x02
 	calr	sub_F68504	; F68444  calr 0xf68504
 	ld	a, (4102:16)	; F68447  ld A,(0x1006)
@@ -146737,7 +146736,7 @@ sub_F683D4_Return:
 ; Called from: in-module: 0xF68344
 ; Touches: (0x0C90) (0x0D4A) (0x0E59) (0x0E5C) (0x0F62) (0x0F66) (0x0FD4)
 ;          (0x0FD6) (0x1006) (0x106C) +2 more
-; Calls:   sub_F68587 sub_F684FA T_BStore_StubTable sub_F6746C sub_F68574 sub_F68504
+; Calls:   sub_F68587 sub_F684FA T_BStore_StubTable sub_F6746C sub_F68354_Nop sub_F68504
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68473 is an instruction
 ;           boundary.  The name IS the address.
@@ -146770,7 +146769,7 @@ sub_F68473_Skip2:
 	ld	(4054:16), iy	; F684BA  ld (0x0fd6),IY
 	calr	sub_F6746C	; F684BE  calr 0xf6746c
 	ld	xix, 4174	; F684C1  ld XIX,0x0000104e
-	calr	sub_F68574	; F684C6  calr 0xf68574
+	calr	sub_F68354_Nop	; F684C6  calr 0xf68574
 	ld	c, 4:opc	; F684C9  ld C,0x04
 	calr	sub_F68504	; F684CB  calr 0xf68504
 sub_F68473_Join:
@@ -146868,16 +146867,16 @@ sub_F68504_Code_Return:
 	ret	; F68573  ret
 
 ; --------------------------------------------------------------------------
-; sub_F68574
+; sub_F68354_Nop
 ; Called from: in-module: 0xF683A0 0xF6843F 0xF684C6
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF68574 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F68354_Nop after what reaches it
+;          (was sub_F68574; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F68574:
+sub_F68354_Nop:
 	ret	; F68574  ret
 
 ; --------------------------------------------------------------------------
@@ -147011,37 +147010,37 @@ sub_F68590_Return2:
 ; --------------------------------------------------------------------------
 DispatchTable_F685C1:
 	.long	sub_F6830B	; F685C1  [0] -> sub_F6830B
-	.long	sub_F675CB	; F685C5  [1] -> ret stub
-	.long	sub_F675CB	; F685C9  [2] -> ret stub
-	.long	sub_F675CB	; F685CD  [3] -> ret stub
-	.long	sub_F675CB	; F685D1  [4] -> ret stub
-	.long	sub_F675CB	; F685D5  [5] -> ret stub
-	.long	sub_F675CB	; F685D9  [6] -> ret stub
-	.long	sub_F675CB	; F685DD  [7] -> ret stub
-	.long	sub_F675CB	; F685E1  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685C5  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685C9  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685CD  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685D1  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685D5  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685D9  [6] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685DD  [7] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685E1  [8] -> ret stub
 	.long	sub_F694D6	; F685E5  [9] -> 0xF694D6
 	.long	sub_F694C4	; F685E9  [10] -> 0xF694C4
-	.long	sub_F675CB	; F685ED  [11] -> ret stub
-	.long	sub_F675CB	; F685F1  [12] -> ret stub
-	.long	sub_F675CB	; F685F5  [13] -> ret stub
-	.long	sub_F675CB	; F685F9  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685ED  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685F1  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685F5  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F685F9  [14] -> ret stub
 	.long	sub_F67696	; F685FD  [15] -> 0xF67696
-	.long	sub_F675CB	; F68601  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68601  [16] -> ret stub
 	.long	sub_F6830B	; F68605  [17] -> sub_F6830B
-	.long	sub_F675CB	; F68609  [18] -> ret stub
-	.long	sub_F675CB	; F6860D  [19] -> ret stub
-	.long	sub_F675CB	; F68611  [20] -> ret stub
-	.long	sub_F675CB	; F68615  [21] -> ret stub
-	.long	sub_F675CB	; F68619  [22] -> ret stub
-	.long	sub_F675CB	; F6861D  [23] -> ret stub
-	.long	sub_F675CB	; F68621  [24] -> ret stub
-	.long	sub_F675CB	; F68625  [25] -> ret stub
-	.long	sub_F675CB	; F68629  [26] -> ret stub
-	.long	sub_F675CB	; F6862D  [27] -> ret stub
-	.long	sub_F675CB	; F68631  [28] -> ret stub
-	.long	sub_F675CB	; F68635  [29] -> ret stub
-	.long	sub_F675CB	; F68639  [30] -> ret stub
-	.long	sub_F675CB	; F6863D  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68609  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6860D  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68611  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68615  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68619  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6861D  [23] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68621  [24] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68625  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68629  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6862D  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68631  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68635  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68639  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6863D  [31] -> ret stub
 
 sub_F68641:
 	ld	hl, bc	; F68641  ld HL,BC
@@ -147090,37 +147089,37 @@ sub_F68641_Return:
 ; --------------------------------------------------------------------------
 DispatchTable_F6865B:
 	.long	sub_F6830B	; F6865B  [0] -> sub_F6830B
-	.long	sub_F675CB	; F6865F  [1] -> ret stub
-	.long	sub_F675CB	; F68663  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6865F  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68663  [2] -> ret stub
 	.long	sub_F67C48	; F68667  [3] -> 0xF67C48
-	.long	sub_F675CB	; F6866B  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6866B  [4] -> ret stub
 	.long	sub_F6A1BB	; F6866F  [5] -> 0xF6A1BB
 	.long	sub_F6A1B4	; F68673  [6] -> 0xF6A1B4
-	.long	sub_F675CB	; F68677  [7] -> ret stub
-	.long	sub_F675CB	; F6867B  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68677  [7] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6867B  [8] -> ret stub
 	.long	sub_F68F5B	; F6867F  [9] -> 0xF68F5B
-	.long	sub_F675CB	; F68683  [10] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68683  [10] -> ret stub
 	.long	sub_F688F0	; F68687  [11] -> 0xF688F0
-	.long	sub_F675CB	; F6868B  [12] -> ret stub
-	.long	sub_F675CB	; F6868F  [13] -> ret stub
-	.long	sub_F675CB	; F68693  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6868B  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6868F  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68693  [14] -> ret stub
 	.long	sub_F67696	; F68697  [15] -> 0xF67696
-	.long	sub_F675CB	; F6869B  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6869B  [16] -> ret stub
 	.long	sub_F6830B	; F6869F  [17] -> sub_F6830B
-	.long	sub_F675CB	; F686A3  [18] -> ret stub
-	.long	sub_F675CB	; F686A7  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686A3  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686A7  [19] -> ret stub
 	.long	sub_F67C48	; F686AB  [20] -> 0xF67C48
-	.long	sub_F675CB	; F686AF  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686AF  [21] -> ret stub
 	.long	sub_F6A1BB	; F686B3  [22] -> 0xF6A1BB
 	.long	sub_F6A1B4	; F686B7  [23] -> 0xF6A1B4
-	.long	sub_F675CB	; F686BB  [24] -> ret stub
-	.long	sub_F675CB	; F686BF  [25] -> ret stub
-	.long	sub_F675CB	; F686C3  [26] -> ret stub
-	.long	sub_F675CB	; F686C7  [27] -> ret stub
-	.long	sub_F675CB	; F686CB  [28] -> ret stub
-	.long	sub_F675CB	; F686CF  [29] -> ret stub
-	.long	sub_F675CB	; F686D3  [30] -> ret stub
-	.long	sub_F675CB	; F686D7  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686BB  [24] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686BF  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686C3  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686C7  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686CB  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686CF  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686D3  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686D7  [31] -> ret stub
 
 sub_F686DB:
 	ld	hl, bc	; F686DB  ld HL,BC
@@ -147168,38 +147167,38 @@ sub_F686DB_Return:
 ; Unknown: what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F686F5:
-	.long	sub_F675CB	; F686F5  [0] -> ret stub
-	.long	sub_F675CB	; F686F9  [1] -> ret stub
-	.long	sub_F675CB	; F686FD  [2] -> ret stub
-	.long	sub_F675CB	; F68701  [3] -> ret stub
-	.long	sub_F675CB	; F68705  [4] -> ret stub
-	.long	sub_F675CB	; F68709  [5] -> ret stub
-	.long	sub_F675CB	; F6870D  [6] -> ret stub
-	.long	sub_F675CB	; F68711  [7] -> ret stub
-	.long	sub_F675CB	; F68715  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686F5  [0] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686F9  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F686FD  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68701  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68705  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68709  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6870D  [6] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68711  [7] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68715  [8] -> ret stub
 	.long	sub_F68775	; F68719  [9] -> 0xF68775
 	.long	sub_F6877E	; F6871D  [10] -> 0xF6877E
-	.long	sub_F675CB	; F68721  [11] -> ret stub
-	.long	sub_F675CB	; F68725  [12] -> ret stub
-	.long	sub_F675CB	; F68729  [13] -> ret stub
-	.long	sub_F675CB	; F6872D  [14] -> ret stub
-	.long	sub_F675CB	; F68731  [15] -> ret stub
-	.long	sub_F675CB	; F68735  [16] -> ret stub
-	.long	sub_F675CB	; F68739  [17] -> ret stub
-	.long	sub_F675CB	; F6873D  [18] -> ret stub
-	.long	sub_F675CB	; F68741  [19] -> ret stub
-	.long	sub_F675CB	; F68745  [20] -> ret stub
-	.long	sub_F675CB	; F68749  [21] -> ret stub
-	.long	sub_F675CB	; F6874D  [22] -> ret stub
-	.long	sub_F675CB	; F68751  [23] -> ret stub
-	.long	sub_F675CB	; F68755  [24] -> ret stub
-	.long	sub_F675CB	; F68759  [25] -> ret stub
-	.long	sub_F675CB	; F6875D  [26] -> ret stub
-	.long	sub_F675CB	; F68761  [27] -> ret stub
-	.long	sub_F675CB	; F68765  [28] -> ret stub
-	.long	sub_F675CB	; F68769  [29] -> ret stub
-	.long	sub_F675CB	; F6876D  [30] -> ret stub
-	.long	sub_F675CB	; F68771  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68721  [11] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68725  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68729  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6872D  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68731  [15] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68735  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68739  [17] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6873D  [18] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68741  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68745  [20] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68749  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6874D  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68751  [23] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68755  [24] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68759  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6875D  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68761  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68765  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68769  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6876D  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68771  [31] -> ret stub
 
 sub_F68775:
 	bit	7, w	; F68775  bit 0x07,W
@@ -147272,17 +147271,17 @@ sub_F68787_Epilogue:
 	ret	; F687EB  ret
 
 ; --------------------------------------------------------------------------
-; sub_F687EC
+; T_F42EEC_Nop
 ; Called from: T_F42EEC (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F42EEC holds `jp 0x00F687EC`, and 0xF687EC is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42EEC_Nop after what reaches it
+;          (was sub_F687EC; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F687EC:		; <- T_F42EEC
+T_F42EEC_Nop:		; <- T_F42EEC
 	ret	; F687EC  ret
 
 ; --------------------------------------------------------------------------
@@ -147403,9 +147402,9 @@ sub_F687ED_Return:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F688D0:
-	.long	sub_F675CB	; F688D0  [0] -> ret stub
-	.long	sub_F675CB	; F688D4  [1] -> ret stub
-	.long	sub_F675CB	; F688D8  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F688D0  [0] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F688D4  [1] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F688D8  [2] -> ret stub
 	.long	sub_F6A2FF	; F688DC  [3] -> sub_F6A2FF
 
 ; --------------------------------------------------------------------------
@@ -147545,7 +147544,7 @@ sub_F68982:
 	cp	w, 0:i3	; F6898A  cp W,0
 	jr	nz, sub_F68982_Return	; F6898C  jr NZ,0xf689ab
 	calr	sub_F67418	; F6898E  calr 0xf67418
-	calr	sub_F6B1E8	; F68991  calr 0xf6b1e8
+	calr	sub_F68982_Nop	; F68991  calr 0xf6b1e8
 	m_bit 0, MD16, 0x2092	; F68994  bit 0,(0x2092)
 	jr	nz, sub_F68982_Return2	; F68998  jr NZ,0xf689ac
 	m_bit 0, MD16, 0x1071	; F6899A  bit 0,(0x1071)
@@ -147572,7 +147571,7 @@ sub_F689AD_Skip:
 	m_bit 0, MD16, 0x2092	; F689C8  bit 0,(0x2092)
 	jr	nz, sub_F689AD_Return2	; F689CC  jr NZ,0xf689df
 	calr	sub_F6833E	; F689CE  calr 0xf6833e
-	calr	sub_F6B1E8	; F689D1  calr 0xf6b1e8
+	calr	sub_F68982_Nop	; F689D1  calr 0xf6b1e8
 	m_bit 0, MD16, 0x2092	; F689D4  bit 0,(0x2092)
 	jr	nz, sub_F689AD_Return2	; F689D8  jr NZ,0xf689df
 	call	sub_F6D6D6	; F689DA  call 0xf6d6d6
@@ -147585,7 +147584,7 @@ sub_F689E0:
 	calr	sub_F6C507	; F689E5  calr 0xf6c507
 	cp	w, 0:i3	; F689E8  cp W,0
 	jr	nz, sub_F689E0_Return	; F689EA  jr NZ,0xf689f4
-	calr	sub_F6B1E8	; F689EC  calr 0xf6b1e8
+	calr	sub_F68982_Nop	; F689EC  calr 0xf6b1e8
 	ld	(4800:16), 0	; F689EF  ld (0x12c0),0x00
 sub_F689E0_Return:
 	ret	; F689F4  ret
@@ -148470,10 +148469,10 @@ sub_F68F67_Return:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F68FB4:
-	.long	sub_F675CB	; F68FB4  [0] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68FB4  [0] -> ret stub
 	.long	sub_F69CB4	; F68FB8  [1] -> sub_F69CB4
 	.long	sub_F69CB4	; F68FBC  [2] -> sub_F69CB4
-	.long	sub_F675CB	; F68FC0  [3] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F68FC0  [3] -> ret stub
 
 DispatchTable_F68FB4_Code_Skip:
 	calr	10538	; F68FC4  calr 0xf6b8f1
@@ -149328,7 +149327,7 @@ sub_F694DF_Skip4:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6953C:
-	.long	sub_F675CB	; F6953C  [0] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6953C  [0] -> ret stub
 	.long	sub_F6954C	; F69540  [1] -> 0xF6954C
 	.long	sub_F69556	; F69544  [2] -> 0xF69556
 	.long	sub_F69560	; F69548  [3] -> 0xF69560
@@ -151273,7 +151272,7 @@ sub_F6A304_Skip:
 sub_F6A304_Skip2:
 	ld	w, 98:opc	; F6A3FA  ld W,0x62
 	calr	sub_F67481	; F6A3FC  calr 0xf67481
-	calr	sub_F6A4D6	; F6A3FF  calr 0xf6a4d6
+	calr	sub_F6A344_Nop	; F6A3FF  calr 0xf6a4d6
 	calr	sub_F6A49D	; F6A402  calr 0xf6a49d
 	ret	; F6A405  ret
 
@@ -151403,7 +151402,7 @@ sub_F6A49D:
 	call	sub_F6D482	; F6A4C4  call 0xf6d482
 	jr	sub_F6A49D_Epilogue	; F6A4C8  jr T,0xf6a4ce
 sub_F6A49D_Skip:
-	call	sub_F6D477	; F6A4CA  call 0xf6d477
+	call	sub_F6A49D_Nop	; F6A4CA  call 0xf6d477
 sub_F6A49D_Epilogue:
 	pop	xiz	; F6A4CE  pop XIZ
 	pop	xiy	; F6A4CF  pop XIY
@@ -151415,16 +151414,16 @@ sub_F6A49D_Epilogue:
 	ret	; F6A4D5  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6A4D6
+; sub_F6A344_Nop
 ; Called from: in-module: 0xF6A3FF
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A4D6 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A344_Nop after what reaches it
+;          (was sub_F6A4D6; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6A4D6:
+sub_F6A344_Nop:
 	ret	; F6A4D6  ret
 	ret	; F6A4D7  ret
 	ret	; F6A4D8  ret
@@ -151541,7 +151540,7 @@ sub_F6A4D9_Skip4:
 	push	xix	; F6A5D4  push XIX
 	push	xiy	; F6A5D5  push XIY
 	push	xiz	; F6A5D6  push XIZ
-	call	sub_F6D5F0	; F6A5D7  call 0xf6d5f0
+	call	sub_F6A4D9_Nop2	; F6A5D7  call 0xf6d5f0
 	pop	xiz	; F6A5DB  pop XIZ
 	pop	xiy	; F6A5DC  pop XIY
 	pop	xix	; F6A5DD  pop XIX
@@ -151559,7 +151558,7 @@ sub_F6A4D9_Skip5:
 	push	xix	; F6A5EE  push XIX
 	push	xiy	; F6A5EF  push XIY
 	push	xiz	; F6A5F0  push XIZ
-	call	sub_F6D46C	; F6A5F1  call 0xf6d46c
+	call	sub_F6A4D9_Nop	; F6A5F1  call 0xf6d46c
 	pop	xiz	; F6A5F5  pop XIZ
 	pop	xiy	; F6A5F6  pop XIY
 	pop	xix	; F6A5F7  pop XIX
@@ -151639,7 +151638,7 @@ sub_F6A674:
 ; sub_F6A67D
 ; Called from: in-module: 0xF67428
 ; Touches: (0x0E53) (0x0E5A) (0x12C0)
-; Calls:   sub_F6A6BB T_Ring600A14_Get sub_F6A6BC sub_F6B387 sub_F67481
+; Calls:   sub_F6A67D_Nop T_Ring600A14_Get sub_F6A6BC sub_F6B387 sub_F67481
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A67D is an instruction
 ;           boundary.  The name IS the address.
@@ -151650,7 +151649,7 @@ sub_F6A67D:
 	ld	a, 133:opc	; F6A67D  ld A,0x85
 	ld	(4800:16), 1	; F6A67F  ld (0x12c0),0x01
 sub_F6A674_Join:
-	call	sub_F6A6BB	; F6A684  call 0xf6a6bb
+	call	sub_F6A67D_Nop	; F6A684  call 0xf6a6bb
 	cp	c, 0:i3	; F6A688  cp C,0
 	jr	z, sub_F6A674_Skip	; F6A68A  jr Z,0xf6a692
 	call	T_Ring600A14_Get	; F6A68C  call 0xf41d84
@@ -151675,16 +151674,16 @@ sub_F6A674_Return:
 	ret	; F6A6BA  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6A6BB
+; sub_F6A67D_Nop
 ; Called from: in-module: 0xF6A684
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A6BB is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A67D_Nop after what reaches it
+;          (was sub_F6A6BB; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6A6BB:
+sub_F6A67D_Nop:
 	ret	; F6A6BB  ret
 
 ; --------------------------------------------------------------------------
@@ -152206,7 +152205,7 @@ sub_F6A9CA:		; <- T_F42EC0
 ; Touches: (0x0E4E) (0x0E4F) (0x0E63) (0x0E64) (0x0E68) (0x0ED5) (0x1008)
 ;          (0x1072) (0x126B) (0x12AC) +15 more
 ; Calls:   sub_F6AD24 sub_F6AC7E sub_F6ACC8 sub_F6AD40 0xF6AD5A sub_F6C4A5
-;          sub_F6AD30 T_F40A14 sub_F6AC4D sub_F6B1E9 T_F42574 sub_F6B1E8 +13
+;          sub_F6AD30 T_F40A14 sub_F6AC4D sub_F6A9E3_Nop T_F42574 sub_F68982_Nop +13
 ;          more
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6A9E3 is an instruction
@@ -152237,9 +152236,9 @@ sub_F6A9E3_Skip:
 	calr	sub_F6AD30	; F6AA25  calr 0xf6ad30
 	call	T_F40A14	; F6AA28  call 0xf40a14
 	calr	sub_F6AC4D	; F6AA2C  calr 0xf6ac4d
-	calr	sub_F6B1E9	; F6AA2F  calr 0xf6b1e9
+	calr	sub_F6A9E3_Nop	; F6AA2F  calr 0xf6b1e9
 	call	T_F42574	; F6AA32  call 0xf42574
-	calr	sub_F6B1E8	; F6AA36  calr 0xf6b1e8
+	calr	sub_F68982_Nop	; F6AA36  calr 0xf6b1e8
 	xor	xwa, xwa	; F6AA39  xor XWA,XWA
 	ld	(4918:16), xwa	; F6AA3B  ld (0x1336),XWA
 	ld	(4922:16), xwa	; F6AA3F  ld (0x133a),XWA
@@ -152374,17 +152373,17 @@ sub_F6A9E3_Entry4_Code_Skip:
 	jrl	sub_F6A9E3_Return	; F6AB8B  jrl T,0xf6ab77
 
 ; --------------------------------------------------------------------------
-; sub_F6AB8E
+; T_F42EF0_Nop
 ; Called from: T_F42EF0 (x0)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F42EF0 holds `jp 0x00F6AB8E`, and 0xF6AB8E is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F42EF0_Nop after what reaches it
+;          (was sub_F6AB8E; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6AB8E:		; <- T_F42EF0
+T_F42EF0_Nop:		; <- T_F42EF0
 	ret	; F6AB8E  ret
 	jrl	-27	; F6AB8F  jrl T,0xf6ab77
 
@@ -152461,7 +152460,7 @@ sub_F6ABB6:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6ABD2:
-	.long	sub_F6AC0C	; F6ABD2  [0] -> 0xF6AC0C
+	.long	DispatchTable_F6ABD2_Nop0	; F6ABD2  [0] -> 0xF6AC0C
 	.long	sub_F6ABE2	; F6ABD6  [1] -> 0xF6ABE2
 	.long	sub_F6ABE2	; F6ABDA  [2] -> 0xF6ABE2
 	.long	sub_F6ABF5	; F6ABDE  [3] -> 0xF6ABF5
@@ -152481,7 +152480,7 @@ sub_F6ABF5:
 	call	T_F431B4	; F6AC03  call 0xf431b4
 	call	T_F431CC	; F6AC07  call 0xf431cc
 	ret	; F6AC0B  ret
-sub_F6AC0C:
+DispatchTable_F6ABD2_Nop0:
 	ret	; F6AC0C  ret
 	pushw	wa	; F6AC0D  push WA
 	pushw	bc	; F6AC0E  push BC
@@ -152731,7 +152730,7 @@ Map_0EF5_F6AD56:
 	.byte	0x00, 0x00, 0x08, 0x0C	; F6AD56  [0..3]
 ; Nop_Ret_F6AD5A -- a lone `ret`: `calr 0xF6AD5A` at 0xF6AA06 and 0xF6AB78
 ;   land here.  The byte sits between two tables, the same one-byte do-nothing
-;   routine this module uses elsewhere (sub_F675CB).
+;   routine this module uses elsewhere (DispatchTable_F674CE_Nop0).
 Nop_Ret_F6AD5A:
 	ret	; F6AD5A  ret
 ; Data_F6AD5B -- 4 bytes, 0x04 0x02 0x02 0x04.  No reader found: no 32-bit
@@ -152849,7 +152848,7 @@ sub_F6ADC2:
 ; Touches: (0x0DC7) (0x0E4E) (0x0E4F) (0x0E50) (0x0E63) (0x0E64) (0x0E65)
 ;          (0x1008) (0x106E) (0x1071) +16 more
 ; Calls:   0xF6D6D6 sub_F6A304 sub_F6A908 sub_F6C4A5 T_F40CB4 T_F42578
-;          sub_F6ACF5 sub_F6AF57 T_F411B8 T_F40A1C sub_F6B276 sub_F6B2ED
+;          sub_F6ACF5 sub_F6AE4B_Nop T_F411B8 T_F40A1C sub_F6B276 sub_F67434_Nop
 ; Evidence: thunk slot T_F42EC4 holds `jp 0x00F6AE4B`, and 0xF6AE4B is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
@@ -152922,7 +152921,7 @@ sub_F6ADC2_Join:
 	ld	(4715:16), a	; F6AF05  ld (0x126b),A
 	m_res 3, MD16, 0x0e4f	; F6AF09  res 3,(0x0e4f)
 	call	sub_F6D6D6	; F6AF0D  call 0xf6d6d6
-	calr	sub_F6AF57	; F6AF11  calr 0xf6af57
+	calr	sub_F6AE4B_Nop	; F6AF11  calr 0xf6af57
 	ld	wa, (6304852:24)	; F6AF14  ld WA,(0x603454)
 	ld	(4210:16), wa	; F6AF19  ld (0x1072),WA
 	call	T_F411B8	; F6AF1D  call 0xf411b8
@@ -152941,21 +152940,21 @@ sub_F6ADC2_Join:
 sub_F6ADC2_Skip6:
 	cp	a, 0:i3	; F6AF4F  cp A,0
 	jr	nz, sub_F6ADC2_Return	; F6AF51  jr NZ,0xf6af56
-	calr	sub_F6B2ED	; F6AF53  calr 0xf6b2ed
+	calr	sub_F67434_Nop	; F6AF53  calr 0xf6b2ed
 sub_F6ADC2_Return:
 	ret	; F6AF56  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6AF57
+; sub_F6AE4B_Nop
 ; Called from: in-module: 0xF6AF11
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6AF57 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6AE4B_Nop after what reaches it
+;          (was sub_F6AF57; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6AF57:
+sub_F6AE4B_Nop:
 	ret	; F6AF57  ret
 
 ; --------------------------------------------------------------------------
@@ -153039,16 +153038,16 @@ sub_F6AF57_Return:
 	ret	; F6B004  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B005
+; sub_F67430_Nop
 ; Called from: in-module: 0xF67430
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B005 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67430_Nop after what reaches it
+;          (was sub_F6B005; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6B005:
+sub_F67430_Nop:
 	ret	; F6B005  ret
 
 ; --------------------------------------------------------------------------
@@ -153072,7 +153071,7 @@ Data_F6B006:
 ; sub_F6B01E
 ; Called from: in-module: 0xF6AB31
 ; Touches: (0x0E63)
-; Calls:   sub_F6B1E8 sub_F6B039 sub_F6ADC2
+; Calls:   sub_F68982_Nop sub_F6B039 sub_F6ADC2
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B01E is an instruction
 ;           boundary.  The name IS the address.
@@ -153080,7 +153079,7 @@ Data_F6B006:
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
 sub_F6B01E:
-	calr	sub_F6B1E8	; F6B01E  calr 0xf6b1e8
+	calr	sub_F68982_Nop	; F6B01E  calr 0xf6b1e8
 	ld	xiz, 3662	; F6B021  ld XIZ,0x00000e4e
 	m_and_mi8 MBI+r6, 0, 0xbf	; F6B026  and (XIZ),0xbf
 	calr	sub_F6B039	; F6B029  calr 0xf6b039
@@ -153312,30 +153311,30 @@ sub_F6B134_Skip2:
 	jr	sub_F6B134_Join	; F6B1D5  jr T,0xf6b199
 
 ; --------------------------------------------------------------------------
-; sub_F6B1D7
+; sub_F67604_Nop
 ; Called from: in-module: 0xF6760E
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1D7 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67604_Nop after what reaches it
+;          (was sub_F6B1D7; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6B1D7:
+sub_F67604_Nop:
 	ret	; F6B1D7  ret
 	ret	; F6B1D8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B1D9
+; sub_F67604_Nop2
 ; Called from: in-module: 0xF67612
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1D9 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67604_Nop2 after what reaches it
+;          (was sub_F6B1D9; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6B1D9:
+sub_F67604_Nop2:
 	ret	; F6B1D9  ret
 	ret	; F6B1DA  ret
 	ret	; F6B1DB  ret
@@ -153362,29 +153361,29 @@ sub_F6B1DF:
 	ret	; F6B1E7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B1E8
+; sub_F68982_Nop
 ; Called from: in-module: 0xF68991 0xF689D1 0xF689EC 0xF6AA36 0xF6B01E
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1E8 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F68982_Nop after what reaches it
+;          (was sub_F6B1E8; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6B1E8:
+sub_F68982_Nop:
 	ret	; F6B1E8  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B1E9
+; sub_F6A9E3_Nop
 ; Called from: in-module: 0xF6AA2F
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B1E9 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A9E3_Nop after what reaches it
+;          (was sub_F6B1E9; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6B1E9:
+sub_F6A9E3_Nop:
 	ret	; F6B1E9  ret
 
 ; --------------------------------------------------------------------------
@@ -153573,16 +153572,16 @@ sub_F6B276_Return:
 	ret	; F6B2EC  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6B2ED
+; sub_F67434_Nop
 ; Called from: in-module: 0xF67434 0xF6AF53
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6B2ED is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67434_Nop after what reaches it
+;          (was sub_F6B2ED; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6B2ED:
+sub_F67434_Nop:
 	ret	; F6B2ED  ret
 
 ; --------------------------------------------------------------------------
@@ -155056,11 +155055,11 @@ sub_F6BC89_Skip13:
 	m_cp_mi8 MB16, 0x0e63, 0x03	; F6BDEE  cp (0x0e63),0x03
 	jr	z, sub_F6BC89_Skip14	; F6BDF3  jr Z,0xf6bdff
 	ld	(3829:16), 4	; F6BDF5  ld (0x0ef5),0x04
-	call	sub_F6D46C	; F6BDFA  call 0xf6d46c
+	call	sub_F6A4D9_Nop	; F6BDFA  call 0xf6d46c
 	ret	; F6BDFE  ret
 sub_F6BC89_Skip14:
 	ld	(3829:16), 12	; F6BDFF  ld (0x0ef5),0x0c
-	call	sub_F6D5F0	; F6BE04  call 0xf6d5f0
+	call	sub_F6A4D9_Nop2	; F6BE04  call 0xf6d5f0
 	ret	; F6BE08  ret
 sub_F6BC89_Loop2:
 	jrl	sub_F6BC89_Loop	; F6BE09  jrl T,0xf6bd06
@@ -155346,12 +155345,12 @@ sub_F6BFF2_Skip14:
 	call	MsgLine_PartSustain	; F6C09D  call 0xf6e091
 	ret	; F6C0A1  ret
 sub_F6BFF2_Skip15:
-	call	sub_F6E5A4	; F6C0A2  call 0xf6e5a4
+	call	sub_F6BFF2_Nop	; F6C0A2  call 0xf6e5a4
 	ret	; F6C0A6  ret
 sub_F6BFF2_Skip16:
 	call	MsgLine_PartTremolo	; F6C0A7  call 0xf6e5a5
 	ret	; F6C0AB  ret
-	call	sub_F6E608	; F6C0AC  call 0xf6e608
+	call	sub_F6BFF2_Nop2	; F6C0AC  call 0xf6e608
 	ret	; F6C0B0  ret
 	call	sub_F67460	; F6C0B1  call 0xf67460
 	ret	; F6C0B5  ret
@@ -156044,16 +156043,16 @@ sub_F6C507_Return:
 	ret	; F6C528  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6C529
+; sub_F67440_Nop
 ; Called from: in-module: 0xF67440
 ; Touches: nothing with an absolute address
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C529 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67440_Nop after what reaches it
+;          (was sub_F6C529; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6C529:
+sub_F67440_Nop:
 	ret	; F6C529  ret
 
 ; --------------------------------------------------------------------------
@@ -156560,17 +156559,17 @@ sub_F6C877_Return:
 	ret	; F6C8F2  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6C8F3
+; sub_F67440_Nop2
 ; Called from: in-module: 0xF67444
 ; Touches: (0x0E5C) (0x0E63) (0x0EF5) (0x12EC)
 ; Calls:   T_F431B0 sub_F6C984 MsgLine_PanKeyShiftTuningBendSens sub_F6C935
 ; Evidence: reached by a `call`/`calr`/`jp` decoded in this transcription
 ;           (the sites are listed above), so 0xF6C8F3 is an instruction
 ;           boundary.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67440_Nop2 after what reaches it
+;          (was sub_F6C8F3; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6C8F3:
+sub_F67440_Nop2:
 	ret	; F6C8F3  ret
 	ret	; F6C8F4  ret
 	ret	; F6C8F5  ret
@@ -157001,36 +157000,36 @@ sub_F6CB52_Return2:
 DispatchTable_F6CBEE:
 	.long	sub_F678F8	; F6CBEE  [0] -> 0xF678F8
 	.long	sub_F6CAE7	; F6CBF2  [1] -> 0xF6CAE7
-	.long	sub_F675CB	; F6CBF6  [2] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CBF6  [2] -> ret stub
 	.long	sub_F6CB13	; F6CBFA  [3] -> 0xF6CB13
-	.long	sub_F675CB	; F6CBFE  [4] -> ret stub
-	.long	sub_F675CB	; F6CC02  [5] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CBFE  [4] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC02  [5] -> ret stub
 	.long	sub_F6748D	; F6CC06  [6] -> 0xF6748D
 	.long	sub_F6749D	; F6CC0A  [7] -> 0xF6749D
-	.long	sub_F675CB	; F6CC0E  [8] -> ret stub
-	.long	sub_F675CB	; F6CC12  [9] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC0E  [8] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC12  [9] -> ret stub
 	.long	sub_F6CB6E	; F6CC16  [10] -> 0xF6CB6E
 	.long	sub_F6CB52_Arm	; F6CC1A  [11] -> 0xF6CB7E
-	.long	sub_F675CB	; F6CC1E  [12] -> ret stub
-	.long	sub_F675CB	; F6CC22  [13] -> ret stub
-	.long	sub_F675CB	; F6CC26  [14] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC1E  [12] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC22  [13] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC26  [14] -> ret stub
 	.long	sub_F67696	; F6CC2A  [15] -> 0xF67696
-	.long	sub_F675CB	; F6CC2E  [16] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC2E  [16] -> ret stub
 	.long	sub_F678F8	; F6CC32  [17] -> 0xF678F8
 	.long	sub_F6CAE7	; F6CC36  [18] -> 0xF6CAE7
-	.long	sub_F675CB	; F6CC3A  [19] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC3A  [19] -> ret stub
 	.long	sub_F6CB13	; F6CC3E  [20] -> 0xF6CB13
-	.long	sub_F675CB	; F6CC42  [21] -> ret stub
-	.long	sub_F675CB	; F6CC46  [22] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC42  [21] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC46  [22] -> ret stub
 	.long	sub_F6748D	; F6CC4A  [23] -> 0xF6748D
 	.long	sub_F6749D	; F6CC4E  [24] -> 0xF6749D
-	.long	sub_F675CB	; F6CC52  [25] -> ret stub
-	.long	sub_F675CB	; F6CC56  [26] -> ret stub
-	.long	sub_F675CB	; F6CC5A  [27] -> ret stub
-	.long	sub_F675CB	; F6CC5E  [28] -> ret stub
-	.long	sub_F675CB	; F6CC62  [29] -> ret stub
-	.long	sub_F675CB	; F6CC66  [30] -> ret stub
-	.long	sub_F675CB	; F6CC6A  [31] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC52  [25] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC56  [26] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC5A  [27] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC5E  [28] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC62  [29] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC66  [30] -> ret stub
+	.long	DispatchTable_F674CE_Nop0	; F6CC6A  [31] -> ret stub
 
 
 ; --------------------------------------------------------------------------
@@ -157459,7 +157458,7 @@ sub_F6CF7A_Return:
 ; --------------------------------------------------------------------------
 sub_F6CFCB:
 	m_cp_mi8 MB16, 0x1342, 0xff	; F6CFCB  cp (0x1342),0xff
-	jr	z, sub_F6D023	; F6CFD0  jr Z,0xf6d023
+	jr	z, sub_F6CFCB_Nop	; F6CFD0  jr Z,0xf6d023
 	ld	xiy, 3726	; F6CFD2  ld XIY,0x00000e8e
 	ld	a, 181:opc	; F6CFD7  ld A,0xb5
 	and	a, 128	; F6CFD9  and A,0x80
@@ -157644,7 +157643,7 @@ Data_F6D002:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6D023
+; sub_F6CFCB_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -157657,10 +157656,10 @@ Data_F6D002:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D023
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6CFCB_Nop after what reaches it
+;          (was sub_F6D023; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6D023:
+sub_F6CFCB_Nop:
 	ret	; F6D023  ret
 
 ; --------------------------------------------------------------------------
@@ -158409,7 +158408,7 @@ MsgLine_Control:
 	ret	; F6D46B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D46C
+; sub_F6A4D9_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -158422,10 +158421,10 @@ MsgLine_Control:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D46C
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A4D9_Nop after what reaches it
+;          (was sub_F6D46C; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6D46C:
+sub_F6A4D9_Nop:
 	ret	; F6D46C  ret
 
 ; --------------------------------------------------------------------------
@@ -158448,7 +158447,7 @@ Data_F6D46D:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6D477
+; sub_F6A49D_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -158461,10 +158460,10 @@ Data_F6D46D:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D477
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A49D_Nop after what reaches it
+;          (was sub_F6D477; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6D477:
+sub_F6A49D_Nop:
 	ret	; F6D477  ret
 
 ; --------------------------------------------------------------------------
@@ -158940,7 +158939,7 @@ sub_F6D5E2:
 	ret	; F6D5EF  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6D5F0
+; sub_F6A4D9_Nop2
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -158953,10 +158952,10 @@ sub_F6D5E2:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6D5F0
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6A4D9_Nop2 after what reaches it
+;          (was sub_F6D5F0; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6D5F0:
+sub_F6A4D9_Nop2:
 	ret	; F6D5F0  ret
 
 ; --------------------------------------------------------------------------
@@ -161567,7 +161566,7 @@ Text_AccTotalVolBassVolumeDrumsVolumeAccmp1Volume:
 	ret	; F6E5A3  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6E5A4
+; sub_F6BFF2_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -161580,10 +161579,10 @@ Text_AccTotalVolBassVolumeDrumsVolumeAccmp1Volume:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E5A4
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6BFF2_Nop after what reaches it
+;          (was sub_F6E5A4; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6E5A4:
+sub_F6BFF2_Nop:
 	ret	; F6E5A4  ret
 
 ; --------------------------------------------------------------------------
@@ -161670,7 +161669,7 @@ Data_F6E5FF:
 
 
 ; --------------------------------------------------------------------------
-; sub_F6E607
+; sub_F6745C_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -161683,14 +161682,14 @@ Data_F6E5FF:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E607
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6745C_Nop after what reaches it
+;          (was sub_F6E607; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6E607:
+sub_F6745C_Nop:
 	ret	; F6E607  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6E608
+; sub_F6BFF2_Nop2
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -161703,16 +161702,16 @@ sub_F6E607:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E608
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F6BFF2_Nop2 after what reaches it
+;          (was sub_F6E608; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6E608:
+sub_F6BFF2_Nop2:
 	ret	; F6E608  ret
 	ret	; F6E609  ret
 	ret	; F6E60A  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6E60B
+; sub_F67460_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -161725,10 +161724,10 @@ sub_F6E608:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E60B
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67460_Nop after what reaches it
+;          (was sub_F6E60B; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6E60B:
+sub_F67460_Nop:
 	ret	; F6E60B  ret
 	ret	; F6E60C  ret
 	ret	; F6E60D  ret
@@ -161764,7 +161763,7 @@ Text_ExtTabEffectEnDis:
 	ret	; F6E626  ret
 
 ; --------------------------------------------------------------------------
-; sub_F6E627
+; sub_F67464_Nop
 ; Called from: an already-converted call site elsewhere in the image
 ; Touches: nothing with an absolute address
 ; Evidence (PROVEN): an instruction ALREADY PROVEN in prom_a/prom_b's
@@ -161777,10 +161776,10 @@ Text_ExtTabEffectEnDis:
 ;                    notes/prom_b_span_frontier.py --by proven`).  0xF6E627
 ;                    is an instruction boundary of this transcription, re-
 ;                    asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F67464_Nop after what reaches it
+;          (was sub_F6E627; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F6E627:
+sub_F67464_Nop:
 	ret	; F6E627  ret
 	ret	; F6E628  ret
 	ret	; F6E629  ret
@@ -165706,7 +165705,7 @@ sub_F70330_Return:
 ; Called from: in-module: 0xF6FFA0
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
 ; Calls:   sub_F71417 sub_F7193F sub_F71978 sub_F719B1 sub_F719EA sub_F707AE
-;          sub_F70599 sub_F707E6 sub_F7095E sub_F7091D sub_F709ED sub_F70960
+;          sub_F70599 sub_F707E6 sub_F7039A_Nop2 sub_F7039A_Nop sub_F709ED sub_F70960
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -165800,10 +165799,10 @@ sub_F7039A_Skip10:
 	calr	sub_F707E6	; F70455  calr 0xf707e6
 	jr	sub_F7039A_Return	; F70458  jr T,0xf7048c
 sub_F7039A_Skip11:
-	call	sub_F7095E	; F7045A  call 0xf7095e
+	call	sub_F7039A_Nop2	; F7045A  call 0xf7095e
 	jr	sub_F7039A_Return	; F7045E  jr T,0xf7048c
 sub_F7039A_Skip12:
-	call	sub_F7091D	; F70460  call 0xf7091d
+	call	sub_F7039A_Nop	; F70460  call 0xf7091d
 	jr	sub_F7039A_Return	; F70464  jr T,0xf7048c
 sub_F7039A_Skip13:
 	calr	sub_F709ED	; F70466  calr 0xf709ed
@@ -165857,23 +165856,23 @@ DispatchTable_F7048D:
 	.long	sub_F704CE	; F7048D  [0] -> sub_F704CE
 	.long	sub_F704E7	; F70491  [1] -> sub_F704E7
 	.long	sub_F71A23	; F70495  [2] -> sub_F71A23
-	.long	sub_F704CD	; F70499  [3] -> sub_F704CD
+	.long	DispatchTable_F7048D_Nop3	; F70499  [3] -> DispatchTable_F7048D_Nop3
 	.long	sub_F71A5C	; F7049D  [4] -> sub_F71A5C
-	.long	sub_F704CD	; F704A1  [5] -> sub_F704CD
+	.long	DispatchTable_F7048D_Nop3	; F704A1  [5] -> DispatchTable_F7048D_Nop3
 	.long	sub_F7053F	; F704A5  [6] -> sub_F7053F
 	.long	sub_F7063C	; F704A9  [7] -> sub_F7063C
-	.long	sub_F704CD	; F704AD  [8] -> sub_F704CD
-	.long	sub_F704CD	; F704B1  [9] -> sub_F704CD
+	.long	DispatchTable_F7048D_Nop3	; F704AD  [8] -> DispatchTable_F7048D_Nop3
+	.long	DispatchTable_F7048D_Nop3	; F704B1  [9] -> DispatchTable_F7048D_Nop3
 	.long	sub_F7068A	; F704B5  [10] -> sub_F7068A
 	.long	sub_F70754	; F704B9  [11] -> sub_F70754
-	.long	sub_F704CD	; F704BD  [12] -> sub_F704CD
-	.long	sub_F704CD	; F704C1  [13] -> sub_F704CD
-	.long	sub_F704CD	; F704C5  [14] -> sub_F704CD
-	.long	sub_F704CD	; F704C9  [15] -> sub_F704CD
+	.long	DispatchTable_F7048D_Nop3	; F704BD  [12] -> DispatchTable_F7048D_Nop3
+	.long	DispatchTable_F7048D_Nop3	; F704C1  [13] -> DispatchTable_F7048D_Nop3
+	.long	DispatchTable_F7048D_Nop3	; F704C5  [14] -> DispatchTable_F7048D_Nop3
+	.long	DispatchTable_F7048D_Nop3	; F704C9  [15] -> DispatchTable_F7048D_Nop3
 
 
 ; --------------------------------------------------------------------------
-; sub_F704CD
+; DispatchTable_F7048D_Nop3
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -165884,10 +165883,10 @@ DispatchTable_F7048D:
 ;                   0xF72323.  0xF704CD is an instruction boundary of this
 ;                   transcription, re-asserted on every emit.  The name IS
 ;                   the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F7048D_Nop3 after what reaches it
+;          (was sub_F704CD; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F704CD:
+DispatchTable_F7048D_Nop3:
 	ret	; F704CD  ret
 
 ; --------------------------------------------------------------------------
@@ -166399,7 +166398,7 @@ sub_F707E6_Skip3:
 	ret	; F70839  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7083A
+; sub_F725D9_Nop
 ; Called from: in-module: 0xF72615
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -166407,10 +166406,10 @@ sub_F707E6_Skip3:
 ;                    0xF7083A is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F725D9_Nop after what reaches it
+;          (was sub_F7083A; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F7083A:
+sub_F725D9_Nop:
 	ret	; F7083A  ret
 
 ; --------------------------------------------------------------------------
@@ -166513,7 +166512,7 @@ sub_F7083B_Epilogue:
 	ret	; F7091C  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7091D
+; sub_F7039A_Nop
 ; Called from: in-module: 0xF70460 0xF722F5
 ; Touches: nothing with an absolute address
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -166522,10 +166521,10 @@ sub_F7083B_Epilogue:
 ;                  decodes is still a real instruction.  0xF7091D is an
 ;                  instruction boundary of this transcription, re-asserted
 ;                  on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F7039A_Nop after what reaches it
+;          (was sub_F7091D; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F7091D:
+sub_F7039A_Nop:
 	ret	; F7091D  ret
 
 ; --------------------------------------------------------------------------
@@ -166561,7 +166560,7 @@ ByteMap_F7091E:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7095E
+; sub_F7039A_Nop2
 ; Called from: in-module: 0xF7045A 0xF722EF
 ; Touches: nothing with an absolute address
 ; Evidence (CALL): an opcode-anchored `call`/`jp addr24` in prom_a or prom_b
@@ -166570,10 +166569,10 @@ ByteMap_F7091E:
 ;                  decodes is still a real instruction.  0xF7095E is an
 ;                  instruction boundary of this transcription, re-asserted
 ;                  on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F7039A_Nop2 after what reaches it
+;          (was sub_F7095E; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F7095E:
+sub_F7039A_Nop2:
 	ret	; F7095E  ret
 	ret	; F7095F  ret
 
@@ -170000,7 +169999,7 @@ sub_F721A3_Return:
 ; Called from: in-module: 0xF71E13
 ; Touches: (0x10D1) (0x1239) (0x124B) (0x2732)
 ; Calls:   sub_F71417 sub_F7193F sub_F71978 sub_F719B1 sub_F719EA sub_F725D9
-;          sub_F7243B sub_F707E6 sub_F7095E sub_F7091D sub_F7263A sub_F7267E
+;          sub_F7243B sub_F707E6 sub_F7039A_Nop2 sub_F7039A_Nop sub_F7263A sub_F7267E
 ;          +6 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
@@ -170094,10 +170093,10 @@ sub_F7222D_Skip10:
 	call	sub_F707E6	; F722E9  call 0xf707e6
 	jr	sub_F7222D_Return	; F722ED  jr T,0xf72322
 sub_F7222D_Skip11:
-	call	sub_F7095E	; F722EF  call 0xf7095e
+	call	sub_F7039A_Nop2	; F722EF  call 0xf7095e
 	jr	sub_F7222D_Return	; F722F3  jr T,0xf72322
 sub_F7222D_Skip12:
-	call	sub_F7091D	; F722F5  call 0xf7091d
+	call	sub_F7039A_Nop	; F722F5  call 0xf7091d
 	jr	sub_F7222D_Return	; F722F9  jr T,0xf72322
 sub_F7222D_Skip13:
 	call	sub_F7263A	; F722FB  call 0xf7263a
@@ -170151,23 +170150,23 @@ DispatchTable_F72323:
 	.long	sub_F72364	; F72323  [0] -> sub_F72364
 	.long	sub_F7237D	; F72327  [1] -> sub_F7237D
 	.long	sub_F71A23	; F7232B  [2] -> sub_F71A23
-	.long	sub_F72363	; F7232F  [3] -> sub_F72363
+	.long	DispatchTable_F72323_Nop3	; F7232F  [3] -> DispatchTable_F72323_Nop3
 	.long	sub_F71A5C	; F72333  [4] -> sub_F71A5C
-	.long	sub_F72363	; F72337  [5] -> sub_F72363
+	.long	DispatchTable_F72323_Nop3	; F72337  [5] -> DispatchTable_F72323_Nop3
 	.long	sub_F723E1	; F7233B  [6] -> sub_F723E1
 	.long	sub_F724A7	; F7233F  [7] -> sub_F724A7
-	.long	sub_F72363	; F72343  [8] -> sub_F72363
-	.long	sub_F72363	; F72347  [9] -> sub_F72363
+	.long	DispatchTable_F72323_Nop3	; F72343  [8] -> DispatchTable_F72323_Nop3
+	.long	DispatchTable_F72323_Nop3	; F72347  [9] -> DispatchTable_F72323_Nop3
 	.long	sub_F724CB	; F7234B  [10] -> sub_F724CB
 	.long	ByteMap_F72555 + 0x20	; F7234F  [11] -> 0xF72575
-	.long	sub_F72363	; F72353  [12] -> sub_F72363
-	.long	sub_F72363	; F72357  [13] -> sub_F72363
-	.long	sub_F72363	; F7235B  [14] -> sub_F72363
-	.long	sub_F72363	; F7235F  [15] -> sub_F72363
+	.long	DispatchTable_F72323_Nop3	; F72353  [12] -> DispatchTable_F72323_Nop3
+	.long	DispatchTable_F72323_Nop3	; F72357  [13] -> DispatchTable_F72323_Nop3
+	.long	DispatchTable_F72323_Nop3	; F7235B  [14] -> DispatchTable_F72323_Nop3
+	.long	DispatchTable_F72323_Nop3	; F7235F  [15] -> DispatchTable_F72323_Nop3
 
 
 ; --------------------------------------------------------------------------
-; sub_F72363
+; DispatchTable_F72323_Nop3
 ; Called from: no thunk slot and no in-module call or jp site -- reached
 ;              only by a branch from the routine above, or through a table
 ; Touches: nothing with an absolute address
@@ -170178,10 +170177,10 @@ DispatchTable_F72323:
 ;                   0xF72323.  0xF72363 is an instruction boundary of this
 ;                   transcription, re-asserted on every emit.  The name IS
 ;                   the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named DispatchTable_F72323_Nop3 after what reaches it
+;          (was sub_F72363; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F72363:
+DispatchTable_F72323_Nop3:
 	ret	; F72363  ret
 
 ; --------------------------------------------------------------------------
@@ -170553,7 +170552,7 @@ Data_F72576:
 ; sub_F725D9
 ; Called from: in-module: 0xF722DF
 ; Touches: (0x10D0) (0x10D2) (0x11AE) (0x11AF) (0x11B0) (0x11B1) (0x1238)
-; Calls:   sub_F7083A sub_F726C6
+; Calls:   sub_F725D9_Nop sub_F726C6
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
 ;                    block's own code is reached from the grades above.
 ;                    0xF725D9 is an instruction boundary of this
@@ -170584,7 +170583,7 @@ sub_F725D9:
 	ret	; F7260E  ret
 	m_bit 0, MD16, 0x11b1	; F7260F  bit 0,(0x11b1)
 	jr	nz, sub_F725D9_Skip	; F72613  jr NZ,0xf7261d
-	calr	sub_F7083A	; F72615  calr 0xf7083a
+	calr	sub_F725D9_Nop	; F72615  calr 0xf7083a
 	ld	(4664:16), 0	; F72618  ld (0x1238),0x00
 sub_F725D9_Skip:
 	ld	(4526:16), 4	; F7261D  ld (0x11ae),0x04
@@ -173831,7 +173830,7 @@ Smf_WriteFile_Skip13:
 	m_cp_mi8 MB16, 0x0c70, 0x0f	; F73EB0  cp (0x0c70),0x0f
 	jrl	ule, Smf_WriteFile_Loop4	; F73EB5  jrl ULE,0xf73b38
 Smf_WriteFile_Join4:
-	calr	sub_F7486B	; F73EB8  calr 0xf7486b
+	calr	Smf_WriteFile_Nop	; F73EB8  calr 0xf7486b
 	xor	wa, wa	; F73EBB  xor WA,WA
 	ld	(4226:16), wa	; F73EBD  ld (0x1082),WA
 	ld	(4228:16), wa	; F73EC1  ld (0x1084),WA
@@ -174754,7 +174753,7 @@ ByteMap_F7484A:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7486B
+; Smf_WriteFile_Nop
 ; Called from: in-module: 0xF73EB8
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -174762,10 +174761,10 @@ ByteMap_F7484A:
 ;                    0xF7486B is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named Smf_WriteFile_Nop after what reaches it
+;          (was sub_F7486B; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F7486B:
+Smf_WriteFile_Nop:
 	ret	; F7486B  ret
 
 ; --------------------------------------------------------------------------
@@ -176174,7 +176173,7 @@ Data_F75675:
 ; Touches: (0x0C70) (0x107E) (0x1080) (0x1082) (0x1084) (0x1086) (0x1088)
 ;          (0x1193) (0x1195) (0x1198) +18 more  |  0x603422 0x603500
 ;          0x6036A0 0x60A700 0x60AAFF
-; Calls:   sub_F7615B sub_F761A1 sub_F762BD T_F41008 sub_F7626A sub_F76122
+; Calls:   sub_F7615B sub_F761A1 sub_F762BD T_F41008 sub_F7626A sub_F75685_Nop
 ;          sub_F76552 sub_F76567 sub_F76541 sub_F76219 sub_F762DF sub_F7620B
 ;          +1 more
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -176580,7 +176579,7 @@ sub_F75685_Join4:
 sub_F75685_Skip6:
 	ld	(4232:16), xix	; F75A88  ld (0x1088),XIX
 sub_F75685_Join5:
-	calr	sub_F76122	; F75A8C  calr 0xf76122
+	calr	sub_F75685_Nop	; F75A8C  calr 0xf76122
 	xor	wa, wa	; F75A8F  xor WA,WA
 	ld	(4226:16), wa	; F75A91  ld (0x1082),WA
 	ld	(4228:16), wa	; F75A95  ld (0x1084),WA
@@ -177260,7 +177259,7 @@ SmfPartOffsets_F760E0:
 
 
 ; --------------------------------------------------------------------------
-; sub_F76122
+; sub_F75685_Nop
 ; Called from: in-module: 0xF75A8C
 ; Touches: nothing with an absolute address
 ; Evidence (BRANCH): a branch decoded inside this block targets it, and the
@@ -177268,10 +177267,10 @@ SmfPartOffsets_F760E0:
 ;                    0xF76122 is an instruction boundary of this
 ;                    transcription, re-asserted on every emit.  The name IS
 ;                    the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F75685_Nop after what reaches it
+;          (was sub_F76122; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F76122:
+sub_F75685_Nop:
 	ret	; F76122  ret
 
 ; --------------------------------------------------------------------------
@@ -179510,7 +179509,7 @@ sub_F76E74_Skip4:
 	cp	(0xc70:16), 15	; F7723D  cp (0x0c70),0x0f
 	jrl	ule, sub_F76E74_Loop2	; F77242  jrl ULE,0xf76f91
 sub_F76E74_Join4:
-	calr	sub_F77899	; F77245  calr 0xf77899
+	calr	sub_F76E74_Nop	; F77245  calr 0xf77899
 	xor	wa, wa	; F77248  xor WA,WA
 	ld	(4226:16), wa	; F7724A  ld (0x1082),WA
 	ld	(4228:16), wa	; F7724E  ld (0x1084),WA
@@ -180166,14 +180165,14 @@ SmfPartOffsets_F77857:
 	.short	0xFFFF	; F77897  terminator
 
 ; --------------------------------------------------------------------------
-; sub_F77899
+; sub_F76E74_Nop
 ; Called from: 0xF77245
 ; Evidence: 0xF77899 is an instruction boundary of this transcription,
 ;           re-asserted on every emit.  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap
-;          stated, per this tree's rule that a stated gap beats a guess.
+; Purpose: none -- the entry is a lone `ret`.  Named sub_F76E74_Nop after what reaches it
+;          (was sub_F77899; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F77899:
+sub_F76E74_Nop:
 	ret	; F77899  ret
 
 ; --------------------------------------------------------------------------
@@ -183376,17 +183375,17 @@ SongStore_LoadSongHeaderToDisplay:
 	ret	; F7AA87  ret
 
 ; --------------------------------------------------------------------------
-; sub_F7AA88
+; T_F428BC_Nop
 ; Called from: T_F428BC (x1)
 ; Touches: nothing with an absolute address
 ; Evidence: thunk slot T_F428BC holds `jp 0x00F7AA88`, and 0xF7AA88 is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  That is ALL the name rests on -- the name IS the
 ;           address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named T_F428BC_Nop after what reaches it
+;          (was sub_F7AA88; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F7AA88:		; <- T_F428BC
+T_F428BC_Nop:		; <- T_F428BC
 	ret	; F7AA88  ret
 
 ; --------------------------------------------------------------------------
@@ -187748,7 +187747,7 @@ sub_F7C6B2:		; <- T_F42A50
 ; Unknown: what selects (0x0DF6), and what the four live handlers do -- they
 ;          are sub_XXXXXX below.
 SongStore_DispatchA_1:
-	.long	sub_F7C6FA	; [0] -> sub_F7C6FA
+	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
 	.long	sub_F7C743	; [1] -> sub_F7C743
 	.long	sub_F7C75C	; [2] -> sub_F7C75C
 	.long	sub_F7C78C	; [3] -> sub_F7C78C
@@ -187756,7 +187755,7 @@ SongStore_DispatchA_1:
 
 
 ; --------------------------------------------------------------------------
-; sub_F7C6FA
+; SongStore_DispatchA_1_Nop0
 ; Called from: dispatch entry SongStore_DispatchA_1[0],
 ;              SongStore_DispatchA_2[0], SongStore_DispatchB_1[0],
 ;              SongStore_DispatchB_2[0], SongStore_DispatchC_1[0],
@@ -187766,10 +187765,10 @@ SongStore_DispatchA_1:
 ;           whose reader ends `ld XHL,(XDE+HL) / call XHL`, and it is an
 ;           instruction boundary of this transcription (re-asserted on every
 ;           emit).  The name IS the address.
-; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
-;          per this tree's rule that a stated gap beats a plausible guess.
+; Purpose: none -- the entry is a lone `ret`.  Named SongStore_DispatchA_1_Nop0 after what reaches it
+;          (was sub_F7C6FA; scripts/renaming/rename_wsa1_nop_routines.py, 2026-10-03).
 ; --------------------------------------------------------------------------
-sub_F7C6FA:
+SongStore_DispatchA_1_Nop0:
 	ret	; F7C6FA  ret
 
 ; --------------------------------------------------------------------------
@@ -187828,7 +187827,7 @@ sub_F7C6FB:		; <- T_F42A54
 ; Unknown: what selects (0x0DF6), and what the four live handlers do -- they
 ;          are sub_XXXXXX below.
 SongStore_DispatchA_2:
-	.long	sub_F7C6FA	; [0] -> sub_F7C6FA
+	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
 	.long	sub_F7C743	; [1] -> sub_F7C743
 	.long	sub_F7C75C	; [2] -> sub_F7C75C
 	.long	sub_F7C78C	; [3] -> sub_F7C78C
@@ -188233,7 +188232,7 @@ sub_F7C918:		; <- T_F42AA4
 ; Unknown: what selects (0x0DED), and what the four live handlers do -- they
 ;          are sub_XXXXXX below.
 SongStore_DispatchB_1:
-	.long	sub_F7C6FA	; [0] -> sub_F7C6FA
+	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
 	.long	sub_F7C9B0	; [1] -> sub_F7C9B0
 	.long	sub_F7C9C9	; [2] -> sub_F7C9C9
 	.long	sub_F7C9F5	; [3] -> sub_F7C9F5
@@ -188297,7 +188296,7 @@ sub_F7C964:		; <- T_F42AA8
 ; Unknown: what selects (0x0DED), and what the four live handlers do -- they
 ;          are sub_XXXXXX below.
 SongStore_DispatchB_2:
-	.long	sub_F7C6FA	; [0] -> sub_F7C6FA
+	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
 	.long	sub_F7C9B0	; [1] -> sub_F7C9B0
 	.long	sub_F7C9C9	; [2] -> sub_F7C9C9
 	.long	sub_F7C9F5	; [3] -> sub_F7C9F5
@@ -188673,7 +188672,7 @@ sub_F7CB4A:		; <- T_F42A78
 ; Unknown: what selects (0x0DE5), and what the four live handlers do -- they
 ;          are sub_XXXXXX below.
 SongStore_DispatchC_1:
-	.long	sub_F7C6FA	; [0] -> sub_F7C6FA
+	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
 	.long	sub_F7CBE1	; [1] -> sub_F7CBE1
 	.long	sub_F7CBFA	; [2] -> sub_F7CBFA
 	.long	sub_F7CC27	; [3] -> sub_F7CC27
@@ -188738,7 +188737,7 @@ sub_F7CB90:		; <- T_F42A7C
 ; Unknown: what selects (0x0DE5), and what the four live handlers do -- they
 ;          are sub_XXXXXX below.
 SongStore_DispatchC_2:
-	.long	sub_F7C6FA	; [0] -> sub_F7C6FA
+	.long	SongStore_DispatchA_1_Nop0	; [0] -> SongStore_DispatchA_1_Nop0
 	.long	sub_F7CBE1	; [1] -> sub_F7CBE1
 	.long	sub_F7CBFA	; [2] -> sub_F7CBFA
 	.long	sub_F7CC27	; [3] -> sub_F7CC27
@@ -189331,7 +189330,7 @@ ScreenEnter_Edit:
 ; Evidence: the +4 word of screen object F43050 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  [round7-entrypoints]
 ScreenLeave_Edit:
-	calr	sub_F7E9C7	; F7D02E  calr 0xf7e9c7
+	calr	ButtonTable_Edit_0C10Zero_Nop0	; F7D02E  calr 0xf7e9c7
 	ret	; F7D031  ret
 ; Evidence: the +8 word of screen object F43050 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7D2D8 / 0xF7D358 and calls T_F41B08.  [round7-entrypoints]
@@ -189346,7 +189345,7 @@ sub_F7CE04_Skip2:
 ; Evidence: the +0x0C word of screen object F43050 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
 ScreenNull_Edit:
-	calr	sub_F7EA55	; F7D048  calr 0xf7ea55
+	calr	ScreenNull_Edit_Nop	; F7D048  calr 0xf7ea55
 	ret	; F7D04B  ret
 
 ; ---------------------------------------------------------------------
@@ -189391,7 +189390,7 @@ ScreenButton_SongClear:
 ; Evidence: the +0x0C word of screen object F43060 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
 ScreenNull_SongClear:
-	calr	sub_F7EC70	; F7D05E  calr 0xf7ec70
+	calr	ScreenNull_SongClear_Nop	; F7D05E  calr 0xf7ec70
 	ret	; F7D061  ret
 
 ; ---------------------------------------------------------------------
@@ -189441,7 +189440,7 @@ sub_F7CE04_Skip3:
 ; Evidence: the +0x0C word of screen object F43070 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
 ScreenNull_TrackClear:
-	calr	sub_F7EE07	; F7D080  calr 0xf7ee07
+	calr	ButtonTable_TrackClear_207ENonZero_Nop16	; F7D080  calr 0xf7ee07
 	ret	; F7D083  ret
 
 ; ---------------------------------------------------------------------
@@ -189491,7 +189490,7 @@ sub_F7CE04_Skip4:
 ; Evidence: the +0x0C word of screen object F43140 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
 ScreenNull_TrackAssign:
-	calr	sub_F7E600	; F7D0A2  calr 0xf7e600
+	calr	ScreenNull_TrackAssign_Nop	; F7D0A2  calr 0xf7e600
 	ret	; F7D0A5  ret
 
 ; ---------------------------------------------------------------------
@@ -189536,7 +189535,7 @@ ScreenButton_TrackAssignPresets:
 ; Evidence: the +0x0C word of screen object F43190 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
 ScreenNull_TrackAssignPresets:
-	calr	sub_F7E76F	; F7D0B8  calr 0xf7e76f
+	calr	ScreenNull_TrackAssignPresets_Nop	; F7D0B8  calr 0xf7e76f
 	ret	; F7D0BB  ret
 
 ; ---------------------------------------------------------------------
@@ -189713,7 +189712,7 @@ ScreenEnter_PanelWrite:
 ; Evidence: the +4 word of screen object F43130 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  [round7-entrypoints]
 ScreenLeave_PanelWrite:
-	call	sub_F7F558	; F7D124  call 0xf7f558
+	call	ScreenLeave_PanelWrite_Nop	; F7D124  call 0xf7f558
 	ret	; F7D128  ret
 ; Evidence: the +8 word of screen object F43130 (prom_a's PanelScreen_VtableTable);
 ;           its body is `call 0xF7F559` then `ret`.  [round7-entrypoints]
@@ -189899,7 +189898,7 @@ ScreenEnter_AfterT0uchSetting:
 ; Evidence: the +4 word of screen object F43180 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  [round7-entrypoints]
 ScreenLeave_AfterT0uchSetting:
-	call	sub_F7E43F	; F7D197  call 0xf7e43f
+	call	ScreenLeave_AfterT0uchSetting_Nop	; F7D197  call 0xf7e43f
 	ret	; F7D19B  ret
 ; Evidence: the +8 word of screen object F43180 (prom_a's PanelScreen_VtableTable);
 ;           its body is transcribed below.  [round7-entrypoints]
@@ -190011,7 +190010,7 @@ ScreenEnter_S0ngC0py:
 ; Evidence: the +4 word of screen object F430F0 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  [round7-entrypoints]
 ScreenLeave_S0ngC0py:
-	call	sub_F803C8	; F7D1FB  call 0xf803c8
+	call	ScreenLeave_S0ngC0py_Nop	; F7D1FB  call 0xf803c8
 	ret	; F7D1FF  ret
 ; Evidence: the +8 word of screen object F430F0 (prom_a's PanelScreen_VtableTable);
 ;           its body loads the 32-word button tables at 0xF7DDD8 / 0xF7DE58 and calls T_F41B08.  [round7-entrypoints]
@@ -190319,7 +190318,7 @@ sub_F7D2BE:
 	ret	; F7D2C4  ret
 ; Evidence: the +0x0C word of screen object F43160 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
-sub_F7D2C5:
+T_F4316C_Nop:
 	ret	; F7D2C5  ret
 ; Evidence: the +0 word of screen object F431D0, which prom_a's PanelScreen_VtableTable
 ;           names at 0xF86F95.  ⚠ NO NAME: its body reaches no display list, so nothing says which screen this is.  [round7-entrypoints]
@@ -190339,7 +190338,7 @@ sub_F7D2D0:
 	ret	; F7D2D6  ret
 ; Evidence: the +0x0C word of screen object F431D0 (prom_a's PanelScreen_VtableTable);
 ;           its body is a no-op (`ret`, or `calr` to a `ret` then `ret`).  NO READER of +0x0C exists in either image.  [round7-entrypoints]
-sub_F7D2D7:
+T_F431DC_Nop:
 	ret	; F7D2D7  ret
 
 ; ==================================================================
@@ -190402,38 +190401,38 @@ sub_F7D2D7:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Edit_0C10Zero:
-	.long sub_F7E9C7	; [ 0]
-	.long sub_F7E9C7	; [ 1]
-	.long sub_F7E9C7	; [ 2]
-	.long sub_F7E9C7	; [ 3]
-	.long sub_F7E9C7	; [ 4]
-	.long sub_F7E9C7	; [ 5]
-	.long sub_F7E9C7	; [ 6]
-	.long sub_F7E9C7	; [ 7]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 0]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 1]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 2]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 3]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 4]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 5]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 6]
+	.long ButtonTable_Edit_0C10Zero_Nop0	; [ 7]
 	.long LcdKeyRow1_Edit_0C10Zero	; [ 8]
 	.long LcdKeyRow2_Edit_0C10Zero	; [ 9]
 	.long LcdKeyRow3_Edit_0C10Zero	; [10]
 	.long LcdKeyRow4_Edit_0C10Zero	; [11]
 	.long LcdKeyRow5_Edit_0C10Zero	; [12]
-	.long sub_F7EA2C	; [13]
-	.long sub_F7EA2C	; [14]
+	.long ButtonTable_Edit_0C10Zero_Nop13	; [13]
+	.long ButtonTable_Edit_0C10Zero_Nop13	; [14]
 	.long ExitKey_Edit_0C10Zero	; [15]
 	.long PageKey_Edit_0C10Zero	; [16]
-	.long sub_F7EA54	; [17]
-	.long sub_F7EA54	; [18]
-	.long sub_F7EA54	; [19]
-	.long sub_F7EA54	; [20]
-	.long sub_F7EA54	; [21]
-	.long sub_F7EA54	; [22]
-	.long sub_F7EA54	; [23]
-	.long sub_F7EA54	; [24]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [17]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [18]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [19]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [20]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [21]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [22]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [23]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [24]
 	.long PageKey_Edit_0C10Zero	; [25]
-	.long sub_F7EA54	; [26]
-	.long sub_F7EA54	; [27]
-	.long sub_F7EA54	; [28]
-	.long sub_F7EA54	; [29]
-	.long sub_F7EA54	; [30]
-	.long sub_F7EA54	; [31]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [26]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [27]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [28]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [29]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [30]
+	.long ButtonTable_Edit_0C10Zero_Nop17	; [31]
 
 ; --- table  1 of 32: 10 distinct targets; named by the `ld XIX` at 0xF7D03E
 ; ButtonTable_Edit_0C10NonZero -- the 32 panel-button handlers of this screen
@@ -190446,38 +190445,38 @@ ButtonTable_Edit_0C10Zero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Edit_0C10NonZero:
-	.long sub_F7EA56	; [ 0]
-	.long sub_F7EA56	; [ 1]
-	.long sub_F7EA56	; [ 2]
-	.long sub_F7EA56	; [ 3]
-	.long sub_F7EA56	; [ 4]
-	.long sub_F7EA56	; [ 5]
-	.long sub_F7EA56	; [ 6]
-	.long sub_F7EA56	; [ 7]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 0]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 1]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 2]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 3]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 4]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 5]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 6]
+	.long ButtonTable_Edit_0C10NonZero_Nop0	; [ 7]
 	.long LcdKeyRow1_Edit_0C10NonZero	; [ 8]
 	.long LcdKeyRow2_Edit_0C10NonZero	; [ 9]
 	.long LcdKeyRow3_Edit_0C10NonZero	; [10]
 	.long LcdKeyRow4_Edit_0C10NonZero	; [11]
 	.long LcdKeyRow5_Edit_0C10NonZero	; [12]
-	.long sub_F7EAA3	; [13]
-	.long sub_F7EAA3	; [14]
+	.long ButtonTable_Edit_0C10NonZero_Nop13	; [13]
+	.long ButtonTable_Edit_0C10NonZero_Nop13	; [14]
 	.long ExitKey_Edit_0C10NonZero	; [15]
 	.long PageKey_Edit_0C10NonZero	; [16]
-	.long sub_F7EACF	; [17]
-	.long sub_F7EACF	; [18]
-	.long sub_F7EACF	; [19]
-	.long sub_F7EACF	; [20]
-	.long sub_F7EACF	; [21]
-	.long sub_F7EACF	; [22]
-	.long sub_F7EACF	; [23]
-	.long sub_F7EACF	; [24]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [17]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [18]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [19]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [20]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [21]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [22]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [23]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [24]
 	.long PageKey_Edit_0C10NonZero	; [25]
-	.long sub_F7EACF	; [26]
-	.long sub_F7EACF	; [27]
-	.long sub_F7EACF	; [28]
-	.long sub_F7EACF	; [29]
-	.long sub_F7EACF	; [30]
-	.long sub_F7EACF	; [31]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [26]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [27]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [28]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [29]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [30]
+	.long ButtonTable_Edit_0C10NonZero_Nop17	; [31]
 
 ; --- table  2 of 32: 9 distinct targets; named by the `ld XIX` at 0xF7D054
 ; ButtonTable_SongClear -- the 32 panel-button handlers of this screen
@@ -190490,38 +190489,38 @@ ButtonTable_Edit_0C10NonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_SongClear:
-	.long sub_F7EBDD	; [ 0]
-	.long sub_F7EBDD	; [ 1]
+	.long ButtonTable_SongClear_Nop0	; [ 0]
+	.long ButtonTable_SongClear_Nop0	; [ 1]
 	.long SoftKeyCol3_SongClear	; [ 2]
 	.long SoftKeyCol4_SongClear	; [ 3]
-	.long sub_F7EC42	; [ 4]
-	.long sub_F7EC42	; [ 5]
-	.long sub_F7EC42	; [ 6]
-	.long sub_F7EC42	; [ 7]
-	.long sub_F7EC42	; [ 8]
-	.long sub_F7EC42	; [ 9]
-	.long sub_F7EC42	; [10]
+	.long ButtonTable_SongClear_Nop4	; [ 4]
+	.long ButtonTable_SongClear_Nop4	; [ 5]
+	.long ButtonTable_SongClear_Nop4	; [ 6]
+	.long ButtonTable_SongClear_Nop4	; [ 7]
+	.long ButtonTable_SongClear_Nop4	; [ 8]
+	.long ButtonTable_SongClear_Nop4	; [ 9]
+	.long ButtonTable_SongClear_Nop4	; [10]
 	.long LcdKeyRow4_SongClear	; [11]
 	.long LcdKeyRow5_SongClear	; [12]
-	.long sub_F7EC60	; [13]
-	.long sub_F7EC60	; [14]
+	.long ButtonTable_SongClear_Nop13	; [13]
+	.long ButtonTable_SongClear_Nop13	; [14]
 	.long ExitKey_SongClear	; [15]
-	.long sub_F7EC6F	; [16]
-	.long sub_F7EC6F	; [17]
-	.long sub_F7EC6F	; [18]
+	.long ButtonTable_SongClear_Nop16	; [16]
+	.long ButtonTable_SongClear_Nop16	; [17]
+	.long ButtonTable_SongClear_Nop16	; [18]
 	.long SoftKeyCol3_SongClear	; [19]
 	.long SoftKeyCol4_SongClear	; [20]
-	.long sub_F7EC6F	; [21]
-	.long sub_F7EC6F	; [22]
-	.long sub_F7EC6F	; [23]
-	.long sub_F7EC6F	; [24]
-	.long sub_F7EC6F	; [25]
-	.long sub_F7EC6F	; [26]
-	.long sub_F7EC6F	; [27]
-	.long sub_F7EC6F	; [28]
-	.long sub_F7EC6F	; [29]
-	.long sub_F7EC6F	; [30]
-	.long sub_F7EC6F	; [31]
+	.long ButtonTable_SongClear_Nop16	; [21]
+	.long ButtonTable_SongClear_Nop16	; [22]
+	.long ButtonTable_SongClear_Nop16	; [23]
+	.long ButtonTable_SongClear_Nop16	; [24]
+	.long ButtonTable_SongClear_Nop16	; [25]
+	.long ButtonTable_SongClear_Nop16	; [26]
+	.long ButtonTable_SongClear_Nop16	; [27]
+	.long ButtonTable_SongClear_Nop16	; [28]
+	.long ButtonTable_SongClear_Nop16	; [29]
+	.long ButtonTable_SongClear_Nop16	; [30]
+	.long ButtonTable_SongClear_Nop16	; [31]
 
 ; --- table  3 of 32: 13 distinct targets; named by the `ld XIX` at 0xF7D06A
 ; ButtonTable_TrackClear_207EZero -- the 32 panel-button handlers of this screen
@@ -190542,15 +190541,15 @@ ButtonTable_TrackClear_207EZero:
 	.long SoftKeyCol6_TrackClear_207EZero	; [ 5]
 	.long SoftKeyCol7_TrackClear_207EZero	; [ 6]
 	.long SoftKeyCol8_TrackClear_207EZero	; [ 7]
-	.long sub_F7EDC7	; [ 8]
+	.long ButtonTable_TrackClear_207EZero_Nop8	; [ 8]
 	.long LcdKeyRow2_TrackClear_207EZero	; [ 9]
-	.long sub_F7EDD2	; [10]
-	.long sub_F7EDD2	; [11]
-	.long sub_F7EDD2	; [12]
-	.long sub_F7EDD2	; [13]
-	.long sub_F7EDD2	; [14]
+	.long ButtonTable_TrackClear_207EZero_Nop10	; [10]
+	.long ButtonTable_TrackClear_207EZero_Nop10	; [11]
+	.long ButtonTable_TrackClear_207EZero_Nop10	; [12]
+	.long ButtonTable_TrackClear_207EZero_Nop10	; [13]
+	.long ButtonTable_TrackClear_207EZero_Nop10	; [14]
 	.long ExitKey_TrackClear_207EZero	; [15]
-	.long sub_F7EDE1	; [16]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [16]
 	.long SoftKeyCol1_TrackClear_207EZero	; [17]
 	.long SoftKeyCol2_TrackClear_207EZero	; [18]
 	.long SoftKeyCol3_TrackClear_207EZero	; [19]
@@ -190559,13 +190558,13 @@ ButtonTable_TrackClear_207EZero:
 	.long SoftKeyCol6_TrackClear_207EZero	; [22]
 	.long SoftKeyCol7_TrackClear_207EZero	; [23]
 	.long SoftKeyCol8_TrackClear_207EZero	; [24]
-	.long sub_F7EDE1	; [25]
-	.long sub_F7EDE1	; [26]
-	.long sub_F7EDE1	; [27]
-	.long sub_F7EDE1	; [28]
-	.long sub_F7EDE1	; [29]
-	.long sub_F7EDE1	; [30]
-	.long sub_F7EDE1	; [31]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [25]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [26]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [27]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [28]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [29]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [30]
+	.long ButtonTable_TrackClear_207EZero_Nop16	; [31]
 
 ; --- table  4 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D076
 ; ButtonTable_TrackClear_207ENonZero -- the 32 panel-button handlers of this screen
@@ -190578,38 +190577,38 @@ ButtonTable_TrackClear_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_TrackClear_207ENonZero:
-	.long sub_F7EDE2	; [ 0]
-	.long sub_F7EDE2	; [ 1]
-	.long sub_F7EDE2	; [ 2]
-	.long sub_F7EDE2	; [ 3]
-	.long sub_F7EDE2	; [ 4]
-	.long sub_F7EDE2	; [ 5]
-	.long sub_F7EDE2	; [ 6]
-	.long sub_F7EDE2	; [ 7]
-	.long sub_F7EDE2	; [ 8]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 1]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 2]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 3]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 4]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 5]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 6]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 7]
+	.long ButtonTable_TrackClear_207ENonZero_Nop0	; [ 8]
 	.long LcdKeyRow2_TrackClear_207ENonZero	; [ 9]
 	.long LcdKeyRow3_TrackClear_207ENonZero	; [10]
-	.long sub_F7EDFC	; [11]
-	.long sub_F7EDFC	; [12]
-	.long sub_F7EDFC	; [13]
-	.long sub_F7EDFC	; [14]
+	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [11]
+	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [12]
+	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [13]
+	.long ButtonTable_TrackClear_207ENonZero_Nop11	; [14]
 	.long ExitKey_TrackClear_207ENonZero	; [15]
-	.long sub_F7EE07	; [16]
-	.long sub_F7EE07	; [17]
-	.long sub_F7EE07	; [18]
-	.long sub_F7EE07	; [19]
-	.long sub_F7EE07	; [20]
-	.long sub_F7EE07	; [21]
-	.long sub_F7EE07	; [22]
-	.long sub_F7EE07	; [23]
-	.long sub_F7EE07	; [24]
-	.long sub_F7EE07	; [25]
-	.long sub_F7EE07	; [26]
-	.long sub_F7EE07	; [27]
-	.long sub_F7EE07	; [28]
-	.long sub_F7EE07	; [29]
-	.long sub_F7EE07	; [30]
-	.long sub_F7EE07	; [31]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [16]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [17]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [18]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [19]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [20]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [21]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [22]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [23]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [24]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [25]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [26]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [27]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [28]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [29]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [30]
+	.long ButtonTable_TrackClear_207ENonZero_Nop16	; [31]
 
 ; --- table  5 of 32: 15 distinct targets; named by the `ld XIX` at 0xF7D08C
 ; ButtonTable_TrackAssign_207EZero -- the 32 panel-button handlers of this screen
@@ -190622,38 +190621,38 @@ ButtonTable_TrackClear_207ENonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_TrackAssign_207EZero:
-	.long sub_F7E508	; [ 0]
-	.long sub_F7E509	; [ 1]
-	.long sub_F7E509	; [ 2]
+	.long ButtonTable_TrackAssign_207EZero_Nop0	; [ 0]
+	.long ButtonTable_TrackAssign_207EZero_Nop1	; [ 1]
+	.long ButtonTable_TrackAssign_207EZero_Nop1	; [ 2]
 	.long SoftKeyCol4_TrackAssign_207EZero	; [ 3]
 	.long SoftKeyCol5_TrackAssign_207EZero	; [ 4]
-	.long sub_F7E535	; [ 5]
+	.long ButtonTable_TrackAssign_207EZero_Nop5	; [ 5]
 	.long SoftKeyCol7_TrackAssign_207EZero	; [ 6]
-	.long sub_F7E546	; [ 7]
+	.long ButtonTable_TrackAssign_207EZero_Nop7	; [ 7]
 	.long LcdKeyRow1_TrackAssign_207EZero	; [ 8]
 	.long LcdKeyRow2_TrackAssign_207EZero	; [ 9]
 	.long LcdKeyRow3_TrackAssign_207EZero	; [10]
 	.long LcdKeyRow4_TrackAssign_207EZero	; [11]
 	.long LcdKeyRow5_TrackAssign_207EZero	; [12]
-	.long sub_F7E5C4	; [13]
-	.long sub_F7E5C4	; [14]
+	.long ButtonTable_TrackAssign_207EZero_Nop13	; [13]
+	.long ButtonTable_TrackAssign_207EZero_Nop13	; [14]
 	.long ExitKey_TrackAssign_207EZero	; [15]
-	.long sub_F7E5D3	; [16]
-	.long sub_F7E5D3	; [17]
-	.long sub_F7E5D3	; [18]
-	.long sub_F7E5D3	; [19]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [16]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [17]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [18]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [19]
 	.long SoftKeyCol4_TrackAssign_207EZero	; [20]
 	.long SoftKeyCol5_TrackAssign_207EZero	; [21]
-	.long sub_F7E535	; [22]
+	.long ButtonTable_TrackAssign_207EZero_Nop5	; [22]
 	.long SoftKeyCol7_TrackAssign_207EZero	; [23]
-	.long sub_F7E5D3	; [24]
-	.long sub_F7E5D3	; [25]
-	.long sub_F7E5D3	; [26]
-	.long sub_F7E5D3	; [27]
-	.long sub_F7E5D3	; [28]
-	.long sub_F7E5D3	; [29]
-	.long sub_F7E5D3	; [30]
-	.long sub_F7E5D3	; [31]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [24]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [25]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [26]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [27]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [28]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [29]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [30]
+	.long ButtonTable_TrackAssign_207EZero_Nop16	; [31]
 
 ; --- table  6 of 32: 6 distinct targets; named by the `ld XIX` at 0xF7D098
 ; ButtonTable_TrackAssign_207ENonZero -- the 32 panel-button handlers of this screen
@@ -190666,38 +190665,38 @@ ButtonTable_TrackAssign_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_TrackAssign_207ENonZero:
-	.long sub_F7E5D4	; [ 0]
-	.long sub_F7E5D4	; [ 1]
-	.long sub_F7E5D4	; [ 2]
-	.long sub_F7E5D4	; [ 3]
-	.long sub_F7E5D4	; [ 4]
-	.long sub_F7E5D4	; [ 5]
-	.long sub_F7E5D4	; [ 6]
-	.long sub_F7E5D4	; [ 7]
-	.long sub_F7E5D4	; [ 8]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 1]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 2]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 3]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 4]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 5]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 6]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 7]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop0	; [ 8]
 	.long LcdKeyRow2_TrackAssign_207ENonZero	; [ 9]
 	.long LcdKeyRow3_TrackAssign_207ENonZero	; [10]
-	.long sub_F7E5F2	; [11]
-	.long sub_F7E5F2	; [12]
-	.long sub_F7E5F2	; [13]
-	.long sub_F7E5F2	; [14]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [11]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [12]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [13]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop11	; [14]
 	.long ExitKey_TrackAssign_207ENonZero	; [15]
-	.long sub_F7E5FF	; [16]
-	.long sub_F7E5FF	; [17]
-	.long sub_F7E5FF	; [18]
-	.long sub_F7E5FF	; [19]
-	.long sub_F7E5FF	; [20]
-	.long sub_F7E5FF	; [21]
-	.long sub_F7E5FF	; [22]
-	.long sub_F7E5FF	; [23]
-	.long sub_F7E5FF	; [24]
-	.long sub_F7E5FF	; [25]
-	.long sub_F7E5FF	; [26]
-	.long sub_F7E5FF	; [27]
-	.long sub_F7E5FF	; [28]
-	.long sub_F7E5FF	; [29]
-	.long sub_F7E5FF	; [30]
-	.long sub_F7E5FF	; [31]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [16]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [17]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [18]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [19]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [20]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [21]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [22]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [23]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [24]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [25]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [26]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [27]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [28]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [29]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [30]
+	.long ButtonTable_TrackAssign_207ENonZero_Nop16	; [31]
 
 ; --- table  7 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D0AE
 ; ButtonTable_TrackAssignPresets -- the 32 panel-button handlers of this screen
@@ -190726,22 +190725,22 @@ ButtonTable_TrackAssignPresets:
 	.long sub_F7E750	; [13]
 	.long sub_F7E758	; [14]
 	.long ExitKey_TrackAssignPresets	; [15]
-	.long sub_F7E76E	; [16]
-	.long sub_F7E76E	; [17]
-	.long sub_F7E76E	; [18]
-	.long sub_F7E76E	; [19]
-	.long sub_F7E76E	; [20]
-	.long sub_F7E76E	; [21]
-	.long sub_F7E76E	; [22]
-	.long sub_F7E76E	; [23]
-	.long sub_F7E76E	; [24]
-	.long sub_F7E76E	; [25]
-	.long sub_F7E76E	; [26]
-	.long sub_F7E76E	; [27]
-	.long sub_F7E76E	; [28]
-	.long sub_F7E76E	; [29]
-	.long sub_F7E76E	; [30]
-	.long sub_F7E76E	; [31]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [16]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [17]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [18]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [19]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [20]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [21]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [22]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [23]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [24]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [25]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [26]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [27]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [28]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [29]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [30]
+	.long ButtonTable_TrackAssignPresets_Nop16	; [31]
 
 ; --- table  8 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0C6
 ; ButtonTable_TrackMerge_207EZero -- the 32 panel-button handlers of this screen
@@ -190754,38 +190753,38 @@ ButtonTable_TrackAssignPresets:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_TrackMerge_207EZero:
-	.long sub_F7EE9B	; [ 0]
-	.long sub_F7EE9C	; [ 1]
-	.long sub_F7EE9D	; [ 2]
-	.long sub_F7EE9E	; [ 3]
+	.long ButtonTable_TrackMerge_207EZero_Nop0	; [ 0]
+	.long ButtonTable_TrackMerge_207EZero_Nop1	; [ 1]
+	.long ButtonTable_TrackMerge_207EZero_Nop2	; [ 2]
+	.long ButtonTable_TrackMerge_207EZero_Nop3	; [ 3]
 	.long SoftKeyCol5_TrackMerge_207EZero	; [ 4]
-	.long sub_F7EECA	; [ 5]
-	.long sub_F7EECB	; [ 6]
-	.long sub_F7EECC	; [ 7]
-	.long sub_F7EECC	; [ 8]
+	.long ButtonTable_TrackMerge_207EZero_Nop5	; [ 5]
+	.long ButtonTable_TrackMerge_207EZero_Nop6	; [ 6]
+	.long ButtonTable_TrackMerge_207EZero_Nop7	; [ 7]
+	.long ButtonTable_TrackMerge_207EZero_Nop7	; [ 8]
 	.long LcdKeyRow2_TrackMerge_207EZero	; [ 9]
 	.long LcdKeyRow3_TrackMerge_207EZero	; [10]
 	.long LcdKeyRow4_TrackMerge_207EZero	; [11]
-	.long sub_F7EF3A	; [12]
-	.long sub_F7EF3B	; [13]
-	.long sub_F7EF3C	; [14]
+	.long ButtonTable_TrackMerge_207EZero_Nop12	; [12]
+	.long ButtonTable_TrackMerge_207EZero_Nop13	; [13]
+	.long ButtonTable_TrackMerge_207EZero_Nop14	; [14]
 	.long ExitKey_TrackMerge_207EZero	; [15]
-	.long sub_F7EF4B	; [16]
-	.long sub_F7EF4B	; [17]
-	.long sub_F7EF4B	; [18]
-	.long sub_F7EF4B	; [19]
-	.long sub_F7EF4B	; [20]
-	.long sub_F7EF4B	; [21]
-	.long sub_F7EF4B	; [22]
-	.long sub_F7EF4B	; [23]
-	.long sub_F7EF4B	; [24]
-	.long sub_F7EF4B	; [25]
-	.long sub_F7EF4B	; [26]
-	.long sub_F7EF4B	; [27]
-	.long sub_F7EF4B	; [28]
-	.long sub_F7EF4B	; [29]
-	.long sub_F7EF4B	; [30]
-	.long sub_F7EF4B	; [31]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [16]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [17]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [18]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [19]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [20]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [21]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [22]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [23]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [24]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [25]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [26]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [27]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [28]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [29]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [30]
+	.long ButtonTable_TrackMerge_207EZero_Nop16	; [31]
 
 ; --- table  9 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0D2
 ; ButtonTable_TrackMerge_207ENonZero -- the 32 panel-button handlers of this screen
@@ -190798,38 +190797,38 @@ ButtonTable_TrackMerge_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_TrackMerge_207ENonZero:
-	.long sub_F7EF4C	; [ 0]
-	.long sub_F7EF4D	; [ 1]
-	.long sub_F7EF4E	; [ 2]
-	.long sub_F7EF4F	; [ 3]
-	.long sub_F7EF50	; [ 4]
-	.long sub_F7EF51	; [ 5]
-	.long sub_F7EF52	; [ 6]
-	.long sub_F7EF53	; [ 7]
-	.long sub_F7EF53	; [ 8]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop1	; [ 1]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop2	; [ 2]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop3	; [ 3]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop4	; [ 4]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop5	; [ 5]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop6	; [ 6]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop7	; [ 7]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop7	; [ 8]
 	.long LcdKeyRow2_TrackMerge_207ENonZero	; [ 9]
-	.long sub_F7EF63	; [10]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop10	; [10]
 	.long LcdKeyRow4_TrackMerge_207ENonZero	; [11]
-	.long sub_F7EF6E	; [12]
-	.long sub_F7EF6F	; [13]
-	.long sub_F7EF70	; [14]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop12	; [12]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop13	; [13]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop14	; [14]
 	.long ExitKey_TrackMerge_207ENonZero	; [15]
-	.long sub_F7EF7B	; [16]
-	.long sub_F7EF7B	; [17]
-	.long sub_F7EF7B	; [18]
-	.long sub_F7EF7B	; [19]
-	.long sub_F7EF7B	; [20]
-	.long sub_F7EF7B	; [21]
-	.long sub_F7EF7B	; [22]
-	.long sub_F7EF7B	; [23]
-	.long sub_F7EF7B	; [24]
-	.long sub_F7EF7B	; [25]
-	.long sub_F7EF7B	; [26]
-	.long sub_F7EF7B	; [27]
-	.long sub_F7EF7B	; [28]
-	.long sub_F7EF7B	; [29]
-	.long sub_F7EF7B	; [30]
-	.long sub_F7EF7B	; [31]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [16]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [17]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [18]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [19]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [20]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [21]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [22]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [23]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [24]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [25]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [26]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [27]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [28]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [29]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [30]
+	.long ButtonTable_TrackMerge_207ENonZero_Nop16	; [31]
 
 ; --- table 10 of 32: 20 distinct targets; named by the `ld XIX` at 0xF7D0E7
 ; ButtonTable_MeasureDelete_207EZero -- the 32 panel-button handlers of this screen
@@ -190842,38 +190841,38 @@ ButtonTable_TrackMerge_207ENonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureDelete_207EZero:
-	.long sub_F7F036	; [ 0]
-	.long sub_F7F037	; [ 1]
-	.long sub_F7F038	; [ 2]
-	.long sub_F7F039	; [ 3]
+	.long ButtonTable_MeasureDelete_207EZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureDelete_207EZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureDelete_207EZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureDelete_207EZero_Nop3	; [ 3]
 	.long SoftKeyCol5_MeasureDelete_207EZero	; [ 4]
-	.long sub_F7F061	; [ 5]
-	.long sub_F7F062	; [ 6]
-	.long sub_F7F063	; [ 7]
-	.long sub_F7F063	; [ 8]
+	.long ButtonTable_MeasureDelete_207EZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureDelete_207EZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureDelete_207EZero_Nop7	; [ 7]
+	.long ButtonTable_MeasureDelete_207EZero_Nop7	; [ 8]
 	.long LcdKeyRow2_MeasureDelete_207EZero	; [ 9]
 	.long LcdKeyRow3_MeasureDelete_207EZero	; [10]
 	.long LcdKeyRow4_MeasureDelete_207EZero	; [11]
-	.long sub_F7F0D5	; [12]
-	.long sub_F7F0D6	; [13]
-	.long sub_F7F0D7	; [14]
+	.long ButtonTable_MeasureDelete_207EZero_Nop12	; [12]
+	.long ButtonTable_MeasureDelete_207EZero_Nop13	; [13]
+	.long ButtonTable_MeasureDelete_207EZero_Nop14	; [14]
 	.long ExitKey_MeasureDelete_207EZero	; [15]
-	.long sub_F7F0E6	; [16]
-	.long sub_F7F0E6	; [17]
-	.long sub_F7F0E6	; [18]
-	.long sub_F7F0E6	; [19]
-	.long sub_F7F0E6	; [20]
+	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [16]
+	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [17]
+	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [18]
+	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [19]
+	.long ButtonTable_MeasureDelete_207EZero_Nop16	; [20]
 	.long sub_F7F0E7	; [21]
-	.long sub_F7F10E	; [22]
-	.long sub_F7F10E	; [23]
-	.long sub_F7F10E	; [24]
-	.long sub_F7F10E	; [25]
-	.long sub_F7F10E	; [26]
+	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [22]
+	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [23]
+	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [24]
+	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [25]
+	.long ButtonTable_MeasureDelete_207EZero_Nop22	; [26]
 	.long NumberPadKey_MeasureDelete_207EZero	; [27]
-	.long sub_F7F113	; [28]
-	.long sub_F7F113	; [29]
-	.long sub_F7F113	; [30]
-	.long sub_F7F113	; [31]
+	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [28]
+	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [29]
+	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [30]
+	.long ButtonTable_MeasureDelete_207EZero_Nop28	; [31]
 
 ; --- table 11 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D0F3
 ; ButtonTable_MeasureDelete_207ENonZero -- the 32 panel-button handlers of this screen
@@ -190886,38 +190885,38 @@ ButtonTable_MeasureDelete_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureDelete_207ENonZero:
-	.long sub_F7F205	; [ 0]
-	.long sub_F7F206	; [ 1]
-	.long sub_F7F207	; [ 2]
-	.long sub_F7F208	; [ 3]
-	.long sub_F7F209	; [ 4]
-	.long sub_F7F20A	; [ 5]
-	.long sub_F7F20B	; [ 6]
-	.long sub_F7F20C	; [ 7]
-	.long sub_F7F20D	; [ 8]
-	.long sub_F7F20D	; [ 9]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop3	; [ 3]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop4	; [ 4]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop7	; [ 7]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop8	; [ 8]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop8	; [ 9]
 	.long LcdKeyRow3_MeasureDelete_207ENonZero	; [10]
 	.long LcdKeyRow4_MeasureDelete_207ENonZero	; [11]
-	.long sub_F7F229	; [12]
-	.long sub_F7F22A	; [13]
-	.long sub_F7F22B	; [14]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop12	; [12]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop13	; [13]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop14	; [14]
 	.long ExitKey_MeasureDelete_207ENonZero	; [15]
-	.long sub_F7F236	; [16]
-	.long sub_F7F236	; [17]
-	.long sub_F7F236	; [18]
-	.long sub_F7F236	; [19]
-	.long sub_F7F236	; [20]
-	.long sub_F7F236	; [21]
-	.long sub_F7F236	; [22]
-	.long sub_F7F236	; [23]
-	.long sub_F7F236	; [24]
-	.long sub_F7F236	; [25]
-	.long sub_F7F236	; [26]
-	.long sub_F7F236	; [27]
-	.long sub_F7F236	; [28]
-	.long sub_F7F236	; [29]
-	.long sub_F7F236	; [30]
-	.long sub_F7F236	; [31]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [16]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [17]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [18]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [19]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [20]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [21]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [22]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [23]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [24]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [25]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [26]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [27]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [28]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [29]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [30]
+	.long ButtonTable_MeasureDelete_207ENonZero_Nop16	; [31]
 
 ; --- table 12 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D108
 ; ButtonTable_MeasureErase_207EZero -- the 32 panel-button handlers of this screen
@@ -190930,38 +190929,38 @@ ButtonTable_MeasureDelete_207ENonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureErase_207EZero:
-	.long sub_F7F2DA	; [ 0]
-	.long sub_F7F2DB	; [ 1]
-	.long sub_F7F2DC	; [ 2]
-	.long sub_F7F2DD	; [ 3]
+	.long ButtonTable_MeasureErase_207EZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureErase_207EZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureErase_207EZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureErase_207EZero_Nop3	; [ 3]
 	.long SoftKeyCol5_MeasureErase_207EZero	; [ 4]
-	.long sub_F7F305	; [ 5]
-	.long sub_F7F306	; [ 6]
-	.long sub_F7F307	; [ 7]
+	.long ButtonTable_MeasureErase_207EZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureErase_207EZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureErase_207EZero_Nop7	; [ 7]
 	.long LcdKeyRow1_MeasureErase_207EZero	; [ 8]
 	.long LcdKeyRow2_MeasureErase_207EZero	; [ 9]
 	.long LcdKeyRow3_MeasureErase_207EZero	; [10]
 	.long LcdKeyRow4_MeasureErase_207EZero	; [11]
-	.long sub_F7F3D0	; [12]
-	.long sub_F7F3D1	; [13]
-	.long sub_F7F3D2	; [14]
+	.long ButtonTable_MeasureErase_207EZero_Nop12	; [12]
+	.long ButtonTable_MeasureErase_207EZero_Nop13	; [13]
+	.long ButtonTable_MeasureErase_207EZero_Nop14	; [14]
 	.long ExitKey_MeasureErase_207EZero	; [15]
-	.long sub_F7F3E1	; [16]
-	.long sub_F7F3E1	; [17]
-	.long sub_F7F3E1	; [18]
-	.long sub_F7F3E1	; [19]
-	.long sub_F7F3E1	; [20]
+	.long ButtonTable_MeasureErase_207EZero_Nop16	; [16]
+	.long ButtonTable_MeasureErase_207EZero_Nop16	; [17]
+	.long ButtonTable_MeasureErase_207EZero_Nop16	; [18]
+	.long ButtonTable_MeasureErase_207EZero_Nop16	; [19]
+	.long ButtonTable_MeasureErase_207EZero_Nop16	; [20]
 	.long sub_F7F3E2	; [21]
-	.long sub_F7F409	; [22]
-	.long sub_F7F409	; [23]
-	.long sub_F7F409	; [24]
-	.long sub_F7F409	; [25]
-	.long sub_F7F409	; [26]
+	.long ButtonTable_MeasureErase_207EZero_Nop22	; [22]
+	.long ButtonTable_MeasureErase_207EZero_Nop22	; [23]
+	.long ButtonTable_MeasureErase_207EZero_Nop22	; [24]
+	.long ButtonTable_MeasureErase_207EZero_Nop22	; [25]
+	.long ButtonTable_MeasureErase_207EZero_Nop22	; [26]
 	.long NumberPadKey_MeasureErase_207EZero	; [27]
-	.long sub_F7F40E	; [28]
-	.long sub_F7F40E	; [29]
-	.long sub_F7F40E	; [30]
-	.long sub_F7F40E	; [31]
+	.long ButtonTable_MeasureErase_207EZero_Nop28	; [28]
+	.long ButtonTable_MeasureErase_207EZero_Nop28	; [29]
+	.long ButtonTable_MeasureErase_207EZero_Nop28	; [30]
+	.long ButtonTable_MeasureErase_207EZero_Nop28	; [31]
 
 ; --- table 13 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D114
 ; ButtonTable_MeasureErase_207ENonZero -- the 32 panel-button handlers of this screen
@@ -190974,38 +190973,38 @@ ButtonTable_MeasureErase_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_MeasureErase_207ENonZero:
-	.long sub_F7F40F	; [ 0]
-	.long sub_F7F410	; [ 1]
-	.long sub_F7F411	; [ 2]
-	.long sub_F7F412	; [ 3]
-	.long sub_F7F413	; [ 4]
-	.long sub_F7F414	; [ 5]
-	.long sub_F7F415	; [ 6]
-	.long sub_F7F416	; [ 7]
-	.long sub_F7F417	; [ 8]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop1	; [ 1]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop2	; [ 2]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop3	; [ 3]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop4	; [ 4]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop5	; [ 5]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop6	; [ 6]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop7	; [ 7]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop8	; [ 8]
 	.long LcdKeyRow2_MeasureErase_207ENonZero	; [ 9]
 	.long LcdKeyRow3_MeasureErase_207ENonZero	; [10]
-	.long sub_F7F431	; [11]
-	.long sub_F7F432	; [12]
-	.long sub_F7F433	; [13]
-	.long sub_F7F434	; [14]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop11	; [11]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop12	; [12]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop13	; [13]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop14	; [14]
 	.long ExitKey_MeasureErase_207ENonZero	; [15]
-	.long sub_F7F43F	; [16]
-	.long sub_F7F43F	; [17]
-	.long sub_F7F43F	; [18]
-	.long sub_F7F43F	; [19]
-	.long sub_F7F43F	; [20]
-	.long sub_F7F43F	; [21]
-	.long sub_F7F43F	; [22]
-	.long sub_F7F43F	; [23]
-	.long sub_F7F43F	; [24]
-	.long sub_F7F43F	; [25]
-	.long sub_F7F43F	; [26]
-	.long sub_F7F43F	; [27]
-	.long sub_F7F43F	; [28]
-	.long sub_F7F43F	; [29]
-	.long sub_F7F43F	; [30]
-	.long sub_F7F43F	; [31]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [16]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [17]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [18]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [19]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [20]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [21]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [22]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [23]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [24]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [25]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [26]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [27]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [28]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [29]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [30]
+	.long ButtonTable_MeasureErase_207ENonZero_Nop16	; [31]
 
 ; --- table 14 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D139
 ; ButtonTable_Quantize_207EZero -- the 32 panel-button handlers of this screen
@@ -191018,38 +191017,38 @@ ButtonTable_MeasureErase_207ENonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Quantize_207EZero:
-	.long sub_F7F608	; [ 0]
-	.long sub_F7F609	; [ 1]
-	.long sub_F7F60A	; [ 2]
-	.long sub_F7F60B	; [ 3]
+	.long ButtonTable_Quantize_207EZero_Nop0	; [ 0]
+	.long ButtonTable_Quantize_207EZero_Nop1	; [ 1]
+	.long ButtonTable_Quantize_207EZero_Nop2	; [ 2]
+	.long ButtonTable_Quantize_207EZero_Nop3	; [ 3]
 	.long SoftKeyCol5_Quantize_207EZero	; [ 4]
-	.long sub_F7F633	; [ 5]
-	.long sub_F7F634	; [ 6]
-	.long sub_F7F635	; [ 7]
+	.long ButtonTable_Quantize_207EZero_Nop5	; [ 5]
+	.long ButtonTable_Quantize_207EZero_Nop6	; [ 6]
+	.long ButtonTable_Quantize_207EZero_Nop7	; [ 7]
 	.long LcdKeyRow1_Quantize_207EZero	; [ 8]
 	.long LcdKeyRow2_Quantize_207EZero	; [ 9]
 	.long LcdKeyRow3_Quantize_207EZero	; [10]
 	.long LcdKeyRow4_Quantize_207EZero	; [11]
-	.long sub_F7F71E	; [12]
-	.long sub_F7F71F	; [13]
-	.long sub_F7F720	; [14]
+	.long ButtonTable_Quantize_207EZero_Nop12	; [12]
+	.long ButtonTable_Quantize_207EZero_Nop13	; [13]
+	.long ButtonTable_Quantize_207EZero_Nop14	; [14]
 	.long ExitKey_Quantize_207EZero	; [15]
-	.long sub_F7F74D	; [16]
-	.long sub_F7F74D	; [17]
-	.long sub_F7F74D	; [18]
-	.long sub_F7F74D	; [19]
-	.long sub_F7F74D	; [20]
+	.long ButtonTable_Quantize_207EZero_Nop16	; [16]
+	.long ButtonTable_Quantize_207EZero_Nop16	; [17]
+	.long ButtonTable_Quantize_207EZero_Nop16	; [18]
+	.long ButtonTable_Quantize_207EZero_Nop16	; [19]
+	.long ButtonTable_Quantize_207EZero_Nop16	; [20]
 	.long sub_F7F74E	; [21]
-	.long sub_F7F775	; [22]
-	.long sub_F7F775	; [23]
-	.long sub_F7F775	; [24]
-	.long sub_F7F775	; [25]
-	.long sub_F7F775	; [26]
+	.long ButtonTable_Quantize_207EZero_Nop22	; [22]
+	.long ButtonTable_Quantize_207EZero_Nop22	; [23]
+	.long ButtonTable_Quantize_207EZero_Nop22	; [24]
+	.long ButtonTable_Quantize_207EZero_Nop22	; [25]
+	.long ButtonTable_Quantize_207EZero_Nop22	; [26]
 	.long NumberPadKey_Quantize_207EZero	; [27]
-	.long sub_F7F77A	; [28]
-	.long sub_F7F77A	; [29]
-	.long sub_F7F77A	; [30]
-	.long sub_F7F77A	; [31]
+	.long ButtonTable_Quantize_207EZero_Nop28	; [28]
+	.long ButtonTable_Quantize_207EZero_Nop28	; [29]
+	.long ButtonTable_Quantize_207EZero_Nop28	; [30]
+	.long ButtonTable_Quantize_207EZero_Nop28	; [31]
 
 ; --- table 15 of 32: 16 distinct targets; named by the `ld XIX` at 0xF7D145
 ; ButtonTable_Quantize_207ENonZero -- the 32 panel-button handlers of this screen
@@ -191062,38 +191061,38 @@ ButtonTable_Quantize_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Quantize_207ENonZero:
-	.long sub_F7F77B	; [ 0]
-	.long sub_F7F77C	; [ 1]
-	.long sub_F7F77D	; [ 2]
-	.long sub_F7F77E	; [ 3]
-	.long sub_F7F77F	; [ 4]
-	.long sub_F7F780	; [ 5]
-	.long sub_F7F781	; [ 6]
-	.long sub_F7F782	; [ 7]
-	.long sub_F7F783	; [ 8]
-	.long sub_F7F783	; [ 9]
+	.long ButtonTable_Quantize_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_Quantize_207ENonZero_Nop1	; [ 1]
+	.long ButtonTable_Quantize_207ENonZero_Nop2	; [ 2]
+	.long ButtonTable_Quantize_207ENonZero_Nop3	; [ 3]
+	.long ButtonTable_Quantize_207ENonZero_Nop4	; [ 4]
+	.long ButtonTable_Quantize_207ENonZero_Nop5	; [ 5]
+	.long ButtonTable_Quantize_207ENonZero_Nop6	; [ 6]
+	.long ButtonTable_Quantize_207ENonZero_Nop7	; [ 7]
+	.long ButtonTable_Quantize_207ENonZero_Nop8	; [ 8]
+	.long ButtonTable_Quantize_207ENonZero_Nop8	; [ 9]
 	.long LcdKeyRow3_Quantize_207ENonZero	; [10]
 	.long LcdKeyRow4_Quantize_207ENonZero	; [11]
-	.long sub_F7F79D	; [12]
-	.long sub_F7F79E	; [13]
-	.long sub_F7F79F	; [14]
+	.long ButtonTable_Quantize_207ENonZero_Nop12	; [12]
+	.long ButtonTable_Quantize_207ENonZero_Nop13	; [13]
+	.long ButtonTable_Quantize_207ENonZero_Nop14	; [14]
 	.long ExitKey_Quantize_207ENonZero	; [15]
-	.long sub_F7F7AA	; [16]
-	.long sub_F7F7AA	; [17]
-	.long sub_F7F7AA	; [18]
-	.long sub_F7F7AA	; [19]
-	.long sub_F7F7AA	; [20]
-	.long sub_F7F7AA	; [21]
-	.long sub_F7F7AA	; [22]
-	.long sub_F7F7AA	; [23]
-	.long sub_F7F7AA	; [24]
-	.long sub_F7F7AA	; [25]
-	.long sub_F7F7AA	; [26]
-	.long sub_F7F7AA	; [27]
-	.long sub_F7F7AA	; [28]
-	.long sub_F7F7AA	; [29]
-	.long sub_F7F7AA	; [30]
-	.long sub_F7F7AA	; [31]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [16]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [17]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [18]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [19]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [20]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [21]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [22]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [23]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [24]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [25]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [26]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [27]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [28]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [29]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [30]
+	.long ButtonTable_Quantize_207ENonZero_Nop16	; [31]
 
 ; --- table 16 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D15A
 ; ButtonTable_Vel0cityChange_207EZero -- the 32 panel-button handlers of this screen
@@ -191106,38 +191105,38 @@ ButtonTable_Quantize_207ENonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Vel0cityChange_207EZero:
-	.long sub_F7F954	; [ 0]
-	.long sub_F7F955	; [ 1]
-	.long sub_F7F956	; [ 2]
-	.long sub_F7F957	; [ 3]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop0	; [ 0]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop1	; [ 1]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop2	; [ 2]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop3	; [ 3]
 	.long SoftKeyCol5_Vel0cityChange_207EZero	; [ 4]
-	.long sub_F7F97F	; [ 5]
-	.long sub_F7F980	; [ 6]
-	.long sub_F7F981	; [ 7]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop5	; [ 5]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop6	; [ 6]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop7	; [ 7]
 	.long LcdKeyRow1_Vel0cityChange_207EZero	; [ 8]
 	.long LcdKeyRow2_Vel0cityChange_207EZero	; [ 9]
 	.long LcdKeyRow3_Vel0cityChange_207EZero	; [10]
 	.long LcdKeyRow4_Vel0cityChange_207EZero	; [11]
-	.long sub_F7FA31	; [12]
-	.long sub_F7FA32	; [13]
-	.long sub_F7FA33	; [14]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop12	; [12]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop13	; [13]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop14	; [14]
 	.long ExitKey_Vel0cityChange_207EZero	; [15]
-	.long sub_F7FA42	; [16]
-	.long sub_F7FA42	; [17]
-	.long sub_F7FA42	; [18]
-	.long sub_F7FA42	; [19]
-	.long sub_F7FA42	; [20]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [16]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [17]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [18]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [19]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop16	; [20]
 	.long sub_F7FA43	; [21]
-	.long sub_F7FA6A	; [22]
-	.long sub_F7FA6A	; [23]
-	.long sub_F7FA6A	; [24]
-	.long sub_F7FA6A	; [25]
-	.long sub_F7FA6A	; [26]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [22]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [23]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [24]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [25]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop22	; [26]
 	.long NumberPadKey_Vel0cityChange_207EZero	; [27]
-	.long sub_F7FA6F	; [28]
-	.long sub_F7FA6F	; [29]
-	.long sub_F7FA6F	; [30]
-	.long sub_F7FA6F	; [31]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [28]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [29]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [30]
+	.long ButtonTable_Vel0cityChange_207EZero_Nop28	; [31]
 
 ; --- table 17 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D166
 ; ButtonTable_Vel0cityChange_207ENonZero -- the 32 panel-button handlers of this screen
@@ -191150,38 +191149,38 @@ ButtonTable_Vel0cityChange_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Vel0cityChange_207ENonZero:
-	.long sub_F7FA70	; [ 0]
-	.long sub_F7FA71	; [ 1]
-	.long sub_F7FA72	; [ 2]
-	.long sub_F7FA73	; [ 3]
-	.long sub_F7FA74	; [ 4]
-	.long sub_F7FA75	; [ 5]
-	.long sub_F7FA76	; [ 6]
-	.long sub_F7FA77	; [ 7]
-	.long sub_F7FA78	; [ 8]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop1	; [ 1]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop2	; [ 2]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop3	; [ 3]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop4	; [ 4]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop5	; [ 5]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop6	; [ 6]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop7	; [ 7]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop8	; [ 8]
 	.long LcdKeyRow2_Vel0cityChange_207ENonZero	; [ 9]
 	.long LcdKeyRow3_Vel0cityChange_207ENonZero	; [10]
-	.long sub_F7FA92	; [11]
-	.long sub_F7FA93	; [12]
-	.long sub_F7FA94	; [13]
-	.long sub_F7FA95	; [14]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop11	; [11]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop12	; [12]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop13	; [13]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop14	; [14]
 	.long ExitKey_Vel0cityChange_207ENonZero	; [15]
-	.long sub_F7FAA0	; [16]
-	.long sub_F7FAA0	; [17]
-	.long sub_F7FAA0	; [18]
-	.long sub_F7FAA0	; [19]
-	.long sub_F7FAA0	; [20]
-	.long sub_F7FAA0	; [21]
-	.long sub_F7FAA0	; [22]
-	.long sub_F7FAA0	; [23]
-	.long sub_F7FAA0	; [24]
-	.long sub_F7FAA0	; [25]
-	.long sub_F7FAA0	; [26]
-	.long sub_F7FAA0	; [27]
-	.long sub_F7FAA0	; [28]
-	.long sub_F7FAA0	; [29]
-	.long sub_F7FAA0	; [30]
-	.long sub_F7FAA0	; [31]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [16]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [17]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [18]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [19]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [20]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [21]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [22]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [23]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [24]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [25]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [26]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [27]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [28]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [29]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [30]
+	.long ButtonTable_Vel0cityChange_207ENonZero_Nop16	; [31]
 
 ; --- table 18 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D17B
 ; ButtonTable_Transp0se_207EZero -- the 32 panel-button handlers of this screen
@@ -191194,38 +191193,38 @@ ButtonTable_Vel0cityChange_207ENonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Transp0se_207EZero:
-	.long sub_F7FC9E	; [ 0]
-	.long sub_F7FC9F	; [ 1]
-	.long sub_F7FCA0	; [ 2]
-	.long sub_F7FCA1	; [ 3]
+	.long ButtonTable_Transp0se_207EZero_Nop0	; [ 0]
+	.long ButtonTable_Transp0se_207EZero_Nop1	; [ 1]
+	.long ButtonTable_Transp0se_207EZero_Nop2	; [ 2]
+	.long ButtonTable_Transp0se_207EZero_Nop3	; [ 3]
 	.long SoftKeyCol5_Transp0se_207EZero	; [ 4]
-	.long sub_F7FCC9	; [ 5]
-	.long sub_F7FCCA	; [ 6]
-	.long sub_F7FCCB	; [ 7]
+	.long ButtonTable_Transp0se_207EZero_Nop5	; [ 5]
+	.long ButtonTable_Transp0se_207EZero_Nop6	; [ 6]
+	.long ButtonTable_Transp0se_207EZero_Nop7	; [ 7]
 	.long LcdKeyRow1_Transp0se_207EZero	; [ 8]
 	.long LcdKeyRow2_Transp0se_207EZero	; [ 9]
 	.long LcdKeyRow3_Transp0se_207EZero	; [10]
 	.long LcdKeyRow4_Transp0se_207EZero	; [11]
-	.long sub_F7FD78	; [12]
-	.long sub_F7FD79	; [13]
-	.long sub_F7FD7A	; [14]
+	.long ButtonTable_Transp0se_207EZero_Nop12	; [12]
+	.long ButtonTable_Transp0se_207EZero_Nop13	; [13]
+	.long ButtonTable_Transp0se_207EZero_Nop14	; [14]
 	.long ExitKey_Transp0se_207EZero	; [15]
-	.long sub_F7FD89	; [16]
-	.long sub_F7FD89	; [17]
-	.long sub_F7FD89	; [18]
-	.long sub_F7FD89	; [19]
-	.long sub_F7FD89	; [20]
+	.long ButtonTable_Transp0se_207EZero_Nop16	; [16]
+	.long ButtonTable_Transp0se_207EZero_Nop16	; [17]
+	.long ButtonTable_Transp0se_207EZero_Nop16	; [18]
+	.long ButtonTable_Transp0se_207EZero_Nop16	; [19]
+	.long ButtonTable_Transp0se_207EZero_Nop16	; [20]
 	.long sub_F7FD8A	; [21]
-	.long sub_F7FDB1	; [22]
-	.long sub_F7FDB1	; [23]
-	.long sub_F7FDB1	; [24]
-	.long sub_F7FDB1	; [25]
-	.long sub_F7FDB1	; [26]
+	.long ButtonTable_Transp0se_207EZero_Nop22	; [22]
+	.long ButtonTable_Transp0se_207EZero_Nop22	; [23]
+	.long ButtonTable_Transp0se_207EZero_Nop22	; [24]
+	.long ButtonTable_Transp0se_207EZero_Nop22	; [25]
+	.long ButtonTable_Transp0se_207EZero_Nop22	; [26]
 	.long NumberPadKey_Transp0se_207EZero	; [27]
-	.long sub_F7FDB6	; [28]
-	.long sub_F7FDB6	; [29]
-	.long sub_F7FDB6	; [30]
-	.long sub_F7FDB6	; [31]
+	.long ButtonTable_Transp0se_207EZero_Nop28	; [28]
+	.long ButtonTable_Transp0se_207EZero_Nop28	; [29]
+	.long ButtonTable_Transp0se_207EZero_Nop28	; [30]
+	.long ButtonTable_Transp0se_207EZero_Nop28	; [31]
 
 ; --- table 19 of 32: 17 distinct targets; named by the `ld XIX` at 0xF7D187
 ; ButtonTable_Transp0se_207ENonZero -- the 32 panel-button handlers of this screen
@@ -191238,38 +191237,38 @@ ButtonTable_Transp0se_207EZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_Transp0se_207ENonZero:
-	.long sub_F7FDB7	; [ 0]
-	.long sub_F7FDB8	; [ 1]
-	.long sub_F7FDB9	; [ 2]
-	.long sub_F7FDBA	; [ 3]
-	.long sub_F7FDBB	; [ 4]
-	.long sub_F7FDBC	; [ 5]
-	.long sub_F7FDBD	; [ 6]
-	.long sub_F7FDBE	; [ 7]
-	.long sub_F7FDBF	; [ 8]
+	.long ButtonTable_Transp0se_207ENonZero_Nop0	; [ 0]
+	.long ButtonTable_Transp0se_207ENonZero_Nop1	; [ 1]
+	.long ButtonTable_Transp0se_207ENonZero_Nop2	; [ 2]
+	.long ButtonTable_Transp0se_207ENonZero_Nop3	; [ 3]
+	.long ButtonTable_Transp0se_207ENonZero_Nop4	; [ 4]
+	.long ButtonTable_Transp0se_207ENonZero_Nop5	; [ 5]
+	.long ButtonTable_Transp0se_207ENonZero_Nop6	; [ 6]
+	.long ButtonTable_Transp0se_207ENonZero_Nop7	; [ 7]
+	.long ButtonTable_Transp0se_207ENonZero_Nop8	; [ 8]
 	.long LcdKeyRow2_Transp0se_207ENonZero	; [ 9]
 	.long LcdKeyRow3_Transp0se_207ENonZero	; [10]
-	.long sub_F7FDD9	; [11]
-	.long sub_F7FDDA	; [12]
-	.long sub_F7FDDB	; [13]
-	.long sub_F7FDDC	; [14]
+	.long ButtonTable_Transp0se_207ENonZero_Nop11	; [11]
+	.long ButtonTable_Transp0se_207ENonZero_Nop12	; [12]
+	.long ButtonTable_Transp0se_207ENonZero_Nop13	; [13]
+	.long ButtonTable_Transp0se_207ENonZero_Nop14	; [14]
 	.long ExitKey_Transp0se_207ENonZero	; [15]
-	.long sub_F7FDE7	; [16]
-	.long sub_F7FDE7	; [17]
-	.long sub_F7FDE7	; [18]
-	.long sub_F7FDE7	; [19]
-	.long sub_F7FDE7	; [20]
-	.long sub_F7FDE7	; [21]
-	.long sub_F7FDE7	; [22]
-	.long sub_F7FDE7	; [23]
-	.long sub_F7FDE7	; [24]
-	.long sub_F7FDE7	; [25]
-	.long sub_F7FDE7	; [26]
-	.long sub_F7FDE7	; [27]
-	.long sub_F7FDE7	; [28]
-	.long sub_F7FDE7	; [29]
-	.long sub_F7FDE7	; [30]
-	.long sub_F7FDE7	; [31]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [16]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [17]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [18]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [19]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [20]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [21]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [22]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [23]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [24]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [25]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [26]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [27]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [28]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [29]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [30]
+	.long ButtonTable_Transp0se_207ENonZero_Nop16	; [31]
 
 ; --- table 20 of 32: 21 distinct targets; named by the `ld XIX` at 0xF7D1DF
 ; ButtonTable_AdvanceDelay_207EZero -- the 32 panel-button handlers of this screen
@@ -191282,14 +191281,14 @@ ButtonTable_Transp0se_207ENonZero:
 ;           Promoted from the framed `Table_<address>` spelling by
 ;           notes/prom_b_screens_round8.py --promote --apply
 ButtonTable_AdvanceDelay_207EZero:
-	.long sub_F7FFCD	; [ 0]
-	.long sub_F7FFCE	; [ 1]
-	.long sub_F7FFCF	; [ 2]
-	.long sub_F7FFD0	; [ 3]
+	.long ButtonTable_AdvanceDelay_207EZero_Nop0	; [ 0]
+	.long ButtonTable_AdvanceDelay_207EZero_Nop1	; [ 1]
+	.long ButtonTable_AdvanceDelay_207EZero_Nop2	; [ 2]
+	.long ButtonTable_AdvanceDelay_207EZero_Nop3	; [ 3]
 	.long SoftKeyCol5_AdvanceDelay_207EZero	; [ 4]
-	.long sub_F7FFF8	; [ 5]
-	.long sub_F7FFF9	; [ 6]
-	.long sub_F7FFFA	; [ 7]
+	.long ButtonTable_AdvanceDelay_207EZero_Nop5	; [ 5]
+	.long ButtonTable_AdvanceDelay_207EZero_Nop6	; [ 6]
+	.long ButtonTable_AdvanceDelay_207EZero_Nop7	; [ 7]
 	.long LcdKeyRow1_AdvanceDelay_207EZero	; [ 8]
 	.long 0x00F8003A	; [ 9]
 	.long 0x00F80059	; [10]
@@ -191465,8 +191464,8 @@ ButtonTable_N0teChange_207EZero:
 	.long 0x00F804F5	; [ 4]
 	.long 0x00F8051C	; [ 5]
 	.long 0x00F8051D	; [ 6]
-	.long sub_F8051E	; [ 7]
-	.long sub_F8051E	; [ 8]
+	.long ButtonTable_N0teChange_207EZero_Nop7	; [ 7]
+	.long ButtonTable_N0teChange_207EZero_Nop7	; [ 8]
 	.long 0x00F8051F	; [ 9]
 	.long 0x00F80569	; [10]
 	.long 0x00F80595	; [11]
@@ -191910,7 +191909,7 @@ ButtonTable_SequencerMedley:
 ;     python3 notes/gen_prom_b_f7e2d8_module.py --selftest --cost
 ; ==============================================================================
 
-sub_F7E2D8:
+sub_F7E39F_Nop:
 	ret	; F7E2D8  ret
 
 ; ------------------------------------------------------------------------------
@@ -192015,7 +192014,7 @@ sub_F7E39F_Skip:
 	xor	c, c	; F7E3BD  xor C,C
 sub_F7E39F_Loop:
 	pushw	wa	; F7E3BF  push WA
-	calr	sub_F7E2D8	; F7E3C0  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E3C0  calr 0xf7e2d8
 	popw	wa	; F7E3C3  pop WA
 	ld	(4854:16), c	; F7E3C4  ld (0x12f6),C
 	pushw	wa	; F7E3C8  push WA
@@ -192085,7 +192084,7 @@ sub_F7E430:
 	ld	xix, DLTable_DisableEnable	; F7E435  ld XIX,0x00f3bb97
 	call	T_DisplayList_Run	; F7E43A  call 0xf417f0
 	ret	; F7E43E  ret
-sub_F7E43F:
+ScreenLeave_AfterT0uchSetting_Nop:
 	ret	; F7E43F  ret
 
 ; ---------------------------------------------------------------------
@@ -192176,9 +192175,9 @@ ScreenLeaveBody_TrackAssign:
 	m_and_mi8 MB16, 0x0dc0, 0xfe	; F7E4FE  and (0x0dc0),0xfe
 	call	T_F42BE8	; F7E503  call 0xf42be8
 	ret	; F7E507  ret
-sub_F7E508:
+ButtonTable_TrackAssign_207EZero_Nop0:
 	ret	; F7E508  ret   <- button table 0xF7D558 entry 0 (TRACK ASSIGN)
-sub_F7E509:
+ButtonTable_TrackAssign_207EZero_Nop1:
 	ret	; F7E509  ret   <- button table 0xF7D558 entry 1 (TRACK ASSIGN) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -192292,7 +192291,7 @@ SoftKeyCol5_TrackAssign_207EZero:
 	calr	sub_F7E788	; F7E52E  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E531  calr 0xf7e2fc
 	ret	; F7E534  ret
-sub_F7E535:
+ButtonTable_TrackAssign_207EZero_Nop5:
 	ret	; F7E535  ret   <- button table 0xF7D558 entry 5 (TRACK ASSIGN) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -192345,7 +192344,7 @@ SoftKeyCol7_TrackAssign_207EZero:
 	calr	sub_F7E788	; F7E53F  calr 0xf7e788
 	calr	sub_F7E2FC	; F7E542  calr 0xf7e2fc
 	ret	; F7E545  ret
-sub_F7E546:
+ButtonTable_TrackAssign_207EZero_Nop7:
 	ret	; F7E546  ret   <- button table 0xF7D558 entry 7 (TRACK ASSIGN)
 
 ; ---------------------------------------------------------------------
@@ -192583,7 +192582,7 @@ LcdKeyRow5_TrackAssign_207EZero:
 	call	T_F42BF4	; F7E5BF  call 0xf42bf4
 ScreenLeaveBody_TrackAssign_Return6:
 	ret	; F7E5C3  ret
-sub_F7E5C4:
+ButtonTable_TrackAssign_207EZero_Nop13:
 	ret	; F7E5C4  ret   <- button table 0xF7D558 entry 13 (TRACK ASSIGN) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -192613,9 +192612,9 @@ ExitKey_TrackAssign_207EZero:
 	jr	ScreenLeaveBody_TrackAssign_Return7	; F7E5D0  jr T,0xf7e5d2
 ScreenLeaveBody_TrackAssign_Return7:
 	ret	; F7E5D2  ret
-sub_F7E5D3:
+ButtonTable_TrackAssign_207EZero_Nop16:
 	ret	; F7E5D3  ret   <- button table 0xF7D558 entry 16 (TRACK ASSIGN) and 11 more slot(s)
-sub_F7E5D4:
+ButtonTable_TrackAssign_207ENonZero_Nop0:
 	ret	; F7E5D4  ret   <- button table 0xF7D5D8 entry 0 (TRACK ASSIGN) and 8 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -192706,7 +192705,7 @@ LcdKeyRow3_TrackAssign_207ENonZero:
 	jr	ScreenLeaveBody_TrackAssign_Return9	; F7E5EF  jr T,0xf7e5f1
 ScreenLeaveBody_TrackAssign_Return9:
 	ret	; F7E5F1  ret
-sub_F7E5F2:
+ButtonTable_TrackAssign_207ENonZero_Nop11:
 	ret	; F7E5F2  ret   <- button table 0xF7D5D8 entry 11 (TRACK ASSIGN) and 3 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -192736,9 +192735,9 @@ ExitKey_TrackAssign_207ENonZero:
 	jr	ExitKey_TrackAssign_207ENonZero_Return	; F7E5FC  jr T,0xf7e5fe
 ExitKey_TrackAssign_207ENonZero_Return:
 	ret	; F7E5FE  ret
-sub_F7E5FF:
+ButtonTable_TrackAssign_207ENonZero_Nop16:
 	ret	; F7E5FF  ret   <- button table 0xF7D5D8 entry 16 (TRACK ASSIGN) and 15 more slot(s)
-sub_F7E600:
+ScreenNull_TrackAssign_Nop:
 	ret	; F7E600  ret
 
 ; ---------------------------------------------------------------------
@@ -193518,9 +193517,9 @@ ExitKey_TrackAssignPresets:
 	jr	ScreenLeaveBody_TrackAssignPresets_Return14	; F7E76B  jr T,0xf7e76d
 ScreenLeaveBody_TrackAssignPresets_Return14:
 	ret	; F7E76D  ret
-sub_F7E76E:
+ButtonTable_TrackAssignPresets_Nop16:
 	ret	; F7E76E  ret   <- button table 0xF7D658 entry 16 (TRACK ASSIGN PRESETS) and 15 more slot(s)
-sub_F7E76F:
+ScreenNull_TrackAssignPresets_Nop:
 	ret	; F7E76F  ret
 
 ; Evidence: reached from call from prom_b 0xF7E671; call from prom_b
@@ -193537,7 +193536,7 @@ sub_F7E770:
 ;           0xF7E5A0, and from nothing else the scans see.
 sub_F7E788:
 	m_or_mi8 MB8, 0xc6, 0x01	; F7E788  or (0xc6),0x01
-	calr	sub_F7E2D8	; F7E78C  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E78C  calr 0xf7e2d8
 	ld	a, (13834:16)	; F7E78F  ld A,(0x360a)
 	inc	1, a	; F7E793  inc 1,A
 	ld	(9792:16), a	; F7E795  ld (0x2640),A
@@ -193669,7 +193668,7 @@ sub_F7E852_Join:
 ; ---------------------------------------------------------------------
 Paint_TrackLabels1To8:
 	ld	(9536:16), 0	; F7E89F  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7E8A4  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E8A4  calr 0xf7e2d8
 	ld	xiy, DL_F3B5D1	; F7E8A7  ld XIY,0x00f3b5d1
 	ld	xix, DL_F3B611	; F7E8AC  ld XIX,0x00f3b611
 	call	T_DisplayList_Run	; F7E8B1  call 0xf417f0
@@ -193688,7 +193687,7 @@ Paint_TrackLabels1To8:
 ; ---------------------------------------------------------------------
 Paint_TrackLabels9To16:
 	ld	(9536:16), 0	; F7E8B6  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7E8BB  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E8BB  calr 0xf7e2d8
 	ld	xiy, DL_F3B611	; F7E8BE  ld XIY,0x00f3b611
 	ld	xix, DL_F3B651	; F7E8C3  ld XIX,0x00f3b651
 	call	T_DisplayList_Run	; F7E8C8  call 0xf417f0
@@ -193698,7 +193697,7 @@ Paint_TrackLabels9To16:
 ;           the scans see.
 sub_F7E8CD:
 	ld	(9536:16), 0	; F7E8CD  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7E8D2  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E8D2  calr 0xf7e2d8
 	ld	xiy, 6304802	; F7E8D5  ld XIY,0x00603422
 	ld	xix, 9793	; F7E8DA  ld XIX,0x00002641
 	ldw	bc, 8	; F7E8DF  ld BC,0x0008
@@ -193712,7 +193711,7 @@ sub_F7E8CD:
 ;           the scans see.
 sub_F7E8F3:
 	ld	(9536:16), 0	; F7E8F3  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7E8F8  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E8F8  calr 0xf7e2d8
 	ld	xiy, 6304810	; F7E8FB  ld XIY,0x0060342a
 	ld	xix, 9793	; F7E900  ld XIX,0x00002641
 	ldw	bc, 8	; F7E905  ld BC,0x0008
@@ -193726,7 +193725,7 @@ sub_F7E8F3:
 ;           the scans see.
 sub_F7E919:
 	ld	(9536:16), 1	; F7E919  ld (0x2540),0x01
-	calr	sub_F7E2D8	; F7E91E  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E91E  calr 0xf7e2d8
 	ld	xiy, DL_F3B7C3	; F7E921  ld XIY,0x00f3b7c3
 	ld	xix, Data_F3B7CD	; F7E926  ld XIX,0x00f3b7cd
 	call	T_DisplayList_Run	; F7E92B  call 0xf417f0
@@ -193740,7 +193739,7 @@ sub_F7E919:
 ;           the scans see.
 sub_F7E941:
 	ld	(9536:16), 1	; F7E941  ld (0x2540),0x01
-	calr	sub_F7E2D8	; F7E946  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7E946  calr 0xf7e2d8
 	ld	xiy, DL_F3972D	; F7E949  ld XIY,0x00f3972d
 	ld	xix, DL_F39737	; F7E94E  ld XIX,0x00f39737
 	call	T_DisplayList_Run	; F7E953  call 0xf417f0
@@ -193802,7 +193801,7 @@ Paint_Edit_Join:
 	call	T_F42E1C	; F7E9BF  call 0xf42e1c
 	calr	63777	; F7E9C3  calr 0xf7e2e7
 	ret	; F7E9C6  ret
-sub_F7E9C7:
+ButtonTable_Edit_0C10Zero_Nop0:
 	ret	; F7E9C7  ret   <- button table 0xF7D2D8 entry 0 (EDIT) and 7 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194032,7 +194031,7 @@ Paint_Edit_Skip7:
 	ldw	(8304:16), 32797	; F7EA25  ld (0x2070),0x801d
 Paint_Edit_Return5:
 	ret	; F7EA2B  ret
-sub_F7EA2C:
+ButtonTable_Edit_0C10Zero_Nop13:
 	ret	; F7EA2C  ret   <- button table 0xF7D2D8 entry 13 (EDIT) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194110,11 +194109,11 @@ Paint_Edit_Join2:
 	m_or_mi8 MB16, 0x2071, 0x10	; F7EA4E  or (0x2071),0x10
 Paint_Edit_Return7:
 	ret	; F7EA53  ret
-sub_F7EA54:
+ButtonTable_Edit_0C10Zero_Nop17:
 	ret	; F7EA54  ret   <- button table 0xF7D2D8 entry 17 (EDIT) and 13 more slot(s)
-sub_F7EA55:
+ScreenNull_Edit_Nop:
 	ret	; F7EA55  ret
-sub_F7EA56:
+ButtonTable_Edit_0C10NonZero_Nop0:
 	ret	; F7EA56  ret   <- button table 0xF7D358 entry 0 (EDIT) and 7 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194337,7 +194336,7 @@ LcdKeyRow5_Edit_0C10NonZero:
 	jr	Paint_Edit_Return12	; F7EAA0  jr T,0xf7eaa2
 Paint_Edit_Return12:
 	ret	; F7EAA2  ret
-sub_F7EAA3:
+ButtonTable_Edit_0C10NonZero_Nop13:
 	ret	; F7EAA3  ret   <- button table 0xF7D358 entry 13 (EDIT) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194416,7 +194415,7 @@ Paint_Edit_Join3:
 	m_or_mi8 MB16, 0x2071, 0x10	; F7EAC9  or (0x2071),0x10
 Paint_Edit_Return14:
 	ret	; F7EACE  ret
-sub_F7EACF:
+ButtonTable_Edit_0C10NonZero_Nop17:
 	ret	; F7EACF  ret   <- button table 0xF7D358 entry 17 (EDIT) and 13 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194522,7 +194521,7 @@ Paint_SongClear_Join:
 ScreenLeaveBody_SongClear:
 	call	T_F428BC	; F7EBD8  call 0xf428bc
 	ret	; F7EBDC  ret
-sub_F7EBDD:
+ButtonTable_SongClear_Nop0:
 	ret	; F7EBDD  ret   <- button table 0xF7D3D8 entry 0 (SONG CLEAR) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194652,7 +194651,7 @@ SoftKeyCol4_SongClear_Skip:
 	m_or_mi8 MB16, 0x2095, 0x10	; F7EC3C  or (0x2095),0x10
 SoftKeyCol4_SongClear_Return:
 	ret	; F7EC41  ret
-sub_F7EC42:
+ButtonTable_SongClear_Nop4:
 	ret	; F7EC42  ret   <- button table 0xF7D3D8 entry 4 (SONG CLEAR) and 6 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194741,7 +194740,7 @@ LcdKeyRow5_SongClear:
 	jr	ScreenLeaveBody_SongClear_Return2	; F7EC5D  jr T,0xf7ec5f
 ScreenLeaveBody_SongClear_Return2:
 	ret	; F7EC5F  ret
-sub_F7EC60:
+ButtonTable_SongClear_Nop13:
 	ret	; F7EC60  ret   <- button table 0xF7D3D8 entry 13 (SONG CLEAR) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -194770,9 +194769,9 @@ ExitKey_SongClear:
 	jr	ScreenLeaveBody_SongClear_Return3	; F7EC6C  jr T,0xf7ec6e
 ScreenLeaveBody_SongClear_Return3:
 	ret	; F7EC6E  ret
-sub_F7EC6F:
+ButtonTable_SongClear_Nop16:
 	ret	; F7EC6F  ret   <- button table 0xF7D3D8 entry 16 (SONG CLEAR) and 13 more slot(s)
-sub_F7EC70:
+ScreenNull_SongClear_Nop:
 	ret	; F7EC70  ret
 
 ; ---------------------------------------------------------------------
@@ -195302,7 +195301,7 @@ ScreenLeaveBody_TrackClear_Skip8:
 ScreenLeaveBody_TrackClear_Join8:
 	call	T_F40CC4	; F7EDC2  call 0xf40cc4
 	ret	; F7EDC6  ret
-sub_F7EDC7:
+ButtonTable_TrackClear_207EZero_Nop8:
 	ret	; F7EDC7  ret   <- button table 0xF7D458 entry 8 (TRACK CLEAR)
 
 ; ---------------------------------------------------------------------
@@ -195347,7 +195346,7 @@ LcdKeyRow2_TrackClear_207EZero:
 	call	T_F428DC	; F7EDCD  call 0xf428dc
 ScreenLeaveBody_TrackClear_Return:
 	ret	; F7EDD1  ret
-sub_F7EDD2:
+ButtonTable_TrackClear_207EZero_Nop10:
 	ret	; F7EDD2  ret   <- button table 0xF7D458 entry 10 (TRACK CLEAR) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -195377,9 +195376,9 @@ ExitKey_TrackClear_207EZero:
 	jr	ScreenLeaveBody_TrackClear_Return2	; F7EDDE  jr T,0xf7ede0
 ScreenLeaveBody_TrackClear_Return2:
 	ret	; F7EDE0  ret
-sub_F7EDE1:
+ButtonTable_TrackClear_207EZero_Nop16:
 	ret	; F7EDE1  ret   <- button table 0xF7D458 entry 16 (TRACK CLEAR) and 7 more slot(s)
-sub_F7EDE2:
+ButtonTable_TrackClear_207ENonZero_Nop0:
 	ret	; F7EDE2  ret   <- button table 0xF7D4D8 entry 0 (TRACK CLEAR) and 8 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -195468,7 +195467,7 @@ LcdKeyRow3_TrackClear_207ENonZero:
 	call	T_F428D8	; F7EDF7  call 0xf428d8
 ScreenLeaveBody_TrackClear_Return4:
 	ret	; F7EDFB  ret
-sub_F7EDFC:
+ButtonTable_TrackClear_207ENonZero_Nop11:
 	ret	; F7EDFC  ret   <- button table 0xF7D4D8 entry 11 (TRACK CLEAR) and 3 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -195497,7 +195496,7 @@ ExitKey_TrackClear_207ENonZero:
 	call	T_F428D8	; F7EE02  call 0xf428d8
 ScreenLeaveBody_TrackClear_Return5:
 	ret	; F7EE06  ret
-sub_F7EE07:
+ButtonTable_TrackClear_207ENonZero_Nop16:
 	ret	; F7EE07  ret   <- button table 0xF7D4D8 entry 16 (TRACK CLEAR) and 15 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -195568,13 +195567,13 @@ Paint_TrackMerge_Join:
 ScreenLeaveBody_TrackMerge:
 	call	T_F4293C	; F7EE96  call 0xf4293c
 	ret	; F7EE9A  ret
-sub_F7EE9B:
+ButtonTable_TrackMerge_207EZero_Nop0:
 	ret	; F7EE9B  ret   <- button table 0xF7D6D8 entry 0 (TRACK MERGE)
-sub_F7EE9C:
+ButtonTable_TrackMerge_207EZero_Nop1:
 	ret	; F7EE9C  ret   <- button table 0xF7D6D8 entry 1 (TRACK MERGE)
-sub_F7EE9D:
+ButtonTable_TrackMerge_207EZero_Nop2:
 	ret	; F7EE9D  ret   <- button table 0xF7D6D8 entry 2 (TRACK MERGE)
-sub_F7EE9E:
+ButtonTable_TrackMerge_207EZero_Nop3:
 	ret	; F7EE9E  ret   <- button table 0xF7D6D8 entry 3 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
@@ -195627,16 +195626,16 @@ ScreenLeaveBody_TrackMerge_Skip:
 	call	T_F4294C	; F7EEAF  call 0xf4294c
 ScreenLeaveBody_TrackMerge_Join:
 	ld	(9536:16), 0	; F7EEB3  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7EEB8  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7EEB8  calr 0xf7e2d8
 	ld	xiy, DL_F3A561	; F7EEBB  ld XIY,0x00f3a561
 	ld	xix, DL_F3A561 + 0x1E	; F7EEC0  ld XIX,0x00f3a57f
 	call	T_DisplayListB_Run	; F7EEC5  call 0xf417f4
 	ret	; F7EEC9  ret
-sub_F7EECA:
+ButtonTable_TrackMerge_207EZero_Nop5:
 	ret	; F7EECA  ret   <- button table 0xF7D6D8 entry 5 (TRACK MERGE)
-sub_F7EECB:
+ButtonTable_TrackMerge_207EZero_Nop6:
 	ret	; F7EECB  ret   <- button table 0xF7D6D8 entry 6 (TRACK MERGE)
-sub_F7EECC:
+ButtonTable_TrackMerge_207EZero_Nop7:
 	ret	; F7EECC  ret   <- button table 0xF7D6D8 entry 7 (TRACK MERGE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -195794,11 +195793,11 @@ LcdKeyRow4_TrackMerge_207EZero:
 	calr	sub_F7EEEF	; F7EF36  calr 0xf7eeef
 sub_F7EEEF_Return2:
 	ret	; F7EF39  ret
-sub_F7EF3A:
+ButtonTable_TrackMerge_207EZero_Nop12:
 	ret	; F7EF3A  ret   <- button table 0xF7D6D8 entry 12 (TRACK MERGE)
-sub_F7EF3B:
+ButtonTable_TrackMerge_207EZero_Nop13:
 	ret	; F7EF3B  ret   <- button table 0xF7D6D8 entry 13 (TRACK MERGE)
-sub_F7EF3C:
+ButtonTable_TrackMerge_207EZero_Nop14:
 	ret	; F7EF3C  ret   <- button table 0xF7D6D8 entry 14 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
@@ -195829,23 +195828,23 @@ sub_F7EEEF_Skip:
 	ldw	(8304:16), 32794	; F7EF44  ld (0x2070),0x801a
 sub_F7EEEF_Return3:
 	ret	; F7EF4A  ret
-sub_F7EF4B:
+ButtonTable_TrackMerge_207EZero_Nop16:
 	ret	; F7EF4B  ret   <- button table 0xF7D6D8 entry 16 (TRACK MERGE) and 15 more slot(s)
-sub_F7EF4C:
+ButtonTable_TrackMerge_207ENonZero_Nop0:
 	ret	; F7EF4C  ret   <- button table 0xF7D758 entry 0 (TRACK MERGE)
-sub_F7EF4D:
+ButtonTable_TrackMerge_207ENonZero_Nop1:
 	ret	; F7EF4D  ret   <- button table 0xF7D758 entry 1 (TRACK MERGE)
-sub_F7EF4E:
+ButtonTable_TrackMerge_207ENonZero_Nop2:
 	ret	; F7EF4E  ret   <- button table 0xF7D758 entry 2 (TRACK MERGE)
-sub_F7EF4F:
+ButtonTable_TrackMerge_207ENonZero_Nop3:
 	ret	; F7EF4F  ret   <- button table 0xF7D758 entry 3 (TRACK MERGE)
-sub_F7EF50:
+ButtonTable_TrackMerge_207ENonZero_Nop4:
 	ret	; F7EF50  ret   <- button table 0xF7D758 entry 4 (TRACK MERGE)
-sub_F7EF51:
+ButtonTable_TrackMerge_207ENonZero_Nop5:
 	ret	; F7EF51  ret   <- button table 0xF7D758 entry 5 (TRACK MERGE)
-sub_F7EF52:
+ButtonTable_TrackMerge_207ENonZero_Nop6:
 	ret	; F7EF52  ret   <- button table 0xF7D758 entry 6 (TRACK MERGE)
-sub_F7EF53:
+ButtonTable_TrackMerge_207ENonZero_Nop7:
 	ret	; F7EF53  ret   <- button table 0xF7D758 entry 7 (TRACK MERGE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -195891,7 +195890,7 @@ LcdKeyRow2_TrackMerge_207ENonZero:
 	call	T_F42958	; F7EF5E  call 0xf42958
 sub_F7EEEF_Return4:
 	ret	; F7EF62  ret
-sub_F7EF63:
+ButtonTable_TrackMerge_207ENonZero_Nop10:
 	ret	; F7EF63  ret   <- button table 0xF7D758 entry 10 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
@@ -195936,11 +195935,11 @@ LcdKeyRow4_TrackMerge_207ENonZero:
 	call	T_F42954	; F7EF69  call 0xf42954
 sub_F7EEEF_Return5:
 	ret	; F7EF6D  ret
-sub_F7EF6E:
+ButtonTable_TrackMerge_207ENonZero_Nop12:
 	ret	; F7EF6E  ret   <- button table 0xF7D758 entry 12 (TRACK MERGE)
-sub_F7EF6F:
+ButtonTable_TrackMerge_207ENonZero_Nop13:
 	ret	; F7EF6F  ret   <- button table 0xF7D758 entry 13 (TRACK MERGE)
-sub_F7EF70:
+ButtonTable_TrackMerge_207ENonZero_Nop14:
 	ret	; F7EF70  ret   <- button table 0xF7D758 entry 14 (TRACK MERGE)
 
 ; ---------------------------------------------------------------------
@@ -195969,7 +195968,7 @@ ExitKey_TrackMerge_207ENonZero:
 	call	T_F42954	; F7EF76  call 0xf42954
 sub_F7EEEF_Return6:
 	ret	; F7EF7A  ret
-sub_F7EF7B:
+ButtonTable_TrackMerge_207ENonZero_Nop16:
 	ret	; F7EF7B  ret   <- button table 0xF7D758 entry 16 (TRACK MERGE) and 15 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -196024,7 +196023,7 @@ Paint_MeasureDelete_Join:
 ; Evidence: reached from calr from prom_b 0xF7F082; calr from prom_b
 ;           0xF7F0A6, and from nothing else the scans see.
 sub_F7EFFA:
-	calr	sub_F7E2D8	; F7EFFA  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7EFFA  calr 0xf7e2d8
 	ld	(9536:16), 1	; F7EFFD  ld (0x2540),0x01
 	ld	xiy, DL_F39551	; F7F002  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F007  ld XIX,0x00f39559
@@ -196036,7 +196035,7 @@ sub_F7EFFA:
 ; Evidence: reached from calr from prom_b 0xF7F05D; calr from prom_b
 ;           0xF7F07F, and from nothing else the scans see.
 sub_F7F01A:
-	calr	sub_F7E2D8	; F7F01A  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7F01A  calr 0xf7e2d8
 	ld	(9536:16), 0	; F7F01D  ld (0x2540),0x00
 	ld	xiy, DL_LastMeasure	; F7F022  ld XIY,0x00f3a6ab
 	ld	xix, DL_LastMeasure + 0x23	; F7F027  ld XIX,0x00f3a6ce
@@ -196059,13 +196058,13 @@ sub_F7F01A:
 ScreenLeaveBody_MeasureDelete:
 	call	T_F42960	; F7F031  call 0xf42960
 	ret	; F7F035  ret
-sub_F7F036:
+ButtonTable_MeasureDelete_207EZero_Nop0:
 	ret	; F7F036  ret   <- button table 0xF7D7D8 entry 0 (MEASURE DELETE)
-sub_F7F037:
+ButtonTable_MeasureDelete_207EZero_Nop1:
 	ret	; F7F037  ret   <- button table 0xF7D7D8 entry 1 (MEASURE DELETE)
-sub_F7F038:
+ButtonTable_MeasureDelete_207EZero_Nop2:
 	ret	; F7F038  ret   <- button table 0xF7D7D8 entry 2 (MEASURE DELETE)
-sub_F7F039:
+ButtonTable_MeasureDelete_207EZero_Nop3:
 	ret	; F7F039  ret   <- button table 0xF7D7D8 entry 3 (MEASURE DELETE)
 
 ; ---------------------------------------------------------------------
@@ -196124,11 +196123,11 @@ ScreenLeaveBody_MeasureDelete_Skip2:
 ScreenLeaveBody_MeasureDelete_Join:
 	calr	sub_F7F01A	; F7F05D  calr 0xf7f01a
 	ret	; F7F060  ret
-sub_F7F061:
+ButtonTable_MeasureDelete_207EZero_Nop5:
 	ret	; F7F061  ret   <- button table 0xF7D7D8 entry 5 (MEASURE DELETE)
-sub_F7F062:
+ButtonTable_MeasureDelete_207EZero_Nop6:
 	ret	; F7F062  ret   <- button table 0xF7D7D8 entry 6 (MEASURE DELETE)
-sub_F7F063:
+ButtonTable_MeasureDelete_207EZero_Nop7:
 	ret	; F7F063  ret   <- button table 0xF7D7D8 entry 7 (MEASURE DELETE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -196285,11 +196284,11 @@ LcdKeyRow4_MeasureDelete_207EZero:
 	calr	sub_F7EFFA	; F7F0D1  calr 0xf7effa
 ScreenLeaveBody_MeasureDelete_Return3:
 	ret	; F7F0D4  ret
-sub_F7F0D5:
+ButtonTable_MeasureDelete_207EZero_Nop12:
 	ret	; F7F0D5  ret   <- button table 0xF7D7D8 entry 12 (MEASURE DELETE)
-sub_F7F0D6:
+ButtonTable_MeasureDelete_207EZero_Nop13:
 	ret	; F7F0D6  ret   <- button table 0xF7D7D8 entry 13 (MEASURE DELETE)
-sub_F7F0D7:
+ButtonTable_MeasureDelete_207EZero_Nop14:
 	ret	; F7F0D7  ret   <- button table 0xF7D7D8 entry 14 (MEASURE DELETE)
 
 ; ---------------------------------------------------------------------
@@ -196320,7 +196319,7 @@ ScreenLeaveBody_MeasureDelete_Skip4:
 	ldw	(8304:16), 32794	; F7F0DF  ld (0x2070),0x801a
 ScreenLeaveBody_MeasureDelete_Return4:
 	ret	; F7F0E5  ret
-sub_F7F0E6:
+ButtonTable_MeasureDelete_207EZero_Nop16:
 	ret	; F7F0E6  ret   <- button table 0xF7D7D8 entry 16 (MEASURE DELETE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -196356,7 +196355,7 @@ ScreenLeaveBody_MeasureDelete_Skip6:
 ScreenLeaveBody_MeasureDelete_Join2:
 	calr	sub_F7F01A	; F7F10A  calr 0xf7f01a
 	ret	; F7F10D  ret
-sub_F7F10E:
+ButtonTable_MeasureDelete_207EZero_Nop22:
 	ret	; F7F10E  ret   <- button table 0xF7D7D8 entry 22 (MEASURE DELETE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -196383,7 +196382,7 @@ sub_F7F10E:
 NumberPadKey_MeasureDelete_207EZero:
 	calr	sub_F7F114	; F7F10F  calr 0xf7f114
 	ret	; F7F112  ret
-sub_F7F113:
+ButtonTable_MeasureDelete_207EZero_Nop28:
 	ret	; F7F113  ret   <- button table 0xF7D7D8 entry 28 (MEASURE DELETE) and 3 more slot(s)
 
 ; Evidence: reached from calr from prom_b 0xF7F10F, and from nothing else
@@ -196506,23 +196505,23 @@ BlinkArgPtrs_F7F1F5:
 	.long DL_LastMeasure + 0xF	; F7F1FD  [2]
 	.long DL_LastMeasure + 0x19	; F7F201  [3]
 
-sub_F7F205:
+ButtonTable_MeasureDelete_207ENonZero_Nop0:
 	ret	; F7F205  ret   <- button table 0xF7D858 entry 0 (MEASURE DELETE)
-sub_F7F206:
+ButtonTable_MeasureDelete_207ENonZero_Nop1:
 	ret	; F7F206  ret   <- button table 0xF7D858 entry 1 (MEASURE DELETE)
-sub_F7F207:
+ButtonTable_MeasureDelete_207ENonZero_Nop2:
 	ret	; F7F207  ret   <- button table 0xF7D858 entry 2 (MEASURE DELETE)
-sub_F7F208:
+ButtonTable_MeasureDelete_207ENonZero_Nop3:
 	ret	; F7F208  ret   <- button table 0xF7D858 entry 3 (MEASURE DELETE)
-sub_F7F209:
+ButtonTable_MeasureDelete_207ENonZero_Nop4:
 	ret	; F7F209  ret   <- button table 0xF7D858 entry 4 (MEASURE DELETE)
-sub_F7F20A:
+ButtonTable_MeasureDelete_207ENonZero_Nop5:
 	ret	; F7F20A  ret   <- button table 0xF7D858 entry 5 (MEASURE DELETE)
-sub_F7F20B:
+ButtonTable_MeasureDelete_207ENonZero_Nop6:
 	ret	; F7F20B  ret   <- button table 0xF7D858 entry 6 (MEASURE DELETE)
-sub_F7F20C:
+ButtonTable_MeasureDelete_207ENonZero_Nop7:
 	ret	; F7F20C  ret   <- button table 0xF7D858 entry 7 (MEASURE DELETE)
-sub_F7F20D:
+ButtonTable_MeasureDelete_207ENonZero_Nop8:
 	ret	; F7F20D  ret   <- button table 0xF7D858 entry 8 (MEASURE DELETE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -196612,11 +196611,11 @@ LcdKeyRow4_MeasureDelete_207ENonZero:
 	jr	LcdKeyRow4_MeasureDelete_207ENonZero_Return	; F7F226  jr T,0xf7f228
 LcdKeyRow4_MeasureDelete_207ENonZero_Return:
 	ret	; F7F228  ret
-sub_F7F229:
+ButtonTable_MeasureDelete_207ENonZero_Nop12:
 	ret	; F7F229  ret   <- button table 0xF7D858 entry 12 (MEASURE DELETE)
-sub_F7F22A:
+ButtonTable_MeasureDelete_207ENonZero_Nop13:
 	ret	; F7F22A  ret   <- button table 0xF7D858 entry 13 (MEASURE DELETE)
-sub_F7F22B:
+ButtonTable_MeasureDelete_207ENonZero_Nop14:
 	ret	; F7F22B  ret   <- button table 0xF7D858 entry 14 (MEASURE DELETE)
 
 ; ---------------------------------------------------------------------
@@ -196645,7 +196644,7 @@ ExitKey_MeasureDelete_207ENonZero:
 	call	T_F42970	; F7F231  call 0xf42970
 ExitKey_MeasureDelete_207ENonZero_Return:
 	ret	; F7F235  ret
-sub_F7F236:
+ButtonTable_MeasureDelete_207ENonZero_Nop16:
 	ret	; F7F236  ret   <- button table 0xF7D858 entry 16 (MEASURE DELETE) and 15 more slot(s)
 
 ; Evidence: reached from calr from prom_b 0xF7F094; calr from prom_b
@@ -196732,13 +196731,13 @@ Paint_MeasureErase_Join:
 ScreenLeaveBody_MeasureErase:
 	call	T_F42984	; F7F2D5  call 0xf42984
 	ret	; F7F2D9  ret
-sub_F7F2DA:
+ButtonTable_MeasureErase_207EZero_Nop0:
 	ret	; F7F2DA  ret   <- button table 0xF7D8D8 entry 0 (MEASURE ERASE)
-sub_F7F2DB:
+ButtonTable_MeasureErase_207EZero_Nop1:
 	ret	; F7F2DB  ret   <- button table 0xF7D8D8 entry 1 (MEASURE ERASE)
-sub_F7F2DC:
+ButtonTable_MeasureErase_207EZero_Nop2:
 	ret	; F7F2DC  ret   <- button table 0xF7D8D8 entry 2 (MEASURE ERASE)
-sub_F7F2DD:
+ButtonTable_MeasureErase_207EZero_Nop3:
 	ret	; F7F2DD  ret   <- button table 0xF7D8D8 entry 3 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
@@ -196797,11 +196796,11 @@ ScreenLeaveBody_MeasureErase_Skip2:
 ScreenLeaveBody_MeasureErase_Join:
 	calr	sub_F7F397	; F7F301  calr 0xf7f397
 	ret	; F7F304  ret
-sub_F7F305:
+ButtonTable_MeasureErase_207EZero_Nop5:
 	ret	; F7F305  ret   <- button table 0xF7D8D8 entry 5 (MEASURE ERASE)
-sub_F7F306:
+ButtonTable_MeasureErase_207EZero_Nop6:
 	ret	; F7F306  ret   <- button table 0xF7D8D8 entry 6 (MEASURE ERASE)
-sub_F7F307:
+ButtonTable_MeasureErase_207EZero_Nop7:
 	ret	; F7F307  ret   <- button table 0xF7D8D8 entry 7 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
@@ -196858,7 +196857,7 @@ ScreenLeaveBody_MeasureErase_Return:
 ;           0xF7F368, and from nothing else the scans see.
 sub_F7F32A:
 	ld	(9536:16), 1	; F7F32A  ld (0x2540),0x01
-	calr	sub_F7E2D8	; F7F32F  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7F32F  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F332  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F337  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F33C  call 0xf417f0
@@ -196974,7 +196973,7 @@ sub_F7F32A_Return2:
 ;           0xF7F323, and from nothing else the scans see.
 sub_F7F397:
 	ld	(9536:16), 0	; F7F397  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7F39C  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7F39C  calr 0xf7e2d8
 	ld	xiy, DL_F3A9DA	; F7F39F  ld XIY,0x00f3a9da
 	ld	xix, DL_F3A9DA + 0x32	; F7F3A4  ld XIX,0x00f3aa0c
 	call	T_DisplayListB_Run	; F7F3A9  call 0xf417f4
@@ -197029,11 +197028,11 @@ LcdKeyRow4_MeasureErase_207EZero:
 	calr	sub_F7F32A	; F7F3CC  calr 0xf7f32a
 sub_F7F397_Return:
 	ret	; F7F3CF  ret
-sub_F7F3D0:
+ButtonTable_MeasureErase_207EZero_Nop12:
 	ret	; F7F3D0  ret   <- button table 0xF7D8D8 entry 12 (MEASURE ERASE)
-sub_F7F3D1:
+ButtonTable_MeasureErase_207EZero_Nop13:
 	ret	; F7F3D1  ret   <- button table 0xF7D8D8 entry 13 (MEASURE ERASE)
-sub_F7F3D2:
+ButtonTable_MeasureErase_207EZero_Nop14:
 	ret	; F7F3D2  ret   <- button table 0xF7D8D8 entry 14 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
@@ -197064,7 +197063,7 @@ sub_F7F397_Skip:
 	ldw	(8304:16), 32794	; F7F3DA  ld (0x2070),0x801a
 sub_F7F397_Return2:
 	ret	; F7F3E0  ret
-sub_F7F3E1:
+ButtonTable_MeasureErase_207EZero_Nop16:
 	ret	; F7F3E1  ret   <- button table 0xF7D8D8 entry 16 (MEASURE ERASE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -197100,7 +197099,7 @@ sub_F7F397_Skip3:
 sub_F7F397_Join:
 	calr	sub_F7F397	; F7F405  calr 0xf7f397
 	ret	; F7F408  ret
-sub_F7F409:
+ButtonTable_MeasureErase_207EZero_Nop22:
 	ret	; F7F409  ret   <- button table 0xF7D8D8 entry 22 (MEASURE ERASE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -197127,25 +197126,25 @@ sub_F7F409:
 NumberPadKey_MeasureErase_207EZero:
 	calr	sub_F7F440	; F7F40A  calr 0xf7f440
 	ret	; F7F40D  ret
-sub_F7F40E:
+ButtonTable_MeasureErase_207EZero_Nop28:
 	ret	; F7F40E  ret   <- button table 0xF7D8D8 entry 28 (MEASURE ERASE) and 3 more slot(s)
-sub_F7F40F:
+ButtonTable_MeasureErase_207ENonZero_Nop0:
 	ret	; F7F40F  ret   <- button table 0xF7D958 entry 0 (MEASURE ERASE)
-sub_F7F410:
+ButtonTable_MeasureErase_207ENonZero_Nop1:
 	ret	; F7F410  ret   <- button table 0xF7D958 entry 1 (MEASURE ERASE)
-sub_F7F411:
+ButtonTable_MeasureErase_207ENonZero_Nop2:
 	ret	; F7F411  ret   <- button table 0xF7D958 entry 2 (MEASURE ERASE)
-sub_F7F412:
+ButtonTable_MeasureErase_207ENonZero_Nop3:
 	ret	; F7F412  ret   <- button table 0xF7D958 entry 3 (MEASURE ERASE)
-sub_F7F413:
+ButtonTable_MeasureErase_207ENonZero_Nop4:
 	ret	; F7F413  ret   <- button table 0xF7D958 entry 4 (MEASURE ERASE)
-sub_F7F414:
+ButtonTable_MeasureErase_207ENonZero_Nop5:
 	ret	; F7F414  ret   <- button table 0xF7D958 entry 5 (MEASURE ERASE)
-sub_F7F415:
+ButtonTable_MeasureErase_207ENonZero_Nop6:
 	ret	; F7F415  ret   <- button table 0xF7D958 entry 6 (MEASURE ERASE)
-sub_F7F416:
+ButtonTable_MeasureErase_207ENonZero_Nop7:
 	ret	; F7F416  ret   <- button table 0xF7D958 entry 7 (MEASURE ERASE)
-sub_F7F417:
+ButtonTable_MeasureErase_207ENonZero_Nop8:
 	ret	; F7F417  ret   <- button table 0xF7D958 entry 8 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
@@ -197234,13 +197233,13 @@ LcdKeyRow3_MeasureErase_207ENonZero:
 	call	T_F42998	; F7F42C  call 0xf42998
 sub_F7F397_Return4:
 	ret	; F7F430  ret
-sub_F7F431:
+ButtonTable_MeasureErase_207ENonZero_Nop11:
 	ret	; F7F431  ret   <- button table 0xF7D958 entry 11 (MEASURE ERASE)
-sub_F7F432:
+ButtonTable_MeasureErase_207ENonZero_Nop12:
 	ret	; F7F432  ret   <- button table 0xF7D958 entry 12 (MEASURE ERASE)
-sub_F7F433:
+ButtonTable_MeasureErase_207ENonZero_Nop13:
 	ret	; F7F433  ret   <- button table 0xF7D958 entry 13 (MEASURE ERASE)
-sub_F7F434:
+ButtonTable_MeasureErase_207ENonZero_Nop14:
 	ret	; F7F434  ret   <- button table 0xF7D958 entry 14 (MEASURE ERASE)
 
 ; ---------------------------------------------------------------------
@@ -197269,7 +197268,7 @@ ExitKey_MeasureErase_207ENonZero:
 	call	T_F42998	; F7F43A  call 0xf42998
 sub_F7F397_Return5:
 	ret	; F7F43E  ret
-sub_F7F43F:
+ButtonTable_MeasureErase_207ENonZero_Nop16:
 	ret	; F7F43F  ret   <- button table 0xF7D958 entry 16 (MEASURE ERASE) and 15 more slot(s)
 
 ; Evidence: reached from calr from prom_b 0xF7F40A, and from nothing else
@@ -197420,7 +197419,7 @@ Paint_PanelWrite:
 	call	T_DisplayList_Run	; F7F550  call 0xf417f0
 	calr	60816	; F7F554  calr 0xf7e2e7
 	ret	; F7F557  ret
-sub_F7F558:
+ScreenLeave_PanelWrite_Nop:
 	ret	; F7F558  ret
 
 ; ---------------------------------------------------------------------
@@ -197527,13 +197526,13 @@ Paint_Quantize_Join:
 ScreenLeaveBody_Quantize:
 	call	T_F4290C	; F7F603  call 0xf4290c
 	ret	; F7F607  ret
-sub_F7F608:
+ButtonTable_Quantize_207EZero_Nop0:
 	ret	; F7F608  ret   <- button table 0xF7D9D8 entry 0 (QUANTIZE)
-sub_F7F609:
+ButtonTable_Quantize_207EZero_Nop1:
 	ret	; F7F609  ret   <- button table 0xF7D9D8 entry 1 (QUANTIZE)
-sub_F7F60A:
+ButtonTable_Quantize_207EZero_Nop2:
 	ret	; F7F60A  ret   <- button table 0xF7D9D8 entry 2 (QUANTIZE)
-sub_F7F60B:
+ButtonTable_Quantize_207EZero_Nop3:
 	ret	; F7F60B  ret   <- button table 0xF7D9D8 entry 3 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
@@ -197592,11 +197591,11 @@ ScreenLeaveBody_Quantize_Skip2:
 ScreenLeaveBody_Quantize_Join:
 	calr	sub_F7F6E5	; F7F62F  calr 0xf7f6e5
 	ret	; F7F632  ret
-sub_F7F633:
+ButtonTable_Quantize_207EZero_Nop5:
 	ret	; F7F633  ret   <- button table 0xF7D9D8 entry 5 (QUANTIZE)
-sub_F7F634:
+ButtonTable_Quantize_207EZero_Nop6:
 	ret	; F7F634  ret   <- button table 0xF7D9D8 entry 6 (QUANTIZE)
-sub_F7F635:
+ButtonTable_Quantize_207EZero_Nop7:
 	ret	; F7F635  ret   <- button table 0xF7D9D8 entry 7 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
@@ -197660,7 +197659,7 @@ ScreenLeaveBody_Quantize_Return:
 ;           0xF7F6B6, and from nothing else the scans see.
 sub_F7F668:
 	ld	(9536:16), 1	; F7F668  ld (0x2540),0x01
-	calr	sub_F7E2D8	; F7F66D  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7F66D  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F670  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F675  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F67A  call 0xf417f0
@@ -197783,7 +197782,7 @@ sub_F7F668_Return2:
 ;           0xF7F661, and from nothing else the scans see.
 sub_F7F6E5:
 	ld	(9536:16), 0	; F7F6E5  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7F6EA  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7F6EA  calr 0xf7e2d8
 	ld	xiy, DL_TrackValueFirstMeasureLastMeasureStrengthWindow	; F7F6ED  ld XIY,0x00f3acf0
 	ld	xix, DL_TrackValueFirstMeasureLastMeasureStrengthWindow + 0x47	; F7F6F2  ld XIX,0x00f3ad37
 	call	T_DisplayListB_Run	; F7F6F7  call 0xf417f4
@@ -197838,11 +197837,11 @@ LcdKeyRow4_Quantize_207EZero:
 	calr	sub_F7F668	; F7F71A  calr 0xf7f668
 sub_F7F6E5_Return:
 	ret	; F7F71D  ret
-sub_F7F71E:
+ButtonTable_Quantize_207EZero_Nop12:
 	ret	; F7F71E  ret   <- button table 0xF7D9D8 entry 12 (QUANTIZE)
-sub_F7F71F:
+ButtonTable_Quantize_207EZero_Nop13:
 	ret	; F7F71F  ret   <- button table 0xF7D9D8 entry 13 (QUANTIZE)
-sub_F7F720:
+ButtonTable_Quantize_207EZero_Nop14:
 	ret	; F7F720  ret   <- button table 0xF7D9D8 entry 14 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
@@ -197882,7 +197881,7 @@ sub_F7F6E5_Skip2:
 	ldw	(8304:16), 32794	; F7F746  ld (0x2070),0x801a
 sub_F7F6E5_Return2:
 	ret	; F7F74C  ret
-sub_F7F74D:
+ButtonTable_Quantize_207EZero_Nop16:
 	ret	; F7F74D  ret   <- button table 0xF7D9D8 entry 16 (QUANTIZE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -197918,7 +197917,7 @@ sub_F7F6E5_Skip4:
 sub_F7F6E5_Join:
 	calr	sub_F7F6E5	; F7F771  calr 0xf7f6e5
 	ret	; F7F774  ret
-sub_F7F775:
+ButtonTable_Quantize_207EZero_Nop22:
 	ret	; F7F775  ret   <- button table 0xF7D9D8 entry 22 (QUANTIZE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -197945,25 +197944,25 @@ sub_F7F775:
 NumberPadKey_Quantize_207EZero:
 	calr	sub_F7F7AC	; F7F776  calr 0xf7f7ac
 	ret	; F7F779  ret
-sub_F7F77A:
+ButtonTable_Quantize_207EZero_Nop28:
 	ret	; F7F77A  ret   <- button table 0xF7D9D8 entry 28 (QUANTIZE) and 3 more slot(s)
-sub_F7F77B:
+ButtonTable_Quantize_207ENonZero_Nop0:
 	ret	; F7F77B  ret   <- button table 0xF7DA58 entry 0 (QUANTIZE)
-sub_F7F77C:
+ButtonTable_Quantize_207ENonZero_Nop1:
 	ret	; F7F77C  ret   <- button table 0xF7DA58 entry 1 (QUANTIZE)
-sub_F7F77D:
+ButtonTable_Quantize_207ENonZero_Nop2:
 	ret	; F7F77D  ret   <- button table 0xF7DA58 entry 2 (QUANTIZE)
-sub_F7F77E:
+ButtonTable_Quantize_207ENonZero_Nop3:
 	ret	; F7F77E  ret   <- button table 0xF7DA58 entry 3 (QUANTIZE)
-sub_F7F77F:
+ButtonTable_Quantize_207ENonZero_Nop4:
 	ret	; F7F77F  ret   <- button table 0xF7DA58 entry 4 (QUANTIZE)
-sub_F7F780:
+ButtonTable_Quantize_207ENonZero_Nop5:
 	ret	; F7F780  ret   <- button table 0xF7DA58 entry 5 (QUANTIZE)
-sub_F7F781:
+ButtonTable_Quantize_207ENonZero_Nop6:
 	ret	; F7F781  ret   <- button table 0xF7DA58 entry 6 (QUANTIZE)
-sub_F7F782:
+ButtonTable_Quantize_207ENonZero_Nop7:
 	ret	; F7F782  ret   <- button table 0xF7DA58 entry 7 (QUANTIZE)
-sub_F7F783:
+ButtonTable_Quantize_207ENonZero_Nop8:
 	ret	; F7F783  ret   <- button table 0xF7DA58 entry 8 (QUANTIZE) and 1 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -198052,11 +198051,11 @@ LcdKeyRow4_Quantize_207ENonZero:
 	call	T_F42928	; F7F798  call 0xf42928
 sub_F7F6E5_Return4:
 	ret	; F7F79C  ret
-sub_F7F79D:
+ButtonTable_Quantize_207ENonZero_Nop12:
 	ret	; F7F79D  ret   <- button table 0xF7DA58 entry 12 (QUANTIZE)
-sub_F7F79E:
+ButtonTable_Quantize_207ENonZero_Nop13:
 	ret	; F7F79E  ret   <- button table 0xF7DA58 entry 13 (QUANTIZE)
-sub_F7F79F:
+ButtonTable_Quantize_207ENonZero_Nop14:
 	ret	; F7F79F  ret   <- button table 0xF7DA58 entry 14 (QUANTIZE)
 
 ; ---------------------------------------------------------------------
@@ -198085,7 +198084,7 @@ ExitKey_Quantize_207ENonZero:
 	call	T_F42928	; F7F7A5  call 0xf42928
 sub_F7F6E5_Return5:
 	ret	; F7F7A9  ret
-sub_F7F7AA:
+ButtonTable_Quantize_207ENonZero_Nop16:
 	ret	; F7F7AA  ret   <- button table 0xF7DA58 entry 16 (QUANTIZE) and 15 more slot(s)
 	ret	; F7F7AB  ret
 
@@ -198257,7 +198256,7 @@ Paint_Vel0cityChange_Skip2:
 	call	T_DisplayList_Run	; F7F914  call 0xf417f0
 Paint_Vel0cityChange_Join:
 	ld	(9536:16), 0	; F7F918  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7F91D  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7F91D  calr 0xf7e2d8
 	calr	sub_F7F935	; F7F920  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7F923  ld XIY,0x00f3ab3b
 	ld	xix, DLBoxes_F3AB74	; F7F928  ld XIX,0x00f3ab74
@@ -198294,13 +198293,13 @@ sub_F7F935:
 ScreenLeaveBody_Vel0cityChange:
 	call	T_F428E4	; F7F94F  call 0xf428e4
 	ret	; F7F953  ret
-sub_F7F954:
+ButtonTable_Vel0cityChange_207EZero_Nop0:
 	ret	; F7F954  ret   <- button table 0xF7DAD8 entry 0 (VEL0CITY CHANGE)
-sub_F7F955:
+ButtonTable_Vel0cityChange_207EZero_Nop1:
 	ret	; F7F955  ret   <- button table 0xF7DAD8 entry 1 (VEL0CITY CHANGE)
-sub_F7F956:
+ButtonTable_Vel0cityChange_207EZero_Nop2:
 	ret	; F7F956  ret   <- button table 0xF7DAD8 entry 2 (VEL0CITY CHANGE)
-sub_F7F957:
+ButtonTable_Vel0cityChange_207EZero_Nop3:
 	ret	; F7F957  ret   <- button table 0xF7DAD8 entry 3 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
@@ -198359,11 +198358,11 @@ ScreenLeaveBody_Vel0cityChange_Skip2:
 ScreenLeaveBody_Vel0cityChange_Join:
 	calr	sub_F7F9FB	; F7F97B  calr 0xf7f9fb
 	ret	; F7F97E  ret
-sub_F7F97F:
+ButtonTable_Vel0cityChange_207EZero_Nop5:
 	ret	; F7F97F  ret   <- button table 0xF7DAD8 entry 5 (VEL0CITY CHANGE)
-sub_F7F980:
+ButtonTable_Vel0cityChange_207EZero_Nop6:
 	ret	; F7F980  ret   <- button table 0xF7DAD8 entry 6 (VEL0CITY CHANGE)
-sub_F7F981:
+ButtonTable_Vel0cityChange_207EZero_Nop7:
 	ret	; F7F981  ret   <- button table 0xF7DAD8 entry 7 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
@@ -198418,7 +198417,7 @@ ScreenLeaveBody_Vel0cityChange_Return:
 ;           0xF7F9D2, and from nothing else the scans see.
 sub_F7F99C:
 	ld	(9536:16), 1	; F7F99C  ld (0x2540),0x01
-	calr	sub_F7E2D8	; F7F9A1  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7F9A1  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7F9A4  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7F9A9  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7F9AE  call 0xf417f0
@@ -198531,7 +198530,7 @@ sub_F7F99C_Return2:
 ;           0xF7F995, and from nothing else the scans see.
 sub_F7F9FB:
 	ld	(9536:16), 0	; F7F9FB  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7FA00  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7FA00  calr 0xf7e2d8
 	calr	sub_F7F935	; F7FA03  calr 0xf7f935
 	ld	xiy, DL_F3AB3B	; F7FA06  ld XIY,0x00f3ab3b
 	ld	xix, DL_F3AB3B + 0x2E	; F7FA0B  ld XIX,0x00f3ab69
@@ -198586,11 +198585,11 @@ LcdKeyRow4_Vel0cityChange_207EZero:
 	jr	sub_F7F9FB_Return	; F7FA2E  jr T,0xf7fa30
 sub_F7F9FB_Return:
 	ret	; F7FA30  ret
-sub_F7FA31:
+ButtonTable_Vel0cityChange_207EZero_Nop12:
 	ret	; F7FA31  ret   <- button table 0xF7DAD8 entry 12 (VEL0CITY CHANGE)
-sub_F7FA32:
+ButtonTable_Vel0cityChange_207EZero_Nop13:
 	ret	; F7FA32  ret   <- button table 0xF7DAD8 entry 13 (VEL0CITY CHANGE)
-sub_F7FA33:
+ButtonTable_Vel0cityChange_207EZero_Nop14:
 	ret	; F7FA33  ret   <- button table 0xF7DAD8 entry 14 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
@@ -198621,7 +198620,7 @@ sub_F7F9FB_Skip:
 	ldw	(8304:16), 32794	; F7FA3B  ld (0x2070),0x801a
 sub_F7F9FB_Return2:
 	ret	; F7FA41  ret
-sub_F7FA42:
+ButtonTable_Vel0cityChange_207EZero_Nop16:
 	ret	; F7FA42  ret   <- button table 0xF7DAD8 entry 16 (VEL0CITY CHANGE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -198657,7 +198656,7 @@ sub_F7F9FB_Skip3:
 sub_F7F9FB_Join:
 	calr	sub_F7F9FB	; F7FA66  calr 0xf7f9fb
 	ret	; F7FA69  ret
-sub_F7FA6A:
+ButtonTable_Vel0cityChange_207EZero_Nop22:
 	ret	; F7FA6A  ret   <- button table 0xF7DAD8 entry 22 (VEL0CITY CHANGE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -198684,25 +198683,25 @@ sub_F7FA6A:
 NumberPadKey_Vel0cityChange_207EZero:
 	calr	sub_F7FAA2	; F7FA6B  calr 0xf7faa2
 	ret	; F7FA6E  ret
-sub_F7FA6F:
+ButtonTable_Vel0cityChange_207EZero_Nop28:
 	ret	; F7FA6F  ret   <- button table 0xF7DAD8 entry 28 (VEL0CITY CHANGE) and 3 more slot(s)
-sub_F7FA70:
+ButtonTable_Vel0cityChange_207ENonZero_Nop0:
 	ret	; F7FA70  ret   <- button table 0xF7DB58 entry 0 (VEL0CITY CHANGE)
-sub_F7FA71:
+ButtonTable_Vel0cityChange_207ENonZero_Nop1:
 	ret	; F7FA71  ret   <- button table 0xF7DB58 entry 1 (VEL0CITY CHANGE)
-sub_F7FA72:
+ButtonTable_Vel0cityChange_207ENonZero_Nop2:
 	ret	; F7FA72  ret   <- button table 0xF7DB58 entry 2 (VEL0CITY CHANGE)
-sub_F7FA73:
+ButtonTable_Vel0cityChange_207ENonZero_Nop3:
 	ret	; F7FA73  ret   <- button table 0xF7DB58 entry 3 (VEL0CITY CHANGE)
-sub_F7FA74:
+ButtonTable_Vel0cityChange_207ENonZero_Nop4:
 	ret	; F7FA74  ret   <- button table 0xF7DB58 entry 4 (VEL0CITY CHANGE)
-sub_F7FA75:
+ButtonTable_Vel0cityChange_207ENonZero_Nop5:
 	ret	; F7FA75  ret   <- button table 0xF7DB58 entry 5 (VEL0CITY CHANGE)
-sub_F7FA76:
+ButtonTable_Vel0cityChange_207ENonZero_Nop6:
 	ret	; F7FA76  ret   <- button table 0xF7DB58 entry 6 (VEL0CITY CHANGE)
-sub_F7FA77:
+ButtonTable_Vel0cityChange_207ENonZero_Nop7:
 	ret	; F7FA77  ret   <- button table 0xF7DB58 entry 7 (VEL0CITY CHANGE)
-sub_F7FA78:
+ButtonTable_Vel0cityChange_207ENonZero_Nop8:
 	ret	; F7FA78  ret   <- button table 0xF7DB58 entry 8 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
@@ -198791,13 +198790,13 @@ LcdKeyRow3_Vel0cityChange_207ENonZero:
 	call	T_F428F8	; F7FA8D  call 0xf428f8
 sub_F7F9FB_Return4:
 	ret	; F7FA91  ret
-sub_F7FA92:
+ButtonTable_Vel0cityChange_207ENonZero_Nop11:
 	ret	; F7FA92  ret   <- button table 0xF7DB58 entry 11 (VEL0CITY CHANGE)
-sub_F7FA93:
+ButtonTable_Vel0cityChange_207ENonZero_Nop12:
 	ret	; F7FA93  ret   <- button table 0xF7DB58 entry 12 (VEL0CITY CHANGE)
-sub_F7FA94:
+ButtonTable_Vel0cityChange_207ENonZero_Nop13:
 	ret	; F7FA94  ret   <- button table 0xF7DB58 entry 13 (VEL0CITY CHANGE)
-sub_F7FA95:
+ButtonTable_Vel0cityChange_207ENonZero_Nop14:
 	ret	; F7FA95  ret   <- button table 0xF7DB58 entry 14 (VEL0CITY CHANGE)
 
 ; ---------------------------------------------------------------------
@@ -198826,7 +198825,7 @@ ExitKey_Vel0cityChange_207ENonZero:
 	call	T_F428F8	; F7FA9B  call 0xf428f8
 sub_F7F9FB_Return5:
 	ret	; F7FA9F  ret
-sub_F7FAA0:
+ButtonTable_Vel0cityChange_207ENonZero_Nop16:
 	ret	; F7FAA0  ret   <- button table 0xF7DB58 entry 16 (VEL0CITY CHANGE) and 15 more slot(s)
 	ret	; F7FAA1  ret
 
@@ -199042,7 +199041,7 @@ Paint_Transp0se_Skip2:
 	call	T_DisplayList_Run	; F7FC7B  call 0xf417f0
 Paint_Transp0se_Join2:
 	ld	(9536:16), 0	; F7FC7F  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7FC84  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7FC84  calr 0xf7e2d8
 	ld	xiy, DL_F3B1E3	; F7FC87  ld XIY,0x00f3b1e3
 	ld	xix, DLBoxes_F3B21C	; F7FC8C  ld XIX,0x00f3b21c
 	call	T_DisplayListB_Run	; F7FC91  call 0xf417f4
@@ -199065,13 +199064,13 @@ Paint_Transp0se_Join2:
 ScreenLeaveBody_Transp0se:
 	call	T_F42A3C	; F7FC99  call 0xf42a3c
 	ret	; F7FC9D  ret
-sub_F7FC9E:
+ButtonTable_Transp0se_207EZero_Nop0:
 	ret	; F7FC9E  ret   <- button table 0xF7DBD8 entry 0 (TRANSP0SE)
-sub_F7FC9F:
+ButtonTable_Transp0se_207EZero_Nop1:
 	ret	; F7FC9F  ret   <- button table 0xF7DBD8 entry 1 (TRANSP0SE)
-sub_F7FCA0:
+ButtonTable_Transp0se_207EZero_Nop2:
 	ret	; F7FCA0  ret   <- button table 0xF7DBD8 entry 2 (TRANSP0SE)
-sub_F7FCA1:
+ButtonTable_Transp0se_207EZero_Nop3:
 	ret	; F7FCA1  ret   <- button table 0xF7DBD8 entry 3 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
@@ -199130,11 +199129,11 @@ ScreenLeaveBody_Transp0se_Skip2:
 ScreenLeaveBody_Transp0se_Join:
 	calr	sub_F7FD45	; F7FCC5  calr 0xf7fd45
 	ret	; F7FCC8  ret
-sub_F7FCC9:
+ButtonTable_Transp0se_207EZero_Nop5:
 	ret	; F7FCC9  ret   <- button table 0xF7DBD8 entry 5 (TRANSP0SE)
-sub_F7FCCA:
+ButtonTable_Transp0se_207EZero_Nop6:
 	ret	; F7FCCA  ret   <- button table 0xF7DBD8 entry 6 (TRANSP0SE)
-sub_F7FCCB:
+ButtonTable_Transp0se_207EZero_Nop7:
 	ret	; F7FCCB  ret   <- button table 0xF7DBD8 entry 7 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
@@ -199189,7 +199188,7 @@ ScreenLeaveBody_Transp0se_Return:
 ;           0xF7FD1C, and from nothing else the scans see.
 sub_F7FCE6:
 	ld	(9536:16), 1	; F7FCE6  ld (0x2540),0x01
-	calr	sub_F7E2D8	; F7FCEB  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7FCEB  calr 0xf7e2d8
 	ld	xiy, DL_F39551	; F7FCEE  ld XIY,0x00f39551
 	ld	xix, Data_F39559	; F7FCF3  ld XIX,0x00f39559
 	call	T_DisplayList_Run	; F7FCF8  call 0xf417f0
@@ -199302,7 +199301,7 @@ sub_F7FCE6_Return2:
 ;           0xF7FCDF, and from nothing else the scans see.
 sub_F7FD45:
 	ld	(9536:16), 0	; F7FD45  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7FD4A  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7FD4A  calr 0xf7e2d8
 	ld	xiy, DL_F3B1E3	; F7FD4D  ld XIY,0x00f3b1e3
 	ld	xix, DL_F3B1E3 + 0x2E	; F7FD52  ld XIX,0x00f3b211
 	call	T_DisplayListB_Run	; F7FD57  call 0xf417f4
@@ -199356,11 +199355,11 @@ LcdKeyRow4_Transp0se_207EZero:
 	jr	sub_F7FD45_Return	; F7FD75  jr T,0xf7fd77
 sub_F7FD45_Return:
 	ret	; F7FD77  ret
-sub_F7FD78:
+ButtonTable_Transp0se_207EZero_Nop12:
 	ret	; F7FD78  ret   <- button table 0xF7DBD8 entry 12 (TRANSP0SE)
-sub_F7FD79:
+ButtonTable_Transp0se_207EZero_Nop13:
 	ret	; F7FD79  ret   <- button table 0xF7DBD8 entry 13 (TRANSP0SE)
-sub_F7FD7A:
+ButtonTable_Transp0se_207EZero_Nop14:
 	ret	; F7FD7A  ret   <- button table 0xF7DBD8 entry 14 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
@@ -199390,7 +199389,7 @@ sub_F7FD45_Skip:
 	ldw	(8304:16), 32794	; F7FD82  ld (0x2070),0x801a
 sub_F7FD45_Return2:
 	ret	; F7FD88  ret
-sub_F7FD89:
+ButtonTable_Transp0se_207EZero_Nop16:
 	ret	; F7FD89  ret   <- button table 0xF7DBD8 entry 16 (TRANSP0SE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -199426,7 +199425,7 @@ sub_F7FD45_Skip3:
 sub_F7FD45_Join:
 	calr	sub_F7FD45	; F7FDAD  calr 0xf7fd45
 	ret	; F7FDB0  ret
-sub_F7FDB1:
+ButtonTable_Transp0se_207EZero_Nop22:
 	ret	; F7FDB1  ret   <- button table 0xF7DBD8 entry 22 (TRANSP0SE) and 4 more slot(s)
 
 ; ---------------------------------------------------------------------
@@ -199453,25 +199452,25 @@ sub_F7FDB1:
 NumberPadKey_Transp0se_207EZero:
 	calr	sub_F7FDE9	; F7FDB2  calr 0xf7fde9
 	ret	; F7FDB5  ret
-sub_F7FDB6:
+ButtonTable_Transp0se_207EZero_Nop28:
 	ret	; F7FDB6  ret   <- button table 0xF7DBD8 entry 28 (TRANSP0SE) and 3 more slot(s)
-sub_F7FDB7:
+ButtonTable_Transp0se_207ENonZero_Nop0:
 	ret	; F7FDB7  ret   <- button table 0xF7DC58 entry 0 (TRANSP0SE)
-sub_F7FDB8:
+ButtonTable_Transp0se_207ENonZero_Nop1:
 	ret	; F7FDB8  ret   <- button table 0xF7DC58 entry 1 (TRANSP0SE)
-sub_F7FDB9:
+ButtonTable_Transp0se_207ENonZero_Nop2:
 	ret	; F7FDB9  ret   <- button table 0xF7DC58 entry 2 (TRANSP0SE)
-sub_F7FDBA:
+ButtonTable_Transp0se_207ENonZero_Nop3:
 	ret	; F7FDBA  ret   <- button table 0xF7DC58 entry 3 (TRANSP0SE)
-sub_F7FDBB:
+ButtonTable_Transp0se_207ENonZero_Nop4:
 	ret	; F7FDBB  ret   <- button table 0xF7DC58 entry 4 (TRANSP0SE)
-sub_F7FDBC:
+ButtonTable_Transp0se_207ENonZero_Nop5:
 	ret	; F7FDBC  ret   <- button table 0xF7DC58 entry 5 (TRANSP0SE)
-sub_F7FDBD:
+ButtonTable_Transp0se_207ENonZero_Nop6:
 	ret	; F7FDBD  ret   <- button table 0xF7DC58 entry 6 (TRANSP0SE)
-sub_F7FDBE:
+ButtonTable_Transp0se_207ENonZero_Nop7:
 	ret	; F7FDBE  ret   <- button table 0xF7DC58 entry 7 (TRANSP0SE)
-sub_F7FDBF:
+ButtonTable_Transp0se_207ENonZero_Nop8:
 	ret	; F7FDBF  ret   <- button table 0xF7DC58 entry 8 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
@@ -199560,13 +199559,13 @@ LcdKeyRow3_Transp0se_207ENonZero:
 	call	T_F42A5C	; F7FDD4  call 0xf42a5c
 sub_F7FD45_Return4:
 	ret	; F7FDD8  ret
-sub_F7FDD9:
+ButtonTable_Transp0se_207ENonZero_Nop11:
 	ret	; F7FDD9  ret   <- button table 0xF7DC58 entry 11 (TRANSP0SE)
-sub_F7FDDA:
+ButtonTable_Transp0se_207ENonZero_Nop12:
 	ret	; F7FDDA  ret   <- button table 0xF7DC58 entry 12 (TRANSP0SE)
-sub_F7FDDB:
+ButtonTable_Transp0se_207ENonZero_Nop13:
 	ret	; F7FDDB  ret   <- button table 0xF7DC58 entry 13 (TRANSP0SE)
-sub_F7FDDC:
+ButtonTable_Transp0se_207ENonZero_Nop14:
 	ret	; F7FDDC  ret   <- button table 0xF7DC58 entry 14 (TRANSP0SE)
 
 ; ---------------------------------------------------------------------
@@ -199595,7 +199594,7 @@ ExitKey_Transp0se_207ENonZero:
 	call	T_F42A5C	; F7FDE2  call 0xf42a5c
 sub_F7FD45_Return5:
 	ret	; F7FDE6  ret
-sub_F7FDE7:
+ButtonTable_Transp0se_207ENonZero_Nop16:
 	ret	; F7FDE7  ret   <- button table 0xF7DC58 entry 16 (TRANSP0SE) and 15 more slot(s)
 	ret	; F7FDE8  ret
 
@@ -199806,7 +199805,7 @@ Paint_AdvanceDelay_Skip2:
 	call	T_DisplayList_Run	; F7FFAA  call 0xf417f0
 Paint_AdvanceDelay_Join2:
 	ld	(9536:16), 0	; F7FFAE  ld (0x2540),0x00
-	calr	sub_F7E2D8	; F7FFB3  calr 0xf7e2d8
+	calr	sub_F7E39F_Nop	; F7FFB3  calr 0xf7e2d8
 	ld	xiy, DL_F3B379	; F7FFB6  ld XIY,0x00f3b379
 	ld	xix, DLBoxes_F3B3B2	; F7FFBB  ld XIX,0x00f3b3b2
 	call	T_DisplayListB_Run	; F7FFC0  call 0xf417f4
@@ -199829,13 +199828,13 @@ Paint_AdvanceDelay_Join2:
 ScreenLeaveBody_AdvanceDelay:
 	call	T_F42A64	; F7FFC8  call 0xf42a64
 	ret	; F7FFCC  ret
-sub_F7FFCD:
+ButtonTable_AdvanceDelay_207EZero_Nop0:
 	ret	; F7FFCD  ret   <- button table 0xF7DCD8 entry 0 (ADVANCE/DELAY)
-sub_F7FFCE:
+ButtonTable_AdvanceDelay_207EZero_Nop1:
 	ret	; F7FFCE  ret   <- button table 0xF7DCD8 entry 1 (ADVANCE/DELAY)
-sub_F7FFCF:
+ButtonTable_AdvanceDelay_207EZero_Nop2:
 	ret	; F7FFCF  ret   <- button table 0xF7DCD8 entry 2 (ADVANCE/DELAY)
-sub_F7FFD0:
+ButtonTable_AdvanceDelay_207EZero_Nop3:
 	ret	; F7FFD0  ret   <- button table 0xF7DCD8 entry 3 (ADVANCE/DELAY)
 
 ; ---------------------------------------------------------------------
@@ -199891,11 +199890,11 @@ SoftKeyCol5_AdvanceDelay_207EZero:
 	call	T_F42A78	; F7FFF0  call 0xf42a78
 	calr	143	; F7FFF4  calr 0xf80086
 	ret	; F7FFF7  ret
-sub_F7FFF8:
+ButtonTable_AdvanceDelay_207EZero_Nop5:
 	ret	; F7FFF8  ret   <- button table 0xF7DCD8 entry 5 (ADVANCE/DELAY)
-sub_F7FFF9:
+ButtonTable_AdvanceDelay_207EZero_Nop6:
 	ret	; F7FFF9  ret   <- button table 0xF7DCD8 entry 6 (ADVANCE/DELAY)
-sub_F7FFFA:
+ButtonTable_AdvanceDelay_207EZero_Nop7:
 	ret	; F7FFFA  ret   <- button table 0xF7DCD8 entry 7 (ADVANCE/DELAY)
 
 ; ---------------------------------------------------------------------
