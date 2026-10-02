@@ -1789,9 +1789,9 @@ PerfMode_Evt04_VolumeHandler:
 Unref_EF6BD3_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03, 0x0f, 0xff, 0xff, 0xff
 	.byte	0xff, 0x0c, 0x0d, 0x0e
-	; Byte data, 80 B.  Read by PerfMode_VolumeParam_Process (0xEF6A25): `ld xix, PerfMode_VoiceAddressTable`
-	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3424:16)`
-	; also read by PerfMode_Evt04_VolumeHandler
+	; 20 x u32 RAM pointers to the 26-byte part records at 0xF9B9 + 26*k, indexed by part
+	; number = byte [0xF1A0 + (0x0D60) - 1] (`sla hl, 2`); written through (`ld (xhl), a`)
+	; by PerfMode_VolumeParam_Process and PerfMode_Evt04_VolumeHandler.  Data, not handlers.
 PerfMode_VoiceAddressTable:
 	.long	0x0000f9b9
 	.long	0x0000f9ed

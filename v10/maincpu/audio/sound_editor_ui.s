@@ -7549,13 +7549,16 @@ SeMenu_NameEditor_Init:
 ;       cell index in u16 +2; 17/1C draw the text at +6 at pixel x=u16 +2,
 ;       y=u16 +4; 03 blits the 1-bpp bitmap at u32 +2).
 ;   GraphicsRender_Start           12 handlers, ops 0x00-0x0B, table at
-;       Str_No+0xC8E (v10/v9 0xEAAFA4).  "BOUND" records: every handler first
-;       reads the byte at the RAM address in u16 +2, ANDs it with u8 +4 and
-;       shifts it right by (u8 +5 & 0x0f), and draws according to that value.
+;       GraphicsRender_Start_PtrTable (v10/v9 0xEAAFA4).  "BOUND" records: ops 00 02 03 04 05 07
+;       08 09 0B first compute value = (RAM byte[u16 +2] & u8 +4) >> (u8 +5 & 15)
+;       and draw according to it; ops 06 and 0A instead print the 16-bit word at
+;       RAM[u16 +2] (no mask or shift) at cell u16 +7, style u8 +6, format
+;       %1d/%2d/%3d chosen by u8 +9 (06) or u8 +0B (0A); op 01 is a null handler.
 ; List wrappers take the first record in XIY and the end (exclusive) in XIX.
-; Single-record wrappers take the record in XIY, or -- the *_FromBuf ones and
-; SeGfx_StaticOp03_BlitAtCell -- use the RAM record buffer at 0x0006CA that the
-; caller has just filled (fields +2.. at 0x06CC..).
+; Single-record wrappers take the record in XIY, or -- the *_FromBuf ones -- use
+; the RAM record buffer at 0x0006CA that the caller has just filled (fields +2..
+; at 0x06CC..); SeGfx_StaticOp03_BlitAtCell builds the op-03 record there itself,
+; from XIY = 1-bpp bitmap, IX = cell, BC = bytes per row, HL = rows.
 ; Evidence: scripts/lanes/seui/se_gfx_wrappers_probe.py reads both handler
 ; tables out of each ROM and checks every wrapper's call target against the
 ; entry its name claims (v10, v9, v7: 51/51).
@@ -8413,7 +8416,10 @@ SeMenu_ShowConfirmDialog_Data_Code_Return:
 
 ; -----------------------------------------------------------------------------
 ; SeEnvCurve_BitmapTable -- 7 LE32 pointers to the 40x40 envelope-curve bitmaps
-; in SeScreenData, indexed 0..6.  Read by the code just above: `ld xiz, table /
+; in SeScreenData, indexed by bits 7-5 of the curve-type byte (`and a, 0xe0 / srl a,
+; 5`).  Value 3 draws a framed box instead (ops 1B + 00), so entry 3 (the same bitmap
+; as entry 6, 0xF10CAE) is never read by this reader; value 7 is not range-checked and would read
+; past the table.  Read by the code just above: `ld xiz, table /
 ; sll 2,wa / ld xiy,(xiz+wa)`, then drawn with SeGfx_StaticOp03_BlitAtCell with
 ; BC = 5 bytes per row and HL = 40 rows (static ScreenData op 03 layout; the
 ; bitmaps are stored column by column -- see the SeScreenData header).
@@ -10376,6 +10382,8 @@ SeMenu_EqEdit_DrawInit:
 ; includes/generated/se_*.bin) inside the block are earlier lanes' work and
 ; are kept as they were.
 ; =============================================================================
+; (The 2026-09 data-as-code census flagged 34 spans in this block as unreached code; all of
+; them are typed screen data now, so its per-span notes were removed on 2026-10-02.)
 SeScreenData:
 ; 1-bpp bitmap 24x10 px, stored column by column (3 byte-columns of 10 rows;
 ; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
@@ -10585,7 +10593,6 @@ SeBitmap_RadioOff:
 	.byte	0b00010000
 	.byte	0b01100000
 	.byte	0b10000000
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF10D1F-0xF10D2F (16 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=4 near SeBitmap_EnvCurve1+113
 ; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
 ; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
 ; evidence: curve table code 0xF0F4D6
@@ -11004,7 +11011,6 @@ SeBitmap_EnvCurve2:
 	.byte	0b00000011
 	.byte	0b11111111
 	.byte	0b11111111
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF10E80-0xF10E96 (22 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=2 near SeBitmap_EnvCurve3+66
 ; 1-bpp bitmap 40x40 px, stored column by column (5 byte-columns of 40 rows;
 ; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
 ; evidence: curve table code 0xF0F4D6
@@ -11850,11 +11856,9 @@ SeScreenData_0x0558:
 	.incbin "includes/generated/se_setup_waveform.bin"
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1121D-0xF11236 (25 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=15 near SeBitmap_EnvCurve5_0x19A+181
 	; head of the next record, split off at se_setup_waveform's proven end
 	sd_quad	0x22, 174, 62, 308, 99
 	sd_quad	0x01, 15, 65, 174, 65
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11245-0xF11261 (28 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=62% dist=12 near SeBitmap_EnvCurve5_0x19A+221
 	sd_quad	0x01, 15, 217, 305, 217
 	sd_quad	0x02, 15, 65, 15, 217
 	sd_quad	0x02, 305, 101, 305, 217
@@ -11888,7 +11892,6 @@ SeScreenData_0x06DB:
 	sd_ctext	0x06, 5, 111*40+0, "\020"
 	sd_ctext	0x06, 5, 149*40+0, "\020"
 	sd_ctext	0x06, 5, 186*40+0, "\020"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11353-0xF11367 (20 B), unreached CODE-territory, was disassembled as 20 plausible-but-dead instruction lines; per=100% dist=2 near SeBitmap_EnvCurve5_0x327+94
 ; NO READER FOUND for these 200 bytes.  Searched: LE32/LE24/LE16 of every
 ; address in the span, ld xiy/xix/xiz immediates, and the loop bounds of the
 ; tables beside it.
@@ -12131,7 +12134,6 @@ SeScreenData_0x07D3:
 ; evidence: bounds at SeScreenData_0x081B
 SeScreenData_0x07EB:
 	sd_blit	SeBitmap_Pattern24x10_1, 74*40+1, 3, 10
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11402-0xF11419 (23 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=73% dist=11 near SeBitmap_EnvCurve5_0x40B+41
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0803
 ; evidence: bounds at SeScreenData_0x081B
 SeScreenData_0x07F7:
@@ -12265,7 +12267,6 @@ SeScreenData_0x09DA:
 	sd_ptext	0x17, 12, 281, 209, "DETUNE"
 	sd_ctext	0x06, 5, 218*40+2, "\215"
 	sd_ctext	0x06, 5, 218*40+7, "\215"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11697-0xF116AC (21 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=75% dist=9 near SeBitmap_EnvCurve5_0x612+183
 	sd_ctext	0x06, 5, 218*40+12, "\215"
 	sd_ctext	0x06, 5, 218*40+27, "\215"
 	sd_ctext	0x06, 5, 218*40+32, "\215"
@@ -12277,7 +12278,6 @@ SeScreenData_0x09DA:
 	sd_ctext	0x06, 5, 228*40+32, "\216"
 	sd_ctext	0x06, 5, 228*40+37, "\216"
 	sd_quad	0x22, 11, 54, 309, 199
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF116D5-0xF116EC (23 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=10 near SeBitmap_EnvCurve5_0x612+245
 	sd_quad	0x22, 9, 218, 30, 238
 	sd_quad	0x22, 49, 218, 70, 238
 	sd_quad	0x22, 89, 218, 110, 238
@@ -12289,7 +12289,6 @@ SeScreenData_0x09DA:
 	sd_quad	0x01, 11, 135, 309, 135
 	sd_quad	0x01, 11, 167, 309, 167
 	sd_quad	0x01, 9, 228, 30, 228
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1173F-0xF11750 (17 B), unreached CODE-territory, was disassembled as 6 plausible-but-dead instruction lines; per=71% dist=8 near SeBitmap_EnvCurve5_0x612+351
 	sd_quad	0x01, 49, 228, 70, 228
 	sd_quad	0x01, 89, 228, 110, 228
 	sd_quad	0x01, 209, 228, 230, 228
@@ -12333,7 +12332,6 @@ SeScreenData_0x0BAE:
 ; evidence: bounds at SeScreenData_0x0BF6
 SeScreenData_0x0BC6:
 	sd_blit	SeBitmap_Pattern24x10_1, 79*40+2, 3, 10
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF117DD-0xF117F4 (23 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=82% dist=10 near SeBitmap_EnvCurve5_0x7E6+41
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0BDE
 ; evidence: bounds at SeScreenData_0x0BF6
 SeScreenData_0x0BD2:
@@ -12394,7 +12392,6 @@ SeScreenData_0x0C72:
 SeScreenData_0x0C8A:
 	sd_blit	SeBitmap_RadioOff, 114*40+2, 2, 12
 	sd_blit	SeBitmap_Pattern24x10_2, 114*40+4, 3, 10
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF118AF-0xF118C2 (19 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=71% dist=9 near SeBitmap_EnvCurve5_0x892+79
 ; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0CBA
 ; evidence: bounds at SeScreenData_0x0CD2
 SeScreenData_0x0CA2:
@@ -12458,9 +12455,7 @@ SeScreenData_0x0D5E:
 	.incbin "includes/generated/se_setup_params_full.bin"
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11A18-0xF11A37 (31 B), unreached CODE-territory, was disassembled as 16 plausible-but-dead instruction lines; per=100% dist=13 near SeBitmap_EnvCurve5_0x986+196
 	sd_quad	0x22, 11, 51, 168, 202
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11B4E-0xF11B61 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=8 near SeBitmap_EnvCurve5_0x986+506
 	sd_quad	0x22, 179, 51, 251, 82
 	sd_quad	0x22, 179, 91, 251, 122
 	sd_quad	0x22, 179, 131, 251, 162
@@ -12468,7 +12463,6 @@ SeScreenData_0x0D5E:
 	sd_quad	0x09, 281, 150, 302, 161
 	sd_quad	0x22, 179, 171, 251, 202
 	sd_quad	0x09, 279, 187, 304, 202
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11B94-0xF11BA7 (19 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=100% dist=9 near SeBitmap_EnvCurve5_0x986+576
 	sd_quad	0x09, 281, 189, 302, 200
 	sd_quad	0x22, 49, 218, 70, 238
 	sd_quad	0x22, 89, 218, 110, 238
@@ -12504,7 +12498,6 @@ SeScreenData_0x1089:
 	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
 	sd_ctext	0x06, 9, 41*40+35, "ENV \021"
 	sd_ctext	0x06, 9, 75*40+35, "AMP \021"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11CC5-0xF11CD7 (18 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=62% dist=10 near SeBitmap_EnvCurve5_0xCC1+54
 	sd_quad	0x09, 4, 4, 68, 16
 	sd_quad	0x09, 276, 37, 308, 54
 	sd_quad	0x09, 276, 65, 308, 94
@@ -12564,7 +12557,6 @@ SeScreenData_0x1226:
 	sd_ptext	0x17, 11, 170, 146, "TOUCH"
 	sd_ptext	0x17, 11, 176, 155, "CURVE"
 	sd_quad	0x22, 168, 102, 206, 140
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF11E53-0xF11E76 (35 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=74% dist=11 near SeBitmap_EnvCurve5_0xD8C+249
 	sd_quad	0x01, 158, 122, 168, 122
 ; list-start table: entry i -> a list of 42 bytes (5 entries, LE32)
 ; evidence: code 0xF0F42E
@@ -12645,7 +12637,6 @@ SeScreenData_0x1466:
 	sd_ptext	0x17, 11, 197, 207, "SUST2"
 	sd_ptext	0x17, 13, 239, 207, "RELEASE"
 	sd_ctext	0x07, 5, 231*40+2, "\022"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF120E6-0xF12105 (31 B), unreached CODE-territory, was disassembled as 23 plausible-but-dead instruction lines; per=69% dist=12 near SeBitmap_EnvCurve5_0x10B6+98
 	sd_ctext	0x07, 5, 231*40+7, "\022"
 	sd_ctext	0x07, 5, 231*40+12, "\022"
 	sd_ctext	0x07, 5, 231*40+17, "\022"
@@ -12679,7 +12670,6 @@ SeScreenData_0x1523:
 	sd_ptext	0x17, 12, 241, 209, "ATTACK"
 	sd_ptext	0x17, 11, 283, 209, "DECAY"
 	sd_ctext	0x07, 5, 215*40+18, "_"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF121F0-0xF1220D (29 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=71% dist=12 near SeBitmap_EnvCurve5_0x115B+199
 	sd_ctext	0x07, 5, 215*40+24, "_"
 	sd_ctext	0x06, 5, 217*40+19, "_"
 	sd_ctext	0x06, 5, 217*40+23, "_"
@@ -12694,7 +12684,6 @@ SeScreenData_0x1523:
 	sd_quad	0x22, 47, 72, 255, 122
 	sd_quad	0x09, 237, 205, 317, 233
 	sd_quad	0x01, 3, 218, 230, 218
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1224B-0xF12266 (27 B), unreached CODE-territory, was disassembled as 14 plausible-but-dead instruction lines; per=100% dist=14 near SeBitmap_EnvCurve5_0x115B+290
 	sd_quad	0x01, 237, 218, 317, 218
 	sd_quad	0x02, 117, 205, 117, 233
 	sd_quad	0x05, 278, 39, 306, 52
@@ -12738,7 +12727,6 @@ SeScreenData_0x173B:
 	.incbin "includes/generated/se_setup_nav_full.bin"
 ; --- comments carried over from the lines this .incbin replaced; the byte-exact C descriptor
 ;     supersedes their verdicts but not the record of them: ---
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12440-0xF12454 (20 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=67% dist=9 near SeBitmap_EnvCurve5_0x13C3+175
 	sd_quad	0x22, 66, 39, 233, 94
 	sd_quad	0x22, 66, 117, 233, 172
 	sd_quad	0x09, 2, 205, 160, 233
@@ -12800,12 +12788,10 @@ SeScreenData_0x19C0:
 	sd_ctext	0x07, 5, 232*40+22, "\022"
 	sd_ctext	0x07, 5, 232*40+27, "\022"
 	sd_ctext	0x07, 5, 232*40+32, "\022"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12693-0xF126A5 (18 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=75% dist=9 near SeBitmap_EnvCurve5_0x15F8+205
 	sd_quad	0x22, 66, 76, 233, 131
 	sd_quad	0x09, 29, 205, 117, 233
 	sd_quad	0x09, 122, 205, 280, 233
 	sd_quad	0x01, 29, 219, 117, 219
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF126BB-0xF126CC (17 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=100% dist=8 near SeBitmap_EnvCurve5_0x15F8+245
 	sd_quad	0x01, 122, 219, 280, 219
 	sd_quad	0x05, 30, 220, 116, 232
 	sd_quad	0x05, 123, 220, 279, 232
@@ -12845,7 +12831,6 @@ SeScreenData_0x1B0B:
 	sd_ptext	0x17, 11, 197, 207, "SUST2"
 	sd_ptext	0x17, 13, 239, 207, "RELEASE"
 	sd_ctext	0x07, 5, 231*40+2, "\022"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF127AA-0xF127CB (33 B), unreached CODE-territory, was disassembled as 23 plausible-but-dead instruction lines; per=64% dist=13 near SeBitmap_EnvCurve5_0x1743+153
 	sd_ctext	0x07, 5, 231*40+7, "\022"
 	sd_ctext	0x07, 5, 231*40+12, "\022"
 	sd_ctext	0x07, 5, 231*40+17, "\022"
@@ -13046,7 +13031,6 @@ SeScreenData_0x20C9:
 	.ascii	"I:", "J:", "K:", "L:", "M:", "N:", "O:", "P:"
 	.ascii	"Q:", "R:", "S:", "U:", "V:", "W:", "X:", "Y:"
 	.ascii	"Z:"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF12D01-0xF12D11 (16 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=75% dist=7 near SeBitmap_EnvCurve5_0x1BB8+379
 ; se_setup_sel2: 10 bytes -- screen layout data, base 0xF12D01
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_setup_sel2.c)
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
@@ -13565,7 +13549,6 @@ SeScreenData_0x28FB:
 ; evidence: bound op02 record at SeScreenData_0x28CE, bound op02 record at SeScreenData_0x28DD, bound op02 record at SeScreenData_0x28EC, bound op02 record at SeScreenData_0x28FB
 SeScreenData_0x290A:
 	.ascii	"+", "-"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF13518-0xF13534 (28 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=71% dist=11 near TuningSystem_Handler_Table_0xCB+6
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (5 entries, LE32)
 ; evidence: Data_UnknownBlock
 SeScreenData_0x290C:
@@ -13889,7 +13872,6 @@ SeScreenData_0x2EAC:
 ; evidence: SeMenu_DataBlock_14
 SeScreenData_0x2EB6:
 	sd_quad	0x1b, 32, 103, 280, 192
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF13ACD-0xF13AE2 (21 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=6 near TuningSystem_Handler_Table_0x67F+7
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value range up to 16)
 ; evidence: bound op03 record at SeScreenData_0x2E85, bound op03 record at SeScreenData_0x2EA1, bound op03 record at SeScreenData_0x2E69
@@ -14104,14 +14086,12 @@ SeScreenData_0x336C:
 	sd_quad	0x01, 11, 106, 230, 106
 	sd_quad	0x01, 11, 138, 230, 138
 	sd_quad	0x01, 11, 170, 230, 170
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF14096-0xF140AF (25 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=60% dist=10 near TuningSystem_Handler_Table_0x71F+1328
 	sd_quad	0x01, 242, 178, 289, 178
 	sd_quad	0x01, 49, 228, 70, 228
 	sd_quad	0x01, 129, 228, 150, 228
 	sd_quad	0x01, 201, 228, 222, 228
 	sd_quad	0x01, 257, 228, 278, 228
 	sd_quad	0x02, 44, 56, 44, 202
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF140D1-0xF140E1 (16 B), unreached CODE-territory, was disassembled as 8 plausible-but-dead instruction lines; per=83% dist=7 near TuningSystem_Handler_Table_0x71F+1387
 	sd_quad	0x02, 124, 56, 124, 202
 	sd_quad	0x02, 174, 56, 174, 202
 	sd_quad	0x05, 244, 180, 287, 200
@@ -14182,7 +14162,6 @@ SeScreenData_0x3660:
 	sd_quad	0x09, 89, 204, 317, 233
 	sd_quad	0x22, 29, 205, 82, 232
 	sd_quad	0x11, 24, 68, 44, 68
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF14388-0xF143A5 (29 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=9 near TuningSystem_Handler_Table_0xE1F+290
 	sd_quad	0x11, 8, 79, 24, 79
 	sd_quad	0x11, 24, 100, 44, 100
 	sd_quad	0x11, 8, 117, 24, 117
@@ -14190,7 +14169,6 @@ SeScreenData_0x3660:
 	sd_quad	0x11, 8, 156, 24, 156
 	sd_quad	0x11, 31, 162, 44, 162
 	sd_quad	0x11, 8, 194, 31, 194
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF143C8-0xF143E1 (25 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=9 near TuningSystem_Handler_Table_0xE1F+354
 	sd_quad	0x12, 24, 68, 24, 79
 	sd_quad	0x12, 24, 100, 24, 117
 	sd_quad	0x12, 24, 130, 24, 156
@@ -14233,7 +14211,6 @@ SeScreenData_0x38E1:
 	.set	SeScreenData_0x39AA, . + 201
 	.set	SeScreenData_0x39B4, . + 211
 	.incbin "includes/generated/se_parameter_grid.bin"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF145C6-0xF14602 (60 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=83% dist=15 near TuningSystem_Handler_Table_0x117D+2
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (16 entries, LE32)
 ; evidence: SeMenu_PresetInit_TableLookup2, SeMenu_FilterEdit_Dispatch
 SeScreenData_0x39BE:
@@ -14265,7 +14242,6 @@ SeScreenData_0x3A0D:
 ; evidence: recptrs at SeScreenData_0x3A3A
 SeScreenData_0x3A1C:
 	sdb_str	0x0664, 0x80, 7, 0x20, SeScreenData_0x3A70, 7, 149*40+7
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF14637-0xF14656 (31 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=61% dist=12 near TuningSystem_Handler_Table_0x117D+115
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x3A3A
 SeScreenData_0x3A2B:
@@ -14910,7 +14886,6 @@ SeScreenData_0x4BA8:
 	sd_ptext	0x17, 11, 7, 209, "DIST."
 	sd_ptext	0x17, 11, 45, 209, "TOUCH"
 	sd_ptext	0x17, 11, 85, 209, "DEPTH"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF1580A-0xF15846 (60 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=81% dist=10 near TuningSystem_Handler_Table_0x23BD+6
 ; (start, end) pair table, 8 bytes per list (24 entries, LE32)
 ; evidence: SeMenu_NameEdit_DataBlock1
 SeScreenData_0x4BFE:
@@ -14926,7 +14901,6 @@ SeScreenData_0x4BFE:
 	.long	SeScreenData_0x4B3C, SeScreenData_0x4BA8
 	.long	SeScreenData_0x4BA8, SeScreenData_0x4BFE
 	.long	SeScreenData_0x4BA8, SeScreenData_0x4BFE
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15866-0xF15877 (17 B), unreached CODE-territory, was disassembled as 7 plausible-but-dead instruction lines; per=100% dist=12 near TuningSystem_Handler_Table_0x241D+2
 ; bound record list (5 records), read by GraphicsRender_Start; ends SeScreenData_0x4C96, SeScreenData_End
 ; evidence: SeMenu_NameEdit_DataBlock1
 SeScreenData_0x4C5E:

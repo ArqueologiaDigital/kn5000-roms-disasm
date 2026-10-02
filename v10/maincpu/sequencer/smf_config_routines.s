@@ -1267,10 +1267,11 @@ SMF_EventLoop_Return:
 ; -----------------------------------------------------------------------------
 ; SMF_PartAssignTable -- maps a value 0..15 read from the SMF event stream to
 ; a PART-TYPE CODE of the kind RAM 0xF1A0[channel] holds (0xFF = none).
-; Readers: SMF_Event_ProgramChange (0xF28999) and SMF_Event_ControlChange (0xF28A2D),
-; identically: after checking the value is 0..0xF, `ld xde,
-; SMF_PartAssignTable` / `ldb_sri A, 0x07, 0xe8, 0xec` (A := table[value]),
-; then search 0xF1A0[0..15] for that code to find the channel (0x7F if none).
+; Reader: SMF_Event_ProgramChange (0xF28999): after checking the value is 0..0xF,
+; `ld xde, SMF_PartAssignTable` / `ld a, (xde+hl)` (A := table[value]), then
+; search 0xF1A0[0..15] for that code to find the channel (0x7F if none).
+; SMF_Event_ControlChange (0xF28A2D) holds an identical lookup, but it is unreachable:
+; it follows `jr SMF_CtrlChg_UseDefault` and nothing branches into it.
 ; Only entries 0-15 are reachable through that range check; entries 16-23
 ; (to SMF_EncodeTimeDelta, code) are read by nothing found
 ; (scripts/analysis/sequi_find_refs.py v10 --window 24 0xF28ADB).  The codes used

@@ -7522,13 +7522,16 @@ SeMenu_NameEditor_Init:
 ;       cell index in u16 +2; 17/1C draw the text at +6 at pixel x=u16 +2,
 ;       y=u16 +4; 03 blits the 1-bpp bitmap at u32 +2).
 ;   GraphicsRender_Start           12 handlers, ops 0x00-0x0B, table at
-;       Str_No+0xC8E (v10/v9 0xEAAFA4).  "BOUND" records: every handler first
-;       reads the byte at the RAM address in u16 +2, ANDs it with u8 +4 and
-;       shifts it right by (u8 +5 & 0x0f), and draws according to that value.
+;       GraphicsRender_Start_PtrTable (v10/v9 0xEAAFA4).  "BOUND" records: ops 00 02 03 04 05 07
+;       08 09 0B first compute value = (RAM byte[u16 +2] & u8 +4) >> (u8 +5 & 15)
+;       and draw according to it; ops 06 and 0A instead print the 16-bit word at
+;       RAM[u16 +2] (no mask or shift) at cell u16 +7, style u8 +6, format
+;       %1d/%2d/%3d chosen by u8 +9 (06) or u8 +0B (0A); op 01 is a null handler.
 ; List wrappers take the first record in XIY and the end (exclusive) in XIX.
-; Single-record wrappers take the record in XIY, or -- the *_FromBuf ones and
-; SeGfx_StaticOp03_BlitAtCell -- use the RAM record buffer at 0x0006CA that the
-; caller has just filled (fields +2.. at 0x06CC..).
+; Single-record wrappers take the record in XIY, or -- the *_FromBuf ones -- use
+; the RAM record buffer at 0x0006CA that the caller has just filled (fields +2..
+; at 0x06CC..); SeGfx_StaticOp03_BlitAtCell builds the op-03 record there itself,
+; from XIY = 1-bpp bitmap, IX = cell, BC = bytes per row, HL = rows.
 ; Evidence: scripts/lanes/seui/se_gfx_wrappers_probe.py reads both handler
 ; tables out of each ROM and checks every wrapper's call target against the
 ; entry its name claims (v10, v9, v7: 51/51).

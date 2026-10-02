@@ -220,8 +220,9 @@ AccChannel_StoreCurrentState:
 ; AccChannel_StoreStateIfChanged -- the conditional form of
 ; AccChannel_StoreCurrentState (just above): when RAM 0x32F5 differs from
 ; 0x32F6, or it is below 0x80 and the low 3 bits of 0x32F7 and 0x32F8 differ,
-; copy 0x32F5 -> 0x32E7 and 0x32F7 -> 0x32E8.  (Like the routine above, the
-; `and w` masks are applied to W, not to the A that is stored.)
+; copy 0x32F5 -> 0x32E7 and 0x32F7 -> 0x32E8.  (Both `and` masks on the store
+; path act on W, so 0x32F7 is stored unmasked; AccChannel_StoreCurrentState above
+; masks A with 0x7F, and only its `and 7` hits W.)
 ; NO CALLER FOUND: scripts/analysis/sequi_find_refs.py v10 0xF538EC (forms as
 ; above).  Was `.byte` until 2026-09-25; decodes cleanly, both decoders agree.
 ; -----------------------------------------------------------------------------
