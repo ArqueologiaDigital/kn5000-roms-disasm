@@ -2311,24 +2311,24 @@ GetWallPaletteRGB:
 InitializeRoot:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, ClassProc, Root_ClassCount_160, Root_ClassTable_160, 0x160
-	RegObjTable 0x160000c, ResEventProc, Root_ResEventCount_1C0, Root_ResEventTable_1C0, 0x1c0
-	RegObjTable 0x160000d, ResMethodProc, Root_ResMethodCount_1E0, Root_ResMethodTable_1E0, 0x1e0
-	RegObjTabl 0x1600002, ApFunctionProc, 0xc, Root_ApFunctionTable_120, 0x120
-	RegObjTabl 0x1600002, ApFunctionProc, 0xc, Root_ApFunctionTable_420, 0x420
-	RegObjTabl 0x1600001, FunctionProc, 0x160, Root_FunctionTable_100, 0x100
-	RegObjTabl 0x1600001, FunctionProc, 0x160, WidgetName_InitPtrTable, 0x400
-	RegObjTabl 0x1600003, MainFunctionProc, 0xd, Root_MainFunctionTable_140, 0x140
-	RegObjTabl 0x1600003, MainFunctionProc, 0xd, Root_MainFunctionTable_440, 0x440
-	RegObjTabl 0x1600010, ViewableProc, 0x33, Root_ViewableTable_000, 0x0
-	RegObjTabl 0x160000f, ResNameProc, 0x33, Root_ResNameTable_300, 0x300
-	RegObjTabl 0x1600010, ViewableProc, 0x9, Root_ViewableTable_0FF, 0xff
-	RegObjTabl 0x160000f, ResNameProc, 0x9, Root_ResNameTable_3FF, 0x3ff
+	RegObjTable NAKA_CLASS_Class, ClassProc, Root_ClassCount_160, Root_ClassTable_160, 0x160
+	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, Root_ResEventCount_1C0, Root_ResEventTable_1C0, 0x1c0
+	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, Root_ResMethodCount_1E0, Root_ResMethodTable_1E0, 0x1e0
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0xc, Root_ApFunctionTable_120, 0x120
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0xc, Root_ApFunctionTable_420, 0x420
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x160, Root_FunctionTable_100, 0x100
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x160, WidgetName_InitPtrTable, 0x400
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0xd, Root_MainFunctionTable_140, 0x140
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0xd, Root_MainFunctionTable_440, 0x440
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x33, Root_ViewableTable_000, 0x0
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x33, Root_ResNameTable_300, 0x300
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x9, Root_ViewableTable_0FF, 0xff
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x9, Root_ResNameTable_3FF, 0x3ff
 
-	RegMode 0x0, InitializeRoot_Str_MD_PS, 0x0, 0x1200000, 0x1a00000
+	RegMode 0x0, InitializeRoot_Str_MD_PS, 0x0, NAKA_APFUNC_DefaultFunction, TITLE_PS
 
-	RegTitle 0x0, InitializeRoot_Str_TT_PS, 0x0, 0x1200000, 0x0
-	RegTitle 0x0, InitializeRoot_Str_TT_CHECK, 0xff, 0x1400009, 0xff0000
+	RegTitle 0x0, InitializeRoot_Str_TT_PS, 0x0, NAKA_APFUNC_DefaultFunction, 0x0
+	RegTitle 0x0, InitializeRoot_Str_TT_CHECK, 0xff, NAKA_MAINFUNC_CheckTitleFunc, 0xff0000
 
 	lda xsp, (xsp + 14)
 	ret

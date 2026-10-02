@@ -3114,7 +3114,7 @@ InitializeEast:
 	pushw East_ResNames_3EC_Strings@lo16
 	ld	xwa, 5:i3
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, 27263056
+	ld	xde, TITLE_MDMENU
 	call	RegisterMode
 	pushw	3
 	pushw	InitializeEast_Str_TT_REVEQMENU@hi16

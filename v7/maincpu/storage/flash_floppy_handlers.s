@@ -6304,98 +6304,98 @@ InitializeSuna:
 	pushw InitializeSuna_Str_MD_CMP@hi16
 	pushw InitializeSuna_Str_MD_CMP@lo16
 	ld XWA,0x0000000e
-	ld XBC,0x01440000
-	ld XDE,0x01a000b0
+	ld XBC,NAKA_MAINFUNC_CmpModeFunc
+	ld XDE,TITLE_CMMENU
 	call RegisterMode
 	pushw 0x0004
 	pushw InitializeSuna_Str_MD_MSP@hi16
 	pushw InitializeSuna_Str_MD_MSP@lo16
 	ld XWA,0x0000000f
 	ld XBC,NAKA_APFUNC_DefaultFunction
-	ld XDE,0x01a000ca
+	ld XDE,TITLE_MSPMENU
 	call RegisterMode
 	pushw 0x0004
 	pushw InitializeSuna_Str_MD_MSP_REC@hi16
 	pushw InitializeSuna_Str_MD_MSP_REC@lo16
 	ld XWA,0x00000010
 	ld XBC,NAKA_APFUNC_DefaultFunction
-	ld XDE,0x01a000c9
+	ld XDE,TITLE_MSPREC
 	call RegisterMode
 	pushw 0x0004
 	pushw InitializeSuna_Str_MD_SND_ARG@hi16
 	pushw InitializeSuna_Str_MD_SND_ARG@lo16
 	ld XWA,0x00000011
-	ld XBC,0x01440016
+	ld XBC,NAKA_MAINFUNC_SndArgModeFunc
 	ld XDE,TITLE_SNDARG
 	call RegisterMode
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_STYLCNVWAIT@hi16
 	pushw InitializeSuna_Str_TT_STYLCNVWAIT@lo16
 	ld XWA,0x00000010
-	ld XBC,0x0144001c
+	ld XBC,NAKA_MAINFUNC_StylCnvWaitTtlFunc
 	ld XDE,0x00100000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_STYLCNVMODL@hi16
 	pushw InitializeSuna_Str_TT_STYLCNVMODL@lo16
 	ld XWA,0x00000011
-	ld XBC,0x0144001e
+	ld XBC,NAKA_MAINFUNC_StylCnvModlTtlFunc
 	ld XDE,0x00110000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_STYLCNVCNVT@hi16
 	pushw InitializeSuna_Str_TT_STYLCNVCNVT@lo16
 	ld XWA,0x00000012
-	ld XBC,0x0144001f
+	ld XBC,NAKA_MAINFUNC_StylCnvCnvtTtlFunc
 	ld XDE,0x00120000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_STYLCNVSTOR@hi16
 	pushw InitializeSuna_Str_TT_STYLCNVSTOR@lo16
 	ld XWA,0x00000013
-	ld XBC,0x01440022
+	ld XBC,NAKA_MAINFUNC_StylCnvStorTtlFunc
 	ld XDE,0x00130000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_STYLCNVTXT@hi16
 	pushw InitializeSuna_Str_TT_STYLCNVTXT@lo16
 	ld XWA,0x00000014
-	ld XBC,0x0144001d
+	ld XBC,NAKA_MAINFUNC_StylCnvTxtTtlFunc
 	ld XDE,0x00140000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_STYLCNVSEL@hi16
 	pushw InitializeSuna_Str_TT_STYLCNVSEL@lo16
 	ld XWA,0x00000015
-	ld XBC,0x01440020
+	ld XBC,NAKA_MAINFUNC_StylCnvSelTtlFunc
 	ld XDE,0x00150000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_STYLCNVCONT@hi16
 	pushw InitializeSuna_Str_TT_STYLCNVCONT@lo16
 	ld XWA,0x00000016
-	ld XBC,0x01440021
+	ld XBC,NAKA_MAINFUNC_StylCnvContTtlFunc
 	ld XDE,0x00160000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_CMMENU@hi16
 	pushw InitializeSuna_Str_TT_CMMENU@lo16
 	ld XWA,0x000000b0
-	ld XBC,0x01440005
+	ld XBC,NAKA_MAINFUNC_CmpMenuTtlFunc
 	ld XDE,0x00b00000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_CMBKSL@hi16
 	pushw InitializeSuna_Str_TT_CMBKSL@lo16
 	ld XWA,0x000000b1
-	ld XBC,0x01440003
+	ld XBC,NAKA_MAINFUNC_CmpBkslTtlFunc
 	ld XDE,0x00b10000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_CMBKSL_S@hi16
 	pushw InitializeSuna_Str_TT_CMBKSL_S@lo16
 	ld XWA,0x000000b2
-	ld XBC,0x01440004
+	ld XBC,NAKA_MAINFUNC_CmpBksl_STtlFunc
 	ld XDE,0x00b20000
 	call RegisterTitle
 	pushw 0x0004
@@ -6409,21 +6409,21 @@ InitializeSuna:
 	pushw InitializeSuna_Str_TT_CMSET@hi16
 	pushw InitializeSuna_Str_TT_CMSET@lo16
 	ld XWA,0x000000b4
-	ld XBC,0x01440001
+	ld XBC,NAKA_MAINFUNC_CmpSetTtlFunc
 	ld XDE,0x00b40000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_CMREAL@hi16
 	pushw InitializeSuna_Str_TT_CMREAL@lo16
 	ld XWA,0x000000b5
-	ld XBC,0x01440002
+	ld XBC,NAKA_MAINFUNC_CmpRealTtlFunc
 	ld XDE,0x00b50000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_CMSTEP@hi16
 	pushw InitializeSuna_Str_TT_CMSTEP@lo16
 	ld XWA,0x000000b6
-	ld XBC,0x01440019
+	ld XBC,NAKA_MAINFUNC_CmpStepTitleFunc
 	ld XDE,0x00b60000
 	call RegisterTitle
 	pushw 0x0004
@@ -6437,21 +6437,21 @@ InitializeSuna:
 	pushw InitializeSuna_Str_TT_CMPNCP@hi16
 	pushw InitializeSuna_Str_TT_CMPNCP@lo16
 	ld XWA,0x000000b8
-	ld XBC,0x01440006
+	ld XBC,NAKA_MAINFUNC_CmpNcpTtlFunc
 	ld XDE,0x00b80000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_CMSEQCP@hi16
 	pushw InitializeSuna_Str_TT_CMSEQCP@lo16
 	ld XWA,0x000000b9
-	ld XBC,0x01440008
+	ld XBC,NAKA_MAINFUNC_S2cTtlFunc
 	ld XDE,0x00b90000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_CMEASY@hi16
 	pushw InitializeSuna_Str_TT_CMEASY@lo16
 	ld XWA,0x000000ba
-	ld XBC,0x01440007
+	ld XBC,NAKA_MAINFUNC_CmEsyTtlFunc
 	ld XDE,0x00ba0000
 	call RegisterTitle
 	pushw 0x0004
@@ -6472,14 +6472,14 @@ InitializeSuna:
 	pushw InitializeSuna_Str_TT_CMCSTMCP@hi16
 	pushw InitializeSuna_Str_TT_CMCSTMCP@lo16
 	ld XWA,0x000000be
-	ld XBC,0x01440009
+	ld XBC,NAKA_MAINFUNC_CstmCpTtlFunc
 	ld XDE,0x00be0000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_MSPBKSL@hi16
 	pushw InitializeSuna_Str_TT_MSPBKSL@lo16
 	ld XWA,0x000000c8
-	ld XBC,0x01440011
+	ld XBC,NAKA_MAINFUNC_MspBkslTtlFunc
 	ld XDE,0x00c80000
 	call RegisterTitle
 	pushw 0x0004
@@ -6493,14 +6493,14 @@ InitializeSuna:
 	pushw InitializeSuna_Str_TT_MSPMENU@hi16
 	pushw InitializeSuna_Str_TT_MSPMENU@lo16
 	ld XWA,0x000000ca
-	ld XBC,0x01440012
+	ld XBC,NAKA_MAINFUNC_MspMenuTtlFunc
 	ld XDE,0x00ca0000
 	call RegisterTitle
 	pushw 0x0004
 	pushw InitializeSuna_Str_TT_MSPNAME@hi16
 	pushw InitializeSuna_Str_TT_MSPNAME@lo16
 	ld XWA,0x000000cb
-	ld XBC,0x01440013
+	ld XBC,NAKA_MAINFUNC_MspNameTtlFunc
 	ld XDE,0x00cb0000
 	call RegisterTitle
 	pushw 0x0004
@@ -6514,7 +6514,7 @@ InitializeSuna:
 	pushw InitializeSuna_Str_TT_SNDARG@hi16
 	pushw InitializeSuna_Str_TT_SNDARG@lo16
 	ld XWA,0x000000dc
-	ld XBC,0x01440017
+	ld XBC,NAKA_MAINFUNC_SndArgTtlFunc
 	ld XDE,0x00dc0000
 	call RegisterTitle
 	pushw 0x0004

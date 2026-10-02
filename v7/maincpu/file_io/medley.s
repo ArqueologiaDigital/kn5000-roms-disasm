@@ -4476,28 +4476,28 @@ InitializeCheap:
 	pushw InitializeCheap_Str_MD_DISK@lo16
 	ld	xwa, 6:i3
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, 0x1a00060
+	ld	xde, TITLE_DKMENU
 	call	RegisterMode
-	RegTitle	0x5, InitializeCheap_Str_TT_DKMENU, 0x60, 0x1200000, 0x600000
-	RegTitle	0x5, InitializeCheap_Str_TT_DKLD, 0x61, 0x1450027, 0x610000
-	RegTitle	0x5, InitializeCheap_Str_TT_CMPLDSNGL, 0x62, 0x1450036, 0x610069
-	RegTitle	0x5, InitializeCheap_Str_TT_DKWPLD, 0x63, 0x1450037, 0x60002b
-	RegTitle	0x5, InitializeCheap_Str_TT_DKLDSMF, 0x64, 0x1450029, 0x61004b
-	RegTitle	0x5, InitializeCheap_Str_TT_DKSVMENU, 0x65, 0x1200000, 0x650000
-	RegTitle	0x5, InitializeCheap_Str_TT_DKSVNAME, 0x66, 0x1200000, 0x600018
-	RegTitle	0x5, InitializeCheap_Str_TT_DKSV, 0x67, 0x1450028, 0x670000
-	RegTitle	0x5, InitializeCheap_Str_TT_DKSVNAMESMF, 0x6a, 0x1200000, 0x600028
-	RegTitle	0x5, InitializeCheap_Str_TT_DKSVSMF, 0x6b, 0x145002d, 0x6b0000
-	RegTitle	0x5, InitializeCheap_Str_TT_DKDPSMF, 0x6c, 0x145001c, 0x6c0000
-	RegTitle	0x5, InitializeCheap_Str_TT_DKDPDOC, 0x6d, 0x145001e, 0x6c0026
-	RegTitle	0x5, InitializeCheap_Str_TT_DKDPPD, 0x6e, 0x145001d, 0x6c003d
-	RegTitle	0x5, InitializeCheap_Str_TT_DKMDLY, 0x77, 0x1450026, 0x770000
-	RegTitle	0x5, InitializeCheap_Str_TT_SQMDLY, 0x79, 0x1450011, 0x60000a
-	RegTitle	0x5, InitializeCheap_Str_TT_DKUT, 0x7b, 0x1450031, 0x7b0000
-	RegTitle	0x5, InitializeCheap_Str_TT_DKUTSMF, 0x7c, 0x1450032, 0x7b0019
-	RegTitle	0x5, InitializeCheap_Str_TT_DKUTFRMT, 0x7d, 0x1450021, 0x7b0018
-	RegTitle	0x5, InitializeCheap_Str_TT_DKSETUP, 0x7e, 0x1200000, 0x7e0000
-	RegTitle	0x5, InitializeCheap_Str_TT_CMPLD, 0xbc, 0x1450025, 0x60001b
+	RegTitle	0x5, InitializeCheap_Str_TT_DKMENU, 0x60, NAKA_APFUNC_DefaultFunction, 0x600000
+	RegTitle	0x5, InitializeCheap_Str_TT_DKLD, 0x61, NAKA_MAINFUNC_FmmLoadTitleFunc, 0x610000
+	RegTitle	0x5, InitializeCheap_Str_TT_CMPLDSNGL, 0x62, NAKA_MAINFUNC_FmmCmpSingleLoadFunc, 0x610069
+	RegTitle	0x5, InitializeCheap_Str_TT_DKWPLD, 0x63, NAKA_MAINFUNC_FmmWallpaperLoadFunc, 0x60002b
+	RegTitle	0x5, InitializeCheap_Str_TT_DKLDSMF, 0x64, NAKA_MAINFUNC_FmmSmfLoadTitleFunc, 0x61004b
+	RegTitle	0x5, InitializeCheap_Str_TT_DKSVMENU, 0x65, NAKA_APFUNC_DefaultFunction, 0x650000
+	RegTitle	0x5, InitializeCheap_Str_TT_DKSVNAME, 0x66, NAKA_APFUNC_DefaultFunction, 0x600018
+	RegTitle	0x5, InitializeCheap_Str_TT_DKSV, 0x67, NAKA_MAINFUNC_FmmSaveTitleFunc, 0x670000
+	RegTitle	0x5, InitializeCheap_Str_TT_DKSVNAMESMF, 0x6a, NAKA_APFUNC_DefaultFunction, 0x600028
+	RegTitle	0x5, InitializeCheap_Str_TT_DKSVSMF, 0x6b, NAKA_MAINFUNC_FmmSmfSaveTitleFunc, 0x6b0000
+	RegTitle	0x5, InitializeCheap_Str_TT_DKDPSMF, 0x6c, NAKA_MAINFUNC_FmmSmfMedleyFunc, 0x6c0000
+	RegTitle	0x5, InitializeCheap_Str_TT_DKDPDOC, 0x6d, NAKA_MAINFUNC_FmmDocMedleyFunc, 0x6c0026
+	RegTitle	0x5, InitializeCheap_Str_TT_DKDPPD, 0x6e, NAKA_MAINFUNC_FmmPdMedleyFunc, 0x6c003d
+	RegTitle	0x5, InitializeCheap_Str_TT_DKMDLY, 0x77, NAKA_MAINFUNC_FmmDiskMedleySelectFunc, 0x770000
+	RegTitle	0x5, InitializeCheap_Str_TT_SQMDLY, 0x79, NAKA_MAINFUNC_FmmIntMedleyFunc, 0x60000a
+	RegTitle	0x5, InitializeCheap_Str_TT_DKUT, 0x7b, NAKA_MAINFUNC_FmmUtilityTitleFunc, 0x7b0000
+	RegTitle	0x5, InitializeCheap_Str_TT_DKUTSMF, 0x7c, NAKA_MAINFUNC_FmmSmfUtilityTitleFunc, 0x7b0019
+	RegTitle	0x5, InitializeCheap_Str_TT_DKUTFRMT, 0x7d, NAKA_MAINFUNC_FmmFormatFunc, 0x7b0018
+	RegTitle	0x5, InitializeCheap_Str_TT_DKSETUP, 0x7e, NAKA_APFUNC_DefaultFunction, 0x7e0000
+	RegTitle	0x5, InitializeCheap_Str_TT_CMPLD, 0xbc, NAKA_MAINFUNC_FmmComposerLoadFunc, 0x60001b
 	lda	xsp, (xsp + 14)
 	ret
 PasswordText:

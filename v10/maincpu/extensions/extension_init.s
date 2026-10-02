@@ -89,73 +89,73 @@ Toshi_ResName_EXT         = NakaInst_ExtDevice_Screens + 0x21a2	; slot 0x3fb, 1 
 InitializeToshi:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
-	RegObjTable 0x160000c, ResEventProc, Toshi_ResEvent_Count, Toshi_ResEvent_Table, 0x1c2
-	RegObjTable 0x160000d, ResMethodProc, Toshi_ResMethod_Count, Toshi_ResMethod_Table, 0x1e2
-	RegObjTabl 0x1600002, ApFunctionProc, 0x2a, Toshi_ApFunction_Table, 0x122
-	RegObjTabl 0x1600002, ApFunctionProc, 0x2a, Toshi_ApFunctionName_Table, 0x422
-	RegObjTabl 0x1600001, FunctionProc, 0x1c, Toshi_Function_Table, 0x102
-	RegObjTabl 0x1600001, FunctionProc, 0x1c, Toshi_FunctionName_Table, 0x402
-	RegObjTabl 0x1600003, MainFunctionProc, 0x14, Toshi_MainFunction_Table, 0x142
-	RegObjTabl 0x1600003, MainFunctionProc, 0x14, Toshi_MainFunctionName_Table, 0x442
-	RegObjTabl 0x1600010, ViewableProc, 0x3f, Toshi_Viewable_NORMAL, 0x1
-	RegObjTabl 0x160000f, ResNameProc, 0x3f, Toshi_ResName_NORMAL, 0x301
-	RegObjTabl 0x1600010, ViewableProc, 0x9, Toshi_Viewable_CTMENU, 0x40
-	RegObjTabl 0x160000f, ResNameProc, 0x9, Toshi_ResName_CTMENU, 0x340
-	RegObjTabl 0x1600010, ViewableProc, 0x11, Toshi_Viewable_CTINIT, 0x41
-	RegObjTabl 0x160000f, ResNameProc, 0x11, Toshi_ResName_CTINIT, 0x341
-	RegObjTabl 0x1600010, ViewableProc, 0x6, Toshi_Viewable_CTFSWAS, 0x42
-	RegObjTabl 0x160000f, ResNameProc, 0x6, Toshi_ResName_CTFSWAS, 0x342
-	RegObjTabl 0x1600010, ViewableProc, 0x8, Toshi_Viewable_CTTOUCH, 0x43
-	RegObjTabl 0x160000f, ResNameProc, 0x8, Toshi_ResName_CTTOUCH, 0x343
-	RegObjTabl 0x1600010, ViewableProc, 0x13, Toshi_Viewable_MSAMODE, 0x44
-	RegObjTabl 0x160000f, ResNameProc, 0x13, Toshi_ResName_MSAMODE, 0x344
-	RegObjTabl 0x1600010, ViewableProc, 0x13, Toshi_Viewable_CTPMMD, 0x45
-	RegObjTabl 0x160000f, ResNameProc, 0x13, Toshi_ResName_CTPMMD, 0x345
-	RegObjTabl 0x1600010, ViewableProc, 0x0, Toshi_Viewable_CTPMPARA, 0x46
-	RegObjTabl 0x160000f, ResNameProc, 0x0, Toshi_ResName_CTPMPARA, 0x346
-	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_CTSYSTEM, 0x47
-	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_CTSYSTEM, 0x347
-	RegObjTabl 0x1600010, ViewableProc, 0x19, Toshi_Viewable_CTWALLSET, 0x48
-	RegObjTabl 0x160000f, ResNameProc, 0x19, Toshi_ResName_CTWALLSET, 0x348
-	RegObjTabl 0x1600010, ViewableProc, 0x4, Toshi_Viewable_ONETCH, 0xc0
-	RegObjTabl 0x160000f, ResNameProc, 0x4, Toshi_ResName_ONETCH, 0x3c0
-	RegObjTabl 0x1600010, ViewableProc, 0x4, Toshi_Viewable_MUSICSTYL, 0xc1
-	RegObjTabl 0x160000f, ResNameProc, 0x4, Toshi_ResName_MUSICSTYL, 0x3c1
-	RegObjTabl 0x1600010, ViewableProc, 0x14, Toshi_Viewable_MSCTSEL, 0xc2
-	RegObjTabl 0x160000f, ResNameProc, 0x14, Toshi_ResName_MSCTSEL, 0x3c2
-	RegObjTabl 0x1600010, ViewableProc, 0x11, Toshi_Viewable_MSSCTSEL, 0xc3
-	RegObjTabl 0x160000f, ResNameProc, 0x11, Toshi_ResName_MSSCTSEL, 0x3c3
-	RegObjTabl 0x1600010, ViewableProc, 0x8, Toshi_Viewable_MSSONGLIST, 0xc4
-	RegObjTabl 0x160000f, ResNameProc, 0x8, Toshi_ResName_MSSONGLIST, 0x3c4
-	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_MSALPSEL, 0xc5
-	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_MSALPSEL, 0x3c5
-	RegObjTabl 0x1600010, ViewableProc, 0x6, Toshi_Viewable_PMBKSEL, 0xd0
-	RegObjTabl 0x160000f, ResNameProc, 0x6, Toshi_ResName_PMBKSEL, 0x3d0
-	RegObjTabl 0x1600010, ViewableProc, 0xd, Toshi_Viewable_PMVIEW, 0xd1
-	RegObjTabl 0x160000f, ResNameProc, 0xd, Toshi_ResName_PMVIEW, 0x3d1
-	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_PMNAME, 0xd2
-	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_PMNAME, 0x3d2
-	RegObjTabl 0x1600010, ViewableProc, 0x7, Toshi_Viewable_PMBKNAME, 0xd3
-	RegObjTabl 0x160000f, ResNameProc, 0x7, Toshi_ResName_PMBKNAME, 0x3d3
-	RegObjTabl 0x1600010, ViewableProc, 0x2, Toshi_Viewable_SVARI, 0xe8
-	RegObjTabl 0x160000f, ResNameProc, 0x2, Toshi_ResName_SVARI, 0x3e8
-	RegObjTabl 0x1600010, ViewableProc, 0x3, Toshi_Viewable_RVARI, 0xe9
-	RegObjTabl 0x160000f, ResNameProc, 0x3, Toshi_ResName_RVARI, 0x3e9
-	RegObjTabl 0x1600010, ViewableProc, 0xe, Toshi_Viewable_TEST1, 0xf4
-	RegObjTabl 0x160000f, ResNameProc, 0xe, Toshi_ResName_TEST1, 0x3f4
-	RegObjTabl 0x1600010, ViewableProc, 0x17, Toshi_Viewable_TEST2, 0xf5
-	RegObjTabl 0x160000f, ResNameProc, 0x17, Toshi_ResName_TEST2, 0x3f5
-	RegObjTabl 0x1600010, ViewableProc, 0x1, Toshi_Viewable_TEST3, 0xf6
-	RegObjTabl 0x160000f, ResNameProc, 0x1, Toshi_ResName_TEST3, 0x3f6
-	RegObjTabl 0x1600010, ViewableProc, 0x3, Toshi_Viewable_TEST4, 0xf7
-	RegObjTabl 0x160000f, ResNameProc, 0x3, Toshi_ResName_TEST4, 0x3f7
-	RegObjTabl 0x1600010, ViewableProc, 0x43, Toshi_Viewable_TEST5, 0xf8
-	RegObjTabl 0x160000f, ResNameProc, 0x43, Toshi_ResName_TEST5, 0x3f8
-	RegObjTabl 0x1600010, ViewableProc, 0x9, Toshi_Viewable_TEST6, 0xf9
-	RegObjTabl 0x160000f, ResNameProc, 0x9, Toshi_ResName_TEST6, 0x3f9
-	RegObjTabl 0x1600010, ViewableProc, 0x1, Toshi_Viewable_EXT, 0xfb
-	RegObjTabl 0x160000f, ResNameProc, 0x1, Toshi_ResName_EXT, 0x3fb
+	RegObjTable NAKA_CLASS_Class, ClassProc, Toshi_Class_Count, Toshi_Class_Table, 0x162
+	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, Toshi_ResEvent_Count, Toshi_ResEvent_Table, 0x1c2
+	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, Toshi_ResMethod_Count, Toshi_ResMethod_Table, 0x1e2
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2a, Toshi_ApFunction_Table, 0x122
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2a, Toshi_ApFunctionName_Table, 0x422
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x1c, Toshi_Function_Table, 0x102
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x1c, Toshi_FunctionName_Table, 0x402
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x14, Toshi_MainFunction_Table, 0x142
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x14, Toshi_MainFunctionName_Table, 0x442
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x3f, Toshi_Viewable_NORMAL, 0x1
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x3f, Toshi_ResName_NORMAL, 0x301
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x9, Toshi_Viewable_CTMENU, 0x40
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x9, Toshi_ResName_CTMENU, 0x340
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x11, Toshi_Viewable_CTINIT, 0x41
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x11, Toshi_ResName_CTINIT, 0x341
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x6, Toshi_Viewable_CTFSWAS, 0x42
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x6, Toshi_ResName_CTFSWAS, 0x342
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x8, Toshi_Viewable_CTTOUCH, 0x43
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x8, Toshi_ResName_CTTOUCH, 0x343
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x13, Toshi_Viewable_MSAMODE, 0x44
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x13, Toshi_ResName_MSAMODE, 0x344
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x13, Toshi_Viewable_CTPMMD, 0x45
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x13, Toshi_ResName_CTPMMD, 0x345
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Toshi_Viewable_CTPMPARA, 0x46
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Toshi_ResName_CTPMPARA, 0x346
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x7, Toshi_Viewable_CTSYSTEM, 0x47
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x7, Toshi_ResName_CTSYSTEM, 0x347
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x19, Toshi_Viewable_CTWALLSET, 0x48
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x19, Toshi_ResName_CTWALLSET, 0x348
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, Toshi_Viewable_ONETCH, 0xc0
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, Toshi_ResName_ONETCH, 0x3c0
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, Toshi_Viewable_MUSICSTYL, 0xc1
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, Toshi_ResName_MUSICSTYL, 0x3c1
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x14, Toshi_Viewable_MSCTSEL, 0xc2
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x14, Toshi_ResName_MSCTSEL, 0x3c2
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x11, Toshi_Viewable_MSSCTSEL, 0xc3
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x11, Toshi_ResName_MSSCTSEL, 0x3c3
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x8, Toshi_Viewable_MSSONGLIST, 0xc4
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x8, Toshi_ResName_MSSONGLIST, 0x3c4
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x7, Toshi_Viewable_MSALPSEL, 0xc5
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x7, Toshi_ResName_MSALPSEL, 0x3c5
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x6, Toshi_Viewable_PMBKSEL, 0xd0
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x6, Toshi_ResName_PMBKSEL, 0x3d0
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xd, Toshi_Viewable_PMVIEW, 0xd1
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xd, Toshi_ResName_PMVIEW, 0x3d1
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x7, Toshi_Viewable_PMNAME, 0xd2
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x7, Toshi_ResName_PMNAME, 0x3d2
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x7, Toshi_Viewable_PMBKNAME, 0xd3
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x7, Toshi_ResName_PMBKNAME, 0x3d3
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x2, Toshi_Viewable_SVARI, 0xe8
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x2, Toshi_ResName_SVARI, 0x3e8
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x3, Toshi_Viewable_RVARI, 0xe9
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x3, Toshi_ResName_RVARI, 0x3e9
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xe, Toshi_Viewable_TEST1, 0xf4
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xe, Toshi_ResName_TEST1, 0x3f4
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x17, Toshi_Viewable_TEST2, 0xf5
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x17, Toshi_ResName_TEST2, 0x3f5
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1, Toshi_Viewable_TEST3, 0xf6
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1, Toshi_ResName_TEST3, 0x3f6
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x3, Toshi_Viewable_TEST4, 0xf7
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x3, Toshi_ResName_TEST4, 0x3f7
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x43, Toshi_Viewable_TEST5, 0xf8
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x43, Toshi_ResName_TEST5, 0x3f8
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x9, Toshi_Viewable_TEST6, 0xf9
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x9, Toshi_ResName_TEST6, 0x3f9
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1, Toshi_Viewable_EXT, 0xfb
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1, Toshi_ResName_EXT, 0x3fb
 
 	; RegMode / RegTitle push 0x0002 and then the 32-bit address of a name
 	; string as two words (high 0x00ed, then low), because the macros take the
@@ -166,37 +166,37 @@ InitializeToshi:
 	; 0x328FC indexed by XWA; RegisterTitle stores the same four fields in a
 	; 22-byte slot of the title table at RAM 0x32ABC, again indexed by XWA --
 	; the index each Toshi_Viewable_* table above is registered under.
-	RegMode 0x2, InitializeToshi_Str_MD_NORMAL, 0x1, 0x1200000, 0x1a00001	; "MD_NORMAL"
-	RegMode 0x2, InitializeToshi_Str_MD_CONTROL, 0x4, 0x1200000, 0x1a00040	; "MD_CONTROL"
-	RegMode 0x2, InitializeToshi_Str_MD_OTP, 0x12, 0x1200000, 0x1a000c0	; "MD_OTP"
-	RegTitle 0x2, InitializeToshi_Str_TT_NORMAL, 0x1, 0x1200000, 0x10001	; "TT_NORMAL"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTMENU, 0x40, 0x1200000, 0x400000	; "TT_CTMENU"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTINIT, 0x41, 0x142000b, 0x410000	; "TT_CTINIT"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTFSWAS, 0x42, 0x142000c, 0x420000	; "TT_CTFSWAS"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTTOUCH, 0x43, 0x1200000, 0x430000	; "TT_CTTOUCH"
-	RegTitle 0x2, InitializeToshi_Str_TT_MSAMODE, 0x44, 0x1200000, 0x440000	; "TT_MSAMODE"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTPMMD, 0x45, 0x1200000, 0x450000	; "TT_CTPMMD"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTPMPARA, 0x46, 0x1200000, 0x410000	; "TT_CTPMPARA"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTSYSTEM, 0x47, 0x1200000, 0x470000	; "TT_CTSYSTEM"
-	RegTitle 0x2, InitializeToshi_Str_TT_CTWALLSET, 0x48, 0x1200000, 0x480002	; "TT_CTWALLSET"
-	RegTitle 0x2, InitializeToshi_Str_TT_ONETCH, 0xc0, 0x1420009, 0xc00000	; "TT_ONETCH"
-	RegTitle 0x2, InitializeToshi_Str_TT_MUSICSTYL, 0xc1, 0x1200000, 0xc10000	; "TT_MUSICSTYL"
-	RegTitle 0x2, InitializeToshi_Str_TT_MSCTSEL, 0xc2, 0x1200000, 0xc20000	; "TT_MSCTSEL"
-	RegTitle 0x2, InitializeToshi_Str_TT_MSSCTSEL, 0xc3, 0x1200000, 0xc30000	; "TT_MSSCTSEL"
-	RegTitle 0x2, InitializeToshi_Str_TT_MSSONGLIST, 0xc4, 0x1200000, 0xc40000	; "TT_MSSONGLIST"
-	RegTitle 0x2, InitializeToshi_Str_TT_MSALPSEL, 0xc5, 0x1200000, 0xc50000	; "TT_MSALPSEL"
-	RegTitle 0x2, InitializeToshi_Str_TT_PMBKSEL, 0xd0, 0x1200000, 0xd00000	; "TT_PMBKSEL"
-	RegTitle 0x2, InitializeToshi_Str_TT_PMVIEW, 0xd1, 0x1200000, 0xd10000	; "TT_PMVIEW"
-	RegTitle 0x2, InitializeToshi_Str_TT_PMNAME, 0xd2, 0x1200000, 0xd20000	; "TT_PMNAME"
-	RegTitle 0x2, InitializeToshi_Str_TT_PMBKNAME, 0xd3, 0x1200000, 0xd30000	; "TT_PMBKNAME"
-	RegTitle 0x2, InitializeToshi_Str_TT_SVARI, 0xe8, 0x1200000, 0xe80000	; "TT_SVARI"
-	RegTitle 0x2, InitializeToshi_Str_TT_RVARI, 0xe9, 0x1200000, 0xe90000	; "TT_RVARI"
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST1, 0xf4, 0x1200000, 0xf40000	; name "TT_TEST1" = 0xED8A96, NakaInst_ExtDevice_Screens + 0x22CA
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST2, 0xf5, 0x1420010, 0xf50000	; name "TT_TEST2" = 0xED8AA0, NakaInst_ExtDevice_Screens + 0x22D4
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST3, 0xf6, 0x1420011, 0xf60000	; name "TT_TEST3" = 0xED8AAA, NakaInst_ExtDevice_Screens + 0x22DE
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST4, 0xf7, 0x1420012, 0xf70000	; name "TT_TEST4" = 0xED8AB4, NakaInst_ExtDevice_Screens + 0x22E8
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST5, 0xf8, 0x1200000, 0xf80000	; name "TT_TEST5" = 0xED8ABE, NakaInst_ExtDevice_Screens + 0x22F2
-	RegTitle 0x2, InitializeToshi_Str_TT_TEST6, 0xf9, 0x1420013, 0xf90000	; name "TT_TEST6" = 0xED8AC8, NakaInst_ExtDevice_Screens + 0x22FC
-	RegTitle 0x2, InitializeToshi_Str_TT_EXT, 0xfb, 0x1200000, 0xfb0000	; "TT_EXT"
+	RegMode 0x2, InitializeToshi_Str_MD_NORMAL, 0x1, NAKA_APFUNC_DefaultFunction, TITLE_NORMAL	; "MD_NORMAL"
+	RegMode 0x2, InitializeToshi_Str_MD_CONTROL, 0x4, NAKA_APFUNC_DefaultFunction, TITLE_CTMENU	; "MD_CONTROL"
+	RegMode 0x2, InitializeToshi_Str_MD_OTP, 0x12, NAKA_APFUNC_DefaultFunction, TITLE_ONETCH	; "MD_OTP"
+	RegTitle 0x2, InitializeToshi_Str_TT_NORMAL, 0x1, NAKA_APFUNC_DefaultFunction, 0x10001	; "TT_NORMAL"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTMENU, 0x40, NAKA_APFUNC_DefaultFunction, 0x400000	; "TT_CTMENU"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTINIT, 0x41, NAKA_MAINFUNC_CntIniFunc, 0x410000	; "TT_CTINIT"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTFSWAS, 0x42, NAKA_MAINFUNC_FswAsIniFunc, 0x420000	; "TT_CTFSWAS"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTTOUCH, 0x43, NAKA_APFUNC_DefaultFunction, 0x430000	; "TT_CTTOUCH"
+	RegTitle 0x2, InitializeToshi_Str_TT_MSAMODE, 0x44, NAKA_APFUNC_DefaultFunction, 0x440000	; "TT_MSAMODE"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTPMMD, 0x45, NAKA_APFUNC_DefaultFunction, 0x450000	; "TT_CTPMMD"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTPMPARA, 0x46, NAKA_APFUNC_DefaultFunction, 0x410000	; "TT_CTPMPARA"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTSYSTEM, 0x47, NAKA_APFUNC_DefaultFunction, 0x470000	; "TT_CTSYSTEM"
+	RegTitle 0x2, InitializeToshi_Str_TT_CTWALLSET, 0x48, NAKA_APFUNC_DefaultFunction, 0x480002	; "TT_CTWALLSET"
+	RegTitle 0x2, InitializeToshi_Str_TT_ONETCH, 0xc0, NAKA_MAINFUNC_OneTchFUNC, 0xc00000	; "TT_ONETCH"
+	RegTitle 0x2, InitializeToshi_Str_TT_MUSICSTYL, 0xc1, NAKA_APFUNC_DefaultFunction, 0xc10000	; "TT_MUSICSTYL"
+	RegTitle 0x2, InitializeToshi_Str_TT_MSCTSEL, 0xc2, NAKA_APFUNC_DefaultFunction, 0xc20000	; "TT_MSCTSEL"
+	RegTitle 0x2, InitializeToshi_Str_TT_MSSCTSEL, 0xc3, NAKA_APFUNC_DefaultFunction, 0xc30000	; "TT_MSSCTSEL"
+	RegTitle 0x2, InitializeToshi_Str_TT_MSSONGLIST, 0xc4, NAKA_APFUNC_DefaultFunction, 0xc40000	; "TT_MSSONGLIST"
+	RegTitle 0x2, InitializeToshi_Str_TT_MSALPSEL, 0xc5, NAKA_APFUNC_DefaultFunction, 0xc50000	; "TT_MSALPSEL"
+	RegTitle 0x2, InitializeToshi_Str_TT_PMBKSEL, 0xd0, NAKA_APFUNC_DefaultFunction, 0xd00000	; "TT_PMBKSEL"
+	RegTitle 0x2, InitializeToshi_Str_TT_PMVIEW, 0xd1, NAKA_APFUNC_DefaultFunction, 0xd10000	; "TT_PMVIEW"
+	RegTitle 0x2, InitializeToshi_Str_TT_PMNAME, 0xd2, NAKA_APFUNC_DefaultFunction, 0xd20000	; "TT_PMNAME"
+	RegTitle 0x2, InitializeToshi_Str_TT_PMBKNAME, 0xd3, NAKA_APFUNC_DefaultFunction, 0xd30000	; "TT_PMBKNAME"
+	RegTitle 0x2, InitializeToshi_Str_TT_SVARI, 0xe8, NAKA_APFUNC_DefaultFunction, 0xe80000	; "TT_SVARI"
+	RegTitle 0x2, InitializeToshi_Str_TT_RVARI, 0xe9, NAKA_APFUNC_DefaultFunction, 0xe90000	; "TT_RVARI"
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST1, 0xf4, NAKA_APFUNC_DefaultFunction, 0xf40000	; name "TT_TEST1" = 0xED8A96, NakaInst_ExtDevice_Screens + 0x22CA
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST2, 0xf5, NAKA_MAINFUNC_TEST2FUNC, 0xf50000	; name "TT_TEST2" = 0xED8AA0, NakaInst_ExtDevice_Screens + 0x22D4
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST3, 0xf6, NAKA_MAINFUNC_TEST3FUNC, 0xf60000	; name "TT_TEST3" = 0xED8AAA, NakaInst_ExtDevice_Screens + 0x22DE
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST4, 0xf7, NAKA_MAINFUNC_TEST4FUNC, 0xf70000	; name "TT_TEST4" = 0xED8AB4, NakaInst_ExtDevice_Screens + 0x22E8
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST5, 0xf8, NAKA_APFUNC_DefaultFunction, 0xf80000	; name "TT_TEST5" = 0xED8ABE, NakaInst_ExtDevice_Screens + 0x22F2
+	RegTitle 0x2, InitializeToshi_Str_TT_TEST6, 0xf9, NAKA_MAINFUNC_TEST6FUNC, 0xf90000	; name "TT_TEST6" = 0xED8AC8, NakaInst_ExtDevice_Screens + 0x22FC
+	RegTitle 0x2, InitializeToshi_Str_TT_EXT, 0xfb, NAKA_APFUNC_DefaultFunction, 0xfb0000	; "TT_EXT"
 	lda xsp, (xsp + 14)
 	ret

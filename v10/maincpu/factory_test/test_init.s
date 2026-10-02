@@ -97,19 +97,19 @@
 InitializeHama:
 	lda xsp, (xsp - 14)
 
-	RegObjTableHama 0x1600004, ClassProc, HamaStr_HamaList + 0xa, HamaObj_169_Data, 0x169
-	RegObjTableHama 0x160000c, ResEventProc, HamaStr_EV_INDEX_PUTS + 0xe, HamaObj_1C9_Data, 0x1c9
-	RegObjTableHama 0x160000d, ResMethodProc, HamaStr_MT_CONTINUE + 0xc, HamaObj_1E9_Data, 0x1e9
-	RegObjTablHama 0x1600002, ApFunctionProc, 0x2, HamaObj_129_Data, 0x129
-	RegObjTablHama 0x1600002, ApFunctionProc, 0x2, HamaObj_429_Data, 0x429
-	RegObjTablHama 0x1600001, FunctionProc, 0x4b, HamaObj_109_Data, 0x109
-	RegObjTablHama 0x1600001, FunctionProc, 0x4b, Hama_ModeParam_Table, 0x409
-	RegObjTablHama 0x1600003, MainFunctionProc, 0x1, FDTest_CfgName_FDDTest + 0x1e, 0x149
-	RegObjTablHama 0x1600003, MainFunctionProc, 0x1, FDTest_CfgName_FDDTest + 0x26, 0x449
-	RegObjTablHama 0x1600010, ViewableProc, 0x0, String_CONSOLE + 0x8, 0x7f
-	RegObjTablHama 0x160000f, ResNameProc, 0x0, FDTest_DataBlock_Table + 0x68, 0x37f
-	RegObjTablHama 0x1600010, ViewableProc, 0x1a, String_CONSOLE + 0xc, 0xfc
-	RegObjTablHama 0x160000f, ResNameProc, 0x1a, FDTest_Config_Table, 0x3fc
+	RegObjTableHama NAKA_CLASS_Class, ClassProc, HamaStr_HamaList + 0xa, HamaObj_169_Data, 0x169
+	RegObjTableHama NAKA_CLASS_ResEvent, ResEventProc, HamaStr_EV_INDEX_PUTS + 0xe, HamaObj_1C9_Data, 0x1c9
+	RegObjTableHama NAKA_CLASS_ResMethod, ResMethodProc, HamaStr_MT_CONTINUE + 0xc, HamaObj_1E9_Data, 0x1e9
+	RegObjTablHama NAKA_CLASS_ApFunction, ApFunctionProc, 0x2, HamaObj_129_Data, 0x129
+	RegObjTablHama NAKA_CLASS_ApFunction, ApFunctionProc, 0x2, HamaObj_429_Data, 0x429
+	RegObjTablHama NAKA_CLASS_Function, FunctionProc, 0x4b, HamaObj_109_Data, 0x109
+	RegObjTablHama NAKA_CLASS_Function, FunctionProc, 0x4b, Hama_ModeParam_Table, 0x409
+	RegObjTablHama NAKA_CLASS_MainFunction, MainFunctionProc, 0x1, FDTest_CfgName_FDDTest + 0x1e, 0x149
+	RegObjTablHama NAKA_CLASS_MainFunction, MainFunctionProc, 0x1, FDTest_CfgName_FDDTest + 0x26, 0x449
+	RegObjTablHama NAKA_CLASS_Viewable, ViewableProc, 0x0, String_CONSOLE + 0x8, 0x7f
+	RegObjTablHama NAKA_CLASS_ResName, ResNameProc, 0x0, FDTest_DataBlock_Table + 0x68, 0x37f
+	RegObjTablHama NAKA_CLASS_Viewable, ViewableProc, 0x1a, String_CONSOLE + 0xc, 0xfc
+	RegObjTablHama NAKA_CLASS_ResName, ResNameProc, 0x1a, FDTest_Config_Table, 0x3fc
 
 	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0xa, 0x7f, 0x1490000, 0xfc0000
 	RegTitleHama 0x9, FDTest_CfgName_FDDTest + 0x14, 0xfc, 0x1490000, 0xfc0000

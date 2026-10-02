@@ -1795,7 +1795,7 @@ AudioMix_Init:
 	calr AudioMix_WriteChannelGroup
 	pop xwa
 	ld xbc, 0x150000
-	ld xwa, 0x101001f
+	ld xwa, NAKA_FUNC_AcFdemoScreenProc
 	ld d, 0x4:opc
 
 AudioMix_EnableChannels_Loop:

@@ -8,199 +8,199 @@
 
 InitializeYoko:
 	lda xsp, (xsp - 0x0e)
-	RegObjTable 0x1600004, ClassProc, Yoko_ClassCount_167, 0xe208ec, 0x167
-	RegObjTable 0x160000c, ResEventProc, Yoko_ResEventCount_1C7, EvtName_PtrTable, 0x1c7
-	RegObjTable 0x160000d, ResMethodProc, Yoko_ResMethodCount_1E7, MtName_PtrTable, 0x1e7
-	RegObjTabl 0x1600002, ApFunctionProc, 0x2e, 0xe20260, 0x127
-	RegObjTabl 0x1600002, ApFunctionProc, 0x2e, 0xe2031c, 0x427
-	RegObjTabl 0x1600001, FunctionProc, 0x1, Yoko_FunctionTable_107, 0x107
-	RegObjTabl 0x1600001, FunctionProc, 0x1, Yoko_FunctionTable_407, 0x407
-	RegObjTabl 0x1600003, MainFunctionProc, 0x1f, Yoko_MainFuncTable_147, 0x147
-	RegObjTabl 0x1600003, MainFunctionProc, 0x1f, Yoko_MainFuncNameTable_447, 0x447
-	RegObjTabl 0x1600010, ViewableProc, 0x2b, Yoko_ViewTable_06F, 0x6f
-	RegObjTabl 0x160000f, ResNameProc, 0x2b, Yoko_ResNameTable_36F, 0x36f
-	RegObjTabl 0x1600010, ViewableProc, 0xc, Yoko_ViewTable_070, 0x70
-	RegObjTabl 0x160000f, ResNameProc, 0xc, Yoko_ResNameTable_370, 0x370
-	RegObjTabl 0x1600010, ViewableProc, 0xb, Yoko_ViewTable_071, 0x71
-	RegObjTabl 0x160000f, ResNameProc, 0xb, Yoko_ResNameTable_371, 0x371
-	RegObjTabl 0x1600010, ViewableProc, 0x7, Yoko_ViewTable_072, 0x72
-	RegObjTabl 0x160000f, ResNameProc, 0x7, Yoko_ResNameTable_372, 0x372
-	RegObjTabl 0x1600010, ViewableProc, 0x10, Yoko_ViewTable_073, 0x73
-	RegObjTabl 0x160000f, ResNameProc, 0x10, Yoko_ResNameTable_373, 0x373
-	RegObjTabl 0x1600010, ViewableProc, 0xf, Yoko_ViewTable_074, 0x74
-	RegObjTabl 0x160000f, ResNameProc, 0xf, Yoko_ResNameTable_374, 0x374
-	RegObjTabl 0x1600010, ViewableProc, 0xd, Yoko_ViewTable_075, 0x75
-	RegObjTabl 0x160000f, ResNameProc, 0xd, Yoko_ResNameTable_375, 0x375
-	RegObjTabl 0x1600010, ViewableProc, 0x8, Yoko_ViewTable_076, 0x76
-	RegObjTabl 0x160000f, ResNameProc, 0x8, Yoko_ResNameTable_376, 0x376
-	RegObjTabl 0x1600010, ViewableProc, 0x1e, Yoko_ViewTable_078, 0x78
-	RegObjTabl 0x160000f, ResNameProc, 0x1e, Yoko_ResNameTable_378, 0x378
-	RegObjTabl 0x1600010, ViewableProc, 0xc, Yoko_ViewTable_07A, 0x7a
-	RegObjTabl 0x160000f, ResNameProc, 0xc, Yoko_ResNameTable_37A, 0x37a
-	RegObjTabl 0x1600010, ViewableProc, 0x5, Yoko_ViewTable_089, 0x89
-	RegObjTabl 0x160000f, ResNameProc, 0x5, Yoko_ResNameTable_389, 0x389
-	RegObjTabl 0x1600010, ViewableProc, 0x1, Yoko_ViewTable_08A, 0x8a
-	RegObjTabl 0x160000f, ResNameProc, 0x1, Yoko_ResNameTable_38A, 0x38a
-	RegObjTabl 0x1600010, ViewableProc, 0x16, Yoko_ViewTable_08B, 0x8b
-	RegObjTabl 0x160000f, ResNameProc, 0x16, Yoko_ResNameTable_38B, 0x38b
-	RegObjTabl 0x1600010, ViewableProc, 0x1c, Yoko_ViewTable_08C, 0x8c
-	RegObjTabl 0x160000f, ResNameProc, 0x1c, Yoko_ResNameTable_38C, 0x38c
-	RegObjTabl 0x1600010, ViewableProc, 0x5, Yoko_ViewTable_08E, 0x8e
-	RegObjTabl 0x160000f, ResNameProc, 0x5, Yoko_ResNameTable_38E, 0x38e
-	RegObjTabl 0x1600010, ViewableProc, 0x6, Yoko_ViewTable_08F, 0x8f
-	RegObjTabl 0x160000f, ResNameProc, 0x6, Yoko_ResNameTable_38F, 0x38f
-	RegObjTabl 0x1600010, ViewableProc, 0x4, Yoko_ViewTable_092, 0x92
-	RegObjTabl 0x160000f, ResNameProc, 0x4, Yoko_ResNameTable_392, 0x392
-	RegObjTabl 0x1600010, ViewableProc, 0x0, Yoko_ViewTable_0A7, 0xa7
-	RegObjTabl 0x160000f, ResNameProc, 0x0, Yoko_ResNameTable_3A7, 0x3a7
-	RegObjTabl 0x1600010, ViewableProc, 0x6, Yoko_ViewTable_0A9, 0xa9
-	RegObjTabl 0x160000f, ResNameProc, 0x6, Yoko_ResNameTable_3A9, 0x3a9
-	RegObjTabl 0x1600010, ViewableProc, 0x4, Yoko_ViewTable_0E0, 0xe0
-	RegObjTabl 0x160000f, ResNameProc, 0x4, Yoko_ResNameTable_3E0, 0x3e0
-	RegObjTabl 0x1600010, ViewableProc, 0xc, Yoko_ViewTable_0E1, 0xe1
-	RegObjTabl 0x160000f, ResNameProc, 0xc, Yoko_ResNameTable_3E1, 0x3e1
-	RegObjTabl 0x1600010, ViewableProc, 0xc, Yoko_ViewTable_0E2, 0xe2
-	RegObjTabl 0x160000f, ResNameProc, 0xc, Yoko_ResNameTable_3E2, 0x3e2
-	RegObjTabl 0x1600010, ViewableProc, 0xc, Yoko_ViewTable_0E3, 0xe3
-	RegObjTabl 0x160000f, ResNameProc, 0xc, Yoko_ResNameTable_3E3, 0x3e3
+	RegObjTable NAKA_CLASS_Class, ClassProc, Yoko_ClassCount_167, 0xe208ec, 0x167
+	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, Yoko_ResEventCount_1C7, EvtName_PtrTable, 0x1c7
+	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, Yoko_ResMethodCount_1E7, MtName_PtrTable, 0x1e7
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2e, 0xe20260, 0x127
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x2e, 0xe2031c, 0x427
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x1, Yoko_FunctionTable_107, 0x107
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x1, Yoko_FunctionTable_407, 0x407
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x1f, Yoko_MainFuncTable_147, 0x147
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x1f, Yoko_MainFuncNameTable_447, 0x447
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x2b, Yoko_ViewTable_06F, 0x6f
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x2b, Yoko_ResNameTable_36F, 0x36f
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, Yoko_ViewTable_070, 0x70
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, Yoko_ResNameTable_370, 0x370
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xb, Yoko_ViewTable_071, 0x71
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xb, Yoko_ResNameTable_371, 0x371
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x7, Yoko_ViewTable_072, 0x72
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x7, Yoko_ResNameTable_372, 0x372
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x10, Yoko_ViewTable_073, 0x73
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x10, Yoko_ResNameTable_373, 0x373
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xf, Yoko_ViewTable_074, 0x74
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xf, Yoko_ResNameTable_374, 0x374
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xd, Yoko_ViewTable_075, 0x75
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xd, Yoko_ResNameTable_375, 0x375
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x8, Yoko_ViewTable_076, 0x76
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x8, Yoko_ResNameTable_376, 0x376
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1e, Yoko_ViewTable_078, 0x78
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1e, Yoko_ResNameTable_378, 0x378
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, Yoko_ViewTable_07A, 0x7a
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, Yoko_ResNameTable_37A, 0x37a
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x5, Yoko_ViewTable_089, 0x89
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x5, Yoko_ResNameTable_389, 0x389
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1, Yoko_ViewTable_08A, 0x8a
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1, Yoko_ResNameTable_38A, 0x38a
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x16, Yoko_ViewTable_08B, 0x8b
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x16, Yoko_ResNameTable_38B, 0x38b
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1c, Yoko_ViewTable_08C, 0x8c
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1c, Yoko_ResNameTable_38C, 0x38c
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x5, Yoko_ViewTable_08E, 0x8e
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x5, Yoko_ResNameTable_38E, 0x38e
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x6, Yoko_ViewTable_08F, 0x8f
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x6, Yoko_ResNameTable_38F, 0x38f
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, Yoko_ViewTable_092, 0x92
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, Yoko_ResNameTable_392, 0x392
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Yoko_ViewTable_0A7, 0xa7
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Yoko_ResNameTable_3A7, 0x3a7
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x6, Yoko_ViewTable_0A9, 0xa9
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x6, Yoko_ResNameTable_3A9, 0x3a9
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, Yoko_ViewTable_0E0, 0xe0
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, Yoko_ResNameTable_3E0, 0x3e0
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, Yoko_ViewTable_0E1, 0xe1
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, Yoko_ResNameTable_3E1, 0x3e1
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, Yoko_ViewTable_0E2, 0xe2
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, Yoko_ResNameTable_3E2, 0x3e2
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, Yoko_ViewTable_0E3, 0xe3
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, Yoko_ResNameTable_3E3, 0x3e3
 	pushw 0x0007
 	pushw Yoko_ResNames_3E3_Strings@hi16
 	pushw Yoko_ResNames_3E3_Strings@lo16
 	ld XWA,0x0000000d
-	ld XBC,0x01470014
-	ld XDE,0x01a00089
+	ld XBC,NAKA_MAINFUNC_SeqStepModeFunc
+	ld XDE,TITLE_SQTRSEL
 	call RegisterMode
 	pushw 0x0007
 	pushw InitializeYoko_Str_MD_DEMO@hi16
 	pushw InitializeYoko_Str_MD_DEMO@lo16
 	ld XWA,0x00000013
-	ld XBC,0x01470017
+	ld XBC,NAKA_MAINFUNC_DemoModeFunc
 	ld XDE,TITLE_DEMOMENU
 	call RegisterMode
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPSMF@hi16
 	pushw InitializeYoko_Str_TT_DPSMF@lo16
 	ld XWA,0x0000006f
-	ld XBC,0x01470012
+	ld XBC,NAKA_MAINFUNC_DpSmfTtlFunc
 	ld XDE,0x006f0000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPDOC@hi16
 	pushw InitializeYoko_Str_TT_DPDOC@lo16
 	ld XWA,0x00000070
-	ld XBC,0x01470010
+	ld XBC,NAKA_MAINFUNC_DpDocTtlFunc
 	ld XDE,0x00700000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPPD@hi16
 	pushw InitializeYoko_Str_TT_DPPD@lo16
 	ld XWA,0x00000071
-	ld XBC,0x01470011
+	ld XBC,NAKA_MAINFUNC_DpPdTtlFunc
 	ld XDE,0x00710000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPSMFLYR@hi16
 	pushw InitializeYoko_Str_TT_DPSMFLYR@lo16
 	ld XWA,0x00000072
-	ld XBC,0x01470013
+	ld XBC,NAKA_MAINFUNC_DpSmfLyrTtlFunc
 	ld XDE,0x00720000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPMDLYSMF@hi16
 	pushw InitializeYoko_Str_TT_DPMDLYSMF@lo16
 	ld XWA,0x00000073
-	ld XBC,0x0147000e
+	ld XBC,NAKA_MAINFUNC_DpMdlySmfTtlFunc
 	ld XDE,0x00730000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPMDLYDOC@hi16
 	pushw InitializeYoko_Str_TT_DPMDLYDOC@lo16
 	ld XWA,0x00000074
-	ld XBC,0x0147000c
+	ld XBC,NAKA_MAINFUNC_DpMdlyDocTtlFunc
 	ld XDE,0x00740001
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPMDLYPD@hi16
 	pushw InitializeYoko_Str_TT_DPMDLYPD@lo16
 	ld XWA,0x00000075
-	ld XBC,0x0147000d
+	ld XBC,NAKA_MAINFUNC_DpMdlyPdTtlFunc
 	ld XDE,0x00750000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DPMDLYSMFLYR@hi16
 	pushw InitializeYoko_Str_TT_DPMDLYSMFLYR@lo16
 	ld XWA,0x00000076
-	ld XBC,0x0147000f
+	ld XBC,NAKA_MAINFUNC_DpMdlySmfLyrTtlFunc
 	ld XDE,0x00760000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DKMDLYPLY@hi16
 	pushw InitializeYoko_Str_TT_DKMDLYPLY@lo16
 	ld XWA,0x00000078
-	ld XBC,0x0147000b
+	ld XBC,NAKA_MAINFUNC_DkMdlyPlyTtlFunc
 	ld XDE,0x00780000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQMDLYPLY@hi16
 	pushw InitializeYoko_Str_TT_SQMDLYPLY@lo16
 	ld XWA,0x0000007a
-	ld XBC,0x0147000a
+	ld XBC,NAKA_MAINFUNC_SqMdlyPlyTtlFunc
 	ld XDE,0x007a0000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQTRSEL@hi16
 	pushw InitializeYoko_Str_TT_SQTRSEL@lo16
 	ld XWA,0x00000089
-	ld XBC,0x01470015
+	ld XBC,NAKA_MAINFUNC_SqTrSelTtlFunc
 	ld XDE,0x00890000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQSTEP@hi16
 	pushw InitializeYoko_Str_TT_SQSTEP@lo16
 	ld XWA,0x0000008a
-	ld XBC,0x01470016
+	ld XBC,NAKA_MAINFUNC_SqStepTtlFunc
 	ld XDE,0x008a0000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQTRAS@hi16
 	pushw InitializeYoko_Str_TT_SQTRAS@lo16
 	ld XWA,0x0000008b
-	ld XBC,0x01470006
+	ld XBC,NAKA_MAINFUNC_SqTrAsTtlFunc
 	ld XDE,0x008b0000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQTRASPS@hi16
 	pushw InitializeYoko_Str_TT_SQTRASPS@lo16
 	ld XWA,0x0000008c
-	ld XBC,0x01470008
+	ld XBC,NAKA_MAINFUNC_SqTrAsPsTtlFunc
 	ld XDE,0x008c0000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQSNGSEL@hi16
 	pushw InitializeYoko_Str_TT_SQSNGSEL@lo16
 	ld XWA,0x0000008e
-	ld XBC,0x01470004
+	ld XBC,NAKA_MAINFUNC_SqSngSelTtlFunc
 	ld XDE,0x008e0000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQSNGNAME@hi16
 	pushw InitializeYoko_Str_TT_SQSNGNAME@lo16
 	ld XWA,0x0000008f
-	ld XBC,0x01470005
+	ld XBC,NAKA_MAINFUNC_SqSngNameTtlFunc
 	ld XDE,0x008f0000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQAFTSET@hi16
 	pushw InitializeYoko_Str_TT_SQAFTSET@lo16
 	ld XWA,0x00000092
-	ld XBC,0x01470003
+	ld XBC,NAKA_MAINFUNC_SqAftSetTtlFunc
 	ld XDE,0x00920000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_SQEASYNAME@hi16
 	pushw InitializeYoko_Str_TT_SQEASYNAME@lo16
 	ld XWA,0x000000a7
-	ld XBC,0x01470005
+	ld XBC,NAKA_MAINFUNC_SqSngNameTtlFunc
 	ld XDE,0x008f0000
 	call RegisterTitle
 	pushw 0x0007
@@ -214,28 +214,28 @@ InitializeYoko:
 	pushw InitializeYoko_Str_TT_DEMOMENU@hi16
 	pushw InitializeYoko_Str_TT_DEMOMENU@lo16
 	ld XWA,0x000000e0
-	ld XBC,0x01470018
+	ld XBC,NAKA_MAINFUNC_DemoMenuTtlFunc
 	ld XDE,LED_patterns_indicating_firmware_version
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DEMOSTYLE@hi16
 	pushw InitializeYoko_Str_TT_DEMOSTYLE@lo16
 	ld XWA,0x000000e1
-	ld XBC,0x01470019
+	ld XBC,NAKA_MAINFUNC_DemoStyleTtlFunc
 	ld XDE,0x00e10000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DEMOSOUND@hi16
 	pushw InitializeYoko_Str_TT_DEMOSOUND@lo16
 	ld XWA,0x000000e2
-	ld XBC,0x0147001a
+	ld XBC,NAKA_MAINFUNC_DemoSoundTtlFunc
 	ld XDE,0x00e20000
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DEMORHY@hi16
 	pushw InitializeYoko_Str_TT_DEMORHY@lo16
 	ld XWA,0x000000e3
-	ld XBC,0x0147001b
+	ld XBC,NAKA_MAINFUNC_DemoRhyTtlFunc
 	ld XDE,0x00e30000
 	call RegisterTitle
 	lda xsp, (xsp + 0x0e)
@@ -4571,141 +4571,141 @@ IvExitTrSel_Epilogue:
 InitializeKubo:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, ClassProc, Kubo_ClassCount_168, Kubo_ClassTable_168, 0x168
-	RegObjTable 0x160000c, ResEventProc, Kubo_ResEventCount_1C8, EvtEffDraw_PtrTable, 0x1c8
-	RegObjTable 0x160000d, ResMethodProc, EffectsEditor_GapByte, MT_FuncName_PtrTable, 0x1e8
-	RegObjTabl 0x1600002, ApFunctionProc, 0x49, Kubo_ApFuncTable_128, 0x128
-	RegObjTabl 0x1600002, ApFunctionProc, 0x49, Kubo_ApFuncNameTable_428, 0x428
-	RegObjTabl 0x1600001, FunctionProc, 0x0, 0x3df10, 0x108
-	RegObjTabl 0x1600001, FunctionProc, 0x0, 0x3df14, 0x408
-	RegObjTabl 0x1600003, MainFunctionProc, 0x2c, Kubo_MainFunctionTable_148, 0x148
-	RegObjTabl 0x1600003, MainFunctionProc, 0x2c, InitializeKubo_PtrTable_72, 0x448
-	RegObjTabl 0x1600010, ViewableProc, 0xc, Kubo_ViewableTable_00A, 0xa
-	RegObjTabl 0x160000f, ResNameProc, 0xc, InitializeKubo_PtrTable_35, 0x30a
-	RegObjTabl 0x1600010, ViewableProc, 0xc, Kubo_ViewableTable_00B, 0xb
-	RegObjTabl 0x160000f, ResNameProc, 0xc, InitializeKubo_PtrTable_36, 0x30b
-	RegObjTabl 0x1600010, ViewableProc, 0x25, Kubo_ViewableTable_00C, 0xc
-	RegObjTabl 0x160000f, ResNameProc, 0x25, InitializeKubo_PtrTable_37, 0x30c
-	RegObjTabl 0x1600010, ViewableProc, 0xc, InitializeKubo_PtrTable, 0xe
-	RegObjTabl 0x160000f, ResNameProc, 0xc, InitializeKubo_PtrTable_38, 0x30e
-	RegObjTabl 0x1600010, ViewableProc, 0xc, InitializeKubo_PtrTable_2, 0x80
-	RegObjTabl 0x160000f, ResNameProc, 0xc, InitializeKubo_PtrTable_39, 0x380
-	RegObjTabl 0x1600010, ViewableProc, 0x1c, InitializeKubo_PtrTable_3, 0x81
-	RegObjTabl 0x160000f, ResNameProc, 0x1c, InitializeKubo_PtrTable_40, 0x381
-	RegObjTabl 0x1600010, ViewableProc, 0x8, InitializeKubo_PtrTable_4, 0x82
-	RegObjTabl 0x160000f, ResNameProc, 0x8, InitializeKubo_PtrTable_41, 0x382
-	RegObjTabl 0x1600010, ViewableProc, 0x10, InitializeKubo_PtrTable_5, 0x83
-	RegObjTabl 0x160000f, ResNameProc, 0x10, InitializeKubo_PtrTable_42, 0x383
-	RegObjTabl 0x1600010, ViewableProc, 0xa, InitializeKubo_PtrTable_6, 0x84
-	RegObjTabl 0x160000f, ResNameProc, 0xa, InitializeKubo_PtrTable_43, 0x384
-	RegObjTabl 0x1600010, ViewableProc, 0x19, InitializeKubo_PtrTable_7, 0x85
-	RegObjTabl 0x160000f, ResNameProc, 0x19, InitializeKubo_PtrTable_44, 0x385
-	RegObjTabl 0x1600010, ViewableProc, 0xb, InitializeKubo_PtrTable_8, 0x86
-	RegObjTabl 0x160000f, ResNameProc, 0xb, InitializeKubo_PtrTable_45, 0x386
-	RegObjTabl 0x1600010, ViewableProc, 0x18, InitializeKubo_PtrTable_9, 0x87
-	RegObjTabl 0x160000f, ResNameProc, 0x18, InitializeKubo_PtrTable_46, 0x387
-	RegObjTabl 0x1600010, ViewableProc, 0xc, InitializeKubo_PtrTable_10, 0x88
-	RegObjTabl 0x160000f, ResNameProc, 0xc, InitializeKubo_PtrTable_47, 0x388
-	RegObjTabl 0x1600010, ViewableProc, 0x4, InitializeKubo_PtrTable_11, 0x8d
-	RegObjTabl 0x160000f, ResNameProc, 0x4, InitializeKubo_PtrTable_48, 0x38d
-	RegObjTabl 0x1600010, ViewableProc, 0x11, InitializeKubo_PtrTable_12, 0x90
-	RegObjTabl 0x160000f, ResNameProc, 0x11, InitializeKubo_PtrTable_49, 0x390
-	RegObjTabl 0x1600010, ViewableProc, 0x13, InitializeKubo_PtrTable_13, 0x91
-	RegObjTabl 0x160000f, ResNameProc, 0x13, InitializeKubo_PtrTable_50, 0x391
-	RegObjTabl 0x1600010, ViewableProc, 0x1a, InitializeKubo_PtrTable_14, 0x93
-	RegObjTabl 0x160000f, ResNameProc, 0x1a, InitializeKubo_PtrTable_51, 0x393
-	RegObjTabl 0x1600010, ViewableProc, 0x4, InitializeKubo_PtrTable_15, 0x94
-	RegObjTabl 0x160000f, ResNameProc, 0x4, InitializeKubo_PtrTable_52, 0x394
-	RegObjTabl 0x1600010, ViewableProc, 0x1b, InitializeKubo_PtrTable_16, 0x95
-	RegObjTabl 0x160000f, ResNameProc, 0x1b, InitializeKubo_PtrTable_53, 0x395
-	RegObjTabl 0x1600010, ViewableProc, 0x8, InitializeKubo_PtrTable_17, 0x96
-	RegObjTabl 0x160000f, ResNameProc, 0x8, InitializeKubo_PtrTable_54, 0x396
-	RegObjTabl 0x1600010, ViewableProc, 0x4, InitializeKubo_PtrTable_18, 0x97
-	RegObjTabl 0x160000f, ResNameProc, 0x4, InitializeKubo_PtrTable_55, 0x397
-	RegObjTabl 0x1600010, ViewableProc, 0x1a, InitializeKubo_PtrTable_19, 0x98
-	RegObjTabl 0x160000f, ResNameProc, 0x1a, InitializeKubo_PtrTable_56, 0x398
-	RegObjTabl 0x1600010, ViewableProc, 0x8, InitializeKubo_PtrTable_20, 0x99
-	RegObjTabl 0x160000f, ResNameProc, 0x8, InitializeKubo_PtrTable_57, 0x399
-	RegObjTabl 0x1600010, ViewableProc, 0xe, InitializeKubo_PtrTable_21, 0x9a
-	RegObjTabl 0x160000f, ResNameProc, 0xe, InitializeKubo_PtrTable_58, 0x39a
-	RegObjTabl 0x1600010, ViewableProc, 0x16, InitializeKubo_PtrTable_22, 0x9b
-	RegObjTabl 0x160000f, ResNameProc, 0x16, InitializeKubo_PtrTable_59, 0x39b
-	RegObjTabl 0x1600010, ViewableProc, 0x15, InitializeKubo_PtrTable_23, 0x9c
-	RegObjTabl 0x160000f, ResNameProc, 0x15, InitializeKubo_PtrTable_60, 0x39c
-	RegObjTabl 0x1600010, ViewableProc, 0x10, InitializeKubo_PtrTable_24, 0x9d
-	RegObjTabl 0x160000f, ResNameProc, 0x10, InitializeKubo_PtrTable_61, 0x39d
-	RegObjTabl 0x1600010, ViewableProc, 0x10, InitializeKubo_PtrTable_25, 0x9e
-	RegObjTabl 0x160000f, ResNameProc, 0x10, InitializeKubo_PtrTable_62, 0x39e
-	RegObjTabl 0x1600010, ViewableProc, 0x19, InitializeKubo_PtrTable_26, 0x9f
-	RegObjTabl 0x160000f, ResNameProc, 0x19, InitializeKubo_PtrTable_63, 0x39f
-	RegObjTabl 0x1600010, ViewableProc, 0x10, InitializeKubo_PtrTable_27, 0xa0
-	RegObjTabl 0x160000f, ResNameProc, 0x10, InitializeKubo_PtrTable_64, 0x3a0
-	RegObjTabl 0x1600010, ViewableProc, 0x10, InitializeKubo_PtrTable_28, 0xa1
-	RegObjTabl 0x160000f, ResNameProc, 0x10, InitializeKubo_PtrTable_65, 0x3a1
-	RegObjTabl 0x1600010, ViewableProc, 0x11, InitializeKubo_PtrTable_29, 0xa2
-	RegObjTabl 0x160000f, ResNameProc, 0x11, InitializeKubo_PtrTable_66, 0x3a2
-	RegObjTabl 0x1600010, ViewableProc, 0xf, InitializeKubo_PtrTable_30, 0xa3
-	RegObjTabl 0x160000f, ResNameProc, 0xf, InitializeKubo_PtrTable_67, 0x3a3
-	RegObjTabl 0x1600010, ViewableProc, 0x11, InitializeKubo_PtrTable_31, 0xa4
-	RegObjTabl 0x160000f, ResNameProc, 0x11, InitializeKubo_PtrTable_68, 0x3a4
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe2ef60, 0xa8
-	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe2fff0, 0x3a8
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xe2ef64, 0xaa
-	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xe2fff6, 0x3aa
-	RegObjTabl 0x1600010, ViewableProc, 0x2, InitializeKubo_PtrTable_32, 0xab
-	RegObjTabl 0x160000f, ResNameProc, 0x2, InitializeKubo_PtrTable_69, 0x3ab
-	RegObjTabl 0x1600010, ViewableProc, 0xf, InitializeKubo_PtrTable_33, 0xd6
-	RegObjTabl 0x160000f, ResNameProc, 0xf, InitializeKubo_PtrTable_70, 0x3d6
-	RegObjTabl 0x1600010, ViewableProc, 0x3d, InitializeKubo_PtrTable_34, 0xe7
-	RegObjTabl 0x160000f, ResNameProc, 0x3d, InitializeKubo_PtrTable_71, 0x3e7
+	RegObjTable NAKA_CLASS_Class, ClassProc, Kubo_ClassCount_168, Kubo_ClassTable_168, 0x168
+	RegObjTable NAKA_CLASS_ResEvent, ResEventProc, Kubo_ResEventCount_1C8, EvtEffDraw_PtrTable, 0x1c8
+	RegObjTable NAKA_CLASS_ResMethod, ResMethodProc, EffectsEditor_GapByte, MT_FuncName_PtrTable, 0x1e8
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x49, Kubo_ApFuncTable_128, 0x128
+	RegObjTabl NAKA_CLASS_ApFunction, ApFunctionProc, 0x49, Kubo_ApFuncNameTable_428, 0x428
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, 0x3df10, 0x108
+	RegObjTabl NAKA_CLASS_Function, FunctionProc, 0x0, 0x3df14, 0x408
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x2c, Kubo_MainFunctionTable_148, 0x148
+	RegObjTabl NAKA_CLASS_MainFunction, MainFunctionProc, 0x2c, InitializeKubo_PtrTable_72, 0x448
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, Kubo_ViewableTable_00A, 0xa
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, InitializeKubo_PtrTable_35, 0x30a
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, Kubo_ViewableTable_00B, 0xb
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, InitializeKubo_PtrTable_36, 0x30b
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x25, Kubo_ViewableTable_00C, 0xc
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x25, InitializeKubo_PtrTable_37, 0x30c
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, InitializeKubo_PtrTable, 0xe
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, InitializeKubo_PtrTable_38, 0x30e
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, InitializeKubo_PtrTable_2, 0x80
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, InitializeKubo_PtrTable_39, 0x380
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1c, InitializeKubo_PtrTable_3, 0x81
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1c, InitializeKubo_PtrTable_40, 0x381
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x8, InitializeKubo_PtrTable_4, 0x82
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x8, InitializeKubo_PtrTable_41, 0x382
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x10, InitializeKubo_PtrTable_5, 0x83
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x10, InitializeKubo_PtrTable_42, 0x383
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xa, InitializeKubo_PtrTable_6, 0x84
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xa, InitializeKubo_PtrTable_43, 0x384
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x19, InitializeKubo_PtrTable_7, 0x85
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x19, InitializeKubo_PtrTable_44, 0x385
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xb, InitializeKubo_PtrTable_8, 0x86
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xb, InitializeKubo_PtrTable_45, 0x386
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x18, InitializeKubo_PtrTable_9, 0x87
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x18, InitializeKubo_PtrTable_46, 0x387
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xc, InitializeKubo_PtrTable_10, 0x88
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xc, InitializeKubo_PtrTable_47, 0x388
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, InitializeKubo_PtrTable_11, 0x8d
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, InitializeKubo_PtrTable_48, 0x38d
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x11, InitializeKubo_PtrTable_12, 0x90
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x11, InitializeKubo_PtrTable_49, 0x390
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x13, InitializeKubo_PtrTable_13, 0x91
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x13, InitializeKubo_PtrTable_50, 0x391
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1a, InitializeKubo_PtrTable_14, 0x93
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1a, InitializeKubo_PtrTable_51, 0x393
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, InitializeKubo_PtrTable_15, 0x94
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, InitializeKubo_PtrTable_52, 0x394
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1b, InitializeKubo_PtrTable_16, 0x95
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1b, InitializeKubo_PtrTable_53, 0x395
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x8, InitializeKubo_PtrTable_17, 0x96
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x8, InitializeKubo_PtrTable_54, 0x396
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x4, InitializeKubo_PtrTable_18, 0x97
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x4, InitializeKubo_PtrTable_55, 0x397
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x1a, InitializeKubo_PtrTable_19, 0x98
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x1a, InitializeKubo_PtrTable_56, 0x398
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x8, InitializeKubo_PtrTable_20, 0x99
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x8, InitializeKubo_PtrTable_57, 0x399
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xe, InitializeKubo_PtrTable_21, 0x9a
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xe, InitializeKubo_PtrTable_58, 0x39a
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x16, InitializeKubo_PtrTable_22, 0x9b
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x16, InitializeKubo_PtrTable_59, 0x39b
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x15, InitializeKubo_PtrTable_23, 0x9c
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x15, InitializeKubo_PtrTable_60, 0x39c
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x10, InitializeKubo_PtrTable_24, 0x9d
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x10, InitializeKubo_PtrTable_61, 0x39d
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x10, InitializeKubo_PtrTable_25, 0x9e
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x10, InitializeKubo_PtrTable_62, 0x39e
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x19, InitializeKubo_PtrTable_26, 0x9f
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x19, InitializeKubo_PtrTable_63, 0x39f
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x10, InitializeKubo_PtrTable_27, 0xa0
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x10, InitializeKubo_PtrTable_64, 0x3a0
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x10, InitializeKubo_PtrTable_28, 0xa1
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x10, InitializeKubo_PtrTable_65, 0x3a1
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x11, InitializeKubo_PtrTable_29, 0xa2
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x11, InitializeKubo_PtrTable_66, 0x3a2
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xf, InitializeKubo_PtrTable_30, 0xa3
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xf, InitializeKubo_PtrTable_67, 0x3a3
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x11, InitializeKubo_PtrTable_31, 0xa4
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x11, InitializeKubo_PtrTable_68, 0x3a4
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, 0xe2ef60, 0xa8
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xe2fff0, 0x3a8
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, 0xe2ef64, 0xaa
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xe2fff6, 0x3aa
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x2, InitializeKubo_PtrTable_32, 0xab
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x2, InitializeKubo_PtrTable_69, 0x3ab
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xf, InitializeKubo_PtrTable_33, 0xd6
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xf, InitializeKubo_PtrTable_70, 0x3d6
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x3d, InitializeKubo_PtrTable_34, 0xe7
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x3d, InitializeKubo_PtrTable_71, 0x3e7
 
-	RegMode 0x8, InitializeKubo_Str_MD_ENTERTAINER, 0x7, 0x1200000, 0x1a000d6
-	RegMode 0x8, InitializeKubo_Str_MD_SEQ, 0x8, 0x1480004, 0x1a00080
-	RegMode 0x8, InitializeKubo_Str_MD_SEQ_EREC, 0x9, 0x1480007, 0x1a00083
-	RegMode 0x8, InitializeKubo_Str_MD_SEQ_PLAY, 0xa, 0x1480006, 0x1a00081
-	RegMode 0x8, InitializeKubo_Str_MD_SEQ_REAL, 0xb, 0x1480005, 0x1a00085
-	RegMode 0x8, InitializeKubo_Str_MD_SEQ_EDIT, 0xc, 0x1480008, 0x1a00093
-	RegMode 0x8, InitializeKubo_Str_MD_HELP, 0x14, 0x1480026, 0x1a000e7
+	RegMode 0x8, InitializeKubo_Str_MD_ENTERTAINER, 0x7, NAKA_APFUNC_DefaultFunction, TITLE_ETMENU
+	RegMode 0x8, InitializeKubo_Str_MD_SEQ, 0x8, NAKA_MAINFUNC_SeqModeFunc, TITLE_SQMENU
+	RegMode 0x8, InitializeKubo_Str_MD_SEQ_EREC, 0x9, NAKA_MAINFUNC_SeqErecModeFunc, TITLE_SQEASYREC
+	RegMode 0x8, InitializeKubo_Str_MD_SEQ_PLAY, 0xa, NAKA_MAINFUNC_SeqPlayModeFunc, TITLE_SQPLAY
+	RegMode 0x8, InitializeKubo_Str_MD_SEQ_REAL, 0xb, NAKA_MAINFUNC_SeqRealModeFunc, TITLE_SQREALREC
+	RegMode 0x8, InitializeKubo_Str_MD_SEQ_EDIT, 0xc, NAKA_MAINFUNC_SeqEditModeFunc, TITLE_SQEMENU
+	RegMode 0x8, InitializeKubo_Str_MD_HELP, 0x14, NAKA_MAINFUNC_HelpModeFunc, TITLE_SWHELP
 
-	RegTitle 0x8, InitializeKubo_Str_TT_SDREVSET, 0xa, 0x1480020, 0xa0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SDDSPEFF, 0xb, 0x1480021, 0xb0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SDEQUALIZER, 0xc, 0x1200000, 0xc0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SDACCILL, 0xe, 0x1480022, 0xe0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQMENU, 0x80, 0x1200000, 0x800000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQPLAY, 0x81, 0x148000a, 0x810000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQCYCPLY, 0x82, 0x1200000, 0x820000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQEASYREC, 0x83, 0x1200000, 0x830000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQCMENU, 0x84, 0x1200000, 0x840000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQREALREC, 0x85, 0x1480009, 0x850000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQCYCREC, 0x86, 0x1200000, 0x860000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQPUNCH, 0x87, 0x148000b, 0x870000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQPUNCHM, 0x88, 0x148000c, 0x880000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQPNLWR, 0x8d, 0x1200000, 0x8d0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQSNGCLR, 0x90, 0x1480013, 0x900000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQSNGCP, 0x91, 0x1480017, 0x910000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQEMENU, 0x93, 0x1200000, 0x930000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTESEL, 0x94, 0x148001d, 0x940000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTEEDT, 0x95, 0x148001c, 0x950000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTECYCP, 0x96, 0x1480024, 0x960000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQDRMSEL, 0x97, 0x148001b, 0x970000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQDRMEDT, 0x98, 0x148001a, 0x980000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQDRMCYCP, 0x99, 0x1480025, 0x990000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQTRKCLR, 0x9a, 0x1480016, 0x9a0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQTRKMRG, 0x9b, 0x1480018, 0x9b0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQQTZ, 0x9c, 0x148000d, 0x9c0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQTRNS, 0x9d, 0x1480011, 0x9d0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQVELOCNG, 0x9e, 0x1480010, 0x9e0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTECNG, 0x9f, 0x1480012, 0x9f0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQADVDLY, 0xa0, 0x1480019, 0xa00000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQMERS, 0xa1, 0x148000f, 0xa10000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQMCP, 0xa2, 0x1480014, 0xa20000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQMDEL, 0xa3, 0x148000e, 0xa30000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQMINS, 0xa4, 0x1480015, 0xa40000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQSNGCPC, 0xa8, 0x1480017, 0x910000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQPNLWRM, 0xaa, 0x1200000, 0x8d0000
-	RegTitle 0x8, InitializeKubo_Str_TT_SQMETBAL, 0xab, 0x1200000, 0xab0000
-	RegTitle 0x8, InitializeKubo_Str_TT_ETMENU, 0xd6, 0x148002a, 0xd60000
-	RegTitle 0x8, InitializeKubo_Str_TT_SWHELP, 0xe7, 0x1480027, 0xe70000
+	RegTitle 0x8, InitializeKubo_Str_TT_SDREVSET, 0xa, NAKA_MAINFUNC_SdRevsetTitleFunc, 0xa0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SDDSPEFF, 0xb, NAKA_MAINFUNC_SdDspeffTitleFunc, 0xb0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SDEQUALIZER, 0xc, NAKA_APFUNC_DefaultFunction, 0xc0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SDACCILL, 0xe, NAKA_MAINFUNC_SdAccillTitleFunc, 0xe0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQMENU, 0x80, NAKA_APFUNC_DefaultFunction, 0x800000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQPLAY, 0x81, NAKA_MAINFUNC_SqPlayTitleFunc, 0x810000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQCYCPLY, 0x82, NAKA_APFUNC_DefaultFunction, 0x820000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQEASYREC, 0x83, NAKA_APFUNC_DefaultFunction, 0x830000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQCMENU, 0x84, NAKA_APFUNC_DefaultFunction, 0x840000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQREALREC, 0x85, NAKA_MAINFUNC_SqRealRecTitleFunc, 0x850000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQCYCREC, 0x86, NAKA_APFUNC_DefaultFunction, 0x860000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQPUNCH, 0x87, NAKA_MAINFUNC_SqPunchTitleFunc, 0x870000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQPUNCHM, 0x88, NAKA_MAINFUNC_SqPunchmTitleFunc, 0x880000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQPNLWR, 0x8d, NAKA_APFUNC_DefaultFunction, 0x8d0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQSNGCLR, 0x90, NAKA_MAINFUNC_SqSoclTitleFunc, 0x900000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQSNGCP, 0x91, NAKA_MAINFUNC_SqSngcpTitleFunc, 0x910000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQEMENU, 0x93, NAKA_APFUNC_DefaultFunction, 0x930000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTESEL, 0x94, NAKA_MAINFUNC_SqNoteSelTitleFunc, 0x940000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTEEDT, 0x95, NAKA_MAINFUNC_SqNoteEdtTitleFunc, 0x950000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTECYCP, 0x96, NAKA_MAINFUNC_SqNoteCycpTitleFunc, 0x960000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQDRMSEL, 0x97, NAKA_MAINFUNC_SqDrmSelTitleFunc, 0x970000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQDRMEDT, 0x98, NAKA_MAINFUNC_SqDrmEdtTitleFunc, 0x980000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQDRMCYCP, 0x99, NAKA_MAINFUNC_SqDrmCycpTitleFunc, 0x990000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQTRKCLR, 0x9a, NAKA_MAINFUNC_SqTrclTitleFunc, 0x9a0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQTRKMRG, 0x9b, NAKA_MAINFUNC_SqTrmgTitleFunc, 0x9b0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQQTZ, 0x9c, NAKA_MAINFUNC_SqQtzTitleFunc, 0x9c0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQTRNS, 0x9d, NAKA_MAINFUNC_SqTrnsTitleFunc, 0x9d0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQVELOCNG, 0x9e, NAKA_MAINFUNC_SqVcngTitleFunc, 0x9e0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQNOTECNG, 0x9f, NAKA_MAINFUNC_SqNcngTitleFunc, 0x9f0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQADVDLY, 0xa0, NAKA_MAINFUNC_SqAdlyTitleFunc, 0xa00000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQMERS, 0xa1, NAKA_MAINFUNC_SqMersTitleFunc, 0xa10000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQMCP, 0xa2, NAKA_MAINFUNC_SqMcpyTitleFunc, 0xa20000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQMDEL, 0xa3, NAKA_MAINFUNC_SqMdelTitleFunc, 0xa30000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQMINS, 0xa4, NAKA_MAINFUNC_SqMinsTitleFunc, 0xa40000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQSNGCPC, 0xa8, NAKA_MAINFUNC_SqSngcpTitleFunc, 0x910000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQPNLWRM, 0xaa, NAKA_APFUNC_DefaultFunction, 0x8d0000
+	RegTitle 0x8, InitializeKubo_Str_TT_SQMETBAL, 0xab, NAKA_APFUNC_DefaultFunction, 0xab0000
+	RegTitle 0x8, InitializeKubo_Str_TT_ETMENU, 0xd6, NAKA_MAINFUNC_EtmenuTitleFunc, 0xd60000
+	RegTitle 0x8, InitializeKubo_Str_TT_SWHELP, 0xe7, NAKA_MAINFUNC_HelpTitleFunc, 0xe70000
 
 	lda xsp, (xsp + 14)
 	ret

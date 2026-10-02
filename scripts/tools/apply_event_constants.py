@@ -34,7 +34,7 @@ CATALOG (JSON list): [{"value": "0x01C00001", "name": "EVT_SHOW", "meaning": "..
 
 USAGE
   python3 scripts/tools/apply_event_constants.py CATALOG.json [--trees v10/maincpu,...]
-         [--check] [--data] [--report OUT]
+         [--check] [--data] [--macros] [--report OUT]
   Default trees: v10/maincpu v9/maincpu v7/maincpu hdae5000. Then: make gate-all (must be
   13/13 -- a symbol for the same value cannot move a byte).
 
@@ -53,6 +53,9 @@ REPO = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=Tr
 TREES = ["v10/maincpu", "v9/maincpu", "v7/maincpu", "hdae5000"]
 EQU = re.compile(r"^\s*\.(?:equ|set)\s+([A-Za-z_][A-Za-z0-9_]*)\s*,\s*(0x[0-9a-fA-F]+|\d+)\b")
 INSN = re.compile(r"^(\s*(?:[A-Za-z_.$][\w.$@]*:)?\s*)([a-z_][a-z0-9_]*)(\s+)([^;]*?)(\s*(?:;.*)?)$")
+# --macros: a capitalised mnemonic is a macro invocation (`RegMode 0x4, Str, 0x11, 0x1440016,
+# 0x1a000dc`); its whole-literal arguments in range are substituted like instruction operands
+INSN_MACROS = re.compile(r"^(\s*(?:[A-Za-z_.$][\w.$@]*:)?\s*)([A-Za-z_][A-Za-z0-9_]*)(\s+)([^;]*?)(\s*(?:;.*)?)$")
 LIT = re.compile(r"^(?:0x[0-9a-fA-F]+|\d+)$")
 BRANCH = {"jr", "jrl", "calr", "call", "jp", "djnz", "call_24", "jp_24"}
 DATA = {".long", ".int", ".word", ".4byte"}
@@ -95,8 +98,8 @@ def split_operands(s):
     return out
 
 
-def substitute_line(line, by_value, data):
-    m = INSN.match(line)
+def substitute_line(line, by_value, data, macros=False):
+    m = (INSN_MACROS if macros else INSN).match(line)
     if not m:
         return line, 0
     lead, mnem, sp, ops, tail = m.groups()
@@ -139,6 +142,8 @@ def main():
     ap.add_argument("--data", action="store_true", help="also substitute in .long/.word data")
     ap.add_argument("--rename-existing", action="store_true",
                     help="rename existing constants whose name differs from the catalog's")
+    ap.add_argument("--macros", action="store_true",
+                    help="also substitute arguments of macro invocations (capitalised mnemonics)")
     ap.add_argument("--report")
     a = ap.parse_args()
     cat = [e for e in json.load(open(a.catalog, encoding="utf-8")) if e.get("name")]
@@ -239,7 +244,7 @@ def main():
             text = read(f)
             out, changed = [], 0
             for line in text.split("\n"):
-                nl, n = substitute_line(line, by_value, a.data)
+                nl, n = substitute_line(line, by_value, a.data, a.macros)
                 if not n and a.data:
                     nl, n = substitute_data_line(line, by_value)
                 out.append(nl)
@@ -250,8 +255,8 @@ def main():
                     write(f, "\n".join(out))
         if new_defs and not a.check:
             t = read(defs_path).rstrip("\n")
-            t += ("\n\n; Named from the event-code catalog of 2026-10-02 "
-                  "(notes/event-codes-2026-10-02/; evidence per value there)\n" + "\n".join(new_defs) + "\n")
+            t += ("\n\n; Named from %s (evidence per value there)\n" %
+                  os.path.relpath(os.path.abspath(a.catalog), REPO) + "\n".join(new_defs) + "\n")
             write(defs_path, t)
         report.append("%-12s %4d new constants, %5d operands substituted" % (tree, len(new_defs), count))
         total += count
