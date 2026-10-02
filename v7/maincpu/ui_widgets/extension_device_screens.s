@@ -366,11 +366,33 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] element 0); "Please check by the LED of test port. (PANEL CPU" (TextBox.text of
 ; [nakarest] element 1); "PANEL CPU CHECKING" (Label.str of element 2); "RESULT: CPU of CPR ="
 ; [nakarest] (Label.str of element 3); ....
-	.incbin "includes/generated/naka_extension_device.bin", 0x2C, 0x3EE
+NakaWidget_TEST2:			.incbin "includes/generated/naka_extension_device.bin", 0x2C, 0x2C
+NakaWidget_TEST2_1_TextBox:		.incbin "includes/generated/naka_extension_device.bin", 0x58, 0x92
+NakaWidget_TEST2_2_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xEA, 0x34
+NakaWidget_TEST2_3_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x11E, 0x36
+NakaWidget_TEST2_4_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x154, 0x2E
+NakaWidget_TEST2_5_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x182, 0x34
+NakaWidget_TEST2_6_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x1B6, 0x44
+NakaWidget_TEST2_7_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x1FA, 0x1C
+NakaWidget_TEST2_8_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x216, 0x1C
+NakaWidget_TEST2_9_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x232, 0x1C
+NakaWidget_TEST2_10_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x24E, 0x1C
+NakaWidget_TEST2OKOK:			.incbin "includes/generated/naka_extension_device.bin", 0x26A, 0x24
+NakaWidget_TEST2_12_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x28E, 0x24
+NakaWidget_TEST2_13_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x2B2, 0x24
+NakaWidget_TEST2NGNG:			.incbin "includes/generated/naka_extension_device.bin", 0x2D6, 0x24
+NakaWidget_TEST2_15_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x2FA, 0x24
+NakaWidget_TEST2_16_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x31E, 0x24
+NakaWidget_TEST2NGOK:			.incbin "includes/generated/naka_extension_device.bin", 0x342, 0x24
+NakaWidget_TEST2_18_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x366, 0x24
+NakaWidget_TEST2_19_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x38A, 0x24
+NakaWidget_TEST2OKNG:			.incbin "includes/generated/naka_extension_device.bin", 0x3AE, 0x24
+NakaWidget_TEST2_21_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x3D2, 0x24
+NakaWidget_TEST2_22_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x3F6, 0x24
 ; [nakarest] naka_extension_device+0x41a  +0x41a..+0x44e (0xed6be6, 52 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xf6 (table 0xed7cfe, 1 entries,
 ; [nakarest] InitializeToshi) ("TEST3"): SineWaveScreen (52 B).
-	.incbin "includes/generated/naka_extension_device.bin", 0x41A, 0x34
+NakaWidget_TEST3:	.incbin "includes/generated/naka_extension_device.bin", 0x41A, 0x34
 ; [nakarest] naka_extension_device+0x44e  +0x44e..+0x548 (0xed6c1a, 250 B)
 ; [nakarest] widget records, elements 0-2 of Viewable slot 0xf7 (table 0xed7d06, 3 entries,
 ; [nakarest] InitializeToshi) ("TEST4"): TtlScreen (42 B), TextBox (40 B), Label (32 B). 3 texts
@@ -378,7 +400,9 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] InitializeToshi)): "" (TtlScreen.title of element 0); "After all LEDs ON and OFF,
 ; [nakarest] Please push any butt" (TextBox.text of element 1); "PANEL SW&LED CHECK" (Label.str
 ; [nakarest] of element 2).
-	.incbin "includes/generated/naka_extension_device.bin", 0x44E, 0xFA
+NakaWidget_TEST4:		.incbin "includes/generated/naka_extension_device.bin", 0x44E, 0x2C
+NakaWidget_TEST4_1_TextBox:	.incbin "includes/generated/naka_extension_device.bin", 0x47A, 0x9A
+NakaWidget_TEST4_2_Label:	.incbin "includes/generated/naka_extension_device.bin", 0x514, 0x34
 ; [nakarest] naka_extension_device+0x548  +0x548..+0xe6c (0xed6d14, 2340 B)
 ; [nakarest] widget records, elements 0-66 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
 ; [nakarest] InitializeToshi) ("TEST5"): TtlScreen (42 B), IvPageControl (28 B) x5, Window (36
@@ -386,7 +410,73 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] slot 0xf8 (table 0xed7d16, 67 entries, InitializeToshi)): "" (TtlScreen.title of
 ; [nakarest] element 0); "LCD PANEL TEST" (Label.str of element 7); "LCD PANEL TEST" (Label.str
 ; [nakarest] of element 9); "LCD PANEL TEST" (Label.str of element 11); ....
-	.incbin "includes/generated/naka_extension_device.bin", 0x548, 0x924
+NakaWidget_TEST5:			.incbin "includes/generated/naka_extension_device.bin", 0x548, 0x2C
+NakaWidget_TEST5_1_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x574, 0x1C
+NakaWidget_TEST5_2_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x590, 0x1C
+NakaWidget_TEST5_3_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x5AC, 0x1C
+NakaWidget_TEST5_4_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x5C8, 0x1C
+NakaWidget_TEST5_5_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x5E4, 0x1C
+NakaWidget_TEST51:			.incbin "includes/generated/naka_extension_device.bin", 0x600, 0x24
+NakaWidget_TEST5_7_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x624, 0x30
+NakaWidget_TEST52:			.incbin "includes/generated/naka_extension_device.bin", 0x654, 0x24
+NakaWidget_TEST5_9_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x678, 0x30
+NakaWidget_TEST53:			.incbin "includes/generated/naka_extension_device.bin", 0x6A8, 0x24
+NakaWidget_TEST5_11_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x6CC, 0x30
+NakaWidget_TEST54:			.incbin "includes/generated/naka_extension_device.bin", 0x6FC, 0x24
+NakaWidget_TEST5_13_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x720, 0x30
+NakaWidget_TEST55:			.incbin "includes/generated/naka_extension_device.bin", 0x750, 0x24
+NakaWidget_TEST5_15_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x774, 0x30
+NakaWidget_TEST56:			.incbin "includes/generated/naka_extension_device.bin", 0x7A4, 0x24
+NakaWidget_TEST5_17_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0x7C8, 0x1C
+NakaWidget_TEST5_18_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x7E4, 0x22
+NakaWidget_TEST5_19_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x806, 0x22
+NakaWidget_TEST5_20_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x828, 0x28
+NakaWidget_TEST5_21_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x850, 0x22
+NakaWidget_TEST5_22_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x872, 0x22
+NakaWidget_TEST5_23_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x894, 0x22
+NakaWidget_TEST5_24_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x8B6, 0x22
+NakaWidget_TEST5_25_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x8D8, 0x22
+NakaWidget_TEST5_26_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x8FA, 0x22
+NakaWidget_TEST5_27_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0x91C, 0x1C
+NakaWidget_TEST5_28_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x938, 0x22
+NakaWidget_TEST5_29_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x95A, 0x22
+NakaWidget_TEST5_30_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x97C, 0x28
+NakaWidget_TEST5_31_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x9A4, 0x22
+NakaWidget_TEST5_32_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x9C6, 0x22
+NakaWidget_TEST5_33_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x9E8, 0x22
+NakaWidget_TEST5_34_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA0A, 0x22
+NakaWidget_TEST5_35_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA2C, 0x22
+NakaWidget_TEST5_36_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA4E, 0x22
+NakaWidget_TEST5_37_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0xA70, 0x1C
+NakaWidget_TEST5_38_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA8C, 0x22
+NakaWidget_TEST5_39_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xAAE, 0x22
+NakaWidget_TEST5_40_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xAD0, 0x28
+NakaWidget_TEST5_41_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xAF8, 0x22
+NakaWidget_TEST5_42_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB1A, 0x22
+NakaWidget_TEST5_43_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB3C, 0x22
+NakaWidget_TEST5_44_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB5E, 0x22
+NakaWidget_TEST5_45_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB80, 0x22
+NakaWidget_TEST5_46_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xBA2, 0x22
+NakaWidget_TEST5_47_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0xBC4, 0x1C
+NakaWidget_TEST5_48_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xBE0, 0x22
+NakaWidget_TEST5_49_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC02, 0x22
+NakaWidget_TEST5_50_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC24, 0x28
+NakaWidget_TEST5_51_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC4C, 0x22
+NakaWidget_TEST5_52_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC6E, 0x22
+NakaWidget_TEST5_53_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC90, 0x22
+NakaWidget_TEST5_54_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xCB2, 0x22
+NakaWidget_TEST5_55_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xCD4, 0x22
+NakaWidget_TEST5_56_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xCF6, 0x22
+NakaWidget_TEST5_57_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0xD18, 0x1C
+NakaWidget_TEST5_58_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xD34, 0x22
+NakaWidget_TEST5_59_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xD56, 0x22
+NakaWidget_TEST5_60_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xD78, 0x28
+NakaWidget_TEST5_61_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xDA0, 0x22
+NakaWidget_TEST5_62_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xDC2, 0x22
+NakaWidget_TEST5_63_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xDE4, 0x22
+NakaWidget_TEST5_64_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE06, 0x22
+NakaWidget_TEST5_65_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE28, 0x22
+NakaWidget_TEST5_66_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE4A, 0x22
 ; [nakarest] naka_extension_device+0xe6c  +0xe6c..+0xfe0 (0xed7638, 372 B)
 ; [nakarest] widget records, elements 0-8 of Viewable slot 0xf9 (table 0xed7e26, 9 entries,
 ; [nakarest] InitializeToshi) ("TEST6"): TtlScreen (42 B), Label (32 B) x4, IvPageControl (28 B)
@@ -394,11 +484,19 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] 0xed7e26, 9 entries, InitializeToshi)): "" (TtlScreen.title of element 0);
 ; [nakarest] "PERIPHERAL DEVICE CHECK" (Label.str of element 1); "FLOPPY DISK CONTROLLER(FDC) "
 ; [nakarest] (Label.str of element 2); "= may be OK" (Label.str of element 6); ....
-	.incbin "includes/generated/naka_extension_device.bin", 0xE6C, 0x174
+NakaWidget_TEST6:			.incbin "includes/generated/naka_extension_device.bin", 0xE6C, 0x2C
+NakaWidget_TEST6_1_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE98, 0x38
+NakaWidget_TEST6_2_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xED0, 0x3E
+NakaWidget_TEST6_3_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0xF0E, 0x1C
+NakaWidget_TEST6_4_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0xF2A, 0x1C
+NakaWidget_TEST6OK:			.incbin "includes/generated/naka_extension_device.bin", 0xF46, 0x24
+NakaWidget_TEST6_6_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xF6A, 0x2C
+NakaWidget_TEST6NG:			.incbin "includes/generated/naka_extension_device.bin", 0xF96, 0x24
+NakaWidget_TEST6_8_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xFBA, 0x26
 ; [nakarest] naka_extension_device+0xfe0  +0xfe0..+0x1002 (0xed77ac, 34 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xfb (table 0xed7e4e, 1 entries,
 ; [nakarest] InitializeToshi) ("EXT"): IvScreen (34 B).
-	.incbin "includes/generated/naka_extension_device.bin", 0xFE0, 0x22
+NakaWidget_EXT:	.incbin "includes/generated/naka_extension_device.bin", 0xFE0, 0x22
 ; [nakarest] naka_extension_device+0x1002  +0x1002..+0x1102 (0xed77ce, 256 B)
 ; [nakarest] the table itself: Viewable slot 0x1 (table 0xed77ce, 63 entries, InitializeToshi),
 ; [nakarest] 63 entry pointers x 4 bytes.

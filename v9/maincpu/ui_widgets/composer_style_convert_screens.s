@@ -193,7 +193,9 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] AcLanguageText (42 B). 1 text the records point at (Viewable slot 0x10 (table
 ; [nakarest] 0xe1b4e2, 3 entries, InitializeSuna)): "STYLE CONVERT" (TtlScreen.title of element
 ; [nakarest] 0).
-	.incbin "includes/generated/naka_composer_style.bin", 0x12, 0x7E
+NakaWidget_StylCnvWaitScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x12, 0x38
+NakaWidget_StylCnvWaitScreen_1_VwBox:		.incbin "includes/generated/naka_composer_style.bin", 0x4A, 0x1C
+NakaWidget_StylCnvWaitScreen_2_AcLanguageText:	.incbin "includes/generated/naka_composer_style.bin", 0x66, 0x2A
 ; [nakarest] naka_composer_style+0x90  +0x90..+0x1f6 (0xe17774, 358 B)
 ; [nakarest] widget records, elements 0-7 of Viewable slot 0x11 (table 0xe1b4f2, 8 entries,
 ; [nakarest] InitializeSuna) ("StylCnvModlScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
@@ -202,7 +204,14 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] InitializeSuna)): "STYLE TYPE SELECT" (TtlScreen.title of element 0); "PREV"
 ; [nakarest] (VwEditSwBox.str of element 3); "" (VwWideESBox.str of element 4); "NEXT"
 ; [nakarest] (VwEditSwBox.str of element 5); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x90, 0x166
+NakaWidget_StylCnvModlScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x90, 0x3C
+NakaWidget_StylCnvModlScreen_1_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0xCC, 0x1A
+NakaWidget_StylCnvModlBox:			.incbin "includes/generated/naka_composer_style.bin", 0xE6, 0x2A
+NakaWidget_StylCnvModlScreen_3_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x110, 0x32
+NakaWidget_StylCnvModlScreen_4_VwWideESBox:	.incbin "includes/generated/naka_composer_style.bin", 0x142, 0x30
+NakaWidget_StylCnvModlScreen_5_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x172, 0x32
+NakaWidget_StylCnvModlScreen_6_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x1A4, 0x2E
+NakaWidget_StylCnvVer:				.incbin "includes/generated/naka_composer_style.bin", 0x1D2, 0x24
 ; [nakarest] naka_composer_style+0x1f6  +0x1f6..+0x334 (0xe178da, 318 B)
 ; [nakarest] widget records, elements 0-6 of Viewable slot 0x12 (table 0xe1b516, 7 entries,
 ; [nakarest] InitializeSuna) ("StylCnvCnvtScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
@@ -210,7 +219,13 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] records point at (Viewable slot 0x12 (table 0xe1b516, 7 entries, InitializeSuna)):
 ; [nakarest] "STYLE CONVERT" (TtlScreen.title of element 0); "PREV" (VwEditSwBox.str of element
 ; [nakarest] 3); "" (VwWideESBox.str of element 4); "NEXT" (VwEditSwBox.str of element 5); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x1F6, 0x13E
+NakaWidget_StylCnvCnvtScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x1F6, 0x38
+NakaWidget_StylCnvCnvtScreen_1_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x22E, 0x1A
+NakaWidget_StylCnvCnvtBox:			.incbin "includes/generated/naka_composer_style.bin", 0x248, 0x2A
+NakaWidget_StylCnvCnvtScreen_3_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x272, 0x32
+NakaWidget_StylCnvCnvtScreen_4_VwWideESBox:	.incbin "includes/generated/naka_composer_style.bin", 0x2A4, 0x30
+NakaWidget_StylCnvCnvtScreen_5_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x2D4, 0x32
+NakaWidget_StylCnvCnvtScreen_6_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x306, 0x2E
 ; [nakarest] naka_composer_style+0x334  +0x334..+0x410 (0xe17a18, 220 B)
 ; [nakarest] widget records, elements 0-3 of Viewable slot 0x13 (table 0xe1b536, 4 entries,
 ; [nakarest] InitializeSuna) ("StylCnvStorScreen"): TtlScreen (42 B), AcRamEditBox (58 B),
@@ -218,14 +233,20 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] slot 0x13 (table 0xe1b536, 4 entries, InitializeSuna)): "STORAGE DATA"
 ; [nakarest] (TtlScreen.title of element 0); " Data Storage to :" (AcRamEditBox.caption of
 ; [nakarest] element 1).
-	.incbin "includes/generated/naka_composer_style.bin", 0x334, 0xDC
+NakaWidget_StylCnvStorScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x334, 0x38
+NakaWidget_StylCnvStorScreen_1_AcRamEditBox:	.incbin "includes/generated/naka_composer_style.bin", 0x36C, 0x4E
+NakaWidget_StylCnvStorScreen_2_AcIndexWideES:	.incbin "includes/generated/naka_composer_style.bin", 0x3BA, 0x2A
+NakaWidget_StylCnvStorScreen_3_AcFuncEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x3E4, 0x2C
 ; [nakarest] naka_composer_style+0x410  +0x410..+0x4a4 (0xe17af4, 148 B)
 ; [nakarest] widget records, elements 0-3 of Viewable slot 0x14 (table 0xe1b54a, 4 entries,
 ; [nakarest] InitializeSuna) ("StylCnvTxtScreen"): TtlScreen (42 B), VwBox (28 B), PSSCTxtBox2
 ; [nakarest] (38 B), IvMainEditSw (26 B). 1 text the records point at (Viewable slot 0x14 (table
 ; [nakarest] 0xe1b54a, 4 entries, InitializeSuna)): "STYLE CONVERT" (TtlScreen.title of element
 ; [nakarest] 0).
-	.incbin "includes/generated/naka_composer_style.bin", 0x410, 0x94
+NakaWidget_StylCnvTxtScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x410, 0x38
+NakaWidget_StylCnvTxtScreen_1_VwBox:		.incbin "includes/generated/naka_composer_style.bin", 0x448, 0x1C
+NakaWidget_StylCnvTxtScreen_2_PSSCTxtBox2:	.incbin "includes/generated/naka_composer_style.bin", 0x464, 0x26
+NakaWidget_StylCnvTxtScreen_3_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x48A, 0x1A
 ; [nakarest] naka_composer_style+0x4a4  +0x4a4..+0x606 (0xe17b88, 354 B)
 ; [nakarest] widget records, elements 0-7 of Viewable slot 0x15 (table 0xe1b55e, 8 entries,
 ; [nakarest] InitializeSuna) ("StylCnvSelScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
@@ -234,7 +255,14 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] InitializeSuna)): "STYLE CONVERT" (TtlScreen.title of element 0); "PREV"
 ; [nakarest] (VwEditSwBox.str of element 3); "" (VwWideESBox.str of element 4); "NEXT"
 ; [nakarest] (VwEditSwBox.str of element 5); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x4A4, 0x162
+NakaWidget_StylCnvSelScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x4A4, 0x38
+NakaWidget_StylCnvSelScreen_1_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x4DC, 0x1A
+NakaWidget_StylCnvSelBox:			.incbin "includes/generated/naka_composer_style.bin", 0x4F6, 0x2A
+NakaWidget_StylCnvSelScreen_3_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x520, 0x32
+NakaWidget_StylCnvSelScreen_4_VwWideESBox:	.incbin "includes/generated/naka_composer_style.bin", 0x552, 0x30
+NakaWidget_StylCnvSelScreen_5_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x582, 0x32
+NakaWidget_StylCnvSelScreen_6_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x5B4, 0x2E
+NakaWidget_StylCnvSelScreen_7_PsSCTxtBox:	.incbin "includes/generated/naka_composer_style.bin", 0x5E2, 0x24
 ; [nakarest] naka_composer_style+0x606  +0x606..+0x722 (0xe17cea, 284 B)
 ; [nakarest] widget records, elements 0-6 of Viewable slot 0x16 (table 0xe1b582, 7 entries,
 ; [nakarest] InitializeSuna) ("StylCnvContScreen"): TtlScreen (42 B), IvMainEditSw (26 B), VwBox
@@ -242,7 +270,13 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] (Viewable slot 0x16 (table 0xe1b582, 7 entries, InitializeSuna)): "STYLE CONVERT"
 ; [nakarest] (TtlScreen.title of element 0); "Continue" (Label.str of element 3); "Next ?"
 ; [nakarest] (Label.str of element 4); "" (VwEditSwBox.str of element 5); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x606, 0x11C
+NakaWidget_StylCnvContScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x606, 0x38
+NakaWidget_StylCnvContScreen_1_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x63E, 0x1A
+NakaWidget_StylCnvContScreen_2_VwBox:		.incbin "includes/generated/naka_composer_style.bin", 0x658, 0x1C
+NakaWidget_StylCnvContScreen_3_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x674, 0x2A
+NakaWidget_StylCnvContScreen_4_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x69E, 0x28
+NakaWidget_StylCnvContScreen_5_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x6C6, 0x2E
+NakaWidget_StylCnvContScreen_6_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x6F4, 0x2E
 ; [nakarest] naka_composer_style+0x722  +0x722..+0xa8c (0xe17e06, 874 B)
 ; [nakarest] widget records, elements 0-17 of Viewable slot 0xb0 (table 0xe1b5a2, 18 entries,
 ; [nakarest] InitializeSuna) ("CmpMenuScreen"): TtlScreen (42 B), AcTitleMenu (54 B) x6, Line
@@ -251,7 +285,24 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] entries, InitializeSuna)): "COMPOSER MENU" (TtlScreen.title of element 0); "BEND
 ; [nakarest] RANGE SET" (AcTitleMenu.str of element 1); "EASY COMPOSER" (AcTitleMenu.str of
 ; [nakarest] element 2); "PATTERN COPY" (AcTitleMenu.str of element 3); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x722, 0x36A
+NakaWidget_CmpMenuScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x722, 0x38
+NakaWidget_CmpMenuScreen_1_AcTitleMenu:		.incbin "includes/generated/naka_composer_style.bin", 0x75A, 0x46
+NakaWidget_CmpMenuScreen_2_AcTitleMenu:		.incbin "includes/generated/naka_composer_style.bin", 0x7A0, 0x44
+NakaWidget_CmpMenuScreen_3_AcTitleMenu:		.incbin "includes/generated/naka_composer_style.bin", 0x7E4, 0x44
+NakaWidget_CmpMenuScreen_4_AcTitleMenu:		.incbin "includes/generated/naka_composer_style.bin", 0x828, 0x42
+NakaWidget_CmpMenuScreen_5_AcTitleMenu:		.incbin "includes/generated/naka_composer_style.bin", 0x86A, 0x4C
+NakaWidget_CmpMenuScreen_6_AcTitleMenu:		.incbin "includes/generated/naka_composer_style.bin", 0x8B6, 0x4C
+NakaWidget_CmpMenuScreen_7_Line:		.incbin "includes/generated/naka_composer_style.bin", 0x902, 0x1A
+NakaWidget_CmpMenuScreen_8_Line:		.incbin "includes/generated/naka_composer_style.bin", 0x91C, 0x1A
+NakaWidget_CmpMenuScreen_9_Line:		.incbin "includes/generated/naka_composer_style.bin", 0x936, 0x1A
+NakaWidget_CmpMenuScreen_10_Line:		.incbin "includes/generated/naka_composer_style.bin", 0x950, 0x1A
+NakaWidget_CmpMenuScreen_11_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x96A, 0x2A
+NakaWidget_CmpMenuScreen_12_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x994, 0x28
+NakaWidget_CmpMenuScreen_13_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x9BC, 0x1A
+NakaWidget_CmpMenuScreen_14_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0x9D6, 0x34
+NakaWidget_CmpMenuScreen_15_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xA0A, 0x34
+NakaWidget_CmpMenuScreen_16_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xA3E, 0x34
+NakaWidget_CmpMenuScreen_17_IvExitMode:		.incbin "includes/generated/naka_composer_style.bin", 0xA72, 0x1A
 ; [nakarest] naka_composer_style+0xa8c  +0xa8c..+0xd46 (0xe18170, 698 B)
 ; [nakarest] widget records, elements 0-11 of Viewable slot 0xb1 (table 0xe1b5ee, 12 entries,
 ; [nakarest] InitializeSuna) ("CmpBkslScreen"): TtlScreen (42 B), IvMainEditSw (26 B), VwMenuBox
@@ -259,7 +310,18 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] entries, InitializeSuna)): "RECORD MEMORY" (TtlScreen.title of element 0);
 ; [nakarest] "VARIATION 1" (VwMenuBox.str of element 2); "VARIATION 3" (VwMenuBox.str of element
 ; [nakarest] 3); "INTRO 1" (VwMenuBox.str of element 4); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0xA8C, 0x2BA
+NakaWidget_CmpBkslScreen:			.incbin "includes/generated/naka_composer_style.bin", 0xA8C, 0x38
+NakaWidget_CmpBkslScreen_1_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0xAC4, 0x1A
+NakaWidget_CmpBkslScreen_2_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xADE, 0x3E
+NakaWidget_CmpBkslScreen_3_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xB1C, 0x3E
+NakaWidget_CmpBkslScreen_4_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xB5A, 0x3A
+NakaWidget_CmpBkslScreen_5_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xB94, 0x3C
+NakaWidget_CmpBkslScreen_6_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xBD0, 0x3C
+NakaWidget_CmpBkslScreen_7_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xC0C, 0x44
+NakaWidget_CmpBkslScreen_8_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xC50, 0x44
+NakaWidget_CmpBkslScreen_9_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xC94, 0x3A
+NakaWidget_CmpBkslScreen_10_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xCCE, 0x3C
+NakaWidget_CmpBkslScreen_11_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xD0A, 0x3C
 ; [nakarest] naka_composer_style+0xd46  +0xd46..+0x10fa (0xe1842a, 948 B)
 ; [nakarest] widget records, elements 0-21 of Viewable slot 0xb2 (table 0xe1b622, 22 entries,
 ; [nakarest] InitializeSuna) ("CmpBkslSScreen"): TtlScreen (42 B), Box (26 B), Label (32 B) x2,
@@ -269,14 +331,39 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] 0xe1b622, 22 entries, InitializeSuna)): "RECORDING" (TtlScreen.title of element 0);
 ; [nakarest] "Memory:" (Label.str of element 2); "RECORD SETTING" (VwMenuBox.str of element 4);
 ; [nakarest] "DRM" (VwEditSwBox.str of element 5); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0xD46, 0x3B4
+NakaWidget_CmpBkslSScreen:			.incbin "includes/generated/naka_composer_style.bin", 0xD46, 0x34
+NakaWidget_CmpBkslSScreen_1_Box:		.incbin "includes/generated/naka_composer_style.bin", 0xD7A, 0x1A
+NakaWidget_CmpBkslSScreen_2_Label:		.incbin "includes/generated/naka_composer_style.bin", 0xD94, 0x28
+NakaWidget_CmpBkslSScreen_3_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0xDBC, 0x1A
+NakaWidget_CmpBkslSScreen_4_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0xDD6, 0x42
+NakaWidget_CmpBkslSScreen_5_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0xE18, 0x30
+NakaWidget_CmpBkslSScreen_6_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0xE48, 0x30
+NakaWidget_CmpBkslSScreen_7_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0xE78, 0x30
+NakaWidget_CmpBkslSScreen_8_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0xEA8, 0x30
+NakaWidget_CmpBkslSScreen_9_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0xED8, 0x30
+NakaWidget_CmpBkslSScreen_10_AcMemNoBox:	.incbin "includes/generated/naka_composer_style.bin", 0xF08, 0x24
+NakaWidget_CmpBkslSScreen_11_Label:		.incbin "includes/generated/naka_composer_style.bin", 0xF2C, 0x30
+NakaWidget_CmpBkslSScreen_12_Line:		.incbin "includes/generated/naka_composer_style.bin", 0xF5C, 0x1A
+NakaWidget_CmpBkslSScreen_13_Line:		.incbin "includes/generated/naka_composer_style.bin", 0xF76, 0x1A
+NakaWidget_CmpBkslSScreen_14_Line:		.incbin "includes/generated/naka_composer_style.bin", 0xF90, 0x1A
+NakaWidget_CmpBkslSScreen_15_Line:		.incbin "includes/generated/naka_composer_style.bin", 0xFAA, 0x1A
+NakaWidget_CmpNameMenu:				.incbin "includes/generated/naka_composer_style.bin", 0xFC4, 0x44
+NakaWidget_CmpBkslSScreen_17_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0x1008, 0x4C
+NakaWidget_CmpClrSure:				.incbin "includes/generated/naka_composer_style.bin", 0x1054, 0x24
+NakaWidget_CmpClrYesSw:				.incbin "includes/generated/naka_composer_style.bin", 0x1078, 0x2C
+NakaWidget_CmpClrNoSw:				.incbin "includes/generated/naka_composer_style.bin", 0x10A4, 0x2C
+NakaWidget_CmpBkslSScreen_21_AcLanguageText:	.incbin "includes/generated/naka_composer_style.bin", 0x10D0, 0x2A
 ; [nakarest] naka_composer_style+0x10fa  +0x10fa..+0x11ca (0xe187de, 208 B)
 ; [nakarest] widget records, elements 0-4 of Viewable slot 0xb3 (table 0xe1b67e, 5 entries,
 ; [nakarest] InitializeSuna) ("CmpNamingScreen"): TtlScreen (42 B), IvNaming (26 B),
 ; [nakarest] AcFuncEditSw (44 B), Label (32 B), AcMemNoBox (36 B). 2 texts the records point at
 ; [nakarest] (Viewable slot 0xb3 (table 0xe1b67e, 5 entries, InitializeSuna)): "VARIATION
 ; [nakarest] NAMING" (TtlScreen.title of element 0); "MEMORY :" (Label.str of element 3).
-	.incbin "includes/generated/naka_composer_style.bin", 0x10FA, 0xD0
+NakaWidget_CmpNamingScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x10FA, 0x3C
+NakaWidget_CmpNamingScreen_1_IvNaming:		.incbin "includes/generated/naka_composer_style.bin", 0x1136, 0x1A
+NakaWidget_CmpNamingScreen_2_AcFuncEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x1150, 0x2C
+NakaWidget_NameMemLabel:			.incbin "includes/generated/naka_composer_style.bin", 0x117C, 0x2A
+NakaWidget_NamingMem:				.incbin "includes/generated/naka_composer_style.bin", 0x11A6, 0x24
 ; [nakarest] naka_composer_style+0x11ca  +0x11ca..+0x1580 (0xe188ae, 950 B)
 ; [nakarest] widget records, elements 0-17 of Viewable slot 0xb4 (table 0xe1b696, 18 entries,
 ; [nakarest] InitializeSuna) ("CmpSetScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
@@ -287,7 +374,24 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] SIGNATURE:|-| | KEY " (AcCmpSetGridBox.fixedrow of element 7); " MEASURE &|TIME
 ; [nakarest] SIGNATURE" (AcCmpSetGridBox.fixedcol of element 7); "RECORD SETTING" (Label.str of
 ; [nakarest] element 8); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x11CA, 0x3B6
+NakaWidget_CmpSetScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x11CA, 0x3A
+NakaWidget_CmpSetScreen_1_IvMainEditSw:		.incbin "includes/generated/naka_composer_style.bin", 0x1204, 0x1A
+NakaWidget_CmSetPage:				.incbin "includes/generated/naka_composer_style.bin", 0x121E, 0x24
+NakaWidget_CmSetP1Ctl:				.incbin "includes/generated/naka_composer_style.bin", 0x1242, 0x1C
+NakaWidget_CmSetP2Ctl:				.incbin "includes/generated/naka_composer_style.bin", 0x125E, 0x1C
+NakaWidget_CmpSetScreen_5_IvShowHide:		.incbin "includes/generated/naka_composer_style.bin", 0x127A, 0x1A
+NakaWidget_CmSetPage1:				.incbin "includes/generated/naka_composer_style.bin", 0x1294, 0x24
+NakaWidget_CmSetP1Grid:				.incbin "includes/generated/naka_composer_style.bin", 0x12B8, 0xCE
+NakaWidget_CmpSetScreen_8_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x1386, 0x30
+NakaWidget_CmpSetScreen_9_AcIndexWideES:	.incbin "includes/generated/naka_composer_style.bin", 0x13B6, 0x2A
+NakaWidget_CmpSetScreen_10_AcIndexWideES:	.incbin "includes/generated/naka_composer_style.bin", 0x13E0, 0x2A
+NakaWidget_CmpSetScreen_11_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x140A, 0x26
+NakaWidget_CmpSetScreen_12_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x1430, 0x26
+NakaWidget_CmSetPage2:				.incbin "includes/generated/naka_composer_style.bin", 0x1456, 0x24
+NakaWidget_CmpSetGrid:				.incbin "includes/generated/naka_composer_style.bin", 0x147A, 0x88
+NakaWidget_CmSetPartSw:				.incbin "includes/generated/naka_composer_style.bin", 0x1502, 0x2A
+NakaWidget_CmSetPanSw:				.incbin "includes/generated/naka_composer_style.bin", 0x152C, 0x2A
+NakaWidget_CmSetRLmtSw:				.incbin "includes/generated/naka_composer_style.bin", 0x1556, 0x2A
 ; [nakarest] naka_composer_style+0x1580  +0x1580..+0x1a2a (0xe18c64, 1194 B)
 ; [nakarest] widget records, elements 0-23, 29-30 of Viewable slot 0xb5 (table 0xe1b6e2, 31
 ; [nakarest] entries, InitializeSuna) ("CmpRealScreen"): TtlScreen (42 B), Box (26 B),
@@ -297,17 +401,47 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] (Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna)): "REALTIME
 ; [nakarest] RECORDING" (TtlScreen.title of element 0); "%" (Label.str of element 3); "PATTERN
 ; [nakarest] =" (Label.str of element 4); "TEMPO =" (Label.str of element 5); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x1580, 0x4AA
+NakaWidget_CmpRealScreen:			.incbin "includes/generated/naka_composer_style.bin", 0x1580, 0x3E
+NakaWidget_CmpRealScreen_1_Box:			.incbin "includes/generated/naka_composer_style.bin", 0x15BE, 0x1A
+NakaWidget_CmpMem:				.incbin "includes/generated/naka_composer_style.bin", 0x15D8, 0x24
+NakaWidget_CmpRealScreen_3_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x15FC, 0x22
+NakaWidget_CmpRealScreen_4_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x161E, 0x2A
+NakaWidget_CmpRealScreen_5_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x1648, 0x2A
+NakaWidget_CmpRealScreen_6_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x1672, 0x2A
+NakaWidget_CmpRealScreen_7_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x169C, 0x2A
+NakaWidget_CmpRealScreen_8_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x16C6, 0x2A
+NakaWidget_CmpRealScreen_9_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x16F0, 0x1A
+NakaWidget_CmpRealScreen_10_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x170A, 0x30
+NakaWidget_CmpRealScreen_11_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x173A, 0x30
+NakaWidget_CmpRealScreen_12_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x176A, 0x30
+NakaWidget_CmpRealScreen_13_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x179A, 0x30
+NakaWidget_CmpRealScreen_14_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x17CA, 0x30
+NakaWidget_CmpRealScreen_15_AcCmpTempoBox:	.incbin "includes/generated/naka_composer_style.bin", 0x17FA, 0x24
+NakaWidget_CmpRealScreen_16_AcTitleMenu:	.incbin "includes/generated/naka_composer_style.bin", 0x181E, 0x3A
+NakaWidget_CmpRealScreen_17_AcTitleMenu:	.incbin "includes/generated/naka_composer_style.bin", 0x1858, 0x3C
+NakaWidget_CmpRealScreen_18_AcMemNoBox:		.incbin "includes/generated/naka_composer_style.bin", 0x1894, 0x24
+NakaWidget_CmpRealScreen_19_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0x18B8, 0x3C
+NakaWidget_CmpRealScreen_20_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0x18F4, 0x3C
+NakaWidget_CmpRealScreen_21_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0x1930, 0x3C
+NakaWidget_CmpRealScreen_22_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0x196C, 0x3C
+NakaWidget_CmpRealScreen_23_VwMenuBox:		.incbin "includes/generated/naka_composer_style.bin", 0x19A8, 0x3A
+NakaWidget_CmpQtz:				.incbin "includes/generated/naka_composer_style.bin", 0x19E2, 0x24
+NakaWidget_CmpMeas:				.incbin "includes/generated/naka_composer_style.bin", 0x1A06, 0x24
 ; [nakarest] naka_composer_style+0x1a2a  +0x1a2a..+0x1a4c (0xe1910e, 34 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xb6 (table 0xe1b762, 1 entries,
 ; [nakarest] InitializeSuna): IvDirmdScreen (34 B).
-	.incbin "includes/generated/naka_composer_style.bin", 0x1A2A, 0x22
+NakaWidget_SunaView0B6_0_IvDirmdScreen:	.incbin "includes/generated/naka_composer_style.bin", 0x1A2A, 0x22
 ; [nakarest] naka_composer_style+0x1a4c  +0x1a4c..+0x1b24 (0xe19130, 216 B)
 ; [nakarest] widget records, elements 0-5 of Viewable slot 0xb7 (table 0xe1b76a, 6 entries,
 ; [nakarest] InitializeSuna) ("CmpBalScreen"): TtlScreen (42 B), AcMixerVol (32 B) x5. 1 text
 ; [nakarest] the records point at (Viewable slot 0xb7 (table 0xe1b76a, 6 entries,
 ; [nakarest] InitializeSuna)): "PART BALANCE" (TtlScreen.title of element 0).
-	.incbin "includes/generated/naka_composer_style.bin", 0x1A4C, 0xD8
+NakaWidget_CmpBalScreen:	.incbin "includes/generated/naka_composer_style.bin", 0x1A4C, 0x38
+NakaWidget_CmpDrmVol:		.incbin "includes/generated/naka_composer_style.bin", 0x1A84, 0x20
+NakaWidget_CmpAc3Vol:		.incbin "includes/generated/naka_composer_style.bin", 0x1AA4, 0x20
+NakaWidget_CmpAc2Vol:		.incbin "includes/generated/naka_composer_style.bin", 0x1AC4, 0x20
+NakaWidget_CmpAc1Vol:		.incbin "includes/generated/naka_composer_style.bin", 0x1AE4, 0x20
+NakaWidget_CmpBasVol:		.incbin "includes/generated/naka_composer_style.bin", 0x1B04, 0x20
 ; [nakarest] naka_composer_style+0x1b24  +0x1b24..+0x1eba (0xe19208, 918 B)
 ; [nakarest] widget records, elements 0-17, 19-25 of Viewable slot 0xb8 (table 0xe1b786, 33
 ; [nakarest] entries, InitializeSuna) ("CmpNcpScreen"): TtlScreen (42 B), IvMainEditSw (26 B),
@@ -316,7 +450,31 @@ NakaStr_PaintArrowProc_Empty:
 ; [nakarest] entries, InitializeSuna)): "PATTERN COPY" (TtlScreen.title of element 0); ""
 ; [nakarest] (VwWideESBox.str of element 2); "" (VwWideESBox.str of element 3); ""
 ; [nakarest] (VwWideESBox.str of element 4); ....
-	.incbin "includes/generated/naka_composer_style.bin", 0x1B24, 0x396
+NakaWidget_CmpNcpScreen:		.incbin "includes/generated/naka_composer_style.bin", 0x1B24, 0x38
+NakaWidget_CmpNcpScreen_1_IvMainEditSw:	.incbin "includes/generated/naka_composer_style.bin", 0x1B5C, 0x1A
+NakaWidget_CmpNcpFitmSw:		.incbin "includes/generated/naka_composer_style.bin", 0x1B76, 0x30
+NakaWidget_CmpNcpScreen_3_VwWideESBox:	.incbin "includes/generated/naka_composer_style.bin", 0x1BA6, 0x30
+NakaWidget_CmpNcpTitmSw:		.incbin "includes/generated/naka_composer_style.bin", 0x1BD6, 0x30
+NakaWidget_CmpNcpScreen_5_VwWideESBox:	.incbin "includes/generated/naka_composer_style.bin", 0x1C06, 0x30
+NakaWidget_CmpNcpScreen_6_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1C36, 0x44
+NakaWidget_CmpNcpScreen_7_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1C7A, 0x26
+NakaWidget_CmpNcpScreen_8_Line:		.incbin "includes/generated/naka_composer_style.bin", 0x1CA0, 0x1A
+NakaWidget_CmpNcpScreen_9_Line:		.incbin "includes/generated/naka_composer_style.bin", 0x1CBA, 0x1A
+NakaWidget_CmpNcpScreen_10_Line:	.incbin "includes/generated/naka_composer_style.bin", 0x1CD4, 0x1A
+NakaWidget_CmpNcpScreen_11_Line:	.incbin "includes/generated/naka_composer_style.bin", 0x1CEE, 0x1A
+NakaWidget_CmpNcpScreen_12_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1D08, 0x24
+NakaWidget_CmpNcpScreen_13_Line:	.incbin "includes/generated/naka_composer_style.bin", 0x1D2C, 0x1A
+NakaWidget_CmpNcpScreen_14_Line:	.incbin "includes/generated/naka_composer_style.bin", 0x1D46, 0x1A
+NakaWidget_CmpNcpScreen_15_Line:	.incbin "includes/generated/naka_composer_style.bin", 0x1D60, 0x1A
+NakaWidget_CmpNcpScreen_16_Line:	.incbin "includes/generated/naka_composer_style.bin", 0x1D7A, 0x1A
+NakaWidget_CmpNcpScreen_17_Box:		.incbin "includes/generated/naka_composer_style.bin", 0x1D94, 0x1A
+NakaWidget_CmpNcpScreen_19_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1DAE, 0x28
+NakaWidget_CmpNcpScreen_20_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1DD6, 0x28
+NakaWidget_CmpNcpScreen_21_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1DFE, 0x2A
+NakaWidget_CmpNcpScreen_22_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1E28, 0x26
+NakaWidget_CmpNcpScreen_23_Label:	.incbin "includes/generated/naka_composer_style.bin", 0x1E4E, 0x24
+NakaWidget_CmpNcpScreen_24_VwEditSwBox:	.incbin "includes/generated/naka_composer_style.bin", 0x1E72, 0x2E
+NakaWidget_CmpNcpScreen_25_Box:		.incbin "includes/generated/naka_composer_style.bin", 0x1EA0, 0x1A
 ; [nakarest] NakaLabel_PatternCopy_MemoryLabel  +0x1eba..+0x1ee2 (0xe1959e, 40 B)
 ; [nakarest] widget record, element 28 of Viewable slot 0xb8 (table 0xe1b786, 33 entries,
 ; [nakarest] InitializeSuna) ("CmpNcpScreen"): Label (32 B). 1 text the records point at

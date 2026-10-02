@@ -637,7 +637,7 @@ NakaInst_CmpRealScreen:	aligned_string "CmpRealScreen"
 ; Registered by InitializeSuna (storage/flash_floppy_handlers.s:5349): `RegObjTabl 0x160000f, 0xfa62cb, 0x1, 0xe1c076, 0x3b6`
 ; = class 0x160000F (ResNameProc), 1 entries (immediate count), id 0x3B6.
 Suna_ResNameTable_3B6:
-	.long 0x00E1C080
+	.long NakaEmpty_CmpReal_Slot25
 	.long NakaEmpty_CmpReal_Slot24
 NakaEmpty_CmpReal_Slot24:	aligned_string ""
 NakaEmpty_CmpReal_Slot25:	aligned_string ""

@@ -154,5 +154,29 @@ NakaInst_MainVariSet:
 ; [nakarest] InitializeToshi)): "NORMAL" (TtlScreen.title of element 0); "" (NormScreen.title of
 ; [nakarest] element 1); "RIGHT2" (StringBox.str of element 7); "RIGHT1" (StringBox.str of
 ; [nakarest] element 9); ....
-	.incbin "includes/generated/naka_normal_mode.bin", 0x118, 0x378
+NakaWidget_Normal:				.incbin "includes/generated/naka_normal_mode.bin", 0x118, 0x32
+NakaWidget_normal:				.incbin "includes/generated/naka_normal_mode.bin", 0x14A, 0x2C
+NakaWidget_Normal_2_AcTempoBox:			.incbin "includes/generated/naka_normal_mode.bin", 0x176, 0x24
+NakaWidget_Normal_3_AcPmemName:			.incbin "includes/generated/naka_normal_mode.bin", 0x19A, 0x24
+NakaWidget_Normal_4_AcRhythmName:		.incbin "includes/generated/naka_normal_mode.bin", 0x1BE, 0x24
+NakaWidget_Normal_5_AcSoundName:		.incbin "includes/generated/naka_normal_mode.bin", 0x1E2, 0x26
+NakaWidget_Normal_6_AcSoundName:		.incbin "includes/generated/naka_normal_mode.bin", 0x208, 0x26
+NakaWidget_Normal_7_StringBox:			.incbin "includes/generated/naka_normal_mode.bin", 0x22E, 0x2E
+NakaWidget_Normal_8_AcSoundName:		.incbin "includes/generated/naka_normal_mode.bin", 0x25C, 0x26
+NakaWidget_Normal_9_StringBox:			.incbin "includes/generated/naka_normal_mode.bin", 0x282, 0x2E
+NakaWidget_Normal_10_StringBox:			.incbin "includes/generated/naka_normal_mode.bin", 0x2B0, 0x2C
+NakaWidget_Normal_11_StringBox:			.incbin "includes/generated/naka_normal_mode.bin", 0x2DC, 0x2E
+NakaWidget_Normal_12_TransposeBox:		.incbin "includes/generated/naka_normal_mode.bin", 0x30A, 0x24
+NakaWidget_Normal_13_ChordBox:			.incbin "includes/generated/naka_normal_mode.bin", 0x32E, 0x24
+NakaWidget_Normal_14_AcLswBox:			.incbin "includes/generated/naka_normal_mode.bin", 0x352, 0x2C
+NakaWidget_Normal_15_IvWindowPageControl:	.incbin "includes/generated/naka_normal_mode.bin", 0x37E, 0x1A
+NakaWidget_Normal_16_FreeSplitBox:		.incbin "includes/generated/naka_normal_mode.bin", 0x398, 0x24
+NakaWidget_Normal_17_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x3BC, 0x1C
+NakaWidget_Normal_18_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x3D8, 0x1C
+NakaWidget_Normal_19_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x3F4, 0x1C
+NakaWidget_Normal_20_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x410, 0x1C
+NakaWidget_Normal_21_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x42C, 0x1C
+NakaWidget_Normal_22_IvPageOverWr:		.incbin "includes/generated/naka_normal_mode.bin", 0x448, 0x1C
+NakaWidget_Normal_23_IvExit:			.incbin "includes/generated/naka_normal_mode.bin", 0x464, 0x16
+NakaWidget_N1:					.incbin "includes/generated/naka_normal_mode.bin", 0x47A, 0x16
 ; External label offsets within the binary blob above.

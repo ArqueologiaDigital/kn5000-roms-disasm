@@ -741,7 +741,7 @@ MidiCC_ExtendedRange_Table:
 	.long MidiCC_RxCC11_Expression
 	.long MidiCC_RxCC10_Pan
 	.long MidiCC_RxCC93_Chorus
-	.long 0x00fcf841
+	.long MidiCC_RxCC94_Celeste
 	.long MidiCC_RxCC91_Reverb
 	.long MidiCC_RxFunc08
 	.long MidiCC_RxFunc09

@@ -162,7 +162,90 @@ NakaInst_TECHNI_CHORD:
 ; [nakarest] PART SETTING" (TtlScreen.title of element 0); "PART SELECT :" (Label.str of element
 ; [nakarest] 9); "VOL" (AcStrRadioBox.str of element 12); "PAN" (AcStrRadioBox.str of element
 ; [nakarest] 13); ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0xE, 0x1056
+NakaWidget_Sdpart:			.incbin "includes/generated/naka_technichord_part.bin", 0xE, 0x3E
+NakaWidget_Sdpart_1_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0x4C, 0x28
+NakaWidget_Sdpart_2_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0x74, 0x28
+NakaWidget_Sdpart_3_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x9C, 0x1A
+NakaWidget_Sdpart_4_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0xB6, 0x1A
+NakaWidget_Sdpart_5_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0xD0, 0x1A
+NakaWidget_Sdpart_6_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0xEA, 0x1A
+NakaWidget_Sdpart_7_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x104, 0x1A
+NakaWidget_Sdpart_8_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x11E, 0x1A
+NakaWidget_Sdpart_9_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x138, 0x2E
+NakaWidget_SdpartSound:			.incbin "includes/generated/naka_technichord_part.bin", 0x166, 0x24
+NakaWidget_SdpartPart:			.incbin "includes/generated/naka_technichord_part.bin", 0x18A, 0x24
+NakaWidget_Sdpart_12_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x1AE, 0x34
+NakaWidget_Sdpart_13_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x1E2, 0x34
+NakaWidget_Sdpart_14_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x216, 0x34
+NakaWidget_Sdpart_15_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x24A, 0x34
+NakaWidget_Sdpart_16_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x27E, 0x34
+NakaWidget_Sdpart_17_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x2B2, 0x34
+NakaWidget_Sdpart_18_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x2E6, 0x34
+NakaWidget_Sdpart_19_AcStrRadioBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x31A, 0x34
+NakaWidget_Sdpart_20_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x34E, 0x2E
+NakaWidget_Sdpart_21_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x37C, 0x2E
+NakaWidget_Sdpart_22_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x3AA, 0x2E
+NakaWidget_Sdpart_23_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x3D8, 0x2E
+NakaWidget_Sdpart_24_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x406, 0x2E
+NakaWidget_Sdpart_25_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x434, 0x2E
+NakaWidget_Sdpart_26_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x462, 0x2E
+NakaWidget_Sdpart_27_VwEditSwBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x490, 0x2E
+NakaWidget_Sdpart_28_IvSdpart:		.incbin "includes/generated/naka_technichord_part.bin", 0x4BE, 0x16
+NakaWidget_SdpartMain:			.incbin "includes/generated/naka_technichord_part.bin", 0x4D4, 0x24
+NakaWidget_Sdpart_30_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x4F8, 0x48
+NakaWidget_Sdpart_31_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x540, 0x48
+NakaWidget_Sdpart_32_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x588, 0x48
+NakaWidget_Sdpart_33_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x5D0, 0x48
+NakaWidget_Sdpart_34_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x618, 0x48
+NakaWidget_Sdpart_35_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x660, 0x1C
+NakaWidget_Sdpart_36_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x67C, 0x48
+NakaWidget_Sdpart_37_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x6C4, 0x48
+NakaWidget_Sdpart_38_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x70C, 0x48
+NakaWidget_Sdpart_39_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x754, 0x48
+NakaWidget_Sdpart_40_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x79C, 0x48
+NakaWidget_Sdpart_41_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x7E4, 0x48
+NakaWidget_Sdpart_42_AcVolPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x82C, 0x4C
+NakaWidget_SdpartVol:			.incbin "includes/generated/naka_technichord_part.bin", 0x878, 0x24
+NakaWidget_Sdpart_44_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0x89C, 0x28
+NakaWidget_Sdpart_45_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x8C4, 0x1C
+NakaWidget_Sdpart_46_AcVolPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x8E0, 0x4E
+NakaWidget_SdpartPan:			.incbin "includes/generated/naka_technichord_part.bin", 0x92E, 0x24
+NakaWidget_Sdpart_48_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x952, 0x1C
+NakaWidget_Sdpart_49_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x96E, 0x40
+NakaWidget_Sdpart_50_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x9AE, 0x3C
+NakaWidget_Sdpart_51_AcLswPartPan:	.incbin "includes/generated/naka_technichord_part.bin", 0x9EA, 0x24
+NakaWidget_Sdpart_52_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0xA0E, 0x28
+NakaWidget_Sdpart_53_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0xA36, 0x1C
+NakaWidget_SdpartEff:			.incbin "includes/generated/naka_technichord_part.bin", 0xA52, 0x24
+NakaWidget_Sdpart_55_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xA76, 0x48
+NakaWidget_Sdpart_56_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xABE, 0x48
+NakaWidget_Sdpart_57_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xB06, 0x48
+NakaWidget_Sdpart_58_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0xB4E, 0x28
+NakaWidget_Sdpart_59_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0xB76, 0x1C
+NakaWidget_SdpartSus:			.incbin "includes/generated/naka_technichord_part.bin", 0xB92, 0x24
+NakaWidget_Sdpart_61_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0xBB6, 0x28
+NakaWidget_Sdpart_62_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xBDE, 0x4E
+NakaWidget_Sdpart_63_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xC2C, 0x4E
+NakaWidget_Sdpart_64_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0xC7A, 0x1C
+NakaWidget_SdpartKey:			.incbin "includes/generated/naka_technichord_part.bin", 0xC96, 0x24
+NakaWidget_Sdpart_66_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xCBA, 0x4A
+NakaWidget_Sdpart_67_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0xD04, 0x28
+NakaWidget_Sdpart_68_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0xD2C, 0x1C
+NakaWidget_SdpartTun:			.incbin "includes/generated/naka_technichord_part.bin", 0xD48, 0x24
+NakaWidget_Sdpart_70_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xD6C, 0x4A
+NakaWidget_Sdpart_71_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0xDB6, 0x28
+NakaWidget_Sdpart_72_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0xDDE, 0x1C
+NakaWidget_SdpartBnd:			.incbin "includes/generated/naka_technichord_part.bin", 0xDFA, 0x24
+NakaWidget_Sdpart_74_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xE1E, 0x4E
+NakaWidget_Sdpart_75_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0xE6C, 0x28
+NakaWidget_Sdpart_76_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0xE94, 0x1C
+NakaWidget_SdpartOth:			.incbin "includes/generated/naka_technichord_part.bin", 0xEB0, 0x24
+NakaWidget_Sdpart_78_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xED4, 0x48
+NakaWidget_Sdpart_79_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xF1C, 0x48
+NakaWidget_Sdpart_80_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xF64, 0x48
+NakaWidget_Sdpart_81_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0xFAC, 0x28
+NakaWidget_Sdpart_82_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0xFD4, 0x48
+NakaWidget_Sdpart_83_AcLswPartEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x101C, 0x48
 ; [nakarest] naka_technichord_part+0x1064  +0x1064..+0x1132 (0xe82d32, 206 B)
 ; [nakarest] widget records, elements 0-3 of Viewable slot 0x4 (table 0xe85618, 4 entries,
 ; [nakarest] InitializeMurai) ("Sdmtune"): TtlScreen (42 B), AcLswEditBox (58 B), Label (32 B),
@@ -170,7 +253,10 @@ NakaInst_TECHNI_CHORD:
 ; [nakarest] 0xe85618, 4 entries, InitializeMurai)): "MASTER TUNING" (TtlScreen.title of element
 ; [nakarest] 0); "MASTER TUNING :" (AcLswEditBox.caption of element 1); "Hz" (Label.str of
 ; [nakarest] element 2).
-	.incbin "includes/generated/naka_technichord_part.bin", 0x1064, 0xCE
+NakaWidget_Sdmtune:			.incbin "includes/generated/naka_technichord_part.bin", 0x1064, 0x38
+NakaWidget_Sdmtune_1_AcLswEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x109C, 0x4C
+NakaWidget_Sdmtune_2_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x10E8, 0x24
+NakaWidget_Sdmtune_3_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x110C, 0x26
 ; [nakarest] Naka_KeyScaling_NavTrail  +0x1132..+0x1136 (0xe82e00, 4 B)
 ; [nakarest] Continues widget record, element 3 of Viewable slot 0x4 (table 0xe85618, 4 entries,
 ; [nakarest] InitializeMurai) ("Sdmtune"): AcIndexWideES (42 B) (starts 0xe82dda, 4 of its 42
@@ -187,20 +273,78 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] (TtlScreen.title of element 0); "SCALING TYPE :" (AcLswEditBox.caption of element
 ; [nakarest] 7); "SCALING SHIFT :" (AcLswEditBox.caption of element 8); "SCALING MODE :"
 ; [nakarest] (AcLswEditBox.caption of element 10); ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0x1136, 0x860
+NakaWidget_Sdscltyp:			.incbin "includes/generated/naka_technichord_part.bin", 0x1136, 0x36
+NakaWidget_SdscltypPage:		.incbin "includes/generated/naka_technichord_part.bin", 0x116C, 0x24
+NakaWidget_Sdscltyp_2_IvPageControl:	.incbin "includes/generated/naka_technichord_part.bin", 0x1190, 0x1C
+NakaWidget_Sdscltyp_3_IvPageControl:	.incbin "includes/generated/naka_technichord_part.bin", 0x11AC, 0x1C
+NakaWidget_Sdscltyp_4_IvShowHide:	.incbin "includes/generated/naka_technichord_part.bin", 0x11C8, 0x1A
+NakaWidget_Sdscltyp1:			.incbin "includes/generated/naka_technichord_part.bin", 0x11E2, 0x24
+NakaWidget_Sdscltyp_6_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x1206, 0x2A
+NakaWidget_ScalingType:			.incbin "includes/generated/naka_technichord_part.bin", 0x1230, 0x4A
+NakaWidget_Sdscltyp_8_AcLswEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x127A, 0x4A
+NakaWidget_Sdscltyp_9_AcLswBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x12C4, 0x2C
+NakaWidget_Sdscltyp_10_AcLswEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x12F0, 0x4A
+NakaWidget_Sdscltyp2:			.incbin "includes/generated/naka_technichord_part.bin", 0x133A, 0x24
+NakaWidget_Sdscltyp_12_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x135E, 0x32
+NakaWidget_Sdscltyp_13_Icon:		.incbin "includes/generated/naka_technichord_part.bin", 0x1390, 0x1A
+NakaWidget_Sdscltyp_14_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x13AA, 0x2A
+NakaWidget_Sdscltyp_15_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x13D4, 0x2A
+NakaWidget_Sdscltyp_16_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x13FE, 0x2A
+NakaWidget_ScalingKey1:			.incbin "includes/generated/naka_technichord_part.bin", 0x1428, 0x3C
+NakaWidget_ScalingKey2:			.incbin "includes/generated/naka_technichord_part.bin", 0x1464, 0x3C
+NakaWidget_ScalingKey3:			.incbin "includes/generated/naka_technichord_part.bin", 0x14A0, 0x3C
+NakaWidget_ScalingKey4:			.incbin "includes/generated/naka_technichord_part.bin", 0x14DC, 0x3C
+NakaWidget_ScalingKey5:			.incbin "includes/generated/naka_technichord_part.bin", 0x1518, 0x3C
+NakaWidget_ScalingKey6:			.incbin "includes/generated/naka_technichord_part.bin", 0x1554, 0x3C
+NakaWidget_ScalingKey7:			.incbin "includes/generated/naka_technichord_part.bin", 0x1590, 0x3C
+NakaWidget_ScalingKey8:			.incbin "includes/generated/naka_technichord_part.bin", 0x15CC, 0x3C
+NakaWidget_ScalingKey9:			.incbin "includes/generated/naka_technichord_part.bin", 0x1608, 0x3C
+NakaWidget_ScalingKey10:		.incbin "includes/generated/naka_technichord_part.bin", 0x1644, 0x3C
+NakaWidget_ScalingKey11:		.incbin "includes/generated/naka_technichord_part.bin", 0x1680, 0x3C
+NakaWidget_ScalingKey12:		.incbin "includes/generated/naka_technichord_part.bin", 0x16BC, 0x3C
+NakaWidget_Sdscltyp_29_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x16F8, 0x1C
+NakaWidget_Sdscltyp_30_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x1714, 0x1C
+NakaWidget_Sdscltyp_31_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x1730, 0x1C
+NakaWidget_Sdscltyp_32_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x174C, 0x1C
+NakaWidget_Sdscltyp_33_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x1768, 0x1C
+NakaWidget_Sdscltyp_34_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x1784, 0x1C
+NakaWidget_Sdscltyp_35_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x17A0, 0x1C
+NakaWidget_Sdscltyp_36_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x17BC, 0x1C
+NakaWidget_Sdscltyp_37_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x17D8, 0x1C
+NakaWidget_Sdscltyp_38_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x17F4, 0x1C
+NakaWidget_Sdscltyp_39_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x1810, 0x1C
+NakaWidget_Sdscltyp_40_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x182C, 0x1C
+NakaWidget_Sdscltyp_41_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x1848, 0x1A
+NakaWidget_Sdscltyp_42_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x1862, 0x1A
+NakaWidget_Sdscltyp_43_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x187C, 0x1A
+NakaWidget_Sdscltyp_44_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x1896, 0x1A
+NakaWidget_Sdscltyp_45_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x18B0, 0x1A
+NakaWidget_Sdscltyp_46_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x18CA, 0x1A
+NakaWidget_Sdscltyp_47_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x18E4, 0x1A
+NakaWidget_Sdscltyp_48_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x18FE, 0x1A
+NakaWidget_Sdscltyp_49_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x1918, 0x1A
+NakaWidget_Sdscltyp_50_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x1932, 0x1A
+NakaWidget_Sdscltyp_51_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x194C, 0x1A
+NakaWidget_Sdscltyp_52_Line:		.incbin "includes/generated/naka_technichord_part.bin", 0x1966, 0x1A
+NakaWidget_Sdscltyp_53_IvSdscltyp2:	.incbin "includes/generated/naka_technichord_part.bin", 0x1980, 0x16
 ; [nakarest] naka_technichord_part+0x1996  +0x1996..+0x1a48 (0xe83664, 178 B)
 ; [nakarest] widget records, elements 0-2 of Viewable slot 0x7 (table 0xe85708, 3 entries,
 ; [nakarest] InitializeMurai) ("Sdlfthld"): TtlScreen (42 B), AcIndexWideES (42 B), AcLswEditBox
 ; [nakarest] (58 B). 2 texts the records point at (Viewable slot 0x7 (table 0xe85708, 3 entries,
 ; [nakarest] InitializeMurai)): "LEFT HOLD SETTING" (TtlScreen.title of element 0); "LEFT HOLD
 ; [nakarest] :" (AcLswEditBox.caption of element 2).
-	.incbin "includes/generated/naka_technichord_part.bin", 0x1996, 0xB2
+NakaWidget_Sdlfthld:			.incbin "includes/generated/naka_technichord_part.bin", 0x1996, 0x3C
+NakaWidget_Sdlfthld_1_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x19D2, 0x2A
+NakaWidget_Sdlfthld_2_AcLswEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x19FC, 0x4C
 ; [nakarest] naka_technichord_part+0x1a48  +0x1a48..+0x1ad6 (0xe83716, 142 B)
 ; [nakarest] widget records, elements 0-3 of Viewable slot 0x8 (table 0xe85718, 4 entries,
 ; [nakarest] InitializeMurai) ("Sdmixer"): TtlScreen (42 B), AcResetPage (36 B), AcPartMixer (36
 ; [nakarest] B), IvExit (22 B). 1 text the records point at (Viewable slot 0x8 (table 0xe85718,
 ; [nakarest] 4 entries, InitializeMurai)): "MIXER" (TtlScreen.title of element 0).
-	.incbin "includes/generated/naka_technichord_part.bin", 0x1A48, 0x8E
+NakaWidget_Sdmixer:			.incbin "includes/generated/naka_technichord_part.bin", 0x1A48, 0x30
+NakaWidget_Sdmixer_1_AcResetPage:	.incbin "includes/generated/naka_technichord_part.bin", 0x1A78, 0x24
+NakaWidget_Sdmixer_2_AcPartMixer:	.incbin "includes/generated/naka_technichord_part.bin", 0x1A9C, 0x24
+NakaWidget_Sdmixer_3_IvExit:		.incbin "includes/generated/naka_technichord_part.bin", 0x1AC0, 0x16
 ; [nakarest] naka_technichord_part+0x1ad6  +0x1ad6..+0x2026 (0xe837a4, 1360 B)
 ; [nakarest] widget records, elements 0-28 of Viewable slot 0xd (table 0xe8572c, 29 entries,
 ; [nakarest] InitializeMurai) ("Sdtecd"): TtlScreen (42 B), AcWindowPage (36 B), IvPageControl
@@ -210,14 +354,45 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] (table 0xe8572c, 29 entries, InitializeMurai)): "TECHNI-CHORD" (TtlScreen.title of
 ; [nakarest] element 0); "CLOSE" (PsLabelBox.str of element 10); "OPEN 1" (PsLabelBox.str of
 ; [nakarest] element 11); "OPEN 2" (PsLabelBox.str of element 12); ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0x1AD6, 0x550
+NakaWidget_Sdtecd:			.incbin "includes/generated/naka_technichord_part.bin", 0x1AD6, 0x38
+NakaWidget_SdtecdPage:			.incbin "includes/generated/naka_technichord_part.bin", 0x1B0E, 0x24
+NakaWidget_Sdtecd_2_IvPageControl:	.incbin "includes/generated/naka_technichord_part.bin", 0x1B32, 0x1C
+NakaWidget_Sdtecd_3_IvPageControl:	.incbin "includes/generated/naka_technichord_part.bin", 0x1B4E, 0x1C
+NakaWidget_Sdtecd_4_IvSdtecd:		.incbin "includes/generated/naka_technichord_part.bin", 0x1B6A, 0x16
+NakaWidget_Sdtecd_5_IvIntEasySet:	.incbin "includes/generated/naka_technichord_part.bin", 0x1B80, 0x18
+NakaWidget_Sdtecd1:			.incbin "includes/generated/naka_technichord_part.bin", 0x1B98, 0x24
+NakaWidget_Sdtecd_7_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x1BBC, 0x2A
+NakaWidget_Sdtecd_8_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0x1BE6, 0x28
+NakaWidget_Sdtecd_9_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0x1C0E, 0x28
+NakaWidget_TcClose:			.incbin "includes/generated/naka_technichord_part.bin", 0x1C36, 0x36
+NakaWidget_TcOpen1:			.incbin "includes/generated/naka_technichord_part.bin", 0x1C6C, 0x38
+NakaWidget_TcOpen2:			.incbin "includes/generated/naka_technichord_part.bin", 0x1CA4, 0x38
+NakaWidget_TcDuet1:			.incbin "includes/generated/naka_technichord_part.bin", 0x1CDC, 0x38
+NakaWidget_TcDuet2:			.incbin "includes/generated/naka_technichord_part.bin", 0x1D14, 0x38
+NakaWidget_TcCountry:			.incbin "includes/generated/naka_technichord_part.bin", 0x1D4C, 0x38
+NakaWidget_TcTheatre:			.incbin "includes/generated/naka_technichord_part.bin", 0x1D84, 0x38
+NakaWidget_TcHymn:			.incbin "includes/generated/naka_technichord_part.bin", 0x1DBC, 0x36
+NakaWidget_TcBigBandBrass:		.incbin "includes/generated/naka_technichord_part.bin", 0x1DF2, 0x40
+NakaWidget_TcBigBandReeds:		.incbin "includes/generated/naka_technichord_part.bin", 0x1E32, 0x40
+NakaWidget_TcOctave:			.incbin "includes/generated/naka_technichord_part.bin", 0x1E72, 0x38
+NakaWidget_TcBlock:			.incbin "includes/generated/naka_technichord_part.bin", 0x1EAA, 0x36
+NakaWidget_TcHardRock:			.incbin "includes/generated/naka_technichord_part.bin", 0x1EE0, 0x3A
+NakaWidget_TcFanfare:			.incbin "includes/generated/naka_technichord_part.bin", 0x1F1A, 0x38
+NakaWidget_Sdtecd_24_IvSdtecd1:		.incbin "includes/generated/naka_technichord_part.bin", 0x1F52, 0x16
+NakaWidget_Sdtecd2:			.incbin "includes/generated/naka_technichord_part.bin", 0x1F68, 0x24
+NakaWidget_Sdtecd_26_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x1F8C, 0x2A
+NakaWidget_Sdtecd_27_AcLswEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x1FB6, 0x4A
+NakaWidget_Sdtecd_28_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2000, 0x26
 ; [nakarest] naka_technichord_part+0x2026  +0x2026..+0x20ba (0xe83cf4, 148 B)
 ; [nakarest] widget records, elements 0-3 of Viewable slot 0xa5 (table 0xe857a4, 4 entries,
 ; [nakarest] InitializeMurai) ("Sqmixer"): TtlScreen (42 B), AcResetPage (36 B), AcTrackMixer
 ; [nakarest] (36 B), IvExit (22 B). 1 text the records point at (Viewable slot 0xa5 (table
 ; [nakarest] 0xe857a4, 4 entries, InitializeMurai)): "TRACK MIXER" (TtlScreen.title of element
 ; [nakarest] 0).
-	.incbin "includes/generated/naka_technichord_part.bin", 0x2026, 0x94
+NakaWidget_Sqmixer:			.incbin "includes/generated/naka_technichord_part.bin", 0x2026, 0x36
+NakaWidget_Sqmixer_1_AcResetPage:	.incbin "includes/generated/naka_technichord_part.bin", 0x205C, 0x24
+NakaWidget_Sqmixer_2_AcTrackMixer:	.incbin "includes/generated/naka_technichord_part.bin", 0x2080, 0x24
+NakaWidget_Sqmixer_3_IvExit:		.incbin "includes/generated/naka_technichord_part.bin", 0x20A4, 0x16
 ; [nakarest] naka_technichord_part+0x20ba  +0x20ba..+0x2338 (0xe83d88, 638 B)
 ; [nakarest] widget records, elements 0-14 of Viewable slot 0xe4 (table 0xe857b8, 15 entries,
 ; [nakarest] InitializeMurai) ("Demofeature"): AcFdemoScreen (42 B), AcPresentationBox (48 B)
@@ -228,7 +403,21 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] 0); "Start the internal DEMO" (AcPresentationBox.str of element 1); "Start the
 ; [nakarest] loaded DEMO" (AcPresentationBox.str of element 7); "Presentation Mode" (Label.str
 ; [nakarest] of element 11); ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0x20BA, 0x27E
+NakaWidget_Demofeature:				.incbin "includes/generated/naka_technichord_part.bin", 0x20BA, 0x40
+NakaWidget_Demofeature_1_AcPresentationBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x20FA, 0x48
+NakaWidget_Demofeature1:			.incbin "includes/generated/naka_technichord_part.bin", 0x2142, 0x24
+NakaWidget_Demofeature_3_IvDemofeature1:	.incbin "includes/generated/naka_technichord_part.bin", 0x2166, 0x16
+NakaWidget_Demofeature_4_AcLanguageText:	.incbin "includes/generated/naka_technichord_part.bin", 0x217C, 0x2A
+NakaWidget_Demofeature2:			.incbin "includes/generated/naka_technichord_part.bin", 0x21A6, 0x24
+NakaWidget_Demofeature_6_IvDemofeature2:	.incbin "includes/generated/naka_technichord_part.bin", 0x21CA, 0x16
+NakaWidget_Demofeature_7_AcPresentationBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x21E0, 0x46
+NakaWidget_FDemoTitleBox:			.incbin "includes/generated/naka_technichord_part.bin", 0x2226, 0x24
+NakaWidget_PlainScreen:				.incbin "includes/generated/naka_technichord_part.bin", 0x224A, 0x22
+NakaWidget_PresentationControl:			.incbin "includes/generated/naka_technichord_part.bin", 0x226C, 0x24
+NakaWidget_Demofeature_11_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2290, 0x32
+NakaWidget_LoadingPresentation:			.incbin "includes/generated/naka_technichord_part.bin", 0x22C2, 0x22
+NakaWidget_Demofeature_13_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x22E4, 0x30
+NakaWidget_PresentationTitle:			.incbin "includes/generated/naka_technichord_part.bin", 0x2314, 0x24
 ; [nakarest] naka_technichord_part+0x2338  +0x2338..+0x2a16 (0xe84006, 1758 B)
 ; [nakarest] widget records, elements 0-43 of Viewable slot 0xea (table 0xe857f8, 44 entries,
 ; [nakarest] InitializeMurai) ("Drawbar"): TtlScreen (42 B), IvIntVari (24 B), AcIndexToggle (44
@@ -241,7 +430,50 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] InitializeMurai)): "" (TtlScreen.title of element 0); " 4'" (AcIndexToggle.stroff
 ; [nakarest] of element 2); " 4'" (AcIndexToggle.stron of element 2); "2 '"
 ; [nakarest] (AcIndexToggle.stroff of element 3); ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0x2338, 0x6DE
+NakaWidget_Drawbar:			.incbin "includes/generated/naka_technichord_part.bin", 0x2338, 0x2C
+NakaWidget_Drawbar_1_IvIntVari:		.incbin "includes/generated/naka_technichord_part.bin", 0x2364, 0x18
+NakaWidget_DrawPerc4:			.incbin "includes/generated/naka_technichord_part.bin", 0x237C, 0x34
+NakaWidget_DrawPerc223:			.incbin "includes/generated/naka_technichord_part.bin", 0x23B0, 0x38
+NakaWidget_White23:			.incbin "includes/generated/naka_technichord_part.bin", 0x23E8, 0x24
+NakaWidget_Black23:			.incbin "includes/generated/naka_technichord_part.bin", 0x240C, 0x24
+NakaWidget_Drawbar_6_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2430, 0x2C
+NakaWidget_Drawbar_7_IvExit:		.incbin "includes/generated/naka_technichord_part.bin", 0x245C, 0x16
+NakaWidget_Drawbar_8_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2472, 0x26
+NakaWidget_Drawbar_9_IvPageOverWrite:	.incbin "includes/generated/naka_technichord_part.bin", 0x2498, 0x1C
+NakaWidget_Drawbar_10_IvPageOverWrite:	.incbin "includes/generated/naka_technichord_part.bin", 0x24B4, 0x1C
+NakaWidget_Drawbar_11_IvDrawbar:	.incbin "includes/generated/naka_technichord_part.bin", 0x24D0, 0x16
+NakaWidget_DrawSetting:			.incbin "includes/generated/naka_technichord_part.bin", 0x24E6, 0x4C
+NakaWidget_Drawbar1:			.incbin "includes/generated/naka_technichord_part.bin", 0x2532, 0x24
+NakaWidget_Drawbar_14_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x2556, 0x1C
+NakaWidget_Drawbar_15_StringBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x2572, 0x4A
+NakaWidget_Drawbar_16_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x25BC, 0x24
+NakaWidget_Drawbar_17_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x25E0, 0x24
+NakaWidget_Drawbar_18_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2604, 0x24
+NakaWidget_Drawbar_19_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2628, 0x24
+NakaWidget_Drawbar_20_IvDrawbar1:	.incbin "includes/generated/naka_technichord_part.bin", 0x264C, 0x16
+NakaWidget_Drawbar_21_VwUserBitmapSp:	.incbin "includes/generated/naka_technichord_part.bin", 0x2662, 0x1A
+NakaWidget_Drawbar2:			.incbin "includes/generated/naka_technichord_part.bin", 0x267C, 0x24
+NakaWidget_Drawbar_23_AcDrawEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x26A0, 0x42
+NakaWidget_Drawbar_24_AcDrawEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x26E2, 0x42
+NakaWidget_Drawbar_25_AcDrawEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x2724, 0x4A
+NakaWidget_Drawbar_26_AcDrawEditBox:	.incbin "includes/generated/naka_technichord_part.bin", 0x276E, 0x4A
+NakaWidget_Drawbar_27_AcIndexWideES:	.incbin "includes/generated/naka_technichord_part.bin", 0x27B8, 0x2A
+NakaWidget_Drawbar_28_IvDrawbar2:	.incbin "includes/generated/naka_technichord_part.bin", 0x27E2, 0x16
+NakaWidget_Drawbar_29_AcDrawbarName:	.incbin "includes/generated/naka_technichord_part.bin", 0x27F8, 0x28
+NakaWidget_DrawbarNorm:			.incbin "includes/generated/naka_technichord_part.bin", 0x2820, 0x24
+NakaWidget_DrawbarPart:			.incbin "includes/generated/naka_technichord_part.bin", 0x2844, 0x24
+NakaWidget_DrawTremolo:			.incbin "includes/generated/naka_technichord_part.bin", 0x2868, 0x38
+NakaWidget_Drawbar_33_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x28A0, 0x28
+NakaWidget_Drawbar_34_IvDrawbarNorm:	.incbin "includes/generated/naka_technichord_part.bin", 0x28C8, 0x16
+NakaWidget_Drawbar_35_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x28DE, 0x1C
+NakaWidget_Drawbar_36_Icon:		.incbin "includes/generated/naka_technichord_part.bin", 0x28FA, 0x1A
+NakaWidget_Drawbar_37_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2914, 0x28
+NakaWidget_DrawbarSndE:			.incbin "includes/generated/naka_technichord_part.bin", 0x293C, 0x24
+NakaWidget_Drawbar_39_IvDrawbarSndE:	.incbin "includes/generated/naka_technichord_part.bin", 0x2960, 0x16
+NakaWidget_Drawbar_40_AcTitleMenu:	.incbin "includes/generated/naka_technichord_part.bin", 0x2976, 0x3C
+NakaWidget_Drawbar_41_VwBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x29B2, 0x1C
+NakaWidget_Drawbar_42_Icon:		.incbin "includes/generated/naka_technichord_part.bin", 0x29CE, 0x1A
+NakaWidget_Drawbar_43_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x29E8, 0x2E
 ; [nakarest] naka_technichord_part+0x2a16  +0x2a16..+0x3182 (0xe846e4, 1900 B)
 ; [nakarest] widget records, elements 0-36 of Viewable slot 0xeb (table 0xe858ac, 37 entries,
 ; [nakarest] InitializeMurai) ("Accordion"): Screen (34 B), Icon (26 B), IvIntVari (24 B), Label
@@ -251,7 +483,43 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] (table 0xe858ac, 37 entries, InitializeMurai)): "ACCORDION REGISTER" (Label.str of
 ; [nakarest] element 3); "TYPE" (Label.str of element 6); "TYPE : GERMAN" (Label.str of element
 ; [nakarest] 10); "BASS1" (AcIndexToggle.stroff of element 12); ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0x2A16, 0x76C
+NakaWidget_Accordion:			.incbin "includes/generated/naka_technichord_part.bin", 0x2A16, 0x22
+NakaWidget_Accordion_1_Icon:		.incbin "includes/generated/naka_technichord_part.bin", 0x2A38, 0x1A
+NakaWidget_Accordion_2_IvIntVari:	.incbin "includes/generated/naka_technichord_part.bin", 0x2A52, 0x18
+NakaWidget_Accordion_3_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2A6A, 0x34
+NakaWidget_Accordion_4_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0x2A9E, 0x28
+NakaWidget_Accordion_5_AcIndexEditSw:	.incbin "includes/generated/naka_technichord_part.bin", 0x2AC6, 0x28
+NakaWidget_Accordion_6_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2AEE, 0x26
+NakaWidget_AccordionPart:		.incbin "includes/generated/naka_technichord_part.bin", 0x2B14, 0x24
+NakaWidget_Accordion_8_IvAccordion:	.incbin "includes/generated/naka_technichord_part.bin", 0x2B38, 0x16
+NakaWidget_Accordion1:			.incbin "includes/generated/naka_technichord_part.bin", 0x2B4E, 0x24
+NakaWidget_Accordion_10_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2B72, 0x2E
+NakaWidget_Accordion_11_VwUserBitmapSp:	.incbin "includes/generated/naka_technichord_part.bin", 0x2BA0, 0x1A
+NakaWidget_Accordion_12_AcIndexToggle:	.incbin "includes/generated/naka_technichord_part.bin", 0x2BBA, 0x38
+NakaWidget_Accordion_13_AcIndexToggle:	.incbin "includes/generated/naka_technichord_part.bin", 0x2BF2, 0x38
+NakaWidget_Accordion_14_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2C2A, 0x44
+NakaWidget_Accordion_15_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2C6E, 0x42
+NakaWidget_Accordion_16_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2CB0, 0x40
+NakaWidget_Accordion_17_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2CF0, 0x50
+NakaWidget_Accordion_18_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2D40, 0x4A
+NakaWidget_Accordion_19_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2D8A, 0x4C
+NakaWidget_Accordion_20_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2DD6, 0x42
+NakaWidget_Accordion_21_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2E18, 0x40
+NakaWidget_Accordion_22_IvAccordionX:	.incbin "includes/generated/naka_technichord_part.bin", 0x2E58, 0x16
+NakaWidget_Accordion2:			.incbin "includes/generated/naka_technichord_part.bin", 0x2E6E, 0x24
+NakaWidget_Accordion_24_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x2E92, 0x30
+NakaWidget_Accordion_25_VwUserBitmapSp:	.incbin "includes/generated/naka_technichord_part.bin", 0x2EC2, 0x1A
+NakaWidget_Accordion_26_AcIndexToggle:	.incbin "includes/generated/naka_technichord_part.bin", 0x2EDC, 0x38
+NakaWidget_Accordion_27_AcIndexToggle:	.incbin "includes/generated/naka_technichord_part.bin", 0x2F14, 0x38
+NakaWidget_Accordion_28_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2F4C, 0x42
+NakaWidget_Accordion_29_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2F8E, 0x3E
+NakaWidget_Accordion_30_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x2FCC, 0x40
+NakaWidget_Accordion_31_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x300C, 0x4C
+NakaWidget_Accordion_32_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x3058, 0x4A
+NakaWidget_Accordion_33_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x30A2, 0x48
+NakaWidget_Accordion_34_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x30EA, 0x42
+NakaWidget_Accordion_35_AcAccordionTab:	.incbin "includes/generated/naka_technichord_part.bin", 0x312C, 0x40
+NakaWidget_Accordion_36_IvAccordionX:	.incbin "includes/generated/naka_technichord_part.bin", 0x316C, 0x16
 ; [nakarest] naka_technichord_part+0x3182  +0x3182..+0x34fa (0xe84e50, 888 B)
 ; [nakarest] widget records, elements 0-23 of Viewable slot 0xee (table 0xe85944, 24 entries,
 ; [nakarest] InitializeMurai) ("Mesage"): IvScreen (34 B), IvMesage (22 B), Window (36 B) x7,
@@ -260,14 +528,47 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] records point at (Viewable slot 0xee (table 0xe85944, 24 entries,
 ; [nakarest] InitializeMurai)): "~81" (EditSw.str of element 16); "~81" (EditSw.str of element
 ; [nakarest] 19).
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3182, 0x378
+NakaWidget_Mesage:			.incbin "includes/generated/naka_technichord_part.bin", 0x3182, 0x22
+NakaWidget_Mesage_1_IvMesage:		.incbin "includes/generated/naka_technichord_part.bin", 0x31A4, 0x16
+NakaWidget_Completed:			.incbin "includes/generated/naka_technichord_part.bin", 0x31BA, 0x24
+NakaWidget_Mesage_3_AcLanguageText:	.incbin "includes/generated/naka_technichord_part.bin", 0x31DE, 0x2A
+NakaWidget_Mesage_4_IvIntComplete:	.incbin "includes/generated/naka_technichord_part.bin", 0x3208, 0x18
+NakaWidget_Reminder:			.incbin "includes/generated/naka_technichord_part.bin", 0x3220, 0x24
+NakaWidget_Mesage_6_AcLanguageText:	.incbin "includes/generated/naka_technichord_part.bin", 0x3244, 0x2A
+NakaWidget_Mesage_7_AcLanguageText:	.incbin "includes/generated/naka_technichord_part.bin", 0x326E, 0x2A
+NakaWidget_Mesage_8_IvIntReminder:	.incbin "includes/generated/naka_technichord_part.bin", 0x3298, 0x18
+NakaWidget_Error:			.incbin "includes/generated/naka_technichord_part.bin", 0x32B0, 0x24
+NakaWidget_Mesage_10_IvIntError:	.incbin "includes/generated/naka_technichord_part.bin", 0x32D4, 0x18
+NakaWidget_Mesage_11_AcLanguageText:	.incbin "includes/generated/naka_technichord_part.bin", 0x32EC, 0x2A
+NakaWidget_Mesage_12_AcLanguageText:	.incbin "includes/generated/naka_technichord_part.bin", 0x3316, 0x2A
+NakaWidget_Other:			.incbin "includes/generated/naka_technichord_part.bin", 0x3340, 0x24
+NakaWidget_Mesage_14_AcLanguageText:	.incbin "includes/generated/naka_technichord_part.bin", 0x3364, 0x2A
+NakaWidget_CheckMessage:		.incbin "includes/generated/naka_technichord_part.bin", 0x338E, 0x24
+NakaWidget_Mesage_16_EditSw:		.incbin "includes/generated/naka_technichord_part.bin", 0x33B2, 0x2C
+NakaWidget_Mesage_17_AcRamBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x33DE, 0x2C
+NakaWidget_Mesage_18_AcRamBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x340A, 0x2C
+NakaWidget_Mesage_19_EditSw:		.incbin "includes/generated/naka_technichord_part.bin", 0x3436, 0x2C
+NakaWidget_NoMessage:			.incbin "includes/generated/naka_technichord_part.bin", 0x3462, 0x24
+NakaWidget_Mesage_21_AcRamBox:		.incbin "includes/generated/naka_technichord_part.bin", 0x3486, 0x2C
+NakaWidget_PleaseWait:			.incbin "includes/generated/naka_technichord_part.bin", 0x34B2, 0x24
+NakaWidget_Mesage_23_AcPleaseWait:	.incbin "includes/generated/naka_technichord_part.bin", 0x34D6, 0x24
 ; [nakarest] naka_technichord_part+0x34fa  +0x34fa..+0x364c (0xe851c8, 338 B)
 ; [nakarest] widget records, elements 0-10 of Viewable slot 0xef (table 0xe859a8, 11 entries,
 ; [nakarest] InitializeMurai) ("Welcom"): AcWelcomScreen (34 B), IvIntWelcome (24 B) x3,
 ; [nakarest] VwUserBitmapSp (26 B) x2, Screen (34 B) x2, Label (32 B), IvMPver (22 B), PsParaBox
 ; [nakarest] (36 B). 1 text the records point at (Viewable slot 0xef (table 0xe859a8, 11
 ; [nakarest] entries, InitializeMurai)): "ALL INITIAL SETTING!" (Label.str of element 5).
-	.incbin "includes/generated/naka_technichord_part.bin", 0x34FA, 0x152
+NakaWidget_Welcom:			.incbin "includes/generated/naka_technichord_part.bin", 0x34FA, 0x22
+NakaWidget_Welcom_1_IvIntWelcome:	.incbin "includes/generated/naka_technichord_part.bin", 0x351C, 0x18
+NakaWidget_Welcom_2_VwUserBitmapSp:	.incbin "includes/generated/naka_technichord_part.bin", 0x3534, 0x1A
+NakaWidget_Welcom_3_VwUserBitmapSp:	.incbin "includes/generated/naka_technichord_part.bin", 0x354E, 0x1A
+NakaWidget_AllInitial:			.incbin "includes/generated/naka_technichord_part.bin", 0x3568, 0x22
+NakaWidget_Welcom_5_Label:		.incbin "includes/generated/naka_technichord_part.bin", 0x358A, 0x36
+NakaWidget_Welcom_6_IvIntWelcome:	.incbin "includes/generated/naka_technichord_part.bin", 0x35C0, 0x18
+NakaWidget_MPVersion:			.incbin "includes/generated/naka_technichord_part.bin", 0x35D8, 0x22
+NakaWidget_Welcom_8_IvMPver:		.incbin "includes/generated/naka_technichord_part.bin", 0x35FA, 0x16
+NakaWidget_Welcom_9_IvIntWelcome:	.incbin "includes/generated/naka_technichord_part.bin", 0x3610, 0x18
+NakaWidget_MPver:			.incbin "includes/generated/naka_technichord_part.bin", 0x3628, 0x24
 ; [nakarest] naka_technichord_part+0x364c  +0x364c..+0x37a2 (0xe8531a, 342 B)
 ; [nakarest] widget records, elements 0-5 of Viewable slot 0xf0 (table 0xe859d8, 6 entries,
 ; [nakarest] InitializeMurai) ("Softver"): TtlScreen (42 B), PsEditBox (50 B) x4, IvSoftver (22
@@ -275,7 +576,12 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] InitializeMurai)): "SOFT VERSION" (TtlScreen.title of element 0); "MAIN PROGRAM :"
 ; [nakarest] (PsEditBox.caption of element 1); "MAIN TABLE :" (PsEditBox.caption of element 2);
 ; [nakarest] "SUB PROGRAM :" (PsEditBox.caption of element 3); ....
-	.incbin "includes/generated/naka_technichord_part.bin", 0x364C, 0x156
+NakaWidget_Softver:		.incbin "includes/generated/naka_technichord_part.bin", 0x364C, 0x38
+NakaWidget_MainProgram:		.incbin "includes/generated/naka_technichord_part.bin", 0x3684, 0x42
+NakaWidget_MainTable:		.incbin "includes/generated/naka_technichord_part.bin", 0x36C6, 0x42
+NakaWidget_SubProgram:		.incbin "includes/generated/naka_technichord_part.bin", 0x3708, 0x42
+NakaWidget_SoundTable:		.incbin "includes/generated/naka_technichord_part.bin", 0x374A, 0x42
+NakaWidget_Softver_5_IvSoftver:	.incbin "includes/generated/naka_technichord_part.bin", 0x378C, 0x16
 ; [nakarest] naka_technichord_part+0x37a2  +0x37a2..+0x37f6 (0xe85470, 84 B)
 ; [nakarest] the table itself: Viewable slot 0x2 (table 0xe85470, 20 entries, InitializeMurai),
 ; [nakarest] 20 entry pointers x 4 bytes.

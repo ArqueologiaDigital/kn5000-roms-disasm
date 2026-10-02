@@ -41,9 +41,9 @@ extern const char NakaState_ZeroBlock_3;
 extern const char NakaState_ZeroBlock_4;
 extern const char NakaWidget_SoundEdit;
 extern const char NakaWidget_SoundMenu_ListBox;
-extern const char NakaWidget_SoundMenu_PageButton;
-extern const char NakaWidget_SoundMenu_PageControl;
-extern const char NakaWidget_SoundMenu_PageControl2;
+extern const char NakaWidget_SdmenuPage;
+extern const char NakaWidget_Sdmenu1;
+extern const char NakaWidget_Sdmenu2;
 extern const char NakaWidget_SoundMenu_ScrollBar1;
 extern const char NakaWidget_SoundMenu_ScrollBar2;
 extern const char NakaWidget_SoundMenu_ValueEdit;
@@ -7977,12 +7977,12 @@ const naka_technichord_part_t naka_technichord_part_data
 
     .ptrs_8 = {
         NAKA_ADDR(NakaContainer_SoundMenu_Root),
-        NAKA_ADDR(NakaWidget_SoundMenu_PageButton),
+        NAKA_ADDR(NakaWidget_SdmenuPage),
         NAKA_ADDR(NakaWidget_SoundMenu_ScrollBar1),
         NAKA_ADDR(NakaWidget_SoundMenu_ScrollBar2),
         NAKA_ADDR(NakaWidget_SoundMenu_ListBox),
         NAKA_ADDR(NakaWidget_SoundMenu_ValueEdit),
-        NAKA_ADDR(NakaWidget_SoundMenu_PageControl),
+        NAKA_ADDR(NakaWidget_Sdmenu1),
         NAKA_ADDR(NakaMenuItem_PartSetting),
         NAKA_ADDR(NakaMenuItem_Mixer),
         NAKA_ADDR(NakaMenuItem_MasterTuning),
@@ -7993,7 +7993,7 @@ const naka_technichord_part_t naka_technichord_part_data
         NAKA_ADDR(NakaMenuItem_DspEffect),
         NAKA_ADDR(NakaMenuItem_AcousticIllusion),
         NAKA_ADDR(NakaWidget_SoundEdit),
-        NAKA_ADDR(NakaWidget_SoundMenu_PageControl2),
+        NAKA_ADDR(NakaWidget_Sdmenu2),
         NAKA_ADDR(NakaMenuItem_LeftHold),
         NAKA_ADDR(NakaMenuItem_TechniChord),
         0x00000000,

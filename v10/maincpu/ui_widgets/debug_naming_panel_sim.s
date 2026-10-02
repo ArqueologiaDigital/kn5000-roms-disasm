@@ -76,7 +76,27 @@
 ; [nakarest] of element 3); "DEBUG WINDOW" (AcWindowMenu.str of element 5); "DEBUG TIME !"
 ; [nakarest] (Label.str of element 8); ....
 NakaDbg_PanelSimTitle:
-	.incbin "includes/generated/naka_debug_naming.bin", 0x0, 0x37C
+	.incbin "includes/generated/naka_debug_naming.bin", 0x0, 0x38
+NakaWidget_PanelSimulator_3_AcTitleMenu:	.incbin "includes/generated/naka_debug_naming.bin", 0x38, 0x42
+NakaWidget_PanelSimulator_4_IvExitMode:		.incbin "includes/generated/naka_debug_naming.bin", 0x7A, 0x1A
+NakaWidget_PanelSimulator_5_AcWindowMenu:	.incbin "includes/generated/naka_debug_naming.bin", 0x94, 0x44
+NakaWidget_ClipBoard:				.incbin "includes/generated/naka_debug_naming.bin", 0xD8, 0x22
+NakaWidget_DebugWindow:				.incbin "includes/generated/naka_debug_naming.bin", 0xFA, 0x24
+NakaWidget_PanelSimulator_8_Label:		.incbin "includes/generated/naka_debug_naming.bin", 0x11E, 0x2E
+NakaWidget_PanelSimulator_9_DbDebugMenu:	.incbin "includes/generated/naka_debug_naming.bin", 0x14C, 0x2E
+NakaWidget_NamingWindow:			.incbin "includes/generated/naka_debug_naming.bin", 0x17A, 0x24
+NakaWidget_PanelSimulator_11_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x19E, 0x28
+NakaWidget_PanelSimulator_12_Label:		.incbin "includes/generated/naka_debug_naming.bin", 0x1C6, 0x24
+NakaWidget_PanelSimulator_13_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x1EA, 0x28
+NakaWidget_PanelSimulator_14_Label:		.incbin "includes/generated/naka_debug_naming.bin", 0x212, 0x24
+NakaWidget_PanelSimulator_15_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x236, 0x28
+NakaWidget_PanelSimulator_16_Label:		.incbin "includes/generated/naka_debug_naming.bin", 0x25E, 0x24
+NakaWidget_PanelSimulator_17_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x282, 0x28
+NakaWidget_PanelSimulator_18_Label:		.incbin "includes/generated/naka_debug_naming.bin", 0x2AA, 0x28
+NakaWidget_PanelSimulator_19_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x2D2, 0x28
+NakaWidget_PanelSimulator_20_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x2FA, 0x28
+NakaWidget_PanelSimulator_21_Label:		.incbin "includes/generated/naka_debug_naming.bin", 0x322, 0x2A
+NakaWidget_NamingCursorBox:			.incbin "includes/generated/naka_debug_naming.bin", 0x34C, 0x30
 ; [nakarest] NakaDbg_LowerCaseChars  +0x37c..+0x380 (0xeb2e7a, 4 B)
 ; [nakarest] Text (4 B at 0xeb2e7a), first string "abc"; no registered NAKA table points into
 ; [nakarest] it; reached through 1 data word in Naka_DrawbarDisplay_Table2 (at 0xeef54e).
@@ -90,7 +110,32 @@ NakaDbg_LowerCaseChars:
 ; [nakarest] PsParaBox (36 B), Window (36 B) x3, DbMemo (22 B), AcTrackSwitch (36 B) x16,
 ; [nakarest] DbMemoryDump (26 B).
 NakaDbg_LowerCaseChars2:
-	.incbin "includes/generated/naka_debug_naming.bin", 0x380, 0x384
+	.incbin "includes/generated/naka_debug_naming.bin", 0x380, 0xC
+NakaWidget_PanelSimulator_26_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x38C, 0x28
+NakaWidget_PanelSimulator_27_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x3B4, 0x28
+NakaWidget_PanelSimulator_28_AcIndexEditSw:	.incbin "includes/generated/naka_debug_naming.bin", 0x3DC, 0x28
+NakaWidget_NamingLabel:				.incbin "includes/generated/naka_debug_naming.bin", 0x404, 0x24
+NakaWidget_MemoWindow:				.incbin "includes/generated/naka_debug_naming.bin", 0x428, 0x24
+NakaWidget_PanelSimulator_31_DbMemo:		.incbin "includes/generated/naka_debug_naming.bin", 0x44C, 0x16
+NakaWidget_TrackSwitchWindow:			.incbin "includes/generated/naka_debug_naming.bin", 0x462, 0x24
+NakaWidget_PanelSimulator_33_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x486, 0x24
+NakaWidget_PanelSimulator_34_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x4AA, 0x24
+NakaWidget_PanelSimulator_35_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x4CE, 0x24
+NakaWidget_PanelSimulator_36_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x4F2, 0x24
+NakaWidget_PanelSimulator_37_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x516, 0x24
+NakaWidget_PanelSimulator_38_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x53A, 0x24
+NakaWidget_PanelSimulator_39_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x55E, 0x24
+NakaWidget_PanelSimulator_40_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x582, 0x24
+NakaWidget_PanelSimulator_41_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x5A6, 0x24
+NakaWidget_PanelSimulator_42_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x5CA, 0x24
+NakaWidget_PanelSimulator_43_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x5EE, 0x24
+NakaWidget_PanelSimulator_44_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x612, 0x24
+NakaWidget_PanelSimulator_45_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x636, 0x24
+NakaWidget_PanelSimulator_46_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x65A, 0x24
+NakaWidget_PanelSimulator_47_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x67E, 0x24
+NakaWidget_PanelSimulator_48_AcTrackSwitch:	.incbin "includes/generated/naka_debug_naming.bin", 0x6A2, 0x24
+NakaWidget_MemDumpWindow:			.incbin "includes/generated/naka_debug_naming.bin", 0x6C6, 0x24
+NakaWidget_PanelSimulator_50_DbMemoryDump:	.incbin "includes/generated/naka_debug_naming.bin", 0x6EA, 0x1A
 ; [nakarest] naka_debug_naming+0x704  +0x704..+0x876 (0xeb3202, 370 B)
 ; [nakarest] widget records, elements 0-8 of Viewable slot 0xff (table 0xeb3444, 9 entries,
 ; [nakarest] InitializeRoot) ("CheckTitle"): TtlScreen (42 B) x2, IvExitScreen (26 B) x3,
@@ -98,7 +143,15 @@ NakaDbg_LowerCaseChars2:
 ; [nakarest] at (Viewable slot 0xff (table 0xeb3444, 9 entries, InitializeRoot)): "CHECK TITLE"
 ; [nakarest] (TtlScreen.title of element 0); "Naming" (AcScreenMenu.str of element 2); "Wall"
 ; [nakarest] (AcScreenMenu.str of element 3); "Check Naming" (TtlScreen.title of element 4).
-	.incbin "includes/generated/naka_debug_naming.bin", 0x704, 0x172
+NakaWidget_CheckTitle:			.incbin "includes/generated/naka_debug_naming.bin", 0x704, 0x36
+NakaWidget_CheckTitle_1_IvExitScreen:	.incbin "includes/generated/naka_debug_naming.bin", 0x73A, 0x1A
+NakaWidget_CheckTitle_2_AcScreenMenu:	.incbin "includes/generated/naka_debug_naming.bin", 0x754, 0x3E
+NakaWidget_CheckTitle_3_AcScreenMenu:	.incbin "includes/generated/naka_debug_naming.bin", 0x792, 0x3C
+NakaWidget_CheckNaming:			.incbin "includes/generated/naka_debug_naming.bin", 0x7CE, 0x38
+NakaWidget_CheckTitle_5_IvNaming:	.incbin "includes/generated/naka_debug_naming.bin", 0x806, 0x1A
+NakaWidget_CheckTitle_6_IvExitScreen:	.incbin "includes/generated/naka_debug_naming.bin", 0x820, 0x1A
+NakaWidget_CheckWall:			.incbin "includes/generated/naka_debug_naming.bin", 0x83A, 0x22
+NakaWidget_CheckTitle_8_IvExitScreen:	.incbin "includes/generated/naka_debug_naming.bin", 0x85C, 0x1A
 ; [nakarest] naka_debug_naming+0x876  +0x876..+0x946 (0xeb3374, 208 B)
 ; [nakarest] the table itself: Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot),
 ; [nakarest] 51 entry pointers x 4 bytes.

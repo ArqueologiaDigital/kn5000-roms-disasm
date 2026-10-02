@@ -455,9 +455,9 @@ NakaContainer_SoundMenu_Root:
 ; [nakarest] InitializeMurai)): "SOUND MENU" (TtlScreen.title of element 0).
 NakaDesc_SOUND_MENU:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x8F8, 0xC
-; [nakarest] NakaWidget_SoundMenu_PageButton  +0x904..+0x90a (0xe818e6, 6 B)
+; [nakarest] NakaWidget_SdmenuPage  +0x904..+0x90a (0xe818e6, 6 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x2 (table 0xe85470, 20 entries,
 ; [nakarest] InitializeMurai) ("Sdmenu"): AcWindowPage (36 B).
-NakaWidget_SoundMenu_PageButton:
+NakaWidget_SdmenuPage:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x904, 0x6
 ; External label offsets within the binary blob above.

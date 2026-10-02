@@ -93,7 +93,7 @@ extern const char NakaWidget_DemoFeatPresItem;
 extern const char NakaWidget_DemoMeasureBox;
 extern const char NakaWidget_DemoPerfItem;
 extern const char NakaWidget_DocDpContainer;
-extern const char NakaWidget_DocDpFileList;
+extern const char NakaWidget_DOCR1Sw;
 extern const char NakaWidget_DocDpFileSelector;
 extern const char NakaWidget_DocDpGroup;
 extern const char NakaWidget_DocDpMeasure;
@@ -101,7 +101,7 @@ extern const char NakaWidget_DocDpMic;
 extern const char NakaWidget_DocDpMixer;
 extern const char NakaWidget_DocDpMuteRow0;
 extern const char NakaWidget_DocDpOrchSelector;
-extern const char NakaWidget_DocDpRT2Selector;
+extern const char NakaWidget_DOCR2Sw;
 extern const char NakaWidget_DocDpVolume;
 extern const char NakaWidget_DocMdlyContainer;
 extern const char NakaWidget_DocMdlyGroup;
@@ -110,10 +110,10 @@ extern const char NakaWidget_DocMdlyMic;
 extern const char NakaWidget_DocMdlyMixer;
 extern const char NakaWidget_DocMdlyMuteRow0;
 extern const char NakaWidget_DocMdlyMuteToggle;
-extern const char NakaWidget_DocMdlyOffOnList;
+extern const char NakaWidget_DOCMedR1Sw;
 extern const char NakaWidget_DocMdlyOffOnSel;
 extern const char NakaWidget_DocMdlyOrchSel;
-extern const char NakaWidget_DocMdlyRT2Sel;
+extern const char NakaWidget_DOCMedR2Sw;
 extern const char NakaWidget_DocMdlySkipLabel;
 extern const char NakaWidget_DocMdlySubPanel;
 extern const char NakaWidget_NamingCharSel;
@@ -127,8 +127,8 @@ extern const char NakaWidget_PartBal1;
 extern const char NakaWidget_PartBal2;
 extern const char NakaWidget_PartBal3;
 extern const char NakaWidget_PartBal4;
-extern const char NakaWidget_PdDpContainer;
-extern const char NakaWidget_PdDpFileList;
+extern const char NakaWidget_DpPd;
+extern const char NakaWidget_PDR1Sw;
 extern const char NakaWidget_PdDpFileSelector;
 extern const char NakaWidget_PdDpGroup;
 extern const char NakaWidget_PdDpMeasure;
@@ -146,15 +146,15 @@ extern const char NakaWidget_PdMdlyMixer;
 extern const char NakaWidget_PdMdlyMuteRow0;
 extern const char NakaWidget_PdMdlyMuteRow1;
 extern const char NakaWidget_PdMdlyMuteToggle;
-extern const char NakaWidget_PdMdlyOffOnList;
+extern const char NakaWidget_PDMedR1Sw;
 extern const char NakaWidget_PdMdlyOffOnSel;
-extern const char NakaWidget_PdMdlyRT2Sel;
+extern const char NakaWidget_PDMedOrchSw;
 extern const char NakaWidget_PdMdlySkipLabel;
 extern const char NakaWidget_Perf2Container;
-extern const char NakaWidget_Perf2FileList;
+extern const char NakaWidget_DemoMed2;
 extern const char NakaWidget_Perf2Flute;
 extern const char NakaWidget_Perf2Gamelan;
-extern const char NakaWidget_Perf2Guitar;
+extern const char NakaWidget_DemoSong9;
 extern const char NakaWidget_Perf2MeasureBox;
 extern const char NakaWidget_Perf2Piano;
 extern const char NakaWidget_Perf2RhythmSel;
@@ -174,7 +174,7 @@ extern const char NakaWidget_Perf3SymphOrch;
 extern const char NakaWidget_PerfAccordionMedley;
 extern const char NakaWidget_PerfClassical;
 extern const char NakaWidget_PerfContemporary;
-extern const char NakaWidget_PerfFileList;
+extern const char NakaWidget_DemoMed1;
 extern const char NakaWidget_PerfFolkMedley;
 extern const char NakaWidget_PerfMainMedley;
 extern const char NakaWidget_PerfMeasureBox;
@@ -185,7 +185,7 @@ extern const char NakaWidget_PerfStyleSel;
 extern const char NakaWidget_SmfDpChLabel;
 extern const char NakaWidget_SmfDpContainer;
 extern const char NakaWidget_SmfDpDisplayMode;
-extern const char NakaWidget_SmfDpFileList;
+extern const char NakaWidget_SMFMuteSw;
 extern const char NakaWidget_SmfDpFileSelector;
 extern const char NakaWidget_SmfDpGroup;
 extern const char NakaWidget_SmfDpLyricsToggle;
@@ -204,20 +204,20 @@ extern const char NakaWidget_SmfDpMuteCtrl5;
 extern const char NakaWidget_SmfDpMuteGroup;
 extern const char NakaWidget_SmfDpMuteRow0;
 extern const char NakaWidget_SmfDpMuteRow1;
-extern const char NakaWidget_SmfDpMuteSel1;
+extern const char NakaWidget_CDswWindow;
 extern const char NakaWidget_SmfDpMuteSel2;
 extern const char NakaWidget_SmfDpMuteSel3;
 extern const char NakaWidget_SmfDpMuteSel4;
 extern const char NakaWidget_SmfDpMuteSel5;
 extern const char NakaWidget_SmfDpMuteSel6;
 extern const char NakaWidget_SmfDpMuteSwRow0;
-extern const char NakaWidget_SmfDpMuteSwRow1;
-extern const char NakaWidget_SmfDpMuteSwRow2;
+extern const char NakaWidget_LyricsSong;
+extern const char NakaWidget_Comporser;
 extern const char NakaWidget_SmfDpMuteToggle;
-extern const char NakaWidget_SmfDpOrchSel;
-extern const char NakaWidget_SmfDpRT1Display;
-extern const char NakaWidget_SmfDpRT1Selector;
-extern const char NakaWidget_SmfDpRT2Selector;
+extern const char NakaWidget_Lyrics;
+extern const char NakaWidget_LyricsData;
+extern const char NakaWidget_PauseDisp;
+extern const char NakaWidget_PlayDisp;
 extern const char NakaWidget_SmfDpSkipLabel;
 extern const char NakaWidget_SmfDpSubPanel;
 extern const char NakaWidget_SmfDpVolume;
@@ -229,8 +229,8 @@ extern const char NakaWidget_SmfMdly2MuteToggle;
 extern const char NakaWidget_SmfMdly2OffOnSel;
 extern const char NakaWidget_SmfMdly2OrchSel;
 extern const char NakaWidget_SmfMdly2SkipLabel;
-extern const char NakaWidget_SmfMdlyContainer;
-extern const char NakaWidget_SmfMdlyContainer2;
+extern const char NakaWidget_DpSmfLyr;
+extern const char NakaWidget_DpMdlySmf;
 extern const char NakaWidget_SmfMdlyFileSelector;
 extern const char NakaWidget_SmfMdlyGroup;
 extern const char NakaWidget_SmfMdlyLyricsItem;
@@ -247,9 +247,9 @@ extern const char NakaWidget_SmfMdlyMuteRow1;
 extern const char NakaWidget_SmfMdlyMuteToggle;
 extern const char NakaWidget_SmfMdlyOffOnList;
 extern const char NakaWidget_SmfMdlyOffOnSel;
-extern const char NakaWidget_SmfMdlyOrchRow;
+extern const char NakaWidget_LyricsFunc;
 extern const char NakaWidget_SmfMdlyOrchSel;
-extern const char NakaWidget_SmfMdlyRootContainer;
+extern const char NakaWidget_DpMdlyDoc;
 extern const char NakaWidget_SmfMdlySkipLabel;
 extern const char NakaWidget_SmfMdlySubPanel;
 extern const char NakaWidget_SmfMdlyVolume;
@@ -266,7 +266,7 @@ extern const char NakaWidget_SongMdly2SkipLabel;
 extern const char NakaWidget_SongMdly2SongList;
 extern const char NakaWidget_SongMdly2SongSel;
 extern const char NakaWidget_SongMdly2Volume;
-extern const char NakaWidget_SongMdlyContainer;
+extern const char NakaWidget_DkMdlyPly;
 extern const char NakaWidget_SongMdlyFileList;
 extern const char NakaWidget_SongMdlyGroup;
 extern const char NakaWidget_SongMdlyMeasureBox;
@@ -307,9 +307,9 @@ extern const char NakaWidget_StepRecPartLabel;
 extern const char NakaWidget_StepRecPartList;
 extern const char NakaWidget_StepRecPartPanel;
 extern const char NakaWidget_StepRecSubPanel;
-extern const char NakaWidget_TrAsContainer;
+extern const char NakaWidget_SqTrAs;
 extern const char NakaWidget_TrAsFileList;
-extern const char NakaWidget_TrAsGridDisplay;
+extern const char NakaWidget_TrAsGrid;
 extern const char NakaWidget_TrAsGroup;
 extern const char NakaWidget_TrAsLocalCont;
 extern const char NakaWidget_TrAsMatrix;
@@ -319,9 +319,9 @@ extern const char NakaWidget_TrAsMidiOut;
 extern const char NakaWidget_TrAsPartList0;
 extern const char NakaWidget_TrAsPartList1;
 extern const char NakaWidget_TrAsPartList2;
-extern const char NakaWidget_TrAsPresetContainer;
-extern const char NakaWidget_TrAsPresetContainer2;
-extern const char NakaWidget_TrAsPresetGmRec;
+extern const char NakaWidget_SqTrAsPsSure1;
+extern const char NakaWidget_SqTrAsPsSure2;
+extern const char NakaWidget_TrAsPsTechSel;
 extern const char NakaWidget_TrAsPresetGroup;
 extern const char NakaWidget_TrAsPresetGroup2;
 extern const char NakaWidget_TrAsPresetGroup3;
@@ -335,7 +335,7 @@ extern const char NakaWidget_TrAsPresetList5;
 extern const char NakaWidget_TrAsPresetList6;
 extern const char NakaWidget_TrAsPresetList7;
 extern const char NakaWidget_TrAsPresetMatrix;
-extern const char NakaWidget_TrAsPresetMeasure;
+extern const char NakaWidget_TrAsPsGmSel;
 extern const char NakaWidget_TrAsPresetMeasure2;
 extern const char NakaWidget_TrAsPresetMeasure3;
 extern const char NakaWidget_TrAsPresetPanel;
@@ -1651,7 +1651,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfDpMuteToggle),
         NAKA_ADDR(NakaWidget_SmfDpMeasureBox),
         NAKA_ADDR(NakaWidget_SmfDpFileSelector),
-        NAKA_ADDR(NakaWidget_SmfDpFileList),
+        NAKA_ADDR(NakaWidget_SMFMuteSw),
         NAKA_ADDR(NakaWidget_SmfDpMixer),
         NAKA_ADDR(NakaWidget_SmfDpMic),
         NAKA_ADDR(NakaWidget_SmfDpMuteChLabel),
@@ -1665,7 +1665,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfDpLyricsToggle2),
         NAKA_ADDR(NakaWidget_SmfDpChLabel),
         NAKA_ADDR(NakaWidget_SmfDpMuteGroup),
-        NAKA_ADDR(NakaWidget_SmfDpMuteSel1),
+        NAKA_ADDR(NakaWidget_CDswWindow),
         NAKA_ADDR(NakaWidget_SmfDpMuteSel2),
         NAKA_ADDR(NakaWidget_SmfDpMuteCtrl1),
         NAKA_ADDR(NakaWidget_SmfDpMuteSel3),
@@ -1677,13 +1677,13 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_SmfDpMuteSel6),
         NAKA_ADDR(NakaWidget_SmfDpMuteCtrl5),
         NAKA_ADDR(NakaWidget_SmfDpMeasure),
-        NAKA_ADDR(NakaWidget_SmfDpRT1Selector),
-        NAKA_ADDR(NakaWidget_SmfDpRT2Selector),
-        NAKA_ADDR(NakaWidget_SmfDpOrchSel),
-        NAKA_ADDR(NakaWidget_SmfDpRT1Display),
+        NAKA_ADDR(NakaWidget_PauseDisp),
+        NAKA_ADDR(NakaWidget_PlayDisp),
+        NAKA_ADDR(NakaWidget_Lyrics),
+        NAKA_ADDR(NakaWidget_LyricsData),
         NAKA_ADDR(NakaWidget_SmfDpMuteSwRow0),
-        NAKA_ADDR(NakaWidget_SmfDpMuteSwRow1),
-        NAKA_ADDR(NakaWidget_SmfDpMuteSwRow2),
+        NAKA_ADDR(NakaWidget_LyricsSong),
+        NAKA_ADDR(NakaWidget_Comporser),
         0x00000000,
     },
 
@@ -1695,8 +1695,8 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_DocDpMuteRow0),
         NAKA_ADDR(NakaWidget_DocDpMeasure),
         NAKA_ADDR(NakaWidget_DocDpFileSelector),
-        NAKA_ADDR(NakaWidget_DocDpFileList),
-        NAKA_ADDR(NakaWidget_DocDpRT2Selector),
+        NAKA_ADDR(NakaWidget_DOCR1Sw),
+        NAKA_ADDR(NakaWidget_DOCR2Sw),
         NAKA_ADDR(NakaWidget_DocDpOrchSelector),
         NAKA_ADDR(NakaWidget_DocDpMixer),
         NAKA_ADDR(NakaWidget_DocDpMic),
@@ -1704,14 +1704,14 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_071 = {
-        NAKA_ADDR(NakaWidget_PdDpContainer),
+        NAKA_ADDR(NakaWidget_DpPd),
         NAKA_ADDR(NakaWidget_PdDpVolume),
         NAKA_ADDR(NakaWidget_PdDpGroup),
         NAKA_ADDR(NakaWidget_PdDpMuteRow0),
         NAKA_ADDR(NakaWidget_PdDpMuteRow1),
         NAKA_ADDR(NakaWidget_PdDpMeasure),
         NAKA_ADDR(NakaWidget_PdDpFileSelector),
-        NAKA_ADDR(NakaWidget_PdDpFileList),
+        NAKA_ADDR(NakaWidget_PDR1Sw),
         NAKA_ADDR(NakaWidget_PdDpOrchSelector),
         NAKA_ADDR(NakaWidget_PdDpMixer),
         NAKA_ADDR(NakaWidget_PdDpMic),
@@ -1719,18 +1719,18 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_072 = {
-        NAKA_ADDR(NakaWidget_SmfMdlyContainer),
+        NAKA_ADDR(NakaWidget_DpSmfLyr),
         NAKA_ADDR(NakaWidget_SmfMdlyVolume),
         NAKA_ADDR(NakaWidget_SmfMdlyMeasure),
         NAKA_ADDR(NakaWidget_SmfMdlyFileSelector),
         NAKA_ADDR(NakaWidget_SmfMdlyMicWidget),
         NAKA_ADDR(NakaWidget_SmfMdlyOrchSel),
-        NAKA_ADDR(NakaWidget_SmfMdlyOrchRow),
+        NAKA_ADDR(NakaWidget_LyricsFunc),
         0x00000000,
     },
 
     .Yoko_ViewTable_073 = {
-        NAKA_ADDR(NakaWidget_SmfMdlyContainer2),
+        NAKA_ADDR(NakaWidget_DpMdlySmf),
         NAKA_ADDR(NakaWidget_SmfMdlyLyricsItem),
         NAKA_ADDR(NakaWidget_SmfMdlySubPanel),
         NAKA_ADDR(NakaWidget_SmfMdlyLyricsToggle),
@@ -1751,7 +1751,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
 
     .Yoko_ViewTable_074 = {
         0x00E21EF4,
-        NAKA_ADDR(NakaWidget_SmfMdlyRootContainer),
+        NAKA_ADDR(NakaWidget_DpMdlyDoc),
         NAKA_ADDR(NakaWidget_DocMdlyContainer),
         NAKA_ADDR(NakaWidget_DocMdlyGroup),
         NAKA_ADDR(NakaWidget_DocMdlyMuteRow0),
@@ -1760,8 +1760,8 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_DocMdlySkipLabel),
         NAKA_ADDR(NakaWidget_DocMdlyMeasureBox),
         NAKA_ADDR(NakaWidget_DocMdlyOffOnSel),
-        NAKA_ADDR(NakaWidget_DocMdlyOffOnList),
-        NAKA_ADDR(NakaWidget_DocMdlyRT2Sel),
+        NAKA_ADDR(NakaWidget_DOCMedR1Sw),
+        NAKA_ADDR(NakaWidget_DOCMedR2Sw),
         NAKA_ADDR(NakaWidget_DocMdlyOrchSel),
         NAKA_ADDR(NakaWidget_DocMdlyMixer),
         NAKA_ADDR(NakaWidget_DocMdlyMic),
@@ -1778,8 +1778,8 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_PdMdlySkipLabel),
         NAKA_ADDR(NakaWidget_PdMdlyMeasureBox),
         NAKA_ADDR(NakaWidget_PdMdlyOffOnSel),
-        NAKA_ADDR(NakaWidget_PdMdlyOffOnList),
-        NAKA_ADDR(NakaWidget_PdMdlyRT2Sel),
+        NAKA_ADDR(NakaWidget_PDMedR1Sw),
+        NAKA_ADDR(NakaWidget_PDMedOrchSw),
         NAKA_ADDR(NakaWidget_PdMdlyMixer),
         NAKA_ADDR(NakaWidget_PdMdlyMic),
         0x00000000,
@@ -1798,7 +1798,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_078 = {
-        NAKA_ADDR(NakaWidget_SongMdlyContainer),
+        NAKA_ADDR(NakaWidget_DkMdlyPly),
         NAKA_ADDR(NakaWidget_SongMdlyGroup),
         NAKA_ADDR(NakaWidget_SongMdlyVolume),
         NAKA_ADDR(NakaWidget_SongMdlySongSel),
@@ -1862,11 +1862,11 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     },
 
     .Yoko_ViewTable_08B = {
-        NAKA_ADDR(NakaWidget_TrAsContainer),
+        NAKA_ADDR(NakaWidget_SqTrAs),
         NAKA_ADDR(NakaWidget_TrAsPresetItem),
         NAKA_ADDR(NakaWidget_TrAsFileList),
         0x0003DEA2,
-        NAKA_ADDR(NakaWidget_TrAsGridDisplay),
+        NAKA_ADDR(NakaWidget_TrAsGrid),
         NAKA_ADDR(NakaWidget_TrAsTrackAssign),
         NAKA_ADDR(NakaWidget_TrAsLocalCont),
         NAKA_ADDR(NakaWidget_TrAsMidiOut),
@@ -1893,12 +1893,12 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_TrAsPresetMatrix),
         NAKA_ADDR(NakaWidget_TrAsPresetPanel),
         NAKA_ADDR(NakaWidget_TrAsPresetInit),
-        NAKA_ADDR(NakaWidget_TrAsPresetGmRec),
-        NAKA_ADDR(NakaWidget_TrAsPresetMeasure),
+        NAKA_ADDR(NakaWidget_TrAsPsTechSel),
+        NAKA_ADDR(NakaWidget_TrAsPsGmSel),
         NAKA_ADDR(NakaWidget_TrAsPresetRT2Sel),
         NAKA_ADDR(NakaWidget_TrAsPresetList),
         NAKA_ADDR(NakaWidget_TrAsPresetGroup),
-        NAKA_ADDR(NakaWidget_TrAsPresetContainer),
+        NAKA_ADDR(NakaWidget_SqTrAsPsSure1),
         NAKA_ADDR(NakaWidget_TrAsPresetMeasure2),
         NAKA_ADDR(NakaWidget_TrAsPresetRT1Sel),
         NAKA_ADDR(NakaWidget_TrAsPresetRT2Sel2),
@@ -1907,7 +1907,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_TrAsPresetList2),
         NAKA_ADDR(NakaWidget_TrAsPresetList3),
         NAKA_ADDR(NakaWidget_TrAsPresetList4),
-        NAKA_ADDR(NakaWidget_TrAsPresetContainer2),
+        NAKA_ADDR(NakaWidget_SqTrAsPsSure2),
         NAKA_ADDR(NakaWidget_TrAsPresetGroup3),
         NAKA_ADDR(NakaWidget_TrAsPresetTypeSel2),
         NAKA_ADDR(NakaWidget_TrAsPresetList5),
@@ -1978,7 +1978,7 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_PerfSoundSel),
         NAKA_ADDR(NakaWidget_PerfRhythmSel),
         NAKA_ADDR(NakaWidget_PerfMeasureBox),
-        NAKA_ADDR(NakaWidget_PerfFileList),
+        NAKA_ADDR(NakaWidget_DemoMed1),
         0x00000000,
     },
 
@@ -1987,14 +1987,14 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_Perf2Strings),
         NAKA_ADDR(NakaWidget_Perf2Gamelan),
         NAKA_ADDR(NakaWidget_Perf2Flute),
-        NAKA_ADDR(NakaWidget_Perf2Guitar),
+        NAKA_ADDR(NakaWidget_DemoSong9),
         NAKA_ADDR(NakaWidget_Perf2SaxBrass),
         NAKA_ADDR(NakaWidget_Perf2Piano),
         NAKA_ADDR(NakaWidget_Perf2StyleSel),
         NAKA_ADDR(NakaWidget_Perf2SoundSel),
         NAKA_ADDR(NakaWidget_Perf2RhythmSel),
         NAKA_ADDR(NakaWidget_Perf2MeasureBox),
-        NAKA_ADDR(NakaWidget_Perf2FileList),
+        NAKA_ADDR(NakaWidget_DemoMed2),
         0x00000000,
     },
 

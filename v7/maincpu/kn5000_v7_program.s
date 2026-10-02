@@ -75,7 +75,23 @@ GUI_FormatStrings:		.include "includes/gui_format_strings.s"
 ; purpose not established.
 ; tried: `lda`/`ld` of a 24- or 32-bit immediate, and any little-endian 24-bit copy of an address from 0x120 B before this slice to its end, anywhere in the ROM: none found
 GUI_DisplayStructData:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x0, 0x226
+	.incbin "includes/generated/gui_display_struct_data.bin", 0x0, 0x6
+NakaWidget_sefillpq1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6, 0x22
+NakaWidget_sefilhpq1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x28, 0x22
+NakaWidget_sefill241:	.incbin "includes/generated/gui_display_struct_data.bin", 0x4A, 0x22
+NakaWidget_sefilh241:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6C, 0x22
+NakaWidget_sefilbpf1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x8E, 0x22
+NakaWidget_sefilbcf1:	.incbin "includes/generated/gui_display_struct_data.bin", 0xB0, 0x22
+NakaWidget_sefilfil2:	.incbin "includes/generated/gui_display_struct_data.bin", 0xD2, 0x22
+NakaWidget_sefilenv1:	.incbin "includes/generated/gui_display_struct_data.bin", 0xF4, 0x22
+NakaWidget_sefilenv2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x116, 0x22
+NakaWidget_sefillfo1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x138, 0x22
+NakaWidget_sedigeff:	.incbin "includes/generated/gui_display_struct_data.bin", 0x15A, 0x22
+NakaWidget_sectr2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x17C, 0x22
+NakaWidget_sectr3:	.incbin "includes/generated/gui_display_struct_data.bin", 0x19E, 0x22
+NakaWidget_secopy:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1C0, 0x22
+NakaWidget_sewrtmem:	.incbin "includes/generated/gui_display_struct_data.bin", 0x1E2, 0x22
+NakaWidget_sewrtsnd:	.incbin "includes/generated/gui_display_struct_data.bin", 0x204, 0x22
 ; 32 parameter blocks of 8 B, one per object 0x20..0x3f (class 0x01600010, proc ViewableProc),
 ; registered by InitializeScoop+0x16F: the block address is the +10 data field of the 14-byte
 ; descriptor {+0 class, +4 proc, +8 u16, +10 data} RegisterObjectTable copies to 0x27ED2 + 14*index

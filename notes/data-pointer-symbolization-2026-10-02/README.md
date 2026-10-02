@@ -14,3 +14,7 @@ start of a code line, 0 inside an instruction.  By file: effects_sequencer_scree
 disk_menu_file_io_screens.s 127, widget_names_charmap.s 72, technichord_part_settings.s 64,
 style_bitmaps.s 53.  Most of the in-`.incbin` targets are NAKA widget records that the
 registered Viewable tables point at.
+
+After `scripts/tools/label_naka_records.py` (same day, notes/naka-record-labels-2026-10-02/):
+422 -- 284 in-incbin, 118 labelled (the absolute `.set` constants), 13 line-start-code,
+7 line-start-data.

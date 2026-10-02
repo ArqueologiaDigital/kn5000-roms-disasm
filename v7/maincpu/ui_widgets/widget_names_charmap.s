@@ -5740,7 +5740,7 @@ NakaInst_trash_bmp:
 ; [nakarest] naka_widget_names_charmap+0x5652  +0x5652..+0x5674 (0xeb2ac2, 34 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
 ; [nakarest] InitializeRoot) ("PanelSimulator"): Screen (34 B).
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5652, 0x22
+NakaWidget_PanelSimulator:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x5652, 0x22
 ; [nakarest] Naka_FileManagerEntry  +0x5674..+0x568e (0xeb2ae4, 26 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x0 (table 0xeb3374, 51 entries,
 ; [nakarest] InitializeRoot) ("PanelSimulator"): Bitmap (26 B).

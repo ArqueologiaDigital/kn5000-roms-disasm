@@ -68,7 +68,7 @@ StrDesc_ApcDataPair:
 StrVal_ApcDataPair_Empty:	aligned_string ""
 StrFld_ApcDataPair_ApcData:	aligned_string "apcdata"
 StrDesc_MspBnkPair_0:
-	.long 0x00E16A60
+	.long StrFld_MspBnkPair_0_MspBnk
 	.long StrVal_MspBnkPair_0_Empty
 StrVal_MspBnkPair_0_Empty:	aligned_string ""
 StrFld_MspBnkPair_0_MspBnk:	aligned_string "mspbnk"
