@@ -4439,11 +4439,9 @@ NoteMap_AddEntry_Skip3:
 	extz	wa
 	inc	4, wa
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte 0x8f
-	push	sr
-	.byte 0xf1
+	cp	a, (xsp+2)
 	jr	nz, NoteMap_AddEntry_Skip4
 	ld	a, (xsp+2)
 	ld	c, a
@@ -4484,11 +4482,9 @@ NoteMap_AddEntry_Loop2:
 	extz	wa
 	add	wa, 132
 	extz	xwa
-	.byte 0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte 0x8f
-	push	sr
-	.byte 0xf1
+	cp	a, (xsp+2)
 	jr	nz, NoteMap_AddEntry_Skip5
 	ldto_berp a, 251
 	ld c, a
@@ -15607,8 +15603,9 @@ ComputeNoteBitPositi_Data:
 	pushw	ix
 	ldto_berp	a, 60
 	cp	a, c
-	jr	nc, 2
+	jr	nc, Voice_ComputeNoteBitPosition_Skip
 	ld	a, c
+Voice_ComputeNoteBitPosition_Skip:
 	popw	bc
 	inc	1, iy
 	djnz16	bc, -52
@@ -15616,8 +15613,7 @@ ComputeNoteBitPositi_Data:
 	ld	c, 11:opc
 	sub	c, a
 	ex8	a, c
-	.byte 0xda
-	swi	4
+	slaa	de	; sla A,DE
 	ex8	a, c
 	ret
 
@@ -26391,6 +26387,7 @@ SendPartDataBlock_Return5_Loop:
 	ld	(xsp+4), 0
 	ldw (xsp+8), 0
 	ldw (xsp+6), 0
+SendPartDataBlock_Data_Loop:
 	ld	wa, (xsp+6)
 	add	wa, 102
 	lda	xbc, (xiz+wa)
@@ -26536,17 +26533,10 @@ SendPartDataBlock_Return5_Skip:
 	ld	a, (xde+61)
 	ld	(xbc+76), a
 	incm8	1, (xsp+4)
-	.byte 0x9f, 0x06
-	push	xwa
-	.byte 0x51
-	nop
-	.byte 0x9f
-	ld	(56:8), 62:io
-	nop
-	.byte 0x8f, 0x04
-	push	xsp
-	max
-	jrl	c, -444
+	addw	(xsp+6), 81
+	addw	(xsp+8), 62
+	cp	(xsp+4), 4
+	jrl	c, SendPartDataBlock_Data_Loop
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -26556,15 +26546,15 @@ HdaeRom_DataHandler_Helper:
 	and	e, 183
 	ld	(xhl), e
 	lda	xbc, (xwa+17)
-	.byte 0xb1
-	inc	6, l
-	halt
+	bit	7, (xbc)
+	jr	z, HdaeRom_DataHandler_Helper_Skip
 	set	6, e
 	ld	(xhl), e
-	.byte 0xb1
-	inc	6, a
-	push	sr
+HdaeRom_DataHandler_Helper_Skip:
+	bit	1, (xbc)
+	jr	z, HdaeRom_DataHandler_Helper_Skip2
 	.byte 0xb3, 0xbb
+HdaeRom_DataHandler_Helper_Skip2:
 	ld	c, (xwa+18)
 	and	c, 240
 	ldfr_berp	c, 240
@@ -26666,11 +26656,8 @@ SendPartDataBlock_Return5_Helper:
 	lda	xix, (xde+345)
 	ldw	bc, 40
 	ldirw
-	.byte 0x85
-	rcf
-	.byte 0xf3
-	swi	5
-	.byte 0xaa, 0x01, 0x37
+	ldi85
+	lda	xsp, (xsp+426)
 	ret
 HdaeRom_DataHandler_Helper2:
 	lda	xsp, (xsp-0x1a)
@@ -26678,7 +26665,7 @@ HdaeRom_DataHandler_Helper2:
 	ld	(xsp+0x16), xbc
 	ld	(xsp+0x1a), xwa
 	ld	xwa, (xsp+0x1a)
-	calr	65441
+	calr	SendPartDataBlock_Return5_Helper
 	ld	xde, (xsp+0x1a)
 	lda	xhl, (xde+0x10)
 	ld	xwa, (xsp+0x16)
@@ -26859,48 +26846,44 @@ SendPartDataBlock_Return5_Skip4:
 	ld	xbc, (xsp+26)
 	lda	xwa, (xbc+17)
 	ld	(xsp+10), xwa
-	.byte 0x80
-	push	xix
-	.byte 0xaa
+	and	(xwa), 170
 	lda	xbc, (xbc+102)
 	ld	xwa, (xsp+22)
 	lda	xde, (xwa+40)
 	ld	(xsp+4), 0
 SendPartDataBlock_Return5_Entry:
-	.byte 0xb2
-	inc	6, l
-	ld	e, 143:opc
-	max
-	push	xsp
-	nop
-	jr	nz, 7
+	bit	7, (xde)
+	jr	z, HdaeRom_DataHandler_Helper2_Join3
+	cp	(xsp+4), 0
+	jr	nz, HdaeRom_DataHandler_Helper2_Skip5
 	ld	xwa, (xsp+10)
-	.byte 0xb0, 0xb8
-	jr	24
-	.byte 0x8f, 0x04
-	push	xsp
-	normal
-	jr	nz, 7
+	set	0, (xwa)
+	jr	HdaeRom_DataHandler_Helper2_Join3
+HdaeRom_DataHandler_Helper2_Skip5:
+	cp	(xsp+4), 1
+	jr	nz, HdaeRom_DataHandler_Helper2_Entry
 	ld	xwa, (xsp+10)
 	.byte 0xb0, 0xba
-	jr	11
+	jr	HdaeRom_DataHandler_Helper2_Join3
+HdaeRom_DataHandler_Helper2_Entry:
 	.byte 0x8f, 0x04
 	push	xsp
 	push	sr
-	jr	nz, 5
+	jr	nz, HdaeRom_DataHandler_Helper2_Join3
 	ld	xwa, (xsp+10)
 	.byte 0xb0, 0xbc
+HdaeRom_DataHandler_Helper2_Join3:
 	lda	xwa, (xbc+6)
 	ld	(xwa), 0
 	lda	xhl, (xbc+38)
 	ld	(xhl), 0
-	.byte 0xb2
-	inc	6, h
-	push	176
-	.byte 0xbd
+	bit	6, (xde)
+	jr	z, HdaeRom_DataHandler_Helper2_Skip6
+	set	5, (xwa)
 	ld	a, (xhl)
 	set	5, a
 	ld	(xhl), a
+HdaeRom_DataHandler_Helper2_Skip6:
 	ld	a, (xde+1)
 	ld	(xbc+2), a
 	ld	a, (xde+2)
@@ -26951,9 +26934,8 @@ SendPartDataBlock_Data2:
 	sla	a, 1
 	ld	(xbc+42), a
 	ld	a, (xde+15)
-	.byte 0xc9, 0xee
-SendPartDataBlock_Data3:
-	normal
+	.set	SendPartDataBlock_Data3, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	sll	a, 1
 	ld	(xbc+43), a
 	ld	a, (xde+16)
 	sla	a, 1
@@ -26981,14 +26963,10 @@ SendPartDataBlock_Data3:
 	ld	a, (xde+20)
 	ld	(xiy), a
 	ld	xwa, (xsp+18)
-	.byte 0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	nz, SendPartDataBlock_Return5_Skip7
 	ld	xwa, (xsp+14)
-	.byte 0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	z, SendPartDataBlock_Return5_Entry2
 	ld	a, (xde+22)
 	ld	(xix), a
@@ -27026,24 +27004,26 @@ SendPartDataBlock_Return5_Skip9:
 	ld	l, a
 	ld	xwa, (xsp+18)
 	ld	(xwa), l
-	.byte 0x8a
-	calr	65343
-	jr	z, 5
-	.byte 0xcf
-SendPartDataBlock_Data4:
-	ldw	bc, 0xb000
-	ld	xsp, 0x8a344db9
-	jp	0x41b421
+	cp	(xde+30), 255
+	jr	z, SendPartDataBlock_Return5_Entry2_Code_Skip
+	.set	SendPartDataBlock_Data4, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	set	0, l
+	ld	(xwa), l
+SendPartDataBlock_Return5_Entry2_Code_Skip:
+	lda	xix, (xbc+77)
+	ld	a, (xde+27)
+	ld	(xix), a
 	ld	xwa, (xsp+6)
 	ld	l, (xwa)
 	ld	a, l
 	and	a, 128
 	cp	a, 128
-	jr	nz, 11
+	jr	nz, SendPartDataBlock_Return5_Entry2_Code_Skip2
 	and	l, 15
 	cp	l, 10
-	jr	nz, 3
+	jr	nz, SendPartDataBlock_Return5_Entry2_Code_Skip2
 	ld	(xix), 127
+SendPartDataBlock_Return5_Entry2_Code_Skip2:
 	ld	a, (xde+28)
 	ld	(xbc+55), a
 	ld	a, (xde+31)
@@ -27275,6 +27255,7 @@ HdaeRom_DataDispatch:
 	cp	(xsp+440), 255
 	jrl	nz, HdaeRom_DataHandler_Skip
 	ldw	(xsp+4), 40
+HdaeRom_DataHandler_Loop2:
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
 	ld	wa, (xsp+4)
@@ -27286,34 +27267,29 @@ HdaeRom_DataDispatch:
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	ld	xiy, xhl
-	.byte 0xaf, 0x06
-	sub	(xiy), l
-	ldw	(36:8), 0x9031:io
-	nop
+	add	xiy, (xsp+6)
+	ld	xix, (xsp+10)
+	ldw	bc, 144
 	ldirw
-	.byte 0x85
-	rcf
+	ldi85
 	ld	xwa, xiz
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte 0xaf, 0x06
-	or	(xhl), c
-	.byte 0x88
+	add	xhl, (xsp+6)
+	ld	xwa, xhl
 	ld	xbc, (xsp+10)
-	calr	63168
-	.byte 0x9f, 0x04
-	push	xde
-	normal
-	nop
-	jr	nz, -82
-	jrl	208
+	calr	SendPartDataBlock_Data
+	subw	(xsp+4), 1
+	jr	nz, HdaeRom_DataHandler_Loop2
+	jrl	HdaeRom_DataHandler_Skip
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
-	jr	nz, 90
+	jr	nz, HdaeRom_DataHandler_Skip2
 	cp	(xsp+440), 255
-	jr	nz, 82
+	jr	nz, HdaeRom_DataHandler_Skip2
 	ldw	(xsp+4), 36
+HdaeRom_DataHandler_Loop3:
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
 	ld	wa, (xsp+4)
@@ -27333,21 +27309,18 @@ HdaeRom_DataDispatch:
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte 0xaf, 0x06
-	or	(xhl), c
-	.byte 0x88
+	add	xhl, (xsp+6)
+	ld	xwa, xhl
 	ld	xbc, (xsp+10)
-	calr	64029
-	.byte 0x9f, 0x04
-	push	xde
-	normal
-	nop
-	jr	nz, -75
-	jr	107
+	calr	HdaeRom_DataHandler_Helper2
+	subw	(xsp+4), 1
+	jr	nz, HdaeRom_DataHandler_Loop3
+	jr	HdaeRom_DataHandler_Skip
+HdaeRom_DataHandler_Skip2:
 	ld	a, (xsp+440)
 	extz	wa
 	ld	(xsp+4), wa
-	jr	81
+	jr	HdaeRom_DataHandler_Join
 HdaeRom_DataHandler_Loop:
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -27356,9 +27329,8 @@ HdaeRom_DataHandler_Loop:
 	add	xbc, xwa
 	sll	xbc, 4
 	add	xbc, 80
-	.byte 0xaf, 0x06
-	or	(xbc), a
-	.byte 0x88
+	add	xbc, (xsp+6)
+	ld	xwa, xbc
 	calr	HdaeRom_DataHandler_Helper
 	ld	iz, (xsp+4)
 	extz	xiz
@@ -27366,18 +27338,17 @@ HdaeRom_DataHandler_Loop:
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte 0xaf, 0x06
-	or	(xhl), h
-	or	(xbc-23), h
-	pop	sr
+	add	xhl, (xsp+6)
+	ld	xbc, xiz
+	sll	xbc, 3
 	add	xbc, xiz
 	sll	xbc, 4
 	add	xbc, 80
-	.byte 0xaf, 0x06
-	or	(xbc), c
-	.byte 0x88
+	add	xbc, (xsp+6)
+	ld	xwa, xhl
 	calr	HdaeRom_DataHandler_Helper2
 	incw	1, (xsp+4)
+HdaeRom_DataHandler_Join:
 	ld	a, (xsp+440)
 	inc	1, a
 	extz	wa
@@ -27637,17 +27608,17 @@ TmFlashWrite_ValidateParams:
 	cp	bc, 0:i3
 	jrl	lt, TmFlashWrite_Block2_Code_Skip
 	ld	iz, 0:i3
-	.byte 0x8f, 0x04
-	.ascii "?@oHè"
-	.byte 0x04
-	ld	a, 216:opc
-	ccf
+	cp	(xsp+4), 64
+	jr	nc, TmFlashWrite_ValidateParams_Loop2
+TmFlashWrite_ValidateParams_Loop:
+	ld	a, (xsp+4)
+	extz	wa
 	ldto_berp	c, 248
 	extz	bc
 	calr	HdaeRom_DataHandler
 	inc	1, iz
 	cp	iz, 20
-	jr	c, -21
+	jr	c, TmFlashWrite_ValidateParams_Loop
 	calr	HdaeRom_DataDispatch_Block
 	ld	a, (xsp+4)
 	ldfr_berp	a, 248
@@ -27660,42 +27631,37 @@ TmFlashWrite_ValidateParams:
 	add	xhl, 16
 	ld	xwa, 0x1e0000
 	add	xwa, xhl
-	.byte 0xf3, 0xed
-	nop
-	jrl	0x3132
-	.byte 0xb8
-	ld	d, 104:opc
-	ld	e, 143:opc
-	.byte 0x04
-	ld	a, 216:opc
-	ccf
+	lda	xde, (xhl+30720)
+	ldw	bc, 9400
+	jr	TmFlashWrite_Block3
+TmFlashWrite_ValidateParams_Loop2:
+	ld	a, (xsp+4)
+	extz	wa
 	ldto_berp	c, 248
 	extz	bc
 	calr	HdaeRom_AltHandler
 	inc	1, iz
 	cp	iz, 128
-	jr	c, -21
+	jr	c, TmFlashWrite_ValidateParams_Loop2
 	calr	HdaeRom_DataDispatch_Block
 	lda	xwa, (0x1e4aa7:24)
 	ldw	bc, 0x2800
-	.byte 0x42
-TmFlashWrite_Block2:
-	.byte 0xa7, 0xc2
-	nop
-	nop
+	.set	TmFlashWrite_Block2, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	xde, 0xc2a7
 TmFlashWrite_Block3:
 	call	InterCPU_E1_Bulk_Transfer
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 255
 	call	BuildAndSendPacket_Block
-	jr	12
+	jr	TmFlashWrite_ValidateParams_Join
 TmFlashWrite_Block2_Code_Skip:
 	ld	a, (xsp+0x4)
 	extz	wa
 	ldw	bc, 255
-	call	0xfef455
-	call	0xf851de
+	call	COMM_BuildAndSendPacket
+TmFlashWrite_ValidateParams_Join:
+	call	FDemoText_RefreshFullDisplay
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -27753,39 +27719,35 @@ TmFlash_WriteRoutine_Entry:
 	push	xsp
 	pushw	wa
 	nop
-	jr	nc, -23
+	jr	nc, TmFlash_WriteRoutine_Skip
 	add	xhl, xde
 	ld	xwa, (xsp+14)
 	ld	(xwa), xhl
 	ldw	wa, 470
-	jr	49
+	jr	TmFlash_WriteRoutine_Entry_Code_Join
 TmFlash_WriteRoutine_Skip2:
 	lda	xbc, (0x1e0000:24)
-	.byte 0xbf
-	push_a
-	inc	6, a
-	ex_ff
-	.byte 0x9f
-	ccf
-	push	xsp
-	normal
-	nop
-	jr	nc, -52
+	bit	1, (xsp+20)
+	jr	z, TmFlash_WriteRoutine_Entry_Code_Entry
+	cpw	(xsp+18), 1
+	jr	nc, TmFlash_WriteRoutine_Skip
 	lda xbc, (xbc+18816)
 	ld xwa, (xsp+14)
 	ld (xwa), xbc
 	.ascii "0')h"
 	scf
+TmFlash_WriteRoutine_Entry_Code_Entry:
 	.byte 0x9f
 	ccf
 	push	xsp
 	pushw	wa
 	nop
-	jr	nc, -74
+	jr	nc, TmFlash_WriteRoutine_Skip
 	add	xbc, xhl
 	ld	xwa, (xsp+14)
 	ld	(xwa), xbc
 	ldw	wa, 470
+TmFlash_WriteRoutine_Entry_Code_Join:
 	ld	xbc, (xsp+26)
 	ld	(xbc), wa
 	jr	TmFlash_WriteRoutine_Join
@@ -27857,10 +27819,8 @@ TmFlash_BulkTransferToSubCPU_Join:
 	add	xbc, xwa
 	sll	xbc, 4
 	add	xbc, 80
-	.byte 0xaf
-	push	sr
-	or	(xbc), a
-	.byte 0x8b
+	add	xbc, (xsp+2)
+	ld	xhl, xbc
 	jr	TmFlash_BulkTransferToSubCPU_Epilogue
 TmFlash_BulkTransferToSubCPU_Skip3:
 	ld	xhl, 0xffffff9a
@@ -27977,19 +27937,19 @@ TmFlash_CompareStrings:
 	jr	38
 TmFlash_CompareStrings_Loop:
 	ld	a, (xsp+8)
-	.byte 0x86, 0xf1
+	cp	a, (xiz)
 	jr	nz, 26
-	.byte 0x9f
-	ei	4
+	pushw	(xsp+6)
 	push	xiz
 	ld	xwa, (xsp+24)
 	push	xwa
 	call	Mem_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 4
+	jr	nz, TmFlash_CompareStrings_Skip
 	ld	xhl, xiz
 	jr	TmFlash_CompareStrings_Epilogue
+TmFlash_CompareStrings_Skip:
 	inc	1, xiz
 	decm	1, (xsp+4)
 	ld	wa, (xsp+6)

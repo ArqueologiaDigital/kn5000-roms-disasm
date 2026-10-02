@@ -535,6 +535,7 @@ DSPCfg_SyncBitmapData:
 	ld	(xsp+10), xwa
 	ld	bc, (0x9042:16)
 	jrl	DSPCfg_CopyEntryValues_Entry
+DSPCfg_CopyEntryValues_Loop:
 	ld	(xsp+6), 0
 	ld	a, (xiz+)
 	ld	(xsp+8), a
@@ -543,16 +544,16 @@ DSPCfg_SyncBitmapData:
 	.byte	0x8f
 	ld	(63:8), 0:io
 	jr	z, DSPCfg_CopyEntryValues_Entry
+DSPCfg_CopyEntryValues_Loop2:
 	ld	xwa, (xsp+18)
 	ld	a, (xwa)
 	.byte	0x86, 0xf1
-	jr	z, 87
+	jr	z, DSPCfg_CopyEntryValues_Skip2
 	cp	bc, 500
-	jr	c, 22
+	jr	c, DSPCfg_CopyEntryValues_Skip
 	extz	xbc
-	.byte	0xaf
-	ldw	(129:8), 177:io
-	swi	7
+	add	xbc, (xsp+10)
+	ld	(xbc), 255
 	push	xde
 	push	xhl
 	push	xix
@@ -563,45 +564,46 @@ DSPCfg_SyncBitmapData:
 	pop	xhl
 	pop	xde
 	ld	bc, 0:i3
+DSPCfg_CopyEntryValues_Skip:
 	ld	de, bc
 	inc	1, bc
 	extz	xde
-	.byte	0xaf
-	ldw	(130:8), 1167:io
-	ld	a, 178:opc
-	ld	xbc, 0x61d98ad9
+	add	xde, (xsp+10)
+	ld	a, (xsp+4)
+	ld	(xde), a
+	ld	de, bc
+	inc	1, bc
 	extz	xde
-	.byte	0xaf
-	ldw	(130:8), 1679:io
-	ld	a, 178:opc
-	ld	xbc, 0x61d98ad9
+	add	xde, (xsp+10)
+	ld	a, (xsp+6)
+	ld	(xde), a
+	ld	de, bc
+	inc	1, bc
 	extz	xde
-	.byte	0xaf
-	ldw	(130:8), 8582:io
+	add	xde, (xsp+10)
+	ld	a, (xiz)
 	ld	(xde), a
 	ld	xwa, (xsp+18)
 	ld	e, (xwa)
-	.byte	0x86, 0xd5
+	xor	e, (xiz)
 	ld	wa, bc
 	inc	1, bc
 	extz	xwa
-	.byte	0xaf
-	ldw	(128:8), 0x45b0:io
+	add	xwa, (xsp+10)
+	ld	(xwa), e
+DSPCfg_CopyEntryValues_Skip2:
 	incm8	1, (xsp+6)
 	decm8	1, (xsp+8)
 	inc	1, xiz
 	ld	xwa, 1:i3
 	add	(xsp+18), xwa
-	.byte	0x8f
-	ld	(63:8), 0:io
-	jr	nz, -115
+	cp	(xsp+8), 0
+	jr	nz, DSPCfg_CopyEntryValues_Loop2
 DSPCfg_CopyEntryValues_Entry:
-	.byte	0xc5
-	swi	0
-	ld	a, 191:opc
-	.byte	0x04
-	ld	xbc, 0xff3f048f
-	jrl	nz, -149
+	ld	a, (xiz+)
+	ld	(xsp+4), a
+	cp	(xsp+4), 255
+	jrl	nz, DSPCfg_CopyEntryValues_Loop
 	ld	wa, bc
 	extz	xwa
 	add	xwa, (xsp+14)

@@ -21678,9 +21678,7 @@ RhythmROM_PatternDisp_CheckCmd:
 	jrl	ge, 28166
 	pop	sr
 	jr	nz, 7
-	.byte 0x9f
-	pop	sr
-	.byte 0x9f
+	adc	(xsp+3), sp
 	reti
 	incf
 	pop	sr
@@ -36563,10 +36561,15 @@ StylCnv_Type6_Dispatch:
 	ld XBC,XWA
 	lda xde, (xwa+256)
 StylCnv_Type6_ClearRegion:
-	.byte 0xe8, 0xa8, 0xf5, 0xe6, 0x60, 0xea, 0xf1, 0x67
-	.byte 0xf7, 0xe1, 0xc0, 0x3c, 0x20, 0xf1, 0xc4, 0x3c
-	.byte 0x60, 0xbf, 0x04, 0x02, 0x00, 0x00, 0xd1, 0x3c
-	.byte 0x48, 0x3f, 0x00, 0x00, 0x73, 0xae, 0x00
+	ld	xwa, 0:i3
+	ld	(xbc+), xwa
+	cp	xbc, xde
+	jr	c, StylCnv_Type6_ClearRegion
+	ld	xwa, (15552:16)
+	ld	(15556:16), xwa
+	ldw	(xsp+4), 0
+	cpw	(18492:16), 0
+	jrl	ule, StylCnv_Type6_BuildFfcBuffer
 StylCnv_Type6_MainLoop:
 	ld	iz, 0:i3
 	lda	xbc, (18416:16)

@@ -5160,7 +5160,7 @@ MainSysControl:
 	jp	t, (xix+wa)
 MainSysCtrl_DispatchTable:
 	ld	wa, 2:i3
-	call	Boot_InitPeripherals_Helper
+	call	ScreenGroup_Dispatch
 	jr	MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry1_AccDemo:
 	call AccDemo_InitDone

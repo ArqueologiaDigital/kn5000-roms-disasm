@@ -8176,20 +8176,20 @@ SeMenu_PresetManager_SaveApply_Helper:
 	ld	xix, SeScreenData_0x06DB + 10
 	call	SeGfx_DrawStaticList
 	ld	c, 2:opc
-	jr	22
+	jr	SeMenu_PresetManager_SaveApply_Helper_Join
 SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x06DB
 	ld	xix, SeBitmap_Picture40x40
 	call	SeGfx_DrawStaticList
 	ld	c, 4:opc
+SeMenu_PresetManager_SaveApply_Helper_Join:
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
-	.byte 0xc8
-	swi	7
-	jr	c, 34
+	srla	w	; srl A,W
+	jr	c, SeMenu_PresetManager_SaveApply_Helper_Skip
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8199,7 +8199,8 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
-	jr	32
+	jr	SeMenu_PresetManager_SaveApply_Helper_Join2
+SeMenu_PresetManager_SaveApply_Helper_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8209,6 +8210,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
+SeMenu_PresetManager_SaveApply_Helper_Join2:
 	djnz8	c, -84
 	ld	(0x03efa8:24), 1
 	ld	xiy, SeScreenData_0x086E
@@ -8764,20 +8766,20 @@ SeMenu_PresetBrowser_Init_Helper:
 	ld	xix, SeScreenData_0x0B7E + 10
 	call	SeGfx_DrawStaticList
 	ld	c, 2:opc
-	jr	22
+	jr	SeMenu_PresetBrowser_Init_Helper_Join
 SeMenu_PresetManager_Data_Skip2:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x0B7E
 	ld	xix, SeScreenData_0x0B92
 	call	SeGfx_DrawStaticList
 	ld	c, 4:opc
+SeMenu_PresetBrowser_Init_Helper_Join:
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
-	.byte 0xc8
-	swi	7
-	jr	c, 34
+	srla	w	; srl A,W
+	jr	c, SeMenu_PresetBrowser_Init_Helper_Skip
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8787,7 +8789,8 @@ SeMenu_PresetManager_Data_Skip2:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
-	jr	32
+	jr	SeMenu_PresetBrowser_Init_Helper_Join2
+SeMenu_PresetBrowser_Init_Helper_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8797,22 +8800,24 @@ SeMenu_PresetManager_Data_Skip2:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
+SeMenu_PresetBrowser_Init_Helper_Join2:
 	djnz8	c, -84
 	ret
 SeMenu_PresetManager_SaveApply_Helper2:
 	ld	(0x03efa8:24), 0
 	cp	(0x6ae:16), 1
-	jr	nz, 4
+	jr	nz, SeMenu_PresetManager_SaveApply_Helper2_Skip
 	ld	c, 2:opc
-	jr	2
+	jr	SeMenu_PresetManager_SaveApply_Helper2_Join
+SeMenu_PresetManager_SaveApply_Helper2_Skip:
 	ld	c, 4:opc
+SeMenu_PresetManager_SaveApply_Helper2_Join:
 	ld	w, (1630:16)
 	ld	a, c
 	sla	a, 1
 	dec	1, a
-	.byte 0xc8
-	swi	7
-	jr	c, 34
+	srla	w	; srl A,W
+	jr	c, SeMenu_PresetManager_SaveApply_Helper2_Skip2
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8822,7 +8827,8 @@ SeMenu_PresetManager_SaveApply_Helper2:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
-	jr	32
+	jr	SeMenu_PresetManager_SaveApply_Helper2_Join2
+SeMenu_PresetManager_SaveApply_Helper2_Skip2:
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8832,6 +8838,7 @@ SeMenu_PresetManager_SaveApply_Helper2:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
+SeMenu_PresetManager_SaveApply_Helper2_Join2:
 	djnz8	c, -84
 	ret
 SeMenu_WaveformSelect_Apply_Helper4:
@@ -8841,9 +8848,8 @@ SeMenu_WaveformSelect_Apply_Helper4:
 	ld	a, c
 	sla	a, 1
 	dec	1, a
-	.byte 0xc8
-	swi	7
-	jr	c, 34
+	srla	w	; srl A,W
+	jr	c, SeMenu_WaveformSelect_Apply_Helper4_Skip
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8853,7 +8859,8 @@ SeMenu_WaveformSelect_Apply_Helper4:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
-	jr	32
+	jr	SeMenu_WaveformSelect_Apply_Helper4_Join
+SeMenu_WaveformSelect_Apply_Helper4_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8863,6 +8870,7 @@ SeMenu_WaveformSelect_Apply_Helper4:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
+SeMenu_WaveformSelect_Apply_Helper4_Join:
 	djnz8	c, -84
 	ret
 SeMenu_PresetManager_SaveApply_Helper3:
@@ -8937,9 +8945,8 @@ SeMenu_PresetBrowser_Select_Helper:
 	ld	a, c
 	sla	a, 1
 	dec	1, a
-	.byte 0xc8
-	swi	7
-	jr	c, 34
+	srla	w	; srl A,W
+	jr	c, SeMenu_PresetBrowser_Select_Helper_Skip
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8949,7 +8956,8 @@ SeMenu_PresetBrowser_Select_Helper:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
-	jr	32
+	jr	SeMenu_PresetBrowser_Select_Helper_Join
+SeMenu_PresetBrowser_Select_Helper_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
@@ -8959,6 +8967,7 @@ SeMenu_PresetBrowser_Select_Helper:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop	c
+SeMenu_PresetBrowser_Select_Helper_Join:
 	djnz8	c, -84
 	ret
 SeMenu_PresetBrowser_Select_Helper2:
@@ -9114,10 +9123,8 @@ SeMenu_CompareAndApply_Data4:
 SeMenu_CompareAndApply_Data5:
 	call	SeMenu_BitShiftMask_Helper
 	call	SeMenu_PresetManager_SaveApply_Helper
-	.byte 0x1d, 0xbd
-SeMenu_CompareAndApply_Data6:
-	swi	3
-	.byte 0xf0
+	.set	SeMenu_CompareAndApply_Data6, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	call	SeMenu_CompareAndApply_Data
 	call	SeMenu_PresetManager_Save
 	ld	(0x03efa8:24), 2
 	ld	xiy, SeScreenData_0x1452

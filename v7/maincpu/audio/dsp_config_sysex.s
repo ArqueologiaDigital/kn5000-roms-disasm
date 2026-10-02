@@ -1496,10 +1496,9 @@ Audio_ConfigureDSP:
 	call	Audio_ResetAfterPayloadError_Helper
 	ldw	wa, 0x4e
 	call	CtrlPanel_SetIndicatorLED
-	.byte 0x30
-; MidiSysEx_ApplyChannel is kept at this address only for ui_widgets/widget_dispatch.s; v10's MidiSysEx_ApplyChannel is the code at 0xFDB19A
-MidiSysEx_ApplyChannel:
-	.byte 0x7f, 0x00
+	.set	MidiSysEx_ApplyChannel, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ldw	wa, 127
+	; MidiSysEx_ApplyChannel is kept at this address only for ui_widgets/widget_dispatch.s; v10's MidiSysEx_ApplyChannel is the code at 0xFDB19A
 	jr	CompIface_WriteVolume
 DSPCfg_ProcessInput:
 	ld	c, (0xbfe4:16)
@@ -2276,21 +2275,22 @@ DSPCfg_Data_003:
 	push	xhl
 	calr	DSPCfg_ExtractPairFromStruct
 	ldw	hl, 0xffff
-	.byte	0x8f, 0x06
-	push	xsp
-	normal
-	jr	nz, 2
+	cp	(xsp+6), 1
+	jr	nz, DSPCfg_FindSlot63_Epilogue
 	ld	hl, 0:i3
+DSPCfg_FindSlot63_Epilogue:
 	pop	xiz
 	inc	8, xsp
 	ret
 	cp	wa, 4:i3
-	jr	ge, 8
+	jr	ge, DSPCfg_FindSlot63_Skip
 	cp	wa, 0:i3
-	jr	lt, 4
+	jr	lt, DSPCfg_FindSlot63_Skip
 	ld	hl, 0:i3
-	jr	3
+	jr	DSPCfg_FindSlot63_Return2
+DSPCfg_FindSlot63_Skip:
 	ldw	hl, 0xffff
+DSPCfg_FindSlot63_Return2:
 	ret
 DSPCfg_DecodeParamIdRange:
 	lda	xsp, (xsp - 10)
@@ -3526,10 +3526,9 @@ DSPCfg_ApplyParamStruct_CheckSpecial:
 	ld	bc, (xsp + 10)
 	cpw	(xsp + 4), 0x63
 	jr	z, DSPCfg_ApplyParamStruct_Offset2
-	.byte 0xda, 0xcf
-; DSPCfg_Data_ParamDispatch is kept at this address only for shared/positional_labels.s; v10's DSPCfg_Data_ParamDispatch is the code at 0xFDC506
-DSPCfg_Data_ParamDispatch:
-	.byte 0x62, 0x00
+	.set	DSPCfg_Data_ParamDispatch, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	cp	de, 98
+	; DSPCfg_Data_ParamDispatch is kept at this address only for shared/positional_labels.s; v10's DSPCfg_Data_ParamDispatch is the code at 0xFDC506
 	jr	z, DSPCfg_ApplyParamStruct_Offset2
 	cp	de, 0x61
 	jr	z, DSPCfg_ApplyParamStruct_Offset2
@@ -4536,23 +4535,24 @@ DSPCfg_ReturnValueTable:
 	ret
 	ldw	hl, 256
 	ret
+ScreenGroup_ReInit:
 	call	MidiParam_ForceResync
 	call	Audio_UpdateLEDsAndChannels
 	call	Reset_Floppy_Disk_Controller
 	call	SndParam_Init
 	call	MainTitle_InitGraphicsAndEvents
 	jp	LoadAndRunXapr_Entry
-Boot_InitPeripherals_Helper:
+ScreenGroup_Dispatch:
 	push	xiz
 	ld	iz, wa	; Screen group ID
 	cp	iz, 0:i3
-	jr	nz, DataBuf_CopyVoiceBlock24_Code_Helper2_Skip2
+	jr	nz, ScreenGroup_SetupWidgetPtr
 	call	DataBuf_CopyVoiceBlock24_Code_Helper2_Helper	; Initialize screen state
 	call	TmFlash_CopyToExtMem
-DataBuf_CopyVoiceBlock24_Code_Helper2_Skip2:
+ScreenGroup_SetupWidgetPtr:
 	ldiw_erp	0xfa, 0
-	jr	DataBuf_CopyVoiceBlock24_Code_Helper2_Join
-DataBuf_CopyVoiceBlock24_Code_Helper2_Loop:
+	jr	ScreenGroup_WidgetLoop
+VoiceInit_Dispatch:
 	push	xiz
 	ld	de, iz
 	extz	xde
@@ -4568,7 +4568,7 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Loop:
 	call	(xhl)
 	pop	xiz
 	inc1w_erp	0xfa
-DataBuf_CopyVoiceBlock24_Code_Helper2_Join:
+ScreenGroup_WidgetLoop:
 	ldto_werp	WA, 0xfa
 	extz	xwa
 	sll	xwa, 2
@@ -4576,7 +4576,7 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Join:
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	or	xwa, xwa
-	jr	nz, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop
+	jr	nz, VoiceInit_Dispatch
 	cp	iz, 0:i3
 	call	z, (0xfdd35d:24)
 	pop	xiz
@@ -4609,7 +4609,7 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Helper:
 	and	(0xc239:16), 1
 	ld	de, 0:i3
 	cp	de, 0x20
-	jrl	ge, DataBuf_CopyVoiceBlock24_Code_Helper2_Skip3
+	jrl	ge, ScreenGroup_InitParams16
 DataBuf_CopyVoiceBlock24_Code_Helper2_Loop2:
 	ld	wa, de
 	inc	4, wa
@@ -4663,11 +4663,11 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Loop2:
 	inc	1, de
 	cp	de, 0x20
 	jrl	lt, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop2
-DataBuf_CopyVoiceBlock24_Code_Helper2_Skip3:
+ScreenGroup_InitParams16:
 	ld	de, 0:i3
 	cp	de, 0x10
-	jr	ge, DataBuf_CopyVoiceBlock24_Code_Helper2_Skip4
-DataBuf_CopyVoiceBlock24_Code_Helper2_Loop3:
+	jr	ge, ScreenGroup_InitParams8
+ScreenGroup_InitParam16Loop:
 	ld	wa, de
 	add	wa, 0x84
 	ld	(xbc+wa), 0xff
@@ -4679,12 +4679,12 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Loop3:
 	ld	(xbc+wa), 0xff
 	inc	1, de
 	cp	de, 0x10
-	jr	lt, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop3
-DataBuf_CopyVoiceBlock24_Code_Helper2_Skip4:
+	jr	lt, ScreenGroup_InitParam16Loop
+ScreenGroup_InitParams8:
 	ld	de, 0:i3
 	cp	de, 0x8
-	jr	ge, DataBuf_CopyVoiceBlock24_Code_Helper2_Skip5
-DataBuf_CopyVoiceBlock24_Code_Helper2_Loop4:
+	jr	ge, ScreenGroup_InitParams8Complex
+ScreenGroup_InitParam8Loop:
 	ld	wa, de
 	add	wa, 0xb4
 	ld	(xbc+wa), 0xff
@@ -4693,12 +4693,12 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Loop4:
 	ld	(xbc+wa), 0xff
 	inc	1, de
 	cp	de, 0x8
-	jr	lt, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop4
-DataBuf_CopyVoiceBlock24_Code_Helper2_Skip5:
+	jr	lt, ScreenGroup_InitParam8Loop
+ScreenGroup_InitParams8Complex:
 	ld	de, 0:i3
 	cp	de, 0x8
 	jr	ge, DataBuf_CopyVoiceBlock24_Code_Helper2_Skip6
-DataBuf_CopyVoiceBlock24_Code_Helper2_Loop5:
+ScreenGroup_InitParam8ComplexLoop:
 	ld	wa, de
 	sla	wa, 2
 	add	wa, 0xc4
@@ -4727,7 +4727,7 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Loop5:
 	andmi8	(xwa + 3), 0x1
 	inc	1, de
 	cp	de, 0x8
-	jr	lt, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop5
+	jr	lt, ScreenGroup_InitParam8ComplexLoop
 DataBuf_CopyVoiceBlock24_Code_Helper2_Skip6:
 	ld	(xbc), 0x1
 	ld	(xbc + 4), 0x0
@@ -4756,10 +4756,9 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Loop6:
 	jr	lt, DataBuf_CopyVoiceBlock24_Code_Helper2_Loop6
 DataBuf_CopyVoiceBlock24_Code_Helper2_Skip7:
 	ld	(0xc9ce:16), 8
-	.byte 0xf1, 0xcf
-; DSPCfg_EventType50 is kept at this address only for ui_widgets/widget_dispatch.s; v10's DSPCfg_EventType50 is the code at 0xFDD1E7
-DSPCfg_EventType50:
-	.byte 0xc9, 0x00, 0x00
+	.set	DSPCfg_EventType50, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	ld	(51663:16), 0
+	; DSPCfg_EventType50 is kept at this address only for ui_widgets/widget_dispatch.s; v10's DSPCfg_EventType50 is the code at 0xFDD1E7
 	ld	(0xc9d0:16), 8
 	ld	(0xc9d1:16), 0
 	ld	(0xc9d2:16), 16

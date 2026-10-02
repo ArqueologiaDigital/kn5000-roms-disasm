@@ -1075,7 +1075,7 @@ User_didnt_request_flash_mem_update:
 	calr	SubCPU_Send_Payload
 	calr	SubCPU_Payload_Verify
 	ld	wa, 0:i3
-	call	Boot_InitPeripherals_Helper
+	call	ScreenGroup_Dispatch
 	ei	0
 	call	SelfTest_FirmwareVersionCheck
 	calr	SubCPU_Payload_GetErrorFlag
@@ -1087,10 +1087,10 @@ Boot_PayloadError:
 	ld wa, 2:i3	; Error: use screen group 2
 
 Boot_DisplayScreen:
-	call	Boot_InitPeripherals_Helper
+	call	ScreenGroup_Dispatch
 	ld	(1024:16), 6
 	ld	wa, 3:i3
-	call	Boot_InitPeripherals_Helper
+	call	ScreenGroup_Dispatch
 	ld	(1024:16), 128
 	ldw	(65492:24), 0
 	ld	a, (1026:16)

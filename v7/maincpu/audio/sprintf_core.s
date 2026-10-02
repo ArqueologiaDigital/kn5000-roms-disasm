@@ -83,10 +83,9 @@ Sprintf_ParseWidthDigit:
 	ld	bc, iz
 	sub	bc, 0x30
 	ld	wa, (xsp + 8)
-	.byte 0xd8, 0x09, 0x0a
-; Strncpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strncpy is the code at 0xFF0516
-Strncpy:
-	.byte 0x00
+	.set	Strncpy, . + 3	; no instruction starts here: the name points 3 byte(s) into the one below
+	muls	wa, 10
+	; Strncpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strncpy is the code at 0xFF0516
 	ld	(xsp + 8), wa
 	add	(xsp + 8), bc
 	ld	xwa, (xsp + 82)
@@ -329,10 +328,9 @@ Sprintf_Decimal_GetShortArg:
 	ld	xwa, 2:i3
 	add	(xbc), xwa
 	ld	xwa, (xbc)
-	.byte 0x98
-; Strcpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strcpy is the code at 0xFF0770
-Strcpy:
-	.byte 0xfe, 0x20
+	.set	Strcpy, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	wa, (xwa-2)
+	; Strcpy is kept at this address only for ui_widgets/naka_widget_descriptors.c; v10's Strcpy is the code at 0xFF0770
 	exts	xwa
 	ld	(xsp + 16), xwa
 Sprintf_Decimal_Setup:

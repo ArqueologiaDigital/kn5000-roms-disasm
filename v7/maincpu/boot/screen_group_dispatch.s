@@ -106,9 +106,8 @@ MimeSyori_Helper:
 	jr	ScreenGroup_InitVoiceLoop_Code_Join2
 DkMdlyPly_CheckState_Helper2_Skip2:
 	andw	(0xc4f8:16), 0xffef
-	.byte	0xf1, 0x66
-ScreenGroup_InitVoiceLoop:
-	.byte	0xfc, 0xc8
+	.set	ScreenGroup_InitVoiceLoop, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	bit	0, (64614:16)
 	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip
 	set	0, (0xc162:16)
 ScreenGroup_InitVoiceLoop_Code_Skip:

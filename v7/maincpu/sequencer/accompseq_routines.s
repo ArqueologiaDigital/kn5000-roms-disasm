@@ -1958,7 +1958,7 @@ AccompSeq_SeqParse_TempoStore:
 	ld	(32168:16), wa
 	ld	wa, qwa
 	ld	(32166:16), wa
-	jp	16181809
+	jp	AccompSeq_SeqParse_Loop
 AccompSeq_SeqParse_Return:
 	ret
 

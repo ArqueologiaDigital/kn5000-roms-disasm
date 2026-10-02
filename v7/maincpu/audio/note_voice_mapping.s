@@ -643,7 +643,7 @@ AccNoteOn_CheckSpecialChannel:
 	jr	nz, AccNoteOn_CheckLayer3Only
 	ld	wa, (0xc4fc:16)
 	and	wa, 0xa
-	jr	z, 76
+	jr	z, AccNoteOn_ProcessVoiceSetup_Skip
 	ld	xhl, 0xcade
 	ld	xbc, 0xcb82
 	lda	xwa, (xsp + 10)
@@ -663,9 +663,13 @@ AccNoteOn_SpecialMergeAndAdd:
 	call	NoteMap_MergeEntries
 	cp	l, 0:i3
 	jr	z, AccNoteOn_FinalizeAndAutoPlay
-	.byte 0x40, 0xde, 0xca, 0x00, 0x00, 0xaf, 0x02, 0x21
-	.byte 0x32, 0x15, 0x00, 0x1d, 0xc0, 0x21, 0xfe, 0x68
-	.byte 0x5d, 0x40, 0x82, 0xcb, 0x00, 0x00
+	ld	xwa, 0xcade
+	ld	xbc, (xsp+2)
+	ldw	de, 21
+	call	NoteMap_AddEntry
+	jr	AccNoteOn_FinalizeAndAutoPlay
+AccNoteOn_ProcessVoiceSetup_Skip:
+	ld	xwa, 0xcb82
 	ld	xbc, (xsp + 2)
 	ldw	de, 0x15
 	.byte 0x1d, 0xc0, 0x21, 0xfe
@@ -4130,11 +4134,9 @@ NoteMap_AddEntry_Skip3:
 	extz	wa
 	inc	4, wa
 	extz	xwa
-	.byte	0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte	0x8f
-	push	sr
-	.byte	0xf1
+	cp	a, (xsp+2)
 	jr	nz, NoteMap_AddEntry_Skip4
 	ld	a, (xsp+2)
 	ld	c, a
@@ -4175,11 +4177,9 @@ NoteMap_AddEntry_Loop2:
 	extz	wa
 	add	wa, 132
 	extz	xwa
-	.byte	0xaf, 0x04, 0x80
+	add	xwa, (xsp+4)
 	ld	a, (xwa)
-	.byte	0x8f
-	push	sr
-	.byte	0xf1
+	cp	a, (xsp+2)
 	jr	nz, NoteMap_AddEntry_Skip5
 	ldto_berp	a, 251
 	ld	c, a
@@ -13455,10 +13455,9 @@ NoteMap_SearchVoiceEntry_Loop:
 	ld	bc, de
 	extz	xbc
 	add	xbc, xbc
-	.byte 0xe9
-; SeqEvtBuf_NoteDispatch is kept at this address only for ui_widgets/widget_dispatch.s; v10's SeqEvtBuf_NoteDispatch is the code at 0xFE817E
-SeqEvtBuf_NoteDispatch:
-	.byte 0x64
+	.set	SeqEvtBuf_NoteDispatch, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	inc	4, xbc
+	; SeqEvtBuf_NoteDispatch is kept at this address only for ui_widgets/widget_dispatch.s; v10's SeqEvtBuf_NoteDispatch is the code at 0xFE817E
 	add	xbc, xwa
 	ld	c, (xbc + 1)
 	ldfr_berp	C, 0xea
@@ -13504,10 +13503,9 @@ SoundFX_Handler_12:
 	jr	z, SoundFX_Handler_12_LoadReg
 	ldw	(xiz), 0x1
 SoundFX_Handler_12_LoadReg:
-	.byte 0x96
-; SeqPerformance_EventDispatch is kept at this address only for ui_widgets/widget_dispatch.s; v10's SeqPerformance_EventDispatch is the code at 0xFE81D9
-SeqPerformance_EventDispatch:
-	.byte 0x23
+	.set	SeqPerformance_EventDispatch, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	hl, (xiz)
+	; SeqPerformance_EventDispatch is kept at this address only for ui_widgets/widget_dispatch.s; v10's SeqPerformance_EventDispatch is the code at 0xFE81D9
 	pop	xiz
 	ret
 SoundFX_Handler_0:
@@ -13640,10 +13638,9 @@ SoundFX_Handler_3:
 	dec	1, a
 	extz	wa
 	muls	wa, 0xc
-	.byte 0xf2, 0xfe, 0x98, 0xee
-; VoiceMap_AllocateSlo_Block2 is kept at this address only for ui_widgets/widget_dispatch.s; v10's VoiceMap_AllocateSlo_Block2 is the code at 0xFE8300
-VoiceMap_AllocateSlo_Block2:
-	.byte 0x31
+	.set	VoiceMap_AllocateSlo_Block2, . + 4	; no instruction starts here: the name points 4 byte(s) into the one below
+	lda	xbc, (15636734:24)
+	; VoiceMap_AllocateSlo_Block2 is kept at this address only for ui_widgets/widget_dispatch.s; v10's VoiceMap_AllocateSlo_Block2 is the code at 0xFE8300
 	exts	xwa
 	add	xwa, xbc
 	ld	c, (xwa+de)
@@ -13706,10 +13703,9 @@ SoundFX_Handler_3_LoadReg:
 	lda	xbc, (SoundFX_Handler_4_Data:24)
 	exts	xwa
 	add	xwa, xbc
-	.byte 0xf3, 0x07, 0xe0
-; NoteMap_GetVoiceData_Entry is kept at this address only for ui_widgets/widget_dispatch.s; v10's NoteMap_GetVoiceData_Entry is the code at 0xFE83A0
-NoteMap_GetVoiceData_Entry:
-	.byte 0xe8, 0x30
+	.set	NoteMap_GetVoiceData_Entry, . + 3	; no instruction starts here: the name points 3 byte(s) into the one below
+	lda	xwa, (xwa+de)
+	; NoteMap_GetVoiceData_Entry is kept at this address only for ui_widgets/widget_dispatch.s; v10's NoteMap_GetVoiceData_Entry is the code at 0xFE83A0
 	ld	c, (xwa + 1)
 	ld	a, (0xce0e:16)
 	sub	a, c
@@ -13882,10 +13878,9 @@ SoundFX_Handler_6:
 	exts	xwa
 	add	xwa, xbc
 	lda	xwa, (xwa+de)
-	.byte 0x88
-; SearchVoice_BubbleSortInner is kept at this address only for ui_widgets/widget_dispatch.s; v10's SearchVoice_BubbleSortInner is the code at 0xFE856F
-SearchVoice_BubbleSortInner:
-	.byte 0x03, 0x23
+	.set	SearchVoice_BubbleSortInner, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	c, (xwa+3)
+	; SearchVoice_BubbleSortInner is kept at this address only for ui_widgets/widget_dispatch.s; v10's SearchVoice_BubbleSortInner is the code at 0xFE856F
 	ld	a, (0xce0e:16)
 	sub	a, c
 	ld	(xiz + 11), a
@@ -14057,10 +14052,9 @@ SoundFX_Handler_8:
 	exts	xwa
 	add	xwa, xbc
 	lda	xwa, (xwa+de)
-	.byte 0x88
-; SoundFX_Handler_4 is kept at this address only for ui_widgets/widget_dispatch.s; v10's SoundFX_Handler_4 is the code at 0xFE873B
-SoundFX_Handler_4:
-	.byte 0x03, 0x23
+	.set	SoundFX_Handler_4, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	c, (xwa+3)
+	; SoundFX_Handler_4 is kept at this address only for ui_widgets/widget_dispatch.s; v10's SoundFX_Handler_4 is the code at 0xFE873B
 	ld	a, (0xce0e:16)
 	sub	a, c
 	ld	(xiz + 11), a
@@ -14649,8 +14643,9 @@ ComputeNoteBitPositi_Data:
 	pushw	ix
 	ldto_berp	a, 60
 	cp	a, c
-	jr	nc, 2
+	jr	nc, Voice_ComputeNoteBitPosition_Skip
 	ld	a, c
+Voice_ComputeNoteBitPosition_Skip:
 	popw	bc
 	inc	1, iy
 	.byte 0xd9, 0x1c, 0xcc
@@ -14658,8 +14653,7 @@ ComputeNoteBitPositi_Data:
 	ld	c, 11:opc
 	sub	c, a
 	ex8	a, c
-	.byte	0xda
-	swi	4
+	slaa	de	; sla A,DE
 	ex8	a, c
 	ret
 ComputeNoteBitPositi_StoreDRAM:
@@ -14997,10 +14991,9 @@ Voice_ProcessSlotEntry:
 	jr	Audio_PopIzRet
 ProcessSlotEntry_Block:
 	ldw	(0xce93:24), 0x0000
-	.byte 0xc2, 0x42, 0xce, 0x00, 0x3c
-; VoiceSlot_StoreParams_Data is kept at this address only for shared/positional_labels.s; v10's VoiceSlot_StoreParams_Data is the code at 0xFE903D
-VoiceSlot_StoreParams_Data:
-	.byte 0xfd
+	.set	VoiceSlot_StoreParams_Data, . + 5	; no instruction starts here: the name points 5 byte(s) into the one below
+	and	(52802:24), 253
+	; VoiceSlot_StoreParams_Data is kept at this address only for shared/positional_labels.s; v10's VoiceSlot_StoreParams_Data is the code at 0xFE903D
 	ld	(0xce45:24), 0x00
 	ld	(0xce49:24), 0x07
 	ld	de, (0xce63:24)
@@ -17548,10 +17541,9 @@ SendEpilogue_Data_Skip20:
 	ld	c, a
 	extz	bc
 	ld	wa, bc
-	.byte 0xd8, 0xcf
-; SendEpilogue_Data is kept at this address only for ui_widgets/widget_dispatch.s; v10's SendEpilogue_Data is the code at 0xFEAAF4
-SendEpilogue_Data:
-	.byte 0x0c, 0x00
+	.set	SendEpilogue_Data, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	cp	wa, 12
+	; SendEpilogue_Data is kept at this address only for ui_widgets/widget_dispatch.s; v10's SendEpilogue_Data is the code at 0xFEAAF4
 	jr	lt, SendEpilogue_Data_Skip21
 	sub	bc, 12
 SendEpilogue_Data_Skip21:
@@ -22336,10 +22328,9 @@ CharMap_NullPreamble_2:
 CharMap_ActivePreamble:
 	ld	(0xe09e:16), 0
 	ld	(0xe09f:16), 1
-	.byte 0x42, 0x9e
-; ReadNextRecord_Block3 is kept at this address only for ui_widgets/widget_dispatch.s; v10's ReadNextRecord_Block3 is the code at 0xFED81C
-ReadNextRecord_Block3:
-	.byte 0xe0, 0x00, 0x00
+	.set	ReadNextRecord_Block3, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	ld	xde, 0xe09e
+	; ReadNextRecord_Block3 is kept at this address only for ui_widgets/widget_dispatch.s; v10's ReadNextRecord_Block3 is the code at 0xFED81C
 	ld	wa, 5:i3
 	ld	bc, 2:i3
 	jp	sendCOMM
@@ -22782,6 +22773,7 @@ FetchOscTableEntry_Epilogue:
 	pop	xiz
 	ret
 ; v10 name for this address: FetchOscTableEntry_Prologue -- not a label here: v7 keeps that name at 0xFEE453 for audio/sound_data_guitar.c
+SndParam_FetchOscTableEntry_Join:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp + 4), xbc
@@ -22821,13 +22813,12 @@ FetchOscTableEntry_Compute:
 	ret
 FetchOscTableEntry_LoadReg:
 	ld	xbc, 0x14
-	.byte 0x68
-; CharMap_ActivePreamb_Prologue is kept at this address only for audio/sound_data_accordion_reg.c, audio/sound_data_bass.c, audio/sound_data_digital_drawbar.c, audio/sound_data_drum_kits.c, audio/sound_data_gm_special.c; v10's CharMap_ActivePreamb_Prologue is the code at 0xFEDC70
-CharMap_ActivePreamb_Prologue:
-	.byte 0xae
+	.set	CharMap_ActivePreamb_Prologue, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	jr	SndParam_FetchOscTableEntry_Join
+	; CharMap_ActivePreamb_Prologue is kept at this address only for audio/sound_data_accordion_reg.c, audio/sound_data_bass.c, audio/sound_data_digital_drawbar.c, audio/sound_data_drum_kits.c, audio/sound_data_gm_special.c; v10's CharMap_ActivePreamb_Prologue is the code at 0xFEDC70
 FetchOscTableEntry_LoadReg2:
 	ld	xbc, 0x24
-	jr	-89
+	jr	SndParam_FetchOscTableEntry_Join
 SeMenu_SetDisplayValue_Helper:
 SndParam_ApplyProgramChange:
 	push	xiz
@@ -23273,10 +23264,9 @@ ApplyProgramChangeAs_LoadReg2:
 Param_SignExtendRetu_Data:
 	ld	xhl, 0:i3
 	ld	l, (xwa+6)
-	.byte 0xeb, 0xee
-; FetchOscTableEntry_Prologue is kept at this address only for audio/sound_data_guitar.c; v10's FetchOscTableEntry_Prologue is the code at 0xFEE039
-FetchOscTableEntry_Prologue:
-	.byte 0x0e
+	.set	FetchOscTableEntry_Prologue, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
+	sll	xhl, 14
+	; FetchOscTableEntry_Prologue is kept at this address only for audio/sound_data_guitar.c; v10's FetchOscTableEntry_Prologue is the code at 0xFEE039
 	ld	e, (xwa+7)
 	res	7, e
 	ld	d, 0:opc
@@ -23478,17 +23468,15 @@ Param_SignExtendReturn_Skip5:
 	sub	xwa, 295
 	ld	xbc, 80
 	call	Math_DivideU32
-	.byte 0xcf
-; SndParam_LookupAndDispatch is kept at this address only for audio/sound_data_organ_accordion.c; v10's SndParam_LookupAndDispatch is the code at 0xFEE255
-SndParam_LookupAndDispatch:
-	.byte 0x89
+	.set	SndParam_LookupAndDispatch, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	a, l
+	; SndParam_LookupAndDispatch is kept at this address only for audio/sound_data_organ_accordion.c; v10's SndParam_LookupAndDispatch is the code at 0xFEE255
 	extz	wa
 	muls	wa, 80
 	extz	xwa
-	.byte	0xf3, 0xe1
-	ld	l, 1:opc
-	ldw	wa, 0x3ab8
-	ldw	wa, 0xf6e8
+	lda	xwa, (xwa+295)
+	lda	xwa, (xwa+58)
+	cp	xiz, xwa
 	jr	c, Param_SignExtendReturn_Skip6
 	ld	xbc, xiz
 	sub	xbc, xwa
@@ -24640,6 +24628,7 @@ SendPartDataBlock_Return5_Loop:
 	ld	(xsp+4), 0
 	ldw	(xsp+8), 0
 	ldw	(xsp+6), 0
+SendPartDataBlock_Data_Loop:
 	ld	wa, (xsp+6)
 	add	wa, 102
 	lda	xbc, (xiz+wa)
@@ -24785,17 +24774,10 @@ SendPartDataBlock_Return5_Skip:
 	ld	a, (xde+61)
 	ld	(xbc+76), a
 	incm8	1, (xsp+4)
-	.byte	0x9f, 0x06
-	push	xwa
-	.byte	0x51
-	nop
-	.byte	0x9f
-	ld	(56:8), 62:io
-	nop
-	.byte	0x8f, 0x04
-	push	xsp
-	max
-	jrl	c, -444
+	addw	(xsp+6), 81
+	addw	(xsp+8), 62
+	cp	(xsp+4), 4
+	jrl	c, SendPartDataBlock_Data_Loop
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -24805,15 +24787,15 @@ HdaeRom_DataHandler_Helper:
 	and	e, 183
 	ld	(xhl), e
 	lda	xbc, (xwa+17)
-	.byte	0xb1
-	inc	6, l
-	halt
+	bit	7, (xbc)
+	jr	z, HdaeRom_DataHandler_Helper_Skip
 	set	6, e
 	ld	(xhl), e
-	.byte	0xb1
-	inc	6, a
-	push	sr
+HdaeRom_DataHandler_Helper_Skip:
+	bit	1, (xbc)
+	jr	z, HdaeRom_DataHandler_Helper_Skip2
 	.byte	0xb3, 0xbb
+HdaeRom_DataHandler_Helper_Skip2:
 	ld	c, (xwa+18)
 	and	c, 240
 	ldfr_berp	c, 240
@@ -24915,11 +24897,8 @@ SendPartDataBlock_Return5_Helper:
 	lda	xix, (xde+345)
 	ldw	bc, 40
 	ldirw
-	.byte	0x85
-	rcf
-	.byte	0xf3
-	swi	5
-	.byte	0xaa, 0x01, 0x37
+	ldi85
+	lda	xsp, (xsp+426)
 	ret
 HdaeRom_DataHandler_Helper2:
 	lda	xsp, (xsp-0x1a)
@@ -24927,7 +24906,7 @@ HdaeRom_DataHandler_Helper2:
 	ld	(xsp+0x16), xbc
 	ld	(xsp+0x1a), xwa
 	ld	xwa, (xsp+0x1a)
-	calr	65441
+	calr	SendPartDataBlock_Return5_Helper
 	ld	xde, (xsp+0x1a)
 	lda	xhl, (xde+0x10)
 	ld	xwa, (xsp+0x16)
@@ -25108,48 +25087,44 @@ SendPartDataBlock_Return5_Skip4:
 	ld	xbc, (xsp+26)
 	lda	xwa, (xbc+17)
 	ld	(xsp+10), xwa
-	.byte	0x80
-	push	xix
-	.byte	0xaa
+	and	(xwa), 170
 	lda	xbc, (xbc+102)
 	ld	xwa, (xsp+22)
 	lda	xde, (xwa+40)
 	ld	(xsp+4), 0
 SendPartDataBlock_Return5_Entry:
-	.byte	0xb2
-	inc	6, l
-	ld	e, 143:opc
-	max
-	push	xsp
-	nop
-	jr	nz, 7
+	bit	7, (xde)
+	jr	z, HdaeRom_DataHandler_Helper2_Join3
+	cp	(xsp+4), 0
+	jr	nz, HdaeRom_DataHandler_Helper2_Skip5
 	ld	xwa, (xsp+10)
-	.byte	0xb0, 0xb8
-	jr	24
-	.byte	0x8f, 0x04
-	push	xsp
-	normal
-	jr	nz, 7
+	set	0, (xwa)
+	jr	HdaeRom_DataHandler_Helper2_Join3
+HdaeRom_DataHandler_Helper2_Skip5:
+	cp	(xsp+4), 1
+	jr	nz, HdaeRom_DataHandler_Helper2_Entry
 	ld	xwa, (xsp+10)
 	.byte	0xb0, 0xba
-	jr	11
+	jr	HdaeRom_DataHandler_Helper2_Join3
+HdaeRom_DataHandler_Helper2_Entry:
 	.byte	0x8f, 0x04
 	push	xsp
 	push	sr
-	jr	nz, 5
+	jr	nz, HdaeRom_DataHandler_Helper2_Join3
 	ld	xwa, (xsp+10)
 	.byte	0xb0, 0xbc
+HdaeRom_DataHandler_Helper2_Join3:
 	lda	xwa, (xbc+6)
 	ld	(xwa), 0
 	lda	xhl, (xbc+38)
 	ld	(xhl), 0
-	.byte	0xb2
-	inc	6, h
-	push	176
-	.byte	0xbd
+	bit	6, (xde)
+	jr	z, HdaeRom_DataHandler_Helper2_Skip6
+	set	5, (xwa)
 	ld	a, (xhl)
 	set	5, a
 	ld	(xhl), a
+HdaeRom_DataHandler_Helper2_Skip6:
 	ld	a, (xde+1)
 	ld	(xbc+2), a
 	ld	a, (xde+2)
@@ -25200,9 +25175,8 @@ SendPartDataBlock_Return5_Skip6:
 	sla	a, 1
 	ld	(xbc+42), a
 	ld	a, (xde+15)
-	.byte	0xc9, 0xee
-; v10 name for this address: SendPartDataBlock_Data3 -- not a label here: v7 keeps that name at 0xFEFC57 for ui_widgets/naka_effects_seq.c, ui_widgets/naka_effects_seq_link.ld
-	normal
+	sll	a, 1
+	; v10 name for this address: SendPartDataBlock_Data3 -- not a label here: v7 keeps that name at 0xFEFC57 for ui_widgets/naka_effects_seq.c, ui_widgets/naka_effects_seq_link.ld
 	ld	(xbc+43), a
 	ld	a, (xde+16)
 	sla	a, 1
@@ -25230,14 +25204,10 @@ SendPartDataBlock_Return5_Skip6:
 	ld	a, (xde+20)
 	ld	(xiy), a
 	ld	xwa, (xsp+18)
-	.byte	0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	nz, SendPartDataBlock_Return5_Skip7
 	ld	xwa, (xsp+14)
-	.byte	0x80
-	push	xsp
-	nop
+	cp	(xwa), 0
 	jr	z, SendPartDataBlock_Return5_Entry2
 	ld	a, (xde+22)
 	ld	(xix), a
@@ -25275,14 +25245,15 @@ SendPartDataBlock_Return5_Skip9:
 	ld	l, a
 	ld	xwa, (xsp+18)
 	ld	(xwa), l
-	.byte	0x8a
-	calr	-193
-	jr	z, 5
-	.byte	0xcf
-; v10 name for this address: SendPartDataBlock_Data4 -- not a label here: v7 keeps that name at 0xFEFD00 for ui_widgets/naka_composer_style.c, ui_widgets/naka_composer_style_link.ld
-	ldw	bc, 0xb000
-	ld	xsp, 0x8a344db9
-	jp	0x41b421
+	cp	(xde+30), 255
+	jr	z, SendPartDataBlock_Return5_Entry2_Code_Skip2
+	set	0, l
+	; v10 name for this address: SendPartDataBlock_Data4 -- not a label here: v7 keeps that name at 0xFEFD00 for ui_widgets/naka_composer_style.c, ui_widgets/naka_composer_style_link.ld
+	ld	(xwa), l
+SendPartDataBlock_Return5_Entry2_Code_Skip2:
+	lda	xix, (xbc+77)
+	ld	a, (xde+27)
+	ld	(xix), a
 	ld	xwa, (xsp+6)
 	ld	l, (xwa)
 	ld	a, l
@@ -25502,6 +25473,7 @@ HdaeRom_DataDispatch:
 	cp	(xsp+440), 255
 	jrl	nz, HdaeRom_DataHandler_Skip
 	ldw	(xsp+4), 40
+HdaeRom_DataHandler_Loop2:
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
 	ld	wa, (xsp+4)
@@ -25513,34 +25485,29 @@ HdaeRom_DataDispatch:
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
 	ld	xiy, xhl
-	.byte	0xaf, 0x06
-	sub	(xiy), l
-	ldw	(36:8), 0x9031:io
-	nop
+	add	xiy, (xsp+6)
+	ld	xix, (xsp+10)
+	ldw	bc, 144
 	ldirw
-	.byte	0x85
-	rcf
+	ldi85
 	ld	xwa, xiz
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte	0xaf, 0x06
-	or	(xhl), c
-	.byte	0x88
+	add	xhl, (xsp+6)
+	ld	xwa, xhl
 	ld	xbc, (xsp+10)
 	calr	SendPartDataBlock_Data
-	.byte	0x9f, 0x04
-	push	xde
-	normal
-	nop
-	jr	nz, -82
+	subw	(xsp+4), 1
+	jr	nz, HdaeRom_DataHandler_Loop2
 	jrl	HdaeRom_DataHandler_Skip
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
-	jr	nz, 90
+	jr	nz, HdaeRom_DataHandler_Skip2
 	cp	(xsp+440), 255
-	jr	nz, 82
+	jr	nz, HdaeRom_DataHandler_Skip2
 	ldw	(xsp+4), 36
+HdaeRom_DataHandler_Loop3:
 	lda	xwa, (xsp+14)
 	ld	(xsp+10), xwa
 	ld	wa, (xsp+4)
@@ -25560,21 +25527,18 @@ HdaeRom_DataDispatch:
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte	0xaf, 0x06
-	or	(xhl), c
-	.byte	0x88
+	add	xhl, (xsp+6)
+	ld	xwa, xhl
 	ld	xbc, (xsp+10)
 	calr	HdaeRom_DataHandler_Helper2
-	.byte	0x9f, 0x04
-	push	xde
-	normal
-	nop
-	jr	nz, -75
+	subw	(xsp+4), 1
+	jr	nz, HdaeRom_DataHandler_Loop3
 	jr	HdaeRom_DataHandler_Skip
+HdaeRom_DataHandler_Skip2:
 	ld	a, (xsp+440)
 	extz	wa
 	ld	(xsp+4), wa
-	jr	81
+	jr	HdaeRom_DataHandler_Join
 HdaeRom_DataHandler_Loop:
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -25583,9 +25547,8 @@ HdaeRom_DataHandler_Loop:
 	add	xbc, xwa
 	sll	xbc, 4
 	add	xbc, 80
-	.byte	0xaf, 0x06
-	or	(xbc), a
-	.byte	0x88
+	add	xbc, (xsp+6)
+	ld	xwa, xbc
 	calr	HdaeRom_DataHandler_Helper
 	ld	iz, (xsp+4)
 	extz	xiz
@@ -25593,18 +25556,17 @@ HdaeRom_DataHandler_Loop:
 	ld	xbc, 470
 	call	Math_MultiplyAccumulate
 	add	xhl, 16
-	.byte	0xaf, 0x06
-	or	(xhl), h
-	or	(xbc-23), h
-	pop	sr
+	add	xhl, (xsp+6)
+	ld	xbc, xiz
+	sll	xbc, 3
 	add	xbc, xiz
 	sll	xbc, 4
 	add	xbc, 80
-	.byte	0xaf, 0x06
-	or	(xbc), c
-	.byte	0x88
+	add	xbc, (xsp+6)
+	ld	xwa, xhl
 	calr	HdaeRom_DataHandler_Helper2
 	incw	1, (xsp+4)
+HdaeRom_DataHandler_Join:
 	ld	a, (xsp+440)
 	inc	1, a
 	extz	wa
@@ -25730,10 +25692,9 @@ PostTmLoad:
 PostTmLoad_Send:
 	ldw	wa, 0xff
 	ldw	bc, 0xff
-	.byte 0x1d
-; SendPartDataBlock_Data4 is kept at this address only for ui_widgets/naka_composer_style.c, ui_widgets/naka_composer_style_link.ld; v10's SendPartDataBlock_Data4 is the code at 0xFEF8E6
-SendPartDataBlock_Data4:
-	.byte 0x86, 0xec, 0xfe
+	.set	SendPartDataBlock_Data4, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	call	COMM_BuildAndSendPacket
+	; SendPartDataBlock_Data4 is kept at this address only for ui_widgets/naka_composer_style.c, ui_widgets/naka_composer_style_link.ld; v10's SendPartDataBlock_Data4 is the code at 0xFEF8E6
 PostTmLoad_Block:
 	jp	FDemoText_RefreshFullDisplay
 FileIO_ParseDirectoryEntry_Helper5:
@@ -25861,17 +25822,17 @@ TmFlashWrite_ValidateParams:
 	cp	bc, 0:i3
 	jrl	lt, TmFlashWrite_Block2_Code_Skip
 	ld	iz, 0:i3
-	.byte	0x8f, 0x04
-	.ascii	"?@oH"
-	.byte	0x04
-	ld	a, 216:opc
-	ccf
+	cp	(xsp+4), 64
+	jr	nc, FileIO_ByteBlock_DemoProc1_Helper7_Loop2
+FileIO_ByteBlock_DemoProc1_Helper7_Loop:
+	ld	a, (xsp+4)
+	extz	wa
 	ldto_berp	c, 248
 	extz	bc
 	calr	HdaeRom_DataHandler
 	inc	1, iz
 	cp	iz, 20
-	jr	c, -21
+	jr	c, FileIO_ByteBlock_DemoProc1_Helper7_Loop
 	calr	HdaeRom_DataDispatch_Block
 	ld	a, (xsp+4)
 	ldfr_berp	a, 248
@@ -25884,42 +25845,37 @@ TmFlashWrite_ValidateParams:
 	add	xhl, 16
 	ld	xwa, 0x1e0000
 	add	xwa, xhl
-	.byte	0xf3, 0xed
-	nop
-	jrl	12594
-	.byte	0xb8
-	ld	d, 104:opc
-	ld	e, 143:opc
-	.byte	0x04
-	ld	a, 216:opc
-	ccf
+	lda	xde, (xhl+30720)
+	ldw	bc, 9400
+	jr	TmFlashWrite_Block3
+FileIO_ByteBlock_DemoProc1_Helper7_Loop2:
+	ld	a, (xsp+4)
+	extz	wa
 	ldto_berp	c, 248
 	extz	bc
 	calr	HdaeRom_AltHandler
 	inc	1, iz
 	cp	iz, 128
-	jr	c, -21
+	jr	c, FileIO_ByteBlock_DemoProc1_Helper7_Loop2
 	calr	HdaeRom_DataDispatch_Block
 	lda	xwa, (0x1e4aa7:24)
 	ldw	bc, 0x2800
-	.byte	0x42
-TmFlashWrite_Block2:
-	.byte	0xa7, 0xc2
-	nop
-	nop
+	.set	TmFlashWrite_Block2, . + 1	; no instruction starts here: the name points 1 byte(s) into the one below
+	ld	xde, 0xc2a7
 TmFlashWrite_Block3:
 	call	InterCPU_E1_Bulk_Transfer
 	ld	a, (xsp+4)
 	extz	wa
 	ldw	bc, 255
 	call	BuildAndSendPacket_Block
-	jr	12
+	jr	FileIO_ByteBlock_DemoProc1_Helper7_Join
 TmFlashWrite_Block2_Code_Skip:
 	ld	a, (xsp+0x4)
 	extz	wa
 	ldw	bc, 255
-	call	0xfeec86
-	call	0xf84dda
+	call	COMM_BuildAndSendPacket
+FileIO_ByteBlock_DemoProc1_Helper7_Join:
+	call	FDemoText_RefreshFullDisplay
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -25981,24 +25937,19 @@ TmFlash_WriteRoutine_Entry:
 	ld	xwa, (xsp+14)
 	ld	(xwa), xhl
 	ldw	wa, 470
-	jr	49
+	jr	TmFlash_WriteRoutine_Entry_Code_Join
 TmFlash_WriteRoutine_Skip2:
 	lda	xbc, (0x1e0000:24)
-	.byte	0xbf
-	push_a
-	inc	6, a
-	ex_ff
-	.byte	0x9f
-	ccf
-	push	xsp
-	normal
-	nop
+	bit	1, (xsp+20)
+	jr	z, TmFlash_WriteRoutine_Entry_Code_Entry
+	cpw	(xsp+18), 1
 	jr	nc, TmFlash_WriteRoutine_Skip
 	lda	xbc, (xbc+18816)
 	ld	xwa, (xsp+14)
 	ld	(xwa), xbc
 	.ascii	"0')h"
 	scf
+TmFlash_WriteRoutine_Entry_Code_Entry:
 	.byte	0x9f
 	ccf
 	push	xsp
@@ -26009,6 +25960,7 @@ TmFlash_WriteRoutine_Skip2:
 	ld	xwa, (xsp+14)
 	ld	(xwa), xbc
 	ldw	wa, 470
+TmFlash_WriteRoutine_Entry_Code_Join:
 	ld	xbc, (xsp+26)
 	ld	(xbc), wa
 	jr	TmFlash_WriteRoutine_Join
@@ -26082,10 +26034,8 @@ TmFlash_BulkTransferToSubCPU_Join:
 	add	xbc, xwa
 	sll	xbc, 4
 	add	xbc, 80
-	.byte	0xaf
-	push	sr
-	or	(xbc), a
-	.byte	0x8b
+	add	xbc, (xsp+2)
+	ld	xhl, xbc
 	jr	TmFlash_BulkTransferToSubCPU_Epilogue
 TmFlash_BulkTransferToSubCPU_Skip3:
 	ld	xhl, 0xffffff9a
@@ -26203,19 +26153,19 @@ TmFlash_CompareStrings:
 	jr	38
 TmFlash_CompareStrings_Loop:
 	ld	a, (xsp+8)
-	.byte	0x86, 0xf1
+	cp	a, (xiz)
 	jr	nz, 26
-	.byte	0x9f
-	ei	4
+	pushw	(xsp+6)
 	push	xiz
 	ld	xwa, (xsp+24)
 	push	xwa
 	call	Mem_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, 4
+	jr	nz, MssNameFunc_Helper_Skip
 	ld	xhl, xiz
 	jr	TmFlash_CompareStrings_Epilogue
+MssNameFunc_Helper_Skip:
 	inc	1, xiz
 	decm	1, (xsp+4)
 	ld	wa, (xsp+6)
@@ -26379,8 +26329,8 @@ Sprintf_Locked:
 	inc	4, xwa
 	ld	(xsp + 2), xwa
 	pushw	0xff	; Sprintf_OutputCallback >> 16
-	.byte	0x0b	; pushw Sprintf_OutputCallback & 0xffff
-	.byte 0xfb, 0x02
+	; pushw Sprintf_OutputCallback & 0xffff
+	pushw	763
 	lda	xwa, (xsp + 6)
 	push	xwa
 	ld	xwa, (xsp + 22)
@@ -26400,8 +26350,8 @@ Sprintf_Unlocked:
 	ld	xwa, (xsp+4)
 	ld	(xwa), 0
 	pushw	0xff	; Sprintf_OutputCallback >> 16
-	.byte	0x0b	; pushw Sprintf_OutputCallback & 0xffff
-	.byte 0xfb, 0x02
+	; pushw Sprintf_OutputCallback & 0xffff
+	pushw	763
 	lda	xwa, (xsp+16)
 	push	xwa
 	ld	xwa, (xsp+16)

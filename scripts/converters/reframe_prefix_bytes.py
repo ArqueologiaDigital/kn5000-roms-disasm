@@ -26,9 +26,12 @@ QUESTION THIS ANSWERS / JOB IT DOES
   the house format (tab after the mnemonic, ", " between operands, no comment that only
   repeats the instruction).
 
+  --any-bytes starts from ANY `.byte` line execution falls into (an instruction written as bytes
+  whose neighbours went out of frame with it), under the same guards.
+
 USAGE
   make all
-  python3 scripts/converters/reframe_prefix_bytes.py --image v10 [--apply] [--report OUT.json]
+  python3 scripts/converters/reframe_prefix_bytes.py --image v10 [--any-bytes] [--apply] [--report OUT.json]
 """
 import argparse
 import collections
@@ -44,6 +47,7 @@ sys.path.insert(0, os.path.join(REPO, "scripts", "converters"))
 import scoop_reframe as SR                    # noqa: E402
 
 PREFIX = {0xc1, 0xc2, 0xc3, 0xc7, 0xd1, 0xd2, 0xd3, 0xd7, 0xe1, 0xe2, 0xe3, 0xe7, 0xf1, 0xf2, 0xf3, 0xf7}
+BYTEN = re.compile(r'^\s*\.byte\s+(0x[0-9a-fA-F]+)\s*(?:,\s*0x[0-9a-fA-F]+\s*)*$')
 BYTE1 = re.compile(r'^\s*\.byte\s+(0x[0-9a-fA-F]+)\s*$')
 STOPS = re.compile(r'^\s*(?:jp|jr|jrl)\s+(?:t\s*,\s*)?[^,]+$|^\s*jp\s+t\s*,|^\s*(?:ret|reti|retd|halt|swi|nop)\b', re.I)
 LABEL_ONLY = re.compile(r'^[A-Za-z_][\w.$]*:\s*$')
@@ -88,6 +92,8 @@ def main():
     ap.add_argument("--image", required=True, choices=("v10", "v9", "v7"))
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--report")
+    ap.add_argument("--any-bytes", action="store_true",
+                    help="start from any `.byte` line execution falls into, not only a lone prefix byte")
     a = ap.parse_args()
     files = assembled(a.image)
     amap, _ = SR.linemap(a.image, files)
@@ -102,8 +108,8 @@ def main():
             code = SR.strip_comment(l)[0].rstrip()
             if not code.strip() or LABEL_ONLY.match(code):
                 continue
-            m = BYTE1.match(code)
-            if m and int(m.group(1), 16) in PREFIX and addrs[i] is not None and prev is not None \
+            m = BYTE1.match(code) or (BYTEN.match(code) if a.any_bytes else None)
+            if m and (a.any_bytes or int(m.group(1), 16) in PREFIX) and addrs[i] is not None and prev is not None \
                     and not prev.lstrip().startswith(".") and not STOPS.match(prev):
                 S = addrs[i]
                 U = SR.unidasm(a.image, S, 48)

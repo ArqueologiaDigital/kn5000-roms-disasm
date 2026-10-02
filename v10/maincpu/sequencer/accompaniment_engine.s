@@ -22282,20 +22282,14 @@ AccPat_DualVoice_DataBlock:
 	ld	(0x355c:16), xiy
 	ld	l, (0x34d6:16)
 	cp	l, 30
-	jr	c, 2
+	jr	c, AccPatch_LoadDualVoiceParams_Skip
 	xor	l, l
+AccPatch_LoadDualVoiceParams_Skip:
 	sla	l, 2
 	xor	h, h
-	.byte 0x44
-	.long RhythmTiming_OffsetTable
-	.byte 0xe3
-	reti
-	.byte 0xf0, 0xec
-	ld	e, 237:opc
-	.byte 0xc8
-	nop
-	popw	wa
-	push	0
+	ld	xix, RhythmTiming_OffsetTable
+	ld	xiy, (xix+hl)
+	add	xiy, 608256
 	add	xiy, 96
 	ld	(0x3560:16), xiy
 	ret

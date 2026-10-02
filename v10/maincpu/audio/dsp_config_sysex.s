@@ -2926,23 +2926,24 @@ DSPCfg_Data_003:
 	push	xhl
 	lda	xhl, (xsp+10)
 	push	xhl
-	calr	65252
+	calr	DSPCfg_ExtractPairFromStruct
 	ldw	hl, 0xffff
-	.byte 0x8f, 0x06
-	push	xsp
-	normal
-	jr	nz, 2
+	cp	(xsp+6), 1
+	jr	nz, DSPCfg_FindSlot63_Epilogue
 	ld	hl, 0:i3
+DSPCfg_FindSlot63_Epilogue:
 	pop	xiz
 	inc	8, xsp
 	ret
 	cp	wa, 4:i3
-	jr	ge, 8
+	jr	ge, DSPCfg_FindSlot63_Skip
 	cp	wa, 0:i3
-	jr	lt, 4
+	jr	lt, DSPCfg_FindSlot63_Skip
 	ld	hl, 0:i3
-	jr	3
+	jr	DSPCfg_FindSlot63_Return2
+DSPCfg_FindSlot63_Skip:
 	ldw	hl, 0xffff
+DSPCfg_FindSlot63_Return2:
 	ret
 
 DSPCfg_DecodeParamIdRange:

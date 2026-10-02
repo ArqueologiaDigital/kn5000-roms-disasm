@@ -3812,7 +3812,7 @@ ToneParam_Evt09_BytecodeHandler_Skip2:
 	or (0x8cec:16), 0x01
 .Lc_ef80e6:
 ToneParam_Evt09_BytecodeHandler_Loop3:
-	jp ToneParam_Evt09_BytecodeHandler_Return
+	jp ToneParam_Evt09_BytecodeHandler_Return2
 .Lc_ef80ea:
 ToneParam_Evt09_BytecodeHandler_Skip3:
 	call VoiceSlot_FlagCheck
@@ -3844,14 +3844,14 @@ ToneParam_Evt09_BytecodeHandler_Loop:
 	call VoiceSlot_RestoreState
 	ld w, (0x0dcc:16)
 	call VoiceSlot_RetZ
-ToneParam_Evt09_BytecodeHandler_Join2:
+ToneParam_Evt09_BytecodeHandler_Join:
 	ld A, 0x01:opc
 	call VoiceSlot_RestoreState
 	jp ToneParam_Evt09_BytecodeHandler_Skip2
 .Lc_ef814a:
 	add XSP,0x00000002
-	jp ToneParam_Evt09_BytecodeHandler_Join2
-ToneParam_Evt09_BytecodeHandler_Return:
+	jp ToneParam_Evt09_BytecodeHandler_Join
+ToneParam_Evt09_BytecodeHandler_Return2:
 	ret
 	; Pointer table, 16 B.  Read by ToneParam_Evt09_BytecodeHandler (0xEF8085): `ld XIX,ToneParam_HandlerTable_BC`
 	; indexed with stride 1 (`sla HL, 0x02`), index from `ld l, (0x0d65:16)`
@@ -13562,7 +13562,7 @@ OscScope_UpdateDisplay:
 	popw	bc
 	djnz16	bc, -9
 	ldw	(3778:16), 0
-	jp	OscScope_Handler_7_Return
+	jp	OscScope_RefreshLoop_Return
 OscScope_UpdateDisplay_Skip2:
 	ld	wa, (3778:16)
 	ld	l, 96:opc
@@ -13587,7 +13587,7 @@ OscScope_UpdateDisplay_Skip:
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
 	ldw	(3778:16), 0
 	ld	(3952:16), 0
-	jp	OscScope_Handler_7_Return
+	jp	OscScope_RefreshLoop_Return
 OscScope_RefreshLoop:
 	ld	wa, (3778:16)
 	ld	l, 96:opc
@@ -13606,15 +13606,15 @@ OscScope_RefreshLoop:
 	popw	de
 	popw	bc
 	cp	(0x0ef6:16), 0
-	jrl	nz, OscScope_Handler_7_Return
+	jrl	nz, OscScope_RefreshLoop_Return
 	djnz16	bc, -19
 OscScope_RefreshLoop_Skip:
 	cp	e, 0:i3
-	jrl	z, OscScope_Handler_7_Return
+	jrl	z, OscScope_RefreshLoop_Return
 	cp	(0x0f70:16), 48
-	jrl	z, OscScope_Handler_7_Return
+	jrl	z, OscScope_RefreshLoop_Return
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
-OscScope_Handler_7_Return:
+OscScope_RefreshLoop_Return:
 	ret
 MemConfig_Handler_4_Helper_Helper2:
 	push	xhl
@@ -13909,10 +13909,10 @@ OscScope_UpdateDisplay_Helper:
 	ld c, (0x0ec1:16)
 	sla C, 0x01
 	cp	(3780:16), c
-	jrl	c, DisplayStr_BytecodeBlock_A_Code_Return
+	jrl	c, DisplayStr_BytecodeBlock_A_Return
 	ld	l, (3782:16)
 	cp	l, 2:i3
-	jrl	z, DisplayStr_BytecodeBlock_A_Code_Loop
+	jrl	z, DisplayStr_BytecodeBlock_A_Loop
 	inc	1, l
 	xor	h, h
 	sla	hl, 2
@@ -13922,28 +13922,28 @@ OscScope_UpdateDisplay_Helper:
 	pop	xde
 	ld	wa, (xhl)
 	cp	wa, 0:i3
-	jrl	nz, DisplayStr_BytecodeBlock_A_Code_Skip
-DisplayStr_BytecodeBlock_A_Code_Loop:
+	jrl	nz, DisplayStr_BytecodeBlock_A_Skip
+DisplayStr_BytecodeBlock_A_Loop:
 	ld	(3830:16), 1
 	jp	DisplayStr_BytecodeBlock_A_Return3
-DisplayStr_BytecodeBlock_A_Code_Skip:
+DisplayStr_BytecodeBlock_A_Skip:
 	ld	l, (3782:16)
 	cp	l, 2:i3
-	jrl	z, DisplayStr_BytecodeBlock_A_Code_Loop
+	jrl	z, DisplayStr_BytecodeBlock_A_Loop
 	inc	1, l
 	ld	xwa, 3701
 	ld	e, (3667:16)
 	cp	l, 1:i3
-	jrl	z, DisplayStr_BytecodeBlock_A_Code_Skip2
+	jrl	z, DisplayStr_BytecodeBlock_A_Skip2
 	ld	xwa, 3733
 	ld	e, (3668:16)
-DisplayStr_BytecodeBlock_A_Code_Skip2:
+DisplayStr_BytecodeBlock_A_Skip2:
 	ld	(3777:16), e
 	ld	(4372:16), xwa
 	ld	(3782:16), l
 	xor	b, b
 	sub (3780:16), bc
-DisplayStr_BytecodeBlock_A_Code_Return:
+DisplayStr_BytecodeBlock_A_Return:
 	ret
 SubCPU_ToneParamRet_Helper17:
 	ld	(3830:16), 0

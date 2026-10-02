@@ -28,3 +28,20 @@ v10 131, v9 139, v7 47 (v10's "R3 absurd block" refusals 509 -> 392).
 `ld_rrb c, xbc, wa` -> `ld c, (xbc+wa)` and the like, each unique form converted only when
 llvm-mc gives the native spelling the pseudo's exact encoding.  Respelled: v10 925, v9 920,
 v7 1,281 (incl. the forms the re-framing rendered), v142 253, wsa1 49; no form left.
+
+## Second pass: `--any-bytes` (same day)
+
+Any `.byte` line execution falls into, not only a lone prefix byte, under the same guards.
+Reports `report_any_bytes_<tree>.json`.
+
+| tree | candidates | applied | no resync | new decode absurd | context not clean | old decode sane |
+|---|---|---|---|---|---|---|
+| v10 | 99 | 90 | 266 | 23 | 58 | 165 |
+| v9 | 101 | 92 | 280 | 29 | 61 | 159 |
+| v7 | 139 | 124 | 304 | 31 | 148 | 484 |
+
+Example, audio/note_voice_mapping.s at 0xFF05F3: the source had `.byte 0x8f, 0x04 / .ascii
+"?@oH" / .byte 0x04 / ld a, 216:opc / ccf ...` inside a routine; the bytes are
+`cp (xsp+4), 0x40 / jr nc, ... / ld a, (xsp+4) / extz wa`.
+Then symbolize_numeric_branches.py --apply --verify: v10 185, v9 186, v7 149 branches; v10's
+R3 refusals 392 -> 223.  v7 harmonized with v10 again (17 renamed, 1 inserted).

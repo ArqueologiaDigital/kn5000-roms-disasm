@@ -1893,13 +1893,11 @@ FDemoText_TextDispatch_Skip3:
 	ld	xbc, EVT_HIDE
 	ld	xde, 5:i3
 	call	SendEvent
-	.byte 0x40
-	.long Pad_NakaExternal_Block1
-	ld	xbc, EVT_SHOW
+	ld	xwa, Pad_NakaExternal_Block1
+	ld	xbc, 0x1c00001
 	ld	xde, 5:i3
 	call	SendEvent
-	.byte 0x40
-	.long Pad_NakaExternal_Block1
+	ld	xwa, Pad_NakaExternal_Block1
 	ld	xbc, EVT_START_SONG
 	ld	xde, 19
 	call	SendEvent
