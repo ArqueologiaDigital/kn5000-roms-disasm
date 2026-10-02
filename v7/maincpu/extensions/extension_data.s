@@ -1045,7 +1045,7 @@ ChordStr_Blank:	aligned_string "  "
 ; which has RegisterObjectTable (ui/ui_widget_defs.s, 0xFA42FB) copy the
 ; 14-byte descriptor {class +0, proc +4, u16 count +8, table +10} into slot
 ; 0x122 of the object registry at RAM 0x27ED2 (14 bytes a slot).  An object
-; id is (slot << 16) | element; CheckViewObject (0xFA42C4) reads the table
+; id is (slot << 16) | element; CheckViewObject (0xFA3EB7) reads the table
 ; pointer at +10 and indexes it with `extz xwa` / `sll xwa, 2` / `ld xwa, (xwa)`
 ; -- one 4-byte pointer per element, 0 = no object.  Slot 0x422 (= 0x122 +
 ; 0x300, the pairing RegisterObject 0xFA431A uses for an object's name) is
@@ -1813,7 +1813,7 @@ Toshi_ResMethod_Count:	.short 26
 ; Toshi_Function_Table -- TOSHI object table: 28 screen/box procedure
 ; pointers + NULL (0xED2F66-0xED2FD9)
 ; ---------------------------------------------------------------------------
-; Registered by InitializeToshi (0xFC311A) with
+; Registered by InitializeToshi (0xFC294F) with
 ;   RegObjTabl 0x1600001, FunctionProc, 28, Toshi_Function_Table, 0x102
 ; into object-registry slot 0x102 (layout and indexing: see
 ; Toshi_ApFunction_Table).  Its names are Toshi_FunctionName_Table (slot
@@ -1920,7 +1920,7 @@ ProcNameStr_NormScreenProc:	aligned_string "NormScreenProc"
 ; Toshi_MainFunction_Table -- TOSHI object table: 20 "main function" code
 ; pointers + NULL (0xED3292-0xED32E5)
 ; ---------------------------------------------------------------------------
-; Registered by InitializeToshi (0xFC311A) with
+; Registered by InitializeToshi (0xFC294F) with
 ;   RegObjTabl 0x1600003, MainFunctionProc, 20, Toshi_MainFunction_Table, 0x142
 ; into object-registry slot 0x142 (layout and indexing: see
 ; Toshi_ApFunction_Table).  Its names are Toshi_MainFunctionName_Table (slot
@@ -2278,7 +2278,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 ; The lookup tables are named by absolute `.set`s in kn5000_v10_program.s
 ; (ENCODER_LUT_*; listed also in midi_encoder_constants.s) and read by the
 ; Encoder_Process* routines of midi/midi_encoder_routines.s, e.g.
-; Encoder_ProcessVolume (0xFC6CAE): `extz wa` / `lda xbc,
+; Encoder_ProcessVolume (0xFC64E3): `extz wa` / `lda xbc,
 ; (ENCODER_LUT_VOLUME:24)` / `ldb_sri a` -- one byte per raw controller
 ; value.  They are monotonic curves, which is why earlier passes wrote whole
 ; stretches of them as .ascii "!\"#$%&..."; they are bytes, not text.
@@ -2287,8 +2287,8 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 ; audio_control_engine.s, 0xFC712B): entries of {u16 mask, u32 handler},
 ; `and wa, (xiz)` / `call (xiz + 2)` for every mask bit set in the flag word
 ; the caller passes, `inc 6, xiz`, until a mask of 0xFFFF.
-; MIDI_ProcessChangedChannels (0xFC700A) passes four "changed" words and
-; MidiChannel_DispatchChanged (0xFC707D) four others; the callers reach the
+; MIDI_ProcessChangedChannels (0xFC683F) passes four "changed" words and
+; MidiChannel_DispatchChanged (0xFC68B2) four others; the callers reach the
 ; lists through positional names ENCODER_LUT_MODWHEEL_0x3C6 .. _0x4D4
 ; (shared/positional_labels.s).  Six handlers (0xFC75E3, 0xFC7704, 0xFC7686,
 ; 0xFC75A6, 0xFC75B7, 0xFC7741) have no label there and stay numeric.
@@ -2658,15 +2658,15 @@ CombinedPreset_8:
 ; Reader: FileIO_OperationDispatch (audio/audio_control_engine.s, 0xFC84EA)
 ; walks a byte stream whose base pointer is at RAM 0xC039 and whose cursor
 ; word is at 0x9133, until the byte at the cursor is 0xFF.  For each 3-byte
-; record SndParam_FetchSequencerParams (0xFC95CE) moves byte 0 to RAM 0x9127
+; record SndParam_FetchSequencerParams (0xFC8E03) moves byte 0 to RAM 0x9127
 ; (the command), byte 1 to 0x9128/0x912F and byte 2 to 0x9130; the
 ; dispatcher then does `ld a, (0x9127)` / `sla wa, 2` / `lda xbc,
 ; (SoundProgram_DispatchTable)` / `ld_sril3` / `call (xhl)`.
 ; Entries: 0x00-0x19 ExtData_ToneParam_DispatchHandler; 0x43-0x48, 0x60,
 ; 0x68, 0x70, 0x72, 0x7A, 0x90, 0x98, 0xA8 and 0xB0 their own handlers;
 ; 0xB1-0xBD the MidiCh_Iterate* volume / expression / pan loops; every other
-; entry is a bare `ret` -- ToshiCmd_DefaultHandler_Ret (0xFC95CD), or for
-; 0x20-0x3F FileIO_AllocBuffer (0xFC873C), which is also a one-byte `ret`
+; entry is a bare `ret` -- ToshiCmd_DefaultHandler_Ret (0xFC8E02), or for
+; 0x20-0x3F FileIO_AllocBuffer (0xFC7F71), which is also a one-byte `ret`
 ; (0x0E) whatever its name says.  The table and handler names are
 ; historical; what the command stream encodes beyond this is not traced
 ; here.  The three tables after it (+0x400, +0x800, +0x880) are indexed by
@@ -2934,7 +2934,7 @@ SoundProgram_DispatchTable:
 ; byte.  VoiceData_LookupPtrByIndex (audio/audio_control_engine.s, 0xFC9DF4)
 ; does `sla wa, 2` / `lda xbc, (+0x400)` / `ld_sril3`, and
 ; SndParam_FetchSequencerParams stores the result at RAM 0x912B next to the
-; command byte it fetched; Audio_InitAllDefaults (0xFC7C49) stores this
+; command byte it fetched; Audio_InitAllDefaults (0xFC747E) stores this
 ; table's address at RAM 0x90F2.
 ; 0xFFFFFFFF = no RAM block for that command.  The live entries are 26 bytes
 ; apart (0xF9B6, 0xF9D0, ...) -- the same spacing as the RAM-bank table
@@ -2972,7 +2972,7 @@ SoundProgram_DispatchTable:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf0]
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf8]
 ; SoundProgram_DispatchTable + 0x800 (..._0x800): 32 RAM addresses, one per
-; channel 0-31: VoiceData_LookupPtrByChannel (0xFC9E04) does `cp a, 0x1f` /
+; channel 0-31: VoiceData_LookupPtrByChannel (0xFC9639) does `cp a, 0x1f` /
 ; `jr ugt` / `sla wa, 2` / `lda xbc, (+0x800)` / `ld_sril3`;
 ; Audio_InitAllDefaults stores the table's address at RAM 0x9182.
 	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0x00]
@@ -3004,24 +3004,24 @@ SoundProgram_DispatchTable:
 ; EQPreset_FindMatch) and CombinedPreset_Table is Naka_ToshiParam_Table_0x48
 ; (9 pointers, CombinedPreset_Load / CombinedPreset_SearchLoop).
 ; ---------------------------------------------------------------------------
-	; +0x890: one 6-byte record.  BitmapTable_ProcessEntry (0xFC8235) takes
+	; +0x890: one 6-byte record.  BitmapTable_ProcessEntry (0xFC7A6A) takes
 	; index*6 and reads +0 with `cpw (xwa), 0x50`, +2 (at +0x892) as a
 	; command byte for VoiceData_LookupPtrByIndex, and +3, +4, +5.
 	.short 0x0050
 	.byte 0x43, 0x01, 0x3c, 0x7f
-	; +0x896: 12 jump offsets.  ExtData_ToneParam_DispatchHandler (0xFC8542):
+	; +0x896: 12 jump offsets.  ExtData_ToneParam_DispatchHandler (0xFC7D77):
 	; `cp wa, 11` / `add wa, wa` / `ld_rrw wa, xix, wa` / `jp_rr` from 0xFC8570
 	; (no label there in audio_control_engine.s, so the offsets are numeric).
 	.short 0x0000, 0x0020, 0x0020, 0x0002, 0x0005, 0x0008, 0x000b, 0x000e, 0x0011, 0x0014, 0x0017, 0x001a
-	; +0x8AE: 9 jump offsets, ExtData_ToneParam_AltDispatch (0xFC876A), from 0xFC8793.
+	; +0x8AE: 9 jump offsets, ExtData_ToneParam_AltDispatch (0xFC7F9F), from 0xFC8793.
 	.short 0x0000, 0x0002, 0x0002, 0x0004, 0x0004, 0x0004, 0x0004, 0x0006, 0x0000
-	; +0x8C0: 9 jump offsets, ExtData_ToneParam_AltBody (0xFC87D4), from 0xFC87FD.
+	; +0x8C0: 9 jump offsets, ExtData_ToneParam_AltBody (0xFC8009), from 0xFC87FD.
 	.short 0x0000, 0x0010, 0x0010, 0x0002, 0x0004, 0x0007, 0x0007, 0x000a, 0x000d
 	; +0x8D2: 4 bytes, indexed by a value & 3 in ExtData_ToneParam_MultiChannel.
 	.byte 1, 1, 2, 3
 	; +0x8D6: 4 bytes, indexed by (RAM 0xFD02) & 3 in ExtData_Voice_MixedHandler.
 	.byte 0, 1, 2, 4
-	; +0x8DA: 26 bytes, 0..24 then 0xFF, read by CtrlPanel_BuildIndicatorBitmask (0xFC9249).
+	; +0x8DA: 26 bytes, 0..24 then 0xFF, read by CtrlPanel_BuildIndicatorBitmask (0xFC8A7E).
 	.byte 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 	.byte 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0xff
 	; +0x8F4: 20 bytes, a channel remap read with `ldb_sri a` by

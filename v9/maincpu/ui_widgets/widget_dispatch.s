@@ -9219,23 +9219,23 @@ Subsys_HandlerTable01:
 	.long CommParam_SetComplete_Block2
 	.long CommParam_SetComplete_Return2
 	.long CommParam_SetComplete_Return3
-; Sound-RAM data identifier "KN2000": SendPartDataBlock_InitVal7 (0xFF01AC)
+; Sound-RAM data identifier "KN2000": SendPartDataBlock_InitVal7 (0xFF01A1)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN2000:
 	.asciz "KN2000"
-; Sound-RAM data identifier "MKA": SendPartDataBlock_InitVal8 (0xFF01D8)
+; Sound-RAM data identifier "MKA": SendPartDataBlock_InitVal8 (0xFF01CD)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_MKA:
 	.asciz "MKA"
-; Sound-RAM data identifier "MKB": SendPartDataBlock_InitVal9 (0xFF0204)
+; Sound-RAM data identifier "MKB": SendPartDataBlock_InitVal9 (0xFF01F9)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_MKB:
 	.asciz "MKB"
-; Sound-RAM data identifier "KN3000 SOUND RAM": SendPartDataBlock_InitVal6 (0xFF0182)
+; Sound-RAM data identifier "KN3000 SOUND RAM": SendPartDataBlock_InitVal6 (0xFF0177)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN3000:
 	.asciz "KN3000 SOUND RAM"
-; Sound-RAM data identifier "KN1500 SOUND RAM": SendPartDataBlock_InitVal5 (0xFF0158)
+; Sound-RAM data identifier "KN1500 SOUND RAM": SendPartDataBlock_InitVal5 (0xFF014D)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN1500:
 	.asciz "KN1500 SOUND RAM"
@@ -9250,13 +9250,13 @@ SoundRam_HandlerTable:
 	.long SendPartDataBlock_Return4
 	.long SendPartDataBlock_DoGetError
 	.long SendPartDataBlock_Return5
-; 16 x u8.  HdaeRom_DataHandler_Helper (0xFEFC28): `lda xhl,(<this>);
+; 16 x u8.  HdaeRom_DataHandler_Helper (0xFEFC1D): `lda xhl,(<this>);
 ; ld_rrb c,xhl,bc`.
 HdaeRom_DataByteMap:
 	.byte 1, 1, 1, 1, 1, 1, 0, 0
 	.byte 1, 2, 3, 1, 1, 1, 1, 1
 ; 426-byte default record (213 words) beginning with the 16-character name
-; "    Initial     ": SendPartDataBlock_Return5_Helper (0xFEFD28) copies it
+; "    Initial     ": SendPartDataBlock_Return5_Helper (0xFEFD1D) copies it
 ; into its frame (`ld xiy,<this>; ld xix,xsp; ldw bc,213; ldirw`).
 SoundRam_DefaultRecord:
 	.byte 0x20, 0x20, 0x20, 0x20, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x20, 0x20, 0x20, 0x20, 0x20
@@ -9292,19 +9292,19 @@ SoundRam_DefaultRecord:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-; 6 x s16 switch offsets.  HdaeRom_DataHandler (0xFF024E): `ld_rrw ..,xix,..; lda xix,(0xFF028F);
+; 6 x s16 switch offsets.  HdaeRom_DataHandler (0xFF0243): `ld_rrw ..,xix,..; lda xix,(0xFF028F);
 ; jp_rr 8,xix,..` -- targets 0xFF028F + offset (no labels yet).
 HdaeRomData_SwitchOffsets:
 	.short 111, 111, 111, 319, 0, 319
-; 6 x s16 switch offsets.  HdaeRom_AltHandler (0xFF0445): `ld_rrw ..,xix,..; lda xix,(0xFF0470);
+; 6 x s16 switch offsets.  HdaeRom_AltHandler (0xFF0437): `ld_rrw ..,xix,..; lda xix,(0xFF0470);
 ; jp_rr 8,xix,..` -- targets 0xFF0470 + offset (no labels yet).
 HdaeRomAlt_SwitchOffsets:
 	.short 12, 12, 12, 0, 12, 8
-; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Skip2 (0xFF07A8): `ld_rrw ..,xix,..; lda xix,(0xFF07FB);
+; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Skip2 (0xFF079A): `ld_rrw ..,xix,..; lda xix,(0xFF07FB);
 ; jp_rr 8,xix,..` -- targets 0xFF07FB + offset (no labels yet).
 TmFlashBulkA_SwitchOffsets:
 	.short 27, 27, 27, 0, 7, 0
-; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Epilogue2 (0xFF086C): `ld_rrw ..,xix,..; lda xix,(0xFF08A9);
+; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Epilogue2 (0xFF085E): `ld_rrw ..,xix,..; lda xix,(0xFF08A9);
 ; jp_rr 8,xix,..` -- targets 0xFF08A9 + offset (no labels yet).
 TmFlashBulkB_SwitchOffsets:
 	.short 66, 66, 66, 0, 33, 0
@@ -9331,13 +9331,13 @@ CType_ClassTable:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
-; 22 x s16 switch offsets.  Sprintf_DispatchType (0xFF11F4): `ld_rrw ..,xix,..; lda xix,(0xFF1237);
+; 22 x s16 switch offsets.  Sprintf_DispatchType (0xFF11E6): `ld_rrw ..,xix,..; lda xix,(0xFF1237);
 ; jp_rr 8,xix,..` -- targets 0xFF1237 + offset (no labels yet).
 Sprintf_TypeSwitch:
 	.short 0, 269, 1674, 1674, 1674, 1761, 269, 1761
 	.short 1761, 1761, 1761, 1638, 1306, 943, 1761, 1761
 	.short 105, 1761, 697, 1761, 1761, 946
-; "0123456789abcdef" + pad: Sprintf_HexToStr (0xFF19C2) uses it for %x
+; "0123456789abcdef" + pad: Sprintf_HexToStr (0xFF19B4) uses it for %x
 ; (`ld xwa,<this>`; `cpw (xsp+12),120` picks the table).
 Sprintf_HexDigitsLower:
 	.asciz "0123456789abcdef"

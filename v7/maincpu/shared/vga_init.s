@@ -118,7 +118,7 @@
 ; This routine is called from the main VGA setup and returns via
 ; RET_VGA_SEQUENCER which performs a tail-call back to Write_VGA_Register.
 ;
-; In maincpu: VGA_Extended_Init (0xef5163)
+; In maincpu: VGA_Extended_Init (0xef5139)
 ; In table_data: VGA_Init entry point (0x9fce1e)
 ;
 ; Label names use maincpu convention. Table_data can define aliases if needed.

@@ -810,8 +810,8 @@ MidiCC_Handler_BitManipulation_Return:
 	ret
 ; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
 	.byte 0xff
-; MidiCC_CC83_ValueMap (0xFCFCB9, 3 x u8): controller value 0..2 -> E.  Reader
-; MidiCC_Handler_BitManipulation (0xFCFC74), CC function 18 <- CC83
+; MidiCC_CC83_ValueMap (0xFCF4E8, 3 x u8): controller value 0..2 -> E.  Reader
+; MidiCC_Handler_BitManipulation (0xFCF8BD), CC function 18 <- CC83
 ; (MidiCC_ChannelMappingData): only for part 25, with `bit 2, (0xfd51)` set;
 ; `ld a, (0x9636) / cp a, 2 / jr ugt` (E stays 0 above 2) / `ld e, (xix+a)`,
 ; then BC = 0x0B98, D = 0xC0 -> VoiceMode_ParamConfigTables_0xB68.
@@ -884,8 +884,8 @@ MidiCC_Handler_RangeCheck_Return:
 	ret
 ; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
 	.byte 0xff
-; MidiCC_CC80_ValueMap (0xFCFD77, 4 x u8): controller value 0..3 -> E.  Reader
-; MidiCC_Handler_RangeCheck (0xFCFD38), CC function 16 <- CC80: only for part 16;
+; MidiCC_CC80_ValueMap (0xFCF5A6, 4 x u8): controller value 0..3 -> E.  Reader
+; MidiCC_Handler_RangeCheck (0xFCF567), CC function 16 <- CC80: only for part 16;
 ; `ld a, (0x9636) / cp a, 3 / jr ugt` (E stays 0 above 3) / `ld e, (xix+a)`,
 ; then BC = 0x0348, D = 7 -> MidiStream_ApplyPendingParams.  Previously
 ; spelled `nop / push sr / normal / pop sr`.

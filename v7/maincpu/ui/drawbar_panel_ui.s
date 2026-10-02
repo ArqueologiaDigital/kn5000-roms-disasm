@@ -18090,7 +18090,7 @@ DemoMenu_ReturnZero:
 	ret
 
 ; =============================================================================
-; DemoMenu_BuildItemWorkspace (0xf83cea)
+; DemoMenu_BuildItemWorkspace (0xf838e6)
 ; =============================================================================
 ; Allocates a 12-byte workspace for one demo menu item and posts it as an
 ; event 0x1c0001c parameter.

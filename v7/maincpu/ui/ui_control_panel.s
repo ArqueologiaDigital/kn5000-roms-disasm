@@ -3363,7 +3363,7 @@ BoxRightCheck_ReturnZero:
 ;   0x1c00038 -> GroupBoxProc_StartSSFPresentation (direct)
 ;   0x1c00030 -> GroupBoxProc_Ev1C00030 -> GroupBoxProc_StartSSFPresentation
 ;
-; GroupBoxProc_StartSSFPresentation (0xf9a273) is the CORRECT code path that
+; GroupBoxProc_StartSSFPresentation (0xf99e66) is the CORRECT code path that
 ; initiates SSF presentation playback: it builds a workspace with type-tag
 ; 0x0000b80a and sends event 0x1c0001c via direct SendEvent (FA9660), causing
 ; AcPresentationControlProc to pass its B80A check and send 0x1c00006
