@@ -5838,9 +5838,9 @@ StylCnv_ModeRb_Select:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2EA, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StylCnv_Str_Stars
-; StylCnv_Str_Stars (+0x7c, ROM 0xe4c14e): "***": no reader found
-; (searched: label and 24-bit operand forms of 0xe4c14e across the v10
-; ROM).
+; StylCnv_Str_Stars (+0x7c, ROM 0xe4c14e): "***": a C string literal the style-convert
+; display passes by far pointer (`pushw StylCnv_Str_Stars@hi16 / @lo16` in
+; StylCnvDisp_ScanFileLoop).
 ;
 ; Typed in naka_widget_descriptors.c as char StylCnv_Str_Stars[4].
 ; -----------------------------------------------------------------------------
@@ -7367,15 +7367,23 @@ East_ClassTable_163:
 	.set NakaData_Block007, East_ClassTable_163 + 76	; historical label, used by other files
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] East_ClassTable_163_Tail
-; East_ClassTable_163_Tail -- 94 bytes after East_ClassTable_163 that no
-; registration or code reference reaches (searched: RegObjTabl tables,
-; slice and positional labels). Contents not established.
+; East_ClassTable_163_Tail -- 94 bytes after East_ClassTable_163: the all-zero
+; terminator descriptor (24 B), then the signature and name strings of
+; descriptors 15, 14, 13 and 12 (East_ClassTable_163[n] +12 name, +16 sig point
+; here; checked against the ROM 2026-10-02).  Descriptor 12's name continues in
+; the next object.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; East_ClassTable_163_Tail[94].
 ; -----------------------------------------------------------------------------
-East_ClassTable_163_Tail:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D0A, 0x5E
+East_ClassTable_163_Tail:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D0A, 0x18	; the all-zero terminator descriptor
+East_ClassDesc15_Sig:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D22, 0x6	; "XXjn"
+East_ClassDesc15_Name:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D28, 0x12	; "AcMidiPartGridBox"
+East_ClassDesc14_Sig:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D3A, 0x6	; "XXjn"
+East_ClassDesc14_Name:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D40, 0x10	; "AcCtlMsgGridBox"
+East_ClassDesc13_Sig:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D50, 0x4	; "XXj"
+East_ClassDesc13_Name:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D54, 0x12	; "AcPmemOutRGridBox"
+East_ClassDesc12_Sig:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x24D66, 0x2	; "XX" (continues in the next object)
 
 ; External label offsets within the binary blob above.
 ; The NakaInst_<EFFECT> run starting at +0x01e1a IS DspEffectName_Strings:

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 48,475
-#   semantic names ........... 45,048 (92.9%)
+#   symbols .................. 48,482
+#   semantic names ........... 45,055 (92.9%)
 #   positional names ......... 3,427
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -4622,6 +4622,13 @@ ClassProps_AcMidiPartGridBox 00E559B4
 East_ClassTable_163 00E559EA
 NakaData_Block007 00E55A36
 East_ClassTable_163_Tail 00E55B6A
+East_ClassDesc15_Sig 00E55B82
+East_ClassDesc15_Name 00E55B88
+East_ClassDesc14_Sig 00E55B9A
+East_ClassDesc14_Name 00E55BA0
+East_ClassDesc13_Sig 00E55BB0
+East_ClassDesc13_Name 00E55BB4
+East_ClassDesc12_Sig 00E55BC6
 MidiMenu_WidgetCount 00E55CD4
 MidiMenu_ResEventTable 00E55CD6
 MidiMenu_ResEventCount 00E55CDA
