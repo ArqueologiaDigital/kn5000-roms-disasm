@@ -2401,7 +2401,7 @@ sub_F8012F:
 	jr z, .LF8014E                                       ; F80140  66 0c
 	jr .LF80151                                          ; F80142  68 0d
 .LF80144:
-	calr sub_F80155                                      ; F80144  1e 0e 00
+	calr Blink_SetEnable_1                                      ; F80144  1e 0e 00
 	jr .LF80151                                          ; F80147  68 08
 .LF80149:
 	calr sub_F8015F                                      ; F80149  1e 13 00
@@ -2411,7 +2411,7 @@ sub_F8012F:
 .LF80151:
 	calr sub_F80220                                      ; F80151  1e cc 00
 	ret                                                  ; F80154  0e
-sub_F80155:
+Blink_SetEnable_1:
 	pushw 0x01                                           ; F80155  0b 01 00
 	call T_Blink_SetEnable                               ; F80158  1d 28 2e f4
 	inc 2,XSP                                            ; F8015C  ef 62
@@ -2998,7 +2998,7 @@ sub_F8062A:
 	jr z, .LF80649                                       ; F8063B  66 0c
 	jr .LF8064C                                          ; F8063D  68 0d
 .LF8063F:
-	calr sub_F80650                                      ; F8063F  1e 0e 00
+	calr Blink_SetEnable_1_2                                      ; F8063F  1e 0e 00
 	jr .LF8064C                                          ; F80642  68 08
 .LF80644:
 	calr sub_F8065A                                      ; F80644  1e 13 00
@@ -3008,7 +3008,7 @@ sub_F8062A:
 .LF8064C:
 	calr sub_F80727                                      ; F8064C  1e d8 00
 	ret                                                  ; F8064F  0e
-sub_F80650:
+Blink_SetEnable_1_2:
 	pushw 0x01                                           ; F80650  0b 01 00
 	call T_Blink_SetEnable                               ; F80653  1d 28 2e f4
 	inc 2,XSP                                            ; F80657  ef 62
@@ -3400,7 +3400,7 @@ sub_F809AD:
 	jr z, .LF809CC                                       ; F809BE  66 0c
 	jr .LF809CF                                          ; F809C0  68 0d
 .LF809C2:
-	calr sub_F809D3                                      ; F809C2  1e 0e 00
+	calr Blink_SetEnable_1_3                                      ; F809C2  1e 0e 00
 	jr .LF809CF                                          ; F809C5  68 08
 .LF809C7:
 	calr sub_F809DD                                      ; F809C7  1e 13 00
@@ -3410,7 +3410,7 @@ sub_F809AD:
 .LF809CF:
 	calr sub_F80A80                                      ; F809CF  1e ae 00
 	ret                                                  ; F809D2  0e
-sub_F809D3:
+Blink_SetEnable_1_3:
 	pushw 0x01                                           ; F809D3  0b 01 00
 	call T_Blink_SetEnable                               ; F809D6  1d 28 2e f4
 	inc 2,XSP                                            ; F809DA  ef 62
@@ -3790,7 +3790,7 @@ sub_F80D12:
 	jr z, .LF80D31                                       ; F80D23  66 0c
 	jr .LF80D34                                          ; F80D25  68 0d
 .LF80D27:
-	calr sub_F80D38                                      ; F80D27  1e 0e 00
+	calr Blink_SetEnable_1_4                                      ; F80D27  1e 0e 00
 	jr .LF80D34                                          ; F80D2A  68 08
 .LF80D2C:
 	calr sub_F80D42                                      ; F80D2C  1e 13 00
@@ -3800,7 +3800,7 @@ sub_F80D12:
 .LF80D34:
 	calr sub_F80DE5                                      ; F80D34  1e ae 00
 	ret                                                  ; F80D37  0e
-sub_F80D38:
+Blink_SetEnable_1_4:
 	pushw 0x01                                           ; F80D38  0b 01 00
 	call T_Blink_SetEnable                               ; F80D3B  1d 28 2e f4
 	inc 2,XSP                                            ; F80D3F  ef 62
@@ -4349,7 +4349,7 @@ sub_F81236:
 	jr ule, .LF81252                                     ; F8124E  63 02
 	jr .LF8125F                                          ; F81250  68 0d
 .LF81252:
-	calr sub_F81263                                      ; F81252  1e 0e 00
+	calr Blink_SetEnable_1_5                                      ; F81252  1e 0e 00
 	jr .LF8125F                                          ; F81255  68 08
 .LF81257:
 	calr sub_F8126D                                      ; F81257  1e 13 00
@@ -4359,7 +4359,7 @@ sub_F81236:
 .LF8125F:
 	calr sub_F81310                                      ; F8125F  1e ae 00
 	ret                                                  ; F81262  0e
-sub_F81263:
+Blink_SetEnable_1_5:
 	pushw 0x01                                           ; F81263  0b 01 00
 	call T_Blink_SetEnable                               ; F81266  1d 28 2e f4
 	inc 2,XSP                                            ; F8126A  ef 62
@@ -47199,7 +47199,7 @@ Paint_MidiRealtimeMessages:
 	inc 8,XSP                                            ; F9A70D  ef 60
 	m_cp_mi8 MB16, 0x2720, 0x00                          ; F9A70F  c1 20 27 3f 00
 	jr nz, .LF9A71B                                      ; F9A714  6e 05
-	calr sub_F9A724                                      ; F9A716  1e 0b 00
+	calr DisplayList_Run_Stack_Wrap                                      ; F9A716  1e 0b 00
 	jr .LF9A71E                                          ; F9A719  68 03
 .LF9A71B:
 	calr sub_F9A73C                                      ; F9A71B  1e 1e 00
@@ -47208,7 +47208,7 @@ Paint_MidiRealtimeMessages:
 	pop XIX                                              ; F9A722  5c
 	ret                                                  ; F9A723  0e
 ; ---------------------------------------------------------------------
-; sub_F9A724 -- a screen painter this round REFUSED to name.
+; DisplayList_Run_Stack_Wrap -- a screen painter this round REFUSED to name.
 ;
 ; It hands 1 display list(s) to the interpreter ON THE STACK.
 ;     site 0xF9A729  list 0xF0CC83-0xF0CC91 (14 B, leaves by call)
@@ -47222,7 +47222,7 @@ Paint_MidiRealtimeMessages:
 ;          sub_XXXXXX and states the gap.
 ; Recorded by notes/prom_a_understanding_round7.py --apply.
 ; ---------------------------------------------------------------------
-sub_F9A724:
+DisplayList_Run_Stack_Wrap:
 	ld (0x2540:16), 0x02                                 ; F9A724  f1 40 25 00 02
 	lda xbc, (DL_RealtimeCommandsClock:24)               ; F9A729  f2 91 cc f0 31
 	push XBC                                             ; F9A72E  39
@@ -47441,7 +47441,7 @@ sub_F9A83A:
 	lda xwa, (DL_F0CCAF:24)                              ; F9A8CF  f2 af cc f0 30
 	push XWA                                             ; F9A8D4  38
 	call T_DisplayListB_Run_Stack                        ; F9A8D5  1d 04 2e f4
-	calr sub_F9A724                                          ; F9A8D9  1e 48 fe
+	calr DisplayList_Run_Stack_Wrap                                          ; F9A8D9  1e 48 fe
 	inc 8,XSP                                            ; F9A8DC  ef 60
 	inc 4,XSP                                            ; F9A8DE  ef 64
 .LF9A8E0:
@@ -106966,181 +106966,181 @@ sub_FC0227:
 	ret                                                  ; FC024E  0e
 T_F40FF8_Nop:
 	ret                                                  ; FC024F  0e
-sub_FC0250:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords                         ; FC0250  46 90 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0255  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC025A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC025C  1e 31 07
 	ret                                                  ; FC025F  0e
-sub_FC0260:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x8                     ; FC0260  46 98 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0265  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC026A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC026C  1e 21 07
 	ret                                                  ; FC026F  0e
-sub_FC0270:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x10                    ; FC0270  46 a0 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0275  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC027A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC027C  1e 11 07
 	ret                                                  ; FC027F  0e
-sub_FC0280:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x18                    ; FC0280  46 a8 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0285  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC028A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC028C  1e 01 07
 	ret                                                  ; FC028F  0e
-sub_FC0290:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x20                    ; FC0290  46 b0 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0295  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC029A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC029C  1e f1 06
 	ret                                                  ; FC029F  0e
-sub_FC02A0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x28                    ; FC02A0  46 b8 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC02A5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC02AA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC02AC  1e e1 06
 	ret                                                  ; FC02AF  0e
-sub_FC02B0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x30                    ; FC02B0  46 c0 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC02B5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC02BA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC02BC  1e d1 06
 	ret                                                  ; FC02BF  0e
-sub_FC02C0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x38                    ; FC02C0  46 c8 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC02C5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC02CA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC02CC  1e c1 06
 	ret                                                  ; FC02CF  0e
-sub_FC02D0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x40                    ; FC02D0  46 d0 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC02D5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC02DA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC02DC  1e b1 06
 	ret                                                  ; FC02DF  0e
-sub_FC02E0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x48                    ; FC02E0  46 d8 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC02E5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC02EA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC02EC  1e a1 06
 	ret                                                  ; FC02EF  0e
-sub_FC02F0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x50                    ; FC02F0  46 e0 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC02F5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC02FA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC02FC  1e 91 06
 	ret                                                  ; FC02FF  0e
-sub_FC0300:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x58                    ; FC0300  46 e8 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0305  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC030A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC030C  1e 81 06
 	ret                                                  ; FC030F  0e
-sub_FC0310:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x60                    ; FC0310  46 f0 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0315  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC031A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC031C  1e 71 06
 	ret                                                  ; FC031F  0e
-sub_FC0320:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x68                    ; FC0320  46 f8 08 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0325  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC032A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC032C  1e 61 06
 	ret                                                  ; FC032F  0e
-sub_FC0330:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x70                    ; FC0330  46 00 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0335  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC033A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC033C  1e 51 06
 	ret                                                  ; FC033F  0e
-sub_FC0340:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x78                    ; FC0340  46 08 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0345  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC034A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC034C  1e 41 06
 	ret                                                  ; FC034F  0e
-sub_FC0350:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x80                    ; FC0350  46 10 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0355  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC035A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC035C  1e 31 06
 	ret                                                  ; FC035F  0e
-sub_FC0360:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x88                    ; FC0360  46 18 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0365  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC036A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC036C  1e 21 06
 	ret                                                  ; FC036F  0e
-sub_FC0370:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x90                    ; FC0370  46 20 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0375  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC037A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC037C  1e 11 06
 	ret                                                  ; FC037F  0e
-sub_FC0380:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0x98                    ; FC0380  46 28 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0385  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC038A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC038C  1e 01 06
 	ret                                                  ; FC038F  0e
-sub_FC0390:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xA0                    ; FC0390  46 30 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0395  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC039A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC039C  1e f1 05
 	ret                                                  ; FC039F  0e
-sub_FC03A0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xA8                    ; FC03A0  46 38 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC03A5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC03AA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC03AC  1e e1 05
 	ret                                                  ; FC03AF  0e
-sub_FC03B0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xB0                    ; FC03B0  46 40 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC03B5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC03BA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC03BC  1e d1 05
 	ret                                                  ; FC03BF  0e
-sub_FC03C0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xB8                    ; FC03C0  46 48 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC03C5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC03CA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC03CC  1e c1 05
 	ret                                                  ; FC03CF  0e
-sub_FC03D0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xC0                    ; FC03D0  46 50 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC03D5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC03DA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC03DC  1e b1 05
 	ret                                                  ; FC03DF  0e
-sub_FC03E0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xC8                    ; FC03E0  46 58 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC03E5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC03EA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC03EC  1e a1 05
 	ret                                                  ; FC03EF  0e
-sub_FC03F0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xD0                    ; FC03F0  46 60 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC03F5  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC03FA  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC03FC  1e 91 05
 	ret                                                  ; FC03FF  0e
-sub_FC0400:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xD8                    ; FC0400  46 68 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0405  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC040A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC040C  1e 81 05
 	ret                                                  ; FC040F  0e
-sub_FC0410:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xE0                    ; FC0410  46 70 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0415  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC041A  21 0d
 	calr Msg0716_DispatchIndex                                          ; FC041C  1e 71 05
 	ret                                                  ; FC041F  0e
-sub_FC0420:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xE8                    ; FC0420  46 78 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0425  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC042A  21 0d
@@ -107174,7 +107174,7 @@ sub_FC0430:
 Msg0716_DispatchIndex_Entry:
 	calr Msg0716_DispatchIndex                                          ; FC043C  1e 51 05
 	ret                                                  ; FC043F  0e
-sub_FC0440:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13:
 	ld XIZ,Msg0716_ObjectRecords+0xF8                    ; FC0440  46 88 09 fc 00
 	ld XIY,Msg0716_HandlerTables                         ; FC0445  45 ce 09 fc 00
 	ld a, 0x0d:opc                                          ; FC044A  21 0d
@@ -107182,7 +107182,7 @@ sub_FC0440:
 	ret                                                  ; FC044F  0e
 sub_FC0450:
 	ld XIZ,Msg0716_ObjectRecords                         ; FC0450  46 90 08 fc 00
-sub_FC0455:
+Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26:
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0455  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC045A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC045C  1e 31 05
@@ -107190,186 +107190,186 @@ sub_FC0455:
 sub_FC0460:
 	ld XIZ,Msg0716_ObjectRecords+0x8                     ; FC0460  46 98 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0465  45 06 0a fc 00
-sub_FC046A:
+Msg0716_DispatchIndex_26:
 	ld a, 0x1a:opc                                          ; FC046A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC046C  1e 21 05
 	ret                                                  ; FC046F  0e
-sub_FC0470:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x10                    ; FC0470  46 a0 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0475  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC047A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC047C  1e 11 05
 	ret                                                  ; FC047F  0e
-sub_FC0480:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x18                    ; FC0480  46 a8 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0485  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC048A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC048C  1e 01 05
 	ret                                                  ; FC048F  0e
-sub_FC0490:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x20                    ; FC0490  46 b0 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0495  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC049A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC049C  1e f1 04
 	ret                                                  ; FC049F  0e
-sub_FC04A0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x28                    ; FC04A0  46 b8 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC04A5  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC04AA  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC04AC  1e e1 04
 	ret                                                  ; FC04AF  0e
-sub_FC04B0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x30                    ; FC04B0  46 c0 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC04B5  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC04BA  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC04BC  1e d1 04
 	ret                                                  ; FC04BF  0e
-sub_FC04C0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x38                    ; FC04C0  46 c8 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC04C5  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC04CA  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC04CC  1e c1 04
 	ret                                                  ; FC04CF  0e
-sub_FC04D0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x40                    ; FC04D0  46 d0 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC04D5  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC04DA  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC04DC  1e b1 04
 	ret                                                  ; FC04DF  0e
-sub_FC04E0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x48                    ; FC04E0  46 d8 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC04E5  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC04EA  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC04EC  1e a1 04
 	ret                                                  ; FC04EF  0e
-sub_FC04F0:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x50                    ; FC04F0  46 e0 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC04F5  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC04FA  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC04FC  1e 91 04
 	ret                                                  ; FC04FF  0e
-sub_FC0500:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x58                    ; FC0500  46 e8 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0505  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC050A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC050C  1e 81 04
 	ret                                                  ; FC050F  0e
-sub_FC0510:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x60                    ; FC0510  46 f0 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0515  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC051A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC051C  1e 71 04
 	ret                                                  ; FC051F  0e
-sub_FC0520:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x68                    ; FC0520  46 f8 08 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0525  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC052A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC052C  1e 61 04
 	ret                                                  ; FC052F  0e
-sub_FC0530:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x70                    ; FC0530  46 00 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0535  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC053A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC053C  1e 51 04
 	ret                                                  ; FC053F  0e
-sub_FC0540:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x78                    ; FC0540  46 08 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0545  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC054A  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC054C  1e 41 04
 	ret                                                  ; FC054F  0e
 	ret                                                  ; FC0550  0e
-sub_FC0551:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x80                    ; FC0551  46 10 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0556  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC055B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC055D  1e 30 04
 	ret                                                  ; FC0560  0e
-sub_FC0561:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x88                    ; FC0561  46 18 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0566  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC056B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC056D  1e 20 04
 	ret                                                  ; FC0570  0e
-sub_FC0571:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x90                    ; FC0571  46 20 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0576  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC057B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC057D  1e 10 04
 	ret                                                  ; FC0580  0e
-sub_FC0581:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0x98                    ; FC0581  46 28 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0586  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC058B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC058D  1e 00 04
 	ret                                                  ; FC0590  0e
-sub_FC0591:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xA0                    ; FC0591  46 30 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0596  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC059B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC059D  1e f0 03
 	ret                                                  ; FC05A0  0e
-sub_FC05A1:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xA8                    ; FC05A1  46 38 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC05A6  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC05AB  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC05AD  1e e0 03
 	ret                                                  ; FC05B0  0e
-sub_FC05B1:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xB0                    ; FC05B1  46 40 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC05B6  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC05BB  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC05BD  1e d0 03
 	ret                                                  ; FC05C0  0e
-sub_FC05C1:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xB8                    ; FC05C1  46 48 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC05C6  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC05CB  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC05CD  1e c0 03
 	ret                                                  ; FC05D0  0e
-sub_FC05D1:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xC0                    ; FC05D1  46 50 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC05D6  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC05DB  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC05DD  1e b0 03
 	ret                                                  ; FC05E0  0e
-sub_FC05E1:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xC8                    ; FC05E1  46 58 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC05E6  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC05EB  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC05ED  1e a0 03
 	ret                                                  ; FC05F0  0e
-sub_FC05F1:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xD0                    ; FC05F1  46 60 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC05F6  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC05FB  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC05FD  1e 90 03
 	ret                                                  ; FC0600  0e
-sub_FC0601:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xD8                    ; FC0601  46 68 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0606  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC060B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC060D  1e 80 03
 	ret                                                  ; FC0610  0e
-sub_FC0611:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xE0                    ; FC0611  46 70 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0616  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC061B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC061D  1e 70 03
 	ret                                                  ; FC0620  0e
-sub_FC0621:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xE8                    ; FC0621  46 78 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0626  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC062B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC062D  1e 60 03
 	ret                                                  ; FC0630  0e
-sub_FC0631:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xF0                    ; FC0631  46 80 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0636  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC063B  21 1a
 	calr Msg0716_DispatchIndex                                          ; FC063D  1e 50 03
 	ret                                                  ; FC0640  0e
-sub_FC0641:
+Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26:
 	ld XIZ,Msg0716_ObjectRecords+0xF8                    ; FC0641  46 88 09 fc 00
 	ld XIY,Msg0716_HandlerTables+0x38                    ; FC0646  45 06 0a fc 00
 	ld a, 0x1a:opc                                          ; FC064B  21 1a
@@ -107424,14 +107424,14 @@ T_F41138_Nop:
 	ret                                                  ; FC0684  0e
 T_F4113C_Nop:
 	ret                                                  ; FC0685  0e
-sub_FC0686:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6:
 	ld XIY,Msg0716_HandlerTables+0xA4                    ; FC0686  45 72 0a fc 00
 	ld a, 0x06:opc                                          ; FC068B  21 06
 	calr Msg0716_DispatchIndex_Twin                                          ; FC068D  1e 1f 03
 	ret                                                  ; FC0690  0e
 T_F41144_Nop:
 	ret                                                  ; FC0691  0e
-sub_FC0692:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2:
 	ld XIY,Msg0716_HandlerTables+0x118                   ; FC0692  45 e6 0a fc 00
 	ld a, 0x02:opc                                          ; FC0697  21 02
 	calr Msg0716_DispatchIndex_Twin                                          ; FC0699  1e 13 03
@@ -107440,22 +107440,22 @@ T_F4114C_Nop:
 	ret                                                  ; FC069D  0e
 T_F41150_Nop:
 	ret                                                  ; FC069E  0e
-sub_FC069F:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14:
 	ld XIY,Msg0716_HandlerTables+0x124                   ; FC069F  45 f2 0a fc 00
 	ld a, 0x0e:opc                                          ; FC06A4  21 0e
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06A6  1e 06 03
 	ret                                                  ; FC06A9  0e
-sub_FC06AA:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13:
 	ld XIY,Msg0716_HandlerTables+0xC0                    ; FC06AA  45 8e 0a fc 00
 	ld a, 0x0d:opc                                          ; FC06AF  21 0d
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06B1  1e fb 02
 	ret                                                  ; FC06B4  0e
-sub_FC06B5:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7:
 	ld XIY,Msg0716_HandlerTables+0xF8                    ; FC06B5  45 c6 0a fc 00
 	ld a, 0x07:opc                                          ; FC06BA  21 07
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06BC  1e f0 02
 	ret                                                  ; FC06BF  0e
-sub_FC06C0:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4:
 	ld XIY,Msg0716_HandlerTables+0x160                   ; FC06C0  45 2e 0b fc 00
 	ld a, 0x04:opc                                          ; FC06C5  21 04
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06C7  1e e5 02
@@ -107465,7 +107465,7 @@ T_F41164_Nop:
 sub_FC06CC:
 	calr sub_FC06CC_Nop                                          ; FC06CC  1e 86 07
 	ret                                                  ; FC06CF  0e
-sub_FC06D0:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19:
 	ld XIY,Msg0716_HandlerTables+0x174                   ; FC06D0  45 42 0b fc 00
 	ld a, 0x13:opc                                          ; FC06D5  21 13
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06D7  1e d5 02
@@ -107484,10 +107484,10 @@ sub_FC06DF:
 	cp L,0x20                                            ; FC06E8  cf cf 20
 	jr nc, .LFC06F3                                      ; FC06EB  6f 06
 	ld (XIX+0x01),L                                      ; FC06ED  bc 01 47
-	calr sub_FC16EE                                          ; FC06F0  1e fb 0f
+	calr Msg0716_Post_Trampoline_4                                          ; FC06F0  1e fb 0f
 .LFC06F3:
 	ret                                                  ; FC06F3  0e
-sub_FC06F4:
+Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17:
 	ld XIY,Msg0716_HandlerTables+0x1C4                   ; FC06F4  45 92 0b fc 00
 	ld a, 0x11:opc                                          ; FC06F9  21 11
 	calr Msg0716_DispatchIndex_Twin                                          ; FC06FB  1e b1 02
@@ -108008,7 +108008,7 @@ sub_FC0C8E:   ; entry: named by 1 `.long` operand, first at 0xFC09EE
 	calr sub_FC161D                                          ; FC0C9F  1e 7b 09
 	jr .LFC0CA7                                          ; FC0CA2  68 03
 .LFC0CA4:
-	calr sub_FC1608                                          ; FC0CA4  1e 61 09
+	calr Msg0716_Post_Trampoline_Wrap                                          ; FC0CA4  1e 61 09
 .LFC0CA7:
 	ret                                                  ; FC0CA7  0e
 sub_FC0CA8:   ; entry: named by 1 `.long` operand, first at 0xFC09F2
@@ -108070,7 +108070,7 @@ sub_FC0CFF:   ; entry: named by 4 `.long` operands, first at 0xFC0A76
 	m_set 0, MD16, 0x070f                                ; FC0D03  f1 0f 07 b8
 	ret                                                  ; FC0D07  0e
 sub_FC0D08:   ; entry: named by 1 `.long` operand, first at 0xFC0A86
-	calr sub_FC1816                                          ; FC0D08  1e 0b 0b
+	calr Msg0716_Post_Trampoline_Wrap_2                                          ; FC0D08  1e 0b 0b
 	ret                                                  ; FC0D0B  0e
 Msg0716_HandlerTables_Nop47:   ; entry: named by 1 `.long` operand, first at 0xFC0A8A
 	ret                                                  ; FC0D0C  0e
@@ -108472,7 +108472,7 @@ sub_FC0FF3:
 	ld (XIX+0x01),C                                      ; FC100C  bc 01 43
 	pushw bc                                             ; FC100F  29
 	push XIX                                             ; FC1010  3c
-	calr sub_FC16EE                                          ; FC1011  1e da 06
+	calr Msg0716_Post_Trampoline_4                                          ; FC1011  1e da 06
 	pop XIX                                              ; FC1014  5c
 	popw bc                                              ; FC1015  49
 	add C,0x01                                           ; FC1016  cb c8 01
@@ -108494,7 +108494,7 @@ sub_FC101E:
 	ld A,(XIZ+0x06)                                      ; FC1036  8e 06 21
 	ld (XIX+0x01),A                                      ; FC1039  bc 01 41
 	pushw bc                                             ; FC103C  29
-	calr sub_FC16EE                                          ; FC103D  1e ae 06
+	calr Msg0716_Post_Trampoline_4                                          ; FC103D  1e ae 06
 	popw bc                                              ; FC1040  49
 .LFC1041:
 	ret                                                  ; FC1041  0e
@@ -108569,8 +108569,8 @@ sub_FC10DD:
 	ldw bc, 0x20                                         ; FC10E7  31 20 00
 .LFC10EA:
 	pushw bc                                             ; FC10EA  29
-	calr sub_FC1945                                          ; FC10EB  1e 57 08
-	calr sub_FC195D                                          ; FC10EE  1e 6c 08
+	calr Msg0716_Post_Trampoline_Wrap_3                                          ; FC10EB  1e 57 08
+	calr Msg0716_Post_Trampoline_Wrap_4                                          ; FC10EE  1e 6c 08
 	popw bc                                              ; FC10F1  49
 	add IZ,0x0008                                        ; FC10F2  de c8 08 00
 	djnz16 bc, .LFC10EA                                  ; FC10F6  d9 1c f1
@@ -109149,7 +109149,7 @@ sub_FC15E1:
 	ld c, 0xff:opc                                          ; FC1602  23 ff
 	calr sub_FC18CC                                      ; FC1604  1e c5 02
 	ret                                                  ; FC1607  0e
-sub_FC1608:
+Msg0716_Post_Trampoline_Wrap:
 	ld (XIX),0xb0                                        ; FC1608  b4 00 b0
 	ld (XIX+0x02),0x0a                                   ; FC160B  bc 02 00 0a
 	ld a, (0x20b9:16)                                   ; FC160F  c1 b9 20 21
@@ -109254,7 +109254,7 @@ sub_FC16E1:
 	ld c, 0xff:opc                                          ; FC16E8  23 ff
 	calr sub_FC18CC                                      ; FC16EA  1e df 01
 	ret                                                  ; FC16ED  0e
-sub_FC16EE:
+Msg0716_Post_Trampoline_4:
 	ld (XIX),0xb0                                        ; FC16EE  b4 00 b0
 	ld (XIX+0x02),0x78                                   ; FC16F1  bc 02 00 78
 	ld (XIX+0x03),0x00                                   ; FC16F5  bc 03 00 00
@@ -109383,7 +109383,7 @@ sub_FC1805:
 	ld c, 0x80:opc                                          ; FC1810  23 80
 	calr sub_FC18DC                                      ; FC1812  1e c7 00
 	ret                                                  ; FC1815  0e
-sub_FC1816:
+Msg0716_Post_Trampoline_Wrap_2:
 	ld (XIX),0xf0                                        ; FC1816  b4 00 f0
 	ld (XIX+0x01),0x50                                   ; FC1819  bc 01 00 50
 	ld (XIX+0x02),0xb2                                   ; FC181D  bc 02 00 b2
@@ -109515,7 +109515,7 @@ sub_FC1927:
 	ret                                                  ; FC1942  0e
 	ret                                                  ; FC1943  0e
 	ret                                                  ; FC1944  0e
-sub_FC1945:
+Msg0716_Post_Trampoline_Wrap_3:
 	ld (XIX),0xe0                                        ; FC1945  b4 00 e0
 	ld A,(XIZ+0x06)                                      ; FC1948  8e 06 21
 	ld (XIX+0x01),A                                      ; FC194B  bc 01 41
@@ -109524,7 +109524,7 @@ sub_FC1945:
 	ldw bc, 0x04                                         ; FC1956  31 04 00
 	calr Msg0716_Post_Trampoline                         ; FC1959  1e be 00
 	ret                                                  ; FC195C  0e
-sub_FC195D:
+Msg0716_Post_Trampoline_Wrap_4:
 	ld (XIX),0xb0                                        ; FC195D  b4 00 b0
 	ld A,(XIZ+0x06)                                      ; FC1960  8e 06 21
 	ld (XIX+0x01),A                                      ; FC1963  bc 01 41
@@ -122744,7 +122744,7 @@ ToneEditPage_A5_OpTable:
 	.long ToneEditField_A5_KeyShift               ; FCFA58  [ 3]
 	.long ToneEditField_A5_Detune                 ; FCFA5C  [ 4]
 	.long ToneEditField_A5_ResoScale              ; FCFA60  [ 5]
-	.long sub_FD4FDC                              ; FCFA64  [ 6]
+	.long ToneEditPage_ToggleRowFocus_Call                              ; FCFA64  [ 6]
 	.long PanelOp_Nop                             ; FCFA68  [ 7]
 	.long sub_FD501D                              ; FCFA6C  [ 8]
 	.long sub_FD503B                              ; FCFA70  [ 9]
@@ -122767,7 +122767,7 @@ ToneEditPage_A6_OpTable:
 	.long PanelOp_Nop                             ; FCFAA0  [ 3]
 	.long ToneEditField_A6_SubGainTouchDepth      ; FCFAA4  [ 4]
 	.long ToneEditField_A6_SubGain                ; FCFAA8  [ 5]
-	.long sub_FD546B                              ; FCFAAC  [ 6]
+	.long ToneEditPage_ToggleRowFocus_Call_2                              ; FCFAAC  [ 6]
 	.long PanelOp_Nop                             ; FCFAB0  [ 7]
 	.long sub_FD546F                              ; FCFAB4  [ 8]
 	.long sub_FD548D                              ; FCFAB8  [ 9]
@@ -122790,7 +122790,7 @@ ToneEditPage_A7_OpTable:
 	.long ToneEditField_A7_KeyFollowLow           ; FCFAE8  [ 3]
 	.long ToneEditField_A7_KeyFollowBreak         ; FCFAEC  [ 4]
 	.long ToneEditField_A7_KeyFollowHigh          ; FCFAF0  [ 5]
-	.long sub_FD5B5F                              ; FCFAF4  [ 6]
+	.long ToneEditPage_ToggleRowFocus_Call_3                              ; FCFAF4  [ 6]
 	.long PanelOp_Nop                             ; FCFAF8  [ 7]
 	.long sub_FD5B63                              ; FCFAFC  [ 8]
 	.long sub_FD5B81                              ; FCFB00  [ 9]
@@ -132445,8 +132445,8 @@ ToneEditField_A5_ResoScale:
 	popw hl                                              ; FD4FD8  4b
 	unlk XIZ                                             ; FD4FD9  ee 0d
 	ret                                                  ; FD4FDB  0e
-; sub_FD4FDC -- a handler: an entry of ToneEditPage_A5_OpTable
-sub_FD4FDC:
+; ToneEditPage_ToggleRowFocus_Call -- a handler: an entry of ToneEditPage_A5_OpTable
+ToneEditPage_ToggleRowFocus_Call:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD4FDC  1e 01 00
 	ret                                                  ; FD4FDF  0e
 ToneEditPage_ToggleRowFocus:
@@ -133044,8 +133044,8 @@ ToneEditField_A6_SubGain:
 	pop XIX                                              ; FD5467  5c
 	unlk XIZ                                             ; FD5468  ee 0d
 	ret                                                  ; FD546A  0e
-; sub_FD546B -- a handler: an entry of ToneEditPage_A6_OpTable
-sub_FD546B:
+; ToneEditPage_ToggleRowFocus_Call_2 -- a handler: an entry of ToneEditPage_A6_OpTable
+ToneEditPage_ToggleRowFocus_Call_2:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD546B  1e 72 fb
 	ret                                                  ; FD546E  0e
 ; sub_FD546F -- a handler: an entry of ToneEditPage_A6_OpTable
@@ -133992,8 +133992,8 @@ ToneEditField_A7_KeyFollowHigh:
 	popw hl                                              ; FD5B5B  4b
 	unlk XIZ                                             ; FD5B5C  ee 0d
 	ret                                                  ; FD5B5E  0e
-; sub_FD5B5F -- a handler: an entry of ToneEditPage_A7_OpTable
-sub_FD5B5F:
+; ToneEditPage_ToggleRowFocus_Call_3 -- a handler: an entry of ToneEditPage_A7_OpTable
+ToneEditPage_ToggleRowFocus_Call_3:
 	calr ToneEditPage_ToggleRowFocus                                      ; FD5B5F  1e 7e f4
 	ret                                                  ; FD5B62  0e
 ; sub_FD5B63 -- a handler: an entry of ToneEditPage_A7_OpTable
@@ -154628,7 +154628,7 @@ sub_FE0514:
 	ld (0x2880:16), 0x25                                 ; FE0514  f1 80 28 00 25
 	pushw 0x09                                           ; FE0519  0b 09 00
 	calr sub_FE1838                                          ; FE051C  1e 19 13
-	calr sub_FE095F                                          ; FE051F  1e 3d 04
+	calr Disk_PortA3_Release_Call                                          ; FE051F  1e 3d 04
 	calr sub_FE16FE                                          ; FE0522  1e d9 11
 	popw bc                                              ; FE0525  49
 	ret                                                  ; FE0526  0e
@@ -155139,7 +155139,7 @@ sub_FE1D52_Nop:
 	ret                                                  ; FE095D  0e
 sub_FE1D52_Nop2:
 	ret                                                  ; FE095E  0e
-sub_FE095F:
+Disk_PortA3_Release_Call:
 	calr Disk_PortA3_Release                                          ; FE095F  1e 95 0f
 	ld (0x178e:24), 0x00                               ; FE0962  f2 8e 17 00 00 00
 	ldw (0x1780:24), 0x00                               ; FE0968  f2 80 17 00 02 00 00
@@ -155191,7 +155191,7 @@ sub_FE09BE:
 	push XIX                                             ; FE09BF  3c
 	lda xix, (0x21e7:16)                                ; FE09C0  f1 e7 21 34
 	calr sub_FE2E96                                          ; FE09C4  1e cf 24
-	calr sub_FE095F                                          ; FE09C7  1e 95 ff
+	calr Disk_PortA3_Release_Call                                          ; FE09C7  1e 95 ff
 	pushw 0x09                                           ; FE09CA  0b 09 00
 	calr sub_FE1838                                          ; FE09CD  1e 68 0e
 	calr sub_FE08BD                                          ; FE09D0  1e ea fe
@@ -156400,7 +156400,7 @@ sub_FE152E__FE1551:
 	m_cp_mi8 MB16, 0x220b, 0x01                          ; FE159D  c1 0b 22 3f 01
 	jr nz, .LFE15DC                                          ; FE15A2  6e 38
 	ld (0x21fa:16), 0x00                                 ; FE15A4  f1 fa 21 00 00
-	calr sub_FE095F                                          ; FE15A9  1e b3 f3
+	calr Disk_PortA3_Release_Call                                          ; FE15A9  1e b3 f3
 	calr sub_FE08BD                                          ; FE15AC  1e 0e f3
 	ld H,A                                               ; FE15AF  c9 8e
 	cp a, 0x00:i3                                          ; FE15B1  c9 d8
@@ -157096,7 +157096,7 @@ sub_FE1C17:
 T_F4258C_Nop:
 	ret                                                  ; FE1C1E  0e
 sub_FE1C1F:
-	calr sub_FE095F                                          ; FE1C1F  1e 3d ed
+	calr Disk_PortA3_Release_Call                                          ; FE1C1F  1e 3d ed
 	ret                                                  ; FE1C22  0e
 sub_FE1C23:
 	calr sub_FE16F3                                          ; FE1C23  1e cd fa
@@ -170424,14 +170424,14 @@ sub_FE8C1F:
 	ld (0x601f51:24), wa                                ; FE8C24  f2 51 1f 60 50
 	m_cp_mi8 MB16, 0x207a, 0x28                          ; FE8C29  c1 7a 20 3f 28
 	jr z, .LFE8C38                                       ; FE8C2E  66 08
-	calr sub_FE8C97                                      ; FE8C30  1e 64 00
+	calr Queue2E00_AppendRegs_0_255_4240                                      ; FE8C30  1e 64 00
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FE8C33  c1 d4 34 3e 10
 .LFE8C38:
 	jr .LFE8C5D                                          ; FE8C38  68 23
 sub_FE8C3A:
 	m_cp_mi8 MB16, 0x207a, 0x25                          ; FE8C3A  c1 7a 20 3f 25
 	jr z, .LFE8C49                                       ; FE8C3F  66 08
-	calr sub_FE8C97                                      ; FE8C41  1e 53 00
+	calr Queue2E00_AppendRegs_0_255_4240                                      ; FE8C41  1e 53 00
 	m_or_mi8 MB16, 0x34d4, 0x10                          ; FE8C44  c1 d4 34 3e 10
 .LFE8C49:
 	ld wa, (0x601f4d:24)                                ; FE8C49  d2 4d 1f 60 20
@@ -170454,7 +170454,7 @@ sub_FE8C3A:
 	call sub_FE8040                                      ; FE8C8F  1d 40 80 fe
 	res_dd8 0x00, 0xc6                                   ; FE8C93  f0 c6 b0
 	ret                                                  ; FE8C96  0e
-sub_FE8C97:
+Queue2E00_AppendRegs_0_255_4240:
 	ld a, 0x00:opc                                          ; FE8C97  21 00
 	ld (0x2250:16), a                                   ; FE8C99  f1 50 22 41
 	ld w, 0xff:opc                                          ; FE8C9D  20 ff
@@ -176847,7 +176847,7 @@ sub_FEF88B:
 	ld (0x2540:16), 0x00                                 ; FEF88B  f1 40 25 00 00
 	ld XIY,DisplayList_FEF89F                            ; FEF890  45 9f f8 fe 00
 	ld XIX,sub_FEF8A9                                    ; FEF895  44 a9 f8 fe 00
-; sub_FEF89A -- a display-list painter whose SCREEN IS NOT ESTABLISHED
+; DisplayList_Run_Call -- a display-list painter whose SCREEN IS NOT ESTABLISHED
 ;
 ; Its body reaches the display-list interpreters 1 time(s) in the 2
 ; instructions to its first `ret`:
@@ -176863,7 +176863,7 @@ sub_FEF88B:
 ;          The label stays sub_XXXXXX on purpose; naming it would need the
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
-sub_FEF89A:
+DisplayList_Run_Call:
 	call T_DisplayList_Run                               ; FEF89A  1d f0 17 f4
 	ret                                                  ; FEF89E  0e
 
@@ -181559,7 +181559,7 @@ Text_FF42A1:
 	.byte 0x55, 0x31, 0x20, 0x2d, 0x55, 0x32, 0x20, 0x2d, 0x55, 0x44, 0x31, 0x2d, 0x55, 0x44, 0x32, 0x2d  ; FF42A1
 Text_FF42A1__FF42B1:
 	ret                                                  ; FF42B1  0e
-sub_FF42B2:
+CallbackQueue_ResetAndRestartTask2_Call:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF42B2  1d 80 2e f4
 	ret                                                  ; FF42B6  0e
 sub_FF42B7:
@@ -181629,7 +181629,7 @@ sub_FF42C9:
 ; Recorded by notes/prom_a_understanding_round7.py --apply.
 ; ---------------------------------------------------------------------
 Paint_DiskMenu:
-	calr sub_FF42B2                                      ; FF42CD  1e e2 ff
+	calr CallbackQueue_ResetAndRestartTask2_Call                                      ; FF42CD  1e e2 ff
 	call sub_FF7604                                      ; FF42D0  1d 04 76 ff
 	pushw 0x00                                           ; FF42D4  0b 00 00
 	lda xbc, (DL_MidiFileLoadMidiFileSave:24)            ; FF42D7  f2 b0 80 f5 31
@@ -186846,7 +186846,7 @@ T_F423CC_Nop:
 ; ---------------------------------------------------------------------
 Paint_FloppyDiskFormatSelectType:
 	ld (0x2730:16), 0x00                                 ; FF6512  f1 30 27 00 00
-	calr sub_FF42B2                                      ; FF6517  1e 98 dd
+	calr CallbackQueue_ResetAndRestartTask2_Call                                      ; FF6517  1e 98 dd
 	call sub_FF7604                                      ; FF651A  1d 04 76 ff
 	pushw 0x00                                           ; FF651E  0b 00 00
 	lda xbc, (DL_ComposerLoad:24)                        ; FF6521  f2 04 99 f5 31

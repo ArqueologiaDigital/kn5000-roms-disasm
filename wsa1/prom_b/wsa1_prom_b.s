@@ -937,73 +937,73 @@
 	.set	sub_FC0206, 0xFC0206
 	.set	sub_FC020F, 0xFC020F
 	.set	T_F40FF8_Nop, 0xFC024F
-	.set	sub_FC0250, 0xFC0250
-	.set	sub_FC0260, 0xFC0260
-	.set	sub_FC0270, 0xFC0270
-	.set	sub_FC0280, 0xFC0280
-	.set	sub_FC0290, 0xFC0290
-	.set	sub_FC02A0, 0xFC02A0
-	.set	sub_FC02B0, 0xFC02B0
-	.set	sub_FC02C0, 0xFC02C0
-	.set	sub_FC02D0, 0xFC02D0
-	.set	sub_FC02E0, 0xFC02E0
-	.set	sub_FC02F0, 0xFC02F0
-	.set	sub_FC0300, 0xFC0300
-	.set	sub_FC0310, 0xFC0310
-	.set	sub_FC0320, 0xFC0320
-	.set	sub_FC0330, 0xFC0330
-	.set	sub_FC0340, 0xFC0340
-	.set	sub_FC0350, 0xFC0350
-	.set	sub_FC0360, 0xFC0360
-	.set	sub_FC0370, 0xFC0370
-	.set	sub_FC0380, 0xFC0380
-	.set	sub_FC0390, 0xFC0390
-	.set	sub_FC03A0, 0xFC03A0
-	.set	sub_FC03B0, 0xFC03B0
-	.set	sub_FC03C0, 0xFC03C0
-	.set	sub_FC03D0, 0xFC03D0
-	.set	sub_FC03E0, 0xFC03E0
-	.set	sub_FC03F0, 0xFC03F0
-	.set	sub_FC0400, 0xFC0400
-	.set	sub_FC0410, 0xFC0410
-	.set	sub_FC0420, 0xFC0420
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13, 0xFC0250
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13, 0xFC0260
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13, 0xFC0270
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13, 0xFC0280
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13, 0xFC0290
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13, 0xFC02A0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13, 0xFC02B0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13, 0xFC02C0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13, 0xFC02D0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13, 0xFC02E0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13, 0xFC02F0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13, 0xFC0300
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13, 0xFC0310
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13, 0xFC0320
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13, 0xFC0330
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13, 0xFC0340
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13, 0xFC0350
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13, 0xFC0360
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13, 0xFC0370
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13, 0xFC0380
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13, 0xFC0390
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13, 0xFC03A0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13, 0xFC03B0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13, 0xFC03C0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13, 0xFC03D0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13, 0xFC03E0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13, 0xFC03F0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13, 0xFC0400
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13, 0xFC0410
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13, 0xFC0420
 	.set	sub_FC0430, 0xFC0430
 	.set	Msg0716_DispatchIndex_Entry, 0xFC043C
-	.set	sub_FC0440, 0xFC0440
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13, 0xFC0440
 	.set	sub_FC0450, 0xFC0450
-	.set	sub_FC0455, 0xFC0455
+	.set	Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26, 0xFC0455
 	.set	sub_FC0460, 0xFC0460
-	.set	sub_FC046A, 0xFC046A
-	.set	sub_FC0470, 0xFC0470
-	.set	sub_FC0480, 0xFC0480
-	.set	sub_FC0490, 0xFC0490
-	.set	sub_FC04A0, 0xFC04A0
-	.set	sub_FC04B0, 0xFC04B0
-	.set	sub_FC04C0, 0xFC04C0
-	.set	sub_FC04D0, 0xFC04D0
-	.set	sub_FC04E0, 0xFC04E0
-	.set	sub_FC04F0, 0xFC04F0
-	.set	sub_FC0500, 0xFC0500
-	.set	sub_FC0510, 0xFC0510
-	.set	sub_FC0520, 0xFC0520
-	.set	sub_FC0530, 0xFC0530
-	.set	sub_FC0540, 0xFC0540
-	.set	sub_FC0551, 0xFC0551
-	.set	sub_FC0561, 0xFC0561
-	.set	sub_FC0571, 0xFC0571
-	.set	sub_FC0581, 0xFC0581
-	.set	sub_FC0591, 0xFC0591
-	.set	sub_FC05A1, 0xFC05A1
-	.set	sub_FC05B1, 0xFC05B1
-	.set	sub_FC05C1, 0xFC05C1
-	.set	sub_FC05D1, 0xFC05D1
-	.set	sub_FC05E1, 0xFC05E1
-	.set	sub_FC05F1, 0xFC05F1
-	.set	sub_FC0601, 0xFC0601
-	.set	sub_FC0611, 0xFC0611
-	.set	sub_FC0621, 0xFC0621
-	.set	sub_FC0631, 0xFC0631
-	.set	sub_FC0641, 0xFC0641
+	.set	Msg0716_DispatchIndex_26, 0xFC046A
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26, 0xFC0470
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26, 0xFC0480
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26, 0xFC0490
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26, 0xFC04A0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26, 0xFC04B0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26, 0xFC04C0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26, 0xFC04D0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26, 0xFC04E0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26, 0xFC04F0
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26, 0xFC0500
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26, 0xFC0510
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26, 0xFC0520
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26, 0xFC0530
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26, 0xFC0540
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26, 0xFC0551
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26, 0xFC0561
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26, 0xFC0571
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26, 0xFC0581
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26, 0xFC0591
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26, 0xFC05A1
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26, 0xFC05B1
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26, 0xFC05C1
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26, 0xFC05D1
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26, 0xFC05E1
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26, 0xFC05F1
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26, 0xFC0601
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26, 0xFC0611
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26, 0xFC0621
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26, 0xFC0631
+	.set	Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26, 0xFC0641
 	.set	T_F410F0_Nop, 0xFC0651
 	.set	T_F410F4_Nop, 0xFC0653
 	.set	T_F410F8_Nop, 0xFC0654
@@ -1024,24 +1024,24 @@
 	.set	T_F41134_Nop, 0xFC0683
 	.set	T_F41138_Nop, 0xFC0684
 	.set	T_F4113C_Nop, 0xFC0685
-	.set	sub_FC0686, 0xFC0686
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6, 0xFC0686
 	.set	T_F41144_Nop, 0xFC0691
-	.set	sub_FC0692, 0xFC0692
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2, 0xFC0692
 	.set	T_F4114C_Nop, 0xFC069D
 	.set	T_F41150_Nop, 0xFC069E
-	.set	sub_FC069F, 0xFC069F
-	.set	sub_FC06AA, 0xFC06AA
-	.set	sub_FC06B5, 0xFC06B5
-	.set	sub_FC06C0, 0xFC06C0
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14, 0xFC069F
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13, 0xFC06AA
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7, 0xFC06B5
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4, 0xFC06C0
 	.set	T_F41164_Nop, 0xFC06CB
 	.set	sub_FC06CC, 0xFC06CC
-	.set	sub_FC06D0, 0xFC06D0
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19, 0xFC06D0
 	.set	T_F41170_Nop, 0xFC06DB
 	.set	T_F41174_Nop, 0xFC06DC
 	.set	T_F41178_Nop, 0xFC06DD
 	.set	T_F4117C_Nop, 0xFC06DE
 	.set	sub_FC06DF, 0xFC06DF
-	.set	sub_FC06F4, 0xFC06F4
+	.set	Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17, 0xFC06F4
 	.set	sub_FC06FF, 0xFC06FF
 	.set	sub_FC0724, 0xFC0724
 	.set	sub_FC0749, 0xFC0749
@@ -88145,38 +88145,38 @@ T_F41058:	jp sub_FC1116  ; -> prom_a 0x41116
 T_F4105C:	jp sub_FC182F  ; -> prom_a 0x4182F   x1
 T_F41060:	jp sub_FC020F  ; -> prom_a 0x4020F   x1
 	.fill 0xC, 1, 0x0E  ; 0xF41064: 12 x ret
-T_F41070:	jp sub_FC0250  ; -> prom_a 0x40250
-T_F41074:	jp sub_FC0260  ; -> prom_a 0x40260
-T_F41078:	jp sub_FC0270  ; -> prom_a 0x40270
-T_F4107C:	jp sub_FC0280  ; -> prom_a 0x40280
-T_F41080:	jp sub_FC0290  ; -> prom_a 0x40290
-T_F41084:	jp sub_FC02A0  ; -> prom_a 0x402A0
-T_F41088:	jp sub_FC02B0  ; -> prom_a 0x402B0
-T_F4108C:	jp sub_FC02C0  ; -> prom_a 0x402C0
-T_F41090:	jp sub_FC02D0  ; -> prom_a 0x402D0
-T_F41094:	jp sub_FC02E0  ; -> prom_a 0x402E0
-T_F41098:	jp sub_FC02F0  ; -> prom_a 0x402F0
-T_F4109C:	jp sub_FC0300  ; -> prom_a 0x40300
-T_F410A0:	jp sub_FC0310  ; -> prom_a 0x40310
-T_F410A4:	jp sub_FC0320  ; -> prom_a 0x40320
-T_F410A8:	jp sub_FC0330  ; -> prom_a 0x40330
-T_F410AC:	jp sub_FC0340  ; -> prom_a 0x40340
-T_F410B0:	jp sub_FC0350  ; -> prom_a 0x40350
-T_F410B4:	jp sub_FC0360  ; -> prom_a 0x40360
-T_F410B8:	jp sub_FC0370  ; -> prom_a 0x40370
-T_F410BC:	jp sub_FC0380  ; -> prom_a 0x40380
-T_F410C0:	jp sub_FC0390  ; -> prom_a 0x40390
-T_F410C4:	jp sub_FC03A0  ; -> prom_a 0x403A0
-T_F410C8:	jp sub_FC03B0  ; -> prom_a 0x403B0
-T_F410CC:	jp sub_FC03C0  ; -> prom_a 0x403C0
-T_F410D0:	jp sub_FC03D0  ; -> prom_a 0x403D0
-T_F410D4:	jp sub_FC03E0  ; -> prom_a 0x403E0
-T_F410D8:	jp sub_FC03F0  ; -> prom_a 0x403F0
-T_F410DC:	jp sub_FC0400  ; -> prom_a 0x40400
-T_F410E0:	jp sub_FC0410  ; -> prom_a 0x40410
-T_F410E4:	jp sub_FC0420  ; -> prom_a 0x40420
+T_F41070:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_Msg0716_HandlerTables_13  ; -> prom_a 0x40250
+T_F41074:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_8_Msg0716_HandlerTables_13  ; -> prom_a 0x40260
+T_F41078:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_13  ; -> prom_a 0x40270
+T_F4107C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_13  ; -> prom_a 0x40280
+T_F41080:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_13  ; -> prom_a 0x40290
+T_F41084:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_13  ; -> prom_a 0x402A0
+T_F41088:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_13  ; -> prom_a 0x402B0
+T_F4108C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_13  ; -> prom_a 0x402C0
+T_F41090:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_13  ; -> prom_a 0x402D0
+T_F41094:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_13  ; -> prom_a 0x402E0
+T_F41098:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_13  ; -> prom_a 0x402F0
+T_F4109C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_13  ; -> prom_a 0x40300
+T_F410A0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_13  ; -> prom_a 0x40310
+T_F410A4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_13  ; -> prom_a 0x40320
+T_F410A8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_13  ; -> prom_a 0x40330
+T_F410AC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_13  ; -> prom_a 0x40340
+T_F410B0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_13  ; -> prom_a 0x40350
+T_F410B4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_13  ; -> prom_a 0x40360
+T_F410B8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_13  ; -> prom_a 0x40370
+T_F410BC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_13  ; -> prom_a 0x40380
+T_F410C0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_13  ; -> prom_a 0x40390
+T_F410C4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_13  ; -> prom_a 0x403A0
+T_F410C8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_13  ; -> prom_a 0x403B0
+T_F410CC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_13  ; -> prom_a 0x403C0
+T_F410D0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_13  ; -> prom_a 0x403D0
+T_F410D4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_13  ; -> prom_a 0x403E0
+T_F410D8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_13  ; -> prom_a 0x403F0
+T_F410DC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_13  ; -> prom_a 0x40400
+T_F410E0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_13  ; -> prom_a 0x40410
+T_F410E4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_13  ; -> prom_a 0x40420
 T_F410E8:	jp sub_FC0430  ; -> prom_a 0x40430
-T_F410EC:	jp sub_FC0440  ; -> prom_a 0x40440
+T_F410EC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_13  ; -> prom_a 0x40440
 T_F410F0:	jp T_F410F0_Nop  ; -> prom_a 0x40651
 T_F410F4:	jp T_F410F4_Nop  ; -> prom_a 0x40653
 T_F410F8:	jp T_F410F8_Nop  ; -> prom_a 0x40654
@@ -88197,18 +88197,18 @@ T_F41130:	jp T_F41130_Nop  ; -> prom_a 0x40682
 T_F41134:	jp T_F41134_Nop  ; -> prom_a 0x40683
 T_F41138:	jp T_F41138_Nop  ; -> prom_a 0x40684
 T_F4113C:	jp T_F4113C_Nop  ; -> prom_a 0x40685
-T_F41140:	jp sub_FC0686  ; -> prom_a 0x40686
+T_F41140:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_164_6  ; -> prom_a 0x40686
 T_F41144:	jp T_F41144_Nop  ; -> prom_a 0x40691
-T_F41148:	jp sub_FC0692  ; -> prom_a 0x40692
+T_F41148:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_280_2  ; -> prom_a 0x40692
 T_F4114C:	jp T_F4114C_Nop  ; -> prom_a 0x4069D
 T_F41150:	jp T_F41150_Nop  ; -> prom_a 0x4069E
-T_F41154:	jp sub_FC069F  ; -> prom_a 0x4069F
-T_F41158:	jp sub_FC06AA  ; -> prom_a 0x406AA
-T_F4115C:	jp sub_FC06B5  ; -> prom_a 0x406B5
-T_F41160:	jp sub_FC06C0  ; -> prom_a 0x406C0
+T_F41154:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_292_14  ; -> prom_a 0x4069F
+T_F41158:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_192_13  ; -> prom_a 0x406AA
+T_F4115C:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_248_7  ; -> prom_a 0x406B5
+T_F41160:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_352_4  ; -> prom_a 0x406C0
 T_F41164:	jp T_F41164_Nop  ; -> prom_a 0x406CB
 T_F41168:	jp sub_FC06CC  ; -> prom_a 0x406CC
-T_F4116C:	jp sub_FC06D0  ; -> prom_a 0x406D0
+T_F4116C:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_372_19  ; -> prom_a 0x406D0
 T_F41170:	jp T_F41170_Nop  ; -> prom_a 0x406DB
 T_F41174:	jp T_F41174_Nop  ; -> prom_a 0x406DC
 T_F41178:	jp T_F41178_Nop  ; -> prom_a 0x406DD
@@ -88220,8 +88220,8 @@ T_F4118C:	jp 0xFC043D  ; -> prom_a 0x4043D
 T_F41190:	jp 0xFC0452  ; -> prom_a 0x40452
 T_F41194:	jp 0xFC0453  ; -> prom_a 0x40453
 T_F41198:	jp 0xFC0454  ; -> prom_a 0x40454
-T_F4119C:	jp sub_FC0455  ; -> prom_a 0x40455
-T_F411A0:	jp sub_FC046A  ; -> prom_a 0x4046A
+T_F4119C:	jp Msg0716_DispatchIndex_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40455
+T_F411A0:	jp Msg0716_DispatchIndex_26  ; -> prom_a 0x4046A
 	.fill 0xC, 1, 0x0E  ; 0xF411A4: 12 x ret
 T_F411B0:	.long sub_FC5400	; ptr -> 0xFC5400 (prom_a 0x45400)
 T_F411B4:	jp sub_FC546A  ; -> prom_a 0x4546A
@@ -89291,37 +89291,37 @@ T_F42428:	jp T_F42428_Nop  ; -> prom_a 0x77083
 	.fill 0x44, 1, 0x0E  ; 0xF4242C: 68 x ret
 T_F42470:	jp sub_FC0450  ; -> prom_a 0x40450
 T_F42474:	jp sub_FC0460  ; -> prom_a 0x40460
-T_F42478:	jp sub_FC0470  ; -> prom_a 0x40470
-T_F4247C:	jp sub_FC0480  ; -> prom_a 0x40480
-T_F42480:	jp sub_FC0490  ; -> prom_a 0x40490
-T_F42484:	jp sub_FC04A0  ; -> prom_a 0x404A0
-T_F42488:	jp sub_FC04B0  ; -> prom_a 0x404B0
-T_F4248C:	jp sub_FC04C0  ; -> prom_a 0x404C0
-T_F42490:	jp sub_FC04D0  ; -> prom_a 0x404D0
-T_F42494:	jp sub_FC04E0  ; -> prom_a 0x404E0
-T_F42498:	jp sub_FC04F0  ; -> prom_a 0x404F0
-T_F4249C:	jp sub_FC0500  ; -> prom_a 0x40500
-T_F424A0:	jp sub_FC0510  ; -> prom_a 0x40510
-T_F424A4:	jp sub_FC0520  ; -> prom_a 0x40520
-T_F424A8:	jp sub_FC0530  ; -> prom_a 0x40530
-T_F424AC:	jp sub_FC0540  ; -> prom_a 0x40540
-T_F424B0:	jp sub_FC0551  ; -> prom_a 0x40551
-T_F424B4:	jp sub_FC0561  ; -> prom_a 0x40561
-T_F424B8:	jp sub_FC0571  ; -> prom_a 0x40571
-T_F424BC:	jp sub_FC0581  ; -> prom_a 0x40581
-T_F424C0:	jp sub_FC0591  ; -> prom_a 0x40591
-T_F424C4:	jp sub_FC05A1  ; -> prom_a 0x405A1
-T_F424C8:	jp sub_FC05B1  ; -> prom_a 0x405B1
-T_F424CC:	jp sub_FC05C1  ; -> prom_a 0x405C1
-T_F424D0:	jp sub_FC05D1  ; -> prom_a 0x405D1
-T_F424D4:	jp sub_FC05E1  ; -> prom_a 0x405E1
-T_F424D8:	jp sub_FC05F1  ; -> prom_a 0x405F1
-T_F424DC:	jp sub_FC0601  ; -> prom_a 0x40601
-T_F424E0:	jp sub_FC0611  ; -> prom_a 0x40611
-T_F424E4:	jp sub_FC0621  ; -> prom_a 0x40621
-T_F424E8:	jp sub_FC0631  ; -> prom_a 0x40631
-T_F424EC:	jp sub_FC0641  ; -> prom_a 0x40641
-T_F424F0:	jp sub_FC06F4  ; -> prom_a 0x406F4
+T_F42478:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_16_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40470
+T_F4247C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_24_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40480
+T_F42480:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_32_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40490
+T_F42484:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_40_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404A0
+T_F42488:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_48_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404B0
+T_F4248C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_56_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404C0
+T_F42490:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_64_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404D0
+T_F42494:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_72_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404E0
+T_F42498:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_80_Msg0716_HandlerTables_56_26  ; -> prom_a 0x404F0
+T_F4249C:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_88_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40500
+T_F424A0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_96_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40510
+T_F424A4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_104_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40520
+T_F424A8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_112_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40530
+T_F424AC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_120_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40540
+T_F424B0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_128_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40551
+T_F424B4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_136_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40561
+T_F424B8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_144_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40571
+T_F424BC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_152_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40581
+T_F424C0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_160_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40591
+T_F424C4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_168_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405A1
+T_F424C8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_176_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405B1
+T_F424CC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_184_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405C1
+T_F424D0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_192_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405D1
+T_F424D4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_200_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405E1
+T_F424D8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_208_Msg0716_HandlerTables_56_26  ; -> prom_a 0x405F1
+T_F424DC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_216_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40601
+T_F424E0:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_224_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40611
+T_F424E4:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_232_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40621
+T_F424E8:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_240_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40631
+T_F424EC:	jp Msg0716_DispatchIndex_Msg0716_ObjectRecords_248_Msg0716_HandlerTables_56_26  ; -> prom_a 0x40641
+T_F424F0:	jp Msg0716_DispatchIndex_Twin_Msg0716_HandlerTables_452_17  ; -> prom_a 0x406F4
 T_F424F4:	jp sub_FC06FF  ; -> prom_a 0x406FF
 T_F424F8:	jp sub_FC0724  ; -> prom_a 0x40724
 T_F424FC:	jp sub_FC0749  ; -> prom_a 0x40749
@@ -89483,7 +89483,7 @@ T_F427E8:	jp sub_F62C0C  ; -> prom_b 0x62C0C   x3
 T_F427EC:	jp sub_F62C10  ; -> prom_b 0x62C10   x4
 T_F427F0:	jp sub_F62C14  ; -> prom_b 0x62C14   x3
 T_F427F4:	jp sub_F62C18  ; -> prom_b 0x62C18   x3
-T_F427F8:	jp sub_F62C1C  ; -> prom_b 0x62C1C   x4
+T_F427F8:	jp BStore_OpenChain_Call  ; -> prom_b 0x62C1C   x4
 T_F427FC:	jp sub_F62C20  ; -> prom_b 0x62C20   x6
 ; Evidence: slot 0xF42800 is `jp 0xF62C00`; prom_b 0xF62C00 carries the label
 ;           BStore_Veneers, graded CONTENT by wave7_documentation_metrics.py.  DERIVATIVE.
@@ -89491,11 +89491,11 @@ T_BStore_Veneers:	jp BStore_Veneers  ; F42800 (was T_F42800) -> prom_b 0x62C00  
 T_F42804:	jp sub_F6418E  ; -> prom_b 0x6418E   x1
 T_F42808:	jp sub_F6487D  ; -> prom_b 0x6487D   x1
 T_F4280C:	jp sub_F63C06  ; -> prom_b 0x63C06   x1
-T_F42810:	jp sub_F633FF  ; -> prom_b 0x633FF   x1
-T_F42814:	jp sub_F63408  ; -> prom_b 0x63408   x1
-T_F42818:	jp sub_F63411  ; -> prom_b 0x63411   x1
-T_F4281C:	jp sub_F6341A  ; -> prom_b 0x6341A   x1
-T_F42820:	jp sub_F63423  ; -> prom_b 0x63423   x1
+T_F42810:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12  ; -> prom_b 0x633FF   x1
+T_F42814:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24  ; -> prom_b 0x63408   x1
+T_F42818:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36  ; -> prom_b 0x63411   x1
+T_F4281C:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48  ; -> prom_b 0x6341A   x1
+T_F42820:	jp BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60  ; -> prom_b 0x63423   x1
 T_F42824:	jp sub_F64A7A  ; -> prom_b 0x64A7A   x1
 T_F42828:	jp sub_F62C05  ; -> prom_b 0x62C05
 T_F4282C:	jp sub_F64B1B  ; -> prom_b 0x64B1B   x1
@@ -116525,13 +116525,13 @@ sub_F55FEF:
 	ld	xix, DL_F352F9 + 0xF	; F55FF9  ld XIX,0x00f35308
 	call	T_DisplayListB_Run	; F55FFE  call 0xf417f4
 	ret	; F56002  ret
-sub_F56003:
+DisplayListB_Run_TimeSig:
 	ld	(9536:16), 2	; F56003  ld (0x2540),0x02
 	ld	xiy, DL_TimeSig	; F56008  ld XIY,0x00f343a2
 	ld	xix, DL_TimeSig + 0xA	; F5600D  ld XIX,0x00f343ac
 	call	T_DisplayListB_Run	; F56012  call 0xf417f4
 	ret	; F56016  ret
-sub_F56017:
+DisplayListB_Run_MasterSongMeasure:
 	ld	(9536:16), 2	; F56017  ld (0x2540),0x02
 	ld	xiy, DL_MasterSongMeasure	; F5601C  ld XIY,0x00f3437f
 	ld	xix, DL_MasterSongMeasure + 0xF	; F56021  ld XIX,0x00f3438e
@@ -117372,7 +117372,7 @@ sub_F56492:
 	calr	sub_F56DA8	; F564A4  calr 0xf56da8
 	ld	a, (14162:16)	; F564A7  ld A,(0x3752)
 	ld	(4873:16), a	; F564AB  ld (0x1309),A
-	ld	xwa, sub_F56017	; F564AF  ld XWA,0x00f56017
+	ld	xwa, DisplayListB_Run_MasterSongMeasure	; F564AF  ld XWA,0x00f56017
 	push	xwa	; F564B4  push XWA
 	call	T_CallbackQueue_Post	; F564B5  call 0xf42e84
 	inc	4, xsp	; F564B9  inc 4,XSP
@@ -117399,7 +117399,7 @@ sub_F56492_Skip3:
 	popw	wa	; F564F4  pop WA
 	ld	(3555:16), a	; F564F5  ld (0x0de3),A
 	ld	(9798:16), a	; F564F9  ld (0x2646),A
-	ld	xwa, sub_F56003	; F564FD  ld XWA,0x00f56003
+	ld	xwa, DisplayListB_Run_TimeSig	; F564FD  ld XWA,0x00f56003
 	push	xwa	; F56502  push XWA
 	call	T_CallbackQueue_Post	; F56503  call 0xf42e84
 	inc	4, xsp	; F56507  inc 4,XSP
@@ -127575,7 +127575,7 @@ sub_F5BF9F_Return:
 ; Touches: (0x2540) (0x27F5)  |  0xF02064 0xF020AA 0xF021E4 0xF02469
 ;          0xF02671 0xF027AF +17 more
 ; Calls:   T_F42E18 sub_F5C338 sub_F5C360 T_DisplayList_Run T_DisplayListB_Run 0xF09AF1
-;          0xF5BAB8 sub_F5C424 sub_F5CBD9 0xF5BB00 sub_F5CC64 sub_F5C374 +4
+;          0xF5BAB8 sub_F5C424 sub_F5CBD9 0xF5BB00 sub_F5CC64 DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth +4
 ;          more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5BFBD is an instruction boundary.
@@ -127651,7 +127651,7 @@ sub_F5C06C:
 	ret	; F5C09D  ret
 sub_F5C09E:
 	call	sub_F5C338	; F5C09E  call 0xf5c338
-	call	sub_F5C374	; F5C0A2  call 0xf5c374
+	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0A2  call 0xf5c374
 	ld	xiy, DL_Page12P0siti0nParameterP0siti0n	; F5C0A6  ld XIY,0x00f02671
 	ld	xix, DL_ResoDriverNatorPositionMovement	; F5C0AB  ld XIX,0x00f027af
 	call	T_DisplayList_Run	; F5C0B0  call 0xf417f0
@@ -127665,7 +127665,7 @@ sub_F5C09E:
 	ret	; F5C0D3  ret
 sub_F5C0D4:
 	call	sub_F5C338	; F5C0D4  call 0xf5c338
-	call	sub_F5C374	; F5C0D8  call 0xf5c374
+	call	DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth	; F5C0D8  call 0xf5c374
 	ld	xiy, DL_Page22P0siti0nM0vementWidth	; F5C0DC  ld XIY,0x00f02942
 	ld	xix, DL_Page13FitMutKeyDeResoTing	; F5C0E1  ld XIX,0x00f02a46
 	call	T_DisplayList_Run	; F5C0E6  call 0xf417f0
@@ -127678,8 +127678,8 @@ sub_F5C0D4:
 	call	T_DisplayListB_Run	; F5C105  call 0xf417f4
 	ret	; F5C109  ret
 sub_F5C10A:
-	call	sub_F5C34C	; F5C10A  call 0xf5c34c
-	call	sub_F5C388	; F5C10E  call 0xf5c388
+	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C10A  call 0xf5c34c
+	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C10E  call 0xf5c388
 	ld	xiy, DL_Page13FitMutKeyDeResoTing	; F5C112  ld XIY,0x00f02a46
 	ld	xix, DL_MainDriverResonatorSubResonator	; F5C117  ld XIX,0x00f02b47
 	call	T_DisplayList_Run	; F5C11C  call 0xf417f0
@@ -127699,7 +127699,7 @@ sub_F5C10A:
 ;              0xF5CDEB
 ; Touches: (0x2540) (0x27B5) (0x27F5)  |  0xF02D08 0xF02DFB 0xF02EF9
 ;          0xF02F22 0xF03595 0xF0359F +15 more
-; Calls:   T_DisplayList_Run T_DisplayListB_Run sub_F5C34C sub_F5C388 sub_F5BFBD 0xF5BAB8
+; Calls:   T_DisplayList_Run T_DisplayListB_Run DisplayList_Run_M0delingSoundEditToneDriver DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain sub_F5BFBD 0xF5BAB8
 ;          0xF5BB00 sub_F5C144 sub_F5C27D sub_F5BF8A
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5C144 is an instruction boundary.
@@ -127721,8 +127721,8 @@ sub_F5C144:
 sub_F5C144_Return:
 	ret	; F5C171  ret
 sub_F5C172:
-	call	sub_F5C34C	; F5C172  call 0xf5c34c
-	call	sub_F5C388	; F5C176  call 0xf5c388
+	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C172  call 0xf5c34c
+	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C176  call 0xf5c388
 	ld	xiy, DL_Page23TouchDepthSubFittingMutingSubGain	; F5C17A  ld XIY,0x00f02d08
 	ld	xix, DL_MutingKeyFollowSlopeRange	; F5C17F  ld XIX,0x00f02dfb
 	call	T_DisplayList_Run	; F5C184  call 0xf417f0
@@ -127736,8 +127736,8 @@ sub_F5C172:
 	call	sub_F5C144	; F5C1A7  call 0xf5c144
 	ret	; F5C1AB  ret
 sub_F5C1AC:
-	call	sub_F5C34C	; F5C1AC  call 0xf5c34c
-	call	sub_F5C388	; F5C1B0  call 0xf5c388
+	call	DisplayList_Run_M0delingSoundEditToneDriver	; F5C1AC  call 0xf5c34c
+	call	DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain	; F5C1B0  call 0xf5c388
 	m_cp_mi8 MB16, 0x27f5, 0x01	; F5C1B4  cp (0x27f5),0x01
 	jr	z, sub_F5C144_Skip	; F5C1B9  jr Z,0xf5c1de
 	ld	xiy, DL_MutingKeyFollowSlopeRange	; F5C1BB  ld XIY,0x00f02dfb
@@ -127875,7 +127875,7 @@ sub_F5C338:
 	ret	; F5C34B  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C34C
+; DisplayList_Run_M0delingSoundEditToneDriver
 ; Called from: in-module: 0xF5C10A 0xF5C172 0xF5C1AC
 ; Touches: (0x2540)  |  0xF01F96 0xF0203E
 ; Calls:   T_DisplayList_Run
@@ -127885,7 +127885,7 @@ sub_F5C338:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C34C:
+DisplayList_Run_M0delingSoundEditToneDriver:
 	ld	(9536:16), 0	; F5C34C  ld (0x2540),0x00
 	ld	xiy, DL_M0delingSoundEditToneDriver	; F5C351  ld XIY,0x00f01f96
 	ld	xix, DL_M0delingSoundEditToneDriver + 0xA8	; F5C356  ld XIX,0x00f0203e
@@ -127911,7 +127911,7 @@ sub_F5C360:
 	ret	; F5C373  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C374
+; DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth
 ; Called from: in-module: 0xF5C0A2 0xF5C0D8
 ; Touches: (0x2540)  |  0xF027AF 0xF02942
 ; Calls:   T_DisplayList_Run
@@ -127921,7 +127921,7 @@ sub_F5C360:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C374:
+DisplayList_Run_ResoDriverNatorPositionMovement_Page22P0siti0nM0vementWidth:
 	ld	(9536:16), 0	; F5C374  ld (0x2540),0x00
 	ld	xiy, DL_ResoDriverNatorPositionMovement	; F5C379  ld XIY,0x00f027af
 	ld	xix, DL_Page22P0siti0nM0vementWidth	; F5C37E  ld XIX,0x00f02942
@@ -127929,7 +127929,7 @@ sub_F5C374:
 	ret	; F5C387  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C388
+; DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain
 ; Called from: in-module: 0xF5C10E 0xF5C176 0xF5C1B0
 ; Touches: (0x2540)  |  0xF02B47 0xF02D08
 ; Calls:   T_DisplayList_Run
@@ -127939,7 +127939,7 @@ sub_F5C374:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C388:
+DisplayList_Run_MainDriverResonatorSubResonator_Page23TouchDepthSubFittingMutingSubGain:
 	ld	(9536:16), 0	; F5C388  ld (0x2540),0x00
 	ld	xiy, DL_MainDriverResonatorSubResonator	; F5C38D  ld XIY,0x00f02b47
 	ld	xix, DL_Page23TouchDepthSubFittingMutingSubGain	; F5C392  ld XIX,0x00f02d08
@@ -128061,7 +128061,7 @@ sub_F5C424_Join2:
 	ret	; F5C49E  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C49F
+; DisplayList_Run_T0neLayerSoundEditTrigGer
 ; Called from: in-module: 0xF5D40E
 ; Touches: (0x2540)  |  0xF03892 0xF03943
 ; Calls:   T_DisplayList_Run
@@ -128071,7 +128071,7 @@ sub_F5C424_Join2:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C49F:
+DisplayList_Run_T0neLayerSoundEditTrigGer:
 	ld	(9536:16), 0	; F5C49F  ld (0x2540),0x00
 	ld	xiy, DL_T0neLayerSoundEditTrigGer	; F5C4A4  ld XIY,0x00f03892
 	ld	xix, DL_T0neLayerSoundEditTrigGer + 0xB1	; F5C4A9  ld XIX,0x00f03943
@@ -128080,7 +128080,7 @@ sub_F5C49F:
 	ret	; F5C4B7  ret
 
 ; --------------------------------------------------------------------------
-; sub_F5C4B8
+; DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit
 ; Called from: in-module: 0xF5D4C3 0xF5D519
 ; Touches: (0x2540)  |  0xF03892 0xF039A9 0xF03D68 0xF03F31 0xF051C2
 ;          0xF05286
@@ -128091,7 +128091,7 @@ sub_F5C49F:
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F5C4B8:
+DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit:
 	ld	(9536:16), 0	; F5C4B8  ld (0x2540),0x00
 	ld	xiy, DL_T0neLayerSoundEditTrigGer	; F5C4BD  ld XIY,0x00f03892
 	ld	xix, DL_T0neSelectSoundEdit	; F5C4C2  ld XIX,0x00f039a9
@@ -129517,7 +129517,7 @@ sub_F5D199_Return2:
 ;              0xF5D3C1
 ; Touches: (0x2530) (0x2532) (0x2534) (0x2536) (0x2540) (0x27A7)  |
 ;          0xF05B34 0xF05B54 0xF05F78 0xF06048 0xF060DA 0xF328DC +2 more
-; Calls:   sub_F5C49F T_DisplayList_Run T_DisplayListB_Run sub_F5D497 sub_F5D46B 0xF5BAB8
+; Calls:   DisplayList_Run_T0neLayerSoundEditTrigGer T_DisplayList_Run T_DisplayListB_Run sub_F5D497 sub_F5D46B 0xF5BAB8
 ;          sub_F5C39C
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
 ;           sites are listed above), so 0xF5D3C6 is an instruction boundary.
@@ -129551,7 +129551,7 @@ sub_F5D3C6:
 DispatchTable_F5B9F8_Nop42:
 	ret	; F5D40D  ret
 sub_F5D40E:
-	call	sub_F5C49F	; F5D40E  call 0xf5c49f
+	call	DisplayList_Run_T0neLayerSoundEditTrigGer	; F5D40E  call 0xf5c49f
 	ldw	bc, 10166	; F5D412  ld BC,0x27b6
 	ld	d, (xbc)	; F5D415  ld D,(XBC)
 	cp	d, 0:i3	; F5D417  cp D,0
@@ -129651,7 +129651,7 @@ sub_F5D497_Loop:
 ; Called from: in-module: 0xF5D49A
 ; Touches: (0x2350) (0x2352) (0x2540)  |  0xF03F31 0xF03F77 0xF0426B
 ;          0xF04323 0xF04344 0xF04358 +11 more
-; Calls:   0xF09AE1 sub_F5C4B8 T_DisplayList_Run sub_F5BBE7 0xF5BAB8 0xF5BB00
+; Calls:   0xF09AE1 DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit T_DisplayList_Run sub_F5BBE7 0xF5BAB8 0xF5BB00
 ;          T_DisplayListB_Run sub_F5C4FF sub_F5BFBD sub_F5CADD sub_F5D5C8 sub_F5C929
 ;          +1 more
 ; Evidence: reached by a `call`/`calr` decoded in this transcription (the
@@ -129673,7 +129673,7 @@ sub_F5D4A7:
 sub_F5D4A7_Return:
 	ret	; F5D4C2  ret
 sub_F5D4C3:
-	call	sub_F5C4B8	; F5D4C3  call 0xf5c4b8
+	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D4C3  call 0xf5c4b8
 	ld	(9536:16), 0	; F5D4C7  ld (0x2540),0x00
 	ld	xiy, DL_F060E4	; F5D4CC  ld XIY,0x00f060e4
 	ld	xix, DL_F06154	; F5D4D1  ld XIX,0x00f06154
@@ -129693,7 +129693,7 @@ sub_F5D4C3:
 	call	T_DisplayListB_Run	; F5D514  call 0xf417f4
 	ret	; F5D518  ret
 sub_F5D519:
-	call	sub_F5C4B8	; F5D519  call 0xf5c4b8
+	call	DisplayList_Run_T0neLayerSoundEditTrigGer_T0neSelectSoundEdit	; F5D519  call 0xf5c4b8
 	ld	(9536:16), 0	; F5D51D  ld (0x2540),0x00
 	ld	xiy, DL_F06154	; F5D522  ld XIY,0x00f06154
 	ld	xix, DL_EffectBlockEff1Eff2RevMain	; F5D527  ld XIX,0x00f06224
@@ -137926,7 +137926,7 @@ sub_F62C14:		; <- T_F427F0
 sub_F62C18:		; <- T_F427F4
 	calr	sub_F63749	; F62C18  calr 0xf63749
 	ret	; F62C1B  ret
-sub_F62C1C:		; <- T_F427F8
+BStore_OpenChain_Call:		; <- T_F427F8
 	calr	BStore_OpenChain	; F62C1C  calr 0xf638bb
 	ret	; F62C1F  ret
 sub_F62C20:		; <- T_F427FC
@@ -138729,23 +138729,23 @@ sub_F633F5:		; <- T_F42788
 	ld	xhl, (4718:16)	; F633F5  ld XHL,(0x126e)
 	mx_ld_rm MXB, ra_HL, ra_IX, 1	; F633F9  ld A,(XHL+IX)
 	ret	; F633FE  ret
-sub_F633FF:		; <- T_F42810
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_12:		; <- T_F42810
 	ld	xiy, BStore_ErrorStatusTable + 0xC	; F633FF  ld XIY,0x00f6344d
 	calr	BStore_ErrorToStatusByte_Sub	; F63404  calr 0xf63431
 	ret	; F63407  ret
-sub_F63408:		; <- T_F42814
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_24:		; <- T_F42814
 	ld	xiy, BStore_ErrorStatusTable + 0x18	; F63408  ld XIY,0x00f63459
 	calr	BStore_ErrorToStatusByte_Sub	; F6340D  calr 0xf63431
 	ret	; F63410  ret
-sub_F63411:		; <- T_F42818
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_36:		; <- T_F42818
 	ld	xiy, BStore_ErrorStatusTable + 0x24	; F63411  ld XIY,0x00f63465
 	calr	BStore_ErrorToStatusByte_Sub	; F63416  calr 0xf63431
 	ret	; F63419  ret
-sub_F6341A:		; <- T_F4281C
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_48:		; <- T_F4281C
 	ld	xiy, BStore_ErrorStatusTable + 0x30	; F6341A  ld XIY,0x00f63471
 	calr	BStore_ErrorToStatusByte_Sub	; F6341F  calr 0xf63431
 	ret	; F63422  ret
-sub_F63423:		; <- T_F42820
+BStore_ErrorToStatusByte_Sub_BStore_ErrorStatusTable_60:		; <- T_F42820
 	ld	xiy, BStore_ErrorStatusTable + 0x3C	; F63423  ld XIY,0x00f6347d
 	calr	BStore_ErrorToStatusByte_Sub	; F63428  calr 0xf63431
 	ret	; F6342B  ret
@@ -150336,7 +150336,7 @@ sub_F69C03_Return:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F69C24:
-	.long	sub_F69C67	; F69C24  [0] -> 0xF69C67
+	.long	MsgLine_TransportState_Plus10_Call	; F69C24  [0] -> 0xF69C67
 	.long	sub_F69C34	; F69C28  [1] -> 0xF69C34
 	.long	sub_F69C50	; F69C2C  [2] -> 0xF69C50
 	.long	sub_F69C71	; F69C30  [3] -> 0xF69C71
@@ -150362,7 +150362,7 @@ sub_F69C50_Skip:
 	call	sub_F6D57A	; F69C62  call 0xf6d57a
 sub_F69C50_Return:
 	ret	; F69C66  ret
-sub_F69C67:
+MsgLine_TransportState_Plus10_Call:
 	ld	(4800:16), 0	; F69C67  ld (0x12c0),0x00
 	call	MsgLine_TransportState_Plus10	; F69C6C  call 0xf6d642
 	ret	; F69C70  ret
@@ -151732,20 +151732,20 @@ sub_F6A6BC:
 ; Unknown: what indexes it, and what the handlers do.
 ; --------------------------------------------------------------------------
 DispatchTable_F6A6DB:
-	.long	sub_F6A6FF	; F6A6DB  [0] -> 0xF6A6FF
-	.long	sub_F6A6EB	; F6A6DF  [1] -> 0xF6A6EB
-	.long	sub_F6A6EB	; F6A6E3  [2] -> 0xF6A6EB
-	.long	sub_F6A6F5	; F6A6E7  [3] -> 0xF6A6F5
+	.long	MsgLine_TransportState_Plus10_Call_2	; F6A6DB  [0] -> 0xF6A6FF
+	.long	MsgLine_Rhythm_Call	; F6A6DF  [1] -> 0xF6A6EB
+	.long	MsgLine_Rhythm_Call	; F6A6E3  [2] -> 0xF6A6EB
+	.long	MsgLine_TransportState_Plus4_Call	; F6A6E7  [3] -> 0xF6A6F5
 
-sub_F6A6EB:
+MsgLine_Rhythm_Call:
 	ld	(3829:16), 5	; F6A6EB  ld (0x0ef5),0x05
 	call	MsgLine_Rhythm	; F6A6F0  call 0xf6d4e4
 	ret	; F6A6F4  ret
-sub_F6A6F5:
+MsgLine_TransportState_Plus4_Call:
 	ld	(3829:16), 15	; F6A6F5  ld (0x0ef5),0x0f
 	call	MsgLine_TransportState_Plus4	; F6A6FA  call 0xf6d608
 	ret	; F6A6FE  ret
-sub_F6A6FF:
+MsgLine_TransportState_Plus10_Call_2:
 	call	MsgLine_TransportState_Plus10	; F6A6FF  call 0xf6d642
 	ret	; F6A703  ret
 
@@ -196397,7 +196397,7 @@ sub_F7F114:
 	jr	ule, sub_F7F114_Skip	; F7F125  jr ULE,0xf7f129
 	jr	sub_F7F114_Join	; F7F127  jr T,0xf7f136
 sub_F7F114_Skip:
-	calr	sub_F7F13A	; F7F129  calr 0xf7f13a
+	calr	Blink_SetEnable_1_6	; F7F129  calr 0xf7f13a
 	jr	sub_F7F114_Join	; F7F12C  jr T,0xf7f136
 sub_F7F114_Skip2:
 	calr	sub_F7F144	; F7F12E  calr 0xf7f144
@@ -196410,7 +196410,7 @@ sub_F7F114_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7F129, and from nothing else
 ;           the scans see.
-sub_F7F13A:
+Blink_SetEnable_1_6:
 	pushw	1	; F7F13A  push 0x0001
 	call	T_Blink_SetEnable	; F7F13D  call 0xf42e28
 	inc	2, xsp	; F7F141  inc 2,XSP
@@ -197283,7 +197283,7 @@ sub_F7F440:
 	jr	z, sub_F7F440_Skip3	; F7F451  jr Z,0xf7f45f
 	jr	sub_F7F440_Join	; F7F453  jr T,0xf7f462
 sub_F7F440_Skip:
-	calr	sub_F7F466	; F7F455  calr 0xf7f466
+	calr	Blink_SetEnable_1_7	; F7F455  calr 0xf7f466
 	jr	sub_F7F440_Join	; F7F458  jr T,0xf7f462
 sub_F7F440_Skip2:
 	calr	sub_F7F470	; F7F45A  calr 0xf7f470
@@ -197296,7 +197296,7 @@ sub_F7F440_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7F455, and from nothing else
 ;           the scans see.
-sub_F7F466:
+Blink_SetEnable_1_7:
 	pushw	1	; F7F466  push 0x0001
 	call	T_Blink_SetEnable	; F7F469  call 0xf42e28
 	inc	2, xsp	; F7F46D  inc 2,XSP
@@ -198100,7 +198100,7 @@ sub_F7F7AC:
 	jr	z, sub_F7F7AC_Skip3	; F7F7BD  jr Z,0xf7f7cb
 	jr	sub_F7F7AC_Join	; F7F7BF  jr T,0xf7f7ce
 sub_F7F7AC_Skip:
-	calr	sub_F7F7D2	; F7F7C1  calr 0xf7f7d2
+	calr	Blink_SetEnable_1_8	; F7F7C1  calr 0xf7f7d2
 	jr	sub_F7F7AC_Join	; F7F7C4  jr T,0xf7f7ce
 sub_F7F7AC_Skip2:
 	calr	sub_F7F7DC	; F7F7C6  calr 0xf7f7dc
@@ -198113,7 +198113,7 @@ sub_F7F7AC_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7F7C1, and from nothing else
 ;           the scans see.
-sub_F7F7D2:
+Blink_SetEnable_1_8:
 	pushw	1	; F7F7D2  push 0x0001
 	call	T_Blink_SetEnable	; F7F7D5  call 0xf42e28
 	inc	2, xsp	; F7F7D9  inc 2,XSP
@@ -198841,7 +198841,7 @@ sub_F7FAA2:
 	jr	z, sub_F7FAA2_Skip3	; F7FAB3  jr Z,0xf7fac1
 	jr	sub_F7FAA2_Join	; F7FAB5  jr T,0xf7fac4
 sub_F7FAA2_Skip:
-	calr	sub_F7FAC8	; F7FAB7  calr 0xf7fac8
+	calr	Blink_SetEnable_1_9	; F7FAB7  calr 0xf7fac8
 	jr	sub_F7FAA2_Join	; F7FABA  jr T,0xf7fac4
 sub_F7FAA2_Skip2:
 	calr	sub_F7FAD2	; F7FABC  calr 0xf7fad2
@@ -198854,7 +198854,7 @@ sub_F7FAA2_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7FAB7, and from nothing else
 ;           the scans see.
-sub_F7FAC8:
+Blink_SetEnable_1_9:
 	pushw	1	; F7FAC8  push 0x0001
 	call	T_Blink_SetEnable	; F7FACB  call 0xf42e28
 	inc	2, xsp	; F7FACF  inc 2,XSP
@@ -199610,7 +199610,7 @@ sub_F7FDE9:
 	jr	z, sub_F7FDE9_Skip3	; F7FDFA  jr Z,0xf7fe08
 	jr	sub_F7FDE9_Join	; F7FDFC  jr T,0xf7fe0b
 sub_F7FDE9_Skip:
-	calr	sub_F7FE0F	; F7FDFE  calr 0xf7fe0f
+	calr	Blink_SetEnable_1_10	; F7FDFE  calr 0xf7fe0f
 	jr	sub_F7FDE9_Join	; F7FE01  jr T,0xf7fe0b
 sub_F7FDE9_Skip2:
 	calr	sub_F7FE19	; F7FE03  calr 0xf7fe19
@@ -199623,7 +199623,7 @@ sub_F7FDE9_Join:
 
 ; Evidence: reached from calr from prom_b 0xF7FDFE, and from nothing else
 ;           the scans see.
-sub_F7FE0F:
+Blink_SetEnable_1_10:
 	pushw	1	; F7FE0F  push 0x0001
 	call	T_Blink_SetEnable	; F7FE12  call 0xf42e28
 	inc	2, xsp	; F7FE16  inc 2,XSP
