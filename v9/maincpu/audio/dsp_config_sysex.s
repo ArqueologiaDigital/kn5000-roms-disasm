@@ -3913,7 +3913,7 @@ DSPCfg_Data_ParamDispatch_Loop:
 	and	hl, 63
 	ld	qiz, 1
 	incm8	1, (xsp+0x4)
-DSPCfg_Data_ParamDispatch_Join4:
+DSPCfg_Data_ParamDispatch_Join5:
 	ld	e, 63:opc
 	jrl	DSPCfg_Data_ParamDispatch_Loop2
 DSPCfg_Data_ParamDispatch_Skip4:
@@ -3921,14 +3921,14 @@ DSPCfg_Data_ParamDispatch_Skip4:
 	calr	DSPCfg_ExtractFieldPair
 	ld	wa, (xsp+0xc)
 	cp	wa, 16
-	jr	z, DSPCfg_Data_ParamDispatch_Skip6
+	jr	z, DSPCfg_Data_ParamDispatch_Skip8
 	ld	wa, iz
 	srl	wa, 6
 	and	wa, 31
 	ld	hl, wa
 	ld	e, 7:opc
 	jrl	DSPCfg_Data_ParamDispatch_Loop2
-DSPCfg_Data_ParamDispatch_Skip6:
+DSPCfg_Data_ParamDispatch_Skip8:
 	cpw	(xsp+0xa), 2
 	jr	nz, DSPCfg_Data_ParamDispatch_Loop
 	ld	wa, iz
@@ -3936,7 +3936,8 @@ DSPCfg_Data_ParamDispatch_Skip6:
 	and	wa, 63
 	ld	hl, wa
 	ld	qiz, 1
-	jr	DSPCfg_Data_ParamDispatch_Join4
+	jr	DSPCfg_Data_ParamDispatch_Join5
+DSPCfg_Data_ParamDispatch_Helper:
 	lda	xsp, (xsp-0x18)
 	pushw	iz
 	ld	(xsp+0x10), e
@@ -3949,7 +3950,7 @@ DSPCfg_Data_ParamDispatch_Skip6:
 	ld	xwa, (xsp+0x1e)
 	ld	a, (xwa)
 	ld	(xsp+0x2), a
-DSPCfg_Data_ParamDispatch_Loop3:
+DSPCfg_Data_ParamDispatch_Helper_Loop:
 	inc	1, iz
 	ld	wa, (xsp+0xe)
 	add	(xsp+0xa), a
@@ -3970,12 +3971,12 @@ DSPCfg_Data_ParamDispatch_Loop3:
 	ld	bc, 0:i3
 	cpw	(xsp+0xe), 0
 	jr	ule, DSPCfg_Data_ParamDispatch_Skip5
-DSPCfg_Data_ParamDispatch_Loop4:
+DSPCfg_Data_ParamDispatch_Helper_Loop2:
 	ld	xwa, 1:i3
 	add	(xsp+0x16), xwa
 	inc	1, bc
 	cp	bc, (xsp+0xe)
-	jr	c, DSPCfg_Data_ParamDispatch_Loop4
+	jr	c, DSPCfg_Data_ParamDispatch_Helper_Loop2
 DSPCfg_Data_ParamDispatch_Skip5:
 	ld	xwa, (xsp+0x12)
 	calr	DSPCfg_PackAddress
@@ -3985,10 +3986,10 @@ DSPCfg_Data_ParamDispatch_Skip5:
 	jr	ugt, DSPCfg_Data_ParamDispatch_Helper_Skip
 	ld	a, (xsp+0xa)
 	cp	a, (xsp+0x10)
-	jr	nz, DSPCfg_Data_ParamDispatch_Loop3
+	jr	nz, DSPCfg_Data_ParamDispatch_Helper_Loop
 	ld	a, (xsp+0x2)
 	and	a, (xsp+0xc)
-	jr	z, DSPCfg_Data_ParamDispatch_Loop3
+	jr	z, DSPCfg_Data_ParamDispatch_Helper_Loop
 DSPCfg_Data_ParamDispatch_Helper_Skip:
 	ld	a, (xsp+0xa)
 	cp	a, (xsp+0x10)

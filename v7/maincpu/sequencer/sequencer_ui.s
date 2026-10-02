@@ -13738,12 +13738,12 @@ SqplyFunc_FormatCases:
 	cp	de, 32770
 	jr	nz, SqplyFunc_FormatCases_Skip
 	ld	xwa, SqplyFunc_ParamFormatData_Str
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join2
+	jr	SqplyFunc_FormatCases_Join
 SqplyFunc_FormatCases_Skip:
 	cp	wa, 32769
 	jr	nz, SqplyFunc_FormatCases_Skip2
 	ld	xwa, SqplyFunc_ParamFormatData_Str_2
-EffectBoxProc_CopyNameAndSetup_Code_Join2:
+SqplyFunc_FormatCases_Join:
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
@@ -13786,7 +13786,7 @@ SqplyFunc_FormatCases_Join2:
 	push	xwa
 	ld	xwa, (xbc)
 	push	xwa
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
+	jr	SqplyFunc_FormatCases_Join4
 SqplyFunc_FormatCases_Skip5:
 	ld	xbc, (xbc)
 	bit 1, (0x28b1:16)
@@ -13798,19 +13798,19 @@ SqplyFunc_FormatCases_Skip6:
 SqplyFunc_FormatCases_Join3:
 	push	xwa
 	push	xbc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
+	jr	SqplyFunc_FormatCases_Join4
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	xwa, SqplyFunc_ParamFormatData_Str_11
 	cp	(10298:16), 0
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip6
+	jr	z, SqplyFunc_FormatCases_Skip3
 	ld	xwa, SqplyFunc_ParamFormatData_Str_10
-EffectBoxProc_CopyNameAndSetup_Code_Skip6:
+SqplyFunc_FormatCases_Skip3:
 	push	xwa
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+18)
 	push	xwa
-EffectBoxProc_CopyNameAndSetup_Code_Join5:
+SqplyFunc_FormatCases_Join4:
 	call	Free_Compare2
 	inc	8, xsp
 	jrl	SqplyFunc_RestoreAndReturn
@@ -13821,11 +13821,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join5:
 	jr	nz, SqplyFunc_FormatCases_Skip7
 	pushm (0x2520:16)
 	ld	xwa, SqplyFunc_ParamFormatData_Str_12
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join6
+	jr	SqplyFunc_FormatCases_Join5
 SqplyFunc_FormatCases_Skip7:
 	pushm (0x251c:16)
 	ld	xwa, SqplyFunc_ParamFormatData_Str_13
-EffectBoxProc_CopyNameAndSetup_Code_Join6:
+SqplyFunc_FormatCases_Join5:
 	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa

@@ -1326,7 +1326,7 @@ FDemoText_ByteData_DisplayRefresh_Skip4:
 	cp	xwa, 0
 	jr	ge, FDemoText_ByteData_DisplayRefresh_Loop
 	ld	xwa, ErrStr_GetInstanceID
-	call	FDemoText_ByteData_DisplayRefresh_Helper
+	call	DbMemo_DrawContent_Loop_0x61
 	ld	xhl, 4294967295
 FDemoText_ByteData_DisplayRefresh_Epilogue2:
 	pop	xiz

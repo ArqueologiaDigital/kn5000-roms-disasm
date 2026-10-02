@@ -206,7 +206,7 @@ SLSrcBankList_FuncBody_Helper8:
 	extz	wa
 	div	wa, c
 	extz	wa
-	call	SLSrcBankList_FuncBody_Helper
+	call	FileIO_ByteBlock_DemoProc2_0x2D
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -286,7 +286,7 @@ SLSrcBankList_FuncBody_Helper10:
 	lda	xiz, (xwa+64)
 	ld	a, (35168:16)
 	extz	wa
-	call	SLSrcBankList_FuncBody_Helper2
+	call	FileIO_ByteBlock_DemoProc2_0xA7
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -521,7 +521,7 @@ SLSrcBankList_FuncBody_Join4:
 	ld	(xwa+42), 2
 	lda	xiz, (xwa+43)
 	ld	wa, 0:i3
-	call	SLSrcBankList_FuncBody_Helper3
+	call	FileIO_ByteBlock_DemoProc2_0x13A
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -685,7 +685,7 @@ SLSrcBankList_FuncBody_Helper13:
 	extz	wa
 	div	wa, e
 	extz	wa
-	call	SLSrcBankList_FuncBody_Helper4
+	call	FileIO_ByteBlock_DemoProc2_0x1B4
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -1812,7 +1812,7 @@ SLDstBankList_FuncBody_Skip10:
 	div	de, c
 	extz	de
 	ld	bc, de
-	call	SLDstBankList_FuncBody_Helper
+	call	FileIO_ByteBlock_DemoProc1_0xD8
 	exts	xhl
 	jr	SLDstBankList_FuncBody_Epilogue
 SLDstBankList_FuncBody_Skip11:
@@ -1956,7 +1956,7 @@ SLDstBankList_FuncBody_Skip16:
 	jr	nz, SLDstBankList_FuncBody_Loop2
 	ld	a, (35176:16)
 	extz	wa
-	call	SLDstBankList_FuncBody_Helper2
+	call	FileIO_ByteBlock_DemoProc1_0x1F8
 	exts	xhl
 SLDstBankList_FuncBody_Epilogue2:
 	pop	xiz
@@ -2241,7 +2241,7 @@ SLDstBankList_FuncBody_Skip28:
 	ld	c, (35178:16)
 	extz	bc
 SLDstBankList_FuncBody_Join11:
-	call	SLDstBankList_FuncBody_Helper3
+	call	FileIO_ByteBlock_DemoProc1_0x2DE
 	exts	xhl
 SLDstBankList_FuncBody_Epilogue3:
 	pop	xiz
@@ -2643,7 +2643,7 @@ SLDstBankList_FuncBody_Skip44:
 	extz	bc
 	div	bc, e
 	extz	bc
-	call	SLDstBankList_FuncBody_Helper5
+	call	FileIO_ByteBlock_DemoProc1_0x4AC
 	exts	xhl
 	jr	SLDstBankList_FuncBody_Epilogue4
 SLDstBankList_FuncBody_Skip45:
@@ -2651,7 +2651,7 @@ SLDstBankList_FuncBody_Skip45:
 	extz	wa
 	ld	c, (35180:16)
 	extz	bc
-	call	SLDstBankList_FuncBody_Helper4
+	call	FileIO_ByteBlock_DemoProc1_0x356
 	exts	xhl
 SLDstBankList_FuncBody_Epilogue4:
 	pop	xiz

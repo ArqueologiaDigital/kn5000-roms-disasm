@@ -11,8 +11,9 @@ QUESTION THIS ANSWERS / JOB IT DOES
     * ANCHORS: every label defined, under the same name, in both images' linked ELFs.  For a
       v10 label between two consecutive anchors whose v10->v7 address deltas are EQUAL, the
       v7 address is the v10 address minus that delta;
-    * PROOF: the 12 ROM bytes at the two addresses are identical (a relocated pointer or a
-      changed instruction makes them differ and the label is skipped).
+    * PROOF: the 12 ROM bytes at the two addresses are identical, except where a 3-byte run is
+      a ROM address in both (a call target or pointer the two builds place differently); any
+      other difference skips the label.
   Then (a STRUCTURAL v10 name -- `X_Skip3` -- is used only when its parent X is v7's
   enclosing routine at that address too; otherwise the parents disagree, which is reported
   as "parent differs" and left for the parent's own correspondence):
@@ -52,6 +53,27 @@ STRUCT = re.compile(r'_(Skip|Join|Loop|Return|Helper|Epilogue|Entry|Tail|Next|Do
                     r'Code|Data|Block|Sub|Case|Default)\d*$|_0x[0-9A-Fa-f]+$|^LABEL_|^sub_|^loc_')
 
 
+def same_code(a, b):
+    """Equal, except where a byte run is a 24-bit little-endian ROM address in BOTH (a call or
+    a pointer the two builds place differently)."""
+    if len(a) != len(b):
+        return False
+    i = 0
+    while i < len(a):
+        if a[i] == b[i]:
+            i += 1
+            continue
+        for j in (i - 2, i - 1, i):
+            if 0 <= j and j + 3 <= len(a):
+                x, y = int.from_bytes(a[j:j + 3], "little"), int.from_bytes(b[j:j + 3], "little")
+                if 0xE00000 <= x <= 0xFFFFFF and 0xE00000 <= y <= 0xFFFFFF:
+                    i = j + 3
+                    break
+        else:
+            return False
+    return True
+
+
 def syms(v):
     out = subprocess.run([NM, "--defined-only", os.path.join(REPO, "rebuilt_ROMs",
                           "kn5000_%s_program.llvm.elf" % v)], capture_output=True, text=True,
@@ -70,8 +92,8 @@ def syms(v):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--to", required=True, choices=("v7", "v9"))
-    ap.add_argument("--from", dest="frm", default="v10", choices=("v10", "v9"))
+    ap.add_argument("--to", required=True, choices=("v7", "v9", "v10"))
+    ap.add_argument("--from", dest="frm", default="v10", choices=("v10", "v9", "v7"))
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--report")
     a = ap.parse_args()
@@ -118,7 +140,7 @@ def main():
             continue
         B = A - anch[k][1]
         oF, oT = A - 0xE00000, B - 0xE00000
-        if not (0 <= oT < len(rT)) or rF[oF:oF + 12] != rT[oT:oT + 12]:
+        if not (0 <= oT < len(rT)) or not same_code(rF[oF:oF + 12], rT[oT:oT + 12]):
             continue
         namesF = sorted(names, key=lambda n: (bool(STRUCT.search(n)), len(n), n))
         nf = namesF[0]

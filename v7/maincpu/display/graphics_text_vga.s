@@ -218,7 +218,7 @@ Display_DeferOrUpdateScreen_Direct:
 	ld wa, 1:i3
 	calr SetNeedUpdate
 	jrl UpdateScreen
-SeMenu_PresetManager_Save_Helper:
+Display_DeferOrUpdateScreen_Direct_0xF:
 	ret
 
 GraphicsRender_RetStub:

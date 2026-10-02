@@ -1270,10 +1270,10 @@ DirmdEmu_CaseF:
 	call	PostTitle_Function_Helper3
 PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
-	call	FDemoText_ByteData_DisplayRefresh_Helper
+	call	DbMemo_DrawContent_Loop_0x61
 	jp	AudioCtrl_DataBlock_Return
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleOld
-	call	FDemoText_ByteData_DisplayRefresh_Helper
+	call	DbMemo_DrawContent_Loop_0x61
 	jp	AudioCtrl_DataBlock_Return2
 	lda	xsp, (xsp-256)
 	pushw	iz
@@ -1287,7 +1287,7 @@ PostTitle_Function_Skip:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
-	call	FDemoText_ByteData_DisplayRefresh_Helper
+	call	DbMemo_DrawContent_Loop_0x61
 	ld	wa, iz
 	ld	bc, (xsp+264)
 	call	PostTitle_Function_Helper
@@ -1295,7 +1295,7 @@ PostTitle_Function_Skip:
 	lda	xsp, (xsp+256)
 	ret
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleCur
-	call	FDemoText_ByteData_DisplayRefresh_Helper
+	call	DbMemo_DrawContent_Loop_0x61
 	jp	AudioCtrl_DataBlock_Return3
 DirmdEmulator_Entry:
 

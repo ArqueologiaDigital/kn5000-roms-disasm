@@ -3167,7 +3167,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
-SLDstBankList_FuncBody_Helper:
+FileIO_ByteBlock_DemoProc1_0xD8:
 	lda	xsp, (xsp-36)
 	push	xiz
 	ld	(xsp+36), bc
@@ -3269,7 +3269,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
-SLDstBankList_FuncBody_Helper2:
+FileIO_ByteBlock_DemoProc1_0x1F8:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	(xsp+32), wa
@@ -3322,7 +3322,7 @@ FileIO_ByteBlock_DemoProc1_Skip9:
 	jr	c, FileIO_ByteBlock_DemoProc1_Skip10
 	ld	wa, (xsp+32)
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc1_Helper
+	call	SeqLoad_ProcessDataBlock_0x80
 	ld	xiz, xhl
 	ld	bc, (xsp+32)
 	extz	xbc
@@ -3359,7 +3359,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue3:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	ret
-SLDstBankList_FuncBody_Helper3:
+FileIO_ByteBlock_DemoProc1_0x2DE:
 	lda	xsp, (xsp-28)
 	pushw	iz
 	ld	(xsp+26), bc
@@ -3398,7 +3398,7 @@ FileIO_ByteBlock_DemoProc1_Skip13:
 	extz	wa
 	ld	bc, (xsp+26)
 	extz	bc
-	call	SLDstBankList_FuncBody_Helper3_Helper
+	call	AccStyle_TableDataEntry_0x90
 	ld	iz, hl
 	jr	FileIO_ByteBlock_DemoProc1_Join4
 FileIO_ByteBlock_DemoProc1_Skip14:
@@ -3410,7 +3410,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue4:
 	popw	iz
 	lda	xsp, (xsp+28)
 	ret
-SLDstBankList_FuncBody_Helper4:
+FileIO_ByteBlock_DemoProc1_0x356:
 	lda	xsp, (xsp-42)
 	pushw	iz
 	ld	(xsp+40), bc
@@ -3534,7 +3534,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue5:
 	popw	iz
 	lda	xsp, (xsp+42)
 	ret
-SLDstBankList_FuncBody_Helper5:
+FileIO_ByteBlock_DemoProc1_0x4AC:
 	lda	xsp, (xsp-36)
 	push	xiz
 	ld	(xsp+36), bc
@@ -3605,7 +3605,7 @@ FileIO_ByteBlock_DemoProc1_Join6:
 	call	FileIO_SeekAndReadBlock
 	ld	iz, hl
 	cp	iz, 0:i3
-	jr	lt, FileIO_ByteBlock_DemoProc1_Skip23
+	jr	lt, FileIO_ByteBlock_DemoProc1_Skip24
 	ld	a, (xsp+10)
 	extz	wa
 	call	FileIO_ByteBlock_DemoProc1_Helper6
@@ -3620,7 +3620,7 @@ FileIO_ByteBlock_DemoProc1_Join6:
 	extz	wa
 	ld	bc, iz
 	call	FileIO_ByteBlock_DemoProc1_Helper7
-FileIO_ByteBlock_DemoProc1_Skip23:
+FileIO_ByteBlock_DemoProc1_Skip24:
 	call	FileIO_CloseHandle
 	ld	hl, iz
 FileIO_ByteBlock_DemoProc1_Epilogue6:
@@ -6634,7 +6634,7 @@ GetFileEntryByIndex_Skip:
 GetFileEntryByIndex_Epilogue:
 	popw	iz
 	ret
-SLSrcBankList_FuncBody_Helper:
+FileIO_ByteBlock_DemoProc2_0x2D:
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
@@ -6679,7 +6679,7 @@ GetFileEntryByIndex_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
-SLSrcBankList_FuncBody_Helper2:
+FileIO_ByteBlock_DemoProc2_0xA7:
 	lda	xsp, (xsp-26)
 	push	xiz
 	ld	(xsp+28), wa
@@ -6731,7 +6731,7 @@ GetFileEntryByIndex_Epilogue3:
 	pop	xiz
 	lda	xsp, (xsp+26)
 	ret
-SLSrcBankList_FuncBody_Helper3:
+FileIO_ByteBlock_DemoProc2_0x13A:
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
@@ -6776,7 +6776,7 @@ GetFileEntryByIndex_Epilogue4:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
-SLSrcBankList_FuncBody_Helper4:
+FileIO_ByteBlock_DemoProc2_0x1B4:
 	lda	xsp, (xsp-28)
 	pushw	iz
 	ld	(xsp+26), bc

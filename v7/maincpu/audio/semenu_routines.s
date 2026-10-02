@@ -590,7 +590,7 @@ SeMenu_SetupDisplayObject_Alt2_Continue:
 	calr SeMenu_FlushDisplayObj
 	lda xsp, (xsp + 20)
 	retd 0x2
-SeMenu_CopyWriteUpdate_Helper2:
+SeMenu_SetupDisplayObject_Alt2_Continue_0x21:
 	lda xsp, (xsp - 14)
 	ld (xsp + 12), a
 	lda xbc, (xsp)
@@ -1632,10 +1632,10 @@ SeMenu_TransferPartValues_EndData_Skip28:
 SeMenu_TransferPartValues_EndData_Skip29:
 	ld	(xwa), c
 	ret
-SeMenu_CopyWriteUpdate_Helper4:
+SeMenu_TransferPartValues_EndData_0x9E:
 	ld	(1685:16), a
 	ret
-UpdSeSel_DetailedUpdate_Helper2:
+SeMenu_TransferPartValues_EndData_0xA3:
 	cp	a, 6:i3
 	jr	z, SeMenu_TransferPartValues_EndData_Skip14
 	cp	a, 5:i3
@@ -3619,7 +3619,7 @@ UpdSeSel_DetailedUpdate_Helper4:
 	pushw	256
 	pushw	59
 	pushw	51
-	call	UpdSeSel_DetailedUpdate_Helper4_Helper
+	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ld	wa, 2:i3
@@ -3974,7 +3974,7 @@ SeMenu_ApplyPartEdit_Helper7:
 	pushw	256
 	pushw	59
 	pushw	51
-	call	UpdSeSel_DetailedUpdate_Helper4_Helper
+	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
 	lda	xbc, (xsp+30)
 	ld	wa, 3:i3
@@ -4553,7 +4553,7 @@ SeMenu_ApplyPartEdit_Join27:
 	pushm	(xsp+8)
 	pushm	(xsp+12)
 	pushm	(xsp+16)
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	inc	8, xsp
 SeMenu_ApplyPartEdit_Epilogue9:
 	popw	iz
@@ -4600,7 +4600,7 @@ SeMenu_ApplyPartEdit_Helper12:
 	pushw 254
 	pushw 73
 	pushw 48
-	call	UpdSeSel_DetailedUpdate_Helper4_Helper
+	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ldw	wa, 10
@@ -4687,7 +4687,7 @@ SeMenu_ApplyPartEdit_Entry12:
 	pushw 254
 	pushw 97
 	pushw 48
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	pushw	121
 	pushm	(xsp+24)
 	pushw	97
@@ -4771,17 +4771,17 @@ SeMenu_ApplyPartEdit_Join29:
 	.byte 0x9f, 0x12, 0x04
 	pushw	iz
 	pushw 48
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	push	qiz
 	pushm	(xsp+22)
 	pushw	iz
 	.byte 0x9f, 0x1e, 0x04
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	push	qiz
 	pushw	254
 	push	qiz
 	pushm	(xsp+34)
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	pushw	121
 	pushm	(xsp+40)
 	pushw	97
@@ -4843,7 +4843,7 @@ SeMenu_ApplyPartEdit_Entry15:
 	.byte 0x9f, 0x06, 0xa0
 	pushw	wa
 	.byte 0x9f, 0x0a, 0x04
-	call	UpdSeSel_DetailedUpdate_Helper4_Helper
+	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
 	ld	a, (xsp+22)
 	extz	wa
@@ -4940,21 +4940,21 @@ SeMenu_ApplyPartEdit_Join30:
 	pushm	(xsp+12)
 	pushm	(xsp+4)
 	pushm	(xsp+18)
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	ld	wa, (xsp+8)
 	.byte 0x9f, 0x0a, 0xa0
 	pushw	wa
 	.byte 0x9f, 0x12, 0x04
 	pushw	wa
 	.byte 0x9f, 0x18, 0x04
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	pushm	(xsp+16)
 	pushm	(xsp+24)
 	ld	wa, (xsp+20)
 	.byte 0x9f, 0x16, 0xa0
 	pushw	wa
 	.byte 0x9f, 0x1e, 0x04
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	lda	xsp, (xsp+24)
 SeMenu_ApplyPartEdit_Epilogue10:
 	lda	xsp, (xsp+28)
@@ -5051,7 +5051,7 @@ UpdSeSel_DetailedUpdate_Helper5:
 	pushw	232
 	pushm	(xsp+8)
 	pushw	67
-	call	UpdSeSel_DetailedUpdate_Helper4_Helper
+	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
 	.byte 0x8f, 0x12, 0x3f, 0x00
 	jr	nz, SeMenu_ApplyPartEdit_Skip56
@@ -5061,14 +5061,14 @@ UpdSeSel_DetailedUpdate_Helper5:
 	pushw	wa
 	pushm	(xsp+12)
 	pushw	67
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	pushm	(xsp+18)
 	push	qiz
 	pushm	(xsp+20)
 	ld	wa, qiz
 	sub	wa, 10
 	pushw	wa
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	lda	xsp, (xsp+16)
 	ldw	de, 232
 	sub	de, qiz
@@ -5139,14 +5139,14 @@ UpdSeSel_DetailedUpdate_Helper5_Join:
 	push	qiz
 	pushw	wa
 	pushw	bc
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	.byte 0x9f, 0x10, 0x04
 	ld	wa, qiz
 	add	wa, 10
 	pushw	wa
 	pushm	(xsp+22)
 	push	qiz
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	lda	xsp, (xsp+16)
 	pushm	(xsp+8)
 	pushw	232
@@ -5155,7 +5155,7 @@ UpdSeSel_DetailedUpdate_Helper5_Join:
 	add	wa, 10
 	pushw	wa
 SeMenu_ApplyPartEdit_Join34:
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	inc	8, xsp
 	pushm	(xsp+6)
 	push	qiz
@@ -5205,7 +5205,7 @@ SeMenu_ApplyPartEdit_Skip60:
 	pushw 232
 	pushw 118
 	pushw 67
-	call	UpdSeSel_DetailedUpdate_Helper4_Helper
+	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
 	ld	a, (xsp+10)
 	.byte 0x8f, 0x04, 0xc1
@@ -5216,14 +5216,14 @@ SeMenu_ApplyPartEdit_Skip60:
 	pushw	wa
 	pushm	(xsp+12)
 	pushw	67
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	pushw	iz
 	push	qiz
 	pushm	(xsp+20)
 	ld	wa, qiz
 	dec	6, wa
 	pushw	wa
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	lda	xsp, (xsp+16)
 	pushw	iz
 	pushw 232
@@ -5234,14 +5234,14 @@ SeMenu_ApplyPartEdit_Skip61:
 	pushw	iz
 	push	xiz
 	pushw 67
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	.byte 0x9f, 0x10, 0x04
 	ld	wa, qiz
 	inc	6, wa
 	pushw	wa
 	pushw	iz
 	.byte 0xd7, 0xfa, 0x04
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	lda	xsp, (xsp+16)
 	pushm	(xsp+8)
 	pushw	232
@@ -5250,7 +5250,7 @@ SeMenu_ApplyPartEdit_Skip61:
 	inc	6, wa
 	pushw	wa
 SeMenu_ApplyPartEdit_Join35:
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	inc	8, xsp
 	.byte 0x9f, 0x06, 0x04
 	push	xiz
@@ -5331,7 +5331,7 @@ SeMenu_ApplyPartEdit_Join35:
 	pushw 232
 	pushw 77
 	pushw 67
-	call	UpdSeSel_DetailedUpdate_Helper4_Helper
+	call	SeMenu_ShowConfirmDialog_Data_0x1BF
 	inc	8, xsp
 	ld	bc, iz
 	sub	bc, 67
@@ -5351,7 +5351,7 @@ SeMenu_ApplyPartEdit_Entry16:
 	pushw	iz
 	pushw	wa
 	pushw	de
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	inc	8, xsp
 	.byte 0x8f, 0x04, 0x3f, 0x01
 	jr	nz, SeMenu_ApplyPartEdit_Entry17
@@ -5367,7 +5367,7 @@ SeMenu_ApplyPartEdit_Entry17:
 	pushw	wa
 	.byte 0x9f, 0x10, 0x04
 	pushw	iz
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	.byte 0x9f, 0x12, 0x04
 	ld	wa, (xsp+18)
 	sub	wa, 10
@@ -5376,7 +5376,7 @@ SeMenu_ApplyPartEdit_Entry17:
 	ld	wa, iz
 	add	wa, 10
 	pushw	wa
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	lda	xsp, (xsp+16)
 	pushm	(xsp+14)
 	pushm	(xsp+10)
@@ -5385,7 +5385,7 @@ SeMenu_ApplyPartEdit_Entry17:
 	sub	wa, 10
 	pushw	wa
 SeMenu_ApplyPartEdit_Join36:
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	inc	8, xsp
 	ldw	bc, 232
 	.byte 0x9f, 0x08, 0xa1
@@ -5404,7 +5404,7 @@ SeMenu_ApplyPartEdit_Join37:
 	pushw	de
 	pushm	(xsp+18)
 	pushm	(xsp+14)
-	call	SeMenu_ApplyPartEdit_Helper15
+	call	SeMenu_DisplayPartValue_Data_0x7F
 	.byte 0x9f, 0x0e, 0x04
 	pushw	iz
 	.byte 0x9f, 0x18, 0x04
@@ -5771,14 +5771,14 @@ SeMenu_SetMode:
 SeMenu_SetMode_Data:
 	ld	(1712:16), wa
 	ret
-SeMenu_CopyWriteUpdate_Helper13:
+SeMenu_SetMode_Data_0x5:
 	.byte 0xb0
 	ex_ff
 	.byte 0xb0, 0x06
 	ret
 	ld	(1714:16), wa
 	ret
-SeMenu_CopyWriteUpdate_Helper14:
+SeMenu_SetMode_Data_0xF:
 	.byte 0xb0
 	ex_ff
 	.byte 0xb2, 0x06

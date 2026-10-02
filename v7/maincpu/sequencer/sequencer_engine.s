@@ -395,7 +395,7 @@ SeqPlay_DataBlock_BBE_Skip:
 	ld	(0xf23a:16), wa
 SeqPlay_DataBlock_BBE_Skip2:
 	jrl	SeqAcc_SetupRepeatCount
-ApPlaySyori_Helper:
+SeqPlay_DataBlock_BBE_0x2C:
 	ld	wa, (0xf238:16)
 	cp	wa, 1:i3
 	jr	ule, SeqPlay_DataBlock_BBE_Skip3
@@ -464,7 +464,7 @@ SeqPlay_DataBlock_BBE_Helper2_Skip2:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	ret
-ApPlaySyori_Helper2:
+SeqPlay_DataBlock_BBE_0xF4:
 	ld	wa, (0xf23a:16)
 	cp	wa, 999
 	jr	c, SeqPlay_DataBlock_BBE_Skip6
@@ -483,7 +483,7 @@ SeqPlay_DataBlock_BBE_Join:
 	calr	SeqPlay_DataBlock_BBE_Helper
 	calr	SeqAcc_SetupRepeatCount
 	ret
-ApPlaySyori_Helper3:
+SeqPlay_DataBlock_BBE_0x126:
 	ld	wa, (0xf23a:16)
 	cp	wa, 2:i3
 	jr	ugt, SeqPlay_DataBlock_BBE_Skip7
@@ -502,7 +502,7 @@ SeqPlay_DataBlock_BBE_Join2:
 	calr	SeqPlay_DataBlock_BBE_Helper2
 	calr	SeqAcc_SetupRepeatCount
 	ret
-ApPlaySyori_Helper4:
+SeqPlay_DataBlock_BBE_0x155:
 	bit	0, (10418:16)
 	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip3
 	cpw	(62008:16), 2
@@ -526,7 +526,7 @@ SeqPlay_DataBlock_BBE_Join3:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	jrl	SeqAcc_SetupRepeatCount
-ApPlaySyori_Helper5:
+SeqPlay_DataBlock_BBE_0x19B:
 	bit	0, (10418:16)
 	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip4
 	cpw	(62008:16), 2
@@ -23043,10 +23043,10 @@ ApPlaySyori_Join3:
 	call	SeqPlay_DataBlock_BBE
 	jr	ApPlaySyori_Join4
 ApPlaySyori_Skip5:
-	call	ApPlaySyori_Helper2
+	call	SeqPlay_DataBlock_BBE_0xF4
 	jr	ApPlaySyori_Join4
 ApPlaySyori_Skip6:
-	call	ApPlaySyori_Helper4
+	call	SeqPlay_DataBlock_BBE_0x155
 ApPlaySyori_Join4:
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -23217,13 +23217,13 @@ ApPlaySyori_Join9:
 	jr	z, ApPlaySyori_Skip13
 	cp	xwa, 8
 	jr	nz, ApPlaySyori_Join10
-	call	ApPlaySyori_Helper
+	call	SeqPlay_DataBlock_BBE_0x2C
 	jr	ApPlaySyori_Join10
 ApPlaySyori_Skip13:
-	call	ApPlaySyori_Helper3
+	call	SeqPlay_DataBlock_BBE_0x126
 	jr	ApPlaySyori_Join10
 ApPlaySyori_Skip14:
-	call	ApPlaySyori_Helper5
+	call	SeqPlay_DataBlock_BBE_0x19B
 ApPlaySyori_Join10:
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -25642,7 +25642,7 @@ SeqLoad_ProcessDataBlock_Skip2:
 	pop qiz
 	inc	6, xsp
 	ret
-FileIO_ByteBlock_DemoProc1_Helper:
+SeqLoad_ProcessDataBlock_0x80:
 	dec	2, xsp
 	pushw	iz
 	ld	(xsp+2), a
@@ -29626,9 +29626,9 @@ SeqPart_ByteBlockA207_Loop:
 	jr	nz, SeqPart_ByteBlockA207_Skip9
 SeqPart_ByteBlockA207_Code_Skip4:
 	cp_erpb	251, 16	; cp qizh,0x10
-	jr	nz, SeqPart_ByteBlockA207_Skip8
+	jr	nz, SeqPart_ByteBlockA207_Code_Skip5
 	set	6, (10363:16)
-SeqPart_ByteBlockA207_Skip8:
+SeqPart_ByteBlockA207_Code_Skip5:
 	ldto_berp	a, 250	; ld a,qizl
 	extz	wa
 	call	Part_ValidateAndSetupVoiceChannel

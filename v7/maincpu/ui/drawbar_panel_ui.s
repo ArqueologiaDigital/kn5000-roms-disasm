@@ -2053,12 +2053,12 @@ TtMdCtlMsg_EventDispatch_Skip7:
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
 	bit	7, (xbc)
-	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip4
+	jr	z, TtMdCtlMsg_EventDispatch_Skip8
 	ld	xbc, 0:i3
 	ld	(xwa+14), xbc
 	call	MainRamPut
 	jrl	TtMdCtlMsg_ReturnZero2
-PmemOutLGridCheck_JumpTable_Code_Skip4:
+TtMdCtlMsg_EventDispatch_Skip8:
 	jrl	PmemOutLGridCheck_JumpTable_Code_Join2
 PmemOutRGridCheck_Evt1C00018:
 	call	GetFocusObject
@@ -17836,7 +17836,7 @@ DrawbarNorm_Update:
 	ld	xwa, 16387
 	call	AcApcToggleProc_Helper
 	exts	xhl
-	ld	xwa, DrawbarNorm_Update_Data
+	ld	xwa, DrawbarNorm_Update_Str_TATION
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, xhl
 	jrl	IvDrawbarNorm_SendEvent

@@ -1418,7 +1418,7 @@ UpdSeSel_DetailedUpdate_Helper11_Loop:
 	ld	a, (xsp+4)
 	extz	wa
 	lda	xbc, (xsp+2)
-	call	UpdSeSel_DetailedUpdate_Helper2
+	call	SeMenu_TransferPartValues_EndData_0xA3
 	ld	c, (xsp+2)
 	inc	2, c
 	extz	bc
@@ -2882,7 +2882,7 @@ SeMenu_CopyWriteUpdate_Entry:
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue4
 	ld	wa, 1:i3
 SeMenu_CopyWriteUpdate_Join2:
-	call	SeMenu_CopyWriteUpdate_Helper4
+	call	SeMenu_TransferPartValues_EndData_0x9E
 	ldw	wa, 59
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
@@ -2905,7 +2905,7 @@ SeMenu_CopyWriteUpdate_Entry2:
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue5
 	ld	wa, 5:i3
 SeMenu_CopyWriteUpdate_Join3:
-	call	SeMenu_CopyWriteUpdate_Helper4
+	call	SeMenu_TransferPartValues_EndData_0x9E
 	ldw	wa, 59
 	ld	bc, 1:i3
 	call	SeMenu_SendEvent
@@ -3487,7 +3487,7 @@ SeMenu_CopyWriteUpdate_Epilogue15:
 	.byte 0x87, 0x3f, 0x00
 	scc	z, a
 	extz	wa
-	call	SeMenu_CopyWriteUpdate_Helper2
+	call	SeMenu_SetupDisplayObject_Alt2_Continue_0x21
 	ldw	wa, 16
 	call	SeMenu_RegisterParamDisplay
 	jr	SeMenu_CopyWriteUpdate_Epilogue16
@@ -3506,9 +3506,9 @@ SeMenu_CopyWriteUpdate_Skip8:
 	.byte 0x8f, 0x08, 0x3f, 0x00
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue16
 	lda	xwa, (xsp+6)
-	call	SeMenu_CopyWriteUpdate_Helper13
+	call	SeMenu_SetMode_Data_0x5
 	lda	xwa, (xsp+4)
-	call	SeMenu_CopyWriteUpdate_Helper14
+	call	SeMenu_SetMode_Data_0xF
 	ld	wa, (xsp+4)
 	dec	1, wa
 	cp	(xsp+6), wa
@@ -3557,7 +3557,7 @@ SeMenu_CopyWriteUpdate_Entry6:
 	.byte 0x8f, 0x04, 0x3f, 0x00
 	jr	nz, SeMenu_CopyWriteUpdate_Epilogue17
 	lda	xwa, (xsp+2)
-	call	SeMenu_CopyWriteUpdate_Helper13
+	call	SeMenu_SetMode_Data_0x5
 	.byte 0x9f, 0x02, 0x3f, 0x00, 0x00
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue17
 	decm	1, (xsp+2)
@@ -7781,7 +7781,7 @@ SeMenu_DisplayPartValue_Data_Code_Join2:
 	pop	xiy
 	.ascii "\\[ZYX^"
 	ret
-SeMenu_ApplyPartEdit_Helper15:
+SeMenu_DisplayPartValue_Data_0x7F:
 	push xiz
 	ld	xiz, xsp
 	.ascii "89:;<="
@@ -8014,10 +8014,12 @@ SeMenu_PresetManager_Data_Helper:
 	ld XIX,SeScreenData_0x0864
 	jr t, .Lc_f0f05e
 .Lc_f0f04e:
+SeMenu_ShowConfirmDialog_Data_Code_Skip6:
 	ld (0x03efa8:24), 0x01
 	ld XIY,SeScreenData_0x0864
 	ld XIX,SeScreenData_0x086E
 .Lc_f0f05e:
+SeMenu_ShowConfirmDialog_Data_Code_Join4:
 	call SeGfx_DrawStaticList
 	pop XIZ
 	pop XIY
@@ -8044,6 +8046,7 @@ SeMenu_PresetManager_Data_Helper2:
 	ld C, 0x02:opc
 	jr t, .Lc_f0f0a6
 .Lc_f0f090:
+SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	ld (0x03efa8:24), 0x00
 	ld XIY,SeScreenData_0x06DB
 	ld XIX,SeBitmap_Picture40x40
@@ -8092,7 +8095,7 @@ SeMenu_PresetManager_Data_Helper2_Join:
 	pop	xbc
 	pop	xwa
 	ret
-UpdSeSel_DetailedUpdate_Helper4_Helper:
+SeMenu_ShowConfirmDialog_Data_0x1BF:
 	push	xiz
 	ld	xiz, xsp
 	push	xwa
@@ -8124,6 +8127,7 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	ld ix, (0x06c6:16)
 	ld iy, (0x06c8:16)
 .Lc_f0f166:
+SeMenu_ShowConfirmDialog_Data_Code_Loop:
 	pushw ix
 	pushw iy
 	push C
@@ -8294,10 +8298,10 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Sub:
 	ldb_d8	a, (0x65d)
 	sla	wa, 2
 	cp	(0x6ae:16), 1
-	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip
+	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip2
 	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_7
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join
-UpdSeSel_DetailedUpdate_Helper4_Helper_Skip:
+SeMenu_ShowConfirmDialog_Data_Code_Skip2:
 	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_6
 SeMenu_ShowConfirmDialog_Data_Code_Join:
 	push	xwa
@@ -8309,20 +8313,20 @@ SeMenu_ShowConfirmDialog_Data_Code_Join:
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip3
 	ld	xiz, 1634
-	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join2
+	jr	SeMenu_ShowConfirmDialog_Data_Code_Join2
 SeMenu_ShowConfirmDialog_Data_Code_Skip3:
 	ld	xiz, 1640
-UpdSeSel_DetailedUpdate_Helper4_Helper_Join2:
+SeMenu_ShowConfirmDialog_Data_Code_Join2:
 	xor	xwa, xwa
 	ldb_d8	a, (0x65d)
 	add	xiz, xwa
 	call	SeMenu_ShowConfirmDialog_Data_0x4A9
 	pop	xwa
 	cp	(0x6ae:16), 1
-	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip3
+	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip4
 	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_5
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join3
-UpdSeSel_DetailedUpdate_Helper4_Helper_Skip3:
+SeMenu_ShowConfirmDialog_Data_Code_Skip4:
 	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_4
 SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	add	xiz, xwa
@@ -8335,7 +8339,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	and	a, 224
 	srl	a, 5
 	cp	a, 3:i3
-	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip4
+	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip5
 	ldw_d16	ix, (0x6c6)
 	ldw_d16	iy, (0x6c8)
 	ld	(0x6cc:16), ix
@@ -8358,8 +8362,8 @@ SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	ld	(0x6d2:16), iy
 	addw	(0x6d2:16), 1
 	call	SeGfx_StaticOp00_FromBuf
-	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Return
-UpdSeSel_DetailedUpdate_Helper4_Helper_Skip4:
+	jr	SeMenu_ShowConfirmDialog_Data_Code_Return
+SeMenu_ShowConfirmDialog_Data_Code_Skip5:
 	ld	xiz, SeEnvCurve_BitmapTable
 	xor	w, w
 	sll	wa, 2
@@ -8374,7 +8378,7 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Skip4:
 	ld	bc, 5:i3
 	ldw	hl, 40
 	call	SeGfx_StaticOp03_BlitAtCell
-UpdSeSel_DetailedUpdate_Helper4_Helper_Return:
+SeMenu_ShowConfirmDialog_Data_Code_Return:
 	ret
 ; -----------------------------------------------------------------------------
 ; SeEnvCurve_BitmapTable (see v10): 7 LE32 pointers to the 40x40 envelope-curve
@@ -8566,7 +8570,7 @@ SeMenu_PresetManager_Save:
 	ld	xiy, SeScreenData_0x0558
 	ld	xix, SeScreenData_0x0562
 	call	SeGfx_DrawStaticList
-	call	SeMenu_PresetManager_Save_Helper
+	call	Display_DeferOrUpdateScreen_Direct_0xF
 	ret
 SeMenu_PresetManager_SaveApply:
 	call	SeMenu_PresetManager_Data_0x1AF
@@ -9011,11 +9015,11 @@ SeMenu_Utility_CopyBlock_Skip2:
 	ld	xiy, SeScreenData_0x5811
 	ld	xix, SeScreenData_0x5853
 	call	SeGfx_DrawBoundList
-	call	SeMenu_Utility_CopyBlock_Helper
+	call	SeMenu_Utility_CopyBlock_0x8B
 SeMenu_Utility_CopyBlock_Join2:
 	call	SeMenu_CompareAndApply_Data4
 	ret
-SeMenu_Utility_CopyBlock_Helper:
+SeMenu_Utility_CopyBlock_0x8B:
 	ld	(257960:24), 0
 	ld	a, (1632:16)
 	and	a, 32
@@ -9134,6 +9138,7 @@ SeMenu_Utility_FormatSigned_Data:
 	normal
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
+SeMenu_Utility_FormatSigned_Data_Skip:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
@@ -9156,6 +9161,7 @@ SeMenu_Utility_FormatPercent:
 	normal
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
+SeMenu_Utility_FormatPercent_Skip:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
@@ -9178,6 +9184,7 @@ SeMenu_Utility_FormatPercent_Data:
 	normal
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
+SeMenu_Utility_FormatPercent_Data_Skip:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
@@ -9197,6 +9204,7 @@ SeMenu_Utility_FormatHex:
 	normal
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
+SeMenu_Utility_FormatHex_Skip:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
@@ -9216,6 +9224,7 @@ SeMenu_Utility_FormatHex_Data:
 	normal
 	jr	z, 4
 	call	SeMenu_Utility_CompareBlock_End
+SeMenu_Utility_FormatHex_Data_Skip:
 	call	SeMenu_ShowConfirmDialog_Data_0xC0
 	call	SeMenu_ShowConfirmDialog_Data_0x10A
 	call	SeMenu_Utility_FormatNumber_End
@@ -9606,7 +9615,7 @@ Data_UnknownBlock_Skip9:
 	ld	(0x3efa8:24), 0
 	ld	xiy, SeScreenData_0x5853
 	call	SeMenu_PatchEdit_Dispatch_Helper
-	call	SeMenu_Utility_CopyBlock_Helper
+	call	SeMenu_Utility_CopyBlock_0x8B
 	jr	Data_UnknownBlock_Return2
 Data_UnknownBlock_Skip10:
 	ld	xiy, SeScreenData_0x5853
@@ -10112,6 +10121,7 @@ SeMenu_FilterEdit_DataBlock5:
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
 	jr	41
+SeMenu_FilterEdit_DataBlock5_Skip:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x3C37
 	ld	xix, SeScreenData_0x3C37 + 175
@@ -10121,6 +10131,7 @@ SeMenu_FilterEdit_DataBlock5:
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x3DF1
 	jr	SeMenu_FilterEdit_DataBlock5_Join
+SeMenu_FilterEdit_DataBlock5_Join2:
 	ld	xiy, SeScreenData_0x3DD3
 SeMenu_FilterEdit_DataBlock5_Join:
 	ld	(0x03efa8:24), 0

@@ -7671,7 +7671,7 @@ AccAutoPlay_ModeAvail_Process:
 	push l
 	ld xhl, 0:i3
 	pop l
-	add xhl, AccAutoPlay_ModeAvail_Process_Data
+	add xhl, AccAutoPlay_ModeAvail_Extended_0x2
 	ld l, (xhl)
 
 AccAutoPlay_ModeAvail_SetMode:
@@ -7683,7 +7683,7 @@ AccAutoPlay_ModeAvail_Return:
 
 AccAutoPlay_ModeAvail_Extended:
 	.byte	0x00, 0x00
-AccAutoPlay_ModeAvail_Process_Data:	.byte	0x3b, 0x36, 0x3b, 0x42, 0x47, 0xf1
+AccAutoPlay_ModeAvail_Extended_0x2:	.byte	0x3b, 0x36, 0x3b, 0x42, 0x47, 0xf1
 	.byte 0x1e, 0x04, 0xca, 0x6e, 0x22, 0xf1, 0xd2, 0x33
 	.byte 0xc9, 0x66, 0x1c, 0xf1, 0xfc, 0x33, 0xc8, 0x66
 	.byte 0x16, 0xf1, 0xfd, 0x33, 0xc8, 0x6e, 0x10, 0x1e
@@ -10337,6 +10337,7 @@ AccVoice_IndexedTableLookup_Data:	.byte	0x00, 0x00, 0x30, 0x00, 0x00, 0x00
 	.byte 0x00, 0x45, 0x00, 0x48, 0x09, 0x00, 0xe3, 0x07
 	.byte 0xf0, 0xec, 0x85, 0x44, 0x0f, 0x34, 0x00, 0x00
 	.byte 0x31, 0x0d, 0x00, 0x85, 0x11, 0x0e, 0x00, 0x00
+AccVoice_IndexedTableLookup_BaseOffsets_Data:
 	.byte 0xb0, 0x0b, 0x00, 0x00, 0xd0, 0x0b, 0x00, 0x00
 	.byte 0xf0, 0x0b, 0x00, 0x00, 0x10, 0x0c, 0x00, 0x00
 	.byte 0x30, 0x0c, 0x00, 0x00, 0xb0, 0x0b, 0x00, 0x00
@@ -11799,8 +11800,8 @@ AccTone_ExtendAndDispatch_Helper:
 	ret
 	bit	0, (0x3383:16)
 	ret	z
-	call	AccTone_ExtendAndDispatch_Helper3
-	call	AccTone_ExtendAndDispatch_Helper4
+	call	Rhythm_SendChanPressure_Wrap
+	call	AccBuf_ResetAll4_Wrap
 	ld	a, (0x3385:16)
 	extz	wa
 	sla	wa, 2
@@ -11826,10 +11827,10 @@ AccTone_ExtendAndDispatch_Helper2:
 	and	(0x3212:16), 240
 	and	(0x3213:16), 240
 	and	(0x3214:16), 240
-	call	AccTone_ExtendAndDispatch_Helper5
+	call	AccSeq_DualPartScan_Wrap
 	bit	6, (0x3258:16)
 	ret	nz
-	call	AccTone_ExtendAndDispatch_Helper6
+	call	AccSeq_FourChannelScan_Wrap
 	ret
 AccVoice_BarCounterBytecodeData_Helper:
 	extz DE
@@ -12724,11 +12725,13 @@ AccTone_LookupByProgram_Dispatch:
 	ld	xhl, xiy
 	pop	xiz
 	ret
+Rhythm_UpdateTuningConfig_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	call	Rhythm_UpdateTuningConfig
 	pop	xiz
 	ret
+AccPatch_SetByChordIndex_Wrap:
 	push	xiz
 	ld	w, a
 	call	AccPatch_SetByChordIndex
@@ -12755,6 +12758,7 @@ AccVoice_ComputeParamAddr_Wrap:
 	and	xhl, 65535
 	pop	xiz
 	ret
+AccPart_InitPositionsAndBase_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	call	AccPart_InitPositionsAndBase
@@ -12802,22 +12806,22 @@ AccVoice_LoadAllParts_Wrap:
 	call	AccBuf_WriteAllNotesOff
 	pop	xiz
 	ret
-AccTone_ExtendAndDispatch_Helper3:
+Rhythm_SendChanPressure_Wrap:
 	push	xiz
 	call	Rhythm_SendChanPressure
 	pop	xiz
 	ret
-AccTone_ExtendAndDispatch_Helper4:
+AccBuf_ResetAll4_Wrap:
 	push	xiz
 	call	AccBuf_ResetAll4
 	pop	xiz
 	ret
-AccTone_ExtendAndDispatch_Helper5:
+AccSeq_DualPartScan_Wrap:
 	push	xiz
 	call	AccSeq_DualPartScan
 	pop	xiz
 	ret
-AccTone_ExtendAndDispatch_Helper6:
+AccSeq_FourChannelScan_Wrap:
 	push	xiz
 	call	AccSeq_FourChannelScan
 	pop	xiz
@@ -13088,7 +13092,7 @@ AccPatch_MultiCallWrapper:
 	calr	AccPatch_ClearModeFlag
 	pop	xiz
 	ret
-SeqOut_TimedChunkLoop32_Code_Helper:
+AccPatch_MultiCallWrapper_0x9:
 	push	xiz
 	calr	AccPatch_ClearModeFlag
 	call	AccPatch_InitSlotChain_WithAddr
@@ -13163,7 +13167,7 @@ AccPatch_CheckAndInitDemo_Helper:
 	jr	nc, AccPatch_CheckAndInitDemo_Return
 	calr	AccPatch_InitCurrentSlotPointer
 	calr	AccPatch_SlotScanByteData
-	calr	AccPatch_CheckAndInitDemo_Helper2
+	calr	AccPatch_SlotScanByteData_0x38
 	ld	e, c
 	ld	c, 1:opc
 AccPatch_CheckAndInitDemo_Join:
@@ -13226,7 +13230,7 @@ AccPatch_SlotScanByteData_Skip:
 	jr	AccPatch_SlotScanByteData_Return2
 AccPatch_SlotScanByteData_Return2:
 	ret
-AccPatch_CheckAndInitDemo_Helper2:
+AccPatch_SlotScanByteData_0x38:
 	calr	AccPatch_GetCurrentSlotAddr
 	ld	xwa, 0:i3
 	ld	a, (xiy+12)
@@ -14954,7 +14958,7 @@ AccPatch_CallParamLookup_Skip:
 	ld	a, (35994:16)
 	cp	a, 184
 	jr	nz, AccPatch_CallParamLookup_Return2
-	call	DrumVoice_NotifyEE_Sub2
+	call	TimeSig_DisplayStrings_0x233
 	call	AccPatch_CallParamLookup_Helper7
 	call	16143311
 AccPatch_CallParamLookup_Return2:
@@ -22624,6 +22628,7 @@ __pad_F63F8F:
 	.byte 0x00, 0x00, 0xc1, 0x35, 0x34, 0x3e, 0x01, 0x1e
 	.byte 0x26, 0xf0, 0x48, 0x4b, 0xf1, 0x52, 0x34, 0x40
 	.byte 0xf1, 0x51, 0x34, 0x41, 0xf1, 0x3a, 0x34, 0x47
+__pad_F63F8F_0x1A8:
 	.byte 0x0e, 0x00, 0x00
 AccWidget_DispatchTable:
 	ld xiy, 0x9b4000
@@ -24342,6 +24347,7 @@ DrumVoice_Handler6_Code:
 	calr	722
 	calr	63352
 	calr	804
+DrumVoice_Handler6_Return:
 	ret	
 DrumVoice_Handler7:
 	.incbin "includes/romslices/v7_transplant_DrumVoice_Handler7.bin"
@@ -24508,7 +24514,7 @@ TimeSig_DisplayStrings_Code_Return12:
 	popw	hl
 	pop w
 	bit	7, w
-	jr	nz, DrumVoice_NotifyEE_Skip6
+	jr	nz, TimeSig_DisplayStrings_Code_Skip4
 	cp	l, 15
 	jr	nz, DrumVoice_NotifyEE_Skip5
 	push	xix
@@ -24522,7 +24528,7 @@ DrumVoice_NotifyEE_Skip5:
 	jr	ule, TimeSig_DisplayStrings_Code_Join2
 	ld	a, (13201:16)
 	jr	TimeSig_DisplayStrings_Code_Join2
-DrumVoice_NotifyEE_Skip6:
+TimeSig_DisplayStrings_Code_Skip4:
 	cp	l, 15
 	jr	nz, TimeSig_DisplayStrings_Code_Skip5
 	push	xix
@@ -24565,7 +24571,7 @@ TimeSig_DisplayStrings_Code_Join2:
 	max
 	max
 	max
-DrumVoice_NotifyEE_Sub2:
+TimeSig_DisplayStrings_0x233:
 	ld	a, (64602:16)
 	and	a, 255
 	ld	w, (64603:16)
@@ -24669,7 +24675,7 @@ DrumVoice_NotifyEE_Join5:
 	ld	a, (13395:16)
 	pop w
 	bit	7, w
-	jr	nz, DrumVoice_NotifyEE_Skip18
+	jr	nz, TimeSig_DisplayStrings_Code_Skip14
 	cp	a, 26
 	jr	nz, DrumVoice_NotifyEE_Skip17
 	push	xix
@@ -24686,7 +24692,7 @@ DrumVoice_NotifyEE_Skip17:
 	jr	ule, DrumVoice_NotifyEE_Join6
 	ld	a, (13202:16)
 	jr	DrumVoice_NotifyEE_Join6
-DrumVoice_NotifyEE_Skip18:
+TimeSig_DisplayStrings_Code_Skip14:
 	cp	a, 26
 	jr	z, DrumVoice_NotifyEE_Join6
 	dec	1, a
@@ -24906,30 +24912,30 @@ TimeSig_DisplayStrings_Code_Skip28:
 	ld	a, 29:opc
 	jr	TimeSig_DisplayStrings_Code_Join5
 TimeSig_DisplayStrings_Code_Join5:
-	jr	DrumVoice_NotifyEE_Return8
+	jr	TimeSig_DisplayStrings_Code_Return7
 TimeSig_DisplayStrings_Code_Skip29:
 	dec	1, a
 	cp	a, 31
 	jr	nz, DrumVoice_NotifyEE_Skip36
 	ld	a, 32:opc
-	jr	DrumVoice_NotifyEE_Return8
+	jr	TimeSig_DisplayStrings_Code_Return7
 DrumVoice_NotifyEE_Skip36:
 	cp	a, 7:i3
 	jr	nz, TimeSig_DisplayStrings_Code_Skip31
 	ld	a, 32:opc
 	ld	(13395:16), 26
-	jr	DrumVoice_NotifyEE_Return8
+	jr	TimeSig_DisplayStrings_Code_Return7
 TimeSig_DisplayStrings_Code_Skip31:
 	cp	a, 23
 	jr	nz, DrumVoice_NotifyEE_Skip38
 	ld	a, 11:opc
-	jr	DrumVoice_NotifyEE_Return8
+	jr	TimeSig_DisplayStrings_Code_Return7
 DrumVoice_NotifyEE_Skip38:
 	cp	a, 30
 	jr	lt, TimeSig_DisplayStrings_Code_Join5
 	ld	a, 29:opc
-	jr	DrumVoice_NotifyEE_Return8
-DrumVoice_NotifyEE_Return8:
+	jr	TimeSig_DisplayStrings_Code_Return7
+TimeSig_DisplayStrings_Code_Return7:
 	ret
 	call	AccWrap_PlayModeDispatch
 	or	(0x28a7:16), 4
@@ -25055,7 +25061,7 @@ DrumVoice_NotifyEE_Helper7:
 	jr	z, TimeSig_DisplayStrings_Code_Skip33
 	cp	bc, wa
 	jr	z, TimeSig_DisplayStrings_Code_Skip33
-	calr	DrumVoice_NotifyEE_Helper9
+	calr	TimeSig_DisplayStrings_Code_Helper3
 TimeSig_DisplayStrings_Code_Skip33:
 	pushw	wa
 	ld	h, 2:opc
@@ -25065,7 +25071,7 @@ TimeSig_DisplayStrings_Code_Skip33:
 	jr	z, TimeSig_DisplayStrings_Code_Skip34
 	cp	bc, wa
 	jr	z, TimeSig_DisplayStrings_Code_Skip34
-	calr	DrumVoice_NotifyEE_Helper9
+	calr	TimeSig_DisplayStrings_Code_Helper3
 TimeSig_DisplayStrings_Code_Skip34:
 	pushw	wa
 	ld	h, 3:opc
@@ -25075,27 +25081,27 @@ TimeSig_DisplayStrings_Code_Skip34:
 	jr	z, TimeSig_DisplayStrings_Code_Helper_Return
 	cp	bc, wa
 	jr	z, TimeSig_DisplayStrings_Code_Helper_Return
-	calr	DrumVoice_NotifyEE_Helper9
+	calr	TimeSig_DisplayStrings_Code_Helper3
 TimeSig_DisplayStrings_Code_Helper_Return:
 	ret
 DrumVoice_NotifyEE_Helper8:
 	ld_rr8b	l, xix, h
 	cp	l, 255
-	jr	z, DrumVoice_NotifyEE_Skip49
+	jr	z, TimeSig_DisplayStrings_Code_Helper2_Skip
 	pushdi_b	(13370)
 	ld	(13370:16), l
 	push	h
 	push	xix
-	call	AccPatch_CheckAndInitDemo_Helper2
+	call	AccPatch_SlotScanByteData_0x38
 	pop	xix
 	pop	h
 	pop	(0x343a:16)
 	ld	b, a
 	jr	3
-DrumVoice_NotifyEE_Skip49:
+TimeSig_DisplayStrings_Code_Helper2_Skip:
 	ldw	bc, 65535
 	ret
-DrumVoice_NotifyEE_Helper9:
+TimeSig_DisplayStrings_Code_Helper3:
 	push	xwa
 	ld	xwa, TimeSig_DisplayStrings_0x745
 	ld_rr8b	a, xwa, h
@@ -25177,7 +25183,9 @@ DrumVoice_NotifyEE_Entry4_Data:
 	.byte 0x21, 0xc8, 0x33, 0x07, 0x6e, 0x08, 0xc9, 0xdb
 	.byte 0x66, 0x0e, 0xc9, 0x61, 0x68, 0x06, 0xc9, 0xd8
 	.byte 0x66, 0x06, 0xc9, 0x69, 0xf1, 0x0e, 0x39, 0x41
+TimeSig_DisplayStrings_Code_Return9:
 	.byte 0x0e, 0x3e, 0x1d, 0x72, 0x5d, 0xf6, 0x5e, 0x0e
+TimeSig_DisplayStrings_0x86D:
 	.byte 0x28, 0x1d, 0x86, 0xe9, 0xf5, 0x48, 0x44, 0xa5
 	.byte 0x5d, 0xf6, 0x00, 0xc1, 0x0e, 0x39, 0x21, 0xc3
 	.byte 0x03, 0xf0, 0xe0, 0x21, 0xc3, 0x03, 0xf4, 0xe0
@@ -27548,12 +27556,12 @@ ExtVoice_ProcessList_Data:
 	call	AccWrap_PlayModeStartAccPlay
 DrumParam_ReadMaxCount_Return:
 	ret
-CmEsyTtlFunc_Helper2:
+ExtVoice_ProcessList_0x1C:
 	push	xiz
-	call	DrumParam_ReadMaxCount_Helper
+	call	ExtVoice_ProcessList_0x23
 	pop	xiz
 	ret
-DrumParam_ReadMaxCount_Helper:
+ExtVoice_ProcessList_0x23:
 	call	AccWrap_PlayModeDispatch
 	calr	DrumParam_ReadMaxCount_Helper3
 	call	Seq_DispatcherEntry
@@ -30206,7 +30214,7 @@ CmpEsy_DeliverEventAndCheck:
 	push	xhl
 	push	xix
 	push	xiz
-	call	CmEsyTtlFunc_Helper2
+	call	ExtVoice_ProcessList_0x1C
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -33054,13 +33062,13 @@ AccScreen_BeatDisplay_Draw:
 
 AccScreen_BeatDataBlock:
 	cp	(0x3676:16), 4
-	jr	nz, AccScreen_BeatDataBlock_Return
+	jr	nz, AccScreen_BeatDataBlock_Code_Return
 	ldmm8	14623, 13944
 	ldmm8	14624, 13945
 	ld	xiy, 16165229
 	ld	xix, AccScreen_UIDataBlock_0x3B8
 	calr	AccGraphics_RenderStart
-AccScreen_BeatDataBlock_Return:
+AccScreen_BeatDataBlock_Code_Return:
 	ret	
 AccScreen_DrawInit_StackWrap:
 	ld xwa, AccScreen_DrawInit_Body
@@ -37173,7 +37181,7 @@ AccStyle_TableDataEntry_Skip6:
 AccStyle_TableDataEntry_Join:
 	call	UI_PostModeChangeEvent
 	ret
-SLDstBankList_FuncBody_Helper3_Helper:
+AccStyle_TableDataEntry_0x90:
 	lda	xsp, (xsp-34)
 	push	xiz
 	ld	(xsp+34), c

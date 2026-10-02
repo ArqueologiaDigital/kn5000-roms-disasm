@@ -592,14 +592,17 @@ EmbeddedPtrTable_v7_naka_disk_menu_file_io_005F00:
 ; [nakarest] naka_disk_menu_file_io+0x61fa  +0x61fa..+0x6200 (0xea75c6, 6 B)
 ; [nakarest] the table itself: ResName slot 0x362 (table 0xea75c6, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
+Cheap_ResNameTable_362:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x61FA, 0x6
 ; [nakarest] naka_disk_menu_file_io+0x6200  +0x6200..+0x6206 (0xea75cc, 6 B)
 ; [nakarest] the table itself: ResName slot 0x363 (table 0xea75cc, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
+Cheap_ResNameTable_363:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6200, 0x6
 ; [nakarest] naka_disk_menu_file_io+0x6206  +0x6206..+0x620c (0xea75d2, 6 B)
 ; [nakarest] the table itself: ResName slot 0x364 (table 0xea75d2, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
+Cheap_ResNameTable_364:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6206, 0x6
 ; [nakarest] naka_disk_menu_file_io+0x620c  +0x620c..+0x621e (0xea75d8, 18 B)
 ; [nakarest] the table itself: ResName slot 0x365 (table 0xea75d8, 3 entries, InitializeCheap),
@@ -627,6 +630,7 @@ InitializeCheap_PtrTable_3:
 ; [nakarest] naka_disk_menu_file_io+0x6418  +0x6418..+0x641e (0xea77e4, 6 B)
 ; [nakarest] the table itself: ResName slot 0x36a (table 0xea77e4, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
+Cheap_ResNameTable_36A:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6418, 0x6
 ; [nakarest] naka_disk_menu_file_io+0x641e  +0x641e..+0x6478 (0xea77ea, 90 B)
 ; [nakarest] the table itself: ResName slot 0x36b (table 0xea77ea, 21 entries, InitializeCheap),
@@ -719,10 +723,12 @@ EmbeddedPtrTable_v7_naka_disk_menu_file_io_006500:
 ; [nakarest] naka_disk_menu_file_io+0x66fe  +0x66fe..+0x6704 (0xea7aca, 6 B)
 ; [nakarest] the table itself: ResName slot 0x36d (table 0xea7aca, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
+Cheap_ResNameTable_36D:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x66FE, 0x6
 ; [nakarest] naka_disk_menu_file_io+0x6704  +0x6704..+0x670a (0xea7ad0, 6 B)
 ; [nakarest] the table itself: ResName slot 0x36e (table 0xea7ad0, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
+Cheap_ResNameTable_36E:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6704, 0x6
 ; [nakarest] naka_disk_menu_file_io+0x670a  +0x670a..+0x6764 (0xea7ad6, 90 B)
 ; [nakarest] the table itself: ResName slot 0x377 (table 0xea7ad6, 21 entries, InitializeCheap),
@@ -736,6 +742,7 @@ InitializeCheap_PtrTable_6:
 ; [nakarest] naka_disk_menu_file_io+0x67c0  +0x67c0..+0x67c6 (0xea7b8c, 6 B)
 ; [nakarest] the table itself: ResName slot 0x379 (table 0xea7b8c, 0 entries, InitializeCheap),
 ; [nakarest] 0 entry pointers x 4 bytes.
+Cheap_ResNameTable_379:
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x67C0, 0x6
 ; [nakarest] naka_disk_menu_file_io+0x67c6  +0x67c6..+0x6944 (0xea7b92, 382 B)
 ; [nakarest] the table itself: ResName slot 0x37b (table 0xea7b92, 94 entries, InitializeCheap),

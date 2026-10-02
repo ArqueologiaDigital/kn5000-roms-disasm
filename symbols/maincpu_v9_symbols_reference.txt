@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 47,963
-#   semantic names ........... 45,721 (95.3%)
+#   symbols .................. 47,964
+#   semantic names ........... 45,722 (95.3%)
 #   positional names ......... 2,242
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -44839,11 +44839,12 @@ DSPCfg_Data_ParamDispatch_Skip 00FDCD5B
 DSPCfg_Data_ParamDispatch_Skip2 00FDCD60
 DSPCfg_Data_ParamDispatch_Skip3 00FDCD91
 DSPCfg_Data_ParamDispatch_Loop 00FDCDA0
-DSPCfg_Data_ParamDispatch_Join4 00FDCDAC
+DSPCfg_Data_ParamDispatch_Join5 00FDCDAC
 DSPCfg_Data_ParamDispatch_Skip4 00FDCDB1
-DSPCfg_Data_ParamDispatch_Skip6 00FDCDD0
-DSPCfg_Data_ParamDispatch_Loop3 00FDCE0C
-DSPCfg_Data_ParamDispatch_Loop4 00FDCE3F
+DSPCfg_Data_ParamDispatch_Skip8 00FDCDD0
+DSPCfg_Data_ParamDispatch_Helper 00FDCDE7
+DSPCfg_Data_ParamDispatch_Helper_Loop 00FDCE0C
+DSPCfg_Data_ParamDispatch_Helper_Loop2 00FDCE3F
 DSPCfg_Data_ParamDispatch_Skip5 00FDCE4B
 DSPCfg_Data_ParamDispatch_Helper_Skip 00FDCE6C
 DSPCfg_Data_ParamDispatch_Helper_Skip2 00FDCE7E

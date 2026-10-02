@@ -2031,11 +2031,11 @@ MiddleFuncCall_DispatchData_Code_Helper5:
 SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc
 	call	UI_PostModeChangeEvent
-	jp	SetWall_MiscDataAndCode_Return
+	jp	SetWall_MiscDataAndCode_0x51
 SetWall_MiscDataAndCode_Skip2:
 	ld	a, 131:opc
 	call	UI_PostModeChangeEvent
-SetWall_MiscDataAndCode_Return:
+SetWall_MiscDataAndCode_0x51:
 	ret
 	ld	xwa, (4349:16)
 	push	xwa
@@ -2060,7 +2060,7 @@ SetWall_MiscDataAndCode_Loop:
 	push	xbc
 	push	xde
 	push	xix
-	call	SetWall_MiscDataAndCode_Helper
+	call	SetWall_MiscDataAndCode_Data
 	pop	xix
 	pop	xde
 	pop	xbc
@@ -2085,7 +2085,7 @@ SetWall_MiscDataAndCode_Entry:
 	pop	xwa
 	ld	(4349:16), xwa
 	ret
-SetWall_MiscDataAndCode_Helper:
+SetWall_MiscDataAndCode_Data:
 	.byte 0xe7, 0x34, 0xa8
 	ld	wa, de
 	inc	1, wa

@@ -3396,6 +3396,7 @@ MasterSetup_GetNameB_DrawString:
 	pushw 245
 	call	DrawString
 	jr	SeqFile_ReturnZeroJmp2
+AcMstStyleAlpGridBoxProc_Evt1C0001C:
 	ld	xwa, (xsp+74)
 	call	GetViewInstance
 	ld	xwa, (xhl+70)

@@ -2381,6 +2381,7 @@ MidiCC_FunctionToCCNumber:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -9528,7 +9529,7 @@ SeqVoice_DispatchProcess_Data_Helper:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SeqOut_TimedChunkLoop32_Code_Helper
+	call	AccPatch_MultiCallWrapper_0x9
 	pop	xiz
 	pop	xix
 	pop	xhl

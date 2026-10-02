@@ -560,7 +560,7 @@ ScoopDisp_BytecodeBlock1_Skip3:
 	ld (4480:16), 32
 ScoopDisp_BytecodeBlock1_Return:
 	ret
-DisplayMode_Handler_3_Helper:
+ScoopDisp_BytecodeBlock1_0x32:
 	push	xbc
 	push	xde
 	push	xhl
@@ -580,7 +580,7 @@ DisplayMode_Handler_3_Helper:
 	pop	xde
 	pop	xbc
 	ret
-DisplayMode_Handler_3_Helper2:
+ScoopDisp_BytecodeBlock1_0x4D:
 	push	xbc
 	push	xde
 	push	xhl
@@ -922,6 +922,7 @@ DisplayMode_Dispatch:
 	pop XHL
 	call (XIY)
 .Lc_ef61e8:
+DisplayMode_Dispatch_Return:
 	ret
 	; 4 handlers indexed by (0x0D65) & 3, the display mode; read by DisplayMode_Dispatch
 	; (`ld XHL,DisplayMode_Dispatch_Tbl / ld xiy, (xhl+iy) / call (XIY)`, stride 4)
@@ -974,10 +975,10 @@ ScoopDisp_FlagSetAndDispatch:
 	bit	7, w
 	jrl	z, ScoopDisp_FlagSetAndDispatch_Skip
 	call	VoiceState_DataBlock2_Helper6
-	jp	ScoopDisp_FlagSetAndDispatch_Return
+	jp	ScoopDisp_FlagSetAndDispatch_0x17
 ScoopDisp_FlagSetAndDispatch_Skip:
 	call	ScoopDisp_FlagSetAndDispatch_Helper
-ScoopDisp_FlagSetAndDispatch_Return:
+ScoopDisp_FlagSetAndDispatch_0x17:
 	ret	
 	; Handler dispatch table, 128 B.  Read by DisplayMode_Dispatch_Mode0 (0xEF61F9): `ld xix, ScoopDisp_DispatchTable_Small`
 	; indexed with stride 4 (`sla hl, 2`)
@@ -1637,12 +1638,12 @@ PerfMode_EventTable_7:
 PerfMode_VolumeParam_Process:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 50 of 83 slots byte-identical
 	bit	7, w
-	jrl	nz, PerfMode_VolumeParam_Process_Return
+	jrl	nz, PerfMode_VolumeParam_Process_0x6F
 	ld	a, (3429:16)
 	cp	a, 0:i3
-	jrl	z, PerfMode_VolumeParam_Process_Return
+	jrl	z, PerfMode_VolumeParam_Process_0x6F
 	cp	a, 3:i3
-	jrl	z, PerfMode_VolumeParam_Process_Return
+	jrl	z, PerfMode_VolumeParam_Process_0x6F
 	cp	a, 2:i3
 	jrl	z, PerfMode_VolumeParam_Process_Skip
 	ld	l, (3424:16)
@@ -1682,12 +1683,12 @@ PerfMode_VolumeParam_Process:
 	ld	a, (xhl)
 	ld	(3831:16), a
 	call	PerfMode_VolumeParam_Process_Helper
-	jp	PerfMode_VolumeParam_Process_Return
+	jp	PerfMode_VolumeParam_Process_0x6F
 PerfMode_VolumeParam_Process_Skip:
 	xor	wa, wa
 	ld	a, 169:opc
 	call	SoundCtrl_SendCommand
-PerfMode_VolumeParam_Process_Return:
+PerfMode_VolumeParam_Process_0x6F:
 	ret
 PerfMode_VolumeParam_Process_Helper:
 	ld	xix, 3789
@@ -3017,10 +3018,10 @@ Timer_ModeHandler_0_Loop:
 	jrl	nz, Timer_ModeHandler_0_Loop
 	call	VoiceCtrl_SendNoteOffSequence
 	ld	e, (3822:16)
-	call	Timer_ModeHandler_0_Helper3
+	call	VoiceSlot_FinalRetZ_0x11
 	ld	(3522:16), a
 Timer_ModeHandler_0_Join:
-	call	Timer_ModeHandler_0_Helper3
+	call	VoiceSlot_FinalRetZ_0x11
 	cp	a, (3522:16)
 	jrl	z, Timer_ModeHandler_0_Skip
 	jr	Timer_ModeHandler_0_Join2
@@ -3070,7 +3071,7 @@ Timer_ModeHandler_0_Skip:
 	pop	xbc
 	pop	xhl
 	pop	xwa
-	call	Timer_ModeHandler_0_Helper4
+	call	VoiceSlot_FinalRetZ_0x1E
 	cp	a, 144
 	jr	nz, Timer_ModeHandler_0_Join2
 	jp	Timer_ModeHandler_0_Join
@@ -3143,6 +3144,7 @@ Timer_ParamLoadAndCompare:
 	cp (0x7ea6:16), 0x0f
 	jrl z, .Lc_ef7a1f
 .Lc_ef7a12:
+Timer_ParamLoadAndCompare_Skip:
 	ld W, 0x00:opc
 	call Timer_ParamCompareAlt_0x2A
 	bit 5, (0x0d54:16)
@@ -3457,7 +3459,7 @@ ToneParam_ModeGuardEntry:
 	jrl	nz, ToneParam_ModeGuardEntry_Skip
 	cp	c, 6:i3
 	jrl	ugt, ToneParam_ModeGuardEntry_Skip
-	call	DisplayMode_Handler_3_Helper3_Helper
+	call	ScoopParam_ValueTable_0x1C
 	call	ToneParam_ModeGuardEntry_Helper2
 	jp	ToneParam_ModeGuardEntry_Join
 ToneParam_ModeGuardEntry_Skip:
@@ -3477,29 +3479,29 @@ ToneParam_ModeGuardEntry_Join:
 	cp	a, (3415:16)
 	jrl	ugt, ToneParam_ModeGuardEntry_Skip2
 	call	DMA_FlagCheckWithCalls
-	jp	ToneParam_ModeGuardEntry_Entry
+	jp	ToneParam_ModeGuardEntry_0x6D
 ToneParam_ModeGuardEntry_Skip2:
 	call	Timer_ParamCompareAlt_Helper6
-ToneParam_ModeGuardEntry_Entry:
+ToneParam_ModeGuardEntry_0x6D:
 	res	2, (0x0d54:16)
 	call	Display_UpdateRegion3
 ToneParam_ModeGuardEntry_Return:
 	ret
 	bit	7, w
-	jrl	nz, MemConfig_Handler_5_Code_Skip2
+	jrl	nz, MemConfig_Handler_5_Skip14
 MemConfig_Handler_5:
 	set	3, (0x0d54:16)
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
-	jrl	z, MemConfig_Handler_5_Code_Skip2
+	jrl	z, MemConfig_Handler_5_Skip14
 	cp	a, 132
-	jrl	z, MemConfig_Handler_5_Code_Skip2
+	jrl	z, MemConfig_Handler_5_Skip14
 	call	VoiceSlot_ReadCurrentParams
 	ld	w, a
 	and	w, 240
 	ld	(3572:16), w
 	cp	a, 129
-	jrl	z, MemConfig_Handler_5_Code_Skip3
+	jrl	z, MemConfig_Handler_5_Skip15
 	cp	a, 132
 	jrl	z, MemConfig_Handler_5_Code_Entry
 	cp	a, 130
@@ -3507,59 +3509,59 @@ MemConfig_Handler_5:
 	cp	(3415:16), 48
 	jrl	nz, MemConfig_Handler_5_Code_Skip4
 MemConfig_Handler_5_Code_Loop:
-	call	MemConfig_Handler_5_Code_Helper2
+	call	MemConfig_Handler_5_0xCC
 MemConfig_Handler_5_Code_Entry:
 	or	(0x8cec:16), 1
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
-	jr	nz, MemConfig_Handler_5_Code_Skip
+	jr	nz, MemConfig_Handler_5_Skip13
 	call	MemConfig_Handler_5_Code_Helper10
-MemConfig_Handler_5_Code_Skip:
+MemConfig_Handler_5_Skip13:
 	call	MemConfig_Handler_5_Helper
 	call	DMA_FlagCheckWithCalls
 	call	MemConfig_Handler_5_Code_Helper11
 	ld	w, 98:opc
 	call	MIDI_SendSysExFromW
 	xor	w, w
-MemConfig_Handler_5_Code_Skip2:
+MemConfig_Handler_5_Skip14:
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_Code_Skip3:
-	call	MemConfig_Handler_5_Code_Helper
+MemConfig_Handler_5_Skip15:
+	call	MemConfig_Handler_5_0x83
 	jp	MemConfig_Handler_5_Code_Entry
 MemConfig_Handler_5_Code_Skip4:
 	call	VoiceSlot_FlagCheck
 	cp	a, 48
 	jrl	nz, MemConfig_Handler_5_Code_Loop
-	call	MemConfig_Handler_5_Code_Helper6
+	call	MemConfig_Handler_5_0x1BF
 	jp	MemConfig_Handler_5_Code_Entry
-MemConfig_Handler_5_Code_Helper:
+MemConfig_Handler_5_0x83:
 	cp	(3415:16), 48
-	jrl	z, MemConfig_Handler_5_Code_Skip5
+	jrl	z, MemConfig_Handler_5_Skip17
 	call	MemConfig_Handler_5_Code_Helper3
 MemConfig_Handler_5_Code_Entry2:
 	or	(0x8cec:16), 1
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_Code_Skip5:
+MemConfig_Handler_5_Skip17:
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
 	jrl	z, MemConfig_Handler_5_Code_Entry2
 	cp	a, 132
 	jrl	z, MemConfig_Handler_5_Code_Entry2
 	cp	a, 129
-	jrl	nz, MemConfig_Handler_5_Code_Skip6
+	jrl	nz, MemConfig_Handler_5_Skip18
 	call	MemConfig_Handler_5_Code_Helper3
 	jp	MemConfig_Handler_5_Code_Entry2
-MemConfig_Handler_5_Code_Skip6:
+MemConfig_Handler_5_Skip18:
 	call	MemConfig_Handler_5_Code_Helper3
 	call	VoiceSlot_FlagCheck
 	cp	a, 48
 	jrl	z, MemConfig_Handler_5_Code_Entry2
-	call	MemConfig_Handler_5_Code_Helper6
+	call	MemConfig_Handler_5_0x1BF
 	jp	MemConfig_Handler_5_Code_Entry2
-MemConfig_Handler_5_Code_Helper2:
+MemConfig_Handler_5_0xCC:
 	cp	(3572:16), 144
 	jrl	nz, MemConfig_Handler_5_Code_Skip7
-	call	MemConfig_Handler_5_Code_Helper4
+	call	MemConfig_Handler_5_0xEE
 	jp	MemConfig_Handler_5_Code_Return
 MemConfig_Handler_5_Code_Skip7:
 	call	ToneParam_Evt09_BytecodeHandler_Sub
@@ -3568,7 +3570,7 @@ MemConfig_Handler_5_Code_Helper3:
 	ld	w, 1:opc
 	call	VoiceSlot_RetZ
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_Code_Helper4:
+MemConfig_Handler_5_0xEE:
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ld	de, 4:i3
@@ -3579,32 +3581,32 @@ MemConfig_Handler_5_Code_Helper4:
 	ld	(3576:16), a
 	xor	a, a
 	call	VoiceSlot_RestoreState
-	call	MemConfig_Handler_5_Code_Helper5
+	call	MemConfig_Handler_5_0x198
 	ld	c, (3576:16)
 	xor	b, b
 	cp	bc, 0:i3
 	jrl	z, MemConfig_Handler_5_Skip
-MemConfig_Handler_5_Code_Join:
+MemConfig_Handler_5_0x11F:
 	pushw	bc
 	call	VoiceSlot_ReadCurrentParams
 	popw	bc
 	cp	a, 129
-	jrl	z, MemConfig_Handler_5_Code_Skip8
+	jrl	z, MemConfig_Handler_5_Skip21
 	pushw	bc
 	call	VoiceCtrl_BytecodeHandler
 	cp	b, 22
-	jrl	z, MemConfig_Handler_5_Code_Entry3
+	jrl	z, MemConfig_Handler_5_Skip20
 	cp	b, 23
-	jrl	z, MemConfig_Handler_5_Code_Entry3
+	jrl	z, MemConfig_Handler_5_Skip20
 	popw	bc
-	jp	MemConfig_Handler_5_Code_Epilogue
-MemConfig_Handler_5_Code_Entry3:
+	jp	MemConfig_Handler_5_0x191
+MemConfig_Handler_5_Skip20:
 	pushdi_w	(0x0d58)
 	call	VoiceSlot_LoadAndDispatch
 	popw_dd16 0x58, 0x0d	; popw (0x0d58)
 	popw	bc
-	jp	MemConfig_Handler_5_Code_Join
-MemConfig_Handler_5_Code_Skip8:
+	jp	MemConfig_Handler_5_0x11F
+MemConfig_Handler_5_Skip21:
 	pushw	bc
 	call	MemConfig_Handler_5_Code_Helper3
 	popw	bc
@@ -3612,50 +3614,50 @@ MemConfig_Handler_5_Code_Skip8:
 MemConfig_Handler_5_Skip:
 	ld	a, (3575:16)
 	cp	(3415:16), 48
-	jrl	z, MemConfig_Handler_5_Code_Skip10
+	jrl	z, MemConfig_Handler_5_Skip22
 	cp	a, 48
 	jrl	nz, MemConfig_Handler_5_Code_Return
-	call	MemConfig_Handler_5_Code_Helper6
+	call	MemConfig_Handler_5_0x1BF
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_Code_Skip10:
+MemConfig_Handler_5_Skip22:
 	cp	a, 48
 	jrl	nz, MemConfig_Handler_5_Code_Return
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	nz, MemConfig_Handler_5_Code_Return
 	call	MemConfig_Handler_5_Code_Helper3
-	call	MemConfig_Handler_5_Code_Helper6
+	call	MemConfig_Handler_5_0x1BF
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_Code_Epilogue:
+MemConfig_Handler_5_0x191:
 	add	xsp, 2
 MemConfig_Handler_5_Code_Return:
 	ret
-MemConfig_Handler_5_Code_Helper5:
+MemConfig_Handler_5_0x198:
 	call	VoiceSlot_FlagCheck
 	ld	(3523:16), a
-MemConfig_Handler_5_Code_Loop2:
+MemConfig_Handler_5_Loop3:
 	call	VoiceSlot_FlagCheck
 	cp	a, (3523:16)
-	jrl	nz, MemConfig_Handler_5_Code_Return2
+	jrl	nz, MemConfig_Handler_5_Return2
 	ld	w, 6:opc
 	call	VoiceSlot_RetZ
 	call	VoiceSlot_ReadCurrentParams
 	and	a, 240
 	cp	a, 144
-	jrl	z, MemConfig_Handler_5_Code_Loop2
-MemConfig_Handler_5_Code_Return2:
+	jrl	z, MemConfig_Handler_5_Loop3
+MemConfig_Handler_5_Return2:
 	ret
-MemConfig_Handler_5_Code_Helper6:
+MemConfig_Handler_5_0x1BF:
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ld	xiy, 3577
 	cp	(3415:16), 48
-	jrl	nz, MemConfig_Handler_5_Code_Skip11
+	jrl	nz, MemConfig_Handler_5_Skip23
 	ld	(xiy), 2
-	jp	MemConfig_Handler_5_Code_Loop3
-MemConfig_Handler_5_Code_Skip11:
+	jp	MemConfig_Handler_5_0x1DC
+MemConfig_Handler_5_Skip23:
 	ld	(xiy), 1
-MemConfig_Handler_5_Code_Loop3:
+MemConfig_Handler_5_0x1DC:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
 	jrl	z, MemConfig_Handler_5_Code_Join2
@@ -3663,99 +3665,99 @@ MemConfig_Handler_5_Code_Loop3:
 	jrl	z, MemConfig_Handler_5_Code_Join2
 	cp	(3577:16), 1
 	jrl	z, MemConfig_Handler_5_Code_Skip12
-	call	MemConfig_Handler_5_Code_Helper8
+	call	MemConfig_Handler_5_0x286
 	cp	w, 255
-	jrl	nz, MemConfig_Handler_5_Code_Loop3
+	jrl	nz, MemConfig_Handler_5_0x1DC
 MemConfig_Handler_5_Code_Join2:
 	xor	a, a
 	call	VoiceSlot_RestoreState
-	jp	MemConfig_Handler_5_Code_Return3
+	jp	MemConfig_Handler_5_0x2F0
 MemConfig_Handler_5_Code_Skip12:
-	call	MemConfig_Handler_5_Code_Helper7
+	call	MemConfig_Handler_5_0x216
 	cp	w, 255
-	jrl	nz, MemConfig_Handler_5_Code_Loop3
+	jrl	nz, MemConfig_Handler_5_0x1DC
 	jp	MemConfig_Handler_5_Code_Join2
-MemConfig_Handler_5_Code_Helper7:
+MemConfig_Handler_5_0x216:
 	cp	a, 129
 	jrl	z, MemConfig_Handler_5_Code_Join3
 	bit	7, a
 	jrl	z, MemConfig_Handler_5_Code_Join3
 	call	VoiceSlot_FlagCheck
 	cp	a, 48
-	jrl	z, MemConfig_Handler_5_Code_Skip13
+	jrl	z, MemConfig_Handler_5_Skip3
 	cp	a, 47
-	jrl	z, MemConfig_Handler_5_Code_Skip15
+	jrl	z, MemConfig_Handler_5_Skip5
 	cp	a, 95
-	jrl	z, MemConfig_Handler_5_Code_Skip14
+	jrl	z, MemConfig_Handler_5_Skip4
 	cp	a, 0:i3
-	jrl	z, MemConfig_Handler_5_Code_Skip16
+	jrl	z, MemConfig_Handler_5_Skip6
 MemConfig_Handler_5_Code_Join3:
 	call	VoiceSlot_LoadAndDispatch
-	jp	MemConfig_Handler_5_Code_Return3
-MemConfig_Handler_5_Code_Skip13:
+	jp	MemConfig_Handler_5_0x2F0
+MemConfig_Handler_5_Skip3:
 	xor	w, w
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	jp	MemConfig_Handler_5_Code_Join3
-MemConfig_Handler_5_Code_Skip14:
+MemConfig_Handler_5_Skip4:
 	ld	w, 47:opc
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	jp	MemConfig_Handler_5_Code_Join3
-MemConfig_Handler_5_Code_Skip15:
+MemConfig_Handler_5_Skip5:
 	ld	w, 95:opc
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	jp	MemConfig_Handler_5_Code_Join3
-MemConfig_Handler_5_Code_Skip16:
+MemConfig_Handler_5_Skip6:
 	ld	(3577:16), 2
 	ld	a, 1:opc
 	call	VoiceSlot_SaveState
 	ld	w, 48:opc
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	call	VoiceSlot_CompareAndBranch
 	call	MemConfig_Handler_5_Code_Helper3
 	jp	MemConfig_Handler_5_Code_Join3
-MemConfig_Handler_5_Code_Helper8:
+MemConfig_Handler_5_0x286:
 	cp	a, 129
 	jrl	z, MemConfig_Handler_5_Code_Join4
 	bit	7, a
 	jrl	z, MemConfig_Handler_5_Code_Join4
 	call	VoiceSlot_FlagCheck
 	cp	a, 0:i3
-	jrl	z, MemConfig_Handler_5_Code_Skip17
+	jrl	z, MemConfig_Handler_5_Skip8
 	cp	a, 47
-	jrl	z, MemConfig_Handler_5_Code_Skip19
+	jrl	z, MemConfig_Handler_5_Skip10
 	cp	a, 95
-	jrl	z, MemConfig_Handler_5_Code_Skip18
+	jrl	z, MemConfig_Handler_5_Skip9
 	cp	a, 48
-	jrl	z, MemConfig_Handler_5_Code_Skip20
+	jrl	z, MemConfig_Handler_5_Skip11
 MemConfig_Handler_5_Code_Join4:
 	call	VoiceSlot_LoadAndDispatch
-	jp	MemConfig_Handler_5_Code_Return3
-MemConfig_Handler_5_Code_Skip17:
+	jp	MemConfig_Handler_5_0x2F0
+MemConfig_Handler_5_Skip8:
 	ld	w, 48:opc
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	jp	MemConfig_Handler_5_Code_Join4
-MemConfig_Handler_5_Code_Skip18:
+MemConfig_Handler_5_Skip9:
 	ld	w, 47:opc
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	jp	MemConfig_Handler_5_Code_Join4
-MemConfig_Handler_5_Code_Skip19:
+MemConfig_Handler_5_Skip10:
 	ld	w, 95:opc
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	jp	MemConfig_Handler_5_Code_Join4
-MemConfig_Handler_5_Code_Skip20:
+MemConfig_Handler_5_Skip11:
 	ld	(3577:16), 1
 	call	MemConfig_Handler_5_Code_Helper12
 	xor	w, w
-	call	MemConfig_Handler_5_Code_Helper9
+	call	MemConfig_Handler_5_0x2E6
 	jp	MemConfig_Handler_5_Code_Join4
-MemConfig_Handler_5_Code_Helper9:
+MemConfig_Handler_5_0x2E6:
 	pushw	wa
 	call	VoiceSlot_FinalRetZ
 	popw	wa
 	call	MemConfig_Handler_5_Code_Helper13
-MemConfig_Handler_5_Code_Return3:
+MemConfig_Handler_5_0x2F0:
 	ret
 ToneParam_ShortCallHandler:
 	call	ToneParam_Evt09_BytecodeHandler
@@ -3775,6 +3777,7 @@ ToneParam_Evt09_BytecodeHandler_Sub:
 	cp B,0xff
 	jrl nz, .Lc_ef80ea
 .Lc_ef80a7:
+ToneParam_Evt09_BytecodeHandler_Loop2:
 	call VoiceSlot_FlagCheck
 	cp a, (0x0d57:16)
 	jrl nz, .Lc_ef80e6
@@ -3794,8 +3797,10 @@ ToneParam_Evt09_BytecodeHandler_Sub:
 	res 2, (0x0d54:16)
 	or (0x8cec:16), 0x01
 .Lc_ef80e6:
+ToneParam_Evt09_BytecodeHandler_Loop3:
 	jp ToneParam_Evt09_BytecodeHandler_0xCF
 .Lc_ef80ea:
+ToneParam_Evt09_BytecodeHandler_Skip3:
 	call VoiceSlot_FlagCheck
 	cp a, (0x0d57:16)
 	jrl nz, .Lc_ef80e6
@@ -3810,6 +3815,7 @@ ToneParam_Evt09_BytecodeHandler_Sub:
 	call ToneParam_HandlerTable_BC_0x4DC
 	ld (0x7ea6:16), 0xff
 .Lc_ef8115:
+ToneParam_Evt09_BytecodeHandler_Loop:
 	call VoiceCtrl_BytecodeHandler
 	pushw bc
 	xor A,A
@@ -4491,10 +4497,10 @@ DisplayMode_Handler_3_Loop4:
 	cp	(3413:16), a
 	jrl	z, DisplayMode_Handler_3_Skip34
 	cp	(3413:16), 210
-	jrl	z, DisplayMode_Handler_3_Skip24
+	jrl	z, DisplayMode_Handler_3_Skip35
 DisplayMode_Handler_3_Loop5:
 	call	DisplayMode_Handler_3_Helper17
-DisplayMode_Handler_3_Join:
+DisplayMode_Handler_3_0x9D:
 	call	Timer_ModeHandler_0_Helper7
 	cp	w, 255
 	jrl	nz, DisplayMode_Handler_3_Loop4
@@ -4506,7 +4512,7 @@ DisplayMode_Handler_3_Next:
 	jrl	nz, DisplayMode_Handler_3_Next2
 DisplayMode_Handler_3_Next2:
 	jp	DisplayMode_Handler_3_0x168
-DisplayMode_Handler_3_Skip24:
+DisplayMode_Handler_3_Skip35:
 	cp	a, 209
 	jrl	z, DisplayMode_Handler_3_Skip34
 	jp	DisplayMode_Handler_3_0x99
@@ -4533,40 +4539,40 @@ DisplayMode_Handler_3_Skip34:
 	jrl	z, DisplayMode_Handler_3_Skip5
 DisplayMode_Handler_3_Loop:
 	call	DisplayMode_Handler_3_Helper17
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip3:
 	call	DisplayMode_Handler_3_Helper3
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip4:
 	call	VoiceCtrl_ParamSetupBytecode
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip5:
 	call	DisplayMode_Handler_3_Helper10
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip6:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
 	call	DisplayMode_Handler_3_Helper11
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip7:
 	call	DisplayMode_Handler_3_Helper13
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip8:
 	call	DisplayMode_Handler_3_Helper12
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip25:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
-	call	DisplayMode_Handler_3_Helper14
-	jp	DisplayMode_Handler_3_Join
+	call	SerialPort_ModeHandler_0_0x5
+	jp	DisplayMode_Handler_3_0x9D
 DisplayMode_Handler_3_Skip26:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Loop
 	call	DisplayMode_Handler_3_Helper15
-	jp	DisplayMode_Handler_3_Join
+	jp	DisplayMode_Handler_3_0x9D
 	ret
 DisplayMode_Handler_3_Helper3:
 	call	Timer_ParamCompareAlt_Helper7
@@ -4608,7 +4614,7 @@ DisplayMode_Handler_3_Loop3:
 	jp	DisplayMode_Handler_3_Join2
 DisplayMode_Handler_3_Skip10:
 	ld	w, (64316:16)
-	call	DisplayMode_Handler_3_Helper
+	call	ScoopDisp_BytecodeBlock1_0x32
 DisplayMode_Handler_3_Join2:
 	ld	(13948:16), a
 	ldfr_lerp	xiy, 56
@@ -4652,7 +4658,7 @@ DisplayMode_Handler_3_Join2:
 	jrl	nz, DisplayMode_Handler_3_Skip11
 	cp	c, 6:i3
 	jrl	ugt, DisplayMode_Handler_3_Skip11
-	call	DisplayMode_Handler_3_Helper3_Helper
+	call	ScoopParam_ValueTable_0x1C
 	call	ToneParam_ModeGuardEntry_Helper2
 	ld	(3422:16), 16
 	jp	DisplayMode_Handler_3_Return
@@ -4716,7 +4722,7 @@ DisplayMode_Handler_3_Join3:
 DisplayMode_Handler_3_Return2:
 	ret
 ToneParam_ModeGuardEntry_Helper:
-	call	ToneParam_ModeGuardEntry_Helper_Helper
+	call	ScoopParam_ValueTable_0x29
 DisplayMode_Handler_3_Sub:
 	ld	l, (3533:16)
 	xor	h, h
@@ -4845,7 +4851,7 @@ DisplayMode_Handler_3_Helper8:
 	jp	DisplayMode_Handler_3_Return5
 DisplayMode_Handler_3_Skip20:
 	ld	w, (64316:16)
-	call	DisplayMode_Handler_3_Helper
+	call	ScoopDisp_BytecodeBlock1_0x32
 DisplayMode_Handler_3_Return5:
 	ret
 DisplayMode_Handler_3_Helper9:
@@ -4863,7 +4869,7 @@ DisplayMode_Handler_3_Helper9:
 	jp	DisplayMode_Handler_3_Return6
 DisplayMode_Handler_3_Skip21:
 	ld	w, (64316:16)
-	call	DisplayMode_Handler_3_Helper2
+	call	ScoopDisp_BytecodeBlock1_0x4D
 DisplayMode_Handler_3_Return6:
 	ret
 PerfMode_ParamHandler_Data_Helper:
@@ -5602,9 +5608,9 @@ VoiceSlot_TableSetup_Skip20:
 	ldw_d16	wa, (0x367e)
 	ld	(0x287f:16), wa
 	cp	wa, 1000
-	jrl	c, VoiceSlot_TableSetup_Skip21
+	jrl	c, VoiceSlot_TableSetup_Code_Skip8
 	ldw	wa, 1000
-VoiceSlot_TableSetup_Skip21:
+VoiceSlot_TableSetup_Code_Skip8:
 	ld	(0x0e50:16), wa
 	call	SubCPU_ToneParamRet_0x315
 	ldb_d8	a, (0x0d60)
@@ -5894,7 +5900,7 @@ VoiceCtrl_ParamSetupBytecode:
 	cp	(3429:16), 0
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Skip
 	call	DisplayMode_Handler_3_Helper17
-	jp	VoiceCtrl_ParamSetupBytecode_Return
+	jp	VoiceCtrl_ParamSetupBytecode_0xF1
 VoiceCtrl_ParamSetupBytecode_Skip:
 	xor	a, a
 	ld	(3569:16), a
@@ -5924,7 +5930,7 @@ VoiceCtrl_ParamSetupBytecode_Skip:
 	ld	(xiy+5), a
 	call	TempoRingBuf_ReadByte
 	ld	wa, hl
-	call	VoiceCtrl_ParamSetupBytecode_Helper2
+	call	VoiceCtrl_ParamSetupBytecode_0xF2
 	cp	a, 0:i3
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Skip5
 	cp	(3429:16), 3
@@ -5960,7 +5966,7 @@ VoiceCtrl_ParamSetupBytecode_Skip3:
 	cp	a, 15
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Skip4
 	cp	a, 16
-	jrl	nz, VoiceCtrl_ParamSetupBytecode_Return
+	jrl	nz, VoiceCtrl_ParamSetupBytecode_0xF1
 VoiceCtrl_ParamSetupBytecode_Skip4:
 	ld	w, 6:opc
 	ld	xiy, 3471
@@ -5971,9 +5977,9 @@ VoiceCtrl_ParamSetupBytecode_Skip5:
 	call	MIDI_SendSysExFromW
 	call	VoiceCtrl_ParamSetupBytecode_Helper3
 	call	VoiceCtrl_ParamSetupBytecode_Sub
-VoiceCtrl_ParamSetupBytecode_Return:
+VoiceCtrl_ParamSetupBytecode_0xF1:
 	ret
-VoiceCtrl_ParamSetupBytecode_Helper2:
+VoiceCtrl_ParamSetupBytecode_0xF2:
 	ld	a, (xiy+2)
 	push	xhl
 	ld	h, (xiy)
@@ -6007,12 +6013,12 @@ VoiceCtrl_ParamSetupBytecode_Skip8:
 	and	a, 127
 	ldto_berp	a, 60
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Loop
-	jp	VoiceCtrl_ParamSetupBytecode_Join2
+	jp	VoiceCtrl_ParamSetupBytecode_0x1C4
 VoiceCtrl_ParamSetupBytecode_Skip9:
 	cp	a, 152
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Skip10
 	ld	a, 24:opc
-	jp	VoiceCtrl_ParamSetupBytecode_Join3
+	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
 VoiceCtrl_ParamSetupBytecode_Skip10:
 	cp	a, 16
 	jrl	c, VoiceCtrl_ParamSetupBytecode_Loop
@@ -6038,14 +6044,14 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 	cp	w, l
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Loop
 	ld	a, c
-	jp	VoiceCtrl_ParamSetupBytecode_Join3
+	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
 VoiceCtrl_ParamSetupBytecode_Loop:
 	ld	a, 0:opc
-	jp	VoiceCtrl_ParamSetupBytecode_Return2
+	jp	VoiceCtrl_ParamSetupBytecode_0x1E4
 VoiceCtrl_ParamSetupBytecode_Join:
 	ld	xhl, VoiceCtrl_ParamSetupBytecode_Tbl
 	ld_rr8b	a, xhl, a
-	jp	VoiceCtrl_ParamSetupBytecode_Join3
+	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
 VoiceCtrl_ParamSetupBytecode_Skip11:
 	ldfr_berp	a, 60
 	ld	a, (xiy)
@@ -6053,13 +6059,13 @@ VoiceCtrl_ParamSetupBytecode_Skip11:
 	ldto_berp	a, 60
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Loop
 	ld	a, 27:opc
-	jp	VoiceCtrl_ParamSetupBytecode_Join3
-VoiceCtrl_ParamSetupBytecode_Join2:
+	jp	VoiceCtrl_ParamSetupBytecode_0x1CA
+VoiceCtrl_ParamSetupBytecode_0x1C4:
 	ld	a, 28:opc
-	jp	VoiceCtrl_ParamSetupBytecode_Helper2_Join
-VoiceCtrl_ParamSetupBytecode_Join3:
+	jp	VoiceCtrl_ParamSetupBytecode_0x1CF
+VoiceCtrl_ParamSetupBytecode_0x1CA:
 	ld	(3422:16), 0
-VoiceCtrl_ParamSetupBytecode_Helper2_Join:
+VoiceCtrl_ParamSetupBytecode_0x1CF:
 	or	(0x0d53:16), 1
 	exts	wa
 	ld	xhl, 3439
@@ -6067,7 +6073,7 @@ VoiceCtrl_ParamSetupBytecode_Helper2_Join:
 	ld	a, (xiy+4)
 	ld	(xhl), a
 	ld	a, 1:opc
-VoiceCtrl_ParamSetupBytecode_Return2:
+VoiceCtrl_ParamSetupBytecode_0x1E4:
 	ret
 	; Byte data, 18 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97B6): `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl`
 	; reader VoiceCtrl_ParamSetupBytecode: `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl` then `ld_rr8b a, xhl, a`
@@ -6403,7 +6409,7 @@ VoiceCtrl_ParamSetupBytecode_Entry:
 	ld	(xhl), 6
 	call	Display_UpdateRegion0
 VoiceCtrl_ParamSetupBytecode_Join5:
-	call	VoiceCtrl_ParamSetupBytecode_Helper10
+	call	DisplayStr_BytecodeBlock_C_0x24
 	ret
 DisplayMode_Handler_3_Helper12:
 	ld	a, 134:opc
@@ -6493,7 +6499,7 @@ SerialPort_ModeHandler_3:
 SerialPort_ModeHandler_0:
 	call	SerialPort_ModeHandler_0_Helper
 	ret
-DisplayMode_Handler_3_Helper14:
+SerialPort_ModeHandler_0_0x5:
 	cp	(3429:16), 3
 	jrl	nz, SerialPort_ModeHandler_0_Skip
 	call	TempoRingBuf_ReadByte
@@ -6519,11 +6525,11 @@ SerialPort_ModeHandler_0_Skip:
 	ld	(13956:16), 2
 	cp	(3567:16), 2
 	jrl	nz, SerialPort_ModeHandler_0_Skip2
-	call	DisplayStr_BytecodeBlock_B_Code_Sub
+	call	DisplayStr_BytecodeBlock_B_0x3D
 	jp	SerialPort_ModeHandler_0_Join
 SerialPort_ModeHandler_0_Skip2:
 	ld	(3567:16), 2
-	call	DisplayMode_Handler_3_Helper14_Helper
+	call	DisplayStr_BytecodeBlock_B_0x39
 SerialPort_ModeHandler_0_Join:
 	ld	(3540:16), 0
 SerialPort_ModeHandler_0_Return:
@@ -6558,11 +6564,11 @@ SerialPort_ModeHandler_0_Skip3:
 	ld	(13956:16), 1
 	cp	(3567:16), 2
 	jrl	nz, SerialPort_ModeHandler_0_Skip4
-	call	DisplayStr_BytecodeBlock_B_Code_Sub
+	call	DisplayStr_BytecodeBlock_B_0x3D
 	jp	SerialPort_ModeHandler_0_Join2
 SerialPort_ModeHandler_0_Skip4:
 	ld	(3567:16), 2
-	call	DisplayMode_Handler_3_Helper14_Helper
+	call	DisplayStr_BytecodeBlock_B_0x39
 SerialPort_ModeHandler_0_Join2:
 	ld	(3540:16), 0
 SerialPort_ModeHandler_0_Return2:
@@ -6658,12 +6664,12 @@ SerialPort_ModeHandler_0_Join3:
 ScoopParam_ValueTable:
 	.byte	0x00, 0x00, 0x08, 0x00, 0x0c, 0x00, 0x10, 0x00, 0x18, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00
 	.byte	0x60, 0x00, 0xc0, 0x00, 0x80, 0x01, 0x00, 0x03, 0x80, 0x04, 0x00, 0x06
-DisplayMode_Handler_3_Helper3_Helper:
+ScoopParam_ValueTable_0x1C:
 	call	SerialPort_ModeHandler_0_Helper2
 	stb_d8	(0x0d57), w
 	stb_d8	(0x0dcd), a
 	ret
-ToneParam_ModeGuardEntry_Helper_Helper:
+ScoopParam_ValueTable_0x29:
 	call	SerialPort_ModeHandler_0_Helper2
 	stb_d8	(0x0dce), w
 	stb_d8	(0x0dcd), a
@@ -7700,7 +7706,7 @@ SysEx_BytecodeDispatcher:
 	ld	xiy, 4360
 	cp	(xiy), wa
 	jrl	nz, SysEx_BytecodeDispatcher_Skip3
-	jp	SysEx_BytecodeDispatcher_Return
+	jp	SysEx_BytecodeDispatcher_0x108
 SysEx_BytecodeDispatcher_Skip:
 	call	SysEx_BytecodeDispatcher_Helper5
 	call	SysEx_BytecodeDispatcher_Helper8
@@ -7758,7 +7764,7 @@ SysEx_BytecodeDispatcher_Skip3:
 	jrl	z, SysEx_BytecodeDispatcher_Skip4
 	call	Timer_ModeHandler_0_Helper2
 SysEx_BytecodeDispatcher_Skip4:
-	call	SysEx_BytecodeDispatcher_Helper
+	call	SystemInit_Handler_Table_0x18
 	ld	(3434:16), 0
 	call	MemConfig_Handler_5_Helper
 	call	MemConfig_Handler_5_Code_Helper11
@@ -7766,7 +7772,7 @@ SysEx_BytecodeDispatcher_Join:
 	cp	w, 255
 	jrl	nz, SysEx_BytecodeDispatcher_Skip5
 	call	SysInit_SendAllNotesAndReset
-	jp	SysEx_BytecodeDispatcher_Return
+	jp	SysEx_BytecodeDispatcher_0x108
 SysEx_BytecodeDispatcher_Skip5:
 	call	AccPedal_CheckBitAndUpdate
 	ld	a, (3420:16)
@@ -7777,7 +7783,7 @@ SysEx_BytecodeDispatcher_Skip6:
 	ld	(13949:16), a
 	call	PortConfig_Handler_0_Helper3
 	call	Display_UpdateRegion3
-SysEx_BytecodeDispatcher_Return:
+SysEx_BytecodeDispatcher_0x108:
 	ret
 	; Handler dispatch table, 24 B.  Read by SysEx_BytecodeDispatcher (0xEFAAB1): `ld xix, MemoryConfig_Handler_Table`
 	; indexed with stride 4 (`sla hl, 2`)
@@ -7879,7 +7885,7 @@ MemoryConfig_Handler_Table_Target2_Sub:
 	call	ClockConfig_Handler_0_0xAB
 MemoryConfig_Handler_Table_Target2_Join:
 	cp	(0x0d65:16), 0
-	jrl	nz, MemoryConfig_Handler_Table_Target2_Skip3
+	jrl	nz, MemoryConfig_Handler_Table_Target2_Entry
 	ld	(0x0d6a:16), 0
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
@@ -7889,7 +7895,7 @@ MemoryConfig_Handler_Table_Target2_Skip2:
 	call	SubCPU_ToneParamRet_0x4BD
 	call	DMA_FlagCheckWithCalls
 	call	MemConfig_Handler_5_Code_Helper11
-MemoryConfig_Handler_Table_Target2_Skip3:
+MemoryConfig_Handler_Table_Target2_Entry:
 	ld	w, 0:opc
 	ret
 MemConfig_VoiceSlotLookup:
@@ -7932,6 +7938,7 @@ MemConfig_Handler_0:
 	call PortConfig_SetupBytecode_0x34
 	jp MemConfig_Handler_0_0x63
 .Lc_efad7e:
+MemConfig_Handler_0_Skip3:
 	call VoiceCtrl_BytecodeHandler
 	cp B,0x16
 	jrl z, .Lc_efadc5
@@ -7956,6 +7963,7 @@ MemConfig_Handler_0:
 	or (0x8cec:16), 0x01
 	jp MemConfig_Handler_0_0x63
 .Lc_efadc5:
+MemConfig_Handler_0_Skip2:
 	call VoiceSlot_LoadAndDispatch
 	jp MemConfig_Handler_0_0x24
 	ret
@@ -8242,18 +8250,18 @@ MemConfig_Handler_4_Helper:
 	call	MemConfig_Handler_4_Helper_Helper2
 	cp	w, 0:i3
 	jrl	z, MemConfig_Handler_4_Helper_Return	; -> 0xEFB154
-	jp	MemConfig_Handler_3_Join
+	jp	MemConfig_Handler_3_0x8E
 	; llvm-mc cannot spell this byte
 MemConfig_Handler_3_Skip:
 	cp	(0x0d5d:16), 4
-	jrl	ule, MemConfig_Handler_3_Join	; -> 0xEFB137
+	jrl	ule, MemConfig_Handler_3_0x8E	; -> 0xEFB137
 	ld	a, (3821:16)
 	ld	w, (3420:16)
 	cp	a, 4:i3
 	jrl	ule, MemConfig_Handler_4_Helper_Skip2	; -> 0xEFB14B
 	cp	w, 4:i3
 	jrl	c, MemConfig_Handler_3_Loop	; -> 0xEFB143
-MemConfig_Handler_3_Join:
+MemConfig_Handler_3_0x8E:
 	call	MemConfig_Handler_4_Helper_Helper
 	call	Display_UpdateRegion2
 	jp	MemConfig_Handler_4_Helper_Return
@@ -8263,7 +8271,7 @@ MemConfig_Handler_3_Loop:
 MemConfig_Handler_4_Helper_Skip2:
 	cp	w, 3:i3
 	jrl	ugt, MemConfig_Handler_3_Loop	; -> 0xEFB143
-	jp	MemConfig_Handler_3_Join
+	jp	MemConfig_Handler_3_0x8E
 MemConfig_Handler_4_Helper_Return:
 	ret
 MemConfig_Handler_4_Helper2:
@@ -8407,7 +8415,7 @@ SndDispatch_Handler_4:
 	call	SndDispatch_ProcessCommand_0xF9
 	call	SndDispatch_ProcessCommand_0xA5
 	cp	a, 0:i3
-	jrl	z, SndDispatch_Handler_4_Code_Return
+	jrl	z, SndDispatch_Handler_4_Return
 	dec	1, a
 	exts	wa
 	sla	wa, 2
@@ -8417,7 +8425,7 @@ SndDispatch_Handler_4:
 	ld_rrl	xhl, xix, hl
 	pop	xix
 	call	(xhl)
-SndDispatch_Handler_4_Code_Return:
+SndDispatch_Handler_4_Return:
 	ret
 	; Handler dispatch table, 24 B.  Read by SndDispatch_Handler_4 (0xEFB2A1): `ld xix, SndDispatch_Handler_4_DispatchTbl`
 	; indexed with stride 4 (`sla wa, 2`), index from `ld hl, wa`
@@ -8459,10 +8467,10 @@ MemConfig_Handler_3_Helper:
 	cp	(xiy), w
 	jrl	nz, SndDispatch_ProcessCommand_Skip
 	ld	a, 1:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip:
 	ld	a, 2:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip2:
 	push	xiy
 	pushw	wa
@@ -8478,18 +8486,18 @@ SndDispatch_ProcessCommand_Skip2:
 	cp	(3526:16), w
 	jrl	nz, SndDispatch_ProcessCommand_Skip3
 	ld	a, 3:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip3:
 	ld	a, 4:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip4:
 	cp	(3526:16), w
 	jrl	nz, SndDispatch_ProcessCommand_Skip5
 	ld	a, 5:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip5:
 	ld	a, 6:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip6:
 	cp	a, 176
 	jrl	nz, SndDispatch_ProcessCommand_Skip10
@@ -8498,21 +8506,21 @@ SndDispatch_ProcessCommand_Skip6:
 	cp	(3526:16), w
 	jrl	nz, SndDispatch_ProcessCommand_Skip7
 	ld	a, 7:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip7:
 	ld	a, 8:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip8:
 	cp	(3526:16), w
 	jrl	nz, SndDispatch_ProcessCommand_Skip9
 	ld	a, 9:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip9:
 	ld	a, 10:opc
-	jp	SndDispatch_ProcessCommand_Return
+	jp	SndDispatch_ProcessCommand_0xA4
 SndDispatch_ProcessCommand_Skip10:
 	xor	a, a
-SndDispatch_ProcessCommand_Return:
+SndDispatch_ProcessCommand_0xA4:
 	ret
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
@@ -8896,7 +8904,7 @@ SystemInit_Handler_Table:
 	.long	SystemInit_StepHandler_3
 	.long	SystemInit_StepHandler_4
 	.long	SystemInit_StepHandler_5
-SysEx_BytecodeDispatcher_Helper:
+SystemInit_Handler_Table_0x18:
 	push	xhl
 	ld	a, l
 	ld	xhl, SysInit_SendAllNotesAndReset_Tbl
@@ -9080,7 +9088,7 @@ SysEx_BytecodeDispatcher_Helper3_Skip2:
 	stb_d8	(0x0d57), a
 	cp	a, (0x0dfa:16)
 	jrl	z, SysEx_BytecodeDispatcher_Helper3_Return
-	call	MemConfig_Handler_5_Code_Helper6
+	call	MemConfig_Handler_5_0x1BF
 SysEx_BytecodeDispatcher_Helper3_Return:
 	ret
 	call	ToneParam_ModeGuardEntry_Helper4
@@ -10072,7 +10080,7 @@ VoiceSlot_FinalRetZ:
 	popw	wa
 	ld	w, d
 	ret
-Timer_ModeHandler_0_Helper3:
+VoiceSlot_FinalRetZ_0x11:
 	ld	a, e
 	push	xiy
 	push	xiz
@@ -10082,7 +10090,7 @@ Timer_ModeHandler_0_Helper3:
 	pop	xiz
 	pop	xiy
 	ret
-Timer_ModeHandler_0_Helper4:
+VoiceSlot_FinalRetZ_0x1E:
 	push	xhl
 	pushw	de
 	dec	1, e
@@ -10347,14 +10355,14 @@ VoiceSlot_IndexDone:
 	xor	wa, wa
 	ld	(3428:16), a
 	ld	(3426:16), wa
-VoiceSlot_ComputeIndex_Join:
+VoiceSlot_IndexDone_0xA:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	nz, VoiceSlot_ComputeIndex_Skip
 	ld	de, 1:i3
 	call	Timer_ModeHandler_0_Helper6
 	incw	1, (3426:16)
-	jp	VoiceSlot_ComputeIndex_Join
+	jp	VoiceSlot_IndexDone_0xA
 VoiceSlot_ComputeIndex_Skip:
 	ld	xiy, 3426
 	ld	xix, 13964
@@ -10369,39 +10377,39 @@ VoiceSlot_ComputeIndex_Skip:
 	ld	(xiy), 128
 VoiceSlot_IndexDone_Skip2:
 	cp	(3415:16), 48
-	jrl	nz, VoiceSlot_ComputeIndex_Loop
+	jrl	nz, VoiceSlot_IndexDone_0x72
 	cp	(xiy), 128
 	jrl	nz, VoiceSlot_IndexDone_Skip3
 	ld	(xiy), 0
-	jp	VoiceSlot_ComputeIndex_Loop
+	jp	VoiceSlot_IndexDone_0x72
 VoiceSlot_IndexDone_Skip3:
 	ld	(xiy), 128
 	ld	wa, (3426:16)
 	sub	wa, 1
-	jrl	nc, VoiceSlot_ComputeIndex_Skip4
+	jrl	nc, VoiceSlot_IndexDone_Skip4
 	xor	wa, wa
-VoiceSlot_ComputeIndex_Skip4:
+VoiceSlot_IndexDone_Skip4:
 	ld	(3426:16), wa
-VoiceSlot_ComputeIndex_Loop:
+VoiceSlot_IndexDone_0x72:
 	call	VoiceSlot_ComputeIndex_Helper
-	jp	VoiceSlot_ComputeIndex_Return
+	jp	VoiceSlot_IndexDone_0xA3
 VoiceSlot_IndexDone_Skip5:
 	cpw	(xiy), 1
-	jrl	z, VoiceSlot_ComputeIndex_Skip5
+	jrl	z, VoiceSlot_IndexDone_Skip6
 	cpw	(xiy), 0
-	jrl	z, VoiceSlot_ComputeIndex_Skip5
+	jrl	z, VoiceSlot_IndexDone_Skip6
 	decm	1, (xiy)
-	jp	VoiceSlot_ComputeIndex_Loop
-VoiceSlot_ComputeIndex_Skip5:
+	jp	VoiceSlot_IndexDone_0x72
+VoiceSlot_IndexDone_Skip6:
 	ld	(xix), 8
-	jp	VoiceSlot_ComputeIndex_Join2
+	jp	VoiceSlot_IndexDone_0x9F
 VoiceSlot_ComputeIndex_Entry2:
 	cpw	(xiy), 0
-	jrl	nz, VoiceSlot_ComputeIndex_Loop
+	jrl	nz, VoiceSlot_IndexDone_0x72
 	ld	(xix), 9
-VoiceSlot_ComputeIndex_Join2:
+VoiceSlot_IndexDone_0x9F:
 	call	SerialPort_ModeHandler_0_Helper
-VoiceSlot_ComputeIndex_Return:
+VoiceSlot_IndexDone_0xA3:
 	ret
 VoiceSlot_StatusCheck:
 	bit 7, a
@@ -10489,7 +10497,7 @@ VoiceSlot_StatusRet_Skip4:
 	jp	VoiceSlot_StatusRet_0xBE
 VoiceSlot_StatusRet_Skip5:
 	ldb_d8	w, (0xfb3c)
-	call	DisplayMode_Handler_3_Helper
+	call	ScoopDisp_BytecodeBlock1_0x32
 	stb_d8	(0x367c), a
 	call	VoiceSlot_FinalRetZ
 	stb_d8	(0x367b), a
@@ -12224,10 +12232,10 @@ SubCPU_ToneParamDisplay_Helper3:
 	cp	(4380:16), 2
 	jrl	nz, SubCPU_ToneParamDisplay_Skip4
 	ldw	de, 128
-	jp	SubCPU_ToneParamDisplay_Join
+	jp	SubCPU_ToneParamDisplay_0x137
 SubCPU_ToneParamDisplay_Skip3:
 	ldw	de, 64
-SubCPU_ToneParamDisplay_Join:
+SubCPU_ToneParamDisplay_0x137:
 	push	xix
 	call	ParamDigit_CalrData
 	pop	xix
@@ -13352,7 +13360,7 @@ OscScope_Handler_7_Helper:
 	sub	wa, hl
 OscScope_UpdateDisplay:
 	cp	wa, 48
-	jrl	z, OscScope_DrawWaveform_Code_Skip
+	jrl	z, OscScope_UpdateDisplay_Skip
 	ld	l, 96:opc
 	div	wa, l
 	cp	w, 48
@@ -13370,7 +13378,7 @@ OscScope_UpdateDisplay_Skip2:
 	ld	l, 96:opc
 	div	wa, l
 	cp	a, 0:i3
-	jrl	z, OscScope_DrawWaveform_Code_Skip
+	jrl	z, OscScope_UpdateDisplay_Skip
 	ld	c, a
 	ld	l, 96:opc
 	muls	wa, l
@@ -13378,14 +13386,14 @@ OscScope_UpdateDisplay_Skip2:
 	ld a, c
 	dec	1, a
 	cp	a, 0:i3
-	jrl	z, OscScope_DrawWaveform_Code_Skip
+	jrl	z, OscScope_UpdateDisplay_Skip
 	exts	wa
 	ld	bc, wa
 	pushw	bc
 	call	DisplayStr_BytecodeBlock_A_0x53
 	popw	bc
 	djnz16	bc, -9
-OscScope_DrawWaveform_Code_Skip:
+OscScope_UpdateDisplay_Skip:
 	call	DisplayStr_BytecodeBlock_A_0x120
 	ldw	(3778:16), 0
 	ld	(3952:16), 0
@@ -13435,9 +13443,9 @@ MemConfig_Handler_4_Helper_Helper2:
 	ld_rrw wa, xde, hl
 	pop	xde
 	cp	wa, 0xffff
-	jrl	z, OscScope_DrawWaveform_Code_Skip4
+	jrl	z, OscScope_RenderBlock_Skip2
 	cp	wa, 0:i3
-	jrl	z, OscScope_DrawWaveform_Code_Skip4
+	jrl	z, OscScope_RenderBlock_Skip2
 OscScope_DrawWaveform_Code_Loop:
 	push	xhl
 	push	xbc
@@ -13454,18 +13462,18 @@ OscScope_DrawWaveform_Code_Loop:
 	pop	xhl
 	inc	1, bc
 	cp	c, 2:i3
-	jrl	ugt, OscScope_DrawWaveform_Code_Skip3
+	jrl	ugt, OscScope_RenderBlock_Skip
 	cp	a, 129
 	jrl	z, OscScope_DrawWaveform_Code_Loop
 	cp	a, 130
-	jrl	z, OscScope_DrawWaveform_Code_Skip4
+	jrl	z, OscScope_RenderBlock_Skip2
 OscScope_RenderBlock:
 	cp	a, 132
-	jrl	z, OscScope_DrawWaveform_Code_Skip4
-OscScope_DrawWaveform_Code_Skip3:
+	jrl	z, OscScope_RenderBlock_Skip2
+OscScope_RenderBlock_Skip:
 	ld	w, 255:opc
 	jp	OscScope_RenderBlock_0xE
-OscScope_DrawWaveform_Code_Skip4:
+OscScope_RenderBlock_Skip2:
 	ld	w, 0:opc
 	pop	xhl
 	pushw	wa
@@ -13507,7 +13515,7 @@ OscScope_Handler_7_Skip2:
 	ld	c, 1:opc
 	ld	e, (3666:16)
 	sla	e, 1
-	call	OscScope_DrawWaveform_Code_Helper
+	call	OscScope_FinalizeRender_0x79
 	; v10 does not spell this byte either
 	cp	(0x117f:16), 0
 	jrl	nz, OscScope_FinalizeRender_Return
@@ -13516,7 +13524,7 @@ OscScope_Handler_7_Skip2:
 	ld	c, 1:opc
 	ld	e, (3667:16)
 	sla	e, 1
-	call	OscScope_DrawWaveform_Code_Helper
+	call	OscScope_FinalizeRender_0x79
 	; v10 does not spell this byte either
 	cp	(0x117f:16), 0
 	jrl	nz, OscScope_FinalizeRender_Return
@@ -13525,7 +13533,7 @@ OscScope_Handler_7_Skip2:
 	ld	c, 1:opc
 	ld	e, (3668:16)
 	sla	e, 1
-	call	OscScope_DrawWaveform_Code_Helper
+	call	OscScope_FinalizeRender_0x79
 	ld	xiy, 3697
 	; v10 does not spell this byte either
 	cp	(xiy), 0
@@ -13551,7 +13559,7 @@ OscScope_FinalizeRender_Skip2:
 	; v10 does not spell this byte either
 OscScope_FinalizeRender_Return:
 	ret
-OscScope_DrawWaveform_Code_Helper:
+OscScope_FinalizeRender_0x79:
 	ld	(4479:16), 0
 	cp	e, 0:i3
 	jrl	z, OscScope_DrawWaveform_Code_Helper_Return
@@ -13560,10 +13568,10 @@ OscScope_DrawWaveform_Code_Helper_Join:
 	jrl	z, OscScope_DrawWaveform_Code_Helper_Return
 	ld	a, (xiy+1)
 	cp	a, 6:i3
-	jrl	z, OscScope_DrawWaveform_Code_Skip7
+	jrl	z, OscScope_FinalizeRender_Skip3
 	cp	a, 7:i3
 	jrl	nz, OscScope_FinalizeRender_Entry
-OscScope_DrawWaveform_Code_Skip7:
+OscScope_FinalizeRender_Skip3:
 	ld	(4479:16), 255
 	jp	OscScope_DrawWaveform_Code_Helper_Return
 OscScope_FinalizeRender_Entry:
@@ -13573,12 +13581,12 @@ OscScope_FinalizeRender_Entry:
 	jrl	nz, OscScope_DrawWaveform_Code_Entry2
 	; v10 does not spell this byte either
 	cp	(xix+2), 0
-	jrl	z, OscScope_DrawWaveform_Code_Entry3
+	jrl	z, OscScope_FinalizeRender_Entry3
 OscScope_DrawWaveform_Code_Entry2:
 	; v10 does not spell this byte either
 	cp	(xiy+2), 0
 	jrl	nz, OscScope_DrawWaveform_Code_Helper_Skip
-OscScope_DrawWaveform_Code_Entry3:
+OscScope_FinalizeRender_Entry3:
 	; v10 does not spell this byte either
 	andmi8	(xiy), 127
 	jp	OscScope_DrawWaveform_Code_Helper_Join2
@@ -13874,9 +13882,9 @@ DisplayStr_BytecodeBlock_B:
 	call	Display_BytecodeBlock_F_0x17C
 	call	Display_UpdateRegion3
 	ret
-DisplayMode_Handler_3_Helper14_Helper:
+DisplayStr_BytecodeBlock_B_0x39:
 	call	Display_UpdateRegion0
-DisplayStr_BytecodeBlock_B_Code_Sub:
+DisplayStr_BytecodeBlock_B_0x3D:
 	call	Display_BytecodeBlock_F_Sub2
 	ld	xiy, Str_Control
 	ld	xix, 0x0ecf
@@ -13992,7 +14000,7 @@ DisplayStr_BytecodeBlock_C:
 	call	DisplayStr_RhythmLabel_0x92
 	call	Display_UpdateRegion3
 	ret
-VoiceCtrl_ParamSetupBytecode_Helper10:
+DisplayStr_BytecodeBlock_C_0x24:
 	call	Display_BytecodeBlock_F_0x32D
 	ld	xix, 3786
 	ld	xiy, Str_TempoEq
@@ -14772,6 +14780,7 @@ ParamPopup_PartVolume:
 	ld (0x0def:16), 0x0a
 	call Display_UpdateRegion0
 .Lc_eff8c1:
+ParamPopup_PartVolume_Skip:
 	call DisplayStr_ClearRegion
 	ld l, (0x10f1:16)
 	xor H,H
@@ -15379,6 +15388,7 @@ ParamPopup_AccompPart_Skip2:
 Tbl_AccompPartNames:
 	.byte	0x09, 0x09
 	.ascii	"ACCOMP PART1 ON ACCOMP PART2 ON "
+Softver_ShowHide_Data_4:
 	.byte	0x09, 0x09
 	.ascii	"ACCOMP PART3 ON "
 	; "OFF", 3 chars copied over the "ON " of the ACCOMP/APC MEMORY/DYNAMIC

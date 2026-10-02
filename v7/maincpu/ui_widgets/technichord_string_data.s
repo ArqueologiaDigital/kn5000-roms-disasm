@@ -4914,7 +4914,7 @@ Seq_LoadResource_Proceed_Str_PRESENTATION:	.incbin "includes/generated/naka_tech
 ; [nakarest] 0xea4fda).
 IvDrawbar_Init_SetupMode_Str_ENTATION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D0, 0x1	; "ENTATION>"
 DrawbarNorm_UpdateCase4_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D1, 0x1
-DrawbarNorm_Update_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D2, 0x6
+DrawbarNorm_Update_Str_TATION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0D2, 0x6
 ; [nakarest] naka_technichord_strings+0x1a0d8  +0x1a0d8..+0x1a0da (0xea0026, 2 B)
 ; [nakarest] Text (2 B at 0xea0026), first string ">"; no registered NAKA table points into it;
 ; [nakarest] reached through source references IvDrawbar_Init_ModernMode (ui/drawbar_panel_ui.s:
@@ -6611,6 +6611,7 @@ Data_WinProp_EA0F42:
 ; [nakarest] allsize, selfsize, name, propdata, propname): PsFileNameBox, PsWindowToggle,
 ; [nakarest] AcTtlJgBox, AcParaStrBox, AcFileSfxBox, AcMonoIndexToggle, IvOneShotTimer,
 ; [nakarest] VwScreenTitle, Arrow, IvIndexSwCtrl, ....
+Cheap_ClassTable_165:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AFF8, 0x150
 ; [nakarest] naka_technichord_strings+0x1b148  +0x1b148..+0x1b14a (0xea1096, 2 B)
 ; [nakarest] propdata strings (the +16 field signature) of class 12 of Class slot 0x165 (table

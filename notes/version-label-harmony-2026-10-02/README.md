@@ -22,3 +22,17 @@ therefore where the two versions disagree about the ENCLOSING routine -- its nam
 start -- e.g. v7's HexCharToNibble around v10's FontGlyph_ByteData: the next thing to look
 at, one parent at a time.  The reports list every row with its result.
 Renames: scripts/renaming/harmonize_v7_from_v10.sed, harmonize_v9_from_v10.sed.
+
+## Round 2 (same day): relocated addresses no longer break the byte check
+
+`same_code` now accepts a difference when the differing bytes form a 3-byte ROM address in
+both builds (a call or pointer the two place differently).  Matched labels rose from 29,787
+to 35,556 (v7).  Applied (reports `*_round2.json`; the sed scripts now hold round 2's rules,
+round 1's are in 6b19cd63): v7 131 renamed, 39 inserted; v9 4 renamed, 1 inserted.
+
+Not applied: v10 taking v7's names (`--to v10 --from v7`: 119 / 39) -- v10 stays the
+reference.  And a finding for a later pass: ~2,600 structural labels in v10 (3,250 in v7)
+are named after a routine other than the label above them, e.g. 89
+`SeqByteBlock_PathNormalize_Skip*` inside `FatPath_Next83Component_CheckDotEntry`.  Often the
+label above is the anomaly (a data-named label mid-routine: `Flash_ExtendedOpsBlock`,
+`AccScreen_DataBlock`), so neither name can be chosen mechanically.

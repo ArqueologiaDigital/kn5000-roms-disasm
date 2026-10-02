@@ -7012,7 +7012,7 @@ DbMemo_DrawContent_Loop:
 	extz	xwa
 	add	(xsp+6), xwa
 	jr	DbMemo_DrawContent_Loop
-FDemoText_ByteData_DisplayRefresh_Helper:
+DbMemo_DrawContent_Loop_0x61:
 	dec	4, xsp
 	push	xiz
 	ld	(xsp+4), xwa

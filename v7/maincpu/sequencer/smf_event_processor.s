@@ -7936,7 +7936,7 @@ SeqChan_ByteBlockB:
 SeqChan_ByteBlockC:
 	push	xiz
 	ld	xiz, (xsp+20)
-	call	SeqChan_ByteBlockC_Helper
+	call	FDC_ClearDiskChangeStatus_0x12
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockC_Skip
 	call	FDC_ClearDiskChangeStatus
@@ -8416,7 +8416,7 @@ FDC_ClearDiskChangeStatus:
 	ld	a, (0x3e3e4:24)
 	ld	(0x3e3e2:24), a
 	ret
-SeqChan_ByteBlockC_Helper:
+FDC_ClearDiskChangeStatus_0x12:
 	ld	hl, (0x3e3e6:24)
 	ret
 
