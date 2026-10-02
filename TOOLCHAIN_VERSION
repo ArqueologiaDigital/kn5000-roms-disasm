@@ -7,15 +7,26 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 4867e03232a6 (4867e03232a63bcf3f9eba89052d8b75a6c85d98)
-Date: 2026-09-25
-Subject: [TLCS900] Refuse the one direct memory-to-memory decode that cannot round-trip
+Commit: d7752a16b6ee (d7752a16b6ee4126c29324471a81b8f408af4ba9)
+Date: 2026-10-02
+Subject: [TLCS900] An EI level and an SWI number are 0..7
 
-Binary: llvm-mc sha256 c949d618903c20e52c376b26c833e0da55c1153671ba012a9dfdf1225efe249a
+Binary: llvm-mc sha256 c39a1525a0376b2f5b4bbb846c5a2f941ccea37e97558f01771e9f2c6856430f
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
         built FROM SCRATCH from the committed, clean tree (every TLCS900
         object, .inc and library deleted, CCACHE_DISABLE=1) -- twice, same
-        sha.  llvm-objdump e5a7fcc4b4eb, llc 65b0e1eff0dd from the same tree.
+        sha, as for llvm-objdump 076b7951b45b (preserved as
+        llvm-objdump.snap.d7752a16b6ee-076b7951), llc 912b83d72868,
+        clang-21 e4e8032941d5, lld ebfdfd231fc8 and llvm-objcopy
+        9ff40ea0a9e7 from the same tree; llvm-nm eb3e1a055dfd (relinked,
+        measured once).
+
+⚠ PIN PROMOTED ON 2026-10-02 (UPDATE 18, wave 3a T1 fix round):
+  4867e03232a6 / c949d618 -> d7752a16b6ee / c39a1525.  The tree was
+  respelled FIRST, with spellings the old pin already accepted, so every
+  disasm commit before this one builds with c949d618 and names it; this
+  binary then refuses the old spellings.  Prior snapshot kept at
+  llvm-mc.snap.4867e03232a6-c949d618.  The LLVM: trailer is now d7752a16b6ee.
 
 ⚠ PIN PROMOTED TWICE ON 2026-09-25 (UPDATE 17, toolchain lane wave 3a):
   da00420dba8d / a7ee33d5 -> 8e188b215251 / a67c5632 (with the MUL/DIV
@@ -79,6 +90,7 @@ Repository: /home/fsanches/compartilhado/llvm-project
 # real code from every automated audit for months.
 
 # Previous pins, superseded (kept: this file's history is additive):
+#   Commit: 4867e03232a6  [TLCS900] Refuse the one direct memory-to-memory decode that cannot round-trip  (binary c949d618; llvm-objdump e5a7fcc4b4eb, llc 65b0e1eff0dd)
 #   Commit: 8e188b215251  [TLCS900] MUL/MULS/DIV/DIVS name the register the CPU writes  (binary a67c5632)
 #   Commit: da00420dba8d  [TLCS900] Delete the nine encoding-selector legacy aliases  (binary a7ee33d5)
 #   Commit: 58fb7f2afaed  [TLCS900] Narrow the ALU-direct-address register fix; add GPR-typed _da24 siblings
@@ -1110,4 +1122,123 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #     six did not (`ld_srib3`, `lda_dri3`, `cps` x2, `ldb`, `lds32` -- refused
 #     mnemonics), and a gotcha still described `ldada_24`.  Fixed in 152e9f67,
 #     which adds scripts/analysis/check_encoding_examples.py: 25/25 examples.
+
+# UPDATE 18 (2026-10-02): THE T1 FIX ROUND -- what the wave 3a V1 verifier
+# panel (encoding truth, tree truth, certification; 1 blocker + 11 majors)
+# found still false after UPDATE 17, fixed.  Seven commits on tlcs900_backend
+# on top of 4867e03232a6, each with lit tests whose byte strings quote MAME's
+# unidasm, each NULL-RUN with make gate-all (13/13) on the respelled tree:
+#
+#   216e342a7582  A register-indirect BASE is a 32-bit register, and a
+#                 register name is never a symbol.  Any register was the base
+#                 and encoded by index -- `ld a, (a)` = 81 21 = ld A,(XBC),
+#                 `(qiz+0:8)` = (XIZ+0), c9359c381fa4's :8/:16 included (the
+#                 panel's BLOCKER) -- and a bank register outside (R+)/(-R),
+#                 or `(5+xsp)`, parsed as an undefined symbol: `ld a, (xbc3)`
+#                 assembled the DIRECT load c2 00 00 00 21.  Both refused.
+#   edabdd2b37dd  A displacement outside d16 is refused BEFORE the (R+) and
+#                 :8/:16 tag bits that ride in the same immediate are read:
+#                 `ld a, (xbc+0x40000000005)` assembled c5 05 21 = (XBC0+).
+#   808088a74bc9  Bit numbers (0..7 memory / byte register, 0..15 word
+#                 register) and INC/DEC counts (1..8) must fit their opcode
+#                 field and be CONSTANTS: `chg 8, (xbc)` was chg 0, `inc 9`
+#                 inc 1, and a forward `.equ` bit number assembled as 0.
+#                 `inc 0` is refused: the field's 0 MEANS 8 (MAME's core:
+#                 `m_imm1 ? m_imm1 : 8`; its disassembler prints the raw 0).
+#                 Register bit decodes above the width (c9 30 14 printed
+#                 `res 20, a`; the CPU clears bit 4) and E8+r bit ops (db)
+#                 are refused.
+#   6836c2807026  SP in a 16-bit register field.  GR16 omits SP, so `add sp,
+#                 (8990:16)` -- T1's own decode of d1 1e 23 87 -- and `ld sp,
+#                 (xbc)`, `ld sp, 5` ... were refused (21,388 round-trip
+#                 failures in V1's sweeps).  A second matching pass, only when
+#                 the first fails, accepts SP for GR16: no existing spelling
+#                 moves (`pushw sp` stays 2f).
+#   6190fbfdb816  36 more pseudo defs whose text lied DELETED (records diff:
+#                 36 gone, DJNZ32 changed, all else identical): wrong width
+#                 (mulw_erp, mul/muls/div/divs 8/16_ri/_rid8, lda_ri/_rid8,
+#                 mul_sd16b, muls_sd16w), a backwards ERP LD (ld2_erpw_rr),
+#                 another operation (incdd*/decdd* = ld/db, tsetda* = stcf,
+#                 call_dd8 = db, cpl/neg/sla/srl_a/sll_a_erpw, ldcf/xorcf_erpb).
+#                 DJNZ32 (codegen's) prints/parses the 16-bit name, `djnz bc,
+#                 L` (d9 1c); `djnz xbc` refused; E8+r 1C decode refused.
+#   12a7c929446f  The ERP INC/DEC decode prints count 8 for field 0 (it
+#                 printed `incb_erp 0, 0`, refused since 808088a74bc9).
+#   d7752a16b6ee  EI level and SWI number 0..7 (`ei 8` = 06 08 ran as ei 0
+#                 and decoded as `ei 0`; 06 08 is now refused).
+#
+# SOURCE RESPELLS, gated with the OLD pin (c949d618) because each new spelling
+# already assembled there; the old spelling is then refused by d7752a16b6ee:
+#   83a3b70d  scripts/converters/wave3a_respell.py, 2,025 lines in 77 files,
+#             each old line and new line assembled alone and required
+#             byte-identical (out/respell_fixround_4867e03232a6.txt):
+#             djnz16 304 (`djnz xbc, L` -> `djnz16 bc, L`), inc8 1,700
+#             (`inc 0, r` -> `inc 8, r`), muldiv2 21 (mulw_erp -> `mul xbc,
+#             qiz`, mul16_rid8 -> `mul xwa, (xsp+8)`, mul_sd16b -> `mul wa,
+#             (0x3986:16)`, ld2_erpw_rr -> `ld qhl, ix` ...); plus v7's two
+#             `.byte` twins of mul_sd16b -> `mul wa, (0x38ea:16)` /
+#             `mul bc, (0x343d:16)` by hand.
+#   157bd9d8  RingBuf_AdvanceIndex's header no longer says "XHL+256".
+#   874d637b  v7's three misframed `.byte 0xb0 / push_a / pop xiz / ei 14`
+#             stubs are `ld (xwa), (nn)` / `ret`, as in v10/v9 (the only
+#             ei/swi operands outside 0..7 in the tree).
+# And 152e9f67 (CLAUDE.md quirks examples + scripts/analysis/
+# check_encoding_examples.py: 25/25), 19a28f3d (UPDATE 17 ERRATA above),
+# d55ae6fe (the fix-round probes, notes/wave3a-toolchain-probes/fixround/).
+#
+# THE PIN, d7752a16b6ee / c39a1525:
+#   * built from scratch twice: identical llvm-mc, llvm-objdump, llc,
+#     clang-21, lld, llvm-objcopy (header).  llvm-nm is at the pin too (the
+#     V1 panel found it last linked 2026-09-02).
+#   * llvm-lit TLCS900: 102/102 = MC 40 + Disassembler 10 + CodeGen 51 + the
+#     ambiguity guard .td (was 95/95: 7 new test files).
+#   * make clean + wsa1 make clean + make gate-all, FROM NOTHING: 9/9 KN5000
+#     IDENTICAL, 4/4 SX-WSA1R ok, 8/8 assemble, prerequisite 8/8 + 4/4; the
+#     286 C-generated bins (clang-21 e4e8032941d5) byte-identical to the
+#     April clang's (out/gate_clean_final_d7752a16b6ee.txt).
+#   * FOILS: `djnz16 wa` put back to `djnz xwa` -> v10 does not assemble
+#     (gate exit 2); `inc 8, xsp` put back to `inc 0, xsp` -> hdae5000
+#     "0 is not an INC/DEC count" (out/gate_foil_d7752a16b6ee.txt).
+#
+# MEASURED AT THE PIN (llvm-objdump 076b7951; out/ has every file):
+#   fixround/v1a_sweep.py, the panel's whole-field decoder sweeps -- ASYM
+#     (printed text does not re-encode), T1 pin -> this pin:
+#       direct 360 -> 0, autoinc 2,880 -> 0, disp 16,928 -> 0, sri 1,136
+#       -> 0, muldiv 4 -> 0, erp 80 -> 0, ei 248 -> 0 (others unchanged;
+#       v1a_sweep_counts_d7752a16b6ee.txt).
+#   two_decoder_sweep.py (register field 1): AGREE 5,948, REG_DIFF 126,
+#     MNEM_DIFF 95, LEN_DIFF 0, LLVM_ONLY 21, MAME_ONLY 1,002, ASYM 31 (was
+#     5,956 / 126 / 95 / 0 / 36 / 994 / 40: the refused E8+r bit/djnz and
+#     masked bit/ei decodes moved out of LLVM_ONLY/AGREE).  --all-reg-fields
+#     (new; 44,032 probes): ASYM 248 -- E8+r scc/ld/push/pop/rotate and masked
+#     rotate counts, the classes listed below; none of them SP-specific.
+#   fixround/asm_sweep.py (every def and alias assembled, read by unidasm;
+#     40,801 -> 39,081 instances, the deleted defs no longer contribute):
+#     ENC_DB 1,147 -> 752, OPERAND 1,497 -> 607, REGSET 3,300 -> 2,574;
+#     size_lies.py: 0 defs; lying_pseudo_check.py: passes against
+#     out/size_lies_baseline.txt (empty) and out/pseudo_ops_baseline.txt (99
+#     known false positives, each tagged [name]/[range]/[raw]).
+#   fixround/sp_asm_check.py: 2,842 instances with SP in every GR16 operand
+#     assembled; against their WA twins 1,928 good with both, 912 bad with
+#     both (raw-operand pseudos), 0 bad with SP alone
+#     (assembler_checks_d7752a16b6ee.txt).
+#
+# ⚠ STILL OPEN (found or confirmed here, NOT fixed; for wave 3a T2 / 3b):
+#   * E8+r (32-bit register) decodes MAME calls db: scc (16 x 8 regs), and
+#     ld/push/pop/rlc/rrc/rl/rr whose text re-encodes as the short form.
+#   * Rotate counts: `c9 e8 34` prints `rlc a` -- the count byte is dropped.
+#   * Missing forms: TSET on byte/word registers and CHG on a byte register
+#     (MAME c8 34 01 = tset 0x01,W) decode to nothing; `bit 7, (xde+ix)` has
+#     no real spelling (bit_dri only).
+#   * llvm-mc ASSERTS on `ld_srib1 a, 5`, `ld_sril1`, `ld_sriw1`, `ld_sril
+#     xwa, (30:8)`, `ldw_sri0 de, (30:8)` (121 CRASH rows in asm_sweep);
+#     `scc z, xwa` assembles to zero bytes; `jp z, 0x100` makes the number a
+#     displacement; `extz w` / `exts w` encode db.  No tree site.
+#   * CODEGEN: llc -filetype=obj (and clang -c) wrote `da 1c 00` for djnz.ll's
+#     loop where the text path gives `da 1c fd` -- the integrated
+#     assembler's rel8 displacement (V1 panel, minor 9).  And TLCS900DJNZOpt
+#     turns a 32-bit count-down loop into a 16-bit DJNZ: a count >= 65536
+#     loops differently.  The tree's 286 C bins are byte-exact, so neither
+#     reaches the ROMs; both are wrong code.
+#   * The MUL/DIV IMMEDIATE forms still need the owner's ruling (UPDATE 17).
 

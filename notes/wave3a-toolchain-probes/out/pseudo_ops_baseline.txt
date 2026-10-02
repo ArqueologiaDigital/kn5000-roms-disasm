@@ -1,0 +1,122 @@
+# pseudo_ops_baseline.txt -- defs fixround/pseudo_ops.py flags that are NOT a
+# spelling that lies, at tlcs900_backend d7752a16b6ee (llvm-mc c39a1525a037).
+# fixround/lying_pseudo_check.py fails on any flagged def missing from here.
+# Every row was read (wave 3a T1 fix round, 2026-10-02); the tag says why it
+# is here:
+#   [name]  pseudo_ops.py's name -> operation map does not know this stem
+#           (cpda8 / cpdi16 = cp, stda16 / stdi8 / stb_d8 / ldw_da / ldda32 =
+#           ld, pushw_erp = push, ldcf16ri = ldcf ...): every instance's MAME
+#           operation IS the one the name means (ok=0 only because no instance
+#           matched the map).
+#   [range] a raw-operand pseudo (a bit number, condition or register-file /
+#           mode byte written as a number) that encodes its name for in-range
+#           operands (ok>0) and is flagged for the sweep's probe values that
+#           are OUT OF RANGE (a bit number 0x30 / 0xe4 the encoder masks) or
+#           that frame ANOTHER addressing mode (a raw SRI mode byte 0xfb
+#           followed by bytes meant for d16) -- the "masked immediates" and
+#           raw-pseudo classes TOOLCHAIN_VERSION lists as deferred (wave 3b
+#           converts these pseudos to real operands).
+#   [raw]   a raw byte emitter (mrd*/mri*, link32): the first operand IS the
+#           prefix byte, so the sweep's `0` emits a nop.
+#   (CP_SRIL_RM is [range] although no sweep instance was in range: by hand,
+#   `cpl_sri_rm xwa, 0xe5, 0x34, 0x12` -> e3 e5 34 12 f0 = MAME cp XWA,(XBC+0x1234).)
+# Line format: pseudo_ops.py's own output, tag prepended after the def name.
+ADC8_da24 [name]  bad=8   ok=0   tree=0     e.g. 'addcda8_24 w, 8990'               -> c2 1e 23 00 90   MAME adc W,(0x00231e)
+ADC8i_da24 [name]  bad=12  ok=0   tree=0     e.g. 'addci8_24 (30), 0'                -> c2 1e 00 00 39 00 MAME adc (0x00001e),0x00
+ADD_SRIB_MR [range] bad=2   ok=10  tree=10    e.g. 'add_srib_mr b, 0xfb, 0xfb, 7'     -> c3 fb fb 07 8a   MAME cp (),C
+ADD_SRIL_MR [range] bad=1   ok=11  tree=8     e.g. 'add_sril_mr xiy, 0xfb, 0xfb, 0xe4' -> e3 fb fb e4 8d   MAME cp (),XHL
+ADD_SRIW_RM [range] bad=1   ok=11  tree=34    e.g. 'add_sriw_rm hl, 0xfb, 0x1234, 1'  -> d3 fb 34 01 83   MAME ex (),IX
+ANDCFN_RI [range] bad=4   ok=8   tree=0     e.g. 'andcfn_ri xwa, 0xe4'              -> b0 64            MAME ld (XWA),XIX
+AND_SRIB_IM [range] bad=1   ok=11  tree=63    e.g. 'and_srib_im 0xfb, 0xe4, 0, 5'     -> c3 fb e4 00 3c 05 MAME or D,()
+AND_SRIB_MR [range] bad=2   ok=10  tree=10    e.g. 'and_srib_mr b, 0xfb, 0x1234, 5'   -> c3 fb 34 05 ca   MAME ex (),D
+AND_SRIW_MR [range] bad=1   ok=11  tree=2     e.g. 'and_sriw_mr iz, 0xfb, 0x1234, 0xe4' -> d3 fb 34 e4 ce   MAME ex (),IX
+BIT_DD8 [range] bad=3   ok=9   tree=527   e.g. 'bit_dd8 0xe4, 0x1234'             -> f0 34 ac         MAME tset 4,(0x34)
+BIT_DRI [range] bad=3   ok=9   tree=240   e.g. 'bit_dri 0xe4, 7, 0, 5'            -> f3 07 00 05 ac   MAME tset 4,(XWA0+r05W)
+CALL_CC_RI [range] bad=1   ok=11  tree=2     e.g. 'call_cc_ri xiz, 0xe4'             -> b6 c4            MAME chg 4,(XIZ)
+CHG_DD8 [range] bad=2   ok=10  tree=0     e.g. 'chg_dd8 0xe4, 0xfb'               -> f0 fb a4         MAME stcf 4,(0xfb)
+CP16_da24_r16 [name]  bad=8   ok=0   tree=0     e.g. 'cpda16_24 wa, (30)'               -> d2 1e 00 00 f0   MAME cp WA,(0x00001e)
+CP16i_da16 [name]  bad=12  ok=0   tree=58    e.g. 'cpdi16 (30), 0'                   -> d1 1e 00 3f 00 00 MAME cp (0x001e),0x0000
+CP16m_da24_r16 [name]  bad=12  ok=0   tree=0     e.g. 'cpdm16_24 (30), wa'               -> d2 1e 00 00 f8   MAME cp (0x00001e),WA
+CP32_da16 [name]  bad=8   ok=0   tree=0     e.g. 'cpda32 xwa, (30)'                 -> e1 1e 00 f0      MAME cp XWA,(0x001e)
+CP32_da24 [name]  bad=9   ok=0   tree=0     e.g. 'cpda32_24 xwa, (30)'              -> e2 1e 00 00 f0   MAME cp XWA,(0x00001e)
+CP32m_da16 [name]  bad=8   ok=0   tree=0     e.g. 'cpdm32 (30), xbc'                 -> e1 1e 00 f9      MAME cp (0x001e),XBC
+CP32m_da24 [name]  bad=7   ok=0   tree=0     e.g. 'cpdm32_24 (30), xiz'              -> e2 1e 00 00 fe   MAME cp (0x00001e),XIZ
+CP8_da16_r8 [name]  bad=4   ok=0   tree=0     e.g. 'cpda8 h, (0x123456)'              -> c1 56 34 f6      MAME cp H,(0x3456)
+CP8_da24 [name]  bad=8   ok=0   tree=0     e.g. 'cpda8_24 w, (8990)'               -> c2 1e 23 00 f0   MAME cp W,(0x00231e)
+CP8i_da16 [name]  bad=12  ok=0   tree=1101  e.g. 'cpdi8 (30), 0'                    -> c1 1e 00 3f 00   MAME cp (0x001e),0x00
+CP8m_da16_r8 [name]  bad=8   ok=0   tree=0     e.g. 'cpdm8 (30), e'                    -> c1 1e 00 fd      MAME cp (0x001e),E
+CP8m_da24 [name]  bad=8   ok=0   tree=0     e.g. 'cpdm8_24 (30), d'                 -> c2 1e 00 00 fc   MAME cp (0x00001e),D
+CPIB_DRI [range] bad=1   ok=11  tree=3     e.g. 'cpib_ind 0xfb, 7, 0, 0xfb'        -> c3 fb 07 00 3f fb MAME rrd A,()
+CP_SRIB_RM [range] bad=1   ok=11  tree=128   e.g. 'cpb_sri_rm w, 0xfb, 0xe4, 0xe4'   -> c3 fb e4 e4 f0   MAME or D,()
+CP_SRIL_MR [name]  bad=12  ok=0   tree=20    e.g. 'cpl_sri_mr xwa, 0x30, 1, 5'       -> e3 30 f8         MAME cp (XWA3),XWA
+CP_SRIL_RM [range] bad=12  ok=0   tree=118   e.g. 'cpl_sri_rm xwa, 0xfb, 0xe4, 0x1234' -> e3 fb e4 34 f0   MAME or XIX,()
+CP_SRIW_MR [range] bad=1   ok=11  tree=3     e.g. 'cpw_sri_mr wa, 0xfb, 0x30, 7'     -> d3 fb 30 07 f8   MAME ex (),WA
+DEC_SRIB [range] bad=5   ok=7   tree=6     e.g. 'dec_srib 0xe4, 0x1234, 1, 0x30'   -> c3 34 4c         MAME muls ??,(XBC3)
+DEC_SRIW [range] bad=5   ok=7   tree=23    e.g. 'dec_sriw 0x30, 0x1234, 0xfb, 5'   -> d3 34 98         MAME adc (XBC3),WA
+INC_SRIB [range] bad=5   ok=7   tree=26    e.g. 'inc_srib 0x30, 0, 0x1234, 1'      -> c3 00 90         MAME adc W,(XWA0)
+INC_SRIW [range] bad=7   ok=5   tree=29    e.g. 'inc_sriw 7, 0xfb, 0xfb, 0'        -> d3 fb fb 00 67   MAME cp (),HL
+JP_CC_RI [range] bad=6   ok=6   tree=0     e.g. 'jp_cc_ri xwa, 0xe4'               -> b0 b4            MAME res 4,(XWA)
+JP_DD8 [range] bad=6   ok=6   tree=0     e.g. 'jp_dd8 0x30, 5'                   -> f0 05 00         MAME ld (0x05),0x00
+JP_DRI [range] bad=7   ok=5   tree=949   e.g. 'jp_ind 0x30, 5, 5, 5'             -> f3 05 05 05 00   MAME ld (XBC0+0x0505),0x00
+LD16_da16_r16 [name]  bad=8   ok=0   tree=283   e.g. 'ldw_d16 wa, (30)'                 -> d1 1e 00 20      MAME ld WA,(0x001e)
+LD16_da24_r16 [name]  bad=8   ok=0   tree=68    e.g. 'ldw_da wa, (30)'                  -> d2 1e 00 00 20   MAME ld WA,(0x00001e)
+LD16m_da16_r16 [name]  bad=12  ok=0   tree=313   e.g. 'stda16 (30), wa'                  -> f1 1e 00 50      MAME ld (0x001e),WA
+LD16m_da24_r16 [name]  bad=12  ok=0   tree=6     e.g. 'stw_da (30), wa'                  -> f2 1e 00 00 50   MAME ld (0x00001e),WA
+LD16mi_da16 [name]  bad=12  ok=0   tree=86    e.g. 'stdi16 (30), 0'                   -> f1 1e 00 02 00 00 MAME ld (0x001e),0x0000
+LD32_da16 [name]  bad=9   ok=0   tree=650   e.g. 'ldda32 xwa, (8990)'               -> e1 1e 23 20      MAME ld XWA,(0x231e)
+LD32m_da16 [name]  bad=8   ok=0   tree=46    e.g. 'stda32 (30), xhl'                 -> f1 1e 00 63      MAME ld (0x001e),XHL
+LD32m_da24 [name]  bad=7   ok=0   tree=2     e.g. 'stl_da (30), xsp'                 -> f2 1e 00 00 67   MAME ld (0x00001e),XSP
+LD8m_da16_r8 [name]  bad=9   ok=0   tree=308   e.g. 'stb_d8 (30), w'                   -> f1 1e 00 40      MAME ld (0x001e),W
+LD8m_da24_r8 [name]  bad=7   ok=0   tree=24    e.g. 'stb_da (30), a'                   -> f2 1e 00 00 41   MAME ld (0x00001e),A
+LD8mi_da16 [name]  bad=12  ok=0   tree=285   e.g. 'stdi8 (30), 0'                    -> f1 1e 00 00 00   MAME ld (0x001e),0x00
+LDCF16ri [name]  bad=12  ok=0   tree=1     e.g. 'ldcf16ri 0, wa'                   -> d8 23 00         MAME ldcf 0x00,WA
+LDCF8ri [name]  bad=10  ok=0   tree=0     e.g. 'ldcf8ri 0, d'                     -> cc 23 00         MAME ldcf 0x00,D
+LDCF_DD16 [range] bad=5   ok=7   tree=9     e.g. 'ldcf_dd16 0x30, 5, 7'             -> f1 05 07 c8      MAME bit 0,(0x0705)
+LDCF_DD8 [range] bad=5   ok=7   tree=11    e.g. 'ldcf_dd8 0x30, 1'                 -> f0 01 c8         MAME bit 0,(0x01)
+LDCF_DRI [range] bad=7   ok=5   tree=9     e.g. 'ldcf_dri 0, 0xfb, 0x1234, 7'      -> f3 fb 34 07 98   MAME lda XIX,
+LDI85 [name]  bad=1   ok=0   tree=190   e.g. 'ldi85 '                           -> 85 10            MAME ldi
+LDIW_RI [name]  bad=8   ok=0   tree=0     e.g. 'ldiw_ri xwa'                      -> 90 10            MAME ldiw
+LDMMW_DRI [range] bad=1   ok=11  tree=18    e.g. 'ldmmw_dri 0xfb, 0xe4, 0xfb, 0xe4, 0xe4' -> f3 fb e4 fb 16 e4 e4 MAME call PE/OV,
+LDMM_SRIW [range] bad=1   ok=11  tree=21    e.g. 'ldmm_sriw 0xfb, 0x30, 7, 0xfb, 1' -> d3 fb 30 07 19 fb 01 MAME ex (),WA
+LD_DRI3B [range] bad=1   ok=11  tree=67    e.g. 'ldb_dri l, 0xfb, 0xe4, 7'         -> c3 fb e4 07 27   MAME or D,()
+LD_DRI3W [range] bad=11  ok=1   tree=19    e.g. 'ldw_dri wa, 1, 0xe4, 7'           -> d3 01 e4 07 20   MAME ld WA,(XWA0+0x07e4)
+LD_SRIB3 [range] bad=2   ok=10  tree=2470  e.g. 'ldb_sri b, 0xfb, 7, 0x30'         -> c3 fb 07 30 22   MAME rrd A,()
+LD_SRIW3 [name]  bad=12  ok=0   tree=939   e.g. 'ldw_sri wa, 0xe4, 0xe4, 0xfb'     -> d3 e4 20         MAME ld WA,(XBC)
+LD_SRIW_D16 [name]  bad=8   ok=0   tree=267   e.g. 'ldw_sri0 bc, (xwa-129)'           -> d3 e1 7f ff 21   MAME ld BC,(XWA+0xff7f)
+LINK32 [raw]   bad=12  ok=0   tree=809   e.g. 'link32 0, 0, 0x30, 7'             -> 00 00 30 07      MAME nop
+MRDB3 [raw]   bad=9   ok=3   tree=4     e.g. 'mrdb3 0, 0, 0xfb'                 -> 00 00 fb         MAME nop
+MRDB4 [raw]   bad=11  ok=1   tree=0     e.g. 'mrdb4 0, 7, 5, 7'                 -> 00 07 05 07      MAME nop
+MRDB5 [raw]   bad=11  ok=1   tree=159   e.g. 'mrdb5 0, 0x30, 0xfb, 1, 0xfb'     -> 00 30 fb 01 fb   MAME nop
+MRDD3 [raw]   bad=11  ok=1   tree=2     e.g. 'mrdd3 0, 0x1234, 0xfb'            -> 00 34 fb         MAME nop
+MRDD4 [raw]   bad=10  ok=2   tree=0     e.g. 'mrdd4 0, 0, 0x30, 1'              -> 00 00 30 01      MAME nop
+MRDD5 [raw]   bad=10  ok=2   tree=0     e.g. 'mrdd5 0, 1, 7, 1, 0xe4'           -> 00 01 07 01 e4   MAME nop
+MRDL3 [raw]   bad=10  ok=2   tree=5     e.g. 'mrdl3 0, 0x30, 0'                 -> 00 30 00         MAME nop
+MRDW3 [raw]   bad=12  ok=0   tree=70    e.g. 'mrdw3 0, 1, 0'                    -> 00 01 00         MAME nop
+MRDW5 [raw]   bad=9   ok=3   tree=123   e.g. 'mrdw5 0, 7, 1, 1, 0xe4'           -> 00 07 01 01 e4   MAME nop
+MRIB2 [raw]   bad=8   ok=4   tree=9     e.g. 'mrib2 0, 5'                       -> 00 05            MAME nop
+MRIB4 [raw]   bad=11  ok=1   tree=118   e.g. 'mrib4 0, 0x30, 1, 0xe4'           -> 00 30 01 e4      MAME nop
+OR8m_da16_r8 [name]  bad=7   ok=0   tree=1     e.g. 'orddm8 (30), b'                   -> c1 1e 00 ea      MAME or (0x001e),B
+ORCFN_RI [range] bad=3   ok=9   tree=0     e.g. 'orcfn_ri xix, 0x30'               -> b4 b8            MAME set 0,(XIX)
+OR_SRIB_MR [range] bad=1   ok=11  tree=25    e.g. 'or_srib_mr d, 0xfb, 7, 0x30'      -> c3 fb 07 30 ec   MAME rrd A,()
+OR_SRIB_RM [range] bad=2   ok=10  tree=24    e.g. 'or_srib_rm c, 0xfb, 7, 0'         -> c3 fb 07 00 e3   MAME rrd A,()
+OR_SRIW_MR [range] bad=1   ok=11  tree=2     e.g. 'or_sriw_mr bc, 0xfb, 0x1234, 1'   -> d3 fb 34 01 e9   MAME ex (),IX
+POP_WERP [name]  bad=8   ok=0   tree=509   e.g. 'popw_erp 0'                       -> d7 00 05         MAME pop RWA0
+PUSH_WERP [name]  bad=8   ok=0   tree=502   e.g. 'pushw_erp 0'                      -> d7 00 04         MAME push RWA0
+RES_DD8 [range] bad=7   ok=5   tree=386   e.g. 'res_dd8 0x30, 0x1234'             -> f0 34 e0         MAME call F,0x34
+RES_DRI [range] bad=6   ok=6   tree=14    e.g. 'res_dri 0x30, 7, 5, 7'            -> f3 07 05 07 e0   MAME call F,XBC0+r07W
+RET_CC_RI [range] bad=7   ok=5   tree=0     e.g. 'ret_cc_ri xwa, 0x1234'            -> b0 24            MAME lda IX,XWA
+SET_DD8 [range] bad=6   ok=6   tree=446   e.g. 'set_dd8 0x30, 1'                  -> f0 01 e8         MAME call T,0x01
+SET_DRI [range] bad=6   ok=6   tree=8     e.g. 'set_dri 0x30, 5, 0xfb, 0xe4'      -> f3 05 fb e4 e8   MAME call T,XBC0+0xe4fb
+SLA_A_WERP [name]  bad=8   ok=0   tree=3     e.g. 'slaw_erp 0'                       -> d7 00 fc         MAME sla A,RWA0
+STCF16ri [name]  bad=12  ok=0   tree=5     e.g. 'stcf16ri 0, wa'                   -> d8 24 00         MAME stcf 0x00,WA
+STCF8ri [name]  bad=11  ok=0   tree=1     e.g. 'stcf8ri 0, b'                     -> ca 24 00         MAME stcf 0x00,B
+STCF_DD8 [range] bad=6   ok=6   tree=2     e.g. 'stcf_dd8 0x30, 1'                 -> f0 01 d0         MAME jp F,0x01
+ST_DRI3B [name]  bad=12  ok=0   tree=1226  e.g. 'stb_dri w, 7, 5, 0xfb'            -> f3 07 05 fb 40   MAME ld (XBC0+rFBW),W
+ST_DRI3L [name]  bad=12  ok=0   tree=565   e.g. 'stl_dri xwa, 1, 7, 5'             -> f3 01 07 05 60   MAME ld (XWA0+0x0507),XWA
+ST_DRI3W [name]  bad=12  ok=0   tree=351   e.g. 'stw_dri wa, 1, 0xe4, 7'           -> f3 01 e4 07 50   MAME ld (XWA0+0x07e4),WA
+SUB_SRIB_IM [range] bad=1   ok=11  tree=4     e.g. 'sub_srib_im 0xfb, 0x1234, 0x30, 0' -> c3 fb 34 30 3a 00 MAME ex (),D
+TSET_DD16 [range] bad=6   ok=6   tree=33    e.g. 'tset_dd16 0x30, 1, 0xfb'          -> f1 01 fb d8      MAME jp T,0xfb01
+TSET_DD8 [range] bad=5   ok=7   tree=10    e.g. 'tset_dd8 0x30, 0x1234'            -> f0 34 d8         MAME jp T,0x34
+XORCFN_RI [range] bad=4   ok=8   tree=0     e.g. 'xorcfn_ri xbc, 0x30'              -> b1 c0            MAME chg 0,(XBC)
+XORCF_DRI [range] bad=4   ok=8   tree=0     e.g. 'xorcf_dri 0x30, 5, 0xfb, 0xfb'    -> f3 05 fb fb c0   MAME chg 0,(XBC0+0xfbfb)
+XOR_SRIB_RM [range] bad=1   ok=11  tree=17    e.g. 'xor_srib_rm d, 0xfb, 0xfb, 0xe4'  -> c3 fb fb e4 d4   MAME cp (),C

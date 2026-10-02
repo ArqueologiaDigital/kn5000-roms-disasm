@@ -1,0 +1,68 @@
+# fixround/v1a_sweep.py class counts per family: the T1 pin vs the fix-round pin.
+# T1 pin 4867e03232a6: llvm-mc c949d618, llvm-objdump e5a7fcc4 (run by the V1a verifier 2026-10-01, verify-V1a/out/*.counts).
+# Fix-round pin d7752a16b6ee: llvm-mc c39a1525a037, llvm-objdump 076b7951b45b (2026-10-02).
+# ASYM = llvm's printed text does not re-assemble to the bytes.  Every T1-pin ASYM outside ei involved SP (V1a sp_asym_oldpin.py).
+
+== direct   (T1 pin | fix-round pin)
+  total 18432                  | total 18432
+  ASYM 360                     | BOTH_REFUSE 5742
+  BOTH_REFUSE 5737             | MAME_ONLY 752
+  LLVM_ONLY 5                  | MNEM 228
+  MAME_ONLY 752                | OK 11634
+  MNEM 228                     | UNPARSED_MAME 76
+  OK 11634                     | 
+  UNPARSED_MAME 76             | 
+
+== autoinc   (T1 pin | fix-round pin)
+  total 524288                 | total 524288
+  ASYM 2880                    | BOTH_REFUSE 163328
+  BOTH_REFUSE 163328           | MAME_ONLY 263184
+  MAME_ONLY 263184             | NOPS 288
+  NOPS 288                     | OK 96336
+  OK 96336                     | UNPARSED_MAME 1152
+  UNPARSED_MAME 1152           | 
+
+== disp   (T1 pin | fix-round pin)
+  total 661888                 | total 661888
+  ASYM 16928                   | BOTH_REFUSE 304824
+  BOTH_REFUSE 304824           | MAME_ONLY 13247
+  MAME_ONLY 13247              | MNEM 91
+  MNEM 91                      | NOPS 4097
+  NOPS 4097                    | OK 339277
+  OK 339277                    | UNPARSED_MAME 352
+  UNPARSED_MAME 352            | 
+
+== sri   (T1 pin | fix-round pin)
+  total 1118192                | total 1118192
+  ASYM 1136                    | BOTH_REFUSE 503315
+  BOTH_REFUSE 503315           | MAME_ONLY 586853
+  MAME_ONLY 586853             | NOPS 224
+  NOPS 224                     | OK 27640
+  OK 27640                     | UNPARSED_MAME 160
+  UNPARSED_MAME 160            | 
+
+== muldiv   (T1 pin | fix-round pin)
+  total 35520                  | total 35520
+  ASYM 4                       | BOTH_REFUSE 17760
+  BOTH_REFUSE 17760            | MAME_ONLY 15048
+  MAME_ONLY 15048              | MNEM 248
+  MNEM 248                     | NOPS 8
+  NOPS 8                       | OK 2440
+  OK 2440                      | UNPARSED_MAME 16
+  UNPARSED_MAME 16             | 
+
+== erp   (T1 pin | fix-round pin)
+  total 196608                 | total 196608
+  ASYM 80                      | BOTH_REFUSE 47616
+  BOTH_REFUSE 47616            | MAME_ONLY 114400
+  MAME_ONLY 114400             | MNEM 31520
+  MNEM 31520                   | NOPS 8
+  NOPS 8                       | OK 1048
+  OK 1048                      | UNPARSED_MAME 2016
+  UNPARSED_MAME 2016           | 
+
+== ei   (T1 pin | fix-round pin)
+  total 256                    | total 256
+  ASYM 248                     | MAME_ONLY 248
+  OK 8                         | OK 8
+  OPERAND 248                  | 

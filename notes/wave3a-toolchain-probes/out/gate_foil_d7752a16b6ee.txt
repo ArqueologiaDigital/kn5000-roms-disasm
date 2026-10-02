@@ -1,0 +1,12 @@
+# FOILS for the fix-round pin d7752a16b6ee (llvm-mc c39a1525a037), 2026-10-02: a respelled line put back to its
+# old spelling must make the build fail.  Both restored afterwards; the gate on the restored tree is in the pin commit.
+
+## foil 1 (make gate-all): v10/maincpu/boot/system_handlers.s:327  djnz16 wa, ... -> djnz xwa, ...
+/home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I v10/maincpu -o rebuilt_ROMs/kn5000_v10_program.llvm.o v10/maincpu/kn5000_v10_program.s
+Included from v10/maincpu/kn5000_v10_program.s:1231:
+v10/maincpu/boot/system_handlers.s:327:7: error: invalid operand for instruction
+        djnz xwa, Boot_InitWorkRAM_ZeroBlock1_Loop
+make: *** [Makefile:711: rebuilt_ROMs/kn5000_v10_program.llvm.o] Error 1   (make gate-all exit 2)
+
+## foil 2 (llvm-mc on the hdae5000 image root): hdae5000/hd-ae5000_v2_06i.s:903  inc 8, xsp -> inc 0, xsp
+hdae5000/hd-ae5000_v2_06i.s:903:2: error: 0 is not an INC/DEC count: the count is 1..8 (8 is encoded as 0; write `8`, not the raw field 0)

@@ -33,6 +33,15 @@ T1's `not_done` list is the starting point for the next toolchain work:
   see Errata);
 - 254 wsa1 "[llvm-mc cannot encode this]" tags remain.
 
+## V1 and the T1 fix round (2026-10-01/02)
+
+V1 was re-run as a three-lens panel (workflow `wave3a-v1-resume`): encoding truth,
+tree truth, certification.  It returned 1 blocker and 11 majors (plus minors); the
+fix round addressed all twelve -- llvm-project tlcs900_backend 216e342a7582..
+d7752a16b6ee, disasm 83a3b70d..(the pin commit), pin d7752a16b6ee / llvm-mc
+c39a1525.  TOOLCHAIN_VERSION UPDATE 18 is the record; the probes are in
+`notes/wave3a-toolchain-probes/fixround/` and their figures in `../out/`.
+
 ## Errata (2026-10-02, from the V1 verifier panel)
 
 - disasm `09b760eb`'s trailer names 8e188b215251, but that commit's tree builds

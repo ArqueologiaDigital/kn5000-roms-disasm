@@ -1,0 +1,50 @@
+# wave3a_respell.py (as committed in 83a3b70d) in REPORT mode on the tree BEFORE the fix-round respell (cdce5139),
+# old = new = the T1 pin llvm-mc c949d618 (the new spellings already assembled there).  Regenerated 2026-10-02.
+
+== djnz16
+old llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 c949d618903c
+new llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 c949d618903c
+candidate sites: 304; refused before assembly: 0
+verified identical: 304   mismatched/unassemblable: 0
+  hdae5000/hdae5000_ui_display.s:7540
+     - djnz xwa, HDAE5000_Clear_Work_Buffer__clear_loop	; djnz WA, .clear_loop
+     + djnz16 wa, HDAE5000_Clear_Work_Buffer__clear_loop	; djnz WA, .clear_loop   [0xd8,0x1c,A]
+  hdae5000/hdae5000_ui_display.s:7558
+     - djnz xwa, HDAE5000_Clear_Work_Buffer__copy_loop	; djnz WA, .copy_loop
+     + djnz16 wa, HDAE5000_Clear_Work_Buffer__copy_loop	; djnz WA, .copy_loop   [0xd8,0x1c,A]
+  hdae5000/hdae5000_ui_display.s:25822
+     - djnz xde, HDAE5000_MemFill__align_loop	; djnz DE, .align_loop
+     + djnz16 de, HDAE5000_MemFill__align_loop	; djnz DE, .align_loop   [0xda,0x1c,A]
+files: 55
+
+== inc8
+old llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 c949d618903c
+new llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 c949d618903c
+candidate sites: 1700; refused before assembly: 0
+verified identical: 1700   mismatched/unassemblable: 0
+  hdae5000/hd-ae5000_v2_06i.s:879
+     - dec 0, xsp                              ; dec 0,XSP
+     + dec 8, xsp                              ; dec 0,XSP   [0xef,0x68]
+  hdae5000/hd-ae5000_v2_06i.s:903
+     - inc 0, xsp                              ; inc 0,XSP
+     + inc 8, xsp                              ; inc 0,XSP   [0xef,0x60]
+  hdae5000/hd-ae5000_v2_06i.s:908
+     - dec 0, xsp                              ; dec 0,XSP
+     + dec 8, xsp                              ; dec 0,XSP   [0xef,0x68]
+files: 21
+
+== muldiv2
+old llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 c949d618903c
+new llvm-mc /home/fsanches/compartilhado/toolchain-snapshot/llvm-mc.snap sha256 c949d618903c
+candidate sites: 21; refused before assembly: 0
+verified identical: 21   mismatched/unassemblable: 0
+  hdae5000/hd-ae5000_v2_06i.s:1351
+     - divs16_rid8 xwa, 0x2a, bc		; divs XBC,(XWA+0x2a)
+     + divs xbc, (xwa+42)		; divs XBC,(XWA+0x2a)   [0x98,0x2a,0x59]
+  hdae5000/hd-ae5000_v2_06i.s:1363
+     - mul16_rid8 xsp, 0x08, wa		; mul XWA,(XSP+0x08)
+     + mul xwa, (xsp+8)		; mul XWA,(XSP+0x08)   [0x9f,0x08,0x40]
+  hdae5000/hd-ae5000_v2_06i.s:1443
+     - divs16_rid8 xwa, 0x2a, bc		; divs XBC,(XWA+0x2a)
+     + divs xbc, (xwa+42)		; divs XBC,(XWA+0x2a)   [0x98,0x2a,0x59]
+files: 14

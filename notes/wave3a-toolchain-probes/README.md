@@ -43,3 +43,18 @@ for `.byte` post-increment instructions `scripts/converters/wave3a_byte_autoinc.
 | `gate_L6a_*_wip.txt`, `gate_L6b_*_wip.txt` | the converted tree gated under each phase-B backend change BEFORE it was committed (256 as a real displacement; the lying pseudos deleted). |
 | `gate_final_4867e03232a6.txt` | the final pin (llvm-mc c949d618, built from scratch twice) on the final tree: 13/13. |
 | `two_decoder_sweep_disagreements_4867e03232a6.tsv` | the sweep at the final pin: what is still false or unspellable (TOOLCHAIN_VERSION UPDATE 17 lists the classes). |
+
+### T1 fix round (2026-10-02, TOOLCHAIN_VERSION UPDATE 18; tools in `fixround/`)
+
+| file | what it is |
+|---|---|
+| `respell_fixround_4867e03232a6.txt` | `wave3a_respell.py` djnz16 / inc8 / muldiv2 in report mode on the tree BEFORE the respell (cdce5139), old = new = the T1 pin: 304 / 1,700 / 21 sites, all byte-identical. |
+| `erratum_09b760eb_trailer.txt` | the 09b760eb tree gated with the binary its trailer names (fails) and with the one its TOOLCHAIN_VERSION names (13/13). |
+| `erratum_sweep_baseline_da00420dba8d.txt` | the sweep's da00420dba8d baseline under the committed classifier (REG 1,263 / MNEM 304) and under 09b760eb's (1,247 / 320). |
+| `v1a_sweep_counts_d7752a16b6ee.txt` | `fixround/v1a_sweep.py` class counts per family, T1 pin beside fix-round pin: every ASYM to 0. |
+| `two_decoder_sweep_disagreements_d7752a16b6ee.tsv`, `two_decoder_sweep_allfields_disagreements_d7752a16b6ee.tsv` | the sweep at the fix-round pin, register field 1 and `--all-reg-fields`. |
+| `assembler_checks_d7752a16b6ee.txt` | asm_sweep counts (beside the T1 pin's), `lying_pseudo_check.py` (pass), the SP twin comparison (0 SP-only defects), the CLAUDE.md examples check (25/25). |
+| `size_lies_baseline.txt`, `pseudo_ops_baseline.txt` | the baselines `fixround/lying_pseudo_check.py` compares against: empty, and 99 known false positives each tagged with why. |
+| `gate_clean_final_d7752a16b6ee.txt` | the pin from nothing: 13/13, every image rebuilt by the binary, 286 C bins identical to the April clang's. |
+| `gate_foil_d7752a16b6ee.txt` | two respelled lines put back: the build fails on each. |
+

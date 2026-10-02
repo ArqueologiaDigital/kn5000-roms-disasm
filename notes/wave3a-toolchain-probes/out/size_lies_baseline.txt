@@ -1,0 +1,5 @@
+# size_lies_baseline.txt -- defs fixround/size_lies.py may flag (a register
+# name of the WRONG WIDTH for the bytes, per MAME) without failing
+# fixround/lying_pseudo_check.py.  EMPTY since tlcs900_backend 6190fbfdb816
+# deleted the last of them (mulw_erp, mul16_ri ... lda_ri, djnz xRR retyped);
+# size_lies.py printed nothing at d7752a16b6ee (llvm-mc c39a1525a037).

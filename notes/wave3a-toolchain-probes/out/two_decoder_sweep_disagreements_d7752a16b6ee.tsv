@@ -1,0 +1,259 @@
+# counts: AGREE=5948, BOTH_REFUSE=2792, LLVM_ONLY=21, MAME_ONLY=1002, MNEM_DIFF=95, REG_DIFF=126, ASYM=31; llvm-mc c39a1525a037, llvm-objdump 076b7951b45b (tlcs900_backend d7752a16b6ee); probe set: register field 1; rows below: every probe that is not AGREE / *_REFUSE / MAME_ONLY, or does not re-encode
+group	bytes	llvm_len	llvm_text	mame_len	mame_text	class	asym
+B0+r	b1 f0 34 12 78 56	2	ret_cc_ri xbc, 0	2	ret F	MNEM_DIFF	
+B0+r	b1 f1 34 12 78 56	2	ret_cc_ri xbc, 1	2	ret LT	MNEM_DIFF	
+B0+r	b1 f2 34 12 78 56	2	ret_cc_ri xbc, 2	2	ret LE	MNEM_DIFF	
+B0+r	b1 f3 34 12 78 56	2	ret_cc_ri xbc, 3	2	ret ULE	MNEM_DIFF	
+B0+r	b1 f4 34 12 78 56	2	ret_cc_ri xbc, 4	2	ret PE/OV	MNEM_DIFF	
+B0+r	b1 f5 34 12 78 56	2	ret_cc_ri xbc, 5	2	ret M/MI	MNEM_DIFF	
+B0+r	b1 f6 34 12 78 56	2	ret_cc_ri xbc, 6	2	ret Z	MNEM_DIFF	
+B0+r	b1 f7 34 12 78 56	2	ret_cc_ri xbc, 7	2	ret C	MNEM_DIFF	
+B0+r	b1 f8 34 12 78 56	2	ret_cc_ri xbc, 8	2	ret T	MNEM_DIFF	
+B0+r	b1 f9 34 12 78 56	2	ret_cc_ri xbc, 9	2	ret GE	MNEM_DIFF	
+B0+r	b1 fa 34 12 78 56	2	ret_cc_ri xbc, 10	2	ret GT	MNEM_DIFF	
+B0+r	b1 fb 34 12 78 56	2	ret_cc_ri xbc, 11	2	ret UGT	MNEM_DIFF	
+B0+r	b1 fc 34 12 78 56	2	ret_cc_ri xbc, 12	2	ret PO/NOV	MNEM_DIFF	
+B0+r	b1 fd 34 12 78 56	2	ret_cc_ri xbc, 13	2	ret P/PL	MNEM_DIFF	
+B0+r	b1 fe 34 12 78 56	2	ret_cc_ri xbc, 14	2	ret NZ	MNEM_DIFF	
+B0+r	b1 ff 34 12 78 56	2	ret_cc_ri xbc, 15	2	ret NC	MNEM_DIFF	
+F0:a8	f0 1e d0 34 12 78 56	3	jp_dd8 0, 30	3	jp F,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d1 34 12 78 56	3	jp_dd8 1, 30	3	jp LT,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d2 34 12 78 56	3	jp_dd8 2, 30	3	jp LE,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d3 34 12 78 56	3	jp_dd8 3, 30	3	jp ULE,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d4 34 12 78 56	3	jp_dd8 4, 30	3	jp PE/OV,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d5 34 12 78 56	3	jp_dd8 5, 30	3	jp M/MI,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d6 34 12 78 56	3	jp_dd8 6, 30	3	jp Z,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d7 34 12 78 56	3	jp_dd8 7, 30	3	jp C,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d8 34 12 78 56	3	jp_dd8 8, 30	3	jp T,0x1e	MNEM_DIFF	
+F0:a8	f0 1e d9 34 12 78 56	3	jp_dd8 9, 30	3	jp GE,0x1e	MNEM_DIFF	
+F0:a8	f0 1e da 34 12 78 56	3	jp_dd8 10, 30	3	jp GT,0x1e	MNEM_DIFF	
+F0:a8	f0 1e db 34 12 78 56	3	jp_dd8 11, 30	3	jp UGT,0x1e	MNEM_DIFF	
+F0:a8	f0 1e dc 34 12 78 56	3	jp_dd8 12, 30	3	jp PO/NOV,0x1e	MNEM_DIFF	
+F0:a8	f0 1e dd 34 12 78 56	3	jp_dd8 13, 30	3	jp P/PL,0x1e	MNEM_DIFF	
+F0:a8	f0 1e de 34 12 78 56	3	jp_dd8 14, 30	3	jp NZ,0x1e	MNEM_DIFF	
+F0:a8	f0 1e df 34 12 78 56	3	jp_dd8 15, 30	3	jp NC,0x1e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d0 34 12 78 56	5	jp_24 f, (8990)	5	jp F,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d1 34 12 78 56	5	jp_24 lt, (8990)	5	jp LT,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d2 34 12 78 56	5	jp_24 le, (8990)	5	jp LE,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d3 34 12 78 56	5	jp_24 ule, (8990)	5	jp ULE,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d4 34 12 78 56	5	jp_24 ov, (8990)	5	jp PE/OV,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d5 34 12 78 56	5	jp_24 mi, (8990)	5	jp M/MI,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d6 34 12 78 56	5	jp_24 z, (8990)	5	jp Z,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d7 34 12 78 56	5	jp_24 c, (8990)	5	jp C,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d8 34 12 78 56	5	jp_24 t, (8990)	5	jp T,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 d9 34 12 78 56	5	jp_24 ge, (8990)	5	jp GE,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 da 34 12 78 56	5	jp_24 gt, (8990)	5	jp GT,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 db 34 12 78 56	5	jp_24 ugt, (8990)	5	jp UGT,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 dc 34 12 78 56	5	jp_24 nov, (8990)	5	jp PO/NOV,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 dd 34 12 78 56	5	jp_24 pl, (8990)	5	jp P/PL,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 de 34 12 78 56	5	jp_24 nz, (8990)	5	jp NZ,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 df 34 12 78 56	5	jp_24 nc, (8990)	5	jp NC,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e0 34 12 78 56	5	call_24 f, (8990)	5	call F,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e1 34 12 78 56	5	call_24 lt, (8990)	5	call LT,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e2 34 12 78 56	5	call_24 le, (8990)	5	call LE,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e3 34 12 78 56	5	call_24 ule, (8990)	5	call ULE,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e4 34 12 78 56	5	call_24 ov, (8990)	5	call PE/OV,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e5 34 12 78 56	5	call_24 mi, (8990)	5	call M/MI,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e6 34 12 78 56	5	call_24 z, (8990)	5	call Z,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e7 34 12 78 56	5	call_24 c, (8990)	5	call C,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e8 34 12 78 56	5	call_24 t, (8990)	5	call T,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 e9 34 12 78 56	5	call_24 ge, (8990)	5	call GE,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 ea 34 12 78 56	5	call_24 gt, (8990)	5	call GT,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 eb 34 12 78 56	5	call_24 ugt, (8990)	5	call UGT,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 ec 34 12 78 56	5	call_24 nov, (8990)	5	call PO/NOV,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 ed 34 12 78 56	5	call_24 pl, (8990)	5	call P/PL,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 ee 34 12 78 56	5	call_24 nz, (8990)	5	call NZ,0x00231e	MNEM_DIFF	
+F2:a24	f2 1e 23 00 ef 34 12 78 56	5	call_24 nc, (8990)	5	call NC,0x00231e	MNEM_DIFF	
+C8+r	c9 12 34 12 78 56	2	extz a	2	db	LLVM_ONLY	
+C8+r	c9 13 34 12 78 56	2	exts a	2	db	LLVM_ONLY	
+C8+r	c9 1c 34 12 78 56	3	djnz8 a, 52	3	djnz A,0x0201f7	MNEM_DIFF	
+C8+r	c9 b8 34 12 78 56	2	ex8 w, a	2	ex W,A	MNEM_DIFF	
+C8+r	c9 b9 34 12 78 56	2	ex8 a, a	2	ex A,A	MNEM_DIFF	
+C8+r	c9 ba 34 12 78 56	2	ex8 b, a	2	ex B,A	MNEM_DIFF	
+C8+r	c9 bb 34 12 78 56	2	ex8 c, a	2	ex C,A	MNEM_DIFF	
+C8+r	c9 bc 34 12 78 56	2	ex8 d, a	2	ex D,A	MNEM_DIFF	
+C8+r	c9 bd 34 12 78 56	2	ex8 e, a	2	ex E,A	MNEM_DIFF	
+C8+r	c9 be 34 12 78 56	2	ex8 h, a	2	ex H,A	MNEM_DIFF	
+C8+r	c9 bf 34 12 78 56	2	ex8 l, a	2	ex L,A	MNEM_DIFF	
+C8+r	c9 e8 34 12 78 56	3	rlc a	3	rlc 0x34,A	AGREE	ASYM
+C8+r	c9 e9 34 12 78 56	3	rrc a	3	rrc 0x34,A	AGREE	ASYM
+C8+r	c9 ea 34 12 78 56	3	rl a	3	rl 0x34,A	AGREE	ASYM
+C8+r	c9 eb 34 12 78 56	3	rr a	3	rr 0x34,A	AGREE	ASYM
+D8+r	d9 1c 34 12 78 56	3	djnz16 bc, 52	3	djnz BC,0x0211f7	MNEM_DIFF	
+D8+r	d9 b8 34 12 78 56	2	ex16 wa, bc	2	ex WA,BC	MNEM_DIFF	
+D8+r	d9 b9 34 12 78 56	2	ex16 bc, bc	2	ex BC,BC	MNEM_DIFF	
+D8+r	d9 ba 34 12 78 56	2	ex16 de, bc	2	ex DE,BC	MNEM_DIFF	
+D8+r	d9 bb 34 12 78 56	2	ex16 hl, bc	2	ex HL,BC	MNEM_DIFF	
+D8+r	d9 bc 34 12 78 56	2	ex16 ix, bc	2	ex IX,BC	MNEM_DIFF	
+D8+r	d9 bd 34 12 78 56	2	ex16 iy, bc	2	ex IY,BC	MNEM_DIFF	
+D8+r	d9 be 34 12 78 56	2	ex16 iz, bc	2	ex IZ,BC	MNEM_DIFF	
+D8+r	d9 bf 34 12 78 56	2	ex16 sp, bc	2	ex SP,BC	MNEM_DIFF	
+D8+r	d9 e8 34 12 78 56	3	rlc bc	3	rlc 0x34,BC	AGREE	ASYM
+D8+r	d9 e9 34 12 78 56	3	rrc bc	3	rrc 0x34,BC	AGREE	ASYM
+D8+r	d9 ea 34 12 78 56	3	rl bc	3	rl 0x34,BC	AGREE	ASYM
+D8+r	d9 eb 34 12 78 56	3	rr bc	3	rr 0x34,BC	AGREE	ASYM
+E8+r	e9 03 34 12 78 56	6	ld xbc, 1450709556	6	ld XBC,0x56781234	AGREE	ASYM
+E8+r	e9 04 34 12 78 56	2	push xbc	2	push XBC	AGREE	ASYM
+E8+r	e9 05 34 12 78 56	2	pop xbc	2	pop XBC	AGREE	ASYM
+E8+r	e9 06 34 12 78 56	2	cpl xbc	2	db	LLVM_ONLY	
+E8+r	e9 07 34 12 78 56	2	neg xbc	2	db	LLVM_ONLY	
+E8+r	e9 0d 34 12 78 56	2	unlk32 xbc	2	unlk XBC	MNEM_DIFF	
+E8+r	e9 10 34 12 78 56	2	daa xbc	2	db	LLVM_ONLY	
+E8+r	e9 70 34 12 78 56	2	scc f, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 71 34 12 78 56	2	scc lt, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 72 34 12 78 56	2	scc le, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 73 34 12 78 56	2	scc ule, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 74 34 12 78 56	2	scc ov, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 75 34 12 78 56	2	scc mi, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 76 34 12 78 56	2	scc z, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 77 34 12 78 56	2	scc c, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 78 34 12 78 56	2	scc t, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 79 34 12 78 56	2	scc ge, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 7a 34 12 78 56	2	scc gt, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 7b 34 12 78 56	2	scc ugt, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 7c 34 12 78 56	2	scc nov, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 7d 34 12 78 56	2	scc pl, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 7e 34 12 78 56	2	scc nz, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 7f 34 12 78 56	2	scc nc, xbc	2	db	LLVM_ONLY	ASYM
+E8+r	e9 e8 34 12 78 56	3	rlc xbc	3	rlc 0x34,XBC	AGREE	ASYM
+E8+r	e9 e9 34 12 78 56	3	rrc xbc	3	rrc 0x34,XBC	AGREE	ASYM
+E8+r	e9 ea 34 12 78 56	3	rl xbc	3	rl 0x34,XBC	AGREE	ASYM
+E8+r	e9 eb 34 12 78 56	3	rr xbc	3	rr 0x34,XBC	AGREE	ASYM
+C7:erp	c7 e4 03 34 12 78 56	4	ldi_erpb 228, 52	4	ld C,0x34	REG_DIFF	
+C7:erp	c7 e4 09 34 12 78 56	4	muls_erpb 228, 52	4	muls C,0x34	MNEM_DIFF	
+C7:erp	c7 e4 2a 34 12 78 56	3	xorcfb_erp 228	3	xorcf A,C	MNEM_DIFF	
+C7:erp	c7 e4 30 34 12 78 56	4	res_erpb 228, 52	4	res 0x34,C	REG_DIFF	
+C7:erp	c7 e4 31 34 12 78 56	4	set_erpb 228, 52	4	set 0x34,C	REG_DIFF	
+C7:erp	c7 e4 33 34 12 78 56	4	bit_erpb 228, 52	4	bit 0x34,C	REG_DIFF	
+C7:erp	c7 e4 60 34 12 78 56	3	incb_erp 228, 8	3	inc 0,C	REG_DIFF	
+C7:erp	c7 e4 61 34 12 78 56	3	inc1b_erp 228	3	inc 1,C	REG_DIFF	
+C7:erp	c7 e4 62 34 12 78 56	3	incb_erp 228, 2	3	inc 2,C	REG_DIFF	
+C7:erp	c7 e4 63 34 12 78 56	3	incb_erp 228, 3	3	inc 3,C	REG_DIFF	
+C7:erp	c7 e4 64 34 12 78 56	3	incb_erp 228, 4	3	inc 4,C	REG_DIFF	
+C7:erp	c7 e4 65 34 12 78 56	3	incb_erp 228, 5	3	inc 5,C	REG_DIFF	
+C7:erp	c7 e4 66 34 12 78 56	3	incb_erp 228, 6	3	inc 6,C	REG_DIFF	
+C7:erp	c7 e4 67 34 12 78 56	3	incb_erp 228, 7	3	inc 7,C	REG_DIFF	
+C7:erp	c7 e4 68 34 12 78 56	3	decb_erp 228, 8	3	dec 0,C	REG_DIFF	
+C7:erp	c7 e4 69 34 12 78 56	3	dec1b_erp 228	3	dec 1,C	REG_DIFF	
+C7:erp	c7 e4 6a 34 12 78 56	3	decb_erp 228, 2	3	dec 2,C	REG_DIFF	
+C7:erp	c7 e4 6b 34 12 78 56	3	decb_erp 228, 3	3	dec 3,C	REG_DIFF	
+C7:erp	c7 e4 6c 34 12 78 56	3	decb_erp 228, 4	3	dec 4,C	REG_DIFF	
+C7:erp	c7 e4 6d 34 12 78 56	3	decb_erp 228, 5	3	dec 5,C	REG_DIFF	
+C7:erp	c7 e4 6e 34 12 78 56	3	decb_erp 228, 6	3	dec 6,C	REG_DIFF	
+C7:erp	c7 e4 6f 34 12 78 56	3	decb_erp 228, 7	3	dec 7,C	REG_DIFF	
+C7:erp	c7 e4 80 34 12 78 56	3	addb_erp w, 228	3	add W,C	REG_DIFF	
+C7:erp	c7 e4 81 34 12 78 56	3	addb_erp a, 228	3	add A,C	REG_DIFF	
+C7:erp	c7 e4 82 34 12 78 56	3	addb_erp b, 228	3	add B,C	REG_DIFF	
+C7:erp	c7 e4 83 34 12 78 56	3	addb_erp c, 228	3	add C,C	REG_DIFF	
+C7:erp	c7 e4 84 34 12 78 56	3	addb_erp d, 228	3	add D,C	REG_DIFF	
+C7:erp	c7 e4 85 34 12 78 56	3	addb_erp e, 228	3	add E,C	REG_DIFF	
+C7:erp	c7 e4 86 34 12 78 56	3	addb_erp h, 228	3	add H,C	REG_DIFF	
+C7:erp	c7 e4 87 34 12 78 56	3	addb_erp l, 228	3	add L,C	REG_DIFF	
+C7:erp	c7 e4 88 34 12 78 56	3	ldto_berp w, 228	3	ld W,C	REG_DIFF	
+C7:erp	c7 e4 89 34 12 78 56	3	ldto_berp a, 228	3	ld A,C	REG_DIFF	
+C7:erp	c7 e4 8a 34 12 78 56	3	ldto_berp b, 228	3	ld B,C	REG_DIFF	
+C7:erp	c7 e4 8b 34 12 78 56	3	ldto_berp c, 228	3	ld C,C	REG_DIFF	
+C7:erp	c7 e4 8c 34 12 78 56	3	ldto_berp d, 228	3	ld D,C	REG_DIFF	
+C7:erp	c7 e4 8d 34 12 78 56	3	ldto_berp e, 228	3	ld E,C	REG_DIFF	
+C7:erp	c7 e4 8e 34 12 78 56	3	ldto_berp h, 228	3	ld H,C	REG_DIFF	
+C7:erp	c7 e4 8f 34 12 78 56	3	ldto_berp l, 228	3	ld L,C	REG_DIFF	
+C7:erp	c7 e4 98 34 12 78 56	3	ldfr_berp w, 228	3	ld C,W	REG_DIFF	
+C7:erp	c7 e4 99 34 12 78 56	3	ldfr_berp a, 228	3	ld C,A	REG_DIFF	
+C7:erp	c7 e4 9a 34 12 78 56	3	ldfr_berp b, 228	3	ld C,B	REG_DIFF	
+C7:erp	c7 e4 9b 34 12 78 56	3	ldfr_berp c, 228	3	ld C,C	REG_DIFF	
+C7:erp	c7 e4 9c 34 12 78 56	3	ldfr_berp d, 228	3	ld C,D	REG_DIFF	
+C7:erp	c7 e4 9d 34 12 78 56	3	ldfr_berp e, 228	3	ld C,E	REG_DIFF	
+C7:erp	c7 e4 9e 34 12 78 56	3	ldfr_berp h, 228	3	ld C,H	REG_DIFF	
+C7:erp	c7 e4 9f 34 12 78 56	3	ldfr_berp l, 228	3	ld C,L	REG_DIFF	
+C7:erp	c7 e4 a0 34 12 78 56	3	subb_erp w, 228	3	sub W,C	REG_DIFF	
+C7:erp	c7 e4 a1 34 12 78 56	3	subb_erp a, 228	3	sub A,C	REG_DIFF	
+C7:erp	c7 e4 a2 34 12 78 56	3	subb_erp b, 228	3	sub B,C	REG_DIFF	
+C7:erp	c7 e4 a3 34 12 78 56	3	subb_erp c, 228	3	sub C,C	REG_DIFF	
+C7:erp	c7 e4 a4 34 12 78 56	3	subb_erp d, 228	3	sub D,C	REG_DIFF	
+C7:erp	c7 e4 a5 34 12 78 56	3	subb_erp e, 228	3	sub E,C	REG_DIFF	
+C7:erp	c7 e4 a6 34 12 78 56	3	subb_erp h, 228	3	sub H,C	REG_DIFF	
+C7:erp	c7 e4 a7 34 12 78 56	3	subb_erp l, 228	3	sub L,C	REG_DIFF	
+C7:erp	c7 e4 a8 34 12 78 56	3	ldib_erp 228, 0	3	ld C,0	REG_DIFF	
+C7:erp	c7 e4 a9 34 12 78 56	3	ldib_erp 228, 1	3	ld C,1	REG_DIFF	
+C7:erp	c7 e4 aa 34 12 78 56	3	ldib_erp 228, 2	3	ld C,2	REG_DIFF	
+C7:erp	c7 e4 ab 34 12 78 56	3	ldib_erp 228, 3	3	ld C,3	REG_DIFF	
+C7:erp	c7 e4 ac 34 12 78 56	3	ldib_erp 228, 4	3	ld C,4	REG_DIFF	
+C7:erp	c7 e4 ad 34 12 78 56	3	ldib_erp 228, 5	3	ld C,5	REG_DIFF	
+C7:erp	c7 e4 ae 34 12 78 56	3	ldib_erp 228, 6	3	ld C,6	REG_DIFF	
+C7:erp	c7 e4 af 34 12 78 56	3	ldib_erp 228, 7	3	ld C,7	REG_DIFF	
+C7:erp	c7 e4 c0 34 12 78 56	3	andb_erp w, 228	3	and W,C	REG_DIFF	
+C7:erp	c7 e4 c1 34 12 78 56	3	andb_erp a, 228	3	and A,C	REG_DIFF	
+C7:erp	c7 e4 c2 34 12 78 56	3	andb_erp b, 228	3	and B,C	REG_DIFF	
+C7:erp	c7 e4 c3 34 12 78 56	3	andb_erp c, 228	3	and C,C	REG_DIFF	
+C7:erp	c7 e4 c4 34 12 78 56	3	andb_erp d, 228	3	and D,C	REG_DIFF	
+C7:erp	c7 e4 c5 34 12 78 56	3	andb_erp e, 228	3	and E,C	REG_DIFF	
+C7:erp	c7 e4 c6 34 12 78 56	3	andb_erp h, 228	3	and H,C	REG_DIFF	
+C7:erp	c7 e4 c7 34 12 78 56	3	andb_erp l, 228	3	and L,C	REG_DIFF	
+C7:erp	c7 e4 c8 34 12 78 56	4	add_erpb 228, 52	4	add C,0x34	REG_DIFF	
+C7:erp	c7 e4 ca 34 12 78 56	4	sub_erpb 228, 52	4	sub C,0x34	REG_DIFF	
+C7:erp	c7 e4 cc 34 12 78 56	4	and_erpb 228, 52	4	and C,0x34	REG_DIFF	
+C7:erp	c7 e4 cd 34 12 78 56	4	xor_erpb 228, 52	4	xor C,0x34	REG_DIFF	
+C7:erp	c7 e4 ce 34 12 78 56	4	or_erpb 228, 52	4	or C,0x34	REG_DIFF	
+C7:erp	c7 e4 cf 34 12 78 56	4	cp_erpb 228, 52	4	cp C,0x34	REG_DIFF	
+C7:erp	c7 e4 d0 34 12 78 56	3	xorb_erp w, 228	3	xor W,C	REG_DIFF	
+C7:erp	c7 e4 d1 34 12 78 56	3	xorb_erp a, 228	3	xor A,C	REG_DIFF	
+C7:erp	c7 e4 d2 34 12 78 56	3	xorb_erp b, 228	3	xor B,C	REG_DIFF	
+C7:erp	c7 e4 d3 34 12 78 56	3	xorb_erp c, 228	3	xor C,C	REG_DIFF	
+C7:erp	c7 e4 d4 34 12 78 56	3	xorb_erp d, 228	3	xor D,C	REG_DIFF	
+C7:erp	c7 e4 d5 34 12 78 56	3	xorb_erp e, 228	3	xor E,C	REG_DIFF	
+C7:erp	c7 e4 d6 34 12 78 56	3	xorb_erp h, 228	3	xor H,C	REG_DIFF	
+C7:erp	c7 e4 d7 34 12 78 56	3	xorb_erp l, 228	3	xor L,C	REG_DIFF	
+C7:erp	c7 e4 d8 34 12 78 56	3	cpib_erp 228, 0	3	cp C,0	REG_DIFF	
+C7:erp	c7 e4 d9 34 12 78 56	3	cpib_erp 228, 1	3	cp C,1	REG_DIFF	
+C7:erp	c7 e4 da 34 12 78 56	3	cpib_erp 228, 2	3	cp C,2	REG_DIFF	
+C7:erp	c7 e4 db 34 12 78 56	3	cpib_erp 228, 3	3	cp C,3	REG_DIFF	
+C7:erp	c7 e4 dc 34 12 78 56	3	cpib_erp 228, 4	3	cp C,4	REG_DIFF	
+C7:erp	c7 e4 dd 34 12 78 56	3	cpib_erp 228, 5	3	cp C,5	REG_DIFF	
+C7:erp	c7 e4 de 34 12 78 56	3	cpib_erp 228, 6	3	cp C,6	REG_DIFF	
+C7:erp	c7 e4 df 34 12 78 56	3	cpib_erp 228, 7	3	cp C,7	REG_DIFF	
+C7:erp	c7 e4 e0 34 12 78 56	3	orb_erp w, 228	3	or W,C	REG_DIFF	
+C7:erp	c7 e4 e1 34 12 78 56	3	orb_erp a, 228	3	or A,C	REG_DIFF	
+C7:erp	c7 e4 e2 34 12 78 56	3	orb_erp b, 228	3	or B,C	REG_DIFF	
+C7:erp	c7 e4 e3 34 12 78 56	3	orb_erp c, 228	3	or C,C	REG_DIFF	
+C7:erp	c7 e4 e4 34 12 78 56	3	orb_erp d, 228	3	or D,C	REG_DIFF	
+C7:erp	c7 e4 e5 34 12 78 56	3	orb_erp e, 228	3	or E,C	REG_DIFF	
+C7:erp	c7 e4 e6 34 12 78 56	3	orb_erp h, 228	3	or H,C	REG_DIFF	
+C7:erp	c7 e4 e7 34 12 78 56	3	orb_erp l, 228	3	or L,C	REG_DIFF	
+C7:erp	c7 e4 ee 34 12 78 56	4	sll_erpb 228, 52	4	sll 0x34,C	MNEM_DIFF	
+C7:erp	c7 e4 ef 34 12 78 56	4	srl_erpb 228, 52	4	srl 0x34,C	MNEM_DIFF	
+C7:erp	c7 e4 f0 34 12 78 56	3	cpb_erp w, 228	3	cp W,C	REG_DIFF	
+C7:erp	c7 e4 f1 34 12 78 56	3	cpb_erp a, 228	3	cp A,C	REG_DIFF	
+C7:erp	c7 e4 f2 34 12 78 56	3	cpb_erp b, 228	3	cp B,C	REG_DIFF	
+C7:erp	c7 e4 f3 34 12 78 56	3	cpb_erp c, 228	3	cp C,C	REG_DIFF	
+C7:erp	c7 e4 f4 34 12 78 56	3	cpb_erp d, 228	3	cp D,C	REG_DIFF	
+C7:erp	c7 e4 f5 34 12 78 56	3	cpb_erp e, 228	3	cp E,C	REG_DIFF	
+C7:erp	c7 e4 f6 34 12 78 56	3	cpb_erp h, 228	3	cp H,C	REG_DIFF	
+C7:erp	c7 e4 f7 34 12 78 56	3	cpb_erp l, 228	3	cp L,C	REG_DIFF	
+C7:erp	c7 e4 fe 34 12 78 56	3	sllb_erp 228	3	sll A,C	MNEM_DIFF	
+E7:erp	e7 e4 04 34 12 78 56	3	push_lerp 228	3	push XBC	REG_DIFF	
+E7:erp	e7 e4 05 34 12 78 56	3	pop_lerp 228	3	pop XBC	REG_DIFF	
+E7:erp	e7 e4 64 34 12 78 56	3	inc4_lerp 228	3	inc 4,XBC	REG_DIFF	
+E7:erp	e7 e4 88 34 12 78 56	3	ldto_lerp xwa, 228	3	ld XWA,XBC	REG_DIFF	
+E7:erp	e7 e4 89 34 12 78 56	3	ldto_lerp xbc, 228	3	ld XBC,XBC	REG_DIFF	
+E7:erp	e7 e4 8a 34 12 78 56	3	ldto_lerp xde, 228	3	ld XDE,XBC	REG_DIFF	
+E7:erp	e7 e4 8b 34 12 78 56	3	ldto_lerp xhl, 228	3	ld XHL,XBC	REG_DIFF	
+E7:erp	e7 e4 8c 34 12 78 56	3	ldto_lerp xix, 228	3	ld XIX,XBC	REG_DIFF	
+E7:erp	e7 e4 8d 34 12 78 56	3	ldto_lerp xiy, 228	3	ld XIY,XBC	REG_DIFF	
+E7:erp	e7 e4 8e 34 12 78 56	3	ldto_lerp xiz, 228	3	ld XIZ,XBC	REG_DIFF	
+E7:erp	e7 e4 8f 34 12 78 56	3	ldto_lerp xsp, 228	3	ld XSP,XBC	REG_DIFF	
+E7:erp	e7 e4 98 34 12 78 56	3	ldfr_lerp xwa, 228	3	ld XBC,XWA	REG_DIFF	
+E7:erp	e7 e4 99 34 12 78 56	3	ldfr_lerp xbc, 228	3	ld XBC,XBC	REG_DIFF	
+E7:erp	e7 e4 9a 34 12 78 56	3	ldfr_lerp xde, 228	3	ld XBC,XDE	REG_DIFF	
+E7:erp	e7 e4 9b 34 12 78 56	3	ldfr_lerp xhl, 228	3	ld XBC,XHL	REG_DIFF	
+E7:erp	e7 e4 9c 34 12 78 56	3	ldfr_lerp xix, 228	3	ld XBC,XIX	REG_DIFF	
+E7:erp	e7 e4 9d 34 12 78 56	3	ldfr_lerp xiy, 228	3	ld XBC,XIY	REG_DIFF	
+E7:erp	e7 e4 9e 34 12 78 56	3	ldfr_lerp xiz, 228	3	ld XBC,XIZ	REG_DIFF	
+E7:erp	e7 e4 9f 34 12 78 56	3	ldfr_lerp xsp, 228	3	ld XBC,XSP	REG_DIFF	
+E7:erp	e7 e4 c8 34 12 78 56	7	add_erpl 228, 52, 18, 120, 86	7	add XBC,0x56781234	REG_DIFF	
+primary	14 34 12 78 56	1	push_a	1	push A	MNEM_DIFF	
+primary	15 34 12 78 56	1	pop_a	1	pop A	MNEM_DIFF	
+primary	16 34 12 78 56	1	ex_ff	1	ex F,F'	MNEM_DIFF	
+primary	18 34 12 78 56	1	push_f	1	push F	MNEM_DIFF	
+primary	19 34 12 78 56	1	pop_f	1	pop F	MNEM_DIFF	
+primary	1a 34 12 78 56	3	jp16 4660	3	jp 0x1234	MNEM_DIFF	
+primary	1c 34 12 78 56	3	call16 4660	3	call 0x1234	MNEM_DIFF	

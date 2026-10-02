@@ -1,0 +1,33 @@
+# Fix-round pin d7752a16b6ee, FROM NOTHING: make clean + make -C wsa1 clean + make gate-all, 2026-10-02.
+# llvm-mc c39a1525a037 (build/bin, = toolchain-snapshot/llvm-mc.snap), clang-21 e4e8032941d5, ld.lld ebfdfd231fc8, llvm-objcopy 9ff40ea0a9e7
+# tree: disasm d55ae6fe (the fix-round respells 83a3b70d, 157bd9d8, 874d637b in it)
+
+PASS: every KN5000 image assembles with the pinned toolchain.
+  kn5000_v7_program                      IDENTICAL
+  kn5000_v9_program                      IDENTICAL
+  kn5000_v10_program                     IDENTICAL
+  kn5000_subprogram_v142                 IDENTICAL
+  kn5000_subprogram_v142_compressed      IDENTICAL
+  kn5000_table_data                      IDENTICAL
+  kn5000_subcpu_boot                     IDENTICAL
+  kn5000_custom_data                     IDENTICAL
+  hd-ae5000_v2_06i                       IDENTICAL
+PASS: every rebuilt ROM is byte-identical.
+  ok       wsa1_prom_a.ic12  (524,288 bytes)
+  ok       wsa1_prom_b.ic13  (524,288 bytes)
+  ok       wsa1_prom_c.ic28  (524,288 bytes)
+  ok       wsa1_prom_d.bin  (524,288 bytes)
+PASS: every rebuilt ROM is byte-identical.
+PASS: a toolchain change rebuilds every image in both trees.
+
+assembler invocations (every image rebuilt by the binary under test):
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I custom_data
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I hdae5000
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I subcpu/boot
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I table_data
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I v10/maincpu
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I v142/subcpu
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I v7/maincpu
+      1 /home/fsanches/compartilhado/llvm-project/build/bin/llvm-mc -triple=tlcs900 -filetype=obj -I v9/maincpu
+
+C-generated bins (clang-21 e4e8032941d5) vs the April clang's (T1 kept them as wave3a-scratch/cbins-before): 286 compared (v10 104, v9 91, v7 91), 0 differ

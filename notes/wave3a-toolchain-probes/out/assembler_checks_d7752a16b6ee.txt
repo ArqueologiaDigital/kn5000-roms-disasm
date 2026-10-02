@@ -1,0 +1,45 @@
+# Assembler-side checks at the fix-round pin d7752a16b6ee (llvm-mc c39a1525a037, llvm-objdump 076b7951b45b), 2026-10-02.
+
+## fixround/asm_sweep.py (every MC def and InstAlias, representative operands, read by unidasm)
+instances 39081 skipped defs 0 {}
+{'ERR': 4624, 'CRASH': 121}
+  ENC_DB            752
+  ENC_LEN          2126
+  MNEM               36
+  NOPS              116
+  OK              12218
+  OPERAND           607
+  PSEUDO_OK       15652
+  REGSET           2574
+  UNPARSED_LLVM     138
+  UNPARSED_MAME     117
+## T1 pin 4867e03232a6 for comparison (V1a, verify-V1a/out/asm_sweep.counts):
+   instances 40801 errors {'ERR': 2856, 'CRASH': 124}
+   ENC_DB 1147
+   ENC_LEN 2126
+   MNEM 36
+   NOPS 119
+   OK 12231
+   OPERAND 1497
+   PSEUDO_OK 17111
+   REGSET 3300
+   UNPARSED_LLVM 138
+   UNPARSED_MAME 116
+
+## fixround/lying_pseudo_check.py (size_lies + pseudo_ops against out/*_baseline.txt)
+instances 39081 skipped defs 0 {}
+size_lies.py   flagged   0  in baseline   0  NEW 0  no longer flagged 0
+pseudo_ops.py  flagged  99  in baseline  99  NEW 0  no longer flagged 0
+exit=0
+
+## fixround/sp_asm_check.py REG=sp / REG=wa, then sp_twin_compare.py
+instances with sp in every GR16 operand: 2944
+refused by the assembler: 102  assembled: 2842
+(good with WA, good with SP): count
+  no twin                   2
+  (False, False)          912
+  (True, True)           1928
+exit=0
+
+## scripts/analysis/check_encoding_examples.py (CLAUDE.md encoding-quirks examples)
+25 examples, 0 mismatched or refused
