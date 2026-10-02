@@ -4951,8 +4951,16 @@ RhythmTiming_OffsetTable:	.incbin "includes/generated/naka_widget_descriptors.bi
 ; VoiceParam_BankProgramWords -- 8 x 128 u16.
 ; VoiceParam_Clamp_LookupTable (v10/v9 0xf5345a, v7 0xf53056): `ld
 ; xwa,<this>; sla l,1; and h,7; ld hl,(xwa+hl)` -- row h (bank, clamped
-; to 0..7 by VoiceParam_Clamp_CheckBank), column l. Meaning of the words
-; not established.
+; to 0..7 by VoiceParam_Clamp_CheckBank), column l. Each word is a (bank',
+; program') pair -- high byte 0..7, low byte 0..127 -- that
+; VoiceParam_ClampAndValidate puts in place of a requested (bank, program <
+; 0x80); voiceassign_process_return then reads rhythmrom_bankprogramlocators
+; [bank'][program' & 0x7f]. measured: 1,022 of the 1,024 entries land on a
+; slot that has a locator (bank 0 programs 89 and 90 map to 0x005a, an
+; empty one); the 200 distinct targets cover 199 of the 201 non-empty
+; locator slots; 15..33 entries per bank map to themselves. So the table
+; maps any request onto a sound the Rhythm Data ROM holds. Same in v10, v9
+; and v7 (notes/rhythm-rom-tables-2026-10-02/bank_program_map_probe.py).
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; VoiceParam_BankProgramWords[8][128].
