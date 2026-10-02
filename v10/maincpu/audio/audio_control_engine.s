@@ -5493,7 +5493,7 @@ ExtData_ToneParam_MultiChannel_Helper:
 	ldw	bc, 6545
 	pushw	de
 	.byte 0x91
-	jrl	2764
+	jrl	SwbtWr_FlushAndAppendParams
 ExtData_Voice_CheckMode:
 	calr	2730
 	ld	a, (0x912f:16)
@@ -5655,9 +5655,9 @@ ExtData_Voice_FullHandler_Helper:
 	and	a, 192
 	ldfr_berp	a, 251
 	ldw	wa, 128
-	calr	2463
+	calr	ExtData_ToneParam_DispatchHandler_Helper
 	ldw	wa, 64
-	calr	2457
+	calr	ExtData_ToneParam_DispatchHandler_Helper
 	lda	xde, (0xfda1:16)
 	ld	c, (xde)
 	ld	a, c

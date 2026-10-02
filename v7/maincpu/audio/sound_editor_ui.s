@@ -8355,6 +8355,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	dec	1, c
 	jr	nz, .Lc_f0f2e0
 	ld	c, 6:opc
+SeMenu_ShowConfirmDialog_Helper_Loop:
 	add	ix, 4
 	ld	(0x6cc:16), ix
 	ld	(0x6d0:16), ix
@@ -8370,7 +8371,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	popw	ix
 	pop	c
 	dec	1, c
-	jr	nz, -48
+	jr	nz, SeMenu_ShowConfirmDialog_Helper_Loop
 	ret
 SeMenu_ShowConfirmDialog_Code:
 	pop	sr
@@ -8391,16 +8392,18 @@ SeMenu_ShowConfirmDialog_Code:
 	nop
 SeMenu_ShowConfirmDialog_Sub:
 	cp	(0x6ae:16), 1
-	jr	nz, 22
+	jr	nz, SeMenu_ShowConfirmDialog_Sub_Skip
 	ld	(0x3efa8:24), 0
 	ld	xiy, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_2
 	ld	xix, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_3
 	call	SeGfx_DrawStaticList
-	jr	20
+	jr	SeMenu_ShowConfirmDialog_Sub_Join
+SeMenu_ShowConfirmDialog_Sub_Skip:
 	ld	(0x3efa8:24), 0
 	ld	xiy, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data
 	ld	xix, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_2
 	call	SeGfx_DrawStaticList
+SeMenu_ShowConfirmDialog_Sub_Join:
 	xor	xwa, xwa
 	ldb_d8	a, (0x65d)
 	sla	wa, 2
@@ -9074,7 +9077,7 @@ SeMenu_CompareAndApply_Data4:
 	ld	(257960:24), 0
 	ld	xiy, SeScreenData_0x113B
 	ld	xix, SeScreenData_0x1140
-	call	15789014
+	call	SeGfx_DrawStaticList
 	ret
 SeMenu_CompareAndApply_Data5:
 	.byte 0x1d, 0x20, 0xf0, 0xf0, 0x1d, 0x6a, 0xf0, 0xf0

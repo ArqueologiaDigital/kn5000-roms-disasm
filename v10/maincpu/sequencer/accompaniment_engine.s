@@ -9199,19 +9199,21 @@ AccPos_ClearOnStart_Padding:
 	nop
 AccPos_ClearOnStart_Padding_Sub:
 	cp	(0x8d34:16), 19
-	jr	nz, 12
+	jr	nz, AccPos_ClearOnStart_Padding_Sub_Skip
 	and	(0x347a:16), 253
 	and	(0x28a6:16), 254
-	jr	30
+	jr	AccPos_ClearOnStart_Padding_Sub_Return
+AccPos_ClearOnStart_Padding_Sub_Skip:
 	bit	1, (0x347a:16)
-	jr	z, 24
+	jr	z, AccPos_ClearOnStart_Padding_Sub_Return
 	ld	a, (0x3283:16)
 	and	a, 3
 	cp	a, 0:i3
-	jr	nz, 13
+	jr	nz, AccPos_ClearOnStart_Padding_Sub_Return
 	ld	(0x3479:16), 0
-	calr	65158
+	calr	AccReplay_FullStop
 	and	(0x347a:16), 253
+AccPos_ClearOnStart_Padding_Sub_Return:
 	ret
 	nop
 	nop
@@ -24573,16 +24575,19 @@ DrumKit_UpdateStatusFlags_Helper:
 	cp	a, e
 	jr	z, DrumKit_UpdateStatusFlags_Return
 	cp	e, 0:i3
-	jr	nz, 4
+	jr	nz, DrumKit_UpdateStatusFlags_Helper_Skip
 	ld	l, 0:opc
-	jr	11
+	jr	DrumKit_UpdateStatusFlags_Helper_Join
+DrumKit_UpdateStatusFlags_Helper_Skip:
 	cp	e, 32
-	jr	nz, 4
+	jr	nz, DrumKit_UpdateStatusFlags_Helper_Skip2
 	ld	l, 4:opc
-	jr	2
+	jr	DrumKit_UpdateStatusFlags_Helper_Join
+DrumKit_UpdateStatusFlags_Helper_Skip2:
 	ld	l, 8:opc
+DrumKit_UpdateStatusFlags_Helper_Join:
 	ld	(0x34d6:16), l
-	calr	65007
+	calr	DrumKit_SendProgramChange
 DrumKit_UpdateStatusFlags_Return:
 	ret
 DrumKit_InlineCode1_Code:
@@ -24827,13 +24832,14 @@ RhythmFillIn_PatternTable:
 	rcf
 RhythmFillIn_PatternTable_Sub:
 	push	xiz
-	call	16142172
+	call	RhythmFillIn_PatternTable_Sub_Helper
 	pop	xiz
 	ret
+RhythmFillIn_PatternTable_Sub_Helper:
 	and	(0x28a7:16), 251
 	and	(0xe3e2:16), 254
 	cp	(36151:16), 181
-	jr	z, 31
+	jr	z, RhythmFillIn_Select_Return
 	or	(0x8d88:16), 1
 	bit	0, (0x3283:16)
 	jr	nz, RhythmFillIn_Select_Return
@@ -25006,7 +25012,7 @@ RhythmVariation_Select_Helper6:
 	ld	(0x379b:16), a
 	call	AudioInit_SelectAndDispatch
 	call	AudioMode_ResetVoiceState
-	calr	64377
+	calr	DrumKit_UpdateStatusFlags
 	ret
 RhythmVariation_InlineCode_Code:
 	nop
@@ -25032,9 +25038,10 @@ RhythmVariation_InlineCode_Code:
 	nop
 RhythmVariation_InlineCode_Sub:
 	push	xiz
-	calr	2
+	calr	RhythmVariation_InlineCode_Sub_Helper
 	pop	xiz
 	ret
+RhythmVariation_InlineCode_Sub_Helper:
 	ld	xhl, 0:i3
 	ld	l, (0x379b:16)
 	and	l, 31
@@ -25043,7 +25050,7 @@ RhythmVariation_InlineCode_Sub:
 	ld	(0x379b:16), a
 	call	AudioInit_SelectAndDispatch
 	call	AudioMode_ResetVoiceState
-	calr	64306
+	calr	DrumKit_UpdateStatusFlags
 	ret
 RhythmVariation_InlineCode_Code2:
 	nop
@@ -25477,7 +25484,7 @@ DrumVoice_Handler7_Helper:
 	jr	nz, DrumVoice_Handler7_Code_Return
 	cp	(0x34d6:16), 12
 	jr	nc, DrumVoice_Handler7_Code_Return
-	calr	880
+	calr	DrumVoice_Handler7_Helper_Helper
 DrumVoice_Handler7_Code_Return:
 	ret
 	ret
@@ -25502,13 +25509,14 @@ DrumVoice_Handler7_Data:
 	.byte 0xc1, 0x37, 0x8d
 	push	xsp
 	.byte 0xb8
-	jr	z, 22
-	calr	1565
+	jr	z, DrumVoice_Handler7_Data_Code_Skip
+	calr	DrumVoice_Handler7_Code_Helper2
 	ld	l, (0x34ed:16)
 	ld	h, (0x34ee:16)
-	calr	1168
-	calr	63200
+	calr	DrumVoice_Handler7_Data_Code_Helper
+	calr	DrumKit_PostMidiEvents
 	and	(0x34cd:16), 191
+DrumVoice_Handler7_Data_Code_Skip:
 	calr	TimeSig_DisplayStrings_Code_Sub
 	calr	DrumVoice_Handler7_Code_Helper
 	calr	DrumVoice_Handler7_Code_Helper2
@@ -25583,7 +25591,7 @@ DrumVoice_Handler7_Data_3_Helper2:
 	sll	a, 1
 	ld	xix, DrumVoice_Handler7_Data_3_Code
 	ld	hl, (xix+a)
-	call	16143937
+	call	DrumVoice_Handler7_Data_3_Helper5
 	ret
 DrumVoice_Handler7_Data_3_Code:
 	nop
@@ -25600,11 +25608,12 @@ DrumVoice_Handler7_Data_3_Sub:
 DrumVoice_Handler7_Data_3_Helper3:
 	ld	a, (0x39a8:16)
 	bit	7, w
-	jr	z, 8
+	jr	z, DrumVoice_Handler7_Data_3_Helper3_Skip
 	cp	a, 1:i3
-	jr	z, 14
+	jr	z, DrumVoice_Handler7_Code_Return5
 	inc	1, a
 	jr	DrumVoice_Handler7_Code_Join2
+DrumVoice_Handler7_Data_3_Helper3_Skip:
 	cp	a, 0:i3
 	jr	z, DrumVoice_Handler7_Code_Return5
 	dec	1, a
@@ -25622,7 +25631,7 @@ DrumVoice_Handler7_Data_3_Helper4:
 	sll	a, 1
 	ld	xix, DrumVoice_Handler7_Data_3_Code2
 	ld	hl, (xix+a)
-	call	16143937
+	call	DrumVoice_Handler7_Data_3_Helper5
 	ret
 DrumVoice_Handler7_Data_3_Code2:
 	pop	sr
@@ -25715,7 +25724,7 @@ DrumVoice_Handler7_Data_4:
 	.byte 0xc1, 0x37, 0x8d
 	push	xsp
 	.byte 0xbd
-	jr	z, 33
+	jr	z, DrumVoice_Handler7_Code_Entry
 	and	(0x34cd:16), 191
 	ld	xix, 0x094800
 	add	xix, 16
@@ -25737,9 +25746,10 @@ DrumVoice_Handler7_Code_Entry_Data:
 	.byte 0xc1, 0x37, 0x8d
 	push	xsp
 	.byte 0xbb
-	jr	z, 5
+	jr	z, DrumVoice_Handler7_Code_Entry_Data_Code_Entry
 	.byte 0xc1, 0xcd
 	ldw	ix, 0xbf3c
+DrumVoice_Handler7_Code_Entry_Data_Code_Entry:
 	.byte 0xc1
 	push	xbc
 	.byte 0x8d
@@ -25875,6 +25885,7 @@ DrumVoice_Handler7_Code_Join5:
 	and	h, 127
 	ld	(0xfc5b:16), h
 	ret
+DrumVoice_Handler7_Helper_Helper:
 	ld	l, (0x34f0:16)
 	and	l, 31
 	xor	h, h
@@ -25983,6 +25994,7 @@ TimeSig_DisplayStrings:
 	.byte 7
 	.ascii "(16/8)+0 "
 	.byte 8
+DrumVoice_Handler7_Data_Code_Helper:
 	call	16069349
 TimeSig_DisplayStrings_Code_Sub2:
 	ld	(0xfc5a:16), l
@@ -26142,10 +26154,11 @@ DrumVoice_Handler7_Code_Helper2:
 	ld	l, (0x34ed:16)
 	and	l, 255
 	cp	l, 240
-	jr	c, 11
+	jr	c, DrumVoice_Handler7_Code_Helper2_Skip5
 	ld	l, 128:opc
 	ld	(0x34ed:16), l
 	ld	(0x34ee:16), 0
+DrumVoice_Handler7_Code_Helper2_Skip5:
 	cp	l, 128
 	jr	c, TimeSig_DisplayStrings_Code_Skip6
 	ld	a, (0x34ee:16)
@@ -26660,9 +26673,10 @@ TimeSig_DisplayStrings_Code_Helper2:
 	pop	h
 	pop	(0x34d6:16)
 	ld	b, a
-	jr	3
+	jr	TimeSig_DisplayStrings_Code_Helper2_Return
 TimeSig_DisplayStrings_Code_Helper2_Skip:
 	ldw	bc, 0xffff
+TimeSig_DisplayStrings_Code_Helper2_Return:
 	ret
 TimeSig_DisplayStrings_Code_Helper3:
 	push	xwa
@@ -29438,7 +29452,7 @@ AccPatch_ResolveEntryAddr:
 	ret
 
 AccVoice_SetupSlots_DataBlock:
-	calr	63909
+	calr	Rhythm_MapChannelToDrumIndex
 	add	xbc, 0x37b2
 	ld	a, (xbc)
 	cp	a, 0:i3
@@ -29533,17 +29547,19 @@ AccPatch_ResolveEntryAddr_Helper6:
 	ld	(xbc), xwa
 	push	xbc
 	ld	xbc, 1:i3
-	calr	110
+	calr	AccPatch_ResolveEntryAddr_Helper8
 	pop	xbc
 	ld	a, 129:opc
-	jr	5
+	jr	AccPatch_ResolveEntryAddr_Helper6_Join
 AccPatch_ResolveEntryAddr_Skip2:
 	push_a
-	calr	101
+	calr	AccPatch_ResolveEntryAddr_Helper8
 	pop_a
+AccPatch_ResolveEntryAddr_Helper6_Join:
 	cp	a, 129
-	jr	z, 2
-	jr	-50
+	jr	z, AccPatch_ResolveEntryAddr_Helper6_Return
+	jr	AccPatch_ResolveEntryAddr_Helper6
+AccPatch_ResolveEntryAddr_Helper6_Return:
 	ret
 AccVoice_SetupSlots_DataBlock_Code:
 	cp	(xbc), l
@@ -29551,15 +29567,17 @@ AccVoice_SetupSlots_DataBlock_Code:
 	swi	7
 	swi	7
 AccPatch_ResolveEntryAddr_Sub:
-	calr	63642
+	calr	Rhythm_MapChannelToDrumIndex
 	sll	xbc, 2
 	add	xbc, 0x3898
 	ld	xwa, (xbc)
 	cp	xwa, AccVoice_SetupSlots_DataBlock_Code
-	jr	z, 4
+	jr	z, AccPatch_ResolveEntryAddr_Sub_Skip
 	ld	a, (xwa)
-	jr	2
+	jr	AccPatch_ResolveEntryAddr_Sub_Return
+AccPatch_ResolveEntryAddr_Sub_Skip:
 	ld	a, 131:opc
+AccPatch_ResolveEntryAddr_Sub_Return:
 	ret
 AccPatch_ResolveEntryAddr_Helper7:
 	ld	c, 0:opc
@@ -29697,24 +29715,25 @@ AccPatch_ResolveEntryAddr_Skip9:
 AccPatch_ResolveEntryAddr_Return5:
 	ret
 AccPatch_ResolveEntryAddr_Helper10:
-	calr	63314
+	calr	Rhythm_MapChannelToDrumIndex
 	sll	bc, 2
 	add	xbc, 0x3898
 	ld	xwa, AccVoice_SetupSlots_DataBlock_Code2
 	ld	(xbc), xwa
 	ld	c, 1:opc
-	calr	65271
+	calr	AccPatch_ResolveEntryAddr_Helper8
 	ret
 AccVoice_SetupSlots_DataBlock_Code2:
 	ld	a, (xhl)
 	normal
 	ld	(0x37c9:16), a
-	calr	64931
-	calr	7
-	calr	64964
+	calr	AccPatch_ResolveEntryAddr_Helper
+	calr	AccPatch_ResolveEntryAddr_Helper10_Helper
+	calr	AccPatch_ResolveEntryAddr_Helper2
 	calr	124
 	ret
-	calr	64844
+AccPatch_ResolveEntryAddr_Helper10_Helper:
+	calr	AccVoice_SetupStyleSlots_Helper2
 	ld	w, (0x34d8:16)
 	ld	a, 12:opc
 	ld	(xix+a), w
@@ -29909,7 +29928,7 @@ AccPatch_ResolveEntryAddr_Return8:
 AccPatch_ResolveEntryAddr_Helper15:
 	ld	xix, 0x342d
 	push	xix
-	calr	62735
+	calr	Rhythm_MapChannelToDrumIndex
 	pop	xix
 	ld	a, (xix+c)
 	ret
@@ -29936,7 +29955,7 @@ AccVoice_SetupSlots_DataBlock_Code3:
 	ld	xwa, (xbc)
 	ld	a, (xwa)
 	cp	a, 144
-	jr	z, 25
+	jr	z, AccPatch_ResolveEntryAddr_Skip17
 	cp	a, 145
 	jr	z, AccPatch_ResolveEntryAddr_Skip17
 	ld	w, a
@@ -33970,8 +33989,9 @@ AccDraw_Secondary_Sub_Return:
 AccDraw_Secondary_Sub_Helper:
 	push	xix
 	cp	e, 32
-	jr	ule, 2
+	jr	ule, AccDraw_Secondary_Sub_Helper_Skip
 	xor	e, e
+AccDraw_Secondary_Sub_Helper_Skip:
 	sla	e, 2
 	ld	xix, AccScreen_DataBlock_Code3
 	ld	xde, (xix+e)
@@ -35563,6 +35583,7 @@ AccPatch_VoiceAssignDataBlock_Helper16:
 	xor	xwa, xwa
 	bit	7, (0x3950:16)
 	jrl	nz, AccPatch_VoiceAssignDataBlock_Helper16_Epilogue2
+AccPatch_VoiceAssignDataBlock_Helper16_Join:
 	cpw	(0x3974:16), 65535
 	jr	z, AccPatch_VoiceAssignDataBlock_Helper16_Epilogue
 	calr	AccPatch_VoiceAssignDataBlock_Helper16_Helper
@@ -35590,17 +35611,19 @@ AccPatch_VoiceAssignDataBlock_Helper16:
 	add	xiy, 0x069800
 	ld	wa, (xiy+3)
 	cp	wa, 0xffff
-	jr	z, 5
+	jr	z, AccPatch_VoiceAssignDataBlock_Helper16_Skip2
 	ld	(xiz+3), wa
-	jr	5
+	jr	AccPatch_VoiceAssignDataBlock_Helper16_Join2
+AccPatch_VoiceAssignDataBlock_Helper16_Skip2:
 	ldw (xiz+3), 65535
+AccPatch_VoiceAssignDataBlock_Helper16_Join2:
 	ld	(0x3974:16), wa
 	ld	wa, (0x3976:16)
 	ld	(0x3978:16), wa
-	jr	-119
+	jr	AccPatch_VoiceAssignDataBlock_Helper16_Join
 AccPatch_VoiceAssignDataBlock_Helper16_Skip:
 	ld	hl, (0x3976:16)
-	calr	63962
+	calr	AccPatch_VoiceAssignDataBlock_Helper
 	ldw	(xiz+3), 65535
 AccPatch_VoiceAssignDataBlock_Helper16_Epilogue:
 	nop
@@ -35611,17 +35634,19 @@ AccPatch_VoiceAssignDataBlock_Helper16_Helper:
 	xor	xhl, xhl
 	ld	hl, (0x3972:16)
 	cp	hl, 340
-	jr	nc, 25
+	jr	nc, AccPatch_VoiceAssignDataBlock_Helper16_Helper_Skip2
 AccPatch_VoiceAssignDataBlock_Join3:
-	calr 63939
+	calr AccPatch_VoiceAssignDataBlock_Helper
 	ld a, (xiz)
 	bit 7, a
-	jr z, 15
+	jr z, AccPatch_VoiceAssignDataBlock_Helper16_Helper_Skip2
 	inc 1, hl
 	cp	hl, 340
-	jr	nc, 2
+	jr	nc, AccPatch_VoiceAssignDataBlock_Helper16_Helper_Skip
 	jr	AccPatch_VoiceAssignDataBlock_Join3
+AccPatch_VoiceAssignDataBlock_Helper16_Helper_Skip:
 	ld	(0x3950:16), 131
+AccPatch_VoiceAssignDataBlock_Helper16_Helper_Skip2:
 	ld	(0x3972:16), hl
 	ret
 AccPatch_VoiceAssignDataBlock_Helper17:

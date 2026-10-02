@@ -27935,12 +27935,12 @@ TmFlash_CompareStrings:
 	push	xsp
 	nop
 	nop
-	jr	z, 31
-	jr	38
+	jr	z, TmFlash_CompareStrings_Skip2
+	jr	TmFlash_CompareStrings_Join
 TmFlash_CompareStrings_Loop:
 	ld	a, (xsp+8)
 	cp	a, (xiz)
-	jr	nz, 26
+	jr	nz, TmFlash_CompareStrings_Skip
 	pushw	(xsp+6)
 	push	xiz
 	ld	xwa, (xsp+24)
@@ -27949,11 +27949,13 @@ TmFlash_CompareStrings_Loop:
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, TmFlash_CompareStrings_Skip
+TmFlash_CompareStrings_Skip2:
 	ld	xhl, xiz
 	jr	TmFlash_CompareStrings_Epilogue
 TmFlash_CompareStrings_Skip:
 	inc	1, xiz
 	decm	1, (xsp+4)
+TmFlash_CompareStrings_Join:
 	ld	wa, (xsp+6)
 	.byte 0x9f, 0x04, 0xf0
 	jr	ule, TmFlash_CompareStrings_Loop

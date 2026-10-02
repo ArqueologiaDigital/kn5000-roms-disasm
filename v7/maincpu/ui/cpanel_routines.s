@@ -977,10 +977,10 @@ CPanel_InterruptPoll_MainLoop:
 	ei 0x06
 	ld wa, (0x8d63:16)
 	sub wa, (36193:16)
-	jr nc, 6
+	jr nc, PollLoop_TXForwardDist
 	neg wa
 	ld hl, wa
-	jr 5
+	jr PollLoop_TXCheckThreshold
 PollLoop_TXForwardDist:
 	ldw hl, 0x3c
 	sub hl, wa

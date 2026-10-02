@@ -8380,6 +8380,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	dec	1, c
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Loop2
 	ld	c, 6:opc
+SeMenu_ShowConfirmDialog_Helper_Loop:
 	add	ix, 4
 	ld	(1740:16), ix
 	ld	(1744:16), ix
@@ -8395,7 +8396,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	popw	ix
 	pop	c
 	dec	1, c
-	jr	nz, -48
+	jr	nz, SeMenu_ShowConfirmDialog_Helper_Loop
 	ret
 SeMenu_ShowConfirmDialog_Code:
 	pop	sr
@@ -8416,16 +8417,18 @@ SeMenu_ShowConfirmDialog_Code:
 	nop
 SeMenu_ShowConfirmDialog_Sub:
 	cp	(0x6ae:16), 1
-	jr	nz, 22
+	jr	nz, SeMenu_ShowConfirmDialog_Sub_Skip
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x114A
 	ld	xix, SeScreenData_0x1154
 	call	SeGfx_DrawStaticList
-	jr	20
+	jr	SeMenu_ShowConfirmDialog_Sub_Join
+SeMenu_ShowConfirmDialog_Sub_Skip:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x1140
 	ld	xix, SeScreenData_0x114A
 	call	SeGfx_DrawStaticList
+SeMenu_ShowConfirmDialog_Sub_Join:
 	xor	xwa, xwa
 	ld	a, (1629:16)
 	sla	wa, 2

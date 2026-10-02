@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,988
-#   semantic names ........... 50,623 (97.4%)
+#   symbols .................. 52,023
+#   semantic names ........... 50,658 (97.4%)
 #   positional names ......... 1,365
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -20212,8 +20212,11 @@ SeMenu_CompareAndApply_Apply_Helper 00F0F156
 SeMenu_ShowConfirmDialog_Data_Code_Loop 00F0F166
 SeMenu_ShowConfirmDialog_Helper 00F0F291
 SeMenu_ShowConfirmDialog_Data_Code_Loop2 00F0F2E0
+SeMenu_ShowConfirmDialog_Helper_Loop 00F0F323
 SeMenu_ShowConfirmDialog_Code 00F0F354
 SeMenu_ShowConfirmDialog_Sub 00F0F368
+SeMenu_ShowConfirmDialog_Sub_Skip 00F0F385
+SeMenu_ShowConfirmDialog_Sub_Join 00F0F399
 SeMenu_ShowConfirmDialog_Data_Code_Skip2 00F0F3B0
 SeMenu_ShowConfirmDialog_Data_Code_Join 00F0F3B5
 SeMenu_ShowConfirmDialog_Data_Code_Skip3 00F0F3D3
@@ -21169,7 +21172,12 @@ FrameSetup_PackResult 00F16EF1
 PartGrid_OperationsBlock 00F16F02
 PartGrid_OperationsBlock_Skip2 00F16F25
 PartGrid_OperationsBlock_Join 00F16F3A
+PartGrid_OperationsBlock_Entry 00F16FA1
+PartGrid_OperationsBlock_Entry2 00F16FAB
+PartGrid_OperationsBlock_Skip3 00F16FB5
 PartGrid_OperationsBlock_Skip 00F16FBF
+PartGrid_OperationsBlock_Join2 00F16FC7
+PartGrid_OperationsBlock_Epilogue 00F16FCD
 PartGrid_ColumnDispatch_End 00F16FD3
 PartGrid_ColumnDispatch_Default 00F16FD7
 PartGrid_DefaultLoop_Outer 00F16FE0
@@ -22177,9 +22185,12 @@ MiddleFuncCall_DispatchData_Code_Helper_Skip 00F1EE25
 MiddleFuncCall_DispatchData_Code_Helper_Skip2 00F1EE34
 MiddleFuncCall_DispatchData_Code_Helper2 00F1EE3D
 MiddleFuncCall_DispatchData_Code_Helper2_Skip 00F1EE4C
+MiddleFuncCall_DispatchData_Code_Helper2_Skip2 00F1EE5A
 NoRef_SetWall_SlotMap20x2 00F1EE63
 SetWall_UpdateSlotIndex_Sub 00F1EE8B
 NoRef_SetWall_SlotMap20x2_Helper 00F1EE90
+NoRef_SetWall_SlotMap20x2_Helper_Skip 00F1EED4
+NoRef_SetWall_SlotMap20x2_Helper_Return 00F1EED8
 MiddleFuncCall_DispatchData_Code_Helper3 00F1EED9
 SetWall_InlineCodeBlock_0xC8 00F1EED9
 SetWall_SlotMaskTable 00F1EEDE
@@ -33194,6 +33205,9 @@ CmpBkslTtl_Dispatch_Helper 00F648A3
 DrumKit_InlineCode1_Helper 00F648AA
 DrumKit_UpdateStatusFlags_Entry 00F648C1
 DrumKit_UpdateStatusFlags_Helper2 00F648C7
+DrumKit_UpdateStatusFlags_Helper2_Skip 00F648E9
+DrumKit_UpdateStatusFlags_Helper2_Skip2 00F648F2
+DrumKit_UpdateStatusFlags_Helper2_Join 00F648F4
 DrumKit_UpdateStatusFlags_Return 00F648FB
 DrumKit_InlineCode1_Code 00F648FC
 DrumKit_UpdateStatusFlags_Sub 00F6491A
@@ -33256,13 +33270,18 @@ RhythmVariation_InlineCode 00F64C8D
 AccDraw_Secondary_Helper 00F64C91
 RhythmVariation_Select_Code_Helper 00F64C97
 RhythmVariation_Select_Code_Helper_Skip 00F64CA8
+AccDraw_Secondary_Helper8_Helper 00F64CB3
 RhythmVariation_Select_Code_Helper2 00F64CB9
 AccDraw_Secondary_Helper2 00F64CBF
 RhythmVariation_Select_Code_Helper3 00F64CC5
 RhythmVariation_InlineCode_Code 00F64CE6
 RhythmVariation_Select_Code_Sub 00F64D06
+RhythmVariation_Select_Code_Sub_Helper 00F64D0C
 RhythmVariation_InlineCode_Code2 00F64D2D
 AccDraw_Secondary_Helper3 00F64D4E
+AccDraw_Secondary_Helper3_Helper 00F64D54
+AccDraw_Secondary_Helper3_Skip 00F64D5D
+AccDraw_Secondary_Helper3_Skip2 00F64D74
 RhythmVariation_Select_Code_Join 00F64D84
 RhythmVariation_Select_Code_Return 00F64D86
 AccDraw_Secondary_Helper4 00F64D87
@@ -33426,6 +33445,7 @@ TimeSig_DisplayStrings_Code_Skip34 00F65BFC
 TimeSig_DisplayStrings_Code_Helper_Return 00F65C10
 DrumVoice_NotifyEE_Helper8 00F65C11
 TimeSig_DisplayStrings_Code_Helper2_Skip 00F65C35
+DrumVoice_NotifyEE_Helper8_Return 00F65C38
 TimeSig_DisplayStrings_Code_Helper3 00F65C39
 TimeSig_DisplayStrings_Code4 00F65C4A
 DrumVoice_NotifyEE_Join13 00F65C67
@@ -33744,9 +33764,13 @@ AccVoice_SetupSlots_DataBlock_Return2 00F673CB
 AccVoice_SetupSlots_DataBlock_Helper5 00F673CC
 AccVoice_SetupSlots_DataBlock_Helper6 00F673E6
 AccVoice_SetupSlots_DataBlock_Skip2 00F6740C
+AccVoice_SetupSlots_DataBlock_Helper6_Join 00F67411
+AccVoice_SetupSlots_DataBlock_Helper6_Return 00F67418
 AccVoice_SetupSlots_DataBlock_Code 00F67419
 AccVoice_SetupSlots_DataBlock_0x107 00F6741A
 AccVoice_SetupSlots_DataBlock_Sub 00F6741E
+AccVoice_SetupSlots_DataBlock_Sub_Skip 00F67438
+AccVoice_SetupSlots_DataBlock_Sub_Return 00F6743A
 AccVoice_SetupSlots_DataBlock_Helper7 00F6743B
 AccVoice_SetupSlots_DataBlock_Skip3 00F67446
 AccVoice_SetupSlots_DataBlock_Skip4 00F6744F
@@ -33767,7 +33791,9 @@ AccVoice_SetupSlots_DataBlock_Skip9 00F6755A
 AccVoice_SetupSlots_DataBlock_Return5 00F67565
 AccVoice_SetupSlots_DataBlock_Helper10 00F67566
 AccVoice_SetupSlots_DataBlock_Code2 00F6757F
+AccVoice_SetupSlots_DataBlock_Helper10_Helper 00F67593
 AccVoice_SetupSlots_DataBlock_Data 00F675FE
+AccVoice_SetupSlots_DataBlock_Helper10_Helper2 00F6760E
 AccVoice_SetupSlots_DataBlock_Join5 00F6761B
 AccVoice_SetupSlots_DataBlock_Skip10 00F67634
 AccVoice_SetupSlots_DataBlock_Helper11 00F67638
@@ -34107,6 +34133,7 @@ AccDraw_Secondary_Helper8 00F6A071
 AccScreen_DataBlock_Data 00F6A085
 AccDraw_Secondary_Return 00F6A0F6
 AccDraw_Secondary_Helper9 00F6A0F7
+AccDraw_Secondary_Helper9_Skip 00F6A0FF
 AccScreen_DataBlock_Code3 00F6A10E
 AccDraw_Secondary_Helper9_Return 00F6A1C1
 AccDraw_Secondary_Entry 00F6A1DA
@@ -34279,11 +34306,16 @@ AccPatch_VoiceAssignDataBlock_Helper22 00F6B655
 AccPatch_VoiceAssignDataBlock_Helper23 00F6B683
 AccPatch_VoiceAssignDataBlock_Helper24 00F6B6B7
 AccPatch_VoiceAssignDataBlock_Helper25 00F6B717
+AccPatch_VoiceAssignDataBlock_Helper25_Join 00F6B720
+AccPatch_VoiceAssignDataBlock_Helper25_Skip 00F6B784
+AccPatch_VoiceAssignDataBlock_Helper25_Join2 00F6B789
 AccPatch_VoiceAssignDataBlock_Skip23 00F6B797
 AccPatch_VoiceAssignDataBlock_Epilogue 00F6B7A3
 AccPatch_VoiceAssignDataBlock_Epilogue2 00F6B7A4
 AccPatch_VoiceAssignDataBlock_Helper26 00F6B7A6
 AccPatch_VoiceAssignDataBlock_Join7 00F6B7B2
+AccPatch_VoiceAssignDataBlock_Helper26_Skip 00F6B7C6
+AccPatch_VoiceAssignDataBlock_Helper26_Skip2 00F6B7CB
 AccPatch_VoiceAssignDataBlock_Helper27 00F6B7D0
 AccPatch_VoiceAssignDataBlock_Helper28 00F6B7D1
 AccPatch_VoiceAssignDataBlock_Helper29 00F6B7D2
@@ -46048,6 +46080,7 @@ SwbtWr_WriteParamBlock_Body 00FC8EF4
 ExtData_ToneParam_DispatchHandler_Helper 00FC8EF7
 Voice_Update_Return 00FC8F4D
 VoiceParam_CompareAndUpdate 00FC8F50
+VoiceParam_CompareAndUpdate_Epilogue 00FC8FA4
 ExtData_ToneParam_DispatchHandler_Helper2 00FC8FA7
 ExtData_ToneParam_DispatchHandler_Helper2_Epilogue 00FC8FF3
 SwbtWr_WriteParamBlock_Skip 00FC903C
@@ -51454,7 +51487,9 @@ TmFlash_BulkTransferToSubCPU_Epilogue3 00FF013A
 MssNameFunc_Helper 00FF0140
 TmFlash_CompareStrings 00FF0140
 TmFlash_CompareStrings_Loop 00FF016C
+MssNameFunc_Helper_Skip 00FF0189
 TmFlash_CompareStrings_Skip 00FF018D
+MssNameFunc_Helper_Join 00FF0192
 TmFlash_CompareStrings_Epilogue 00FF019C
 DrawEditSw_CopyVariant_Code_Helper 00FF01A0
 StrSearch_Init 00FF01A0

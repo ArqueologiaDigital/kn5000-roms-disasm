@@ -1704,35 +1704,40 @@ PartGrid_OperationsBlock_Join:
 	cp	(xsp+8), 4
 	jr	z, Util_FrameSetup10_Skip
 	cp	(xsp+8), 3
-	jr	z, 48
+	jr	z, PartGrid_OperationsBlock_Skip2
 	cp	(xsp+8), 2
-	jr	z, 32
+	jr	z, PartGrid_OperationsBlock_Entry2
 	cp	(xsp+8), 1
-	jr	z, 16
+	jr	z, PartGrid_OperationsBlock_Entry
 	cp	(xsp+8), 0
-	jr	nz, 54
+	jr	nz, PartGrid_OperationsBlock_Epilogue
 	ld	(xbc+24), e
 	ld	xwa, 25
-	jr	38
+	jr	PartGrid_OperationsBlock_Join2
+PartGrid_OperationsBlock_Entry:
 	.byte 0xb9
 	.asciz " E@!"
 	nop
 	nop
-	jr	28
+	jr	PartGrid_OperationsBlock_Join2
+PartGrid_OperationsBlock_Entry2:
 	.byte 0xb9
 	.asciz "(E@)"
 	nop
 	nop
-	jr	18
+	jr	PartGrid_OperationsBlock_Join2
+PartGrid_OperationsBlock_Skip2:
 	ld	(xbc+48), e
 	ld	xwa, 49
-	jr	8
+	jr	PartGrid_OperationsBlock_Join2
 Util_FrameSetup10_Skip:
 	ld	(xbc+56), e
 	ld	xwa, 57
+PartGrid_OperationsBlock_Join2:
 	add	xbc, xwa
 	ld	a, (xsp)
 	ld	(xbc), a
+PartGrid_OperationsBlock_Epilogue:
 	lda	xsp, (xsp+14)
 	retd	2
 

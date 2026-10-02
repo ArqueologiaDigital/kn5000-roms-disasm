@@ -54,8 +54,9 @@ MiddleFuncCall_DispatchData_Code_Helper2_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
 	cp	a, 0:i3
-	jr	z, 2
+	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip2
 	dec	1, a
+MiddleFuncCall_DispatchData_Code_Helper2_Skip2:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
@@ -91,13 +92,13 @@ SetWall_UpdateSlotIndex_Sub:
 NoRef_SetWall_SlotMap20x2_Helper:
 	ld	a, (0x2873:16)
 	cp	a, 13
-	jr	z, 59
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 16
-	jr	z, 54
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 15
-	jr	z, 49
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 14
-	jr	z, 44
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	call	CDlikeSwTtl_SendStartEvt
 	ld	xhl, 0xf1a0
 	xor	w, w
@@ -105,15 +106,17 @@ NoRef_SetWall_SlotMap20x2_Helper:
 	ld	iy, wa
 	ld	a, (xhl+iy)
 	cp a, 13
-	jr	z, 17
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 16
-	jr	z, 12
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 15
-	jr	z, 7
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
 	cp	a, 14
-	jr	z, 2
-	jr	4
+	jr	z, NoRef_SetWall_SlotMap20x2_Helper_Skip
+	jr	NoRef_SetWall_SlotMap20x2_Helper_Return
+NoRef_SetWall_SlotMap20x2_Helper_Skip:
 	call	CDlikeSwTtl_SendStartEvtArg1
+NoRef_SetWall_SlotMap20x2_Helper_Return:
 	ret
 MiddleFuncCall_DispatchData_Code_Helper3:
 	call	NoRef_SetWall_SlotMap20x2_Helper

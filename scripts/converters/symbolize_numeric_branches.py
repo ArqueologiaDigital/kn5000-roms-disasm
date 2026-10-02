@@ -262,7 +262,7 @@ def label_rank(name):
     return 0
 
 
-def analyse(img, only=None):
+def analyse(img, only=None, trusted=frozenset()):
     """only: optional set of source paths RELATIVE TO THE IMAGE'S MIRROR DIR;
     when given, only branches in those files are converted and labels are only
     inserted into those files (a lane edits its own files and no others)."""
@@ -368,6 +368,10 @@ def analyse(img, only=None):
     #      (`jr cc, 0`), two or more `nop`, a `reti` not preceded by a `pop`,
     #      and (outside WSA1, where `swi 7` is the LCD service call) any
     #      `swi` -- 0xFF padding decodes as `swi 7`.
+    #      --trust-traced waives R3 for listed sites: those a control-flow trace
+    #      from CALLED entry points reaches, target included, as instruction
+    #      starts (notes/r3-trace-2026-10-02/trace_r3_sites.py) -- the `nop / nop`
+    #      that starts many accompaniment-engine routines is not data there.
     wsa = img["mirror"] == "wsa1"
     ABSURD = re.compile(r'^(halt|incf|decf|ldf|normal|max|min)\b|^(jr|jrl)\s+[a-z]+\s*,\s*(0x)?0+$'
                         r'|^(jr|jrl)\s+f\s*,'
@@ -489,7 +493,7 @@ def analyse(img, only=None):
                                       src_addr="0x%06X" % s["addr"],
                                       target="0x%06X" % s["target"]))
             continue
-        if near_absurd(s["rel"], s["li"]):
+        if near_absurd(s["rel"], s["li"]) and s["addr"] not in trusted:
             if tkind(s["target"]) == "boundary":
                 stats["refuse_R3_absurd_block"] += 1
                 refused["R3"].append(dict(src="%s:%d" % (s["rel"], s["li"] + 1),
@@ -755,11 +759,15 @@ def main():
     ap.add_argument("--report")
     ap.add_argument("--only", help="comma-separated source files, relative to the image's "
                     "mirror dir (e.g. sequencer/accompaniment_engine.s, or prom_b/wsa1_prom_b.s)")
+    ap.add_argument("--trust-traced", help="JSON list of branch-site addresses (hex strings) that a "
+                    "control-flow trace from called entry points reached, with their targets: R3 "
+                    "(absurd neighbourhood) is waived for them; every other rule still applies")
     ap.add_argument("--kinds", default="boundary-code,boundary-data,boundary-incbin",
                     help="which target kinds to convert")
     a = ap.parse_args()
     img = image_by_key(a.image)
-    res = analyse(img, set(a.only.split(",")) if a.only else None)
+    trusted = frozenset(int(x, 16) for x in json.load(open(a.trust_traced))) if a.trust_traced else frozenset()
+    res = analyse(img, set(a.only.split(",")) if a.only else None, trusted)
     allowed = set(a.kinds.split(","))
     for t in list(res["plans"]):
         if res["plans"][t]["kind"] not in allowed:

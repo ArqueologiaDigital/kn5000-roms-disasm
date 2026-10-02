@@ -6924,12 +6924,13 @@ VoiceParam_CompareAndUpdate:
 	ld	c, a
 	ld	a, (0x9096:16)
 	cp	c, a
-	jr	z, 16
+	jr	z, VoiceParam_CompareAndUpdate_Epilogue
 	ld	(xhl), c
 	ld	(0x9096:16), c
 	ld	(0x908d:16), c
 	ld	a, (xsp)
 	or	(0x908e:16), a
+VoiceParam_CompareAndUpdate_Epilogue:
 	inc	2, xsp
 	ret
 ExtData_ToneParam_DispatchHandler_Helper2:
