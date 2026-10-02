@@ -39,7 +39,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_MasterStyleGrid  +0x0..+0x14 (0xed27e8, 20 B)
-; [nakarest] purpose not established: 20 B at 0xed27e8 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] bytes 4-23 of class definition 0 (NormScreen) of Class slot 0x162 (table 0xed27e4, 28 entries, InitializeToshi): its parent, allsize, selfsize, name, propdata and propname; its proc word, bytes 0-3, ends the slice before.
 NakaData_MasterStyleGrid:
 	.incbin "includes/generated/naka_master_style.bin", 0x0, 0x14
 ; [nakarest] naka_master_style+0x14  +0x14..+0x2b4 (0xed27fc, 672 B)

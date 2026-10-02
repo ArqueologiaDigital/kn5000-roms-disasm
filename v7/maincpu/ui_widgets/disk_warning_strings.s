@@ -313,7 +313,7 @@ ButtonState_DispatchDSP_InlineData_Str_N98:	.incbin "includes/generated/naka_dis
 ButtonState_DispatchDSP_InlineData_Str_N85:	.incbin "includes/generated/naka_disk_warning.bin", 0x1646, 0x4	; "~85"
 ButtonState_DispatchDSP_InlineData_Str_N81:	.incbin "includes/generated/naka_disk_warning.bin", 0x164A, 0x4	; "~81"
 ; [nakarest] NakaInst_OK  +0x164e..+0x166a (0xeaa2fa, 28 B)
-; [nakarest] purpose not established: 28 B at 0xeaa2fa that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 28 B at 0xeaa2fa: split since into the labelled pieces below; code or data uses NakaInst_OK, ButtonState_DispatchDSP_InlineData_Str_OFF, ButtonState_DispatchDSP_InlineData_Str_OK, ButtonState_DispatchDSP_InlineData_Str_Lt and 4 more.
 NakaInst_OK:					.incbin "includes/generated/naka_disk_warning.bin", 0x164E, 0x4
 ButtonState_DispatchDSP_InlineData_Str_OFF:	.incbin "includes/generated/naka_disk_warning.bin", 0x1652, 0x4	; "OFF"
 ButtonState_DispatchDSP_InlineData_Str_OK:	.incbin "includes/generated/naka_disk_warning.bin", 0x1656, 0x4	; "OK"
@@ -323,7 +323,7 @@ ButtonState_DispatchDSP_InlineData_Str_N7f:	.incbin "includes/generated/naka_dis
 ButtonState_DispatchDSP_InlineData_Str_N80:	.incbin "includes/generated/naka_disk_warning.bin", 0x1662, 0x4	; "~80"
 ButtonState_DispatchDSP_InlineData_Str_YES:	.incbin "includes/generated/naka_disk_warning.bin", 0x1666, 0x4	; "YES"
 ; [nakarest] Str_No  +0x166a..+0x166e (0xeaa316, 4 B)
-; [nakarest] purpose not established: 4 B at 0xeaa316 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 4 B at 0xeaa316: split since into the labelled pieces below; code or data uses Str_No.
 Str_No:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x166A, 0x4
 ; [nakarest] naka_disk_warning+0x166e  +0x166e..+0x1690 (0xeaa31a, 34 B)
@@ -908,7 +908,7 @@ DrawFunc_Init_Entry5_Str_Fmt2d:		.incbin "includes/generated/naka_disk_warning.b
 DrawFunc_Init_Entry5_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24EC, 0x4	; "%3d"
 DrawFunc_Init_Entry5_Str_Fmt4d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24F0, 0x4	; "%4d"
 ; [nakarest] Data_CharMapFormatBlock  +0x24f4..+0x2508 (0xeab1a0, 20 B)
-; [nakarest] purpose not established: 20 B at 0xeab1a0 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 20 B at 0xeab1a0: split since into the labelled pieces below; code or data uses Data_CharMapFormatBlock, DrawFunc_Init_Entry5_Str_Fmt1d, DrawFunc_Init_Entry5_Str_Fmt2d_2, DrawFunc_Init_Entry5_Str_Fmt3d_2.
 Data_CharMapFormatBlock:		.incbin "includes/generated/naka_disk_warning.bin", 0x24F4, 0x8
 DrawFunc_Init_Entry5_Str_Fmt1d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24FC, 0x4	; "%1d"
 DrawFunc_Init_Entry5_Str_Fmt2d_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x2500, 0x4	; "%2d"

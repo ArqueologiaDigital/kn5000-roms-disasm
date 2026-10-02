@@ -39,7 +39,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_Block012  +0x0..+0x14 (0xeaccda, 20 B)
-; [nakarest] purpose not established: 20 B at 0xeaccda that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] bytes 4-23 of class definition 31 (AcIndexEditSw) of Class slot 0x160 (table 0xeac9ee, 109 entries, InitializeRoot): its parent, allsize, selfsize, name, propdata and propname; its proc word, bytes 0-3, ends the slice before.
 NakaData_Block012:
 	.incbin "includes/generated/naka_block_012.bin", 0x0, 0x14
 ; [nakarest] naka_block_012+0x14  +0x14..+0x764 (0xeaccee, 1872 B)

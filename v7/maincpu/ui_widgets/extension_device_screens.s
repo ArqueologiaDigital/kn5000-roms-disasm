@@ -884,7 +884,7 @@ MidiCC_LookupHandler_Data:
 ENCODER_HANDLER_TABLE:
 	.incbin "includes/generated/naka_extension_device.bin", 0x38F0, 0x80
 ; [nakarest] ENCODER_LUT_MODWHEEL  +0x3970..+0x3994 (0xeda13c, 36 B)
-; [nakarest] purpose not established: 36 B at 0xeda13c that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 36 B at 0xeda13c: split since into the labelled pieces below; code or data uses ENCODER_LUT_MODWHEEL.
 ENCODER_LUT_MODWHEEL:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3970, 0x24
 ; External label offsets within the binary blob above.

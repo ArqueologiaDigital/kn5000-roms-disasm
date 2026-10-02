@@ -71,7 +71,6 @@ MixerPart_NamePtrTable:
 ; [nakarest] that copy was found.
 Naka_DrawbarControl_Table:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0xCCC, 0x34
-EmbeddedPtrTable_v9_naka_sequencer_channels_000D00:
 	.long NakaInst_PART_14
 	.long NakaInst_PART_15
 	.long NakaInst_PART_16

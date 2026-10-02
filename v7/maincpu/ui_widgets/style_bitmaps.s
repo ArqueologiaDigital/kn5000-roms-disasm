@@ -3659,7 +3659,6 @@ NakaInst_Bluegrass_Time:
 ; [nakarest] 0x0340d6.
 StyleGroup_LatinWorld_PairTable:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x187EC, 0x14
-EmbeddedPtrTable_v7_naka_style_bitmaps_018800:
 	.long 0x00ECD16E
 	.long 0x00ECFC5C
 	.long 0x00ECD214
@@ -3868,7 +3867,7 @@ NakaInst_MEMORY_A_ECFDF4:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C36, 0xA
 VariScreen_HandlePaint_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C40, 0xE2
 ; [nakarest] Naka_MemoryC_Screens  +0x18d22..+0x18d62 (0xecfee0, 64 B)
-; [nakarest] purpose not established: 64 B at 0xecfee0 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 64 B at 0xecfee0: split since into the labelled pieces below; code or data uses Naka_MemoryC_Screens.
 Naka_MemoryC_Screens:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18D22, 0x40
 ; [nakarest] MemScreen_Space1  +0x18d62..+0x18d66 (0xecff20, 4 B)

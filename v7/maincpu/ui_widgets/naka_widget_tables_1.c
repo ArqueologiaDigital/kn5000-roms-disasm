@@ -400,12 +400,16 @@ extern const char TrkMixerIntTtlFunc;
 
 typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
-     * [typed] by span_t1
-     * NakaData_WidgetTables1 -- 24 bytes at the start of the blob that no
-     * registration or code reference reaches (searched: RegObjTabl tables,
-     * slice and positional labels). Contents not established.
+     * NakaWidget_Perf3RhythmSel_Tail -- the last 8 bytes of widget record
+     * NakaWidget_Perf3RhythmSel (0xE24034, a 42-byte PsWideToggle, element 9 of
+     * Viewable slot 0xE3), split across the blob boundary: the previous blob
+     * (naka_direct_play) holds its first 34 bytes.  Then its two captions:
+     * the record's +30 word points at the first "RHYTHM", its +26 word
+     * (stroff, by the other PsWideToggle records) at the second.
      * --------------------------------------------------------------------- */
-    uint8_t NakaData_WidgetTables1[24];
+    uint8_t NakaWidget_Perf3RhythmSel_Tail[8];
+    char txt_RHYTHM_on[8];
+    char txt_RHYTHM_off[8];
     /* ---------------------------------------------------------------------
      * NakaHdr_Perf2MeasureBoxData -- widget record, entry 10 of
      * Yoko_ViewTable_0E3 (registered by InitializeYoko (v10/v9 0xF29E6D, v7
@@ -1619,10 +1623,11 @@ _Static_assert(sizeof(naka_widget_tables_1_t) == 12878,
 const naka_widget_tables_1_t naka_widget_tables_1_data
     __attribute__((section(".text"), used)) = {
 
-    .NakaData_WidgetTables1 = {
-        0xA0, 0xDE, 0x03, 0x00, 0x06, 0x00, 0x07, 0x00, 0x52, 0x48, 0x59, 0x54, 0x48, 0x4D, 0x00, 0xFF,
-        0x52, 0x48, 0x59, 0x54, 0x48, 0x4D, 0x00, 0xFF,
+    .NakaWidget_Perf3RhythmSel_Tail = {
+        0xA0, 0xDE, 0x03, 0x00, 0x06, 0x00, 0x07, 0x00,
     },
+    .txt_RHYTHM_on = ALIGNED_STRING("RHYTHM"),
+    .txt_RHYTHM_off = ALIGNED_STRING("RHYTHM"),
 
     .NakaHdr_Perf2MeasureBoxData = {
         0x29, 0x00, 0x60, 0x01, 0x00, 0x00, 0xFF, 0xFF, 0x0B, 0x00, 0x09, 0x00, 0x18, 0x00, 0x00, 0x00,

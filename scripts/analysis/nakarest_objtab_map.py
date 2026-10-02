@@ -110,11 +110,23 @@ def nm(v):
     return d, rev
 
 
+def abs_syms(v):
+    """The .equ / .set constants of the linked image (llvm-nm type `a`): the
+    registrations name their classes NAKA_CLASS_* since the event-constant pass
+    of 2026-10-02."""
+    elf = os.path.join(ROOT, 'rebuilt_ROMs', 'kn5000_%s_program.llvm.elf' % v)
+    out = subprocess.run([os.path.join(LLVM, 'llvm-nm'), '--defined-only', elf],
+                         capture_output=True, text=True, check=True).stdout
+    return {f[2]: int(f[0], 16) for f in (ln.split() for ln in out.split('\n'))
+            if len(f) == 3 and f[1] in 'aA'}
+
+
 class Map:
     def __init__(self, v):
         self.v = v
         self.rom = open(os.path.join(ROOT, 'original_ROMs', 'kn5000_%s_program.rom' % v), 'rb').read()
         self.sym, self.rev = nm(v)
+        self.abssym = abs_syms(v)
         self.revaddr = [a for a, _ in self.rev]
         self.regs = []           # dicts: cls, proc, count, table, slot, init, file, line
         self._parse()
@@ -131,7 +143,7 @@ class Map:
         try:
             return int(tok, 0)
         except ValueError:
-            return self.sym.get(tok)
+            return self.sym[tok] if tok in self.sym else self.abssym.get(tok)
 
     def _parse(self):
         """Both spellings: the RegObjTabl macro (v10/v9), and the same code
@@ -180,9 +192,9 @@ class Map:
         cls = proc = cnt = tab = slot = None
         self._count_at = None
         for j, t in enumerate(txt):
-            m = re.match(r'^ld\s+XWA,\s*(0x0160[0-9a-fA-F]{4})$', t, re.I)
-            if m:
-                cls = int(m.group(1), 16)
+            m = re.match(r'^ld\s+XWA,\s*(0x0160[0-9a-fA-F]{4}|NAKA_CLASS_\w+)$', t, re.I)
+            if m and (self._val(m.group(1)) or 0) >> 16 == 0x160:
+                cls = self._val(m.group(1))
             m = re.match(r'^lda\s+xwa,\s*\(([^:)]+):24\)$', t, re.I)
             if m and j + 1 < len(txt):
                 nxt = txt[j + 1].replace(' ', '').lower()

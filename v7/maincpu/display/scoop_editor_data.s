@@ -5,7 +5,7 @@
 ; CODE, not data: 3,422 TLCS-900 instructions and not one .byte/.ascii/.long
 ; directive, re-assembled byte-identical to the dump.  Entered at
 ; Scoop_SoundEditorData -- named by one `.long` of the pointer table
-; EmbeddedPtrTable_v*_gui_display_struct_data_000B00 in kn5000_v*_program.s,
+; GUI_DisplayStructData_0xAF8 in kn5000_v*_program.s,
 ; where 187 more `.long`s point into this file as bare numbers -- and at the
 ; 15 interior offsets that the title-function stubs of
 ; audio/sound_editor_routines.s reach by `jp Scoop_SoundEditorData_0x..`

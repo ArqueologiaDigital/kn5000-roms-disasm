@@ -344,7 +344,6 @@ Murai_ResNameTable_302:	.incbin "includes/generated/naka_technichord_part.bin", 
 ; [nakarest] the table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries, InitializeMurai),
 ; [nakarest] 84 entry pointers x 4 bytes.
 Murai_ResNameTable_303:	.incbin "includes/generated/naka_technichord_part.bin", 0x3DC0, 0x40
-EmbeddedPtrTable_v10_naka_technichord_part_003E00:
 	.long 0x00E85CB4
 	.long 0x00E85CB2
 	.long 0x00E85CB0
@@ -410,7 +409,7 @@ EmbeddedPtrTable_v10_naka_technichord_part_003E00:
 	.long 0x00E85BEE
 	.long 0x00E85BEC
 ; [nakarest] naka_technichord_part+0x3f00  +0x3f00..+0x3f16 (0xe85bce, 22 B)
-; [nakarest] purpose not established: 6 B at 0xe85bde that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 6 B at 0xe85bde: the end marker of ResName slot 0x303 (table 0xe85a8e, 84 entries, InitializeMurai) -- entry 84, a pointer to the empty string right after it ("", 00 ff), as every ResName table ends.
 ; [nakarest] Continues the table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries,
 ; [nakarest] InitializeMurai), 84 entry pointers x 4 bytes (starts 0xe85a8e, 16 of its 336 bytes
 ; [nakarest] are here or later).

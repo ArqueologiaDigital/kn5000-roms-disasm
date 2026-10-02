@@ -65,7 +65,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_SoundMenuDrawbar  +0x0..+0x14 (0xe80fe2, 20 B)
-; [nakarest] purpose not established: 20 B at 0xe80fe2 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] bytes 4-23 of class definition 31 (AcFdemoScreen) of Class slot 0x161 (table 0xe80cf6, 37 entries, InitializeMurai): its parent, allsize, selfsize, name, propdata and propname; its proc word, bytes 0-3, ends the slice before.
 NakaData_SoundMenuDrawbar:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x0, 0x14
 ; [nakarest] naka_sound_menu_drawbar+0x14  +0x14..+0xa4 (0xe80ff6, 144 B)
@@ -381,7 +381,7 @@ Murai_ClassCount_161:
 Murai_ResEventTable_1C1:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x302, 0x4
 ; [nakarest] Naka_EventDispatch_Table  +0x306..+0x32e (0xe812e8, 40 B)
-; [nakarest] purpose not established: 4 B at 0xe8130c that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 4 B at 0xe8130c: the end marker of ResEvent slot 0x1c1 (table 0xe812e4, 10 entries, InitializeMurai) -- a zero word after entry 9, the last, as every ResEvent table ends.
 ; [nakarest] Continues the table itself: ResEvent slot 0x1c1 (table 0xe812e4, 10 entries,
 ; [nakarest] InitializeMurai), 10 entry pointers x 4 bytes (starts 0xe812e4, 36 of its 40 bytes
 ; [nakarest] are here or later).
@@ -423,7 +423,7 @@ InitializeMurai_PtrTable_5:	.incbin "includes/generated/naka_sound_menu_drawbar.
 Murai_FunctionTable_401:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x5AA, 0x4
 ; [nakarest] Naka_Event_Table2  +0x5ae..+0x642 (0xe81590, 148 B)
-; [nakarest] purpose not established: 4 B at 0xe81620 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 4 B at 0xe81620: the end marker of Function slot 0x401 (table 0xe8158c, 37 entries, InitializeMurai) -- entry 37, a pointer to the empty string right after it ("", 00 ff, which starts the next slice), as every function name table ends.
 ; [nakarest] Continues the table itself: Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes (starts 0xe8158c, 144 of its 148
 ; [nakarest] bytes are here or later).

@@ -2,15 +2,16 @@
 ; NAKA Widget Pointer Tables Part 1 (13 widgets, 12878 bytes)
 ; Source: maincpu/ui_widgets/naka_widget_tables_1.c (C struct with named fields)
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] NakaData_WidgetTables1
-; NakaData_WidgetTables1 -- 24 bytes at the start of the blob that no
-; registration or code reference reaches (searched: RegObjTabl tables,
-; slice and positional labels). Contents not established.
-;
-; Typed in naka_widget_tables_1.c as uint8_t NakaData_WidgetTables1[24].
+; NakaWidget_Perf3RhythmSel_Tail -- the last 8 bytes of widget record
+; NakaWidget_Perf3RhythmSel (a 42-byte PsWideToggle, element 9 of Viewable slot
+; 0xe3), split across the blob boundary: direct_play_medley_screens.s holds its
+; first 34 bytes.  Then the record's two captions: its +30 word points at
+; NakaWidget_Perf3RhythmSel_StrOn, its +26 word (stroff, by the other
+; PsWideToggle records) at NakaWidget_Perf3RhythmSel_StrOff.
 ; -----------------------------------------------------------------------------
-NakaData_WidgetTables1:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x0, 0x18
+NakaWidget_Perf3RhythmSel_Tail:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x0, 0x8
+NakaWidget_Perf3RhythmSel_StrOn:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x8, 0x8
+NakaWidget_Perf3RhythmSel_StrOff:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x10, 0x8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaHdr_Perf2MeasureBoxData
 ; NakaHdr_Perf2MeasureBoxData -- widget record, entry 10 of

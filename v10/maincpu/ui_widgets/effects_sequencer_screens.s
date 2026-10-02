@@ -822,7 +822,6 @@ Kubo_ViewableTable_00B:	.incbin "includes/generated/naka_effects_seq.bin", 0x66B
 ; [nakarest] the table itself: Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo),
 ; [nakarest] 37 entry pointers x 4 bytes.
 Kubo_ViewableTable_00C:	.incbin "includes/generated/naka_effects_seq.bin", 0x66E8, 0x18
-EmbeddedPtrTable_v10_naka_effects_seq_006700:
 	.long 0x00E2841C
 	.long 0x00E28444
 	.long 0x00E2846C
@@ -1464,7 +1463,7 @@ InitializeKubo_PtrTable_34:	.long 0x00E2DD10
 	.long 0x00E2E5AC
 	.long 0x00E2E5D6
 ; [nakarest] naka_effects_seq+0x7100  +0x7100..+0x7108 (0xe2f0a4, 8 B)
-; [nakarest] purpose not established: 4 B at 0xe2f0a8 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 4 B at 0xe2f0a8: the end marker of Viewable slot 0xe7 (table 0xe2efb4, 61 entries, InitializeKubo) -- a zero word after entry 60, the last, as every Viewable table ends.
 ; [nakarest] Continues the table itself: Viewable slot 0xe7 (table 0xe2efb4, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe2efb4, 4 of its 244 bytes
 ; [nakarest] are here or later).
@@ -1809,7 +1808,7 @@ Naka_Help_566_E300E3:
 Naka_Help_567_E300EC:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x8148, 0x27
 ; [nakarest] Naka_Help_569_E30113  +0x816f..+0x81f4 (0xe30113, 133 B)
-; [nakarest] purpose not established: 6 B at 0xe30192 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 6 B at 0xe30192: the end marker of ResName slot 0x3e7 (table 0xe3009e, 61 entries, InitializeKubo) -- entry 61, a pointer to the empty string right after it ("", 00 ff), as every ResName table ends.
 ; [nakarest] Continues the table itself: ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo), 61 entry pointers x 4 bytes (starts 0xe3009e, 127 of its 244 bytes
 ; [nakarest] are here or later).
@@ -1870,7 +1869,6 @@ InitializeKubo_Str_TT_SWHELP:		.incbin "includes/generated/naka_effects_seq.bin"
 ; [nakarest] the table itself: MainFunction slot 0x148 (table 0xe3051c, 44 entries,
 ; [nakarest] InitializeKubo), 44 entry pointers x 4 bytes.
 Kubo_MainFunctionTable_148:	.incbin "includes/generated/naka_effects_seq.bin", 0x8578, 0x88
-EmbeddedPtrTable_v10_naka_effects_seq_008600:
 	.long SdAccillTitleFunc
 	.long MimeSyori
 	.long SqNoteCycpTitleFunc
@@ -1929,9 +1927,9 @@ InitializeKubo_PtrTable_72:	.long 0x00E30932
 	.long 0x00E30684
 ; [nakarest] naka_effects_seq+0x86e0  +0x86e0..+0x86e2 (0xe30684, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe30684 not derived; readers below
-; [nakarest] Readers: source references EmbeddedPtrTable_v10_naka_effects_seq_008600
+; [nakarest] Readers: source references Kubo_MainFunctionTable_148
 ; [nakarest] (ui_widgets/effects_sequencer_screens.s: `.long 0x00e30684`); 1 data word in
-; [nakarest] EmbeddedPtrTable_v10_naka_effects_seq_008600 (at 0xe30680).
+; [nakarest] Kubo_MainFunctionTable_148 (at 0xe30680).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x86E0, 0x2
 ; [nakarest] naka_effects_seq+0x86e2  +0x86e2..+0x899a (0xe30686, 696 B)
 ; [nakarest] name strings, entries 0-43 of MainFunction slot 0x448 (table 0xe305d0, 44 entries,

@@ -39,7 +39,7 @@
 ; -----------------------------------------------------------------------------
 
 ; [nakarest] NakaData_SequencerExit  +0x0..+0x14 (0xe272a4, 20 B)
-; [nakarest] purpose not established: 20 B at 0xe272a4 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] bytes 4-23 of class definition 12 (NoteEditBox) of Class slot 0x168 (table 0xe27180, 26 entries, InitializeKubo): its parent, allsize, selfsize, name, propdata and propname; its proc word, bytes 0-3, ends the slice before.
 NakaData_SequencerExit:
 	.incbin "includes/generated/naka_sequencer_exit.bin", 0x0, 0x14
 ; [nakarest] naka_sequencer_exit+0x14  +0x14..+0x164 (0xe272b8, 336 B)

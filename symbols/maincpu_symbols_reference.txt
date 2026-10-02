@@ -21,9 +21,9 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 47,973
-#   semantic names ........... 45,731 (95.3%)
-#   positional names ......... 2,242
+#   symbols .................. 47,960
+#   semantic names ........... 45,729 (95.3%)
+#   positional names ......... 2,231
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -764,7 +764,6 @@ GUI_DisplayStructData_0x7D8 00E0D7B6
 GUI_DisplayStructData_0xAD8 00E0DAB6
 GUI_DisplayStructData_0xAE8 00E0DAC6
 GUI_DisplayStructData_0xAF8 00E0DAD6
-EmbeddedPtrTable_v10_gui_display_struct_data_000B00 00E0DADE
 GUI_DisplayStructData_0xB08 00E0DAE6
 GUI_DisplayStructData_0xB18 00E0DAF6
 GUI_DisplayStructData_0xB28 00E0DB06
@@ -3309,7 +3308,9 @@ NakaWidget_Perf3ModernBluegrass 00E23F80
 NakaWidget_Perf3StyleSel 00E23FC8
 NakaWidget_Perf3SoundSel 00E23FFE
 NakaWidget_Perf3RhythmSel 00E24034
-NakaData_WidgetTables1 00E24056
+NakaWidget_Perf3RhythmSel_Tail 00E24056
+NakaWidget_Perf3RhythmSel_StrOn 00E2405E
+NakaWidget_Perf3RhythmSel_StrOff 00E24066
 NakaHdr_Perf2MeasureBoxData 00E2406E
 NakaHdr_Perf2FileListData 00E24088
 Yoko_ViewTable_06F 00E240AC
@@ -3680,7 +3681,6 @@ NakaInst_FADE_IN_OUT_SETTING 00E2DB96
 Kubo_ViewableTable_00A 00E2E624
 Kubo_ViewableTable_00B 00E2E658
 Kubo_ViewableTable_00C 00E2E68C
-EmbeddedPtrTable_v10_naka_effects_seq_006700 00E2E6A4
 InitializeKubo_PtrTable 00E2E724
 InitializeKubo_PtrTable_2 00E2E758
 InitializeKubo_PtrTable_3 00E2E78C
@@ -3810,7 +3810,6 @@ InitializeKubo_Str_TT_SQMETBAL 00E304FC
 InitializeKubo_Str_TT_ETMENU 00E30508
 InitializeKubo_Str_TT_SWHELP 00E30512
 Kubo_MainFunctionTable_148 00E3051C
-EmbeddedPtrTable_v10_naka_effects_seq_008600 00E305A4
 InitializeKubo_PtrTable_72 00E305D0
 EntertainerGridCheck_Data 00E3093E
 NoteEdit_FormatTempoString_Data 00E30946
@@ -5162,7 +5161,6 @@ Murai_ViewableTable_0EF 00E859A8
 Murai_ViewableTable_0F0 00E859D8
 Murai_ResNameTable_302 00E859F4
 Murai_ResNameTable_303 00E85A8E
-EmbeddedPtrTable_v10_naka_technichord_part_003E00 00E85ACE
 InitializeMurai_PtrTable 00E85CF0
 InitializeMurai_PtrTable_2 00E85D14
 InitializeMurai_PtrTable_3 00E85F0A
@@ -5543,7 +5541,6 @@ MsgText_Lang2_PtrTable 00E98382
 Str_Err24Ctrl_Indonesian 00E9839A
 Str_Err24Ctrl_Italian 00E983EC
 MsgText_Lang3_PtrTable 00E9855C
-StrTable_DiskErr24_APC 00E98560
 Str_Err24APC_Indonesian 00E98574
 Str_Err24APC_Italian 00E985BE
 Str_Err24APC_Spanish 00E985C8
@@ -6152,7 +6149,6 @@ BankStr_Bank2 00EA0612
 BankStr_Dashes2 00EA0618
 BankStr_Bank3 00EA061E
 SLDstMem_HandleShow_PtrTable 00EA0624
-DiskItem_TypeTable 00EA0628
 DiskItemType_Dashes 00EA0638
 DiskItemType_Memory 00EA0642
 DiskItemType_Pattern 00EA064C
@@ -6205,7 +6201,6 @@ Str_Variation3 00EA0826
 Str_Variation2 00EA082E
 Str_Variation1 00EA0836
 WP_GetBankMemName_FromROM_PtrTable 00EA083E
-PtrTbl_RhythmSectionNames 00EA084E
 Str_Ending2 00EA0866
 Str_Ending1 00EA0878
 Str_FillIn2 00EA088A
@@ -6249,7 +6244,6 @@ SLDstBankList_FuncBody_Data_4 00EA0A12
 SLDst_HandleShow_PtrTable 00EA0A16
 CmpSrc_HandleShow_PtrTable 00EA0A2A
 CmpDst_HandleShow_PtrTable 00EA0A3E
-EmbeddedPtrTable_v10_naka_technichord_strings_01AB00 00EA0A4E
 CmpFile_ShowDefault_Data 00EA0A52
 Data_SaveLoadMenuTable_0x64 00EA0A54
 InitializeCheap_PtrTable 00EA0A56
@@ -6414,7 +6408,6 @@ Cheap_ViewableTable_07E 00EA6FBA
 Cheap_ViewableTable_0BC 00EA6FDE
 Cheap_ResNameTable_360 00EA6FE2
 Cheap_ResNameTable_361 00EA7228
-EmbeddedPtrTable_v10_naka_disk_menu_file_io_005F00 00EA72CC
 Cheap_ResNameTable_362 00EA75C6
 Cheap_ResNameTable_363 00EA75CC
 Cheap_ResNameTable_364 00EA75D2
@@ -6424,7 +6417,6 @@ InitializeCheap_PtrTable_3 00EA7602
 Cheap_ResNameTable_36A 00EA77E4
 InitializeCheap_PtrTable_4 00EA77EA
 InitializeCheap_PtrTable_5 00EA7878
-EmbeddedPtrTable_v10_naka_disk_menu_file_io_006500 00EA78CC
 Cheap_ResNameTable_36D 00EA7ACA
 Cheap_ResNameTable_36E 00EA7AD0
 InitializeCheap_PtrTable_6 00EA7AD6
@@ -7149,8 +7141,6 @@ Str_InitializeMurai 00EB191A
 Str_InitializeRoot 00EB192A
 SliderV_Setup_Data 00EB193A
 IconIDProc_PtrTable 00EB193C
-IconNamePtrTable 00EB1940
-EmbeddedPtrTable_v10_naka_widget_names_charmap_004500 00EB1970
 IconName_Empty 00EB1D3C
 IconName_i173 00EB1D3E
 IconName_i172 00EB1D44
@@ -7327,7 +7317,6 @@ IconName_i2 00EB207E
 IconName_i1 00EB2082
 IconName_i0 00EB2086
 IconName_Default 00EB208A
-EmbeddedPtrTable_v10_naka_widget_names_charmap_004C28 00EB2098
 IconBitmapNamePtrTable 00EB2098
 IconBitmapName_Empty 00EB2498
 IconBitmapName_i173 00EB249A
@@ -8081,7 +8070,6 @@ NakaInst_Kentucky_Blue 00ECF974
 NakaInst_Modern_Hoedown 00ECF986
 NakaInst_Bluegrass_Time 00ECF998
 StyleGroup_LatinWorld_PairTable 00ECF9AA
-EmbeddedPtrTable_v10_naka_style_bitmaps_018800 00ECF9BE
 MstStyle1Grid_CellSelect_Data 00ECFCA4
 StyleGroup_LatinDance_Table 00ECFCA8
 NakaInst_Latin_World 00ECFCF4
@@ -11788,7 +11776,6 @@ SeqCh_FeatureDemoCallbackData 00EEE820
 SeqCh_SystemHandlerData 00EEE900
 MixerPart_NamePtrTable 00EEECC0
 Naka_DrawbarControl_Table 00EEED44
-EmbeddedPtrTable_v10_naka_sequencer_channels_000D00 00EEED78
 MidiPart_ConfigNameTable 00EEEDD4
 Naka_DrawbarSlider_Resources 00EEEFC0
 Naka_DrawbarDisplay_Table1 00EEF350

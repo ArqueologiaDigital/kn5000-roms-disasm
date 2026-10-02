@@ -203,7 +203,6 @@ GUI_DisplayStructData_0xAF8:
 	.incbin "includes/generated/gui_display_struct_data.bin", 0xAF8, 0x8
 ; purpose not established.
 ; tried: `lda`/`ld` of a 24- or 32-bit immediate, and any little-endian 24-bit copy of an address from 0x120 B before this slice to its end, anywhere in the ROM: none found
-EmbeddedPtrTable_v7_gui_display_struct_data_000B00:
 	.long SeTonTon1TitleFunc_DisplayData+0x8
 	.long SeTonTon1TitleFunc_DisplayData+0x12
 ; object named by 1 line(s) of code outside this file; what that code does with it:

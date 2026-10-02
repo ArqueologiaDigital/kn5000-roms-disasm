@@ -3673,7 +3673,6 @@ NakaInst_Bluegrass_Time:
 ; [nakarest] 0x0340d6.
 StyleGroup_LatinWorld_PairTable:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x187EC, 0x14
-EmbeddedPtrTable_v9_naka_style_bitmaps_018800:
 	.long 0x00ECD16E
 	.long 0x00ECFC5C
 	.long 0x00ECD214

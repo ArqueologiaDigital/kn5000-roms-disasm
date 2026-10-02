@@ -491,7 +491,6 @@ Cheap_ResNameTable_360:	.incbin "includes/generated/naka_disk_menu_file_io.bin",
 ; [nakarest] the table itself: ResName slot 0x361 (table 0xea7228, 128 entries,
 ; [nakarest] InitializeCheap), 128 entry pointers x 4 bytes.
 Cheap_ResNameTable_361:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x5E5C, 0xA4
-EmbeddedPtrTable_v9_naka_disk_menu_file_io_005F00:
 	.long 0x00EA754A
 	.long 0x00EA7548
 	.long 0x00EA7546
@@ -557,7 +556,7 @@ EmbeddedPtrTable_v9_naka_disk_menu_file_io_005F00:
 	.long 0x00EA747C
 	.long 0x00EA747A
 ; [nakarest] naka_disk_menu_file_io+0x6000  +0x6000..+0x6062 (0xea73cc, 98 B)
-; [nakarest] purpose not established: 6 B at 0xea7428 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
+; [nakarest] 6 B at 0xea7428: the end marker of ResName slot 0x361 (table 0xea7228, 128 entries, InitializeCheap) -- entry 128, a pointer to the empty string right after it ("", 00 ff), as every ResName table ends.
 ; [nakarest] Continues the table itself: ResName slot 0x361 (table 0xea7228, 128 entries,
 ; [nakarest] InitializeCheap), 128 entry pointers x 4 bytes (starts 0xea7228, 92 of its 512
 ; [nakarest] bytes are here or later).
@@ -615,7 +614,6 @@ InitializeCheap_PtrTable_4:	.incbin "includes/generated/naka_disk_menu_file_io.b
 ; [nakarest] the table itself: ResName slot 0x36c (table 0xea7878, 83 entries, InitializeCheap),
 ; [nakarest] 83 entry pointers x 4 bytes.
 InitializeCheap_PtrTable_5:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x64AC, 0x54
-EmbeddedPtrTable_v9_naka_disk_menu_file_io_006500:
 	.long 0x00EA7A8E
 	.long 0x00EA7A8C
 	.long 0x00EA7A8A
@@ -681,9 +679,9 @@ EmbeddedPtrTable_v9_naka_disk_menu_file_io_006500:
 	.long 0x00EA79C8
 ; [nakarest] naka_disk_menu_file_io+0x65fc  +0x65fc..+0x65fe (0xea79c8, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xea79c8 not derived; readers below
-; [nakarest] Readers: source references EmbeddedPtrTable_v9_naka_disk_menu_file_io_006500
+; [nakarest] Readers: source references InitializeCheap_PtrTable_5
 ; [nakarest] (ui_widgets/disk_menu_file_io_screens.s: `.long 0x00ea79c8`); 1 data word in
-; [nakarest] EmbeddedPtrTable_v9_naka_disk_menu_file_io_006500 (at 0xea79c4).
+; [nakarest] InitializeCheap_PtrTable_5 (at 0xea79c4).
 	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x65FC, 0x2
 ; [nakarest] naka_disk_menu_file_io+0x65fe  +0x65fe..+0x66fe (0xea79ca, 256 B)
 ; [nakarest] name strings, entries 0-82 of ResName slot 0x36c (table 0xea7878, 83 entries,
