@@ -181,9 +181,9 @@ ParaLoadOpt_CaseF:
 	cp	wa, 12
 	jrl	gt, MidiFunc_SendEventReturn	; -> 0xF767F9
 	add	wa, wa
-	lda	xix, (15203924:24)
+	lda	xix, (ParaLoadOpt_AudioFlagCheck_B_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (16213759:24)
+	lda	xix, (ParaLoadOpt_DispatchTable_B:24)
 	jp_rr	8, xix, wa
 ParaLoadOpt_DispatchTable_B:
 	ld	(0x024760:24), 0

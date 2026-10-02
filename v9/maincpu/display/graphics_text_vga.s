@@ -2269,7 +2269,7 @@ FontGlyph_ByteData_Join:
 ; =============================================================================
 InitPaletteRGB:
 	lda xde, (0x0324fc:24)
-	lda xwa, (0xeb37de:24)
+	lda xwa, (Palette_8bit_RGBA:24)
 	ld xbc, xwa
 	lda xhl, (xwa+1024)
 

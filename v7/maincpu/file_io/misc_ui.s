@@ -29,7 +29,7 @@ JumpInsertFunc:
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 15373962
+	ld	xbc, DiskWarning_ConfirmStrings_0x9DE
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -66,7 +66,7 @@ FilePriorityFunc:
 	ld	wa, (xde+8)
 	and	wa, 1
 	sla	wa, 2
-	lda	xbc, (15374072:24)
+	lda	xbc, (DiskWarning_ConfirmStrings_0xA4C:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+10)

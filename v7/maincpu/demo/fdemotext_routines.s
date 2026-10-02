@@ -1227,7 +1227,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xiz, xwa
 	cp	xiz, 4294967295
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip
-	lda	xhl, (15334864:24)
+	lda	xhl, (DemoDiskPrompt_English1_0x192:24)
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue
 FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xwa, xiz
@@ -1325,7 +1325,7 @@ FDemoText_ByteData_DisplayRefresh_Skip4:
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jr	ge, FDemoText_ByteData_DisplayRefresh_Loop
-	ld	xwa, 15334876
+	ld	xwa, ErrStr_GetInstanceID
 	call	FDemoText_ByteData_DisplayRefresh_Helper
 	ld	xhl, 4294967295
 FDemoText_ByteData_DisplayRefresh_Epilogue2:
@@ -3004,7 +3004,7 @@ Seq_LoadResource_Proceed:
 	pushw	24
 	ld	xwa, 149704
 	ld	xbc, 256
-	ld	xde, 15335432
+	ld	xde, Presentation_TagStrTable
 	calr	Seq_LoadDisplayResource_Helper
 	call	FileIO_CloseHandle
 Seq_Epilogue32:

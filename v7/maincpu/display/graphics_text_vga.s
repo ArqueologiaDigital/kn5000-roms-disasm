@@ -2247,7 +2247,7 @@ HexCharToNibble_Join:
 ; =============================================================================
 InitPaletteRGB:
 	lda xde, (0x0324fc:24)
-	lda xwa, (0xeb37de:24)
+	lda xwa, (Palette_8bit_RGBA:24)
 	ld xbc, xwa
 	lda xhl, (xwa+1024)
 
@@ -3998,7 +3998,7 @@ PmBank_DrawRegionInfo:
 	ld	a, b
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15537838:24)
+	lda	xbc, (ParamStr_Table_05:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw 237
@@ -5143,9 +5143,9 @@ MainSysControl:
 	cp	wa, 8
 	jr	gt, MainSysControl_PostDispatchFinalize
 	add	wa, wa
-	lda	xix, (15538978:24)
+	lda	xix, (TransposeNoteStr_C_0x40E:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (16524359:24)
+	lda	xix, (MainSysCtrl_DispatchTable:24)
 	jp_rr	8, xix, wa
 MainSysCtrl_DispatchTable:
 	ld	wa, 2:i3
@@ -5317,7 +5317,7 @@ AcFreeSplit_LookupNoteLabel:
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
-	lda	xbc, (15539114:24)
+	lda	xbc, (SplitNoteStr_C_0x4:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	ld	xwa, 16769
@@ -5326,7 +5326,7 @@ AcFreeSplit_LookupNoteLabel:
 	divs	hl, 12
 	ld	wa, qhl
 	sla	wa, 2
-	lda	xbc, (15539008:24)
+	lda	xbc, (ParamStr_Table_06:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	237
@@ -5361,7 +5361,7 @@ AcFreeSplit_LookupSecondNote:
 	exts	xhl
 	divs	hl, 12
 	sla	hl, 2
-	lda	xbc, (15539114:24)
+	lda	xbc, (SplitNoteStr_C_0x4:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	ld	xwa, 16769
@@ -5370,7 +5370,7 @@ AcFreeSplit_LookupSecondNote:
 	divs	hl, 12
 	ld	wa, qhl
 	sla	wa, 2
-	lda	xbc, (15539008:24)
+	lda	xbc, (ParamStr_Table_06:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	237

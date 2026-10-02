@@ -3310,7 +3310,7 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	cp	wa, 5:i3
 	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
-	lda	xix, (0xee6384:24)
+	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfdc702:24)
 	jp_rr	8, xix, wa
@@ -4908,7 +4908,7 @@ UIStateEvt_DrumAssign_Notify:
 	jr	z, UIStateEvt_TransposeUpdate_Clear
 	ld	a, l
 	extz	wa
-	lda	xbc, (0xee8df4:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
@@ -4924,7 +4924,7 @@ UIStateEvt_TransposeUpdate_Clear:
 	ld	a, l
 	extz	wa
 	.set	Audio_CheckSubsystemReady, . + 4	; v7 name kept for its references in other v7 files; it sits inside this instruction (the v7 label drift)
-	lda	xbc, (0xee8df4:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 ; Audio_CheckSubsystemReady is kept at this address only for ui_widgets/widget_dispatch.s; v10's Audio_CheckSubsystemReady is the code at 0xFDD69E
 	ld_rrb	a, xbc, wa
 	extz	wa
@@ -4944,7 +4944,7 @@ UIStateEvt_TransposeUpdate_Apply:
 	cp	wa, 6:i3
 	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
-	lda	xix, (0xee8e48:24)
+	lda	xix, (ParamEdit_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfddafe:24)
 	jp_rr	8, xix, wa
@@ -4958,13 +4958,13 @@ UIStateEvt_TransposeUpdate_Apply:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join
 AudioDispatch_CheckStereoMode_Code_Skip:
@@ -4977,7 +4977,7 @@ AudioDispatch_CheckStereoMode_Code_Skip:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join
 AudioDispatch_CheckStereoMode_Code_Skip2:
@@ -4985,7 +4985,7 @@ AudioDispatch_CheckStereoMode_Code_Skip2:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 AudioDispatch_CheckStereoMode_Code_Join:
 	ldw_d16	wa, (0xc4fa)
@@ -5057,13 +5057,13 @@ AudioDispatch_CheckStereoMode_Code_Skip10:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join5
 AudioDispatch_CheckStereoMode_Code_Skip11:
@@ -5075,7 +5075,7 @@ AudioDispatch_CheckStereoMode_Code_Skip11:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	AudioDispatch_CheckStereoMode_Code_Join5
 AudioDispatch_CheckStereoMode_Code_Skip12:
@@ -5083,7 +5083,7 @@ AudioDispatch_CheckStereoMode_Code_Skip12:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 AudioDispatch_CheckStereoMode_Code_Join5:
 	andw	(0xc4fa:16), 0xffe8
@@ -5142,7 +5142,7 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	cp	wa, 5:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (0xee8e56:24)
+	lda	xix, (VolumeMixer_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfddd67:24)
 	jp_rr	8, xix, wa
@@ -5219,7 +5219,7 @@ AudioDispatch_CheckStereoMode_Code_Join8:
 UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
-	lda	xbc, (0xee8d74:24)
+	lda	xbc, (PartRecord_RamPtrTable:24)
 	ld_rrl	xwa, xbc, wa
 	bitm	0, (xwa+0x16)
 	jr	z, AudioDispatch_CheckStereoMode_Code_Skip17
@@ -5326,7 +5326,7 @@ UIStateEvt_EffectSelect_Data_Skip2:
 	ldb_d8	a, (0xbfe2)
 	and	a, 255
 	extz	wa
-	lda	xbc, (0xee8e1c:24)
+	lda	xbc, (EffectSelect_StepTable:24)
 	ld_rrb	e, xbc, wa
 	ld	hl, 0:i3
 	cp	hl, 26
@@ -5425,7 +5425,7 @@ AudioDispatch_CheckStereoMode_Code_Loop:
 	ldb_d8	a, (0xfd04)
 	and	a, 255
 	extz	wa
-	lda	xbc, (0xee8e1c:24)
+	lda	xbc, (EffectSelect_StepTable:24)
 	ld_rrb	a, xbc, wa
 	and	a, 15
 	sla	a, 4

@@ -16067,7 +16067,7 @@ SndParam_Init:
 	cp	wa, 12
 	jrl	gt, SndParam_ProcessEntry_Epilogue
 	add	wa, wa
-	lda	xix, (0xeec044:24)
+	lda	xix, (KeyEvent_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfea080:24)
 	jp_rr	8, xix, wa
@@ -16455,7 +16455,7 @@ HdaeRom_TableEntry2:
 	cp	wa, 7:i3
 	jrl	gt, HdaeRom_TableEntry2_Epilogue
 	add	wa, wa
-	lda	xix, (0xeec05e:24)
+	lda	xix, (HdaeRomEntry2_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfea445:24)
 	jp_rr	8, xix, wa
@@ -16717,7 +16717,7 @@ HdaeRom_AltCheckResult_Epilogue:
 	add	xwa, xbc
 	ld	a, (xwa)
 	extz	wa
-	lda	xbc, (0xee8ea2:24)
+	lda	xbc, (AudioInit_SlotOrderMap:24)
 	ld_rrb	e, xbc, wa
 	ld	a, e
 	cp	a, 1:i3
@@ -18181,9 +18181,9 @@ SendEpilogue_Data_Helper:
 	cp	wa, 6:i3
 	jr	gt, SeqVoice_CheckAndRet_Data_Skip12
 	add	wa, wa
-	lda	xix, (0xeec168:24)
+	lda	xix, (SendEpilogueC_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfeb588:24)
+	lda	xix, (SeqVoice_CheckAndRet_Data_Skip10:24)
 	jp_rr	8, xix, wa
 SeqVoice_CheckAndRet_Data_Skip10:
 	ld	hl, 0:i3
@@ -23323,7 +23323,7 @@ Param_SignExtendReturn_Helper3:
 	add	xhl, xhl
 	add	xhl, CharMap_FullPermutation_0x38C
 	ld	hl, (xhl)
-	lda	xix, (0xfee4b5:24)
+	lda	xix, (Param_SignExtendRetu_Data_0x69:24)
 	jp_rr	8, xix, hl
 	ld	a, (xsp)
 	exts	wa
@@ -23414,7 +23414,7 @@ Param_SignExtendReturn_Skip3:
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x323
 	ld_rrw	bc, xix, bc
-	lda	xix, (0xfee5c2:24)
+	lda	xix, (Param_SignExtendReturn_Skip4:24)
 	jp_rr	8, xix, bc
 Param_SignExtendReturn_Skip4:
 	ld	a, (xsp)
@@ -23512,7 +23512,7 @@ SndParam_LookupAndDispatch:
 	add	xhl, xhl
 	add	xhl, CharMap_FullPermutation_0x3F4
 	ld	hl, (xhl)
-	lda	xix, (0xfee6b0:24)
+	lda	xix, (Param_SignExtendRetu_Data_0x264:24)
 	jp_rr	8, xix, hl
 	pushw	127
 	pushw	0
@@ -23543,7 +23543,7 @@ Param_SignExtendReturn_Skip7:
 	sll	wa, 1
 	ld	xix, CharMap_FullPermutation_0x3E6
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfee71c:24)
+	lda	xix, (Param_SignExtendReturn_Skip8:24)
 	jp_rr	8, xix, wa
 Param_SignExtendReturn_Skip8:
 	pushw	127
@@ -23606,7 +23606,7 @@ Param_SignExtendReturn_Skip10:
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x3B7
 	ld_rrw	bc, xix, bc
-	lda	xix, (0xfee7db:24)
+	lda	xix, (Param_SignExtendReturn_Skip11:24)
 	jp_rr	8, xix, bc
 Param_SignExtendReturn_Skip11:
 	pushw	127
@@ -26141,7 +26141,7 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	cp	hl, 5:i3
 	jrl	gt, TmFlash_BulkTransferToSubCPU_Skip5
 	add	hl, hl
-	lda	xix, (0xeed76b:24)
+	lda	xix, (TmFlashBulkB_SwitchOffsets:24)
 	ld_rrw	hl, xix, hl
 	lda	xix, (0xff00cc:24)
 	jp_rr	8, xix, hl

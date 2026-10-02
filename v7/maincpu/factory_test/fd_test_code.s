@@ -72,7 +72,7 @@ FDTest_AllocBuffer:
 	ld	xwa, xhl
 	or	xwa, xwa
 	jr	nz, FDTest_FillBuffer
-	lda	xwa, (14810738:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x134:24)
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
@@ -93,16 +93,16 @@ FDTest_FillLoop:
 	jr c, FDTest_FillLoop
 
 FDTest_OpenForWrite:
-	lda	xwa, (14810758:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x148:24)
 	push	xwa
-	lda	xwa, (14810694:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x108:24)
 	push	xwa
 	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	nz, FDTest_WriteBuffer
-	lda	xwa, (14810762:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x14C:24)
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
@@ -111,7 +111,7 @@ FDTest_OpenForWrite:
 	ldw	hl, 65535
 	jrl	FDTest_Return
 FDTest_WriteBuffer:
-	lda	xwa, (14810786:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x164:24)
 	calr	FDTest_PrintDiag
 	push	xiz
 	pushw	2048
@@ -122,7 +122,7 @@ FDTest_WriteBuffer:
 	lda	xsp, (xsp+12)
 	cp	hl, 2048
 	jr	z, FDTest_CloseAndReopen
-	lda	xwa, (14810802:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x174:24)
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
@@ -131,7 +131,7 @@ FDTest_WriteBuffer:
 	ldw	hl, 65535
 	jrl	FDTest_Return
 FDTest_CloseAndReopen:
-	lda	xwa, (14810810:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x17C:24)
 	calr	FDTest_PrintDiag
 	push	xiz
 	call	FileClose
@@ -141,18 +141,18 @@ FDTest_CloseAndReopen:
 	push	xwa
 	call	16713757
 	lda	xsp, (xsp+12)
-	lda	xwa, (14810814:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x180:24)
 	calr	FDTest_PrintDiag
-	lda	xwa, (14810828:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x18E:24)
 	push	xwa
-	lda	xwa, (14810694:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x108:24)
 	push	xwa
 	call	FileOpen
 	inc	8, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	nz, FDTest_ReadBack
-	lda	xwa, (14810832:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x192:24)
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
@@ -170,7 +170,7 @@ FDTest_ReadBack:
 	lda	xsp, (xsp+12)
 	cp	hl, 2048
 	jr	z, FDTest_VerifyData
-	lda	xwa, (14810856:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x1AA:24)
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
@@ -201,11 +201,11 @@ FDTest_CompareNext:
 	jr c, FDTest_CompareLoop
 
 FDTest_CompareResult:
-	lda	xwa, (14810868:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x1B6:24)
 	calr	FDTest_PrintDiag
 	cp	iz, 0:i3
 	jr	z, FDTest_Pass
-	lda	xwa, (14810886:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x1C8:24)
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
@@ -218,7 +218,7 @@ FDTest_Pass:
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
-	lda	xwa, (14810902:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x1D8:24)
 	calr	FDTest_PrintDiag
 	ld	hl, 0:i3
 FDTest_Return:

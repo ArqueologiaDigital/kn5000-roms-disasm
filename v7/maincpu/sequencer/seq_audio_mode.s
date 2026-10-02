@@ -703,7 +703,7 @@ AccVoice_PatchFromDirect:
 	calr	AccPatch_SetVoiceParam
 AccVoice_StorePatchAndLookup:
 	ld	(1075:16), a
-	ld	xhl, 14969758
+	ld	xhl, AccVoice_LookupTableAddress_Table
 	sla	a, 1
 	ld_rr8w	wa, xhl, a
 	ld	(12767:16), wa

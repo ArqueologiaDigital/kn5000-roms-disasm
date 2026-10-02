@@ -12204,7 +12204,7 @@ AccTone_InlineBytecodeData_Skip2:
 AccTone_InlineBytecodeData_Code_Helper:
 	ld	a, (13016:16)
 	extz	wa
-	lda	xbc, (14983112:24)
+	lda	xbc, (AccTuning_ReadAndApplyOffset_Table:24)
 	ld_rrb	a, xbc, wa
 	ld	(13355:16), a
 	ld	xbc, (13006:16)
@@ -12223,7 +12223,7 @@ AccTone_InlineBytecodeData_Code_Helper:
 	ld	a, (13345:16)
 	extz	wa
 	sla	wa, 2
-	lda	xde, (14967570:24)
+	lda	xde, (RhythmTiming_OffsetTable:24)
 	ld	xbc, 608352
 	add_sril_rm	XBC, 0x07, 0xe8, 0xe0
 	ld	(13350:16), xbc
@@ -12289,17 +12289,17 @@ AccVoice_BarCounterBytecodeData_Helper2:
 	sub	a, 240
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14983092:24)
+	lda	xbc, (AccTone_LookupByProgram_Table_2:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(13006:16), xwa
 	ld	a, (xwa)
 	ld	(13297:16), a
 	extz	wa
-	lda	xbc, (14969849:24)
+	lda	xbc, (AccStyle_ExtStyleMap:24)
 	ld	(13112), (xbc+wa)
 	ld	bc, wa
 	sla	bc, 2
-	lda	xde, (0xe46312:24)
+	lda	xde, (RhythmTiming_OffsetTable:24)
 	ld	xwa, 608352
 	add_sril_rm	XWA, 0x07, 0xe8, 0xe4
 	ld	(13298:16), xwa
@@ -12333,12 +12333,12 @@ AccTone_InlineBytecodeData_Code_Skip:
 	call	Rhythm_UpdateTuningConfig_Wrap
 	ld	a, (xiz+12)
 	extz	wa
-	lda	xbc, (14969738:24)
+	lda	xbc, (AccTone_LookupByProgram_Table:24)
 	ld	(1075), (xbc+wa)
 	ld	a, (1075:16)
 	extz	wa
 	add	wa, wa
-	lda	xbc, (14969758:24)
+	lda	xbc, (AccVoice_LookupTableAddress_Table:24)
 	ldw	(12923), (xbc+wa)
 	ld	a, (13297:16)
 	add	a, 128
@@ -12352,7 +12352,7 @@ AccTone_InlineBytecodeData_Code_Skip:
 	ld	a, (13354:16)
 	extz	wa
 	sla	wa, 2
-	lda	xde, (14967570:24)
+	lda	xde, (RhythmTiming_OffsetTable:24)
 	ld	xbc, 608352
 	add_sril_rm	XBC, 0x07, 0xe8, 0xe0
 	ld	(13350:16), xbc
@@ -12376,17 +12376,17 @@ AccTone_InlineBytecodeData_Code_Skip:
 	sub	a, 240
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14983092:24)
+	lda	xbc, (AccTone_LookupByProgram_Table_2:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(13006:16), xwa
 	ld	a, (xwa)
 	ld	(13297:16), a
 	extz	wa
-	lda	xbc, (14969849:24)
+	lda	xbc, (AccStyle_ExtStyleMap:24)
 	ld	(13112), (xbc+wa)
 	ld	bc, wa
 	sla	bc, 2
-	lda	xde, (14967570:24)
+	lda	xde, (RhythmTiming_OffsetTable:24)
 	ld	xwa, 608352
 	add_sril_rm	XWA, 0x07, 0xe8, 0xe4
 	ld	(13298:16), xwa
@@ -12420,12 +12420,12 @@ AccTone_InlineBytecodeData_Code_Skip2:
 	call	Rhythm_UpdateTuningConfig_Wrap
 	ld	a, (xiz+12)
 	extz	wa
-	lda	xbc, (14969738:24)
+	lda	xbc, (AccTone_LookupByProgram_Table:24)
 	ld	(1075), (xbc+wa)
 	ld	a, (1075:16)
 	extz	wa
 	add	wa, wa
-	lda	xbc, (14969758:24)
+	lda	xbc, (AccVoice_LookupTableAddress_Table:24)
 	ldw	(12923), (xbc+wa)
 	ld	a, (13297:16)
 	add	a, 128
@@ -12440,7 +12440,7 @@ AccTone_InlineBytecodeData_Code_Skip2:
 	ld	c, (13345:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (14967570:24)
+	lda	xde, (RhythmTiming_OffsetTable:24)
 	ld	xwa, 608352
 	add_sril_rm	XWA, 0x07, 0xe8, 0xe4
 	ld	(13350:16), xwa
@@ -12463,7 +12463,7 @@ AccTone_InlineBytecodeData_Code_Helper3:
 	jr	nz, AccTone_InlineBytecodeData_Code_Helper3_Skip2
 	ld	a, (1075:16)
 	extz	wa
-	lda	xbc, (14969776:24)
+	lda	xbc, (AccStyle_ApplyExt_SkipClamp_Table:24)
 	cpib_sri	0x07, 0xe4, 0xe0, 0x01
 	jr	nz, AccTone_InlineBytecodeData_Code_Helper3_Skip
 	calr AccTone_InlineBytecodeData_Code_Helper3_Helper
@@ -12790,7 +12790,7 @@ AccVoice_BarCounterBytecodeData_Skip5:
 	ret
 	dec	2, xsp
 	push	xiz
-	lda	xbc, (14967570:24)
+	lda	xbc, (RhythmTiming_OffsetTable:24)
 	bit	0, (0x3363:16)
 	jr	z, AccVoice_BarCounterBytecodeData_Skip9
 	ld	a, (13067:16)
@@ -12883,7 +12883,7 @@ AccVoice_BarCounterBytecodeData_Join2:
 	ret
 	dec	2, xsp
 	push	xiz
-	lda	xbc, (14967570:24)
+	lda	xbc, (RhythmTiming_OffsetTable:24)
 	bit	0, (0x3363:16)
 	jr	z, AccVoice_BarCounterBytecodeData_Skip15
 	ld	a, (13065:16)
@@ -12972,7 +12972,7 @@ AccVoice_BarCounterBytecodeData_Join3:
 	dec	2, xsp
 	push	xiz
 	ld	xwa, (13298:16)
-	lda	xiy, (14967570:24)
+	lda	xiy, (RhythmTiming_OffsetTable:24)
 	lda	xix, (xwa+17)
 	ld	e, (xwa+16)
 	lda	xhl, (xsp+4)
@@ -13007,7 +13007,7 @@ AccVoice_BarCounterBytecodeData_Skip17:
 AccVoice_BarCounterBytecodeData_Skip18:
 	ld	a, (1075:16)
 	extz	wa
-	lda	xiy, (14969776:24)
+	lda	xiy, (AccStyle_ApplyExt_SkipClamp_Table:24)
 	cpib_sri	0x07, 0xf4, 0xe0, 0x01
 	jr	nz, AccVoice_BarCounterBytecodeData_Skip19
 	calr	AccTone_InlineBytecodeData_Code_Helper3_Helper
@@ -13155,7 +13155,7 @@ AccTuning_ComplexBytecodeData:
 	ld	a, e
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14967570:24)
+	lda	xbc, (RhythmTiming_OffsetTable:24)
 	ld	xde, 608352
 	add_sril_rm	XDE, 0x07, 0xe4, 0xe0
 	extz	hl
@@ -33990,7 +33990,7 @@ AccDraw_Secondary_Return:
 	ret
 	ld	(0x03efa8:24), 0
 	ldmm8	14779, 14102
-	ld	xiy, 16166287
+	ld	xiy, AccScreen_UIDataBlock_0x3B8
 	calr	AccDraw_Secondary
 	ret
 	.byte 0xc1, 0xe2, 0xe3
@@ -34250,7 +34250,7 @@ AccDraw_Secondary_Skip3:
 AccDraw_Secondary_Skip4:
 	calr	AccScreen_BeatDataBlock
 	ldmm8	14779, 14102
-	ld	xiy, 16166287
+	ld	xiy, AccScreen_UIDataBlock_0x3B8
 	calr	AccDraw_Secondary
 AccDraw_Secondary_Return7:
 	ret

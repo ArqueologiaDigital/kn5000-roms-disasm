@@ -1658,7 +1658,7 @@ SelfTest_SramAndRom:
 	ld xde, 1:i3
 	call ApPostEvent
 	; object handle 0xf40001 = class 0x0f4, instance 1 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqData_ScanTracks_OuterLoop_0xC)
-	ld xwa, 0xf40001
+	ld xwa, SeqData_ScanTracks_OuterLoop_0xC
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1697,7 +1697,7 @@ SelfTest_PostRomError:
 	ld xde, 1:i3
 	call ApPostEvent
 	; object handle 0xf40007 = class 0x0f4, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqData_ScanTracks_InnerLoop_0x5)
-	ld xwa, 0xf40007
+	ld xwa, SeqData_ScanTracks_InnerLoop_0x5
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1838,7 +1838,7 @@ EffectMode_HandleTimerEvents:
 	cp a, 0:i3
 	jrl nz, EffectMode_TimerEvent_Default
 	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x11)
-	ld xwa, 0xf8000c
+	ld xwa, AudioCtrl_PageHandler_0x11
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1850,7 +1850,7 @@ EffectMode_HandleTimerEvents:
 
 EffectMode_TimerEvent_Step1E:
 	; object handle 0xf8000e = class 0x0f8, instance 14 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x13)
-	ld xwa, 0xf8000e
+	ld xwa, AudioCtrl_PageHandler_0x13
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1862,7 +1862,7 @@ EffectMode_TimerEvent_Step1E:
 
 EffectMode_TimerEvent_Step3C:
 	; object handle 0xf80010 = class 0x0f8, instance 16 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x15)
-	ld xwa, 0xf80010
+	ld xwa, AudioCtrl_PageHandler_0x15
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1874,7 +1874,7 @@ EffectMode_TimerEvent_Step3C:
 
 EffectMode_TimerEvent_Step5A:
 	; object handle 0xf80006 = class 0x0f8, instance 6 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xB)
-	ld xwa, 0xf80006
+	ld xwa, AudioCtrl_PageHandler_0xB
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1886,7 +1886,7 @@ EffectMode_TimerEvent_Step5A:
 
 EffectMode_TimerEvent_Step78:
 	; object handle 0xf80008 = class 0x0f8, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xD)
-	ld xwa, 0xf80008
+	ld xwa, AudioCtrl_PageHandler_0xD
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1898,7 +1898,7 @@ EffectMode_TimerEvent_Step78:
 
 EffectMode_TimerEvent_Step96:
 	; object handle 0xf8000a = class 0x0f8, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xF)
-	ld xwa, 0xf8000a
+	ld xwa, AudioCtrl_PageHandler_0xF
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1916,35 +1916,35 @@ EffectMode_RunDiagSequence:
 	cp a, 0:i3
 	jr nz, EffectMode_DiagSeq_AnimFrame
 	; object handle 0xf80006 = class 0x0f8, instance 6 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xB)
-	ld xwa, 0xf80006
+	ld xwa, AudioCtrl_PageHandler_0xB
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf80008 = class 0x0f8, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xD)
-	ld xwa, 0xf80008
+	ld xwa, AudioCtrl_PageHandler_0xD
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf8000a = class 0x0f8, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0xF)
-	ld xwa, 0xf8000a
+	ld xwa, AudioCtrl_PageHandler_0xF
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x11)
-	ld xwa, 0xf8000c
+	ld xwa, AudioCtrl_PageHandler_0x11
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
 	; object handle 0xf8000e = class 0x0f8, instance 14 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x13)
-	ld xwa, 0xf8000e
+	ld xwa, AudioCtrl_PageHandler_0x13
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -2025,7 +2025,7 @@ EffectMode_ByteData_DiagEvents_Skip2:
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip3:
 	; object handle 0xf50014 = class 0x0f5, instance 20 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqStep_FileSectorPopReturn_0x367)
-	ld	xwa, 0xf50014
+	ld	xwa, SeqStep_FileSectorPopReturn_0x367
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 EffectMode_ByteData_DiagEvents_Join:

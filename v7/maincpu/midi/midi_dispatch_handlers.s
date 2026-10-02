@@ -1619,7 +1619,7 @@ FileData_ValidateAndDispatch:
 	ld	xix, 0x95a0
 	ld c, (xix + 4)
 	ld w, (xix + 0:8)
-	ld	xiy, 0xfdafa2
+	ld	xiy, SeqOut_WriteTimedBytes
 	ld xiz, 0x424
 	pushw wa
 	ld a, w
@@ -5952,7 +5952,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	ldb_sri0 A, (xwa + 0x0155)
 	and a, 0xf
 	extz wa
-	lda	xbc, (0xee159c:24)
+	lda	xbc, (NakaInst_SoundConfig_LookupTable_0x28:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	extz bc
 	lda xde, (xde+756)
@@ -6007,7 +6007,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	ldb_sri0 A, (xwa + 0x0152)
 	srl a, 4
 	extz wa
-	lda	xbc, (0xee15ac:24)
+	lda	xbc, (NakaInst_SoundConfig_LookupTable_0x38:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	extz bc
 	ld xwa, (xsp + 6)
@@ -6058,7 +6058,7 @@ DSPCfg_VoiceSlotB_MapAndWrite:
 	and c, 0xf
 	srl c, 1
 	extz bc
-	lda	xde, (0xee15bc:24)
+	lda	xde, (NakaInst_SoundConfig_LookupTable_0x48:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	extz bc
 	ld xde, (xsp + 6)
@@ -6120,7 +6120,7 @@ DSPCfg_VoiceSlotB_ExtractData_Loop:
 	jr	c, DSPCfg_VoiceSlotB_ExtractData_Loop
 	ld	a, (xde+389)
 	extz	wa
-	lda	xhl, (0xee15cc:24)
+	lda	xhl, (NakaInst_SoundConfig_LookupTable_0x58:24)
 	ld	a, (xhl+wa)
 	ld	(xbc+948), a
 	ld	a, (xde+390)
@@ -6554,7 +6554,7 @@ DataBuf_CopyBulkBitfields_Large_Helper3:
 	dec	6, xsp
 	pushw	iz
 	ld	(xsp+6), wa
-	lda	xwa, (0xedb3fc:24)
+	lda	xwa, (SndParamRam_DefaultImage:24)
 	ld	(xsp+2), xwa
 	ld	iz, 0:i3
 	cpw	(xsp+6), 0
@@ -6587,7 +6587,7 @@ Part_InitFromPreset_Helper:
 DataBuf_InitSlotFromPreset:
 	pushw iz
 	ld iz, wa
-	lda	xwa, (0xedb3dc:24)
+	lda	xwa, (DataSlot_HeaderTemplate:24)
 	cp iz, 0:i3
 	jr	nz, DataBuf_InitSlotFromPreset_Alt
 	lda xbc, (0x00f180:24)
@@ -6907,7 +6907,7 @@ SndParam_GetBlockPointer:
 	jr	nc, SndParam_GetBlockPointer_Extended
 	extz wa
 	muls wa, 0xea
-	lda	xbc, (0xee15fe:24)
+	lda	xbc, (NakaInst_SoundConfig_LookupTable_0x8A:24)
 	lda_dri XHL, 0x07, 0xe4, 0xe0
 	ret
 SndParam_GetBlockPointer_Extended:
@@ -7479,7 +7479,7 @@ VocalistPage2OKFunc_Helper2:
 MidiSysEx_CopyParamToBuffer:
 	extz wa
 	sla	wa, 3
-	lda	xbc, (0xee2cfa:24)
+	lda	xbc, (NakaInst_SoundConfig_LookupTable_0x1786:24)
 	exts xwa
 	add xwa, xbc
 	pushw	8
@@ -7736,9 +7736,9 @@ MIDI_ReadChannelParam:
 	cp bc, 0xf
 	ret gt
 	add bc, bc
-	lda	xix, (0xee2d2a:24)
+	lda	xix, (NakaInst_SoundConfig_LookupTable_0x17B6:24)
 	ldw_sri BC, 0x07, 0xf0, 0xe4
-	lda	xix, (0xfd568b:24)
+	lda	xix, (MidiChan_ParamDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; MIDI channel parameter read dispatch
 MidiChan_ParamDispatch:
@@ -7792,9 +7792,9 @@ SeqData_ReadFieldByIndex:
 	cp bc, 0xf
 	jr	gt, SeqData_ReturnZeroField
 	add bc, bc
-	lda	xix, (0xee2d4a:24)
+	lda	xix, (NakaInst_SoundConfig_LookupTable_0x17D6:24)
 	ldw_sri BC, 0x07, 0xf0, 0xe4
-	lda	xix, (0xfd5707:24)
+	lda	xix, (SeqData_FieldDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
 ; Sequence data field read dispatch
 SeqData_FieldDispatch:
@@ -7859,7 +7859,7 @@ MidiSeq_AssignVoiceSlots:
 	ld	xwa, (0xbbb8:16)
 	calr	MidiChan_DequeueVoiceEntry
 	ldib_erp 0xfb, 0
-	lda	xbc, (0xee493e:24)
+	lda	xbc, (SysExRx_TrieRoot:24)
 MidiSeq_ScanSlot0_Loop:
 	ldto_berp A, 0xfb
 	extz wa
@@ -7886,7 +7886,7 @@ MidiSeq_Slot0_WriteParams:
 	ldto_berp A, 0xfb
 	extz wa
 	muls wa, 0x6
-	lda	xbc, (0xee493e:24)
+	lda	xbc, (SysExRx_TrieRoot:24)
 	exts xwa
 	add xwa, xbc
 	ld e, (xwa + 1)
@@ -7899,7 +7899,7 @@ MidiSeq_Slot0_WriteParams:
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
-	lda	xwa, (0xee4940:24)
+	lda	xwa, (WidgetParam_Entry_018_0x26:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	ld e, (xwa)
 	ld	xwa, (0xbc10:16)
@@ -7909,7 +7909,7 @@ MidiSeq_Slot0_WriteParams:
 	extz wa
 	muls wa, 0x6
 	ld bc, wa
-	lda	xwa, (0xee4940:24)
+	lda	xwa, (WidgetParam_Entry_018_0x26:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	ld e, (xwa + 1)
 	ld	xwa, (0xbc10:16)
@@ -9922,7 +9922,7 @@ MidiSeq_UpdateToneParam:
 	ld bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	extz hl
-	lda	xbc, (0xee499e:24)
+	lda	xbc, (MidiRx_ToneParam_ByteMap:24)
 	ldb_sri C, 0x07, 0xe4, 0xec
 	ld a, c
 	ld	(0xbc64:16), c
@@ -9936,7 +9936,7 @@ MidiSeq_UpdateToneParam_Lower:
 	ld bc, 3:i3
 	call	SeqData_ReadFieldByIndex
 	extz hl
-	lda	xbc, (0xee499e:24)
+	lda	xbc, (MidiRx_ToneParam_ByteMap:24)
 	ldb_sri C, 0x07, 0xe4, 0xec
 	ld a, c
 	ld	(0xbc70:16), c
@@ -10072,7 +10072,7 @@ MidiSeq_PartLookup_Data_Helper3:
 	ld	bc, 4:i3
 	call	SeqData_ReadFieldByIndex
 	extz	hl
-	lda	xbc, (0xee49b4:24)
+	lda	xbc, (MidiRx_PartLookup_ByteMap:24)
 	ld	(0x7ea6), (xbc+hl)
 	ldw	wa, 238
 	jp	SoundCtrl_SendCommand
@@ -10574,7 +10574,7 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper4:
 	ld a, (xwa)
 	extz wa
 	sla	wa, 2
-	lda	xbc, (0xee2d6c:24)
+	lda	xbc, (SeqChan_CommandHandlers:24)
 	ld	xhl, (xbc+wa)
 	call	(xhl)
 	calr	MidiPkt_ArpConfigChain_Data_Helper18_Helper5
@@ -10594,17 +10594,17 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper5:
 	ld a, (xwa+4)
 	cp	a, 0:i3
 	jr	nz, MidiTable_CheckSpecialSlot
-	ld xwa, 0x00ee3594
+	ld xwa, SysEx_Msg_3594
 	ld	bc, 5:i3
 	jr	MidiTable_CallFlush
 MidiTable_CheckSpecialSlot:
 	cp a, 0x16
 	jr	nz, MidiPkt_ArpConfigChain_Data_Helper18_Skip
-	ld xwa, 0x00ee35b2
+	ld xwa, SysEx_Msg_35B2
 	ld	bc, 5:i3
 	jr	MidiTable_CallFlush
 MidiPkt_ArpConfigChain_Data_Helper18_Skip:
-	ld xwa, 0x00ee359a
+	ld xwa, SysEx_Msg_359A
 	ld	bc, 5:i3
 MidiTable_CallFlush:
 	call	SeqBuf_FlushNoteOffs
@@ -10843,7 +10843,7 @@ MidiPkt_ArpExtHandler_N_Data:
 	ret	nc
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (0xee2e08:24)
+	lda	xbc, (SeqChan_StepCmdHandlers:24)
 	ld	xhl, (xbc+hl)
 	call (xhl)
 	ret
@@ -11124,7 +11124,7 @@ SeqChan_DispatchByType_Data:
 	ret	nc
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee2e60:24)
+	lda	xbc, (SeqChan_WriteFieldHandlers:24)
 ; v7 NAME DISPLACED: `MidiPkt_ArpExtHandler_F_Data` sits where v10 has no label (v10 0xFD80C8).
 ; The v7 code v10 calls `MidiPkt_ArpExtHandler_F_Data` is 0x41A earlier, at v7 0xFD74DD.
 ; Kept because another v7 file references this address by this name.
@@ -11362,7 +11362,7 @@ MidiSysEx_ProcessBlock_Helper11:
 	ret	nc
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee2ebe:24)
+	lda	xbc, (MidiSysEx_BlockHandlers:24)
 	ld	xhl, (xbc+wa)
 	call	(xhl)
 	ret
@@ -11379,7 +11379,7 @@ MidiSysEx_ProcessBlock_Helper11_Join:
 	push	xhl
 	push	xix
 	push	xiz
-	ld	xhl, (0xedb2ec:24)
+	ld	xhl, (SoundProgram_DispatchTable_0x888:24)
 	call	(xhl)
 	call	MidiMsg_ParseChannelStream
 	call	SeqTimer_UpdateTempoReg
@@ -11430,7 +11430,7 @@ MidiSysEx_ProcessBlock_Helper11_Join4:
 	push	xhl
 	push	xix
 	push	xiz
-	ld	xhl, (0xe4463e:24)
+	ld	xhl, (WidgetData_CharsetMappingTable_0x8:24)
 	call	(xhl)
 	pop	xiz
 	pop	xix
@@ -12205,7 +12205,7 @@ SoundMode_ChorusType3:
 SoundMode_ChorusSyncAndRet:
 	jp	SndParam_ApplyAndSync
 VoiceData_ZeroFillAll:
-	lda	xbc, (0xee2f36:24)
+	lda	xbc, (VoiceData_RamBlockPtrs:24)
 	ld xwa, xbc
 	lda xbc, (xbc + 64)
 VoiceData_ZeroFillOuter:
@@ -12496,9 +12496,9 @@ SysEx_InitiateSend:
 	cp wa, 6:i3
 	ret gt
 	add wa, wa
-	lda	xix, (0xee2f7e:24)
+	lda	xix, (SysExSend_SwitchOffsets:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
-	lda	xix, (0xfd8520:24)
+	lda	xix, (SysEx_SendDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 ; SysEx send dispatch
 SysEx_SendDispatch:
@@ -12595,7 +12595,7 @@ SeqData_DispatchHandler:
 	call	SeqData_ReadFieldByIndex
 	extz hl
 	sla hl, 2
-	lda	xbc, (0xee2f8c:24)
+	lda	xbc, (SeqData_Handlers:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xec
 ; v7 NAME DISPLACED: `TGReg_WriteCC11_PartMode` (0xFD861A) falls inside the line above in the
 ; correct framing (v10 0xFD8DEB).  Kept as an alias because another v7
@@ -12767,7 +12767,7 @@ SeqData_FormatOutput_Data_Helper:
 	cp	hl, 6:i3
 	ret	gt
 	add	hl, hl
-	lda	xix, (0xee302c:24)
+	lda	xix, (SeqDataFmt_SwitchOffsets:24)
 	ld	hl, (xix+hl)
 	lda	xix, (0xfd87ad:24)
 	jp_rr 8, xix, hl
@@ -12790,7 +12790,7 @@ SeqData_FormatOutput_Data_Helper_Join:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e2a:24)
+	lda	xwa, (MidiCtl_SelectTable0:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -12798,13 +12798,13 @@ SeqData_FormatOutput_Data_Helper_Join:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e2a:24)
+	lda	xbc, (MidiCtl_SelectTable0:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -12823,7 +12823,7 @@ SeqData_FormatOutput_Data_Helper_Join2:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e82:24)
+	lda	xwa, (MidiCtl_SelectTable2:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -12831,13 +12831,13 @@ SeqData_FormatOutput_Data_Helper_Join2:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e82:24)
+	lda	xbc, (MidiCtl_SelectTable2:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -12856,7 +12856,7 @@ SeqData_FormatOutput_Data_Helper_Join3:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e8a:24)
+	lda	xwa, (MidiCtl_SelectTable4:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -12864,13 +12864,13 @@ SeqData_FormatOutput_Data_Helper_Join3:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e8a:24)
+	lda	xbc, (MidiCtl_SelectTable4:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -12891,7 +12891,7 @@ SeqData_FormatOutput_Data_Helper_Join4:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4eea:24)
+	lda	xwa, (MidiCtl_SelectTable6:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -12899,13 +12899,13 @@ SeqData_FormatOutput_Data_Helper_Join4:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4eea:24)
+	lda	xbc, (MidiCtl_SelectTable6:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -12924,7 +12924,7 @@ SeqData_FormatOutput_Data_Helper_Join5:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4ef2:24)
+	lda	xwa, (MidiCtl_SelectTable8:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -12932,13 +12932,13 @@ SeqData_FormatOutput_Data_Helper_Join5:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4ef2:24)
+	lda	xbc, (MidiCtl_SelectTable8:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -12957,7 +12957,7 @@ SeqData_FormatOutput_Data_Helper_Helper:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4efa:24)
+	lda	xwa, (MidiCtl_SelectTable10:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -12965,13 +12965,13 @@ SeqData_FormatOutput_Data_Helper_Helper:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4efa:24)
+	lda	xbc, (MidiCtl_SelectTable10:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13019,7 +13019,7 @@ SeqAlt_ApplyDescriptor_TypeA:
 	jr	nc, SeqAlt_PopIzSkip4Ret
 	extz wa
 	muls wa, 0x6
-	lda	xbc, (0xee4e16:24)
+	lda	xbc, (MidiCtl_SubTableDesc:24)
 	exts xwa
 	add xwa, xbc
 	ld de, (xwa)
@@ -13093,7 +13093,7 @@ SeqAlt_ApplyDescriptor_TypeB:
 	jr	nc, SeqAlt_PopIzSkip4Ret2
 	extz wa
 	muls wa, 0x6
-	lda	xbc, (0xee4e16:24)
+	lda	xbc, (MidiCtl_SubTableDesc:24)
 	exts xwa
 	add xwa, xbc
 	ld de, (xwa)
@@ -13194,7 +13194,7 @@ SeqAlt_NibbleSearch_Epilogue4:
 	jr	nc, SeqAlt_NibbleSearch_Epilogue5
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (0xee4e18:24)
+	lda	xbc, (ToneKit_FrequencyTable_0x408:24)
 	ld	xbc, (xbc+wa)
 	ld	a, (xiz+8)
 	cpl	a
@@ -13226,7 +13226,7 @@ SeqAlt_NibbleSearch_Epilogue5:
 	jrl	nc, SeqAlt_NibbleSearch_Epilogue
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (0xee4e16:24)
+	lda	xbc, (MidiCtl_SubTableDesc:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	de, (xwa)
@@ -13360,7 +13360,7 @@ SeqAlt_NibbleSearch_Epilogue2:
 	jrl	nc, SeqAlt_NibbleSearch_Epilogue6
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e20:24)
+	lda	xbc, (MidiCtl_SubTableBPtr:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	ld	xwa, (0xbc10:16)
@@ -13440,7 +13440,7 @@ SeqAlt_NibbleSearch_Epilogue6:
 	jr	nc, SeqAlt_NibbleSearch_Epilogue3
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e26:24)
+	lda	xbc, (MidiCtl_SubTableCPtr:24)
 	ld	xwa, (xbc+wa)
 	lda	xbc, (xsp+6)
 	cp	l, 0:i3
@@ -13852,7 +13852,7 @@ VoiceParam_MultiMode_StubRet:
 	cp	hl, 6:i3
 	ret	gt
 	add	hl, hl
-	lda	xix, (0xee303a:24)
+	lda	xix, (AssSwbMulti_SwitchOffsets:24)
 	ld	hl, (xix+hl)
 	lda	xix, (0xfd926d:24)
 	jp_rr	8, xix, hl
@@ -13875,7 +13875,7 @@ SeqAlt_DescriptorBlock_Data_Join:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e56:24)
+	lda	xwa, (MidiCtl_SelectTable1:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13883,13 +13883,13 @@ SeqAlt_DescriptorBlock_Data_Join:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e56:24)
+	lda	xbc, (MidiCtl_SelectTable1:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13908,7 +13908,7 @@ SeqAlt_DescriptorBlock_Data_Join2:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e86:24)
+	lda	xwa, (MidiCtl_SelectTable3:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13916,13 +13916,13 @@ SeqAlt_DescriptorBlock_Data_Join2:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e86:24)
+	lda	xbc, (MidiCtl_SelectTable3:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13941,7 +13941,7 @@ SeqAlt_DescriptorBlock_Data_Join3:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4eba:24)
+	lda	xwa, (MidiCtl_SelectTable5:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13949,13 +13949,13 @@ SeqAlt_DescriptorBlock_Data_Join3:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4eba:24)
+	lda	xbc, (MidiCtl_SelectTable5:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13976,7 +13976,7 @@ SeqAlt_DescriptorBlock_Data_Join4:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4eee:24)
+	lda	xwa, (MidiCtl_SelectTable7:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13984,13 +13984,13 @@ SeqAlt_DescriptorBlock_Data_Join4:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4eee:24)
+	lda	xbc, (MidiCtl_SelectTable7:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14009,7 +14009,7 @@ SeqAlt_DescriptorBlock_Data_Join5:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4ef6:24)
+	lda	xwa, (MidiCtl_SelectTable9:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14017,13 +14017,13 @@ SeqAlt_DescriptorBlock_Data_Join5:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4ef6:24)
+	lda	xbc, (MidiCtl_SelectTable9:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14042,7 +14042,7 @@ SeqAlt_DescriptorBlock_Data_Helper3:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4f32:24)
+	lda	xwa, (MidiCtl_SelectTable11:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14050,13 +14050,13 @@ SeqAlt_DescriptorBlock_Data_Helper3:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4f32:24)
+	lda	xbc, (MidiCtl_SelectTable11:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14072,7 +14072,7 @@ VoiceParam_MultiBlock_Ret:
 	jr	nc, SeqAlt_DescriptorBlock_Data_Epilogue
 	extz	bc
 	muls	bc, 6
-	lda	xde, (0xee4e18:24)
+	lda	xde, (ToneKit_FrequencyTable_0x408:24)
 	ld	xhl, (xde+bc)
 	lda	xde, (xsp+8)
 	ld	c, (xwa+6)
@@ -14284,7 +14284,7 @@ MidiPkt_BuildDirect:
 	ld	a, (xwa+14)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e20:24)
+	lda	xbc, (MidiCtl_SubTableBPtr:24)
 	ld	xiz, (xbc+wa)
 	ld	a, (xsp+4)
 	extz	wa
@@ -14348,7 +14348,7 @@ MidiPkt_BuildControl_Epilogue:
 	jr	nc, MidiPkt_BuildControl_Epilogue2
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e26:24)
+	lda	xbc, (MidiCtl_SubTableCPtr:24)
 	ld	xiz, (xbc+wa)
 	ld	a, (xsp+4)
 	extz	wa
@@ -14467,7 +14467,7 @@ MidiPkt_ProcessEventQueue_Loop:
 	ld c, (xwa)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee304c:24)
+	lda	xde, (MidiPkt_EventType_Table:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -14495,7 +14495,7 @@ MidiPkt_DispatchViaTable_4D6A:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -14522,7 +14522,7 @@ MidiPkt_DispatchViaTable_4D82:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -14549,7 +14549,7 @@ MidiPkt_DispatchViaTable_4D8E:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)

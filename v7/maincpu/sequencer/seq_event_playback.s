@@ -2601,9 +2601,9 @@ InitializeEast:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe55cd4:24)
+	ld wa, (MidiMenu_WidgetCount:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe559ea:24)
+	lda xwa, (East_ClassTable_163:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0163
 	call RegisterObjectTable
@@ -2612,9 +2612,9 @@ InitializeEast:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe55cda:24)
+	ld wa, (MidiMenu_ResEventCount:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe55cd6:24)
+	lda xwa, (MidiMenu_ResEventTable:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01c3
 	call RegisterObjectTable
@@ -2623,9 +2623,9 @@ InitializeEast:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe55dac:24)
+	ld wa, (MidiMenu_MsgTypeCount:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe55cdc:24)
+	lda xwa, (MidiMenu_MsgType_Table:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01e3
 	call RegisterObjectTable
@@ -2635,7 +2635,7 @@ InitializeEast:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x003c
-	lda xwa, (0xe55210:24)
+	lda xwa, (MidiMenu_ApFunctionTable:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0123
 	call RegisterObjectTable
@@ -2645,7 +2645,7 @@ InitializeEast:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x003c
-	lda xwa, (0xe55304:24)
+	lda xwa, (MidiMenu_ApFunctionNameTable:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0423
 	call RegisterObjectTable
@@ -2655,7 +2655,7 @@ InitializeEast:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe55dae:24)
+	lda xwa, (MidiMenu_ProcTable:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0103
 	call RegisterObjectTable
@@ -2675,7 +2675,7 @@ InitializeEast:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe5ad8c:24)
+	lda xwa, (East_MainFuncTable_143:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0143
 	call RegisterObjectTable
@@ -2685,7 +2685,7 @@ InitializeEast:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe5adac:24)
+	lda xwa, (East_MainFuncNameTable_443:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0443
 	call RegisterObjectTable
@@ -2865,7 +2865,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe5a3f2:24)
+	lda xwa, (East_ResNameTable_353:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0353
 	call RegisterObjectTable
@@ -2945,7 +2945,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001c
-	lda xwa, (0xe5a77c:24)
+	lda xwa, (East_ResNameTable_357:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0357
 	call RegisterObjectTable
@@ -2965,7 +2965,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xe5a906:24)
+	lda xwa, (East_ResNameTable_358:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0358
 	call RegisterObjectTable
@@ -2985,7 +2985,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe5a9ae:24)
+	lda xwa, (East_ResNameTable_359:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0359
 	call RegisterObjectTable
@@ -3045,7 +3045,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe5aac6:24)
+	lda xwa, (East_ResNameTable_35C:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x035c
 	call RegisterObjectTable
@@ -3065,7 +3065,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0018
-	lda xwa, (0xe5ab12:24)
+	lda xwa, (East_ResNameTable_3D7:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03d7
 	call RegisterObjectTable
@@ -3085,7 +3085,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe5ac06:24)
+	lda xwa, (East_ResNameTable_3D8:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03d8
 	call RegisterObjectTable
@@ -3105,7 +3105,7 @@ InitializeEast:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe5ac5a:24)
+	lda xwa, (East_ResNameTable_3EC:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03ec
 	call RegisterObjectTable

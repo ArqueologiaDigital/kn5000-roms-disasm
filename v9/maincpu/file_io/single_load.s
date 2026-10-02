@@ -2539,7 +2539,7 @@ SLDstBankList_FuncBody_Skip29:
 	inc	1, a
 	cp	a, (0xea0a14:24)
 	jr	nc, SLDstBankList_FuncBody_Skip31
-	ld	e, (0xea0a12:24)
+	ld	e, (Data_SaveLoadMenuTable_0x22:24)
 	ld	a, e
 	add	a, e
 	cp	c, a

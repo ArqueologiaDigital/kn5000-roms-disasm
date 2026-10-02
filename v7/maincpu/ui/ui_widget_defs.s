@@ -773,7 +773,7 @@ PasTableCheck:
 	jr	nz, PasTableCheck_Return
 	ld	xwa, (xde)
 	sll	xwa, 2
-	ld	xbc, 15377026
+	ld	xbc, Data_SoundEditorCharsLayout_0x3B0
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -816,7 +816,7 @@ AcOnOff_GetText:
 	ld	wa, (xwa)
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, 15377050
+	ld	xbc, Data_SoundEditorCharsLayout_0x3C8
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -2379,7 +2379,7 @@ BitEditCheck:
 	ld	wa, (xde+8)
 	and	wa, 1
 	sla	wa, 2
-	lda	xbc, (15377102:24)
+	lda	xbc, (Data_SoundEditorCharsLayout_0x3FC:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+10)
@@ -3619,31 +3619,31 @@ ButtonState_DispatchDSP_InlineData:
 	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	jr	ButtonState_Paint_DrawAligned
-	ld	xwa, 15377130
+	ld	xwa, Data_SoundEditorCharsLayout_0x418
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377134
+	ld	xwa, Data_SoundEditorCharsLayout_0x41C
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377138
+	ld	xwa, Data_SoundEditorCharsLayout_0x420
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377142
+	ld	xwa, Data_SoundEditorCharsLayout_0x424
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377146
+	ld	xwa, NakaInst_OK
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377150
+	ld	xwa, NakaInst_OK_0x4
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377154
+	ld	xwa, NakaInst_OK_0x8
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377158
+	ld	xwa, NakaInst_OK_0xC
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377160
+	ld	xwa, NakaInst_OK_0xE
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377162
+	ld	xwa, NakaInst_OK_0x10
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377166
+	ld	xwa, NakaInst_OK_0x14
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377170
+	ld	xwa, NakaInst_OK_0x18
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, 15377174
+	ld	xwa, Str_No
 ButtonState_PaintProc_Join:
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -6541,7 +6541,7 @@ AcMixerVol_Confirm:
 	pushw	0
 	pushw	0
 	pushw	1
-	ld	xde, 15378100
+	ld	xde, Str_No_0x39E
 	call	DrawStringReverse
 	jrl	UIList_ReturnZeroJmp
 AcMixerVol_PartSelect:
@@ -10129,7 +10129,7 @@ UnregisteredTitle:
 	ld	xwa, 4294967295
 	ld	(xbc+4), xwa
 	ldw	(xbc+8), 65535
-	lda	xwa, (15378710:24)
+	lda	xwa, (Str_No_0x600:24)
 	ld	(xbc+10), xwa
 	ld	xwa, 4294967295
 	ld	(xbc+14), xwa

@@ -6821,10 +6821,10 @@ PaletteReduce_FindClosest:
 	ld xwa, (xsp + 24)
 	add (xsp + 20), xwa
 	ld xwa, (xsp + 44)
-	and xwa, 0xff0000
+	and xwa, SendPartDataBlock_Data2
 	srl xwa, 16
 	ld xbc, (xsp + 40)
-	and xbc, 0xff0000
+	and xbc, SendPartDataBlock_Data2
 	srl xbc, 16
 	sub xbc, xwa
 	ld xwa, xbc
@@ -6994,7 +6994,7 @@ CaptureLcd_WritePaletteOr94:
 	sla de, 2
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
-	and xbc, 0xff0000	; is this a mask for Red?
+	and xbc, SendPartDataBlock_Data2	; is this a mask for Red?
 	srl xbc, 16
 	stb_dri C, 0x07, 0xe0, 0xe8
 	ld bc, iz
@@ -7019,7 +7019,7 @@ CaptureLcd_WritePaletteNoOr94:
 	sla de, 2
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
-	and xbc, 0xff0000	; is this a mask for Red?
+	and xbc, SendPartDataBlock_Data2	; is this a mask for Red?
 	srl xbc, 16
 	stb_dri C, 0x07, 0xe0, 0xe8
 	ld bc, iz

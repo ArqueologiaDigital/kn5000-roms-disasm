@@ -54,7 +54,7 @@ MainExcSend:
 	ld xde, 0:i3
 
 MainExcSend_ClampIndexToRange:
-	ld	xwa, 15203716
+	ld	xwa, MainExcSend_ClampIndexToRange_Table
 	add	xwa, xde
 	ld	a, (xwa)
 	call	16614621
@@ -127,7 +127,7 @@ ExcPmemFunc:
 ExcPmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 15203742
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -166,7 +166,7 @@ ExcSmemFunc:
 ExcSmemFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 15203742
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -205,7 +205,7 @@ ExcCompFunc:
 ExcCompFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 15203742
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -244,7 +244,7 @@ ExcSeqFunc:
 ExcSeqFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 15203742
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -283,7 +283,7 @@ ExcMspFunc:
 ExcMspFunc_HandlerJumpTable:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 15203742
+	ld	xbc, FileTransfer_Status_Table
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa

@@ -29,7 +29,7 @@ MidiPkt_ExtractAndPack:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -52,7 +52,7 @@ MidiPkt_DispatchViaTable_4DA6:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 ; v7 NAME DISPLACED: `MidiPkt_ExtractAndPack_StoreShifted` (0xFD9999) falls inside the line above in the
@@ -79,7 +79,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -110,7 +110,7 @@ MidiPkt_BuildControl:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -154,7 +154,7 @@ MidiPkt_DispatchSpecialType_Default:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -165,7 +165,7 @@ MidiPkt_DispatchSpecialType_Return:
 	ret
 MidiPkt_MatchParamInTable:
 	ld xde, xbc
-	lda	xix, (0xee49e8:24)
+	lda	xix, (MidiCtl_NullRecord:24)
 MidiPkt_MatchParamInTable_Loop:
 	ld XHL, (xde+)
 	cp xix, xhl
@@ -191,7 +191,7 @@ MidiPkt_EnqueueControl_3354:
 	calr	MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jr	z, MidiPkt_EnqueueControl_3354_Return
-	lda	xbc, (0xee49e8:24)
+	lda	xbc, (MidiCtl_NullRecord:24)
 	ld xwa, (xiz + 4)
 	cp xbc, xwa
 	jr	z, MidiPkt_EnqueueControl_3354_Return
@@ -244,7 +244,7 @@ MidiPkt_EnqueueExtended_Data:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
-	lda	xwa, (0xee49e8:24)
+	lda	xwa, (MidiCtl_NullRecord:24)
 	cp	xwa, (xiz+4)
 	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
 	ld	xwa, (xiz)
@@ -295,7 +295,7 @@ SeqAlt_DescriptorBlock_Data_Helper:
 	calr	MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jr	z, MidiPkt_EnqueueControl_335C_Return
-	lda	xbc, (0xee49e8:24)
+	lda	xbc, (MidiCtl_NullRecord:24)
 	ld xwa, (xiz + 4)
 	cp xbc, xwa
 	jr	z, MidiPkt_EnqueueControl_335C_Return
@@ -347,7 +347,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	calr	MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jrl	z, MidiPkt_EnqueueControl_3358_Return
-	lda	xbc, (0xee49e8:24)
+	lda	xbc, (MidiCtl_NullRecord:24)
 	ld xwa, (xiz + 4)
 	cp xbc, xwa
 	jrl	z, MidiPkt_EnqueueControl_3358_Return
@@ -428,7 +428,7 @@ VocalistPage2OKFunc_Helper2_Helper:
 	ldi85
 	lda xbc, (xsp + 10)
 	ld (xbc), xiz
-	lda	xwa, (0xee4aea:24)
+	lda	xwa, (MidiCtl_Rec_09:24)
 	ld (xbc + 4), xwa
 	calr	MidiPkt_CheckGateCondition
 	cp hl, 0xffff
@@ -617,7 +617,7 @@ MidiPkt_BuildControl_Helper:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jrl	z, MidiPkt_EnqueueControl_3364_Epilogue
-	lda	xbc, (0xee49e8:24)
+	lda	xbc, (MidiCtl_NullRecord:24)
 	ld	xwa, (xiz+4)
 	cp	xbc, xwa
 	jr	z, MidiPkt_EnqueueControl_3364_Epilogue
@@ -675,7 +675,7 @@ MidiPkt_CheckGateCondition:
 	jr	z, MidiPkt_CheckGateCondition_Second
 	extz bc
 	muls bc, 0x6
-	lda	xde, (0xee4df2:24)
+	lda	xde, (MidiCtl_GateRecords:24)
 	lda_dri XDE, 0x07, 0xe8, 0xe4
 	ld xhl, (xde)
 	ld c, (xde + 4)
@@ -692,7 +692,7 @@ MidiPkt_CheckGateCondition_Second:
 ; Kept because another v7 file references this address by this name.
 MidiPkt_EnqueueControl_335C:
 	muls wa, 0x6
-	lda	xbc, (0xee4e04:24)
+	lda	xbc, (ToneKit_FrequencyTable_0x3F4:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xde, (xbc)
 	ld a, (xbc + 4)
@@ -720,7 +720,7 @@ MidiPkt_DispatchViaTable_4DCE:
 	ld c, (xbc + 16)
 	extz bc
 	sla bc, 2
-	lda	xde, (0xee4f52:24)
+	lda	xde, (MidiCtl_Handlers:24)
 	exts xbc
 	add xbc, xde
 	ld xhl, (xbc)
@@ -883,7 +883,7 @@ MidiPkt_SysExBulkTransfer_Data:
 	cp	hl, 5:i3
 	ret	gt
 	add	hl, hl
-	lda	xix, (0xee3370:24)
+	lda	xix, (SysExBulk_SwitchOffsets:24)
 	ld	hl, (xix+hl)
 	lda	xix, (0xfda17c:24)
 	jp_rr 8, xix, hl
@@ -947,7 +947,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	jrl	nc, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
 	ldto_berp	a, 251
 	extz	wa
-	lda	xbc, (0xee337c:24)
+	lda	xbc, (SysExBulk_SlotMap:24)
 	ld	a, (xbc+wa)
 	ldfr_berp	a, 251
 	; v7 bytes do not decode as v10's `sub	(xbc-31), ix`
@@ -1104,7 +1104,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Helper:
 	ld	a, 0:opc
 MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
 	extz	wa
-	lda	xbc, (0xee33a4:24)
+	lda	xbc, (SysEx4B_VoiceIndexMap8:24)
 	ld	l, (xbc+wa)
 	ret
 MidiPkt_SysExBulkTransfer_Data_Helper2_Join:
@@ -1161,7 +1161,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Helper:
 	ld	a, 0:opc
 MidiPkt_SysExBulkTransfer_Data_Helper2_Skip2:
 	extz	wa
-	lda	xbc, (0xee33ac:24)
+	lda	xbc, (SysEx4B_LevelCurve128:24)
 	ld	l, (xbc+wa)
 	ret
 MidiPkt_SysExBulkTransfer_Data_Helper2_Join2:
@@ -1219,7 +1219,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Helper2:
 	ld	a, 0:opc
 MidiPkt_SysExBulkTransfer_Data_Helper2_Skip3:
 	extz	wa
-	lda	xbc, (0xee342c:24)
+	lda	xbc, (SysEx49_VoiceIndexMap8:24)
 	ld	l, (xbc+wa)
 	ret
 MidiPkt_SendBankSelect_Helper:
@@ -1276,7 +1276,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Helper3:
 	ld	a, 0:opc
 MidiPkt_SysExBulkTransfer_Data_Helper2_Skip4:
 	extz	wa
-	lda	xbc, (0xee3434:24)
+	lda	xbc, (SysEx49_LevelCurve128:24)
 	ld	l, (xbc+wa)
 	ret
 MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4:
@@ -1290,7 +1290,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4:
 	cp	wa, 7:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (0xee3520:24)
+	lda	xix, (SysEx4B_ChannelSwitch:24)
 	ld	wa, (xix+wa)
 	lda	xix, (0xfda542:24)
 	jp_rr	8, xix, wa
@@ -1339,7 +1339,7 @@ SysEx_DispatchByChannel_Entry_Code_Sub:
 	cp	wa, 7:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (0xee3584:24)
+	lda	xix, (SysEx49_ChannelSwitch:24)
 	ld	wa, (xix+wa)
 	lda	xix, (0xfda5c9:24)
 	jp_rr	8, xix, wa

@@ -4034,7 +4034,7 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	cp	wa, 5:i3
 	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
-	lda	xix, (0xee6384:24)
+	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfdced3:24)
 	jp_rr	8, xix, wa
@@ -5725,7 +5725,7 @@ UIStateEvt_TransposeUpdate:
 	jr	z, UIStateEvt_TransposeUpdate_Clear
 	ld	a, l
 	extz	wa
-	lda	xbc, (0xee8df4:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
@@ -5740,7 +5740,7 @@ UIStateEvt_TransposeUpdate:
 UIStateEvt_TransposeUpdate_Clear:
 	ld	a, l
 	extz	wa
-	lda	xbc, (0xee8df4:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	add	wa, wa
@@ -5759,7 +5759,7 @@ UIStateEvt_ParamEdit_Data:
 	cp	wa, 6:i3
 	jrl	gt, UIStateEvt_ParamEdit_Data_Epilogue
 	add	wa, wa
-	lda	xix, (0xee8e48:24)
+	lda	xix, (ParamEdit_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfde2cf:24)
 	jp_rr	8, xix, wa
@@ -5773,13 +5773,13 @@ UIStateEvt_ParamEdit_Data:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join
 UIStateEvt_ParamEdit_Data_Skip:
@@ -5792,7 +5792,7 @@ UIStateEvt_ParamEdit_Data_Skip:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join
 UIStateEvt_ParamEdit_Data_Skip2:
@@ -5800,7 +5800,7 @@ UIStateEvt_ParamEdit_Data_Skip2:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 UIStateEvt_ParamEdit_Data_Join:
 	ldw_d16	wa, (0xc596)
@@ -5872,13 +5872,13 @@ UIStateEvt_ParamEdit_Data_Skip10:
 	and	a, 7
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 	ldb_d8	a, (0xfc5d)
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join5
 UIStateEvt_ParamEdit_Data_Skip11:
@@ -5890,7 +5890,7 @@ UIStateEvt_ParamEdit_Data_Skip11:
 	and	a, 8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0xe6	; or IZ,(XBC+WA)
 	jr	UIStateEvt_ParamEdit_Data_Join5
 UIStateEvt_ParamEdit_Data_Skip12:
@@ -5898,7 +5898,7 @@ UIStateEvt_ParamEdit_Data_Skip12:
 	and	a, 15
 	extz	wa
 	add	wa, wa
-	lda	xbc, (0xee8e28:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld_rrw	iz, xbc, wa
 UIStateEvt_ParamEdit_Data_Join5:
 	andw	(0xc596:16), 0xffe8
@@ -5956,7 +5956,7 @@ UIStateEvt_VolumeMixer_Data:
 	cp	wa, 5:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (0xee8e56:24)
+	lda	xix, (VolumeMixer_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfde538:24)
 	jp_rr	8, xix, wa
@@ -6033,7 +6033,7 @@ UIStateEvt_VolumeMixer_Data_Join4:
 UIStateEvt_VolumeMixer_Data_Loop:
 	ld	wa, de
 	sla	wa, 2
-	lda	xbc, (0xee8d74:24)
+	lda	xbc, (PartRecord_RamPtrTable:24)
 	ld_rrl	xwa, xbc, wa
 	bitm	0, (xwa+0x16)
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip5
@@ -6138,7 +6138,7 @@ UIStateEvt_EffectSelect_Data_Skip2:
 	ldb_d8	a, (0xc07e)
 	and	a, 255
 	extz	wa
-	lda	xbc, (0xee8e1c:24)
+	lda	xbc, (EffectSelect_StepTable:24)
 	ld_rrb	e, xbc, wa
 	ld	hl, 0:i3
 	cp	hl, 26
@@ -6237,7 +6237,7 @@ UIStateEvt_ChannelConfig_Data_Loop2:
 	ldb_d8	a, (0xfd04)
 	and	a, 255
 	extz	wa
-	lda	xbc, (0xee8e1c:24)
+	lda	xbc, (EffectSelect_StepTable:24)
 	ld_rrb	a, xbc, wa
 	and	a, 15
 	sla	a, 4

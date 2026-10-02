@@ -845,7 +845,7 @@ RVari_ConfirmF_Item_Draw:
 	ld	a, (xsp+8)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15537702:24)
+	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw 237
@@ -1376,7 +1376,7 @@ RVari_EnumNotifyF_Item_Draw:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15537702:24)
+	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw 237

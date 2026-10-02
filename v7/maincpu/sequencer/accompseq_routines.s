@@ -1066,7 +1066,7 @@ AccompSeq_ProcessAfterNote_Skip2:
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	xor	w, w
 	ld	hl, wa
-	ld	xix, 16181302
+	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A
 	ld_rrb	h, xix, hl
 	ld	l, (64786:16)
 	cp	l, 17
@@ -1144,7 +1144,7 @@ AccompSeq_LookupStyle_Internal:
 	xor	xwa, xwa
 	ldw	wa, 32
 	mul	xwa, hl
-	add	xwa, 14991782
+	add	xwa, AccompSeq_StyleDataTable
 	ld	(32142:16), wa
 	ld	wa, qwa
 	ld	(32140:16), wa
@@ -1209,7 +1209,7 @@ AccompSeq_LoadParams_OverrideCheck:
 	dec	1, a
 	and	a, 7
 	sll	wa, 2
-	ld	xiy, 16182248
+	ld	xiy, AccompSeq_TempoScaleTable
 	ld_rrl	xwa, xiy, wa
 	add	xwa, 6
 	ld	(0x7d92:16), wa

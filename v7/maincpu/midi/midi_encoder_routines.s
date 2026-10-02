@@ -61,7 +61,7 @@ Encoder_ProcessModwheel:
 	ld	(36398:16), c
 	srl	a, 1
 	extz	wa
-	lda	xbc, (15573308:24)
+	lda	xbc, (ENCODER_LUT_MODWHEEL:24)
 	ld	a, (xbc+wa)
 	ld	c, (36424:16)
 	res	7, c
@@ -81,7 +81,7 @@ Encoder_ProcessVolume:
 	ldw	iz, 65535
 	ld	(36400:16), a
 	extz	wa
-	lda	xbc, (15573436:24)
+	lda	xbc, (ENCODER_LUT_VOLUME:24)
 	ld	a, (xbc+wa)
 	calr	Encoder_ClampScaleAndNormalize
 	ld	a, l
@@ -115,7 +115,7 @@ Encoder_PerformScaling:
 	ld	a, (36416:16)
 	extz	wa
 	add	wa, wa
-	lda	xbc, (15573692:24)
+	lda	xbc, (ENCODER_LUT_BREATH_INDEX:24)
 	ld	bc, (xbc+wa)
 	extz	xbc
 	ld	xwa, xhl
@@ -137,7 +137,7 @@ Encoder_ProcessBreath:
 	cpl	a
 	ld	(0x8e38:16), a
 	extz	wa
-	lda	xbc, (0xeda2d2:24)
+	lda	xbc, (ENCODER_LUT_BREATH_VALUE:24)
 	ld	a, (xbc+wa)
 	ld	c, (0x36ff:16)
 	and	c, 15
@@ -154,10 +154,10 @@ Encoder_ProcessBreath_WithModeAdjustment:
 	dec	1, c
 	extz	bc
 	add	bc, bc
-	lda	xwa, (0xeda3d2:24)
+	lda	xwa, (ENCODER_LUT_BREATH_MULT:24)
 	ld	de, (xwa+bc)
 	mul	xhl, de
-	lda	xwa, (0xeda3ea:24)
+	lda	xwa, (ENCODER_LUT_BREATH_OFFSET:24)
 	ld	wa, (xwa+bc)
 	sub	hl, wa
 	add	hl, 0x4080
@@ -185,7 +185,7 @@ Encoder_ProcessFoot:
 	ld	(36410:16), a
 	srl	a, 1
 	extz	wa
-	lda	xbc, (15574018:24)
+	lda	xbc, (ENCODER_LUT_FOOT:24)
 	ld	a, (xbc+wa)
 	ld	c, (36430:16)
 	res	7, c
@@ -206,7 +206,7 @@ Encoder_ProcessExpression:
 	ld	(36412:16), c
 	srl	a, 1
 	extz	wa
-	lda	xbc, (15574146:24)
+	lda	xbc, (ENCODER_LUT_EXPRESSION:24)
 	ld	a, (xbc+wa)
 	ld	(36426:16), a
 	extz	wa

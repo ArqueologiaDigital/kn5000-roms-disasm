@@ -2103,7 +2103,7 @@ TaskSched_InitMsgQueues:
 	ld	(xhl+), ix
 	ld	(xhl+), ix
 	djnz8	b, -11
-	ld	xwa, 15669844
+	ld	xwa, TaskSched_InitMsgQueues_0x12
 	jr	8	; -> 0xEF1A5C
 	normal
 	nop

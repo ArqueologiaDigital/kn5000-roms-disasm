@@ -3053,7 +3053,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	cp	wa, 16
 	jr	gt, ExtData_VoiceParam_DispatchBytecode_Epilogue2
 	add	wa, wa
-	lda	xix, (0xeda62c:24)
+	lda	xix, (Protocol_values_for_LED_rows_0x16:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfc7568:24)
 	jp_rr	8, xix, wa

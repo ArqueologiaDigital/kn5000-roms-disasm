@@ -5790,7 +5790,7 @@ IndexToRecordLookup:
 	sll xbc, 2				; XBC = index * 12 (record stride)
 	ld xix, 0x00025db8			; record array base
 	add xix, xbc				; XIX = &records[index]
-	ld xiy, 0x00ea03dc			; destination descriptor
+	ld xiy, SeqFileTypeCode_Lsw_0x50			; destination descriptor
 	ld	bc, 6:i3
 	ldirw					; copy 6 words (12 bytes)
 	lda xbc, (xsp + 8)			; XBC = output buffer

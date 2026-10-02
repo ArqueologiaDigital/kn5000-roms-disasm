@@ -4057,7 +4057,7 @@ MidiPartGridCheck_Evt1C00017:
 	dec	4, wa
 	ld	de, wa
 	add	de, hl
-	lda	xwa, (15205664:24)
+	lda	xwa, (MidiSetup_EventHandler_Table:24)
 	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
@@ -4143,7 +4143,7 @@ MidiPartGridCheck_Evt1C00018:
 	dec	4, wa
 	ld	de, wa
 	add	de, hl
-	lda	xwa, (15205664:24)
+	lda	xwa, (MidiSetup_EventHandler_Table:24)
 	ld_rrl	xwa, xwa, de
 	ld	(xsp+12), xwa
 	ld	wa, (xbc)
@@ -4223,7 +4223,7 @@ MidiPartGridCheck_Loop:
 	muls	wa, 96
 	ld	iy, wa
 	add	iy, de
-	lda	xhl, (15205664:24)
+	lda	xhl, (MidiSetup_EventHandler_Table:24)
 	ld_rrl	xiz, xhl, iy
 	ld	xde, (xsp+34)
 	cp	(xde), xiz
@@ -9312,7 +9312,7 @@ IvAccordion_ShowHide:
 	cpw (0x24782:24), 0
 	jr z, IvAccordion_ShowHide_NoBellows
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9325,7 +9325,7 @@ IvAccordion_ShowHide:
 
 IvAccordion_ShowHide_NoBellows:
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9371,12 +9371,12 @@ IvAccordion_Scroll:
 	jr nz, IvAccordion_Scroll_SetOff
 	ldw (0x024780:24), 0x0001
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9396,12 +9396,12 @@ IvAccordion_Scroll:
 IvAccordion_Scroll_SetOff:
 	ldw (0x024780:24), 0x0000
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9462,7 +9462,7 @@ IvAccordion_Update:
 	cpw (0x2477c:24), 0
 	jr z, IvAccordion_Update_SendPartParam
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9477,7 +9477,7 @@ IvAccordion_Update_BellowsOn:
 	cpw (0x2477c:24), 1
 	jr z, IvAccordion_Update_SendPartParam
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9544,7 +9544,7 @@ IvAccordion_Refresh:
 	lda xwa, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe0, 0xec
 	; object handle 0xeb0007 = class 0x0eb, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_InitPtrTable_0x15)
-	ld xwa, 0xeb0007
+	ld xwa, WidgetName_InitPtrTable_0x15
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	ld wa, (0x02477e:24)
@@ -10879,7 +10879,7 @@ Softver_ShowHide:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	; object handle 0xf00001 = class 0x0f0, instance 1 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x160)
-	ld xwa, 0xf00001
+	ld xwa, StringData_APCModeNames_0x160
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	call Boot_ParseTableDataTimestamp
@@ -10892,7 +10892,7 @@ Softver_ShowHide:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	; object handle 0xf00002 = class 0x0f0, instance 2 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x161)
-	ld xwa, 0xf00002
+	ld xwa, StringData_APCModeNames_0x161
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	call Boot_GetSystemPointer
@@ -10905,7 +10905,7 @@ Softver_ShowHide:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	; object handle 0xf00003 = class 0x0f0, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x162)
-	ld xwa, 0xf00003
+	ld xwa, StringData_APCModeNames_0x162
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	call Boot_ParseSubCPUTimestamp
@@ -10918,7 +10918,7 @@ Softver_ShowHide:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	; object handle 0xf00004 = class 0x0f0, instance 4 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x163)
-	ld xwa, 0xf00004
+	ld xwa, StringData_APCModeNames_0x163
 	ld xbc, EVT_PARA_DRAW
 	jr Softver_SendEvent
 
@@ -10978,7 +10978,7 @@ MPver_ShowHide:
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
 	; object handle 0xef000a = class 0x0ef, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was CharEncoding_PrintableHi_0xA)
-	ld xwa, 0xef000a
+	ld xwa, CharEncoding_PrintableHi_0xA
 	ld xbc, EVT_PARA_DRAW
 	jr MPver_SendEvent
 
@@ -15399,7 +15399,7 @@ IvDrawbar_Init_SetupMode:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xea0026 = class 0x0ea, instance 38 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x1E)
-	ld xwa, 0xea0026
+	ld xwa, Presentation_TagStrTable_0x1E
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -15418,7 +15418,7 @@ IvDrawbar_Init_SetupMode:
 	ld xde, 0:i3
 	call SendEvent
 	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x16)
-	ld xwa, 0xea001e
+	ld xwa, Presentation_TagStrTable_0x16
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call SendEvent
@@ -15436,7 +15436,7 @@ IvDrawbar_Init_ModernMode:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x16)
-	ld xwa, 0xea001e
+	ld xwa, Presentation_TagStrTable_0x16
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -15530,7 +15530,7 @@ IvDrawbar_DrawbarUpdate:
 	cpw (0x247c2:24), 0
 	jr z, IvDrawbar_DrawbarUpdate_UpperOff
 	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
-	ld xwa, 0xea0003
+	ld xwa, Presentation_RootEntry_0x3
 	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	call SendEvent
@@ -15541,7 +15541,7 @@ IvDrawbar_DrawbarUpdate:
 
 IvDrawbar_DrawbarUpdate_UpperOff:
 	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
-	ld xwa, 0xea0003
+	ld xwa, Presentation_RootEntry_0x3
 	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 	call SendEvent
@@ -16786,7 +16786,7 @@ IvDrawbar1_ShowHide:
 	ld de, (0x024798:24)
 	exts xde
 	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x4)
-	ld xwa, 0xea000c
+	ld xwa, Presentation_TagStrTable_0x4
 	ld xbc, EVT_SET_PARAM
 	call SendEvent
 	ld xwa, (xsp + 12)
@@ -17224,7 +17224,7 @@ IvDrawbar2_ShowHideHandler:
 	ld de, (0x024798:24)
 	exts xde
 	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x4)
-	ld xwa, 0xea000c
+	ld xwa, Presentation_TagStrTable_0x4
 	ld xbc, EVT_SET_PARAM
 	jr IvDrawbar2_SendEventShared
 
@@ -17425,7 +17425,7 @@ DrawbarNorm_Update:
 	call SndParam_LookupReadOnly
 	exts xhl
 	; object handle 0xea0020 = class 0x0ea, instance 32 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x18)
-	ld xwa, 0xea0020
+	ld xwa, Presentation_TagStrTable_0x18
 	ld xbc, EVT_SET_PARAM
 	ld xde, xhl
 	jrl IvDrawbarNorm_SendEvent
@@ -17436,7 +17436,7 @@ DrawbarNorm_UpdateCase4:
 	lda xbc, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	; object handle 0xea001f = class 0x0ea, instance 31 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x17)
-	ld xwa, 0xea001f
+	ld xwa, Presentation_TagStrTable_0x17
 	ld xbc, EVT_PARA_DRAW
 	jr IvDrawbarNorm_SendEvent
 
@@ -18255,7 +18255,7 @@ Demofeat2_ShowHide:
 	call ApFuncCall
 	ld xde, xhl
 	; object handle 0xe40008 = class 0x0e4, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9A8)
-	ld xwa, 0xe40008
+	ld xwa, Bitmap_Dredt0d_0x9A8
 	ld xbc, EVT_PARA_DRAW
 	jr Demofeat2_SendEvent
 
@@ -18420,7 +18420,7 @@ PresBox_TimerExpired:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xe4000a = class 0x0e4, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9AA)
-	ld xwa, 0xe4000a
+	ld xwa, Bitmap_Dredt0d_0x9AA
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call PostEvent
@@ -18609,7 +18609,7 @@ AcPresCtrl_Case5:
 	ld wa, 2:i3
 	call ChangePalette
 	; object handle 0xe40000 = class 0x0e4, instance 0 (SendEvent indexes its class table by bits 16-27; not an address -- was NakaData_ExternalBase)
-	ld xwa, 0xe40000
+	ld xwa, NakaData_ExternalBase
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr AcPresCtrl_SendEventReturn

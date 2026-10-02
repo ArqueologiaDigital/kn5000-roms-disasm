@@ -18523,7 +18523,7 @@ Scoop_EventLoop_12Entry_Join:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15380484:24)
+	lda	xbc, (Str_No_0xCEE:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18673,7 +18673,7 @@ Scoop_EventLoop_12Entry_Join3:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15380484:24)
+	lda	xbc, (Str_No_0xCEE:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa

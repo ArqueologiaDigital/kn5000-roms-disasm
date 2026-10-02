@@ -11338,17 +11338,17 @@ MidiTable_FlushArpNotes:
 	ld a, (xwa+4)
 	cp	a, 0:i3
 	jr nz, MidiTable_CheckSpecialSlot
-	ld xwa, 0x00ee3594
+	ld xwa, SysEx_Msg_3594
 	ld	bc, 5:i3
 	jr t, MidiTable_CallFlush
 MidiTable_CheckSpecialSlot:
 	cp a, 0x16
 	jr nz, MidiTable_UseDefaultBuf
-	ld xwa, 0x00ee35b2
+	ld xwa, SysEx_Msg_35B2
 	ld	bc, 5:i3
 	jr t, MidiTable_CallFlush
 MidiTable_UseDefaultBuf:
-	ld xwa, 0x00ee359a
+	ld xwa, SysEx_Msg_359A
 	ld	bc, 5:i3
 MidiTable_CallFlush:
 	call SeqBuf_FlushNoteOffs
@@ -13603,7 +13603,7 @@ SeqData_FormatOutput_Data_Helper_Join:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e2a:24)
+	lda	xwa, (MidiCtl_SelectTable0:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13611,13 +13611,13 @@ SeqData_FormatOutput_Data_Helper_Join:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e2a:24)
+	lda	xbc, (MidiCtl_SelectTable0:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13636,7 +13636,7 @@ SeqData_FormatOutput_Data_Helper_Join2:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e82:24)
+	lda	xwa, (MidiCtl_SelectTable2:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13644,13 +13644,13 @@ SeqData_FormatOutput_Data_Helper_Join2:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e82:24)
+	lda	xbc, (MidiCtl_SelectTable2:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13669,7 +13669,7 @@ SeqData_FormatOutput_Data_Helper_Join3:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e8a:24)
+	lda	xwa, (MidiCtl_SelectTable4:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13677,13 +13677,13 @@ SeqData_FormatOutput_Data_Helper_Join3:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e8a:24)
+	lda	xbc, (MidiCtl_SelectTable4:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13704,7 +13704,7 @@ SeqData_FormatOutput_Data_Helper_Join4:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4eea:24)
+	lda	xwa, (MidiCtl_SelectTable6:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13712,13 +13712,13 @@ SeqData_FormatOutput_Data_Helper_Join4:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4eea:24)
+	lda	xbc, (MidiCtl_SelectTable6:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13737,7 +13737,7 @@ SeqData_FormatOutput_Data_Helper_Join5:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4ef2:24)
+	lda	xwa, (MidiCtl_SelectTable8:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13745,13 +13745,13 @@ SeqData_FormatOutput_Data_Helper_Join5:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4ef2:24)
+	lda	xbc, (MidiCtl_SelectTable8:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -13770,7 +13770,7 @@ SeqData_FormatOutput_Data_Helper_Helper:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4efa:24)
+	lda	xwa, (MidiCtl_SelectTable10:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -13778,13 +13778,13 @@ SeqData_FormatOutput_Data_Helper_Helper:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4efa:24)
+	lda	xbc, (MidiCtl_SelectTable10:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+17)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f6a:24)
+	lda	xde, (MidiCtl_FormatHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14026,7 +14026,7 @@ SeqAlt_NibbleSearch_Epilogue4:
 	jr	nc, SeqAlt_NibbleSearch_Epilogue5
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (0xee4e18:24)
+	lda	xbc, (ToneKit_FrequencyTable_0x408:24)
 	ld	xbc, (xbc+wa)
 	ld	a, (xiz+8)
 	cpl	a
@@ -14058,7 +14058,7 @@ SeqAlt_NibbleSearch_Epilogue5:
 	jrl	nc, SeqAlt_NibbleSearch_Epilogue
 	extz	wa
 	muls	wa, 6
-	lda	xbc, (0xee4e16:24)
+	lda	xbc, (MidiCtl_SubTableDesc:24)
 	exts	xwa
 	add	xwa, xbc
 	ld	de, (xwa)
@@ -14192,7 +14192,7 @@ SeqAlt_NibbleSearch_Epilogue2:
 	jrl	nc, SeqAlt_NibbleSearch_Epilogue6
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e20:24)
+	lda	xbc, (MidiCtl_SubTableBPtr:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	ld	xwa, (0xbcac:16)
@@ -14271,7 +14271,7 @@ SeqAlt_NibbleSearch_Epilogue6:
 	jr	nc, SeqAlt_NibbleSearch_Epilogue3
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e26:24)
+	lda	xbc, (MidiCtl_SubTableCPtr:24)
 	ld	xwa, (xbc+wa)
 	lda	xbc, (xsp+6)
 	cp	l, 0:i3
@@ -14741,7 +14741,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Join:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e56:24)
+	lda	xwa, (MidiCtl_SelectTable1:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14749,13 +14749,13 @@ VoiceParam_AssSwb_MultiBlock_Data_Join:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e56:24)
+	lda	xbc, (MidiCtl_SelectTable1:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14774,7 +14774,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Join2:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4e86:24)
+	lda	xwa, (MidiCtl_SelectTable3:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14782,13 +14782,13 @@ VoiceParam_AssSwb_MultiBlock_Data_Join2:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4e86:24)
+	lda	xbc, (MidiCtl_SelectTable3:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14807,7 +14807,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Join3:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4eba:24)
+	lda	xwa, (MidiCtl_SelectTable5:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14815,13 +14815,13 @@ VoiceParam_AssSwb_MultiBlock_Data_Join3:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4eba:24)
+	lda	xbc, (MidiCtl_SelectTable5:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14842,7 +14842,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Join4:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4eee:24)
+	lda	xwa, (MidiCtl_SelectTable7:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14850,13 +14850,13 @@ VoiceParam_AssSwb_MultiBlock_Data_Join4:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4eee:24)
+	lda	xbc, (MidiCtl_SelectTable7:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14875,7 +14875,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Join5:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4ef6:24)
+	lda	xwa, (MidiCtl_SelectTable9:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14883,13 +14883,13 @@ VoiceParam_AssSwb_MultiBlock_Data_Join5:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4ef6:24)
+	lda	xbc, (MidiCtl_SelectTable9:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14908,7 +14908,7 @@ VoiceParam_AssSwb_MultiBlock_Data_Helper:
 	ldto_berp	c, 251
 	extz	bc
 	sla	bc, 2
-	lda	xwa, (0xee4f32:24)
+	lda	xwa, (MidiCtl_SelectTable11:24)
 	ld	xwa, (xwa+bc)
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
@@ -14916,13 +14916,13 @@ VoiceParam_AssSwb_MultiBlock_Data_Helper:
 	ldto_berp	a, 251
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee4f32:24)
+	lda	xbc, (MidiCtl_SelectTable11:24)
 	ld	xbc, (xbc+wa)
 	ld	xwa, xbc
 	ld	c, (xbc+18)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee4f9a:24)
+	lda	xde, (MidiCtl_AssSwbHandlers:24)
 	exts	xbc
 	add	xbc, xde
 	ld	xhl, (xbc)
@@ -14941,7 +14941,7 @@ VoiceParam_MultiBlock_Epilogue_Data:
 	jr	nc, VoiceParam_AssSwb_MultiBlock_Data_Epilogue
 	extz	bc
 	muls	bc, 6
-	lda	xde, (0xee4e18:24)
+	lda	xde, (ToneKit_FrequencyTable_0x408:24)
 	ld	xhl, (xde+bc)
 	lda	xde, (xsp+8)
 	ld	c, (xwa+6)

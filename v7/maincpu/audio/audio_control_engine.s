@@ -3118,7 +3118,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	cp	wa, 16
 	jr	gt, SndParamF9A541_ResBit7_Code_Epilogue
 	add	wa, wa
-	lda	xix, (0xeda62c:24)
+	lda	xix, (Protocol_values_for_LED_rows_0x16:24)
 ; (pre-port v7 note about the bytes at 0xFC6D8E:)
 ; v10 does not spell this byte either
 	ld_rrw	wa, xix, wa
@@ -12273,7 +12273,7 @@ MidiStream_HandleRunningStatus_Join2:
 	ld	xwa, 0x34100
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, 0xffffff
+	cp	xde, NakaData_RomEnd
 	jr	nz, MidiStream_HandleRunningStatus_Loop
 MidiStream_HandleRunningStatus_Skip6:
 	ld	xwa, (xsp+0x6)
@@ -12286,7 +12286,7 @@ MidiStream_HandleRunningStatus_Skip6:
 	jr	nc, MidiStream_HandleRunningStatus_Skip8
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee10ec:24)
+	lda	xde, (SndParam_RegisterHandlers:24)
 	lda_rr	xhl, xde, bc
 	ld	bc, (xsp+0xc)
 	ld	de, (xsp+0xa)
@@ -12320,7 +12320,7 @@ MidiStream_HandleRunningStatus_Skip9:
 	jr	nc, MidiStream_HandleRunningStatus_Loop2
 	extz	bc
 	sla	bc, 2
-	lda	xde, (0xee1148:24)
+	lda	xde, (SndParam_WriteHandlers:24)
 	lda_rr	xde, xde, bc
 	ld	bc, (xsp+0xc)
 	ld	xhl, (xde)
@@ -12393,7 +12393,7 @@ MidiStream_HandleRunningStatus_Join4:
 	ld	xwa, 0x34100
 	add	xwa, xbc
 	ld	xde, (xwa)
-	cp	xde, 0xffffff
+	cp	xde, NakaData_RomEnd
 	jr	nz, MidiStream_HandleRunningStatus_Loop3
 MidiStream_HandleRunningStatus_Skip11:
 	ld	xwa, (xsp+0x6)
@@ -12404,7 +12404,7 @@ MidiStream_HandleRunningStatus_Skip11:
 	jr	nc, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (0xee1110:24)
+	lda	xbc, (SndParam_Register2Handlers:24)
 	lda_rr	xhl, xbc, wa
 	ld	xwa, (xsp+0x6)
 	ld	bc, (xsp+0xc)

@@ -796,7 +796,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (0xe7f972:24)
+	lda	xbc, (Data_FadeSetGridDispatch_Table:24)
 	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
@@ -819,7 +819,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (0xe7f972:24)
+	lda	xbc, (Data_FadeSetGridDispatch_Table:24)
 	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
@@ -832,7 +832,7 @@ FadeSetGridCheck_Join:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda	xix, (0xe7f972:24)
+	lda	xix, (Data_FadeSetGridDispatch_Table:24)
 	ld	xiz, (xsp+28)
 	jr	FadeSetGridCheck_Join2
 FadeSetGridCheck_Loop:
@@ -879,7 +879,7 @@ FadeSetGridCheck_Skip2:
 	ld	xwa, NakaInst_OFF_WidgetTbl2_0x9C
 	cpw	(xde), 0
 	jr	z, FadeSetGridCheck_Skip3
-	ld	xwa, 0xe7f9ac
+	ld	xwa, Data_AcGridParamTable
 FadeSetGridCheck_Skip3:
 	push	xwa
 	push	xbc
@@ -936,10 +936,10 @@ SndParam_LookupAndSendCmd:
 SndParam_FormatAndDisplay:
 	call	AcApcToggleProc_Helper
 	lda	xbc, (xsp+12)
-	ld	xwa, 15202764
+	ld	xwa, SndParam_FormatAndDisplay_Str_2
 	cp	hl, 0:i3
 	jr	z, SndParam_PushStrAndCopy
-	ld	xwa, 15202758
+	ld	xwa, SndParam_FormatAndDisplay_Str
 SndParam_PushStrAndCopy:
 	push	xwa
 	push	xbc
@@ -1064,7 +1064,7 @@ AcInOutGrid_Init:
 	add	wa, wa
 	cp	hl, 0:i3
 	jr	nz, AcInOutGrid_ScrollUp_AltTable
-	lda	xbc, (15202784:24)
+	lda	xbc, (AcInOutGrid_Init_Table:24)
 	ld	wa, (xbc+wa)
 	ld	bc, iz
 	sub	bc, wa
@@ -1141,7 +1141,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	add	wa, wa
 	cp	hl, 0:i3
 	jr	nz, AcInOutGrid_ScrollDown_AltTable	; -> 0xF75574
-	lda	xbc, (15202820:24)
+	lda	xbc, (AcInOutGrid_ScrollUp_Dispatch_Table:24)
 	ld	wa, (xbc+wa)
 	add	wa, iz
 	ld	de, wa
@@ -1215,7 +1215,7 @@ AcInOutGrid_GetRowText:
 	jr	z, AcInOutGrid_GetRowText_Src1
 	cp	hl, 0:i3
 	jr	nz, AcInOutGrid_ReturnZero
-	ld	xwa, 15202856
+	ld	xwa, AcInOutGrid_GetRowText_Str
 	jr	AcInOutGrid_GetRowText_Push
 AcInOutGrid_GetRowText_Src1:
 	ld xwa, NakaInst_OFF_WidgetTbl2_0x1CC
@@ -1314,7 +1314,7 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
-	lda	xix, (0xe7fd5e:24)
+	lda	xix, (Data_InOutGridDispatch_CaseTable_3:24)
 	ld	bc, (xix+bc)
 	lda	xix, (0xf75728:24)
 	jp_rr	8, xix, bc
@@ -1386,7 +1386,7 @@ InOutGridCheck_Skip:
 	cp	bc, 8
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
-	lda	xix, (0xe7fd4c:24)
+	lda	xix, (Data_InOutGridDispatch_CaseTable_2:24)
 	ld	bc, (xix+bc)
 	lda	xix, (0xf757f4:24)
 	jp_rr	8, xix, bc
@@ -1441,7 +1441,7 @@ InOutGridCheck_Join:
 	ld	(xwa+4), xbc
 	ld	xix, (xiz)
 	lda	xbc, (xwa+2)
-	lda	xhl, (0xe7fc94:24)
+	lda	xhl, (Data_InOutGridDispatch_PtrTable:24)
 	cp	xix, 0x2183
 	jrl	z, InOutGridCheck_Entry
 	cp	xix, 0x2182
@@ -1464,7 +1464,7 @@ InOutGridCheck_Join:
 	ldw	(xbc), 0
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (0xe7fca8:24)
+	lda	xbc, (Data_InOutGridDispatch_PtrTable_2:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xde
@@ -1492,7 +1492,7 @@ InOutGridCheck_Skip3:
 InOutGridCheck_Skip4:
 	ld	xix, xwa
 	ld	wa, (xwa)
-	lda	xhl, (0xe7fcc4:24)
+	lda	xhl, (Data_InOutGridDispatch_PtrTable_3:24)
 	cp	wa, 2:i3
 	jr	z, InOutGridCheck_Skip6
 	cp	wa, 1:i3
@@ -1700,7 +1700,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8448
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15203496:24)
+	lda	xwa, (Data_InOutGridDispatch_PtrTable_2:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -1715,7 +1715,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 8449
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15203476:24)
+	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -1730,7 +1730,7 @@ Data_ParaLoadOptDispatch:
 	ld	xwa, 20480
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15203524:24)
+	lda	xwa, (Data_InOutGridDispatch_PtrTable_3:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -1849,7 +1849,7 @@ InOutGridCheck_Skip17:
 	ld	xwa, 8577
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15203476:24)
+	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -1864,7 +1864,7 @@ InOutGridCheck_Skip17:
 	ld	xwa, 8580
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15203476:24)
+	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -1879,7 +1879,7 @@ InOutGridCheck_Skip17:
 	ld	xwa, 8578
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15203476:24)
+	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -1894,7 +1894,7 @@ InOutGridCheck_Skip17:
 	ld	xwa, 8579
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15203476:24)
+	lda	xwa, (Data_InOutGridDispatch_PtrTable:24)
 	ld	xwa, (xwa+hl)
 	push	xwa
 	lda	xwa, (xsp+16)

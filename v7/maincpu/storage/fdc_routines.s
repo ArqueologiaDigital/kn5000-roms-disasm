@@ -290,9 +290,9 @@ FDC_COMMAND_DISPATCHER:
 	cp	wa, 11
 	jr	ugt, FDC_CheckDriveCount	; -> 0xF969D7
 	add	wa, wa
-	lda	xix, (15374514:24)
+	lda	xix, (DiskWarning_ConfirmStrings_0xC06:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (16345545:24)
+	lda	xix, (FDC_CMD_HANDLER_BASE:24)
 	jp_rr	8, xix, wa
 FDC_CMD_HANDLER_BASE:
 	calr	FDC_SetupFormatParams

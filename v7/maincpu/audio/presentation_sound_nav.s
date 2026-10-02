@@ -1269,10 +1269,10 @@ DirmdEmu_CaseF:
 	ldw	wa, 255
 	call	PostTitle_Function_Helper3
 PostTitle_Function_Skip:
-	ld	xwa, 15375216
+	ld	xwa, DiskWarning_ConfirmStrings_0xEC4
 	call	FDemoText_ByteData_DisplayRefresh_Helper
 	jp	AudioCtrl_DataBlock_Return
-	ld	xwa, 15375234
+	ld	xwa, DiskWarning_ConfirmStrings_0xED6
 	call	FDemoText_ByteData_DisplayRefresh_Helper
 	jp	AudioCtrl_DataBlock_Return2
 	lda	xsp, (xsp-256)
@@ -1294,7 +1294,7 @@ PostTitle_Function_Skip:
 	popw	iz
 	lda	xsp, (xsp+256)
 	ret
-	ld	xwa, 15375276
+	ld	xwa, DiskWarning_ConfirmStrings_0xF00
 	call	FDemoText_ByteData_DisplayRefresh_Helper
 	jp	AudioCtrl_DataBlock_Return3
 DirmdEmulator_Entry:

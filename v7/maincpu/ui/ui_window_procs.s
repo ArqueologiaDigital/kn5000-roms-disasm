@@ -2053,13 +2053,13 @@ EditSw_ByteData:
 	jr	z, DrawDesignFrame_Skip2
 	cpw	(xwa), 0
 	jr	nz, DrawDesignFrame_Skip
-	ld	xwa, 15376742
+	ld	xwa, Data_SoundEditorCharsLayout_0x294
 	jr	DrawDesignFrame_Join
 DrawDesignFrame_Skip:
-	ld	xwa, 15376746
+	ld	xwa, Data_SoundEditorCharsLayout_0x298
 	jr	DrawDesignFrame_Join
 DrawDesignFrame_Skip2:
-	ld	xwa, 15376750
+	ld	xwa, Data_SoundEditorCharsLayout_0x29C
 DrawDesignFrame_Join:
 	push	xwa
 	push	xbc
@@ -4090,7 +4090,7 @@ ClampColorToRange_Skip:
 	ldw	wa, 14
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (16436844:24)
+	lda	xbc, (DrawDesignBox_ByteData_0x59:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -7546,7 +7546,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw	bc
 	call	ClipBlit_Replace_Impl_Helper
 	add	hl, hl
-	lda	xwa, (15380116:24)
+	lda	xwa, (Str_No_0xB7E:24)
 	ld_rrw	de, xwa, hl
 	ldw	bc, 30
 	sub	bc, de

@@ -1424,7 +1424,7 @@ SqTrAsPsTtl_CaseF:
 	sll	wa, 1
 	ld	xix, SepaOut_Config_0_0x52
 	ld_rrw wa, xix, wa
-	lda xix, (15863692:24)
+	lda xix, (SqTrAsPsTtl_CaseF_Skip:24)
 	jp_rr 8, xix, wa
 SqTrAsPsTtl_CaseF_Skip:
 	push	xde

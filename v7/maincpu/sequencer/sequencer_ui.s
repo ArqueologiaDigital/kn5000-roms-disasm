@@ -316,7 +316,7 @@ TrAsSureLangCheck:
 	ld	a, (10355:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14836000:24)
+	lda	xbc, (TrAsSureLangCheck_PtrTable_2:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	a, (4438:16)
@@ -331,7 +331,7 @@ TrAsSureLangCheck:
 	ld	a, (213220:24)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14835280:24)
+	lda	xbc, (TrAsSureLangCheck_PtrTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	2
@@ -3365,7 +3365,7 @@ TrAsGridChk_Part1_AdjustUp:
 TrAsGridChk_Part1_SendAudio:
 	extz	hl
 	sla	hl, 2
-	ld	xbc, 14836426
+	ld	xbc, TrAsGridChk_Part1_SendAudio_PtrTable
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	lda	xwa, (xsp+8)
@@ -3411,7 +3411,7 @@ TrAsGridChk_Part2_PushCmd:
 	calr	TrAsGrid_CheckTrackType
 	cp	l, 1:i3
 	jrl	nz, TrAsGridChk_Part2_Finish
-	ld	xwa, 14836888
+	ld	xwa, TrAsGridChk_Part2_PushCmd_Str
 	jr	TrAsGridChk_SendExtraAudioCmd
 TrAsGridChk_Part2_CheckType0:
 	ld wa, 0:i3
@@ -3453,7 +3453,7 @@ TrAsGridChk_Part2_UpPushCmd:
 	calr	TrAsGrid_CheckTrackType
 	cp	l, 1:i3
 	jr	nz, TrAsGridChk_Part2_Finish
-	ld	xwa, 14836904
+	ld	xwa, TrAsGridChk_Part2_UpPushCmd_Str
 	jr	TrAsGridChk_SendExtraAudioCmd
 TrAsGridChk_Part2_UpCheckType0:
 	ld wa, 0:i3
@@ -3509,7 +3509,7 @@ TrAsGridChk_Part3_PushCmd:
 	calr	TrAsGrid_CheckTrackType
 	cp	l, 1:i3
 	jrl	nz, TrAsGridChk_Part3_Finish
-	ld	xwa, 14836920
+	ld	xwa, TrAsGridChk_Part3_PushCmd_Str
 	jr	TrAsGridChk_SendExtraAudioCmd2
 TrAsGridChk_Part3_CheckType0:
 	ld wa, 0:i3
@@ -3551,7 +3551,7 @@ TrAsGridChk_Part3_UpPushCmd:
 	calr	TrAsGrid_CheckTrackType
 	cp	l, 1:i3
 	jr	nz, TrAsGridChk_Part3_Finish
-	ld	xwa, 14836936
+	ld	xwa, TrAsGridChk_Part3_UpPushCmd_Str
 	jr	TrAsGridChk_SendExtraAudioCmd2
 TrAsGridChk_Part3_UpCheckType0:
 	ld wa, 0:i3
@@ -3902,7 +3902,7 @@ SmfMuteChSelFunc:
 MuteChSel_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 14837008
+	ld	xbc, MuteChSel_Dispatch_PtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -3943,7 +3943,7 @@ SqTrAsPsSongFunc:
 SqTrAsPsSong_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 14837188
+	ld	xbc, SqTrAsPsSong_Dispatch_PtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -3979,7 +3979,7 @@ SqAftSetFunc:
 	jr	nz, SqAftSet_Case2	; -> 0xF2CD0B
 	ld	wa, (xde+8)
 	sla	wa, 2
-	lda	xbc, (14837362:24)
+	lda	xbc, (SqAftSetFunc_PtrTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+10)
@@ -4034,7 +4034,7 @@ MuteChSetFunc:
 MuteChSet_Dispatch:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, 14837414
+	ld	xbc, MuteChSet_Dispatch_PtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -4379,10 +4379,10 @@ DemoMedDspCheck:
 DemoMedDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, 14837662
+	ld	xwa, DemoMedDsp_Dispatch_Str
 	or	xhl, xhl
 	jr	nz, AcDemoMedleyDispBoxProc_Skip
-	ld	xwa, 14837650
+	ld	xwa, MedleyDisp_Blank
 AcDemoMedleyDispBoxProc_Skip:
 	push	xwa
 	push	xbc
@@ -4427,10 +4427,10 @@ DPPlayDspCheck:
 DPPlayDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, 14837700
+	ld	xwa, DPPlayDsp_Dispatch_Str
 	or	xhl, xhl
 	jr	nz, AcDemoMedleyDispBoxProc_Skip2
-	ld	xwa, 14837694
+	ld	xwa, PlayModeStr_Play
 AcDemoMedleyDispBoxProc_Skip2:
 	push	xwa
 	push	xbc
@@ -4475,10 +4475,10 @@ DPPauseDspCheck:
 DPPauseDsp_Dispatch:
 	ld	xhl, (xde+14)
 	ld	xbc, (xde+18)
-	ld	xwa, 14837732
+	ld	xwa, DPPauseDsp_Dispatch_Str
 	or	xhl, xhl
 	jr	nz, AcDemoMedleyDispBoxProc_Skip3
-	ld	xwa, 14837726
+	ld	xwa, PlayModeStr_Pause
 AcDemoMedleyDispBoxProc_Skip3:
 	push	xwa
 	push	xbc
@@ -5213,7 +5213,7 @@ HelpTtlFunc_ClampMin:
 
 HelpTtlFunc_LookupSlide:
 	sll	wa, 2
-	lda	xix, (14894062:24)
+	lda	xix, (HelpTtlFunc_LookupSlide_PtrTable:24)
 	ld_rrl	xwa, xix, wa
 	push	xwa
 	ld	xwa, (xde+18)
@@ -6180,7 +6180,7 @@ NoteEditBox_EventDispatch2_Skip:
 	ld	c, (xsp+10)
 	extz	bc
 	sla	bc, 3
-	lda	xde, (14890864:24)
+	lda	xde, (NoteEditBox_EventDispatch2_Table:24)
 	lda_rr	xde, xde, bc
 	ld	bc, (xde)
 	ld	(xwa), bc
@@ -6215,7 +6215,7 @@ NoteEditBox_EventDispatch2_Skip2:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 3
-	lda	xbc, (14890864:24)
+	lda	xbc, (NoteEditBox_EventDispatch2_Table:24)
 	lda_rr	xbc, xbc, wa
 	ld	wa, (xbc+2)
 	ld	(xde), wa
@@ -6268,7 +6268,7 @@ NoteEditBox_EventDispatch2_Skip3:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 3
-	lda	xbc, (14890864:24)
+	lda	xbc, (NoteEditBox_EventDispatch2_Table:24)
 	lda_rr	xbc, xbc, wa
 	ld	wa, (xbc+2)
 	ld	(xde), wa
@@ -6317,7 +6317,7 @@ NoteEditBox_EventDispatch2_Skip3:
 	lda	xwa, (xsp+20)
 	ld	(xwa), hl
 	lda	xhl, (xwa+2)
-	lda	xix, (14890864:24)
+	lda	xix, (NoteEditBox_EventDispatch2_Table:24)
 	ld	bc, (xix+66)
 	ld	(xhl), bc
 	lda	xbc, (xsp+16)
@@ -6351,7 +6351,7 @@ NoteEditBox_EventDispatch2_Loop:
 	ldto_berp	a, 251
 	extz	wa
 	add	wa, wa
-	lda	xbc, (14890936:24)
+	lda	xbc, (NoteEditBox_EventDispatch2_Table_2:24)
 	ld_rrw	wa, xbc, wa
 	ld	(xsp+28), wa
 	ld	xde, 0:i3
@@ -6370,7 +6370,7 @@ NoteEditBox_EventDispatch2_Loop:
 	cpib_erp	251, 0
 	jr	nz, NoteEditBox_EventDispatch2_Skip4
 	pushm (xsp+8)
-	ld	xwa, 14894612
+	ld	xwa, FmtStr_pct3d
 	jr	NoteEditBox_EventDispatch2_Join2
 NoteEditBox_EventDispatch2_Skip4:
 	ld	wa, (xsp+8)
@@ -6379,7 +6379,7 @@ NoteEditBox_EventDispatch2_Skip4:
 	ld	wa, qwa
 	pushw	wa
 	ld	(xsp+10), wa
-	ld	xwa, 14894616
+	ld	xwa, NoteEditBox_EventDispatch2_Str
 NoteEditBox_EventDispatch2_Join2:
 	push	xwa
 	lda	xwa, (xsp+42)
@@ -6444,7 +6444,7 @@ NoteEditBox_EventDispatch2_Loop2:
 	ldto_berp	a, 251
 	extz	wa
 	add	wa, wa
-	lda	xbc, (14890960:24)
+	lda	xbc, (NoteEditBox_EventDispatch2_Table_3:24)
 	ld_rrw	wa, xbc, wa
 	ld	(xsp+28), wa
 	ld	xde, 0:i3
@@ -6466,7 +6466,7 @@ NoteEditBox_EventDispatch2_Loop2:
 	cpib_erp	251, 0
 	jr	nz, NoteEditBox_EventDispatch2_Skip6
 	pushm (xsp+8)
-	ld	xwa, 14894624
+	ld	xwa, NoteEditBox_EventDispatch2_Str_2
 	jr	NoteEditBox_EventDispatch2_Join4
 NoteEditBox_EventDispatch2_Skip6:
 	ld	wa, (xsp+8)
@@ -6475,7 +6475,7 @@ NoteEditBox_EventDispatch2_Skip6:
 	ld	wa, qwa
 	pushw	wa
 	ld	(xsp+10), wa
-	ld	xwa, 14894628
+	ld	xwa, NoteEditBox_EventDispatch2_Str_3
 NoteEditBox_EventDispatch2_Join4:
 	push	xwa
 	push	xde
@@ -6931,11 +6931,11 @@ NoteEdit_FormatTempoString:
 	ld	wa, (10114:16)
 	inc	1, wa
 	pushw	wa
-	ld	xwa, 14894708
+	ld	xwa, NoteEdit_FormatTempoString_Str
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
 	pushm (0x2784:16)
-	ld	xwa, 14894714
+	ld	xwa, NoteEdit_FormatTempoString_Str_2
 	jrl	NoteEdit_PushFormatAndCopy
 	ld	xiz, xde
 	call	GetTitleNow
@@ -6945,7 +6945,7 @@ NoteEdit_FormatTempoString:
 	jr	nz, NoteEdit_FormatNoteOther
 	pushw 9
 	muls	wa, 9
-	lda	xbc, (14879046:24)
+	lda	xbc, (Naka_Help_569_E30113_0x833:24)
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
@@ -7817,7 +7817,7 @@ SndParam_Dispatch:
 	cp	wa, 8
 	jrl	gt, SndParam_ReturnZero
 	add	wa, wa
-	lda	xix, (14895072:24)
+	lda	xix, (SndParam_Dispatch_PtrTable_2:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (15926271:24)
 	jp_rr 8, xix, wa
@@ -7825,13 +7825,13 @@ SndParam_Dispatch:
 	sla	de, 2
 	cp	xbc, EVT_INDEXSW_UP_AIC
 	jr	nz, SndParam_Dispatch_Skip
-	lda	xbc, (14894928:24)
+	lda	xbc, (SndParam_Dispatch_Table:24)
 	ld_rrl	xwa, xbc, de
 	ld	bc, 4:i3
 	ld	de, 4:i3
 	jr	SndParam_Dispatch_Join
 SndParam_Dispatch_Skip:
-	lda	xbc, (14894928:24)
+	lda	xbc, (SndParam_Dispatch_Table:24)
 	ld_rrl	xwa, xbc, de
 	ld	bc, 1:i3
 	ld	de, 4:i3
@@ -7869,13 +7869,13 @@ SndParam_Dispatch_Join:
 	cp	wa, 8
 	jrl	gt, SndParam_ReturnZero
 	add	wa, wa
-	lda	xix, (14895054:24)
+	lda	xix, (SndParam_Dispatch_PtrTable:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (15926443:24)
 	jp_rr 8, xix, wa
 	ld	xde, (xsp+62)
 	sla	hl, 2
-	lda	xwa, (14894928:24)
+	lda	xwa, (SndParam_Dispatch_Table:24)
 	ld_rrl	xwa, xwa, hl
 	cp	xde, EVT_INDEXSW_DOWN_AIC
 	jr	nz, SndParam_Dispatch_Skip2
@@ -7905,7 +7905,7 @@ SndParam_Dispatch_Join3:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda	xix, (14894928:24)
+	lda	xix, (SndParam_Dispatch_Table:24)
 	ld	xiz, (xsp+58)
 	jr	SndParam_Dispatch_Join4
 SndParam_Dispatch_Loop:
@@ -7942,10 +7942,10 @@ SndParam_Dispatch_Skip3:
 	ld	xbc, EVT_GRID_DRAW
 	jrl	SndParam_SendEventReturnZero
 SndParam_Dispatch_Skip4:
-	ld	xwa, 14894994
+	ld	xwa, SndParam_Dispatch_Str_2
 	cpw (xde), 0
 	jr	z, SndParam_Dispatch_Skip5
-	ld	xwa, 14894984
+	ld	xwa, SndParam_Dispatch_Str
 SndParam_Dispatch_Skip5:
 	push	xwa
 	push	xbc
@@ -8011,10 +8011,10 @@ EntGridCheck_Handler:
 	jrl t, SndParam_SendEventReturnZero
 EntGridCheck_Handle4140:
 	call	AcApcToggleProc_Helper
-	ld	xwa, 14895024
+	ld	xwa, EntGridCheck_Handle4140_Str_2
 	cp	hl, 0:i3
 	jr	z, EntGridCheck_CopyStringResult
-	ld	xwa, 14895014
+	ld	xwa, EntGridCheck_Handle4140_Str
 EntGridCheck_CopyStringResult:
 	push	xwa
 	lda	xwa, (xsp+52)
@@ -12438,7 +12438,7 @@ EffectBox_PostFill3Setup:
 	lda	xbc, (xde+2)
 	ld	wa, iz
 	extz	xwa
-	ld	xhl, 14890370
+	ld	xhl, EffectBox_PostFillSetup_Table
 	add	xhl, xwa
 	ld	a, (xhl)
 	extz	wa
@@ -13737,12 +13737,12 @@ SqplyFunc_FormatCases:
 	ld	wa, de
 	cp	de, 32770
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip
-	ld	xwa, 14895772
+	ld	xwa, SqplyFunc_ParamFormatData_Str
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join2
 EffectBoxProc_CopyNameAndSetup_Code_Skip:
 	cp	wa, 32769
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip2
-	ld	xwa, 14895776
+	ld	xwa, SqplyFunc_ParamFormatData_Str_2
 EffectBoxProc_CopyNameAndSetup_Code_Join2:
 	push	xwa
 	ld	xwa, (xsp+4)
@@ -13753,21 +13753,21 @@ EffectBoxProc_CopyNameAndSetup_Code_Join2:
 	jrl	SqplyFunc_RestoreAndReturn
 EffectBoxProc_CopyNameAndSetup_Code_Skip2:
 	pushw	wa
-	ld	xwa, 14895780
+	ld	xwa, SqplyFunc_ParamFormatData_Str_3
 	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	a, (9010:16)
 	extz	wa
 	pushw	wa
-	ld	xwa, 14895784
+	ld	xwa, SqplyFunc_ParamFormatData_Str_4
 	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
 	ld	a, (7528:16)
 	extz	wa
 	pushw	wa
-	ld	xwa, 14895790
+	ld	xwa, SqplyFunc_ParamFormatData_Str_5
 	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
@@ -13778,10 +13778,10 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip2:
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip4
 	bit 0, (0x28b1:16)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip3
-	ld	xwa, 14895794
+	ld	xwa, SqplyFunc_ParamFormatData_Str_6
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join3
 EffectBoxProc_CopyNameAndSetup_Code_Skip3:
-	ld	xwa, 14895800
+	ld	xwa, SqplyFunc_ParamFormatData_Str_7
 EffectBoxProc_CopyNameAndSetup_Code_Join3:
 	push	xwa
 	ld	xwa, (xbc)
@@ -13791,20 +13791,20 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip4:
 	ld	xbc, (xbc)
 	bit 1, (0x28b1:16)
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip5
-	ld	xwa, 14895806
+	ld	xwa, SqplyFunc_ParamFormatData_Str_8
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join4
 EffectBoxProc_CopyNameAndSetup_Code_Skip5:
-	ld	xwa, 14895812
+	ld	xwa, SqplyFunc_ParamFormatData_Str_9
 EffectBoxProc_CopyNameAndSetup_Code_Join4:
 	push	xwa
 	push	xbc
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
 	ld	xwa, (xsp+4)
 	ld	(xsp), xwa
-	ld	xwa, 14895824
+	ld	xwa, SqplyFunc_ParamFormatData_Str_11
 	cp	(10298:16), 0
 	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip6
-	ld	xwa, 14895818
+	ld	xwa, SqplyFunc_ParamFormatData_Str_10
 EffectBoxProc_CopyNameAndSetup_Code_Skip6:
 	push	xwa
 	ld	xwa, (xsp+4)
@@ -13820,11 +13820,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join5:
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry
 	pushm (0x2520:16)
-	ld	xwa, 14895830
+	ld	xwa, SqplyFunc_ParamFormatData_Str_12
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join6
 EffectBoxProc_CopyNameAndSetup_Code_Entry:
 	pushm (0x251c:16)
-	ld	xwa, 14895836
+	ld	xwa, SqplyFunc_ParamFormatData_Str_13
 EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	jrl	SqplyFunc_PushFormatAddr
 	ld	xwa, (xsp+4)
@@ -13833,11 +13833,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	cp	l, 134
 	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry2
 	pushm (0x2522:16)
-	ld	xwa, 14895842
+	ld	xwa, SqplyFunc_ParamFormatData_Str_14
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join7
 EffectBoxProc_CopyNameAndSetup_Code_Entry2:
 	pushm (0x251e:16)
-	ld	xwa, 14895848
+	ld	xwa, SqplyFunc_ParamFormatData_Str_15
 EffectBoxProc_CopyNameAndSetup_Code_Join7:
 	jr	SqplyFunc_PushFormatAddr
 SqplyFunc_FormatRhythmPattern:
@@ -15274,7 +15274,7 @@ DspItem0_DisplayEffectName:
 	ld	wa, (10614:16)
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, 14887546
+	ld	xbc, DspEffectName_PtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa

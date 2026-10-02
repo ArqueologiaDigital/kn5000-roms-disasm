@@ -21,3 +21,15 @@ seven-NOP sled that falls into `IRQ_UnusedVector_Hang`, and the tool named those
 `ret`/`jp (xrr)`/`jrl t` between their parent and themselves -- mostly case targets of a
 computed jump or extra exits, i.e. plausibly the right routine -- and all `__ADDR` labels are
 placeholders for a naming pass.
+
+## KN5000 main CPU: exact-symbol operands (same day)
+
+`scripts/converters/symbolize_kn5000_rom_operands.py --image <v> --apply` replaced numeric
+main-CPU ROM addresses in non-branch operands with the symbol the image's own linked ELF
+defines AT that address (exact matches only; a column-0 label preferred over a `.set` alias, a
+non-structural name over a structural one): v7 1,041, v10 190, v9 184 (76 files).  With
+several names at one address the choice is listed in `kn5000_<v>_report.json`
+(`candidates`).  Not touched, and listed there as `no-symbol`: v7 346, v9 117, v10 108
+values with no symbol at that exact address (inside an object, or code nobody labelled) --
+input for a pass that adds labels; table-data addresses (0x8xxxxx) are a cross-ROM question
+the tool does not answer.  `make gate-all` 13/13.

@@ -1382,13 +1382,13 @@ SqTrAsPsTtl_CaseF:
 	jr	lt, SqTrAsPsTtl_CaseF_Skip
 	cp	wa, 13
 	jr	gt, SqTrAsPsTtl_CaseF_Skip
-	lda	xix, (14811178:24)
+	lda	xix, (SepaOut_Config_0_0x44:24)
 	ld_rrw	wa, xix, wa
 	extz	wa
 	sll	wa, 1
-	ld	xix, 14811192
+	ld	xix, SepaOut_Config_0_0x52
 	ld_rrw	wa, xix, wa
-	lda	xix, (15863650:24)
+	lda	xix, (SqTrAsPsTtl_CaseF_Skip:24)
 	jp_rr 8, xix, wa
 SqTrAsPsTtl_CaseF_Skip:
 	push	xde
@@ -1594,7 +1594,7 @@ Snd_ParamLookupSetupWerp:
 DkMdlyPly_HandleResult:
 	ld	wa, qiz
 	add	wa, wa
-	lda	xbc, (14811252:24)
+	lda	xbc, (SepaOut_Config_0_0x8E:24)
 	ld_rrw	wa, xbc, wa
 	ldw	bc, 1025
 	call	DkMdlyPly_CheckState_Helper
@@ -1605,7 +1605,7 @@ DkMdlyPly_HandleResult:
 	jr	nz, DkMdlyPly_ExtendedCheck	; -> 0xF21121
 	ld	wa, qiz
 	add	wa, wa
-	lda	xbc, (14811252:24)
+	lda	xbc, (SepaOut_Config_0_0x8E:24)
 	ld_rrw	wa, xbc, wa
 	ld	(35998:16), a
 	ld	e, a

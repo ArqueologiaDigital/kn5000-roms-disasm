@@ -80,7 +80,7 @@ CmptCnctDrawConnectionDiagram:
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
-	ld	xbc, 15091570
+	ld	xbc, Bitmap_MIDIConnections_1
 	ldw	de, 296
 	jr	CmptCnctBitmapDrawComplete
 CmptCnct_DrawDiagram1:
@@ -91,7 +91,7 @@ CmptCnct_DrawDiagram1:
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
-	ld	xbc, 15123538
+	ld	xbc, Bitmap_MIDIConnections_2
 	ldw	de, 296
 	jr	CmptCnctBitmapDrawComplete
 CmptCnct_DrawDiagram2:
@@ -102,7 +102,7 @@ CmptCnct_DrawDiagram2:
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
-	ld	xbc, 15155506
+	ld	xbc, Bitmap_MIDIConnections_3
 	ldw	de, 296
 	jr	CmptCnctBitmapDrawComplete
 CmptCnct_DrawDiagramDefault:
@@ -113,7 +113,7 @@ CmptCnct_DrawDiagramDefault:
 	inc	8, xsp
 	lda	xwa, (xsp+4)
 	pushw	108
-	ld	xbc, 15091570
+	ld	xbc, Bitmap_MIDIConnections_1
 	ldw	de, 296
 CmptCnctBitmapDrawComplete:
 	call DrawBitmapSPFast

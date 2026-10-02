@@ -49,14 +49,14 @@ AcSendEditSw_EventD:
 	inc	8, xsp
 	ld	xbc, (xiz+48)
 	lda	xde, (xsp+4)
-	lda	xwa, (15204348:24)
+	lda	xwa, (AcSendEditSw_EventD_Table:24)
 	cpw	(xbc), 193
 	jr	nz, AcSendEditSw_DrawAlt
 	ld	xbc, 0:i3
 	push	xbc
 	pushw 0
 	pushw 247
-	ld	xbc, 15204360
+	ld	xbc, NakaData_ModeConfig1
 	jr	AcSendEditSw_DrawString
 AcSendEditSw_DrawAlt:
 	ld xbc, 0:i3
@@ -212,7 +212,7 @@ ComSetGridCheck_Evt1C00017:
 	jr	nz, ComSetGridCheck_JumpTable_Skip
 	ld	wa, (xsp+6)
 	sla	wa, 2
-	lda	xbc, (15204374:24)
+	lda	xbc, (ComSetGridCheck_JumpTable_Table:24)
 	ld_rrl	xwa, xbc, wa
 	cp	xwa, 8705
 	jrl	z, UI_ReturnZero
@@ -221,7 +221,7 @@ ComSetGridCheck_Evt1C00017:
 ComSetGridCheck_JumpTable_Skip:
 	ld	bc, (xsp+6)
 	sla	bc, 2
-	lda	xwa, (15204374:24)
+	lda	xwa, (ComSetGridCheck_JumpTable_Table:24)
 	ld_rrl	xwa, xwa, bc
 	ld	bc, 1:i3
 	ld	de, 2:i3
@@ -248,7 +248,7 @@ ComSetGridCheck_Evt1C00018:
 	jr	nz, ComSetGridCheck_JumpTable_Skip2
 	ld	wa, (xsp+6)
 	sla	wa, 2
-	lda	xbc, (15204374:24)
+	lda	xbc, (ComSetGridCheck_JumpTable_Table:24)
 	ld_rrl	xwa, xbc, wa
 	cp	xwa, 8705
 	jrl	z, UI_ReturnZero
@@ -257,7 +257,7 @@ ComSetGridCheck_Evt1C00018:
 ComSetGridCheck_JumpTable_Skip2:
 	ld	bc, (xsp+6)
 	sla	bc, 2
-	lda	xwa, (15204374:24)
+	lda	xwa, (ComSetGridCheck_JumpTable_Table:24)
 	ld_rrl	xwa, xwa, bc
 	ldw	bc, 65535
 	ld	de, 2:i3
@@ -269,7 +269,7 @@ ComSetGridCheck_Evt1C0001C:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda	xix, (15204374:24)
+	lda	xix, (ComSetGridCheck_JumpTable_Table:24)
 	ld	xiz, (xsp+22)
 	jr	ComSetGridCheck_JumpTable_Join2
 ComSetGridCheck_JumpTable_Loop:
@@ -308,11 +308,11 @@ ComSetGridCheck_JumpTable_Skip3:
 	cp	xwa, 8707
 	jrl	nz, UI_ReturnZero
 ComSetGridCheck_JumpTable_Skip4:
-	ld	xbc, 15204426
+	ld	xbc, ComSetGridCheck_JumpTable_Str
 	ld	xwa, (xsp+22)
 	cpw	(xwa+4), 0
 	jr	z, ComSetGridCheck_JumpTable_Skip5
-	ld	xbc, 15204420
+	ld	xbc, ComSetGridCheck_JumpTable_Table_2
 ComSetGridCheck_JumpTable_Skip5:
 	push	xbc
 	push	xde
@@ -328,7 +328,7 @@ ComSetGridCheck_JumpTable_Skip6:
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
 	jr	nz, ComSetGridCheck_JumpTable_Skip7
-	ld	xwa, 15204432
+	ld	xwa, ComSetGridCheck_JumpTable_Str_2
 	jr	ComSetGridCheck_JumpTable_Join3
 ComSetGridCheck_JumpTable_Skip7:
 	ld	xwa, (xsp+22)
@@ -339,16 +339,16 @@ ComSetGridCheck_JumpTable_Skip7:
 	jr	z, ComSetGridCheck_JumpTable_Skip8
 	cp	wa, 0:i3
 	jr	nz, ComSetGridCheck_JumpTable_Skip10
-	ld	xwa, 15204442
+	ld	xwa, NakaInst_NORMAL
 	jr	ComSetGridCheck_JumpTable_Join3
 ComSetGridCheck_JumpTable_Skip8:
-	ld	xwa, 15204452
+	ld	xwa, ComSetGridCheck_JumpTable_Str_3
 	jr	ComSetGridCheck_JumpTable_Join3
 ComSetGridCheck_JumpTable_Skip9:
-	ld	xwa, 15204462
+	ld	xwa, ComSetGridCheck_JumpTable_Table_3
 	jr	ComSetGridCheck_JumpTable_Join3
 ComSetGridCheck_JumpTable_Skip10:
-	ld	xwa, 15204472
+	ld	xwa, ComSetGridCheck_JumpTable_Str_4
 ComSetGridCheck_JumpTable_Join3:
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -399,10 +399,10 @@ ComSetGrid_EventHandler:
 ComSetGridCheck_ParamDisplay:
 	call	AcApcToggleProc_Helper
 	lda	xbc, (xsp+12)
-	ld	xwa, 15204488
+	ld	xwa, ComSetGridCheck_ParamDisplay_Str_2
 	cp	hl, 0:i3
 	jr	z, ComSetGrid_CopyStrAndDispatch
-	ld	xwa, 15204482
+	ld	xwa, ComSetGridCheck_ParamDisplay_Str
 ComSetGrid_CopyStrAndDispatch:
 	push	xwa
 	push	xbc
@@ -418,12 +418,12 @@ ComSetGrid_CheckC0Param:
 	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
 	jr	nz, ComSetGrid_LookupByColumn
-	ld	xwa, 15204494
+	ld	xwa, ComSetGrid_CopyStrAndDispatch_Str
 	jr	UI_DisplayStringAndDispatchEvent
 ComSetGrid_LookupByColumn:
 	ld	bc, (xsp+6)
 	sla	bc, 2
-	lda	xwa, (15204374:24)
+	lda	xwa, (ComSetGridCheck_JumpTable_Table:24)
 	ld_rrl	xwa, xwa, bc
 	call	AcApcToggleProc_Helper
 	cp	hl, 3:i3
@@ -432,7 +432,7 @@ ComSetGrid_LookupByColumn:
 	jr	z, ComSetGrid_ParamStr1
 	cp	hl, 0:i3
 	jr	nz, ComSetGrid_ParamStrDefault
-	ld	xwa, 15204504
+	ld	xwa, ComSetGrid_LookupByColumn_Str
 	jr	UI_DisplayStringAndDispatchEvent
 ComSetGrid_ParamStr1:
 	ld xwa, NakaInst_GM_0x32
@@ -1961,7 +1961,7 @@ TtMdCtlMsg_EventDispatch:
 	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip2
 	cp	bc, 0:i3
 	jrl	nz, TtMdCtlMsg_ReturnZero2
-	ld	xiy, 15204820
+	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -1997,7 +1997,7 @@ TtMdCtlMsg_EventDispatch:
 PmemOutLGridCheck_JumpTable_Code_Skip:
 	jrl	PmemOutLGridCheck_JumpTable_Code_Join2
 PmemOutLGridCheck_JumpTable_Code_Skip2:
-	ld	xiy, 15204820
+	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2025,7 +2025,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip2:
 	ld	(xwa+6), xbc
 	jrl	PmemOutLGridCheck_JumpTable_Code_Join2
 PmemOutLGridCheck_JumpTable_Code_Skip3:
-	ld	xiy, 15204820
+	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2082,7 +2082,7 @@ PmemOutRGridCheck_Evt1C00018:
 	jrl	z, PmemOutLGridCheck_JumpTable_Code_Skip6
 	cp	bc, 0:i3
 	jrl	nz, TtMdCtlMsg_ReturnZero2
-	ld	xiy, 15204820
+	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2123,7 +2123,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip5:
 	ld	(xde), xbc
 	jrl	PmemOutLGridCheck_JumpTable_Code_Join2
 PmemOutLGridCheck_JumpTable_Code_Skip6:
-	ld	xiy, 15204820
+	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2153,7 +2153,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip6:
 	ld	(xwa+14), xbc
 	jr	PmemOutLGridCheck_JumpTable_Code_Join2
 PmemOutLGridCheck_JumpTable_Code_Skip7:
-	ld	xiy, 15204820
+	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -3212,7 +3212,7 @@ CtlMsgGridCheck_Evt1C00017:
 	muls	wa, 36
 	ld	de, wa
 	add	de, bc
-	lda	xwa, (15205254:24)
+	lda	xwa, (CtlMsgGridCheck_Table:24)
 	ld_rrl	xwa, xwa, de
 	ld	bc, 1:i3
 	ld	de, 2:i3
@@ -3240,7 +3240,7 @@ CtlMsgGridCheck_Evt1C00018:
 	muls	wa, 36
 	ld	de, wa
 	add	de, bc
-	lda	xwa, (15205254:24)
+	lda	xwa, (CtlMsgGridCheck_Table:24)
 	ld_rrl	xwa, xwa, de
 	ldw	bc, 65535
 	ld	de, 2:i3
@@ -3270,11 +3270,11 @@ CtlMsgGridCheck_Loop:
 	lda	xde, (xsp+20)
 	ld	xwa, (xsp+4)
 	ld	(xwa+4), xde
-	ld	xbc, 15205342
+	ld	xbc, CtlMsgGridCheck_JumpTable_Str_2
 	ld	xwa, (xsp+30)
 	cpw	(xwa+4), 0
 	jr	z, CtlMsgGridCheck_Skip
-	ld	xbc, 15205336
+	ld	xbc, CtlMsgGridCheck_JumpTable_Str
 CtlMsgGridCheck_Skip:
 	push	xbc
 	push	xde
@@ -4387,7 +4387,7 @@ MidiPart_LookupColumnParam:
 	ld	xwa, (xsp+12)
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15205984:24)
+	lda	xwa, (Transpose_ValueDisplay_Table:24)
 	ld_rrl	xwa, xwa, hl
 	push	xwa
 	lda	xwa, (xsp+28)
@@ -4471,7 +4471,7 @@ InitializeMurai:
 	ld (XBC+0x04),XWA
 	ld wa, (0xe812e2:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe80cf6:24)
+	lda xwa, (Murai_ClassTable_161:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0161
 	call RegisterObjectTable
@@ -4503,7 +4503,7 @@ InitializeMurai:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe8070a:24)
+	lda xwa, (Murai_ApFuncTable_121:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0121
 	call RegisterObjectTable
@@ -4513,7 +4513,7 @@ InitializeMurai:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe807be:24)
+	lda xwa, (Murai_ApFuncNameTable_421:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0421
 	call RegisterObjectTable
@@ -7108,7 +7108,7 @@ SdpartUpdatePartUI_Confirm:
 LswSound:
 	push	xiz
 	ld	xiz, xwa
-	lda	xhl, (15291050:24)
+	lda	xhl, (MixerPartTable_Start_0x8:24)
 	cp	xbc, EVT_LSW_DATA_REQ
 	jrl	z, LswSound_ReturnZero
 	ld	xix, xde
@@ -7198,7 +7198,7 @@ LswSound_PopIzRet:
 LswVolume:
 	push	xiz
 	ld	xiz, xwa
-	lda	xhl, (15291050:24)
+	lda	xhl, (MixerPartTable_Start_0x8:24)
 	cp	xbc, EVT_LSW_DATA_REQ
 	jrl	z, AudioCtrlMuteZeroReturn
 	ld	xix, xde
@@ -7321,7 +7321,7 @@ AudioCtrl_PopIzRet3:
 LswMute:
 	push	xiz
 	ld	xiz, xwa
-	lda	xhl, (15291050:24)
+	lda	xhl, (MixerPartTable_Start_0x8:24)
 	cp	xbc, EVT_LSW_DATA_REQ
 	jrl	z, AudioCtrlMutePitchReturn
 	ld	xix, xde
@@ -7969,7 +7969,7 @@ LswSustain_PopIzRet2:
 LswSustainLength:
 	push	xiz
 	ld	xiz, xwa
-	lda	xhl, (15291050:24)
+	lda	xhl, (MixerPartTable_Start_0x8:24)
 	cp	xbc, EVT_LSW_DATA_REQ
 	jrl	z, LswSustainLenZeroReturn
 	ld	xix, xde
@@ -8066,7 +8066,7 @@ LswSustainLength_PopIzRet:
 LswKeyShift:
 	push	xiz
 	ld	xiz, xwa
-	lda	xhl, (15291050:24)
+	lda	xhl, (MixerPartTable_Start_0x8:24)
 	cp	xbc, EVT_GET_INIT_DATA
 	jrl	z, LswKeyShift_ReturnCenter
 	cp	xbc, EVT_CHECK_INIT_DATA
@@ -8182,7 +8182,7 @@ AudioCtrl_PopIzRet5:
 LswTuning:
 	push	xiz
 	ld	xiz, xwa
-	lda	xhl, (15291050:24)
+	lda	xhl, (MixerPartTable_Start_0x8:24)
 	cp	xbc, EVT_GET_INIT_DATA
 	jrl	z, LswTuning_ReturnCenter
 	cp	xbc, EVT_CHECK_INIT_DATA
@@ -8988,8 +8988,8 @@ LswMidiChannel:
 	push	xiz
 	ld	xiz, xde
 	ld	(xsp+4), xwa
-	lda	xde, (15291342:24)
-	lda	xhl, (15291050:24)
+	lda	xde, (MixerPartTable_Start_0x12C:24)
+	lda	xhl, (MixerPartTable_Start_0x8:24)
 	cp	xbc, EVT_LSW_DATA_REQ
 	jrl	z, LswLocalZeroReturn
 	ld	xix, xiz
@@ -9129,17 +9129,17 @@ IvMesageProc:
 	call	InheritedProc
 	ld	wa, (149388:24)
 	muls	wa, 14
-	lda	xbc, (15323968:24)
+	lda	xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	ld_rrw	wa, xbc, wa
 	sla	wa, 2
-	lda	xbc, (15325102:24)
+	lda	xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586:24)
 	ld_rrl	xwa, xbc, wa
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	wa, (149388:24)
 	muls	wa, 14
-	lda	xbc, (15323968:24)
+	lda	xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
 	.byte	0xd3, 0x07, 0xe4, 0xe0, 0x3f, 0x05, 0x00	; cp (xbc+wa), 0x0005
 	jrl	nz, IvMessageStrcpyReturn
 	ld	xwa, 4294967295
@@ -9395,7 +9395,7 @@ CheckLang_GetTextStr:
 	ld	a, (213220:24)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15325254:24)
+	lda	xbc, (Str_PleaseWait_Multilingual:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+18)
@@ -9686,7 +9686,7 @@ IvAccordion_ShowHide:
 	cpw (0x24782:24), 0
 	jr z, IvAccordion_ShowHide_NoBellows
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9699,7 +9699,7 @@ IvAccordion_ShowHide:
 
 IvAccordion_ShowHide_NoBellows:
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9745,12 +9745,12 @@ IvAccordion_Scroll:
 	jr nz, IvAccordion_Scroll_SetOff
 	ldw (0x024780:24), 0x0001
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9770,12 +9770,12 @@ IvAccordion_Scroll:
 IvAccordion_Scroll_SetOff:
 	ldw (0x024780:24), 0x0000
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9836,7 +9836,7 @@ IvAccordion_Update:
 	cpw (0x2477c:24), 0
 	jr z, IvAccordion_Update_SendPartParam
 	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, 0xeb0017
+	ld xwa, WidgetName_PtrBlock_A_0xF
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9851,7 +9851,7 @@ IvAccordion_Update_BellowsOn:
 	cpw (0x2477c:24), 1
 	jr z, IvAccordion_Update_SendPartParam
 	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, 0xeb0009
+	ld xwa, WidgetName_PtrBlock_A_0x1
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
@@ -9918,7 +9918,7 @@ IvAccordion_Refresh:
 	lda xwa, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe0, 0xec
 	; object handle 0xeb0007 = class 0x0eb, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_InitPtrTable_0x15)
-	ld xwa, 0xeb0007
+	ld xwa, WidgetName_InitPtrTable_0x15
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	ld wa, (0x02477e:24)
@@ -10222,7 +10222,7 @@ IvSdtecd1Proc:
 	ld	xwa, 16898
 	call	AcApcToggleProc_Helper
 	sla	hl, 2
-	lda	xwa, (15325644:24)
+	lda	xwa, (NakaInst_RIGHT_1_E9D9B0_0x1C:24)
 	ld_rrl	xwa, xwa, hl
 	ld	xbc, EVT_SET_DIAL_FOCUS
 	ld	xde, 1:i3
@@ -10270,7 +10270,7 @@ Sdtecd1_ScrollDown_Lookup:
 	ld	xwa, 16898
 	call	AcApcToggleProc_Helper
 	ld	bc, hl
-	ld	xwa, 15325700
+	ld	xwa, NakaInst_RIGHT_1_E9D9B0_0x54
 	calr	SdpartLookupPartId
 	ld	wa, hl
 	inc	7, wa
@@ -10278,7 +10278,7 @@ Sdtecd1_ScrollDown_Lookup:
 	jrl	gt, IvSdtecd1_ReturnDefault
 	inc	7, hl
 	add	hl, hl
-	lda	xwa, (15325700:24)
+	lda	xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
 	ld_rrw	bc, xwa, hl
 	ld	xwa, 16898
 	ld	de, 3:i3
@@ -10315,14 +10315,14 @@ Sdtecd1_ScrollUp_Lookup:
 	ld	xwa, 16898
 	call	AcApcToggleProc_Helper
 	ld	bc, hl
-	ld	xwa, 15325700
+	ld	xwa, NakaInst_RIGHT_1_E9D9B0_0x54
 	calr	SdpartLookupPartId
 	ld	wa, hl
 	sub	wa, 7
 	jr	lt, IvSdtecd1_ReturnDefault
 	dec	7, hl
 	add	hl, hl
-	lda	xwa, (15325700:24)
+	lda	xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
 	ld_rrw	bc, xwa, hl
 	ld	xwa, 16898
 	ld	de, 3:i3
@@ -10983,7 +10983,7 @@ LswScalingShift:
 	jr	nz, LswScaleShift_ReturnZero	; -> 0xF7ED65
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (15326486:24)
+	lda	xbc, (Scale_Arabic2_NameTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+8)
@@ -11028,7 +11028,7 @@ LswScalingShift2:
 	jr	nz, LswScaleShift2_ReturnZero	; -> 0xF7EDCA
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (15326582:24)
+	lda	xbc, (Scale_Names_Table:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+8)
@@ -11073,7 +11073,7 @@ LswScalingMode:
 	jr	nz, LswScaleMode_ReturnZero	; -> 0xF7EE2F
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (15326750:24)
+	lda	xbc, (NakaInst_KEY_C_E9DE14_0xA:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+8)
@@ -11244,7 +11244,7 @@ Softver_ShowHide:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, 0xf00002
+	ld	xwa, ParamPopup_DynamicAccomp_Skip
 	ld	xbc, EVT_PARA_DRAW
 	call	SendEvent
 	call	Boot_GetSystemPointer
@@ -15821,7 +15821,7 @@ IvDrawbar_Init_SetupMode:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xea0026 = class 0x0ea, instance 38 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x1E)
-	ld xwa, 0xea0026
+	ld xwa, Presentation_TagStrTable_0x1E
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -15840,7 +15840,7 @@ IvDrawbar_Init_SetupMode:
 	ld xde, 0:i3
 	call SendEvent
 	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x16)
-	ld xwa, 0xea001e
+	ld xwa, Presentation_TagStrTable_0x16
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call SendEvent
@@ -15858,7 +15858,7 @@ IvDrawbar_Init_ModernMode:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xea001e = class 0x0ea, instance 30 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x16)
-	ld xwa, 0xea001e
+	ld xwa, Presentation_TagStrTable_0x16
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
@@ -15951,7 +15951,7 @@ IvDrawbar_DrawbarUpdate:
 	cpw (0x247c2:24), 0
 	jr z, IvDrawbar_DrawbarUpdate_UpperOff
 	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
-	ld xwa, 0xea0003
+	ld xwa, Presentation_RootEntry_0x3
 	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	call SendEvent
@@ -15962,7 +15962,7 @@ IvDrawbar_DrawbarUpdate:
 
 IvDrawbar_DrawbarUpdate_UpperOff:
 	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
-	ld xwa, 0xea0003
+	ld xwa, Presentation_RootEntry_0x3
 	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 	call SendEvent
@@ -16802,7 +16802,7 @@ LswPercDecay:
 	jr	nz, LswPercDecay_Return	; -> 0xF82C76
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (15333546:24)
+	lda	xbc, (KeyShift_DisplayStrTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+8)
@@ -16918,7 +16918,7 @@ LswPercLevel:
 	jr	nz, LswPercLevel_Return	; -> 0xF82D85
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (15333546:24)
+	lda	xbc, (KeyShift_DisplayStrTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+8)
@@ -17004,7 +17004,7 @@ LswDrawAttack:
 	jr	nz, LswDrawAttack_Return	; -> 0xF82E66
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (15333546:24)
+	lda	xbc, (KeyShift_DisplayStrTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+8)
@@ -17090,7 +17090,7 @@ LswDrawRelease:
 	jr	nz, LswDrawRelease_Return	; -> 0xF82F47
 	ld	wa, (xde+4)
 	sla	wa, 2
-	lda	xbc, (15333546:24)
+	lda	xbc, (KeyShift_DisplayStrTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+8)
@@ -17201,7 +17201,7 @@ IvDrawbar1_ShowHide:
 	ld de, (0x024798:24)
 	exts xde
 	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x4)
-	ld xwa, 0xea000c
+	ld xwa, Presentation_TagStrTable_0x4
 	ld xbc, EVT_SET_PARAM
 	call SendEvent
 	ld xwa, (xsp + 12)
@@ -17230,7 +17230,7 @@ IvDrawbar1_LoadVals_Loop:
 	ld	bc, iz
 	extz	xbc
 	add	xbc, xbc
-	ld	xde, 15333498
+	ld	xde, MidiParam_MixerCfgData_0x78
 	add	xde, xbc
 	ld	bc, (xde)
 	call	DkMdlyPly_CheckState_Helper
@@ -17637,7 +17637,7 @@ IvDrawbar2_ShowHideHandler:
 	ld de, (0x024798:24)
 	exts xde
 	; object handle 0xea000c = class 0x0ea, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x4)
-	ld xwa, 0xea000c
+	ld xwa, Presentation_TagStrTable_0x4
 	ld xbc, EVT_SET_PARAM
 	jr IvDrawbar2_SendEventShared
 
@@ -17835,7 +17835,7 @@ DrawbarNorm_Update:
 	ld	xwa, 16387
 	call	AcApcToggleProc_Helper
 	exts	xhl
-	ld	xwa, 15335456
+	ld	xwa, Presentation_TagStrTable_0x18
 	ld	xbc, EVT_SET_PARAM
 	ld	xde, xhl
 	jrl	IvDrawbarNorm_SendEvent
@@ -17845,7 +17845,7 @@ DrawbarNorm_UpdateCase4:
 	lda xbc, (0x03e9a0:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	; object handle 0xea001f = class 0x0ea, instance 31 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x17)
-	ld xwa, 0xea001f
+	ld xwa, Presentation_TagStrTable_0x17
 	ld xbc, EVT_PARA_DRAW
 	jr IvDrawbarNorm_SendEvent
 
@@ -18018,7 +18018,7 @@ MemDraw_ParamLoopBody:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, xwa
-	ld	xbc, 15333516
+	ld	xbc, MidiParam_MixerCfgData_0x8A
 	add	xbc, xwa
 	ld	wa, (xbc)
 	extz	xwa
@@ -18657,7 +18657,7 @@ Demofeat2_ShowHide:
 	call ApFuncCall
 	ld xde, xhl
 	; object handle 0xe40008 = class 0x0e4, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9A8)
-	ld xwa, 0xe40008
+	ld xwa, Bitmap_Dredt0d_0x9A8
 	ld xbc, EVT_PARA_DRAW
 	jr Demofeat2_SendEvent
 
@@ -18821,7 +18821,7 @@ PresBox_TimerExpired:
 	ld xde, 1:i3
 	call SendEvent
 	; object handle 0xe4000a = class 0x0e4, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9AA)
-	ld xwa, 0xe4000a
+	ld xwa, Bitmap_Dredt0d_0x9AA
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call PostEvent
@@ -19008,7 +19008,7 @@ AcPresCtrl_Case5:
 	ld wa, 2:i3
 	call ChangePalette
 	; object handle 0xe40000 = class 0x0e4, instance 0 (SendEvent indexes its class table by bits 16-27; not an address -- was NakaData_ExternalBase)
-	ld xwa, 0xe40000
+	ld xwa, NakaData_ExternalBase
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr AcPresCtrl_SendEventReturn

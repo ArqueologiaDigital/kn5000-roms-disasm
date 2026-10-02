@@ -8594,8 +8594,8 @@ SeMenu_PresetManager_Load:
 	ld	(0x03efa8:24), 0
 	cp	(1710:16), 1
 	jr nz, SeMenu_PresetManager_End
-	ld xiy, 0x00f1616f
-	ld xix, 0x00f16239
+	ld xiy, SeScreenData_0x5569
+	ld xix, SeScreenData_0x5633
 	call SeGfx_DrawStaticList
 SeMenu_PresetManager_End:
 	ret
@@ -8952,8 +8952,8 @@ SeMenu_CompareAndApply_Init:
 	call SeGfx_DrawStaticList
 	jr t, SeMenu_CompareAndApply_Match
 SeMenu_CompareAndApply_Check:
-	ld xiy, 0x00f16239
-	ld xix, 0x00f162d3
+	ld xiy, SeScreenData_0x5633
+	ld xix, SeScreenData_0x56CD
 	call SeGfx_DrawStaticList
 SeMenu_CompareAndApply_Match:
 	call SeMenu_ShowConfirmDialog_Data_0xC0
@@ -8968,8 +8968,8 @@ SeMenu_CompareAndApply_Match:
 	jr t, SeMenu_CompareAndApply_End
 SeMenu_CompareAndApply_Apply:
 	ld	(0x03efa8:24), 0
-	ld xiy, 0x00f163aa
-	ld xix, 0x00f163e1
+	ld xiy, SeScreenData_0x57A4
+	ld xix, SeScreenData_0x57DB
 	call SeGfx_DrawBoundList
 SeMenu_CompareAndApply_End:
 	call SeMenu_CompareAndApply_Data4
@@ -9063,7 +9063,7 @@ SeMenu_Utility_CopyBlock_Join2:
 	ld	a, (1632:16)
 	and	a, 32
 	jr	z, SeMenu_Utility_CopyBlock_Skip3
-	ld	xiy, 0xf16479
+	ld	xiy, SeScreenData_0x5873
 	ld	xix, DrumDetailEdit_Menu_Table_0x35E
 	call	SeGfx_DrawBoundList
 	ld	(0x03efa8:24), 2
@@ -9363,8 +9363,8 @@ SeMenu_NameEdit_Dispatch:
 	jr t, SeMenu_NameEdit_Return
 SeMenu_NameEdit_SetupPath:
 	ld	(0x03efa8:24), 1
-	ld xiy, 0x00f1659f
-	ld xix, 0x00f165a9
+	ld xiy, SeScreenData_0x5999
+	ld xix, SeScreenData_0x59A3
 	call SeGfx_DrawStaticList
 	ld a, 0x00:opc
 SeMenu_NameEdit_DefaultPath:
@@ -9379,10 +9379,10 @@ SeMenu_NameEdit_CheckBit7:
 	ld	a, (1642:16)
 	and a, 0x80
 	jr nz, SeMenu_NameEdit_Bit7Set
-	ld xiy, 0x00f16506
+	ld xiy, SeScreenData_0x5900
 	jr t, SeMenu_NameEdit_HandleInput
 SeMenu_NameEdit_Bit7Set:
-	ld xiy, 0x00f164f7
+	ld xiy, SeScreenData_0x58F1
 SeMenu_NameEdit_HandleInput:
 	call SeGfx_DrawBoundRecord
 	ret
@@ -14930,7 +14930,7 @@ SeScreenData_0x4BFE:
 ; bound record list (5 records), read by GraphicsRender_Start; ends SeScreenData_0x4C96, SeScreenData_End
 ; evidence: SeMenu_NameEdit_DataBlock1
 SeScreenData_0x4C5E:
-	sdb_str	0x0660, 0x0f, 0, 0x20, 0x00f15b01, 13, 51*40+17
+	sdb_str	0x0660, 0x0f, 0, 0x20, SeScreenData_0x4EFB, 13, 51*40+17
 ; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x4C8B
 ; evidence: SeMenu_PatchEdit_DataBlock
 SeScreenData_0x4C6D:

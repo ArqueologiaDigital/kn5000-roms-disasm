@@ -812,7 +812,7 @@ BitMapOut_CopyROMToWorkspace:
 	pushw	960
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15432002:24)
+	lda	xbc, (WidgetStyleDataTable_0x10:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	0

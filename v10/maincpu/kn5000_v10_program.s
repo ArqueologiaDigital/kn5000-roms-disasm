@@ -1345,7 +1345,7 @@ ResInfo_GetMspSettingsRange:
 	ret
 
 ResInfo_GetResourceListPtr:
-	lda xwa, (0xe1ffcc:24)
+	lda xwa, (FDTest_String_TestTitleFunc_0x28E:24)
 	ld (xbc), xwa
 	ld xwa, 0:i3
 	ld (xbc + 4), xwa
@@ -1366,19 +1366,19 @@ SetSepaOutMode:
 	lda xix, (xsp + 16)
 	ldiw
 	ldiw
-	ld xiy, 0xe1ffea
+	ld xiy, SepaOut_Config_0_0x4
 	lda xix, (xsp + 12)
 	ldiw
 	ldiw
-	ld xiy, 0xe1ffee
+	ld xiy, SepaOut_Config_0_0x8
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
-	ld xiy, 0xe1fff2
+	ld xiy, SepaOut_Config_0_0xC
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
-	ld xiy, 0xe1fff6
+	ld xiy, SepaOut_Config_0_0x10
 	ld xix, xsp
 	ldiw
 	ldiw
@@ -2521,7 +2521,7 @@ TextRender_CharEncodeAndDraw:
 	ld xhl, (xsp + 30)
 	ld c, (xhl)
 	extz bc
-	lda xde, (0xeab1b4:24)
+	lda xde, (Data_CharMapFormatBlock_0x14:24)
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	ld (xhl), c
 	ld xbc, (xsp + 4)
@@ -2880,7 +2880,7 @@ MainChordPre:
 	ld a, (36162:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (0xecff6a:24)
+	lda xbc, (MemScreen_Blank_0x4:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	push xiz
@@ -2890,11 +2890,11 @@ MainChordPre:
 	jr z, MainChordPre_EmptyChordStr
 	bit 1, (52958:16)
 	jr z, MainChordPre_EmptyChordStr
-	ld xwa, 0xed1c96
+	ld xwa, ChordStr_On
 	jr MainChordPre_AppendChordSuffix
 
 MainChordPre_EmptyChordStr:
-	ld xwa, 0xed1c9a
+	ld xwa, ChordStr_Blank
 
 MainChordPre_AppendChordSuffix:
 	push xwa

@@ -801,7 +801,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (0xe7f972:24)
+	lda	xbc, (Data_FadeSetGridDispatch_Table:24)
 	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
@@ -824,7 +824,7 @@ Data_FadeSetGridDispatch:
 	cpw	(xbc), 1
 	jrl	nz, SndParam_ReturnZero2
 	sla	wa, 2
-	lda	xbc, (0xe7f972:24)
+	lda	xbc, (Data_FadeSetGridDispatch_Table:24)
 	ld	xwa, (xbc+wa)
 	cp	xwa, 0xffffffff
 	jrl	z, SndParam_ReturnZero2
@@ -837,7 +837,7 @@ FadeSetGridCheck_Join:
 	ldw	(xhl), 1
 	lda	xde, (xhl+2)
 	ldw	(xde), 0
-	lda	xix, (0xe7f972:24)
+	lda	xix, (Data_FadeSetGridDispatch_Table:24)
 	ld	xiz, (xsp+28)
 	jr	FadeSetGridCheck_Join2
 FadeSetGridCheck_Loop:
@@ -884,7 +884,7 @@ FadeSetGridCheck_Skip2:
 	ld	xwa, NakaInst_OFF_WidgetTbl2_0x9C
 	cpw	(xde), 0
 	jr	z, FadeSetGridCheck_Skip3
-	ld	xwa, 0xe7f9ac
+	ld	xwa, Data_AcGridParamTable
 FadeSetGridCheck_Skip3:
 	push	xwa
 	push	xbc
@@ -1328,7 +1328,7 @@ Data_InOutGridDispatch:
 	cp	bc, 8
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
-	lda	xix, (0xe7fd5e:24)
+	lda	xix, (Data_InOutGridDispatch_CaseTable_3:24)
 	ld	bc, (xix+bc)
 	lda	xix, (0xf75b2c:24)
 	jp_rr	8, xix, bc
@@ -1395,7 +1395,7 @@ InOutGridCheck_Skip:
 	cp	bc, 8
 	jrl	gt, MdPreset_ReturnZero2
 	add	bc, bc
-	lda	xix, (0xe7fd4c:24)
+	lda	xix, (Data_InOutGridDispatch_CaseTable_2:24)
 	ld	bc, (xix+bc)
 	lda	xix, (0xf75bf8:24)
 	jp_rr	8, xix, bc
@@ -1450,7 +1450,7 @@ InOutGridCheck_Join:
 	ld	(xwa+4), xbc
 	ld	xix, (xiz)
 	lda	xbc, (xwa+2)
-	lda	xhl, (0xe7fc94:24)
+	lda	xhl, (Data_InOutGridDispatch_PtrTable:24)
 	cp	xix, 0x2183
 	jrl	z, InOutGridCheck_Entry
 	cp	xix, 0x2182
@@ -1473,7 +1473,7 @@ InOutGridCheck_Join:
 	ldw	(xbc), 0
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (0xe7fca8:24)
+	lda	xbc, (Data_InOutGridDispatch_PtrTable_2:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xde
@@ -1501,7 +1501,7 @@ InOutGridCheck_Skip3:
 InOutGridCheck_Skip4:
 	ld	xix, xwa
 	ld	wa, (xwa)
-	lda	xhl, (0xe7fcc4:24)
+	lda	xhl, (Data_InOutGridDispatch_PtrTable_3:24)
 	cp	wa, 2:i3
 	jr	z, InOutGridCheck_Skip6
 	cp	wa, 1:i3

@@ -4817,7 +4817,7 @@ SeMenu_CopyWriteUpdate_Helper7:
 	ld	a, (xsp+24)
 	extz	wa
 	add	wa, wa
-	lda	xbc, (14737659:24)
+	lda	xbc, (GUI_DisplayStructData_0x111D:24)
 	ld_rrw	wa, xbc, wa
 	ld	(xsp), wa
 	ldw	(xsp+2), 20

@@ -235,7 +235,7 @@ FileRenameFunc:
 	ld	xwa, xiz
 	call	FileIO_CopyString
 	ld	iy, 0:i3
-	lda	xix, (15652728:24)
+	lda	xix, (CType_ClassTable:24)
 	lda	xwa, (34772:16)
 	ld	xhl, xwa
 	jr	FRename_PadLoop_Cond
@@ -274,7 +274,7 @@ FRename_PadDone:
 
 FRename_TextChange_Error:
 	ld	xwa, 34772
-	ld	xbc, 15337150
+	ld	xbc, DiskOp_ChannelCfgTable_0x52
 	call	FileIO_CopyString
 FRename_TextChange_SendApply:
 	ld	xwa, (xsp+4)
@@ -334,7 +334,7 @@ FileRenameSmfFunc:
 	ld	xwa, xiz
 	call	FileIO_CopyString
 	ld	iy, 0:i3
-	lda	xix, (15652728:24)
+	lda	xix, (CType_ClassTable:24)
 	lda	xwa, (34772:16)
 	ld	xhl, xwa
 	jr	FRenameSmf_PadLoop_Cond
@@ -373,7 +373,7 @@ FRenameSmf_PadDone:
 
 FRenameSmf_TextChange_Error:
 	ld	xwa, 34772
-	ld	xbc, 15337158
+	ld	xbc, DiskOp_ChannelCfgTable_0x5A
 	call	FileIO_CopyString
 FRenameSmf_TextChange_SendApply:
 	ld	xwa, (xsp+4)
@@ -386,7 +386,7 @@ FRenameSmf_HandleApply:
 	ld	xbc, (xsp+4)
 	call	FileIO_CopyString
 	ld	xwa, 34772
-	ld	xbc, 15337168
+	ld	xbc, DiskOp_ChannelCfgTable_0x64
 	call	FileIO_BuildFilePath
 	ld	xwa, 6291494
 	ld	xbc, EVT_SHOW
@@ -806,7 +806,7 @@ FmmSaveTtl_SlotLoop:
 	ld	wa, 7:i3
 	call	FileIO_BuildRecordPath_Return
 	call	FileIO_SetModeFlag_Reading
-	ld	xiy, 15337066
+	ld	xiy, BankStr_Memory_0xA
 	ld	xix, 35184
 	ldiw
 FmmSaveTtl_CommitSave:
@@ -871,7 +871,7 @@ DiskName_TextChange:
 	call	FileIO_CopyString
 	ld	iy, 0:i3
 	lda	xix, (34772:16)
-	lda	xiz, (15652728:24)
+	lda	xiz, (CType_ClassTable:24)
 	lda	xde, (34544:16)
 	ld	xhl, xde
 	jr	DiskName_PadLoop_Cond
@@ -998,12 +998,12 @@ DiskInfo_RenderStrings:
 	ld	(xsp+4), xbc
 	ld	wa, (33892:16)
 	sla	wa, 2
-	lda	xbc, (15336792:24)
+	lda	xbc, (DiskType_CodeTable:24)
 	ld_rrl	xbc, xbc, wa
 	ld	xwa, 34610
 	call	FileIO_CopyString
 	ld	xwa, 34610
-	ld	xbc, 15337174
+	ld	xbc, DiskOp_ChannelCfgTable_0x6A
 	call	FileIO_BuildFilePath
 	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
@@ -1014,7 +1014,7 @@ DiskInfo_RenderStrings:
 	ld	xwa, (xsp+12)
 	call	FileIO_BuildFilePath
 	ld	xwa, 34610
-	ld	xbc, 15337178
+	ld	xbc, DiskOp_ChannelCfgTable_0x6E
 	call	FileIO_BuildFilePath
 	lda	xwa, (34610:16)
 	ld	(xsp+12), xwa
@@ -1025,7 +1025,7 @@ DiskInfo_RenderStrings:
 	ld	xwa, (xsp+12)
 	call	FileIO_BuildFilePath
 	ld	xwa, 34610
-	ld	xbc, 15337188
+	ld	xbc, DiskOp_ChannelCfgTable_0x78
 	call	FileIO_BuildFilePath
 	ld	xwa, (xsp+16)
 	ld	xbc, EVT_PARA_DRAW
@@ -1150,7 +1150,7 @@ SaveFileName_TextChange:
 	ld	xwa, xiz
 	call	FileIO_CopyString
 	ld	iy, 0:i3
-	lda	xix, (15652728:24)
+	lda	xix, (CType_ClassTable:24)
 	lda	xde, (34740:16)
 	ld	xhl, xde
 	jr	SaveFileName_PadLoop_Cond

@@ -419,7 +419,7 @@ WP_FindNextSlot:
 	ld	iz, 1:i3
 	extz	wa
 	ld	qbc, wa
-	lda	xde, (15337386:24)
+	lda	xde, (Str_SmfConvert_GmToGm_0x2A:24)
 WPFind_SearchLoop:
 	ldto_werp HL, 0xe6
 	add hl, iz

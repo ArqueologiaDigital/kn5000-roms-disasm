@@ -1998,7 +1998,7 @@ EffectMode_DiagSeq_AnimFrame:
 	cp	c, 0:i3
 	jr	nz, EffectMode_DiagSeq_DecrementDelay	; -> 0xFB7385
 	extz	wa
-	lda	xbc, (15433350:24)
+	lda	xbc, (WidgetStyleDataTable_0x554:24)
 	ld	xde, 0:i3
 	ld_rrb	e, xbc, wa
 	add	xde, TITLE_PS
@@ -2626,7 +2626,7 @@ AcMstStyleAlp_Boundary:
 	add	xbc, xbc
 	add	xbc, Str_StoreTotalSetting_DE_0x98
 	ld	bc, (xbc)
-	lda	xix, (0xfb78db:24)
+	lda	xix, (AcMstStyleAlp_Boundary_Skip:24)
 	jp_rr	8, xix, bc	; jp t, xix+bc
 AcMstStyleAlp_Boundary_Skip:
 	ld	xwa, (xsp+74)
@@ -2822,7 +2822,7 @@ MasterSetup_DialTurn_ScrollUp:
 	ld	xwa, (xix)
 	ld	wa, (xwa)
 	muls	wa, 6
-	lda	xde, (15443092:24)
+	lda	xde, (StyleSong_MasterTable:24)
 	ld_rrl	xwa, xde, wa
 	push	xwa
 	push	xbc
@@ -2830,7 +2830,7 @@ MasterSetup_DialTurn_ScrollUp:
 	inc	8, xsp
 	jr	MasterSetup_ScrollUp_UpdateView
 MasterSetup_ScrollUp_Overflow:
-	ld	xwa, (15443092:24)
+	ld	xwa, (StyleSong_MasterTable:24)
 	push	xwa
 	push	xbc
 	call	Free_Compare2
@@ -2855,7 +2855,7 @@ MasterSetup_ScrollUp_Search_Loop:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	ld	xwa, 15443092
+	ld	xwa, StyleSong_MasterTable
 	add	xwa, xbc
 	ld	xwa, (xwa)
 	push	xwa
@@ -2931,7 +2931,7 @@ MasterSetup_ScrollUp_Search_Done:
 	jrl	nz, MasterSetup_DialDown_DecPage
 	ld	xbc, (xbc+78)
 	lda	xde, (xsp+12)
-	lda	xhl, (15443092:24)
+	lda	xhl, (StyleSong_MasterTable:24)
 	cpw	(xbc), 0
 	jr	z, MasterSetup_DialDown_Underflow
 	ld	wa, (xbc)
@@ -2982,7 +2982,7 @@ MasterSetup_DialDown_Search_Loop:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	ld	xwa, 15443092
+	ld	xwa, StyleSong_MasterTable
 	add	xwa, xbc
 	ld	xwa, (xwa)
 	push	xwa
@@ -3151,7 +3151,7 @@ MasterSetup_FallbackEvent:
 	add	bc, (xwa)
 	inc	1, bc
 	ld	hl, bc
-	lda	xbc, (15443092:24)
+	lda	xbc, (StyleSong_MasterTable:24)
 	cp	hl, 1000
 	jr	nc, MstStyleAlp_OverflowCopy
 	ld	hl, (xwa)
@@ -3207,7 +3207,7 @@ MstStyleAlp_CompareEntry:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	ld	xwa, 15443092
+	ld	xwa, StyleSong_MasterTable
 	add	xwa, xbc
 	ld	xwa, (xwa)
 	push	xwa
@@ -4011,7 +4011,7 @@ MstStyle1Grid_CellSelect:
 	ld	xiy, (xix)
 	lda	xhl, (xwa+78)
 	ld	xiz, (xhl)
-	lda	xwa, (15531172:24)
+	lda	xwa, (StyleGroup_LatinWorld_PairTable_0x2FA:24)
 	ld	(xsp+8), xwa
 	ld	xwa, (xix)
 	ld	ix, (xwa)
@@ -5937,7 +5937,7 @@ MstStyle2_GetNameB_DrawString:
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
-	ld	xwa, 15535590
+	ld	xwa, Str_StoreTotalSetting_DE_0x15A
 	jr	MstStyle2_NameB_Render
 MstStyle2_NameB_DrawCurrent:
 	exts	xwa
@@ -5950,7 +5950,7 @@ MstStyle2_NameB_DrawCurrent:
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	ld	xwa, 15535600
+	ld	xwa, Str_StoreTotalSetting_DE_0x164
 	jr	MstStyle2_NameB_Render
 MstStyle2_NameB_DrawLower:
 	ld	wa, (xbc)
@@ -5966,7 +5966,7 @@ MstStyle2_NameB_DrawLower:
 	push	xde
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
-	ld	xwa, 15535610
+	ld	xwa, Str_StoreTotalSetting_DE_0x16E
 MstStyle2_NameB_Render:
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -6033,7 +6033,7 @@ MstStyle2_NameB_Render:
 	ld	wa, (213188:24)
 	extz	xwa
 	sll	xwa, 3
-	ld	xbc, 15531172
+	ld	xbc, StyleGroup_LatinWorld_PairTable_0x2FA
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -6933,10 +6933,10 @@ TchSensGridCheck_Skip:
 	ldw	(xwa+2), 4
 	lda	xbc, (xsp+4)
 	ld	(xwa+4), xbc
-	ld	xwa, 15535848
+	ld	xwa, Str_StoreTotalSetting_DE_0x25C
 	cpw	(xix), 0
 	jr	z, TchSensGridCheck_Skip2
-	ld	xwa, 15535844
+	ld	xwa, Str_StoreTotalSetting_DE_0x258
 TchSensGridCheck_Skip2:
 	push	xwa
 	push	xbc
@@ -7379,7 +7379,7 @@ FSWAssGrid_EventDispatch:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
@@ -7404,7 +7404,7 @@ FSWAssGridCheck_Entry:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
@@ -7429,7 +7429,7 @@ FSWAssGridCheck_Entry2:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
@@ -7454,7 +7454,7 @@ FSWAssGridCheck_Entry3:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
@@ -7479,7 +7479,7 @@ FSWAssGridCheck_Entry4:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
@@ -7504,7 +7504,7 @@ FSWAssGridCheck_Entry5:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
@@ -7529,7 +7529,7 @@ FSWAssGridCheck_Entry6:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
@@ -7566,7 +7566,7 @@ FSWAssGridCheck_Evt1C00018:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10374
@@ -7591,7 +7591,7 @@ FSWAssGridCheck_Entry7:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10376
@@ -7616,7 +7616,7 @@ FSWAssGridCheck_Entry8:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10378
@@ -7641,7 +7641,7 @@ FSWAssGridCheck_Entry9:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10380
@@ -7666,7 +7666,7 @@ FSWAssGridCheck_Entry10:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10382
@@ -7691,7 +7691,7 @@ FSWAssGridCheck_Entry11:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10384
@@ -7716,7 +7716,7 @@ FSWAssGridCheck_Entry12:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (15535908:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld_rrb	c, xbc, hl
 	extz	bc
 	ld	xwa, 10368
@@ -7739,7 +7739,7 @@ FSWAssGridCheck_Evt1C0001C:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (15535940:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7767,7 +7767,7 @@ FSWAssGridCheck_Skip:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (15535940:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7793,7 +7793,7 @@ FSWAssGridCheck_Skip2:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (15535940:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7819,7 +7819,7 @@ FSWAssGridCheck_Skip3:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (15535940:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7846,7 +7846,7 @@ FSWAssGridCheck_Skip4:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (15535940:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7872,7 +7872,7 @@ FSWAssGridCheck_Skip5:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (15535940:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -7898,7 +7898,7 @@ FSWAssGridCheck_Skip6:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (15535940:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld_rrl	xwa, xbc, hl
 	push	xwa
 	pushw 237
@@ -8481,7 +8481,7 @@ PmExpFilter_DrawCellBank1:
 	ld	a, (xsp+10)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (15536704:24)
+	lda	xbc, (ParamStr_Table_01:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	237
@@ -9109,14 +9109,14 @@ PmExpFilterCheck_AltDecode:
 	jr	lt, PmExpFilterCheck_PushDefault	; -> 0xFBBC1E
 	cp	wa, 10
 	jr	gt, PmExpFilterCheck_PushDefault	; -> 0xFBBC1E
-	lda	xwa, (15537234:24)
+	lda	xwa, (PmExpFilter_AltKeys:24)
 	ld_rrl	xwa, xwa, bc
 	call	AcApcToggleProc_Helper
 	lda	xbc, (xsp)
-	ld	xwa, 15537298
+	ld	xwa, ParamStr02_Vocalist_0xB6
 	cp	hl, 0:i3
 	jr	nz, PmExpFilterCheck_PushNameB	; -> 0xFBBC1A
-	ld	xwa, 15537294
+	ld	xwa, ParamStr02_Vocalist_0xB2
 PmExpFilterCheck_PushNameB:
 	push xwa
 	push xbc
@@ -9680,7 +9680,7 @@ DispTimeSetGridCheck_Evt1C0001C:
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
 	sll	xwa, 2
-	ld	xde, 15537334
+	ld	xde, ParamStr_Table_03
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
@@ -9705,7 +9705,7 @@ DispTimeSetGridCheck_Skip2:
 	ld	(xwa+4), xbc
 	ld	xwa, (xiy)
 	sll	xwa, 2
-	ld	xde, 15537334
+	ld	xde, ParamStr_Table_03
 	add	xde, xwa
 	ld	xwa, (xde)
 	push	xwa
@@ -9721,7 +9721,7 @@ DispTimeSetGridCheck_Skip2:
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip3:
 	lda	xbc, (213226:24)
-	lda	xwa, (15537334:24)
+	lda	xwa, (ParamStr_Table_03:24)
 	ld	(xsp+4), xwa
 	cp	xbc, (xde)
 	jr	nz, DispTimeSetGridCheck_Skip4
@@ -10589,7 +10589,7 @@ MssNameFunc_Skip2:
 	push	xwa
 	call	MssNameFunc_Helper2
 	lda	xsp, (xsp+18)
-	ld	xwa, 15537572
+	ld	xwa, FadeTimeStr_Off_0x5A
 	jr	MssNameFunc_Join
 MssNameFunc_Skip3:
 	sll	xwa, 2
@@ -10604,7 +10604,7 @@ MssNameFunc_Skip3:
 	push	xwa
 	call	16712982
 	lda	xsp, (xsp+10)
-	ld	xwa, 15537576
+	ld	xwa, FadeTimeStr_Off_0x5E
 MssNameFunc_Join:
 	push	xwa
 	ld	xwa, (xiz+18)
@@ -13858,7 +13858,7 @@ RVari_Paint:
 	push	xde
 	pushw	255
 	pushw	247
-	ld	xde, 15537734
+	ld	xde, VariationStr_V1_0x4
 	call	DrawString
 	ld	xwa, 163840
 	call	AcApcToggleProc_Helper
@@ -13982,7 +13982,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda	xbc, (15531432:24)
+	lda	xbc, (NakaInst_Rock_Pop_0x24:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	call	DrawEditSw
@@ -13991,7 +13991,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda	xbc, (15531432:24)
+	lda	xbc, (NakaInst_Rock_Pop_0x24:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -14013,7 +14013,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	sla	wa, 2
-	lda	xbc, (15537702:24)
+	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	237
@@ -14065,7 +14065,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda	xbc, (15531432:24)
+	lda	xbc, (NakaInst_Rock_Pop_0x24:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -14103,7 +14103,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda	xbc, (15531432:24)
+	lda	xbc, (NakaInst_Rock_Pop_0x24:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	call	DrawEditSw
@@ -14112,7 +14112,7 @@ RVari_Select_CheckSameBank:
 	exts	xwa
 	divs	wa, 4
 	ld	wa, qwa
-	lda	xbc, (15531432:24)
+	lda	xbc, (NakaInst_Rock_Pop_0x24:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -14134,7 +14134,7 @@ RVari_Select_CheckSameBank:
 	divs	wa, 4
 	ld	wa, qwa
 	sla	wa, 2
-	lda	xbc, (15537702:24)
+	lda	xbc, (ParamStr_Table_04:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	pushw	237
@@ -14174,7 +14174,7 @@ RVari_Select_CheckSameBank:
 	ld	wa, (xwa)
 	exts	xwa
 	divs	wa, 4
-	lda	xbc, (15531436:24)
+	lda	xbc, (NakaInst_Rock_Pop_0x28:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -14208,7 +14208,7 @@ RVari_Select_CheckSameBank:
 	srl	e, 2
 	extz	de
 	sla	de, 2
-	lda	xhl, (15531476:24)
+	lda	xhl, (SeqChan_Map_2ch_0x2:24)
 	ld_rrl	xde, xhl, de
 	ld	xhl, 1:i3
 	push	xhl
@@ -14219,7 +14219,7 @@ RVari_Select_CheckSameBank:
 	ld	wa, (xwa)
 	exts	xwa
 	divs	wa, 4
-	lda	xbc, (15531436:24)
+	lda	xbc, (NakaInst_Rock_Pop_0x28:24)
 	ld_rrb	a, xbc, wa
 	extz	wa
 	lda	xbc, (xsp+532)
@@ -14253,7 +14253,7 @@ RVari_Select_CheckSameBank:
 	srl	e, 2
 	extz	de
 	sla	de, 2
-	lda	xhl, (15531476:24)
+	lda	xhl, (SeqChan_Map_2ch_0x2:24)
 	ld_rrl	xde, xhl, de
 	ld	xhl, 1:i3
 	push	xhl

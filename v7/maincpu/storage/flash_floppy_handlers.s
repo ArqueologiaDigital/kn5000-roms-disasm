@@ -974,7 +974,7 @@ InitializeNaka:
 	ld (XBC+0x04),XWA
 	ld wa, (0xe0e95c:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe0e944:24)
+	lda xwa, (ToneGen_ParamTable_0x53D:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x016b
 	call RegisterObjectTable
@@ -985,7 +985,7 @@ InitializeNaka:
 	ld (XBC+0x04),XWA
 	ld wa, (0xe0e962:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe0e95e:24)
+	lda xwa, (ToneGen_ParamTable_0x557:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01cb
 	call RegisterObjectTable
@@ -996,7 +996,7 @@ InitializeNaka:
 	ld (XBC+0x04),XWA
 	ld wa, (0xe0e968:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe0e964:24)
+	lda xwa, (ToneGen_ParamTable_0x55D:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01eb
 	call RegisterObjectTable
@@ -1006,7 +1006,7 @@ InitializeNaka:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0012
-	lda xwa, (0xe0e7ae:24)
+	lda xwa, (ToneGen_ParamTable_0x3A7:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x012b
 	call RegisterObjectTable
@@ -1016,7 +1016,7 @@ InitializeNaka:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0012
-	lda xwa, (0xe0e7fa:24)
+	lda xwa, (ToneGen_ParamTable_0x3F3:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x042b
 	call RegisterObjectTable
@@ -1026,7 +1026,7 @@ InitializeNaka:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe0e96a:24)
+	lda xwa, (ToneGen_ParamTable_0x563:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x010b
 	call RegisterObjectTable
@@ -1036,7 +1036,7 @@ InitializeNaka:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe0e96e:24)
+	lda xwa, (ToneGen_ParamTable_0x567:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x040b
 	call RegisterObjectTable
@@ -1412,7 +1412,7 @@ Flash_InitBytecodeBlock:
 	call	AccPatch_CountSlotsAlt
 	ld	a, (xsp+10)
 	extz	wa
-	lda	xbc, (14770428:24)
+	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb	a, xbc, wa
 	ld	(xsp+6), a
 	ld	xwa, (3186:16)
@@ -1426,7 +1426,7 @@ Flash_InitBytecodeBlock_Loop:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda	xwa, (14770368:24)
+	lda	xwa, (MSP_Default_ChannelMap:24)
 	ld	(0x3910), (xwa+de)
 	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
@@ -1446,7 +1446,7 @@ Flash_InitBytecodeBlock_Loop2:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda	xde, (14770368:24)
+	lda	xde, (MSP_Default_ChannelMap:24)
 	ld	(0x3910), (xde+wa)
 	ld	a, (xsp+6)
 	extz	wa
@@ -1528,7 +1528,7 @@ Flash_InitBytecodeBlock_Skip5:
 	ldirw
 	ld	a, (xsp+12)
 	extz	wa
-	lda	xbc, (14770428:24)
+	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb	a, xbc, wa
 	ld	(xsp+6), a
 	ld	xwa, (3186:16)
@@ -1542,7 +1542,7 @@ Flash_InitBytecodeBlock_Loop4:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda	xwa, (14770368:24)
+	lda	xwa, (MSP_Default_ChannelMap:24)
 	ld	(0x3910), (xwa+de)
 	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
@@ -1564,7 +1564,7 @@ Flash_InitBytecodeBlock_Loop5:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda	xde, (14770368:24)
+	lda	xde, (MSP_Default_ChannelMap:24)
 	ld	(0x3910), (xde+wa)
 	ld	a, (xsp+10)
 	extz	wa
@@ -4326,7 +4326,7 @@ Flash_WriteBackSlotTable_Skip4:
 	lda	xsp, (xsp-1036)
 	push	xiz
 	calr	Flash_InitExtMemAddrs
-	ld	xiy, 14769344
+	ld	xiy, MSP_Default_Signature3
 	lda	xix, (xsp+16)
 	ldw	bc, 512
 	ldirw
@@ -5409,7 +5409,7 @@ DualVoice_LoadAndScan:
 	call	AccPatch_CountSlotsAlt
 	ld	a, (xsp+12)
 	extz	wa
-	lda	xbc, (14770428:24)
+	lda	xbc, (MSP_Default_GroupIndexPad:24)
 	ld_rrb	a, xbc, wa
 	ld	(xsp+8), a
 	ld	xwa, (3186:16)
@@ -5423,7 +5423,7 @@ DualVoice_AccPatchLoop:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda	xwa, (14770368:24)
+	lda	xwa, (MSP_Default_ChannelMap:24)
 	ldmm_srib	0x07, 0xe0, 0xe8, 0x10, 0x39
 	call	AccPatch_InitFromSlotIndex
 	inc1b_erp	251
@@ -5443,7 +5443,7 @@ DualVoice_ParamCompareLoop:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda	xde, (14770368:24)
+	lda	xde, (MSP_Default_ChannelMap:24)
 	ldmm_srib	0x07, 0xe8, 0xe0, 0x10, 0x39
 	ld	a, (xsp+8)
 	extz	wa
@@ -5647,9 +5647,9 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe17322:24)
+	ld wa, (Suna_ClassCount_164:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe16c86:24)
+	lda xwa, (Suna_ClassTable_164:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0164
 	call RegisterObjectTable
@@ -5658,9 +5658,9 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe17328:24)
+	ld wa, (Suna_ResEventCount_1C4:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe17324:24)
+	lda xwa, (Suna_ResEventTable_1C4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01c4
 	call RegisterObjectTable
@@ -5669,7 +5669,7 @@ InitializeSuna:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe176d2:24)
+	ld wa, (Suna_ResMethodCount_1E4:24)
 	ld (XBC+0x08),WA
 	lda xwa, (NakaMethodTable_PtrsStart:24)
 	ld (XBC+0x0a),XWA
@@ -5681,7 +5681,7 @@ InitializeSuna:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0049
-	lda xwa, (0xe16284:24)
+	lda xwa, (Composer_FunctionTable:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0124
 	call RegisterObjectTable
@@ -5701,7 +5701,7 @@ InitializeSuna:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe176d4:24)
+	lda xwa, (Suna_FunctionTable_104:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0104
 	call RegisterObjectTable
@@ -5711,7 +5711,7 @@ InitializeSuna:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe176dc:24)
+	lda xwa, (Suna_FunctionTable_404:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0404
 	call RegisterObjectTable
@@ -5721,7 +5721,7 @@ InitializeSuna:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0024
-	lda xwa, (0xe1ca6e:24)
+	lda xwa, (Suna_MainFunctionTable_144:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0144
 	call RegisterObjectTable
@@ -5811,7 +5811,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe1bbce:24)
+	lda xwa, (Suna_ResNameTable_313:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0313
 	call RegisterObjectTable
@@ -5831,7 +5831,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe1bbfc:24)
+	lda xwa, (Suna_ResNameTable_314:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0314
 	call RegisterObjectTable
@@ -5871,7 +5871,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe1bc7c:24)
+	lda xwa, (Suna_ResNameTable_316:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0316
 	call RegisterObjectTable
@@ -5891,7 +5891,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0012
-	lda xwa, (0xe1bcbc:24)
+	lda xwa, (Suna_ResNameTable_3B0:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03b0
 	call RegisterObjectTable
@@ -5931,7 +5931,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe1bd94:24)
+	lda xwa, (Suna_ResNameTable_3B2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03b2
 	call RegisterObjectTable
@@ -5951,7 +5951,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe1be54:24)
+	lda xwa, (Suna_ResNameTable_3B3:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03b3
 	call RegisterObjectTable
@@ -6011,7 +6011,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe1c076:24)
+	lda xwa, (Suna_ResNameTable_3B6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03b6
 	call RegisterObjectTable
@@ -6131,7 +6131,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe1c3bc:24)
+	lda xwa, (Suna_ResNameTable_3BD:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03bd
 	call RegisterObjectTable
@@ -6181,7 +6181,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe1ba1e:24)
+	lda xwa, (Suna_ViewableTable_C9:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00c9
 	call RegisterObjectTable
@@ -6191,7 +6191,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0010
-	lda xwa, (0xe1c6dc:24)
+	lda xwa, (Suna_ResNameTable_3C9:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03c9
 	call RegisterObjectTable
@@ -6231,7 +6231,7 @@ InitializeSuna:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe1c7ce:24)
+	lda xwa, (Suna_ResNameTable_3CB:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03cb
 	call RegisterObjectTable
@@ -7583,7 +7583,7 @@ S2cMemNoBox_HandleScroll:
 	ld	a, (14579:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14799900:24)
+	lda	xbc, (StrPanLeft64_0x18:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)
@@ -7763,7 +7763,7 @@ PsS2cTrans_HandleScroll:
 	ld	a, (14578:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14800280:24)
+	lda	xbc, (PtrTbl_TransposeStrs:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)

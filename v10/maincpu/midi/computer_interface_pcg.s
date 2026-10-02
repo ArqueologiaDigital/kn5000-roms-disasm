@@ -319,7 +319,7 @@ PcgOutGridCheckJumpTable:
 	jr	z, PcgOutGridCheckJumpTable_Skip2
 	cp	bc, 0:i3
 	jrl	nz, PcgOutGridCheckComplete
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw
@@ -335,7 +335,7 @@ PcgOutGridCheckJumpTable:
 PcgOutGridCheckJumpTable_Skip:
 	jrl	PcgOutGridCheckJumpTable_Join4
 PcgOutGridCheckJumpTable_Skip2:
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw
@@ -353,7 +353,7 @@ PcgOutGridCheckJumpTable_Skip3:
 PcgOutGridCheckJumpTable_Entry:
 	cp	(0x24770:24), 255
 	jrl	z, PcgOutGridCheckComplete
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw
@@ -369,7 +369,7 @@ PcgOutGridCheckJumpTable_Entry:
 PcgOutGridCheckJumpTable_Skip4:
 	jrl	PcgOutGridCheckJumpTable_Join4
 PcgOutGridCheckJumpTable_Skip5:
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw
@@ -410,7 +410,7 @@ PcgOutGridCheckJumpTable_Skip6:
 	jr	z, PcgOutGridCheckJumpTable_Skip8
 	cp	bc, 0:i3
 	jrl	nz, PcgOutGridCheckComplete
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw
@@ -431,7 +431,7 @@ PcgOutGridCheckJumpTable_Skip7:
 PcgOutGridCheckJumpTable_Join:
 	jrl	PcgOutGridCheckJumpTable_Join4
 PcgOutGridCheckJumpTable_Skip8:
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw
@@ -454,7 +454,7 @@ PcgOutGridCheckJumpTable_Join2:
 PcgOutGridCheckJumpTable_Entry2:
 	cp	(0x24770:24), 255
 	jrl	z, PcgOutGridCheckComplete
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw
@@ -475,7 +475,7 @@ PcgOutGridCheckJumpTable_Skip10:
 PcgOutGridCheckJumpTable_Join3:
 	jr	PcgOutGridCheckJumpTable_Join4
 PcgOutGridCheckJumpTable_Skip11:
-	ld	xiy, 15204142
+	ld	xiy, UserMemory_FormatStrings
 	lda	xix, (xsp+22)
 	ldw	bc, 11
 	ldirw

@@ -7265,7 +7265,7 @@ SeMenu_PopupDialog_Close_Data:
 	sub	a, 32
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14739245:24)
+	lda	xbc, (ToneGen_ParamTable_0x326:24)
 	ld_rrl	xhl, xbc, wa
 	call	(xhl)
 SeMenu_ValueEditor_Init:
@@ -7417,7 +7417,7 @@ SeMenu_ListSelector_HandleInput:
 	sub	a, 32
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14739245:24)
+	lda	xbc, (ToneGen_ParamTable_0x326:24)
 	ld_rrl	xhl, xbc, wa
 	call	(xhl)
 	jr	SeMenu_ListSelector_ScrollDown	; -> 0xF0EB3B
@@ -8552,15 +8552,15 @@ SeMenu_PresetManager_Load:
 	ld	(0x3efa8:24), 0
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_PresetManager_End
-	ld	xiy, 0xf16145
-	ld	xix, 0xf1620f
+	ld	xiy, SeScreenData_0x5569
+	ld	xix, SeScreenData_0x5633
 	call	SeGfx_DrawStaticList
 SeMenu_PresetManager_End:
 	ret
 SeMenu_PresetManager_Save:
 	ld	(257960:24), 0
-	ld	xiy, 15798580
-	ld	xix, 15798590
+	ld	xiy, SeScreenData_0x0558
+	ld	xix, SeScreenData_0x0562
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save_Helper
 	ret
@@ -8582,24 +8582,24 @@ SeMenu_PresetManager_Data:
 	call	SeMenu_PresetManager_Data_Helper3
 	cp	(1710:16), 1
 	jr	z, SeMenu_PresetManager_Data_Skip
-	ld	xiy, 15814194
-	ld	xix, 15814646
+	ld	xiy, SeScreenData_0x4256
+	ld	xix, SeScreenData_0x441A
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	jr	SeMenu_PresetManager_Data_Join
 SeMenu_PresetManager_Data_Skip:
-	ld	xiy, 15814646
-	ld	xix, 15814691
+	ld	xiy, SeScreenData_0x441A
+	ld	xix, SeScreenData_0x4447
 	call	SeGfx_DrawStaticList
-	ld	xiy, 15814205
-	ld	xix, 15814646
+	ld	xiy, SeScreenData_0x4261
+	ld	xix, SeScreenData_0x441A
 	call	SeGfx_DrawStaticList
 SeMenu_PresetManager_Data_Join:
 	call	SeMenu_PresetManager_Data_Helper
 	call	SeMenu_PresetManager_Data_Helper2
 	ld	(257960:24), 0
-	ld	xiy, 15805265
-	ld	xix, 15805276
+	ld	xiy, SeScreenData_0x1F75
+	ld	xix, SeScreenData_0x1F80
 	call	SeGfx_DrawBoundList
 	call	SeMenu_BankEdit_LoopHelper
 	call	SeMenu_PresetManager_Data_Helper4
@@ -8629,7 +8629,7 @@ SeMenu_PresetBrowser_Init_Helper:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15800274
+	ld	xiz, SeScreenData_0x0BF6
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8640,7 +8640,7 @@ SeMenu_PresetManager_Data_Entry:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15800202
+	ld	xiz, SeScreenData_0x0BAE
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8666,7 +8666,7 @@ SeMenu_PresetManager_Data_Join2:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15800494
+	ld	xiz, SeScreenData_0x0CD2
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8677,7 +8677,7 @@ SeMenu_PresetManager_Data_Entry2:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15800374
+	ld	xiz, SeScreenData_0x0C5A
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8697,7 +8697,7 @@ SeMenu_PresetManager_Data_Join3:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15800618
+	ld	xiz, SeScreenData_0x0D4E
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8708,7 +8708,7 @@ SeMenu_PresetManager_Data_Entry3:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15800560
+	ld	xiz, SeScreenData_0x0D14
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8737,27 +8737,27 @@ SeMenu_PresetManager_Data_Helper4:
 	ret
 SeMenu_PresetBrowser_Init:
 	call	SeMenu_PresetBrowser_Navigate
-	ld	xiy, 15800845
-	ld	xix, 15801375
+	ld	xiy, SeScreenData_0x0E31
+	ld	xix, SeScreenData_0x1043
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Data_Helper
 	call	SeMenu_PresetBrowser_Init_Helper
 	ld	(257960:24), 0
-	ld	xiy, 15806907
-	ld	xix, 15807125
+	ld	xiy, TuningSys_Param_01
+	ld	xix, SeScreenData_0x26B9
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetBrowser_Select
 	ret
 SeMenu_PresetBrowser_Navigate:
 	ld	(257960:24), 0
-	ld	xiy, 15800634
-	ld	xix, 15800810
+	ld	xiy, SeScreenData_0x0D5E
+	ld	xix, SeScreenData_0x0E0E
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_PresetBrowser_Select:
 	ld	(257960:24), 0
-	ld	xiy, 15800810
-	ld	xix, 15800815
+	ld	xiy, SeScreenData_0x0E0E
+	ld	xix, SeScreenData_0x0E13
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_PresetBrowser_Data:
@@ -8770,8 +8770,8 @@ SeMenu_PresetBrowser_Data:
 	call SeMenu_PresetBrowser_Data_0x98
 	call Data_UnknownBlock_0x6E
 	ld	(257960:24), 0
-	ld	xiy, 15807577
-	ld	xix, 15807658
+	ld	xiy, SeScreenData_0x287D
+	ld	xix, SeScreenData_0x28CE
 	call	SeGfx_DrawBoundList
 	ret
 	ld	(257960:24), 0
@@ -8785,7 +8785,7 @@ SeMenu_PresetBrowser_Data:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15811653
+	ld	xiz, SeScreenData_0x3869
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8796,7 +8796,7 @@ SeMenu_PresetBrowser_Data_Code_Entry:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, 15811581
+	ld	xiz, SeScreenData_0x3821
 	ld_rrl	xiy, xiz, bc
 	add	bc, 4
 	ld_rrl	xix, xiz, bc
@@ -8806,19 +8806,19 @@ SeMenu_PresetBrowser_Data_Code_Join:
 	djnz8	c, -84
 	ret
 	ld	(257960:24), 1
-	ld	xiy, 15807818
-	ld	xix, 15807828
+	ld	xiy, SeScreenData_0x296E
+	ld	xix, SeScreenData_0x2978
 	call	SeGfx_DrawStaticList
 	ld	(257960:24), 0
-	ld	xiy, 15807898
-	ld	xix, 15807908
+	ld	xiy, SeScreenData_0x29BE
+	ld	xix, SeScreenData_0x29C8
 	call	SeGfx_DrawStaticList
-	ld	xiy, 15807908
-	ld	xix, 15807918
+	ld	xiy, SeScreenData_0x29C8
+	ld	xix, SeScreenData_0x29D2
 	call	SeGfx_DrawStaticList
 	ld	(257960:24), 2
-	ld	xiy, 15807908
-	ld	xix, 15807918
+	ld	xiy, SeScreenData_0x29C8
+	ld	xix, SeScreenData_0x29D2
 	call	SeGfx_DrawStaticList
 	ld	c, 4:opc
 	ld	xiy, 1637
@@ -8834,7 +8834,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	ld	e, d
 	xor	d, d
 	sla	de, 2
-	ld	xiz, 15807868
+	ld	xiz, SeScreenData_0x29A0
 	ld_rrl	xiy, xiz, de
 	pushw	de
 	add	de, 4
@@ -8847,7 +8847,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	ld	(257960:24), 0
 	.byte 0xcb, 0x04
 	push	xiy
-	ld	xiz, 15808222
+	ld	xiz, SeScreenData_0x2B02
 	ld_rrl	xiy, xiz, de
 	ld	xix, xiy
 	add	xix, 7
@@ -8863,7 +8863,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	srl	a, 6
 	xor	w, w
 	mul	a, 10
-	ld	xiz, 15808178
+	ld	xiz, SeScreenData_0x2AD6
 	ld_rrl	xiy, xiz, de
 	extz	xwa
 	add	xiy, xwa
@@ -8876,7 +8876,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	pop	c
 	push	c
 	push	xiy
-	ld	xiz, 15807740
+	ld	xiz, SeScreenData_0x2920
 	ld_rrl	xiy, xiz, de
 	pushw	de
 	call	SeGfx_DrawBoundRecord
@@ -8886,7 +8886,7 @@ SeMenu_PresetBrowser_Data_Code_Loop:
 	ld	(257960:24), 2
 	.byte 0xcb, 0x04
 	push	xiy
-	ld	xiz, 15811677
+	ld	xiz, SeScreenData_0x3881
 	ld_rrl	xiy, xiz, de
 	ld	xix, xiy
 	add	xix, 20
@@ -8904,13 +8904,13 @@ SeMenu_CompareAndApply_Init:
 	cp	(1710:16), 1
 	jr	z, SeMenu_CompareAndApply_Check
 	call	SeMenu_PresetManager_Save
-	ld	xiy, 15801964
-	ld	xix, 15802201
+	ld	xiy, SeScreenData_0x1290
+	ld	xix, SeScreenData_0x137D
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_CompareAndApply_Match
 SeMenu_CompareAndApply_Check:
-	ld	xiy, 15819279
-	ld	xix, 15819433
+	ld	xiy, SeScreenData_0x5633
+	ld	xix, SeScreenData_0x56CD
 	call	SeGfx_DrawStaticList
 SeMenu_CompareAndApply_Match:
 	call	SeMenu_PresetManager_Data_Helper
@@ -8919,14 +8919,14 @@ SeMenu_CompareAndApply_Match:
 	cp	(1710:16), 1
 	jr	z, SeMenu_CompareAndApply_Apply
 	ld	(257960:24), 0
-	ld	xiy, 15806315
-	ld	xix, 15806454
+	ld	xiy, SeScreenData_0x238F
+	ld	xix, SeScreenData_0x241A
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_CompareAndApply_End
 SeMenu_CompareAndApply_Apply:
 	ld	(257960:24), 0
-	ld	xiy, 15819648
-	ld	xix, 15819703
+	ld	xiy, SeScreenData_0x57A4
+	ld	xix, SeScreenData_0x57DB
 	call	SeGfx_DrawBoundList
 SeMenu_CompareAndApply_End:
 	call SeMenu_CompareAndApply_Data4
@@ -8945,8 +8945,8 @@ SeMenu_CompareAndApply_Data3:
 	ret
 SeMenu_CompareAndApply_Data4:
 	ld	(257960:24), 0
-	ld	xiy, 15801623
-	ld	xix, 15801628
+	ld	xiy, SeScreenData_0x113B
+	ld	xix, SeScreenData_0x1140
 	call	15789014
 	ret
 SeMenu_CompareAndApply_Data5:
@@ -8977,21 +8977,21 @@ SeMenu_Utility_CopyBlock:
 	call	SeMenu_CompareAndApply_Data
 	cp	(1710:16), 1
 	jr	z, SeMenu_Utility_CopyBlock_Skip
-	ld	xiy, 15802434
-	ld	xix, 15802623
+	ld	xiy, SeScreenData_0x1466
+	ld	xix, SeScreenData_0x1523
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
 	ld	(257960:24), 2
-	ld	xiy, 15804103
-	ld	xix, 15804113
+	ld	xiy, SeScreenData_0x1AEB
+	ld	xix, SeBitmap_EnvCurve5_0x172D
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_Utility_CopyBlock_Join
 SeMenu_Utility_CopyBlock_Skip:
-	ld	xiy, 15802434
-	ld	xix, 15802458
+	ld	xiy, SeScreenData_0x1466
+	ld	xix, SeBitmap_EnvCurve5_0x10B6
 	call	SeGfx_DrawStaticList
-	ld	xiy, 15819433
-	ld	xix, 15819648
+	ld	xiy, SeScreenData_0x56CD
+	ld	xix, SeScreenData_0x57A4
 	call	SeGfx_DrawStaticList
 SeMenu_Utility_CopyBlock_Join:
 	call	SeMenu_PresetManager_Data_Helper
@@ -8999,13 +8999,13 @@ SeMenu_Utility_CopyBlock_Join:
 	ld	(257960:24), 0
 	cp	(1710:16), 1
 	jr	z, SeMenu_Utility_CopyBlock_Skip2
-	ld	xiy, 15806628
-	ld	xix, 15806698
+	ld	xiy, SeScreenData_0x24C8
+	ld	xix, SeScreenData_0x250E
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_Utility_CopyBlock_Join2
 SeMenu_Utility_CopyBlock_Skip2:
-	ld	xiy, 15819757
-	ld	xix, 15819823
+	ld	xiy, SeScreenData_0x5811
+	ld	xix, SeScreenData_0x5853
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_CopyBlock_Helper
 SeMenu_Utility_CopyBlock_Join2:
@@ -9016,21 +9016,21 @@ SeMenu_Utility_CopyBlock_Helper:
 	ld	a, (1632:16)
 	and	a, 32
 	jr	z, SeMenu_Utility_CopyBlock_Skip3
-	ld	xiy, 15819855
-	ld	xix, 15819875
+	ld	xiy, SeScreenData_0x5873
+	ld	xix, SeScreenData_0x5887
 	call	SeGfx_DrawBoundList
 	ld	(257960:24), 2
-	ld	xiy, 15804103
-	ld	xix, 15804125
+	ld	xiy, SeScreenData_0x1AEB
+	ld	xix, SeScreenData_0x1B01
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_Utility_CopyBlock_Return
 SeMenu_Utility_CopyBlock_Skip3:
-	ld	xiy, 15819875
-	ld	xix, 15819889
+	ld	xiy, SeScreenData_0x5887
+	ld	xix, SeScreenData_0x5895
 	call	SeGfx_DrawStaticList
 	ld	(257960:24), 2
-	ld	xiy, 15804125
-	ld	xix, 15804135
+	ld	xiy, SeScreenData_0x1B01
+	ld	xix, SeScreenData_0x1B0B
 	call	SeGfx_DrawStaticList
 SeMenu_Utility_CopyBlock_Return:
 	ret
@@ -9071,14 +9071,14 @@ SeMenu_Utility_CompareBlock_Loop:
 	call	SeMenu_PresetManager_Data_Helper2
 	call	SeMenu_Utility_FormatNumber_End
 	ld	(257960:24), 0
-	ld	xiy, 15805756
-	ld	xix, 15805852
+	ld	xiy, SeScreenData_0x2160
+	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	call	SeMenu_Utility_FormatNumber_Loop
 	ret
 SeMenu_Utility_CompareBlock_End:
-	ld	xiy, 15803228
-	ld	xix, 15803239
+	ld	xiy, SeScreenData_0x1780
+	ld	xix, SeScreenData_0x178B
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Save
 	ret
@@ -9091,13 +9091,13 @@ SeMenu_Utility_SearchByte:
 SeMenu_Utility_SearchByte_End:
 	ld	xix, 15803012
 SeMenu_Utility_FormatNumber:
-	ld	xiy, 15802974
+	ld	xiy, SeScreenData_0x1682
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_Utility_FormatNumber_Loop:
 	ld	(257960:24), 0
-	ld	xiy, 15803159
-	ld	xix, 15803164
+	ld	xiy, SeScreenData_0x173B
+	ld	xix, SeScreenData_0x1740
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_Utility_FormatNumber_End:
@@ -9114,7 +9114,7 @@ SeMenu_Utility_FormatNumber_Data:
 SeMenu_Utility_FormatSigned:
 	call	SeGfx_DrawStaticList
 	ld	(257960:24), 0
-	ld	xiy, 15805705
+	ld	xiy, SeScreenData_0x212D
 	call	15789040
 	ret
 SeMenu_Utility_FormatSigned_Data:
@@ -9244,24 +9244,24 @@ SeMenu_NameEdit_DataBlock1:
 	ld	(1648:16), a
 	cp	a, 10
 	jr	nz, SeMenu_NameEdit_DataBlock1_Skip
-	ld	xiy, 15815607
+	ld	xiy, SeScreenData_0x47DB
 	jr	SeMenu_NameEdit_DataBlock1_Join
 SeMenu_NameEdit_DataBlock1_Skip:
-	ld	xiy, 15815576
+	ld	xiy, SeScreenData_0x47BC
 SeMenu_NameEdit_DataBlock1_Join:
-	ld	xix, 15815863
+	ld	xix, SeScreenData_0x48DB
 	call	SeGfx_DrawStaticList
 	xor	xwa, xwa
 	ld	a, (1648:16)
 	sla	wa, 3
-	ld	xiz, 15816666
+	ld	xiz, SeScreenData_0x4BFE
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
 	call	SeGfx_DrawStaticList
-	ld	xiy, 15815336
+	ld	xiy, SeScreenData_0x46CC
 	xor	xbc, xbc
-	ld	xiz, 15817383
+	ld	xiz, SeScreenData_0x4ECB
 	ld	c, (1648:16)
 	sla	bc, 2
 	ld_rrl	xix, xiz, bc
@@ -9269,27 +9269,27 @@ SeMenu_NameEdit_DataBlock1_Join:
 	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, SeMenu_NameEdit_DataBlock1_Skip2
-	ld	xiy, 15815546
+	ld	xiy, SeScreenData_0x479E
 	jr	SeMenu_NameEdit_DataBlock1_Join2
 SeMenu_NameEdit_DataBlock1_Skip2:
-	ld	xiy, 15815516
+	ld	xiy, SeScreenData_0x4780
 SeMenu_NameEdit_DataBlock1_Join2:
-	ld	xix, 15815576
+	ld	xix, SeScreenData_0x47BC
 	call	SeGfx_DrawStaticList
-	ld	xiy, 15816762
+	ld	xiy, SeScreenData_0x4C5E
 	ld	a, (1648:16)
 	cp	a, 10
 	jr	nz, SeMenu_NameEdit_DataBlock1_Skip3
-	ld	xix, 15816818
+	ld	xix, FlashRead_BlockData_Field7
 	jr	SeMenu_NameEdit_DataBlock1_Join3
 SeMenu_NameEdit_DataBlock1_Skip3:
-	ld	xix, 15816829
+	ld	xix, FlashWrite_BlockHandler_Table
 SeMenu_NameEdit_DataBlock1_Join3:
 	call	SeGfx_DrawBoundList
 	xor	xwa, xwa
 	ld	a, (1648:16)
 	sla	wa, 3
-	ld	xiz, 15816829
+	ld	xiz, FlashWrite_BlockHandler_Table
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
@@ -9314,8 +9314,8 @@ SeMenu_NameEdit_Dispatch:
 	jr t, SeMenu_NameEdit_Return
 SeMenu_NameEdit_SetupPath:
 	ld	(257960:24), 1
-	ld	xiy, 15820149
-	ld	xix, 15820159
+	ld	xiy, SeScreenData_0x5999
+	ld	xix, SeScreenData_0x59A3
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 SeMenu_NameEdit_DefaultPath:
@@ -9329,10 +9329,10 @@ SeMenu_NameEdit_CheckBit7:
 	ld	a, (1642:16)
 	and	a, 128
 	jr	nz, SeMenu_NameEdit_Bit7Set
-	ld	xiy, 15819996
+	ld	xiy, SeScreenData_0x5900
 	jr	SeMenu_NameEdit_HandleInput
 SeMenu_NameEdit_Bit7Set:
-	ld	xiy, 15819981
+	ld	xiy, SeScreenData_0x58F1
 SeMenu_NameEdit_HandleInput:
 	call SeGfx_DrawBoundRecord
 	ret
@@ -9368,7 +9368,7 @@ SeMenu_PatchEdit_Dispatch:
 	jr	z, SeMenu_PatchEdit_CallHelper
 	cp	a, 14
 	jr	c, SeMenu_PatchEdit_DefaultPath
-	ld	xiy, 15805139
+	ld	xiy, SeScreenData_0x1EF7
 	extz	xwa
 	xor	w, w
 	sla	wa, 2
@@ -9381,8 +9381,8 @@ SeMenu_PatchEdit_Dispatch:
 	jr	SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_SetupPath:
 	ld	(257960:24), 1
-	ld	xiy, 15805215
-	ld	xix, 15805225
+	ld	xiy, SeScreenData_0x1F43
+	ld	xix, SeScreenData_0x1F4D
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 	jr	SeMenu_PatchEdit_DefaultPath
@@ -9390,7 +9390,7 @@ SeMenu_PatchEdit_CallHelper:
 	call SeMenu_PresetManager_Data_0xEA
 	jr t, SeMenu_PatchEdit_Return
 SeMenu_PatchEdit_DefaultPath:
-	ld	xiy, 15805139
+	ld	xiy, SeScreenData_0x1EF7
 	ld	(257960:24), 0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 SeMenu_PatchEdit_Return:
@@ -9405,20 +9405,20 @@ SeMenu_BankEdit_Dispatch:
 	jr t, SeMenu_BankEdit_Return
 SeMenu_BankEdit_SetupPath:
 	ld	(257960:24), 1
-	ld	xiy, 15805655
-	ld	xix, 15805665
+	ld	xiy, SeScreenData_0x20FB
+	ld	xix, SeScreenData_0x2105
 	call	SeGfx_DrawStaticList
-	ld	xiy, 15805265
+	ld	xiy, SeScreenData_0x1F75
 	call	SeGfx_DrawBoundRecord
 SeMenu_BankEdit_Return:
 	ret
 SeMenu_BankEdit_LoopHelper:
 	ld	(257960:24), 0
-	ld	xiy, 15805466
-	ld	xix, 15805474
+	ld	xiy, SeScreenData_0x203E
+	ld	xix, SeScreenData_0x2046
 	call	SeGfx_DrawStaticList
-	ld	xiy, 15805276
-	ld	xix, 15805316
+	ld	xiy, SeScreenData_0x1F80
+	ld	xix, SeScreenData_0x1FA8
 	call	SeGfx_DrawBoundList
 	ld	c, 0:opc
 	ld	xiz, 1636
@@ -9446,7 +9446,7 @@ SeMenu_BankEdit_LoopBody:
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_BankEdit_LoopContinue
 SeMenu_BankEdit_EmptyEntry:
-	ld	xiy, 15805581
+	ld	xiy, SeScreenData_0x20B1
 	extz	xbc
 	xor	b, b
 	sla	bc, 2
@@ -9869,14 +9869,14 @@ Data_UnknownBlock_Return6:
 SeMenu_PresetInit_Main:
 	call	SeMenu_PresetManager_Data_Helper3
 	call	SeMenu_PresetManager_Save
-	ld	xiy, 15810376
-	ld	xix, 15810757
+	ld	xiy, SeScreenData_0x336C
+	ld	xix, SeScreenData_0x34E9
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Data_Helper
 	call	SeMenu_PresetBrowser_Init_Helper
 	ld	(257960:24), 0
-	ld	xiy, 15811773
-	ld	xix, 15811954
+	ld	xiy, SeScreenData_0x38E1
+	ld	xix, SeScreenData_0x3996
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop1
 	call	SeMenu_PresetInit_Loop2
@@ -9902,7 +9902,7 @@ SeMenu_PresetInit_TableLookup1:
 	ld	d, (xbc)
 	and	d, 128
 	jr	z, SeMenu_PresetInit_Lookup1Return
-	ld	xiy, 15812118
+	ld	xiy, SeScreenData_0x3A3A
 	ld	(257960:24), 0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 SeMenu_PresetInit_Lookup1Return:
@@ -9927,7 +9927,7 @@ SeMenu_PresetInit_TableLookup2:
 	ld	d, (xbc)
 	cp	d, 0:i3
 	jr	z, SeMenu_PresetInit_Lookup2Return
-	ld	xiy, 15811994
+	ld	xiy, SeScreenData_0x39BE
 	ld	(257960:24), 0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 SeMenu_PresetInit_Lookup2Return:
@@ -10128,25 +10128,25 @@ SeMenu_EqEdit_Init:
 	call	SeMenu_EqEdit_SetupHelper1
 	call	SeMenu_PresetManager_Save
 	ld	(257960:24), 0
-	ld	xiy, 15812882
-	ld	xix, 15813039
+	ld	xiy, SeScreenData_0x3D36
+	ld	xix, SeScreenData_0x3DD3
 	call	SeGfx_DrawStaticList
 	ld	(257960:24), 0
-	ld	xiy, 15814142
-	ld	xix, 15814172
+	ld	xiy, SeScreenData_0x4222
+	ld	xix, SeScreenData_0x4240
 	call	SeGfx_DrawBoundList
 	call	SeMenu_EqEdit_SetupHelper2
 	ret
 SeMenu_EqEdit_SetupHelper1:
 	ld	(257960:24), 0
-	ld	xiy, 15812575
-	ld	xix, 15812622
+	ld	xiy, SeScreenData_0x3C03
+	ld	xix, SeScreenData_0x3C32
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_EqEdit_SetupHelper2:
 	ld	(257960:24), 0
-	ld	xiy, 15812622
-	ld	xix, 15812627
+	ld	xiy, SeScreenData_0x3C32
+	ld	xix, SeScreenData_0x3C37
 	call	SeGfx_DrawStaticList
 	ret
 SeMenu_EqEdit_Dispatch:
@@ -10163,14 +10163,14 @@ SeMenu_EqEdit_Dispatch:
 	ld	xix, SeScreenData_0x3DF1
 	call	SeGfx_DrawBoundList
 SeMenu_EqEdit_DrawTable:
-	ld	xiy, 15813139
-	ld	xix, 15813169
+	ld	xiy, SeScreenData_0x3E37
+	ld	xix, SeScreenData_0x3E55
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_EqEdit_Return
 SeMenu_EqEdit_SetupPath:
 	ld	(257960:24), 1
-	ld	xiy, 15814056
-	ld	xix, 15814086
+	ld	xiy, SeScreenData_0x41CC
+	ld	xix, SeScreenData_0x41EA
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 	jr	SeMenu_EqEdit_DefaultPath
@@ -10178,7 +10178,7 @@ SeMenu_EqEdit_SetConstA:
 	ld a, 0x07:opc
 SeMenu_EqEdit_DefaultPath:
 	ld	(257960:24), 0
-	ld	xiy, 15813180
+	ld	xiy, SeScreenData_0x3E60
 	call	SeMenu_PatchEdit_Dispatch_Helper
 SeMenu_EqEdit_Return:
 	ret
@@ -15309,7 +15309,7 @@ SeScreenData_0x4BFE:
 ; bound record list (5 records), read by GraphicsRender_Start; ends SeScreenData_0x4C96, SeScreenData_End
 ; evidence: SeMenu_NameEdit_DataBlock1
 SeScreenData_0x4C5E:
-	sdb_str	0x0660, 0x0f, 0, 0x20, 0x00f15ad7, 13, 51*40+17
+	sdb_str	0x0660, 0x0f, 0, 0x20, SeScreenData_0x4EFB, 13, 51*40+17
 ; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x4C8B
 ; evidence: SeMenu_PatchEdit_DataBlock
 SeScreenData_0x4C6D:
@@ -15705,7 +15705,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	ld	a, (13395:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14800796:24)
+	lda	xbc, (StrBeatOff_0x12:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -15807,7 +15807,7 @@ PsCstmCpBnkBox_ReadParam2:
 PsCstmCpBnkBox_LookupAndSend:
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14801336:24)
+	lda	xbc, (PtrTbl_RhySlotLongNames:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)
@@ -15872,10 +15872,10 @@ PsCstmCpSwBox_PushTableAddr0:
 	jr PsCstmCpSwBox_SendCommand
 
 PsCstmCpSwBox_ReadParam2:
-	ld	xwa, 14801780
+	ld	xwa, StrRhySlot_MemoryA_0x22
 	cp	(14619:16), 10
 	jr	nc, PsCstmCpSwBox_PushTableAddr1
-	ld	xwa, 14801772
+	ld	xwa, StrRhySlot_MemoryA_0x1A
 PsCstmCpSwBox_PushTableAddr1:
 	push xwa
 	push xbc
@@ -16080,7 +16080,7 @@ AcMemNoBox_HandleEvtBC:
 	ld	a, (13370:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14801788:24)
+	lda	xbc, (StrRhySlot_MemoryA_0x2A:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+16)
@@ -16193,7 +16193,7 @@ AcCmpRecBox_HandleEvtBC:
 	ld	e, (xiz+36)
 	ld	a, (14079:16)
 	and	a, e
-	lda	xhl, (14802184:24)
+	lda	xhl, (StrStyleSect2_A_Vari1_0x8:24)
 	lda	xbc, (xsp+16)
 	cp	a, e
 	jr	nz, AcCmpRecBox_CheckParam2	; -> 0xF1BB71
@@ -16284,7 +16284,7 @@ PsCmpQtzBox_HandleEvtBC:
 	ld	a, (13375:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14802214:24)
+	lda	xbc, (PtrTbl_NotePositionStrs:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)
@@ -16598,7 +16598,7 @@ PsNameMemBox_HandleEvtBC:
 	ld	a, (13370:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14802310:24)
+	lda	xbc, (PtrTbl_StyleVarGroupCodes:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)
@@ -16995,7 +16995,7 @@ EasyCmp_GridEvtEnc_Case2:
 	ld	a, (xwa)
 	cp	a, 0:i3
 	jr	nz, EasyCmp_GridCheck_EventCase2
-	ld	xwa, 14802702
+	ld	xwa, StrGenre_8Beat_0x12
 	push	xwa
 EasyCmp_GridCheck_EventCase1:
 	push	xde
@@ -17178,7 +17178,7 @@ PsMspNameBnk_HandleEvtBC:
 	ld	a, (32418:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14802800:24)
+	lda	xbc, (PtrTbl_MspCompileBankLabels:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)
@@ -17449,7 +17449,7 @@ VwVariBox_GetText_LookupAudio:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14802896:24)
+	lda	xbc, (PtrTbl_MusicStyleBankNames:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xsp+280)
@@ -18080,7 +18080,7 @@ RgpSetBnkBox_HandleEvtBC:
 	ld	a, (32417:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (14803664:24)
+	lda	xbc, (StrMsBankLong2_Effect1_0x26:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)

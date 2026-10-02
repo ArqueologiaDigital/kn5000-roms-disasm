@@ -679,7 +679,7 @@ MidiPkt_EnqueueExtended_Data:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
-	lda	xwa, (0xee49e8:24)
+	lda	xwa, (MidiCtl_NullRecord:24)
 	cp	xwa, (xiz+4)
 	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
 	ld	xwa, (xiz)
@@ -1071,7 +1071,7 @@ MidiPkt_BuildControl_Helper:
 	calr	MidiPkt_CheckGateCondition
 	cp	hl, 0xffff
 	jrl	z, MidiPkt_EnqueueControl_3364_Epilogue
-	lda	xbc, (0xee49e8:24)
+	lda	xbc, (MidiCtl_NullRecord:24)
 	ld	xwa, (xiz+4)
 	cp	xbc, xwa
 	jr	z, MidiPkt_EnqueueControl_3364_Epilogue
@@ -1390,7 +1390,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	jrl	nc, MidiPkt_SysExBulkTransfer_Data_Helper2_Epilogue
 	ldto_berp	a, 251
 	extz	wa
-	lda	xbc, (0xee337c:24)
+	lda	xbc, (SysExBulk_SlotMap:24)
 	ld	a, (xbc+wa)
 	ldfr_berp	a, 251
 	ld	xwa, (0xbcac:16)

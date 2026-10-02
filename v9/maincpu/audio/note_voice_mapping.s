@@ -17180,9 +17180,9 @@ UIState_ProcessKeyEvent:
 	cp	wa, 12
 	jrl	gt, SndParam_ProcessEntry_Epilogue
 	add	wa, wa
-	lda	xix, (0xeec044:24)
+	lda	xix, (KeyEvent_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfea84f:24)
+	lda	xix, (UIState_ProcessKeyEvent_0x3D:24)
 	jp_rr	8, xix, wa
 	ld	a, (xsp+0x3)
 	and	a, 255
@@ -17566,7 +17566,7 @@ HdaeRom_TableEntry2:
 	cp	wa, 7:i3
 	jrl	gt, HdaeRom_TableEntry2_Epilogue
 	add	wa, wa
-	lda	xix, (0xeec05e:24)
+	lda	xix, (HdaeRomEntry2_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfeac14:24)
 	jp_rr	8, xix, wa
@@ -17825,7 +17825,7 @@ HdaeRom_AltCheckResult_Epilogue:
 	add	xwa, xbc
 	ld	a, (xwa)
 	extz	wa
-	lda	xbc, (0xee8ea2:24)
+	lda	xbc, (AudioInit_SlotOrderMap:24)
 	ld_rrb	e, xbc, wa
 	ld	a, e
 	cp	a, 1:i3
@@ -19338,9 +19338,9 @@ SendEpilogue_Data_Helper:
 	cp	wa, 6:i3
 	jr	gt, SeqVoice_CheckAndRet_Data_Skip12
 	add	wa, wa
-	lda	xix, (0xeec168:24)
+	lda	xix, (SendEpilogueC_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfebd57:24)
+	lda	xix, (SeqVoice_CheckAndRet_Data_Skip10:24)
 	jp_rr	8, xix, wa
 SeqVoice_CheckAndRet_Data_Skip10:
 	ld	hl, 0:i3
@@ -25095,7 +25095,7 @@ Param_SignExtendReturn_Skip3:
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x323
 	ld_rrw bc, xix, bc
-	lda xix, (16706961:24)
+	lda xix, (Param_SignExtendReturn_Skip4:24)
 	jp_rr 8, xix, bc
 Param_SignExtendReturn_Skip4:
 	ld	a, (xsp)
@@ -25217,7 +25217,7 @@ Param_SignExtendReturn_Skip7:
 	sll	wa, 1
 	ld	xix, CharMap_FullPermutation_0x3E6
 	ld_rrw wa, xix, wa
-	lda xix, (16707307:24)
+	lda xix, (Param_SignExtendReturn_Skip8:24)
 	jp_rr 8, xix, wa
 Param_SignExtendReturn_Skip8:
 	pushw 127
@@ -25280,7 +25280,7 @@ Param_SignExtendReturn_Skip10:
 	sll	bc, 1
 	ld	xix, CharMap_FullPermutation_0x3B7
 	ld_rrw bc, xix, bc
-	lda xix, (16707498:24)
+	lda xix, (Param_SignExtendReturn_Skip11:24)
 	jp_rr 8, xix, bc
 Param_SignExtendReturn_Skip11:
 	pushw 127
@@ -27922,7 +27922,7 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	cp	hl, 5:i3
 	jrl	gt, TmFlash_BulkTransferToSubCPU_Skip5
 	add	hl, hl
-	lda	xix, (0xeed76b:24)
+	lda	xix, (TmFlashBulkB_SwitchOffsets:24)
 	ld_rrw	hl, xix, hl
 	lda	xix, (0xff089b:24)
 	jp_rr	8, xix, hl

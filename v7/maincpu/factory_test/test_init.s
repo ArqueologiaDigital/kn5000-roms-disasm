@@ -90,7 +90,7 @@ InitializeHama:
 	lda	xsp, (xsp-14)
 	ld	xwa, NAKA_CLASS_Class
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16400597:24)
+	lda	xwa, (ClassProc:24)
 	ld	(xsp+4), xwa
 	ld	wa, (14807228:24)
 	ld	(xsp+8), wa
@@ -102,7 +102,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_ResEvent
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16405742:24)
+	lda	xwa, (ResEventProc:24)
 	ld	(xsp+4), xwa
 	ld	wa, (14807252:24)
 	ld	(xsp+8), wa
@@ -114,7 +114,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_ResMethod
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16405819:24)
+	lda	xwa, (ResMethodProc:24)
 	ld	(xsp+4), xwa
 	ld	wa, (14807274:24)
 	ld	(xsp+8), wa
@@ -126,7 +126,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_ApFunction
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16401759:24)
+	lda	xwa, (ApFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
 	lda	xwa, (14807114:24)
@@ -137,7 +137,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_ApFunction
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16401759:24)
+	lda	xwa, (ApFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
 	lda	xwa, (14807126:24)
@@ -148,7 +148,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_Function
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16401564:24)
+	lda	xwa, (FunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
 	lda	xwa, (14807276:24)
@@ -159,10 +159,10 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_Function
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16401564:24)
+	lda	xwa, (FunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
-	lda	xwa, (14807616:24)
+	lda	xwa, (Hama_ModeParam_Table:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -170,7 +170,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_MainFunction
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16401931:24)
+	lda	xwa, (MainFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
 	lda	xwa, (14810412:24)
@@ -181,7 +181,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_MainFunction
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16401931:24)
+	lda	xwa, (MainFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
 	lda	xwa, (14810420:24)
@@ -192,7 +192,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_Viewable
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16405896:24)
+	lda	xwa, (ViewableProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
 	lda	xwa, (14810064:24)
@@ -203,7 +203,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_ResName
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16408254:24)
+	lda	xwa, (ResNameProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
 	lda	xwa, (14810176:24)
@@ -214,7 +214,7 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_Viewable
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16405896:24)
+	lda	xwa, (ViewableProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 26
 	lda	xwa, (14810068:24)
@@ -225,10 +225,10 @@ InitializeHama:
 	call	RegisterObjectTable
 	ld	xwa, NAKA_CLASS_ResName
 	ld	(xsp+0:8), xwa
-	lda	xwa, (16408254:24)
+	lda	xwa, (ResNameProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 26
-	lda	xwa, (14810182:24)
+	lda	xwa, (FDTest_Config_Table:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -591,7 +591,7 @@ LoadExtROM_Entry:
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	z, LoadExtROM_JumpEntry
-	lda	xwa, (14811042:24)
+	lda	xwa, (FDTest_String_TestTitleFunc_0x264:24)
 	jrl	SendEvent_Entry
 LoadExtROM_JumpEntry:
 	ld xhl, 0x200008
