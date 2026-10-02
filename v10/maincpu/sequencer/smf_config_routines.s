@@ -1751,7 +1751,7 @@ SMF_LoadSongBank:
 	cp a, 0:i3
 	jr z, SMF_LoadBank_Return
 	ld xde, 0xab000
-	lda_dri XDE, 0xe9, 0xc7, 0x00
+	lda xde, (xde+199:16)
 	cp (4394:16), 1
 	jr nz, SMF_LoadBank_ReadEntries
 	ld (xde), 0x0

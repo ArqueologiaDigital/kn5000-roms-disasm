@@ -4168,7 +4168,7 @@ SeqStep_FileIoComplete:
 
 SeqStep_FileIoFinal:
 	incw 1, (xsp + 4)
-	lda_dri XIX, 0xf1, 0x1a, 0x02
+	lda xix, (xix+538)
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileIoError
 
@@ -4411,7 +4411,7 @@ SeqStep_FileBufferReturn:
 
 SeqStep_FileBufferError:
 	incw 1, (xsp + 4)
-	lda_dri XBC, 0xe5, 0x1a, 0x02
+	lda xbc, (xbc+538)
 	cpw (xsp + 4), 0xa
 	jr lt, SeqStep_FileBufferReturn
 

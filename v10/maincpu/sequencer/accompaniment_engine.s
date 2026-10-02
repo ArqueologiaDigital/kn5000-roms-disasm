@@ -35680,7 +35680,7 @@ AccBankData_InitSlot_OuterLoop:
 AccBankData_InitSlot_InnerLoop:
 	lda_dri XBC, 0x07, 0xe8, 0xe0
 	add xbc, (0x55dc:16)
-	lda_dri XBC, 0xe5, 0xa0, 0x00
+	lda xbc, (xbc+160:16)
 	cp (xbc), 0x0
 	jr nz, AccBankData_InitSlot_NonZero
 	ld (xbc), 0x20
@@ -35811,7 +35811,7 @@ AccBankData_ProcessWithCopy:
 	ld xwa, (0x3d5c:16)
 	add xwa, 0x16802
 	push xwa
-	lda_dri XWA, 0xe5, 0xa0, 0x00
+	lda xwa, (xbc+160:16)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -35944,7 +35944,7 @@ AccBankData_ProcessWithCopy_Loop:
 StyleBuf_ClearAllEntries:
 	lda xbc, (0x3f88:16)
 	ld xwa, xbc
-	lda_dri XBC, 0xe5, 0x00, 0x08
+	lda xbc, (xbc+2048)
 
 StyleBuf_ClearEntry_Outer:
 	ld xde, xwa
@@ -36047,7 +36047,7 @@ StyleFile_ClearAllTables:
 	lda xwa, (0x555c:16)
 	ld xbc, xwa
 	lda xde, (0x48dc:16)
-	lda_dri XHL, 0xe1, 0x80, 0x00
+	lda xhl, (xwa+128:16)
 
 StyleFile_ClearTable_Outer:
 	ld xwa, xde

@@ -78,12 +78,12 @@ TextRender_AdvanceStringPointer:
 	jrl nz, TextRender_CharEncodeAndDraw
 
 TextRender_Finalize:
-	lda_dri XWA, 0xfd, 0x2e, 0x01
+	lda xwa, (xsp+302)
 	calr SetChangeRect
 
 TextRender_PopAndReturn:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x3a, 0x01
+	lda xsp, (xsp+314)
 	retd 0x8
 PostTitle_Function_Helper2:
 	ld (0x03efa2:24), wa
@@ -231,7 +231,7 @@ GraphicsRender_ShortByteBlock:
 	jr	t, GraphicsRender_Start
 
 GraphicsRender_ProcessEntries:
-	lda_dri XSP, 0xfd, 0x6a, 0xff
+	lda xsp, (xsp-150)
 	push xiz
 	stl_dri XBC, 0xfd, 0x96, 0x00
 	ld xiz, xwa
@@ -270,7 +270,7 @@ VoiceMidi_EventHandler:
 
 GraphicsRender_ProcessEntries_Done:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x96, 0x00
+	lda xsp, (xsp+150:16)
 	ret
 
 GraphicsRender_Start:
@@ -317,10 +317,10 @@ GraphicsRender_Start_Done:
 	ret
 
 DrawText_LayoutAndRender:
-	lda_dri XSP, 0xfd, 0xee, 0xfe
+	lda xsp, (xsp-274)
 	push xiz
 	ld xiy, Str_No_0xCBE
-	lda_dri XIX, 0xfd, 0x0e, 0x01
+	lda xix, (xsp+270)
 	ld bc, 4:i3
 	ldirw
 	ld hl, (xwa + 2)
@@ -328,7 +328,7 @@ DrawText_LayoutAndRender:
 	dec 4, c
 	extz bc
 	ld (xsp + 4), bc
-	lda_dri XBC, 0xfd, 0x0a, 0x01
+	lda xbc, (xsp+266)
 	ld (xsp + 6), xbc
 	ld de, hl
 	extz xde
@@ -367,7 +367,7 @@ DrawText_NullTerminate:
 	ld xbc, xde
 	add xbc, xwa
 	ld (xbc), 0x0
-	lda_dri XWA, 0xfd, 0x0e, 0x01
+	lda xwa, (xsp+270)
 	ld xbc, 0:i3
 	push xbc
 	pushw_da 0xa4, 0xef, 0x03
@@ -375,7 +375,7 @@ DrawText_NullTerminate:
 	ld xbc, (xsp + 14)
 	calr DrawText_QueueOrDirect
 	pop xiz
-	lda_dri XSP, 0xfd, 0x12, 0x01
+	lda xsp, (xsp+274)
 	ret
 
 DrawText_LayoutAndRender_Variant1:
@@ -1108,11 +1108,11 @@ ColorBlit_ByteData:
 	ret
 
 DrawText_ExtendedLayout:
-	lda_dri XSP, 0xfd, 0xe4, 0xfe
+	lda xsp, (xsp-284)
 	push xiz
 	stl_dri XWA, 0xfd, 0x1c, 0x01
 	ld xiy, Str_No_0xDFE
-	lda_dri XIX, 0xfd, 0x14, 0x01
+	lda xix, (xsp+276)
 	ld bc, 4:i3
 	ldirw
 	ld XDE, (xsp + 0x011c)
@@ -1136,7 +1136,7 @@ DrawText_ExtLayout_SkipShift:
 	ld (xsp + 10), wa
 	ld wa, (xde + 11)
 	ld (xsp + 4), wa
-	lda_dri XWA, 0xfd, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld (xsp + 12), xwa
 	ld bc, (xsp + 10)
 	extz xbc
@@ -1189,7 +1189,7 @@ DrawText_ExtLayout_NullAndDraw:
 	sla wa, 2
 	lda xbc, (Str_No_0xCEE:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
-	lda_dri XWA, 0xfd, 0x14, 0x01
+	lda xwa, (xsp+276)
 	push xbc
 	pushw_da 0xa4, 0xef, 0x03
 	pushw_da 0xa2, 0xef, 0x03
@@ -1197,7 +1197,7 @@ DrawText_ExtLayout_NullAndDraw:
 	ld xde, (xsp + 16)
 	calr DrawText_QueueOrDirect
 	pop xiz
-	lda_dri XSP, 0xfd, 0x1c, 0x01
+	lda xsp, (xsp+284)
 	ret
 
 DrawText_ExtLayout_Variant1:
@@ -1285,11 +1285,11 @@ DrawText_ExtendedLayout_Skip:
 	ret
 
 DrawFunc_Init:
-	lda_dri XSP, 0xfd, 0xf4, 0xfe
+	lda xsp, (xsp-268)
 	push xiz
 	ld xiz, xwa
 	ld xiy, Str_No_0xE0E
-	lda_dri XIX, 0xfd, 0x08, 0x01
+	lda xix, (xsp+264)
 	ld bc, 4:i3
 	ldirw
 	ld wa, (xiz + 2)
@@ -1308,7 +1308,7 @@ DrawFunc_Init_SkipShift:
 	ld a, (xiz + 9)
 	ldfr_berp A, 0xf0
 	extz ix
-	lda_dri XBC, 0xfd, 0x04, 0x01
+	lda xbc, (xsp+260)
 	ld wa, de
 	extz xwa
 	div wa, 0x28
@@ -2249,7 +2249,7 @@ InitPaletteRGB:
 	lda xde, (0x0324fc:24)
 	lda xwa, (0xeb37de:24)
 	ld xbc, xwa
-	lda_dri XHL, 0xe1, 0x00, 0x04
+	lda xhl, (xwa+1024)
 
 InitPaletteRGB_CopyLoop:
 	ld XWA, (xbc+)
@@ -3493,7 +3493,7 @@ BitMapOut:
 	.include "ui/bitmap_out_routines.s"
 	.include "ui/ui_mode_handlers.s"
 PmBankScreenProc:
-	lda_dri XSP, 0xfd, 0xe8, 0xfe
+	lda xsp, (xsp-280)
 	push xiz
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
@@ -3578,10 +3578,10 @@ PmBank_Select:
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x0c, 0x01
-	lda_dri XHL, 0xfd, 0x08, 0x01
+	lda xwa, (xsp+268)
+	lda xhl, (xsp+264)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	sub bc, 0xf
@@ -3619,10 +3619,10 @@ PmBank_Select_DrawFirstRow:
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x0c, 0x01
-	lda_dri XHL, 0xfd, 0x08, 0x01
+	lda xwa, (xsp+268)
+	lda xhl, (xsp+264)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	sub bc, 0xf
@@ -3705,10 +3705,10 @@ PmBank_BankChanged_Lookup:
 	lda xbc, (SeqChan_Map_10ch:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	call GetEditSwPoint
-	lda_dri XDE, 0xfd, 0x0c, 0x01
-	lda_dri XHL, 0xfd, 0x08, 0x01
+	lda xde, (xsp+268)
+	lda xhl, (xsp+264)
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
 	sub wa, 0xf
@@ -3921,12 +3921,12 @@ PmBank_CallHandler:
 
 PmBank_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x18, 0x01
+	lda xsp, (xsp+280)
 	ret
 PmBank_Boundary:
 
 SineWaveScreenProc:
-	lda_dri XSP, 0xfd, 0xe8, 0xfe
+	lda xsp, (xsp-280)
 	push xiz
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
@@ -4034,11 +4034,11 @@ PmBank_OnPaint:
 	ld xbc, xiz
 	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ldw (xbc), 0xa
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0x6
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -4055,11 +4055,11 @@ PmBank_OnPaint:
 	pushw 0xf7
 	ld xde, TransposeNoteStr_C_0x12
 	call DrawString
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ldw (xbc), 0x8
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0x1c
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -4076,11 +4076,11 @@ PmBank_OnPaint:
 	pushw 0xf7
 	ld xde, TransposeNoteStr_C_0x26
 	call DrawString
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ldw (xbc), 0x0
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0x2a
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -4097,11 +4097,11 @@ PmBank_OnPaint:
 	pushw 0xf7
 	ld xde, TransposeNoteStr_C_0x58
 	call DrawString
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ldw (xbc), 0x28
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0xdc
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -4140,10 +4140,10 @@ PmBank_OnSelect:
 	sla wa, 3
 	lda xbc, (VariationStr_V1_0x3C:24)
 	lda_dri XIY, 0x07, 0xe4, 0xe0
-	lda_dri XIX, 0xfd, 0x0c, 0x01
+	lda xix, (xsp+268)
 	ld bc, 4:i3
 	ldirw
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ld bc, 0:i3
 	ldw de, 0xf5
 	call DrawDesignBox
@@ -4158,10 +4158,10 @@ PmBank_OnSelect:
 	sla wa, 3
 	lda xbc, (VariationStr_V1_0x3C:24)
 	lda_dri XIY, 0x07, 0xe4, 0xe0
-	lda_dri XIX, 0xfd, 0x0c, 0x01
+	lda xix, (xsp+268)
 	ld bc, 4:i3
 	ldirw
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ldw bc, 0xc1
 	ld de, 7:i3
 	call DrawDesignBox
@@ -4228,7 +4228,7 @@ PmBank_CallInheritedDirect:
 
 PmBank_OnDefault:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x18, 0x01
+	lda xsp, (xsp+280)
 	ret
 
 ToneGen_WriteParamByIndex:
@@ -5249,7 +5249,7 @@ MainMssSetUp_ReturnZero:
 MainMssSetUp_End:
 
 AcFreeSplitBoxProc:
-	lda_dri XSP, 0xfd, 0xfc, 0xfe
+	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
@@ -5392,7 +5392,7 @@ UI_AccChordBoxProc_Return:
 
 AcFreeSplit_PopAndReturn:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x04, 0x01
+	lda xsp, (xsp+260)
 	ret
 
 AcTranspose_ParamData:
@@ -5401,7 +5401,7 @@ AcTranspose_ParamData:
 AcTranspose_ParamData_End:
 
 AcTransposeBoxProc:
-	lda_dri XSP, 0xfd, 0xfc, 0xfe
+	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01

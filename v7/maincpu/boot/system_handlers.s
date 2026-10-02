@@ -6960,7 +6960,7 @@ SLIDE_Decompress_4K_Init:
 
 	ld xwa, xhl
 
-	lda_dri XBC, 0xed, 0xee, 0x0f
+	lda xbc, (xhl+4078)
 
 
 
@@ -7092,7 +7092,7 @@ SLIDE_Decompress_8K_Init:
 
 	ld xwa, xhl
 
-	lda_dri XBC, 0xed, 0xf6, 0x1f
+	lda xbc, (xhl+8182)
 
 
 

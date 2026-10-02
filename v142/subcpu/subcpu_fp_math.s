@@ -824,7 +824,7 @@ FP_SinCos_Kernel_InRange:
 	lda xwa, (xsp + 116)
 	push xwa
 	lda xde, (FPConst_InvPi:24)
-	lda_dri XBC, 0xFD, 0x98, 0x00
+	lda xbc, (xsp+152:16)
 	lda xwa, (xsp + 72)
 	call FP_dmul
 	lda xiy, (xsp + 72)
@@ -861,7 +861,7 @@ FP_SinCos_Kernel_Phase2:
 
 ; Take |n| and, on the half-quadrant case, subtract 0.5 (0x01F6A6).
 FP_SinCos_Kernel_Phase3:
-	lda_dri XIY, 0xFD, 0x8C, 0x00
+	lda xiy, (xsp+140:16)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -871,7 +871,7 @@ FP_SinCos_Kernel_Phase3:
 	call FP_fabs
 	lda xsp, (xsp + 12)
 	lda xwa, (xsp + 92)
-	lda_dri XBC, 0xFD, 0x94, 0x00
+	lda xbc, (xsp+148:16)
 	ld de, 4:i3
 	call FP_dcmp
 	cp hl, 0:i3
@@ -884,9 +884,9 @@ FP_SinCos_Kernel_Phase3:
 ; Cody-Waite reduction proper: subtract n*pi_hi then n*pi_lo, leaving z in the local at
 ; (XSP+0x7C); then the |z| <= 2.3283e-10 shortcut test.
 FP_SinCos_Kernel_Phase4:
-	lda_dri XWA, 0xFD, 0x8C, 0x00
+	lda xwa, (xsp+140:16)
 	push xwa
-	lda_dri XIY, 0xFD, 0x90, 0x00
+	lda xiy, (xsp+144:16)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -904,10 +904,10 @@ FP_SinCos_Kernel_Phase4:
 	push xwa
 	call FP_modf
 	lda xde, (FPConst_PiHi_CodyWaite:24)
-	lda_dri XBC, 0xFD, 0x84, 0x00
+	lda xbc, (xsp+132:16)
 	lda xwa, (xsp + 84)
 	call FP_dmul
-	lda_dri XBC, 0xFD, 0x9C, 0x00
+	lda xbc, (xsp+156:16)
 	lda xwa, (xsp + 84)
 	ld xde, xwa
 	call FP_DP_Sub
@@ -920,13 +920,13 @@ FP_SinCos_Kernel_Phase4:
 	call FP_DP_CopyOrNegate8
 	lda xwa, (xsp + 72)
 	ld xbc, xwa
-	lda_dri XDE, 0xFD, 0x84, 0x00
+	lda xde, (xsp+132:16)
 	call FP_dmul
 	lda xbc, (xsp + 84)
 	lda xde, (xsp + 72)
-	lda_dri XWA, 0xFD, 0x8C, 0x00
+	lda xwa, (xsp+140:16)
 	call FP_DP_Sub
-	lda_dri XIY, 0xFD, 0x8C, 0x00
+	lda xiy, (xsp+140:16)
 	ld xix, (xiy + 4)
 	push xix
 	ld xix, (xiy)
@@ -1033,7 +1033,7 @@ FP_SinCos_Kernel_FinalCopy:
 ; Kernel epilogue: pop XIZ, release the 0x80-byte frame.
 FP_SinCos_Kernel_Epilog:
 	pop xiz
-	lda_dri XSP, 0xFD, 0x80, 0x00
+	lda xsp, (xsp+128:16)
 	ret
 
 ; Signed 64-bit divide/modulo helper for the C runtime. Inputs XWA:QWA (dividend) and

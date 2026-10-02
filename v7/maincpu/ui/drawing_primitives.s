@@ -2771,7 +2771,7 @@ DrawIcons_Impl_ColLoop:
 	jr lt, DrawIcons_Impl_ColLoop
 	ld xwa, (xsp + 16)
 	incw 1, (xwa)
-	lda_dri XHL, 0xed, 0x40, 0x01
+	lda xhl, (xhl+320)
 	inc 1, de
 	cp de, 0x18
 	jr lt, DrawIcons_Impl_RowLoop
@@ -3923,7 +3923,7 @@ DrawBitmapFile_Impl_BuildDirtyRect:
 
 DrawBitmapFile_Impl_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x38, 0x04
+	lda xsp, (xsp+1080)
 	ret
 
 ; =============================================================================
@@ -4038,7 +4038,7 @@ DrawString_DeferredDispatch:
 	ret
 
 DrawString_Impl:
-	lda_dri XSP, 0xfd, 0xc4, 0xfe
+	lda xsp, (xsp-316)
 	push xiz
 	stl_dri XDE, 0xfd, 0x38, 0x01
 	stl_dri XWA, 0xfd, 0x3c, 0x01
@@ -4073,10 +4073,10 @@ DrawString_Impl_ClipXMax:
 
 DrawString_Impl_ClipYMax:
 	ld xiy, xbc
-	lda_dri XIX, 0xfd, 0x2c, 0x01
+	lda xix, (xsp+300)
 	ldiw
 	ldiw
-	lda_dri XIX, 0xfd, 0x2c, 0x01
+	lda xix, (xsp+300)
 	cpw (xix), 0x0
 	jr ge, DrawString_Impl_ClipCursorXMin
 	ldw (xix), 0x0
@@ -4111,7 +4111,7 @@ DrawString_Impl_FixedWidthKerning:
 
 DrawString_Impl_FontSetup:
 	ld (xsp + 12), xiy
-	lda_dri XIZ, 0xfd, 0x30, 0x01
+	lda xiz, (xsp+304)
 	lda xiy, (xiz + 2)
 	ld wa, (xbc)
 	ld (xiy), wa
@@ -4180,7 +4180,7 @@ DrawString_Impl_KerningDone:
 
 DrawString_Impl_ComputeDirtyRect:
 	add_sriw_mr WA, 0xfd, 0x34, 0x01
-	lda_dri XWA, 0xfd, 0x30, 0x01
+	lda xwa, (xsp+304)
 	lda xde, (xwa + 2)
 	ld XBC, (xsp + 0x013c)
 	ld bc, (xbc + 2)
@@ -4272,7 +4272,7 @@ DrawString_Impl_ColumnLoop:
 	ldw bc, 0x8
 
 DrawString_Impl_ColumnSetup:
-	lda_dri XWA, 0xfd, 0x2c, 0x01
+	lda xwa, (xsp+300)
 	ld (xsp + 32), xwa
 	inc 2, xwa
 	ld (xsp + 36), xwa
@@ -4294,7 +4294,7 @@ DrawString_Impl_ColumnSetup:
 DrawString_Impl_RowLoop:
 	cp (xde), 0x0
 	jr z, DrawString_Impl_RowAdvance
-	lda_dri XHL, 0xfd, 0x28, 0x01
+	lda xhl, (xsp+296)
 	ld xwa, (xsp + 36)
 	ld wa, (xwa)
 	add wa, (xsp + 22)
@@ -4371,12 +4371,12 @@ DrawString_Impl_CharAdvance:
 	jrl nz, DrawString_Impl_CharLoop
 
 DrawString_Impl_SetChangeRect:
-	lda_dri XWA, 0xfd, 0x30, 0x01
+	lda xwa, (xsp+304)
 	calr SetChangeRect
 
 DrawString_Impl_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x3c, 0x01
+	lda xsp, (xsp+316)
 	retd 0x8
 
 ; =============================================================================
@@ -4393,7 +4393,7 @@ DrawString_Impl_Return:
 ;   Stack: font_id (word), foreground_color (word), background_color (word)
 ; =============================================================================
 DrawStringCentered:
-	lda_dri XSP, 0xfd, 0xf2, 0xfe
+	lda xsp, (xsp-270)
 	pushw iz
 	stl_dri XBC, 0xfd, 0x08, 0x01
 	stl_dri XWA, 0xfd, 0x0c, 0x01
@@ -4411,10 +4411,10 @@ DrawStringCentered:
 	call GetCharDescent
 	ld XWA, (xsp + 0x0108)
 	ld xiy, xwa
-	lda_dri XIX, 0xfd, 0x04, 0x01
+	lda xix, (xsp+260)
 	ldiw
 	ldiw
-	lda_dri XBC, 0xfd, 0x04, 0x01
+	lda xbc, (xsp+260)
 	ld wa, iz
 	exts xwa
 	divs wa, 0x2
@@ -4426,7 +4426,7 @@ DrawStringCentered:
 	sub (xbc + 2), wa
 	ld XWA, (xsp + 0x0118)
 	call GetCenteredDelta
-	lda_dri XBC, 0xfd, 0x04, 0x01
+	lda xbc, (xsp+260)
 	add (xbc + 2), hl
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0118)
@@ -4436,7 +4436,7 @@ DrawStringCentered:
 	ld XWA, (xsp + 0x0114)
 	calr DrawString
 	popw iz
-	lda_dri XSP, 0xfd, 0x0e, 0x01
+	lda xsp, (xsp+270)
 	retd 0x8
 
 ; =============================================================================
@@ -4490,7 +4490,7 @@ DrawStringLeftJustify:
 ; Positions text at x = rect.right - 4 - text_width, vertically centered.
 ; =============================================================================
 DrawStringRightJustify:
-	lda_dri XSP, 0xfd, 0xf0, 0xfe
+	lda xsp, (xsp-272)
 	push xiz
 	stl_dri XBC, 0xfd, 0x0c, 0x01
 	stl_dri XWA, 0xfd, 0x10, 0x01
@@ -4509,10 +4509,10 @@ DrawStringRightJustify:
 	call GetCharDescent
 	ld XWA, (xsp + 0x010c)
 	ld xiy, xwa
-	lda_dri XIX, 0xfd, 0x08, 0x01
+	lda xix, (xsp+264)
 	ldiw
 	ldiw
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ld XWA, (xsp + 0x0110)
 	ld wa, (xwa + 4)
 	dec 4, wa
@@ -4525,7 +4525,7 @@ DrawStringRightJustify:
 	sub (xbc + 2), wa
 	ld xwa, xiz
 	call GetCenteredDelta
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	add (xbc + 2), hl
 	lda xde, (xsp + 8)
 	push xiz
@@ -4534,7 +4534,7 @@ DrawStringRightJustify:
 	ld XWA, (xsp + 0x0118)
 	calr DrawString
 	pop xiz
-	lda_dri XSP, 0xfd, 0x10, 0x01
+	lda xsp, (xsp+272)
 	retd 0x8
 
 ; =============================================================================

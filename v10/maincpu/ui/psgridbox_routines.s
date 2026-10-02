@@ -119,10 +119,10 @@ PsGridBox_ShowHide_CountLoop:
 	ld a, (xwa)
 	cp a, 0:i3
 	jr nz, PsGridBox_ShowHide_CountPipe
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld XWA, (xsp + 0x014e)
 	calr GetClientBox
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld wa, (xbc + 4)
 	ld (xsp + 8), wa
 	ld wa, (xbc)
@@ -325,7 +325,7 @@ PsGridBox_ShowHide_FinalRow:
 	ld xwa, (xwa)
 	add xwa, xbc
 	ldw (xwa), 0x5
-	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda xwa, (xsp+318)
 	ld bc, (xwa + 2)
 	ld hl, (xwa + 6)
 	sub hl, bc
@@ -410,7 +410,7 @@ PsGridBox_Confirm:
 	ld XWA, (xsp + 0x014e)
 	ld xbc, EVT_GET_FIXED_COL_STR
 	call SendEvent
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld xhl, (xsp + 20)
 	lda xde, (xhl + 54)
 	ld xwa, (xde)
@@ -464,7 +464,7 @@ PsGridBox_Confirm_DrawCol:
 	ld xwa, (xde)
 	ld xhl, (xwa)
 	add xhl, xbc
-	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda xwa, (xsp+318)
 	ld bc, (xhl)
 	ld (xwa), bc
 	ld hl, (xsp + 12)
@@ -476,10 +476,10 @@ PsGridBox_Confirm_DrawCol:
 	add xbc, xhl
 	ld bc, (xbc)
 	ld (xwa + 4), bc
-	lda_dri XBC, 0xfd, 0x32, 0x01
+	lda xbc, (xsp+306)
 	calr GetBoxCenter
-	lda_dri XDE, 0xfd, 0x3e, 0x01
-	lda_dri XBC, 0xfd, 0x32, 0x01
+	lda xde, (xsp+318)
+	lda xbc, (xsp+306)
 	ld xwa, (xsp + 20)
 	ld xwa, (xwa + 28)
 	push xwa
@@ -503,7 +503,7 @@ PsGridBox_Confirm_Rows:
 	ld XWA, (xsp + 0x014e)
 	ld xbc, EVT_GET_FIXED_ROW_STR
 	call SendEvent
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld xhl, (xsp + 20)
 	lda xde, (xhl + 50)
 	ld xwa, (xde)
@@ -560,7 +560,7 @@ PsGridBox_Confirm_DrawRow:
 	add xwa, xde
 	ld de, (xwa)
 	inc 3, de
-	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda xwa, (xsp+318)
 	ld (xwa + 2), de
 	ld de, (xsp + 12)
 	inc 1, de
@@ -572,10 +572,10 @@ PsGridBox_Confirm_DrawRow:
 	ld bc, (xbc)
 	dec 1, bc
 	ld (xwa + 6), bc
-	lda_dri XBC, 0xfd, 0x32, 0x01
+	lda xbc, (xsp+306)
 	calr GetBoxCenter
-	lda_dri XWA, 0xfd, 0x3e, 0x01
-	lda_dri XDE, 0xfd, 0x32, 0x01
+	lda xwa, (xsp+318)
+	lda xde, (xsp+306)
 	ld xbc, (xsp + 20)
 	ld xbc, (xbc + 28)
 	push xbc
@@ -591,14 +591,14 @@ PsGridBox_Confirm_DrawRow:
 	jr PsGridBox_Confirm_RowDone
 
 PsGridBox_Confirm_DrawSep:
-	lda_dri XBC, 0xfd, 0x36, 0x01
+	lda xbc, (xsp+310)
 	ld XWA, (xsp + 0x014e)
 	calr GetClientBox
-	lda_dri XWA, 0xfd, 0x2e, 0x01
-	lda_dri XDE, 0xfd, 0x36, 0x01
+	lda xwa, (xsp+302)
+	lda xde, (xsp+310)
 	ld bc, (xde)
 	ld (xwa), bc
-	lda_dri XBC, 0xfd, 0x2a, 0x01
+	lda xbc, (xsp+298)
 	ld de, (xde + 4)
 	ld (xbc), de
 	ld hl, (xsp + 12)
@@ -700,7 +700,7 @@ PsGridBox_Select:
 	jr z, PsGridBox_Select_NoOld
 	ld wa, (xbc)
 	ld (xsp + 18), wa
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld XWA, (xsp + 0x014e)
 	calr GetClientBox
 	ld xix, (xsp + 20)
@@ -715,7 +715,7 @@ PsGridBox_Select:
 	add xwa, xhl
 	ld hl, (xwa)
 	inc 1, hl
-	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda xwa, (xsp+318)
 	ld (xwa + 2), hl
 	incw 1, (xwa)
 	decm 1, (xwa + 4)
@@ -743,10 +743,10 @@ PsGridBox_Select_Scroll:
 	ld xwa, (xsp + 20)
 	cpw (xwa + 40), 0x0
 	jr z, PsGridBox_Select_StoreSel
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld XWA, (xsp + 0x014e)
 	calr GetClientBox
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld wa, (xbc + 2)
 	stw_dri WA, 0xfd, 0x30, 0x01
 	ld wa, (xbc + 6)
@@ -765,13 +765,13 @@ PsGridBox_Select_ScrollLoop:
 	ld xwa, (xhl)
 	ld xbc, (xwa)
 	add xbc, xde
-	lda_dri XWA, 0xfd, 0x2e, 0x01
+	lda xwa, (xsp+302)
 	ld bc, (xbc)
 	ld (xwa), bc
 	ld xbc, (xhl)
 	ld xhl, (xbc)
 	add xhl, xde
-	lda_dri XBC, 0xfd, 0x2a, 0x01
+	lda xbc, (xsp+298)
 	ld de, (xhl)
 	ld (xbc), de
 	ldw de, 0xff
@@ -815,7 +815,7 @@ PsGridBox_Select_SendCurr:
 	ld XWA, (xsp + 0x014e)
 	ld xbc, EVT_REQUEST_GRID_DRAW
 	call SendEvent
-	lda_dri XBC, 0xfd, 0x3e, 0x01
+	lda xbc, (xsp+318)
 	ld XWA, (xsp + 0x014e)
 	calr GetClientBox
 	ld xde, (xsp + 20)
@@ -830,7 +830,7 @@ PsGridBox_Select_SendCurr:
 	add xwa, xhl
 	ld hl, (xwa)
 	inc 1, hl
-	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda xwa, (xsp+318)
 	ld (xwa + 2), hl
 	incw 1, (xwa)
 	decm 1, (xwa + 4)
@@ -917,7 +917,7 @@ PsGridBox_Scroll_CalcBounds:
 	add xwa, xbc
 	ld bc, (xwa)
 	inc 3, bc
-	lda_dri XWA, 0xfd, 0x3e, 0x01
+	lda xwa, (xsp+318)
 	ld (xwa + 2), bc
 	ld iz, (xde)
 	exts xiz
@@ -949,7 +949,7 @@ PsGridBox_Scroll_CalcBounds:
 	ld bc, (xbc)
 	dec 1, bc
 	ld (xwa + 6), bc
-	lda_dri XBC, 0xfd, 0x32, 0x01
+	lda xbc, (xsp+306)
 	calr GetBoxCenter
 	calr GetDialFocus
 	cpl_sri_rm XHL, 0xfd, 0x4e, 0x01
@@ -971,8 +971,8 @@ PsGridBox_Scroll_Unfocused:
 	ld de, 0:i3
 
 PsGridBox_Scroll_Render:
-	lda_dri XHL, 0xfd, 0x3e, 0x01
-	lda_dri XBC, 0xfd, 0x32, 0x01
+	lda xhl, (xsp+318)
+	lda xbc, (xsp+306)
 	ld xix, (xsp + 20)
 	ld xwa, (xix + 28)
 	push xwa
@@ -1141,6 +1141,6 @@ PsGridBox_Default:
 
 PsGridBox_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x4e, 0x01
+	lda xsp, (xsp+334)
 	ret
 

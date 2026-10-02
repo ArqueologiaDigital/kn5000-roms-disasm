@@ -73,7 +73,7 @@ NoteEditSy_CopyEntryLoop:
 NoteEditSy_DirectCopy:
 	ld xbc, (7504:16)
 	ld xwa, xbc
-	lda_dri XBC, 0xe5, 0xa4, 0x06
+	lda xbc, (xbc+1700)
 
 NoteEditSy_DirectCopyLoop:
 	ld (xwa+), 0x20
@@ -3070,7 +3070,7 @@ SeqNote_Reconfig_ProcessChannel:
 
 SeqVoice_CopyEventToSlot:
 	lda xix, (xsp)
-	lda_dri XWA, 0xed, 0x88, 0x00
+	lda xwa, (xhl+136:16)
 	ld xbc, xix
 	lda xde, (xwa + 2)
 	lda xhl, (xix + 6)
@@ -3159,7 +3159,7 @@ SeqNote_Reconfig_SubDone:
 	ldto_berp A, 0xe2
 	extz wa
 	inc 2, wa
-	lda_dri XHL, 0xe9, 0x88, 0x00
+	lda xhl, (xde+136:16)
 	ld ix, wa
 	extz xix
 	add xix, xhl
@@ -4185,7 +4185,7 @@ SeqNoteCh_StoreChannel:
 	ld (xsp + 8), a
 
 SeqNoteCh_WriteStatusByte:
-	lda_dri XHL, 0xf1, 0x82, 0x00
+	lda xhl, (xix+130:16)
 	cp (7522:16), 1
 	jr nz, SeqNote_HandleMasterChannel
 	ld a, (xsp + 8)
@@ -6502,7 +6502,7 @@ SeqAccVoice_CopySlotLoop:
 	ldto_berp A, 0xe2
 	extz wa
 	inc 2, wa
-	lda_dri XBC, 0xed, 0x98, 0x00
+	lda xbc, (xhl+152:16)
 	ld de, wa
 	extz xde
 	add xde, xbc
@@ -6564,7 +6564,7 @@ SeqAccVoice_CopyChannelLoop:
 	extz wa
 	inc 2, wa
 	lda xde, (9016:16)
-	lda_dri XBC, 0xe9, 0x98, 0x00
+	lda xbc, (xde+152:16)
 	ld iy, wa
 	extz xiy
 	add xiy, xbc
@@ -6577,7 +6577,7 @@ SeqAccVoice_CopyChannelLoop:
 	jr c, SeqAccVoice_CopyChannelLoop
 	cp (xix), 0x82
 	jr nz, SeqPlay_WriteVoiceData
-	lda_dri XHL, 0xe9, 0x9b, 0x00
+	lda xhl, (xde+155:16)
 	ld a, (xhl)
 	cp a, 0x30
 	jr ule, SeqAccVoice_AdjustOctave
@@ -6588,7 +6588,7 @@ SeqAccVoice_CopyChannelLoop:
 
 SeqAccVoice_AdjustOctave:
 	addmi8 (xhl), 0x30
-	lda_dri XDE, 0xe9, 0x98, 0x00
+	lda xde, (xde+152:16)
 	ld wa, (xde)
 	ld a, (xhl)
 	ld (xix + 1), a
@@ -6610,7 +6610,7 @@ SeqAccVoice_WriteChannelData:
 
 SeqPlay_WriteVoiceData:
 	lda xhl, (9016:16)
-	lda_dri XWA, 0xed, 0x98, 0x00
+	lda xwa, (xhl+152:16)
 	ld (xsp + 6), xwa
 	ld wa, (xwa)
 	cp wa, (xsp + 20)
@@ -6823,7 +6823,7 @@ SeqPlay_Chord_CopyDataLoop:
 	ldto_berp A, 0xe2
 	extz wa
 	inc 2, wa
-	lda_dri XHL, 0xe9, 0xa0, 0x00
+	lda xhl, (xde+160:16)
 	ld ix, wa
 	extz xix
 	add xix, xhl
@@ -7385,7 +7385,7 @@ SeqPlay_Reconfig_CopyPartBits:
 	lda xbc, (xsp + 24)
 	lda xwa, (9332:16)
 	ld (xsp + 4), xwa
-	lda_dri XWA, 0xe1, 0x88, 0x00
+	lda xwa, (xwa+136:16)
 	ld (xsp + 12), xwa
 	ld wa, (xwa)
 	ld (xbc), wa
@@ -7397,7 +7397,7 @@ SeqPlay_Reconfig_CopyPartBits:
 	ld (xde), wa
 	lda xhl, (xsp + 20)
 	ld xwa, (xsp + 4)
-	lda_dri XIX, 0xe1, 0x80, 0x00
+	lda xix, (xwa+128:16)
 	ld wa, (xix)
 	ld (xhl), wa
 	lda xwa, (xhl + 2)
@@ -7420,7 +7420,7 @@ SeqPlay_Reconfig_CopyPartBits:
 	ldfr_werp WA, 0xfa
 	ld iz, (xde)
 	ld xwa, (xsp + 4)
-	lda_dri XIY, 0xe1, 0x90, 0x00
+	lda xiy, (xwa+144:16)
 	ldto_werp WA, 0xfa
 	ld (xiy), wa
 	ld (xiy + 2), iz
@@ -7538,7 +7538,7 @@ SeqChanAssign_CheckCount:
 
 SeqChanAssign_ReadEventData:
 	lda xix, (xsp + 2)
-	lda_dri XWA, 0xe1, 0x88, 0x00
+	lda xwa, (xwa+136:16)
 	ld xbc, xix
 	lda xde, (xwa + 2)
 	lda xhl, (xix + 6)
@@ -7640,7 +7640,7 @@ SeqChanAssignExt_CheckCount:
 
 SeqChanAssignExt_ReadEventData:
 	lda xix, (xsp + 26)
-	lda_dri XWA, 0xe1, 0x88, 0x00
+	lda xwa, (xwa+136:16)
 	ld xbc, xix
 	lda xde, (xwa + 2)
 	lda xhl, (xix + 6)
@@ -7738,7 +7738,7 @@ SeqChanAssignExt_BuildSwapData:
 	lda xwa, (xsp + 18)
 	ld (xsp + 2), xwa
 	lda xix, (9332:16)
-	lda_dri XDE, 0xf1, 0x80, 0x00
+	lda xde, (xix+128:16)
 	ld xwa, (xsp + 2)
 	ld bc, (xde)
 	ld (xwa+), BC
@@ -7748,7 +7748,7 @@ SeqChanAssignExt_BuildSwapData:
 	ld xwa, (xsp + 6)
 	ld (xwa), hl
 	lda xhl, (xsp + 22)
-	lda_dri XWA, 0xf1, 0x88, 0x00
+	lda xwa, (xix+136:16)
 	ld (xsp + 10), xwa
 	ld wa, (xwa)
 	ld (xhl), wa
@@ -7763,7 +7763,7 @@ SeqChanAssignExt_BuildSwapData:
 	ld (xbc), iz
 	ld de, (xhl)
 	ld bc, (xiy)
-	lda_dri XWA, 0xf1, 0x90, 0x00
+	lda xwa, (xix+144:16)
 	ld (xwa), de
 	ld (xwa + 2), bc
 	ld ix, (xhl)
@@ -7796,7 +7796,7 @@ SeqChanAssignExt_BuildSwapData:
 
 SeqChanAssign3_ReadEventData:
 	lda xix, (xsp + 26)
-	lda_dri XWA, 0xe1, 0x88, 0x00
+	lda xwa, (xwa+136:16)
 	ld xbc, xix
 	lda xde, (xwa + 2)
 	lda xhl, (xix + 6)
@@ -8145,7 +8145,7 @@ SeqRealloc_SetupSwapData:
 	ld wa, (xbc + 2)
 	ld (xix), wa
 	lda xiy, (xsp + 12)
-	lda_dri XBC, 0xf9, 0x88, 0x00
+	lda xbc, (xiz+136:16)
 	ld wa, (xbc)
 	ld (xiy), wa
 	ld wa, (xbc + 2)
@@ -8219,7 +8219,7 @@ SeqPlay_ReadAndProcessEvents:
 
 SeqPlay_CheckEventTiming:
 	lda xix, (9016:16)
-	lda_dri XHL, 0xf1, 0x80, 0x00
+	lda xhl, (xix+128:16)
 	ldw_sri0 WA, (xix + 0x0088)
 	ld de, (xhl)
 	lda xbc, (xsp + 24)
@@ -8240,7 +8240,7 @@ SeqPlay_ReadEvents_CopyDataLoop:
 	ldto_berp A, 0xe2
 	extz wa
 	inc 2, wa
-	lda_dri XBC, 0xf1, 0x80, 0x00
+	lda xbc, (xix+128:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xbc
@@ -8288,7 +8288,7 @@ SeqPlay_PendingCh_CopyDataLoop:
 	ldto_berp A, 0xe2
 	extz wa
 	inc 2, wa
-	lda_dri XBC, 0xf1, 0x88, 0x00
+	lda xbc, (xix+136:16)
 	ld iz, wa
 	extz xiz
 	add xiz, xbc
@@ -10832,7 +10832,7 @@ SeqPartInit_PartShiftDone:
 	jr nz, SeqPartInit_PartLoopNext
 	ld hl, (xix)
 	ld de, (xiy)
-	lda_dri XWA, 0xf9, 0x98, 0x00
+	lda xwa, (xiz+152:16)
 	ld (xwa), hl
 	ld (xwa + 2), de
 
@@ -11423,13 +11423,13 @@ SeqVoice_InitForRepeatMode:
 	ld (xsp + 6), 0x82
 	calr SeqVoice_FindChannelSetup
 	lda xbc, (9332:16)
-	lda_dri XWA, 0xe5, 0x80, 0x00
+	lda xwa, (xbc+128:16)
 	ldw (xwa), 0x1
 	ldw (xwa + 2), 0x5
-	lda_dri XWA, 0xe5, 0x90, 0x00
+	lda xwa, (xbc+144:16)
 	ldw (xwa), 0x1
 	ldw (xwa + 2), 0x5
-	lda_dri XWA, 0xe5, 0x88, 0x00
+	lda xwa, (xbc+136:16)
 	ldw (xwa), 0x2
 	ldw (xwa + 2), 0x5
 	lda xbc, (9184:16)
@@ -15466,7 +15466,7 @@ PartCopyBuf_ComputeSrcAddr:
 	ld w, 0x0:opc
 	extz xwa
 	sll xwa, 11
-	lda_dri XWA, 0xe1, 0xe0, 0x02
+	lda xwa, (xwa+736)
 	lda xde, (0x0ab000:24)
 	add xde, xwa
 
@@ -15481,7 +15481,7 @@ PartCopyBuf_ComputeDstAddr:
 	ld b, 0x0:opc
 	extz xbc
 	sll xbc, 11
-	lda_dri XWA, 0xe5, 0xe0, 0x02
+	lda xwa, (xbc+736)
 	lda xbc, (0x0ab000:24)
 	add xbc, xwa
 
@@ -23506,7 +23506,7 @@ SeqAccomp_ReassignWriteLoop:
 	ldto_berp A, 0xe2
 	extz wa
 	inc 2, wa
-	lda_dri XBC, 0xed, 0x98, 0x00
+	lda xbc, (xhl+152:16)
 	ld de, wa
 	extz xde
 	add xde, xbc

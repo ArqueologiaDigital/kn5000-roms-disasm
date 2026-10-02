@@ -7004,7 +7004,7 @@ SLIDE_Decompress_4K_Init:
 	inc 2, xsp
 	ld (1570:16), xhl
 	ld xwa, xhl
-	lda_dri XBC, 0xed, 0xee, 0x0f
+	lda xbc, (xhl+4078)
 
 SLIDE_Decompress_4K_FillRing:
 	ld (xwa+), 0x00
@@ -7127,7 +7127,7 @@ SLIDE_Decompress_8K_Init:
 	inc 2, xsp
 	ld (1570:16), xhl
 	ld xwa, xhl
-	lda_dri XBC, 0xed, 0xf6, 0x1f
+	lda xbc, (xhl+8182)
 
 SLIDE_Decompress_8K_FillRing:
 	ld (xwa+), 0x00

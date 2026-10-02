@@ -7343,7 +7343,7 @@ FSWAss_Epilogue:
 	ret
 
 FSWAssGridCheck:
-	lda_dri XSP, 0xfd, 0xf8, 0xfe
+	lda xsp, (xsp-264)
 	push xiz
 	ld xwa, xbc
 	cp xbc, EVT_REQUEST_GRID_DRAW
@@ -7935,7 +7935,7 @@ FSWAssGrid_EventDispatch_Skip3_Skip:
 	jrl	AudioTable_SendEventAndContinue
 
 FSWAssGrid_CellSelect:
-	lda_dri XBC, 0xfd, 0x04, 0x01
+	lda xbc, (xsp+260)
 	ld xwa, xde
 	srl xwa, 16
 	ldiw_erp 0xe2, 0
@@ -7966,7 +7966,7 @@ FSWAssGrid_CellSelect:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x04, 0x01
+	lda xde, (xsp+260)
 	ld xbc, EVT_GRID_DRAW
 	jrl AudioTable_SendEventAndContinue
 
@@ -7993,7 +7993,7 @@ FSWAssGrid_CheckCell_1_3:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x04, 0x01
+	lda xde, (xsp+260)
 	ld xbc, EVT_GRID_DRAW
 	jrl AudioTable_SendEventAndContinue
 
@@ -8020,7 +8020,7 @@ FSWAssGrid_CheckCell_1_4:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x04, 0x01
+	lda xde, (xsp+260)
 	ld xbc, EVT_GRID_DRAW
 	jrl AudioTable_SendEventAndContinue
 
@@ -8047,7 +8047,7 @@ FSWAssGrid_CheckCell_1_5:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x04, 0x01
+	lda xde, (xsp+260)
 	ld xbc, EVT_GRID_DRAW
 	jrl AudioTable_SendEventAndContinue
 
@@ -8074,7 +8074,7 @@ FSWAssGrid_CheckCell_1_6:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x04, 0x01
+	lda xde, (xsp+260)
 	ld xbc, EVT_GRID_DRAW
 	jrl AudioTable_SendEventAndContinue
 
@@ -8101,7 +8101,7 @@ FSWAssGrid_CheckCell_1_7:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x04, 0x01
+	lda xde, (xsp+260)
 	ld xbc, EVT_GRID_DRAW
 	jr AudioTable_SendEventAndContinue
 
@@ -8128,7 +8128,7 @@ FSWAssGrid_CheckCell_1_8:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x04, 0x01
+	lda xde, (xsp+260)
 	ld xbc, EVT_GRID_DRAW
 
 AudioTable_SendEventAndContinue:
@@ -8137,7 +8137,7 @@ AudioTable_SendEventAndContinue:
 AudioTable_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz
-	lda_dri XSP, 0xfd, 0x08, 0x01
+	lda xsp, (xsp+264)
 	ret
 
 AudioTable_FindMatchIndex:
@@ -8353,7 +8353,7 @@ PmemPageCtl_Epilogue:
 	ret
 
 AcPmExpFilterGridBoxProc:
-	lda_dri XSP, 0xfd, 0xdc, 0xfe
+	lda xsp, (xsp-292)
 	push xiz
 	stl_dri XDE, 0xfd, 0x20, 0x01
 	stl_dri XBC, 0xfd, 0x24, 0x01
@@ -8496,7 +8496,7 @@ PmExpFilter_Repaint:
 	jrl nz, PmExpFilter_DrawCellBank2
 
 PmExpFilter_DrawCellBank1:
-	lda_dri XBC, 0xfd, 0x18, 0x01
+	lda xbc, (xsp+280)
 	ldw (xbc), 0x0
 	ld a, (xsp + 10)
 	inc 2, a
@@ -8517,7 +8517,7 @@ PmExpFilter_DrawCellBank1:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x18, 0x01
+	lda xde, (xsp+280)
 	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 	inc	1, (xsp+10)
@@ -8564,7 +8564,7 @@ PmExpFilter_DrawCellBank1:
 	jrl PmExpFilter_DrawCentered
 
 PmExpFilter_DrawCellBank2:
-	lda_dri XBC, 0xfd, 0x18, 0x01
+	lda xbc, (xsp+280)
 	ldw (xbc), 0x0
 	ld a, (xsp + 10)
 	inc 2, a
@@ -8585,7 +8585,7 @@ PmExpFilter_DrawCellBank2:
 	lda xsp, (xsp + 12)
 	call GetFocusObject
 	ld xwa, xhl
-	lda_dri XDE, 0xfd, 0x18, 0x01
+	lda xde, (xsp+280)
 	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 	inc	1, (xsp+10)
@@ -8869,11 +8869,11 @@ PmExpFilter_CallInherited:
 
 PmExpFilter_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x24, 0x01
+	lda xsp, (xsp+292)
 	ret
 
 PmExpFilterGridCheck:
-	lda_dri XSP, 0xfd, 0xf8, 0xfe
+	lda xsp, (xsp-264)
 	ld xwa, xbc
 	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, PmExpFilterCheck_CellDecode
@@ -9145,7 +9145,7 @@ PmExpFilterCheck_DoSend:
 
 SeqLoad_StoreReturnZero:
 	ld xhl, 0:i3
-	lda_dri XSP, 0xfd, 0x08, 0x01
+	lda xsp, (xsp+264)
 	ret
 
 AcDispTimeSetGridBoxProc:
@@ -10641,7 +10641,7 @@ NormScreenProc_Epilogue:
 	ret
 
 AcPmBkNoBoxProc:
-	lda_dri XSP, 0xfd, 0xfc, 0xfe
+	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
@@ -10733,11 +10733,11 @@ UI_AcPmBkNoBoxProc_Return:
 
 AcPmBkNoBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x04, 0x01
+	lda xsp, (xsp+260)
 	ret
 
 AcBkNoBoxProc:
-	lda_dri XSP, 0xfd, 0xfc, 0xfe
+	lda xsp, (xsp-260)
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
@@ -10809,7 +10809,7 @@ UI_AcBkNoBoxProc_Return:
 
 AcBkNoBox_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x04, 0x01
+	lda xsp, (xsp+260)
 	ret
 
 MsaModeScreenProc:
@@ -11056,7 +11056,7 @@ MsaMode_Epilogue:
 	ret
 
 PmemModeBoxProc:
-	lda_dri XSP, 0xfd, 0xe8, 0xfe
+	lda xsp, (xsp-280)
 	push xiz
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
@@ -11119,7 +11119,7 @@ PmemMode_Paint:
 	ld xbc, xiz
 	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ldw (xwa + 2), 0x6
 	ldw (xwa + 6), 0x17
 	ldw (xwa), 0xf5
@@ -11127,14 +11127,14 @@ PmemMode_Paint:
 	ldw bc, 0xc1
 	ldw de, 0xf3
 	call DrawDesignBox
-	lda_dri XDE, 0xfd, 0x0c, 0x01
+	lda xde, (xsp+268)
 	ld wa, (xde + 4)
 	sub wa, (xde)
 	exts xwa
 	divs wa, 0x2
 	ld bc, (xde)
 	add bc, wa
-	lda_dri XHL, 0xfd, 0x08, 0x01
+	lda xhl, (xsp+264)
 	ld (xhl), bc
 	ld bc, (xde + 2)
 	ld wa, (xde + 6)
@@ -11150,8 +11150,8 @@ PmemMode_Paint:
 	push xwa
 	call Strcpy
 	inc 8, xsp
-	lda_dri XWA, 0xfd, 0x0c, 0x01
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xwa, (xsp+268)
+	lda xbc, (xsp+264)
 	lda xde, (xsp + 8)
 	ld xhl, 0:i3
 	push xhl
@@ -11180,10 +11180,10 @@ PmemMode_Select:
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x0c, 0x01
-	lda_dri XHL, 0xfd, 0x08, 0x01
+	lda xwa, (xsp+268)
+	lda xhl, (xsp+264)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	sub bc, 0xb
@@ -11213,10 +11213,10 @@ PmemMode_Select_DrawHighlight1:
 	ld wa, (xwa)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x0c, 0x01
-	lda_dri XHL, 0xfd, 0x08, 0x01
+	lda xwa, (xsp+268)
+	lda xhl, (xsp+264)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	sub bc, 0xb
@@ -11310,11 +11310,11 @@ PmemMode_CallHandler:
 
 PmemMode_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x18, 0x01
+	lda xsp, (xsp+280)
 	ret
 
 AcPmBkEditBoxProc:
-	lda_dri XSP, 0xfd, 0xce, 0xfe
+	lda xsp, (xsp-306)
 	push xiz
 	stl_dri XDE, 0xfd, 0x2e, 0x01
 	stl_dri XWA, 0xfd, 0x32, 0x01
@@ -11752,7 +11752,7 @@ AcPmBkEdit_Default:
 
 AcPmBkEdit_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x32, 0x01
+	lda xsp, (xsp+306)
 	ret
 
 PmBkNameFunc:
@@ -11887,7 +11887,7 @@ VariScreen_CleanupRet:
 	ret
 
 VariScreenProc:
-	lda_dri XSP, 0xfd, 0xca, 0xfd
+	lda xsp, (xsp-566)
 	push xiz
 	stl_dri XDE, 0xfd, 0x2e, 0x02
 	stl_dri XBC, 0xfd, 0x32, 0x02
@@ -11990,11 +11990,11 @@ VariScreen_HandlePaint:
 	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld (xsp + 24), xhl
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xhl, (xsp+546)
 	ldw (xhl), 0x4
 	lda xde, (xhl + 2)
 	ldw (xde), 0x2
-	lda_dri XWA, 0xfd, 0x26, 0x02
+	lda xwa, (xsp+550)
 	ld bc, (xhl)
 	dec 2, bc
 	ld (xwa), bc
@@ -12010,14 +12010,14 @@ VariScreen_HandlePaint:
 	ldw bc, 0xc0
 	ldw de, 0xf0
 	call DrawDesignBox
-	lda_dri XWA, 0xfd, 0x22, 0x02
+	lda xwa, (xsp+546)
 	ld xbc, 0x8c
 	call DrawIcons
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	ldw (xbc), 0x23
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0x8
-	lda_dri XWA, 0xfd, 0x26, 0x02
+	lda xwa, (xsp+550)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -12049,13 +12049,13 @@ VariScreen_HandlePaint:
 	call SndParam_FetchOscTableEntry
 	ld a, (xsp + 28)
 	extz wa
-	lda_dri XBC, 0xfd, 0x22, 0x01
+	lda xbc, (xsp+290)
 	call StoreDRAMInit_LoadDRAM
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	ldw (xbc), 0x68
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0xc
-	lda_dri XWA, 0xfd, 0x26, 0x02
+	lda xwa, (xsp+550)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -12066,17 +12066,17 @@ VariScreen_HandlePaint:
 	ld de, (xhl)
 	add de, 0xf
 	ld (xwa + 6), de
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	ld xhl, 0:i3
 	push xhl
 	pushw 0xfb
 	pushw 0xf7
 	call DrawString
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	ldw (xbc), 0x90
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0x0
-	lda_dri XWA, 0xfd, 0x26, 0x02
+	lda xwa, (xsp+550)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -12164,10 +12164,10 @@ VariScreen_CalcRowOffset:
 	ld_sril3 XWA, 0x07, 0xec, 0xe8
 	ldb_sri A, 0x07, 0xe0, 0xe4
 	extz wa
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x26, 0x02
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xwa, (xsp+550)
+	lda xhl, (xsp+546)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	sub bc, 0xf
@@ -12214,7 +12214,7 @@ VariScreen_DrawDesignArea:
 	extz wa
 	ld c, (xbc + 4)
 	extz bc
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	call SndParam_ApplyProgramChangeAsync
 	stib_ind 0xfd, 0x32, 0x01, 0x00
 	ld (xsp + 8), 0x9
@@ -12289,7 +12289,7 @@ VariScreen_DrawEditSwitch:
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	call GetEditSwPoint
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 56)
@@ -12299,8 +12299,8 @@ VariScreen_DrawEditSwitch:
 	jrl nz, VariScreen_DrawDefaultVoice
 
 VariScreen_DrawNameLabel:
-	lda_dri XDE, 0xfd, 0x26, 0x02
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xde, (xsp+550)
+	lda xhl, (xsp+546)
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
 	sub wa, 0xf
@@ -12342,8 +12342,8 @@ VariScreen_DrawNameString:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
-	lda_dri XHL, 0xfd, 0x26, 0x02
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xhl, (xsp+550)
+	lda xbc, (xsp+546)
 	lda xde, (xsp + 34)
 	ld xwa, 3:i3
 	push xwa
@@ -12355,12 +12355,12 @@ VariScreen_DrawNameString:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	lda xde, (xbc + 2)
 	ld wa, (xde)
 	add wa, 0xc
 	ld (xde), wa
-	lda_dri XHL, 0xfd, 0x26, 0x02
+	lda xhl, (xsp+550)
 	sub wa, 0xf
 	ld (xhl + 2), wa
 	ld wa, (xde)
@@ -12378,7 +12378,7 @@ VariScreen_SetRightVoiceBounds:
 	ldw (xwa), 0x137
 
 VariScreen_DrawVoiceString:
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	ld xwa, 1:i3
 	push xwa
 	ld a, (xsp + 16)
@@ -12391,8 +12391,8 @@ VariScreen_DrawVoiceString:
 	jr VariScreen_CallDrawLeftJustify
 
 VariScreen_DrawDefaultVoice:
-	lda_dri XHL, 0xfd, 0x26, 0x02
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xhl, (xsp+550)
+	lda xbc, (xsp+546)
 	lda xde, (xbc + 2)
 	ld wa, (xde)
 	sub wa, 0xf
@@ -12412,7 +12412,7 @@ VariScreen_SetDefVoiceRightBounds:
 	ldw (xwa), 0x137
 
 VariScreen_DrawDefVoiceString:
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	ld xwa, 1:i3
 	push xwa
 	ld a, (xsp + 16)
@@ -12448,10 +12448,10 @@ VariScreen_DrawRightPanel:
 	ld_sril3 XWA, 0x07, 0xec, 0xe8
 	ldb_sri A, 0x07, 0xe0, 0xe4
 	extz wa
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x26, 0x02
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xwa, (xsp+550)
+	lda xhl, (xsp+546)
 	lda xde, (xhl + 2)
 	ld bc, (xde)
 	sub bc, 0xf
@@ -12498,7 +12498,7 @@ VariScreen_DrawRightDesignBox:
 	extz wa
 	ld c, (xbc + 4)
 	extz bc
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	call SndParam_ApplyProgramChangeAsync
 	stib_ind 0xfd, 0x32, 0x01, 0x00
 	ld (xsp + 8), 0x9
@@ -12572,7 +12572,7 @@ VariScreen_DrawRightEditSw:
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	call GetEditSwPoint
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 56)
@@ -12582,8 +12582,8 @@ VariScreen_DrawRightEditSw:
 	jrl nz, VariScreen_DrawRightDefaultVoice
 
 VariScreen_DrawRightNameLabel:
-	lda_dri XDE, 0xfd, 0x26, 0x02
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xde, (xsp+550)
+	lda xhl, (xsp+546)
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
 	sub wa, 0xf
@@ -12624,8 +12624,8 @@ VariScreen_DrawRightNameString:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
-	lda_dri XHL, 0xfd, 0x26, 0x02
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xhl, (xsp+550)
+	lda xbc, (xsp+546)
 	lda xde, (xsp + 34)
 	ld xwa, 3:i3
 	push xwa
@@ -12637,12 +12637,12 @@ VariScreen_DrawRightNameString:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	lda xde, (xbc + 2)
 	ld wa, (xde)
 	add wa, 0xc
 	ld (xde), wa
-	lda_dri XHL, 0xfd, 0x26, 0x02
+	lda xhl, (xsp+550)
 	sub wa, 0xf
 	ld (xhl + 2), wa
 	ld wa, (xde)
@@ -12660,7 +12660,7 @@ VariScreen_SetRightVoiceRightBounds:
 	ldw (xwa), 0x137
 
 VariScreen_DrawRightVoiceString:
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	ld xwa, 1:i3
 	push xwa
 	ld a, (xsp + 16)
@@ -12673,8 +12673,8 @@ VariScreen_DrawRightVoiceString:
 	jrl FileBrowser_DrawString
 
 VariScreen_DrawRightDefaultVoice:
-	lda_dri XDE, 0xfd, 0x26, 0x02
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xde, (xsp+550)
+	lda xbc, (xsp+546)
 	lda xhl, (xbc + 2)
 	ld wa, (xhl)
 	sub wa, 0xf
@@ -12694,7 +12694,7 @@ VariScreen_SetRightDefVoiceRightBounds:
 	ldw (xwa), 0x137
 
 VariScreen_DrawRightDefVoiceString:
-	lda_dri XHL, 0xfd, 0x22, 0x01
+	lda xhl, (xsp+290)
 	ld xwa, 1:i3
 	push xwa
 	ld a, (xsp + 16)
@@ -12717,7 +12717,7 @@ VariScreen_HandleConfirm:
 	ld (xsp + 16), xhl
 	ld xwa, (xsp + 16)
 	ld (xsp + 4), xwa
-	lda_dri XWA, 0xfd, 0x26, 0x02
+	lda xwa, (xsp+550)
 	ldw (xwa + 2), 0x6
 	ldw (xwa + 6), 0x17
 	ldw (xwa), 0xf5
@@ -12725,14 +12725,14 @@ VariScreen_HandleConfirm:
 	ldw bc, 0xc1
 	ldw de, 0xf3
 	call DrawDesignBox
-	lda_dri XDE, 0xfd, 0x26, 0x02
+	lda xde, (xsp+550)
 	ld wa, (xde + 4)
 	sub wa, (xde)
 	exts xwa
 	divs wa, 0x2
 	ld bc, (xde)
 	add bc, wa
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xhl, (xsp+546)
 	ld (xhl), bc
 	ld bc, (xde + 2)
 	ld wa, (xde + 6)
@@ -12753,13 +12753,13 @@ VariScreen_HandleConfirm:
 	pushw	(xwa)
 	pushw 0xed
 	pushw 0x1612
-	lda_dri XWA, 0xfd, 0x2a, 0x01
+	lda xwa, (xsp+298)
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
-	lda_dri XWA, 0xfd, 0x26, 0x02
-	lda_dri XBC, 0xfd, 0x22, 0x02
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xwa, (xsp+550)
+	lda xbc, (xsp+546)
+	lda xde, (xsp+290)
 	ld xhl, 0:i3
 	push xhl
 	pushw 0x0
@@ -12806,7 +12806,7 @@ VariScreen_ConfirmLoopBody:
 	extz wa
 	ld c, (xbc + 4)
 	extz bc
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	call SndParam_ApplyProgramChangeAsync
 	stib_ind 0xfd, 0x32, 0x01, 0x00
 	ld (xsp + 8), 0x9
@@ -12867,12 +12867,12 @@ VariScreen_ConfirmDrawEditSw:
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	call GetEditSwPoint
 	ld xwa, (xsp + 16)
 	ld xiz, (xwa + 56)
-	lda_dri XIY, 0xfd, 0x26, 0x02
-	lda_dri XIX, 0xfd, 0x22, 0x02
+	lda xiy, (xsp+550)
+	lda xix, (xsp+546)
 	lda xbc, (xix + 2)
 	lda xde, (xiy + 2)
 	lda xwa, (xiy + 4)
@@ -12921,8 +12921,8 @@ VariScreen_ConfirmDrawNameAudio:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
-	lda_dri XWA, 0xfd, 0x26, 0x02
-	lda_dri XDE, 0xfd, 0x22, 0x02
+	lda xwa, (xsp+550)
+	lda xde, (xsp+546)
 	lda xhl, (xsp + 34)
 	ld xbc, 3:i3
 	push xbc
@@ -12935,12 +12935,12 @@ VariScreen_ConfirmDrawNameAudio:
 	ld xbc, xde
 	ld xde, xhl
 	call DrawStringLeftJustify
-	lda_dri XDE, 0xfd, 0x22, 0x02
+	lda xde, (xsp+546)
 	lda xbc, (xde + 2)
 	ld hl, (xbc)
 	add hl, 0xc
 	ld (xbc), hl
-	lda_dri XWA, 0xfd, 0x26, 0x02
+	lda xwa, (xsp+550)
 	sub hl, 0xf
 	ld (xwa + 2), hl
 	ld bc, (xbc)
@@ -12958,7 +12958,7 @@ VariScreen_ConfirmSetVoiceRightBounds:
 	ldw (xbc), 0x137
 
 VariScreen_ConfirmDrawVoiceString:
-	lda_dri XHL, 0xfd, 0x22, 0x01
+	lda xhl, (xsp+290)
 	ld xbc, 1:i3
 	push xbc
 	ld c, (xsp + 16)
@@ -12992,7 +12992,7 @@ VariScreen_ConfirmSetDefVoiceRightBounds:
 	ldw (xbc), 0x137
 
 VariScreen_ConfirmDrawDefVoiceString:
-	lda_dri XDE, 0xfd, 0x22, 0x01
+	lda xde, (xsp+290)
 	ld xbc, 1:i3
 	push xbc
 	ld c, (xsp + 16)
@@ -13087,7 +13087,7 @@ VariScreen_EnumHighlightColors:
 	ld_sril3 XWA, 0x07, 0xe8, 0xe4
 	ldb_sri A, 0x07, 0xe0, 0xec
 	extz wa
-	lda_dri XBC, 0xfd, 0x22, 0x02
+	lda xbc, (xsp+546)
 	call GetEditSwPoint
 	ld xwa, (xsp + 24)
 	ld xwa, (xwa + 56)
@@ -13097,8 +13097,8 @@ VariScreen_EnumHighlightColors:
 	jrl nz, VariScreen_EnumDrawDefaultVoice
 
 VariScreen_EnumDrawNameLabel:
-	lda_dri XDE, 0xfd, 0x26, 0x02
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xde, (xsp+550)
+	lda xhl, (xsp+546)
 	lda xbc, (xhl + 2)
 	ld wa, (xbc)
 	sub wa, 0xf
@@ -13136,8 +13136,8 @@ VariScreen_EnumDrawNameAudio:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
-	lda_dri XWA, 0xfd, 0x26, 0x02
-	lda_dri XDE, 0xfd, 0x22, 0x02
+	lda xwa, (xsp+550)
+	lda xde, (xsp+546)
 	lda xhl, (xsp + 34)
 	ld xbc, 3:i3
 	push xbc
@@ -13150,12 +13150,12 @@ VariScreen_EnumDrawNameAudio:
 	ld xbc, xde
 	ld xde, xhl
 	call DrawStringLeftJustify
-	lda_dri XHL, 0xfd, 0x22, 0x02
+	lda xhl, (xsp+546)
 	lda xbc, (xhl + 2)
 	ld de, (xbc)
 	add de, 0xc
 	ld (xbc), de
-	lda_dri XWA, 0xfd, 0x26, 0x02
+	lda xwa, (xsp+550)
 	sub de, 0xf
 	ld (xwa + 2), de
 	ld bc, (xbc)
@@ -13187,8 +13187,8 @@ VariScreen_EnumDrawVoiceString:
 	jr FileBrowser_DrawString
 
 VariScreen_EnumDrawDefaultVoice:
-	lda_dri XWA, 0xfd, 0x26, 0x02
-	lda_dri XDE, 0xfd, 0x22, 0x02
+	lda xwa, (xsp+550)
+	lda xde, (xsp+546)
 	lda xhl, (xde + 2)
 	ld bc, (xhl)
 	sub bc, 0xf
@@ -13651,7 +13651,7 @@ VariScreen_CallInheritedAndReturn:
 
 VariScreen_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x36, 0x02
+	lda xsp, (xsp+566)
 	ret
 
 VariScreen_CalcValidNoteRow:
@@ -13677,7 +13677,7 @@ VariScreen_IsHalfRangeAbove:
 	ret
 
 RVariScreenProc:
-	lda_dri XSP, 0xfd, 0xd8, 0xfd
+	lda xsp, (xsp-552)
 	push xiz
 	stl_dri XDE, 0xfd, 0x20, 0x02
 	stl_dri XBC, 0xfd, 0x24, 0x02
@@ -13775,11 +13775,11 @@ RVari_Paint:
 	call InheritedProc
 	ld XWA, (xsp + 0x0228)
 	call GetViewInstance
-	lda_dri XHL, 0xfd, 0x14, 0x02
+	lda xhl, (xsp+532)
 	ldw (xhl), 0x4
 	lda xde, (xhl + 2)
 	ldw (xde), 0x2
-	lda_dri XWA, 0xfd, 0x18, 0x02
+	lda xwa, (xsp+536)
 	ld bc, (xhl)
 	dec 2, bc
 	ld (xwa), bc
@@ -13795,14 +13795,14 @@ RVari_Paint:
 	ldw bc, 0xc0
 	ldw de, 0xf0
 	call DrawDesignBox
-	lda_dri XWA, 0xfd, 0x14, 0x02
+	lda xwa, (xsp+532)
 	ld xbc, 0x90
 	call DrawIcons
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	ldw (xbc), 0x23
 	lda xhl, (xbc + 2)
 	ldw (xhl), 0x8
-	lda_dri XWA, 0xfd, 0x18, 0x02
+	lda xwa, (xsp+536)
 	ld de, (xbc)
 	ld (xwa), de
 	ld de, (xbc)
@@ -13834,17 +13834,17 @@ RVari_Paint:
 	extz xhl
 	pushw 0x10
 	push xhl
-	lda_dri XWA, 0xfd, 0x1a, 0x01
+	lda xwa, (xsp+282)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
-	lda_dri XDE, 0xfd, 0x14, 0x01
+	lda xde, (xsp+276)
 	ld (xde + 16), 0x0
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	ldw (xbc), 0x6b
 	lda xix, (xbc + 2)
 	ldw (xix), 0x0
-	lda_dri XWA, 0xfd, 0x18, 0x02
+	lda xwa, (xsp+536)
 	ld hl, (xbc)
 	ld (xwa), hl
 	ld hl, (xbc)
@@ -13890,10 +13890,10 @@ RVari_Select:
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x18, 0x02
-	lda_dri XDE, 0xfd, 0x16, 0x02
+	lda xwa, (xsp+536)
+	lda xde, (xsp+534)
 	ld bc, (xde)
 	sub bc, 0xf
 	ld (xwa + 2), bc
@@ -13915,7 +13915,7 @@ RVari_Select:
 	extz xhl
 	pushw 0xd
 	push xhl
-	lda_dri XWA, 0xfd, 0x1a, 0x01
+	lda xwa, (xsp+282)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -13955,10 +13955,10 @@ RVari_Select_CheckSameBank:
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	call GetEditSwPoint
-	lda_dri XDE, 0xfd, 0x18, 0x02
-	lda_dri XBC, 0xfd, 0x16, 0x02
+	lda xde, (xsp+536)
+	lda xbc, (xsp+534)
 	ld wa, (xbc)
 	sub wa, 0xf
 	ld (xde + 2), wa
@@ -13983,8 +13983,8 @@ RVari_Select_CheckSameBank:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
-	lda_dri XHL, 0xfd, 0x18, 0x02
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xhl, (xsp+536)
+	lda xbc, (xsp+532)
 	lda xde, (xsp + 20)
 	ld xwa, 3:i3
 	push xwa
@@ -13996,12 +13996,12 @@ RVari_Select_CheckSameBank:
 	pushw wa
 	ld xwa, xhl
 	call DrawStringLeftJustify
-	lda_dri XHL, 0xfd, 0x14, 0x02
+	lda xhl, (xsp+532)
 	lda xde, (xhl + 2)
 	ld wa, (xde)
 	add wa, 0xc
 	ld (xde), wa
-	lda_dri XBC, 0xfd, 0x18, 0x02
+	lda xbc, (xsp+536)
 	sub wa, 0xf
 	ld (xbc + 2), wa
 	ld wa, (xde)
@@ -14009,7 +14009,7 @@ RVari_Select_CheckSameBank:
 	ld (xbc + 6), wa
 	ldw (xbc), 0xb7
 	ldw (xbc + 4), 0x14b
-	lda_dri XDE, 0xfd, 0x14, 0x01
+	lda xde, (xsp+276)
 	ld xwa, 1:i3
 	push xwa
 	ld a, (xsp + 14)
@@ -14029,10 +14029,10 @@ RVari_Select_CheckSameBank:
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x18, 0x02
-	lda_dri XDE, 0xfd, 0x16, 0x02
+	lda xwa, (xsp+536)
+	lda xde, (xsp+534)
 	ld bc, (xde)
 	sub bc, 0xf
 	ld (xwa + 2), bc
@@ -14054,7 +14054,7 @@ RVari_Select_CheckSameBank:
 	extz xhl
 	pushw 0xd
 	push xhl
-	lda_dri XWA, 0xfd, 0x1a, 0x01
+	lda xwa, (xsp+282)
 	push xwa
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -14076,10 +14076,10 @@ RVari_Select_CheckSameBank:
 	lda xbc, (NakaInst_Rock_Pop_0x24:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	call GetEditSwPoint
-	lda_dri XDE, 0xfd, 0x18, 0x02
-	lda_dri XBC, 0xfd, 0x16, 0x02
+	lda xde, (xsp+536)
+	lda xbc, (xsp+534)
 	ld wa, (xbc)
 	sub wa, 0xf
 	ld (xde + 2), wa
@@ -14104,20 +14104,20 @@ RVari_Select_CheckSameBank:
 	push xwa
 	call Sprintf_Locked
 	lda xsp, (xsp + 12)
-	lda_dri XWA, 0xfd, 0x18, 0x02
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xwa, (xsp+536)
+	lda xbc, (xsp+532)
 	lda xde, (xsp + 20)
 	ld xhl, 3:i3
 	push xhl
 	pushw 0x0
 	pushw 0x7
 	call DrawStringLeftJustify
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	lda xhl, (xbc + 2)
 	ld de, (xhl)
 	add de, 0xc
 	ld (xhl), de
-	lda_dri XWA, 0xfd, 0x18, 0x02
+	lda xwa, (xsp+536)
 	sub de, 0xf
 	ld (xwa + 2), de
 	ld de, (xhl)
@@ -14125,7 +14125,7 @@ RVari_Select_CheckSameBank:
 	ld (xwa + 6), de
 	ldw (xwa), 0xb7
 	ldw (xwa + 4), 0x14b
-	lda_dri XDE, 0xfd, 0x14, 0x01
+	lda xde, (xsp+276)
 	ld xhl, 1:i3
 	push xhl
 	pushw 0x0
@@ -14138,10 +14138,10 @@ RVari_Select_CheckSameBank:
 	lda xbc, (NakaInst_Rock_Pop_0x28:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x18, 0x02
-	lda_dri XDE, 0xfd, 0x16, 0x02
+	lda xwa, (xsp+536)
+	lda xde, (xsp+534)
 	ld bc, (xde)
 	sub bc, 0xf
 	ld (xwa + 2), bc
@@ -14153,8 +14153,8 @@ RVari_Select_CheckSameBank:
 	ld bc, 0:i3
 	ldw de, 0xf5
 	call DrawDesignBox
-	lda_dri XWA, 0xfd, 0x18, 0x02
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xwa, (xsp+536)
+	lda xbc, (xsp+532)
 	lda xhl, (xbc + 2)
 	ld de, (xhl)
 	sub de, 0xf
@@ -14183,10 +14183,10 @@ RVari_Select_CheckSameBank:
 	lda xbc, (NakaInst_Rock_Pop_0x28:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xbc, (xsp+532)
 	call GetEditSwPoint
-	lda_dri XWA, 0xfd, 0x18, 0x02
-	lda_dri XDE, 0xfd, 0x16, 0x02
+	lda xwa, (xsp+536)
+	lda xde, (xsp+534)
 	ld bc, (xde)
 	sub bc, 0xf
 	ld (xwa + 2), bc
@@ -14198,8 +14198,8 @@ RVari_Select_CheckSameBank:
 	ldw bc, 0xc1
 	ld de, 7:i3
 	call DrawDesignBox
-	lda_dri XWA, 0xfd, 0x18, 0x02
-	lda_dri XBC, 0xfd, 0x14, 0x02
+	lda xwa, (xsp+536)
+	lda xbc, (xsp+532)
 	lda xhl, (xbc + 2)
 	ld de, (xhl)
 	sub de, 0xf

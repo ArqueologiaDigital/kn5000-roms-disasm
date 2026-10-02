@@ -7,7 +7,7 @@ HDAE5000_FdList_Scan:	; 0x282E8D (1126 bytes)
 	; = 1 and its 6 characters at row n; flagged rows get a "*".  Caller:
 	; HDDTitleSwCatch.  (Was "configure HD drive parameters ... formats
 	; partition table".)
-	lda_dri xsp, 0xFD, 0xF4, 0xFE	; lda xsp, (xsp + 0xfef4) — alloc 268-byte frame
+	lda xsp, (xsp-268)	; lda xsp, (xsp + 0xfef4) — alloc 268-byte frame
 	push xiz					; 3e
 	ldw	(xsp+4), 0x0000
 	; Check disk status via 0x0e88 vtable
@@ -218,7 +218,7 @@ HDAE5000_FdList_Scan:	; 0x282E8D (1126 bytes)
 .Lsd_epilogue:
 	ld hl, (xsp + 0x04)				; 9f 04 23
 	pop xiz					; 5e
-	lda_dri xsp, 0xFD, 0x0C, 0x01	; lda xsp, (xsp + 0x010c) — dealloc frame
+	lda xsp, (xsp+268)	; lda xsp, (xsp + 0x010c) — dealloc frame
 	ret						; 0e
 	; --- Sub-handler 1: event 0x01C00007 dispatch (0x28310D) ---
 HDAE5000_HDDTitleSwCatch:

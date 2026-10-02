@@ -4356,7 +4356,7 @@ VoiceData_InitAndCopyParams:
 	call	Math_MultiplyAccumulate
 	add	xhl, 0x99eca0
 	add	xhl, 0x7c
-	lda_dri	XWA, 0xf9, 0x1e, 0x01
+	lda	xwa, (xiz+286)
 	pushw	0x226
 	push	xhl
 	push	xwa
@@ -6404,7 +6404,7 @@ CtrlPanel_RefreshIndicatorState:
 	pop	xiz
 	ret
 CtrlPanel_CompareAndUpdateIndicators:
-	lda_dri	XSP, 0xfd, 0x8e, 0xfe
+	lda	xsp, (xsp-370)
 	push	xiz
 	stl_dri	XBC, 0xfd, 0x6e, 0x01
 	stl_dri	XWA, 0xfd, 0x72, 0x01
@@ -6515,7 +6515,7 @@ CtrlPanelRefresh_CheckMigration:
 	calr	MIDI_DispatchVoiceParamCC
 CtrlPanelRefresh_Done:
 	pop	xiz
-	lda_dri	XSP, 0xfd, 0x72, 0x01
+	lda	xsp, (xsp+370)
 	ret
 CtrlPanel_BuildIndicatorBitmask:
 	push	xiz

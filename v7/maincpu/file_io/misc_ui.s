@@ -505,7 +505,7 @@ DiskMedley_Return:
 	ret
 
 PsFileNameBoxProc:
-	lda_dri XSP, 0xfd, 0x56, 0xff
+	lda xsp, (xsp-170)
 	push xiz
 	stl_dri XDE, 0xfd, 0xa2, 0x00
 	stl_dri XBC, 0xfd, 0xa6, 0x00
@@ -595,10 +595,10 @@ PsFileNameBox_HandleShow:
 	ld xwa, (xsp + 14)
 	cpw (xwa + 38), 0x2
 	jr lt, PsFileNameBox_CheckScrollButtons
-	lda_dri XBC, 0xfd, 0x92, 0x00
+	lda xbc, (xsp+146:16)
 	ld_sril XWA, (xsp + 0x00aa)
 	call GetClientBox
-	lda_dri XDE, 0xfd, 0x92, 0x00
+	lda xde, (xsp+146:16)
 	ld bc, (xde + 4)
 	sub bc, (xde)
 	exts xbc
@@ -620,9 +620,9 @@ PsFileNameBox_DrawItem_Body:
 	ldw_sri0 BC, (xsp + 0x0092)
 	add bc, wa
 	dec 1, bc
-	lda_dri XWA, 0xfd, 0x9e, 0x00
+	lda xwa, (xsp+158:16)
 	ld (xwa), bc
-	lda_dri XBC, 0xfd, 0x9a, 0x00
+	lda xbc, (xsp+154:16)
 	ld de, (xwa)
 	ld (xbc), de
 	ld de, 7:i3
@@ -722,8 +722,8 @@ PsFileNameBox_HandleConfirm:
 	pushw	0x1
 	jr	PsFileNameBox_Confirm_Execute
 PsFileNameBox_Confirm_Existing:
-	lda_dri XWA, 0xfd, 0x92, 0x00
-	lda_dri XBC, 0xfd, 0x9e, 0x00
+	lda xwa, (xsp+146:16)
+	lda xbc, (xsp+158:16)
 	ld xhl, (xhl)
 	push xhl
 	pushm (xiy)
@@ -823,7 +823,7 @@ PsFileNameBox_Confirm_MultiItem:
 	pushw 255
 	jr	PsFileNameBox_Confirm_Finish
 PsFileNameBox_Confirm_NewItem:
-	lda_dri XWA, 0xfd, 0x92, 0x00
+	lda xwa, (xsp+146:16)
 	ld xhl, (xhl)
 	push xhl
 	ld xhl, (xsp + 14)
@@ -968,6 +968,6 @@ PsFileNameBox_DispatchParent:
 
 PsFileNameBox_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0xaa, 0x00
+	lda xsp, (xsp+170:16)
 	ret
 

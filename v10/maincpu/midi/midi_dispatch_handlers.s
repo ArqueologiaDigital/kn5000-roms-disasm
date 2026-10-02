@@ -3488,7 +3488,7 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	call Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
-	lda_dri XWA, 0xe1, 0xe0, 0x02
+	lda xwa, (xwa+736)
 	ld (xsp + 10), xwa
 	ld a, (xsp + 18)
 	extz wa
@@ -3541,19 +3541,19 @@ DataBuf_TransferEffectParams_Loop:
 	cpw (xsp + 4), 0x3
 	jr c, DataBuf_TransferEffectParams_Loop
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x44, 0x03
+	lda xwa, (xwa+836)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xd8, 0x02
+	lda xbc, (xbc+728)
 	calr DataBuf_CopyFilterBlock12
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x54, 0x03
+	lda xwa, (xwa+852)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xe4, 0x02
+	lda xbc, (xbc+740)
 	calr DataBuf_CopyReverbBlock6
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x5c, 0x03
+	lda xwa, (xwa+860)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xec, 0x02
+	lda xbc, (xbc+748)
 	calr DataBuf_CopySimpleBlock4
 	ldw (xsp + 4), 0x0
 
@@ -3576,29 +3576,29 @@ DataBuf_TransferAuxParams_Loop:
 	cpw (xsp + 4), 0x2
 	jr c, DataBuf_TransferAuxParams_Loop
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0xaa, 0x03
+	lda xwa, (xwa+938)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0x80, 0x03
+	lda xbc, (xbc+896)
 	calr DataBuf_CopyEQBlock7
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0xb8, 0x03
+	lda xwa, (xwa+952)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0x8a, 0x03
+	lda xbc, (xbc+906)
 	calr DataBuf_CopyChorusBlock16
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0xc8, 0x03
+	lda xwa, (xwa+968)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0x9a, 0x03
+	lda xbc, (xbc+922)
 	calr DataBuf_CopyCompressorBlock16
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0xd8, 0x03
+	lda xwa, (xwa+984)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xaa, 0x03
+	lda xbc, (xbc+938)
 	calr DataBuf_CopyDelayBit2
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0xde, 0x03
+	lda xwa, (xwa+990)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xce, 0x03
+	lda xbc, (xbc+974)
 	calr DataBuf_CopyMixerBlock12
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 14)
@@ -5040,8 +5040,8 @@ DataBuf_CopyBulkBitfields_960:
 
 DataBuf_CopyBulkBitfields_F980:
 	ld xde, xbc
-	lda_dri XIX, 0xe9, 0xb0, 0x03
-	lda_dri XHL, 0xe1, 0xb0, 0x03
+	lda xix, (xde+944)
+	lda xhl, (xwa+944)
 	ldcfm 7, (xhl)
 	scc8 c, c
 	and c, 0x1
@@ -5086,8 +5086,8 @@ DataBuf_CopyBulkBitfields_F980:
 	or (xix), c
 	ldcfm 0, (xhl)
 	stcfm 0, (xix)
-	lda_dri XIX, 0xe9, 0xb1, 0x03
-	lda_dri XHL, 0xe1, 0xb1, 0x03
+	lda xix, (xde+945)
+	lda xhl, (xwa+945)
 	ldcfm 3, (xhl)
 	scc8 c, c
 	and c, 0x1
@@ -5923,29 +5923,29 @@ FileData_LoadAndParseType3_Error:
 	cpw (xsp + 4), 0x18
 	jr c, FileData_LoadAndParseType3_Error
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x34, 0x01
+	lda xwa, (xwa+308)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xd8, 0x02
+	lda xbc, (xbc+728)
 	calr VoiceParam_CopyBitfields_TypeB
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x46, 0x01
+	lda xwa, (xwa+326)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xe4, 0x02
+	lda xbc, (xbc+740)
 	calr VoiceParam_CopyBitfields_TypeC
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x4e, 0x01
+	lda xwa, (xwa+334)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0x80, 0x03
+	lda xbc, (xbc+896)
 	calr VoiceParam_CopyFields_TypeD
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x60, 0x01
+	lda xwa, (xwa+352)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0xaa, 0x03
+	lda xbc, (xbc+938)
 	calr VoiceParam_CopyBits_TwoFlags
 	ld xwa, (xsp + 10)
-	lda_dri XWA, 0xe1, 0x66, 0x01
+	lda xwa, (xwa+358)
 	ld xbc, (xsp + 14)
-	lda_dri XBC, 0xe5, 0x8a, 0x03
+	lda xbc, (xbc+906)
 	calr VoiceParam_CopyFields_TypeE
 	ld xwa, (xsp + 10)
 	ld xbc, (xsp + 14)
@@ -6478,7 +6478,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	lda xbc, (NakaInst_SoundConfig_LookupTable_0x28:24)
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	extz bc
-	lda_dri XDE, 0xe9, 0xf4, 0x02
+	lda xde, (xde+756)
 	ld xwa, 0x4900
 	call DSPCfg_WriteParamSimple
 	cp hl, 0:i3
@@ -6489,7 +6489,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	extz wa
 	pushw wa
 	pushw 0x0
-	lda_dri XWA, 0xe5, 0xf5, 0x02
+	lda xwa, (xbc+757)
 	push xwa
 	call Memset
 	inc 8, xsp
@@ -6518,7 +6518,7 @@ DSPCfg_VoiceSlotA_ParamLoop:
 	exts xwa
 	add xwa, 0x4910
 	ld xde, (xsp + 6)
-	lda_dri XDE, 0xe9, 0xf4, 0x02
+	lda xde, (xde+756)
 	call DSPCfg_WriteParamSimple
 	inc 1, iz
 	cpw_erp IZ, 0xfa
@@ -6537,7 +6537,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	ldb_sri C, 0x07, 0xe4, 0xe0
 	extz bc
 	ld xwa, (xsp + 6)
-	lda_dri XDE, 0xe1, 0x0e, 0x03
+	lda xde, (xwa+782)
 	ld xwa, 0x4b00
 	call DSPCfg_WriteParamSimple
 	cp hl, 0:i3
@@ -6548,7 +6548,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	extz wa
 	pushw wa
 	pushw 0x0
-	lda_dri XWA, 0xe5, 0x0f, 0x03
+	lda xwa, (xbc+783)
 	push xwa
 	call Memset
 	inc 8, xsp
@@ -6590,7 +6590,7 @@ DSPCfg_VoiceSlotB_MapAndWrite:
 	ldb_sri C, 0x07, 0xe8, 0xe4
 	extz bc
 	ld xde, (xsp + 6)
-	lda_dri XDE, 0xe9, 0x0e, 0x03
+	lda xde, (xde+782)
 	jr DSPCfg_VoiceSlotB_WriteAndLoop
 
 DSPCfg_VoiceSlotB_ReadAndWrite:
@@ -6600,7 +6600,7 @@ DSPCfg_VoiceSlotB_ReadAndWrite:
 	exts xwa
 	add xwa, 0x4b10
 	ld xde, (xsp + 6)
-	lda_dri XDE, 0xe9, 0x0e, 0x03
+	lda xde, (xde+782)
 
 DSPCfg_VoiceSlotB_WriteAndLoop:
 	call DSPCfg_WriteParamSimple
@@ -6966,7 +6966,7 @@ DataBuf_TransferSlotBitfields:
 	lda xbc, (xwa + 64)
 	ld xhl, xbc
 	lda xix, (xde + 64)
-	lda_dri XIY, 0xe5, 0xa0, 0x01
+	lda xiy, (xbc+416)
 
 DataBuf_TransferSlotBitfields_Loop:
 	ld c, (xhl - 2)
@@ -7309,7 +7309,7 @@ SndParam_ApplyMaskBlock:
 	calr SndParam_GetBlockPointer
 	or xhl, xhl
 	ret z
-	lda_dri XWA, 0xed, 0x8a, 0x00
+	lda xwa, (xhl+138:16)
 	ld xbc, xwa
 	lda xde, (xwa + 96)
 
@@ -7338,7 +7338,7 @@ SndParam_ApplyBaseBlock:
 	or xhl, xhl
 	ret z
 	ld xbc, xhl
-	lda_dri XDE, 0xed, 0x8a, 0x00
+	lda xde, (xhl+138:16)
 
 SndParam_ApplyBaseBlock_Loop:
 	ld xhl, xbc
@@ -7398,7 +7398,7 @@ SndParam_AllocAndCopyPreset:
 	lda xsp, (xsp + 10)
 	lda xwa, (xiz + 5)
 	ld xbc, xwa
-	lda_dri XDE, 0xe1, 0x8a, 0x00
+	lda xde, (xwa+138:16)
 
 SndParam_CopyPreset_FillLoop:
 	ld xhl, (xbc - 5)
@@ -7410,7 +7410,7 @@ SndParam_CopyPreset_FillLoop:
 	inc 6, xbc
 	cp xbc, xde
 	jr c, SndParam_CopyPreset_FillLoop
-	lda_dri XWA, 0xf9, 0x8f, 0x00
+	lda xwa, (xiz+143:16)
 	ld xbc, xwa
 	lda xde, (xwa + 96)
 
@@ -7508,7 +7508,7 @@ SndParam_RelocateAndApply:
 	calr SndParam_GetBlockPointer
 	or xhl, xhl
 	jr z, SndParam_RelocateApply_Epilog
-	lda_dri XBC, 0xed, 0x8a, 0x00
+	lda xbc, (xhl+138:16)
 	ld xde, xbc
 	lda xiy, (xbc + 96)
 

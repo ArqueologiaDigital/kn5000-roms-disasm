@@ -34545,7 +34545,7 @@ AccBankData_ProcessWithCopy:
 
 	push xwa
 
-	lda_dri XWA, 0xe5, 0xa0, 0x00
+	lda xwa, (xbc+160:16)
 
 	push xwa
 

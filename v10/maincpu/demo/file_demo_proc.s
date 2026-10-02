@@ -1118,7 +1118,7 @@ Demo_GetPresetBase_Default:
 	lda xhl, (0x0ab000:24)
 
 Demo_GetPresetBase_StoreAndRet:
-	lda_dri XHL, 0xed, 0x00, 0x08
+	lda xhl, (xhl+2048)
 	ret
 
 Demo_GetPresetBaseForPartAlt:
@@ -1136,7 +1136,7 @@ Demo_GetPresetBaseAlt_Default:
 	lda xhl, (0x0ab000:24)
 
 Demo_GetPresetBaseAlt_StoreAndRet:
-	lda_dri XHL, 0xed, 0x00, 0x03
+	lda xhl, (xhl+768)
 	ret
 
 Demo_GetPresetBaseForPartExt:
@@ -1154,7 +1154,7 @@ Demo_GetPresetBaseExt_Default:
 	lda xwa, (0x0ab000:24)
 
 Demo_GetPresetBaseExt_StoreAndRet:
-	lda_dri XHL, 0xe1, 0xd0, 0x00
+	lda xhl, (xwa+208:16)
 	ret
 
 Voice_GetPresetFieldWord:
@@ -4024,7 +4024,7 @@ GetFirstRecord_GotPage:
 	jp FileIO_OpenDefault
 
 SearchAndOpen:
-	lda_dri XSP, 0xfd, 0xf2, 0xfe
+	lda xsp, (xsp-270)
 	pushw iz
 	stl_dri XWA, 0xfd, 0x0c, 0x01
 	call GetFirstPageBase
@@ -4054,7 +4054,7 @@ SearchOpen_AlreadyExists:
 
 SearchOpen_Return:
 	popw iz
-	lda_dri XSP, 0xfd, 0x0e, 0x01
+	lda xsp, (xsp+270)
 	ret
 
 LoadFromSecondaryPage:
@@ -4141,7 +4141,7 @@ FileIO_OpenMode_Success:
 
 FileIO_OpenMode_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x80, 0x00
+	lda xsp, (xsp+128:16)
 	ret
 
 FileIO_CloseHandle:
@@ -5243,7 +5243,7 @@ GetRecordFlags_Valid:
 	ret
 
 FileIO_CheckFileExists:
-	lda_dri XSP, 0xfd, 0xf6, 0xfe
+	lda xsp, (xsp-266)
 	lda xbc, (xsp)
 	call _findfirst
 	ld xwa, xhl
@@ -5257,7 +5257,7 @@ CheckFileExists_NotFound:
 	ld l, 0x0:opc
 
 CheckFileExists_Done:
-	lda_dri XSP, 0xfd, 0x0a, 0x01
+	lda xsp, (xsp+266)
 	ret
 
 FileIO_InitRecordTable:
@@ -5267,7 +5267,7 @@ FileIO_InitRecordTable:
 	ldirw
 	lda xbc, (0x025db8:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0xf0, 0x00
+	lda xde, (xbc+240:16)
 
 InitRecordTable_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x50
@@ -5279,7 +5279,7 @@ InitRecordTable_CopyLoop:
 	jr c, InitRecordTable_CopyLoop
 	lda xbc, (0x025eb2:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0x38, 0x13
+	lda xde, (xbc+4920)
 
 InitRecordTable_ExtLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -5465,7 +5465,7 @@ GetCurrentFileType_Lookup:
 	ret
 
 UpdateFileEntry:
-	lda_dri XSP, 0xfd, 0xd4, 0xfe
+	lda xsp, (xsp-300)
 	push xiz
 	stb_dri C, 0xfd, 0x2e, 0x01
 	ld iz, wa
@@ -5512,7 +5512,7 @@ UpdateFileEntry_Commit:
 
 UpdateFileEntry_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x2c, 0x01
+	lda xsp, (xsp+300)
 	ret
 
 ParseFileExtension:
@@ -5700,11 +5700,11 @@ HandleFilenameChange_Return:
 	ret
 
 GetEncodedFileSizeData:
-	lda_dri XSP, 0xfd, 0xee, 0xfe
+	lda xsp, (xsp-274)
 	pushw iz
 	lda xbc, (0x025db8:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0xf0, 0x00
+	lda xde, (xbc+240:16)
 
 GetEncFileSize_CopyRecordLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x50
@@ -5766,7 +5766,7 @@ GetEncFileSize_ReleaseHandle:
 GetEncFileSize_Return:
 	ld hl, iz
 	popw iz
-	lda_dri XSP, 0xfd, 0x12, 0x01
+	lda xsp, (xsp+274)
 	ret
 
 ; =============================================================================
@@ -5971,11 +5971,11 @@ GetFirstPageBase_Valid:
 	ret
 
 BuildSecondPageRecords:
-	lda_dri XSP, 0xfd, 0xee, 0xfe
+	lda xsp, (xsp-274)
 	pushw iz
 	lda xbc, (0x025eb2:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0x38, 0x13
+	lda xde, (xbc+4920)
 
 BuildSecondPage_CopyRecordLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -6047,7 +6047,7 @@ BuildSecondPage_ReleaseHandle:
 BuildSecondPage_Return:
 	ld hl, iz
 	popw iz
-	lda_dri XSP, 0xfd, 0x12, 0x01
+	lda xsp, (xsp+274)
 	ret
 
 NavigateToFileIndex:
@@ -7043,11 +7043,11 @@ GetCurrentIndex_Return:
 	ret
 
 BuildPageRecords:
-	lda_dri XSP, 0xfd, 0xee, 0xfe
+	lda xsp, (xsp-274)
 	pushw iz
 	lda xbc, (0x025eb2:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0x38, 0x13
+	lda xde, (xbc+4920)
 
 BuildRecords_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -7119,7 +7119,7 @@ BuildRecords_Cleanup:
 BuildRecords_Return:
 	ld hl, iz
 	popw iz
-	lda_dri XSP, 0xfd, 0x12, 0x01
+	lda xsp, (xsp+274)
 	ret
 
 SetCurrentFileIndex:
@@ -7264,7 +7264,7 @@ TrimFormat_SkipLoop:
 TrimFormat_Done:
 	ld hl, 0:i3
 	pop xiz
-	lda_dri XSP, 0xfd, 0x80, 0x00
+	lda xsp, (xsp+128:16)
 	ret
 
 DetectFileType:
@@ -7407,7 +7407,7 @@ FileIO_InitDirScan:
 	push xiz
 	lda xbc, (0x025eb2:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0x38, 0x13
+	lda xde, (xbc+4920)
 
 InitDirScan_CopyLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0x5C
@@ -7803,7 +7803,7 @@ CheckMediaWritable_Ok:
 	ret
 
 FileIO_OpenWithBuiltPath:
-	lda_dri XSP, 0xfd, 0x70, 0xff
+	lda xsp, (xsp-144)
 	push xiz
 	stl_dri XBC, 0xfd, 0x90, 0x00
 	ld xiz, xwa
@@ -7820,7 +7820,7 @@ FileIO_OpenWithBuiltPath:
 	ld_sril XBC, (xsp + 0x0090)
 	call FileIO_OpenWithMode
 	pop xiz
-	lda_dri XSP, 0xfd, 0x90, 0x00
+	lda xsp, (xsp+144:16)
 	ret
 
 FileIO_BuildFileIndex:
@@ -7944,7 +7944,7 @@ CtrlCmd_Return:
 	ret
 
 FileIO_FindFirstMatch:
-	lda_dri XSP, 0xfd, 0xec, 0xfe
+	lda xsp, (xsp-276)
 	push xiz
 	stl_dri XBC, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
@@ -8020,11 +8020,11 @@ FindFirst_NotFound:
 
 FindFirst_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x14, 0x01
+	lda xsp, (xsp+276)
 	ret
 
 FileIO_FindNextMatch:
-	lda_dri XSP, 0xfd, 0xf2, 0xfe
+	lda xsp, (xsp-270)
 	push xiz
 	stl_dri XBC, 0xfd, 0x0e, 0x01
 	ld xiz, xwa
@@ -8066,7 +8066,7 @@ FindNext_Ok:
 
 FindNext_Return:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x0e, 0x01
+	lda xsp, (xsp+270)
 	ret
 
 FileIO_SearchStringMatch:
@@ -8232,11 +8232,11 @@ GetWallpaper_ReturnIndex:
 	ret
 
 FileIO_ScanDirEntries:
-	lda_dri XSP, 0xfd, 0xee, 0xfe
+	lda xsp, (xsp-274)
 	pushw iz
 	lda xbc, (0x02723c:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0x8c, 0x00
+	lda xde, (xbc+140:16)
 
 ScanDir_CopyEntryLoop:
 	ld xiy, SeqFileTypeCode_Lsw_0xAE
@@ -8308,7 +8308,7 @@ ScanDir_CloseFindHandle:
 ScanDir_Return:
 	ld hl, iz
 	popw iz
-	lda_dri XSP, 0xfd, 0x12, 0x01
+	lda xsp, (xsp+274)
 	ret
 
 FileIO_SelectWallpaperByIndex:

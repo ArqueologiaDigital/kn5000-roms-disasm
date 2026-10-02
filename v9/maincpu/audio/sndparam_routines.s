@@ -3041,7 +3041,7 @@ SndParam_EncodeAddress:
 SndParam_InitHashTable:
 	lda xbc, (0x034100:24)
 	ld xwa, xbc
-	lda_dri XDE, 0xe5, 0xf8, 0x3f
+	lda xde, (xbc+16376)
 
 SndParam_InitHashFillLoop:
 	ld xiy, Naka_ToshiParam_Table_0x6CC
@@ -3149,7 +3149,7 @@ SndParam_InsertReturn:
 SndParam_ClearHashTable:
 	lda xwa, (0x97d8:16)
 	ld xbc, xwa
-	lda_dri XDE, 0xe1, 0xfc, 0x1f
+	lda xde, (xwa+8188)
 
 SndParam_ClearLoop:
 	ld xwa, 0:i3
@@ -3159,7 +3159,7 @@ SndParam_ClearLoop:
 	lda xde, (0x0380f8:24)
 	lda xbc, (xde + 2)
 	ld xwa, xbc
-	lda_dri XBC, 0xe5, 0x00, 0x40
+	lda xbc, (xbc+16384)
 
 SndParam_ClearHeap:
 	ld (xwa+), 0x00

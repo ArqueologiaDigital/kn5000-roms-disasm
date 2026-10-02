@@ -3462,7 +3462,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	; (= the copy-to-HD run: checks the floppy song (HDAE5000_FdSong_CheckFiles)
 	; and copies it into the chosen directory (HDAE5000_CopyFdSongToHd).
 	; There are no partitions.)
-	lda_dri xsp, 0xFD, 0xD4, 0xFE	; lda XSP, XSP+0xFED4 (alloc ~300 bytes)
+	lda xsp, (xsp-300)	; lda XSP, XSP+0xFED4 (alloc ~300 bytes)
 	push xiz
 	stw_dri de, 0xFD, 0x2C, 0x01	; ld (XSP+0x012C), DE
 	stw_dri bc, 0xFD, 0x2E, 0x01	; ld (XSP+0x012E), BC
@@ -3481,7 +3481,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	; Valid entry — format and display
 	pushw 0x000d
 	pushw 0x0000
-	lda_dri xwa, 0xFD, 0x22, 0x01	; lda XWA, XSP+0x0122
+	lda xwa, (xsp+290)	; lda XWA, XSP+0x0122
 	push xwa
 	call HDAE5000_MemFill			; MemFill
 	ld wa, iz
@@ -3489,7 +3489,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	pushw wa                                ; push wa (compact)
 	pushw 0x002e
 	pushw 0x2f24		; low half of HDAE5000_Fmt_2_2d_CopyToHd_Execute
-	lda_dri xwa, 0xFD, 0x2C, 0x01	; lda XWA, XSP+0x012C
+	lda xwa, (xsp+300)	; lda XWA, XSP+0x012C
 	push xwa
 	call HDAE5000_SPrintf
 	pushw 0x0006
@@ -3501,7 +3501,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	ld xbc, 0x0022aa9c
 	add xbc, xwa
 	push xbc
-	lda_dri xwa, 0xFD, 0x38, 0x01	; lda XWA, XSP+0x0138
+	lda xwa, (xsp+312)	; lda XWA, XSP+0x0138
 	push xwa
 	call HDAE5000_StrNCpy			; MemCopy_Reverse
 	lda xsp, (xsp + 0x1c)
@@ -3528,9 +3528,9 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	jrl z, .LFSD__loop_next
 	; Copy 8 bytes from entry
 	pushw 0x0008
-	lda_dri xwa, 0xFD, 0x20, 0x01	; lda XWA, XSP+0x0120
+	lda xwa, (xsp+288)	; lda XWA, XSP+0x0120
 	push xwa
-	lda_dri xwa, 0xFD, 0x16, 0x01	; lda XWA, XSP+0x0116
+	lda xwa, (xsp+278)	; lda XWA, XSP+0x0116
 	push xwa
 	call HDAE5000_MemCopy			; MemCopy
 	lda xsp, (xsp + 0x0a)
@@ -3543,13 +3543,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	call (xhl)
 	pushw 0x002e
 	pushw 0x2f2a		; low half of HDAE5000_Str_LSW
-	lda_dri xwa, 0xFD, 0x1C, 0x01	; lda XWA, XSP+0x011C
+	lda xwa, (xsp+284)	; lda XWA, XSP+0x011C
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01	; lda XWA, XSP+0x0110
+	lda xwa, (xsp+272)	; lda XWA, XSP+0x0110
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)             ; XDE = (XDE+0x0E88)
 	ld_sril xix, (xde + HamaFn__findfirst)             ; XIX = (XDE+0x0094)
@@ -3566,13 +3566,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f1:				; Field 1 (0x2F30)
 	pushw 0x002e
 	pushw 0x2f30		; low half of HDAE5000_Str_PMT
-	lda_dri xwa, 0xFD, 0x1C, 0x01	; lda XWA, XSP+0x011C
+	lda xwa, (xsp+284)	; lda XWA, XSP+0x011C
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01	; lda XWA, XSP+0x0110
+	lda xwa, (xsp+272)	; lda XWA, XSP+0x0110
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3589,13 +3589,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f2:				; Field 2 (0x2F36)
 	pushw 0x002e
 	pushw 0x2f36		; low half of HDAE5000_Str_SQT
-	lda_dri xwa, 0xFD, 0x1C, 0x01
+	lda xwa, (xsp+284)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3612,13 +3612,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f3:				; Field 3 (0x2F3C)
 	pushw 0x002e
 	pushw 0x2f3c		; low half of HDAE5000_Str_CMP
-	lda_dri xwa, 0xFD, 0x1C, 0x01
+	lda xwa, (xsp+284)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3635,13 +3635,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f4:				; Field 4 (0x2F42)
 	pushw 0x002e
 	pushw 0x2f42		; low half of HDAE5000_Str_TM
-	lda_dri xwa, 0xFD, 0x1C, 0x01
+	lda xwa, (xsp+284)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3658,13 +3658,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f5:				; Field 5 (0x2F46)
 	pushw 0x002e
 	pushw 0x2f46		; low half of HDAE5000_Str_MSP
-	lda_dri xwa, 0xFD, 0x1C, 0x01
+	lda xwa, (xsp+284)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3681,13 +3681,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f6:				; Field 6 (0x2F4C)
 	pushw 0x002e
 	pushw 0x2f4c		; low half of HDAE5000_Str_RCM
-	lda_dri xwa, 0xFD, 0x1C, 0x01
+	lda xwa, (xsp+284)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3704,13 +3704,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f7:				; Field 7 (0x2F52)
 	pushw 0x002e
 	pushw 0x2f52		; low half of HDAE5000_Str_MD
-	lda_dri xwa, 0xFD, 0x1C, 0x01
+	lda xwa, (xsp+284)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3727,13 +3727,13 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 .LFSD__f8:				; Field 8 (0x2F56)
 	pushw 0x002e
 	pushw 0x2f56		; low half of HDAE5000_Str_TLX
-	lda_dri xwa, 0xFD, 0x1C, 0x01
+	lda xwa, (xsp+284)
 	push xwa
 	call HDAE5000_StrCpy
 	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
-	lda_dri xwa, 0xFD, 0x10, 0x01
+	lda xwa, (xsp+272)
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xde, (xde + WS_HamaFnTable)
 	ld_sril xix, (xde + HamaFn__findfirst)
@@ -3749,14 +3749,14 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	call (xhl)
 .LFSD__post_search:
 	; Check results and call directory handler
-	lda_dri xwa, 0xFD, 0x1E, 0x01	; lda XWA, XSP+0x011E
+	lda xwa, (xsp+286)	; lda XWA, XSP+0x011E
 	ld	bc, qiz
 	call HDAE5000_FdSong_CheckFiles
 	cp hl, 0xffff
 	jrl z, .LFSD__no_match
 	; Match — attempt write
 	ld bc, (xsp + 0x04)
-	lda_dri xwa, 0xFD, 0x1E, 0x01	; lda XWA, XSP+0x011E
+	lda xwa, (xsp+286)	; lda XWA, XSP+0x011E
 	ld xde, xwa
 	push	qiz
 	pushw 0x0000
@@ -3841,7 +3841,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	ld hl, 0:i3
 .LFSD__exit:
 	pop xiz
-	lda_dri xsp, 0xFD, 0x2C, 0x01	; lda XSP, XSP+0x012C (dealloc)
+	lda xsp, (xsp+300)	; lda XSP, XSP+0x012C (dealloc)
 	ret
 	;
 	; Part 2: Event handler — navigation (0x289D72)

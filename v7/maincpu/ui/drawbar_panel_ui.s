@@ -10432,7 +10432,7 @@ LswOrchestra_PopIzRet:
 	ret
 
 PsLabelBoxProc:
-	lda_dri XSP, 0xfd, 0xec, 0xfe
+	lda xsp, (xsp-276)
 	push xiz
 	stl_dri XDE, 0xfd, 0x10, 0x01
 	stl_dri XWA, 0xfd, 0x14, 0x01
@@ -10463,11 +10463,11 @@ PsLabelBoxProc:
 	jrl PsLabelBox_SendEvent_Continue
 
 PsLabel_Confirm:
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ld XWA, (xsp + 0x0114)
 	call GetClientBox
-	lda_dri XWA, 0xfd, 0x08, 0x01
-	lda_dri XBC, 0xfd, 0x04, 0x01
+	lda xwa, (xsp+264)
+	lda xbc, (xsp+260)
 	call GetBoxCenter
 	ld XWA, (xsp + 0x0114)
 	call GetViewInstance
@@ -10490,8 +10490,8 @@ PsLabel_CopyDataStr:
 	call	Free_Compare2
 	inc	8, xsp
 PsLabel_DrawReverse:
-	lda_dri XHL, 0xfd, 0x08, 0x01
-	lda_dri XBC, 0xfd, 0x04, 0x01
+	lda xhl, (xsp+264)
+	lda xbc, (xsp+260)
 	lda xde, (xsp + 4)
 	ld xwa, (xiz + 32)
 	push xwa
@@ -10621,7 +10621,7 @@ PsLabel_ForwardToBase:
 
 PsLabel_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x14, 0x01
+	lda xsp, (xsp+276)
 	ret
 
 LswMasterTuning:
@@ -18271,7 +18271,7 @@ DemoDesc_DataByte:
 	ret
 
 PsVariBoxProc:
-	lda_dri XSP, 0xfd, 0xe8, 0xfe
+	lda xsp, (xsp-280)
 	push xiz
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
@@ -18321,10 +18321,10 @@ PsVari_Paint:
 	jr PsVari_DrawEditSw
 
 PsVari_PaintEmpty:
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ld XWA, (xsp + 0x0118)
 	call GetBox
-	lda_dri XWA, 0xfd, 0x08, 0x01
+	lda xwa, (xsp+264)
 	ldw bc, 0xf5
 	call DrawBox
 
@@ -18341,11 +18341,11 @@ PsVari_Confirm:
 	ld XWA, (xsp + 0x0118)
 	call GetViewInstance
 	ld (xsp + 4), xhl
-	lda_dri XBC, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+264)
 	ld XWA, (xsp + 0x0118)
 	call GetClientBox
-	lda_dri XWA, 0xfd, 0x08, 0x01
-	lda_dri XBC, 0xfd, 0x10, 0x01
+	lda xwa, (xsp+264)
+	lda xbc, (xsp+272)
 	call GetBoxCenter
 	lda xde, (xsp + 8)
 	ld XWA, (xsp + 0x0118)
@@ -18353,8 +18353,8 @@ PsVari_Confirm:
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xiz, (xwa + 38)
-	lda_dri XBC, 0xfd, 0x10, 0x01
-	lda_dri XDE, 0xfd, 0x08, 0x01
+	lda xbc, (xsp+272)
+	lda xde, (xsp+264)
 	lda xhl, (xsp + 8)
 	lda xiy, (xwa + 28)
 	ld a, (xwa + 34)
@@ -18469,7 +18469,7 @@ PsVari_CallInherited:
 
 PsVari_Epilogue:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x18, 0x01
+	lda xsp, (xsp+280)
 	ret
 
 

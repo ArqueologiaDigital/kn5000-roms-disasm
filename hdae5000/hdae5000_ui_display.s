@@ -916,7 +916,7 @@ HDAE5000_BitmapButt01:
 
 HDAE5000_AcLanguageText1Proc:
 	; registered as "AcLanguageText1Proc" in HDAE5000_ClassProc_Table
-	lda_dri xsp, 0xFD, 0x2A, 0xFF	; lda XSP,XSP+0xff2a
+	lda xsp, (xsp-214)	; lda XSP,XSP+0xff2a
 	push xiz
 	stl_dri xde, 0xFD, 0xCE, 0x00	; ld (XSP+0x00ce),XDE
 	stl_dri xbc, 0xFD, 0xD2, 0x00	; ld (XSP+0x00d2),XBC
@@ -3207,7 +3207,7 @@ HDAE5000_AcLanguageText1Proc_NoMessage:
 	ld	xhl, 0:i3
 .LUIH_cd01:
 	pop xiz                                 ; pop XIZ
-	lda_dri xsp, 0xFD, 0xD6, 0x00	; lda XSP,XSP+0x00d6
+	lda xsp, (xsp+214:16)	; lda XSP,XSP+0x00d6
 	ret
 
 HDAE5000_LyricBoxProc:
@@ -5579,7 +5579,7 @@ HDAE5000_SwapBytes16:	; 0x28E60E (13 bytes)
 	; --- Main dispatch function (2384 bytes) ---
 HDAE5000_FDFileSelectProc:
 	; registered as "FDFileSelectProc" in HDAE5000_ClassProc_Table
-	lda_dri xsp, 0xfd, 0x7e, 0xff	; lda XSP, XSP-130 (stack frame)
+	lda xsp, (xsp-130)	; lda XSP, XSP-130 (stack frame)
 	push xiz
 	ld (xsp + 0x7a), xde		; save arg3
 	ld (xsp + 0x7e), xbc		; save arg2
@@ -6399,7 +6399,7 @@ HDAE5000_FDFileSelectProc:
 	ld xhl, 0:i3
 .Lsc_epilogue:
 	pop xiz
-	lda_dri xsp, 0xfd, 0x82, 0x00	; lda XSP, XSP+130 (restore stack)
+	lda xsp, (xsp+130:16)	; lda XSP, XSP+130 (restore stack)
 	ret
 
 HDAE5000_FdLyricList_Scan:	; 0x28EF6B (556 bytes)
@@ -6416,7 +6416,7 @@ HDAE5000_FdLyricList_Scan:	; 0x28EF6B (556 bytes)
 	;   RootFn_WakeUpMainTask.
 
 	; --- Prologue: allocate ~370 bytes of stack ---
-	lda_dri xsp, 0xfd, 0x8e, 0xfe	; lda XSP, XSP-370
+	lda xsp, (xsp-370)	; lda XSP, XSP-370
 	push xiz			; save XIZ
 	ld xwa, 0:i3
 	ld (xsp + 4), xwa		; local[0x04] = 0 (result)
@@ -6541,20 +6541,20 @@ HDAE5000_FdLyricList_Scan:	; 0x28EF6B (556 bytes)
 	ld xwa, HDAE5000_RAM_FdLyricNames			; XWA = 0x00230884
 	add xwa, xbc			; XWA = entry address
 	push xwa
-	lda_dri xwa, 0xfd, 0x16, 0x01	; lda XWA, XSP+0x0116
+	lda xwa, (xsp+278)	; lda XWA, XSP+0x0116
 	push xwa
 	call HDAE5000_StrCpy			; call 0x29AF45 (memcpy)
 
 	; Append separator string
 	pushw 46			; max = 0x2E -- high half of HDAE5000_Str_TTX
 	pushw 23896			; src = 0x5D58		; low half of HDAE5000_Str_TTX
-	lda_dri xwa, 0xfd, 0x1e, 0x01	; lda XWA, XSP+0x011E
+	lda xwa, (xsp+286)	; lda XWA, XSP+0x011E
 	push xwa
 	call HDAE5000_StrCat			; call 0x29AF0B (strcat)
 	lda xsp, (xsp + 16)		; pop 16 bytes
 
 	; --- Call vtable method at +0x00A0 (display entry) ---
-	lda_dri xwa, 0xfd, 0x12, 0x01	; lda XWA, XSP+0x0112
+	lda xwa, (xsp+274)	; lda XWA, XSP+0x0112
 	lda xbc, (HDAE5000_Str_Rb_FdLyricTtx:24); XBC = 0x2E5D5E
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24); XDE = (0x23A1A2)
 	ld xde, (xde + WS_HamaFnTable)             ; XDE = (XDE + 0x0E88)
@@ -6591,18 +6591,18 @@ HDAE5000_FdLyricList_Scan:	; 0x28EF6B (556 bytes)
 	ld xwa, HDAE5000_RAM_FdLyricNames			; 0x00230884
 	add xwa, xbc
 	push xwa
-	lda_dri xwa, 0xfd, 0x16, 0x01	; lda XWA, XSP+0x0116
+	lda xwa, (xsp+278)	; lda XWA, XSP+0x0116
 	push xwa
 	call HDAE5000_StrCpy			; memcpy
 	pushw 46
 	pushw 23906			; src = 0x5D62		; low half of HDAE5000_Str_MID
-	lda_dri xwa, 0xfd, 0x1e, 0x01	; lda XWA, XSP+0x011E
+	lda xwa, (xsp+286)	; lda XWA, XSP+0x011E
 	push xwa
 	call HDAE5000_StrCat			; strcat
 	lda xsp, (xsp + 16)		; pop 16 bytes
 
 	; --- Call vtable method at +0x00A0 via XIX ---
-	lda_dri xwa, 0xfd, 0x12, 0x01	; lda XWA, XSP+0x0112
+	lda xwa, (xsp+274)	; lda XWA, XSP+0x0112
 	lda xbc, (HDAE5000_Str_Rb_FdLyricMid:24); XBC = 0x2E5D68
 	ld xde, (HDAE5000_RAM_MainWorkspacePtr:24); XDE = (0x23A1A2)
 	ld xde, (xde + WS_HamaFnTable)
@@ -6650,7 +6650,7 @@ HDAE5000_FdLyricList_Scan:	; 0x28EF6B (556 bytes)
 	; --- Epilogue: return result and deallocate ---
 	ld xhl, (xsp + 4)		; XHL = result
 	pop xiz				; restore XIZ
-	lda_dri xsp, 0xfd, 0x72, 0x01	; lda XSP, XSP+0x0172
+	lda xsp, (xsp+370)	; lda XSP, XSP+0x0172
 	ret
 
 HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
@@ -11284,7 +11284,7 @@ HDAE5000_FdSong_CheckFiles:
 	; +0x9C), or if, for any part k in the mask, the first 512 bytes of
 	; "<name><ext k>" (opened "rb" with +0xA0, read with +0xA8, closed with
 	; +0xAC) fail HDAE5000_CheckFileSignature(k).  HL = 0 otherwise.
-	lda_dri xsp, 0xFD, 0xE6, 0xFE	; lda XSP,XSP+0xfee6
+	lda xsp, (xsp-282)	; lda XSP,XSP+0xfee6
 	push xiz
 	stw_dri bc, 0xFD, 0x1C, 0x01	; ld (XSP+0x011c),BC
 	ld	xiz, xwa
@@ -11656,7 +11656,7 @@ HDAE5000_FdSong_CheckFiles:
 	ld	hl, 0:i3
 .LTCI_214a:
 	pop xiz                                 ; pop XIZ
-	lda_dri xsp, 0xFD, 0x1A, 0x01	; lda XSP,XSP+0x011a
+	lda xsp, (xsp+282)	; lda XSP,XSP+0x011a
 	ret
 
 HDAE5000_CopyFdSongToHd:
@@ -15547,7 +15547,7 @@ HDAE5000_PPORT_Svc13_SendInfosAboutSong:
 	calr	HDAE5000_DebugTrace
 	ld	hl, qiz
 	pop xiz                                 ; pop XIZ
-	lda_dri xsp, 0xFD, 0x80, 0x00	; lda XSP,XSP+0x0080
+	lda xsp, (xsp+128:16)	; lda XSP,XSP+0x0080
 	ret
 
 HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory:

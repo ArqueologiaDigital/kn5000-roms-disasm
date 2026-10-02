@@ -17497,7 +17497,7 @@ Scoop_CurveUpdate_NextSegment:
 	jp	Param_SignExtendReturn
 
 Scoop_CurveUpdate_SegmentEnd:
-	lda_dri XSP, 0xfd, 0xf0, 0xfe
+	lda xsp, (xsp-272)
 	push xiz
 	ld xbc, xwa
 	ld iz, (xbc + 2)
@@ -17581,9 +17581,9 @@ Scoop_EnvelopeCalc:
 	ldw_sri0 WA, (xsp + 0x010a)
 	add wa, hl
 	stw_dri WA, 0xfd, 0x12, 0x01
-	lda_dri XWA, 0xfd, 0x0c, 0x01
+	lda xwa, (xsp+268)
 	ld xhl, xwa
-	lda_dri XWA, 0xfd, 0x08, 0x01
+	lda xwa, (xsp+264)
 	ld xbc, xwa
 	lda xwa, (xsp + 8)
 	ld xde, xwa
@@ -17594,7 +17594,7 @@ Scoop_EnvelopeCalc:
 	ld xwa, xhl
 	call DrawString
 	pop xiz
-	lda_dri XSP, 0xfd, 0x10, 0x01
+	lda xsp, (xsp+272)
 	ret
 
 Scoop_EnvelopeCalc_Data:
@@ -17923,7 +17923,7 @@ Scoop_EnvCalc_Handler3:
 	ret
 
 Scoop_GlideParam_Setup:
-	lda_dri XSP, 0xfd, 0xf4, 0xfe
+	lda xsp, (xsp-268)
 	pushw iz
 	ld hl, (xwa + 2)
 	ld c, (xwa + 1)
@@ -17987,9 +17987,9 @@ Scoop_GlideParam_End:
 	add wa, hl
 	sub wa, iz
 	stw_dri WA, 0xfd, 0x0c, 0x01
-	lda_dri XWA, 0xfd, 0x06, 0x01
+	lda xwa, (xsp+262)
 	ld xhl, xwa
-	lda_dri XWA, 0xfd, 0x02, 0x01
+	lda xwa, (xsp+258)
 	ld xbc, xwa
 	lda xwa, (xsp + 2)
 	ld xde, xwa
@@ -18000,7 +18000,7 @@ Scoop_GlideParam_End:
 	ld xwa, xhl
 	call DrawString
 	popw iz
-	lda_dri XSP, 0xfd, 0x0c, 0x01
+	lda xsp, (xsp+268)
 	ret
 
 Scoop_GlideParam_Data:
@@ -18272,7 +18272,7 @@ Scoop_Dispatch_CallFAB273:
 
 
 Scoop_EventLoop_12Entry:
-	lda_dri XSP, 0xfd, 0x6a, 0xff
+	lda xsp, (xsp-150)
 	push xiz
 	stl_dri XBC, 0xfd, 0x96, 0x00
 	ld xiz, xwa
@@ -18305,7 +18305,7 @@ Scoop_EventLoop_12Entry_Process:
 
 Scoop_EventLoop_12Entry_End:
 	pop xiz
-	lda_dri XSP, 0xfd, 0x96, 0x00
+	lda xsp, (xsp+150:16)
 	ret
 
 Scoop_EnvProcessor_Data:
@@ -18548,11 +18548,11 @@ Scoop_EventLoop_12Entry_Join3:
 	ret
 
 Scoop_EventLoop_36Entry:
-	lda_dri XSP, 0xfd, 0xec, 0xfe
+	lda xsp, (xsp-276)
 	pushw iz
 	stl_dri XWA, 0xfd, 0x12, 0x01
 	ld xiy, StyleUI_ScreenData_CtlOnly_0x1FF
-	lda_dri XIX, 0xfd, 0x0a, 0x01
+	lda xix, (xsp+266)
 	ld bc, 4:i3
 	ldirw
 	ld XWA, (xsp + 0x0112)
@@ -18636,9 +18636,9 @@ Scoop_EventLoop_36Entry_Branch3:
 	add wa, hl
 	sub wa, iz
 	stw_dri WA, 0xfd, 0x10, 0x01
-	lda_dri XWA, 0xfd, 0x0a, 0x01
+	lda xwa, (xsp+266)
 	ld xhl, xwa
-	lda_dri XWA, 0xfd, 0x06, 0x01
+	lda xwa, (xsp+262)
 	ld xbc, xwa
 	lda xwa, (xsp + 6)
 	ld xde, xwa
@@ -18649,7 +18649,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	ld xwa, xhl
 	call DrawString
 	popw iz
-	lda_dri XSP, 0xfd, 0x14, 0x01
+	lda xsp, (xsp+276)
 	ret
 
 Scoop_EventLoop_36Entry_Data:

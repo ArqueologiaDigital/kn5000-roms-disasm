@@ -2898,7 +2898,7 @@ Seq_CopyResourcePtrs:
 	lda xde, (0x024fd8:24)
 	lda xhl, (Presentation_RootEntry_0x6:24)
 	ld xbc, xde
-	lda_dri XDE, 0xe9, 0xfc, 0x01
+	lda xde, (xde+508)
 
 Seq_CopyPtrLoop:
 	ld (xbc+), XHL

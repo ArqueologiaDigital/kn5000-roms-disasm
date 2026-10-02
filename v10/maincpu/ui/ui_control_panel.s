@@ -3900,7 +3900,7 @@ GroupBox_Nav_SendEventAndUpdate:
 	lda xbc, (xde + 15)
 	ld xwa, xbc
 	inc 1, xde
-	lda_dri XBC, 0xe5, 0xc0, 0x01
+	lda xbc, (xbc+448)
 
 GroupBox_Nav_ClearWidgetFlags:
 	ld (xde), 0x0
