@@ -3130,7 +3130,7 @@ Audio_InitAllDefaults_Data_2:
 ; SystemConfig_PointerTable (ui_widgets/widget_dispatch.s) points at the
 ; table's head under the `.set` name SoundProgram_ParamPtrTable
 ; (kn5000_v10_program.s).  Searched for other readers: the positional names
-; SoundProgram_DispatchTable_0x880..0x88C and the literals 0xEDB2E4-0xEDB2F3.
+; SoundProgram_ParamPtrTable..0x88C and the literals 0xEDB2E4-0xEDB2F3.
 SoundProgram_ParamPtrTable:
 	.long Audio_InitAllDefaults
 	.long Audio_ReinitToneGenAndOutput

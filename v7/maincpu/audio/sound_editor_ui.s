@@ -11964,7 +11964,7 @@ SeScreenData_0x06B1:
 	sd_ctext	0x06, 12, 36*40+32, "EDITED \021"
 	sd_quad	0x09, 252, 31, 308, 50
 	sd_quad	0x09, 254, 33, 306, 48
-; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x06E5, SeScreenData_0x06EF
+; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x06E5, SeBitmap_Picture40x40
 ; evidence: SeMenu_ShowConfirmDialog_Data
 SeScreenData_0x06DB:
 	sd_ctext	0x06, 5, 74*40+0, "\020"
@@ -12631,7 +12631,7 @@ SeScreenData_0x1043:
 	sd_ptext	0x17, 11, 216, 178, "TOTAL"
 	sd_ptext	0x17, 11, 252, 178, "DEPTH"
 	sd_quad	0x02, 213, 174, 213, 203
-; static record list (17 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x1100, SeScreenData_0x113B
+; static record list (17 records), read by GraphicsRender_ProcessEntries; ends SeMenu_CompareAndApply_Apply_Data, SeScreenData_0x113B
 ; evidence: SeMenu_CompareAndApply_Data3
 SeScreenData_0x1089:
 	sd_ptext	0x1c, 15, 122, 5, "AMPLITUDE"
@@ -12802,7 +12802,7 @@ SeScreenData_0x137D:
 SeScreenData_0x1452:
 	sd_quad	0x01, 47, 97, 255, 97
 	sd_quad	0x09, 82, 205, 235, 233
-; static record list (21 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x147E, SeScreenData_0x1523
+; static record list (21 records), read by GraphicsRender_ProcessEntries; ends SeMenu_Utility_CopyBlock_Data, SeScreenData_0x1523
 ; evidence: SeMenu_Utility_CopyBlock
 SeScreenData_0x1466:
 	sd_ptext	0x17, 14, 127, 48, "ENVELOPE"
@@ -12874,7 +12874,7 @@ SeScreenData_0x1523:
 SeScreenData_0x166E:
 	sd_quad	0x01, 47, 97, 255, 97
 	sd_quad	0x09, 3, 205, 230, 233
-; static record list (19 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x16A8, SeScreenData_0x173B
+; static record list (19 records), read by GraphicsRender_ProcessEntries; ends SeMenu_Utility_SearchByte_Data, SeScreenData_0x173B
 ; evidence: SeMenu_Utility_FormatNumber
 SeScreenData_0x1682:
 	sd_ptext	0x1c, 12, 140, 5, "FILTER"
@@ -12910,7 +12910,7 @@ SeScreenData_0x1740:
 	sd_quad	0x05, 278, 39, 306, 52
 	sd_quad	0x05, 270, 67, 306, 92
 	sd_quad	0x05, 278, 107, 306, 120
-; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x1776, SeScreenData_0x1780
+; static record list (4 records), read by GraphicsRender_ProcessEntries; ends SeMenu_Utility_FormatNumber_Data_2, SeScreenData_0x1780
 ; evidence: SeMenu_Utility_FormatSigned
 SeScreenData_0x175E:
 	sd_ctext	0x06, 8, 137*40+32, "M0DE"
@@ -13041,11 +13041,11 @@ SeScreenData_0x19C0:
 SeScreenData_0x1ACA:
 	sd_ptext	0x1c, 13, 112, 96, "THROUGH"
 	sd_quad	0x22, 66, 76, 233, 131
-; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1AF5
+; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeMenu_Utility_CopyBlock_Data_2
 ; evidence: SeMenu_Utility_End
 SeScreenData_0x1AE1:
 	sd_quad	0x11, 50, 102, 257, 102
-; static record list (2 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x1AF5, SeScreenData_0x1B01
+; static record list (2 records), read by GraphicsRender_ProcessEntries; ends SeMenu_Utility_CopyBlock_Data_2, SeScreenData_0x1B01
 ; evidence: SeMenu_Utility_CopyBlock
 SeScreenData_0x1AEB:
 	sd_quad	0x12, 213, 58, 213, 145
@@ -15467,11 +15467,11 @@ SeScreenData_0x4BFE:
 	.long	SeScreenData_0x4B3C, SeScreenData_0x4BA8
 	.long	SeScreenData_0x4BA8, SeScreenData_0x4BFE
 	.long	SeScreenData_0x4BA8, SeScreenData_0x4BFE
-; bound record list (5 records), read by GraphicsRender_Start; ends SeScreenData_0x4C96, SeScreenData_End
+; bound record list (5 records), read by GraphicsRender_Start; ends FlashRead_BlockData_Field7, SeScreenData_End
 ; evidence: SeMenu_NameEdit_DataBlock1
 SeScreenData_0x4C5E:
 	sdb_str	0x0660, 0x0f, 0, 0x20, SeScreenData_0x4EFB, 13, 51*40+17
-; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x4C8B
+; bound record list (2 records), read by GraphicsRender_Start; end FlashRead_BlockData_Field8
 ; evidence: SeMenu_PatchEdit_DataBlock
 SeScreenData_0x4C6D:
 	sdb_str	0x0660, 0x80, 7, 0x20, SeScreenData_0x08D1, 3, 75*40+2

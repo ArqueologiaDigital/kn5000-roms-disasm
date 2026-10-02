@@ -972,7 +972,7 @@ GmOffSureLangCheck_Strings:
 ; [naka_s_headers] TrAsSureLangCheck_PtrTable
 ; TrAsSureLangCheck_PtrTable -- 6 u32 addresses, read by
 ; TrAsSureLangCheck (v10/v9 0xf2a9a3, v7 0xf2a979) (`lda xbc,
-; (NakaWidgetPtrTbl_SmfDp_0x1da0:24)`).
+; (TrAsSureLangCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsSureLangCheck_PtrTable[6].
@@ -993,7 +993,7 @@ TrAsSureLangCheck_Strings:
 ; [naka_s_headers] PartSelLangCheck_PtrTable
 ; PartSelLangCheck_PtrTable -- 6 u32 addresses, read by PartSelLangCheck
 ; (v10/v9 0xf2a92c, v7 0xf2a902) (`lda xhl,
-; (NakaWidgetPtrTbl_SmfDp_0x1fc8:24)`).
+; (PartSelLangCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; PartSelLangCheck_PtrTable[6].
@@ -1004,7 +1004,7 @@ PartSelLangCheck_PtrTable:
 ; [naka_s_headers] AfterLangCheck_PtrTable
 ; AfterLangCheck_PtrTable -- 6 u32 addresses, read by AfterLangCheck
 ; (v10/v9 0xf2a93d, v7 0xf2a913) (`lda xhl,
-; (NakaWidgetPtrTbl_SmfDp_0x1fe0:24)`).
+; (AfterLangCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; AfterLangCheck_PtrTable[6].
@@ -1015,7 +1015,7 @@ AfterLangCheck_PtrTable:
 ; [naka_s_headers] TrAsPreLangCheck_PtrTable
 ; TrAsPreLangCheck_PtrTable -- 6 u32 addresses, read by TrAsPreLangCheck
 ; (v10/v9 0xf2a94e, v7 0xf2a924) (`lda xhl,
-; (NakaWidgetPtrTbl_SmfDp_0x1ff8:24)`).
+; (TrAsPreLangCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsPreLangCheck_PtrTable[6].
@@ -1113,7 +1113,7 @@ IvNamingExit_CopyString_Str_ExMD:		.incbin "includes/generated/naka_widget_table
 ; [naka_s_headers] TrAsGridChk_Part1_SendAudio_PtrTable
 ; TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 addresses, read by
 ; TrAsGridChk_Part1_SendAudio (v10/v9 0xf2c798, v7 0xf2c76e) (`ld xbc,
-; NakaWidgetPtrTbl_SmfDp_0x221a`).
+; TrAsGridChk_Part1_SendAudio_PtrTable`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; TrAsGridChk_Part1_SendAudio_PtrTable[20].
@@ -1146,7 +1146,7 @@ TrAsGrid_GetDirectionLabel_Str:
 ; [naka_s_headers] TrAsGrid_DirectionLabel2_Str
 ; TrAsGrid_DirectionLabel2_Str -- NUL-terminated string(s), 44 bytes,
 ; used by TrAsGrid_DirectionLabel2 (v10/v9 0xf2c30c, v7 0xf2c2e2) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x235e`).
+; xwa, TrAsGrid_DirectionLabel2_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGrid_DirectionLabel2_Str[44].
@@ -1157,7 +1157,7 @@ TrAsGrid_DirectionLabel2_Str:
 ; [naka_s_headers] AcTrAsGridBoxProc_CaseTable
 ; AcTrAsGridBoxProc_CaseTable -- jump table of a compiled `switch` in
 ; AcTrAsGridBoxProc (v10/v9 0xf2bf1e, v7 0xf2bef4) (`add xbc,
-; NakaWidgetPtrTbl_SmfDp_0x238a`): 7 u16 case offsets from
+; AcTrAsGridBoxProc_CaseTable`): 7 u16 case offsets from
 ; TrAsGrid_HandleInit.
 ;
 ; Typed in naka_widget_tables_1.c as uint16_t
@@ -1181,7 +1181,7 @@ TrAsGrid_LookupTable_Table:
 ; [naka_s_headers] TrAsGrid_ByteData1_Table
 ; TrAsGrid_ByteData1_Table -- read by TrAsGrid_StepListValue (v10/v9
 ; 0xf2c41a, v7 0xf2c3f0) (`lda xde,
-; (NakaWidgetPtrTbl_SmfDp_0x23b8:24)`). 20 bytes to the next object; the
+; (TrAsGrid_ByteData1_Table:24)`). 20 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_1.c as uint8_t
@@ -1192,7 +1192,7 @@ TrAsGrid_ByteData1_Table:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] TrAsGrid_ByteData1_Table_2
 ; TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_StepListValue (v10/v9
-; 0xf2c41a, v7 0xf2c3f0) (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x23cc`). 20
+; 0xf2c41a, v7 0xf2c3f0) (`ld xbc, TrAsGrid_ByteData1_Table_2`). 20
 ; bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -1205,7 +1205,7 @@ TrAsGrid_ByteData1_Table_2:
 ; [naka_s_headers] TrAsGridChk_Part2_Start_Str
 ; TrAsGridChk_Part2_Start_Str -- NUL-terminated string(s), 4 bytes, used
 ; by TrAsGridChk_Part2_Start (v10/v9 0xf2c7c3, v7 0xf2c799) (`ld xwa,
-; NakaWidgetPtrTbl_SmfDp_0x23e0`).
+; TrAsGridChk_Part2_Start_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_Start_Str[4].
@@ -1216,7 +1216,7 @@ TrAsGridChk_Part2_Start_Str:
 ; [naka_s_headers] TrAsGridChk_Part2_Start_Str_2
 ; TrAsGridChk_Part2_Start_Str_2 -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part2_Start (v10/v9 0xf2c7c3, v7 0xf2c799) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x23e4`).
+; xwa, TrAsGridChk_Part2_Start_Str_2`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_Start_Str_2[4].
@@ -1227,7 +1227,7 @@ TrAsGridChk_Part2_Start_Str_2:
 ; [naka_s_headers] TrAsGridChk_Part2_PushCmd_Str
 ; TrAsGridChk_Part2_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part2_PushCmd (v10/v9 0xf2c7e5, v7 0xf2c7bb) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x23e8`).
+; xwa, TrAsGridChk_Part2_PushCmd_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_PushCmd_Str[4].
@@ -1238,7 +1238,7 @@ TrAsGridChk_Part2_PushCmd_Str:
 ; [naka_s_headers] TrAsGridChk_Part2_PushCmd_Str_2
 ; TrAsGridChk_Part2_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part2_PushCmd (v10/v9 0xf2c7e5, v7 0xf2c7bb) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x23ec`).
+; xwa, TrAsGridChk_Part2_PushCmd_Str_2`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_PushCmd_Str_2[4].
@@ -1249,7 +1249,7 @@ TrAsGridChk_Part2_PushCmd_Str_2:
 ; [naka_s_headers] TrAsGridChk_Part2_UpDir_Str
 ; TrAsGridChk_Part2_UpDir_Str -- NUL-terminated string(s), 4 bytes, used
 ; by TrAsGridChk_Part2_UpDir (v10/v9 0xf2c82e, v7 0xf2c804) (`ld xwa,
-; NakaWidgetPtrTbl_SmfDp_0x23f0`).
+; TrAsGridChk_Part2_UpDir_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpDir_Str[4].
@@ -1260,7 +1260,7 @@ TrAsGridChk_Part2_UpDir_Str:
 ; [naka_s_headers] TrAsGridChk_Part2_UpDir_Str_2
 ; TrAsGridChk_Part2_UpDir_Str_2 -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part2_UpDir (v10/v9 0xf2c82e, v7 0xf2c804) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x23f4`).
+; xwa, TrAsGridChk_Part2_UpDir_Str_2`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpDir_Str_2[4].
@@ -1271,7 +1271,7 @@ TrAsGridChk_Part2_UpDir_Str_2:
 ; [naka_s_headers] TrAsGridChk_Part2_UpPushCmd_Str
 ; TrAsGridChk_Part2_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part2_UpPushCmd (v10/v9 0xf2c84a, v7 0xf2c820)
-; (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x23f8`).
+; (`ld xwa, TrAsGridChk_Part2_UpPushCmd_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpPushCmd_Str[4].
@@ -1282,7 +1282,7 @@ TrAsGridChk_Part2_UpPushCmd_Str:
 ; [naka_s_headers] TrAsGridChk_Part2_UpCheckType0_Str
 ; TrAsGridChk_Part2_UpCheckType0_Str -- NUL-terminated string(s), 4
 ; bytes, used by TrAsGridChk_Part2_UpCheckType0 (v10/v9 0xf2c882, v7
-; 0xf2c858) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x23fc`).
+; 0xf2c858) (`ld xwa, TrAsGridChk_Part2_UpCheckType0_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part2_UpCheckType0_Str[4].
@@ -1326,7 +1326,7 @@ TrAsGridChk_Part3_PushCmd_Str:
 ; [naka_s_headers] TrAsGridChk_Part3_PushCmd_Str_2
 ; TrAsGridChk_Part3_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
 ; used by TrAsGridChk_Part3_PushCmd (v10/v9 0xf2c8cb, v7 0xf2c8a1) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x240c`).
+; xwa, TrAsGridChk_Part3_PushCmd_Str_2`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_PushCmd_Str_2[4].
@@ -1370,7 +1370,7 @@ TrAsGridChk_Part3_UpPushCmd_Str:
 ; [naka_s_headers] TrAsGridChk_Part3_UpCheckType0_Str
 ; TrAsGridChk_Part3_UpCheckType0_Str -- NUL-terminated string(s), 4
 ; bytes, used by TrAsGridChk_Part3_UpCheckType0 (v10/v9 0xf2c96b, v7
-; 0xf2c941) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x241c`).
+; 0xf2c941) (`ld xwa, TrAsGridChk_Part3_UpCheckType0_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; TrAsGridChk_Part3_UpCheckType0_Str[4].
@@ -1393,7 +1393,7 @@ TrAsGridCheck_CaseTable:
 ; [naka_s_headers] VoiceConfig_LookupByScreenType_Table
 ; VoiceConfig_LookupByScreenType_Table -- read by
 ; VoiceConfig_LookupByScreenType (v10/v9 0xf2ca12, v7 0xf2c9e8) (`ld
-; xwa, NakaWidgetPtrTbl_SmfDp_0x242e`). 6 bytes to the next object; the
+; xwa, VoiceConfig_LookupByScreenType_Table`). 6 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_1.c as uint8_t
@@ -1416,7 +1416,7 @@ VoiceConfig_LoadTableA_Table:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VoiceConfig_LoadTableB_Table
 ; VoiceConfig_LoadTableB_Table -- read by VoiceConfig_LoadTableB (v10/v9
-; 0xf2ca51, v7 0xf2ca27) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x243a`). 38
+; 0xf2ca51, v7 0xf2ca27) (`ld xwa, VoiceConfig_LoadTableB_Table`). 38
 ; bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -1486,7 +1486,7 @@ SqTrAsPsSong_Dispatch_Strings:
 ; [naka_s_headers] SqTrAsPsSongFunc_CaseTable
 ; SqTrAsPsSongFunc_CaseTable -- jump table of a compiled `switch` in
 ; SqTrAsPsSongFunc (v10/v9 0xf2cc88, v7 0xf2cc5e) (`add xbc,
-; NakaWidgetPtrTbl_SmfDp_0x25ae`): 10 u16 case offsets from
+; SqTrAsPsSongFunc_CaseTable`): 10 u16 case offsets from
 ; SqTrAsPsSong_Dispatch.
 ;
 ; Typed in naka_widget_tables_1.c as uint16_t
@@ -1498,7 +1498,7 @@ SqTrAsPsSongFunc_CaseTable:
 ; [naka_s_headers] SqAftSetFunc_PtrTable
 ; SqAftSetFunc_PtrTable -- 2 u32 addresses, read by SqAftSetFunc (v10/v9
 ; 0xf2cce8, v7 0xf2ccbe) (`lda xbc,
-; (NakaWidgetPtrTbl_SmfDp_0x25c2:24)`).
+; (SqAftSetFunc_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t SqAftSetFunc_PtrTable[2].
 ; -----------------------------------------------------------------------------
@@ -1517,7 +1517,7 @@ SqAftSetFunc_Strings:
 ; [naka_s_headers] SqAftSet_LookupTableEntry_Table
 ; SqAftSet_LookupTableEntry_Table -- read by SqAftSet_LookupTableEntry
 ; (v10/v9 0xf2cd39, v7 0xf2cd0f) (`lda xbc,
-; (NakaWidgetPtrTbl_SmfDp_0x25d6:24)`). 32 bytes to the next object; the
+; (SqAftSet_LookupTableEntry_Table:24)`). 32 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_1.c as uint8_t
@@ -1529,7 +1529,7 @@ SqAftSet_LookupTableEntry_Table:
 ; [naka_s_headers] MuteChSet_Dispatch_PtrTable
 ; MuteChSet_Dispatch_PtrTable -- 16 u32 addresses, read by
 ; MuteChSet_Dispatch (v10/v9 0xf2cd84, v7 0xf2cd5a) (`ld xbc,
-; NakaWidgetPtrTbl_SmfDp_0x25f6`).
+; MuteChSet_Dispatch_PtrTable`).
 ;
 ; Typed in naka_widget_tables_1.c as uint32_t
 ; MuteChSet_Dispatch_PtrTable[16].
@@ -1551,7 +1551,7 @@ MuteChSet_Dispatch_Strings:
 ; [naka_s_headers] MuteChSetFunc_CaseTable
 ; MuteChSetFunc_CaseTable -- jump table of a compiled `switch` in
 ; MuteChSetFunc (v10/v9 0xf2cd4d, v7 0xf2cd23) (`add xwa,
-; NakaWidgetPtrTbl_SmfDp_0x26b6`): 10 u16 case offsets from
+; MuteChSetFunc_CaseTable`): 10 u16 case offsets from
 ; MuteChSet_Dispatch.
 ;
 ; Typed in naka_widget_tables_1.c as uint16_t
@@ -1563,7 +1563,7 @@ MuteChSetFunc_CaseTable:
 ; [naka_s_headers] AcDemoMedley_HandleScrollEvent_Str
 ; AcDemoMedley_HandleScrollEvent_Str -- NUL-terminated string(s), 12
 ; bytes, used by AcDemoMedley_HandleScrollEvent (v10/v9 0xf2d078, v7
-; 0xf2d04e) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x26ca`).
+; 0xf2d04e) (`ld xwa, AcDemoMedley_HandleScrollEvent_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; AcDemoMedley_HandleScrollEvent_Str[12].
@@ -1574,7 +1574,7 @@ AcDemoMedley_HandleScrollEvent_Str:
 ; [naka_s_headers] AcDemoMedley_HandleScrollEvent_Str_2
 ; AcDemoMedley_HandleScrollEvent_Str_2 -- NUL-terminated string(s), 12
 ; bytes, used by AcDemoMedley_HandleScrollEvent (v10/v9 0xf2d078, v7
-; 0xf2d04e) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x26d6`).
+; 0xf2d04e) (`ld xwa, AcDemoMedley_HandleScrollEvent_Str_2`).
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; AcDemoMedley_HandleScrollEvent_Str_2[12].
@@ -1595,7 +1595,7 @@ MedleyDisp_Blank:
 ; [naka_s_headers] DemoMedDsp_Dispatch_Str
 ; DemoMedDsp_Dispatch_Str -- NUL-terminated string(s), 12 bytes, used by
 ; DemoMedDsp_Dispatch (v10/v9 0xf2d0e9, v7 0xf2d0bf) (`ld xwa,
-; MedleyDisp_Blank_0xc`).
+; DemoMedDsp_Dispatch_Str`).
 ;
 ; Typed in naka_widget_tables_1.c as char DemoMedDsp_Dispatch_Str[12].
 ; -----------------------------------------------------------------------------
@@ -1636,7 +1636,7 @@ DPPlayDsp_Dispatch_Str:
 ; [naka_s_headers] DPPlayDspCheck_CaseTable
 ; DPPlayDspCheck_CaseTable -- jump table of a compiled `switch` in
 ; DPPlayDspCheck (v10/v9 0xf2d12a, v7 0xf2d100) (`add xwa,
-; PlayModeStr_Play_0xc`): 10 u16 case offsets from DPPlayDsp_Dispatch.
+; DPPlayDspCheck_CaseTable`): 10 u16 case offsets from DPPlayDsp_Dispatch.
 ;
 ; Typed in naka_widget_tables_1.c as uint16_t
 ; DPPlayDspCheck_CaseTable[10].
@@ -1667,7 +1667,7 @@ DPPauseDsp_Dispatch_Str:
 ; [naka_s_headers] DPPauseDspCheck_CaseTable
 ; DPPauseDspCheck_CaseTable -- jump table of a compiled `switch` in
 ; DPPauseDspCheck (v10/v9 0xf2d1a2, v7 0xf2d178) (`add xwa,
-; PlayModeStr_Pause_0xc`): 10 u16 case offsets from DPPauseDsp_Dispatch.
+; DPPauseDspCheck_CaseTable`): 10 u16 case offsets from DPPauseDsp_Dispatch.
 ;
 ; Typed in naka_widget_tables_1.c as uint16_t
 ; DPPauseDspCheck_CaseTable[10].
