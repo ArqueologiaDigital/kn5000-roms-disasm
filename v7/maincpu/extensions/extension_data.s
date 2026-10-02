@@ -2494,9 +2494,9 @@ ENCODER_LUT_EXPRESSION:
 	; MIDI_ProcessChangedChannels, group 1: flags 0x8F3A & ~0x8F3C
 MIDI_ProcessChangedChannels_Data:
 	.short 0x0001
-	.long 0x00fc6e18
+	.long MIDI_ProcessChangedChannels_Data_Target0
 	.short 0x0002
-	.long 0x00fc6f39
+	.long MIDI_ProcessChangedChannels_Data_Target1
 	.short 0x0004
 	.long SndParam_TableLookup_Via4100
 	.short 0x0008
@@ -2514,7 +2514,7 @@ MIDI_ProcessChangedChannels_Data:
 	; MIDI_ProcessChangedChannels, group 2: 0x8F3E & ~0x8F40
 MidiChanged_ProcessGroup2_Data:
 	.short 0x0001
-	.long 0x00fc6ebb
+	.long MidiChanged_ProcessGroup2_Data_Target0
 	.short 0x0002
 	.long SndParam_VoiceEntryLookup_ViaReg8000
 	.short 0x0004
@@ -2552,11 +2552,11 @@ MidiChanged_ProcessGroup3_Data:
 	.short 0x0100
 	.long ExtData_VoiceParam_DispatchBytecode
 	.short 0x0400
-	.long 0x00fc6ddb
+	.long MidiChanged_ProcessGroup3_Data_Target7
 	.short 0x1000
-	.long 0x00fc6dec
+	.long MidiChanged_ProcessGroup3_Data_Target8
 	.short 0x2000
-	.long 0x00fc6f76
+	.long MidiChanged_ProcessGroup3_Data_Target9
 	.short 0x4000
 	.long CtrlPanel_SetResBit6_ViaLookup
 	.short 0x8000

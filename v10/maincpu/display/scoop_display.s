@@ -18137,6 +18137,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target4:
 	dec	8, xsp
 	ld	xbc, xwa
 	ld	wa, (xbc+2)
@@ -18181,6 +18182,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip3:
 	call	DrawBox
 	inc	8, xsp
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target8:
 	dec	8, xsp
 	ld	xbc, xwa
 	ld	wa, (xbc+2)
@@ -18838,6 +18840,7 @@ Scoop_EventLoop_12Entry_Join:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target5:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19174,6 +19177,7 @@ Scoop_EventLoop_36Entry_Join:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target11:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19314,6 +19318,7 @@ Scoop_EventLoop_36Entry_Join3:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target10:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19379,6 +19384,7 @@ Scoop_EventLoop_36Entry_Join4:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target7:
 	lda xsp, (xsp-270)
 	push	xiz
 	ld	xde, xwa

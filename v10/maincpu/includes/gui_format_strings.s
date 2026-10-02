@@ -30,14 +30,14 @@ Scoop_EventLoop_12Entry_Alt_Data:
 	.long Scoop_Dispatch_Nop
 	.long Scoop_EnvelopeCalc_Data
 	.long ColorBlit_WithPaletteSave
-	.long 0x00F01B69
-	.long 0x00F0226A
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target4
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target5
 	.long Scoop_EventLoop_36Entry
-	.long 0x00F027D1
-	.long 0x00F01BD7
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target7
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target8
 	.long Scoop_EventLoop_36Entry_Data
-	.long 0x00F02720
-	.long 0x00F025D2
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target10
+	.long Scoop_EventLoop_12Entry_Alt_Data_Target11
 Scoop_ApFunctionTable_126:	.long 0x00000000
 Scoop_ApFunctionTable_426:	.long Scoop_ApFunctionTable_426_EndName
 Scoop_ApFunctionTable_426_EndName:

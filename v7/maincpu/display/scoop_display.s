@@ -12415,20 +12415,20 @@ SubCPU_ToneDispatch:
 	.byte	0xb6, 0xf9, 0x00
 	.long	0x00f9ea00
 	.long	0x00f9d000
-	.long	0x00fa6c00
+	.long	SubCPU_ToneDispatch_Target2
 	.long	0x00fa8600
-	.long	0x00faa000
+	.long	SubCPU_ToneDispatch_Target4
 	.long	0x00faba00
 	.long	0x00fad400
-	.long	0x00fa1e00
-	.long	0x00fa3800
+	.long	SubCPU_ToneDispatch_Target7
+	.long	SubCPU_ToneDispatch_Target8
 	.long	0x00fa5200
 	.long	0x00fa0400
-	.long	0x00fb3c00
+	.long	SubCPU_ToneDispatch_Target11
 	.byte	0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.long	0x00faeeff
-	.long	0x00fb0800
-	.long	0x00fb2200
+	.long	SubCPU_ToneDispatch_Target12
+	.long	SubCPU_ToneDispatch_Target13
+	.long	SubCPU_ToneDispatch_Target14
 	.byte	0x00
 SubCPU_ToneParamDisplay_Tbl:
 	ld	(9:8), 10:io
@@ -18120,6 +18120,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target4:
 	dec	8, xsp
 	ld	xbc, xwa
 	ld	wa, (xbc+2)
@@ -18163,6 +18164,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip3:
 	call	DrawBox
 	inc	8, xsp
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target8:
 	dec	8, xsp
 	ld	xbc, xwa
 	ld	wa, (xbc+2)
@@ -19165,6 +19167,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target11:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19305,6 +19308,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join3:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target10:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19370,6 +19374,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join4:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target7:
 	lda	xsp, (xsp-270)
 	push	xiz
 	ld	xde, xwa

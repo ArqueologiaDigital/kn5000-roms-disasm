@@ -1046,7 +1046,7 @@ Cheap_ResNameTable_361:	.incbin "includes/generated/naka_disk_menu_file_io.bin",
 	.long NakaWidget_DiskLoad_71_PsFileNameBox_Name
 	.long NakaWidget_DiskLoad_72_PsFileNameBox_Name
 	.long NakaWidget_DiskLoad_73_PsFileNameBox_Name
-	.long 0x00EA74E0
+	.long Cheap_ResNameTable_361_Str_SingleBankToggle
 	.long NakaWidget_DiskLoadSMF_Name
 	.long NakaWidget_DiskLoad_76_AcTitleMenu_Name
 	.long NakaWidget_DiskLoad_77_AcIndexWideES_Name
@@ -1117,7 +1117,8 @@ NakaWidget_DiskLoad_79_Label_Name:		.incbin "includes/generated/naka_disk_menu_f
 NakaWidget_DiskLoad_78_AcIndexEditSw_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6102, 0x2
 NakaWidget_DiskLoad_77_AcIndexWideES_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6104, 0x2
 NakaWidget_DiskLoad_76_AcTitleMenu_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6106, 0x2
-NakaWidget_DiskLoadSMF_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6108, 0x1E
+NakaWidget_DiskLoadSMF_Name:			.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6108, 0xC
+Cheap_ResNameTable_361_Str_SingleBankToggle:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6114, 0x12
 NakaWidget_DiskLoad_73_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6126, 0x2
 NakaWidget_DiskLoad_72_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6128, 0x2
 NakaWidget_DiskLoad_71_PsFileNameBox_Name:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x612A, 0x2

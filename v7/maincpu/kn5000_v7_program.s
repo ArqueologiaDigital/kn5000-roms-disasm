@@ -2052,6 +2052,7 @@ Voice_FactoryPresetData_Code_Skip2:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	xde, xwa
+SubCPU_ToneDispatch_Target13:
 	sll	xde, 2
 	add	xde, xwa
 	sll	xde, 6

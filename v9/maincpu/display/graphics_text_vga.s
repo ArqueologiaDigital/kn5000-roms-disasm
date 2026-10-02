@@ -1475,6 +1475,7 @@ DrawFunc_Init_Join8:
 	calr	DrawText_QueueOrDirect
 	pop	xiz
 	lda	xsp, (xsp+268)
+SubCPU_ToneDispatch_Target14:
 	ret
 SeGfx_BoundOp06_Helper:
 	lda xsp, (xsp-268)

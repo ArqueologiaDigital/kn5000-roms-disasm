@@ -3097,6 +3097,7 @@ ExtData_VoiceParam_DispatchBytecode_Join:
 ExtData_VoiceParam_DispatchBytecode_Epilogue2:
 	pop	xiz
 	ret
+MidiChanged_ProcessGroup3_Data_Target7:
 	lda_d16	xwa, (0x8f18)
 	cp	(0x3390:16), 0
 	jr	z, ExtData_VoiceParam_DispatchBytecode_Entry
@@ -3105,6 +3106,7 @@ ExtData_VoiceParam_DispatchBytecode_Epilogue2:
 ExtData_VoiceParam_DispatchBytecode_Entry:
 	.byte 0xb0, 0xb3
 	ret
+MidiChanged_ProcessGroup3_Data_Target8:
 	lda	xwa, (0x8f1e:16)
 	.byte 0xb0, 0xb5, 0xf1, 0xa5
 	pushw	wa
@@ -3123,6 +3125,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry:
 	ret	z
 	.byte 0xb0, 0xbd
 	ret
+MIDI_ProcessChangedChannels_Data_Target0:
 	lda	xsp, (xsp-10)
 	push	xiz
 	lda	xwa, (0x8f18:16)
@@ -3188,6 +3191,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
+MidiChanged_ProcessGroup2_Data_Target0:
 	dec	6, xsp
 	push	xiz
 	lda	xiz, (0x8f18:16)
@@ -3237,6 +3241,7 @@ ExtData_VoiceParam_DispatchBytecode_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
+MIDI_ProcessChangedChannels_Data_Target1:
 	push	xiz
 	lda	xiz, (0x8f18:16)
 	call	GetCurrentPartSelect
@@ -3268,6 +3273,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry4:
 	swi	0
 	pop	xiz
 	ret
+MidiChanged_ProcessGroup3_Data_Target9:
 	push	xiz
 	lda	xiz, (0x8f18:16)
 	ld	xwa, 0x40c0

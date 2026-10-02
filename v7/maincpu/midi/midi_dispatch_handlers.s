@@ -811,7 +811,7 @@ PanelEvt_DispatchTable:
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
 	.long PanelEvt_Handler_3_ValueCheck
-	.long 0x00fd0f16
+	.long PanelEvt_DispatchTable_Target4
 	.long PanelEvt_Handler_5_ValueCheck
 	.long PanelEvt_Handler_6_NullStub
 	.long PanelEvt_Handler_7_ValueCheck
@@ -2055,6 +2055,7 @@ MidiCC_PartTargets_BankSelect:
 	.short 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f
 	.short 0x0010, 0x0011, 0x0012, 0x0013, 0x0014, 0x0015, 0x00ff, 0x0017
 	.short 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff, 0xffff
+PanelEvt_DispatchTable_Target4:
 	bit	3, (0x95b3:16)
 	jr	z, PanelEvt_Handler_4_DualValueCheck_Skip2
 	ld	l, (0x95b0:16)

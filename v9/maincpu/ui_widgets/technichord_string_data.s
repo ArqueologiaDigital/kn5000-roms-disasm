@@ -6648,7 +6648,7 @@ CmpSrc_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings
 ; [nakarest] `lda xde, (CmpDst_HandleShow_PtrTable:24)`), CmpDst_ScrollMode6
 ; [nakarest] (file_io/single_load.s: `lda xde, (CmpDst_HandleShow_PtrTable:24)`), 4 more.
 CmpDst_HandleShow_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAF0, 0x10	; 5 x 32-bit pointer
-	.long 0x00F90D63
+	.long CmpDst_HandleShow_PtrTable_Target0
 CmpFile_ShowDefault_Data:
 	.long 0xFF00FF00
 InitializeCheap_PtrTable:	.long InsertOptionText

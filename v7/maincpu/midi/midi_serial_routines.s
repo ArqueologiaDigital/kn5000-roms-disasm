@@ -753,7 +753,7 @@ MidiCC_ExtendedRange_Table:
 	.long MidiCC_RxFunc15
 	.long MidiCC_Handler_RangeCheck
 	.long MidiCC_Handler_ChannelMapping
-	.long 0x00fcf4a3
+	.long MidiCC_ExtendedRange_Table_Target18
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
 	.long MidiCC_NullHandlerBlock
@@ -785,6 +785,7 @@ MidiCC_ExtendedRange_Table:
 	.long MidiCC_NullHandlerBlock
 MidiCC_NullHandlerBlock:
 	ret
+MidiCC_ExtendedRange_Table_Target18:
 	bit	2, (0xfd51:16)
 	jr	z, MidiCC_Handler_BitManipulation_Return
 	ld	a, (0x95ce:16)

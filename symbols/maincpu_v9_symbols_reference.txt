@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,967
-#   semantic names ........... 50,870 (97.9%)
+#   symbols .................. 51,984
+#   semantic names ........... 50,887 (97.9%)
 #   positional names ......... 1,097
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -9187,6 +9187,7 @@ NakaWidget_DiskLoad_78_AcIndexEditSw_Name 00EA74CE
 NakaWidget_DiskLoad_77_AcIndexWideES_Name 00EA74D0
 NakaWidget_DiskLoad_76_AcTitleMenu_Name 00EA74D2
 NakaWidget_DiskLoadSMF_Name 00EA74D4
+Cheap_ResNameTable_361_Str_SingleBankToggle 00EA74E0
 NakaWidget_DiskLoad_73_PsFileNameBox_Name 00EA74F2
 NakaWidget_DiskLoad_72_PsFileNameBox_Name 00EA74F4
 NakaWidget_DiskLoad_71_PsFileNameBox_Name 00EA74F6
@@ -18651,7 +18652,9 @@ Scoop_EnvelopeCalc_Data 00F01A46
 Scoop_CurveUpdate_SegmentEnd_Skip 00F01A6C
 Scoop_CurveUpdate_SegmentEnd_Loop 00F01A9B
 Scoop_CurveUpdate_SegmentEnd_Skip2 00F01ACC
+Scoop_EventLoop_12Entry_Alt_Data_Target4 00F01B69
 Scoop_CurveUpdate_SegmentEnd_Skip3 00F01B87
+Scoop_EventLoop_12Entry_Alt_Data_Target8 00F01BD7
 Scoop_CurveUpdate_SegmentEnd_Skip4 00F01BF5
 Scoop_EnvCalc_Handler0 00F01C29
 Scoop_EnvCalc_Handler1 00F01C6C
@@ -18681,6 +18684,7 @@ Scoop_EventLoop_12Entry_Skip9 00F021B4
 Scoop_EventLoop_12Entry_Skip 00F02200
 Scoop_EventLoop_12Entry_Skip2 00F02218
 Scoop_EventLoop_12Entry_Join 00F0222E
+Scoop_EventLoop_12Entry_Alt_Data_Target5 00F0226A
 Scoop_EventLoop_12Entry_Skip10 00F0229A
 Scoop_EventLoop_12Entry_Skip3 00F022DA
 Scoop_EventLoop_12Entry_Skip4 00F022E6
@@ -18700,6 +18704,7 @@ Scoop_EventLoop_36Entry_Skip5 00F02533
 Scoop_EventLoop_36Entry_Skip6 00F02568
 Scoop_EventLoop_36Entry_Skip7 00F02580
 Scoop_EventLoop_36Entry_Join 00F02596
+Scoop_EventLoop_12Entry_Alt_Data_Target11 00F025D2
 Scoop_EventLoop_36Entry_Skip8 00F02602
 Scoop_EventLoop_36Entry_Skip9 00F0262B
 Scoop_EventLoop_36Entry_Skip10 00F02637
@@ -18710,9 +18715,11 @@ Scoop_EventLoop_36Entry_Skip11 00F02692
 Scoop_EventLoop_36Entry_Skip3 00F026B6
 Scoop_EventLoop_36Entry_Skip4 00F026CE
 Scoop_EventLoop_36Entry_Join3 00F026E4
+Scoop_EventLoop_12Entry_Alt_Data_Target10 00F02720
 Scoop_EventLoop_36Entry_Skip12 00F0276D
 Scoop_EventLoop_36Entry_Skip13 00F02782
 Scoop_EventLoop_36Entry_Join4 00F02795
+Scoop_EventLoop_12Entry_Alt_Data_Target7 00F027D1
 Scoop_EventLoop_36Entry_Skip14 00F02805
 Scoop_EventLoop_36Entry_Loop 00F02821
 Scoop_EventLoop_36Entry_Skip15 00F02846
@@ -39251,6 +39258,7 @@ SLDstBankList_FuncBody_Skip35 00F90CF7
 SLDstBankList_FuncBody_Skip36 00F90D1E
 SLDstBankList_FuncBody_Helper6_Skip3 00F90D4D
 SLDstBankList_FuncBody_Epilogue4 00F90D5F
+CmpDst_HandleShow_PtrTable_Target0 00F90D63
 SLDstBankList_FuncBody_Loop5 00F90D73
 SLDstBankList_FuncBody_Skip37 00F90DB9
 SingleLoadDstFunc 00F90DBF
@@ -40945,6 +40953,7 @@ AcLswBox_HandleWriteBack 00F9CF51
 AcLswBox_HandleScrollUp 00F9CFA2
 AcLswBox_HandleScrollDown 00F9CFCD
 AcLswBox_HandlePageUp 00F9CFF7
+SubCPU_ToneDispatch_Target1 00F9D000
 AcLswBox_HandlePageDown 00F9D028
 Ac_SendUIEvent_Common 00F9D057
 AcLswBox_ReturnZeroJmp 00F9D05B
@@ -42163,6 +42172,7 @@ BoxStyle11_Execute 00FA6BA2
 BoxStyle11_Done 00FA6BCB
 BoxStyle11_DoneAlt 00FA6BCD
 pSlongProc 00FA6BD4
+SubCPU_ToneDispatch_Target2 00FA6C00
 BoxStyle12_Setup 00FA6C4E
 BoxStyle12_CalcWidth 00FA6C7C
 BoxStyle12_CheckInner 00FA6CA8
@@ -43731,6 +43741,7 @@ DrawFunc_Init_Skip5 00FB21B2
 DrawFunc_Init_Skip6 00FB21B9
 DrawFunc_Init_Join2 00FB21BE
 DrawFunc_Init_Join8 00FB21C3
+SubCPU_ToneDispatch_Target14 00FB2200
 SeGfx_BoundOp06_Helper 00FB2201
 DrawFunc_Init_Entry2 00FB2253
 DrawFunc_Init_Entry3 00FB225C
@@ -45951,17 +45962,23 @@ ExtData_VoiceParam_DispatchBytecode 00FC7519
 ExtData_VoiceParam_DispatchBytecode_Code 00FC7568
 ExtData_VoiceParam_DispatchBytecode_Join 00FC75A1
 ExtData_VoiceParam_DispatchBytecode_Epilogue2 00FC75A4
+MidiChanged_ProcessGroup3_Data_Target7 00FC75A6
 ExtData_VoiceParam_DispatchBytecode_Entry 00FC75B4
+MidiChanged_ProcessGroup3_Data_Target8 00FC75B7
+MIDI_ProcessChangedChannels_Data_Target0 00FC75E3
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Entry 00FC763E
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Join 00FC764E
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Skip 00FC767A
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue 00FC7681
+MidiChanged_ProcessGroup2_Data_Target0 00FC7686
 ExtData_VoiceParam_DispatchBytecode_Entry2 00FC76D6
 ExtData_VoiceParam_DispatchBytecode_Entry3 00FC76EA
 ExtData_VoiceParam_DispatchBytecode_Epilogue 00FC7700
+MIDI_ProcessChangedChannels_Data_Target1 00FC7704
 ExtData_VoiceParam_DispatchBytecode_Skip 00FC7728
 ExtData_VoiceParam_DispatchBytecode_Skip2 00FC7732
 ExtData_VoiceParam_DispatchBytecode_Entry4 00FC773C
+MidiChanged_ProcessGroup3_Data_Target9 00FC7741
 CtrlPanel_SetResBit6_ViaLookup 00FC775B
 CtrlPanel_ResBit6 00FC7771
 CtrlPanel_Bit6Done 00FC7773

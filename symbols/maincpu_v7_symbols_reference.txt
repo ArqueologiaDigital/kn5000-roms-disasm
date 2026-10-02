@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,964
-#   semantic names ........... 50,599 (97.4%)
+#   symbols .................. 51,988
+#   semantic names ........... 50,623 (97.4%)
 #   positional names ......... 1,365
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -9294,6 +9294,7 @@ NakaWidget_DiskLoad_78_AcIndexEditSw_Name 00EA74CE
 NakaWidget_DiskLoad_77_AcIndexWideES_Name 00EA74D0
 NakaWidget_DiskLoad_76_AcTitleMenu_Name 00EA74D2
 NakaWidget_DiskLoadSMF_Name 00EA74D4
+Cheap_ResNameTable_361_Str_SingleBankToggle 00EA74E0
 NakaWidget_DiskLoad_73_PsFileNameBox_Name 00EA74F2
 NakaWidget_DiskLoad_72_PsFileNameBox_Name 00EA74F4
 NakaWidget_DiskLoad_71_PsFileNameBox_Name 00EA74F6
@@ -15741,6 +15742,7 @@ WorkRam2_VoiceLinkA_ListHeads 00EF000E
 CharEncoding_ExtendedLo 00EF001C
 CharEncoding_ExtendedHi 00EF003F
 WorkRam2_VoiceLinkB_Nodes 00EF004E
+FDTest_Label_Tilde80_Data0 00EF0069
 WorkRam2_VoiceLinkB_FreeList 00EF008E
 WorkRam2_VoiceLinkB_ListHeads 00EF0090
 WorkRam2_VoiceLinks_Count 00EF0098
@@ -18716,7 +18718,9 @@ Scoop_EnvelopeCalc_Data 00F01A1C
 Scoop_CurveUpdate_SegmentEnd_Skip 00F01A42
 Scoop_CurveUpdate_SegmentEnd_Loop 00F01A71
 Scoop_CurveUpdate_SegmentEnd_Skip2 00F01AA2
+Scoop_EventLoop_12Entry_Alt_Data_Target4 00F01B3F
 Scoop_CurveUpdate_SegmentEnd_Skip3 00F01B5D
+Scoop_EventLoop_12Entry_Alt_Data_Target8 00F01BAD
 Scoop_CurveUpdate_SegmentEnd_Skip4 00F01BCB
 Scoop_EnvCalc_Handler0 00F01BFF
 Scoop_EnvCalc_Handler1 00F01C42
@@ -18765,6 +18769,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip 00F02509
 Scoop_EventLoop_36Entry_Branch1_Code_Skip2 00F0253E
 Scoop_EventLoop_36Entry_Branch1_Code_Skip3 00F02556
 Scoop_EventLoop_36Entry_Branch1_Code_Join 00F0256C
+Scoop_EventLoop_12Entry_Alt_Data_Target11 00F025A8
 Scoop_EventLoop_36Entry_Branch1_Code_Skip4 00F025D8
 Scoop_EventLoop_36Entry_Branch1_Code_Skip5 00F02601
 Scoop_EventLoop_36Entry_Branch1_Code_Skip6 00F0260D
@@ -18775,9 +18780,11 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip9 00F02668
 Scoop_EventLoop_36Entry_Branch1_Code_Skip10 00F0268C
 Scoop_EventLoop_36Entry_Branch1_Code_Skip11 00F026A4
 Scoop_EventLoop_36Entry_Branch1_Code_Join3 00F026BA
+Scoop_EventLoop_12Entry_Alt_Data_Target10 00F026F6
 Scoop_EventLoop_36Entry_Branch1_Code_Skip12 00F02743
 Scoop_EventLoop_36Entry_Branch1_Code_Skip13 00F02758
 Scoop_EventLoop_36Entry_Branch1_Code_Join4 00F0276B
+Scoop_EventLoop_12Entry_Alt_Data_Target7 00F027A7
 Scoop_EventLoop_36Entry_Branch1_Code_Skip14 00F027DB
 Scoop_EventLoop_36Entry_Branch1_Code_Loop 00F027F7
 Scoop_EventLoop_36Entry_Branch1_Code_Skip15 00F0281C
@@ -39005,6 +39012,7 @@ SLDstBankList_FuncBody_Skip43 00F908EA
 SLDstBankList_FuncBody_Skip44 00F90911
 SLDstBankList_FuncBody_Skip45 00F90940
 SLDstBankList_FuncBody_Epilogue4 00F90952
+CmpDst_HandleShow_PtrTable_Target0 00F90956
 SLDstBankList_FuncBody_Loop5 00F90966
 SLDstBankList_FuncBody_Skip46 00F909AC
 SingleLoadDstFunc 00F909B2
@@ -41300,6 +41308,7 @@ IvInterrupt_ReturnZero 00FA1DD7
 IvInterrupt_GetInterval 00FA1DDB
 IvInterrupt_CheckActive 00FA1DE9
 ReminderProc_Return 00FA1DFD
+SubCPU_ToneDispatch_Target7 00FA1E00
 IvIntReminderProc 00FA1E01
 IvIntReminder_GetInterval 00FA1E22
 IvIntCompleteProc 00FA1E2A
@@ -41500,6 +41509,7 @@ PsTextBoxProc 00FA3750
 AcTrkSw_Reset 00FA3775
 AcTrkSw_Reset_UpdateIndex 00FA37B4
 AcTrkSw_Reset_DrawTrack 00FA37BA
+SubCPU_ToneDispatch_Target8 00FA3800
 AcTrkSw_Select 00FA3839
 AcTrkSw_Select_Paint 00FA3896
 AcTrkSw_Select_CheckTrackNum 00FA38EF
@@ -41956,6 +41966,7 @@ RectY1Proc 00FA6BAC
 EdgeDraw_BottomRight 00FA6BE2
 EdgeDraw_BottomRight_Inner 00FA6BF2
 EdgeDraw_BottomRight_Check 00FA6BF6
+SubCPU_ToneDispatch_Target2 00FA6C00
 EdgeDraw_BottomRight_Draw 00FA6C05
 EdgeDraw_BottomRight_Done 00FA6C12
 EdgeDraw_BottomRight_Finish 00FA6C43
@@ -42510,6 +42521,7 @@ DrawRing_TryTake 00FA9FBE
 DrawRing_TryTake_Load 00FA9FCE
 DrawRing_TryPost 00FA9FDE
 DrawRing_TryPost_Store 00FA9FEE
+SubCPU_ToneDispatch_Target4 00FAA000
 DisplayCmd_Return 00FAA00F
 DrawQueue_Alloc_Prologue 00FAA01A
 DrawQueue_Alloc_FindSlot 00FAA02A
@@ -43067,6 +43079,7 @@ ChangePalette_QueuedPath 00FAEECB
 ChangePalette_Epilogue 00FAEEDF
 ChangePalette_QueueCallback 00FAEEE1
 ChangePalette_Impl 00FAEEE6
+SubCPU_ToneDispatch_Target12 00FAEEFF
 UIRender_IterateCallbacks 00FAEF09
 UIRender_RetStub1 00FAEF37
 UIRender_RetStub2 00FAEF38
@@ -43323,6 +43336,7 @@ Voice_FactoryPresetData_Code_Join6 00FB076E
 Voice_FactoryPresetData_Code_Skip15 00FB0793
 Voice_FactoryPresetData_Code_Loop 00FB07DE
 Voice_FactoryPresetData_Code_Skip2 00FB07EB
+SubCPU_ToneDispatch_Target13 00FB0800
 Voice_FactoryPresetData_Code_Skip3 00FB084D
 Voice_FactoryPresetData_Code_Skip4 00FB0881
 Voice_FactoryPresetData_Code_Skip5 00FB0886
@@ -43508,6 +43522,7 @@ ColorBlit_Variant_ByteData_Skip 00FB2149
 ColorBlit_Variant_ByteData_Skip2 00FB21B4
 GetFrameSPSize 00FB21E6
 GetCharHeight 00FB21FD
+SubCPU_ToneDispatch_Target14 00FB2200
 GetCharDescent 00FB220A
 GetCenteredDelta 00FB2217
 GetCenteredDelta_RetNeg1 00FB222B
@@ -43600,6 +43615,7 @@ VGA_ConfigExtSequencer_Alt 00FB36E0
 BitMapOut 00FB3B5A
 BitMapOut_PaletteLoadLoop 00FB3B7F
 BitMapOut_PixelBlitLoop 00FB3BE3
+SubCPU_ToneDispatch_Target11 00FB3C00
 BitMapOut_BlitComplete 00FB3C04
 BitMapOut_ByteData_RenderA 00FB3C09
 BitMapOut_ByteData_RenderA_Skip 00FB3C5E
@@ -45691,17 +45707,23 @@ ExtData_VoiceParam_DispatchBytecode 00FC6D4E
 ExtData_VoiceParam_DispatchBytecode_Code 00FC6D9D
 SndParamF9A541_ResBit7_Code_Join 00FC6DD6
 SndParamF9A541_ResBit7_Code_Epilogue 00FC6DD9
+MidiChanged_ProcessGroup3_Data_Target7 00FC6DDB
 ExtData_VoiceParam_DispatchBytecode_Entry 00FC6DE9
+MidiChanged_ProcessGroup3_Data_Target8 00FC6DEC
+MIDI_ProcessChangedChannels_Data_Target0 00FC6E18
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Entry 00FC6E73
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Join 00FC6E83
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Skip 00FC6EAF
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue 00FC6EB6
+MidiChanged_ProcessGroup2_Data_Target0 00FC6EBB
 ExtData_VoiceParam_DispatchBytecode_Entry2 00FC6F0B
 ExtData_VoiceParam_DispatchBytecode_Entry3 00FC6F1F
 ExtData_VoiceParam_DispatchBytecode_Epilogue 00FC6F35
+MIDI_ProcessChangedChannels_Data_Target1 00FC6F39
 ExtData_VoiceParam_DispatchBytecode_Skip 00FC6F5D
 ExtData_VoiceParam_DispatchBytecode_Skip2 00FC6F67
 ExtData_VoiceParam_DispatchBytecode_Entry4 00FC6F71
+MidiChanged_ProcessGroup3_Data_Target9 00FC6F76
 CtrlPanel_SetResBit6_ViaLookup 00FC6F90
 CtrlPanel_ResBit6 00FC6FA6
 CtrlPanel_Bit6Done 00FC6FA8
@@ -47047,6 +47069,7 @@ MidiRx_ControlChange_Skip 00FCF3CC
 MidiRx_ControlChange_Return 00FCF3E1
 MidiCC_ExtendedRange_Table 00FCF3E2
 MidiCC_NullHandlerBlock 00FCF4A2
+MidiCC_ExtendedRange_Table_Target18 00FCF4A3
 MidiCC_Handler_BitManipulation_Skip 00FCF4CD
 MidiCC_Handler_BitManipulation_Return 00FCF4E6
 MidiCC_CC83_ValueMap 00FCF4E8
@@ -47285,6 +47308,7 @@ MidiCP_PartTargets 00FD0E76
 MidiCC_PartSelector_DataEntry 00FD0EB6
 MidiCC_PartTargets_BankSelect 00FD0ED6
 MidiCC_ChannelMappingData_0x440 00FD0EF0
+PanelEvt_DispatchTable_Target4 00FD0F16
 PanelEvt_Handler_4_DualValueCheck_Skip 00FD0F4C
 PanelEvt_Handler_4_DualValueCheck_Skip2 00FD0F51
 PanelEvt_Handler_4_DualValueCheck_Skip3 00FD0F87

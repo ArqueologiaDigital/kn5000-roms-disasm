@@ -2657,6 +2657,7 @@ SLDstBankList_FuncBody_Epilogue4:
 	pop	xiz
 	inc	4, xsp
 	ret
+CmpDst_HandleShow_PtrTable_Target0:
 	dec	4, xsp
 	pushw	iz
 	ld	(xsp+2), xwa

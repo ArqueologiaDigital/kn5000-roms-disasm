@@ -3198,6 +3198,7 @@ SndParamF9A541_ResBit7_Code_Join:
 SndParamF9A541_ResBit7_Code_Epilogue:
 	pop	xiz
 	ret
+MidiChanged_ProcessGroup3_Data_Target7:
 	lda_d16	xwa, (0x8e7c)
 ; (pre-port v7 note about the bytes at 0xFC6DDF:)
 ; differs from v10 here and llvm-objdump cannot read it
@@ -3216,6 +3217,7 @@ SndParamF9A541_ResBit7_Code_Epilogue:
 ExtData_VoiceParam_DispatchBytecode_Entry:
 	.byte	0xb0, 0xb3
 	ret
+MidiChanged_ProcessGroup3_Data_Target8:
 	lda	xwa, (0x8e82:16)
 ; (pre-port v7 note about the bytes at 0xFC6DF0:)
 ; v10 does not spell this byte either
@@ -3248,6 +3250,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry:
 ; v10 does not spell this byte either
 	.byte	0xb0, 0xbd
 	ret
+MIDI_ProcessChangedChannels_Data_Target0:
 	lda	xsp, (xsp-10)
 	push	xiz
 	lda	xwa, (0x8e7c:16)
@@ -3323,6 +3326,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
+MidiChanged_ProcessGroup2_Data_Target0:
 	dec	6, xsp
 	push	xiz
 	lda	xiz, (0x8e7c:16)
@@ -3394,6 +3398,7 @@ ExtData_VoiceParam_DispatchBytecode_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
+MIDI_ProcessChangedChannels_Data_Target1:
 	push	xiz
 	lda	xiz, (0x8e7c:16)
 	call	GetCurrentPartSelect
@@ -3427,6 +3432,7 @@ ExtData_VoiceParam_DispatchBytecode_Entry4:
 	swi	0
 	pop	xiz
 	ret
+MidiChanged_ProcessGroup3_Data_Target9:
 	push	xiz
 	lda	xiz, (0x8e7c:16)
 	ld	xwa, 0x40c0

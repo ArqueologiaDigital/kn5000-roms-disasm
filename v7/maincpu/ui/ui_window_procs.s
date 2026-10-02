@@ -7329,6 +7329,7 @@ ChangePalette_Impl:
 	lda xwa, (ChangePalette_Impl_Data:24)
 	add xwa, xbc
 	ld xwa, (xwa)
+SubCPU_ToneDispatch_Target12:
 	ld (0x03ef94:24), xwa
 	ldi_erpw 0xfa, 0x20, 0x00
 

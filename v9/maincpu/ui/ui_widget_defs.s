@@ -13149,6 +13149,7 @@ pSlongProc:
 	jrl z, BoxStyle12_CalcHeight
 	lda xhl, (xsp + 8)
 	ld XWA, (xsp + 0x0108)
+SubCPU_ToneDispatch_Target2:
 	lda xbc, (xwa + 4)
 	lda xde, (xwa + 8)
 	cp xiz, EVT_DUMP_PROPERTY_EX

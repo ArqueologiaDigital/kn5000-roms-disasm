@@ -12388,8 +12388,8 @@ Str_PanKeyShiftTuning:
 SubCPU_ToneDispatch:
 	.byte	0xb6, 0xf9, 0x00
 	.long	0x00f9ea00
-	.long	0x00f9d000
-	.long	0x00fa6c00
+	.long	SubCPU_ToneDispatch_Target1
+	.long	SubCPU_ToneDispatch_Target2
 	.long	0x00fa8600
 	.long	0x00faa000
 	.long	0x00faba00
@@ -12402,7 +12402,7 @@ SubCPU_ToneDispatch:
 	.byte	0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.long	0x00faeeff
 	.long	0x00fb0800
-	.long	0x00fb2200
+	.long	SubCPU_ToneDispatch_Target14
 	.byte	0x00
 	; Byte data, 4 B.  Read by SubCPU_ToneParamDisplay (0xEFD9BC): `ld xiy, SubCPU_ToneParamDisplay_Tbl`
 	; reader SubCPU_ToneParamDisplay: `ld xiy, SubCPU_ToneParamDisplay_Tbl` then `ld_rrb a, xiy, hl`
@@ -18126,6 +18126,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target4:
 	dec	8, xsp
 	ld	xbc, xwa
 	ld	wa, (xbc+2)
@@ -18169,6 +18170,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip3:
 	call	DrawBox
 	inc	8, xsp
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target8:
 	dec	8, xsp
 	ld	xbc, xwa
 	ld	wa, (xbc+2)
@@ -18826,6 +18828,7 @@ Scoop_EventLoop_12Entry_Join:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target5:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19162,6 +19165,7 @@ Scoop_EventLoop_36Entry_Join:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target11:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19302,6 +19306,7 @@ Scoop_EventLoop_36Entry_Join3:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target10:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
@@ -19367,6 +19372,7 @@ Scoop_EventLoop_36Entry_Join4:
 	pop	xiz
 	lda	xsp, (xsp+268)
 	ret
+Scoop_EventLoop_12Entry_Alt_Data_Target7:
 	lda xsp, (xsp-270)
 	push	xiz
 	ld	xde, xwa
