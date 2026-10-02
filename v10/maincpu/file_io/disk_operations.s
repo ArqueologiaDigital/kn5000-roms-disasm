@@ -18,13 +18,13 @@
 FileCopyFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, FCopy_HandleScroll
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, FCopy_HandleScroll
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, FCopy_HandleExecute
-	cp xbc, 0x1e50004
+	cp xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl nz, FCopy_Return
 	ld (0x7f60:16), xiz
 	call GetCurrentFileIndex
@@ -59,7 +59,7 @@ FCopy_HandleExecute:
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
 	ld xwa, (0x7f60:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x850c
 	call ApPostEvent
 	jrl FCopy_Return
@@ -69,7 +69,7 @@ FCopy_HandleScroll:
 	jrl nz, FCopy_HandleCopyContext
 	ld wa, (0x7f66:16)
 	ld de, wa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr nz, FCopy_ScrollUp_Adjust
 	cp wa, 0:i3
 	jr le, FCopy_ScrollDown_CheckMin
@@ -106,12 +106,12 @@ FCopy_Scroll_Apply:
 	pushw 0x0
 	call FileIO_ReadHeader_ParseLoop
 	ld xwa, (0x7f60:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x850c
 	jr FCopy_DispatchFA9D58
 
 FCopy_ScrollUp_Adjust:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, FCopy_ScrollDown_Reload
 	cp wa, 0x13
 	jr ge, FCopy_ScrollUp_CheckMax
@@ -141,11 +141,11 @@ FCopy_HandleCopyContext:
 	cp (0x0340ea:24), 0x00
 	jr z, FCopy_CopyConfirm_Execute
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 FCopy_DispatchFA9D58:
@@ -154,7 +154,7 @@ FCopy_DispatchFA9D58:
 
 FCopy_CopyConfirm_Execute:
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -171,17 +171,17 @@ FCopy_CopyConfirm_Execute:
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x7b
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -191,7 +191,7 @@ FCopy_CopyExecute:
 	cp xiz, 0x32
 	jr nz, FCopy_Return
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -208,17 +208,17 @@ FCopy_CopyExecute:
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x7b
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -235,9 +235,9 @@ FileRenameFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1e00086
+	cp xbc, EVT_SET_STRING
 	jrl z, FRename_HandleApply
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, FRename_Return
 	call GetCurrentFileIndex
 	cp hl, 0:i3
@@ -294,7 +294,7 @@ FRename_TextChange_Error:
 
 FRename_TextChange_SendApply:
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1e00086
+	ld xbc, EVT_SET_STRING
 	ld xde, 0x8870
 	call ApPostEvent
 	jr FRename_Return
@@ -307,7 +307,7 @@ FRename_HandleApply:
 	ld xbc, (xsp + 4)
 	call FileIO_CopyString
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -322,7 +322,7 @@ FRename_HandleApply:
 	call GetEncodedFileSizeData
 	ld (0x8502:16), hl
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -338,9 +338,9 @@ FileRenameSmfFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1e00086
+	cp xbc, EVT_SET_STRING
 	jrl z, FRenameSmf_HandleApply
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, FRenameSmf_Return
 	call GetFirstPageBase
 	cp hl, 0:i3
@@ -397,7 +397,7 @@ FRenameSmf_TextChange_Error:
 
 FRenameSmf_TextChange_SendApply:
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1e00086
+	ld xbc, EVT_SET_STRING
 	ld xde, 0x8870
 	call ApPostEvent
 	jr FRenameSmf_Return
@@ -410,7 +410,7 @@ FRenameSmf_HandleApply:
 	ld xbc, DiskOp_ChannelCfgTable_0x64
 	call FileIO_BuildFilePath
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -425,7 +425,7 @@ FRenameSmf_HandleApply:
 	call GetFileCountEncoded
 	ld (0x8504:16), hl
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -439,9 +439,9 @@ FRenameSmf_Return:
 
 FmmFormatFunc:
 	pushw iz
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, FmmFmt_HandleProgress
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, FmmFmt_Return
 	cp xde, 0x3
 	jr z, FmmFmt_HandleCancel
@@ -467,7 +467,7 @@ FmmFmt_InitPhase_CheckDrive:
 FmmFmt_InitPhase_DriveType23:
 	ld (0x7f68:16), a
 	ld xwa, 0x7b0036
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x84fe:16), 0
@@ -475,7 +475,7 @@ FmmFmt_InitPhase_DriveType23:
 
 FmmFmt_InitPhase_OtherDrive:
 	ld xwa, 0x7b003f
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x84fe:16), 2
@@ -506,7 +506,7 @@ FmmFmt_HandleProgress:
 	cp c, 0:i3
 	jrl nz, FmmFmt_ExecutePhase2
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -518,13 +518,13 @@ FmmFmt_HandleProgress:
 	calr SignalProgressUpdate
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	cp iz, 0:i3
 	jr ge, FmmFmt_FormatSuccess
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f6a:16)
@@ -532,7 +532,7 @@ FmmFmt_HandleProgress:
 	call UI_PostModeChangeEvent
 	ld (0x7f6c:16), 0
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, iz
@@ -545,11 +545,11 @@ FmmFmt_HandleProgress:
 
 FmmFmt_FormatSuccess:
 	ld xwa, 0x7b0036
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0x7b0031
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x84fe:16), 1
@@ -560,11 +560,11 @@ FmmFmt_ExecutePhase2:
 	jr nz, FmmFmt_Return
 	ld (0x7f68:16), 3
 	ld xwa, 0x7b003f
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0x7b0036
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr FmmFmt_DispatchAndNotify
 
@@ -581,11 +581,11 @@ FmmFmt_AbortPhase2:
 	jr nz, FmmFmt_Return
 	ld (0x7f68:16), 2
 	ld xwa, 0x7b003f
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0x7b0036
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 FmmFmt_DispatchAndNotify:
@@ -605,7 +605,7 @@ FmmFmt_Return:
 	ret
 
 UtilityTtlJgFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, UtilTtlJg_Return
 	ldw wa, 0x7b
 	ldw bc, 0x7c
@@ -617,9 +617,9 @@ UtilTtlJg_Return:
 
 FmmLoadTitleFunc:
 	pushw iz
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, FmmLoadTtl_HandleOk
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, FmmLoadTtl_Return
 	cp xde, 0x3
 	jrl z, FmmLoadTtl_HandleCancelOp
@@ -632,7 +632,7 @@ FmmLoadTitleFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ldmm8 0x7f6e, 0x8d37
@@ -674,7 +674,7 @@ FmmLoadTtl_CheckSmfHandle:
 	cp (0x7f6e:16), 100
 	jrl z, FmmLoadTtl_LoadSlots
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x64
@@ -682,18 +682,18 @@ FmmLoadTtl_CheckSmfHandle:
 
 FmmLoadTtl_StateCancelLoad:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f6e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
@@ -702,7 +702,7 @@ FmmLoadTtl_StateCancelLoad:
 
 FmmLoadTtl_StateIdle:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -710,19 +710,19 @@ FmmLoadTtl_StateIdle:
 
 FmmLoadTtl_StateSuccess:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	calr ResetProgressIndication
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f6e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
@@ -734,11 +734,11 @@ FmmLoadTtl_NotifyComplete:
 
 FmmLoadTtl_LoadSlots:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x89fc:16), 0
@@ -777,7 +777,7 @@ FmmLoadTtl_HandleScrollNav:
 FmmLoadTtl_HandleCancelOp:
 	calr CancelOperationCleanup
 	ld xwa, 0x610001
-	ld xbc, 0x1e0007f
+	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call ApPostEvent
 	jr FmmLoadTtl_Return
@@ -803,9 +803,9 @@ FmmLoadTtl_Return:
 
 FmmSaveTitleFunc:
 	pushw iz
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, FmmSaveTtl_HandleOk
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, FmmSaveTtl_Return
 	cp xde, 0x3
 	jrl z, FmmSaveTtl_HandleCancel
@@ -815,7 +815,7 @@ FmmSaveTitleFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8502:16), 0
@@ -849,18 +849,18 @@ FmmSaveTtl_SlotLoop:
 
 FmmSaveTtl_CommitSave:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	jr FmmSaveTtl_DispatchAndReturn
 
 FmmSaveTtl_HandleCancel:
 	calr CancelOperationCleanup
 	ld xwa, 0x670001
-	ld xbc, 0x1e0007f
+	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 
 FmmSaveTtl_DispatchAndReturn:
@@ -882,11 +882,11 @@ DiskNameFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1e00086
+	cp xbc, EVT_SET_STRING
 	jrl z, DiskName_HandleApply
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, DiskName_TextChange
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl nz, DiskName_Return
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -896,7 +896,7 @@ DiskNameFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld xwa, (xsp + 4)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x878c
 	jr DiskName_Dispatch
 
@@ -947,7 +947,7 @@ DiskName_FillLoop:
 DiskName_PadDone:
 	ld (xde + 11), 0x0
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1e00086
+	ld xbc, EVT_SET_STRING
 
 DiskName_Dispatch:
 	call ApPostEvent
@@ -976,7 +976,7 @@ DiskInfoFunc:
 	lda xsp, (xsp - 16)
 	push xiz
 	ld (xsp + 16), xde
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl nz, DiskInfo_Return
 	ld wa, 0:i3
 	calr InitializeOperationState
@@ -1073,7 +1073,7 @@ DiskInfo_RenderStrings:
 	ld xbc, DiskOp_ChannelCfgTable_0x78
 	call FileIO_BuildFilePath
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x87ce
 	call ApPostEvent
 
@@ -1087,7 +1087,7 @@ SongNameFunc:
 	dec 8, xsp
 	pushw iz
 	ld (xsp + 6), xde
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr nz, SongName_Return
 	call GetFirstPageBase
 	ld iz, hl
@@ -1129,7 +1129,7 @@ SongName_NoSlot:
 
 SongName_SendDisplay:
 	ld xwa, (xsp + 6)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x880e
 	call ApPostEvent
 
@@ -1143,7 +1143,7 @@ SaveFileNameNumFunc:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xde
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr nz, SaveFileNum_Return
 	call GetCurrentFileIndex
 	ld iz, hl
@@ -1164,7 +1164,7 @@ SaveFileNum_NoSlot:
 
 SaveFileNum_SendDisplay:
 	ld xwa, (xsp + 2)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x8850
 	call ApPostEvent
 
@@ -1178,11 +1178,11 @@ SaveFileNameFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xde
-	cp xbc, 0x1e00086
+	cp xbc, EVT_SET_STRING
 	jrl z, SaveFileName_HandleApply
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jr z, SaveFileName_TextChange
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl nz, SaveFileName_Return
 	lda xiz, (0x8850:16)
 	call FileIO_GetRecordByType
@@ -1192,7 +1192,7 @@ SaveFileNameFunc:
 	ld xwa, 0x8850
 	call FileIO_GetRecordType_Extended
 	ld xwa, (xsp + 4)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x8850
 	jr SaveFileName_Dispatch
 
@@ -1240,7 +1240,7 @@ SaveFileName_FillLoop:
 SaveFileName_PadDone:
 	ld (xde + 6), 0x0
 	ld xwa, (xsp + 4)
-	ld xbc, 0x1e00086
+	ld xbc, EVT_SET_STRING
 
 SaveFileName_Dispatch:
 	call ApPostEvent
@@ -1263,7 +1263,7 @@ CurFileNameFunc:
 	dec 4, xsp
 	pushw iz
 	ld (xsp + 2), xde
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr nz, CurFileName_Return
 	call GetCurrentFileIndex
 	ld iz, hl
@@ -1285,7 +1285,7 @@ CurFileName_NoSlot:
 
 CurFileName_SendDisplay:
 	ld xwa, (xsp + 2)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0x8870
 	call ApPostEvent
 

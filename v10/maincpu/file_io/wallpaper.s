@@ -13,15 +13,15 @@ FmmWallpaperLoadFunc:
 	ld (xsp + 6), xde
 	ld xiz, xbc
 	ld xwa, (0x81b0:16)
-	cp xiz, 0x1c00018
+	cp xiz, EVT_INDEXSW_DOWN
 	jrl z, WPLoad_HandleScroll
-	cp xiz, 0x1c00017
+	cp xiz, EVT_INDEXSW_UP
 	jrl z, WPLoad_HandleScroll
-	cp xiz, 0x1c0000b
+	cp xiz, EVT_PAINT
 	jrl z, WPLoad_HandleShow
-	cp xiz, 0x1e50004
+	cp xiz, EVT_PS_FILE_NAME_BOX_ID
 	jrl z, WPLoad_HandleSelection
-	cp xiz, EVT_CPANEL_EVENT
+	cp xiz, EVT_ACTIVATE_STATE
 	jrl nz, WPLoad_Return
 	ld xwa, (xsp + 6)
 	cp xwa, 0x3
@@ -32,7 +32,7 @@ FmmWallpaperLoadFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	cpw (0x8500:16), 0
@@ -60,27 +60,27 @@ WPLoad_DispatchState:
 
 WPLoad_ContinueWait:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleCancel:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
@@ -89,7 +89,7 @@ WPLoad_HandleCancel:
 
 WPLoad_HandleError:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -99,17 +99,17 @@ WPLoad_HandleError:
 WPLoad_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
@@ -139,7 +139,7 @@ WPLoad_Selection_Positive:
 	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x81b0:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	jrl WPLoad_DispatchWidget
 
 WPLoad_HandleShow:
@@ -151,7 +151,7 @@ WPLoad_HandleShow:
 	jrl WPLoad_Return
 
 WPLoad_HandleScroll:
-	ld xbc, 0x1c50001
+	ld xbc, EVT_NOT_POST_AIC
 	ld xde, 1:i3
 	call ApPostEvent
 	ld hl, (0x81b4:16)
@@ -160,7 +160,7 @@ WPLoad_HandleScroll:
 	or xwa, xwa
 	jr nz, WPLoad_PageScroll
 	ld xwa, xiz
-	cp xwa, 0x1c00018
+	cp xwa, EVT_INDEXSW_DOWN
 	jr nz, WPLoad_ScrollUp
 	ld wa, hl
 	inc 1, wa
@@ -170,7 +170,7 @@ WPLoad_HandleScroll:
 	jr WPLoad_StorePosition
 
 WPLoad_ScrollUp:
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jrl nz, WPLoad_GetSelection
 	cp hl, 0:i3
 	jrl le, WPLoad_GetSelection
@@ -225,7 +225,7 @@ WPLoad_OpLoad:
 	cp xwa, 0x3
 	jr nz, WPLoad_GetSelection
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -237,17 +237,17 @@ WPLoad_OpLoad:
 	ld (0x7f42:16), l
 	calr SignalProgressUpdate
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x48
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0xee
@@ -267,7 +267,7 @@ WPLoad_UpdateDisplay:
 	ldto_werp DE, 0xe2
 	exts xde
 	ld xwa, (0x81b0:16)
-	ld xbc, 0x1e50002
+	ld xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call ApPostEvent
 	ld bc, (0x81b4:16)
 	exts xbc
@@ -287,7 +287,7 @@ WPLoad_UpdateDisplay:
 	ld de, bc
 	extz xde
 	add xde, xhl
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld wa, (0x81b4:16)
 	exts xwa
@@ -299,7 +299,7 @@ WPLoad_UpdateDisplay:
 	extz xde
 	add xde, xbc
 	ld xwa, (0x81b0:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	jr WPLoad_SendState
 
@@ -309,7 +309,7 @@ WPLoad_RedrawPage:
 
 WPLoad_SendState:
 	ld xwa, (0x81b0:16)
-	ld xbc, 0x1c50001
+	ld xbc, EVT_NOT_POST_AIC
 	ld xde, 0:i3
 
 WPLoad_DispatchWidget:

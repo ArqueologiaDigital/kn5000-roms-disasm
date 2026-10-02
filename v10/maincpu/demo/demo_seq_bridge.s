@@ -10,9 +10,9 @@
 
 MiddleFuncCall:
 	ld xwa, xbc
-	cp xbc, 0x1e70018
+	cp xbc, EVT_LYRICS_CHARA_REQ
 	jrl z, SqTrSel_CaseB
-	sub xwa, 0x1e70000
+	sub xwa, EVT_DEMO_SONG_SEL
 	cp xwa, 0x0
 	jrl lt, SqTrSel_CaseC
 	cp xwa, 0xc
@@ -179,15 +179,15 @@ SongBank_CopyNameAndFinish:
 
 SeqSongNameFunc:
 	pushw iz
-	cp xbc, 0x1e70003
+	cp xbc, EVT_SET_SELECTED_FILE_NUM
 	jrl z, SongBank_ReturnZero
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr z, SongBank_HandleNextPrev
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr z, SongBank_HandleNextPrev
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, SeqSongName_RefreshAll
-	cp xbc, 0x1e70002
+	cp xbc, EVT_PS_SONG_SEL_BOX_ID
 	jrl nz, SongBank_ReturnZero
 	ld (7116:16), xde
 	ld a, (0x00ffe3:24)
@@ -196,7 +196,7 @@ SeqSongNameFunc:
 	ld de, wa
 	extz xde
 	ld xwa, (7116:16)
-	ld xbc, 0x1e70003
+	ld xbc, EVT_SET_SELECTED_FILE_NUM
 	call ApPostEvent
 	jrl SongBank_ReturnZero
 
@@ -210,7 +210,7 @@ SeqSongName_RefreshLoop:
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xa
@@ -220,7 +220,7 @@ SeqSongName_RefreshLoop:
 SongBank_HandleNextPrev:
 	ld wa, (7120:16)
 	ld iz, wa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr nz, SeqSongName_CheckPrev
 	cp wa, 0x9
 	jr nc, SongBank_StoreCurrentSong
@@ -228,7 +228,7 @@ SongBank_HandleNextPrev:
 	jr SeqSongName_StoreCurrent
 
 SeqSongName_CheckPrev:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, SongBank_StoreCurrentSong
 	cp wa, 0:i3
 	jr z, SongBank_StoreCurrentSong
@@ -243,7 +243,7 @@ SongBank_StoreCurrentSong:
 	jr z, SongBank_ReturnZero
 	extz xde
 	ld xwa, (7116:16)
-	ld xbc, 0x1e70003
+	ld xbc, EVT_SET_SELECTED_FILE_NUM
 	call ApPostEvent
 	ld wa, iz
 	ld bc, iz
@@ -251,7 +251,7 @@ SongBank_StoreCurrentSong:
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld bc, (7120:16)
 	ld wa, bc
@@ -259,7 +259,7 @@ SongBank_StoreCurrentSong:
 	calr SongBank_ComputeTableOfs
 	ld xde, xhl
 	ld xwa, (7116:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ldto_berp A, 0xf8
 	ld (7500:16), a
@@ -335,15 +335,15 @@ SongBankLookup_BuildAudioCmd:
 
 SeqSongMemoryFunc:
 	pushw iz
-	cp xbc, 0x1e70003
+	cp xbc, EVT_SET_SELECTED_FILE_NUM
 	jrl z, SongBank_EventHandler_Return
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr z, SongBank_HandleNextPrevAlt
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr z, SongBank_HandleNextPrevAlt
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, SeqSongMem_RefreshAll
-	cp xbc, 0x1e70002
+	cp xbc, EVT_PS_SONG_SEL_BOX_ID
 	jrl nz, SongBank_EventHandler_Return
 	ld (7192:16), xde
 	ld a, (0x00ffe3:24)
@@ -352,7 +352,7 @@ SeqSongMemoryFunc:
 	ld de, wa
 	extz xde
 	ld xwa, (7192:16)
-	ld xbc, 0x1e70003
+	ld xbc, EVT_SET_SELECTED_FILE_NUM
 	jrl SeqSongMem_PostAndReturn
 
 SeqSongMem_RefreshAll:
@@ -365,7 +365,7 @@ SeqSongMem_RefreshLoop:
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	inc 1, iz
 	cp iz, 0xa
@@ -375,7 +375,7 @@ SeqSongMem_RefreshLoop:
 SongBank_HandleNextPrevAlt:
 	ld wa, (7196:16)
 	ld iz, wa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jr nz, SeqSongMem_CheckPrev
 	cp wa, 0x9
 	jr nc, SongBank_EventCompare
@@ -383,7 +383,7 @@ SongBank_HandleNextPrevAlt:
 	jr SeqSongMem_StoreCurrent
 
 SeqSongMem_CheckPrev:
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jr nz, SongBank_EventCompare
 	cp wa, 0:i3
 	jr z, SongBank_EventCompare
@@ -398,7 +398,7 @@ SongBank_EventCompare:
 	jr z, SongBank_EventHandler_Return
 	extz xde
 	ld xwa, (7192:16)
-	ld xbc, 0x1e70003
+	ld xbc, EVT_SET_SELECTED_FILE_NUM
 	call ApPostEvent
 	ld wa, iz
 	ld bc, iz
@@ -406,7 +406,7 @@ SongBank_EventCompare:
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld bc, (7196:16)
 	ld wa, bc
@@ -414,7 +414,7 @@ SongBank_EventCompare:
 	calr SongBank_LookupTableEntry
 	ld xde, xhl
 	ld xwa, (7192:16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 
 SeqSongMem_PostAndReturn:
 	call ApPostEvent
@@ -453,7 +453,7 @@ CDlikeSwTtl_SendEvt4:
 	extz	xde
 	add	xde, 0x10000
 	ld	xwa, 0x8b0004
-	ld	xbc, 0x1e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 	jr	CDlikeSwTtl_SendEvt4_Post
 CDlikeSwTtl_SendEvt4_Bit0Set:
 	ldb_d8	a, (0xcdf)
@@ -463,80 +463,80 @@ CDlikeSwTtl_SendEvt4_Bit0Set:
 	extz	xde
 	add	xde, 0x10000
 	ld	xwa, 0x8b0004
-	ld	xbc, 0x1e0008d
+	ld	xbc, EVT_REQUEST_GRID_DRAW
 CDlikeSwTtl_SendEvt4_Post:
 	jp	ApPostEvent
 ; Same event as CDlikeSwTtl_SendStartEvt (0x8B0003) but with XDE = 1.
 ; Called from ui/setwall_routines.s.
 CDlikeSwTtl_SendStartEvtArg1:
 	ld	xwa, 0x8b0003
-	ld	xbc, EVT_POST_ACTIVATE
+	ld	xbc, EVT_SET_VISIBLE
 	ld	xde, 1:i3
 	jp	ApPostEvent
 
 CDlikeSwTtl_SendStartEvt:
 	ld xwa, 0x8b0003
-	ld xbc, EVT_POST_ACTIVATE
+	ld xbc, EVT_SET_VISIBLE
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendResetEvent:
 	ld xwa, 0x8b0000
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendStopEvtD:
 	ld xwa, 0x8b000d
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_0:
 	ld xwa, 0x8c0000
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_A:
 	ld xwa, 0x8c000a
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SendEvent8C_13:
 	ld xwa, 0x8c0013
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jp ApPostEvent
 
 CDlikeSwTtl_SetRecordAndNotify:
 	ld (0x021090:24), 0x01
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, SepaOut_Config_0_0x25
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jp ApPostEvent
 
 SeqInit_PostEventSequence:
 	ld (0x021090:24), 0x00
 	ld xwa, NAKA_PerfReg_Container_Root_0x1697
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, SepaOut_Config_0_0x25
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
-	ld xbc, 0x1c0000c
+	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jp ApPostEvent
 
@@ -552,13 +552,13 @@ SeqInit_PostDispatchEvent:
 	extz wa
 	calr SeqInit_LookupDispatchEntry
 	ld xwa, xhl
-	ld xbc, 0x1e0004d
+	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
 	jp ApDeliveryEvent
 
 SeqInit_FinalEvent:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001b
+	ld xbc, EVT_INDEX_SELECT
 	ld xde, 0:i3
 	jp ApPostEvent
 
@@ -566,39 +566,39 @@ SeqRecPlay_EnableRecordOnly:
 	ld (0x021092:24), 0x01
 	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xde, 0:i3
 	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	jp ApPostEvent
 
 SeqRecPlay_EnablePlayOnly:
 	ld (0x021092:24), 0x00
 	ld (0x021094:24), 0x01
 	ld xwa, 0x6f0025
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xde, 0:i3
 	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	jp ApPostEvent
 
 SeqRecPlay_DisableBoth:
 	ld (0x021092:24), 0x00
 	ld (0x021094:24), 0x00
 	ld xwa, 0x6f0025
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xde, 0:i3
 	ld e, (0x021094:24)
 	ld xwa, 0x6f0024
-	ld xbc, 0x1e000a7
+	ld xbc, EVT_REFRESH_PARA_DRAW
 	jp ApPostEvent
 
 ; SqTrSelTtl case D
@@ -613,7 +613,7 @@ SqTrSel_CaseE:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
 	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
+	ld xbc, EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (7498:16), 0
@@ -628,7 +628,7 @@ SqTrSel_CaseF:
 
 PlayMode_SendStopEvent:
 	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
+	ld xbc, EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
 	jp ApPostEvent
 
@@ -707,20 +707,20 @@ PlayMode_CheckAndAbort:
 	calr SeqRecPlay_DisableBoth
 	call Song_AbortPlayback
 	ld xwa, 0x6f0026
-	ld xbc, 0x1c70009
+	ld xbc, EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
 	call ApPostEvent
 	ret
 
 PlayMode_SwitchToModeAndNotify:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ldw wa, 0x8b
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 35

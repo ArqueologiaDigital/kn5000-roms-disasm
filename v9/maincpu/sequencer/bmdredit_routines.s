@@ -244,7 +244,7 @@ BmDrEdit_RenderNoteBlock:
 	dec 8, xsp
 	calr BmDrEdit_CalcNotePosition
 	call GetTitleNow
-	cp xhl, 0x1a00095
+	cp xhl, TITLE_SQNOTEEDT
 	jr nz, BmDrEdit_RenderNoteBlock_Vertical
 	calr BmDrEdit_RenderHorizontal
 	jr BmDrEdit_RenderNoteBlock_StoreCoords
@@ -276,7 +276,7 @@ BmDrEdit_CalcNotePosition:
 	ld a, (0x0210a8:24)
 	sub (0x2806:16), a
 	call GetTitleNow
-	cp xhl, 0x1a00095
+	cp xhl, TITLE_SQNOTEEDT
 	jr nz, BmDrEdit_CalcNotePos_VerticalMode
 	cp (0x2798:16), 0
 	jr nz, BmDrEdit_CalcNotePos_ReadFields
@@ -380,7 +380,7 @@ BmDrEdit_RenderSecondaryBlock:
 	ldmmw_dd24 0xb2, 0x10, 0x02, 0x20, 0x28
 	calr BmDrEdit_CalcSecondaryPosition
 	call GetTitleNow
-	cp xhl, 0x1a00095
+	cp xhl, TITLE_SQNOTEEDT
 	jr nz, BmDrEdit_RenderSecondary_Vertical
 	calr BmDrEdit_RenderSecondaryHoriz
 	jr BmDrEdit_RenderSecondary_StoreCoords
@@ -452,7 +452,7 @@ BmDrEdit_CalcSecondaryPosition:
 	ld a, (0x2826:16)
 	sub (0x0210b0:24), a
 	call GetTitleNow
-	cp xhl, 0x1a00095
+	cp xhl, TITLE_SQNOTEEDT
 	jr nz, BmDrEdit_CalcSecondaryPos_Vert
 	cp (0x2798:16), 0
 	jr nz, BmDrEdit_CalcSecondaryPos_ClampSize

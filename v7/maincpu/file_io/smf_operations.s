@@ -1,7 +1,7 @@
 FmmSmfLoadTitleFunc:
-	cp	xbc, 29360135
+	cp	xbc, EVT_SW_IN
 	jrl	z, SmfLoad_HandleOk
-	cp	xbc, EVT_CPANEL_EVENT
+	cp	xbc, EVT_ACTIVATE_STATE
 	jrl	nz, SmfLoad_Return
 	cp	xde, 3
 	jrl	z, SmfLoad_CancelCleanup
@@ -11,7 +11,7 @@ FmmSmfLoadTitleFunc:
 	ld	wa, 1:i3
 	calr	InitializeOperationState
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ldmm8	0x7fee, 0x8c9b
@@ -56,7 +56,7 @@ SmfLoad_CheckSlotCount:
 
 	ld xwa, 0x600026
 
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 
 	ld xde, 0:i3
 
@@ -70,18 +70,18 @@ SmfLoad_CheckSlotCount:
 
 SmfLoad_AbortPartial:
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	a, (32750:16)
 	extz	wa
 	call	UI_PostModeChangeEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(32422:16), 0
@@ -89,7 +89,7 @@ SmfLoad_AbortPartial:
 	jr	SmfLoad_CallStatusDisplay
 SmfLoad_ErrorCancel:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ldw wa, 0x7d
@@ -98,18 +98,18 @@ SmfLoad_ErrorCancel:
 SmfLoad_Success:
 	calr	ResetProgressIndication
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	a, (32750:16)
 	extz	wa
 	call	UI_PostModeChangeEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(32422:16), 2
@@ -120,11 +120,11 @@ SmfLoad_CallStatusDisplay:
 
 SmfLoad_SendWait:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	jr SmfLoad_Return
@@ -150,7 +150,7 @@ SmfLoad_Return:
 	ld xhl, 0:i3
 	ret
 FmmSmfSaveTitleFunc:
-	cp	xbc, EVT_CPANEL_EVENT
+	cp	xbc, EVT_ACTIVATE_STATE
 	jr	nz, SmfSave_Return
 	cp	xde, 3
 	jr	z, SmfSave_CancelCleanup
@@ -160,7 +160,7 @@ FmmSmfSaveTitleFunc:
 	ld	wa, 1:i3
 	calr	InitializeOperationState
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	cpw	(33896:16), 0
@@ -172,11 +172,11 @@ FmmSmfSaveTitleFunc:
 	calr	SignalProgressUpdate
 SmfSave_SendWait:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	jr SmfSave_Return
@@ -229,13 +229,13 @@ SaveFileNameSmfFunc:
 	push	xiz
 	ld	(xsp+4), xde
 	lda	xwa, (34740:16)
-	cp	xbc, 31457414
+	cp	xbc, EVT_SET_STRING
 	jr	z, SaveFN_HandleApply
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jr	z, SaveFN_HandleTextChange
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, SaveFN_HandleActivate
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jrl	nz, SaveFN_Return
 	ld	xwa, (xsp+4)
 	ld	(32752:16), xwa
@@ -250,7 +250,7 @@ SaveFN_HandleActivate:
 	lda	xwa, (34741:16)
 	call	FileIO_GetRecordType_Extended
 	ld	xwa, (32752:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 34740
 	jr	SaveFN_SendEvent
 SaveFN_HandleTextChange:
@@ -263,7 +263,7 @@ SaveFN_HandleTextChange:
 	ldw	bc, 8
 	calr	RenderSmfFilename
 	ld	xwa, (xsp+4)
-	ld	xbc, 31457414
+	ld	xbc, EVT_SET_STRING
 	ld	xde, 34740
 SaveFN_SendEvent:
 	call ApPostEvent
@@ -289,9 +289,9 @@ SaveFN_Return:
 
 SmfSeqToSongNumFunc:
 	push	xiz
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, SeqToSong_BuildEntry
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, SeqToSong_Return
 	ld	(32756:16), xde
 	jr	SeqToSong_Return
@@ -310,7 +310,7 @@ SeqToSong_BuildEntry:
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
 	ld	xwa, (32756:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 32760
 	call	ApPostEvent
 SeqToSong_Return:
@@ -320,9 +320,9 @@ SeqToSong_Return:
 
 SmfSeqFromSongNumFunc:
 	push	xiz
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, SeqFromSong_BuildEntry
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, SeqFromSong_Return
 	ld	(32888:16), xde
 	jr	SeqFromSong_Return
@@ -341,7 +341,7 @@ SeqFromSong_BuildEntry:
 	ld	xwa, xiz
 	call	FileIO_BuildFilePath
 	ld	xwa, (32888:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 32892
 	call	ApPostEvent
 SeqFromSong_Return:
@@ -350,9 +350,9 @@ SeqFromSong_Return:
 	ret
 
 SmfSeqSongNameFunc:
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, SeqSongName_BuildEntry
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, SeqSongName_Return
 	ld	(33020:16), xde
 	jr	SeqSongName_Return
@@ -364,16 +364,16 @@ SeqSongName_BuildEntry:
 	calr	BuildSlotLabel
 	ld	xde, xhl
 	ld	xwa, (33020:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 SeqSongName_Return:
 	ld xhl, 0:i3
 	ret
 
 SmfLoadAsFunc:
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, SmfLoadAs_Apply
-	cp	xbc, 31784964
+	cp	xbc, EVT_PS_FILE_NAME_BOX_ID
 	jr	nz, SmfLoadAs_Return
 	ld	(33024:16), xde
 	jr	SmfLoadAs_Return
@@ -384,7 +384,7 @@ SmfLoadAs_Apply:
 	lda	xbc, (15337300:24)
 	ld_rrl	xde, xbc, wa
 	ld	xwa, (33024:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 SmfLoadAs_Return:
 	ld xhl, 0:i3
@@ -476,7 +476,7 @@ DispFileList_LoopBody:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10
@@ -519,14 +519,14 @@ FmmSmfFileNameFunc:
 	ld XDE,(XSP+0x1c)
 	ld	xwa, (33028:16)
 	ld	xbc, (xsp+28)
-	cp	xbc, 29360152
+	cp	xbc, EVT_INDEXSW_DOWN
 	jrl	z, SmfFN_NavSetup
-	cp	xbc, 29360151
+	cp	xbc, EVT_INDEXSW_UP
 	jrl	z, SmfFN_NavSetup
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jrl	z, SmfFN_HandleActivate
 	ld	xbc, xiz
-	sub	xde, 31784962
+	sub	xde, EVT_SET_SELECTED_FILE_NUMBER
 	cp	xde, 0
 	jrl	lt, SmfFN_ReturnZero
 	cp	xde, 5
@@ -564,7 +564,7 @@ FmmSmfFileNameFunc_Join:
 	ld	de, qwa
 	exts	xde
 	ld	xwa, (33028:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	jrl	SmfFN_DispatchFinalEvent
 SmfFN_HandleActivate:
 	ld	bc, (33040:16)
@@ -577,7 +577,7 @@ SmfFN_ReturnZero:
 	jrl SmfFN_Return
 
 SmfFN_NavSetup:
-	ld	xbc, 0x1c50001
+	ld	xbc, EVT_NOT_POST_AIC
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	ix, (0x8110:16)
@@ -587,7 +587,7 @@ SmfFN_NavSetup:
 	cp	(0x8462:16), 0
 	jr	nz, SmfFN_PageUp
 	ld	xwa, (xsp + 28)
-	cp	xwa, 0x1c00018
+	cp	xwa, EVT_INDEXSW_DOWN
 	jr	nz, SmfFN_NavUp
 	ld	bc, ix
 	inc	1, bc
@@ -606,7 +606,7 @@ SmfFN_NavDown_Apply:
 	jrl SmfFN_StoreIndex
 
 SmfFN_NavUp:
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jrl nz, SmfFN_UpdateDisplay
 	cp ix, 0:i3
 	jrl le, SmfFN_UpdateDisplay
@@ -683,7 +683,7 @@ SmfFN_HandleSave:
 	cp	xiz, 3
 	jrl	nz, SmfFN_HandleOpen
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -737,11 +737,11 @@ SmfFN_Save_WriteSlot:
 	call	FileIO_CopyString_WriteNull
 SmfFN_Save_Finish:
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	cpw (0xf19e:16), 0
@@ -759,7 +759,7 @@ SmfFN_Save_CallResult:
 	calr	FileIO_ValidateSignedValue
 	ld	(32422:16), l
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -768,7 +768,7 @@ SmfFN_HandleOpen:
 	cp xiz, 0x4
 	jrl nz, SmfFN_HandleOpen2
 	ld xwa, 0x600026
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	call FileIO_GetRecordPtrAlt
@@ -779,15 +779,15 @@ SmfFN_HandleOpen:
 	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Open_Execute
 	ld xwa, 0x600026
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x600037
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jrl SmfFN_DispatchEvent
 
@@ -811,17 +811,17 @@ SmfFN_Open_Execute:
 	ld	(33896:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -830,7 +830,7 @@ SmfFN_HandleOpen2:
 	cp	xiz, 50
 	jrl	nz, SmfFN_HandleDelete
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -852,17 +852,17 @@ SmfFN_HandleOpen2:
 	ld	(33896:16), hl
 	calr	SignalProgressUpdate
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
 	call	UI_PostPartChangeEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 238
@@ -873,16 +873,16 @@ SmfFN_HandleDelete:
 	cp (0x0340ea:24), 0x00
 	jr z, SmfFN_Delete_Execute
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c50000
+	ld xbc, EVT_NOT_PARA_DRAW
 	ld xde, 1:i3
 	call ApPostEvent
 	ld xwa, 0x7b0051
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jrl SmfFN_DispatchEvent
 SmfFN_Delete_Execute:
 	ld	xwa, 6291494
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 5:i3
 	call	ApPostEvent
 	ld	wa, 0:i3
@@ -898,7 +898,7 @@ SmfFN_Delete_Execute:
 	call	GetFileCountEncoded
 	ld	(33896:16), hl
 	ld	xwa, 6291494
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, (33040:16)
@@ -917,7 +917,7 @@ SmfFN_HandleDelete2:
 	cp XIZ,0x00000033
 	jr nz, SmfFN_IgnoredEvents
 	ld XWA,0x00600026
-	ld XBC,EVT_MENU_OPEN
+	ld XBC,EVT_SHOW
 	ld xde, 5:i3
 	call ApPostEvent
 	ld wa, 0:i3
@@ -933,7 +933,7 @@ SmfFN_HandleDelete2:
 	call GetFileCountEncoded
 	ld (0x8468:16), hl
 	ld XWA,0x00600026
-	ld XBC,EVT_SELECT_CONFIRM
+	ld XBC,EVT_HIDE
 	ld xde, 0:i3
 	call ApPostEvent
 	ld wa, (0x8110:16)
@@ -964,7 +964,7 @@ SmfFN_IgnoredEvents:
 	cp	(33890:16), 0
 	jr	nz, SmfFN_HandleScrollFlag1
 	ld	xwa, (xsp+28)
-	cp	xwa, 29360151
+	cp	xwa, EVT_INDEXSW_UP
 	jr	nz, SmfFN_SetScrollDir0
 	ld	(34982:16), 1
 	jrl	SmfFN_UpdateDisplay
@@ -982,13 +982,13 @@ SmfFN_HandleScrollFlag1:
 	inc	1, c
 	ld	(34986:16), c
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	SmfFN_LoadAs_Apply
 SmfFN_LoadAs_Wrap:
 	ld	(34986:16), 0
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 SmfFN_LoadAs_Apply:
 	calr SmfLoadAsFunc
@@ -998,7 +998,7 @@ SmfFN_HandleScrollFlag2:
 	cp	xiz, 22
 	jr	nz, SmfFN_HandleScrollFlag3
 	ld	xwa, (xsp+28)
-	cp	xwa, 29360151
+	cp	xwa, EVT_INDEXSW_UP
 	jr	nz, SmfFN_SetTrackFlag0
 	ld	(34990:16), 1
 	jrl	SmfFN_UpdateDisplay
@@ -1009,7 +1009,7 @@ SmfFN_HandleScrollFlag3:
 	ld	xwa, (xsp+28)
 	cp	xiz, 23
 	jr	nz, SmfFN_HandleScrollFlag4
-	cp	xwa, 29360151
+	cp	xwa, EVT_INDEXSW_UP
 	jr	nz, SmfFN_SetTransposeFlag0
 	ld	(34992:16), 1
 	jrl	SmfFN_UpdateDisplay
@@ -1019,7 +1019,7 @@ SmfFN_SetTransposeFlag0:
 SmfFN_HandleScrollFlag4:
 	cp	xiz, 24
 	jr	nz, SmfFN_HandleSeqSongNum
-	cp	xwa, 29360151
+	cp	xwa, EVT_INDEXSW_UP
 	jr	nz, SmfFN_SetFlag35140_0
 	ld	(34984:16), 1
 	jrl	SmfFN_UpdateDisplay
@@ -1037,21 +1037,21 @@ SmfFN_HandleSeqSongNum:
 	inc	1, c
 	ld	(34988:16), c
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	SmfSeqToSongNumFunc
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	SmfFN_SeqSongName_Dispatch
 SmfFN_SeqToSong_Wrap:
 	ld	(34988:16), 0
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	SmfSeqToSongNumFunc
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	SmfFN_SeqSongName_Dispatch
 SmfFN_HandleSeqFromSong:
@@ -1062,21 +1062,21 @@ SmfFN_HandleSeqFromSong:
 	inc	1, c
 	ld	(34988:16), c
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	SmfSeqFromSongNumFunc
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	jr	SmfFN_SeqSongName_Dispatch
 SmfFN_SeqFromSong_Wrap:
 	ld	(34988:16), 0
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	SmfSeqFromSongNumFunc
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 SmfFN_SeqSongName_Dispatch:
 	calr SmfSeqSongNameFunc
@@ -1090,7 +1090,7 @@ SmfFN_HandleMedleyConfirm:
 	ld	xwa, (0x8108:16)
 	or	xwa, xwa
 	jr	z, SmfFN_UpdateDisplay
-	ld	xbc, 0x1c0000a
+	ld	xbc, EVT_ALL_PAINT
 	ld	xde, 0:i3
 SmfFN_DispatchEvent:
 	call ApPostEvent
@@ -1108,7 +1108,7 @@ SmfFN_RefreshIfChanged:
 	ld	de, qwa
 	exts	xde
 	ld	xwa, (33028:16)
-	ld	xbc, 31784962
+	ld	xbc, EVT_SET_SELECTED_FILE_NUMBER
 	call	ApPostEvent
 	ld	bc, (33040:16)
 	exts	xbc
@@ -1128,7 +1128,7 @@ SmfFN_RefreshIfChanged:
 	ld	de, bc
 	extz	xde
 	add	xde, xhl
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	ld	wa, (33040:16)
 	exts	xwa
@@ -1140,7 +1140,7 @@ SmfFN_RefreshIfChanged:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (33028:16)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	jr	SmfFN_UpdateFilenameField
 SmfFN_RedrawPage:
@@ -1149,7 +1149,7 @@ SmfFN_RedrawPage:
 	cp	(35994:16), 108
 	jr	nz, SmfFN_UpdateFilenameField
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	FmmSmfMedleyFunc
 SmfFN_UpdateFilenameField:
@@ -1176,12 +1176,12 @@ SmfFN_WriteFilenameField:
 	ld	xwa, 34740
 	call	FileIO_WriteRecordName
 	ld	xwa, (xsp+32)
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	calr	SaveFileNameSmfFunc
 SmfFN_SendOkState:
 	ld xwa, (0x8104:16)
-	ld XBC,0x01c50001
+	ld XBC,EVT_NOT_POST_AIC
 	ld xde, 0:i3
 	jr t, SmfFN_DispatchFinalEvent
 	ld (0x8108:16), xbc
@@ -1201,7 +1201,7 @@ SmfFN_SendOkState:
 	ld DE,QWA
 	exts XDE
 	ld xwa, (0x8104:16)
-	ld XBC,0x01e50002
+	ld XBC,EVT_SET_SELECTED_FILE_NUMBER
 SmfFN_DispatchFinalEvent:
 	call	ApPostEvent
 	jrl	SmfFN_ReturnZero
@@ -1253,7 +1253,7 @@ DispSeqList_LoopBody:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, (xsp+4)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	ApPostEvent
 	inc	1, iz
 	cp	iz, 10

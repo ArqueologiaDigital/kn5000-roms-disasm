@@ -14,29 +14,29 @@ AcLswFuncBoxProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcLswBox_HandleScrollDownEvt
-	cp xbc, 0x1c0001a
+	cp xbc, EVT_INDEXSW_DOWN_AIC
 	jrl z, AcLswBox_HandleScrollUpEvt
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcLswBox_HandleDialDecEvt
-	cp xbc, 0x1c00019
+	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcLswBox_HandleDialIncEvt
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jrl z, AcLswBox_HandleValueChange
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jrl z, AcLswBox_HandleGetLsw
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl z, AcLswBox_HandleGetLsw
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jrl z, AcLswBox_HandleResetFilter
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jrl z, AcLswBox_OnCreateEvt
-	cp xbc, 0x1e0003d
+	cp xbc, EVT_CALC_PARAM
 	jr z, AcLswBox_HandleAdd
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jr z, AcLswBox_HandlePut
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, AcLswBox_DefaultInherited
 	ld xwa, xiz
 	call GetViewInstance
@@ -133,7 +133,7 @@ AcLswBox_HandleValueChange:
 	ld wa, (xde + 4)
 	ld (xbc), wa
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AudioMix_SendEventAlt
 
@@ -142,13 +142,13 @@ AcLswBox_HandleDialIncEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AudioMix_ReturnZeroJmp2
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 1:i3
 	jr AudioMix_SendEventAlt
 
@@ -157,13 +157,13 @@ AcLswBox_HandleDialDecEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AudioMix_ReturnZeroJmp2
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 1:i3
 	jr AudioMix_SendEventAlt
 
@@ -172,13 +172,13 @@ AcLswBox_HandleScrollUpEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AudioMix_ReturnZeroJmp2
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 0xffffffff
 	jr AudioMix_SendEventAlt
 
@@ -187,13 +187,13 @@ AcLswBox_HandleScrollDownEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AudioMix_ReturnZeroJmp2
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 0xffffffff
 
 AudioMix_SendEventAlt:
@@ -214,13 +214,13 @@ AcLswBox_ReturnEpilogue:
 	ret
 
 TtMdRealMsg:
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, TtMdRealMsg_ReturnZero
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, TtMdRealMsg_ReturnZero
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, TtMdRealMsg_ReturnZero
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtMdRealMsg_ReturnZero
 	or xde, xde
 	jr nz, TtMdRealMsg_ReturnZero
@@ -242,29 +242,29 @@ AcLswFuncEditBoxProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcLswEdit_HandleScrollDownEvt
-	cp xbc, 0x1c0001a
+	cp xbc, EVT_INDEXSW_DOWN_AIC
 	jrl z, AcLswEdit_HandleScrollUpEvt
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcLswEdit_HandleDialDecEvt
-	cp xbc, 0x1c00019
+	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcLswEdit_HandleDialIncEvt
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jrl z, AcLswEdit_HandleValueChange
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jrl z, AcLswEdit_HandleGetLsw
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl z, AcLswEdit_HandleGetLsw
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jrl z, AcLswEdit_HandleResetFilter
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jrl z, AcLswEdit_HandleCreate
-	cp xbc, 0x1e0003d
+	cp xbc, EVT_CALC_PARAM
 	jr z, AcLswEdit_HandleAdd
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jr z, AcLswEdit_HandlePut
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, AcLswEdit_DefaultInherited
 	ld xwa, xiz
 	call GetViewInstance
@@ -361,7 +361,7 @@ AcLswEdit_HandleValueChange:
 	ld wa, (xde + 4)
 	ld (xbc), wa
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AudioMix_SendEvent
 
@@ -370,13 +370,13 @@ AcLswEdit_HandleDialIncEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AudioMix_ReturnZeroJmp
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 1:i3
 	jr AudioMix_SendEvent
 
@@ -385,13 +385,13 @@ AcLswEdit_HandleDialDecEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AudioMix_ReturnZeroJmp
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 1:i3
 	jr AudioMix_SendEvent
 
@@ -400,13 +400,13 @@ AcLswEdit_HandleScrollUpEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AudioMix_ReturnZeroJmp
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 0xffffffff
 	jr AudioMix_SendEvent
 
@@ -415,13 +415,13 @@ AcLswEdit_HandleScrollDownEvt:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld xde, (xsp + 4)
 	call SendEvent
 	or xhl, xhl
 	jr z, AudioMix_ReturnZeroJmp
 	ld xwa, xiz
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, 0xffffffff
 
 AudioMix_SendEvent:
@@ -457,13 +457,13 @@ AcLswEdit_Epilogue:
 ; Used by: Entertainer mode tone fade effects (TT_ETFADEIN)
 ; =============================================================================
 TtFadeInOut:
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, TtFadeInOut_ReturnZero
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, TtFadeInOut_ReturnZero
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, TtFadeInOut_ReturnZero
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtFadeInOut_ReturnZero
 	or xde, xde
 	jr nz, TtFadeInOut_ReturnZero
@@ -507,16 +507,16 @@ AcFadeSetGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, VoiceUI_GridCase2
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, VoiceUI_GridCase1
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, VoiceUI_GridCase0
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, VoiceParam_ListHandler
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, VoiceUI_GridCase3
 	cp xbc, 0x6
@@ -537,7 +537,7 @@ VoiceParam_ListHandler:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -550,7 +550,7 @@ VoiceParam_ListHandler:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -561,7 +561,7 @@ VoiceParam_ListHandler:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FadeGrid_SetDialEnable
@@ -570,13 +570,13 @@ VoiceParam_ListHandler:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, FadeGrid_CheckFadeOut
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 1:i3
@@ -589,7 +589,7 @@ VoiceParam_ListHandler:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -600,7 +600,7 @@ VoiceParam_ListHandler:
 
 FadeGrid_CheckFadeOut:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -616,11 +616,11 @@ FadeGrid_CheckFadeOut:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -630,13 +630,13 @@ FadeGrid_CheckFadeOut:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, FadeGrid_CheckFadeOutAlt
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -648,7 +648,7 @@ FadeGrid_CheckFadeOut:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -658,7 +658,7 @@ FadeGrid_CheckFadeOut:
 
 FadeGrid_CheckFadeOutAlt:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -674,11 +674,11 @@ FadeGrid_CheckFadeOutAlt:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -767,9 +767,9 @@ FadeSetGridCheck:
 	ld bc, 4:i3
 	ldirw
 	ld xwa, xde
-	cp xde, 0x1e0008d
+	cp xde, EVT_REQUEST_GRID_DRAW
 	jrl z, AcInOutGrid_Handler
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, SndParam_ReturnZero2
 	cp xwa, 0x6
@@ -782,7 +782,7 @@ FadeSetGridCheck:
 Data_FadeSetGridDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -805,7 +805,7 @@ Data_FadeSetGridDispatch:
 	jr	FadeSetGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+28), xhl
@@ -873,7 +873,7 @@ FadeSetGridCheck_Entry:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	SndParam_SendEventAndReturn
 FadeSetGridCheck_Skip2:
 	ld	xwa, NakaInst_OFF_WidgetTbl2_0x9C
@@ -888,7 +888,7 @@ FadeSetGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	SndParam_SendEventAndReturn
 AcInOutGrid_Handler:
 	lda xde, (xsp + 4)
@@ -931,7 +931,7 @@ SndParam_LookupAndSendCmd:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jr	SndParam_SendEventAndReturn
 SndParam_FormatAndDisplay:
 	call	AcApcToggleProc_Helper
@@ -948,7 +948,7 @@ SndParam_PushStrAndCopy:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 SndParam_SendEventAndReturn:
 	call SendEvent
 
@@ -959,13 +959,13 @@ SndParam_ReturnZero2:
 	ret
 
 TtMdInOut:
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, TtMdInOut_ReturnZero
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, TtMdInOut_ReturnZero
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, TtMdInOut_ReturnZero
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtMdInOut_ReturnZero
 	or xde, xde
 	jr nz, TtMdInOut_ReturnZero
@@ -987,16 +987,16 @@ AcInOutGridBoxProc:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	ld xbc, (xsp + 12)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, AcInOutGrid_CellSelect
 	ld xwa, (xsp + 12)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, AcInOutGrid_GetRowText
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, AcInOutGrid_GetColText
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, AcInOutGrid_Init
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, AcInOutGrid_Default
 	cp xbc, 0x6
@@ -1015,7 +1015,7 @@ AcInOutGrid_Init:
 	call	GetViewInstance
 	ld	(xsp+4), xhl
 	ld	xwa, (xsp+16)
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1028,7 +1028,7 @@ AcInOutGrid_Init:
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+16)
-	ld	xbc, 29360151
+	ld	xbc, EVT_INDEXSW_UP
 	call	SetDialUp
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa+26)
@@ -1039,7 +1039,7 @@ AcInOutGrid_Init:
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+16)
-	ld	xbc, 29360152
+	ld	xbc, EVT_INDEXSW_DOWN
 	call	SetDialDown
 	ld	wa, 1:i3
 	jrl	AcInOutGrid_SetScrollBounds
@@ -1048,13 +1048,13 @@ AcInOutGrid_Init:
 	ld	xde, (xsp+8)
 	call	InheritedProc
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457360
+	ld	xbc, EVT_CHECK_INDEX
 	ld	xde, (xsp+8)
 	call	SendEvent
 	or	xhl, xhl
 	jr	z, AcInOutGrid_ScrollUp_CheckAlt
 	ld	xwa, (xsp+16)
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	iz, hl
@@ -1072,7 +1072,7 @@ AcInOutGrid_Init:
 	extz	xde
 	add	xde, 4294901760
 	ld	xwa, (xsp+16)
-	ld	xbc, 29360142
+	ld	xbc, EVT_SELE_DRAW
 	jr	AcInOutGrid_ScrollUp_Dispatch
 AcInOutGrid_ScrollUp_AltTable:
 	lda xbc, (NakaInst_OFF_WidgetTbl2_0xDC:24)
@@ -1083,7 +1083,7 @@ AcInOutGrid_ScrollUp_AltTable:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 
 AcInOutGrid_ScrollUp_Dispatch:
 	call SendEvent
@@ -1095,7 +1095,7 @@ AcInOutGrid_ScrollUp_Dispatch:
 
 AcInOutGrid_ScrollUp_CheckAlt:
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457425
+	ld	xbc, EVT_CHECK_GRID_INDEX
 	ld	xde, (xsp+8)
 	call	SendEvent
 	or	xhl, xhl
@@ -1111,11 +1111,11 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	ld	xde, (xsp+8)
 	call	SetAutoInc
 	ld	xwa, (xsp+16)
-	ld	xbc, 29360151
+	ld	xbc, EVT_INDEXSW_UP
 	ld	xde, (xsp+8)
 	call	SetDialUp
 	ld	xwa, (xsp+16)
-	ld	xbc, 29360152
+	ld	xbc, EVT_INDEXSW_DOWN
 	ld	xde, (xsp+8)
 	call	SetDialDown
 	ld	wa, 1:i3
@@ -1125,13 +1125,13 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	ld	xde, (xsp+8)
 	call	InheritedProc
 	ld	xwa, (xsp+16)
-	ld	xbc, 31457360
+	ld	xbc, EVT_CHECK_INDEX
 	ld	xde, (xsp+8)
 	call	SendEvent
 	or	xhl, xhl
 	jr	z, AcInOutGrid_ScrollDown_CheckAlt	; -> 0xF755A6
 	ld	xwa, (xsp+16)
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	iz, hl
@@ -1148,7 +1148,7 @@ AcInOutGrid_ScrollUp_CheckAlt:
 	extz	xde
 	add	xde, 4294901760
 	ld	xwa, (xsp+16)
-	ld	xbc, 29360142
+	ld	xbc, EVT_SELE_DRAW
 	jr	AcInOutGrid_ScrollDown_Dispatch	; -> 0xF75592
 AcInOutGrid_ScrollDown_AltTable:
 	lda xbc, (NakaInst_OFF_WidgetTbl2_0x100:24)
@@ -1158,7 +1158,7 @@ AcInOutGrid_ScrollDown_AltTable:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 
 AcInOutGrid_ScrollDown_Dispatch:
 	call SendEvent
@@ -1170,7 +1170,7 @@ AcInOutGrid_ScrollDown_Dispatch:
 
 AcInOutGrid_ScrollDown_CheckAlt:
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -1186,11 +1186,11 @@ AcInOutGrid_ScrollDown_CheckAlt:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 8)
 	call SetDialUp
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 8)
 	call SetDialDown
 	ld wa, 1:i3
@@ -1279,9 +1279,9 @@ InOutGridCheck:
 	ldirw
 	ld xwa, xde
 	lda xbc, (xsp + 12)
-	cp xde, 0x1e0008d
+	cp xde, EVT_REQUEST_GRID_DRAW
 	jrl z, ParaLoadOpt_Entry
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, MdPreset_ReturnZero2
 	cp xwa, 0x6
@@ -1296,7 +1296,7 @@ Data_InOutGridDispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 308 of 360 slots byte-identical
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1368,7 +1368,7 @@ InOutGridCheck_Skip:
 	jrl	InOutGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -1473,7 +1473,7 @@ InOutGridCheck_Join:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip3:
 	ldw	(xbc), 1
@@ -1487,7 +1487,7 @@ InOutGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip4:
 	ld	xix, xwa
@@ -1510,11 +1510,11 @@ InOutGridCheck_Skip4:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip5:
@@ -1529,11 +1529,11 @@ InOutGridCheck_Skip5:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip6:
@@ -1548,11 +1548,11 @@ InOutGridCheck_Skip6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, 0x1c0000c
+	ld	xbc, EVT_REPAINT
 	ld	xde, 0:i3
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip7:
@@ -1582,7 +1582,7 @@ InOutGridCheck_Join2:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip9:
 	ldw	(xbc), 3
@@ -1612,7 +1612,7 @@ InOutGridCheck_Join3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip11:
 	ldw	(xbc), 5
@@ -1626,7 +1626,7 @@ InOutGridCheck_Skip11:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip12:
 	ldw	(xbc), 6
@@ -1640,7 +1640,7 @@ InOutGridCheck_Skip12:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Skip13:
 	ldw	(xbc), 7
@@ -1654,7 +1654,7 @@ InOutGridCheck_Skip13:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 InOutGridCheck_Entry:
 	; v10 does not spell this byte either
@@ -1671,7 +1671,7 @@ InOutGridCheck_Entry:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4
 ParaLoadOpt_Entry:
 	lda xde, (xsp + 4)
@@ -1710,7 +1710,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 	ld	xwa, 8449
 	call	AcApcToggleProc_Helper
@@ -1725,7 +1725,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 	ld	xwa, 20480
 	call	AcApcToggleProc_Helper
@@ -1740,7 +1740,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	ld	xwa, 20480
 	call	AcApcToggleProc_Helper
@@ -1761,7 +1761,7 @@ Data_ParaLoadOptDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 InOutGridCheck_Skip14:
 	ldw	(xwa), 3
@@ -1778,7 +1778,7 @@ InOutGridCheck_Skip14:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 InOutGridCheck_Skip15:
 	ldw	(xsp+6), 3
@@ -1794,7 +1794,7 @@ InOutGridCheck_Skip15:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 	ld	xwa, 20480
 	call	AcApcToggleProc_Helper
@@ -1813,7 +1813,7 @@ InOutGridCheck_Skip15:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 InOutGridCheck_Skip16:
 	ld	xwa, 20481
@@ -1829,7 +1829,7 @@ InOutGridCheck_Skip16:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 InOutGridCheck_Skip17:
 	ld	xwa, 20482
@@ -1844,7 +1844,7 @@ InOutGridCheck_Skip17:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 	ld	xwa, 8577
 	call	AcApcToggleProc_Helper
@@ -1859,7 +1859,7 @@ InOutGridCheck_Skip17:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	InOutGridCheck_Join4	; -> 0xF75DF0
 	ld	xwa, 8580
 	call	AcApcToggleProc_Helper
@@ -1874,7 +1874,7 @@ InOutGridCheck_Skip17:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
 	ld	xwa, 8578
 	call	AcApcToggleProc_Helper
@@ -1889,7 +1889,7 @@ InOutGridCheck_Skip17:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jr	InOutGridCheck_Join4	; -> 0xF75DF0
 	ld	xwa, 8579
 	call	AcApcToggleProc_Helper
@@ -1904,7 +1904,7 @@ InOutGridCheck_Skip17:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 InOutGridCheck_Join4:
 	call	SendEvent
 MdPreset_ReturnZero2:
@@ -1914,18 +1914,18 @@ MdPreset_ReturnZero2:
 	ret
 
 TtMdPreset:
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, TtMdPreset_ReturnZero
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, TtMdPreset_ReturnZero
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, TtMdPreset_ReturnZero
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtMdPreset_ReturnZero
 	or xde, xde
 	jr nz, TtMdPreset_ReturnZero
 	ld xwa, 0x560001
-	ld xbc, 0x1e0007f
+	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
 
@@ -1940,11 +1940,11 @@ IvMpstPageControlProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c0001e
+	cp xwa, EVT_PAGE_CHANGE
 	jr z, IvMpst_HandlePageSwitch
-	cp xwa, 0x1e0003a
+	cp xwa, EVT_GET_STRING
 	jr z, IvMpst_HandleGetName
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, IvMpst_HandleClose
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -1958,7 +1958,7 @@ IvMpst_HandleClose:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 12)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl IvMpst_SendEventEpilogue
 
@@ -1975,25 +1975,25 @@ IvMpst_HandlePageSwitch:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1e00094
+	ld xbc, EVT_CHECK_SHOW_WINDOW
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, IvMpst_CheckSecondView
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 
 IvMpst_CheckSecondView:
 	ld xwa, (xiz + 28)
-	ld xbc, 0x1e00094
+	ld xbc, EVT_CHECK_SHOW_WINDOW
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, IvMpst_InheritAndCheck
 	ld xwa, (xiz + 28)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 
@@ -2009,13 +2009,13 @@ IvMpst_InheritAndCheck:
 	cp (0x024756:24), 0x00
 	jr nz, IvMpst_ActivateSecondView
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr IvMpst_SendEventEpilogue
 
 IvMpst_ActivateSecondView:
 	ld xwa, (xiz + 28)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 IvMpst_SendEventEpilogue:
@@ -2031,13 +2031,13 @@ IvMpst_Epilogue:
 
 MdPresetWithoutFunc:
 	push xiz
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, MdPresetWith_ReturnSuccess
 	cp (0x024756:24), 0x00
 	jr z, MdPresetWith_ReturnSuccess
 	ld (0x024756:24), 0x00
 	ld xwa, 0x560001
-	ld xbc, 0x1e00056
+	ld xbc, EVT_GET_PAGE_NOW
 	ld xde, 0:i3
 	call SendEvent
 	cp l, 2:i3
@@ -2048,11 +2048,11 @@ MdPresetWithoutFunc:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr MdPresetWithout_SendCreate
 
@@ -2061,11 +2061,11 @@ MdPresetWithout_Slot2Path:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 28)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 MdPresetWithout_SendCreate:
@@ -2078,13 +2078,13 @@ MdPresetWith_ReturnSuccess:
 
 MdPresetWithFunc:
 	push xiz
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, MdPreset_ReturnSuccess
 	cp (0x024756:24), 0x01
 	jr z, MdPreset_ReturnSuccess
 	ld (0x024756:24), 0x01
 	ld xwa, 0x560001
-	ld xbc, 0x1e00056
+	ld xbc, EVT_GET_PAGE_NOW
 	ld xde, 0:i3
 	call SendEvent
 	cp l, 2:i3
@@ -2095,11 +2095,11 @@ MdPresetWithFunc:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 28)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr MdPresetWith_SendCreate
 
@@ -2108,11 +2108,11 @@ MdPresetWith_Slot2Path:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 28)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 MdPresetWith_SendCreate:
@@ -2125,10 +2125,10 @@ MdPreset_ReturnSuccess:
 
 MdPresetOKFunc:
 	ld xhl, xde
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x560001
-	ld xbc, 0x1e00056
+	ld xbc, EVT_GET_PAGE_NOW
 	ld xde, 0:i3
 	call SendEvent
 	cp l, 4:i3
@@ -2145,27 +2145,27 @@ MdPresetOKFunc:
 	cp a, 0:i3
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56000c
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x44
 	ld h, 0x0:opc
 	extz xhl
-	ld xwa, 0x1430002
-	ld xbc, 0x1e30003
+	ld xwa, NAKA_MAINFUNC_MainMpstFunc
+	ld xbc, EVT_MPST_LOAD
 	ld xde, xhl
 	jrl MdPreset_CallMainFunc
 
 MdPresetOK_Slot1Func:
 	ld xwa, 0x560015
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x4d
 	ld h, 0x0:opc
 	extz xhl
-	ld xwa, 0x1430002
-	ld xbc, 0x1e30003
+	ld xwa, NAKA_MAINFUNC_MainMpstFunc
+	ld xbc, EVT_MPST_LOAD
 	ld xde, xhl
 	jrl MdPreset_CallMainFunc
 
@@ -2175,57 +2175,57 @@ MdPresetOK_CheckSlotB:
 	cp a, 0:i3
 	jrl nz, MdPreset_PostMainFunc
 	ld xwa, 0x56002d
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x41
 	ld h, 0x0:opc
 	extz xhl
-	ld xwa, 0x1430002
-	ld xbc, 0x1e30003
+	ld xwa, NAKA_MAINFUNC_MainMpstFunc
+	ld xbc, EVT_MPST_LOAD
 	ld xde, xhl
 	jrl MdPreset_CallMainFunc
 
 MdPresetOK_SlotBFunc:
 	ld xwa, 0x560039
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x4a
 	ld h, 0x0:opc
 	extz xhl
-	ld xwa, 0x1430002
-	ld xbc, 0x1e30003
+	ld xwa, NAKA_MAINFUNC_MainMpstFunc
+	ld xbc, EVT_MPST_LOAD
 	ld xde, xhl
 	jr MdPreset_CallMainFunc
 
 MdPresetOK_Slot3Path:
 	ld xwa, 0x560020
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	add l, 0x1b
 	ld h, 0x0:opc
 	extz xhl
-	ld xwa, 0x1430002
-	ld xbc, 0x1e30003
+	ld xwa, NAKA_MAINFUNC_MainMpstFunc
+	ld xbc, EVT_MPST_LOAD
 	ld xde, xhl
 	jr MdPreset_CallMainFunc
 
 MdPresetOK_Slot4Path:
 	ld xwa, 0x560029
-	ld xbc, 0x1e0006b
+	ld xbc, EVT_GET_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	ld (0x024758:24), l
 	ld xwa, 0x560025
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	ld h, 0x0:opc
 	extz xhl
-	ld xwa, 0x1430002
-	ld xbc, 0x1e30004
+	ld xwa, NAKA_MAINFUNC_MainMpstFunc
+	ld xbc, EVT_MPST_WRITE
 	ld xde, xhl
 
 MdPreset_CallMainFunc:
@@ -2238,31 +2238,31 @@ MdPreset_PostMainFunc:
 MainMpstFunc:
 	dec	4, xsp
 	ld	(xsp), xde
-	cp	xbc, 31653892
+	cp	xbc, EVT_MPST_WRITE
 	jr	z, MainMpst_HandlePresetCopy
-	cp	xbc, 31653891
+	cp	xbc, EVT_MPST_LOAD
 	jr	nz, MainMpst_ReturnZero
 	ld	xwa, (xsp)
 	ld	(46928:16), a
 	call	VocalistPage2OKFunc_Helper
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	jr	MainMpst_PostEvent
 MainMpst_HandlePresetCopy:
 	ld	(32422:16), 37
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 	ld	xwa, (xsp)
 	extz	wa
 	call	SndParam_AllocAndCopyPreset
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 MainMpst_PostEvent:
 	call ApPostEvent
 
@@ -2276,13 +2276,13 @@ MainMpst_ReadPresetIndex:
 	ret
 
 TtMdExc:
-	cp	xbc, 0x1c0000c
+	cp	xbc, EVT_REPAINT
 	jr	z, TtMdExc_ReturnZero
-	cp	xbc, 0x1c0000b
+	cp	xbc, EVT_PAINT
 	jr	z, TtMdExc_ReturnZero
-	cp	xbc, EVT_SELECT_CONFIRM
+	cp	xbc, EVT_HIDE
 	jr	z, TtMdExc_HandleClose
-	cp	xbc, EVT_MENU_OPEN
+	cp	xbc, EVT_SHOW
 	jr	nz, TtMdExc_ReturnZero
 	or	xde, xde
 	jr	nz, TtMdExc_ReturnZero

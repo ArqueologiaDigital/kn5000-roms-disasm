@@ -748,7 +748,7 @@ Display_PollAudioDone:
 	ret
 Display_DeletePollEvent:
 	; --- XBC/XWA setup and call ---
-	ld xbc, 0x01c00007
+	ld xbc, EVT_SW_IN
 	ld	xwa, 0:i3
 	call DeleteEvent
 	ret

@@ -14802,8 +14802,8 @@ HDAE5000_Palette_Button01:
 ;
 ; HDAE5000_Bitmap_Button01 (0x2E3464, 42 x 15 = 630 B, 8 bpp, one row per
 ; line): the image of UI object "BitmapButt01".  Its handler
-; HDAE5000_BitmapButt01 (0x28B527) answers EVT_ALLOC_DATA_PTR 0x01E000A1 with
-; this address, EVT_ALLOC_WIDTH 0x01E000A2 with 42 and EVT_ALLOC_HEIGHT
+; HDAE5000_BitmapButt01 (0x28B527) answers EVT_GET_BITMAP_DATA 0x01E000A1 with
+; this address, EVT_GET_BITMAP_WIDTH 0x01E000A2 with 42 and EVT_GET_BITMAP_HEIGHT
 ; 0x01E000A3 with 15 (the same protocol the main CPU's bitmap objects use).
 ;
 HDAE5000_Bitmap_Button01:

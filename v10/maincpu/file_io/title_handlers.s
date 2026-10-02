@@ -14,7 +14,7 @@
 ; =============================================================================
 
 LoadTtlJgFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, LoadTtl_Return
 	ldw wa, 0x61
 	ldw bc, 0x64
@@ -25,7 +25,7 @@ LoadTtl_Return:
 	ret
 
 SaveTtlJgFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, SaveTtl_Return
 	ldw wa, 0x67
 	calr FileIO_GetDiskCapacity
@@ -35,7 +35,7 @@ SaveTtl_Return:
 	ret
 
 SaveSmfTtlJgFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, SaveSmfTtl_Return
 	ldw wa, 0x6b
 	calr FileIO_GetDiskCapacity
@@ -45,13 +45,13 @@ SaveSmfTtl_Return:
 	ret
 
 DirectPlayTtlJgFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	call z, (FileIO_DetectFileTypeAndPost:24)
 	ld xhl, 0:i3
 	ret
 
 SongMedleyTtlJgFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, SongMedleyTtl_Return
 	ldw wa, 0x77
 	calr FileIO_GetDiskCapacity
@@ -61,9 +61,9 @@ SongMedleyTtl_Return:
 	ret
 
 SetupFlashFunc:
-	cp xbc, 0x1e5000c
+	cp xbc, EVT_CHEAP_FLASH_LOAD
 	jr z, SetupFlash_HandleLoadEvent
-	cp xbc, 0x1e5000b
+	cp xbc, EVT_CHEAP_FLASH_WRITE
 	jr nz, SetupFlash_Return
 	ld (0x7f42:16), 37
 	ldw wa, 0xee
@@ -84,7 +84,7 @@ SetupFlash_Return:
 	ret
 
 FmmUtilityTitleFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, FmmUtility_Return
 	cp xde, 0x3
 	jrl z, FmmUtility_HandleAbort
@@ -94,7 +94,7 @@ FmmUtilityTitleFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x7b0013
-	ld xbc, 0x1e50005
+	ld xbc, EVT_ON_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 0x7f5c, 0x8d37
@@ -136,7 +136,7 @@ FmmUtility_CheckCapacity:
 	cp (0x7f5c:16), 124
 	jrl z, FmmUtility_ContinueWait
 	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7c
@@ -144,18 +144,18 @@ FmmUtility_CheckCapacity:
 
 FmmUtility_HandleCancel:
 	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5c:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
@@ -164,7 +164,7 @@ FmmUtility_HandleCancel:
 
 FmmUtility_HandleError:
 	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7d
@@ -176,18 +176,18 @@ FmmUtility_CallHandler:
 FmmUtility_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5c:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
@@ -199,11 +199,11 @@ FmmUtility_ShowStatus:
 
 FmmUtility_ContinueWait:
 	ld xwa, 0x7b0013
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	jr FmmUtility_Return
@@ -216,7 +216,7 @@ FmmUtility_Return:
 	ret
 
 FmmSmfUtilityTitleFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jrl nz, FmmSmfUtility_Return
 	cp xde, 0x3
 	jrl z, FmmSmfUtility_HandleAbort
@@ -226,7 +226,7 @@ FmmSmfUtilityTitleFunc:
 	ld wa, 1:i3
 	calr InitializeOperationState
 	ld xwa, 0x7b002a
-	ld xbc, 0x1e50005
+	ld xbc, EVT_ON_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldmm8 0x7f5e, 0x8d37
@@ -268,7 +268,7 @@ FmmSmfUtility_CheckCapacity:
 	cp (0x7f5e:16), 123
 	jrl z, FmmSmfUtility_ContinueWait
 	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7b
@@ -276,18 +276,18 @@ FmmSmfUtility_CheckCapacity:
 
 FmmSmfUtility_HandleCancel:
 	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 0
@@ -296,7 +296,7 @@ FmmSmfUtility_HandleCancel:
 
 FmmSmfUtility_HandleError:
 	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ldw wa, 0x7d
@@ -308,18 +308,18 @@ FmmSmfUtility_CallHandler:
 FmmSmfUtility_HandleSuccess:
 	calr ResetProgressIndication
 	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call ApPostEvent
 	ld a, (0x7f5e:16)
 	extz wa
 	call UI_PostModeChangeEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call ApPostEvent
 	ld (0x7f42:16), 2
@@ -331,11 +331,11 @@ FmmSmfUtility_ShowStatus:
 
 FmmSmfUtility_ContinueWait:
 	ld xwa, 0x7b002a
-	ld xbc, 0x1e50006
+	ld xbc, EVT_OFF_WINDOW
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call ApPostEvent
 	jr FmmSmfUtility_Return

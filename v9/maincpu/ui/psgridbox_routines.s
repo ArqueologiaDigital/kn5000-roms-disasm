@@ -97,7 +97,7 @@ PsGridBox_ShowHide:
 	ld (xsp + 4), xwa
 	lda xde, (xsp + 42)
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008a
+	ld xbc, EVT_GET_FIXED_COL_STR
 	call SendEvent
 	ldw (xsp + 14), 0x0
 	ldw (xsp + 18), 0x0
@@ -207,7 +207,7 @@ PsGridBox_ShowHide_CalcWidth:
 PsGridBox_ShowHide_ParseRows:
 	lda xde, (xsp + 42)
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008b
+	ld xbc, EVT_GET_FIXED_ROW_STR
 	call SendEvent
 	ld xwa, (xsp + 20)
 	ld xwa, (xwa + 28)
@@ -385,7 +385,7 @@ PsGridBox_Paint:
 	call GetViewInstance
 	ld xiz, xhl
 	ld XWA, (xsp + 0x014e)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 42)
@@ -393,7 +393,7 @@ PsGridBox_Paint:
 	ldw (xwa), 0xffff
 	exts xde
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	jrl PsGridBox_DispatchEvent
 
 PsGridBox_Confirm:
@@ -408,7 +408,7 @@ PsGridBox_Confirm:
 	ld (xsp + 4), xwa
 	lda xde, (xsp + 42)
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008a
+	ld xbc, EVT_GET_FIXED_COL_STR
 	call SendEvent
 	lda_dri XBC, 0xfd, 0x3e, 0x01
 	ld xhl, (xsp + 20)
@@ -501,7 +501,7 @@ PsGridBox_Confirm_DrawCol:
 PsGridBox_Confirm_Rows:
 	lda xde, (xsp + 42)
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008b
+	ld xbc, EVT_GET_FIXED_ROW_STR
 	call SendEvent
 	lda_dri XBC, 0xfd, 0x3e, 0x01
 	ld xhl, (xsp + 20)
@@ -659,7 +659,7 @@ PsGridBox_Confirm_InnerLoop:
 	sll xde, 0
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call SendEvent
 
 PsGridBox_Confirm_InnerNext:
@@ -798,7 +798,7 @@ PsGridBox_Select_StoreSel:
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call SendEvent
 
 PsGridBox_Select_SendCurr:
@@ -813,7 +813,7 @@ PsGridBox_Select_SendCurr:
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call SendEvent
 	lda_dri XBC, 0xfd, 0x3e, 0x01
 	ld XWA, (xsp + 0x014e)
@@ -879,7 +879,7 @@ PsGridBox_Scroll:
 	extz xde
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008e
+	ld xbc, EVT_SET_SELECTED_CEL
 	jrl PsGridBox_DispatchEvent
 	ld XWA, (xsp + 0x014e)
 	call GetViewInstance
@@ -1006,7 +1006,7 @@ PsGridBox_Scroll_Render:
 	lda xsp, (xsp + 12)
 	lda xde, (xsp + 24)
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 	jrl PsGridBox_DispatchEvent
 	ld xwa, Data_SoundEditorCharsLayout_0x320
 	jr PsGridBox_Scroll_CopyStr
@@ -1051,7 +1051,7 @@ PsGridBox_Scroll_CheckRowChange:
 	ld de, (xsp + 18)
 	exts xde
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 
 PsGridBox_Scroll_CheckColChange:
@@ -1085,7 +1085,7 @@ PsGridBox_Scroll_SendOldCell:
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 	call SendEvent
 
 PsGridBox_Scroll_SendNewCell:
@@ -1100,7 +1100,7 @@ PsGridBox_Scroll_SendNewCell:
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
-	ld xbc, 0x1e0008d
+	ld xbc, EVT_REQUEST_GRID_DRAW
 
 PsGridBox_DispatchEvent:
 	call SendEvent

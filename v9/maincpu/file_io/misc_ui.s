@@ -16,7 +16,7 @@
 JumpInsertFunc:
 	push xiz
 	ld xiz, xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, JumpInsert_Error
 	cp xbc, 0x9
@@ -56,13 +56,13 @@ JumpInsert_Return:
 FilePriorityFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1e00065
+	cp xbc, EVT_GET_DIRECTION
 	jr z, FilePriority_DefaultReturn
-	cp xbc, 0x1e00064
+	cp xbc, EVT_GET_BIT
 	jr z, FilePriority_ReturnOne
-	cp xbc, 0x1e00063
+	cp xbc, EVT_GET_BIT_ADDRESS
 	jr z, FilePriority_ReturnPointer
-	cp xbc, 0x1e00062
+	cp xbc, EVT_GET_BIT_STRING
 	jr nz, FilePriority_DefaultReturn
 	ld wa, (xde + 8)
 	and wa, 0x1
@@ -93,10 +93,10 @@ FilePriority_Return:
 	ret
 
 SetupOkFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, SetupOk_Return
-	ld xwa, 0x1450030
-	ld xbc, 0x1e5000b
+	ld xwa, NAKA_MAINFUNC_SetupFlashFunc
+	ld xbc, EVT_CHEAP_FLASH_WRITE
 	call MainFuncCall
 
 SetupOk_Return:
@@ -106,7 +106,7 @@ SetupOk_Return:
 SetupExitFunc:
 	push xiz
 	ld xiz, xde
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr nz, SetupExit_Return
 	ld xde, xiz
 	call InheritedProc
@@ -117,20 +117,20 @@ SetupExitFunc:
 	cp hl, 0:i3
 	jr z, SetupExit_Return
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
 	ld (0x7f42:16), 72
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000ee
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_MESAGE
 	call PostEvent
-	ld xwa, 0x1450030
-	ld xbc, 0x1e5000c
+	ld xwa, NAKA_MAINFUNC_SetupFlashFunc
+	ld xbc, EVT_CHEAP_FLASH_LOAD
 	ld xde, xiz
 	call MainFuncCall
 
@@ -144,16 +144,16 @@ TechnicsFileNaming:
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 4), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, TechnicsFileNaming_HandleOk
-	cp xiz, 0x1e0007c
+	cp xiz, EVT_GET_STRING_LENGTH
 	jr z, TechnicsFileNaming_Cancel
-	cp xiz, 0x1e00084
+	cp xiz, EVT_GET_NAMING_MODE
 	jr z, TechnicsFileNaming_Validate
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr nz, TechnicsFileNaming_DefaultReturn
 	call GetNamingWindowID
-	ld xwa, 0x145000e
+	ld xwa, NAKA_MAINFUNC_SaveFileNameFunc
 	ld xbc, xiz
 	ld xde, xhl
 	call MainFuncCall
@@ -171,16 +171,16 @@ TechnicsFileNaming_Cancel:
 TechnicsFileNaming_HandleOk:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	ld xde, 0x2742c
 	call SendEvent
-	ld xwa, 0x145000e
-	ld xbc, 0x1e00086
+	ld xwa, NAKA_MAINFUNC_SaveFileNameFunc
+	ld xbc, EVT_SET_STRING
 	ld xde, 0x2742c
 	call MainFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00067
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_DKSV
 	call SendEvent
 
 TechnicsFileNaming_DefaultReturn:
@@ -196,16 +196,16 @@ TechnicsFileRename:
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 4), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, TechnicsFileRename_HandleOk
-	cp xiz, 0x1e0007c
+	cp xiz, EVT_GET_STRING_LENGTH
 	jr z, TechnicsFileRename_Cancel
-	cp xiz, 0x1e00084
+	cp xiz, EVT_GET_NAMING_MODE
 	jr z, TechnicsFileRename_Validate
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr nz, TechnicsFileRename_DefaultReturn
 	call GetNamingWindowID
-	ld xwa, 0x1450022
+	ld xwa, NAKA_MAINFUNC_FileRenameFunc
 	ld xbc, xiz
 	ld xde, xhl
 	call MainFuncCall
@@ -223,15 +223,15 @@ TechnicsFileRename_Cancel:
 TechnicsFileRename_HandleOk:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	ld xde, 0x2743e
 	call SendEvent
-	ld xwa, 0x1450022
-	ld xbc, 0x1e00086
+	ld xwa, NAKA_MAINFUNC_FileRenameFunc
+	ld xbc, EVT_SET_STRING
 	ld xde, 0x2743e
 	call MainFuncCall
 	ld xwa, 0x7b0000
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 
@@ -248,16 +248,16 @@ SmfFileNaming:
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 4), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, SmfFileNaming_HandleOk
-	cp xiz, 0x1e0007c
+	cp xiz, EVT_GET_STRING_LENGTH
 	jr z, SmfFileNaming_Cancel
-	cp xiz, 0x1e00084
+	cp xiz, EVT_GET_NAMING_MODE
 	jr z, SmfFileNaming_Validate
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr nz, SmfFileNaming_DefaultReturn
 	call GetNamingWindowID
-	ld xwa, 0x145002f
+	ld xwa, NAKA_MAINFUNC_SaveFileNameSmfFunc
 	ld xbc, xiz
 	ld xde, xhl
 	call MainFuncCall
@@ -275,16 +275,16 @@ SmfFileNaming_Cancel:
 SmfFileNaming_HandleOk:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	ld xde, 0x27450
 	call SendEvent
-	ld xwa, 0x145002f
-	ld xbc, 0x1e00086
+	ld xwa, NAKA_MAINFUNC_SaveFileNameSmfFunc
+	ld xbc, EVT_SET_STRING
 	ld xde, 0x27450
 	call MainFuncCall
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a0006b
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_DKSVSMF
 	call SendEvent
 
 SmfFileNaming_DefaultReturn:
@@ -300,16 +300,16 @@ SmfFileRename:
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 4), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, SmfFileRename_HandleOk
-	cp xiz, 0x1e0007c
+	cp xiz, EVT_GET_STRING_LENGTH
 	jr z, SmfFileRename_Cancel
-	cp xiz, 0x1e00084
+	cp xiz, EVT_GET_NAMING_MODE
 	jr z, SmfFileRename_Validate
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr nz, SmfFileRename_DefaultReturn
 	call GetNamingWindowID
-	ld xwa, 0x1450023
+	ld xwa, NAKA_MAINFUNC_FileRenameSmfFunc
 	ld xbc, xiz
 	ld xde, xhl
 	call MainFuncCall
@@ -327,15 +327,15 @@ SmfFileRename_Cancel:
 SmfFileRename_HandleOk:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	ld xde, 0x27462
 	call SendEvent
-	ld xwa, 0x1450023
-	ld xbc, 0x1e00086
+	ld xwa, NAKA_MAINFUNC_FileRenameSmfFunc
+	ld xbc, EVT_SET_STRING
 	ld xde, 0x27462
 	call MainFuncCall
 	ld xwa, 0x7b0019
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 
@@ -352,16 +352,16 @@ FormatDiskNaming:
 	push xiz
 	ld xiz, xbc
 	ld (xsp + 4), xwa
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, FormatDiskNaming_HandleOk
-	cp xiz, 0x1e0007c
+	cp xiz, EVT_GET_STRING_LENGTH
 	jr z, FormatDiskNaming_Cancel
-	cp xiz, 0x1e00084
+	cp xiz, EVT_GET_NAMING_MODE
 	jr z, FormatDiskNaming_Validate
-	cp xiz, 0x1e0003a
+	cp xiz, EVT_GET_STRING
 	jr nz, FormatDiskNaming_DefaultReturn
 	call GetNamingWindowID
-	ld xwa, 0x145000b
+	ld xwa, NAKA_MAINFUNC_DiskNameFunc
 	ld xbc, xiz
 	ld xde, xhl
 	call MainFuncCall
@@ -379,11 +379,11 @@ FormatDiskNaming_Cancel:
 FormatDiskNaming_HandleOk:
 	call GetNamingWindowID
 	ld xwa, xhl
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	ld xde, 0x27474
 	call SendEvent
-	ld xwa, 0x145000b
-	ld xbc, 0x1e00086
+	ld xwa, NAKA_MAINFUNC_DiskNameFunc
+	ld xbc, EVT_SET_STRING
 	ld xde, 0x27474
 	call MainFuncCall
 
@@ -459,9 +459,9 @@ WaitingFunc:
 	lda xsp, (xsp - 68)
 	push xiz
 	ld (xsp + 68), xde
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, WaitingFunc_DrawMessage
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, WaitingFunc_Return
 	ld xwa, (xsp + 68)
 	ld (0x02748a:24), wa
@@ -486,7 +486,7 @@ WaitingFunc_DrawMessage:
 	ld (0x02748c:24), hl
 	ld xwa, (xsp + 68)
 	lda xde, (xsp + 4)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 
 WaitingFunc_Return:
@@ -496,12 +496,12 @@ WaitingFunc_Return:
 	ret
 
 DiskMedleyShowHideFunc:
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, DiskMedley_Return
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, DiskMedley_Return
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call SendEvent
 
@@ -516,27 +516,27 @@ PsFileNameBoxProc:
 	stl_dri XBC, 0xfd, 0xa6, 0x00
 	stl_dri XWA, 0xfd, 0xaa, 0x00
 	ld_sril XWA, (xsp + 0x00a6)
-	cp xwa, 0x1c50001
+	cp xwa, EVT_NOT_POST_AIC
 	jrl z, PsFileNameBox_HandleOkState
-	cp xwa, 0x1c50000
+	cp xwa, EVT_NOT_PARA_DRAW
 	jrl z, PsFileNameBox_HandleCancelState
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jrl z, PsFileNameBox_HandleClose
-	cp xwa, 0x1c0001a
+	cp xwa, EVT_INDEXSW_DOWN_AIC
 	jrl z, PsFileNameBox_HandleScrollDone
-	cp xwa, 0x1c00019
+	cp xwa, EVT_INDEXSW_UP_AIC
 	jrl z, PsFileNameBox_HandleScrollDone
-	cp xwa, 0x1c00018
+	cp xwa, EVT_INDEXSW_DOWN
 	jrl z, PsFileNameBox_HandleScrollEvt
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jrl z, PsFileNameBox_HandleScrollEvt
-	cp xwa, 0x1e50002
+	cp xwa, EVT_SET_SELECTED_FILE_NUMBER
 	jrl z, PsFileNameBox_HandleListSelect
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jrl z, PsFileNameBox_HandleConfirm
-	cp xwa, 0x1c0000b
+	cp xwa, EVT_PAINT
 	jrl z, PsFileNameBox_HandleShow
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jrl nz, PsFileNameBox_DefaultHandler
 	ld_sril XWA, (xsp + 0x00aa)
 	call GetViewInstance
@@ -547,7 +547,7 @@ PsFileNameBoxProc:
 	ldw (xwa), 0x1
 	ld_sril XDE, (xsp + 0x00aa)
 	ld xwa, (xiz + 34)
-	ld xbc, 0x1e50004
+	ld xbc, EVT_PS_FILE_NAME_BOX_ID
 	call MainFuncCall
 	cpw (xiz + 46), 0x0
 	jr z, PsFileNameBox_Init_Forward
@@ -556,21 +556,21 @@ PsFileNameBoxProc:
 	cpw (xiz + 38), 0x1
 	jr nz, PsFileNameBox_Init_HideFirst
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	jr PsFileNameBox_Init_Configure
 
 PsFileNameBox_Init_HideFirst:
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 
 PsFileNameBox_Init_Configure:
@@ -649,21 +649,21 @@ PsFileNameBox_CheckScrollButtons:
 	cpw (xwa + 38), 0x1
 	jr nz, PsFileNameBox_Scroll_HideDown
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	jr PsFileNameBox_Scroll_Apply
 
 PsFileNameBox_Scroll_HideDown:
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, 0:i3
 	call SetDialUp
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, 0:i3
 
 PsFileNameBox_Scroll_Apply:
@@ -867,16 +867,16 @@ PsFileNameBox_HandleScrollEvt:
 	or xwa, xwa
 	jrl nz, PsFileNameBox_ReturnZero
 	ld_sril XWA, (xsp + 0x00a6)
-	cp xwa, 0x1c00017
+	cp xwa, EVT_INDEXSW_UP
 	jr nz, PsFileNameBox_ScrollEvt_Down
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c00019
+	ld xbc, EVT_INDEXSW_UP_AIC
 	ld_sril XDE, (xsp + 0x00a2)
 	jr PsFileNameBox_ScrollEvt_Send
 
 PsFileNameBox_ScrollEvt_Down:
 	ld_sril XWA, (xsp + 0x00aa)
-	ld xbc, 0x1c0001a
+	ld xbc, EVT_INDEXSW_DOWN_AIC
 	ld_sril XDE, (xsp + 0x00a2)
 
 PsFileNameBox_ScrollEvt_Send:
@@ -900,14 +900,14 @@ PsFileNameBox_HandleScrollDone:
 	jr z, PsFileNameBox_ReturnZero
 	ld_sril XBC, (xsp + 0x00a6)
 	ld xwa, (xhl + 34)
-	cp xbc, 0x1c00019
+	cp xbc, EVT_INDEXSW_UP_AIC
 	jr nz, PsFileNameBox_ScrollDone_PairDown
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld_sril XDE, (xsp + 0x00a2)
 	jr PsFileNameBox_ScrollDone_Forward
 
 PsFileNameBox_ScrollDone_PairDown:
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld_sril XDE, (xsp + 0x00a2)
 
 PsFileNameBox_ScrollDone_Forward:

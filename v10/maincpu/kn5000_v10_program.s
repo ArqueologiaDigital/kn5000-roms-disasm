@@ -2791,7 +2791,7 @@ TextRender_XorMode_DrawPixel:
 ChordProc_SendRefreshEvent:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 
 UI_EventHandler_InitReturnZero:
@@ -2803,7 +2803,7 @@ UI_EventHandler_PopAndReturn:
 	ret
 
 ChordProc_TrailingData:
-	ld	xhl, 16908291
+	ld	xhl, NAKA_FUNC_AcTransposeBoxProc
 	ret
 AcChordBoxProc_Entry:
 
@@ -2812,11 +2812,11 @@ AcChordBoxProc:
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
-	cp xbc, 0x1c20001
+	cp xbc, EVT_CHORD_DSP
 	jr z, AcChordBox_HandleChordUpdate
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, AcChordBox_HandleInitOrSelect
-	cp xbc, 0x1c20000
+	cp xbc, EVT_CHORD_SHOW
 	jr z, AcChordBox_HandleInitOrSelect
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
@@ -2827,8 +2827,8 @@ AcChordBox_HandleInitOrSelect:
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
 	call InheritedProc
-	ld xwa, 0x1420007
-	ld xbc, 0x1e2000d
+	ld xwa, NAKA_MAINFUNC_MainChordPre
+	ld xbc, EVT_CHORD_PRE
 	ld xde, 0:i3
 	call MainFuncCall
 	jr AcChordBox_ReturnZero
@@ -2850,7 +2850,7 @@ AcChordBox_HandleChordUpdate:
 	jr nz, AcChordBox_ReturnZero
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 
 AcChordBox_ReturnZero:
@@ -2863,7 +2863,7 @@ AcChordBox_PopAndReturn:
 
 MainChordPre:
 	push xiz
-	cp xbc, 0x1e2000d
+	cp xbc, EVT_CHORD_PRE
 	jrl nz, MainChordPre_ReturnZero
 	pushw 0x15
 	call Malloc
@@ -2918,11 +2918,11 @@ MainChordPre_AppendChordSuffix:
 	call Strcat
 	lda xsp, (xsp + 16)
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20001
+	ld xbc, EVT_CHORD_DSP
 	ld xde, xiz
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, xiz
 	call ApPostEvent
 
@@ -2932,7 +2932,7 @@ MainChordPre_ReturnZero:
 	ret
 
 MainChordPre_ReturnDefaultResult:
-	ld xhl, 0x1020005
+	ld xhl, NAKA_FUNC_AcChordBoxProc
 	ret
 
 

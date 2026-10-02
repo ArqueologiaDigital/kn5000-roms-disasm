@@ -20,21 +20,21 @@ MainTitle_InitGraphicsAndEvents:
 	call InitializeTimer
 	call InitializeObjectTable
 	call LcdOn
-	ld xwa, 0x1a00000
-	ld xbc, 0x1e0009e
+	ld xwa, TITLE_PS
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call PostEvent
 	ld xwa, 0:i3
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00014
-	ld xde, 0x1800001
+	ld xbc, EVT_CHANGE_MODE
+	ld xde, NAKA_MODE_MD_NORMAL
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000ef
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_WELCOM
 	jp PostEvent
 
 MainTitle_SetBootFlag:
@@ -43,11 +43,11 @@ MainTitle_SetBootFlag:
 
 MainTitle_TeardownAndLoop:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	ld wa, 0:i3
@@ -78,7 +78,7 @@ MainTitle_EventLoop:
 
 	calr SleepMainTask
 	ld xwa, 0:i3
-	ld xbc, 0x1c00000
+	ld xbc, EVT_NONE
 	ld xde, 0:i3
 	call DirmdEmulator_Entry
 	ld wa, 1:i3
@@ -93,8 +93,8 @@ MainTitle_EventLoopSkipInit:
 
 MainTitle_PrepareAndDispatch:
 	call MainDispatchEvent
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000bb
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_MAIN_LOOP_COUNT
 	ld xde, 0:i3
 	jrl MainTitleControl
 	push xiz
@@ -154,15 +154,15 @@ SndParam_SendDiskMenuEvents:
 	bit 1, a
 	jr z, CtrlPanel_CheckDiskMenuRelease
 	ld xwa, 0xffffffff
-	ld xbc, EVT_ACTIVATE
+	ld xbc, EVT_SW_ON
 	call ApPostEvent
 	ld xde, xiz
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
+	ld xbc, EVT_SW_IN
 	call DeleteSpecificEvent
 	ld xde, xiz
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
+	ld xbc, EVT_SW_IN
 	call ApPostEvent
 	ld xde, xiz
 	ld xwa, xde
@@ -175,7 +175,7 @@ SndParam_SendDiskMenuEvents:
 	and xwa, (0x02749e:24)
 	jr z, CtrlPanel_ProcessButtonPress
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00030
+	ld xbc, EVT_SW_BOTH
 	call ApPostEvent
 	jr CtrlPanel_ProcessButtonPress
 
@@ -183,7 +183,7 @@ CtrlPanel_CheckDiskMenuRelease:
 	bit 1, c
 	jr z, CtrlPanel_ProcessButtonPress
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	call ApPostEvent
 	ld xwa, xiz
 	sll xwa, 2
@@ -203,17 +203,17 @@ CtrlPanel_ProcessButtonPress:
 	bit 0, a
 	jr z, CtrlPanel_CheckButtonRelease
 	ld xwa, 0xffffffff
-	ld xbc, EVT_ACTIVATE
+	ld xbc, EVT_SW_ON
 	call ApPostEvent
 	ld xde, xiz
 	set 7, de
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
+	ld xbc, EVT_SW_IN
 	call DeleteSpecificEvent
 	ld xde, xiz
 	set 7, de
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00007
+	ld xbc, EVT_SW_IN
 	call ApPostEvent
 	ld xde, xiz
 	ld xwa, xde
@@ -226,7 +226,7 @@ CtrlPanel_ProcessButtonPress:
 	and xwa, (0x02749a:24)
 	jr z, CtrlPanel_DispatchCombinedState
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00030
+	ld xbc, EVT_SW_BOTH
 	call ApPostEvent
 	jr CtrlPanel_DispatchCombinedState
 
@@ -234,7 +234,7 @@ CtrlPanel_CheckButtonRelease:
 	bit 0, c
 	jr z, CtrlPanel_DispatchCombinedState
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00009
+	ld xbc, EVT_SW_OFF
 	call ApPostEvent
 	ld xwa, xiz
 	sll xwa, 2
@@ -258,20 +258,20 @@ CtrlPanel_DispatchCombinedState:
 	cp xwa, 0x89
 	jr nz, CtrlPanel_HandlePortCommands
 	ld xwa, 7:i3
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr CtrlPanel_PostCombinedEvent
 
 CtrlPanel_PostDisplayEvent:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00000
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_PS
 	jr CtrlPanel_PostCombinedEvent
 
 CtrlPanel_PostScrollEvent:
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000f0
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_SOFTVER
 
 CtrlPanel_PostCombinedEvent:
 	call ApPostEvent
@@ -288,13 +288,13 @@ CtrlPanel_HandlePortCommands:
 	cp (0xc07e:16), 0
 	jr z, CtrlPanel_HandleSerialPort
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0003b
+	ld xbc, EVT_SW_IN_MODE
 	call DeleteEvent
 	ld xde, 0:i3
 	ld e, (0xc07e:16)
-	add xde, 0x1800000
+	add xde, NAKA_MODE_MD_PS
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0003b
+	ld xbc, EVT_SW_IN_MODE
 	call ApPostEvent
 
 CtrlPanel_HandleSerialPort:
@@ -303,7 +303,7 @@ CtrlPanel_HandleSerialPort:
 	cp (0xc07e:16), 0
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001f
+	ld xbc, EVT_DIAL
 	call DeleteEvent
 	ld a, (0xc07e:16)
 	add a, 0x10
@@ -312,7 +312,7 @@ CtrlPanel_HandleSerialPort:
 	lda xbc, (DiskWarning_ConfirmStrings_0xC36:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001f
+	ld xbc, EVT_DIAL
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_EventType_A8:
@@ -324,7 +324,7 @@ CtrlPanel_EventType_A8:
 	bit 0, a
 	jr z, CtrlPanel_A8_CheckRelease
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009b
+	ld xbc, EVT_TOGGLE_HOLD
 	ld xde, 0:i3
 	call ApPostEvent
 	ld xwa, 1:i3
@@ -380,7 +380,7 @@ CtrlPanel_AA_PanelEvent_0F:
 	bit 7, a
 	jr z, CtrlPanel_AA_0F_Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 0:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -388,7 +388,7 @@ CtrlPanel_AA_0F_Release:
 	bit 7, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 0:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -396,7 +396,7 @@ CtrlPanel_AA_PanelEvent_12:
 	bit 0, a
 	jr z, CtrlPanel_AA_12_Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 1:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -404,7 +404,7 @@ CtrlPanel_AA_12_Release:
 	bit 0, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 1:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -412,7 +412,7 @@ CtrlPanel_AA_PanelEvent_0E_Bit3:
 	bit 3, a
 	jr z, CtrlPanel_AA_0E_Bit3Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 2:i3
 	jr CtrlPanel_AA_0E_PostAndContinue
 
@@ -420,7 +420,7 @@ CtrlPanel_AA_0E_Bit3Release:
 	bit 3, c
 	jr z, CtrlPanel_AA_PanelEvent_0E_Bit2
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 2:i3
 
 CtrlPanel_AA_0E_PostAndContinue:
@@ -433,7 +433,7 @@ CtrlPanel_AA_PanelEvent_0E_Bit2:
 	bit 2, a
 	jr z, CtrlPanel_AA_0E_Bit2Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 3:i3
 	jr CtrlPanel_AA_0E_Bit2Post
 
@@ -441,7 +441,7 @@ CtrlPanel_AA_0E_Bit2Release:
 	bit 2, c
 	jr z, CtrlPanel_AA_PanelEvent_0E_Bit4
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 3:i3
 
 CtrlPanel_AA_0E_Bit2Post:
@@ -454,7 +454,7 @@ CtrlPanel_AA_PanelEvent_0E_Bit4:
 	bit 4, a
 	jr z, CtrlPanel_AA_0E_Bit4Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 0x9
 	jrl UIEvent_DispatchAndReturn
 
@@ -462,7 +462,7 @@ CtrlPanel_AA_0E_Bit4Release:
 	bit 4, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 0x9
 	jrl UIEvent_DispatchAndReturn
 
@@ -470,7 +470,7 @@ CtrlPanel_AA_PanelEvent_04_Bit4:
 	bit 4, a
 	jr z, CtrlPanel_AA_04_Bit4Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 4:i3
 	jr CtrlPanel_AA_04_PostAndContinue
 
@@ -478,7 +478,7 @@ CtrlPanel_AA_04_Bit4Release:
 	bit 4, c
 	jr z, CtrlPanel_AA_PanelEvent_04_Bit5
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 4:i3
 
 CtrlPanel_AA_04_PostAndContinue:
@@ -491,7 +491,7 @@ CtrlPanel_AA_PanelEvent_04_Bit5:
 	bit 5, a
 	jr z, CtrlPanel_AA_04_Bit5Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 5:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -499,7 +499,7 @@ CtrlPanel_AA_04_Bit5Release:
 	bit 5, c
 	jrl z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 5:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -510,13 +510,13 @@ CtrlPanel_AA_PanelEvent_15:
 	cp l, 0:i3
 	jr z, CtrlPanel_AA_15_AprInactive
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 0xb
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_15_AprInactive:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 6:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -527,13 +527,13 @@ CtrlPanel_AA_15_Release:
 	cp l, 0:i3
 	jr z, CtrlPanel_AA_15_ReleaseAprInactive
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 0xb
 	jrl UIEvent_DispatchAndReturn
 
 CtrlPanel_AA_15_ReleaseAprInactive:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 6:i3
 	jrl UIEvent_DispatchAndReturn
 
@@ -541,7 +541,7 @@ CtrlPanel_AA_PanelEvent_01_Bit1:
 	bit 1, a
 	jr z, CtrlPanel_AA_01_Bit1Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 7:i3
 	jr CtrlPanel_AA_01_PostAndContinue
 
@@ -549,7 +549,7 @@ CtrlPanel_AA_01_Bit1Release:
 	bit 1, c
 	jr z, CtrlPanel_AA_PanelEvent_01_Bit5
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 7:i3
 
 CtrlPanel_AA_01_PostAndContinue:
@@ -562,7 +562,7 @@ CtrlPanel_AA_PanelEvent_01_Bit5:
 	bit 5, a
 	jr z, CtrlPanel_AA_01_Bit5Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 0x8
 	jr CtrlPanel_AA_01_Bit5Post
 
@@ -570,7 +570,7 @@ CtrlPanel_AA_01_Bit5Release:
 	bit 5, c
 	jr z, CtrlPanel_AA_PanelEvent_01_Bit6
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 0x8
 
 CtrlPanel_AA_01_Bit5Post:
@@ -583,7 +583,7 @@ CtrlPanel_AA_PanelEvent_01_Bit6:
 	bit 6, a
 	jr z, CtrlPanel_AA_01_Bit6Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 0x8
 	jr UIEvent_DispatchAndReturn
 
@@ -591,7 +591,7 @@ CtrlPanel_AA_01_Bit6Release:
 	bit 6, c
 	jr z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 0x8
 	jr UIEvent_DispatchAndReturn
 
@@ -601,7 +601,7 @@ CtrlPanel_AA_PanelEvent_11:
 	and a, (0xc07e:16)
 	jr z, CtrlPanel_AA_11_Release
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a5
+	ld xbc, EVT_EASY_SET_ON
 	ld xde, 0xa
 	jr UIEvent_DispatchAndReturn
 
@@ -609,7 +609,7 @@ CtrlPanel_AA_11_Release:
 	cp c, 0:i3
 	jr z, UIEvent_Epilogue
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e000a6
+	ld xbc, EVT_EASY_SET_OFF
 	ld xde, 0xa
 
 UIEvent_DispatchAndReturn:

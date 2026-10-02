@@ -68,7 +68,7 @@ BitMapOut_ByteData_RenderA:
 	cp	hl, 0:i3
 	ret	z
 	call	GetTitleNow
-	cp	xhl, 27263222
+	cp	xhl, TITLE_TEST3
 	ret	z
 	cp	(49121:16), 0
 	ret	nz
@@ -81,31 +81,31 @@ BitMapOut_ByteData_RenderA:
 	cp	a, 12
 	jr	nz, BitMapOut_ByteData_RenderA_Skip2
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
+	ld	xbc, EVT_INTERRUPT_TITLE
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263210
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_DRAWBAR
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jr	BitMapOut_ByteData_RenderA_Join
 BitMapOut_ByteData_RenderA_Skip:
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
+	ld	xbc, EVT_INTERRUPT_TITLE
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263211
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_ACCORDION
 	call	ApPostEvent
 	ld	wa, 1:i3
 	jr	BitMapOut_ByteData_RenderA_Join
 BitMapOut_ByteData_RenderA_Skip2:
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
+	ld	xbc, EVT_INTERRUPT_TITLE
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263208
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_SVARI
 	call	ApPostEvent
 	ld	wa, 1:i3
 BitMapOut_ByteData_RenderA_Join:
@@ -117,7 +117,7 @@ BitMapOut_ByteData_RenderB:
 	cp	hl, 0:i3
 	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
 	call	GetTitleNow
-	cp	xhl, 27263222
+	cp	xhl, TITLE_TEST3
 	jrl	z, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (49124:16)
 	cp	a, (35998:16)
@@ -128,7 +128,7 @@ BitMapOut_ByteData_RenderB:
 	cp	l, 0:i3
 	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
 	call	GetTitleNow
-	cp	xhl, 27263208
+	cp	xhl, TITLE_SVARI
 	jr	nz, BitMapOut_ByteData_RenderB_Epilogue
 	ld	a, (35998:16)
 	extz	wa
@@ -150,16 +150,16 @@ BitMapOut_ByteData_RenderB:
 	jr	nz, BitMapOut_ByteData_RenderB_Skip2
 BitMapOut_ByteData_RenderB_Skip:
 	ld	xwa, 4294967295
-	ld	xbc, 31457401
+	ld	xbc, EVT_INTERRUPT_EXIT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	jr	BitMapOut_ByteData_RenderB_Epilogue
 BitMapOut_ByteData_RenderB_Skip2:
 	ld	xwa, 4294967295
-	ld	xbc, 29491207
+	ld	xbc, EVT_TVARI_PAINT
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29491207
+	ld	xbc, EVT_TVARI_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -177,7 +177,7 @@ BitMapOut_ByteData_RenderD:
 	cp	hl, 0:i3
 	jr	z, BitMapOut_ByteData_RenderD_Epilogue
 	call	GetTitleNow
-	cp xhl, 27263208
+	cp xhl, TITLE_SVARI
 	jr	nz, BitMapOut_ByteData_RenderD_Epilogue
 	cpdi8 (49124), 144
 	jr nz, BitMapOut_ByteData_RenderD_Epilogue
@@ -203,13 +203,13 @@ BitMapOut_ByteData_RenderD:
 	jr	nz, BitMapOut_ByteData_RenderD_Skip2
 BitMapOut_ByteData_RenderD_Skip:
 	ld	xwa, 4294967295
-	ld	xbc, 31457401
+	ld	xbc, EVT_INTERRUPT_EXIT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	jr	BitMapOut_ByteData_RenderD_Epilogue
 BitMapOut_ByteData_RenderD_Skip2:
 	ld	xwa, 4294967295
-	ld	xbc, 29491207
+	ld	xbc, EVT_TVARI_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -226,11 +226,11 @@ BitMapOut_ByteData_RenderD_Epilogue:
 	cp	l, 0:i3
 	ret	nz
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
+	ld	xbc, EVT_INTERRUPT_TITLE
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263209
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_RVARI
 	call	ApPostEvent
 	ld	wa, 1:i3
 	calr	BitMapOut_StorePresetValue
@@ -248,13 +248,13 @@ BitMapOut_ByteData_RenderE:
 	cp	l, 0:i3
 	ret	nz
 	call	GetTitleNow
-	cp	xhl, 27263209
+	cp	xhl, TITLE_RVARI
 	ret	nz
 	ld	xwa, 4294967295
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -264,7 +264,7 @@ BitMapOut_CheckDiskAndApply:
 	cp (0x8c9c:16), 0x8a
 	jp z, (Interrupt_ModeGuardCheck:24)
 	ld XWA,0xffffffff
-	ld XBC,0x01c20000
+	ld XBC,EVT_CHORD_SHOW
 	ld xde, 0:i3
 	jp ApPostEvent
 BitMapOut_ByteData_DiskCheck:
@@ -278,7 +278,7 @@ BitMapOut_SetDefaultTimer:
 	ret
 BitMapOut_DecrementTimer:
 	call	16405594
-	cp	xhl, 27263215
+	cp	xhl, TITLE_WELCOM
 	jr	z, -18
 	ld	a, (36000:16)
 	cp	a, 0:i3
@@ -298,7 +298,7 @@ BitMapOut_DecrementTimer:
 BitMapOut_ByteData_TransitionSeq:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 35 of 57 slots byte-identical
 	call	GetTitleNow
-	cp	xhl, 27262977
+	cp	xhl, TITLE_NORMAL
 	ret	nz
 	cpdi8 (49124), 152
 	ret nz
@@ -315,7 +315,7 @@ BitMapOut_ByteData_TransitionSeq:
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
-	ld	xbc, 29491206
+	ld	xbc, EVT_PAGE_SET
 	ld	xde, 5:i3
 	jr	BitMapOut_ByteData_TransitionSeq_Join
 BitMapOut_ByteData_TransitionSeq_Skip:
@@ -323,7 +323,7 @@ BitMapOut_ByteData_TransitionSeq_Skip:
 	ldw wa, 96
 	call	CtrlPanel_SetIndicatorBit
 	ld	xwa, 4294967295
-	ld	xbc, 29491206
+	ld	xbc, EVT_PAGE_SET
 	ld	xde, 6:i3
 	jr	BitMapOut_ByteData_TransitionSeq_Join
 BitMapOut_ByteData_TransitionSeq_Skip2:
@@ -335,12 +335,12 @@ BitMapOut_ByteData_TransitionSeq_Skip2:
 	cp	hl, 1:i3
 	jr	nz, BitMapOut_ByteData_TransitionSeq_Skip3
 	ld	xwa, 4294967295
-	ld	xbc, 29491206
+	ld	xbc, EVT_PAGE_SET
 	ld	xde, 3:i3
 	jr	BitMapOut_ByteData_TransitionSeq_Join
 BitMapOut_ByteData_TransitionSeq_Skip3:
 	ld	xwa, 4294967295
-	ld	xbc, 29491206
+	ld	xbc, EVT_PAGE_SET
 	ld	xde, 1:i3
 BitMapOut_ByteData_TransitionSeq_Join:
 	call	ApPostEvent
@@ -3094,17 +3094,17 @@ BitMapOut_ByteData_RenderState_Join:
 	calr	BitMapOut_PrepareRender_CheckBit2
 BitMapOut_ByteData_RenderState_Skip4:
 	call	GetTitleNow
-	cp	xhl, 27263184
+	cp	xhl, TITLE_PMBKSEL
 	jr	nz, BitMapOut_ByteData_RenderState_Skip5
 	ldto_berp	e, 251
 	exts	de
 	exts	xde
 	ld	xwa, 4294967295
-	ld	xbc, 29360142
+	ld	xbc, EVT_SELE_DRAW
 	jr	BitMapOut_ByteData_RenderState_Join2
 BitMapOut_ByteData_RenderState_Skip5:
 	call	GetTitleNow
-	cp	xhl, 27263185
+	cp	xhl, TITLE_PMVIEW
 	jr	nz, BitMapOut_ByteData_RenderState_Skip6
 	pushw 18
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -3117,11 +3117,11 @@ BitMapOut_ByteData_RenderState_Skip5:
 	lda	xbc, (xiz+1)
 	calr	BitMapOut_UpdateWidget_PostDraw
 	ld	xwa, 4294967295
-	ld	xbc, 29491202
+	ld	xbc, EVT_PMBK_NAME
 	ld	xde, xiz
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 BitMapOut_ByteData_RenderState_Join2:
 	call	ApPostEvent
@@ -3153,7 +3153,7 @@ BitMapOut_ByteData_DisplayUpdate:
 	calr	BitMapOut_PrepareRender_CheckBit2
 BitMapOut_ByteData_DisplayUpdate_Skip:
 	call	GetTitleNow
-	cp	xhl, 27263185
+	cp	xhl, TITLE_PMVIEW
 	jr	nz, BitMapOut_ByteData_DisplayUpdate_Epilogue
 	pushw	18
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -3166,11 +3166,11 @@ BitMapOut_ByteData_DisplayUpdate_Skip:
 	lda	xbc, (xiz+1)
 	calr	BitMapOut_UpdateWidget_PostDraw
 	ld	xwa, 4294967295
-	ld	xbc, 29491202
+	ld	xbc, EVT_PMBK_NAME
 	ld	xde, xiz
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	ApPostEvent
 BitMapOut_ByteData_DisplayUpdate_Epilogue:
@@ -3302,7 +3302,7 @@ FileIO_ByteBlock_DemoProc1_Helper4:
 	inc 2,XSP
 	ret
 OneTchFUNC:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, BitMapOut_ApplyWidgetPatch
 	dec 2, xde
 	cp xde, 0x0

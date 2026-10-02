@@ -2597,7 +2597,7 @@ AccPlay_StopResetRet:
 InitializeEast:
 	lda xsp, (xsp - 0x0e)
 	lda XBC, (XSP)
-	ld XWA,0x01600004
+	ld XWA,NAKA_CLASS_Class
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
@@ -2608,7 +2608,7 @@ InitializeEast:
 	ldw WA, 0x0163
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000c
+	ld XWA,NAKA_CLASS_ResEvent
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
@@ -2619,7 +2619,7 @@ InitializeEast:
 	ldw WA, 0x01c3
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000d
+	ld XWA,NAKA_CLASS_ResMethod
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
@@ -2630,7 +2630,7 @@ InitializeEast:
 	ldw WA, 0x01e3
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600002
+	ld XWA,NAKA_CLASS_ApFunction
 	ld (XBC),XWA
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -2640,7 +2640,7 @@ InitializeEast:
 	ldw WA, 0x0123
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600002
+	ld XWA,NAKA_CLASS_ApFunction
 	ld (XBC),XWA
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -2650,7 +2650,7 @@ InitializeEast:
 	ldw WA, 0x0423
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600001
+	ld XWA,NAKA_CLASS_Function
 	ld (XBC),XWA
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -2660,7 +2660,7 @@ InitializeEast:
 	ldw WA, 0x0103
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600001
+	ld XWA,NAKA_CLASS_Function
 	ld (XBC),XWA
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -2670,7 +2670,7 @@ InitializeEast:
 	ldw WA, 0x0403
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600003
+	ld XWA,NAKA_CLASS_MainFunction
 	ld (XBC),XWA
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -2680,7 +2680,7 @@ InitializeEast:
 	ldw WA, 0x0143
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600003
+	ld XWA,NAKA_CLASS_MainFunction
 	ld (XBC),XWA
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
@@ -2690,7 +2690,7 @@ InitializeEast:
 	ldw WA, 0x0443
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2700,7 +2700,7 @@ InitializeEast:
 	ldw WA, 0x0009
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2710,7 +2710,7 @@ InitializeEast:
 	ldw WA, 0x0309
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2720,7 +2720,7 @@ InitializeEast:
 	ldw WA, 0x000f
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2730,7 +2730,7 @@ InitializeEast:
 	ldw WA, 0x030f
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2740,7 +2740,7 @@ InitializeEast:
 	ldw WA, 0x0018
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2750,7 +2750,7 @@ InitializeEast:
 	ldw WA, 0x0318
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2760,7 +2760,7 @@ InitializeEast:
 	ldw WA, 0x0019
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2770,7 +2770,7 @@ InitializeEast:
 	ldw WA, 0x0319
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2780,7 +2780,7 @@ InitializeEast:
 	ldw WA, 0x001a
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2790,7 +2790,7 @@ InitializeEast:
 	ldw WA, 0x031a
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2800,7 +2800,7 @@ InitializeEast:
 	ldw WA, 0x0050
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2810,7 +2810,7 @@ InitializeEast:
 	ldw WA, 0x0350
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2820,7 +2820,7 @@ InitializeEast:
 	ldw WA, 0x0051
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2830,7 +2830,7 @@ InitializeEast:
 	ldw WA, 0x0351
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2840,7 +2840,7 @@ InitializeEast:
 	ldw WA, 0x0052
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2850,7 +2850,7 @@ InitializeEast:
 	ldw WA, 0x0352
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2860,7 +2860,7 @@ InitializeEast:
 	ldw WA, 0x0053
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2870,7 +2870,7 @@ InitializeEast:
 	ldw WA, 0x0353
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2880,7 +2880,7 @@ InitializeEast:
 	ldw WA, 0x0054
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2890,7 +2890,7 @@ InitializeEast:
 	ldw WA, 0x0354
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2900,7 +2900,7 @@ InitializeEast:
 	ldw WA, 0x0055
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2910,7 +2910,7 @@ InitializeEast:
 	ldw WA, 0x0355
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2920,7 +2920,7 @@ InitializeEast:
 	ldw WA, 0x0056
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2930,7 +2930,7 @@ InitializeEast:
 	ldw WA, 0x0356
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2940,7 +2940,7 @@ InitializeEast:
 	ldw WA, 0x0057
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2950,7 +2950,7 @@ InitializeEast:
 	ldw WA, 0x0357
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2960,7 +2960,7 @@ InitializeEast:
 	ldw WA, 0x0058
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2970,7 +2970,7 @@ InitializeEast:
 	ldw WA, 0x0358
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -2980,7 +2980,7 @@ InitializeEast:
 	ldw WA, 0x0059
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -2990,7 +2990,7 @@ InitializeEast:
 	ldw WA, 0x0359
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -3000,7 +3000,7 @@ InitializeEast:
 	ldw WA, 0x005a
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -3010,7 +3010,7 @@ InitializeEast:
 	ldw WA, 0x035a
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -3020,7 +3020,7 @@ InitializeEast:
 	ldw WA, 0x005b
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -3030,7 +3030,7 @@ InitializeEast:
 	ldw WA, 0x035b
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -3040,7 +3040,7 @@ InitializeEast:
 	ldw WA, 0x005c
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -3050,7 +3050,7 @@ InitializeEast:
 	ldw WA, 0x035c
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -3060,7 +3060,7 @@ InitializeEast:
 	ldw WA, 0x00d7
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -3070,7 +3070,7 @@ InitializeEast:
 	ldw WA, 0x03d7
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -3080,7 +3080,7 @@ InitializeEast:
 	ldw WA, 0x00d8
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -3090,7 +3090,7 @@ InitializeEast:
 	ldw WA, 0x03d8
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x01600010
+	ld XWA,NAKA_CLASS_Viewable
 	ld (XBC),XWA
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
@@ -3100,7 +3100,7 @@ InitializeEast:
 	ldw WA, 0x00ec
 	call RegisterObjectTable
 	lda XBC, (XSP)
-	ld XWA,0x0160000f
+	ld XWA,NAKA_CLASS_ResName
 	ld (XBC),XWA
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
@@ -3113,164 +3113,164 @@ InitializeEast:
 	pushw 0x00e5
 	pushw 0xac90
 	ld	xwa, 5:i3
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 27263056
 	call	RegisterMode
 	pushw	3
 	pushw	229
 	pushw	44184
 	ld	xwa, 9
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 589824
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44198
 	ld	xwa, 15
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 983040
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44208
 	ld	xwa, 24
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 1572864
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44222
 	ld	xwa, 25
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 1638400
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44234
 	ld	xwa, 26
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 1703936
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44250
 	ld	xwa, 80
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5242880
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44260
 	ld	xwa, 81
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5308416
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44270
 	ld	xwa, 82
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5373952
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44280
 	ld	xwa, 83
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5439488
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44290
 	ld	xwa, 84
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5505024
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44300
 	ld	xwa, 85
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5570560
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44312
 	ld	xwa, 86
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5636096
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44324
 	ld	xwa, 87
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5701632
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44334
 	ld	xwa, 88
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5767168
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44346
 	ld	xwa, 89
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5832704
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44358
 	ld	xwa, 90
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5898240
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44368
 	ld	xwa, 91
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 5963776
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44380
 	ld	xwa, 92
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 6029312
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44392
 	ld	xwa, 215
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 14090240
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44404
 	ld	xwa, 216
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 14155776
 	call	RegisterTitle
 	pushw	3
 	pushw	229
 	pushw	44416
 	ld	xwa, 236
-	ld	xbc, 18874368
+	ld	xbc, NAKA_APFUNC_DefaultFunction
 	ld	xde, 15466496
 	call	RegisterTitle
 	lda	xsp, (xsp+14)
 	ret
 BitmapBmphk:
-	cp xbc, EVT_ALLOC_HEIGHT
+	cp xbc, EVT_GET_BITMAP_HEIGHT
 	jr z, BitmapBmphk_ReturnA3
-	cp xbc, EVT_ALLOC_WIDTH
+	cp xbc, EVT_GET_BITMAP_WIDTH
 	jr z, BitmapBmphk_ReturnA2
-	cp xbc, EVT_ALLOC_DATA_PTR
+	cp xbc, EVT_GET_BITMAP_DATA
 	jr z, BitmapBmphk_ReturnA1
 	ld xhl, 0:i3
 	ret
@@ -3289,13 +3289,13 @@ BitmapBmphk_ReturnA3:
 
 TtMdmenu:
 	push xiz
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, TtMdmenu_ReturnZero
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, TtMdmenu_ReturnZero
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, TtMdmenu_ReturnZero
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtMdmenu_ReturnZero
 	or xde, xde
 	jr nz, TtMdmenu_ReturnZero
@@ -3305,7 +3305,7 @@ TtMdmenu:
 	cp xhl, xiz
 	jr z, TtMdmenu_ReturnZero
 	ld xwa, 0x500001
-	ld xbc, 0x1e0007f
+	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
 
@@ -3315,18 +3315,18 @@ TtMdmenu_ReturnZero:
 	ret
 
 TtVocalistWorkstation:
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, TtVocalist_ReturnZero
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, TtVocalist_ReturnZero
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, TtVocalist_ReturnZero
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtVocalist_ReturnZero
 	or xde, xde
 	jr nz, TtVocalist_ReturnZero
 	ld xwa, 0xd70003
-	ld xbc, 0x1e0007f
+	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xd7000e
@@ -3347,16 +3347,16 @@ AcVocalGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, AcVocalGrid_FuncCallA
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, AcVocalGrid_ViewAccess
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, AcVocalGrid_StringCopy
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, AcVocalGrid_DialSetup
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, AcVocalGrid_FuncCallC
 	cp xbc, 0x6
@@ -3377,7 +3377,7 @@ AcVocalGrid_DialSetup:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -3390,7 +3390,7 @@ AcVocalGrid_DialSetup:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -3401,7 +3401,7 @@ AcVocalGrid_DialSetup:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialDown
 	ld wa, 1:i3
 	jrl AcVocalGrid_SetDialAndRet
@@ -3410,13 +3410,13 @@ AcVocalGrid_DialSetup:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcVocalGrid_CheckEvent91
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -3427,7 +3427,7 @@ AcVocalGrid_DialSetup:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -3438,7 +3438,7 @@ AcVocalGrid_DialSetup:
 
 AcVocalGrid_CheckEvent91:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -3454,11 +3454,11 @@ AcVocalGrid_CheckEvent91:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -3468,13 +3468,13 @@ AcVocalGrid_CheckEvent91:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, AcVocalGrid_CheckEvent91B
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld wa, hl
@@ -3486,7 +3486,7 @@ AcVocalGrid_CheckEvent91:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, xiz
 	ld xbc, (xsp + 16)
@@ -3496,7 +3496,7 @@ AcVocalGrid_CheckEvent91:
 
 AcVocalGrid_CheckEvent91B:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -3512,11 +3512,11 @@ AcVocalGrid_CheckEvent91B:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -3597,10 +3597,10 @@ VocalistGridCheck:
 	lda xwa, (MidiPart_OctaveStr_m2_0x4:24)
 	ld (xsp + 8), xwa
 	lda xiy, (xbc + 2)
-	cp xhl, 0x1e0008d
+	cp xhl, EVT_REQUEST_GRID_DRAW
 	jrl z, VocalistGrid_CheckHandler
 	ld xwa, xix
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, AcVocalist_ReturnZero
 	cp xwa, 0x6
@@ -3613,7 +3613,7 @@ VocalistGridCheck:
 VocalistGrid_DispatchData:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -3649,7 +3649,7 @@ VocalistGridCheck_Skip:
 	jr	VocalistGridCheck_Join
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -3766,7 +3766,7 @@ VocalistGridCheck_Join6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 	ld	wa, (xbc)
 	inc	1, wa
@@ -3780,7 +3780,7 @@ VocalistGridCheck_Join6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 	ld	wa, (xbc)
 	inc	1, wa
@@ -3794,7 +3794,7 @@ VocalistGridCheck_Join6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 	ld	wa, (xbc)
 	sla	wa, 2
@@ -3810,7 +3810,7 @@ VocalistGridCheck_Join6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 	ld	wa, (xbc)
 	cp	wa, 3:i3
@@ -3841,7 +3841,7 @@ VocalistGridCheck_Skip10:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 	ld	wa, (xbc)
 	cp	wa, 120
@@ -3871,7 +3871,7 @@ VocalistGridCheck_Join9:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 	ld	bc, (xbc)
 	ld	de, bc
@@ -3905,7 +3905,7 @@ VocalistGridCheck_Join9:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 	ld	xwa, MidiPart_OctaveStr_m2_0x12E
 	cpw	(xbc), 0
@@ -3920,7 +3920,7 @@ VocalistGridCheck_Skip13:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15
 VocalistGrid_CheckHandler:
 	ld (xsp + 4), xbc
@@ -3985,7 +3985,7 @@ VocalistGridCheck_Join11:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, 11522
 	call	AcApcToggleProc_Helper
@@ -4000,7 +4000,7 @@ VocalistGridCheck_Join11:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, 11524
 	call	AcApcToggleProc_Helper
@@ -4015,7 +4015,7 @@ VocalistGridCheck_Join11:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, 11526
 	call	AcApcToggleProc_Helper
@@ -4032,7 +4032,7 @@ VocalistGridCheck_Join11:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, 11528
 	call	AcApcToggleProc_Helper
@@ -4064,7 +4064,7 @@ VocalistGridCheck_Skip19:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, 11530
 	call	AcApcToggleProc_Helper
@@ -4097,7 +4097,7 @@ VocalistGridCheck_Join14:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, 11533
 	call	AcApcToggleProc_Helper
@@ -4131,7 +4131,7 @@ VocalistGridCheck_Join14:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, 11537
 	call	AcApcToggleProc_Helper
@@ -4165,7 +4165,7 @@ VocalistGridCheck_Join14:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jr	VocalistGridCheck_Join15	; -> 0xF73BA6
 	ld	xwa, (xsp+4)
 	ld	wa, (xwa)
@@ -4187,7 +4187,7 @@ VocalistGridCheck_Skip22:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+12)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 VocalistGridCheck_Join15:
 	call	SendEvent
 AcVocalist_ReturnZero:
@@ -4199,7 +4199,7 @@ AcVocalist_ReturnZero:
 AcVocalistListBoxProc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1c0000e
+	cp xbc, EVT_SELE_DRAW
 	jr z, AcVocalist_ListSetup
 	ld xwa, xiz
 	call InheritedProc
@@ -4210,7 +4210,7 @@ AcVocalist_ListSetup:
 	ld xwa, xiz
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x5
@@ -4223,11 +4223,11 @@ AcVocalist_ListSetup:
 ; AcVocalistListBoxProc dispatch
 AcVocalist_ListDispatch:
 	ld	xwa, 0xd7000c
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	jr	VocalistGridCheck_Join16
 	ld	xwa, 0xd7000c
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 1:i3
 VocalistGridCheck_Join16:
 	call	SendEvent
@@ -4255,9 +4255,9 @@ PsHarmOnOffBoxProc:
 	lda xix, (xsp + 8)
 	ld bc, 4:i3
 	ldirw
-	cp xiz, EVT_INIT_HOOK
+	cp xiz, EVT_PARA_DRAW
 	jr z, PsHarm_DrawHandler
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jr z, PsHarm_CheckMode
 	ld xwa, (xsp + 24)
 	ld xbc, xiz
@@ -4267,7 +4267,7 @@ PsHarmOnOffBoxProc:
 
 PsHarm_CheckMode:
 	ld xwa, 0xd7000a
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	cp xhl, 0x5
@@ -4323,7 +4323,7 @@ PsHarm_ActiveColorA:
 PsHarm_DrawActiveBox:
 	call DrawDesignBox
 	ld xwa, 0xd7000a
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	lda xbc, (xsp + 16)
@@ -4362,7 +4362,7 @@ PsHarm_InactiveColorA:
 PsHarm_DrawInactiveBox:
 	call DrawDesignBox
 	ld xwa, 0xd7000a
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	lda xbc, (xsp + 16)
@@ -4404,23 +4404,23 @@ HarmOnOffFunc:
 VocalistPage1OKFunc:
 	push xiz
 	ld xhl, xde
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, VocalistP1OK_Case0
 	ld xwa, 0xd7000a
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	ld iz, hl
 	extz xiz
 	ld xwa, 0xd7000c
-	ld xbc, 0x1e0006b
+	ld xbc, EVT_GET_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	extz xhl
 	sll xhl, 0
 	add xhl, xiz
-	ld xwa, 0x1430004
-	ld xbc, 0x1e30007
+	ld xwa, NAKA_MAINFUNC_MainVocalistPage1OKFunc
+	ld xbc, EVT_VST_PST_OK
 	ld xde, xhl
 	call MainFuncCall
 
@@ -4431,10 +4431,10 @@ VocalistP1OK_Case0:
 	ret
 
 VocalistPage2OKFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, VocalistP1OK_Case1
-	ld xwa, 0x1430005
-	ld xbc, 0x1e30008
+	ld xwa, NAKA_MAINFUNC_MainVocalistPage2OKFunc
+	ld xbc, EVT_VST_SEND_OK
 	ld xde, 0:i3
 	call MainFuncCall
 
@@ -4446,7 +4446,7 @@ VocalistP1OK_Case1:
 MainVocalistPage1OKFunc:
 	dec 4, xsp
 	ld (xsp), xde
-	cp xbc, 0x1e30007
+	cp xbc, EVT_VST_PST_OK
 	jr nz, VocalistPage_Handler
 	ld xwa, (xsp)
 	ld de, wa
@@ -4482,8 +4482,8 @@ VocalistPage2OKFunc_Join:
 	call	16566832
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 VocalistPage2OKFunc_Join2:
 	call	ApPostEvent
 	ld	(32420:16), 1
@@ -4516,8 +4516,8 @@ VocalistPage2OKFunc_Join3:
 	call	16566832
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	jr	VocalistPage2OKFunc_Join2
 	ld	wa, bc
 	call	VocalistPage2OKFunc_Helper2
@@ -4545,8 +4545,8 @@ VocalistPage2OKFunc_Join4:
 	call	16566832
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	jrl	VocalistPage2OKFunc_Join2
 	ld	wa, bc
 	call	VocalistPage2OKFunc_Helper2
@@ -4557,17 +4557,17 @@ VocalistPage2OKFunc_Join4:
 	call	SmfMedley_RawData
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	jrl	VocalistPage2OKFunc_Join2
 MainVocalistPage2OKFunc:
-	cp	xbc, 31653896
+	cp	xbc, EVT_VST_SEND_OK
 	jr	nz, 28
 	call	16601121
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 VocalistPage2_ReturnZero:
 	ld xhl, 0:i3
@@ -4581,13 +4581,13 @@ RevSelFunc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00029
+	cp xbc, EVT_I_AM_SELECTED
 	jr z, RevSel_HandleDial
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, RevSel_HandleConfirm
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, RevSel_HandleInit
-	cp xbc, 0x1e00085
+	cp xbc, EVT_ARE_YOU_CLASS_PROC
 	jr z, RevSel_ReturnOne
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -4609,13 +4609,13 @@ RevSel_HandleInit:
 	extz xhl
 	add xhl, 0x10000
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0002a
+	ld xbc, EVT_YOU_ARE_SELECTED
 	ld xde, xhl
 	jr RevSel_SendAndRet
 
 RevSel_NoPresetMatch:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001b
+	ld xbc, EVT_INDEX_SELECT
 	ld xde, 1:i3
 	jr RevSel_SendAndRet
 
@@ -4624,7 +4624,7 @@ RevSel_HandleConfirm:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, MidiPart_HarmLocalStr_0x30
 
 RevSel_SendAndRet:
@@ -4643,8 +4643,8 @@ RevSel_HandleDial:
 	ld xwa, (xsp + 4)
 	ld de, wa
 	extz xde
-	ld xwa, 0x1430006
-	ld xbc, 0x1e30009
+	ld xwa, NAKA_MAINFUNC_MainRevEqPresetLoad
+	ld xbc, EVT_REV_LOAD
 	call MainFuncCall
 
 RevSel_ReturnZero:
@@ -4660,15 +4660,15 @@ EqSelFunc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jrl z, EqSel_HandleParamChange
-	cp xbc, 0x1c00029
+	cp xbc, EVT_I_AM_SELECTED
 	jrl z, EqSel_HandleDial
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, EqSel_HandleConfirm
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, EqSel_HandleInit
-	cp xbc, 0x1e00085
+	cp xbc, EVT_ARE_YOU_CLASS_PROC
 	jr z, EqSel_ReturnOne
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -4690,13 +4690,13 @@ EqSel_HandleInit:
 	extz xhl
 	add xhl, 0x20000
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0002a
+	ld xbc, EVT_YOU_ARE_SELECTED
 	ld xde, xhl
 	jr EqSel_SendPresetEvent
 
 EqSel_NoPresetMatch:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001b
+	ld xbc, EVT_INDEX_SELECT
 	ld xde, 2:i3
 
 EqSel_SendPresetEvent:
@@ -4705,7 +4705,7 @@ EqSel_SendPresetEvent:
 	call	AcApcToggleProc_Helper
 	exts	xhl
 	ld	xwa, 1638411
-	ld	xbc, 31457339
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, xhl
 	jrl	EqSel_SendEvent
 EqSel_HandleConfirm:
@@ -4713,7 +4713,7 @@ EqSel_HandleConfirm:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, MidiPart_HarmLocalStr_0x36
 	jr EqSel_SendEvent
 
@@ -4727,7 +4727,7 @@ EqSel_HandleDial:
 	cp wa, 2:i3
 	jr nz, RevEqFunc_ReturnZero
 	ld xwa, 0x19000b
-	ld xbc, 0x1e0006b
+	ld xbc, EVT_GET_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	extz xhl
@@ -4736,8 +4736,8 @@ EqSel_HandleDial:
 	extz xwa
 	add xwa, xhl
 	ld (xsp + 4), xwa
-	ld xwa, 0x1430006
-	ld xbc, 0x1e3000a
+	ld xwa, NAKA_MAINFUNC_MainRevEqPresetLoad
+	ld xbc, EVT_EQ_LOAD
 	ld xde, (xsp + 4)
 	call MainFuncCall
 	jr RevEqFunc_ReturnZero
@@ -4753,7 +4753,7 @@ EqSel_HandleParamChange:
 	ld de, (xbc + 4)
 	exts xde
 	ld xwa, 0x19000b
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 
 EqSel_SendEvent:
 	call SendEvent
@@ -4771,15 +4771,15 @@ RevEqSelFunc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jrl z, RevEqSel_HandleParamChange
-	cp xbc, 0x1c00029
+	cp xbc, EVT_I_AM_SELECTED
 	jrl z, RevEqSel_HandleDial
-	cp xbc, EVT_POST_INIT
+	cp xbc, EVT_DRAW
 	jr z, RevEqSel_HandleConfirm
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, RevEqSel_HandleInit
-	cp xbc, 0x1e00085
+	cp xbc, EVT_ARE_YOU_CLASS_PROC
 	jr z, RevEqSel_ReturnOne
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -4801,13 +4801,13 @@ RevEqSel_HandleInit:
 	extz xhl
 	add xhl, 0x30000
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0002a
+	ld xbc, EVT_YOU_ARE_SELECTED
 	ld xde, xhl
 	jr RevEqSel_SendPresetEvent
 
 RevEqSel_NoPresetMatch:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001b
+	ld xbc, EVT_INDEX_SELECT
 	ld xde, 3:i3
 
 RevEqSel_SendPresetEvent:
@@ -4816,7 +4816,7 @@ RevEqSel_SendPresetEvent:
 	call	AcApcToggleProc_Helper
 	exts	xhl
 	ld	xwa, 1703946
-	ld	xbc, 31457339
+	ld	xbc, EVT_SET_PARAM
 	ld	xde, xhl
 	jrl	RevEqSel_SendEvent
 RevEqSel_HandleConfirm:
@@ -4824,7 +4824,7 @@ RevEqSel_HandleConfirm:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, MidiPart_HarmLocalStr_0x3C
 	jr RevEqSel_SendEvent
 
@@ -4838,7 +4838,7 @@ RevEqSel_HandleDial:
 	cp wa, 3:i3
 	jr nz, EqFunc_ReturnZero
 	ld xwa, 0x1a000a
-	ld xbc, 0x1e0006b
+	ld xbc, EVT_GET_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	extz xhl
@@ -4847,8 +4847,8 @@ RevEqSel_HandleDial:
 	extz xwa
 	add xwa, xhl
 	ld (xsp + 4), xwa
-	ld xwa, 0x1430006
-	ld xbc, 0x1e3000b
+	ld xwa, NAKA_MAINFUNC_MainRevEqPresetLoad
+	ld xbc, EVT_REV_EQ_LOAD
 	ld xde, (xsp + 4)
 	call MainFuncCall
 	jr EqFunc_ReturnZero
@@ -4864,7 +4864,7 @@ RevEqSel_HandleParamChange:
 	ld de, (xbc + 4)
 	exts xde
 	ld xwa, 0x1a000a
-	ld xbc, 0x1e0003b
+	ld xbc, EVT_SET_PARAM
 
 RevEqSel_SendEvent:
 	call SendEvent
@@ -4880,7 +4880,7 @@ RevEqSel_CleanupAndRet:
 EqOnOffFunc:
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0006b
+	ld xbc, EVT_GET_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0x4006
@@ -4893,7 +4893,7 @@ EqOnOffFunc:
 RevEqOnOffFunc:
 	call GetFocusObject
 	ld xwa, xhl
-	ld xbc, 0x1e0006b
+	ld xbc, EVT_GET_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, 0x4006
@@ -4906,11 +4906,11 @@ RevEqOnOffFunc:
 MainRevEqPresetLoad:
 	ld xhl, xbc
 	extz de
-	cp xhl, 0x1e3000b
+	cp xhl, EVT_REV_EQ_LOAD
 	jr z, RevEqPreset_TypeRevEq
-	cp xhl, 0x1e3000a
+	cp xhl, EVT_EQ_LOAD
 	jr z, RevEqPreset_TypeEq
-	cp xhl, 0x1e30009
+	cp xhl, EVT_REV_LOAD
 	jr nz, RevEqPreset_ReturnZero
 	ld wa, 0:i3
 	ld bc, de
@@ -4939,7 +4939,7 @@ AcGMOnOffBoxProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, AcGMOnOff_InitHandler
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -4966,7 +4966,7 @@ AcGMOnOff_CleanupAndRet:
 	ret
 
 StsAttentionCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, StsAttention_ReturnZero
 	lda xhl, (GMMode_AttentionTable:24)
 	ret
@@ -4976,7 +4976,7 @@ StsAttention_ReturnZero:
 	ret
 
 StsGMOnCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, StsGMOn_ReturnZero
 	lda xhl, (GMMode_Attention_English2_0x204:24)
 	ret
@@ -4986,7 +4986,7 @@ StsGMOn_ReturnZero:
 	ret
 
 StsGMOffCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, StsGMOff_ReturnZero
 	lda xhl, (GMMode_Attention_English2_0x47C:24)
 	ret
@@ -4996,7 +4996,7 @@ StsGMOff_ReturnZero:
 	ret
 
 StsAreYouSureCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, StsAreYouSure_ReturnZero
 	lda xhl, (GMMode_Attention_English2_0x494:24)
 	ret
@@ -5018,19 +5018,19 @@ GMOKFunc:
 
 GMOK_ConfirmDialog:
 	ld xwa, 0x580001
-	ld xbc, 0x1e0006b
+	ld xbc, EVT_GET_PARAM
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, GMOK_PostNoDialog
 	ld xwa, 0x580005
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr GMOK_PostEvent
 
 GMOK_PostNoDialog:
 	ld xwa, 0x58000d
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 GMOK_PostEvent:
@@ -5042,11 +5042,11 @@ GMOK_ReturnZero:
 
 GMNoFunc:
 	ld xwa, 0xffffffff
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000a
+	ld xbc, EVT_ALL_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	ld xhl, 0:i3
@@ -5054,7 +5054,7 @@ GMNoFunc:
 
 GMYesFunc:
 	ld	xwa, 5767169
-	ld	xbc, 31457387
+	ld	xbc, EVT_GET_PARAM
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, 192
@@ -5062,33 +5062,33 @@ GMYesFunc:
 	ld	de, 1:i3
 	call	MainLswPut
 	ld	xwa, 4294967295
-	ld	xbc, EVT_SELECT_CONFIRM
+	ld	xbc, EVT_HIDE
 	ld	xde, 0:i3
 	call	PostEvent
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	PostEvent
 	ld	xhl, 0:i3
 	ret
 TtMdGm:
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, TtMdGm_ReturnZero
 	call GetTitleOld
-	cp xhl, 0x1a000ee
+	cp xhl, TITLE_MESAGE
 	jr nz, TtMdGm_ReturnZero
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00014
-	ld xde, 0x1800001
+	ld xbc, EVT_CHANGE_MODE
+	ld xde, NAKA_MODE_MD_NORMAL
 	call PostEvent
 
 TtMdGm_ReturnZero:
@@ -5096,7 +5096,7 @@ TtMdGm_ReturnZero:
 	ret
 
 StsSplitCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, StsSplit_ReturnZero
 	lda xhl, (GMMode_Attention_English2_0x514:24)
 	ret
@@ -5115,17 +5115,17 @@ SplitPointFunc:
 	lda	xix, (xsp+4)
 	ldiw
 	ldiw
-	cp	xde, 31457343
+	cp	xde, EVT_GET_SMALL_STEP
 	jrl	z, ParamFunc_ReturnOne
-	cp	xde, 31457342
+	cp	xde, EVT_GET_LARGE_STEP
 	jrl	z, ParamFunc_ReturnOne
-	cp	xde, 31457345
+	cp	xde, EVT_GET_LSW_OUTPUT
 	jrl	z, ParamFunc_ReturnOne
-	cp	xde, 31457344
+	cp	xde, EVT_GET_LSW_ADDRESS
 	jrl	z, SplitPoint_ReturnParamId
-	cp	xde, 31457346
+	cp	xde, EVT_GET_LSW_STRING
 	jrl	z, SplitPoint_HandleNoteEvt
-	cp	xde, 31653890
+	cp	xde, EVT_DRAW_KEY
 	jrl	nz, SplitPoint_ReturnZero
 	ld	xwa, 16768
 	ld	bc, 0:i3
@@ -5198,7 +5198,7 @@ SplitPoint_UpdateScreen:
 	ld wa, 0:i3
 	call SetNeedUpdate
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00078
+	ld xbc, EVT_RESET_INTERRUPT_TIME
 	ld xde, 0:i3
 	call SendEvent
 
@@ -5230,7 +5230,7 @@ SplitPoint_HandleNoteEvt:
 	ld	de, (xwa+4)
 	exts	xde
 	ld	xwa, (xsp+12)
-	ld	xbc, 31653890
+	ld	xbc, EVT_DRAW_KEY
 	call	ApFuncCall
 	ld	xhl, (xsp+12)
 	jr	ParamFunc_CommonExit
@@ -5277,15 +5277,15 @@ AccWrap_SetMinVelocity:
 R12OctaveFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1e0003f
+	cp xbc, EVT_GET_SMALL_STEP
 	jrl z, R12Octave_ReturnStepSize
-	cp xbc, 0x1e0003e
+	cp xbc, EVT_GET_LARGE_STEP
 	jrl z, R12Octave_ReturnStepSize
-	cp xbc, 0x1e00041
+	cp xbc, EVT_GET_LSW_OUTPUT
 	jrl z, R12Octave_ReturnOne
-	cp xbc, 0x1e00040
+	cp xbc, EVT_GET_LSW_ADDRESS
 	jr z, R12Octave_ReturnParamId
-	cp xbc, 0x1e00042
+	cp xbc, EVT_GET_LSW_STRING
 	jr z, R12Octave_HandleNoteEvt
 	ld xhl, 0:i3
 	jr R12Octave_PopIzRet
@@ -5331,7 +5331,7 @@ R12Octave_StringCopyAndSendEvent:
 	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, 4294967295
-	ld	xbc, 31457400
+	ld	xbc, EVT_RESET_INTERRUPT_TIME
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xhl, xiz

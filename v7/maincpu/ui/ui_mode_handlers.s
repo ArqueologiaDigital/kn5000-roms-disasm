@@ -103,7 +103,7 @@ EffectMode_ByteData_Block2:
 	ret	nz
 EffectMode_ByteData_Block2_Skip:
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e0009a
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -112,7 +112,7 @@ EffectMode_ByteData_Block2_Skip2:
 	cp	(0x8cb2:16), 0
 	ret	nz
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e0009a
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -121,7 +121,7 @@ EffectMode_ByteData_Block2_Skip3:
 	cp	(0x8cb2:16), 0
 	jr	z, EffectMode_ByteData_Block2_Skip4
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e0009a
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -130,7 +130,7 @@ EffectMode_ByteData_Block2_Join:
 	jr	EffectMode_ByteData_Block2_Join2
 EffectMode_ByteData_Block2_Skip4:
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e0009a
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 18
@@ -141,7 +141,7 @@ EffectMode_ByteData_Block2_Skip5:
 	cp	(0x8cb2:16), 0
 	ret	z
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e0009a
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldw	wa, 193
@@ -243,7 +243,7 @@ EffectMode_ApplyTranspose:
 	cp	(0x8c9a:16), 0xc0
 	jr	nz, EffectMode_ApplyTranspose_StoreTimer
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e0009a
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	wa, 1:i3
@@ -1669,18 +1669,18 @@ SelfTest_SramAndRom:
 	cp	hl, 0:i3
 	jr	z, SelfTest_SramAndRom_CheckROM	; -> 0xFB7063
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
+	ld	xbc, EVT_INTERRUPT_TITLE
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263220
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_TEST1
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	xwa, 15990785
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ldib_erp	250, 1
@@ -1704,19 +1704,19 @@ SelfTest_SramAndRom_CheckROM:
 	cpib_erp	250, 0
 	jr	nz, SelfTest_PostRomError	; -> 0xFB70AA
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
+	ld	xbc, EVT_INTERRUPT_TITLE
 	call	DeleteEvent
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263220
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_TEST1
 	call	ApPostEvent
 SelfTest_PostRomError:
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	xwa, 15990791
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 EffectMode_PopRetFA:
@@ -1897,7 +1897,7 @@ EffectMode_HandleTimerEvents:
 	cp	a, 0:i3
 	jrl	nz, EffectMode_TimerEvent_Default
 	ld	xwa, 16252940
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	a, (36062:16)
@@ -1907,7 +1907,7 @@ EffectMode_HandleTimerEvents:
 	ret
 EffectMode_TimerEvent_Step1E:
 	ld	xwa, 16252942
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	a, (36062:16)
@@ -1917,7 +1917,7 @@ EffectMode_TimerEvent_Step1E:
 	ret
 EffectMode_TimerEvent_Step3C:
 	ld	xwa, 16252944
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	a, (36062:16)
@@ -1927,7 +1927,7 @@ EffectMode_TimerEvent_Step3C:
 	ret
 EffectMode_TimerEvent_Step5A:
 	ld	xwa, 16252934
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	a, (36062:16)
@@ -1937,7 +1937,7 @@ EffectMode_TimerEvent_Step5A:
 	ret
 EffectMode_TimerEvent_Step78:
 	ld	xwa, 16252936
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	a, (36062:16)
@@ -1947,7 +1947,7 @@ EffectMode_TimerEvent_Step78:
 	ret
 EffectMode_TimerEvent_Step96:
 	ld	xwa, 16252938
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(36062:16), 220
@@ -1962,31 +1962,31 @@ EffectMode_RunDiagSequence:
 	cp	a, 0:i3
 	jr	nz, EffectMode_DiagSeq_AnimFrame
 	ld	xwa, 16252934
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
 	ld	xwa, 16252936
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
 	ld	xwa, 16252938
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
 	ld	xwa, 16252940
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
 	ld	xwa, 16252942
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
 	calr	A_Short_Pause
@@ -2001,9 +2001,9 @@ EffectMode_DiagSeq_AnimFrame:
 	lda	xbc, (15433350:24)
 	ld	xde, 0:i3
 	ld_rrb	e, xbc, wa
-	add	xde, 27262976
+	add	xde, TITLE_PS
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
+	ld	xbc, EVT_INTERRUPT_TITLE
 	call	ApPostEvent
 	ld	a, (36062:16)
 	cp	a, 5:i3
@@ -2042,26 +2042,26 @@ EffectMode_ByteData_DiagEvents:
 	and	a, 9
 	jr	nz, EffectMode_ByteData_DiagEvents_Skip
 	ld	xwa, 0xf5000b
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip:
 	cp	a, 9
 	jr	nz, EffectMode_ByteData_DiagEvents_Skip2
 	ld	xwa, 0xf5000e
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip2:
 	bit_erpb	251, 0
 	jr	z, EffectMode_ByteData_DiagEvents_Skip3
 	ld	xwa, 0xf50011
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip3:
 	ld	xwa, 0xf50014
-	ld	xbc, EVT_MENU_OPEN
+	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 EffectMode_ByteData_DiagEvents_Join:
 	call	ApPostEvent
@@ -2083,7 +2083,7 @@ Voice_EmitNoteWithVelocity:
 	ld	(0x8ce8:16), a
 	ld	(0x8cea:16), c
 	ld	xwa, 0xffffffff
-	ld	xbc, 0x1e20017
+	ld	xbc, EVT_KEY_INFO
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ret
@@ -2165,12 +2165,12 @@ FDC_CommandAndPostEvent:
 	cp A,0xfc
 	jr nz, FDC_PostEvent_Error
 	ld XWA,0xffffffff
-	ld XBC,0x01c0001e
+	ld XBC,EVT_PAGE_CHANGE
 	ld xde, 2:i3
 	jr t, FDC_PostEvent_Send
 FDC_PostEvent_Error:
 	ld xwa, 0xffffffff
-	ld xbc, 0x01c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	ld	xde, 1:i3
 FDC_PostEvent_Send:
 	call ApPostEvent
@@ -2242,7 +2242,7 @@ EffectMode_MidiLED_Done:
 	ret
 
 TEST2FUNC:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, TableDispatch_Return3
 	dec 2, xde
 	cp xde, 0x0
@@ -2271,7 +2271,7 @@ TableDispatch_Return3:
 	ret
 
 TEST3FUNC:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, TableDispatch_Return4
 	dec 2, xde
 	cp xde, 0x0
@@ -2300,7 +2300,7 @@ TableDispatch_Return4:
 	ret
 
 TEST4FUNC:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, TableDispatch_Return5
 	dec 2, xde
 	cp xde, 0x0
@@ -2329,7 +2329,7 @@ TableDispatch_Return5:
 	ret
 
 TEST6FUNC:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, TableDispatch_Return
 	dec 2, xde
 	cp xde, 0x0
@@ -2367,19 +2367,19 @@ BitmapFinpic_ByteData:
 	cp	(49121:16), 0
 	ret	nz
 	call	GetTitleNow
-	cp	xhl, 27263222
+	cp	xhl, TITLE_TEST3
 	ret	nz
 	ld	xwa, 4294967295
-	ld	xbc, 29360139
+	ld	xbc, EVT_PAINT
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ret
 BitmapFinpic:
-	cp xbc, EVT_ALLOC_HEIGHT
+	cp xbc, EVT_GET_BITMAP_HEIGHT
 	jr z, BitmapFinpic_GetHeight
-	cp xbc, EVT_ALLOC_WIDTH
+	cp xbc, EVT_GET_BITMAP_WIDTH
 	jr z, BitmapFinpic_GetWidth
-	cp xbc, EVT_ALLOC_DATA_PTR
+	cp xbc, EVT_GET_BITMAP_DATA
 	jr z, BitmapFinpic_GetDataPtr
 	ld xhl, 0:i3
 	ret
@@ -2397,11 +2397,11 @@ BitmapFinpic_GetHeight:
 	ret
 
 BitmapFinst:
-	cp xbc, EVT_ALLOC_HEIGHT
+	cp xbc, EVT_GET_BITMAP_HEIGHT
 	jr z, BitmapFinst_GetHeight
-	cp xbc, EVT_ALLOC_WIDTH
+	cp xbc, EVT_GET_BITMAP_WIDTH
 	jr z, BitmapFinst_GetWidth
-	cp xbc, EVT_ALLOC_DATA_PTR
+	cp xbc, EVT_GET_BITMAP_DATA
 	jr z, BitmapFinst_GetDataPtr
 	ld xhl, 0:i3
 	ret
@@ -2419,11 +2419,11 @@ BitmapFinst_GetHeight:
 	ret
 
 BitmapFoutpic:
-	cp xbc, EVT_ALLOC_HEIGHT
+	cp xbc, EVT_GET_BITMAP_HEIGHT
 	jr z, BitmapFoutpic_GetHeight
-	cp xbc, EVT_ALLOC_WIDTH
+	cp xbc, EVT_GET_BITMAP_WIDTH
 	jr z, BitmapFoutpic_GetWidth
-	cp xbc, EVT_ALLOC_DATA_PTR
+	cp xbc, EVT_GET_BITMAP_DATA
 	jr z, BitmapFoutpic_GetDataPtr
 	ld xhl, 0:i3
 	ret
@@ -2441,11 +2441,11 @@ BitmapFoutpic_GetHeight:
 	ret
 
 BitmapFoutst:
-	cp xbc, EVT_ALLOC_HEIGHT
+	cp xbc, EVT_GET_BITMAP_HEIGHT
 	jr z, BitmapFoutst_GetHeight
-	cp xbc, EVT_ALLOC_WIDTH
+	cp xbc, EVT_GET_BITMAP_WIDTH
 	jr z, BitmapFoutst_GetWidth
-	cp xbc, EVT_ALLOC_DATA_PTR
+	cp xbc, EVT_GET_BITMAP_DATA
 	jr z, BitmapFoutst_GetDataPtr
 	ld xhl, 0:i3
 	ret
@@ -2463,22 +2463,22 @@ BitmapFoutst_GetHeight:
 	ret
 
 SystemInitMDFunc:
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr nz, SystemInitMD_ReturnZero
 	call GetTitleOld
-	cp xhl, 0x1a000ee
+	cp xhl, TITLE_MESAGE
 	jr nz, SystemInitMD_ReturnZero
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 1:i3
 	call SendEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009e
+	ld xbc, EVT_SET_NOT_DRAW_FLAG
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00014
-	ld xde, 0x1800001
+	ld xbc, EVT_CHANGE_MODE
+	ld xde, NAKA_MODE_MD_NORMAL
 	call PostEvent
 
 SystemInitMD_ReturnZero:
@@ -2487,22 +2487,22 @@ SystemInitMD_ReturnZero:
 
 SystemInitOkFunc:
 	ld xwa, 0x410002
-	ld xbc, 0x1e00090
+	ld xbc, EVT_GET_SELECTED
 	ld xde, 0:i3
 	call SendEvent
 	exts xhl
 	ld (0x0340de:24), xhl
 	cp (0x0340ea:24), 0x00
 	jr nz, SystemInitOk_PostEvent
-	ld xwa, 0x142000a
-	ld xbc, 0x1e20013
+	ld xwa, NAKA_MAINFUNC_MainSysControl
+	ld xbc, EVT_SYS_INI
 	ld xde, xhl
 	call MainFuncCall
 	jr SystemInitOk_ReturnZero
 
 SystemInitOk_PostEvent:
 	ld xwa, 0x410007
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 
@@ -2512,16 +2512,16 @@ SystemInitOk_ReturnZero:
 
 SysIniNoFunc:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00041
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_CTINIT
 	call PostEvent
 	ld xhl, 0:i3
 	ret
 
 SysIniYesFunc:
 	ld xde, (0x0340de:24)
-	ld xwa, 0x142000a
-	ld xbc, 0x1e20013
+	ld xwa, NAKA_MAINFUNC_MainSysControl
+	ld xbc, EVT_SYS_INI
 	call MainFuncCall
 	ld xhl, 0:i3
 	ret
@@ -2531,7 +2531,7 @@ SysSureShowHideFunc:
 	ret
 
 AttnLngCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, AttnLngCheck_ReturnZero
 	lda xhl, (NoteStr3_Blank_3_0x4:24)
 	ret
@@ -2541,7 +2541,7 @@ AttnLngCheck_ReturnZero:
 	ret
 
 SysSureLngCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SysSureLngCheck_ReturnZero
 	lda xhl, (Str_Attention_EN_0xC:24)
 	ret
@@ -2551,7 +2551,7 @@ SysSureLngCheck_ReturnZero:
 	ret
 
 SureLngCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SureLngCheck_ReturnZero
 	lda xhl, (Str_InitSettingWarn_IT_0x19A:24)
 	ret
@@ -2561,7 +2561,7 @@ SureLngCheck_ReturnZero:
 	ret
 
 CtlIniLngCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CtlIniLngCheck_ReturnZero
 	lda xhl, (Str_AreYouSure_IT_0x46:24)
 	ret
@@ -2571,7 +2571,7 @@ CtlIniLngCheck_ReturnZero:
 	ret
 
 PmemNormLngCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PmemNormLngCheck_ReturnZero
 	lda xhl, (Str_FactoryResetDesc_EN3_0x156:24)
 	ret
@@ -2581,7 +2581,7 @@ PmemNormLngCheck_ReturnZero:
 	ret
 
 PmemExpLngCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PmemExpLngCheck_ReturnZero
 	lda xhl, (Str_StoreSoundBalance_DE_0x58:24)
 	ret
@@ -2605,20 +2605,20 @@ AcMstStyleAlp_Boundary:
 	ld	(xsp+70), xbc
 	ld	(xsp+74), xwa
 	ld	xbc, (xsp+70)
-	cp	xbc, 0x1e0008d
+	cp	xbc, EVT_REQUEST_GRID_DRAW
 	jrl	z, MasterSetup_ForwardToChild
 	ld	xwa, (xsp+70)
-	cp	xwa, 0x1e0008b
+	cp	xwa, EVT_GET_FIXED_ROW_STR
 	jrl	z, MasterSetup_GetNameB_DrawString
-	cp	xwa, 0x1e0008a
+	cp	xwa, EVT_GET_FIXED_COL_STR
 	jrl	z, MasterSetup_GetNameA
-	cp	xwa, 0x1c00007
+	cp	xwa, EVT_SW_IN
 	jrl	z, AcMstStyleAlp_Boundary_Skip3
-	cp	xwa, EVT_SELECT_CONFIRM
+	cp	xwa, EVT_HIDE
 	jrl	z, AcMstStyleAlp_Boundary_Skip2
-	cp	xwa, EVT_MENU_OPEN
+	cp	xwa, EVT_SHOW
 	jr	z, AcMstStyleAlp_Boundary_Skip
-	sub	xbc, 0x1c00017
+	sub	xbc, EVT_INDEXSW_UP
 	cp	xbc, 0
 	jrl	lt, MasterSetup_InheritedProc_Fallback
 	cp	xbc, 6
@@ -2637,7 +2637,7 @@ AcMstStyleAlp_Boundary_Skip:
 	call	GetViewInstance
 	ld	(xsp+8), xhl
 	ld	xwa, (xsp+74)
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xiz, xhl
@@ -2650,7 +2650,7 @@ AcMstStyleAlp_Boundary_Skip:
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+74)
-	ld	xbc, 0x1c00018
+	ld	xbc, EVT_INDEXSW_DOWN
 	call	SetDialUp
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+26)
@@ -2661,7 +2661,7 @@ AcMstStyleAlp_Boundary_Skip:
 	ld	de, wa
 	extz	xde
 	ld	xwa, (xsp+74)
-	ld	xbc, 0x1c00017
+	ld	xbc, EVT_INDEXSW_UP
 	call	SetDialDown
 	ld	wa, 1:i3
 	call	SetDialEnable
@@ -2679,16 +2679,16 @@ AcMstStyleAlp_Boundary_Skip:
 	lda	xbc, (StyleSong_MasterTable_0x4:24)
 	ld_rrw	de, xbc, de	; ld de, (xbc+de)
 	extz	xde
-	ld	xwa, 0x142000d
-	ld	xbc, 0x1e20018
+	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
+	ld	xbc, EVT_OTP_CNT_SET
 	jr	AcMstStyleAlp_Boundary_Join
 AcMstStyleAlp_Boundary_Skip2:
 	ld	xwa, (xsp+74)
 	ld	xbc, (xsp+70)
 	ld	xde, (xsp+66)
 	call	InheritedProc
-	ld	xwa, 0x142000d
-	ld	xbc, 0x1e20019
+	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
+	ld	xbc, EVT_OTP_CNT_RESET
 	ld	xde, 0:i3
 AcMstStyleAlp_Boundary_Join:
 	call	MainFuncCall
@@ -2790,16 +2790,16 @@ MasterSetup_StringSearch_Adjust:
 	ld xwa, (xde + 90)
 	ldw (xwa), 0x1
 	ld xwa, (xsp + 74)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1e0008e
+	ld xbc, EVT_SET_SELECTED_CEL
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 66)
 	jrl SeqFile_CallApFunc
 MasterSetup_DialTurn_ScrollUp:
@@ -2892,16 +2892,16 @@ MasterSetup_ScrollUp_Search_Done:
 	ld	xwa, (xwa+90)
 	ldw	(xwa), 1
 	ld	xwa, (xsp+74)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, (xsp+74)
-	ld	xbc, 31457422
+	ld	xbc, EVT_SET_SELECTED_CEL
 	ld	xde, 4294901760
 	call	SendEvent
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+70)
-	ld	xbc, 29360152
+	ld	xbc, EVT_INDEXSW_DOWN
 	ld	xde, (xsp+66)
 	jrl	SeqFile_CallApFunc
 	ld	xwa, (xsp+74)
@@ -2914,13 +2914,13 @@ MasterSetup_ScrollUp_Search_Done:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	xwa, (xsp+74)
-	ld	xbc, 31457360
+	ld	xbc, EVT_CHECK_INDEX
 	ld	xde, (xsp+66)
 	call	SendEvent
 	or	xhl, xhl
 	jrl	z, MasterSetup_FallbackEvent
 	ld	xwa, (xsp+74)
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	cp	hl, 0:i3
@@ -3023,7 +3023,7 @@ MasterSetup_DialDown_AdjustView:
 	ld wa, (xwa)
 	ld (xbc), wa
 	ld xwa, (xsp + 74)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 8)
@@ -3035,7 +3035,7 @@ MasterSetup_DialDown_AdjustView:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xsp + 74)
 	ld xbc, (xsp + 70)
@@ -3050,11 +3050,11 @@ MasterSetup_DialDown_AdjustView:
 MasterSetup_DialDown_DecPage:
 	decw	1, (xwa)
 	ld xwa, (xsp + 74)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0008
 	call SendEvent
 	ld xwa, (xsp + 74)
@@ -3072,7 +3072,7 @@ MasterSetup_DialDown_SendPageEvent:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, (xsp + 74)
@@ -3087,7 +3087,7 @@ MasterSetup_DialDown_SendPageEvent:
 	jrl SeqFile_ReturnZeroJmp2
 MasterSetup_FallbackEvent:
 	ld	xwa, (xsp+74)
-	ld	xbc, 31457425
+	ld	xbc, EVT_CHECK_GRID_INDEX
 	ld	xde, (xsp+66)
 	call	SendEvent
 	or	xhl, xhl
@@ -3103,11 +3103,11 @@ MasterSetup_FallbackEvent:
 	ld	xde, (xsp+66)
 	call	SetAutoInc
 	ld	xwa, (xsp+74)
-	ld	xbc, 29360152
+	ld	xbc, EVT_INDEXSW_DOWN
 	ld	xde, (xsp+66)
 	call	SetDialUp
 	ld	xwa, (xsp+74)
-	ld	xbc, 29360151
+	ld	xbc, EVT_INDEXSW_UP
 	ld	xde, (xsp+66)
 	call	SetDialDown
 	ld	wa, 1:i3
@@ -3122,13 +3122,13 @@ MasterSetup_FallbackEvent:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	xwa, (xsp+74)
-	ld	xbc, 31457360
+	ld	xbc, EVT_CHECK_INDEX
 	ld	xde, (xsp+66)
 	call	SendEvent
 	or	xhl, xhl
 	jrl	z, MstStyleAlp_FallbackDispatch
 	ld	xwa, (xsp+74)
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xix, (xsp+8)
@@ -3245,11 +3245,11 @@ MstStyleAlp_CompareComplete:
 	ld xwa, (xhl + 90)
 	ldw (xwa), 0x1
 	ld xwa, (xsp + 74)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xsp + 74)
@@ -3272,11 +3272,11 @@ MstStyleAlp_PageForward:
 	jrl z, SeqFile_ReturnZeroJmp2
 	incw 1, (xbc)
 	ld xwa, (xsp + 74)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xsp + 74)
@@ -3294,7 +3294,7 @@ MstStyleAlp_SelectAndAutoInc:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, (xsp + 74)
@@ -3310,7 +3310,7 @@ MstStyleAlp_SelectAndAutoInc:
 
 MstStyleAlp_FallbackDispatch:
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 66)
 	call SendEvent
 	or xhl, xhl
@@ -3326,11 +3326,11 @@ MstStyleAlp_FallbackDispatch:
 	ld xde, (xsp + 66)
 	call SetAutoInc
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 66)
 	call SetDialUp
 	ld xwa, (xsp + 74)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 66)
 	call SetDialDown
 	ld wa, 1:i3
@@ -3430,9 +3430,9 @@ MstStyleAlpGridCheck:
 	push xiz
 	ld (xsp + 58), xde
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, MstStyleAlp_CellSelect
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, EffectMode_SendEvent_Return
 	cp xwa, 0x6
@@ -3456,7 +3456,7 @@ MstStyleAlpGridCheck:
 MstStyleAlp_EventDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+58), xhl
@@ -3476,8 +3476,8 @@ MstStyleAlp_EventDispatch:
 	lda	xbc, (StyleSong_MasterTable_0x4:24)
 	ld_rrw	de, xbc, de
 	extz	xde
-	ld	xwa, 0x142000d
-	ld	xbc, 0x1e20018
+	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
+	ld	xbc, EVT_OTP_CNT_SET
 	call	MainFuncCall
 	jrl	EffectMode_SendEvent_Return
 
@@ -3632,7 +3632,7 @@ MstStyleAlp_FinalSendEvent:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 50)
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 
 EffectMode_SendEvent_Return:
@@ -3648,16 +3648,16 @@ AcMstStyle1GridBoxProc:
 	ld (xsp + 12), xbc
 	ld (xsp + 16), xwa
 	ld xbc, (xsp + 12)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, MstStyle_ForwardToChild
 	ld xwa, (xsp + 12)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, MstStyle_GetNameB
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, MstStyle_GetNameA
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, MstStyle_EventDispatch
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, MstStyle_InheritedProc_Fallback
 	cp xbc, 0x6
@@ -3687,7 +3687,7 @@ MstStyle_EventDispatch:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xiz + 78)
@@ -3695,7 +3695,7 @@ MstStyle_EventDispatch:
 	ld xwa, (xiz + 74)
 	ldw (xwa), 0xa
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld iy, hl
@@ -3715,13 +3715,13 @@ AcMstStyle1GridBoxProc_Evt1C00017:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
 	jrl z, MstStyle_FallbackEvent
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld iy, hl
@@ -3739,11 +3739,11 @@ AcMstStyle1GridBoxProc_Evt1C00017:
 	dec 1, wa
 	ld (0x0340c4:24), wa
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0009
 	call SendEvent
 	ld xwa, (xsp + 16)
@@ -3751,7 +3751,7 @@ AcMstStyle1GridBoxProc_Evt1C00017:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20005
+	ld xbc, EVT_SUBCT_SHOW
 	ld xde, 0:i3
 	jr MstStyle_DialDown_PostEvent
 
@@ -3763,14 +3763,14 @@ MstStyle_DialDown_Decrement:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20005
+	ld xbc, EVT_SUBCT_SHOW
 	ld xde, 0:i3
 
 MstStyle_DialDown_PostEvent:
@@ -3779,7 +3779,7 @@ MstStyle_DialDown_PostEvent:
 
 MstStyle_FallbackEvent:
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -3803,13 +3803,13 @@ AcMstStyle1GridBoxProc_Evt1C00018:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
 	jrl z, MstStyle_DialUp_FallbackEvent
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld iy, hl
@@ -3830,11 +3830,11 @@ AcMstStyle1GridBoxProc_Evt1C00018:
 	sub wa, 0xa
 	ld (0x0340c4:24), wa
 	ld xwa, (xsp + 16)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xsp + 16)
@@ -3842,7 +3842,7 @@ AcMstStyle1GridBoxProc_Evt1C00018:
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20005
+	ld xbc, EVT_SUBCT_SHOW
 	ld xde, 0:i3
 	jrl MstStyle_DialUp_PostEvent
 
@@ -3852,14 +3852,14 @@ MstStyle_DialUp_Increment:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20005
+	ld xbc, EVT_SUBCT_SHOW
 	ld xde, 0:i3
 	jr MstStyle_DialUp_PostEvent
 
@@ -3883,14 +3883,14 @@ MstStyle_DialUp_CheckLimit:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xsp + 16)
 	ld xbc, (xsp + 12)
 	ld xde, (xsp + 8)
 	call SetAutoInc
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20005
+	ld xbc, EVT_SUBCT_SHOW
 	ld xde, 0:i3
 
 MstStyle_DialUp_PostEvent:
@@ -3899,7 +3899,7 @@ MstStyle_DialUp_PostEvent:
 
 MstStyle_DialUp_FallbackEvent:
 	ld xwa, (xsp + 16)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 8)
 	call SendEvent
 	or xhl, xhl
@@ -3965,10 +3965,10 @@ MstStyle1GridCheck:
 	push xiz
 	ld (xsp + 38), xde
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jr z, MstStyle1Grid_CellSelect
 	ld xhl, 0:i3
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, MstStyle1Grid_Epilogue
 	cp xwa, 0x6
@@ -4123,7 +4123,7 @@ MstStyle1Grid_CheckPlayAudio:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 30)
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 
 MstStyle1Grid_ReturnZero:
@@ -4141,20 +4141,20 @@ AcMstStyle1SubGridBoxProc:
 	ld (xsp + 62), xbc
 	ld (xsp + 66), xwa
 	ld xbc, (xsp + 62)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, MstStyle1Sub_ForwardToChild
 	ld xwa, (xsp + 62)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, MstStyle1Sub_GetNameB_DrawString
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, MstStyle1Sub_GetNameA
-	cp xwa, 0x1c20005
+	cp xwa, EVT_SUBCT_SHOW
 	jrl z, MstStyle1Sub_HandleSubSelect
-	cp xwa, 0x1c0000b
+	cp xwa, EVT_PAINT
 	jrl z, MstStyle1Sub_HandleScroll
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, MstStyle1_EventDispatch
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, MstStyle1Sub_InheritedFallback
 	cp xbc, 0x6
@@ -4184,7 +4184,7 @@ MstStyle1_EventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 66)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -4197,7 +4197,7 @@ MstStyle1_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -4208,7 +4208,7 @@ MstStyle1_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialDown
 	ld wa, 1:i3
 	call SetDialEnable
@@ -4282,7 +4282,7 @@ MstStyle1Sub_HandleScroll:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	jrl SeqFile_ReturnZeroJmp
 
@@ -4343,7 +4343,7 @@ MstStyle1Sub_SubSel_Adjust:
 	inc 1, wa
 	ld (xbc), wa
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call PostEvent
 	jrl SeqFile_ReturnZeroJmp
@@ -4356,13 +4356,13 @@ AcMstStyle1SubGridBoxProc_Evt1C00017:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 58)
 	call SendEvent
 	or xhl, xhl
 	jrl z, MstStyle1Sub_FallbackEvent
 	ld xwa, (xsp + 66)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	lda xbc, (0x0340c8:24)
@@ -4384,11 +4384,11 @@ AcMstStyle1SubGridBoxProc_Evt1C00017:
 	add xbc, xde
 	ld (xbc), a
 	ld xwa, (xsp + 66)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0009
 	call SendEvent
 	ld xwa, (xsp + 66)
@@ -4408,7 +4408,7 @@ MstStyle1Sub_DialDown_Decrement:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, (xsp + 66)
@@ -4421,7 +4421,7 @@ MstStyle1Sub_DialDown_SetAutoInc:
 
 MstStyle1Sub_FallbackEvent:
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 58)
 	call SendEvent
 	or xhl, xhl
@@ -4437,11 +4437,11 @@ MstStyle1Sub_FallbackEvent:
 	ld xde, (xsp + 58)
 	call SetAutoInc
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 58)
 	call SetDialUp
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 58)
 	call SetDialDown
 	ld wa, 1:i3
@@ -4457,13 +4457,13 @@ AcMstStyle1SubGridBoxProc_Evt1C00018:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 58)
 	call SendEvent
 	or xhl, xhl
 	jrl z, MstStyle1Sub_DialUp_FallbackEvent
 	ld xwa, (xsp + 66)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 8)
@@ -4493,11 +4493,11 @@ AcMstStyle1SubGridBoxProc_Evt1C00018:
 	add xix, xbc
 	ld (xix), a
 	ld xwa, (xsp + 66)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xsp + 66)
@@ -4513,7 +4513,7 @@ MstStyle1Sub_DialUp_Increment:
 	add xix, xwa
 	ld (xix), c
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
@@ -4537,7 +4537,7 @@ MstStyle1Sub_DialUp_CheckLimit:
 	add xhl, xwa
 	ld (xhl), c
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xsp + 66)
 	ld xbc, (xsp + 62)
@@ -4549,7 +4549,7 @@ MstStyle1Sub_DialUp_SetAutoInc:
 
 MstStyle1Sub_DialUp_FallbackEvent:
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 58)
 	call SendEvent
 	or xhl, xhl
@@ -4565,11 +4565,11 @@ MstStyle1Sub_DialUp_FallbackEvent:
 	ld xde, (xsp + 58)
 	call SetAutoInc
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 58)
 	call SetDialUp
 	ld xwa, (xsp + 66)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 58)
 	call SetDialDown
 	ld wa, 1:i3
@@ -4661,10 +4661,10 @@ MstStyle1SubGridCheck:
 	push xiz
 	ld xiz, xde
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jr z, MstStyle1SubGrid_CellSelect
 	ld xhl, 0:i3
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, MstStyle1SubGrid_Epilogue
 	cp xwa, 0x6
@@ -4841,7 +4841,7 @@ MstStyle1SubGrid_CheckPlayAudio:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 26)
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 
 MstStyle1SubGrid_ReturnZero:
@@ -4859,20 +4859,20 @@ AcMstStyle2GridBoxProc:
 	ld (xsp + 52), xbc
 	ld (xsp + 56), xwa
 	ld xbc, (xsp + 52)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, MstStyle2_ForwardToChild
 	ld xwa, (xsp + 52)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, MstStyle2_GetNameB_DrawString
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, MstStyle2_GetNameA
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jrl z, MstStyle2_HandleDialTurn
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jrl z, MstStyle2_HandleDialStop
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, MstStyle1Page_EventDispatch
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, MstStyle2_InheritedFallback
 	cp xbc, 0x6
@@ -4904,7 +4904,7 @@ MstStyle1Page_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 56)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld xiz, xhl
@@ -4917,7 +4917,7 @@ MstStyle1Page_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -4928,7 +4928,7 @@ MstStyle1Page_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialDown
 	ld wa, 1:i3
 	call SetDialEnable
@@ -5055,11 +5055,11 @@ MstStyle2_CountSubEntries_AdjB:
 
 MstStyle2_InitDone_PostEvent:
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0000
 	jrl MstStyle2_SendEvent_Done
 
@@ -5123,25 +5123,25 @@ MstStyle2_InitOdd_CountAdjB:
 	extz bc
 	ld (xde), bc
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0005
 
 MstStyle2_SendEvent_Done:
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	call ApFuncCall
 	jrl SeqData_ReturnZero
 
 MstStyle2_HandleSpecialEvent:
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 48)
@@ -5149,7 +5149,7 @@ MstStyle2_HandleSpecialEvent:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	jrl SeqData_ReturnZero
 
@@ -5158,8 +5158,8 @@ MstStyle2_HandleDialStop:
 	ld xbc, (xsp + 52)
 	ld xde, (xsp + 48)
 	call InheritedProc
-	ld xwa, 0x142000d
-	ld xbc, 0x1e20019
+	ld xwa, NAKA_MAINFUNC_MainMssSetUp
+	ld xbc, EVT_OTP_CNT_RESET
 	ld xde, 0:i3
 	call MainFuncCall
 	jrl SeqData_ReturnZero
@@ -5200,12 +5200,12 @@ MstStyle2_HandleDialTurn:
 	ld wa, (xwa)
 	ld (xbc), a
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1e0008e
+	ld xbc, EVT_SET_SELECTED_CEL
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
 
@@ -5294,16 +5294,16 @@ MstStyle2_DialDown_UpdateAndPost:
 	ld wa, (xwa)
 	ld (xbc), a
 	ld xwa, (xsp + 56)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0005
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
 
@@ -5330,12 +5330,12 @@ MstStyle2_DialUp_Scroll:
 	ld wa, (xwa)
 	ld (xbc), a
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1e0008e
+	ld xbc, EVT_SET_SELECTED_CEL
 	ld xde, 0xffff0005
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
 
@@ -5429,16 +5429,16 @@ MstStyle2_DialUp_UpdateAndPost:
 	ld wa, (xwa)
 	ld (xbc), a
 	ld xwa, (xsp + 56)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	jrl Seq_ApplyFunctionAndReturn
 AcMstStyle2GridBoxProc_Evt1C00017:
@@ -5452,13 +5452,13 @@ AcMstStyle2GridBoxProc_Evt1C00017:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 48)
 	call SendEvent
 	or xhl, xhl
 	jrl z, MstStyle2_FallbackEvent
 	ld xwa, (xsp + 56)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld ix, hl
@@ -5555,7 +5555,7 @@ MstStyle2_DialScrollDown_Count2Adj:
 
 MstStyle2_DialScrollDown_PostEvent:
 	ld xwa, (xsp + 56)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 8)
@@ -5566,11 +5566,11 @@ MstStyle2_DialScrollDown_PostEvent:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 48)
 	jr MstStyle2_DialScroll_CallFunc
 
@@ -5592,7 +5592,7 @@ MstStyle2_DialScrollUp_Middle:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	jr MstStyle2_DialScrollUp_SendEvent
 
 MstStyle2_DialScrollUp_Simple:
@@ -5601,13 +5601,13 @@ MstStyle2_DialScrollUp_Simple:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 
 MstStyle2_DialScrollUp_SendEvent:
 	call SendEvent
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 70)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 
 MstStyle2_DialScroll_CallFunc:
@@ -5622,7 +5622,7 @@ MstStyle2_DialScroll_SetAutoInc:
 
 MstStyle2_FallbackEvent:
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 48)
 	call SendEvent
 	or xhl, xhl
@@ -5638,11 +5638,11 @@ MstStyle2_FallbackEvent:
 	ld xde, (xsp + 48)
 	call SetAutoInc
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	call SetDialUp
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 48)
 	call SetDialDown
 	ld wa, 1:i3
@@ -5657,13 +5657,13 @@ AcMstStyle2GridBoxProc_Evt1C00018:
 	ld xiz, xhl
 	ld (xsp + 4), xiz
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 48)
 	call SendEvent
 	or xhl, xhl
 	jrl z, MstStyle2_DialScroll_FallbackUp
 	ld xwa, (xsp + 56)
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld ix, hl
@@ -5689,11 +5689,11 @@ AcMstStyle2GridBoxProc_Evt1C00018:
 	ld wa, (xwa)
 	ld (xde), a
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0005
 	call SendEvent
 	ld xwa, (xiz + 70)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	jrl MstStyle2_DialScroll_CallApFunc
 
@@ -5797,15 +5797,15 @@ MstStyle2_DialScroll_IncAndPost:
 	ld wa, (xwa)
 	ld (xde), a
 	ld xwa, (xsp + 56)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0000
 	call SendEvent
 	ld xwa, (xiz + 70)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	jr MstStyle2_DialScroll_CallApFunc
 
@@ -5816,10 +5816,10 @@ MstStyle2_DialScrollUp_SendSimple:
 	extz xde
 	add xde, 0xffff0000
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	ld xwa, (xiz + 70)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 
 MstStyle2_DialScroll_CallApFunc:
@@ -5834,7 +5834,7 @@ MstStyle2_DialScroll_AutoInc:
 
 MstStyle2_DialScroll_FallbackUp:
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 48)
 	call SendEvent
 	or xhl, xhl
@@ -5850,11 +5850,11 @@ MstStyle2_DialScroll_FallbackUp:
 	ld xde, (xsp + 48)
 	call SetAutoInc
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 48)
 	call SetDialUp
 	ld xwa, (xsp + 56)
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 48)
 	call SetDialDown
 	ld wa, 1:i3
@@ -6082,9 +6082,9 @@ MstStyle2GridCheck:
 	push xiz
 	ld (xsp + 62), xde
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, MstGrid2_CellSelect
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, MstGrid2_Return
 	cp xwa, 0x6
@@ -6107,7 +6107,7 @@ MstStyle2GridCheck:
 MstGrid2_ScrollJumpTable:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	(xsp+62), xhl
@@ -6130,8 +6130,8 @@ MstGrid2_ScrollJumpTable:
 	add	xbc, (0x340d6:24)
 	ld	de, (xbc+4)
 	extz	xde
-	ld	xwa, 0x142000d
-	ld	xbc, 0x1e20018
+	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
+	ld	xbc, EVT_OTP_CNT_SET
 	jr	MstStyle2GridCheck_Join
 MstStyle2GridCheck_Skip:
 	ld	xwa, (xhl+98)
@@ -6149,8 +6149,8 @@ MstStyle2GridCheck_Skip:
 	add	xbc, (0x340da:24)
 	ld	de, (xbc+4)
 	extz	xde
-	ld	xwa, 0x142000d
-	ld	xbc, 0x1e20018
+	ld	xwa, NAKA_MAINFUNC_MainMssSetUp
+	ld	xbc, EVT_OTP_CNT_SET
 MstStyle2GridCheck_Join:
 	call	MainFuncCall
 	jrl	MstGrid2_Return
@@ -6407,7 +6407,7 @@ MstGrid2_CheckPlayAudio:
 	call GetFocusObject
 	ld xwa, xhl
 	lda xde, (xsp + 54)
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 
 MstGrid2_Return:
@@ -6437,9 +6437,9 @@ IvMstStyleWindowPgCtlProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, MstStylePgCtl_HandleScroll
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, MstStylePgCtl_HandleInit
 	ld xwa, xiz
 	ld xde, (xsp + 4)
@@ -6458,7 +6458,7 @@ MstStylePgCtl_HandleInit:
 	ld xwa, (xhl + 22)
 	ldw (xwa), 0x1
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	ld xde, 1:i3
 	call SendEvent
 	jr MstStylePgCtl_ReturnZero
@@ -6479,7 +6479,7 @@ MstStylePgCtl_HandleScroll:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	jr MstStylePgCtl_SendPageEvent
 
 MstStylePgCtl_HandleScrollDown:
@@ -6495,7 +6495,7 @@ MstStylePgCtl_HandleScrollDown:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 
 MstStylePgCtl_SendPageEvent:
 	call SendEvent
@@ -6503,8 +6503,8 @@ MstStylePgCtl_SendPageEvent:
 
 MstStylePgCtl_ScrollDown_Exit:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a000c1
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_MUSICSTYL
 	call PostEvent
 
 MstStylePgCtl_ReturnZero:
@@ -6522,16 +6522,16 @@ AcTchSensGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, TchSens_ForwardToChild
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, TchSens_GetNameB
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, TchSens_GetNameA
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, MstStyle2_EventDispatch
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, TchSens_InheritedFallback
 	cp xbc, 0x6
@@ -6561,7 +6561,7 @@ MstStyle2_EventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -6574,7 +6574,7 @@ MstStyle2_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -6585,7 +6585,7 @@ MstStyle2_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialDown
 	ld wa, 1:i3
 	jrl TchSens_SetDialEnable
@@ -6595,13 +6595,13 @@ AcTchSensGridBoxProc_Evt1C00017:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, TchSens_DialDown_Fallback
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 4:i3
@@ -6610,7 +6610,7 @@ AcTchSensGridBoxProc_Evt1C00017:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	jr TchSens_DialDown_SendEvent
 
@@ -6619,7 +6619,7 @@ TchSens_DialDown_Dec1:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 
 TchSens_DialDown_SendEvent:
@@ -6632,7 +6632,7 @@ TchSens_DialDown_SendEvent:
 
 TchSens_DialDown_Fallback:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -6648,11 +6648,11 @@ TchSens_DialDown_Fallback:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -6663,13 +6663,13 @@ AcTchSensGridBoxProc_Evt1C00018:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, TchSens_DialUp_Fallback
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 1:i3
@@ -6678,7 +6678,7 @@ AcTchSensGridBoxProc_Evt1C00018:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	jr TchSens_DialUp_SendEvent
 
@@ -6687,7 +6687,7 @@ TchSens_DialUp_Inc1:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 
 TchSens_DialUp_SendEvent:
@@ -6700,7 +6700,7 @@ TchSens_DialUp_SendEvent:
 
 TchSens_DialUp_Fallback:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -6716,11 +6716,11 @@ TchSens_DialUp_Fallback:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -6784,9 +6784,9 @@ TchSensGridCheck:
 	lda xsp, (xsp - 18)
 	push xiz
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, TchSensGrid_CellSelect
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, TchSensGrid_ReturnZero
 	cp xwa, 0x6
@@ -6808,7 +6808,7 @@ TchSensGridCheck:
 TchSensGrid_EventDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -6856,7 +6856,7 @@ TchSensGridCheck_Entry3:
 TchSensGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -6922,7 +6922,7 @@ TchSensGridCheck_Evt1C0001C:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	TchSensGrid_SendEvent
 TchSensGridCheck_Skip:
 	ld	xwa, (xde)
@@ -6945,7 +6945,7 @@ TchSensGridCheck_Skip2:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	TchSensGrid_SendEvent
 TchSensGridCheck_Skip3:
 	lda	xiy, (xsp+14)
@@ -6967,7 +6967,7 @@ TchSensGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	TchSensGrid_SendEvent
 TchSensGridCheck_Skip4:
 	ld	xwa, (xde)
@@ -6985,7 +6985,7 @@ TchSensGridCheck_Skip4:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	TchSensGrid_SendEvent
 TchSensGrid_CellSelect:
 	lda xbc, (xsp + 0x0e)
@@ -7013,7 +7013,7 @@ TchSensGrid_CellSelect:
 	call GetFocusObject
 	ld XWA,XHL
 	lda xde, (xsp + 0x0e)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, TchSensGrid_SendEvent
 TchSensGrid_CheckCell_1_4:
 .Lc_fba51b:
@@ -7036,7 +7036,7 @@ TchSensGrid_Cell_1_4_Render:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jr	TchSensGrid_SendEvent
 TchSensGrid_CheckCell_1_5:
 	cpw	(xbc), 1
@@ -7055,7 +7055,7 @@ TchSensGrid_CheckCell_1_5:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jr	TchSensGrid_SendEvent
 TchSensGrid_CheckCell_1_6:
 	cpw	(xbc), 1
@@ -7074,7 +7074,7 @@ TchSensGrid_CheckCell_1_6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+14)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 TchSensGrid_SendEvent:
 	call SendEvent
 
@@ -7091,16 +7091,16 @@ AcFSWAssGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, FSWAss_ForwardToChild
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, FSWAss_GetNameB
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, FSWAss_GetNameA
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, TchSens_EventDispatch
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, FSWAss_InheritedFallback
 	cp xbc, 0x6
@@ -7130,7 +7130,7 @@ TchSens_EventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -7143,7 +7143,7 @@ TchSens_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -7154,7 +7154,7 @@ TchSens_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialDown
 	ld wa, 1:i3
 	jrl FSWAss_SetDialEnable
@@ -7164,20 +7164,20 @@ AcFSWAssGridBoxProc_Evt1C00017:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, FSWAss_DialDown_Fallback
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	dec 1, hl
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -7188,7 +7188,7 @@ AcFSWAssGridBoxProc_Evt1C00017:
 
 FSWAss_DialDown_Fallback:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -7204,11 +7204,11 @@ FSWAss_DialDown_Fallback:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -7219,20 +7219,20 @@ AcFSWAssGridBoxProc_Evt1C00018:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, FSWAss_DialUp_Fallback
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -7243,7 +7243,7 @@ AcFSWAssGridBoxProc_Evt1C00018:
 
 FSWAss_DialUp_Fallback:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -7259,11 +7259,11 @@ FSWAss_DialUp_Fallback:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -7327,9 +7327,9 @@ FSWAssGridCheck:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
 	push xiz
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, FSWAssGrid_CellSelect
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, AudioTable_ReturnZero
 	cp xwa, 0x6
@@ -7351,7 +7351,7 @@ FSWAssGridCheck:
 FSWAssGrid_EventDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -7538,7 +7538,7 @@ FSWAssGridCheck_Entry6:
 FSWAssGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -7751,7 +7751,7 @@ FSWAssGridCheck_Evt1C0001C:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	AudioTable_SendEventAndContinue
 FSWAssGridCheck_Skip:
 	lda	xhl, (xsp+260)
@@ -7779,7 +7779,7 @@ FSWAssGridCheck_Skip:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	AudioTable_SendEventAndContinue
 FSWAssGridCheck_Skip2:
 	ld	xwa, (xde)
@@ -7805,7 +7805,7 @@ FSWAssGridCheck_Skip2:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	AudioTable_SendEventAndContinue
 FSWAssGridCheck_Skip3:
 	ld	xwa, (xde)
@@ -7831,7 +7831,7 @@ FSWAssGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	AudioTable_SendEventAndContinue
 FSWAssGridCheck_Skip4:
 	lda	xiz, (xhl+2)
@@ -7858,7 +7858,7 @@ FSWAssGridCheck_Skip4:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	AudioTable_SendEventAndContinue
 FSWAssGridCheck_Skip5:
 	ld	xwa, (xde)
@@ -7884,7 +7884,7 @@ FSWAssGridCheck_Skip5:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	AudioTable_SendEventAndContinue
 FSWAssGridCheck_Skip6:
 	ld	xwa, (xde)
@@ -7910,7 +7910,7 @@ FSWAssGridCheck_Skip6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+260)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	AudioTable_SendEventAndContinue
 FSWAssGrid_CellSelect:
 	lda XBC,(XSP+0x0104)
@@ -7945,7 +7945,7 @@ FSWAssGrid_CellSelect:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0104)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, AudioTable_SendEventAndContinue
 FSWAssGrid_CheckCell_1_3:
 .Lc_fbaf8b:
@@ -7972,7 +7972,7 @@ FSWAssGrid_CheckCell_1_3:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0104)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, AudioTable_SendEventAndContinue
 FSWAssGrid_CheckCell_1_4:
 .Lc_fbafdb:
@@ -7999,7 +7999,7 @@ FSWAssGrid_CheckCell_1_4:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0104)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, AudioTable_SendEventAndContinue
 FSWAssGrid_CheckCell_1_5:
 .Lc_fbb02b:
@@ -8026,7 +8026,7 @@ FSWAssGrid_CheckCell_1_5:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0104)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, AudioTable_SendEventAndContinue
 FSWAssGrid_CheckCell_1_6:
 .Lc_fbb07b:
@@ -8053,7 +8053,7 @@ FSWAssGrid_CheckCell_1_6:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0104)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, AudioTable_SendEventAndContinue
 FSWAssGrid_CheckCell_1_7:
 .Lc_fbb0cb:
@@ -8080,7 +8080,7 @@ FSWAssGrid_CheckCell_1_7:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0104)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jr t, AudioTable_SendEventAndContinue
 FSWAssGrid_CheckCell_1_8:
 .Lc_fbb11a:
@@ -8107,7 +8107,7 @@ FSWAssGrid_CheckCell_1_8:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0104)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 AudioTable_SendEventAndContinue:
 	call SendEvent
 
@@ -8132,7 +8132,7 @@ AudioTable_FindMatch_Loop:
 	ret
 
 FswAsIniFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, SeqLoadFunc_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -8195,9 +8195,9 @@ IvPmemWindowPageCtlProc:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 4), xwa
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, PmemPageCtl_OK_PageSwitch
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, PmemPageCtl_InitForward
 	ld xwa, (xsp + 4)
 	ld xde, xiz
@@ -8227,7 +8227,7 @@ GridBox_NotifySelection:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	call SendEvent
 	jrl SeqLoad_ReturnZeroJmp2
 
@@ -8246,11 +8246,11 @@ PmemPageCtl_OK_PageSwitch:
 	incw 1, (xwa)
 	ld (0x0340e2:24), 0x01
 	ld xwa, 0x450005
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0x45000d
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr SeqLoad_PostEvent
 
@@ -8259,18 +8259,18 @@ PmemPageCtl_OK_AdvanceTo2:
 	jr nz, PmemPageCtl_OK_ResetTo1
 	ld (0x0340e2:24), 0x02
 	ld xwa, 0x45000d
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr SeqLoad_PostEvent
 
 PmemPageCtl_OK_ResetTo1:
 	ldw (xwa), 0x1
 	ld xwa, 0x45000d
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0x450005
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr SeqLoad_PostEvent
 
@@ -8286,11 +8286,11 @@ PmemPageCtl_OK_Rotate:
 	ldw (xwa), 0x2
 	ld (0x0340e2:24), 0x02
 	ld xwa, 0x450005
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0x45000d
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 
 SeqLoad_PostEvent:
@@ -8302,18 +8302,18 @@ PmemPageCtl_OK_RotateReverse:
 	jr nz, PmemPageCtl_OK_RotatePost
 	decw	1, (xwa)
 	ld xwa, 0x45000d
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call PostEvent
 	ld xwa, 0x450005
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 	jr SeqLoad_ReturnZeroJmp2
 
 PmemPageCtl_OK_RotatePost:
 	ld xwa, 0x45000d
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 	ld (0x0340e2:24), 0x01
@@ -8334,22 +8334,22 @@ AcPmExpFilterGridBoxProc:
 	stl_dri XBC, 0xfd, 0x24, 0x01
 	ld xiz, xwa
 	ld XBC, (xsp + 0x0124)
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, PmExpFilter_OkHandler
 	ld XWA, (xsp + 0x0124)
-	cp xwa, 0x1e0008d
+	cp xwa, EVT_REQUEST_GRID_DRAW
 	jrl z, PmExpFilter_ForwardToView
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, PmExpFilter_GetNameB
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, PmExpFilter_GetNameA
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jrl z, PmExpFilter_Repaint
-	cp xwa, 0x1c0000b
+	cp xwa, EVT_PAINT
 	jrl z, PmExpFilter_ShowHide
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, PmemPageCtl_EventDispatch
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, PmExpFilter_DefaultInherited
 	cp xbc, 0x6
@@ -8379,7 +8379,7 @@ PmemPageCtl_EventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -8392,7 +8392,7 @@ PmemPageCtl_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -8403,7 +8403,7 @@ PmemPageCtl_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialDown
 	ld wa, 1:i3
 	jrl PmExpFilter_SetDialEnable
@@ -8414,7 +8414,7 @@ PmExpFilter_ShowHide:
 	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0002
 	call SendEvent
 	jrl SeqLoad_ReturnZeroJmp
@@ -8492,7 +8492,7 @@ PmExpFilter_DrawCellBank1:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+280)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	inc	1, (xsp+10)
 	cp	(xsp+10), 9
@@ -8560,7 +8560,7 @@ PmExpFilter_DrawCellBank2:
 	call GetFocusObject
 	ld XWA,XHL
 	lda XDE,(XSP+0x0118)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	call SendEvent
 	inc	1, (xsp+10)
 	cp	(xsp+10), 9
@@ -8612,13 +8612,13 @@ AcPmExpFilterGridBoxProc_Evt1C00017:
 	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
 	jr z, PmExpFilter_FallbackForward
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	cp (0x0340e2:24), 0x02
@@ -8627,11 +8627,11 @@ AcPmExpFilterGridBoxProc_Evt1C00017:
 	jr nz, PmExpFilter_DecAndUpdate
 	ld (0x0340e2:24), 0x01
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff000a
 	jr PmExpFilter_SendSelEvent
 
@@ -8640,7 +8640,7 @@ PmExpFilter_DecAndUpdate:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 
 PmExpFilter_SendSelEvent:
@@ -8653,7 +8653,7 @@ PmExpFilter_SendSelEvent:
 
 PmExpFilter_FallbackForward:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
@@ -8669,11 +8669,11 @@ PmExpFilter_FallbackForward:
 	ld XDE, (xsp + 0x0120)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld XDE, (xsp + 0x0120)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld XDE, (xsp + 0x0120)
 	call SetDialDown
 	ld wa, 1:i3
@@ -8684,13 +8684,13 @@ AcPmExpFilterGridBoxProc_Evt1C00018:
 	ld XDE, (xsp + 0x0120)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
 	jr z, PmExpFilter_FallbackForward2
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld a, (0x0340e2:24)
@@ -8706,11 +8706,11 @@ PmExpFilter_CheckAdvBank:
 	jr nz, PmExpFilter_IncAndUpdate
 	ld (0x0340e2:24), 0x02
 	ld xwa, xiz
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0xffff0002
 	jr PmExpFilter_SendSelEvent2
 
@@ -8719,7 +8719,7 @@ PmExpFilter_IncAndUpdate:
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 
 PmExpFilter_SendSelEvent2:
@@ -8732,7 +8732,7 @@ PmExpFilter_SendSelEvent2:
 
 PmExpFilter_FallbackForward2:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld XDE, (xsp + 0x0120)
 	call SendEvent
 	or xhl, xhl
@@ -8748,11 +8748,11 @@ PmExpFilter_FallbackForward2:
 	ld XDE, (xsp + 0x0120)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld XDE, (xsp + 0x0120)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld XDE, (xsp + 0x0120)
 	call SetDialDown
 	ld wa, 1:i3
@@ -8807,22 +8807,22 @@ PmExpFilter_OkHandler:
 	jr nz, PmExpFilter_OK_InheritedFwd
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, PmExpFilter_OK_Navigate
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00079
+	ld xbc, EVT_INTERRUPT_EXIT
 	ld xde, 0:i3
 	call SendEvent
 	jr PmExpFilter_OK_InheritedFwd
 
 PmExpFilter_OK_Navigate:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00040
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_CTMENU
 	call PostEvent
 
 PmExpFilter_OK_InheritedFwd:
@@ -8847,9 +8847,9 @@ PmExpFilter_Epilogue:
 PmExpFilterGridCheck:
 	lda_dri XSP, 0xfd, 0xf8, 0xfe
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, PmExpFilterCheck_CellDecode
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, SeqLoad_StoreReturnZero
 	cp xwa, 0x6
@@ -8874,7 +8874,7 @@ PmExpFilter_EventDispatch:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 147 of 182 slots byte-identical
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -8919,7 +8919,7 @@ PmExpFilterGridCheck_Skip:
 PmExpFilterGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -9007,7 +9007,7 @@ PmExpFilterGridCheck_Skip3:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	lda	xde, (xsp+256)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	PmExpFilterCheck_DoSend
 PmExpFilterGridCheck_Skip4:
 	inc	1, l
@@ -9053,7 +9053,7 @@ PmExpFilterGridCheck_Skip6:
 	; v10 does not spell this byte either
 	; v10 does not spell this byte either
 	lda	xde, (xsp+256)
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jrl	PmExpFilterCheck_DoSend
 PmExpFilterGridCheck_Skip7:
 	inc	1, l
@@ -9102,7 +9102,7 @@ PmExpFilterCheck_SendNameA:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+256)	; lda xde, xsp+0x0100
-	ld	xbc, 0x1e0008c
+	ld	xbc, EVT_GRID_DRAW
 	jr	PmExpFilterCheck_DoSend
 PmExpFilterCheck_AltDecode:
 	cp	wa, 2:i3
@@ -9138,7 +9138,7 @@ PmExpFilterCheck_StrcpySend:
 
 	lda xde, (xsp+256)
 
-	ld xbc, 0x1e0008c
+	ld xbc, EVT_GRID_DRAW
 
 
 
@@ -9157,18 +9157,18 @@ AcDispTimeSetGridBoxProc:
 	ld (xsp + 16), xbc
 	ld xiz, xwa
 	ld xbc, (xsp + 16)
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, DispTimeSet_CellSelectFwd
 	ld xwa, (xsp + 16)
-	cp xwa, 0x1e0008b
+	cp xwa, EVT_GET_FIXED_ROW_STR
 	jrl z, DispTimeSet_GetNameB
-	cp xwa, 0x1e0008a
+	cp xwa, EVT_GET_FIXED_COL_STR
 	jrl z, DispTimeSet_GetNameA
-	cp xwa, EVT_SELECT_CONFIRM
+	cp xwa, EVT_HIDE
 	jrl z, DispTimeSet_SelectInit
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, PmExpFilter2_EventDispatch
-	sub xbc, 0x1c00017
+	sub xbc, EVT_INDEXSW_UP
 	cp xbc, 0x0
 	jrl lt, DispTimeSet_DefaultInherited
 	cp xbc, 0x6
@@ -9198,7 +9198,7 @@ PmExpFilter2_EventDispatch:
 	call GetViewInstance
 	ld (xsp + 8), xhl
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	ld (xsp + 4), xhl
@@ -9211,7 +9211,7 @@ PmExpFilter2_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	call SetDialUp
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
@@ -9222,7 +9222,7 @@ PmExpFilter2_EventDispatch:
 	ld de, wa
 	extz xde
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	call SetDialDown
 	ld wa, 1:i3
 	jrl DispTimeSet_SetDialEnabled
@@ -9240,20 +9240,20 @@ DispTimeSet_SelectInit:
 	cp	hl, 0:i3
 	jrl	z, SeqSave_ReturnZeroJmp
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	SendEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
 	ld	(32422:16), 72
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	PostEvent
-	ld	xwa, 21102606
-	ld	xbc, 31588373
+	ld	xwa, NAKA_MAINFUNC_MainTimeFlashFunc
+	ld	xbc, EVT_TOSHI_FLASH_LOAD
 	ld	xde, (xsp+12)
 	call	MainFuncCall
 	jrl	SeqSave_ReturnZeroJmp
@@ -9263,20 +9263,20 @@ AcDispTimeSetGridBoxProc_Evt1C00017:
 	ld	xde, (xsp+12)
 	call	InheritedProc
 	ld	xwa, xiz
-	ld	xbc, 31457360
+	ld	xbc, EVT_CHECK_INDEX
 	ld	xde, (xsp+12)
 	call	SendEvent
 	or	xhl, xhl
 	jr	z, DispTimeSet_DialFallback
 	ld	xwa, xiz
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	dec	1, hl
 	extz	xhl
 	add	xhl, 4294901760
 	ld	xwa, xiz
-	ld	xbc, 29360142
+	ld	xbc, EVT_SELE_DRAW
 	ld	xde, xhl
 	call	SendEvent
 	ld	xwa, xiz
@@ -9286,7 +9286,7 @@ AcDispTimeSetGridBoxProc_Evt1C00017:
 	jrl	SeqSave_ReturnZeroJmp
 DispTimeSet_DialFallback:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -9302,11 +9302,11 @@ DispTimeSet_DialFallback:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -9317,20 +9317,20 @@ AcDispTimeSetGridBoxProc_Evt1C00018:
 	ld xde, (xsp + 12)
 	call InheritedProc
 	ld xwa, xiz
-	ld xbc, 0x1e00050
+	ld xbc, EVT_CHECK_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
 	jr z, DispTimeSet_DialFallback2
 	ld xwa, xiz
-	ld xbc, EVT_OBJECT_STATE_QUERY
+	ld xbc, EVT_GET_SELECTED_CEL
 	ld xde, 0:i3
 	call SendEvent
 	inc 1, hl
 	extz xhl
 	add xhl, 0xffff0000
 	ld xwa, xiz
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, xhl
 	call SendEvent
 	ld xwa, xiz
@@ -9341,7 +9341,7 @@ AcDispTimeSetGridBoxProc_Evt1C00018:
 
 DispTimeSet_DialFallback2:
 	ld xwa, xiz
-	ld xbc, 0x1e00091
+	ld xbc, EVT_CHECK_GRID_INDEX
 	ld xde, (xsp + 12)
 	call SendEvent
 	or xhl, xhl
@@ -9357,11 +9357,11 @@ DispTimeSet_DialFallback2:
 	ld xde, (xsp + 12)
 	call SetAutoInc
 	ld xwa, xiz
-	ld xbc, 0x1c00017
+	ld xbc, EVT_INDEXSW_UP
 	ld xde, (xsp + 12)
 	call SetDialUp
 	ld xwa, xiz
-	ld xbc, 0x1c00018
+	ld xbc, EVT_INDEXSW_DOWN
 	ld xde, (xsp + 12)
 	call SetDialDown
 	ld wa, 1:i3
@@ -9425,9 +9425,9 @@ DispTimeSetGridCheck:
 	lda xsp, (xsp - 44)
 	push xiz
 	ld xwa, xbc
-	cp xbc, 0x1e0008d
+	cp xbc, EVT_REQUEST_GRID_DRAW
 	jrl z, DispTimeSetCheck_CellDecode
-	sub xwa, 0x1c00017
+	sub xwa, EVT_INDEXSW_UP
 	cp xwa, 0x0
 	jrl lt, DispTimeSet_ReturnZero
 	cp xwa, 0x6
@@ -9449,7 +9449,7 @@ DispTimeSetGridCheck:
 DispTimeSet_EventDispatch:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -9557,7 +9557,7 @@ DispTimeSetGridCheck_Entry5:
 DispTimeSetGridCheck_Evt1C00018:
 	call	GetFocusObject
 	ld	xwa, xhl
-	ld	xbc, EVT_OBJECT_STATE_QUERY
+	ld	xbc, EVT_GET_SELECTED_CEL
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xde, xhl
@@ -9692,7 +9692,7 @@ DispTimeSetGridCheck_Evt1C0001C:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip2:
 	lda	xwa, (213224:24)
@@ -9717,7 +9717,7 @@ DispTimeSetGridCheck_Skip2:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip3:
 	lda	xbc, (213226:24)
@@ -9744,7 +9744,7 @@ DispTimeSetGridCheck_Skip3:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip4:
 	lda	xwa, (213228:24)
@@ -9769,7 +9769,7 @@ DispTimeSetGridCheck_Skip4:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip5:
 	lda	xiz, (213230:24)
@@ -9796,7 +9796,7 @@ DispTimeSetGridCheck_Skip5:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetGridCheck_Skip6:
 	lda	xiz, (213232:24)
@@ -9819,7 +9819,7 @@ DispTimeSetGridCheck_Skip6:
 	call	GetFocusObject
 	ld	xwa, xhl
 	lda	xde, (xsp+40)
-	ld	xbc, 31457420
+	ld	xbc, EVT_GRID_DRAW
 	jrl	DispTimeSet_SendEventReturn
 DispTimeSetCheck_CellDecode:
 	lda xhl, (xsp + 0x28)
@@ -9849,7 +9849,7 @@ DispTimeSetCheck_CellDecode:
 	call GetFocusObject
 	ld XWA,XHL
 	lda xde, (xsp + 0x28)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, DispTimeSet_SendEventReturn
 DispTimeSetCheck_TryRow3:
 .Lc_fbc3fb:
@@ -9871,7 +9871,7 @@ DispTimeSetCheck_TryRow3:
 	call GetFocusObject
 	ld XWA,XHL
 	lda xde, (xsp + 0x28)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, DispTimeSet_SendEventReturn
 DispTimeSetCheck_TryRow4:
 .Lc_fbc43b:
@@ -9892,7 +9892,7 @@ DispTimeSetCheck_TryRow4:
 	call GetFocusObject
 	ld XWA,XHL
 	lda xde, (xsp + 0x28)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jrl t, DispTimeSet_SendEventReturn
 DispTimeSetCheck_TryRow5:
 .Lc_fbc476:
@@ -9913,7 +9913,7 @@ DispTimeSetCheck_TryRow5:
 	call GetFocusObject
 	ld XWA,XHL
 	lda xde, (xsp + 0x28)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jr t, DispTimeSet_SendEventReturn
 DispTimeSetCheck_TryRow6:
 .Lc_fbc4b0:
@@ -9934,7 +9934,7 @@ DispTimeSetCheck_TryRow6:
 	call GetFocusObject
 	ld XWA,XHL
 	lda xde, (xsp + 0x28)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 	jr t, DispTimeSet_SendEventReturn
 DispTimeSetCheck_TryRow7:
 .Lc_fbc4ea:
@@ -9955,7 +9955,7 @@ DispTimeSetCheck_TryRow7:
 	call GetFocusObject
 	ld XWA,XHL
 	lda xde, (xsp + 0x28)
-	ld XBC,0x01e0008c
+	ld XBC,EVT_GRID_DRAW
 DispTimeSet_SendEventReturn:
 	call SendEvent
 
@@ -9966,10 +9966,10 @@ DispTimeSet_ReturnZero:
 	ret
 
 DispTimeSetOKFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, DispTimeSetOK_ReturnZero
-	ld xwa, 0x142000e
-	ld xbc, 0x1e20014
+	ld xwa, NAKA_MAINFUNC_MainTimeFlashFunc
+	ld xbc, EVT_TOSHI_FLASH_WRITE
 	call MainFuncCall
 
 DispTimeSetOK_ReturnZero:
@@ -9977,21 +9977,21 @@ DispTimeSetOK_ReturnZero:
 	ret
 
 MainTimeFlashFunc:
-	cp	xbc, 31588373
+	cp	xbc, EVT_TOSHI_FLASH_LOAD
 	jr	z, MainTimeFlash_DispatchCmd
-	cp	xbc, 31588372
+	cp	xbc, EVT_TOSHI_FLASH_WRITE
 	jr	nz, MainTimeFlash_ReturnZero
 	ld	(32422:16), 40
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 	ld	wa, 5:i3
 	call	CtrlPanel_IndicatorJumpTable
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 	jr	MainTimeFlash_ReturnZero
 MainTimeFlash_DispatchCmd:
@@ -10009,7 +10009,7 @@ NormScreenProc:
 	ld (xsp + 8), xbc
 	ld xiz, xwa
 	ld xwa, (xsp + 8)
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jr z, NormScreen_InitHandler
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -10026,17 +10026,17 @@ NormScreen_InitHandler:
 	bit	0, wa
 	jr	z, NormScreen_ClearBit
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	SendEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
 	ld	(32422:16), 36
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	PostEvent
 	res	0, (0x8cec:16)
 NormScreen_ClearBit:
@@ -10065,13 +10065,13 @@ IvWindowPageControlProc:
 	push xiz
 	ld (xsp + 8), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, IvWindowPgCtl_OkHandler
-	cp xbc, 0x1c20006
+	cp xbc, EVT_PAGE_SET
 	jrl z, IvWindowPgCtl_PageChanged
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, IvWindowPgCtl_Deselect
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, IvWindowPgCtl_Init
 	ld xwa, xiz
 	ld xde, (xsp + 8)
@@ -10099,10 +10099,10 @@ IvWindowPgCtl_SetPageIndex:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20004
+	ld xbc, EVT_FRT_PAGE_CHANGE
 	call SendEvent
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 1:i3
 	jrl UI_MainFuncCall_Execute
 
@@ -10110,8 +10110,8 @@ IvWindowPgCtl_Deselect:
 	ld xwa, xiz
 	ld xde, (xsp + 8)
 	call InheritedProc
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 0:i3
 	jrl UI_MainFuncCall_Execute
 
@@ -10131,20 +10131,20 @@ IvWindowPgCtl_PageChanged:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	call SendEvent
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 22)
 	cpw (xwa), 0x5
 	jr ge, IvWindowPgCtl_DisableFunc
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 1:i3
 	jrl UI_MainFuncCall_Execute
 
 IvWindowPgCtl_DisableFunc:
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 0:i3
 	jrl UI_MainFuncCall_Execute
 
@@ -10165,8 +10165,8 @@ IvWindowPgCtl_OkHandler:
 	cpw (xwa), 0x4
 	jr ge, IvWindowPgCtl_TryNextPage
 	incw 1, (xwa)
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 1:i3
 	call MainFuncCall
 	ld xwa, (xsp + 4)
@@ -10174,7 +10174,7 @@ IvWindowPgCtl_OkHandler:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 	jr	IvWindowPgCtl_SendPageEvent
 
 IvWindowPgCtl_TryNextPage:
@@ -10191,8 +10191,8 @@ IvWindowPgCtl_TryNextPage:
 IvWindowPgCtl_SetNextPage:
 	ld xbc, (xbc)
 	ld (xbc), wa
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 1:i3
 	call MainFuncCall
 	ld xwa, (xsp + 4)
@@ -10200,15 +10200,15 @@ IvWindowPgCtl_SetNextPage:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 
 IvWindowPgCtl_SendPageEvent:
 	call SendEvent
 	jrl IvWindowPgCtl_ReturnZero
 
 IvWindowPgCtl_DisableAll:
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 0:i3
 
 UI_MainFuncCall_Execute:
@@ -10225,8 +10225,8 @@ IvWindowPgCtl_JumpToEnd:
 	cpw (XWA), 0x0003
 	jr z, IvWindowPgCtl_ReturnZero
 	ldw (XWA), 0x0003
-	ld XWA,0x01400001
-	ld XBC,0x01e000ab
+	ld XWA,NAKA_MAINFUNC_MainTitleControl
+	ld XBC,EVT_OTHER_PART_LED
 	ld xde, 1:i3
 	call MainFuncCall
 	ld XWA,(XSP+0x04)
@@ -10234,7 +10234,7 @@ IvWindowPgCtl_JumpToEnd:
 	ld DE,(XWA)
 	exts XDE
 	ld XWA,0xffffffff
-	ld XBC,0x01c0001e
+	ld XBC,EVT_PAGE_CHANGE
 	jr t, IvWindowPgCtl_DoSendEvent
 IvWindowPgCtl_JumpToStart:
 	ld xwa, (xsp + 4)
@@ -10242,8 +10242,8 @@ IvWindowPgCtl_JumpToStart:
 	cpw (xwa), 0x1
 	jr z, IvWindowPgCtl_ReturnZero
 	ldw (xwa), 0x1
-	ld xwa, 0x1400001
-	ld xbc, 0x1e000ab
+	ld xwa, NAKA_MAINFUNC_MainTitleControl
+	ld xbc, EVT_OTHER_PART_LED
 	ld xde, 1:i3
 	call MainFuncCall
 	ld xwa, (xsp + 4)
@@ -10251,7 +10251,7 @@ IvWindowPgCtl_JumpToStart:
 	ld de, (xwa)
 	exts xde
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0001e
+	ld xbc, EVT_PAGE_CHANGE
 
 IvWindowPgCtl_DoSendEvent:
 	call SendEvent
@@ -10271,13 +10271,13 @@ IvPageOverWrProc:
 	ld (xsp + 8), xbc
 	ld (xsp + 12), xwa
 	ld xwa, (xsp + 8)
-	cp xwa, 0x1c0001e
+	cp xwa, EVT_PAGE_CHANGE
 	jrl z, IvPageOverWr_PageChanged
-	cp xwa, 0x1c20004
+	cp xwa, EVT_FRT_PAGE_CHANGE
 	jr z, IvPageOverWr_PageSelect
-	cp xwa, 0x1e0003a
+	cp xwa, EVT_GET_STRING
 	jr z, IvPageOverWr_GetName
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jr z, IvPageOverWr_KeyPress
 	ld xwa, (xsp + 12)
 	ld xbc, (xsp + 8)
@@ -10291,7 +10291,7 @@ IvPageOverWr_KeyPress:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 12)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl IvPageOverWr_SendAndReturn
 
@@ -10308,13 +10308,13 @@ IvPageOverWr_PageSelect:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1e00094
+	ld xbc, EVT_CHECK_SHOW_WINDOW
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPageOverWr_PageSelect2
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent
 
@@ -10328,7 +10328,7 @@ IvPageOverWr_PageSelect2:
 	cp xwa, (xsp + 4)
 	jr nz, PmNamingCheck_CleanupRet
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	jr IvPageOverWr_SendAndReturn
 
@@ -10337,13 +10337,13 @@ IvPageOverWr_PageChanged:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 24)
-	ld xbc, 0x1e00094
+	ld xbc, EVT_CHECK_SHOW_WINDOW
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, IvPageOverWr_PageChanged2
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_SELECT_CONFIRM
+	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 
@@ -10357,7 +10357,7 @@ IvPageOverWr_PageChanged2:
 	cp xwa, (xsp + 4)
 	jr nz, PmNamingCheck_CleanupRet
 	ld xwa, (xiz + 24)
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 
 IvPageOverWr_SendAndReturn:
@@ -10376,13 +10376,13 @@ PmNamingCheck:
 	push	xiz
 	ld	(xsp+22), xde
 	ld	xiz, xwa
-	cp	xbc, 29360135
+	cp	xbc, EVT_SW_IN
 	jr	z, PmNaming_HandleKeyPress
-	cp	xbc, 31457404
+	cp	xbc, EVT_GET_STRING_LENGTH
 	jr	z, PmNaming_GetKeyLayout
-	cp	xbc, 31457412
+	cp	xbc, EVT_GET_NAMING_MODE
 	jrl	z, PmBankNamingCheck_Ret
-	cp	xbc, 31457338
+	cp	xbc, EVT_GET_STRING
 	jrl	nz, PmBankNamingCheck_Ret
 	ld	xwa, 768
 	call	AcApcToggleProc_Helper
@@ -10407,7 +10407,7 @@ PmNaming_HandleKeyPress:
 	call	GetNamingWindowID
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457338
+	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	ld	xwa, 768
 	call	AcApcToggleProc_Helper
@@ -10418,7 +10418,7 @@ PmNaming_HandleKeyPress:
 	call	GetNamingWindowID
 	ld	xwa, xhl
 	lda	xde, (xsp+4)
-	ld	xbc, 31457338
+	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	lda	xwa, (xsp+4)
 	push	xwa
@@ -10427,11 +10427,11 @@ PmNaming_HandleKeyPress:
 	call	Free_Compare2
 	inc	8, xsp
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263185
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_PMVIEW
 	call	PostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 1:i3
 	call	PostEvent
 PmNaming_HandleF_Confirm:
@@ -10439,11 +10439,11 @@ PmNaming_HandleF_Confirm:
 	cp xwa, 0xf
 	jr nz, PmBankNamingCheck_Ret
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000d1
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_PMVIEW
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 1:i3
 	call PostEvent
 
@@ -10460,13 +10460,13 @@ PmBankNamingCheck:
 	push xiz
 	ld (xsp + 22), xde
 	ld xiz, xwa
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr z, PmBankNaming_HandleKeyPress
-	cp xbc, 0x1e0007c
+	cp xbc, EVT_GET_STRING_LENGTH
 	jr z, PmBankNaming_GetKeyLayout
-	cp xbc, 0x1e00084
+	cp xbc, EVT_GET_NAMING_MODE
 	jrl z, MssNameFunc_CleanupRet
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, MssNameFunc_CleanupRet
 	call BitMapOut_PrepareRender_CheckBit1
 	ld a, l
@@ -10486,18 +10486,18 @@ PmBankNaming_HandleKeyPress:
 	call GetNamingWindowID
 	ld xwa, xhl
 	lda xde, (xsp + 4)
-	ld xbc, 0x1e0003a
+	ld xbc, EVT_GET_STRING
 	call SendEvent
 	call BitMapOut_PrepareRender_CheckBit1
 	ld a, l
 	lda xbc, (xsp + 4)
 	call BitMapOut_UpdateWidget_Finalize
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000d1
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_PMVIEW
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 1:i3
 	call PostEvent
 
@@ -10506,11 +10506,11 @@ PmBankNaming_HandleF_Confirm:
 	cp xwa, 0xf
 	jr nz, MssNameFunc_CleanupRet
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000d1
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_PMVIEW
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 1:i3
 	call PostEvent
 
@@ -10526,7 +10526,7 @@ MssNameFunc:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jrl lt, MssName_ReturnZero
 	cp xbc, 0x9
@@ -10639,15 +10639,15 @@ AcPmBkNoBoxProc:
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jr z, AcPmBkNoBox_Match
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, AcPmBkNoBox_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, AcPmBkNoBox_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, AcPmBkNoBox_Focus
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, AcPmBkNoBox_Init
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
@@ -10717,7 +10717,7 @@ AcPmBkNoBox_FormatBankNo:
 AcPmBkNoBox_SendConfirm:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 
 UI_AcPmBkNoBoxProc_Return:
@@ -10733,15 +10733,15 @@ AcBkNoBoxProc:
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jr z, AcBkNoBox_Match
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, AcBkNoBox_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, AcBkNoBox_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, AcBkNoBox_Focus
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, AcBkNoBox_Init
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
@@ -10793,7 +10793,7 @@ AcBkNoBox_Match:
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+260)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	call	SendEvent
 UI_AcBkNoBoxProc_Return:
 	ld xhl, 0:i3
@@ -10809,17 +10809,17 @@ MsaModeScreenProc:
 	ld	(xsp+20), xde
 	ld	xiz, xbc
 	ld	(xsp+24), xwa
-	cp	xiz, 29360135
+	cp	xiz, EVT_SW_IN
 	jrl	z, MsaMode_OK
-	cp	xiz, 29360142
+	cp	xiz, EVT_SELE_DRAW
 	jrl	z, MsaMode_Select
-	cp	xiz, EVT_POST_INIT
+	cp	xiz, EVT_DRAW
 	jrl	z, MsaMode_Paint
-	cp	xiz, 29360156
+	cp	xiz, EVT_LSW_DATA
 	jr	z, MsaMode_Match
-	cp	xiz, 29360139
+	cp	xiz, EVT_PAINT
 	jr	z, MsaMode_Show
-	cp	xiz, EVT_MENU_OPEN
+	cp	xiz, EVT_SHOW
 	jrl	nz, MsaMode_Default
 	ld	xwa, (xsp+20)
 	cp	xwa, 4
@@ -10872,7 +10872,7 @@ MsaMode_Match:
 	ld wa, (xix + 4)
 	ld (xbc), wa
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	jr MsaMode_DispatchSelect
 
@@ -10882,7 +10882,7 @@ MsaMode_Paint:
 	ld xde, (xsp + 20)
 	call InheritedProc
 	ld xwa, (xsp + 24)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 
 MsaMode_DispatchSelect:
@@ -10983,14 +10983,14 @@ MsaMode_OK:
 	jr nz, MsaMode_OK_DefaultForward
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, MsaMode_OK_Navigate
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00079
+	ld xbc, EVT_INTERRUPT_EXIT
 	ld xde, 0:i3
 	call SendEvent
 	jr MsaMode_ReturnZero
@@ -11018,8 +11018,8 @@ MsaMode_OK_ModeChange:
 
 MsaMode_OK_Navigate:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00040
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_CTMENU
 	call PostEvent
 
 MsaMode_ReturnZero:
@@ -11051,17 +11051,17 @@ PmemModeBoxProc:
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x01
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jrl z, PmemMode_OK
-	cp xiz, 0x1c0000e
+	cp xiz, EVT_SELE_DRAW
 	jrl z, PmemMode_Select
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jrl z, PmemMode_Paint
-	cp xiz, 0x1c0001c
+	cp xiz, EVT_LSW_DATA
 	jr z, PmemMode_Match
-	cp xiz, 0x1c0000b
+	cp xiz, EVT_PAINT
 	jr z, PmemMode_Show
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jrl nz, PmemMode_Default
 	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
@@ -11100,7 +11100,7 @@ PmemMode_Match:
 	ld wa, (xix + 4)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	jrl PmemMode_DispatchSelect
 
@@ -11193,7 +11193,7 @@ PmemMode_Paint:
 
 	ld XWA, (xsp + 0x0118)
 
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 
 	ld xde, 0:i3
 
@@ -11295,14 +11295,14 @@ PmemMode_OK:
 	jr nz, PmemMode_OK_DefaultForward
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e0007a
+	ld xbc, EVT_IS_INTERRUPT
 	ld xde, 0:i3
 	call SendEvent
 	or xhl, xhl
 	jr z, PmemMode_OK_Navigate
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e00079
+	ld xbc, EVT_INTERRUPT_EXIT
 	ld xde, 0:i3
 	call SendEvent
 	jr PmemMode_OK_DefaultForward
@@ -11327,8 +11327,8 @@ PmemMode_ReturnZero:
 
 PmemMode_OK_Navigate:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00040
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_CTMENU
 	call PostEvent
 
 PmemMode_OK_DefaultForward:
@@ -11355,33 +11355,33 @@ AcPmBkEditBoxProc:
 	push xiz
 	stl_dri XDE, 0xfd, 0x2e, 0x01
 	stl_dri XWA, 0xfd, 0x32, 0x01
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jrl z, AcPmBkEdit_OK
-	cp xbc, 0x1c00018
+	cp xbc, EVT_INDEXSW_DOWN
 	jrl z, AcPmBkEdit_AutoIncDown
-	cp xbc, 0x1c0001a
+	cp xbc, EVT_INDEXSW_DOWN_AIC
 	jrl z, AcPmBkEdit_ScrollDown
-	cp xbc, 0x1c00017
+	cp xbc, EVT_INDEXSW_UP
 	jrl z, AcPmBkEdit_ScrollUp
-	cp xbc, 0x1c00019
+	cp xbc, EVT_INDEXSW_UP_AIC
 	jrl z, AcPmBkEdit_AutoIncUp
-	cp xbc, 0x1c0001d
+	cp xbc, EVT_RAM_DATA
 	jrl z, AcPmBkEdit_Assign
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jrl z, AcPmBkEdit_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jrl z, AcPmBkEdit_ShowHide
-	cp xbc, 0x1e0003d
+	cp xbc, EVT_CALC_PARAM
 	jrl z, AcPmBkEdit_AddDelta
-	cp xbc, 0x1e0003b
+	cp xbc, EVT_SET_PARAM
 	jrl z, AcPmBkEdit_SetValue
 	lda xwa, (xsp + 46)
 	ld (xsp + 8), xwa
-	cp xbc, 0x1c20003
+	cp xbc, EVT_PM_NAME
 	jrl z, AcPmBkEdit_BankEdit
-	cp xbc, 0x1c20002
+	cp xbc, EVT_PMBK_NAME
 	jr z, AcPmBkEdit_BankChanged
-	cp xbc, 0x1e0003a
+	cp xbc, EVT_GET_STRING
 	jrl nz, AcPmBkEdit_Default
 	ld XWA, (xsp + 0x012e)
 	ld (xwa), 0x0
@@ -11392,8 +11392,8 @@ AcPmBkEditBoxProc:
 	ld w, 0x0:opc
 	extz xwa
 	stl_dri XWA, 0xfd, 0x2e, 0x01
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20010
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x012e)
 	call MainFuncCall
 	jrl AcPmBkEdit_ReturnZero
@@ -11439,7 +11439,7 @@ AcPmBkEdit_BankChanged:
 
 	ld XWA, (xsp + 0x0132)
 
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 
 	call	SendEvent
 
@@ -11455,8 +11455,8 @@ AcPmBkEdit_BankChanged_UpdateLoop:
 	ld w, 0x0:opc
 	extz xwa
 	stl_dri XWA, 0xfd, 0x2e, 0x01
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20012
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_NAME_REQ
 	ld XDE, (xsp + 0x012e)
 	call MainFuncCall
 	inc1b_erp 0xfb
@@ -11530,13 +11530,13 @@ AcPmBkEdit_SetValue:
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 24), xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00046
+	ld xbc, EVT_GET_RAM_SIZE
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 24)
@@ -11545,13 +11545,13 @@ AcPmBkEdit_SetValue:
 	ld (xwa + 14), xbc
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00043
+	ld xbc, EVT_GET_MAX
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 30), xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00044
+	ld xbc, EVT_GET_MIN
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 24)
@@ -11565,13 +11565,13 @@ AcPmBkEdit_AddDelta:
 	ld (xsp + 8), xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 24), xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00046
+	ld xbc, EVT_GET_RAM_SIZE
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 24)
@@ -11580,13 +11580,13 @@ AcPmBkEdit_AddDelta:
 	ld (xwa + 14), xbc
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00043
+	ld xbc, EVT_GET_MAX
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 30), xhl
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 50)
-	ld xbc, 0x1e00044
+	ld xbc, EVT_GET_MIN
 	ld xde, 0:i3
 	call ApFuncCall
 	lda xwa, (xsp + 24)
@@ -11602,12 +11602,12 @@ AcPmBkEdit_ShowHide:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld (xsp + 8), xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00046
+	ld xbc, EVT_GET_RAM_SIZE
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xwa, (xsp + 8)
@@ -11623,7 +11623,7 @@ AcPmBkEdit_Assign:
 	call GetViewInstance
 	ld xiz, xhl
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e00045
+	ld xbc, EVT_GET_RAM_ADDRESS
 	ld xde, 0:i3
 	call ApFuncCall
 	ld XDE, (xsp + 0x012e)
@@ -11634,7 +11634,7 @@ AcPmBkEdit_Assign:
 	ld xwa, (xde + 14)
 	ld (xbc), xwa
 	ld XWA, (xsp + 0x0132)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	jrl AcPmBkEdit_DispatchAndReturn
 
@@ -11646,18 +11646,18 @@ AcPmBkEdit_AutoIncUp:
 	call GetViewInstance
 	ld xiz, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003e
+	ld xbc, EVT_GET_LARGE_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jrl AcPmBkEdit_DispatchAndReturn
 
 AcPmBkEdit_ScrollUp:
@@ -11668,18 +11668,18 @@ AcPmBkEdit_ScrollUp:
 	call GetViewInstance
 	ld xiz, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003f
+	ld xbc, EVT_GET_SMALL_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	jrl AcPmBkEdit_DispatchAndReturn
 
 AcPmBkEdit_ScrollDown:
@@ -11690,20 +11690,20 @@ AcPmBkEdit_ScrollDown:
 	call GetViewInstance
 	ld xiz, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003e
+	ld xbc, EVT_GET_LARGE_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, xhl
 	jr AcPmBkEdit_DispatchAndReturn
 
@@ -11715,20 +11715,20 @@ AcPmBkEdit_AutoIncDown:
 	call GetViewInstance
 	ld xiz, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003c
+	ld xbc, EVT_CHECK_SELECTED
 	ld XDE, (xsp + 0x012e)
 	call SendEvent
 	or xhl, xhl
 	jrl z, AcPmBkEdit_ReturnZero
 	ld xwa, (xiz + 50)
-	ld xbc, 0x1e0003f
+	ld xbc, EVT_GET_SMALL_STEP
 	ld xde, 0:i3
 	call ApFuncCall
 	cpl hl
 	cplw_erp 0xee
 	inc 1, xhl
 	ld XWA, (xsp + 0x0132)
-	ld xbc, 0x1e0003d
+	ld xbc, EVT_CALC_PARAM
 	ld xde, xhl
 
 AcPmBkEdit_DispatchAndReturn:
@@ -11751,11 +11751,11 @@ AcPmBkEdit_OK:
 	cp xwa, 0x9
 	jrl nz, AcPmBkEdit_ReturnZero
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000d3
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_PMBKNAME
 	call PostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 1:i3
 	jrl AcPmBkEdit_OK_NavComplete
 
@@ -11765,35 +11765,35 @@ AcPmBkEdit_OK_Load:
 	cp	l, 0:i3
 	jr	z, AcPmBkEdit_OK_LoadEmpty
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263186
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_PMNAME
 	call	PostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457434
+	ld	xbc, EVT_SET_HOLD
 	ld	xde, 1:i3
 	call	PostEvent
 	jr	AcPmBkEdit_ReturnZero
 AcPmBkEdit_OK_LoadEmpty:
 	ld	(32422:16), 73
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 	jr	AcPmBkEdit_ReturnZero
 AcPmBkEdit_OK_SaveDelete:
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000d0
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_PMBKSEL
 	call PostEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e000aa
+	ld xbc, EVT_CHECK_HOLD
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 0:i3
 	jr z, AcPmBkEdit_ReturnZero
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 1:i3
 
 AcPmBkEdit_OK_NavComplete:
@@ -11815,7 +11815,7 @@ AcPmBkEdit_Epilogue:
 
 PmBkNameFunc:
 	ld xhl, xwa
-	sub xbc, 0x1e0003e
+	sub xbc, EVT_GET_LARGE_STEP
 	cp xbc, 0x0
 	jr lt, PmBkName_ReturnZero
 	cp xbc, 0x9
@@ -11858,17 +11858,17 @@ GmOnOffFunc:
 	lda	xsp, (xsp-12)
 	push	xiz
 	ld	xiz, xwa
-	cp	xbc, 0x1e00083
+	cp	xbc, EVT_LSW_DATA_REQ
 	jr	z, GmOnOff_GetBoundsRect
-	cp	xbc, 0x1e0003f
+	cp	xbc, EVT_GET_SMALL_STEP
 	jrl	z, GmOnOff_DefaultReturn
-	cp	xbc, 0x1e0003e
+	cp	xbc, EVT_GET_LARGE_STEP
 	jr	z, GmOnOff_Return1
-	cp	xbc, 0x1e00041
+	cp	xbc, EVT_GET_LSW_OUTPUT
 	jr	z, GmOnOff_Return1
-	cp	xbc, 0x1e00040
+	cp	xbc, EVT_GET_LSW_ADDRESS
 	jr	z, GmOnOff_Return0xC0
-	cp	xbc, 0x1e00042
+	cp	xbc, EVT_GET_LSW_STRING
 	jrl	nz, GmOnOff_DefaultReturn
 	pushw	(xde+4)
 	pushw	237
@@ -11914,7 +11914,7 @@ GmOnOff_GetBoundsRect:
 	ld xbc, 0x20
 	call DrawIcons
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20006
+	ld xbc, EVT_PAGE_SET
 	ld xde, 3:i3
 	jr GmOnOff_SendAndReturn
 
@@ -11927,7 +11927,7 @@ GmOnOff_CheckDesign:
 	call	DrawBox
 GmOnOff_SendHideEvent:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c20006
+	ld xbc, EVT_PAGE_SET
 	ld xde, 1:i3
 
 GmOnOff_SendAndReturn:
@@ -11948,21 +11948,21 @@ VariScreenProc:
 	stl_dri XBC, 0xfd, 0x32, 0x02
 	stl_dri XWA, 0xfd, 0x36, 0x02
 	ld XWA, (xsp + 0x0232)
-	cp xwa, 0x1c00007
+	cp xwa, EVT_SW_IN
 	jrl z, VariScreen_HandleOK
-	cp xwa, 0x1e20005
+	cp xwa, EVT_TOSHI_SOUND_NAME
 	jrl z, VariScreen_HandleEnumNotify
-	cp xwa, EVT_INIT_HOOK
+	cp xwa, EVT_PARA_DRAW
 	jrl z, VariScreen_HandleConfirm
-	cp xwa, 0x1c0000e
+	cp xwa, EVT_SELE_DRAW
 	jrl z, VariScreen_HandleSelect
-	cp xwa, EVT_POST_INIT
+	cp xwa, EVT_DRAW
 	jrl z, VariScreen_HandlePaint
-	cp xwa, 0x1c0000b
+	cp xwa, EVT_PAINT
 	jr z, VariScreen_HandleShow
-	cp xwa, 0x1c20007
+	cp xwa, EVT_TVARI_PAINT
 	jr z, VariScreen_RefreshAfterInit
-	cp xwa, EVT_MENU_OPEN
+	cp xwa, EVT_SHOW
 	jrl nz, VariScreen_DefaultHandler
 	ld XWA, (xsp + 0x0236)
 	ld XBC, (xsp + 0x0232)
@@ -11977,7 +11977,7 @@ VariScreen_RefreshAfterInit:
 	ld XWA, (xsp + 0x0236)
 	call GetViewInstance
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	jrl VariScreen_SendAndReturn
 
@@ -12155,11 +12155,11 @@ VariScreen_HandlePaint:
 	pushw	247
 	call	DrawString
 	ld	xwa, (xsp+566)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, (xsp+566)
-	ld	xbc, 0x1c0000e
+	ld	xbc, EVT_SELE_DRAW
 	ld	xde, 0:i3
 VariScreen_SendAndReturn:
 	call SendEvent
@@ -13344,7 +13344,7 @@ VariScreen_OK_Dispatch:
 	sub wa, 0xa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13368,7 +13368,7 @@ VariScreen_OK_HalfRange1:
 	sub wa, 0x9
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13392,7 +13392,7 @@ VariScreen_OK_HalfRange2:
 	dec 8, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13416,7 +13416,7 @@ VariScreen_OK_HalfRange3:
 	dec 7, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13440,7 +13440,7 @@ VariScreen_OK_HalfRange4:
 	dec 6, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13471,7 +13471,7 @@ VariScreen_OK_CalcRow0:
 	ld xwa, (xbc + 60)
 	ld (xwa), de
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13504,7 +13504,7 @@ VariScreen_OK_CalcRow1:
 	ld xwa, (xbc + 60)
 	ld (xwa), de
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13537,7 +13537,7 @@ VariScreen_OK_CalcRow2:
 	ld xwa, (xbc + 60)
 	ld (xwa), de
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13570,7 +13570,7 @@ VariScreen_OK_CalcRow3:
 	ld xwa, (xbc + 60)
 	ld (xwa), de
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13603,7 +13603,7 @@ VariScreen_OK_CalcRow4:
 	ld xwa, (xbc + 60)
 	ld (xwa), de
 	ld XWA, (xsp + 0x0236)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0236)
@@ -13631,7 +13631,7 @@ VariScreen_OK_PageScroll:
 	jr ge, VariScreen_OK_PageScrollWrap
 	incw 1, (xbc)
 	ld XWA, (xsp + 0x0236)
-	ld xbc, EVT_POST_INIT
+	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jr VariScreen_OK_PageSendEvent
 
@@ -13640,7 +13640,7 @@ VariScreen_OK_PageScrollWrap:
 	jr le, VariScreen_OK_PageScrollDown
 	ldw (xbc), 0x1
 	ld XWA, (xsp + 0x0236)
-	ld xbc, EVT_POST_INIT
+	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 
 VariScreen_OK_PageSendEvent:
@@ -13656,7 +13656,7 @@ VariScreen_OK_PageScrollDown:
 	jr le, VariScreen_OK_PageScrollDownWrap
 	decw	1, (xbc)
 	ld XWA, (xsp + 0x0236)
-	ld xbc, EVT_POST_INIT
+	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jr VariScreen_OK_PageDownSendEvent
 
@@ -13671,7 +13671,7 @@ VariScreen_OK_PageScrollDownWrap:
 	jr le, VariScreen_OK_ForwardToInherited
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0236)
-	ld xbc, EVT_POST_INIT
+	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 
 VariScreen_OK_PageDownSendEvent:
@@ -13725,19 +13725,19 @@ RVariScreenProc:
 	ld	(xsp+548), xbc
 	ld	(xsp+552), xwa
 	ld	xbc, (xsp+548)
-	cp	xbc, 29360135
+	cp	xbc, EVT_SW_IN
 	jrl	z, RVari_OK	; -> 0xFC0721
-	cp	xbc, 31588363
+	cp	xbc, EVT_TOSHI_RHYTHM_NAME
 	jrl	z, RVari_EnumNotify	; -> 0xFC0310
-	cp	xbc, EVT_INIT_HOOK
+	cp	xbc, EVT_PARA_DRAW
 	jrl	z, RVari_Confirm	; -> 0xFBFCB7
-	cp	xbc, 29360142
+	cp	xbc, EVT_SELE_DRAW
 	jrl	z, RVari_Select	; -> 0xFBEFBE
-	cp	xbc, EVT_POST_INIT
+	cp	xbc, EVT_DRAW
 	jrl	z, RVari_Paint	; -> 0xFBEE6A
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jrl	z, RVari_Show	; -> 0xFBEE52
-	cp	xbc, EVT_MENU_OPEN
+	cp	xbc, EVT_SHOW
 	jrl	nz, RVari_Default	; -> 0xFC11E6
 	ld	xwa, (xsp+552)
 	call	GetViewInstance
@@ -13902,11 +13902,11 @@ RVari_Paint:
 	pushw	247
 	call	DrawString
 	ld	xwa, (xsp+552)
-	ld	xbc, EVT_INIT_HOOK
+	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xwa, (xsp+552)
-	ld	xbc, 29360142
+	ld	xbc, EVT_SELE_DRAW
 	ld	xde, 0:i3
 	call	SendEvent
 	ld	xhl, 0:i3

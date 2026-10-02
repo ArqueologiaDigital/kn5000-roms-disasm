@@ -3498,21 +3498,21 @@ PmBankScreenProc:
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x01
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jrl z, PmBank_OK
-	cp xiz, 0x1c20002
+	cp xiz, EVT_PMBK_NAME
 	jrl z, PmBank_BankChanged
-	cp xiz, EVT_INIT_HOOK
+	cp xiz, EVT_PARA_DRAW
 	jrl z, PmBank_Confirm
-	cp xiz, 0x1c0000e
+	cp xiz, EVT_SELE_DRAW
 	jrl z, PmBank_Select
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jr z, PmBank_Paint
-	cp xiz, 0x1e2000e
+	cp xiz, EVT_PM_BANK_SET_NOTIFY
 	jr z, PmBank_EnumNotify
-	cp xiz, 0x1c0000b
+	cp xiz, EVT_PAINT
 	jr z, PmBank_Show
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jrl nz, PmBank_Default
 	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
@@ -3524,8 +3524,8 @@ PmBank_Show:
 	ld xbc, xiz
 	ld XDE, (xsp + 0x0114)
 	call InheritedProc
-	ld xwa, 0x1420008
-	ld xbc, 0x1e2000f
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_SET
 	ld xde, 0:i3
 	jrl PmBank_DispatchBankSelect
 
@@ -3535,13 +3535,13 @@ PmBank_EnumNotify:
 	ld XWA, (xsp + 0x0114)
 	ldfr_berp A, 0xfb
 	ld XWA, (xsp + 0x0118)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xde, 0:i3
 	ldto_berp E, 0xfb
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	call SendEvent
 	jrl PmBank_ReturnZero
 
@@ -3609,8 +3609,8 @@ PmBank_Select_DrawFirstRow:
 	ld wa, (xwa)
 	exts xwa
 	stl_dri XWA, 0xfd, 0x14, 0x01
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20010
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x0114)
 	call MainFuncCall
 	ld xwa, (xsp + 4)
@@ -3650,8 +3650,8 @@ PmBank_Select_DrawSecondRow:
 	ld wa, (xwa)
 	exts xwa
 	stl_dri XWA, 0xfd, 0x14, 0x01
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20010
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x0114)
 	jrl PmBank_DispatchBankSelect
 
@@ -3668,8 +3668,8 @@ PmBank_Confirm_Loop:
 	ld xwa, 0:i3
 	ldto_berp A, 0xfb
 	stl_dri XWA, 0xfd, 0x14, 0x01
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20010
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_NAME
 	ld XDE, (xsp + 0x0114)
 	call MainFuncCall
 	inc1b_erp 0xfb
@@ -3824,18 +3824,18 @@ PmBank_OK:
 
 PmBank_OK_SaveDelete:
 	ld xwa, 0xffffffff
-	ld xbc, EVT_HD_INIT_PARAMS
-	ld xde, 0x1a000d1
+	ld xbc, EVT_INTERRUPT_TITLE
+	ld xde, TITLE_PMVIEW
 	call PostEvent
 	call GetTitleNow
 	ld xwa, xhl
-	ld xbc, 0x1e000aa
+	ld xbc, EVT_CHECK_HOLD
 	ld xde, 0:i3
 	call SendEvent
 	cp hl, 0:i3
 	jr z, PmBank_OK_Forward
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e0009a
+	ld xbc, EVT_SET_HOLD
 	ld xde, 1:i3
 	call PostEvent
 
@@ -3846,62 +3846,62 @@ PmBank_OK_Forward:
 	jrl PmBank_CallHandler
 
 PmBank_OK_Slot0:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 0:i3
 	jrl PmBank_DispatchBankSelect
 
 PmBank_OK_Slot1:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 1:i3
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot2:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 2:i3
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot3:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 3:i3
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot4:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 4:i3
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot5:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 5:i3
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot6:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 6:i3
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot7:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 7:i3
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot8:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 0x8
 	jr PmBank_DispatchBankSelect
 
 PmBank_OK_Slot9:
-	ld xwa, 0x1420008
-	ld xbc, 0x1e20011
+	ld xwa, NAKA_MAINFUNC_MainPmGet
+	ld xbc, EVT_PM_BANK_MK
 	ld xde, 0x9
 
 PmBank_DispatchBankSelect:
@@ -3931,21 +3931,21 @@ SineWaveScreenProc:
 	stl_dri XDE, 0xfd, 0x14, 0x01
 	ld xiz, xbc
 	stl_dri XWA, 0xfd, 0x18, 0x01
-	cp xiz, 0x1c00007
+	cp xiz, EVT_SW_IN
 	jrl z, PmBank_OnEnumNotify
-	cp xiz, EVT_INIT_HOOK
+	cp xiz, EVT_PARA_DRAW
 	jrl z, PmBank_OnConfirm
-	cp xiz, 0x1c0000e
+	cp xiz, EVT_SELE_DRAW
 	jrl z, PmBank_OnSelect
-	cp xiz, EVT_POST_INIT
+	cp xiz, EVT_DRAW
 	jrl z, PmBank_OnPaint
-	cp xiz, 0x1e20017
+	cp xiz, EVT_KEY_INFO
 	jr z, PmBank_DrawRegionInfo
-	cp xiz, 0x1e20002
+	cp xiz, EVT_SVARI_SET
 	jr z, PmBank_OnBankChanged
-	cp xiz, 0x1c0000b
+	cp xiz, EVT_PAINT
 	jr z, PmBank_InitDisplay
-	cp xiz, EVT_MENU_OPEN
+	cp xiz, EVT_SHOW
 	jrl nz, PmBank_DefaultPassthrough
 	ld XWA, (xsp + 0x0118)
 	ld xbc, xiz
@@ -3953,8 +3953,8 @@ SineWaveScreenProc:
 	jr PmBank_CallInherited
 
 PmBank_InitDisplay:
-	ld xwa, 0x1420001
-	ld xbc, 0x1e20001
+	ld xwa, NAKA_MAINFUNC_MainSvariIni
+	ld xbc, EVT_SVARI_INI
 	ld xde, 0:i3
 	call MainFuncCall
 	ld XWA, (xsp + 0x0118)
@@ -3979,7 +3979,7 @@ PmBank_OnBankChanged:
 	extz wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0118)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	jrl PmBank_SendEventAndDone
 PmBank_DrawRegionInfo:
@@ -4119,7 +4119,7 @@ PmBank_OnPaint:
 	ld xde, TransposeNoteStr_C_0x64
 	call DrawString
 	ld XWA, (xsp + 0x0118)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 
 PmBank_SendEventAndDone:
@@ -4403,11 +4403,11 @@ WallHomeEditCheck:
 	ld xiz, xde
 	ld (xsp + 4), xwa
 	ld xwa, xbc
-	cp xbc, 0x1e00082
+	cp xbc, EVT_RAM_DATA_REQ
 	jrl z, WallHomeEditCheck_ReturnFalse
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, WallHomeEdit_EventDispatch
-	sub xwa, 0x1e0003e
+	sub xwa, EVT_GET_LARGE_STEP
 	cp xwa, 0x0
 	jr lt, WallHomeEditCheck_ReturnFalse
 	cp xwa, 0x9
@@ -4430,20 +4430,20 @@ WallHomeEdit_EventDispatch:
 	cp	hl, 0:i3
 	jr	z, WallHomeEditCheck_ReturnFalse
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	SendEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
 	ld	(32422:16), 72
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	PostEvent
-	ld	xwa, 21102607
-	ld	xbc, 31588373
+	ld	xwa, NAKA_MAINFUNC_MainWallSetFlashFunc
+	ld	xbc, EVT_TOSHI_FLASH_LOAD
 	ld	xde, xiz
 	call	MainFuncCall
 WallHomeEditCheck_ReturnFalse:
@@ -4492,9 +4492,9 @@ WallMenuEditCheck:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1e00082
+	cp xbc, EVT_RAM_DATA_REQ
 	jr z, WallOthEditCheck_RetZero
-	sub xwa, 0x1e0003e
+	sub xwa, EVT_GET_LARGE_STEP
 	cp xwa, 0x0
 	jr lt, WallOthEditCheck_RetZero
 	cp xwa, 0x9
@@ -4543,9 +4543,9 @@ WallOthEditCheck:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xbc
-	cp xbc, 0x1e00082
+	cp xbc, EVT_RAM_DATA_REQ
 	jr z, WallOthCheckLoop_RetZero
-	sub xwa, 0x1e0003e
+	sub xwa, EVT_GET_LARGE_STEP
 	cp xwa, 0x0
 	jr lt, WallOthCheckLoop_RetZero
 	cp xwa, 0x9
@@ -4591,10 +4591,10 @@ WallOthEditCheck_Epilogue:
 	ret
 
 WallSetOKFunc:
-	cp xbc, 0x1c00007
+	cp xbc, EVT_SW_IN
 	jr nz, WallSetOK_ReturnZero
-	ld xwa, 0x142000f
-	ld xbc, 0x1e20014
+	ld xwa, NAKA_MAINFUNC_MainWallSetFlashFunc
+	ld xbc, EVT_TOSHI_FLASH_WRITE
 	call MainFuncCall
 
 WallSetOK_ReturnZero:
@@ -4602,23 +4602,23 @@ WallSetOK_ReturnZero:
 	ret
 
 MainWallSetFlashFunc:
-	cp	xbc, 31588374
+	cp	xbc, EVT_WALL_INI
 	jr	z, MainWallFlash_ClearAndRestore
-	cp	xbc, 31588373
+	cp	xbc, EVT_TOSHI_FLASH_LOAD
 	jr	z, MainWallFlash_DispatchAudio
-	cp	xbc, 31588372
+	cp	xbc, EVT_TOSHI_FLASH_WRITE
 	jrl	nz, MainWallFlash_ReturnZero
 	ld	(32422:16), 40
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 	ldw	wa, 8
 	call	CtrlPanel_IndicatorJumpTable
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	jr	MainWallFlash_PostEvent
 MainWallFlash_DispatchAudio:
 	ldw wa, 0x8
@@ -4628,26 +4628,26 @@ MainWallFlash_DispatchAudio:
 MainWallFlash_ClearAndRestore:
 	ld	(32422:16), 40
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	ApPostEvent
 	call	Gfx_ClearFrameBuffers
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29360149
-	ld	xde, 27263048
+	ld	xbc, EVT_CHANGE_TITLE
+	ld	xde, TITLE_CTWALLSET
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 MainWallFlash_PostEvent:
 	call ApPostEvent
 
@@ -4658,14 +4658,14 @@ MainWallFlash_ReturnZero:
 WallUsrIniFunc:
 	cp (0x0340ea:24), 0x00
 	jr nz, WallUsrIni_PostBootEvent
-	ld xwa, 0x142000f
-	ld xbc, 0x1e20016
+	ld xwa, NAKA_MAINFUNC_MainWallSetFlashFunc
+	ld xbc, EVT_WALL_INI
 	call MainFuncCall
 	jr WallUsrIni_ReturnZero
 
 WallUsrIni_PostBootEvent:
 	ld xwa, 0x48000f
-	ld xbc, EVT_MENU_OPEN
+	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call PostEvent
 
@@ -4674,7 +4674,7 @@ WallUsrIni_ReturnZero:
 	ret
 
 WallSureLngCheck:
-	cp xbc, 0x1e0009f
+	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, WallSureLng_ReturnZero
 	lda xhl, (TransposeNoteStr_C_0x21E:24)
 	ret
@@ -4685,15 +4685,15 @@ WallSureLng_ReturnZero:
 
 WallUsrIniNoFunc:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00015
-	ld xde, 0x1a00048
+	ld xbc, EVT_CHANGE_TITLE
+	ld xde, TITLE_CTWALLSET
 	call PostEvent
 	ld xhl, 0:i3
 	ret
 
 WallUsrIniYesFunc:
-	ld xwa, 0x142000f
-	ld xbc, 0x1e20016
+	ld xwa, NAKA_MAINFUNC_MainWallSetFlashFunc
+	ld xbc, EVT_WALL_INI
 	call MainFuncCall
 	ld xhl, 0:i3
 	ret
@@ -4705,7 +4705,7 @@ WallSureShowHideFunc:
 WallUsrShowHideFunc:
 	push	xiz
 	ld	xiz, xde
-	cp	xbc, EVT_SELECT_CONFIRM
+	cp	xbc, EVT_HIDE
 	jr	nz, MainVariSet_ReturnZero
 	ld	xde, xiz
 	call	InheritedProc
@@ -4716,20 +4716,20 @@ WallUsrShowHideFunc:
 	cp	hl, 0:i3
 	jr	z, MainVariSet_ReturnZero
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	SendEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	PostEvent
 	ld	(32422:16), 72
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	PostEvent
-	ld	xwa, 21102607
-	ld	xbc, 31588373
+	ld	xwa, NAKA_MAINFUNC_MainWallSetFlashFunc
+	ld	xbc, EVT_TOSHI_FLASH_LOAD
 	ld	xde, xiz
 	call	MainFuncCall
 MainVariSet_ReturnZero:
@@ -4739,7 +4739,7 @@ MainVariSet_ReturnZero:
 
 MainVariSet:
 	push	xiz
-	cp	xbc, 31588352
+	cp	xbc, EVT_VARI_WRITE
 	jr	nz, MainVariSet_Done
 	ld	xiz, xde
 	ld	a, (xiz)
@@ -4767,7 +4767,7 @@ MainVariSet_Done:
 
 MainSvariIni:
 	push	xiz
-	cp	xbc, 31588353
+	cp	xbc, EVT_SVARI_INI
 	jr	nz, MainSvariIni_ReturnZero
 	pushw	6
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -4792,11 +4792,11 @@ MainSvariIni:
 	ld	(xiz+3), l
 	ld	(xiz+4), (0x8c9e)
 	ld	xwa, 4294967295
-	ld	xbc, 0x1e20002
+	ld	xbc, EVT_SVARI_SET
 	ld	xde, xiz
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 0x1e00023
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	ApPostEvent
 MainSvariIni_ReturnZero:
@@ -4806,7 +4806,7 @@ MainSvariIni_ReturnZero:
 
 MainRvariIni:
 	push	xiz
-	cp	xbc, 31588359
+	cp	xbc, EVT_RVARI_INI
 	jr	nz, MainRvariIni_ReturnZero
 	pushw	6
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -4826,11 +4826,11 @@ MainRvariIni:
 	call	AccVoice_GetChannelCount_Wrap
 	ld	(xiz+3), l
 	ld	xwa, 4294967295
-	ld	xbc, 31588360
+	ld	xbc, EVT_RVARI_SET
 	ld	xde, xiz
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	ApPostEvent
 MainRvariIni_ReturnZero:
@@ -4841,7 +4841,7 @@ MainRvariIni_ReturnZero:
 MainGetSndGrpName:
 	dec	6, xsp
 	push	xiz
-	cp	xbc, 31588356
+	cp	xbc, EVT_GET_SND_GRP_NAME
 	jr	nz, MainGetSndGrpName_ReturnZero
 	pushw	18
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -4865,11 +4865,11 @@ MainGetSndGrpName:
 	ld	xbc, xiz
 	call	16703033
 	ld	xwa, 4294967295
-	ld	xbc, 0x1e20006
+	ld	xbc, EVT_SOUND_GRP_NAME
 	ld	xde, xiz
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 0x1e00023
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	ApPostEvent
 MainGetSndGrpName_ReturnZero:
@@ -4882,7 +4882,7 @@ MainGetSndName:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, xde
-	cp	xbc, 31588355
+	cp	xbc, EVT_GET_SND_NAME
 	jr	nz, MainGetSndName_ReturnZero
 	pushw	18
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -4904,11 +4904,11 @@ MainGetSndName:
 	ld	c, (xsp+4)
 	ld	(xwa), c
 	ld	xwa, 4294967295
-	ld	xbc, 31588357
+	ld	xbc, EVT_TOSHI_SOUND_NAME
 	ld	xde, (xsp+6)
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+6)
 	call	ApPostEvent
 MainGetSndName_ReturnZero:
@@ -4920,7 +4920,7 @@ MainGetSndName_ReturnZero:
 MainGetRhyGrpName:
 	dec	6, xsp
 	push	xiz
-	cp	xbc, 31588362
+	cp	xbc, EVT_GET_RHY_GRP_NAME
 	jr	nz, MainGetRhyGrpName_ReturnZero
 	pushw	17
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -4946,11 +4946,11 @@ MainGetRhyGrpName:
 	lda	xsp, (xsp+10)
 	ld	(xiz+16), 0
 	ld	xwa, 4294967295
-	ld	xbc, 31588364
+	ld	xbc, EVT_RHYTHM_GRP_NAME
 	ld	xde, xiz
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, xiz
 	call	ApPostEvent
 MainGetRhyGrpName_ReturnZero:
@@ -4963,7 +4963,7 @@ MainGetRhyName:
 	dec	6, xsp
 	push	xiz
 	ld	xiz, xde
-	cp	xbc, 31588361
+	cp	xbc, EVT_GET_RHY_NAME
 	jr	nz, MainGetRhyName_ReturnZero
 	pushw	15
 	call	SLIDE_Decompress_4K_Init_Helper2
@@ -4990,11 +4990,11 @@ MainGetRhyName:
 	ld	c, (xsp+4)
 	ld	(xwa), c
 	ld	xwa, 4294967295
-	ld	xbc, 31588363
+	ld	xbc, EVT_TOSHI_RHYTHM_NAME
 	ld	xde, (xsp+6)
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+6)
 	call	ApPostEvent
 MainGetRhyName_ReturnZero:
@@ -5007,20 +5007,20 @@ MainPmGet:
 	dec 8, xsp
 	pushw_erp 0xfa
 	ld (xsp + 6), xde
-	cp xbc, 0x1e20012
+	cp xbc, EVT_PM_NAME_REQ
 	jrl z, MainPmGet_HandleBankDisplay
-	cp xbc, 0x1e20011
+	cp xbc, EVT_PM_BANK_MK
 	jr z, MainPmGet_HandleCheckBit2
-	cp xbc, 0x1e20010
+	cp xbc, EVT_PM_BANK_NAME
 	jr z, MainPmGet_HandleBankData
-	cp xbc, 0x1e2000f
+	cp xbc, EVT_PM_BANK_SET
 	jrl nz, MainPmGet_ReturnZero
 	call BitMapOut_PrepareRender_CheckBit1
 	ld h, 0x0:opc
 	extz xhl
 	ld (xsp + 6), xhl
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e2000e
+	ld xbc, EVT_PM_BANK_SET_NOTIFY
 	ld xde, (xsp + 6)
 	jrl MainPmGet_PostEvent
 
@@ -5039,11 +5039,11 @@ MainPmGet_HandleBankData:
 	lda	xbc, (xde+1)
 	call	BitMapOut_UpdateWidget_PostDraw
 	ld	xwa, 4294967295
-	ld	xbc, 29491202
+	ld	xbc, EVT_PMBK_NAME
 	ld	xde, (xsp+2)
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+2)
 	jr	MainPmGet_PostEvent	; -> 0xFC23E8
 MainPmGet_HandleCheckBit2:
@@ -5054,7 +5054,7 @@ MainPmGet_HandleCheckBit2:
 	ld xde, 0:i3
 	ldto_berp E, 0xfb
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	jr MainPmGet_PostEvent
 
 MainPmGet_HandleBankDisplay:
@@ -5094,7 +5094,7 @@ MainPmGet_HandleBankDisplay:
 
 	ld xwa, 0xffffffff
 
-	ld xbc, 0x1c20003
+	ld xbc, EVT_PM_NAME
 
 	ld xde, (xsp + 2)
 
@@ -5102,7 +5102,7 @@ MainPmGet_HandleBankDisplay:
 
 	ld xwa, 0xffffffff
 
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 
 	ld xde, (xsp + 2)
 
@@ -5120,7 +5120,7 @@ MainSysControl:
 	dec	4, xsp
 	push	qiz
 	ld	(xsp+2), xde
-	cp	xbc, 31588371
+	cp	xbc, EVT_SYS_INI
 	jr	nz, MainSysControl_PostDispatchFinalize
 	ld	(32422:16), 40
 	ldw	wa, 238
@@ -5192,15 +5192,15 @@ MainSysCtrl_DelayInner:
 	cp	bc, 4096
 	jr	c, MainSysCtrl_DelayOuter
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 1:i3
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 29360148
-	ld	xde, 25165825
+	ld	xbc, EVT_CHANGE_MODE
+	ld	xde, NAKA_MODE_MD_NORMAL
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457438
+	ld	xbc, EVT_SET_NOT_DRAW_FLAG
 	ld	xde, 0:i3
 	call	ApPostEvent
 	ld	(32422:16), 35
@@ -5211,7 +5211,7 @@ MainSysCtrl_DelayInner:
 	inc	4, xsp
 	ret
 CntIniFunc:
-	cp xbc, EVT_CPANEL_EVENT
+	cp xbc, EVT_ACTIVATE_STATE
 	jr nz, CntIniFunc_ReturnZero
 	dec 2, xde
 	cp xde, 0x0
@@ -5233,9 +5233,9 @@ CntIniFunc_ReturnZero:
 	ret
 
 MainMssSetUp:
-	cp	xbc, 31588377
+	cp	xbc, EVT_OTP_CNT_RESET
 	jr	z, MainMssSetUp_ClearMode
-	cp	xbc, 31588376
+	cp	xbc, EVT_OTP_CNT_SET
 	jr	nz, MainMssSetUp_ReturnZero
 	ld	(36026:16), de
 	incw	1, (36026:16)
@@ -5253,15 +5253,15 @@ AcFreeSplitBoxProc:
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jr z, AcFreeSplit_ValueChanged
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, AcFreeSplit_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, AcFreeSplit_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, AcFreeSplit_Release
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, AcFreeSplit_Init
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz
@@ -5338,7 +5338,7 @@ AcFreeSplit_LookupNoteLabel:
 AcFreeSplit_SendConfirmEvent:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	jrl AcFreeSplit_SendEventAndReturn
 
 AcFreeSplit_CheckSecondKey:
@@ -5382,7 +5382,7 @@ AcFreeSplit_LookupSecondNote:
 AcFreeSplit_SendSecondConfirm:
 	lda xde, (xsp + 4)
 	ld XWA, (xsp + 0x0104)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 
 AcFreeSplit_SendEventAndReturn:
 	call SendEvent
@@ -5396,7 +5396,7 @@ AcFreeSplit_PopAndReturn:
 	ret
 
 AcTranspose_ParamData:
-	ld	xhl, 0x01020004
+	ld	xhl, NAKA_FUNC_AcFreeSplitBoxProc
 	ret
 AcTranspose_ParamData_End:
 
@@ -5405,15 +5405,15 @@ AcTransposeBoxProc:
 	push xiz
 	ld xiz, xde
 	stl_dri XWA, 0xfd, 0x04, 0x01
-	cp xbc, 0x1c0001c
+	cp xbc, EVT_LSW_DATA
 	jr z, AcTranspose_ValueChanged
-	cp xbc, 0x1c0000c
+	cp xbc, EVT_REPAINT
 	jr z, AcTranspose_ShowHide
-	cp xbc, 0x1c0000b
+	cp xbc, EVT_PAINT
 	jr z, AcTranspose_ShowHide
-	cp xbc, EVT_SELECT_CONFIRM
+	cp xbc, EVT_HIDE
 	jr z, AcTranspose_Release
-	cp xbc, EVT_MENU_OPEN
+	cp xbc, EVT_SHOW
 	jr z, AcTranspose_Init
 	ld XWA, (xsp + 0x0104)
 	ld xde, xiz

@@ -46,15 +46,15 @@ GetSoundName_DefaultString:
 	inc	8, xsp
 GetSoundName_DispatchResult:
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00020
+	ld xbc, EVT_SOUND_NAME
 	ld xde, (xsp + 6)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 6)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 10)
 	jr SoundLookup_DispatchAndReturn
 
@@ -85,7 +85,7 @@ SoundLookup_ByCategory:
 	extz	xde
 	add	xde, xbc
 	ld	xwa, 4294967295
-	ld	xbc, 29360163
+	ld	xbc, EVT_SOUND_SW_NO
 SoundLookup_DispatchAndReturn:
 	call ApPostEvent
 	jrl Sound_Navigate_Return
@@ -377,7 +377,7 @@ GetSoundBankCount_DoLookup:
 MainGetRhythmName:
 	dec	4, xsp
 	push	qiz
-	cp	xbc, 31457375
+	cp	xbc, EVT_GET_RHYTHM_NAME
 	jrl	nz, MainGetRhythmName_Return	; -> 0xF98C6F
 	ld	xwa, 163840
 	call	AcApcToggleProc_Helper
@@ -419,11 +419,11 @@ MainGetRhythmName:
 	ld	xwa, (xsp+2)
 	ld	(xwa+13), 0
 	ld	xwa, 4294967295
-	ld	xbc, 29360161
+	ld	xbc, EVT_RHYTHM_NAME
 	ld	xde, (xsp+2)
 	call	ApPostEvent
 	ld	xwa, 4294967295
-	ld	xbc, 31457315
+	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+2)
 	call	ApPostEvent
 MainGetRhythmName_Return:
@@ -488,15 +488,15 @@ MainGetPmemName_StoreResult:
 	ld (xwa + 4), xbc
 	ld (xbc + 17), 0x0
 	ld xwa, 0xffffffff
-	ld xbc, 0x1c00022
+	ld xbc, EVT_PMEM_NAME
 	ld xde, (xsp + 2)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 2)
 	call ApPostEvent
 	ld xwa, 0xffffffff
-	ld xbc, 0x1e00023
+	ld xbc, EVT_AUTO_FREE
 	ld xde, (xsp + 6)
 	call ApPostEvent
 	ld xhl, 0:i3
@@ -509,9 +509,9 @@ MainTrSwControl:
 	ld (xsp), xde
 	ld xwa, (xsp)
 	extz wa
-	cp xbc, 0x1e00093
+	cp xbc, EVT_TOGGLE_TRACK_SWITCH
 	jr z, MainTrSwControl_HandleChannel
-	cp xbc, 0x1e00092
+	cp xbc, EVT_REQUEST_TRACK_SWITCH
 	jr nz, MainTrSwControl_Return
 	call SeqVoice_DispatchEventToHandler
 	ld xwa, (xsp)

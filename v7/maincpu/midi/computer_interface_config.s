@@ -19,13 +19,13 @@
 ; =============================================================================
 
 TtComputerConnection:
-	cp	xbc, 29360140
+	cp	xbc, EVT_REPAINT
 	jr	z, 60
-	cp	xbc, 29360139
+	cp	xbc, EVT_PAINT
 	jr	z, 52
-	cp	xbc, EVT_SELECT_CONFIRM
+	cp	xbc, EVT_HIDE
 	jr	z, 44
-	cp	xbc, EVT_MENU_OPEN
+	cp	xbc, EVT_SHOW
 	jr	nz, 36
 	or	xde, xde
 	jr	nz, 32
@@ -34,8 +34,8 @@ TtComputerConnection:
 	jr	nz, 24
 	ld	(32422:16), 70
 	ld	xwa, 4294967295
-	ld	xbc, EVT_HD_INIT_PARAMS
-	ld	xde, 27263214
+	ld	xbc, EVT_INTERRUPT_TITLE
+	ld	xde, TITLE_MESAGE
 	call	16421701
 ComputerConnectionTitleExit:
 	ld xhl, 0:i3
@@ -51,15 +51,15 @@ MdCmptCnctFunc:
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
-	cp xde, 0x1e0003f
+	cp xde, EVT_GET_SMALL_STEP
 	jrl z, CmptCnctBlockingReturn
-	cp xde, 0x1e0003e
+	cp xde, EVT_GET_LARGE_STEP
 	jrl z, CmptCnctBlockingReturn
-	cp xde, 0x1e00041
+	cp xde, EVT_GET_LSW_OUTPUT
 	jrl z, CmptCnctBlockingReturn
-	cp xde, 0x1e00040
+	cp xde, EVT_GET_LSW_ADDRESS
 	jrl z, CmptCnctInvalidInputReturn
-	cp xde, 0x1e00042
+	cp xde, EVT_GET_LSW_STRING
 	jr z, CmptCnctDrawConnectionDiagram
 	ld xhl, 0:i3
 	jrl MdCmptCnct_Epilogue
@@ -135,15 +135,15 @@ MdCmptCnct_Epilogue:
 MdPcgModeFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1e0003f
+	cp xbc, EVT_GET_SMALL_STEP
 	jr z, PcgMode_BlockingReturn
-	cp xbc, 0x1e0003e
+	cp xbc, EVT_GET_LARGE_STEP
 	jr z, PcgMode_BlockingReturn
-	cp xbc, 0x1e00041
+	cp xbc, EVT_GET_LSW_OUTPUT
 	jr z, PcgMode_BlockingReturn
-	cp xbc, 0x1e00040
+	cp xbc, EVT_GET_LSW_ADDRESS
 	jr z, PcgMode_InvalidReturn
-	cp xbc, 0x1e00042
+	cp xbc, EVT_GET_LSW_STRING
 	jr z, PcgModeGridEventStart
 	ld xhl, 0:i3
 	jr MdPcgMode_Epilogue
@@ -199,15 +199,15 @@ MdPcgMode_Epilogue:
 MdDrumTypeFunc:
 	push xiz
 	ld xiz, xwa
-	cp xbc, 0x1e0003f
+	cp xbc, EVT_GET_SMALL_STEP
 	jr z, DrumType_BlockingReturn
-	cp xbc, 0x1e0003e
+	cp xbc, EVT_GET_LARGE_STEP
 	jr z, DrumType_BlockingReturn
-	cp xbc, 0x1e00041
+	cp xbc, EVT_GET_LSW_OUTPUT
 	jr z, DrumType_BlockingReturn
-	cp xbc, 0x1e00040
+	cp xbc, EVT_GET_LSW_ADDRESS
 	jr z, DrumType_InvalidReturn
-	cp xbc, 0x1e00042
+	cp xbc, EVT_GET_LSW_STRING
 	jr z, DrumType_GridEvent
 	ld xhl, 0:i3
 	jr MdDrumType_Epilogue
@@ -269,7 +269,7 @@ MdSetupLoadFunc:
 	lda xix, (xsp + 4)
 	ldw bc, 0x8
 	ldirw
-	sub xhl, 0x1e0003e
+	sub xhl, EVT_GET_LARGE_STEP
 	cp xhl, 0x0
 	jr lt, SetupLoadInvalidIndex
 	cp xhl, 0x9

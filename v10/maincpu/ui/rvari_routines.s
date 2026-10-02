@@ -1734,11 +1734,11 @@ RVari_OK:
 	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld XWA, (xsp + 0x0228)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xhl, 0:i3
@@ -1760,11 +1760,11 @@ RVari_OK_TypeF_Input8A:
 	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld XWA, (xsp + 0x0228)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xhl, 0:i3
@@ -1786,11 +1786,11 @@ RVari_OK_TypeF_Input8B:
 	ld XWA, (xsp + 0x0228)
 	calr RVari_UpdateDisplayNotify
 	ld XWA, (xsp + 0x0228)
-	ld xbc, EVT_INIT_HOOK
+	ld xbc, EVT_PARA_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld xhl, 0:i3
@@ -1809,7 +1809,7 @@ RVari_OK_TypeF_Input9:
 	sla wa, 2
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -1831,7 +1831,7 @@ RVari_OK_TypeF_InputA:
 	inc 1, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -1853,7 +1853,7 @@ RVari_OK_TypeF_InputB:
 	inc 2, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -1875,7 +1875,7 @@ RVari_OK_TypeF_InputC:
 	inc 3, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -1953,7 +1953,7 @@ RVari_OK_TypeE_DispatchInput:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -1988,7 +1988,7 @@ RVari_OK_TypeE_Input89:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2023,7 +2023,7 @@ RVari_OK_TypeE_Input8A:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2058,7 +2058,7 @@ RVari_OK_TypeE_Input8B:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2093,7 +2093,7 @@ RVari_OK_TypeE_Input8C:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2135,7 +2135,7 @@ RVari_OK_TypeE_Input8:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2177,7 +2177,7 @@ RVari_OK_TypeE_Input9:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2219,7 +2219,7 @@ RVari_OK_TypeE_InputA:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2261,7 +2261,7 @@ RVari_OK_TypeE_InputB:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2303,7 +2303,7 @@ RVari_OK_TypeE_InputC:
 	add wa, de
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2354,7 +2354,7 @@ RVari_OK_TypeNE_DispatchInput:
 	sub wa, 0xa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2383,7 +2383,7 @@ RVari_OK_TypeNE_Input89:
 	sub wa, 0x9
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2412,7 +2412,7 @@ RVari_OK_TypeNE_Input8A:
 	dec 8, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2441,7 +2441,7 @@ RVari_OK_TypeNE_Input8B:
 	dec 7, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2470,7 +2470,7 @@ RVari_OK_TypeNE_Input8C:
 	dec 6, wa
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2504,7 +2504,7 @@ RVari_OK_TypeNE_Input8:
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2538,7 +2538,7 @@ RVari_OK_TypeNE_Input9:
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2572,7 +2572,7 @@ RVari_OK_TypeNE_InputA:
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2606,7 +2606,7 @@ RVari_OK_TypeNE_InputB:
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2640,7 +2640,7 @@ RVari_OK_TypeNE_InputC:
 	ld xbc, (xiz + 60)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000e
+	ld xbc, EVT_SELE_DRAW
 	ld xde, 0:i3
 	call SendEvent
 	ld XWA, (xsp + 0x0228)
@@ -2667,7 +2667,7 @@ RVari_OK_PageScroll:
 	ld xwa, (xiz + 44)
 	incw 1, (xwa)
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call SendEvent
 	jr RVari_OK_CheckPageDown
@@ -2678,7 +2678,7 @@ RVari_OK_PageUp_AtMax:
 	ld xwa, (xiz + 44)
 	ldw (xwa), 0x1
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call SendEvent
 
@@ -2692,7 +2692,7 @@ RVari_OK_CheckPageDown:
 	ld xwa, (xiz + 44)
 	decm 1, (xwa)
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call SendEvent
 	jr RVari_OK_ForwardDefault
@@ -2704,7 +2704,7 @@ RVari_OK_PageDown_AtMin:
 	ld wa, (0x0340bc:24)
 	ld (xbc), wa
 	ld XWA, (xsp + 0x0228)
-	ld xbc, 0x1c0000b
+	ld xbc, EVT_PAINT
 	ld xde, 0:i3
 	call SendEvent
 
@@ -2746,12 +2746,12 @@ RVari_UpdateDisplayNotify:
 	ld xwa, (xbc + 60)
 	ld wa, (xwa)
 	ld (xiz + 3), a
-	ld xwa, 0x1420000
-	ld xbc, 0x1e20000
+	ld xwa, NAKA_MAINFUNC_MainVariSet
+	ld xbc, EVT_VARI_WRITE
 	ld xde, xiz
 	call MainFuncCall
-	ld xwa, 0x1400003
-	ld xbc, 0x1e00023
+	ld xwa, NAKA_MAINFUNC_MainAutoFree
+	ld xbc, EVT_AUTO_FREE
 	ld xde, xiz
 	call MainFuncCall
 	pop xiz
