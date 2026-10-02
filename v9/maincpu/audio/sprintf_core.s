@@ -3088,7 +3088,7 @@ Sprintf_StringLength:
 Sprintf_StrLen_ScanLoop:
 	cp A, (-xhl)
 	jr z, Sprintf_StrLen_Return
-	djnz xbc, Sprintf_StrLen_ScanLoop
+	djnz16 bc, Sprintf_StrLen_ScanLoop
 
 Sprintf_StrLen_NotFound:
 	ld xhl, 0:i3

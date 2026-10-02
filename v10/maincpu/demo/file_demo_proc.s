@@ -4735,7 +4735,7 @@ FileIO_CopyString_StoreAndCont:
 
 FileIO_CopyString_Return:
 	ld (xwa+), 0x00
-	djnz xde, FileIO_CopyString_Return
+	djnz16 de, FileIO_CopyString_Return
 	ret
 
 FileIO_BuildFilePath:

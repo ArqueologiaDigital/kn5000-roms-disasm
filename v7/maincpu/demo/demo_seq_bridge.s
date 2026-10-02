@@ -770,7 +770,7 @@ SeqSlot_InitEntryLoop:
 	inc 1, hl
 	inc 1, de
 	add xiy, 0x100
-	djnz xbc, SeqSlot_InitEntryLoop
+	djnz16 bc, SeqSlot_InitEntryLoop
 	andmi8 (xiy), 0x7f
 	ld (xiy + 1), hl
 	ld (xiy + 5), 0x82
@@ -782,35 +782,35 @@ SeqSlot_ClearF250Loop:
 	ld (xhl), 0x0
 	ldw (xhl + 1), 0xffff
 	add xhl, 0x3
-	djnz xbc, SeqSlot_ClearF250Loop
+	djnz16 bc, SeqSlot_ClearF250Loop
 	ld xhl, 0xc9e
 	ldw bc, 0x10
 
 SeqSlot_ClearC9ELoop:
 	ldw (xhl), 0xffff
 	inc 2, xhl
-	djnz xbc, SeqSlot_ClearC9ELoop
+	djnz16 bc, SeqSlot_ClearC9ELoop
 	ld xhl, 0xcae
 	ldw bc, 0x10
 
 SeqSlot_InitCAELoop:
 	ld (xhl), 0x5
 	inc 1, xhl
-	djnz xbc, SeqSlot_InitCAELoop
+	djnz16 bc, SeqSlot_InitCAELoop
 	ld xhl, 0xf1f8
 	ldw bc, 0x10
 
 SeqSlot_ClearF1F8Loop:
 	ldw (xhl), 0xffff
 	inc 2, xhl
-	djnz xbc, SeqSlot_ClearF1F8Loop
+	djnz16 bc, SeqSlot_ClearF1F8Loop
 	ld xhl, 0xf218
 	ldw bc, 0x10
 
 SeqSlot_InitF218Loop:
 	ld (xhl), 0x5
 	inc 1, xhl
-	djnz xbc, SeqSlot_InitF218Loop
+	djnz16 bc, SeqSlot_InitF218Loop
 	ret
 
 DispatchHandler_ResolveSlot:

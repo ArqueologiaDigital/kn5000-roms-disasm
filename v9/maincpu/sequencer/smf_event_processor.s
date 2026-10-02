@@ -1045,7 +1045,7 @@ SMF_WriteChannel_FileUnderflow:
 	jrl SMF_FlushAndFinalize
 
 SMF_WriteChannel_Continue:
-	djnz xbc, SMF_WriteChannelDataLoop
+	djnz16 bc, SMF_WriteChannelDataLoop
 	ld (4376:16), xix
 	cp (6709:16), 0
 	jrl z, SMF_FinishChannelAndGetNextEvent

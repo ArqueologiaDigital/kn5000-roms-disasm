@@ -105,13 +105,13 @@
 	; === DRAM Initialization Delay 1 ===
 	ldw bc, 0x400
 Boot_Init__pause1:
-	djnz xbc, Boot_Init__pause1
+	djnz16 bc, Boot_Init__pause1
 	ld (357:16), 129; Enable DRAM refresh
 
 	; === DRAM Initialization Delay 2 ===
 	ldw bc, 0x2000
 Boot_Init__pause2:
-	djnz xbc, Boot_Init__pause2
+	djnz16 bc, Boot_Init__pause2
 	ld (357:16), 113
 	ld (354:16), 139
 	ld (355:16), 88

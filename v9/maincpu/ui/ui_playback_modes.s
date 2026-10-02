@@ -483,7 +483,7 @@ SeqRestart_WaitBit2Loop:
 	nop
 	nop
 	nop
-	djnz xbc, SeqRestart_WaitBit2Loop
+	djnz16 bc, SeqRestart_WaitBit2Loop
 
 SeqRestart_DispatchAndNotify:
 	call Seq_DispatcherEntry

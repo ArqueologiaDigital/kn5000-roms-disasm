@@ -800,7 +800,7 @@ COPY_VECTORS:
 	ldto_werp WA, 0xE6
 COPY_VECTORS__copy_rest:
 	mrib2 0x83, 0x11	; TMP94C241 encoding
-	djnz xwa, COPY_VECTORS__copy_rest
+	djnz16 wa, COPY_VECTORS__copy_rest
 COPY_VECTORS__done:
 	ret
 
@@ -1749,7 +1749,7 @@ DELAY_ROUTINE__inner_loop:
 	inc 1, e
 	cp e, 0x20
 	jr c, DELAY_ROUTINE__inner_loop
-	djnz xbc, DELAY_ROUTINE__delay_loop
+	djnz16 bc, DELAY_ROUTINE__delay_loop
 DELAY_ROUTINE__next_bit:
 	set_dd8 1, 0x30
 	ldw bc, 0x4000
@@ -1759,7 +1759,7 @@ DELAY_ROUTINE__delay2_inner:
 	inc 1, e
 	cp e, 0x20
 	jr c, DELAY_ROUTINE__delay2_inner
-	djnz xbc, DELAY_ROUTINE__delay2_outer
+	djnz16 bc, DELAY_ROUTINE__delay2_outer
 	srl a, 1	; Next bit
 	inc 1, l
 	cp l, 3:i3

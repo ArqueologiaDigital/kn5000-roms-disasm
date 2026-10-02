@@ -16293,7 +16293,7 @@ AccPatch_InitAndLoadSequence:
 AccPatch_InitSeq_ClearLoop:
 	ldw (xhl), 0x0
 	add hl, 0x6
-	djnz xbc, AccPatch_InitSeq_ClearLoop
+	djnz16 bc, AccPatch_InitSeq_ClearLoop
 	ei 6
 	bit 0, (0x364a:16)
 	jr nz, AccPatch_InitSeq_LoadTempo
@@ -16318,7 +16318,7 @@ AccPatch_InitSeq_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, AccPatch_InitSeq_AdvLoop
+	djnz16 bc, AccPatch_InitSeq_AdvLoop
 
 AccPatch_InitSeq_AdvDone:
 	ret
@@ -16334,7 +16334,7 @@ AccPatch_ResetSeqCounters:
 AccPatch_ResetSeqCounters_Loop:
 	ldw (xhl), 0x0
 	add hl, 0x6
-	djnz xbc, AccPatch_ResetSeqCounters_Loop
+	djnz16 bc, AccPatch_ResetSeqCounters_Loop
 	ei 6
 	ld a, (1077:16)
 	ld c, (1046:16)
@@ -16354,7 +16354,7 @@ AccPatch_ResetSeqCounters_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, AccPatch_ResetSeqCounters_AdvLoop
+	djnz16 bc, AccPatch_ResetSeqCounters_AdvLoop
 
 AccPatch_ResetSeqCounters_Done:
 	ret
@@ -16613,7 +16613,7 @@ AccPatch_SeekFwd_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, AccPatch_SeekFwd_AdvLoop
+	djnz16 bc, AccPatch_SeekFwd_AdvLoop
 
 AccPatch_SeekFwd_Done:
 	ret
@@ -16717,7 +16717,7 @@ AccPatch_ResumeSeq_AddAndAdvance:
 
 AccPatch_ResumeSeq_AdvLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, AccPatch_ResumeSeq_AdvLoop
+	djnz16 bc, AccPatch_ResumeSeq_AdvLoop
 	jr AccPatch_ResumeSeq_ComparePos
 
 AccPatch_ResumeSeq_HandleMarker:
@@ -16980,7 +16980,7 @@ AccPatch_SkipNoteOff:
 
 AccPatch_ProcessSeqEvt_AdvLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, AccPatch_ProcessSeqEvt_AdvLoop
+	djnz16 bc, AccPatch_ProcessSeqEvt_AdvLoop
 	ld a, (0x35fa:16)
 	ld b, (0x3558:16)
 	and b, 0x7f
@@ -17007,7 +17007,7 @@ AccPatch_ProcessSeqEvt_SkipD:
 
 AccPatch_ProcessSeqEvt_SkipDLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, AccPatch_ProcessSeqEvt_SkipDLoop
+	djnz16 bc, AccPatch_ProcessSeqEvt_SkipDLoop
 	jrl AccPatch_ProcessSequenceEvents
 
 AccPatch_ProcessSeqEvt_SetSize:
@@ -17850,7 +17850,7 @@ AccPatch_AdvAllSteps_Loop:
 
 AccPatch_AdvAllSteps_InnerLoop:
 	calr AccPatch_AdvanceSingleStep
-	djnz xbc, AccPatch_AdvAllSteps_InnerLoop
+	djnz16 bc, AccPatch_AdvAllSteps_InnerLoop
 
 AccPatch_AdvAllSteps_Next:
 	add xix, 0x6
@@ -27338,7 +27338,7 @@ Tempo_DisplayBPMValue:
 	sub wa, (0x398a:16)
 	inc 1, a
 	ldfr_berp A, 0xfa
-	mul_sd16b 1, 0x86, 0x39
+	mul wa, (0x3986:16)
 	ldfr_berp A, 0xfa
 
 Tempo_DisplayBPMFraction:
@@ -29286,7 +29286,7 @@ __pad_F676C1:
 	ld xbc, 0:i3
 	ld c, (0x34d7:16)
 	inc 1, c
-	mul_sd16b 3, 0xd9, 0x34
+	mul bc, (0x34d9:16)
 
 AccVoice_SetupSlots_CheckType:
 	cp bc, 0:i3
@@ -34635,7 +34635,7 @@ AccPatch_IterateSlot_NextBlock:
 	ld xiz, (0x376e:16)
 	ld wa, (xiz + 3)
 	ld (0x377e:16), wa
-	djnz xbc, AccPatch_IterateSlotChain
+	djnz16 bc, AccPatch_IterateSlotChain
 	xor xwa, xwa
 	xor xhl, xhl
 	ld wa, (0x378e:16)

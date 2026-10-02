@@ -267,7 +267,7 @@ ClkTick_TempoThresholdCheck:
 ClkTick_MidRangeTempoMul:
 	extz xwa
 	xor w, w
-	muls_sd16w 0, 0xda, 0xb7
+	muls xwa, (0xb7da:16)
 	jr ClkTick_WriteTimingReg
 
 ClkTick_HighTempoLoad:

@@ -4108,7 +4108,7 @@ FileIO_OpenWithMode:
 	lda xwa, (xsp + 0x08)
 	push XWA
 	call FileOpen
-	inc 0,XSP
+	inc 8,XSP
 	ld	(0x7ea8:16), xhl
 	or	xhl, xhl
 	jr	nz, FileIO_OpenMode_Success
@@ -4706,7 +4706,7 @@ FileIO_CopyString_StoreAndCont:
 
 FileIO_CopyString_Return:
 	ld (xwa+), 0x00
-	djnz xde, FileIO_CopyString_Return
+	djnz16 de, FileIO_CopyString_Return
 	ret
 
 FileIO_BuildFilePath:

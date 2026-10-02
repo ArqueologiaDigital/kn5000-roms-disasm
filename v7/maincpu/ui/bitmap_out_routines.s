@@ -2825,7 +2825,7 @@ BitMapOut_RefreshDisplay_CheckDirty:
 	jrl	BitMapOut_CopyVoicePreset9
 	ret
 BitMapOut_RefreshDisplay_ClearDirty:
-	dec 0,XSP
+	dec 8,XSP
 	push XIZ
 	ld de, (0x9046:16)
 	lda xhl, (0xbe9d:16)

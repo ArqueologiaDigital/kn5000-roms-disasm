@@ -1072,7 +1072,7 @@ Report_BlinkLoop_FlashDelay:
 	inc 1, e
 	cp e, 0x20
 	jr c, Report_BlinkLoop_FlashDelay
-	djnz xbc, Report_BlinkLoop_FlashOn
+	djnz16 bc, Report_BlinkLoop_FlashOn
 
 Report_BlinkLoop_FlashOff:
 	set_dd8 1, 0x30
@@ -1085,7 +1085,7 @@ Report_BlinkLoop_OffDelayInner:
 	inc 1, e
 	cp e, 0x20
 	jr c, Report_BlinkLoop_OffDelayInner
-	djnz xbc, Report_BlinkLoop_OffDelay
+	djnz16 bc, Report_BlinkLoop_OffDelay
 	srl a, 1
 	inc 1, l
 	cp l, 3:i3
@@ -3535,7 +3535,7 @@ MstStyleAlp_CellSelect:
 	ld XWA,(XSP+0x10)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	ld (XSP+0x0e),0x00
 	jr t, MstStyleAlp_PadLoopCond
 MstStyleAlp_AppendPadChar:
@@ -3590,7 +3590,7 @@ MstStyleAlp_CopyEntryAndPad:
 	ld XWA,(XSP+0x10)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	ld (XSP+0x0e),0x00
 	jr t, MstStyleAlp_PadLoopCond2
 MstStyleAlp_AppendPadChar2:

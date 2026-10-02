@@ -1047,7 +1047,7 @@ Report_BlinkLoop_FlashDelay:
 	inc 1, e
 	cp e, 0x20
 	jr c, Report_BlinkLoop_FlashDelay
-	djnz xbc, Report_BlinkLoop_FlashOn
+	djnz16 bc, Report_BlinkLoop_FlashOn
 
 Report_BlinkLoop_FlashOff:
 	set_dd8 1, 0x30
@@ -1060,7 +1060,7 @@ Report_BlinkLoop_OffDelayInner:
 	inc 1, e
 	cp e, 0x20
 	jr c, Report_BlinkLoop_OffDelayInner
-	djnz xbc, Report_BlinkLoop_OffDelay
+	djnz16 bc, Report_BlinkLoop_OffDelay
 	srl a, 1
 	inc 1, l
 	cp l, 3:i3
@@ -2753,7 +2753,7 @@ MasterSetup_StringSearch_Loop:
 	add xsp, 0xa
 	cp hl, 0:i3
 	jr nz, MasterSetup_StringSearch_Done
-	djnz xiz, MasterSetup_StringSearch_Loop
+	djnz16 iz, MasterSetup_StringSearch_Loop
 
 MasterSetup_StringSearch_Done:
 	cp iz, 0:i3
@@ -2982,7 +2982,7 @@ MasterSetup_DialDown_Search_Loop:
 	add xsp, 0xa
 	cp hl, 0:i3
 	jr nz, MasterSetup_DialDown_Search_Done
-	djnz xiz, MasterSetup_DialDown_Search_Loop
+	djnz16 iz, MasterSetup_DialDown_Search_Loop
 
 MasterSetup_DialDown_Search_Done:
 	cp iz, 0:i3

@@ -9801,7 +9801,7 @@ AccompValidate_StoreResult:
 	ret
 
 Seq_SyncPositionAndOutputMIDITiming:
-	dec 0,XSP
+	dec 8,XSP
 	push XIZ
 	ld XIY,WidgetData_DrawbarPositionTable_0x176
 	lda xix, (xsp + 0x04)
@@ -22592,7 +22592,7 @@ EffEdit_PopAndReturn:
 	ret
 
 EffEdit_ValidateRangeDelta:
-	dec 0,XSP
+	dec 8,XSP
 	push XIZ
 	ld (XSP+0x06),BC
 	ld (XSP+0x08),XWA
@@ -26691,7 +26691,7 @@ VoiceData_LoopEnd:
 ; === v7-specific block: SeqLoad_ProcessEpilogue (88 bytes) ===
 SeqLoad_ProcessEpilogue:
 	pop XIZ
-	inc 0,XSP
+	inc 8,XSP
 	ret
 SeqLoad_ProcessDataBlock_Helper3:
 	push QIZ

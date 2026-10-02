@@ -69,13 +69,13 @@ SeqTrack_ResetAllChannelSlots:
 
 SeqTrack_ResetChannelSlots_Loop:
 	ld (xix+), WA
-	djnz xbc, SeqTrack_ResetChannelSlots_Loop
+	djnz16 bc, SeqTrack_ResetChannelSlots_Loop
 	xor wa, wa
 	ldw bc, 0x28
 
 SeqTrack_ClearRemaining_Loop:
 	ld (xix+), WA
-	djnz xbc, SeqTrack_ClearRemaining_Loop
+	djnz16 bc, SeqTrack_ClearRemaining_Loop
 	ret
 
 SeqTrack_ScanActiveChannels:
@@ -100,13 +100,13 @@ SeqTrack_ClearPlaybackBuffers:
 
 SeqTrack_ClearPlaybackBuf1_Loop:
 	ld (xix+), WA
-	djnz xbc, SeqTrack_ClearPlaybackBuf1_Loop
+	djnz16 bc, SeqTrack_ClearPlaybackBuf1_Loop
 	ld xix, 0xf82
 	ldw bc, 0x8
 
 SeqTrack_ClearPlaybackBuf2_Loop:
 	ld (xix+), WA
-	djnz xbc, SeqTrack_ClearPlaybackBuf2_Loop
+	djnz16 bc, SeqTrack_ClearPlaybackBuf2_Loop
 	pop xix
 	pop xbc
 	pop xwa
@@ -179,7 +179,7 @@ SeqTrack_ClearPartParamBuffers:
 
 SeqTrack_ClearPartParams_Loop:
 	ld (xix+), WA
-	djnz xbc, SeqTrack_ClearPartParams_Loop
+	djnz16 bc, SeqTrack_ClearPartParams_Loop
 	pop xix
 	popw bc
 	popw wa
@@ -986,8 +986,8 @@ SeqPlay_DelayLoop_InnerInit:
 	ldw hl, 0x3c0
 
 SeqPlay_DelayLoop_Inner:
-	djnz xhl, SeqPlay_DelayLoop_Inner
-	djnz xbc, SeqPlay_DelayLoop_InnerInit
+	djnz16 hl, SeqPlay_DelayLoop_Inner
+	djnz16 bc, SeqPlay_DelayLoop_InnerInit
 	ret
 
 SeqPlay_InitChannelParams:
@@ -1008,7 +1008,7 @@ SeqPlay_InitChannelParams_Loop:
 	ld (xiy + 11), a
 	ld (xiy + 10), w
 	inc 1, de
-	djnz xbc, SeqPlay_InitChannelParams_Loop
+	djnz16 bc, SeqPlay_InitChannelParams_Loop
 	pop xhl
 	pop xde
 	pop xiy
@@ -1080,7 +1080,7 @@ SeqTrack_ClearTempoAccumulators:
 
 SeqTrack_ClearTempoAccum_Loop:
 	ld (xix+), WA
-	djnz xbc, SeqTrack_ClearTempoAccum_Loop
+	djnz16 bc, SeqTrack_ClearTempoAccum_Loop
 	pop xix
 	popw bc
 	popw wa
@@ -1120,7 +1120,7 @@ SMF_MTrk_CompareSignature:
 	jrl SMF_NullRet
 
 SMF_MTrk_SignatureMatch:
-	djnz xbc, SMF_MTrk_ReadByteLoop
+	djnz16 bc, SMF_MTrk_ReadByteLoop
 	ld (6887:16), 1
 	call FloppyIO_ReadNextByte
 	ld (6886:16), a
@@ -1612,7 +1612,7 @@ SoundGen_RefreshVoices_Loop:
 	popw bc
 	cp (4323:16), 0
 	jrl nz, SoundGen_RefreshVoices_Done
-	djnz xbc, SoundGen_RefreshVoices_Loop
+	djnz16 bc, SoundGen_RefreshVoices_Loop
 	call ToneGen_WriteChannelRegs
 	or (4236:16), 1
 	ld (4323:16), 0
@@ -2442,7 +2442,7 @@ ToneGen_UpdateBlocks_Loop:
 	cp (4323:16), 0
 	jrl nz, ToneGen_UpdateBlocks_Done
 	inc 1, ix
-	djnz xbc, ToneGen_UpdateBlocks_Loop
+	djnz16 bc, ToneGen_UpdateBlocks_Loop
 
 ToneGen_UpdateBlocks_Done:
 	ret
@@ -2529,7 +2529,7 @@ FloppyIO_ClearTrackParseBuffer:
 
 FloppyIO_ClearParseBuf_Loop:
 	ld (xix+), WA
-	djnz xbc, FloppyIO_ClearParseBuf_Loop
+	djnz16 bc, FloppyIO_ClearParseBuf_Loop
 	ret
 
 FloppyIO_ReadVariableLength:
@@ -4263,7 +4263,7 @@ VoiceChannel_ClearParamTable:
 
 VoiceChannel_ClearParam_Loop:
 	ld (xix+), WA
-	djnz xbc, VoiceChannel_ClearParam_Loop
+	djnz16 bc, VoiceChannel_ClearParam_Loop
 	ret
 
 VoiceChannel_AdvancePosition:

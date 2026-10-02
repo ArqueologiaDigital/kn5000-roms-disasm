@@ -324,7 +324,7 @@ Boot_InitWorkRAM:
 
 Boot_InitWorkRAM_ZeroBlock1_Loop:
 	ldirw93
-	djnz xwa, Boot_InitWorkRAM_ZeroBlock1_Loop
+	djnz16 wa, Boot_InitWorkRAM_ZeroBlock1_Loop
 
 MemCopy_DataValidation:
 	bit 0, ix
@@ -348,7 +348,7 @@ Boot_InitWorkRAM_ZeroBlock1_Done:
 	ldto_werp	WA, 0xe6
 Boot_InitWorkRAM_ZeroBlock2_Loop:
 	ldirw93
-	djnz xwa, Boot_InitWorkRAM_ZeroBlock2_Loop
+	djnz16 wa, Boot_InitWorkRAM_ZeroBlock2_Loop
 
 MemCopy_SetupAndDMA:
 	bit 0, ix
@@ -368,7 +368,7 @@ Boot_InitWorkRAM_ROMCopy1_Start:
 
 Boot_InitWorkRAM_ROMCopy1_Loop:
 	ldir83
-	djnz xwa, Boot_InitWorkRAM_ROMCopy1_Loop
+	djnz16 wa, Boot_InitWorkRAM_ROMCopy1_Loop
 
 Boot_InitWorkRAM_ROMCopy2_Start:
 	ld	xde, 0xe2c2
@@ -382,7 +382,7 @@ Boot_InitWorkRAM_ROMCopy2_Start:
 	ldto_werp	WA, 0xe6
 Boot_InitWorkRAM_ROMCopy2_Loop:
 	ldir83
-	djnz xwa, Boot_InitWorkRAM_ROMCopy2_Loop
+	djnz16 wa, Boot_InitWorkRAM_ROMCopy2_Loop
 
 Boot_InitWorkRAM_Done:
 	jrl Boot_RunSelfTest
@@ -1935,7 +1935,7 @@ Copy_DE_words_from_XBC_to_XWA:
 ; =============================================================================
 Fill_memory_at_XWA_with_DE_words_of_BC_value:
 	ld (xwa+), BC
-	djnz xde, Fill_memory_at_XWA_with_DE_words_of_BC_value
+	djnz16 de, Fill_memory_at_XWA_with_DE_words_of_BC_value
 	ret
 
 Checksum_ComputeComplement:
@@ -3369,7 +3369,7 @@ SeqBuf_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_512
 	inc 1, xiy
-	djnz xbc, SeqBuf_WriteBytes_Loop
+	djnz16 bc, SeqBuf_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -3469,7 +3469,7 @@ TempoRingBuf_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_Check
 	inc 1, xiy
-	djnz xbc, TempoRingBuf_WriteBytes_Loop
+	djnz16 bc, TempoRingBuf_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -3661,7 +3661,7 @@ AltEvtBuf_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_Small
 	inc 1, xiy
-	djnz xbc, AltEvtBuf_WriteBytes_Loop
+	djnz16 bc, AltEvtBuf_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -3848,7 +3848,7 @@ SeqMain_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte
 	inc 1, xiy
-	djnz xbc, SeqMain_WriteBytes_Loop
+	djnz16 bc, SeqMain_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -3947,7 +3947,7 @@ SeqBuf_MidiOut_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_Small
 	inc 1, xiy
-	djnz xbc, SeqBuf_MidiOut_WriteBytes_Loop
+	djnz16 bc, SeqBuf_MidiOut_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -4052,7 +4052,7 @@ SeqBuf2_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_512
 	inc 1, xiy
-	djnz xbc, SeqBuf2_WriteBytes_Loop
+	djnz16 bc, SeqBuf2_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -4154,7 +4154,7 @@ SeqBuf3_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_512
 	inc 1, xiy
-	djnz xbc, SeqBuf3_WriteBytes_Loop
+	djnz16 bc, SeqBuf3_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -4249,7 +4249,7 @@ SeqBuf_DspSysEx_WriteBytes_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte
 	inc 1, xiy
-	djnz xbc, SeqBuf_DspSysEx_WriteBytes_Loop
+	djnz16 bc, SeqBuf_DspSysEx_WriteBytes_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -4516,7 +4516,7 @@ SeqBuf_VoiceMap_WriteBlock_Loop:
 	ld a, (xiy)
 	calr Seq_RingBuf_WriteByte_Small
 	inc 1, xiy
-	djnz xbc, SeqBuf_VoiceMap_WriteBlock_Loop
+	djnz16 bc, SeqBuf_VoiceMap_WriteBlock_Loop
 	pop xde
 	pop xix
 	pop xiy
@@ -6577,7 +6577,7 @@ Flash_EraseSectorAndWrite_Write:
 ; Identifies the target flash chip, copies ROM content to a buffer,
 ; applies modifications, then programs the flash sector.
 FlashWrite:
-	dec 0,XSP
+	dec 8,XSP
 	push XIZ
 	ld (XSP+0x04),DE
 	ld (XSP+0x06),XBC
@@ -8532,7 +8532,7 @@ LZ_Decompress_ReadTracks:
 	ld wa, (1618:16)
 	extz xwa
 	ldw bc, 0x2400
-	mulw_erp BC, 0xfa
+	mul xbc, qiz
 	ld xde, 0x69800
 	add xde, xbc
 	ldw bc, 0x12

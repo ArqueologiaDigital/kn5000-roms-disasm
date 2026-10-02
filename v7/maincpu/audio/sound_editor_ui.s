@@ -5420,7 +5420,7 @@ Scoop_SoundEditorData_Helper:
 Scoop_SoundEditorData_Helper_Epilogue:
 	inc	4, xsp
 	ret
-	dec 0,XSP
+	dec 8,XSP
 	pushw iz
 	ld (XSP+0x08),BC
 	ld IZ,WA
@@ -5448,7 +5448,7 @@ Scoop_SoundEditorData_Helper_Epilogue:
 	call (XHL)
 .Lc_f0d7e3:
 	popw iz
-	inc 0,XSP
+	inc 8,XSP
 	ret
 	lda	xsp, (xsp-20)
 	push	qiz
@@ -15419,7 +15419,7 @@ S2c_GridCheck_Dispatch:
 	push XWA
 	push XDE
 	call Scoop_EventLoop_12Entry_Helper
-	inc 0,XSP
+	inc 8,XSP
 S2c_GridCheck_GetFocusSendEvt:
 	call GetFocusObject
 	ld xwa, xhl
@@ -15965,7 +15965,7 @@ PsCstmCpNameBox_HandleEvt2D:
 	lda xwa, (xsp + 0x08)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	lda xde, (xsp + 0x04)
 	ld XWA,XIZ
 	ld XBC,EVT_INIT_HOOK
@@ -15980,7 +15980,7 @@ PsCstmCpNameBox_HandleEvt2E:
 	lda xwa, (xsp + 0x08)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	lda xde, (xsp + 0x04)
 	ld XWA,XIZ
 	ld XBC,EVT_INIT_HOOK
@@ -18007,7 +18007,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	push XWA
 	push XDE
 	call Scoop_EventLoop_12Entry_Helper
-	inc 0,XSP
+	inc 8,XSP
 	jr t, AudioEvt_GetFocusRetZero
 RgpSetBnk_EvtEnc_HighIndex:
 	ld xwa, 0x1e8a80

@@ -14430,7 +14430,7 @@ SoundFX_Handler_1_LoadReg:
 	jr SoundFX_SetVolumeOffset_Return
 
 SoundFX_Handler_1_Block2:
-	djnz xde, SoundFX_Handler_1_LoadReg
+	djnz16 de, SoundFX_Handler_1_LoadReg
 
 SoundFX_SetVolumeOffset_Return:
 	ld hl, (xiz)
@@ -15326,7 +15326,7 @@ VoicePair_InnerScan:
 
 VoicePair_AdvanceOuter:
 	inc 2, iy
-	djnz xbc, VoicePair_OuterLoop
+	djnz16 bc, VoicePair_OuterLoop
 
 VoicePair_Return:
 	ret
@@ -15498,7 +15498,7 @@ VoiceSlot_StoreParams_LoadReg2:
 	ld (xix), a
 	dec 1, iy
 	inc 1, ix
-	djnz xbc, VoiceSlot_StoreParams_LoadReg2
+	djnz16 bc, VoiceSlot_StoreParams_LoadReg2
 
 VoiceSlot_StoreParams_Return:
 	ret
@@ -15523,7 +15523,7 @@ VoiceSlot_StoreParams_LoadReg4:
 
 VoiceSlot_StoreParams_Increment:
 	inc 2, iy
-	djnz xbc, VoiceSlot_StoreParams_LoadReg4
+	djnz16 bc, VoiceSlot_StoreParams_LoadReg4
 
 VoiceSlot_StoreParams_LoadReg5:
 	ld l, a
@@ -15584,7 +15584,7 @@ ComputeNoteBitPositi_Prologue:
 	ldto_berp A, 0x3c
 	popw bc
 	dec 1, iy
-	djnz xbc, ComputeNoteBitPositi_Prologue
+	djnz16 bc, ComputeNoteBitPositi_Prologue
 	or de, 0x800
 	ret
 
@@ -16055,7 +16055,7 @@ VoiceSlot_CheckPitch_LoadReg2:
 	add hl, 0x2
 	cp a, 0x8
 	jr ugt, VoiceSlot_CheckPitch_Compare
-	djnz xbc, VoiceSlot_CheckPitch_LoadReg2
+	djnz16 bc, VoiceSlot_CheckPitch_LoadReg2
 	xor hl, hl
 
 VoiceSlot_CheckPitch_Compare:
@@ -16128,7 +16128,7 @@ NoteBuffer_CompactEn_LoadReg2:
 	ld (xix), a
 	dec 1, iy
 	inc 1, ix
-	djnz xbc, NoteBuffer_CompactEn_LoadReg2
+	djnz16 bc, NoteBuffer_CompactEn_LoadReg2
 
 NoteBuffer_CompactEn_Epilogue:
 	pop xiz
@@ -16166,7 +16166,7 @@ NoteBuffer_CompactEn_Compare:
 
 NoteBuffer_CompactEn_Increment:
 	inc 2, iy
-	djnz xbc, NoteBuffer_CompactEn_Compare
+	djnz16 bc, NoteBuffer_CompactEn_Compare
 	ld l, (0x00cee5:24)
 	xor h, h
 	dec 1, hl
@@ -16533,7 +16533,7 @@ InitPartAllocState_Increment:
 	jr nc, InitPartAllocState_Increment
 	ld (xiy), e
 	dec 1, iy
-	djnz xbc, InitPartAllocState_Increment
+	djnz16 bc, InitPartAllocState_Increment
 
 InitPartAllocState_Return:
 	ret
@@ -16604,7 +16604,7 @@ VoiceSlot_IterateAlloc:
 
 VoiceSlot_IterateAlloc_NextIter:
 	inc 1, hl
-	djnz xbc, VoiceSlot_SetPitchParams_LoadFromStack
+	djnz16 bc, VoiceSlot_SetPitchParams_LoadFromStack
 	jr VoiceSlot_IterateAlloc_Return
 
 VoiceSlot_IterateAlloc_Block:
@@ -16628,7 +16628,7 @@ VoiceSlot_IterateAlloc_LoadFromStack:
 	ld (xix), a
 	inc 1, hl
 	inc 1, ix
-	djnz xbc, VoiceSlot_IterateAlloc_LoadFromStack
+	djnz16 bc, VoiceSlot_IterateAlloc_LoadFromStack
 
 VoiceSlot_IterateAlloc_Return:
 	ret
@@ -16676,7 +16676,7 @@ VoiceSlot_IterateAlloc_Block4:
 VoiceSlot_IterateAlloc_SetByte:
 	ld a, 0x40:opc
 	ld (xix+), WA
-	djnz xbc, VoiceSlot_IterateAlloc_Block4
+	djnz16 bc, VoiceSlot_IterateAlloc_Block4
 
 VoiceSlot_IterateAlloc_Return2:
 	ret
@@ -16695,7 +16695,7 @@ VoiceSlot_IterateAlloc_LoadReg2:
 	inc 1, iy
 	inc 1, ix
 	inc 1, ix
-	djnz xbc, VoiceSlot_IterateAlloc_LoadReg2
+	djnz16 bc, VoiceSlot_IterateAlloc_LoadReg2
 	ret
 
 VoiceSlot_IterateAlloc_TestBit24:
@@ -26282,7 +26282,7 @@ SendPartDataBlock_SetWord5:
 
 SendPartDataBlock_Block10:
 	add DE, (xwa+)
-	djnz xbc, SendPartDataBlock_Block10
+	djnz16 bc, SendPartDataBlock_Block10
 	cpl de
 	ld hl, de
 	ret
@@ -27248,7 +27248,7 @@ SendPartDataBlock_SetWord7:
 
 SendPartDataBlock_Block11:
 	add HL, (xwa+)
-	djnz xde, SendPartDataBlock_Block11
+	djnz16 de, SendPartDataBlock_Block11
 	cpl hl
 	stw_dri HL, 0xe5, 0xa8, 0x72
 	ret
@@ -28577,7 +28577,7 @@ Mem_Compare_Block:
 	ret nz
 	sub bc, 0x1
 	ret z
-	djnz xde, Mem_Compare_Block
+	djnz16 de, Mem_Compare_Block
 
 Mem_Compare_LoadReg:
 	ld de, bc
@@ -28607,7 +28607,7 @@ Mem_Compare_Extend:
 	ret
 
 Mem_Compare_Block3:
-	djnz xbc, Mem_Compare_Block2
+	djnz16 bc, Mem_Compare_Block2
 	ld hl, 0:i3
 
 Mem_Compare_MaskBits:
@@ -28621,7 +28621,7 @@ Mem_Compare_Block4:
 	extz wa
 	sub hl, wa
 	ret nz
-	djnz xde, Mem_Compare_Block4
+	djnz16 de, Mem_Compare_Block4
 	ret
 
 Mem_Copy:
@@ -29025,7 +29025,7 @@ Memset_Block:
 	ld (xix+), a
 	sub bc, 0x1
 	ret z
-	djnz xde, Memset_Block
+	djnz16 de, Memset_Block
 
 Memset_LoadReg:
 	ld de, bc
@@ -29036,7 +29036,7 @@ Memset_LoadReg:
 
 Memset_Block2:
 	ld (xix+), XWA
-	djnz xbc, Memset_Block2
+	djnz16 bc, Memset_Block2
 
 Memset_MaskBits:
 	and de, 0x3
@@ -29044,7 +29044,7 @@ Memset_MaskBits:
 
 Memset_Block3:
 	ld (xix+), a
-	djnz xde, Memset_Block3
+	djnz16 de, Memset_Block3
 	ret
 
 Math_AbsInt16:

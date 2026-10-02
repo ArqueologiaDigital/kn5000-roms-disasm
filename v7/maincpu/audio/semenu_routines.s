@@ -772,7 +772,7 @@ SeMenu_SetDisplayValue_Join2:
 	lda	xsp, (xsp+16)
 	ret
 SeMenu_InitTrackInfo:
-	dec 0,XSP
+	dec 8,XSP
 	lda XWA, (XSP)
 	calr SeMenu_LoadMasterPtr
 	lda xwa, (xsp + 0x02)

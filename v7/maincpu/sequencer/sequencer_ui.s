@@ -457,7 +457,7 @@ LyricsBox_DrawLineLoop:
 	pushw 0x0002
 	pushw 0x0dfe
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	lda xbc, (xsp + 0x14)
 	lda xwa, (xsp + 0x28)
 	ld DE,(XWA)
@@ -521,7 +521,7 @@ LyricsBox_CheckCurrentLine:
 	pushw 0x0002
 	pushw 0x0dfe
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	ld BC,(XSP+0x0a)
 	sll BC, 0x03
 	lda xwa, (xsp + 0x28)
@@ -14584,7 +14584,7 @@ SqedtFunc_Case2:
 	ld XWA,(XWA+0x12)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	jr t, StringCopyEpilog
 SqedtFunc_Case2_CopyParam:
 	push_sd16w 0x28, 0x27
@@ -14609,7 +14609,7 @@ SqedtFunc_CheckMode:
 	ld XWA,(XWA+0x12)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	jr t, StringCopyEpilog
 SqedtFunc_CheckMode_CopyParam:
 	ld a, (0x286c:16)

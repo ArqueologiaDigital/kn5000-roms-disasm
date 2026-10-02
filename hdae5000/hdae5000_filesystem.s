@@ -393,7 +393,7 @@ HDAE5000_FileLBNNameCheck_Ev01E00047:
 	ld xwa, (xiz + 0x12)                    ; ld XWA,(XIZ+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_75d1:
 	ld xhl, (xsp + 0x04)                    ; ld XHL,(XSP+0x04)
 	jr t, .LFS_75f7                        ; [68 21] jr T,0x2875f7
@@ -464,7 +464,7 @@ HDAE5000_LBNLswBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_7671:
 	ld	xhl, xiz
 	jrl t, .LFS_7703                       ; [78 8d 00] jrl T,0x287703
@@ -570,7 +570,7 @@ HDAE5000_LBNPmtBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_777b:
 	ld	xhl, xiz
 	jrl t, .LFS_780d                       ; [78 8d 00] jrl T,0x28780d
@@ -676,7 +676,7 @@ HDAE5000_LBNSqtBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_7885:
 	ld	xhl, xiz
 	jrl t, .LFS_7917                       ; [78 8d 00] jrl T,0x287917
@@ -782,7 +782,7 @@ HDAE5000_LBNCmpBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_798f:
 	ld	xhl, xiz
 	jrl t, .LFS_7a21                       ; [78 8d 00] jrl T,0x287a21
@@ -888,7 +888,7 @@ HDAE5000_LBNTmBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_7a99:
 	ld	xhl, xiz
 	jrl t, .LFS_7b2b                       ; [78 8d 00] jrl T,0x287b2b
@@ -994,7 +994,7 @@ HDAE5000_LBNMspBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_7ba3:
 	ld	xhl, xiz
 	jrl t, .LFS_7c35                       ; [78 8d 00] jrl T,0x287c35
@@ -1100,7 +1100,7 @@ HDAE5000_LBNRcmBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_7cad:
 	ld	xhl, xiz
 	jrl t, .LFS_7d3f                       ; [78 8d 00] jrl T,0x287d3f
@@ -1206,7 +1206,7 @@ HDAE5000_LBNMdBitCheck_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_7db7:
 	ld	xhl, xiz
 	jrl t, .LFS_7e49                       ; [78 8d 00] jrl T,0x287e49
@@ -1317,7 +1317,7 @@ HDAE5000_LBNTlxBitCheck_Unregistered_Ev01E00047:
 	ld xwa, (xde + 0x12)                    ; ld XWA,(XDE+0x12)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFS_7ec1:
 	ld	xhl, xiz
 	jrl t, .LFS_7f53                       ; [78 8d 00] jrl T,0x287f53
@@ -1411,7 +1411,7 @@ HDAE5000_FlsList_BuildPage:	; 0x287F55 (832 bytes)
 	lda xwa, (0x22a2ca:24); dest = FSB display buffer base
 	push xwa
 	call HDAE5000_MemFill			; MemFill — clear all 24 entries
-	inc 0, xsp			; dealloc 8 bytes
+	inc 8, xsp			; dealloc 8 bytes
 	ld iz, 0:i3			; IZ = 0 (entry index, 0-23)
 	cp iz, 0x0018			; pre-check: 24 iterations?
 	jrl nc, .LFS_RdFSB__loop_done
@@ -1914,7 +1914,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	lda xwa, (0x22a078:24)
 	push xwa
 	call HDAE5000_MemFill
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+2)
 	ld	xde, xwa
 	ld	wa, (HDAE5000_RAM_CurFls:24)
@@ -1943,7 +1943,7 @@ HDAE5000_FlsScreen_Refresh:	; 0x288295 (5072 bytes)
 	lda	xwa, (xsp+12)
 	push xwa
 	call HDAE5000_SPrintf
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LFWF_8544:
 	lda	xwa, (xsp+8)
 	push xwa
@@ -2464,7 +2464,7 @@ HDAE5000_FlsLoadScreen:
 
 HDAE5000_FlsFileLoadSwCatch:
 	; registered as "FlsFileLoadSwCatch" in HDAE5000_ObjHandler_Table
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
 	ld	xiz, xbc
@@ -2526,7 +2526,7 @@ HDAE5000_FlsFileLoadSwCatch:
 	call	(xix)
 .LFWF_8cea:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_FlsEditScreen:
@@ -3546,7 +3546,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01	; lda XWA, XSP+0x011C
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01	; lda XWA, XSP+0x0110
@@ -3569,7 +3569,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01	; lda XWA, XSP+0x011C
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01	; lda XWA, XSP+0x0110
@@ -3592,7 +3592,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01
@@ -3615,7 +3615,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01
@@ -3638,7 +3638,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01
@@ -3661,7 +3661,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01
@@ -3684,7 +3684,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01
@@ -3707,7 +3707,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01
@@ -3730,7 +3730,7 @@ HDAE5000_CopyToHd_Execute:	; 0x289889 (2663 bytes)
 	lda_dri xwa, 0xFD, 0x1C, 0x01
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	lda xwa, (xsp + 0x06)
 	ld xbc, xwa
 	lda_dri xwa, 0xFD, 0x10, 0x01
@@ -4169,7 +4169,7 @@ HDAE5000_CP_FD_DIRNAMECheck:
 	; Part 4: Event handler — menu selection (0x28A1A7)
 HDAE5000_WrConfirmEventCatch:
 	; registered as "WrConfirmEventCatch" in HDAE5000_ObjHandler_Table
-	dec 0, xsp			; alloc 4 bytes
+	dec 8, xsp			; alloc 4 bytes
 	push xiz
 	ld (xsp + 0x04), xde
 	ld xiz, xbc
@@ -4266,7 +4266,7 @@ HDAE5000_WrConfirmEventCatch:
 	call (xix)
 .LFSD__hC_exit:
 	pop xiz
-	inc 0, xsp
+	inc 8, xsp
 	ret
 
 HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
@@ -4387,7 +4387,7 @@ HDAE5000_DelOpt_ShowFlags:	; 0x28A2F0 (739 bytes)
 	; Part 2: Event handler (0x28A497) — dispatches on event codes
 HDAE5000_DelOptSwEventCatch:
 	; registered as "DelOptSwEventCatch" in HDAE5000_ObjHandler_Table
-	dec 0, xsp			; allocate 8 bytes
+	dec 8, xsp			; allocate 8 bytes
 	push xiz
 	ld (xsp + 0x04), xde		; save XDE to stack
 	ld xiz, xbc			; save event code in XIZ
@@ -4484,7 +4484,7 @@ HDAE5000_DelOptSwEventCatch:
 	call (xix)
 .LFS_EL__epilogue:
 	pop xiz
-	inc 0, xsp			; deallocate 8 bytes
+	inc 8, xsp			; deallocate 8 bytes
 	ret
 
 ; --- Display, Menu, and Utility Routines ---

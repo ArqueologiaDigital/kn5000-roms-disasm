@@ -381,7 +381,7 @@ SMF_ClearWorkArea:
 
 SMF_ClearWork_Loop:
 	ld (xix+), WA
-	djnz xbc, SMF_ClearWork_Loop
+	djnz16 bc, SMF_ClearWork_Loop
 	pop xix
 	popw bc
 	popw wa
@@ -1355,7 +1355,7 @@ SMF_ClearOutputQueue:
 
 SMF_ClearQueue_Loop:
 	ld (xix+), a
-	djnz xbc, SMF_ClearQueue_Loop
+	djnz16 bc, SMF_ClearQueue_Loop
 	pop xix
 	ret
 
@@ -1453,7 +1453,7 @@ SMF_AdvanceMulti_Loop:
 	pushw bc
 	calr SMF_AdvancePosition
 	popw bc
-	djnz xbc, SMF_AdvanceMulti_Loop
+	djnz16 bc, SMF_AdvanceMulti_Loop
 	calr SMF_GetNextEvent
 	ret
 
@@ -1667,7 +1667,7 @@ SMF_ClearFileBuffer:
 
 SMF_ClearBuf_Loop:
 	ldw (xix+), 0x0000
-	djnz xwa, SMF_ClearBuf_Loop
+	djnz16 wa, SMF_ClearBuf_Loop
 	pop xwa
 	pop xix
 	ret

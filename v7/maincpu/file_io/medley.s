@@ -290,7 +290,7 @@ FmtNum_WriteTwoDigits:
 	ret
 
 FmmIntMedleyFunc:
-	dec 0,XSP
+	dec 8,XSP
 	pushw iz
 	ld (XSP+0x06),XWA
 	cp XBC,0x01e5000a

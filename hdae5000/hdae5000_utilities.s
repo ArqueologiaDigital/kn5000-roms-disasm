@@ -54,7 +54,7 @@ HDAE5000_StrLen:	; 0x29AF71
 	ld xiz, (xsp + 0x0C)		; buffer pointer
 	push xiz
 	call HDAE5000_MemChr
-	inc 0, xsp			; clean up 8 bytes
+	inc 8, xsp			; clean up 8 bytes
 	or xhl, xhl			; test result
 	jr nz, .Ldbv_ok
 	ldw hl, 0xFFFF			; return -1
@@ -247,7 +247,7 @@ HDAE5000_FltDec_Convert:
 	pushw 0x0023
 	pushw 0x948a
 	call HDAE5000_MemFill
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ld	qiz, 0
 .LMCR_b09f:
 	ld	bc, qiz
@@ -443,7 +443,7 @@ HDAE5000_FltDec_Convert:
 	push xbc
 .LMCR_b27c:
 	calr	HDAE5000_FltDec_ShiftRightBits
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ld	qiz, 1
 .LMCR_b284:
 	push	qiz
@@ -534,7 +534,7 @@ HDAE5000_FltDec_Convert:
 
 HDAE5000_FltDec_ShiftRightBits:
 	; shift a limb array right by N bits (limbs hold 8 bits each)
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	pushw iz                                ; push IZ
 	ld	iz, 0:i3
 	ld	wa, 0:i3
@@ -598,7 +598,7 @@ HDAE5000_FltDec_ShiftRightBits:
 .LMCR_b3e4:
 	ld (xiy), bc                            ; ld (XIY),BC
 	popw iz                                 ; pop IZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_FltDec_ShiftLeftBits:
@@ -882,7 +882,7 @@ HDAE5000_FltDec_NormalizeLeft:
 	ld xwa, (xsp + 0x0c)                    ; ld XWA,(XSP+0x0c)
 	push xwa
 	calr	HDAE5000_FltDec_ShiftLeftBits
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LMCR_b643:
 	add	(xsp+2), iz
 .LMCR_b646:
@@ -939,7 +939,7 @@ HDAE5000_FltDec_NormalizeRight:
 	pushw iz                                ; push IZ
 	push xde
 	calr	HDAE5000_FltDec_ShiftRightBits
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LMCR_b6a5:
 	ld	hl, iz
 .LMCR_b6a7:
@@ -949,7 +949,7 @@ HDAE5000_FltDec_NormalizeRight:
 HDAE5000_FltDec_DecimalExponent:
 	; decimal exponent from the binary one: e * 301 / 1000 (log10 2 ~ 0.301),
 	; with the remainder deciding the rounding (HDAE5000_SMod32/_SDiv32 by 1000)
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld	wa, (xsp+16)
 	exts xwa                                ; exts XWA
@@ -1002,7 +1002,7 @@ HDAE5000_FltDec_DecimalExponent:
 	ld	xhl, xiz
 .LMCR_b729:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 

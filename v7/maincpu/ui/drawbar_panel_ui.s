@@ -2600,7 +2600,7 @@ CtlMsgGrid_EventHandler:
 	ld XWA,(XSP+0x10)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	jr t, CtlMsg_GetFocusAndDispatch
 CtlMsg_SendAudioCommand:
 	ld	a, (xbc)
@@ -2659,7 +2659,7 @@ CtlMsg_ComputeAndCheck:
 	ld XWA,(XSP+0x10)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	jr t, CtlMsg_DispatchFocusEvent
 CtlMsg_SendParamValue:
 	ld	a, (xwa)
@@ -2817,7 +2817,7 @@ AcCtlMsgGrid_Show:
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	lda	xde, (xsp+8)
 	ld	xwa, 0:i3
 	push	xwa
@@ -3488,7 +3488,7 @@ MidiSetup_TtlCase4:
 	lda xwa, (xsp + 0x0c)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	lda	xde, (xsp+8)
 	ld	xwa, 0:i3
 	push	xwa
@@ -4359,7 +4359,7 @@ MidiSetup_EventHandler:
 	lda xwa, (xsp + 0x1c)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	jr t, MidiPart_GridDispatchEvent
 MidiPart_AudioCmdDisplay:
 	ld	xwa, (xsp+12)

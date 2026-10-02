@@ -1411,7 +1411,7 @@ SetWall_BankInit_SlotLoop:
 	inc 1, hl
 	inc 1, de
 	add xiy, 0x100
-	djnz xbc, SetWall_BankInit_SlotLoop
+	djnz16 bc, SetWall_BankInit_SlotLoop
 	andmi8 (xiy), 0x7f
 	ld (xiy + 1), hl
 	ld (xiy + 5), 0x82
@@ -1423,35 +1423,35 @@ SetWall_BankInit_ClearF250:
 	ld (xhl), 0x0
 	ldw (xhl + 1), 0xffff
 	add xhl, 0x3
-	djnz xbc, SetWall_BankInit_ClearF250
+	djnz16 bc, SetWall_BankInit_ClearF250
 	ld xhl, 0xc9e
 	ldw bc, 0x10
 
 SetWall_BankInit_ClearC9E:
 	ldw (xhl), 0xffff
 	inc 2, xhl
-	djnz xbc, SetWall_BankInit_ClearC9E
+	djnz16 bc, SetWall_BankInit_ClearC9E
 	ld xhl, 0xcae
 	ldw bc, 0x10
 
 SetWall_BankInit_FillCAE:
 	ld (xhl), 0x5
 	inc 1, xhl
-	djnz xbc, SetWall_BankInit_FillCAE
+	djnz16 bc, SetWall_BankInit_FillCAE
 	ld xhl, 0xf1f8
 	ldw bc, 0x10
 
 SetWall_BankInit_ClearF1F8:
 	ldw (xhl), 0xffff
 	inc 2, xhl
-	djnz xbc, SetWall_BankInit_ClearF1F8
+	djnz16 bc, SetWall_BankInit_ClearF1F8
 	ld xhl, 0xf218
 	ldw bc, 0x10
 
 SetWall_BankInit_FillF218:
 	ld (xhl), 0x5
 	inc 1, xhl
-	djnz xbc, SetWall_BankInit_FillF218
+	djnz16 bc, SetWall_BankInit_FillF218
 	ret
 
 SetWall_FullReset:

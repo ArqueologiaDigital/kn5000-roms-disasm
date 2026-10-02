@@ -2286,7 +2286,7 @@ FP_DP_AlignMantissa_ShiftBit:
 	srl xhl, 1
 	extpfx3 0xDA, 0x24, 0x00
 	rrc xde
-	djnz xix, FP_DP_AlignMantissa_ShiftBit
+	djnz16 ix, FP_DP_AlignMantissa_ShiftBit
 
 ; Drop the guard byte, rounding to nearest when it is >= 0x80.
 FP_DP_AlignMantissa_Round:
@@ -3647,7 +3647,7 @@ FP_MulMantissa64x64:
 	add_erpw_rr DE, 0xF2
 	adc_erpw 0xEA, 0x00, 0x00
 	add_erpw_rr IX, 0xEE
-	ld2_erpw_rr IX, 0xEE
+	ld qhl, ix
 	ret nc
 	adc xde, 0x0
 	ret

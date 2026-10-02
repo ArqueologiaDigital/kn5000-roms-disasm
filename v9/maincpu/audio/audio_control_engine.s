@@ -10306,7 +10306,7 @@ MidiPart_ScanNextEntry:
 	ld A, (xiy+)
 	cp a, w
 	jr z, MidiPart_ScanDone
-	djnz xbc, MidiPart_ScanNextEntry
+	djnz16 bc, MidiPart_ScanNextEntry
 
 MidiPart_NoChannelFound:
 	ld (0x91b5:16), 255
@@ -10454,7 +10454,7 @@ PendingExpr_ScanEntry:
 
 PendingExpr_NextEntry:
 	inc 1, xiy
-	djnz xbc, PendingExpr_ScanEntry
+	djnz16 bc, PendingExpr_ScanEntry
 	ld xiy, 0x9452
 	ldw bc, 0x10
 
@@ -10474,7 +10474,7 @@ PendingVol_ScanEntry:
 
 PendingVol_NextEntry:
 	inc 1, xiy
-	djnz xbc, PendingVol_ScanEntry
+	djnz16 bc, PendingVol_ScanEntry
 	ld xiy, 0x9472
 	ldw bc, 0x10
 
@@ -10495,7 +10495,7 @@ PendingPan_ScanEntry:
 
 PendingPan_NextEntry:
 	inc 2, xiy
-	djnz xbc, PendingPan_ScanEntry
+	djnz16 bc, PendingPan_ScanEntry
 	ld xiy, 0x9432
 	ldw bc, 0x10
 
@@ -10515,7 +10515,7 @@ PendingBank_ScanEntry:
 
 PendingBank_NextEntry:
 	inc 1, xiy
-	djnz xbc, PendingBank_ScanEntry
+	djnz16 bc, PendingBank_ScanEntry
 	ld xiy, 0x94b2
 	ldw bc, 0x10
 
@@ -10535,7 +10535,7 @@ PendingPartCC_ScanEntry:
 
 PendingPartCC_NextEntry:
 	inc 1, xiy
-	djnz xbc, PendingPartCC_ScanEntry
+	djnz16 bc, PendingPartCC_ScanEntry
 	ret
 
 PartCtrl_CheckBitmaskBit:

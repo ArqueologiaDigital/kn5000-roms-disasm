@@ -443,7 +443,7 @@ PsEditBox_Paint:
 	lda xwa, (xsp + 0x0110)
 	push XWA
 	call LyricsTrack_ReadAndParse_Helper2
-	inc 0,XSP
+	inc 8,XSP
 	lda xwa, (xsp + 0x020c)
 	lda xde, (xwa + 0x04)
 	ld BC,(XDE)
@@ -9431,7 +9431,7 @@ TitleWidget_Confirm_DrawRowNext:
 	lda xwa, (xsp + 0x16)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	lda xwa, (xsp + 0x0092)
 	add XWA,(XSP+0x0a)
 	ld A,(XWA)
@@ -9452,7 +9452,7 @@ TitleWidget_Confirm_DrawRowNext:
 	ld XWA,(XBC+0x04)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	jr t, ClassProc_ReturnZeroJmp
 TitleWidget_Confirm_SkipEmpty:
 	ld xbc, 1:i3
@@ -11532,7 +11532,7 @@ Viewable_SetName:
 	ld XWA,(XWA)
 	push XWA
 	call LyricsTrack_ReadAndParse_Helper2
-	inc 0,XSP
+	inc 8,XSP
 	cp HL,(XSP+0x08)
 	jr nc, Viewable_SetName_Copy
 	ld XWA,(XSP+0x10)
@@ -15165,7 +15165,7 @@ ScrollBar_Draw:
 	ld (XSP+0x10),HL
 	push XIZ
 	call LyricsTrack_ReadAndParse_Helper2
-	inc 0,XSP
+	inc 8,XSP
 	cp HL,(XSP+0x0c)
 	jr nc, ScrollBar_ReturnZero
 	ld XWA,(XSP+0x04)
@@ -16333,7 +16333,7 @@ ScreenID_EventSwitch:
 	ld XWA,(XWA+0x04)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
-	inc 0,XSP
+	inc 8,XSP
 	jrl t, ScreenID_ReturnZero
 ScreenID_Select_Lookup:
 .Lc_fa8308:
@@ -16675,7 +16675,7 @@ WindowID_EventSwitch:
 	ld XWA,(XWA+0x04)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
-	inc 0,XSP
+	inc 8,XSP
 	jrl t, WindowID_ReturnZero
 WindowID_Select_Lookup:
 .Lc_fa8698:
@@ -19619,7 +19619,7 @@ DrawFunc_XspCheck_Loop:
 	ret
 
 InitializeGraphics:
-	dec 0,XSP
+	dec 8,XSP
 	push XIZ
 	calr InitDrawTask
 	ld wa, 5:i3
@@ -19653,7 +19653,7 @@ InitializeGraphics:
 	calr UpdateScreen
 	calr LcdOn
 	pop XIZ
-	inc 0,XSP
+	inc 8,XSP
 	ret
 LcdOn:
 	calr IS_XSP_INSIDE_4K_REGION_AT_1C032

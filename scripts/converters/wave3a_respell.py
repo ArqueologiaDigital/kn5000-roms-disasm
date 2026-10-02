@@ -51,6 +51,32 @@ right bytes but name the wrong instruction or register
             becomes `(xrr+0:8)`.  The value is matched, not the text
             (256, 0x100, 0x0100).
 
+FIX-ROUND FAMILIES (wave 3a, T1 fix round, 2026-10-02) -- each new spelling
+already assembles under the T1 pin (4867e03232a6 / c949d618) to the old
+line's bytes, so these are gated with that pin; the backend then refuses the
+old spelling (TOOLCHAIN_VERSION UPDATE 18):
+
+  djnz16    `djnz xbc, L` -> `djnz16 bc, L`.  DJNZ exists only under the
+            byte (C8) and word (D8) prefixes: `d9 1c` is MAME `djnz BC,..`,
+            but the DJNZ32 def printed and accepted the 32-bit name.
+
+  inc8      `inc 0, r` / `dec 0, r` -> `inc 8, r` / `dec 8, r`.  The 3-bit
+            count field holds 1..7 and 0 MEANS 8 (TLCS-900 manual "#3 = 1-8";
+            MAME's CPU core: `m_imm1 ? m_imm1 : 8`).  `inc 0` was MAME's
+            DISASSEMBLER text (the raw field) and the assembler masked it.
+
+  muldiv2   the MUL/DIV pseudos UPDATE 17's respell table did not cover, all
+            naming the 16-bit register where the CPU writes the 32-bit one or
+            writing the register as a raw field:
+              mulw_erp BC, 0xfa          ->  mul xbc, qiz            (d7 fa 41)
+              mul16_rid8 xsp, 0x08, wa   ->  mul xwa, (xsp+8)        (9f 08 40)
+              divs16_rid8 xwa, 0x2a, bc  ->  divs xbc, (xwa+42)      (98 2a 59)
+              mul_sd16b 1, 0x86, 0x39    ->  mul wa, (0x3986:16)     (c1 86 39 41)
+              muls_sd16w 0, 0xda, 0xb7   ->  muls xwa, (0xb7da:16)   (d1 da b7 48)
+            and the one extended-register LD the UPDATE 17 rename missed
+            (LD2_ERPW_RR shares LDFR_WERP's encoding):
+              ld2_erpw_rr IX, 0xEE       ->  ld qhl, ix              (d7 ee 9c)
+
 VERIFICATION (every site, before anything is written)
   The old line is assembled alone by the OLD assembler (--old-mc, default the
   pinned snapshot) and the new line by the NEW one (--new-mc, default the
@@ -64,6 +90,11 @@ RUN (from the tree root)
     python3 scripts/converters/wave3a_respell.py muldiv --apply    # write
     python3 scripts/converters/wave3a_respell.py autoinc --apply
     python3 scripts/converters/wave3a_respell.py disp256 --apply
+  fix round (both assemblers = the T1 pin: the new spellings already exist):
+    S=~/compartilhado/toolchain-snapshot/llvm-mc.snap
+    python3 scripts/converters/wave3a_respell.py djnz16  --old-mc $S --new-mc $S --apply
+    python3 scripts/converters/wave3a_respell.py inc8    --old-mc $S --new-mc $S --apply
+    python3 scripts/converters/wave3a_respell.py muldiv2 --old-mc $S --new-mc $S --apply
 Sources are read and written as latin-1 bytes (notes/lanes/BRIEF-2026-09-01.md).
 """
 import argparse
@@ -322,6 +353,75 @@ def rw_lda_dri(mn, ops):
 D256 = re.compile(r'(\(\s*x(?:wa|bc|de|hl|ix|iy|iz|sp)\s*\+\s*)(0x0*100|256)(\s*\))', re.I)
 
 
+# ------------------------------------------------------------------ fix round
+QNAME = {0xE2 + 4 * i: "q" + R16[i] for i in range(8)}   # previous-bank word regs
+
+
+def _int(s):
+    try:
+        return int(s.strip(), 0)
+    except ValueError:
+        return None
+
+
+def rw_djnz16(mn, ops):
+    if mn.lower() != "djnz" or len(ops) != 2 or ops[0].lower() not in R32:
+        return None
+    return "djnz16", [R16[R32.index(ops[0].lower())], ops[1]]
+
+
+def rw_inc8(mn, ops):
+    if mn.lower() not in ("inc", "dec") or len(ops) != 2 or ops[0].strip() != "0":
+        return None
+    return mn, ["8", ops[1]]
+
+
+RID8 = {"mul16_rid8": "mul", "muls16_rid8": "muls", "div16_rid8": "div",
+        "divs16_rid8": "divs"}
+
+
+def rw_muldiv2(mn, ops):
+    m = mn.lower()
+    if m == "mulw_erp":                       # mulw_erp R16, N : d7 N 40+R
+        if len(ops) != 2 or ops[0].lower() not in R16:
+            return "REFUSE:operands"
+        q = QNAME.get(_int(ops[1]))
+        if not q:
+            return "REFUSE:register-file-byte-not-a-q-register"
+        return "mul", [R32[R16.index(ops[0].lower())], q]
+    if m in RID8:                             # mul16_rid8 BASE32, D8, R16
+        if len(ops) != 3 or ops[0].lower() not in R32 or ops[2].lower() not in R16:
+            return "REFUSE:operands"
+        d = _int(ops[1])
+        if d is None or not 0 <= d <= 0xFF:
+            return "REFUSE:displacement"
+        d = d - 0x100 if d >= 0x80 else d
+        disp = ("+%d" % d) if d >= 0 else ("%d" % d)
+        return RID8[m], [R32[R16.index(ops[2].lower())],
+                         "(%s%s)" % (ops[0].lower(), disp)]
+    if m in ("mul_sd16b", "muls_sd16w"):      # FIELD, addr lo, addr hi
+        if len(ops) != 3:
+            return "REFUSE:operands"
+        f, lo, hi = (_int(x) for x in ops)
+        if None in (f, lo, hi) or not (0 <= f <= 7 and 0 <= lo <= 0xFF and 0 <= hi <= 0xFF):
+            return "REFUSE:not-constant"
+        if m == "mul_sd16b":
+            if f & 1 == 0:
+                return "REFUSE:even-byte-multiply-field"   # MAME `mul ??,`
+            reg = R16[f >> 1]
+        else:
+            reg = R32[f]
+        return m.split("_")[0], [reg, "(0x%04x:16)" % ((hi << 8) | lo)]
+    if m == "ld2_erpw_rr":                    # ld2_erpw_rr R16, N : d7 N 98+R = ld rN, R
+        if len(ops) != 2 or ops[0].lower() not in R16:
+            return "REFUSE:operands"
+        q = QNAME.get(_int(ops[1]))
+        if not q:
+            return "REFUSE:register-file-byte-not-a-q-register"
+        return "ld", [q, ops[0].lower()]
+    return None
+
+
 # ------------------------------------------------------------------ driver
 def sources():
     out = subprocess.run(["git", "ls-files", "-z", "*.s", "*.inc", "*.S"], cwd=ROOT,
@@ -367,6 +467,12 @@ def rewrite_line(fam, line, equs):
             return rw_erp(mn, o)
         if fam == "ldadri256":
             return rw_lda_dri(mn, o)
+        if fam == "djnz16":
+            return rw_djnz16(mn, o)
+        if fam == "inc8":
+            return rw_inc8(mn, o)
+        if fam == "muldiv2":
+            return rw_muldiv2(mn, o)
         return rw_autoinc(mn, o, equs)
     if "\\" in ops and fam not in ("erp",):
         r = rw(split_ops(ops))
@@ -376,6 +482,21 @@ def rewrite_line(fam, line, equs):
         return None, None
     if isinstance(r, str):
         return None, r
+    if fam in ("inc8", "djnz16"):
+        # Keep the line's own layout (wsa1 aligns a column of comments):
+        # change only the count / the register name, in the source's case.
+        if fam == "inc8":
+            nops_s = re.sub(r'^(\s*)0(?=\s*,)', r'\g<1>8', ops)
+            nm = mn
+        else:
+            nops_s = re.sub(r'^(\s*)[xX]', r'\1', ops)
+            nm = mn + "16"
+        grow = len(nm) + len(nops_s) - len(mn) - len(ops)
+        w2 = ws2 or ""
+        if com and grow > 0 and w2.endswith(" " * (grow + 1)):
+            w2 = w2[:-grow]
+        new = head + nm + ws + nops_s + (w2 if com else "") + (com or "")
+        return (new.rstrip() if not com else new), "ok"
     nm, nops = r
     com = com or ""
     if fam == "autoinc" and com:
@@ -392,10 +513,12 @@ KEEP = set(R32 + R16 + R8 + ["qwa", "qbc", "qde", "qhl", "qix", "qiy", "qiz", "q
             "xbc2", "xde2", "xhl2", "xwa3", "xbc3", "xde3", "xhl3"])
 
 
-def assemble(mc, lines, equs=None):
+def assemble(mc, lines, equs=None, default_sym="0x1234"):
     """Each line alone; a symbol is defined to its tree-wide .equ value when it
     has one (so an old line naming MEM_XIX_PI2 and a new line spelling its
-    value agree), else to 0x1234 for BOTH spellings.  -> list of hex|None."""
+    value agree), else to `default_sym` for BOTH spellings -- 0x1234, or `.`
+    for a relative branch (djnz16), whose d8 cannot reach 0x1234.
+    -> list of hex|None."""
     equs = equs or {}
     src = []
     for i, l in enumerate(lines):
@@ -409,7 +532,13 @@ def assemble(mc, lines, equs=None):
                     syms.add(s)
         src.append(".section .t%d,\"ax\"" % i)
         for s in sorted(syms):
-            src.append("\t.set %s, %s" % (s, hex(equs[s]) if s in equs else "0x1234"))
+            if s not in equs and default_sym == ".":
+                # a location cannot be re-.set: give each line its own copy
+                u = "%s__t%d" % (s, i)
+                code = re.sub(r'(?<![\w.$])' + re.escape(s) + r'(?![\w.$])', u, code)
+                src.append("\t.set %s, ." % u)
+                continue
+            src.append("\t.set %s, %s" % (s, hex(equs[s]) if s in equs else default_sym))
         src.append(code)
     with tempfile.TemporaryDirectory() as td:
         p = os.path.join(td, "a.s")
@@ -442,7 +571,8 @@ def assemble(mc, lines, equs=None):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("family", choices=("muldiv", "autoinc", "disp256", "erp", "ldadri256"))
+    ap.add_argument("family", choices=("muldiv", "autoinc", "disp256", "erp", "ldadri256",
+                                       "djnz16", "inc8", "muldiv2"))
     ap.add_argument("--all-lda-dri", action="store_true",
                     help="ldadri256: every d16 lda_dri site, not only +256")
     ap.add_argument("--apply", action="store_true")
@@ -469,8 +599,9 @@ def main():
             elif new is not None and new != line:
                 sites.append((f, i, line, new))
     print("candidate sites: %d; refused before assembly: %d" % (len(sites), sum(refused.values())))
-    eo = assemble(a.old_mc, [s[2] for s in sites], equs)
-    en = assemble(a.new_mc, [s[3] for s in sites], equs)
+    dsym = "." if a.family == "djnz16" else "0x1234"
+    eo = assemble(a.old_mc, [s[2] for s in sites], equs, dsym)
+    en = assemble(a.new_mc, [s[3] for s in sites], equs, dsym)
     ok, bad = [], []
     for s, o, n in zip(sites, eo, en):
         (ok if (o is not None and o == n) else bad).append((s, o, n))

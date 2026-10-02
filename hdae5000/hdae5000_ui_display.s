@@ -290,7 +290,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	;   (0x29E/0x29F) with event 0x01CA0002.  Callers: FileLoadSwCatch,
 	;   LBNLoadSwCatch, FlsLoadScreen (x2) and the routine at 0x286E50.
 	; --- Prologue ---
-	dec 0, xsp				; ef 68 — allocate 4 bytes
+	dec 8, xsp				; ef 68 — allocate 4 bytes
 	pushw iz                                ; push iz (compact 16-bit)
 	ld (xsp + 0x04), de			; bf 04 52
 	ld (xsp + 0x06), bc			; bf 06 51
@@ -446,7 +446,7 @@ HDAE5000_LoadSongWithUi:	; 0x28AF38 (441 bytes)
 	; --- Epilogue ---
 	ld hl, (xsp + 0x02)			; 9f 02 23
 	popw iz                                 ; pop iz (compact 16-bit)
-	inc 0, xsp				; ef 60
+	inc 8, xsp				; ef 60
 	retd 0x0006				; 0f 06 00
 
 HDAE5000_SaveSongWithUi:	; 0x28B0F1 (271 bytes)
@@ -681,7 +681,7 @@ HDAE5000_NameHistory_Push:	; 0x28B33E (61 bytes)
 	add xwa, xiz		; XWA = &name[slot]
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp			; clean up 8 bytes (arg + saved XBC)
+	inc 8, xsp			; clean up 8 bytes (arg + saved XBC)
 	ld a, (xiz + 2)		; recall index = the slot just written
 	ld (xiz + 1), a
 	lda xwa, (xiz + 2)
@@ -1039,7 +1039,7 @@ HDAE5000_AcLanguageText1Proc_Msg001:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b6f3:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b70a                      ; [6e 10] jr NZ,0x28b70a
@@ -1048,7 +1048,7 @@ HDAE5000_AcLanguageText1Proc_Msg001:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b70a:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e cb 15] jrl NZ,0x28ccdd
@@ -1057,7 +1057,7 @@ HDAE5000_AcLanguageText1Proc_Msg001:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 b8 15] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg002:
 	cpw	(xsp+4), 0x0001
@@ -1067,7 +1067,7 @@ HDAE5000_AcLanguageText1Proc_Msg002:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b73c:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b753                      ; [6e 10] jr NZ,0x28b753
@@ -1076,7 +1076,7 @@ HDAE5000_AcLanguageText1Proc_Msg002:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b753:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 82 15] jrl NZ,0x28ccdd
@@ -1085,7 +1085,7 @@ HDAE5000_AcLanguageText1Proc_Msg002:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 6f 15] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg003:
 	cpw	(xsp+4), 0x0001
@@ -1095,7 +1095,7 @@ HDAE5000_AcLanguageText1Proc_Msg003:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b785:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b79c                      ; [6e 10] jr NZ,0x28b79c
@@ -1104,7 +1104,7 @@ HDAE5000_AcLanguageText1Proc_Msg003:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b79c:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 39 15] jrl NZ,0x28ccdd
@@ -1113,7 +1113,7 @@ HDAE5000_AcLanguageText1Proc_Msg003:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 26 15] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg004:
 	cpw	(xsp+4), 0x0001
@@ -1123,7 +1123,7 @@ HDAE5000_AcLanguageText1Proc_Msg004:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b7ce:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b7e5                      ; [6e 10] jr NZ,0x28b7e5
@@ -1132,7 +1132,7 @@ HDAE5000_AcLanguageText1Proc_Msg004:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b7e5:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f0 14] jrl NZ,0x28ccdd
@@ -1141,7 +1141,7 @@ HDAE5000_AcLanguageText1Proc_Msg004:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 dd 14] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg005:
 	cpw	(xsp+4), 0x0001
@@ -1151,7 +1151,7 @@ HDAE5000_AcLanguageText1Proc_Msg005:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b817:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b82e                      ; [6e 10] jr NZ,0x28b82e
@@ -1160,7 +1160,7 @@ HDAE5000_AcLanguageText1Proc_Msg005:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b82e:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e a7 14] jrl NZ,0x28ccdd
@@ -1169,7 +1169,7 @@ HDAE5000_AcLanguageText1Proc_Msg005:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 94 14] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg006:
 	cpw	(xsp+4), 0x0001
@@ -1179,7 +1179,7 @@ HDAE5000_AcLanguageText1Proc_Msg006:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b860:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b877                      ; [6e 10] jr NZ,0x28b877
@@ -1188,7 +1188,7 @@ HDAE5000_AcLanguageText1Proc_Msg006:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b877:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 5e 14] jrl NZ,0x28ccdd
@@ -1197,7 +1197,7 @@ HDAE5000_AcLanguageText1Proc_Msg006:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 4b 14] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg007:
 	cpw	(xsp+4), 0x0001
@@ -1207,7 +1207,7 @@ HDAE5000_AcLanguageText1Proc_Msg007:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b8a9:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b8c0                      ; [6e 10] jr NZ,0x28b8c0
@@ -1216,7 +1216,7 @@ HDAE5000_AcLanguageText1Proc_Msg007:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b8c0:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 15 14] jrl NZ,0x28ccdd
@@ -1225,7 +1225,7 @@ HDAE5000_AcLanguageText1Proc_Msg007:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 02 14] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg008:
 	cpw	(xsp+4), 0x0001
@@ -1235,7 +1235,7 @@ HDAE5000_AcLanguageText1Proc_Msg008:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b8f2:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b909                      ; [6e 10] jr NZ,0x28b909
@@ -1244,7 +1244,7 @@ HDAE5000_AcLanguageText1Proc_Msg008:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b909:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e cc 13] jrl NZ,0x28ccdd
@@ -1253,7 +1253,7 @@ HDAE5000_AcLanguageText1Proc_Msg008:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 b9 13] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg009:
 	cpw	(xsp+4), 0x0001
@@ -1263,7 +1263,7 @@ HDAE5000_AcLanguageText1Proc_Msg009:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b93b:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b952                      ; [6e 10] jr NZ,0x28b952
@@ -1272,7 +1272,7 @@ HDAE5000_AcLanguageText1Proc_Msg009:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b952:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 83 13] jrl NZ,0x28ccdd
@@ -1281,7 +1281,7 @@ HDAE5000_AcLanguageText1Proc_Msg009:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 70 13] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg010:
 	cpw	(xsp+4), 0x0001
@@ -1291,7 +1291,7 @@ HDAE5000_AcLanguageText1Proc_Msg010:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b984:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b99b                      ; [6e 10] jr NZ,0x28b99b
@@ -1300,7 +1300,7 @@ HDAE5000_AcLanguageText1Proc_Msg010:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b99b:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 3a 13] jrl NZ,0x28ccdd
@@ -1309,7 +1309,7 @@ HDAE5000_AcLanguageText1Proc_Msg010:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 27 13] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg011:
 	cpw	(xsp+4), 0x0001
@@ -1319,7 +1319,7 @@ HDAE5000_AcLanguageText1Proc_Msg011:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b9cd:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_b9e4                      ; [6e 10] jr NZ,0x28b9e4
@@ -1328,7 +1328,7 @@ HDAE5000_AcLanguageText1Proc_Msg011:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_b9e4:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f1 12] jrl NZ,0x28ccdd
@@ -1337,7 +1337,7 @@ HDAE5000_AcLanguageText1Proc_Msg011:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 de 12] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg012:
 	cpw	(xsp+4), 0x0001
@@ -1347,7 +1347,7 @@ HDAE5000_AcLanguageText1Proc_Msg012:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ba16:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_ba2d                      ; [6e 10] jr NZ,0x28ba2d
@@ -1356,7 +1356,7 @@ HDAE5000_AcLanguageText1Proc_Msg012:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ba2d:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e a8 12] jrl NZ,0x28ccdd
@@ -1365,7 +1365,7 @@ HDAE5000_AcLanguageText1Proc_Msg012:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 95 12] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg013:
 	cpw	(xsp+4), 0x0001
@@ -1375,7 +1375,7 @@ HDAE5000_AcLanguageText1Proc_Msg013:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ba5f:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_ba76                      ; [6e 10] jr NZ,0x28ba76
@@ -1384,7 +1384,7 @@ HDAE5000_AcLanguageText1Proc_Msg013:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ba76:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 5f 12] jrl NZ,0x28ccdd
@@ -1393,7 +1393,7 @@ HDAE5000_AcLanguageText1Proc_Msg013:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 4c 12] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg014:
 	cpw	(xsp+4), 0x0001
@@ -1403,7 +1403,7 @@ HDAE5000_AcLanguageText1Proc_Msg014:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_baa8:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_babf                      ; [6e 10] jr NZ,0x28babf
@@ -1412,7 +1412,7 @@ HDAE5000_AcLanguageText1Proc_Msg014:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_babf:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 16 12] jrl NZ,0x28ccdd
@@ -1421,7 +1421,7 @@ HDAE5000_AcLanguageText1Proc_Msg014:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 03 12] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg015:
 	cpw	(xsp+4), 0x0001
@@ -1431,7 +1431,7 @@ HDAE5000_AcLanguageText1Proc_Msg015:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_baf1:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bb08                      ; [6e 10] jr NZ,0x28bb08
@@ -1440,7 +1440,7 @@ HDAE5000_AcLanguageText1Proc_Msg015:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bb08:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e cd 11] jrl NZ,0x28ccdd
@@ -1449,7 +1449,7 @@ HDAE5000_AcLanguageText1Proc_Msg015:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 ba 11] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg016:
 	cpw	(xsp+4), 0x0001
@@ -1459,7 +1459,7 @@ HDAE5000_AcLanguageText1Proc_Msg016:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bb3a:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bb51                      ; [6e 10] jr NZ,0x28bb51
@@ -1468,7 +1468,7 @@ HDAE5000_AcLanguageText1Proc_Msg016:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bb51:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 84 11] jrl NZ,0x28ccdd
@@ -1477,7 +1477,7 @@ HDAE5000_AcLanguageText1Proc_Msg016:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 71 11] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg017:
 	cpw	(xsp+4), 0x0001
@@ -1487,7 +1487,7 @@ HDAE5000_AcLanguageText1Proc_Msg017:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bb83:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bb9a                      ; [6e 10] jr NZ,0x28bb9a
@@ -1496,7 +1496,7 @@ HDAE5000_AcLanguageText1Proc_Msg017:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bb9a:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 3b 11] jrl NZ,0x28ccdd
@@ -1505,7 +1505,7 @@ HDAE5000_AcLanguageText1Proc_Msg017:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 28 11] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg018:
 	cpw	(xsp+4), 0x0001
@@ -1515,7 +1515,7 @@ HDAE5000_AcLanguageText1Proc_Msg018:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bbcc:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bbe3                      ; [6e 10] jr NZ,0x28bbe3
@@ -1524,7 +1524,7 @@ HDAE5000_AcLanguageText1Proc_Msg018:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bbe3:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f2 10] jrl NZ,0x28ccdd
@@ -1533,7 +1533,7 @@ HDAE5000_AcLanguageText1Proc_Msg018:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 df 10] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg019:
 	cpw	(xsp+4), 0x0001
@@ -1543,7 +1543,7 @@ HDAE5000_AcLanguageText1Proc_Msg019:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bc15:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bc2c                      ; [6e 10] jr NZ,0x28bc2c
@@ -1552,7 +1552,7 @@ HDAE5000_AcLanguageText1Proc_Msg019:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bc2c:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e a9 10] jrl NZ,0x28ccdd
@@ -1561,7 +1561,7 @@ HDAE5000_AcLanguageText1Proc_Msg019:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 96 10] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg020:
 	cpw	(xsp+4), 0x0001
@@ -1571,7 +1571,7 @@ HDAE5000_AcLanguageText1Proc_Msg020:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bc5e:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bc75                      ; [6e 10] jr NZ,0x28bc75
@@ -1580,7 +1580,7 @@ HDAE5000_AcLanguageText1Proc_Msg020:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bc75:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 60 10] jrl NZ,0x28ccdd
@@ -1589,7 +1589,7 @@ HDAE5000_AcLanguageText1Proc_Msg020:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 4d 10] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg021:
 	cpw	(xsp+4), 0x0001
@@ -1599,7 +1599,7 @@ HDAE5000_AcLanguageText1Proc_Msg021:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bca7:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bcbe                      ; [6e 10] jr NZ,0x28bcbe
@@ -1608,7 +1608,7 @@ HDAE5000_AcLanguageText1Proc_Msg021:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bcbe:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 17 10] jrl NZ,0x28ccdd
@@ -1617,7 +1617,7 @@ HDAE5000_AcLanguageText1Proc_Msg021:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 04 10] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg022:
 	cpw	(xsp+4), 0x0001
@@ -1627,7 +1627,7 @@ HDAE5000_AcLanguageText1Proc_Msg022:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bcf0:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bd07                      ; [6e 10] jr NZ,0x28bd07
@@ -1636,7 +1636,7 @@ HDAE5000_AcLanguageText1Proc_Msg022:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bd07:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e ce 0f] jrl NZ,0x28ccdd
@@ -1645,7 +1645,7 @@ HDAE5000_AcLanguageText1Proc_Msg022:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 bb 0f] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg023:
 	cpw	(xsp+4), 0x0001
@@ -1655,7 +1655,7 @@ HDAE5000_AcLanguageText1Proc_Msg023:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bd39:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bd50                      ; [6e 10] jr NZ,0x28bd50
@@ -1664,7 +1664,7 @@ HDAE5000_AcLanguageText1Proc_Msg023:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bd50:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 85 0f] jrl NZ,0x28ccdd
@@ -1673,7 +1673,7 @@ HDAE5000_AcLanguageText1Proc_Msg023:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 72 0f] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg024:
 	cpw	(xsp+4), 0x0001
@@ -1683,7 +1683,7 @@ HDAE5000_AcLanguageText1Proc_Msg024:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bd82:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bd99                      ; [6e 10] jr NZ,0x28bd99
@@ -1692,7 +1692,7 @@ HDAE5000_AcLanguageText1Proc_Msg024:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bd99:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 3c 0f] jrl NZ,0x28ccdd
@@ -1701,7 +1701,7 @@ HDAE5000_AcLanguageText1Proc_Msg024:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 29 0f] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg025:
 	cpw	(xsp+4), 0x0001
@@ -1711,7 +1711,7 @@ HDAE5000_AcLanguageText1Proc_Msg025:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bdcb:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bde2                      ; [6e 10] jr NZ,0x28bde2
@@ -1720,7 +1720,7 @@ HDAE5000_AcLanguageText1Proc_Msg025:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bde2:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f3 0e] jrl NZ,0x28ccdd
@@ -1729,7 +1729,7 @@ HDAE5000_AcLanguageText1Proc_Msg025:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e0 0e] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg026:
 	cpw	(xsp+4), 0x0001
@@ -1739,7 +1739,7 @@ HDAE5000_AcLanguageText1Proc_Msg026:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_be14:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_be2b                      ; [6e 10] jr NZ,0x28be2b
@@ -1748,7 +1748,7 @@ HDAE5000_AcLanguageText1Proc_Msg026:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_be2b:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e aa 0e] jrl NZ,0x28ccdd
@@ -1757,7 +1757,7 @@ HDAE5000_AcLanguageText1Proc_Msg026:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 97 0e] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg027:
 	cpw	(xsp+4), 0x0001
@@ -1767,7 +1767,7 @@ HDAE5000_AcLanguageText1Proc_Msg027:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_be5d:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_be74                      ; [6e 10] jr NZ,0x28be74
@@ -1776,7 +1776,7 @@ HDAE5000_AcLanguageText1Proc_Msg027:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_be74:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 61 0e] jrl NZ,0x28ccdd
@@ -1785,7 +1785,7 @@ HDAE5000_AcLanguageText1Proc_Msg027:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 4e 0e] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg028:
 	cpw	(xsp+4), 0x0001
@@ -1795,7 +1795,7 @@ HDAE5000_AcLanguageText1Proc_Msg028:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bea6:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bebd                      ; [6e 10] jr NZ,0x28bebd
@@ -1804,7 +1804,7 @@ HDAE5000_AcLanguageText1Proc_Msg028:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bebd:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 18 0e] jrl NZ,0x28ccdd
@@ -1813,7 +1813,7 @@ HDAE5000_AcLanguageText1Proc_Msg028:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 05 0e] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg029:
 	cpw	(xsp+4), 0x0001
@@ -1823,7 +1823,7 @@ HDAE5000_AcLanguageText1Proc_Msg029:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_beef:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bf06                      ; [6e 10] jr NZ,0x28bf06
@@ -1832,7 +1832,7 @@ HDAE5000_AcLanguageText1Proc_Msg029:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bf06:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e cf 0d] jrl NZ,0x28ccdd
@@ -1841,7 +1841,7 @@ HDAE5000_AcLanguageText1Proc_Msg029:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 bc 0d] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg030:
 	cpw	(xsp+4), 0x0001
@@ -1851,7 +1851,7 @@ HDAE5000_AcLanguageText1Proc_Msg030:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bf38:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bf4f                      ; [6e 10] jr NZ,0x28bf4f
@@ -1860,7 +1860,7 @@ HDAE5000_AcLanguageText1Proc_Msg030:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bf4f:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 86 0d] jrl NZ,0x28ccdd
@@ -1869,7 +1869,7 @@ HDAE5000_AcLanguageText1Proc_Msg030:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 73 0d] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg031:
 	cpw	(xsp+4), 0x0001
@@ -1879,7 +1879,7 @@ HDAE5000_AcLanguageText1Proc_Msg031:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bf81:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bf98                      ; [6e 10] jr NZ,0x28bf98
@@ -1888,7 +1888,7 @@ HDAE5000_AcLanguageText1Proc_Msg031:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bf98:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 3d 0d] jrl NZ,0x28ccdd
@@ -1897,7 +1897,7 @@ HDAE5000_AcLanguageText1Proc_Msg031:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 2a 0d] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg032:
 	cpw	(xsp+4), 0x0001
@@ -1907,7 +1907,7 @@ HDAE5000_AcLanguageText1Proc_Msg032:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bfca:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_bfe1                      ; [6e 10] jr NZ,0x28bfe1
@@ -1916,7 +1916,7 @@ HDAE5000_AcLanguageText1Proc_Msg032:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_bfe1:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f4 0c] jrl NZ,0x28ccdd
@@ -1925,7 +1925,7 @@ HDAE5000_AcLanguageText1Proc_Msg032:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e1 0c] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg033:
 	cpw	(xsp+4), 0x0001
@@ -1935,7 +1935,7 @@ HDAE5000_AcLanguageText1Proc_Msg033:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c013:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c02a                      ; [6e 10] jr NZ,0x28c02a
@@ -1944,7 +1944,7 @@ HDAE5000_AcLanguageText1Proc_Msg033:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c02a:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e ab 0c] jrl NZ,0x28ccdd
@@ -1953,7 +1953,7 @@ HDAE5000_AcLanguageText1Proc_Msg033:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 98 0c] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg034:
 	cpw	(xsp+4), 0x0001
@@ -1963,7 +1963,7 @@ HDAE5000_AcLanguageText1Proc_Msg034:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c05c:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c073                      ; [6e 10] jr NZ,0x28c073
@@ -1972,7 +1972,7 @@ HDAE5000_AcLanguageText1Proc_Msg034:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c073:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 62 0c] jrl NZ,0x28ccdd
@@ -1981,7 +1981,7 @@ HDAE5000_AcLanguageText1Proc_Msg034:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 4f 0c] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg035:
 	cpw	(xsp+4), 0x0001
@@ -1991,7 +1991,7 @@ HDAE5000_AcLanguageText1Proc_Msg035:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c0a5:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c0bc                      ; [6e 10] jr NZ,0x28c0bc
@@ -2000,7 +2000,7 @@ HDAE5000_AcLanguageText1Proc_Msg035:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c0bc:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 19 0c] jrl NZ,0x28ccdd
@@ -2009,7 +2009,7 @@ HDAE5000_AcLanguageText1Proc_Msg035:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 06 0c] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg036:
 	cpw	(xsp+4), 0x0001
@@ -2019,7 +2019,7 @@ HDAE5000_AcLanguageText1Proc_Msg036:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c0ee:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c105                      ; [6e 10] jr NZ,0x28c105
@@ -2028,7 +2028,7 @@ HDAE5000_AcLanguageText1Proc_Msg036:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c105:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e d0 0b] jrl NZ,0x28ccdd
@@ -2037,7 +2037,7 @@ HDAE5000_AcLanguageText1Proc_Msg036:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 bd 0b] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg037:
 	cpw	(xsp+4), 0x0001
@@ -2047,7 +2047,7 @@ HDAE5000_AcLanguageText1Proc_Msg037:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c137:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c14e                      ; [6e 10] jr NZ,0x28c14e
@@ -2056,7 +2056,7 @@ HDAE5000_AcLanguageText1Proc_Msg037:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c14e:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 87 0b] jrl NZ,0x28ccdd
@@ -2065,7 +2065,7 @@ HDAE5000_AcLanguageText1Proc_Msg037:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 74 0b] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg038:
 	cpw	(xsp+4), 0x0001
@@ -2075,7 +2075,7 @@ HDAE5000_AcLanguageText1Proc_Msg038:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c180:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c197                      ; [6e 10] jr NZ,0x28c197
@@ -2084,7 +2084,7 @@ HDAE5000_AcLanguageText1Proc_Msg038:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c197:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 3e 0b] jrl NZ,0x28ccdd
@@ -2093,7 +2093,7 @@ HDAE5000_AcLanguageText1Proc_Msg038:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 2b 0b] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg039:
 	cpw	(xsp+4), 0x0001
@@ -2103,7 +2103,7 @@ HDAE5000_AcLanguageText1Proc_Msg039:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c1c9:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c1e0                      ; [6e 10] jr NZ,0x28c1e0
@@ -2112,7 +2112,7 @@ HDAE5000_AcLanguageText1Proc_Msg039:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c1e0:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f5 0a] jrl NZ,0x28ccdd
@@ -2121,7 +2121,7 @@ HDAE5000_AcLanguageText1Proc_Msg039:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e2 0a] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg040:
 	cpw	(xsp+4), 0x0001
@@ -2131,7 +2131,7 @@ HDAE5000_AcLanguageText1Proc_Msg040:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c212:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c229                      ; [6e 10] jr NZ,0x28c229
@@ -2140,7 +2140,7 @@ HDAE5000_AcLanguageText1Proc_Msg040:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c229:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e ac 0a] jrl NZ,0x28ccdd
@@ -2149,7 +2149,7 @@ HDAE5000_AcLanguageText1Proc_Msg040:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 99 0a] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg041:
 	cpw	(xsp+4), 0x0001
@@ -2159,7 +2159,7 @@ HDAE5000_AcLanguageText1Proc_Msg041:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c25b:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c272                      ; [6e 10] jr NZ,0x28c272
@@ -2168,7 +2168,7 @@ HDAE5000_AcLanguageText1Proc_Msg041:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c272:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 63 0a] jrl NZ,0x28ccdd
@@ -2177,7 +2177,7 @@ HDAE5000_AcLanguageText1Proc_Msg041:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 50 0a] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg042:
 	cpw	(xsp+4), 0x0001
@@ -2187,7 +2187,7 @@ HDAE5000_AcLanguageText1Proc_Msg042:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c2a4:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c2bb                      ; [6e 10] jr NZ,0x28c2bb
@@ -2196,7 +2196,7 @@ HDAE5000_AcLanguageText1Proc_Msg042:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c2bb:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 1a 0a] jrl NZ,0x28ccdd
@@ -2205,7 +2205,7 @@ HDAE5000_AcLanguageText1Proc_Msg042:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 07 0a] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg043:
 	cpw	(xsp+4), 0x0001
@@ -2215,7 +2215,7 @@ HDAE5000_AcLanguageText1Proc_Msg043:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c2ed:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c304                      ; [6e 10] jr NZ,0x28c304
@@ -2224,7 +2224,7 @@ HDAE5000_AcLanguageText1Proc_Msg043:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c304:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e d1 09] jrl NZ,0x28ccdd
@@ -2233,7 +2233,7 @@ HDAE5000_AcLanguageText1Proc_Msg043:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 be 09] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg044:
 	cpw	(xsp+4), 0x0001
@@ -2243,7 +2243,7 @@ HDAE5000_AcLanguageText1Proc_Msg044:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c336:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c34d                      ; [6e 10] jr NZ,0x28c34d
@@ -2252,7 +2252,7 @@ HDAE5000_AcLanguageText1Proc_Msg044:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c34d:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 88 09] jrl NZ,0x28ccdd
@@ -2261,7 +2261,7 @@ HDAE5000_AcLanguageText1Proc_Msg044:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 75 09] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg045:
 	cpw	(xsp+4), 0x0001
@@ -2271,7 +2271,7 @@ HDAE5000_AcLanguageText1Proc_Msg045:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c37f:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c396                      ; [6e 10] jr NZ,0x28c396
@@ -2280,7 +2280,7 @@ HDAE5000_AcLanguageText1Proc_Msg045:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c396:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 3f 09] jrl NZ,0x28ccdd
@@ -2289,7 +2289,7 @@ HDAE5000_AcLanguageText1Proc_Msg045:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 2c 09] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg046:
 	cpw	(xsp+4), 0x0001
@@ -2299,7 +2299,7 @@ HDAE5000_AcLanguageText1Proc_Msg046:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c3c8:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c3df                      ; [6e 10] jr NZ,0x28c3df
@@ -2308,7 +2308,7 @@ HDAE5000_AcLanguageText1Proc_Msg046:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c3df:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f6 08] jrl NZ,0x28ccdd
@@ -2317,7 +2317,7 @@ HDAE5000_AcLanguageText1Proc_Msg046:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e3 08] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg047:
 	cpw	(xsp+4), 0x0001
@@ -2327,7 +2327,7 @@ HDAE5000_AcLanguageText1Proc_Msg047:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c411:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c428                      ; [6e 10] jr NZ,0x28c428
@@ -2336,7 +2336,7 @@ HDAE5000_AcLanguageText1Proc_Msg047:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c428:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e ad 08] jrl NZ,0x28ccdd
@@ -2345,7 +2345,7 @@ HDAE5000_AcLanguageText1Proc_Msg047:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 9a 08] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg048:
 	cpw	(xsp+4), 0x0001
@@ -2355,7 +2355,7 @@ HDAE5000_AcLanguageText1Proc_Msg048:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c45a:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c471                      ; [6e 10] jr NZ,0x28c471
@@ -2364,7 +2364,7 @@ HDAE5000_AcLanguageText1Proc_Msg048:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c471:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 64 08] jrl NZ,0x28ccdd
@@ -2373,7 +2373,7 @@ HDAE5000_AcLanguageText1Proc_Msg048:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 51 08] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg049:
 	cpw	(xsp+4), 0x0001
@@ -2383,7 +2383,7 @@ HDAE5000_AcLanguageText1Proc_Msg049:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c4a3:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c4ba                      ; [6e 10] jr NZ,0x28c4ba
@@ -2392,7 +2392,7 @@ HDAE5000_AcLanguageText1Proc_Msg049:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c4ba:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 1b 08] jrl NZ,0x28ccdd
@@ -2401,7 +2401,7 @@ HDAE5000_AcLanguageText1Proc_Msg049:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 08 08] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg050:
 	cpw	(xsp+4), 0x0001
@@ -2411,7 +2411,7 @@ HDAE5000_AcLanguageText1Proc_Msg050:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c4ec:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c503                      ; [6e 10] jr NZ,0x28c503
@@ -2420,7 +2420,7 @@ HDAE5000_AcLanguageText1Proc_Msg050:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c503:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e d2 07] jrl NZ,0x28ccdd
@@ -2429,7 +2429,7 @@ HDAE5000_AcLanguageText1Proc_Msg050:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 bf 07] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg051:
 	cpw	(xsp+4), 0x0001
@@ -2439,7 +2439,7 @@ HDAE5000_AcLanguageText1Proc_Msg051:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c535:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c54c                      ; [6e 10] jr NZ,0x28c54c
@@ -2448,7 +2448,7 @@ HDAE5000_AcLanguageText1Proc_Msg051:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c54c:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 89 07] jrl NZ,0x28ccdd
@@ -2457,7 +2457,7 @@ HDAE5000_AcLanguageText1Proc_Msg051:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 76 07] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg052:
 	cpw	(xsp+4), 0x0001
@@ -2467,7 +2467,7 @@ HDAE5000_AcLanguageText1Proc_Msg052:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c57e:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c595                      ; [6e 10] jr NZ,0x28c595
@@ -2476,7 +2476,7 @@ HDAE5000_AcLanguageText1Proc_Msg052:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c595:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 40 07] jrl NZ,0x28ccdd
@@ -2485,7 +2485,7 @@ HDAE5000_AcLanguageText1Proc_Msg052:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 2d 07] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg053:
 	cpw	(xsp+4), 0x0001
@@ -2495,7 +2495,7 @@ HDAE5000_AcLanguageText1Proc_Msg053:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c5c7:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c5de                      ; [6e 10] jr NZ,0x28c5de
@@ -2504,7 +2504,7 @@ HDAE5000_AcLanguageText1Proc_Msg053:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c5de:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f7 06] jrl NZ,0x28ccdd
@@ -2513,7 +2513,7 @@ HDAE5000_AcLanguageText1Proc_Msg053:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e4 06] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg054:
 	cpw	(xsp+4), 0x0001
@@ -2523,7 +2523,7 @@ HDAE5000_AcLanguageText1Proc_Msg054:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c610:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c627                      ; [6e 10] jr NZ,0x28c627
@@ -2532,7 +2532,7 @@ HDAE5000_AcLanguageText1Proc_Msg054:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c627:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e ae 06] jrl NZ,0x28ccdd
@@ -2541,7 +2541,7 @@ HDAE5000_AcLanguageText1Proc_Msg054:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 9b 06] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg055:
 	cpw	(xsp+4), 0x0001
@@ -2551,7 +2551,7 @@ HDAE5000_AcLanguageText1Proc_Msg055:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c659:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c670                      ; [6e 10] jr NZ,0x28c670
@@ -2560,7 +2560,7 @@ HDAE5000_AcLanguageText1Proc_Msg055:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c670:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 65 06] jrl NZ,0x28ccdd
@@ -2569,7 +2569,7 @@ HDAE5000_AcLanguageText1Proc_Msg055:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 52 06] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg056:
 	cpw	(xsp+4), 0x0001
@@ -2579,7 +2579,7 @@ HDAE5000_AcLanguageText1Proc_Msg056:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c6a2:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c6b9                      ; [6e 10] jr NZ,0x28c6b9
@@ -2588,7 +2588,7 @@ HDAE5000_AcLanguageText1Proc_Msg056:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c6b9:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 1c 06] jrl NZ,0x28ccdd
@@ -2597,7 +2597,7 @@ HDAE5000_AcLanguageText1Proc_Msg056:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 09 06] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg057:
 	cpw	(xsp+4), 0x0001
@@ -2607,7 +2607,7 @@ HDAE5000_AcLanguageText1Proc_Msg057:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c6eb:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c702                      ; [6e 10] jr NZ,0x28c702
@@ -2616,7 +2616,7 @@ HDAE5000_AcLanguageText1Proc_Msg057:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c702:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e d3 05] jrl NZ,0x28ccdd
@@ -2625,7 +2625,7 @@ HDAE5000_AcLanguageText1Proc_Msg057:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 c0 05] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg058:
 	cpw	(xsp+4), 0x0001
@@ -2635,7 +2635,7 @@ HDAE5000_AcLanguageText1Proc_Msg058:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c734:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c74b                      ; [6e 10] jr NZ,0x28c74b
@@ -2644,7 +2644,7 @@ HDAE5000_AcLanguageText1Proc_Msg058:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c74b:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 8a 05] jrl NZ,0x28ccdd
@@ -2653,7 +2653,7 @@ HDAE5000_AcLanguageText1Proc_Msg058:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 77 05] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg059:
 	cpw	(xsp+4), 0x0001
@@ -2663,7 +2663,7 @@ HDAE5000_AcLanguageText1Proc_Msg059:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c77d:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c794                      ; [6e 10] jr NZ,0x28c794
@@ -2672,7 +2672,7 @@ HDAE5000_AcLanguageText1Proc_Msg059:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c794:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 41 05] jrl NZ,0x28ccdd
@@ -2681,7 +2681,7 @@ HDAE5000_AcLanguageText1Proc_Msg059:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 2e 05] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg060:
 	cpw	(xsp+4), 0x0001
@@ -2691,7 +2691,7 @@ HDAE5000_AcLanguageText1Proc_Msg060:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c7c6:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c7dd                      ; [6e 10] jr NZ,0x28c7dd
@@ -2700,7 +2700,7 @@ HDAE5000_AcLanguageText1Proc_Msg060:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c7dd:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f8 04] jrl NZ,0x28ccdd
@@ -2709,7 +2709,7 @@ HDAE5000_AcLanguageText1Proc_Msg060:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e5 04] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg061:
 	cpw	(xsp+4), 0x0001
@@ -2719,7 +2719,7 @@ HDAE5000_AcLanguageText1Proc_Msg061:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c80f:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c826                      ; [6e 10] jr NZ,0x28c826
@@ -2728,7 +2728,7 @@ HDAE5000_AcLanguageText1Proc_Msg061:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c826:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e af 04] jrl NZ,0x28ccdd
@@ -2737,7 +2737,7 @@ HDAE5000_AcLanguageText1Proc_Msg061:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 9c 04] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg062:
 	cpw	(xsp+4), 0x0001
@@ -2747,7 +2747,7 @@ HDAE5000_AcLanguageText1Proc_Msg062:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c858:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c86f                      ; [6e 10] jr NZ,0x28c86f
@@ -2756,7 +2756,7 @@ HDAE5000_AcLanguageText1Proc_Msg062:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c86f:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 66 04] jrl NZ,0x28ccdd
@@ -2765,7 +2765,7 @@ HDAE5000_AcLanguageText1Proc_Msg062:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 53 04] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg064:
 	cpw	(xsp+4), 0x0001
@@ -2775,7 +2775,7 @@ HDAE5000_AcLanguageText1Proc_Msg064:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c8a1:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c8b8                      ; [6e 10] jr NZ,0x28c8b8
@@ -2784,7 +2784,7 @@ HDAE5000_AcLanguageText1Proc_Msg064:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c8b8:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 1d 04] jrl NZ,0x28ccdd
@@ -2793,7 +2793,7 @@ HDAE5000_AcLanguageText1Proc_Msg064:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 0a 04] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg065:
 	cpw	(xsp+4), 0x0001
@@ -2803,7 +2803,7 @@ HDAE5000_AcLanguageText1Proc_Msg065:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c8ea:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c901                      ; [6e 10] jr NZ,0x28c901
@@ -2812,7 +2812,7 @@ HDAE5000_AcLanguageText1Proc_Msg065:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c901:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e d4 03] jrl NZ,0x28ccdd
@@ -2821,7 +2821,7 @@ HDAE5000_AcLanguageText1Proc_Msg065:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 c1 03] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg066:
 	cpw	(xsp+4), 0x0001
@@ -2831,7 +2831,7 @@ HDAE5000_AcLanguageText1Proc_Msg066:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c933:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c94a                      ; [6e 10] jr NZ,0x28c94a
@@ -2840,7 +2840,7 @@ HDAE5000_AcLanguageText1Proc_Msg066:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c94a:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 8b 03] jrl NZ,0x28ccdd
@@ -2849,7 +2849,7 @@ HDAE5000_AcLanguageText1Proc_Msg066:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 78 03] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg067:
 	cpw	(xsp+4), 0x0001
@@ -2859,7 +2859,7 @@ HDAE5000_AcLanguageText1Proc_Msg067:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c97c:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c993                      ; [6e 10] jr NZ,0x28c993
@@ -2868,7 +2868,7 @@ HDAE5000_AcLanguageText1Proc_Msg067:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c993:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 42 03] jrl NZ,0x28ccdd
@@ -2877,7 +2877,7 @@ HDAE5000_AcLanguageText1Proc_Msg067:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 2f 03] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg200:
 	cpw	(xsp+4), 0x0001
@@ -2887,7 +2887,7 @@ HDAE5000_AcLanguageText1Proc_Msg200:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c9c5:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_c9dc                      ; [6e 10] jr NZ,0x28c9dc
@@ -2896,7 +2896,7 @@ HDAE5000_AcLanguageText1Proc_Msg200:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_c9dc:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e f9 02] jrl NZ,0x28ccdd
@@ -2905,7 +2905,7 @@ HDAE5000_AcLanguageText1Proc_Msg200:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e6 02] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg201:
 	cpw	(xsp+4), 0x0001
@@ -2915,7 +2915,7 @@ HDAE5000_AcLanguageText1Proc_Msg201:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ca0e:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_ca25                      ; [6e 10] jr NZ,0x28ca25
@@ -2924,7 +2924,7 @@ HDAE5000_AcLanguageText1Proc_Msg201:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ca25:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e b0 02] jrl NZ,0x28ccdd
@@ -2933,7 +2933,7 @@ HDAE5000_AcLanguageText1Proc_Msg201:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 9d 02] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg202:
 	cpw	(xsp+4), 0x0001
@@ -2943,7 +2943,7 @@ HDAE5000_AcLanguageText1Proc_Msg202:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ca57:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_ca6e                      ; [6e 10] jr NZ,0x28ca6e
@@ -2952,7 +2952,7 @@ HDAE5000_AcLanguageText1Proc_Msg202:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ca6e:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 67 02] jrl NZ,0x28ccdd
@@ -2961,7 +2961,7 @@ HDAE5000_AcLanguageText1Proc_Msg202:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 54 02] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg203:
 	cpw	(xsp+4), 0x0001
@@ -2971,7 +2971,7 @@ HDAE5000_AcLanguageText1Proc_Msg203:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_caa0:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_cab7                      ; [6e 10] jr NZ,0x28cab7
@@ -2980,7 +2980,7 @@ HDAE5000_AcLanguageText1Proc_Msg203:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cab7:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 1e 02] jrl NZ,0x28ccdd
@@ -2989,7 +2989,7 @@ HDAE5000_AcLanguageText1Proc_Msg203:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 0b 02] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg206:
 	cpw	(xsp+4), 0x0001
@@ -2999,7 +2999,7 @@ HDAE5000_AcLanguageText1Proc_Msg206:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cae9:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_cb00                      ; [6e 10] jr NZ,0x28cb00
@@ -3008,7 +3008,7 @@ HDAE5000_AcLanguageText1Proc_Msg206:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cb00:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e d5 01] jrl NZ,0x28ccdd
@@ -3017,7 +3017,7 @@ HDAE5000_AcLanguageText1Proc_Msg206:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 c2 01] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg207:
 	cpw	(xsp+4), 0x0001
@@ -3027,7 +3027,7 @@ HDAE5000_AcLanguageText1Proc_Msg207:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cb32:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_cb49                      ; [6e 10] jr NZ,0x28cb49
@@ -3036,7 +3036,7 @@ HDAE5000_AcLanguageText1Proc_Msg207:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cb49:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 8c 01] jrl NZ,0x28ccdd
@@ -3045,7 +3045,7 @@ HDAE5000_AcLanguageText1Proc_Msg207:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 79 01] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg208:
 	cpw	(xsp+4), 0x0001
@@ -3055,7 +3055,7 @@ HDAE5000_AcLanguageText1Proc_Msg208:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cb7b:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_cb92                      ; [6e 10] jr NZ,0x28cb92
@@ -3064,7 +3064,7 @@ HDAE5000_AcLanguageText1Proc_Msg208:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cb92:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e 43 01] jrl NZ,0x28ccdd
@@ -3073,7 +3073,7 @@ HDAE5000_AcLanguageText1Proc_Msg208:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 30 01] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg209:
 	cpw	(xsp+4), 0x0001
@@ -3083,7 +3083,7 @@ HDAE5000_AcLanguageText1Proc_Msg209:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cbc4:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_cbdb                      ; [6e 10] jr NZ,0x28cbdb
@@ -3092,7 +3092,7 @@ HDAE5000_AcLanguageText1Proc_Msg209:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cbdb:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e fa 00] jrl NZ,0x28ccdd
@@ -3101,7 +3101,7 @@ HDAE5000_AcLanguageText1Proc_Msg209:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 e7 00] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg210:
 	cpw	(xsp+4), 0x0001
@@ -3111,7 +3111,7 @@ HDAE5000_AcLanguageText1Proc_Msg210:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cc0d:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_cc24                      ; [6e 10] jr NZ,0x28cc24
@@ -3120,7 +3120,7 @@ HDAE5000_AcLanguageText1Proc_Msg210:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cc24:
 	cpw	(xsp+4), 0x0003
 	jrl nz, .LUIH_ccdd                     ; [7e b1 00] jrl NZ,0x28ccdd
@@ -3129,7 +3129,7 @@ HDAE5000_AcLanguageText1Proc_Msg210:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jrl t, .LUIH_ccdd                      ; [78 9e 00] jrl T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg211:
 	cpw	(xsp+4), 0x0001
@@ -3139,7 +3139,7 @@ HDAE5000_AcLanguageText1Proc_Msg211:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cc56:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_cc6d                      ; [6e 10] jr NZ,0x28cc6d
@@ -3148,7 +3148,7 @@ HDAE5000_AcLanguageText1Proc_Msg211:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cc6d:
 	cpw	(xsp+4), 0x0003
 	jr nz, .LUIH_ccdd                      ; [6e 69] jr NZ,0x28ccdd
@@ -3157,7 +3157,7 @@ HDAE5000_AcLanguageText1Proc_Msg211:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jr t, .LUIH_ccdd                       ; [68 57] jr T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_Msg212:
 	cpw	(xsp+4), 0x0001
@@ -3167,7 +3167,7 @@ HDAE5000_AcLanguageText1Proc_Msg212:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_cc9d:
 	cpw	(xsp+4), 0x0002
 	jr nz, .LUIH_ccb4                      ; [6e 10] jr NZ,0x28ccb4
@@ -3176,7 +3176,7 @@ HDAE5000_AcLanguageText1Proc_Msg212:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ccb4:
 	cpw	(xsp+4), 0x0003
 	jr nz, .LUIH_ccdd                      ; [6e 22] jr NZ,0x28ccdd
@@ -3185,7 +3185,7 @@ HDAE5000_AcLanguageText1Proc_Msg212:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	jr t, .LUIH_ccdd                       ; [68 10] jr T,0x28ccdd
 HDAE5000_AcLanguageText1Proc_NoMessage:
 	pushw 0x002e
@@ -3193,7 +3193,7 @@ HDAE5000_AcLanguageText1Proc_NoMessage:
 	lda	xwa, (xsp+10)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 .LUIH_ccdd:
 	lda	xwa, (xsp+6)
 	ld	xbc, xwa
@@ -3895,7 +3895,7 @@ HDAE5000_Lyrics_ClearBuffer:	; 0x28D605 (32 bytes)
 	lda xwa, (HDAE5000_RAM_LyricBuffer:24)		; XWA = lyric buffer 0x22B430
 	push xwa
 	call HDAE5000_MemFill
-	inc 0, xsp			; deallocate 8 bytes
+	inc 8, xsp			; deallocate 8 bytes
 	ld xwa, 0:i3			; clear XWA
 	ld (0x2304f2:24), xwa		; (0x2304F2) = 0: track end
 	ld (HDAE5000_RAM_LyricLoaded:24), 0x00		; (0x23A19C) = 0: nothing loaded
@@ -4104,7 +4104,7 @@ HDAE5000_Lyrics_PlayToPosition:	; 0x28D6D1 (938 bytes)
 	lda xwa, (0x23051e:24)		; &0x23051E: syllable copy
 	push xwa
 	call HDAE5000_StrCpy			; memcpy 0x29AF45
-	inc 0, xsp			; pop stack frame
+	inc 8, xsp			; pop stack frame
 	; Check cumulative length
 	ld wa, (xsp + 4)		; WA = strlen result
 	add wa, (2295012:24); WA += (0x2304E4)
@@ -4505,7 +4505,7 @@ HDAE5000_Lyrics_ReadSongInfo:	; 0x28DBF8 (564 bytes)
 	lda xwa, (0x230736:24); &0x230736
 	push xwa
 	call HDAE5000_StrCpy			; call 0x29AF45
-	inc 0, xsp			; pop stack frame
+	inc 8, xsp			; pop stack frame
 
 .Lfl_block2:				; 0x28DC72
 	; --- meta 0x03 (track name) -> 0x230768, <= 40 chars ---
@@ -4554,7 +4554,7 @@ HDAE5000_Lyrics_ReadSongInfo:	; 0x28DBF8 (564 bytes)
 	lda xwa, (0x230736:24); &0x230736
 	push xwa
 	call HDAE5000_StrCpy			; call 0x29AF45
-	inc 0, xsp			; pop stack frame
+	inc 8, xsp			; pop stack frame
 
 .Lfl_block3:				; 0x28DCEC
 	; --- meta 0x58 (time signature) ---
@@ -4765,7 +4765,7 @@ HDAE5000_Lyrics_FillLines:	; 0x28DE2C (579 bytes)
 	add xwa, xbc
 	push xwa
 	call HDAE5000_StrCpy			; memcpy
-	inc 0, xsp			; pop stack frame
+	inc 8, xsp			; pop stack frame
 
 .Lfd_strlen_store:			; 0x28DF1D
 	; store the line length, next line
@@ -4812,7 +4812,7 @@ HDAE5000_Lyrics_FillLines:	; 0x28DE2C (579 bytes)
 	add xwa, xbc
 	push xwa
 	call HDAE5000_StrCpy			; memcpy
-	inc 0, xsp			; pop frame
+	inc 8, xsp			; pop frame
 	jr t, .Lfd_strlen_store		; goto strlen/store
 
 .Lfd_other_type:			; 0x28DF97
@@ -4836,7 +4836,7 @@ HDAE5000_Lyrics_FillLines:	; 0x28DE2C (579 bytes)
 	lda xwa, (0x230636:24); &0x230636
 	push xwa
 	call HDAE5000_StrLen			; strlen(0x230636)
-	inc 0, xsp			; pop frame
+	inc 8, xsp			; pop frame
 	add hl, iz			; HL = combined length
 	cp hl, 39			; if combined > 39
 	jr ugt, .Lfd_tail_copy		; does not fit: store the line
@@ -4845,7 +4845,7 @@ HDAE5000_Lyrics_FillLines:	; 0x28DE2C (579 bytes)
 	lda xwa, (xsp + 22)		; &local[0x12] (offset by push)
 	push xwa
 	call HDAE5000_StrCat			; call 0x29AF0B (strcat)
-	inc 0, xsp			; pop frame
+	inc 8, xsp			; pop frame
 	ld xwa, (xsp + 6)		; result
 	ld (xsp + 4), wa		; save
 
@@ -4863,7 +4863,7 @@ HDAE5000_Lyrics_FillLines:	; 0x28DE2C (579 bytes)
 	add xwa, xbc
 	push xwa
 	call HDAE5000_StrCpy			; memcpy
-	inc 0, xsp			; pop frame
+	inc 8, xsp			; pop frame
 	jrl t, .Lfd_strlen_store	; goto strlen/store
 
 .Lfd_check_positive:			; 0x28E00D
@@ -4913,7 +4913,7 @@ HDAE5000_Lyrics_FillLines:	; 0x28DE2C (579 bytes)
 	; _FillLines.
 	; ============================================================
 HDAE5000_Lyrics_FindEvent:	; 0x28E06F (280 bytes)
-	dec 0, xsp			; allocate 8 bytes
+	dec 8, xsp			; allocate 8 bytes
 	pushw iz
 	ld (xsp + 4), de		; DE: events to skip / -1 / -2
 	ld (xsp + 6), c		; C: ParseEvent flags
@@ -5035,7 +5035,7 @@ HDAE5000_Lyrics_FindEvent:	; 0x28E06F (280 bytes)
 	ld xhl, 0:i3
 .Lfr_exit:
 	popw iz
-	inc 0, xsp			; deallocate 8 bytes
+	inc 8, xsp			; deallocate 8 bytes
 	retd 0x0004
 
 	; ============================================================
@@ -5694,7 +5694,7 @@ HDAE5000_FDFileSelectProc:
 	pushw 0x0023
 	pushw 0x0e7a
 	call HDAE5000_StrCpy
-	inc 0, xsp			; clean 8 bytes
+	inc 8, xsp			; clean 8 bytes
 
 	ld_sril XWA, (xsp + 0x0082)
 	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)
@@ -6480,7 +6480,7 @@ HDAE5000_FdLyricList_Scan:	; 0x28EF6B (556 bytes)
 	pushw 35			; offset = 0x23
 	pushw 3706			; dest = 0x0E7A
 	call HDAE5000_StrCat			; call 0x29AF0B (strcat)
-	inc 0, xsp
+	inc 8, xsp
 
 .Lpb_no_separator:			; 0x28F000
 	; --- Call vtable method at +0x0094 to scan directory ---
@@ -6721,7 +6721,7 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 	lda xwa, (HDAE5000_RAM_FdLyricNames:24)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp			; clean 8 bytes
+	inc 8, xsp			; clean 8 bytes
 	incw 1, (HDAE5000_RAM_FdLyricCount:24)
 	ld xhl, 0:i3
 	jrl t, .Ldh_epilogue
@@ -6743,7 +6743,7 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 	lda xwa, (xsp + 0x08)
 	push xwa
 	call HDAE5000_StrPrefixCmp			; string compare
-	inc 0, xsp			; clean 8 bytes
+	inc 8, xsp			; clean 8 bytes
 	cp hl, 0:i3
 	jr ge, .Ldh_next_slot
 
@@ -6767,7 +6767,7 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 	add xwa, xbc
 	push xwa			; destination
 	call HDAE5000_StrCpy			; copy 9-byte entry
-	inc 0, xsp
+	inc 8, xsp
 	dec 1, iz
 	cpw_erp iz, 0xfa
 	jr gt, .Ldh_shift_loop
@@ -6782,7 +6782,7 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 	add xwa, xbc
 	push xwa
 	call HDAE5000_StrCpy			; copy entry to insert position
-	inc 0, xsp
+	inc 8, xsp
 	incw 1, (HDAE5000_RAM_FdLyricCount:24)
 	ld xhl, 0:i3
 	jr t, .Ldh_epilogue
@@ -6806,7 +6806,7 @@ HDAE5000_FdLyricList_AddTlx:	; 0x28F197 (614 bytes)
 	add xwa, xbc
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	incw 1, (HDAE5000_RAM_FdLyricCount:24)
 	ld xhl, 0:i3
 	jr t, .Ldh_epilogue
@@ -6857,7 +6857,7 @@ HDAE5000_PPORT_Svc28_FlashXapFile:	; 0x28F308
 	lda xwa, (xsp + 0x08)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp
+	inc 8, xsp
 	ld (xsp + 0x08), xiz		; store XIZ to stack
 	ld xwa, 0x00280000
 	ld (xsp + 0x14), xwa
@@ -7537,7 +7537,7 @@ HDAE5000_Clear_Work_Buffer:	; 28F785h
 	ldto_werp WA, 0xE6	; ld WA, QBC  ; get high word count
 HDAE5000_Clear_Work_Buffer__clear_loop:
 	mriw2 0x93, 0x11	; ldirw  ; continue word copy
-	djnz xwa, HDAE5000_Clear_Work_Buffer__clear_loop	; djnz WA, .clear_loop
+	djnz16 wa, HDAE5000_Clear_Work_Buffer__clear_loop	; djnz WA, .clear_loop
 HDAE5000_Clear_Work_Buffer__clear_done:
 	bit 0, ix	; bit 0, IX  ; check if odd byte
 	jr z, HDAE5000_Clear_Work_Buffer__no_odd_byte
@@ -7555,7 +7555,7 @@ HDAE5000_Clear_Work_Buffer__no_odd_byte:
 	ldto_werp WA, 0xE6	; ld WA, QBC
 HDAE5000_Clear_Work_Buffer__copy_loop:
 	ldir83	; ldir
-	djnz xwa, HDAE5000_Clear_Work_Buffer__copy_loop	; djnz WA, .copy_loop
+	djnz16 wa, HDAE5000_Clear_Work_Buffer__copy_loop	; djnz WA, .copy_loop
 HDAE5000_Clear_Work_Buffer__copy_done:
 	ret
 
@@ -11328,7 +11328,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+18)
 	ld	xbc, xwa
 	lda	xwa, (xsp+4)
@@ -11355,7 +11355,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8eae:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11389,7 +11389,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8eb8:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11423,7 +11423,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8ec2:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11457,7 +11457,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8ecc:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11491,7 +11491,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8ed4:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11525,7 +11525,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8ede:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11559,7 +11559,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8ee8:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11593,7 +11593,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8ef0:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -11627,7 +11627,7 @@ HDAE5000_FdSong_CheckFiles:
 	lda	xwa, (xsp+16)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+4)
 	lda xbc, (0x2f8efa:24)
 	ld	xde, (HDAE5000_RAM_MainWorkspacePtr)
@@ -12982,7 +12982,7 @@ HDAE5000_CopyFdSongToHd_Tlx:	; 0x292FD2 (329 bytes)
 	lda xwa, (HDAE5000_RAM_HdStreamBuffer:24); 0x230F1C
 	push xwa
 	call HDAE5000_MemFill
-	inc 0, xsp		; clean up 8 bytes
+	inc 8, xsp		; clean up 8 bytes
 	; Workspace dispatch with XBC=0x16
 	lda xwa, (HDAE5000_RAM_HdStreamBuffer:24)
 	ld xbc, (HDAE5000_RAM_MainWorkspacePtr:24)
@@ -13190,7 +13190,7 @@ HDAE5000_DeleteDirectory:
 	; directory name is blanked (16 spaces); tables written
 	; (HDAE5000_HD_WriteTables_Status).  BC = 1: also the 0x0E0A +0x538/+0x53C
 	; UI callbacks; DE != 1: spin down.  Caller: AttenDelDirSwCatch.
-	dec 0, xsp			; callee cleanup placeholder
+	dec 8, xsp			; callee cleanup placeholder
 	push xiz
 	ld (xsp + 6), de		; save DE (param)
 	ld (xsp + 8), bc		; save BC (param)
@@ -13270,7 +13270,7 @@ HDAE5000_DeleteDirectory:
 	add xwa, xhl			; absolute address
 	push xwa			; push fill dest
 	call HDAE5000_MemFill
-	inc 0, xsp			; stack cleanup (no-op)
+	inc 8, xsp			; stack cleanup (no-op)
 	incw 1, (xsp + 4)		; slot counter++
 	cpw (xsp + 4), 0x0010
 	jrl c, .Lwh_slot_loop
@@ -13285,7 +13285,7 @@ HDAE5000_DeleteDirectory:
 	add xbc, xwa
 	push xbc			; push fill dest
 	call HDAE5000_MemFill
-	inc 0, xsp			; stack cleanup
+	inc 8, xsp			; stack cleanup
 	; Final handler calls
 	call HDAE5000_HD_WriteTables_Status
 	cpw (xsp + 6), 0x0001	; DE == 1?
@@ -13307,7 +13307,7 @@ HDAE5000_DeleteDirectory:
 	ld_sril xhl, (xwa + HamaFn_EditSwRefresh)             ; XHL = (XWA+0x00F0)
 	call (xhl)
 	pop xiz
-	inc 0, xsp			; stack cleanup
+	inc 8, xsp			; stack cleanup
 	ret
 
 HDAE5000_DeleteSongParts:	; 0x29336B (349 bytes)
@@ -13418,7 +13418,7 @@ HDAE5000_DeleteSongParts:	; 0x29336B (349 bytes)
 	add xwa, xhl
 	push xwa
 	call HDAE5000_MemFill
-	inc 0, xsp
+	inc 8, xsp
 	; Call workspace handler
 	ld wa, (xsp + 6)
 	ld bc, (xsp + 4)
@@ -14268,7 +14268,7 @@ HDAE5000_RoundUpToSector:	; 0x293DF1 (61 bytes)
 	; Output: XHL = parameter block pointer
 	; ^ corrected: XWA is a BYTE COUNT: XHL = XWA rounded up to a multiple of
 	;   512 (HDAE5000_LDiv by 0x200), and 0x200 for 0.  Used for part sizes.
-	dec 0, xsp			; allocate 8 bytes
+	dec 8, xsp			; allocate 8 bytes
 	push xiz
 	ld xiz, xwa			; XIZ = source pointer
 	or xwa, xwa			; test if source is NULL
@@ -14293,7 +14293,7 @@ HDAE5000_RoundUpToSector:	; 0x293DF1 (61 bytes)
 .Lcgp_result:
 	ld xhl, xiz			; return value in XHL
 	pop xiz
-	inc 0, xsp			; deallocate 8 bytes
+	inc 8, xsp			; deallocate 8 bytes
 	ret
 
 HDAE5000_HD_StoreTables:	; 0x293E2E (1093 bytes)
@@ -14646,7 +14646,7 @@ HDAE5000_HD_GetSongInfo:
 	; -> return HL = 0xFFFF), dest+2 = the 16-byte directory name, dest+18 =
 	; the 26-byte file name, dest+44 = bytes 26..35 of the 76-byte file
 	; record.  HL = 0.
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
 	ld (xsp + 0x08), bc
@@ -14714,7 +14714,7 @@ HDAE5000_HD_GetSongInfo:
 	ld	hl, 0:i3
 .LDC_426f:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 
@@ -15946,7 +15946,7 @@ HDAE5000_PPORT_Svc24_ReadOpenHD:
 	; context by HDAE5000_PPORT_ServiceDispatch.  Developer's name from the
 	; trace banner it passes to HDAE5000_DebugTrace (ROM 0x2F9336):
 	; "ReadOpenHD".
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push	qiz
 	ld (xsp + 0x06), bc
 	ld (xsp + 0x08), wa                     ; ld (XSP+0x08),WA
@@ -15991,7 +15991,7 @@ HDAE5000_PPORT_Svc24_ReadOpenHD:
 .LDS_4f92:
 	ld	hl, (xsp+4)
 	pop	qiz
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_PPORT_Svc25_ReadFileHD:
@@ -24429,7 +24429,7 @@ HDAE5000_DoPrintf_Case_Float:
 	lda_dd8l	xbc, (8); lda XBC,0x08 (F0 8-bit direct)
 	add	(xde), xbc
 	ld xbc, (xde)                           ; ld XBC,(XDE)
-	dec 0, xbc                              ; dec 0,XBC
+	dec 8, xbc                              ; dec 0,XBC
 	call HDAE5000_Copy8
 .LDSR_a392:
 	pushm	(xsp+10)
@@ -25659,7 +25659,7 @@ HDAE5000_MemCCpy:	; 0x29ADCC (64 bytes)
 	ld xwa, (xsp + 0x12)		; source pointer
 	push xwa			; arg: string ptr
 	call HDAE5000_MemChr
-	inc 0, xsp			; clean up 8 bytes
+	inc 8, xsp			; clean up 8 bytes
 	ld (xsp + 2), xhl		; save result
 	ld xwa, (xsp + 2)		; reload result
 	or xwa, xwa			; test if found
@@ -25819,7 +25819,7 @@ HDAE5000_MemFill__align_loop:
 	ld (xix+), a	; ld (XIX+), A - store byte
 	sub bc, 0x1	; sub BC, 1 - decrement count
 	ret z	; Return if done
-	djnz xde, HDAE5000_MemFill__align_loop	; djnz DE, .align_loop
+	djnz16 de, HDAE5000_MemFill__align_loop	; djnz DE, .align_loop
 HDAE5000_MemFill__aligned:
 	ld de, bc	; Save count for remainder calc
 	srl bc, 2	; srl 2, BC - divide by 4
@@ -25828,13 +25828,13 @@ HDAE5000_MemFill__aligned:
 	ldfr_werp WA, 0xE2	; ld QWA, WA - expand to 32-bit
 HDAE5000_MemFill__fill_dwords:
 	ld (xix+), XWA	; ld (XIX+), XWA - store 4 bytes
-	djnz xbc, HDAE5000_MemFill__fill_dwords	; djnz BC, .fill_dwords
+	djnz16 bc, HDAE5000_MemFill__fill_dwords	; djnz BC, .fill_dwords
 HDAE5000_MemFill__remainder:
 	and de, 0x3	; DE = remaining bytes (0-3)
 	ret z	; Return if none
 HDAE5000_MemFill__fill_bytes:
 	ld (xix+), a	; ld (XIX+), A
-	djnz xde, HDAE5000_MemFill__fill_bytes	; djnz DE, .fill_bytes
+	djnz16 de, HDAE5000_MemFill__fill_bytes	; djnz DE, .fill_bytes
 	ret
 
 HDAE5000_StrCat:	; 29AF0Bh

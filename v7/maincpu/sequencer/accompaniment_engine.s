@@ -15481,7 +15481,7 @@ AccPatch_InitSeq_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, AccPatch_InitSeq_AdvLoop
+	djnz16 bc, AccPatch_InitSeq_AdvLoop
 
 AccPatch_InitSeq_AdvDone:
 	ret
@@ -15515,7 +15515,7 @@ AccPatch_ResetSeqCounters_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, AccPatch_ResetSeqCounters_AdvLoop
+	djnz16 bc, AccPatch_ResetSeqCounters_AdvLoop
 
 AccPatch_ResetSeqCounters_Done:
 	ret
@@ -15761,7 +15761,7 @@ AccPatch_SeekFwd_AdvLoop:
 	pushw bc
 	calr AccPatch_ScanToSequenceEnd
 	popw bc
-	djnz xbc, AccPatch_SeekFwd_AdvLoop
+	djnz16 bc, AccPatch_SeekFwd_AdvLoop
 
 AccPatch_SeekFwd_Done:
 	ret
@@ -15860,7 +15860,7 @@ AccPatch_ResumeSeq_AddAndAdvance:
 	add	(0x356e:16), bc
 AccPatch_ResumeSeq_AdvLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, AccPatch_ResumeSeq_AdvLoop
+	djnz16 bc, AccPatch_ResumeSeq_AdvLoop
 	jr AccPatch_ResumeSeq_ComparePos
 
 AccPatch_ResumeSeq_HandleMarker:
@@ -16132,7 +16132,7 @@ AccPatch_ProcessSeqEvt_SkipD:
 
 AccPatch_ProcessSeqEvt_SkipDLoop:
 	calr AccPatch_AdvanceSeqIndex
-	djnz xbc, AccPatch_ProcessSeqEvt_SkipDLoop
+	djnz16 bc, AccPatch_ProcessSeqEvt_SkipDLoop
 	jrl AccPatch_ProcessSequenceEvents
 
 AccPatch_ProcessSeqEvt_SetSize:
@@ -16980,7 +16980,7 @@ AccPatch_AdvAllSteps_Loop:
 	ld	bc, (0x356e:16)
 AccPatch_AdvAllSteps_InnerLoop:
 	calr AccPatch_AdvanceSingleStep
-	djnz xbc, AccPatch_AdvAllSteps_InnerLoop
+	djnz16 bc, AccPatch_AdvAllSteps_InnerLoop
 
 AccPatch_AdvAllSteps_Next:
 	add	xix, 6
@@ -25697,8 +25697,8 @@ Tempo_DisplayBPMValue:
 
 	ldfr_berp A, 0xfa
 
-	; mul_sd16b 1, 0x86, 0x39 (v7 patched)
-	.byte	0xc1, 0xea, 0x38, 0x41	; mul WA, (0x38ea) (unidasm; no llvm-mc spelling)
+	; mul wa, (0x3986:16) (v7 patched)
+	mul wa, (0x38ea:16)
 	ldfr_berp A, 0xfa
 
 
@@ -27677,8 +27677,8 @@ __pad_F676C1:
 
 	inc 1, c
 
-	; mul_sd16b 3, 0xd9, 0x34 (v7 patched)
-	.byte	0xc1, 0x3d, 0x34, 0x43	; mul BC, (0x343d) (unidasm; no llvm-mc spelling)
+	; mul bc, (0x34d9:16) (v7 patched)
+	mul bc, (0x343d:16)
 AccVoice_SetupSlots_CheckType:
 	cp bc, 0:i3
 	jr z, AccVoice_SetupSlots_Done
@@ -36654,7 +36654,7 @@ StylCnv_Type6_Case1_CopyName:
 	lda xwa, (xsp + 0x16)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	ld xwa, (0x3cc0:16)
 	ld (XSP+0x0a),XWA
 	ldw (XSP+0x08), 0x0000
@@ -36982,7 +36982,7 @@ StylCnv_Multi_ParseLoop:
 	inc 1,XWA
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	incw 1, (0x39e6:16)
 	jr t, StylCnv_Multi_Finalize
 StylCnv_Multi_HandleSeparator:
@@ -37003,7 +37003,7 @@ StylCnv_Multi_HandleSeparator:
 	inc 1,XWA
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	lda xbc, (xsp + 0x12)
 	ld XWA,XBC
 	lda xbc, (xbc + 0x64)

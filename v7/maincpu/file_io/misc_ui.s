@@ -702,7 +702,7 @@ PsFileNameBox_HandleConfirm:
 	lda xwa, (xsp + 0x16)
 	push XWA
 	call Free_Compare2
-	inc 0,XSP
+	inc 8,XSP
 	ld XHL,(XSP+0x0a)
 	ld XBC,(XHL+0x2a)
 	lda xde, (xsp + 0x12)

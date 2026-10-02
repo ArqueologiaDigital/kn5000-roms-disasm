@@ -2756,7 +2756,7 @@ SeqStep_SearchBackwardLoop:
 	call PartCtrl_TestBit7
 	cp l, 0:i3
 	jr nz, SeqStep_SearchBackwardDone
-	djnz xiz, SeqStep_SearchBackwardLoop
+	djnz16 iz, SeqStep_SearchBackwardLoop
 
 SeqStep_SearchBackwardDone:
 	ld hl, iz

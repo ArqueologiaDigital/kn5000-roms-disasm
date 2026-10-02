@@ -19022,7 +19022,7 @@ ParaListBox_HandleEvtF:
 	divs xwa, de
 	ld de, wa
 	ld wa, iz
-	mulw_erp WA, 0xea
+	mul xwa, qde
 	inc 2, wa
 	add hl, wa
 	ld (xix), hl

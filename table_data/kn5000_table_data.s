@@ -4275,7 +4275,7 @@ LZSS_Decompress__preread_loop:
 	ld wa, (3124:16); LD WA, (0x0C34)
 	extz xwa	; EXTZ XWA
 	ldw bc, 0x2400	; LD BC, 0x2400
-	mulw_erp BC, 0xFA	; MUL XBC, QIZ
+	mul xbc, qiz	; MUL XBC, QIZ
 	ld xde, 0x99A4	; LD XDE, 0x000099A4
 	add xde, xbc	; ADD XDE, XBC
 	ldw bc, 0x12	; LD BC, 0x0012

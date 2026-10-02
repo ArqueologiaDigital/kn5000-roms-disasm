@@ -141,7 +141,7 @@ SoundBank_InitTrack_WordFields:
 
 SoundBank_InitTrack_ClearTail:
 	ld (xix+), WA
-	djnz xbc, SoundBank_InitTrack_ClearTail
+	djnz16 bc, SoundBank_InitTrack_ClearTail
 	popw bc
 	inc 1, bc
 	cp bc, 0xa
@@ -450,7 +450,7 @@ SMF_ReadMThd_Mismatch:
 	jrl SeqPlay_FloppyReady
 
 SMF_ReadMThd_Matched:
-	djnz xbc, SMF_ReadMThd_ByteLoop
+	djnz16 bc, SMF_ReadMThd_ByteLoop
 	ld (6887:16), 1
 	call FloppyIO_ReadNextByte
 	ld (6886:16), a
@@ -528,7 +528,7 @@ SMF_ReadMTrk_ByteLoop:
 	jrl SeqPlay_FloppyReady
 
 SMF_ReadMTrk_Matched:
-	djnz xbc, SMF_ReadMTrk_ByteLoop
+	djnz16 bc, SMF_ReadMTrk_ByteLoop
 	ld xix, 0xfa2
 	ld bc, 4:i3
 
@@ -555,7 +555,7 @@ SMF_ReadTrackData_FloppyErr:
 
 SMF_ReadTrackData_Continue:
 	ld (xix+), a
-	djnz xbc, SMF_ReadTrackData_Loop
+	djnz16 bc, SMF_ReadTrackData_Loop
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_RestoreVoiceState_Return
 	xor wa, wa

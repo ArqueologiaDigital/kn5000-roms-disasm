@@ -2465,7 +2465,7 @@ Display_FillMemoryLoop:
 
 Display_FillRegionLoop:
 	ld (xix+), WA
-	djnz xbc, Display_FillRegionLoop
+	djnz16 bc, Display_FillRegionLoop
 	popw wa
 	ret
 
@@ -13926,7 +13926,7 @@ DisplayStr_ClearRegion:
 
 DisplayStr_ClearLoop:
 	ld (xix+), a
-	djnz xbc, DisplayStr_ClearLoop
+	djnz16 bc, DisplayStr_ClearLoop
 	pop xix
 	popw bc
 	popw wa
@@ -13950,7 +13950,7 @@ DisplayStr_StyleSectionInit:
 
 DisplayStr_StyleClearLoop:
 	ld (xix+), a
-	djnz xbc, DisplayStr_StyleClearLoop
+	djnz16 bc, DisplayStr_StyleClearLoop
 	call Display_UpdateRegion3
 	ret
 

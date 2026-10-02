@@ -876,7 +876,7 @@ HDAE5000_UiState_Reset:	; 0x2803C2
 
 HDAE5000_AcWindowPage1Proc:
 	; registered as "AcWindowPage1Proc" in HDAE5000_ClassProc_Table
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
 	ld (xsp + 0x08), xbc                    ; ld (XSP+0x08),XBC
@@ -900,12 +900,12 @@ HDAE5000_AcWindowPage1Proc:
 	ld_sril	xix, (xhl + RootFn_InheritedProc)
 	call	(xix)
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_TtlScreenRProc:
 	; registered as "TtlScreenRProc" in HDAE5000_ClassProc_Table
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
 	ld	xiz, xbc
@@ -976,12 +976,12 @@ HDAE5000_TtlScreenRProc:
 	call	(xix)
 .LRF_0563:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_TtlScreenR2Proc:
 	; registered as "TtlScreenR2Proc" in HDAE5000_ClassProc_Table
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
 	ld	xiz, xbc
@@ -1052,12 +1052,12 @@ HDAE5000_TtlScreenR2Proc:
 	call	(xix)
 .LRF_0641:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_TtlScreenR3Proc:
 	; registered as "TtlScreenR3Proc" in HDAE5000_ClassProc_Table
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
 	ld	xiz, xbc
@@ -1128,12 +1128,12 @@ HDAE5000_TtlScreenR3Proc:
 	call	(xix)
 .LRF_071f:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_IvScreenR2Proc:
 	; registered as "IvScreenR2Proc" in HDAE5000_ClassProc_Table
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld (xsp + 0x04), xde                    ; ld (XSP+0x04),XDE
 	ld	xiz, xbc
@@ -1192,7 +1192,7 @@ HDAE5000_IvScreenR2Proc:
 	call	(xix)
 .LRF_07d5:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_SelectListProc:
@@ -1348,7 +1348,7 @@ HDAE5000_SelectListProc:
 	sub	bc, (xsp+80)
 	exts xbc                                ; exts XBC
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
-	divs16_rid8 xwa, 0x2a, bc		; divs XBC,(XWA+0x2a)
+	divs xbc, (xwa+42)		; divs XBC,(XWA+0x2a)
 	ld (xsp + 0x0c), bc
 	ld	wa, (xsp+82)
 	inc	1, wa
@@ -1360,7 +1360,7 @@ HDAE5000_SelectListProc:
 	jr t, .LRF_0a81                        ; [68 61] jr T,0x280a81
 .LRF_0a20:
 	ld	wa, (xsp+12)
-	mul16_rid8 xsp, 0x08, wa		; mul XWA,(XSP+0x08)
+	mul xwa, (xsp+8)		; mul XWA,(XSP+0x08)
 	ld	bc, (xsp+80)
 	add	bc, wa
 	dec	1, bc
@@ -1440,13 +1440,13 @@ HDAE5000_SelectListProc:
 	sub	bc, (xsp+80)
 	exts xbc                                ; exts XBC
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
-	divs16_rid8 xwa, 0x2a, bc		; divs XBC,(XWA+0x2a)
+	divs xbc, (xwa+42)		; divs XBC,(XWA+0x2a)
 	ld (xsp + 0x0c), bc
 	ld	bc, (xsp+86)
 	sub	bc, (xsp+82)
 	exts xbc                                ; exts XBC
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
-	divs16_rid8 xwa, 0x2c, bc		; divs XBC,(XWA+0x2c)
+	divs xbc, (xwa+44)		; divs XBC,(XWA+0x2c)
 	ld (xsp + 0x0e), bc
 	ldw (xsp + 0x08), 0
 	ldw (xsp + 0x0a), 0
@@ -1677,7 +1677,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld	bc, (xwa+42)
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
-	muls16_rid8 xwa, 0x2c, bc		; muls XBC,(XWA+0x2c)
+	muls xbc, (xwa+44)		; muls XBC,(XWA+0x2c)
 	cp	(xsp+8), bc
 	jrl c, .LRF_0b26                       ; [77 5f fd] jrl C,0x280b26
 	ld	xhl, 0:i3
@@ -1710,7 +1710,7 @@ HDAE5000_SelectListProc:
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
 	ld	bc, (xwa+44)
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
-	muls16_rid8 xwa, 0x2a, bc		; muls XBC,(XWA+0x2a)
+	muls xbc, (xwa+42)		; muls XBC,(XWA+0x2a)
 	cp	de, bc
 	jr lt, .LRF_0e49                       ; [61 24] jr LT,0x280e49
 	ld	bc, de
@@ -2006,7 +2006,7 @@ HDAE5000_SelectListProc:
 	jrl t, .LRF_1225                       ; [78 84 00] jrl T,0x281225
 .LRF_11a1:
 	ld	xwa, xiz
-	inc 0, xwa		; inc 0,XWA
+	inc 8, xwa		; inc 0,XWA
 	cp	xwa, (xsp+96)
 	jr nz, .LRF_11d4                       ; [6e 2a] jr NZ,0x2811d4
 	ld xwa, (xsp + 0x04)                    ; ld XWA,(XSP+0x04)
@@ -2139,7 +2139,7 @@ HDAE5000_DbMemoClProc:
 	ld	wa, (xsp+98)
 	ld (xsp + 0x4e), wa                     ; ld (XSP+0x4e),WA
 	ld	wa, (xsp+104)
-	dec 0, wa		; dec 0,WA
+	dec 8, wa		; dec 0,WA
 	ld (xsp + 0x50), wa                     ; ld (XSP+0x50),WA
 	lda	xiy, (xsp+98)
 	lda	xix, (xsp+90)
@@ -2151,7 +2151,7 @@ HDAE5000_DbMemoClProc:
 	ld	bc, 4:i3
 	ldirw                                   ; ldirw
 	ld	wa, (xsp+88)
-	dec 0, wa		; dec 0,WA
+	dec 8, wa		; dec 0,WA
 	ld (xsp + 0x54), wa                     ; ld (XSP+0x54),WA
 	ld	wa, (xsp+98)
 	ld (xsp + 0x4a), wa                     ; ld (XSP+0x4a),WA
@@ -3284,7 +3284,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	lda xwa, (0x22a000:24)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ld xwa, (xsp + 0x30)                    ; ld XWA,(XSP+0x30)
 	ld	xbc, (HDAE5000_RAM_MainWorkspacePtr)
 	ld	xbc, (xbc + WS_RootFnTable)
@@ -3300,7 +3300,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld xwa, (xsp + 0x2c)                    ; ld XWA,(XSP+0x2c)
 	push xwa
 	call HDAE5000_StrCpy
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ld	xhl, 0:i3
 	jrl t, .LRF_267c                       ; [78 58 04] jrl T,0x28267c
 .LRF_2224:
@@ -3645,7 +3645,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 
 HDAE5000_IvHddNamingProc:
 	; registered as "IvHddNamingProc" in HDAE5000_ClassProc_Table
-	dec 0, xsp                              ; dec 0,XSP
+	dec 8, xsp                              ; dec 0,XSP
 	push xiz
 	ld	xiz, xde
 	ld (xsp + 0x04), xbc                    ; ld (XSP+0x04),XBC
@@ -3731,7 +3731,7 @@ HDAE5000_IvHddNamingProc:
 	ld	xhl, 0:i3
 .LRF_27a4:
 	pop xiz                                 ; pop XIZ
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	ret
 
 HDAE5000_HDTitleMenuProc:
@@ -3775,7 +3775,7 @@ HDAE5000_HardTest_Print:	; 0x2827F4 (932 bytes)
 	; Entry point 2: main event handler dispatcher
 HDAE5000_HardTestPage:
 	; registered as "HardTestPage" in HDAE5000_ObjHandler_Table
-	dec 0, xsp					; ef 68 — allocate stack frame
+	dec 8, xsp					; ef 68 — allocate stack frame
 	push xiz					; 3e
 	ld (xsp + 0x04), xde				; bf 04 62 — save XDE
 	ld (xsp + 0x08), xbc				; bf 08 61 — save XBC
@@ -4035,7 +4035,7 @@ HDAE5000_HardTestPage:
 	call (xix)					; b4 e8
 .Leh_return:
 	pop xiz					; 5e
-	inc 0, xsp					; ef 60 — deallocate stack frame
+	inc 8, xsp					; ef 60 — deallocate stack frame
 	ret						; 0e
 
 ; --- PPI/IDE Low-Level I/O ---
@@ -4311,7 +4311,7 @@ HDAE5000_FdName_SongNumber:	; 0x282E3C (81 bytes)
 	; 0xFFFF.  (Was "transfer a block of data via PPI".)
 	; Iterates entries 1..20, copies block via PPI_Block_Copy, validates buffer,
 	; then compares with MemCompare_Block. Returns matching index-1 or 0xFFFF.
-	dec 0, xsp			; allocate 8 bytes on stack
+	dec 8, xsp			; allocate 8 bytes on stack
 	pushw iz
 	ld (xsp + 6), xwa		; save input parameter
 	ld iz, 1:i3			; IZ = 1 (entry counter)
@@ -4347,7 +4347,7 @@ HDAE5000_FdName_SongNumber:	; 0x282E3C (81 bytes)
 	ldw hl, 0xFFFF			; return -1 (not found)
 .Lptb_done:
 	popw iz
-	inc 0, xsp			; deallocate 8 bytes
+	inc 8, xsp			; deallocate 8 bytes
 	ret
 
 ; --- HD Drive Setup and Configuration ---

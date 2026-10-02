@@ -573,7 +573,7 @@ HDAE5000_TitleInfo_Build:	; 0x2832F3 (1051 bytes)
 ; --- Event handler sub-function ---
 HDAE5000_HdTitleEventCatch:
 	; registered as "HdTitleEventCatch" in HDAE5000_ObjHandler_Table
-	dec 0, xsp				; ef 68 — allocate 4 bytes
+	dec 8, xsp				; ef 68 — allocate 4 bytes
 	push xiz				; 3e
 	ld (xsp + 0x04), xde			; bf 04 62
 	ld xiz, xbc				; e9 8e
@@ -621,7 +621,7 @@ HDAE5000_HdTitleEventCatch:
 
 .Lri_evt_done:					; 0x283514
 	pop xiz					; 5e
-	inc 0, xsp				; ef 60
+	inc 8, xsp				; ef 60
 	ret					; 0e
 
 ; --- Jump table dispatcher sub-function ---
@@ -809,7 +809,7 @@ HDAE5000_DirList_BuildPage:	; 0x28370E (702 bytes)
 	lda xwa, (0x22a0d0:24)
 	push xwa
 	call HDAE5000_MemFill
-	inc 0, xsp			; (NOP — callee cleaned stack)
+	inc 8, xsp			; (NOP — callee cleaned stack)
 
 	; --- Loop: format 24 (0x18) entries ---
 	ld iz, 0:i3			; IZ = loop counter
@@ -2166,7 +2166,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2190,7 +2190,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2234,7 +2234,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2258,7 +2258,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2302,7 +2302,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2326,7 +2326,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2370,7 +2370,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2394,7 +2394,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2438,7 +2438,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2462,7 +2462,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2506,7 +2506,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2530,7 +2530,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2574,7 +2574,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2598,7 +2598,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2642,7 +2642,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2666,7 +2666,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2710,7 +2710,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2734,7 +2734,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	lda	xwa, (xsp+4)
@@ -2778,7 +2778,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 	pushw 0x0040
@@ -2802,7 +2802,7 @@ HDAE5000_HDD_UTIL_PAGE:
 	lda	xwa, (xsp+48)
 	push xwa
 	call HDAE5000_StrCat
-	inc 0, xsp                              ; inc 0,XSP
+	inc 8, xsp                              ; inc 0,XSP
 	lda	xwa, (xsp+44)
 	calr	HDAE5000_HardTest_Print
 .LHRW_4d61:
@@ -2908,7 +2908,7 @@ HDAE5000_PcLink_ShowStatus:	; 0x284DE9 (355 bytes)
 
 HDAE5000_PC_DATA_LINK_PAGE:
 	; registered as "PC_DATA_LINK_PAGE" in HDAE5000_ObjHandler_Table
-	dec 0, xsp
+	dec 8, xsp
 	push xiz
 	ld (xsp + 4), xde		; save extra data
 	ld xiz, xbc			; XIZ = error code
@@ -2988,7 +2988,7 @@ HDAE5000_PC_DATA_LINK_PAGE:
 	call (xix)
 .Lhd_exit:
 	pop xiz
-	inc 0, xsp
+	inc 8, xsp
 	ret
 
 HDAE5000_SeparateOutput_SendPartMsg:	; 0x284F4C (138 bytes)
@@ -3000,7 +3000,7 @@ HDAE5000_SeparateOutput_SendPartMsg:	; 0x284F4C (138 bytes)
 	; byte 3 of the first, E is byte 3 of the second; each block goes to the
 	; main CPU with WA = 0, BC = 4.  Only caller: HDAE5000_SeparateOutput_Apply.
 	; What the main CPU does with them is not established here.)
-	dec 0, xsp			; allocate 8 bytes on stack
+	dec 8, xsp			; allocate 8 bytes on stack
 	ld l, c				; save C in L
 	ld xiy, HDAE5000_SeparateOutput_SendPartMsg_Data		; source template address (first block)
 	lda xix, (xsp + 4)		; XIX = destination: stack+4
@@ -3058,7 +3058,7 @@ HDAE5000_SeparateOutput_SendPartMsg:	; 0x284F4C (138 bytes)
 	ld bc, 4:i3			; BC = 4
 	call (xhl)			; call handler
 .Lwr_exit:
-	inc 0, xsp			; deallocate 8 bytes
+	inc 8, xsp			; deallocate 8 bytes
 	ret
 
 HDAE5000_SeparateOutput_Apply:	; 0x284FD6 (782 bytes)
@@ -5263,7 +5263,7 @@ HDAE5000_SetupP2SwCatch:
 	lda xwa, (0x22ad9c:24)
 	push xwa
 	call HDAE5000_MemFill
-	inc 0, xsp			; deallocate 8 bytes
+	inc 8, xsp			; deallocate 8 bytes
 	cp (HDAE5000_RAM_WriteProtect:24), 0x00
 	jr nz, .LHD_PS__exit
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
@@ -5293,14 +5293,14 @@ HDAE5000_FormatDialog_CodeDigit:	; 0x2865DE (1098 bytes)
 	; collected at 0x22AD9E; after six, "050354" (0x2E1E2C) gives IZ = 2,
 	; "965768" (0x2E1E34) gives 3, anything else 1.  What 2 and 3 unlock is
 	; decided by the caller, AttenHDFormatSwCatch.)
-	dec 0, xsp			; alloc 4 bytes
+	dec 8, xsp			; alloc 4 bytes
 	pushw iz                                ; push iz (compact)
 	pushw 0x000a
 	lda xbc, (xsp + 0x04)
 	push xbc
 	pushw wa                                ; push wa (compact)
 	call HDAE5000_IToA
-	inc 0, xsp			; dealloc 4 bytes
+	inc 8, xsp			; dealloc 4 bytes
 	ld a, (0x22ad9c:24); A = current count
 	extz wa
 	ld bc, wa
@@ -5317,7 +5317,7 @@ HDAE5000_FormatDialog_CodeDigit:	; 0x2865DE (1098 bytes)
 	lda xwa, (0x22ad9e:24)
 	push xwa
 	call HDAE5000_StrPrefixCmp			; string compare
-	inc 0, xsp
+	inc 8, xsp
 	cp hl, 0:i3
 	jr nz, .LCHSC__try2
 	ld iz, 2:i3			; match pattern 1 → IZ=2
@@ -5328,7 +5328,7 @@ HDAE5000_FormatDialog_CodeDigit:	; 0x2865DE (1098 bytes)
 	lda xwa, (0x22ad9e:24)
 	push xwa
 	call HDAE5000_StrPrefixCmp			; string compare
-	inc 0, xsp
+	inc 8, xsp
 	cp hl, 0:i3
 	jr nz, .LCHSC__no_match
 	ld iz, 3:i3			; match pattern 2 → IZ=3
@@ -5341,14 +5341,14 @@ HDAE5000_FormatDialog_CodeDigit:	; 0x2865DE (1098 bytes)
 	lda xwa, (0x22ad9c:24)
 	push xwa
 	call HDAE5000_MemFill			; MemFill (clear buffer)
-	inc 0, xsp
+	inc 8, xsp
 	jr t, .LCHSC__return
 .LCHSC__not_full:
 	ld iz, 0:i3			; not full → IZ=0
 .LCHSC__return:
 	ld hl, iz			; return value in HL
 	popw iz                                 ; pop iz (compact)
-	inc 0, xsp			; dealloc 4 bytes
+	inc 8, xsp			; dealloc 4 bytes
 	ret
 	;
 	; Part 2: Event handler (0x286666)
@@ -5480,7 +5480,7 @@ HDAE5000_AttenHDFormatSwCatch_Case6:
 	lda xwa, (0x22ad9c:24)
 	push xwa
 	call HDAE5000_MemFill			; MemFill
-	inc 0, xsp
+	inc 8, xsp
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld xwa, (xwa + WS_RootFnTable)
 	ld xhl, (xwa + RootFn_PostEvent)             ; XHL = (XWA + 0x0104)
@@ -5806,7 +5806,7 @@ HDAE5000_Lbn_StepDigit_Case5:
 	; Part 2: Event handler A (0x286B72)
 HDAE5000_LBNPage1SwCatch:
 	; registered as "LBNPage1SwCatch" in HDAE5000_ObjHandler_Table
-	dec 0, xsp			; alloc 8 bytes
+	dec 8, xsp			; alloc 8 bytes
 	push xiz
 	ld (xsp + 0x04), xde
 	ld (xsp + 0x08), xbc
@@ -5958,13 +5958,13 @@ HDAE5000_LBNPage1SwCatch_Case4:
 	call (xix)
 .LHD_SR__a_epilogue:
 	pop xiz
-	inc 0, xsp
+	inc 8, xsp
 	ret
 	;
 	; Part 3: Event handler B (0x286CED)
 HDAE5000_LBNLoadSwCatch:
 	; registered as "LBNLoadSwCatch" in HDAE5000_ObjHandler_Table
-	dec 0, xsp
+	dec 8, xsp
 	push xiz
 	ld (xsp + 0x04), xde
 	ld xiz, xbc			; save event code in XIZ
@@ -6072,7 +6072,7 @@ HDAE5000_LBNLoadSwCatch:
 	call (xix)
 .LHD_SR__b_epilogue:
 	pop xiz
-	inc 0, xsp
+	inc 8, xsp
 	ret
 
 HDAE5000_Lbn_TypeDigit:	; 0x286E50 (646 bytes)

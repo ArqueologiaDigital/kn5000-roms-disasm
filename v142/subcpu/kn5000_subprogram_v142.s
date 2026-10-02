@@ -381,7 +381,7 @@ MemClear_DRAM_And_ExtRAM:
 
 MemClear_DRAM_BulkLoop:
 	ldirw93
-	djnz xwa, MemClear_DRAM_BulkLoop
+	djnz16 wa, MemClear_DRAM_BulkLoop
 
 MemClear_DRAM_OddByte:
 	bit 0, ix
@@ -406,7 +406,7 @@ MemClear_ExtRAM:
 
 MemClear_ExtRAM_BulkLoop:
 	ldirw93
-	djnz xwa, MemClear_ExtRAM_BulkLoop
+	djnz16 wa, MemClear_ExtRAM_BulkLoop
 
 MemClear_ExtRAM_OddByte:
 	bit 0, ix
@@ -32017,7 +32017,7 @@ VoiceAlloc_Apply_Grp0_VoiceLoop_Test:
 ; ★ Its voice-list loop terminates on (word & 0xFF) >= 0x40, not >= 0x80 like the other two.
 ; Callers: opcodes 0x2F..0x32 (0x02FBA5..0x02FBD5).
 VoiceAlloc_Apply_Algo_Group1:
-	dec	0, xsp
+	dec	8, xsp
 	push xiz
 	ld	(xsp+8), c
 	ld	(xsp+10), a
@@ -32122,14 +32122,14 @@ VoiceAlloc_Apply_Grp1_VoiceLoop_Test:
 	cp	wa, 64
 	jr	c, VoiceAlloc_Apply_Grp1_VoiceLoop
 	pop xiz
-	inc	0, xsp
+	inc	8, xsp
 	ret
 ; ALGORITHM GROUP 2 APPLY.  Group = 2 throughout; Voice_BuildOutputList selector = slot | 8
 ; (`set 3,WA`); per voice it calls Voice_OpSlot_WriteParams(group 2), Voice_Freq_WriteLeft
 ; (0x023043), Voice_Freq_WriteRight (0x02315F) and ToneGen_WriteExtParams_15_Banked (0x02DD6D).
 ; Loop terminator (word & 0xFF) >= 0x80.  Callers: opcodes 0x33..0x36 (0x02FBE5..0x02FC15).
 VoiceAlloc_Apply_Algo_Group2:
-	dec	0, xsp
+	dec	8, xsp
 	push xiz
 	ld	(xsp+8), c
 	ld	(xsp+10), a
@@ -32232,7 +32232,7 @@ VoiceAlloc_Apply_Grp2_VoiceLoop_Test:
 	cp	wa, 128
 	jr	c, VoiceAlloc_Apply_Grp2_VoiceLoop
 	pop xiz
-	inc	0, xsp
+	inc	8, xsp
 	ret
 ; Second command dispatcher.  Entry XWA = command record; part goes to QIZH.
 ; Stage 1 accepts opcodes 0x15..0x27 through AUDIO_CMD_EFFECTPARAM_JUMPTABLE (0x00FA76,
@@ -42446,7 +42446,7 @@ DSP_WriteCount_Compute:
 ; The `add DE,(XWA+)` / `djnz` accumulation loop.
 DSP_WriteCount_Loop:
 	add DE, (xwa+)
-	djnz xbc, DSP_WriteCount_Loop
+	djnz16 bc, DSP_WriteCount_Loop
 
 ; HL = ~sum.
 DSP_WriteCount_Next:

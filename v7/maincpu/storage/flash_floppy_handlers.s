@@ -3233,7 +3233,7 @@ Flash_InitBytecodeBlock_Helper9_Helper_Helper:
 	ld L,A
 	jr t, .Lc_f17ce5
 .Lc_f17ce1:
-	inc 0,A
+	inc 8,A
 	ld L,A
 .Lc_f17ce5:
 	ret
