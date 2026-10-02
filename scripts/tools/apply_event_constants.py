@@ -59,6 +59,18 @@ DATA = {".long", ".int", ".word", ".4byte"}
 IDENT = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*$")
 
 
+def brief(meaning, cap=150):
+    """The catalog meaning as a one-line comment: whole, or cut at a word boundary with ' ...'
+    (a cut inside a token -- '...(XHL+0x' -- reads as an unfinished template; the full text is
+    in the catalog)."""
+    m = (meaning or "").replace("\n", " ").strip()
+    if len(m) <= cap:
+        return m
+    cut = m[:cap]
+    sp = cut.rfind(" ")
+    return (cut[:sp] if sp > 60 else cut).rstrip(" ,;:(") + " ..."
+
+
 def read(p):
     return open(p, "rb").read().decode("latin-1")
 
@@ -182,7 +194,7 @@ def main():
                 errors.append("%s: name %s already exists in the tree" % (tree, n))
                 continue
             by_value[v] = n
-            new_defs.append(".equ %s, 0x%x\t; %s" % (n, v, (e.get("meaning") or "").replace("\n", " ")[:110]))
+            new_defs.append(".equ %s, 0x%x\t; %s" % (n, v, brief(e.get("meaning"))))
         # also substitute values that already had a constant but were not in the catalog
         for v, n in val2name.items():
             by_value.setdefault(v, renames[n][0] if n in renames else n)
@@ -214,7 +226,7 @@ def main():
                 if m and m.group(1) in {n for n, _, _ in renames.values()}:
                     n = m.group(1)
                     v, meaning = [(vv, mm) for o, (nn, vv, mm) in renames.items() if nn == n][0]
-                    lines[i] = ".equ %s, 0x%x\t; %s" % (n, v, meaning.replace("\n", " ")[:110])
+                    lines[i] = ".equ %s, 0x%x\t; %s" % (n, v, brief(meaning))
             write(defs_path, "\n".join(lines))
         report.append("renamed %d existing constant(s) via scripts/renaming/rename_event_constants.sed" % len(renames))
 
