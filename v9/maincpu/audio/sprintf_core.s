@@ -104,7 +104,7 @@ Sprintf_ParseWidthDigit:
 Sprintf_CheckIfDigit:
 	ldto_berp A, 0xf8
 	extz wa
-	lda xbc, (FileOpen_NormalizeName_Data:24)
+	lda xbc, (CType_ClassTable:24)
 	bit	2, (xbc+wa)
 	jr nz, Sprintf_ParseWidthDigit
 
@@ -153,7 +153,7 @@ Sprintf_ParsePrecisionDigit:
 Sprintf_CheckPrecisionDigit:
 	ldto_berp A, 0xf8
 	extz wa
-	lda xbc, (FileOpen_NormalizeName_Data:24)
+	lda xbc, (CType_ClassTable:24)
 	bit	2, (xbc+wa)
 	jr nz, Sprintf_ParsePrecisionDigit
 
@@ -205,7 +205,7 @@ Sprintf_DispatchType:
 	cp wa, 0x15
 	jrl gt, Sprintf_MainLoop_ReadNext
 	add wa, wa
-	lda xix, (Sprintf_DispatchType_Data:24)
+	lda xix, (Sprintf_TypeSwitch:24)
 	ld	wa, (xix+wa)
 	lda xix, (Sprintf_Format_Percent:24)
 	jp	t, (xix+wa)
@@ -1157,10 +1157,10 @@ Sprintf_UIntToStr_DivLoop:
 	ret
 
 Sprintf_HexToStr:
-	ld xwa, Sprintf_HexToStr_Str_N0123456789ABCDEF
+	ld xwa, Sprintf_HexDigitsUpper
 	cpw (xsp + 12), 0x78
 	jr nz, Sprintf_HexToStr_TableSelected
-	ld xwa, Sprintf_HexToStr_Str_N0123456789abcdef
+	ld xwa, Sprintf_HexDigitsLower
 
 Sprintf_HexToStr_TableSelected:
 	ld xix, xwa
@@ -1315,7 +1315,7 @@ Sprintf_FFixed_CheckLongDoubleLimit:
 	ld c, (xsp + 10)
 	ld a, c
 	extz wa
-	lda xde, (FileOpen_NormalizeName_Data:24)
+	lda xde, (CType_ClassTable:24)
 	lda	xde, (xde+wa)
 	bitm 1, (xde)
 	jr z, Sprintf_FFixed_SpecNoUpperCase
@@ -1696,7 +1696,7 @@ Sprintf_FormatEScientific:
 Sprintf_ESci_ApplyDefaults:
 	ld a, (xsp + 10)
 	extz wa
-	lda xbc, (FileOpen_NormalizeName_Data:24)
+	lda xbc, (CType_ClassTable:24)
 	lda	xbc, (xbc+wa)
 	bitm 1, (xbc)
 	jr z, Sprintf_ESci_SpecNoUpperCase
@@ -1922,7 +1922,7 @@ Sprintf_ESci_DecimalPointEmit:
 Sprintf_ESci_MantissaDigits:
 	ld c, (xsp + 10)
 	extz bc
-	lda xwa, (FileOpen_NormalizeName_Data:24)
+	lda xwa, (CType_ClassTable:24)
 	bit	1, (xwa+bc)
 	jr z, Sprintf_ESci_MantissaNoCase
 	ld a, (xsp + 10)
@@ -1997,7 +1997,7 @@ Sprintf_ESci_MantTrailLoop:
 	ld iz, hl
 	ld c, (xsp + 10)
 	extz bc
-	lda xwa, (FileOpen_NormalizeName_Data:24)
+	lda xwa, (CType_ClassTable:24)
 	bit	1, (xwa+bc)
 	jr z, Sprintf_ESci_ExpNoCase
 	ld a, (xsp + 10)

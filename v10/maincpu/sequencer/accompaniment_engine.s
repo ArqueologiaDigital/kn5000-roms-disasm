@@ -30429,7 +30429,6 @@ CmpReal_ReturnZero:
 	ld xhl, 0:i3
 	ret
 ; CmpRealTtlFunc entry
-CmpRealTtl_Entry:
 CmpRealTtlFunc:
 	cp xbc, EVT_SW_IN
 	jr z, CmpRealTtl_MajorDispatch
@@ -32445,7 +32444,6 @@ CstmCp_StyleDataBlock:
 CstmCpTtlFunc_Skip16:
 	ld	xhl, 0:i3
 	ret
-CstmCp_StyleDataBlock_Code:
 
 MainCstmNameFunc:
 	lda xsp, (xsp - 120)
@@ -32521,7 +32519,6 @@ CstmName_ReturnZero:
 	pop xiz
 	lda xsp, (xsp + 120)
 	ret
-CstmName_ReturnZero_Code:
 
 MainS2cFunc:
 	dec 4, xsp
@@ -32591,7 +32588,6 @@ EventDelivery_ReturnZero:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-EventDelivery_ReturnZero_Code:
 
 MiddleNameFunc:
 	lda xwa, (0x34bc:16)
@@ -32651,7 +32647,6 @@ MiddleName_PostModeChange:
 MiddleName_ReturnZero:
 	ld xhl, 0:i3
 	ret
-MiddleName_ReturnZero_Code:
 
 MiddleCmpClrFunc:
 	cp xbc, EVT_CMP_CLR_NO
@@ -32683,7 +32678,6 @@ MiddleCmpClr_HandleEvent07:
 MiddleCmpClr_ReturnZero:
 	ld xhl, 0:i3
 	ret
-MiddleCmpClr_ReturnZero_Code:
 
 MainCmpCpFunc:
 	lda xsp, (xsp - 18)
@@ -32977,7 +32971,6 @@ CmpSong_VariantA:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-CmpSong_VariantA_Code:
 
 MainEsCmpFunc:
 	dec 4, xsp
@@ -33091,12 +33084,10 @@ EsCmp_ReturnZero:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-EsCmp_ReturnZero_Code:
 
 MspBkslTtlFunc:
 	ld xhl, 0:i3
 	ret
-MspBkslTtlFunc_Code:
 
 MainMspBnkNameFunc:
 	ld xhl, 0:i3
@@ -33191,7 +33182,6 @@ AccSeq_DeliverC9_000A:
 	ld xde, 0:i3
 	call ApDeliveryEvent
 	ret
-AccSeq_DeliverC9_000A_Code:
 
 MainMspRgpSetFunc:
 	ld a, (0x7f3d:16)
@@ -33556,7 +33546,6 @@ SndArgTtlFunc_Skip:
 SndArgTtl_ReturnZero:
 	ld xhl, 0:i3
 	ret
-SndArgTtl_ReturnZero_Code:
 
 SndArgNmGet:
 	lda xsp, (xsp - 76)
@@ -33756,7 +33745,6 @@ SndArgNm_ReturnZero:
 	popw_erp 0xfa
 	lda xsp, (xsp + 76)
 	ret
-SndArgNm_ReturnZero_Code:
 
 CmpStepTitleFunc:
 	lda xsp, (xsp - 16)
@@ -34159,7 +34147,7 @@ AccDraw_Secondary_Return:
 AccScreen_DataBlock_Code6:
 	ld	(0x03efa8:24), 0
 	ldmm8	14779, 14102
-	ld	xiy, AccScreen_UIDataBlock_0x3B8
+	ld	xiy, AccDraw_Secondary_Sub_Entry2_Data_9
 	calr	AccDraw_Secondary
 	ret
 	.byte 0xc1, 0xe2, 0xe3
@@ -34433,15 +34421,15 @@ AccDraw_Secondary_Skip3:
 AccDraw_Secondary_Skip4:
 	calr	AccScreen_BeatDataBlock
 	ldmm8	14779, 14102
-	ld	xiy, AccScreen_UIDataBlock_0x3B8
+	ld	xiy, AccDraw_Secondary_Sub_Entry2_Data_9
 	calr	AccDraw_Secondary
 AccDraw_Secondary_Return7:
 	ret
 
 AccScreen_DrawTempoDisplay:
 	calr AccScreen_CalcTempoParams
-	ld xiy, AccScreen_UIDataBlock_0x360
-	ld xix, AccScreen_UIDataBlock_0x37E
+	ld xiy, AccScreen_DrawTempoDisplay_Data
+	ld xix, AccScreen_DrawTempoDisplay_Data_2
 	calr AccGraphics_RenderStart
 	ret
 
@@ -34456,18 +34444,18 @@ AccScreen_CalcTempoParams:
 
 AccScreen_UpdateBeatDisplay:
 	ldmm8 0x39bb, 0x3717
-	ld xiy, AccScreen_UIDataBlock_0x37E
+	ld xiy, AccScreen_DrawTempoDisplay_Data_2
 	push xwa
 	ld xwa, xiy
 	call DrawText_LayoutAndRender
 	pop xwa
 	cp (0x3717:16), 99
 	jr ugt, AccScreen_BeatDisplay_Large
-	ld xiy, AccScreen_UIDataBlock_0x386
+	ld xiy, AccScreen_UpdateBeatDisplay_Data
 	jr AccScreen_BeatDisplay_Draw
 
 AccScreen_BeatDisplay_Large:
-	ld xiy, AccScreen_UIDataBlock_0x390
+	ld xiy, AccScreen_BeatDisplay_Large_Data
 
 AccScreen_BeatDisplay_Draw:
 	calr AccDraw_Init
@@ -34479,7 +34467,7 @@ AccScreen_BeatDataBlock:
 	ldmm8	14779, 14100
 	ldmm8	14780, 14101
 	ld xiy, 16166257
-	ld	xix, AccScreen_UIDataBlock_0x3B8
+	ld	xix, AccDraw_Secondary_Sub_Entry2_Data_9
 	calr	AccGraphics_RenderStart
 AccScreen_BeatDataBlock_Code_Return:
 	ret
@@ -34682,7 +34670,12 @@ AccScreen_DrawMeas_Variant3_Data:
 
 ; accomp_display_full: 287 bytes (compiled from C)
 AccScreen_DrawMeas_Other_Data:
-	.incbin "includes/generated/accomp_display_full.bin"
+	.incbin "includes/generated/accomp_display_full.bin", 0x0, 0xA
+AccScreen_DrawTempoDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0xA, 0x1E
+AccScreen_DrawTempoDisplay_Data_2:	.incbin "includes/generated/accomp_display_full.bin", 0x28, 0x8
+AccScreen_UpdateBeatDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x30, 0xA
+AccScreen_BeatDisplay_Large_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x3A, 0x28
+AccDraw_Secondary_Sub_Entry2_Data_9:	.incbin "includes/generated/accomp_display_full.bin", 0x62, 0xBD
 
 ; Accompaniment part names and ordering: 955 bytes
 ; ** RE-FRAMED 2026-08-30 (lane B4) -- and the "955 bytes" above is NOT all
@@ -36329,7 +36322,6 @@ DialCalc_Return:
 	pop xiz
 	inc 2, xsp
 	ret
-PostEventSetup_Send_Code:
 
 StylCnvWaitTtlFunc:
 	cp xbc, EVT_SW_IN
@@ -36378,7 +36370,6 @@ StylCnvWait_RestoreDisplay:
 AccChord_ReturnZero:
 	ld xhl, 0:i3
 	ret
-AccChord_ReturnZero_Code:
 
 StylCnvTxtTtlFunc:
 	cp xbc, EVT_SW_IN
@@ -36405,7 +36396,6 @@ StylCnvTxt_HandleClose:
 StylCnvTxt_ReturnZero:
 	ld xhl, 0:i3
 	ret
-StylCnvTxt_ReturnZero_Code:
 
 StylCnvModlTtlFunc:
 	lda xsp, (xsp - 36)
@@ -37362,7 +37352,6 @@ StylCnvCont_NotifyPart:
 AccRhythm_ReturnZero:
 	ld xhl, 0:i3
 	ret
-AccRhythm_ReturnZero_Code:
 
 StylCnvStorTtlFunc:
 	cp xbc, EVT_ACTIVATE_STATE
@@ -37379,7 +37368,6 @@ StylCnvStor_HandleClose:
 StylCnvStor_ReturnZero:
 	ld xhl, 0:i3
 	ret
-StylCnvStor_ReturnZero_Code:
 
 MainStylCnvFunc:
 	extz de

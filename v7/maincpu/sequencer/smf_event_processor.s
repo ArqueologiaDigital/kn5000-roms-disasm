@@ -365,7 +365,7 @@ VoiceChannel_GetParamBlockAlt_Data:
 	.long 0x0000f566, 0x0000f61c, 0x0000f59a, 0x0000f5b4
 	.long 0x0000f5ce, 0x0000f5e8, 0x0000f602, 0x0000f580
 ; VoiceChannel_SetRecordField3 (= VoiceChannel_ParamTable1 +0x80, which
-; shared/positional_labels.s still names VoiceChannel_ParamTable1_0x80):
+; shared/positional_labels.s still names VoiceChannel_SetRecordField3):
 ; XIY = the channel record of the MIDI channel in 0x0FAB
 ; (VoiceChannel_GetParamBlock), then record field +3 = byte at 0x0FAD.
 ; Called from smf_tonegen_core.s (two sites).
@@ -619,7 +619,7 @@ SndParam_LookupChannelVoice:
 	xor HL,HL
 	ld l, (0x0fac:16)
 	pushw hl
-	call ApplyProgramChangeAs_Block_Code_Sub
+	call SndParam_LookupByChannel
 	ld A,L
 	pop XDE
 	pop XBC
@@ -1118,7 +1118,7 @@ SMF_WriteChannelNoteData:
 	pushw	bc
 	pushw	de
 	ld	xwa, 6743
-	call	SMF_InitPlaybackState_Helper
+	call	SndParam_InitBufferConverge
 	popw	de
 	popw	bc
 	ld	a, (6881:16)
@@ -2211,7 +2211,7 @@ SMF_ProgramChange_ProcessPatch:
 	ld	(6748:16), l
 	pop	xix
 	ld	xwa, 6743
-	call	SMF_InitPlaybackState_Helper
+	call	SndParam_InitBufferConverge
 	ld	a, 176:opc
 	ld	w, (4213:16)
 	or	a, w
@@ -2951,7 +2951,7 @@ FileOpen_ParseModeNext:
 FileOpen_AllocBuffer:
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
 	calr	SeqStep_MemAllocWrapper
@@ -2975,7 +2975,7 @@ FileOpen_NormalizeName:
 	ld xwa, xde
 	ld a, (xwa)
 	extz wa
-	lda xbc, (FileOpen_NormalizeName_Data:24)
+	lda xbc, (CType_ClassTable:24)
 	ld	a, (xbc+wa)
 	bit 1, a
 	jr z, FileOpen_NormalizeNoUpper
@@ -3011,12 +3011,12 @@ FileOpen_StoreNormChar:
 FileOpen_MatchDevice:
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	ld	iz, hl
 	extz	xiz
 	ld	xwa, (xsp+28)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	8, xsp
 	ld	wa, hl
 	extz	xwa
@@ -3622,14 +3622,14 @@ SeqStep_FileNopB:
 SeqStep_FreeMemory:
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	ret
 SeqStep_MallocWrapper:
 	ld	xwa, (xsp+6)
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ret
 FileOpenDefault:
@@ -5177,7 +5177,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Skip10:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
@@ -5433,7 +5433,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop10:
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip25
@@ -5587,7 +5587,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop14:
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, SeqByteBlock_StyleBitmapRef_Code_Helper_Skip34
@@ -5660,7 +5660,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Skip36:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+4)
 	ld	xbc, (xwa+20)
 	add	xbc, xhl
@@ -5882,7 +5882,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop21:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
@@ -6429,7 +6429,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip16:
 	ld	wa, (xwa+38)
 	extz	xwa
 	ld	xbc, (xbc)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+4)
 	ld	(xwa+40), hl
 	ld	xwa, (xsp+4)
@@ -6647,7 +6647,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	extz	xbc
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+22)
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
 	ld	bc, (xwa+38)
@@ -6767,7 +6767,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Join:
 	dec	2, wa
 	extz	xwa
 	ld	xbc, (xbc)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, (xsp+22)
 	add	(xwa), xhl
 	ld	xwa, (xsp+16)
@@ -6775,7 +6775,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4_Join:
 	extz	xwa
 	ld	xbc, (xsp+8)
 	ld	xbc, (xbc+32)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (xsp+6)
 	sub	xhl, xwa
@@ -7822,7 +7822,7 @@ SeqStep_CalcTotalSectors:
 	ld	xwa, (xwa+30)
 	ld	wa, (xwa+40)
 	extz	xwa
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ret
 SeqStep_SectorCompareBlock:
 	ld	xde, (xsp+4)
@@ -8514,7 +8514,7 @@ FDC_Format2DD_Step2:
 
 FDC_Format2DD_AllocBuf:
 	pushw	512
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	xwa, xhl
@@ -8554,7 +8554,7 @@ FDC_Format2DD_WriteBoot:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8590,7 +8590,7 @@ FDC_Format2DD_WriteFAT1:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8613,7 +8613,7 @@ FDC_Format2DD_WriteFAT2:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8636,7 +8636,7 @@ FDC_Format2DD_WriteRoot:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8672,7 +8672,7 @@ FDC_Format2DD_WriteDataSec1:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8695,7 +8695,7 @@ FDC_Format2DD_WriteDataSec2:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8718,7 +8718,7 @@ FDC_Format2DD_WriteDataSec3:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8751,7 +8751,7 @@ FDC_Format2DD_TrackBody:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8778,7 +8778,7 @@ FDC_Format2DD_Side1Body:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
@@ -8808,7 +8808,7 @@ FDC_Format2DD_Side1Test:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jr	FDC_CmdFrame_Epilogue
@@ -8827,7 +8827,7 @@ FDC_Format2DD_FinalTrack:
 	ldfr_berp	l, 251
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	8, xsp
 	cpib_erp	251, 0
 	jr	nz, FDC_Format2DD_SetSectorAndRet	; -> 0xF51E7C
@@ -8878,7 +8878,7 @@ FDC_Format2HD_Step2:
 
 FDC_Format2HD_AllocBuf:
 	pushw	512
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	xwa, xhl
@@ -8918,7 +8918,7 @@ FDC_Format2HD_WriteBoot:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FdcOp_Epilogue20	; -> 0xF521E1
@@ -8954,7 +8954,7 @@ FDC_Format2HD_WriteFAT1:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FdcOp_Epilogue20	; -> 0xF521E1
@@ -8980,7 +8980,7 @@ FDC_Format2HD_TrackBody:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FdcOp_Epilogue20	; -> 0xF521E1
@@ -9021,7 +9021,7 @@ FDC_Format2HD_TrackTest:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FdcOp_Epilogue20
@@ -9047,7 +9047,7 @@ FDC_Format2HD_Side2Body:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FdcOp_Epilogue20	; -> 0xF521E1
@@ -9071,7 +9071,7 @@ FDC_Format2HD_Side2Test:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FdcOp_Epilogue20
@@ -9097,7 +9097,7 @@ FDC_Format2HD_Side1Body:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jrl	FdcOp_Epilogue20	; -> 0xF521E1
@@ -9127,7 +9127,7 @@ FDC_Format2HD_Side1Test:
 	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 	jr	FdcOp_Epilogue20
@@ -9146,7 +9146,7 @@ FDC_Format2HD_FinalTrack:
 	ldfr_berp	l, 251
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	8, xsp
 	cpib_erp	251, 0
 	jr	nz, FDC_Format2HD_SetSectorAndRet	; -> 0xF521D7
@@ -9168,7 +9168,7 @@ GetMediaType:
 	push QIZ
 	call Reset_Floppy_Disk_Controller
 	pushw 0x0400
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2,XSP
 	ld (XSP+0x02),XHL
 	ld XWA,XHL
@@ -9304,7 +9304,7 @@ GetMediaType_Epilogue:
 
 	push xwa
 
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 
 	ldto_berp A, 0xfb
 
@@ -9491,12 +9491,12 @@ PathInfo_BuildAndOpen:
 	pushw	GetVolumeLabel_CaseTable_Tail@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	ld	xwa, xiz
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	pushw	PathInfo_BuildAndOpen_Str_wb@hi16
 	pushw	PathInfo_BuildAndOpen_Str_wb@lo16
 	lda	xwa, (xsp+26)
@@ -9552,14 +9552,14 @@ FileIO_ParseLoop_CheckChar:
 	pushw	FileIO_ParseLoop_CheckChar_Str_Backslash@lo16
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 FileIO_ParseLoop_AppendSlash:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	ld	de, 0:i3
 	ld	xwa, (xiz)
@@ -9606,7 +9606,7 @@ _findfirst:
 
 FindFirst_AllocHandle:
 	pushw	8
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+8), xhl
 	ld	xwa, xhl
@@ -9616,14 +9616,14 @@ FindFirst_AllocHandle:
 	jrl	FdcFile_Epilogue20
 FindFirst_AllocPathBuf:
 	pushw	260
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	nz, FindFirst_ParseAndOpen
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	xhl, 4294967295
 	jrl	FdcFile_Epilogue20
@@ -9637,10 +9637,10 @@ FindFirst_ParseAndOpen:
 	jr	z, FindFirst_OpenDir
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	ld	xwa, xiz
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	8, xsp
 	ld	xhl, 4294967295
 	jrl	FdcFile_Epilogue20
@@ -9657,30 +9657,30 @@ FindFirst_OpenDir:
 	jr	nz, FindFirst_AllocPattern
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	ld	xwa, xiz
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	8, xsp
 	ld	xhl, 4294967295
 	jr	FdcFile_Epilogue20
 FindFirst_AllocPattern:
 	ld	xwa, xiz
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	lda	xsp, (xsp+10)
 	ld	xiz, xhl
 	or	xiz, xiz
 	jr	nz, FindFirst_CopyAndSearch
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	xhl, 4294967295
 	jr	FdcFile_Epilogue20
@@ -9736,10 +9736,10 @@ FindClose_FreeResources:
 	ld	xwa, xiz
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	ld	xwa, xiz
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	lda	xsp, (xsp+12)
 	ld	hl, 0:i3
 FindClose_Return:
@@ -10481,7 +10481,7 @@ FDC_DetectSector_CheckPianoDisc:
 	pushw	FDC_DetectSector_CheckPianoDisc_Str_N1_PianoDisc@lo16
 	lda	xwa, (148302:24)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, FDC_DetectSector_ReturnPD3
@@ -11034,8 +11034,8 @@ AccChord_CompareNoteC:
 	stb_d8	(12859), a
 	stb_d8	(52802), a
 	stb_d8	(8966), a
-	call	VoiceAlloc_ScoopDisplayProcess_Helper2
-	call	VoiceAlloc_ScoopDisplayProcess_Helper
+	call	Voice_InitSlotData
+	call	Voice_FindAndAllocBestMatch
 	ldb_d8	a, (64605)
 	and	a, 7
 	cp	a, 0:i3

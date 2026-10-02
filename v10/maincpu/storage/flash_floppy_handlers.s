@@ -674,10 +674,10 @@ DrumDetailEdit_Menu_Table:
 ; evidence: SeMenu_PresetManager_Load+0x17 (0xF0F6F0)
 SeScreenData_0x5569:
 ; se_setup_editor_full: 266 B at 0xF1616F, compiled from audio/sound_editor_screens/se_setup_editor_full.c
-	.incbin "includes/generated/se_setup_editor_full.bin"
+	.incbin "includes/generated/se_setup_editor_full.bin", 0x0, 0xCA
+SeMenu_PresetManager_Load_Data:	.incbin "includes/generated/se_setup_editor_full.bin", 0xCA, 0x40
 ; static record list (17 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF162D3
 ; evidence: SeMenu_CompareAndApply_Check+0xA (0xF0FB77)
-	.set	SeScreenData_0x5633, SeScreenData_0x5569 + 0xca
 ; F16279 -- remainder of the source line the descriptor ends inside
 	.byte	0x22, 0x0a, 0x0b, 0x00, 0x38, 0x00, 0x9c, 0x00, 0x8a, 0x00
 	.byte	0x22, 0x0a, 0x59, 0x00, 0xda, 0x00, 0x6e, 0x00, 0xee, 0x00

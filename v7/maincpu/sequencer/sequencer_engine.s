@@ -815,7 +815,7 @@ SeqPlay_FinalCleanupAndReset:
 	jr z, SeqPlay_FinalCleanup_ClearFlags
 	ld (0x11f4:16), 0x00
 	ld wa, 0:i3
-	call SeqPlay_FinalCleanupAndReset_Helper
+	call BitMapOut_PrepareAndRender
 SeqPlay_FinalCleanup_ClearFlags:
 	res 3, (0x28b3:16)
 
@@ -2590,8 +2590,8 @@ SeqPlay_HandleEvent_StopAndClean:
 	ldw	(10420:16), 0
 	ldw	wa, 50
 	call	SeqBuf_WriteNoteOffEntry
-	call	Interrupt_FlagSetBytecode_Helper2
-	call	Interrupt_FlagSetBytecode_Helper
+	call	NoteMap_SendAllNotesOff
+	call	AudioInit_RefreshToneBank
 	call	VoiceAlloc_ProcessAll
 	call	BitMapOut_PrepareAndDisplaySimple
 	call	AccompSeq_StopSequence
@@ -2678,8 +2678,8 @@ SeqPlay_ProcessVoice_CheckActive:
 SeqPlay_StopAndCleanup:
 	ldw	wa, 50
 	call	SeqBuf_WriteNoteOffEntry
-	call	Interrupt_FlagSetBytecode_Helper2
-	call	Interrupt_FlagSetBytecode_Helper
+	call	NoteMap_SendAllNotesOff
+	call	AudioInit_RefreshToneBank
 	call	VoiceAlloc_ProcessAll
 	call	BitMapOut_PrepareAndDisplay
 	call	AccompSeq_StopSequence
@@ -7191,7 +7191,7 @@ SeqStart_SendResetAndInit:
 	res	3, (10407:16)
 	ld	(4596:16), 0
 	ld	wa, 0:i3
-	call	SeqPlay_FinalCleanupAndReset_Helper
+	call	BitMapOut_PrepareAndRender
 	jr	SeqStart_FinalInit
 SeqStart_SetBit3:
 	set 3, (0x28a7:16)
@@ -7216,8 +7216,8 @@ SeqPlay_EmergencyStopAll:
 	res	0, (10406:16)
 	ldw	wa, 50
 	call	SeqBuf_WriteNoteOffEntry
-	call	Interrupt_FlagSetBytecode_Helper2
-	call	Interrupt_FlagSetBytecode_Helper
+	call	NoteMap_SendAllNotesOff
+	call	AudioInit_RefreshToneBank
 	call	VoiceAlloc_ProcessAll
 	call	BitMapOut_PrepareAndDisplay
 	ld	(8976:16), 0
@@ -7266,8 +7266,8 @@ SeqPlay_StopReset_CleanupAll:
 	res	5, (10419:16)
 	ldw	wa, 50
 	call	SeqBuf_WriteNoteOffEntry
-	call	Interrupt_FlagSetBytecode_Helper2
-	call	Interrupt_FlagSetBytecode_Helper
+	call	NoteMap_SendAllNotesOff
+	call	AudioInit_RefreshToneBank
 	call	VoiceAlloc_ProcessAll
 	call	AccompSeq_StopSequence
 	res	7, (10414:16)
@@ -8108,7 +8108,7 @@ SeqPlay_ReallocateAndReconfig:
 	push XIZ
 	ldw WA, 0x0032
 	call SeqBuf_WriteNoteOffEntry
-	call Interrupt_FlagSetBytecode_Helper2
+	call NoteMap_SendAllNotesOff
 	call AudioInit_RefreshToneBank
 	call VoiceAlloc_ProcessAll
 	call BitMapOut_PrepareAndDisplay
@@ -8661,8 +8661,8 @@ SeqActivate_PartLoopNext:
 	ldw	(10410:16), 0
 	ldw	wa, 50
 	call	SeqBuf_WriteNoteOffEntry
-	call	Interrupt_FlagSetBytecode_Helper2
-	call	Interrupt_FlagSetBytecode_Helper
+	call	NoteMap_SendAllNotesOff
+	call	AudioInit_RefreshToneBank
 	call	VoiceAlloc_ProcessAll
 	call	BitMapOut_PrepareAndDisplay
 	call	PerfMode_Handler_EvtB_Helper2_Helper11
@@ -9198,7 +9198,7 @@ VoiceAlloc_SortOuterLoop:
 VoiceAlloc_DisplayAndApply:
 	lda xwa, (xsp + 0x1a)
 	ld de, 2:i3
-	call VoiceAlloc_ScoopDisplayProcess_Helper3
+	call NoteDisplay_StoreAndDispatch
 	lda xwa, (xsp + 0x1a)
 	ld	(52803), (xwa)
 	ld	(52804), (xwa+1)
@@ -9234,8 +9234,8 @@ VoiceAlloc_CopyFieldLoop:
 	jr c, VoiceAlloc_CopyFieldLoop
 
 VoiceAlloc_InitAndFind:
-	call	VoiceAlloc_ScoopDisplayProcess_Helper2
-	call	VoiceAlloc_ScoopDisplayProcess_Helper
+	call	Voice_InitSlotData
+	call	Voice_FindAndAllocBestMatch
 VoiceAlloc_WriteIndexAndApply:
 	lda xwa, (xsp + 26)
 
@@ -9451,7 +9451,7 @@ VoiceAlloc_SortLoop_OuterCheck:
 	jr	c, VoiceAlloc_SortLoop_Outer
 	lda	xwa, (xsp+40)
 	ld	de, 2:i3
-	call	VoiceAlloc_ScoopDisplayProcess_Helper3
+	call	NoteDisplay_StoreAndDispatch
 	lda	xwa, (xsp+40)
 	cp	(xsp+44), 0
 	jr	z, VoiceAlloc_CompareLocalIdx
@@ -9519,8 +9519,8 @@ VoiceAlloc_CopyNoteData_Loop:
 VoiceAlloc_CopyNoteData_Check:
 	cp	l, (xiz)
 	jr	c, VoiceAlloc_CopyNoteData_Loop
-	call	VoiceAlloc_ScoopDisplayProcess_Helper2
-	call	VoiceAlloc_ScoopDisplayProcess_Helper
+	call	Voice_InitSlotData
+	call	Voice_FindAndAllocBestMatch
 	lda	xwa, (xsp+40)
 	ld	(36006), (xwa)
 	ld	(36004), (xwa+1)
@@ -9541,14 +9541,14 @@ BitMapOut_PrepareAndDisplay:
 	ld (XBC),0x00
 	lda xwa, (xsp + 0x0c)
 	ld de, 2:i3
-	call VoiceAlloc_ScoopDisplayProcess_Helper3
+	call NoteDisplay_StoreAndDispatch
 	lda xwa, (xsp + 0x0c)
 	ld	(52803), (xwa)
 	ld	(52804), (xwa+1)
 	ld	(52805), (xwa+2)
 	ld	(52802), (xwa+3)
-	call	VoiceAlloc_ScoopDisplayProcess_Helper2
-	call	VoiceAlloc_ScoopDisplayProcess_Helper
+	call	Voice_InitSlotData
+	call	Voice_FindAndAllocBestMatch
 	lda	xwa, (xsp+12)
 	ld	(36006), (xwa)
 	ld	(36004), (xwa+1)
@@ -9568,7 +9568,7 @@ BitMapOut_PrepareAndDisplaySimple:
 
 	ld de, 2:i3
 
-	call	VoiceAlloc_ScoopDisplayProcess_Helper3
+	call	NoteDisplay_StoreAndDispatch
 
 	lda xwa, (xsp + 12)
 
@@ -13964,7 +13964,7 @@ SeqBuf_CalcPageDivision:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 251
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	sub	xhl, (0x26c2:16)
 	ld	a, 251:opc
 	sub	a, l
@@ -14784,7 +14784,7 @@ SeqPlay_ComputeOffsets:
 	extz	xwa
 	ld	(xsp+4), xwa
 	ld	xbc, 251
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+4), xhl
 	ld	wa, (xiz+2)
 	extz	xwa
@@ -14794,7 +14794,7 @@ SeqPlay_ComputeOffsets:
 	extz	xwa
 	ld	(xsp+8), xwa
 	ld	xbc, 251
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+8), xhl
 	ld	wa, (xiz+2)
 	extz	xwa
@@ -14908,7 +14908,7 @@ SeqPlay_HandleSmallerDelta:
 	ld	(xsp+22), hl
 	ld	xwa, (xsp+8)
 	ld	xbc, 251
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	ld	xwa, (xsp+12)
 	ldw	(xwa), (10581)
 	ldb_d8	c, (10583)
@@ -18569,7 +18569,7 @@ Part_InitFromPreset:
 SeqInit_SetMIDIDefaults:
 	ldto_berp	a, 251
 	extz	wa
-	call	Part_InitFromPreset_Helper
+	call	DataBuf_InitSlotFromPreset
 	inc1b_erp	251
 	cp_erpb	251, 10
 	jr	ule, SeqInit_SetMIDIDefaults
@@ -19474,7 +19474,7 @@ SeqPlay_CheckNoteDisplayPending:
 	jr	nz, SeqPlay_InitBuffers
 	ld	(4596:16), 0
 	ld	wa, 0:i3
-	call	SeqPlay_FinalCleanupAndReset_Helper
+	call	BitMapOut_PrepareAndRender
 	ld	(7568:16), 0
 SeqPlay_InitBuffers:
 	bit	4, (10419:16)
@@ -20032,7 +20032,7 @@ SeqTimer_BarChangeReturn:
 	jr	z, SeqTimer_BarChangeCleanup
 	ld	(4596:16), 0
 	ld	wa, 0:i3
-	call	SeqPlay_FinalCleanupAndReset_Helper
+	call	BitMapOut_PrepareAndRender
 SeqTimer_BarChangeCleanup:
 	popw_erp 0xfa
 	inc 4, xsp
@@ -22046,7 +22046,7 @@ EffEdit_ParamBNegative:
 	ld xwa, 0x4900
 
 EffEdit_WriteDSPAndReturn:
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	jr	AppEvent_ReturnZeroEpilogue4
 AppEvent_DeliveryNoRet:
 	ld iz, 0:i3
@@ -22105,7 +22105,7 @@ EffEdit_DirectWriteD6:
 	jr Voice_OffsetAndDispatch
 
 EffEdit_CallWriteParam:
-	call	EffEdit_ValidateRangeDelta_Helper
+	call	DSPCfg_WriteParamDelta
 AppEvent_ReturnZeroEpilogue4:
 	ld xhl, 0:i3
 	popw iz
@@ -22166,7 +22166,7 @@ EffEdit_DSPConfigBlock_Loop:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, 19216
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	inc	1, iz
 EffEdit_DSPConfigBlock_Join:
 	cp	iz, (0x29aa:16)
@@ -22221,7 +22221,7 @@ EffEdit_DSPConfigBlock_Loop2:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, 18704
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	inc	1, iz
 EffEdit_DSPConfigBlock_Join2:
 	cp	iz, (0x29aa:16)
@@ -22286,7 +22286,7 @@ EffEdit_DSPConfigBlock_Skip5:
 	call	DSPCfg_ReadParam_Map1
 	ld	bc, hl
 	ld	xwa, 19728
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	jr	.Lc_f4576f
 EffEdit_DSPConfigBlock_Skip6:
 	ld	xwa, (xsp+2)
@@ -22322,7 +22322,7 @@ EffEdit_DSPConfigBlock_Skip7:
 	ld WA,IZ
 	extz XWA
 	add XWA,0x00004e10
-	call AppEvent_HandleChannelEvent_Helper
+	call DSPCfg_WriteParamFull
 	inc 1,IZ
 	cp iz, 4:i3
 	jr c, .Lc_f4574b
@@ -22662,7 +22662,7 @@ EffEdit_RangeCheckHL:
 EffEdit_WriteValidDelta:
 	ld	xwa, (xsp+8)
 	ld	bc, (xsp+6)
-	call	EffEdit_ValidateRangeDelta_Helper
+	call	DSPCfg_WriteParamDelta
 	jr	EffEdit_PopIzSkip8Ret
 EffEdit_RangeCheck4C16:
 	ld xwa, (xsp + 8)
@@ -25965,7 +25965,7 @@ SeqSave_AllocAndWrite:
 	cp	xiz, 0
 	jrl	lt, AppEvent_LoadIzToHL
 	pushw	8224
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(10734:16), xhl
 	or	xhl, xhl
@@ -25980,7 +25980,7 @@ SeqSave_WriteAndFree:
 	exts	xiz
 	ld	xwa, (10734:16)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	cp	xiz, 0
 	jrl	lt, AppEvent_LoadIzToHL

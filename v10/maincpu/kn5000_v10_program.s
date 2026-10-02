@@ -1475,19 +1475,19 @@ SetSepaOutMode:
 	lda xix, (xsp + 16)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0x4
+	ld xiy, SetSepaOutMode_Data
 	lda xix, (xsp + 12)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0x8
+	ld xiy, SetSepaOutMode_Data_2
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0xC
+	ld xiy, SetSepaOutMode_Data_3
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0x10
+	ld xiy, SetSepaOutMode_Data_4
 	ld xix, xsp
 	ldiw
 	ldiw
@@ -2293,7 +2293,7 @@ Voice_FactoryPresetData_Code_Skip15:
 	ld	de, (xde)
 	ld	(xiy), de
 	ld	de, (xsp+14)
-	calr	Voice_FactoryPresetData_Code_Helper
+	calr	DrawLineWithMode_Impl
 	lda	xwa, (xsp+10)
 	ld	xbc, (xsp+16)
 	lda	xde, (xbc+6)
@@ -2303,7 +2303,7 @@ Voice_FactoryPresetData_Code_Skip15:
 	ld	de, (xde)
 	ld	(xbc+2), de
 	ld	de, (xsp+14)
-	calr	Voice_FactoryPresetData_Code_Helper
+	calr	DrawLineWithMode_Impl
 	lda	xwa, (xsp+10)
 	ld	xhl, (xsp+16)
 	ld	bc, (xhl+2)
@@ -2316,7 +2316,7 @@ Voice_FactoryPresetData_Code_Skip15:
 	ld	de, (xhl+6)
 	ld	(xbc+2), de
 	ld	de, (xsp+14)
-	calr	Voice_FactoryPresetData_Code_Helper
+	calr	DrawLineWithMode_Impl
 	lda	xwa, (xsp+10)
 	ld	xbc, (xsp+16)
 	lda	xde, (xbc+4)
@@ -2327,7 +2327,7 @@ Voice_FactoryPresetData_Code_Skip15:
 	ld	(xbc), de
 	ld	de, (xsp+14)
 Voice_FactoryPresetData_Code_Join5:
-	calr	Voice_FactoryPresetData_Code_Helper
+	calr	DrawLineWithMode_Impl
 	ld	xwa, (xsp+16)
 	calr	SetChangeRect
 	popw	iz

@@ -336,7 +336,7 @@ TrAsSureLangCheck:
 	push	xwa
 	pushw	2
 	pushw	3252
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+18)
 	lda	xhl, (253688:24)
 	ret
@@ -1048,10 +1048,10 @@ SongEdit_CheckBounds_Epilogue:
 
 LyricsTrack_ReadAndParse:
 	lda	xwa, (134734:24)
-	call	LyricsTrack_ReadAndParse_Helper
+	call	SeqFile_ReadTrackData
 	pushw	2
 	pushw	3662
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	cp	hl, 34
 	jr	c, LyricsTrack_CheckEmpty
@@ -1061,7 +1061,7 @@ LyricsTrack_CheckEmpty:
 	cp (xwa), 0
 	ret z
 	push xwa
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4, xsp
 	dec 1, hl
 	extz xhl
@@ -1075,13 +1075,13 @@ LyricsTrack_CheckEmpty:
 	cp c, 13
 	jrl nz, LyricsTrack_HandleNormalChar
 LyricsTrack_HandleNewline:
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	cp	l, 1:i3
 	jr	z, LyricsTrack_HandleSingleChar
 	pushw	2
 	pushw	3662
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	extz	hl
 	ld	wa, hl
@@ -1126,7 +1126,7 @@ LyricsTrack_HandleSingleChar:
 	ret
 
 LyricsTrack_HandleNormalChar:
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	extz	hl
 	ld	wa, hl
@@ -1217,10 +1217,10 @@ LyricsTrack_ZeroFillLoop:
 LyricsFile_ValidateAndInsert:
 	pushw	iz
 	ld	xwa, 134990
-	call	LyricsFile_ValidateAndInsert_Helper
+	call	SeqFile_ValidateAndStore
 	pushw	2
 	pushw	3918
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	cp	hl, 34
 	jr	c, LyricsFile_CheckFirstByte
@@ -1257,7 +1257,7 @@ LyricsFile_InsertNormalChar:
 	call z, (LyricsTrack_ResetAllBuffers:24)
 	pushw 0x0002
 	pushw 0x0f4e
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	ld iz, hl
 	pushw iz
 	pushw 0x0002
@@ -1356,7 +1356,7 @@ LyricsBoxFunc_HandleInput:
 	cp (XWA),0x00
 	jrl z, LyricsBoxFunc_ReadTrack
 	push XBC
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4,XSP
 	dec 1,HL
 	extz XHL
@@ -1370,13 +1370,13 @@ LyricsBoxFunc_HandleInput:
 	cp C,0x0d
 	jrl nz, LyricsBoxFunc_HandleNormalChar
 LyricsBoxFunc_HandleNewline:
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	cp	l, 1:i3
 	jr	z, LyricsBoxFunc_HandleSingleChar
 	pushw	2
 	pushw	3662
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	extz	hl
 	ld	wa, hl
@@ -1427,7 +1427,7 @@ LyricsBoxFunc_HandleSingleChar:
 	jr LyricsBoxFunc_ReadTrack
 
 LyricsBoxFunc_HandleNormalChar:
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	extz	hl
 	ld	wa, hl
@@ -1761,7 +1761,7 @@ MeasureBoxFunc_DrawMeasure:
 	pushw MeasureBoxFunc_DrawMeasure_Str_MEASURE_Fmt3d@lo16
 	ld xwa, (xde+18)
 	push xwa
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp+10)
 	ld xhl, xiz
 	jr MeasureBoxFunc_Epilogue
@@ -3370,7 +3370,7 @@ TrAsGridChk_Part1_SendAudio:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3393,7 +3393,7 @@ TrAsGridChk_Part2_Start:
 TrAsGridChk_Part2_PushCmd:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3435,7 +3435,7 @@ TrAsGridChk_Part2_UpDir:
 TrAsGridChk_Part2_UpPushCmd:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3466,7 +3466,7 @@ TrAsGridChk_SendExtraAudioCmd:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 TrAsGridChk_Part2_Finish:
 	call GetFocusObject
@@ -3491,7 +3491,7 @@ TrAsGridChk_Part3_PushCmd:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3533,7 +3533,7 @@ TrAsGridChk_Part3_UpPushCmd:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3564,7 +3564,7 @@ TrAsGridChk_SendExtraAudioCmd2:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 TrAsGridChk_Part3_Finish:
 	call GetFocusObject
@@ -3793,7 +3793,7 @@ AcCurSongName_HandleFocusGained:
 	pushw	AcCurSongName_HandleFocusGained_Data@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -4343,7 +4343,7 @@ AcDemoMedley_HandleScrollEvent:
 DPPlayDsp_CheckEntry:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -4386,7 +4386,7 @@ DemoMedDsp_Dispatch:
 AcDemoMedleyDispBoxProc_Skip:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	AcDemoMedleyDispBoxProc_Epilogue
@@ -4434,7 +4434,7 @@ DPPlayDsp_Dispatch:
 AcDemoMedleyDispBoxProc_Skip2:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	AcDemoMedleyDispBoxProc_Epilogue2
@@ -4482,7 +4482,7 @@ DPPauseDsp_Dispatch:
 AcDemoMedleyDispBoxProc_Skip3:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	AcDemoMedleyDispBoxProc_Epilogue3
@@ -6384,7 +6384,7 @@ NoteEditBox_EventDispatch2_Join2:
 	push	xwa
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
@@ -6400,7 +6400,7 @@ NoteEditBox_EventDispatch2_Skip5:
 	pushw NoteEditBox_EventDispatch2_Str_Fmt2d@lo16
 	lda	xwa, (xsp+42)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+10)
 NoteEditBox_EventDispatch2_Join3:
@@ -6479,7 +6479,7 @@ NoteEditBox_EventDispatch2_Skip6:
 NoteEditBox_EventDispatch2_Join4:
 	push	xwa
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+8)
 	ldw	(xsp+10), 2
@@ -6493,7 +6493,7 @@ NoteEditBox_EventDispatch2_Skip7:
 	pushw NoteEditBox_EventDispatch2_Str_Fmt2d_2@hi16
 	pushw NoteEditBox_EventDispatch2_Str_Fmt2d_2@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	incw	1, (xsp+10)
 NoteEditBox_EventDispatch2_Join5:
@@ -6916,7 +6916,7 @@ NoteEdit_FormatTempo:
 	pushw	NoteEditBox_SetupGrid_CaseTable_Strings@lo16
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jrl	NoteEdit_RestoreAndReturn
 NoteEdit_FormatTempoString:
@@ -7059,7 +7059,7 @@ NoteEdit_PushFormatAndCopy:
 	push xwa
 
 NoteEdit_CallAudioSendCmd:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jrl	NoteEdit_RestoreAndReturn
 NoteEdit_FormatChordNotes:
@@ -7071,7 +7071,7 @@ NoteEdit_FormatChordNotes:
 	ld	a, (10142:16)
 	add	xwa, xbc
 	ld	xbc, 13
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (7508:16)
 	push	xhl
 	jrl	NoteEdit_DoStrncpy
@@ -7379,7 +7379,7 @@ SngSelFunc_HandleEvent47:
 	ld	xwa, (xiz+18)
 	inc	4, xwa
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xbc, (xiz+18)
 	ld	xwa, (xbc)
 	ld	(xwa+6), 58
@@ -7936,7 +7936,7 @@ SndParam_Dispatch_Skip3:
 	pushw EntertainerGridCheck_LocalInit_Strings@hi16
 	pushw EntertainerGridCheck_LocalInit_Strings@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -8004,7 +8004,7 @@ EntGridCheck_Handler:
 	pushw EntGridCheck_Handler_Str_Fmt3d@lo16
 	lda xwa, (xsp + 0x36)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0a)
 	call GetFocusObject
 	ld XWA,XHL
@@ -8139,7 +8139,7 @@ EntGridCheck_Handle4E13:
 
 	push xwa
 
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 
 	lda xsp, (xsp + 10)
 
@@ -8310,7 +8310,7 @@ EntGridCheck_SendAudioCommand:
 
 	push xwa
 
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 
 	lda xsp, (xsp + 10)
 
@@ -13905,7 +13905,7 @@ SqplyFunc_PushFormatAddr:
 	push xwa
 
 SqplyFunc_CallAudioSendCmd:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 SqplyFunc_RestoreAndReturn:
 	ld xhl, (xsp + 8)
@@ -14628,7 +14628,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join18:
 	push xwa
 
 SqedtFunc_CheckMode_SendAudio:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	StringCopyEpilog
 SqedtFunc_ModeA:
@@ -15403,7 +15403,7 @@ DspItem0_SendEffectParam:
 
 	push xwa
 
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 
 	lda xsp, (xsp + 10)
 
@@ -15949,7 +15949,7 @@ PrepareAudioParam:
 SendAudioCommand:
 	push	xwa
 	push	xhl
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 Equalizer_PadSpaceAndReturn:
 	ld (xiz + 6), 0x20

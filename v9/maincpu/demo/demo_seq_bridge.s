@@ -18,7 +18,7 @@ MiddleFuncCall:
 	cp xwa, 0xc
 	jrl gt, SqTrSel_CaseC
 	add xwa, xwa
-	add xwa, SepaOut_Config_0_0x202
+	add xwa, MiddleFuncCall_Data
 	ld wa, (xwa)
 	lda xix, (MiddleFuncCall_DispatchData:24)
 	jp	t, (xix+wa)
@@ -516,7 +516,7 @@ CDlikeSwTtl_SetRecordAndNotify:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, SepaOut_Config_0_0x25
+	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_3
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
@@ -531,7 +531,7 @@ SeqInit_PostEventSequence:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, SepaOut_Config_0_0x25
+	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_3
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
@@ -543,7 +543,7 @@ SeqInit_PostEventSequence:
 SeqInit_LookupDispatchEntry:
 	extz wa
 	sla wa, 2
-	lda xbc, (SepaOut_Config_0_0x222:24)
+	lda xbc, (SeqInit_LookupDispatchEntry_Data:24)
 	ld	xhl, (xbc+wa)
 	ret
 
@@ -642,7 +642,7 @@ SqTrSel_CaseG:
 	cp wa, 7:i3
 	ret gt
 	add wa, wa
-	lda xix, (SepaOut_Config_0_0x26A:24)
+	lda xix, (PlayMode_SendStopEvent_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (SqTrSel_CaseG_JumpTable:24)
 	jp	t, (xix+wa)

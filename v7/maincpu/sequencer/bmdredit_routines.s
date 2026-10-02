@@ -1819,7 +1819,7 @@ BmDrEdit_TestPartTableEntry_Below:
 
 BmDrEdit_InitDrumMode:
 	pushw 0x06a4
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2,XSP
 	ld (0x1d50:16), xhl
 	ld (0x1d54:16), xhl
@@ -1989,7 +1989,7 @@ BmDrEdit_CleanupDrumMode:
 	ldmm16 0x2796, 0x2792
 	ld xwa, (0x1d50:16)
 	push XWA
-	call SLIDE_Decompress_4K_Init_Helper
+	call Free
 	inc 4,XSP
 	cp (0x8c9a:16), 0x98
 	jr z, BmDrEdit_SkipPartSelect

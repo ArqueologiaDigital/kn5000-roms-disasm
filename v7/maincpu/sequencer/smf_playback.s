@@ -221,7 +221,7 @@ SoundBank_CopyChData:
 	jp SoundBank_CopyCh_InitRemaining
 
 SoundBank_CopyCh_FromDefault:
-	ld xiy, SoundBank_DefaultNamePadding_0xA
+	ld xiy, SoundBank_CopyCh_FromDefault_Data
 	ldir85
 
 SoundBank_CopyCh_InitRemaining:
@@ -314,9 +314,10 @@ SoundBank_NextEntry3:
 ; Default name text: 10 spaces then 6 underscores.  Read by
 ; SoundBank_CopyChData (0xF23158) with ldir: when record
 ; byte +0xC1 is below 0x20 (no name), the 6 underscores at +0x0A
-; (SoundBank_DefaultNamePadding_0xA) go to record +0x100; then 10 spaces
+; (SoundBank_CopyCh_FromDefault_Data) go to record +0x100; then 10 spaces
 ; from +0 follow them, and 6 spaces from +0 go to record +0xC1.
-SoundBank_DefaultNamePadding:	.ascii "          ______"
+SoundBank_DefaultNamePadding:	.ascii	"          "
+SoundBank_CopyCh_FromDefault_Data:	.ascii	"______"
 
 SMF_SelectBankAndLoad:
 	ld (4599:16), a
@@ -515,7 +516,7 @@ FloppyIO_ReadAndValidateHeader:
 	call FloppyIO_SelectReadMode
 	call FloppyIO_ConfigureSwitchboard
 	ld bc, 4:i3
-	ld xiy, SMF_HeaderMagic_MThdMTrk_0x4
+	ld xiy, FloppyIO_ReadAndValidateHeader_Data
 
 SMF_ReadMTrk_ByteLoop:
 	pushw bc

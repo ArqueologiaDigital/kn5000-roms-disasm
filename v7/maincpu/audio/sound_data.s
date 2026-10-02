@@ -272,8 +272,11 @@ SOUND_DATA_DIGITAL_DRAWBAR:	.incbin "includes/generated/sound_data_digital_drawb
 SOUND_DATA_ACCORDION_REG:	.incbin "includes/generated/sound_data_accordion_reg.bin"
 SOUND_DATA_GM_SPECIAL:	.incbin "includes/generated/sound_data_gm_special.bin"
 ; Slot +0x4C (mode 1, part 15): first 18 bytes as above.  The 195 bytes
-; after them are reached through SOUND_DATA_DRUM_KITS_0x1A / _0x3A (`.set`
-; in shared/positional_labels.s, loaded by display/scoop_display.s) and are
-; described, without a cited reader, in audio/sound_data_drum_kits.c; the
-; +0x4C reader never indexes past byte 17.
-SOUND_DATA_DRUM_KITS:	.incbin "includes/generated/sound_data_drum_kits.bin"
+; after them are loaded by display/scoop_display.s at +0x1A
+; (Scoop_CallDisplayHelper_DisplayList_Data) and +0x3A
+; (Scoop_SetPartIndexAndDisplay_Data) -- labels since 2026-10-03, positional `.set`
+; aliases before -- and are described, without a cited reader, in
+; audio/sound_data_drum_kits.c; the +0x4C reader never indexes past byte 17.
+SOUND_DATA_DRUM_KITS:				.incbin "includes/generated/sound_data_drum_kits.bin", 0x0, 0x1A
+Scoop_CallDisplayHelper_DisplayList_Data:	.incbin "includes/generated/sound_data_drum_kits.bin", 0x1A, 0x20
+Scoop_SetPartIndexAndDisplay_Data:		.incbin "includes/generated/sound_data_drum_kits.bin", 0x3A, 0x9B

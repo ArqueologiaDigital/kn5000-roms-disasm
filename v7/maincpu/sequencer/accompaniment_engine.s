@@ -148,7 +148,7 @@ AccStyle_DetectChanges:
 	jrl z, AccStyle_DetectChanges_CompareParams
 	bit 4, (0x0421:16)
 	jr z, .Lc_f55901
-	call Interrupt_FlagSetBytecode_Helper2
+	call NoteMap_SendAllNotesOff
 AccStyle_DetectChanges_Init:
 .Lc_f55901:
 	ld (0x3246:16), 0x00
@@ -6097,7 +6097,7 @@ AccPedal_Sustain_CallReset:
 	push XIX
 	push XIY
 	push XIZ
-	call AccPedal_SustainHandler_Helper
+	call CompIface_ResetPedal
 	pop XIZ
 	pop XIY
 	pop XIX
@@ -6622,7 +6622,7 @@ AccPedal_SendCtrl1_UpdateMask:
 	ld	c, 72:opc
 	ld	d, a
 	ld	e, (13286:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 AccPedal_SendCtrl1_Return:
 	ret
 
@@ -6662,7 +6662,7 @@ AccPedal_SendCtrl2_UpdateMask:
 	ld	c, 72:opc
 	ld	d, a
 	ld	e, (13290:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 AccPedal_SendCtrl2_Return:
 	ret
 
@@ -6700,7 +6700,7 @@ AccPedal_SendCtrl3_UpdateMask:
 	ld	c, 72:opc
 	ld	d, a
 	ld	e, (13286:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 AccPedal_SendCtrl3_Return:
 	ret
 
@@ -6738,7 +6738,7 @@ AccPedal_SendCtrl4_UpdateMask:
 	ld	c, 72:opc
 	ld	d, a
 	ld	e, (13290:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 AccPedal_SendCtrl4_Return:
 	ret
 
@@ -7351,7 +7351,7 @@ AccAutoPlay_NoteDispatch:
 	push XIX
 	push XIY
 	push XIZ
-	call AccPedal_SustainHandler_Helper
+	call CompIface_ResetPedal
 	pop XIZ
 	pop XIY
 	pop XIX
@@ -10061,7 +10061,7 @@ AccProcess_Entry_Skip4:
 AccProcess_Entry_Join:
 	ld	e, 72:opc
 	ld	d, 8:opc
-	call	AccProcess_Entry_Helper2
+	call	SwbtWr_TrailingBytecode
 	ret
 AccProcess_TimerCompare:
 	bit	0, (0x33f4:16)
@@ -10184,7 +10184,7 @@ AccVoice_ComputedCopy:
 
 	muls wa, 0xd
 
-	; add xwa, Display_FontPalette_Table_0x22EF (v7 patched)
+	; add xwa, AccVoice_RomRecords13 (v7 patched)
 	add	xwa, AccVoice_RomRecords13
 	ld xiy, xwa
 
@@ -10365,7 +10365,7 @@ AccVoice_CopyFromROM_Do:
 
 	muls wa, 0x10
 
-	; add xwa, Display_FontPalette_Table_0x21EF (v7 patched)
+	; add xwa, AccVoice_RomRecords16 (v7 patched)
 	add	xwa, AccVoice_RomRecords16
 	ld xiy, xwa
 
@@ -21205,7 +21205,7 @@ AccPat_Dispatch_AllocAndProcess:
 .Lc_f62d55:
 	ld XWA,0x00000800
 	push XWA
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	add XSP,0x00000004
 	ld	(13512:16), xhl
 	ld	a, (13393:16)
@@ -23551,7 +23551,7 @@ DrumKit_UpdateStatusFlags_Helper3:
 	ld	w, 7:opc
 	ld	e, 72:opc
 	ld	d, 3:opc
-	call	AccProcess_Entry_Helper2
+	call	SwbtWr_TrailingBytecode
 	ld	a, 8:opc
 	or (64605:16), a
 	ld	w, 8:opc
@@ -28874,7 +28874,6 @@ CmpReal_ReturnZero:
 	ld xhl, 0:i3
 	ret
 ; CmpRealTtlFunc entry
-CmpRealTtl_Entry:
 CmpRealTtlFunc:
 	cp xbc, EVT_SW_IN
 	jr z, CmpRealTtl_MajorDispatch
@@ -30997,7 +30996,6 @@ CstmCp_StyleDataBlock:
 CstmCpTtl_Dispatch2_Code_Skip:
 	ld	xhl, 0:i3
 	ret
-CstmCp_StyleDataBlock_Code:
 
 MainCstmNameFunc:
 	lda	xsp, (xsp-120)
@@ -31012,7 +31010,7 @@ MainCstmNameFunc:
 	cp	xde, EVT_CSTM_F_NM_GET
 	jrl	nz, CstmName_ReturnZero
 	pushw	17
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xiz, xhl
 	ld	a, (0x391a:16)
 	extz	wa
@@ -31040,7 +31038,7 @@ MainCstmNameFunc:
 CstmName_HandleEvent2C:
 	pushw 0x11
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	ld xiz, xhl
 
@@ -31098,7 +31096,6 @@ CstmName_ReturnZero:
 	pop xiz
 	lda xsp, (xsp + 120)
 	ret
-CstmName_ReturnZero_Code:
 
 MainS2cFunc:
 	dec	4, xsp
@@ -31166,7 +31163,6 @@ EventDelivery_ReturnZero:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-EventDelivery_ReturnZero_Code:
 
 MiddleNameFunc:
 	lda	xwa, (13344:16)
@@ -31223,7 +31219,6 @@ MiddleName_PostModeChange:
 MiddleName_ReturnZero:
 	ld xhl, 0:i3
 	ret
-MiddleName_ReturnZero_Code:
 
 MiddleCmpClrFunc:
 	cp	xbc, EVT_CMP_CLR_NO
@@ -31254,7 +31249,6 @@ MiddleCmpClr_ReturnZero:
 	ld xhl, 0:i3
 	ret
 MainCmpCpFunc:
-MainCmpCpFunc_Code:
 	lda	xsp, (xsp-18)
 	push	xiz
 	ld	xde, xbc
@@ -31267,7 +31261,7 @@ MainCmpCpFunc_Code:
 	cp	xde, EVT_RHY_GRP_NM_GET
 	jrl	nz, MainCmpSet_Case4
 	pushw 17
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
@@ -31299,7 +31293,7 @@ MainCmpCpFunc_Code:
 	jrl	MainCmpSet_Case3
 MainCmpCp_HandleEvent03:
 	pushw 15
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
@@ -31539,7 +31533,6 @@ CmpSong_VariantA:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-CmpSong_VariantA_Code:
 
 MainEsCmpFunc:
 	dec	4, xsp
@@ -31649,12 +31642,10 @@ EsCmp_ReturnZero:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-EsCmp_ReturnZero_Code:
 
 MspBkslTtlFunc:
 	ld xhl, 0:i3
 	ret
-MspBkslTtlFunc_Code:
 
 MainMspBnkNameFunc:
 	ld xhl, 0:i3
@@ -31701,7 +31692,7 @@ SoundCtrl_CalcScaledTempo:
 	ld	bc, (13368:16)
 	extz	xbc
 	ld	xwa, xhl
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, xhl
 	ld	xbc, 190
 	call	Math_DivideU32
@@ -31790,7 +31781,6 @@ AccSeq_DeliverC9_000A:
 	call	ApDeliveryEvent
 	ret
 
-AccSeq_DeliverC9_000A_Code:
 
 MainMspRgpSetFunc:
 	ld	a, (0x7ea1:16)
@@ -32182,7 +32172,6 @@ SndArgTtl_Dispatch_Code_Skip:
 SndArgTtl_ReturnZero:
 	ld xhl, 0:i3
 	ret
-SndArgTtl_ReturnZero_Code:
 
 SndArgNmGet:
 	lda	xsp, (xsp-76)
@@ -32321,7 +32310,7 @@ SndArgNm_ProcessEntry:
 
 	ld	xde, (xhl+de)
 
-	call	Display_BytecodeBlock_F_Helper2
+	call	SndParam_ApplyProgramChangeAsync
 
 	ldto_berp A, 0xfb
 
@@ -32446,7 +32435,6 @@ SndArgNm_ReturnZero:
 	popw_erp 0xfa
 	lda xsp, (xsp + 76)
 	ret
-SndArgNm_ReturnZero_Code:
 
 CmpStepTitleFunc:
 	lda xsp, (xsp - 16)
@@ -32828,7 +32816,7 @@ AccDraw_Secondary_Return3:
 AccScreen_DataBlock_Code6:
 	ld	(257960:24), 0
 	ldmm8	14623, 13946
-	ld	xiy, AccScreen_UIDataBlock_0x3B8
+	ld	xiy, AccDraw_Secondary_Entry_Data
 	calr	AccDraw_Secondary
 	ret
 	.byte 0xc1, 0x1c, 0xe3, 0x3e, 0x08, 0xc1, 0x77, 0x36, 0x3e, 0x02, 0xc1, 0x77, 0x36, 0x3c, 0xfe
@@ -33093,14 +33081,14 @@ AccDraw_Secondary_Skip7:
 AccDraw_Secondary_Skip8:
 	calr	AccScreen_BeatDataBlock
 	ldmm8	14623, 13946
-	ld	xiy, AccScreen_UIDataBlock_0x3B8
+	ld	xiy, AccDraw_Secondary_Entry_Data
 	calr	AccDraw_Secondary
 AccDraw_Secondary_Return12:
 	ret
 AccScreen_DrawTempoDisplay:
 	calr AccScreen_CalcTempoParams
-	ld xiy, AccScreen_UIDataBlock_0x360
-	ld xix, AccScreen_UIDataBlock_0x37E
+	ld xiy, AccScreen_DrawTempoDisplay_Data
+	ld xix, AccScreen_DrawTempoDisplay_Data_2
 	calr AccGraphics_RenderStart
 	ret
 
@@ -33114,17 +33102,17 @@ AccScreen_CalcTempoParams:
 	ret
 AccScreen_UpdateBeatDisplay:
 	ldmm8 0x391f, 0x367b
-	ld XIY,AccScreen_UIDataBlock_0x37E
+	ld XIY,AccScreen_DrawTempoDisplay_Data_2
 	push XWA
 	ld XWA,XIY
 	call DrawText_LayoutAndRender
 	pop XWA
 	cp (0x367b:16), 0x63
 	jr ugt, AccScreen_BeatDisplay_Large
-	ld XIY,AccScreen_UIDataBlock_0x386
+	ld XIY,AccScreen_UpdateBeatDisplay_Data
 	jr t, AccScreen_BeatDisplay_Draw
 AccScreen_BeatDisplay_Large:
-	ld xiy, AccScreen_UIDataBlock_0x390
+	ld xiy, AccScreen_BeatDisplay_Large_Data
 
 AccScreen_BeatDisplay_Draw:
 	calr AccDraw_Init
@@ -33136,7 +33124,7 @@ AccScreen_BeatDataBlock:
 	ldmm8	14623, 13944
 	ldmm8	14624, 13945
 	ld	xiy, 16165229
-	ld	xix, AccScreen_UIDataBlock_0x3B8
+	ld	xix, AccDraw_Secondary_Entry_Data
 	calr	AccGraphics_RenderStart
 AccScreen_BeatDataBlock_Code_Return:
 	ret	
@@ -33345,7 +33333,12 @@ AccScreen_DrawMeas_Variant3_Data:
 
 ; accomp_display_full: 287 bytes (compiled from C)
 AccScreen_DrawMeas_Other_Data:
-	.incbin "includes/generated/accomp_display_full.bin"
+	.incbin "includes/generated/accomp_display_full.bin", 0x0, 0xA
+AccScreen_DrawTempoDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0xA, 0x1E
+AccScreen_DrawTempoDisplay_Data_2:	.incbin "includes/generated/accomp_display_full.bin", 0x28, 0x8
+AccScreen_UpdateBeatDisplay_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x30, 0xA
+AccScreen_BeatDisplay_Large_Data:	.incbin "includes/generated/accomp_display_full.bin", 0x3A, 0x28
+AccDraw_Secondary_Entry_Data:		.incbin "includes/generated/accomp_display_full.bin", 0x62, 0xBD
 
 ; Accompaniment part names and ordering: 955 bytes
 ; ** RE-FRAMED 2026-08-30 (lane B4) -- and the "955 bytes" above is NOT all
@@ -33421,7 +33414,7 @@ AccDraw_Secondary_Sub_Entry2_Data_8:	.byte	0x42, 0x00, 0x60, 0x00, 0x7e, 0x00, 0
 	.byte 0x45, 0x4e, 0x44, 0x20, 0x32, 0x43, 0x2d, 0x49, 0x4e, 0x54, 0x20, 0x31, 0x43, 0x2d, 0x49, 0x4e	; |END 2C-INT 1C-IN|
 	.byte 0x54, 0x20, 0x32, 0x43, 0x2d, 0x46, 0x49, 0x4c, 0x4c, 0x31, 0x43, 0x2d, 0x46, 0x49, 0x4c, 0x4c	; |T 2C-FILL1C-FILL|
 	.byte 0x32, 0x43, 0x2d, 0x45, 0x4e, 0x44, 0x20, 0x31, 0x43, 0x2d, 0x45, 0x4e, 0x44, 0x20, 0x32	; |2C-END 1C-END 2|
-; 0xF6B1DB = AccScreen_UIDataBlock_0x804: reads a byte variable into A and
+; 0xF6B1DB = AccScreen_GetByte_0x353E: reads a byte variable into A and
 ; preserves XHL. Callers do `xor xwa,xwa` / `call` / `ld l,a` / `mul8rr a,l`.
 AccScreen_GetByte_0x353E:
 	push	xhl
@@ -33433,7 +33426,7 @@ AccScreen_GetByte_0x353E:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x0c, 0x0d, 0x0e, 0x0f, 0x10, 0x11	; |..........|
 	.byte 0x04, 0x05, 0x06, 0x07, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17	; |..........|
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x18, 0x19, 0x1a, 0x1b, 0x1c, 0x1d	; |..........|
-; 0xF6B200 = AccScreen_UIDataBlock_0x829: the same shape for (0x353c). The tree
+; 0xF6B200 = AccScreen_GetByte_0x353C: the same shape for (0x353c). The tree
 ; had lost its entry point inside a phantom `jp 0x3b1d1c` at 0xF6B1FD.
 AccScreen_GetByte_0x353C:
 	push	xhl
@@ -33510,7 +33503,7 @@ AccPatch_SwapSlotBuffers:
 	push	xbc
 	ld	xwa, 1024
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	add	xsp, 4
 	ld	(0x34c8:16), xhl
 	ldw	bc, 256
@@ -33527,7 +33520,7 @@ AccPatch_SwapSlotBuffers:
 	ldir85
 	ld	xwa, (0x34c8:16)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	add	xsp, 4
 	pop	xbc
 	ret
@@ -34485,14 +34478,14 @@ MspSaveAuto_Return:
 
 AccDisplay_FullInit:
 	call	SeqBuf_Init
-	call	Interrupt_FlagSetBytecode_Helper2
+	call	NoteMap_SendAllNotesOff
 	call	Part_ReinitAllActive
 	call	AccompSeq_StopSequence
 	call	AccWrap_PlayModeDispatch
 	set	2, (0x28a7:16)
 	call	AudioInit_RefreshToneBank
 	call	NoteMap_ProcessAndMerge
-	call	DemoMode_Main_Operation_Helper
+	call	Voice_InitializeAll
 	call	Voice_InitTablePair
 	call	Voice_InitTableGroup
 	call	MIDI_SendAllSoundOff
@@ -34675,7 +34668,7 @@ AccBankData_CopyToExtRAM:
 	cp	xde, 29350
 	jr	c, AccBankData_CopyToExtRAM
 	ld	wa, 0:i3
-	call	AccBankData_FinalizeCheck_Code_Helper
+	call	PostTmSave_Success
 AccBankData_Return:
 	popw_erp 0xfa
 	ret
@@ -35006,7 +34999,6 @@ DialCalc_Return:
 	pop xiz
 	inc 2, xsp
 	ret
-PostEventSetup_Send_Code:
 
 StylCnvWaitTtlFunc:
 	cp	xbc, EVT_SW_IN
@@ -35051,7 +35043,6 @@ StylCnvWait_RestoreDisplay:
 AccChord_ReturnZero:
 	ld xhl, 0:i3
 	ret
-AccChord_ReturnZero_Code:
 
 StylCnvTxtTtlFunc:
 	cp xbc, EVT_SW_IN
@@ -35077,7 +35068,6 @@ StylCnvTxt_HandleClose:
 StylCnvTxt_ReturnZero:
 	ld xhl, 0:i3
 	ret
-StylCnvTxt_ReturnZero_Code:
 
 StylCnvModlTtlFunc:
 	lda	xsp, (xsp-36)
@@ -35985,7 +35975,6 @@ StylCnvCont_NotifyPart:
 AccRhythm_ReturnZero:
 	ld xhl, 0:i3
 	ret
-AccRhythm_ReturnZero_Code:
 
 StylCnvStorTtlFunc:
 	cp xbc, EVT_ACTIVATE_STATE
@@ -36001,7 +35990,6 @@ StylCnvStor_HandleClose:
 StylCnvStor_ReturnZero:
 	ld xhl, 0:i3
 	ret
-StylCnvStor_ReturnZero_Code:
 
 MainStylCnvFunc:
 	extz de
@@ -36121,7 +36109,7 @@ StylCnvDisp_ScanFileLoop:
 	extz XWA
 	add XWA,0x000ffc00
 	push XWA
-	call SLIDE_Parse_Header_Helper
+	call String_Compare
 	add XSP,0x0000000a
 	cp hl, 0:i3
 	jr z, StylCnv_ParseEntry_Done
@@ -36322,7 +36310,7 @@ StylCnv_Type4_AppendExt:
 	pushw	18458
 	push	xbc
 StylCnv_AppendAndClear:
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 StylCnv_ClearAndFinalize:
 	ld (0x0ffc00:24), 0xff
@@ -36379,7 +36367,7 @@ StylCnv_Type3_SearchLoop:
 	pushw	18416
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xwa, (xsp+34)
 	push	xwa
 	ld	wa, (xsp+24)
@@ -36658,7 +36646,7 @@ StylCnv_Type6_AppendName:
 	add	xde, xwa
 	push	xde
 	push	xbc
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	ld	xwa, 18416
 	ld	xbc, StylCnv_ModeRb_Type6

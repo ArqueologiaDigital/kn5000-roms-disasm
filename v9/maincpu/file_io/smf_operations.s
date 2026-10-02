@@ -204,7 +204,7 @@ RenderSmfFilename:
 	extz bc
 	ld	(xwa+bc), 0x00
 	ld ix, 0:i3
-	lda xhl, (FileOpen_NormalizeName_Data:24)
+	lda xhl, (CType_ClassTable:24)
 	jr RenderSmf_LoopCheck
 
 RenderSmf_CheckSeparator:

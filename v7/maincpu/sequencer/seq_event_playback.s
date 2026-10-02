@@ -705,7 +705,7 @@ Voice_DecodeNoteChannel_Data:
 	.short 0x000d, 0x010d, 0x020d, 0x030d, 0x040d, 0x050d, 0x000e, 0x010e
 	.short 0x020e, 0x030e, 0x040e, 0x050e, 0x000c, 0x000c, 0x000c, 0x000c
 ; Voice_NoteChannelGrid_Lookup (= Voice_NoteChannelTable1 +0x422, the
-; address shared/positional_labels.s still calls Voice_NoteChannelTable1_0x422;
+; address shared/positional_labels.s still calls Voice_NoteChannelGrid_Lookup;
 ; its one caller is AccompSeq_ProcessAfterNote in accompseq_routines.s).
 ; In: L = row (low 4 bits used), H = column (low 3 bits used).
 ; Out: HL = word [(L & 15) * 8 + (H & 7)] of the 16 x 8 grid at +0x43F below.
@@ -717,7 +717,6 @@ Voice_NoteChannelGrid_Lookup:
 ; v7 only: accompseq_routines.s (not owned by lane seqeng) still calls this
 ; routine by its old structural name; keep that name as an alias until the
 ; call site is renamed, then drop it.
-Voice_NoteChannelTable1_Code_Sub:
 	and	l, 15
 	and	h, 7
 	sla	l, 4
@@ -1161,7 +1160,7 @@ AccPlay_InitializeStart:
 	call AccWrap_PlayModeDispatch
 	call CountAvailableVoiceSlots
 	calr AccPlay_SetupSoundParams
-	call AccPlay_InitializeStart_Helper
+	call AudioInit_CheckMIDIAndDispatch
 	calr AccPlay_SaveMuteStates
 	ldw (0x7e72:16), 0xfffe
 	ld (0x7e98:16), 0x00
@@ -1214,7 +1213,7 @@ AccPlay_MainUpdateLoop:
 	pop XBC
 	pop XHL
 	pop XWA
-	call AccPlay_InitializeStart_Helper
+	call AudioInit_CheckMIDIAndDispatch
 	calr AccPlay_RestoreMuteStates
 	calr AccPlay_ClearSlotTable
 	cp (0x8c98:16), 0x10
@@ -3767,7 +3766,7 @@ VocalistGridCheck_Skip6:
 	pushw VocalistGrid_DispatchData_Str_Fmt2d@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 VocalistGridCheck_Join6:
 	call	GetFocusObject
@@ -3782,7 +3781,7 @@ VocalistGridCheck_Join6:
 	pushw	VocalistGrid_DispatchData_Str_Fmt3d@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3796,7 +3795,7 @@ VocalistGridCheck_Join6:
 	pushw VocalistGrid_DispatchData_Str_Fmtd@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3812,7 +3811,7 @@ VocalistGridCheck_Join6:
 	pushw VocalistGrid_DispatchData_Str_Fmts@lo16
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3872,7 +3871,7 @@ VocalistGridCheck_Skip12:
 	pushw VocalistGrid_DispatchData_Str_CC_Fmt3d@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 VocalistGridCheck_Join9:
 	call	GetFocusObject
@@ -3907,7 +3906,7 @@ VocalistGridCheck_Join9:
 	pushw VocalistGrid_DispatchData_Str_Fmts_Fmts_Fmts@lo16
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -3986,7 +3985,7 @@ VocalistGridCheck_Skip15:
 	pushw	VocalistGrid_CheckDispData_Str_Fmt2d@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 VocalistGridCheck_Join11:
 	call	GetFocusObject
@@ -4002,7 +4001,7 @@ VocalistGridCheck_Join11:
 	pushw	VocalistGrid_CheckDispData_Str_Fmt3d@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4017,7 +4016,7 @@ VocalistGridCheck_Join11:
 	pushw	VocalistGrid_CheckDispData_Str_Fmtd@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4034,7 +4033,7 @@ VocalistGridCheck_Join11:
 	pushw	VocalistGrid_CheckDispData_Str_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4098,7 +4097,7 @@ VocalistGridCheck_Skip21:
 	pushw	VocalistGridCheck_Entry2_Str_CC_Fmt3d@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 VocalistGridCheck_Join14:
 	call	GetFocusObject
@@ -4133,7 +4132,7 @@ VocalistGridCheck_Join14:
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts@lo16
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4167,7 +4166,7 @@ VocalistGridCheck_Join14:
 	pushw	VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts_2@lo16
 	lda	xwa, (xsp+36)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -4468,10 +4467,10 @@ MainVocalistPage1OKFunc:
 	jp	t, (xix+de)
 ; MainVocalistPage1OKFunc dispatch
 VocalistPage1OK_Dispatch:
-	call	VocalistPage2OKFunc_Helper2
+	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 11
-	call	VocalistPage2OKFunc_Helper
+	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
 	srl	xwa, 16
 	ld	qwa, 0
@@ -4502,10 +4501,10 @@ VocalistPage_Handler:
 	ret
 
 VocalistPage1_DispatchData:
-	call	VocalistPage2OKFunc_Helper2
+	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 2
-	call	VocalistPage2OKFunc_Helper
+	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
 	srl	xwa, 16
 	ld	qwa, 0
@@ -4527,10 +4526,10 @@ VocalistPage2OKFunc_Join3:
 	ld	xde, TITLE_MESAGE
 	jr	VocalistPage2OKFunc_Join2
 	ld	wa, bc
-	call	VocalistPage2OKFunc_Helper2
+	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 24
-	call	VocalistPage2OKFunc_Helper
+	call	SndParam_ApplyAndSync
 	ld	xwa, 16897
 	ld	bc, 3:i3
 	ld	de, 2:i3
@@ -4556,10 +4555,10 @@ VocalistPage2OKFunc_Join4:
 	ld	xde, TITLE_MESAGE
 	jrl	VocalistPage2OKFunc_Join2
 	ld	wa, bc
-	call	VocalistPage2OKFunc_Helper2
+	call	MidiSysEx_CopyParamToBuffer
 	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 1
-	call	VocalistPage2OKFunc_Helper
+	call	SndParam_ApplyAndSync
 	ld	wa, 1:i3
 	call	SmfMedley_RawData
 	ld	(32422:16), 35
@@ -5231,7 +5230,7 @@ SplitPoint_HandleNoteEvt:
 	pushw SplitPointFunc_LocalInit_Strings@lo16
 	ld	xwa, (xde+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	ld	xwa, (xsp+8)
 	ld	de, (xwa+4)

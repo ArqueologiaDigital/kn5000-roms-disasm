@@ -14,21 +14,21 @@ PsGridBox_Init:
 	sll	wa, 1
 	inc	2, wa
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xwa, (xiz+50)
 	ld	(xwa), xhl
 	ld	wa, (xiz+36)
 	sll	wa, 1
 	inc	2, wa
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xwa, (xiz+54)
 	ld	(xwa), xhl
 	ld	wa, (xiz+36)
 	sll	wa, 1
 	inc	2, wa
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	6, xsp
 	ld	xwa, (xiz+58)
 	ld	(xwa), xhl
@@ -52,7 +52,7 @@ PsGridBox_Close:
 	ld	xwa, (xbc)
 	ld	xwa, (xwa)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	xbc, (xiz+50)
 	ld	xwa, 0:i3
@@ -64,7 +64,7 @@ PsGridBox_Close_FreeRows:
 	jr	z, PsGridBox_Close_FreeRowAlt
 	ld	xwa, (xbc)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	xbc, (xiz+54)
 	ld	xwa, 0:i3
@@ -76,7 +76,7 @@ PsGridBox_Close_FreeRowAlt:
 	jr	z, PsGridBox_ReturnZero
 	ld	xwa, (xbc)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	xbc, (xiz+58)
 	ld	xwa, 0:i3
@@ -126,7 +126,7 @@ PsGridBox_ShowHide_CountLoop:
 	decm 1, (xsp+8)
 	lda xwa, (xsp+42)
 	push xwa
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp+18)
 	sub hl, wa
@@ -170,7 +170,7 @@ PsGridBox_ShowHide_ScanLoop:
 PsGridBox_ShowHide_CalcWidth:
 	ld xwa, (xsp+16)
 	push xwa
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4, xsp
 	ld wa, (xsp+8)
 	mul xwa, hl
@@ -996,7 +996,7 @@ PsGridBox_Scroll_Render:
 	pushw PsGridBox_Scroll_Render_Str_Fmtd_Fmtd@hi16
 	pushw PsGridBox_Scroll_Render_Str_Fmtd_Fmtd@lo16
 	push xwa
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp+12)
 	lda xde, (xsp+24)
 	ld xwa, (xsp+334)

@@ -293,7 +293,7 @@ GridCheck_CellSelect:
 
 	push xde
 
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 
 	lda xsp, (xsp + 12)
 
@@ -436,13 +436,13 @@ PsEditBox_Paint:
 	call ConvertStrings
 	lda xwa, (xsp + 0x010c)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	ld XWA,(XSP+0x0c)
 	ld IZ,(XWA+0x28)
 	add IZ,HL
 	lda xwa, (xsp + 0x0110)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 8,XSP
 	lda xwa, (xsp + 0x020c)
 	lda xde, (xwa + 0x04)
@@ -500,7 +500,7 @@ PsEditBox_Confirm:
 	call ConvertStrings
 	lda xwa, (xsp + 0x010c)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4,XSP
 	ld XWA,(XSP+0x08)
 	ld BC,(XWA+0x28)
@@ -703,25 +703,25 @@ PsNumEditBox_Confirm:
 	pushw	PsNumEditBox_Confirm_Str_Fmtd@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xwa, (xsp+32)
 	push	xwa
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+26)
 	pushw	PsNumEditBox_Confirm_Str_d@hi16
 	pushw	PsNumEditBox_Confirm_Str_d@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	ld	xwa, (xsp+42)
 	push	xwa
 	lda	xwa, (xsp+36)
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+42)
@@ -941,18 +941,18 @@ AcNumEdit_GetText:
 	pushw	AcNumEdit_GetText_Str_Fmtd@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xwa, (xsp+26)
 	push	xwa
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+26)
 	pushw AcNumEdit_GetText_Str_d@hi16
 	pushw AcNumEdit_GetText_Str_d@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+50)
 	pushw	(xwa)
@@ -960,7 +960,7 @@ AcNumEdit_GetText:
 	push	xwa
 	ld	xwa, (xsp+42)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+18)
 	jrl	AcNumEdit_ReturnZero
 AcNumEdit_SetValue:
@@ -1428,7 +1428,7 @@ LswEditCheck:
 	pushw	LswEditCheck_Str_Fmt3d@lo16
 	ld	xwa, (xde+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
 	jr	LswEditCheck_Return
@@ -1458,7 +1458,7 @@ MainLswPut:
 	ld	(xsp+6), bc
 	ld	(xsp+8), xwa
 	pushw	12
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
@@ -1488,7 +1488,7 @@ MainLswPartPut:
 	ld	(xsp+8), bc
 	ld	iz, wa
 	pushw	12
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	bc, (xsp+8)
@@ -1524,7 +1524,7 @@ MainLswAdd:
 	ld	(xsp+6), bc
 	ld	(xsp+8), xwa
 	pushw	12
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, (xsp+8)
@@ -1554,7 +1554,7 @@ MainLswPartAdd:
 	ld	(xsp+8), bc
 	ld	iz, wa
 	pushw	12
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	bc, (xsp+8)
@@ -1592,7 +1592,7 @@ MainLswGet:
 
 	pushw 0xc
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -1647,7 +1647,7 @@ MainLswPartGet:
 
 	pushw 0xc
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -2023,7 +2023,7 @@ RamEditCheck_JumpStart:
 	pushw	RamEditCheck_JumpStart_Str_Fmt3d@lo16
 	ld	xwa, (xde+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	ld	xhl, xiz
 	jr	ResetLswFilter_Epilogue
@@ -2057,7 +2057,7 @@ MainRamPut:
 
 	pushw 0x16
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -2106,7 +2106,7 @@ MainRamAdd:
 
 	pushw 0x16
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -2152,7 +2152,7 @@ MainRamGet:
 	ld	(xsp+4), bc
 	ld	(xsp+6), xwa
 	pushw	22
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, (xsp+6)
@@ -2438,7 +2438,7 @@ MainBitGet:
 
 	pushw 0xe
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -2685,7 +2685,7 @@ AcTitleMenu_Confirm_SetRight:
 	ld	(xsp+6), hl
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ld	de, (xsp+6)
 	lda	xbc, (xsp+296)
@@ -2744,11 +2744,11 @@ AcTitleMenu_Confirm_MultiLine:
 	exts	xwa
 	add	xwa, xde
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	ld	iz, hl
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	xbc, (xwa+28)
@@ -3043,7 +3043,7 @@ VwMenuBox_Confirm_SetRight:
 	ld	iz, hl
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ld	de, iz
 	lda	xbc, (xsp+294)
@@ -3100,11 +3100,11 @@ VwMenuBox_Confirm_MultiLine:
 	jr	z, VwMenuBox_Confirm_RenderBottom
 	lda	xwa, (xde+iz)	; lda xwa, xde+iz
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	ld	qiz, hl
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	8, xsp
 	ld	xwa, (xsp+6)
 	ld	xbc, (xwa+28)
@@ -4187,7 +4187,7 @@ PsPageBox_Confirm_DrawValue:
 	pushw	PsPageBox_Confirm_DrawValue_Str_PAGE_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xbc, (xsp+268)
 	ld	xwa, (xsp+276)
@@ -5477,7 +5477,7 @@ NamingCheck_NotHandled:
 
 NamingCheck_GetStrLen:
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	extz	xhl
 NamingCheck_Return:
@@ -6285,7 +6285,7 @@ AcPmemName_Confirm:
 	pushw	AcPmemName_Confirm_Str_PMEM_Fmt2d_Fmtd_Fmt16s@hi16
 	pushw	AcPmemName_Confirm_Str_PMEM_Fmt2d_Fmtd_Fmt16s@lo16
 	push	xix
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 	jr	AcPmemName_Confirm_SendEvent
 AcPmemName_Confirm_ZeroIndex:
@@ -6295,7 +6295,7 @@ AcPmemName_Confirm_ZeroIndex:
 	pushw	AcPmemName_Confirm_ZeroIndex_Str_PMEM_Fmt2d_Fmt16s@hi16
 	pushw	AcPmemName_Confirm_ZeroIndex_Str_PMEM_Fmt2d_Fmt16s@lo16
 	push	xix
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jr	AcPmemName_Confirm_SendEvent
 AcPmemName_Confirm_EmptySlot:
@@ -6303,7 +6303,7 @@ AcPmemName_Confirm_EmptySlot:
 	pushw	AcPmemName_Confirm_EmptySlot_Str_PMEM_Fmt2d@hi16
 	pushw	AcPmemName_Confirm_EmptySlot_Str_PMEM_Fmt2d@lo16
 	push	xix
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 AcPmemName_Confirm_SendEvent:
 	lda xde, (xsp + 4)
@@ -6486,7 +6486,7 @@ AcMixerVol_Confirm:
 	pushw	AcMixerVol_Confirm_Str_Fmt3d@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+24)
 	lda	xbc, (xsp+32)
@@ -7005,7 +7005,7 @@ DbMemo_DrawContent_Loop:
 	call	DrawString
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	cp	hl, (xsp+4)
 	jrl	nz, DbMemo_ReturnZero
@@ -7018,10 +7018,10 @@ DbMemo_DrawContent_Loop_0x61:
 	push	xiz
 	ld	(xsp+4), xwa
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xiz, xhl
 	ld	xwa, (xsp+10)
 	push	xwa
@@ -7166,7 +7166,7 @@ DbMemDump_Confirm_RowLoop:
 	pushw DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt4X@lo16
 	lda xwa, (xsp + 0x26)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x16)
 	lda xwa, (xsp + 0x68)
 	lda xbc, (xsp + 0x64)
@@ -7205,7 +7205,7 @@ DbMemDump_Confirm_RowLoop:
 	pushw	DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt2X_Fmt2X_Fmt2X_Fmt2X@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+24)
 	lda	xbc, (xsp+100)
 	addw	(xbc), 0x30
@@ -7877,7 +7877,7 @@ PsTrkSw_Confirm_DrawGeometry:
 	pushw PsTrkSw_Confirm_DrawGeometry_Str_Fmtd@lo16
 	lda	xwa, (xsp+124)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	xbc, (xwa+24)
@@ -8271,14 +8271,14 @@ AcTrkSw_Reset_UpdateIndex:
 AcTrkSw_Reset_DrawTrack:
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	ld	xwa, (xsp+24)
 	ld	iz, (xwa+36)
 	add	iz, hl
 	ld	wa, iz
 	inc	1, wa
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	(xsp+30), xhl
 	ld	xbc, (xsp+30)
 	ld	(xsp+16), xbc
@@ -8322,7 +8322,7 @@ AcTrkSw_Select:
 	pushw	AcTrkSw_Select_Data@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	DrawEditSw_CopyVariant_Code_Helper
+	call	StrSearch_Init
 	inc	8, xsp
 	ld	xwa, (xsp+10)
 	lda	xwa, (xwa+hl)	; lda xwa, xwa+hl
@@ -8338,7 +8338,7 @@ AcTrkSw_Select:
 	ld	iz, hl
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ld	wa, iz
 	cp	wa, hl
@@ -8388,7 +8388,7 @@ AcTrkSw_Select_Paint:
 AcTrkSw_Select_CheckTrackNum:
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 AcTrkSw_Select_LowTrack:
 	ld xhl, 0:i3
@@ -8557,7 +8557,7 @@ ObjectProc_Evt1E00019:
 	pushw ObjectProc_Evt1E00019_Str_YZ@lo16
 	ld	xwa, (xsp+140)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 ObjectProc_Skip:
 	ld	xhl, (xsp+4)
@@ -8725,7 +8725,7 @@ ObjectProc_Evt1E00022:
 ObjectProc_Evt1E00023:
 	ld	xwa, (xsp+136)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 ObjectProc_Join4:
 	ld	xhl, 0:i3
@@ -8899,7 +8899,7 @@ CountObject:
 	ld WA,QIZ
 	extz XWA
 	ld XBC,0x0000000e
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 InputDialog_GetText:
 	ld xwa, (xsp + 4)
 	add xwa, xhl
@@ -9335,7 +9335,7 @@ TitleWidget_Confirm:
 	ld	xwa, (xsp+274)
 	push	xwa
 	push	xde
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xwa, (xsp+154)
 	push	xwa
 	ld	xwa, (xsp+286)
@@ -9362,7 +9362,7 @@ ClassProc_Evt1E00006:
 	call	SendEvent
 	lda	xwa, (xsp+146)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	extz	xhl
 	jrl	ClassProc_ReturnWithStatus
@@ -9982,7 +9982,7 @@ ObjectEnum_OK_DispatchInline:
 	ld	wa, (xsp+8)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, xiz
 	ldw	(xhl+18), 65535
 	ldw	(xhl+20), 65535
@@ -10085,7 +10085,7 @@ RegisterTitle:
 
 	ld xbc, 0x16
 
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 
 	ld xbc, 0x32abc
 
@@ -10123,7 +10123,7 @@ RegisterTitle:
 
 UnregisteredTitle:
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xbc, 207548
 	add	xbc, xhl
 	ld	xwa, NAKA_APFUNC_DefaultFunction
@@ -10255,14 +10255,14 @@ EventDispatch_ScanLoop:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	jrl	TitleFunc_Epilogue34
 TitleProc_Evt1E00031:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ld	xwa, (xhl)
 	ld	xbc, EVT_GET_FUNCTION
@@ -10273,7 +10273,7 @@ TitleProc_Evt1E00032:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ld	xhl, (xhl)
 	jrl	TitleFunc_Epilogue34
@@ -10281,7 +10281,7 @@ TitleProc_Evt1E00033:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ld	xhl, (xhl+4)
 	jrl	TitleFunc_Epilogue34
@@ -10289,7 +10289,7 @@ TitleProc_Evt1E00030:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ld	hl, (xhl+8)
 	exts	xhl
@@ -10301,7 +10301,7 @@ EventDispatch_Select:
 
 	ld xbc, 0x16
 
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 
 	add xhl, (xsp + 4)
 
@@ -10346,7 +10346,7 @@ EventDispatch_ConfirmHandler:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ld	xwa, (xhl+4)
 	cp	xwa, 0xffffffff
@@ -10373,13 +10373,13 @@ EventDispatch_OK:
 	extz XIZ
 	ld XWA,XIZ
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	ld XWA,XIZ
 	cpw (XHL+0x12), 0xffff
 	jrl z, .Lc_fa4d7f
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	ld WA,(XHL+0x12)
 	exts XWA
@@ -10409,7 +10409,7 @@ EventDispatch_OK:
 	ld WA,(XSP+0x0c)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	ld XBC,(XSP+0x12)
 	ld WA,BC
@@ -10436,7 +10436,7 @@ EventDispatch_OK:
 	ld WA,(XSP+0x0c)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	ld XWA,(XSP+0x08)
 	ld (XHL+0x12),WA
@@ -10450,7 +10450,7 @@ EventDispatch_OKDone:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ld	xwa, (xhl+4)
 	cp	xwa, 0xffffffff
@@ -10505,7 +10505,7 @@ EventDispatch_DefaultProc:
 
 	ld xbc, 0x16
 
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 
 	add xhl, (xsp + 4)
 
@@ -10558,7 +10558,7 @@ EventDispatch_Return:
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	lda	xbc, (xhl+18)
 	ld	wa, (xbc)
@@ -10577,13 +10577,13 @@ EventDispatch_Return:
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ldw	(xhl+18), 65535
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, xhl
 	add	xwa, (xsp+4)
 	ldw	(xwa+20), 65535
@@ -10609,7 +10609,7 @@ EventDispatch_Return:
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	ldw	(xhl+20), 65535
 	ld	wa, (179250:24)
@@ -10624,7 +10624,7 @@ EventDispatch_Return:
 	ld	wa, (xsp+12)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	cpw	(xhl+18), 65535
 	jrl	nz, TitleProc_ReturnZero
@@ -10634,7 +10634,7 @@ EnumList_Init:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	lda xbc, (xhl + 0x0e)
 	ld XWA,(XBC)
@@ -10653,7 +10653,7 @@ EnumList_Init_TypeB:
 
 	ld xbc, 0x16
 
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 
 	add xhl, (xsp + 4)
 
@@ -10672,7 +10672,7 @@ EnumList_Close:
 
 	ld xbc, 0x16
 
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 
 	add xhl, (xsp + 4)
 
@@ -10709,7 +10709,7 @@ EnumList_ShowHide_A:
 
 	ld xbc, 0x16
 
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 
 	add xhl, (xsp + 4)
 
@@ -10745,7 +10745,7 @@ EnumList_ShowHide_B:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jrl z, TitleProc_ReturnZero
@@ -10787,7 +10787,7 @@ EnumList_PartChange_B:
 
 	ld xbc, 0x16
 
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 
 	add xhl, (xsp + 4)
 
@@ -10822,7 +10822,7 @@ EnumList_ValueChange_A:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, EnumList_ValueChange_B
@@ -10843,7 +10843,7 @@ EnumList_ValueChange_Done:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	cpw	(xhl+18), 65535
 	jr	z, EnumList_Confirm_Init
@@ -10884,7 +10884,7 @@ EnumList_Paint:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, EnumList_Paint_DrawEntry
@@ -10905,7 +10905,7 @@ EnumList_Paint_Loop:
 	ld	wa, (xsp+22)
 	extz	xwa
 	ld	xbc, 22
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+4)
 	cpw	(xhl+18), 65535
 	jr	z, EnumList_ReturnZero
@@ -10938,7 +10938,7 @@ EnumList_Return:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, TitleProc_ToggleFlag
@@ -10966,7 +10966,7 @@ EnumList_OK:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	cpw (XHL+0x12), 0xffff
 	jr z, TitleProc_ToggleFlag
@@ -10997,7 +10997,7 @@ EnumList_OK_Next:
 
 	ld xbc, 0x16
 
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 
 	add xhl, (xsp + 4)
 
@@ -11112,7 +11112,7 @@ EnumList_HitTest_Match:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	ld XWA,(XHL)
 	ld XBC,XIZ
@@ -11146,7 +11146,7 @@ EnumList_HitTest_NoMatch:
 	ld WA,(XSP+0x16)
 	extz XWA
 	ld XBC,0x00000016
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x04)
 	ld XWA,(XHL)
 	ld XBC,XIZ
@@ -11525,7 +11525,7 @@ Viewable_SetName:
 	ld (XSP+0x04),XIX
 	ld XWA,(XSP+0x10)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	ld (XSP+0x0c),HL
 	ld WA,(XSP+0x0e)
 	extz XWA
@@ -11533,16 +11533,16 @@ Viewable_SetName:
 	add XWA,(XSP+0x08)
 	ld XWA,(XWA)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 8,XSP
 	cp HL,(XSP+0x08)
 	jr nc, Viewable_SetName_Copy
 	ld XWA,(XSP+0x10)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 1,HL
 	pushw hl
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 6,XSP
 	ld WA,(XSP+0x0a)
 	extz XWA
@@ -12787,7 +12787,7 @@ pBoolProc:
 	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
@@ -12832,7 +12832,7 @@ BoxStyle7_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 BoxStyle7_InnerFill:
 	ld xhl, 0:i3
@@ -12907,7 +12907,7 @@ pSwordProc:
 	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
@@ -12952,7 +12952,7 @@ BoxStyle8_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 BoxStyle8_InnerFill:
 	ld xhl, 0:i3
@@ -13027,7 +13027,7 @@ pUwordProc:
 	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
@@ -13072,7 +13072,7 @@ BoxStyle9_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 BoxStyle9_InnerFill:
 	ld xhl, 0:i3
@@ -13147,7 +13147,7 @@ pScharProc:
 	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
@@ -13192,7 +13192,7 @@ BoxStyle10_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 BoxStyle10_InnerFill:
 	ld xhl, 0:i3
@@ -13268,7 +13268,7 @@ pUcharProc:
 	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
@@ -13313,7 +13313,7 @@ BoxStyle11_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 BoxStyle11_InnerFill:
 	ld xhl, 0:i3
@@ -13388,7 +13388,7 @@ pSlongProc:
 	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
@@ -13433,7 +13433,7 @@ BoxStyle12_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 BoxStyle12_InnerFill:
 	ld xhl, 0:i3
@@ -13507,7 +13507,7 @@ pUlongProc:
 	calr	IDCountHelper
 	ld	xiz, xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xiz), xhl
 	ld	xwa, (xsp+4)
@@ -13553,7 +13553,7 @@ BoxStyle13_CheckInner:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 BoxStyle13_InnerFill:
 	ld xhl, 0:i3
@@ -13689,7 +13689,7 @@ EdgeDraw_TopRight_Inner:
 	pushw	EdgeDraw_TopRight_Inner_Str_left@lo16
 	ld	xwa, (xsp+268)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	jr	EdgeDraw_BottomLeft
 EdgeDraw_TopRight_Done:
@@ -13702,7 +13702,7 @@ EdgeDraw_TopRight_Done:
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xwa, (xsp+24)
 	push	xwa
 	ld	xwa, (xsp+284)
@@ -13781,7 +13781,7 @@ EdgeDraw_BottomRight:
 	pushw	EdgeDraw_BottomRight_Str_top@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 EdgeDraw_BottomRight_Inner:
 	ld xhl, 0:i3
@@ -13856,7 +13856,7 @@ TabDraw_TopEdge:
 	pushw	TabDraw_TopEdge_Str_width@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	jr	TabDraw_TopEdge_Execute
 TabDraw_TopEdge_Inner:
@@ -13958,7 +13958,7 @@ EdgeVariant_A_Setup:
 	pushw	EdgeVariant_A_Setup_Str_height@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	ld	xhl, 1:i3
 	jr	POINTWProc_Return
@@ -13967,7 +13967,7 @@ EdgeVariant_A_CalcWidth:
 	pushw	EdgeVariant_A_CalcWidth_Str_RBrace@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	jr	EdgeVariant_A_Done
 EdgeVariant_A_CalcHeight:
@@ -14128,7 +14128,7 @@ EdgeVariant_C_CalcWidth:
 	pushw	EdgeVariant_C_CalcWidth_Str_x@lo16
 	ld	xwa, (xsp+264)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	jr	EdgeVariant_C_CheckInner
 EdgeVariant_C_CalcHeight:
@@ -14141,7 +14141,7 @@ EdgeVariant_C_CalcHeight:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xwa, (xsp+20)
 	push	xwa
 	ld	xwa, (xsp+280)
@@ -14214,7 +14214,7 @@ ShadowBox_A_Setup:
 	pushw	ShadowBox_A_Setup_Str_y@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 	ld	xhl, 1:i3
 	jr	IDCursorProc_Return
@@ -14223,7 +14223,7 @@ ShadowBox_A_CalcWidth:
 	pushw	ShadowBox_A_CalcWidth_Str_RBrace@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	inc	8, xsp
 ShadowBox_A_CheckInner:
 	ld xhl, 0:i3
@@ -14353,7 +14353,7 @@ ShadowBox_B_Prologue:
 	push	xwa
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+16)
 	push	xwa
@@ -15111,10 +15111,10 @@ ScrollBar_Setup:
 	ld	xwa, (xsp+6)
 	ld	xwa, (xwa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	6, xsp
 	ld	xwa, (xsp+10)
 	ld	(xwa), xhl
@@ -15133,12 +15133,12 @@ ScrollBar_CalcRange:
 	push	xwa
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	pushw	ScrollBar_CalcRange_Str_DQuote_2@hi16
 	pushw	ScrollBar_CalcRange_Str_DQuote_2@lo16
 	lda	xwa, (xsp+34)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+24)
 	lda	xwa, (xsp+14)
 	push	xwa
@@ -15164,19 +15164,19 @@ ScrollBar_Draw:
 	ld XIZ,(XWA)
 	ld XWA,(XSP+0x04)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	ld (XSP+0x10),HL
 	push XIZ
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 8,XSP
 	cp HL,(XSP+0x0c)
 	jr nc, ScrollBar_ReturnZero
 	ld XWA,(XSP+0x04)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 1,HL
 	pushw hl
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 6,XSP
 	ld XWA,(XSP+0x08)
 	ld (XWA),XHL
@@ -15238,7 +15238,7 @@ SliderH_Prologue:
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -15359,7 +15359,7 @@ SliderV_Prologue:
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -15480,7 +15480,7 @@ DrawHelper_A_Prologue:
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+8)
 	push	xwa
@@ -15649,7 +15649,7 @@ DrawHelper_B_FinishAlt:
 	push	xwa
 	lda	xwa, (xsp+32)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+20)
 	push	xwa
@@ -15842,7 +15842,7 @@ DrawHelper_D_FinishAlt:
 	push	xwa
 	lda	xwa, (xsp+32)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+20)
 	push	xwa
@@ -16030,7 +16030,7 @@ ViewID_EventSwitch:
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	jrl	ViewID_ReturnZero
 ViewID_Select_Lookup:
@@ -16049,7 +16049,7 @@ ViewID_Select_Lookup:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jrl	ViewID_ReturnZero
 ViewID_Select_NoName:
@@ -16075,7 +16075,7 @@ ViewID_Select_NoName:
 	pushw	ViewID_Select_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xde+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jrl	ViewID_ReturnZero
 ViewID_EnumCount:
@@ -16093,7 +16093,7 @@ ViewID_GetInfoStr:
 	push	xwa
 	lda	xwa, (xsp+32)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+20)
 	push	xwa
@@ -16131,7 +16131,7 @@ ViewID_GetCurrent:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jr	ViewID_ReturnZero
 ViewID_GetCurrent_NoName:
@@ -16153,7 +16153,7 @@ ViewID_GetCurrent_NoName:
 	pushw	ViewID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xbc+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jr	ViewID_ReturnZero
 ViewID_GetCurrent_None:
@@ -16335,7 +16335,7 @@ ScreenID_EventSwitch:
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	inc 8,XSP
 	jrl t, ScreenID_ReturnZero
 ScreenID_Select_Lookup:
@@ -16355,7 +16355,7 @@ ScreenID_Select_Lookup:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jrl	ScreenID_ReturnZero
 ScreenID_Select_NoName:
@@ -16385,7 +16385,7 @@ ScreenID_Select_NoName:
 	pushw	ScreenID_Select_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xde+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jrl	ScreenID_ReturnZero
 ScreenID_EnumCount:
@@ -16417,7 +16417,7 @@ ScreenID_GetCurrent:
 	ld XWA,(XSP+0x0c)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	jr t, ScreenID_ReturnZero
 ScreenID_GetCurrent_NoName:
@@ -16439,7 +16439,7 @@ ScreenID_GetCurrent_NoName:
 	pushw	ScreenID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xbc+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jr	ScreenID_ReturnZero
 ScreenID_GetCurrent_None:
@@ -16481,7 +16481,7 @@ ScreenID_EnumOpen_ScanLoop:
 	pushw	ScreenID_EnumOpen_ScanLoop_Str_idi_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jr	ScreenID_EnumOpen_Compare
 ScreenID_EnumOpen_ScanNoName:
@@ -16509,7 +16509,7 @@ ScreenID_EnumOpen_ScanNoName:
 	pushw	ScreenID_EnumOpen_ScanNoName_Str_idi_Fmts_Fmtd@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 ScreenID_EnumOpen_Compare:
 	ld	xwa, (xsp+4)
@@ -16677,7 +16677,7 @@ WindowID_EventSwitch:
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	inc 8,XSP
 	jrl t, WindowID_ReturnZero
 WindowID_Select_Lookup:
@@ -16697,7 +16697,7 @@ WindowID_Select_Lookup:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jrl	WindowID_ReturnZero
 WindowID_Select_NoName:
@@ -16727,7 +16727,7 @@ WindowID_Select_NoName:
 	pushw	WindowID_Select_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xde+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jrl	WindowID_ReturnZero
 WindowID_EnumCount:
@@ -16759,7 +16759,7 @@ WindowID_GetCurrent:
 	ld XWA,(XSP+0x0c)
 	ld XWA,(XWA+0x04)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	jr t, WindowID_ReturnZero
 WindowID_GetCurrent_NoName:
@@ -16781,7 +16781,7 @@ WindowID_GetCurrent_NoName:
 	pushw	WindowID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xbc+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jr	WindowID_ReturnZero
 WindowID_GetCurrent_None:
@@ -16823,7 +16823,7 @@ WindowID_EnumOpen_ScanLoop:
 	pushw	WindowID_EnumOpen_ScanLoop_Str_idi_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jr	WindowID_EnumOpen_Compare
 WindowID_EnumOpen_ScanNoName:
@@ -16851,7 +16851,7 @@ WindowID_EnumOpen_ScanNoName:
 	pushw	WindowID_EnumOpen_ScanNoName_Str_idi_Fmts_Fmtd@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 WindowID_EnumOpen_Compare:
 	ld	xwa, (xsp+4)
@@ -17013,7 +17013,7 @@ ModeID_EnumFill:
 	pushw	ModeID_EnumFill_Str_Mode_Fmtd@hi16
 	pushw	ModeID_EnumFill_Str_Mode_Fmtd@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jrl	ModeID_ReturnZero
 ModeID_EnumFill_HasName:
@@ -17050,7 +17050,7 @@ ModeID_GetCurrent_SendAudio:
 	push	xwa
 	ld	xwa, (xiz+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jr	ModeID_ReturnZero
 ModeID_GetNext:
@@ -17073,7 +17073,7 @@ ModeID_GetNext:
 	pushw ModeID_GetNext_Str_Mode_Fmtd@lo16
 	ld XWA,(XWA)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0a)
 	jr t, ModeID_ReturnZero
 ModeID_GetNext_HasName:
@@ -17120,7 +17120,7 @@ ModeID_EnumOpen_SearchLoop:
 	pushw	ModeID_EnumOpen_SearchLoop_Str_Mode_Fmtd@hi16
 	pushw	ModeID_EnumOpen_SearchLoop_Str_Mode_Fmtd@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 ModeID_EnumOpen_Compare:
 	ld	xwa, (xiz+4)
@@ -17252,7 +17252,7 @@ TitleID_EnumFill:
 	pushw	TitleID_EnumFill_Str_Title_Fmtd@hi16
 	pushw	TitleID_EnumFill_Str_Title_Fmtd@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jrl	TitleID_ReturnZero
 TitleID_EnumFill_HasName:
@@ -17289,7 +17289,7 @@ TitleID_GetCurrent_SendAudio:
 	push	xwa
 	ld	xwa, (xiz+4)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jr	TitleID_ReturnZero
 TitleID_GetNext:
@@ -17312,7 +17312,7 @@ TitleID_GetNext:
 	pushw TitleID_GetNext_Str_Title_Fmtd@lo16
 	ld XWA,(XWA)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0a)
 	jr t, TitleID_ReturnZero
 TitleID_GetNext_HasName:
@@ -17359,7 +17359,7 @@ TitleID_EnumOpen_SearchLoop:
 	pushw	TitleID_EnumOpen_SearchLoop_Str_Title_Fmtd@hi16
 	pushw	TitleID_EnumOpen_SearchLoop_Str_Title_Fmtd@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 TitleID_EnumOpen_Compare:
 	ld	xwa, (xiz+4)
@@ -17652,7 +17652,7 @@ CommonIDProc_Evt1E00009:
 	push	xwa
 	ld	xwa, (xbc)
 	push	xwa
-	call	CommonIDProc_Helper
+	call	Strlen_LoadParam
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+12)
 	cpw	(xwa+4), 0
@@ -18841,7 +18841,7 @@ ApDeliveryEvent_Deliver:
 	cp	xiz, 4294967295
 	jr	z, ApDeliveryEvent_ReturnZero
 	pushw	12
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+4), xhl
 	ld	(xhl), xiz

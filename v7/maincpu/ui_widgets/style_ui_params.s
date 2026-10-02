@@ -182,7 +182,33 @@ Scoop_SelectModeTable_2Part_Data_2:
 ; [nakarest] to Scoop_EventLoop_12Entry (display/scoop_display.s).  Reached through no
 ; [nakarest] StyleUI_ParamBlockPtrTable entry; loaded directly by
 ; [nakarest] Scoop_TitleBar_DisplayPartTable.
-StyleUI_ScreenData_Main:	.incbin "includes/generated/style_ui_screendata_main.bin"
+StyleUI_ScreenData_Main:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x0, 0xB4
+Scoop_TitleBar_GetPartConfig_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xB4, 0x10E
+Scoop_TitleBar_ShowBPM_Part0_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x1C2, 0xA
+Scoop_TitleBar_ShowBPM_Part1_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x1CC, 0xA
+Scoop_TitleBar_ShowBPM_Part2_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x1D6, 0xA
+Display_RedrawTitleBar_Data:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x1E0, 0x5
+Scoop_TitleBar_Part1Check_Data:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x1E5, 0x5
+Scoop_TitleBar_Part2Check_Data:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x1EA, 0x5
+Scoop_InitPartDisplay_Data_2:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x1EF, 0xA
+Display_RedrawMainContent_Data:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x1F9, 0x23
+Display_RedrawFooter_Data:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x21C, 0x3C
+Display_RedrawFooter_Data_2:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x258, 0x1E
+Scoop_FooterShowPartValue_Data:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x276, 0x168
+Display_RedrawButtonLabels_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x3DE, 0x168
+Display_RedrawButtonLabels_Data_2:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x546, 0x168
+Display_RedrawButtonLabels_Data_3:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x6AE, 0x2D0
+Scoop_Selection_RedrawActive_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x97E, 0x8
+Scoop_Selection_RedrawActive_Data_2:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x986, 0xA
+Scoop_Selection_DrawMode1_Data:		.incbin "includes/generated/style_ui_screendata_main.bin", 0x990, 0x2B
+Scoop_Selection_RedrawActive_Data_3:	.incbin "includes/generated/style_ui_screendata_main.bin", 0x9BB, 0x4B
+Scoop_Selection_DrawMode1_Data_2:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xA06, 0x113
+Scoop_SidePanel_StoreAndDraw_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xB19, 0x21
+Scoop_SidePanel_StoreAndDraw_Data_2:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xB3A, 0x5A
+Scoop_SidePanel_DrawOneSlot_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xB94, 0x40
+Display_RedrawButtonLabels_Data_4:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xBD4, 0x168
+Display_RedrawButtonLabels_Data_5:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xD3C, 0x3
+Scoop_SelectModeTable_2Part_XIX_Data:	.incbin "includes/generated/style_ui_screendata_main.bin", 0xD3F, 0x8C
 ; [nakarest] StyleUI_ScreenData_MeasCursor: Style-UI ScreenData bytecode -- the sd_* commands of
 ; [nakarest] style_ui/screendata_types.h (lines, rects, labelled refs, strings), typed in
 ; [nakarest] style_ui/meascursor.c -- drawn by UIRender_TwoTableGeneral, which hands its xiy/xix
@@ -201,5 +227,15 @@ StyleUI_ScreenData_YesCtl:	.incbin "includes/generated/style_ui_screendata_yesct
 ; [nakarest] style_ui/ctlonly.c -- drawn by UIRender_TwoTableGeneral, which hands its xiy/xix
 ; [nakarest] pair to Scoop_EventLoop_12Entry (display/scoop_display.s).  Reached through
 ; [nakarest] StyleUI_ParamBlockPtrTable entries 30, 68.
-StyleUI_ScreenData_CtlOnly:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin"
+StyleUI_ScreenData_CtlOnly:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x0, 0x20
+Display_RedrawAltContent_Str_END:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x20, 0x3
+Scoop_CurveUpdate_Finalize_Data:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x23, 0x100
+Scoop_EnvCalc_Handler1_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x123, 0x8
+Scoop_GlideParam_Configure_Data:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x12B, 0x8
+Scoop_GlideCalc_Handler0_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x133, 0x8
+Scoop_EventLoop_12Entry_Data:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x13B, 0x90
+Scoop_EventLoop_12Entry_Process_Data:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1CB, 0x14
+Scoop_EventLoop_12Entry_Process_Data_2:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1DF, 0x20
+Scoop_EventLoop_36Entry_Data_2:		.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x1FF, 0x14
+Scoop_EventLoop_36Entry_Branch3_Data_4:	.incbin "includes/generated/style_ui_screendata_ctlonly.bin", 0x213, 0x14
 

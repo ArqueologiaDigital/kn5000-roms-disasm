@@ -51,7 +51,6 @@ NMI_HaltLoop:
 ;        the payload on the next boot and show the splash screen (not "ALL INITIAL SETTING!").
 ; ===========================================================================
 NMI_StorePayloadChecksums:
-NMI_StorePayloadChecksums_Entry:
 	cp (1024:16), 128
 	ret nz
 	call Demo_SelectEntry_PreSaveCheck
@@ -95,7 +94,6 @@ NMI_CopyPayloadToSRAM:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown on failure
 ; ===========================================================================
 SubCPU_Payload_Verify:
-SubCPU_Payload_Verify_Entry:
 	ld xwa, 0xf180	; Start of payload region 1
 	ldw bc, 0x800	; Size: 0x800 words
 	call Checksum_ComputeComplement	; Compute checksum -> HL
@@ -111,7 +109,6 @@ SubCPU_Payload_Verify_Entry:
 	ret
 
 SubCPU_Payload_Verify_Fail:
-SubCPU_Payload_Verify_Fail_Entry:
 	ld (0x01e53e:24), 0xff; Mark as failed
 	ldw bc, 0x280
 	call Checksum_ComputeComplement
@@ -135,7 +132,6 @@ SubCPU_Payload_Verify_Fail_Entry:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown when HL != 0
 ; ===========================================================================
 SubCPU_Payload_GetErrorFlag:
-SubCPU_Payload_GetErrorFlag_Entry:
 	ld l, (0x01e53e:24)
 	exts hl
 	ret
@@ -358,7 +354,7 @@ MemCopy_SetupAndDMA:
 
 Boot_InitWorkRAM_ROMCopy1_Start:
 	ld xde, 0x3d524
-	ld xhl, Boot_InitWorkRAM_ROMCopy1_Start_Data
+	ld xhl, WorkRamInit_Image
 	ld xbc, 0x219e
 	or xbc, xbc
 	jr z, Boot_InitWorkRAM_ROMCopy2_Start
@@ -2315,7 +2311,6 @@ INTT3_EnterScheduler:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
 Show_ScreenGroup:
-Show_ScreenGroup_Entry:
 	push	sr
 	ei 6
 	push xhl

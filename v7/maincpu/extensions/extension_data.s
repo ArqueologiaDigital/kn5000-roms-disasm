@@ -389,7 +389,7 @@ NoteStr3_C:
 ; of the *LngCheck functions of Toshi_ApFunction_Table (`cp xbc, 0x1e0009f` /
 ; `lda xhl, (<table>:24)` / `ret`, ui/ui_mode_handlers.s and, for
 ; WallSureLngCheck, display/graphics_text_vga.s), which reach them through
-; positional names such as SysSureLngCheck_Data.  Four tables are
+; positional names such as LngTable_InitSettingWarn.  Four tables are
 ; translated except for Italian, whose entry is the literal "Italian"; the
 ; three description tables (FactoryResetDesc, StoreSoundBalance,
 ; StoreTotalSetting) have only EN and DE, the FR/ES/IT/ID slots pointing at
@@ -400,7 +400,6 @@ NoteStr3_C:
 NoteStr3_Blank_3:
 	aligned_string "  "
 LngTable_Attention:	; returned by AttnLngCheck
-AttnLngCheck_Data:
 	.long Str_Attention_EN	; EN
 	.long Str_Attention_DE	; DE
 	.long Str_Attention_FR	; FR
@@ -420,7 +419,6 @@ Str_Attention_DE:
 Str_Attention_EN:
 	aligned_string "ATTENTION!"
 LngTable_InitSettingWarn:	; returned by SysSureLngCheck
-SysSureLngCheck_Data:
 	.long Str_InitSettingWarn_EN	; EN
 	.long Str_InitSettingWarn_DE	; DE
 	.long Str_InitSettingWarn_FR	; FR
@@ -436,7 +434,6 @@ Str_InitSettingWarn_FR:	aligned_string "La procédure d'initialisation va remplac
 Str_InitSettingWarn_DE:	aligned_string "Durch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zurückversetzt."
 Str_InitSettingWarn_EN:	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
 LngTable_AreYouSure:	; returned by SureLngCheck
-SureLngCheck_Data:
 	.long Str_AreYouSure_EN	; EN
 	.long Str_AreYouSure_DE	; DE
 	.long Str_AreYouSure_FR	; FR
@@ -452,7 +449,6 @@ Str_AreYouSure_FR:	aligned_string "Etes vous sûr?"
 Str_AreYouSure_DE:	aligned_string "SIND SIE SICHER?"
 Str_AreYouSure_EN:	aligned_string "Are You Sure?"
 LngTable_FactoryResetDesc:	; returned by CtlIniLngCheck
-CtlIniLngCheck_Data:
 	.long Str_FactoryResetDesc_EN	; EN
 	.long Str_FactoryResetDesc_DE	; DE
 	.long Str_FactoryResetDesc_EN3	; FR
@@ -470,7 +466,6 @@ Str_FactoryResetDesc_EN3:
 Str_FactoryResetDesc_DE:	aligned_string "Setzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurück."
 Str_FactoryResetDesc_EN:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 LngTable_StoreSoundBalance:	; returned by PmemNormLngCheck
-PmemNormLngCheck_Data:
 	.long Str_StoreSoundBalance_EN	; EN
 	.long Str_StoreSoundBalance_DE	; DE
 	.long Str_StoreSoundBalance_EN3	; FR
@@ -489,7 +484,6 @@ Str_StoreSoundBalance_DE:
 	aligned_string "Speichert nur Klang- und Lautstärkeeinstellungen."
 Str_StoreSoundBalance_EN:	aligned_string "Stores sound & balance settings only."
 LngTable_StoreTotalSetting:	; returned by PmemExpLngCheck
-PmemExpLngCheck_Data:
 	.long Str_StoreTotalSetting_EN	; EN
 	.long Str_StoreTotalSetting_DE	; DE
 	.long Str_StoreTotalSetting_EN3	; FR
@@ -527,36 +521,30 @@ MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd:	aligned_string "%c:%d/%d  "
 ; blanks (0x188, 0x1AC, 0x1D0, 0x1F4, 0x216) by MstGrid2_OutOfRange_*, and
 ; "ON "/"OFF" (0x258/0x25C, 0x270/0x26C) by TchSensGrid.
 ; ---------------------------------------------------------------------------
-AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (AcMstStyleAlpGridBoxProc_Data)
-AcMstStyleAlpGridBoxProc_Data:
+AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (AcMstStyleAlpGridBoxProc_EventOffsets)
 	.short 0x02e5, 0x0513, 0x02e5, 0x0513, 0x081d, 0x07f3, 0x07f3
 MstStyleAlp_AppendPadChar_Data:
 	aligned_string " "
 MstStyleAlp_OverflowStr_Str_Blank32:	aligned_string "                                "
 MstStyleAlp_AppendPadChar2_Str_Blank1:	aligned_string " "
-MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAlp_EventDispatch (MstStyleAlpGridCheck_Data)
-MstStyleAlpGridCheck_Data:
+MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAlp_EventDispatch (MstStyleAlpGridCheck_EventOffsets)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x01f1, 0x01f1, 0x01f1
-AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (AcMstStyle1GridBoxProc_Data)
-AcMstStyle1GridBoxProc_Data:
+AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (AcMstStyle1GridBoxProc_EventOffsets)
 	.short 0x0059, 0x0165, 0x0059, 0x0165, 0x0310, 0x02f8, 0x02f8
 MstStyle1Grid_CellSelect_Data_2:
 	aligned_string " "
 MstStyle1Grid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1Grid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
-MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_EventDispatch (MstStyle1GridCheck_Data)
-MstStyle1GridCheck_Data:
+MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_EventDispatch (MstStyle1GridCheck_EventOffsets)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x016a, 0x0000, 0x0000
 MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd:	aligned_string "%d/%d"
-AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (AcMstStyle1SubGridBoxProc_Data)
-AcMstStyle1SubGridBoxProc_Data:
+AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (AcMstStyle1SubGridBoxProc_EventOffsets)
 	.short 0x01cc, 0x02fa, 0x01cc, 0x02fa, 0x0529, 0x0511, 0x0511
 	aligned_string " "
 MstStyle1SubGrid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1SubGrid_PadLeft_LoopB_Str_Blank1:
 	aligned_string " "
-MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (MstStyle1SubGridCheck_Data)
-MstStyle1SubGridCheck_Data:
+MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (MstStyle1SubGridCheck_EventOffsets)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x015e, 0x0000, 0x0000
 MstStyle2_GetNameB_DrawString_Str_Fmts:		aligned_string "%s:"
 MstStyle2_GetNameB_DrawString_Str_Blank17:	aligned_string "                 "
@@ -569,8 +557,7 @@ MstStyle2_NameB_DrawLower_Str_Fmts:	aligned_string "%s:"
 MstStyle2_NameB_DrawLower_Str_TEMPO:
 	aligned_string "TEMPO"
 MstStyle2_NameB_Render_Str_Fmts:	aligned_string "%s"
-AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (AcMstStyle2GridBoxProc_Data)
-AcMstStyle2GridBoxProc_Data:
+AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (AcMstStyle2GridBoxProc_EventOffsets)
 	.short 0x055a, 0x076a, 0x055a, 0x076a, 0x0bae, 0x0b96, 0x0b96
 MstGrid2_PadLeft_LoopA_Data:
 	aligned_string " "
@@ -587,11 +574,9 @@ MstGrid2_OutOfRange_HighCol2_Str_Blank32:
 	aligned_string "                                "
 MstGrid2_OutOfRange_BeyondMax_Str_Blank32:
 	aligned_string "                                "
-MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_ScrollJumpTable (MstStyle2GridCheck_Data)
-MstStyle2GridCheck_Data:
+MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_ScrollJumpTable (MstStyle2GridCheck_EventOffsets)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x02db, 0x02db, 0x02db
-AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (AcTchSensGridBoxProc_Data)
-AcTchSensGridBoxProc_Data:
+AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (AcTchSensGridBoxProc_EventOffsets)
 	.short 0x006a, 0x0127, 0x006a, 0x0127, 0x0234, 0x020c, 0x020c
 TchSensGridCheck_Evt1C0001C_Data:
 	aligned_string "%3d"
@@ -608,25 +593,21 @@ TchSensGrid_CheckCell_1_4_Str_ON:
 	aligned_string "ON "
 TchSensGrid_CheckCell_1_5_Str_Fmt3d:	aligned_string "%3d"
 TchSensGrid_CheckCell_1_6_Str_Fmt3d:	aligned_string "%3d"
-TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (TchSensGridCheck_Data)
-TchSensGridCheck_Data:
+TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (TchSensGridCheck_EventOffsets)
 	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x02f8, 0x00fe, 0x00fe
-AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (AcFSWAssGridBoxProc_Data)
-AcFSWAssGridBoxProc_Data:
+AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (AcFSWAssGridBoxProc_EventOffsets)
 	.short 0x006a, 0x010e, 0x006a, 0x010e, 0x0202, 0x01da, 0x01da
 ; FswAssign_FunctionCodes / FswAssign_FunctionNames: the foot-switch
 ; assignable functions.  FSWAssGrid_EventDispatch (ui/ui_mode_handlers.s)
-; indexes the codes with `ld_rrb c, xbc, hl` (FSWAssGrid_EventDispatch_Data)
+; indexes the codes with `ld c, (xbc+hl)` (FswAssign_FunctionCodes)
 ; and, after AudioTable_FindMatchIndex, the names with `sla hl, 2` /
-; `ld_rrl xwa, xbc, hl` (FSWAssGridCheck_Evt1C0001C_Data).  31 codes -- 0x00
+; `ld xwa, (xbc+hl)` (FswAssign_FunctionNames).  31 codes -- 0x00
 ; is OFF, then 0x90.. in the order of the names -- and a 0xFF terminator;
 ; 31 name pointers, entry k naming code k.
 FswAssign_FunctionCodes:
-FSWAssGrid_EventDispatch_Data:
 	.byte 0x00, 0x90, 0x91, 0xb3, 0xb4, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xb2, 0x88, 0x92
 	.byte 0x93, 0x94, 0x95, 0x40, 0x96, 0x99, 0x97, 0x98, 0xad, 0xb0, 0xb1, 0xb8, 0xb9, 0xb6, 0xb7, 0xff
 FswAssign_FunctionNames:
-FSWAssGridCheck_Evt1C0001C_Data:
 	.long CtrlAssignStr_Off
 	.long CtrlAssignStr_PMemIncrement
 	.long CtrlAssignStr_PMemDecrement
@@ -704,11 +685,9 @@ FSWAssGrid_CheckCell_1_5_Str_Fmts:	aligned_string "%s"
 FSWAssGrid_CheckCell_1_6_Str_Fmts:	aligned_string "%s"
 FSWAssGrid_CheckCell_1_7_Str_Fmts:	aligned_string "%s"
 FSWAssGrid_CheckCell_1_8_Str_Fmts:	aligned_string "%s"
-FSWAssGridCheck_EventOffsets:	; read by FSWAssGridCheck via FSWAssGrid_EventDispatch (FSWAssGridCheck_Data)
-FSWAssGridCheck_Data:
+FSWAssGridCheck_EventOffsets:	; read by FSWAssGridCheck via FSWAssGrid_EventDispatch (FSWAssGridCheck_EventOffsets)
 	.short 0x0000, 0x022f, 0x0000, 0x022f, 0x08ea, 0x045b, 0x045b
-FswAsIniFunc_EventOffsets:	; read by FswAsIniFunc via FswAsIni_EventDispatch (FswAsIniFunc_Data), six entries
-FswAsIniFunc_Data:
+FswAsIniFunc_EventOffsets:	; read by FswAsIniFunc via FswAsIni_EventDispatch (FswAsIniFunc_EventOffsets), six entries
 	.short 0x0006, 0x0000, 0x0006, 0x0006, 0x0006, 0x0006
 ParamStr_Table_01:
 	.long ParamStr01_RhythmSelection
@@ -757,20 +736,17 @@ PmExpFilter_DrawCellBank1_Str_PAGE_2_3:	aligned_string "PAGE 2/3"
 PmExpFilter_DrawCellBank2_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff
 PmExpFilter_DrawCellBank2_Data:
 	aligned_string "PAGE 3/3"
-AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (AcPmExpFilterGridBoxProc_Data)
-AcPmExpFilterGridBoxProc_Data:
+AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (AcPmExpFilterGridBoxProc_EventOffsets)
 	.short 0x02be, 0x03a7, 0x02be, 0x03a7, 0x054e, 0x04c8, 0x04c8
 ; PmExpFilter_CellKeys / PmExpFilter_AltKeys: two lists of nine u32 sound-
 ; parameter KEYS -- all 18 are the +0x00 key of an 18-byte descriptor in this
-; file -- that PmExpFilterGridCheck picks with `ld_rrl xwa, xbc, wa` (cell
-; index 2..10) through PmExpFilter_EventDispatch_Data / _0x76.
+; file -- that PmExpFilterGridCheck picks with `ld xwa, (xbc+wa)` (cell
+; index 2..10) through PmExpFilter_CellKeys / PmExpFilter_AltKeys.
 PmExpFilter_CellKeys:
-PmExpFilter_EventDispatch_Data:
 	.long 0x00002900, 0x00002901, 0x00002904
 	.long 0x00002902, 0x00002903, 0x0000290a
 	.long 0x0000290b, 0x0000290c, 0x0000290d
 PmExpFilter_AltKeys:
-PmExpFilter_EventDispatch_Data_2:
 	.long 0x0000290e, 0x00002905, 0x00002907
 	.long 0x00002908, 0x0000290f, 0x00002910
 	.long 0x00002909, 0x00002906, 0x00002911
@@ -793,14 +769,12 @@ PmExpFilterCheck_AltDecode_Str_ON:
 PmExpFilterCheck_AltDecode_Str_OFF:
 	aligned_string "OFF"
 PmExpFilterCheck_PushDefault_Str_Blank3:	aligned_string "   "
-PmExpFilterGridCheck_EventOffsets:	; read by PmExpFilterGridCheck via PmExpFilter_EventDispatch (PmExpFilterGridCheck_Data)
-PmExpFilterGridCheck_Data:
+PmExpFilterGridCheck_EventOffsets:	; read by PmExpFilterGridCheck via PmExpFilter_EventDispatch (PmExpFilterGridCheck_EventOffsets)
 	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x0297, 0x00fa, 0x00fa
-AcDispTimeSetGridBoxProc_EventOffsets:	; read by AcDispTimeSetGridBoxProc via PmExpFilter2_EventDispatch (AcDispTimeSetGridBoxProc_Data)
-AcDispTimeSetGridBoxProc_Data:
+AcDispTimeSetGridBoxProc_EventOffsets:	; read by AcDispTimeSetGridBoxProc via PmExpFilter2_EventDispatch (AcDispTimeSetGridBoxProc_EventOffsets)
 	.short 0x00d5, 0x0179, 0x00d5, 0x0179, 0x026d, 0x0245, 0x0245
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_EventDispatch_Data+9
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_EventDispatch_Data_2+1
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_CellKeys+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_AltKeys+1
 ParamStr_Table_03:
 	.long FadeTimeStr_Off
 	.long FadeTimeStr_Default
@@ -841,8 +815,7 @@ DispTimeSetCheck_TryRow4_Str_Fmts:		.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_TryRow5_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_TryRow6_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_TryRow7_Str_Fmts:	.byte	0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (DispTimeSetGridCheck_Data)
-DispTimeSetGridCheck_Data:
+DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (DispTimeSetGridCheck_EventOffsets)
 	.short 0x0000, 0x0136, 0x0000, 0x0136, 0x05bc, 0x0283, 0x0283
 IvPageOverWr_GetName_Data:
 	aligned_string "PAGE"
@@ -897,13 +870,12 @@ RVari_EnumNotifyF_Item_Draw_Str_Fmts:	.byte	0x25, 0x73, 0x3a, 0x00
 RVari_EnumNotifyE_Item_Draw_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
 PmBank_BankChanged_DrawSlot_Str_Fmtd:	.byte	0x25, 0x64, 0x3a, 0x00
 ; SelectRect_Table: six screen rectangles {x1, y1, x2, y2}, 8 bytes each,
-; read with `sla wa, 3` / `lda xbc, (PmBank_OnSelect_Data:24)` by PmBank_OnSelect
+; read with `sla wa, 3` / `lda xbc, (SelectRect_Table:24)` by PmBank_OnSelect
 ; and ToneGen_WriteParamByIndex (display/graphics_text_vga.s), which copy the
 ; four words.  Two of the y1/x2 pairs used to be written as pointers
 ; (`.long NakaInst_Param_EmptyStr` = {134, 238}, `.long
 ; NakaData_DescriptorPad_ZeroA` = {154, 230}); neither is one.
 SelectRect_Table:
-PmBank_OnSelect_Data:
 	.short 2, 62, 302, 93
 	.short 2, 98, 316, 129
 	.short 2, 134, 238, 153
@@ -988,7 +960,6 @@ ToneGen_ParamWriteDispatch_Str_N6_SINE_WAVE_ROM_check_16dB_DOWN:
 ToneGen_WriteParamByIndex_Data:
 	.short 0, 86, 174, 221, 267, 313
 WallHomeEdit_Text:
-WallHomeEditCheck_ReturnFalse_Str_DEFAULT:
 	aligned_string "DEFAULT"
 WallHomeEdit_PushSndAddr_Str_USER:	aligned_string " USER  "
 WallHomeEdit_LoadSndAddr3_Str_ERROR:
@@ -996,7 +967,6 @@ WallHomeEdit_LoadSndAddr3_Str_ERROR:
 WallHomeEditCheck_Data:
 	.short 156, 156, 96, 96, 96, 156, 96, 160, 167, 100
 WallMenuEdit_Text:
-WallMenuEdit_EventDispatch_Str_DEFAULT:
 	aligned_string "DEFAULT"
 WallMenuEdit_EventDispatch_Str_USER:
 	aligned_string " USER  "
@@ -1005,7 +975,6 @@ WallMenuEdit_EventDispatch_Str_ERROR:
 WallMenuEditCheck_Data:
 	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
 WallOthEdit_Text:
-WallOthEdit_EventDispatch_Str_DEFAULT:
 	aligned_string "DEFAULT"
 WallOthEdit_EventDispatch_Str_USER:
 	aligned_string " USER  "
@@ -1014,7 +983,6 @@ WallOthEdit_EventDispatch_Str_ERROR:
 WallOthEditCheck_Data:
 	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
 LngTable_UserInitialWallpaper:	; returned by WallSureLngCheck
-WallSureLngCheck_Data:
 	.long Str_UserInitialWallpaper_EN	; EN
 	.long Str_UserInitialWallpaper_DE	; DE
 	.long Str_UserInitialWallpaper_FR	; FR
@@ -1209,7 +1177,7 @@ Toshi_ApFunction_Table:
 	.long PmemNormLngCheck
 	.long PmemExpLngCheck
 	.long 0
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1D1B-0xED1D3A (31 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=70% dist=12 near KeyScaleNoteStr_G_0x18+129
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1D1B-0xED1D3A (31 B), unreached CODE-territory, was disassembled as 19 plausible-but-dead instruction lines; per=70% dist=12 near ChordStr_Blank+129
 ; Toshi_ApFunctionName_Table -- object-registry slot 0x422 (InitializeToshi:
 ; RegObjTabl 0x1600002, ApFunctionProc, 42, Toshi_ApFunctionName_Table, 0x422):
 ; the name of each Toshi_ApFunction_Table entry, same index, then "" as the
@@ -2635,7 +2603,6 @@ Protocol_values_for_LED_rows:
 ;   +0x56  32 u32, 1 << k  CtrlPanel_LookupIndicatorEntry (a bit-mask table)
 ; ---------------------------------------------------------------------------
 AudioCtl_SmallTables:
-SndParam_TableLookup_Via4100_Data:
 	.byte 4, 2, 6, 7, 5, 3
 ExtData_VoiceParam_DispatchBytecode_Data:
 	.short 0x0023, 0x0023, 0x002b, 0x0027, 0x002f, 0x0033, 0x000c, 0x001f, 0x003c
@@ -3144,11 +3111,11 @@ MidiSysEx_ProcessBlock_Data:
 ; The three preset pointer tables (records: see the header above the records)
 ; ---------------------------------------------------------------------------
 ; ReverbPreset_Table: 10 pointers; ReverbPreset_Load and SoundPreset_FindMatch
-; (audio/audio_control_engine.s) index it as ReverbPreset_SearchLoop_Data.
+; (audio/audio_control_engine.s) index it as ReverbPreset_Table.
 ; Naka_ToshiParam_Table sits ONE ENTRY INTO it, which is how the tree had
 ; it; the label stays because positional names are built on it:
-; EQPreset_Table is EQPreset_SearchLoop_Data (9 pointers, EQPreset_Load /
-; EQPreset_FindMatch) and CombinedPreset_Table is CombinedPreset_SearchLoop_Data
+; EQPreset_Table is EQPreset_Table (9 pointers, EQPreset_Load /
+; EQPreset_FindMatch) and CombinedPreset_Table is CombinedPreset_Table
 ; (9 pointers, CombinedPreset_Load / CombinedPreset_SearchLoop).
 ; ---------------------------------------------------------------------------
 	; +0x890: one 6-byte record.  BitmapTable_ProcessEntry (0xFC7A6A) takes
@@ -3159,7 +3126,7 @@ BitmapTable_ProcessEntry_Data:
 BitmapTable_ProcessEntry_Data_2:
 	.byte 0x43, 0x01, 0x3c, 0x7f
 	; +0x896: 12 jump offsets.  ExtData_ToneParam_DispatchHandler (0xFC7D77):
-	; `cp wa, 11` / `add wa, wa` / `ld_rrw wa, xix, wa` / `jp_rr` from 0xFC8570
+	; `cp wa, 11` / `add wa, wa` / `ld wa, (xix+wa)` / `jp_rr` from 0xFC8570
 	; (no label there in audio_control_engine.s, so the offsets are numeric).
 ExtData_ToneParam_DispatchHandler_Data:
 	.short 0x0000, 0x0020, 0x0020, 0x0002, 0x0005, 0x0008, 0x000b, 0x000e, 0x0011, 0x0014, 0x0017, 0x001a
@@ -3184,7 +3151,6 @@ CtrlPanel_BuildIndicatorBitmask_Data:
 VoiceChannels_InitPanFromPreset_Data:
 	.byte 0, 2, 1, 7, 8, 9, 10, 11, 4, 5, 6, 3, 15, 21, 21, 25, 20, 12, 13, 14
 ReverbPreset_Table:
-ReverbPreset_SearchLoop_Data:
 	.long ReverbPreset_0
 Naka_ToshiParam_Table:
 	.long ReverbPreset_1
@@ -3197,7 +3163,6 @@ Naka_ToshiParam_Table:
 	.long ReverbPreset_8
 	.long ReverbPreset_9
 EQPreset_Table:
-EQPreset_SearchLoop_Data:
 	.long EQPreset_0
 	.long EQPreset_1
 	.long EQPreset_2
@@ -3208,7 +3173,6 @@ EQPreset_SearchLoop_Data:
 	.long EQPreset_7
 	.long EQPreset_8
 CombinedPreset_Table:
-CombinedPreset_SearchLoop_Data:
 	.long CombinedPreset_0
 	.long CombinedPreset_1
 	.long CombinedPreset_2
@@ -3237,7 +3201,6 @@ DataSlot_HeaderTemplate:
 ; each tagged with its RAM address.
 ; ---------------------------------------------------------------------------
 SndParamRam_DefaultImage:
-SMF_SlotChain_ExtendedVoice_Data:
 	.byte 0x78, 0x12, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00, 0x00, 0x00, 0x18	; 0xF9A0
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x38, 0x00, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x01, 0x00, 0x01, 0x18	; 0xF9B6
 	.byte 0x38, 0x00, 0x00, 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x50, 0x40, 0x80, 0x02, 0x38, 0x01, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x01, 0x00, 0x02, 0x18	; 0xF9D0
@@ -3367,11 +3330,11 @@ WidgetParam_TestMode_Entry:
 ; VALUE MAPS AND THEIR 10-BYTE DESCRIPTORS (11 of them, 0xEDBA56-0xEDE9FB)
 ; ---------------------------------------------------------------------------
 ; The eleven descriptors are the entries of the pointer table at 0xEE0154 in
-; ui_widgets/widget_dispatch.s (SndParam_ResetDefaultTable_Data_2 there, then
+; ui_widgets/widget_dispatch.s (SndParam_LinkTargetPtrs there, then
 ; Naka_SubDispatch_A_Table).  The accessors in audio/sndparam_routines.s that
-; load that address (`lda xbc, (SndParam_ResetDefaultTable_Data_2:24)`, two sites)
+; load that address (`lda xbc, (SndParam_LinkTargetPtrs:24)`, two sites)
 ; take a record's +0x0B aux_index: 0xFF selects entry 0, anything else is
-; `sla a, 2` / `ld_rr8l xiy, xbc, a`; the descriptor is then read at +0x00
+; `sla a, 2` / `ld xiy, (xbc+a)`; the descriptor is then read at +0x00
 ; and `ld wa, (xix+7)`.  Descriptor layout, uniform in all 11:
 ;   +0x00 u32 pointer to the byte map      +0x04 u16 number of map entries
 ;   +0x06 u8 (0, 128, 255 or 7)             +0x07 u16, UNALIGNED

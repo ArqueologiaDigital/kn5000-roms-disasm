@@ -42,7 +42,7 @@ MidiPkt_DispatchViaTable_4DA6:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld	xbc, MidiPkt_DispatchViaTable_4DA6_Data
+	ld	xbc, MidiCtl_MatchList4
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -69,7 +69,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld	xbc, MidiPkt_DispatchViaTable_4DAE_Data
+	ld	xbc, MidiCtl_MatchList5
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -100,7 +100,7 @@ MidiPkt_BuildControl:
 	cp a, 0:i3
 	jr	z, MidiPkt_DispatchViaTable_4DAE_Done
 	ld xwa, xiz
-	ld	xbc, MidiPkt_DispatchViaTable_4DAE_Data
+	ld	xbc, MidiCtl_MatchList5
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -126,7 +126,7 @@ MidiPkt_DispatchSpecialType:
 	ld a, (xiz + 1)
 	cp a, 0x11
 	jr	nz, MidiPkt_DispatchSpecialType_Type10
-	ld	xwa, MidiPkt_DispatchSpecialType_Data
+	ld	xwa, SysEx_GmSystemOn
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
@@ -134,7 +134,7 @@ MidiPkt_DispatchSpecialType:
 MidiPkt_DispatchSpecialType_Type10:
 	cp a, 0x10
 	jr	nz, MidiPkt_DispatchSpecialType_Default
-	ld	xwa, MidiPkt_DispatchSpecialType_Type10_Data
+	ld	xwa, SysEx_GmSystemOff
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
@@ -144,7 +144,7 @@ MidiPkt_DispatchSpecialType_SendAndUpdate:
 	jr	MidiPkt_DispatchSpecialType_Return
 MidiPkt_DispatchSpecialType_Default:
 	ld xwa, xiz
-	ld	xbc, MidiPkt_DispatchSpecialType_SendAndUpdate_Data
+	ld	xbc, MidiCtl_MatchList6
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -183,7 +183,7 @@ MidiPkt_EnqueueControl_3354:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_3354_Data
+	ld	xiy, MidiPkt_MsgTemplate_334C
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -199,7 +199,7 @@ MidiPkt_EnqueueControl_3354:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr	z, MidiPkt_EnqueueControl_3354_Return
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -236,7 +236,7 @@ MidiPkt_EnqueueExtended_Data:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_3354_ShiftBits_Data
+	ld	xiy, MidiPkt_MsgTemplate_3350
 	lda	xix, (xsp+4)
 	ldi85
 	ldiw
@@ -250,7 +250,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xwa, (xiz)
 	cpw	(xwa+4), 0
 	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (xiz+4)
@@ -287,7 +287,7 @@ SeqAlt_DescriptorBlock_Data_Helper:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_335C_Data
+	ld	xiy, MidiPkt_MsgTemplate_3354
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -303,7 +303,7 @@ SeqAlt_DescriptorBlock_Data_Helper:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr	z, MidiPkt_EnqueueControl_335C_Return
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -338,7 +338,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	dec 6, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_3358_Data
+	ld	xiy, MidiPkt_MsgTemplate_3358
 	lda xix, (xsp + 4)
 	ld bc, 2:i3
 	ldirw
@@ -355,7 +355,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jrl	z, MidiPkt_EnqueueControl_3358_Return
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -421,7 +421,7 @@ VocalistPage2OKFunc_Helper2_Helper:
 	lda xsp, (xsp - 14)
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_335E_Data
+	ld	xiy, MidiPkt_MsgTemplate_335E
 	lda xix, (xsp + 4)
 	ld bc, 2:i3
 	ldirw
@@ -433,7 +433,7 @@ VocalistPage2OKFunc_Helper2_Helper:
 	calr	MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jr	z, MidiPkt_EnqueueControl_335E_Return
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xsp + 14)
@@ -480,7 +480,7 @@ MidiPkt_EnqueueControl_3364:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_3364_Data
+	ld	xiy, MidiPkt_MsgTemplate_3364
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -493,7 +493,7 @@ MidiPkt_EnqueueControl_3364:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr	z, MidiPkt_EnqueueControl_3364_Return
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -536,7 +536,7 @@ MidiPkt_EnqueueControl_3368:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_3368_Data
+	ld	xiy, MidiPkt_MsgTemplate_3368
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -549,14 +549,14 @@ MidiPkt_EnqueueControl_3368:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jrl	z, MidiPkt_EnqueueControl_3368_Return
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld a, (0xfd99:16)
 	and a, 0x1
 	cp a, 1:i3
 	jr	nz, MidiPkt_EnqueueControl_3368_NoPedal
-	ld	xwa, MidiPkt_EnqueueControl_3368_Data_2
+	ld	xwa, MidiCtl_Rec_07
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xbc, (xiz)
@@ -609,7 +609,7 @@ MidiPkt_BuildControl_Helper:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, MidiPkt_EnqueueControl_3368_FormatData_Data
+	ld	xiy, MidiPkt_MsgTemplate_336C
 	lda	xix, (xsp+4)
 	ldi85
 	ldiw
@@ -625,7 +625,7 @@ MidiPkt_BuildControl_Helper:
 	ld	a, (xwa+8)
 	and	a, (xbc+3)
 	jr	z, MidiPkt_EnqueueControl_3364_Epilogue
-	ld	xwa, MidiPkt_BuildControl_Data_2
+	ld	xwa, SysEx_Msg_35DC
 	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	pushw	6
@@ -710,7 +710,7 @@ MidiPkt_DispatchViaTable_4DCE:
 	push xiz
 	ld xiz, (xsp + 16)
 	ld xwa, xiz
-	ld	xbc, MidiPkt_DispatchViaTable_4DCE_Data
+	ld	xbc, MidiCtl_MatchList7
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -796,7 +796,7 @@ MidiPkt_SendBankSelect:
 	cp l, 0x2c
 	ret nz
 MidiPkt_SendBankSelect_Send:
-	ld	xwa, MidiPkt_ArpPopReturn_Data_3
+	ld	xwa, SysEx_Msg_35AC
 	ld bc, 5:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
@@ -975,7 +975,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldw	bc, 32
 	ldw	de, 120
 	call	UIState_CheckAndRenderBitmap_Helper
-	ld	xiy, MidiPkt_SendBankSelect_Send_Data_2
+	ld	xiy, SysExBulk_FrameTemplate0
 	lda	xix, (xsp+10)
 	ldiw
 	ldiw
@@ -983,7 +983,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_SendBankSelect_Send_Data_3
+	ld	xiy, SysExBulk_FrameTemplate1
 	lda	xix, (xsp+6)
 	ldiw
 	ldiw
@@ -991,7 +991,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_SendBankSelect_Send_Data_4
+	ld	xiy, SysExBulk_FrameTemplate2
 	lda	xix, (xsp+2)
 	ldiw
 	ldiw
@@ -1010,7 +1010,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
 	ldw	bc, 32
 	ld	de, 0:i3
 	call	UIState_CheckAndRenderBitmap_Helper
-	ld	xiy, MidiPkt_SendBankSelect_Send_Data_5
+	ld	xiy, SysExBulk_FrameTemplate3
 	lda	xix, (xsp+10)
 	ldiw
 	ldiw
@@ -1018,7 +1018,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_SendBankSelect_Send_Data_6
+	ld	xiy, SysExBulk_FrameTemplate4
 	lda	xix, (xsp+6)
 	ldiw
 	ldiw
@@ -1026,7 +1026,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_SendBankSelect_Send_Data_7
+	ld	xiy, SysExBulk_FrameTemplate5
 	lda	xix, (xsp+2)
 	ldiw
 	ldiw
@@ -1054,7 +1054,7 @@ MidiPkt_SysExBulkTransfer_Data_Join4:
 	extz	hl
 	ld	xwa, 0x4b00
 	ld	bc, hl
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	cp	hl, 0:i3
 	jr	lt, MidiPkt_SysExBulkTransfer_Data_Epilogue
 	ld	xwa, 0x4b04
@@ -1077,7 +1077,7 @@ MidiPkt_SysExBulkTransfer_Data_Loop:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 0x4b10
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 MidiPkt_SysExBulkTransfer_Data_Skip:
 	inc	1, iz
 	cp	iz, qiz
@@ -1142,7 +1142,7 @@ SysEx_ClampVoiceIndex8_Skip:
 	add	xwa, 0x4b10
 	ld	c, (xsp+4)
 	extz	bc
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	jr	SysEx_ClampVoiceIndex8_Join
 SysEx_ClampVoiceIndex8_Skip2:
 	inc	1, iz
@@ -1178,7 +1178,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Join2:
 	extz	hl
 	ld	xwa, 0x4900
 	ld	bc, hl
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	cp	hl, 0:i3
 	jr	lt, SysEx_ClampVoiceIndex128_Epilogue
 	ld	xwa, 0x4904
@@ -1201,7 +1201,7 @@ SysEx_ClampVoiceIndex128_Loop:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 0x4910
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 SysEx_ClampVoiceIndex128_Skip:
 	inc	1, iz
 	cp	iz, qiz
@@ -1257,7 +1257,7 @@ SysEx_ApplyToSlot49_Format_Data_Skip:
 	add	xwa, 0x4910
 	ld	c, (xsp+4)
 	extz	bc
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	jr	SysEx_ApplyToSlot49_Format_Data_Join
 SysEx_ApplyToSlot49_Format_Data_Skip2:
 	inc	1, iz
@@ -1298,35 +1298,35 @@ SysEx_DispatchByChannel:
 SysEx_DispatchByChannel_Code:
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data
+	ld	xwa, SysEx4B_ChannelWords0
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data_2
+	ld	xwa, SysEx4B_ChannelWords1
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data_3
+	ld	xwa, SysEx4B_ChannelWords2
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data_4
+	ld	xwa, SysEx4B_ChannelWords3
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 8
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data_5
+	ld	xwa, SysEx4B_ChannelWords4
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 8
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data_6
+	ld	xwa, SysEx4B_ChannelWords5
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data_7
+	ld	xwa, SysEx4B_ChannelWords6
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_Data_8
+	ld	xwa, SysEx4B_ChannelWords7
 SysEx_DispatchByChannel_Entry:
 	ld	hl, (xwa+de)
 	ret
@@ -1348,35 +1348,35 @@ SysEx_DispatchByChannel_49:
 SysEx_DispatchByChannel_49_Code:
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data
+	ld	xwa, SysEx49_ChannelWords0
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data_2
+	ld	xwa, SysEx49_ChannelWords1
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data_3
+	ld	xwa, SysEx49_ChannelWords2
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data_4
+	ld	xwa, SysEx49_ChannelWords3
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data_5
+	ld	xwa, SysEx49_ChannelWords4
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data_6
+	ld	xwa, SysEx49_ChannelWords5
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 6:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data_7
+	ld	xwa, SysEx49_ChannelWords6
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 6:i3
 	ret	nc
-	ld	xwa, SysEx_DispatchByChannel_49_Data_8
+	ld	xwa, SysEx49_ChannelWords7
 SysEx_DispatchByChannel_49_Entry:
 	ld	hl, (xwa+de)
 	ret
@@ -1452,7 +1452,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Join2:
 	ld xwa, 0x4b00
 	ld bc, hl
 	ld xde, (xsp + 6)
-	call	DataBuf_CopyVoiceBlock24_Code_Helper
+	call	DSPCfg_WriteParamSimple
 	cp hl, 0:i3
 	jr	lt, SysEx_DispatchByChannel_49_Entry_Code_Epilogue
 	lda xwa, (0xfc8e:16)
@@ -1494,7 +1494,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Loop:
 	exts xwa
 	add xwa, 0x4b10
 	ld xde, (xsp + 6)
-	call	DataBuf_CopyVoiceBlock24_Code_Helper
+	call	DSPCfg_WriteParamSimple
 SysEx_DispatchByChannel_49_Entry_Code_Skip8:
 	inc 1, iz
 	cpw_erp IZ, 0xfa

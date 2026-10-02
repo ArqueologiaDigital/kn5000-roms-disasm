@@ -31,7 +31,7 @@ ScreenGroup_ReInit:
 ;        eventually leads to displaying Screen Group 7 error dialog.
 ;
 ; See also:
-;   - Show_ScreenGroup (Show_ScreenGroup_Entry) - Alternative screen display routine
+;   - Show_ScreenGroup (Show_ScreenGroup) - Alternative screen display routine
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
 ScreenGroup_Dispatch:

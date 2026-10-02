@@ -33,7 +33,7 @@ GetSoundName_BuildString:
 	extz	hl
 	ld	bc, hl
 	ld	xde, (xsp+10)
-	call	Display_BytecodeBlock_F_Helper2
+	call	SndParam_ApplyProgramChangeAsync
 	ld	xwa, (xsp+10)
 	ld	(xwa+16), 0
 	jr	GetSoundName_DispatchResult	; -> 0xF98941
@@ -386,7 +386,7 @@ MainGetRhythmName:
 	call	AcApcToggleProc_Helper
 	ldfr_berp	l, 251
 	pushw	17
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	lda	xbc, (36942:16)
@@ -436,10 +436,10 @@ MainGetPmemName:
 	dec	8, xsp
 	push	qiz
 	pushw	8
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	(xsp+4), xhl
 	pushw	18
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	4, xsp
 	ld	(xsp+6), xhl
 	call	BitMapOut_PrepareRender_CheckBit1

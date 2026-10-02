@@ -845,7 +845,7 @@ SndParam_ReadRegWithLUT:
 	ld e, (xwa + 11)
 	ld c, e
 	sla c, 2
-	lda xhl, (SndParam_ReadRegWithLUT_Data:24)
+	lda xhl, (SndParam_RegRamPtrs:24)
 	ld	xbc, (xhl+c)
 	ld c, (xbc)
 	cp e, 2:i3
@@ -1560,7 +1560,7 @@ SndParam_RegisterLinked2_Data_Skip2:
 	jr	nc, SndParam_RegisterLinked2_Data_Skip3
 	ld	l, a
 SndParam_RegisterLinked2_Data_Skip3:
-	lda	xbc, (SndParam_ResetDefaultTable_Data_2:24)
+	lda	xbc, (SndParam_LinkTargetPtrs:24)
 	ld	a, (xde+11)
 	cp	a, 255
 	jr	z, SndParam_RegisterLinked2_Data_Skip6
@@ -2180,7 +2180,7 @@ SndParam_RegisterDual_Data:
 	srla	c	; srl A,C
 SndParam_RegisterDual_Data_Skip6:
 	ld	w, c
-	lda	xbc, (SndParam_ResetDefaultTable_Data_2:24)
+	lda	xbc, (SndParam_LinkTargetPtrs:24)
 	ld	a, (xde+11)
 	cp	a, 255
 	jr	z, SndParam_RegisterDual_Data_Skip7
@@ -3238,7 +3238,7 @@ SndParam_AllocAndInsert:
 	ld (xsp + 4), xwa
 	or xwa, xwa
 	jr nz, SndParam_AllocBuildKey
-	ld xwa, SndParam_AllocAndInsert_Data
+	ld xwa, SndParam_OutOfMemoryMsg
 	call Debug_PrintString
 	pushw 0x1
 	call Boot_HaltInstruction

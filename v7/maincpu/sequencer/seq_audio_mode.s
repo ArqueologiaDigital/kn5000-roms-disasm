@@ -649,7 +649,7 @@ AccVoice_ComputeParamOffset:
 ; 0x324A (v10: 0x32E6).
 ; Reader: AccVoice_ComputeParamOffset (0xF5392A, the tail of
 ; AccVoice_ResolveParamAddr 0xF5391C): `ld xix, AccVoice_BankBaseTable`,
-; `ld_rrl xix, xix, wa` with wa = (0x324A)*4; the entry is added to the
+; `ld xix, (xix+wa)` with wa = (0x324A)*4; the entry is added to the
 ; 32-bit offset loaded from the RhythmTiming_OffsetTable entry (A clamped to
 ; 0..0x1D) plus 0x60, and the sum returned in XIY -- each entry is the base
 ; of a bank those offsets index into.
@@ -1629,29 +1629,29 @@ RhythmROM_CheckDone:
 ; Malloc(0x1000), Free(second), Free(first), return.  NO CALLER FOUND:
 ; scripts/analysis/sequi_find_refs.py v7 0xF54158 -> none.
 ; The two callees carry misleading v7 names: 0xFF06A3
-; (`SLIDE_Decompress_4K_Init_Helper2`) is v10's Malloc (0xFF0E80) -- 63 of
+; (`Malloc`) is v10's Malloc (0xFF0E80) -- 63 of
 ; their first 64 bytes equal, the odd one a relocated call operand -- and
-; 0xFF0315 (`SLIDE_Decompress_4K_Init_Helper`) is v10's Free (0xFF0AF2), 62/64
+; 0xFF0315 (`Free`) is v10's Free (0xFF0AF2), 62/64
 ; equal.  v10's copy of this routine calls Malloc / Free by name.
 ; -----------------------------------------------------------------------------
 Heap_AllocAndFreeTwoBlocks:
 	ld	xwa, 1024
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	add	xsp, 4
 	ld	(13504:16), xhl
 	ld	xwa, 4096
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	add	xsp, 4
 	ld	xwa, xhl
 	ld	xwa, xwa
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	add	xsp, 4
 	ld	xwa, (13504:16)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	add	xsp, 4
 	ret
 AccentData_ComparePart1:

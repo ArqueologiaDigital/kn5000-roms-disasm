@@ -1,0 +1,840 @@
+{
+ "rows": [
+  {
+   "alias": "SOUND_DATA_DRUM_KITS_0x1A",
+   "result": "label",
+   "label": "Scoop_CallDisplayHelper_DisplayList_Data",
+   "kind": "incbin",
+   "at": "audio/sound_data.s:279"
+  },
+  {
+   "alias": "SOUND_DATA_DRUM_KITS_0x3A",
+   "result": "label",
+   "label": "Scoop_SetPartIndexAndDisplay_Data",
+   "kind": "incbin",
+   "at": "audio/sound_data.s:279"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xB4",
+   "result": "label",
+   "label": "Scoop_TitleBar_GetPartConfig_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1C2",
+   "result": "label",
+   "label": "Scoop_TitleBar_ShowBPM_Part0_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1CC",
+   "result": "label",
+   "label": "Scoop_TitleBar_ShowBPM_Part1_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1D6",
+   "result": "label",
+   "label": "Scoop_TitleBar_ShowBPM_Part2_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1E0",
+   "result": "label",
+   "label": "Display_RedrawTitleBar_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1E5",
+   "result": "label",
+   "label": "Scoop_TitleBar_Part1Check_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1EA",
+   "result": "label",
+   "label": "Scoop_TitleBar_Part2Check_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1EF",
+   "result": "label",
+   "label": "Scoop_InitPartDisplay_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x1F9",
+   "result": "label",
+   "label": "Display_RedrawMainContent_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x21C",
+   "result": "label",
+   "label": "Display_RedrawFooter_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x258",
+   "result": "label",
+   "label": "Display_RedrawFooter_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x276",
+   "result": "label",
+   "label": "Scoop_FooterShowPartValue_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x3DE",
+   "result": "label",
+   "label": "Display_RedrawButtonLabels_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x546",
+   "result": "label",
+   "label": "Display_RedrawButtonLabels_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x6AE",
+   "result": "label",
+   "label": "Display_RedrawButtonLabels_Data_3",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x97E",
+   "result": "label",
+   "label": "Scoop_Selection_RedrawActive_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x986",
+   "result": "label",
+   "label": "Scoop_Selection_RedrawActive_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x990",
+   "result": "label",
+   "label": "Scoop_Selection_DrawMode1_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0x9BB",
+   "result": "label",
+   "label": "Scoop_Selection_RedrawActive_Data_3",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xA06",
+   "result": "label",
+   "label": "Scoop_Selection_DrawMode1_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xB19",
+   "result": "label",
+   "label": "Scoop_SidePanel_StoreAndDraw_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xB3A",
+   "result": "label",
+   "label": "Scoop_SidePanel_StoreAndDraw_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xB94",
+   "result": "label",
+   "label": "Scoop_SidePanel_DrawOneSlot_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xBD4",
+   "result": "label",
+   "label": "Display_RedrawButtonLabels_Data_4",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xD3C",
+   "result": "label",
+   "label": "Display_RedrawButtonLabels_Data_5",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_Main_0xD3F",
+   "result": "label",
+   "label": "Scoop_SelectModeTable_2Part_XIX_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:185"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x20",
+   "result": "label",
+   "label": "Display_RedrawAltContent_Str_END",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x23",
+   "result": "label",
+   "label": "Scoop_CurveUpdate_Finalize_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x123",
+   "result": "label",
+   "label": "Scoop_EnvCalc_Handler1_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x12B",
+   "result": "label",
+   "label": "Scoop_GlideParam_Configure_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x133",
+   "result": "label",
+   "label": "Scoop_GlideCalc_Handler0_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x13B",
+   "result": "label",
+   "label": "Scoop_EventLoop_12Entry_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x1CB",
+   "result": "label",
+   "label": "Scoop_EventLoop_12Entry_Process_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x1DF",
+   "result": "label",
+   "label": "Scoop_EventLoop_12Entry_Process_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x1FF",
+   "result": "label",
+   "label": "Scoop_EventLoop_36Entry_Data_2",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "StyleUI_ScreenData_CtlOnly_0x213",
+   "result": "label",
+   "label": "Scoop_EventLoop_36Entry_Branch3_Data_4",
+   "kind": "incbin",
+   "at": "ui_widgets/style_ui_params.s:204"
+  },
+  {
+   "alias": "FDTest_String_TestTitleFunc_0x28E",
+   "result": "label",
+   "label": "ResInfo_GetResourceListPtr_Str_TEST",
+   "kind": "incbin",
+   "at": "factory_test/fd_test_data.s:471"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x4",
+   "result": "label",
+   "label": "SetSepaOutMode_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x8",
+   "result": "label",
+   "label": "SetSepaOutMode_Data_2",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0xC",
+   "result": "label",
+   "label": "SetSepaOutMode_Data_3",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x10",
+   "result": "label",
+   "label": "SetSepaOutMode_Data_4",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x14",
+   "result": "label",
+   "label": "SqSngSelTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x20",
+   "result": "label",
+   "label": "SqSngNameTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x25",
+   "result": "label",
+   "label": "CDlikeSwTtl_SetRecordAndNotify_Data_3",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x2C",
+   "result": "label",
+   "label": "SqTrAsTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x38",
+   "result": "label",
+   "label": "SqTrAsPsTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x44",
+   "result": "label",
+   "label": "SetWall_ReturnZero_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x52",
+   "result": "label",
+   "label": "SetWall_ReturnZero_Data_2",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x56",
+   "result": "label",
+   "label": "SqMdlyPlyTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x62",
+   "result": "label",
+   "label": "DkMdlyPlyTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x6E",
+   "result": "label",
+   "label": "DkMdlyPly_SendAudioCmd_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x8E",
+   "result": "label",
+   "label": "DkMdlyPly_HandleResult_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0xCE",
+   "result": "label",
+   "label": "DisplayMode_DispatchEvents_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0xDC",
+   "result": "label",
+   "label": "DpMdlyDocTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0xE8",
+   "result": "label",
+   "label": "DpMdlyPdTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0xF4",
+   "result": "label",
+   "label": "DpMdlySmfTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x100",
+   "result": "label",
+   "label": "DpMdlySmfLyrTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x13A",
+   "result": "label",
+   "label": "NameGetFuncCall_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x156",
+   "result": "label",
+   "label": "DpDocTtl_Dispatch_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x16A",
+   "result": "label",
+   "label": "DpDocTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x176",
+   "result": "label",
+   "label": "DpPdTtl_Dispatch_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x18A",
+   "result": "label",
+   "label": "DpPdTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x196",
+   "result": "label",
+   "label": "DpSmfTtl_Dispatch_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x1AA",
+   "result": "label",
+   "label": "DpSmfTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x1B6",
+   "result": "label",
+   "label": "DpSmfLyrTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x1C2",
+   "result": "label",
+   "label": "SqTrSelTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x1CE",
+   "result": "label",
+   "label": "SqStepTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x1DE",
+   "result": "label",
+   "label": "DemoStyleTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x1EA",
+   "result": "label",
+   "label": "DemoSoundTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x1F6",
+   "result": "label",
+   "label": "DemoRhyTtlFunc_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x202",
+   "result": "label",
+   "label": "MiddleFuncCall_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x222",
+   "result": "label",
+   "label": "SeqInit_LookupDispatchEntry_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "SepaOut_Config_0_0x26A",
+   "result": "label",
+   "label": "PlayMode_SendStopEvent_Data",
+   "kind": "incbin",
+   "at": "ui/sepaout_config.s:14"
+  },
+  {
+   "alias": "Data_SaveLoadMenuTable_0x64",
+   "result": "inside a line",
+   "at": "ui_widgets/technichord_string_data.s:6018"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x10",
+   "result": "label",
+   "label": "DataBuf_CopyBulkBitfields_Large_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x28",
+   "result": "label",
+   "label": "DSPCfg_ConfigureVoiceSlotA_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x38",
+   "result": "label",
+   "label": "DSPCfg_ConfigureVoiceSlotB_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x48",
+   "result": "label",
+   "label": "DSPCfg_VoiceSlotB_MapAndWrite_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x58",
+   "result": "label",
+   "label": "DSPCfg_VoiceSlotB_ExtractData_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x8A",
+   "result": "label",
+   "label": "SndParam_AllocAndCopyPreset_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x1786",
+   "result": "label",
+   "label": "MidiSysEx_CopyParamToBuffer_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x17B6",
+   "result": "label",
+   "label": "MIDI_ReadChannelParam_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x17D6",
+   "result": "label",
+   "label": "SeqData_ReadFieldByIndex_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "NakaInst_SoundConfig_LookupTable_0x17F6",
+   "result": "label",
+   "label": "ArpQueue_ComputeAndEnqueue_Data",
+   "kind": "incbin",
+   "at": "ui_widgets/widget_dispatch.s:1286"
+  },
+  {
+   "alias": "WidgetParam_Entry_018_0x26",
+   "result": "inside a line",
+   "at": "ui_widgets/widget_dispatch.s:3277"
+  },
+  {
+   "alias": "CharMap_ValueData_B_0x1F27",
+   "result": "label",
+   "label": "SoundFX_Handler_9_Data_2",
+   "kind": "list",
+   "at": "ui_widgets/widget_dispatch.s:8204"
+  },
+  {
+   "alias": "CharMap_ValueData_B_0x1F28",
+   "result": "label",
+   "label": "SoundFX_Handler_10_Data",
+   "kind": "list",
+   "at": "ui_widgets/widget_dispatch.s:8204"
+  },
+  {
+   "alias": "CharMap_ValueData_B_0x1F29",
+   "result": "label",
+   "label": "SoundFX_Handler_10_Data_2",
+   "kind": "list",
+   "at": "ui_widgets/widget_dispatch.s:8204"
+  },
+  {
+   "alias": "CharMap_ValueData_B_0x1F2A",
+   "result": "label",
+   "label": "SoundFX_Handler_11_Data",
+   "kind": "list",
+   "at": "ui_widgets/widget_dispatch.s:8204"
+  },
+  {
+   "alias": "CharMap_ValueData_B_0x1F2B",
+   "result": "label",
+   "label": "SoundFX_Handler_11_Data_2",
+   "kind": "list",
+   "at": "ui_widgets/widget_dispatch.s:8204"
+  },
+  {
+   "alias": "Display_BytecodeBlock_F_0x253",
+   "result": "label",
+   "label": "Display_BytecodeBlock_F_Sub_Data",
+   "kind": "ascii",
+   "at": "display/scoop_display.s:14561"
+  },
+  {
+   "alias": "Display_BytecodeBlock_F_0x256",
+   "result": "label",
+   "label": "Display_BytecodeBlock_F_Sub_Data_2",
+   "kind": "ascii",
+   "at": "display/scoop_display.s:14561"
+  },
+  {
+   "alias": "Display_BytecodeBlock_F_0x31A",
+   "result": "label",
+   "label": "Str_PBendModExpEq_Data",
+   "kind": "ascii",
+   "at": "display/scoop_display.s:14632"
+  },
+  {
+   "alias": "SeScreenData_0x268D",
+   "result": "label",
+   "label": "SeMenu_DrumKit_Dispatch_Data",
+   "kind": "incbin",
+   "at": "audio/sound_editor_ui.s:13817"
+  },
+  {
+   "alias": "SeScreenData_0x26A3",
+   "result": "label",
+   "label": "SeMenu_DrumKit_Dispatch_Data_2",
+   "kind": "incbin",
+   "at": "audio/sound_editor_ui.s:13817"
+  },
+  {
+   "alias": "SoundBank_DefaultNamePadding_0xA",
+   "result": "label",
+   "label": "SoundBank_CopyCh_FromDefault_Data",
+   "kind": "ascii",
+   "at": "sequencer/smf_playback.s:319"
+  },
+  {
+   "alias": "SMF_HeaderMagic_MThdMTrk_0x4",
+   "result": "label",
+   "label": "FloppyIO_ReadAndValidateHeader_Data",
+   "kind": "ascii",
+   "at": "sequencer/smf_tonegen_core.s:63"
+  },
+  {
+   "alias": "AccScreen_UIDataBlock_0x360",
+   "result": "label",
+   "label": "AccScreen_DrawTempoDisplay_Data",
+   "kind": "incbin",
+   "at": "sequencer/accompaniment_engine.s:33348"
+  },
+  {
+   "alias": "AccScreen_UIDataBlock_0x37E",
+   "result": "label",
+   "label": "AccScreen_DrawTempoDisplay_Data_2",
+   "kind": "incbin",
+   "at": "sequencer/accompaniment_engine.s:33348"
+  },
+  {
+   "alias": "AccScreen_UIDataBlock_0x386",
+   "result": "label",
+   "label": "AccScreen_UpdateBeatDisplay_Data",
+   "kind": "incbin",
+   "at": "sequencer/accompaniment_engine.s:33348"
+  },
+  {
+   "alias": "AccScreen_UIDataBlock_0x390",
+   "result": "label",
+   "label": "AccScreen_BeatDisplay_Large_Data",
+   "kind": "incbin",
+   "at": "sequencer/accompaniment_engine.s:33348"
+  },
+  {
+   "alias": "AccScreen_UIDataBlock_0x3B8",
+   "result": "label",
+   "label": "AccDraw_Secondary_Entry_Data",
+   "kind": "incbin",
+   "at": "sequencer/accompaniment_engine.s:33348"
+  },
+  {
+   "alias": "AccompSeq_MidiFilterCodeBlock_0x7A",
+   "result": "label",
+   "label": "AccompSeq_LargeCodeBlock2_Data",
+   "kind": "incbin",
+   "at": "sequencer/accompseq_routines.s:1621"
+  }
+ ],
+ "retired": {
+  "SOUND_DATA_DRUM_KITS_0x1A": "Scoop_CallDisplayHelper_DisplayList_Data",
+  "SOUND_DATA_DRUM_KITS_0x3A": "Scoop_SetPartIndexAndDisplay_Data",
+  "StyleUI_ScreenData_Main_0xB4": "Scoop_TitleBar_GetPartConfig_Data",
+  "StyleUI_ScreenData_Main_0x1C2": "Scoop_TitleBar_ShowBPM_Part0_Data",
+  "StyleUI_ScreenData_Main_0x1CC": "Scoop_TitleBar_ShowBPM_Part1_Data",
+  "StyleUI_ScreenData_Main_0x1D6": "Scoop_TitleBar_ShowBPM_Part2_Data",
+  "StyleUI_ScreenData_Main_0x1E0": "Display_RedrawTitleBar_Data",
+  "StyleUI_ScreenData_Main_0x1E5": "Scoop_TitleBar_Part1Check_Data",
+  "StyleUI_ScreenData_Main_0x1EA": "Scoop_TitleBar_Part2Check_Data",
+  "StyleUI_ScreenData_Main_0x1EF": "Scoop_InitPartDisplay_Data_2",
+  "StyleUI_ScreenData_Main_0x1F9": "Display_RedrawMainContent_Data",
+  "StyleUI_ScreenData_Main_0x21C": "Display_RedrawFooter_Data",
+  "StyleUI_ScreenData_Main_0x258": "Display_RedrawFooter_Data_2",
+  "StyleUI_ScreenData_Main_0x276": "Scoop_FooterShowPartValue_Data",
+  "StyleUI_ScreenData_Main_0x3DE": "Display_RedrawButtonLabels_Data",
+  "StyleUI_ScreenData_Main_0x546": "Display_RedrawButtonLabels_Data_2",
+  "StyleUI_ScreenData_Main_0x6AE": "Display_RedrawButtonLabels_Data_3",
+  "StyleUI_ScreenData_Main_0x97E": "Scoop_Selection_RedrawActive_Data",
+  "StyleUI_ScreenData_Main_0x986": "Scoop_Selection_RedrawActive_Data_2",
+  "StyleUI_ScreenData_Main_0x990": "Scoop_Selection_DrawMode1_Data",
+  "StyleUI_ScreenData_Main_0x9BB": "Scoop_Selection_RedrawActive_Data_3",
+  "StyleUI_ScreenData_Main_0xA06": "Scoop_Selection_DrawMode1_Data_2",
+  "StyleUI_ScreenData_Main_0xB19": "Scoop_SidePanel_StoreAndDraw_Data",
+  "StyleUI_ScreenData_Main_0xB3A": "Scoop_SidePanel_StoreAndDraw_Data_2",
+  "StyleUI_ScreenData_Main_0xB94": "Scoop_SidePanel_DrawOneSlot_Data",
+  "StyleUI_ScreenData_Main_0xBD4": "Display_RedrawButtonLabels_Data_4",
+  "StyleUI_ScreenData_Main_0xD3C": "Display_RedrawButtonLabels_Data_5",
+  "StyleUI_ScreenData_Main_0xD3F": "Scoop_SelectModeTable_2Part_XIX_Data",
+  "StyleUI_ScreenData_CtlOnly_0x20": "Display_RedrawAltContent_Str_END",
+  "StyleUI_ScreenData_CtlOnly_0x23": "Scoop_CurveUpdate_Finalize_Data",
+  "StyleUI_ScreenData_CtlOnly_0x123": "Scoop_EnvCalc_Handler1_Data",
+  "StyleUI_ScreenData_CtlOnly_0x12B": "Scoop_GlideParam_Configure_Data",
+  "StyleUI_ScreenData_CtlOnly_0x133": "Scoop_GlideCalc_Handler0_Data",
+  "StyleUI_ScreenData_CtlOnly_0x13B": "Scoop_EventLoop_12Entry_Data",
+  "StyleUI_ScreenData_CtlOnly_0x1CB": "Scoop_EventLoop_12Entry_Process_Data",
+  "StyleUI_ScreenData_CtlOnly_0x1DF": "Scoop_EventLoop_12Entry_Process_Data_2",
+  "StyleUI_ScreenData_CtlOnly_0x1FF": "Scoop_EventLoop_36Entry_Data_2",
+  "StyleUI_ScreenData_CtlOnly_0x213": "Scoop_EventLoop_36Entry_Branch3_Data_4",
+  "FDTest_String_TestTitleFunc_0x28E": "ResInfo_GetResourceListPtr_Str_TEST",
+  "SepaOut_Config_0_0x4": "SetSepaOutMode_Data",
+  "SepaOut_Config_0_0x8": "SetSepaOutMode_Data_2",
+  "SepaOut_Config_0_0xC": "SetSepaOutMode_Data_3",
+  "SepaOut_Config_0_0x10": "SetSepaOutMode_Data_4",
+  "SepaOut_Config_0_0x14": "SqSngSelTtlFunc_Data",
+  "SepaOut_Config_0_0x20": "SqSngNameTtlFunc_Data",
+  "SepaOut_Config_0_0x25": "CDlikeSwTtl_SetRecordAndNotify_Data_3",
+  "SepaOut_Config_0_0x2C": "SqTrAsTtlFunc_Data",
+  "SepaOut_Config_0_0x38": "SqTrAsPsTtlFunc_Data",
+  "SepaOut_Config_0_0x44": "SetWall_ReturnZero_Data",
+  "SepaOut_Config_0_0x52": "SetWall_ReturnZero_Data_2",
+  "SepaOut_Config_0_0x56": "SqMdlyPlyTtlFunc_Data",
+  "SepaOut_Config_0_0x62": "DkMdlyPlyTtlFunc_Data",
+  "SepaOut_Config_0_0x6E": "DkMdlyPly_SendAudioCmd_Data",
+  "SepaOut_Config_0_0x8E": "DkMdlyPly_HandleResult_Data",
+  "SepaOut_Config_0_0xCE": "DisplayMode_DispatchEvents_Data",
+  "SepaOut_Config_0_0xDC": "DpMdlyDocTtlFunc_Data",
+  "SepaOut_Config_0_0xE8": "DpMdlyPdTtlFunc_Data",
+  "SepaOut_Config_0_0xF4": "DpMdlySmfTtlFunc_Data",
+  "SepaOut_Config_0_0x100": "DpMdlySmfLyrTtlFunc_Data",
+  "SepaOut_Config_0_0x13A": "NameGetFuncCall_Data",
+  "SepaOut_Config_0_0x156": "DpDocTtl_Dispatch_Data",
+  "SepaOut_Config_0_0x16A": "DpDocTtlFunc_Data",
+  "SepaOut_Config_0_0x176": "DpPdTtl_Dispatch_Data",
+  "SepaOut_Config_0_0x18A": "DpPdTtlFunc_Data",
+  "SepaOut_Config_0_0x196": "DpSmfTtl_Dispatch_Data",
+  "SepaOut_Config_0_0x1AA": "DpSmfTtlFunc_Data",
+  "SepaOut_Config_0_0x1B6": "DpSmfLyrTtlFunc_Data",
+  "SepaOut_Config_0_0x1C2": "SqTrSelTtlFunc_Data",
+  "SepaOut_Config_0_0x1CE": "SqStepTtlFunc_Data",
+  "SepaOut_Config_0_0x1DE": "DemoStyleTtlFunc_Data",
+  "SepaOut_Config_0_0x1EA": "DemoSoundTtlFunc_Data",
+  "SepaOut_Config_0_0x1F6": "DemoRhyTtlFunc_Data",
+  "SepaOut_Config_0_0x202": "MiddleFuncCall_Data",
+  "SepaOut_Config_0_0x222": "SeqInit_LookupDispatchEntry_Data",
+  "SepaOut_Config_0_0x26A": "PlayMode_SendStopEvent_Data",
+  "NakaInst_SoundConfig_LookupTable_0x10": "DataBuf_CopyBulkBitfields_Large_Data",
+  "NakaInst_SoundConfig_LookupTable_0x28": "DSPCfg_ConfigureVoiceSlotA_Data",
+  "NakaInst_SoundConfig_LookupTable_0x38": "DSPCfg_ConfigureVoiceSlotB_Data",
+  "NakaInst_SoundConfig_LookupTable_0x48": "DSPCfg_VoiceSlotB_MapAndWrite_Data",
+  "NakaInst_SoundConfig_LookupTable_0x58": "DSPCfg_VoiceSlotB_ExtractData_Data",
+  "NakaInst_SoundConfig_LookupTable_0x8A": "SndParam_AllocAndCopyPreset_Data",
+  "NakaInst_SoundConfig_LookupTable_0x1786": "MidiSysEx_CopyParamToBuffer_Data",
+  "NakaInst_SoundConfig_LookupTable_0x17B6": "MIDI_ReadChannelParam_Data",
+  "NakaInst_SoundConfig_LookupTable_0x17D6": "SeqData_ReadFieldByIndex_Data",
+  "NakaInst_SoundConfig_LookupTable_0x17F6": "ArpQueue_ComputeAndEnqueue_Data",
+  "CharMap_ValueData_B_0x1F27": "SoundFX_Handler_9_Data_2",
+  "CharMap_ValueData_B_0x1F28": "SoundFX_Handler_10_Data",
+  "CharMap_ValueData_B_0x1F29": "SoundFX_Handler_10_Data_2",
+  "CharMap_ValueData_B_0x1F2A": "SoundFX_Handler_11_Data",
+  "CharMap_ValueData_B_0x1F2B": "SoundFX_Handler_11_Data_2",
+  "Display_BytecodeBlock_F_0x253": "Display_BytecodeBlock_F_Sub_Data",
+  "Display_BytecodeBlock_F_0x256": "Display_BytecodeBlock_F_Sub_Data_2",
+  "Display_BytecodeBlock_F_0x31A": "Str_PBendModExpEq_Data",
+  "SeScreenData_0x268D": "SeMenu_DrumKit_Dispatch_Data",
+  "SeScreenData_0x26A3": "SeMenu_DrumKit_Dispatch_Data_2",
+  "SoundBank_DefaultNamePadding_0xA": "SoundBank_CopyCh_FromDefault_Data",
+  "SMF_HeaderMagic_MThdMTrk_0x4": "FloppyIO_ReadAndValidateHeader_Data",
+  "AccScreen_UIDataBlock_0x360": "AccScreen_DrawTempoDisplay_Data",
+  "AccScreen_UIDataBlock_0x37E": "AccScreen_DrawTempoDisplay_Data_2",
+  "AccScreen_UIDataBlock_0x386": "AccScreen_UpdateBeatDisplay_Data",
+  "AccScreen_UIDataBlock_0x390": "AccScreen_BeatDisplay_Large_Data",
+  "AccScreen_UIDataBlock_0x3B8": "AccDraw_Secondary_Entry_Data",
+  "AccompSeq_MidiFilterCodeBlock_0x7A": "AccompSeq_LargeCodeBlock2_Data"
+ }
+}

@@ -2519,7 +2519,7 @@ SMF_SlotChain_ExtendedVoice:
 	mul l, 0x20
 	add hl, 0x5
 	add hl, 0x2
-	ld xix, SMF_SlotChain_ExtendedVoice_Data
+	ld xix, SndParamRam_DefaultImage
 	ld	a, (xix+hl)
 	jr SMF_SlotChain_ExtVoiceStore
 
@@ -2616,7 +2616,7 @@ SMF_SlotParam_VolumeScale:
 	mul l, 0x20
 	add hl, 0x7
 	add hl, 0x2
-	ld xix, SMF_SlotChain_ExtendedVoice_Data
+	ld xix, SndParamRam_DefaultImage
 	ld	a, (xix+hl)
 	ld (xiy + 4), a
 

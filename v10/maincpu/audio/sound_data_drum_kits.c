@@ -6,7 +6,7 @@
  * PART 15 (reader CharMap_ActivePreamb_Prologue, v10/v9 0xFEE43F; see
  * sound_data_bass.c) -- category 15 only, 8 kits.  The +0x4C reader never
  * indexes past byte 17.  The remaining 195 bytes are reached through
- * SOUND_DATA_DRUM_KITS_0x1A / _0x3A (display/scoop_display.s); the
+ * Scoop_CallDisplayHelper_DisplayList_Data / _0x3A (display/scoop_display.s); the
  * description of them below cites no reader and has not been checked here.
  * Evidence for everything in this block: audio/sound_data.s (reader
  * addresses for v10/v9/v7) and scripts/analysis/sound_data_map_proof.py.

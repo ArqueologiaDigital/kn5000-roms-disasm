@@ -1354,7 +1354,7 @@ PmemOutLGridCheck_Evt1C0001D:
 	pushw	PmemOutLGridCheck_LocalInit_Strings@hi16
 	pushw	PmemOutLGridCheck_LocalInit_Strings@lo16
 	push	xhl
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1397,7 +1397,7 @@ PmemOutLGridCheck_JumpTable_Join3:
 	ld	xwa, 0:i3
 	ld	a, (0x024774:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (0x024772:24)
 	ld	xbc, xwa
@@ -1425,7 +1425,7 @@ PmemOutLGridCheck_JumpTable_Skip6:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Join4:
 	lda	xde, (xsp+36)
@@ -1439,7 +1439,7 @@ PmemOutLGridCheck_JumpTable_Join4:
 	ld	xwa, 0:i3
 	ld	a, (0x024774:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (0x024772:24)
 	ld	xbc, xwa
@@ -1457,7 +1457,7 @@ PmemOutLGridCheck_JumpTable_Join4:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+36)
 	ld	xwa, 0x5b0009
@@ -1470,7 +1470,7 @@ PmemOutLGridCheck_JumpTable_Join4:
 	ld	xwa, 0:i3
 	ld	a, (0x024774:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (0x024772:24)
 	ld	xbc, xwa
@@ -1498,7 +1498,7 @@ PmemOutLGridCheck_JumpTable_Skip7:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Join5:
 	lda	xde, (xsp+36)
@@ -1573,7 +1573,7 @@ PmemOutLGridCheck_JumpTable_Skip10:
 	ld	xwa, 0:i3
 	ld	a, (0x024774:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (0x024772:24)
 	ld	xbc, xwa
@@ -1600,7 +1600,7 @@ PmemOutLGridCheck_JumpTable_Skip11:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4@hi16
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Join7:
 	lda	xde, (xsp+36)
@@ -1614,7 +1614,7 @@ PmemOutLGridCheck_JumpTable_Join7:
 	ld	xwa, 0:i3
 	ld	a, (0x024774:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (0x024772:24)
 	ld	xbc, xwa
@@ -1632,7 +1632,7 @@ PmemOutLGridCheck_JumpTable_Join7:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_5@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+36)
 	ld	xwa, 0x5b0009
@@ -1645,7 +1645,7 @@ PmemOutLGridCheck_JumpTable_Join7:
 	ld	xwa, 0:i3
 	ld	a, (0x024774:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (0x024772:24)
 	ld	xbc, xwa
@@ -1673,7 +1673,7 @@ PmemOutLGridCheck_JumpTable_Skip12:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_6@lo16
 	lda	xwa, (xsp+50)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Join8:
 	lda	xde, (xsp+36)
@@ -1689,7 +1689,7 @@ PmemOutLGridCheck_JumpTable_Skip13:
 	ld	xwa, 0:i3
 	ld	a, (0x024774:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xbc, (xsp+24)
 	add	xbc, xhl
 	ld	xde, xbc
@@ -1716,7 +1716,7 @@ PmemOutLGridCheck_JumpTable_Skip14:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_7@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 PmemOutLGridCheck_JumpTable_Join9:
 	lda	xde, (xsp+36)
@@ -1741,7 +1741,7 @@ PmemOutLGridCheck_JumpTable_Skip15:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_8@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xde, (xsp+36)
 	ld	xwa, 0x5b0009
@@ -1774,7 +1774,7 @@ PmemOutLGridCheck_JumpTable_Skip17:
 	pushw	PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_9@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 PmemOutLGridCheck_JumpTable_Join10:
 	lda	xde, (xsp+36)
@@ -1815,7 +1815,7 @@ PmemOutL_GridCheck:
 	pushw PmemOutL_GridCheck_Str_Fmt2d_Fmtd@hi16
 	pushw PmemOutL_GridCheck_Str_Fmt2d_Fmtd@lo16
 	push XDE
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -1971,7 +1971,7 @@ TtMdCtlMsg_EventDispatch:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2007,7 +2007,7 @@ TtMdCtlMsg_EventDispatch_Skip6:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2035,7 +2035,7 @@ TtMdCtlMsg_EventDispatch_Skip7:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2092,7 +2092,7 @@ PmemOutRGridCheck_Evt1C00018:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2133,7 +2133,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip6:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2163,7 +2163,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip7:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2217,7 +2217,7 @@ PmemOutRGridCheck_Evt1C0001D:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2245,7 +2245,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip9:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d@lo16
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Code_Join3:
 	call	GetFocusObject
@@ -2260,7 +2260,7 @@ PmemOutLGridCheck_JumpTable_Code_Join3:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2278,7 +2278,7 @@ PmemOutLGridCheck_JumpTable_Code_Join3:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2292,7 +2292,7 @@ PmemOutLGridCheck_JumpTable_Code_Join3:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2320,7 +2320,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip10:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Code_Join4:
 	call	GetFocusObject
@@ -2340,7 +2340,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip11:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2368,7 +2368,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip12:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_4@lo16
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Code_Join5:
 	call	GetFocusObject
@@ -2383,7 +2383,7 @@ PmemOutLGridCheck_JumpTable_Code_Join5:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2401,7 +2401,7 @@ PmemOutLGridCheck_JumpTable_Code_Join5:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_5@lo16
 	lda	xwa, (xsp+46)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2415,7 +2415,7 @@ PmemOutLGridCheck_JumpTable_Code_Join5:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0:i3
 	ld	a, (149362:24)
 	ld	xbc, xwa
@@ -2442,7 +2442,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip13:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_6@hi16
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_6@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 PmemOutLGridCheck_JumpTable_Code_Join6:
 	call	GetFocusObject
@@ -2457,7 +2457,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip14:
 	ld	xwa, 0:i3
 	ld	a, (149364:24)
 	ld	xbc, 26
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xbc, 0:i3
 	ld	c, (149362:24)
 	ld	xwa, xbc
@@ -2489,7 +2489,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip15:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_7@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 PmemOutLGridCheck_JumpTable_Code_Join7:
 	call	GetFocusObject
@@ -2515,7 +2515,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip16:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_8@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2548,7 +2548,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip18:
 	pushw PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_9@lo16
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 PmemOutLGridCheck_JumpTable_Code_Join8:
 	call	GetFocusObject
@@ -2574,7 +2574,7 @@ CtlMsgGrid_EventHandler:
 	ld xwa, 0:i3
 	ld a, (0x024774:24)
 	ld XBC,0x0000001a
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	cp iz, 2:i3
 	jrl z, CtlMsg_ComputeAndCheck
 	ld xbc, 0:i3
@@ -2610,7 +2610,7 @@ CtlMsg_SendAudioCommand:
 	pushw	CtlMsg_SendAudioCommand_Str_Fmt3d@lo16
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 CtlMsg_GetFocusAndDispatch:
 	call GetFocusObject
@@ -2631,7 +2631,7 @@ CtlMsg_ReadOffsetAndSend:
 	pushw	CtlMsg_ReadOffsetAndSend_Str_Fmt3d@lo16
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2669,7 +2669,7 @@ CtlMsg_SendParamValue:
 	pushw	CtlMsg_SendParamValue_Str_Fmt3d@lo16
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 CtlMsg_DispatchFocusEvent:
 	call GetFocusObject
@@ -4224,7 +4224,7 @@ MidiPartGridCheck_Skip9:
 	pushw	MidiPartGridCheck_Evt1C0001C_Str_Fmt2d@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 MidiPartGridCheck_Join3:
 	call	GetFocusObject
@@ -4260,7 +4260,7 @@ MidiPartGridCheck_Skip11:
 	pushw	MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 MidiPartGridCheck_Join4:
 	call	GetFocusObject
@@ -4370,7 +4370,7 @@ MidiPart_AudioCmdDisplay:
 	pushw	MidiPart_AudioCmdDisplay_Str_Fmt2d@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 MidiPart_GridDispatchEvent:
 	call GetFocusObject
@@ -6944,7 +6944,7 @@ AcLswPartPan_Confirm:
 	ld WA,(XWA)
 	exts XWA
 	sla XWA, 0x0c
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	ld XWA,XHL
 	sra XWA, 0x0f
 	sra XWA, 16
@@ -7237,7 +7237,7 @@ LswVolume:
 	pushw	LswVolume_Str_Fmt4d@hi16
 	pushw	LswVolume_Str_Fmt4d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswVolume_ReturnThis
 LswVolume_OverflowStr:
@@ -7360,7 +7360,7 @@ LswMute:
 	pushw	LswMute_Str_Fmt4d@hi16
 	pushw	LswMute_Str_Fmt4d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswMute_ReturnThis
 LswMute_OverflowStr:
@@ -7502,7 +7502,7 @@ LswPan_FormatRight:
 LswPan_SendCommand:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswPan_ReturnThis
 LswPan_InactiveStr:
@@ -7602,7 +7602,7 @@ LswReverb:
 	pushw	LswReverb_Str_Fmt3d@hi16
 	pushw	LswReverb_Str_Fmt3d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswReverb_ReturnThis
 LswReverb_InactiveStr:
@@ -7716,7 +7716,7 @@ LswDSPEffect:
 	pushw	LswDSPEffect_Str_Fmt3d@hi16
 	pushw	LswDSPEffect_Str_Fmt3d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswDSPEff_ReturnThis
 LswDSPEff_InactiveStr:
@@ -8007,7 +8007,7 @@ LswSustainLength:
 	pushw	LswSustainLength_Str_Fmt2d@hi16
 	pushw	LswSustainLength_Str_Fmt2d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswSustLen_ReturnThis
 LswSustLen_InactiveStr:
@@ -8109,7 +8109,7 @@ LswKeyShift:
 	pushw	LswKeyShift_Str_Fmt3d@hi16
 	pushw	LswKeyShift_Str_Fmt3d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswKeyShift_ReturnThis
 LswKeyShift_ZeroStr:
@@ -8225,7 +8225,7 @@ LswTuning:
 	pushw	LswTuning_Str_Fmt4d@hi16
 	pushw	LswTuning_Str_Fmt4d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswTuning_ReturnThis
 LswTuning_ZeroStr:
@@ -8334,7 +8334,7 @@ LswBendRange:
 	pushw	LswBendRange_Str_Fmt3d@hi16
 	pushw	LswBendRange_Str_Fmt3d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswBendRng_ReturnThis
 LswBendRng_InactiveStr:
@@ -9038,7 +9038,7 @@ LswMidiChannel:
 	pushw	LswMidiChannel_Str_CH_Fmt2d@hi16
 	pushw	LswMidiChannel_Str_CH_Fmt2d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	LswMidi_LoadReturnValue
 LswMidi_StrChannelAlt:
@@ -9287,7 +9287,7 @@ PleaseWait_GetText:
 	lda xbc, (PleaseWait_GetText_PtrTable:24)
 	ld	xwa, (xbc+wa)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4,XSP
 	ld DE,HL
 	ld hl, 0:i3
@@ -9481,7 +9481,7 @@ CheckMsg_AudioCommand:
 
 	push xwa
 
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 
 	lda xsp, (xsp + 10)
 
@@ -9558,7 +9558,7 @@ MsgHeader_BuildHeader:
 	cpw	(xwa), 3
 	jrl	nz, MsgHeader_SingleEntry
 	pushw	24
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+4), xhl
 	ld	xwa, 0xffffffff
@@ -9576,10 +9576,10 @@ MsgHeader_BuildLoop:
 	add	xde, (xwa+bc)
 	ld	xwa, (xde)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	6, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xiz, xhl
 	ld	bc, (0x02478c:24)
 	muls	bc, 14
@@ -9595,7 +9595,7 @@ MsgHeader_BuildLoop:
 	pushw	MsgHeader_BuildLoop_Str_Fmts_Fmt2d@hi16
 	pushw	MsgHeader_BuildLoop_Str_Fmts_Fmt2d@lo16
 	push	xiz
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	ld	xwa, 0xffffffff
 	ld	xbc, EVT_AUTO_FREE
@@ -10674,7 +10674,7 @@ LswTuning_SearchLoop:
 	pushw	LswTuning_SearchLoop_Str_N4_Fmtd_0@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	wa, iz
 	extz	xwa
@@ -11127,7 +11127,7 @@ LswScalingKeyX:
 	exts	xhl
 	ld	xwa, xhl
 	ld	xbc, 201
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, 127
 	sra	xhl, 8
 	sub	xhl, 100
@@ -11138,7 +11138,7 @@ LswScalingKeyX:
 	pushw	LswScalingKeyX_Str_Fmt4d@hi16
 	pushw	LswScalingKeyX_Str_Fmt4d@lo16
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	jr	LswScaleKeyX_LoadReturn
 LswScaleKeyX_StrZero:
@@ -11230,7 +11230,7 @@ Softver_ShowHide:
 	pushw	Softver_ShowHide_Str_Fmt4d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, Softver_ShowHide_Code
@@ -11242,7 +11242,7 @@ Softver_ShowHide:
 	pushw	Softver_ShowHide_Str_Fmt4d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, ParamPopup_DynamicAccomp_Skip
@@ -11254,7 +11254,7 @@ Softver_ShowHide:
 	pushw	Softver_ShowHide_Str_Fmt4d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, Softver_ShowHide_Code_2
@@ -11266,7 +11266,7 @@ Softver_ShowHide:
 	pushw	Softver_ShowHide_Str_Fmt4d_4@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, 0xf00004
@@ -11323,7 +11323,7 @@ MPver_ShowHide:
 	pushw	MPver_ShowHide_Str_Ver_Fmt2X@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, MPver_ShowHide_Data
@@ -12952,7 +12952,7 @@ PsMixerControlProc_Evt1C00020:
 	pushw PsMixerControlProc_Evt1C00020_Str_Fmts_SOUND_Fmts@lo16
 	lda xwa, (xsp + 0x1e)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x10)
 	lda xde, (xsp + 0x12)
 	ld XWA,(XSP+0x5a)
@@ -15324,7 +15324,7 @@ PsMixer_CtlTypeProc1_Loop:
 	pushw	PsMixer_CtlTypeProc1_Data@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+82)
 	lda	xbc, (xsp+78)
@@ -15583,7 +15583,7 @@ PsMixer_CtlTypeProc10_Loop:
 	pushw	PsMixer_CtlTypeProc10_Data@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+52)
 	lda	xbc, (xsp+48)
@@ -18123,7 +18123,7 @@ DemoMenu_BuildItemWorkspace:
 	ld IZ,BC
 	ld (XSP+0x06),WA
 	pushw 0x000c
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2,XSP
 	ld (XSP+0x02),XHL
 	call GetPartSelect
@@ -18401,7 +18401,7 @@ PsVari_GetText:
 	pushw PsVari_GetText_Str_EditSw_Fmtd@lo16
 	ld XWA,(XSP+0x011a)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0a)
 	jr t, AudioView_ReturnZeroJmp
 PsVari_OK:

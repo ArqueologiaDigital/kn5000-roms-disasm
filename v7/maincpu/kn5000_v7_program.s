@@ -832,7 +832,7 @@ ToneGen_ParamTable_0x186:
 ToneGen_ParamTable_0x1CE:
 	.incbin "includes/generated/tonegen_param_table.bin", 0x1CE, 0x48
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
-; evidence: SeMenu_CopyWriteUpdate_Data_0x1DD6+0x1E (0xF0D78E) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
+; evidence: Scoop_SoundEditorData_Helper+0x1E (0xF0D78E) loads it into XDE, adds BC*4 and calls the entry (`exts xbc / add xbc,xde / ld xhl,(xbc) / call (xhl)`)
 ToneGen_ParamTable_0x216:
 	.incbin "includes/generated/tonegen_param_table.bin", 0x216, 0x48
 ; table of 4-byte code pointers, 72 B = 18 entries to the next address the code names
@@ -1262,7 +1262,7 @@ Boot_HandleComboDisplay_Check3:
 Boot_ParseTableDataTimestamp:
 	ld	xwa, 10485700
 	push	xwa
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	ret
 Boot_GetSystemPointer:
@@ -1272,7 +1272,7 @@ Boot_GetSystemPointer:
 Boot_ParseSubCPUTimestamp:
 	ld	xwa, 8912885
 	push	xwa
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	ret
 Boot_HandleFactoryReset:
@@ -1439,7 +1439,7 @@ ResInfo_GetMspSettingsRange:
 	ret
 
 ResInfo_GetResourceListPtr:
-	lda xwa, (FDTest_String_TestTitleFunc_0x28E:24)
+	lda xwa, (ResInfo_GetResourceListPtr_Str_TEST:24)
 	ld (xbc), xwa
 	ld xwa, 0:i3
 	ld (xbc + 4), xwa
@@ -1460,19 +1460,19 @@ SetSepaOutMode:
 	lda xix, (xsp + 16)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0x4
+	ld xiy, SetSepaOutMode_Data
 	lda xix, (xsp + 12)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0x8
+	ld xiy, SetSepaOutMode_Data_2
 	lda xix, (xsp + 8)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0xC
+	ld xiy, SetSepaOutMode_Data_3
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
-	ld xiy, SepaOut_Config_0_0x10
+	ld xiy, SetSepaOutMode_Data_4
 	ld xix, xsp
 	ldiw
 	ldiw
@@ -1697,7 +1697,7 @@ PlayHalt:
 	dec	2, xsp
 	ld	(xsp), a
 	call	SeqBuf_Init
-	call	Interrupt_FlagSetBytecode_Helper2
+	call	NoteMap_SendAllNotesOff
 	call	Part_ReinitAllActive
 	call	AccWrap_PlayModeDispatch
 	cp	(xsp), 0x0
@@ -1707,7 +1707,7 @@ PlayHalt_SkipSetFlag:
 	call	AccompSeq_StopSequence
 	call	AudioInit_RefreshToneBank
 	call	NoteMap_ProcessAndMerge
-	call	DemoMode_Main_Operation_Helper
+	call	Voice_InitializeAll
 	call	Voice_InitTablePair
 	call	Voice_InitTableGroup
 	call	MIDI_SendAllSoundOff
@@ -1765,7 +1765,7 @@ SetGlobalError:
 	ret
 malloc_X:
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ret
 free_X:
@@ -1775,7 +1775,7 @@ free_X:
 	; neighbour malloc_X (immediately above) already carries a numeric call
 	; target in this exact style, so the convention is not new here.
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ret
 	.include "ui/setwall_routines.s"
@@ -2021,7 +2021,7 @@ Voice_FactoryPresetData_Code_Skip15:
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
 ; call Math_MultiplyAccumulate (v7)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+34)
 	ld	xwa, xbc
@@ -2339,7 +2339,7 @@ DrawText_QueueOrDirect:
 DrawText_QueueDeferred:
 	ld	xwa, (xsp + 8)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	inc	1, hl
 	ld	wa, hl
@@ -2535,7 +2535,7 @@ TextRender_CustomFontWidth:
 	jr	nz, TextRender_ProcessStringLoop
 	ld	xwa, (xsp+30)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ld	wa, (xsp+20)
 	mul	xwa, hl
@@ -2876,7 +2876,7 @@ TextRender_XorMode_DrawPixel:
 	ld wa, (xde)
 	exts xwa
 	.include "display/graphics_text_vga.s"
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 12)
 
 ChordProc_SendRefreshEvent:
@@ -2933,7 +2933,7 @@ AcChordBox_HandleChordUpdate:
 	pushw	AcChordBox_HandleChordUpdate_Str_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	ld	xwa, 192
 	call	AcApcToggleProc_Helper
@@ -2956,7 +2956,7 @@ MainChordPre:
 	cp	xbc, EVT_CHORD_PRE
 	jrl	nz, MainChordPre_ReturnZero
 	pushw	0x15
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xiz, xhl
 	ld	(xiz), 0x0
 	ld	a, (0x8ca4:16)
@@ -2966,7 +2966,7 @@ MainChordPre:
 	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xiz
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	ld	a, (0x8ca6:16)
 	extz	wa
 	sla	wa, 2
@@ -2974,7 +2974,7 @@ MainChordPre:
 	ld	xwa, (xbc+wa)
 	push	xwa
 	push	xiz
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp + 18)
 	cp	(0x8ca8:16), 0
 	jr	z, MainChordPre_EmptyChordStr
@@ -2988,7 +2988,7 @@ MainChordPre_EmptyChordStr:
 MainChordPre_AppendChordSuffix:
 	push	xwa
 	push	xiz
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	ld	a, (36006:16)
 	extz	wa
 	sla	wa, 2
@@ -3004,7 +3004,7 @@ MainChordPre_AppendChordSuffix:
 	ld	xbc, (xbc+wa)
 	push	xbc
 	push	xiz
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_CHORD_DSP
@@ -3228,7 +3228,7 @@ SndParam_RW_ProcessResult_v7:
 	inc	3, a
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_RW_ProcessResult_Data:24)
+	lda	xbc, (SndParam_EncodeHandlers:24)
 	lda	xde, (xbc+wa)
 	ld	xwa, xiz
 	ld	bc, (xsp + 4)

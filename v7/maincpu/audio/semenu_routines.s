@@ -740,7 +740,7 @@ SeMenu_SetDisplayValue_Data_Join:
 	ld	(xwa+1), c
 	ld	c, (xsp)
 	ld	(xwa+2), c
-	call	SeMenu_SetDisplayValue_Helper
+	call	SndParam_ApplyProgramChange
 	lda	xwa, (xsp+2)
 	ld	e, (xwa+3)
 	ld	c, (xwa+4)
@@ -779,7 +779,7 @@ SeMenu_InitTrackInfo:
 	ld (XWA+0x01),0x0f
 	ld C,(XSP)
 	ld (XWA+0x02),C
-	call SeMenu_SetDisplayValue_Helper
+	call SndParam_ApplyProgramChange
 	lda xwa, (xsp + 0x02)
 	ld E,(XWA+0x03)
 	ld C,(XWA+0x04)
@@ -1211,7 +1211,6 @@ SeMenu_BitShiftMask_End_Loop3:
 	cp	de, bc
 	jr	c, SeMenu_BitShiftMask_End_Loop3
 	ret
-SeMenu_TransferPartValues_EndData_Helper:
 SeMenu_RefreshPartDisplay_Data_2:
 	.byte 0x88, 0x06
 	push	xsp
@@ -1663,7 +1662,7 @@ SeMenu_ApplyPartEdit_Helper2:
 	ld	(xwa+9), 0
 	ld	c, (xsp+20)
 	ld	(xwa+10), c
-	calr	SeMenu_TransferPartValues_EndData_Helper
+	calr	SeMenu_RefreshPartDisplay_Data_2
 	cp	l, 0:i3
 	jr	z, SeMenu_TransferPartValues_EndData_Epilogue
 	ld	a, (xsp+22)
@@ -1710,7 +1709,7 @@ SeMenu_ApplyPartEdit_Helper3:
 	ld	(xsp+10), a
 	ld	xiz, (xsp+16)
 	ld	xwa, xiz
-	calr	SeMenu_TransferPartValues_EndData_Helper
+	calr	SeMenu_RefreshPartDisplay_Data_2
 	extz	hl
 	cp	hl, 0:i3
 	jr	nz, SeMenu_TransferPartValues_EndData_Skip19
@@ -3514,7 +3513,7 @@ SeMenu_ApplyPartEdit_Join7:
 	lda	xbc, (xbc+10)
 	calr	SeMenu_ApplyPartEdit_Helper5
 	lda	xwa, (xsp+2)
-	calr	SeMenu_TransferPartValues_EndData_Helper
+	calr	SeMenu_RefreshPartDisplay_Data_2
 	cp	l, 0:i3
 	jr	z, SeMenu_ApplyPartEdit_Epilogue7
 	ldto_berp	a, 251

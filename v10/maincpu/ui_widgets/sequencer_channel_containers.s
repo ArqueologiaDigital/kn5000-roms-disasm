@@ -241,7 +241,7 @@ Naka_DrawbarDisplay_Table2:
 ; [nakarest] Naka_DrawbarReg_Table: despite the name, entries 0-11 are the WALLPAPER PALETTE
 ; [nakarest] table: pointers to NakaColor_Palette2, 1, 6, 5, 4, 3, 10, 9, 8, 7, Blank, Blank
 ; [nakarest] (debug_naming_panel_sim.s).  This blob lies wholly inside the work-RAM initial
-; [nakarest] image (ROM 0xeed8c8 onward, Boot_InitWorkRAM_ROMCopy1_Start_Data) that Boot_InitWorkRAM
+; [nakarest] image (ROM 0xeed8c8 onward, WorkRamInit_Image) that Boot_InitWorkRAM
 ; [nakarest] copies with ldir, so the table lives at RAM 0x3f1e4, where GetWallPaletteRGB
 ; [nakarest] (display/graphics_text_vga.s: `ld xde, 0x3f1e4`) indexes it (`sll 2`) and returns
 ; [nakarest] entry [colour] of the palette; ChangeWallPalette_Impl sets DAC entries 0xe0..0xef

@@ -27,7 +27,7 @@ FDemo_DisplayResourceData_Loop:
 	cp	xwa, xbc
 	jr	c, FDemo_DisplayResourceData_Loop
 	push	xiz
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	pushw	hl
 	push	xiz
 	lda	xwa, (xsp+0x112)
@@ -38,7 +38,7 @@ FDemo_DisplayResourceData_Loop:
 	pushw	FDemo_DisplayResourceData_Str_SQT@hi16
 	pushw	FDemo_DisplayResourceData_Str_SQT@lo16
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+22)
 	lda	xwa, (xsp+0x108)
 	ld	xbc, FDemo_DisplayResourceData_Str_rb
@@ -259,10 +259,10 @@ Seq_StartWithFullInit:
 	jr	lt, ApPreControl_ReturnNull
 	pushw	2
 	pushw	18552
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xiz, xhl
 	pushw	2
 	pushw	18552
@@ -525,7 +525,7 @@ FDemo_FileOpen_Exit:
 
 DemoMode_Main_Operation:
 	res 0, (0x28b1:16)
-	call DemoMode_Main_Operation_Helper
+	call Voice_InitializeAll
 	lda xbc, (0xf9a0:16)
 	lda xwa, (0xffbe:16)
 	sub XWA,XBC
@@ -545,7 +545,7 @@ DemoMode_Main_Operation:
 	res 0, (0x045b:16)
 	call AccompSeq_StopSequence
 	calr Voice_CopyPreset
-	call DemoMode_Main_Operation_Helper2
+	call MIDI_BroadcastPitchReset
 	calr Timer7_DisableInterrupt
 	call PerfMode_Handler_EvtB_Helper2_Helper11
 	set 6, (0xb746:16)
@@ -574,7 +574,7 @@ DemoMode_Initialize:
 	call	SeqInit_PostEventSequence
 	call	ToneGen_FileIO_RestoreFromBackup
 	call	SeqTimer_UpdateTempoReg
-	call	DemoMode_Main_Operation_Helper
+	call	Voice_InitializeAll
 	call	Seq_StartMainControlAlt
 	call	TempoRingBuf_Init
 	call	SeqBuf_Init
@@ -1862,9 +1862,9 @@ LoadRegion7_OpenSuccess:
 	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
 	jr	z, LoadRegion7_ModeError
-	call	SysEx_ApplyVoiceParam_49_Return
+	call	PreMidiLoad
 	pushw	1024
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	or	xiz, xiz
@@ -1884,7 +1884,7 @@ LoadRegion7_OpenSuccess:
 	ldw	de, 1024
 	call	FlashWrite
 	push	xiz
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	call	FileIO_ReturnError
 	ld	iz, hl
@@ -1893,7 +1893,7 @@ LoadRegion7_AllocFailed:
 	ldw iz, 0xff38				; alloc failure error code
 LoadRegion7_PostMidi:
 	ld	wa, iz
-	call	FileIO_ValidateWithExtHeader_Helper
+	call	PostMidiLoad
 	jr	LoadRegion7_Finalize
 LoadRegion7_ModeError:
 	ldw iz, 0xff9a				; mode unavailable error
@@ -2270,7 +2270,7 @@ LoadRegion4_ReadDone:
 	cp	iz, 0:i3
 	jr	lt, LoadRegion4_PostSave
 	lda	xwa, (xsp+2)
-	call	FileIO_LoadSongRegion8_Helper
+	call	PostTmSave_ByteBlock
 	ld	iz, hl
 	cp	iz, 0:i3
 	jr	lt, LoadRegion4_PostSave
@@ -2284,7 +2284,7 @@ LoadRegion4_ReadDone:
 	ld	iz, hl
 LoadRegion4_PostSave:
 	ld	wa, iz
-	call	AccBankData_FinalizeCheck_Code_Helper
+	call	PostTmSave_Success
 LoadRegion4_Finalize:
 	call FileIO_CloseHandle
 	ld hl, iz
@@ -2515,14 +2515,14 @@ SaveRegion1_OpenSuccess:
 	ld iz, hl
 	jr SaveRegion1_Finalize
 SaveRegion1_AltPmSave:
-	call	FileIO_ParseDirectoryEntry_Helper
+	call	PrePmSave
 	ld	xwa, 2020176
 	ld	xbc, xiz
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, iz
-	call	FileIO_ParseDirectoryEntry_Helper2
+	call	PostPmSave
 SaveRegion1_Finalize:
 	call FileIO_CloseHandle
 	cp iz, 0:i3
@@ -2559,14 +2559,14 @@ SaveRegion7_SpaceOk:
 	call FileIO_ReturnError
 	jr SaveRegion7_Return
 SaveRegion7_OpenSuccess:
-	call	FileIO_ParseDirectoryEntry_Helper3
+	call	PreMidiSave
 	ld	xwa, 4009984
 	ld	xbc, 1024
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, iz
-	call	FileIO_ParseDirectoryEntry_Helper4
+	call	PostMidiSave
 	call	FileIO_CloseHandle
 	cp	iz, 0:i3
 	jr	ge, SaveRegion7_Done
@@ -2769,14 +2769,14 @@ SaveRegion4_SpaceOk:
 	call FileIO_ReturnError
 	jr SaveRegion4_Return
 SaveRegion4_OpenSuccess:
-	call	FileIO_ParseDirectoryEntry_Helper5
+	call	PreTmSave
 	ld	xwa, 1966080
 	ld	xbc, 29354
 	call	FileIO_WriteByte_Impl
 	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, iz
-	call	FileIO_ParseDirectoryEntry_Helper6
+	call	PostTmSave
 	call	FileIO_CloseHandle
 	cp	iz, 0:i3
 	jr	ge, SaveRegion4_Done
@@ -3128,13 +3128,13 @@ FileIO_ByteBlock_DemoProc1_Skip2:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	add	xiz, 176
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+4), xhl
 	ld	xwa, 176
 	add	(xsp+4), xwa
@@ -3223,7 +3223,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	jrl	lt, FileIO_ByteBlock_DemoProc1_Join2
 	ld	wa, (xsp+36)
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc1_Helper3
+	call	LoadRegion1_OpenSuccess_Data
 	lda	xwa, (2020176:24)
 	add	xwa, (xsp+0x4)
 	ld	xbc, 16
@@ -3236,13 +3236,13 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	add	xiz, 176
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, (xsp+8)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+4), xhl
 	ld	xwa, 176
 	add	(xsp+4), xwa
@@ -3457,14 +3457,14 @@ FileIO_ByteBlock_DemoProc1_Skip17:
 	ldw	(xsp+10), 470
 	extz	xwa
 	ld	xbc, 470
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+2), xhl
 	ld	xwa, 16
 	add	(xsp+2), xwa
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 470
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+6), xhl
 	ld	xwa, 16
 	add	(xsp+6), xwa
@@ -3513,7 +3513,7 @@ FileIO_ByteBlock_DemoProc1_Join5:
 	extz	wa
 	ld	c, (xsp+14)
 	extz	bc
-	call	FileIO_ByteBlock_DemoProc1_Helper5
+	call	TmFlashWrite_Block1
 	lda	xwa, (1966080:24)
 	add	xwa, (xsp+0x6)
 	ld	bc, (xsp+10)
@@ -3580,13 +3580,13 @@ FileIO_ByteBlock_DemoProc1_Entry:
 	ld	wa, (xsp+38)
 	extz	xwa
 	ld	xbc, 9400
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	add	xiz, 16
 	ld	wa, (xsp+36)
 	extz	xwa
 	ld	xbc, 9400
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+4), xhl
 	ld	xwa, 16
 	add	(xsp+4), xwa
@@ -3608,7 +3608,7 @@ FileIO_ByteBlock_DemoProc1_Join6:
 	jr	lt, FileIO_ByteBlock_DemoProc1_Skip24
 	ld	a, (xsp+10)
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc1_Helper6
+	call	TmFlashWrite_Block1_Return
 	lda	xwa, (1966080:24)
 	add	xwa, (xsp+0x4)
 	ld	bc, (xsp+8)
@@ -3619,7 +3619,7 @@ FileIO_ByteBlock_DemoProc1_Join6:
 	ld	a, (xsp+10)
 	extz	wa
 	ld	bc, iz
-	call	FileIO_ByteBlock_DemoProc1_Helper7
+	call	TmFlashWrite_ValidateParams
 FileIO_ByteBlock_DemoProc1_Skip24:
 	call	FileIO_CloseHandle
 	ld	hl, iz
@@ -6077,7 +6077,7 @@ GetRecordPtr_InRange:
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 155314
 	add	xwa, xhl
 	ld	xhl, xwa
@@ -6365,7 +6365,7 @@ ProcessFileRecord:
 	ld	wa, (xsp+10)
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 155314
 	add	xwa, xhl
 	ld	xbc, ProcessFileRecord_Str_rb
@@ -6386,7 +6386,7 @@ ProcessRecord_MatchLoop1:
 	ld	wa, (xsp + 10)
 	extz	xwa
 	ld	xbc, 0x52
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0x25eb2
 	add	xwa, xhl
 	setm	5, (xwa + 80)
@@ -6403,7 +6403,7 @@ ProcessRecord_CheckBit5:
 	ld	wa, (xsp + 10)
 	extz	xwa
 	ld	xbc, 0x52
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (0x025f02:24)
 	add	xwa, xhl
 	bitm	5, (xwa)
@@ -6425,7 +6425,7 @@ ProcessRecord_MatchLoop2:
 	ld	wa, (xsp + 10)
 	extz	xwa
 	ld	xbc, 0x52
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 0x25eb2
 	add	xwa, xhl
 	setm	5, (xwa + 80)
@@ -6439,7 +6439,7 @@ ProcessRecord_Match2Next:
 	ld	wa, (xsp + 10)
 	extz	xwa
 	ld	xbc, 0x52
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (0x025f02:24)
 	add	xwa, xhl
 	resm	5, (xwa)
@@ -6457,7 +6457,7 @@ ProcessRecord_ReadTimeSig:
 	ld	wa, (xsp + 10)
 	extz	xwa
 	ld	xbc, 0x52
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (0x025f02:24)
 	add	xwa, xhl
 	resm	7, (xwa)
@@ -6480,7 +6480,7 @@ ProcessRecord_MatchLoop3:
 	ld WA,(XSP+0x0a)
 	extz XWA
 	ld XBC,0x00000052
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	ld XWA,0x00025eb2
 	add XWA,XHL
 	set 5,(XWA+0x50)
@@ -6493,7 +6493,7 @@ ProcessRecord_CheckTempo:
 	ld WA,(XSP+0x0a)
 	extz XWA
 	ld XBC,0x00000052
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	lda xwa, (0x025f02:24)
 	add XWA,XHL
 	set 7,(XWA)
@@ -6503,7 +6503,7 @@ ProcessRecord_DefaultSetBit:
 	ld WA,(XSP+0x0a)
 	extz XWA
 	ld XBC,0x00000052
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	ld XWA,0x00025eb2
 	add XWA,XHL
 	set 5,(XWA+0x50)
@@ -6537,7 +6537,7 @@ ProcessRecord_NoTrackName:
 	ld	wa, (xsp+10)
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (155328:24)
 	add	xwa, xhl
 	ld	xbc, ProcessRecord_MatchLoop1_Str_Blank5
@@ -6551,7 +6551,7 @@ ProcessRecord_SearchTrackName:
 	extz	xwa
 	lda	xiz, (0x025eb2:24)
 	ld	xbc, 0x52
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, xiz
 	add	xwa, xhl
 	lda	xwa, (xwa + 14)
@@ -6589,7 +6589,7 @@ GetEntry_ComputeOffset:
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (155328:24)
 	add	xwa, xhl
 	lda	xbc, (ProcessRecord_SearchTrackName_Data:24)
@@ -6605,7 +6605,7 @@ FileEntry_ComputeOffset:
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (155328:24)
 	add	xwa, xhl
 	ld	xhl, xwa
@@ -6625,7 +6625,7 @@ GetFileEntryByIndex_Skip:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (155394:24)
 	add	xwa, xhl
 	ldcfm	7, (xwa)
@@ -7138,7 +7138,7 @@ GetRecordPtr_ComputeOffset:
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (155328:24)
 	add	xwa, xhl
 	ld	xhl, xwa
@@ -7535,7 +7535,7 @@ GetFileEntry_ComputeOffset:
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, 155314
 	add	xwa, xhl
 	ld	xhl, xwa
@@ -7730,7 +7730,7 @@ GetEntryRefresh_ComputeOffset:
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (155328:24)
 	add	xwa, xhl
 	cp	(xwa), 0
@@ -7742,7 +7742,7 @@ GetEntryRefresh_ComputeOffset:
 	ld	wa, bc
 	extz	xwa
 	ld	xbc, 82
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	lda	xwa, (155328:24)
 	add	xwa, xhl
 	ld	xhl, xwa
@@ -8391,7 +8391,7 @@ InitializeOperationState:
 	dec 2,XSP
 	ld (XSP),A
 	call SeqBuf_Init
-	call Interrupt_FlagSetBytecode_Helper2
+	call NoteMap_SendAllNotesOff
 	call Part_ReinitAllActive
 	call AccWrap_PlayModeDispatch
 	cp (XSP),0x00
@@ -8401,7 +8401,7 @@ InitOp_SkipSetFlag:
 	call	AccompSeq_StopSequence
 	call	AudioInit_RefreshToneBank
 	call	NoteMap_ProcessAndMerge
-	call	DemoMode_Main_Operation_Helper
+	call	Voice_InitializeAll
 	call	Voice_InitTablePair
 	call	Voice_InitTableGroup
 	call	MIDI_SendAllSoundOff

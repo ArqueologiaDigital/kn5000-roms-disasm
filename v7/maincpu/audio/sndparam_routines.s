@@ -91,7 +91,7 @@ SndParam_ProbeEntry_Epilogue:
 	ld	xwa, xhl
 	.set	SndParam_Epilogue, . + 4
 	ld	xbc, 2047
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	ld	ix, hl
 	.set	SndParam_DispatchTypeDE5, . + 1
 	jr	SndParam_ProbeEntry_Join2
@@ -145,7 +145,7 @@ SndParam_ProbeEntry_Skip2:
 	ld	e, (xwa+15)
 	extz	de
 	sla	de, 2
-	lda	xhl, (SndParam_RW_ProcessResult_Data:24)
+	lda	xhl, (SndParam_EncodeHandlers:24)
 	exts	xde
 	add	xde, xhl
 	ld	xix, (xde)
@@ -206,7 +206,7 @@ SndParam_ResolveOscEntry_Helper:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	ld	ix, hl
 	jr	SndParam_ResolveOscEntry_Helper_Join2
 SndParam_ResolveOscEntry_Helper_Loop:
@@ -325,7 +325,7 @@ SndParam_RO_Epilogue:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	ld	ix, hl
 	jr	SndParam_ResolveOscEntry_Helper_Join4
 SndParam_ResolveOscEntry_Helper_Loop2:
@@ -364,7 +364,7 @@ SndParam_ResolveOscEntry_Helper_Skip6:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	l, (xwa+5)
 	extz	hl
 	ld	xwa, (xde+bc)
@@ -381,7 +381,7 @@ SndParam_ResolveOscEntry_Helper_Skip7:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xde, (xde+bc)
 	or	xde, xde
 	ret	z
@@ -405,7 +405,7 @@ SndParam_RW_ExactMatch:
 SndParam_RW_CheckFirstMatch:
 	ld	c, e
 	sla	c, 2
-	lda	xhl, (SndParam_ReadRegWithLUT_Data:24)
+	lda	xhl, (SndParam_RegRamPtrs:24)
 	.set	SndParam_RW_ChainNext, . + 3
 	ld	xbc, (xhl+c)
 	ld	c, (xbc)
@@ -440,7 +440,7 @@ SndParam_RW_ChainCheckFirst:
 	.set	SndParam_RW_FoundCallback, . + 1
 	sla	wa, 2
 	.set	SndParam_RW_ChainContinue, . + 3
-	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xde, (xde+wa)
 SndParam_RW_NoEntry:
 	or	xde, xde
@@ -485,7 +485,7 @@ SndParam_RegisterSimple_Data_Helper:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xde, (xde+bc)
 	or	xde, xde
 SndParam_RW_Success:
@@ -514,7 +514,7 @@ SndParam_RW_HandleB1Type_Loop:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xde, (SndParam_BlockRamPtrs:24)
 	ld	xix, (xde+bc)
 	or	xix, xix
 	jr	z, SndParam_RW_HandleB1Type_Join
@@ -553,7 +553,7 @@ SndParam_RW_HandleB1Type_Join:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	or	xwa, xwa
 	ret	z
@@ -579,7 +579,7 @@ SndParam_RW_HandleB1Type_Join:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xhl, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xhl, (SndParam_BlockRamPtrs:24)
 	ld	xhl, (xhl+wa)
 	or	xhl, xhl
 	jrl	z, SndParam_RW_HandleB1Type_Skip10
@@ -682,7 +682,7 @@ SndParam_DMA_ExtractFields:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xix, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xix+wa)
 	ld	(xsp+2), xwa
 	or	xwa, xwa
@@ -804,7 +804,7 @@ SndParam_ResolveWidgetVariant2_Data_Return:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
@@ -905,7 +905,7 @@ SndParam_RegisterSimple_Data_Helper2:
 SndParam_CompareShifted:
 	extz	bc
 	sla	bc, 2
-	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xix, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xix+bc)
 	or	xiz, xiz
 	jrl	z, SndParam_ResolveWidgetVariant2_Data_Skip11
@@ -995,7 +995,7 @@ SndParam_ResolveWidgetVariant2_Data_Join5:
 	extz	wa
 SndParam_ReadRegAddress:
 	sla	wa, 2
-	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xix, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xix+wa)
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1120,7 +1120,7 @@ SndParam_RegisterEntry_Data_Join3:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	.set	SndParam_RegisterEntryAlt_Data, . + 2
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
@@ -1136,7 +1136,7 @@ SndParam_RegisterEntry_Data_Skip7:
 	jr	nc, SndParam_RegisterEntry_Data_Skip8
 	ld	l, a
 SndParam_RegisterEntry_Data_Skip8:
-	lda	xbc, (SndParam_ResetDefaultTable_Data_2:24)
+	lda	xbc, (SndParam_LinkTargetPtrs:24)
 	ld	a, (xde+11)
 	cp	a, 255
 	jr	z, SndParam_RegisterEntry_Data_Skip9
@@ -1264,7 +1264,7 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jr	z, SndParam_RegisterMultiField_Data_Skip3
@@ -1337,7 +1337,7 @@ SndParam_RegisterMultiField_Data_Join2:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterLinked_Data_Skip
@@ -1454,7 +1454,7 @@ SndParam_RegisterLinked_Data_Join:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xiz, (xbc+wa)
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterLinked_Data_Skip8
@@ -1564,7 +1564,7 @@ SndParam_RegisterLinked_Data_Join3:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1688,7 +1688,7 @@ SndParam_RegisterLinked_Data_Join6:
 SndParam_RegisterSimple_Data:
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	or	xwa, xwa
 	jr	z, SndParam_RegisterSimple_Data_Skip3
@@ -1726,7 +1726,7 @@ SndParam_RegisterSimple_Data_Skip3:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1756,7 +1756,7 @@ SndParam_RegisterSimple_Data_Skip3:
 	.byte	0xcb,	0xff
 SndParam_RegisterSimple_Data_Skip4:
 	ld	w, c
-	lda	xbc, (SndParam_ResetDefaultTable_Data_2:24)
+	lda	xbc, (SndParam_LinkTargetPtrs:24)
 	ld	a, (xde+11)
 	cp	a, 255
 SndParam_RegisterChained_Data:
@@ -1862,7 +1862,7 @@ SndParam_RegisterChained_Data_Join4:
 	ld	a, (xde)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterChained_Data_Skip11
@@ -1938,7 +1938,7 @@ SndParam_RegisterChained_Data_Join6:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
+	lda	xbc, (SndParam_BlockRamPtrs:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp+4), xwa
 	or	xwa, xwa
@@ -2387,7 +2387,7 @@ SndParam_NotifyQuick_Data_Helper:
 	push	xhl
 	push	xix
 	push	xiz
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2652,7 +2652,7 @@ SndParam_NotifyQuick_Data_Helper4:
 SndParam_NotifyQuick_Data_Loop3:
 	ld	xbc, xiz
 	sll	xbc, 2
-	ld	xwa, SndParam_RegisterLoop_Data
+	ld	xwa, SndParam_Registry
 	add	xwa, xbc
 	ld	xbc, (xwa)
 	ld	xwa, (xbc)
@@ -2687,7 +2687,7 @@ SndParam_NotifyQuick_Data_Helper5:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 SndParam_NotifyQuick_Data_Loop4:
 	ld	wa, hl
 	extz	xwa
@@ -2757,7 +2757,7 @@ SndParam_NotifyQuick_Data_Helper7:
 SndParam_NotifyQuick_Data_Loop8:
 	ld	xbc, xiz
 	sll	xbc, 2
-	ld	xwa, SndParam_RegisterLoop_Data
+	ld	xwa, SndParam_Registry
 	add	xwa, xbc
 	ld	xhl, (xwa)
 	ld	a, (xhl+4)
@@ -2783,7 +2783,7 @@ SndParam_NotifyQuick_Data_Helper8:
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jr	nz, SndParam_NotifyQuick_Data_Skip26
-	ld	xwa, SndParam_AllocAndInsert_Data
+	ld	xwa, SndParam_OutOfMemoryMsg
 	call	Debug_PrintString
 	pushw	1
 	call	Boot_HaltInstruction
@@ -2828,7 +2828,7 @@ SndParam_NotifyQuick_Data_Skip26:
 	add	xhl, xbc
 	ld	xwa, xhl
 	ld	xbc, 2047
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	ld	bc, hl
 	sll	hl, 2
 	.set	SndParam_WidgetNotifyType0, . + 1
@@ -3033,7 +3033,7 @@ MidiSeq_ReceiveAndForward_Helper:
 	push	xix
 	push	xiy
 	push	xiz
-	calr	SndParam_Widget1_AppendType2_Helper2
+	calr	MIDI_RX_CONTEXT_RESTORE
 	ldb_d8	a, (0xb743)
 	bit	7, a
 	jr	z, SndParam_Widget1_AppendType2_Skip4
@@ -3102,7 +3102,7 @@ SndParam_Widget1_AppendType2_Skip5:
 SndParam_Widget1_AppendType2_Skip6:
 	ld	d, a
 	.byte 0xf1, 0x50, 0xfd, 0xca
-	jrl	z, IntTx0_DequeueAndSend_Code_Skip
+	jrl	z, AltClk_DisabledClockPath
 	cp	d, 248
 	jr	nz, SndParam_Widget1_AppendType2_Skip10
 	.byte 0xf1, 0xac, 0x28, 0xcd

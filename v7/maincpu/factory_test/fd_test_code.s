@@ -66,7 +66,7 @@ FDTest_OpenFailed:
 
 FDTest_AllocBuffer:
 	pushw	2048
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+4), xhl
 	ld	xwa, xhl
@@ -76,7 +76,7 @@ FDTest_AllocBuffer:
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ldw	hl, 65535
 	jrl	FDTest_Return
@@ -106,7 +106,7 @@ FDTest_OpenForWrite:
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ldw	hl, 65535
 	jrl	FDTest_Return
@@ -126,7 +126,7 @@ FDTest_WriteBuffer:
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ldw	hl, 65535
 	jrl	FDTest_Return
@@ -156,7 +156,7 @@ FDTest_CloseAndReopen:
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ldw	hl, 65535
 	jrl	FDTest_Return
@@ -174,7 +174,7 @@ FDTest_ReadBack:
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ldw	hl, 65535
 	jr	FDTest_Return
@@ -209,14 +209,14 @@ FDTest_CompareResult:
 	calr	FDTest_PrintDiag
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ldw	hl, 65535
 	jr	FDTest_Return
 FDTest_Pass:
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	lda	xwa, (FDTest_Pass_Str_OK:24)
 	calr	FDTest_PrintDiag

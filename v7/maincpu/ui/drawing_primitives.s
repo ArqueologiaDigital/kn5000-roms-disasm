@@ -279,7 +279,7 @@ DrawLine_Impl_SteepCheck:
 	jr le, DrawLine_Impl_ShallowSetup
 	ld xwa, (xsp+12)
 	ld xbc, (xsp+24)
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	ld (xsp+12), xhl
 	lda xwa, (xsp+56)
 	ld (xsp+40), xwa
@@ -327,7 +327,7 @@ DrawLine_Impl_SteepLoop:
 DrawLine_Impl_ShallowSetup:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+28)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	lda	xwa, (xsp+56)
 	ld	(xsp+40), xwa
@@ -483,7 +483,7 @@ DrawLine_Impl_PatternDiagCheck:
 
 	ld xbc, (xsp + 24)
 
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 
 	ld (xsp + 12), xhl
 
@@ -557,7 +557,7 @@ DrawLine_Impl_PatternSteepLoop:
 DrawLine_Impl_PatternShallowSetup:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+28)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xwa, (xsp+40)
 	ld	(xsp+32), xwa
@@ -869,7 +869,7 @@ DrawLineEx_DiagSetup:
 
 	ld xbc, xiz
 
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 
 	ld (xsp + 12), xhl
 
@@ -955,7 +955,7 @@ DrawLineEx_ShallowSetup:
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+28)
 	ld	xwa, xbc
@@ -3569,7 +3569,7 @@ DrawBitmapFile_Impl:
 	pushw DrawBitmapFile_Impl_Data@lo16
 	ld XWA,(XSP+0x043a)
 	push XWA
-	call SLIDE_Parse_Header_Helper
+	call String_Compare
 	add XSP,0x0000000a
 	cp hl, 0:i3
 	jrl nz, DrawBitmapFile_Impl_Return
@@ -3682,9 +3682,9 @@ DrawBitmapFile_Impl_ParseDimensions:
 	ld (xsp+20), xhl
 	ld xwa, xhl
 	ld xbc, xiz
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	pushw hl
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2, xsp
 	ld (xsp+40), xhl
 	ld xwa, (xsp+40)
@@ -3719,7 +3719,7 @@ DrawBitmapFile_Impl_ComputeStride:
 	ld	xbc, (xsp+8)
 	dec	1, xbc
 	ld	xwa, (xsp+32)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+32), xhl
 	add	xhl, 354304
 	ld	(xsp+28), xhl
@@ -3765,7 +3765,7 @@ DrawBitmapFile_Impl_TileLoop:
 	push xwa
 	ld xwa, xiz
 	ld xbc, (xsp+22)
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add xhl, (xsp+34)
 	push xhl
 	call Mem_Copy
@@ -3781,7 +3781,7 @@ DrawBitmapFile_Impl_TileRemainder:
 
 	ld xbc, (xsp + 16)
 
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 
 	ld xwa, 0x140
 
@@ -3856,7 +3856,7 @@ DrawBitmapFile_Impl_FillLoop:
 DrawBitmapFile_Impl_CopyToVRAM:
 	ld	xwa, (xsp+40)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	calr	Gfx_DecodeImageToBuffer
 	ld	xwa, (xsp+1080)
@@ -3980,7 +3980,7 @@ DrawString:
 DrawString_DeferredPath:
 	ld xwa, (xsp+8)
 	push xwa
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4, xsp
 	inc 1, hl
 	ld wa, hl
@@ -4153,7 +4153,7 @@ DrawString_Impl_ClampDirtyBottom:
 	jr	nz, DrawString_Impl_VariableWidthLoop
 	ld	xwa, (xsp+24)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ld	wa, (xsp+16)
 	mul	xwa, hl

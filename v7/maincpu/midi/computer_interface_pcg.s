@@ -512,7 +512,7 @@ PcgOutGridCheckJumpTable_Join4:
 	pushw	PcgOutGridCheck_LocalInit_Strings@hi16
 	pushw	PcgOutGridCheck_LocalInit_Strings@lo16
 	push	xhl
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -530,7 +530,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d@hi16
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d@lo16
 	push	xhl
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -572,7 +572,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip3:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_2@hi16
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_2@lo16
 	push	xhl
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -590,7 +590,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip3:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -646,7 +646,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip5:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_3@hi16
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_3@lo16
 	push	xhl
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -660,7 +660,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip5:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_4@lo16
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -678,7 +678,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip5:
 	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d_2@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -713,7 +713,7 @@ PcgOutCheckGridDataStructure:
 	pushw PcgOutCheckGridDataStructure_Str_Fmt3d@hi16
 	pushw PcgOutCheckGridDataStructure_Str_Fmt3d@lo16
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0a)
 	call GetFocusObject
 	ld XWA,XHL
@@ -728,7 +728,7 @@ PcgOutCheck_SendPreset1:
 	pushw	PcgOutCheck_SendPreset1_Str_Fmt3d@hi16
 	pushw	PcgOutCheck_SendPreset1_Str_Fmt3d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -767,7 +767,7 @@ PcgOutCheck_SendPreset2Named:
 	pushw	PcgOutCheck_SendPreset2Named_Str_Fmt3d@hi16
 	pushw	PcgOutCheck_SendPreset2Named_Str_Fmt3d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -786,7 +786,7 @@ PcgOutCheck_SendPreset2Named:
 	pushw	PcgOutCheck_SendPreset2Named_Str_Fmt5d@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -838,7 +838,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw	PcgOutCheck_SendPreset3Named_Str_Fmt3d@hi16
 	pushw	PcgOutCheck_SendPreset3Named_Str_Fmt3d@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -853,7 +853,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw	PcgOutCheck_SendPreset3Named_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -872,7 +872,7 @@ PcgOutCheck_SendPreset3Named:
 	pushw	PcgOutCheck_SendPreset3Named_Str_Fmt5d@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl

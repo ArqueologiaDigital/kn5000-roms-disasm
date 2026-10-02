@@ -10,14 +10,14 @@
 AudioInit_VoiceNotConfigured_Code_Helper:
 	ld	a, (0x8c9e:16)
 	extz	wa
-	lda	xbc, (AudioInit_ConfigStereoVoice_Data:24)
+	lda	xbc, (AudioInit_ChannelMapA:24)
 	extz	xwa
 	add	xwa, xbc
 	cp	(xwa), 0x3
 	.byte 0x67, 0x78
 	ld	a, (0x8c9e:16)
 	extz	wa
-	lda	xbc, (AudioInit_ConfigStereoVoice_Data:24)
+	lda	xbc, (AudioInit_ChannelMapA:24)
 	extz	xwa
 	add	xwa, xbc
 	ld	a, (xwa)
@@ -175,7 +175,7 @@ AudioInit_RestoreStack:
 AudioInit_LoadGroupVoice:
 	ld	c, (0x8c9e:16)
 	extz	bc
-	lda	xde, (AudioInit_ConfigStereoVoice_Data:24)
+	lda	xde, (AudioInit_ChannelMapA:24)
 	ld	c, (xde+bc)
 	ld	(0xc163:16), c
 	cp	c, 0xff
@@ -220,7 +220,7 @@ AudioInit_GroupFallbackDefault:
 	jr	nz, AudioInit_G51FallbackDefault
 	ld	c, (0x8c9e:16)
 	extz	bc
-	lda	xde, (AudioInit_CheckSoundGroup51_Data:24)
+	lda	xde, (AudioInit_ChannelMapB:24)
 	ld	c, (xde+bc)
 	ld	(0xc163:16), c
 	cp	c, 0xff
@@ -273,7 +273,7 @@ AudioInit_G51FallbackDefault:
 AudioInit_LoadAndConfigure:
 	ld	c, (0x8c9e:16)	; LD C, (238D3Ah) - 24-bit addressing mode
 	extz	bc
-	lda	xde, (AudioInit_CheckSoundGroup51_Data:24)
+	lda	xde, (AudioInit_ChannelMapB:24)
 	ld	c, (xde+bc)
 	ld	(0xc163:16), c
 	cp	c, 0xff
@@ -673,7 +673,7 @@ DSPCfg_EventType50_Code_Helper5_Skip2:
 	ld	a, e
 	extz	wa
 	add	wa, wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data:24)
+	lda	xix, (Bit16Mask_Table:24)
 	ld	wa, (xix+wa)
 	and	wa, (0xf290:16)
 	jr	z, AudioInit_VoiceNotAssigned
@@ -684,7 +684,7 @@ DSPCfg_EventType50_Code_Helper5_Skip2:
 	add	xwa, xix
 	ld	a, (xwa)
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	extz	wa
 	lda	xix, (0xc186:16)
@@ -698,13 +698,13 @@ AudioInit_VoiceNotAssigned:
 AudioInit_CheckVoiceChanged:
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	cp	(xix+wa), 0xff
 	jr	z, AudioInit_VoiceUnchanged
 	ld	a, e
 	extz	wa
 	add	wa, wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data:24)
+	lda	xix, (Bit16Mask_Table:24)
 	ld	wa, (xix+wa)
 	ld	ix, hl
 	or	ix, bc
@@ -731,7 +731,7 @@ AudioInit_CheckGroupA:
 	ld	a, e
 	extz	wa
 	add	wa, wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data:24)
+	lda	xix, (Bit16Mask_Table:24)
 	ld	wa, (xix+wa)
 	and	wa, hl
 	jrl	z, AudioInit_CheckGroupB_Channel
@@ -749,7 +749,7 @@ AudioInit_CheckGroupA:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	ld	a, e
@@ -760,7 +760,7 @@ AudioInit_CheckGroupA:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	jrl	AudioInit_CheckGroupB_Channel
@@ -774,7 +774,7 @@ AudioInit_GroupA_TypeE:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	ld	a, e
@@ -785,7 +785,7 @@ AudioInit_GroupA_TypeE:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	jrl	AudioInit_CheckGroupB_Channel
@@ -800,13 +800,13 @@ AudioInit_GroupA_OtherType:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	ld	a, e
 	extz	wa
 	add	wa, wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data:24)
+	lda	xix, (Bit16Mask_Table:24)
 	ld	wa, (xix+wa)
 	and	wa, (3928:16)
 	jr	z, AudioInit_GroupA_NoAuxMapping
@@ -818,7 +818,7 @@ AudioInit_GroupA_OtherType:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	jr	AudioInit_StoreChannelMapping
@@ -840,13 +840,13 @@ AudioInit_GroupA_DefaultMapping:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	ld	a, e
 	extz	wa
 	add	wa, wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data:24)
+	lda	xix, (Bit16Mask_Table:24)
 	ld	wa, (xix+wa)
 	and	wa, (0xf1d0:16)
 	jr	z, AudioInit_GroupA_NoSecondary
@@ -858,7 +858,7 @@ AudioInit_GroupA_DefaultMapping:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	jr	AudioInit_StoreChannelMapping
@@ -886,7 +886,7 @@ AudioInit_CheckGroupB_Channel:
 	ld	a, e
 	extz	wa
 	add	wa, wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data:24)
+	lda	xix, (Bit16Mask_Table:24)
 	ld	wa, (xix+wa)
 	and	wa, bc
 	jrl	z, AudioInit_ChannelLoop_Next
@@ -895,7 +895,7 @@ AudioInit_CheckGroupB_Channel:
 	jr	nz, AudioInit_GroupB_CheckType
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	(0xc502:16), (xix+wa)
 AudioInit_GroupB_CheckType:
 	ld	a, d
@@ -914,7 +914,7 @@ AudioInit_GroupB_CheckType:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	ld	a, e
@@ -925,7 +925,7 @@ AudioInit_GroupB_CheckType:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	jrl	AudioInit_ChannelLoop_Next
@@ -939,7 +939,7 @@ AudioInit_GroupB_TypeE:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	ld	a, e
@@ -950,7 +950,7 @@ AudioInit_GroupB_TypeE:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	jr	AudioInit_ChannelLoop_Next
@@ -978,7 +978,7 @@ AudioInit_GroupB_DefaultMapping:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 	ld	a, e
@@ -989,7 +989,7 @@ AudioInit_GroupB_DefaultMapping:
 	add	xiy, xix
 	ld	a, d
 	extz	wa
-	lda	xix, (AudioInit_ChannelLoop_Body_Data_2:24)
+	lda	xix, (AudioInit_SlotOrderMap:24)
 	ld	a, (xix+wa)
 	ld	(xiy), a
 AudioInit_ChannelLoop_Next:
@@ -1013,13 +1013,13 @@ AudioInit_CheckExternalBit3:
 	and	a, 0x7
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_CheckExternalBit3_Data:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld	de, (xbc+wa)
 	ld	a, (0xfc5d:16)
 	and	a, 0x8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_CheckExternalBit3_Data:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	or	de, (xbc+wa)
 	jr	AudioInit_ApplyOutputRouting
 AudioInit_NoTypeE_CheckD:
@@ -1032,7 +1032,7 @@ AudioInit_NoTypeE_CheckD:
 	and	a, 0x8
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_CheckExternalBit3_Data:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	or	de, (xbc+wa)
 	jr	AudioInit_ApplyOutputRouting
 AudioInit_DefaultOutputRouting:
@@ -1040,7 +1040,7 @@ AudioInit_DefaultOutputRouting:
 	and	a, 0xf
 	extz	wa
 	add	wa, wa
-	lda	xbc, (AudioInit_CheckExternalBit3_Data:24)
+	lda	xbc, (ParamEdit_WordTable:24)
 	ld	de, (xbc+wa)
 AudioInit_ApplyOutputRouting:
 	andw	(0xc4fa:16), 0xffe8
@@ -1119,7 +1119,6 @@ AudioInit_MIDIDisabled:
 	orw	(0xc500:16), 32
 	ret
 AudioInit_RefreshToneBank:
-Interrupt_FlagSetBytecode_Helper:
 	pushw	iz
 	ld	iz, (0xc4fa:16)
 	andw	(0xc4fa:16), 0xffef

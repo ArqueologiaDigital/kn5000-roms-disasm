@@ -249,7 +249,7 @@ FileRenameFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld iy, 0:i3
-	lda xix, (FileOpen_NormalizeName_Data:24)
+	lda xix, (CType_ClassTable:24)
 	lda xwa, (0x8870:16)
 	ld xhl, xwa
 	jr FRename_PadLoop_Cond
@@ -352,7 +352,7 @@ FileRenameSmfFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld iy, 0:i3
-	lda xix, (FileOpen_NormalizeName_Data:24)
+	lda xix, (CType_ClassTable:24)
 	lda xwa, (0x8870:16)
 	ld xhl, xwa
 	jr FRenameSmf_PadLoop_Cond
@@ -910,7 +910,7 @@ DiskName_TextChange:
 	call FileIO_CopyString
 	ld iy, 0:i3
 	lda xix, (0x8870:16)
-	lda xiz, (FileOpen_NormalizeName_Data:24)
+	lda xiz, (CType_ClassTable:24)
 	lda xde, (0x878c:16)
 	ld xhl, xde
 	jr DiskName_PadLoop_Cond
@@ -1203,7 +1203,7 @@ SaveFileName_TextChange:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld iy, 0:i3
-	lda xix, (FileOpen_NormalizeName_Data:24)
+	lda xix, (CType_ClassTable:24)
 	lda xde, (0x8850:16)
 	ld xhl, xde
 	jr SaveFileName_PadLoop_Cond

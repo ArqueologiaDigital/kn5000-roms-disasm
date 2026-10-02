@@ -2013,7 +2013,7 @@ BitMapOut_ApplyIOChange_Port0:
 	ld	e, (36016:16)
 	ld	(36016:16), 255
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	ld	(36016:16), 0
 	ld	c, (36016:16)
 	ld	(36016:16), 0
@@ -2024,7 +2024,7 @@ BitMapOut_ApplyIOChange_Port0:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2045,7 +2045,7 @@ BitMapOut_ApplyIOChange_Port1:
 	ld	e, (36016:16)
 	ld	(36016:16), 255
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	ld	(36016:16), 1
 	ld	c, (36016:16)
 	ld	(36016:16), 0
@@ -2056,7 +2056,7 @@ BitMapOut_ApplyIOChange_Port1:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2077,7 +2077,7 @@ BitMapOut_ApplyIOChange_Port2:
 	ld	e, (36016:16)
 	ld	(36016:16), 255
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	ld	(36016:16), 2
 	ld	c, (36016:16)
 	ld	(36016:16), 0
@@ -2088,7 +2088,7 @@ BitMapOut_ApplyIOChange_Port2:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2109,7 +2109,7 @@ BitMapOut_ApplyIOChange_Port3:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2130,7 +2130,7 @@ BitMapOut_ApplyIOChange_Port4:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2151,7 +2151,7 @@ BitMapOut_ApplyIOChange_Port5:
 	ld	e, (36016:16)
 	ld	(36016:16), 127
 	ld	d, (36016:16)
-	call	AccPedal_SendCtrl1_CheckPort_Code_Helper
+	call	MIDI_DispatchCC
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -3108,7 +3108,7 @@ BitMapOut_ByteData_RenderState_Skip5:
 	cp	xhl, TITLE_PMVIEW
 	jr	nz, BitMapOut_ByteData_RenderState_Skip6
 	pushw 18
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	calr	BitMapOut_PrepareRender_CheckBit1
@@ -3157,7 +3157,7 @@ BitMapOut_ByteData_DisplayUpdate_Skip:
 	cp	xhl, TITLE_PMVIEW
 	jr	nz, BitMapOut_ByteData_DisplayUpdate_Epilogue
 	pushw	18
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	calr	BitMapOut_PrepareRender_CheckBit1
@@ -3273,7 +3273,6 @@ BitMapOut_UpdateWidget_Done:
 	.byte 0x00, 0xe0, 0x01, 0xea, 0xa8, 0x1d, 0x4b, 0x99
 	.byte 0xfa, 0x0e, 0x0e, 0xd8, 0x12, 0xd9, 0xd8, 0xf2
 	.byte 0x0d, 0x76, 0xfc, 0xd1, 0x1b, 0xbd, 0x44, 0xfc
-FileIO_ByteBlock_DemoProc1_Helper3:
 LoadRegion1_OpenSuccess_Data:
 	.byte 0x0e
 FileIO_ByteBlock_DemoProc1_Helper4:

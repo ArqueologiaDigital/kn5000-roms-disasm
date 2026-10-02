@@ -5584,7 +5584,7 @@ Scoop_SoundEditorData_Helper_Join:
 	lda	xbc, (xde+10)
 	call	SeMenu_ApplyPartEdit_Helper5
 	lda	xwa, (xsp+2)
-	call	SeMenu_TransferPartValues_EndData_Helper
+	call	SeMenu_RefreshPartDisplay_Data_2
 	cp	l, 1:i3
 	jrl	nz, Scoop_SoundEditorData_Helper_Epilogue2
 	ld	a, (xsp+18)
@@ -5684,7 +5684,7 @@ Scoop_SoundEditorData_Helper_Skip5:
 	jr	Scoop_SoundEditorData_Helper_Join4
 Scoop_SoundEditorData_Helper_Skip6:
 	ld	(xwa+10), 1
-	call	SeMenu_TransferPartValues_EndData_Helper
+	call	SeMenu_RefreshPartDisplay_Data_2
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Helper_Epilogue2
 Scoop_SoundEditorData_Helper_Loop:
@@ -5736,7 +5736,7 @@ Scoop_SoundEditorData_Helper_Join4:
 	jr	Scoop_SoundEditorData_Helper_Join2
 Scoop_SoundEditorData_Helper_Skip9:
 	ld	(xwa+10), 255
-	call	SeMenu_TransferPartValues_EndData_Helper
+	call	SeMenu_RefreshPartDisplay_Data_2
 	cp	l, 1:i3
 	jr	z, Scoop_SoundEditorData_Helper_Loop
 Scoop_SoundEditorData_Helper_Epilogue2:
@@ -8175,7 +8175,7 @@ SeMenu_ShowConfirmDialog_Data_Code_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeMenu_ShowConfirmDialog_Data_3
+	ld	xiz, SeScreenData_0x081B
 	ld	xiy, (xiz+bc)
 	add	bc, 4
 	ld	xix, (xiz+bc)
@@ -8186,7 +8186,7 @@ SeMenu_PresetManager_Data_Helper2_Skip:
 	push	c
 	xor	b, b
 	sla	bc, 2
-	ld	xiz, SeMenu_ShowConfirmDialog_Data_2
+	ld	xiz, SeScreenData_0x07D3
 	ld	xiy, (xiz+bc)
 	add	bc, 4
 	ld	xix, (xiz+bc)
@@ -8195,10 +8195,10 @@ SeMenu_PresetManager_Data_Helper2_Skip:
 SeMenu_PresetManager_Data_Helper2_Join:
 	djnz8	c, -84
 	ld	(0x3efa8:24), 1
-	ld	xiy, SeMenu_ShowConfirmDialog_Data_4
-	ld	xix, SeMenu_ShowConfirmDialog_Data_5
+	ld	xiy, SeScreenData_0x086E
+	ld	xix, SeScreenData_0x0878
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeMenu_ShowConfirmDialog_Data_5
+	ld	xiy, SeScreenData_0x0878
 	call	SeGfx_BoundOp03
 	pop	xiz
 	pop	xiy
@@ -8403,14 +8403,14 @@ SeMenu_ShowConfirmDialog_Sub:
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Sub_Skip
 	ld	(0x3efa8:24), 0
-	ld	xiy, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_2
-	ld	xix, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_3
+	ld	xiy, SeScreenData_0x114A
+	ld	xix, SeScreenData_0x1154
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_ShowConfirmDialog_Sub_Join
 SeMenu_ShowConfirmDialog_Sub_Skip:
 	ld	(0x3efa8:24), 0
-	ld	xiy, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data
-	ld	xix, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_2
+	ld	xiy, SeScreenData_0x1140
+	ld	xix, SeScreenData_0x114A
 	call	SeGfx_DrawStaticList
 SeMenu_ShowConfirmDialog_Sub_Join:
 	xor	xwa, xwa
@@ -8418,10 +8418,10 @@ SeMenu_ShowConfirmDialog_Sub_Join:
 	sla	wa, 2
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip2
-	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_7
+	ld	xiz, SeScreenData_0x1284
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join
 SeMenu_ShowConfirmDialog_Data_Code_Skip2:
-	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_6
+	ld	xiz, SeScreenData_0x1270
 SeMenu_ShowConfirmDialog_Data_Code_Join:
 	push	xwa
 	add	xiz, xwa
@@ -8443,10 +8443,10 @@ SeMenu_ShowConfirmDialog_Data_Code_Join2:
 	pop	xwa
 	cp	(0x6ae:16), 1
 	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip4
-	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_5
+	ld	xiz, SeScreenData_0x1264
 	jr	SeMenu_ShowConfirmDialog_Data_Code_Join3
 SeMenu_ShowConfirmDialog_Data_Code_Skip4:
-	ld	xiz, UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_4
+	ld	xiz, SeScreenData_0x1250
 SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	add	xiz, xwa
 	ld	xiy, (xiz)
@@ -8555,8 +8555,8 @@ SeMenu_WaveformSelect_Data_Skip:
 	ld	(0x3efa8:24), 0
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_WaveformSelect_Data_Skip2
-	ld	xiy, SeMenu_WaveformSelect_Apply_Data
-	ld	xix, SeMenu_WaveformSelect_Apply_Data_2
+	ld	xiy, SeScreenData_0x0562
+	ld	xix, SeScreenData_0x0685
 	call	SeGfx_DrawStaticList
 	call	SeMenu_WaveformSelect_Apply_Helper
 	jr	SeMenu_WaveformSelect_Data_Return
@@ -9197,11 +9197,11 @@ SeMenu_Utility_FillBlock:
 	ret
 SeMenu_Utility_CompareBlock:
 	call	SeMenu_Utility_SearchByte
-	ld	xiy, SeMenu_Utility_CompareBlock_Data
-	ld	xix, SeMenu_Utility_CompareBlock_Data_2
+	ld	xiy, SeScreenData_0x178B
+	ld	xix, SeScreenData_0x18D8
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeMenu_Utility_CompareBlock_Data_3
-	ld	xix, SeMenu_Utility_CompareBlock_Data_4
+	ld	xiy, SeScreenData_0x18ED
+	ld	xix, SeScreenData_0x1901
 	call	SeGfx_DrawStaticList
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_Utility_CompareBlock_Loop
@@ -9542,8 +9542,8 @@ SeMenu_BankEdit_Return:
 	ret
 SeMenu_BankEdit_LoopHelper:
 	ld	(257960:24), 0
-	ld	xiy, SeScreenData_0x203E
-	ld	xix, SeScreenData_0x2046
+	ld	xiy, SeMenu_BankEdit_LoopHelper_Data_2
+	ld	xix, SeMenu_BankEdit_LoopHelper_Data_3
 	call	SeGfx_DrawStaticList
 	ld	xiy, SeScreenData_0x1F80
 	ld	xix, SeScreenData_0x1FA8
@@ -9601,8 +9601,8 @@ SeMenu_DrumKit_Dispatch:
 	cp	a, 16
 	jr	nz, SeMenu_DrumKit_Dispatch_Join
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeScreenData_0x268D
-	ld	xix, SeScreenData_0x26A3
+	ld	xiy, SeMenu_DrumKit_Dispatch_Data
+	ld	xix, SeMenu_DrumKit_Dispatch_Data_2
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_DrumKit_Dispatch_Return
 SeMenu_DrumKit_Dispatch_Skip:
@@ -9696,8 +9696,8 @@ Data_UnknownBlock_Skip6:
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip7
 	ld	(0x3efa8:24), 1
-	ld	xiy, Data_UnknownBlock_Data_8
-	ld	xix, Data_UnknownBlock_Data_9
+	ld	xiy, SeScreenData_0x244E
+	ld	xix, SeScreenData_0x2458
 	jr	Data_UnknownBlock_Join3
 Data_UnknownBlock_Skip7:
 	ld	(0x3efa8:24), 1
@@ -9710,7 +9710,7 @@ Data_UnknownBlock_Join4:
 	ld	(0x3efa8:24), 0
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip8
-	ld	xiy, Data_UnknownBlock_Data_7
+	ld	xiy, SeScreenData_0x241A
 	jr	Data_UnknownBlock_Join5
 Data_UnknownBlock_Skip8:
 	ld	xiy, SeScreenData_0x57DB
@@ -9719,13 +9719,13 @@ Data_UnknownBlock_Join5:
 	ret
 SeMenu_DataBlock_02:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_10
+	ld	xiy, SeScreenData_0x24B8
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 SeMenu_DataBlock_03:
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip9
-	ld	xiy, Data_UnknownBlock_Data_11
+	ld	xiy, SeScreenData_0x250E
 	jr	Data_UnknownBlock_Join6
 Data_UnknownBlock_Skip9:
 	cp	a, 0:i3
@@ -9744,20 +9744,20 @@ Data_UnknownBlock_Return2:
 	ret
 SeMenu_DataBlock_04:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_12
+	ld	xiy, SeScreenData_0x25B7
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 SeMenu_DataBlock_05:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip11
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data
-	ld	xix, Data_UnknownBlock_Data_2
+	ld	xiy, SeScreenData_0x21A2
+	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return3
 Data_UnknownBlock_Skip11:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_2
+	ld	xiy, SeScreenData_0x21C0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 Data_UnknownBlock_Return3:
 	ret
@@ -9765,42 +9765,42 @@ SeMenu_DataBlock_06:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip12
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data
-	ld	xix, Data_UnknownBlock_Data_2
+	ld	xiy, SeScreenData_0x21A2
+	ld	xix, SeScreenData_0x21C0
 	call	SeGfx_DrawBoundList
 	jr	Data_UnknownBlock_Return4
 Data_UnknownBlock_Skip12:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_2
+	ld	xiy, SeScreenData_0x21C0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 Data_UnknownBlock_Return4:
 	ret
 SeMenu_DataBlock_07:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_3
+	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 SeMenu_DataBlock_08:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_3
+	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 SeMenu_DataBlock_09:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_4
+	ld	xiy, SeScreenData_0x22B0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 SeMenu_DataBlock_10:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip13
 	ld	(0x3efa8:24), 1
-	ld	xiy, Data_UnknownBlock_Data_5
-	ld	xix, Data_UnknownBlock_Data_6
+	ld	xiy, SeScreenData_0x234F
+	ld	xix, SeScreenData_0x2363
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
 Data_UnknownBlock_Skip13:
 	ld	(0x3efa8:24), 0
-	ld	xiy, Data_UnknownBlock_Data_6
+	ld	xiy, SeScreenData_0x2363
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
 SeMenu_DataBlock_11:
@@ -9828,11 +9828,11 @@ Data_UnknownBlock_Join7:
 	ldb_d8	a, (0x8c9e)
 	stb_d8	(0x9050), a
 	ld	xwa, 36942
-	call	SeMenu_SetDisplayValue_Helper
+	call	SndParam_ApplyProgramChange
 	ldb_d8	a, (0x9051)
 	ldb_d8	c, (0x9052)
 	ld	xde, 0x20c13
-	call	Display_BytecodeBlock_F_Helper2
+	call	SndParam_ApplyProgramChangeAsync
 	ld	c, 20:opc
 	xor	hl, hl
 	ldw	ix, 5889
@@ -10081,7 +10081,7 @@ SeMenu_FxEdit_Init:
 	call	SeMenu_FxEdit_Init_Helper
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x34F3
-	ld	xix, SeScreenData_0x3563
+	ld	xix, SeMenu_FxEdit_Init_Data_2
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
 	ld	xiy, SeScreenData_0x34E9
@@ -10100,7 +10100,7 @@ SeMenu_FxEdit_Init:
 SeMenu_FxEdit_DataBlock1:
 	call	SeMenu_FxEdit_Init_Helper
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeScreenData_0x3563
+	ld	xiy, SeMenu_FxEdit_Init_Data_2
 	ld	xix, SeScreenData_0x3633
 	call	SeGfx_DrawStaticList
 	ld	(0x03efa8:24), 2
@@ -10185,8 +10185,8 @@ SeMenu_FilterEdit_Dispatch:
 	cp	a, 11
 	jr	c, SeMenu_FilterEdit_Dispatch_Skip3
 	ld	(0x03efa8:24), 0
-	ld	xiy, SeScreenData_0x394F
-	ld	xix, SeScreenData_0x398B
+	ld	xiy, SeMenu_FilterEdit_Dispatch_Data_2
+	ld	xix, SeMenu_FilterEdit_Dispatch_Data_3
 	call	SeGfx_DrawBoundList
 	call	SeMenu_PresetInit_Loop2
 	jr	SeMenu_FilterEdit_Dispatch_Return
@@ -10253,7 +10253,7 @@ SeMenu_FilterEdit_DataBlock5_Skip:
 	ld	xiy, SeScreenData_0x3D17
 	ld	xix, SeScreenData_0x3D36
 	call	SeGfx_DrawStaticList
-	ld	xiy, SeScreenData_0x3DF1
+	ld	xiy, SeMenu_FilterEdit_DataBlock5_Data_2
 	jr	SeMenu_FilterEdit_DataBlock5_Join
 SeMenu_FilterEdit_DataBlock5_Join2:
 	ld	xiy, SeScreenData_0x3DD3
@@ -10299,7 +10299,7 @@ SeMenu_EqEdit_Dispatch:
 	cp	(0x6ae:16), 1
 	jr	z, SeMenu_EqEdit_DrawTable
 	ld	xiy, SeScreenData_0x3DD3
-	ld	xix, SeScreenData_0x3DF1
+	ld	xix, SeMenu_FilterEdit_DataBlock5_Data_2
 	call	SeGfx_DrawBoundList
 SeMenu_EqEdit_DrawTable:
 	ld	xiy, SeScreenData_0x3E37
@@ -10569,7 +10569,7 @@ SeBitmap_Pattern24x10_3:
 	.byte	0b00010101
 ; 1-bpp bitmap 24x10 px, stored column by column (3 byte-columns of 10 rows;
 ; bit 7 is tested first), drawn by static op 03 via ColorBlit2_LargeCodeBlock
-; evidence: static op03 record at SeScreenData_0x080F, static op03 record at SeScreenData_0x0BEA, static op03 record at SeScreenData_0x0CC6, static op03 record at SeScreenData_0x385D
+; evidence: static op03 record at SeScreenData_0x080F, static op03 record at SeScreenData_0x0BEA, static op03 record at SeScreenData_0x0CC6, static op03 record at SeMenu_PresetBrowser_Select_Sub_Data_2
 SeBitmap_Pattern24x10_4:
 	; column 0 (x 0-7)
 	.byte	0b00000100
@@ -11925,7 +11925,6 @@ SeScreenData_0x0558:
 ; static record list (35 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0685
 ; evidence: SeMenu_WaveformSelect_Data
 SeScreenData_0x0562:
-SeMenu_WaveformSelect_Apply_Data:
 	sd_ptext	0x1c, 16, 110, 5, "SOUND EDIT"
 	sd_ctext	0x06, 11, 36*40+0, "\020 WRITE"
 	sd_ctext	0x06, 5, 75*40+39, "\021"
@@ -11964,7 +11963,6 @@ SeMenu_WaveformSelect_Apply_Data:
 ; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x06B1
 ; evidence: SeMenu_WaveformSelect_Data
 SeScreenData_0x0685:
-SeMenu_WaveformSelect_Apply_Data_2:
 	sd_quad	0x1b, 236, 31, 308, 50
 	sd_ctext	0x06, 14, 36*40+30, "ORIGINAL \021"
 	sd_quad	0x09, 236, 31, 308, 50
@@ -12215,7 +12213,6 @@ SeScreenData_0x07CC:
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
 ; evidence: SeMenu_ShowConfirmDialog_Data
 SeScreenData_0x07D3:
-SeMenu_ShowConfirmDialog_Data_2:
 	.long	SeScreenData_0x07B7
 	.long	SeScreenData_0x07B7
 	.long	SeScreenData_0x07BE
@@ -12241,7 +12238,6 @@ SeScreenData_0x080F:
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
 ; evidence: SeMenu_ShowConfirmDialog_Data
 SeScreenData_0x081B:
-SeMenu_ShowConfirmDialog_Data_3:
 	.long	SeScreenData_0x07EB
 	.long	SeScreenData_0x07EB
 	.long	SeScreenData_0x07F7
@@ -12266,12 +12262,10 @@ SeScreenData_0x0864:
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x0878
 ; evidence: SeMenu_ShowConfirmDialog_Data
 SeScreenData_0x086E:
-SeMenu_ShowConfirmDialog_Data_4:
 	sd_quad	0x1b, 8, 73, 34, 197
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: SeMenu_ShowConfirmDialog_Data
 SeScreenData_0x0878:
-SeMenu_ShowConfirmDialog_Data_5:
 	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x0883
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
@@ -12671,17 +12665,14 @@ SeScreenData_0x113B:
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x114A
 ; evidence: code 0xF0F395
 SeScreenData_0x1140:
-UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data:
 	sd_quad	0x1b, 214, 70, 263, 225
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1154
 ; evidence: code 0xF0F37F
 SeScreenData_0x114A:
-UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_2:
 	sd_quad	0x1b, 158, 70, 210, 161
 ; static record list (4 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x117E
 ; evidence: startptrs at SeScreenData_0x1250
 SeScreenData_0x1154:
-UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_3:
 	sd_ptext	0x17, 11, 226, 114, "TOUCH"
 	sd_ptext	0x17, 11, 232, 123, "CURVE"
 	sd_quad	0x22, 224, 70, 262, 108
@@ -12724,7 +12715,6 @@ SeScreenData_0x1226:
 ; list-start table: entry i -> a list of 42 bytes (5 entries, LE32)
 ; evidence: code 0xF0F404
 SeScreenData_0x1250:
-UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_4:
 	.long	SeScreenData_0x1154
 	.long	SeScreenData_0x1154
 	.long	SeScreenData_0x117E
@@ -12733,14 +12723,12 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_4:
 ; list-start table: entry i -> a list of 42 bytes (3 entries, LE32)
 ; evidence: code 0xF0F404
 SeScreenData_0x1264:
-UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_5:
 	.long	SeScreenData_0x11FC
 	.long	SeScreenData_0x11FC
 	.long	SeScreenData_0x1226
 ; u16 table, stride 4, fields +0/+2, indexed directly by code
 ; evidence: code 0xF0F3B8, code 0xF0F3BE
 SeScreenData_0x1270:
-UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_6:
 	.short	224, 70
 	.short	224, 70
 	.short	224, 102
@@ -12749,7 +12737,6 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_6:
 ; u16 table, stride 4, fields +0/+2, indexed directly by code
 ; evidence: code 0xF0F3B8, code 0xF0F3BE
 SeScreenData_0x1284:
-UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_7:
 	.short	168, 70
 	.short	168, 70
 	.short	168, 102
@@ -12937,7 +12924,6 @@ SeScreenData_0x1780:
 ; static record list (38 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x18D8
 ; evidence: SeMenu_Utility_CompareBlock, SeMenu_Utility_FormatSigned_Data
 SeScreenData_0x178B:
-SeMenu_Utility_CompareBlock_Data:
 	sd_ptext	0x17, 13, 67, 30, "FILTER:"
 	sd_ptext	0x17, 12, 213, 98, "CUTOFF"
 	sd_ptext	0x17, 15, 67, 108, "EQUALIZER"
@@ -12979,17 +12965,14 @@ SeMenu_Utility_CompareBlock_Data:
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x18ED
 ; evidence: SeMenu_Utility_FormatSigned_Data
 SeScreenData_0x18D8:
-SeMenu_Utility_CompareBlock_Data_2:
 	sd_ptext	0x17, 21, 109, 30, "HIGH PASS -12dB"
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1901
 ; evidence: SeMenu_Utility_CompareBlock
 SeScreenData_0x18ED:
-SeMenu_Utility_CompareBlock_Data_3:
 	sd_ptext	0x17, 20, 109, 30, "LOW PASS -12dB"
 ; static record list (17 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x1997
 ; evidence: SeMenu_Utility_FormatPercent, SeMenu_Utility_FormatPercent_Data
 SeScreenData_0x1901:
-SeMenu_Utility_CompareBlock_Data_4:
 	sd_ptext	0x17, 13, 67, 67, "FILTER:"
 	sd_ptext	0x17, 12, 211, 135, "CUTOFF"
 	sd_ctext	0x06, 10, 193*40+17, "FILTER"
@@ -13301,20 +13284,20 @@ SeScreenData_0x1FDA:
 	sdb_str	0x0000, 0x00, 0, 0x20, 0x00020c13, 13, 151*40+10
 	sdb_num	0x0665, 0x7f, 0, 0x20, 151*40+24, 3
 	sdb_num	0x0663, 0x7f, 0, 0x20, 151*40+28, 3
-; bound record list (4 records), read by GraphicsRender_Start; end SeScreenData_0x203E
+; bound record list (4 records), read by GraphicsRender_Start; end SeMenu_BankEdit_LoopHelper_Data_2
 ; evidence: startptrs at SeScreenData_0x20A5
 SeScreenData_0x200C:
 	sdb_str	0x066b, 0x0f, 0, 0x20, SeScreenData_0x20C9, 2, 167*40+8
 	sdb_str	0x0000, 0x00, 0, 0x20, 0x00020c23, 13, 167*40+10
 	sdb_num	0x0666, 0x7f, 0, 0x20, 167*40+24, 3
 	sdb_num	0x0667, 0x7f, 0, 0x20, 167*40+28, 3
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2046
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_BankEdit_LoopHelper_Data_3
 ; evidence: SeMenu_BankEdit_LoopHelper
-SeScreenData_0x203E:
+SeMenu_BankEdit_LoopHelper_Data_2:
 	sd_ctext	0x06, 8, 119*40+24, "  0-"
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x204B
 ; evidence: startptrs at SeScreenData_0x20BD
-SeScreenData_0x2046:
+SeMenu_BankEdit_LoopHelper_Data_3:
 	sd_ctext	0x06, 5, 135*40+27, "-"
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2050
 ; evidence: startptrs at SeScreenData_0x20BD
@@ -13361,7 +13344,7 @@ SeScreenData_0x20B1:
 ; list-start table: entry i -> a list of 5 bytes (3 entries, LE32)
 ; evidence: SeMenu_BankEdit_LoopBody
 SeScreenData_0x20BD:
-	.long	SeScreenData_0x2046
+	.long	SeMenu_BankEdit_LoopHelper_Data_3
 	.long	SeScreenData_0x204B
 	.long	SeScreenData_0x2050
 ; string table, 2-char cells, indexed by a bound record's value (field +7 of
@@ -13422,13 +13405,11 @@ SeScreenData_0x2193:
 ; bound record list (2 records), read by GraphicsRender_Start; end SeScreenData_0x21C0
 ; evidence: SeMenu_DataBlock_05, SeMenu_DataBlock_06
 SeScreenData_0x21A2:
-Data_UnknownBlock_Data:
 	sdb_str	0x0665, 0x80, 7, 0x20, SeScreenData_0x1EE7, 4, 221*40+24
 	sdb_str	0x0665, 0x7f, 0, 0x20, SeScreenData_0x21F2, 3, 221*40+34
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (5 entries, LE32)
 ; evidence: SeMenu_DataBlock_05, SeMenu_DataBlock_06
 SeScreenData_0x21C0:
-Data_UnknownBlock_Data_2:
 	.long	SeScreenData_0x2160
 	.long	SeScreenData_0x216B
 	.long	SeScreenData_0x2175
@@ -13472,7 +13453,6 @@ SeScreenData_0x2240:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (4 entries, LE32)
 ; evidence: SeMenu_DataBlock_07, SeMenu_DataBlock_08
 SeScreenData_0x224F:
-Data_UnknownBlock_Data_3:
 	.long	SeScreenData_0x221C
 	.long	SeScreenData_0x2227
 	.long	SeScreenData_0x2231
@@ -13504,7 +13484,6 @@ SeScreenData_0x22A1:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (6 entries, LE32)
 ; evidence: SeMenu_DataBlock_09
 SeScreenData_0x22B0:
-Data_UnknownBlock_Data_4:
 	.long	SeScreenData_0x225F
 	.long	SeScreenData_0x226A
 	.long	SeScreenData_0x2274
@@ -13571,13 +13550,11 @@ SeMenu_CompareScreen_DataTable:
 ; static record list (2 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2363
 ; evidence: SeMenu_DataBlock_10
 SeScreenData_0x234F:
-Data_UnknownBlock_Data_5:
 	sd_quad	0x1b, 61, 189, 284, 202
 	sd_quad	0x1b, 4, 218, 284, 231
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (11 entries, LE32)
 ; evidence: SeMenu_DataBlock_10
 SeScreenData_0x2363:
-Data_UnknownBlock_Data_6:
 	.long	SeScreenData_0x2332
 	.long	SeScreenData_0x22DE
 	.long	SeScreenData_0x22C8
@@ -13644,7 +13621,6 @@ SeScreenData_0x240F:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (13 entries, LE32)
 ; evidence: SeMenu_DataBlock_01
 SeScreenData_0x241A:
-Data_UnknownBlock_Data_7:
 	.long	SeScreenData_0x240F
 	.long	SeScreenData_0x238F
 	.long	SeScreenData_0x2399
@@ -13661,13 +13637,11 @@ Data_UnknownBlock_Data_7:
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x2458
 ; evidence: SeMenu_DataBlock_01
 SeScreenData_0x244E:
-Data_UnknownBlock_Data_8:
 	sd_quad	0x1b, 13, 76, 210, 200
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value range up to 16)
 ; evidence: bound op03 record at SeScreenData_0x240F
 SeScreenData_0x2458:
-Data_UnknownBlock_Data_9:
 	.short	13, 76, 210, 104
 	.short	13, 76, 210, 104
 	.short	13, 108, 210, 136
@@ -13692,7 +13666,6 @@ SeScreenData_0x24A9:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (4 entries, LE32)
 ; evidence: SeMenu_DataBlock_02
 SeScreenData_0x24B8:
-Data_UnknownBlock_Data_10:
 	.long	SeScreenData_0x249A
 	.long	SeScreenData_0x248B
 	.long	SeScreenData_0x24A9
@@ -13728,7 +13701,6 @@ SeScreenData_0x2504:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (7 entries, LE32)
 ; evidence: SeMenu_DataBlock_03
 SeScreenData_0x250E:
-Data_UnknownBlock_Data_11:
 	.long	SeScreenData_0x24C8
 	.long	SeScreenData_0x24D2
 	.long	SeScreenData_0x24DC
@@ -13782,7 +13754,6 @@ SeScreenData_0x259F:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (10 entries, LE32)
 ; evidence: SeMenu_DataBlock_04
 SeScreenData_0x25B7:
-Data_UnknownBlock_Data_12:
 	.long	SeScreenData_0x252A
 	.long	SeScreenData_0x2535
 	.long	SeScreenData_0x2540
@@ -13811,10 +13782,10 @@ TuningSys_Param_01:
 	.set	SeScreenData_0x2664, . + 133
 	.set	SeScreenData_0x2673, . + 148
 	.set	SeScreenData_0x2682, . + 163
-	.set	SeScreenData_0x268D, . + 174
-	.set	SeScreenData_0x26A3, . + 196
 	.set	SeScreenData_0x26AE, . + 207
-	.incbin "includes/generated/se_name_editor.bin"
+	.incbin "includes/generated/se_name_editor.bin", 0x0, 0xAE
+SeMenu_DrumKit_Dispatch_Data:	.incbin "includes/generated/se_name_editor.bin", 0xAE, 0x16
+SeMenu_DrumKit_Dispatch_Data_2:	.incbin "includes/generated/se_name_editor.bin", 0xC4, 0x16
 ; string table, 8-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 32 by the record's mask; the table holds 32 cells)
 ; evidence: bound op02 record at SeScreenData_0x2673
@@ -13859,7 +13830,7 @@ SeScreenData_0x27B9:
 	.ascii	"1/16", "1/32", "1/64", " FIX"
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value at most 8 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
-; evidence: bound op03 record at SeScreenData_0x26A3
+; evidence: bound op03 record at SeMenu_DrumKit_Dispatch_Data_2
 SeScreenData_0x27D9:
 	.short	13, 76, 166, 104
 	.short	13, 76, 166, 104
@@ -13887,7 +13858,7 @@ SeScreenData_0x2833:
 ; evidence: SeMenu_DrumKit_Dispatch
 	.set	TuningSystem_Handler_Table, . + 4
 SeScreenData_0x283D:
-	.long	SeScreenData_0x26A3
+	.long	SeMenu_DrumKit_Dispatch_Data_2
 	.long	TuningSys_Param_01
 	.long	SeScreenData_0x25EA
 	.long	SeScreenData_0x25F5
@@ -14515,7 +14486,7 @@ SeScreenData_0x336C:
 ; evidence: SeMenu_FxEdit_Init, SeMenu_FxEdit_DataBlock1
 SeScreenData_0x34E9:
 	sd_quad	0x09, 69, 204, 251, 233
-; static record list (13 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3563
+; static record list (13 records), read by GraphicsRender_ProcessEntries; end SeMenu_FxEdit_Init_Data_2
 ; evidence: SeMenu_FxEdit_Init
 SeScreenData_0x34F3:
 	sd_ctext	0x06, 13, 30*40+13, "KEY LAYER"
@@ -14533,7 +14504,7 @@ SeScreenData_0x34F3:
 	sd_quad	0x05, 262, 68, 306, 94
 ; static record list (21 records), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3633
 ; evidence: SeMenu_FxEdit_DataBlock1
-SeScreenData_0x3563:
+SeMenu_FxEdit_Init_Data_2:
 	sd_ctext	0x06, 18, 34*40+11, "VELOCITY LAYER"
 	sd_ptext	0x17, 7, 45, 50, "0"
 	sd_ptext	0x17, 8, 91, 50, "32"
@@ -14645,13 +14616,13 @@ SeScreenData_0x3839:
 ; evidence: bounds at SeScreenData_0x3869
 SeScreenData_0x3845:
 	sd_blit	SeBitmap_Pattern24x10_2, 95*40+6, 3, 10
-; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x385D
+; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeMenu_PresetBrowser_Select_Sub_Data_2
 ; evidence: bounds at SeScreenData_0x3869
 SeScreenData_0x3851:
 	sd_blit	SeBitmap_Pattern24x10_3, 126*40+6, 3, 10
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x3869
 ; evidence: bounds at SeScreenData_0x3869
-SeScreenData_0x385D:
+SeMenu_PresetBrowser_Select_Sub_Data_2:
 	sd_blit	SeBitmap_Pattern24x10_4, 158*40+6, 3, 10
 ; list-boundary table: entry i and i+1 bound list i (6 entries, LE32)
 ; evidence: SeMenu_PresetBrowser_Data
@@ -14660,7 +14631,7 @@ SeScreenData_0x3869:
 	.long	SeScreenData_0x3839
 	.long	SeScreenData_0x3845
 	.long	SeScreenData_0x3851
-	.long	SeScreenData_0x385D
+	.long	SeMenu_PresetBrowser_Select_Sub_Data_2
 	.long	SeScreenData_0x3869
 ; list-start table: entry i -> a list of 20 bytes (4 entries, LE32)
 ; evidence: SeMenu_PresetBrowser_Data
@@ -14716,16 +14687,16 @@ SeScreenData_0x393B:
 ; evidence: recptrs at SeScreenData_0x39BE
 SeScreenData_0x3945:
 	sdb_num	0x066a, 0x7f, 0, 0x20, 186*40+32, 3
-; bound record list (4 records), read by GraphicsRender_Start; end SeScreenData_0x398B
+; bound record list (4 records), read by GraphicsRender_Start; end SeMenu_FilterEdit_Dispatch_Data_3
 ; evidence: SeMenu_FilterEdit_Dispatch
-SeScreenData_0x394F:
+SeMenu_FilterEdit_Dispatch_Data_2:
 	sdb_str	0x066b, 0x03, 0, 0x06, SeScreenData_0x3A52, 3, 85*40+24
 	sdb_str	0x066b, 0x0c, 2, 0x06, SeScreenData_0x3A52, 3, 118*40+24
 	sdb_str	0x066b, 0x30, 4, 0x06, SeScreenData_0x3A52, 3, 149*40+24
 	sdb_str	0x066b, 0xc0, 6, 0x06, SeScreenData_0x3A52, 3, 181*40+24
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x39BE
-SeScreenData_0x398B:
+SeMenu_FilterEdit_Dispatch_Data_3:
 	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x3A88
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x39BE
@@ -14746,7 +14717,7 @@ SeScreenData_0x39B4:
 ; record-pointer table: entry i -> one bound record, drawn with SeGfx_DrawBoundRecord (16 entries, LE32)
 ; evidence: SeMenu_PresetInit_TableLookup2, SeMenu_FilterEdit_Dispatch
 SeScreenData_0x39BE:
-	.long	SeScreenData_0x398B
+	.long	SeMenu_FilterEdit_Dispatch_Data_3
 	.long	SeScreenData_0x38E1
 	.long	SeScreenData_0x391D
 	.long	SeScreenData_0x3927
@@ -14757,7 +14728,7 @@ SeScreenData_0x39BE:
 	.long	SeScreenData_0x39AA
 	.long	SeScreenData_0x39B4
 	.long	SeScreenData_0x3945
-	.long	SeScreenData_0x394F
+	.long	SeMenu_FilterEdit_Dispatch_Data_2
 	.long	SeScreenData_0x3996
 	.long	SeScreenData_0x39A0
 	.long	SeScreenData_0x39AA
@@ -14789,7 +14760,7 @@ SeScreenData_0x3A3A:
 	.long	SeScreenData_0x3A2B
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 3 cells; values >= 3 would read past it)
-; evidence: bound op07 record DrumDetailEdit_Entry_09, bound op02 record at SeScreenData_0x394F, bound op02 record at SeScreenData_0x395E, bound op02 record at SeScreenData_0x396D (+1 more)
+; evidence: bound op07 record DrumDetailEdit_Entry_09, bound op02 record at SeMenu_FilterEdit_Dispatch_Data_2, bound op02 record at SeScreenData_0x395E, bound op02 record at SeScreenData_0x396D (+1 more)
 SeScreenData_0x3A52:
 	.ascii	"CTR", "L  ", "R  "
 ; string table, 7-char cells, indexed by a bound record's value (field +7 of
@@ -14811,7 +14782,7 @@ SeScreenData_0x3A7E:
 	sd_quad	0x1b, 13, 76, 228, 200
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
 ; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
-; evidence: bound op03 record at SeScreenData_0x398B
+; evidence: bound op03 record at SeMenu_FilterEdit_Dispatch_Data_3
 SeScreenData_0x3A88:
 	.short	13, 76, 228, 104
 	.short	13, 76, 228, 104
@@ -14995,14 +14966,14 @@ SeScreenData_0x3D36:
 	sd_quad	0x22, 209, 218, 230, 238
 	sd_quad	0x01, 89, 228, 110, 228
 	sd_quad	0x01, 209, 228, 230, 228
-; bound record list (10 records), read by GraphicsRender_Start; ends SeScreenData_0x3DF1, SeScreenData_0x3E60
+; bound record list (10 records), read by GraphicsRender_Start; ends SeMenu_FilterEdit_DataBlock5_Data_2, SeScreenData_0x3E60
 ; evidence: SeMenu_FilterEdit_DataBlock5, SeMenu_EqEdit_Dispatch
 SeScreenData_0x3DD3:
 	sdb_str	0x066c, 0x30, 4, 0x20, SeScreenData_0x3E80, 3, 221*40+31
 	sdb_str	0x066c, 0xc0, 6, 0x20, SeScreenData_0x3E80, 3, 221*40+35
 ; bound record list (8 records), read by GraphicsRender_Start; end SeScreenData_0x3E60
 ; evidence: SeMenu_FilterEdit_DataBlock5
-SeScreenData_0x3DF1:
+SeMenu_FilterEdit_DataBlock5_Data_2:
 	sdb_str	0x0661, 0x3f, 0, 0x20, SeScreenData_0x3E8C, 13, 77*40+10
 ; single bound record, read by SeGfx_DrawBoundRecord (GraphicsRender_Start)
 ; evidence: recptrs at SeScreenData_0x3E60
@@ -15033,7 +15004,7 @@ SeScreenData_0x3E55:
 ; evidence: SeMenu_EqEdit_DefaultPath
 SeScreenData_0x3E60:
 	.long	SeScreenData_0x3E55
-	.long	SeScreenData_0x3DF1
+	.long	SeMenu_FilterEdit_DataBlock5_Data_2
 	.long	SeScreenData_0x3E00
 	.long	SeScreenData_0x3E0F
 	.long	SeScreenData_0x3E1E
@@ -15047,7 +15018,7 @@ SeScreenData_0x3E80:
 	.ascii	"OFF", " ON", "---", "INV"
 ; string table, 13-char cells, indexed by a bound record's value (field +7 of
 ; a bound op 02/07 record; value at most 64 by the record's mask; the table holds 64 cells)
-; evidence: bound op02 record at SeScreenData_0x3DF1, bound op02 record at SeScreenData_0x3E00, bound op02 record at SeScreenData_0x3E0F, bound op02 record at SeScreenData_0x3E1E
+; evidence: bound op02 record at SeMenu_FilterEdit_DataBlock5_Data_2, bound op02 record at SeScreenData_0x3E00, bound op02 record at SeScreenData_0x3E0F, bound op02 record at SeScreenData_0x3E1E
 SeScreenData_0x3E8C:
 	.ascii	"-------------"
 	.ascii	"PITCH BEND   "
@@ -15593,7 +15564,7 @@ S2c_GridCheck_Dispatch:
 	ld	xwa, (xbc+wa)
 	push XWA
 	push XDE
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	inc 8,XSP
 S2c_GridCheck_GetFocusSendEvt:
 	call GetFocusObject
@@ -15623,7 +15594,6 @@ CmpClrNoFunc:
 	call MainFuncCall
 	ld xhl, 0:i3
 	ret
-PsCmpCpFGrpBox_Entry:
 
 PsCmpCpFGrpBoxProc:
 	lda xsp, (xsp-272)
@@ -15676,7 +15646,7 @@ PsCmpCpFGrpBox_HandleEvt4:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
@@ -15730,7 +15700,6 @@ PsCmpCpFGrpBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+272)
 	ret
-PsCmpCpFVariBox_Entry:
 
 PsCmpCpFVariBoxProc:
 	lda xsp, (xsp-272)
@@ -15786,7 +15755,7 @@ PsCmpCpFVariBox_HandleEvt5:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
@@ -15843,7 +15812,6 @@ PsCmpCpFVariBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+272)
 	ret
-PsCmpCpFPtnBox_Entry:
 
 PsCmpCpFPtnBoxProc:
 	lda xsp, (xsp-268)
@@ -15885,7 +15853,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
@@ -15939,7 +15907,6 @@ PsCmpCpFPtnBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+268)
 	ret
-PsCstmCpBnkBox_Entry:
 
 PsCstmCpBnkBoxProc:
 	lda xsp, (xsp-256)
@@ -15987,7 +15954,7 @@ PsCstmCpBnkBox_LookupAndSend:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -16000,7 +15967,6 @@ PsCstmCpBnkBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+256)
 	ret
-PsCstmCpSwBox_Entry:
 
 PsCstmCpSwBoxProc:
 	lda xsp, (xsp-256)
@@ -16056,7 +16022,7 @@ PsCstmCpSwBox_PushTableAddr1:
 	push xbc
 
 PsCstmCpSwBox_SendCommand:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -16069,7 +16035,6 @@ PsCstmCpSwBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+256)
 	ret
-PsCstmCpNameBox_Entry:
 
 PsCstmCpNameBoxProc:
 	lda xsp, (xsp-260)
@@ -16169,7 +16134,6 @@ PsCstmCpNameBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+260)
 	ret
-PsCtmAttStrBox_Entry:
 
 PsCtmAttStrBoxProc:
 	lda xsp, (xsp-256)
@@ -16205,7 +16169,7 @@ PsCtmAttStrBox_HandleEvtBC:
 	pushw	14771
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -16218,7 +16182,6 @@ PsCtmAttStrBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+256)
 	ret
-AcMemNoBox_Entry:
 
 AcMemNoBoxProc:
 	lda xsp, (xsp-268)
@@ -16260,7 +16223,7 @@ AcMemNoBox_HandleEvtBC:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
@@ -16317,7 +16280,6 @@ AcMemNoBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+268)
 	ret
-AcCmpRecBox_Entry:
 
 AcCmpRecBoxProc:
 	lda xsp, (xsp-280)
@@ -16375,7 +16337,7 @@ AcCmpRecBox_HandleEvtBC:
 	ld	xwa, (xhl+4)
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xwa, (xsp+12)
 	ldw	(xwa+22), 242
@@ -16395,7 +16357,7 @@ AcCmpRecBox_AdjustTable:
 
 	push xbc
 
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 
 	inc 8, xsp
 
@@ -16422,7 +16384,6 @@ AcCmpRecBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+280)
 	ret
-PsCmpQtzBox_Entry:
 
 PsCmpQtzBoxProc:
 	lda xsp, (xsp-256)
@@ -16464,7 +16425,7 @@ PsCmpQtzBox_HandleEvtBC:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -16477,7 +16438,6 @@ PsCmpQtzBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+256)
 	ret
-PsCmpMeasBox_Entry:
 
 PsCmpMeasBoxProc:
 	lda xsp, (xsp-264)
@@ -16532,7 +16492,7 @@ PsCmpMeasBox_HandleEvtBC:
 	pushw	PsCmpMeasBox_HandleEvtBC_Str_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+264)
@@ -16545,7 +16505,6 @@ PsCmpMeasBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+264)
 	ret
-PsCmpMemBox_Entry:
 
 PsCmpMemBoxProc:
 	lda xsp, (xsp-264)
@@ -16599,7 +16558,7 @@ PsCmpMemBox_HandleEvtBC:
 	pushw	PsCmpMemBox_HandleEvtBC_Str_Fmt2d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+264)
@@ -16612,7 +16571,6 @@ PsCmpMemBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+264)
 	ret
-AcCmpTempoBox_Entry:
 
 AcCmpTempoBoxProc:
 	lda xsp, (xsp-260)
@@ -16672,7 +16630,7 @@ AcCmpTempoBox_HandleEvt1C:
 	pushw	AcCmpTempoBox_HandleEvt1C_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+260)
@@ -16736,7 +16694,6 @@ CmpNameOkFunc:
 CmpNameOkFunc_ReturnZero:
 	ld xhl, 0:i3
 	ret
-PsNameMemBox_Entry:
 
 PsNameMemBoxProc:
 	lda xsp, (xsp-268)
@@ -16778,7 +16735,7 @@ PsNameMemBox_HandleEvtBC:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)
@@ -17174,7 +17131,7 @@ EasyCmp_GridEvtEnc_Case2:
 	push	xwa
 EasyCmp_GridCheck_EventCase1:
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	jr	EasyCmp_GridCheck_EventCase3
 EasyCmp_GridCheck_EventCase2:
@@ -17183,7 +17140,7 @@ EasyCmp_GridCheck_EventCase2:
 	pushw	EasyCmp_GridCheck_EventCase2_Str_Fmt3d@hi16
 	pushw	EasyCmp_GridCheck_EventCase2_Str_Fmt3d@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 EasyCmp_GridCheck_EventCase3:
 	call GetFocusObject
@@ -17358,7 +17315,7 @@ PsMspNameBnk_HandleEvtBC:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -17629,7 +17586,7 @@ VwVariBox_GetText_LookupAudio:
 	push	xwa
 	ld	xwa, (xsp+280)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	jr	VwVariBox_ReturnHandled
 VwVariBox_GetText_HighValues:
@@ -17792,7 +17749,6 @@ MspBnk_ReturnZero:
 	ld xhl, 0:i3
 	pop xiz
 	ret
-AcMspBnkSlBox_Entry:
 
 AcMspBnkSlBoxProc:
 	lda xsp, (xsp - 12)
@@ -18009,7 +17965,7 @@ MspBnkNameBox_HandleEvt1B:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -18022,7 +17978,7 @@ MspBnkNameBox_HandleEvt1C:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -18035,7 +17991,7 @@ MspBnkNameBox_HandleEvt1D:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -18048,7 +18004,7 @@ RgpSetBnk_GridCheck:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -18181,7 +18137,7 @@ RgpSetBnk_GridCheck_EventEnc:
 	ld	xwa, (xbc+wa)
 	push XWA
 	push XDE
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	inc 8,XSP
 	jr t, AudioEvt_GetFocusRetZero
 RgpSetBnk_EvtEnc_HighIndex:
@@ -18206,7 +18162,7 @@ RgpSetBnk_EvtEnc_SendAudioCmd:
 	pushw	RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd@hi16
 	pushw	RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 AudioEvt_GetFocusRetZero:
 	call GetFocusObject
@@ -18220,7 +18176,6 @@ RgpSetBnk_GridCheck_Return:
 	ld xhl, 0:i3
 	lda xsp, (xsp + 28)
 	ret
-PsRgpSetBnkBoxProc_Entry:
 
 PsRgpSetBnkBoxProc:
 	lda xsp, (xsp-256)
@@ -18260,7 +18215,7 @@ RgpSetBnkBox_HandleEvtBC:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -18409,7 +18364,7 @@ MspMeasBox_HandleEvtBC:
 	pushw	MspMeasBox_HandleEvtBC_Str_MEASURE_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -18470,7 +18425,7 @@ MspMemBox_ClampValue:
 	pushw	MspMemBox_ClampValue_Str_MEMORY_Fmt2d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -18586,7 +18541,7 @@ AcSndArgGrid_BnkDispatch:
 	pushw	AcSndArgGrid_BnkDispatch_Str_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -19150,7 +19105,7 @@ SndArgGridCheck_PlayRow_4:
 SndArgGridCheck_PlayRow_Send:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 SndArgGridCheck_PlayRow_Finalize:
 	call GetFocusObject
@@ -19192,7 +19147,6 @@ SndArgTtlCheck:
 ParamList_ReturnZero:
 	ld xhl, 0:i3
 	ret
-PsParaListBoxProc_Entry:
 
 PsParaListBoxProc:
 	lda xsp, (xsp-158)
@@ -19430,7 +19384,6 @@ StylCnvStorBnkSel_Epilogue:
 	pop xiz
 	lda xsp, (xsp + 92)
 	ret
-PsSCTxtBoxProc_Entry:
 
 PsSCTxtBoxProc:
 	lda xsp, (xsp-512)
@@ -19479,7 +19432,6 @@ SCTxtBox_Epilogue:
 	pop xiz
 	lda xsp, (xsp+512)
 	ret
-PsSCTxtBox2Proc_Entry:
 
 PsSCTxtBox2Proc:
 	lda xsp, (xsp-512)
@@ -20016,7 +19968,6 @@ StylCnvStorBnk_ProcDataBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
-CmpNameMenuBoxProc_Entry:
 
 CmpNameMenuBoxProc:
 	push xiz
@@ -20122,7 +20073,6 @@ SndArrLangCheck:
 SndArrLangCheck_ReturnZero:
 	ld xhl, 0:i3
 	ret
-PsStylCnvVerProc_Entry:
 
 PsStylCnvVerProc:
 	lda xsp, (xsp-512)

@@ -468,4 +468,5 @@ FDTest_String_TestTitleFunc_PtrTable:
 	.long HamaStub1_Entry
 	.long HamaStub2_Entry
 	.long HamaStub3_Entry
-LoadExtROM_JumpEntry_Data:	.incbin "includes/romslices/v7_data_fdtest_string_testtitlefunc_tail.bin"
+LoadExtROM_JumpEntry_Data:		.incbin "includes/romslices/v7_data_fdtest_string_testtitlefunc_tail.bin", 0x0, 0x6
+ResInfo_GetResourceListPtr_Str_TEST:	.incbin "includes/romslices/v7_data_fdtest_string_testtitlefunc_tail.bin", 0x6, 0x6

@@ -275,7 +275,7 @@ Seq_StartWithFullInit:
 	ld xbc, EVT_START_PRESENTATION
 	ld xde, 0:i3
 	jrl Seq_DispatchMainFunc
-	ld xwa, NakaInst_Param_Field02_0x4
+	ld xwa, FDemoText_ByteData_LayoutEngine_Data_8
 	ld xbc, EVT_HIDE
 	ld xde, 0:i3
 	call SendEvent

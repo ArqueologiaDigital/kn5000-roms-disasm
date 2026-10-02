@@ -2233,7 +2233,7 @@ KeyScan_Disable:
 
 MainAutoFree:
 	push	xde
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	xhl, 0:i3
 	ret
@@ -2249,7 +2249,7 @@ MainRamControl:
 	ld xwa, (xde)
 	ld (xsp+4), xwa
 	pushw 22
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2, xsp
 	ld (xsp+12), xhl
 	ld xhl, (xsp)
@@ -2394,7 +2394,7 @@ RamCtrl_Adjust_StoreMax:
 
 RamCtrl_Adjust_WriteBack:
 	pushw 22
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2, xsp
 	ld (xsp+12), xhl
 	ld xhl, (xsp)
@@ -2482,7 +2482,7 @@ RamCtrl_Set_InvalidSize:
 RamCtrl_Set_Dispatch:
 	pushw 0x16
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -2535,7 +2535,7 @@ MainBitControl:
 	ld xwa, (xiz)
 	ld (xsp+4), xwa
 	pushw 14
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2, xsp
 	ld (xsp+8), xhl
 	ld xwa, (xsp+8)
@@ -2588,7 +2588,7 @@ BitCtrl_ReadBitZero:
 BitCtrl_ReadBitDone:
 	pushw 0xe
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -2677,7 +2677,7 @@ MainPmanCtrl_Case2:
 	call AcApcToggleProc_Helper
 	ld (xiz+4), hl
 	pushw 12
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2, xsp
 	ld (xsp+4), xhl
 	ld xwa, (xsp+4)
@@ -2722,7 +2722,7 @@ MainPmanCtrl_Case5:
 	call DkMdlyPly_CheckState_Helper
 	ld (xiz+4), hl
 	pushw 12
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 2, xsp
 	ld (xsp+4), xhl
 	ld xwa, (xsp+4)

@@ -737,10 +737,9 @@ PlayModeStop_InitFlagBlock_Helper:
 	cp	(3380:16), 0
 	jr	nz, PlayModeStop_InitFlagBlock_Helper_Return
 	ld	(3380:16), 1
-	call	PlayModeStop_InitFlagBlock_Helper_Helper
+	call	PlayModeStop_InitFlagBlock_Helper2
 PlayModeStop_InitFlagBlock_Helper_Return:
 	ret
-PlayModeStop_InitFlagBlock_Helper_Helper:
 PlayModeStop_InitFlagBlock_Helper2:
 	or	(10412:16), 4
 	ld	(4420:16), 10
@@ -1090,7 +1089,7 @@ SqSngSelTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqSngName_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x14
+	add xde, SqSngSelTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqTrAs_CondCheck:24)
 	jp	t, (xix+de)
@@ -1130,7 +1129,7 @@ SqSngNameTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrAs_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x20
+	add xde, SqSngNameTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_1:24)
 	jp	t, (xix+de)
@@ -1172,7 +1171,7 @@ SqTrAsTtlFunc:
 	cp xde, 0x5
 	jrl ugt, CDlikeSwTtl_ReturnZero2
 	add xde, xde
-	add xde, SepaOut_Config_0_0x2C
+	add xde, SqTrAsTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_2:24)
 	jp	t, (xix+de)
@@ -1308,7 +1307,7 @@ SqTrAsPsTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrAsPsTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x38
+	add xde, SqTrAsPsTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqTrAsPsTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1405,11 +1404,11 @@ SqTrAsPsTtl_CaseF:
 	jr	lt, SqTrAsPsTtl_CaseF_Skip
 	cp	wa, 13
 	jr	gt, SqTrAsPsTtl_CaseF_Skip
-	lda	xix, (SepaOut_Config_0_0x44:24)
+	lda	xix, (SetWall_ReturnZero_Data:24)
 	ld	wa, (xix+wa)
 	extz	wa
 	sll	wa, 1
-	ld	xix, SepaOut_Config_0_0x52
+	ld	xix, SetWall_ReturnZero_Data_2
 	ld	wa, (xix+wa)
 	lda	xix, (SqTrAsPsTtl_CaseF_Skip:24)
 	jp	t, (xix+wa)
@@ -1435,7 +1434,7 @@ SqMdlyPlyTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqMdlyPly_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x56
+	add xde, SqMdlyPlyTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqMdlyPlyTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1514,7 +1513,7 @@ DkMdlyPlyTtlFunc:
 	cp xde, 0x5
 	jr ugt, DkMdlyPly_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x62
+	add xde, DkMdlyPlyTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DkMdlyPlyTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1583,7 +1582,7 @@ DkMdlyPly_ReturnZero:
 ; DkMdlyPly send audio command
 DkMdlyPly_SendAudioCmd:
 	ld hl, 0:i3
-	lda xde, (SepaOut_Config_0_0x6E:24)
+	lda xde, (DkMdlyPly_SendAudioCmd_Data:24)
 
 DkMdlyPly_VoiceScanLoop:
 	ld bc, hl
@@ -1617,7 +1616,7 @@ Snd_ParamLookupSetupWerp:
 DkMdlyPly_HandleResult:
 	ld	wa, qiz
 	add	wa, wa
-	lda	xbc, (SepaOut_Config_0_0x8E:24)
+	lda	xbc, (DkMdlyPly_HandleResult_Data:24)
 	ld	wa, (xbc+wa)
 	ldw	bc, 1025
 	call	DkMdlyPly_CheckState_Helper
@@ -1628,7 +1627,7 @@ DkMdlyPly_HandleResult:
 	jr	nz, DkMdlyPly_ExtendedCheck	; -> 0xF21121
 	ld	wa, qiz
 	add	wa, wa
-	lda	xbc, (SepaOut_Config_0_0x8E:24)
+	lda	xbc, (DkMdlyPly_HandleResult_Data:24)
 	ld	wa, (xbc+wa)
 	ld	(35998:16), a
 	ld	e, a
@@ -1659,7 +1658,7 @@ DisplayMode_DispatchEvents:
 	cp wa, 6:i3
 	ret gt
 	add wa, wa
-	lda xix, (SepaOut_Config_0_0xCE:24)
+	lda xix, (DisplayMode_DispatchEvents_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (DisplayMode_BatchEventSend:24)
 	jp	t, (xix+wa)
@@ -1719,7 +1718,7 @@ DisplayMode_RefreshState:
 	ld	wa, (135302:24)
 	calr	DkMdlyPly_CheckState
 	ld	wa, (135302:24)
-	jp	SeqVoice_CheckAndRet_Data_Code_Join
+	jp	FileIO_ReadChunk
 DpMdlyDocTtlFunc:
 	cp xbc, EVT_SW_IN
 	jr z, DpMdlyDoc_CaseA
@@ -1731,7 +1730,7 @@ DpMdlyDocTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlyDoc_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0xDC
+	add xde, DpMdlyDocTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlyDocTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1824,7 +1823,7 @@ DpMdlyPdTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlyPd_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0xE8
+	add xde, DpMdlyPdTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlyPdTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1917,7 +1916,7 @@ DpMdlySmfTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlySmf_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0xF4
+	add xde, DpMdlySmfTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlySmfTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2012,7 +2011,7 @@ DpMdlySmfLyrTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlySmfLyr_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x100
+	add xde, DpMdlySmfLyrTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlySmfLyrTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2117,7 +2116,7 @@ NameGetFuncCall:
 	cp xbc, 0xd
 	jrl gt, NameGetFunc_Entry
 	add xbc, xbc
-	add xbc, SepaOut_Config_0_0x13A
+	add xbc, NameGetFuncCall_Data
 	ld bc, (xbc)
 	lda xix, (NameGetFuncCall_Dispatch:24)
 	jp	t, (xix+bc)
@@ -2141,7 +2140,7 @@ NameGetFuncCall_Dispatch:
 	pushw	242
 	pushw	0
 	pushw	7248
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+24)
 	ld	xwa, 4294967295
 	ld	xbc, EVT_CUR_SONG_NAME
@@ -2158,7 +2157,7 @@ NameGetFuncCall_Dispatch:
 	pushw	252
 	pushw	0
 	pushw	7270
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	ld	(7283:16), 0
 	ld	xwa, 4294967295
@@ -2176,7 +2175,7 @@ NameGetFuncCall_Dispatch:
 	pushw	264
 	pushw	0
 	pushw	7284
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	lda	xwa, (7284:16)
 	ld	(xwa+16), 0
@@ -2217,7 +2216,7 @@ NameGetFuncCall_Skip2:
 	pushw	272
 	pushw	0
 	pushw	7362
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	(7365:16), 0
 	ld	xwa, 4294967295
@@ -2256,7 +2255,7 @@ NameGetFuncCall_Skip3:
 	pushw	280
 	pushw	0
 	pushw	7366
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	(7369:16), 0
 	ld	xwa, 4294967295
@@ -2373,7 +2372,7 @@ CDlikeSwTtl_ReturnZero:
 	ret
 
 CDlikeSwTtl_ShowSongTitle:
-	call CDlikeSwTtl_ShowSongTitle_Helper
+	call SeqState_GetFlags
 	bit 0x00,HL
 	ret NZ
 	ld	xwa, 7471110
@@ -2392,7 +2391,7 @@ CDlikeSwTtl_ShowSongTitle:
 	lda	xbc, (7198:16)
 	ld	(xbc+12), 0
 	ld	wa, 1:i3
-	call	CDlikeSwTtl_ShowSongTitle_Helper2
+	call	Acc_LoadAndStartPlayback
 	ld	wa, hl
 	cp	wa, 0:i3
 	jp nz, (SongMode_VoiceStateDisp:24)
@@ -2400,7 +2399,7 @@ CDlikeSwTtl_ShowSongTitle:
 	ld	(4437:16), 0
 	ret
 CDlikeSwTtl_ShowDocTitle:
-	call CDlikeSwTtl_ShowSongTitle_Helper
+	call SeqState_GetFlags
 	bit 0x00,HL
 	ret NZ
 	pushw 12
@@ -2415,7 +2414,7 @@ CDlikeSwTtl_ShowDocTitle:
 	lda_d16 xbc, (7212)
 	ld (xbc+12), 0
 	ld wa, 2:i3
-	call CDlikeSwTtl_ShowSongTitle_Helper2
+	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cp wa, 0:i3
 	jp nz, (SongMode_VoiceStateDisp:24)
@@ -2423,7 +2422,7 @@ CDlikeSwTtl_ShowDocTitle:
 	ld (4437:16), 0
 	ret
 CDlikeSwTtl_ShowPdTitle:
-	call CDlikeSwTtl_ShowSongTitle_Helper
+	call SeqState_GetFlags
 	bit 0x00,HL
 	ret NZ
 	pushw 20
@@ -2438,7 +2437,7 @@ CDlikeSwTtl_ShowPdTitle:
 	lda_d16 xbc, (7226)
 	ld (xbc+20), 0
 	ld wa, 4:i3
-	call CDlikeSwTtl_ShowSongTitle_Helper2
+	call Acc_LoadAndStartPlayback
 	ld wa, hl
 	cp wa, 0:i3
 	jp nz, (SongMode_VoiceStateDisp:24)
@@ -2446,7 +2445,7 @@ CDlikeSwTtl_ShowPdTitle:
 	ld (4437:16), 0
 	ret
 CDlikeSwTtl_SongBit1Check:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, CDlikeSwTtl_SongBit0Check
 	calr	SeqRecPlay_DisableBoth
@@ -2456,7 +2455,7 @@ CDlikeSwTtl_SongBit1Check:
 	ld	xde, 0:i3
 	jr	CDlikeSwTtl_JumpToFA9D58
 CDlikeSwTtl_SongBit0Check:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jrl	z, CDlikeSwTtl_ShowSongTitle
 	calr	SeqRecPlay_DisableBoth
@@ -2468,33 +2467,33 @@ CDlikeSwTtl_JumpToFA9D58:
 	jp ApPostEvent
 
 CDlikeSwTtl_DocBitCheck:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	nz, CDlikeSwTtl_DocRedraw
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jrl	z, CDlikeSwTtl_ShowDocTitle
 CDlikeSwTtl_DocRedraw:
 	calr	SeqRecPlay_DisableBoth
 	jp	Song_AbortPlayback
 CDlikeSwTtl_PdBitCheck:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	nz, CDlikeSwTtl_PdRedraw
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jrl	z, CDlikeSwTtl_ShowPdTitle
 CDlikeSwTtl_PdRedraw:
 	calr	SeqRecPlay_DisableBoth
 	jp	Song_AbortPlayback
 CDlikeSwTtl_SongConfirmStart:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, CDlikeSwTtl_SongConfirmBit0
 	ld	(7498:16), 3
 	jr	CDlikeSwTtl_SongConfirmJump
 CDlikeSwTtl_SongConfirmBit0:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, CDlikeSwTtl_SongConfirmDefault
 	ld	(7498:16), 2
@@ -2517,18 +2516,18 @@ CDlikeSwTtl_SongConfirmDispatch:
 
 CDlikeSwTtl_SongConfirmState1:
 	calr	SeqRecPlay_EnablePlayOnly
-	jp	DpDocTtlFunc_Helper
+	jp	Acc_TransitionPlayMode
 CDlikeSwTtl_SongConfirmState2:
 	calr	SeqRecPlay_EnableRecordOnly
 	jp	Acc_StopPlayMode
 CDlikeSwTtl_DocConfirmStart:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, CDlikeSwTtl_DocConfirmBit0
 	ld	(7498:16), 3
 	jr	CDlikeSwTtl_DocConfirmJump
 CDlikeSwTtl_DocConfirmBit0:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, CDlikeSwTtl_DocConfirmDefault
 	ld	(7498:16), 2
@@ -2541,13 +2540,13 @@ CDlikeSwTtl_DocConfirmDefault:
 CDlikeSwTtl_DocConfirmJump:
 	jp	Acc_StartFillIn
 CDlikeSwTtl_PdConfirmStart:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, CDlikeSwTtl_PdConfirmBit0
 	ld	(7498:16), 3
 	jr	CDlikeSwTtl_PdConfirmJump
 CDlikeSwTtl_PdConfirmBit0:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, CDlikeSwTtl_PdConfirmDefault
 	ld	(7498:16), 2
@@ -2562,7 +2561,7 @@ CDlikeSwTtl_PdConfirmJump:
 CDlikeSwTtl_SongNavDispatch:
 	pushw	iz
 	ld	iz, wa
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, CDlikeSwTtl_SongNavBit0
 	call	Song_AbortPlayback
@@ -2593,7 +2592,7 @@ CDlikeSwTtl_SongNavDispatch:
 	ld	xde, 0:i3
 	jr	CDlikeSwTtl_SongNavFinishNames
 CDlikeSwTtl_SongNavBit0:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, CDlikeSwTtl_SongNavNoRedraw
 	call	Song_AbortPlayback
@@ -2658,7 +2657,7 @@ CDlikeSwTtl_SongNavReturn:
 CDlikeSwTtl_DocNavDispatch:
 	pushw	iz
 	ld	iz, wa
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, CDlikeSwTtl_DocNavBit0
 	call	Song_AbortPlayback
@@ -2676,7 +2675,7 @@ CDlikeSwTtl_DocNavDispatch:
 	ld	xde, 0:i3
 	jr	CDlikeSwTtl_DocNavFinishNames
 CDlikeSwTtl_DocNavBit0:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, CDlikeSwTtl_DocNavNoRedraw
 	call	Song_AbortPlayback
@@ -2719,7 +2718,7 @@ CDlikeSwTtl_DocNavReturn:
 CDlikeSwTtl_PdNavDispatch:
 	pushw	iz
 	ld	iz, wa
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, CDlikeSwTtl_PdNavBit0
 	call	Song_AbortPlayback
@@ -2737,7 +2736,7 @@ CDlikeSwTtl_PdNavDispatch:
 	ld	xde, 0:i3
 	jr	CDlikeSwTtl_PdNavFinishNames
 CDlikeSwTtl_PdNavBit0:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, CDlikeSwTtl_PdNavNoRedraw
 	call	Song_AbortPlayback
@@ -2792,7 +2791,7 @@ DpDocTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpDocTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x16A
+	add xde, DpDocTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpDocTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2803,7 +2802,7 @@ DpDocTtl_Dispatch:
 	calr	DisplayMode_DispatchEvents
 	calr	CDlikeSwTtl_ShowDocTitle
 	jrl	DpDocTtl_ReturnZero
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpDocTtlFunc_Skip
 	calr	SeqRecPlay_DisableBoth
@@ -2827,7 +2826,7 @@ DpDoc_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpDocTtl_ReturnZero
 	add xwa, xwa
-	add xwa, SepaOut_Config_0_0x156
+	add xwa, DpDocTtl_Dispatch_Data
 	ld wa, (xwa)
 	lda xix, (DpDoc_CaseB:24)
 	jp	t, (xix+wa)
@@ -2839,18 +2838,18 @@ DpDoc_CaseB:
 
 ; DpDocTtl case C
 DpDoc_CaseC:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, DpDoc_CheckBit0PlayMode
 	calr	SeqRecPlay_EnableRecordOnly
 	call	Acc_StopPlayMode
 	jr	DpDocTtl_ReturnZero
 DpDoc_CheckBit0PlayMode:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpDocTtl_ReturnZero
 	calr	SeqRecPlay_EnablePlayOnly
-	call	DpDocTtlFunc_Helper
+	call	Acc_TransitionPlayMode
 	jr	DpDocTtl_ReturnZero
 DpDoc_CaseD:
 	calr CDlikeSwTtl_DocBitCheck
@@ -2914,7 +2913,7 @@ DpPdTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpPdTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x18A
+	add xde, DpPdTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpPdTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2925,7 +2924,7 @@ DpPdTtl_Dispatch:
 	calr	DisplayMode_DispatchEvents
 	calr	CDlikeSwTtl_ShowPdTitle
 	jrl	DpPdTtl_ReturnZero
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpPdTtlFunc_Skip
 	calr	SeqRecPlay_DisableBoth
@@ -2949,7 +2948,7 @@ DpPd_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpPdTtl_ReturnZero
 	add xwa, xwa
-	add xwa, SepaOut_Config_0_0x176
+	add xwa, DpPdTtl_Dispatch_Data
 	ld wa, (xwa)
 	lda xix, (DpPd_CaseB:24)
 	jp	t, (xix+wa)
@@ -2961,18 +2960,18 @@ DpPd_CaseB:
 
 ; DpPdTtl case C
 DpPd_CaseC:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, DpPd_CheckBit0PlayMode
 	calr	SeqRecPlay_EnableRecordOnly
 	call	Acc_StopPlayMode
 	jr	DpPdTtl_ReturnZero
 DpPd_CheckBit0PlayMode:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpPdTtl_ReturnZero
 	calr	SeqRecPlay_EnablePlayOnly
-	call	DpDocTtlFunc_Helper
+	call	Acc_TransitionPlayMode
 	jr	DpPdTtl_ReturnZero
 DpPd_CaseD:
 	calr CDlikeSwTtl_PdBitCheck
@@ -3036,7 +3035,7 @@ DpSmfTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpSmfTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x1AA
+	add xde, DpSmfTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpSmfTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3053,7 +3052,7 @@ DpSmfTtl_Dispatch:
 	jrl	DpSmfTtl_ReturnZero
 	cp	(35994:16), 114	; differs from v10 here and llvm-objdump cannot read it
 	jrl	z, DpSmfTtl_ReturnZero
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpSmfTtlFunc_Skip
 	calr	SeqRecPlay_DisableBoth
@@ -3081,7 +3080,7 @@ DpSmf_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpSmfTtl_ReturnZero
 	add xwa, xwa
-	add xwa, SepaOut_Config_0_0x196
+	add xwa, DpSmfTtl_Dispatch_Data
 	ld wa, (xwa)
 	lda xix, (DpSmf_CaseB:24)
 	jp	t, (xix+wa)
@@ -3093,18 +3092,18 @@ DpSmf_CaseB:
 
 ; DpSmfTtl case C
 DpSmf_CaseC:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, DpSmf_CheckBit0PlayMode
 	calr	SeqRecPlay_EnableRecordOnly
 	call	Acc_StopPlayMode
 	jr	DpSmfTtl_ReturnZero
 DpSmf_CheckBit0PlayMode:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, DpSmfTtl_ReturnZero
 	calr	SeqRecPlay_EnablePlayOnly
-	call	DpDocTtlFunc_Helper
+	call	Acc_TransitionPlayMode
 	jr	DpSmfTtl_ReturnZero
 DpSmf_CaseD:
 	calr CDlikeSwTtl_SongBit1Check
@@ -3168,7 +3167,7 @@ DpSmfLyrTtlFunc:
 	cp xde, 0x5
 	jrl ugt, SeqStep_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x1B6
+	add xde, DpSmfLyrTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpSmfLyrTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3213,18 +3212,18 @@ DpSmfLyr_NavigateBackward:
 	jr DpSmfLyr_DispatchNavigation
 
 SeqRecPlay_ToggleRecordOrPlay:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	1, hl
 	jr	z, DpSmfLyr_CheckBit0PlayMode
 	calr	SeqRecPlay_EnableRecordOnly
 	call	Acc_StopPlayMode
 	jr	SeqStep_ReturnZero
 DpSmfLyr_CheckBit0PlayMode:
-	call	CDlikeSwTtl_ShowSongTitle_Helper
+	call	SeqState_GetFlags
 	bit	0, hl
 	jr	z, SeqStep_ReturnZero
 	calr	SeqRecPlay_EnablePlayOnly
-	call	DpDocTtlFunc_Helper
+	call	Acc_TransitionPlayMode
 	jr	SeqStep_ReturnZero
 DpSmfLyr_CheckSongBit1:
 	calr CDlikeSwTtl_SongBit1Check
@@ -3310,7 +3309,7 @@ SqTrSelTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrSelTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x1C2
+	add xde, SqTrSelTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqTrSelTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3398,7 +3397,7 @@ SqTrSel_CaseA:
 SqStepTtlFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, SepaOut_Config_0_0x1CE
+	ld xiy, SqStepTtlFunc_Data
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw

@@ -119,7 +119,7 @@ Encoder_PerformScaling:
 	ld	bc, (xbc+wa)
 	extz	xbc
 	ld	xwa, xhl
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, xhl
 	ld	xbc, 20
 	call	Math_DivideU32

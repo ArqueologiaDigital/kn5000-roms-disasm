@@ -2769,7 +2769,7 @@ SndParam_TableLookup_Via4100:
 	lda	xiz, (0x8f18:16)
 	ld xwa, 0x00004100
 	call SndParam_LookupReadOnly
-	lda xwa, (SndParam_TableLookup_Via4100_Data:24)
+	lda xwa, (AudioCtl_SmallTables:24)
 	ld	a, (xwa+hl)
 	and a, 0x07
 	sla	a, 4
@@ -4126,7 +4126,7 @@ VoiceData_InitAndCopyParams:
 	push xhl
 	push xiz
 	call Mem_Copy
-	lda xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
+	lda xwa, (SndParamRam_DefaultImage:24)
 	add xwa, 0x7c
 	lda xiz, (xiz + 124)
 	pushw 0x11e
@@ -4178,7 +4178,7 @@ MainSysCtrl_Entry5_VoiceInit_Helper:
 MainSysCtrl_Entry5_VoiceInit_Helper2:
 	dec	8, xsp
 	pushw	iz
-	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
+	lda	xwa, (SndParamRam_DefaultImage:24)
 	ld	(xsp+2), xwa
 	lda	xwa, (0xf9a0:16)
 	ld	(xsp+6), xwa
@@ -4219,7 +4219,7 @@ VoiceData_ExtendedParamSetup_Loop3:
 MainSysCtrl_Entry5_VoiceInit_Helper3:
 	lda	xsp, (xsp-10)
 	push	qiz
-	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
+	lda	xwa, (SndParamRam_DefaultImage:24)
 	ld	(xsp+4), xwa
 	lda	xwa, (0xf9a0:16)
 	ld	(xsp+8), xwa
@@ -4342,7 +4342,7 @@ MainSysCtrl_Entry5_VoiceInit_Helper3_Skip:
 	pop	xde
 	ld	(xsp+2), 0
 VoiceData_ExtendedParamSetup_Loop:
-	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
+	lda	xwa, (SndParamRam_DefaultImage:24)
 	ld	(xsp+4), xwa
 	ld	xwa, 0:i3
 	ld	a, (xsp+2)
@@ -7474,7 +7474,7 @@ ReverbPreset_SearchLoop:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, ReverbPreset_SearchLoop_Data
+	ld xbc, ReverbPreset_Table
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -7506,7 +7506,7 @@ EQPreset_SearchLoop:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, EQPreset_SearchLoop_Data
+	ld xbc, EQPreset_Table
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -7538,7 +7538,7 @@ CombinedPreset_SearchLoop:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, CombinedPreset_SearchLoop_Data
+	ld xbc, CombinedPreset_Table
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -7552,7 +7552,7 @@ CombinedPreset_SearchLoop:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, CombinedPreset_SearchLoop_Data
+	ld xbc, CombinedPreset_Table
 	add xbc, xwa
 	ld xwa, (xbc)
 	lda xwa, (xwa + 24)
@@ -7615,7 +7615,7 @@ ReverbPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
-	lda xbc, (ReverbPreset_SearchLoop_Data:24)
+	lda xbc, (ReverbPreset_Table:24)
 	ld	xwa, (xbc+wa)
 	pushw 0x18
 	push xwa
@@ -7657,7 +7657,7 @@ EQPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
-	lda xbc, (EQPreset_SearchLoop_Data:24)
+	lda xbc, (EQPreset_Table:24)
 	ld	xwa, (xbc+wa)
 	pushw 0x18
 	push xwa
@@ -7700,7 +7700,7 @@ CombinedPreset_Load:
 	pushw iz
 	extz wa
 	sla wa, 2
-	lda xbc, (CombinedPreset_SearchLoop_Data:24)
+	lda xbc, (CombinedPreset_Table:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 2), xwa
 	pushw 0x18

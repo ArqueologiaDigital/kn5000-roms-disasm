@@ -116,7 +116,7 @@ WndScroll_HandleSelectionChange:
 	ld (XDE),WA
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4,XSP
 	sll HL, 0x03
 	lda xwa, (xsp + 0x1a)
@@ -190,7 +190,7 @@ WndScroll_DrawCurrentItem:
 
 	push xwa
 
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 
 	inc 4, xsp
 
@@ -782,7 +782,7 @@ WndEvt_EventCodeDispatch_Skip10:
 	srlw	(xsp+6)
 	inc	1, de
 	pushw	de
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	(xsp+10), xhl
 	ld	wa, qiz
 	extz	xwa
@@ -812,7 +812,7 @@ WndEvt_EventCodeDispatch_Skip10:
 	call	Free_Compare2
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	lda	xsp, (xsp+22)
 	ld	iz, 0:i3
 	; v10 does not spell this byte either
@@ -979,7 +979,7 @@ WndScroll_HandleCharInput:
 	ld a, (xwa)
 	ld c, a
 	extz bc
-	lda xhl, (FileOpen_NormalizeName_Data:24)
+	lda xhl, (CType_ClassTable:24)
 	ld	c, (xhl+bc)
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
@@ -1220,7 +1220,7 @@ ModeEdit_HandlePaint:
 	pushw	ModeEdit_HandlePaint_Data@lo16
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	lda	xbc, (xsp+260)
 	ld	xwa, (xsp+276)
@@ -1352,7 +1352,7 @@ TitleEdit_HandlePaint:
 	pushw	TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts@lo16
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	lda	xbc, (xsp+260)
 	ld	xwa, (xsp+276)
@@ -1690,7 +1690,7 @@ VwUserBitmapByName_HandlePaint:
 	pushw	VwUserBitmapByName_HandlePaint_Data@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+4)
 	call	FDemo_LinkedListLookupField
@@ -2066,21 +2066,21 @@ DrawDesignFrame_Join:
 	call	Free_Compare2
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	ld	iz, hl
 	ld	xwa, (xsp+20)
 	ld	xwa, (xwa+22)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	lda	xsp, (xsp+16)
 	cp	hl, iz
 	jr	ule, DrawDesignFrame_Skip3
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	6, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+22), xhl
@@ -2279,14 +2279,14 @@ TextBox_HandlePaint:
 	ld	xwa, (xsp+18)
 	ld	xwa, (xwa+26)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	ld	xwa, (xsp+22)
 	ld	wa, (xwa+38)
 	add	wa, hl
 	ld	(xsp+20), wa
 	inc	1, wa
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	6, xsp
 	ld	(xsp+22), xhl
 	ld	xiz, (xsp+22)
@@ -2335,7 +2335,7 @@ TextBox_DrawLineLoop:
 	pushw TextBox_DrawLineLoop_Data@hi16
 	pushw TextBox_DrawLineLoop_Data@lo16
 	push XIZ
-	call DrawEditSw_CopyVariant_Code_Helper
+	call StrSearch_Init
 	inc	8, xsp
 	lda	xwa, (xiz+hl)	; lda xwa, xiz+hl
 	ld	(xsp+10), xwa
@@ -2349,7 +2349,7 @@ TextBox_DrawLineLoop:
 	call	WordwrapStrings
 	ld	(xsp+14), hl
 	push	xiz
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ld	wa, (xsp+14)
 	cp	wa, hl
@@ -2400,7 +2400,7 @@ TextBox_CheckMoreText:
 TextBox_FreeBuffer:
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	xhl, 0:i3
 TextBox_Epilogue:
@@ -2997,7 +2997,7 @@ AcTempoBox_MatchTempoID:
 	pushw	AcTempoBox_MatchTempoID_Str_aa_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	AcTempoBox_SendConfirmEvent
 AcTempoBox_CopyTempoString:
@@ -4278,7 +4278,7 @@ ClampColorToRange_Skip12:
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+30)
 	ld	xwa, xde
@@ -4336,7 +4336,7 @@ ClampColorToRange_Skip15:
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xde, (xsp+30)
 	ld	xwa, xde
@@ -6241,7 +6241,7 @@ Gfx_LoadSplashBMP:
 	pushw Gfx_LoadSplashBMP_Data@lo16
 	lda xwa, (xsp + 0x0450)
 	push XWA
-	call SLIDE_Parse_Header_Helper
+	call String_Compare
 	add XSP,0x0000000a
 	cp hl, 0:i3
 	jr nz, FileIO_ControllerValidationFailed
@@ -6351,9 +6351,9 @@ SplashBMP_ReadInfoHeader:
 	ld	(xsp+18), xhl
 	ld	xwa, xhl
 	ld	xbc, (xsp+30)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+30), xhl
 	ld	xwa, (xsp+30)
@@ -6397,7 +6397,7 @@ SplashBMP_PrepareRowBuffer:
 	ld	xbc, (xsp+2)
 	dec	1, xbc
 	ld	xwa, (xsp+30)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+30), xhl
 	add	xhl, 354304
 	ld	(xsp+22), xhl
@@ -6419,7 +6419,7 @@ SplashBMP_ReadRowLoop:
 	push xwa
 
 SplashBMP_FreeOnError:
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 SplashScreen_Return:
 	ld hl, iz
@@ -6455,7 +6455,7 @@ SplashBMP_TileNarrow:
 	push	xwa
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+20)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	add	xhl, (xsp+28)
 	push	xhl
 	call	Mem_Copy
@@ -6472,7 +6472,7 @@ SplashBMP_CopyRemainder:
 
 	ld xbc, (xsp + 14)
 
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 
 	ld xwa, 0x140
 
@@ -6567,7 +6567,7 @@ Gfx_ProcessSplashData:
 	ld	wa, iz
 	extz	xwa
 	ld	xbc, (xsp+24)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+18), xhl
 	cpw	(xsp+22), 1
 	jr	z, SplashData_1bppSetup
@@ -6577,7 +6577,7 @@ Gfx_ProcessSplashData:
 	ld	xwa, (xsp+18)
 	ld	(xsp+4), xwa
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+16)
 	ld	(xsp+12), xbc
@@ -6706,7 +6706,7 @@ SplashData_1bppFree:
 	push xwa
 
 SplashData_FreeTempBuffer:
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 SplashData_Epilogue:
 	pop xiz
@@ -6775,7 +6775,7 @@ ImageDecode_CheckNextEntry:
 ImageDecode_PaletteReduceLoop:
 	ld	xwa, xbc
 	ld	xbc, 1000000
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xwa, xhl
 	ld	xbc, 1300000
 	call	Math_DivideSigned32
@@ -6906,7 +6906,7 @@ PaletteReduce_FindClosest:
 	ld XBC,XWA
 	sub XBC,XDE
 	ld XWA,XBC
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	ld (XSP+0x18),XHL
 	ld XDE,(XSP+0x2c)
 	and XDE,0x000000ff
@@ -6914,7 +6914,7 @@ PaletteReduce_FindClosest:
 	and XBC,0x000000ff
 	sub XBC,XDE
 	ld XWA,XBC
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	ld (XSP+0x14),XHL
 	ld XWA,(XSP+0x18)
 	add (XSP+0x14),XWA
@@ -6926,7 +6926,7 @@ PaletteReduce_FindClosest:
 	srl XBC, 16
 	sub XBC,XWA
 	ld XWA,XBC
-	call InitializeKubo_Helper
+	call Math_MultiplyAccumulate
 	add XHL,(XSP+0x14)
 	cp (XSP+0x0c),XHL
 	jr le, PaletteReduce_UpdateMinDist
@@ -7058,7 +7058,7 @@ CaptureLcd:
 	pushw	CaptureLcd_Str_HKLCD_Fmt3d_BMP@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	ld	xwa, 1:i3
 	add	(0x03044a:24), xwa
@@ -7547,7 +7547,7 @@ ClipBlit_Replace_ScanlineLoop:
 	ld	xbc, (xsp+8)
 	sub	xbc, xwa
 	pushw	bc
-	call	ClipBlit_Replace_Impl_Helper
+	call	Math_AbsInt16
 	add	hl, hl
 	lda	xwa, (ClipBlit_Replace_ScanlineLoop_Data:24)
 	ld	de, (xwa+hl)
@@ -9103,7 +9103,7 @@ DrawLineWithMode_Impl_Skip13:
 	jrl	le, DrawLineWithMode_Impl_Skip16
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9187,7 +9187,7 @@ DrawLineWithMode_Impl_Join3:
 DrawLineWithMode_Impl_Skip16:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, (xsp+46)
@@ -9341,7 +9341,7 @@ DrawLineWithMode_Impl_Skip22:
 	jr	le, DrawLineWithMode_Impl_Skip24
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9390,7 +9390,7 @@ DrawLineWithMode_Impl_Join7:
 DrawLineWithMode_Impl_Skip24:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xhl, (xsp+42)
 	ld	xde, (xsp+46)
@@ -9502,7 +9502,7 @@ DrawLineWithMode_Impl_Skip29:
 	jr	le, DrawLineWithMode_Impl_Skip31
 	ld	xwa, (xsp+12)
 	ld	xbc, xhl
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xde, (xsp+42)
 	ld	xwa, xde
@@ -9551,7 +9551,7 @@ DrawLineWithMode_Impl_Join11:
 DrawLineWithMode_Impl_Skip31:
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+34)
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+16), xhl
 	ld	xhl, (xsp+42)
 	ld	xde, (xsp+46)
@@ -10015,7 +10015,7 @@ DrawDottedLineWithMode_Impl_Skip21:
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	(xsp+12), xhl
 	ld	xbc, (xsp+34)
 	ld	xwa, xbc

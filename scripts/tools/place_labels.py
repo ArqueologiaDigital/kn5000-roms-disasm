@@ -10,6 +10,9 @@ JOB IT DOES (a library; scripts/tools/label_naka_records.py is its first user)
       `NAME:` (same-line form, the house style for slices);
     * inside a `.byte`/`.short`/`.long` list, on an element boundary, every element a plain
       number or symbol -> the list is cut there likewise;
+    * inside a whole-file `.incbin "F"` -> it becomes `.incbin "F", 0, off` + the rest (the
+      file's size read from disk: generated .bin files exist after `make`);
+    * inside a one-string `.ascii "..."` with no escapes -> the string is cut there;
     * anything else (inside an instruction, mid-element, inside a macro) -> reported, left.
   A label emits no byte: the caller runs `make gate-all`.
 
@@ -32,7 +35,9 @@ LABEL = re.compile(r'^([A-Za-z_][\w.$]*):')
 INCBIN = re.compile(r'^(?P<pre>(?:[A-Za-z_][\w.$]*:)?\s*)\.incbin\s+"(?P<f>[^"]+)"\s*,\s*(?P<o>0x[0-9a-fA-F]+|\d+)\s*,\s*(?P<n>0x[0-9a-fA-F]+|\d+)(?P<post>\s*(?:;.*)?)$')
 LIST = re.compile(r'^(?P<pre>(?:[A-Za-z_][\w.$]*:)?\s*)\.(?P<d>byte|short|hword|2byte|long|word|4byte)\s+(?P<items>[^;]*?)(?P<post>\s*(?:;.*)?)$')
 SIZE = {"byte": 1, "short": 2, "hword": 2, "2byte": 2, "long": 4, "word": 4, "4byte": 4}
-ITEM = re.compile(r'^(0x[0-9a-fA-F]+|\d+|[A-Za-z_][\w.$]*)$')
+ITEM = re.compile(r'^(-?0x[0-9a-fA-F]+|-?\d+|[A-Za-z_][\w.$]*)$')
+WHOLE = re.compile(r'^(?P<pre>(?:[A-Za-z_][\w.$]*:)?\s*)\.incbin\s+"(?P<f>[^"]+)"(?P<post>\s*(?:;.*)?)$')
+ASCII1 = re.compile(r'^(?P<pre>(?:[A-Za-z_][\w.$]*:)?\s*)\.ascii\s+"(?P<s>[^"\\]*)"(?P<post>\s*(?:;.*)?)$')
 LABINC = re.compile(r'^([A-Za-z_][\w.$]*):[ \t]*(\.incbin\s.*)$')
 
 
@@ -53,6 +58,14 @@ class Planner:
             self.texts[rel] = open(os.path.join(self.srcroot, rel), "rb").read().decode("latin-1").split("\n")
         return self.texts[rel]
 
+    def binsize(self, f):
+        """Size of a whole-file .incbin's file (generated .bin files exist after `make`)."""
+        for base in (self.srcroot, os.path.join(REPO, self.img.get("root", "").split("/")[0])):
+            q = os.path.join(base, f)
+            if os.path.exists(q):
+                return os.path.getsize(q)
+        return 0
+
     def where(self, addr):
         k = bisect.bisect_right(self.starts, addr) - 1
         if k < 0:
@@ -71,9 +84,13 @@ class Planner:
         if off == 0:
             kind = ("insert", 0)
         else:
-            mi, ml = INCBIN.match(line), LIST.match(line)
+            mi, ml, mw, ma = INCBIN.match(line), LIST.match(line), WHOLE.match(line), ASCII1.match(line)
             if mi and 0 < off < int(mi.group("n"), 0):
                 kind = ("incbin", off)
+            elif mw and 0 < off < self.binsize(mw.group("f")):
+                kind = ("whole", off)
+            elif ma and 0 < off < len(ma.group("s")):
+                kind = ("ascii", off)
             elif ml:
                 sz = SIZE[ml.group("d")]
                 items = [x.strip() for x in ml.group("items").split(",")]
@@ -86,7 +103,8 @@ class Planner:
             return "duplicate"
         items.append((kind[0], kind[1], name))
         self.names[addr] = name
-        return {"insert": "line-start", "incbin": "incbin", "list": "list"}[kind[0]]
+        return {"insert": "line-start", "incbin": "incbin", "list": "list", "whole": "incbin",
+                "ascii": "ascii"}[kind[0]]
 
     def apply(self):
         for (rel, li), items in sorted(self.plan.items(), key=lambda kv: (kv[0][0], -kv[0][1])):
@@ -95,7 +113,22 @@ class Planner:
             ins = [x for x in items if x[0] == "insert"]
             cuts = sorted([x for x in items if x[0] != "insert"], key=lambda x: x[1])
             out = [line]
-            if cuts and cuts[0][0] == "incbin":
+            if cuts and cuts[0][0] == "whole":
+                mw = WHOLE.match(line)
+                n0 = self.binsize(mw.group("f"))
+                b = [0] + [c[1] for c in cuts] + [n0]
+                out = ['%s.incbin "%s", 0x%X, 0x%X%s' % (mw.group("pre") if j == 0 else "%s:\t" % cuts[j - 1][2],
+                                                         mw.group("f"), b[j], b[j + 1] - b[j],
+                                                         mw.group("post") if j == 0 else "")
+                       for j in range(len(b) - 1)]
+            elif cuts and cuts[0][0] == "ascii":
+                ma = ASCII1.match(line)
+                s = ma.group("s")
+                b = [0] + [c[1] for c in cuts] + [len(s)]
+                out = ['%s.ascii\t"%s"%s' % (ma.group("pre") if j == 0 else "%s:\t" % cuts[j - 1][2],
+                                             s[b[j]:b[j + 1]], ma.group("post") if j == 0 else "")
+                       for j in range(len(b) - 1)]
+            elif cuts and cuts[0][0] == "incbin":
                 mi = INCBIN.match(line)
                 o0, n0 = int(mi.group("o"), 0), int(mi.group("n"), 0)
                 b = [0] + [c[1] for c in cuts] + [n0]

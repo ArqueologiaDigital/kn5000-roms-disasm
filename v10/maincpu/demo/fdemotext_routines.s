@@ -1902,7 +1902,7 @@ FDemoText_TextDispatch_Skip3:
 	ld	xbc, EVT_START_SONG
 	ld	xde, 19
 	call	SendEvent
-	ld	xwa, NakaInst_Param_Field02_0x4
+	ld	xwa, FDemoText_ByteData_LayoutEngine_Data_8
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	SendEvent

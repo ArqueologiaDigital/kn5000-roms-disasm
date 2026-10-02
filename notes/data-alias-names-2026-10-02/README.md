@@ -22,3 +22,15 @@ the first code line using it), and every use takes that name.  `v*.json` list ea
 The CODE targets (a secondary entry into a routine, a jump-table case) are left for a pass
 that can name what the code does.  docs/ and technics-docs quotes of retired aliases were
 renamed in the same change.
+
+## Round 2 (2026-10-03)
+
+name_data_aliases.py now places through scripts/tools/place_labels.py, which also cuts
+whole-file `.incbin "F"` lines, negative `.byte` items and one-string `.ascii` lines: new
+labels v10 128, v9 113, v7 103 (reports `round2_<tree>.json`; e.g. the sound_data_drum_kits.bin
+bytes scoop_display.s reads at +0x1A / +0x3A).  Before it,
+scripts/tools/drop_codeless_positional_aliases.py deleted the aliases no code, data, C or link
+script uses (v10 117, v9 117, v7 248; their comment mentions were turned into the label at the
+address by fix_stale_positional_comments.py), and afterwards
+scripts/tools/retire_colocated_labels.py retired generated names that shared an address with
+another label (v10 313, v9 320, v7 385; hand-written pairs and names a C source uses left).

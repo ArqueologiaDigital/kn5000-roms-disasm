@@ -400,7 +400,7 @@ DrawString_Centered:
 	ld	(xsp + 10), xwa
 	ld	xwa, (xsp + 6)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ld	(xsp + 2), hl
 	ld	de, 0:i3
@@ -471,7 +471,7 @@ WaitingFunc_DrawMessage:
 	lda	xbc, (WaitingFunc_DrawMessage_PtrTable:24)
 	ld	xiz, (xbc+wa)
 	push	xiz
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	srl	hl, 1
 	pushw_da	0x8c, 0x74, 0x02

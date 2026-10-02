@@ -14,6 +14,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
     * the address is inside an `.incbin` slice       -> the slice is cut there;
     * inside a `.byte` / `.short` / `.long` list, on an element boundary -> the list is cut;
     * anything else (code, mid-element, macros)     -> reported, left alone.
+  Placement is scripts/tools/place_labels.py's (also whole-file `.incbin`s, negative `.byte`
+  items and one-string `.ascii` lines since 2026-10-03).
   The new label is `<Reader>_Str_<Text>` when the bytes there start a NUL-terminated ASCII
   string (split_blobs_at_far_pointers.c_string_at), else `<Reader>_Data`; Reader is the
   nearest non-structural label above the first code line that uses the alias.  The alias's
@@ -103,95 +105,56 @@ def main():
                 if reader and (n not in use or ent < use[n]):
                     use[n] = ent
     stats, rows = collections.Counter(), []
-    plan = {}                                  # (rel, line) -> list of (offset/kind, name, alias)
+    sys.path.insert(0, os.path.join(REPO, "scripts", "tools"))
+    import place_labels
+    planner = place_labels.Planner(a.tree)
     retire = {}
+    placed_at = {}
     for n, (v, arel, ai) in sorted(aliases.items(), key=lambda kv: kv[1][0]):
         if n not in use:
             stats["not-used-by-code"] += 1
             continue
-        k = bisect.bisect_right(starts, v) - 1
-        if k < 0:
+        w = planner.where(v)
+        if not w:
             continue
-        sa, se, rel, li = spans[k]
-        if rel not in texts:
-            continue
-        line = texts[rel][li]
+        sa, rel, li = w
+        line = planner.lines(rel)[li]
         if snb.drc.classify_line(line, macros)[0] != "data":
             stats["code-target"] += 1
+            continue
+        if v in placed_at:
+            retire[n] = placed_at[v]
+            stats["same-place-as-another-alias"] += 1
+            continue
+        lab = LABEL.match(line)
+        if v == sa and lab:
+            retire[n] = lab.group(1)
+            stats["retire-into-existing-label"] += 1
+            rows.append({"alias": n, "result": "existing", "label": lab.group(1)})
             continue
         reader = use[n][1]
         s = sb.c_string_at(rom, base, v)
         good_str = s is not None and len(s) >= 2 and (v == sa or rom[v - base - 1] in (0, 0xff))
         stem = "%s_Str_%s" % (reader, sb.text_token(s)) if good_str else "%s_Data" % reader
-        lab = LABEL.match(line)
-        off = v - sa
-        if off == 0 and lab:
-            retire[n] = lab.group(1)
-            stats["retire-into-existing-label"] += 1
-            rows.append({"alias": n, "result": "existing", "label": lab.group(1)})
-            continue
-        kind = None
-        if off == 0:
-            kind = ("insert", 0)
-        else:
-            mi = INCBIN.match(line)
-            ml = LIST.match(line)
-            if mi and 0 < off < int(mi.group("n"), 0):
-                kind = ("incbin", off)
-            elif ml:
-                sz = SIZE[ml.group("d")]
-                items = [x.strip() for x in ml.group("items").split(",")]
-                if off % sz == 0 and 0 < off // sz < len(items) and \
-                        all(re.match(r'^(0x[0-9a-fA-F]+|\d+|[A-Za-z_][\w.$]*)$', x) for x in items):
-                    kind = ("list", off // sz)
-        if not kind:
-            stats["inside-a-line"] += 1
-            rows.append({"alias": n, "result": "inside a line", "at": "%s:%d" % (rel, li + 1)})
-            continue
-        if (rel, li) in plan and any(p[0] == kind for p in plan[(rel, li)]):
-            other = [p for p in plan[(rel, li)] if p[0] == kind][0]
-            retire[n] = other[1]
-            stats["same-place-as-another-alias"] += 1
-            continue
         nm, kk = stem, 2
         if prefer.get(n) and prefer[n] not in taken:
             nm = prefer[n]
             stats["names-from-used"] += 1
         while nm in taken:
             nm, kk = "%s_%d" % (stem, kk), kk + 1
-        taken.add(nm)
-        plan.setdefault((rel, li), []).append((kind, nm, n))
-        retire[n] = nm
-        stats["new-label"] += 1
-        rows.append({"alias": n, "result": "label", "label": nm, "kind": kind[0], "at": "%s:%d" % (rel, li + 1)})
-    if a.apply:
-        for (rel, li), items in sorted(plan.items(), key=lambda kv: (kv[0][0], -kv[0][1])):
-            L = texts[rel]
-            line = L[li]
-            ins = [x for x in items if x[0][0] == "insert"]
-            cuts = sorted([x for x in items if x[0][0] != "insert"], key=lambda x: x[0][1])
-            out = []
-            if cuts and cuts[0][0][0] == "incbin":
-                mi = INCBIN.match(line)
-                o0, n0 = int(mi.group("o"), 0), int(mi.group("n"), 0)
-                bounds = [0] + [c[0][1] for c in cuts] + [n0]
-                for j in range(len(bounds) - 1):
-                    pre = mi.group("pre") if j == 0 else "%s:\t" % cuts[j - 1][1]
-                    post = mi.group("post") if j == 0 else ""
-                    out.append('%s.incbin "%s", 0x%X, 0x%X%s' % (pre, mi.group("f"), o0 + bounds[j], bounds[j + 1] - bounds[j], post))
-            elif cuts:
-                ml = LIST.match(line)
-                items_ = [x.strip() for x in ml.group("items").split(",")]
-                bounds = [0] + [c[0][1] for c in cuts] + [len(items_)]
-                for j in range(len(bounds) - 1):
-                    pre = ml.group("pre") if j == 0 else "%s:\t" % cuts[j - 1][1]
-                    post = ml.group("post") if j == 0 else ""
-                    out.append("%s.%s\t%s%s" % (pre, ml.group("d"), ", ".join(items_[bounds[j]:bounds[j + 1]]), post))
-            else:
-                out = [line]
-            for x in ins:
-                out[0:0] = ["%s:" % x[1]]
-            L[li:li + 1] = out
+        how = planner.add(v, nm)
+        if how in ("line-start", "incbin", "list", "ascii"):
+            taken.add(nm)
+            placed_at[v] = nm
+            retire[n] = nm
+            stats["new-label"] += 1
+            rows.append({"alias": n, "result": "label", "label": nm, "kind": how, "at": "%s:%d" % (rel, li + 1)})
+        else:
+            stats["inside-a-line"] += 1
+            rows.append({"alias": n, "result": "inside a line", "at": "%s:%d" % (rel, li + 1)})
+    if a.apply and retire:
+        planner.apply()
+        texts = {rel: open(os.path.join(srcroot, rel), "rb").read().decode("latin-1").split("\n") for rel in texts}
         rp = re.compile(r'(?<![\w.$])(%s)(?![\w$]|\.\w)' % "|".join(map(re.escape, sorted(retire, key=len, reverse=True))))
         for rel, L in texts.items():
             new = []
@@ -209,7 +172,8 @@ def main():
         for p in glob.glob(os.path.join(srcroot, "**", "*.c"), recursive=True) + \
                 glob.glob(os.path.join(srcroot, "**", "*.h"), recursive=True):
             t = open(p, "rb").read().decode("latin-1")
-            t2 = rp.sub(lambda mm: retire[mm.group(1)], t)
+            rpc = re.compile(r'(?<![\w$])(%s)(?![\w$])' % "|".join(map(re.escape, sorted(retire, key=len, reverse=True))))
+            t2 = rpc.sub(lambda mm: retire[mm.group(1)], t)        # C: `.member` designators too
             if t2 != t:
                 open(p, "wb").write(t2.encode("latin-1"))
     print("%s: %s%s" % (a.tree, dict(stats), "" if a.apply else " (dry run)"))

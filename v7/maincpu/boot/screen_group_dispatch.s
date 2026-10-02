@@ -41,7 +41,7 @@ screen_group_dispatch_Skip2:
 ; (v7 label ScreenGroup_SetupWidgetPtr stood here; dropped, see the file header)
 	sla	wa, 2
 ; (v7 label VoiceInit_Dispatch stood here; dropped, see the file header)
-	lda	xbc, (AudioModeChange_Handler_Data:24)
+	lda	xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (AudioModeChange_Handler_Code:24)
@@ -84,7 +84,7 @@ DkMdlyPly_CheckState_Helper2_Join:
 	ld	a, (0x8c98:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (AudioModeChange_Handler_Data:24)
+	lda	xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	.byte	0xf2, 0x09, 0xe5, 0xfd, 0x30
@@ -123,7 +123,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip3:
 	andw	(0xc4fa:16), 0xffdf
 	ld	wa, (0xc4fa:16)
 	and	wa, 0x7
-	call	z, (Interrupt_FlagSetBytecode_Helper:24)
+	call	z, (AudioInit_RefreshToneBank:24)
 ScreenGroup_InitVoiceLoop_Code_Join:
 	res	2, (0xc162:16)
 	ld	a, (0xfc67:16)
@@ -151,7 +151,7 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 	ld	a, l
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (UIState_ProcessMidiEvent_Data:24)
+	lda	xbc, (PartRecord_RamPtrTable:24)
 	ld	xwa, (xbc+wa)
 	ld	a, h
 	cp	a, 0x16
@@ -173,7 +173,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip4:
 	ret	z
 	ld	a, l
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 ; (v7 label ScreenGroup_InitParams16 stood here; dropped, see the file header)
 	extz	wa
@@ -185,7 +185,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip4:
 	ld	a, d
 	and	a, 0x7
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data_2:24)
+	lda	xbc, (PartRouting_ByteTable:24)
 	ld	a, (xbc+wa)
 	and	a, 0x7
 	sla	a, 1
@@ -203,7 +203,7 @@ UIStateEvt_VoiceAssign:
 	jr	nz, UIStateEvt_VoiceAssign_Reset
 	ld	a, l
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
@@ -219,7 +219,7 @@ UIStateEvt_VoiceAssign:
 UIStateEvt_VoiceAssign_Reset:
 	ld	a, l
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
@@ -236,7 +236,7 @@ UIStateEvt_ToneChange:
 	jr	z, UIStateEvt_ToneChange_Set
 	ld	a, l
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc166:16)
@@ -251,7 +251,7 @@ UIStateEvt_ToneChange:
 UIStateEvt_ToneChange_Set:
 	ld	a, l
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc166:16)
@@ -261,7 +261,7 @@ UIStateEvt_ToneChange_Set:
 	ld	a, l
 ; (v7 label ScreenGroup_InitWordPairsLoop stood here; dropped, see the file header)
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 	ld	(xix), a
 	cp	l, 0x13
@@ -279,7 +279,7 @@ UIStateEvt_DrumAssign:
 	jr	z, UIStateEvt_DrumAssign_Set
 	ld	a, l
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)

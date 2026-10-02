@@ -1198,7 +1198,7 @@ PerfMode_Evt03_FlagHandler_A_Code:
 	ld	h, 13:opc
 	call	PerfMode_ClampValue
 	ld	(13944:16), a
-	call	PerfMode_Evt03_FlagHandler_A_Code_Helper
+	call	Disp_ShowNoteValueFields
 	call	Display_UpdateRegion3
 	ret	
 PerfMode_Evt03_FlagHandler_B:
@@ -1208,7 +1208,7 @@ PerfMode_Evt03_FlagHandler_B:
 	ld	h, 12:opc
 	call	PerfMode_ClampValue
 	ld	(13945:16), a
-	call	PerfMode_Evt03_FlagHandler_A_Code_Helper
+	call	Disp_ShowNoteValueFields
 	call	Display_UpdateRegion3
 	ret	
 PerfMode_Evt03_ClampAndUpdate:
@@ -1218,7 +1218,7 @@ PerfMode_Evt03_ClampAndUpdate:
 	ld	h, 3:opc
 	call	PerfMode_ClampValue
 	stb_d8	(0x367a), a
-	call	PerfMode_Evt03_FlagHandler_A_Code_Helper
+	call	Disp_ShowNoteValueFields
 	call	Display_UpdateRegion3
 	ret
 PerfMode_ClampValue:
@@ -4880,7 +4880,7 @@ DisplayMode_Handler_3_Skip19:
 DisplayMode_Handler_3_Join6:
 	xor	a, a
 	call	VoiceSlot_RestoreState
-	call	DisplayMode_Handler_3_Helper20
+	call	Disp_ShowNoteNameAndVelocity
 	or	(0xe31c:16), 8
 	call	Display_UpdateRegion3
 DisplayMode_Handler_3_Return4:
@@ -5079,7 +5079,7 @@ DisplayMode_Handler_3_Helper9_Helper:
 	ld	(0x110e:16), xhl
 	pop	xhl
 	call	PerfMode_EventTable_0_Target1_Helper2
-	call	DisplayMode_Handler_3_Helper20
+	call	Disp_ShowNoteNameAndVelocity
 	or	(0xe31c:16), 8
 	call	Display_UpdateRegion3
 DisplayMode_Handler_3_Helper9_Return4:
@@ -5101,7 +5101,7 @@ PerfMode_EventTable_0_Target2_Helper:
 	ld	(0x110e:16), xhl
 	pop	xhl
 	call	PerfMode_EventTable_0_Target1_Helper2
-	call	DisplayMode_Handler_3_Helper20
+	call	Disp_ShowNoteNameAndVelocity
 	or	(0xe31c:16), 8
 	call	Display_UpdateRegion3
 DisplayMode_Handler_3_Helper9_Return5:
@@ -6155,7 +6155,7 @@ VoiceCtrl_ParamSetupBytecode_0x1CF:
 VoiceCtrl_ParamSetupBytecode_0x1E4:
 	ret
 	; Byte data, 18 B.  Read by VoiceCtrl_ParamSetupBytecode (0xEF97B6): `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl`
-	; reader VoiceCtrl_ParamSetupBytecode: `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl` then `ld_rr8b a, xhl, a`
+	; reader VoiceCtrl_ParamSetupBytecode: `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl` then `ld a, (xhl+a)`
 VoiceCtrl_ParamSetupBytecode_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 	.byte	0x00, 0x00
@@ -6739,7 +6739,7 @@ SerialPort_ModeHandler_0_Join3:
 	ld	(13202:16), a
 	ret
 	; Byte data, 28 B.  Read by SerialPort_ModeHandler_0 (0xEF9DD9): `ld xix, ScoopParam_ValueTable`
-	; reader SerialPort_ModeHandler_0: `ld xix, ScoopParam_ValueTable` then `ld_rrw bc, xix, hl`
+	; reader SerialPort_ModeHandler_0: `ld xix, ScoopParam_ValueTable` then `ld bc, (xix+hl)`
 ScoopParam_ValueTable:
 	.byte	0x00, 0x00, 0x08, 0x00, 0x0c, 0x00, 0x10, 0x00, 0x18, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00
 	.byte	0x60, 0x00, 0xc0, 0x00, 0x80, 0x01, 0x00, 0x03, 0x80, 0x04, 0x00, 0x06
@@ -7178,7 +7178,7 @@ Interrupt_SendAllNotesOff:
 	push	xix
 	push	xiy
 	push	xiz
-	call	Interrupt_FlagSetBytecode_Helper2
+	call	NoteMap_SendAllNotesOff
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -7193,7 +7193,7 @@ Interrupt_SendAllNotesOff:
 	push	xix
 	push	xiy
 	push	xiz
-	call	Interrupt_FlagSetBytecode_Helper
+	call	AudioInit_RefreshToneBank
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -7423,7 +7423,7 @@ PortConfig_Handler_0_Helper4:
 	ld	(3429:16), a
 	ret
 	; Byte data, 24 B.  Read by PortConfig_Handler_0 (0xEFA53B): `ld xhl, PortConfig_DataTable_A`
-	; reader PortConfig_Handler_0: `ld xhl, PortConfig_DataTable_A` then `ld_rr8b a, xhl, a`
+	; reader PortConfig_Handler_0: `ld xhl, PortConfig_DataTable_A` then `ld a, (xhl+a)`
 PortConfig_DataTable_A:
 	.byte	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00, 0x02
 	.byte	0x03, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01
@@ -7479,7 +7479,7 @@ PerfMode_Handler_EvtB_Helper2_Helper5:
 	ld (3567:16), a
 	ret
 	; Byte data, 4 B.  Read by PortConfig_Handler_0 (0xEFA53B): `ld xhl, PortConfig_Handler_0_Tbl`
-	; reader PortConfig_Handler_0: `ld xhl, PortConfig_Handler_0_Tbl` then `ld_rr8b a, xhl, a`
+	; reader PortConfig_Handler_0: `ld xhl, PortConfig_Handler_0_Tbl` then `ld a, (xhl+a)`
 PortConfig_Handler_0_Tbl:
 	.byte	0x00, 0x00, 0x00, 0x0c
 PerfMode_Handler_EvtB_Helper2_Helper6:
@@ -7946,7 +7946,7 @@ MemoryConfig_Handler_Table_Join2:
 	ldto_lerp	xiy, 56
 	ret
 	; Byte data, 97 B.  Read by SysEx_BytecodeDispatcher (0xEFAAB1): `ld XIY,SysEx_BytecodeDispatcher_Tbl`
-	; reader SysEx_BytecodeDispatcher: `ld XIY,SysEx_BytecodeDispatcher_Tbl` then `lda_rr xiy, xiy, hl`
+	; reader SysEx_BytecodeDispatcher: `ld XIY,SysEx_BytecodeDispatcher_Tbl` then `lda xiy, (xiy+hl)`
 SysEx_BytecodeDispatcher_Tbl:
 	.byte	0x04, 0x04, 0x00, 0x03, 0x00, 0x04, 0x00, 0x00, 0x08, 0x08, 0x00, 0x03, 0x00, 0x08, 0x00, 0x00
 	.byte	0x10, 0x10, 0x00, 0x05, 0x00, 0x10, 0x2f, 0x02, 0x20, 0x20, 0x00, 0x05, 0x00, 0x20, 0x2f, 0x02
@@ -11360,7 +11360,7 @@ Display_ModePopupDispatch_Tbl:
 Display_ModePopupIds:
 	.byte	0x00, 0x05, 0x05, 0x0f
 	; Byte data, 12 B.  Read by VoiceSlot_StatusRet (0xEFC788): `ld xhl, VoiceSlot_StatusRet_Tbl2`
-	; reader VoiceSlot_StatusRet: `ld xhl, VoiceSlot_StatusRet_Tbl2` then `ld_rr8b a, xhl, a`
+	; reader VoiceSlot_StatusRet: `ld xhl, VoiceSlot_StatusRet_Tbl2` then `ld a, (xhl+a)`
 VoiceSlot_StatusRet_Tbl2:
 	.byte	0x00, 0x06, 0x04, 0x05, 0x03, 0x07, 0x02, 0x07, 0x01, 0x07, 0x07, 0x07
 VoiceSlot_SaveState:
@@ -12406,7 +12406,7 @@ SubCPU_ToneParamDisplay_Join2:
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 40 B.  Read by SubCPU_ToneParamDisplay (0xEFD992): `ld xiy, Str_PanKeyShiftTuning`
-	; reader SubCPU_ToneParamDisplay: `ld xiy, Str_PanKeyShiftTuning` then `lda_rr xiy, xiy, wa`
+	; reader SubCPU_ToneParamDisplay: `ld xiy, Str_PanKeyShiftTuning` then `lda xiy, (xiy+wa)`
 Str_PanKeyShiftTuning:
 	.ascii	"PAN      :KEY SHIFT:TUNING   :BEND SENS:"
 	; Byte data, 80 B.  Read by SubCPU_ToneParamDisplay (0xEFD992): `ld XIX,SubCPU_ToneDispatch`
@@ -13228,7 +13228,7 @@ SubCPU_ToneParamRet_Helper4:
 	ld	xbc, 0x0d43
 	xor	xde, xde
 	ld	e, 2:opc
-	call	VoiceAlloc_ScoopDisplayProcess_Helper3
+	call	NoteDisplay_StoreAndDispatch
 	pop	xde
 	pop	xbc
 	pop	xwa
@@ -14469,7 +14469,7 @@ Display_BytecodeBlock_F_Skip3:
 	ld	a, (4541:16)
 	ld	c, (4540:16)
 	ld	xde, 4543
-	call	Display_BytecodeBlock_F_Helper2
+	call	SndParam_ApplyProgramChangeAsync
 	pop	xde
 	ld	xiy, 4543
 	ld	xix, 3800
@@ -14488,7 +14488,7 @@ Display_BytecodeBlock_F_Skip9:
 Display_BytecodeBlock_F_Return:
 	ret
 	; Byte data, 16 B.  Read by Display_BytecodeBlock_F (0xEFF11A): `ld xhl, Display_BytecodeBlock_F_Tbl`
-	; reader Display_BytecodeBlock_F: `ld xhl, Display_BytecodeBlock_F_Tbl` then `ld_rr8b a, xhl, a`
+	; reader Display_BytecodeBlock_F: `ld xhl, Display_BytecodeBlock_F_Tbl` then `ld a, (xhl+a)`
 Display_BytecodeBlock_F_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte	0x0c, 0x0d, 0x0e, 0x0f
@@ -14536,9 +14536,9 @@ Display_BytecodeBlock_F_Skip4:
 	and	a, 127
 	cp	a, 0:i3
 	jrl	z, Display_BytecodeBlock_F_Join2
-	ld	xiy, Display_BytecodeBlock_F_0x253
+	ld	xiy, Display_BytecodeBlock_F_Sub_Data
 	jp	Display_BytecodeBlock_F_Join2
-	ld	xiy, Display_BytecodeBlock_F_0x256
+	ld	xiy, Display_BytecodeBlock_F_Sub_Data_2
 Display_BytecodeBlock_F_Join2:
 	ld	wa, (xiy)
 	ld	(xix), wa
@@ -14558,7 +14558,9 @@ Display_BytecodeBlock_F_Return2:
 	; Lcd text, 72 B.  Read by Display_BytecodeBlock_F (0xEFF11A): `ld xiy, Str_PBendModExpEq`
 	; indexed with stride 8 (`sla hl, 3`)
 Str_PBendModExpEq:
-	.ascii	"        P.BEND= MOD.  = EXP.  = P.MEM = AFT.  =                          ONOFF"
+	.ascii	"        P.BEND= MOD.  = EXP.  = P.MEM = AFT.  =                         "
+Display_BytecodeBlock_F_Sub_Data:	.ascii	" ON"
+Display_BytecodeBlock_F_Sub_Data_2:	.ascii	"OFF"
 Display_BytecodeBlock_F_Sub_Helper2:
 	xor	xwa, xwa
 	ldb_d8	a, (0x3685)
@@ -14615,7 +14617,7 @@ VoiceSlot_StatusRet_Helper4:
 	jrl	nz, Display_BytecodeBlock_F_Skip7
 	cp	(64603:16), 2
 	jrl	nz, Display_BytecodeBlock_F_Skip7
-	ld	xiy, Display_BytecodeBlock_F_0x31A
+	ld	xiy, Str_PBendModExpEq_Data
 Display_BytecodeBlock_F_Skip7:
 	ldw	bc, 26
 	ldir85
@@ -14629,7 +14631,8 @@ Display_BytecodeBlock_F_Tbl2:
 	.byte	0x15
 	.ascii	"="
 	.byte	0x09
-	.ascii	"        TEMPO   "
+	.ascii	"       "
+Str_PBendModExpEq_Data:	.ascii	" TEMPO   "
 	.byte	0x93
 	.ascii	"="
 	.byte	0x09
@@ -14813,7 +14816,6 @@ Tbl_NoteValueGlyphs:
 	; ("TENU"/"NORM"/"STAC"/"CUTT").  Called after (0x3678..0x367a) change
 	; (PerfMode_Evt03_ClampAndUpdate clamps (0x367a) to 0..3 then calls this).
 Disp_ShowNoteValueFields:
-PerfMode_Evt03_FlagHandler_A_Code_Helper:
 	ld XIX,0x00000ed9
 	xor HL,HL
 	ld l, (0x3678:16)
@@ -14924,7 +14926,6 @@ Tbl_ArticulationNames:
 	; octave Tbl_OctaveNames[((0x367c) div 12)*2] ("-2".."8"), 'V' at +5 and
 	; (0x367b) in decimal at +6 -- a MIDI note number and its velocity.
 Disp_ShowNoteNameAndVelocity:
-DisplayMode_Handler_3_Helper20:
 	ld	xix, 3791
 	cp	(13947:16), 255
 	jrl	nz, Disp_ShowNoteNameAndVelocity_Skip
@@ -16460,7 +16461,7 @@ Scoop_SetupDisplayTables:
 Scoop_InitPartDisplay:
 	ld a, (3424:16)
 	ld (4494:16), a
-	ld xiy, StyleUI_ScreenData_Main_0x1EF
+	ld xiy, Scoop_InitPartDisplay_Data_2
 	push xhl
 	call UIRender_ConditionalDrawInit
 	pop xhl
@@ -16485,7 +16486,7 @@ Scoop_SelectModeTable_2Part_XIX:
 	pop xhl
 	cp l, 0:i3
 	jr nz, Scoop_SetPartIndexAndDisplay
-	ld xiy, StyleUI_ScreenData_Main_0xD3F
+	ld xiy, Scoop_SelectModeTable_2Part_XIX_Data
 	ld xix, StyleUI_ScreenData_MeasCursor
 	call UIRender_TwoTableGeneral
 
@@ -16495,7 +16496,7 @@ Scoop_SetPartIndexAndDisplay:
 	ld xiy, 0xf1a0
 	ld	a, (xiy+a)
 	ld (4493:16), a
-	ld xiy, SOUND_DATA_DRUM_KITS_0x3A
+	ld xiy, Scoop_SetPartIndexAndDisplay_Data
 	call Scoop_ConditionalCurveUpdate
 
 Scoop_Return:
@@ -16541,7 +16542,7 @@ Scoop_CallDisplayHelper_DisplayList:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x32, 0x00, 0x10, 0x01, 0x42, 0x00
 Scoop_CallDisplayHelper_DisplayList_Code:
 	ld	xiy, 0xe0b42a
-	ld	xix, SOUND_DATA_DRUM_KITS_0x1A
+	ld	xix, Scoop_CallDisplayHelper_DisplayList_Data
 	call	UIRender_SingleTable
 	ret
 
@@ -16600,14 +16601,14 @@ Scoop_InitDisplayFull:
 	call UIRender_TwoTableGeneral
 	ld a, (3424:16)
 	ld (4494:16), a
-	ld xiy, StyleUI_ScreenData_Main_0x1EF
+	ld xiy, Scoop_InitPartDisplay_Data_2
 	call UIRender_ConditionalDrawInit
 	ld a, (3424:16)
 	dec 1, a
 	ld xiy, 0xf1a0
 	ld	a, (xiy+a)
 	ld (4493:16), a
-	ld xiy, SOUND_DATA_DRUM_KITS_0x3A
+	ld xiy, Scoop_SetPartIndexAndDisplay_Data
 	call Scoop_ConditionalCurveUpdate
 	ret
 
@@ -16615,7 +16616,7 @@ Display_RedrawMainContent:
 	cp (0x8c9c:16), 0x8a
 	jr nz, Scoop_RedrawMainContent_End
 	ld (0x03efa8:24), 0x00
-	ld XIY,StyleUI_ScreenData_Main_0x1F9
+	ld XIY,Display_RedrawMainContent_Data
 	call Scoop_CurveUpdate_Direct
 Scoop_RedrawMainContent_End:
 	ret
@@ -16627,15 +16628,15 @@ Display_RedrawFooter:
 	ld a, (0x0f52:16)
 	ld (0x1191:16), a
 	ld (0x1192:16), a
-	ld XIY,StyleUI_ScreenData_Main_0x21C
+	ld XIY,Display_RedrawFooter_Data
 	cpw (0x0e50:16), 0x0000
 	jr nz, Scoop_FooterShowPartValue
-	ld XIX,StyleUI_ScreenData_Main_0x258
+	ld XIX,Display_RedrawFooter_Data_2
 	jr t, Scoop_FooterCallDisplay
 Scoop_FooterShowPartValue:
 	ld a, (3922:16)
 	ld (4499:16), a
-	ld xix, StyleUI_ScreenData_Main_0x276
+	ld xix, Scoop_FooterShowPartValue_Data
 
 Scoop_FooterCallDisplay:
 	call GraphicsRender_TwoTable
@@ -16658,13 +16659,13 @@ Display_RedrawTitleBar:
 	calr Scoop_TitleBar_GetPartConfig
 	cpw (0x0e4c:16), 0x03e8
 	jr c, Scoop_TitleBar_ShowBPM_Part0
-	ld XIY,StyleUI_ScreenData_Main_0x1E0
+	ld XIY,Display_RedrawTitleBar_Data
 	call Scoop_ConditionalGlideSetup
 	jr t, Scoop_TitleBar_Part1Check
 Scoop_TitleBar_ShowBPM_Part0:
 	ld wa, (3660:16)
 	ld (4487:16), wa
-	ld xiy, StyleUI_ScreenData_Main_0x1C2
+	ld xiy, Scoop_TitleBar_ShowBPM_Part0_Data
 	call GraphicsRender_EventCheck
 
 Scoop_TitleBar_Part1Check:
@@ -16674,14 +16675,14 @@ Scoop_TitleBar_Part1Check:
 	calr Scoop_TitleBar_GetPartConfig
 	cpw (3662:16), 1000
 	jr c, Scoop_TitleBar_ShowBPM_Part1
-	ld xiy, StyleUI_ScreenData_Main_0x1E5
+	ld xiy, Scoop_TitleBar_Part1Check_Data
 	call Scoop_ConditionalGlideSetup
 	jr Scoop_TitleBar_Part2Check
 
 Scoop_TitleBar_ShowBPM_Part1:
 	ld wa, (3662:16)
 	ld (4489:16), wa
-	ld xiy, StyleUI_ScreenData_Main_0x1CC
+	ld xiy, Scoop_TitleBar_ShowBPM_Part1_Data
 	call GraphicsRender_EventCheck
 
 Scoop_TitleBar_Part2Check:
@@ -16691,14 +16692,14 @@ Scoop_TitleBar_Part2Check:
 	calr Scoop_TitleBar_GetPartConfig
 	cpw (3664:16), 1000
 	jr c, Scoop_TitleBar_ShowBPM_Part2
-	ld xiy, StyleUI_ScreenData_Main_0x1EA
+	ld xiy, Scoop_TitleBar_Part2Check_Data
 	call Scoop_ConditionalGlideSetup
 	jr Scoop_TitleBar_End
 
 Scoop_TitleBar_ShowBPM_Part2:
 	ld wa, (3664:16)
 	ld (4491:16), wa
-	ld xiy, StyleUI_ScreenData_Main_0x1D6
+	ld xiy, Scoop_TitleBar_ShowBPM_Part2_Data
 	call GraphicsRender_EventCheck
 
 Scoop_TitleBar_End:
@@ -16725,7 +16726,7 @@ Scoop_TitleBar_DisplayPartTable:
 	ret
 
 Scoop_TitleBar_GetPartConfig:
-	ld xiy, StyleUI_ScreenData_Main_0xB4
+	ld xiy, Scoop_TitleBar_GetPartConfig_Data
 	cp bc, 1:i3
 	jr ge, Scoop_TitleBar_Part1Config
 	ld a, (3666:16)
@@ -16770,13 +16771,13 @@ Scoop_Selection_RedrawActive:
 	cp a, 0:i3
 	jr nz, Scoop_Selection_CheckMode1
 	pushw wa
-	ld xiy, StyleUI_ScreenData_Main_0x97E
-	ld xix, StyleUI_ScreenData_Main_0x986
+	ld xiy, Scoop_Selection_RedrawActive_Data
+	ld xix, Scoop_Selection_RedrawActive_Data_2
 	call UIRender_SingleTable
 	ld a, (3823:16)
 	ld (4497:16), a
 	popw wa
-	ld xiy, StyleUI_ScreenData_Main_0x9BB
+	ld xiy, Scoop_Selection_RedrawActive_Data_3
 	call UIRender_TwoTableEvtCheck
 	jp Scoop_Selection_End
 
@@ -16785,27 +16786,27 @@ Scoop_Selection_CheckMode1:
 	jr nz, Scoop_Selection_DrawMode2
 
 Scoop_Selection_DrawMode1:
-	ld	xiy, StyleUI_ScreenData_Main_0x986
-	ld	xix, StyleUI_ScreenData_Main_0x990
+	ld	xiy, Scoop_Selection_RedrawActive_Data_2
+	ld	xix, Scoop_Selection_DrawMode1_Data
 	call	UIRender_TwoTableGeneral
 	cp	(13939:16), 0
 	jr	z, Scoop_Selection_End
 	ld	a, (13939:16)
 	ld	(4495:16), a
-	ld	xiy, StyleUI_ScreenData_Main_0xA06
+	ld	xiy, Scoop_Selection_DrawMode1_Data_2
 	call	UIRender_TwoTableEvtCheck
 	jr	Scoop_Selection_End
 Scoop_Selection_DrawMode2:
 	cp a, 2:i3
 	jr z, Scoop_Selection_DrawMode1
-	ld xiy, StyleUI_ScreenData_Main_0x97E
-	ld xix, StyleUI_ScreenData_Main_0x986
+	ld xiy, Scoop_Selection_RedrawActive_Data
+	ld xix, Scoop_Selection_RedrawActive_Data_2
 	call UIRender_SingleTable
 	pushw wa
 	ld a, (3922:16)
 	ld (4500:16), a
 	popw wa
-	ld xiy, StyleUI_ScreenData_Main_0x990
+	ld xiy, Scoop_Selection_DrawMode1_Data
 	call UIRender_TwoTableEvtCheck
 
 Scoop_Selection_End:
@@ -16882,8 +16883,8 @@ Scoop_SidePanel_StoreAndDraw:
 	ld (4508:16), a
 	ld a, (3668:16)
 	ld (4509:16), a
-	ld xiy, StyleUI_ScreenData_Main_0xB19
-	ld xix, StyleUI_ScreenData_Main_0xB3A
+	ld xiy, Scoop_SidePanel_StoreAndDraw_Data
+	ld xix, Scoop_SidePanel_StoreAndDraw_Data_2
 	call GraphicsRender_TwoTable_Alt
 	call Display_UpdateRegion1_Alt
 
@@ -16895,7 +16896,7 @@ Scoop_SidePanel_DrawOneSlot:
 	push xix
 	pushw de
 	pushw bc
-	ld xiy, StyleUI_ScreenData_Main_0xB94
+	ld xiy, Scoop_SidePanel_DrawOneSlot_Data
 	ld bc, 4:i3
 	ld (0x03efa8:24), 0x00
 	ld xwa, 0x11d4
@@ -16937,7 +16938,7 @@ Display_RedrawAltContent:
 	jr z, Scoop_AltContent_ClearRegions
 	add xix, xwa
 	ld (0x03efa8:24), 0x02
-	ld xiy, StyleUI_ScreenData_CtlOnly_0x20
+	ld xiy, Display_RedrawAltContent_Str_END
 	ld bc, 3:i3
 	xor hl, hl
 	ld (4579:16), 6
@@ -16979,25 +16980,25 @@ Display_RedrawButtonLabels:
 	jr nz, Scoop_ButtonLabels_End
 	ld (0x03efa8:24), 0x00
 	call Scoop_ButtonLabels_CopySlotData
-	ld XIY,StyleUI_ScreenData_Main_0xBD4
-	ld XIX,StyleUI_ScreenData_Main_0xD3C
+	ld XIY,Display_RedrawButtonLabels_Data_4
+	ld XIX,Display_RedrawButtonLabels_Data_5
 	call GraphicsRender_TwoTable
 	call Scoop_ButtonLabels_SetupPartButtons
 	ld (0x03efa8:24), 0x02
-	ld XIY,StyleUI_ScreenData_Main_0x276
-	ld XIX,StyleUI_ScreenData_Main_0x3DE
+	ld XIY,Scoop_FooterShowPartValue_Data
+	ld XIX,Display_RedrawButtonLabels_Data
 	call GraphicsRender_TwoTable
 	call Scoop_ButtonLabels_DrawPitchLabels
 	ld XIX,0x00000e55
-	ld XIY,StyleUI_ScreenData_Main_0x3DE
+	ld XIY,Display_RedrawButtonLabels_Data
 	calr Scoop_ButtonLabels_DrawCategory
 	call Scoop_ButtonLabels_DrawAmpLabels
 	ld XIX,0x00000e75
-	ld XIY,StyleUI_ScreenData_Main_0x546
+	ld XIY,Display_RedrawButtonLabels_Data_2
 	calr Scoop_ButtonLabels_DrawCategory
 	call Scoop_ButtonLabels_DrawFilterLabels
 	ld XIX,0x00000e95
-	ld XIY,StyleUI_ScreenData_Main_0x6AE
+	ld XIY,Display_RedrawButtonLabels_Data_3
 	calr Scoop_ButtonLabels_DrawCategory
 Scoop_ButtonLabels_End:
 	ret
@@ -17967,7 +17968,7 @@ Scoop_CurveUpdate_End:
 	add xhl, xiz
 	ld a, (xhl)
 	extz wa
-	lda xhl, (StyleUI_ScreenData_CtlOnly_0x23:24)
+	lda xhl, (Scoop_CurveUpdate_Finalize_Data:24)
 	ld	a, (xhl+wa)
 	ld (xix), a
 	inc 1, iy
@@ -18066,7 +18067,7 @@ Scoop_CurveUpdate_SegmentEnd_Loop:
 	add	xhl, xiz
 	ld	a, (xhl)
 	extz	wa
-	lda	xhl, (StyleUI_ScreenData_CtlOnly_0x23:24)
+	lda	xhl, (Scoop_CurveUpdate_Finalize_Data:24)
 	ld	a, (xhl+wa)
 	ld (xix), a
 	inc 1, iy
@@ -18225,7 +18226,7 @@ Scoop_EnvCalc_Handler0:
 	ret
 Scoop_EnvCalc_Handler1:
 	lda xsp, (xsp-268)
-	ld	xiy, StyleUI_ScreenData_CtlOnly_0x123
+	ld	xiy, Scoop_EnvCalc_Handler1_Data
 	lda	xix, (xsp+260)
 	ld	bc, 4:i3
 	ldirw
@@ -18257,7 +18258,7 @@ Scoop_CurveUpdate_SegmentEnd_Loop2:
 	add	xbc, xwa
 	ld	c, (xbc)
 	extz	bc
-	lda	xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
+	lda	xiy, (Scoop_CurveUpdate_Finalize_Data:24)
 	ld	c, (xiy+bc)
 	ld (xhl), c
 	inc 1, ix
@@ -18378,7 +18379,7 @@ Scoop_GlideParam_Configure:
 	add xbc, xwa
 	ld c, (xbc)
 	extz bc
-	lda xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
+	lda xiy, (Scoop_CurveUpdate_Finalize_Data:24)
 	ld	c, (xiy+bc)
 	ld (xhl), c
 	inc 1, ix
@@ -18429,7 +18430,7 @@ Scoop_GlideParam_End:
 
 Scoop_GlideParam_Data:
 	lda xsp, (xsp-268)
-	ld	xiy, StyleUI_ScreenData_CtlOnly_0x12B
+	ld	xiy, Scoop_GlideParam_Configure_Data
 	lda	xix, (xsp+260)
 	ld	bc, 4:i3
 	ldirw
@@ -18461,7 +18462,7 @@ Scoop_GlideParam_Setup_Loop:
 	add	xbc, xwa
 	ld	c, (xbc)
 	extz	bc
-	lda	xiy, (StyleUI_ScreenData_CtlOnly_0x23:24)
+	lda	xiy, (Scoop_CurveUpdate_Finalize_Data:24)
 	ld	c, (xiy+bc)
 	ld (xhl), c
 	inc 1, ix
@@ -18489,7 +18490,7 @@ Scoop_GlideParam_Setup_Skip:
 	ret
 Scoop_GlideCalc_Handler0:
 	lda xsp, (xsp-268)
-	ld	xiy, StyleUI_ScreenData_CtlOnly_0x133
+	ld	xiy, Scoop_GlideCalc_Handler0_Data
 	lda	xix, (xsp+260)
 	ld	bc, 4:i3
 	ldirw
@@ -18700,7 +18701,7 @@ Scoop_EventLoop_12Entry:
 	push xiz
 	ld	(xsp+150), xbc
 	ld xiz, xwa
-	ld xiy, StyleUI_ScreenData_CtlOnly_0x13B
+	ld xiy, Scoop_EventLoop_12Entry_Data
 	lda xix, (xsp + 6)
 	ldw bc, 0x48
 	ldirw
@@ -18736,7 +18737,7 @@ Scoop_EnvProcessor_Data:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, StyleUI_ScreenData_CtlOnly_0x1CB
+	ld	xiy, Scoop_EventLoop_12Entry_Process_Data
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	; llvm-mc cannot spell this byte
@@ -18779,7 +18780,7 @@ Scoop_EventLoop_12Entry_Skip10:
 	pushw	52426
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_12Entry_Join	; -> 0xF02204
 Scoop_EventLoop_12Entry_Skip:
@@ -18790,7 +18791,7 @@ Scoop_EventLoop_12Entry_Skip:
 	pushw	52430
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_12Entry_Join	; -> 0xF02204
 Scoop_EventLoop_12Entry_Skip2:
@@ -18801,7 +18802,7 @@ Scoop_EventLoop_12Entry_Skip2:
 	pushw	52434
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 Scoop_EventLoop_12Entry_Join:
 	ld	a, (xiz+6)
@@ -18827,7 +18828,7 @@ Scoop_EventLoop_12Entry_Join:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, StyleUI_ScreenData_CtlOnly_0x1DF
+	ld	xiy, Scoop_EventLoop_12Entry_Process_Data_2
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	; llvm-mc cannot spell this byte
@@ -18890,7 +18891,7 @@ Scoop_EventLoop_12Entry_Join2:
 	pushw	52446
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jrl	Scoop_EventLoop_12Entry_Join3	; -> 0xF02369
 Scoop_EventLoop_12Entry_Skip5:
@@ -18901,7 +18902,7 @@ Scoop_EventLoop_12Entry_Skip5:
 	pushw	52450
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_12Entry_Join3	; -> 0xF02369
 Scoop_EventLoop_12Entry_Skip6:
@@ -18912,7 +18913,7 @@ Scoop_EventLoop_12Entry_Skip6:
 	pushw	52454
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_12Entry_Join3	; -> 0xF02369
 Scoop_EventLoop_12Entry_Skip7:
@@ -18929,7 +18930,7 @@ Scoop_EventLoop_12Entry_Skip7:
 	pushw	52458
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_12Entry_Join3	; -> 0xF02369
 Scoop_EventLoop_12Entry_Skip8:
@@ -18940,7 +18941,7 @@ Scoop_EventLoop_12Entry_Skip8:
 	pushw	52462
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_12Entry_Join3	; -> 0xF02369
 Scoop_EventLoop_12Entry_Skip9:
@@ -18951,7 +18952,7 @@ Scoop_EventLoop_12Entry_Skip9:
 	pushw	52466
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 Scoop_EventLoop_12Entry_Join3:
 	ld	a, (xiz+6)
@@ -18978,7 +18979,7 @@ Scoop_EventLoop_36Entry:
 	lda xsp, (xsp - 0x0114)
 	pushw iz
 	ld (XSP+0x0112),XWA
-	ld XIY,StyleUI_ScreenData_CtlOnly_0x1FF
+	ld XIY,Scoop_EventLoop_36Entry_Data_2
 	lda xix, (xsp + 0x010a)
 	ld bc, 4:i3
 	ldirw
@@ -19011,7 +19012,7 @@ Scoop_EventLoop_36Entry:
 	pushw	52478
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch3
 Scoop_EventLoop_36Entry_Branch1:
@@ -19020,7 +19021,7 @@ Scoop_EventLoop_36Entry_Branch1:
 	pushw	52482
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch3
 Scoop_EventLoop_36Entry_Branch2:
@@ -19034,7 +19035,7 @@ Scoop_EventLoop_36Entry_Branch2:
 
 	push xwa
 
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 
 	lda xsp, (xsp + 10)
 
@@ -19089,7 +19090,7 @@ Scoop_EventLoop_36Entry_Data:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, StyleUI_ScreenData_CtlOnly_0x213
+	ld	xiy, Scoop_EventLoop_36Entry_Branch3_Data_4
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw
@@ -19122,7 +19123,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip:
 	pushw	52498
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join
 Scoop_EventLoop_36Entry_Branch1_Code_Skip2:
@@ -19133,7 +19134,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip2:
 	pushw	52502
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join
 Scoop_EventLoop_36Entry_Branch1_Code_Skip3:
@@ -19144,7 +19145,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip3:
 	pushw	52506
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 Scoop_EventLoop_36Entry_Branch1_Code_Join:
 	ld	a, (xiz+6)
@@ -19224,7 +19225,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join2:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jrl	Scoop_EventLoop_36Entry_Branch1_Code_Join3
 Scoop_EventLoop_36Entry_Branch1_Code_Skip7:
@@ -19235,7 +19236,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip7:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join3
 Scoop_EventLoop_36Entry_Branch1_Code_Skip8:
@@ -19246,7 +19247,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip8:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d@lo16
 	lda	xwa, (xsp+11)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join3
 Scoop_EventLoop_36Entry_Branch1_Code_Skip9:
@@ -19263,7 +19264,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip9:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join3
 Scoop_EventLoop_36Entry_Branch1_Code_Skip10:
@@ -19274,7 +19275,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip10:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join3
 Scoop_EventLoop_36Entry_Branch1_Code_Skip11:
@@ -19285,7 +19286,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip11:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 Scoop_EventLoop_36Entry_Branch1_Code_Join3:
 	ld	a, (xiz+6)
@@ -19333,7 +19334,7 @@ Scoop_EventLoop_12Entry_Alt_Data_Target10:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join4
 Scoop_EventLoop_36Entry_Branch1_Code_Skip12:
@@ -19342,7 +19343,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip12:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	Scoop_EventLoop_36Entry_Branch1_Code_Join4
 Scoop_EventLoop_36Entry_Branch1_Code_Skip13:
@@ -19351,7 +19352,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip13:
 	pushw	Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 Scoop_EventLoop_36Entry_Branch1_Code_Join4:
 	ld	a, (xiz+6)

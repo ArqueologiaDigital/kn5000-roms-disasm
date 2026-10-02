@@ -874,7 +874,7 @@ WndScroll_HandleCharInput:
 	ld a, (xwa)
 	ld c, a
 	extz bc
-	lda xhl, (FileOpen_NormalizeName_Data:24)
+	lda xhl, (CType_ClassTable:24)
 	ld	c, (xhl+bc)
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
@@ -8686,12 +8686,11 @@ DrawMonoBitmap_Impl_Done:
 ; (_Impl_Done).  DrawLine's wrapper (ui/drawing_primitives.s) does not latch the
 ; draw mode byte; this one does.
 ; Derived from the ROM code below (v10 0xFAFECD).  Callers:
-; display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper) and,
+; display/graphics_text_vga.s (as DrawLineWithMode) and,
 ; directly into _Impl, the image's root .s (as
-; Voice_FactoryPresetData_Code_Helper).
+; DrawLineWithMode_Impl).
 ; =============================================================================
-; DrawText_LayoutAndRender_Variant1_Helper: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s (owned by another lane)
-DrawText_LayoutAndRender_Variant1_Helper:
+; DrawLineWithMode: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s (owned by another lane)
 DrawLineWithMode:
 	dec	6, xsp
 	push	xiz
@@ -8746,8 +8745,7 @@ DrawLineWithMode_ParamBlock:
 	ld	xbc, xhl
 	calr	DrawLineWithMode_Impl
 	ret
-; Voice_FactoryPresetData_Code_Helper: previous name of this label, kept only because it is still referenced by kn5000_v10_program.s (owned by another lane)
-Voice_FactoryPresetData_Code_Helper:
+; DrawLineWithMode_Impl: previous name of this label, kept only because it is still referenced by kn5000_v10_program.s (owned by another lane)
 DrawLineWithMode_Impl:
 	lda	xsp, (xsp-72)
 	push	xiz
@@ -9534,10 +9532,9 @@ DrawLineWithMode_Impl_Epilogue:
 ; The routine continues past the end of this file into the image's root .s
 ; (kn5000_v10_program.s), which branches back into it.
 ; Derived from the ROM code below (v10 0xFB06B6).  Caller:
-; display/graphics_text_vga.s (as DrawText_LayoutAndRender_Variant1_Helper2).
+; display/graphics_text_vga.s (as DrawDottedLineWithMode).
 ; =============================================================================
-; DrawText_LayoutAndRender_Variant1_Helper2: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s (owned by another lane)
-DrawText_LayoutAndRender_Variant1_Helper2:
+; DrawDottedLineWithMode: previous name of this label, kept only because it is still referenced by display/graphics_text_vga.s (owned by another lane)
 DrawDottedLineWithMode:
 	dec	6, xsp
 	push	xiz
@@ -9947,7 +9944,6 @@ DrawDottedLineWithMode_Impl_Skip21:
 	jrl	lt, Voice_FactoryPresetData_Code_Join4
 ; ColorBlit2_LargeCodeBlock_Entry2: previous name of this label, kept only because it is still referenced by kn5000_v10_program.s (owned by another lane)
 ColorBlit2_LargeCodeBlock_Entry2:
-DrawDottedLineWithMode_Impl_Entry2:
 	cp	(xsp+24), 3
 	jr	ule, DrawDottedLineWithMode_Impl_Skip22
 	ld	(xsp+24), 0

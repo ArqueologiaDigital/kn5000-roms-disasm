@@ -678,7 +678,7 @@ SeGfx_StaticOp00_FromBuf_Helper:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -694,7 +694,7 @@ SeGfx_StaticOp00_FromBuf_Helper:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
 SeGfx_StaticOp02_FromBuf_Helper:
@@ -711,7 +711,7 @@ SeGfx_StaticOp02_FromBuf_Helper:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -727,7 +727,7 @@ SeGfx_StaticOp02_FromBuf_Helper:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2
+	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -743,7 +743,7 @@ SeGfx_StaticOp02_FromBuf_Helper:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2
+	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
 SeGfx_StaticOp15_FromBuf_Helper:
@@ -760,7 +760,7 @@ SeGfx_StaticOp15_FromBuf_Helper:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2
+	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
 SeGfx_StaticOp09_FromBuf_Helper:
@@ -810,7 +810,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -827,7 +827,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	inc	2, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	1, bc
@@ -844,7 +844,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	2, bc
@@ -861,7 +861,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	inc	2, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -880,7 +880,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	ld	de, (xhl)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2
+	calr	DrawDottedLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	ld	(xwa), bc
@@ -893,7 +893,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	ld	de, (xhl)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2
+	calr	DrawDottedLineWithMode
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+2)
 	ld	bc, (xde)
@@ -906,7 +906,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2
+	calr	DrawDottedLineWithMode
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -919,7 +919,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper2
+	calr	DrawDottedLineWithMode
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -953,7 +953,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	1, bc
@@ -970,7 +970,7 @@ SeGfx_StaticOp09_FromBuf_Helper:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	DrawText_LayoutAndRender_Variant1_Helper
+	calr	DrawLineWithMode
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -4143,7 +4143,7 @@ PmBank_OnSelect:
 	ld xwa, (xwa + 48)
 	ld wa, (xwa)
 	sla wa, 3
-	lda xbc, (PmBank_OnSelect_Data:24)
+	lda xbc, (SelectRect_Table:24)
 	lda	xiy, (xbc+wa)
 	lda xix, (xsp+268)
 	ld bc, 4:i3
@@ -4161,7 +4161,7 @@ PmBank_OnSelect:
 	ld xwa, (xwa + 44)
 	ld wa, (xwa)
 	sla wa, 3
-	lda xbc, (PmBank_OnSelect_Data:24)
+	lda xbc, (SelectRect_Table:24)
 	lda	xiy, (xbc+wa)
 	lda xix, (xsp+268)
 	ld bc, 4:i3
@@ -4242,7 +4242,7 @@ ToneGen_WriteParamByIndex:
 	ld iz, bc
 	ld bc, wa
 	ld wa, iz
-	lda xiy, (PmBank_OnSelect_Data:24)
+	lda xiy, (SelectRect_Table:24)
 	cp bc, 5:i3
 	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
@@ -4462,7 +4462,7 @@ WallHomeEditCheck_ReturnFalse:
 	ld xbc, (xwa)
 	or xde, xde
 	jr nz, WallHomeEdit_LoadSndAddr3
-	ld xwa, WallHomeEditCheck_ReturnFalse_Str_DEFAULT
+	ld xwa, WallHomeEdit_Text
 	jr WallHomeEdit_PushAddr
 
 WallHomeEdit_PushSndAddr:
@@ -4520,7 +4520,7 @@ WallMenuEdit_EventDispatch:
 	jr	z, ToneGen_WriteParamByIndex_Skip
 	or	xwa, xwa
 	jr	nz, ToneGen_WriteParamByIndex_Skip2
-	ld	xwa, WallMenuEdit_EventDispatch_Str_DEFAULT
+	ld	xwa, WallMenuEdit_Text
 	jr	ToneGen_WriteParamByIndex_Join2
 ToneGen_WriteParamByIndex_Skip:
 	ld	xwa, WallMenuEdit_EventDispatch_Str_USER
@@ -4572,7 +4572,7 @@ WallOthEdit_EventDispatch:
 	jr	z, ToneGen_WriteParamByIndex_Skip3
 	or	xwa, xwa
 	jr	nz, ToneGen_WriteParamByIndex_Skip4
-	ld	xwa, WallOthEdit_EventDispatch_Str_DEFAULT
+	ld	xwa, WallOthEdit_Text
 	jr	ToneGen_WriteParamByIndex_Join3
 ToneGen_WriteParamByIndex_Skip3:
 	ld	xwa, WallOthEdit_EventDispatch_Str_USER
@@ -4687,7 +4687,7 @@ WallUsrIni_ReturnZero:
 WallSureLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, WallSureLng_ReturnZero
-	lda xhl, (WallSureLngCheck_Data:24)
+	lda xhl, (LngTable_UserInitialWallpaper:24)
 	ret
 
 WallSureLng_ReturnZero:

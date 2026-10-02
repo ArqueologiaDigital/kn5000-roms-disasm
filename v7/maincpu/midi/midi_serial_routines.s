@@ -99,9 +99,8 @@ Continue_ClearPositionAndSetSrc1:
 	ld (1054:16), 6
 Continue_Return:
 	ret
-; v7 NAME DISPLACED: `IntTx0_DequeueAndSend_Code_Skip` sits where v10 has `AltClk_DisabledClockPath` (v10 0xFCF5F9).
+; v7 NAME DISPLACED: `AltClk_DisabledClockPath` sits where v10 has `AltClk_DisabledClockPath` (v10 0xFCF5F9).
 ; Kept because another v7 file references this address by this name.
-IntTx0_DequeueAndSend_Code_Skip:
 AltClk_DisabledClockPath:
 	ld (1066:16), 0
 	pushw wa
@@ -358,9 +357,8 @@ SysEx_InProgressByte:
 	inc 2, xsp
 SysEx_InProgressReturn:
 	ret
-; v7 NAME DISPLACED: `SndParam_Widget1_AppendType2_Helper2` sits where v10 has `MIDI_RX_CONTEXT_RESTORE` (v10 0xFCF85D).
+; v7 NAME DISPLACED: `MIDI_RX_CONTEXT_RESTORE` sits where v10 has `MIDI_RX_CONTEXT_RESTORE` (v10 0xFCF85D).
 ; Kept because another v7 file references this address by this name.
-SndParam_Widget1_AppendType2_Helper2:
 MIDI_RX_CONTEXT_RESTORE:
 	ld xwa, (1080:16)
 	ld xbc, (1084:16)

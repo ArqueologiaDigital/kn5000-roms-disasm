@@ -133,7 +133,7 @@ SysEx_ApplyVoiceParam_49_RestoreSlotId:
 	jr	z, SysEx_ApplyVoiceParam_4B_128_Return_Epilogue
 	ld	a, (xsp + 4)
 	ld	(xbc), a
-; v10 name for this address: SysEx_ApplyVoiceParam_49_Return -- not a label here: v7 keeps that name at 0xFDACCF for demo/file_demo_proc.s
+; v10 name for this address: PreMidiLoad -- not a label here: v7 keeps that name at 0xFDACCF for demo/file_demo_proc.s
 SysEx_ApplyVoiceParam_4B_128_Return_Epilogue:
 	pop	xiz
 	inc	8, xsp
@@ -370,7 +370,7 @@ SwbtWr_ProcessAll_CompactDone:
 	ldw	(0x9046:16), 0
 	ret
 SwbtWr_InitBank1:
-	ld	xiy, SwbtWr_InitBank1_Data
+	ld	xiy, SwbtBank1_ListenerTable
 	ld	(0xbfe5:16), xiy
 	ld	xiy, SwbtBank1_PostCallbacks
 	ld	(0xbfe9:16), xiy
@@ -381,7 +381,7 @@ SwbtWr_InitBank1:
 SwbtWr_InitBank2:
 	ld	xiy, Naka_RenderMode_A_Table
 	ld	(0xbfe5:16), xiy
-	ld	xiy, SwbtWr_InitBank2_Data
+	ld	xiy, SwbtBank2_PostCallbacks
 	ld	(0xbfe9:16), xiy
 	ld	xiy, 0xbca0
 	ld	(0xbfed:16), xiy
@@ -487,7 +487,6 @@ SysEx_ApplyVoiceParam_49:
 	addw	(0x9046:16), 4
 SwbtWr_QueuePostEvent_Done:
 	ret
-AccProcess_Entry_Helper2:
 SwbtWr_TrailingBytecode:
 	ld	xhl, 0xbf9d
 SwbtWr_TrailingBytecode_Join:
@@ -553,23 +552,17 @@ PostPmLoad:
 	call	ToneGen_Config_InitAllChannels
 	call	ToneGen_DSPCfg_ResetAllChannels
 	ret
-FileIO_ParseDirectoryEntry_Helper:
 PrePmSave:
 	ret
-FileIO_ParseDirectoryEntry_Helper2:
 PostPmSave:
 	ret
-; SysEx_ApplyVoiceParam_49_Return is kept at this address only for demo/file_demo_proc.s; v10's SysEx_ApplyVoiceParam_49_Return is the code at 0xFDA8B5
+; PreMidiLoad is kept at this address only for demo/file_demo_proc.s; v10's PreMidiLoad is the code at 0xFDA8B5
 PreMidiLoad:
-SysEx_ApplyVoiceParam_49_Return:
 	ret
-FileIO_ValidateWithExtHeader_Helper:
 PostMidiLoad:
 	ret
-FileIO_ParseDirectoryEntry_Helper3:
 PreMidiSave:
 	ret
-FileIO_ParseDirectoryEntry_Helper4:
 PostMidiSave:
 	ret
 VoiceParam_SaveReverbChorus:
@@ -653,7 +646,6 @@ BitMapOut_ComputeRegionDelta:
 	lda	xsp, (xsp + 10)
 	ret
 BitMapOut_PrepareAndRender:
-SeqPlay_FinalCleanupAndReset_Helper:
 	pushw	iz
 	ld	iz, wa
 	call	Audio_ConfigureDSP
@@ -1028,7 +1020,6 @@ MidiSeq_SendMultiByte_Exit:
 	popw	iz
 	inc	2, xsp
 	ret
-MainLoop_AfterSeqTick_Code_Helper:
 SeqBuf_DspSysEx_DataReadLoop:
 	dec	2, xsp
 SeqBuf_DspSysEx_ReadAndForward_Loop:
@@ -1107,7 +1098,7 @@ MidiSysEx_BuildAndSend_Exit:
 MIDI_BroadcastControlChange:
 	dec	8, xsp
 	pushw_erp	0xfa
-	ld	xiy, MIDI_BroadcastControlChange_Data
+	ld	xiy, Midi_AllOffTemplate
 	lda	xix, (xsp + 2)
 	ld	bc, 3:i3
 	ldirw
@@ -1161,7 +1152,7 @@ CompIface_SendActiveSensing_PC1MAC:
 	ld	bc, 1:i3
 ; BitMapOut_CopyRegion_Done is kept at this address only for ui_widgets/widget_dispatch.s; v10's BitMapOut_CopyRegion_Done is the code at 0xFDAE32
 BitMapOut_CopyRegion_Done:
-	ld	xde, CompIface_SendActiveSensing_PC1MAC_Data	;	PC1 or MAC (0F5h)
+	ld	xde, CompIface_PortByte_F5	;	PC1 or MAC (0F5h)
 	call	sendCOMM
 	pop	sr
 	ret
@@ -1170,7 +1161,7 @@ CompIface_SendActiveSensing_PC2:
 	ei	0
 	ld	wa, 4:i3
 	ld	bc, 1:i3
-	ld	xde, CompIface_SendActiveSensing_PC2_Data	;	PC2 (0F4h)
+	ld	xde, CompIface_PortByte_F4	;	PC2 (0F4h)
 	call	sendCOMM
 	pop	sr
 	ret
@@ -1414,7 +1405,6 @@ CompIface_RampDown_Clamp:
 	ld	de, 0:i3
 	call	CtrlPanel_IndicatorDispatch
 	ret
-AccPedal_SustainHandler_Helper:
 CompIface_ResetPedal:
 	bit	2, (0xc154:16)
 	ret	z
@@ -2111,7 +2101,7 @@ DSPCfg_ReadViaTableLookup:
 	calr	DSPCfg_GetParamCount
 	exts	xhl
 	sll	xhl, 2
-	ld	xbc, DSPCfg_ReadViaTableLookup_Data
+	ld	xbc, DspFxRecListPtrTable
 	add	xbc, xhl
 	ld	xbc, (xbc)
 	lda	xwa, (xiz + 1)
@@ -2134,7 +2124,7 @@ DSPCfg_WriteViaTableLookup:
 	calr	DSPCfg_GetParamCount
 	exts	xhl
 	sll	xhl, 2
-	ld	xbc, DSPCfg_ReadViaTableLookup_Data
+	ld	xbc, DspFxRecListPtrTable
 	add	xbc, xhl
 	ld	xbc, (xbc)
 	lda	xwa, (xiz + 1)
@@ -2235,7 +2225,7 @@ DSPCfg_FindSlot63:
 	ld	wa, iz
 	exts	xwa
 	sll	xwa, 2
-	ld	xbc, DSPCfg_ReadViaTableLookup_Data
+	ld	xbc, DspFxRecListPtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	iz, 0:i3
@@ -2506,7 +2496,7 @@ DSPCfg_ResolveWithFallback:
 	ld	wa, (xsp + 10)
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, DSPCfg_ResolveWithFallback_Data
+	ld	xbc, DspFxSettingsPtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	(xsp + 12), xwa
@@ -2645,7 +2635,7 @@ DSPCfg_ValidateSlotForWrite:
 	ld	de, wa
 	extz	xde
 	sll	xde, 2
-	ld	xhl, DSPCfg_ReadViaTableLookup_Data
+	ld	xhl, DspFxRecListPtrTable
 	add	xhl, xde
 	ld	xde, (xhl)
 	or	xde, xde
@@ -2696,7 +2686,6 @@ DSPCfg_ValidateSlotForWrite_Slot4:
 DSPCfg_ValidateSlotForWrite_Valid:
 	ld	hl, 0:i3
 	jr	DSPCfg_ValidateSlotForWrite_Ret
-AppEvent_HandleChannelEvent_Helper:
 DSPCfg_WriteParamFull:
 	lda	xsp, (xsp - 22)
 	pushw	iz
@@ -2812,7 +2801,6 @@ DSPCfg_WriteParamFull_Return:
 	lda	xsp, (xsp + 22)
 	ret
 DSPCfg_WriteParamSimple:
-DataBuf_CopyVoiceBlock24_Code_Helper:
 	lda	xsp, (xsp - 26)
 	pushw	iz
 	ld	(xsp + 18), xde
@@ -2898,7 +2886,6 @@ DSPCfg_WriteParamSimple_Return:
 	lda	xsp, (xsp + 26)
 	ret
 DSPCfg_WriteParamDelta:
-EffEdit_ValidateRangeDelta_Helper:
 	lda	xsp, (xsp - 16)
 	pushw	iz
 	ld	iz, bc
@@ -2972,7 +2959,7 @@ DSPCfg_WriteAllSlots_Direct:
 	ld	(xsp + 6), hl
 	ld	wa, (xsp + 6)
 	sla	wa, 2
-	lda	xbc, (DSPCfg_ResolveWithFallback_Data:24)
+	lda	xbc, (DspFxSettingsPtrTable:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp + 8), xwa
 	ld	iz, 0:i3
@@ -3028,7 +3015,7 @@ DSPCfg_WriteAllSlots_Clamped:
 	ld	(xsp + 4), hl
 	ld	wa, (xsp + 4)
 	sla	wa, 2
-	lda	xbc, (DSPCfg_ResolveWithFallback_Data:24)
+	lda	xbc, (DspFxSettingsPtrTable:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp + 6), xwa
 	ld	iz, 0:i3
@@ -3345,7 +3332,7 @@ DSPCfg_Data_ParamDispatch_Join3:
 	calr	DSPCfg_GetParamCount
 	extz	xhl
 	sll	xhl, 2
-	ld	xbc, DSPCfg_ReadViaTableLookup_Data
+	ld	xbc, DspFxRecListPtrTable
 	add	xbc, xhl
 	ld	xbc, (xbc)
 	ld	xwa, 1:i3
@@ -3378,7 +3365,7 @@ DSPCfg_CheckParamTableEntry:
 	jr	ugt, DSPCfg_CheckParamTableEntry_NotFound
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, DSPCfg_ReadViaTableLookup_Data
+	ld	xbc, DspFxRecListPtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	or	xwa, xwa
@@ -3488,7 +3475,7 @@ DSPCfg_ApplyParamStruct_Normal:
 	ld	wa, (xsp + 4)
 	exts	xwa
 	sll	xwa, 2
-	ld	xbc, DSPCfg_ReadViaTableLookup_Data
+	ld	xbc, DspFxRecListPtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	(xsp + 14), xwa
@@ -3562,7 +3549,7 @@ DSPCfg_ApplyParamStruct_WriteLoop:
 	ld	wa, (xsp + 4)
 	exts	xwa
 	sll	xwa, 2
-	ld	xbc, DSPCfg_ReadViaTableLookup_Data
+	ld	xbc, DspFxRecListPtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	(xsp + 14), xwa
@@ -3610,7 +3597,6 @@ DSPCfg_ApplyParamStruct_Return:
 	lda	xsp, (xsp + 22)
 	ret
 DSPCfg_ApplyParamStructFull:
-DataBuf_CopyVoiceBlock24_Code_Helper2:
 	lda	xsp, (xsp - 68)
 	push	xiz
 	ldw	(xsp + 4), 0x0
@@ -4790,7 +4776,7 @@ AudioModeChange_Handler:
 	ld	a, (0x8c98:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (AudioModeChange_Handler_Data:24)
+	lda	xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (AudioModeChange_Handler_Code:24)
@@ -4830,7 +4816,7 @@ AudioSubsystem_Callback:
 	ld	a, (0x8c98:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (AudioModeChange_Handler_Data:24)
+	lda	xbc, (AudioVoiceHandler_Table:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (AudioModeChange_Handler_Code:24)
@@ -4847,7 +4833,6 @@ AudioSubsystem_Callback:
 AudioInit_SelectAndDispatch:
 	call	AudioInit_SelectPriority
 	jp	AudioInit_DispatchChanges
-AccPlay_InitializeStart_Helper:
 AudioInit_CheckMIDIAndDispatch:
 	call	AudioInit_CheckMIDIStatus
 	jp	AudioInit_DispatchChanges
@@ -4883,7 +4868,7 @@ AudioDispatch_CheckStereoMode:
 UIStateEvt_DrumAssign_Set:
 	ld	a, l
 	extz	wa
-	lda	xbc, (UIStateEvt_PartRouting_Data:24)
+	lda	xbc, (PartIndex_ByteMap:24)
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
@@ -4893,7 +4878,7 @@ UIStateEvt_DrumAssign_Set:
 	ld	a, l
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (UIState_ProcessMidiEvent_Data:24)
+	lda	xbc, (PartRecord_RamPtrTable:24)
 	ld	xwa, (xbc+wa)
 	ld	a, (xwa + 13)
 	and	a, 0xf

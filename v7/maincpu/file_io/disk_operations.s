@@ -976,7 +976,7 @@ DiskInfo_ComputePercent:
 	ld	xwa, (xsp + 12)
 	sub	xwa, (xsp + 4)
 	ld	xbc, 0x64
-	call	InitializeKubo_Helper
+	call	Math_MultiplyAccumulate
 	ld	xiz, xhl
 	ld	xbc, (xsp + 12)
 	ld	xwa, xiz

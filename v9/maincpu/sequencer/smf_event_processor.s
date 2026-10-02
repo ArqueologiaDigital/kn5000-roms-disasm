@@ -365,7 +365,7 @@ VoiceChannel_GetParamBlockAlt_Data:
 	.long 0x0000f566, 0x0000f61c, 0x0000f59a, 0x0000f5b4
 	.long 0x0000f5ce, 0x0000f5e8, 0x0000f602, 0x0000f580
 ; VoiceChannel_SetRecordField3 (= VoiceChannel_ParamTable1 +0x80, which
-; shared/positional_labels.s still names VoiceChannel_ParamTable1_0x80):
+; shared/positional_labels.s still names VoiceChannel_SetRecordField3):
 ; XIY = the channel record of the MIDI channel in 0x0FAB
 ; (VoiceChannel_GetParamBlock), then record field +3 = byte at 0x0FAD.
 ; Called from smf_tonegen_core.s (two sites).
@@ -2979,7 +2979,7 @@ FileOpen_NormalizeName:
 	ld xwa, xde
 	ld a, (xwa)
 	extz wa
-	lda xbc, (FileOpen_NormalizeName_Data:24)
+	lda xbc, (CType_ClassTable:24)
 	ld	a, (xbc+wa)
 	bit 1, a
 	jr z, FileOpen_NormalizeNoUpper

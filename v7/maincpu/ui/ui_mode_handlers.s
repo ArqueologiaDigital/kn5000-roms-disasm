@@ -2077,7 +2077,7 @@ TEST3FUNC_Helper:
 	ldw	bc, 128
 	ld	de, 3:i3
 	call	MainTitle_PrepareAndDispatch_Helper
-	call	DemoMode_Main_Operation_Helper
+	call	Voice_InitializeAll
 	ret
 Voice_EmitNoteWithVelocity:
 	cp	(0x8c9a:16), 0xf6
@@ -2535,7 +2535,7 @@ SysSureShowHideFunc:
 AttnLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, AttnLngCheck_ReturnZero
-	lda xhl, (AttnLngCheck_Data:24)
+	lda xhl, (LngTable_Attention:24)
 	ret
 
 AttnLngCheck_ReturnZero:
@@ -2545,7 +2545,7 @@ AttnLngCheck_ReturnZero:
 SysSureLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SysSureLngCheck_ReturnZero
-	lda xhl, (SysSureLngCheck_Data:24)
+	lda xhl, (LngTable_InitSettingWarn:24)
 	ret
 
 SysSureLngCheck_ReturnZero:
@@ -2555,7 +2555,7 @@ SysSureLngCheck_ReturnZero:
 SureLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SureLngCheck_ReturnZero
-	lda xhl, (SureLngCheck_Data:24)
+	lda xhl, (LngTable_AreYouSure:24)
 	ret
 
 SureLngCheck_ReturnZero:
@@ -2565,7 +2565,7 @@ SureLngCheck_ReturnZero:
 CtlIniLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CtlIniLngCheck_ReturnZero
-	lda xhl, (CtlIniLngCheck_Data:24)
+	lda xhl, (LngTable_FactoryResetDesc:24)
 	ret
 
 CtlIniLngCheck_ReturnZero:
@@ -2575,7 +2575,7 @@ CtlIniLngCheck_ReturnZero:
 PmemNormLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PmemNormLngCheck_ReturnZero
-	lda xhl, (PmemNormLngCheck_Data:24)
+	lda xhl, (LngTable_StoreSoundBalance:24)
 	ret
 
 PmemNormLngCheck_ReturnZero:
@@ -2585,7 +2585,7 @@ PmemNormLngCheck_ReturnZero:
 PmemExpLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PmemExpLngCheck_ReturnZero
-	lda xhl, (PmemExpLngCheck_Data:24)
+	lda xhl, (LngTable_StoreTotalSetting:24)
 	ret
 
 PmemExpLngCheck_ReturnZero:
@@ -2626,7 +2626,7 @@ AcMstStyleAlp_Boundary:
 	cp	xbc, 6
 	jrl	gt, MasterSetup_InheritedProc_Fallback
 	add	xbc, xbc
-	add	xbc, AcMstStyleAlpGridBoxProc_Data
+	add	xbc, AcMstStyleAlpGridBoxProc_EventOffsets
 	ld	bc, (xbc)
 	lda	xix, (AcMstStyleAlp_Boundary_Skip:24)
 	jp	t, (xix+bc)	; jp t, xix+bc
@@ -2759,7 +2759,7 @@ AcMstStyleAlp_Boundary_Join2:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, MasterSetup_StringSearch_Done
@@ -2863,7 +2863,7 @@ MasterSetup_ScrollUp_Search_Loop:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, MasterSetup_ScrollUp_Search_Done
@@ -2990,7 +2990,7 @@ MasterSetup_DialDown_Search_Loop:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, MasterSetup_DialDown_Search_Done
@@ -3215,7 +3215,7 @@ MstStyleAlp_CompareEntry:
 	push	xwa
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, MstStyleAlp_CompareComplete
@@ -3385,7 +3385,7 @@ MasterSetup_GetNameB_DrawString:
 	pushw	MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+22)
 	lda	xwa, (xsp+50)
 	lda	xbc, (xsp+46)
@@ -3441,10 +3441,10 @@ MstStyleAlpGridCheck:
 	cp xwa, 0x6
 	jrl gt, EffectMode_SendEvent_Return
 	add xwa, xwa
-	add xwa, MstStyleAlpGridCheck_Data
+	add xwa, MstStyleAlpGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstStyleAlp_EventDispatch:24)
-; Computed jump: target = MstStyleAlp_EventDispatch + MstStyleAlpGridCheck_Data[i], MstStyleAlpGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyleAlp_EventDispatch + MstStyleAlpGridCheck_EventOffsets[i], MstStyleAlpGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstStyleAlp_EventDispatch
 ;   0x1c00018 -> MstStyleAlp_EventDispatch
@@ -3565,7 +3565,7 @@ MstStyleAlp_PadLoopCond:
 	lda	xbc, (StyleSong_MasterTable:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
@@ -3620,7 +3620,7 @@ MstStyleAlp_PadLoopCond2:
 	lda	xbc, (StyleSong_MasterTable:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
@@ -3666,10 +3666,10 @@ AcMstStyle1GridBoxProc:
 	cp xbc, 0x6
 	jrl gt, MstStyle_InheritedProc_Fallback
 	add xbc, xbc
-	add xbc, AcMstStyle1GridBoxProc_Data
+	add xbc, AcMstStyle1GridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle_EventDispatch:24)
-; Computed jump: target = MstStyle_EventDispatch + AcMstStyle1GridBoxProc_Data[i], AcMstStyle1GridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle_EventDispatch + AcMstStyle1GridBoxProc_EventOffsets[i], AcMstStyle1GridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcMstStyle1GridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcMstStyle1GridBoxProc_Evt1C00018
@@ -3977,10 +3977,10 @@ MstStyle1GridCheck:
 	cp xwa, 0x6
 	jrl gt, MstStyle1Grid_Epilogue
 	add xwa, xwa
-	add xwa, MstStyle1GridCheck_Data
+	add xwa, MstStyle1GridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstStyle1Grid_EventDispatch:24)
-; Computed jump: target = MstStyle1Grid_EventDispatch + MstStyle1GridCheck_Data[i], MstStyle1GridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1Grid_EventDispatch + MstStyle1GridCheck_EventOffsets[i], MstStyle1GridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstStyle1Grid_EventDispatch
 ;   0x1c00018 -> MstStyle1Grid_EventDispatch
@@ -4064,7 +4064,7 @@ MstStyle1Grid_PadLeft_Check:
 	lda	xbc, (MstStyle1Grid_CellSelect_Data:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 16
 	sub	bc, hl
@@ -4111,7 +4111,7 @@ MstStyle1Grid_PadLeft_CheckB:
 	lda	xbc, (MstStyle1Grid_CellSelect_Data:24)
 	ld	xwa, (xbc+wa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 16
 	sub	bc, hl
@@ -4163,10 +4163,10 @@ AcMstStyle1SubGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, MstStyle1Sub_InheritedFallback
 	add xbc, xbc
-	add xbc, AcMstStyle1SubGridBoxProc_Data
+	add xbc, AcMstStyle1SubGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle1_EventDispatch:24)
-; Computed jump: target = MstStyle1_EventDispatch + AcMstStyle1SubGridBoxProc_Data[i], AcMstStyle1SubGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1_EventDispatch + AcMstStyle1SubGridBoxProc_EventOffsets[i], AcMstStyle1SubGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcMstStyle1SubGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcMstStyle1SubGridBoxProc_Evt1C00018
@@ -4625,7 +4625,7 @@ MstStyle1Sub_GetNameB_DrawString:
 	pushw	MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	lda	xwa, (xsp+50)
 	lda	xbc, (xsp+46)
@@ -4673,10 +4673,10 @@ MstStyle1SubGridCheck:
 	cp xwa, 0x6
 	jrl gt, MstStyle1SubGrid_Epilogue
 	add xwa, xwa
-	add xwa, MstStyle1SubGridCheck_Data
+	add xwa, MstStyle1SubGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstStyle1Sub_EventDispatch:24)
-; Computed jump: target = MstStyle1Sub_EventDispatch + MstStyle1SubGridCheck_Data[i], MstStyle1SubGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1Sub_EventDispatch + MstStyle1SubGridCheck_EventOffsets[i], MstStyle1SubGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstStyle1Sub_EventDispatch
 ;   0x1c00018 -> MstStyle1Sub_EventDispatch
@@ -4770,7 +4770,7 @@ MstStyle1SubGrid_PadLeft_Check:
 	add	xwa, (0x0340d2:24)
 	ld	xwa, (xwa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 16
 	sub	bc, hl
@@ -4829,7 +4829,7 @@ MstStyle1SubGrid_PadLeft_CheckB:
 	add	xwa, (0x0340d2:24)
 	ld	xwa, (xwa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 16
 	sub	bc, hl
@@ -4881,10 +4881,10 @@ AcMstStyle2GridBoxProc:
 	cp xbc, 0x6
 	jrl gt, MstStyle2_InheritedFallback
 	add xbc, xbc
-	add xbc, AcMstStyle2GridBoxProc_Data
+	add xbc, AcMstStyle2GridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle1Page_EventDispatch:24)
-; Computed jump: target = MstStyle1Page_EventDispatch + AcMstStyle2GridBoxProc_Data[i], AcMstStyle2GridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1Page_EventDispatch + AcMstStyle2GridBoxProc_EventOffsets[i], AcMstStyle2GridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcMstStyle2GridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcMstStyle2GridBoxProc_Evt1C00018
@@ -5913,7 +5913,7 @@ MstStyle2_GetNameB_DrawString:
 	pushw MstStyle2_GetNameB_DrawString_Str_Fmts@lo16
 	lda	xwa, (xsp+34)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+20)
 	lda	xwa, (xsp+40)
 	lda	xbc, (xsp+36)
@@ -5951,7 +5951,7 @@ MstStyle2_NameB_DrawCurrent:
 	pushw	MstStyle2_NameB_DrawCurrent_Str_Fmts@hi16
 	pushw	MstStyle2_NameB_DrawCurrent_Str_Fmts@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	ld	xwa, MstStyle2_NameB_DrawCurrent_Str_TEMPO
 	jr	MstStyle2_NameB_Render
@@ -5967,7 +5967,7 @@ MstStyle2_NameB_DrawLower:
 	pushw	MstStyle2_NameB_DrawLower_Str_Fmts@hi16
 	pushw	MstStyle2_NameB_DrawLower_Str_Fmts@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	ld	xwa, MstStyle2_NameB_DrawLower_Str_TEMPO
 MstStyle2_NameB_Render:
@@ -6044,7 +6044,7 @@ MstStyle2_NameB_Render:
 	pushw MstStyle2_NameB_Render_Str_Fmts@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+40)
 	lda	xbc, (xsp+36)
@@ -6093,10 +6093,10 @@ MstStyle2GridCheck:
 	cp xwa, 0x6
 	jrl gt, MstGrid2_Return
 	add xwa, xwa
-	add xwa, MstStyle2GridCheck_Data
+	add xwa, MstStyle2GridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstGrid2_ScrollJumpTable:24)
-; Computed jump: target = MstGrid2_ScrollJumpTable + MstStyle2GridCheck_Data[i], MstStyle2GridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstGrid2_ScrollJumpTable + MstStyle2GridCheck_EventOffsets[i], MstStyle2GridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstGrid2_ScrollJumpTable
 ;   0x1c00018 -> MstGrid2_ScrollJumpTable
@@ -6237,7 +6237,7 @@ MstGrid2_PadLeft_CheckA:
 	add	xbc, (213206:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
@@ -6282,7 +6282,7 @@ MstGrid2_PadLeft_CheckB:
 	add	xbc, (213210:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
@@ -6327,7 +6327,7 @@ MstGrid2_PadLeft_CheckC:
 	add	xbc, (213206:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
@@ -6381,7 +6381,7 @@ MstGrid2_PadLeft_CheckD:
 	add	xbc, (213210:24)
 	ld	xwa, (xbc)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	4, xsp
 	ldw	bc, 32
 	sub	bc, hl
@@ -6540,10 +6540,10 @@ AcTchSensGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, TchSens_InheritedFallback
 	add xbc, xbc
-	add xbc, AcTchSensGridBoxProc_Data
+	add xbc, AcTchSensGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle2_EventDispatch:24)
-; Computed jump: target = MstStyle2_EventDispatch + AcTchSensGridBoxProc_Data[i], AcTchSensGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle2_EventDispatch + AcTchSensGridBoxProc_EventOffsets[i], AcTchSensGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcTchSensGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcTchSensGridBoxProc_Evt1C00018
@@ -6795,10 +6795,10 @@ TchSensGridCheck:
 	cp xwa, 0x6
 	jrl gt, TchSensGrid_ReturnZero
 	add xwa, xwa
-	add xwa, TchSensGridCheck_Data
+	add xwa, TchSensGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (TchSensGrid_EventDispatch:24)
-; Computed jump: target = TchSensGrid_EventDispatch + TchSensGridCheck_Data[i], TchSensGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = TchSensGrid_EventDispatch + TchSensGridCheck_EventOffsets[i], TchSensGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> TchSensGrid_EventDispatch
 ;   0x1c00018 -> TchSensGridCheck_Evt1C00018
@@ -6920,7 +6920,7 @@ TchSensGridCheck_Evt1C0001C:
 	pushw	TchSensGridCheck_Evt1C0001C_Data@hi16
 	pushw	TchSensGridCheck_Evt1C0001C_Data@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -6965,7 +6965,7 @@ TchSensGridCheck_Skip3:
 	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d@hi16
 	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d@lo16
 	push	xiz
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -6983,7 +6983,7 @@ TchSensGridCheck_Skip4:
 	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2@hi16
 	pushw	TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2@lo16
 	push	xiz
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7011,7 +7011,7 @@ TchSensGrid_CellSelect:
 	pushw TchSensGrid_CellSelect_Str_Fmt3d@lo16
 	lda xwa, (xsp + 0x0a)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0a)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7053,7 +7053,7 @@ TchSensGrid_CheckCell_1_5:
 	pushw	TchSensGrid_CheckCell_1_5_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7072,7 +7072,7 @@ TchSensGrid_CheckCell_1_6:
 	pushw	TchSensGrid_CheckCell_1_6_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7109,10 +7109,10 @@ AcFSWAssGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, FSWAss_InheritedFallback
 	add xbc, xbc
-	add xbc, AcFSWAssGridBoxProc_Data
+	add xbc, AcFSWAssGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (TchSens_EventDispatch:24)
-; Computed jump: target = TchSens_EventDispatch + AcFSWAssGridBoxProc_Data[i], AcFSWAssGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = TchSens_EventDispatch + AcFSWAssGridBoxProc_EventOffsets[i], AcFSWAssGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcFSWAssGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcFSWAssGridBoxProc_Evt1C00018
@@ -7338,10 +7338,10 @@ FSWAssGridCheck:
 	cp xwa, 0x6
 	jrl gt, AudioTable_ReturnZero
 	add xwa, xwa
-	add xwa, FSWAssGridCheck_Data
+	add xwa, FSWAssGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (FSWAssGrid_EventDispatch:24)
-; Computed jump: target = FSWAssGrid_EventDispatch + FSWAssGridCheck_Data[i], FSWAssGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = FSWAssGrid_EventDispatch + FSWAssGridCheck_EventOffsets[i], FSWAssGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> FSWAssGrid_EventDispatch
 ;   0x1c00018 -> FSWAssGridCheck_Evt1C00018
@@ -7749,7 +7749,7 @@ FSWAssGridCheck_Evt1C0001C:
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7777,7 +7777,7 @@ FSWAssGridCheck_Skip:
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_2@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7803,7 +7803,7 @@ FSWAssGridCheck_Skip2:
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_3@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7829,7 +7829,7 @@ FSWAssGridCheck_Skip3:
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_4@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7856,7 +7856,7 @@ FSWAssGridCheck_Skip4:
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_5@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7882,7 +7882,7 @@ FSWAssGridCheck_Skip5:
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_6@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7908,7 +7908,7 @@ FSWAssGridCheck_Skip6:
 	pushw FSWAssGridCheck_Evt1C0001C_Str_Fmts_7@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -7936,14 +7936,14 @@ FSWAssGrid_CellSelect:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CellSelect_Str_Fmts@hi16
 	pushw FSWAssGrid_CellSelect_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7963,14 +7963,14 @@ FSWAssGrid_CheckCell_1_3:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_3_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_3_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -7990,14 +7990,14 @@ FSWAssGrid_CheckCell_1_4:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_4_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_4_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -8017,14 +8017,14 @@ FSWAssGrid_CheckCell_1_5:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_5_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_5_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -8044,14 +8044,14 @@ FSWAssGrid_CheckCell_1_6:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_6_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_6_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -8071,14 +8071,14 @@ FSWAssGrid_CheckCell_1_7:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_7_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_7_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -8098,14 +8098,14 @@ FSWAssGrid_CheckCell_1_8:
 	calr AudioTable_FindMatchIndex
 	extz HL
 	sla HL, 0x02
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push XWA
 	pushw FSWAssGrid_CheckCell_1_8_Str_Fmts@hi16
 	pushw FSWAssGrid_CheckCell_1_8_Str_Fmts@lo16
 	lda xwa, (xsp + 0x0c)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -8122,7 +8122,7 @@ AudioTable_ReturnZero:
 
 AudioTable_FindMatchIndex:
 	ld l, 0x0:opc
-	lda xde, (FSWAssGrid_EventDispatch_Data:24)
+	lda xde, (FswAssign_FunctionCodes:24)
 
 AudioTable_FindMatch_Loop:
 	ld c, l
@@ -8143,10 +8143,10 @@ FswAsIniFunc:
 	cp xde, 0x5
 	jr ugt, SeqLoadFunc_ReturnZero
 	add xde, xde
-	add xde, FswAsIniFunc_Data
+	add xde, FswAsIniFunc_EventOffsets
 	ld de, (xde)
 	lda xix, (FswAsIni_EventDispatch:24)
-; Computed jump: target = FswAsIni_EventDispatch + FswAsIniFunc_Data[i], FswAsIniFunc_Data = 16-bit offsets (6 words, read
+; Computed jump: target = FswAsIni_EventDispatch + FswAsIniFunc_EventOffsets[i], FswAsIniFunc_EventOffsets = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> SeqLoadFunc_ReturnZero
 ;   1 -> FswAsIni_EventDispatch
@@ -8181,8 +8181,8 @@ FSWAss_RefreshAllVoices:
 	push	xiz
 	call	AudioInit_RefreshToneBank
 	call	NoteMap_ProcessAndMerge
-	call	DemoMode_Main_Operation_Helper
-	call	Interrupt_FlagSetBytecode_Helper2
+	call	Voice_InitializeAll
+	call	NoteMap_SendAllNotesOff
 	call	Voice_InitTableGroup
 	call	Voice_InitTablePair
 	call	MIDI_SendAllSoundOff
@@ -8358,10 +8358,10 @@ AcPmExpFilterGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, PmExpFilter_DefaultInherited
 	add xbc, xbc
-	add xbc, AcPmExpFilterGridBoxProc_Data
+	add xbc, AcPmExpFilterGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (PmemPageCtl_EventDispatch:24)
-; Computed jump: target = PmemPageCtl_EventDispatch + AcPmExpFilterGridBoxProc_Data[i], AcPmExpFilterGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = PmemPageCtl_EventDispatch + AcPmExpFilterGridBoxProc_EventOffsets[i], AcPmExpFilterGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcPmExpFilterGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcPmExpFilterGridBoxProc_Evt1C00018
@@ -8490,7 +8490,7 @@ PmExpFilter_DrawCellBank1:
 	pushw	PmExpFilter_DrawCellBank1_Str_Fmts@hi16
 	pushw	PmExpFilter_DrawCellBank1_Str_Fmts@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -8558,7 +8558,7 @@ PmExpFilter_DrawCellBank2:
 	pushw PmExpFilter_DrawCellBank2_Str_Fmts@hi16
 	pushw PmExpFilter_DrawCellBank2_Str_Fmts@lo16
 	push XDE
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -8858,10 +8858,10 @@ PmExpFilterGridCheck:
 	cp xwa, 0x6
 	jrl gt, SeqLoad_StoreReturnZero
 	add xwa, xwa
-	add xwa, PmExpFilterGridCheck_Data
+	add xwa, PmExpFilterGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (PmExpFilter_EventDispatch:24)
-; Computed jump: target = PmExpFilter_EventDispatch + PmExpFilterGridCheck_Data[i], PmExpFilterGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = PmExpFilter_EventDispatch + PmExpFilterGridCheck_EventOffsets[i], PmExpFilterGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> PmExpFilter_EventDispatch
 ;   0x1c00018 -> PmExpFilterGridCheck_Evt1C00018
@@ -8904,7 +8904,7 @@ PmExpFilter_EventDispatch:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
+	lda	xbc, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xbc+wa)
 	ldw	bc, 65535
 	ld	de, 2:i3
@@ -8914,7 +8914,7 @@ PmExpFilterGridCheck_Skip:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
+	lda	xbc, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xbc+wa)
 	ldw	bc, 65535
 	ld	de, 2:i3
@@ -8949,7 +8949,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
+	lda	xbc, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
@@ -8959,7 +8959,7 @@ PmExpFilterGridCheck_Skip2:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
+	lda	xbc, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
@@ -8973,7 +8973,7 @@ PmExpFilterGridCheck_Evt1C0001C:
 	cp	a, 1:i3
 	jrl	nz, SeqLoad_StoreReturnZero
 	ld	l, 0:opc
-	lda	xix, (PmExpFilter_EventDispatch_Data:24)
+	lda	xix, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xde)
 PmExpFilterGridCheck_Loop:
 	ld	c, l
@@ -9019,7 +9019,7 @@ PmExpFilterGridCheck_Skip4:
 	jrl	SeqLoad_StoreReturnZero
 PmExpFilterGridCheck_Skip5:
 	ld	l, 0:opc
-	lda	xix, (PmExpFilter_EventDispatch_Data_2:24)
+	lda	xix, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xde)
 PmExpFilterGridCheck_Loop2:
 	ld	c, l
@@ -9089,7 +9089,7 @@ PmExpFilterCheck_CellDecode:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	wa, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xwa, (PmExpFilter_EventDispatch_Data:24)
+	lda	xwa, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xwa+bc)
 	call	AcApcToggleProc_Helper
 	ld	xwa, PmExpFilterCheck_CellDecode_Str_OFF
@@ -9177,10 +9177,10 @@ AcDispTimeSetGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, DispTimeSet_DefaultInherited
 	add xbc, xbc
-	add xbc, AcDispTimeSetGridBoxProc_Data
+	add xbc, AcDispTimeSetGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (PmExpFilter2_EventDispatch:24)
-; Computed jump: target = PmExpFilter2_EventDispatch + AcDispTimeSetGridBoxProc_Data[i], AcDispTimeSetGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = PmExpFilter2_EventDispatch + AcDispTimeSetGridBoxProc_EventOffsets[i], AcDispTimeSetGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcDispTimeSetGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcDispTimeSetGridBoxProc_Evt1C00018
@@ -9436,10 +9436,10 @@ DispTimeSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, DispTimeSet_ReturnZero
 	add xwa, xwa
-	add xwa, DispTimeSetGridCheck_Data
+	add xwa, DispTimeSetGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (DispTimeSet_EventDispatch:24)
-; Computed jump: target = DispTimeSet_EventDispatch + DispTimeSetGridCheck_Data[i], DispTimeSetGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = DispTimeSet_EventDispatch + DispTimeSetGridCheck_EventOffsets[i], DispTimeSetGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> DispTimeSet_EventDispatch
 ;   0x1c00018 -> DispTimeSetGridCheck_Evt1C00018
@@ -9690,7 +9690,7 @@ DispTimeSetGridCheck_Evt1C0001C:
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts@hi16
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9715,7 +9715,7 @@ DispTimeSetGridCheck_Skip2:
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@hi16
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_3@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9742,7 +9742,7 @@ DispTimeSetGridCheck_Skip3:
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@hi16
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_4@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9767,7 +9767,7 @@ DispTimeSetGridCheck_Skip4:
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@hi16
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_5@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9794,7 +9794,7 @@ DispTimeSetGridCheck_Skip5:
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2@hi16
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2@lo16
 	push	xix
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9817,7 +9817,7 @@ DispTimeSetGridCheck_Skip6:
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@hi16
 	pushw DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_6@lo16
 	push	xix
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -9847,7 +9847,7 @@ DispTimeSetCheck_CellDecode:
 	pushw DispTimeSetCheck_CellDecode_Str_Fmts@hi16
 	pushw DispTimeSetCheck_CellDecode_Str_Fmts@lo16
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9869,7 +9869,7 @@ DispTimeSetCheck_TryRow3:
 	pushw DispTimeSetCheck_TryRow3_Str_Fmts@hi16
 	pushw DispTimeSetCheck_TryRow3_Str_Fmts@lo16
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9890,7 +9890,7 @@ DispTimeSetCheck_TryRow4:
 	pushw DispTimeSetCheck_TryRow4_Str_Fmts@hi16
 	pushw DispTimeSetCheck_TryRow4_Str_Fmts@lo16
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9911,7 +9911,7 @@ DispTimeSetCheck_TryRow5:
 	pushw DispTimeSetCheck_TryRow5_Str_Fmts@hi16
 	pushw DispTimeSetCheck_TryRow5_Str_Fmts@lo16
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9932,7 +9932,7 @@ DispTimeSetCheck_TryRow6:
 	pushw DispTimeSetCheck_TryRow6_Str_Fmts@hi16
 	pushw DispTimeSetCheck_TryRow6_Str_Fmts@lo16
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -9953,7 +9953,7 @@ DispTimeSetCheck_TryRow7:
 	pushw DispTimeSetCheck_TryRow7_Str_Fmts@hi16
 	pushw DispTimeSetCheck_TryRow7_Str_Fmts@lo16
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0c)
 	call GetFocusObject
 	ld XWA,XHL
@@ -10590,7 +10590,7 @@ MssNameFunc_Skip2:
 	ld	xwa, (xiz+18)
 	lda	xwa, (xwa+16)
 	push	xwa
-	call	MssNameFunc_Helper2
+	call	Sprintf_StrNSet
 	lda	xsp, (xsp+18)
 	ld	xwa, MssName_EventDispatch_Str_Blank2
 	jr	MssNameFunc_Join
@@ -10612,7 +10612,7 @@ MssNameFunc_Join:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	MssNameFunc_Helper
+	call	TmFlash_CompareStrings
 	inc	8, xsp
 	ld	(xhl), 0
 MssNameFunc_Join2:
@@ -10715,7 +10715,7 @@ AcPmBkNoBox_FormatBankNo:
 	pushw	AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd@hi16
 	pushw	AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 AcPmBkNoBox_SendConfirm:
 	lda xde, (xsp + 4)
@@ -10792,7 +10792,7 @@ AcBkNoBox_Match:
 	pushw	AcBkNoBox_Match_Str_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, (xsp+260)
@@ -11422,7 +11422,7 @@ AcPmBkEdit_BankChanged:
 
 	push xwa
 
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 
 	ld XWA, (xsp + 0x0138)
 
@@ -11434,7 +11434,7 @@ AcPmBkEdit_BankChanged:
 
 	push xwa
 
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 
 	lda xsp, (xsp + 18)
 
@@ -11493,13 +11493,13 @@ AcPmBkEdit_BankEdit:
 	pushw AcPmBkEdit_BankEdit_Str_Fmtd@lo16
 	ld XWA,(XSP+0x0e)
 	push XWA
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	ld XWA,(XSP+0x0138)
 	inc 2,XWA
 	push XWA
 	lda xwa, (xsp + 0x3c)
 	push XWA
-	call FileIO_CheckPathAndVolumeLabel_Helper
+	call Strcat
 	lda xsp, (xsp + 0x12)
 	lda xhl, (xsp + 0x2e)
 	lda xwa, (xsp + 0x10)
@@ -11878,7 +11878,7 @@ GmOnOffFunc:
 	pushw	GmOnOffFunc_Data@lo16
 	ld	xwa, (xde+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
 	jrl	VariScreen_CleanupRet
@@ -12016,7 +12016,7 @@ VariScreen_HandleShow:
 	ld	(xde), wa
 	ld	a, (xbc)
 	extz	wa
-	call	VariScreenProc_Helper
+	call	CharMap_ActivePreamb_Prologue2
 	ld	xde, (xsp+24)
 	ld	xbc, (xde+52)
 	extz	hl
@@ -12265,14 +12265,14 @@ VariScreen_DrawDesignArea:
 	div	c, 10
 	ld	c, b
 	ld	(xwa+3), c
-	call	SeMenu_SetDisplayValue_Helper
+	call	SndParam_ApplyProgramChange
 	lda	xbc, (xsp+28)
 	ld	a, (xbc+3)
 	extz	wa
 	ld	c, (xbc+4)
 	extz	bc
 	lda	xde, (xsp+290)
-	call	Display_BytecodeBlock_F_Helper2
+	call	SndParam_ApplyProgramChangeAsync
 	ld	(xsp+306), 0
 	ld	(xsp+8), 9
 	ld	xwa, (xsp+24)
@@ -12395,7 +12395,7 @@ VariScreen_DrawNameString:
 	pushw VariScreen_DrawNameString_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+550)
 	lda	xbc, (xsp+546)
@@ -12546,14 +12546,14 @@ VariScreen_DrawRightDesignBox:
 	div	c, 10
 	ld	c, b
 	ld	(xwa+3), c
-	call	SeMenu_SetDisplayValue_Helper
+	call	SndParam_ApplyProgramChange
 	lda	xbc, (xsp+28)
 	ld	a, (xbc+3)
 	extz	wa
 	ld	c, (xbc+4)
 	extz	bc
 	lda	xde, (xsp+290)
-	call	Display_BytecodeBlock_F_Helper2
+	call	SndParam_ApplyProgramChangeAsync
 	ld	(xsp+306), 0
 	ld	(xsp+8), 9
 	ld	xwa, (xsp+24)
@@ -12674,7 +12674,7 @@ VariScreen_DrawRightNameString:
 	pushw VariScreen_DrawRightNameString_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+550)
 	lda	xbc, (xsp+546)
@@ -12806,7 +12806,7 @@ VariScreen_HandleConfirm:
 	pushw	VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+298)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+550)
 	lda	xbc, (xsp+546)
@@ -12850,14 +12850,14 @@ VariScreen_ConfirmLoopBody:
 	ld XBC,(XDE+0x30)
 	ld BC,(XBC)
 	ld (XWA+0x02),C
-	call SeMenu_SetDisplayValue_Helper
+	call SndParam_ApplyProgramChange
 	lda xbc, (xsp + 0x1c)
 	ld A,(XBC+0x03)
 	extz WA
 	ld C,(XBC+0x04)
 	extz BC
 	lda XDE,(XSP+0x0122)
-	call Display_BytecodeBlock_F_Helper2
+	call SndParam_ApplyProgramChangeAsync
 	ld (XSP+0x0132),0x00
 	ld (XSP+0x08),0x09
 	ld XWA,(XSP+0x10)
@@ -12967,7 +12967,7 @@ VariScreen_ConfirmDrawNameAudio:
 	pushw VariScreen_ConfirmDrawNameAudio_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+550)
 	lda	xde, (xsp+546)
@@ -13180,7 +13180,7 @@ VariScreen_EnumDrawNameAudio:
 	pushw VariScreen_EnumDrawNameAudio_Str_Fmtd@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+550)
 	lda	xde, (xsp+546)
@@ -14023,7 +14023,7 @@ RVari_Select_CheckSameBank:
 	pushw	RVari_Select_CheckSameBank_Str_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -14144,7 +14144,7 @@ RVari_Select_CheckSameBank:
 	pushw	RVari_Select_CheckSameBank_Str_Fmts_2@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+536)
 	lda	xbc, (xsp+532)

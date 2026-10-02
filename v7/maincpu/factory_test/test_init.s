@@ -587,7 +587,7 @@ LoadExtROM_Entry:
 	pushw	CheckFDStatusLoad_Transfer_Str_XAPR@lo16
 	ld	xwa, 2097152
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	z, LoadExtROM_JumpEntry
@@ -608,7 +608,7 @@ LoadXaprInit_Entry:
 	pushw	LoadExtROM_JumpEntry_Str_XAPR@lo16
 	ld	xwa, 2621440
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	ret	nz
@@ -636,7 +636,7 @@ LoadAndRunXapr_Entry:
 	pushw	LoadExtROM_JumpEntry_Data@lo16
 	ld	xwa, 2621440
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, LoadAndRunXapr_ClearFlag

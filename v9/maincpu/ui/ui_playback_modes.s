@@ -1106,7 +1106,7 @@ SqSngSelTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqSngName_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x14
+	add xde, SqSngSelTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqTrAs_CondCheck:24)
 	jp	t, (xix+de)
@@ -1146,7 +1146,7 @@ SqSngNameTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrAs_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x20
+	add xde, SqSngNameTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_1:24)
 	jp	t, (xix+de)
@@ -1188,7 +1188,7 @@ SqTrAsTtlFunc:
 	cp xde, 0x5
 	jrl ugt, CDlikeSwTtl_ReturnZero2
 	add xde, xde
-	add xde, SepaOut_Config_0_0x2C
+	add xde, SqTrAsTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SQTR_DISPATCH_TABLE_2:24)
 	jp	t, (xix+de)
@@ -1335,7 +1335,7 @@ SqTrAsPsTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrAsPsTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x38
+	add xde, SqTrAsPsTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqTrAsPsTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1434,11 +1434,11 @@ SqTrAsPsTtl_CaseF:
 	jr	lt, SqTrAsPsTtl_CaseF_Skip
 	cp	wa, 13
 	jr	gt, SqTrAsPsTtl_CaseF_Skip
-	lda	xix, (SepaOut_Config_0_0x44:24)
+	lda	xix, (SetWall_ReturnZero_Data:24)
 	ld	wa, (xix+wa)
 	extz wa
 	sll	wa, 1
-	ld	xix, SepaOut_Config_0_0x52
+	ld	xix, SetWall_ReturnZero_Data_2
 	ld	wa, (xix+wa)
 	lda xix, (SqTrAsPsTtl_CaseF_Skip:24)
 	jp	t, (xix+wa)
@@ -1465,7 +1465,7 @@ SqMdlyPlyTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqMdlyPly_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x56
+	add xde, SqMdlyPlyTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqMdlyPlyTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1544,7 +1544,7 @@ DkMdlyPlyTtlFunc:
 	cp xde, 0x5
 	jr ugt, DkMdlyPly_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x62
+	add xde, DkMdlyPlyTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DkMdlyPlyTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1613,7 +1613,7 @@ DkMdlyPly_ReturnZero:
 ; DkMdlyPly send audio command
 DkMdlyPly_SendAudioCmd:
 	ld hl, 0:i3
-	lda xde, (SepaOut_Config_0_0x6E:24)
+	lda xde, (DkMdlyPly_SendAudioCmd_Data:24)
 
 DkMdlyPly_VoiceScanLoop:
 	ld bc, hl
@@ -1648,7 +1648,7 @@ Snd_ParamLookupSetupWerp:
 DkMdlyPly_HandleResult:
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (SepaOut_Config_0_0x8E:24)
+	lda xbc, (DkMdlyPly_HandleResult_Data:24)
 	ld	wa, (xbc+wa)
 	ldw bc, 0x401
 	call SndParam_LookupViaEncode
@@ -1659,7 +1659,7 @@ DkMdlyPly_HandleResult:
 	jr nz, DkMdlyPly_ExtendedCheck
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (SepaOut_Config_0_0x8E:24)
+	lda xbc, (DkMdlyPly_HandleResult_Data:24)
 	ld	wa, (xbc+wa)
 	ld (0x8d3a:16), a
 	ld e, a
@@ -1692,7 +1692,7 @@ DisplayMode_DispatchEvents:
 	cp wa, 6:i3
 	ret gt
 	add wa, wa
-	lda xix, (SepaOut_Config_0_0xCE:24)
+	lda xix, (DisplayMode_DispatchEvents_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (DisplayMode_BatchEventSend:24)
 	jp	t, (xix+wa)
@@ -1771,7 +1771,7 @@ DpMdlyDocTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlyDoc_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0xDC
+	add xde, DpMdlyDocTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlyDocTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1864,7 +1864,7 @@ DpMdlyPdTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlyPd_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0xE8
+	add xde, DpMdlyPdTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlyPdTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -1957,7 +1957,7 @@ DpMdlySmfTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlySmf_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0xF4
+	add xde, DpMdlySmfTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlySmfTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2054,7 +2054,7 @@ DpMdlySmfLyrTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpMdlySmfLyr_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x100
+	add xde, DpMdlySmfLyrTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpMdlySmfLyrTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2161,7 +2161,7 @@ NameGetFuncCall:
 	cp xbc, 0xd
 	jrl gt, NameGetFunc_Entry
 	add xbc, xbc
-	add xbc, SepaOut_Config_0_0x13A
+	add xbc, NameGetFuncCall_Data
 	ld bc, (xbc)
 	lda xix, (NameGetFuncCall_Dispatch:24)
 	jp	t, (xix+bc)
@@ -2863,7 +2863,7 @@ DpDocTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpDocTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x16A
+	add xde, DpDocTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpDocTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -2900,7 +2900,7 @@ DpDoc_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpDocTtl_ReturnZero
 	add xwa, xwa
-	add xwa, SepaOut_Config_0_0x156
+	add xwa, DpDocTtl_Dispatch_Data
 	ld wa, (xwa)
 	lda xix, (DpDoc_CaseB:24)
 	jp	t, (xix+wa)
@@ -2990,7 +2990,7 @@ DpPdTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpPdTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x18A
+	add xde, DpPdTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpPdTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3027,7 +3027,7 @@ DpPd_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpPdTtl_ReturnZero
 	add xwa, xwa
-	add xwa, SepaOut_Config_0_0x176
+	add xwa, DpPdTtl_Dispatch_Data
 	ld wa, (xwa)
 	lda xix, (DpPd_CaseB:24)
 	jp	t, (xix+wa)
@@ -3117,7 +3117,7 @@ DpSmfTtlFunc:
 	cp xde, 0x5
 	jrl ugt, DpSmfTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x1AA
+	add xde, DpSmfTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpSmfTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3163,7 +3163,7 @@ DpSmf_CaseA:
 	cp xwa, 0x9
 	jr ugt, DpSmfTtl_ReturnZero
 	add xwa, xwa
-	add xwa, SepaOut_Config_0_0x196
+	add xwa, DpSmfTtl_Dispatch_Data
 	ld wa, (xwa)
 	lda xix, (DpSmf_CaseB:24)
 	jp	t, (xix+wa)
@@ -3253,7 +3253,7 @@ DpSmfLyrTtlFunc:
 	cp xde, 0x5
 	jrl ugt, SeqStep_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x1B6
+	add xde, DpSmfLyrTtlFunc_Data
 	ld de, (xde)
 	lda xix, (DpSmfLyrTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3397,7 +3397,7 @@ SqTrSelTtlFunc:
 	cp xde, 0x5
 	jr ugt, SqTrSelTtl_ReturnZero
 	add xde, xde
-	add xde, SepaOut_Config_0_0x1C2
+	add xde, SqTrSelTtlFunc_Data
 	ld de, (xde)
 	lda xix, (SqTrSelTtl_Dispatch:24)
 	jp	t, (xix+de)
@@ -3485,7 +3485,7 @@ SqTrSel_CaseA:
 SqStepTtlFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, SepaOut_Config_0_0x1CE
+	ld xiy, SqStepTtlFunc_Data
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw

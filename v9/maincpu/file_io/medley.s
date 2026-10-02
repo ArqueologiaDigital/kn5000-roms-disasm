@@ -1758,12 +1758,10 @@ DiskSel_Exit:
 	lda xsp, (xsp + 14)
 	ret
 
-GetPlayState1_Entry:
 GetPlayState1:
 	ld l, (0x8942:16)
 	ret
 
-GetPlayState2_Entry:
 GetPlayState2:
 	ld l, (0x8944:16)
 	ret
@@ -1774,7 +1772,6 @@ SmfMedley_RawData:
 	ld	(35140:16), a
 	ret
 
-NavigateSongList_Entry:
 NavigateSongList:
 	dec 2, xsp
 	pushw iz
@@ -1815,7 +1812,6 @@ NavSong_Exit:
 	inc 2, xsp
 	ret
 
-NavigateDocList_Entry:
 NavigateDocList:
 	pushw iz
 	ld iz, wa
@@ -1850,7 +1846,6 @@ NavDoc_Exit:
 	popw iz
 	ret
 
-NavigatePdList_Entry:
 NavigatePdList:
 	pushw iz
 	ld iz, wa
@@ -2224,7 +2219,6 @@ SmfMed_FinishInit:
 	ld (0x8434:16), xwa
 	jrl SmfMed_Exit
 
-SmfMed_HandleStop_Entry:
 SmfMed_HandleStop:
 	ld a, (0x8d36:16)
 	cp a, 0x6f
@@ -2473,7 +2467,6 @@ SmfMed_Exit:
 	inc 4, xsp
 	ret
 
-PdMed_FormatFileList_Entry:
 PdMed_FormatFileList:
 	dec 6, xsp
 	pushw iz
@@ -2944,7 +2937,6 @@ PdMed_ShowError:
 	call SoundCtrl_SendCommand
 	jrl PdMed_Exit
 
-PdMed_InitFromDisk_Entry:
 PdMed_InitFromDisk:
 	cpw (0x8506:16), 0
 	jr ge, PdMed_InitState
@@ -3227,7 +3219,6 @@ PdMed_Exit:
 	pop xiz
 	ret
 
-DocDiskNameFunc_Entry:
 DocDiskNameFunc:
 	push xiz
 	ld xiz, xde
@@ -3525,7 +3516,6 @@ DocName_Exit:
 	inc 4, xsp
 	ret
 
-DocMed_FormatSlotList_Entry:
 DocMed_FormatSlotList:
 	dec 6, xsp
 	push xiz
@@ -3751,7 +3741,6 @@ DocMed_ShowError:
 	call SoundCtrl_SendCommand
 	jrl DocMed_Exit
 
-DocMed_CheckInit_Entry:
 DocMed_CheckInit:
 	cpw (0x8508:16), 0
 	jr lt, DocMed_InitFromDisk
@@ -4065,7 +4054,6 @@ SetSongSlotValue:
 	ld (xhl), bc
 	ret
 
-GetSongSlotValue_Entry:
 GetSongSlotValue:
 	ld hl, 0:i3
 	cp wa, 0xa
@@ -4078,7 +4066,6 @@ GetSongSlotValue:
 	ld hl, (xbc)
 	ret
 
-CheckSongSlotHasData_Entry:
 CheckSongSlotHasData:
 	calr GetSongSlotValue
 	cp hl, 0:i3
@@ -4095,7 +4082,6 @@ SongSlot_RawData:
 	popw	iz
 	ret
 
-FindFirstEmptySlot_Entry:
 FindFirstEmptySlot:
 	pushw iz
 	ld iz, 0:i3
@@ -4113,7 +4099,6 @@ FindEmpty_Exit:
 	popw iz
 	ret
 
-ClearAllSongSlots_Entry:
 ClearAllSongSlots:
 	push xiz
 	ld iz, wa
@@ -4129,7 +4114,6 @@ ClearSlots_Loop:
 	pop xiz
 	ret
 
-ResetSlotsIfEmpty_Entry:
 ResetSlotsIfEmpty:
 	calr FindFirstEmptySlot
 	ld wa, hl
@@ -4138,7 +4122,6 @@ ResetSlotsIfEmpty:
 	calr ClearAllSongSlots
 	ret
 
-CheckSlotIsSelected_Entry:
 CheckSlotIsSelected:
 	pushw iz
 	ld iz, wa
@@ -4148,24 +4131,20 @@ CheckSlotIsSelected:
 	popw iz
 	ret
 
-CheckAnySlotHasData_Entry:
 CheckAnySlotHasData:
 	calr FindFirstEmptySlot
 	cp hl, 0:i3
 	scc16 nz, hl
 	ret
 
-SetCurrentSlotIndex_Entry:
 SetCurrentSlotIndex:
 	ld (0x09480e:24), wa
 	ret
 
-GetCurrentSlotIndex_Entry:
 GetCurrentSlotIndex:
 	ld hl, (0x09480e:24)
 	ret
 
-CheckIsCurrentSlot_Entry:
 CheckIsCurrentSlot:
 	pushw iz
 	ld iz, wa
@@ -4175,7 +4154,6 @@ CheckIsCurrentSlot:
 	popw iz
 	ret
 
-CheckSlotIndexValid_Entry:
 CheckSlotIndexValid:
 	calr GetCurrentSlotIndex
 	cp hl, 0:i3

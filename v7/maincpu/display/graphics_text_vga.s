@@ -1347,7 +1347,7 @@ DrawFunc_Init_FontTable0:
 DrawFunc_Init_PushFontAndDraw:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1457,7 +1457,7 @@ DrawFunc_Init_Join3:
 	lda	xwa, (xsp+10)
 	push	xwa
 DrawFunc_Init_Join4:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 63
@@ -1515,7 +1515,7 @@ AccDraw_Secondary_Helper20:
 .Lc_fb1e56:
 	push XWA
 	push XBC
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp + 0x0a)
 	ld A,(XIZ+0x06)
 	and A,0x3f
@@ -1575,7 +1575,7 @@ AccDraw_Secondary_Helper20_Skip3:
 AccDraw_Secondary_Helper20_Join:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1674,7 +1674,7 @@ AccDraw_Secondary_Helper20_Join4:
 	push	xwa
 	push	xbc
 AccDraw_Secondary_Helper20_Join5:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -1728,7 +1728,7 @@ AccDraw_Secondary_Helper20_Join6:
 	push	xwa
 	push	xbc
 AccDraw_Secondary_Helper20_Join7:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	ld	a, (xiz+6)
 	and	a, 15
@@ -2054,10 +2054,10 @@ CalcTotalWidth:
 	ld (XSP+0x0c),XBC
 	ld XIZ,XWA
 	push XIZ
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 1,HL
 	pushw hl
-	call SLIDE_Decompress_4K_Init_Helper2
+	call Malloc
 	inc 6,XSP
 	ld (XSP+0x08),XHL
 	ld XWA,(XSP+0x08)
@@ -2070,7 +2070,7 @@ CalcTotalWidth:
 	add XIZ,0x00945c00
 	ld XWA,(XSP+0x08)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	inc 4,XSP
 	ld XBC,(XIZ+0x0c)
 	or XBC,XBC
@@ -2103,7 +2103,7 @@ CalcTotalWidth_KerningLoop:
 CalcTotalWidth_FreeAndReturn:
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, iz
 	pop	xiz
@@ -2119,10 +2119,10 @@ WordwrapStrings:
 	ldw	(xsp+10), 0
 	ld	xiz, (xsp+22)
 	push	xiz
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	6, xsp
 	ld	(xsp+12), xhl
 	ld	xwa, (xsp+12)
@@ -2177,7 +2177,7 @@ Wordwrap_CheckEndOfString:
 Wordwrap_FreeAndReturn:
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	hl, (xsp+10)
 	pop	xiz
@@ -3749,7 +3749,7 @@ PmBank_BankChanged_DrawSlot:
 	pushw PmBank_BankChanged_DrawSlot_Str_Fmtd@lo16
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+268)
 	lda	xhl, (xsp+264)
@@ -4017,7 +4017,7 @@ PmBank_DrawRegionInfo:
 	pushw SoundCheck_Text@lo16
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 	lda	xbc, (xsp+264)
 	ldw	(xbc), 230
@@ -4150,7 +4150,7 @@ PmBank_OnSelect:
 	ld xwa, (xwa + 48)
 	ld wa, (xwa)
 	sla wa, 3
-	lda xbc, (PmBank_OnSelect_Data:24)
+	lda xbc, (SelectRect_Table:24)
 	lda	xiy, (xbc+wa)
 	lda xix, (xsp+268)
 	ld bc, 4:i3
@@ -4168,7 +4168,7 @@ PmBank_OnSelect:
 	ld xwa, (xwa + 44)
 	ld wa, (xwa)
 	sla wa, 3
-	lda xbc, (PmBank_OnSelect_Data:24)
+	lda xbc, (SelectRect_Table:24)
 	lda	xiy, (xbc+wa)
 	lda xix, (xsp+268)
 	ld bc, 4:i3
@@ -4249,7 +4249,7 @@ ToneGen_WriteParamByIndex:
 	ld iz, bc
 	ld bc, wa
 	ld wa, iz
-	lda xiy, (PmBank_OnSelect_Data:24)
+	lda xiy, (SelectRect_Table:24)
 	cp bc, 5:i3
 	jrl ugt, ToneGen_WriteParam_Return
 	add bc, bc
@@ -4468,7 +4468,7 @@ WallHomeEditCheck_ReturnFalse:
 	ld xbc, (xwa)
 	or xde, xde
 	jr nz, WallHomeEdit_LoadSndAddr3
-	ld xwa, WallHomeEditCheck_ReturnFalse_Str_DEFAULT
+	ld xwa, WallHomeEdit_Text
 	jr WallHomeEdit_PushAddr
 
 WallHomeEdit_PushSndAddr:
@@ -4486,7 +4486,7 @@ WallHomeEdit_PushAddr:
 	push xbc
 
 WallHomeEdit_CallAudio:
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, (xsp+4)
 	jr	WallHome_PopIzSkip4Ret
@@ -4525,7 +4525,7 @@ WallMenuEdit_EventDispatch:
 	jr	z, WallMenuEditCheck_Skip
 	or	xwa, xwa
 	jr	nz, WallMenuEditCheck_Skip2
-	ld	xwa, WallMenuEdit_EventDispatch_Str_DEFAULT
+	ld	xwa, WallMenuEdit_Text
 	jr	WallMenuEditCheck_Join
 WallMenuEditCheck_Skip:
 	ld	xwa, WallMenuEdit_EventDispatch_Str_USER
@@ -4535,7 +4535,7 @@ WallMenuEditCheck_Skip2:
 WallMenuEditCheck_Join:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	WallMenuEditCheck_Epilogue
@@ -4576,7 +4576,7 @@ WallOthEdit_EventDispatch:
 	jr	z, WallOthEditCheck_Skip
 	or	xwa, xwa
 	jr	nz, WallOthEditCheck_Skip2
-	ld	xwa, WallOthEdit_EventDispatch_Str_DEFAULT
+	ld	xwa, WallOthEdit_Text
 	jr	WallOthEditCheck_Join
 WallOthEditCheck_Skip:
 	ld	xwa, WallOthEdit_EventDispatch_Str_USER
@@ -4586,7 +4586,7 @@ WallOthEditCheck_Skip2:
 WallOthEditCheck_Join:
 	push	xwa
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	ld	xhl, xiz
 	jr	WallOthEditCheck_Epilogue
@@ -4688,7 +4688,7 @@ WallUsrIni_ReturnZero:
 WallSureLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, WallSureLng_ReturnZero
-	lda xhl, (WallSureLngCheck_Data:24)
+	lda xhl, (LngTable_UserInitialWallpaper:24)
 	ret
 
 WallSureLng_ReturnZero:
@@ -4782,7 +4782,7 @@ MainSvariIni:
 	cp	xbc, EVT_SVARI_INI
 	jr	nz, MainSvariIni_ReturnZero
 	pushw	6
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ldb_d8	a, (0x8c9e)
@@ -4800,7 +4800,7 @@ MainSvariIni:
 	call	SndParam_FetchOscTableEntry
 	ld	a, (xiz)
 	extz	wa
-	call	VariScreenProc_Helper
+	call	CharMap_ActivePreamb_Prologue2
 	ld	(xiz+3), l
 	ld	(xiz+4), (0x8c9e)
 	ld	xwa, 4294967295
@@ -4821,7 +4821,7 @@ MainRvariIni:
 	cp	xbc, EVT_RVARI_INI
 	jr	nz, MainRvariIni_ReturnZero
 	pushw	6
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
@@ -4856,7 +4856,7 @@ MainGetSndGrpName:
 	cp	xbc, EVT_GET_SND_GRP_NAME
 	jr	nz, MainGetSndGrpName_ReturnZero
 	pushw	18
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ldb_d8	a, (0x8c9e)
@@ -4897,20 +4897,20 @@ MainGetSndName:
 	cp	xbc, EVT_GET_SND_NAME
 	jr	nz, MainGetSndName_ReturnZero
 	pushw	18
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+6), xhl
 	ld	a, (xiz+3)
 	ld	(xsp+4), a
 	ld	xwa, xiz
-	call	SeMenu_SetDisplayValue_Helper
+	call	SndParam_ApplyProgramChange
 	ld	a, (xiz+3)
 	extz	wa
 	ld	c, (xiz+4)
 	extz	bc
 	ld	xde, (xsp+6)
 	inc	1, xde
-	call	Display_BytecodeBlock_F_Helper2
+	call	SndParam_ApplyProgramChangeAsync
 	ld	xwa, (xsp+6)
 	ld	(xwa+17), 0
 	ld	c, (xsp+4)
@@ -4935,7 +4935,7 @@ MainGetRhyGrpName:
 	cp	xbc, EVT_GET_RHY_GRP_NAME
 	jr	nz, MainGetRhyGrpName_ReturnZero
 	pushw	17
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 163840
@@ -4978,7 +4978,7 @@ MainGetRhyName:
 	cp	xbc, EVT_GET_RHY_NAME
 	jr	nz, MainGetRhyName_ReturnZero
 	pushw	15
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+6), xhl
 	ld	xbc, xiz
@@ -5038,7 +5038,7 @@ MainPmGet:
 
 MainPmGet_HandleBankData:
 	pushw	18
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+2), xhl
 	ld	xwa, (xsp+6)
@@ -5072,7 +5072,7 @@ MainPmGet_HandleCheckBit2:
 MainPmGet_HandleBankDisplay:
 	pushw 0x13
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -5345,7 +5345,7 @@ AcFreeSplit_LookupNoteLabel:
 	pushw	AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 AcFreeSplit_SendConfirmEvent:
 	lda xde, (xsp + 4)
@@ -5389,7 +5389,7 @@ AcFreeSplit_LookupSecondNote:
 	pushw	AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 AcFreeSplit_SendSecondConfirm:
 	lda xde, (xsp + 4)

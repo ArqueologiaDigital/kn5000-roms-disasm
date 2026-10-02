@@ -106,10 +106,9 @@ MiddleFuncCall_DispatchData_Helper:
 	ret
 ; 20 x u8 mask per SetWall slot number 0..0x13 (0xFF, or 0 for slots 13-16):
 ; SetWall_CompareAndSwap (0xF1EFF7) and SetWall_InlineCodeBlock2_Skip read it with
-; `ld xde,<this>; ld_rrb c,xde,iy`, iy = a slot number from the RAM slot table
+; `ld xde,<this>; ld c, (xde+iy)`, iy = a slot number from the RAM slot table
 ; at 0xF1A0 -- two such masks are then ANDed (`and a,c`) to test a pair of slots.
 SetWall_SlotMaskTable:
-SetWall_CompareAndSwap_Data:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff
 
 SetWall_EventHandler:
@@ -214,7 +213,7 @@ SetWall_CompareAndSwap:
 	xor w, w
 	ld iy, wa
 	push xde
-	ld xde, SetWall_CompareAndSwap_Data
+	ld xde, SetWall_SlotMaskTable
 	ld	c, (xde+iy)
 	ld a, (3295:16)
 	ld iy, wa
@@ -222,7 +221,7 @@ SetWall_CompareAndSwap:
 	ld	a, (xde+iy)
 	ld (3297:16), a
 	ld iy, wa
-	ld xde, SetWall_CompareAndSwap_Data
+	ld xde, SetWall_SlotMaskTable
 	ld	a, (xde+iy)
 	pop xde
 	and a, c
@@ -601,14 +600,14 @@ SetWall_InlineCodeBlock2_Skip:
 	xor	w, w
 	ld	iy, wa
 	push	xde
-	ld	xde, SetWall_CompareAndSwap_Data
+	ld	xde, SetWall_SlotMaskTable
 	ld	c, (xde+iy)
 	ld a, (3295:16)
 	ld iy, wa
 	ld	xde, 0xf1a0
 	ld	a, (xde+iy)
 	ld iy, wa
-	ld	xde, SetWall_CompareAndSwap_Data
+	ld	xde, SetWall_SlotMaskTable
 	ld	a, (xde+iy)
 	pop xde
 	and	a, c

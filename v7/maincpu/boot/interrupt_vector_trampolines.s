@@ -66,7 +66,7 @@ AcApcToggleProc_Helper:
 	add	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 0x7ff
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	ld	ix, hl
 	jr	AcApcToggleProc_Helper_Join2
 ; (v7 label .Lc_fcccb4 stood here; dropped, see the file header)
@@ -190,7 +190,7 @@ GroupBoxProc_StartSSFPresentation_Helper:
 	add	xhl, xbc
 	ld	xwa, xhl
 	ld	xbc, 0x7ff
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 	sll	hl, 2
 	lda	xwa, (0x973c:16)
 	extz	xhl

@@ -184,7 +184,7 @@ SeScreenData_0x4E68:
 ; [v10] F15A6E..F15A91  [flags:u8][len:u8][payload] records
 ; [v10] F15A6E flags=0x02 len=15
 	.byte	0x02, 0x0f, 0x61, 0x06, 0x01, 0x00, 0x20
-	.long	SeMenu_ShowConfirmDialog_Data_5 + 0x53
+	.long	SeScreenData_0x0878 + 0x53
 	.byte	0x03, 0x00, 0x0b, 0x0b
 ; -> 0xF15A5D
 ; [v10] F15A7D flags=0x00 len=10
@@ -813,7 +813,7 @@ SeScreenData_0x57F9:
 ; evidence: recptrs table 0xF1642F
 SeScreenData_0x5811:
 	.byte	0x02, 0x0f, 0x60, 0x06, 0x20, 0x05, 0x20
-	.long	SeMenu_ShowConfirmDialog_Data_5 + 0x53
+	.long	SeScreenData_0x0878 + 0x53
 	.byte	0x03, 0x00, 0x70, 0x1d
 ; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF1642F
@@ -6999,7 +6999,7 @@ UI_COMPONENT_DISPATCH:
 	pushw	UI_COMPONENT_DISPATCH_Str_Fmtd@hi16
 	pushw	UI_COMPONENT_DISPATCH_Str_Fmtd@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jrl	WidgetHandler_PostEventAndReturnZero
 UI_COMPONENT_DISPATCH_CASE1:
@@ -7019,7 +7019,7 @@ UI_COMPONENT_DISPATCH_CASE1:
 	pushw	UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@hi16
 	pushw	UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts@lo16
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+16)
 	jr	WidgetHandler_PostEventAndReturnZero	; -> 0xF1A845
 UI_COMPONENT_DISPATCH_CASE2:
@@ -7056,7 +7056,7 @@ UI_COMPONENT_DISPATCH_CASE5_SKIP:
 	push	xwa	; Push parameter
 UI_COMPONENT_DISPATCH_PUSH_CALL:
 	push	xde
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 WidgetHandler_PostEventAndReturnZero:
 	cpw (xsp + 22), 0x4
@@ -7202,7 +7202,7 @@ GridCheck_LookupAndSend:
 
 	push xwa
 
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 
 	inc 8, xsp
 
@@ -7602,7 +7602,7 @@ S2cMemNoBox_HandleScroll:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -7639,7 +7639,7 @@ PsS2cFmeas_HandleScroll:
 	pushw	PsS2cFmeas_HandleScroll_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
@@ -7691,7 +7691,7 @@ PsS2cLmeas_HandleScroll:
 	pushw	PsS2cLmeas_HandleScroll_Str_Fmt3d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xbc, (xiz+22)
 	lda	xwa, (xiz+32)
@@ -7744,7 +7744,7 @@ PsSeqSongNo_HandleScroll:
 	pushw	PsSeqSongNo_HandleScroll_Str_SONG_Fmt2d@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	xwa, xiz
@@ -7782,7 +7782,7 @@ PsS2cTrans_HandleScroll:
 	push	xwa
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	inc	8, xsp
 	lda	xwa, (xiz+22)
 	lda	xbc, (xiz+32)

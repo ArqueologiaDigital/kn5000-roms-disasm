@@ -1067,7 +1067,7 @@ AccompSeq_ProcessAfterNote_Skip2:
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	xor	w, w
 	ld	hl, wa
-	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A
+	ld	xix, AccompSeq_MidiFilterCodeBlock_Code
 	ld	h, (xix+hl)
 	ld	l, (64786:16)
 	cp	l, 17
@@ -1091,7 +1091,7 @@ AccompSeq_ProcessAfterNote_Skip4:
 	cp	l, 14
 	jr	ugt, AccompSeq_ProcessAfterNote_Return
 AccompSeq_ProcessAfterNote_Skip5:
-	call	Voice_NoteChannelTable1_Code_Sub
+	call	Voice_NoteChannelGrid_Lookup
 	cp	h, 0:i3
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	cp	(32367:16), 0
@@ -1618,7 +1618,8 @@ AccompSeq_SendAllOff_Loop2:
 	ret
 
 AccompSeq_MidiFilterCodeBlock:
-	.incbin "includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin"
+	.incbin "includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin", 0x0, 0x7A
+AccompSeq_MidiFilterCodeBlock_Code:	.incbin "includes/romslices/v7_transplant_AccompSeq_MidiFilterCodeBlock.bin", 0x7A, 0x40
 AccompSeq_ProcessChordChange:
 	and (0x7dd2:16), 0xfe
 	and (0x7dd3:16), 0xfe
@@ -1637,7 +1638,7 @@ AccompSeq_ProcessChordChange:
 	push XIX
 	push XIY
 	push XIZ
-	call AccPedal_SustainHandler_Helper
+	call CompIface_ResetPedal
 	pop XIZ
 	pop XIY
 	pop XIX
@@ -1655,7 +1656,7 @@ AccompSeq_ChordChange_Reinit:
 	push	xix
 	push	xiy
 	push	xiz
-	call	AccPedal_SustainHandler_Helper
+	call	CompIface_ResetPedal
 	pop	xiz
 	pop	xiy
 	pop	xix

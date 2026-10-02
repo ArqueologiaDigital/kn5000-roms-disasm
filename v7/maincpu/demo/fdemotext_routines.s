@@ -1164,7 +1164,7 @@ FDemoText_NotifyUIChange:
 	push	xiz
 	extz	bc
 	ld	xwa, 18688
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	ld	e, (64628:16)
 	extz	de
 	pushw	255
@@ -1186,7 +1186,7 @@ FDemoText_NotifyUI_Loop:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, 18704
-	call	AppEvent_HandleChannelEvent_Helper
+	call	DSPCfg_WriteParamFull
 	inc	1, iz
 	cp	iz, qiz
 	jr	c, FDemoText_NotifyUI_Loop
@@ -1253,7 +1253,7 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	pushw FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd@lo16
 	pushw 2
 	pushw 18422
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+14)
 	jr	FDemoText_ByteData_DisplayRefresh_Join
 FDemoText_ByteData_DisplayRefresh_Skip2:
@@ -1468,7 +1468,7 @@ FDemoText_ProcessMarkup_CheckTagOpen:
 FDemoText_ProcessMarkup_LookupTag:
 	ld XWA,(XBC)
 	push XWA
-	call LyricsTrack_ReadAndParse_Helper2
+	call Strlen
 	ld (XSP+0x12),HL
 	pushm	(xsp + 18)
 	ld	xwa, (xsp + 92)
@@ -1479,7 +1479,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	lda	xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable:24)
 	ld	xwa, (xwa+bc)
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 0xe
 	cp	hl, 0:i3
 	jrl	nz, FDemoText_ProcessMarkup_NextTag
@@ -1508,7 +1508,7 @@ FDemoText_ProcessMarkup_AllocCopy:
 	ld	xwa, xiz
 	inc	1, xwa
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	(xsp+14), xhl
 	ld	xbc, (xsp+14)
 	ld	(xsp+10), xbc
@@ -1584,7 +1584,7 @@ FDemoText_ProcessMarkup_CallHandler:
 	ld	(xsp+18), hl
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 FDemoText_ProcessMarkup_SkipToEnd:
 	ld xwa, (xsp + 86)
@@ -1670,7 +1670,7 @@ FDemoText_ProcessMarkup_CopyAndRender:
 
 	pushw wa
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	ld (xsp + 18), xhl
 
@@ -1706,7 +1706,7 @@ FDemoText_ProcessMarkup_CopyAndRender:
 
 	push xwa
 
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 
 	inc 4, xsp
 
@@ -1733,10 +1733,10 @@ FDemoText_ByteData_TextRenderer:
 	add	xwa, (xsp+0xa)
 	ld	xwa, (xwa)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	(xsp+8), xhl
 	ld	wa, iz
 	exts	xwa
@@ -1789,7 +1789,7 @@ FDemoText_ByteData_TextRenderer_Loop:
 	call	Free_Compare2
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	lda	xsp, (xsp+12)
 	dec	1, hl
 	extz	xhl
@@ -1812,7 +1812,7 @@ FDemoText_ByteData_TextRenderer_Skip:
 FDemoText_ProcessTextMarkup_Skip2:
 	ld	xwa, (xsp+2)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	popw	iz
 	lda	xsp, (xsp+12)
@@ -1873,7 +1873,7 @@ FDemoText_TextDispatch_Loop5:
 	cp	wa, 0:i3
 	jr	nz, FDemoText_TextDispatch_Join
 	push	xbc
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	ld	(xsp+4), hl
 	jr	FDemoText_TextDispatch_Join
@@ -1917,7 +1917,7 @@ FDemoText_TextDispatch_Skip3:
 	pushw	FDemoText_ByteData_LayoutEngine_Str_Fmt8s@lo16
 	pushw	2
 	pushw	0x4878
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xwa, (xsp+18)
 	push	xwa
 	pushw	2
@@ -1953,10 +1953,10 @@ FDemoText_TextDispatch_Skip3:
 	call	SendEvent
 	pushw	2
 	pushw	0x4878
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xiz, xhl
 	pushw	2
 	pushw	0x4878
@@ -2008,7 +2008,7 @@ FDemoText_TextDispatch_Loop7:
 	cp	bc, 0:i3
 	jr	nz, FDemoText_TextDispatch_Join3
 	push	xwa
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	ld	iz, hl
 	jr	FDemoText_TextDispatch_Join3
@@ -2021,7 +2021,7 @@ FDemoText_TextDispatch_Skip5:
 	cp	c, 76
 	jr	nz, FDemoText_TextDispatch_Join3
 	push	xwa
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	ldw	iz, 64
 	sub	iz, hl
@@ -2031,7 +2031,7 @@ FDemoText_TextDispatch_Skip6:
 	jr	FDemoText_TextDispatch_Join3
 FDemoText_TextDispatch_Skip7:
 	push	xwa
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	ld	iz, hl
 	add	iz, 64
@@ -2181,7 +2181,7 @@ FDemoText_TextDispatch_Loop9:
 	cp	bc, 0:i3
 	jr	nz, FDemoText_TextDispatch_Skip8
 	push	xwa
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	lt, FDemoText_TextDispatch_Skip8
@@ -2194,7 +2194,7 @@ FDemoText_TextDispatch_Loop9:
 	jr	FDemoText_TextDispatch_Skip8
 FDemoText_TextDispatch_Skip20:
 	push	xwa
-	call	Boot_CheckConfigFlag7_Helper
+	call	ParseInt16
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	lt, FDemoText_TextDispatch_Skip8
@@ -2644,12 +2644,12 @@ FDemoText_Layout_Setup:
 	sub	(xsp+22), iz
 	ld	xwa, (xsp+32)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	ld	qiz, hl
 	ld	wa, qiz
 	inc	1, wa
 	pushw	wa
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	(xsp+22), xhl
 	ld	xwa, (xsp+38)
 	push	xwa
@@ -2755,7 +2755,7 @@ FDemoText_Layout_UpdatePosition:
 FDemoText_Layout_FreeBuffer:
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	pop	xiz
 	lda	xsp, (xsp+32)
@@ -2936,10 +2936,10 @@ Seq_InitializeAndStart:
 	calr	Seq_InitVoiceStructures
 	ld	xwa, (xsp+4)
 	push	xwa
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	inc	1, hl
 	pushw	hl
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	ld	xiz, xhl
 	ld	xwa, (xsp+10)
 	push	xwa
@@ -2987,12 +2987,12 @@ Seq_LoadResource_Proceed:
 	push	xiz
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	pushw	Seq_LoadResource_Proceed_Str_PRE@hi16
 	pushw	Seq_LoadResource_Proceed_Str_PRE@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+4)
 	ld	xbc, Seq_LoadResource_Proceed_Str_rt
@@ -3024,7 +3024,7 @@ Seq_FillBufferLoop:
 	cp	xwa, xbc
 	jr	c, Seq_FillBufferLoop
 	push	xiz
-	call	LyricsTrack_ReadAndParse_Helper2
+	call	Strlen
 	pushw	hl
 	push	xiz
 	lda	xwa, (xsp+14)
@@ -3035,7 +3035,7 @@ Seq_FillBufferLoop:
 	pushw	Seq_FillBufferLoop_Str_ACT@hi16
 	pushw	Seq_FillBufferLoop_Str_ACT@lo16
 	push	xwa
-	call	FileIO_CheckPathAndVolumeLabel_Helper
+	call	Strcat
 	lda	xsp, (xsp+22)
 	lda	xwa, (xsp+4)
 	ld	xbc, Seq_FillBufferLoop_Str_rt

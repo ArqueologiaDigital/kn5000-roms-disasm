@@ -868,7 +868,7 @@ FadeSetGridCheck_Entry:
 	pushw	FadeSetGridCheck_LocalInit_Strings@hi16
 	pushw	FadeSetGridCheck_LocalInit_Strings@lo16
 	push	xbc
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -926,7 +926,7 @@ SndParam_LookupAndSendCmd:
 	pushw	SndParam_LookupAndSendCmd_Str_Fmt2d_measure@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1570,7 +1570,7 @@ InOutGridCheck_Skip7:
 	pushw	InOutGridCheck_LocalInit_Strings@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	InOutGridCheck_Join2
 InOutGridCheck_Skip8:
@@ -1600,7 +1600,7 @@ InOutGridCheck_Skip9:
 	pushw	Data_InOutGridDispatch_Str_Fmt3d@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	jr	InOutGridCheck_Join3
 InOutGridCheck_Skip10:
@@ -1775,7 +1775,7 @@ InOutGridCheck_Skip14:
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1791,7 +1791,7 @@ InOutGridCheck_Skip15:
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_2@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1826,7 +1826,7 @@ InOutGridCheck_Skip16:
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_3@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -1841,7 +1841,7 @@ InOutGridCheck_Skip17:
 	pushw	Data_ParaLoadOptDispatch_Str_Fmt3d_4@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	call	GetFocusObject
 	ld	xwa, xhl
@@ -2246,7 +2246,7 @@ MainMpstFunc:
 	jr	nz, MainMpst_ReturnZero
 	ld	xwa, (xsp)
 	ld	(46928:16), a
-	call	VocalistPage2OKFunc_Helper
+	call	SndParam_ApplyAndSync
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE

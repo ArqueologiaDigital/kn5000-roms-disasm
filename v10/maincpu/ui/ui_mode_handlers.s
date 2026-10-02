@@ -2506,7 +2506,7 @@ SysSureShowHideFunc:
 AttnLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, AttnLngCheck_ReturnZero
-	lda xhl, (AttnLngCheck_Data:24)
+	lda xhl, (LngTable_Attention:24)
 	ret
 
 AttnLngCheck_ReturnZero:
@@ -2516,7 +2516,7 @@ AttnLngCheck_ReturnZero:
 SysSureLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SysSureLngCheck_ReturnZero
-	lda xhl, (SysSureLngCheck_Data:24)
+	lda xhl, (LngTable_InitSettingWarn:24)
 	ret
 
 SysSureLngCheck_ReturnZero:
@@ -2526,7 +2526,7 @@ SysSureLngCheck_ReturnZero:
 SureLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SureLngCheck_ReturnZero
-	lda xhl, (SureLngCheck_Data:24)
+	lda xhl, (LngTable_AreYouSure:24)
 	ret
 
 SureLngCheck_ReturnZero:
@@ -2536,7 +2536,7 @@ SureLngCheck_ReturnZero:
 CtlIniLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CtlIniLngCheck_ReturnZero
-	lda xhl, (CtlIniLngCheck_Data:24)
+	lda xhl, (LngTable_FactoryResetDesc:24)
 	ret
 
 CtlIniLngCheck_ReturnZero:
@@ -2546,7 +2546,7 @@ CtlIniLngCheck_ReturnZero:
 PmemNormLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PmemNormLngCheck_ReturnZero
-	lda xhl, (PmemNormLngCheck_Data:24)
+	lda xhl, (LngTable_StoreSoundBalance:24)
 	ret
 
 PmemNormLngCheck_ReturnZero:
@@ -2556,7 +2556,7 @@ PmemNormLngCheck_ReturnZero:
 PmemExpLngCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PmemExpLngCheck_ReturnZero
-	lda xhl, (PmemExpLngCheck_Data:24)
+	lda xhl, (LngTable_StoreTotalSetting:24)
 	ret
 
 PmemExpLngCheck_ReturnZero:
@@ -2596,10 +2596,10 @@ AcMstStyleAlpGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, MasterSetup_InheritedProc_Fallback
 	add xbc, xbc
-	add xbc, AcMstStyleAlpGridBoxProc_Data
+	add xbc, AcMstStyleAlpGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MasterSetup_EventDispatch:24)
-; Computed jump: target = MasterSetup_EventDispatch + AcMstStyleAlpGridBoxProc_Data[i], AcMstStyleAlpGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MasterSetup_EventDispatch + AcMstStyleAlpGridBoxProc_EventOffsets[i], AcMstStyleAlpGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcMstStyleAlpGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcMstStyleAlpGridBoxProc_Evt1C00018
@@ -3428,10 +3428,10 @@ MstStyleAlpGridCheck:
 	cp xwa, 0x6
 	jrl gt, EffectMode_SendEvent_Return
 	add xwa, xwa
-	add xwa, MstStyleAlpGridCheck_Data
+	add xwa, MstStyleAlpGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstStyleAlp_EventDispatch:24)
-; Computed jump: target = MstStyleAlp_EventDispatch + MstStyleAlpGridCheck_Data[i], MstStyleAlpGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyleAlp_EventDispatch + MstStyleAlpGridCheck_EventOffsets[i], MstStyleAlpGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstStyleAlp_EventDispatch
 ;   0x1c00018 -> MstStyleAlp_EventDispatch
@@ -3660,10 +3660,10 @@ AcMstStyle1GridBoxProc:
 	cp xbc, 0x6
 	jrl gt, MstStyle_InheritedProc_Fallback
 	add xbc, xbc
-	add xbc, AcMstStyle1GridBoxProc_Data
+	add xbc, AcMstStyle1GridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle_EventDispatch:24)
-; Computed jump: target = MstStyle_EventDispatch + AcMstStyle1GridBoxProc_Data[i], AcMstStyle1GridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle_EventDispatch + AcMstStyle1GridBoxProc_EventOffsets[i], AcMstStyle1GridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcMstStyle1GridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcMstStyle1GridBoxProc_Evt1C00018
@@ -3972,10 +3972,10 @@ MstStyle1GridCheck:
 	cp xwa, 0x6
 	jrl gt, MstStyle1Grid_Epilogue
 	add xwa, xwa
-	add xwa, MstStyle1GridCheck_Data
+	add xwa, MstStyle1GridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstStyle1Grid_EventDispatch:24)
-; Computed jump: target = MstStyle1Grid_EventDispatch + MstStyle1GridCheck_Data[i], MstStyle1GridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1Grid_EventDispatch + MstStyle1GridCheck_EventOffsets[i], MstStyle1GridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstStyle1Grid_EventDispatch
 ;   0x1c00018 -> MstStyle1Grid_EventDispatch
@@ -4166,10 +4166,10 @@ AcMstStyle1SubGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, MstStyle1Sub_InheritedFallback
 	add xbc, xbc
-	add xbc, AcMstStyle1SubGridBoxProc_Data
+	add xbc, AcMstStyle1SubGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle1_EventDispatch:24)
-; Computed jump: target = MstStyle1_EventDispatch + AcMstStyle1SubGridBoxProc_Data[i], AcMstStyle1SubGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1_EventDispatch + AcMstStyle1SubGridBoxProc_EventOffsets[i], AcMstStyle1SubGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcMstStyle1SubGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcMstStyle1SubGridBoxProc_Evt1C00018
@@ -4678,10 +4678,10 @@ MstStyle1SubGridCheck:
 	cp xwa, 0x6
 	jrl gt, MstStyle1SubGrid_Epilogue
 	add xwa, xwa
-	add xwa, MstStyle1SubGridCheck_Data
+	add xwa, MstStyle1SubGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstStyle1Sub_EventDispatch:24)
-; Computed jump: target = MstStyle1Sub_EventDispatch + MstStyle1SubGridCheck_Data[i], MstStyle1SubGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1Sub_EventDispatch + MstStyle1SubGridCheck_EventOffsets[i], MstStyle1SubGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstStyle1Sub_EventDispatch
 ;   0x1c00018 -> MstStyle1Sub_EventDispatch
@@ -4874,10 +4874,10 @@ AcMstStyle2GridBoxProc:
 	cp xbc, 0x6
 	jrl gt, MstStyle2_InheritedFallback
 	add xbc, xbc
-	add xbc, AcMstStyle2GridBoxProc_Data
+	add xbc, AcMstStyle2GridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle1Page_EventDispatch:24)
-; Computed jump: target = MstStyle1Page_EventDispatch + AcMstStyle2GridBoxProc_Data[i], AcMstStyle2GridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle1Page_EventDispatch + AcMstStyle2GridBoxProc_EventOffsets[i], AcMstStyle2GridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcMstStyle2GridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcMstStyle2GridBoxProc_Evt1C00018
@@ -6091,10 +6091,10 @@ MstStyle2GridCheck:
 	cp xwa, 0x6
 	jrl gt, MstGrid2_Return
 	add xwa, xwa
-	add xwa, MstStyle2GridCheck_Data
+	add xwa, MstStyle2GridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (MstGrid2_ScrollJumpTable:24)
-; Computed jump: target = MstGrid2_ScrollJumpTable + MstStyle2GridCheck_Data[i], MstStyle2GridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstGrid2_ScrollJumpTable + MstStyle2GridCheck_EventOffsets[i], MstStyle2GridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> MstGrid2_ScrollJumpTable
 ;   0x1c00018 -> MstGrid2_ScrollJumpTable
@@ -6549,10 +6549,10 @@ AcTchSensGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, TchSens_InheritedFallback
 	add xbc, xbc
-	add xbc, AcTchSensGridBoxProc_Data
+	add xbc, AcTchSensGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (MstStyle2_EventDispatch:24)
-; Computed jump: target = MstStyle2_EventDispatch + AcTchSensGridBoxProc_Data[i], AcTchSensGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = MstStyle2_EventDispatch + AcTchSensGridBoxProc_EventOffsets[i], AcTchSensGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcTchSensGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcTchSensGridBoxProc_Evt1C00018
@@ -6805,10 +6805,10 @@ TchSensGridCheck:
 	cp xwa, 0x6
 	jrl gt, TchSensGrid_ReturnZero
 	add xwa, xwa
-	add xwa, TchSensGridCheck_Data
+	add xwa, TchSensGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (TchSensGrid_EventDispatch:24)
-; Computed jump: target = TchSensGrid_EventDispatch + TchSensGridCheck_Data[i], TchSensGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = TchSensGrid_EventDispatch + TchSensGridCheck_EventOffsets[i], TchSensGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> TchSensGrid_EventDispatch
 ;   0x1c00018 -> TchSensGridCheck_Evt1C00018
@@ -7126,10 +7126,10 @@ AcFSWAssGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, FSWAss_InheritedFallback
 	add xbc, xbc
-	add xbc, AcFSWAssGridBoxProc_Data
+	add xbc, AcFSWAssGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (TchSens_EventDispatch:24)
-; Computed jump: target = TchSens_EventDispatch + AcFSWAssGridBoxProc_Data[i], AcFSWAssGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = TchSens_EventDispatch + AcFSWAssGridBoxProc_EventOffsets[i], AcFSWAssGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcFSWAssGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcFSWAssGridBoxProc_Evt1C00018
@@ -7356,10 +7356,10 @@ FSWAssGridCheck:
 	cp xwa, 0x6
 	jrl gt, AudioTable_ReturnZero
 	add xwa, xwa
-	add xwa, FSWAssGridCheck_Data
+	add xwa, FSWAssGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (FSWAssGrid_EventDispatch:24)
-; Computed jump: target = FSWAssGrid_EventDispatch + FSWAssGridCheck_Data[i], FSWAssGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = FSWAssGrid_EventDispatch + FSWAssGridCheck_EventOffsets[i], FSWAssGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> FSWAssGrid_EventDispatch
 ;   0x1c00018 -> FSWAssGridCheck_Evt1C00018
@@ -7402,7 +7402,7 @@ FSWAssGrid_EventDispatch:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2886
@@ -7427,7 +7427,7 @@ FSWAssGrid_EventDispatch_Skip4:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2888
@@ -7452,7 +7452,7 @@ FSWAssGrid_EventDispatch_Skip5:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288a
@@ -7477,7 +7477,7 @@ FSWAssGrid_EventDispatch_Skip6:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288c
@@ -7502,7 +7502,7 @@ FSWAssGrid_EventDispatch_Skip7:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288e
@@ -7527,7 +7527,7 @@ FSWAssGrid_EventDispatch_Skip8:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2890
@@ -7552,7 +7552,7 @@ FSWAssGrid_EventDispatch_Skip9:
 	calr	AudioTable_FindMatchIndex
 	inc	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2880
@@ -7589,7 +7589,7 @@ FSWAssGridCheck_Evt1C00018:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2886
@@ -7614,7 +7614,7 @@ FSWAssGrid_EventDispatch_Skip10:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2888
@@ -7639,7 +7639,7 @@ FSWAssGrid_EventDispatch_Skip11:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288a
@@ -7664,7 +7664,7 @@ FSWAssGrid_EventDispatch_Skip12:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288c
@@ -7689,7 +7689,7 @@ FSWAssGrid_EventDispatch_Skip13:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x288e
@@ -7714,7 +7714,7 @@ FSWAssGrid_EventDispatch_Skip14:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2890
@@ -7739,7 +7739,7 @@ FSWAssGrid_EventDispatch_Skip15:
 	calr	AudioTable_FindMatchIndex
 	dec	1, l
 	extz	hl
-	lda	xbc, (FSWAssGrid_EventDispatch_Data:24)
+	lda	xbc, (FswAssign_FunctionCodes:24)
 	ld	c, (xbc+hl)
 	extz bc
 	ld	xwa, 0x2880
@@ -7762,7 +7762,7 @@ FSWAssGridCheck_Evt1C0001C:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGridCheck_Evt1C0001C_Str_Fmts@hi16
@@ -7790,7 +7790,7 @@ FSWAssGrid_EventDispatch_Entry:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts@hi16
@@ -7816,7 +7816,7 @@ FSWAssGrid_EventDispatch_Entry_Skip:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_2@hi16
@@ -7842,7 +7842,7 @@ FSWAssGrid_EventDispatch_Skip:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_3@hi16
@@ -7869,7 +7869,7 @@ FSWAssGrid_EventDispatch_Skip2:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push	xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_4@hi16
@@ -7895,7 +7895,7 @@ FSWAssGrid_EventDispatch_Skip3:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_5@hi16
@@ -7921,7 +7921,7 @@ FSWAssGrid_EventDispatch_Skip3_Skip:
 	calr	AudioTable_FindMatchIndex
 	extz	hl
 	sla	hl, 2
-	lda	xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda	xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw	FSWAssGrid_EventDispatch_Entry_Str_Fmts_6@hi16
@@ -7957,7 +7957,7 @@ FSWAssGrid_CellSelect:
 	calr AudioTable_FindMatchIndex
 	extz hl
 	sla hl, 2
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw FSWAssGrid_CellSelect_Str_Fmts@hi16
@@ -7984,7 +7984,7 @@ FSWAssGrid_CheckCell_1_3:
 	calr AudioTable_FindMatchIndex
 	extz hl
 	sla hl, 2
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw FSWAssGrid_CheckCell_1_3_Str_Fmts@hi16
@@ -8011,7 +8011,7 @@ FSWAssGrid_CheckCell_1_4:
 	calr AudioTable_FindMatchIndex
 	extz hl
 	sla hl, 2
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw FSWAssGrid_CheckCell_1_4_Str_Fmts@hi16
@@ -8038,7 +8038,7 @@ FSWAssGrid_CheckCell_1_5:
 	calr AudioTable_FindMatchIndex
 	extz hl
 	sla hl, 2
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw FSWAssGrid_CheckCell_1_5_Str_Fmts@hi16
@@ -8065,7 +8065,7 @@ FSWAssGrid_CheckCell_1_6:
 	calr AudioTable_FindMatchIndex
 	extz hl
 	sla hl, 2
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw FSWAssGrid_CheckCell_1_6_Str_Fmts@hi16
@@ -8092,7 +8092,7 @@ FSWAssGrid_CheckCell_1_7:
 	calr AudioTable_FindMatchIndex
 	extz hl
 	sla hl, 2
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw FSWAssGrid_CheckCell_1_7_Str_Fmts@hi16
@@ -8119,7 +8119,7 @@ FSWAssGrid_CheckCell_1_8:
 	calr AudioTable_FindMatchIndex
 	extz hl
 	sla hl, 2
-	lda xbc, (FSWAssGridCheck_Evt1C0001C_Data:24)
+	lda xbc, (FswAssign_FunctionNames:24)
 	ld	xwa, (xbc+hl)
 	push xwa
 	pushw FSWAssGrid_CheckCell_1_8_Str_Fmts@hi16
@@ -8144,7 +8144,7 @@ AudioTable_ReturnZero:
 
 AudioTable_FindMatchIndex:
 	ld l, 0x0:opc
-	lda xde, (FSWAssGrid_EventDispatch_Data:24)
+	lda xde, (FswAssign_FunctionCodes:24)
 
 AudioTable_FindMatch_Loop:
 	ld c, l
@@ -8165,10 +8165,10 @@ FswAsIniFunc:
 	cp xde, 0x5
 	jr ugt, SeqLoadFunc_ReturnZero
 	add xde, xde
-	add xde, FswAsIniFunc_Data
+	add xde, FswAsIniFunc_EventOffsets
 	ld de, (xde)
 	lda xix, (FswAsIni_EventDispatch:24)
-; Computed jump: target = FswAsIni_EventDispatch + FswAsIniFunc_Data[i], FswAsIniFunc_Data = 16-bit offsets (6 words, read
+; Computed jump: target = FswAsIni_EventDispatch + FswAsIniFunc_EventOffsets[i], FswAsIniFunc_EventOffsets = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> SeqLoadFunc_ReturnZero
 ;   1 -> FswAsIni_EventDispatch
@@ -8382,10 +8382,10 @@ AcPmExpFilterGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, PmExpFilter_DefaultInherited
 	add xbc, xbc
-	add xbc, AcPmExpFilterGridBoxProc_Data
+	add xbc, AcPmExpFilterGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (PmemPageCtl_EventDispatch:24)
-; Computed jump: target = PmemPageCtl_EventDispatch + AcPmExpFilterGridBoxProc_Data[i], AcPmExpFilterGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = PmemPageCtl_EventDispatch + AcPmExpFilterGridBoxProc_EventOffsets[i], AcPmExpFilterGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcPmExpFilterGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcPmExpFilterGridBoxProc_Evt1C00018
@@ -8885,10 +8885,10 @@ PmExpFilterGridCheck:
 	cp xwa, 0x6
 	jrl gt, SeqLoad_StoreReturnZero
 	add xwa, xwa
-	add xwa, PmExpFilterGridCheck_Data
+	add xwa, PmExpFilterGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (PmExpFilter_EventDispatch:24)
-; Computed jump: target = PmExpFilter_EventDispatch + PmExpFilterGridCheck_Data[i], PmExpFilterGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = PmExpFilter_EventDispatch + PmExpFilterGridCheck_EventOffsets[i], PmExpFilterGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> PmExpFilter_EventDispatch
 ;   0x1c00018 -> PmExpFilterGridCheck_Evt1C00018
@@ -8927,7 +8927,7 @@ PmExpFilter_EventDispatch:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
+	lda	xbc, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xbc+wa)
 	ldw	bc, 0xffff
 	ld	de, 2:i3
@@ -8937,7 +8937,7 @@ FSWAss_RefreshAllVoices_Skip:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
+	lda	xbc, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xbc+wa)
 	ldw	bc, 0xffff
 	ld	de, 2:i3
@@ -8969,7 +8969,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data:24)
+	lda	xbc, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
@@ -8979,7 +8979,7 @@ FSWAss_RefreshAllVoices_Skip2:
 	jrl	lt, SeqLoad_StoreReturnZero
 	cp	de, 10
 	jrl	gt, SeqLoad_StoreReturnZero
-	lda	xbc, (PmExpFilter_EventDispatch_Data_2:24)
+	lda	xbc, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xbc+wa)
 	ld	bc, 1:i3
 	ld	de, 2:i3
@@ -8993,7 +8993,7 @@ PmExpFilterGridCheck_Evt1C0001C:
 	cp	a, 1:i3
 	jrl	nz, SeqLoad_StoreReturnZero
 	ld	l, 0:opc
-	lda	xix, (PmExpFilter_EventDispatch_Data:24)
+	lda	xix, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xde)
 FSWAss_RefreshAllVoices_Loop:
 	ld	c, l
@@ -9029,7 +9029,7 @@ FSWAss_RefreshAllVoices_Skip10:
 	jrl	SeqLoad_StoreReturnZero
 FSWAss_RefreshAllVoices_Skip11:
 	ld	l, 0:opc
-	lda	xix, (PmExpFilter_EventDispatch_Data_2:24)
+	lda	xix, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xde)
 FSWAss_RefreshAllVoices_Loop2:
 	ld	c, l
@@ -9090,7 +9090,7 @@ PmExpFilterCheck_CellDecode:
 	jrl lt, SeqLoad_StoreReturnZero
 	cp wa, 0xa
 	jrl gt, SeqLoad_StoreReturnZero
-	lda xwa, (PmExpFilter_EventDispatch_Data:24)
+	lda xwa, (PmExpFilter_CellKeys:24)
 	ld	xwa, (xwa+bc)
 	call SndParam_LookupReadOnly
 	ld xwa, PmExpFilterCheck_CellDecode_Str_OFF
@@ -9115,7 +9115,7 @@ PmExpFilterCheck_AltDecode:
 	jr lt, PmExpFilterCheck_PushDefault
 	cp wa, 0xa
 	jr gt, PmExpFilterCheck_PushDefault
-	lda xwa, (PmExpFilter_EventDispatch_Data_2:24)
+	lda xwa, (PmExpFilter_AltKeys:24)
 	ld	xwa, (xwa+bc)
 	call SndParam_LookupReadOnly
 	lda xbc, (xsp)
@@ -9174,10 +9174,10 @@ AcDispTimeSetGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, DispTimeSet_DefaultInherited
 	add xbc, xbc
-	add xbc, AcDispTimeSetGridBoxProc_Data
+	add xbc, AcDispTimeSetGridBoxProc_EventOffsets
 	ld bc, (xbc)
 	lda xix, (PmExpFilter2_EventDispatch:24)
-; Computed jump: target = PmExpFilter2_EventDispatch + AcDispTimeSetGridBoxProc_Data[i], AcDispTimeSetGridBoxProc_Data = 16-bit offsets (7 words, read
+; Computed jump: target = PmExpFilter2_EventDispatch + AcDispTimeSetGridBoxProc_EventOffsets[i], AcDispTimeSetGridBoxProc_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcDispTimeSetGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcDispTimeSetGridBoxProc_Evt1C00018
@@ -9435,10 +9435,10 @@ DispTimeSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, DispTimeSet_ReturnZero
 	add xwa, xwa
-	add xwa, DispTimeSetGridCheck_Data
+	add xwa, DispTimeSetGridCheck_EventOffsets
 	ld wa, (xwa)
 	lda xix, (DispTimeSet_EventDispatch:24)
-; Computed jump: target = DispTimeSet_EventDispatch + DispTimeSetGridCheck_Data[i], DispTimeSetGridCheck_Data = 16-bit offsets (7 words, read
+; Computed jump: target = DispTimeSet_EventDispatch + DispTimeSetGridCheck_EventOffsets[i], DispTimeSetGridCheck_EventOffsets = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> DispTimeSet_EventDispatch
 ;   0x1c00018 -> DispTimeSetGridCheck_Evt1C00018

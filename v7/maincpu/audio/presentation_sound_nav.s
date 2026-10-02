@@ -1284,7 +1284,7 @@ PostTitle_Function_Skip:
 	pushw DirmdTitleFunc_Str_DirmdTitleESw_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
 	call	DbMemo_DrawContent_Loop_0x61

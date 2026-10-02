@@ -51,7 +51,6 @@ NMI_HaltLoop:
 ;        the payload on the next boot and show the splash screen (not "ALL INITIAL SETTING!").
 ; ===========================================================================
 NMI_StorePayloadChecksums:
-NMI_StorePayloadChecksums_Entry:
 	cp (1024:16), 128
 	ret nz
 	call Demo_SelectEntry_PreSaveCheck
@@ -95,7 +94,6 @@ NMI_CopyPayloadToSRAM:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown on failure
 ; ===========================================================================
 SubCPU_Payload_Verify:
-SubCPU_Payload_Verify_Entry:
 	ld xwa, 0xf180	; Start of payload region 1
 	ldw bc, 0x800	; Size: 0x800 words
 	call Checksum_ComputeComplement	; Compute checksum -> HL
@@ -111,7 +109,6 @@ SubCPU_Payload_Verify_Entry:
 	ret
 
 SubCPU_Payload_Verify_Fail:
-SubCPU_Payload_Verify_Fail_Entry:
 	ld (0x01e53e:24), 0xff; Mark as failed
 	ldw bc, 0x280
 	call Checksum_ComputeComplement
@@ -135,7 +132,6 @@ SubCPU_Payload_Verify_Fail_Entry:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog shown when HL != 0
 ; ===========================================================================
 SubCPU_Payload_GetErrorFlag:
-SubCPU_Payload_GetErrorFlag_Entry:
 	ld l, (0x01e53e:24)
 	exts hl
 	ret
@@ -357,7 +353,7 @@ MemCopy_SetupAndDMA:
 
 Boot_InitWorkRAM_ROMCopy1_Start:
 	ld xde, 0x3d524
-	ld xhl, Boot_InitWorkRAM_ROMCopy1_Start_Data
+	ld xhl, WorkRamInit_Image
 	ld xbc, 0x219e
 	or xbc, xbc
 	jr z, Boot_InitWorkRAM_ROMCopy2_Start
@@ -1132,8 +1128,8 @@ MainLoop_AfterSeqTick:
 	call	SeqMain_InitBuffer
 	and	(1063:16), 211
 	ei	0
-	call	DemoMode_Main_Operation_Helper
-	call	DemoMode_Main_Operation_Helper2
+	call	Voice_InitializeAll
+	call	MIDI_BroadcastPitchReset
 MainLoop_AfterVoiceReset:
 	ei 0
 	calr Seq_EventProcessingTick
@@ -1153,7 +1149,7 @@ MainLoop_AfterBit3Check:
 	call	SeqBuf_DspSysEx_CheckSongEnd
 	and	hl, hl
 	jr	z, MainLoop_AfterSeqBuf_DspSysEx
-	call	MainLoop_AfterSeqTick_Code_Helper
+	call	SeqBuf_DspSysEx_DataReadLoop
 MainLoop_AfterSeqBuf_DspSysEx:
 	ld	a, (13265:16)
 	and	a, 3
@@ -1165,7 +1161,7 @@ MainLoop_AfterSeqBuf_DspSysEx:
 MainLoop_AfterAccWrap:
 	tset_dd16	0, 0x73, 0x04
 	jr	nz, MainLoop_AfterPedalReset
-	call	AccPedal_SustainHandler_Helper
+	call	CompIface_ResetPedal
 MainLoop_AfterPedalReset:
 	calr	Seq_EventProcessingTick
 	call	Encoder_ValueScanAndSync
@@ -2272,7 +2268,6 @@ INTT3_EnterScheduler:
 ;   - ErrorDialog_CPUTransmissionError - Error dialog in Screen Group 7
 ; ===========================================================================
 Show_ScreenGroup:
-Show_ScreenGroup_Entry:
 	push	sr
 	ei 6
 	push xhl
@@ -6956,7 +6951,7 @@ SLIDE_Decompress_4K_Init:
 
 	pushw 0x1000
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -7075,7 +7070,7 @@ SLIDE_Decompress_4K_Continue:
 SLIDE_Decompress_4K_Done:
 	ld	xwa, (1570:16)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	popw	iz
 	ret
@@ -7088,7 +7083,7 @@ SLIDE_Decompress_8K_Init:
 
 	pushw 0x2000
 
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 
 	inc 2, xsp
 
@@ -7207,7 +7202,7 @@ SLIDE_Decompress_8K_Continue:
 SLIDE_Decompress_8K_Done:
 	ld	xwa, (1570:16)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	popw	iz
 	ret
@@ -7224,7 +7219,7 @@ SLIDE_Parse_Header:
 	lda xwa, (xsp + 0x06)
 	push XWA
 	push XIZ
-	call SLIDE_Parse_Header_Helper
+	call String_Compare
 	add XSP,0x0000000a
 	cp hl, 0:i3
 	jr nz, SLIDE_Parse_NotFound
@@ -7313,7 +7308,7 @@ FDC_SetupSectorParams:
 
 	ld xbc, 0x12
 
-	call	FDC_SetupSectorParams_Helper
+	call	DivMod32
 
 	inc 1, xhl
 
@@ -7369,7 +7364,7 @@ Detect_Disk_Type:
 	push	xiz
 	ld	(xsp+4), 255
 	pushw	512
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xwa, 33
@@ -7380,7 +7375,7 @@ Detect_Disk_Type:
 	pushw	FILETYPE_SIG_PROGRAM_1@hi16
 	pushw	FILETYPE_SIG_PROGRAM_1@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_CheckProgram2of2
@@ -7391,7 +7386,7 @@ DetectDisk_CheckProgram2of2:
 	pushw	FILETYPE_SIG_PROGRAM_2@hi16
 	pushw	FILETYPE_SIG_PROGRAM_2@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_CheckTable1of2
@@ -7402,7 +7397,7 @@ DetectDisk_CheckTable1of2:
 	pushw	FILETYPE_SIG_TABLE_1@hi16
 	pushw	FILETYPE_SIG_TABLE_1@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_CheckTable2of2
@@ -7413,7 +7408,7 @@ DetectDisk_CheckTable2of2:
 	pushw	FILETYPE_SIG_TABLE_2@hi16
 	pushw	FILETYPE_SIG_TABLE_2@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_CheckCmpCustom
@@ -7424,7 +7419,7 @@ DetectDisk_CheckCmpCustom:
 	pushw	FILETYPE_SIG_CMPCUSTOM@hi16
 	pushw	FILETYPE_SIG_CMPCUSTOM@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_CheckHDAEPRG
@@ -7435,7 +7430,7 @@ DetectDisk_CheckHDAEPRG:
 	pushw	FILETYPE_SIG_HDAE_PRG@hi16
 	pushw	FILETYPE_SIG_HDAE_PRG@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_CheckProgramPCK
@@ -7446,7 +7441,7 @@ DetectDisk_CheckProgramPCK:
 	pushw	FILETYPE_SIG_PROGRAM_PCK@hi16
 	pushw	FILETYPE_SIG_PROGRAM_PCK@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_CheckTablePCK
@@ -7457,14 +7452,14 @@ DetectDisk_CheckTablePCK:
 	pushw	FILETYPE_SIG_TABLE_PCK@hi16
 	pushw	FILETYPE_SIG_TABLE_PCK@lo16
 	push	xiz
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	nz, DetectDisk_FreeBufAndReturn
 	ld	(xsp+4), 8
 DetectDisk_FreeBufAndReturn:
 	push	xiz
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	ld	l, (xsp+4)
 	pop	xiz
@@ -8448,7 +8443,7 @@ LZSS_Decompress_ReadHeader:
 	pushw	SLIDE_STRING_2@hi16
 	pushw	SLIDE_STRING_2@lo16
 	push	xwa
-	call	SLIDE_Parse_Header_Helper
+	call	String_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	z, LZSS_Decompress_HeaderOK
@@ -8495,7 +8490,7 @@ LZ_Decompress_Init:
 	lda	xsp, (xsp-16)
 	push	xiz
 	pushw	4096
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+16), xhl
 	ld	xwa, (xsp+16)
@@ -8653,7 +8648,7 @@ LZ_Decompress_LoopCheck:
 LZ_Decompress_Done:
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	SLIDE_Decompress_4K_Init_Helper
+	call	Free
 	inc	4, xsp
 	pop	xiz
 	lda	xsp, (xsp+16)

@@ -174,7 +174,7 @@ RVari_SelectE_SecondItem_Draw:
 	pushw RVari_SelectE_SecondItem_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -369,7 +369,7 @@ RVari_SelectO_SecondItem_Draw:
 	pushw RVari_SelectO_SecondItem_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -852,7 +852,7 @@ RVari_ConfirmF_Item_Draw:
 	pushw RVari_ConfirmF_Item_Draw_Str_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -988,7 +988,7 @@ RVari_Confirm_TypeNotF:
 	pushw RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd@lo16
 	lda xwa, (xsp+284)
 	push xwa
-	call Scoop_EventLoop_12Entry_Helper
+	call Sprintf_Locked
 	lda xsp, (xsp+12)
 	lda xwa, (xsp+536)
 	lda xbc, (xsp+532)
@@ -1141,7 +1141,7 @@ RVari_ConfirmE_Item_Draw:
 	pushw RVari_ConfirmE_Item_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -1385,7 +1385,7 @@ RVari_EnumNotifyF_Item_Draw:
 	pushw RVari_EnumNotifyF_Item_Draw_Str_Fmts@lo16
 	lda	xwa, (xsp+284)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -1554,7 +1554,7 @@ RVari_EnumNotifyE_Item_Draw:
 	pushw RVari_EnumNotifyE_Item_Draw_Str_Fmtd@lo16
 	lda	xwa, (xsp+282)
 	push	xwa
-	call	Scoop_EventLoop_12Entry_Helper
+	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
 	lda	xhl, (xsp+536)
 	lda	xbc, (xsp+532)
@@ -2714,7 +2714,7 @@ RVari_UpdateDisplayNotify:
 	call	GetViewInstance
 	ld	(xsp+4), xhl
 	pushw	4
-	call	SLIDE_Decompress_4K_Init_Helper2
+	call	Malloc
 	inc	2, xsp
 	ld	xiz, xhl
 	ld	xbc, (xsp+4)

@@ -60,8 +60,9 @@ SeqPlay_ReadyStateTransition:
 ; Standard MIDI File chunk IDs "MThd" (+0) and "MTrk" (+4), compared
 ; against bytes read from the file: read by smf_playback.s via
 ; `ld xiy, SMF_HeaderMagic_MThdMTrk` (header chunk) and
-; `ld xiy, SMF_HeaderMagic_MThdMTrk_0x4` (track chunk).
-SMF_HeaderMagic_MThdMTrk:	.ascii "MThdMTrk"
+; `ld xiy, FloppyIO_ReadAndValidateHeader_Data` (track chunk).
+SMF_HeaderMagic_MThdMTrk:	.ascii	"MThd"
+FloppyIO_ReadAndValidateHeader_Data:	.ascii	"MTrk"
 
 SeqTrack_ResetAllChannelSlots:
 	ldw wa, 0xffff
