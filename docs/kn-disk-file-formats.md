@@ -182,7 +182,7 @@ There are exactly three, and together they bound what can be learned here:
 The `EV_LSWDATA` step was taken. Each of the three mentions leads away from the format:
 
 * **The glob is factory-test scratch.** `A:\HAMA\*.LSW` sits in
-  `FDTest_String_TestTitleFunc_0xDC`, inside the HAMA factory-diagnostics subsystem
+  `ListDir2_Entry_Str_A_HAMA_LSW`, inside the HAMA factory-diagnostics subsystem
   (`v7/maincpu/factory_test/`). `FDLoadSaveTest` there allocates a 2 KB buffer, fills it with a
   counting pattern 0..0x3FF, writes it to a file, reads it back and compares byte by byte. So that
   glob names a SCRATCH FILE the disk test writes and re-reads -- it says nothing about the format
@@ -209,10 +209,10 @@ only ever says `0`.
 ### `.LSW` is file type 0, and type 0 has a handler
 
 `FileIO_SaveAllRegions` walks eight 6-byte records at **0xEA0210**
-(`Resource_Region3_Start_0x10`):
+(`SaveAll_CheckRecordLoop_Data`):
 
     +0  u16  file-type index into SeqFileType_CodeTable   -- 0 = LSW
-    +2  u32  handler, fetched via Resource_Region3_Start_0x12 and `call (xhl)`
+    +2  u32  handler, fetched via FileDemo_ProcessCallback_Data and `call (xhl)`
 
 Both offsets come from the code rather than from the shape of the bytes: `_0x10` feeds the type
 index passed to `FileIO_ReadHeader` in `e`, and `_0x12` is loaded into `xhl` and indirectly called
@@ -667,7 +667,7 @@ subscriber either.**
 
 ### A confirmed L2 misnomer, cross-validated by this code
 
-`scripts/analysis/l2_name_vs_structure.py` flagged `SystemConfig_PointerTable_0x56`
+`scripts/analysis/l2_name_vs_structure.py` flagged `AudioInit_ChannelLoop_Body_Data`
 at `0x00EE8CD4` as "claims POINTERS, 0% in range". This routine shows why: it is
 a **u16 MASK table**, indexed `x2` and ANDed against an enable word. The name is
 wrong, and a structural check and a code read agree independently.

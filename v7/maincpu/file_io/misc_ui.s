@@ -22,7 +22,7 @@ JumpInsertFunc:
 	cp xbc, 0x9
 	jr gt, JumpInsert_Error
 	add xbc, xbc
-	add xbc, DiskWarning_ConfirmStrings_0xA38
+	add xbc, JumpInsertFunc_Data
 	ld bc, (xbc)
 	lda xix, (JumpInsert_DispatchBody:24)
 	jp	t, (xix+bc)

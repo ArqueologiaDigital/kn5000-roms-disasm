@@ -410,7 +410,7 @@ BitMapOut_CopyPreset9_Execute:
 	ld (xsp + 56), xbc
 	extz wa
 	sla wa, 2
-	lda xbc, (WidgetStyleDataTable_0x10:24)
+	lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
 	lda	xbc, (xbc+wa)
 	ld xwa, (xbc)
 	ld xix, (xsp + 56)
@@ -610,7 +610,7 @@ BitMapOut_Snapshot_Execute:
 	extz wa
 	ld bc, wa
 	sla bc, 2
-	lda xde, (WidgetStyleDataTable_0x10:24)
+	lda xde, (BitMapOut_CopyPreset9_Execute_Data:24)
 	ld	xde, (xde+bc)
 	cp (xde), 0x78
 	jr nz, BitMapOut_Snapshot_PostProcess
@@ -932,7 +932,7 @@ BitMapOut_RestoreFullVoice:
 	push xiz
 	extz wa
 	sla wa, 2
-	lda xbc, (WidgetStyleDataTable_0x10:24)
+	lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
 	exts xwa
 	add xwa, xbc
 	ld (xsp + 24), xwa
@@ -1452,7 +1452,7 @@ BitMapOut_CopyROMToWorkspace:
 	pushw 0x3c0
 	extz wa
 	sla wa, 2
-	lda xbc, (WidgetStyleDataTable_0x10:24)
+	lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	pushw 0x0
@@ -3326,7 +3326,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	sll xbc, 3
 	sub xbc, xde
 	add xbc, xbc
-	ld xde, WidgetStyleDataTable_0x154
+	ld xde, BitMapOut_DeltaEncode_Type90Final_Data
 	add xde, xbc
 	ld xbc, (xde)
 	ld c, (xbc)
@@ -3345,7 +3345,7 @@ BitMapOut_DeltaEncode_Type90Final:
 	sll xbc, 3
 	sub xbc, xwa
 	add xbc, xbc
-	lda xhl, (WidgetStyleDataTable_0x15E:24)
+	lda xhl, (BitMapOut_DeltaEncode_Type90Final_Data_2:24)
 	add xhl, xbc
 	lda xde, (xsp + 2)
 	ld a, (xde)
@@ -3727,7 +3727,7 @@ BitMapOut_UpdateWidget_CheckType:
 	dec 1, a
 	extz wa
 	sla wa, 2
-	lda xbc, (WidgetStyleDataTable_0x10:24)
+	lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)
 	ld	xbc, (xbc+wa)
 	pushw 0x10
 	lda xwa, (0xf9a2:16)
@@ -3750,7 +3750,7 @@ BitMapOut_UpdateWidget_TypeB:
 	dec 1, a
 	extz wa
 	sla wa, 2
-	lda xde, (WidgetStyleDataTable_0x10:24)
+	lda xde, (BitMapOut_CopyPreset9_Execute_Data:24)
 	ld	xde, (xde+wa)
 	pushw 0x10
 	push xbc
@@ -3876,7 +3876,7 @@ OneTchFUNC:
 	cp xde, 0x5
 	jr ugt, BitMapOut_ApplyWidgetPatch
 	add xde, xde
-	add xde, WidgetStyleDataTable_0x362
+	add xde, OneTchFUNC_Data
 	ld de, (xde)
 	lda xix, (BitMapOut_ByteData_WidgetTable:24)
 	jp	t, (xix+de)

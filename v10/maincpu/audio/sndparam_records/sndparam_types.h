@@ -3,7 +3,7 @@
  *
  * WHAT REGISTERS THESE.  SndParam_RegisterAllWidgets
  * (v10/maincpu/audio/sndparam_routines.s:3135-3151) walks 972 `.long` pointers
- * from Naka_SubDispatch_B_Table_0x8 (= 0xEE01A0, in ui_widgets/widget_dispatch.s),
+ * from SndParam_RegisterLoop_Data (= 0xEE01A0, in ui_widgets/widget_dispatch.s),
  * reads the u32 at each record's +0x00 as a key, and hands the pair to
  * SndParam_InsertEntry, which hashes the key and stores {key, record pointer}
  * as an 8-byte slot in the RAM table at 0x34100.  Every later access re-hashes
@@ -23,7 +23,7 @@
  *                       whole at :3196 `cp xiz, xde`.  Byte +0x03 is 0 in all
  *                       972 records, so it is effectively 24-bit.
  *   +0x04 bank_index    `ld c,(xwa+4)` / `extz bc` / `sla bc,2` / `lda_24 xde,
- *                       (Naka_MainDispatch_Table_0xE50)` :813-816 -- x4 index
+ *                       (SndParam_DMA_Zone2Check_Data)` :813-816 -- x4 index
  *                       into the RAM-bank pointer table at 0xEE1160, whose
  *                       entries are 26 bytes apart (0xF9B6, 0xF9D0, ...).
  *                       `or xde,xde; ret z` -- a null bank aborts the access.
@@ -60,17 +60,17 @@
  *                       decided by the accessor selected below, not by this
  *                       byte, so no per-record aux TYPE is claimed here.
  *   +0x0C read_accessor      `ld a,(xwa+12)` / `cps a,7` / `sla wa,2` /
- *                       Naka_MainDispatch_Table_0xDC0 (0xEE10D0) :293-302.
+ *                       SndParam_RO_Dispatch_Data (0xEE10D0) :293-302.
  *   +0x0D register_accessor  `ld c,(xwa+13)` / `cp c,0x9` /
- *                       Naka_MainDispatch_Table_0xDDC (0xEE10EC) :48-58.
+ *                       SndParam_DispatchCallback_Data (0xEE10EC) :48-58.
  *   +0x0E lookup2_accessor   `ld a,(xwa+14)` / `cp a,0x8` /
- *                       Naka_MainDispatch_Table_0xE00 (0xEE1110) :178-189.
+ *                       SndParam_Lkp2_Dispatch_Data (0xEE1110) :178-189.
  *   +0x0F codec         `ld e,(xwa+15)` / `sla de,2` /
- *                       Naka_MainDispatch_Table_0xE20 (0xEE1130) :585-592 picks
+ *                       SndParam_RW_ProcessResult_Data (0xEE1130) :585-592 picks
  *                       slot n (the ENCODER); :463-472 does `inc 3,a` first and
  *                       picks slot n+3 (the matching DECODER).
  *   +0x10 write_accessor     `ld c,(xwa+16)` / `cps c,6` /
- *                       Naka_MainDispatch_Table_0xE38 (0xEE1148) :86-95.
+ *                       SndParam_DispatchTypeDE5_Data (0xEE1148) :86-95.
  *   +0x11 unknown_0x11  !! NO READER.  No `(X??+0x11)` load exists anywhere in
  *                       the 0xFCD200-0xFCF000 accessor region.  0xFF in almost
  *                       every record, which is consistent with padding or a

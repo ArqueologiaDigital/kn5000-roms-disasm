@@ -25348,38 +25348,38 @@ HelpLang_DispatchDataBlock_Join:
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BBE
+	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip5:
 	cp	a, 2:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip6
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BC5
+	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_2
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BC7
+	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_3
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip6:
 	cp	a, 3:i3
 	jr	nz, HelpLang_DispatchDataBlock_Skip7
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BD2
+	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_4
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BD4
+	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_5
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_DispatchDataBlock_Join2
 HelpLang_DispatchDataBlock_Skip7:
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BDA
+	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_6
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BDD
+	ld	xwa, HelpLang_DispatchDataBlock_Entry_Data_7
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 HelpLang_DispatchDataBlock_Join2:
@@ -25397,12 +25397,12 @@ HelpLangChkMain:
 	call	Get_Region_Code
 	cp	l, 3:i3
 	jr	nz, HelpLang_SetRegion5
-	ld	xwa, Bitmap_MIDIConnections_2_0x3BB8
+	ld	xwa, HelpLangChkMain_Data
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	HelpLang_PostEvent
 HelpLang_SetRegion5:
-	ld xwa, Bitmap_MIDIConnections_2_0x3BB3
+	ld xwa, HelpLang_SetRegion5_Data
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 

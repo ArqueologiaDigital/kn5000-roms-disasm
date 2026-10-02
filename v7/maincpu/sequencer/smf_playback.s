@@ -128,7 +128,7 @@ SoundBank_InitTrack_ByteFields:
 	add	xhl, xde
 	xor	iy, iy
 SoundBank_InitTrack_WordFields:
-	ld xix, SoundBank_DefaultTrackData_0x8
+	ld xix, SoundBank_InitTrack_WordFields_Data
 	ld	wa, (xix+iy)
 	ld	(xhl+iy), wa
 	add iy, 0x2
@@ -157,11 +157,12 @@ SoundBank_InitTrack_ClearTail:
 ; bytes +0..+7 ("ZZZZ", 0, 1, 8, 0) are copied to record +0..+7 (IY = 0..7,
 ; ld A,(XIX+IY) / ld (XHL+IY),A), then record +8 gets the byte at 0x8E6A;
 ; SoundBank_InitTrack_WordFields copies the four LE16 words at +8 (via
-; SoundBank_DefaultTrackData_0x8) to record +0x14..+0x1B.  TYPED 2026-09-25
+; SoundBank_InitTrack_WordFields_Data) to record +0x14..+0x1B.  TYPED 2026-09-25
 ; (lane seqeng): bytes +5..+15 were spelled normal / ld (0:8),0:io / nop /
 ; nop / normal / pushw iz / nop / ld w,5.
 SoundBank_DefaultTrackData:	.asciz "ZZZZ"
 	.byte 0x01, 0x08, 0x00
+SoundBank_InitTrack_WordFields_Data:
 	.short 0x0000, 0x0100, 0x002e, 0x0520
 
 SoundBank_CopyChannelData:

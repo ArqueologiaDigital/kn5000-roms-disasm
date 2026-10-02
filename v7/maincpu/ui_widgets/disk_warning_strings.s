@@ -89,7 +89,8 @@ JumpInsert_DispatchBody_PtrTable:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] naka_disk_warning+0xa38  +0xa38..+0xb46 (0xea96e4, 270 B)
 ; [nakarest] Text (270 B at 0xea96e4), first string " "; no registered NAKA table points into
 ; [nakarest] it; reached through source references JumpInsertFunc (file_io/misc_ui.s: `add xbc,
-; [nakarest] DiskWarning_ConfirmStrings_0xA38`).
+; [nakarest] JumpInsertFunc_Data`).
+JumpInsertFunc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xA38, 0x14
 FilePriorityFunc_PtrTable:		.incbin "includes/generated/naka_disk_warning.bin", 0xA4C, 0x20	; 2 x 32-bit pointer
 WaitingFunc_DrawMessage_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0xA6C, 0xDA	; 6 x 32-bit pointer
@@ -101,48 +102,60 @@ AcFileSfx_DrawLoop_PtrTable:		.incbin "includes/generated/naka_disk_warning.bin"
 IvTimer_HandleEvent3A_Str_N1shot:	.incbin "includes/generated/naka_disk_warning.bin", 0xBE8, 0x6	; "1shot"
 IvIndexSwCtrlProc_Str_ISC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBEE, 0x4	; "ISC"
 IvIndexSwDelayProc_Str_ISD:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF2, 0x4	; "ISD"
-IvWaitWinCtlProc_Str_WWC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF6, 0xC4	; "WWC"
+IvWaitWinCtlProc_Str_WWC:		.incbin "includes/generated/naka_disk_warning.bin", 0xBF6, 0x4	; "WWC"
+FDC_WaitReady_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xBFA, 0xC
+FDC_COMMAND_DISPATCHER_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xC06, 0x18
+FDC_CommandEntry_CopyParams_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xC1E, 0x18
+CtrlPanel_HandleSerialPort_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0xC36, 0x84
 ; [nakarest] naka_disk_warning+0xcba  +0xcba..+0xd4c (0xea9966, 146 B)
 ; [nakarest] purpose not established: layout of 146 B at 0xea9966 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_CheckButtonRelease
-; [nakarest] (boot/main_title_ctrl_panel.s: `ld xbc, DiskWarning_ConfirmStrings_0xCBA`),
+; [nakarest] (boot/main_title_ctrl_panel.s: `ld xbc, SndParam_SendDiskMenuEvents_Data`),
 ; [nakarest] CtrlPanel_CheckDiskMenuRelease (boot/main_title_ctrl_panel.s: `ld xbc,
-; [nakarest] DiskWarning_ConfirmStrings_0xCBA`).
+; [nakarest] SndParam_SendDiskMenuEvents_Data`).
+SndParam_SendDiskMenuEvents_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xCBA, 0x92
 ; [nakarest] naka_disk_warning+0xd4c  +0xd4c..+0xd58 (0xea99f8, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xea99f8 not derived; readers below
 ; [nakarest] Readers: source references MainPmanControl (ui/ui_control_panel.s: `add xwa,
-; [nakarest] DiskWarning_ConfirmStrings_0xD4C`).
+; [nakarest] MainPmanControl_Data`).
+MainPmanControl_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xD4C, 0xC
 ; [nakarest] naka_disk_warning+0xd58  +0xd58..+0xdae (0xea9a04, 86 B)
 ; [nakarest] purpose not established: layout of 86 B at 0xea9a04 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_DispatchByIndex (ui/ui_control_panel.s: `lda
-; [nakarest] xix, (DiskWarning_ConfirmStrings_0xD58:24)`).
+; [nakarest] xix, (CtrlPanel_DispatchByIndex_Data:24)`).
+CtrlPanel_DispatchByIndex_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xD58, 0x56
 ; [nakarest] naka_disk_warning+0xdae  +0xdae..+0xe2e (0xea9a5a, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xea9a5a not derived; readers below
 ; [nakarest] Readers: source references GroupBox_HandleStateCompare (ui/ui_control_panel.s: `lda
-; [nakarest] xwa, (DiskWarning_ConfirmStrings_0xDAE:24)`).
+; [nakarest] xwa, (GroupBox_HandleStateCompare_Data:24)`).
+GroupBox_HandleStateCompare_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xDAE, 0x80
 ; [nakarest] naka_disk_warning+0xe2e  +0xe2e..+0xe56 (0xea9ada, 40 B)
 ; [nakarest] purpose not established: layout of 40 B at 0xea9ada not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_FuncDispatch (ui/ui_control_panel.s: `add xwa,
-; [nakarest] DiskWarning_ConfirmStrings_0xE2E`).
+; [nakarest] CtrlPanel_FuncDispatch_Data`).
+CtrlPanel_FuncDispatch_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xE2E, 0x28
 ; [nakarest] naka_disk_warning+0xe56  +0xe56..+0xe70 (0xea9b02, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xea9b02 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_FuncDispatch (ui/ui_control_panel.s: `ld xix,
-; [nakarest] DiskWarning_ConfirmStrings_0xE56`).
+; [nakarest] CtrlPanel_FuncDispatch_Data_2`).
+CtrlPanel_FuncDispatch_Data_2:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xE56, 0x1A
 ; [nakarest] naka_disk_warning+0xe70  +0xe70..+0xe8a (0xea9b1c, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xea9b1c not derived; readers below
 ; [nakarest] Readers: source references GetEditSwPoint (audio/presentation_sound_nav.s: `lda
-; [nakarest] xix, (DiskWarning_ConfirmStrings_0xE70:24)`).
+; [nakarest] xix, (GetEditSwPoint_Data:24)`).
+GetEditSwPoint_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xE70, 0x1A
 ; [nakarest] naka_disk_warning+0xe8a  +0xe8a..+0xe96 (0xea9b36, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xea9b36 not derived; readers below
 ; [nakarest] Readers: source references SetWallPaper (audio/presentation_sound_nav.s: `lda xix,
-; [nakarest] (DiskWarning_ConfirmStrings_0xE8A:24)`).
+; [nakarest] (SetWallPaper_Data:24)`).
+SetWallPaper_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xE8A, 0xC
 ; [nakarest] naka_disk_warning+0xe96  +0xe96..+0xeb4 (0xea9b42, 30 B)
 ; [nakarest] purpose not established: layout of 30 B at 0xea9b42 not derived; readers below
@@ -162,12 +175,14 @@ DirmdTitleFunc_Str_DirmdTitleCur:		.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0xf12  +0xf12..+0xf32 (0xea9bbe, 32 B)
 ; [nakarest] purpose not established: layout of 32 B at 0xea9bbe not derived; readers below
 ; [nakarest] Readers: source references DirmdEmulator (audio/presentation_sound_nav.s: `add xbc,
-; [nakarest] DiskWarning_ConfirmStrings_0xF12`).
+; [nakarest] DirmdEmulator_Data`).
+DirmdEmulator_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xF12, 0x20
 ; [nakarest] naka_disk_warning+0xf32  +0xf32..+0xf46 (0xea9bde, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xea9bde not derived; readers below
 ; [nakarest] Readers: source references WindowProc (audio/presentation_sound_nav.s: `add xbc,
-; [nakarest] DiskWarning_ConfirmStrings_0xF32`).
+; [nakarest] WindowProc_Data`).
+WindowProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0xF32, 0x14
 ; [nakarest] naka_disk_warning+0xf46  +0xf46..+0x1154 (0xea9bf2, 526 B)
 ; [nakarest] purpose not established: layout of 526 B at 0xea9bf2 not derived; readers below
@@ -214,13 +229,15 @@ AcNaming_QueryCharSet_PtrTable:	.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] naka_disk_warning+0x124a  +0x124a..+0x1274 (0xea9ef6, 42 B)
 ; [nakarest] purpose not established: layout of 42 B at 0xea9ef6 not derived; readers below
 ; [nakarest] Readers: source references WndEvt_DispatchByEventCode (ui/ui_window_procs.s: `add
-; [nakarest] xwa, Data_SoundEditorCharsLayout_0x24`).
+; [nakarest] xwa, WndEvt_DispatchByEventCode_Data`).
+WndEvt_DispatchByEventCode_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x124A, 0x1E
 TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts:	.incbin "includes/generated/naka_disk_warning.bin", 0x1268, 0xC	; "0x%02X : %s"
 ; [nakarest] naka_disk_warning+0x1274  +0x1274..+0x14c6 (0xea9f20, 594 B)
 ; [nakarest] purpose not established: layout of 594 B at 0xea9f20 not derived; readers below
 ; [nakarest] Readers: source references UserBitmapCheck_ReturnTablePtr (ui/ui_window_procs.s:
-; [nakarest] `lda xhl, (Data_SoundEditorCharsLayout_0x4E:24)`).
+; [nakarest] `lda xhl, (UserBitmapCheck_ReturnTablePtr_Data:24)`).
+UserBitmapCheck_ReturnTablePtr_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1274, 0x246
 EditSw_ByteData_Str_N7f:	.incbin "includes/generated/naka_disk_warning.bin", 0x14BA, 0x4	; "~7f"
 EditSw_ByteData_Str_N80:	.incbin "includes/generated/naka_disk_warning.bin", 0x14BE, 0x4	; "~80"
@@ -249,17 +266,20 @@ PsGridBox_Scroll_Render_Str_RIGHT1_RIGHT2_LEFT_PART4_PART5:	.incbin "includes/ge
 ; [nakarest] naka_disk_warning+0x159c  +0x159c..+0x15ac (0xeaa248, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeaa248 not derived; readers below
 ; [nakarest] Readers: source references PsGridBoxProc (ui/ui_window_procs.s: `add xbc,
-; [nakarest] Data_SoundEditorCharsLayout_0x376`).
+; [nakarest] PsGridBoxProc_Data`).
+PsGridBoxProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x159C, 0x10
 ; [nakarest] naka_disk_warning+0x15ac  +0x15ac..+0x15c0 (0xeaa258, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeaa258 not derived; readers below
 ; [nakarest] Readers: source references AcGridBoxProc (ui/ui_widget_defs.s: `add xwa,
-; [nakarest] Data_SoundEditorCharsLayout_0x386`).
+; [nakarest] AcGridBoxProc_Data`).
+AcGridBoxProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x15AC, 0x14
 ; [nakarest] naka_disk_warning+0x15c0  +0x15c0..+0x160e (0xeaa26c, 78 B)
 ; [nakarest] purpose not established: layout of 78 B at 0xeaa26c not derived; readers below
 ; [nakarest] Readers: source references GridCheck (ui/ui_widget_defs.s: `add xwa,
-; [nakarest] Data_SoundEditorCharsLayout_0x39A`).
+; [nakarest] GridCheck_Data`).
+GridCheck_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x15C0, 0xE
 PsNumEditBox_Confirm_Str_Chr25:		.incbin "includes/generated/naka_disk_warning.bin", 0x15CE, 0x2	; "%"
 PsNumEditBox_Confirm_Str_Fmtd:		.incbin "includes/generated/naka_disk_warning.bin", 0x15D0, 0x4	; "%d"
@@ -274,7 +294,8 @@ RamEditCheck_JumpStart_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] naka_disk_warning+0x160e  +0x160e..+0x1636 (0xeaa2ba, 40 B)
 ; [nakarest] purpose not established: layout of 40 B at 0xeaa2ba not derived; readers below
 ; [nakarest] Readers: source references RamEditCheck (ui/ui_widget_defs.s: `add xwa,
-; [nakarest] Data_SoundEditorCharsLayout_0x3E8`).
+; [nakarest] RamEditCheck_Data`).
+RamEditCheck_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x160E, 0x14
 BitEditCheck_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x1622, 0x14	; 2 x 32-bit pointer
 ; [nakarest] naka_disk_warning+0x1636  +0x1636..+0x163a (0xeaa2e2, 4 B)
@@ -308,17 +329,20 @@ Str_No:
 ; [nakarest] naka_disk_warning+0x166e  +0x166e..+0x1690 (0xeaa31a, 34 B)
 ; [nakarest] purpose not established: layout of 34 B at 0xeaa31a not derived; readers below
 ; [nakarest] Readers: source references ButtonState_DispatchDSP (ui/ui_widget_defs.s: `lda xix,
-; [nakarest] (Str_No_0x4:24)`).
+; [nakarest] (ButtonState_DispatchDSP_Data:24)`).
+ButtonState_DispatchDSP_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x166E, 0x22
 ; [nakarest] naka_disk_warning+0x1690  +0x1690..+0x16a2 (0xeaa33c, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xeaa33c not derived; readers below
 ; [nakarest] Readers: source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `lda xix,
-; [nakarest] (Str_No_0x26:24)`).
+; [nakarest] (AcIndexEdit_DispatchDSP_Data:24)`).
+AcIndexEdit_DispatchDSP_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1690, 0x12
 ; [nakarest] naka_disk_warning+0x16a2  +0x16a2..+0x16d8 (0xeaa34e, 54 B)
 ; [nakarest] Text (54 B at 0xeaa34e), first string ""; no registered NAKA table points into it;
 ; [nakarest] reached through source references AcIndexEdit_DispatchDSP (ui/ui_widget_defs.s: `ld
-; [nakarest] xix, Str_No_0x38`).
+; [nakarest] xix, AcIndexEdit_DispatchDSP_Data_2`).
+AcIndexEdit_DispatchDSP_Data_2:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x16A2, 0x6
 PsPageBox_Confirm_DrawValue_Str_PAGE_Fmtd_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x16A8, 0xC	; "PAGE %d/%d"
 IvPageControl_GetText_Str_PAGE:			.incbin "includes/generated/naka_disk_warning.bin", 0x16B4, 0x6	; "PAGE"
@@ -370,20 +394,23 @@ AcMixerVol_Paint_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0
 ; [nakarest] naka_disk_warning+0x1860  +0x1860..+0x1864 (0xeaa50c, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeaa50c not derived; readers below
 ; [nakarest] Readers: source references AcMixerVol_Confirm (ui/ui_widget_defs.s: `ld
-; [nakarest] XWA,Str_No_0x1F6`), AcMixerVol_FastScroll (ui/ui_widget_defs.s: `ld xde,
-; [nakarest] Str_No_0x1F6`), AcMixerVol_FastScroll_Increment (ui/ui_widget_defs.s: `ld xde,
-; [nakarest] Str_No_0x1F6`), AcMixerVol_OK (ui/ui_widget_defs.s: `ld XBC,Str_No_0x1F6`), 3 more.
+; [nakarest] XWA,AcMixerVol_Confirm_Data`), AcMixerVol_FastScroll (ui/ui_widget_defs.s: `ld xde,
+; [nakarest] AcMixerVol_Confirm_Data`), AcMixerVol_FastScroll_Increment (ui/ui_widget_defs.s: `ld xde,
+; [nakarest] AcMixerVol_Confirm_Data`), AcMixerVol_OK (ui/ui_widget_defs.s: `ld XBC,AcMixerVol_Confirm_Data`), 3 more.
+AcMixerVol_Confirm_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1860, 0x4
 ; [nakarest] naka_disk_warning+0x1864  +0x1864..+0x1978 (0xeaa510, 276 B)
 ; [nakarest] purpose not established: layout of 276 B at 0xeaa510 not derived; readers below
 ; [nakarest] Readers: source references AcMixerVol_Confirm (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (Str_No_0x1FA:24)`), AcMixerVol_OK (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (Str_No_0x1FA:24)`).
+; [nakarest] (AcMixerVol_Confirm_Data_2:24)`), AcMixerVol_OK (ui/ui_widget_defs.s: `lda xwa,
+; [nakarest] (AcMixerVol_Confirm_Data_2:24)`).
+AcMixerVol_Confirm_Data_2:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1864, 0x114
 ; [nakarest] naka_disk_warning+0x1978  +0x1978..+0x1a0e (0xeaa624, 150 B)
 ; [nakarest] purpose not established: layout of 150 B at 0xeaa624 not derived; readers below
 ; [nakarest] Readers: source references AcMixerVol_PartSelect_DrawIcon (ui/ui_widget_defs.s:
-; [nakarest] `lda xde, (Str_No_0x30E:24)`).
+; [nakarest] `lda xde, (AcMixerVol_PartSelect_DrawIcon_Data:24)`).
+AcMixerVol_PartSelect_DrawIcon_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1978, 0x8C
 AcMixerVol_Confirm_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A04, 0x4	; "%3d"
 AcMixerVol_Confirm_Str_MUTE:	.incbin "includes/generated/naka_disk_warning.bin", 0x1A08, 0x6	; "MUTE"
@@ -426,7 +453,8 @@ PsTrackSwitchProc_PtrTable_2:	.incbin "includes/generated/naka_disk_warning.bin"
 ; [nakarest] naka_disk_warning+0x1b6e  +0x1b6e..+0x1b7e (0xeaa81a, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeaa81a not derived; readers below
 ; [nakarest] Readers: source references PsTrackSwitchProc (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] Str_No_0x504`).
+; [nakarest] PsTrackSwitchProc_Data`).
+PsTrackSwitchProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1B6E, 0xA
 PsTrkSw_Confirm_DrawGeometry_Str_Fmtd:	.incbin "includes/generated/naka_disk_warning.bin", 0x1B78, 0x6	; "%d"
 ; [nakarest] naka_disk_warning+0x1b7e  +0x1b7e..+0x1b88 (0xeaa82a, 10 B)
@@ -451,52 +479,63 @@ ObjectProc_Evt1E00018_Str_Empty:	.incbin "includes/generated/naka_disk_warning.b
 ; [nakarest] naka_disk_warning+0x1bf8  +0x1bf8..+0x1c20 (0xeaa8a4, 40 B)
 ; [nakarest] purpose not established: layout of 40 B at 0xeaa8a4 not derived; readers below
 ; [nakarest] Readers: source references ObjectProc (ui/ui_widget_defs.s: `add xwa,
-; [nakarest] Str_No_0x58E`).
+; [nakarest] ObjectProc_Data`).
+ObjectProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1BF8, 0x28
 ; [nakarest] naka_disk_warning+0x1c20  +0x1c20..+0x1c30 (0xeaa8cc, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeaa8cc not derived; readers below
 ; [nakarest] Readers: source references ExitWindow_Confirm (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] Str_No_0x5B6`).
+; [nakarest] ExitWindow_Confirm_Data`).
+ExitWindow_Confirm_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C20, 0x10
 ; [nakarest] naka_disk_warning+0x1c30  +0x1c30..+0x1c48 (0xeaa8dc, 24 B)
 ; [nakarest] purpose not established: layout of 24 B at 0xeaa8dc not derived; readers below
 ; [nakarest] Readers: source references ExitWindow_OK (ui/ui_widget_defs.s: `ld xiy,
-; [nakarest] Str_No_0x5C6`).
+; [nakarest] ExitWindow_OK_Data`).
+ExitWindow_OK_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C30, 0x18
 ; [nakarest] naka_disk_warning+0x1c48  +0x1c48..+0x1c4a (0xeaa8f4, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xeaa8f4 not derived; readers below
 ; [nakarest] Readers: source references InputDialog_Confirm (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (Str_No_0x5DE:24)`).
+; [nakarest] (InputDialog_Confirm_Data:24)`).
+InputDialog_Confirm_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C48, 0x2
 ; [nakarest] naka_disk_warning+0x1c4a  +0x1c4a..+0x1c4c (0xeaa8f6, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xeaa8f6 not derived; readers below
 ; [nakarest] Readers: source references UnRegisterObject (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (Str_No_0x5E0:24)`).
+; [nakarest] (UnRegisterObject_Data:24)`).
+UnRegisterObject_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C4A, 0x2
 ; [nakarest] naka_disk_warning+0x1c4c  +0x1c4c..+0x1c5c (0xeaa8f8, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeaa8f8 not derived; readers below
 ; [nakarest] Readers: source references ClassProc (ui/ui_widget_defs.s: `add xbc,
-; [nakarest] Str_No_0x5E2`).
+; [nakarest] ClassProc_Data`).
+ClassProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C4C, 0x10
 ; [nakarest] naka_disk_warning+0x1c5c  +0x1c5c..+0x1c68 (0xeaa908, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeaa908 not derived; readers below
-; [nakarest] Readers: source references ModeProc (ui/ui_widget_defs.s: `add xbc, Str_No_0x5F2`).
+; [nakarest] Readers: source references ModeProc (ui/ui_widget_defs.s: `add xbc, ModeProc_Data`).
+ModeProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C5C, 0xC
 ; [nakarest] naka_disk_warning+0x1c68  +0x1c68..+0x1c6c (0xeaa914, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeaa914 not derived; readers below
 ; [nakarest] Readers: source references UnregisteredMode (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (Str_No_0x5FE:24)`).
-	.incbin "includes/generated/naka_disk_warning.bin", 0x1C68, 0x4
+; [nakarest] (UnregisteredMode_Data:24)`).
+UnregisteredMode_Data:
+	.incbin "includes/generated/naka_disk_warning.bin", 0x1C68, 0x2
+UnregisteredTitle_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x1C6A, 0x2
 ; [nakarest] naka_disk_warning+0x1c6c  +0x1c6c..+0x1c70 (0xeaa918, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeaa918 not derived; readers below
 ; [nakarest] Readers: source references EnumList_HitTest_Loop (ui/ui_widget_defs.s: `ld xwa,
-; [nakarest] Str_No_0x602`), EnumList_OK_ScrollUp_Done (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] Str_No_0x602`), TitleProc (ui/ui_widget_defs.s: `ld xbc, Str_No_0x602`).
+; [nakarest] TitleProc_Data`), EnumList_OK_ScrollUp_Done (ui/ui_widget_defs.s: `ld xbc,
+; [nakarest] TitleProc_Data`), TitleProc (ui/ui_widget_defs.s: `ld xbc, TitleProc_Data`).
+TitleProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C6C, 0x4
 ; [nakarest] naka_disk_warning+0x1c70  +0x1c70..+0x1d14 (0xeaa91c, 164 B)
 ; [nakarest] purpose not established: layout of 164 B at 0xeaa91c not derived; readers below
 ; [nakarest] Readers: source references EnumList_HitTest (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (Str_No_0x606:24)`).
+; [nakarest] (EnumList_HitTest_Data:24)`).
+EnumList_HitTest_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1C70, 0xA4
 ; [nakarest] naka_disk_warning+0x1d14  +0x1d14..+0x1d20 (0xeaa9c0, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeaa9c0 not derived; readers below
@@ -506,17 +545,20 @@ TitleProc_Str_j:	.incbin "includes/generated/naka_disk_warning.bin", 0x1D14, 0xC
 ; [nakarest] naka_disk_warning+0x1d20  +0x1d20..+0x1d3a (0xeaa9cc, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xeaa9cc not derived; readers below
 ; [nakarest] Readers: source references EnumList_Reset (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] Str_No_0x6B6`).
+; [nakarest] EnumList_Reset_Data`).
+EnumList_Reset_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1D20, 0x1A
 ; [nakarest] naka_disk_warning+0x1d3a  +0x1d3a..+0x1d48 (0xeaa9e6, 14 B)
 ; [nakarest] purpose not established: layout of 14 B at 0xeaa9e6 not derived; readers below
 ; [nakarest] Readers: source references ViewableProc (ui/ui_widget_defs.s: `add xwa,
-; [nakarest] Str_No_0x6D0`).
+; [nakarest] ViewableProc_Data`).
+ViewableProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1D3A, 0xE
 ; [nakarest] naka_disk_warning+0x1d48  +0x1d48..+0x1d52 (0xeaa9f4, 10 B)
 ; [nakarest] Text (10 B at 0xeaa9f4), first string "bool %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle7_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, Str_No_0x6DE`).
+; [nakarest] `ld xwa, BoxStyle7_Setup_Data`).
+BoxStyle7_Setup_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1D48, 0xA
 ; [nakarest] naka_disk_warning+0x1d52  +0x1d52..+0x1d58 (0xeaa9fe, 6 B)
 ; [nakarest] Text (6 B at 0xeaa9fe), first string "&%s%d"; no registered NAKA table points into
@@ -526,7 +568,8 @@ BoxStyle7_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0x1d58  +0x1d58..+0x1d64 (0xeaaa04, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa04), first string "sword %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle8_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, Str_No_0x6EE`).
+; [nakarest] `ld xwa, BoxStyle8_Setup_Data`).
+BoxStyle8_Setup_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1D58, 0xC
 ; [nakarest] naka_disk_warning+0x1d64  +0x1d64..+0x1d6a (0xeaaa10, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa10), first string "&%s%d"; no registered NAKA table points into
@@ -536,7 +579,8 @@ BoxStyle8_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0x1d6a  +0x1d6a..+0x1d76 (0xeaaa16, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa16), first string "uword %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle9_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, Str_No_0x700`).
+; [nakarest] `ld xwa, BoxStyle9_Setup_Data`).
+BoxStyle9_Setup_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1D6A, 0xC
 ; [nakarest] naka_disk_warning+0x1d76  +0x1d76..+0x1d7c (0xeaaa22, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa22), first string "&%s%d"; no registered NAKA table points into
@@ -546,7 +590,8 @@ BoxStyle9_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0x1d7c  +0x1d7c..+0x1d88 (0xeaaa28, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa28), first string "schar %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle10_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, Str_No_0x712`).
+; [nakarest] `ld xwa, BoxStyle10_Setup_Data`).
+BoxStyle10_Setup_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1D7C, 0xC
 ; [nakarest] naka_disk_warning+0x1d88  +0x1d88..+0x1d8e (0xeaaa34, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa34), first string "&%s%d"; no registered NAKA table points into
@@ -556,7 +601,8 @@ BoxStyle10_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] naka_disk_warning+0x1d8e  +0x1d8e..+0x1d9a (0xeaaa3a, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa3a), first string "uchar %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle11_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, Str_No_0x724`).
+; [nakarest] `ld xwa, BoxStyle11_Setup_Data`).
+BoxStyle11_Setup_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1D8E, 0xC
 ; [nakarest] naka_disk_warning+0x1d9a  +0x1d9a..+0x1da0 (0xeaaa46, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa46), first string "&%s%d"; no registered NAKA table points into
@@ -566,7 +612,8 @@ BoxStyle11_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] naka_disk_warning+0x1da0  +0x1da0..+0x1dac (0xeaaa4c, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa4c), first string "slong %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle12_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, Str_No_0x736`).
+; [nakarest] `ld xwa, BoxStyle12_Setup_Data`).
+BoxStyle12_Setup_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1DA0, 0xC
 ; [nakarest] naka_disk_warning+0x1dac  +0x1dac..+0x1db2 (0xeaaa58, 6 B)
 ; [nakarest] Text (6 B at 0xeaaa58), first string "&%s%d"; no registered NAKA table points into
@@ -576,7 +623,8 @@ BoxStyle12_CalcWidth_Str_Fmts_Fmtd:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] naka_disk_warning+0x1db2  +0x1db2..+0x1dbe (0xeaaa5e, 12 B)
 ; [nakarest] Text (12 B at 0xeaaa5e), first string "ulong %s%d"; no registered NAKA table points
 ; [nakarest] into it; reached through source references BoxStyle13_Setup (ui/ui_widget_defs.s:
-; [nakarest] `ld xwa, Str_No_0x748`).
+; [nakarest] `ld xwa, BoxStyle13_Setup_Data`).
+BoxStyle13_Setup_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1DB2, 0xC
 ; [nakarest] naka_disk_warning+0x1dbe  +0x1dbe..+0x1ed0 (0xeaaa6a, 274 B)
 ; [nakarest] Text (274 B at 0xeaaa6a), first string "&%s%d"; no registered NAKA table points
@@ -660,7 +708,8 @@ NameProc_Init_Str_name:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F
 ; [nakarest] naka_disk_warning+0x1f26  +0x1f26..+0x1f2a (0xeaabd2, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeaabd2 not derived; readers below
 ; [nakarest] Readers: source references NameProc_Init_SetPtr (ui/ui_widget_defs.s: `ld xwa,
-; [nakarest] Str_No_0x8BC`).
+; [nakarest] NameProc_Init_SetPtr_Data`).
+NameProc_Init_SetPtr_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1F26, 0x2
 NameProc_GetText_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F28, 0x2	; ""
 ; [nakarest] naka_disk_warning+0x1f2a  +0x1f2a..+0x1f32 (0xeaabd6, 8 B)
@@ -671,28 +720,33 @@ ConstFlagProc_GetValue_Str_romram:	.incbin "includes/generated/naka_disk_warning
 ; [nakarest] naka_disk_warning+0x1f32  +0x1f32..+0x1f38 (0xeaabde, 6 B)
 ; [nakarest] purpose not established: layout of 6 B at 0xeaabde not derived; readers below
 ; [nakarest] Readers: source references ConstFlagProc_GetValue_Set (ui/ui_widget_defs.s: `ld
-; [nakarest] xwa, Str_No_0x8C8`).
+; [nakarest] xwa, ConstFlagProc_GetValue_Set_Data`).
+ConstFlagProc_GetValue_Set_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1F32, 0x2
 ConstFlagProc_SetValue_Check_Str_Empty:	.incbin "includes/generated/naka_disk_warning.bin", 0x1F34, 0x4	; ""
 ; [nakarest] naka_disk_warning+0x1f38  +0x1f38..+0x1f46 (0xeaabe4, 14 B)
 ; [nakarest] purpose not established: layout of 14 B at 0xeaabe4 not derived; readers below
 ; [nakarest] Readers: source references CommonIDProc (ui/ui_widget_defs.s: `add xde,
-; [nakarest] Str_No_0x8CE`).
+; [nakarest] CommonIDProc_Data`).
+CommonIDProc_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1F38, 0xE
 ; [nakarest] naka_disk_warning+0x1f46  +0x1f46..+0x214a (0xeaabf2, 516 B)
 ; [nakarest] purpose not established: layout of 516 B at 0xeaabf2 not derived; readers below
 ; [nakarest] Readers: source references DrawIcons_Impl_ColLoop (ui/drawing_primitives.s: `lda
-; [nakarest] xbc, (Str_No_0x8DC:24)`).
+; [nakarest] xbc, (DrawIcons_Impl_ColLoop_Data:24)`).
+DrawIcons_Impl_ColLoop_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x1F46, 0x204
 ; [nakarest] naka_disk_warning+0x214a  +0x214a..+0x216a (0xeaadf6, 32 B)
 ; [nakarest] purpose not established: layout of 32 B at 0xeaadf6 not derived; readers below
 ; [nakarest] Readers: source references DrawPartGroup_DispatchByType (ui/ui_window_procs.s: `lda
-; [nakarest] xix, (Str_No_0xAE0:24)`).
+; [nakarest] xix, (DrawPartGroup_DispatchByType_Data:24)`).
+DrawPartGroup_DispatchByType_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x214A, 0x20
 ; [nakarest] naka_disk_warning+0x216a  +0x216a..+0x21b6 (0xeaae16, 76 B)
 ; [nakarest] purpose not established: layout of 76 B at 0xeaae16 not derived; readers below
 ; [nakarest] Readers: source references Draw_DispatchByPartType (ui/ui_window_procs.s: `lda xix,
-; [nakarest] (Str_No_0xB00:24)`).
+; [nakarest] (Draw_DispatchByPartType_Data:24)`).
+Draw_DispatchByPartType_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x216A, 0x36
 CaptureLcd_Str_BM:		.incbin "includes/generated/naka_disk_warning.bin", 0x21A0, 0x4	; "BM"
 CaptureLcd_Str_HKLCD_Fmt3d_BMP:	.incbin "includes/generated/naka_disk_warning.bin", 0x21A4, 0xE	; "HKLCD%03d.BMP"
@@ -700,17 +754,21 @@ CaptureLcd_Str_wb:		.incbin "includes/generated/naka_disk_warning.bin", 0x21B2, 
 ; [nakarest] naka_disk_warning+0x21b6  +0x21b6..+0x21ba (0xeaae62, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeaae62 not derived; readers below
 ; [nakarest] Readers: source references ChangeWall_Impl (ui/ui_window_procs.s: `ld xwa,
-; [nakarest] Str_No_0xB4C`).
+; [nakarest] ChangeWall_Impl_Data`).
+ChangeWall_Impl_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x21B6, 0x4
 ; [nakarest] naka_disk_warning+0x21ba  +0x21ba..+0x2228 (0xeaae66, 110 B)
 ; [nakarest] purpose not established: layout of 110 B at 0xeaae66 not derived; readers below
 ; [nakarest] Readers: source references ChangePalette_Impl (ui/ui_window_procs.s: `lda xwa,
-; [nakarest] (Str_No_0xB50:24)`).
-	.incbin "includes/generated/naka_disk_warning.bin", 0x21BA, 0x6E
+; [nakarest] (ChangePalette_Impl_Data:24)`).
+ChangePalette_Impl_Data:
+	.incbin "includes/generated/naka_disk_warning.bin", 0x21BA, 0x2E
+ClipBlit_Replace_ScanlineLoop_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x21E8, 0x40
 ; [nakarest] naka_disk_warning+0x2228  +0x2228..+0x2248 (0xeaaed4, 32 B)
 ; [nakarest] purpose not established: layout of 32 B at 0xeaaed4 not derived; readers below
 ; [nakarest] Readers: source references GraphicsRender_ByteData_Loop2
-; [nakarest] (display/graphics_text_vga.s: `ld xbc, Str_No_0xBBE`).
+; [nakarest] (display/graphics_text_vga.s: `ld xbc, GraphicsRender_ByteData_Data`).
+GraphicsRender_ByteData_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2228, 0x20
 ; [nakarest] naka_disk_warning+0x2248  +0x2248..+0x2268 (0xeaaef4, 32 B)
 ; [nakarest] purpose not established: layout of 32 B at 0xeaaef4 not derived; readers below
@@ -730,60 +788,71 @@ GraphicsRender_Start_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin
 ; [nakarest] naka_disk_warning+0x2328  +0x2328..+0x2330 (0xeaafd4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafd4 not derived; readers below
 ; [nakarest] Readers: source references DrawText_LayoutAndRender (display/graphics_text_vga.s:
-; [nakarest] `ld xiy, Str_No_0xCBE`).
+; [nakarest] `ld xiy, DrawText_LayoutAndRender_Data`).
+DrawText_LayoutAndRender_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2328, 0x8
 ; [nakarest] naka_disk_warning+0x2330  +0x2330..+0x2338 (0xeaafdc, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafdc not derived; readers below
 ; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, Str_No_0xCC6`).
+; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data`).
+DrawText_LayoutAndRender_Variant1_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2330, 0x8
 ; [nakarest] naka_disk_warning+0x2338  +0x2338..+0x2340 (0xeaafe4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafe4 not derived; readers below
 ; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, Str_No_0xCCE`).
+; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_2`).
+DrawText_LayoutAndRender_Variant1_Data_2:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2338, 0x8
 ; [nakarest] naka_disk_warning+0x2340  +0x2340..+0x2348 (0xeaafec, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaafec not derived; readers below
 ; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, Str_No_0xCD6`).
+; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_3`).
+DrawText_LayoutAndRender_Variant1_Data_3:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2340, 0x8
 ; [nakarest] naka_disk_warning+0x2348  +0x2348..+0x2350 (0xeaaff4, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaaff4 not derived; readers below
 ; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, Str_No_0xCDE`).
+; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_4`).
+DrawText_LayoutAndRender_Variant1_Data_4:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2348, 0x8
 ; [nakarest] naka_disk_warning+0x2350  +0x2350..+0x2358 (0xeaaffc, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeaaffc not derived; readers below
 ; [nakarest] Readers: source references DrawText_LayoutAndRender_Variant1_Loop
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, Str_No_0xCE6`).
+; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_LayoutAndRender_Variant1_Data_5`).
+DrawText_LayoutAndRender_Variant1_Data_5:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2350, 0x8
 ; [nakarest] naka_disk_warning+0x2358  +0x2358..+0x2458 (0xeab004, 256 B)
 ; [nakarest] purpose not established: layout of 256 B at 0xeab004 not derived; readers below
 ; [nakarest] Readers: source references AccDraw_Secondary_Helper20 (display/graphics_text_vga.s:
-; [nakarest] `lda xbc, (Str_No_0xCEE:24)`), DrawText_ExtLayout_NullAndDraw
-; [nakarest] (display/graphics_text_vga.s: `lda xbc, (Str_No_0xCEE:24)`), Scoop_EnvelopeCalc
-; [nakarest] (display/scoop_display.s: `lda xbc, (Str_No_0xCEE:24)`), Scoop_EnvelopeCalc_Data
-; [nakarest] (display/scoop_display.s: `lda xbc, (Str_No_0xCEE:24)`), 1 more.
+; [nakarest] `lda xbc, (Scoop_EnvelopeCalc_Data_2:24)`), DrawText_ExtLayout_NullAndDraw
+; [nakarest] (display/graphics_text_vga.s: `lda xbc, (Scoop_EnvelopeCalc_Data_2:24)`), Scoop_EnvelopeCalc
+; [nakarest] (display/scoop_display.s: `lda xbc, (Scoop_EnvelopeCalc_Data_2:24)`), Scoop_EnvelopeCalc_Data
+; [nakarest] (display/scoop_display.s: `lda xbc, (Scoop_EnvelopeCalc_Data_2:24)`), 1 more.
+Scoop_EnvelopeCalc_Data_2:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2358, 0x100
 ; [nakarest] naka_disk_warning+0x2458  +0x2458..+0x2468 (0xeab104, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeab104 not derived; readers below
 ; [nakarest] Readers: source references DrawText_ExtendedLayout_Skip
-; [nakarest] (display/graphics_text_vga.s: `lda xbc, (Str_No_0xDEE:24)`).
+; [nakarest] (display/graphics_text_vga.s: `lda xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)`).
+Scoop_EventLoop_36Entry_Branch3_Data_3:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2458, 0x10
 ; [nakarest] naka_disk_warning+0x2468  +0x2468..+0x2470 (0xeab114, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeab114 not derived; readers below
 ; [nakarest] Readers: source references DrawText_ExtendedLayout (display/graphics_text_vga.s:
-; [nakarest] `ld xiy, Str_No_0xDFE`).
+; [nakarest] `ld xiy, DrawText_ExtendedLayout_Data`).
+DrawText_ExtendedLayout_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2468, 0x8
 ; [nakarest] naka_disk_warning+0x2470  +0x2470..+0x2478 (0xeab11c, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeab11c not derived; readers below
 ; [nakarest] Readers: source references DrawText_ExtLayout_Variant1
-; [nakarest] (display/graphics_text_vga.s: `ld xiy, Str_No_0xE06`).
+; [nakarest] (display/graphics_text_vga.s: `ld xiy, DrawText_ExtLayout_Variant1_Data`).
+DrawText_ExtLayout_Variant1_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2470, 0x8
 ; [nakarest] naka_disk_warning+0x2478  +0x2478..+0x2480 (0xeab124, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeab124 not derived; readers below
 ; [nakarest] Readers: source references DrawFunc_Init (display/graphics_text_vga.s: `ld xiy,
-; [nakarest] Str_No_0xE0E`).
+; [nakarest] DrawFunc_Init_Data`).
+DrawFunc_Init_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2478, 0x8
 ; [nakarest] naka_disk_warning+0x2480  +0x2480..+0x2484 (0xeab12c, 4 B)
 ; [nakarest] Text (4 B at 0xeab12c), first string "%1d"; no registered NAKA table points into
@@ -799,7 +868,8 @@ DrawFunc_Init_FontTable2_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] Text (36 B at 0xeab134), first string "%3d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_FontTable0
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_FontTable0_Str_Fmt3d`).
-DrawFunc_Init_FontTable0_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2488, 0xC	; "%3d"
+DrawFunc_Init_FontTable0_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2488, 0x4	; "%3d"
+DrawFunc_Init_Variant1_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x248C, 0x8
 DrawFunc_Init_Variant1_Str_Fmt1d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2494, 0x4	; "%1d"
 DrawFunc_Init_Variant1_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2498, 0x4	; "%2d"
 DrawFunc_Init_Variant1_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x249C, 0x4	; "%3d"
@@ -809,7 +879,8 @@ DrawFunc_Init_Entry_Str_Fmt4d:		.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] naka_disk_warning+0x24ac  +0x24ac..+0x24b4 (0xeab158, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xeab158 not derived; readers below
 ; [nakarest] Readers: source references AccDraw_Secondary_Helper20 (display/graphics_text_vga.s:
-; [nakarest] `ld XIY,Str_No_0xE42`).
+; [nakarest] `ld XIY,DrawFunc_Init_Entry_Data`).
+DrawFunc_Init_Entry_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x24AC, 0x8
 ; [nakarest] naka_disk_warning+0x24b4  +0x24b4..+0x24b8 (0xeab160, 4 B)
 ; [nakarest] Text (4 B at 0xeab160), first string "%1d"; no registered NAKA table points into
@@ -825,10 +896,12 @@ DrawFunc_Init_Entry2_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bi
 ; [nakarest] Text (56 B at 0xeab168), first string "%3d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references AccDraw_Secondary_Helper20
 ; [nakarest] (display/graphics_text_vga.s: `ld XWA,DrawFunc_Init_Entry3_Str_Fmt3d`).
-DrawFunc_Init_Entry3_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24BC, 0xC	; "%3d"
+DrawFunc_Init_Entry3_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24BC, 0x4	; "%3d"
+DrawFunc_Init_Entry3_Data:	.incbin "includes/generated/naka_disk_warning.bin", 0x24C0, 0x8
 DrawFunc_Init_Entry3_Str_Fmt1d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24C8, 0x4	; "%1d"
 DrawFunc_Init_Entry3_Str_Fmt2d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24CC, 0x4	; "%2d"
-DrawFunc_Init_Entry3_Str_Fmt3d_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x24D0, 0xC	; "%3d"
+DrawFunc_Init_Entry3_Str_Fmt3d_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x24D0, 0x4	; "%3d"
+DrawFunc_Init_Entry3_Data_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x24D4, 0x8
 DrawFunc_Init_Entry3_Str_Fmt1d_2:	.incbin "includes/generated/naka_disk_warning.bin", 0x24DC, 0x8	; "%1d"
 DrawFunc_Init_Entry4_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24E4, 0x4	; "%3d"
 DrawFunc_Init_Entry5_Str_Fmt2d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24E8, 0x4	; "%2d"
@@ -843,8 +916,9 @@ DrawFunc_Init_Entry5_Str_Fmt3d_2:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] naka_disk_warning+0x2508  +0x2508..+0x2608 (0xeab1b4, 256 B)
 ; [nakarest] purpose not established: layout of 256 B at 0xeab1b4 not derived; readers below
 ; [nakarest] Readers: source references FontGlyph_ByteData (display/graphics_text_vga.s: `lda
-; [nakarest] xde, (Data_CharMapFormatBlock_0x14:24)`), TextRender_CharEncodeAndDraw
+; [nakarest] xde, (TextRender_CharEncodeAndDraw_Data:24)`), TextRender_CharEncodeAndDraw
 ; [nakarest] (kn5000_v7_program.s: `lda xde, (0xeab1b4:24)`).
+TextRender_CharEncodeAndDraw_Data:
 	.incbin "includes/generated/naka_disk_warning.bin", 0x2508, 0x100
 ; [nakarest] naka_disk_warning+0x2608  +0x2608..+0x263c (0xeab2b4, 52 B)
 ; [nakarest] the table itself: ApFunction slot 0x120 (table 0xeab2b4, 12 entries,

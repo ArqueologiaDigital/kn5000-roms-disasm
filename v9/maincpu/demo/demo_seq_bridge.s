@@ -512,7 +512,7 @@ CDlikeSwTtl_SendEvent8C_13:
 
 CDlikeSwTtl_SetRecordAndNotify:
 	ld (0x021090:24), 0x01
-	ld xwa, NAKA_PerfReg_Container_Root_0x1697
+	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
@@ -520,14 +520,14 @@ CDlikeSwTtl_SetRecordAndNotify:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
+	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_2
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jp ApPostEvent
 
 SeqInit_PostEventSequence:
 	ld (0x021090:24), 0x00
-	ld xwa, NAKA_PerfReg_Container_Root_0x1697
+	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
@@ -535,7 +535,7 @@ SeqInit_PostEventSequence:
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	call ApPostEvent
-	ld xwa, NakaInst_FADE_IN_OUT_SETTING_0x2475
+	ld xwa, CDlikeSwTtl_SetRecordAndNotify_Data_2
 	ld xbc, EVT_REPAINT
 	ld xde, 0:i3
 	jp ApPostEvent

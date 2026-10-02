@@ -4787,15 +4787,15 @@ HelpFuncChkFunc:
 	jrl nz, HelpFunc_ReturnZero
 	or xiz, xiz
 	jrl nz, HelpFunc_ReturnZero
-	ld xwa, Bitmap_MIDIConnections_2_0x3BCA
+	ld xwa, HelpFuncChkFunc_Data
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, Bitmap_MIDIConnections_2_0x3BD5
+	ld xwa, HelpFuncChkFunc_Data_2
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, Bitmap_MIDIConnections_2_0x3BDC
+	ld xwa, HelpFuncChkFunc_Data_3
 	ld xbc, EVT_SET_PAGE
 	ld xde, 1:i3
 	call SendEvent
@@ -5404,7 +5404,7 @@ AcIndexToggle_SendVisibility:
 	ld xwa, (xwa + 46)
 	ld xbc, EVT_SET_LANG
 	call ApFuncCall
-	ld xwa, Bitmap_MIDIConnections_2_0x3BB0
+	ld xwa, AcIndexToggle_SendVisibility_Data
 	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jrl SendNoteDeleteEvent
@@ -6675,7 +6675,7 @@ NoteEdit_FormatTempoString:
 	jr nz, NoteEdit_FormatNoteOther
 	pushw 0x9
 	muls wa, 0x9
-	lda xbc, (Naka_Help_569_E30113_0x833:24)
+	lda xbc, (NoteEdit_FormatTempoString_Data:24)
 	exts xwa
 	add xwa, xbc
 	push xwa
@@ -7494,15 +7494,15 @@ EntertainerGridCheck:
 	lda xix, (xsp + 48)
 	ld bc, 5:i3
 	ldirw
-	ld xiy, Naka_Help_569_E30113_0x82B
+	ld xiy, EntertainerGridCheck_Data
 	lda xix, (xsp + 40)
 	ld bc, 4:i3
 	ldirw
 	ld xde, (xsp + 62)
 	ld (xsp + 20), xde
-	lda xwa, (NakaData_WidgetDescriptors_0x1530:24)
+	lda xwa, (EntertainerGridCheck_Data_3:24)
 	ld (xsp + 12), xwa
-	lda xwa, (NakaData_WidgetDescriptors_0x139A:24)
+	lda xwa, (EntertainerGridCheck_Data_2:24)
 	ld (xsp + 8), xwa
 	lda xwa, (NakaData_WidgetDescriptors:24)
 	ld (xsp + 4), xwa
@@ -14085,7 +14085,7 @@ Sqedt_ParamDispatch_Join6:
 	ld	a, (9750:16)
 	extz	wa
 	muls	wa, 9
-	lda	xde, (Naka_Help_569_E30113_0x833:24)
+	lda	xde, (NoteEdit_FormatTempoString_Data:24)
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -14108,7 +14108,7 @@ Sqedt_ParamDispatch_Join6:
 	ld	a, (9816:16)
 	extz	wa
 	muls	wa, 9
-	lda	xde, (Naka_Help_569_E30113_0x833:24)
+	lda	xde, (NoteEdit_FormatTempoString_Data:24)
 	exts	xwa
 	add	xwa, xde
 	push	xwa
@@ -15241,7 +15241,7 @@ EqualizerCngFunc:
 	jrl z, Equalizer_ParamByIndex
 	cp xbc, EVT_GET_DISP_POS
 	jr z, Equalizer_DispatchA
-	lda xbc, (NakaData_WidgetDescriptors_0x139A:24)
+	lda xbc, (EntertainerGridCheck_Data_2:24)
 	lda xhl, (0x2978:16)
 	sub xwa, EVT_GET_EQ0_STR
 	cp xwa, 0x0
@@ -15257,8 +15257,8 @@ EqualizerCngFunc:
 ; EqualizerCngFunc dispatch A
 Equalizer_DispatchA:
 	ld xwa, xde
-	lda xbc, (Naka_Help_569_E30113_0xCEB:24)
-	lda xde, (Naka_Help_569_E30113_0xCB3:24)
+	lda xbc, (Equalizer_DispatchA_Data_2:24)
+	lda xde, (Equalizer_DispatchA_Data:24)
 	dec 2, xwa
 	cp xwa, 0x0
 	jrl c, Equalizer_LookupParamByIndex
@@ -15386,7 +15386,7 @@ Equalizer_LookupParamString:
 	ld xbc, xwa
 	sll xbc, 2
 	add xbc, xwa
-	ld xwa, NakaData_WidgetDescriptors_0x1530
+	ld xwa, EntertainerGridCheck_Data_3
 	add xwa, xbc
 	push xwa
 	jr FormatEqParam_CopyAndReturn
@@ -15583,51 +15583,51 @@ Equalizer_FormatDispatch:
 ; code.
 Equalizer_FormatCases:
 	pushw 0x0005
-	ld xwa, NakaData_WidgetDescriptors_0x1530
+	ld xwa, EntertainerGridCheck_Data_3
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x0005
 	ld xwa, 0x00e322f0
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x0005
-	ld xwa, NakaData_WidgetDescriptors_0x139A
+	ld xwa, EntertainerGridCheck_Data_2
 	jrl FormatParamStr_CopyEnumName
 
 FormatParamString:
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x11A6
+	ld xwa, FormatParamString_Data_3
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x1196
+	ld xwa, FormatParamString_Data_2
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xFA2
+	ld xwa, FormatParamString_Data
 	jrl FormatParamStr_CopyEnumName
 
 ; Equalizer format default
 Equalizer_FormatDefault:
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xDAE
+	ld xwa, Equalizer_FormatDefault_Data_8
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xBBA
+	ld xwa, Equalizer_FormatDefault_Data_7
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xBB0
+	ld xwa, Equalizer_FormatDefault_Data_6
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0xA42
+	ld xwa, Equalizer_FormatDefault_Data_5
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x84E
+	ld xwa, Equalizer_FormatDefault_Data_4
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x65A
+	ld xwa, Equalizer_FormatDefault_Data_3
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x466
+	ld xwa, Equalizer_FormatDefault_Data_2
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x272
+	ld xwa, Equalizer_FormatDefault_Data
 	jr FormatParamStr_CopyEnumName
 	add bc, bc
 	ld	wa, (xde+bc)
@@ -15649,7 +15649,7 @@ EqFormat_PositiveValue:
 	ld xwa, EqFormat_PositiveValue_Str
 	jr SendAudioCommand
 	pushw 0x5
-	ld xwa, NakaData_WidgetDescriptors_0x1F4
+	ld xwa, EqFormat_PositiveValue_Data
 	jr FormatParamStr_CopyEnumName
 	pushw 0x5
 	ld xwa, NakaData_WidgetDescriptors

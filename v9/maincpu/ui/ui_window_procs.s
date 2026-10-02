@@ -258,10 +258,10 @@ WndEvt_DispatchByEventCode:
 	cp xwa, 0x8
 	jrl ugt, UIDialog_ReturnZeroJmp
 	add xwa, xwa
-	add xwa, Data_SoundEditorCharsLayout_0x24
+	add xwa, WndEvt_DispatchByEventCode_Data
 	ld wa, (xwa)
 	lda xix, (WndEvt_EventCodeDispatch:24)
-; Computed jump: target = WndEvt_EventCodeDispatch + Data_SoundEditorCharsLayout_0x24[i], Data_SoundEditorCharsLayout_0x24 = 16-bit offsets (9 words, read
+; Computed jump: target = WndEvt_EventCodeDispatch + WndEvt_DispatchByEventCode_Data[i], WndEvt_DispatchByEventCode_Data = 16-bit offsets (9 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = index:
 ;   0 -> WndEvt_EventCodeDispatch
 ;   1 -> WndEvt_DispatchByEventCode_Case1
@@ -874,7 +874,7 @@ WndScroll_HandleCharInput:
 	ld a, (xwa)
 	ld c, a
 	extz bc
-	lda xhl, (CharMap_FullPermutation_0x660:24)
+	lda xhl, (FileOpen_NormalizeName_Data:24)
 	ld	c, (xhl+bc)
 	bit 0, c
 	jr z, WndScroll_CharIsUppercase
@@ -1535,7 +1535,7 @@ UserBitmapCheck:
 	ret
 
 UserBitmapCheck_ReturnTablePtr:
-	lda xhl, (Data_SoundEditorCharsLayout_0x4E:24)
+	lda xhl, (UserBitmapCheck_ReturnTablePtr_Data:24)
 	ret
 
 UserBitmapCheck_ReturnSize:
@@ -3917,10 +3917,10 @@ PsGridBoxProc:
 	cp xbc, 0x7
 	jrl gt, PsGridBox_Default
 	add xbc, xbc
-	add xbc, Data_SoundEditorCharsLayout_0x376
+	add xbc, PsGridBoxProc_Data
 	ld bc, (xbc)
 	lda xix, (PsGridBox_Init:24)
-; Computed jump: target = PsGridBox_Init + Data_SoundEditorCharsLayout_0x376[i], Data_SoundEditorCharsLayout_0x376 = 16-bit offsets (8 words, read
+; Computed jump: target = PsGridBox_Init + PsGridBoxProc_Data[i], PsGridBoxProc_Data = 16-bit offsets (8 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0008a:
 ;   0x1e0008a -> 0xf9e7f5
 ;   0x1e0008b -> 0xf9e7fc
@@ -4411,7 +4411,7 @@ DrawDesignBox_CheckStyle80:
 ; Draw dispatch by part type
 Draw_DispatchByPartType:
 	add wa, wa
-	lda xix, (Str_No_0xB00:24)
+	lda xix, (Draw_DispatchByPartType_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (Draw_StyledBoxWithFrame:24)
 	jp	t, (xix+wa)
@@ -4905,7 +4905,7 @@ DrawDesignBox_PartGroupStyle:
 ; DrawPartGroup dispatch by type
 DrawPartGroup_DispatchByType:
 	add wa, wa
-	lda xix, (Str_No_0xAE0:24)
+	lda xix, (DrawPartGroup_DispatchByType_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (DrawPartGroup_TableJump_DefaultCase:24)
 	jp	t, (xix+wa)
@@ -7110,7 +7110,7 @@ ChangeWall_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	ld xwa, Str_No_0xB4C
+	ld xwa, ChangeWall_Impl_Data
 	add xwa, xbc
 	ld xwa, (xwa)
 	ld (0x03ef98:24), xwa
@@ -7230,7 +7230,7 @@ ChangePalette_Impl:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda xwa, (Str_No_0xB50:24)
+	lda xwa, (ChangePalette_Impl_Data:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	ld (0x03ef94:24), xwa
@@ -7453,7 +7453,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw bc
 	call Math_AbsInt16
 	add hl, hl
-	lda	xwa, (Str_No_0xB7E:24)
+	lda	xwa, (ClipBlit_Replace_ScanlineLoop_Data:24)
 	ld_rrw	de, xwa, hl
 	ldw bc, 0x001e
 	sub bc, de

@@ -16,13 +16,16 @@ Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d:	.asciz "%3d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_2:	.asciz "%2d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2:	.asciz "%3d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt4d:	.asciz "%4d"
+Scoop_EventLoop_36Entry_Branch3_Data:
 	.long 0x00000000
 	.long 0x00EF013F
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt1d_2:	.asciz "%1d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt2d_3:	.asciz "%2d"
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3:	.asciz "%3d"
+Scoop_EventLoop_36Entry_Branch3_Data_2:
 	.long 0x00000000
 	.long 0x00EF013F
+Scoop_EventLoop_12Entry_Alt_Data:
 	.long 0x00F02184
 	.long 0x00F020D6
 	.long 0x00F01A46

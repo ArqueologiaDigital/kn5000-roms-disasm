@@ -64,7 +64,8 @@
 ; [nakarest] "FTBMP01" (VwUserBitmapByName.file of element 1); "" (TtlScreen.title of element
 ; [nakarest] 2); "200 Preset" (Label.str of element 5); ....
 NAKA_PerfReg_Container_Root:
-	.incbin "includes/generated/naka_perf_style.bin", 0x0, 0x4ADA
+	.incbin "includes/generated/naka_perf_style.bin", 0x0, 0x1697
+CDlikeSwTtl_SetRecordAndNotify_Data:	.incbin "includes/generated/naka_perf_style.bin", 0x1697, 0x3443
 ; [nakarest] NAKA_UIObjectTable  +0x4ada..+0x5256 (0xe1344e, 1916 B)
 ; [nakarest] the table itself: Viewable slot 0xfd (table 0xe1344e, 478 entries, InitializeNaka),
 ; [nakarest] 478 entry pointers x 4 bytes.
@@ -198,12 +199,14 @@ NAKA_InitDataBlock_PtrTable_18:	.incbin "includes/generated/naka_perf_style.bin"
 ; [nakarest] naka_perf_style+0x70ac  +0x70ac..+0x71ac (0xe15a20, 256 B)
 ; [nakarest] purpose not established: layout of 256 B at 0xe15a20 not derived; readers below
 ; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
-; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NAKA_UIObjectTable_0x25D2`).
+; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NoteEvent_LoadSoundGenParams_Data`).
+NoteEvent_LoadSoundGenParams_Data:
 	.incbin "includes/generated/naka_perf_style.bin", 0x70AC, 0x100
 ; [nakarest] naka_perf_style+0x71ac  +0x71ac..+0x71ec (0xe15b20, 64 B)
 ; [nakarest] purpose not established: layout of 64 B at 0xe15b20 not derived; readers below
 ; [nakarest] Readers: source references NoteEvent_LoadSoundGenParams
-; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NAKA_UIObjectTable_0x26D2`).
+; [nakarest] (storage/flash_floppy_handlers.s: `ld xiy, NoteEvent_LoadSoundGenParams_Data_2`).
+NoteEvent_LoadSoundGenParams_Data_2:
 	.incbin "includes/generated/naka_perf_style.bin", 0x71AC, 0x40
 ; NAKA_UIObjectTable is at offset 0x4ada within the binary blob above.
 ; Referenced from flash_floppy_handlers.s (RegisterObjectTable call).

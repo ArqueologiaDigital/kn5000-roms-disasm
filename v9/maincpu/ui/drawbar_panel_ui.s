@@ -531,10 +531,10 @@ AcPmemOutLGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, AcPmemOutL_ForwardToBase
 	add xbc, xbc
-	add xbc, NakaInst_GM_0x5E
+	add xbc, AcPmemOutLGridBoxProc_Data
 	ld bc, (xbc)
 	lda xix, (AcPmemOutL_Init:24)
-; Computed jump: target = AcPmemOutL_Init + NakaInst_GM_0x5E[i], NakaInst_GM_0x5E = 16-bit offsets (7 words, read
+; Computed jump: target = AcPmemOutL_Init + AcPmemOutLGridBoxProc_Data[i], AcPmemOutLGridBoxProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcPmemOutLGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcPmemOutLGridBoxProc_Evt1C00017
@@ -1970,7 +1970,7 @@ TtMdCtlMsg_EventDispatch:
 	jr	z, TtMdCtlMsg_EventDispatch_Skip6
 	cp	bc, 0:i3
 	jrl	nz, TtMdCtlMsg_ReturnZero2
-	ld	xiy, NakaInst_ON_E80168_0x6C
+	ld	xiy, TtMdCtlMsg_EventDispatch_Data
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2006,7 +2006,7 @@ TtMdCtlMsg_EventDispatch:
 TtMdCtlMsg_EventDispatch_Skip5:
 	jrl	TtMdCtlMsg_EventDispatch_Join2
 TtMdCtlMsg_EventDispatch_Skip6:
-	ld	xiy, NakaInst_ON_E80168_0x6C
+	ld	xiy, TtMdCtlMsg_EventDispatch_Data
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2034,7 +2034,7 @@ TtMdCtlMsg_EventDispatch_Skip6:
 	ld	(xwa+6), xbc
 	jrl	TtMdCtlMsg_EventDispatch_Join2
 TtMdCtlMsg_EventDispatch_Skip7:
-	ld	xiy, NakaInst_ON_E80168_0x6C
+	ld	xiy, TtMdCtlMsg_EventDispatch_Data
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2091,7 +2091,7 @@ PmemOutRGridCheck_Evt1C00018:
 	jrl	z, TtMdCtlMsg_EventDispatch_Skip9
 	cp	bc, 0:i3
 	jrl	nz, TtMdCtlMsg_ReturnZero2
-	ld	xiy, NakaInst_ON_E80168_0x6C
+	ld	xiy, TtMdCtlMsg_EventDispatch_Data
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2132,7 +2132,7 @@ TtMdCtlMsg_EventDispatch_Skip:
 	ld	(xde), xbc
 	jrl	TtMdCtlMsg_EventDispatch_Join2
 TtMdCtlMsg_EventDispatch_Skip9:
-	ld	xiy, NakaInst_ON_E80168_0x6C
+	ld	xiy, TtMdCtlMsg_EventDispatch_Data
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -2162,7 +2162,7 @@ TtMdCtlMsg_EventDispatch_Skip9:
 	ld	(xwa+14), xbc
 	jr	TtMdCtlMsg_EventDispatch_Join2
 TtMdCtlMsg_EventDispatch_Skip10:
-	ld	xiy, NakaInst_ON_E80168_0x6C
+	ld	xiy, TtMdCtlMsg_EventDispatch_Data
 	lda	xix, (xsp+56)
 	ldw	bc, 11
 	ldirw
@@ -4926,10 +4926,10 @@ IvSdpartProc:
 	cp xwa, 0x9
 	jrl gt, IvSdpart_ForwardToBase
 	add xwa, xwa
-	add xwa, Str_PartName_Right1_0x10
+	add xwa, IvSdpartProc_Data
 	ld wa, (xwa)
 	lda xix, (IvSdpart_Init:24)
-; Computed jump: target = IvSdpart_Init + Str_PartName_Right1_0x10[i], Str_PartName_Right1_0x10 = 16-bit offsets (10 words, read
+; Computed jump: target = IvSdpart_Init + IvSdpartProc_Data[i], IvSdpartProc_Data = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> IvSdpartProc_Evt1C00017
 ;   0x1c00018 -> IvSdpartProc_Evt1C00017
@@ -4965,7 +4965,7 @@ IvSdpart_Init_ResetPart:
 IvSdpart_Init_LoadDescriptor:
 	ld wa, (0x03e99c:24)
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x108:24)
+	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
@@ -4997,7 +4997,7 @@ IvSdpart_ShowHide:
 	cpw (0x3e99e:24), 18
 	jr ge, IvSdpart_ShowHide_UpdateUI
 	call GetPartSelect
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	ld bc, hl
 	calr SdpartLookupPartId
 	ld de, hl
@@ -5030,7 +5030,7 @@ IvSdpart_OK:
 	cp wa, 0x8
 	jr z, IvSdpart_OK_ExitToMenu
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x108:24)
+	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
@@ -5040,7 +5040,7 @@ IvSdpart_OK:
 	ld xde, 0x8
 	call SendEvent
 	ldw (0x03e99c:24), 0x0008
-	ld xwa, (MixerPartTable_Start_0x128:24)
+	ld xwa, (IvSdpart_OK_Data:24)
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jrl IvSdpart_DispatchEvent
@@ -5075,7 +5075,7 @@ IvSdpart_PageSelect:
 	cp iz, 0xffff
 	jrl z, IvSdpart_ReturnHandled
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x108:24)
+	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
@@ -5083,7 +5083,7 @@ IvSdpart_PageSelect:
 	ld (0x03e99c:24), iz
 	ld wa, iz
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x108:24)
+	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
@@ -5122,7 +5122,7 @@ IvSdpartProc_Evt1C00017:
 	call SendEvent
 	ld wa, (0x03e99e:24)
 	sla wa, 1
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainPmanControl
@@ -5130,7 +5130,7 @@ IvSdpartProc_Evt1C00017:
 	call MainFuncCall
 	ld wa, (0x03e99c:24)
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x108:24)
+	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -5149,7 +5149,7 @@ IvSdpart_Refresh:
 	cpw (0x3e99e:24), 18
 	jrl ge, IvSdpart_ReturnHandled
 	call GetPartSelect
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	ld bc, hl
 	calr SdpartLookupPartId
 	ld de, hl
@@ -5168,7 +5168,7 @@ IvSdpart_Refresh:
 	call SendEvent
 	ld wa, (0x03e99c:24)
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x108:24)
+	lda xbc, (IvSdpart_Init_LoadDescriptor_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -5180,7 +5180,7 @@ IvSdpartProc_Evt1C0001C:
 	call InheritedProc
 	ld wa, (0x03e99e:24)
 	sla wa, 1
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xbc, xde
@@ -5206,7 +5206,7 @@ IvSdpartProc_Evt1C00020:
 	call InheritedProc
 	ld wa, (0x03e99e:24)
 	sla wa, 1
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	bc, (xbc+wa)
 	ld xwa, (xsp + 4)
 	cp bc, (xwa)
@@ -6685,12 +6685,12 @@ SdpartUpdatePartUI:
 	ld bc, (0x03e99e:24)
 	ld wa, bc
 	sla wa, 2
-	lda xde, (MixerPartTable_Start_0x8:24)
+	lda xde, (SdpartUpdatePartUI_Data:24)
 	ld	xwa, (xde+wa)
 	bit_erpw 0xe2, 0x0f
 	jr z, SdpartUpdatePartUI_Confirm
 	add bc, bc
-	lda xwa, (MixerPartTable_Start_0x12C:24)
+	lda xwa, (IvSdpart_ShowHide_Data:24)
 	ld	de, (xwa+bc)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -6706,7 +6706,7 @@ SdpartUpdatePartUI_Confirm:
 LswSound:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSound_ReturnZero
 	ld xix, xde
@@ -6756,7 +6756,7 @@ LswSound_GetPartId:
 
 LswSound_LookupPartOffset:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -6797,7 +6797,7 @@ LswSound_PopIzRet:
 LswVolume:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, AudioCtrlMuteZeroReturn
 	ld xix, xde
@@ -6865,7 +6865,7 @@ LswVolume_GetPartId:
 
 LswVolume_LookupPartOffset:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -6922,7 +6922,7 @@ AudioCtrl_PopIzRet3:
 LswMute:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, AudioCtrlMutePitchReturn
 	ld xix, xde
@@ -6990,7 +6990,7 @@ LswMute_GetPartId:
 
 LswMute_LookupPartOffset:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7043,7 +7043,7 @@ AudioCtrl_PopIzRet2:
 LswPan:
 	push xiz
 	ld xiz, xwa
-	lda xix, (MixerPartTable_Start_0x8:24)
+	lda xix, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_GET_INIT_DATA
 	jrl z, LswPan_ReturnCenter
 	cp xbc, EVT_CHECK_INIT_DATA
@@ -7123,7 +7123,7 @@ LswPan_ReturnThis:
 
 LswPan_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7171,7 +7171,7 @@ AudioCtrl_PopIzRet6:
 LswReverb:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, AudioCtrlVibratoZeroReturn
 	ld xix, xde
@@ -7230,7 +7230,7 @@ LswReverb_GetPartId:
 
 LswReverb_LookupPartOffset:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7287,7 +7287,7 @@ AudioCtrl_PopIzRet1:
 LswDSPEffect:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswDSPEffZeroReturn
 	ld xix, xde
@@ -7339,7 +7339,7 @@ LswDSPEff_ReturnThis:
 
 LswDSPEff_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7384,7 +7384,7 @@ LswDSPEffect_PopIzRet:
 LswDigitalEffect:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswDigitalEffZeroReturn
 	ld xix, xde
@@ -7437,7 +7437,7 @@ LswDigEff_CopyStr:
 
 LswDigEff_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7482,7 +7482,7 @@ LswDigitalEffect_PopIzRet:
 LswSustain:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSustainZeroReturn2
 	ld xix, xde
@@ -7535,7 +7535,7 @@ LswSust_CopyStr:
 
 LswSust_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7580,7 +7580,7 @@ LswSustain_PopIzRet2:
 LswSustainLength:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSustainLenZeroReturn
 	ld xix, xde
@@ -7634,7 +7634,7 @@ LswSustLen_ReturnThis:
 
 LswSustLen_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7679,7 +7679,7 @@ LswSustainLength_PopIzRet:
 LswKeyShift:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_GET_INIT_DATA
 	jrl z, LswKeyShift_ReturnCenter
 	cp xbc, EVT_CHECK_INIT_DATA
@@ -7744,7 +7744,7 @@ LswKeyShift_ReturnThis:
 
 LswKeyShift_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7797,7 +7797,7 @@ AudioCtrl_PopIzRet5:
 LswTuning:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_GET_INIT_DATA
 	jrl z, LswTuning_ReturnCenter
 	cp xbc, EVT_CHECK_INIT_DATA
@@ -7862,7 +7862,7 @@ LswTuning_ReturnThis:
 
 LswTuning_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -7915,7 +7915,7 @@ AudioCtrl_PopIzRet4:
 LswBendRange:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswBendRangeZeroReturn
 	ld xix, xde
@@ -7967,7 +7967,7 @@ LswBendRng_ReturnThis:
 
 LswBendRng_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8012,7 +8012,7 @@ LswBendRange_PopIzRet:
 LswGlidePedal:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswGlideZeroReturn
 	ld xix, xde
@@ -8065,7 +8065,7 @@ LswGlide_CopyStr:
 
 LswGlide_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8112,7 +8112,7 @@ LswGlide_PopIzRet:
 LswSustainPedal:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswSustainZeroReturn
 	ld xix, xde
@@ -8165,7 +8165,7 @@ LswSustPedal_CopyStr:
 
 LswSustPedal_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8212,7 +8212,7 @@ LswSustain_PopIzRet:
 LswKeyScaling:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswKeyScaleZeroReturn
 	ld xix, xde
@@ -8265,7 +8265,7 @@ LswKeyScale_CopyStr:
 
 LswKeyScale_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8312,7 +8312,7 @@ LswKeyScale_PopIzRet:
 LswAfterTouch:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswAfterTouchZeroReturn
 	ld xix, xde
@@ -8365,7 +8365,7 @@ LswAfterTouch_CopyStr:
 
 LswAfterTouch_GetPartId:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8412,7 +8412,7 @@ LswAfterTouch_PopIzRet:
 LswPartExp:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswPartExpZeroReturn
 	ld xix, xde
@@ -8465,7 +8465,7 @@ LswPartExp_StrCopyReturn:
 
 LswPartExp_PartIdLookup:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8512,7 +8512,7 @@ LswPartExp_PopIzRet:
 LswLocalControl:
 	push xiz
 	ld xiz, xwa
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswLocalControlZeroReturn
 	ld xix, xde
@@ -8565,7 +8565,7 @@ LswLocal_StrCopyReturn:
 
 LswLocal_PartIdLookup:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -8613,8 +8613,8 @@ LswMidiChannel:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 4), xwa
-	lda xde, (MixerPartTable_Start_0x12C:24)
-	lda xhl, (MixerPartTable_Start_0x8:24)
+	lda xde, (IvSdpart_ShowHide_Data:24)
+	lda xhl, (SdpartUpdatePartUI_Data:24)
 	cp xbc, EVT_LSW_DATA_REQ
 	jrl z, LswLocalZeroReturn
 	ld xix, xiz
@@ -8757,7 +8757,7 @@ IvMesageProc:
 	call InheritedProc
 	ld wa, (0x02478c:24)
 	muls wa, 0xe
-	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xbc, (IvMesageProc_Data:24)
 	ld	wa, (xbc+wa)
 	sla wa, 2
 	lda xbc, (IvMesageProc_PtrTable:24)
@@ -8767,7 +8767,7 @@ IvMesageProc:
 	call SendEvent
 	ld wa, (0x02478c:24)
 	muls wa, 0xe
-	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xbc, (IvMesageProc_Data:24)
 	cpw	(xbc+wa), 0x0005
 	jrl nz, IvMessageStrcpyReturn
 	ld xwa, 0xffffffff
@@ -8791,7 +8791,7 @@ IvMessage_Paint:
 	call InheritedProc
 	ld wa, (0x02478c:24)
 	muls wa, 0xe
-	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xbc, (IvMesageProc_Data:24)
 	cpw	(xbc+wa), 0x0005
 	call nz, (DrawWall:24)
 	ld xwa, xiz
@@ -8805,7 +8805,7 @@ IvMessage_SendEvent:
 IvMessage_SelectionChange:
 	ld (0x02478c:24), wa
 	muls wa, 0xe
-	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xbc, (IvMesageProc_Data:24)
 	ld	wa, (xbc+wa)
 	sla wa, 2
 	lda xbc, (IvMesageProc_PtrTable:24)
@@ -9060,7 +9060,7 @@ CheckMessage:
 	jrl nz, CheckMsg_ReturnZero
 	ld wa, (0x02478c:24)
 	muls wa, 0xe
-	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xbc, (IvMesageProc_Data:24)
 	ld	wa, (xbc+wa)
 	sla wa, 2
 	lda xbc, (IvMesageProc_PtrTable:24)
@@ -9082,7 +9082,7 @@ CheckMsg_IncrementCheck:
 	ld bc, wa
 	muls wa, 0xe
 	add wa, 0xe
-	lda xde, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x122:24)
+	lda xde, (CheckMsg_IncrementCheck_Data:24)
 	ld	xwa, (xde+wa)
 	or xwa, xwa
 	jr z, LanguageCheckReturn
@@ -9092,7 +9092,7 @@ CheckMsg_IncrementCheck:
 LanguageCheckReturn:
 	ld wa, (0x02478c:24)
 	muls wa, 0xe
-	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xbc, (IvMesageProc_Data:24)
 	ld	wa, (xbc+wa)
 	sla wa, 2
 	lda xbc, (IvMesageProc_PtrTable:24)
@@ -9137,7 +9137,7 @@ MsgText_LookupMessage:
 	cp wa, 0x1a
 	jr z, MsgText_CheckLanguage
 	muls wa, 0xe
-	lda xbc, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x122:24)
+	lda xbc, (CheckMsg_IncrementCheck_Data:24)
 	ld	xhl, (xbc+wa)
 	ret
 
@@ -9177,7 +9177,7 @@ MessageHeader:
 MsgHeader_BuildHeader:
 	ld bc, (0x02478c:24)
 	muls bc, 0xe
-	lda xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xwa, (IvMesageProc_Data:24)
 	lda	xwa, (xwa+bc)
 	cpw (xwa), 0x3
 	jrl nz, MsgHeader_SingleEntry
@@ -9208,7 +9208,7 @@ MsgHeader_BuildLoop:
 	ld xiz, xhl
 	ld bc, (0x02478c:24)
 	muls bc, 0xe
-	lda xwa, (NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118:24)
+	lda xwa, (IvMesageProc_Data:24)
 	lda	xwa, (xwa+bc)
 	pushw	(xwa+4)
 	ld bc, (xsp + 16)
@@ -9312,27 +9312,27 @@ IvAccordion_ShowHide:
 	jr nz, IvAccordion_ShowHide_UpdatePart
 	cpw (0x24782:24), 0
 	jr z, IvAccordion_ShowHide_NoBellows
-	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
+	ld xwa, IvAccordion_ShowHide_Data
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0001
 	ldw (0x024780:24), 0x0001
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	ld xwa, IvAccordion_ShowHide_Data_2
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr IvAccordion_ShowHide_Toggle
 
 IvAccordion_ShowHide_NoBellows:
-	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
+	ld xwa, IvAccordion_ShowHide_Data_2
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0000
 	ldw (0x024780:24), 0x0000
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	ld xwa, IvAccordion_ShowHide_Data
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 
@@ -9347,7 +9347,7 @@ IvAccordion_ShowHide_UpdatePart:
 	sla wa, 2
 	lda xbc, (0x03e9a0:24)
 	ld	xde, (xbc+wa)
-	ld xwa, WidgetName_InitPtrTable_0x15
+	ld xwa, IvAccordion_ShowHide_UpdatePart_Data
 	ld xbc, EVT_PARA_DRAW
 	jrl IvAccordion_DispatchEvent
 
@@ -9371,13 +9371,13 @@ IvAccordion_Scroll:
 	cpw (0x24780:24), 0
 	jr nz, IvAccordion_Scroll_SetOff
 	ldw (0x024780:24), 0x0001
-	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
+	ld xwa, IvAccordion_ShowHide_Data
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
-	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
+	ld xwa, IvAccordion_ShowHide_Data_2
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9396,13 +9396,13 @@ IvAccordion_Scroll:
 
 IvAccordion_Scroll_SetOff:
 	ldw (0x024780:24), 0x0000
-	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
+	ld xwa, IvAccordion_ShowHide_Data_2
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
-	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
+	ld xwa, IvAccordion_ShowHide_Data
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call SendEvent
@@ -9462,14 +9462,14 @@ IvAccordion_Update:
 	jr nc, IvAccordion_Update_BellowsOn
 	cpw (0x2477c:24), 0
 	jr z, IvAccordion_Update_SendPartParam
-	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0xF)
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	; object handle 0xeb0017 = class 0x0eb, instance 23 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data_2)
+	ld xwa, IvAccordion_ShowHide_Data_2
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0000
 	ldw (0x024780:24), 0x0000
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	ld xwa, IvAccordion_ShowHide_Data
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	jr IvAccordion_Update_CommitToggle
@@ -9477,14 +9477,14 @@ IvAccordion_Update:
 IvAccordion_Update_BellowsOn:
 	cpw (0x2477c:24), 1
 	jr z, IvAccordion_Update_SendPartParam
-	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_PtrBlock_A_0x1)
-	ld xwa, WidgetName_PtrBlock_A_0x1
+	; object handle 0xeb0009 = class 0x0eb, instance 9 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_Data)
+	ld xwa, IvAccordion_ShowHide_Data
 	ld xbc, EVT_HIDE
 	ld xde, 5:i3
 	call SendEvent
 	ldw (0x02477c:24), 0x0001
 	ldw (0x024780:24), 0x0001
-	ld xwa, WidgetName_PtrBlock_A_0xF
+	ld xwa, IvAccordion_ShowHide_Data_2
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 
@@ -9544,8 +9544,8 @@ IvAccordion_Refresh:
 	sla hl, 2
 	lda xwa, (0x03e9a0:24)
 	ld	xde, (xwa+hl)
-	; object handle 0xeb0007 = class 0x0eb, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was WidgetName_InitPtrTable_0x15)
-	ld xwa, WidgetName_InitPtrTable_0x15
+	; object handle 0xeb0007 = class 0x0eb, instance 7 (SendEvent indexes its class table by bits 16-27; not an address -- was IvAccordion_ShowHide_UpdatePart_Data)
+	ld xwa, IvAccordion_ShowHide_UpdatePart_Data
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	ld wa, (0x02477e:24)
@@ -9853,7 +9853,7 @@ IvSdtecd1Proc:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	sla hl, 2
-	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x1C:24)
+	lda xwa, (IvSdtecd1Proc_Data:24)
 	ld	xwa, (xwa+hl)
 	ld xbc, EVT_SET_DIAL_FOCUS
 	ld xde, 1:i3
@@ -9902,7 +9902,7 @@ Sdtecd1_ScrollDown_Lookup:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	ld bc, hl
-	ld xwa, NakaInst_RIGHT_1_E9D9B0_0x54
+	ld xwa, Sdtecd1_ScrollDown_Lookup_Data
 	calr SdpartLookupPartId
 	ld wa, hl
 	inc 7, wa
@@ -9910,7 +9910,7 @@ Sdtecd1_ScrollDown_Lookup:
 	jrl gt, IvSdtecd1_ReturnDefault
 	inc 7, hl
 	add hl, hl
-	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
+	lda xwa, (Sdtecd1_ScrollDown_Lookup_Data:24)
 	ld	bc, (xwa+hl)
 	ld xwa, 0x4202
 	ld de, 3:i3
@@ -9948,14 +9948,14 @@ Sdtecd1_ScrollUp_Lookup:
 	ld xwa, 0x4202
 	call SndParam_LookupReadOnly
 	ld bc, hl
-	ld xwa, NakaInst_RIGHT_1_E9D9B0_0x54
+	ld xwa, Sdtecd1_ScrollDown_Lookup_Data
 	calr SdpartLookupPartId
 	ld wa, hl
 	sub wa, 0x7
 	jr lt, IvSdtecd1_ReturnDefault
 	dec 7, hl
 	add hl, hl
-	lda xwa, (NakaInst_RIGHT_1_E9D9B0_0x54:24)
+	lda xwa, (Sdtecd1_ScrollDown_Lookup_Data:24)
 	ld	bc, (xwa+hl)
 	ld xwa, 0x4202
 	ld de, 3:i3
@@ -9973,7 +9973,7 @@ Sdtecd1_Match:
 	jr nz, IvSdtecd1_ReturnDefault
 	ld wa, (xiz + 4)
 	sla wa, 2
-	lda xbc, (NakaInst_RIGHT_1_E9D9B0_0x1C:24)
+	lda xbc, (IvSdtecd1Proc_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_DIAL_FOCUS
 	ld xde, 1:i3
@@ -10289,7 +10289,7 @@ LswMasterTuning:
 	cp xde, EVT_GET_LSW_STRING
 	jrl nz, StringOp_ReturnZero
 	ld iz, 1:i3
-	lda xde, (NakaInst_RIGHT_1_E9DB0C_0x14:24)
+	lda xde, (LswMasterTuning_Data:24)
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 4)
 
@@ -10430,7 +10430,7 @@ IvSdscltyp2Proc:
 	call SendEvent
 	ld wa, (0x02478e:24)
 	sla wa, 2
-	lda xbc, (NakaInst_RIGHT_1_E9DB0C_0x70:24)
+	lda xbc, (IvSdscltyp2Proc_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
@@ -10464,7 +10464,7 @@ Sdscltyp2_ScrollDown:
 	call SendEvent
 	ld wa, (0x02478e:24)
 	sla wa, 2
-	lda xbc, (NakaInst_RIGHT_1_E9DB0C_0x70:24)
+	lda xbc, (IvSdscltyp2Proc_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
@@ -10499,7 +10499,7 @@ Sdscltyp2_ScrollUp:
 	call SendEvent
 	ld wa, (0x02478e:24)
 	sla wa, 2
-	lda xbc, (NakaInst_RIGHT_1_E9DB0C_0x70:24)
+	lda xbc, (IvSdscltyp2Proc_Data:24)
 	ld	xwa, (xbc+wa)
 	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
@@ -10566,7 +10566,7 @@ LswScalingType:
 	cp xbc, EVT_GET_LSW_STRING
 	jr nz, LswScaleType_ReturnZero
 	ld bc, (xiz + 4)
-	ld xwa, NakaInst_RIGHT_1_E9DB0C_0xAA
+	ld xwa, LswScalingType_Data
 	calr SdpartLookupPartId
 	ld xbc, (xiz + 8)
 	cp hl, 0xffff
@@ -10807,7 +10807,7 @@ LswScaleKeyX_LoopBody:
 	extz xwa
 	ld xbc, xwa
 	sll xbc, 2
-	ld xde, NakaInst_RIGHT_1_E9DB0C_0x70
+	ld xde, IvSdscltyp2Proc_Data
 	add xde, xbc
 	cp (xde), xhl
 	jr nz, LswScaleKeyX_LoopNext
@@ -10822,7 +10822,7 @@ LswScaleKeyX_LoopCheck:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, NakaInst_RIGHT_1_E9DB0C_0x70
+	ld xbc, IvSdscltyp2Proc_Data
 	add xbc, xwa
 	ld xwa, (xbc)
 	cp xwa, 0xffffffff
@@ -10879,8 +10879,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	; object handle 0xf00001 = class 0x0f0, instance 1 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x160)
-	ld xwa, StringData_APCModeNames_0x160
+	; object handle 0xf00001 = class 0x0f0, instance 1 (SendEvent indexes its class table by bits 16-27; not an address -- was Softver_ShowHide_Data)
+	ld xwa, Softver_ShowHide_Data
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	call Boot_ParseTableDataTimestamp
@@ -10892,8 +10892,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	; object handle 0xf00002 = class 0x0f0, instance 2 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x161)
-	ld xwa, StringData_APCModeNames_0x161
+	; object handle 0xf00002 = class 0x0f0, instance 2 (SendEvent indexes its class table by bits 16-27; not an address -- was Softver_ShowHide_Data_2)
+	ld xwa, Softver_ShowHide_Data_2
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	call Boot_GetSystemPointer
@@ -10905,8 +10905,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	; object handle 0xf00003 = class 0x0f0, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x162)
-	ld xwa, StringData_APCModeNames_0x162
+	; object handle 0xf00003 = class 0x0f0, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Softver_ShowHide_Data_3)
+	ld xwa, Softver_ShowHide_Data_3
 	ld xbc, EVT_PARA_DRAW
 	call SendEvent
 	call Boot_ParseSubCPUTimestamp
@@ -10918,8 +10918,8 @@ Softver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	; object handle 0xf00004 = class 0x0f0, instance 4 (SendEvent indexes its class table by bits 16-27; not an address -- was StringData_APCModeNames_0x163)
-	ld xwa, StringData_APCModeNames_0x163
+	; object handle 0xf00004 = class 0x0f0, instance 4 (SendEvent indexes its class table by bits 16-27; not an address -- was Softver_ShowHide_Data_4)
+	ld xwa, Softver_ShowHide_Data_4
 	ld xbc, EVT_PARA_DRAW
 	jr Softver_SendEvent
 
@@ -10978,8 +10978,8 @@ MPver_ShowHide:
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
 	lda xde, (xsp + 4)
-	; object handle 0xef000a = class 0x0ef, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was CharEncoding_PrintableHi_0xA)
-	ld xwa, CharEncoding_PrintableHi_0xA
+	; object handle 0xef000a = class 0x0ef, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was MPver_ShowHide_Data)
+	ld xwa, MPver_ShowHide_Data
 	ld xbc, EVT_PARA_DRAW
 	jr MPver_SendEvent
 
@@ -11036,10 +11036,10 @@ AcWelcomScreenProc:
 	ld wa, 1:i3
 	call ChangePalette
 	call Get_Region_Code
-	ld xwa, Bitmap_DigitD_0x8DA
+	ld xwa, AcWelcomScreenProc_Data_2
 	cp l, 2:i3
 	jr nz, AcWelcomScreen_Init_StoreData
-	ld xwa, Bitmap_DigitD_0x22
+	ld xwa, AcWelcomScreenProc_Data
 
 AcWelcomScreen_Init_StoreData:
 	ld (0x024786:24), xwa
@@ -11095,7 +11095,7 @@ AcWelcomScreen_Activate:
 	cp hl, 0:i3
 	jr z, AcWelcomScreen_Activate_Setup
 	call LcdOff
-	ld xwa, Bitmap_DigitD_0x11CE
+	ld xwa, AcWelcomScreen_Activate_Data
 	ld bc, 0:i3
 	call DrawBox
 	ld wa, 1:i3
@@ -11149,7 +11149,7 @@ AcWelcomScreen_Select:
 	cp hl, 0xc
 	jrl gt, AcWelcomScreen_Select_NextStep
 	add hl, hl
-	lda xix, (Bitmap_DigitD_0x11D6:24)
+	lda xix, (AcWelcomScreen_Select_Data:24)
 	ld	hl, (xix+hl)
 	lda xix, (AcWelcomScreen_RenderBytecode:24)
 	jp	t, (xix+hl)
@@ -11218,7 +11218,7 @@ AcWelcomScreen_RenderBytecode_Skip4:
 	pushw	17
 	pushw	(xde)	; F7F709 (pushw (xde))
 	pushw	247
-	ld	xbc, NakaInst_TOTAL_0x34
+	ld	xbc, AcWelcomScreen_RenderBytecode_Data
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
 	lda	xix, (xsp+12)
@@ -11228,7 +11228,7 @@ AcWelcomScreen_RenderBytecode_Skip4:
 	pushw	17
 	pushw	(xde)
 	pushw	247
-	ld	xbc, Bitmap_DigitL_0x44
+	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
 	ldw	de, 16
 	jrl	AcWelcomScreen_RenderBytecode_Join
 	lda	xix, (xsp+12)
@@ -11277,7 +11277,7 @@ AcWelcomScreen_RenderBytecode_Skip4:
 	pushw	17
 	pushw	255
 	pushw	247
-	ld	xbc, Bitmap_DigitL_0x22
+	ld	xbc, AcWelcomScreen_RenderBytecode_Data_2
 	ldw	de, 16
 AcWelcomScreen_RenderBytecode_Join:
 	call	DrawBitmapSP2
@@ -11335,7 +11335,7 @@ AcWelcomScreen_RenderBytecode_Skip2:
 	add	xde, (0x024786:24)
 	pushw	(xde+10)
 	pushw	247
-	ld	xbc, NakaInst_TOTAL_0x34
+	ld	xbc, AcWelcomScreen_RenderBytecode_Data
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
@@ -11350,7 +11350,7 @@ AcWelcomScreen_RenderBytecode_Skip2:
 	add	xde, (0x024786:24)
 	pushw	(xde+10)
 	pushw	247
-	ld	xbc, Bitmap_DigitL_0x44
+	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
 	ldw	de, 16
 	call	DrawBitmapSP2
 	lda	xwa, (xsp+12)
@@ -11380,7 +11380,7 @@ AcWelcomScreen_RenderBytecode_Skip2:
 	add	xde, (0x024786:24)
 	pushw	(xde+10)
 	pushw	247
-	ld	xbc, Bitmap_DigitL_0x44
+	ld	xbc, AcWelcomScreen_RenderBytecode_Data_3
 	ldw	de, 16
 	call	DrawBitmapSP2
 	ld	wa, (0x024784:24)
@@ -11475,7 +11475,7 @@ AcWelcomScreen_SubCpuError:
 	ld xbc, xiz
 	ld xde, (xsp + 16)
 	call InheritedProc
-	ld xwa, CharEncoding_PrintableHi_0x4
+	ld xwa, AcWelcomScreen_SubCpuError_Data
 	ld xbc, EVT_SHOW
 	ld xde, 3:i3
 	jr AcWelcomScreen_DispatchEvent
@@ -11485,7 +11485,7 @@ AcWelcomScreen_SubCpuLoaded:
 	ld xbc, xiz
 	ld xde, (xsp + 16)
 	call InheritedProc
-	ld xwa, CharEncoding_PrintableHi_0x7
+	ld xwa, AcWelcomScreen_SubCpuLoaded_Data
 	ld xbc, EVT_SHOW
 	ld xde, 3:i3
 
@@ -11554,10 +11554,10 @@ PsMixerControlProc:
 	cp xbc, 0x9
 	jrl gt, PsMixer_ControlReturn
 	add xbc, xbc
-	add xbc, TrackName4_Tr1_0x2E
+	add xbc, PsMixerControlProc_Data
 	ld bc, (xbc)
 	lda xix, (PsMixer_ControlHandler:24)
-; Computed jump: target = PsMixer_ControlHandler + TrackName4_Tr1_0x2E[i], TrackName4_Tr1_0x2E = 16-bit offsets (10 words, read
+; Computed jump: target = PsMixer_ControlHandler + PsMixerControlProc_Data[i], PsMixerControlProc_Data = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> PsMixer_ControlCase8
 ;   0x1c00018 -> PsMixer_ControlCase8
@@ -11731,7 +11731,7 @@ PsMixer_ControlHelper:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-; PsMixer control-type procedure table Bitmap_DigitD_0x11F0 (v10 0xE9F11C, 11 x 32-bit, read from
+; PsMixer control-type procedure table PsMixer_ControlHelper_Data (v10 0xE9F11C, 11 x 32-bit, read from
 ;   the ROM by scripts/renaming/uiproc_psmixer_ctltypes.py), indexed by word +2 of the control's record:
 ;    0 -> PsMixer_CtlTypeProc0
 ;    1 -> PsMixer_CtlTypeProc1
@@ -11744,14 +11744,14 @@ PsMixer_ControlHelper:
 ;    8 -> PsMixer_CtlTypeProc8
 ;    9 -> PsMixer_CtlTypeProc9
 ;   10 -> PsMixer_CtlTypeProc10
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_DRAW
 	ld xhl, (xhl)
 	call (xhl)
 	ld de, (xsp + 8)
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	extz xde
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
@@ -11791,7 +11791,7 @@ PsMixer_GridLoop:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -11810,7 +11810,7 @@ PsMixer_GridLoop:
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -11870,7 +11870,7 @@ PsMixer_ControlCase5:
 	calr PsMixer_ReadWordArrayEntry
 	extz xhl
 	add xhl, xhl
-	ld xbc, MixerPartTable_Start_0x12C
+	ld xbc, IvSdpart_ShowHide_Data
 	add xbc, xhl
 	ld de, (xbc)
 	exts xde
@@ -11908,7 +11908,7 @@ PsMixer_ControlCase5:
 	calr PsMixer_ReadWordArrayEntry
 	extz xhl
 	add xhl, xhl
-	ld xbc, MixerPartTable_Start_0x12C
+	ld xbc, IvSdpart_ShowHide_Data
 	add xbc, xhl
 	ld de, (xbc)
 	exts xde
@@ -11971,7 +11971,7 @@ AudioCtrl_DispatchHandler:
 	add xde, 0x10000
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_SELE_DRAW
@@ -11985,7 +11985,7 @@ AudioCtrl_DispatchHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_SELE_DRAW
@@ -12054,7 +12054,7 @@ AudioCtrl_PageAdvance:
 AudioCtrl_SetupPartDisplay:
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainPmanControl
@@ -12062,7 +12062,7 @@ AudioCtrl_SetupPartDisplay:
 	call MainFuncCall
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -12245,7 +12245,7 @@ PsMixer_ControlCase8:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12281,7 +12281,7 @@ PsMixer_MidiScanOuterLoop:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x80:24)
+	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 14), xwa
 	ld iz, (0x024794:24)
@@ -12322,7 +12322,7 @@ PsMixer_ArrayReadHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12337,7 +12337,7 @@ AudioCtrl_MixerDispatch:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12355,7 +12355,7 @@ AudioCtrl_MixerDispatch:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12380,7 +12380,7 @@ PsMixer_UnmatchedPartScan:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x80:24)
+	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 14), xwa
 	ld iz, (0x024794:24)
@@ -12415,7 +12415,7 @@ AudioCtrl_ArrayReadHandler:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12429,7 +12429,7 @@ AudioCtrl_DispatchCallback:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12447,7 +12447,7 @@ AudioCtrl_DispatchCallback:
 	ld xwa, (xsp + 4)
 	ld wa, (xwa + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, EVT_PARA_DRAW
@@ -12475,12 +12475,12 @@ PsMixer_ControlCase9:
 	calr PsMixer_ReadWordArrayEntry
 	extz xhl
 	add xhl, xhl
-	ld xbc, MixerPartTable_Start_0x12C
+	ld xbc, IvSdpart_ShowHide_Data
 	add xbc, xhl
 	cpw (xbc), 0x10
 	jrl ge, AudioCtrl_ReturnZero
 	call GetPartSelect
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	ld bc, hl
 	calr SdpartLookupPartId
 	ldfr_werp HL, 0xfa
@@ -12546,7 +12546,7 @@ PsMixer_VolumeSelect_Continue:
 	ld (0x024794:24), wa
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	de, (xbc+wa)
 	exts xde
 	ld xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -12591,7 +12591,7 @@ PsMixerControlProc_Evt1C00020:
 	ldfr_werp HL, 0xfa
 	ldto_werp WA, 0xfa
 	add wa, wa
-	lda xbc, (MixerPartTable_Start_0x12C:24)
+	lda xbc, (IvSdpart_ShowHide_Data:24)
 	ld	bc, (xbc+wa)
 	ld xwa, (xsp + 82)
 	cp bc, (xwa)
@@ -12628,14 +12628,14 @@ PsMixer_EventForwardHelper:
 	ld xde, (xsp + 4)
 	ld wa, (xde)
 	sla wa, 2
-	lda xbc, (MixerPartTable_Start_0x80:24)
+	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 14), xwa
 	cp xwa, NAKA_APFUNC_LswSound
 	jr nz, PsMixer_EventFwd_Next
 	ld wa, (xde + 2)
 	sla wa, 2
-	lda xbc, (Bitmap_DigitD_0x11F0:24)
+	lda xbc, (PsMixer_ControlHelper_Data:24)
 	lda	xhl, (xbc+wa)
 	ld xwa, (xsp + 90)
 	ld xbc, (xsp + 86)
@@ -12694,9 +12694,9 @@ AcPartMixerProc:
 	jr PartMixer_Epilogue
 
 PartMixer_Init:
-	ld xwa, TrackName4_Tr1_0x42
+	ld xwa, PartMixer_Init_Data
 	calr Util_StorePartArrayBase
-	ld xwa, MidiParamStr2_Sound_0x8
+	ld xwa, PartMixer_Init_Data_2
 	calr Util_StoreGridArrayBase
 	ld xwa, xiz
 	ld xbc, (xsp + 8)
@@ -12715,7 +12715,7 @@ AcTrackMixerProc:
 	ld (xsp + 42), xde
 	ld (xsp + 46), xbc
 	ld (xsp + 50), xwa
-	ld xiy, MidiParam_MixerCfgData_0x2
+	ld xiy, AcTrackMixerProc_Data
 	lda xix, (xsp + 2)
 	ldw bc, 0x14
 	ldirw
@@ -12735,7 +12735,7 @@ AcTrackMixerProc:
 	jrl TrackMixer_Epilogue
 
 TrackMixer_Init:
-	ld xwa, MidiParamStr2_Sound_0x48
+	ld xwa, TrackMixer_Init_Data
 	calr Util_StorePartArrayBase
 	ld xwa, 0x3ebe8
 	calr Util_StoreGridArrayBase
@@ -13245,7 +13245,7 @@ PsMixer_CtlTypeProc5_Skip3:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+4)
@@ -13395,7 +13395,7 @@ PsMixer_CtlTypeProc6_Skip3:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+4)
@@ -13520,7 +13520,7 @@ PsMixer_CtlTypeProc3_Skip2:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+6), xwa
 	lda xwa, (xsp+62)
@@ -13611,7 +13611,7 @@ PsMixer_CtlTypeProc3_Join2:
 	ld	xwa, (xsp+6)
 	ld	xbc, EVT_CHECK_PART
 	call	ApFuncCall
-	lda	xbc, (MidiParam_MixerCfgData_0x2A:24)
+	lda	xbc, (PsMixer_CtlTypeProc3_Data:24)
 	or	xhl, xhl
 	jr	z, PsMixer_CtlTypeProc3_Skip5
 	lda	xhl, (xsp+58)
@@ -13650,7 +13650,7 @@ PsMixer_CtlTypeProc3_Skip6:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
@@ -13718,7 +13718,7 @@ PsMixer_CtlTypeProc3_Skip8:
 	ld	xwa, (xsp+6)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
@@ -13840,7 +13840,7 @@ PsMixer_CtlTypeProc7_Skip2:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
@@ -13928,7 +13928,7 @@ PsMixer_CtlTypeProc7_Skip5:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -13993,7 +13993,7 @@ PsMixer_CtlTypeProc7_Skip7:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -14111,7 +14111,7 @@ PsMixer_CtlTypeProc4_Skip2:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+6), xwa
 	lda xwa, (xsp+66)
@@ -14222,7 +14222,7 @@ PsMixer_CtlTypeProc4_Skip7:
 	ld	(xsp+4), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
 	ld	(xsp+6), xwa
 	ld	de, (xsp+4)
@@ -14344,7 +14344,7 @@ PsMixer_CtlTypeProc9_Skip2:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	lda xwa, (xsp+64)
@@ -14460,7 +14460,7 @@ PsMixer_CtlTypeProc9_Skip6:
 	ld	(xsp+6), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+8), xwa
 	ld de, (xsp+6)
@@ -14554,7 +14554,7 @@ PsMixer_CtlTypeProc2:
 	ld	wa, (xsp+10)
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
-	ld	xwa, (MixerPartTable_Start_0x104:24)
+	ld	xwa, (PsMixer_CtlTypeProc2_Data:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14620,7 +14620,7 @@ PsMixer_CtlTypeProc2_Entry:
 	pushw	0
 	pushw	0
 	pushw	1
-	ld	xde, MidiParam_MixerCfgData_0x6A
+	ld	xde, PsMixer_CtlTypeProc2_Entry_Data
 	call	DrawStringReverse
 PsMixer_CtlTypeProc2_Loop:
 	ld	xhl, 0:i3
@@ -14631,7 +14631,7 @@ PsMixer_CtlTypeProc2_Skip2:
 	ld	wa, bc
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
-	ld	xwa, (MixerPartTable_Start_0x104:24)
+	ld	xwa, (PsMixer_CtlTypeProc2_Data:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14689,7 +14689,7 @@ PsMixer_CtlTypeProc2_Join:
 	calr	Util_SignExtendAndDouble
 	ld	wa, (xhl)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+12), xwa
 	ld de, (xsp+6)
@@ -14751,7 +14751,7 @@ PsMixer_CtlTypeProc2_Skip5:
 	ld	wa, bc
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+6), hl
-	ld	xwa, (MixerPartTable_Start_0x104:24)
+	ld	xwa, (PsMixer_CtlTypeProc2_Data:24)
 	ld	(xsp+12), xwa
 	ld	de, (xsp+6)
 	exts	xde
@@ -14939,7 +14939,7 @@ PsMixer_CtlTypeProc1_Skip2:
 	calr	PsMixer_ReadWordArrayEntry
 	ld	(xsp+8), hl
 	add	hl, hl
-	lda	xwa, (MixerPartTable_Start_0x12C:24)
+	lda	xwa, (IvSdpart_ShowHide_Data:24)
 	ld_rrw de, xwa, hl
 	exts xde
 	ld	xwa, NAKA_MAINFUNC_MainGetSoundName
@@ -14959,7 +14959,7 @@ PsMixer_CtlTypeProc1_Loop2:
 	ld	xiz, xhl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl	xwa, xbc, wa	; ld xwa, (xbc+wa)
 	ld	(xsp+14), xwa
 	cp	xwa, NAKA_APFUNC_LswSound
@@ -14975,7 +14975,7 @@ PsMixer_CtlTypeProc1_Loop3:
 	ld	(xsp+8), hl
 	ld	xwa, (xsp+4)
 	ld	bc, (xwa)
-	ld	xwa, MixerPartTable_Start_0x12C
+	ld	xwa, IvSdpart_ShowHide_Data
 	calr	SdpartLookupPartId
 	cp	hl, (xsp+8)
 	jrl	nz, PsMixer_CtlTypeProc1_Skip5
@@ -15050,7 +15050,7 @@ PsMixer_CtlTypeProc1_Skip7:
 	ld	(xsp+8), hl
 	ld	wa, (xiz)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+14), xwa
 	ld de, (xsp+8)
@@ -15210,7 +15210,7 @@ PsMixer_CtlTypeProc8_Skip:
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa)
 	sla	wa, 2
-	lda	xbc, (MixerPartTable_Start_0x80:24)
+	lda	xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld_rrl xwa, xbc, wa
 	ld (xsp+10), xwa
 	ld de, (xsp+8)
@@ -15530,23 +15530,23 @@ IvDrawbar_DrawbarUpdate:
 	jrl nz, IvDrawbar_ReturnHandled
 	cpw (0x247c2:24), 0
 	jr z, IvDrawbar_DrawbarUpdate_UpperOff
-	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
-	ld xwa, Presentation_RootEntry_0x3
+	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar_DrawbarUpdate_Data)
+	ld xwa, IvDrawbar_DrawbarUpdate_Data
 	ld xbc, EVT_SET_PARAM
 	ld xde, 1:i3
 	call SendEvent
-	ld xwa, Presentation_RootEntry_0x4
+	ld xwa, IvDrawbar_DrawbarUpdate_Data_2
 	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jrl IvDrawbar_DispatchEvent
 
 IvDrawbar_DrawbarUpdate_UpperOff:
-	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_RootEntry_0x3)
-	ld xwa, Presentation_RootEntry_0x3
+	; object handle 0xea0003 = class 0x0ea, instance 3 (SendEvent indexes its class table by bits 16-27; not an address -- was IvDrawbar_DrawbarUpdate_Data)
+	ld xwa, IvDrawbar_DrawbarUpdate_Data
 	ld xbc, EVT_SET_PARAM
 	ld xde, 0:i3
 	call SendEvent
-	ld xwa, Presentation_RootEntry_0x5
+	ld xwa, IvDrawbar_DrawbarUpdate_UpperOff_Data
 	ld xbc, EVT_DRAW
 	ld xde, 0:i3
 	jrl IvDrawbar_DispatchEvent
@@ -15554,7 +15554,7 @@ IvDrawbar_DrawbarUpdate_UpperOff:
 IvDrawbar_DrawbarUpdate_Lower:
 	ld de, (0x0247c4:24)
 	exts xde
-	ld xwa, Presentation_RootEntry_0x2
+	ld xwa, IvDrawbar_DrawbarUpdate_Lower_Data
 	ld xbc, EVT_SET_PARAM
 	jrl IvDrawbar_DispatchEvent
 
@@ -16396,7 +16396,7 @@ LswPercDecay:
 
 LswPercDecay_PartIdLookup:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16513,7 +16513,7 @@ LswPercLevel:
 
 LswPercLevel_PartIdLookup:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16600,7 +16600,7 @@ LswDrawAttack:
 
 LswDrawAttack_PartIdLookup:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16687,7 +16687,7 @@ LswDrawRelease:
 
 LswDrawRelease_PartIdLookup:
 	add xde, xde
-	ld xwa, MixerPartTable_Start_0x12C
+	ld xwa, IvSdpart_ShowHide_Data
 	add xwa, xde
 	ld hl, (xwa)
 	exts xhl
@@ -16816,7 +16816,7 @@ IvDrawbar1_LoadVals_Loop:
 	ld bc, iz
 	extz xbc
 	add xbc, xbc
-	ld xde, MidiParam_MixerCfgData_0x78
+	ld xde, IvDrawbar1_LoadVals_Data
 	add xde, xbc
 	ld bc, (xde)
 	call SndParam_LookupViaEncode
@@ -16934,7 +16934,7 @@ IvDrawbar1_OK_ComputeNewValue:
 	ld wa, (0x02479a:24)
 	ldto_werp BC, 0xfa
 	add bc, bc
-	lda xde, (MidiParam_MixerCfgData_0x78:24)
+	lda xde, (IvDrawbar1_LoadVals_Data:24)
 	ld	bc, (xde+bc)
 	pushw 0x4
 	ld de, iz
@@ -16975,7 +16975,7 @@ IvDrawbar1_OK_ScrollDown:
 	cp xhl, NAKA_MODE_MD_SOUNDEDIT
 	jr z, IvDrawbar1_OK_ScrollDown_DualMode
 	ld wa, (0x02479a:24)
-	lda xde, (MidiParam_MixerCfgData_0x78:24)
+	lda xde, (IvDrawbar1_LoadVals_Data:24)
 	ld	bc, (xde+bc)
 	pushw 0x4
 	ld de, iz
@@ -17436,8 +17436,8 @@ DrawbarNorm_UpdateCase4:
 	sla wa, 2
 	lda xbc, (0x03e9a0:24)
 	ld	xde, (xbc+wa)
-	; object handle 0xea001f = class 0x0ea, instance 31 (SendEvent indexes its class table by bits 16-27; not an address -- was Presentation_TagStrTable_0x17)
-	ld xwa, Presentation_TagStrTable_0x17
+	; object handle 0xea001f = class 0x0ea, instance 31 (SendEvent indexes its class table by bits 16-27; not an address -- was DrawbarNorm_UpdateCase4_Data)
+	ld xwa, DrawbarNorm_UpdateCase4_Data
 	ld xbc, EVT_PARA_DRAW
 	jr IvDrawbarNorm_SendEvent
 
@@ -17550,7 +17550,7 @@ DrawbarBitmapHelper:
 	lda xwa, (xsp)
 	ld hl, de
 	add hl, hl
-	lda xix, (KeyShiftStr_Zero_0x28:24)
+	lda xix, (DrawbarBitmapHelper_Data:24)
 	ld	hl, (xix+hl)
 	ld (xwa), hl
 	ldw (xwa + 2), 0x72
@@ -17558,7 +17558,7 @@ DrawbarBitmapHelper:
 	lda xhl, (0x03ec28:24)
 	ld	xde, (xhl+de)
 	sla bc, 2
-	lda xhl, (KeyShiftStr_Zero_0x3A:24)
+	lda xhl, (DrawbarBitmapHelper_Data_2:24)
 	ld	xbc, (xhl+bc)
 	add xbc, xbc
 	add xde, xbc
@@ -17612,7 +17612,7 @@ MemDraw_ParamLoopBody:
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
-	ld xbc, MidiParam_MixerCfgData_0x8A
+	ld xbc, MemDraw_ParamLoopBody_Data
 	add xbc, xwa
 	ld wa, (xbc)
 	extz xwa
@@ -17723,7 +17723,7 @@ DemoMenu_BuildItemWorkspace:
 	ld de, (xsp + 6)
 	extz xde
 	add xde, xde
-	ld xbc, MidiParam_MixerCfgData_0x8A
+	ld xbc, MemDraw_ParamLoopBody_Data
 	add xbc, xde
 	ld hl, (xbc)
 	extz xhl
@@ -17747,7 +17747,7 @@ DemoMenu_WorkspaceFunc:
 	cp wa, 5:i3
 	jr ugt, DemoMenu_BuildItemWorkspace_Post
 	add wa, wa
-	lda xix, (KeyShiftStr_Zero_0x5E:24)
+	lda xix, (DemoMenu_WorkspaceFunc_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (DemoMenu_WorkspaceDispatch:24)
 	jp	t, (xix+wa)
@@ -17805,7 +17805,7 @@ DemoMenu_DescriptorFunc:
 	cp wa, 5:i3
 	jr ugt, DemoMenu_DescriptorReturn
 	add wa, wa
-	lda xix, (KeyShiftStr_Zero_0x6A:24)
+	lda xix, (DemoMenu_DescriptorFunc_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (DemoDesc_DispatchTable:24)
 	jp	t, (xix+wa)
@@ -18255,8 +18255,8 @@ Demofeat2_ShowHide:
 	ld xde, 0:i3
 	call ApFuncCall
 	ld xde, xhl
-	; object handle 0xe40008 = class 0x0e4, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9A8)
-	ld xwa, Bitmap_Dredt0d_0x9A8
+	; object handle 0xe40008 = class 0x0e4, instance 8 (SendEvent indexes its class table by bits 16-27; not an address -- was Demofeat2_ShowHide_Data)
+	ld xwa, Demofeat2_ShowHide_Data
 	ld xbc, EVT_PARA_DRAW
 	jr Demofeat2_SendEvent
 
@@ -18420,8 +18420,8 @@ PresBox_TimerExpired:
 	ld xbc, EVT_SET_SELECTED
 	ld xde, 1:i3
 	call SendEvent
-	; object handle 0xe4000a = class 0x0e4, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was Bitmap_Dredt0d_0x9AA)
-	ld xwa, Bitmap_Dredt0d_0x9AA
+	; object handle 0xe4000a = class 0x0e4, instance 10 (SendEvent indexes its class table by bits 16-27; not an address -- was PresBox_TimerExpired_Data)
+	ld xwa, PresBox_TimerExpired_Data
 	ld xbc, EVT_SHOW
 	ld xde, 5:i3
 	call PostEvent
@@ -18527,10 +18527,10 @@ AcPresentationControlProc:
 	cp xbc, 0xa
 	jrl gt, AcPresCtrl_DefaultCase
 	add xbc, xbc
-	add xbc, KeyShiftStr_Zero_0x8C
+	add xbc, AcPresentationControlProc_Data
 	ld bc, (xbc)
 	lda xix, (AcPresCtrl_EventDispatch:24)
-; Computed jump: target = AcPresCtrl_EventDispatch + KeyShiftStr_Zero_0x8C[i], KeyShiftStr_Zero_0x8C = 16-bit offsets (11 words, read
+; Computed jump: target = AcPresCtrl_EventDispatch + AcPresentationControlProc_Data[i], AcPresentationControlProc_Data = 16-bit offsets (11 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00002:
 ;   0x1c00002 -> AcPresCtrl_EventDispatch
 ;   0x1c00003 -> AcPresCtrl_DefaultCase

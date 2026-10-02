@@ -60,6 +60,7 @@ NakaInst_Param_IdxA0_01:
 ; Legacy name Naka_SubDispatch_A_Table (= entry 1) kept as an alias.
 SndParam_LinkTargetPtrs:
 	.set Naka_SubDispatch_A_Table, SndParam_LinkTargetPtrs + 4
+SndParam_ResetDefaultTable_Data_2:
 	.long WidgetParam_TestMode_Entry + 96	; no label at this target yet
 	.long WidgetParam_MidiCC_Program
 	.long WidgetParam_MidiCC_PitchBend
@@ -75,6 +76,7 @@ SndParam_LinkTargetPtrs:
 ; SndParam_ReadRegWithLUT (0xFCD9FF): `lda xhl,(<this>); ld_rr8l xbc,xhl,c;
 ; ld c,(xbc)` -- reads the byte at the selected RAM address.
 SndParam_RegRamPtrs:
+SndParam_ReadRegWithLUT_Data:
 	.long 0x00008ee4
 	.long 0x00008ee6
 	.long 0x00008ee8
@@ -91,6 +93,7 @@ SndParam_RegRamPtrs:
 SndParam_ValueTablePtrPair:
 	.set Naka_SubDispatch_B_Table, SndParam_ValueTablePtrPair
 	.long WidgetParam_MidiCC_Chorus
+SndParam_ReadRegWord_Data:
 	.long WidgetParam_MidiCC_SysExcl
 ; 972 x u32 pointers to sound-parameter descriptor records.  Count pinned by
 ; SndParam_RegisterAllWidgets / SndParam_RegisterLoop (0xFCEEC7): `ld xbc,xiz;
@@ -101,6 +104,7 @@ SndParam_ValueTablePtrPair:
 ; positional_labels.s derives Naka_MainDispatch_Table_0xNN names from it.
 SndParam_Registry:
 	.set Naka_MainDispatch_Table, SndParam_Registry + 368
+SndParam_RegisterLoop_Data:
 	.long WidgetParam_TestMode_Entry
 	.long WidgetParam_SineWave_Entry
 	.long VoiceCtrlR1_Entry_001
@@ -1077,6 +1081,7 @@ SndParam_Registry:
 ; `lda xbc,(<this>); lda_rr xbc,xbc,wa; ld xhl,(xbc); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_ReadHandlers:
+SndParam_RO_Dispatch_Data:
 	.long SndParam_ReturnNotFound
 	.long SndParam_ReadRegField
 	.long SndParam_ReadRegWithLUT
@@ -1088,6 +1093,7 @@ SndParam_ReadHandlers:
 ; `lda xde,(<this>); lda_rr xhl,xde,bc; ld xhl,(xhl); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_RegisterHandlers:
+SndParam_DispatchCallback_Data:
 	.long SndParam_ResetDefaultTable
 	.long SndParam_RegisterEntry_Data
 	.long SndParam_RegisterEntryAlt_Data
@@ -1101,6 +1107,7 @@ SndParam_RegisterHandlers:
 ; `lda xbc,(<this>); lda_rr xhl,xbc,wa; ld xhl,(xhl); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_Register2Handlers:
+SndParam_Lkp2_Dispatch_Data:
 	.long SndParam_DeregisterEntry_Data
 	.long SndParam_RegisterChained_Data
 	.long SndParam_RegisterChained2_Data
@@ -1113,6 +1120,7 @@ SndParam_Register2Handlers:
 ; `lda xbc,(<this>); lda_rr xde,xbc,wa; ld xix,(xde); call (xix)` (also SndParam_ResolveWidget_Skip2).
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_EncodeHandlers:
+SndParam_RW_ProcessResult_Data:
 	.long SndParam_EncodeFieldDirect_Data
 	.long SndParam_EncodeFieldSub_Data
 	.long SndParam_ClampReverbTime
@@ -1123,6 +1131,7 @@ SndParam_EncodeHandlers:
 ; `lda xde,(<this>); lda_rr xde,xde,bc; ld xhl,(xde); call (xhl)`.
 ; Extent: up to the next table's base (each base is loaded by its own reader).
 SndParam_WriteHandlers:
+SndParam_DispatchTypeDE5_Data:
 	.long SndParam_ReturnInvalid
 	.long SndParam_WriteFieldDirect_Data
 	.long SndParam_WriteFieldSub_Data
@@ -1137,6 +1146,7 @@ SndParam_WriteHandlers:
 ; (`ldl_da xwa,(<this>+0x120)`).  Entries 0-22 equal PartRecord_RamPtrTable's
 ; (0xF9B6 + 0x1A*i).  256 entries = exactly up to the string that follows.
 SndParam_BlockRamPtrs:
+SndParam_DMA_Zone2Check_Data:
 	.long 0x0000f9b6, 0x0000f9d0, 0x0000f9ea, 0x0000fa04	; 0x00
 	.long 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa6c	; 0x04
 	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4	; 0x08
@@ -1155,6 +1165,7 @@ SndParam_BlockRamPtrs:
 	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x3C
 	.long 0x00000000, 0x00000000, 0x00000000, 0x0000fc54	; 0x40
 	.long 0x0000fc26, 0x0000fc32, 0x0000fc3e, 0x0000fc4a	; 0x44
+SndParam_ClampReverbTime_Data:
 	.long 0x0000fc5a, 0x0000ff92, 0x00000000, 0x00000000	; 0x48
 	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x4C
 	.long 0x00000000, 0x00000000, 0x00000000, 0x00000000	; 0x50
@@ -1205,6 +1216,7 @@ SndParam_BlockRamPtrs:
 ; it in xwa (`ld xwa,<this>`) to the routine at 0xFFFEA1 when an allocation
 ; fails.  NUL + 0xFF pad.
 SndParam_OutOfMemoryMsg:
+SndParam_AllocAndInsert_Data:
 	.asciz "Out of Memory !!!\n"
 	.byte 0xff	; pad
 ; Sound configuration lookup table (6136 bytes)
@@ -1258,6 +1270,7 @@ SeqChan_CommandHandlers:
 ; 22 x u32 routine pointers; MidiPkt_ArpExtHandler_N_Data (0xFD7E10): `lda xbc,(<this>); ld_rrl xhl,xbc,hl; call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_StepCmdHandlers:
+MidiPkt_RetStub_B_Data:
 	.long SeqChan_ProcessStepCmd
 	.long SeqChan_StepCmd_Field1to2
 	.long SeqChan_StepCmd_Field2to3
@@ -1283,6 +1296,7 @@ SeqChan_StepCmdHandlers:
 ; 22 x u32 routine pointers; SeqChan_DispatchByType_Data (0xFD80B2): `lda xbc,(<this>); ld_rrl xhl,xbc,wa; call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
 SeqChan_WriteFieldHandlers:
+SeqChan_RetStub_B_Data:
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
 	.long SeqChan_DefaultHandler
@@ -1308,10 +1322,12 @@ SeqChan_WriteFieldHandlers:
 ; 6-byte template: MidiSysEx_ProcessBlock_Helper7 (0xFD81EE) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ld bc,3; ldirw`).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiSysEx_BlockTemplate:
+MidiSysEx_ProcessBlock_Data_2:
 	.byte 0x88, 0x00, 0x18, 0x00, 0x00, 0x00
 ; 22 x u32 routine pointers; MidiSysEx_ProcessBlock_Helper11 (0xFD827D): `lda xbc,(<this>); ld_rrl xhl,xbc,wa; call (xhl)` -- entries point 0-4 bytes apart into one run of short entry points at 0xFD829B.
 ; Extent: to the next object's base (loaded by its own reader).
 MidiSysEx_BlockHandlers:
+MidiSysEx_ProcessBlock_Data_3:
 	.long MidiSysEx_ProcessBlock_Helper11 + 30	; no label at this target yet
 	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
 	.long MidiSysEx_ProcessBlock_Helper11 + 31	; no label at this target yet
@@ -1337,6 +1353,7 @@ MidiSysEx_BlockHandlers:
 ; 16-byte template: MidiChan_InitSoundRegisters (0xFD8484) copies it into its frame (`ld xiy,<this>; ld xix,<ram>; ldw bc,8; ldirw`, four times).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiChan_ZeroRegTemplate:
+MidiChan_InitSoundRegisters_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 ; 4 x u32 routine pointers (0xFD84F0, 0xFD84F2, 0xFD84F3, 0xFD84F4): entry 4 of
 ; Subsys_HandlerTableList, so VoiceInit_Dispatch (0xFDDB5A) calls entry
@@ -1352,6 +1369,7 @@ SeqFormat_HandlerTable:
 ; `lda xbc,(<this>); ld xwa,xbc; lda xbc,(xbc+64)` -- walks the 16 entries
 ; (end = <this>+64) and clears each block.
 VoiceData_RamBlockPtrs:
+VoiceData_ZeroFillAll_Data:
 	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16
 	.long 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66
 	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6
@@ -1360,10 +1378,12 @@ VoiceData_RamBlockPtrs:
 ; VoiceData_SyncLoop (0xFD8C35): `ld xbc,<this>; add xbc,xwa; ld a,(xbc);
 ; call VoiceData_LookupPtrByIndex` for each code until 0xFF.
 VoiceData_SyncCodeList:
+VoiceData_SyncLoop_Data:
 	.byte 0x43, 0x64, 0x65, 0x66, 0x99, 0x98, 0x93, 0xff
 ; 7 x s16 switch offsets.  SysEx_InitiateSend (0xFD8CAE): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD8CF1); jp_rr 8,xix,..` -- targets 0xFD8CF1 (SysEx_SendDispatch) + offset (no labels yet).
 SysExSend_SwitchOffsets:
+SysEx_InitiateSend_Data:
 	.short 0, 21, 27, 33, 39, 45, 51
 ; 39 x u32 routine pointers; SeqData_DispatchHandler (0xFD8DB4): `lda xbc,(<this>); ld_rrl xhl,xbc,hl; call (xhl)`.
 ; Extent: to the next object's base (loaded by its own reader).
@@ -1411,18 +1431,22 @@ SeqData_Handlers:
 ; 4-byte template: SeqData_DispatchLoop_Done (0xFD8DFD) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SeqData_OutTemplate:
+SeqData_DispatchLoop_Check_Data:
 	.byte 0x08, 0x07, 0xf7, 0xff
 ; 7 x s16 switch offsets.  SeqData_FormatOutput_Data (0xFD8F2A): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD8F7E); jp_rr 8,xix,..` -- targets 0xFD8F7E + offset (no labels yet).
 SeqDataFmt_SwitchOffsets:
+SeqData_FormatOutput_Dispatch_Data:
 	.short 0, 2, 4, 7, 10, 13, 16
 ; 7 x s16 switch offsets.  VoiceParam_AssSwb_MultiBlock_Data (0xFD9A0C): `ld_rrw ..,xix,..;
 ; lda xix,(0xFD9A3E); jp_rr 8,xix,..` -- targets 0xFD9A3E + offset (no labels yet).
 AssSwbMulti_SwitchOffsets:
+VoiceParam_MultiMode_StubRet_Data:
 	.short 0, 2, 4, 7, 10, 13, 16
 ; 4-byte template: MidiPkt_BuildControl (0xFD9DA0) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+6); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_ControlTemplate:
+MidiPkt_BuildControl_Data:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; MIDI packet event type dispatch table
 ; Index: event byte from queue (0x00-0xbf), entries: 192
@@ -1630,38 +1654,47 @@ MidiPkt_EventType_Table:
 ; 4-byte template: MidiPkt_EnqueueControl_3354 (0xFDA278) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_334C:
+MidiPkt_EnqueueControl_3354_Data:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_EnqueueExtended_Data (0xFDA302) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3350:
+MidiPkt_EnqueueControl_3354_ShiftBits_Data:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_EnqueueControl_335C (0xFDA389) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3354:
+MidiPkt_EnqueueControl_335C_Data:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 6-byte template: MidiPkt_EnqueueControl_3358 (0xFDA40F) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3358:
+MidiPkt_EnqueueControl_3358_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 ; 6-byte template: MidiPkt_EnqueueControl_335E (0xFDA4EE) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ld bc,2; ldirw; ldi85` -- 5 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_335E:
+MidiPkt_EnqueueControl_335E_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_EnqueueControl_3364 (0xFDA587) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3364:
+MidiPkt_EnqueueControl_3364_Data:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_EnqueueControl_3368 (0xFDA616) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_3368:
+MidiPkt_EnqueueControl_3368_Data:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_BuildControl_Helper (0xFDA6CE) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+4); ldi85; ldiw` -- 3 bytes).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 MidiPkt_MsgTemplate_336C:
+MidiPkt_EnqueueControl_3368_FormatData_Data:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 6 x s16 switch offsets.  MidiPkt_SysExBulkTransfer_Data (0xFDA921): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDA94D); jp_rr 8,xix,..` -- targets 0xFDA94D + offset (no labels yet).
 SysExBulk_SwitchOffsets:
+MidiPkt_SendBankSelect_Send_Data:
 	.short 0, 2, 5, 8, 11, 14
 ; 16 x u8 (15, 0..8, 10..14, 9).  MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1):
 ; `lda xbc,(<this>); ld_rrb a,xbc,wa`.
@@ -1670,34 +1703,42 @@ SysExBulk_SlotMap:
 ; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate0:
+MidiPkt_SendBankSelect_Send_Data_2:
 	.byte 0x00, 0x00, 0xff, 0x00
 ; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate1:
+MidiPkt_SendBankSelect_Send_Data_3:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate2:
+MidiPkt_SendBankSelect_Send_Data_4:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate3:
+MidiPkt_SendBankSelect_Send_Data_5:
 	.byte 0x00, 0x00, 0xff, 0x00
 ; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate4:
+MidiPkt_SendBankSelect_Send_Data_6:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 4-byte template: MidiPkt_SysExBulkTransfer_Data_Join (0xFDA9B1) copies it into its frame (`ld xiy,<this>; lda xix,(xsp+..); ldiw; ldiw` -- 4 bytes, one of six).
 ; Trailing 0xFF (if any) is padding the copy does not take.
 SysExBulk_FrameTemplate5:
+MidiPkt_SendBankSelect_Send_Data_7:
 	.byte 0x00, 0x00, 0x00, 0xff
 ; 8 x u8.  SysEx_ClampVoiceIndex8_DoLookup (0xFDAB4B): index clamped to 0..7
 ; (`cp a,8; jr c` else 0), then `lda xbc,(<this>); ld_rrb l,xbc,wa`.
 SysEx4B_VoiceIndexMap8:
+SysEx_ClampVoiceIndex8_DoLookup_Data:
 	.byte 20, 20, 20, 20, 20, 18, 9, 9
 ; 128 x u8 monotone curve 0..94.  SysEx_ClampVoiceIndex128_DoLookup (0xFDABCF):
 ; index clamped to 0..127, then `lda xbc,(<this>); ld_rrb l,xbc,wa`.
 SysEx4B_LevelCurve128:
+SysEx_ClampVoiceIndex128_DoLookup_Data:
 	.byte 0, 3, 6, 9, 12, 16, 19, 22, 25, 28, 32, 35, 38, 41, 44, 47
 	.byte 50, 50, 51, 52, 52, 53, 54, 54, 55, 56, 56, 57, 58, 58, 59, 60
 	.byte 60, 61, 61, 62, 63, 63, 64, 65, 65, 66, 67, 67, 68, 69, 69, 70
@@ -1709,10 +1750,12 @@ SysEx4B_LevelCurve128:
 ; 8 x u8.  SysEx_ClampVoiceIndex8_49_DoLookup (0xFDAC59), same access as
 ; SysEx4B_VoiceIndexMap8.
 SysEx49_VoiceIndexMap8:
+SysEx_ClampVoiceIndex8_49_DoLookup_Data:
 	.byte 1, 2, 1, 2, 4, 4, 9, 9
 ; 128 x u8, the same curve as SysEx4B_LevelCurve128 in a separate copy.
 ; SysEx_ClampVoiceIndex128_49_DoLookup (0xFDACDD), same access.
 SysEx49_LevelCurve128:
+SysEx_ClampVoiceIndex128_49_DoLookup_Data:
 	.byte 0, 3, 6, 9, 12, 16, 19, 22, 25, 28, 32, 35, 38, 41, 44, 47
 	.byte 50, 50, 51, 52, 52, 53, 54, 54, 55, 56, 56, 57, 58, 58, 59, 60
 	.byte 60, 61, 61, 62, 63, 63, 64, 65, 65, 66, 67, 67, 68, 69, 69, 70
@@ -1725,89 +1768,107 @@ SysEx49_LevelCurve128:
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords0:
+SysEx_DispatchByChannel_Data:
 	.short 30, 4, 0, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 1 of
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords1:
+SysEx_DispatchByChannel_Data_2:
 	.short 84, 10, 53, 80, 0, 80, 0
 ; 5 x u16 (count pinned by the `cp c,5; ret nc` guard): case 2 of
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords2:
+SysEx_DispatchByChannel_Data_3:
 	.short 90, 6, 0, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 3 of
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords3:
+SysEx_DispatchByChannel_Data_4:
 	.short 86, 10, 53, 35, 0, 80, 0
 ; 8 x u16 (count pinned by the `cp c,8; ret nc` guard): case 4 of
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords4:
+SysEx_DispatchByChannel_Data_5:
 	.short 95, 8, 40, 0, 75, 0, 80, 0
 ; 8 x u16 (count pinned by the `cp c,8; ret nc` guard): case 5 of
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords5:
+SysEx_DispatchByChannel_Data_6:
 	.short 80, 2, 88, 0, 90, 0, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 6 of
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords6:
+SysEx_DispatchByChannel_Data_7:
 	.short 70, 70, 0, 0, 24, 80, 0
 ; 7 x u16 (count pinned by the `cp c,7; ret nc` guard): case 7 of
 ; SysEx_ChannelHandler_4B_Data (0xFDAD13) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx4B_ChannelWords7:
+SysEx_DispatchByChannel_Data_8:
 	.short 70, 70, 50, 50, 24, 80, 0
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel (0xFDACEA): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDAD13); jp_rr 8,xix,..` -- targets 0xFDAD13 (SysEx_ChannelHandler_4B_Data) + offset (no labels yet).
 SysEx4B_ChannelSwitch:
+SysEx_DispatchByChannel_Data_9:
 	.short 0, 11, 22, 33, 44, 56, 68, 79
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 0 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords0:
+SysEx_DispatchByChannel_49_Data:
 	.short 31, 11, 0, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 1 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords1:
+SysEx_DispatchByChannel_49_Data_2:
 	.short 34, 11, 12, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 2 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords2:
+SysEx_DispatchByChannel_49_Data_3:
 	.short 34, 11, 16, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 3 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords3:
+SysEx_DispatchByChannel_49_Data_4:
 	.short 40, 50, 12, 70, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 4 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords4:
+SysEx_DispatchByChannel_49_Data_5:
 	.short 37, 20, 16, 50, 80
 ; 5 x s16 (count pinned by the `cp c,5; ret nc` guard): case 5 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords5:
+SysEx_DispatchByChannel_49_Data_6:
 	.short 37, 20, 0, 50, 80
 ; 6 x s16 (count pinned by the `cp c,6; ret nc` guard): case 6 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords6:
+SysEx_DispatchByChannel_49_Data_7:
 	.short 100, 100, 36, 36, 24, 80
 ; 6 x s16 (count pinned by the `cp c,6; ret nc` guard): case 7 of
 ; SysEx_ChannelHandler_49_Data (0xFDAD9A) loads it (`ld xwa,<this>`) and
 ; returns word c (`ld_rrw hl,xwa,de`).
 SysEx49_ChannelWords7:
+SysEx_DispatchByChannel_49_Data_8:
 	.short 170, 250, 40, -30, 24, 80
 ; 8 x s16 switch offsets.  SysEx_DispatchByChannel_49 (0xFDAD71): `ld_rrw ..,xix,..;
 ; lda xix,(0xFDAD9A); jp_rr 8,xix,..` -- targets 0xFDAD9A (SysEx_ChannelHandler_49_Data) + offset (no labels yet).
 SysEx49_ChannelSwitch:
+SysEx_DispatchByChannel_49_Data_9:
 	.short 0, 11, 22, 33, 44, 55, 66, 77
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_FlushArpNotes (0xFD7B2F): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
@@ -1820,14 +1881,17 @@ SysEx_Msg_359A:
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_Helper18 (0xFD7A34): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35A0:
+MidiPkt_ArpPopReturn_Data:
 	.byte 0xf0, 0x50, 0x27, 0x7e, 0xf7, 0xff
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD7A59): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35A6:
+MidiPkt_ArpPopReturn_Data_2:
 	.byte 0xf0, 0x50, 0x28, 0x7e, 0xf7, 0xff
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD7A59): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35AC:
+MidiPkt_ArpPopReturn_Data_3:
 	.byte 0xf0, 0x50, 0x29, 0x7e, 0xf7, 0xff
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiTable_CheckSpecialSlot (0xFD7B4D): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
@@ -1836,95 +1900,115 @@ SysEx_Msg_35B2:
 ; MIDI system-exclusive bytes (0xF0 ...) sent by ArpQueue_ProcessAndSort_Data_Helper (0xFD6AD2): `ld xwa,<this>;
 ; ld bc,3; call SeqBuf_FlushNoteOffs` queues the first 3 bytes; the rest is 0xFF padding.
 SysEx_Msg_35B8:
+ArpQueue_EnqueueDone_Data:
 	.byte 0xf0, 0x50, 0x7e, 0xff
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpPassLoop (0xFD7673): `ld xwa,<this>;
 ; ld bc,7; call SeqBuf_FlushNoteOffs` queues the first 7 bytes; the rest is 0xFF padding.
 SysEx_Msg_35BC:
+MidiPkt_ArpPassLoop_Data:
 	.byte 0xf0, 0x50, 0x21, 0x01, 0x28, 0x12, 0xf7, 0xff
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpSecondLoop (0xFD76DA): `ld xwa,<this>;
 ; ld bc,7; call SeqBuf_FlushNoteOffs` queues the first 7 bytes; the rest is 0xFF padding.
 SysEx_Msg_35C4:
+MidiPkt_ArpSecondLoop_Data:
 	.byte 0xf0, 0x50, 0x22, 0x01, 0x28, 0x12, 0xf7, 0xff
 ; MIDI system-exclusive bytes (0xF0 ...) sent by SeqData_DispatchLoop_Done (0xFD8DFD): `ld xwa,<this>;
 ; ld bc,3; call SeqBuf_FlushNoteOffs` queues the first 3 bytes; the rest is 0xFF padding.
 SysEx_Msg_35CC:
+SeqData_DispatchLoop_Check_Data_2:
 	.byte 0xf0, 0x50, 0x25, 0xff
 ; Universal Non-Real-Time SysEx F0 7E 7F 09 01 F7 = General MIDI System On.
 ; MidiPkt_DispatchSpecialType (0xFDA1ED) sends it: `ld xwa,<this>; ld bc,6; call ArpQueue_Enqueue`.
 SysEx_GmSystemOn:
+MidiPkt_DispatchSpecialType_Data:
 	.byte 0xf0, 0x7e, 0x7f, 0x09, 0x01, 0xf7
 ; F0 7E 7F 09 02 F7 = General MIDI System Off.  MidiPkt_DispatchSpecialType_Type10 (0xFDA20B)
 ; sends it: `ld xwa,<this>; ld bc,6; call ArpQueue_Enqueue`.
 SysEx_GmSystemOff:
+MidiPkt_DispatchSpecialType_Type10_Data:
 	.byte 0xf0, 0x7e, 0x7f, 0x09, 0x02, 0xf7
 ; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_BuildControl_Skip (0xFD9EA7): `ld xwa,<this>;
 ; ld bc,6; call ArpQueue_Enqueue` queues the first 6 bytes.
 SysEx_Msg_35DC:
+MidiPkt_BuildControl_Data_2:
 	.byte 0xf0, 0x50, 0x2c, 0x01, 0x28, 0x12
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper2: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_35E2:
+MidiPkt_ArpPopReturn_Data_4:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x20, 0x00, 0x00, 0x00, 0x0c, 0x40
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper3: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_35EE:
+MidiPkt_ArpPopReturn_Data_5:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x24, 0x00, 0x00, 0x04, 0x59, 0x30
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper5: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_35FA:
+MidiPkt_ArpPopReturn_Data_6:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x38, 0x00, 0x00, 0x00, 0x00, 0x10
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper6: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_3606:
+MidiPkt_ArpPopReturn_Data_7:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x38, 0x00, 0x10, 0x00, 0x5a, 0x50
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper8: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_3612:
+MidiPkt_ArpPopReturn_Data_8:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x50, 0x00, 0x00, 0x00, 0x00, 0x60
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper9: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_361E:
+MidiPkt_ArpPopReturn_Data_9:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x50, 0x00, 0x60, 0x00, 0x26, 0x60
 ; SysEx F0 50 2D 01 28 12 + address/data (9 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper10: `ld xwa,<this>; ldw bc,9;
 ; call SeqBuf_FlushNoteOffs`; trailing 0xFF is padding.
 SysEx_TechMsg_362A:
+MidiPkt_ArpPopReturn_Data_10:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x50, 0x27, 0x40, 0xff
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper11: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_3634:
+MidiPkt_ArpPopReturn_Data_11:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x60, 0x00, 0x00, 0x00, 0x10, 0x00
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper12: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_3640:
+MidiPkt_ArpPopReturn_Data_12:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x60, 0x10, 0x00, 0x01, 0x20, 0x00
 ; SysEx F0 50 2D 01 28 12 + address/data (9 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper13: `ld xwa,<this>; ldw bc,9;
 ; call SeqBuf_FlushNoteOffs`; trailing 0xFF is padding.
 SysEx_TechMsg_364C:
+MidiPkt_ArpPopReturn_Data_13:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x61, 0x30, 0x00, 0xff
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper15: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_3656:
+MidiPkt_ArpPopReturn_Data_14:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x48, 0x00, 0x00, 0x00, 0x00, 0x20
 ; SysEx F0 50 2D 01 28 12 + address/data (12 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper16: `ld xwa,<this>; ldw bc,12;
 ; call SeqBuf_FlushNoteOffs`.
 SysEx_TechMsg_3662:
+MidiPkt_ArpPopReturn_Data_15:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x48, 0x00, 0x20, 0x00, 0x01, 0x60
 ; SysEx F0 50 2D 01 28 12 + address/data (9 bytes, no F7: the sender appends
 ; the rest).  MidiPkt_ArpConfigChain_Data_Helper17: `ld xwa,<this>; ldw bc,9;
 ; call SeqBuf_FlushNoteOffs`; trailing 0xFF is padding.
 SysEx_TechMsg_366E:
+MidiPkt_ArpPopReturn_Data_16:
 	.byte 0xf0, 0x50, 0x2d, 0x01, 0x28, 0x12, 0x48, 0x02, 0x00, 0xff
 ; =============================================================================
 ; INCOMING SYSTEM-EXCLUSIVE RECOGNITION TRIE  (0xEE3678-0xEE499D, 817 x 6 bytes)
@@ -3144,6 +3228,7 @@ SysExRx_Trie_799:
 	sysex_rx_entry 0xff, 0x08, SysExRx_Trie_000	; end of list
 ; root list (entries 801-816): first byte after F0 50 / the Universal id
 SysExRx_TrieRoot:
+MidiSeq_AssignVoiceSlots_Data:
 	sysex_rx_entry 0x25, 0x09, SysExRx_Trie_000
 	sysex_rx_entry 0x7f, 0x00, SysExRx_Trie_016
 	sysex_rx_entry 0x7e, 0x0a, SysExRx_Trie_000
@@ -3164,15 +3249,18 @@ SysExRx_TrieRoot:
 ; MidiSeq_UpdateToneParam_Lower (0xFD743A): `lda xbc,(<this>); ld_rrb c,xbc,hl`,
 ; the byte is stored to RAM 0xBD00.
 MidiRx_ToneParam_ByteMap:
+MidiSeq_UpdateToneParam_Data:
 	.byte 0, 1, 1, 2, 3, 3, 4, 5, 5, 5, 6, 7, 7, 7, 8, 9, 9, 10, 11, 11, 11, 12
 ; 36 x u8 (0x20-0x23, 0x0F, one 0xFF).  MidiSeq_PartLookup_Data_Helper3 (0xFD759F):
 ; `lda xbc,(<this>); ld (0x7F42),(xbc+hl)` -- copies the indexed byte to RAM.
 MidiRx_PartLookup_ByteMap:
+MidiSeq_PartLookup_Data_Entry_Data:
 	.byte 0x23, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x22, 0x22, 0x22, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21
 	.byte 0x21, 0x21, 0x21, 0x21, 0x0f, 0x21, 0x20, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x21, 0x20, 0x20, 0x21, 0xff
 ; 16-byte template: ArpQueue_InitBuffer (0xFD83D2) copies it into the queue buffer
 ; (`ld xiy,<this>; ld xix,xde; ldw bc,8; ldirw`).
 ArpQueue_InitTemplate:
+ArpQueue_InitBuffer_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; 40 bytes of MIDI control records.  0xEE49E8 is the sentinel
 ; MidiPkt_MatchParamInTable (0xFDA258) stops at (`lda xix,(<this>)`, `cp xix,xhl;
@@ -3198,6 +3286,7 @@ ArpQueue_InitTemplate:
 ; `.long` "SendPartDataBlock_Data3" pointer: v7 has the same bytes although its
 ; SendPartDataBlock_Data3 is at 0xFEFC57, so they are not a pointer.
 MidiCtl_NullRecord:
+MidiPkt_MatchParamInTable_Data:
 	.byte 0x0a, 0x00, 0x00, 0x00, 0x00, 0x01, 0xb0, 0x01, 0x7f, 0x00, 0x7f, 0x00, 0x00, 0x00, 0xff, 0x00, 0x00, 0x00, 0x01, 0xff
 ; MIDI control record 1 (20 bytes, layout at MidiCtl_NullRecord);
 ; reached through the MidiCtl_SelectTable* pointers.
@@ -3237,6 +3326,7 @@ MidiCtl_Rec_06:
 ; MIDI control record 7 (20 bytes, layout at MidiCtl_NullRecord);
 ; reached through the MidiCtl_MatchList*/MidiCtl_SelectTable* pointers.
 MidiCtl_Rec_07:
+MidiPkt_EnqueueControl_3368_Data_2:
 	.byte 0x00, 0x00, 0x12, 0x00, 0x00, 0x01, 0x98, 0x03, 0x01, 0x00, 0x30, 0x04, 0x01, 0x00, 0xff, 0x00, 0x02, 0x02, 0x02, 0xff
 ; MIDI control record 8 (20 bytes, layout at MidiCtl_NullRecord);
 ; reached through the MidiCtl_MatchList*/MidiCtl_SelectTable* pointers.
@@ -3245,6 +3335,7 @@ MidiCtl_Rec_08:
 ; MIDI control record 9 (20 bytes, layout at MidiCtl_NullRecord);
 ; reached through the MidiCtl_MatchList*/MidiCtl_SelectTable* pointers.
 MidiCtl_Rec_09:
+MidiPkt_EnqueueControl_335E_Data_2:
 	.byte 0x00, 0x00, 0x20, 0x00, 0x00, 0x02, 0x17, 0x00, 0xff, 0x00, 0x7f, 0x00, 0x01, 0x00, 0xff, 0x00, 0x00, 0x0a, 0x00, 0xff
 ; MIDI control record 10 (20 bytes, layout at MidiCtl_NullRecord);
 ; reached through the MidiCtl_MatchList*/MidiCtl_SelectTable* pointers.
@@ -3374,6 +3465,7 @@ MidiCtl_Rec_40:
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList0:
+MidiPkt_DispatchViaTable_4D6A_Data:
 	.long MidiCtl_Rec_12
 	.long MidiCtl_Rec_22
 	.long MidiCtl_Rec_23
@@ -3384,6 +3476,7 @@ MidiCtl_MatchList0:
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList1:
+MidiPkt_DispatchViaTable_4D82_Data:
 	.long MidiCtl_Rec_20
 	.long MidiCtl_Rec_40
 	.long MidiCtl_NullRecord
@@ -3391,6 +3484,7 @@ MidiCtl_MatchList1:
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList2:
+MidiPkt_DispatchViaTable_4D8E_Data:
 	.long MidiCtl_Rec_14
 	.long MidiCtl_Rec_18
 	.long MidiCtl_NullRecord
@@ -3398,6 +3492,7 @@ MidiCtl_MatchList2:
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList3:
+MidiPkt_DispatchViaTable_4D9A_Data:
 	.long MidiCtl_Rec_10
 	.long MidiCtl_Rec_25
 	.long MidiCtl_NullRecord
@@ -3405,12 +3500,14 @@ MidiCtl_MatchList3:
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList4:
+MidiPkt_DispatchViaTable_4DA6_Data:
 	.long MidiCtl_Rec_03
 	.long MidiCtl_NullRecord
 ; 6 record pointers ending with MidiCtl_NullRecord: MidiPkt_DispatchViaTable_4DAE (0xFDA173) passes
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList5:
+MidiPkt_DispatchViaTable_4DAE_Data:
 	.long MidiCtl_Rec_05
 	.long MidiCtl_Rec_07
 	.long MidiCtl_Rec_07
@@ -3421,12 +3518,14 @@ MidiCtl_MatchList5:
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList6:
+MidiPkt_DispatchSpecialType_SendAndUpdate_Data:
 	.long MidiCtl_Rec_11
 	.long MidiCtl_NullRecord
 ; 9 record pointers ending with MidiCtl_NullRecord: MidiPkt_DispatchViaTable_4DCE (0xFDA7C4) passes
 ; `ld xbc,<this>` to MidiPkt_MatchParamInTable, which walks it until the null
 ; record, then calls MidiCtl_Handlers[match +16].
 MidiCtl_MatchList7:
+MidiPkt_DispatchViaTable_4DCE_Data:
 	.long MidiCtl_Rec_26
 	.long MidiCtl_Rec_28
 	.long MidiCtl_Rec_29
@@ -3440,12 +3539,14 @@ MidiCtl_MatchList7:
 ; base +0) and MidiPkt_CheckGateCondition_Second (0xFDA79A, base +0x12 = record 3):
 ; `lda_rr xde,xde,bc; ld xhl,(xde); ld c,(xde+4); and c,(xhl); cp (xde+5),c`.
 MidiCtl_GateRecords:
+MidiPkt_CheckGateCondition_Data:
 	.long 0x0000fd56	; gate 0
 	.byte 0x08, 0x08
 	.long 0x0000fd56	; gate 1
 	.byte 0x08, 0x08
 	.long 0x0000fd56	; gate 2
 	.byte 0x04, 0x04
+MidiPkt_CheckGateCondition_Second_Data:
 	.long 0x0000fd56	; gate 3
 	.byte 0x08, 0x08
 	.long 0x0000fd59	; gate 4
@@ -3456,7 +3557,9 @@ MidiCtl_GateRecords:
 ; (0xFD91E1): record +14 must be < 1, `muls wa,6; lda xbc,(<this>); ld de,(xwa);
 ; ld xbc,(xwa+2)`; SeqAlt_DescriptorBlock_Data (0xFD9339) reads +2 as a u32 table.
 MidiCtl_SubTableDesc:
+SeqAlt_ApplyDescriptor_TypeA_Data:
 	.short 0x004e
+SeqAlt_PopIzSkip4Ret2_Data:
 	.long MidiCtl_SignedRamp78
 ; 4 bytes (0, 0x15, 1, 1), the only entry reachable through MidiCtl_SubTableBPtr
 ; (SeqAlt_NibbleSearch, index = record +14 < 1).  Legacy name
@@ -3467,6 +3570,7 @@ MidiCtl_SubTableB:
 ; 1 x u32 -> MidiCtl_SubTableB.  Read at 0xFD9569 (after SeqAlt_NibbleSearch_Epilogue2):
 ; `sla wa,2; lda xbc,(<this>); ld_rrl xwa,xbc,wa` with wa = record +14 (< 1).
 MidiCtl_SubTableBPtr:
+MidiPkt_BuildControl_Data_3:
 	.long MidiCtl_SubTableB
 ; 2 bytes (0, 0x7F), the only entry reachable through MidiCtl_SubTableCPtr.
 MidiCtl_SubTableC:
@@ -3474,6 +3578,7 @@ MidiCtl_SubTableC:
 ; 1 x u32 -> MidiCtl_SubTableC.  Read at 0xFD9639 (after SeqAlt_NibbleSearch_Join):
 ; `sla wa,2; lda xbc,(<this>); ld_rrl xwa,xbc,wa`, wa = record +14 (< 1).
 MidiCtl_SubTableCPtr:
+MidiPkt_BuildControl_Data_4:
 	.long MidiCtl_SubTableC
 ; 11 record pointers indexed by the caller (`sla wa,2` / `lda xwa,(<this>);
 ; ld_rrl xwa,xwa,bc`) in the code after SeqData_FormatOutput_Data; the selected record's +17
@@ -3604,6 +3709,7 @@ NoRef_EnqueueNopPtr:
 ; (9 sites): `ld c,(xbc+16); extz bc; sla bc,2; lda xde,(<this>); add xbc,xde;
 ; ld xhl,(xbc); call (xhl)`.
 MidiCtl_Handlers:
+MidiPkt_DispatchViaTable_4D6A_Data_2:
 	.long MidiPkt_EnqueueControlNop
 	.long MidiPkt_EnqueueControl_3354
 	.long MidiPkt_EnqueueControl_3364
@@ -3646,13 +3752,16 @@ Midi_BankProgramTemplate:
 ; Reset All Controllers (running status).  MIDI_BroadcastControlChange (0xFDB99B)
 ; copies the 7 bytes (`ld xiy,<this>; ld bc,3; ldirw; ldi85`).
 Midi_AllOffTemplate:
+MIDI_BroadcastControlChange_Data:
 	.byte 0xb0, 0x7b, 0x00, 0x78, 0x00, 0x79, 0x00, 0xff
 ; 0xF4 + pad: CompIface_SendActiveSensing_PC2 (0xFDBA28) passes it (`ld xde,<this>`)
 ; to the send routine at 0xEF32F4.
 CompIface_PortByte_F4:
+CompIface_SendActiveSensing_PC2_Data:
 	.byte 0xf4, 0xff
 ; 0xF5 + pad: CompIface_SendActiveSensing_PC1MAC (0xFDBA16) passes it the same way.
 CompIface_PortByte_F5:
+CompIface_SendActiveSensing_PC1MAC_Data:
 	.byte 0xf5, 0xff
 ; ToneKit sound parameter blocks (120 labels, 4226 bytes)
 ; Source: maincpu/ui_widgets/tonekit_param_blocks.c
@@ -4139,7 +4248,8 @@ ToneKit_ParamBlock_115:
 ; The C slice named ToneKit_ParamBlock_116 is 0x80 bytes: its +0x18..+0x7B
 ; are the DSP parameter-count bytes (DSPCfg_GetSlotCount, 0xEE5FE0) and
 ; +0x7C..+0x7F is entry 0 of the range table (0xEE6044).
-ToneKit_ParamBlock_116:			.incbin "includes/generated/tonekit_param_blocks.bin", 0x1002, 0x7C
+ToneKit_ParamBlock_116:			.incbin "includes/generated/tonekit_param_blocks.bin", 0x1002, 0x18
+DSPCfg_GetSlotCount_Data:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x101A, 0x64
 DSPCfg_LookupAndExtract_PtrTable:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x107E, 0x4	; 200 x 32-bit pointer
 ; =============================================================================
 ; DSP EFFECT TABLES, indexed by DSP effect number 0..99 (names from
@@ -4259,7 +4369,7 @@ ToneKit_VoiceDispatch_Table:
 ; DspFxSettingsPtrTable -- 100 x u32: effect n -> its 24-byte settings block
 ; (the ToneKit_* C blocks it points at).  Readers: DSPCfg_ResolveWithFallback
 ; (0xFDC710) and DSPCfg_WriteAllSlots_Direct (0xFDCB40) load entry n as
-; `ToneKit_VoiceDispatch_Table_0x18C + 4*n`, then DSPCfg_ReadViaTableLookup
+; `DSPCfg_ResolveWithFallback_Data + 4*n`, then DSPCfg_ReadViaTableLookup
 ; (0xFDC364) reads block+0 with DSPCfg_GetParamCount (0xFDC35F, `ld l,(xwa)`)
 ; and uses it to index DspFxRecListPtrTable, and hands block+1 plus that
 ; record list to DSPCfg_ReadMultiField (0xFDC2E8).  So +0 is the EFFECT
@@ -4269,6 +4379,7 @@ ToneKit_VoiceDispatch_Table:
 ; at ToneKit_DefaultParams.
 ; -----------------------------------------------------------------------------
 DspFxSettingsPtrTable:
+DSPCfg_ResolveWithFallback_Data:
 	.long ToneKit_DefaultParams	; 0 NO OPERATION
 	.long ToneKit_ParamBlock_063	; 1 CHORUS
 	.long ToneKit_ParamBlock_064	; 2 MODULATED CHORUS
@@ -4372,7 +4483,7 @@ DspFxSettingsPtrTable:
 
 ; -----------------------------------------------------------------------------
 ; Seven small arrays read by audio/dsp_config_sysex.s through positional
-; names (ToneKit_VoiceDispatch_Table_0x31C .. _0x348).
+; names (DspCfg_Data001_ByteTable .. _0x348).
 ; -----------------------------------------------------------------------------
 ; byte[n], read by DSPCfg_Data_001 (0xFDC448: `add xbc,xwa / ld l,(xbc)`).  No
 ; call of DSPCfg_Data_001 was found (call/calr/jp/jr target scan of the v10
@@ -5311,7 +5422,7 @@ DspFxRecs_26_WaveReverb1:
 ; effect 27 WAVE REVERB 2 -- 5 parameter-write records (count byte 0xEE5FE0+27);
 ; reached through DspFxRecListPtrTable entry 27 (DSPCfg_FindSlot63 & co.)
 ; (label name kept: shared/positional_labels.s derives
-;  WidgetParam_Config_058_0x36 = DspFxRecListPtrTable from it)
+;  DSPCfg_ReadViaTableLookup_Data = DspFxRecListPtrTable from it)
 WidgetParam_Config_058:
 	.byte 0x00, 8,	'u', 0x00, 0x2a, 0x5e, 0x35, 'z'
 	.byte 0x00, 8,	'g', 0x00, 0x00, 0x80, 0x02, 'z'
@@ -5327,13 +5438,14 @@ WidgetParam_Config_058:
 ; Readers: DSPCfg_ValidateSlotForWrite (0xFDC883) bounds the index with
 ; `cp wa,0x63 / jr ugt` and treats a 0 entry as "no such effect";
 ; DSPCfg_FindSlot63 (0xFDC472) and six further DSPCfg_* routines load it as
-; `ld xbc,WidgetParam_Config_058_0x36` (the positional name of this address).
+; `ld xbc,DSPCfg_ReadViaTableLookup_Data` (the positional name of this address).
 ; The tree used to split it into eight invented tables (PerfMode_Setup..,
 ; VoiceEdit_Param.., AccompStyle_Config.., RhythmKit_Select..,
 ; ChordMode_Config.., RecordMode_Setup.., ControlPanel_Button..,
 ; Naka_DisplayMode_Table); the entry offsets show it is one table.
 ; -----------------------------------------------------------------------------
 DspFxRecListPtrTable:
+DSPCfg_ReadViaTableLookup_Data:
 	.long 0				; 0 NO OPERATION
 	.long DspFxRecs_01_Chorus	; 1 CHORUS
 	.long DspFxRecs_02_ModulatedChorus	; 2 MODULATED CHORUS
@@ -5431,7 +5543,7 @@ DspFxRecListPtrTable:
 	.long 0				; 94 ----------
 	.long 0				; 95 ----------
 ; Naka_DisplayMode_Table is kept only because shared/positional_labels.s
-; defines Naka_DisplayMode_Table_0x10 (= the SwbtWr bank-1 table that
+; defines SwbtWr_InitBank1_Data (= the SwbtWr bank-1 table that
 ; follows) relative to it; it is entry 96 of this table, not a table.
 Naka_DisplayMode_Table:
 	.long DspFxRecs_96_PeqComprDist	; 96 PEQ+COMPR+DIST
@@ -5475,6 +5587,7 @@ Naka_DisplayMode_Table:
 ; ---- bank 1: 192 x u32, entry = event code 0x00..0xBF -> listener list;
 ;      installed by SwbtWr_InitBank1, read by SwbtWr_DispatchLoop (queue 0xBD3C)
 SwbtBank1_ListenerTable:
+SwbtWr_InitBank1_Data:
 	.long SwbtB1_Code00_Listeners	; 0x00
 	.long SwbtB1_Code01_Listeners	; 0x01
 	.long SwbtB1_Code02_Listeners	; 0x02
@@ -6606,6 +6719,7 @@ SwbtB2_CodeBD_Listeners:	.long 0xffffffff
 UIState_DefaultConfig_B:	.long 0xffffffff	; codes 0x4A, 0x4B, 0x4C, 0x4D, 0x4E, 0x4F, 0x55, 0x56, 0x57, 0x58, 0x59, 0x5A, 0x5B, 0x5C, 0x5D, 0x5E, 0x5F, 0x67, 0x6F, 0x73, 0x74, 0x75, 0x76, 0x77, 0x7B, 0x7C, 0x7D, 0x7E, 0x7F, 0x82, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88, 0x89, 0x8A, 0x8B, 0x8C, 0x8D, 0x8E, 0x8F, 0x94, 0x95, 0x96, 0x97, 0x9B, 0x9C, 0x9D, 0x9E, 0x9F, 0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5, 0xA6, 0xA7, 0xAB, 0xAF, 0xBE, 0xBF; name kept: its +4 is the post list
 ; bank 2 post list: SwbtWr_PostCallback_Loop calls each entry once the queue drains
 SwbtBank2_PostCallbacks:
+SwbtWr_InitBank2_Data:
 	.long Song_SendPartDataBlocks
 	.long AudioInit_ProcessModeChange
 	.long PerfMode_Handler_EvtB_Skip + 45	; no label at this callback entry yet
@@ -7063,7 +7177,7 @@ SwbtBank3_PostCallbacks:	.long 0xffffffff	; bank 3 post list: SwbtWr_PostCallbac
 ; is a table of routine pointers and xde selects one routine in every table;
 ; the loop stops on the 0 entry (`or xwa,xwa`).  Legacy name kept: it is loaded
 ; by boot/screen_group_dispatch.s and is the base of shared/positional_labels.s
-; SystemConfig_PointerTable_0x56/_0x76.
+; AudioInit_ChannelLoop_Body_Data/_0x76.
 Subsys_HandlerTableList:
 	.set SystemConfig_PointerTable, Subsys_HandlerTableList
 	.long Seq_InitFuncTable
@@ -7096,6 +7210,7 @@ NoRef_Bytes_EE8CCE:
 ; AudioInit_* routines and and-ed with a channel mask (AudioInit_ChannelLoop_Body:
 ; `andda16 xwa,(0xF290)`).
 Bit16Mask_Table:
+AudioInit_ChannelLoop_Body_Data:
 	.short 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080
 	.short 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
 ; 32 x u32 routine pointers indexed by RAM byte 0x8D34.  AudioModeChange_Handler
@@ -7107,6 +7222,7 @@ Bit16Mask_Table:
 ; AudioInit_VoiceDispatch_Table (kept for positional_labels.s) is entry 1.
 AudioVoiceHandler_Table:
 	.set AudioInit_VoiceDispatch_Table, AudioVoiceHandler_Table + 4
+AudioModeChange_Handler_Data:
 	.long AudioInit_ConfigStereoVoice
 	.long AudioInit_ConfigStereoVoice
 	.long AudioInit_CheckSoundGroup
@@ -7145,6 +7261,7 @@ AudioVoiceHandler_Table:
 ; UIStateEvt_VolumeMixer_Data_Loop (0xFDE616: `bitm 0,(xwa+22)`) load an entry
 ; with `ld_rrl xwa,xbc,wa` and read record fields.
 PartRecord_RamPtrTable:
+UIState_ProcessMidiEvent_Data:
 	.long 0x0000f9b6
 	.long 0x0000f9d0
 	.long 0x0000f9ea
@@ -7181,6 +7298,7 @@ PartRecord_RamPtrTable:
 ; (0xFDE0D0), UIStateEvt_VoiceAssign (0xFDE11C) and eight more UIStateEvt_*
 ; entry points before the byte is used as a part index.
 PartIndex_ByteMap:
+UIStateEvt_PartRouting_Data:
 	.byte 0, 1, 2, 3, 4, 5, 6, 7
 	.byte 8, 9, 10, 11, 12, 13, 14, 15
 	.byte 16, 17, 18, 19, 20, 21, 22, 23
@@ -7188,6 +7306,7 @@ PartIndex_ByteMap:
 ; 8 x u8 (0,1,2,3,0,0xFD,0xFE,0xFF).  UIStateEvt_PartRouting (0xFDE0D0) reads
 ; an entry with `ld_rrb a,xbc,wa`, then `and a,7 / sla a,1`.
 PartRouting_ByteTable:
+UIStateEvt_PartRouting_Data_2:
 	.byte 0, 1, 2, 3, 0, -3, -2, -1
 ; 12 x s8, -5..+6.  UIStateEvt_EffectSelect_Data_Skip2 (0xFDE723) reads an entry
 ; with `ld_rrb e,xbc,wa` (two call sites).
@@ -7197,6 +7316,7 @@ EffectSelect_StepTable:
 ; 16 x u16 (0,1,2,4,0,0,0,0,0x10,0x11,0x12,0x14,0,0,0,0).  UIStateEvt_ParamEdit_Data
 ; (0xFDE2A8) and its _Entry path read it with `ld_rrw iz,xbc,wa` (12 sites).
 ParamEdit_WordTable:
+AudioInit_CheckExternalBit3_Data:
 	.short 0x0000, 0x0001, 0x0002, 0x0004, 0x0000, 0x0000, 0x0000, 0x0000
 	.short 0x0010, 0x0011, 0x0012, 0x0014, 0x0000, 0x0000, 0x0000, 0x0000
 ; 7 x u16 switch offsets.  UIStateEvt_ParamEdit_Data (0xFDE2A8): `ld_rrw wa,xix,wa;
@@ -7211,6 +7331,7 @@ VolumeMixer_SwitchOffsets:
 ; (0xFDE9AE, two sites) and AudioInit_LoadGroupVoice index it with
 ; `extz xwa; add xwa,xbc` after `lda xbc,(<this>)`.
 AudioInit_ChannelMapA:
+AudioInit_ConfigStereoVoice_Data:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
@@ -7219,6 +7340,7 @@ AudioInit_ChannelMapA:
 ; AudioInit_CheckSoundGroup51 (0xFDEC16) and AudioInit_LoadAndConfigure
 ; (0xFDECB6) read it with `ld_rrb c,xde,bc`.
 AudioInit_ChannelMapB:
+AudioInit_CheckSoundGroup51_Data:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
@@ -7227,6 +7349,7 @@ AudioInit_ChannelMapB:
 ; Read with `ld_rrb a,xix,wa` at 18 sites: AudioInit_ChannelLoop_Body (0xFDF0DB),
 ; AudioInit_CheckGroupA/B, AudioInit_GroupA/B_* and HdaeRom_AltCheckResult.
 AudioInit_SlotOrderMap:
+AudioInit_ChannelLoop_Body_Data_2:
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte 0x04, 0x05, 0x06, 0x03, 0x0f, 0x15, 0x15, 0xff
 	.byte 0x15, 0x0c, 0x0d, 0x0e
@@ -7234,6 +7357,7 @@ AudioInit_SlotOrderMap:
 ; NoteMap_LookupAndMergeVoice and Voice_LookupTableEntries read it with
 ; `ld_rrb a,xbc,wa` / `lda xhl,(<this>)`.
 NoteMap_LinkByte_Table:
+NoteMap_AssignAllVoiceLinks_Data:
 	.byte 0x21, 0x22
 ; 32 x u8, 0x81..0xA0.  NoteMap_AllocNewVoiceEntry (0xFE4C0D), NoteMap_SetChannelParam
 ; and SndParam_UpdateChannelTuning read it with `ld_rrb a,xbc,wa`; it is also
@@ -7256,42 +7380,52 @@ NoteMap_ByteMap_21:
 ; 4-byte template (0x7F,0xA8,0xFE,0x00): AccNoteOn_ProcessVoiceSetup (0xFE06E7)
 ; copies it into its frame at (xsp+10) with `ld xiy,<this>` + two `ldiw`.
 AccNoteOn_FrameTemplateA:
+AccNoteOn_ProcessVoiceSetup_Data:
 	.byte 0x7f, 0xa8, 0xfe, 0x00
 ; 4-byte template (0x53,0x00,0xFE,0x00): AccNoteOn_ProcessVoiceSetup copies it to
 ; (xsp+6) right after AccNoteOn_FrameTemplateA, the same way.
 AccNoteOn_FrameTemplateB:
+AccNoteOn_ProcessVoiceSetup_Data_2:
 	.byte 0x53, 0x00, 0xfe, 0x00
 ; 8 x u8 (0x10..0x14, 3 x 0xFF).  RhythmMidi_DispatchByStatus (0xFE0B40) and the
 ; RhythmMidi_CC7D/7F/Default/Standard/PostLoop paths read it with `ld_rrb a,xbc,wa`.
 RhythmMidi_StatusMap:
+RhythmMidi_DispatchByStatus_Data:
 	.byte 0x10, 0x11, 0x12, 0x13, 0x14, 0xff, 0xff, 0xff
 ; 5-byte zero template + 0xFF.  RhythmMidi_Dispatcher (0xFE0B06): `ld xiy,<this>;
 ; lda xix,(xsp+6); ld bc,2; ldirw; ldi85` copies the first 5 bytes into its frame.
 RhythmMidi_FrameTemplate:
+RhythmMidi_Dispatcher_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 ; 8 x u8 (0x17, 0x18, 6 x 0xFF).  RhythmMidi_SeqEvt_Dispatch (0xFE0D7F) reads it
 ; with `ld_rrb e,xbc,wa` (5 sites).
 RhythmMidi_SeqEvtMap:
+RhythmMidi_SeqEvt_Dispatch_Data:
 	.byte 0x17, 0x18, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; 14 x u16 switch offsets.  VoiceEvent_TypeDispatch (0xFE131B): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE127D); jp_rr` -- targets 0xFE127D + offset (no labels yet).
 VoiceEvent_SwitchOffsets:
+VoiceEvent_TypeDispatch_Data:
 	.short 0, 15, 30, 45, 59, 73, 87
 	.short 101, 115, 129, 143, 157, 157, 171
 ; 3 x u32 RAM addresses (0xCF5F, 0xCF77, 0xCE66).  NoteMap_InitVoiceSlots (0xFE3D2A)
 ; and a NoteMap_* sibling: `sla wa,2; lda xbc,(<this>)`, a 32-bit indexed load
 ; (`ld r, (xrr+rr)`) into xiz, then `cpw (xiz),0`.
 NoteMap_VoiceSlotRamPtrs:
+NoteMap_InitVoiceSlots_Data:
 	.long 0x0000cf5f
 	.long 0x0000cf77
 	.long 0x0000ce66
 ; 5 records x 13 bytes {+0 u32 RAM ptr, +4 u32 RAM ptr, +8 u32 byte-map ptr,
 ; +12 u8 flags} + one 0xFF pad.  LookupTableEntries_Prologue (0xFE43E4) scales
 ; the index with `muls hl,0xd` and reads +0/+4/+8 through positional names
-; CharMap_ValueData_B_0x56/_0x5A/_0x5E (= this+0/+4/+8); the +8 map is then
+; LookupTableEntries_Prologue_Data/_0x5A/_0x5E (= this+0/+4/+8); the +8 map is then
 ; indexed with `ld r, (xrr+rr)`.  Flags: 0x80 x4, 0x20.
 NoteMap_ChannelMapRecords:
-	.long 0x0000c66a, 0x0000e82e, NoteMap_ByteMap_81	; record 0
+LookupTableEntries_Prologue_Data:
+	.long	0x0000c66a	; record 0
+LookupTableEntries_Prologue_Data_2:	.long	0x0000e82e
+LookupTableEntries_Prologue_Data_3:	.long	NoteMap_ByteMap_81
 	.byte 0x80
 	.long 0x0000c66a, 0x0000e82e, NoteMap_ByteMap_81	; record 1
 	.byte 0x80
@@ -7306,16 +7440,20 @@ NoteMap_ChannelMapRecords:
 ; _LoadDRAM and _LoadDRAM2: `ld wa,(ram); extz xwa; ld xbc,<this>; add xbc,xwa;
 ; ld a,(xbc)` with the index from RAM 0xCF01 / 0xCF31 / 0xCE24.
 SetChannelParam_ByteMap:
+SetChannelParam_LoadParam_Data:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x00, 0x00, 0x00, 0xff
 ; 8 x u8 (0,8,0,0,0,0,0,0xFF).  BuildNoteOn_VoiceLoop (0xFE5228): `ld_rrb a,xde,wa;
 ; or a,0x90` -- the byte is the MIDI channel of a Note-On status.
 NoteOn_ChannelByVoice:
+BuildNoteOn_VoiceLoop_Data:
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 ; 13 x {u8, u8}.  MarkEntriesAboveThre_LoadParam (0xFE5938): `sub a,0x54; add wa,wa;
 ; lda xbc,(<this>)` / `(<this>+1)`; `ld r, (xrr+rr)` -- one pair per value 0x54..0x60
 ; of the byte it indexes with (13 pairs to the next referenced object).
 NoteThreshold_PairTable:
-	.byte 0x00, 0x20
+MarkEntriesAboveThre_LoadParam_Data:
+	.byte	0x00
+MarkEntriesAboveThre_LoadParam_Data_2:	.byte	0x20
 	.byte 0x00, 0x04
 	.byte 0x00, 0x00
 	.byte 0x00, 0x10
@@ -7331,20 +7469,24 @@ NoteThreshold_PairTable:
 ; 10 x u8 (4 x 0xFF, 0x10..0x14, 0xFF).  Rhythm_ProcessEventDispatch (0xFE8433)
 ; reads it with `ld_rrb a,xbc,wa` (2 sites).
 Rhythm_EventMapA:
+Rhythm_ProcessEventDispatch_Data:
 	.byte 0xff, 0xff, 0xff, 0xff, 0x10, 0x11, 0x12, 0x13
 	.byte 0x14, 0xff
 ; 10 x u8 (0xFF, 0x17, 0x18, 7 x 0xFF).  NonNoteDispatchLoop_ReadAlt (0xFE8800)
 ; reads it with `ld_rrb a,xbc,wa` (2 sites).
 Rhythm_EventMapB:
+NonNoteDispatchLoop_ReadAlt_Data:
 	.byte 0xff, 0x17, 0x18, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff
 ; 9 x u16 switch offsets.  RhythmBuf_EventDispatchLoop (0xFE83DD): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE8633); jp_rr` -- targets 0xFE8633 + offset (no labels yet).
 RhythmBuf_SwitchOffsets:
+RhythmBuf_EventDispatchLoop_Data:
 	.short 415, -86, -86, -86, 595, 595, 595, 595, 595
 ; 7 x u16 switch offsets.  SeqEvtBuf_NoteDispatch (0xFE894D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFE8BA8); jp_rr` -- targets 0xFE8BA8 + offset (no labels yet).
 SeqEvtBuf_SwitchOffsets:
+SeqEvtBuf_NoteDispatch_Data:
 	.short 0, 28, 85, 115, 145, 205, 175
 ; 28 rows x 12 columns x 1 byte = 336 bytes.  SoundFX_Handler_2 (0xFE8E38): row = RAM byte
 ; 0xCEDF - 1 (`muls wa,0xc`), column = (0xCEAA - 0xCEE0 + VoiceBank_MapNoteToOffset
@@ -7353,6 +7495,7 @@ SeqEvtBuf_SwitchOffsets:
 ; 28 x 12 x k up to the next referenced one.  [INFERENCE] harmony notes below
 ; the melody note per chord row; UIParam_CallbackDispatch selects SoundFX_Handler_2.
 Harmony_Offsets1_A:
+SoundFX_Handler_2_Data:
 	.byte 0x08, 0x03, 0x03, 0x03, 0x04, 0x03, 0x03, 0x03, 0x04, 0x05, 0x03, 0x04
 	.byte 0x08, 0x03, 0x04, 0x03, 0x04, 0x03, 0x03, 0x03, 0x04, 0x05, 0x03, 0x04
 	.byte 0x08, 0x06, 0x03, 0x04, 0x04, 0x03, 0x03, 0x03, 0x04, 0x05, 0x03, 0x04
@@ -7388,6 +7531,7 @@ Harmony_Offsets1_A:
 ; 28 x 12 x k up to the next referenced one.  [INFERENCE] harmony notes below
 ; the melody note per chord row; UIParam_CallbackDispatch selects SoundFX_Handler_4.
 Harmony_Offsets2:
+SoundFX_Handler_4_Data:
 	.byte 0x08, 0x11, 0x09, 0x0f, 0x0a, 0x13, 0x09, 0x0f, 0x09, 0x10, 0x08, 0x0f, 0x06, 0x0f, 0x07, 0x0f, 0x08, 0x10, 0x09, 0x11, 0x06, 0x0f, 0x07, 0x10
 	.byte 0x08, 0x0e, 0x09, 0x0f, 0x07, 0x10, 0x08, 0x11, 0x06, 0x10, 0x07, 0x0f, 0x08, 0x10, 0x09, 0x0f, 0x0a, 0x10, 0x09, 0x11, 0x0a, 0x0f, 0x08, 0x0e
 	.byte 0x08, 0x11, 0x09, 0x0e, 0x0a, 0x13, 0x09, 0x10, 0x09, 0x11, 0x08, 0x0f, 0x07, 0x0f, 0x08, 0x0f, 0x09, 0x10, 0x0a, 0x11, 0x06, 0x0f, 0x07, 0x10
@@ -7423,6 +7567,7 @@ Harmony_Offsets2:
 ; 28 x 12 x k up to the next referenced one.  [INFERENCE] harmony notes below
 ; the melody note per chord row; UIParam_CallbackDispatch selects SoundFX_Handler_6.
 Harmony_Offsets4_A:
+SoundFX_Handler_6_Data:
 	.byte 0x03, 0x05, 0x08, 0x0c, 0x03, 0x06, 0x09, 0x0c, 0x03, 0x07, 0x0a, 0x0c
 	.byte 0x03, 0x06, 0x09, 0x0c, 0x04, 0x07, 0x09, 0x0c, 0x03, 0x05, 0x08, 0x0c
 	.byte 0x03, 0x06, 0x09, 0x0c, 0x03, 0x07, 0x0a, 0x0c, 0x04, 0x08, 0x0c, 0x00
@@ -7542,6 +7687,7 @@ Harmony_Offsets4_A:
 ; 28 x 12 x k up to the next referenced one.  [INFERENCE] harmony notes below
 ; the melody note per chord row; UIParam_CallbackDispatch selects SoundFX_Handler_3.
 Harmony_Offsets1_B:
+SoundFX_Handler_3_Data:
 	.byte 0x05, 0x06, 0x05, 0x08, 0x09, 0x03, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x04, 0x05, 0x06, 0x07, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07
 	.byte 0x08, 0x09, 0x03, 0x04, 0x05, 0x03, 0x03, 0x03, 0x04, 0x05, 0x06, 0x07
@@ -7577,6 +7723,7 @@ Harmony_Offsets1_B:
 ; 28 x 12 x k up to the next referenced one.  [INFERENCE] harmony notes below
 ; the melody note per chord row; UIParam_CallbackDispatch selects SoundFX_Handler_5.
 Harmony_Offsets3_A:
+SoundFX_Handler_5_Data:
 	.byte 0x05, 0x08, 0x0c, 0x06, 0x08, 0x0c, 0x07, 0x09, 0x0e, 0x06, 0x09, 0x0f
 	.byte 0x04, 0x09, 0x10, 0x05, 0x08, 0x11, 0x03, 0x09, 0x12, 0x03, 0x07, 0x13
 	.byte 0x04, 0x08, 0x14, 0x04, 0x09, 0x15, 0x06, 0x0f, 0x16, 0x04, 0x0c, 0x13
@@ -7668,6 +7815,7 @@ Harmony_Offsets3_A:
 ; 28 x 12 x k up to the next referenced one.  [INFERENCE] harmony notes below
 ; the melody note per chord row; UIParam_CallbackDispatch selects SoundFX_Handler_7.
 Harmony_Offsets3_B:
+SoundFX_Handler_7_Data:
 	.byte 0x03, 0x05, 0x08, 0x03, 0x06, 0x09, 0x03, 0x07, 0x0a, 0x03, 0x06, 0x09
 	.byte 0x04, 0x07, 0x09, 0x03, 0x05, 0x08, 0x03, 0x06, 0x09, 0x03, 0x07, 0x0a
 	.byte 0x04, 0x08, 0x0c, 0x02, 0x05, 0x09, 0x03, 0x06, 0x08, 0x04, 0x07, 0x0b
@@ -7903,6 +8051,7 @@ NoRef_HarmonyLike_EEA22E:
 ; (`ld r, (xrr+rr)`, `ld c,(xwa+1..3)`) are subtracted from RAM 0xCEAA like the tables
 ; above.  UIParam_CallbackDispatch selects SoundFX_Handler_8.
 Harmony_Offsets4_B:
+SoundFX_Handler_8_Data:
 	.byte 0x05, 0x08, 0x0c, 0x0f, 0x06, 0x09, 0x0c, 0x0f, 0x07, 0x0a, 0x0c, 0x0f
 	.byte 0x06, 0x09, 0x0c, 0x0f, 0x07, 0x09, 0x0c, 0x10, 0x05, 0x08, 0x0c, 0x0f
 	.byte 0x06, 0x09, 0x0c, 0x0f, 0x07, 0x0a, 0x0c, 0x0f, 0x08, 0x0c, 0x10, 0x00
@@ -8019,6 +8168,7 @@ Harmony_Offsets4_B:
 ; and subtracted from RAM 0xCEAA: SoundFX_Handler_9 (0xFE933D) uses +0/+1,
 ; SoundFX_Handler_10 (0xFE9360) +2/+3, SoundFX_Handler_11 (0xFE9383) +4/+5.
 Harmony_FixedIntervals:
+SoundFX_Handler_9_Data:
 	.byte -12, 12, 5, 12, -10, -5
 ; 16 x u32 routine pointers, indexed by RAM byte 0xE9BE: UIParam_CallbackDispatch
 ; (0xFE8C1B) does `ld c,(0xe9be); sla bc,2; lda xde,(<this>); add xbc,xde;
@@ -8029,6 +8179,7 @@ Harmony_FixedIntervals:
 ; positional_labels.s derives 36 SoundEffect_Dispatch_Table_0xNN names from it.
 Harmony_HandlerTable:
 	.set SoundEffect_Dispatch_Table, Harmony_HandlerTable + 4
+UIParam_CallbackDispatch_Data:
 	.long NoteMap_SearchVoiceEntry
 	.long SoundFX_Handler_0
 	.long SoundFX_Handler_1
@@ -8055,6 +8206,7 @@ Harmony_HandlerTable:
 ; 4096 bytes = 2048 x 2 exactly up to the next referenced object.
 ; [INFERENCE] the fingered-chord recognition table (chord type, root offset).
 ChordRecog_IntervalMaskTable:
+Voice_LookupNoteAndComputePitch_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x15, 0x89, 0x00, 0x00, 0x00, 0x00, 0x06, 0x09, 0x23, 0x80, 0x1c, 0x80, 0x00, 0x00
@@ -8317,6 +8469,7 @@ ChordRecog_IntervalMaskTable:
 ; (0xFE99DE) and VoiceSlot_LoadResult_Data (0xFE9A11) load the same base.
 ; 512 bytes exactly up to the next referenced object.
 NoteMask9_ClassTable:
+ComputeNoteBitPositi_StoreDRAM_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
@@ -8361,11 +8514,13 @@ HdaeRomEntry2_SwitchOffsets:
 ; 15 x s16 switch offsets.  SendEpilogue_Data_Skip14 (0xFEB4C6): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB4EE); jp_rr 8,xix,wa` -- targets 0xFEB4EE + offset (no labels yet).
 SendEpilogueA_SwitchOffsets:
+MIDI_SendEpilogue_Data:
 	.short 0, 30, 147, 266, 330, 396, 462, 528
 	.short 594, 660, 726, 792, 858, 925, 991
 ; 7 x s16 switch offsets.  SendEpilogue_Data_Skip7 (0xFEB3DC): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEB40D); jp_rr 8,xix,wa` -- targets 0xFEB40D + offset (no labels yet).
 SendEpilogueB_SwitchOffsets:
+MIDI_SendEpilogue_Data_2:
 	.short 0, 12, 24, 31, 38, 45, 57
 ; 12-byte per-semitone tables (one byte per pitch class C..B; 0x80 = centre).
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) maps its selector byte (0x80, 5, 4, 3,
@@ -8373,21 +8528,25 @@ SendEpilogueB_SwitchOffsets:
 ; and returns its address in xhl (`lda_24 xhl,(table)` at 14 case labels;
 ; the 15th returns RAM 0xFD1E).  [INFERENCE] scale-tuning presets.
 SemitoneBias_TableA:
+SeqVoice_CheckAndRet_Prologue_Data:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableB:
+SeqVoice_CheckAndRet_Prologue_Data_2:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableC:
+SeqVoice_CheckAndRet_Prologue_Data_3:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableD:
+SeqVoice_CheckAndRet_Prologue_Data_4:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 24 bytes shaped like two more 12-byte semitone tables, but no reader: no
@@ -8399,56 +8558,67 @@ NoRef_SemitoneBias_EEC0CA:
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableE:
+SeqVoice_CheckAndRet_Prologue_Data_5:
 	.byte 0x78, 0x8a, 0x7d, 0x71, 0x83, 0x76, 0x88, 0x7b
 	.byte 0x8d, 0x80, 0x74, 0x71
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableF:
+SeqVoice_CheckAndRet_Prologue_Data_6:
 	.byte 0x8f, 0x83, 0x85, 0x88, 0x83, 0x8d, 0x80, 0x8a
 	.byte 0x85, 0x80, 0x8a, 0x7d
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableG:
+SeqVoice_CheckAndRet_Prologue_Data_7:
 	.byte 0x8d, 0x80, 0x84, 0x85, 0x83, 0x8a, 0x80, 0x89
 	.byte 0x83, 0x80, 0x88, 0x85
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableH:
+SeqVoice_CheckAndRet_Prologue_Data_8:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableI:
+SeqVoice_CheckAndRet_Prologue_Data_9:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x40, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableJ:
+SeqVoice_CheckAndRet_Prologue_Data_10:
 	.byte 0x80, 0x80, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x40
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableK:
+SeqVoice_CheckAndRet_Prologue_Data_11:
 	.byte 0x80, 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x80
 	.byte 0x80, 0x40, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableL:
+SeqVoice_CheckAndRet_Prologue_Data_12:
 	.byte 0x80, 0x40, 0x80, 0x80, 0x80, 0x80, 0x40, 0x80
 	.byte 0x80, 0x80, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableM:
+SeqVoice_CheckAndRet_Prologue_Data_13:
 	.byte 0x80, 0x80, 0xd1, 0x80, 0x80, 0x6f, 0x80, 0xb2
 	.byte 0x80, 0xe0, 0x80, 0x80
 ; 12 x u8 semitone table (one byte per pitch class, 0x80 centre): a
 ; SeqVoice_CheckAndRet_Data (0xFEBC56) case returns it (`lda_24 xhl,(<this>)`).
 SemitoneBias_TableN:
+SeqVoice_CheckAndRet_Prologue_Data_14:
 	.byte 0x80, 0x80, 0x56, 0x80, 0x8f, 0xaf, 0x80, 0x6b
 	.byte 0x80, 0xad, 0x80, 0x80
 ; 7 x s16 switch offsets.  SeqVoice_CheckAndRet_Data (0xFEBC56): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBCA0); jp_rr 8,xix,wa` -- targets 0xFEBCA0 + offset (no labels yet).
 SeqVoiceSel_SwitchOffsets:
+SeqVoice_CheckAndRet_Prologue_Data_15:
 	.short 49, 56, 63, 70, 77, 84, 91
 ; 7 x s16 switch offsets.  SendEpilogue_Data_Helper (0xFEBD0E): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBD57); jp_rr 8,xix,wa` -- targets 0xFEBD57 + offset (no labels yet).
@@ -8457,11 +8627,13 @@ SendEpilogueC_SwitchOffsets:
 ; 9 x s16 switch offsets.  MIDI_WriteChannelData_Block (0xFEBF1D): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFEBF45); jp_rr 8,xix,wa` -- targets 0xFEBF45 + offset (no labels yet).
 ChannelData_SwitchOffsets:
+SendAllSoundOff_Flush_Data:
 	.short 0, 0, 0, 0, 0, 2, 2, 0
 	.short 0
 ; 16 x u16 1<<i template: MIDI_SendSinglePacket (0xFEC505) copies it into its
 ; frame with `ld xiy,<this>; lda xix,(xsp+4); ldw bc,16; ldirw`.
 SendPacket_BitMaskTemplateA:
+MIDI_SendSinglePacket_Data:
 	.short 0x0001, 0x0002, 0x0004, 0x0008, 0x0010, 0x0020, 0x0040, 0x0080
 	.short 0x0100, 0x0200, 0x0400, 0x0800, 0x1000, 0x2000, 0x4000, 0x8000
 ; Same 16 x u16 1<<i contents, a separate copy: SendSinglePacket_Data (0xFEC57A)
@@ -8472,57 +8644,69 @@ SendPacket_BitMaskTemplateB:
 ; Standard MIDI File header chunk id: SendSinglePacket_WriteReg (0xFEC5D6) copies
 ; the 4 bytes (`ld bc,2; ldirw`) into its frame at (xsp+136).  NUL + 0xFF pad.
 Smf_ChunkId_MThd:
+SendSinglePacket_WriteReg_Str_MThd:
 	.asciz "MThd"
 	.byte 0xff	; pad
 ; Standard MIDI File track chunk id: SendSinglePacket_WriteReg copies these 4
 ; bytes to (xsp+130) the same way.  NUL + 0xFF pad.
 Smf_ChunkId_MTrk:
+SendSinglePacket_WriteReg_Str_MTrk:
 	.asciz "MTrk"
 	.byte 0xff	; pad
 ; 10 zero bytes: SeekRecord_PopReturn_Prologue (0xFECB8F) copies them into its
 ; frame with `ld xiy,<this>; ld bc,5; ldirw`.
 SeekRecord_ZeroTemplate:
+SeekRecord_PopReturn_Prologue_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 ; File signature "COM-ESEQ": SeqPlay_ReadFileRecord (0xFED0A8) copies its 8
 ; bytes into its frame (`ld bc,4; ldirw`) to compare with a file header.
 ; NUL + 0xFF pad.
 ESeq_FileSignature:
+SeqPlay_ReadFileRecord_Str_COM_ESEQ:
 	.asciz "COM-ESEQ"
 	.byte 0xff	; pad
 ; 16 x s16 switch offsets.  MidiSysMsg_Handler (0xFED63B): `ld_rrw wa,xix,wa;
 ; lda xix,(0xFED772); jp_rr 8,xix,wa` -- targets 0xFED772 + offset (no labels yet).
 MidiSysMsg_SwitchOffsets:
+MidiSysMsg_Handler_Data:
 	.short 0, 23, 52, 58, 111, 349, 349, 349
 	.short 349, 164, 349, 193, 349, 349, 236, 262
 ; Six 16-byte slot maps (permutations of 0..0x13): SoundParam_InitDefaultBanks
 ; (0xFEDDA2) copies each into its frame (`ld xiy,<map>; lda xix,(xsp+82/66/
 ; 50/34/18/2); ldw bc,8; ldirw`).
 SoundParam_DefaultBankMap0:
+SoundParam_InitDefaultBanks_Data:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
 ; 16-byte slot map 1 (a permutation of 0..0x13), copied into a frame slot by
 ; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap1:
+SoundParam_InitDefaultBanks_Data_2:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c
 ; 16-byte slot map 2 (a permutation of 0..0x13), copied into a frame slot by
 ; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap2:
+SoundParam_InitDefaultBanks_Data_3:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f, 0x09
 ; 16-byte slot map 3 (a permutation of 0..0x13), copied into a frame slot by
 ; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap3:
+SoundParam_InitDefaultBanks_Data_4:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x0c, 0x06, 0x07, 0x11, 0x12, 0x13, 0x05
 ; 16-byte slot map 4 (a permutation of 0..0x13), copied into a frame slot by
 ; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap4:
+SoundParam_InitDefaultBanks_Data_5:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0f, 0x0e
 ; 16-byte slot map 5 (a permutation of 0..0x13), copied into a frame slot by
 ; SoundParam_InitDefaultBanks (0xFEDDA2) with `ldw bc,8; ldirw`.
 SoundParam_DefaultBankMap5:
+SoundParam_InitDefaultBanks_Data_6:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x0c, 0x13
 ; 32-byte path buffer template "A:\" + 29 NULs: NotifyChangeComplete_Prologue
 ; (0xFEDF6D) copies it into its frame (`ld xiy,<this>; ld xix,xsp; ldw bc,16;
 ; ldirw`).
 Disk_DefaultPath:
+NotifyChangeComplete_Prologue_Data:
 	.byte 0x41, 0x3a, 0x5c, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 ; =============================================================================
@@ -9007,6 +9191,7 @@ SndParam_ValueMap_R1P2_Inv:
 ; 128 x u8 (0xFF = unmapped).  LoadTableConverge_LoadReg (0xFEEB3F) and
 ; LookupTableConverge_LoadReg (0xFEEBC4): `ld xwa,<this>; ld_rrb l,xwa,de`.
 NoteMap_ConvergeMapA:
+LoadTableConverge_LoadReg_Data:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x53, 0xff
 	.byte 0x30, 0xff, 0x1e, 0x24, 0x28, 0x1c, 0x26, 0x33, 0x26, 0x24, 0x2f, 0x28, 0x54, 0x26, 0x5e, 0x26
@@ -9018,6 +9203,7 @@ NoteMap_ConvergeMapA:
 ; 128 x u8 (0xFF = unmapped).  LoadTableConverge_LoadReg2 (0xFEEB46) and
 ; LookupTableConverge_LoadReg2: `ld xwa,<this>; ld_rrb l,xwa,de`.
 NoteMap_ConvergeMapB:
+LoadTableConverge_LoadReg2_Data:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0x25, 0x24, 0x2f, 0x26, 0xff, 0x27, 0x79, 0x30, 0xff, 0xff, 0x29, 0x32, 0x2b
@@ -9029,14 +9215,17 @@ NoteMap_ConvergeMapB:
 ; Text "WRONG SW NUMBER!" (16 bytes, no NUL): StoreDRAMInit_Block4 (0xFEE635)
 ; copies from <this> to <this>+16 (`lda xwa,(<this>); lda xhl,(xwa+16)`).
 Msg_WrongSwNumber:
+StoreDRAMInit_LoadDRAM_Str_WRONG_SW_NUMBER_Sound_Name_Error:
 	.byte 0x57, 0x52, 0x4f, 0x4e, 0x47, 0x20, 0x53, 0x57, 0x20, 0x4e, 0x55, 0x4d, 0x42, 0x45, 0x52, 0x21
 ; Text "Sound Name Error": SndParam_ApplyProgramChangeAsync (0xFEE64A) copies
 ; <this>..<this>+17 (`lda xhl,(xwa+17)`).
 Msg_SoundNameError:
+SndParam_ApplyProgramChangeAsync_Str_Sound_Name_Error:
 	.asciz "Sound Name Error"
 ; Text "SName Error!!" (13 bytes, no NUL): ApplyProgramChangeAs_Prologue2
 ; (0xFEE712) copies from <this> (`lda xwa,(<this>); lda xhl,(xwa+10)`).
 Msg_SNameError:
+ApplyProgramChangeAs_Prologue2_Data:
 	.byte 0x53, 0x4e, 0x61, 0x6d, 0x65, 0x20, 0x45, 0x72, 0x72, 0x6f, 0x72, 0x21, 0x21
 ; 128 x u8 rising curve 1..0x7F (slow start, fast end).  No reader: no
 ; instruction operand and no 32-bit data pointer in the v10 ROM names it.
@@ -9052,6 +9241,7 @@ NoRef_ExpCurve128:
 ; 128 x u8 rising curve 0..0x7F (fast start).  SndParam_CompactLookupStub
 ; (0xFEEA13): `lda xbc,(<this>); ld_rrb a,xbc,wa; extz wa; ld l,a; ret`.
 SndParam_LogCurve128:
+SndParam_CompactLookupStub_Data:
 	.byte 0, 15, 31, 40, 47, 52, 56, 60, 63, 66, 68, 70, 72, 74, 76, 78
 	.byte 79, 80, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 94
 	.byte 95, 96, 96, 97, 98, 98, 99, 100, 100, 101, 101, 102, 102, 103, 103, 104
@@ -9069,6 +9259,7 @@ SndParam_LogCurve128:
 ; Entries 0-3 pick grid column +0, +4, +8, +12 of SndParam_ValueMapGrid for
 ; SndParam_LoadTableConverge; entries 4-5 use NoteMap_ConvergeMapA / NoteMap_ConvergeMapB.
 SndParamChan_SwitchOffsets:
+SndParam_LookupByChannel_Data:
 	.short 0, 8, 18, 28, 57, 64
 ; 6 x s16 switch offsets from 0xFEEB97, indexed by (selector 1..6) - 1:
 ; `lda xix,(<this>)` at 0xFEEB83 (in SndParam_OffsetHandler), `ld de,(xix+de)`,
@@ -9079,6 +9270,7 @@ SndParamChan_SwitchOffsets:
 ; Entries 0-3 pick grid column +16, +20, +8, +12 of SndParam_ValueMapGrid for
 ; SndParam_LookupTableConverge; entries 4-5 use NoteMap_ConvergeMapA / NoteMap_ConvergeMapB.
 SndParamOffs_SwitchOffsets:
+SndParam_OffsetHandler_Data:
 	.short 0, 5, 10, 15, 45, 52
 ; 4 x u32 routine pointers: entry 11 of Subsys_HandlerTableList, so
 ; VoiceInit_Dispatch calls one entry of it with every subsystem's table.
@@ -9093,6 +9285,7 @@ Subsys_HandlerTable11:
 ; `add xbc,<this>; ld bc,(xbc); extz bc; sll bc,1; ld xix,<ParamSx_SwitchA>;
 ; ld_rrw ..; jp` -- a two-level switch: this byte, then the offset table.
 ParamSx_CaseMapA:
+Param_SignExtendReturn_Data:
 	.byte 0x00, 0x00, 0x00, 0x01, 0x00, 0x02, 0x03, 0x00
 	.byte 0x02, 0x03, 0x00, 0x02, 0x03, 0x00, 0x02, 0x03
 	.byte 0x00, 0x02, 0x03, 0x00, 0x02, 0x03, 0x00, 0x02
@@ -9106,10 +9299,12 @@ ParamSx_CaseMapA:
 ; 7 x s16 switch offsets.  Param_SignExtendReturn_Skip3 (0xFEED58): `ld_rrw ..,xix,..; lda xix,(0xFEED91);
 ; jp_rr 8,xix,..` -- targets 0xFEED91 + offset (no labels yet).
 ParamSx_SwitchA:
+Param_SignExtendReturn_Data_2:
 	.short 122, 17, 34, 51, 68, 85, 102
 ; 77 x u8 case numbers 0..6.  Param_SignExtendReturn_Skip (0xFEEC96), same
 ; two-level switch as ParamSx_CaseMapA with ParamSx_SwitchB.
 ParamSx_CaseMapB:
+Param_SignExtendReturn_Data_3:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x03, 0x03, 0x05
 	.byte 0x05, 0x06, 0x05, 0x06, 0x05, 0x06, 0x05, 0x06
 	.byte 0x05, 0x05, 0x05, 0x02, 0x05, 0x05, 0x05, 0x02
@@ -9123,35 +9318,43 @@ ParamSx_CaseMapB:
 ; 7 x s16 switch offsets.  Param_SignExtendReturn_Skip (0xFEEC96): `ld_rrw ..,xix,..; lda xix,(0xFEECDA);
 ; jp_rr 8,xix,..` -- targets 0xFEECDA + offset (no labels yet).
 ParamSx_SwitchB:
+Param_SignExtendReturn_Data_4:
 	.short 0, 18, 36, 305, 54, 72, 90
 ; 10 x s16 offsets.  Param_SignExtendReturn_Helper3 (0xFEEC48): `add xhl,<this>;
 ; ld hl,(xhl); lda xix,(0xFEEC84); jp_rr` -- targets 0xFEEC84 + offset.
 ParamSx_SwitchC:
+Param_SignExtendReturn_Data_5:
 	.short 0, 0, 0, 0, 391, 0, 391, 0, 391, 0
 ; 23 x u8 case numbers 0..2.  Param_SignExtendReturn_Skip10 (0xFEEF73): byte,
 ; then ParamSx_SwitchD.
 ParamSx_CaseMapD:
+Param_SignExtendReturn_Data_6:
 	.byte 0x00, 0x00, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02, 0x00, 0x01, 0x02
 ; 3 x s16 switch offsets.  Param_SignExtendReturn_Skip10 (0xFEEF73): `ld_rrw ..,xix,..; lda xix,(0xFEEFAA);
 ; jp_rr 8,xix,..` -- targets 0xFEEFAA + offset (no labels yet).
 ParamSx_SwitchD:
+Param_SignExtendReturn_Data_7:
 	.short 52, 16, 32
 ; 41 x u8 case numbers 0..6.  Param_SignExtendReturn_Skip7 (0xFEEEB2): byte,
 ; then ParamSx_SwitchE.
 ParamSx_CaseMapE:
+Param_SignExtendReturn_Data_8:
 	.byte 0x00, 0x01, 0x01, 0x02, 0x03, 0x00, 0x04, 0x00, 0x03, 0x04, 0x00, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x04, 0x00, 0x06, 0x00
 	.byte 0x00, 0x00, 0x00, 0x02, 0x03, 0x00, 0x04, 0x00, 0x03, 0x04, 0x00, 0x05, 0x05, 0x05, 0x05, 0x05, 0x05, 0x04, 0x00, 0x06
 ; 7 x s16 switch offsets.  Param_SignExtendReturn_Skip7 (0xFEEEB2): `ld_rrw ..,xix,..; lda xix,(0xFEEEEB);
 ; jp_rr 8,xix,..` -- targets 0xFEEEEB + offset (no labels yet).
 ParamSx_SwitchE:
+Param_SignExtendReturn_Data_9:
 	.short 243, 17, 51, 68, 85, 102, 34
 ; 10 x s16 offsets.  Param_SignExtendReturn_Skip5 (0xFEEE0B): `add xhl,<this>;
 ; ld hl,(xhl); lda xix,(0xFEEE7F); jp_rr` -- targets 0xFEEE7F + offset.
 ParamSx_SwitchF:
+Param_SignExtendReturn_Data_10:
 	.short 0, 0, 0, 0, 351, 0, 351, 0, 351, 0
 ; 11 x u8 (0,2,4,5,3,0,1,1,4,2,3).  TmFlash_Return_Prologue (0xFEF507):
 ; `ld xbc,<this>; add xbc,xwa; ld a,(xbc)`.
 TmFlash_ByteMap:
+TmFlash_Return_Prologue_Data:
 	.byte 0, 2, 4, 5, 3, 0, 1, 1, 4, 2, 3
 ; 4 x u32 routine pointers: entry 1 of Subsys_HandlerTableList (see
 ; Subsys_HandlerTable11; kn5000_v10_program.s's absolute .set
@@ -9164,26 +9367,32 @@ Subsys_HandlerTable01:
 ; Sound-RAM data identifier "KN2000": SendPartDataBlock_InitVal7 (0xFF01AC)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN2000:
+SendPartDataBlock_InitVal7_Str_KN2000:
 	.asciz "KN2000"
 ; Sound-RAM data identifier "MKA": SendPartDataBlock_InitVal8 (0xFF01D8)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_MKA:
+SendPartDataBlock_InitVal8_Str_MKA:
 	.asciz "MKA"
 ; Sound-RAM data identifier "MKB": SendPartDataBlock_InitVal9 (0xFF0204)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_MKB:
+SendPartDataBlock_InitVal9_Str_MKB:
 	.asciz "MKB"
 ; Sound-RAM data identifier "KN3000 SOUND RAM": SendPartDataBlock_InitVal6 (0xFF0182)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN3000:
+SendPartDataBlock_InitVal6_Str_KN3000_SOUND_RAM:
 	.asciz "KN3000 SOUND RAM"
 ; Sound-RAM data identifier "KN1500 SOUND RAM": SendPartDataBlock_InitVal5 (0xFF0158)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN1500:
+SendPartDataBlock_InitVal5_Str_KN1500_SOUND_RAM:
 	.asciz "KN1500 SOUND RAM"
 ; Sound-RAM data identifier "KN5000 SOUND RAM": SendPartDataBlock_ClearByte4 (0xFEF950)
 ; loads it (`lda_24 xhl,(<this>)`) and compares/copies it byte by byte.
 SoundRam_Id_KN5000:
+SendPartDataBlock_ClearByte4_Str_KN5000_SOUND_RAM:
 	.asciz "KN5000 SOUND RAM"
 ; 4 x u32 routine pointers: entry 16 of Subsys_HandlerTableList (VoiceInit_Dispatch
 ; calls one entry of it with every subsystem's table).
@@ -9195,12 +9404,14 @@ SoundRam_HandlerTable:
 ; 16 x u8.  HdaeRom_DataHandler_Helper (0xFEFC28): `lda xhl,(<this>);
 ; ld_rrb c,xhl,bc`.
 HdaeRom_DataByteMap:
+SendPartDataBlock_DoGetError_Data:
 	.byte 1, 1, 1, 1, 1, 1, 0, 0
 	.byte 1, 2, 3, 1, 1, 1, 1, 1
 ; 426-byte default record (213 words) beginning with the 16-character name
 ; "    Initial     ": SendPartDataBlock_Return5_Helper (0xFEFD28) copies it
 ; into its frame (`ld xiy,<this>; ld xix,xsp; ldw bc,213; ldirw`).
 SoundRam_DefaultRecord:
+SendPartDataBlock_DoGetError_Data_2:
 	.byte 0x20, 0x20, 0x20, 0x20, 0x49, 0x6e, 0x69, 0x74, 0x69, 0x61, 0x6c, 0x20, 0x20, 0x20, 0x20, 0x20
 	.byte 0x10, 0x01, 0x00, 0x00, 0x55, 0x81, 0x40, 0x55, 0x05, 0x40, 0x55, 0x00, 0x40, 0x00, 0x00, 0x40
 	.byte 0x00, 0x00, 0x40, 0x55, 0x00, 0x40, 0x55, 0x00, 0x40, 0x08, 0x89, 0x00, 0x17, 0x00, 0x0f, 0x0c
@@ -9245,6 +9456,7 @@ HdaeRomAlt_SwitchOffsets:
 ; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Skip2 (0xFF07A8): `ld_rrw ..,xix,..; lda xix,(0xFF07FB);
 ; jp_rr 8,xix,..` -- targets 0xFF07FB + offset (no labels yet).
 TmFlashBulkA_SwitchOffsets:
+TmFlash_BulkTransferToSubCPU_Data:
 	.short 27, 27, 27, 0, 7, 0
 ; 6 x s16 switch offsets.  TmFlash_BulkTransferToSubCPU_Epilogue2 (0xFF086C): `ld_rrw ..,xix,..; lda xix,(0xFF08A9);
 ; jp_rr 8,xix,..` -- targets 0xFF08A9 + offset (no labels yet).
@@ -9257,6 +9469,7 @@ TmFlashBulkB_SwitchOffsets:
 ; FileOpen_NormalizeName (0xF4EC45) and 14 more sites: `lda xbc,(<this>);
 ; ld_rrb a,xbc,wa; bit 1,a` (islower) and similar bit tests.
 CType_ClassTable:
+FileOpen_NormalizeName_Data:
 	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x28, 0x28, 0x28, 0x28, 0x28, 0x20, 0x20
 	.byte 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20
 	.byte 0x48, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10, 0x10
@@ -9276,16 +9489,19 @@ CType_ClassTable:
 ; 22 x s16 switch offsets.  Sprintf_DispatchType (0xFF11F4): `ld_rrw ..,xix,..; lda xix,(0xFF1237);
 ; jp_rr 8,xix,..` -- targets 0xFF1237 + offset (no labels yet).
 Sprintf_TypeSwitch:
+Sprintf_DispatchType_Data:
 	.short 0, 269, 1674, 1674, 1674, 1761, 269, 1761
 	.short 1761, 1761, 1761, 1638, 1306, 943, 1761, 1761
 	.short 105, 1761, 697, 1761, 1761, 946
 ; "0123456789abcdef" + pad: Sprintf_HexToStr (0xFF19C2) uses it for %x
 ; (`ld xwa,<this>`; `cpw (xsp+12),120` picks the table).
 Sprintf_HexDigitsLower:
+Sprintf_HexToStr_Str_N0123456789abcdef:
 	.asciz "0123456789abcdef"
 	.byte 0xff	; pad
 ; "0123456789ABCDEF" + pad: Sprintf_HexToStr uses it for %X.
 Sprintf_HexDigitsUpper:
+Sprintf_HexToStr_Str_N0123456789ABCDEF:
 	.asciz "0123456789ABCDEF"
 	.byte 0xff	; pad
 ; ROM image of initialised RAM: Boot_InitWorkRAM_ROMCopy1_Start (0xEF0BB0) copies
@@ -9303,6 +9519,7 @@ Sprintf_HexDigitsUpper:
 ; 0xFEFC40 in v7 while these bytes are identical in all three, so they are
 ; not pointers.
 WorkRamInit_Image:
+Boot_InitWorkRAM_ROMCopy1_Start_Data:
 	.byte 0x30, 0x00, 0x01, 0x00, 0x00, 0x78, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0xff	; RAM 0x3D524
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; RAM 0x3D534
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff	; RAM 0x3D544

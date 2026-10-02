@@ -184,7 +184,7 @@ SeScreenData_0x4E68:
 ; [v10] F15A6E..F15A91  [flags:u8][len:u8][payload] records
 ; [v10] F15A6E flags=0x02 len=15
 	.byte	0x02, 0x0f, 0x61, 0x06, 0x01, 0x00, 0x20
-	.long	SeBitmap_EnvCurve5_0x4B0 + 0x53
+	.long	SeMenu_ShowConfirmDialog_Data_5 + 0x53
 	.byte	0x03, 0x00, 0x0b, 0x0b
 ; -> 0xF15A5D
 ; [v10] F15A7D flags=0x00 len=10
@@ -812,7 +812,7 @@ SeScreenData_0x57F9:
 ; evidence: recptrs table 0xF1642F
 SeScreenData_0x5811:
 	.byte	0x02, 0x0f, 0x60, 0x06, 0x20, 0x05, 0x20
-	.long	SeBitmap_EnvCurve5_0x4B0 + 0x53
+	.long	SeMenu_ShowConfirmDialog_Data_5 + 0x53
 	.byte	0x03, 0x00, 0x70, 0x1d
 ; single bound record (op 0x00, 10 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF1642F
@@ -1250,11 +1250,11 @@ InitializeNaka_Join:
 NoteEvent_LoadSoundGenParams:
 	lda xsp, (xsp-364)
 	push xiz
-	ld xiy, NAKA_UIObjectTable_0x26D2
+	ld xiy, NoteEvent_LoadSoundGenParams_Data_2
 	lda xix, (xsp+272)
 	ldw bc, 0x30
 	ldirw
-	ld xiy, NAKA_UIObjectTable_0x25D2
+	ld xiy, NoteEvent_LoadSoundGenParams_Data
 	lda xix, (xsp + 16)
 	ldw bc, 0x80
 	ldirw
@@ -2009,7 +2009,7 @@ Pack12BitValueWithBank:
 ; NoteEventBuffer Store dispatch (7-entry, table 0xe16136)
 NoteEvent_Store:
 	extz wa
-	lda xbc, (MSP_Default_ChannelMap_0x1E:24)
+	lda xbc, (NoteEvent_Store_Data:24)
 	ld	l, (xbc+wa)
 	ret
 
@@ -5577,7 +5577,7 @@ ToneData_CopyBlock1_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock1_Loop
-	lda xhl, (Composer_SettingsBlock_0x60:24)
+	lda xhl, (ToneData_ZeroFillLoop_Data:24)
 	ld xbc, xhl
 	ld xwa, (3226:16)
 	lda xde, (xwa + 16)
@@ -5599,7 +5599,7 @@ ToneData_CopyBlock3_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock3_Loop
-	lda xhl, (Composer_SettingsBlock_0x80:24)
+	lda xhl, (ToneData_ZeroFillLoop_Data_2:24)
 	ld xbc, xhl
 	ld xwa, (3226:16)
 	lda xde, (xwa+576)
@@ -5610,7 +5610,7 @@ ToneData_CopyBlock4_Loop:
 	ld (xde+), a
 	cp xbc, xhl
 	jr c, ToneData_CopyBlock4_Loop
-	lda xhl, (Composer_SettingsBlock_0xC0:24)
+	lda xhl, (ToneData_ZeroFillLoop_Data_3:24)
 	ld xbc, xhl
 	ld xwa, (3226:16)
 	lda xde, (xwa+640)
@@ -5628,7 +5628,7 @@ ToneData_CopyBlock5_Loop:
 ToneData_ScanRegionLoop:
 	cp (xbc), 0x0
 	jr nz, ToneData_AdvanceRegion
-	lda xiy, (Composer_SettingsBlock_0x70:24)
+	lda xiy, (ToneData_ScanRegionLoop_Data:24)
 	ld xhl, xiy
 	ld xwa, (3226:16)
 	lda xwa, (xwa + 32)
@@ -6692,7 +6692,7 @@ AcCmpSetGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, CmpSetP1_GridCheck_Case4
 	add xbc, xbc
-	add xbc, NoteStepDisplayData_0x5C
+	add xbc, AcCmpSetGridBoxProc_Data
 	ld bc, (xbc)
 	lda xix, (CmpSetP1_DialGrid:24)
 	jp	t, (xix+bc)
@@ -6751,7 +6751,7 @@ CmpSetP1_DialGrid:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda xbc, (NoteStepDisplayData_0x38:24)
+	lda xbc, (CmpSetP1_DialGrid_Data:24)
 	ld	wa, (xbc+wa)
 	sub hl, wa
 	extz xhl
@@ -6809,7 +6809,7 @@ CmpSetP1_SendAndApplyFunc:
 	call SendEvent
 	ld wa, hl
 	add wa, wa
-	lda xbc, (NoteStepDisplayData_0x4A:24)
+	lda xbc, (CmpSetP1_SendAndApplyFunc_Data:24)
 	ld	wa, (xbc+wa)
 	add wa, hl
 	ld de, wa
@@ -6913,7 +6913,7 @@ CmpSetP1GridCheck:
 	cp xwa, 0x6
 	jrl gt, Widget_PostEvtReturnZero
 	add xwa, xwa
-	add xwa, StrTimeSig_1_2_0x20
+	add xwa, CmpSetP1GridCheck_Data
 	ld wa, (xwa)
 	lda xix, (CmpSetP1_GridCheck_EventEnc:24)
 	jp	t, (xix+wa)
@@ -6980,7 +6980,7 @@ CmpSetP1_GridCheck_Return:
 	cp wa, 7:i3
 	jrl gt, WidgetHandler_PostEventAndReturnZero
 	add wa, wa
-	lda xix, (StrTimeSig_1_2_0x10:24)
+	lda xix, (CmpSetP1_GridCheck_EventEnc_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (UI_COMPONENT_DISPATCH:24)
 	jp	t, (xix+wa)
@@ -7079,7 +7079,7 @@ CmpSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, GridCheck_ReturnZero
 	add xwa, xwa
-	add xwa, StrPanLeft64_0xA
+	add xwa, CmpSetGridCheck_Data
 	ld wa, (xwa)
 	lda xix, (GridCheck_Handler0:24)
 	jp	t, (xix+wa)
@@ -7592,7 +7592,7 @@ S2cMemNoBox_HandleScroll:
 	ld	a, (14579:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (StrPanLeft64_0x18:24)
+	lda	xbc, (S2cMemNoBox_HandleScroll_Data:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	lda	xwa, (xsp+8)
@@ -7832,7 +7832,7 @@ S2cGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, FdcFormat_GridCheck_Case4
 	add xwa, xwa
-	add xwa, StrTranspose_Minus25_0x4
+	add xwa, S2cGridBoxProc_Data
 	ld wa, (xwa)
 	lda xix, (FdcFormat_DialGrid:24)
 	jp	t, (xix+wa)

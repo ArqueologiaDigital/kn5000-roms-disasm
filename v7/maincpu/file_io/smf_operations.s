@@ -192,7 +192,7 @@ RenderSmfFilename:
 	extz bc
 	ld	(xwa+bc), 0x00
 	ld ix, 0:i3
-	lda xhl, (CharMap_FullPermutation_0x660:24)
+	lda xhl, (FileOpen_NormalizeName_Data:24)
 	jr RenderSmf_LoopCheck
 
 RenderSmf_CheckSeparator:
@@ -532,7 +532,7 @@ FmmSmfFileNameFunc:
 	cp	xde, 5
 	jr	gt, SmfFN_ReturnZero
 	add	xde, xde
-	add	xde, Str_SmfConvert_GmToGm_0x1E
+	add	xde, FmmSmfFileNameFunc_Data
 	ld	de, (xde)
 	lda	xix, (16309435:24)
 SmfFN_JumpTable:

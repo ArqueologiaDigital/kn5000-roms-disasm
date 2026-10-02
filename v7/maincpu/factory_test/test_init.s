@@ -274,7 +274,7 @@ TestTitleFunc:
 	cp xwa, 0x5
 	jrl ugt, TitleFunc_Return
 	add xwa, xwa
-	add xwa, FDTest_String_TestTitleFunc_0xD0
+	add xwa, TestTitleFunc_Data
 	ld wa, (xwa)
 	lda xix, (TitleFunc_ActionDispatch:24)
 	jp	t, (xix+wa)
@@ -282,22 +282,22 @@ TestTitleFunc:
 ; User action dispatch table (event 0x1c00013, xde=2..6)
 ; Each entry loads a string address and calls FDTest_PrintDiag, then exits
 TitleFunc_ActionDispatch:
-	lda xwa, (FDTest_String_TestTitleFunc_0xE:24)
+	lda xwa, (TitleFunc_ActionDispatch_Data:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0x1A:24)
+	lda xwa, (TitleFunc_ActionDispatch_Data_2:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0x26:24)
+	lda xwa, (TitleFunc_ActionDispatch_Data_3:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0x36:24)
+	lda xwa, (TitleFunc_ActionDispatch_Data_4:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0x48:24)
+	lda xwa, (TitleFunc_ActionDispatch_Data_5:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0x58:24)
+	lda xwa, (TitleFunc_ActionDispatch_Data_6:24)
 	calr FDTest_PrintDiag
 	jrl TitleFunc_Return
 
@@ -306,7 +306,7 @@ TitleFunc_LifecycleDispatch:
 	cp xwa, 0x7
 	jrl ugt, TitleFunc_Return
 	add xwa, xwa
-	add xwa, FDTest_String_TestTitleFunc_0xC0
+	add xwa, TitleFunc_LifecycleDispatch_Data
 	ld wa, (xwa)
 	lda xix, (TitleFunc_LifecycleTable:24)
 	jp	t, (xix+wa)
@@ -317,7 +317,7 @@ TitleFunc_LifecycleDispatch:
 ; 4=interrupt: print+call RegHamaTitle1_Entry, 5=interrupt return: print+call RegHamaTitle2_Entry
 ; 6=TBIOS test: call ListDir2_Entry
 TitleFunc_LifecycleTable:
-	lda xwa, (FDTest_String_TestTitleFunc_0x70:24)
+	lda xwa, (TitleFunc_LifecycleTable_Data:24)
 	calr FDTest_PrintDiag
 	call Reset_Floppy_Disk_Controller_0x12
 	jr TitleFunc_Return
@@ -329,11 +329,11 @@ TitleFunc_LifecycleTable:
 	ld xwa, 0:i3
 	ld xde, 0xffffffff
 	call KillApTimer
-	lda xwa, (FDTest_String_TestTitleFunc_0x7C:24)
+	lda xwa, (TitleFunc_LifecycleTable_Data_2:24)
 	calr FDTest_PrintDiag
 	ld wa, 0:i3
 	jr TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0x8C:24)
+	lda xwa, (TitleFunc_LifecycleTable_Data_3:24)
 	calr FDTest_PrintDiag
 	calr RunTestCounters_Entry
 	ld xwa, EVT_SW_IN
@@ -346,15 +346,15 @@ TitleFunc_LifecycleTable:
 	call SetApTimer
 	ld wa, 1:i3
 	jr TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0xA2:24)
+	lda xwa, (TitleFunc_LifecycleTable_Data_4:24)
 	calr FDTest_PrintDiag
 	calr FDListDirectory
 	jr TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0xA8:24)
+	lda xwa, (TitleFunc_LifecycleTable_Data_5:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle1_Entry
 	jr TitleFunc_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0xB4:24)
+	lda xwa, (TitleFunc_LifecycleTable_Data_6:24)
 	calr FDTest_PrintDiag
 	calr RegHamaTitle2_Entry
 	jr TitleFunc_Return
@@ -374,7 +374,7 @@ TitleFunc_Return:
 ListDir2_Entry:
 	lda xsp, (xsp - 266)
 	push xiz
-	lda xwa, (FDTest_String_TestTitleFunc_0xDC:24)
+	lda xwa, (ListDir2_Entry_Str_A_HAMA_LSW:24)
 	lda xbc, (xsp + 4)
 	call _findfirst
 	ld xiz, xhl
@@ -430,7 +430,7 @@ RunTestCounters_BadStatus:
 RunTestCounters_IncrNG:
 	incw 1, (0x03dd02:24)
 RunTestCounters_Display:
-	lda xwa, (FDTest_String_TestTitleFunc_0xEA:24)
+	lda xwa, (RunTestCounters_Display_Data:24)
 	calr FDTest_PrintDiag
 	ld de, (0x03dcfe:24)
 	exts xde
@@ -452,7 +452,7 @@ RunTestCounters_Display:
 ; calls 0xf97cca to execute the FD operation, then prints success/failure.
 CreateRunFDOp_Entry:
 	lda xsp, (xsp - 16)
-	lda xwa, (FDTest_String_TestTitleFunc_0xFA:24)
+	lda xwa, (CreateRunFDOp_Entry_Str_init:24)
 	calr FDTest_PrintDiag
 	ldw (xsp+0:8), 0
 	ldw (xsp + 6), 0xe0
@@ -468,11 +468,11 @@ CreateRunFDOp_Entry:
 	inc 4, xsp
 	cp hl, 0:i3
 	jr nz, CreateRunFDOp_Fail
-	lda xwa, (FDTest_String_TestTitleFunc_0x100:24)
+	lda xwa, (CreateRunFDOp_Entry_Str_OK:24)
 	calr FDTest_PrintDiag
 	jr CreateRunFDOp_Return
 CreateRunFDOp_Fail:
-	lda xwa, (FDTest_String_TestTitleFunc_0x104:24)
+	lda xwa, (CreateRunFDOp_Fail_Str_NG:24)
 	calr FDTest_PrintDiag
 CreateRunFDOp_Return:
 	lda xsp, (xsp + 16)
@@ -485,7 +485,7 @@ CreateRunFDOp_Return:
 RegHamaTitle1_Entry:
 	ld wa, 2:i3
 	call format_FD
-	lda xwa, (FDTest_String_TestTitleFunc_0x204:24)
+	lda xwa, (RegHamaTitle1_Entry_Str_TEST_HAMA:24)
 	call FileIO_CheckPathAndVolumeLabel
 	ld hl, 0:i3
 	ret
@@ -495,7 +495,7 @@ RegHamaTitle1_Entry:
 RegHamaTitle2_Entry:
 	ld wa, 3:i3
 	call format_FD
-	lda xwa, (FDTest_String_TestTitleFunc_0x20E:24)
+	lda xwa, (RegHamaTitle2_Entry_Str_TESTHAMA2HD:24)
 	call FileIO_CheckPathAndVolumeLabel
 	ld hl, 0:i3
 	ret
@@ -523,17 +523,17 @@ HamaEvtDisp_LifecycleCheck:
 	jr z, HamaEvtDisp_ExtBootstrap
 	cp xde, 0x8a
 	jr nz, HamaEvtDisp_Return
-	lda xwa, (FDTest_String_TestTitleFunc_0x21A:24)
+	lda xwa, (HamaEvtDisp_LifecycleCheck_Str_LOAD:24)
 	calr SendEvent_Entry
 	calr CheckFDStatusLoad_Entry
-	lda xwa, (FDTest_String_TestTitleFunc_0x220:24)
+	lda xwa, (HamaEvtDisp_LifecycleCheck_Str_LOAD_END:24)
 	calr SendEvent_Entry
 	jr HamaEvtDisp_Return
 HamaEvtDisp_ExtBootstrap:
-	lda xwa, (FDTest_String_TestTitleFunc_0x22A:24)
+	lda xwa, (HamaEvtDisp_ExtBootstrap_Str_GO:24)
 	calr SendEvent_Entry
 	calr LoadExtROM_Entry
-	lda xwa, (FDTest_String_TestTitleFunc_0x22E:24)
+	lda xwa, (HamaEvtDisp_ExtBootstrap_Str_Finishd:24)
 	calr SendEvent_Entry
 HamaEvtDisp_Return:
 	ld xhl, 0:i3
@@ -549,11 +549,11 @@ CheckFDStatusLoad_Entry:
 	jr z, CheckFDStatusLoad_DoLoad
 	cp hl, 3:i3
 	jr z, CheckFDStatusLoad_DoLoad
-	lda xwa, (FDTest_String_TestTitleFunc_0x236:24)
+	lda xwa, (CheckFDStatusLoad_Entry_Str_Media_Error:24)
 	calr SendEvent_Entry
 	jr CheckFDStatusLoad_Return
 CheckFDStatusLoad_DoLoad:
-	lda xwa, (FDTest_String_TestTitleFunc_0x242:24)
+	lda xwa, (CheckFDStatusLoad_DoLoad_Str_rb:24)
 	push xwa
 	pushw 0xe1
 	pushw 0xff84
@@ -562,7 +562,7 @@ CheckFDStatusLoad_DoLoad:
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, CheckFDStatusLoad_Transfer
-	lda xwa, (FDTest_String_TestTitleFunc_0x252:24)
+	lda xwa, (CheckFDStatusLoad_DoLoad_Str_Cannot_open:24)
 	calr SendEvent_Entry
 	jr CheckFDStatusLoad_Return
 CheckFDStatusLoad_Transfer:
@@ -591,7 +591,7 @@ LoadExtROM_Entry:
 	add	xsp, 10
 	cp	hl, 0:i3
 	jr	z, LoadExtROM_JumpEntry
-	lda	xwa, (FDTest_String_TestTitleFunc_0x264:24)
+	lda	xwa, (LoadExtROM_Entry_Str_Different_ID:24)
 	jrl	SendEvent_Entry
 LoadExtROM_JumpEntry:
 	ld xhl, 0x200008

@@ -109,7 +109,7 @@ extern const char uwordProc;
  * Readers (ui/ui_mode_handlers.s): the MasterSetup dial handlers index the
  * table with 6*k (muls wa, 0x6), load +0 and Strcpy the title into the view;
  * the cell-select paths of MasterSetup and MstStyleAlp load the u16 at +4
- * (StyleSong_MasterTable_0x4 = table + 4, same 6*k index) and pass it as xde
+ * (MasterSetup_EventDispatch_Data = table + 4, same 6*k index) and pass it as xde
  * to MainFuncCall(0x142000D, 0x1E20018). */
 typedef struct __attribute__((packed)) {
     uint32_t title;  /* +0 pointer to a 34-byte entry of StyleSong_Titles */
@@ -1652,11 +1652,11 @@ typedef struct __attribute__((packed)) {
      * MasterSetup_DialDown_*) index it with 6*k (`muls wa, 0x6`), load +0
      * and Strcpy the title into the view, and search it with String_Compare;
      * their bounds are 0x3E8 (1000) -- an index of 1000 wraps to 0 and an
-     * underflow reads entry 999 through StyleSong_MasterTable_0x176A (=
+     * underflow reads entry 999 through MasterSetup_DialTurn_Underflow_Data (=
      * +999*6, .set in shared/positional_labels.s), which is how the count is
      * pinned. The cell-select paths of MasterSetup and
      * MstStyleAlp_EventDispatch load the u16 at +4 of entry 9*(page-1) +
-     * scroll + row (StyleSong_MasterTable_0x4, 9 rows per page) and hand it
+     * scroll + row (MasterSetup_EventDispatch_Data, 9 rows per page) and hand it
      * to MainFuncCall with 0x142000D / 0x1E20018. Checked here: the 1000
      * title pointers are exactly the 1000 entries of StyleSong_Titles (entry
      * k of this table -> title 999-k), and the ids are 0..999, each once.

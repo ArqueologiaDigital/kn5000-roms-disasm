@@ -1764,7 +1764,8 @@ InitializeKubo_PtrTable_69:	.incbin "includes/generated/naka_effects_seq.bin", 0
 ; [nakarest] naka_effects_seq+0x8066  +0x8066..+0x806a (0xe3000a, 4 B)
 ; [nakarest] name strings, entries 0-1 of ResName slot 0x3ab (table 0xe2fffc, 2 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xab): "", "".
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8066, 0x4
+	.incbin "includes/generated/naka_effects_seq.bin", 0x8066, 0x1
+CDlikeSwTtl_SetRecordAndNotify_Data_2:	.incbin "includes/generated/naka_effects_seq.bin", 0x8067, 0x3
 ; [nakarest] naka_effects_seq+0x806a  +0x806a..+0x80ac (0xe3000e, 66 B)
 ; [nakarest] the table itself: ResName slot 0x3d6 (table 0xe3000e, 15 entries, InitializeKubo),
 ; [nakarest] 15 entry pointers x 4 bytes.
@@ -1941,15 +1942,17 @@ InitializeKubo_PtrTable_72:	.long 0x00E30932
 ; [nakarest] naka_effects_seq+0x899a  +0x899a..+0x89a2 (0xe3093e, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xe3093e not derived; readers below
 ; [nakarest] Readers: source references EntertainerGridCheck (sequencer/sequencer_ui.s: `ld xiy,
-; [nakarest] Naka_Help_569_E30113_0x82B`).
+; [nakarest] EntertainerGridCheck_Data`).
+EntertainerGridCheck_Data:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x899A, 0x8
 ; [nakarest] naka_effects_seq+0x89a2  +0x89a2..+0x8b86 (0xe30946, 484 B)
 ; [nakarest] Text (484 B at 0xe30946), first string
 ; [nakarest] "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46"; no registered NAKA table points
 ; [nakarest] into it; reached through source references NoteEdit_FormatTempoString
-; [nakarest] (sequencer/sequencer_ui.s: `lda xbc, (Naka_Help_569_E30113_0x833:24)`),
+; [nakarest] (sequencer/sequencer_ui.s: `lda xbc, (NoteEdit_FormatTempoString_Data:24)`),
 ; [nakarest] Sqedt_ParamDispatch_Join6 (sequencer/sequencer_ui.s: `lda xde,
-; [nakarest] (Naka_Help_569_E30113_0x833:24)`).
+; [nakarest] (NoteEdit_FormatTempoString_Data:24)`).
+NoteEdit_FormatTempoString_Data:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x1E4
 ; [nakarest] naka_effects_seq+0x8b86  +0x8b86..+0x8e22 (0xe30b2a, 668 B)
 ; [nakarest] Text (668 B at 0xe30b2a), first string
@@ -1961,12 +1964,14 @@ InitializeKubo_PtrTable_72:	.long 0x00E30932
 ; [nakarest] naka_effects_seq+0x8e22  +0x8e22..+0x8e5a (0xe30dc6, 56 B)
 ; [nakarest] purpose not established: layout of 56 B at 0xe30dc6 not derived; readers below
 ; [nakarest] Readers: source references Equalizer_DispatchA (sequencer/sequencer_ui.s: `lda xde,
-; [nakarest] (Naka_Help_569_E30113_0xCB3:24)`).
+; [nakarest] (Equalizer_DispatchA_Data:24)`).
+Equalizer_DispatchA_Data:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x8E22, 0x38
 ; [nakarest] naka_effects_seq+0x8e5a  +0x8e5a..+0x8ebc (0xe30dfe, 98 B)
 ; [nakarest] Text (98 B at 0xe30dfe), first string "q"; no registered NAKA table points into it;
 ; [nakarest] reached through source references Equalizer_DispatchA (sequencer/sequencer_ui.s:
-; [nakarest] `lda xbc, (Naka_Help_569_E30113_0xCEB:24)`).
+; [nakarest] `lda xbc, (Equalizer_DispatchA_Data_2:24)`).
+Equalizer_DispatchA_Data_2:
 	.incbin "includes/generated/naka_effects_seq.bin", 0x8E5A, 0x62
 
 ; External label offsets within the binary blob above.

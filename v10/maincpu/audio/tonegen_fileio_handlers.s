@@ -67,7 +67,7 @@ ToneGen_Config_InitAndChannels:
 	jr ToneGen_Config_InitAllChannels
 
 ToneGen_ApplyMaskTable:
-	lda xwa, (NakaInst_ExtDevice_Screens_0x2B0C:24)
+	lda xwa, (ToneGen_ApplyMaskTable_Data:24)
 	lda xbc, (xwa + 4)
 	ld xde, xwa
 	lda xhl, (xwa + 25)
@@ -107,7 +107,7 @@ Voice_InitAllChannelEntries:
 Voice_InitChannelLoop:
 	ld wa, (xsp + 10)
 	extz xwa
-	ld xbc, NakaInst_ExtDevice_Screens_0x2B26
+	ld xbc, Voice_InitChannelLoop_Data
 	add xbc, xwa
 	ld a, (xbc)
 	ld (xsp + 8), a
@@ -192,7 +192,7 @@ DSPCfg_ResetEntryLoop:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, NakaInst_ExtDevice_Screens_0x2814
+	ld xbc, DSPCfg_ResetEntryLoop_Data
 	add xbc, xwa
 	ld xwa, (xsp + 2)
 	calr DSPCfg_CopyEntryValues
@@ -216,7 +216,7 @@ DSPCfg_InitEntryLoop:
 	sll xde, 2
 	add xde, xwa
 	add xde, xde
-	ld xbc, NakaInst_ExtDevice_Screens_0x2814
+	ld xbc, DSPCfg_ResetEntryLoop_Data
 	add xbc, xde
 	ld xwa, (xsp + 2)
 	calr DSPCfg_Init_Entry1
@@ -266,7 +266,7 @@ DSPCfg_Init_Entry0:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, NakaInst_ExtDevice_Screens_0x29E0
+	ld xbc, DSPCfg_Init_Entry0_Data
 	add xbc, xwa
 	ld xwa, (xsp + 2)
 	calr DSPCfg_Init_Entry1
@@ -314,7 +314,7 @@ DSPCfg_Init_BoundsCheck:
 	cp de, 0x8
 	jr gt, DSPCfg_Init_Finalize
 	add de, de
-	lda xix, (NakaInst_ExtDevice_Screens_0x2B3E:24)
+	lda xix, (DSPCfg_Init_BoundsCheck_Data:24)
 	ld	de, (xix+de)
 	lda xix, (DSPCfg_InitDispatch:24)
 	jp	t, (xix+de)
@@ -530,7 +530,7 @@ DSPCfg_ResetAuxEntryLoop:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, NakaInst_ExtDevice_Screens_0x29E0
+	ld xbc, DSPCfg_Init_Entry0_Data
 	add xbc, xwa
 	ld xwa, (xsp + 2)
 	calr DSPCfg_CopyEntryValues
@@ -891,13 +891,13 @@ ToneGen_FlashWriteAll:
 	ld xbc, ToneGen_FlashVerify_Str_HK
 	ldw de, 0xfa
 	call FlashWrite
-	lda xbc, (NakaInst_ExtDevice_Screens_0x2C68:24)
+	lda xbc, (ToneGen_FlashWriteAll_Data:24)
 	ld xwa, 0x3d3110
 	push xwa
 	ld wa, 1:i3
 	ldw de, 0xea
 	call FlashWrite
-	lda xbc, (NakaInst_ExtDevice_Screens_0x2D52:24)
+	lda xbc, (ToneGen_FlashWriteAll_Data_2:24)
 	ld xwa, 0x3d3210
 	push xwa
 	ld wa, 1:i3
@@ -1060,7 +1060,7 @@ CtrlPanel_IndicatorJumpTable:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda xix, (NakaInst_ExtDevice_Screens_0x2E3C:24)
+	lda xix, (CtrlPanel_IndicatorJumpTable_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSPCfg_Param_CaseC:24)
 	jp	t, (xix+wa)
@@ -1106,7 +1106,7 @@ Audio_DispatchCommand:
 	cp wa, 0x8
 	ret gt
 	add wa, wa
-	lda xix, (NakaInst_ExtDevice_Screens_0x2E4E:24)
+	lda xix, (Audio_DispatchCommand_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (DSPCfg_Param_CaseD:24)
 	jp	t, (xix+wa)
@@ -1154,7 +1154,7 @@ PanelDisplay_DispatchByMode:
 	cp wa, 0x8
 	jrl gt, DSPCfg_Param_Default
 	add wa, wa
-	lda xix, (NakaInst_ExtDevice_Screens_0x2E60:24)
+	lda xix, (PanelDisplay_DispatchByMode_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (PanelDisplay_DispatchData:24)
 	jp	t, (xix+wa)

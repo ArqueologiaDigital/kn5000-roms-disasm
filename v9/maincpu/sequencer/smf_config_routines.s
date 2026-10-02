@@ -182,47 +182,53 @@ SMF_HeaderConstants:
 	; SMF_SetupActiveChannel (0xF27170) copies these 4 bytes (`ld bc, 4; ldir85`)
 	; and then the 16-byte name from RAM 0xF280 (`ldw bc, 0x10; ldir85`).
 	.byte 0x00, 0xff, 0x03, 0x10
-	; +0x04 (SMF_HeaderConstants_0x4): the MThd chunk -- "MThd", length 6,
+	; +0x04 (SMF_SetupActiveChannel_Str_MThd): the MThd chunk -- "MThd", length 6,
 	; format 0, 1 track, division 96 ticks per quarter note.  Copied whole to
 	; RAM 0x13FA by SMF_SetupActiveChannel (`ld bc, 7; ldirw` = 7 words).
+SMF_SetupActiveChannel_Str_MThd:
 	.ascii "MThd"
 	.byte 0x00, 0x00, 0x00, 0x06	; chunk length (big-endian)
 	.byte 0x00, 0x00		; format 0
 	.byte 0x00, 0x01		; one track
 	.byte 0x00, 0x60		; 96 ticks per quarter note
-	; +0x12 (SMF_HeaderConstants_0x12): "MTrk", copied after the MThd chunk
+	; +0x12 (SMF_SetupActiveChannel_Str_MTrk): "MTrk", copied after the MThd chunk
 	; by SMF_SetupActiveChannel (`ld bc, 4; ldir85`).
+SMF_SetupActiveChannel_Str_MTrk:
 	.ascii "MTrk"
 	; +0x16: four zero bytes that nothing reads -- SMF_SetupActiveChannel
 	; writes the track-length placeholder from RAM words 0x0FA2/0x0FA4
 	; instead (scripts/analysis/sequi_find_refs.py v10 0xF28250 -> none).
 	.byte 0x00, 0x00, 0x00, 0x00
-	; +0x1A (SMF_HeaderConstants_0x1A): 20 x 16-bit offsets indexed by the
+	; +0x1A (SMF_ScanAndProcessChannel_Data): 20 x 16-bit offsets indexed by the
 	; PART-TYPE CODE a MIDI channel carries in RAM 0xF1A0[channel] (x2).
 	; Readers SMF_ScanAndProcessChannel (0xF272A9), SMF_WriteVol_PanAndPitch (0xF27515),
 	; SMF_WriteRPN_FineTune (0xF275C9), SMF_WriteRPN_CoarseTune (0xF2768B) and
-	; SMF_WriteRPN_Transpose (0xF27743): `ld xix, SMF_HeaderConstants_0x1A`,
+	; SMF_WriteRPN_Transpose (0xF27743): `ld xix, SMF_ScanAndProcessChannel_Data`,
 	; `ld hl, (xrr+rr)` (hl := table[code]); 0xFFFF skips the channel;
 	; otherwise the offset is added to RAM 0xF460 (`lda xiy, (xrr+rr)`) to reach
 	; that part's record.  The offsets are 0x36 + 26*k (k = 0..15), so the
 	; records sit 26 bytes apart.  20 entries, pinned by the next piece at +0x42.
+SMF_ScanAndProcessChannel_Data:
 	.short 0x0036, 0x006a, 0x0050, 0x00ec, 0x0106	; codes 0-4
 	.short 0x0120, 0x013a, 0x0154, 0x009e, 0x00b8	; codes 5-9
 	.short 0x00d2, 0x0084, 0x01bc, 0xffff, 0xffff	; codes 10-14
 	.short 0xffff, 0xffff, 0x016e, 0x0188, 0x01a2	; codes 15-19
-	; +0x42 (SMF_HeaderConstants_0x42): delta 0 + SysEx F0 05 7E 7F 09 01 F7,
-	; "General MIDI System On".  +0x4A (SMF_HeaderConstants_0x4A): the same
+	; +0x42 (SMF_Setup_WriteLoop_Data): delta 0 + SysEx F0 05 7E 7F 09 01 F7,
+	; "General MIDI System On".  +0x4A (SMF_Setup_WriteLoop_Data_2): the same
 	; with 09 02, "GM System Off".  SMF_Setup_WriteLoop (0xF2724E) writes 8 bytes
 	; of the first when RAM byte 0x10E4 is non-zero, of the second when it
 	; is zero.
+SMF_Setup_WriteLoop_Data:
 	.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x01, 0xf7
+SMF_Setup_WriteLoop_Data_2:
 	.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x02, 0xf7
-	; +0x52 (SMF_HeaderConstants_0x52): 20 bytes, indexed by the same
+	; +0x52 (SMF_ProgramChange_ProcessPatch_Data): 20 bytes, indexed by the same
 	; part-type code.  SMF_ProgramChange_ProcessPatch (0xF27B92): L := 0xF1A0[ch],
-	; `ld xix, SMF_HeaderConstants_0x52`, `ld l, (xrr+rr)` (L := table[L]),
+	; `ld xix, SMF_ProgramChange_ProcessPatch_Data`, `ld l, (xrr+rr)` (L := table[L]),
 	; stored at RAM 0x1A5C, the third byte of the 3-byte message built at
 	; 0x1A5A before SndParam_InitBufferConverge.  0x7F exactly where the
 	; offset table above holds 0xFFFF (codes 13-16).
+SMF_ProgramChange_ProcessPatch_Data:
 	.byte 0x00, 0x02, 0x01, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05	; codes 0-9
 	.byte 0x06, 0x03, 0x0f, 0x7f, 0x7f, 0x7f, 0x7f, 0x0c, 0x0d, 0x0e	; codes 10-19
 
@@ -2512,7 +2518,7 @@ SMF_SlotChain_ExtendedVoice:
 	mul l, 0x20
 	add hl, 0x5
 	add hl, 0x2
-	ld xix, Naka_ToshiParam_Table_0x8C
+	ld xix, SMF_SlotChain_ExtendedVoice_Data
 	ld	a, (xix+hl)
 	jr SMF_SlotChain_ExtVoiceStore
 
@@ -2609,7 +2615,7 @@ SMF_SlotParam_VolumeScale:
 	mul l, 0x20
 	add hl, 0x7
 	add hl, 0x2
-	ld xix, Naka_ToshiParam_Table_0x8C
+	ld xix, SMF_SlotChain_ExtendedVoice_Data
 	ld	a, (xix+hl)
 	ld (xiy + 4), a
 
@@ -3231,7 +3237,7 @@ SMF_SlotParam_BankLSBReturn:
 
 SMF_SlotParam_RPN:
 	push xix
-	ld xix, SMF_SlotParam_RPNReturn_0x1F
+	ld xix, SMF_SlotParam_RPN_Data
 	ld l, (xiy + 3)
 	ld	a, (xix+hl)
 	pop xix
@@ -3248,7 +3254,7 @@ SMF_SlotParam_RPNDone:
 ; Reader: SMF_SlotParam_BankLSBReturn (0xF29CBF), for a record whose (XIY+2) is
 ; 0x39: with HL := 0 and L := (XIY+3), `ld r, (mem)`-style load A := (XIX+HL);
 ;   bit 5 of (XIY+3) clear: XIX = SMF_SlotParam_RPNReturn,       (XIY+2) := 0xAD
-;   bit 5 of (XIY+3) set:   XIX = SMF_SlotParam_RPNReturn_0x1F,  (XIY+2) := 0xAE
+;   bit 5 of (XIY+3) set:   XIX = SMF_SlotParam_RPN_Data,  (XIY+2) := 0xAE
 ; and A is written back to (XIY+3).  62 bytes to SMF_SlotParam_NRPN (code).
 ; NOT RESOLVED: the second lookup uses the unmasked index, which has bit 5
 ; set, so it addresses +0x3F or beyond -- past this table.  Either (XIY+3)
@@ -3258,7 +3264,8 @@ SMF_SlotParam_RPNDone:
 SMF_SlotParam_RPNReturn:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x17, 0x0e
 	.byte 0x18, 0x0f, 0x00, 0x10, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x12, 0x13, 0x14, 0x15, 0x16
-	; +0x1F (SMF_SlotParam_RPNReturn_0x1F): the same 31 bytes again
+	; +0x1F (SMF_SlotParam_RPN_Data): the same 31 bytes again
+SMF_SlotParam_RPN_Data:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x17, 0x0e
 	.byte 0x18, 0x0f, 0x00, 0x10, 0x00, 0x11, 0x00, 0x00, 0x00, 0x00, 0x12, 0x13, 0x14, 0x15, 0x16
 SMF_SlotParam_NRPN:

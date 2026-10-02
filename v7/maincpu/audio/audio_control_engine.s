@@ -1982,7 +1982,7 @@ VoiceEntry_CheckTerminator:
 	ret
 Audio_CopyStateFromROM:
 	calr	MidiCC_ResetState
-	lda	xbc, (SoundParam_EncoderMappingData_0x302:24)
+	lda	xbc, (Audio_CopyStateFromROM_Data:24)
 	ld	xwa, xbc
 	lda	xde, (0x8e1a:16)
 	lda	xhl, (xbc + 12)
@@ -2216,7 +2216,7 @@ MidiCC_LookupHandler:
 	srl	a, 1
 	or	a, c
 	extz	wa
-	lda	xbc, (EffectMode_DispatchTable_0x10:24)
+	lda	xbc, (MidiCC_LookupHandler_Data:24)
 	ld	l, (xbc+wa)
 	ret
 Voice_SetupFromData:
@@ -2509,7 +2509,7 @@ MIDI_ProcessChangedChannels:
 	cpl	wa
 	and	wa, (0x8e9e:16)
 	jr	z, MidiChanged_ProcessGroup2
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x3C6
+	ld	xbc, MIDI_ProcessChangedChannels_Data
 	calr	DispatchBitmaskHandlers
 	ldw	(0x8e9e:16), 0
 MidiChanged_ProcessGroup2:
@@ -2517,7 +2517,7 @@ MidiChanged_ProcessGroup2:
 	cpl	wa
 	and	wa, (0x8ea2:16)
 	jr	z, MidiChanged_ProcessGroup3
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x3FC
+	ld	xbc, MidiChanged_ProcessGroup2_Data
 	calr	DispatchBitmaskHandlers
 	ldw	(0x8ea2:16), 0
 MidiChanged_ProcessGroup3:
@@ -2525,7 +2525,7 @@ MidiChanged_ProcessGroup3:
 	cpl	wa
 	and	wa, (0x8ea6:16)
 	jr	z, MidiChanged_ProcessGroup4
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x43E
+	ld	xbc, MidiChanged_ProcessGroup3_Data
 	calr	DispatchBitmaskHandlers
 	ldw	(0x8ea6:16), 0
 MidiChanged_ProcessGroup4:
@@ -2533,7 +2533,7 @@ MidiChanged_ProcessGroup4:
 	cpl	wa
 	and	wa, (0x8eaa:16)
 	ret	z
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x48C
+	ld	xbc, MidiChanged_ProcessGroup4_Data
 	calr	DispatchBitmaskHandlers
 	ldw	(0x8eaa:16), 0
 	ret
@@ -2543,25 +2543,25 @@ MidiChannel_DispatchChanged:
 	ld	wa, (0x8ea0:16)
 	cp	wa, 0:i3
 	jr	z, MidiDispatch_CheckGroup2
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x49E
+	ld	xbc, MidiChannel_DispatchChanged_Data
 	calr	DispatchBitmaskHandlers
 MidiDispatch_CheckGroup2:
 	ld	wa, (0x8ea4:16)
 	cp	wa, 0:i3
 	jr	z, MidiDispatch_CheckGroup3
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x4A4
+	ld	xbc, MidiDispatch_CheckGroup2_Data
 	calr	DispatchBitmaskHandlers
 MidiDispatch_CheckGroup3:
 	ld	wa, (0x8ea8:16)
 	cp	wa, 0:i3
 	jr	z, MidiDispatch_CheckGroup4
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x4BC
+	ld	xbc, MidiDispatch_CheckGroup3_Data
 	calr	DispatchBitmaskHandlers
 MidiDispatch_CheckGroup4:
 	ld	wa, (0x8eac:16)
 	cp	wa, 0:i3
 	jr	z, MidiDispatch_UpdateLEDs
-	ld	xbc, ENCODER_LUT_MODWHEEL_0x4D4
+	ld	xbc, MidiDispatch_CheckGroup4_Data
 	calr	DispatchBitmaskHandlers
 MidiDispatch_UpdateLEDs:
 	jrl	CtrlPanel_UpdateLEDState
@@ -2786,7 +2786,7 @@ SndParam_TableLookup_Via4100:
 	lda	xiz, (0x8e7c:16)
 	ld	xwa, 0x00004100
 	call	AcApcToggleProc_Helper
-	lda	xwa, (Protocol_values_for_LED_rows_0x10:24)
+	lda	xwa, (SndParam_TableLookup_Via4100_Data:24)
 	ld_rrb	a, xwa, hl
 	and	a, 0x07
 	sla	a, 4
@@ -3118,7 +3118,7 @@ ExtData_VoiceParam_DispatchBytecode:
 	cp	wa, 16
 	jr	gt, SndParamF9A541_ResBit7_Code_Epilogue
 	add	wa, wa
-	lda	xix, (Protocol_values_for_LED_rows_0x16:24)
+	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Data:24)
 ; (pre-port v7 note about the bytes at 0xFC6D8E:)
 ; v10 does not spell this byte either
 	ld_rrw	wa, xix, wa
@@ -3847,11 +3847,11 @@ MidiChOut_CheckHWState:
 	jr	nz, MidiChOut_OtherMode_Mask3
 MidiChOut_Mode6or3_Mask7:
 	and	l, 0x7
-	ld	xwa, Protocol_values_for_LED_rows_0x38
+	ld	xwa, MidiChOut_Mode6or3_Mask7_Data
 	jr	MidiChOut_TableLookup
 MidiChOut_OtherMode_Mask3:
 	and	l, 0x3
-	ld	xwa, Protocol_values_for_LED_rows_0x3E
+	ld	xwa, MidiChOut_OtherMode_Mask3_Data
 MidiChOut_TableLookup:
 	extz	hl
 	ld	a, (xwa+hl)
@@ -3999,7 +3999,7 @@ UIState_ProcessExtendedMode:
 	cp	wa, 7:i3
 	ret	gt
 	add	wa, wa
-	lda	xix, (Protocol_values_for_LED_rows_0x46:24)
+	lda	xix, (UIState_ProcessExtendedMode_Data:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfc73ba:24)
 ; (pre-port v7 note about the bytes at 0xFC73B5:)
@@ -4136,7 +4136,7 @@ UIState_ProcessSimpleMode:
 CtrlPanel_LookupIndicatorEntry:
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Protocol_values_for_LED_rows_0x56:24)
+	lda	xbc, (CtrlPanel_LookupIndicatorEntry_Data:24)
 	ld	xhl, (xbc+wa)
 	ret
 Util_FindLowestSetBit:
@@ -4165,9 +4165,9 @@ Audio_InitAllDefaults:
 	ld	(0x9136:16), 255
 	ld	(0x905c:16), 127
 	ld	(0x8ec7:16), 255
-	lda	xwa, (SoundProgram_DispatchTable_0x400:24)
+	lda	xwa, (Audio_InitAllDefaults_Data:24)
 	ld	(0x9056:16), xwa
-	lda	xwa, (SoundProgram_DispatchTable_0x800:24)
+	lda	xwa, (Audio_InitAllDefaults_Data_2:24)
 	ld	(0x90e6:16), xwa
 	lda	xbc, (0x90f1:16)
 	ld	xwa, xbc
@@ -4268,9 +4268,9 @@ Audio_UpdateTempoAndReturn:
 	call	SeqTimer_UpdateTempoReg
 	jp	CompIface_SetMax
 Audio_FullReinitWithPreset:
-	lda	xwa, (SoundProgram_DispatchTable_0x400:24)
+	lda	xwa, (Audio_InitAllDefaults_Data:24)
 	ld	(0x9056:16), xwa
-	lda	xwa, (SoundProgram_DispatchTable_0x800:24)
+	lda	xwa, (Audio_InitAllDefaults_Data_2:24)
 	ld	(0x90e6:16), xwa
 	call	Sys_CheckPowerStableFlag
 	cp	hl, 0:i3
@@ -4342,7 +4342,7 @@ VoiceData_InitAndCopyParams:
 	push	xhl
 	push	xiz
 	call	Mem_Copy
-	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
+	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
 	add	xwa, 0x7c
 	lda	xiz, (xiz + 124)
 	pushw	0x11e
@@ -4390,7 +4390,7 @@ VoiceData_ExtendedParamSetup:
 	jrl	Audio_FillParamBuffer
 	dec	8, xsp
 	pushw	iz
-	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
+	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
 	ld	(xsp+2), xwa
 	lda	xwa, (0xf9a0:16)
 	ld	(xsp+6), xwa
@@ -4437,7 +4437,7 @@ VoiceData_ExtendedParamSetup:
 	.byte	0xd7
 	swi	2
 	.byte	0x04
-	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
+	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
 	ld	(xsp+4), xwa
 	lda	xwa, (0xf9a0:16)
 	ld	(xsp+8), xwa
@@ -4569,7 +4569,7 @@ VoiceData_ExtendedParamSetup:
 	pop	xde
 	ld	(xsp+2), 0
 VoiceData_ExtendedParamSetup_Loop:
-	lda	xwa, (Naka_ToshiParam_Table_0x8C:24)
+	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
 	ld	(xsp+4), xwa
 	ld	xwa, 0:i3
 	ld	a, (xsp+2)
@@ -4756,7 +4756,7 @@ BitmapTable_ProcessEntry:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	lda	xwa, (SoundProgram_DispatchTable_0x892:24)
+	lda	xwa, (BitmapTable_ProcessEntry_Data_2:24)
 	add	xwa, xbc
 	ld	a, (xwa)
 	calr	VoiceData_LookupPtrByIndex
@@ -4768,7 +4768,7 @@ BitmapTable_ProcessEntry:
 	add	xbc, xbc
 	add	xbc, xwa
 	add	xbc, xbc
-	ld	xwa, SoundProgram_DispatchTable_0x890
+	ld	xwa, BitmapTable_ProcessEntry_Data
 	add	xwa, xbc
 	lda	xbc, (0x1ed400:24)
 	lda	xde, (xwa + 3)
@@ -4993,7 +4993,7 @@ Audio_MainPeriodicUpdate:
 	cp	(0xbf9d:16), 255
 	ret	z
 	res	0, (0x90c9:16)
-	lda	xwa, (SoundProgram_DispatchTable_0x400:24)
+	lda	xwa, (Audio_InitAllDefaults_Data:24)
 	ld	(0x9056:16), xwa
 	calr	Audio_SyncBufferPositions
 	push	xde
@@ -5064,7 +5064,7 @@ ExtData_ToneParam_DispatchHandler:
 	cp	wa, 11
 	ret	gt
 	add	wa, wa
-	lda	xix, (SoundProgram_DispatchTable_0x896:24)
+	lda	xix, (ExtData_ToneParam_DispatchHandler_Data:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfc7da5:24)
 	jp_rr	8, xix, wa
@@ -5357,7 +5357,7 @@ ExtData_ToneParam_AltDispatch:
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda	xix, (SoundProgram_DispatchTable_0x8AE:24)
+	lda	xix, (ExtData_ToneParam_AltDispatch_Data:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfc7fc8:24)
 	jp_rr	8, xix, wa
@@ -5413,7 +5413,7 @@ ExtData_ToneParam_AltBody:
 	cp	wa, 8
 	ret	gt
 	add	wa, wa
-	lda	xix, (SoundProgram_DispatchTable_0x8C0:24)
+	lda	xix, (ExtData_ToneParam_AltBody_Data:24)
 	ld_rrw	wa, xix, wa
 	lda	xix, (0xfc8032:24)
 	jp_rr	8, xix, wa
@@ -5687,7 +5687,7 @@ ExtData_ToneParam_MultiChannel_Join3:
 	ret	z
 	lda	xde, (0xfc66:16)
 	extz	wa
-	lda	xbc, (SoundProgram_DispatchTable_0x8D2:24)
+	lda	xbc, (ExtData_ToneParam_MultiChannel_Data:24)
 	.byte	0xc3
 	reti
 	.byte	0xe4, 0xe0
@@ -5877,7 +5877,7 @@ ExtData_Voice_MixedHandler_Join:
 	ld	a, (0xfd02:16)
 	and	a, 3
 	extz	wa
-	lda	xbc, (SoundProgram_DispatchTable_0x8D6:24)
+	lda	xbc, (ExtData_Voice_MixedHandler_Data:24)
 	.byte	0xc3
 	reti
 	.byte	0xe4, 0xe0
@@ -6520,7 +6520,7 @@ CtrlPanelRefresh_Done:
 CtrlPanel_BuildIndicatorBitmask:
 	push	xiz
 	ld	xiz, 0:i3
-	lda	xde, (SoundProgram_DispatchTable_0x8DA:24)
+	lda	xde, (CtrlPanel_BuildIndicatorBitmask_Data:24)
 	ld	c, (xwa + 1)
 	cp	c, 0xff
 	jr	nz, IndBitmask_LookupByChannel
@@ -7741,7 +7741,7 @@ SwbtWr_AppendFixedParamBlock:
 VoiceData_LookupPtrByIndex:
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SoundProgram_DispatchTable_0x400:24)
+	lda	xbc, (Audio_InitAllDefaults_Data:24)
 	ld	xhl, (xbc+wa)
 	ret
 VoiceData_LookupPtrByChannel:
@@ -7749,7 +7749,7 @@ VoiceData_LookupPtrByChannel:
 	jr	ugt, VoiceLookup_CheckRhythm
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SoundProgram_DispatchTable_0x800:24)
+	lda	xbc, (Audio_InitAllDefaults_Data_2:24)
 	ld	xhl, (xbc+wa)
 	ret
 VoiceLookup_CheckRhythm:
@@ -7780,7 +7780,7 @@ VoicePanInit_Loop:
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
-	lda	xbc, (SoundProgram_DispatchTable_0x8F4:24)
+	lda	xbc, (VoiceChannels_InitPanFromPreset_Data:24)
 	ld	a, (xbc+wa)
 	calr	VoiceData_LookupPtrByIndex
 	cp	xhl, 0xffffffff
@@ -7831,7 +7831,7 @@ ReverbPreset_SearchLoop:
 	ld	wa, iz
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, SoundProgram_DispatchTable_0x908
+	ld	xbc, ReverbPreset_SearchLoop_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -7859,7 +7859,7 @@ EQPreset_SearchLoop:
 	ld	wa, iz
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, Naka_ToshiParam_Table_0x24
+	ld	xbc, EQPreset_SearchLoop_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -7887,7 +7887,7 @@ CombinedPreset_SearchLoop:
 	ld	wa, iz
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, Naka_ToshiParam_Table_0x48
+	ld	xbc, CombinedPreset_SearchLoop_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -7901,7 +7901,7 @@ CombinedPreset_SearchLoop:
 	ld	wa, iz
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, Naka_ToshiParam_Table_0x48
+	ld	xbc, CombinedPreset_SearchLoop_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	lda	xwa, (xwa + 24)
@@ -7958,7 +7958,7 @@ ReverbPreset_Load:
 	pushw	iz
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SoundProgram_DispatchTable_0x908:24)
+	lda	xbc, (ReverbPreset_SearchLoop_Data:24)
 	ld	xwa, (xbc+wa)
 	pushw	0x18
 	push	xwa
@@ -8000,7 +8000,7 @@ EQPreset_Load:
 	pushw	iz
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_ToshiParam_Table_0x24:24)
+	lda	xbc, (EQPreset_SearchLoop_Data:24)
 	ld	xwa, (xbc+wa)
 	pushw	0x18
 	push	xwa
@@ -8043,7 +8043,7 @@ CombinedPreset_Load:
 	pushw	iz
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_ToshiParam_Table_0x48:24)
+	lda	xbc, (CombinedPreset_SearchLoop_Data:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp + 2), xwa
 	pushw	0x18
@@ -8690,7 +8690,7 @@ MidiStream_InitFromLookup:
 	ld	l, (0x36ff:16)
 	and	l, 0xf
 	sll	hl, 2
-	ld	xiy, VoiceMode_ParamConfigTables_0xAB8
+	ld	xiy, MidiStream_InitFromLookup_Data
 	ld	xiy, (xiy+hl)
 	cp	xiy, 0xffffffff
 	jr	z, MidiStreamInit_Done
@@ -8814,7 +8814,7 @@ MidiStream_ProcessorDispatchB:
 	ld	(0x912b:16), 0
 	and	w, 0x7
 	sll	w, 2
-	ld	xix, MidiSeqBuf_ProcessorTable_0x1
+	ld	xix, MidiStream_ProcessorDispatchB_Data
 	ld	xix, (xix+w)
 	call	(xix)
 	ld	(0x9136:16), 255
@@ -8828,7 +8828,7 @@ MidiSeqBuf_Return:
 	pop	xiz
 	ret
 ; MidiSeqBuf event-type handler table: 8 x .long code pointer, starting one
-; byte in (after the 0xff pad byte; the reader uses MidiSeqBuf_ProcessorTable_0x1,
+; byte in (after the 0xff pad byte; the reader uses MidiStream_ProcessorDispatchB_Data,
 ; a .set in shared/positional_labels.s).  Reader MidiStream_ProcessorDispatchB:
 ;   and w, 7 / sll w, 2 / ld xix, <table> / ld_sril3 xix, (xix + w) / call (xix)
 ; so 8 entries, index = w & 7.  Each handler builds one record at RAM 0x9111
@@ -8837,6 +8837,7 @@ MidiSeqBuf_Return:
 ; entries 5-7 are the `ret` right after the table (no record).
 MidiSeqBuf_ProcessorTable:
 	.byte	0xff	; pad: the table proper starts one byte in
+MidiStream_ProcessorDispatchB_Data:
 	.long	TempoCC_TransmitBytecodeBlock
 	.long	MIDI_EmitRecord_B0
 	.long	MIDI_EmitRecord_D2
@@ -9038,7 +9039,7 @@ TempoRing_FoundMatch:
 MidiStream_ProcessorDispatchC:
 	and	w, 0xf
 	sll	w, 2
-	ld	xix, TempoRing_ProcessorTable_0x1
+	ld	xix, MidiStream_ProcessorDispatchC_Data
 	ld	xix, (xix+w)
 	call	(xix)
 TempoRing_UpdateAndContinue:
@@ -9054,7 +9055,7 @@ TempoRing_Return:
 	pop	xiz
 	ret
 ; TempoRing event-type handler table: 16 x .long code pointer, starting one
-; byte in (after the 0xff pad byte; the reader uses TempoRing_ProcessorTable_0x1,
+; byte in (after the 0xff pad byte; the reader uses MidiStream_ProcessorDispatchC_Data,
 ; a .set in shared/positional_labels.s).  Reader MidiStream_ProcessorDispatchC
 ;   and w, 0xf / sll w, 2 / ld xix, <table> / ld_sril3 xix, (xix + w) / call (xix)
 ; so 16 entries, index = w & 15; entries 7-15 point at the `ret` right after
@@ -9063,6 +9064,7 @@ TempoRing_Return:
 ; MIDI_EmitRecord_D0 (index 6, which emits only when bit 0 of 0xFFC2 is set).
 TempoRing_ProcessorTable:
 	.byte	0xff	; pad: the table proper starts one byte in
+MidiStream_ProcessorDispatchC_Data:
 	.long	TempoCC_TransmitBytecodeBlock
 	.long	MIDI_EmitRecord_B0
 	.long	MIDI_EmitRecord_80
@@ -9287,7 +9289,7 @@ TempoRing_InitPartStream:
 	ld	xix, 0xf1a0
 	ld	l, (xix+hl)
 	sll	hl, 2
-	ld	xix, VoiceMode_ParamConfigTables_0x68
+	ld	xix, TempoRing_InitPartStream_Data
 	ld	xiy, (xix+hl)
 	ld	xix, 0x9136
 TempoPartStream_CopyLoop:
@@ -9467,7 +9469,7 @@ PartReinit_SendB0Command:
 	ld	l, (0x912c:16)
 	ld	xiy, 0xf1a0
 	ld	l, (xiy+hl)
-	ld	xiy, VoiceMode_ParamConfigTables_0x24
+	ld	xiy, PartReinit_SendB0Command_Data
 	ld	a, (xiy+hl)
 	ld	w, 0x4:opc
 	ld	(xix+), WA
@@ -9749,13 +9751,13 @@ VoiceMode_ParamHandler_3:
 	ld	l, (0x9135:16)
 	and	l, 0xf
 	sll	hl, 2
-	ld	xix, VoiceMode3_DispatchTable_0x1
+	ld	xix, VoiceMode_ParamHandler_3_Data
 	ld	xix, (xix+hl)
 	call	(xix)
 VoiceMode3_Done:
 	ret
 ; VoiceMode3 record-type handler table: 16 x .long code pointer, starting one
-; byte in (after the 0xff pad byte; the reader uses VoiceMode3_DispatchTable_0x1,
+; byte in (after the 0xff pad byte; the reader uses VoiceMode_ParamHandler_3_Data,
 ; a .set in shared/positional_labels.s).  Reader VoiceMode_ParamHandler_3:
 ;   ld l, (0x9135) / and l, 0xf / sll hl, 2 / ld xix, <table> /
 ;   ld_sril3 xix, (xix + hl) / call (xix)
@@ -9766,6 +9768,7 @@ VoiceMode3_Done:
 ; ties this table's index to that numbering).
 VoiceMode3_DispatchTable:
 	.byte	0xff	; pad: the table proper starts one byte in
+VoiceMode_ParamHandler_3_Data:
 	.long	VoiceMode3_EvType0
 	.long	MidiVoice_DataBlockHandler
 	.long	VoiceMode3_EvType2
@@ -9896,7 +9899,7 @@ MidiPartCC_WriteAndDispatch:
 	ldb_d8	l, (0x912c)
 	ld	xix, 0xf1a0
 	ld_rrb	l, xix, hl
-	ld	xix, VoiceMode_ParamConfigTables_0x24
+	ld	xix, PartReinit_SendB0Command_Data
 	ld_rrb	c, xix, hl
 	ld	b, 3:opc
 	ld	(0x90bf:16), bc
@@ -10083,7 +10086,7 @@ VoiceMode3_BuildChannelTable:
 	ld	xix, 0xf1a0
 	ld	l, (xix+hl)
 	sll	hl, 2
-	ld	xix, VoiceMode_ParamConfigTables_0x5C4
+	ld	xix, VoiceMode3_BuildChannelTable_Data
 	ld	xiy, (xix+hl)
 	ld	xix, 0x9136
 VoiceMode3_CopyTableEntry:
@@ -10156,7 +10159,7 @@ VoiceParam_WriteExpression:
 	ld	xix, 0xf1a0
 	ld	l, (0x912c:16)
 	ld	l, (xix+l)
-	ld	xix, VoiceMode_ParamConfigTables_0x24
+	ld	xix, PartReinit_SendB0Command_Data
 	ld	b, (xix+l)
 	ld	(0x90bf:16), bc
 	ld	d, 0x7f:opc
@@ -10197,7 +10200,7 @@ VoiceParam_WriteVolume:
 	ld	xix, 0xf1a0
 	ld	l, (0x912c:16)
 	ld	l, (xix+l)
-	ld	xix, VoiceMode_ParamConfigTables_0x24
+	ld	xix, PartReinit_SendB0Command_Data
 	ld	b, (xix+l)
 	ld	(0x90bf:16), bc
 	ld	d, 0x7f:opc
@@ -10240,7 +10243,7 @@ VoiceParam_WritePan:
 	ld	xix, 0xf1a0
 	ld	l, (0x912c:16)
 	ld	l, (xix+l)
-	ld	xix, VoiceMode_ParamConfigTables_0x24
+	ld	xix, PartReinit_SendB0Command_Data
 	ld	b, (xix+l)
 	ld	(0x90bf:16), bc
 	and	de, 0x7f7f
@@ -10289,7 +10292,7 @@ VoiceNote_WriteBankAndCC:
 	cp	a, 0xf
 	jr	z, VoiceNote_SetupCCParams
 	ld	c, 0xb3:opc
-	ld	xix, VoiceMode_ParamConfigTables_0x24
+	ld	xix, PartReinit_SendB0Command_Data
 	ld	b, (xix+a)
 VoiceNote_SetupCCParams:
 	ld	(0x90bf:16), bc
@@ -10346,22 +10349,22 @@ MidiVoiceNote_Dispatch_Table:
 	.long	MidiVoiceNote_LookupMode2
 	.long	MidiVoiceNote_LookupMode3
 MidiVoiceNote_LookupMode0:
-	ld	xiy, VoiceMode_ParamConfigTables_0x47
+	ld	xiy, MidiVoiceNote_LookupMode0_Data
 	ld	xbc, 0xf
 	ld	l, (0x911c:16)
 	jr	MidiPart_FindChannelInTable
 MidiVoiceNote_LookupMode1:
-	ld	xiy, VoiceMode_ParamConfigTables_0x38
+	ld	xiy, MidiVoiceNote_LookupMode1_Data
 	ld	xbc, 0xf
 	ld	l, (0x911c:16)
 	jr	MidiPart_FindChannelInTable
 MidiVoiceNote_LookupMode2:
-	ld	xiy, VoiceMode_ParamConfigTables_0x38
+	ld	xiy, MidiVoiceNote_LookupMode1_Data
 	ld	xbc, 0xf
 	ld	l, (0x911d:16)
 	jr	MidiPart_FindChannelInTable
 MidiVoiceNote_LookupMode3:
-	ld	xiy, VoiceMode_ParamConfigTables_0x56
+	ld	xiy, MidiVoiceNote_LookupMode3_Data
 	ld	xbc, 0x11
 	ld	l, (0x911c:16)
 MidiPart_FindChannelInTable:
@@ -10621,15 +10624,20 @@ VoiceMode_ParamConfigTables:
 	.byte	0xb3, 0x17, 0x7f, 0x04, 0xb0, 0x01, 0x7f, 0x04
 	.byte	0x17, 0x00, 0xff, 0x00, 0x17, 0x04, 0x48, 0x01
 	.byte	0x17, 0x08, 0x7f, 0x01, 0xff, 0xff, 0xff, 0xff
-	.byte	0xff, 0xff, 0xff, 0xff, 0x00, 0x02, 0x01, 0x07
+	.byte	0xff, 0xff, 0xff, 0xff
+PartReinit_SendB0Command_Data:	.byte	0x00, 0x02, 0x01, 0x07
 	.byte	0x08, 0x09, 0x0a, 0x0b, 0x04, 0x05, 0x06, 0x03
 	.byte	0x0f, 0x15, 0x15, 0x00, 0x00, 0x0c, 0x0d, 0x0e
+MidiVoiceNote_LookupMode1_Data:
 	.byte	0x00, 0x02, 0x01, 0x08, 0x09, 0x0a, 0x0b, 0x03
-	.byte	0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x00
+	.byte	0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13
+MidiVoiceNote_LookupMode0_Data:	.byte	0x00
 	.byte	0x02, 0x01, 0x08, 0x09, 0x0a, 0x0b, 0x03, 0x04
-	.byte	0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x00, 0x02
+	.byte	0x05, 0x06, 0x07, 0x11, 0x12, 0x13
+MidiVoiceNote_LookupMode3_Data:	.byte	0x00, 0x02
 	.byte	0x01, 0x08, 0x09, 0x0a, 0x0b, 0x03, 0x04, 0x05
 	.byte	0x06, 0x07, 0x11, 0x12, 0x13, 0x0c, 0x0f, 0xff
+TempoRing_InitPartStream_Data:
 	.byte 0xcc, 0xb2, 0xfc, 0x00, 0x7c, 0xb3, 0xfc, 0x00
 	.byte 0x24, 0xb3, 0xfc, 0x00, 0xe4, 0xb4, 0xfc, 0x00
 	.byte 0x28, 0xb5, 0xfc, 0x00, 0x6c, 0xb5, 0xfc, 0x00
@@ -10802,6 +10810,7 @@ VoiceMode_ParamConfigTables:
 	.byte	0x72, 0x07, 0x7f, 0x06, 0xff, 0xff, 0xff, 0xff
 	.fill	8, 1, 0xff
 	.byte	0xff, 0xff, 0xff, 0xff
+VoiceMode3_BuildChannelTable_Data:
 	.byte 0x28, 0xb8, 0xfc, 0x00, 0x30, 0xb9, 0xfc, 0x00
 	.byte 0xac, 0xb8, 0xfc, 0x00, 0x74, 0xba, 0xfc, 0x00
 	.byte 0xa4, 0xba, 0xfc, 0x00, 0xd4, 0xba, 0xfc, 0x00
@@ -10961,6 +10970,7 @@ VoiceMode_ParamConfigTables:
 	.byte	0x72, 0x03, 0xff, 0x06, 0x72, 0x07, 0x7f, 0x06
 	.fill	8, 1, 0xff
 	.fill	8, 1, 0xff
+MidiStream_InitFromLookup_Data:
 	.byte	0xff, 0xff, 0xff, 0xff, 0xc, 0xbd, 0xfc, 0x00
 	.byte	0x28, 0xbd, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff
 	.byte	0x44, 0xbd, 0xfc, 0x00, 0xff, 0xff, 0xff, 0xff
@@ -11619,7 +11629,7 @@ MidiStream_CmdPedalNotify_Skip4:
 	ldb_d8	l, (0xfd50)
 	and	l, 3
 	sla	l, 2
-	ld	xix, MidiStream_ExtendedDispatch_0x73
+	ld	xix, MidiStream_ExtendedDispatch_Data
 	ld_rr8l	xix, xix, l
 	call	(xix)
 MidiStream_ExtDispatch_Mode2Ret:
@@ -11632,9 +11642,10 @@ MidiStream_ExtDispatch_Mode2Ret:
 ;   ld_rr8l xix, xix, l / call (xix)
 ; so the index is bits 0-1 of RAM 0xFD50 and the count, 4, is that mask.
 ; Entry 2 is the `ret` in front of the table: that value does nothing.
-; Also named MidiStream_ExtendedDispatch_0x73 (a .set in
+; Also named MidiStream_ExtendedDispatch_Data (a .set in
 ; shared/positional_labels.s).  Open: what the four values of 0xFD50 bits 0-1
 ; select (0xFD50-0xFD5D is the block BitMapOut_RestoreVoiceChannels restores).
+MidiStream_ExtendedDispatch_Data:
 	.long	MidiStream_ExtDispatch_Mode0
 	.long	MidiStream_ExtDispatch_Mode1
 	.long	MidiStream_ExtDispatch_Mode2Ret
@@ -11892,15 +11903,16 @@ MidiStream_ExtendedDispatch_Join2:
 	ldb_d8	b, (0xfd50)
 	and	b, 3
 	sll	b, 2
-	ld	xiy, MidiStream_ExtendedDispatch_0x307
+	ld	xiy, MidiStream_ExtDispatch_Mode3_Data
 	ld_rr8l	xiy, xiy, b
 	jp	(xiy)
 ; MIDI-mode jump table: 4 x .long code pointer, indexed by bits 0-1 of RAM
 ; 0xFD50.  Reader: the code just above (v7 0xFCC642) --
 ;   ldb_d8 b, (0xfd50) / and b, 3 / sll b, 2 / ld xiy, <this table> /
 ;   ld_rr8l xiy, xiy, b / jp (xiy)
-; Modes 0 and 2 share one target.  Also named MidiStream_ExtendedDispatch_0x307
+; Modes 0 and 2 share one target.  Also named MidiStream_ExtDispatch_Mode3_Data
 ; (a .set in shared/positional_labels.s).
+MidiStream_ExtDispatch_Mode3_Data:
 	.long	MidiStream_ExtDispatch_ModeJump02
 	.long	MidiStream_ExtDispatch_ModeJump1
 	.long	MidiStream_ExtDispatch_ModeJump02
@@ -11943,7 +11955,7 @@ MidiStream_HandleRunningStatus_Skip:
 	ldb_d8	l, (0xfd50)
 	and	l, 3
 	sll	hl, 2
-	ld	xix, MidiStream_HandleRunningStatus_0x21
+	ld	xix, MidiStream_HandleRunningStatus_Data
 	ld_rr8l	xix, xix, l
 	jp	(xix)
 MidiStream_HandleRunningStatus_Return:
@@ -11953,8 +11965,9 @@ MidiStream_HandleRunningStatus_Return:
 ; (v7 0xFCC699) -- ldb_d8 l, (0xfd50) / and l, 3 / sll hl, 2 /
 ; ld xix, <this table> / ld_rr8l xix, xix, l / jp (xix).  Entry 2 is the `ret`
 ; just above (no action); entry 3 is the routine that follows the 1-byte `ret`
-; stub MidiStream_HandleNoteCC.  Also named MidiStream_HandleRunningStatus_0x21
+; stub MidiStream_HandleNoteCC.  Also named MidiStream_HandleRunningStatus_Data
 ; (a .set in shared/positional_labels.s).
+MidiStream_HandleRunningStatus_Data:
 	.long	MidiStream_RunStatus_Mode0
 	.long	MidiStream_RunStatus_Mode1
 	.long	MidiStream_HandleRunningStatus_Return

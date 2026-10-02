@@ -1121,7 +1121,7 @@ Boot_ClearAllInterruptEnables:
 ; ===========================================================================
 SubCPU_Send_Payload:
 	push xiz
-	cp (ROM_PaddingFF_0x4:24), 0xff
+	cp (SubCPU_Send_Payload_Data:24), 0xff
 	jrl nz, SubCPU_Payload_Done
 	ld xiz, 0:i3
 
@@ -1150,7 +1150,7 @@ SubCPU_Payload_DelayLoop_Short:
 	ld xde, 0x90000
 	call InterCPU_E1_Bulk_Transfer
 	ld xiz, 0x800000
-	cp (ROM_PaddingFF_0x2:24), 0xff
+	cp (SubCPU_Payload_DelayLoop_Short_Data:24), 0xff
 	jr nz, SubCPU_Payload_TransferPart2
 	ld xiz, 0x50000
 	ld xwa, 0x3e0000
@@ -2589,7 +2589,7 @@ TextRender_CharEncodeAndDraw:
 	ld xhl, (xsp + 30)
 	ld c, (xhl)
 	extz bc
-	lda xde, (Data_CharMapFormatBlock_0x14:24)
+	lda xde, (TextRender_CharEncodeAndDraw_Data:24)
 	ld	c, (xde+bc)
 	ld (xhl), c
 	ld xbc, (xsp + 4)
@@ -3205,7 +3205,7 @@ SndParam_RW_ProcessResult_v7:
 	inc	3, a
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE20:24)
+	lda	xbc, (SndParam_RW_ProcessResult_Data:24)
 	lda	xde, (xbc+wa)
 	ld	xwa, xiz
 	ld	bc, (xsp + 4)
@@ -3294,7 +3294,10 @@ Get_Firmware_Version:
 	ret
 
 ROM_PaddingFF:
-	.byte 0xff, 0xff, 0xff, 0x00, 0xff
+	.byte	0xff, 0xff
+SubCPU_Payload_DelayLoop_Short_Data:	.byte	0xff
+Boot_CallInitHandlers_Data:	.byte	0x00
+SubCPU_Send_Payload_Data:	.byte	0xff
 
 	.include "boot/rom_end_structure.s"
 
@@ -3648,7 +3651,6 @@ ROM_PaddingFF:
 	.set Str_AL, 0xe8005f
 
 
-	.set NakaInst_GM_0x5E, 0xe800ce
 
 
 

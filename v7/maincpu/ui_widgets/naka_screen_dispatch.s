@@ -1362,11 +1362,14 @@ NoteStepDisplayData:
 	aligned_string "  1"
 	aligned_string "  0"
 CmpBndRng_DefaultString_Str_ERR:	aligned_string "ERR"
+CmpSetP1_DialGrid_Data:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
 	.byte 0x02, 0x00, 0x03, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00, 0x03, 0x00
+	.byte	0x01, 0x00
+CmpSetP1_SendAndApplyFunc_Data:	.byte	0x01, 0x00, 0x01, 0x00, 0x03, 0x00
 	.byte 0x02, 0x00, 0x01, 0x00, 0x01, 0x00, 0x01, 0x00
-	.byte 0x01, 0x00, 0x01, 0x00, 0x6a, 0x00, 0x1c, 0x01
+	.byte	0x01, 0x00, 0x01, 0x00
+AcCmpSetGridBoxProc_Data:	.byte	0x6a, 0x00, 0x1c, 0x01
 	.byte 0x6a, 0x00, 0x1c, 0x01, 0x0c, 0x02, 0xf5, 0x01
 	.byte 0xf5, 0x01
 NoteDataB_Natural:
@@ -1433,11 +1436,13 @@ StrTimeSig_1_2:
 	aligned_string "1/2"
 UI_COMPONENT_DISPATCH_Str_Fmtd:			.byte 0x25, 0x64, 0x00, 0xff
 UI_COMPONENT_DISPATCH_CASE1_Str_Fmts_Fmts:	aligned_string "%s (%s)"
+CmpSetP1_GridCheck_EventEnc_Data:
 	.byte 0x00, 0x00, 0x1a, 0x00, 0xa4
 	.byte 0x00			; padding
 	.byte 0xa4, 0x00, 0x55
 	.byte 0x00			; padding
-	.byte 0x60, 0x00, 0x7e, 0x00, 0x82, 0x00, 0x00, 0x00
+	.byte	0x60, 0x00, 0x7e, 0x00, 0x82, 0x00
+CmpSetP1GridCheck_Data:	.byte	0x00, 0x00
 	.byte 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0x72, 0x01
 	.byte 0x72, 0x01, 0x72, 0x01
 StrPanRight63:	aligned_string "Right 63"
@@ -1568,9 +1573,11 @@ StrPanLeft61:	aligned_string " Left 61"
 StrPanLeft62:	aligned_string " Left 62"
 StrPanLeft63:	aligned_string " Left 63"
 StrPanLeft64:	aligned_string " Left 64"
+CmpSetGridCheck_Data:
 	.byte 0x00, 0x00
 	.byte 0x48, 0x00, 0x00, 0x00, 0x48, 0x00, 0xf3, 0x00
-	.byte 0xf3, 0x00, 0xf3, 0x00, 0x7c, 0xd5, 0xe1, 0x00
+	.byte	0xf3, 0x00, 0xf3, 0x00
+S2cMemNoBox_HandleScroll_Data:	.byte	0x7c, 0xd5, 0xe1, 0x00
 PtrTbl_StyleSectShortNames:
 	.long StrStyleSect_A_Vari2
 	.long StrStyleSect_A_Vari3
@@ -1785,8 +1792,10 @@ StrTranspose_Minus24:
 	.byte 0x2d, 0x32, 0x34, 0x00
 StrTranspose_Minus25:
 	.byte 0x2d, 0x32, 0x35, 0x00
+S2cGridBoxProc_Data:
 	.byte 0x76, 0x00, 0x26, 0x01, 0x76, 0x00, 0x26, 0x01
-	.byte 0x3c, 0x02, 0x00, 0x02, 0x00, 0x02, 0xf5, 0x38
+	.byte	0x3c, 0x02, 0x00, 0x02, 0x00, 0x02
+S2c_GridCheck_Dispatch_Data:	.byte	0xf5, 0x38
 	.byte 0x00, 0x00, 0xf6, 0x38, 0x00, 0x00, 0xf7, 0x38
 	.byte 0x00, 0x00, 0xf8, 0x38, 0x00, 0x00, 0xf9, 0x38
 	.byte 0x00, 0x00
@@ -1815,9 +1824,11 @@ StrBeat02:
 	aligned_string " 2 "
 StrBeat01:	.asciz " 1 "
 StrBeatOff:
-	.byte 0x4f, 0x46, 0x46, 0x00, 0x00, 0x00
+	.byte	0x4f, 0x46, 0x46, 0x00
+S2cGridCheck_Data:	.byte	0x00, 0x00
 	.byte 0x38, 0x00, 0x00, 0x00, 0x38, 0x00, 0xce, 0x00
-	.byte 0xce, 0x00, 0xce, 0x00, 0xa8, 0xd9, 0xe1, 0x00
+	.byte	0xce, 0x00, 0xce, 0x00
+PsCmpCpFPtnBox_HandleEvtBC_Data:	.byte	0xa8, 0xd9, 0xe1, 0x00
 PtrTbl_StylePatternLongNames:
 	.long StrStylePatt_Vari2b
 	.long StrStylePatt_Vari3b
@@ -1933,14 +1944,19 @@ StrRhySlot_AkiPlaceholderX:	aligned_string " aki     "
 StrRhySlot_MemoryC:		aligned_string "MEMORY C "
 StrRhySlot_MemoryB:		aligned_string "MEMORY B "
 StrRhySlot_MemoryA:		aligned_string "MEMORY A "
+PsCstmCpSwBox_HandleEvtBC_Str_MEMORY:
 	aligned_string "MEMORY"
+PsCstmCpSwBox_HandleEvtBC_Str_CUSTOM:
 	aligned_string "CUSTOM"
+PsCstmCpSwBox_ReadParam2_Str_MEMORY:
 	.byte 0x4d, 0x45, 0x4d, 0x4f, 0x52, 0x59
 	.byte 0x00			; padding
 	.byte 0xff			; padding
+PsCstmCpSwBox_ReadParam2_Str_CUSTOM:
 	.byte 0x43, 0x55, 0x53, 0x54, 0x4f, 0x4d
 	.byte 0x00			; padding
 	.byte 0xff			; padding
+AcMemNoBox_HandleEvtBC_Data:
 	.byte 0x00			; padding
 	.byte 0xdd, 0xe1
 	.byte 0x00			; padding
@@ -2010,6 +2026,7 @@ StrStyleSect2_A_Vari4:	aligned_string "A-vari4"
 StrStyleSect2_A_Vari3:	aligned_string "A-vari3"
 StrStyleSect2_A_Vari2:	aligned_string "A-vari2"
 StrStyleSect2_A_Vari1:	aligned_string "A-vari1"
+AcCmpRecBox_HandleEvtBC_Data:
 	.long StrTrackBlank
 	.long StrTrackRec
 	.long StrTrackMute
@@ -2136,7 +2153,8 @@ StyleVarGrp_AVari1:
 StyleVarGrp_AEnd1:
 	.byte 0x41, 0x00
 StyleVarGrp_AEnd2b:
-	.byte 0x41, 0x00, 0x6a, 0x00, 0x0e, 0x01
+	.byte	0x41, 0x00
+AcEasyCmpGridBoxProc_Data:	.byte	0x6a, 0x00, 0x0e, 0x01
 	.byte 0x6a, 0x00, 0x0e, 0x01, 0xf0, 0x01, 0xd9, 0x01
 	.byte 0xd9, 0x01
 StrGenre_Waltz:		aligned_string "     Waltz      "
@@ -2149,10 +2167,13 @@ StrGenre_JazzFusion:	aligned_string "  Jazz Fusion   "
 StrGenre_DancePop:	aligned_string "   Dance Pop    "
 StrGenre_16Beat:	aligned_string "    16 Beat     "
 StrGenre_8Beat:		aligned_string "     8 Beat     "
+EasyCmp_GridCheck_EventEnc_Str_OFF:
 	.byte 0x4f, 0x46
-	.byte 0x46, 0x00, 0x25, 0x33, 0x64, 0x00, 0x00, 0x00
+	.byte	0x46, 0x00, 0x25, 0x33, 0x64, 0x00
+EasyCmpGridCheck_Data:	.byte	0x00, 0x00
 	.byte 0x48, 0x00, 0x00, 0x00, 0x48, 0x00, 0x18, 0x01
-	.byte 0x18, 0x01, 0x18, 0x01, 0x52, 0xdf, 0xe1, 0x00
+	.byte	0x18, 0x01, 0x18, 0x01
+MspNameBnkFunc_Data:	.byte	0x52, 0xdf, 0xe1, 0x00
 	.long StrBankShort_User2
 	.long StrBankShort_Compile1
 	.long StrBankShort_Compile2
@@ -2160,6 +2181,7 @@ StrBankShort_Compile2:	aligned_string "COMPILE2"
 StrBankShort_Compile1:	aligned_string "COMPILE1"
 StrBankShort_User2:	aligned_string "User2   "
 StrBankShort_User1:	aligned_string "User1   "
+MspNameBnkFunc_Data_2:
 	.byte 0x1c, 0x00, 0x1c, 0x00
 	.byte 0x69, 0x00, 0x69, 0x00, 0x69, 0x00, 0x20, 0x00
 	.byte 0x69, 0x00, 0x24, 0x00, 0x1c, 0x00, 0x00, 0x00
@@ -2243,8 +2265,10 @@ StrMsBankLong2_Comical:				aligned_string "    Comical     "
 StrMsBankLong2_Effect2:				aligned_string "    Effect 2    "
 StrMsBankLong2_Effect1:				aligned_string "    Effect 1    "
 RgpSetBnk_EvtEnc_SendAudioCmd_Str_PAD_Fmtd:	.byte 0x50, 0x41, 0x44, 0x25
-	.byte 0x64, 0x00, 0x00, 0x00, 0x48, 0x00, 0x00, 0x00
+	.byte	0x64, 0x00
+MspRGrpSetGridCheck_Data:	.byte	0x00, 0x00, 0x48, 0x00, 0x00, 0x00
 	.byte 0x48, 0x00, 0x41, 0x01, 0x41, 0x01, 0x41, 0x01
+RgpSetBnkBox_HandleEvtBC_Data:
 	.long StrCompileBank1
 	.long StrCompileBank2
 StrCompileBank2:				aligned_string "COMPILE BANK:2"
@@ -2254,16 +2278,21 @@ MspMemBox_ClampValue_Str_MEMORY_Fmt2d:		aligned_string "MEMORY = %2d"
 AcSndArgGrid_BnkDispatch_Str_Fmtd:		.byte 0x25, 0x64
 	.byte 0x00			; padding
 	.byte 0xff			; padding
+MspPlayModeFunc_Data:
 	.long StrInstantStart
 	.long StrSyncToRhythm
 StrSyncToRhythm:	aligned_string "SYNC TO RHYTHM   "
 StrInstantStart:	aligned_string "INSTANT START    "
+MspPlayModeFunc_Data_2:
 	.byte 0x23, 0x00, 0x23, 0x00
 	.byte 0x4c, 0x00, 0x4c, 0x00, 0x4c, 0x00, 0x32, 0x00
 	.byte 0x4c, 0x00, 0x36, 0x00, 0x32, 0x00, 0x00, 0x00
-	.byte 0x01, 0x02, 0x04, 0x08, 0x10, 0xff, 0x6e, 0x00
+AcSndArgGridBoxProc_Data:
+	.byte	0x01, 0x02, 0x04, 0x08, 0x10, 0xff
+AcSndArgGridBoxProc_Data_2:	.byte	0x6e, 0x00
 	.byte 0x4c, 0x01, 0x6e, 0x00, 0x4c, 0x01, 0x93, 0x03
-	.byte 0x56, 0x02, 0x6e, 0x03, 0x00, 0x00, 0x00, 0x00
+	.byte	0x56, 0x02, 0x6e, 0x03
+SndArgGridCheck_Data:	.byte	0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00
 	.long Presentation_RootEntry
 	.zero 4
@@ -2333,6 +2362,7 @@ MSG_ATTENTION_ES:
 MSG_ATTENTION_EN2:	aligned_string "ATTENTION!"	; Duplicate (12 bytes)
 MSG_ATTENTION_ID:	.asciz "Perhatian !"	; Indonesian (12 bytes)
 	; Pointer table at 0xe1e516
+AttLangCheck_Data:
 	.long MSG_ATTENTION_EN
 	.long MSG_ATTENTION_DE
 	.long MSG_ATTENTION_FR
@@ -2353,6 +2383,7 @@ MSG_ARE_YOU_SURE_ES:
 MSG_ARE_YOU_SURE_EN2:	.asciz "Are You Sure?"	; Duplicate (14 bytes)
 MSG_ARE_YOU_SURE_ID:	.asciz "Apakah yakin akan dihapus ?"	; Indonesian (28 bytes)
 	; Pointer table at 0xe1e596
+SureLangCheck_Data:
 	.long MSG_ARE_YOU_SURE_EN
 	.long MSG_ARE_YOU_SURE_DE
 	.long MSG_ARE_YOU_SURE_FR
@@ -2373,6 +2404,7 @@ MSG_CUSTOM_SOUND_COPY_ES:
 MSG_CUSTOM_SOUND_COPY_EN2:	.asciz "The Custom sound memories included with this pattern will be copied into the Sound Group memories. Some of the Sound Group memories will be replaced by them. OK?"	; Duplicate (162 bytes)
 MSG_CUSTOM_SOUND_COPY_ID:	.asciz "Custom Sound Memory termasuk dengan Pattern yang akan digandakan kedalam SOUND GROUP MEMORIES. Beberapa Sound Group Memory dikembalikan. OK ?"	; Indonesian (142 bytes)
 	; Pointer table at 0xe1e994
+SndMemLangCheck_Data:
 	.long MSG_CUSTOM_SOUND_COPY_EN
 	.long MSG_CUSTOM_SOUND_COPY_DE
 	.long MSG_CUSTOM_SOUND_COPY_FR
@@ -2390,6 +2422,7 @@ MSG_SOUND_GROUP_AFFECTED_ES:	.asciz "Las memorias de los grupos de sonido afecta
 MSG_SOUND_GROUP_AFFECTED_EN2:	aligned_string "Sound Group memories affected:"	; Duplicate (32 bytes)
 MSG_SOUND_GROUP_AFFECTED_ID:	aligned_string "Sound Group memory sudah bekerja :"	; Indonesian (36 bytes)
 	; Pointer table at 0xe1ea88
+SndMem1LangCheck_Data:
 	.long MSG_SOUND_GROUP_AFFECTED_EN
 	.long MSG_SOUND_GROUP_AFFECTED_DE
 	.long MSG_SOUND_GROUP_AFFECTED_FR
@@ -2410,6 +2443,7 @@ MSG_CUSTOM_SOUND_FULL_ES:
 MSG_CUSTOM_SOUND_FULL_EN2:	.asciz "The Custom sound memory is full.Some sounds which are used by current Custom Rhythms will be deleted. OK?"	; Duplicate (106 bytes)
 MSG_CUSTOM_SOUND_FULL_ID:	.asciz "Custom Sound memory sudah penuh.Beberapa suara (Sounds) yang digunakan dengan Custom Rhythms sekarang akan dihapus. Benar ?"	; Indonesian (124 bytes)
 	; Pointer table at 0xe1ed64
+MemfulLangCheck_Data:
 	.long MSG_CUSTOM_SOUND_FULL_EN
 	.long MSG_CUSTOM_SOUND_FULL_DE
 	.long MSG_CUSTOM_SOUND_FULL_FR
@@ -2428,6 +2462,7 @@ MSG_CUSTOM_RHYTHMS_AFFECTED_ES:		aligned_string "Los ritmos personalizados afect
 MSG_CUSTOM_RHYTHMS_AFFECTED_EN2:	aligned_string "Custom Rhythms affected:"	; Duplicate (26 bytes)
 MSG_CUSTOM_RHYTHMS_AFFECTED_ID:		.asciz "Custom Rhythm sudah bekerja :"	; Indonesian (30 bytes)
 	; Pointer table at 0xe1ee2c
+Memful2LangCheck_Data:
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_EN
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_DE
 	.long MSG_CUSTOM_RHYTHMS_AFFECTED_FR
@@ -2444,6 +2479,7 @@ MSG_INSERT_STYLE_CONVERT_ES:	.asciz "Please Insert the Style Convert Disk!"	; Sp
 MSG_INSERT_STYLE_CONVERT_EN2:	.asciz "Please Insert the Style Convert Disk!"	; Duplicate (38 bytes)
 MSG_INSERT_STYLE_CONVERT_ID:	.asciz "Please Insert the Style Convert Disk!"	; Indonesian (38 bytes)
 	; Pointer table at 0xe1ef42
+StylCnvLangCheck_Data:
 	.long MSG_INSERT_STYLE_CONVERT_EN
 	.long MSG_INSERT_STYLE_CONVERT_DE
 	.long MSG_INSERT_STYLE_CONVERT_FR

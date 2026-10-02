@@ -376,7 +376,7 @@ NoteStr3_C:
 ; of the *LngCheck functions of Toshi_ApFunction_Table (`cp xbc, 0x1e0009f` /
 ; `lda xhl, (<table>:24)` / `ret`, ui/ui_mode_handlers.s and, for
 ; WallSureLngCheck, display/graphics_text_vga.s), which reach them through
-; positional names such as Str_Attention_EN_0xC.  Four tables are
+; positional names such as SysSureLngCheck_Data.  Four tables are
 ; translated except for Italian, whose entry is the literal "Italian"; the
 ; three description tables (FactoryResetDesc, StoreSoundBalance,
 ; StoreTotalSetting) have only EN and DE, the FR/ES/IT/ID slots pointing at
@@ -387,6 +387,7 @@ NoteStr3_C:
 NoteStr3_Blank_3:
 	aligned_string "  "
 LngTable_Attention:	; returned by AttnLngCheck
+AttnLngCheck_Data:
 	.long Str_Attention_EN	; EN
 	.long Str_Attention_DE	; DE
 	.long Str_Attention_FR	; FR
@@ -406,6 +407,7 @@ Str_Attention_DE:
 Str_Attention_EN:
 	aligned_string "ATTENTION!"
 LngTable_InitSettingWarn:	; returned by SysSureLngCheck
+SysSureLngCheck_Data:
 	.long Str_InitSettingWarn_EN	; EN
 	.long Str_InitSettingWarn_DE	; DE
 	.long Str_InitSettingWarn_FR	; FR
@@ -421,6 +423,7 @@ Str_InitSettingWarn_FR:	aligned_string "La procédure d'initialisation va remplac
 Str_InitSettingWarn_DE:	aligned_string "Durch das Initialisieren werden alle aktuellen Einstellungen wieder in den Werkszustand zurückversetzt."
 Str_InitSettingWarn_EN:	aligned_string "Using Initial Setting will replace any current data with the original factory settings!"
 LngTable_AreYouSure:	; returned by SureLngCheck
+SureLngCheck_Data:
 	.long Str_AreYouSure_EN	; EN
 	.long Str_AreYouSure_DE	; DE
 	.long Str_AreYouSure_FR	; FR
@@ -436,6 +439,7 @@ Str_AreYouSure_FR:	aligned_string "Etes vous sûr?"
 Str_AreYouSure_DE:	aligned_string "SIND SIE SICHER?"
 Str_AreYouSure_EN:	aligned_string "Are You Sure?"
 LngTable_FactoryResetDesc:	; returned by CtlIniLngCheck
+CtlIniLngCheck_Data:
 	.long Str_FactoryResetDesc_EN	; EN
 	.long Str_FactoryResetDesc_DE	; DE
 	.long Str_FactoryResetDesc_EN3	; FR
@@ -453,6 +457,7 @@ Str_FactoryResetDesc_EN3:
 Str_FactoryResetDesc_DE:	aligned_string "Setzt die PERFORMANCE Daten, d.h. die von Ihnen erstellten Daten und Einstellungen, auf die Werkseinstellung zurück."
 Str_FactoryResetDesc_EN:	aligned_string "                               Resets the PERFORMANCE or individual sections to the original factory settings."
 LngTable_StoreSoundBalance:	; returned by PmemNormLngCheck
+PmemNormLngCheck_Data:
 	.long Str_StoreSoundBalance_EN	; EN
 	.long Str_StoreSoundBalance_DE	; DE
 	.long Str_StoreSoundBalance_EN3	; FR
@@ -471,6 +476,7 @@ Str_StoreSoundBalance_DE:
 	aligned_string "Speichert nur Klang- und Lautstärkeeinstellungen."
 Str_StoreSoundBalance_EN:	aligned_string "Stores sound & balance settings only."
 LngTable_StoreTotalSetting:	; returned by PmemExpLngCheck
+PmemExpLngCheck_Data:
 	.long Str_StoreTotalSetting_EN	; EN
 	.long Str_StoreTotalSetting_DE	; DE
 	.long Str_StoreTotalSetting_EN3	; FR
@@ -508,76 +514,101 @@ MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd:	aligned_string "%c:%d/%d  "
 ; blanks (0x188, 0x1AC, 0x1D0, 0x1F4, 0x216) by MstGrid2_OutOfRange_*, and
 ; "ON "/"OFF" (0x258/0x25C, 0x270/0x26C) by TchSensGrid.
 ; ---------------------------------------------------------------------------
-AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (Str_StoreTotalSetting_DE_0x98)
+AcMstStyleAlpGridBoxProc_EventOffsets:	; read by AcMstStyleAlpGridBoxProc via MasterSetup_EventDispatch (AcMstStyleAlpGridBoxProc_Data)
+AcMstStyleAlpGridBoxProc_Data:
 	.short 0x02ef, 0x051d, 0x02ef, 0x051d, 0x0827, 0x07fd, 0x07fd
 	aligned_string " "
 MstStyleAlp_OverflowStr_Str_Blank32:	aligned_string "                                "
 MstStyleAlp_AppendPadChar2_Str_Blank1:	aligned_string " "
-MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAlp_EventDispatch (Str_StoreTotalSetting_DE_0xCC)
+MstStyleAlpGridCheck_EventOffsets:	; read by MstStyleAlpGridCheck via MstStyleAlp_EventDispatch (MstStyleAlpGridCheck_Data)
+MstStyleAlpGridCheck_Data:
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x01f1, 0x01f1, 0x01f1
-AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (Str_StoreTotalSetting_DE_0xDA)
+AcMstStyle1GridBoxProc_EventOffsets:	; read by AcMstStyle1GridBoxProc via MstStyle_EventDispatch (AcMstStyle1GridBoxProc_Data)
+AcMstStyle1GridBoxProc_Data:
 	.short 0x0059, 0x0165, 0x0059, 0x0165, 0x0310, 0x02f8, 0x02f8
 	aligned_string " "
 MstStyle1Grid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1Grid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
-MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_EventDispatch (Str_StoreTotalSetting_DE_0xFE)
+MstStyle1GridCheck_EventOffsets:	; read by MstStyle1GridCheck via MstStyle1Grid_EventDispatch (MstStyle1GridCheck_Data)
+MstStyle1GridCheck_Data:
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x016a, 0x0000, 0x0000
 MstStyle1Sub_GetNameB_DrawString_Str_Fmtd_Fmtd:	aligned_string "%d/%d"
-AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (Str_StoreTotalSetting_DE_0x112)
+AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via MstStyle1_EventDispatch (AcMstStyle1SubGridBoxProc_Data)
+AcMstStyle1SubGridBoxProc_Data:
 	.short 0x01cc, 0x02fa, 0x01cc, 0x02fa, 0x0529, 0x0511, 0x0511
 	aligned_string " "
 MstStyle1SubGrid_OutOfRange_Str_Blank16:	aligned_string "                "
 MstStyle1SubGrid_PadLeft_LoopB_Str_Blank1:	aligned_string " "
-MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (Str_StoreTotalSetting_DE_0x136)
+MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (MstStyle1SubGridCheck_Data)
+MstStyle1SubGridCheck_Data:
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x015e, 0x0000, 0x0000
 MstStyle2_GetNameB_DrawString_Str_Fmts:		aligned_string "%s:"
 MstStyle2_GetNameB_DrawString_Str_Blank17:	aligned_string "                 "
+MstStyle2_GetNameB_DrawString_Str_Blank5:
 	aligned_string "     "
 MstStyle2_NameB_DrawCurrent_Str_Fmts:	aligned_string "%s:"
+MstStyle2_NameB_DrawCurrent_Str_TEMPO:
 	aligned_string "TEMPO"
 MstStyle2_NameB_DrawLower_Str_Fmts:	aligned_string "%s:"
+MstStyle2_NameB_DrawLower_Str_TEMPO:
 	aligned_string "TEMPO"
 MstStyle2_NameB_Render_Str_Fmts:	aligned_string "%s"
-AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (Str_StoreTotalSetting_DE_0x178)
+AcMstStyle2GridBoxProc_EventOffsets:	; read by AcMstStyle2GridBoxProc via MstStyle1Page_EventDispatch (AcMstStyle2GridBoxProc_Data)
+AcMstStyle2GridBoxProc_Data:
 	.short 0x055a, 0x076a, 0x055a, 0x076a, 0x0bae, 0x0b96, 0x0b96
 	aligned_string " "
+MstGrid2_OutOfRange_LowCol_Str_Blank32:
 	aligned_string "                                "
 MstGrid2_PadLeft_LoopB_Str_Blank1:	aligned_string " "
+MstGrid2_OutOfRange_HighCol_Str_Blank32:
 	aligned_string "                                "
 MstGrid2_PadLeft_LoopC_Str_Blank1:	aligned_string " "
+MstGrid2_OutOfRange_LowCol2_Str_Blank32:
 	aligned_string "                                "
 MstGrid2_PadLeft_LoopD_Str_Blank1:	aligned_string " "
+MstGrid2_OutOfRange_HighCol2_Str_Blank32:
 	aligned_string "                                "
+MstGrid2_OutOfRange_BeyondMax_Str_Blank32:
 	aligned_string "                                "
-MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_ScrollJumpTable (Str_StoreTotalSetting_DE_0x238)
+MstStyle2GridCheck_EventOffsets:	; read by MstStyle2GridCheck via MstGrid2_ScrollJumpTable (MstStyle2GridCheck_Data)
+MstStyle2GridCheck_Data:
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x02db, 0x02db, 0x02db
-AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (Str_StoreTotalSetting_DE_0x246)
+AcTchSensGridBoxProc_EventOffsets:	; read by AcTchSensGridBoxProc via MstStyle2_EventDispatch (AcTchSensGridBoxProc_Data)
+AcTchSensGridBoxProc_Data:
 	.short 0x006a, 0x0127, 0x006a, 0x0127, 0x0234, 0x020c, 0x020c
 	aligned_string "%3d"
+TchSensGridCheck_Evt1C0001C_Str_ON:
 	aligned_string "ON "
+TchSensGridCheck_Evt1C0001C_Str_OFF:
 	aligned_string "OFF"
 TchSensGridCheck_Evt1C0001C_Str_Fmt3d:		aligned_string "%3d"
 TchSensGridCheck_Evt1C0001C_Str_Fmt3d_2:	aligned_string "%3d"
 TchSensGrid_CellSelect_Str_Fmt3d:		aligned_string "%3d"
+TchSensGrid_CheckCell_1_4_Str_OFF:
 	aligned_string "OFF"
+TchSensGrid_CheckCell_1_4_Str_ON:
 	aligned_string "ON "
 TchSensGrid_CheckCell_1_5_Str_Fmt3d:	aligned_string "%3d"
 TchSensGrid_CheckCell_1_6_Str_Fmt3d:	aligned_string "%3d"
-TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (Str_StoreTotalSetting_DE_0x27C)
+TchSensGridCheck_EventOffsets:	; read by TchSensGridCheck via TchSensGrid_EventDispatch (TchSensGridCheck_Data)
+TchSensGridCheck_Data:
 	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x02f8, 0x00fe, 0x00fe
-AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (Str_StoreTotalSetting_DE_0x28A)
+AcFSWAssGridBoxProc_EventOffsets:	; read by AcFSWAssGridBoxProc via TchSens_EventDispatch (AcFSWAssGridBoxProc_Data)
+AcFSWAssGridBoxProc_Data:
 	.short 0x006a, 0x010e, 0x006a, 0x010e, 0x0202, 0x01da, 0x01da
 ; FswAssign_FunctionCodes / FswAssign_FunctionNames: the foot-switch
 ; assignable functions.  FSWAssGrid_EventDispatch (ui/ui_mode_handlers.s)
-; indexes the codes with `ld_rrb c, xbc, hl` (Str_StoreTotalSetting_DE_0x298)
+; indexes the codes with `ld_rrb c, xbc, hl` (FSWAssGrid_EventDispatch_Data)
 ; and, after AudioTable_FindMatchIndex, the names with `sla hl, 2` /
-; `ld_rrl xwa, xbc, hl` (Str_StoreTotalSetting_DE_0x2B8).  31 codes -- 0x00
+; `ld_rrl xwa, xbc, hl` (FSWAssGridCheck_Evt1C0001C_Data).  31 codes -- 0x00
 ; is OFF, then 0x90.. in the order of the names -- and a 0xFF terminator;
 ; 31 name pointers, entry k naming code k.
 FswAssign_FunctionCodes:
+FSWAssGrid_EventDispatch_Data:
 	.byte 0x00, 0x90, 0x91, 0xb3, 0xb4, 0xc0, 0xc1, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7, 0xb2, 0x88, 0x92
 	.byte 0x93, 0x94, 0x95, 0x40, 0x96, 0x99, 0x97, 0x98, 0xad, 0xb0, 0xb1, 0xb8, 0xb9, 0xb6, 0xb7, 0xff
 FswAssign_FunctionNames:
+FSWAssGridCheck_Evt1C0001C_Data:
 	.long CtrlAssignStr_Off
 	.long CtrlAssignStr_PMemIncrement
 	.long CtrlAssignStr_PMemDecrement
@@ -655,9 +686,11 @@ FSWAssGrid_CheckCell_1_5_Str_Fmts:		aligned_string "%s"
 FSWAssGrid_CheckCell_1_6_Str_Fmts:		aligned_string "%s"
 FSWAssGrid_CheckCell_1_7_Str_Fmts:		aligned_string "%s"
 FSWAssGrid_CheckCell_1_8_Str_Fmts:		aligned_string "%s"
-FSWAssGridCheck_EventOffsets:	; read by FSWAssGridCheck via FSWAssGrid_EventDispatch (CtrlAssignStr_Off_0x4A)
+FSWAssGridCheck_EventOffsets:	; read by FSWAssGridCheck via FSWAssGrid_EventDispatch (FSWAssGridCheck_Data)
+FSWAssGridCheck_Data:
 	.short 0x0000, 0x022f, 0x0000, 0x022f, 0x08ea, 0x045b, 0x045b
-FswAsIniFunc_EventOffsets:	; read by FswAsIniFunc via FswAsIni_EventDispatch (CtrlAssignStr_Off_0x58), six entries
+FswAsIniFunc_EventOffsets:	; read by FswAsIniFunc via FswAsIni_EventDispatch (FswAsIniFunc_Data), six entries
+FswAsIniFunc_Data:
 	.short 0x0006, 0x0000, 0x0006, 0x0006, 0x0006, 0x0006
 ParamStr_Table_01:
 	.long ParamStr01_RhythmSelection
@@ -697,42 +730,57 @@ ParamStr02_DspEffect:	aligned_string "    DSP EFFECT     "
 ParamStr02_Reverb:	aligned_string "      REVERB       "
 ParamStr02_Midi:	aligned_string "       MIDI        "
 ParamStr02_Vocalist:	aligned_string "     VOCALIST      "
+PmExpFilter_Repaint_Str_FILTER_TYPE:
 	aligned_string "FILTER TYPE"
+PmExpFilter_Repaint_Str_ON_OFF:
 	.byte 0x4f, 0x4e, 0x2f, 0x4f, 0x46, 0x46, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 PmExpFilter_DrawCellBank1_Str_PAGE_2_3:	aligned_string "PAGE 2/3"
 PmExpFilter_DrawCellBank2_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff
 	aligned_string "PAGE 3/3"
-AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (ParamStr02_Vocalist_0x44)
+AcPmExpFilterGridBoxProc_EventOffsets:	; read by AcPmExpFilterGridBoxProc via PmemPageCtl_EventDispatch (AcPmExpFilterGridBoxProc_Data)
+AcPmExpFilterGridBoxProc_Data:
 	.short 0x02be, 0x03a7, 0x02be, 0x03a7, 0x054e, 0x04c8, 0x04c8
 ; PmExpFilter_CellKeys / PmExpFilter_AltKeys: two lists of nine u32 sound-
 ; parameter KEYS -- all 18 are the +0x00 key of an 18-byte descriptor in this
 ; file -- that PmExpFilterGridCheck picks with `ld_rrl xwa, xbc, wa` (cell
-; index 2..10) through ParamStr02_Vocalist_0x52 / _0x76.
+; index 2..10) through PmExpFilter_EventDispatch_Data / _0x76.
 PmExpFilter_CellKeys:
+PmExpFilter_EventDispatch_Data:
 	.long 0x00002900, 0x00002901, 0x00002904
 	.long 0x00002902, 0x00002903, 0x0000290a
 	.long 0x0000290b, 0x0000290c, 0x0000290d
 PmExpFilter_AltKeys:
+PmExpFilter_EventDispatch_Data_2:
 	.long 0x0000290e, 0x00002905, 0x00002907
 	.long 0x00002908, 0x0000290f, 0x00002910
 	.long 0x00002909, 0x00002906, 0x00002911
-	; ON/OFF cell texts: PmExpFilter_EventDispatch (ParamStr02_Vocalist_0x9A..0xA6),
+	; ON/OFF cell texts: PmExpFilter_EventDispatch (PmExpFilterGridCheck_Evt1C0001C_Str_OFF..0xA6),
 	; PmExpFilterCheck_CellDecode (_0xAA, _0xAE), PmExpFilterCheck_AltDecode (_0xB2, _0xB6)
+PmExpFilterGridCheck_Evt1C0001C_Str_OFF:
 	aligned_string "OFF"
+PmExpFilterGridCheck_Evt1C0001C_Str_ON:
 	aligned_string "ON "
+PmExpFilterGridCheck_Evt1C0001C_Str_OFF_2:
 	aligned_string "OFF"
+PmExpFilterGridCheck_Evt1C0001C_Str_ON_2:
 	aligned_string "ON "
+PmExpFilterCheck_CellDecode_Str_ON:
 	aligned_string "ON "
+PmExpFilterCheck_CellDecode_Str_OFF:
 	aligned_string "OFF"
+PmExpFilterCheck_AltDecode_Str_ON:
 	aligned_string "ON "
+PmExpFilterCheck_AltDecode_Str_OFF:
 	aligned_string "OFF"
 PmExpFilterCheck_PushDefault_Str_Blank3:	aligned_string "   "
-PmExpFilterGridCheck_EventOffsets:	; read by PmExpFilterGridCheck via PmExpFilter_EventDispatch (ParamStr02_Vocalist_0xBE)
+PmExpFilterGridCheck_EventOffsets:	; read by PmExpFilterGridCheck via PmExpFilter_EventDispatch (PmExpFilterGridCheck_Data)
+PmExpFilterGridCheck_Data:
 	.short 0x0000, 0x007c, 0x0000, 0x007c, 0x0297, 0x00fa, 0x00fa
-AcDispTimeSetGridBoxProc_EventOffsets:	; read by AcDispTimeSetGridBoxProc via PmExpFilter2_EventDispatch (ParamStr02_Vocalist_0xCC)
+AcDispTimeSetGridBoxProc_EventOffsets:	; read by AcDispTimeSetGridBoxProc via PmExpFilter2_EventDispatch (AcDispTimeSetGridBoxProc_Data)
+AcDispTimeSetGridBoxProc_Data:
 	.short 0x00d5, 0x0179, 0x00d5, 0x0179, 0x026d, 0x0245, 0x0245
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x52+9
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near ParamStr02_Vocalist_0x76+1
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1437-0xED1452 (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_EventDispatch_Data+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED1453-0xED146E (27 B), unreached CODE-territory, was disassembled as 22 plausible-but-dead instruction lines; per=100% dist=8 near PmExpFilter_EventDispatch_Data_2+1
 ParamStr_Table_03:
 	.long FadeTimeStr_Off
 	.long FadeTimeStr_Default
@@ -764,19 +812,25 @@ FadeTimeStr_Off:	aligned_string "  OFF  "
 DispTimeSetGridCheck_Evt1C0001C_Str_Fmts:	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 DispTimeSetGridCheck_Evt1C0001C_Str_Fmts_2:	.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
 DispTimeSetCheck_TryRow4_Str_Fmts:		.byte 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff, 0x25, 0x73, 0x00, 0xff
-DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (FadeTimeStr_Off_0x38)
+DispTimeSetGridCheck_EventOffsets:	; read by DispTimeSetGridCheck via DispTimeSet_EventDispatch (DispTimeSetGridCheck_Data)
+DispTimeSetGridCheck_Data:
 	.short 0x0000, 0x0136, 0x0000, 0x0136, 0x05bc, 0x0283, 0x0283
 	aligned_string "PAGE"
 MssName_EventDispatch_Str_Memory_data:	aligned_string "Memory data "
-	.byte 0x20, 0x20, 0x00, 0xff, 0x20, 0x20, 0x00, 0xff, 0xa4, 0x00, 0xa4, 0x00, 0xb9, 0x00, 0xb9, 0x00
+MssName_EventDispatch_Str_Blank2:
+	.byte	0x20, 0x20, 0x00, 0xff
+MssName_EventDispatch_Str_Blank2_2:	.byte	0x20, 0x20, 0x00, 0xff
+MssNameFunc_Data:	.byte	0xa4, 0x00, 0xa4, 0x00, 0xb9, 0x00, 0xb9, 0x00
 	.byte 0xb9, 0x00, 0xa8, 0x00, 0xa4, 0x00, 0xaf, 0x00, 0xb5, 0x00, 0x00, 0x00
 AcPmBkNoBox_Match_Str_Blank8:		aligned_string "        "
 AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd:	aligned_string "%d-%d:"
 AcBkNoBox_Match_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00
 PmemMode_Paint_Str_PAGE_1_3:		aligned_string "PAGE 1/3"
 AcPmBkEdit_BankChanged_Str_BANK_Fmt2d:	aligned_string "BANK%2d:"
-AcPmBkEdit_BankEdit_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
-	.byte 0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xff, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00
+AcPmBkEdit_BankEdit_Str_Fmtd:		.byte	0x25, 0x64, 0x3a, 0x00
+PmBkNameFunc_Data:	.byte	0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
+	.byte	0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xff
+VariScreen_HandlePaint_Str_SOUND:	.byte	0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00
 VariScreen_DrawNameString_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 VariScreen_HandleConfirm_Str_PAGE_Fmtd_Fmtd:	aligned_string "PAGE %d/%d"
 VariScreen_ConfirmDrawNameAudio_Str_Fmtd:	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
@@ -793,23 +847,25 @@ VariationStr_V2:
 	.byte 0x56, 0x32, 0x00, 0xff
 VariationStr_V1:
 	.byte 0x56, 0x31, 0x00, 0xff
+RVari_Paint_Str_RHYTHM:
 	aligned_string "RHYTHM"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+8
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED164E-0xED1662 (20 B), unreached CODE-territory, was disassembled as 15 plausible-but-dead instruction lines; per=100% dist=5 near RVari_Paint_Str_RHYTHM+8
 RVari_Select_CheckSameBank_Str_Fmts:		aligned_string "%s:"
 RVari_Select_CheckSameBank_Str_Fmts_2:		aligned_string "%s:"
 RVari_SelectE_SecondItem_Draw_Str_Fmtd:		aligned_string "%d:"
 RVari_SelectO_SecondItem_Draw_Str_Fmtd:		aligned_string "%d:"
 RVari_ConfirmF_Item_Draw_Str_Fmts:		aligned_string "%s:"
 RVari_Confirm_TypeNotF_Str_PAGE_Fmtd_Fmtd:	aligned_string "PAGE %d/%d"
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near VariationStr_V1_0x4+40
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xED166E-0xED167E (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=5 near RVari_Paint_Str_RHYTHM+40
 RVari_ConfirmE_Item_Draw_Str_Fmtd:	.byte 0x25, 0x64, 0x3a, 0x00, 0x25, 0x73, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00, 0x25, 0x64, 0x3a, 0x00
 ; SelectRect_Table: six screen rectangles {x1, y1, x2, y2}, 8 bytes each,
-; read with `sla wa, 3` / `lda xbc, (VariationStr_V1_0x3C:24)` by PmBank_OnSelect
+; read with `sla wa, 3` / `lda xbc, (PmBank_OnSelect_Data:24)` by PmBank_OnSelect
 ; and ToneGen_WriteParamByIndex (display/graphics_text_vga.s), which copy the
 ; four words.  Two of the y1/x2 pairs used to be written as pointers
 ; (`.long NakaInst_Param_EmptyStr` = {134, 238}, `.long
 ; NakaData_DescriptorPad_ZeroA` = {154, 230}); neither is one.
 SelectRect_Table:
+PmBank_OnSelect_Data:
 	.short 2, 62, 302, 93
 	.short 2, 98, 316, 129
 	.short 2, 134, 238, 153
@@ -867,35 +923,60 @@ TransposeNoteStr_C:
 ; ---------------------------------------------------------------------------
 SoundCheck_Text:
 	aligned_string "(%s%2d, %3d)"
+PmBank_OnPaint_Str_CHECK_BY_SINE_WAVE:
 	aligned_string "CHECK BY SINE WAVE"
+PmBank_OnPaint_Str_Select_the_mode_by_sound_button:
 	aligned_string "Select the mode by sound button of highest line."
+PmBank_OnPaint_Str_CHECK_MODE:
 	aligned_string "CHECK MODE:"
+PmBank_OnPaint_Str_KEY_DOWN_INFORMATION:
 	aligned_string "KEY DOWN INFORMATION ="
+ToneGen_ParamWriteDispatch_Str_N1_SINE_WAVE_ROM_check_w_o_TOUCH:
 	aligned_string "(1)SINE WAVE & ROM check(w/o TOUCH)"
+ToneGen_ParamWriteDispatch_Str_C_key_IC304_305_C_7eB_key_IC306:
 	aligned_string "C-key=IC304&305,C#~7eB-key=IC306&307"
+ToneGen_ParamWriteDispatch_Str_N2_GENERATOR_LSI_OUTSEL_check:
 	aligned_string "(2)GENERATOR LSI OUTSEL check"
+ToneGen_ParamWriteDispatch_Str_C_key_DIRECT_REV_DSP_C_7eB_key:
 	aligned_string "C-key=DIRECT+REV/DSP,C#~7eB-key=REV/DSP"
+ToneGen_ParamWriteDispatch_Str_N3_HIGH_SOUND_check_2octave:
 	aligned_string "(3)HIGH SOUND check(+2octave)"
+ToneGen_ParamWriteDispatch_Str_N4_LOW_SOUND_check_2octave:
 	aligned_string "(4)LOW SOUND check(-2octave)"
+ToneGen_ParamWriteDispatch_Str_N5_NORMAL_SOUND_check_with_TOUCH:
 	aligned_string "(5)NORMAL SOUND check with TOUCH"
+ToneGen_ParamWriteDispatch_Str_N6_SINE_WAVE_ROM_check_16dB_DOWN:
 	aligned_string "(6)SINE WAVE & ROM check 16dB DOWN"
+ToneGen_WriteParamByIndex_Data:
 	.short 0, 86, 174, 221, 267, 313
 WallHomeEdit_Text:
+WallHomeEditCheck_ReturnFalse_Str_DEFAULT:
 	aligned_string "DEFAULT"
 WallHomeEdit_PushSndAddr_Str_USER:	aligned_string " USER  "
+WallHomeEdit_LoadSndAddr3_Str_ERROR:
 	aligned_string " ERROR "
+WallHomeEditCheck_Data:
 	.short 156, 156, 96, 96, 96, 156, 96, 160, 167, 100
 WallMenuEdit_Text:
+WallMenuEdit_EventDispatch_Str_DEFAULT:
 	aligned_string "DEFAULT"
+WallMenuEdit_EventDispatch_Str_USER:
 	aligned_string " USER  "
+WallMenuEdit_EventDispatch_Str_ERROR:
 	aligned_string " ERROR "
+WallMenuEditCheck_Data:
 	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
 WallOthEdit_Text:
+WallOthEdit_EventDispatch_Str_DEFAULT:
 	aligned_string "DEFAULT"
+WallOthEdit_EventDispatch_Str_USER:
 	aligned_string " USER  "
+WallOthEdit_EventDispatch_Str_ERROR:
 	aligned_string " ERROR "
+WallOthEditCheck_Data:
 	.short 49, 49, 64, 64, 64, 49, 64, 53, 60, 0
 LngTable_UserInitialWallpaper:	; returned by WallSureLngCheck
+WallSureLngCheck_Data:
 	.long Str_UserInitialWallpaper_EN	; EN
 	.long Str_UserInitialWallpaper_DE	; DE
 	.long Str_UserInitialWallpaper_FR	; FR
@@ -908,7 +989,9 @@ Str_UserInitialWallpaper_ES:	aligned_string "¡El USER INITIAL cambiará el patrÓn
 Str_UserInitialWallpaper_FR:	aligned_string "USER INITIAL va remplacer votre fond de l'écran par un fond noir !"
 Str_UserInitialWallpaper_DE:	aligned_string "USER INITIAL ersetzt das aktuelle Hintergrundbild durch eine schwarze Fläche !"
 Str_UserInitialWallpaper_EN:	aligned_string "USER INITIAL will replace the current user wallpaper with the \"Plain Black\" wallpaper!"
-	.short 0, 38, 44, 50, 26, 8, 14, 32, 20, 0, 8, 8, 8, 8, 8
+MainSysControl_Data:
+	.short	0, 38, 44, 50, 26, 8, 14, 32, 20
+CntIniFunc_Data:	.short	0, 8, 8, 8, 8, 8
 
 
 ParamStr_Table_06:
@@ -953,7 +1036,7 @@ SplitNoteStr_DFlat:	aligned_string "D~a0"
 ;     it, and the last entry (0x00ED1BD6) is exactly the first byte past the
 ;     table's own end (0xED1BAA + 11*4);
 ;   * display/graphics_text_vga.s indexes THIS address -- `divs hl, 0xc` then
-;     `sla hl, 2` then `lda_24 xbc, (SplitNoteStr_C_0x4)` at 0xFC2DE2 and
+;     `sla hl, 2` then `lda_24 xbc, (AcFreeSplit_LookupNoteLabel_Data)` at 0xFC2DE2 and
 ;     0xFC2E67. Note number / 12, scaled by 4 = the pointer width.
 ; The five phantom `jp` operands (NakaData_PartConfig,
 ; Bitmap_SplitPoint_Gb_0x2B, Bitmap_Dredt0d_0xA8D, SepaOut_FormatData_Tail,
@@ -961,7 +1044,8 @@ SplitNoteStr_DFlat:	aligned_string "D~a0"
 ; definitions here; nothing lost a name.
 ; -----------------------------------------------------------------------------
 SplitNoteStr_C:	aligned_string "C "
-	; 0xED1BAA = SplitNoteStr_C_0x4: octave-digit pointers, index = note / 12
+	; 0xED1BAA = AcFreeSplit_LookupNoteLabel_Data: octave-digit pointers, index = note / 12
+AcFreeSplit_LookupNoteLabel_Data:
 	.long OctaveDigitStr_0B
 	.long OctaveDigitStr_0C
 	.long OctaveDigitStr_0A
@@ -992,6 +1076,7 @@ AcFreeSplit_ValueChanged_Str_Blank10:			aligned_string "          "
 AcFreeSplit_LookupNoteLabel_Str_SPLIT_Fmts_Fmts:	aligned_string "SPLIT<%s%s>"
 AcFreeSplit_CheckSecondKey_Str_Blank10:			aligned_string "          "
 AcFreeSplit_LookupSecondNote_Str_SPLIT_Fmts_Fmts:	aligned_string "SPLIT<%s%s>"
+AcTranspose_FormatLabel_Data:
 	.long KeyScaleNoteStr_G
 ParamStr_Table_07:
 	.long KeyScaleNoteStr_AFlat
@@ -2278,11 +2363,11 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 ; the caller passes, `inc 6, xiz`, until a mask of 0xFFFF.
 ; MIDI_ProcessChangedChannels (0xFC700A) passes four "changed" words and
 ; MidiChannel_DispatchChanged (0xFC707D) four others; the callers reach the
-; lists through positional names ENCODER_LUT_MODWHEEL_0x3C6 .. _0x4D4
+; lists through positional names MIDI_ProcessChangedChannels_Data .. _0x4D4
 ; (shared/positional_labels.s).  Six handlers (0xFC75E3, 0xFC7704, 0xFC7686,
 ; 0xFC75A6, 0xFC75B7, 0xFC7741) have no label there and stay numeric.
 ; ---------------------------------------------------------------------------
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA545-0xEDA558 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=10 near ENCODER_LUT_MODWHEEL_0x3FC+13
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA545-0xEDA558 (19 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=10 near MidiChanged_ProcessGroup2_Data+13
 	; ENCODER_LUT_MODWHEEL, entries 36-127 (0-35 are in the blob above): 92 bytes
 	.byte 0x21, 0x22, 0x23, 0x24, 0x25, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a, 0x2b, 0x2c, 0x2c, 0x2d, 0x2e
 	.byte 0x2f, 0x30, 0x31, 0x32, 0x33, 0x34, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3b, 0x3c
@@ -2352,6 +2437,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 	.byte 0x60, 0x61, 0x62, 0x63, 0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a, 0x6b, 0x6c, 0x6d, 0x6e, 0x6f
 	.byte 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79, 0x7a, 0x7b, 0x7c, 0x7d, 0x7e, 0x7f
 	; MIDI_ProcessChangedChannels, group 1: flags 0x8F3A & ~0x8F3C
+MIDI_ProcessChangedChannels_Data:
 	.short 0x0001
 	.long 0x00fc75e3
 	.short 0x0002
@@ -2371,6 +2457,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MIDI_ProcessChangedChannels, group 2: 0x8F3E & ~0x8F40
+MidiChanged_ProcessGroup2_Data:
 	.short 0x0001
 	.long 0x00fc7686
 	.short 0x0002
@@ -2394,6 +2481,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MIDI_ProcessChangedChannels, group 3: 0x8F42 & ~0x8F44
+MidiChanged_ProcessGroup3_Data:
 	.short 0x0001
 	.long SndParam_DecrLookup_Via0300
 	.short 0x0004
@@ -2421,6 +2509,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MIDI_ProcessChangedChannels, group 4: 0x8F46 & ~0x8F48
+MidiChanged_ProcessGroup4_Data:
 	.short 0x0001
 	.long CtrlPanel_SyncBit0_From8F5C
 	.short 0x0002
@@ -2428,9 +2517,11 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 1: 0x8F3C
+MidiChannel_DispatchChanged_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 2: 0x8F40
+MidiDispatch_CheckGroup2_Data:
 	.short 0x0040
 	.long CtrlPanel_SetResBit0_ViaLookup4
 	.short 0x0008
@@ -2440,6 +2531,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 3: 0x8F44
+MidiDispatch_CheckGroup3_Data:
 	.short 0x0004
 	.long CtrlPanel_SetResBit7_ViaLookup4C
 	.short 0x2000
@@ -2449,6 +2541,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 	.short 0xffff	; end of list
 	.long 0xffffffff
 	; MidiChannel_DispatchChanged, group 4: 0x8F48
+MidiDispatch_CheckGroup4_Data:
 	.short 0xffff	; end of list
 	.long 0xffffffff
 
@@ -2487,12 +2580,18 @@ Protocol_values_for_LED_rows:
 ;   +0x56  32 u32, 1 << k  CtrlPanel_LookupIndicatorEntry (a bit-mask table)
 ; ---------------------------------------------------------------------------
 AudioCtl_SmallTables:
+SndParam_TableLookup_Via4100_Data:
 	.byte 4, 2, 6, 7, 5, 3
+ExtData_VoiceParam_DispatchBytecode_Data:
 	.short 0x0023, 0x0023, 0x002b, 0x0027, 0x002f, 0x0033, 0x000c, 0x001f, 0x003c
 	.short 0x0010, 0x000c, 0x000c, 0x0004, 0x0000, 0x003c, 0x0008, 0x0037
+MidiChOut_Mode6or3_Mask7_Data:
 	.byte 1, 2, 4, 1, 2, 4
+MidiChOut_OtherMode_Mask3_Data:
 	.byte 1, 2, 4, 8, 1, 2, 4, 8
+UIState_ProcessExtendedMode_Data:
 	.short 0x0000, 0x0034, 0x0034, 0x000e, 0x0027, 0x0007, 0x0007, 0x002e
+CtrlPanel_LookupIndicatorEntry_Data:
 	.long 0x00000001, 0x00000002, 0x00000004, 0x00000008
 	.long 0x00000010, 0x00000020, 0x00000040, 0x00000080
 	.long 0x00000100, 0x00000200, 0x00000400, 0x00000800
@@ -2519,25 +2618,25 @@ AudioCtl_SmallTables:
 ; audio_control_engine.s name them); kn5000_v10_program.s still holds the
 ; old absolute names ToshiParam_Entry_01..27 for records 1-27 as `.set`s.
 ; ---------------------------------------------------------------------------
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA65B-0xEDA66C (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=60% dist=7 near Protocol_values_for_LED_rows_0x3E+7
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA675-0xEDA68D (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+9
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA696-0xEDA6AE (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+42
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6B7-0xEDA6CF (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+75
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6D8-0xEDA6F8 (32 B), unreached CODE-territory, was disassembled as 21 plausible-but-dead instruction lines; per=100% dist=11 near Protocol_values_for_LED_rows_0x56+108
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA700-0xEDA710 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=6 near Protocol_values_for_LED_rows_0x56+148
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA718-0xEDA728 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+172
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA730-0xEDA740 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+196
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA760-0xEDA770 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+244
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA778-0xEDA788 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+268
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA820-0xEDA830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near Protocol_values_for_LED_rows_0x56+436
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8B0-0xEDA8C0 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+580
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8E0-0xEDA8F0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near Protocol_values_for_LED_rows_0x56+628
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA940-0xEDA950 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+724
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA970-0xEDA980 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+772
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9A0-0xEDA9B0 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+820
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9D0-0xEDA9E0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+868
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA00-0xEDAA10 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+916
-	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA30-0xEDAA40 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near Protocol_values_for_LED_rows_0x56+964
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA65B-0xEDA66C (17 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=60% dist=7 near MidiChOut_OtherMode_Mask3_Data+7
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA675-0xEDA68D (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+9
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA696-0xEDA6AE (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+42
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6B7-0xEDA6CF (24 B), unreached CODE-territory, was disassembled as 17 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+75
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA6D8-0xEDA6F8 (32 B), unreached CODE-territory, was disassembled as 21 plausible-but-dead instruction lines; per=100% dist=11 near CtrlPanel_LookupIndicatorEntry_Data+108
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA700-0xEDA710 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=6 near CtrlPanel_LookupIndicatorEntry_Data+148
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA718-0xEDA728 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+172
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA730-0xEDA740 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+196
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA760-0xEDA770 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+244
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA778-0xEDA788 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+268
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA820-0xEDA830 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=10 near CtrlPanel_LookupIndicatorEntry_Data+436
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8B0-0xEDA8C0 (16 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+580
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA8E0-0xEDA8F0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=7 near CtrlPanel_LookupIndicatorEntry_Data+628
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA940-0xEDA950 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+724
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA970-0xEDA980 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+772
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9A0-0xEDA9B0 (16 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+820
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDA9D0-0xEDA9E0 (16 B), unreached CODE-territory, was disassembled as 12 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+868
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA00-0xEDAA10 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+916
+	; data-as-code (v10_data_as_code_census.py, STRICT rule): 0xEDAA30-0xEDAA40 (16 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=8 near CtrlPanel_LookupIndicatorEntry_Data+964
 ReverbPreset_0:
 	.byte 0x11, 0x32, 0x00, 0x0c, 0x14, 0x32, 0x5d, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x63, 0x00
@@ -2918,7 +3017,7 @@ SoundProgram_DispatchTable:
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
 	.long ToshiCmd_DefaultHandler_Ret
-; SoundProgram_DispatchTable + 0x400 (SoundProgram_DispatchTable_0x400 in
+; SoundProgram_DispatchTable + 0x400 (Audio_InitAllDefaults_Data in
 ; shared/positional_labels.s): 256 RAM addresses, indexed by the SAME command
 ; byte.  VoiceData_LookupPtrByIndex (audio/audio_control_engine.s, 0xFC9DF4)
 ; does `sla wa, 2` / `lda xbc, (+0x400)` / `ld r, (xrr+rr)`, and
@@ -2928,6 +3027,7 @@ SoundProgram_DispatchTable:
 ; 0xFFFFFFFF = no RAM block for that command.  The live entries are 26 bytes
 ; apart (0xF9B6, 0xF9D0, ...) -- the same spacing as the RAM-bank table
 ; sndparam_types.h describes.
+Audio_InitAllDefaults_Data:
 	.long 0x0000f9b6, 0x0000f9d0, 0x0000f9ea, 0x0000fa04, 0x0000fa1e, 0x0000fa38, 0x0000fa52, 0x0000fa6c	; [0x00]
 	.long 0x0000fa86, 0x0000faa0, 0x0000faba, 0x0000fad4, 0x0000faee, 0x0000fb08, 0x0000fb22, 0x0000fb3c	; [0x08]
 	.long 0x0000fb56, 0x0000fb70, 0x0000fb8a, 0x0000fba4, 0x0000fbbe, 0x0000fbd8, 0x0000fbf2, 0x0000fd62	; [0x10]
@@ -2964,19 +3064,21 @@ SoundProgram_DispatchTable:
 ; channel 0-31: VoiceData_LookupPtrByChannel (0xFC9E04) does `cp a, 0x1f` /
 ; `jr ugt` / `sla wa, 2` / `lda xbc, (+0x800)` / `ld r, (xrr+rr)`;
 ; Audio_InitAllDefaults stores the table's address at RAM 0x9182.
+Audio_InitAllDefaults_Data_2:
 	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0x00]
 	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6, 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; [0x08]
 	.long 0x0000ff1a, 0x0000ff2e, 0x0000ff42, 0x0000ff56, 0x0000ff6a, 0x0000ff1a, 0x0000ff56, 0x0000ff7e	; [0x10]
 	.long 0x0000ff7e, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0x18]
 ; SoundProgram_DispatchTable + 0x880: four audio (re)initialisation routines.
 ; midi/midi_dispatch_handlers.s calls the third through it (`ld xhl,
-; (SoundProgram_DispatchTable_0x888:24)` / `call (xhl)`), and entry 6 of
+; (MidiSysEx_ProcessBlock_Data:24)` / `call (xhl)`), and entry 6 of
 ; SystemConfig_PointerTable (ui_widgets/widget_dispatch.s) points at the
 ; table's head under the `.set` name SoundProgram_ParamPtrTable
 ; (kn5000_v10_program.s).  Searched for other readers: the positional names
 ; SoundProgram_DispatchTable_0x880..0x88C and the literals 0xEDB2E4-0xEDB2F3.
 	.long Audio_InitAllDefaults
 	.long Audio_ReinitToneGenAndOutput
+MidiSysEx_ProcessBlock_Data:
 	.long Audio_ResetAfterPayloadError
 	.long Audio_FullReinitWithPreset
 ; SoundProgram_DispatchTable + 0x890..+0x907: seven small tables, each read
@@ -2986,37 +3088,47 @@ SoundProgram_DispatchTable:
 ; The three preset pointer tables (records: see the header above the records)
 ; ---------------------------------------------------------------------------
 ; ReverbPreset_Table: 10 pointers; ReverbPreset_Load and SoundPreset_FindMatch
-; (audio/audio_control_engine.s) index it as SoundProgram_DispatchTable_0x908.
+; (audio/audio_control_engine.s) index it as ReverbPreset_SearchLoop_Data.
 ; Naka_ToshiParam_Table sits ONE ENTRY INTO it, which is how the tree had
 ; it; the label stays because positional names are built on it:
-; EQPreset_Table is Naka_ToshiParam_Table_0x24 (9 pointers, EQPreset_Load /
-; EQPreset_FindMatch) and CombinedPreset_Table is Naka_ToshiParam_Table_0x48
+; EQPreset_Table is EQPreset_SearchLoop_Data (9 pointers, EQPreset_Load /
+; EQPreset_FindMatch) and CombinedPreset_Table is CombinedPreset_SearchLoop_Data
 ; (9 pointers, CombinedPreset_Load / CombinedPreset_SearchLoop).
 ; ---------------------------------------------------------------------------
 	; +0x890: one 6-byte record.  BitmapTable_ProcessEntry (0xFC8235) takes
 	; index*6 and reads +0 with `cpw (xwa), 0x50`, +2 (at +0x892) as a
 	; command byte for VoiceData_LookupPtrByIndex, and +3, +4, +5.
+BitmapTable_ProcessEntry_Data:
 	.short 0x0050
+BitmapTable_ProcessEntry_Data_2:
 	.byte 0x43, 0x01, 0x3c, 0x7f
 	; +0x896: 12 jump offsets.  ExtData_ToneParam_DispatchHandler (0xFC8542):
 	; `cp wa, 11` / `add wa, wa` / `ld_rrw wa, xix, wa` / `jp_rr` from 0xFC8570
 	; (no label there in audio_control_engine.s, so the offsets are numeric).
+ExtData_ToneParam_DispatchHandler_Data:
 	.short 0x0000, 0x0020, 0x0020, 0x0002, 0x0005, 0x0008, 0x000b, 0x000e, 0x0011, 0x0014, 0x0017, 0x001a
 	; +0x8AE: 9 jump offsets, ExtData_ToneParam_AltDispatch (0xFC876A), from 0xFC8793.
+ExtData_ToneParam_AltDispatch_Data:
 	.short 0x0000, 0x0002, 0x0002, 0x0004, 0x0004, 0x0004, 0x0004, 0x0006, 0x0000
 	; +0x8C0: 9 jump offsets, ExtData_ToneParam_AltBody (0xFC87D4), from 0xFC87FD.
+ExtData_ToneParam_AltBody_Data:
 	.short 0x0000, 0x0010, 0x0010, 0x0002, 0x0004, 0x0007, 0x0007, 0x000a, 0x000d
 	; +0x8D2: 4 bytes, indexed by a value & 3 in ExtData_ToneParam_MultiChannel.
+ExtData_ToneParam_MultiChannel_Data:
 	.byte 1, 1, 2, 3
 	; +0x8D6: 4 bytes, indexed by (RAM 0xFD02) & 3 in ExtData_Voice_MixedHandler.
+ExtData_Voice_MixedHandler_Data:
 	.byte 0, 1, 2, 4
 	; +0x8DA: 26 bytes, 0..24 then 0xFF, read by CtrlPanel_BuildIndicatorBitmask (0xFC9249).
+CtrlPanel_BuildIndicatorBitmask_Data:
 	.byte 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 	.byte 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0xff
 	; +0x8F4: 20 bytes, a channel remap read with `ld a, (xrr+rr)` by
 	; VoiceChannels_InitPanFromPreset; its result goes to VoiceData_LookupPtrByIndex.
+VoiceChannels_InitPanFromPreset_Data:
 	.byte 0, 2, 1, 7, 8, 9, 10, 11, 4, 5, 6, 3, 15, 21, 21, 25, 20, 12, 13, 14
 ReverbPreset_Table:
+ReverbPreset_SearchLoop_Data:
 	.long ReverbPreset_0
 Naka_ToshiParam_Table:
 	.long ReverbPreset_1
@@ -3029,6 +3141,7 @@ Naka_ToshiParam_Table:
 	.long ReverbPreset_8
 	.long ReverbPreset_9
 EQPreset_Table:
+EQPreset_SearchLoop_Data:
 	.long EQPreset_0
 	.long EQPreset_1
 	.long EQPreset_2
@@ -3039,6 +3152,7 @@ EQPreset_Table:
 	.long EQPreset_7
 	.long EQPreset_8
 CombinedPreset_Table:
+CombinedPreset_SearchLoop_Data:
 	.long CombinedPreset_0
 	.long CombinedPreset_1
 	.long CombinedPreset_2
@@ -3052,6 +3166,7 @@ CombinedPreset_Table:
 ; (midi/midi_dispatch_handlers.s) copies to offset 0x2E0 of a data slot
 ; (slot 0: RAM 0xF180 + 0x2E0; slot n: 0xAB000 + (n-1) * 0x800 + 0x2E0).
 DataSlot_HeaderTemplate:
+DataBuf_InitSlotFromPreset_Str_ZZ:
 	.byte 0x5a, 0x5a, 0x00, 0x00, 0x48, 0x4b, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 ; ---------------------------------------------------------------------------
@@ -3067,6 +3182,7 @@ DataSlot_HeaderTemplate:
 ; each tagged with its RAM address.
 ; ---------------------------------------------------------------------------
 SndParamRam_DefaultImage:
+SMF_SlotChain_ExtendedVoice_Data:
 	.byte 0x78, 0x12, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x00, 0x00, 0x00, 0x18	; 0xF9A0
 	.byte 0x00, 0x00, 0x00, 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x40, 0x40, 0x80, 0x02, 0x38, 0x00, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x01, 0x00, 0x01, 0x18	; 0xF9B6
 	.byte 0x38, 0x00, 0x00, 0x7f, 0x35, 0x00, 0x00, 0x5a, 0x50, 0x40, 0x80, 0x02, 0x38, 0x01, 0x80, 0x00, 0x00, 0x80, 0x80, 0x80, 0x80, 0x00, 0x01, 0x00, 0x02, 0x18	; 0xF9D0
@@ -3159,8 +3275,11 @@ SndParamRam_DefaultImage:
 ;   +0x6CC {u32 0x00FFFFFF, u32 0}: one EMPTY 8-byte hash slot, stamped over
 ;          the whole {key, record pointer} table at RAM 0x34100 by
 ;          SndParam_InitHashFillLoop.
+SndParam_ResetDefaultTable_Data:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+SndParam_RW_Fail_Data:
 	.byte 0x00, 0x00, 0x00, 0x00
+SndParam_InitHashFillLoop_Data:
 	.long 0x00ffffff, 0x00000000
 ; ---------------------------------------------------------------------------
 ; sndparam_descriptor -- ONE 18-byte sound-parameter descriptor
@@ -3191,9 +3310,9 @@ SndParamRam_DefaultImage:
 ; VALUE MAPS AND THEIR 10-BYTE DESCRIPTORS (11 of them, 0xEDBA56-0xEDE9FB)
 ; ---------------------------------------------------------------------------
 ; The eleven descriptors are the entries of the pointer table at 0xEE0154 in
-; ui_widgets/widget_dispatch.s (NakaInst_Param_IdxA0_01_0x12 there, then
+; ui_widgets/widget_dispatch.s (SndParam_ResetDefaultTable_Data_2 there, then
 ; Naka_SubDispatch_A_Table).  The accessors in audio/sndparam_routines.s that
-; load that address (`lda xbc, (NakaInst_Param_IdxA0_01_0x12:24)`, two sites)
+; load that address (`lda xbc, (SndParam_ResetDefaultTable_Data_2:24)`, two sites)
 ; take a record's +0x0B aux_index: 0xFF selects entry 0, anything else is
 ; `sla a, 2` / `ld_rr8l xiy, xbc, a`; the descriptor is then read at +0x00
 ; and `ld wa, (xix+7)`.  Descriptor layout, uniform in all 11:

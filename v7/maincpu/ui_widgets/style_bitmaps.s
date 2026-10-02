@@ -54,8 +54,8 @@ NakaInst_iduRoot:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14, 0x8
 ; [nakarest] NakaInst_False_EB71DA  +0x1c..+0x4a (0xeb71da, 46 B)
 ; [nakarest] purpose not established: layout of 46 B at 0xeb71da not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb78a8, 0xeb78b4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78a8, 0xeb78b4), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaInst_False_EB71DA:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1C, 0x2E
 ; [nakarest] NakaInst_pSword_EmptyStr  +0x4a..+0x4c (0xeb7208, 2 B)
@@ -65,14 +65,14 @@ NakaInst_pSword_EmptyStr:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A, 0x2
 ; [nakarest] NakaInst_pUword_FormatData  +0x4c..+0x60 (0xeb720a, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb720a not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb78c0, 0xeb78cc), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78c0, 0xeb78cc), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaInst_pUword_FormatData:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4C, 0x14
 ; [nakarest] NakaInst_pUchar_FormatData  +0x60..+0x72 (0xeb721e, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xeb721e not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb78d8, 0xeb78e4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78d8, 0xeb78e4), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaInst_pUchar_FormatData:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x60, 0x12
 ; [nakarest] NakaInst_pSlong_EmptyStr  +0x72..+0x74 (0xeb7230, 2 B)
@@ -82,8 +82,8 @@ NakaInst_pSlong_EmptyStr:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x72, 0x2
 ; [nakarest] NakaInst_pUlong_FormatData  +0x74..+0x88 (0xeb7232, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb7232 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb78f0, 0xeb78fc), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb78f0, 0xeb78fc), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaInst_pUlong_FormatData:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x74, 0x14
 ; [nakarest] NakaInst_PartID_EnumTable  +0x88..+0x33a (0xeb7246, 690 B)
@@ -259,7 +259,8 @@ NakaInst_IT_Off:
 ; [nakarest] naka_style_bitmaps+0x4d2  +0x4d2..+0x741 (0xeb7690, 623 B)
 ; [nakarest] purpose not established: layout of 623 B at 0xeb7690 not derived; readers below
 ; [nakarest] Readers: source references ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] (ExitWindow_OK_Data_2:24)`).
+ExitWindow_OK_Data_2:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4D2, 0x26F
 ; [nakarest] NakaInst_WindowID_Cont  +0x741..+0x774 (0xeb78ff, 51 B)
 ; [nakarest] purpose not established: 51 B at 0xeb78ff that no registered NAKA table, symbol, 24/32-bit literal or data word points into
@@ -276,88 +277,105 @@ WidgetStyleDataTable:
 ; [nakarest] naka_style_bitmaps+0x784  +0x784..+0x8c8 (0xeb7942, 324 B)
 ; [nakarest] purpose not established: layout of 324 B at 0xeb7942 not derived; readers below
 ; [nakarest] Readers: source references BitMapOut_CopyPreset9_Execute (ui/bitmap_out_routines.s:
-; [nakarest] `lda xbc, (WidgetStyleDataTable_0x10:24)`), BitMapOut_UpdateWidget_CheckType
-; [nakarest] (ui/bitmap_out_routines.s: `lda xbc, (WidgetStyleDataTable_0x10:24)`),
+; [nakarest] `lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)`), BitMapOut_UpdateWidget_CheckType
+; [nakarest] (ui/bitmap_out_routines.s: `lda xbc, (BitMapOut_CopyPreset9_Execute_Data:24)`),
 ; [nakarest] BitMapOut_UpdateWidget_TypeB (ui/bitmap_out_routines.s: `lda xde,
-; [nakarest] (WidgetStyleDataTable_0x10:24)`).
+; [nakarest] (BitMapOut_CopyPreset9_Execute_Data:24)`).
+BitMapOut_CopyPreset9_Execute_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x784, 0x144
 ; [nakarest] naka_style_bitmaps+0x8c8  +0x8c8..+0x8d2 (0xeb7a86, 10 B)
 ; [nakarest] purpose not established: layout of 10 B at 0xeb7a86 not derived; readers below
 ; [nakarest] Readers: source references BitMapOut_DeltaEncode_Type90Final
-; [nakarest] (ui/bitmap_out_routines.s: `ld xde, WidgetStyleDataTable_0x154`).
+; [nakarest] (ui/bitmap_out_routines.s: `ld xde, BitMapOut_DeltaEncode_Type90Final_Data`).
+BitMapOut_DeltaEncode_Type90Final_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8C8, 0xA
 ; [nakarest] naka_style_bitmaps+0x8d2  +0x8d2..+0xa1c (0xeb7a90, 330 B)
 ; [nakarest] purpose not established: layout of 330 B at 0xeb7a90 not derived; readers below
 ; [nakarest] Readers: source references BitMapOut_DeltaEncode_Type90Final
-; [nakarest] (ui/bitmap_out_routines.s: `lda xhl, (WidgetStyleDataTable_0x15E:24)`).
+; [nakarest] (ui/bitmap_out_routines.s: `lda xhl, (BitMapOut_DeltaEncode_Type90Final_Data_2:24)`).
+BitMapOut_DeltaEncode_Type90Final_Data_2:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D2, 0x138
 BitMapOut_UpdateDisplayWidget_Str_Non_Panel_Memory:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA0A, 0x12	; "Non Panel Memory"
 ; [nakarest] naka_style_bitmaps+0xa1c  +0xa1c..+0xad6 (0xeb7bda, 186 B)
 ; [nakarest] purpose not established: layout of 186 B at 0xeb7bda not derived; readers below
 ; [nakarest] Readers: source references EffectMode_UpdateBitFlags_Loop (ui/ui_mode_handlers.s:
-; [nakarest] `ld xix, WidgetStyleDataTable_0x2A8`).
+; [nakarest] `ld xix, EffectMode_UpdateBitFlags_CheckCount_Data`).
+EffectMode_UpdateBitFlags_CheckCount_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA1C, 0xBA
 ; [nakarest] naka_style_bitmaps+0xad6  +0xad6..+0xae2 (0xeb7c94, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb7c94 not derived; readers below
 ; [nakarest] Readers: source references OneTchFUNC (ui/bitmap_out_routines.s: `add xde,
-; [nakarest] WidgetStyleDataTable_0x362`).
+; [nakarest] OneTchFUNC_Data`).
+OneTchFUNC_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAD6, 0xC
 ; [nakarest] naka_style_bitmaps+0xae2  +0xae2..+0xc6e (0xeb7ca0, 396 B)
 ; [nakarest] Text (396 B at 0xeb7ca0), first string "IModern Vibes Moscow Mandolins\xD5Sing
 ; [nakarest] It, P"; no registered NAKA table points into it; reached through source references
 ; [nakarest] EffectMode_SearchPresetTableC2C5 (ui/ui_mode_handlers.s: `lda xhl,
-; [nakarest] (WidgetStyleDataTable_0x36E:24)`).
+; [nakarest] (EffectMode_SearchPresetTableC2C5_Data:24)`).
+EffectMode_SearchPresetTableC2C5_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xAE2, 0x18C
 ; [nakarest] naka_style_bitmaps+0xc6e  +0xc6e..+0xcce (0xeb7e2c, 96 B)
 ; [nakarest] purpose not established: layout of 96 B at 0xeb7e2c not derived; readers below
 ; [nakarest] Readers: source references EffectMode_SearchPresetTableC0 (ui/ui_mode_handlers.s:
-; [nakarest] `lda xhl, (WidgetStyleDataTable_0x4FA:24)`).
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC6E, 0x60
+; [nakarest] `lda xhl, (EffectMode_SearchPresetTableC0_Data:24)`).
+EffectMode_SearchPresetTableC0_Data:
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0xC6E, 0x5A
+EffectMode_DiagSeq_AnimFrame_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCC8, 0x6
 ; [nakarest] naka_style_bitmaps+0xcce  +0xcce..+0xe2e (0xeb7e8c, 352 B)
 ; [nakarest] purpose not established: layout of 352 B at 0xeb7e8c not derived; readers below
 ; [nakarest] Readers: source references EffectMode_MidiSetLEDs (ui/ui_mode_handlers.s: `lda xde,
-; [nakarest] (WidgetStyleDataTable_0x55A:24)`).
+; [nakarest] (EffectMode_MidiSetLEDs_Data:24)`).
+EffectMode_MidiSetLEDs_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xCCE, 0x160
 ; [nakarest] naka_style_bitmaps+0xe2e  +0xe2e..+0xe4e (0xeb7fec, 32 B)
 ; [nakarest] purpose not established: layout of 32 B at 0xeb7fec not derived; readers below
 ; [nakarest] Readers: source references EffectMode_SetAllLEDs_Loop (ui/ui_mode_handlers.s: `lda
-; [nakarest] xbc, (WidgetStyleDataTable_0x6BA:24)`), LED_SetAll_BlankLoop
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (WidgetStyleDataTable_0x6BA:24)`).
+; [nakarest] xbc, (EffectMode_SetAllLEDs_SetOne_Data:24)`), LED_SetAll_BlankLoop
+; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (EffectMode_SetAllLEDs_SetOne_Data:24)`).
+EffectMode_SetAllLEDs_SetOne_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE2E, 0x20
 ; [nakarest] naka_style_bitmaps+0xe4e  +0xe4e..+0xe70 (0xeb800c, 34 B)
 ; [nakarest] purpose not established: layout of 34 B at 0xeb800c not derived; readers below
 ; [nakarest] Readers: source references RhythmRomTest_Compare (ui/ui_mode_handlers.s: `lda xix,
-; [nakarest] (WidgetStyleDataTable_0x6DA:24)`).
+; [nakarest] (RhythmRomTest_Compare_Data:24)`).
+RhythmRomTest_Compare_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE4E, 0x22
 ; [nakarest] naka_style_bitmaps+0xe70  +0xe70..+0xe7a (0xeb802e, 10 B)
 ; [nakarest] purpose not established: layout of 10 B at 0xeb802e not derived; readers below
 ; [nakarest] Readers: source references DramTest_IC10IC9_NextChip (ui/ui_mode_handlers.s: `lda
-; [nakarest] xbc, (WidgetStyleDataTable_0x6FC:24)`).
+; [nakarest] xbc, (DramTest_IC10IC9_NextChip_Data:24)`).
+DramTest_IC10IC9_NextChip_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE70, 0xA
 ; [nakarest] naka_style_bitmaps+0xe7a  +0xe7a..+0xe84 (0xeb8038, 10 B)
 ; [nakarest] purpose not established: layout of 10 B at 0xeb8038 not derived; readers below
 ; [nakarest] Readers: source references SramTest_IC21_Loop (ui/ui_mode_handlers.s: `lda xde,
-; [nakarest] (WidgetStyleDataTable_0x706:24)`).
+; [nakarest] (Test_SRAM_IC21_Data:24)`).
+Test_SRAM_IC21_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE7A, 0xA
 ; [nakarest] naka_style_bitmaps+0xe84  +0xe84..+0xe90 (0xeb8042, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb8042 not derived; readers below
 ; [nakarest] Readers: source references TEST2FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] WidgetStyleDataTable_0x710`).
+; [nakarest] TEST2FUNC_Data`).
+TEST2FUNC_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE84, 0xC
 ; [nakarest] naka_style_bitmaps+0xe90  +0xe90..+0xe9c (0xeb804e, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb804e not derived; readers below
 ; [nakarest] Readers: source references TEST3FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] WidgetStyleDataTable_0x71C`).
+; [nakarest] TEST3FUNC_Data`).
+TEST3FUNC_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE90, 0xC
 ; [nakarest] naka_style_bitmaps+0xe9c  +0xe9c..+0xea8 (0xeb805a, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb805a not derived; readers below
 ; [nakarest] Readers: source references TEST4FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] WidgetStyleDataTable_0x728`).
+; [nakarest] TEST4FUNC_Data`).
+TEST4FUNC_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xE9C, 0xC
 ; [nakarest] naka_style_bitmaps+0xea8  +0xea8..+0xeb4 (0xeb8066, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xeb8066 not derived; readers below
 ; [nakarest] Readers: source references TEST6FUNC (ui/ui_mode_handlers.s: `add xde,
-; [nakarest] WidgetStyleDataTable_0x734`).
+; [nakarest] TEST6FUNC_Data`).
+TEST6FUNC_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0xEA8, 0xC
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_FadeInPicture
@@ -520,11 +538,11 @@ Bitmap_FadeOutText:
 ; MasterSetup_DialDown_*) index it with 6*k (`muls wa, 0x6`), load +0
 ; and Strcpy the title into the view, and search it with String_Compare;
 ; their bounds are 0x3e8 (1000) -- an index of 1000 wraps to 0 and an
-; underflow reads entry 999 through StyleSong_MasterTable_0x176A (=
+; underflow reads entry 999 through MasterSetup_DialTurn_Underflow_Data (=
 ; +999*6, .set in shared/positional_labels.s), which is how the count is
 ; pinned. The cell-select paths of MasterSetup and
 ; MstStyleAlp_EventDispatch load the u16 at +4 of entry 9*(page-1) +
-; scroll + row (StyleSong_MasterTable_0x4, 9 rows per page) and hand it
+; scroll + row (MasterSetup_EventDispatch_Data, 9 rows per page) and hand it
 ; to MainFuncCall with 0x142000d / 0x1e20018. Checked here: the 1000
 ; title pointers are exactly the 1000 entries of StyleSong_Titles (entry
 ; k of this table -> title 999-k), and the ids are 0..999, each once.
@@ -534,7 +552,9 @@ Bitmap_FadeOutText:
 ; StyleSong_MasterTable[1000] (a local typedef).
 ; -----------------------------------------------------------------------------
 StyleSong_MasterTable:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x32D6, 0x1770
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x32D6, 0x4
+MasterSetup_EventDispatch_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x32DA, 0x1766
+MasterSetup_DialTurn_Underflow_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A40, 0x6
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] StyleSong_Titles
 ; StyleSong_Titles  --  1000 title strings x 34 bytes = 34000 bytes
@@ -3705,7 +3725,8 @@ EmbeddedPtrTable_v7_naka_style_bitmaps_018800:
 ; [nakarest] MstStyle1Page_EventDispatch load (index*8)+4 -- the group table -- through the
 ; [nakarest] label 4 bytes into it (StyleGroup_LatinDance_Table) and store it at 0x0340d2;
 ; [nakarest] MstStyle1Grid_CellSelect and MstStyle2_NameB_Render load +0, the name, through
-; [nakarest] StyleGroup_LatinWorld_PairTable_0x2FA (= this address).
+; [nakarest] MstStyle1Grid_CellSelect_Data (= this address).
+MstStyle1Grid_CellSelect_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AE6, 0x4
 ; [nakarest] StyleGroup_LatinDance_Table  +0x18aea..+0x18b36 (0xecfca8, 76 B)
 ; [nakarest] Continues the root of the MstStyle browser tree (0xecfca4): 10 x {u32 group name,
@@ -3713,7 +3734,7 @@ EmbeddedPtrTable_v7_naka_style_bitmaps_018800:
 ; [nakarest] MstStyle1Page_EventDispatch load (index*8)+4 -- the group table -- through the
 ; [nakarest] label 4 bytes into it (StyleGroup_LatinDance_Table) and store it at 0x0340d2;
 ; [nakarest] MstStyle1Grid_CellSelect and MstStyle2_NameB_Render load +0, the name, through
-; [nakarest] StyleGroup_LatinWorld_PairTable_0x2FA (= this address) (starts 0xecfca4, 76 of its
+; [nakarest] MstStyle1Grid_CellSelect_Data (= this address) (starts 0xecfca4, 76 of its
 ; [nakarest] 80 bytes are here or later).
 StyleGroup_LatinDance_Table:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18AEA, 0x4C
@@ -3756,25 +3777,29 @@ NakaInst_Rock_Pop:
 ; [nakarest] naka_style_bitmaps+0x18bea  +0x18bea..+0x18bee (0xecfda8, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xecfda8 not derived; readers below
 ; [nakarest] Readers: source references RVari_ConfirmF_CheckSelected (ui/rvari_routines.s: `lda
-; [nakarest] xbc, (NakaInst_Rock_Pop_0x24:24)`), RVari_EnumNotifyF_CheckSelected
-; [nakarest] (ui/rvari_routines.s: `lda xbc, (NakaInst_Rock_Pop_0x24:24)`).
+; [nakarest] xbc, (RVari_Select_Data:24)`), RVari_EnumNotifyF_CheckSelected
+; [nakarest] (ui/rvari_routines.s: `lda xbc, (RVari_Select_Data:24)`).
+RVari_Select_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BEA, 0x4
 ; [nakarest] naka_style_bitmaps+0x18bee  +0x18bee..+0x18bf2 (0xecfdac, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xecfdac not derived; readers below
 ; [nakarest] Readers: source references RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda
-; [nakarest] xbc, (NakaInst_Rock_Pop_0x28:24)`).
+; [nakarest] xbc, (RVari_Select_CheckSameBank_Data:24)`).
+RVari_Select_CheckSameBank_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BEE, 0x4
 ; [nakarest] naka_style_bitmaps+0x18bf2  +0x18bf2..+0x18bf6 (0xecfdb0, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xecfdb0 not derived; readers below
 ; [nakarest] Readers: source references MsaMode_Select (ui/ui_mode_handlers.s: `lda xbc,
-; [nakarest] (NakaInst_Rock_Pop_0x2C:24)`), MsaMode_Select_DrawHighlight1
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (NakaInst_Rock_Pop_0x2C:24)`).
+; [nakarest] (MsaMode_Select_Data:24)`), MsaMode_Select_DrawHighlight1
+; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (MsaMode_Select_Data:24)`).
+MsaMode_Select_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF2, 0x4
 ; [nakarest] naka_style_bitmaps+0x18bf6  +0x18bf6..+0x18bf8 (0xecfdb4, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xecfdb4 not derived; readers below
 ; [nakarest] Readers: source references PmemMode_Select (ui/ui_mode_handlers.s: `lda xbc,
-; [nakarest] (NakaInst_Rock_Pop_0x30:24)`), PmemMode_Select_DrawHighlight1
-; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (NakaInst_Rock_Pop_0x30:24)`).
+; [nakarest] (PmemMode_Select_Data:24)`), PmemMode_Select_DrawHighlight1
+; [nakarest] (ui/ui_mode_handlers.s: `lda xbc, (PmemMode_Select_Data:24)`).
+PmemMode_Select_Data:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18BF6, 0x2
 ; [nakarest] SeqChan_Map_10ch  +0x18bf8..+0x18c02 (0xecfdb6, 10 B)
 ; [nakarest] purpose not established: layout of 10 B at 0xecfdb6 not derived; readers below
@@ -3840,7 +3865,8 @@ NakaInst_MEMORY_B_ECFDEA:
 ; [nakarest] read by RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda xhl,
 ; [nakarest] (RVari_Select_CheckSameBank_PtrTable:24)`).
 NakaInst_MEMORY_A_ECFDF4:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C36, 0xEC
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C36, 0xA
+VariScreen_HandlePaint_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C40, 0xE2
 ; [nakarest] Naka_MemoryC_Screens  +0x18d22..+0x18d62 (0xecfee0, 64 B)
 ; [nakarest] purpose not established: 64 B at 0xecfee0 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 Naka_MemoryC_Screens:
@@ -3928,10 +3954,10 @@ MainChordPre_PtrTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18
 ; [nakarest] naka_style_bitmaps+0x18e42  +0x18e42..+0x18e4a (0xed0000, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xed0000 not derived; readers below
 ; [nakarest] Readers: source references InitializeSuna (storage/flash_floppy_handlers.s: `ld
-; [nakarest] XDE,0x00ed0000`); 1 data word in Bitmap_DigitD_0x22 (at 0xe9e514), which is read by
-; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, Bitmap_DigitD_0x22`); 1 data
-; [nakarest] word in Bitmap_DigitD_0x8DA (at 0xe9edcc), which is read by AcWelcomScreenProc
-; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, Bitmap_DigitD_0x8DA`); 2 data words in
+; [nakarest] XDE,0x00ed0000`); 1 data word in AcWelcomScreenProc_Data (at 0xe9e514), which is read by
+; [nakarest] AcWelcomScreenProc (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data`); 1 data
+; [nakarest] word in AcWelcomScreenProc_Data_2 (at 0xe9edcc), which is read by AcWelcomScreenProc
+; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`); 2 data words in
 ; [nakarest] Naka_KeyScaling_NavTrail (at 0xe8303c, 0xe846c6).
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18E42, 0x8
 ; External label offsets within the binary blob above.

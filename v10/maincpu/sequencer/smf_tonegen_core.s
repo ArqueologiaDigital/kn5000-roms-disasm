@@ -961,7 +961,7 @@ VoiceChannels_LoadPartMapAndInitPan:
 	ld xiy, VoiceChannels_PartMapTable
 	cp (4600:16), 1
 	jrl z, VoiceChannels_LoadPartMap_Mode1
-	ld xiy, VoiceChannels_PartMapTable_0x10
+	ld xiy, VoiceChannels_LoadPartMapAndInitPan_Data
 
 VoiceChannels_LoadPartMap_Mode1:
 	ld xix, 0xf1a0
@@ -975,11 +975,12 @@ VoiceChannels_PartMapTable:
 ; Two 16-byte MIDI-channel -> part-number maps (values 0x00..0x13).
 ; Read by VoiceChannels_LoadPartMapAndInitPan (0xF23DF1):
 ; XIY = this table when the byte at 0x11F8 is 1, else +0x10
-; (VoiceChannels_PartMapTable_0x10); ldir copies BC = 16 bytes to RAM 0xF1A0.
+; (VoiceChannels_LoadPartMapAndInitPan_Data); ldir copies BC = 16 bytes to RAM 0xF1A0.
 ; The +0x10 map equals the +0x00 map with entries 9 and 15 swapped
 ; (0x05 <-> 0x0C), the same channel-10/16 exchange VoiceChannel_ParamTable1
 ; and SeqTrack_ChannelMapIdentity make in that mode.
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x05, 0x06, 0x07, 0x11, 0x12, 0x13, 0x0c
+VoiceChannels_LoadPartMapAndInitPan_Data:
 	.byte 0x00, 0x02, 0x01, 0x0b, 0x08, 0x09, 0x0a, 0x03, 0x04, 0x0c, 0x06, 0x07, 0x11, 0x12, 0x13, 0x05
 
 SeqPlay_DelayLoop_Outer:
@@ -1484,7 +1485,7 @@ MidiSysEx_CC_LookupPartMap:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cp (4600:16), 1
 	jrl z, MidiSysEx_CC_PartMapSelected
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 
 MidiSysEx_CC_PartMapSelected:
 	ld	a, (xix+hl)
@@ -1507,7 +1508,7 @@ MidiSysEx_Cmd_ProgramChange:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cp (4600:16), 1
 	jrl z, MidiSysEx_PgmChg_PartMapSelected
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 
 MidiSysEx_PgmChg_PartMapSelected:
 	ld	a, (xix+hl)
@@ -1574,11 +1575,12 @@ SeqTrack_ChannelMapIdentity:
 ; identity with entries 9 and 15 swapped.  Read by MidiSysEx_CC_LookupPartMap
 ; (0xF24273) and MidiSysEx_Cmd_ProgramChange
 ; (0xF242A9): XIX = this table when the byte at 0x11F8
-; is 1, else +0x10 (SeqTrack_ChannelMapIdentity_0x10), then ld A,(XIX+HL)
+; is 1, else +0x10 (MidiSysEx_CC_LookupPartMap_Data), then ld A,(XIX+HL)
 ; with HL = the channel byte at 0x1075, and A is written back there -- the
 ; channel is remapped in place.  TYPED 2026-09-25 (lane seqeng); was spelled
 ; nop / normal / push sr / pop sr / max / halt / ei 7 / ... / .byte 0x09.
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
+MidiSysEx_CC_LookupPartMap_Data:
 	.byte 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x0f, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x09
 
 ToneGen_ComputeBlockPtr:
@@ -3041,7 +3043,7 @@ MidiPgmChg_Mode0_SetupA:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 	ld	l, (xix+iy)
 	ld (6748:16), l
 	pop xix
@@ -3085,7 +3087,7 @@ MidiPgmChg_Mode0_SetupA:
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	push xix
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 	ld	a, (xix+iy)
 	pop xix
 	push xhl
@@ -3132,7 +3134,7 @@ MidiPgmChg_Mode2_SetupA:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 	ld	l, (xix+iy)
 	ld (6748:16), l
 	pop xix
@@ -3189,7 +3191,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	cp (4323:16), 0
 	jrl nz, SoundGen_NullReturn
 	push xix
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 	ld	a, (xix+iy)
 	pop xix
 	push xhl
@@ -4772,7 +4774,7 @@ VoiceParam_ByMode_Mode0:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 	ld	l, (xix+de)
 	ld (6748:16), l
 	pop xde
@@ -4801,7 +4803,7 @@ VoiceParam_ByMode_Mode2:
 	ld (6744:16), l
 	ld l, (4012:16)
 	ld (6745:16), l
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 	ld	l, (xix+de)
 	ld (6748:16), l
 	pop xde
@@ -5154,7 +5156,7 @@ VoiceSynth_Algo_MultiStage:
 	ld_rrb	a, xix, hl
 	cp	(4600:16), 1
 	jr	z, VoiceSynth_Algo_MultiStage_Skip
-	ld	xix, SeqTrack_ChannelMapIdentity_0x10
+	ld	xix, MidiSysEx_CC_LookupPartMap_Data
 	ld_rrb a, xix, hl
 VoiceSynth_Algo_MultiStage_Skip:
 	pop xix

@@ -15220,15 +15220,19 @@ ParamPopup_AccompPart_Skip2:
 	; "ACCOMP PART3 ON " -- the visible strings do NOT fall on the reader's
 	; 16-byte boundaries, and the role of the 0x09 bytes is not established.
 	; The values 0xF00001-0xF00004 (inside this text) are also loaded as
-	; StringData_APCModeNames_0x160..0x163 by ui/drawbar_panel_ui.s's Softver
+	; Softver_ShowHide_Data..0x163 by ui/drawbar_panel_ui.s's Softver
 	; screen and handed to SendEvent -- more likely numeric event arguments
 	; than pointers here (not verified).
 Tbl_AccompPartNames:
 	.byte	0x09, 0x09
 	.ascii	"ACCOMP PART1 ON ACCOMP PART2 "
+Softver_ShowHide_Data:
 	.ascii	"O"
+Softver_ShowHide_Data_2:
 	.ascii	"N"
+Softver_ShowHide_Data_3:
 	.ascii	" "
+Softver_ShowHide_Data_4:
 	.byte	0x09, 0x09
 	.ascii	"ACCOMP PART3 ON "
 	; "OFF", 3 chars copied over the "ON " of the ACCOMP/APC MEMORY/DYNAMIC
@@ -16076,14 +16080,14 @@ Scoop_InitPartDisplay:
 	ld xiy, StyleUI_ParamBlockPtrTable
 	cp (3429:16), 2
 	jr nz, Scoop_SelectModeTable_2Part
-	ld xiy, StyleUI_ParamBlockPtrTable_0x98
+	ld xiy, Scoop_InitPartDisplay_Data
 
 Scoop_SelectModeTable_2Part:
 	ld	xiy, (xiy+hl)
-	ld xix, StyleUI_ParamBlockPtrTable_0x4C
+	ld xix, Scoop_SelectModeTable_2Part_Data
 	cp (3429:16), 2
 	jr nz, Scoop_SelectModeTable_2Part_XIX
-	ld xix, StyleUI_ParamBlockPtrTable_0xE4
+	ld xix, Scoop_SelectModeTable_2Part_Data_2
 
 Scoop_SelectModeTable_2Part_XIX:
 	ld	xix, (xix+hl)
@@ -17590,7 +17594,7 @@ Scoop_EnvelopeCalc:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda xbc, (Str_No_0xCEE:24)
+	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 4), xwa
 	decw	2, (xsp+266)
@@ -17688,7 +17692,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xCEE:24)
+	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
 	decm	2, (xsp+268)
@@ -18411,7 +18415,7 @@ Scoop_EventLoop_12Entry_Join:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xCEE:24)
+	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18559,7 +18563,7 @@ Scoop_EventLoop_12Entry_Join3:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xCEE:24)
+	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18642,7 +18646,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda xbc, (Str_No_0xCEE:24)
+	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 2), xwa
 	ld	wa, (xsp+262)
@@ -18747,7 +18751,7 @@ Scoop_EventLoop_36Entry_Join:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18887,7 +18891,7 @@ Scoop_EventLoop_36Entry_Join3:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18906,7 +18910,7 @@ Scoop_EventLoop_36Entry_Join3:
 	lda xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, GUI_FormatStrings_0x20
+	ld	xiy, Scoop_EventLoop_36Entry_Branch3_Data
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw
@@ -18952,7 +18956,7 @@ Scoop_EventLoop_36Entry_Join4:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18971,7 +18975,7 @@ Scoop_EventLoop_36Entry_Join4:
 	lda xsp, (xsp-270)
 	push	xiz
 	ld	xde, xwa
-	ld	xiy, GUI_FormatStrings_0x34
+	ld	xiy, Scoop_EventLoop_36Entry_Branch3_Data_2
 	lda	xix, (xsp+266)
 	ld	bc, 4:i3
 	ldirw
@@ -19025,7 +19029,7 @@ Scoop_EventLoop_36Entry_Skip15:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+266)
 	ld	xhl, xwa
@@ -19047,7 +19051,7 @@ Scoop_EventLoop_12Entry_Alt:
 	push xiz
 	ld (xsp + 54), xbc
 	ld xiz, xwa
-	ld xiy, GUI_FormatStrings_0x3C
+	ld xiy, Scoop_EventLoop_12Entry_Alt_Data
 	lda xix, (xsp + 6)
 	ldw bc, 0x18
 	ldirw

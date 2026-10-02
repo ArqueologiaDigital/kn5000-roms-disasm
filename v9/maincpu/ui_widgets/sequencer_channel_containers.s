@@ -242,7 +242,7 @@ Naka_DrawbarDisplay_Table2:
 ; [nakarest] Naka_DrawbarReg_Table: despite the name, entries 0-11 are the WALLPAPER PALETTE
 ; [nakarest] table: pointers to NakaColor_Palette2, 1, 6, 5, 4, 3, 10, 9, 8, 7, Blank, Blank
 ; [nakarest] (debug_naming_panel_sim.s).  This blob lies wholly inside the work-RAM initial
-; [nakarest] image (ROM 0xeed8c8 onward, CharMap_FullPermutation_0x7B0) that Boot_InitWorkRAM
+; [nakarest] image (ROM 0xeed8c8 onward, Boot_InitWorkRAM_ROMCopy1_Start_Data) that Boot_InitWorkRAM
 ; [nakarest] copies with ldir, so the table lives at RAM 0x3f1e4, where GetWallPaletteRGB
 ; [nakarest] (display/graphics_text_vga.s: `ld xde, 0x3f1e4`) indexes it (`sll 2`) and returns
 ; [nakarest] entry [colour] of the palette; ChangeWallPalette_Impl sets DAC entries 0xe0..0xef
@@ -317,7 +317,7 @@ Naka_DrawbarReg_Table:
 ; [nakarest] naka_sequencer_channels+0x19ee  +0x19ee..+0x1a78 (0xeefa66, 138 B)
 ; [nakarest] purpose not established: layout of 138 B at 0xeefa66 not derived; readers below
 ; [nakarest] Readers: source references Boot_InitWorkRAM_ROMCopy2_Start (boot/system_handlers.s:
-; [nakarest] `ld xhl, Naka_DrawbarReg_Table_0x4DE`); 1 data word in
+; [nakarest] `ld xhl, Boot_InitWorkRAM_ROMCopy2_Start_Data`); 1 data word in
 ; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start (at 0xef0bd8), which is read by
 ; [nakarest] Boot_InitWorkRAM_ROMCopy1_Start (boot/system_handlers.s: `jr z,
 ; [nakarest] Boot_InitWorkRAM_ROMCopy2_Start`); work-RAM image: Boot_InitWorkRAM copies these
@@ -327,6 +327,7 @@ Naka_DrawbarReg_Table:
 ; [nakarest] (0xe3dc:16), 181`), AccPlayback_CheckStateFlags (sequencer/accompaniment_engine.s:
 ; [nakarest] `or (0xe3e0:16), 16`), AccPlayback_ProcessTempoAdvance
 ; [nakarest] (sequencer/accompaniment_engine.s: `ld (0xe3e0:16), 16`), 83 more.
+Boot_InitWorkRAM_ROMCopy2_Start_Data:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x19EE, 0x8A
 ; [nakarest] Palette_8bit_RGBA_2_Data  +0x1a78..+0x1f00 (0xeefaf0, 1160 B)
 ; [nakarest] purpose not established: layout of 1160 B at 0xeefaf0 not derived; readers below

@@ -284,135 +284,135 @@ NakaColor_PaletteBlank:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x38E0, 0x400
 ; [nakarest] NakaProp_FontEntry0  +0x3ce0..+0x3cf4 (0xeb67de, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb67de not derived; readers below
-; [nakarest] Readers: 3 data words in NakaInst_IT_Off_0x8 (at 0xeb7698, 0xeb76a4, 0xeb77dc),
+; [nakarest] Readers: 3 data words in ExitWindow_OK_Data_2 (at 0xeb7698, 0xeb76a4, 0xeb77dc),
 ; [nakarest] which is read by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa,
-; [nakarest] (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] (ExitWindow_OK_Data_2:24)`).
 NakaProp_FontEntry0:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3CE0, 0x14
 ; [nakarest] NakaProp_FontEntry1  +0x3cf4..+0x3d08 (0xeb67f2, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb67f2 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb76b0, 0xeb76bc), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb76b0, 0xeb76bc), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_FontEntry1:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3CF4, 0x14
 ; [nakarest] NakaProp_FontEntry2  +0x3d08..+0x3d1c (0xeb6806, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb6806 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb76c8, 0xeb76d4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb76c8, 0xeb76d4), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_FontEntry2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D08, 0x14
 ; [nakarest] NakaInst_False  +0x3d1c..+0x3d4c (0xeb681a, 48 B)
 ; [nakarest] purpose not established: layout of 48 B at 0xeb681a not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb76e0, 0xeb76ec), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb76e0, 0xeb76ec), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaInst_False:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D1C, 0x30
 ; [nakarest] NakaProp_BoolEntry1  +0x3d4c..+0x3d60 (0xeb684a, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb684a not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb76f8, 0xeb7704), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb76f8, 0xeb7704), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry1:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D4C, 0x14
 ; [nakarest] NakaProp_BoolEntry2  +0x3d60..+0x3d74 (0xeb685e, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb685e not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7710, 0xeb771c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7710, 0xeb771c), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry2:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D60, 0x14
 ; [nakarest] NakaProp_BoolEntry3  +0x3d74..+0x3d88 (0xeb6872, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb6872 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7728, 0xeb7734), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7728, 0xeb7734), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry3:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D74, 0x14
 ; [nakarest] NakaProp_BoolEntry4  +0x3d88..+0x3d9c (0xeb6886, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb6886 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7740, 0xeb774c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7740, 0xeb774c), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry4:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D88, 0x14
 ; [nakarest] NakaProp_BoolEntry5  +0x3d9c..+0x3db0 (0xeb689a, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb689a not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7758, 0xeb7764), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7758, 0xeb7764), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry5:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3D9C, 0x14
 ; [nakarest] NakaProp_BoolEntry6  +0x3db0..+0x3dc4 (0xeb68ae, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb68ae not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7770, 0xeb777c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7770, 0xeb777c), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry6:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DB0, 0x14
 ; [nakarest] NakaProp_BoolEntry7  +0x3dc4..+0x3dd8 (0xeb68c2, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb68c2 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7788, 0xeb7794), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7788, 0xeb7794), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry7:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DC4, 0x14
 ; [nakarest] NakaProp_BoolEntry8  +0x3dd8..+0x3dec (0xeb68d6, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb68d6 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb77a0, 0xeb77ac), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb77a0, 0xeb77ac), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BoolEntry8:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DD8, 0x14
 ; [nakarest] NakaProp_CFlagEntry  +0x3dec..+0x3e24 (0xeb68ea, 56 B)
 ; [nakarest] purpose not established: layout of 56 B at 0xeb68ea not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb77b8, 0xeb77c4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb77b8, 0xeb77c4), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_CFlagEntry:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3DEC, 0x38
 ; [nakarest] NakaProp_VisFlag_Header  +0x3e24..+0x3e2e (0xeb6922, 10 B)
 ; [nakarest] purpose not established: layout of 10 B at 0xeb6922 not derived; readers below
-; [nakarest] Readers: 1 data word in NakaInst_IT_Off_0x8 (at 0xeb77d0), which is read by
-; [nakarest] ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 1 data word in ExitWindow_OK_Data_2 (at 0xeb77d0), which is read by
+; [nakarest] ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_VisFlag_Header:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3E24, 0xA
 ; [nakarest] NakaProp_VisFlag_Chain  +0x3e2e..+0x40d2 (0xeb692c, 676 B)
 ; [nakarest] purpose not established: layout of 676 B at 0xeb692c not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb77e8, 0xeb77f4), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb77e8, 0xeb77f4), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_VisFlag_Chain:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x3E2E, 0x2A4
 ; [nakarest] NakaProp_BorderDefs  +0x40d2..+0x426e (0xeb6bd0, 412 B)
 ; [nakarest] purpose not established: layout of 412 B at 0xeb6bd0 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7800, 0xeb780c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7800, 0xeb780c), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_BorderDefs:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x40D2, 0x19C
 ; [nakarest] NakaProp_Align_Header  +0x426e..+0x4282 (0xeb6d6c, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb6d6c not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7818, 0xeb7824), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7818, 0xeb7824), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_Align_Header:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x426E, 0x14
 ; [nakarest] NakaProp_Align_PtrEntry  +0x4282..+0x42d8 (0xeb6d80, 86 B)
 ; [nakarest] purpose not established: layout of 86 B at 0xeb6d80 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7830, 0xeb783c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7830, 0xeb783c), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_Align_PtrEntry:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x4282, 0x56
 ; [nakarest] NakaProp_EditSwitch_Chain  +0x42d8..+0x457c (0xeb6dd6, 676 B)
 ; [nakarest] purpose not established: layout of 676 B at 0xeb6dd6 not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7848, 0xeb7854), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7848, 0xeb7854), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_EditSwitch_Chain:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x42D8, 0x2A4
 ; [nakarest] NakaInst_LM_RightDown  +0x457c..+0x45dc (0xeb707a, 96 B)
 ; [nakarest] purpose not established: layout of 96 B at 0xeb707a not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7860, 0xeb786c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7860, 0xeb786c), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaInst_LM_RightDown:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x457C, 0x60
 ; [nakarest] NakaProp_Frame_Header  +0x45dc..+0x45f0 (0xeb70da, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xeb70da not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7878, 0xeb7884), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7878, 0xeb7884), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_Frame_Header:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x45DC, 0x14
 ; [nakarest] NakaProp_Frame_Chain  +0x45f0..+0x46c0 (0xeb70ee, 208 B)
 ; [nakarest] purpose not established: layout of 208 B at 0xeb70ee not derived; readers below
-; [nakarest] Readers: 2 data words in NakaInst_IT_Off_0x8 (at 0xeb7890, 0xeb789c), which is read
-; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (NakaInst_IT_Off_0x8:24)`).
+; [nakarest] Readers: 2 data words in ExitWindow_OK_Data_2 (at 0xeb7890, 0xeb789c), which is read
+; [nakarest] by ExitWindow_OK (ui/ui_widget_defs.s: `lda xwa, (ExitWindow_OK_Data_2:24)`).
 NakaProp_Frame_Chain:
 	.incbin "includes/generated/naka_debug_naming.bin", 0x45F0, 0xD0
 ; External label offsets within the binary blob above.

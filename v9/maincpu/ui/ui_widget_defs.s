@@ -28,10 +28,10 @@ AcGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, AcGridBox_Default
 	add xwa, xwa
-	add xwa, Data_SoundEditorCharsLayout_0x386
+	add xwa, AcGridBoxProc_Data
 	ld wa, (xwa)
 	lda xix, (AcGridBox_Init:24)
-; Computed jump: target = AcGridBox_Init + Data_SoundEditorCharsLayout_0x386[i], Data_SoundEditorCharsLayout_0x386 = 16-bit offsets (7 words, read
+; Computed jump: target = AcGridBox_Init + AcGridBoxProc_Data[i], AcGridBoxProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> AcGridBoxProc_Evt1C00017
 ;   0x1c00018 -> AcGridBoxProc_Evt1C00018
@@ -248,10 +248,10 @@ GridCheck:
 	cp xwa, 0x6
 	jr gt, GridCheck_Return
 	add xwa, xwa
-	add xwa, Data_SoundEditorCharsLayout_0x39A
+	add xwa, GridCheck_Data
 	ld wa, (xwa)
 	lda xix, (GridCheck_JumpEnd:24)
-; Computed jump: target = GridCheck_JumpEnd + Data_SoundEditorCharsLayout_0x39A[i], Data_SoundEditorCharsLayout_0x39A = 16-bit offsets (7 words, read
+; Computed jump: target = GridCheck_JumpEnd + GridCheck_Data[i], GridCheck_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c00017:
 ;   0x1c00017 -> GridCheck_JumpEnd
 ;   0x1c00018 -> GridCheck_JumpEnd
@@ -1931,10 +1931,10 @@ RamEditCheck:
 	cp xwa, 0x9
 	jr gt, RamEditCheck_NotHandled
 	add xwa, xwa
-	add xwa, Data_SoundEditorCharsLayout_0x3E8
+	add xwa, RamEditCheck_Data
 	ld wa, (xwa)
 	lda xix, (RamEditCheck_JumpStart:24)
-; Computed jump: target = RamEditCheck_JumpStart + Data_SoundEditorCharsLayout_0x3E8[i], Data_SoundEditorCharsLayout_0x3E8 = 16-bit offsets (10 words, read
+; Computed jump: target = RamEditCheck_JumpStart + RamEditCheck_Data[i], RamEditCheck_Data = 16-bit offsets (10 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0003e:
 ;   0x1e0003e -> RamEditCheck_Evt1E0003E
 ;   0x1e0003f -> RamEditCheck_Evt1E0003F
@@ -3476,7 +3476,7 @@ ButtonState_DispatchDSP:
 	cp wa, 0x10
 	jrl gt, ButtonState_Paint_DrawAligned
 	add wa, wa
-	lda xix, (Str_No_0x4:24)
+	lda xix, (ButtonState_DispatchDSP_Data:24)
 	ld	wa, (xix+wa)
 	lda xix, (ButtonState_DispatchDSP_InlineData:24)
 	jp	t, (xix+wa)
@@ -3717,11 +3717,11 @@ AcIndexEdit_DispatchDSP:
 	jrl mi, AcIndexEdit_ReturnZeroJmp
 	cp wa, 0x10
 	jrl gt, AcIndexEdit_ReturnZeroJmp
-	lda xix, (Str_No_0x26:24)
+	lda xix, (AcIndexEdit_DispatchDSP_Data:24)
 	ld	wa, (xix+wa)
 	extz wa
 	sll wa, 1
-	ld xix, Str_No_0x38
+	ld xix, AcIndexEdit_DispatchDSP_Data_2
 	ld	wa, (xix+wa)
 	lda xix, (AcIndexEdit_DispatchDSP_InlineData:24)
 	jp	t, (xix+wa)
@@ -6337,7 +6337,7 @@ AcMixerVol_Confirm:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	ld xwa, Str_No_0x1F6
+	ld xwa, AcMixerVol_Confirm_Data
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6349,7 +6349,7 @@ AcMixerVol_Confirm:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda xwa, (Str_No_0x1FA:24)
+	lda xwa, (AcMixerVol_Confirm_Data_2:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6477,7 +6477,7 @@ AcMixerVol_PartSelect_DrawIcon:
 	ld (xwa + 2), bc
 	ld bc, (xsp + 10)
 	sla bc, 2
-	lda xde, (Str_No_0x30E:24)
+	lda xde, (AcMixerVol_PartSelect_DrawIcon_Data:24)
 	ld	xbc, (xde+bc)
 	call DrawBitmapFast
 	jrl UIList_ReturnZeroJmp
@@ -6495,7 +6495,7 @@ AcMixerVol_ValueChange:
 	sll xwa, 2
 	add xwa, xde
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, AcMixerVol_Confirm_Data
 	add xbc, xwa
 	ld xhl, (xsp + 36)
 	ld xwa, (xhl)
@@ -6547,7 +6547,7 @@ AcMixerVol_OK:
 	sll xbc, 2
 	add xbc, xwa
 	add xbc, xbc
-	lda xwa, (Str_No_0x1FA:24)
+	lda xwa, (AcMixerVol_Confirm_Data_2:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	call SndParam_LookupReadOnly
@@ -6562,7 +6562,7 @@ AcMixerVol_OK:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, AcMixerVol_Confirm_Data
 	add xbc, xwa
 	ld xwa, (xbc + 4)
 	ld de, (xbc + 8)
@@ -6580,7 +6580,7 @@ AcMixerVol_OK_Mute:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, AcMixerVol_Confirm_Data
 	add xbc, xwa
 	ld de, (xbc + 8)
 	ld xwa, (xsp + 36)
@@ -6631,7 +6631,7 @@ AcMixerVol_FastScroll:
 	ld xwa, (xsp + 36)
 	bit 7, wa
 	jr z, AcMixerVol_FastScroll_Increment
-	ld xde, Str_No_0x1F6
+	ld xde, AcMixerVol_Confirm_Data
 	add xde, xbc
 	ld xwa, (xde)
 	ld de, (xde + 8)
@@ -6639,7 +6639,7 @@ AcMixerVol_FastScroll:
 	jr AcMixerVol_FastScroll_Apply
 
 AcMixerVol_FastScroll_Increment:
-	ld xde, Str_No_0x1F6
+	ld xde, AcMixerVol_Confirm_Data
 	add xde, xbc
 	ld xwa, (xde)
 	ld de, (xde + 8)
@@ -6684,7 +6684,7 @@ AcMixerVol_Reset:
 	sll xwa, 2
 	add xwa, xbc
 	add xwa, xwa
-	ld xbc, Str_No_0x1F6
+	ld xbc, AcMixerVol_Confirm_Data
 	add xbc, xwa
 	ld xwa, (xbc + 4)
 	ld de, (xbc + 8)
@@ -7644,7 +7644,7 @@ PsTrackSwitchProc:
 	lda xix, (xsp + 18)
 	ldw bc, 0xa
 	ldirw
-	ld xiy, Str_No_0x504
+	ld xiy, PsTrackSwitchProc_Data
 	lda xix, (xsp + 8)
 	ld bc, 5:i3
 	ldirw
@@ -8384,10 +8384,10 @@ ObjectProc:
 	cp xwa, 0x13
 	jrl gt, ExitWindow_Init
 	add xwa, xwa
-	add xwa, Str_No_0x58E
+	add xwa, ObjectProc_Data
 	ld wa, (xwa)
 	lda xix, (AcTrkSw_Return:24)
-; Computed jump: target = AcTrkSw_Return + Str_No_0x58E[i], Str_No_0x58E = 16-bit offsets (20 words, read
+; Computed jump: target = AcTrkSw_Return + ObjectProc_Data[i], ObjectProc_Data = 16-bit offsets (20 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00010:
 ;   0x1e00010 -> AcTrkSw_Return
 ;   0x1e00011 -> ObjectProc_Evt1E00011
@@ -8670,7 +8670,7 @@ ExitWindow_Paint:
 	lda xde, (xbc+448)
 
 ExitWindow_Confirm:
-	ld xiy, Str_No_0x5B6
+	ld xiy, ExitWindow_Confirm_Data
 	ld xix, xwa
 	ld bc, 7:i3
 	ldirw
@@ -8682,7 +8682,7 @@ ExitWindow_Confirm:
 	lda xde, (xbc+5632)
 
 ExitWindow_OK:
-	ld xiy, Str_No_0x5C6
+	ld xiy, ExitWindow_OK_Data
 	ld xix, xwa
 	ldw bc, 0xb
 	ldirw
@@ -8695,7 +8695,7 @@ ExitWindow_OK:
 	lda xwa, (SupportClassProc:24)
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0x37
-	lda xwa, (NakaInst_IT_Off_0x8:24)
+	lda xwa, (ExitWindow_OK_Data_2:24)
 	ld (xbc + 10), xwa
 	ldw wa, 0x260
 	calr RegisterObjectTable
@@ -8914,7 +8914,7 @@ InputDialog_Confirm:
 	add xwa, xbc
 	ld xwa, (xwa + 10)
 	add xix, xwa
-	lda xwa, (Str_No_0x5DE:24)
+	lda xwa, (InputDialog_Confirm_Data:24)
 	ld (xix), xwa
 	incw 1, (xhl + 8)
 	ld xhl, (xsp + 8)
@@ -8965,7 +8965,7 @@ UnRegisterObject:
 	add xix, xhl
 	ld xwa, (xix + 10)
 	add xde, xwa
-	lda xwa, (Str_No_0x5E0:24)
+	lda xwa, (UnRegisterObject_Data:24)
 	ld (xde), xwa
 	decw	1, (xbc+8)
 	pop xiz
@@ -9129,10 +9129,10 @@ ClassProc:
 	cp xbc, 0x7
 	jrl gt, TitleWidget_OK_AdvanceDone
 	add xbc, xbc
-	add xbc, Str_No_0x5E2
+	add xbc, ClassProc_Data
 	ld bc, (xbc)
 	lda xix, (ClassProc_Event_LoadFromWA:24)
-; Computed jump: target = ClassProc_Event_LoadFromWA + Str_No_0x5E2[i], Str_No_0x5E2 = 16-bit offsets (8 words, read
+; Computed jump: target = ClassProc_Event_LoadFromWA + ClassProc_Data[i], ClassProc_Data = 16-bit offsets (8 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00000:
 ;   0x1e00000 -> ClassProc_Event_LoadFromWA
 ;   0x1e00001 -> ClassProc_Event_LoadFromHL
@@ -9722,10 +9722,10 @@ ModeProc:
 	cp xbc, 0x5
 	jrl gt, GetMode_DispatchDSP
 	add xbc, xbc
-	add xbc, Str_No_0x5F2
+	add xbc, ModeProc_Data
 	ld bc, (xbc)
 	lda xix, (NakaWidget_ReturnConst_0x1600006:24)
-; Computed jump: target = NakaWidget_ReturnConst_0x1600006 + Str_No_0x5F2[i], Str_No_0x5F2 = 16-bit offsets (6 words, read
+; Computed jump: target = NakaWidget_ReturnConst_0x1600006 + ModeProc_Data[i], ModeProc_Data = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e0002b:
 ;   0x1e0002b -> ModeProc_Evt1E0002B
 ;   0x1e0002c -> ModeProc_Evt1E0002C
@@ -9980,7 +9980,7 @@ UnregisteredMode:
 	ld xwa, 0xffffffff
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0xffff
-	lda xwa, (Str_No_0x5FE:24)
+	lda xwa, (UnregisteredMode_Data:24)
 	ld (xbc + 10), xwa
 	ret
 
@@ -10018,7 +10018,7 @@ UnregisteredTitle:
 	ld xwa, 0xffffffff
 	ld (xbc + 4), xwa
 	ldw (xbc + 8), 0xffff
-	lda xwa, (Str_No_0x600:24)
+	lda xwa, (UnregisteredTitle_Data:24)
 	ld (xbc + 10), xwa
 	ld xwa, 0xffffffff
 	ld (xbc + 14), xwa
@@ -10066,7 +10066,7 @@ TitleProc:
 	sll xwa, 3
 	sub xwa, (xsp + 30)
 	add xwa, xwa
-	ld xbc, Str_No_0x602
+	ld xbc, TitleProc_Data
 	add xbc, xwa
 	ld xwa, (xbc + 8)
 	cp xiz, EVT_EASY_SET_OFF
@@ -10829,7 +10829,7 @@ EnumList_OK_ScrollUp_Done:
 	sll xwa, 3
 	sub xwa, (xsp + 30)
 	add xwa, xwa
-	ld xbc, Str_No_0x602
+	ld xbc, TitleProc_Data
 	add xbc, xwa
 	ld xwa, (xbc + 8)
 	ld xbc, (xbc)
@@ -10851,7 +10851,7 @@ EnumList_HitTest:
 	sll xbc, 3
 	sub xbc, (xsp + 30)
 	add xbc, xbc
-	lda xwa, (Str_No_0x606:24)
+	lda xwa, (EnumList_HitTest_Data:24)
 	add xwa, xbc
 	ld xwa, (xwa)
 	cp xwa, EVT_CHANGE_TITLE
@@ -10874,7 +10874,7 @@ EnumList_HitTest_Loop:
 	sll xbc, 3
 	sub xbc, (xsp + 30)
 	add xbc, xbc
-	ld xwa, Str_No_0x602
+	ld xwa, TitleProc_Data
 	add xwa, xbc
 	ld xbc, (xwa + 4)
 	ld xde, (xwa)
@@ -10976,7 +10976,7 @@ EnumList_Reset:
 	ld wa, iz
 	extz xwa
 	add xwa, xwa
-	ld xbc, Str_No_0x6B6
+	ld xbc, EnumList_Reset_Data
 	add xbc, xwa
 	ld wa, (xbc)
 	ld (0x02bc32:24), wa
@@ -11162,10 +11162,10 @@ ViewableProc:
 	cp xwa, 0x6
 	jrl gt, Viewable_DefaultDispatch
 	add xwa, xwa
-	add xwa, Str_No_0x6D0
+	add xwa, ViewableProc_Data
 	ld wa, (xwa)
 	lda xix, (Viewable_GetClassProc:24)
-; Computed jump: target = Viewable_GetClassProc + Str_No_0x6D0[i], Str_No_0x6D0 = 16-bit offsets (7 words, read
+; Computed jump: target = Viewable_GetClassProc + ViewableProc_Data[i], ViewableProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1c0000b:
 ;   0x1c0000b -> ViewableProc_Evt1C0000B
 ;   0x1c0000c -> ViewableProc_Evt1C0000C
@@ -12578,7 +12578,7 @@ BoxStyle7_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6DE
+	ld xwa, BoxStyle7_Setup_Data
 	jr BoxStyle7_CheckInner
 
 BoxStyle7_CalcWidth:
@@ -12700,7 +12700,7 @@ BoxStyle8_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6EE
+	ld xwa, BoxStyle8_Setup_Data
 	jr BoxStyle8_CheckInner
 
 BoxStyle8_CalcWidth:
@@ -12822,7 +12822,7 @@ BoxStyle9_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x700
+	ld xwa, BoxStyle9_Setup_Data
 	jr BoxStyle9_CheckInner
 
 BoxStyle9_CalcWidth:
@@ -12944,7 +12944,7 @@ BoxStyle10_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x712
+	ld xwa, BoxStyle10_Setup_Data
 	jr BoxStyle10_CheckInner
 
 BoxStyle10_CalcWidth:
@@ -13067,7 +13067,7 @@ BoxStyle11_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x724
+	ld xwa, BoxStyle11_Setup_Data
 	jr BoxStyle11_CheckInner
 
 BoxStyle11_CalcWidth:
@@ -13189,7 +13189,7 @@ BoxStyle12_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x736
+	ld xwa, BoxStyle12_Setup_Data
 	jr BoxStyle12_CheckInner
 
 BoxStyle12_CalcWidth:
@@ -13310,7 +13310,7 @@ BoxStyle13_Setup:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x748
+	ld xwa, BoxStyle13_Setup_Data
 	jr BoxStyle13_CheckInner
 
 BoxStyle13_CalcWidth:
@@ -14996,7 +14996,7 @@ FontIDProc:
 	jr SliderH_CalcThumb
 
 SliderH_Setup:
-	ld hl, (NakaData_WidgetNames_0x624:24)
+	ld hl, (SliderH_Setup_Data:24)
 	exts xhl
 	jrl SliderH_ReturnAlt5
 
@@ -15120,7 +15120,7 @@ IconIDProc:
 	jr SliderV_CalcThumb
 
 SliderV_Setup:
-	ld hl, (Str_InitializeRoot_0x10:24)
+	ld hl, (SliderV_Setup_Data:24)
 	extz xhl
 	jrl BitmapIDProc_Return
 
@@ -17261,7 +17261,7 @@ NameProc_Init:
 	jr NameProc_Close
 
 NameProc_Init_SetPtr:
-	ld xwa, Str_No_0x8BC
+	ld xwa, NameProc_Init_SetPtr_Data
 
 NameProc_Close:
 	push xwa
@@ -17328,7 +17328,7 @@ ConstFlagProc_GetValue:
 	jr ConstFlagProc_SetValue
 
 ConstFlagProc_GetValue_Set:
-	ld xwa, Str_No_0x8C8
+	ld xwa, ConstFlagProc_GetValue_Set_Data
 
 ConstFlagProc_SetValue:
 	push xwa
@@ -17428,10 +17428,10 @@ CommonIDProc:
 	cp xde, 0x6
 	jrl gt, CommonIDProc_Default
 	add xde, xde
-	add xde, Str_No_0x8CE
+	add xde, CommonIDProc_Data
 	ld de, (xde)
 	lda xix, (CommonIDProc_Evt1E0000D:24)
-; Computed jump: target = CommonIDProc_Evt1E0000D + Str_No_0x8CE[i], Str_No_0x8CE = 16-bit offsets (7 words, read
+; Computed jump: target = CommonIDProc_Evt1E0000D + CommonIDProc_Data[i], CommonIDProc_Data = 16-bit offsets (7 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00008:
 ;   0x1e00008 -> CommonIDProc_ReturnZero
 ;   0x1e00009 -> CommonIDProc_Evt1E00009

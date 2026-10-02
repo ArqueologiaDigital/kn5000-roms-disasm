@@ -530,7 +530,7 @@ Voice_DecodeNoteChannel:
 	and l, 0xf
 	sla hl, 1
 	push xix
-	ld xix, Voice_NoteChannelTable1_0x402
+	ld xix, Voice_DecodeNoteChannel_Data
 	ld	hl, (xix+hl)
 	pop xix
 	jr Voice_DecodeRet
@@ -544,7 +544,7 @@ Voice_DecodeNonPercussion:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, Voice_NoteChannelTable1_0x2
+	ld xix, Voice_DecodeNonPercussion_Data
 	ld	hl, (xix+hl)
 	pop xix
 
@@ -568,6 +568,7 @@ Voice_NoteChannelTable1:
 ; +0x00 (2 B) head; the grid below is based at +0x02
 	.byte 0x00, 0x00	; |..|
 ; +0x02 (128 records x 4 LE16). The reader is ldw_sri, a WORD load, so each record is four 16-bit fields and the index (note<<3) + ((h and 3)<<1) selects one of them. One record per line, MIDI note 0..127.
+Voice_DecodeNonPercussion_Data:
 	.short 0x0000, 0x0000, 0x0000, 0x0000
 	.short 0x0000, 0x0000, 0x0000, 0x0000
 	.short 0x0000, 0x0000, 0x0000, 0x0000
@@ -701,6 +702,7 @@ Voice_NoteChannelTable1:
 ; Voice_DecodeNoteChannel percussion path -- xor h,h / and l,0xf / sla hl,1
 ; then ldw_sri off xix = this label, i.e. word[l & 15]. 32 B = 16 entries,
 ; ending exactly where the +0x422 subroutine begins.
+Voice_DecodeNoteChannel_Data:
 	.short 0x000d, 0x010d, 0x020d, 0x030d, 0x040d, 0x050d, 0x000e, 0x010e
 	.short 0x020e, 0x030e, 0x040e, 0x050e, 0x000c, 0x000c, 0x000c, 0x000c
 ; Voice_NoteChannelGrid_Lookup (= Voice_NoteChannelTable1 +0x422, the
@@ -720,7 +722,7 @@ Voice_NoteChannelGrid_Lookup:
 	or	l, h
 	xor	h, h
 	push	xix
-	ld	xix, Voice_NoteChannelTable1_0x43F
+	ld	xix, Voice_NoteChannelGrid_Lookup_Data
 	ld	hl, (xix+hl)	; ld HL,(XIX+HL)
 	pop	xix
 	ret
@@ -731,6 +733,7 @@ Voice_NoteChannelGrid_Lookup:
 ; sla h,1 / or l,h / xor h,h then ldw_sri -- index (l&15)*16 + (h&7)*2, so a
 ; 16-row grid of 8 LE16 words, which is exactly the 256 B to the next label.
 ; The grid shape shows in the values: columns 6 and 7 are zero in every row.
+Voice_NoteChannelGrid_Lookup_Data:
 	.short 0x0170, 0x0171, 0x0172, 0x017a, 0x0174, 0x0175, 0x0000, 0x0000
 	.short 0x0140, 0x0179, 0x017c, 0x0178, 0x017d, 0x017b, 0x0000, 0x0000
 	.short 0x0250, 0x0159, 0x015a, 0x015b, 0x0258, 0x0253, 0x0000, 0x0000
@@ -756,7 +759,7 @@ Voice_DecodeNoteChannel2:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, Voice_NoteChannelTable2_0x2
+	ld xix, Voice_DecodeNoteChannel2_Data
 	ld	hl, (xix+hl)
 	pop xix
 	ret
@@ -769,13 +772,14 @@ Voice_NoteChannelTable2:
 ; 0xF716CA-0xF716E6, 0xF71752-0xF71772, 0xF717B2-0xF717D0,
 ; 0xF717DA-0xF717FA, 0xF71872-0xF718AA, 0xF718DA-0xF718EA and
 ; 0xF71972-0xF719A2. The rest was still spelled as mnemonics. The only
-; reference is `ld xix, Voice_NoteChannelTable2_0x2`; nothing calls or
+; reference is `ld xix, Voice_DecodeNoteChannel2_Data`; nothing calls or
 ; jumps into the block, and 1026 B is exactly 2 + 128*8, ending where
 ; Voice_DecodeBankIndex begins.
 ; +0x00 (2 B) head; the grid below is based at +0x02
 ; +0x00 (2 B) head; the grid below is based at +0x02
 	.byte 0x00, 0x00	; |..|
 ; +0x02 (128 records x 4 LE16). The reader is ldw_sri, a WORD load, so each record is four 16-bit fields and the index (note<<3) + ((h and 3)<<1) selects one of them. One record per line, MIDI note 0..127.
+Voice_DecodeNoteChannel2_Data:
 	.short 0x0000, 0x0000, 0x0000, 0x0000
 	.short 0x0000, 0x0000, 0x0000, 0x0000
 	.short 0x0000, 0x0000, 0x0000, 0x0000
@@ -914,7 +918,7 @@ Voice_ClampBankIndex:
 	xor h, h
 	sla hl, 1
 	push xix
-	ld xix, Voice_BankIndexTable_0x2
+	ld xix, Voice_ClampBankIndex_Data
 	ld	hl, (xix+hl)
 	pop xix
 	ret
@@ -924,7 +928,8 @@ Voice_BankIndexTable:
 ; Voice_DecodeBankIndex: and l,0x7f / cp l,0xc else xor l,l / xor h,h /
 ; sla hl,1 then ldw_sri off xix = +0x02, so entry k is the word at index
 ; k+1 below. The values are the ramp 0x20,0x30,...,0xD0 then 0x20 repeated.
-	.short 0x0000, 0x0020, 0x0030, 0x0040, 0x0050, 0x0060, 0x0070, 0x0080
+	.short	0x0000
+Voice_ClampBankIndex_Data:	.short	0x0020, 0x0030, 0x0040, 0x0050, 0x0060, 0x0070, 0x0080
 	.short 0x0090, 0x00a0, 0x00b0, 0x00c0, 0x00d0, 0x0020, 0x0020, 0x0020
 	.short 0x0020, 0x0020
 
@@ -948,7 +953,7 @@ Voice_DecodeStandard:
 	or a, h
 	ld hl, wa
 	push xix
-	ld xix, Voice_NoteParamTable_0x2
+	ld xix, Voice_DecodeStandard_Data
 	ld	hl, (xix+hl)
 	pop xix
 
@@ -959,11 +964,12 @@ Voice_NoteParamTable:
 ; REGRIDDED 2026-09-02 (lane v10seq). The bytes were already correct;
 ; they were laid out 8 to a line but starting at +0x00, which put every
 ; record across two lines. The only reference to this block is
-; `ld xix, Voice_NoteParamTable_0x2`, and 1026 B is exactly 2 + 128*8.
+; `ld xix, Voice_DecodeStandard_Data`, and 1026 B is exactly 2 + 128*8.
 ; +0x00 (2 B) head; the grid below is based at +0x02
 ; +0x00 (2 B) head; the grid below is based at +0x02
 	.byte 0x00, 0x00	; |..|  (was `nop / nop`: never executed, nothing jumps here)
 ; +0x02 (128 records x 4 LE16). The reader is ldw_sri, a WORD load, so each record is four 16-bit fields and the index (note<<3) + ((h and 3)<<1) selects one of them. One record per line, MIDI note 0..127.
+Voice_DecodeStandard_Data:
 	.short 0x0100, 0x0103, 0x0203, 0x0303
 	.short 0x0100, 0x0103, 0x0203, 0x0303
 	.short 0x0100, 0x0103, 0x0203, 0x0303

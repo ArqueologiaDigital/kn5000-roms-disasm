@@ -898,7 +898,20 @@ Bitmap_MIDIConnections_1:
 ; Bitmap_MIDIConnections_2[108][296] (rows of 296 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_2:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x120B4, 0x7CE0
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x120B4, 0x3BB0
+AcIndexToggle_SendVisibility_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C64, 0x3
+HelpLang_SetRegion5_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C67, 0x5
+HelpLangChkMain_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C6C, 0x6
+HelpLang_DispatchDataBlock_Entry_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C72, 0x7
+HelpLang_DispatchDataBlock_Entry_Data_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C79, 0x2
+HelpLang_DispatchDataBlock_Entry_Data_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C7B, 0x3
+HelpFuncChkFunc_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C7E, 0x8
+HelpLang_DispatchDataBlock_Entry_Data_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C86, 0x2
+HelpLang_DispatchDataBlock_Entry_Data_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C88, 0x1
+HelpFuncChkFunc_Data_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C89, 0x5
+HelpLang_DispatchDataBlock_Entry_Data_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C8E, 0x2
+HelpFuncChkFunc_Data_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C90, 0x1
+HelpLang_DispatchDataBlock_Entry_Data_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C91, 0x4103
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_MIDIConnections_3
 ; Bitmap_MIDIConnections_3  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes
@@ -2868,10 +2881,11 @@ ComSetGridCheck_CaseTable:
 ; Typed in naka_widget_tables_2.c as uint8_t
 ; ComSetGridCheck_CaseTable_Tail[14].
 ; Readers (claims_lint.py unread-claims, 2026-10-02): Naka_ReverbScreen_EmptyStr (0xE28588, 32-bit
-;   pointer); AcPmemOutLGridBoxProc (0xF7837B, 32-bit pointer); NAKA_PerfReg_Container_Root_0x1697
+;   pointer); AcPmemOutLGridBoxProc (0xF7837B, 32-bit pointer); CDlikeSwTtl_SetRecordAndNotify_Data
 ;   (0xE10276, 32-bit pointer); NakaWidget_SmfDpMuteCtrl5 (0xE2163E, 32-bit pointer)
 ; -----------------------------------------------------------------------------
 ComSetGridCheck_CaseTable_Tail:
+AcPmemOutLGridBoxProc_Data:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D30, 0xE
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcPmemOutRGridBoxProc_CaseTable
@@ -3038,6 +3052,7 @@ PmemOutLGridCheck_CaseTable:
 ;   (0xF7935F, 32-bit pointer); PmemOutRGridCheck_Evt1C00018 (0xF79405, 32-bit pointer); and 8 more
 ; -----------------------------------------------------------------------------
 PmemOutLGridCheck_CaseTable_Tail:
+TtMdCtlMsg_EventDispatch_Data:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E36, 0x16
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutRGridCheck_LocalInit

@@ -370,9 +370,9 @@ SwbtWr_ProcessAll_CompactDone:
 	ldw	(0x9046:16), 0
 	ret
 SwbtWr_InitBank1:
-	ld	xiy, Naka_DisplayMode_Table_0x10
+	ld	xiy, SwbtWr_InitBank1_Data
 	ld	(0xbfe5:16), xiy
-	ld	xiy, UIState_DefaultConfig_A_0x4
+	ld	xiy, SwbtBank1_PostCallbacks
 	ld	(0xbfe9:16), xiy
 	ld	xiy, 0xbca0
 	ld	(0xbfed:16), xiy
@@ -381,7 +381,7 @@ SwbtWr_InitBank1:
 SwbtWr_InitBank2:
 	ld	xiy, Naka_RenderMode_A_Table
 	ld	(0xbfe5:16), xiy
-	ld	xiy, UIState_DefaultConfig_B_0x4
+	ld	xiy, SwbtWr_InitBank2_Data
 	ld	(0xbfe9:16), xiy
 	ld	xiy, 0xbca0
 	ld	(0xbfed:16), xiy
@@ -390,7 +390,7 @@ SwbtWr_InitBank2:
 SwbtWr_InitBank3:
 	ld	xiy, Naka_EventHandler_Table
 	ld	(0xbfe5:16), xiy
-	ld	xiy, UIState_DefaultConfig_C_0x4
+	ld	xiy, SwbtBank3_PostCallbacks
 	ld	(0xbfe9:16), xiy
 	ld	xiy, 0xbf9d
 	ld	(0xbfed:16), xiy
@@ -1107,7 +1107,7 @@ MidiSysEx_BuildAndSend_Exit:
 MIDI_BroadcastControlChange:
 	dec	8, xsp
 	pushw_erp	0xfa
-	ld	xiy, WidgetParam_SelfRef_Table_0x19E
+	ld	xiy, MIDI_BroadcastControlChange_Data
 	lda	xix, (xsp + 2)
 	ld	bc, 3:i3
 	ldirw
@@ -1161,7 +1161,7 @@ CompIface_SendActiveSensing_PC1MAC:
 	ld	bc, 1:i3
 ; BitMapOut_CopyRegion_Done is kept at this address only for ui_widgets/widget_dispatch.s; v10's BitMapOut_CopyRegion_Done is the code at 0xFDAE32
 BitMapOut_CopyRegion_Done:
-	ld	xde, WidgetParam_SelfRef_Table_0x1A8	;	PC1 or MAC (0F5h)
+	ld	xde, CompIface_SendActiveSensing_PC1MAC_Data	;	PC1 or MAC (0F5h)
 	call	sendCOMM
 	pop	sr
 	ret
@@ -1170,7 +1170,7 @@ CompIface_SendActiveSensing_PC2:
 	ei	0
 	ld	wa, 4:i3
 	ld	bc, 1:i3
-	ld	xde, WidgetParam_SelfRef_Table_0x1A6	;	PC2 (0F4h)
+	ld	xde, CompIface_SendActiveSensing_PC2_Data	;	PC2 (0F4h)
 	call	sendCOMM
 	pop	sr
 	ret
@@ -1708,7 +1708,7 @@ DSPCfg_ScaleFactor_StoreResult:
 	ret
 DSPCfg_LookupMidiMap:
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x324
+	ld	xbc, DspBlock_ObjectCode_Table
 	add	xbc, xwa
 	ld	a, (xbc)
 	jp	VoiceData_LookupPtrByIndex
@@ -2112,7 +2112,7 @@ DSPCfg_ReadViaTableLookup:
 	calr	DSPCfg_GetParamCount
 	exts	xhl
 	sll	xhl, 2
-	ld	xbc, WidgetParam_Config_058_0x36
+	ld	xbc, DSPCfg_ReadViaTableLookup_Data
 	add	xbc, xhl
 	ld	xbc, (xbc)
 	lda	xwa, (xiz + 1)
@@ -2135,7 +2135,7 @@ DSPCfg_WriteViaTableLookup:
 	calr	DSPCfg_GetParamCount
 	exts	xhl
 	sll	xhl, 2
-	ld	xbc, WidgetParam_Config_058_0x36
+	ld	xbc, DSPCfg_ReadViaTableLookup_Data
 	add	xbc, xhl
 	ld	xbc, (xbc)
 	lda	xwa, (xiz + 1)
@@ -2206,21 +2206,21 @@ DSPCfg_LookupAndExtract:
 	ret
 DSPCfg_Data_001:
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x31C
+	ld	xbc, DspCfg_Data001_ByteTable
 	add	xbc, xwa
 	ld	l, (xbc)
 	extz	hl
 	ret
 DSPCfg_GetSlotCount:
 	extz	xwa
-	ld	xbc, ToneKit_ParamBlock_116_0x18
+	ld	xbc, DSPCfg_GetSlotCount_Data
 	add	xbc, xwa
 	ld	l, (xbc)
 	extz	hl
 	ret
 DSPCfg_Data_002:
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x320
+	ld	xbc, DspCfg_Data002_ByteTable
 	add	xbc, xwa
 	ld	l, (xbc)
 	extz	hl
@@ -2236,7 +2236,7 @@ DSPCfg_FindSlot63:
 	ld	wa, iz
 	exts	xwa
 	sll	xwa, 2
-	ld	xbc, WidgetParam_Config_058_0x36
+	ld	xbc, DSPCfg_ReadViaTableLookup_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	iz, 0:i3
@@ -2318,7 +2318,7 @@ DSPCfg_DecodeParamIdRange:
 	jr	c, DSPCfg_DecodeParamIdRange_Invalid
 	cp	xwa, 0x7
 	jr	ugt, DSPCfg_DecodeParamIdRange_Invalid
-	add	xwa, ToneKit_VoiceDispatch_Table_0x32A
+	add	xwa, DspParamId4900_ByteMap
 	ld	c, (xwa)
 	exts	bc
 	ld	xwa, (xsp + 6)
@@ -2509,14 +2509,14 @@ DSPCfg_ResolveWithFallback:
 	ld	wa, (xsp + 10)
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x18C
+	ld	xbc, DSPCfg_ResolveWithFallback_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	(xsp + 12), xwa
 	ld	wa, (xsp + 8)
 	extz	xwa
 	add	xwa, xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x332
+	ld	xbc, DspCfg_ResolveFallback_WordTable
 	add	xbc, xwa
 	ld	bc, (xbc)
 	sll	bc, 8
@@ -2648,7 +2648,7 @@ DSPCfg_ValidateSlotForWrite:
 	ld	de, wa
 	extz	xde
 	sll	xde, 2
-	ld	xhl, WidgetParam_Config_058_0x36
+	ld	xhl, DSPCfg_ReadViaTableLookup_Data
 	add	xhl, xde
 	ld	xde, (xhl)
 	or	xde, xde
@@ -2735,7 +2735,7 @@ DSPCfg_WriteParamFull:
 	ld	iz, hl
 	ld	wa, (xsp + 6)
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x324
+	ld	xbc, DspBlock_ObjectCode_Table
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -2777,7 +2777,7 @@ DSPCfg_WriteParamFull_Type1_Clamped:
 DSPCfg_WriteParamFull_Type1_Notify:
 	ld	wa, (xsp + 6)
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x324
+	ld	xbc, DspBlock_ObjectCode_Table
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -2963,7 +2963,7 @@ DSPCfg_WriteAllSlots_Direct:
 	calr	DSPCfg_StoreByte_ReturnZero
 	ld	wa, (xsp + 20)
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x324
+	ld	xbc, DspBlock_ObjectCode_Table
 	add	xbc, xwa
 	ld	a, (xbc)
 	pushw	0xff
@@ -2975,7 +2975,7 @@ DSPCfg_WriteAllSlots_Direct:
 	ld	(xsp + 6), hl
 	ld	wa, (xsp + 6)
 	sla	wa, 2
-	lda	xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
+	lda	xbc, (DSPCfg_ResolveWithFallback_Data:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp + 8), xwa
 	ld	iz, 0:i3
@@ -2995,7 +2995,7 @@ DSPCfg_WriteAllSlots_Direct_Loop:
 	calr	DSPCfg_WriteViaTableLookup
 	ld	wa, (xsp + 20)
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x324
+	ld	xbc, DspBlock_ObjectCode_Table
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -3031,7 +3031,7 @@ DSPCfg_WriteAllSlots_Clamped:
 	ld	(xsp + 4), hl
 	ld	wa, (xsp + 4)
 	sla	wa, 2
-	lda	xbc, (ToneKit_VoiceDispatch_Table_0x18C:24)
+	lda	xbc, (DSPCfg_ResolveWithFallback_Data:24)
 	ld	xwa, (xbc+wa)
 	ld	(xsp + 6), xwa
 	ld	iz, 0:i3
@@ -3061,7 +3061,7 @@ DSPCfg_WriteAllSlots_Clamped_Loop:
 	calr	DSPCfg_WriteViaTableLookup
 	ld	wa, (xsp + 20)
 	extz	xwa
-	ld	xbc, ToneKit_VoiceDispatch_Table_0x324
+	ld	xbc, DspBlock_ObjectCode_Table
 	add	xbc, xwa
 	ld	a, (xbc)
 	extz	wa
@@ -3347,7 +3347,7 @@ DSPCfg_Data_ParamDispatch_Join3:
 	calr	DSPCfg_GetParamCount
 	extz	xhl
 	sll	xhl, 2
-	ld	xbc, WidgetParam_Config_058_0x36
+	ld	xbc, DSPCfg_ReadViaTableLookup_Data
 	add	xbc, xhl
 	ld	xbc, (xbc)
 	ld	xwa, 1:i3
@@ -3380,7 +3380,7 @@ DSPCfg_CheckParamTableEntry:
 	jr	ugt, DSPCfg_CheckParamTableEntry_NotFound
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, WidgetParam_Config_058_0x36
+	ld	xbc, DSPCfg_ReadViaTableLookup_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	or	xwa, xwa
@@ -3451,7 +3451,7 @@ DSPCfg_ApplyParamStruct:
 	ld	a, (xiz)
 	extz	wa
 	ld	(xsp + 4), wa
-	lda	xbc, (ToneKit_ParamBlock_116_0x18:24)
+	lda	xbc, (DSPCfg_GetSlotCount_Data:24)
 	ld	wa, (xsp + 4)
 	ld	a, (xbc+wa)
 	extz	wa
@@ -3490,7 +3490,7 @@ DSPCfg_ApplyParamStruct_Normal:
 	ld	wa, (xsp + 4)
 	exts	xwa
 	sll	xwa, 2
-	ld	xbc, WidgetParam_Config_058_0x36
+	ld	xbc, DSPCfg_ReadViaTableLookup_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	(xsp + 14), xwa
@@ -3565,7 +3565,7 @@ DSPCfg_ApplyParamStruct_WriteLoop:
 	ld	wa, (xsp + 4)
 	exts	xwa
 	sll	xwa, 2
-	ld	xbc, WidgetParam_Config_058_0x36
+	ld	xbc, DSPCfg_ReadViaTableLookup_Data
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	ld	(xsp + 14), xwa
@@ -3691,7 +3691,7 @@ DSPCfg_ApplyParamStructFull_RangeCheck:
 ; DSP config event dispatch
 DspConfig_EventDispatch:
 	add	bc, bc
-	lda	xix, (ToneKit_VoiceDispatch_Table_0x348:24)
+	lda	xix, (DspConfig_EventDispatch_JumpOffsets:24)
 	ld	bc, (xix+bc)
 	lda	xix, (AssSwb_SwapEntriesAndDispatch:24)
 	jp	t, (xix+bc)
@@ -4793,7 +4793,7 @@ AudioModeChange_Handler:
 	ld	a, (0x8c98:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SystemConfig_PointerTable_0x76:24)
+	lda	xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (0xfde509:24)
@@ -4833,7 +4833,7 @@ AudioSubsystem_Callback:
 	ld	a, (0x8c98:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (SystemConfig_PointerTable_0x76:24)
+	lda	xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
 	lda	xwa, (0xfde509:24)
@@ -4886,7 +4886,7 @@ AudioDispatch_CheckStereoMode:
 UIStateEvt_DrumAssign_Set:
 	ld	a, l
 	extz	wa
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
+	lda	xbc, (UIStateEvt_PartRouting_Data:24)
 	ld	a, (xbc+wa)
 	extz	wa
 	lda	xbc, (0xc186:16)
@@ -4896,7 +4896,7 @@ UIStateEvt_DrumAssign_Set:
 	ld	a, l
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (AudioInit_VoiceDispatch_Table_0x7C:24)
+	lda	xbc, (UIState_ProcessMidiEvent_Data:24)
 	ld	xwa, (xbc+wa)
 	ld	a, (xwa + 13)
 	and	a, 0xf

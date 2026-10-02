@@ -63,7 +63,7 @@ SndParam_ProbeEntry_Epilogue:
 	ld	(xsp+14), xwa
 	ldw	(xsp+4), 0
 	ld	xwa, (xsp+14)
-	ld	xiy, Naka_ToshiParam_Table_0x6C8
+	ld	xiy, SndParam_RW_Fail_Data
 	ld	xix, xwa
 	ldiw
 	ldiw
@@ -145,7 +145,7 @@ SndParam_ProbeEntry_Skip2:
 	ld	e, (xwa+15)
 	extz	de
 	sla	de, 2
-	lda	xhl, (Naka_MainDispatch_Table_0xE20:24)
+	lda	xhl, (SndParam_RW_ProcessResult_Data:24)
 	exts	xde
 	add	xde, xhl
 	ld	xix, (xde)
@@ -364,7 +364,7 @@ SndParam_ResolveOscEntry_Helper_Skip6:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
 	ld	l, (xwa+5)
 	extz	hl
 	ld_rrl	xwa, xde, bc
@@ -381,7 +381,7 @@ SndParam_ResolveOscEntry_Helper_Skip7:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xde, xde, bc
 	or	xde, xde
 	ret	z
@@ -405,7 +405,7 @@ SndParam_RW_ExactMatch:
 SndParam_RW_CheckFirstMatch:
 	ld	c, e
 	sla	c, 2
-	lda	xhl, (Naka_SubDispatch_A_Table_0x28:24)
+	lda	xhl, (SndParam_ReadRegWithLUT_Data:24)
 	.set	SndParam_RW_ChainNext, . + 3
 	ld_rr8l	xbc, xhl, c
 	ld	c, (xbc)
@@ -440,7 +440,7 @@ SndParam_RW_ChainCheckFirst:
 	.set	SndParam_RW_FoundCallback, . + 1
 	sla	wa, 2
 	.set	SndParam_RW_ChainContinue, . + 3
-	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xde, xde, wa
 SndParam_RW_NoEntry:
 	or	xde, xde
@@ -485,7 +485,7 @@ SndParam_RegisterSimple_Data_Helper:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xde, xde, bc
 	or	xde, xde
 SndParam_RW_Success:
@@ -499,7 +499,7 @@ SndParam_RW_Epilogue:
 	ld_rrw	de, xde, bc
 	ld	a, (xwa+11)
 	sla	a, 2
-	lda	xbc, (Naka_SubDispatch_B_Table_0x4:24)
+	lda	xbc, (SndParam_ReadRegWord_Data:24)
 	ld_rr8l	xwa, xbc, a
 	ld	hl, 0:i3
 SndParam_RW_HandleB1Type_Loop:
@@ -514,7 +514,7 @@ SndParam_RW_HandleB1Type_Loop:
 	ld	c, (xwa+4)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xde, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xix, xde, bc
 	or	xix, xix
 	jr	z, SndParam_RW_HandleB1Type_Join
@@ -553,7 +553,7 @@ SndParam_RW_HandleB1Type_Join:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xbc, wa
 	or	xwa, xwa
 	ret	z
@@ -561,7 +561,7 @@ SndParam_RW_HandleB1Type_Join:
 	and	wa, 511
 	ld	hl, wa
 	ret
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38456
 	ld	bc, 6:i3
 	ldirw
@@ -579,7 +579,7 @@ SndParam_RW_HandleB1Type_Join:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xhl, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xhl, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xhl, xhl, wa
 	or	xhl, xhl
 	jrl	z, SndParam_RW_HandleB1Type_Skip10
@@ -597,7 +597,7 @@ SndParam_RW_HandleB1Type_Skip5:
 	jr	ge, SndParam_RW_HandleB1Type_Skip6
 	ldfr_berp	a, 230
 SndParam_RW_HandleB1Type_Skip6:
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38468
 	ld	bc, 6:i3
 	ldirw
@@ -682,7 +682,7 @@ SndParam_DMA_ExtractFields:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xix, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xix, wa
 	ld	(xsp+2), xwa
 	or	xwa, xwa
@@ -701,7 +701,7 @@ SndParam_RW_HandleB1Type_Skip11:
 	jr	ge, SndParam_RW_HandleB1Type_Skip12
 	ldfr_berp	a, 230
 SndParam_RW_HandleB1Type_Skip12:
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38480
 	ld	bc, 6:i3
 	ldirw
@@ -762,7 +762,7 @@ SndParam_ResolveWidgetVariant2_Data_Join2:
 	inc	8, xsp
 	ret
 	ld	de, bc
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38492
 	ld	bc, 6:i3
 	ldirw
@@ -804,12 +804,12 @@ SndParam_ResolveWidgetVariant2_Data_Return:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_ResolveWidgetVariant2_Data_Skip7
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38504
 	ld	bc, 6:i3
 	ldirw
@@ -905,11 +905,11 @@ SndParam_RegisterSimple_Data_Helper2:
 SndParam_CompareShifted:
 	extz	bc
 	sla	bc, 2
-	lda	xix, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xiz, xix, bc
 	or	xiz, xiz
 	jrl	z, SndParam_ResolveWidgetVariant2_Data_Skip11
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 SndParam_CompareStatus5:
 	ld	xix, 38516
 	ld	bc, 6:i3
@@ -933,7 +933,7 @@ SndParam_ResolveWidgetVariant2_Data_Skip8:
 SndParam_ResolveWidgetVariant2_Data_Skip9:
 	ld	c, (xwa+11)
 	sla	c, 2
-	lda	xiy, (Naka_SubDispatch_B_Table_0x4:24)
+	lda	xiy, (SndParam_ReadRegWord_Data:24)
 	ld_rr8l	xiy, xiy, c
 	exts	xde
 	add	xde, xde
@@ -995,7 +995,7 @@ SndParam_ResolveWidgetVariant2_Data_Join5:
 	extz	wa
 SndParam_ReadRegAddress:
 	sla	wa, 2
-	lda	xix, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xix, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xix, wa
 	ld	(xsp), xwa
 	or	xwa, xwa
@@ -1015,7 +1015,7 @@ SndParam_ResolveWidgetVariant2_Data_Skip12:
 	jr	ge, SndParam_ResolveWidgetVariant2_Data_Skip13
 	ldfr_berp	a, 230
 SndParam_ResolveWidgetVariant2_Data_Skip13:
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38528
 SndParam_RegisterEntry_Data:
 	ld	bc, 6:i3
@@ -1120,7 +1120,7 @@ SndParam_RegisterEntry_Data_Join3:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	.set	SndParam_RegisterEntryAlt_Data, . + 2
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
@@ -1136,7 +1136,7 @@ SndParam_RegisterEntry_Data_Skip7:
 	jr	nc, SndParam_RegisterEntry_Data_Skip8
 	ld	l, a
 SndParam_RegisterEntry_Data_Skip8:
-	lda	xbc, (NakaInst_Param_IdxA0_01_0x12:24)
+	lda	xbc, (SndParam_ResetDefaultTable_Data_2:24)
 	ld	a, (xde+11)
 	cp	a, 255
 	jr	z, SndParam_RegisterEntry_Data_Skip9
@@ -1184,7 +1184,7 @@ SndParam_RegisterEntry_Data_Skip13:
 	ld	xwa, (xhl)
 	ld_rrb	l, xwa, bc
 SndParam_RegisterEntry_Data_Join6:
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38540
 	ld	bc, 6:i3
 	ldirw
@@ -1264,11 +1264,11 @@ SndParam_RegisterMultiField_Data:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xiz, xbc, wa
 	or	xiz, xiz
 	jr	z, SndParam_RegisterMultiField_Data_Skip3
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38552
 	ld	bc, 6:i3
 	ldirw
@@ -1320,7 +1320,7 @@ SndParam_RegisterMultiField_Data_Join2:
 	pop	xiz
 	inc	6, xsp
 	ret
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38564
 	ld	bc, 6:i3
 	ldirw
@@ -1337,11 +1337,11 @@ SndParam_RegisterMultiField_Data_Join2:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xiz, xbc, wa
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterLinked_Data_Skip
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38576
 SndParam_RegisterBitfield_Data:
 	ld	bc, 6:i3
@@ -1454,11 +1454,11 @@ SndParam_RegisterLinked_Data_Join:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xiz, xbc, wa
 	or	xiz, xiz
 	jrl	z, SndParam_RegisterLinked_Data_Skip8
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38588
 	ld	bc, 6:i3
 	ldirw
@@ -1564,12 +1564,12 @@ SndParam_RegisterLinked_Data_Join3:
 	ld	a, (xwa+4)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterLinked_Data_Skip15
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38600
 	ld	bc, 6:i3
 	ldirw
@@ -1688,7 +1688,7 @@ SndParam_RegisterLinked_Data_Join6:
 SndParam_RegisterSimple_Data:
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xbc, wa
 	or	xwa, xwa
 	jr	z, SndParam_RegisterSimple_Data_Skip3
@@ -1726,12 +1726,12 @@ SndParam_RegisterSimple_Data_Skip3:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterChained_Data_Skip8
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38616
 	ld	bc, 6:i3
 	ldirw
@@ -1756,7 +1756,7 @@ SndParam_RegisterSimple_Data_Skip3:
 	.byte	0xcb,	0xff
 SndParam_RegisterSimple_Data_Skip4:
 	ld	w, c
-	lda	xbc, (NakaInst_Param_IdxA0_01_0x12:24)
+	lda	xbc, (SndParam_ResetDefaultTable_Data_2:24)
 	ld	a, (xde+11)
 	cp	a, 255
 SndParam_RegisterChained_Data:
@@ -1862,11 +1862,11 @@ SndParam_RegisterChained_Data_Join4:
 	ld	a, (xde)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xbc, wa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterChained_Data_Skip11
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38628
 	ld	bc, 6:i3
 	ldirw
@@ -1938,12 +1938,12 @@ SndParam_RegisterChained_Data_Join6:
 	ld	a, (xwa)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Naka_MainDispatch_Table_0xE50:24)
+	lda	xbc, (SndParam_DMA_Zone2Check_Data:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jrl	z, SndParam_RegisterComplex_Data_Skip6
-	ld	xiy, Naka_ToshiParam_Table_0x6BC
+	ld	xiy, SndParam_ResetDefaultTable_Data
 	ld	xix, 38640
 	ld	bc, 6:i3
 	ldirw
@@ -2099,7 +2099,7 @@ SndParam_RegisterComplex_Data_Skip11:
 	and	l, a
 	extz	hl
 	ret
-	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
+	ld	xwa, (SndParam_ClampReverbTime_Data:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2168,7 +2168,7 @@ SndParam_NotifyQuick_Data_Join:
 	ld	l, (xbc)
 	extz	hl
 	ret
-	ld	xwa, (Naka_MainDispatch_Table_0xF70:24)
+	ld	xwa, (SndParam_ClampReverbTime_Data:24)
 	ld	hl, (xwa+8)
 	and	hl, 511
 	cp	hl, 40
@@ -2637,7 +2637,7 @@ SndParam_NotifyQuick_Data_Helper3:
 	ld	xwa, xbc
 	lda	xde, (xbc+16376)
 SndParam_NotifyQuick_Data_Loop2:
-	ld	xiy, Naka_ToshiParam_Table_0x6CC
+	ld	xiy, SndParam_InitHashFillLoop_Data
 	ld	xix, xwa
 	ld	bc, 4:i3
 	ldirw
@@ -2652,7 +2652,7 @@ SndParam_NotifyQuick_Data_Helper4:
 SndParam_NotifyQuick_Data_Loop3:
 	ld	xbc, xiz
 	sll	xbc, 2
-	ld	xwa, Naka_SubDispatch_B_Table_0x8
+	ld	xwa, SndParam_RegisterLoop_Data
 	add	xwa, xbc
 	ld	xbc, (xwa)
 	ld	xwa, (xbc)
@@ -2757,7 +2757,7 @@ SndParam_NotifyQuick_Data_Helper7:
 SndParam_NotifyQuick_Data_Loop8:
 	ld	xbc, xiz
 	sll	xbc, 2
-	ld	xwa, Naka_SubDispatch_B_Table_0x8
+	ld	xwa, SndParam_RegisterLoop_Data
 	add	xwa, xbc
 	ld	xhl, (xwa)
 	ld	a, (xhl+4)
@@ -2783,7 +2783,7 @@ SndParam_NotifyQuick_Data_Helper8:
 	ld	(xsp+4), xwa
 	or	xwa, xwa
 	jr	nz, SndParam_NotifyQuick_Data_Skip26
-	ld	xwa, Naka_MainDispatch_Table_0x1250
+	ld	xwa, SndParam_AllocAndInsert_Data
 	call	Debug_PrintString
 	pushw	1
 	call	Boot_HaltInstruction

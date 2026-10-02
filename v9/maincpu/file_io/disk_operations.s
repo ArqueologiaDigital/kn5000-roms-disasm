@@ -249,7 +249,7 @@ FileRenameFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld iy, 0:i3
-	lda xix, (CharMap_FullPermutation_0x660:24)
+	lda xix, (FileOpen_NormalizeName_Data:24)
 	lda xwa, (0x8870:16)
 	ld xhl, xwa
 	jr FRename_PadLoop_Cond
@@ -352,7 +352,7 @@ FileRenameSmfFunc:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld iy, 0:i3
-	lda xix, (CharMap_FullPermutation_0x660:24)
+	lda xix, (FileOpen_NormalizeName_Data:24)
 	lda xwa, (0x8870:16)
 	ld xhl, xwa
 	jr FRenameSmf_PadLoop_Cond
@@ -843,7 +843,7 @@ FmmSaveTtl_SlotLoop:
 	ld wa, 7:i3
 	call FileIO_BuildRecordPath_Return
 	call FileIO_SetModeFlag_Reading
-	ld xiy, BankStr_Memory_0xA
+	ld xiy, ResetProgressIndication_Data
 	ld xix, 0x8a0c
 	ldiw
 
@@ -910,7 +910,7 @@ DiskName_TextChange:
 	call FileIO_CopyString
 	ld iy, 0:i3
 	lda xix, (0x8870:16)
-	lda xiz, (CharMap_FullPermutation_0x660:24)
+	lda xiz, (FileOpen_NormalizeName_Data:24)
 	lda xde, (0x878c:16)
 	ld xhl, xde
 	jr DiskName_PadLoop_Cond
@@ -1203,7 +1203,7 @@ SaveFileName_TextChange:
 	ld xwa, xiz
 	call FileIO_CopyString
 	ld iy, 0:i3
-	lda xix, (CharMap_FullPermutation_0x660:24)
+	lda xix, (FileOpen_NormalizeName_Data:24)
 	lda xde, (0x8850:16)
 	ld xhl, xde
 	jr SaveFileName_PadLoop_Cond

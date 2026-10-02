@@ -1936,7 +1936,7 @@ typedef struct __attribute__((packed)) {
      *
      * What it is: the letter C, read from the bit pictures in the C
      * (upside-down there, because the rows are stored bottom-up). No label
-     * of its own in the .s: other files reach it as NakaInst_TOTAL_0x34
+     * of its own in the .s: other files reach it as AcWelcomScreen_RenderBytecode_Data
      * (.set in shared/positional_labels.s); it shares the old NakaInst_TOTAL
      * slice with the strings above it. Drawn by the welcome-script op
      * handlers: 'C' by op 4 alone and ops 9/12 as the first letter of
@@ -1986,7 +1986,7 @@ typedef struct __attribute__((packed)) {
      *
      * What it is: the letters L/N/O, read from the bit pictures in the C
      * (upside-down there, because the rows are stored bottom-up). Glyphs 1
-     * and 2 are reached as Bitmap_DigitL_0x22 and Bitmap_DigitL_0x44 (.set
+     * and 2 are reached as AcWelcomScreen_RenderBytecode_Data_2 and AcWelcomScreen_RenderBytecode_Data_3 (.set
      * in shared/positional_labels.s). Drawn by the welcome-script op
      * handlers: 'L' by op 6 alone and ops 9/12 in COLO(U)R; 'N' by op 8,
      * after the I; 'O' by op 5 alone and ops 9/12 twice in COLO(U)R.
@@ -2034,7 +2034,7 @@ typedef struct __attribute__((packed)) {
      * WelcomeScript_Steps_A  --  186 welcome_step_t records x 12 bytes = 2232 bytes
      *
      * The welcome-screen animation script used when Get_Region_Code returns
-     * 2. Reached by other files as Bitmap_DigitD_0x22 (.set in
+     * 2. Reached by other files as AcWelcomScreenProc_Data (.set in
      * shared/positional_labels.s).
      *
      * Reader: AcWelcomScreenProc (v10/v9 0xF7F4A6, v7 0xF7F0A2), on its init
@@ -2066,7 +2066,7 @@ typedef struct __attribute__((packed)) {
      * WelcomeScript_Steps_B  --  191 welcome_step_t records x 12 bytes = 2292 bytes
      *
      * The welcome-screen animation script used for every other region code.
-     * Reached by other files as Bitmap_DigitD_0x8DA (.set in
+     * Reached by other files as AcWelcomScreenProc_Data_2 (.set in
      * shared/positional_labels.s).
      *
      * Reader: AcWelcomScreenProc (v10/v9 0xF7F4A6, v7 0xF7F0A2), on its init
@@ -2100,7 +2100,7 @@ typedef struct __attribute__((packed)) {
      * The whole 320 x 240 screen. AcWelcomScreen_Activate (v10/v9 0xF7F595,
      * v7 0xF7F191) (when CheckNotDrawFlag is clear) turns the LCD off,
      * passes this rectangle to DrawBox with colour 0, updates the screen and
-     * turns the LCD back on (`ld xwa, Bitmap_DigitD_0x11CE; ld bc, 0; call
+     * turns the LCD back on (`ld xwa, AcWelcomScreen_Activate_Data; ld bc, 0; call
      * DrawBox`; the name is .set in shared/positional_labels.s). The
      * generator had read its last four bytes 3F 01 EF 00 as a pointer to
      * Naka_PresentationRootState (0x00EF013F); they are x2 = 319, y2 = 239.
@@ -2110,7 +2110,7 @@ typedef struct __attribute__((packed)) {
      * WelcomeScript_OpJumpOffsets  --  13 x s16 code offsets, one per op 0..12
      *
      * AcWelcomScreen_Select (v10/v9 0xF7F605, v7 0xF7F201) doubles the op
-     * (add hl, hl), loads the word at Bitmap_DigitD_0x11D6 + 2*op (the name
+     * (add hl, hl), loads the word at AcWelcomScreen_Select_Data + 2*op (the name
      * is .set in shared/positional_labels.s), loads xix with
      * AcWelcomScreen_RenderBytecode and jumps indirectly -- so each entry is
      * the offset of an op handler from AcWelcomScreen_RenderBytecode.
@@ -2133,9 +2133,9 @@ typedef struct __attribute__((packed)) {
      * PsMixer_ControlHelper (v10/v9 0xF7FCB0, v7 0xF7F8AC)
      * (ui/drawbar_panel_ui.s) loads the word at +2 of a control record,
      * multiplies it by 4 and indexes this table (lda xbc,
-     * Bitmap_DigitD_0x11F0 -- .set in shared/positional_labels.s -- then an
+     * PsMixer_ControlHelper_Data -- .set in shared/positional_labels.s -- then an
      * indexed load into xhl), and calls the entry with xbc = 0x1C0000D, the
-     * paint message; the same `lda xbc, Bitmap_DigitD_0x11F0` occurs at 14
+     * paint message; the same `lda xbc, PsMixer_ControlHelper_Data` occurs at 14
      * sites in that file. The eleven values (v10/v9) are 0xF80B7D, 0xF81ED2,
      * 0xF81B56, 0xF80EE9, 0xF815E5, 0xF80B80, 0xF80D21, 0xF812AF, 0xF8231B,
      * 0xF81890, 0xF82222: all inside the AudioCtrl_DataBlock_* stretch of

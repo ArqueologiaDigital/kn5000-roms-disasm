@@ -9029,7 +9029,7 @@ SeMenu_Utility_CopyBlock:
 	call	SeMenu_CompareAndApply_Data
 	cp	(1710:16), 1
 	jr	z, SeMenu_Utility_CopyBlock_Skip
-	ld	xiy, SeBitmap_EnvCurve5_0x109E
+	ld	xiy, SeMenu_Utility_CopyBlock_Data
 	ld	xix, SeScreenData_0x1523
 	call	SeGfx_DrawStaticList
 	call	SeMenu_Utility_CompareBlock_End
@@ -12728,6 +12728,7 @@ SeScreenData_0x1452:
 ; static record list (21 records), read by GraphicsRender_ProcessEntries; ends SeScreenData_0x147E, SeScreenData_0x1523
 ; evidence: SeMenu_Utility_CopyBlock
 SeScreenData_0x1466:
+SeMenu_Utility_CopyBlock_Data:
 	sd_ptext	0x17, 14, 127, 48, "ENVELOPE"
 	sd_quad	0x22, 50, 58, 257, 145
 	sd_ptext	0x17, 12, 195, 151, "KEYOFF"
@@ -15170,7 +15171,7 @@ S2cGridCheck:
 	cp xwa, 0x6
 	jrl gt, S2c_GridCheck_EventEnc
 	add xwa, xwa
-	add xwa, StrBeatOff_0x4
+	add xwa, S2cGridCheck_Data
 	ld wa, (xwa)
 	lda xix, (S2c_GridCheck_DataBlock:24)
 	jp	t, (xix+wa)
@@ -15232,7 +15233,7 @@ S2c_GridCheck_Dispatch:
 	dec 2, a
 	extz wa
 	sla wa, 2
-	lda xbc, (StrTranspose_Minus25_0x12:24)
+	lda xbc, (S2c_GridCheck_Dispatch_Data:24)
 	ld	xwa, (xbc+wa)
 	ld a, (xwa)
 	extz wa
@@ -15536,7 +15537,7 @@ PsCmpCpFPtnBox_HandleEvtBC:
 	ld a, (0x34ef:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (StrBeatOff_0x12:24)
+	lda xbc, (PsCmpCpFPtnBox_HandleEvtBC_Data:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	lda xwa, (xsp + 16)
@@ -15699,10 +15700,10 @@ PsCstmCpSwBox_HandleEvtBC:
 	lda xbc, (xsp + 4)
 	cp (xhl + 36), 0x0
 	jr nz, PsCstmCpSwBox_ReadParam2
-	ld xwa, StrRhySlot_MemoryA_0x12
+	ld xwa, PsCstmCpSwBox_HandleEvtBC_Str_CUSTOM
 	cp (0x39b6:16), 10
 	jr nc, PsCstmCpSwBox_PushTableAddr0
-	ld xwa, StrRhySlot_MemoryA_0xA
+	ld xwa, PsCstmCpSwBox_HandleEvtBC_Str_MEMORY
 
 PsCstmCpSwBox_PushTableAddr0:
 	push xwa
@@ -15710,10 +15711,10 @@ PsCstmCpSwBox_PushTableAddr0:
 	jr PsCstmCpSwBox_SendCommand
 
 PsCstmCpSwBox_ReadParam2:
-	ld xwa, StrRhySlot_MemoryA_0x22
+	ld xwa, PsCstmCpSwBox_ReadParam2_Str_CUSTOM
 	cp (0x39b7:16), 10
 	jr nc, PsCstmCpSwBox_PushTableAddr1
-	ld xwa, StrRhySlot_MemoryA_0x1A
+	ld xwa, PsCstmCpSwBox_ReadParam2_Str_MEMORY
 
 PsCstmCpSwBox_PushTableAddr1:
 	push xwa
@@ -15925,7 +15926,7 @@ AcMemNoBox_HandleEvtBC:
 	ld a, (0x34d6:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (StrRhySlot_MemoryA_0x2A:24)
+	lda xbc, (AcMemNoBox_HandleEvtBC_Data:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	lda xwa, (xsp + 16)
@@ -16041,7 +16042,7 @@ AcCmpRecBox_HandleEvtBC:
 	ld e, (xiz + 36)
 	ld a, (0x379b:16)
 	and a, e
-	lda xhl, (StrStyleSect2_A_Vari1_0x8:24)
+	lda xhl, (AcCmpRecBox_HandleEvtBC_Data:24)
 	lda xbc, (xsp + 16)
 	cp a, e
 	jr nz, AcCmpRecBox_CheckParam2
@@ -16539,7 +16540,7 @@ AcEasyCmpGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, EasyCmp_GridCheck_Case4
 	add xbc, xbc
-	add xbc, StyleVarGrp_AEnd2b_0x2
+	add xbc, AcEasyCmpGridBoxProc_Data
 	ld bc, (xbc)
 	lda xix, (EasyCmp_DialGrid:24)
 	jp	t, (xix+bc)
@@ -16754,7 +16755,7 @@ EasyCmpGridCheck:
 	cp xwa, 0x6
 	jrl gt, EasyCmp_GridCheck_EventCase4
 	add xwa, xwa
-	add xwa, StrGenre_8Beat_0x1A
+	add xwa, EasyCmpGridCheck_Data
 	ld wa, (xwa)
 	lda xix, (EasyCmp_GridCheck_DataBlock:24)
 	jp	t, (xix+wa)
@@ -16850,7 +16851,7 @@ EasyCmp_GridEvtEnc_Case2:
 	ld a, (xwa)
 	cp a, 0:i3
 	jr nz, EasyCmp_GridCheck_EventCase2
-	ld xwa, StrGenre_8Beat_0x12
+	ld xwa, EasyCmp_GridCheck_EventEnc_Str_OFF
 	push xwa
 
 ; EasyCmpGridCheck event case 1
@@ -16889,7 +16890,7 @@ MspNameBnkFunc:
 	push xiz
 	ld xhl, xbc
 	ld xiz, xwa
-	ld xiy, StrGenre_8Beat_0x28
+	ld xiy, MspNameBnkFunc_Data
 	lda xix, (xsp + 4)
 	ldw bc, 0x8
 	ldirw
@@ -16902,7 +16903,7 @@ MspNameBnkFunc:
 	cp xwa, 0x9
 	jr gt, MspNaming_CleanupExit
 	add xwa, xwa
-	add xwa, StrBankShort_User1_0xA
+	add xwa, MspNameBnkFunc_Data_2
 	ld wa, (xwa)
 	lda xix, (EasyCmp_GridEvtCase_Default:24)
 	jp	t, (xix+wa)
@@ -17765,7 +17766,7 @@ MspRGrpSetGridCheck:
 	cp xwa, 0x6
 	jrl gt, RgpSetBnk_GridCheck_Return
 	add xwa, xwa
-	add xwa, StrMsBankLong2_Effect1_0x18
+	add xwa, MspRGrpSetGridCheck_Data
 	ld wa, (xwa)
 	lda xix, (MspRGrpSetGridCheck_DataBlock:24)
 	jp	t, (xix+wa)
@@ -17939,7 +17940,7 @@ RgpSetBnkBox_HandleEvtBC:
 	ld a, (0x7f3d:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (StrMsBankLong2_Effect1_0x26:24)
+	lda xbc, (RgpSetBnkBox_HandleEvtBC_Data:24)
 	ld	xwa, (xbc+wa)
 	push xwa
 	lda xwa, (xsp + 8)
@@ -18292,7 +18293,7 @@ MspPlayModeFunc:
 	ld xiz, xde
 	ld xde, xbc
 	ld (xsp + 12), xwa
-	ld xiy, StrCompileBank1_0x30
+	ld xiy, MspPlayModeFunc_Data
 	lda xix, (xsp + 4)
 	ld bc, 4:i3
 	ldirw
@@ -18305,7 +18306,7 @@ MspPlayModeFunc:
 	cp xwa, 0x9
 	jr gt, AcSndArgGrid_BoxCase1
 	add xwa, xwa
-	add xwa, StrInstantStart_0x12
+	add xwa, MspPlayModeFunc_Data_2
 	ld wa, (xwa)
 	lda xix, (MspPlayModeFunc_DataBlock:24)
 	jp	t, (xix+wa)
@@ -18358,7 +18359,7 @@ AcSndArgGridBoxProc:
 	ld (xsp + 18), xde
 	ld xiz, xbc
 	ld (xsp + 22), xwa
-	ld xiy, StrInstantStart_0x26
+	ld xiy, AcSndArgGridBoxProc_Data
 	lda xix, (xsp + 12)
 	ld bc, 2:i3
 	ldirw
@@ -18384,7 +18385,7 @@ AcSndArgGridBoxProc:
 	cp xwa, 0x6
 	jrl gt, AcSndArgGrid_ForwardToBase
 	add xwa, xwa
-	add xwa, StrInstantStart_0x2C
+	add xwa, AcSndArgGridBoxProc_Data_2
 	ld wa, (xwa)
 	lda xix, (AcSndArgGrid_Init:24)
 	jp	t, (xix+wa)
@@ -18732,7 +18733,7 @@ SndArgGridCheck:
 	cp xwa, 0x6
 	jrl gt, SndArgGridCheck_Return
 	add xwa, xwa
-	add xwa, StrInstantStart_0x3A
+	add xwa, SndArgGridCheck_Data
 	ld wa, (xwa)
 	lda xix, (SndArgGridCheck_JumpTableFallthrough:24)
 	jp	t, (xix+wa)
@@ -19744,7 +19745,7 @@ CmpNameMenu_Epilogue:
 AttLangCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, AttLangCheck_ReturnZero
-	lda xhl, (MSG_ATTENTION_ID_0xC:24)
+	lda xhl, (AttLangCheck_Data:24)
 	ret
 
 AttLangCheck_ReturnZero:
@@ -19754,7 +19755,7 @@ AttLangCheck_ReturnZero:
 SureLangCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SureLangCheck_ReturnZero
-	lda xhl, (MSG_ARE_YOU_SURE_ID_0x1C:24)
+	lda xhl, (SureLangCheck_Data:24)
 	ret
 
 SureLangCheck_ReturnZero:
@@ -19764,7 +19765,7 @@ SureLangCheck_ReturnZero:
 SndMemLangCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SndMemLangCheck_ReturnZero
-	lda xhl, (MSG_CUSTOM_SOUND_COPY_ID_0x8E:24)
+	lda xhl, (SndMemLangCheck_Data:24)
 	ret
 
 SndMemLangCheck_ReturnZero:
@@ -19774,7 +19775,7 @@ SndMemLangCheck_ReturnZero:
 SndMem1LangCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, SndMem1LangCheck_ReturnZero
-	lda xhl, (MSG_SOUND_GROUP_AFFECTED_ID_0x24:24)
+	lda xhl, (SndMem1LangCheck_Data:24)
 	ret
 
 SndMem1LangCheck_ReturnZero:
@@ -19784,7 +19785,7 @@ SndMem1LangCheck_ReturnZero:
 MemfulLangCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, MemfulLangCheck_ReturnZero
-	lda xhl, (MSG_CUSTOM_SOUND_FULL_ID_0x7C:24)
+	lda xhl, (MemfulLangCheck_Data:24)
 	ret
 
 MemfulLangCheck_ReturnZero:
@@ -19794,7 +19795,7 @@ MemfulLangCheck_ReturnZero:
 Memful2LangCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, Memful2LangCheck_ReturnZero
-	lda xhl, (MSG_CUSTOM_RHYTHMS_AFFECTED_ID_0x1E:24)
+	lda xhl, (Memful2LangCheck_Data:24)
 	ret
 
 Memful2LangCheck_ReturnZero:
@@ -19804,7 +19805,7 @@ Memful2LangCheck_ReturnZero:
 StylCnvLangCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, StylCnvLangCheck_ReturnZero
-	lda xhl, (MSG_INSERT_STYLE_CONVERT_ID_0x26:24)
+	lda xhl, (StylCnvLangCheck_Data:24)
 	ret
 
 StylCnvLangCheck_ReturnZero:

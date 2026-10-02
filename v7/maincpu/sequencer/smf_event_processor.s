@@ -174,7 +174,7 @@ VoiceChannel_ApplyPitchFlags:
 	ld xix, SeqTrack_ChannelMapIdentity
 	cp (4600:16), 1
 	jr z, VoiceChannel_SelectChannelBank
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 
 VoiceChannel_SelectChannelBank:
 	ld	a, (xix+iy)
@@ -332,7 +332,7 @@ VoiceChannel_GetParamBlock:
 
 VoiceChannel_GetParamBlockAlt:
 	push xix
-	ld xix, VoiceChannel_ParamTable1_0x40
+	ld xix, VoiceChannel_GetParamBlockAlt_Data
 	ld	xhl, (xix+hl)
 	pop xix
 
@@ -346,7 +346,7 @@ VoiceChannel_ParamTable1:
 ; swi 6 / push_f / ldw de,245 ... around lone .byte fragments.
 ; Read by VoiceChannel_GetParamBlock (0xF26BC4, just above):
 ; HL = ((byte at 0x0FAB) & 15) * 4, then ld XHL,(XIX+HL) with XIX = this
-; table when the byte at 0x11F8 is 1, else +0x40 (VoiceChannel_ParamTable1_0x40);
+; table when the byte at 0x11F8 is 1, else +0x40 (VoiceChannel_GetParamBlockAlt_Data);
 ; the record pointer is returned in XIY.  Stride 4, 16 entries per table,
 ; pinned by the `& 15` index and by the routine at +0x80.
 ;   +0x00: record k for channel index k (identity).
@@ -359,6 +359,7 @@ VoiceChannel_ParamTable1:
 	.long 0x0000f4fe, 0x0000f518, 0x0000f532, 0x0000f54c
 	.long 0x0000f566, 0x0000f580, 0x0000f59a, 0x0000f5b4
 	.long 0x0000f5ce, 0x0000f5e8, 0x0000f602, 0x0000f61c
+VoiceChannel_GetParamBlockAlt_Data:
 	.long 0x0000f496, 0x0000f4b0, 0x0000f4ca, 0x0000f4e4
 	.long 0x0000f4fe, 0x0000f518, 0x0000f532, 0x0000f54c
 	.long 0x0000f566, 0x0000f61c, 0x0000f59a, 0x0000f5b4
@@ -433,7 +434,7 @@ SoundGen_UpdateAndWriteChannel:
 	jr SoundGen_ApplyChannelParam
 
 SoundGen_SelectChannelTable:
-	ld xix, SeqTrack_ChannelMapIdentity_0x10
+	ld xix, MidiSysEx_CC_LookupPartMap_Data
 	cp (4600:16), 1
 	jr nz, SoundGen_SelectAltChannelTable
 	ld xix, SeqTrack_ChannelMapIdentity
@@ -933,11 +934,11 @@ SMF_SetupActiveChannel:
 	pop xde
 	ld (0x28af:16), hl
 	ldw (9830:16), 5
-	ld xiy, SMF_HeaderConstants_0x4
+	ld xiy, SMF_SetupActiveChannel_Str_MThd
 	ld xix, 0x13fa
 	ld bc, 7:i3
 	ldirw
-	ld xiy, SMF_HeaderConstants_0x12
+	ld xiy, SMF_SetupActiveChannel_Str_MTrk
 	ld bc, 4:i3
 	ldir85
 	xor wa, wa
@@ -1003,10 +1004,10 @@ SMF_Setup_FileUnderflow:
 	jp SMF_FlushAndFinalize
 
 SMF_Setup_WriteLoop:
-	ld xiy, SMF_HeaderConstants_0x42
+	ld xiy, SMF_Setup_WriteLoop_Data
 	cp (4324:16), 0
 	jr nz, SMF_Setup_SelectTablePtr
-	ld xiy, SMF_HeaderConstants_0x4A
+	ld xiy, SMF_Setup_WriteLoop_Data_2
 
 SMF_Setup_SelectTablePtr:
 	ld xix, (4376:16)
@@ -1070,7 +1071,7 @@ SMF_ScanAndProcessChannel:
 	ld b, l
 	sla l, 1
 	push xix
-	ld xix, SMF_HeaderConstants_0x1A
+	ld xix, SMF_ScanAndProcessChannel_Data
 	ld	hl, (xix+hl)
 	pop xix
 	cp hl, 0xffff
@@ -1382,7 +1383,7 @@ SMF_WriteVol_PanAndPitch:
 	xor h, h
 	sla l, 1
 	push xix
-	ld xix, SMF_HeaderConstants_0x1A
+	ld xix, SMF_ScanAndProcessChannel_Data
 	ld	hl, (xix+hl)
 	pop xix
 	cp hl, 0xffff
@@ -1465,7 +1466,7 @@ SMF_WriteRPN_FineTune:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sla hl, 1
-	ld xix, SMF_HeaderConstants_0x1A
+	ld xix, SMF_ScanAndProcessChannel_Data
 	ld	hl, (xix+hl)
 	pop xix
 	ld xiy, 0xf460
@@ -1567,7 +1568,7 @@ SMF_WriteRPN_CoarseTune:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sla l, 1
-	ld xix, SMF_HeaderConstants_0x1A
+	ld xix, SMF_ScanAndProcessChannel_Data
 	ld	hl, (xix+hl)
 	pop xix
 	ld xiy, 0xf460
@@ -1664,7 +1665,7 @@ SMF_WriteRPN_Transpose:
 	ld xix, 0xf1a0
 	ld	l, (xix+hl)
 	sla l, 1
-	ld xix, SMF_HeaderConstants_0x1A
+	ld xix, SMF_ScanAndProcessChannel_Data
 	ld	hl, (xix+hl)
 	pop xix
 	ld xiy, 0xf460
@@ -2205,7 +2206,7 @@ SMF_ProgramChange_ProcessPatch:
 	ld	l, (4213:16)
 	ld	xix, 61856
 	ld_rrb	l, xix, hl
-	ld	xix, SMF_HeaderConstants_0x52
+	ld	xix, SMF_ProgramChange_ProcessPatch_Data
 	ld_rrb	l, xix, hl
 	ld	(6748:16), l
 	pop	xix
@@ -2974,7 +2975,7 @@ FileOpen_NormalizeName:
 	ld xwa, xde
 	ld a, (xwa)
 	extz wa
-	lda xbc, (CharMap_FullPermutation_0x660:24)
+	lda xbc, (FileOpen_NormalizeName_Data:24)
 	ld	a, (xbc+wa)
 	bit 1, a
 	jr z, FileOpen_NormalizeNoUpper

@@ -1226,6 +1226,7 @@ SeMenu_BitShiftMask_End_Loop3:
 	jr	c, -9
 	ret
 SeMenu_TransferPartValues_EndData_Helper:
+SeMenu_RefreshPartDisplay_Data_2:
 	.byte 0x88, 0x06
 	push	xsp
 	nop
@@ -6638,7 +6639,7 @@ SeMenu_RefreshPartDisplay_Data:
 	lda xbc, (xbc + 0x0a)
 	call SeMenu_SetupPartDisplay_End_0x219
 	lda xwa, (xsp + 0x02)
-	call SeMenu_BitShiftMask_End_0x14
+	call SeMenu_RefreshPartDisplay_Data_2
 	cp l, 1:i3
 	jr nz, .Lc_f09d35
 	ld A,(XSP+0x05)

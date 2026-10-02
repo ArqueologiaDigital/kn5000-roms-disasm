@@ -460,11 +460,11 @@ Rhythm_VelLookA_SelectTable:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bit 2, (0x3258:16)
 	jr z, Rhythm_VelLookA_CheckBit3
-	ld xiy, Rhythm_InstrMapTable_Default_0x31
+	ld xiy, Rhythm_VelLookA_SelectTable_Data
 Rhythm_VelLookA_CheckBit3:
 	bit 3, (0x3258:16)
 	jr z, Rhythm_VelLookA_TableLookup
-	ld xiy, Rhythm_InstrMapTable_Default_0x62
+	ld xiy, Rhythm_VelLookA_CheckBit3_Data
 Rhythm_VelLookA_TableLookup:
 	ld	l, (xiy+l)
 	extz hl
@@ -501,7 +501,7 @@ Rhythm_InstrBaseLookup:
 ; where the column A came from Rhythm_InstrBaseLookup (a byte of
 ; AccPatch_Transpose_LookupTable_Data indexed by the note).
 ; Variant choice: bit 2 of RAM 0x3258 selects +0x31 (the positional alias
-; Rhythm_InstrMapTable_Default_0x31), bit 3 selects +0x62 (..._0x62) and,
+; Rhythm_VelLookA_SelectTable_Data), bit 3 selects +0x62 (..._0x62) and,
 ; being tested second, wins over bit 2;
 ; Rhythm_TranspMod_BaseApply always uses +0x31.  Stride 0x31 = 49 is pinned by
 ; those two aliases; the tables end exactly at Rhythm_TransposeNote (147 B).
@@ -515,11 +515,13 @@ Rhythm_InstrMapTable_Default:
 	.byte 5, 0, 0, 1, 1, 6, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 	; +0x31: bit 2 of 0x3258 set; always used by Rhythm_TranspMod_BaseApply
+Rhythm_VelLookA_SelectTable_Data:
 	.byte 0, 0, 0, 1, 5, 0, 3, 9, 10, 7, 4, 2, 5, 6, 6, 11
 	.byte 12, 14, 15, 8, 10, 16, 17, 4, 13, 18, 19, 20, 0, 5, 12, 13
 	.byte 5, 12, 13, 1, 1, 6, 4, 5, 11, 16, 0, 0, 0, 0, 0, 0
 	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 	; +0x62: bit 3 of 0x3258 set (tested after bit 2, so it wins)
+Rhythm_VelLookA_CheckBit3_Data:
 	.byte 0, 0, 0, 1, 5, 0, 3, 9, 10, 7, 4, 2, 5, 6, 6, 0
 	.byte 0, 1, 2, 8, 10, 3, 8, 4, 0, 18, 19, 20, 0, 5, 0, 0
 	.byte 5, 0, 0, 1, 1, 6, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0
@@ -598,7 +600,7 @@ Rhythm_VoiceMap_ClampInstr:
 	ld xiy, Rhythm_PitchShiftTable_Default
 	bit 3, (0x3258:16)
 	jr z, Rhythm_VoiceMap_SelectTable
-	ld xiy, Rhythm_PitchShiftTable_Default_0x31
+	ld xiy, Rhythm_VoiceMap_ClampInstr_Data
 Rhythm_VoiceMap_SelectTable:
 	ld_rr8b	l, xiy, l
 	cp	l, 0:i3
@@ -635,11 +637,11 @@ Rhythm_VoiceMap_Inst2Clamp:
 	ld xiy, Rhythm_InstrMapTable_Default
 	bit 2, (0x3258:16)
 	jr z, Rhythm_VoiceMap_Inst2Bit2
-	ld xiy, Rhythm_InstrMapTable_Default_0x31
+	ld xiy, Rhythm_VelLookA_SelectTable_Data
 Rhythm_VoiceMap_Inst2Bit2:
 	bit 3, (0x3258:16)
 	jr z, Rhythm_VoiceMap_Inst2Bit3
-	ld xiy, Rhythm_InstrMapTable_Default_0x62
+	ld xiy, Rhythm_VelLookA_CheckBit3_Data
 Rhythm_VoiceMap_Inst2Bit3:
 	ld	l, (xiy+l)
 	extz hl
@@ -664,7 +666,7 @@ Rhythm_VoiceMap_Done:
 ; where a shift byte with bit 5 set returns 0 (muted), bit 4 set subtracts and
 ; clear adds its low nibble to A.  Rhythm_NoteRangeCheck clears both bytes.
 ; Variant: bit 3 of RAM 0x3258 selects +0x31 (alias
-; Rhythm_PitchShiftTable_Default_0x31).  98 bytes = 2 x 49, to
+; Rhythm_VoiceMap_ClampInstr_Data).  98 bytes = 2 x 49, to
 ; Rhythm_VelocityCompute.  Was framed as `nop` / `normal` / `push sr`
 ; (0x00 / 0x01 / 0x02) until 2026-09-25.
 ; -----------------------------------------------------------------------------
@@ -675,6 +677,7 @@ Rhythm_PitchShiftTable_Default:
 	.byte 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0
 	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 	; +0x31: bit 3 of 0x3258 set
+Rhythm_VoiceMap_ClampInstr_Data:
 	.byte 0, 0, 1, 1, 1, 2, 1, 1, 2, 1, 1, 1, 1, 0, 1, 1
 	.byte 1, 1, 1, 1, 2, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1
 	.byte 1, 1, 1, 1, 1, 1, 1, 1, 0, 2, 0, 0, 0, 0, 0, 0
@@ -705,7 +708,7 @@ Rhythm_VelComp_SelectTable:
 	ld xiy, Rhythm_VelocityTable_A
 	bit 2, (0x3258:16)
 	jr z, Rhythm_VelComp_Lookup
-	ld xiy, Rhythm_VelocityTable_A_0x31
+	ld xiy, Rhythm_VelComp_SelectTable_Data
 Rhythm_VelComp_Lookup:
 	ld	l, (xiy+l)
 	extz hl
@@ -728,7 +731,7 @@ Rhythm_VelComp_Done:
 ; Reader: Rhythm_VelocityCompute -- `ld xiy, <variant>`, L := variant[L]
 ; (L = RAM 0x323C clamped 0..0x2F), `sla hl, 4`, row lookup, `add w, a`,
 ; `calr Rhythm_TransposeNote`: identical to Rhythm_VelocityLookup_A.
-; Variant: bit 2 of RAM 0x3258 selects +0x31 (alias Rhythm_VelocityTable_A_0x31).
+; Variant: bit 2 of RAM 0x3258 selects +0x31 (alias Rhythm_VelComp_SelectTable_Data).
 ; 98 bytes = 2 x 49, to Rhythm_FourChannelDispatch.  The two variants differ
 ; from Rhythm_InstrMapTable_Default's first two only at entry 7 (0 here, 9
 ; there).  The "Velocity" in the name is not supported by the reader, which
@@ -741,6 +744,7 @@ Rhythm_VelocityTable_A:
 	.byte 5, 0, 0, 1, 1, 6, 4, 5, 0, 0, 0, 0, 0, 0, 0, 0
 	.byte 0	; entry 48: past the 0..0x2F index clamp, never read
 	; +0x31: bit 2 of 0x3258 set
+Rhythm_VelComp_SelectTable_Data:
 	.byte 0, 0, 0, 1, 5, 0, 3, 0, 10, 7, 4, 2, 5, 6, 6, 11
 	.byte 12, 14, 15, 8, 10, 16, 17, 4, 13, 18, 19, 20, 0, 5, 12, 13
 	.byte 5, 12, 13, 1, 1, 6, 4, 5, 11, 16, 0, 0, 0, 0, 0, 0
@@ -1541,7 +1545,7 @@ Rhythm_TranspMod_BaseApply:
 	xor L,L
 Rhythm_TranspMod_BaseLookup:
 	extz hl
-	ld xiy, Rhythm_InstrMapTable_Default_0x31
+	ld xiy, Rhythm_VelLookA_SelectTable_Data
 	ld	l, (xiy+hl)
 	extz hl
 	sla hl, 4

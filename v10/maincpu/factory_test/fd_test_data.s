@@ -336,84 +336,135 @@ FDTest_CfgName_FDDTest:	aligned_string "FDD_TEST"
 	.long FDTest_TestTitle_Terminator
 FDTest_TestTitle_Terminator:	aligned_string ""
 FDTest_String_TestTitleFunc:	aligned_string "TestTitleFunc"
+TitleFunc_ActionDispatch_Data:
 	.byte 0x0a
 	aligned_string "Title new"
+TitleFunc_ActionDispatch_Data_2:
 	.byte 0x0a
 	.asciz "Title old"
-	.byte 0xff, 0x0a
+	.byte	0xff
+TitleFunc_ActionDispatch_Data_3:	.byte	0x0a
 	aligned_string "Title Activate"
+TitleFunc_ActionDispatch_Data_4:
 	.byte 0x0a
 	aligned_string "Title Inactivate"
+TitleFunc_ActionDispatch_Data_5:
 	.byte 0x0a
 	aligned_string "Title INTERUPT"
+TitleFunc_ActionDispatch_Data_6:
 	.byte 0x0a
 	aligned_string "Title INTERUPT RETURN"
+TitleFunc_LifecycleTable_Data:
 	.byte 0x0a
 	aligned_string "TBIOS Test"
+TitleFunc_LifecycleTable_Data_2:
 	.byte 0x0a
 	aligned_string "STOP FDD TEST"
+TitleFunc_LifecycleTable_Data_3:
 	.byte 0x0a
 	aligned_string "START FDD TEST LOOP"
-	.byte 0x0a, 0x44, 0x49, 0x52, 0x00, 0xff, 0x0a
+TitleFunc_LifecycleTable_Data_4:
+	.byte	0x0a, 0x44, 0x49, 0x52, 0x00, 0xff
+TitleFunc_LifecycleTable_Data_5:	.byte	0x0a
 	aligned_string "Debug Test"
+TitleFunc_LifecycleTable_Data_6:
 	.byte 0x0a
 	.asciz "Debug Test"
+TitleFunc_LifecycleDispatch_Data:
 	.byte 0x00, 0x00
 	.byte 0x0e, 0x00, 0x30, 0x00, 0x58, 0x00, 0x65, 0x00
-	.byte 0x72, 0x00, 0x7f, 0x00, 0x82, 0x00, 0x00, 0x00
+	.byte	0x72, 0x00, 0x7f, 0x00, 0x82, 0x00
+TestTitleFunc_Data:	.byte	0x00, 0x00
 	.byte 0x0b, 0x00, 0x21, 0x00, 0x16, 0x00, 0x2c, 0x00
 	.byte 0x37, 0x00
+ListDir2_Entry_Str_A_HAMA_LSW:
 	aligned_string "A:\\HAMA\\*.LSW"
+RunTestCounters_Display_Data:
 	.byte 0x0a
 	.asciz "TEST Finishd!!"
+CreateRunFDOp_Entry_Str_init:
 	aligned_string "init"
+CreateRunFDOp_Entry_Str_OK:
 	.byte 0x4f, 0x4b
-	.byte 0x00, 0xff, 0x4e, 0x47, 0x00, 0xff
+	.byte	0x00, 0xff
+CreateRunFDOp_Fail_Str_NG:	.byte	0x4e, 0x47, 0x00, 0xff
+FDLoadSaveTest_Str_A_IMMUNITY_TST:
 	aligned_string "A:IMMUNITY.TST"
+FDLoadSaveTest_Data:
 	.byte	0x0a
 	.ascii	"File remove =>"
-	.byte	0x00, 0x20, 0x65
+	.byte	0x00
+FDLoadSaveTest_Str_error:	.byte	0x20, 0x65
 	aligned_string "rror"
+FDTest_OpenFailed_Str_OK:
 	.byte 0x20, 0x4f
-	.byte 0x4b, 0x00, 0x0a
+	.byte	0x4b, 0x00
+FDTest_AllocBuffer_Data:	.byte	0x0a
 	.asciz "Not Enough memory!"
+FDTest_OpenForWrite_Str_wb:
 	.byte 0x77, 0x62
-	.byte 0x00, 0xff, 0x0a
+	.byte	0x00, 0xff
+FDTest_OpenForWrite_Data:	.byte	0x0a
 	.asciz "cannot open write file"
+FDTest_WriteBuffer_Data:
 	.byte 0x0a
 	aligned_string "File Write =>"
+FDTest_WriteBuffer_Str_Error:
 	aligned_string " Error"
-	.byte 0x20, 0x4f, 0x4b, 0x00, 0x0a
+FDTest_CloseAndReopen_Str_OK:
+	.byte	0x20, 0x4f, 0x4b, 0x00
+FDTest_CloseAndReopen_Data:	.byte	0x0a
 	aligned_string "File Read =>"
-	.byte	0x72, 0x62, 0x00, 0xff, 0x0a
+FDTest_CloseAndReopen_Str_rb:
+	.byte	0x72, 0x62, 0x00, 0xff
+FDTest_CloseAndReopen_Data_2:	.byte	0x0a
 	.ascii	"cannot open read file"
 	.byte	0x00, 0xff
+FDTest_ReadBack_Str_error:
 	aligned_string " error"
-	.byte	0x20, 0x4f, 0x4b, 0x00, 0x0a
+FDTest_VerifyData_Str_OK:
+	.byte	0x20, 0x4f, 0x4b, 0x00
+FDTest_CompareResult_Data:	.byte	0x0a
 	.ascii	"Data Compare =>"
 	.byte	0x00, 0xff
+FDTest_CompareResult_Str_Error:
 	aligned_string " Error!!!!!!!!"
-	.byte	0x20, 0x4f, 0x4b, 0x00, 0x2a, 0x2e, 0x2a, 0x00
+FDTest_Pass_Str_OK:
+	.byte	0x20, 0x4f, 0x4b, 0x00
+FDListDirectory_Str_Star_Dot_Star:	.byte	0x2a, 0x2e, 0x2a, 0x00
+FDTestDlg_FormatDisplay_Str_File_Name_20_charact:
 	aligned_string "File Name 20 charact"
+FDTestDialogProc_Data:
 	.byte	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x33, 0x00, 0x00, 0x00, 0x00, 0x00
+RegHamaTitle1_Entry_Str_TEST_HAMA:
 	aligned_string "TEST_HAMA"
+RegHamaTitle2_Entry_Str_TESTHAMA2HD:
 	aligned_string "TESTHAMA2HD"
+HamaEvtDisp_LifecycleCheck_Str_LOAD:
 	.ascii	"LOAD"
 	.byte	0x00, 0xff
+HamaEvtDisp_LifecycleCheck_Str_LOAD_END:
 	.ascii	"LOAD END"
-	.byte	0x00, 0xff, 0x47, 0x4f, 0x00, 0xff
+	.byte	0x00, 0xff
+HamaEvtDisp_ExtBootstrap_Str_GO:	.byte	0x47, 0x4f, 0x00, 0xff
+HamaEvtDisp_ExtBootstrap_Str_Finishd:
 	aligned_string "Finishd"
+CheckFDStatusLoad_Entry_Str_Media_Error:
 	aligned_string "Media Error"
+CheckFDStatusLoad_DoLoad_Str_rb:
 	.byte	0x72, 0x62, 0x00, 0xff
 CheckFDStatusLoad_DoLoad_Str_A_HKEXT_XAP:	aligned_string "A:HKEXT.XAP"
+CheckFDStatusLoad_DoLoad_Str_Cannot_open:
 	aligned_string "Cannot open"
 LoadExtROM_Entry_Str_XAPR:	.ascii	"XAPR"
 	.byte	0x00, 0xff
+LoadExtROM_Entry_Str_Different_ID:
 	aligned_string "Different ID"
 LoadXaprInit_Entry_Str_XAPR:	aligned_string "XAPR"
 	.byte 0xa9, 0xe9
 	.byte 0xf1, 0x00, 0xcd, 0xe9, 0xf1, 0x00, 0xce, 0xe9
 	.byte 0xf1, 0x00, 0xcf, 0xe9, 0xf1, 0x00, 0x58, 0x41
 	.byte 0x50, 0x52, 0x00, 0xff
+ResInfo_GetResourceListPtr_Str_TEST:
 	.byte 0x54, 0x45, 0x53, 0x54
 	.byte 0x00, 0xff

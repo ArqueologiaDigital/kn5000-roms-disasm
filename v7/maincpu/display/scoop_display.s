@@ -6022,7 +6022,7 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 	ld	l, a
 	xor	h, h
 	push	xix
-	ld	xix, VoiceCtrl_ParamSetupBytecode_0x1F7
+	ld	xix, VoiceCtrl_ParamSetupBytecode_Data
 	ld_rrb	l, xix, hl
 	pop	xix
 	cp	l, 255
@@ -6030,7 +6030,7 @@ VoiceCtrl_ParamSetupBytecode_Skip10:
 	ld	c, l
 	ld	l, a
 	push	xde
-	ld	xde, VoiceCtrl_ParamSetupBytecode_0x20B
+	ld	xde, VoiceCtrl_ParamSetupBytecode_Data_2
 	ld_rrb	l, xde, hl
 	pop	xde
 	cp	l, 255
@@ -6073,8 +6073,10 @@ VoiceCtrl_ParamSetupBytecode_Return2:
 	; reader VoiceCtrl_ParamSetupBytecode: `ld xhl, VoiceCtrl_ParamSetupBytecode_Tbl` then `ld_rr8b a, xhl, a`
 VoiceCtrl_ParamSetupBytecode_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f
-	.byte	0x00, 0x00, 0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff, 0xff
+	.byte	0x00, 0x00
+VoiceCtrl_ParamSetupBytecode_Data:	.byte	0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff
+VoiceCtrl_ParamSetupBytecode_Data_2:	.byte	0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0x03, 0xff, 0xff, 0xff
 	.byte	0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 VoiceCtrl_ParamSetupBytecode_Sub:
 	push	xwa
@@ -7712,7 +7714,7 @@ SysEx_BytecodeDispatcher_Skip:
 	call	MIDI_SendSysExFromW
 	pop	xhl
 	push	xde
-	ld	xde, SysInit_BytecodeBlock_0x6
+	ld	xde, SysEx_BytecodeDispatcher_Data
 	ld_rrb	w, xde, hl
 	pop	xde
 	ld	(3425:16), w
@@ -9022,7 +9024,8 @@ SystemInit_StepHandler_0_Tbl:
 	.byte	0x00, 0x04, 0x60, 0x04, 0x00, 0x03, 0x60, 0x03, 0x00, 0x02, 0x60, 0x02, 0x30, 0x01, 0x90, 0x01
 	.byte	0x00, 0x01, 0x60, 0x01, 0x30, 0x00, 0x30, 0x01
 SysInit_BytecodeBlock:
-	.byte	0x50, 0x40, 0x30, 0x20, 0x10, 0x00, 0x01, 0x02, 0x03, 0x05, 0x04, 0x06
+	.byte	0x50, 0x40, 0x30, 0x20, 0x10, 0x00
+SysEx_BytecodeDispatcher_Data:	.byte	0x01, 0x02, 0x03, 0x05, 0x04, 0x06
 SysEx_BytecodeDispatcher_Helper3:
 	ld b, (0xce55:16)
 	sla B, 0x01
@@ -14200,7 +14203,7 @@ Display_BytecodeBlock_F:
 	ret
 Display_BytecodeBlock_F_Sub_Helper:
 	ld	xix, 3796
-	ld	xiy, Display_BytecodeBlock_F_0x104
+	ld	xiy, Display_BytecodeBlock_F_Data
 	ld	a, (4539:16)
 	ld	xhl, Display_BytecodeBlock_F_Tbl
 	ld_rr8b	a, xhl, a
@@ -14272,6 +14275,7 @@ Display_BytecodeBlock_F_Return:
 Display_BytecodeBlock_F_Tbl:
 	.byte	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b
 	.byte	0x0c, 0x0d, 0x0e, 0x0f
+Display_BytecodeBlock_F_Data:
 	.ascii	"RT1 RT2 LFT P 4 P 5 P 6 P 7 P 8 P 9 P10 P11 P12 P13 P14 P15 KBP DUALMSP ----"
 	.byte	0x01, 0x02, 0x03, 0x04
 Display_BytecodeBlock_F_Sub:
@@ -16210,14 +16214,14 @@ Scoop_InitPartDisplay:
 	ld xiy, StyleUI_ParamBlockPtrTable
 	cp (3429:16), 2
 	jr nz, Scoop_SelectModeTable_2Part
-	ld xiy, StyleUI_ParamBlockPtrTable_0x98
+	ld xiy, Scoop_InitPartDisplay_Data
 
 Scoop_SelectModeTable_2Part:
 	ld	xiy, (xiy+hl)
-	ld xix, StyleUI_ParamBlockPtrTable_0x4C
+	ld xix, Scoop_SelectModeTable_2Part_Data
 	cp (3429:16), 2
 	jr nz, Scoop_SelectModeTable_2Part_XIX
-	ld xix, StyleUI_ParamBlockPtrTable_0xE4
+	ld xix, Scoop_SelectModeTable_2Part_Data_2
 
 Scoop_SelectModeTable_2Part_XIX:
 	ld	xix, (xix+hl)
@@ -17721,7 +17725,7 @@ Scoop_EnvelopeCalc:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda xbc, (Str_No_0xCEE:24)
+	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 4), xwa
 	decw	2, (xsp+266)
@@ -17819,7 +17823,7 @@ Scoop_CurveUpdate_SegmentEnd_Skip2:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xCEE:24)
+	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld_rrl	xwa, xbc, wa
 	ld	(xsp+4), xwa
 	decm	2, (xsp+268)
@@ -18543,7 +18547,7 @@ Scoop_EventLoop_12Entry_Join:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xCEE:24)
+	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18693,7 +18697,7 @@ Scoop_EventLoop_12Entry_Join3:
 	and	a, 63
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xCEE:24)
+	lda	xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -18781,7 +18785,7 @@ Scoop_EventLoop_36Entry_Branch3:
 	and a, 0x3f
 	extz wa
 	sla wa, 2
-	lda xbc, (Str_No_0xCEE:24)
+	lda xbc, (Scoop_EnvelopeCalc_Data_2:24)
 	ld	xwa, (xbc+wa)
 	ld (xsp + 2), xwa
 	ld	wa, (xsp+262)
@@ -18886,7 +18890,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -19026,7 +19030,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join3:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -19045,7 +19049,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join3:
 	lda	xsp, (xsp-268)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, GUI_FormatStrings_0x20
+	ld	xiy, Scoop_EventLoop_36Entry_Branch3_Data
 	lda	xix, (xsp+264)
 	ld	bc, 4:i3
 	ldirw
@@ -19091,7 +19095,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join4:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+264)
 	ld	xhl, xwa
@@ -19110,7 +19114,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Join4:
 	lda	xsp, (xsp-270)
 	push	xiz
 	ld	xde, xwa
-	ld	xiy, GUI_FormatStrings_0x34
+	ld	xiy, Scoop_EventLoop_36Entry_Branch3_Data_2
 	lda	xix, (xsp+266)
 	ld	bc, 4:i3
 	ldirw
@@ -19164,7 +19168,7 @@ Scoop_EventLoop_36Entry_Branch1_Code_Skip15:
 	and	a, 15
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (Str_No_0xDEE:24)
+	lda	xbc, (Scoop_EventLoop_36Entry_Branch3_Data_3:24)
 	ld_rrl	xix, xbc, wa
 	lda	xwa, (xsp+266)
 	ld	xhl, xwa
@@ -19185,7 +19189,7 @@ Scoop_EventLoop_12Entry_Alt:
 	push xiz
 	ld (xsp + 54), xbc
 	ld xiz, xwa
-	ld xiy, GUI_FormatStrings_0x3C
+	ld xiy, Scoop_EventLoop_12Entry_Alt_Data
 	lda xix, (xsp + 6)
 	ldw bc, 0x18
 	ldirw

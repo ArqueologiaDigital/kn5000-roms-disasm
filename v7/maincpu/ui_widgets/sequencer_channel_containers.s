@@ -233,7 +233,7 @@ Naka_DrawbarDisplay_Table2:
 ; [nakarest] Naka_DrawbarReg_Table: despite the name, entries 0-11 are the WALLPAPER PALETTE
 ; [nakarest] table: pointers to NakaColor_Palette2, 1, 6, 5, 4, 3, 10, 9, 8, 7, Blank, Blank
 ; [nakarest] (debug_naming_panel_sim.s).  This blob lies wholly inside the work-RAM initial
-; [nakarest] image (ROM 0xeed8c8 onward, CharMap_FullPermutation_0x7B0) that Boot_InitWorkRAM
+; [nakarest] image (ROM 0xeed8c8 onward, Boot_InitWorkRAM_ROMCopy1_Start_Data) that Boot_InitWorkRAM
 ; [nakarest] copies with ldir, so the table lives at RAM 0x3f1e4, where GetWallPaletteRGB
 ; [nakarest] (display/graphics_text_vga.s: `ld xde, 0x3f1e4`) indexes it (`sll 2`) and returns
 ; [nakarest] entry [colour] of the palette; ChangeWallPalette_Impl sets DAC entries 0xe0..0xef
@@ -313,7 +313,8 @@ Naka_DrawbarReg_Table:
 ; [nakarest] 0x10`), AccPlayback_ReadEvt_OverflowOK (sequencer/accompaniment_engine.s: `ld
 ; [nakarest] (58138:16), 16`), AccStyle_SC0ByteSelect (sequencer/accompaniment_engine.s: `ld
 ; [nakarest] (0xe318:16), 0x10`), 60 more.
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x478
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1600, 0x3EE
+Boot_InitWorkRAM_ROMCopy2_Start_Data:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x19EE, 0x8A
 ; [nakarest] Palette_8bit_RGBA_2_Data  +0x1a78..+0x1ed6 (0xeefaf0, 1118 B)
 ; [nakarest] purpose not established: layout of 1118 B at 0xeefaf0 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM

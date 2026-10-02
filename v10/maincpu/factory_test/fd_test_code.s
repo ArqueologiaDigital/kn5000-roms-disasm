@@ -48,20 +48,20 @@
 FDLoadSaveTest:
 	dec 4, xsp
 	push xiz
-	lda xwa, (FDTest_String_TestTitleFunc_0x118:24)
+	lda xwa, (FDLoadSaveTest_Data:24)
 	calr FDTest_PrintDiag
-	lda xwa, (FDTest_String_TestTitleFunc_0x108:24)
+	lda xwa, (FDLoadSaveTest_Str_A_IMMUNITY_TST:24)
 	push xwa
 	call FileOpenDefault
 	inc 4, xsp
 	cp hl, 0:i3
 	jr z, FDTest_OpenFailed
-	lda xwa, (FDTest_String_TestTitleFunc_0x128:24)
+	lda xwa, (FDLoadSaveTest_Str_error:24)
 	calr FDTest_PrintDiag
 	jr FDTest_AllocBuffer
 
 FDTest_OpenFailed:
-	lda xwa, (FDTest_String_TestTitleFunc_0x130:24)
+	lda xwa, (FDTest_OpenFailed_Str_OK:24)
 	calr FDTest_PrintDiag
 
 FDTest_AllocBuffer:
@@ -72,7 +72,7 @@ FDTest_AllocBuffer:
 	ld xwa, xhl
 	or xwa, xwa
 	jr nz, FDTest_FillBuffer
-	lda xwa, (FDTest_String_TestTitleFunc_0x134:24)
+	lda xwa, (FDTest_AllocBuffer_Data:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -94,16 +94,16 @@ FDTest_FillLoop:
 	jr c, FDTest_FillLoop
 
 FDTest_OpenForWrite:
-	lda xwa, (FDTest_String_TestTitleFunc_0x148:24)
+	lda xwa, (FDTest_OpenForWrite_Str_wb:24)
 	push xwa
-	lda xwa, (FDTest_String_TestTitleFunc_0x108:24)
+	lda xwa, (FDLoadSaveTest_Str_A_IMMUNITY_TST:24)
 	push xwa
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, FDTest_WriteBuffer
-	lda xwa, (FDTest_String_TestTitleFunc_0x14C:24)
+	lda xwa, (FDTest_OpenForWrite_Data:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -113,7 +113,7 @@ FDTest_OpenForWrite:
 	jrl FDTest_Return
 
 FDTest_WriteBuffer:
-	lda xwa, (FDTest_String_TestTitleFunc_0x164:24)
+	lda xwa, (FDTest_WriteBuffer_Data:24)
 	calr FDTest_PrintDiag
 	push xiz
 	pushw 0x800
@@ -124,7 +124,7 @@ FDTest_WriteBuffer:
 	lda xsp, (xsp + 12)
 	cp hl, 0x800
 	jr z, FDTest_CloseAndReopen
-	lda xwa, (FDTest_String_TestTitleFunc_0x174:24)
+	lda xwa, (FDTest_WriteBuffer_Str_Error:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -134,7 +134,7 @@ FDTest_WriteBuffer:
 	jrl FDTest_Return
 
 FDTest_CloseAndReopen:
-	lda xwa, (FDTest_String_TestTitleFunc_0x17C:24)
+	lda xwa, (FDTest_CloseAndReopen_Str_OK:24)
 	calr FDTest_PrintDiag
 	push xiz
 	call FileClose
@@ -144,18 +144,18 @@ FDTest_CloseAndReopen:
 	push xwa
 	call Memset
 	lda xsp, (xsp + 12)
-	lda xwa, (FDTest_String_TestTitleFunc_0x180:24)
+	lda xwa, (FDTest_CloseAndReopen_Data:24)
 	calr FDTest_PrintDiag
-	lda xwa, (FDTest_String_TestTitleFunc_0x18E:24)
+	lda xwa, (FDTest_CloseAndReopen_Str_rb:24)
 	push xwa
-	lda xwa, (FDTest_String_TestTitleFunc_0x108:24)
+	lda xwa, (FDLoadSaveTest_Str_A_IMMUNITY_TST:24)
 	push xwa
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
 	or xiz, xiz
 	jr nz, FDTest_ReadBack
-	lda xwa, (FDTest_String_TestTitleFunc_0x192:24)
+	lda xwa, (FDTest_CloseAndReopen_Data_2:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -174,7 +174,7 @@ FDTest_ReadBack:
 	lda xsp, (xsp + 12)
 	cp hl, 0x800
 	jr z, FDTest_VerifyData
-	lda xwa, (FDTest_String_TestTitleFunc_0x1AA:24)
+	lda xwa, (FDTest_ReadBack_Str_error:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -184,7 +184,7 @@ FDTest_ReadBack:
 	jr FDTest_Return
 
 FDTest_VerifyData:
-	lda xwa, (FDTest_String_TestTitleFunc_0x1B2:24)
+	lda xwa, (FDTest_VerifyData_Str_OK:24)
 	calr FDTest_PrintDiag
 	push xiz
 	call FileClose
@@ -206,11 +206,11 @@ FDTest_CompareNext:
 	jr c, FDTest_CompareLoop
 
 FDTest_CompareResult:
-	lda xwa, (FDTest_String_TestTitleFunc_0x1B6:24)
+	lda xwa, (FDTest_CompareResult_Data:24)
 	calr FDTest_PrintDiag
 	cp iz, 0:i3
 	jr z, FDTest_Pass
-	lda xwa, (FDTest_String_TestTitleFunc_0x1C8:24)
+	lda xwa, (FDTest_CompareResult_Str_Error:24)
 	calr FDTest_PrintDiag
 	ld xwa, (xsp + 4)
 	push xwa
@@ -224,7 +224,7 @@ FDTest_Pass:
 	push xwa
 	call Free
 	inc 4, xsp
-	lda xwa, (FDTest_String_TestTitleFunc_0x1D8:24)
+	lda xwa, (FDTest_Pass_Str_OK:24)
 	calr FDTest_PrintDiag
 	ld hl, 0:i3
 
@@ -245,7 +245,7 @@ FDListDirectory:
 	lda xsp, (xsp - 266)
 	push xiz
 	ld wa, 0:i3
-	lda xwa, (FDTest_String_TestTitleFunc_0x1DC:24)
+	lda xwa, (FDListDirectory_Str_Star_Dot_Star:24)
 	lda xbc, (xsp + 4)
 	call _findfirst
 	ld xiz, xhl
@@ -306,7 +306,7 @@ FDTestDialogProc:
 	cp xwa, 0x6
 	jr gt, FDTestDlg_Unhandled
 	add xwa, xwa
-	add xwa, FDTest_String_TestTitleFunc_0x1F6
+	add xwa, FDTestDialogProc_Data
 	ld wa, (xwa)
 	lda xix, (FDTestDlg_DefaultCase:24)
 	jp	t, (xix+wa)
@@ -321,7 +321,7 @@ FDTestDlg_FormatDisplay:
 	ldiw_erp 0xe2, 0
 	ld (xsp+0:8), wa
 	ld (xsp + 2), de
-	lda xwa, (FDTest_String_TestTitleFunc_0x1E0:24)
+	lda xwa, (FDTestDlg_FormatDisplay_Str_File_Name_20_charact:24)
 	ld (xsp + 4), xwa
 	call GetFocusObject
 	lda xwa, (xsp)

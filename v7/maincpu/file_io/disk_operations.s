@@ -806,7 +806,7 @@ FmmSaveTtl_SlotLoop:
 	ld	wa, 7:i3
 	call	FileIO_BuildRecordPath_Return
 	call	FileIO_SetModeFlag_Reading
-	ld	xiy, BankStr_Memory_0xA
+	ld	xiy, ResetProgressIndication_Data
 	ld	xix, 35184
 	ldiw
 FmmSaveTtl_CommitSave:

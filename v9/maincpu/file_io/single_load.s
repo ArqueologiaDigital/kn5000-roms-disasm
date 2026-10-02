@@ -320,19 +320,19 @@ SLSrcBankList_FuncBody_Helper3_Epilogue:
 	jr	z, SLSrcBankList_FuncBody_Skip
 	ld	a, (0x89fc:16)
 	extz	wa
-	div	wa, (PtrTbl_DrumKitNames_0x7A:24)
+	div	wa, (SLSrcBankList_FuncBody_Data:24)
 	ld	(0x89fc:16), w
 SLSrcBankList_FuncBody_Skip:
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper2
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper3
 	ld	xwa, 0:i3
@@ -350,7 +350,7 @@ SLSrcBankList_FuncBody_Skip2:
 	ld	xix, xbc
 	cp	xbc, EVT_INDEXSW_UP
 	jr	nz, SLSrcBankList_FuncBody_Skip3
-	ld	l, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	l, (SLSrcBankList_FuncBody_Data:24)
 	ld	a, l
 	ld	c, e
 	add	a, e
@@ -358,25 +358,25 @@ SLSrcBankList_FuncBody_Skip2:
 	jr	nc, SLSrcBankList_FuncBody_Skip3
 	add	c, l
 	ld	(0x89fc:16), c
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	jr	SLSrcBankList_FuncBody_Join
 SLSrcBankList_FuncBody_Skip3:
 	cp	xix, EVT_INDEXSW_DOWN
 	jr	nz, SLSrcBankList_FuncBody_Skip4
 	ld	a, e
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	cp	e, c
 	jr	c, SLSrcBankList_FuncBody_Skip4
 	sub	a, c
 	ld	(0x89fc:16), a
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 SLSrcBankList_FuncBody_Join:
 	calr	SLSrcBankList_FuncBody_Helper2
@@ -406,7 +406,7 @@ SLSrcBankList_FuncBody_Skip5:
 	inc	1, a
 	cp a, (15337812:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip6
-	ld	e, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	e, (SLSrcBankList_FuncBody_Data:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -417,7 +417,7 @@ SLSrcBankList_FuncBody_Skip5:
 	jr	nc, SLSrcBankList_FuncBody_Skip7
 	inc	1, c
 	ld	(0x89fc:16), c
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	jr	SLSrcBankList_FuncBody_Join2
 SLSrcBankList_FuncBody_Skip6:
@@ -426,7 +426,7 @@ SLSrcBankList_FuncBody_Skip6:
 	ld	c, e
 	cp	e, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip7
-	ld	e, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	e, (SLSrcBankList_FuncBody_Data:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
@@ -435,7 +435,7 @@ SLSrcBankList_FuncBody_Skip6:
 	jr	z, SLSrcBankList_FuncBody_Skip7
 	dec	1, c
 	ld	(0x89fc:16), c
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 SLSrcBankList_FuncBody_Join2:
 	calr	SLSrcBankList_FuncBody_Helper2
@@ -480,14 +480,14 @@ SLSrcBankList_FuncBody_Skip10:
 	jr	nz, SLSrcBankList_FuncBody_Join4
 	cp	(0x81d0:16), 0
 	jr	z, SLSrcBankList_FuncBody_Entry
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper
 	ld	(0x81d0:16), 0
 SLSrcBankList_FuncBody_Entry:
 	cp	(0x81ce:16), 0
 	jr	z, SLSrcBankList_FuncBody_Join4
-	ld	c, (PtrTbl_DrumKitNames_0x7A:24)
+	ld	c, (SLSrcBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper3
 	ld	(0x81ce:16), 0
@@ -710,7 +710,7 @@ SLSrcBankList_FuncBody_Helper6_Epilogue:
 	ld	(xsp+4), xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	cp	xde, EVT_INDEXSW_DOWN
 	jr	z, SLSrcBankList_FuncBody_Skip12
 	cp	xde, EVT_INDEXSW_UP
@@ -719,10 +719,10 @@ SLSrcBankList_FuncBody_Helper6_Epilogue:
 	jrl	nz, SLSrcBankList_FuncBody_Join9
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper5
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper4
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper6
 	ld	xwa, 0:i3
@@ -736,7 +736,7 @@ SLSrcBankList_FuncBody_Skip12:
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
 	jr	nz, SLSrcBankList_FuncBody_Skip13
-	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	e, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
@@ -744,25 +744,25 @@ SLSrcBankList_FuncBody_Skip12:
 	jr	nc, SLSrcBankList_FuncBody_Skip13
 	add	c, e
 	ld	(0x89fe:16), c
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper4
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 	jr	SLSrcBankList_FuncBody_Join5
 SLSrcBankList_FuncBody_Skip13:
 	cp	xix, EVT_INDEXSW_DOWN
 	jr	nz, SLSrcBankList_FuncBody_Skip14
 	ld	a, l
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	cp	l, c
 	jr	c, SLSrcBankList_FuncBody_Skip14
 	sub	a, c
 	ld	(0x89fe:16), a
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper4
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 SLSrcBankList_FuncBody_Join5:
 	calr	SLSrcBankList_FuncBody_Helper5
@@ -791,7 +791,7 @@ SLSrcBankList_FuncBody_Skip15:
 	inc	1, a
 	cp a, (15337846:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip16
-	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	e, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -802,7 +802,7 @@ SLSrcBankList_FuncBody_Skip15:
 	jr	nc, SLSrcBankList_FuncBody_Skip17
 	inc	1, c
 	ld	(0x89fe:16), c
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 	jr	SLSrcBankList_FuncBody_Join6
 SLSrcBankList_FuncBody_Skip16:
@@ -811,7 +811,7 @@ SLSrcBankList_FuncBody_Skip16:
 	ld	c, l
 	cp	l, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip17
-	ld	e, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	e, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
@@ -820,7 +820,7 @@ SLSrcBankList_FuncBody_Skip16:
 	jr	z, SLSrcBankList_FuncBody_Skip17
 	dec	1, c
 	ld	(0x89fe:16), c
-	ld	c, (PtrTbl_DrumKitNames_0x9C:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	xwa, xiz
 SLSrcBankList_FuncBody_Join6:
 	calr	SLSrcBankList_FuncBody_Helper5
@@ -1094,7 +1094,7 @@ SLSrcBankList_FuncBody_Helper11_Epilogue:
 	push	xiz
 	ld	(xsp+4), xde
 	ld	xiz, xwa
-	ld	e, (Str_AllOption_EA0980_0x12:24)
+	ld	e, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	cp	xbc, EVT_INDEXSW_DOWN
 	jr	z, SLSrcBankList_FuncBody_Skip25
 	cp	xbc, EVT_INDEXSW_UP
@@ -1104,13 +1104,13 @@ SLSrcBankList_FuncBody_Helper11_Epilogue:
 	ld	xwa, xiz
 	ld	c, e
 	calr	SLSrcBankList_FuncBody_Helper8
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper10
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper9
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper11
 	ld	xwa, 0:i3
@@ -1126,7 +1126,7 @@ SLSrcBankList_FuncBody_Skip25:
 	ld	xde, xbc
 	cp	xbc, EVT_INDEXSW_UP
 	jr	nz, SLSrcBankList_FuncBody_Skip27
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	w, c
 	add	w, c
 	ld	a, l
@@ -1140,13 +1140,13 @@ SLSrcBankList_FuncBody_Skip25:
 SLSrcBankList_FuncBody_Skip26:
 	ld	(0x8a00:16), w
 SLSrcBankList_FuncBody_Join12:
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper8
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper10
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1156,7 +1156,7 @@ SLSrcBankList_FuncBody_Skip27:
 	cp	xde, EVT_INDEXSW_DOWN
 	jr	nz, SLSrcBankList_FuncBody_Skip29
 	ld	c, l
-	ld	e, (Str_AllOption_EA0980_0x12:24)
+	ld	e, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	cp	l, e
 	jr	c, SLSrcBankList_FuncBody_Skip29
 	ld	a, e
@@ -1169,13 +1169,13 @@ SLSrcBankList_FuncBody_Skip27:
 SLSrcBankList_FuncBody_Skip28:
 	ld	(0x8a00:16), e
 SLSrcBankList_FuncBody_Join13:
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper8
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper10
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1208,7 +1208,7 @@ SLSrcBankList_FuncBody_Skip30:
 	inc	1, a
 	cp a, (15337876:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip32
-	ld	e, (Str_AllOption_EA0980_0x12:24)
+	ld	e, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
@@ -1223,10 +1223,10 @@ SLSrcBankList_FuncBody_Skip30:
 	jrl	nc, SLSrcBankList_FuncBody_Skip34
 	inc	1, c
 	ld	(0x8a00:16), c
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper10
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1235,10 +1235,10 @@ SLSrcBankList_FuncBody_Skip30:
 SLSrcBankList_FuncBody_Skip31:
 	inc	1, c
 	ld	(0x8a00:16), c
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper10
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1250,7 +1250,7 @@ SLSrcBankList_FuncBody_Skip32:
 	ld	c, l
 	cp	l, 0:i3
 	jr	z, SLSrcBankList_FuncBody_Skip34
-	ld	e, (Str_AllOption_EA0980_0x12:24)
+	ld	e, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
@@ -1263,10 +1263,10 @@ SLSrcBankList_FuncBody_Skip32:
 	jr	z, SLSrcBankList_FuncBody_Skip34
 	dec	1, c
 	ld	(0x8a00:16), c
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper10
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1277,10 +1277,10 @@ SLSrcBankList_FuncBody_Skip33:
 	jr	ule, SLSrcBankList_FuncBody_Skip34
 	dec	1, c
 	ld	(0x8a00:16), c
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper10
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -1335,7 +1335,7 @@ SLSrcBankList_FuncBody_Skip37:
 SLSrcBankList_FuncBody_Entry2:
 	cp	(0x81dc:16), 0
 	jr	z, SLSrcBankList_FuncBody_Join17
-	ld	c, (Str_AllOption_EA0980_0x12:24)
+	ld	c, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	xwa, xiz
 	calr	SLSrcBankList_FuncBody_Helper11
 	ld	(0x81dc:16), 0
@@ -1670,7 +1670,7 @@ SLDstBankList_FuncBody_Join:
 	ld	(xsp+4), xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	cp	xde, EVT_INDEXSW_DOWN
 	jr	z, SLDstBankList_FuncBody_Skip
 	cp	xde, EVT_INDEXSW_UP
@@ -1679,7 +1679,7 @@ SLDstBankList_FuncBody_Join:
 	jrl	nz, SLDstBankList_FuncBody_Loop
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper
 	ld	xwa, 0:i3
@@ -1693,7 +1693,7 @@ SLDstBankList_FuncBody_Skip:
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
 	jr	nz, SLDstBankList_FuncBody_Skip2
-	ld	e, (Str_AllOption_EA09B2_0x16:24)
+	ld	e, (SLDstBankList_FuncBody_Data:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
@@ -1701,25 +1701,25 @@ SLDstBankList_FuncBody_Skip:
 	jr	nc, SLDstBankList_FuncBody_Skip2
 	add	c, e
 	ld	(0x8a02:16), c
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	jr	SLDstBankList_FuncBody_Join2
 SLDstBankList_FuncBody_Skip2:
 	cp	xix, EVT_INDEXSW_DOWN
 	jr	nz, SLDstBankList_FuncBody_Skip3
 	ld	a, l
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	cp	l, c
 	jr	c, SLDstBankList_FuncBody_Skip3
 	sub	a, c
 	ld	(0x8a02:16), a
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 SLDstBankList_FuncBody_Join2:
 	calr	SLDstBankList_FuncBody_Helper
@@ -1753,7 +1753,7 @@ SLDstBankList_FuncBody_Skip4:
 	inc	1, a
 	cp a, (15337930:24)
 	jr	nc, SLDstBankList_FuncBody_Skip5
-	ld	e, (Str_AllOption_EA09B2_0x16:24)
+	ld	e, (SLDstBankList_FuncBody_Data:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -1764,7 +1764,7 @@ SLDstBankList_FuncBody_Skip4:
 	jr	nc, SLDstBankList_FuncBody_Skip6
 	inc	1, c
 	ld	(0x8a02:16), c
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 	jr	SLDstBankList_FuncBody_Join4
 SLDstBankList_FuncBody_Skip5:
@@ -1773,7 +1773,7 @@ SLDstBankList_FuncBody_Skip5:
 	ld	c, l
 	cp	l, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip6
-	ld	e, (Str_AllOption_EA09B2_0x16:24)
+	ld	e, (SLDstBankList_FuncBody_Data:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
@@ -1782,7 +1782,7 @@ SLDstBankList_FuncBody_Skip5:
 	jr	z, SLDstBankList_FuncBody_Skip6
 	dec	1, c
 	ld	(0x8a02:16), c
-	ld	c, (Str_AllOption_EA09B2_0x16:24)
+	ld	c, (SLDstBankList_FuncBody_Data:24)
 	ld	xwa, xiz
 SLDstBankList_FuncBody_Join4:
 	calr	SLDstBankList_FuncBody_Helper
@@ -2090,7 +2090,7 @@ SLDstBankList_FuncBody_Helper4_Join:
 	ld	(xsp+4), xde
 	ld	xde, xbc
 	ld	xiz, xwa
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	cp	xde, EVT_INDEXSW_DOWN
 	jr	z, SLDstBankList_FuncBody_Skip15
 	cp	xde, EVT_INDEXSW_UP
@@ -2099,7 +2099,7 @@ SLDstBankList_FuncBody_Helper4_Join:
 	jrl	nz, SLDstBankList_FuncBody_Loop3
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper3
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper4
 	ld	xwa, 0:i3
@@ -2113,7 +2113,7 @@ SLDstBankList_FuncBody_Skip15:
 	ld	xix, xde
 	cp	xde, EVT_INDEXSW_UP
 	jr	nz, SLDstBankList_FuncBody_Skip16
-	ld	e, (Str_AllOption_EA09B2_0x3A:24)
+	ld	e, (SLDstBankList_FuncBody_Data_2:24)
 	ld	a, e
 	ld	c, l
 	add	a, l
@@ -2121,25 +2121,25 @@ SLDstBankList_FuncBody_Skip15:
 	jr	nc, SLDstBankList_FuncBody_Skip16
 	add	c, e
 	ld	(0x8a06:16), c
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper3
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	ld	xwa, xiz
 	jr	SLDstBankList_FuncBody_Join7
 SLDstBankList_FuncBody_Skip16:
 	cp	xix, EVT_INDEXSW_DOWN
 	jr	nz, SLDstBankList_FuncBody_Skip17
 	ld	a, l
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	cp	l, c
 	jr	c, SLDstBankList_FuncBody_Skip17
 	sub	a, c
 	ld	(0x8a06:16), a
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper3
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	ld	xwa, xiz
 SLDstBankList_FuncBody_Join7:
 	calr	SLDstBankList_FuncBody_Helper4
@@ -2173,7 +2173,7 @@ SLDstBankList_FuncBody_Skip18:
 	inc	1, a
 	cp a, (15337966:24)
 	jr	nc, SLDstBankList_FuncBody_Skip19
-	ld	e, (Str_AllOption_EA09B2_0x3A:24)
+	ld	e, (SLDstBankList_FuncBody_Data_2:24)
 	ld	l, e
 	ld	a, c
 	extz	wa
@@ -2184,7 +2184,7 @@ SLDstBankList_FuncBody_Skip18:
 	jr	nc, SLDstBankList_FuncBody_Skip20
 	inc	1, c
 	ld	(0x8a06:16), c
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	ld	xwa, xiz
 	jr	SLDstBankList_FuncBody_Join9
 SLDstBankList_FuncBody_Skip19:
@@ -2193,7 +2193,7 @@ SLDstBankList_FuncBody_Skip19:
 	ld	c, l
 	cp	l, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip20
-	ld	e, (Str_AllOption_EA09B2_0x3A:24)
+	ld	e, (SLDstBankList_FuncBody_Data_2:24)
 	ld	a, c
 	extz	wa
 	div	wa, e
@@ -2202,7 +2202,7 @@ SLDstBankList_FuncBody_Skip19:
 	jr	z, SLDstBankList_FuncBody_Skip20
 	dec	1, c
 	ld	(0x8a06:16), c
-	ld	c, (Str_AllOption_EA09B2_0x3A:24)
+	ld	c, (SLDstBankList_FuncBody_Data_2:24)
 	ld	xwa, xiz
 SLDstBankList_FuncBody_Join9:
 	calr	SLDstBankList_FuncBody_Helper4
@@ -2389,7 +2389,7 @@ SLDstBankList_FuncBody_Helper6_Skip2:
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
-	ld	xbc, Data_SaveLoadMenuTable_0x1E
+	ld	xbc, SLDstBankList_FuncBody_Data_3
 	call	FileIO_BuildFilePath
 	lda	xiz, (0x89cd:16)
 	ld	a, (0x8a08:16)
@@ -2427,7 +2427,7 @@ SLDstBankList_FuncBody_Helper6_Join:
 	push	xiz
 	ld	(xsp+4), xde
 	ld	xiz, xwa
-	ld	e, (Data_SaveLoadMenuTable_0x22:24)
+	ld	e, (SLDstBankList_FuncBody_Data_4:24)
 	cp	xbc, EVT_INDEXSW_DOWN
 	jr	z, SLDstBankList_FuncBody_Skip24
 	cp	xbc, EVT_INDEXSW_UP
@@ -2437,7 +2437,7 @@ SLDstBankList_FuncBody_Helper6_Join:
 	ld	xwa, xiz
 	ld	c, e
 	calr	SLDstBankList_FuncBody_Helper5
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
 	ld	xwa, 0:i3
@@ -2451,7 +2451,7 @@ SLDstBankList_FuncBody_Skip24:
 	ld	xde, xbc
 	cp	xbc, EVT_INDEXSW_UP
 	jr	nz, SLDstBankList_FuncBody_Skip26
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	w, c
 	add	w, c
 	ld	a, l
@@ -2465,13 +2465,13 @@ SLDstBankList_FuncBody_Skip24:
 SLDstBankList_FuncBody_Skip25:
 	ld	(0x8a08:16), w
 SLDstBankList_FuncBody_Join12:
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper5
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2481,7 +2481,7 @@ SLDstBankList_FuncBody_Skip26:
 	cp	xde, EVT_INDEXSW_DOWN
 	jr	nz, SLDstBankList_FuncBody_Skip28
 	ld	c, l
-	ld	e, (Data_SaveLoadMenuTable_0x22:24)
+	ld	e, (SLDstBankList_FuncBody_Data_4:24)
 	cp	l, e
 	jr	c, SLDstBankList_FuncBody_Skip28
 	ld	a, e
@@ -2496,13 +2496,13 @@ SLDstBankList_FuncBody_Skip27:
 	jr	c, SLDstBankList_FuncBody_Join13
 	ld	(0x8a08:16), e
 SLDstBankList_FuncBody_Join13:
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper5
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2539,7 +2539,7 @@ SLDstBankList_FuncBody_Skip29:
 	inc	1, a
 	cp	a, (0xea0a14:24)
 	jr	nc, SLDstBankList_FuncBody_Skip31
-	ld	e, (Data_SaveLoadMenuTable_0x22:24)
+	ld	e, (SLDstBankList_FuncBody_Data_4:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
@@ -2554,10 +2554,10 @@ SLDstBankList_FuncBody_Skip29:
 	jrl	nc, SLDstBankList_FuncBody_Skip33
 	inc	1, c
 	ld	(0x8a08:16), c
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2566,10 +2566,10 @@ SLDstBankList_FuncBody_Skip29:
 SLDstBankList_FuncBody_Skip30:
 	inc	1, c
 	ld	(0x8a08:16), c
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2581,7 +2581,7 @@ SLDstBankList_FuncBody_Skip31:
 	ld	c, l
 	cp	l, 0:i3
 	jr	z, SLDstBankList_FuncBody_Skip33
-	ld	e, (Data_SaveLoadMenuTable_0x22:24)
+	ld	e, (SLDstBankList_FuncBody_Data_4:24)
 	ld	a, e
 	add	a, e
 	cp	c, a
@@ -2594,10 +2594,10 @@ SLDstBankList_FuncBody_Skip31:
 	jr	z, SLDstBankList_FuncBody_Skip33
 	dec	1, c
 	ld	(0x8a08:16), c
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -2608,10 +2608,10 @@ SLDstBankList_FuncBody_Skip32:
 	jr	ule, SLDstBankList_FuncBody_Skip33
 	dec	1, c
 	ld	(0x8a08:16), c
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	ld	xwa, xiz
 	calr	SLDstBankList_FuncBody_Helper6
-	ld	c, (Data_SaveLoadMenuTable_0x22:24)
+	ld	c, (SLDstBankList_FuncBody_Data_4:24)
 	pushw	0
 	pushw	0x8a08
 	ld	xwa, (xsp+8)
@@ -3559,7 +3559,7 @@ CmpFile_HandleShow:
 	jr CmpFile_ShowDraw
 
 CmpFile_ShowDefault:
-	lda xiz, (Data_SaveLoadMenuTable_0x62:24)
+	lda xiz, (CmpFile_ShowDefault_Data:24)
 
 CmpFile_ShowDraw:
 	lda xwa, (0x8871:16)
@@ -3605,7 +3605,7 @@ CmpFile_ScrollRedraw:
 	jr z, CmpFile_Return
 	call NotifyUIOfSelectionChange
 	ld (0x8870:16), 0
-	lda xiz, (Data_SaveLoadMenuTable_0x62:24)
+	lda xiz, (CmpFile_ShowDefault_Data:24)
 	ld (0x89f8:16), 4
 	ld wa, 3:i3
 	call FileIO_CheckRecordValid

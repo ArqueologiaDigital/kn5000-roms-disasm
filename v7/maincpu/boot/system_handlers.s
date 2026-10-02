@@ -357,7 +357,7 @@ MemCopy_SetupAndDMA:
 
 Boot_InitWorkRAM_ROMCopy1_Start:
 	ld xde, 0x3d524
-	ld xhl, CharMap_FullPermutation_0x7B0
+	ld xhl, Boot_InitWorkRAM_ROMCopy1_Start_Data
 	ld xbc, 0x219e
 	or xbc, xbc
 	jr z, Boot_InitWorkRAM_ROMCopy2_Start
@@ -372,7 +372,7 @@ Boot_InitWorkRAM_ROMCopy1_Loop:
 
 Boot_InitWorkRAM_ROMCopy2_Start:
 	ld	xde, 0xe2c2
-	ld	xhl, Naka_DrawbarReg_Table_0x4DE
+	ld	xhl, Boot_InitWorkRAM_ROMCopy2_Start_Data
 	ld	xbc, 0x931
 	or	xbc, xbc
 	jr	z, Boot_InitWorkRAM_Done
@@ -1961,6 +1961,7 @@ TaskSched_ScreenGroupTable:
 	.byte	0x5f, 0x7c, 0xf9, 0x00, 0x30, 0xc0, 0x01, 0x00
 	.byte	0x00, 0x88, 0x03, 0x00, 0xed, 0x9e, 0xfa, 0x00
 	.byte	0x32, 0xd0, 0x01, 0x00, 0x00, 0x88, 0x03, 0x00
+TaskSched_InitTimerSlots_Data:
 	.byte	0x01, 0x01, 0x01, 0x01
 	.fill	8, 1, 0x01
 	.fill	8, 1, 0x01
@@ -2030,7 +2031,7 @@ TaskSched_InitTimerSlots:
 	ld (xix + 4), xwa
 	add ix, 0x8
 	djnz8 b, TaskSched_InitTimerSlots
-	ld xhl, TaskSched_ScreenGroupTable_0x3C
+	ld xhl, TaskSched_InitTimerSlots_Data
 	ldw de, 0x4f9
 	extz xde
 	ldw bc, 0xa

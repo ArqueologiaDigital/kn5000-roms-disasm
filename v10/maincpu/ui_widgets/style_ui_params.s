@@ -115,6 +115,7 @@ StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_AltC
 	.long StyleUI_ParamBlock_MEAS
 	.long StyleUI_ParamBlock_AltD
+Scoop_SelectModeTable_2Part_Data:
 	.long StyleUI_ParamBlock_VALUE
 	.long StyleUI_ScreenData_YesCtl
 	.long StyleUI_ParamBlock_Medium
@@ -134,6 +135,7 @@ StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_AltD
 	.long StyleUI_ParamBlock_AltB
 	.long StyleUI_ParamBlock_AltE
+Scoop_InitPartDisplay_Data:
 	.long StyleUI_ParamBlock_BAL
 	.long StyleUI_ParamBlock_Common
 	.long StyleUI_ParamBlock_Extended
@@ -153,6 +155,7 @@ StyleUI_ParamBlockPtrTable:
 	.long StyleUI_ParamBlock_AltC
 	.long StyleUI_ParamBlock_MEAS
 	.long StyleUI_ParamBlock_AltD
+Scoop_SelectModeTable_2Part_Data_2:
 	.long StyleUI_ParamBlock_VALUE
 	.long StyleUI_ParamBlock_Short
 	.long StyleUI_ParamBlock_Medium

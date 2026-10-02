@@ -39,7 +39,21 @@
 ; v142/subcpu/subcpu_data_tables.s (DSP_EffNN_* / DSP2_EffNN_* blocks) and
 ; technics-docs/dsp-effect-data-zone.md.
 ; =============================================================================
-NakaData_WidgetDescriptors:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x15B8
+NakaData_WidgetDescriptors:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x1F4
+EqFormat_PositiveValue_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F4, 0x7E
+Equalizer_FormatDefault_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x272, 0x1F4
+Equalizer_FormatDefault_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x466, 0x1F4
+Equalizer_FormatDefault_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x65A, 0x1F4
+Equalizer_FormatDefault_Data_4:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x84E, 0x1F4
+Equalizer_FormatDefault_Data_5:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xA42, 0x16E
+Equalizer_FormatDefault_Data_6:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBB0, 0xA
+Equalizer_FormatDefault_Data_7:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBBA, 0x1F4
+Equalizer_FormatDefault_Data_8:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xDAE, 0x1F4
+FormatParamString_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xFA2, 0x1F4
+FormatParamString_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1196, 0x10
+FormatParamString_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x11A6, 0x1F4
+EntertainerGridCheck_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x139A, 0x196
+EntertainerGridCheck_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1530, 0x88
 DspParamUnit_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x15B8, 0xAC	; 86 x 2
 DspParamName_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1664, 0x11	; 86 x 17
 DspParamName_01_VOLUME:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1675, 0x11	; slot  1 "VOLUME"
@@ -3458,7 +3472,10 @@ Bitmap_Dredt0k:
 ; (rows of 168 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0d:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x4E18
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x9A8
+Demofeat2_ShowHide_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A8, 0x1
+FDemoText_ByteData_LayoutEngine_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A9, 0x1
+PresBox_TimerExpired_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1AA, 0x446E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] WidgetData_DrawbarPositionTable
 ; WidgetData_DrawbarPositionTable -- Historical name, kept for

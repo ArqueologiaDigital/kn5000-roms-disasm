@@ -922,8 +922,9 @@ Root_ClassCount_160:	.incbin "includes/generated/naka_widget_names_charmap.bin",
 ; [nakarest] naka_widget_names_charmap+0x624  +0x624..+0x628 (0xeada94, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeada94 not derived; readers below
 ; [nakarest] Readers: source references SliderH_Setup (ui/ui_widget_defs.s: `ld hl,
-; [nakarest] (NakaData_WidgetNames_0x624:24)`); 1 data word in Naka_DrawbarDisplay_Table1 (at
+; [nakarest] (SliderH_Setup_Data:24)`); 1 data word in Naka_DrawbarDisplay_Table1 (at
 ; [nakarest] 0xeef378).
+SliderH_Setup_Data:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x624, 0x4
 ; [nakarest] NakaInst_CHARA5W  +0x628..+0x630 (0xeada98, 8 B)
 ; [nakarest] Text (8 B at 0xeada98), first string "CHARA5W"; no registered NAKA table points
@@ -1040,13 +1041,16 @@ Root_FunctionTable_100:	.incbin "includes/generated/naka_widget_names_charmap.bi
 ; [nakarest] the table itself: Function slot 0x400 (table 0xeafff2, 352 entries,
 ; [nakarest] InitializeRoot), 352 entry pointers x 4 bytes.
 WidgetName_InitPtrTable:
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B82, 0x16
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B82, 0x15
+IvAccordion_ShowHide_UpdatePart_Data:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B97, 0x1
 ; [nakarest] WidgetName_PtrBlock_A  +0x2b98..+0x2bb0 (0xeb0008, 24 B)
 ; [nakarest] Continues the table itself: Function slot 0x400 (table 0xeafff2, 352 entries,
 ; [nakarest] InitializeRoot), 352 entry pointers x 4 bytes (starts 0xeafff2, 1386 of its 1408
 ; [nakarest] bytes are here or later).
 WidgetName_PtrBlock_A:
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B98, 0x18
+	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B98, 0x1
+IvAccordion_ShowHide_Data:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2B99, 0xE
+IvAccordion_ShowHide_Data_2:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x2BA7, 0x9
 ; [nakarest] WidgetName_PtrBlock_B1  +0x2bb0..+0x2bb1 (0xeb0020, 1 B)
 ; [nakarest] Continues the table itself: Function slot 0x400 (table 0xeafff2, 352 entries,
 ; [nakarest] InitializeRoot), 352 entry pointers x 4 bytes (starts 0xeafff2, 1362 of its 1408
@@ -2936,7 +2940,8 @@ Str_InitializeRoot:
 ; [nakarest] naka_widget_names_charmap+0x44ca  +0x44ca..+0x44cc (0xeb193a, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xeb193a not derived; readers below
 ; [nakarest] Readers: source references SliderV_Setup (ui/ui_widget_defs.s: `ld hl,
-; [nakarest] (Str_InitializeRoot_0x10:24)`).
+; [nakarest] (SliderV_Setup_Data:24)`).
+SliderV_Setup_Data:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CA, 0x2
 ; [nakarest] naka_widget_names_charmap+0x44cc  +0x44cc..+0x44d0 (0xeb193c, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeb193c not derived; readers below

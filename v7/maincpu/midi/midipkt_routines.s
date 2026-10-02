@@ -42,7 +42,7 @@ MidiPkt_DispatchViaTable_4DA6:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld	xbc, ToneKit_FrequencyTable_0x396
+	ld	xbc, MidiPkt_DispatchViaTable_4DA6_Data
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -69,7 +69,7 @@ MidiPkt_DispatchViaTable_4DAE:
 	push xiz
 	ld xiz, xwa
 	ld xwa, xiz
-	ld	xbc, ToneKit_FrequencyTable_0x39E
+	ld	xbc, MidiPkt_DispatchViaTable_4DAE_Data
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -100,7 +100,7 @@ MidiPkt_BuildControl:
 	cp a, 0:i3
 	jr	z, MidiPkt_DispatchViaTable_4DAE_Done
 	ld xwa, xiz
-	ld	xbc, ToneKit_FrequencyTable_0x39E
+	ld	xbc, MidiPkt_DispatchViaTable_4DAE_Data
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -126,7 +126,7 @@ MidiPkt_DispatchSpecialType:
 	ld a, (xiz + 1)
 	cp a, 0x11
 	jr	nz, MidiPkt_DispatchSpecialType_Type10
-	ld	xwa, MidiPkt_EventType_Table_0x584
+	ld	xwa, MidiPkt_DispatchSpecialType_Data
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
@@ -134,7 +134,7 @@ MidiPkt_DispatchSpecialType:
 MidiPkt_DispatchSpecialType_Type10:
 	cp a, 0x10
 	jr	nz, MidiPkt_DispatchSpecialType_Default
-	ld	xwa, MidiPkt_EventType_Table_0x58A
+	ld	xwa, MidiPkt_DispatchSpecialType_Type10_Data
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
@@ -144,7 +144,7 @@ MidiPkt_DispatchSpecialType_SendAndUpdate:
 	jr	MidiPkt_DispatchSpecialType_Return
 MidiPkt_DispatchSpecialType_Default:
 	ld xwa, xiz
-	ld	xbc, ToneKit_FrequencyTable_0x3B6
+	ld	xbc, MidiPkt_DispatchSpecialType_SendAndUpdate_Data
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -183,7 +183,7 @@ MidiPkt_EnqueueControl_3354:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x300
+	ld	xiy, MidiPkt_EnqueueControl_3354_Data
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -199,7 +199,7 @@ MidiPkt_EnqueueControl_3354:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr	z, MidiPkt_EnqueueControl_3354_Return
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -236,7 +236,7 @@ MidiPkt_EnqueueExtended_Data:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x304
+	ld	xiy, MidiPkt_EnqueueControl_3354_ShiftBits_Data
 	lda	xix, (xsp+4)
 	ldi85
 	ldiw
@@ -250,7 +250,7 @@ MidiPkt_EnqueueExtended_Data:
 	ld	xwa, (xiz)
 	cpw	(xwa+4), 0
 	jr	z, MidiPkt_EnqueueExtended_Data_Epilogue
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (xiz+4)
@@ -287,7 +287,7 @@ SeqAlt_DescriptorBlock_Data_Helper:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x308
+	ld	xiy, MidiPkt_EnqueueControl_335C_Data
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -303,7 +303,7 @@ SeqAlt_DescriptorBlock_Data_Helper:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr	z, MidiPkt_EnqueueControl_335C_Return
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -338,7 +338,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	dec 6, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x30C
+	ld	xiy, MidiPkt_EnqueueControl_3358_Data
 	lda xix, (xsp + 4)
 	ld bc, 2:i3
 	ldirw
@@ -355,7 +355,7 @@ SeqAlt_DescriptorBlock_Data_Helper2:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jrl	z, MidiPkt_EnqueueControl_3358_Return
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -421,7 +421,7 @@ VocalistPage2OKFunc_Helper2_Helper:
 	lda xsp, (xsp - 14)
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x312
+	ld	xiy, MidiPkt_EnqueueControl_335E_Data
 	lda xix, (xsp + 4)
 	ld bc, 2:i3
 	ldirw
@@ -433,7 +433,7 @@ VocalistPage2OKFunc_Helper2_Helper:
 	calr	MidiPkt_CheckGateCondition
 	cp hl, 0xffff
 	jr	z, MidiPkt_EnqueueControl_335E_Return
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xsp + 14)
@@ -480,7 +480,7 @@ MidiPkt_EnqueueControl_3364:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x318
+	ld	xiy, MidiPkt_EnqueueControl_3364_Data
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -493,7 +493,7 @@ MidiPkt_EnqueueControl_3364:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jr	z, MidiPkt_EnqueueControl_3364_Return
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xwa, (xiz + 4)
@@ -536,7 +536,7 @@ MidiPkt_EnqueueControl_3368:
 	dec 4, xsp
 	push xiz
 	ld xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x31C
+	ld	xiy, MidiPkt_EnqueueControl_3368_Data
 	lda xix, (xsp + 4)
 	ldi85
 	ldiw
@@ -549,14 +549,14 @@ MidiPkt_EnqueueControl_3368:
 	ld a, (xwa + 8)
 	and a, (xbc + 3)
 	jrl	z, MidiPkt_EnqueueControl_3368_Return
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld a, (0xfd99:16)
 	and a, 0x1
 	cp a, 1:i3
 	jr	nz, MidiPkt_EnqueueControl_3368_NoPedal
-	ld	xwa, ToneKit_FrequencyTable_0xB2
+	ld	xwa, MidiPkt_EnqueueControl_3368_Data_2
 	ld bc, 6:i3
 	call	ArpQueue_Enqueue
 	ld xbc, (xiz)
@@ -609,7 +609,7 @@ MidiPkt_BuildControl_Helper:
 	lda	xsp, (xsp-10)
 	push	xiz
 	ld	xiz, xwa
-	ld	xiy, MidiPkt_EventType_Table_0x320
+	ld	xiy, MidiPkt_EnqueueControl_3368_FormatData_Data
 	lda	xix, (xsp+4)
 	ldi85
 	ldiw
@@ -625,7 +625,7 @@ MidiPkt_BuildControl_Helper:
 	ld	a, (xwa+8)
 	and	a, (xbc+3)
 	jr	z, MidiPkt_EnqueueControl_3364_Epilogue
-	ld	xwa, MidiPkt_EventType_Table_0x590
+	ld	xwa, MidiPkt_BuildControl_Data_2
 	ld	bc, 6:i3
 	call	ArpQueue_Enqueue
 	pushw	6
@@ -692,7 +692,7 @@ MidiPkt_CheckGateCondition_Second:
 ; Kept because another v7 file references this address by this name.
 MidiPkt_EnqueueControl_335C:
 	muls wa, 0x6
-	lda	xbc, (ToneKit_FrequencyTable_0x3F4:24)
+	lda	xbc, (MidiPkt_CheckGateCondition_Second_Data:24)
 	lda	xbc, (xbc+wa)
 	ld xde, (xbc)
 	ld a, (xbc + 4)
@@ -710,7 +710,7 @@ MidiPkt_DispatchViaTable_4DCE:
 	push xiz
 	ld xiz, (xsp + 16)
 	ld xwa, xiz
-	ld	xbc, ToneKit_FrequencyTable_0x3BE
+	ld	xbc, MidiPkt_DispatchViaTable_4DCE_Data
 	calr	MidiPkt_MatchParamInTable
 	lda xwa, (xsp + 4)
 	lda xbc, (xwa + 4)
@@ -796,7 +796,7 @@ MidiPkt_SendBankSelect:
 	cp l, 0x2c
 	ret nz
 MidiPkt_SendBankSelect_Send:
-	ld	xwa, MidiPkt_EventType_Table_0x560
+	ld	xwa, MidiPkt_ArpPopReturn_Data_3
 	ld bc, 5:i3
 	call	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
@@ -974,7 +974,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldw	bc, 32
 	ldw	de, 120
 	call	UIState_CheckAndRenderBitmap_Helper
-	ld	xiy, MidiPkt_EventType_Table_0x340
+	ld	xiy, MidiPkt_SendBankSelect_Send_Data_2
 	lda	xix, (xsp+10)
 	ldiw
 	ldiw
@@ -982,7 +982,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_EventType_Table_0x344
+	ld	xiy, MidiPkt_SendBankSelect_Send_Data_3
 	lda	xix, (xsp+6)
 	ldiw
 	ldiw
@@ -990,7 +990,7 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_EventType_Table_0x348
+	ld	xiy, MidiPkt_SendBankSelect_Send_Data_4
 	lda	xix, (xsp+2)
 	ldiw
 	ldiw
@@ -1009,7 +1009,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
 	ldw	bc, 32
 	ld	de, 0:i3
 	call	UIState_CheckAndRenderBitmap_Helper
-	ld	xiy, MidiPkt_EventType_Table_0x34C
+	ld	xiy, MidiPkt_SendBankSelect_Send_Data_5
 	lda	xix, (xsp+10)
 	ldiw
 	ldiw
@@ -1017,7 +1017,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_EventType_Table_0x350
+	ld	xiy, MidiPkt_SendBankSelect_Send_Data_6
 	lda	xix, (xsp+6)
 	ldiw
 	ldiw
@@ -1025,7 +1025,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
 	ldto_berp	c, 251
 	ld	(xwa), c
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper
-	ld	xiy, MidiPkt_EventType_Table_0x354
+	ld	xiy, MidiPkt_SendBankSelect_Send_Data_7
 	lda	xix, (xsp+2)
 	ldiw
 	ldiw
@@ -1296,35 +1296,35 @@ SysEx_DispatchByChannel:
 	jp_rr	8, xix, wa
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x468
+	ld	xwa, SysEx_DispatchByChannel_Data
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x472
+	ld	xwa, SysEx_DispatchByChannel_Data_2
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x480
+	ld	xwa, SysEx_DispatchByChannel_Data_3
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x48A
+	ld	xwa, SysEx_DispatchByChannel_Data_4
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 8
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x498
+	ld	xwa, SysEx_DispatchByChannel_Data_5
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 8
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x4A8
+	ld	xwa, SysEx_DispatchByChannel_Data_6
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x4B8
+	ld	xwa, SysEx_DispatchByChannel_Data_7
 	jr	SysEx_DispatchByChannel_Entry
 	cp	c, 7:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x4C6
+	ld	xwa, SysEx_DispatchByChannel_Data_8
 SysEx_DispatchByChannel_Entry:
 	ld	hl, (xwa+de)
 	ret
@@ -1345,35 +1345,35 @@ SysEx_DispatchByChannel_49:
 	jp_rr	8, xix, wa
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x4E4
+	ld	xwa, SysEx_DispatchByChannel_49_Data
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x4EE
+	ld	xwa, SysEx_DispatchByChannel_49_Data_2
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x4F8
+	ld	xwa, SysEx_DispatchByChannel_49_Data_3
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x502
+	ld	xwa, SysEx_DispatchByChannel_49_Data_4
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x50C
+	ld	xwa, SysEx_DispatchByChannel_49_Data_5
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 5:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x516
+	ld	xwa, SysEx_DispatchByChannel_49_Data_6
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 6:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x520
+	ld	xwa, SysEx_DispatchByChannel_49_Data_7
 	jr	SysEx_DispatchByChannel_49_Entry
 	cp	c, 6:i3
 	ret	nc
-	ld	xwa, MidiPkt_EventType_Table_0x52C
+	ld	xwa, SysEx_DispatchByChannel_49_Data_8
 SysEx_DispatchByChannel_49_Entry:
 	ld	hl, (xwa+de)
 	ret

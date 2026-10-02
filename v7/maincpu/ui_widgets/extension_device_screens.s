@@ -781,57 +781,67 @@ InitializeToshi_Str_TT_EXT:		.incbin "includes/generated/naka_extension_device.b
 ; [nakarest] naka_extension_device+0x2814  +0x2814..+0x29e0 (0xed8fe0, 460 B)
 ; [nakarest] purpose not established: layout of 460 B at 0xed8fe0 not derived; readers below
 ; [nakarest] Readers: source references DSPCfg_ResetEntryLoop (audio/tonegen_fileio_handlers.s:
-; [nakarest] `ld xbc, NakaInst_ExtDevice_Screens_0x2814`).
+; [nakarest] `ld xbc, DSPCfg_ResetEntryLoop_Data`).
+DSPCfg_ResetEntryLoop_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2814, 0x1CC
 ; [nakarest] naka_extension_device+0x29e0  +0x29e0..+0x2b0c (0xed91ac, 300 B)
 ; [nakarest] purpose not established: layout of 300 B at 0xed91ac not derived; readers below
 ; [nakarest] Readers: source references DSPCfg_Init_Entry0 (audio/tonegen_fileio_handlers.s: `ld
-; [nakarest] xbc, NakaInst_ExtDevice_Screens_0x29E0`), DSPCfg_ResetAuxEntryLoop
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld xbc, NakaInst_ExtDevice_Screens_0x29E0`).
+; [nakarest] xbc, DSPCfg_Init_Entry0_Data`), DSPCfg_ResetAuxEntryLoop
+; [nakarest] (audio/tonegen_fileio_handlers.s: `ld xbc, DSPCfg_Init_Entry0_Data`).
+DSPCfg_Init_Entry0_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x29E0, 0x12C
 ; [nakarest] naka_extension_device+0x2b0c  +0x2b0c..+0x2b26 (0xed92d8, 26 B)
 ; [nakarest] purpose not established: layout of 26 B at 0xed92d8 not derived; readers below
 ; [nakarest] Readers: source references ToneGen_ApplyMaskTable (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xwa, (NakaInst_ExtDevice_Screens_0x2B0C:24)`).
+; [nakarest] `lda xwa, (ToneGen_ApplyMaskTable_Data:24)`).
+ToneGen_ApplyMaskTable_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2B0C, 0x1A
 ; [nakarest] naka_extension_device+0x2b26  +0x2b26..+0x2b3e (0xed92f2, 24 B)
 ; [nakarest] purpose not established: layout of 24 B at 0xed92f2 not derived; readers below
 ; [nakarest] Readers: source references Voice_InitChannelLoop (audio/tonegen_fileio_handlers.s:
-; [nakarest] `ld xbc, NakaInst_ExtDevice_Screens_0x2B26`).
+; [nakarest] `ld xbc, Voice_InitChannelLoop_Data`).
+Voice_InitChannelLoop_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2B26, 0x18
 ; [nakarest] naka_extension_device+0x2b3e  +0x2b3e..+0x2b6e (0xed930a, 48 B)
 ; [nakarest] purpose not established: layout of 48 B at 0xed930a not derived; readers below
 ; [nakarest] Readers: source references DSPCfg_Init_BoundsCheck
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (NakaInst_ExtDevice_Screens_0x2B3E:24)`).
+; [nakarest] (DSPCfg_Init_BoundsCheck_Data:24)`).
+DSPCfg_Init_BoundsCheck_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2B3E, 0x30
 ; [nakarest] naka_extension_device+0x2b6e  +0x2b6e..+0x2e3c (0xed933a, 718 B)
 ; [nakarest] purpose not established: layout of 718 B at 0xed933a not derived; readers below
 ; [nakarest] Readers: source references ToneGen_FlashVerify (audio/tonegen_fileio_handlers.s:
 ; [nakarest] `lda xhl, (ToneGen_FlashVerify_Str_HK:24)`).
-ToneGen_FlashVerify_Str_HK:	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0x2CE	; "HK "
+ToneGen_FlashVerify_Str_HK:	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0xFA	; "HK "
+ToneGen_FlashWriteAll_Data:	.incbin "includes/generated/naka_extension_device.bin", 0x2C68, 0xEA
+ToneGen_FlashWriteAll_Data_2:	.incbin "includes/generated/naka_extension_device.bin", 0x2D52, 0xEA
 ; [nakarest] naka_extension_device+0x2e3c  +0x2e3c..+0x2e4e (0xed9608, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xed9608 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_IndicatorJumpTable
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (NakaInst_ExtDevice_Screens_0x2E3C:24)`).
+; [nakarest] (CtrlPanel_IndicatorJumpTable_Data:24)`).
+CtrlPanel_IndicatorJumpTable_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2E3C, 0x12
 ; [nakarest] naka_extension_device+0x2e4e  +0x2e4e..+0x2e60 (0xed961a, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xed961a not derived; readers below
 ; [nakarest] Readers: source references Audio_DispatchCommand (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xix, (NakaInst_ExtDevice_Screens_0x2E4E:24)`).
+; [nakarest] `lda xix, (Audio_DispatchCommand_Data:24)`).
+Audio_DispatchCommand_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2E4E, 0x12
 ; [nakarest] naka_extension_device+0x2e60  +0x2e60..+0x3452 (0xed962c, 1522 B)
 ; [nakarest] purpose not established: layout of 1522 B at 0xed962c not derived; readers below
 ; [nakarest] Readers: source references PanelDisplay_DispatchByMode
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
-; [nakarest] (NakaInst_ExtDevice_Screens_0x2E60:24)`); 32 data words in
+; [nakarest] (PanelDisplay_DispatchByMode_Data:24)`); 32 data words in
 ; [nakarest] Encoder_PrepareCallback_PtrTable (at 0xed9c1e, 0xed9c22, 0xed9c26), which is read
 ; [nakarest] by Encoder_PrepareCallback (audio/tonegen_fileio_handlers.s: `ld
 ; [nakarest] XWA,Encoder_PrepareCallback_PtrTable`); 32 data words in
 ; [nakarest] Encoder_PrepareCallback_PtrTable_2 (at 0xed9c9e, 0xed9ca2, 0xed9ca6), which is read
 ; [nakarest] by Encoder_PrepareCallback (audio/tonegen_fileio_handlers.s: `ld
 ; [nakarest] XWA,Encoder_PrepareCallback_PtrTable_2`).
+PanelDisplay_DispatchByMode_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x2E60, 0x5F2
 ; [nakarest] naka_extension_device+0x3452  +0x3452..+0x34d2 (0xed9c1e, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xed9c1e not derived; readers below
@@ -852,7 +862,8 @@ SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_devi
 FileIO_BytecodeData_Code_Entry8_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3598, 0x1E	; 6 x 32-bit pointer
 FileIO_BytecodeData_Code_Entry8_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x35B6, 0x122	; 6 x 32-bit pointer
 FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0x100	; 22 x 32-bit pointer
-ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x88	; 8 x 32-bit pointer
+ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x7C	; 8 x 32-bit pointer
+Audio_CopyStateFromROM_Data:	.incbin "includes/generated/naka_extension_device.bin", 0x3854, 0xC
 ; [nakarest] EffectMode_DispatchTable  +0x3860..+0x3870 (0xeda02c, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeda02c not derived; readers below
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
@@ -863,7 +874,8 @@ EffectMode_DispatchTable:
 ; [nakarest] naka_extension_device+0x3870  +0x3870..+0x38f0 (0xeda03c, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xeda03c not derived; readers below
 ; [nakarest] Readers: source references MidiCC_LookupHandler (audio/audio_control_engine.s: `lda
-; [nakarest] xbc, (EffectMode_DispatchTable_0x10:24)`).
+; [nakarest] xbc, (MidiCC_LookupHandler_Data:24)`).
+MidiCC_LookupHandler_Data:
 	.incbin "includes/generated/naka_extension_device.bin", 0x3870, 0x80
 ; [nakarest] ENCODER_HANDLER_TABLE  +0x38f0..+0x3970 (0xeda0bc, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xeda0bc not derived; readers below
