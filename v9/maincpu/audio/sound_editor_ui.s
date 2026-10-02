@@ -15190,7 +15190,7 @@ S2c_GridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -15208,7 +15208,7 @@ S2c_GridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+10)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -15225,7 +15225,7 @@ S2cGridCheck_Join:
 S2c_GridCheck_Dispatch:
 	lda xbc, (xsp + 10)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -16567,7 +16567,7 @@ EasyCmp_DialGrid:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -16578,7 +16578,7 @@ EasyCmp_DialGrid:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -16774,7 +16774,7 @@ EasyCmp_GridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -16799,7 +16799,7 @@ EasyCmpGridCheck_Skip:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -16823,7 +16823,7 @@ EasyCmpGridCheck_Join:
 EasyCmp_GridCheck_EventEnc:
 	lda xbc, (xsp + 20)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -17785,7 +17785,7 @@ MspRGrpSetGridCheck_DataBlock:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -17810,7 +17810,7 @@ MspRGrpSetGridCheck_Skip:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -17834,7 +17834,7 @@ MspRGrpSetGridCheck_Join:
 RgpSetBnk_GridCheck_EventEnc:
 	lda xhl, (xsp + 20)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
@@ -18001,7 +18001,7 @@ MspRGrpSetBnk_InnerLoop:
 	ldto_berp A, 0xfb
 	extz wa
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld xwa, 0xcc0003
@@ -18411,7 +18411,7 @@ AcSndArgGrid_Init:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -18422,7 +18422,7 @@ AcSndArgGrid_Init:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -18716,7 +18716,7 @@ SndArgGridCheck:
 	push xiz
 	ld xiy, xbc
 	ld wa, de
-	srl xde, 0
+	srl xde, 16
 	ldfr_werp WA, 0xe2
 	ldiw_erp 0xea, 0
 	ld wa, de

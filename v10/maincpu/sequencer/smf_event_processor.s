@@ -93,7 +93,7 @@ VoiceChannel_GetStatusBank2First:
 	pop xix
 
 VoiceChannel_CombineStatusBits:
-	rlc_i_8 l, 2
+	rlc l, 2
 	and l, 0x1
 	sla a, 1
 	or a, l
@@ -1499,7 +1499,7 @@ SMF_WriteRPN_FileUnderflow4:
 SMF_WriteRPN_FineTuneLSB:
 	ld l, c
 	and l, 0x1
-	rrc_i_8 l, 2
+	rrc l, 2
 	ld w, 0x26:opc
 	pushw wa
 	call SMF_WriteByteLoop
@@ -2196,7 +2196,7 @@ SMF_ProgramChange_ProcessPatch:
 	ld (6746:16), l
 	ld l, (4211:16)
 	and l, 0x2
-	rrc_i_8 l, 2
+	rrc l, 2
 	ld a, (4216:16)
 	and a, 0x7f
 	or a, l
@@ -2491,7 +2491,7 @@ SMF_CC_RPN_WriteCC6_DataEntry:
 	ld l, (4215:16)
 	ld h, (4211:16)
 	and h, 0x1
-	rrc_i_8 h, 2
+	rrc h, 2
 	srl l, 1
 	or l, h
 	pushw wa
@@ -2516,7 +2516,7 @@ SMF_CC_RPN_WriteCC38_DataEntryLSB:
 	ld w, 0x26:opc
 	ld l, (4215:16)
 	and l, 0x1
-	rrc_i_8 l, 2
+	rrc l, 2
 	pushw wa
 	call SMF_WriteByteLoop
 	popw wa
@@ -4510,7 +4510,7 @@ SeqStep_FileSectorProcess:
 	add (xbc), xwa
 	ld xwa, 0:i3
 	ld a, (xde)
-	sll xwa, 0
+	sll xwa, 16
 	add xhl, xwa
 	ld xbc, xix
 	ld xde, (xbc)
@@ -4519,7 +4519,7 @@ SeqStep_FileSectorProcess:
 	ld xwa, 0:i3
 	ld a, (xde)
 	sll xwa, 8
-	sll xwa, 0
+	sll xwa, 16
 	add xhl, xwa
 	ret
 
@@ -4561,7 +4561,7 @@ SeqStep_FileSectorDone:
 	ld	xwa, 1:i3
 	add	(xde), xwa
 	ld	xwa, xhl
-	srl	xwa, 0
+	srl	xwa, 16
 	; Sprintf_FillToVectors (data pointer)
 	and	xwa, 255
 	ld	(xix), a
@@ -4570,7 +4570,7 @@ SeqStep_FileSectorDone:
 	add	(xbc), xwa
 	ld	xwa, xhl
 	srl	xwa, 8
-	srl	xwa, 0
+	srl	xwa, 16
 	and	xwa, 255
 	ld	(xde), a
 	ret
@@ -4688,12 +4688,12 @@ SeqStep_FileSectorReturn:
 	lda	xbc, (xwa+:1)
 	ld	(xsp+4), xwa
 	ld	xwa, (xiz+19)
-	srl	xwa, 0
+	srl	xwa, 16
 	and	xwa, 255
 	ld	(xbc), a
 	ld	xwa, (xiz+19)
 	srl	xwa, 8
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	c, a
 	ld	xwa, (xsp+4)
 	ld	(xwa), c

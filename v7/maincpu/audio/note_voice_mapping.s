@@ -21450,7 +21450,7 @@ ProcessMidiConverge_Block:
 	jrl	lt, ToneGen_VoiceReset_Return
 	ld	xwa, 0:i3
 	ld	a, l
-	sll	xwa, 0
+	sll	xwa, 16
 	and	xwa, 0xff0000
 	add	(0xeb37:16), xwa
 	calr	RingBuffer_ReadByte
@@ -21460,7 +21460,7 @@ ProcessMidiConverge_Block:
 	ld	xwa, 0:i3
 	ld	a, l
 	sll	xwa, 8
-	sll	xwa, 0
+	sll	xwa, 16
 	and	xwa, 0xff000000
 	add	(0xeb37:16), xwa
 	calr	RingBuffer_ReadByte
@@ -21622,10 +21622,10 @@ VoiceReset_Return_LoadDRAM2:
 	srl	xwa, 8
 	ld	(xsp + 5), a
 	ld	xwa, xhl
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	(xsp + 6), a
 	srl	xhl, 8
-	srl	xhl, 0
+	srl	xhl, 16
 	ld	a, l
 	ld	(xsp + 7), a
 	inc4w_erp	0xfa
@@ -23651,7 +23651,7 @@ Param_SignExtendReturn_Skip12:
 	jrl	z, Param_SignExtendReturn_Skip16
 	ld	xwa, xhl
 	sra	xwa, 15
-	sra	xwa, 0
+	sra	xwa, 16
 	and	xwa, 0x3fff
 	add	xwa, xhl
 	and	xwa, 0xffffc000
@@ -23827,7 +23827,7 @@ Param_SignExtendReturn_Return:
 	jr	z, Param_SignExtendReturn_Skip22
 	ld	xwa, xhl
 	sra	xwa, 15
-	sra	xwa, 0
+	sra	xwa, 16
 	and	xwa, 0x3fff
 	add	xwa, xhl
 	and	xwa, 0xffffc000
@@ -25655,29 +25655,31 @@ HdaeRom_DataDispatch_Block3:
 	dec	1, xix
 	cp	xix, xhl
 	jr	nc, -13
+; For QE = 0..127 and DE = 2*QE: XHL = XWA + 0x49A7 + DE, then bits 5..4 of
+; the byte at XHL+1 become 0b10 (clear 0x30, set bit 5; XBC = XWA + exts(BC)
+; reaches the same byte).  Re-framed 2026-10-02 from MAME unidasm's reading
+; at this label: the source had cut `lda xhl, (xwa+bc)` (f3 07 e0 e4 33) into
+; `.byte 0xf3 / reti / .byte 0xe0, 0xe4 ...`, and that framing spelled a
+; rotate whose count byte the CPU reads as 3 as `rrc_i_8 l, 19`.
 HdaeRom_DataDispatch_Block3_Skip:
-	.byte 0xb3, 0x00
-; SendPartDataBlock_Data2 is kept at this address only for ui_widgets/naka_debug_naming.c, ui_widgets/naka_debug_naming_link.ld, ui_widgets/naka_disk_warning.c, ui_widgets/naka_disk_warning_link.ld, ui_widgets/naka_widget_descriptors.c, ui_widgets/naka_widget_descriptors_link.ld, ui_widgets/naka_widget_tables_2.c, ui_widgets/naka_widget_tables_2_link.ld; v10's SendPartDataBlock_Data2 is the code at 0xFEF826
-SendPartDataBlock_Data2:
-	.byte 0x01
-	ldib_erp	234, 0
+	ld	(xhl), 1
+	ldib_erp	234, 0	; ld QE,0 (the assembler has no byte-register name for QE yet)
 	ld	de, 0:i3
+HdaeRom_DataDispatch_Block3_Loop:
 	ld	bc, de
 	add	bc, 0x49a7
-	.byte	0xf3
-	reti
-	.byte	0xe0, 0xe4
-	ldw	hl, 395
-	push	xix
-	rrc_i_8	l, 19
-; SendPartDataBlock_Data3 is kept at this address only for ui_widgets/naka_effects_seq.c, ui_widgets/naka_effects_seq_link.ld; v10's SendPartDataBlock_Data3 is the code at 0xFEF83D
-SendPartDataBlock_Data3:
+	lda	xhl, (xwa+bc)
+	and	(xhl+1), 0xcf
+	exts	xbc
+SendPartDataBlock_Data3:	; kept: ui_widgets/naka_effects_seq_link.ld names this address
 	add	xbc, xwa
-	.byte	0xb9, 0x01, 0xbd, 0xc7
-	inc	1, xde
+	set	5, (xbc+1)
+	incb_erp	234, 1	; inc 1,QE
 	inc	2, de
-	.byte	0xc7
-	cp	xde, 0xedf6780
+	cp_erpb	234, 0x80	; cp QE,0x80
+	jr	c, HdaeRom_DataDispatch_Block3_Loop
+	ret
+	.set	SendPartDataBlock_Data2, HdaeRom_DataDispatch_Block3_Skip + 2	; inside `ld (xhl), 1`; kept for the C link scripts that name it
 ; HDAE ROM alt dispatch handler
 HdaeRom_AltHandler:
 	pushw	iz

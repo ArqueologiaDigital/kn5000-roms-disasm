@@ -3538,7 +3538,7 @@ HDAE5000_AcHddNamingWindowProc_Case9:
 	ld_sril	xhl, (xhl + RootFn_InheritedProc)
 	call	(xhl)
 	ld xwa, (xsp + 0x28)                    ; ld XWA,(XSP+0x28)
-	srl	xwa, 0x00
+	srl	xwa, 16
 	ld	qwa, 0
 	cp	wa, 0:i3
 	jrl nz, .LRF_265e                      ; [7e 17 01] jrl NZ,0x28265e

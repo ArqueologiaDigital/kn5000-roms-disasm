@@ -2640,7 +2640,7 @@ MainPmanCtrl_Case2:
 MainPmanCtrl_Case3:
 	ld xiz, xde
 	ld xwa, (xiz)
-	srl xwa, 0
+	srl xwa, 16
 	ld qwa, 0
 	ld xbc, (xiz)
 	pushm (xiz+6)
@@ -2650,7 +2650,7 @@ MainPmanCtrl_Case3:
 MainPmanCtrl_Case4:
 	ld xiz, xde
 	ld xwa, (xiz)
-	srl xwa, 0
+	srl xwa, 16
 	ld qwa, 0
 	ld xbc, (xiz)
 	pushm (xiz+6)
@@ -2660,7 +2660,7 @@ MainPmanCtrl_Case4:
 MainPmanCtrl_Case5:
 	ld xiz, xde
 	ld xwa, (xiz)
-	srl xwa, 0
+	srl xwa, 16
 	ld qwa, 0
 	ld xbc, (xiz)
 	call SndParam_LookupViaEncode

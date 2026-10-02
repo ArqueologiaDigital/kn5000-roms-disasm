@@ -21552,7 +21552,7 @@ SeqVoice_DispatchEventToHandler:
 	sll xbc, 8
 	ld xwa, 0:i3
 	ld a, (xsp + 2)
-	sll xwa, 0
+	sll xwa, 16
 	ld xix, xwa
 	add xix, xbc
 	ld h, 0x0:opc
@@ -21607,7 +21607,7 @@ SeqVoice_PostStatus_Loop:
 	extz xbc
 	ld xwa, 0:i3
 	ld a, (xsp)
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld xwa, 0xffffffff
@@ -21692,7 +21692,7 @@ AppEvent_ToggleSetStatus:
 	extz xhl
 	ld xwa, 0:i3
 	ld a, (xsp + 4)
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xhl
 	ld xwa, 0xffffffff
@@ -21742,7 +21742,7 @@ SeqState_Case3:
 	extz xhl
 	ld xwa, 0:i3
 	ld a, (xsp + 4)
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xhl
 	ld xwa, 0xffffffff
@@ -21859,7 +21859,7 @@ AppEvent_9AStoreAndPost:
 	extz xhl
 	ld xwa, 0:i3
 	ld a, (xsp + 4)
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xhl
 	ld xwa, 0xffffffff

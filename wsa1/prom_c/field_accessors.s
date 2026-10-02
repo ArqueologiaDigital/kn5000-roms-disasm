@@ -3746,7 +3746,7 @@ Pack104_StageRegs_00C0_0100_0240__FC4AB5:
 	push	xbc                                   ; FC4AC6  push XBC
 	push	xix                                   ; FC4AC7  push XIX
 	call	Multiply32                              ; FC4AC8  call 0xfcb11b
-	srl	xiy, 0                                 ; FC4ACC  srl 0x00,XIY
+	srl	xiy, 16                                ; FC4ACC  srl 0x00,XIY
 	ld	hl, iy                                  ; FC4ACF  ld HL,IY
 	ld	xbc, (xiz+8)                            ; FC4AD1  ld XBC,(XIZ+0x08)
 	ld	(xbc+18), iy                            ; FC4AD4  ld (XBC+0x12),IY
@@ -4966,7 +4966,7 @@ Dev104_PackStagingStruct__FC534A:
 	push	xbc                                   ; FC535B  push XBC
 	push	xix                                   ; FC535C  push XIX
 	call	Multiply32                              ; FC535D  call 0xfcb11b
-	srl	xiy, 0                                 ; FC5361  srl 0x00,XIY
+	srl	xiy, 16                                ; FC5361  srl 0x00,XIY
 	ld	xbc, (xiz+8)                            ; FC5364  ld XBC,(XIZ+0x08)
 	ld	(xbc+14), iy                            ; FC5367  ld (XBC+0x0e),IY
 	ld	xbc, (xiz-4)                            ; FC536A  ld XBC,(XIZ+0xfc)
@@ -5122,7 +5122,7 @@ Dev104_PackStagingStruct__FC54C0:
 	push	xbc                                   ; FC54D1  push XBC
 	push	xix                                   ; FC54D2  push XIX
 	call	Multiply32                              ; FC54D3  call 0xfcb11b
-	srl	xiy, 0                                 ; FC54D7  srl 0x00,XIY
+	srl	xiy, 16                                ; FC54D7  srl 0x00,XIY
 	ld	xbc, (xiz+8)                            ; FC54DA  ld XBC,(XIZ+0x08)
 	ld	(xbc+16), iy                            ; FC54DD  ld (XBC+0x10),IY
 	ld	xbc, (xiz-4)                            ; FC54E0  ld XBC,(XIZ+0xfc)

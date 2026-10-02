@@ -8243,7 +8243,7 @@ SeqTimer_ComputeRegValue:
 SeqTimer_AdjustForMode4:
 	div xde, wa
 	ld xbc, xde
-	srl xbc, 0
+	srl xbc, 16
 	srl wa, 1
 	cp bc, wa
 	jr c, SeqTimer_RoundUp

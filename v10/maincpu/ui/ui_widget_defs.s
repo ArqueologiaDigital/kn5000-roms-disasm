@@ -58,7 +58,7 @@ AcGridBox_Init:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -69,7 +69,7 @@ AcGridBox_Init:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -268,7 +268,7 @@ GridCheck_JumpEnd:
 GridCheck_CellSelect:
 	lda xbc, (xsp + 10)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -1483,7 +1483,7 @@ MainLswPartPut:
 	extz xbc
 	ld de, iz
 	extz xde
-	sll xde, 0
+	sll xde, 16
 	add xde, xbc
 	ld xwa, (xsp + 2)
 	ld (xwa), xde
@@ -1551,7 +1551,7 @@ MainLswPartAdd:
 	extz xbc
 	ld de, iz
 	extz xde
-	sll xde, 0
+	sll xde, 16
 	add xde, xbc
 	ld xwa, (xsp + 2)
 	ld (xwa), xde
@@ -1614,7 +1614,7 @@ MainLswPartGet:
 	extz xbc
 	ld de, iz
 	extz xde
-	sll xde, 0
+	sll xde, 16
 	add xde, xbc
 	ld xwa, (xsp + 2)
 	ld (xwa), xde
@@ -3558,7 +3558,7 @@ PsWideESBox_GetEditRange:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 20)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ldfr_werp WA, 0xfa
 	ld xwa, (xsp + 20)
@@ -4582,7 +4582,7 @@ AcIndexToggle_OK_SetValue:
 	extz xbc
 	ld wa, (xwa + 40)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld xwa, 0xffffffff
@@ -4628,7 +4628,7 @@ AcIndexToggle_Select:
 	cpw (xwa), 0xffff
 	jr z, AcIndexToggle_ReturnZero
 	ld xbc, (xsp + 8)
-	srl xbc, 0
+	srl xbc, 16
 	ldiw_erp 0xe6, 0
 	ld de, (xwa)
 	ld wa, de
@@ -4692,7 +4692,7 @@ PsWideToggle_GetBounds:
 	ld xwa, (xsp + 8)
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 20)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ldfr_werp WA, 0xfa
 	ld xwa, (xsp + 20)
@@ -5429,7 +5429,7 @@ IvCatchEvent_Lookup:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 22)
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ld xhl, xwa
 	ldiw_erp 0xee, 0
@@ -6455,7 +6455,7 @@ AcMixerVol_PartSelect_Ch1A:
 
 AcMixerVol_PartSelect_Default:
 	ld xwa, (xsp + 36)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	srl wa, 8
 	ld w, 0x0:opc
@@ -6719,7 +6719,7 @@ AcMixerVol_EncoderUpdate:
 	add wa, de
 	ld bc, wa
 	extz xbc
-	sll xbc, 0
+	sll xbc, 16
 	ld xwa, (xsp + 36)
 	ld de, wa
 	extz xde
@@ -7052,7 +7052,7 @@ DbMemDump_Confirm_RowLoop:
 	ld wa, iz
 	pushw wa
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	pushw wa
 	pushw 0xea
 	pushw 0xa6c6
@@ -7684,7 +7684,7 @@ PsTrkSw_ShowHide:
 	ld xwa, (xiz + 24)
 	ld wa, (xwa)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld_sril XWA, (xsp + 0x00b2)
@@ -7706,7 +7706,7 @@ PsTrkSw_Confirm:
 	call GetViewInstance
 	ld (xsp + 4), xhl
 	ld_sril XWA, (xsp + 0x00ae)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld bc, wa
 	cp bc, 0xffff
@@ -8074,7 +8074,7 @@ AcTrkSw_ReturnZero:
 	ld xwa, (xsp + 8)
 	call GetViewInstance
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	cp wa, (xhl + 22)
 	jr nz, PsTextBox_ZeroReturn
@@ -8086,7 +8086,7 @@ AcTrkSw_ReturnZero:
 	srl wa, 8
 	ld w, 0x0:opc
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld xwa, (xsp + 8)
@@ -8101,7 +8101,7 @@ AcTrkSw_OK:
 	ld xwa, (xsp + 8)
 	call GetViewInstance
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	cp wa, (xhl + 22)
 	jr nz, PsTextBox_ZeroReturn
@@ -8362,7 +8362,7 @@ ObjectProc:
 	stl_dri XBC, 0xfd, 0x8c, 0x00
 	stl_dri XWA, 0xfd, 0x90, 0x00
 	ld_sril XWA, (xsp + 0x0090)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	ld xbc, xwa
@@ -8820,7 +8820,7 @@ InputDialog_GetText_CopyAndReturn:
 
 CheckViewObject:
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	extz xbc
 	ld xde, xbc
@@ -8873,7 +8873,7 @@ RegisterObject:
 	ld (xsp + 16), xbc
 	ld (xsp + 20), xwa
 	call GetCurrentTarget
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0xfff
 	ld de, hl
 	ld wa, de
@@ -8918,7 +8918,7 @@ InputDialog_Confirm:
 	ld (xix), xwa
 	incw 1, (xhl + 8)
 	ld xhl, (xsp + 8)
-	sll xhl, 0
+	sll xhl, 16
 	add xhl, (xsp + 12)
 	jr UnRegisterObject_Epilogue
 
@@ -8936,7 +8936,7 @@ UnRegisterObject_Epilogue:
 
 UnRegisterObject:
 	push xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld hl, wa
 	ld bc, hl
@@ -8976,7 +8976,7 @@ InheritedProc:
 	push xiz
 	ld xhl, (0x02bc14:24)
 	ld (xsp + 4), xhl
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0xfff
 	ld iz, hl
 	ld xhl, (xsp + 4)
@@ -9004,7 +9004,7 @@ InheritedProc:
 	jr z, TitleWidget_Init
 	ld (0x02bc14:24), xiy
 	ld xhl, xiy
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0xfff
 	ld iz, hl
 	ld xhl, xiy
@@ -9084,7 +9084,7 @@ ClassProc:
 	stl_dri XDE, 0xfd, 0x12, 0x01
 	stl_dri XBC, 0xfd, 0x16, 0x01
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ld de, bc
 	ld xbc, xwa
@@ -9187,7 +9187,7 @@ TitleWidget_Paint_CheckState:
 
 TitleWidget_Paint_DrawText:
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	ld xhl, xwa
@@ -9426,7 +9426,7 @@ SupportClassProc:
 	push xiz
 	ld xix, xwa
 	ld xhl, xix
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0xfff
 	ld iy, hl
 	ld xhl, xwa
@@ -9481,7 +9481,7 @@ FunctionProc:
 	push xiz
 	ld (xsp + 4), xde
 	ld xde, xwa
-	srl xde, 0
+	srl xde, 16
 	and xde, 0xfff
 	ld hl, de
 	ld xde, xwa
@@ -9540,7 +9540,7 @@ FuncProc_PopIzSkip4Ret:
 
 FuncCall:
 	ld xhl, xwa
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0xfff
 	ld ix, hl
 	ld xhl, xwa
@@ -9575,7 +9575,7 @@ ApFunctionProc:
 ; ApFuncCall object ID lookup dispatch
 ApFuncCall_VirtualDispatch:
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ldiw_erp 0xe2, 0
 	ld de, wa
@@ -9609,7 +9609,7 @@ ApFuncCall:
 	or xhl, xhl
 	jr z, ResourceWidget_ReturnZero
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld xde, xiz
 	ldiw_erp 0xea, 0
@@ -9654,7 +9654,7 @@ MainFunctionProc:
 ; MainFuncCall DSP variant dispatch
 MainFuncCall_DispatchDSP:
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ldiw_erp 0xe2, 0
 	ld de, wa
@@ -9689,7 +9689,7 @@ ModeProc:
 	ld (xsp + 10), xde
 	ld xiz, xbc
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ld de, bc
 	ld xbc, xwa
@@ -9876,7 +9876,7 @@ ObjectEnum_OK_Dispatch:
 ObjectEnum_OK_DispatchInline:
 	ld xwa, (0x03ef8a:24)
 	ld xde, xwa
-	srl xde, 0
+	srl xde, 16
 	and xde, 0xfff
 	ldiw_erp 0xe2, 0
 	ld (xsp + 8), wa
@@ -10033,7 +10033,7 @@ TitleProc:
 	ld xiz, xbc
 	ld (xsp + 34), xwa
 	ld xwa, (xsp + 34)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld bc, wa
 	ld xwa, (xsp + 34)
@@ -10268,7 +10268,7 @@ EventDispatch_OK:
 	add xwa, TITLE_PS
 	ld (xsp + 18), xwa
 	ld xwa, (xsp + 8)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld bc, wa
 	ld xwa, (xsp + 8)
@@ -10295,7 +10295,7 @@ EventDispatch_OK:
 	cp xbc, 0xffffffff
 	jr z, EventDispatch_OKDone
 	ld xwa, (xsp + 18)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld bc, wa
 	ld xwa, (xsp + 18)
@@ -10346,7 +10346,7 @@ EventDispatch_DefaultProc:
 	ld (xhl + 18), wa
 	ld xwa, (0x03ef8e:24)
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ldiw_erp 0xe2, 0
 	ld (xsp + 12), wa
@@ -10380,7 +10380,7 @@ EventDispatch_DefaultProc:
 
 EventDispatch_Return:
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ldiw_erp 0xe2, 0
 	ld (xsp + 12), wa
@@ -10435,7 +10435,7 @@ EventDispatch_Return:
 	ld (xhl + 14), xwa
 	ld xwa, (0x03ef8a:24)
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ldiw_erp 0xe2, 0
 	ld (xsp + 12), wa
@@ -11029,7 +11029,7 @@ TitleProc_ClearResourceDirtyFlag:
 
 ResEventProc:
 	ld xhl, xwa
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0xfff
 	ld ix, hl
 	ld xhl, xwa
@@ -11061,7 +11061,7 @@ EnumList_Reset_Return:
 
 ResMethodProc:
 	ld xhl, xwa
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0xfff
 	ld ix, hl
 	ld xhl, xwa
@@ -11127,7 +11127,7 @@ ViewableProc:
 	ld xbc, xiz
 	ldiw_erp 0xe6, 0
 	ld (xsp + 10), bc
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld bc, wa
 	add wa, 0x300
@@ -11525,7 +11525,7 @@ Viewable_GetBoundsY_Bottom:
 
 Viewable_DefaultDispatch:
 	ld xwa, (xsp + 20)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	cp wa, 0x1e0
 	jr c, Viewable_Default_ToOwner
@@ -11677,10 +11677,10 @@ NextView:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_4_Draw
@@ -11703,10 +11703,10 @@ View_GetNextSibling:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_5_Draw
@@ -11729,10 +11729,10 @@ PrevView:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_6_Draw
@@ -11755,10 +11755,10 @@ View_ResolveInstanceAddr:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_7_Draw
@@ -11781,10 +11781,10 @@ SuperView:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_8_Draw
@@ -11807,10 +11807,10 @@ View_GetParentOffset:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_9_Draw
@@ -11833,10 +11833,10 @@ SubView:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_10_Draw
@@ -11859,10 +11859,10 @@ View_GetSuperViewInstance:
 	ld bc, (xwa)
 	exts xbc
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr DrawWidget_Hline_11_Draw
@@ -12103,7 +12103,7 @@ FrameDraw_Return:
 
 GetViewInstance:
 	ld xbc, xwa
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	ldiw_erp 0xe2, 0
 	ld de, wa
@@ -14065,7 +14065,7 @@ ShadowBox_A_DrawAlt:
 	lda_dri XBC, 0xfd, 0x10, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xde
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -15376,7 +15376,7 @@ DrawHelper_B_DrawTrack:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 12)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xde
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -15572,7 +15572,7 @@ DrawHelper_D_DrawTrack:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 12)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xde
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -15764,7 +15764,7 @@ ViewID_EnumFill_OuterLoop:
 
 ViewID_EnumFill_InnerLoop:
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	call GetViewInstance
 	or xhl, xhl
@@ -15774,7 +15774,7 @@ ViewID_EnumFill_InnerLoop:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -15844,7 +15844,7 @@ ViewID_Select_Lookup:
 ViewID_Select_NoName:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 8)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -15904,10 +15904,10 @@ ViewID_GetCurrent:
 	cp xwa, 0xffffffff
 	jr z, ViewID_GetCurrent_None
 	ld xwa, (xde + 8)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xbc, xwa
 	add xbc, (xde)
 	ld xwa, xbc
@@ -15929,7 +15929,7 @@ ViewID_GetCurrent:
 ViewID_GetCurrent_NoName:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa + 8)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -16069,13 +16069,13 @@ ScreenID_EnumFill_OuterLoop:
 
 ScreenID_EnumFill_InnerLoop:
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	call GetViewInstance
 	or xhl, xhl
 	jr z, ScreenID_EnumFill_InnerNext
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	ld xbc, EVT_CHECK_CLASS
 	ld xde, NAKA_CLASS_Screen
@@ -16087,7 +16087,7 @@ ScreenID_EnumFill_InnerLoop:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -16161,7 +16161,7 @@ ScreenID_Select_NoName:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xbc)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -16221,7 +16221,7 @@ ScreenID_GetCurrent:
 ScreenID_GetCurrent_NoName:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -16291,7 +16291,7 @@ ScreenID_EnumOpen_ScanNoName:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xbc)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -16420,13 +16420,13 @@ WindowID_EnumFill_OuterLoop:
 
 WindowID_EnumFill_InnerLoop:
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	call GetViewInstance
 	or xhl, xhl
 	jr z, WindowID_EnumFill_InnerNext
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	ld xbc, EVT_CHECK_CLASS
 	ld xde, NAKA_CLASS_Window
@@ -16438,7 +16438,7 @@ WindowID_EnumFill_InnerLoop:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, (xsp + 12)
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -16512,7 +16512,7 @@ WindowID_Select_NoName:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xbc)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -16572,7 +16572,7 @@ WindowID_GetCurrent:
 WindowID_GetCurrent_NoName:
 	ld xwa, (xsp + 4)
 	ld xwa, (xwa)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -16642,7 +16642,7 @@ WindowID_EnumOpen_ScanNoName:
 	lda_dri XBC, 0xfd, 0x14, 0x01
 	add xbc, xwa
 	ld xwa, (xbc)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	add xwa, TITLE_PS
@@ -16775,7 +16775,7 @@ ModeID_BuildTable_InnerLoop:
 	lda_dri XBC, 0xfd, 0x10, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xde
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -17020,7 +17020,7 @@ TitleID_BuildTable_InnerLoop:
 	lda_dri XBC, 0xfd, 0x10, 0x01
 	add xbc, xwa
 	ld xwa, (xsp + 8)
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xde
 	ld (xbc), xwa
 	ld xwa, 1:i3
@@ -17700,7 +17700,7 @@ EventHandler_ObjectDispatch:
 	cp xwa, 0xffffffff
 	jrl z, EventHandler_ContinueProc
 	ld xwa, (xsp + 8)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	ld xbc, xwa
@@ -17728,7 +17728,7 @@ EventHandler_ObjectDispatch:
 	call (xix)
 	ld (0x02bc14:24), xhl
 	ld xwa, xhl
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ldiw_erp 0xee, 0
 	extz xwa
@@ -17781,7 +17781,7 @@ SendEvent:
 ; EventRoute dual dispatch with context setup
 EventRoute_ObjectDispatch:
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	extz xwa
 	ld xbc, xwa
@@ -17811,7 +17811,7 @@ EventRoute_ObjectDispatch:
 	call (xix)
 	ld (0x02bc14:24), xhl
 	ld xwa, xhl
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ldiw_erp 0xee, 0
 	extz xwa
@@ -18260,7 +18260,7 @@ MainSendEvent_VirtualDispatch:
 	cp xwa, 0xffffffff
 	jr z, MainSendEvent_Return
 	ld xwa, (xsp + 8)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld xde, (xsp + 8)
 	ldiw_erp 0xea, 0
@@ -18313,7 +18313,7 @@ MainPostEvent_VirtualDispatch:
 	or xhl, xhl
 	jr z, MainPostEvent_ReturnZero
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ld xde, xiz
 	ldiw_erp 0xea, 0
@@ -18804,7 +18804,7 @@ ApTimer_VirtDispatch_Return:
 
 SetApTimer_Prologue:
 	ld xbc, xiz
-	srl xbc, 0
+	srl xbc, 16
 	and xbc, 0xfff
 	extz xbc
 	ld xde, xbc
@@ -18855,7 +18855,7 @@ RootContext_Setup:
 	call (xix)
 	ld (0x02bc14:24), xhl
 	ld xwa, xhl
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	ldiw_erp 0xee, 0
 	extz xwa

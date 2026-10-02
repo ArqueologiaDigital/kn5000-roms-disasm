@@ -57,7 +57,7 @@ AcApcToggleProc_Helper:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 0x1f
 	add	xhl, xwa
 	ld	xwa, xhl
@@ -152,7 +152,7 @@ DkMdlyPly_CheckState_Helper:
 	sll	xbc, 8
 	ld	h, 0x0:opc
 	extz	xhl
-	sll	xhl, 0
+	sll	xhl, 16
 	or	xhl, xbc
 	ld	d, 0x0:opc
 	extz	xde
@@ -202,7 +202,7 @@ DkMdlyPly_CheckState_Helper:
 	cp	xbc, xwa
 	jr	nz, DkMdlyPly_CheckState_Helper_Skip2
 	ld	xwa, xiz
-	srl	xwa, 0
+	srl	xwa, 16
 	cp	xwa, 0xb1
 	jr	z, DkMdlyPly_CheckState_Helper_Skip
 	ld	xwa, xix
@@ -229,7 +229,7 @@ DkMdlyPly_CheckState_Helper_Loop:
 	cp	xbc, xwa
 	jr	nz, SndParam_RW_ChainCheckFirst_v7
 	ld	xwa, xix
-	srl	xwa, 0
+	srl	xwa, 16
 	cp	xwa, 0xb1
 	jr	z, EmptyRoutine_03_Skip
 	ld	xwa, xiy

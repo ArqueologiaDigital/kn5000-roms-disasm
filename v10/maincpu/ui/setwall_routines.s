@@ -1556,7 +1556,7 @@ SetWall_DualPass_TypeC0:
 	and wa, 0x80
 	ld (0x2893:16), wa
 	and hl, 0x2
-	rrc_i_8 l, 2
+	rrc l, 2
 	ld (0x2895:16), hl
 	call SetWall_StreamAdvanceBounded
 	cp (0x287a:16), 0

@@ -2348,7 +2348,7 @@ FP_SP_AlignMantissa_Shift:
 	jr gt, FP_SP_AlignMantissa_MaxShift
 	bit 4, l
 	jr z, FP_SP_AlignMantissa_Shift_Odd
-	srl xde, 0
+	srl xde, 16
 	and l, 0xF
 	jr z, FP_SP_AlignMantissa_Round
 

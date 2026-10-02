@@ -5788,7 +5788,7 @@ CmpSetP1_DialGrid:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -5799,7 +5799,7 @@ CmpSetP1_DialGrid:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -6004,7 +6004,7 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -6023,7 +6023,7 @@ CmpSetP1_GridCheck_EventEnc:
 	ld	xde, xhl
 	lda	xwa, (xsp+20)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -6041,7 +6041,7 @@ CmpSetP1GridCheck_Join:
 CmpSetP1_GridCheck_Return:
 	lda xbc, (xsp + 20)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -6175,7 +6175,7 @@ GridCheck_Handler0:
 	ld xde, xhl	; Result in XDE
 	lda xwa, (xsp + 14)	; Get local var pointer
 	ld xbc, xde	; Copy result to XBC
-	srl xbc, 0	; SRL 0, XBC (clear carry)
+	srl xbc, 16	; SRL 0, XBC (clear carry)
 	ldiw_erp 0xe6, 0	; LD QBC, 0 (clear high bits)
 	ld (xwa), bc	; Store low word
 	ld (xwa + 2), de	; Store high word
@@ -6207,7 +6207,7 @@ GridCheck_Handler1:
 	ld xde, xhl	; Result in XDE
 	lda xwa, (xsp + 14)	; Get local var pointer
 	ld xbc, xde	; Copy result to XBC
-	srl xbc, 0	; SRL 0, XBC (clear carry)
+	srl xbc, 16	; SRL 0, XBC (clear carry)
 	ldiw_erp 0xe6, 0	; LD QBC, 0 (clear high bits)
 	ld (xwa), bc	; Store low word
 	ld (xwa + 2), de	; Store high word
@@ -6237,7 +6237,7 @@ GridCheck_SendEvent:
 CmpSet_GridCheck_Dispatch:
 	lda xbc, (xsp + 14)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -6936,7 +6936,7 @@ FdcFormat_DialGrid:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -6947,7 +6947,7 @@ FdcFormat_DialGrid:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa

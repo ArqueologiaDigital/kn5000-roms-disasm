@@ -984,6 +984,7 @@ binary, wave 3a, 2026-10-02):
 | Stack store immediate | `ldmw (xsp+d), imm` | raw bytes |
 | Stack compare immediate | `cpmi16 (xsp+d), imm` | raw bytes |
 | Stack word inc/dec | `incm N, (xsp+d)` / `decm N, (xsp+d)` | raw bytes |
+| Shift / rotate by a count (UPDATE 19) | `srl xhl, 16`, `rlc a, 3` -- the count is 1..16 and 16 is ENCODED as 0 (the CPU reads `count & 0x0F`, 0 = 16).  `srl xhl, 0` (MAME's raw field) and counts above 16 are errors; the `rlc_i_8`-style pseudos are deleted; `rlc a` alone is count 1 | `srl xhl, 16` → `eb ef 00`; `rrc h, 2` → `ce e9 02` |
 | Compact compare small | `cp reg, N:i3` (the `cps` alias was deleted, TOOLCHAIN_VERSION UPDATE 16) | `cp hl, 0:i3` → `db d8`, `cp l, 3:i3` → `cf db` |
 | Return + deallocate | `retd imm16` | `retd 2` → `0f 02 00` |
 | Indirect call | `call (xhl)` | → `b3 e8` (2 bytes) |

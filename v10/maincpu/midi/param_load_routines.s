@@ -338,7 +338,7 @@ ParaLoadOpt_GridHandler:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -349,7 +349,7 @@ ParaLoadOpt_GridHandler:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -613,7 +613,7 @@ ParaLoadOpt_GridDispatch:
 	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
@@ -677,7 +677,7 @@ ParaLoadOpt_PostDualEvent_Skip3:
 	call	SendEvent
 	lda	xwa, (xsp+20)
 	ld	xbc, xhl
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), hl
@@ -833,7 +833,7 @@ ParaLoadOpt_PostDualEvent_Skip7:
 ; Voice UI misc handler
 VoiceUI_MiscHandler:
 	ld xde, xhl
-	srl xde, 0
+	srl xde, 16
 	ldiw_erp 0xea, 0
 	ld (xiy), de
 	ld xde, xwa

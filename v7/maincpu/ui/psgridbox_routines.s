@@ -650,7 +650,7 @@ PsGridBox_Confirm_InnerLoop:
 	jr nz, PsGridBox_Confirm_InnerNext
 	ld de, (xsp + 12)
 	extz xde
-	sll xde, 0
+	sll xde, 16
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
 	ld xbc, EVT_REQUEST_GRID_DRAW
@@ -788,7 +788,7 @@ PsGridBox_Select_StoreSel:
 	ld xwa, (xde + 46)
 	ld wa, (xwa)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
@@ -803,7 +803,7 @@ PsGridBox_Select_SendCurr:
 	ld xwa, (xde + 46)
 	ld wa, (xwa)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
@@ -867,7 +867,7 @@ PsGridBox_Scroll:
 	sub xwa, xbc
 	ld bc, wa
 	extz xbc
-	sll xbc, 0
+	sll xbc, 16
 	ld xwa, (xhl + 42)
 	ld de, (xwa)
 	extz xde
@@ -983,7 +983,7 @@ PsGridBox_Scroll_Render:
 	jrl PsGridBox_ReturnZero
 	lda xde, (xsp+24)
 	ld xwa, (xsp+326)
-	srl xwa, 0
+	srl xwa, 16
 	ld qwa, 0
 	ld (xde), wa
 	lda xbc, (xde+2)
@@ -1016,7 +1016,7 @@ PsGridBox_Scroll_CopyStr:
 	call	GetViewInstance
 	ld	(xsp+20), xhl
 	ld	xwa, (xsp+326)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	iz, wa
 	cp	iz, 65535
@@ -1058,7 +1058,7 @@ PsGridBox_Scroll_CheckColChange:
 
 PsGridBox_Scroll_StoreCol:
 	ld XBC, (xsp + 0x0146)
-	srl xbc, 0
+	srl xbc, 16
 	ldiw_erp 0xe6, 0
 	cp bc, 0xffff
 	jr z, PsGridBox_Scroll_SendOldCell
@@ -1073,7 +1073,7 @@ PsGridBox_Scroll_SendOldCell:
 	extz xbc
 	ld wa, iz
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
@@ -1088,7 +1088,7 @@ PsGridBox_Scroll_SendNewCell:
 	ld xwa, (xde + 46)
 	ld wa, (xwa)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld XWA, (xsp + 0x014e)
@@ -1105,7 +1105,7 @@ PsGridBox_DispatchEvent:
 	ld xwa, (xhl + 46)
 	ld wa, (xwa)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	add xwa, xbc
 	ld xhl, xwa
 	jr PsGridBox_Return

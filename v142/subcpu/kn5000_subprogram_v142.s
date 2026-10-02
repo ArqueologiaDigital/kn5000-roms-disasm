@@ -50798,7 +50798,7 @@ DSP_WriteParamWord:
 	ld (xsp + 4), bc
 	ld xiz, xwa
 	ld xwa, xiz
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0xFF
 	extz wa
 	ld bc, (xsp + 4)
@@ -50887,7 +50887,7 @@ DSP_WriteFreqParam_AlgoType:
 	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
@@ -50969,7 +50969,7 @@ DSP_WriteFreqParam:
 	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
@@ -51022,7 +51022,7 @@ DSP_WriteCoeffData_5B:
 	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 1
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0x7F
 	extz wa
 	ld bc, (xsp + 4)
@@ -51063,7 +51063,7 @@ DSP_UnpackParam3B:
 	sla xde, 8
 	ld xbc, 0:i3
 	ld c, (xix)
-	sla xbc, 0
+	sla xbc, 16
 	ld xiy, xbc
 	add xiy, xde
 	ld c, (xix + 2)
@@ -51290,7 +51290,7 @@ DSP_WriteOscParam:
 	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
@@ -51341,7 +51341,7 @@ DSP_WriteCoeffData_5B_Direct:
 	call DSP_DispatchData
 	ld xwa, xiz
 	sra xwa, 1
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0x7F
 	extz wa
 	ld bc, (xsp + 4)
@@ -51411,7 +51411,7 @@ DSP_WriteOscParam_Offset:
 	call DSP_DispatchData
 	ld xwa, (xsp + 2)
 	sra xwa, 1
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
@@ -51837,7 +51837,7 @@ DSP_TuneOffset_WriteSequence:
 	ld (xsp + 4), hl
 	ld xwa, (xsp + 6)
 	sra xwa, 1
-	sra xwa, 0
+	sra xwa, 16
 	and xwa, 0x7F
 	extz wa
 	ld bc, iz
@@ -52146,7 +52146,7 @@ DSP_PitchParam_Scale:
 	ld (xsp + 4), xwa
 	ld xwa, (xsp + 8)
 	sla xwa, 5
-	sla xwa, 0
+	sla xwa, 16
 	ld xbc, (xsp + 4)
 	call Int_SignedDiv_AltEntry
 	sla xhl, 2
@@ -52191,7 +52191,7 @@ DSP_VolumeParam_Scale:
 	cp xbc, 0x32
 	jr gt, DSP_VolScale_Algo0_Seg2
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0x6BAA8
 	call Int_SignedDiv_AltEntry
@@ -52203,7 +52203,7 @@ DSP_VolScale_Algo0_Seg2:
 	jr gt, DSP_VolScale_Algo0_Seg3
 	sub xbc, 0x19
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
@@ -52216,7 +52216,7 @@ DSP_VolScale_Algo0_Seg3:
 	sla xbc, 2
 	sub xbc, 0xFA
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
@@ -52229,7 +52229,7 @@ DSP_VolScale_Algo0_Seg4:
 	add xwa, xbc
 	sub xwa, 0x2B2
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
@@ -52239,7 +52239,7 @@ DSP_VolScale_Algo1_Seg1:
 	cp xbc, 0xA
 	jr gt, DSP_VolScale_Algo1_Seg2
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
@@ -52255,7 +52255,7 @@ DSP_VolScale_Algo1_Seg2:
 	add xwa, xwa
 	sub xwa, 0x5A
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_Return
@@ -52312,7 +52312,7 @@ DSP_VolScale_Algo2_Seg1:
 	ld xde, 0xFA0
 	sub xde, xwa
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
@@ -52329,7 +52329,7 @@ DSP_VolScale_Algo2_Seg2:
 	sub xde, xwa
 	sub xbc, 0x19
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
@@ -52347,7 +52347,7 @@ DSP_VolScale_Algo2_Seg3:
 	sla xbc, 2
 	sub xbc, 0xFA
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
@@ -52367,7 +52367,7 @@ DSP_VolScale_Algo2_Seg4:
 	add xwa, xbc
 	sub xwa, 0x2B2
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
 
@@ -52634,7 +52634,7 @@ DSP_FreqCurve_FP:
 	sub xbc, xwa
 	ld xwa, xiz
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	call Int_SignedDiv_AltEntry
 	jr DSP_FreqCurve_FP_Return
 
@@ -52650,7 +52650,7 @@ DSP_FreqCurve_FP_Seg2:
 	ld xwa, xiz
 	sub xwa, 0xA
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	call Int_SignedDiv_AltEntry
 	jr DSP_FreqCurve_FP_Return
 
@@ -54068,7 +54068,7 @@ DSP_VolScale_B:
 	cp xbc, 0x32
 	jr gt, DSP_VolScale_B_Algo0_Seg2
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0x6BAA8
 	call Int_SignedDiv_AltEntry
@@ -54080,7 +54080,7 @@ DSP_VolScale_B_Algo0_Seg2:
 	jr gt, DSP_VolScale_B_Algo0_Seg3
 	sub xbc, 0x19
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
@@ -54093,7 +54093,7 @@ DSP_VolScale_B_Algo0_Seg3:
 	sla xbc, 2
 	sub xbc, 0xFA
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
@@ -54106,7 +54106,7 @@ DSP_VolScale_B_Algo0_Seg4:
 	add xwa, xbc
 	sub xwa, 0x2B2
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	ld xbc, 0x35D54
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
@@ -54116,7 +54116,7 @@ DSP_VolScale_B_Algo1_Seg1:
 	cp xbc, 0xA
 	jr gt, DSP_VolScale_B_Algo1_Seg2
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
@@ -54132,7 +54132,7 @@ DSP_VolScale_B_Algo1_Seg2:
 	add xwa, xwa
 	sub xwa, 0x5A
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	ld xbc, 0xAC44
 	call Int_SignedDiv_AltEntry
 	jrl DSP_VolScale_B_Return
@@ -54189,7 +54189,7 @@ DSP_VolScale_B_Algo2_Seg1:
 	ld xde, 0xFA0
 	sub xde, xwa
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
@@ -54206,7 +54206,7 @@ DSP_VolScale_B_Algo2_Seg2:
 	sub xde, xwa
 	sub xbc, 0x19
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
@@ -54224,7 +54224,7 @@ DSP_VolScale_B_Algo2_Seg3:
 	sla xbc, 2
 	sub xbc, 0xFA
 	sla xbc, 7
-	sla xbc, 0
+	sla xbc, 16
 	ld xwa, xbc
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
@@ -54244,7 +54244,7 @@ DSP_VolScale_B_Algo2_Seg4:
 	add xwa, xbc
 	sub xwa, 0x2B2
 	sla xwa, 7
-	sla xwa, 0
+	sla xwa, 16
 	ld xbc, xde
 	call Int_SignedDiv_AltEntry
 
@@ -56611,10 +56611,10 @@ DSP_MixerCoeff_Compute:
 	extz xwa
 	add xwa, xbc
 	ld xwa, (xwa)
-	sra xwa, 0
+	sra xwa, 16
 	ld xbc, xde
 	call FP_MulAccum64
-	srl xhl, 0
+	srl xhl, 16
 	ld wa, (xsp + 20)
 	sll wa, 2
 	lda xbc, (DSP2_MixerGain_Curve:16)
@@ -56648,11 +56648,11 @@ DSP_MixerCoeff_Compute:
 	call DSP_DispatchData
 	ld xwa, (xsp + 8)
 	srl xwa, 8
-	srl xwa, 0
+	srl xwa, 16
 	ld bc, 1:i3
 	call DSP_DispatchData
 	ld xwa, (xsp + 8)
-	srl xwa, 0
+	srl xwa, 16
 	ld bc, 1:i3
 	call DSP_DispatchData
 	call DSP2_SPI_BusIdle
@@ -56668,12 +56668,12 @@ DSP_MixerCoeff_Compute:
 	call DSP_DispatchData
 	ld xwa, (xsp + 16)
 	srl xwa, 9
-	srl xwa, 0
+	srl xwa, 16
 	ld bc, 1:i3
 	call DSP_DispatchData
 	ld xwa, (xsp + 16)
 	srl xwa, 1
-	srl xwa, 0
+	srl xwa, 16
 	ld bc, 1:i3
 	call DSP_DispatchData
 	call DSP2_SPI_BusIdle
@@ -57107,7 +57107,7 @@ DSP_BytecodeInterpreter_Init_Skip2:
 	ld	qiz, hl
 	ld	xwa, (xsp+16)
 	sra	xwa, 1
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	xbc, xwa
 	and	xbc, 127
 	ld	xwa, (xsp+26)
@@ -57518,7 +57518,7 @@ DSP_BytecodeInterpreter_Init_Skip3:
 	ld	qiz, hl
 	ld	xwa, (xsp+16)
 	sra	xwa, 1
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	xbc, xwa
 	and	xbc, 127
 	ld	xwa, (xsp+26)
@@ -58291,7 +58291,7 @@ DSP_StreamDecode_3ByteWord:
 	exts wa
 	exts xwa
 	sla xwa, 8
-	sla xwa, 0
+	sla xwa, 16
 	and xwa, 0xFF000000
 	ld xhl, xwa
 	lda xwa, (xde+:1)
@@ -58299,7 +58299,7 @@ DSP_StreamDecode_3ByteWord:
 	exts wa
 	exts xwa
 	ld xix, xwa
-	sla xix, 0
+	sla xix, 16
 	and xix, 0xFF0000
 	lda xwa, (xde+:1)
 	ld a, (xwa)

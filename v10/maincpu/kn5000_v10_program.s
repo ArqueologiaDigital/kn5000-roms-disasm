@@ -1913,7 +1913,7 @@ Voice_FactoryPresetData_Code_Join:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xbc), wa
 	ld	xwa, (xsp+16)
 	add	(xbc+2), wa
@@ -1925,7 +1925,7 @@ Voice_FactoryPresetData_Code_Join:
 	jrl	Voice_FactoryPresetData_Code_Join4
 Voice_FactoryPresetData_Code_Skip2:
 	ld	xwa, (xsp+8)
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	xbc, (xsp+4)
 	call	Math_DivideSigned32
 	ld	xiz, xhl
@@ -1940,7 +1940,7 @@ Voice_FactoryPresetData_Code_Skip2:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+8), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
@@ -2048,7 +2048,7 @@ Voice_FactoryPresetData_Code_Join3:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xde, (xsp+8)
-	sra	xde, 0
+	sra	xde, 16
 	ld	xwa, (xsp+34)
 	ld	(xwa), de
 	ld	xwa, (xsp+12)
@@ -3119,7 +3119,7 @@ SoundParam_NotifyChange:
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl

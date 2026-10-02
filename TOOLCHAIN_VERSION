@@ -7,19 +7,26 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: d7752a16b6ee (d7752a16b6ee4126c29324471a81b8f408af4ba9)
+Commit: 12b3a5571450 (12b3a55714501f683391967d48929c2a8dac584b)
 Date: 2026-10-02
-Subject: [TLCS900] An EI level and an SWI number are 0..7
+Subject: [TLCS900] A shift/rotate count is 1..16; codegen splits wider shifts; raw pseudos range-checked
 
-Binary: llvm-mc sha256 c39a1525a0376b2f5b4bbb846c5a2f941ccea37e97558f01771e9f2c6856430f
+Binary: llvm-mc sha256 9ed604e16fd9b8199b90e87c2ef4217117a7b200acb4a34003887d18f6389968
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
         built FROM SCRATCH from the committed, clean tree (every TLCS900
         object, .inc and library deleted, CCACHE_DISABLE=1) -- twice, same
-        sha, as for llvm-objdump 076b7951b45b (preserved as
-        llvm-objdump.snap.d7752a16b6ee-076b7951), llc 912b83d72868,
-        clang-21 e4e8032941d5, lld ebfdfd231fc8 and llvm-objcopy
-        9ff40ea0a9e7 from the same tree; llvm-nm eb3e1a055dfd (relinked,
-        measured once).
+        sha, as for llvm-objdump 475b26d38b66 (preserved as
+        llvm-objdump.snap.12b3a5571450-475b26d3), llc 5ed8a7cfb3f7,
+        clang-21 f8cce07f2ec1, lld 645ef3485809, llvm-objcopy 82887137c75e
+        and llvm-nm 6a1c3fedd96d from the same tree.
+
+⚠ PIN PROMOTED ON 2026-10-02 (UPDATE 19, wave 3a second fix round):
+  d7752a16b6ee / c39a1525 -> 12b3a5571450 / 9ed604e1.  The shift/rotate
+  respell (`srl xhl, 0` -> `srl xhl, 16`, `rrc_i_8 l, 3` -> `rrc l, 3`)
+  only assembles byte-identically under THIS binary (the old one wrote the
+  count byte verbatim: `srl xhl, 16` = eb ef 10), so tree and pin move in
+  one commit.  Prior snapshot kept at llvm-mc.snap.d7752a16b6ee-c39a1525.
+  The LLVM: trailer is now 12b3a5571450.
 
 ⚠ PIN PROMOTED ON 2026-10-02 (UPDATE 18, wave 3a T1 fix round):
   4867e03232a6 / c949d618 -> d7752a16b6ee / c39a1525.  The tree was
@@ -1242,3 +1249,64 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #     reaches the ROMs; both are wrong code.
 #   * The MUL/DIV IMMEDIATE forms still need the owner's ruling (UPDATE 17).
 
+# UPDATE 19 (2026-10-02): SHIFT/ROTATE COUNTS, A CODEGEN MISCOMPILE, AND THE
+# RAW-OPERAND PSEUDOS -- the wave 3a V1 re-verification's open items.
+#
+#   llvm-project 12b3a5571450 (one commit):
+#   * A shift or rotate count byte is read by the CPU as `count & 0x0F`, 0
+#     meaning 16 (TLCS-900 "#4 = 1-16"; MAME's CPU core sla8 & co: `(s & 0x0f)
+#     ? (s & 0x0f) : 16`).  The backend wrote the byte verbatim.
+#   * CODEGEN MISCOMPILE (pre-existing, every pin): `x << 24` selected
+#     `sla xde, 24` = ee ec 18, a shift by 8; `x >> 20` shifted 4; the
+#     CodeGen test multiop.ll pinned `sra xwa, 31` (a shift by 15) in a
+#     branchless abs.  Constant shifts of 17..31 are now two shifts.  The
+#     286 C-generated bins were regenerated with this clang (deleted and
+#     rebuilt through `make <bins> v7-extract-bins indexed-images
+#     hdae5000-images`): byte-identical, so no ROM C used such a shift --
+#     but the Mines homebrew and anything else compiled with this clang did.
+#   * Parser: a shift/rotate count is a CONSTANT 1..16; 0 is refused by name
+#     ("write 16, not the raw field 0"), 17.. refused; encoder writes 16 as 0.
+#   * Rotates: real spellings `rlc/rrc/rl/rr r, n` (the raw pseudos
+#     `rlc_i_8` ... retired; RL/RR forms added); the decoder printed `rrc h`
+#     for ce e9 02 and now prints `rrc h, 2`; field 0 prints 16; a count byte
+#     with its high nibble set is refused (no truthful spelling re-encodes it).
+#   * checkRawPseudoOperands: BIT/SET/RES/CHG/TSET/LDCF/STCF_DD8, TSET/
+#     LDCF_DD16, JP_DD8, AND/OR/XORCFN_RI, CALL/JP/RET_CC_RI take bit 0..7,
+#     condition 0..15, address bytes 0..0xFF, constants.  `bit_dd8 8, 0x34`
+#     had assembled f0 34 d0 = jp F,0x34; a forward reference dropped a byte
+#     or asserted.  No tree line was out of range.
+#   * Tests: MC/TLCS900/shift-count-field.s, raw-pseudo-ranges.s,
+#     MC/Disassembler/TLCS900/shift-count-field.txt, CodeGen/TLCS900/
+#     shift-count-split.ll; multiop.ll corrected.  llvm-lit TLCS900 106/106
+#     (was 102/102).
+#
+#   disasm (the commit that promotes this pin):
+#   * scripts/converters/wave3a_respell.py families shift16 (1,276 lines, 88
+#     files) and rotimm (55 lines, 15 files): every old line assembled by
+#     c39a1525 and new line by this build, byte-identical (1,276/1,276 and
+#     55/55).  rotimm refused 2 sites (`rrc_i_8 l, 19`, count byte 0x13 =
+#     a rotate by 3) -- both in a MISFRAMED run of HdaeRom_DataDispatch_Block3
+#     (v10/v9/v7 audio/note_voice_mapping.s): `.byte 0xf3 / reti / .byte 0xe0,
+#     0xe4` was `lda xhl, (xwa+bc)`.  The run is re-framed from MAME unidasm's
+#     reading at the label (a 128-step loop setting bits 5..4 of records at
+#     XWA+0x49A7); v7's two labels pinned inside it are kept (one as a .set,
+#     it sits inside `ld (xhl), 1`).
+#   * Stale comments beside respelled lines (re-verification major):
+#     scripts/analysis/respell_comment_scan.py scans every respelled line and
+#     6 lines above; fixed: hdae5000_ui_display `inc 8, xsp ; stack cleanup
+#     (no-op)` (it pops the 8 argument bytes), system_handlers v10/v9/v7
+#     "XDE = word count" (DJNZ16 decrements DE), table_data `dec 8, xsp ;
+#     ... allocate 1 byte`, `sla xhl, 16 ; SLA 0 ... alignment`, two `sll xbc,
+#     16 ; alignment/padding` (XBC <<= 32 = 0), and 8 "(llvm-mc: rrc l does
+#     not round-trip)" notes this decoder made untrue.
+#   * Gate: from nothing (make clean, wsa1 clean, make gate-all) 13/13 with
+#     llvm-mc 9ed604e1: 9/9 KN5000 IDENTICAL, 4/4 SX-WSA1R ok, 8/8 + 4/4
+#     prerequisite, rebuild-on-toolchain-change ok.
+#
+# ⚠ STILL OPEN after UPDATE 19 (UPDATE 18's list minus the rotate counts):
+#   E8+r decodes MAME calls db; TSET/CHG on byte/word registers and
+#   `bit n, (xrr+rr)` without real spellings; the ld_sri* asserts; `scc z,
+#   xwa` zero bytes; `jp z, 0x100`; the integrated assembler's rel8; the DJNZ
+#   optimisation for counts >= 65536; MUL/DIV immediates (owner ruling);
+#   byte-wide Q registers (QE ...) have no assembler name, so the tree still
+#   writes them through the raw-number ERP pseudos (`ldib_erp 234, 0`).

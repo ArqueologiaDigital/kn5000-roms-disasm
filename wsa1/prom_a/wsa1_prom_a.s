@@ -20403,7 +20403,7 @@ sub_F8AE68:   ; entry: PanelGroupActionListPool
 	and XWA,XDE                                          ; F8AE7A  ea c0
 	jr z, .LF8AE93                                           ; F8AE7C  66 15
 	m_add_mi8 MBD+r4, 0xff, 0x11                         ; F8AE7E  8c ff 38 11
-	sla xde, 0x00                                        ; F8AE82  ea ec 00
+	sla xde, 16                                        ; F8AE82  ea ec 00
 	sla xde, 0x01                                        ; F8AE85  ea ec 01
 	jr nz, .LF8AE93                                          ; F8AE88  6e 09
 	ld (xix-1), 0x19                                     ; F8AE8A  bc ff 00 19
@@ -20419,7 +20419,7 @@ sub_F8AE68:   ; entry: PanelGroupActionListPool
 	jr .LF8AED7                                              ; F8AEA5  68 30
 .LF8AEA7:
 	ld XBC,XDE                                           ; F8AEA7  ea 89
-	sla xbc, 0x00                                        ; F8AEA9  e9 ec 00
+	sla xbc, 16                                        ; F8AEA9  e9 ec 00
 	sla xbc, 0x01                                        ; F8AEAC  e9 ec 01
 	jr nz, .LF8AEB6                                          ; F8AEAF  6e 05
 	ld XBC,0x02000000                                    ; F8AEB1  41 00 00 00 02
@@ -20448,7 +20448,7 @@ sub_F8AEDB:   ; entry: PanelGroupActionListPool
 	and XWA,XDE                                          ; F8AEED  ea c0
 	jr z, .LF8AF06                                           ; F8AEEF  66 15
 	m_add_mi8 MBD+r4, 0xff, 0x11                         ; F8AEF1  8c ff 38 11
-	sla xde, 0x00                                        ; F8AEF5  ea ec 00
+	sla xde, 16                                        ; F8AEF5  ea ec 00
 	sla xde, 0x01                                        ; F8AEF8  ea ec 01
 	jr nz, .LF8AF06                                          ; F8AEFB  6e 09
 	ld (xix-1), 0x19                                     ; F8AEFD  bc ff 00 19
@@ -20464,7 +20464,7 @@ sub_F8AEDB:   ; entry: PanelGroupActionListPool
 	jr .LF8AF4A                                              ; F8AF18  68 30
 .LF8AF1A:
 	ld XBC,XDE                                           ; F8AF1A  ea 89
-	sla xbc, 0x00                                        ; F8AF1C  e9 ec 00
+	sla xbc, 16                                        ; F8AF1C  e9 ec 00
 	sla xbc, 0x01                                        ; F8AF1F  e9 ec 01
 	jr nz, .LF8AF29                                          ; F8AF22  6e 05
 	ld XBC,0x02000000                                    ; F8AF24  41 00 00 00 02
@@ -38345,7 +38345,7 @@ sub_F94CDE:
 	sub A,0x04                                           ; F94CF0  c9 ca 04
 .LF94CF3:
 	ld xhl, (0x284a:16)                                 ; F94CF3  e1 4a 28 23
-	srl xhl, 0x00                                        ; F94CF7  eb ef 00
+	srl xhl, 16                                        ; F94CF7  eb ef 00
 	cp a, 0x00:i3                                          ; F94CFA  c9 d8
 	jr z, .LF94D00                                           ; F94CFC  66 02
 	.byte 0xeb, 0xff                                     ; F94CFE  eb ff   srl A,XHL
@@ -40029,7 +40029,7 @@ sub_F95A1A:   ; entry: screen button-handler table
 	ld h, 0x01:opc                                          ; F95A31  26 01
 .LF95A33:
 	ld xiy, (0x2846:16)                                 ; F95A33  e1 46 28 25
-	srl xiy, 0x00                                        ; F95A37  ed ef 00
+	srl xiy, 16                                        ; F95A37  ed ef 00
 	and XIY,0x000000f0                                   ; F95A3A  ed cc f0 00 00 00
 	srl xiy, 0x04                                        ; F95A40  ed ef 04
 	ld_erpb_rr c, 0xf4                                   ; F95A43  c7 f4 8b   ld C,IYL
@@ -40044,7 +40044,7 @@ sub_F95A1A:   ; entry: screen button-handler table
 	ld xwa, (0x2846:16)                                 ; F95A5B  e1 46 28 20
 	and XWA,0x000fffff                                   ; F95A5F  e8 cc ff ff 0f 00
 	ld (xiz-8), xwa                                      ; F95A65  be f8 60
-	sll xbc, 0x00                                        ; F95A68  e9 ee 00
+	sll xbc, 16                                        ; F95A68  e9 ee 00
 	m_or_rm MLD+r6, 0xf8, r1                             ; F95A6B  ae f8 e1
 	ld (0x2846:16), xbc                                 ; F95A6E  f1 46 28 61
 	calr sub_F95C2D                                          ; F95A72  1e b8 01
@@ -40064,7 +40064,7 @@ sub_F95A7A:   ; entry: screen button-handler table
 	ld h, 0x01:opc                                          ; F95A91  26 01
 .LF95A93:
 	ld xiy, (0x2846:16)                                 ; F95A93  e1 46 28 25
-	srl xiy, 0x00                                        ; F95A97  ed ef 00
+	srl xiy, 16                                        ; F95A97  ed ef 00
 	ld_erpb_rr c, 0xf4                                   ; F95A9A  c7 f4 8b   ld C,IYL
 	and C,0x0f                                           ; F95A9D  cb cc 0f
 	ld (XIX),C                                           ; F95AA0  b4 43
@@ -40077,7 +40077,7 @@ sub_F95A7A:   ; entry: screen button-handler table
 	ld xwa, (0x2846:16)                                 ; F95AB2  e1 46 28 20
 	and XWA,0x00f0ffff                                   ; F95AB6  e8 cc ff ff f0 00
 	ld (xiz-8), xwa                                      ; F95ABC  be f8 60
-	sll xbc, 0x00                                        ; F95ABF  e9 ee 00
+	sll xbc, 16                                        ; F95ABF  e9 ee 00
 	m_or_rm MLD+r6, 0xf8, r1                             ; F95AC2  ae f8 e1
 	ld (0x2846:16), xbc                                 ; F95AC5  f1 46 28 61
 	calr sub_F95C2D                                          ; F95AC9  1e 61 01
@@ -63516,7 +63516,7 @@ DisplayList_FA4EAB:
 	ld C,D                                               ; FA510F  cc 8b
 	extz BC                                              ; FA5111  d9 12
 	extz XBC                                             ; FA5113  e9 12
-	sll xbc, 0x00                                        ; FA5115  e9 ee 00
+	sll xbc, 16                                        ; FA5115  e9 ee 00
 	add XIY,XBC                                          ; FA5118  e9 85
 	ld XBC,(XIZ+0x08)                                    ; FA511A  ae 08 21
 	ld (XBC),XIY                                         ; FA511D  b1 65
@@ -63529,7 +63529,7 @@ DisplayList_FA4EAB:
 	ld bc, (0x2738:16)                                 ; FA5130  d1 38 27 21
 	extz BC                                              ; FA5134  d9 12
 	extz XBC                                             ; FA5136  e9 12
-	sll xbc, 0x00                                        ; FA5138  e9 ee 00
+	sll xbc, 16                                        ; FA5138  e9 ee 00
 	add XIY,XBC                                          ; FA513B  e9 85
 	ld XBC,(XIZ+0x08)                                    ; FA513D  ae 08 21
 	ld (XBC+0x06),XIY                                    ; FA5140  b9 06 65
@@ -73777,7 +73777,7 @@ ParamRecord_WriteFieldAndStage_StaleCopy:
 	ld XDE,0x08583b00                                    ; FAA378  42 00 3b 58 08
 	div xde, wa                                         ; FAA37D  d8 52
 	ld XBC,XDE                                           ; FAA37F  ea 89
-	srl xbc, 0x00                                        ; FAA381  e9 ef 00
+	srl xbc, 16                                        ; FAA381  e9 ef 00
 	srl wa, 0x01                                         ; FAA384  d8 ef 01
 	cp BC,WA                                             ; FAA387  d8 f1
 	jr c, .LFAA38D                                       ; FAA389  67 02
@@ -74392,7 +74392,7 @@ sub_FAA742:
 	ld XDE,0x08583b00                                    ; FAA778  42 00 3b 58 08
 	div xde, wa                                         ; FAA77D  d8 52
 	ld XBC,XDE                                           ; FAA77F  ea 89
-	srl xbc, 0x00                                        ; FAA781  e9 ef 00
+	srl xbc, 16                                        ; FAA781  e9 ef 00
 	srl wa, 0x01                                         ; FAA784  d8 ef 01
 	cp BC,WA                                             ; FAA787  d8 f1
 	jr c, .LFAA78D                                       ; FAA789  67 02
@@ -96497,7 +96497,7 @@ sub_FB94DB:
 	ld C,H                                               ; FB94E1  ce 8b
 	extz BC                                              ; FB94E3  d9 12
 	extz XBC                                             ; FB94E5  e9 12
-	sll xbc, 0x00                                        ; FB94E7  e9 ee 00
+	sll xbc, 16                                        ; FB94E7  e9 ee 00
 	ld (xiz-8), xbc                                      ; FB94EA  be f8 61
 	ld (XIX),XBC                                         ; FB94ED  b4 61
 	ld C,E                                               ; FB94EF  cd 8b
@@ -154325,7 +154325,7 @@ sub_FE02AB:
 	ld bc, (0x17a0:24)                                  ; FE02B7  d2 a0 17 00 21
 	extz XBC                                             ; FE02BC  e9 12
 	ld XIX,XBC                                           ; FE02BE  e9 8c
-	sll xix, 0x00                                        ; FE02C0  ec ee 00
+	sll xix, 16                                        ; FE02C0  ec ee 00
 	ld (0x1700:24), xix                                 ; FE02C3  f2 00 17 00 64
 	ld bc, (0x179e:24)                                  ; FE02C8  d2 9e 17 00 21
 	extz XBC                                             ; FE02CD  e9 12
@@ -155309,7 +155309,7 @@ sub_FE0B43:
 	ld (xiz-4), xbc                                      ; FE0B7A  be fc 61
 	ld wa, (0x17a0:24)                                  ; FE0B7D  d2 a0 17 00 20
 	extz XWA                                             ; FE0B82  e8 12
-	sll xwa, 0x00                                        ; FE0B84  e8 ee 00
+	sll xwa, 16                                        ; FE0B84  e8 ee 00
 	ld (xiz-8), xwa                                      ; FE0B87  be f8 60
 	ld iy, (0x179e:24)                                  ; FE0B8A  d2 9e 17 00 25
 	extz XIY                                             ; FE0B8F  ed 12
@@ -159687,7 +159687,7 @@ sub_FE30DD:
 	ld XHL,(XBC)                                         ; FE32E9  a1 23
 	bit 0x04,A                                           ; FE32EB  c9 33 04
 	jr z, .LFE32F3                                           ; FE32EE  66 03
-	srl xhl, 0x00                                        ; FE32F0  eb ef 00
+	srl xhl, 16                                        ; FE32F0  eb ef 00
 .LFE32F3:
 	and A,0x0f                                           ; FE32F3  c9 cc 0f
 	jr z, 0x02                                           ; FE32F6  66 02

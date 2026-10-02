@@ -174,10 +174,10 @@ DrawLine_Impl_CopyStartPos:
 	ld (xsp+20), xwa
 	ld xwa, (xsp+4)
 	ld (xsp+40), xwa
-	sla xwa, 0
+	sla xwa, 16
 	ld (xsp+40), xwa
 	ld xbc, (xsp+8)
-	sla xbc, 0
+	sla xbc, 16
 	ld wa, (xsp+46)
 	exts xwa
 	ld (xsp+44), xwa
@@ -286,7 +286,7 @@ DrawLine_Impl_SteepCheck:
 	ld wa, (xwa)
 	exts xwa
 	ld (xsp+4), xwa
-	sla xwa, 0
+	sla xwa, 16
 	ld (xsp+4), xwa
 	ld xwa, 32768
 	add (xsp+4), xwa
@@ -314,7 +314,7 @@ DrawLine_Impl_SteepLoop:
 	ld xwa, (xsp + 12)
 	add (xsp + 4), xwa
 	ld xde, (xsp + 4)
-	sra xde, 0
+	sra xde, 16
 	ld (xhl), de
 	ld xde, (xsp + 16)
 	ld xwa, (xsp + 44)
@@ -336,7 +336,7 @@ DrawLine_Impl_ShallowSetup:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+8), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
@@ -363,7 +363,7 @@ DrawLine_Impl_ShallowLoop:
 	ld xwa, (xsp + 16)
 	add (xsp + 8), xwa
 	ld xde, (xsp + 8)
-	sra xde, 0
+	sra xde, 16
 	ld (xix), de
 	ld xde, (xsp + 12)
 	add (xhl), de
@@ -497,7 +497,7 @@ DrawLine_Impl_PatternDiagCheck:
 
 	ld (xsp + 4), xwa
 
-	sla xwa, 0
+	sla xwa, 16
 
 	ld (xsp + 4), xwa
 
@@ -544,7 +544,7 @@ DrawLine_Impl_PatternSteepLoop:
 	ld xwa, (xsp + 12)
 	add (xsp + 4), xwa
 	ld xde, (xsp + 4)
-	sra xde, 0
+	sra xde, 16
 	ld (xhl), de
 	ld xde, (xsp + 16)
 	ld xwa, (xsp + 42)
@@ -566,7 +566,7 @@ DrawLine_Impl_PatternShallowSetup:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+8), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
@@ -602,7 +602,7 @@ DrawLine_Impl_PatternShallowLoop:
 	ld xwa, (xsp + 16)
 	add (xsp + 8), xwa
 	ld xde, (xsp + 8)
-	sra xde, 0
+	sra xde, 16
 	ld (xix), de
 	ld xde, (xsp + 12)
 	add (xhl), de
@@ -857,7 +857,7 @@ DrawLineEx_DiagSetup:
 
 	ld xwa, (xsp + 4)
 
-	sla xwa, 0
+	sla xwa, 16
 
 	ld xbc, (xsp + 8)
 
@@ -883,7 +883,7 @@ DrawLineEx_DiagSetup:
 
 	ld (xsp + 4), xwa
 
-	sla xwa, 0
+	sla xwa, 16
 
 	ld (xsp + 4), xwa
 
@@ -928,7 +928,7 @@ DrawLineEx_SteepAdvance:
 	ld xwa, (xsp + 12)
 	add (xsp + 4), xwa
 	ld xwa, (xsp + 4)
-	sra xwa, 0
+	sra xwa, 16
 	ld (xbc), wa
 	ld xwa, (xsp + 16)
 	add (xiy), wa
@@ -949,7 +949,7 @@ DrawLineEx_SteepXorPixel:
 
 DrawLineEx_ShallowSetup:
 	ld	xwa, (xsp+8)
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	xbc, (xsp+4)
 	call	16712753
 	ld	xiz, xhl
@@ -963,7 +963,7 @@ DrawLineEx_ShallowSetup:
 	ld	wa, (xde)
 	exts	xwa
 	ld	(xsp+8), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+8), xwa
 	ld	xwa, 32768
 	add	(xsp+8), xwa
@@ -998,7 +998,7 @@ DrawLineEx_ShallowAdvance:
 	ld xwa, (xsp + 16)
 	add (xsp + 8), xwa
 	ld xwa, (xsp + 8)
-	sra xwa, 0
+	sra xwa, 16
 	ld (xde), wa
 	ld xwa, (xsp + 12)
 	add (xbc), wa

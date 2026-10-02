@@ -77,6 +77,21 @@ old spelling (TOOLCHAIN_VERSION UPDATE 18):
             (LD2_ERPW_RR shares LDFR_WERP's encoding):
               ld2_erpw_rr IX, 0xEE       ->  ld qhl, ix              (d7 ee 9c)
 
+SHIFT-COUNT FAMILIES (wave 3a, second fix round, 2026-10-02) -- the backend
+now takes a shift/rotate count of 1..16 and encodes 16 as 0 (the CPU reads the
+count byte as `count & 0x0F`, 0 meaning 16; MAME's core `(s & 0x0f) ? (s &
+0x0f) : 16`), and refuses 0 and 17..  Old lines assembled by the OLD pin, new
+lines by the NEW build, required byte-identical:
+
+  shift16   `srl xhl, 0` -> `srl xhl, 16` (SLA/SRA/SLL/SRL on a register): the
+            raw field MAME's disassembler prints, for a shift by 16.
+
+  rotimm    `rlc_i_8 a, 3` / `rrc_i_16 wa, 5` / ... -> `rlc a, 3` / `rrc wa, 5`
+            (the raw-field rotate pseudos, retired); a count of 0 becomes 16.
+            A count above 16 (the CPU would rotate by count & 15) is REFUSED
+            and left for a hand decision -- in the tree only v7's misframed
+            `rrc_i_8 l, 19`, data decoded as code.
+
 VERIFICATION (every site, before anything is written)
   The old line is assembled alone by the OLD assembler (--old-mc, default the
   pinned snapshot) and the new line by the NEW one (--new-mc, default the
@@ -370,6 +385,35 @@ def rw_djnz16(mn, ops):
     return "djnz16", [R16[R32.index(ops[0].lower())], ops[1]]
 
 
+SHIFT_MN = ("sla", "sra", "sll", "srl")
+
+
+def rw_shift16(mn, ops):
+    if mn.lower() not in SHIFT_MN or len(ops) != 2 or ops[1].strip().lower() not in ("0", "0x0", "0x00"):
+        return None
+    return mn, [ops[0], "16"]
+
+
+ROT_PSEUDO = re.compile(r'^(rlc|rrc|rl|rr)_i_(8|16|32)$', re.I)
+
+
+def rw_rotimm(mn, ops):
+    m = ROT_PSEUDO.match(mn)
+    if not m:
+        return None
+    if len(ops) != 2:
+        return "REFUSE:operands"
+    try:
+        v = _int(ops[1])
+    except Exception:
+        return "REFUSE:symbolic-count"
+    if v == 0:
+        v = 16
+    if not 1 <= v <= 16:
+        return "REFUSE:count-above-16"
+    return m.group(1).lower(), [ops[0], str(v)]
+
+
 def rw_inc8(mn, ops):
     if mn.lower() not in ("inc", "dec") or len(ops) != 2 or ops[0].strip() != "0":
         return None
@@ -473,6 +517,10 @@ def rewrite_line(fam, line, equs):
             return rw_inc8(mn, o)
         if fam == "muldiv2":
             return rw_muldiv2(mn, o)
+        if fam == "shift16":
+            return rw_shift16(mn, o)
+        if fam == "rotimm":
+            return rw_rotimm(mn, o)
         return rw_autoinc(mn, o, equs)
     if "\\" in ops and fam not in ("erp",):
         r = rw(split_ops(ops))
@@ -482,11 +530,14 @@ def rewrite_line(fam, line, equs):
         return None, None
     if isinstance(r, str):
         return None, r
-    if fam in ("inc8", "djnz16"):
+    if fam in ("inc8", "djnz16", "shift16"):
         # Keep the line's own layout (wsa1 aligns a column of comments):
         # change only the count / the register name, in the source's case.
         if fam == "inc8":
             nops_s = re.sub(r'^(\s*)0(?=\s*,)', r'\g<1>8', ops)
+            nm = mn
+        elif fam == "shift16":
+            nops_s = re.sub(r',(\s*)0(x0+)?(\s*)$', r',\g<1>16\3', ops)
             nm = mn
         else:
             nops_s = re.sub(r'^(\s*)[xX]', r'\1', ops)
@@ -572,7 +623,7 @@ def assemble(mc, lines, equs=None, default_sym="0x1234"):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("family", choices=("muldiv", "autoinc", "disp256", "erp", "ldadri256",
-                                       "djnz16", "inc8", "muldiv2"))
+                                       "djnz16", "inc8", "muldiv2", "shift16", "rotimm"))
     ap.add_argument("--all-lda-dri", action="store_true",
                     help="ldadri256: every d16 lda_dri site, not only +256")
     ap.add_argument("--apply", action="store_true")

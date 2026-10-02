@@ -2807,7 +2807,7 @@ sub_F0095D:
 	ld	xbc, 0	; F0096A  ld XBC,0x00000000
 	ld	c, (6311936:24)	; F0096F  ld C,(0x605000)
 	div	xwa, bc	; F00974  div XWA,BC
-	srl	xwa, 0	; F00976  srl 0x00,XWA
+	srl	xwa, 16	; F00976  srl 0x00,XWA
 	cp	wa, 0:i3	; F00979  cp WA,0
 	jr	nz, sub_F0095D_Epilogue	; F0097B  jr NZ,0xf0097f
 	ld	d, 1:opc	; F0097D  ld D,0x01
@@ -98195,7 +98195,7 @@ sub_F49033_Skip7:
 	ld	c, d	; F4927C  ld C,D
 	extz	bc	; F4927E  extz BC
 	extz	xbc	; F49280  extz XBC
-	sll	xbc, 0	; F49282  sll 0x00,XBC
+	sll	xbc, 16	; F49282  sll 0x00,XBC
 	add	xiy, xbc	; F49285  add XIY,XBC
 	ld	xbc, (xiz+8)	; F49287  ld XBC,(XIZ+0x08)
 	ld	(xbc), xiy	; F4928A  ld (XBC),XIY
@@ -98208,7 +98208,7 @@ sub_F49033_Skip7:
 	ld	bc, (10040:16)	; F4929D  ld BC,(0x2738)
 	extz	bc	; F492A1  extz BC
 	extz	xbc	; F492A3  extz XBC
-	sll	xbc, 0	; F492A5  sll 0x00,XBC
+	sll	xbc, 16	; F492A5  sll 0x00,XBC
 	add	xiy, xbc	; F492A8  add XIY,XBC
 	ld	xbc, (xiz+8)	; F492AA  ld XBC,(XIZ+0x08)
 	ld	(xbc+6), xiy	; F492AD  ld (XBC+0x06),XIY

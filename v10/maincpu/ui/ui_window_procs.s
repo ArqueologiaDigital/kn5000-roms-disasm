@@ -1002,7 +1002,7 @@ WndScroll_HandleDialPage:
 	ld xde, (xsp + 42)
 	calr WindowProc
 	ld xwa, (xsp + 42)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	cp wa, 0:i3
 	jrl nz, UIDialog_ReturnZeroJmp
@@ -3157,7 +3157,7 @@ PsRadioBox_RadioSelect:
 	cpw (xwa), 0xffff
 	jrl z, PsRadioBox_ReturnZero
 	ld XBC, (xsp + 0x011c)
-	srl xbc, 0
+	srl xbc, 16
 	ldiw_erp 0xe6, 0
 	ld wa, (xwa)
 	cp wa, bc
@@ -3194,7 +3194,7 @@ PsRadioBox_SetIndex:
 	extz xbc
 	ld wa, (xwa + 26)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xbc
 	ld xwa, 0xffffffff
@@ -4182,7 +4182,7 @@ ClampColorToRange_Skip12:
 	cp	xwa, (xsp+4)
 	jrl	le, ClampColorToRange_Skip15
 	ld	xwa, (xsp+4)
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	xbc, (xsp+8)
 	call	Math_DivideSigned32
 	ld	xiz, xhl
@@ -4195,7 +4195,7 @@ ClampColorToRange_Skip12:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+4), xwa
 	ld	xwa, 0x8000
 	add	(xsp+4), xwa
@@ -4230,7 +4230,7 @@ ClampColorToRange_Join5:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xde), wa
 	ld	xwa, (xsp+16)
 	add	(xde+2), wa
@@ -4240,7 +4240,7 @@ ClampColorToRange_Join5:
 	jrl	ClampColorToRange_Join7
 ClampColorToRange_Skip15:
 	ld	xwa, (xsp+8)
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	xbc, (xsp+4)
 	call	Math_DivideSigned32
 	ld	xiz, xhl
@@ -4254,7 +4254,7 @@ ClampColorToRange_Skip15:
 	ld	wa, (xhl)
 	exts	xwa
 	ld	(xsp+8), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+8), xwa
 	ld	xwa, 0x8000
 	add	(xsp+8), xwa
@@ -4289,7 +4289,7 @@ ClampColorToRange_Join6:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xhl), wa
 	ld	xwa, (xsp+12)
 	add	(xde), wa
@@ -6822,10 +6822,10 @@ PaletteReduce_FindClosest:
 	add (xsp + 20), xwa
 	ld xwa, (xsp + 44)
 	and xwa, 0xff0000
-	srl xwa, 0
+	srl xwa, 16
 	ld xbc, (xsp + 40)
 	and xbc, 0xff0000
-	srl xbc, 0
+	srl xbc, 16
 	sub xbc, xwa
 	ld xwa, xbc
 	call Math_MultiplyAccumulate
@@ -6995,7 +6995,7 @@ CaptureLcd_WritePaletteOr94:
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
 	and xbc, 0xff0000	; is this a mask for Red?
-	srl xbc, 0
+	srl xbc, 16
 	stb_dri C, 0x07, 0xe0, 0xe8
 	ld bc, iz
 	sla bc, 2
@@ -7020,7 +7020,7 @@ CaptureLcd_WritePaletteNoOr94:
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
 	and xbc, 0xff0000	; is this a mask for Red?
-	srl xbc, 0
+	srl xbc, 16
 	stb_dri C, 0x07, 0xe0, 0xe8
 	ld bc, iz
 	sla bc, 2
@@ -8826,14 +8826,14 @@ DrawLineWithMode_Impl_Skip5:
 	ld	(xsp+38), xwa
 	ld	(xsp+30), xwa
 	ld	xwa, (xsp+8)
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	xbc, (xsp+4)
 	call	Math_DivideSigned32
 	ld	(xsp+34), xhl
 	lda	xwa, (xsp+62)
 	ld	(xsp+42), xwa
 	ld	xwa, (xsp+4)
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	xbc, (xsp+8)
 	call	Math_DivideSigned32
 	ld	xix, (xsp+42)
@@ -8841,7 +8841,7 @@ DrawLineWithMode_Impl_Skip5:
 	ld	(xsp+46), xwa
 	ld	wa, (xwa)
 	exts	xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+50), xwa
 	ld	xwa, 32768
 	add	(xsp+50), xwa
@@ -9014,7 +9014,7 @@ DrawLineWithMode_Impl_Skip13:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa
@@ -9079,7 +9079,7 @@ DrawLineWithMode_Impl_Join3:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xde), wa
 	ld	xhl, (xsp+16)
 	ld	xwa, (xsp+50)
@@ -9158,7 +9158,7 @@ DrawLineWithMode_Impl_Join4:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xhl, (xsp+8)
-	sra	xhl, 0
+	sra	xhl, 16
 	ld	xwa, (xsp+46)
 	ld	(xwa), hl
 	ld	xwa, (xsp+12)
@@ -9252,7 +9252,7 @@ DrawLineWithMode_Impl_Skip22:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa
@@ -9283,7 +9283,7 @@ DrawLineWithMode_Impl_Join7:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xde), wa
 	ld	xwa, (xsp+16)
 	add	(xhl), wa
@@ -9326,7 +9326,7 @@ DrawLineWithMode_Impl_Join8:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xde), wa
 	ld	xwa, (xsp+12)
 	add	(xhl), wa
@@ -9412,7 +9412,7 @@ DrawLineWithMode_Impl_Skip29:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa
@@ -9443,7 +9443,7 @@ DrawLineWithMode_Impl_Join11:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xde), wa
 	ld	xwa, (xsp+16)
 	add	(xhl), wa
@@ -9486,7 +9486,7 @@ DrawLineWithMode_Impl_Join12:
 	ld	xwa, (xsp+16)
 	add	(xsp+8), xwa
 	ld	xwa, (xsp+8)
-	sra	xwa, 0
+	sra	xwa, 16
 	ld	(xde), wa
 	ld	xwa, (xsp+12)
 	add	(xhl), wa
@@ -9914,7 +9914,7 @@ DrawDottedLineWithMode_Impl_Skip21:
 	cp	xwa, (xsp+4)
 	jrl	le, Voice_FactoryPresetData_Code_Skip2
 	ld	xwa, (xsp+4)
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	xbc, (xsp+8)
 	call	Math_DivideSigned32
 	ld	xiz, xhl
@@ -9927,7 +9927,7 @@ DrawDottedLineWithMode_Impl_Skip21:
 	ld	wa, (xwa)
 	exts	xwa
 	ld	(xsp+4), xwa
-	sla	xwa, 0
+	sla	xwa, 16
 	ld	(xsp+4), xwa
 	ld	xwa, 32768
 	add	(xsp+4), xwa

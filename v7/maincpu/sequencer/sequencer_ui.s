@@ -2639,7 +2639,7 @@ TrAsGrid_InitDispatch:
 	ld xwa, (xsp + 4)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -2650,7 +2650,7 @@ TrAsGrid_InitDispatch:
 	ld xwa, (xsp + 4)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -3110,7 +3110,7 @@ TrAsGridCheck_Cases:
 	ld	xiz, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xiz
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	de, iz
@@ -3215,7 +3215,7 @@ TrAsGrid_CheckTrackType_Join2:
 	ld	xiz, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xiz
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	de, iz
@@ -3321,7 +3321,7 @@ TrAsGrid_CheckTrackType_Join5:
 TrAsGridChk_HandleResizeEvent:
 	lda xbc, (xsp + 14)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -5629,7 +5629,7 @@ AcIndexToggle_HandleInit:
 	extz xhl
 	ld wa, (xiz + 42)
 	extz xwa
-	sll xwa, 0
+	sll xwa, 16
 	ld xde, xwa
 	add xde, xhl
 	ld xwa, 0xffffffff
@@ -5752,7 +5752,7 @@ AcIndexToggle_HandleDefault:
 	cpw (xwa), 0xffff
 	jr z, SqedtNote_ReturnZero
 	ld xbc, (xsp + 8)
-	srl xbc, 0
+	srl xbc, 16
 	ldiw_erp 0xe6, 0
 	ld de, (xwa)
 	ld wa, de
@@ -7531,7 +7531,7 @@ EntGrid_PostMainEvent:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -7542,7 +7542,7 @@ EntGrid_PostMainEvent:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -7804,7 +7804,7 @@ SndParam_Dispatch:
 	ld	(xsp+58), xhl
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xde, (xsp+58)
@@ -7856,7 +7856,7 @@ SndParam_Dispatch_Join:
 	ld	(xsp+58), xhl
 	lda	xbc, (xsp+40)
 	ld	xwa, (xsp+58)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xhl, (xsp+58)
@@ -7958,7 +7958,7 @@ SndParam_Dispatch_Skip5:
 	jrl	SndParam_SendEventReturnZero
 EntGridCheck_Handler:
 	ld XWA,(XSP+0x3a)
-	srl XWA, 0x00
+	srl XWA, 16
 	ld QWA,0
 	ld (XBC),WA
 	ld XHL,(XSP+0x24)
@@ -10955,7 +10955,7 @@ SqedtVal2_HandleUpScrollEvent:
 	call GetTitleNow
 	ld (xsp + 6), l
 	ld xwa, (xsp + 66)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xff
 	ld c, a
 	ld xwa, (xsp + 66)

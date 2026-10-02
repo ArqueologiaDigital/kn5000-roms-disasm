@@ -99,7 +99,7 @@ SoundLookup_ByCategory:
 	add wa, de
 	ld bc, wa
 	extz xbc
-	sll xbc, 0
+	sll xbc, 16
 	ld xwa, (xsp + 20)
 	ld de, wa
 	extz xde
@@ -114,7 +114,7 @@ SoundLookup_DispatchAndReturn:
 Sound_SetSelection:
 	extz wa
 	ld xbc, (xsp + 20)
-	srl xbc, 0
+	srl xbc, 16
 	ldiw_erp 0xe6, 0
 	ld de, bc
 	srl bc, 8
@@ -125,7 +125,7 @@ Sound_SetSelection:
 	ld xwa, (xsp + 20)
 	extz wa
 	ld xbc, (xsp + 20)
-	srl xbc, 0
+	srl xbc, 16
 	ldiw_erp 0xe6, 0
 	ld de, bc
 	srl de, 8
@@ -150,7 +150,7 @@ Sound_Navigate_Entry:
 Sound_Navigate_Init:
 	ldw (xsp + 12), 0x0
 	ld xwa, (xsp + 20)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xsp + 10), wa
 	ld wa, (xsp + 4)

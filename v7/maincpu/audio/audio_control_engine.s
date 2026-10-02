@@ -8450,7 +8450,7 @@ SeqTimer_ComputeRegValue:
 SeqTimer_AdjustForMode4:
 	div	xde, wa
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	srl	wa, 1
 	cp	bc, wa
 	jr	c, SeqTimer_RoundUp
@@ -12238,7 +12238,7 @@ Audio_ResetAfterPayloadError_Helper:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 31
 	add	xhl, xwa
 	ld	xwa, xhl
@@ -12358,7 +12358,7 @@ UIState_CheckAndRenderBitmap_Helper:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 31
 	add	xhl, xwa
 	ld	xwa, xhl

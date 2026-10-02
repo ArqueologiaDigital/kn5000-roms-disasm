@@ -310,7 +310,7 @@ FDTestDlg_DefaultCase:
 
 FDTestDlg_FormatDisplay:
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xsp+0:8), wa
 	ld (xsp + 2), de

@@ -549,7 +549,7 @@ sub_FC8EE5__FC8F0F:
 	call	Shift32_LogicalRight                              ; FC8F64  call 0xfca0db
 	extpfx3 0xC7, 0xF4, 0x8C                   ; FC8F68  ld D,IYL
 	ld	xiy, xix                                ; FC8F6B  ld XIY,XIX
-	srl	xiy, 0                                 ; FC8F6D  srl 0x00,XIY
+	srl	xiy, 16                                ; FC8F6D  srl 0x00,XIY
 	ld	hl, iy                                  ; FC8F70  ld HL,IY
 	add	iy, iy                                 ; FC8F72  add IY,IY
 	ld	hl, iy                                  ; FC8F74  ld HL,IY
@@ -676,7 +676,7 @@ sub_FC8EE5__FC90A8:
 	ld	iy, hl                                  ; FC90B3  ld IY,HL
 	sll	iy, 4                                  ; FC90B5  sll 0x04,IY
 	extz	xiy                                   ; FC90B8  extz XIY
-	sll	xiy, 0                                 ; FC90BA  sll 0x00,XIY
+	sll	xiy, 16                                ; FC90BA  sll 0x00,XIY
 	or	xbc, xiy                                ; FC90BD  or XBC,XIY
 	ld	(xiz-20), xbc                           ; FC90BF  ld (XIZ+0xec),XBC
 	cp	d, 0:i3                                   ; FC90C2  cp D,0

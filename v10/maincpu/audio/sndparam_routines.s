@@ -129,7 +129,7 @@ SndParam_LookupByKey:
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
@@ -244,7 +244,7 @@ SndParam_LookupReadOnly:
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
@@ -341,7 +341,7 @@ SndParam_ResolveWidget:
 	sll xbc, 8
 	ld h, 0x0:opc
 	extz xhl
-	sll xhl, 0
+	sll xhl, 16
 	or xhl, xbc
 	ld d, 0x0:opc
 	extz xde
@@ -391,7 +391,7 @@ SndParam_ResolveWidget:
 	cp xbc, xwa
 	jr nz, SndParam_RW_CheckFirstMatch
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	cp xwa, 0xb1
 	jr z, SndParam_RW_ExactMatch
 	ld xwa, xix
@@ -421,7 +421,7 @@ SndParam_RW_ChainNext:
 	cp xbc, xwa
 	jr nz, SndParam_RW_ChainCheckFirst
 	ld xwa, xix
-	srl xwa, 0
+	srl xwa, 16
 	cp xwa, 0xb1
 	jr z, SndParam_RW_ChainExactMatch
 	ld xwa, xiy
@@ -533,7 +533,7 @@ SndParam_ResolveWidgetEx_Data:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 31
 	add	xhl, xwa
 	ld	xwa, xhl
@@ -641,7 +641,7 @@ SndParam_DecodeMidiAddr:
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
@@ -756,7 +756,7 @@ SndParam_ResolveWidgetVariant2_Data:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 31
 	add	xhl, xwa
 	ld	xwa, xhl
@@ -3090,7 +3090,7 @@ SndParam_InsertEntry:
 	sll xwa, 9
 	add xwa, xhl
 	ld xhl, xiz
-	srl xhl, 0
+	srl xhl, 16
 	and xhl, 0x1f
 	add xhl, xwa
 	ld xwa, xhl
@@ -3214,7 +3214,7 @@ SndParam_AllocBuildKey:
 	sll xde, 8
 	ld xwa, 0:i3
 	ld a, (xsp + 20)
-	sll xwa, 0
+	sll xwa, 16
 	ld xbc, xwa
 	or xbc, xde
 	ld xwa, 0:i3

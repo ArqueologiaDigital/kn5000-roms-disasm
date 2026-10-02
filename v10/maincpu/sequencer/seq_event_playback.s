@@ -2818,7 +2818,7 @@ AcVocalGrid_DialSetup:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -2829,7 +2829,7 @@ AcVocalGrid_DialSetup:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -3056,7 +3056,7 @@ VocalistGrid_DispatchData:
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xhl), wa
 	ld	bc, de
@@ -3092,7 +3092,7 @@ VocalistGridCheck_Skip:
 	ld	xde, xhl
 	lda	xhl, (xsp+12)
 	ld	xwa, xde
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xhl), wa
 	ld	bc, de
@@ -3364,7 +3364,7 @@ VocalistGridCheck_Skip19:
 VocalistGrid_CheckHandler:
 	ld (xsp + 4), xbc
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	ld (xiy), de
@@ -3857,7 +3857,7 @@ VocalistPage1OKFunc:
 	ld xde, 0:i3
 	call SendEvent
 	extz xhl
-	sll xhl, 0
+	sll xhl, 16
 	add xhl, xiz
 	ld xwa, NAKA_MAINFUNC_MainVocalistPage1OKFunc
 	ld xbc, EVT_VST_PST_OK
@@ -3906,7 +3906,7 @@ VocalistPage1OK_Dispatch:
 	ld	(0xb7ec:16), 11
 	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	cp	wa, 0:i3
 	jr	z, VocalistPage2OKFunc_Skip
@@ -3942,7 +3942,7 @@ VocalistPage1_DispatchData:
 	ld	(0xb7ec:16), 2
 	call	SndParam_ApplyAndSync
 	ld	xwa, (xsp)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	cp	wa, 0:i3
 	jr	z, VocalistPage2OKFunc_Skip3
@@ -3971,7 +3971,7 @@ VocalistPage2OKFunc_Join2:
 	ld	de, 2:i3
 	call	SoundParam_NotifyChange
 	ld	xwa, (xsp)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	cp	wa, 0:i3
 	jr	z, VocalistPage2OKFunc_Skip2
@@ -4081,7 +4081,7 @@ RevSel_HandleDial:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	cp wa, 1:i3
 	jr nz, RevSel_ReturnZero
@@ -4168,7 +4168,7 @@ EqSel_HandleDial:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	cp wa, 2:i3
 	jr nz, RevEqFunc_ReturnZero
@@ -4177,7 +4177,7 @@ EqSel_HandleDial:
 	ld xde, 0:i3
 	call SendEvent
 	extz xhl
-	sll xhl, 0
+	sll xhl, 16
 	ld xwa, (xsp + 4)
 	extz xwa
 	add xwa, xhl
@@ -4280,7 +4280,7 @@ RevEqSel_HandleDial:
 	ld xde, (xsp + 4)
 	call InheritedProc
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	cp wa, 3:i3
 	jr nz, EqFunc_ReturnZero
@@ -4289,7 +4289,7 @@ RevEqSel_HandleDial:
 	ld xde, 0:i3
 	call SendEvent
 	extz xhl
-	sll xhl, 0
+	sll xhl, 16
 	ld xwa, (xsp + 4)
 	extz xwa
 	add xwa, xhl

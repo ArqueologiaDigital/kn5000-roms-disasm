@@ -81,7 +81,7 @@ SndParam_ProbeEntry_Epilogue:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	.set	SndParam_CallbackType1, . + 1
 	and	xhl, 31
 	add	xhl, xwa
@@ -199,7 +199,7 @@ SndParam_ResolveOscEntry_Helper:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 31
 	add	xhl, xwa
 	ld	xwa, xhl
@@ -318,7 +318,7 @@ SndParam_RO_Epilogue:
 	sll	xwa, 9
 	add	xwa, xhl
 	ld	xhl, xiz
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 31
 	add	xhl, xwa
 	ld	xwa, xhl
@@ -2677,7 +2677,7 @@ SndParam_NotifyQuick_Data_Helper5:
 	add	xwa, xhl
 	ld	xhl, xiz
 	.set	SndParam_PackAndWrite, . + 2
-	srl	xhl, 0
+	srl	xhl, 16
 	and	xhl, 31
 	add	xhl, xwa
 	ld	xwa, xhl
@@ -2789,7 +2789,7 @@ SndParam_NotifyQuick_Data_Skip26:
 	sll	xde, 8
 	ld	xwa, 0:i3
 	ld	a, (xsp+20)
-	sll	xwa, 0
+	sll	xwa, 16
 	ld	xbc, xwa
 	or	xbc, xde
 	ld	xwa, 0:i3

@@ -546,7 +546,7 @@ VoiceParam_ListHandler:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -557,7 +557,7 @@ VoiceParam_ListHandler:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -793,7 +793,7 @@ Data_FadeSetGridDispatch:
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+28)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
@@ -816,7 +816,7 @@ Data_FadeSetGridDispatch:
 	ld	(xsp+28), xhl
 	lda	xbc, (xsp+4)
 	ld	xwa, (xsp+28)
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	xwa, (xsp+28)
@@ -900,7 +900,7 @@ FadeSetGridCheck_Skip3:
 AcInOutGrid_Handler:
 	lda xde, (xsp + 4)
 	ld xwa, (xsp + 28)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xde), wa
 	lda xbc, (xde + 2)
@@ -1033,7 +1033,7 @@ AcInOutGrid_Init:
 	ld xwa, (xsp + 4)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -1044,7 +1044,7 @@ AcInOutGrid_Init:
 	ld xwa, (xsp + 4)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -1316,7 +1316,7 @@ Data_InOutGridDispatch:
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
@@ -1383,7 +1383,7 @@ InOutGridCheck_Skip:
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
@@ -1681,7 +1681,7 @@ InOutGridCheck_Entry:
 ParaLoadOpt_Entry:
 	lda xde, (xsp + 4)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xde), wa
 	lda xwa, (xde + 2)

@@ -423,7 +423,7 @@ SeqTrack_DispatchPart_Mode2:
 SeqTrack_DispatchPart_Mode3:
 	ld a, (4206:16)
 	and a, 0x7f
-	rrc_i_8 a, 2
+	rrc a, 2
 	ld w, a
 	and a, 0x3f
 	and w, 0xc0
@@ -3058,7 +3058,7 @@ MidiPgmChg_Mode0_SetupA:
 	or a, w
 	ld w, (6747:16)
 	and w, 0x80
-	rlc_i_8 w, 2
+	rlc w, 2
 	or a, w
 	push xhl
 	call SoundGen_UpdateAndRefresh
@@ -3162,7 +3162,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeA:
 	or a, w
 	ld w, (6747:16)
 	and w, 0x80
-	rlc_i_8 w, 2
+	rlc w, 2
 	or a, w
 	push xhl
 	call SoundGen_UpdateAndRefresh
@@ -3785,7 +3785,7 @@ MidiPgmChg_Mode0_SetupB:
 	or a, w
 	ld w, (6747:16)
 	and w, 0x80
-	rlc_i_8 w, 2
+	rlc w, 2
 	or a, w
 	push xhl
 	call SoundGen_UpdateAndRefresh
@@ -3891,7 +3891,7 @@ MidiPgmChg_Mode2_ApplyEnvelopeB:
 	or a, w
 	ld w, (6747:16)
 	and w, 0x80
-	rlc_i_8 w, 2
+	rlc w, 2
 	or a, w
 	push xhl
 	call SoundGen_UpdateAndRefresh

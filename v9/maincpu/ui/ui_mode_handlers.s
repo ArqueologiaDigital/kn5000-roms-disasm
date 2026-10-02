@@ -2625,7 +2625,7 @@ MasterSetup_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -2636,7 +2636,7 @@ MasterSetup_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -3476,7 +3476,7 @@ MstStyleAlp_CellSelect:
 	ld (xsp + 4), xhl
 	lda xde, (xsp + 50)
 	ld xwa, (xsp + 58)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xde), wa
 	lda xbc, (xde + 2)
@@ -3995,7 +3995,7 @@ MstStyle1Grid_CellSelect:
 	ld (xsp + 4), xhl
 	lda xhl, (xsp + 30)
 	ld xwa, (xsp + 38)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xhl), wa
 	lda xde, (xhl + 2)
@@ -4195,7 +4195,7 @@ MstStyle1_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -4206,7 +4206,7 @@ MstStyle1_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -4701,7 +4701,7 @@ MstStyle1SubGrid_CellSelect:
 	ld (xsp + 4), xhl
 	lda xwa, (xsp + 26)
 	ld xbc, xiz
-	srl xbc, 0
+	srl xbc, 16
 	ldiw_erp 0xe6, 0
 	ld (xwa), bc
 	lda xbc, (xwa + 2)
@@ -4905,7 +4905,7 @@ MstStyle1Page_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -4916,7 +4916,7 @@ MstStyle1Page_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, xiz
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -6163,7 +6163,7 @@ MstGrid2_CellSelect:
 	ld (xsp + 4), xix
 	lda xhl, (xsp + 54)
 	ld xwa, (xsp + 62)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
@@ -6578,7 +6578,7 @@ MstStyle2_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -6589,7 +6589,7 @@ MstStyle2_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -6827,7 +6827,7 @@ TchSensGrid_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -6875,7 +6875,7 @@ TchSensGridCheck_Evt1C00018:
 	ld	xde, xhl
 	lda	xwa, (xsp+14)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -7004,7 +7004,7 @@ TchSensGrid_EventDispatch_Skip3:
 TchSensGrid_CellSelect:
 	lda xbc, (xsp + 14)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -7155,7 +7155,7 @@ TchSens_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -7166,7 +7166,7 @@ TchSens_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -7378,7 +7378,7 @@ FSWAssGrid_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -7565,7 +7565,7 @@ FSWAssGridCheck_Evt1C00018:
 	ld	xde, xhl
 	lda	xwa, (xsp+260)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -7937,7 +7937,7 @@ FSWAssGrid_EventDispatch_Skip3_Skip:
 FSWAssGrid_CellSelect:
 	lda_dri XBC, 0xfd, 0x04, 0x01
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xbc), wa
 	lda xwa, (xbc + 2)
@@ -8411,7 +8411,7 @@ PmemPageCtl_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -8422,7 +8422,7 @@ PmemPageCtl_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -8907,7 +8907,7 @@ PmExpFilter_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+256)	; lda xwa, xsp+0x0100
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -8949,7 +8949,7 @@ PmExpFilterGridCheck_Evt1C00018:
 	ld	xde, xhl
 	lda	xbc, (xsp+256)	; lda xbc, xsp+0x0100
 	ld	xwa, xde
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xbc), wa
 	ld	(xbc+2), de
@@ -9065,7 +9065,7 @@ FSWAss_RefreshAllVoices_Skip13:
 PmExpFilterCheck_CellDecode:
 	lda xhl, (xsp+256)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xhl), wa
 	lda xbc, (xhl + 2)
@@ -9203,7 +9203,7 @@ PmExpFilter2_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -9214,7 +9214,7 @@ PmExpFilter2_EventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -9457,7 +9457,7 @@ DispTimeSet_EventDispatch:
 	ld	xde, xhl
 	lda	xwa, (xsp+40)
 	ld	xbc, xde
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	(xwa+2), de
@@ -9565,7 +9565,7 @@ DispTimeSetGridCheck_Evt1C00018:
 	ld	xde, xhl
 	lda	xiy, (xsp+40)
 	ld	xwa, xde
-	srl	xwa, 0
+	srl	xwa, 16
 	ld	qwa, 0
 	ld	(xiy), wa
 	ld	iz, de
@@ -9827,7 +9827,7 @@ FSWAss_RefreshAllVoices_Skip8:
 DispTimeSetCheck_CellDecode:
 	lda xhl, (xsp + 40)
 	ld xwa, xde
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	ld (xhl), wa
 	lda xwa, (xhl + 2)

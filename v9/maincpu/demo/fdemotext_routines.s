@@ -1216,7 +1216,7 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	cp	(xhl), 0
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip2
 	ld	xwa, xiz
-	srl	xwa, 0
+	srl	xwa, 16
 	and	xwa, 4095
 	extz	xwa
 	add	xwa, TITLE_PS
@@ -1269,7 +1269,7 @@ FDemoText_ByteData_DisplayRefresh_Loop:
 FDemoText_TextDispatch_Helper_Loop:
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
-	sll	xwa, 0
+	sll	xwa, 16
 	add	xwa, xbc
 	call	CheckViewObject
 	cp	hl, 0:i3
@@ -1288,7 +1288,7 @@ FDemoText_TextDispatch_Helper_Loop:
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip3
 	ld	xbc, xiz
 	ld	xwa, (xsp+4)
-	sll	xwa, 0
+	sll	xwa, 16
 	add	xwa, xbc
 	ld	xhl, xwa
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue2

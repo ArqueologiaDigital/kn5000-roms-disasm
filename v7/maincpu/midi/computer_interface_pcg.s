@@ -76,7 +76,7 @@ PcgOutGridBoxEventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -87,7 +87,7 @@ PcgOutGridBoxEventDispatch:
 	ld xwa, (xsp + 8)
 	ld bc, (xwa + 26)
 	ld xwa, (xsp + 4)
-	srl xwa, 0
+	srl xwa, 16
 	ldiw_erp 0xe2, 0
 	add wa, bc
 	ld de, wa
@@ -303,7 +303,7 @@ PcgOutGridCheckJumpTable:
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
@@ -394,7 +394,7 @@ PcgOutGridCheckJumpTable_Skip6:
 	ld	xiz, xhl
 	lda	xwa, (xsp+4)
 	ld	xbc, xiz
-	srl	xbc, 0
+	srl	xbc, 16
 	ld	qbc, 0
 	ld	(xwa), bc
 	ld	bc, iz
@@ -687,7 +687,7 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip5:
 	jrl	PcgOutCheck_SetFinalProp
 PcgOutCheckGridDataStructure:
 	ld XWA,XIZ
-	srl XWA, 0x00
+	srl XWA, 16
 	ld QWA,0
 	ld (XHL),WA
 	ld XWA,XBC

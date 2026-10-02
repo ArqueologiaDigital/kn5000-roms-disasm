@@ -1792,7 +1792,7 @@ sub_F9A86B__F9AA94:
 	push	0                                     ; F9AA94  push 0x00
 	extpfx3 0x8E, 0xFB, 0x04                   ; F9AA96  push (XIZ+0xfb)
 	ld	bc, (xiz-16)                            ; F9AA99  ld BC,(XIZ+0xf0)
-	sra	bc, 0                                  ; F9AA9C  sra 0x00,BC
+	sra	bc, 16                                 ; F9AA9C  sra 0x00,BC
 	ld	hl, bc                                  ; F9AA9F  ld HL,BC
 	and	hl, 0xFF                               ; F9AAA1  and HL,0x00ff
 	ld	xbc, (xiz-4)                            ; F9AAA5  ld XBC,(XIZ+0xfc)
@@ -7103,7 +7103,7 @@ Stream_ReadU24BE_Shl8:
 	ld	c, (xwa)                                ; F9DFDF  ld C,(XWA)
 	extz	bc                                    ; F9DFE1  extz BC
 	extz	xbc                                   ; F9DFE3  extz XBC
-	sll	xbc, 0                                 ; F9DFE5  sll 0x00,XBC
+	sll	xbc, 16                                ; F9DFE5  sll 0x00,XBC
 	and	xbc, 0xFF0000                          ; F9DFE8  and XBC,0x00ff0000
 	ld	(xiz-8), xbc                            ; F9DFEE  ld (XIZ+0xf8),XBC
 	sub	xwa, xwa                               ; F9DFF1  sub XWA,XWA
@@ -7178,7 +7178,7 @@ Stream_ReadU24BE:
 	ld	a, (xbc)                                ; F9E027  ld A,(XBC)
 	extz	wa                                    ; F9E029  extz WA
 	extz	xwa                                   ; F9E02B  extz XWA
-	sll	xwa, 0                                 ; F9E02D  sll 0x00,XWA
+	sll	xwa, 16                                ; F9E02D  sll 0x00,XWA
 	and	xwa, 0xFF0000                          ; F9E030  and XWA,0x00ff0000
 	ld	(xiz-4), xwa                            ; F9E036  ld (XIZ+0xfc),XWA
 	inc	1, xbc                                 ; F9E039  inc 1,XBC
@@ -15509,7 +15509,7 @@ MixerGain_ProductOfCurves:
 	extpfx3 0x9E, 0x08, 0x48                   ; FA30DB  muls XWA,(XIZ+0x08)
 	add	xwa, DSP_MixerGain_Curve_B                          ; FA30DE  add XWA,0x00fccb71
 	ld	xwa, (xwa)                              ; FA30E4  ld XWA,(XWA)
-	sra	xwa, 0                                 ; FA30E6  sra 0x00,XWA
+	sra	xwa, 16                                ; FA30E6  sra 0x00,XWA
 	push	xix                                   ; FA30E9  push XIX
 	push	xwa                                   ; FA30EA  push XWA
 	call	Multiply32_Signed                              ; FA30EB  call 0xfcb0d3

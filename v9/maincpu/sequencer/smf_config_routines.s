@@ -1307,7 +1307,7 @@ SMF_Encode_ThreeBytes:
 	ld l, (4230:16)
 	ld h, l
 	and h, 0xc0
-	rlc_i_8 h, 2
+	rlc h, 2
 	sla l, 1
 	and l, 0x1
 	or l, w

@@ -990,7 +990,7 @@ DiskInfo_RenderStrings:
 	ld	xwa, (xsp+4)
 	ld	xbc, xwa
 	sra	xbc, 15
-	sra	xbc, 0
+	sra	xbc, 16
 	and	xbc, 1023
 	add	xbc, xwa
 	ld	(xsp+4), xbc

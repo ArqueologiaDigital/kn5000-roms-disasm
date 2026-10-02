@@ -13270,7 +13270,7 @@ HDAE5000_DeleteDirectory:
 	add xwa, xhl			; absolute address
 	push xwa			; push fill dest
 	call HDAE5000_MemFill
-	inc 8, xsp			; stack cleanup (no-op)
+	inc 8, xsp			; pop MemFill's 8 argument bytes (two pushw, push xwa)
 	incw 1, (xsp + 4)		; slot counter++
 	cpw (xsp + 4), 0x0010
 	jrl c, .Lwh_slot_loop

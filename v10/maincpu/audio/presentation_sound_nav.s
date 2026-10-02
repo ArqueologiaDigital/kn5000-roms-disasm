@@ -1736,7 +1736,7 @@ WindowProc_GroupBoxForward:
 ; WindowProc default handler (returns 0)
 WindowProc_DefaultHandler:
 	ld xwa, (xsp + 20)
-	srl xwa, 0
+	srl xwa, 16
 	and xwa, 0xfff
 	cp wa, 0x1e0
 	jr c, WindowProc_GroupBoxAndChild

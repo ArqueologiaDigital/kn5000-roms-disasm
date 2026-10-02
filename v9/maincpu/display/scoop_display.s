@@ -2373,7 +2373,7 @@ TitleString_MaskAndFormat:
 	or a, w
 	and h, 0x2
 	ld l, (3770:16)
-	rrc_i_8 h, 2
+	rrc h, 2
 	or l, h
 	and a, l
 	xor c, c
@@ -6148,7 +6148,7 @@ VoiceCtrl_ParamSetupBytecode_Skip26:
 	ld	(xiy+2), a
 	ld	l, (3828:16)
 	and	l, 4
-	rrc_i_8 l, 3	; rrc 0x03,L  (llvm-mc: rrc	l does not round-trip)
+	rrc l, 3	; rrc 0x03,L
 	or	a, l
 	ld	(4539:16), a
 	ld	(0x90f7:16), a
@@ -10357,7 +10357,7 @@ VoiceSlot_StatusRet_Skip8:
 	call	VoiceSlot_StatusRet_0x8A1
 	call	VoiceSlot_StatusRet_0x8A1
 	and	a, 32
-	rlc_i_8 a, 3	; rlc 0x03,A  (llvm-mc: rlc	a does not round-trip)
+	rlc a, 3	; rlc 0x03,A
 	ld	e, a
 	call	VoiceSlot_ReadCurrentParams
 	and	a, 7
@@ -10483,7 +10483,7 @@ VoiceSlot_StatusRet_Code_Skip5:
 	or	w, l
 	ld	(4339:16), w
 	and	h, 2
-	rrc_i_8 h, 2	; rrc 0x02,H
+	rrc h, 2	; rrc 0x02,H
 	or	a, h
 	ld	(4341:16), a
 	ldfr_berp a, 60
@@ -10517,7 +10517,7 @@ VoiceSlot_StatusRet_Code_Skip9:
 	or	w, l
 	ld	(4339:16), w
 	and	h, 2
-	rrc_i_8 h, 2	; rrc 0x02,H
+	rrc h, 2	; rrc 0x02,H
 	or	a, h
 	ld	(4341:16), a
 	bit	4, a
@@ -10615,7 +10615,7 @@ VoiceSlot_StatusRet_Code_Skip13:
 	call	VoiceSlot_FinalRetZ
 	pop	xhl
 	and	h, 2
-	rrc_i_8 h, 2	; rrc 0x02,H
+	rrc h, 2	; rrc 0x02,H
 	or	a, h
 	ld	(4341:16), a
 	ld	a, (4337:16)
@@ -15614,7 +15614,7 @@ ParamPopup_Msa_Loop2:
 ParamPopup_Msa_Skip6:
 	ld	a, (3765:16)
 	and	a, 4
-	rrc_i_8 a, 3	; rrc 0x03,A  (llvm-mc: rrc	a does not round-trip)
+	rrc a, 3	; rrc 0x03,A
 	ld	w, (3767:16)
 	and	w, 127
 	or	a, w

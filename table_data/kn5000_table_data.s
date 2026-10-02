@@ -1570,8 +1570,8 @@ Boot_PrepareJump:
 	ld xwa, PROGRAM_ROM_ENTRY_BOOT	; target address
 	ldw ix, 0x14B	; CS2 register
 	extz xix
-	sll xbc, 0	; alignment/padding
-	sll xbc, 0
+	sll xbc, 16	; with the next line: XBC <<= 32 = 0 (XBC is not read before the jump)
+	sll xbc, 16
 	ld (xix), 0x80	; CS2 config
 	jp (xwa)	; jump to main program!
 
@@ -1816,7 +1816,7 @@ Flash_Reset_16bit__done:
 ; Manufacturer IDs: 0x01 (AMD), 0x04 (Fujitsu)
 ; -----------------------------------------------------------------------------
 Flash_ReadID_16bit:
-	dec 8, xsp	; DEC 0, XSP - allocate 1 byte on stack
+	dec 8, xsp	; allocate 8 bytes of locals
 	push xiz	; 3e
 	ld (xsp + 10), a	; LD (XSP+0Ah), A - save target
 	ldw (xsp + 8), 0xFFFF	; LD (XSP+08h), 0FFFFh - default return
@@ -3896,8 +3896,8 @@ HDAE5000_InitializeParallelPort__handoff:
 	ld xwa, PROGRAM_ROM_ENTRY_HDAE5000	; entry in Program ROM (Boot_Init's own handoff uses 0xFFFEDC)
 	ldw ix, 0x14B	; CS2 register
 	extz xix
-	sll xbc, 0	; alignment/padding
-	sll xbc, 0
+	sll xbc, 16	; with the next line: XBC <<= 32 = 0 (XBC is not read before the jump)
+	sll xbc, 16
 	ld (xix), 0x80	; CS2 config
 	jp (xwa)	; jump into main program ROM - never returns
 	popw_erp 0xFA	; unreachable canonical epilogue: POP QIZ
@@ -4296,7 +4296,7 @@ LZSS_Decompress__read_header_loop:
 	; === Parse decompressed size (3 bytes) ===
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	extz xhl	; EXTZ XHL
-	sla xhl, 0	; SLA 0, XHL (shift left for alignment)
+	sla xhl, 16	; first (high) size byte -> bits 23..16
 	ld (3104:16), xhl	; LD (0x0C20), XHL
 	calr LZSS_ReadByte	; CALR LZSS_ReadByte
 	sll hl, 8	; SLL 8, HL

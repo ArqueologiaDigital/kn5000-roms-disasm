@@ -1930,7 +1930,7 @@ Copy_DE_words_from_XBC_to_XWA:
 ;
 ; Input:
 ;   XWA = destination address (24-bit, auto-increments via SFR post-increment)
-;   XDE = word count (decrements to zero)
+;   DE  = word count (16-bit: `djnz16 de` decrements DE)
 ;   BC  = 16-bit fill pattern (e.g., color | (color << 8) for 8bpp)
 ; =============================================================================
 Fill_memory_at_XWA_with_DE_words_of_BC_value:
@@ -6982,7 +6982,7 @@ SLIDE_Decompress_4K_FillRing:
 	ld xwa, 0:i3
 	ld a, (xde)
 	ld xix, xwa
-	sll xix, 0
+	sll xix, 16
 	add xix, xhl
 	ld xhl, 0:i3
 	cp xix, 0x0
@@ -7114,7 +7114,7 @@ SLIDE_Decompress_8K_FillRing:
 	ld xwa, 0:i3
 	ld a, (xde)
 	ld xix, xwa
-	sll xix, 0
+	sll xix, 16
 	add xix, xhl
 	ld xhl, 0:i3
 	cp xix, 0x0
@@ -8550,7 +8550,7 @@ LZ_Decompress_ReadSizeField:
 	jr c, LZ_Decompress_ReadSizeField
 	calr Parport_ReadNextByte
 	extz xhl
-	sla xhl, 0
+	sla xhl, 16
 	ld (1598:16), xhl
 	calr Parport_ReadNextByte
 	sll hl, 8
