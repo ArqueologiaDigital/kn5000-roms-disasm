@@ -32,6 +32,11 @@ COLUMNS (each is a count of source lines or tokens; lower is better)
            CLAUDE.md "Event Code Freshness" wants these spelled as EVT_* / class constants.
            On 2026-10-02 these were 9,230 of the 9,909 "big" operands in v10, so they are
            counted apart from numaddr rather than inflating it.
+  numdata  numeric addresses inside the tree's own ROM in DATA: values on `.long` / `.4byte`
+           lines (`.long 0x00EB2AAE` in a pointer table) and absolute address constants
+           (`.set BmpFile_i18_bmp, 0xeb2a16`).  numaddr above sees instruction operands only;
+           this column was added on 2026-10-02, when v10 held 1,028 such `.long` values and
+           600 such constants (notes/data-pointer-symbolization-2026-10-02/).
   numfar   numeric FAR POINTERS into the tree's own ROM that the operand columns cannot see,
            because each half is below the ROM range: adjacent `pushw HI` / `pushw LO` lines
            (HI <= 0xff; the C compiler's far-pointer argument, `pushw 0xe4 / pushw 0x5126` =
@@ -80,6 +85,8 @@ REG_ADDR_ARGS = {b"RegObjTable": (1, 2, 3), b"RegObjTabl": (1, 3), b"RegObjTable
                  b"RegObjTablHama": (1, 3), b"RegTitleHama": (1,), b"RegMode": (1,),
                  b"RegTitle": (1,), b"RegModeHiLo": (1,), b"RegTitleHiLo": (1,)}
 NUMLIT = re.compile(rb'^(0x[0-9a-fA-F]+|\d+)$')
+DATALONG = re.compile(rb'^[ \t]*(?:[A-Za-z_.$][\w.$]*:)?[ \t]*\.(?:long|4byte)[ \t]+([^;\n]*)', re.M)
+ABSSET = re.compile(rb'^[ \t]*\.(?:set|equ)[ \t]+[A-Za-z_]\w*[ \t]*,[ \t]*(0x[0-9a-fA-F]+)[ \t]*(?:;.*)?$', re.M)
 POSALIAS = re.compile(rb'^\s*\.(?:set|equ)\s+[A-Za-z_][\w.$]*_0x[0-9A-Fa-f]+\s*,\s*[A-Za-z_][\w.$]*\s*\+', re.M)
 FIELD = re.compile(rb'\b(?:field|unk|unknown|pad)_(?:0x)?[0-9A-Fa-f]{2,6}\b')
 TODO = re.compile(rb'(?:;|//|/\*|#).*?(?:\bTODO\b|\bFIXME\b|\bunknown\b|\bpurpose unknown\b|\?\?\?)', re.I)
@@ -139,7 +146,7 @@ def numfar(data, rng):
 
 
 def measure(rev, path):
-    c = dict(numbr=0, numaddr=0, numevt=0, numfar=0, posalias=0, addrlbl=0, bytecmt=0, field=0,
+    c = dict(numbr=0, numaddr=0, numdata=0, numevt=0, numfar=0, posalias=0, addrlbl=0, bytecmt=0, field=0,
              todo=0, files=0)
     for name, data in blobs(rev, path):
         c["files"] += 1
@@ -155,6 +162,11 @@ def measure(rev, path):
                 c["numaddr"] += 1
             if any(0x1000000 <= v < 0x2000000 for v in vals):
                 c["numevt"] += 1
+        lo, hi = OWN_ROM.get(path, (1, 0))
+        for m in DATALONG.finditer(data):
+            c["numdata"] += sum(1 for x in m.group(1).split(b",")
+                                if NUMLIT.match(x.strip()) and lo <= int(x.strip(), 0) <= hi)
+        c["numdata"] += sum(1 for m in ABSSET.finditer(data) if lo <= int(m.group(1), 0) <= hi)
         c["numfar"] += numfar(data, OWN_ROM.get(path, (1, 0)))
         c["posalias"] += len(POSALIAS.findall(data))
         c["addrlbl"] += len(ADDRLBL.findall(data))
@@ -171,7 +183,7 @@ def main():
     a = ap.parse_args()
     short = subprocess.run(["git", "-C", REPO, "rev-parse", "--short", a.rev],
                            capture_output=True, text=True, check=True).stdout.strip()
-    cols = ["files", "numbr", "numaddr", "numevt", "numfar", "posalias", "addrlbl", "bytecmt",
+    cols = ["files", "numbr", "numaddr", "numdata", "numevt", "numfar", "posalias", "addrlbl", "bytecmt",
             "field", "todo"]
     tot = dict.fromkeys(cols, 0)
     rows = []
