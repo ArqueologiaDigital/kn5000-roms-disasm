@@ -3335,9 +3335,7 @@ ROM_PaddingFF:
 
 ; Labels emitted as .set (exact addresses from ORG/name)
 
-	.set SeqRingBuf_WriteDispatch_Table_0x11, 0xe00023
 
-	.set SeqRingBuf_WriteDispatch_Table_0x16, 0xe00028
 
 	.set LongStr_ics_KN5000_Program, 0xe00065
 
@@ -3467,9 +3465,7 @@ ROM_PaddingFF:
 
 	.set Str_ENGLISH, 0xe2df54
 
-	.set Str_ENGLISH_0x10, 0xe2df64
 
-	.set Str_ENGLISH_0x52, 0xe2dfa6
 
 	.set NakaData_EffectsBlock_Byte1, 0xe30001
 
@@ -3505,7 +3501,6 @@ ROM_PaddingFF:
 
 	.set WarnStr_PresstheSTARTSTOPbutt, 0xe34104
 
-	.set WarnStr_PresstheSTARTSTOPbutt_0x26, 0xe3412a
 
 	.set FmtStr_pct3d, 0xe34614
 
@@ -3533,11 +3528,8 @@ ROM_PaddingFF:
 
 	.set Pad_NakaExternal_Block3, 0xe40046
 
-	.set Pad_BeforeNakaData_ExternalBase_0x66, 0xe40059
 
-	.set NakaData_ExternalBase_0x66, 0xe40066
 
-	.set Pad_AfterNakaData_ExternalBase_0x66, 0xe4006e
 
 	.set Pad_NakaExternal_Block4, 0xe40081
 
@@ -3655,13 +3647,10 @@ ROM_PaddingFF:
 
 	.set Str_AL, 0xe8005f
 
-	.set NakaInst_GM_0x5A, 0xe800ca
 
 	.set NakaInst_GM_0x5E, 0xe800ce
 
-	.set NakaInst_GM_0x6E, 0xe800de
 
-	.set NakaInst_LEFT_0x04, 0xe800fa
 
 	.set AlignedStr_ON, 0xe8013c
 
@@ -3685,13 +3674,10 @@ ROM_PaddingFF:
 
 	.set NakaData_TechnichordBitmap1, 0xe900d8
 
-	.set NakaData_TechnichordBitmap1_0x09, 0xe900e1
 
-	.set NakaData_TechnichordBitmap1_0x14, 0xe900ec
 
 	.set NakaInst_SequencerComboBox, 0xe90130
 
-	.set NakaInst_SequencerComboBox_0x03, 0xe90133
 
 	.set NakaData_TechnichordBitmap2, 0xe9013d
 
@@ -3699,7 +3685,6 @@ ROM_PaddingFF:
 
 	.set StrPtrTable_DiskErr03, 0xe96344
 
-	.set Str_DiskErr12_French_0x5A, 0xe97114
 
 	.set StrPtrTable_DiskErr16, 0xe971de
 
@@ -3707,7 +3692,6 @@ ROM_PaddingFF:
 
 	.set StrPtrTable_DiskErr24_Start, 0xe97dc2
 
-	.set Str_Err24APC_French_0x62, 0xe98676
 
 	.set StrPtrTable_DiskErr24_French_End, 0xe9871a
 
@@ -4221,13 +4205,11 @@ ROM_PaddingFF:
 
 	.set SoundName_160, 0xec00ec
 
-	.set SoundName_160_0x27, 0xec0113
 
 	.set SoundName_ToTheBone, 0xec013b
 
 	.set NakaStr_SoundPresetBone, 0xec013f
 
-	.set NakaInst_Hard_Analogue_148_0x65, 0xec0a1b
 
 	.set SoundName_MournfulTenor, 0xec88ec
 
@@ -4235,13 +4217,11 @@ ROM_PaddingFF:
 
 	.set SoundName_HymnBand, 0xec89b4
 
-	.set SoundName_HymnBand_0x66, 0xec8a1a
 
 	.set SoundName_PreachTheWord, 0xec8a7c
 
 	.set SoundName_LushTango, 0xecb09c
 
-	.set SoundName_LushTango_0x66, 0xecb102
 
 	.set SoundName_AstorsTango, 0xecb164
 
@@ -4251,7 +4231,6 @@ ROM_PaddingFF:
 
 	.set SoundName_NotStrauss, 0xecb334
 
-	.set SoundName_NotStrauss_0x66, 0xecb39a
 
 	.set SoundName_BavarianFlutes, 0xecb3fc
 
@@ -4457,29 +4436,19 @@ ROM_PaddingFF:
 
 	.set WidgetParam_SineWave_Entry, 0xedbaae
 
-	.set Naka_SubDispatch_B_Table_0x6E, 0xee0206
 
 	.set SeqData_SubDispatch_ParamA, 0xee3023
 
 	.set SeqData_SubDispatch_ParamB, 0xee3025
 
-	.set WidgetParam_Entry_002_0x18, 0xee45d2
 
-	.set WidgetParam_Entry_002_0x30, 0xee45ea
 
-	.set WidgetParam_Entry_006_0x18, 0xee4662
 
-	.set WidgetParam_Entry_006_0x48, 0xee4692
 
-	.set WidgetParam_Entry_008_0x18, 0xee46da
 
-	.set WidgetParam_Entry_009_0x18, 0xee470a
 
-	.set WidgetParam_Entry_011_0x18, 0xee4752
 
-	.set WidgetParam_Entry_011_0x48, 0xee4782
 
-	.set WidgetParam_Entry_011_0x60, 0xee479a
 
 	.set CharMap_PermutationPtrTable_A, 0xeed3de
 
@@ -4489,9 +4458,7 @@ ROM_PaddingFF:
 
 	.set NakaData_NormalModeMap, 0xeefff5
 
-	.set NakaData_NormalModeMap_0x07, 0xeefffc
 
-	.set ScoopDisp_DispatchTable_Extended_0x20, 0xef774f
 
 	.set PerfMode_Evt01_Handler, 0xef8b43
 
@@ -4577,23 +4544,16 @@ ROM_PaddingFF:
 
 	.set EffectParamEdit_Entry_08, SeScreenData_0x58E6
 
-	.set SeqVoice_ValidateAndProcessState_0x13, 0xf400de
 
 	.set NakaData_PerfStyleCode, 0xf4fc1b
 
-	.set NakaData_PerfStyleCode_0x10, 0xf4fc2b
 
-	.set NakaData_PerfStyleCode_0x1A, 0xf4fc35
 
-	.set NakaData_PerfStyleCode_0x33, 0xf4fc4e
 
-	.set NakaData_PerfStyleCode_0x59, 0xf4fc74
 
 	.set MSP_FactoryPresetData_Continued, 0xf6fcb7
 
-	.set SLDstBankList_FuncBody_0x44, 0xf8fcac
 
-	.set SLDstBankList_FuncBody_0x7C, 0xf8fce4
 
 	.set FDC_INIT, 0xf967b2
 
@@ -4633,7 +4593,6 @@ ROM_PaddingFF:
 
 	.set FDC_OUTPUT_CTRL, 0xf9784e
 
-	.set RVari_SelectO_SecondItem_Draw_0x32, 0xfbf847
 
 	.set NakaData_WidgetInit1, 0xfc5c8f
 
@@ -4643,13 +4602,9 @@ ROM_PaddingFF:
 
 	.set SeqChan_UnhandledCmd, 0xfd7a90
 
-	.set SeqChan_UnhandledCmd_0x01, 0xfd7a91
 
-	.set SeqChan_UnhandledCmd_0x02, 0xfd7a92
 
-	.set SeqChan_UnhandledCmd_0x03, 0xfd7a93
 
-	.set SeqChan_UnhandledCmd_0x12, 0xfd7aa2
 
 	.set AudioInit_PartConfig_Loop_0x26, 0xfdf884
 
@@ -4657,6 +4612,5 @@ ROM_PaddingFF:
 
 	.set HdaeRom_AltDispatchOffsetTable, 0xeed753
 
-	.set HdaeRom_DataHandler_0x22, 0xfefaa1
 
 	.set NakaData_RomEnd, 0xffffff

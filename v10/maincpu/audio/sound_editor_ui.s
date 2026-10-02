@@ -13013,14 +13013,8 @@ SeScreenData_0x1F75:
 ; evidence: SeMenu_BankEdit_LoopHelper
 SeScreenData_0x1F80:
 	.set	SeScreenData_0x1FA8, . + 40
-	.set	SeScreenData_0x1FDA, . + 90
-	.set	SeScreenData_0x200C, . + 140
 	.set	SeScreenData_0x203E, . + 190
 	.set	SeScreenData_0x2046, . + 198
-	.set	SeScreenData_0x204B, . + 203
-	.set	SeScreenData_0x2050, . + 208
-	.set	SeScreenData_0x2069, . + 233
-	.set	SeScreenData_0x207D, . + 253
 	.set	SeScreenData_0x2091, . + 273
 	.incbin "includes/generated/se_drumkit_display.bin"
 ; string table, 2-char cells, indexed by a bound record's value (field +7 of
@@ -14182,17 +14176,11 @@ SeScreenData_0x3660:
 ; reader (se_screendata_model.py): static record list(s) from here, read by GraphicsRender_ProcessEntries;
 ; evidence: bounds SeScreenData_0x3821
 SeScreenData_0x3805:
-	.set	SeScreenData_0x380C, . + 7
-	.set	SeScreenData_0x3813, . + 14
 	.set	SeScreenData_0x381A, . + 21
 	.set	SeScreenData_0x3839, . + 52
 	.set	SeScreenData_0x3845, . + 64
 	.set	SeScreenData_0x3851, . + 76
 	.set	SeScreenData_0x385D, . + 88
-	.set	SeScreenData_0x3891, . + 140
-	.set	SeScreenData_0x38A5, . + 160
-	.set	SeScreenData_0x38B9, . + 180
-	.set	SeScreenData_0x38CD, . + 200
 	.incbin "includes/generated/se_rhythm_transport_tables.bin"
 ; se_parameter_grid: 221 bytes (17 commands)
 ; Compiled from C source (maincpu/audio/sound_editor_screens/se_parameter_grid.c)

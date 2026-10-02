@@ -130,7 +130,6 @@
 	.set BitMapOut_UpdateWidget_Done_0x8B, BitMapOut_UpdateWidget_Done + 139
 	.set BitMapOut_UpdateWidget_Done_0x98, BitMapOut_UpdateWidget_Done + 152
 	.set BitMapOut_UpdateWidget_Done_0x99, BitMapOut_UpdateWidget_Done + 153
-	.set Bitmap_1bit_Completed_0x15C, Bitmap_1bit_Completed + 348
 	.set Bitmap_DigitD_0x11CE, Bitmap_DigitD + 4558
 	.set Bitmap_DigitD_0x11D6, Bitmap_DigitD + 4566
 	.set Bitmap_DigitD_0x11F0, Bitmap_DigitD + 4592
@@ -232,10 +231,7 @@
 	.set ClockConfig_Handler_0_0x110, ClockConfig_Handler_0 + 272
 	.set ClockConfig_Handler_0_0x227, ClockConfig_Handler_0 + 551
 	.set ClockConfig_Handler_0_0x228, ClockConfig_Handler_0 + 552
-	.set ClockConfig_Handler_0_0x9F, ClockConfig_Handler_0 + 159
-	.set ClockConfig_Handler_0_0xA5, ClockConfig_Handler_0 + 165
 	.set ClockConfig_Handler_0_0xAB, ClockConfig_Handler_0 + 171
-	.set ColorBlit2_LargeCodeBlock_0x3F0, ColorBlit2_LargeCodeBlock + 1008
 	.set ColorBlit2_LargeCodeBlock_0x65, ColorBlit2_LargeCodeBlock + 101
 	.set ColorBlit2_LargeCodeBlock_0xBD9, ColorBlit2_LargeCodeBlock + 3033
 	.set Composer_SettingsBlock_0x60, Composer_SettingsBlock + 96
@@ -263,7 +259,6 @@
 	.set Data_UnknownBlock_0x6E, Data_UnknownBlock + 110
 	.set DbMemo_DrawContent_Loop_0x61, DbMemo_DrawContent_Loop + 97
 	.set Debug_SWI_JumpTable_0x6, Debug_SWI_JumpTable + 6
-	.set DefaultHandler_Ret_0x2B, DefaultHandler_Ret + 43
 	.set DefaultHandler_Ret_0xA6, DefaultHandler_Ret + 166
 	.set DemoDiskPrompt_English1_0x86, DemoDiskPrompt_English1 + 134
 	.set DemoDiskPrompt_English1_0x8A, DemoDiskPrompt_English1 + 138
@@ -335,7 +330,6 @@
 	.set DisplayMode_Handler_3_0x9D, DisplayMode_Handler_3 + 157
 	.set DisplayStr_BytecodeBlock_A_0x11F, DisplayStr_BytecodeBlock_A + 287
 	.set DisplayStr_BytecodeBlock_A_0x120, DisplayStr_BytecodeBlock_A + 288
-	.set DisplayStr_BytecodeBlock_A_0x198, DisplayStr_BytecodeBlock_A + 408
 	.set DisplayStr_BytecodeBlock_A_0x1A4, DisplayStr_BytecodeBlock_A + 420
 	.set DisplayStr_BytecodeBlock_A_0x52, DisplayStr_BytecodeBlock_A + 82
 	.set DisplayStr_BytecodeBlock_A_0x53, DisplayStr_BytecodeBlock_A + 83
@@ -343,43 +337,29 @@
 	.set DisplayStr_BytecodeBlock_B_0x39, DisplayStr_BytecodeBlock_B + 57
 	.set DisplayStr_BytecodeBlock_B_0x3D, DisplayStr_BytecodeBlock_B + 61
 	.set DisplayStr_BytecodeBlock_B_0x4, DisplayStr_BytecodeBlock_B + 4
-	.set DisplayStr_BytecodeBlock_B_0x5C, DisplayStr_BytecodeBlock_B + 92
 	.set DisplayStr_BytecodeBlock_B_0x63, DisplayStr_BytecodeBlock_B + 99
 	.set DisplayStr_BytecodeBlock_B_0x8C, DisplayStr_BytecodeBlock_B + 140
 	.set DisplayStr_BytecodeBlock_C_0x24, DisplayStr_BytecodeBlock_C + 36
-	.set DisplayStr_BytecodeBlock_C_0x5E, DisplayStr_BytecodeBlock_C + 94
-	.set DisplayStr_BytecodeBlock_C_0x77, DisplayStr_BytecodeBlock_C + 119
 	.set DisplayStr_BytecodeBlock_C_0x90, DisplayStr_BytecodeBlock_C + 144
 	.set DisplayStr_BytecodeBlock_E_0x1, DisplayStr_BytecodeBlock_E + 1
-	.set DisplayStr_RhythmLabel_0x1, DisplayStr_RhythmLabel + 1
-	.set DisplayStr_RhythmLabel_0x42, DisplayStr_RhythmLabel + 66
 	.set DisplayStr_RhythmLabel_0x4C, DisplayStr_RhythmLabel + 76
 	.set DisplayStr_RhythmLabel_0x64, DisplayStr_RhythmLabel + 100
-	.set DisplayStr_RhythmLabel_0x86, DisplayStr_RhythmLabel + 134
 	.set DisplayStr_RhythmLabel_0x92, DisplayStr_RhythmLabel + 146
 	.set DisplayStr_RhythmLabel_0xA, DisplayStr_RhythmLabel + 10
 	.set DisplayStr_StyleSectionNames_0x69, DisplayStr_StyleSectionNames + 105
-	.set DisplayStr_TempoString_0x19, DisplayStr_TempoString + 25
 	.set DisplayStr_TempoString_0x32, DisplayStr_TempoString + 50
 	.set DisplayStr_TempoString_0x36, DisplayStr_TempoString + 54
-	.set DisplayStr_TempoString_0x56, DisplayStr_TempoString + 86
 	.set DisplayStr_TempoString_0x6F, DisplayStr_TempoString + 111
 	.set DisplayStr_TempoString_0x74, DisplayStr_TempoString + 116
 	.set DisplayStr_TempoString_0x9F, DisplayStr_TempoString + 159
-	.set Display_BytecodeBlock_F_0x104, Display_BytecodeBlock_F + 260
 	.set Display_BytecodeBlock_F_0x154, Display_BytecodeBlock_F + 340
 	.set Display_BytecodeBlock_F_0x17C, Display_BytecodeBlock_F + 380
 	.set Display_BytecodeBlock_F_0x1E7, Display_BytecodeBlock_F + 487
 	.set Display_BytecodeBlock_F_0x20A, Display_BytecodeBlock_F + 522
-	.set Display_BytecodeBlock_F_0x20B, Display_BytecodeBlock_F + 523
-	.set Display_BytecodeBlock_F_0x253, Display_BytecodeBlock_F + 595
-	.set Display_BytecodeBlock_F_0x256, Display_BytecodeBlock_F + 598
 	.set Display_BytecodeBlock_F_0x259, Display_BytecodeBlock_F + 601
 	.set Display_BytecodeBlock_F_0x27, Display_BytecodeBlock_F + 39
 	.set Display_BytecodeBlock_F_0x2A2, Display_BytecodeBlock_F + 674
 	.set Display_BytecodeBlock_F_0x2DA, Display_BytecodeBlock_F + 730
-	.set Display_BytecodeBlock_F_0x307, Display_BytecodeBlock_F + 775
-	.set Display_BytecodeBlock_F_0x31A, Display_BytecodeBlock_F + 794
 	.set Display_BytecodeBlock_F_0x32D, Display_BytecodeBlock_F + 813
 	.set Display_BytecodeBlock_F_0x33F, Display_BytecodeBlock_F + 831
 	.set Display_BytecodeBlock_F_0x344, Display_BytecodeBlock_F + 836
@@ -388,7 +368,6 @@
 	.set Display_BytecodeBlock_F_0x4, Display_BytecodeBlock_F + 4
 	.set Display_BytecodeBlock_F_0x59, Display_BytecodeBlock_F + 89
 	.set Display_BytecodeBlock_F_0xF3, Display_BytecodeBlock_F + 243
-	.set Display_BytecodeBlock_F_0xF4, Display_BytecodeBlock_F + 244
 	.set Display_DeferOrDrawWall_0x18, Display_DeferOrDrawWall + 24
 	.set Display_DeferOrUpdateScreen_0x18, Display_DeferOrUpdateScreen + 24
 	.set Display_DeferOrUpdateScreen_Direct_0xF, Display_DeferOrUpdateScreen_Direct + 15
@@ -617,31 +596,12 @@
 	.set MemoryConfig_Handler_Table_0x18, MemoryConfig_Handler_Table + 24
 	.set MemoryConfig_Handler_Table_0x67, MemoryConfig_Handler_Table + 103
 	.set MemoryConfig_Handler_Table_0x88, MemoryConfig_Handler_Table + 136
-	.set MemoryConfig_Handler_Table_0xB2, MemoryConfig_Handler_Table + 178
 	.set MidiCC_ChannelMappingData_0x140, MidiCC_ChannelMappingData + 320
-	.set MidiCC_ChannelMappingData_0x1A0, MidiCC_ChannelMappingData + 416
-	.set MidiCC_ChannelMappingData_0x200, MidiCC_ChannelMappingData + 512
-	.set MidiCC_ChannelMappingData_0x260, MidiCC_ChannelMappingData + 608
-	.set MidiCC_ChannelMappingData_0x2C0, MidiCC_ChannelMappingData + 704
-	.set MidiCC_ChannelMappingData_0x320, MidiCC_ChannelMappingData + 800
-	.set MidiCC_ChannelMappingData_0x380, MidiCC_ChannelMappingData + 896
-	.set MidiCC_ChannelMappingData_0x3E0, MidiCC_ChannelMappingData + 992
 	.set MidiCC_ChannelMappingData_0x440, MidiCC_ChannelMappingData + 1088
-	.set MidiCC_ChannelMappingData_0x560, MidiCC_ChannelMappingData + 1376
-	.set MidiCC_ChannelMappingData_0x5C0, MidiCC_ChannelMappingData + 1472
 	.set MidiCC_ChannelMappingData_0x620, MidiCC_ChannelMappingData + 1568
-	.set MidiCC_ChannelMappingData_0x680, MidiCC_ChannelMappingData + 1664
-	.set MidiCC_ChannelMappingData_0x6E0, MidiCC_ChannelMappingData + 1760
-	.set MidiCC_ChannelMappingData_0x760, MidiCC_ChannelMappingData + 1888
-	.set MidiCC_ChannelMappingData_0x7A0, MidiCC_ChannelMappingData + 1952
-	.set MidiCC_ChannelMappingData_0x7E0, MidiCC_ChannelMappingData + 2016
 	.set MidiCC_ChannelMappingData_0x80, MidiCC_ChannelMappingData + 128
-	.set MidiCC_ChannelMappingData_0x820, MidiCC_ChannelMappingData + 2080
-	.set MidiCC_ChannelMappingData_0x840, MidiCC_ChannelMappingData + 2112
 	.set MidiCC_ChannelMappingData_0xE0, MidiCC_ChannelMappingData + 224
-	.set MidiCC_Handler_BitManipulation_0x45, MidiCC_Handler_BitManipulation + 69
 	.set MidiCC_Handler_ChannelMapping_0x60, MidiCC_Handler_ChannelMapping + 96
-	.set MidiCC_Handler_RangeCheck_0x3F, MidiCC_Handler_RangeCheck + 63
 	.set MidiParamStr2_Sound_0x48, MidiParamStr2_Sound + 72
 	.set MidiParamStr2_Sound_0x8, MidiParamStr2_Sound + 8
 	.set MidiParam_MixerCfgData_0x2, MidiParam_MixerCfgData + 2
@@ -659,7 +619,6 @@
 	.set MidiPkt_EventType_Table_0x31C, MidiPkt_EventType_Table + 796
 	.set MidiPkt_EventType_Table_0x320, MidiPkt_EventType_Table + 800
 	.set MidiPkt_EventType_Table_0x324, MidiPkt_EventType_Table + 804
-	.set MidiPkt_EventType_Table_0x33, MidiPkt_EventType_Table + 51
 	.set MidiPkt_EventType_Table_0x330, MidiPkt_EventType_Table + 816
 	.set MidiPkt_EventType_Table_0x340, MidiPkt_EventType_Table + 832
 	.set MidiPkt_EventType_Table_0x344, MidiPkt_EventType_Table + 836
@@ -733,8 +692,6 @@
 	.set MidiStream_DispatchData_0xD0, MidiStream_DispatchData + 208
 	.set MidiStream_DispatchData_0xEE, MidiStream_DispatchData + 238
 	.set MidiStream_ExtendedDispatch_0x1, MidiStream_ExtendedDispatch + 1
-	.set MidiStream_ExtendedDispatch_0x197, MidiStream_ExtendedDispatch + 407
-	.set MidiStream_ExtendedDispatch_0x28F, MidiStream_ExtendedDispatch + 655
 	.set MidiStream_ExtendedDispatch_0x298, MidiStream_ExtendedDispatch + 664
 	.set MidiStream_ExtendedDispatch_0x307, MidiStream_ExtendedDispatch + 775
 	.set MidiStream_ExtendedDispatch_0x73, MidiStream_ExtendedDispatch + 115
@@ -855,11 +812,7 @@
 	.set OscScope_RenderBlock_0xE, OscScope_RenderBlock + 14
 	.set PaletteBankRotate_0x18, PaletteBankRotate + 24
 	.set PanelEvt_Dispatch11_TableAndHandlers_0x1, PanelEvt_Dispatch11_TableAndHandlers + 1
-	.set PanelEvt_Dispatch11_TableAndHandlers_0x5F, PanelEvt_Dispatch11_TableAndHandlers + 95
 	.set PanelEvt_Dispatch6_TableAndHandlers_0x1, PanelEvt_Dispatch6_TableAndHandlers + 1
-	.set PanelEvt_Dispatch6_TableAndHandlers_0x49, PanelEvt_Dispatch6_TableAndHandlers + 73
-	.set PanelEvt_Dispatch6_TableAndHandlers_0xAC, PanelEvt_Dispatch6_TableAndHandlers + 172
-	.set PanelEvt_Dispatch6_TableAndHandlers_0xB5, PanelEvt_Dispatch6_TableAndHandlers + 181
 	.set PanelEvt_Handler_4_DualValueCheck_0x377, PanelEvt_Handler_4_DualValueCheck + 887
 	.set PanelEvt_Handler_4_DualValueCheck_0x3A7, PanelEvt_Handler_4_DualValueCheck + 935
 	.set PanelEvt_Handler_4_DualValueCheck_0x427, PanelEvt_Handler_4_DualValueCheck + 1063
@@ -912,10 +865,8 @@
 	.set Part_ProcessEntry_Data_0x48, Part_ProcessEntry_Data + 72
 	.set PerfMode_Handler_EvtB_0x78, PerfMode_Handler_EvtB + 120
 	.set PerfMode_Handler_EvtB_0xC8, PerfMode_Handler_EvtB + 200
-	.set PerfMode_ParamHandler_2_0x1B, PerfMode_ParamHandler_2 + 27
 	.set PerfMode_ParamHandler_3_Entry_0x12, PerfMode_ParamHandler_3_Entry + 18
 	.set PerfMode_ParamHandler_Data_0x12, PerfMode_ParamHandler_Data + 18
-	.set PerfMode_ParamHandler_Data_0x13, PerfMode_ParamHandler_Data + 19
 	.set PerfMode_VoiceAddressTable_0x50, PerfMode_VoiceAddressTable + 80
 	.set PerfMode_VolumeParam_Process_0x6F, PerfMode_VolumeParam_Process + 111
 	.set PerfMode_VolumeParam_Process_0x70, PerfMode_VolumeParam_Process + 112
@@ -929,7 +880,6 @@
 	.set PlayMode_InitFlagBlock_0x5, PlayMode_InitFlagBlock + 5
 	.set PortConfig_DataTable_A_0x51, PortConfig_DataTable_A + 81
 	.set PortConfig_DataTable_B_0x20, PortConfig_DataTable_B + 32
-	.set PortConfig_DataTable_B_0x44, PortConfig_DataTable_B + 68
 	.set PortConfig_Handler_0_0x10A, PortConfig_Handler_0 + 266
 	.set PortConfig_Handler_0_0x16E, PortConfig_Handler_0 + 366
 	.set PortConfig_Handler_0_0xBB, PortConfig_Handler_0 + 187
@@ -965,8 +915,6 @@
 	.set ROM_PaddingFF_0x2, ROM_PaddingFF + 2
 	.set ROM_PaddingFF_0x3, ROM_PaddingFF + 3
 	.set ROM_PaddingFF_0x4, ROM_PaddingFF + 4
-	.set RegBitManip_Handler_4_0x1B, RegBitManip_Handler_4 + 27
-	.set RegBitManip_Handler_4_0x30, RegBitManip_Handler_4 + 48
 	.set RegBitManip_Handler_4_0x43, RegBitManip_Handler_4 + 67
 	.set RegBitManip_Handler_4_0x8, RegBitManip_Handler_4 + 8
 	.set RegPreset_LoadVoiceData_0x14, RegPreset_LoadVoiceData + 20
@@ -1007,7 +955,6 @@
 	.set ScoopDisp_FlagSetAndDispatch_0x17, ScoopDisp_FlagSetAndDispatch + 23
 	.set ScoopDisp_HandlerData2_0x6D, ScoopDisp_HandlerData2 + 109
 	.set ScoopDisp_HandlerData2_0x7E, ScoopDisp_HandlerData2 + 126
-	.set ScoopDisp_HandlerData2_0x7F, ScoopDisp_HandlerData2 + 127
 	.set ScoopParam_ValueTable_0x186, ScoopParam_ValueTable + 390
 	.set ScoopParam_ValueTable_0x1C, ScoopParam_ValueTable + 28
 	.set ScoopParam_ValueTable_0x1DD, ScoopParam_ValueTable + 477
@@ -1015,7 +962,6 @@
 	.set ScoopParam_ValueTable_0x4E, ScoopParam_ValueTable + 78
 	.set ScoopParam_ValueTable_0x84, ScoopParam_ValueTable + 132
 	.set Scoop_CurveUpdate_DrawSegment_0x20, Scoop_CurveUpdate_DrawSegment + 32
-	.set Scoop_DisplayData_ButtonLayout_0x17, Scoop_DisplayData_ButtonLayout + 23
 	.set Scoop_DisplayData_ButtonLayout_0x21, Scoop_DisplayData_ButtonLayout + 33
 	.set Scoop_SoundEditorData_0x10DE, Scoop_SoundEditorData + 4318
 	.set Scoop_SoundEditorData_0x110C, Scoop_SoundEditorData + 4364
@@ -1034,62 +980,27 @@
 	.set Scoop_SoundEditorData_0xEB, Scoop_SoundEditorData + 235
 	.set Scoop_SpecialMode_UpdateParams_0x38, Scoop_SpecialMode_UpdateParams + 56
 	.set Scoop_SpecialMode_UpdateParams_0x70, Scoop_SpecialMode_UpdateParams + 112
-	.set SeBitmap_EnvCurve5_0x1069, SeBitmap_EnvCurve5 + 4201
-	.set SeBitmap_EnvCurve5_0x108A, SeBitmap_EnvCurve5 + 4234
 	.set SeBitmap_EnvCurve5_0x109E, SeBitmap_EnvCurve5 + 4254
 	.set SeBitmap_EnvCurve5_0x10B6, SeBitmap_EnvCurve5 + 4278
 	.set SeBitmap_EnvCurve5_0x115B, SeBitmap_EnvCurve5 + 4443
-	.set SeBitmap_EnvCurve5_0x12A6, SeBitmap_EnvCurve5 + 4774
 	.set SeBitmap_EnvCurve5_0x12BA, SeBitmap_EnvCurve5 + 4794
 	.set SeBitmap_EnvCurve5_0x13C3, SeBitmap_EnvCurve5 + 5059
-	.set SeBitmap_EnvCurve5_0x1510, SeBitmap_EnvCurve5 + 5392
-	.set SeBitmap_EnvCurve5_0x1525, SeBitmap_EnvCurve5 + 5413
-	.set SeBitmap_EnvCurve5_0x1539, SeBitmap_EnvCurve5 + 5433
-	.set SeBitmap_EnvCurve5_0x15CF, SeBitmap_EnvCurve5 + 5583
-	.set SeBitmap_EnvCurve5_0x15E3, SeBitmap_EnvCurve5 + 5603
 	.set SeBitmap_EnvCurve5_0x15F8, SeBitmap_EnvCurve5 + 5624
-	.set SeBitmap_EnvCurve5_0x1702, SeBitmap_EnvCurve5 + 5890
-	.set SeBitmap_EnvCurve5_0x1719, SeBitmap_EnvCurve5 + 5913
 	.set SeBitmap_EnvCurve5_0x1723, SeBitmap_EnvCurve5 + 5923
 	.set SeBitmap_EnvCurve5_0x172D, SeBitmap_EnvCurve5 + 5933
 	.set SeBitmap_EnvCurve5_0x1739, SeBitmap_EnvCurve5 + 5945
 	.set SeBitmap_EnvCurve5_0x1743, SeBitmap_EnvCurve5 + 5955
-	.set SeBitmap_EnvCurve5_0x1865, SeBitmap_EnvCurve5 + 6245
-	.set SeBitmap_EnvCurve5_0x18B2, SeBitmap_EnvCurve5 + 6322
 	.set SeBitmap_EnvCurve5_0x19A, SeBitmap_EnvCurve5 + 410
-	.set SeBitmap_EnvCurve5_0x19EF, SeBitmap_EnvCurve5 + 6639
-	.set SeBitmap_EnvCurve5_0x1A03, SeBitmap_EnvCurve5 + 6659
-	.set SeBitmap_EnvCurve5_0x1B06, SeBitmap_EnvCurve5 + 6918
 	.set SeBitmap_EnvCurve5_0x1BAD, SeBitmap_EnvCurve5 + 7085
 	.set SeBitmap_EnvCurve5_0x1BB8, SeBitmap_EnvCurve5 + 7096
 	.set SeBitmap_EnvCurve5_0x1D98, SeBitmap_EnvCurve5 + 7576
-	.set SeBitmap_EnvCurve5_0x1DDA, SeBitmap_EnvCurve5 + 7642
 	.set SeBitmap_EnvCurve5_0x1DF8, SeBitmap_EnvCurve5 + 7672
-	.set SeBitmap_EnvCurve5_0x1E54, SeBitmap_EnvCurve5 + 7764
-	.set SeBitmap_EnvCurve5_0x1E87, SeBitmap_EnvCurve5 + 7815
-	.set SeBitmap_EnvCurve5_0x1E97, SeBitmap_EnvCurve5 + 7831
-	.set SeBitmap_EnvCurve5_0x1EE8, SeBitmap_EnvCurve5 + 7912
-	.set SeBitmap_EnvCurve5_0x1F00, SeBitmap_EnvCurve5 + 7936
-	.set SeBitmap_EnvCurve5_0x1F75, SeBitmap_EnvCurve5 + 8053
-	.set SeBitmap_EnvCurve5_0x2BD, SeBitmap_EnvCurve5 + 701
-	.set SeBitmap_EnvCurve5_0x2E9, SeBitmap_EnvCurve5 + 745
-	.set SeBitmap_EnvCurve5_0x313, SeBitmap_EnvCurve5 + 787
-	.set SeBitmap_EnvCurve5_0x31D, SeBitmap_EnvCurve5 + 797
 	.set SeBitmap_EnvCurve5_0x327, SeBitmap_EnvCurve5 + 807
 	.set SeBitmap_EnvCurve5_0x40B, SeBitmap_EnvCurve5 + 1035
-	.set SeBitmap_EnvCurve5_0x453, SeBitmap_EnvCurve5 + 1107
-	.set SeBitmap_EnvCurve5_0x46B, SeBitmap_EnvCurve5 + 1131
-	.set SeBitmap_EnvCurve5_0x492, SeBitmap_EnvCurve5 + 1170
-	.set SeBitmap_EnvCurve5_0x49C, SeBitmap_EnvCurve5 + 1180
-	.set SeBitmap_EnvCurve5_0x4A6, SeBitmap_EnvCurve5 + 1190
 	.set SeBitmap_EnvCurve5_0x4B0, SeBitmap_EnvCurve5 + 1200
-	.set SeBitmap_EnvCurve5_0x50F, SeBitmap_EnvCurve5 + 1295
 	.set SeBitmap_EnvCurve5_0x5E2, SeBitmap_EnvCurve5 + 1506
 	.set SeBitmap_EnvCurve5_0x60D, SeBitmap_EnvCurve5 + 1549
 	.set SeBitmap_EnvCurve5_0x612, SeBitmap_EnvCurve5 + 1554
-	.set SeBitmap_EnvCurve5_0x7B6, SeBitmap_EnvCurve5 + 1974
-	.set SeBitmap_EnvCurve5_0x7C0, SeBitmap_EnvCurve5 + 1984
-	.set SeBitmap_EnvCurve5_0x7CA, SeBitmap_EnvCurve5 + 1994
 	.set SeBitmap_EnvCurve5_0x7E6, SeBitmap_EnvCurve5 + 2022
 	.set SeBitmap_EnvCurve5_0x82E, SeBitmap_EnvCurve5 + 2094
 	.set SeBitmap_EnvCurve5_0x892, SeBitmap_EnvCurve5 + 2194
@@ -1099,12 +1010,7 @@
 	.set SeBitmap_EnvCurve5_0xC7B, SeBitmap_EnvCurve5 + 3195
 	.set SeBitmap_EnvCurve5_0xCC1, SeBitmap_EnvCurve5 + 3265
 	.set SeBitmap_EnvCurve5_0xD78, SeBitmap_EnvCurve5 + 3448
-	.set SeBitmap_EnvCurve5_0xD82, SeBitmap_EnvCurve5 + 3458
 	.set SeBitmap_EnvCurve5_0xD8C, SeBitmap_EnvCurve5 + 3468
-	.set SeBitmap_EnvCurve5_0xE88, SeBitmap_EnvCurve5 + 3720
-	.set SeBitmap_EnvCurve5_0xE9C, SeBitmap_EnvCurve5 + 3740
-	.set SeBitmap_EnvCurve5_0xEA8, SeBitmap_EnvCurve5 + 3752
-	.set SeBitmap_EnvCurve5_0xEBC, SeBitmap_EnvCurve5 + 3772
 	.set SeBitmap_EnvCurve5_0xFB5, SeBitmap_EnvCurve5 + 4021
 	.set SeMenu_AltUpdate_Data_0x1BB, SeMenu_AltUpdate_Data + 443
 	.set SeMenu_AltUpdate_Data_0xDC, SeMenu_AltUpdate_Data + 220
@@ -1147,17 +1053,8 @@
 	.set SeMenu_BitShiftMask_End_0x1A3, SeMenu_BitShiftMask_End + 419
 	.set SeMenu_BitShiftMask_End_0x1C4, SeMenu_BitShiftMask_End + 452
 	.set SeMenu_CompareAndApply_Data6_0x32, SeMenu_CompareAndApply_Data6 + 50
-	.set SeMenu_CompareScreen_DataTable_0x10, SeMenu_CompareScreen_DataTable + 16
-	.set SeMenu_CompareScreen_DataTable_0x10F, SeMenu_CompareScreen_DataTable + 271
-	.set SeMenu_CompareScreen_DataTable_0x119, SeMenu_CompareScreen_DataTable + 281
-	.set SeMenu_CompareScreen_DataTable_0x141, SeMenu_CompareScreen_DataTable + 321
-	.set SeMenu_CompareScreen_DataTable_0x179, SeMenu_CompareScreen_DataTable + 377
 	.set SeMenu_CompareScreen_DataTable_0x189, SeMenu_CompareScreen_DataTable + 393
 	.set SeMenu_CompareScreen_DataTable_0x1CF, SeMenu_CompareScreen_DataTable + 463
-	.set SeMenu_CompareScreen_DataTable_0x1EB, SeMenu_CompareScreen_DataTable + 491
-	.set SeMenu_CompareScreen_DataTable_0x24, SeMenu_CompareScreen_DataTable + 36
-	.set SeMenu_CompareScreen_DataTable_0x260, SeMenu_CompareScreen_DataTable + 608
-	.set SeMenu_CompareScreen_DataTable_0x278, SeMenu_CompareScreen_DataTable + 632
 	.set SeMenu_CompareScreen_DataTable_0xDB, SeMenu_CompareScreen_DataTable + 219
 	.set SeMenu_CopyWriteUpdate_Data_0x114, SeMenu_CopyWriteUpdate_Data + 276
 	.set SeMenu_CopyWriteUpdate_Data_0x1B9, SeMenu_CopyWriteUpdate_Data + 441
@@ -1423,8 +1320,6 @@
 	.set SetWall_MiscDataAndCode_0xCB, SetWall_MiscDataAndCode + 203
 	.set Show_ScreenGroup_Entry_0x7A, Show_ScreenGroup_Entry + 122
 	.set SndBuf_WriteParamEntries_0x36, SndBuf_WriteParamEntries + 54
-	.set SndBuf_WriteParamEntries_0x6C, SndBuf_WriteParamEntries + 108
-	.set SndDispatch_Handler_4_0x25, SndDispatch_Handler_4 + 37
 	.set SndDispatch_ProcessCommand_0x143, SndDispatch_ProcessCommand + 323
 	.set SndDispatch_ProcessCommand_0x159, SndDispatch_ProcessCommand + 345
 	.set SndDispatch_ProcessCommand_0x265, SndDispatch_ProcessCommand + 613
@@ -1498,7 +1393,6 @@
 	.set SoundProgram_DispatchTable_0x8F4, SoundProgram_DispatchTable + 2292
 	.set SoundProgram_DispatchTable_0x908, SoundProgram_DispatchTable + 2312
 	.set SplitNoteStr_C_0x4, SplitNoteStr_C + 4
-	.set Sprintf_Octal_ZeroFill_0x7, Sprintf_Octal_ZeroFill + 7
 	.set Sqedt_ValueDispatch_0x28, Sqedt_ValueDispatch + 40
 	.set Sqedt_ValueDispatch_0x58, Sqedt_ValueDispatch + 88
 	.set Sqedt_ValueDispatch_0x82, Sqedt_ValueDispatch + 130
@@ -1616,47 +1510,24 @@
 	.set Str_StoreTotalSetting_DE_0xCC, Str_StoreTotalSetting_DE + 204
 	.set Str_StoreTotalSetting_DE_0xDA, Str_StoreTotalSetting_DE + 218
 	.set Str_StoreTotalSetting_DE_0xFE, Str_StoreTotalSetting_DE + 254
-	.set StringData_APCModeNames_0x141, StringData_APCModeNames + 321
 	.set StringData_APCModeNames_0x160, StringData_APCModeNames + 352
 	.set StringData_APCModeNames_0x161, StringData_APCModeNames + 353
 	.set StringData_APCModeNames_0x162, StringData_APCModeNames + 354
 	.set StringData_APCModeNames_0x163, StringData_APCModeNames + 355
-	.set StringData_APCModeNames_0x175, StringData_APCModeNames + 373
-	.set StringData_APCModeNames_0x178, StringData_APCModeNames + 376
-	.set StringData_APCModeNames_0x1B8, StringData_APCModeNames + 440
-	.set StringData_APCModeNames_0x1CA, StringData_APCModeNames + 458
-	.set StringData_APCModeNames_0x20A, StringData_APCModeNames + 522
-	.set StringData_APCModeNames_0x21B, StringData_APCModeNames + 539
 	.set StringData_APCModeNames_0x24F, StringData_APCModeNames + 591
-	.set StringData_APCModeNames_0x26C, StringData_APCModeNames + 620
-	.set StringData_APCModeNames_0x2AC, StringData_APCModeNames + 684
 	.set StringData_APCModeNames_0x31F, StringData_APCModeNames + 799
-	.set StringData_APCModeNames_0x324, StringData_APCModeNames + 804
-	.set StringData_APCModeNames_0x384, StringData_APCModeNames + 900
 	.set StringData_APCModeNames_0x394, StringData_APCModeNames + 916
-	.set StringData_APCModeNames_0x395, StringData_APCModeNames + 917
-	.set StringData_APCModeNames_0x3F0, StringData_APCModeNames + 1008
 	.set StringData_APCModeNames_0x3F8, StringData_APCModeNames + 1016
 	.set StringData_APCModeNames_0x3F9, StringData_APCModeNames + 1017
 	.set StringData_APCModeNames_0x3FA, StringData_APCModeNames + 1018
 	.set StringData_APCModeNames_0x413, StringData_APCModeNames + 1043
-	.set StringData_APCModeNames_0x414, StringData_APCModeNames + 1044
-	.set StringData_APCModeNames_0x456, StringData_APCModeNames + 1110
 	.set StringData_APCModeNames_0x463, StringData_APCModeNames + 1123
-	.set StringData_APCModeNames_0x464, StringData_APCModeNames + 1124
-	.set StringData_APCModeNames_0x4C0, StringData_APCModeNames + 1216
-	.set StringData_APCModeNames_0x4D8, StringData_APCModeNames + 1240
 	.set StringData_APCModeNames_0x506, StringData_APCModeNames + 1286
-	.set StringData_APCModeNames_0x537, StringData_APCModeNames + 1335
-	.set StringData_APCModeNames_0x53E, StringData_APCModeNames + 1342
 	.set StringData_APCModeNames_0x54E, StringData_APCModeNames + 1358
 	.set StringData_APCModeNames_0x57E, StringData_APCModeNames + 1406
 	.set StringData_APCModeNames_0x5F5, StringData_APCModeNames + 1525
-	.set StringData_APCModeNames_0x664, StringData_APCModeNames + 1636
 	.set StringData_APCModeNames_0x6F0, StringData_APCModeNames + 1776
-	.set StringData_APCModeNames_0x6F5, StringData_APCModeNames + 1781
 	.set StringData_APCModeNames_0x713, StringData_APCModeNames + 1811
-	.set StringData_APCModeNames_0x90, StringData_APCModeNames + 144
 	.set StringData_APCModeNames_0x928, StringData_APCModeNames + 2344
 	.set StringData_APCModeNames_0x92C, StringData_APCModeNames + 2348
 	.set StringData_APCModeNames_0x9AD, StringData_APCModeNames + 2477
@@ -1672,48 +1543,11 @@
 	.set StringData_APCModeNames_0xAA6, StringData_APCModeNames + 2726
 	.set StringData_APCModeNames_0xAAC, StringData_APCModeNames + 2732
 	.set StringData_APCModeNames_0xAC2, StringData_APCModeNames + 2754
-	.set StringData_APCModeNames_0xD9, StringData_APCModeNames + 217
-	.set StringData_APCModeNames_0xE7, StringData_APCModeNames + 231
-	.set StringData_EffectLabel_0x12B, StringData_EffectLabel + 299
-	.set StringData_EffectLabel_0x138, StringData_EffectLabel + 312
 	.set StringData_EffectLabel_0x176, StringData_EffectLabel + 374
-	.set StringData_EffectLabel_0x17F, StringData_EffectLabel + 383
-	.set StringData_EffectLabel_0x187, StringData_EffectLabel + 391
-	.set StringData_EffectLabel_0x18A, StringData_EffectLabel + 394
-	.set StringData_EffectLabel_0x18D, StringData_EffectLabel + 397
 	.set StringData_EffectLabel_0x1CB, StringData_EffectLabel + 459
-	.set StringData_EffectLabel_0x1D4, StringData_EffectLabel + 468
-	.set StringData_EffectLabel_0x1DD, StringData_EffectLabel + 477
-	.set StringData_EffectLabel_0x5C, StringData_EffectLabel + 92
-	.set StringData_EffectLabel_0x67, StringData_EffectLabel + 103
-	.set StringData_EffectLabel_0x7, StringData_EffectLabel + 7
-	.set StringData_EffectLabel_0xBB, StringData_EffectLabel + 187
-	.set StringData_EffectLabel_0xC2, StringData_EffectLabel + 194
 	.set StringData_KeyNames_0x160, StringData_KeyNames + 352
-	.set StringData_KeyNames_0x180, StringData_KeyNames + 384
 	.set StringData_KeyNames_0x1FE, StringData_KeyNames + 510
-	.set StringData_KeyNames_0x20, StringData_KeyNames + 32
-	.set StringData_KeyNames_0x23E, StringData_KeyNames + 574
-	.set StringData_KeyNames_0x29E, StringData_KeyNames + 670
 	.set StringData_KeyNames_0x312, StringData_KeyNames + 786
-	.set StringData_KeyNames_0x313, StringData_KeyNames + 787
-	.set StringData_KeyNames_0x32B, StringData_KeyNames + 811
-	.set StringData_KeyNames_0x341, StringData_KeyNames + 833
-	.set StringData_KeyNames_0x399, StringData_KeyNames + 921
-	.set StringData_PartNames_0x116, StringData_PartNames + 278
-	.set StringData_PartNames_0x120, StringData_PartNames + 288
-	.set StringData_PartNames_0x182, StringData_PartNames + 386
-	.set StringData_PartNames_0x1C9, StringData_PartNames + 457
-	.set StringData_PartNames_0x222, StringData_PartNames + 546
-	.set StringData_PartNames_0x22C, StringData_PartNames + 556
-	.set StringData_PartNames_0x287, StringData_PartNames + 647
-	.set StringData_PartNames_0x28F, StringData_PartNames + 655
-	.set StringData_PartNames_0x297, StringData_PartNames + 663
-	.set StringData_PartNames_0x2EB, StringData_PartNames + 747
-	.set StringData_PartNames_0x2F6, StringData_PartNames + 758
-	.set StringData_PartNames_0x54, StringData_PartNames + 84
-	.set StringData_PartNames_0xAC, StringData_PartNames + 172
-	.set StringData_PartNames_0xB3, StringData_PartNames + 179
 	.set StyleGroup_LatinWorld_PairTable_0x2FA, StyleGroup_LatinWorld_PairTable + 762
 	.set StyleSong_MasterTable_0x176A, StyleSong_MasterTable + 5994
 	.set StyleSong_MasterTable_0x4, StyleSong_MasterTable + 4
@@ -1827,7 +1661,6 @@
 	.set SysInit_BytecodeBlock_0x499, SysInit_BytecodeBlock + 1177
 	.set SysInit_BytecodeBlock_0x4AF, SysInit_BytecodeBlock + 1199
 	.set SysInit_BytecodeBlock_0x4DE, SysInit_BytecodeBlock + 1246
-	.set SysInit_BytecodeBlock_0x6, SysInit_BytecodeBlock + 6
 	.set SysInit_BytecodeBlock_0x68, SysInit_BytecodeBlock + 104
 	.set SysInit_BytecodeBlock_0x691, SysInit_BytecodeBlock + 1681
 	.set SysInit_BytecodeBlock_0xA7, SysInit_BytecodeBlock + 167
@@ -1844,13 +1677,10 @@
 	.set SystemInit_StepHandler_0_0x4B, SystemInit_StepHandler_0 + 75
 	.set SystemInit_StepHandler_0_0x5E, SystemInit_StepHandler_0 + 94
 	.set SystemInit_StepHandler_0_0x7A, SystemInit_StepHandler_0 + 122
-	.set SystemInit_StepHandler_0_0x9, SystemInit_StepHandler_0 + 9
-	.set SystemInit_StepHandler_0_0xBD, SystemInit_StepHandler_0 + 189
 	.set TaskSched_InitMsgQueues_0x12, TaskSched_InitMsgQueues + 18
 	.set TaskSched_ScreenGroupTable_0x3C, TaskSched_ScreenGroupTable + 60
 	.set TaskSched_ScreenGroupTable_0x46, TaskSched_ScreenGroupTable + 70
 	.set TempoRing_ProcessorTable_0x1, TempoRing_ProcessorTable + 1
-	.set TextInput_Prop_NullTerm_0x1, TextInput_Prop_NullTerm + 1
 	.set TextRender_PopAndReturn_0x9, TextRender_PopAndReturn + 9
 	.set TimeSig_DisplayStrings_0x21B, TimeSig_DisplayStrings + 539
 	.set TimeSig_DisplayStrings_0x227, TimeSig_DisplayStrings + 551
@@ -1992,40 +1822,18 @@
 	.set TransposeNoteStr_C_0xA0, TransposeNoteStr_C + 160
 	.set TransposeNoteStr_C_0xC6, TransposeNoteStr_C + 198
 	.set TransposeNoteStr_C_0xE4, TransposeNoteStr_C + 228
-	.set TuningSys_Param_01_0x24A, TuningSys_Param_01 + 586
-	.set TuningSys_Param_01_0x254, TuningSys_Param_01 + 596
 	.set TuningSys_Param_01_0x25E, TuningSys_Param_01 + 606
-	.set TuningSys_Param_01_0xAE, TuningSys_Param_01 + 174
-	.set TuningSys_Param_01_0xC4, TuningSys_Param_01 + 196
 	.set TuningSystem_Handler_Table_0x1028, TuningSystem_Handler_Table + 4136
 	.set TuningSystem_Handler_Table_0x1040, TuningSystem_Handler_Table + 4160
 	.set TuningSystem_Handler_Table_0x10A0, TuningSystem_Handler_Table + 4256
-	.set TuningSystem_Handler_Table_0x10DC, TuningSystem_Handler_Table + 4316
-	.set TuningSystem_Handler_Table_0x110E, TuningSystem_Handler_Table + 4366
-	.set TuningSystem_Handler_Table_0x114A, TuningSystem_Handler_Table + 4426
 	.set TuningSystem_Handler_Table_0x117D, TuningSystem_Handler_Table + 4477
-	.set TuningSystem_Handler_Table_0x123, TuningSystem_Handler_Table + 291
-	.set TuningSystem_Handler_Table_0x123D, TuningSystem_Handler_Table + 4669
-	.set TuningSystem_Handler_Table_0x1247, TuningSystem_Handler_Table + 4679
-	.set TuningSystem_Handler_Table_0x126F, TuningSystem_Handler_Table + 4719
-	.set TuningSystem_Handler_Table_0x12B6, TuningSystem_Handler_Table + 4790
-	.set TuningSystem_Handler_Table_0x12CA, TuningSystem_Handler_Table + 4810
 	.set TuningSystem_Handler_Table_0x12D, TuningSystem_Handler_Table + 301
-	.set TuningSystem_Handler_Table_0x12D4, TuningSystem_Handler_Table + 4820
-	.set TuningSystem_Handler_Table_0x12FC, TuningSystem_Handler_Table + 4860
-	.set TuningSystem_Handler_Table_0x132F, TuningSystem_Handler_Table + 4911
-	.set TuningSystem_Handler_Table_0x1343, TuningSystem_Handler_Table + 4931
 	.set TuningSystem_Handler_Table_0x137, TuningSystem_Handler_Table + 311
-	.set TuningSystem_Handler_Table_0x139A, TuningSystem_Handler_Table + 5018
 	.set TuningSystem_Handler_Table_0x13F6, TuningSystem_Handler_Table + 5110
-	.set TuningSystem_Handler_Table_0x14A5, TuningSystem_Handler_Table + 5285
-	.set TuningSystem_Handler_Table_0x14D6, TuningSystem_Handler_Table + 5334
 	.set TuningSystem_Handler_Table_0x14F5, TuningSystem_Handler_Table + 5365
 	.set TuningSystem_Handler_Table_0x1592, TuningSystem_Handler_Table + 5522
-	.set TuningSystem_Handler_Table_0x15B0, TuningSystem_Handler_Table + 5552
 	.set TuningSystem_Handler_Table_0x15F, TuningSystem_Handler_Table + 351
 	.set TuningSystem_Handler_Table_0x161F, TuningSystem_Handler_Table + 5663
-	.set TuningSystem_Handler_Table_0x173, TuningSystem_Handler_Table + 371
 	.set TuningSystem_Handler_Table_0x17D, TuningSystem_Handler_Table + 381
 	.set TuningSystem_Handler_Table_0x187, TuningSystem_Handler_Table + 391
 	.set TuningSystem_Handler_Table_0x191, TuningSystem_Handler_Table + 401
@@ -2035,9 +1843,6 @@
 	.set TuningSystem_Handler_Table_0x1A20, TuningSystem_Handler_Table + 6688
 	.set TuningSystem_Handler_Table_0x1BD9, TuningSystem_Handler_Table + 7129
 	.set TuningSystem_Handler_Table_0x1C06, TuningSystem_Handler_Table + 7174
-	.set TuningSystem_Handler_Table_0x1C45, TuningSystem_Handler_Table + 7237
-	.set TuningSystem_Handler_Table_0x1E1, TuningSystem_Handler_Table + 481
-	.set TuningSystem_Handler_Table_0x1E73, TuningSystem_Handler_Table + 7795
 	.set TuningSystem_Handler_Table_0x1E8B, TuningSystem_Handler_Table + 7819
 	.set TuningSystem_Handler_Table_0x1F3F, TuningSystem_Handler_Table + 7999
 	.set TuningSystem_Handler_Table_0x1F5D, TuningSystem_Handler_Table + 8029
@@ -2046,39 +1851,16 @@
 	.set TuningSystem_Handler_Table_0x209A, TuningSystem_Handler_Table + 8346
 	.set TuningSystem_Handler_Table_0x23BD, TuningSystem_Handler_Table + 9149
 	.set TuningSystem_Handler_Table_0x241D, TuningSystem_Handler_Table + 9245
-	.set TuningSystem_Handler_Table_0x242C, TuningSystem_Handler_Table + 9260
 	.set TuningSystem_Handler_Table_0x295, TuningSystem_Handler_Table + 661
 	.set TuningSystem_Handler_Table_0x2C1, TuningSystem_Handler_Table + 705
-	.set TuningSystem_Handler_Table_0x2D1, TuningSystem_Handler_Table + 721
 	.set TuningSystem_Handler_Table_0x3C, TuningSystem_Handler_Table + 60
-	.set TuningSystem_Handler_Table_0x3C9, TuningSystem_Handler_Table + 969
-	.set TuningSystem_Handler_Table_0x3F1, TuningSystem_Handler_Table + 1009
-	.set TuningSystem_Handler_Table_0x3F4, TuningSystem_Handler_Table + 1012
-	.set TuningSystem_Handler_Table_0x416, TuningSystem_Handler_Table + 1046
-	.set TuningSystem_Handler_Table_0x442, TuningSystem_Handler_Table + 1090
-	.set TuningSystem_Handler_Table_0x55, TuningSystem_Handler_Table + 85
-	.set TuningSystem_Handler_Table_0x5F9, TuningSystem_Handler_Table + 1529
-	.set TuningSystem_Handler_Table_0x603, TuningSystem_Handler_Table + 1539
-	.set TuningSystem_Handler_Table_0x617, TuningSystem_Handler_Table + 1559
-	.set TuningSystem_Handler_Table_0x628, TuningSystem_Handler_Table + 1576
-	.set TuningSystem_Handler_Table_0x633, TuningSystem_Handler_Table + 1587
-	.set TuningSystem_Handler_Table_0x64F, TuningSystem_Handler_Table + 1615
-	.set TuningSystem_Handler_Table_0x66B, TuningSystem_Handler_Table + 1643
-	.set TuningSystem_Handler_Table_0x675, TuningSystem_Handler_Table + 1653
 	.set TuningSystem_Handler_Table_0x67F, TuningSystem_Handler_Table + 1663
-	.set TuningSystem_Handler_Table_0x69, TuningSystem_Handler_Table + 105
-	.set TuningSystem_Handler_Table_0x6FF, TuningSystem_Handler_Table + 1791
 	.set TuningSystem_Handler_Table_0x71F, TuningSystem_Handler_Table + 1823
-	.set TuningSystem_Handler_Table_0x82, TuningSystem_Handler_Table + 130
 	.set TuningSystem_Handler_Table_0x8D, TuningSystem_Handler_Table + 141
 	.set TuningSystem_Handler_Table_0xCA8, TuningSystem_Handler_Table + 3240
 	.set TuningSystem_Handler_Table_0xCB, TuningSystem_Handler_Table + 203
-	.set TuningSystem_Handler_Table_0xCB2, TuningSystem_Handler_Table + 3250
-	.set TuningSystem_Handler_Table_0xD22, TuningSystem_Handler_Table + 3362
 	.set TuningSystem_Handler_Table_0xDF, TuningSystem_Handler_Table + 223
-	.set TuningSystem_Handler_Table_0xDF2, TuningSystem_Handler_Table + 3570
 	.set TuningSystem_Handler_Table_0xE1F, TuningSystem_Handler_Table + 3615
-	.set TuningSystem_Handler_Table_0xFC4, TuningSystem_Handler_Table + 4036
 	.set TuningSystem_Handler_Table_0xFE0, TuningSystem_Handler_Table + 4064
 	.set UIDisp_DefaultInputHandler_0x20, UIDisp_DefaultInputHandler + 32
 	.set UIDisp_DefaultInputHandler_0x40, UIDisp_DefaultInputHandler + 64
@@ -2125,9 +1907,6 @@
 	.set VoiceCtrl_ParamSetupBytecode_0x1CA, VoiceCtrl_ParamSetupBytecode + 458
 	.set VoiceCtrl_ParamSetupBytecode_0x1CF, VoiceCtrl_ParamSetupBytecode + 463
 	.set VoiceCtrl_ParamSetupBytecode_0x1E4, VoiceCtrl_ParamSetupBytecode + 484
-	.set VoiceCtrl_ParamSetupBytecode_0x1E5, VoiceCtrl_ParamSetupBytecode + 485
-	.set VoiceCtrl_ParamSetupBytecode_0x1F7, VoiceCtrl_ParamSetupBytecode + 503
-	.set VoiceCtrl_ParamSetupBytecode_0x20B, VoiceCtrl_ParamSetupBytecode + 523
 	.set VoiceCtrl_ParamSetupBytecode_0x21F, VoiceCtrl_ParamSetupBytecode + 543
 	.set VoiceCtrl_ParamSetupBytecode_0x256, VoiceCtrl_ParamSetupBytecode + 598
 	.set VoiceCtrl_ParamSetupBytecode_0x25E, VoiceCtrl_ParamSetupBytecode + 606
@@ -2231,7 +2010,6 @@
 	.set VoiceState_DataBlock2_0x51E, VoiceState_DataBlock2 + 1310
 	.set VoiceState_DataBlock2_0x534, VoiceState_DataBlock2 + 1332
 	.set VoiceState_DataBlock2_0x540, VoiceState_DataBlock2 + 1344
-	.set VoiceState_DataBlock2_0x541, VoiceState_DataBlock2 + 1345
 	.set VoiceState_DataBlock2_0x55, VoiceState_DataBlock2 + 85
 	.set VoiceState_DataBlock2_0x561, VoiceState_DataBlock2 + 1377
 	.set VoiceState_DataBlock2_0x563, VoiceState_DataBlock2 + 1379
@@ -2253,9 +2031,6 @@
 	.set VoiceState_DataBlock2_0x841, VoiceState_DataBlock2 + 2113
 	.set VoiceState_DataBlock2_0xAB, VoiceState_DataBlock2 + 171
 	.set VoiceState_DataBlock2_0xAD, VoiceState_DataBlock2 + 173
-	.set VoiceState_SaveAndRestore_0x19, VoiceState_SaveAndRestore + 25
-	.set VoiceState_SaveAndRestore_0x1D, VoiceState_SaveAndRestore + 29
-	.set VoiceState_SaveAndRestore_0x9, VoiceState_SaveAndRestore + 9
 	.set Voice_BankIndexTable_0x2, Voice_BankIndexTable + 2
 	.set Voice_InitBankDataSafe_Alt1_0x7, Voice_InitBankDataSafe_Alt1 + 7
 	.set Voice_InitBankDataSafe_Alt1_0xE, Voice_InitBankDataSafe_Alt1 + 14
@@ -2265,7 +2040,6 @@
 	.set Voice_NoteChannelTable1_0x43F, Voice_NoteChannelTable1 + 1087
 	.set Voice_NoteChannelTable2_0x2, Voice_NoteChannelTable2 + 2
 	.set Voice_NoteParamTable_0x2, Voice_NoteParamTable + 2
-	.set VwMenuBox_Confirm_RenderBottom_0x2E, VwMenuBox_Confirm_RenderBottom + 46
 	.set WidgetName_InitPtrTable_0x15, WidgetName_InitPtrTable + 21
 	.set WidgetName_PtrBlock_A_0x1, WidgetName_PtrBlock_A + 1
 	.set WidgetName_PtrBlock_A_0xF, WidgetName_PtrBlock_A + 15
