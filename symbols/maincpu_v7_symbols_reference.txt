@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 48,426
-#   semantic names ........... 44,999 (92.9%)
+#   symbols .................. 48,475
+#   semantic names ........... 45,048 (92.9%)
 #   positional names ......... 3,427
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -635,6 +635,9 @@ GUI_FormatStrings_0x20 00E0CD3E
 Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2 00E0CD4E
 GUI_FormatStrings_0x34 00E0CD52
 GUI_FormatStrings_0x3C 00E0CD5A
+Scoop_ApFunctionTable_426 00E0CD8E
+Scoop_ResEventTable_1C6 00E0CDAE
+Scoop_FunctionTable_406 00E0CDBE
 GUI_DisplayStructData 00E0CFDE
 GUI_DisplayStructData_0x226 00E0D204
 Scoop_ViewableTable_021 00E0D20C
@@ -2539,6 +2542,7 @@ NakaInst_SelectSoundForPart_B 00E1EFD2
 NakaInst_SelectSoundForPart_C 00E1EFF2
 NakaInst_SelectSoundForPart_D 00E1F012
 Hama_ModeInit_Table 00E1F032
+InitializeHama_PtrTable 00E1F04A
 HamaStr_Empty 00E1F062
 HamaStr_hamadeb 00E1F064
 HamaStr_HamaPage1Func 00E1F06C
@@ -2669,6 +2673,7 @@ FDTest_ConsoleArea2 00E1FB54
 FDTest_StatusBar_Memory 00E1FB92
 FDTest_Label_Console2 00E1FBA8
 String_CONSOLE 00E1FBC8
+InitializeHama_Str_Empty 00E1FBD0
 FDTest_DataBlock_Table 00E1FBD8
 FDTest_DataBlock_Terminator 00E1FC44
 FDTest_Config_Table 00E1FC46
@@ -2699,6 +2704,8 @@ FDTest_CfgName_OK 00E1FD00
 FDTest_CfgName_NG 00E1FD04
 FDTest_CfgName_Total 00E1FD08
 FDTest_CfgName_FDDTest 00E1FD0E
+InitializeHama_Str_TT_HDDEXT 00E1FD18
+InitializeHama_Str_TT_EXTAPR 00E1FD22
 FDTest_TestTitle_Terminator 00E1FD3C
 FDTest_String_TestTitleFunc 00E1FD3E
 FDTest_String_TestTitleFunc_0xE 00E1FD4C
@@ -3691,6 +3698,8 @@ InitializeKubo_PtrTable_28 00E2EE4C
 InitializeKubo_PtrTable_29 00E2EE90
 InitializeKubo_PtrTable_30 00E2EED8
 InitializeKubo_PtrTable_31 00E2EF18
+Kubo_ViewableTable_0A8 00E2EF60
+Kubo_ViewableTable_0AA 00E2EF64
 InitializeKubo_PtrTable_32 00E2EF68
 InitializeKubo_PtrTable_33 00E2EF74
 InitializeKubo_PtrTable_34 00E2EFB4
@@ -3728,7 +3737,10 @@ InitializeKubo_PtrTable_65 00E2FE24
 InitializeKubo_PtrTable_66 00E2FE96
 InitializeKubo_PtrTable_67 00E2FF0C
 InitializeKubo_PtrTable_68 00E2FF78
+Kubo_ResNameTable_3A8 00E2FFF0
+Kubo_ResNameTable_3AA 00E2FFF6
 InitializeKubo_PtrTable_69 00E2FFFC
+InitializeYoko_PtrTable 00E30000
 NakaInst_FADE_IN_OUT_SETTING_0x2475 00E3000B
 InitializeKubo_PtrTable_70 00E3000E
 InitializeKubo_PtrTable_71 00E3009E
@@ -4212,6 +4224,7 @@ SqplyFunc_CaseTable 00E34B38
 Sqedt_ParamDispatch_Str 00E34B4C
 Sqedt_ParamDispatch_Str_2 00E34B52
 Sqedt_ParamDispatch_Str_3 00E34B58
+Sqedt_ParamDispatch_Str_Fmt3d 00E34B64
 Sqedt_ParamDispatch_Str_4 00E34B6A
 Sqedt_ParamDispatch_Str_5 00E34B70
 Sqedt_ParamDispatch_Str_6 00E34B76
@@ -4243,6 +4256,7 @@ Sqedt_ParamDispatch_Str_27 00E34C2C
 Sqedt_ParamDispatch_Str_28 00E34C32
 Sqedt_ParamDispatch_Str_29 00E34C38
 Sqedt_ParamDispatch_Str_30 00E34C3E
+Sqedt_ParamDispatch_Entry2_Str_Fmt3d_2 00E34C44
 Sqedt_ParamDispatch_Str_31 00E34C4A
 NakaInst_2d 00E34C50
 Sqedt_ParamDispatch_Str_32 00E34C56
@@ -4784,6 +4798,7 @@ VocalistGrid_DispatchData_Str_Fmt2d 00E7EEF8
 VocalistGrid_DispatchData_Str_Fmt3d 00E7EF04
 VocalistGrid_DispatchData_Str_Fmtd 00E7EF10
 VocalistGrid_DispatchData_Str_Fmts 00E7EF1C
+VocalistGrid_DispatchData_Str_OFF 00E7EF28
 VocalistGrid_DispatchData_Str_3 00E7EF34
 VocalistGrid_DispatchData_Str_4 00E7EF40
 VocalistGrid_DispatchData_Str_5 00E7EF4C
@@ -5025,6 +5040,7 @@ PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_2 00E80156
 PmemOutLGridCheck_Evt1C0001D_Str_OFF 00E8015C
 PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3 00E80162
 NakaInst_ON_E80168 00E80168
+PmemOutLGridCheck_Evt1C0001D_Str_OFF_6 00E8016E
 PmemOutLGridCheck_Evt1C0001D_Str_OFF_2 00E80174
 PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4 00E8017A
 PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_5 00E80180
@@ -5096,6 +5112,8 @@ MidiPartGridCheck_LocalInit_Strings 00E806BA
 MidiPartGridCheck_Evt1C0001C_Str_Fmt2d 00E806C0
 MidiPartGridCheck_Evt1C0001C_Str_OFF 00E806C8
 MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2 00E806CE
+MidiPartGridCheck_Evt1C0001C_Str_ON 00E806D6
+MidiPartGridCheck_Evt1C0001C_Str_OFF_2 00E806DC
 MidiSetup_EventHandler_Str_OFF 00E806E2
 MidiPart_AudioCmdDisplay_Str_Fmt2d 00E806E8
 MidiPart_LookupFromTable_Str 00E806F0
@@ -5154,6 +5172,7 @@ Murai_ResEventTable_1C1 00E812E4
 Naka_EventDispatch_Table 00E812E8
 Murai_ResEventCount_1C1 00E813A4
 Naka_Event_Table3 00E813A6
+InitializeMurai_PtrTable_5 00E814F4
 Murai_FunctionTable_401 00E8158C
 Naka_Event_Table2 00E81590
 NakaInst_EmptyString 00E81624
@@ -5330,6 +5349,7 @@ InitializeMurai_Str_TT_ACCORDION 00E8660A
 InitializeMurai_Str_TT_MESAGE 00E86618
 InitializeMurai_Str_TT_WELCOM 00E86622
 InitializeMurai_Str_TT_SOFTVER 00E8662C
+InitializeMurai_PtrTable_6 00E86638
 Murai_MainFunctionTable_441 00E86644
 Str_DrawCtrl_Empty 00E86650
 Str_DrawCtrl_MainMemDrawCtrl 00E86652
@@ -6042,13 +6062,18 @@ IvDrawbar_Init_SetupMode_Str_ENTATION 00EA001E
 Presentation_TagStrTable_0x17 00EA001F
 Presentation_TagStrTable_0x18 00EA0020
 IvDrawbar_Init_SetupMode_Str_Gt 00EA0026
+Seq_LoadDisplayResource_Str_Empty 00EA0028
 Seq_LoadResource_Proceed_Str_PRE 00EA0048
+Seq_LoadResource_Proceed_Str_rt 00EA004E
+Seq_FillBufferLoop_Str_ACTION_2 00EA0052
 Seq_FillBufferLoop_Str_ACTION 00EA005C
 Seq_FillBufferLoop_Str_ACT 00EA0066
+Seq_FillBufferLoop_Str_rt 00EA006C
 FDemo_DisplayResourceData_Str_SQT 00EA0070
 FDemo_DisplayResourceData_Str_rb 00EA0076
 Presentation_TagStrTable_0x72 00EA007A
 Presentation_TagStrTable_0x88 00EA0090
+FDemo_LoadRegsAndPostEvent_Str_FEATURE 00EA009E
 Presentation_TagStrTable_0xA4 00EA00AC
 Presentation_TagStrTable_0xA5 00EA00AD
 Presentation_TagStrTable_0xD2 00EA00DA
@@ -6065,14 +6090,27 @@ FileIO_ValidateOpen_Process_Str_rb 00EA0182
 Presentation_TagTableEnd_0x47 00EA0186
 FileIO_ValidateFileWithRegion_Str_rb 00EA018C
 FileIO_ValidateWithExtHeader_Str_rb 00EA0190
+FileIO_LoadRegion0_VRAM_Str_rb 00EA0194
+FileIO_LoadRegion1_VRAM_Str_rb 00EA0198
+FileIO_LoadRegion7_Flash_Str_rb 00EA019C
+FileIO_LoadRegion2_ExtMem_Str_rb 00EA01A0
 FileIO_LoadSongRegion8_Str_rb 00EA01A4
 LoadSong8_ReadDone_Str_rb 00EA01A8
 LoadSong8_AltPresetPath_Str_rb 00EA01AC
+FileIO_LoadRegion3_ExtMem_Str_rb 00EA01B0
+FileIO_LoadRegion5_VRAM_Str_rb 00EA01B4
+FileIO_LoadRegion6_Simple_Str_rb 00EA01B8
+FileIO_LoadRegion4_VRAM_Str_rb 00EA01BC
 Presentation_TagTableEnd_0x81 00EA01C0
 Presentation_TagTableEnd_0x83 00EA01C2
+SaveRegion0_SpaceOk_Str_wb 00EA01F0
+SaveRegion1_SpaceOk_Str_wb 00EA01F4
 Resource_Region7_Start 00EA01F8
 Resource_Region2_Start 00EA01FC
 Resource_Region3_Start 00EA0200
+SaveRegion5_SpaceOk_Str_wb 00EA0204
+FileIO_SaveRegion6_Simple_Str_wb 00EA0208
+SaveRegion4_SpaceOk_Str_wb 00EA020C
 Resource_Region3_Start_0x10 00EA0210
 Resource_Region3_Start_0x12 00EA0212
 LoadSMF_GetRecordPtr_Str_rb 00EA0240
@@ -6120,7 +6158,9 @@ SearchLoad_DefaultVolume_Str_Under_Under_Under_Under 00EA0462
 Filename_TemplateArea_0x26 00EA046E
 Filename_TemplateArea_0x36 00EA047E
 GetEncFileSize_CopyRecordLoop_Str_Star_Dot_Star 00EA048E
+IndexToRecordLookup_Str_Dot_Star 00EA0492
 BuildSecondPage_CopyRecordLoop_Str_MID 00EA0496
+ValidateAndSearchFile_Str_Empty 00EA049C
 ProcessRecord_MatchLoop1_Str_MThd 00EA04AC
 ProcessRecord_MatchLoop3_Str_MTrk 00EA04B2
 ProcessRecord_MatchLoop1_Str_Blank5 00EA04B8
@@ -6272,6 +6312,7 @@ CmpDst_HandleShow_PtrTable 00EA0A3E
 EmbeddedPtrTable_v7_naka_technichord_strings_01AB00 00EA0A4E
 Data_SaveLoadMenuTable_0x62 00EA0A52
 Data_SaveLoadMenuTable_0x64 00EA0A54
+InitializeCheap_PtrTable_9 00EA0A56
 PtrTbl_DiskFuncNames 00EA0ACE
 Data_DiskFuncPtrTbl_EA0B00 00EA0B00
 Data_DiskFuncPtrTbl_EA0B12 00EA0B12
@@ -6393,6 +6434,7 @@ Str_Mt_PsFileNameBoxId 00EA12F4
 Str_Mt_GetSelectedFileNumber 00EA1308
 Str_Mt_SetSelectedFileNumber 00EA1322
 Str_Mt_SetFileSfx 00EA133C
+InitializeCheap_PtrTable 00EA135A
 PtrTbl_NakaModuleHandlers 00EA1392
 Data_NakaSep_EA13CA 00EA13CA
 NakaInst_IvWaitWinCtlProc 00EA13CC
@@ -6465,6 +6507,7 @@ InitializeCheap_Str_TT_DKUTSMF 00EA7FA0
 InitializeCheap_Str_TT_DKUTFRMT 00EA7FAC
 InitializeCheap_Str_TT_DKSETUP 00EA7FB8
 InitializeCheap_Str_TT_CMPLD 00EA7FC4
+InitializeCheap_PtrTable_8 00EA7FCE
 Cheap_MainFunctionTable_445 00EA80B6
 PasswordText_PtrTable 00EA85C8
 CheckPwd_Type0_PtrTable 00EA868E
@@ -6725,6 +6768,7 @@ DrawFunc_Init_FontTable0_Str_Fmt3d 00EAB134
 Str_No_0xE22 00EAB138
 DrawFunc_Init_Variant1_Str_Fmt1d 00EAB140
 DrawFunc_Init_Variant1_Str_Fmt2d 00EAB144
+DrawFunc_Init_Variant1_Str_Fmt3d 00EAB148
 DrawFunc_Init_Entry_Str_Fmt2d 00EAB14C
 DrawFunc_Init_Entry_Str_Fmt3d 00EAB150
 DrawFunc_Init_Entry_Str_Fmt4d 00EAB154
@@ -9107,6 +9151,9 @@ NakaInst_ExtDevice_Screens_0x2E60 00ED962C
 Encoder_PrepareCallback_PtrTable 00ED9C1E
 Encoder_PrepareCallback_PtrTable_2 00ED9C9E
 SoundParam_EncoderMappingData 00ED9D1E
+FileIO_BytecodeData_Code_Entry8_PtrTable 00ED9D64
+FileIO_BytecodeData_Code_Entry8_PtrTable_2 00ED9D82
+FileIO_BytecodeData_Code_Entry8_PtrTable_3 00ED9EA4
 ExtDev_SndParam_DispatchComplex_PtrTable 00ED9FA4
 SoundParam_EncoderMappingData_0x302 00EDA020
 EffectMode_DispatchTable 00EDA02C
@@ -42820,6 +42867,7 @@ VoiceMode0_UpdateTempoAndWrite 00FCAC61
 VoiceMode0_Done 00FCAC82
 VoiceParam_DispatchByMode 00FCAC83
 VoiceParam_DispatchDone 00FCACA3
+VoiceParam_DispatchByMode_PtrTable 00FCACA4
 VoiceParam_StoreExpression 00FCACB4
 VoiceParam_WriteExpression 00FCACCC
 VoiceParam_ExprCheckGuard 00FCAD0A
@@ -43015,6 +43063,7 @@ MidiStream_RunStatus_Mode1 00FCC6E8
 MidiStream_HandleRunningStatus_Skip3 00FCC6EF
 MidiStream_HandleRunningStatus_Skip4 00FCC716
 MidiStream_HandleRunningStatus_Return2 00FCC72F
+MidiStream_DispatchLoop_PtrTable 00FCC730
 MidiStream_HandleRunningStatus_0x98 00FCC731
 Audio_ResetAfterPayloadError_Helper 00FCCA30
 MidiStream_HandleRunningStatus_Loop 00FCCA85

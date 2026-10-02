@@ -963,7 +963,8 @@ DrawFunc_Init_FontTable0_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] it; reached through source references DrawFunc_Init_Join
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_Variant1_Str_Fmt1d`).
 DrawFunc_Init_Variant1_Str_Fmt1d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2494, 0x4	; "%1d"
-DrawFunc_Init_Variant1_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2498, 0x8	; "%2d"
+DrawFunc_Init_Variant1_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2498, 0x4	; "%2d"
+DrawFunc_Init_Variant1_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x249C, 0x4	; "%3d"
 ; [nakarest] naka_disk_warning+0x24a0  +0x24a0..+0x24a4 (0xeab14c, 4 B)
 ; [nakarest] Text (4 B at 0xeab14c), first string "%2d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Skip4

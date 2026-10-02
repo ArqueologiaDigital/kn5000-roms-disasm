@@ -1,0 +1,649 @@
+[
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 931,
+  "value": "0x2b1f8e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 1007,
+  "value": "0x2c4f8e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 1083,
+  "value": "0x2d7f8e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6864,
+  "value": "0x2f0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 8063,
+  "value": "0x2f8e04",
+  "result": "HDAE5000_FlsItem_SongRecord_Str_Blank26",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 10012,
+  "value": "0x2f8dd8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11032,
+  "value": "0x2f8dd8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11250,
+  "value": "0x2f8e26",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11257,
+  "value": "0x2f8e24",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11265,
+  "value": "0x2f8e20",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11360,
+  "value": "0x2f8eae",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11394,
+  "value": "0x2f8eb8",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11428,
+  "value": "0x2f8ec2",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_3",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11462,
+  "value": "0x2f8ecc",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_4",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11496,
+  "value": "0x2f8ed4",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_5",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11530,
+  "value": "0x2f8ede",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_6",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11564,
+  "value": "0x2f8ee8",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_7",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11598,
+  "value": "0x2f8ef0",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_8",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11632,
+  "value": "0x2f8efa",
+  "result": "HDAE5000_FdSong_CheckFiles_Str_rb_9",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11863,
+  "value": "0x2f8f04",
+  "result": "HDAE5000_CopyFdSongToHd_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11994,
+  "value": "0x2f8f0e",
+  "result": "HDAE5000_CopyFdSongToHd_Lsw_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12108,
+  "value": "0x2f8f18",
+  "result": "HDAE5000_CopyFdSongToHd_Pmt_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12258,
+  "value": "0x2f8f22",
+  "result": "HDAE5000_CopyFdSongToHd_Sqt_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12403,
+  "value": "0x2f8f2c",
+  "result": "HDAE5000_CopyFdSongToHd_Cmp_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12553,
+  "value": "0x2f8f34",
+  "result": "HDAE5000_CopyFdSongToHd_Tm_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12654,
+  "value": "0x2f8f3e",
+  "result": "HDAE5000_CopyFdSongToHd_Msp_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12740,
+  "value": "0x2f8f48",
+  "result": "HDAE5000_CopyFdSongToHd_Rcm_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12885,
+  "value": "0x2f8f50",
+  "result": "HDAE5000_CopyFdSongToHd_Md_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12972,
+  "value": "0x2f8f5a",
+  "result": "HDAE5000_CopyFdSongToHd_Tlx_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 14918,
+  "value": "0x2f8f5e",
+  "result": "HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_GetInfoBlockPointer",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 14930,
+  "value": "0x2f8f8c",
+  "result": "HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 14948,
+  "value": "0x2f8f8e",
+  "result": "HDAE5000_PPORT_Svc02_TurnHdMotorOff_Str_TurnHdMotorOff",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 14950,
+  "value": "0x2f8fa8",
+  "result": "HDAE5000_PPORT_Svc02_TurnHdMotorOff_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 14983,
+  "value": "0x2f8faa",
+  "result": "HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_SendInfosAboutHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15036,
+  "value": "0x2f900a",
+  "result": "HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15058,
+  "value": "0x2f900c",
+  "result": "HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_SendInfosAboutDirBlock",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15088,
+  "value": "0x2f9058",
+  "result": "HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15109,
+  "value": "0x2f905a",
+  "result": "HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_SendInfosAboutFileSystemBlock",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15139,
+  "value": "0x2f90ac",
+  "result": "HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15162,
+  "value": "0x2f90ae",
+  "result": "HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_SendInfosAboutFlsBlock",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15201,
+  "value": "0x2f9108",
+  "result": "HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15219,
+  "value": "0x2f910a",
+  "result": "HDAE5000_PPORT_Svc07_ReadDirBlockFromHd_Str_ReadDirBlockFromHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15221,
+  "value": "0x2f9128",
+  "result": "HDAE5000_PPORT_Svc07_ReadDirBlockFromHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15240,
+  "value": "0x2f912a",
+  "result": "HDAE5000_PPORT_Svc08_ReadFileBlockFromHd_Str_ReadFileBlockFromHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15242,
+  "value": "0x2f9148",
+  "result": "HDAE5000_PPORT_Svc08_ReadFileBlockFromHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15261,
+  "value": "0x2f914a",
+  "result": "HDAE5000_PPORT_Svc09_ReadFlsBlockFromHd_Str_ReadFlsBlockFromHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15263,
+  "value": "0x2f9168",
+  "result": "HDAE5000_PPORT_Svc09_ReadFlsBlockFromHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15282,
+  "value": "0x2f916a",
+  "result": "HDAE5000_PPORT_Svc10_WriteDirBlockToHd_Str_WriteDirBlockToHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15284,
+  "value": "0x2f9186",
+  "result": "HDAE5000_PPORT_Svc10_WriteDirBlockToHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15303,
+  "value": "0x2f9188",
+  "result": "HDAE5000_PPORT_Svc11_WriteFileSystemBlockToHd_Str_WriteFileSystemBlockToHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15305,
+  "value": "0x2f91ac",
+  "result": "HDAE5000_PPORT_Svc11_WriteFileSystemBlockToHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15324,
+  "value": "0x2f91ae",
+  "result": "HDAE5000_PPORT_Svc12_WriteFlsBlockToHd_Str_WriteFlsBlockToHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15326,
+  "value": "0x2f91ca",
+  "result": "HDAE5000_PPORT_Svc12_WriteFlsBlockToHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15524,
+  "value": "0x2f91cc",
+  "result": "HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_SendInfosAboutSong",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15546,
+  "value": "0x2f9206",
+  "result": "HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15568,
+  "value": "0x2f9208",
+  "result": "HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory_Str_LoadSongFromHdToMemory",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15570,
+  "value": "0x2f922a",
+  "result": "HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15592,
+  "value": "0x2f922c",
+  "result": "HDAE5000_PPORT_Svc15_SaveSongInMemoryToHd_Str_SaveSongInMemoryToHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15594,
+  "value": "0x2f924c",
+  "result": "HDAE5000_PPORT_Svc15_SaveSongInMemoryToHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15675,
+  "value": "0x2f924e",
+  "result": "HDAE5000_PPORT_Svc16_InitWholeSongInMemory_Str_InitWholeSongInMemory",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15677,
+  "value": "0x2f926e",
+  "result": "HDAE5000_PPORT_Svc16_InitWholeSongInMemory_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15692,
+  "value": "0x2f9270",
+  "result": "HDAE5000_PPORT_Svc17_FormatHd_Str_FormatHd",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15694,
+  "value": "0x2f9284",
+  "result": "HDAE5000_PPORT_Svc17_FormatHd_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15720,
+  "value": "0x2f9286",
+  "result": "HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_SendPointerToFreeBufferSpace",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15731,
+  "value": "0x2f92be",
+  "result": "HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15798,
+  "value": "0x2f92c0",
+  "result": "HDAE5000_PPORT_Svc20_PreWholeSongInMemory_Str_PreWholeSongInMemory",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15800,
+  "value": "0x2f92e0",
+  "result": "HDAE5000_PPORT_Svc20_PreWholeSongInMemory_Str_Blank1",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15812,
+  "value": "0x2f92e2",
+  "result": "HDAE5000_PPORT_Svc21_WriteOpenHD_Str_WriteOpenHD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15920,
+  "value": "0x2f9306",
+  "result": "HDAE5000_PPORT_Svc22_WriteCloseHD_Str_WriteCloseHD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15938,
+  "value": "0x2f931e",
+  "result": "HDAE5000_PPORT_Svc23_WriteFileHD_Str_WriteFileHD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15954,
+  "value": "0x2f9336",
+  "result": "HDAE5000_PPORT_Svc24_ReadOpenHD_Str_ReadOpenHD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 16007,
+  "value": "0x2f934c",
+  "result": "HDAE5000_PPORT_Svc25_ReadFileHD_Str_ReadFileHD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 16815,
+  "value": "0x29562a",
+  "result": "HDAE5000_PPORT_Cmd01_SendInfosAboutHd_Str_Error_Wrong_Dll_Ver",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 16841,
+  "value": "0x295436",
+  "result": "HDAE5000_PPORT_Cmd02_ExitPport_Str_N02_Exit_PPORT",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 16861,
+  "value": "0x29544e",
+  "result": "HDAE5000_PPORT_Cmd03_ReadFsbFromHd_Str_N03_Read_FSB_from_HD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 16887,
+  "value": "0x295466",
+  "result": "HDAE5000_PPORT_Cmd04_SendFsbToPc_Str_N04_Sending_FSB_to_PC",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 16971,
+  "value": "0x29547e",
+  "result": "HDAE5000_PPORT_Cmd05_RcvFsbFromPc_Str_N05_Rcv_FSB_from_PC",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 17055,
+  "value": "0x295496",
+  "result": "HDAE5000_PPORT_Cmd06_WriteFsbToHd_Str_N06_Writing_FSB_to_HD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 17083,
+  "value": "0x2954ae",
+  "result": "HDAE5000_PPORT_Cmd07_LoadHdToMemory_Str_N07_Load_HD_to_Memory",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 17168,
+  "value": "0x2954c6",
+  "result": "HDAE5000_PPORT_Cmd08_SendDataToPc_Str_N08_Send_data_to_PC",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 17478,
+  "value": "0x2954de",
+  "result": "HDAE5000_PPORT_Cmd09_SendFilesToPc_Str_N09_Sending_files_to_PC",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 17749,
+  "value": "0x2954f6",
+  "result": "HDAE5000_PPORT_Cmd10_RcvDataFromPc_Str_N10_Rcv_data_from_PC",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 17970,
+  "value": "0x29550e",
+  "result": "HDAE5000_PPORT_Cmd11_SaveMemoryToHd_Str_N11_Save_memory_to_HD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18030,
+  "value": "0x295526",
+  "result": "HDAE5000_PPORT_Cmd12_Nothing_Str_N12_nothing",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18043,
+  "value": "0x29553e",
+  "result": "HDAE5000_PPORT_Cmd13_RcvDataFromPc_Str_N13_Rcv_data_from_PC",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18173,
+  "value": "0x295556",
+  "result": "HDAE5000_PPORT_Cmd14_SendInfosToPc_Str_N14_Sending_infos_to_PC",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18259,
+  "value": "0x29556e",
+  "result": "HDAE5000_PPORT_Cmd15_Nothing_Str_N15_nothing",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18271,
+  "value": "0x295586",
+  "result": "HDAE5000_PPORT_Cmd16_DeleteFiles_Str_N16_Delete_files",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18357,
+  "value": "0x29559e",
+  "result": "HDAE5000_PPORT_Cmd17_FormatHd_Str_N17_Formating_HD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18384,
+  "value": "0x2955b6",
+  "result": "HDAE5000_PPORT_Cmd18_SwitchHdMotorOff_Str_N18_Switch_HD_motor_off",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18410,
+  "value": "0x2955ce",
+  "result": "HDAE5000_PPORT_Cmd19_Nothing_Str_N19_nothing",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18423,
+  "value": "0x2955e6",
+  "result": "HDAE5000_PPORT_Cmd20_SendXapFileFlash_Str_N20_Send_XapFile_flash",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18469,
+  "value": "0x295614",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18477,
+  "value": "0x2955fe",
+  "result": "no-symbol"
+ }
+]

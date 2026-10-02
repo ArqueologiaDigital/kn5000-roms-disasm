@@ -1,0 +1,1152 @@
+[
+ {
+  "value": "0xe0b42a",
+  "reader": "Scoop_CallDisplayHelper_DisplayList",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccca",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccce",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccd2",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccde",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cce2",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cce6",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccea",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccee",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccf2",
+  "reader": "Scoop_EventLoop_12Entry_Process",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0ccfe",
+  "reader": "Scoop_EventLoop_36Entry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd02",
+  "reader": "Scoop_EventLoop_36Entry_Branch1",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd06",
+  "reader": "Scoop_EventLoop_36Entry_Branch2",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd12",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd16",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd1a",
+  "reader": "Scoop_EventLoop_36Entry_Branch3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cd8a",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "label",
+  "name": "Scoop_ApFunctionTable_126",
+  "at": "includes/gui_format_strings.s:38"
+ },
+ {
+  "value": "0xe0cd8e",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "label",
+  "name": "Scoop_ApFunctionTable_426",
+  "at": "includes/gui_format_strings.s:39"
+ },
+ {
+  "value": "0xe0cd94",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdac",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdae",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "label",
+  "name": "Scoop_ResEventTable_1C6",
+  "at": "includes/gui_format_strings.s:42"
+ },
+ {
+  "value": "0xe0cdb2",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdb4",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdb8",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdba",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe0cdbe",
+  "reader": "InitializeScoop",
+  "sites": 1,
+  "result": "label",
+  "name": "Scoop_FunctionTable_406",
+  "at": "includes/gui_format_strings.s:43"
+ },
+ {
+  "value": "0xe1ce12",
+  "reader": "CmpBndRng_DefaultString",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1d588",
+  "reader": "PsS2cLmeas_HandleScroll",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1dd7a",
+  "reader": "PsCmpMeasBox_HandleEvtBC",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1dd7e",
+  "reader": "PsCmpMemBox_HandleEvtBC",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1dd82",
+  "reader": "AcCmpTempoBox_HandleEvt1C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1df12",
+  "reader": "EasyCmp_GridCheck_EventCase2",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe1ffc6",
+  "reader": "LoadAndRunXapr_Entry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe200f2",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe200fc",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20108",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20110",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20118",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20202",
+  "reader": "SongBankLookup_BuildAudioCmd",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe20260",
+  "reader": "InitializeYoko",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe2031c",
+  "reader": "InitializeYoko",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe208ec",
+  "reader": "InitializeYoko",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe264f0",
+  "reader": "AcCurSongName_HandleFocusGained",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe2ef60",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "Kubo_ViewableTable_0A8",
+  "at": "ui_widgets/effects_sequencer_screens.s:1385"
+ },
+ {
+  "value": "0xe2ef64",
+  "reader": "InitializeKubo",
+  "sites": 1,
+  "result": "label",
+  "name": "Kubo_ViewableTable_0AA",
+  "at": "ui_widgets/effects_sequencer_screens.s:1386"
+ },
+ {
+  "value": "0xe322f0",
+  "reader": "Equalizer_FormatCases",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe3471a",
+  "reader": "SngSelFunc_HandleEvent47",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe4448e",
+  "reader": "BmDrEdit_TestPartTableEntry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe44ea2",
+  "reader": "SeqPart_VelCurveData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe44eaa",
+  "reader": "SeqPart_VelCurveData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe44eae",
+  "reader": "SeqPart_VelCurveData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe49ff8",
+  "reader": "AccTone_InlineBytecodeData_Code_Entry2",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe4a01a",
+  "reader": "AccTone_InlineBytecodeData_Code_Entry2",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe7000e",
+  "reader": "HelpLang_DispatchDataBlock_Entry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe8004d",
+  "reader": "SeMenu_ApplyPartEdit_Entry5",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe80076",
+  "reader": "SeMenu_ApplyPartEdit_Entry5",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe80640",
+  "reader": "MidiPartGridCheck_Evt1C00017",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe80650",
+  "reader": "MidiPartGridCheck_Evt1C00018",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe952a6",
+  "reader": "LswLeftHold_DefaultStr",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9554a",
+  "reader": "IvSdpart_GetText",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9d7c6",
+  "reader": "IvMessage_GetText",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9da22",
+  "reader": "Sdtecd1_GetText",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9f872",
+  "reader": "PsMixer_CtlTypeProc1",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xe9f876",
+  "reader": "PsMixer_CtlTypeProc10",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea00a8",
+  "reader": "FDemo_FileOpen_DoOpen",
+  "sites": 1,
+  "result": "ui_widgets/technichord_string_data.s:5165 data, neither a string nor a table"
+ },
+ {
+  "value": "0xea0954",
+  "reader": "SLSrcBankList_FuncBody",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea0976",
+  "reader": "SLSrcBankList_FuncBody_Entry",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea0994",
+  "reader": "SLSrcBankList_FuncBody_Entry",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea09ca",
+  "reader": "SLDstBankList_FuncBody",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea09d0",
+  "reader": "SLDstBankList_FuncBody",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea09ee",
+  "reader": "SLDstBankList_FuncBody",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea0a14",
+  "reader": "SLDstBankList_FuncBody",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea75c6",
+  "reader": "InitializeCheap",
+  "sites": 1,
+  "result": "label",
+  "name": "Cheap_ResNameTable_362",
+  "at": "ui_widgets/disk_menu_file_io_screens.s:573"
+ },
+ {
+  "value": "0xea75cc",
+  "reader": "InitializeCheap",
+  "sites": 1,
+  "result": "label",
+  "name": "Cheap_ResNameTable_363",
+  "at": "ui_widgets/disk_menu_file_io_screens.s:577"
+ },
+ {
+  "value": "0xea75d2",
+  "reader": "InitializeCheap",
+  "sites": 1,
+  "result": "label",
+  "name": "Cheap_ResNameTable_364",
+  "at": "ui_widgets/disk_menu_file_io_screens.s:581"
+ },
+ {
+  "value": "0xea7aca",
+  "reader": "InitializeCheap",
+  "sites": 1,
+  "result": "label",
+  "name": "Cheap_ResNameTable_36D",
+  "at": "ui_widgets/disk_menu_file_io_screens.s:695"
+ },
+ {
+  "value": "0xea7ad0",
+  "reader": "InitializeCheap",
+  "sites": 1,
+  "result": "label",
+  "name": "Cheap_ResNameTable_36E",
+  "at": "ui_widgets/disk_menu_file_io_screens.s:699"
+ },
+ {
+  "value": "0xea99e6",
+  "reader": "GetSoundName_DefaultString",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xea9f08",
+  "reader": "ModeEdit_HandlePaint",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaa160",
+  "reader": "VwUserBitmapByName_HandlePaint",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaa17e",
+  "reader": "TextBox_DrawLineLoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaa266",
+  "reader": "GridCheck_CellSelect",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaa828",
+  "reader": "AcTrkSw_Select",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaabe2",
+  "reader": "CommonIDProc_Evt1E0000A",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaadf2",
+  "reader": "DrawBitmapFile_Impl",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xeaae48",
+  "reader": "Gfx_LoadSplashBMP",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed0d32",
+  "reader": "MstStyleAlp_AppendPadChar",
+  "sites": 1,
+  "result": "extensions/extension_data.s:513 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0d74",
+  "reader": "MstStyle1Grid_CellSelect",
+  "sites": 1,
+  "result": "extensions/extension_data.s:520 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0dac",
+  "reader": "MstStyle1SubGrid_CellSelect",
+  "sites": 1,
+  "result": "extensions/extension_data.s:528 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0e12",
+  "reader": "MstGrid2_PadLeft_LoopA",
+  "sites": 1,
+  "result": "extensions/extension_data.s:543 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed0ee0",
+  "reader": "TchSensGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "extensions/extension_data.s:556 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed1404",
+  "reader": "PmExpFilter_DrawCellBank1",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1416",
+  "reader": "PmExpFilter_DrawCellBank2",
+  "sites": 1,
+  "result": "extensions/extension_data.s:704 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed1556",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed155a",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed155e",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1566",
+  "reader": "DispTimeSetGridCheck_Evt1C0001C",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed156a",
+  "reader": "DispTimeSetCheck_CellDecode",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed156e",
+  "reader": "DispTimeSetCheck_TryRow3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1576",
+  "reader": "DispTimeSetCheck_TryRow5",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed157a",
+  "reader": "DispTimeSetCheck_TryRow6",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed157e",
+  "reader": "DispTimeSetCheck_TryRow7",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1590",
+  "reader": "IvPageOverWr_GetName",
+  "sites": 1,
+  "result": "extensions/extension_data.s:769 data, neither a string nor a table"
+ },
+ {
+  "value": "0xed1602",
+  "reader": "GmOnOffFunc",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed160e",
+  "reader": "VariScreen_DrawRightNameString",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1622",
+  "reader": "VariScreen_EnumDrawNameAudio",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1672",
+  "reader": "RVari_EnumNotifyF_Item_Draw",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1676",
+  "reader": "RVari_EnumNotifyE_Item_Draw",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed167a",
+  "reader": "PmBank_BankChanged_DrawSlot",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed1c86",
+  "reader": "AcTranspose_ValueChanged",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed931c",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9320",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9324",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9330",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9334",
+  "reader": "ToneGen_FlashWriteAll",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d30",
+  "reader": "FileIO_BytecodeData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d32",
+  "reader": "FileIO_BytecodeData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d34",
+  "reader": "FileIO_BytecodeData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d36",
+  "reader": "FileIO_BytecodeData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d38",
+  "reader": "FileIO_BytecodeData",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d3c",
+  "reader": "FileIO_BytecodeData_Code_Entry3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d44",
+  "reader": "FileIO_BytecodeData_Code_Entry3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d4c",
+  "reader": "FileIO_BytecodeData_Code_Entry3",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d4e",
+  "reader": "FileIO_BytecodeData_Code_Entry4",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d56",
+  "reader": "FileIO_BytecodeData_Code_Entry4",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d58",
+  "reader": "FileIO_BytecodeData_Code_Entry4",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d60",
+  "reader": "FileIO_BytecodeData_Code_Entry6",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d7c",
+  "reader": "FileIO_BytecodeData_Code_Entry8",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9d9a",
+  "reader": "FileIO_BytecodeData_Code_Entry8",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9da0",
+  "reader": "FileIO_BytecodeData_Code_Entry8",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xed9da4",
+  "reader": "FileIO_BytecodeData_Code_Entry8",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xedba1c",
+  "reader": "Display_CopyAndRenderBitmaps",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2cd8",
+  "reader": "MidiSysEx_SendAllParams",
+  "sites": 6,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2ce6",
+  "reader": "MidiSysEx_SendControlChange1",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2cea",
+  "reader": "MidiSysEx_SendProgramChange",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xee2cec",
+  "reader": "MidiSysEx_SendPartChanLoop",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf0dc8b",
+  "reader": "SeMenu_CopyWriteUpdate_Entry5",
+  "sites": 1,
+  "result": "audio/sound_editor_ui.s:5916 is code"
+ },
+ {
+  "value": "0xf0dd36",
+  "reader": "SeMenu_CopyWriteUpdate_Entry5",
+  "sites": 1,
+  "result": "audio/sound_editor_ui.s:5978 is code"
+ },
+ {
+  "value": "0xf0ddc7",
+  "reader": "SeMenu_CopyWriteUpdate_Entry5",
+  "sites": 1,
+  "result": "audio/sound_editor_ui.s:6031 is code"
+ },
+ {
+  "value": "0xf15b9d",
+  "reader": "TuningSys_Param_01",
+  "sites": 1,
+  "result": "storage/flash_floppy_handlers.s:246 data, neither a string nor a table"
+ },
+ {
+  "value": "0xf20000",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 3,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf200ff",
+  "reader": "NoteEditBox_EventDispatch2",
+  "sites": 2,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf30429",
+  "reader": "SndParam_Dispatch",
+  "sites": 1,
+  "result": "sequencer/sequencer_ui.s:7566 is code"
+ },
+ {
+  "value": "0xf304d5",
+  "reader": "SndParam_Dispatch",
+  "sites": 1,
+  "result": "sequencer/sequencer_ui.s:7618 is code"
+ },
+ {
+  "value": "0xf34a89",
+  "reader": "Sqedt_ParamDispatch",
+  "sites": 1,
+  "result": "sequencer/sequencer_ui.s:13855 is code"
+ },
+ {
+  "value": "0xf34ade",
+  "reader": "Sqedt_ParamDispatch",
+  "sites": 1,
+  "result": "sequencer/sequencer_ui.s:13884 is code"
+ },
+ {
+  "value": "0xf34b56",
+  "reader": "Sqedt_ParamDispatch_Entry",
+  "sites": 1,
+  "result": "sequencer/sequencer_ui.s:13920 is code"
+ },
+ {
+  "value": "0xf400f7",
+  "reader": "DrawEditSw_FinalPosition",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf44904",
+  "reader": "AppEvent_SubDispatch",
+  "sites": 1,
+  "result": "sequencer/sequencer_engine.s:20937 is code"
+ },
+ {
+  "value": "0xf449b9",
+  "reader": "AppEvent_SubDispatch",
+  "sites": 1,
+  "result": "sequencer/sequencer_engine.s:20997 is code"
+ },
+ {
+  "value": "0xf67a02",
+  "reader": "AccPatch_ResolveEntryAddr_Sub",
+  "sites": 1,
+  "result": "sequencer/accompaniment_engine.s:29645 data, neither a string nor a table"
+ },
+ {
+  "value": "0xf6ac3e",
+  "reader": "AccScreen_DataBlock",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf6ad71",
+  "reader": "AccScreen_BeatDataBlock",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xf75b2c",
+  "reader": "Data_InOutGridDispatch",
+  "sites": 1,
+  "result": "midi/ac_listener_handlers.s:1335 is code"
+ },
+ {
+  "value": "0xf75bf8",
+  "reader": "Data_InOutGridDispatch",
+  "sites": 1,
+  "result": "midi/ac_listener_handlers.s:1402 is code"
+ },
+ {
+  "value": "0xf8479b",
+  "reader": "FDemoText_ByteData_VoiceProbeC",
+  "sites": 1,
+  "result": "demo/fdemotext_routines.s:78 is code"
+ },
+ {
+  "value": "0xf96ccd",
+  "reader": "FDC_WaitReady",
+  "sites": 1,
+  "result": "storage/fdc_routines.s:212 is code"
+ },
+ {
+  "value": "0xfb0000",
+  "reader": "PsMixer_CtlTypeProc2_Entry",
+  "sites": 2,
+  "result": "ui/ui_window_procs.s:8818 is code"
+ },
+ {
+  "value": "0xfb00f5",
+  "reader": "NoteEditBox_EventDispatch2",
+  "sites": 8,
+  "result": "ui/ui_window_procs.s:8907 is code"
+ },
+ {
+  "value": "0xfb00f7",
+  "reader": "VariScreen_HandlePaint",
+  "sites": 3,
+  "result": "ui/ui_window_procs.s:8908 is code"
+ },
+ {
+  "value": "0xfb0d6d",
+  "reader": "Voice_FactoryPresetData",
+  "sites": 1,
+  "result": "kn5000_v10_program.s:2207 is code"
+ },
+ {
+  "value": "0xfc0000",
+  "reader": "NameGetFuncCall_Dispatch",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfc0001",
+  "reader": "RunTestCounters_Display",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfc0002",
+  "reader": "RunTestCounters_Display",
+  "sites": 1,
+  "result": "ui/rvari_routines.s:368 is code"
+ },
+ {
+  "value": "0xfc0003",
+  "reader": "RunTestCounters_Display",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfc7568",
+  "reader": "ExtData_VoiceParam_DispatchBytecode",
+  "sites": 1,
+  "result": "audio/audio_control_engine.s:3060 is code"
+ },
+ {
+  "value": "0xfc7b85",
+  "reader": "UIState_ProcessExtendedMode",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfc8570",
+  "reader": "ExtData_ToneParam_DispatchHandler",
+  "sites": 1,
+  "result": "audio/audio_control_engine.s:4914 is code"
+ },
+ {
+  "value": "0xfc8793",
+  "reader": "ExtData_ToneParam_AltDispatch",
+  "sites": 1,
+  "result": "audio/audio_control_engine.s:5143 is code"
+ },
+ {
+  "value": "0xfc87fd",
+  "reader": "ExtData_ToneParam_AltBody",
+  "sites": 1,
+  "result": "audio/audio_control_engine.s:5185 is code"
+ },
+ {
+  "value": "0xfd8f7e",
+  "reader": "SeqData_FormatOutput_Dispatch",
+  "sites": 1,
+  "result": "midi/midi_dispatch_handlers.s:13594 is code"
+ },
+ {
+  "value": "0xfd9a3e",
+  "reader": "VoiceParam_MultiMode_StubRet",
+  "sites": 1,
+  "result": "midi/midi_dispatch_handlers.s:14732 is code"
+ },
+ {
+  "value": "0xfda94d",
+  "reader": "MidiPkt_SendBankSelect_Send",
+  "sites": 1,
+  "result": "midi/midipkt_routines.s:1333 is code"
+ },
+ {
+  "value": "0xfdced3",
+  "reader": "DSPCfg_Data_ParamDispatch",
+  "sites": 1,
+  "result": "audio/dsp_config_sysex.s:4041 is code"
+ },
+ {
+  "value": "0xfde2cf",
+  "reader": "UIStateEvt_TransposeUpdate_Apply",
+  "sites": 1,
+  "result": "audio/dsp_config_sysex.s:5766 is code"
+ },
+ {
+  "value": "0xfde538",
+  "reader": "UIStateEvt_ParamEdit_Data_Entry",
+  "sites": 1,
+  "result": "audio/dsp_config_sysex.s:5963 is code"
+ },
+ {
+  "value": "0xfe0049",
+  "reader": "SeMenu_ApplyPartEdit_Entry2",
+  "sites": 1,
+  "result": "audio/audioinit_routines.s:2321 is code"
+ },
+ {
+  "value": "0xfe0061",
+  "reader": "SeMenu_ApplyPartEdit_Entry2",
+  "sites": 1,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xfeac14",
+  "reader": "HdaeRom_TableEntry2",
+  "sites": 1,
+  "result": "audio/note_voice_mapping.s:17571 is code"
+ },
+ {
+  "value": "0xfeb40d",
+  "reader": "MIDI_SendEpilogue",
+  "sites": 1,
+  "result": "audio/note_voice_mapping.s:18440 is code"
+ },
+ {
+  "value": "0xfeb4ee",
+  "reader": "MIDI_SendEpilogue",
+  "sites": 1,
+  "result": "audio/note_voice_mapping.s:18518 is code"
+ },
+ {
+  "value": "0xfebf45",
+  "reader": "SendAllSoundOff_Flush",
+  "sites": 1,
+  "result": "audio/note_voice_mapping.s:19559 is code"
+ },
+ {
+  "value": "0xfeecda",
+  "reader": "Param_SignExtendReturn",
+  "sites": 1,
+  "result": "audio/note_voice_mapping.s:25036 is code"
+ },
+ {
+  "value": "0xff0008",
+  "reader": "PsMixer_CtlTypeProc5",
+  "sites": 3,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xff00f2",
+  "reader": "NoteEditBox_EventDispatch2",
+  "sites": 3,
+  "result": "audio/note_voice_mapping.s:27059 is code"
+ },
+ {
+  "value": "0xff00f5",
+  "reader": "Scoop_EnvelopeCalc",
+  "sites": 22,
+  "result": "audio/note_voice_mapping.s:27060 is code"
+ },
+ {
+  "value": "0xff00f7",
+  "reader": "VwVariBox_Confirm_NoSelection",
+  "sites": 24,
+  "result": "inside a line"
+ },
+ {
+  "value": "0xff08a9",
+  "reader": "VoiceParam_DispatchTable1",
+  "sites": 1,
+  "result": "audio/note_voice_mapping.s:27920 is code"
+ }
+]

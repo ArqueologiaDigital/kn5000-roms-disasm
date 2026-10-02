@@ -2935,7 +2935,7 @@ Seq_LoadDisplayResource:
 	lda xsp, (xsp - 32)
 	push xiz				; 4 bytes, frame = 36
 	ld xiz, xwa				; XIZ = caller arg
-	ld xiy, 0x00ea0028			; resource descriptor ptr
+	ld xiy, Seq_LoadDisplayResource_Str_Empty			; resource descriptor ptr
 	lda xix, (xsp + 4)			; XIX = local buffer
 	ldw bc, 0x0010				; 16 bytes to copy
 	ldirw					; block copy
@@ -2969,7 +2969,7 @@ Seq_LoadResource_Proceed:
 	call Strcat			; format/prepare
 	lda xsp, (xsp + 16)			; clean stack (16 bytes)
 	lda xwa, (xsp + 4)			; reload buffer
-	ld xbc, 0x00ea004e			; resource descriptor
+	ld xbc, Seq_LoadResource_Proceed_Str_rt			; resource descriptor
 	call FileIO_OpenWithMode				; open display resource
 	cp hl, 0:i3
 	jr lt, Seq_Epilogue32			; failed
@@ -3012,7 +3012,7 @@ Seq_FillBufferLoop:
 	call Strcat			; format/prepare
 	lda xsp, (xsp + 22)			; clean stack
 	lda xwa, (xsp + 4)
-	ld xbc, 0x00ea006c			; resource descriptor
+	ld xbc, Seq_FillBufferLoop_Str_rt			; resource descriptor
 	call FileIO_OpenWithMode				; open display resource
 	cp hl, 0:i3
 	jr lt, Seq_NamedResource_Epilogue			; failed
@@ -3029,7 +3029,7 @@ Seq_FillBufferLoop:
 	pushw Seq_FillBufferLoop_Str_ACTION@hi16
 	pushw Seq_FillBufferLoop_Str_ACTION@lo16
 	ld xbc, xiz				; info ptr
-	ld xde, 0x00ea0052			; destination descriptor
+	ld xde, Seq_FillBufferLoop_Str_ACTION_2			; destination descriptor
 	calr	Seq_LoadDisplayResource_Helper
 	call FileIO_CloseHandle			; finalize
 	cp hl, 0:i3

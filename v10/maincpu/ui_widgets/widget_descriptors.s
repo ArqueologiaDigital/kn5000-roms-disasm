@@ -2688,8 +2688,8 @@ Sqedt_ParamDispatch_Str_2:
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_3[18].
 ; -----------------------------------------------------------------------------
-Sqedt_ParamDispatch_Str_3:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CF8, 0x12
+Sqedt_ParamDispatch_Str_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CF8, 0xC
+Sqedt_ParamDispatch_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D04, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_4
 ; Sqedt_ParamDispatch_Str_4 -- NUL-terminated string(s), 6 bytes, used
@@ -2997,8 +2997,8 @@ Sqedt_ParamDispatch_Str_29:
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_30[12].
 ; -----------------------------------------------------------------------------
-Sqedt_ParamDispatch_Str_30:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DDE, 0xC
+Sqedt_ParamDispatch_Str_30:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DDE, 0x6
+Sqedt_ParamDispatch_Entry2_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DE4, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_31
 ; Sqedt_ParamDispatch_Str_31 -- NUL-terminated string(s), 6 bytes, used

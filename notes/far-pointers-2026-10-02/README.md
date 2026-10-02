@@ -85,3 +85,17 @@ v9 194, v7 187, prom_a 35, prom_c 2, HD-AE5000 0).  Gate 13/13.
   data that is neither text nor a pointer table, and the non-pointer pairs above.
 * The C side still types each split run as one member (`char East_ResNames_3EC_Strings[252]`);
   the `.s` names the strings.  Splitting the C members to match is a C-retyping job.
+
+## Third pass, the same day: numeric instruction operands (`lda xbc, (0x29559e:24)`)
+
+The splitter and the line labeller took one more target source, numeric own-ROM INSTRUCTION
+operands with no symbol at the address; symbolize_kn5000_rom_operands.py learned the
+HD-AE5000 image (own ROM 0x280000..0x2FFFFF).  Reports in `operands/`:
+
+    split_blobs_at_far_pointers.py --image v10 --apply  (v9/v7 with --names-from)   ~30 labels each
+    label_far_pointer_lines.py --image <i> --apply        HD-AE5000 83, v10 11, v9 10, v7 12
+    symbolize_kn5000_rom_operands.py --image <i> --apply  HD-AE5000 22 + 83, v10 30, v9 30, v7 157
+    symbolize_far_pointer_pushes.py --image <i> --apply   (macro arguments made exact)
+
+numaddr: HD-AE5000 116 -> 11, v10 109 -> 79, v9 118 -> 88, v7 346 -> 189; numfar 607 -> 534.
+Gate 13/13.  (v7's 157 includes 115 exact matches that had never been applied.)

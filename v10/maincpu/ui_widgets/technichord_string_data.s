@@ -5118,25 +5118,25 @@ IvDrawbar_Init_SetupMode_Str_Gt:	.incbin "includes/generated/naka_technichord_st
 ; [nakarest] Readers: source references Seq_LoadDisplayResource (demo/fdemotext_routines.s: `ld
 ; [nakarest] xiy, 0x00ea0028`); 1 data word in Str_DISKNAME (at 0xea1e3c); 1 data word in
 ; [nakarest] Str_PREV_471A (at 0xea5c4e).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0DA, 0x20
+Seq_LoadDisplayResource_Str_Empty:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0DA, 0x20	; ""
 Seq_LoadResource_Proceed_Str_PRE:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A0FA, 0x6	; ".PRE"
 ; [nakarest] naka_technichord_strings+0x1a100  +0x1a100..+0x1a104 (0xea004e, 4 B)
 ; [nakarest] Text (4 B at 0xea004e), first string "rt"; no registered NAKA table points into it;
 ; [nakarest] reached through source references Seq_LoadResource_Proceed
 ; [nakarest] (demo/fdemotext_routines.s: `ld xbc, 0x00ea004e`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A100, 0x4
+Seq_LoadResource_Proceed_Str_rt:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A100, 0x4	; "rt"
 ; [nakarest] naka_technichord_strings+0x1a104  +0x1a104..+0x1a11e (0xea0052, 26 B)
 ; [nakarest] Text (26 B at 0xea0052), first string "<ACTION>"; no registered NAKA table points
 ; [nakarest] into it; reached through source references Seq_FillBufferLoop
 ; [nakarest] (demo/fdemotext_routines.s: `ld xde, 0x00ea0052`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A104, 0xA
+Seq_FillBufferLoop_Str_ACTION_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A104, 0xA	; "<ACTION>"
 Seq_FillBufferLoop_Str_ACTION:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A10E, 0xA	; "</ACTION>"
 Seq_FillBufferLoop_Str_ACT:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A118, 0x6	; ".ACT"
 ; [nakarest] naka_technichord_strings+0x1a11e  +0x1a11e..+0x1a128 (0xea006c, 10 B)
 ; [nakarest] Text (10 B at 0xea006c), first string "rt"; no registered NAKA table points into
 ; [nakarest] it; reached through source references Seq_FillBufferLoop
 ; [nakarest] (demo/fdemotext_routines.s: `ld xbc, 0x00ea006c`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A11E, 0x4
+Seq_FillBufferLoop_Str_rt:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A11E, 0x4	; "rt"
 FDemo_DisplayResourceData_Str_SQT:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A122, 0x6	; ".SQT"
 ; [nakarest] naka_technichord_strings+0x1a128  +0x1a128..+0x1a12c (0xea0076, 4 B)
 ; [nakarest] Text (4 B at 0xea0076), first string "rb"; no registered NAKA table points into it;
@@ -5157,7 +5157,7 @@ FDemo_DisplayResourceData_Str_rb:	.incbin "includes/generated/naka_technichord_s
 ; [nakarest] Text (10 B at 0xea009e), first string "FEATURE "; no registered NAKA table points
 ; [nakarest] into it; reached through source references FDemo_LoadRegsAndPostEvent
 ; [nakarest] (demo/file_demo_proc.s: `ld xde, 0x00ea009e`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A150, 0xA
+FDemo_LoadRegsAndPostEvent_Str_FEATURE:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A150, 0xA	; "FEATURE "
 ; [nakarest] naka_technichord_strings+0x1a15a  +0x1a15a..+0x1a15e (0xea00a8, 4 B)
 ; [nakarest] Text (4 B at 0xea00a8), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FDemo_FileOpen_DoOpen (demo/file_demo_proc.s: `ld
@@ -5258,22 +5258,22 @@ FileIO_ValidateWithExtHeader_Str_rb:	.incbin "includes/generated/naka_technichor
 ; [nakarest] Text (4 B at 0xea0194), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion0_VRAM (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea0194`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A246, 0x4
+FileIO_LoadRegion0_VRAM_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A246, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a24a  +0x1a24a..+0x1a24e (0xea0198, 4 B)
 ; [nakarest] Text (4 B at 0xea0198), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion1_VRAM (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea0198`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A24A, 0x4
+FileIO_LoadRegion1_VRAM_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A24A, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a24e  +0x1a24e..+0x1a252 (0xea019c, 4 B)
 ; [nakarest] Text (4 B at 0xea019c), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion7_Flash (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea019c`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A24E, 0x4
+FileIO_LoadRegion7_Flash_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A24E, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a252  +0x1a252..+0x1a256 (0xea01a0, 4 B)
 ; [nakarest] Text (4 B at 0xea01a0), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion2_ExtMem (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea01a0`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A252, 0x4
+FileIO_LoadRegion2_ExtMem_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A252, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a256  +0x1a256..+0x1a25a (0xea01a4, 4 B)
 ; [nakarest] Text (4 B at 0xea01a4), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadSongRegion8 (demo/file_demo_proc.s:
@@ -5293,22 +5293,22 @@ LoadSong8_AltPresetPath_Str_rb:	.incbin "includes/generated/naka_technichord_str
 ; [nakarest] Text (4 B at 0xea01b0), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion3_ExtMem (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea01b0`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A262, 0x4
+FileIO_LoadRegion3_ExtMem_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A262, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a266  +0x1a266..+0x1a26a (0xea01b4, 4 B)
 ; [nakarest] Text (4 B at 0xea01b4), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion5_VRAM (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea01b4`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A266, 0x4
+FileIO_LoadRegion5_VRAM_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A266, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a26a  +0x1a26a..+0x1a26e (0xea01b8, 4 B)
 ; [nakarest] Text (4 B at 0xea01b8), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion6_Simple (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea01b8`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A26A, 0x4
+FileIO_LoadRegion6_Simple_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A26A, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a26e  +0x1a26e..+0x1a272 (0xea01bc, 4 B)
 ; [nakarest] Text (4 B at 0xea01bc), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_LoadRegion4_VRAM (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea01bc`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A26E, 0x4
+FileIO_LoadRegion4_VRAM_Str_rb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A26E, 0x4	; "rb"
 ; [nakarest] naka_technichord_strings+0x1a272  +0x1a272..+0x1a274 (0xea01c0, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xea01c0 not derived; readers below
 ; [nakarest] Readers: source references FileDemo_RecordCallback (demo/file_demo_proc.s: `lda
@@ -5323,12 +5323,12 @@ LoadSong8_AltPresetPath_Str_rb:	.incbin "includes/generated/naka_technichord_str
 ; [nakarest] Text (4 B at 0xea01f0), first string "wb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references SaveRegion0_SpaceOk (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea01f0`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2A2, 0x4
+SaveRegion0_SpaceOk_Str_wb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2A2, 0x4	; "wb"
 ; [nakarest] naka_technichord_strings+0x1a2a6  +0x1a2a6..+0x1a2aa (0xea01f4, 4 B)
 ; [nakarest] Text (4 B at 0xea01f4), first string "wb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references SaveRegion1_SpaceOk (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea01f4`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2A6, 0x4
+SaveRegion1_SpaceOk_Str_wb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2A6, 0x4	; "wb"
 ; [nakarest] Resource_Region7_Start  +0x1a2aa..+0x1a2ae (0xea01f8, 4 B)
 ; [nakarest] Text (4 B at 0xea01f8), first string "wb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references SaveRegion7_SpaceOk (demo/file_demo_proc.s: `ld
@@ -5351,17 +5351,17 @@ Resource_Region3_Start:
 ; [nakarest] Text (4 B at 0xea0204), first string "wb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references SaveRegion5_SpaceOk (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea0204`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2B6, 0x4
+SaveRegion5_SpaceOk_Str_wb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2B6, 0x4	; "wb"
 ; [nakarest] naka_technichord_strings+0x1a2ba  +0x1a2ba..+0x1a2be (0xea0208, 4 B)
 ; [nakarest] Text (4 B at 0xea0208), first string "wb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FileIO_SaveRegion6_Simple (demo/file_demo_proc.s:
 ; [nakarest] `ld xbc, 0x00ea0208`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2BA, 0x4
+FileIO_SaveRegion6_Simple_Str_wb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2BA, 0x4	; "wb"
 ; [nakarest] naka_technichord_strings+0x1a2be  +0x1a2be..+0x1a2c2 (0xea020c, 4 B)
 ; [nakarest] Text (4 B at 0xea020c), first string "wb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references SaveRegion4_SpaceOk (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea020c`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2BE, 0x4
+SaveRegion4_SpaceOk_Str_wb:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A2BE, 0x4	; "wb"
 ; [nakarest] naka_technichord_strings+0x1a2c2  +0x1a2c2..+0x1a2c4 (0xea0210, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xea0210 not derived; readers below
 ; [nakarest] Readers: source references FileDemo_ProcessCallback (demo/file_demo_proc.s: `lda
@@ -5642,7 +5642,7 @@ GetEncFileSize_CopyRecordLoop_Str_Star_Dot_Star:	.incbin "includes/generated/nak
 ; [nakarest] Text (4 B at 0xea0492), first string ".*"; no registered NAKA table points into it;
 ; [nakarest] reached through source references IndexToRecordLookup (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea0492`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A544, 0x4
+IndexToRecordLookup_Str_Dot_Star:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A544, 0x4	; ".*"
 ; [nakarest] naka_technichord_strings+0x1a548  +0x1a548..+0x1a54e (0xea0496, 6 B)
 ; [nakarest] Text (6 B at 0xea0496), first string "*.MID"; no registered NAKA table points into
 ; [nakarest] it; reached through source references BuildSecondPage_CopyRecordLoop
@@ -5652,7 +5652,7 @@ BuildSecondPage_CopyRecordLoop_Str_MID:	.incbin "includes/generated/naka_technic
 ; [nakarest] purpose not established: layout of 16 B at 0xea049c not derived; readers below
 ; [nakarest] Readers: source references ValidateAndSearchFile (demo/file_demo_proc.s: `ld xiy,
 ; [nakarest] 0x00ea049c`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A54E, 0x10
+ValidateAndSearchFile_Str_Empty:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A54E, 0x10	; ""
 ; [nakarest] naka_technichord_strings+0x1a55e  +0x1a55e..+0x1a564 (0xea04ac, 6 B)
 ; [nakarest] Text (6 B at 0xea04ac), first string "MThd"; no registered NAKA table points into
 ; [nakarest] it; reached through source references ProcessRecord_MatchLoop1

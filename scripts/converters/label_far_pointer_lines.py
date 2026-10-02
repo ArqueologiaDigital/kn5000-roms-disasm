@@ -2,7 +2,8 @@
 """label_far_pointer_lines.py -- a far pointer that lands at the START of a data line gets a label there.
 
 QUESTION THIS ANSWERS / JOB IT DOES
-  After far_pointer_pipeline.sh, the far-pointer pushes and Reg* macro arguments still numeric
+  After far_pointer_pipeline.sh, the far-pointer pushes, Reg* macro arguments and (since the
+  second pass) numeric own-ROM instruction operands still numeric
   point at bytes that are not in an `.incbin` slice -- mostly strings in `.include`d text
   (`GUI_FormatStrings`, `aligned_string "%s"` runs) and tables written as `.long`/`.byte`
   lines.  When the pointer is the first byte a DATA line emits (`aligned_string`, `.asciz`,
@@ -38,6 +39,9 @@ import symbolize_numeric_branches as snb              # noqa: E402
 
 REPO = fp.REPO
 LABEL = re.compile(r'^([A-Za-z_][\w.$]*):')
+OPER = re.compile(r'^\s*(?:[A-Za-z_.$][\w.$]*:)?\s*(?!jr\b|jrl\b|calr\b|call\b|jp\b|djnz\b|\.)'
+                  r'[a-z_][a-z0-9_]*\s+([^;\n]*)')
+OLIT = re.compile(r'(?<![\w.$])(0x[0-9a-fA-F]+|\d{7,})(?![\w.$])')
 
 
 def main():
@@ -89,6 +93,12 @@ def main():
                     h, lw = int(m1.group(2), 0), int(m2.group(2), 0)
                     v = (h << 16) | lw
                     if h <= 0xff and lo <= v <= hi and v not in syms:
+                        targets[v].append((addr_of.get(rd, 1 << 30), rd, None))
+            mo = OPER.match(l)
+            if mo and not fp.PUSH.match(l) and not fp.REG_MACRO.match(l):
+                for x in OLIT.findall(mo.group(1)):
+                    v = int(x, 0)
+                    if lo <= v <= hi and v not in syms:
                         targets[v].append((addr_of.get(rd, 1 << 30), rd, None))
             mm, found = fp.reg_macro_addresses(l)
             for k, v in found:

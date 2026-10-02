@@ -3983,7 +3983,7 @@ InitializeCheap:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xea1186:24)
+	ld wa, (Cheap_ClassCount_165:24)
 	ld (XBC+0x08),WA
 	lda xwa, (0xea0f46:24)
 	ld (XBC+0x0a),XWA
@@ -3994,7 +3994,7 @@ InitializeCheap:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xea11f2:24)
+	ld wa, (Cheap_ResEventCount_1C5:24)
 	ld (XBC+0x08),WA
 	lda xwa, (PtrTbl_EventNames_EA1188:24)
 	ld (XBC+0x0a),XWA
@@ -4007,7 +4007,7 @@ InitializeCheap:
 	ld (XBC+0x04),XWA
 	ld wa, (0xea1358:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xea11f4:24)
+	lda xwa, (Cheap_ResMethodTable_1E5:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01e5
 	call RegisterObjectTable
@@ -4017,7 +4017,7 @@ InitializeCheap:
 	lda xwa, (ApFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001d
-	lda xwa, (0xea0a56:24)
+	lda xwa, (InitializeCheap_PtrTable_9:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0125
 	call RegisterObjectTable
@@ -4037,7 +4037,7 @@ InitializeCheap:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000d
-	lda xwa, (0xea135a:24)
+	lda xwa, (InitializeCheap_PtrTable:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0105
 	call RegisterObjectTable
@@ -4057,7 +4057,7 @@ InitializeCheap:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0039
-	lda xwa, (0xea7fce:24)
+	lda xwa, (InitializeCheap_PtrTable_8:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0145
 	call RegisterObjectTable
@@ -4067,7 +4067,7 @@ InitializeCheap:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0039
-	lda xwa, (0xea80b6:24)
+	lda xwa, (Cheap_MainFunctionTable_445:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0445
 	call RegisterObjectTable
@@ -4077,7 +4077,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x004a
-	lda xwa, (0xea67b6:24)
+	lda xwa, (Cheap_ViewableTable_060:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0060
 	call RegisterObjectTable
@@ -4087,7 +4087,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x004a
-	lda xwa, (0xea6fe2:24)
+	lda xwa, (Cheap_ResNameTable_360:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0360
 	call RegisterObjectTable
@@ -4097,7 +4097,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0080
-	lda xwa, (0xea68e2:24)
+	lda xwa, (Cheap_ViewableTable_061:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0061
 	call RegisterObjectTable
@@ -4107,7 +4107,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0080
-	lda xwa, (0xea7228:24)
+	lda xwa, (Cheap_ResNameTable_361:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0361
 	call RegisterObjectTable
@@ -4117,7 +4117,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6ae6:24)
+	lda xwa, (Cheap_ViewableTable_062:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0062
 	call RegisterObjectTable
@@ -4137,7 +4137,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6aea:24)
+	lda xwa, (Cheap_ViewableTable_063:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0063
 	call RegisterObjectTable
@@ -4157,7 +4157,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6aee:24)
+	lda xwa, (Cheap_ViewableTable_064:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0064
 	call RegisterObjectTable
@@ -4177,7 +4177,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xea6af2:24)
+	lda xwa, (Cheap_ViewableTable_065:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0065
 	call RegisterObjectTable
@@ -4187,7 +4187,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xea75d8:24)
+	lda xwa, (InitializeCheap_PtrTable_2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0365
 	call RegisterObjectTable
@@ -4197,7 +4197,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6b02:24)
+	lda xwa, (Cheap_ViewableTable_066:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0066
 	call RegisterObjectTable
@@ -4207,7 +4207,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea75fc:24)
+	lda xwa, (InitializeCheap_Str_Empty:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0366
 	call RegisterObjectTable
@@ -4217,7 +4217,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0047
-	lda xwa, (0xea6b06:24)
+	lda xwa, (Cheap_ViewableTable_067:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0067
 	call RegisterObjectTable
@@ -4227,7 +4227,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0047
-	lda xwa, (0xea7602:24)
+	lda xwa, (InitializeCheap_PtrTable_3:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0367
 	call RegisterObjectTable
@@ -4237,7 +4237,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6c26:24)
+	lda xwa, (Cheap_ViewableTable_06A:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006a
 	call RegisterObjectTable
@@ -4257,7 +4257,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xea6c2a:24)
+	lda xwa, (Cheap_ViewableTable_06B:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006b
 	call RegisterObjectTable
@@ -4267,7 +4267,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xea77ea:24)
+	lda xwa, (InitializeCheap_PtrTable_4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036b
 	call RegisterObjectTable
@@ -4277,7 +4277,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0053
-	lda xwa, (0xea6c82:24)
+	lda xwa, (Cheap_ViewableTable_06C:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006c
 	call RegisterObjectTable
@@ -4287,7 +4287,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0053
-	lda xwa, (0xea7878:24)
+	lda xwa, (InitializeCheap_PtrTable_5:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036c
 	call RegisterObjectTable
@@ -4297,7 +4297,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6dd2:24)
+	lda xwa, (Cheap_ViewableTable_06D:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006d
 	call RegisterObjectTable
@@ -4317,7 +4317,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6dd6:24)
+	lda xwa, (Cheap_ViewableTable_06E:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x006e
 	call RegisterObjectTable
@@ -4337,7 +4337,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xea6dda:24)
+	lda xwa, (Cheap_ViewableTable_077:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0077
 	call RegisterObjectTable
@@ -4347,7 +4347,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0015
-	lda xwa, (0xea7ad6:24)
+	lda xwa, (InitializeCheap_PtrTable_6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0377
 	call RegisterObjectTable
@@ -4357,7 +4357,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6e32:24)
+	lda xwa, (Cheap_ViewableTable_079:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0079
 	call RegisterObjectTable
@@ -4377,7 +4377,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x005e
-	lda xwa, (0xea6e36:24)
+	lda xwa, (Cheap_ViewableTable_07B:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007b
 	call RegisterObjectTable
@@ -4387,7 +4387,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x005e
-	lda xwa, (0xea7b92:24)
+	lda xwa, (InitializeCheap_PtrTable_7:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037b
 	call RegisterObjectTable
@@ -4397,7 +4397,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6fb2:24)
+	lda xwa, (Cheap_ViewableTable_07C:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007c
 	call RegisterObjectTable
@@ -4407,7 +4407,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea7e98:24)
+	lda xwa, (Cheap_ResNameTable_37C:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037c
 	call RegisterObjectTable
@@ -4417,7 +4417,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6fb6:24)
+	lda xwa, (Cheap_ViewableTable_07D:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007d
 	call RegisterObjectTable
@@ -4427,7 +4427,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea7e9e:24)
+	lda xwa, (Cheap_ResNameTable_37D:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037d
 	call RegisterObjectTable
@@ -4437,7 +4437,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xea6fba:24)
+	lda xwa, (Cheap_ViewableTable_07E:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x007e
 	call RegisterObjectTable
@@ -4447,7 +4447,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xea7ea4:24)
+	lda xwa, (Cheap_ResNameTable_37E:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x037e
 	call RegisterObjectTable
@@ -4457,7 +4457,7 @@ InitializeCheap:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea6fde:24)
+	lda xwa, (Cheap_ViewableTable_0BC:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00bc
 	call RegisterObjectTable
@@ -4467,7 +4467,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea7ee2:24)
+	lda xwa, (Cheap_ResNameTable_3BC:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03bc
 	call RegisterObjectTable

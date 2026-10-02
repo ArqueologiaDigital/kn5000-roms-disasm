@@ -129,7 +129,7 @@ InitializeHama:
 	lda	xwa, (ApFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
-	lda	xwa, (14807114:24)
+	lda	xwa, (InitializeHama_PtrTable:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -195,7 +195,7 @@ InitializeHama:
 	lda	xwa, (ViewableProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
-	lda	xwa, (14810064:24)
+	lda	xwa, (InitializeHama_Str_Empty:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -235,14 +235,14 @@ InitializeHama:
 	ldw	wa, 1020
 	call	RegisterObjectTable
 	pushw 9
-	lda	xwa, (14810392:24)
+	lda	xwa, (InitializeHama_Str_TT_HDDEXT:24)
 	push	xwa
 	ld	xwa, 127
 	ld	xbc, 21561344
 	ld	xde, 16515072
 	call	RegisterTitle
 	pushw 9
-	lda	xwa, (14810402:24)
+	lda	xwa, (InitializeHama_Str_TT_EXTAPR:24)
 	push	xwa
 	ld	xwa, 252
 	ld	xbc, 21561344

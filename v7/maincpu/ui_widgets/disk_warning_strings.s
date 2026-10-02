@@ -801,7 +801,8 @@ DrawFunc_Init_FontTable2_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warnin
 ; [nakarest] (display/graphics_text_vga.s: `ld xwa, DrawFunc_Init_FontTable0_Str_Fmt3d`).
 DrawFunc_Init_FontTable0_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2488, 0xC	; "%3d"
 DrawFunc_Init_Variant1_Str_Fmt1d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2494, 0x4	; "%1d"
-DrawFunc_Init_Variant1_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2498, 0x8	; "%2d"
+DrawFunc_Init_Variant1_Str_Fmt2d:	.incbin "includes/generated/naka_disk_warning.bin", 0x2498, 0x4	; "%2d"
+DrawFunc_Init_Variant1_Str_Fmt3d:	.incbin "includes/generated/naka_disk_warning.bin", 0x249C, 0x4	; "%3d"
 DrawFunc_Init_Entry_Str_Fmt2d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24A0, 0x4	; "%2d"
 DrawFunc_Init_Entry_Str_Fmt3d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24A4, 0x4	; "%3d"
 DrawFunc_Init_Entry_Str_Fmt4d:		.incbin "includes/generated/naka_disk_warning.bin", 0x24A8, 0x4	; "%4d"

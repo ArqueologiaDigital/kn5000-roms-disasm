@@ -416,7 +416,7 @@ Naka_Event_Table3:
 ; [nakarest] naka_sound_menu_drawbar+0x512  +0x512..+0x5aa (0xe814f4, 152 B)
 ; [nakarest] the table itself: Function slot 0x101 (table 0xe814f4, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x512, 0x98
+InitializeMurai_PtrTable_5:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x512, 0x98	; 37 x 32-bit pointer
 ; [nakarest] naka_sound_menu_drawbar+0x5aa  +0x5aa..+0x5ae (0xe8158c, 4 B)
 ; [nakarest] the table itself: Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes.

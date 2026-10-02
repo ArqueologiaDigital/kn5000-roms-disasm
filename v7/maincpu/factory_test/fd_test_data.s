@@ -233,7 +233,7 @@ FDTest_Label_Console2:
 
 String_CONSOLE:
 	aligned_string "CONSOLE"
-	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0xdc, 0x03, 0x00
+InitializeHama_Str_Empty:	.byte 0x00, 0x00, 0x00, 0x00, 0xd4, 0xdc, 0x03, 0x00
 
 FDTest_DataBlock_Table:
 	.long FDTest_DiagList_Total
@@ -319,10 +319,10 @@ FDTest_CfgName_OK:
 	.byte 0x4f, 0x4b, 0x00, 0xff
 FDTest_CfgName_NG:
 	.byte 0x4e, 0x47, 0x00, 0xff
-FDTest_CfgName_Total:	aligned_string "TOTAL"
-FDTest_CfgName_FDDTest:	aligned_string "FDD_TEST"
-	aligned_string "TT_HDDEXT"
-	aligned_string "TT_EXTAPR"
+FDTest_CfgName_Total:		aligned_string "TOTAL"
+FDTest_CfgName_FDDTest:		aligned_string "FDD_TEST"
+InitializeHama_Str_TT_HDDEXT:	aligned_string "TT_HDDEXT"
+InitializeHama_Str_TT_EXTAPR:	aligned_string "TT_EXTAPR"
 	.byte 0x70, 0xe3, 0xf1, 0x00
 	.byte 0x00, 0x00, 0x00, 0x00, 0x3e, 0xfd, 0xe1, 0x00
 	.long FDTest_TestTitle_Terminator

@@ -2962,7 +2962,7 @@ Seq_LoadDisplayResource:
 	lda xsp, (xsp - 32)
 	push xiz				; 4 bytes, frame = 36
 	ld xiz, xwa				; XIZ = caller arg
-	ld xiy, 0x00ea0028			; resource descriptor ptr
+	ld xiy, Seq_LoadDisplayResource_Str_Empty			; resource descriptor ptr
 	lda xix, (xsp + 4)			; XIX = local buffer
 	ldw bc, 0x0010				; 16 bytes to copy
 	ldirw					; block copy
@@ -2996,7 +2996,7 @@ Seq_LoadResource_Proceed:
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+16)
 	lda	xwa, (xsp+4)
-	ld	xbc, 15335502
+	ld	xbc, Seq_LoadResource_Proceed_Str_rt
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	lt, Seq_Epilogue32
@@ -3039,7 +3039,7 @@ Seq_FillBufferLoop:
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+22)
 	lda	xwa, (xsp+4)
-	ld	xbc, 15335532
+	ld	xbc, Seq_FillBufferLoop_Str_rt
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	lt, Seq_NamedResource_Epilogue
@@ -3056,7 +3056,7 @@ Seq_FillBufferLoop:
 	pushw	Seq_FillBufferLoop_Str_ACTION@hi16
 	pushw	Seq_FillBufferLoop_Str_ACTION@lo16
 	ld	xbc, xiz
-	ld	xde, 15335506
+	ld	xde, Seq_FillBufferLoop_Str_ACTION_2
 	calr	Seq_LoadDisplayResource_Helper
 	call	FileIO_CloseHandle
 	cp	hl, 0:i3

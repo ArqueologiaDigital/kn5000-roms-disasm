@@ -4199,11 +4199,11 @@ InitializeCheap:
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x80, Cheap_ViewableTable_061, 0x61
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x80, Cheap_ResNameTable_361, 0x361
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_062, 0x62
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xea75c6, 0x362
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Cheap_ResNameTable_362, 0x362
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_063, 0x63
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xea75cc, 0x363
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Cheap_ResNameTable_363, 0x363
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_064, 0x64
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xea75d2, 0x364
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Cheap_ResNameTable_364, 0x364
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x3, Cheap_ViewableTable_065, 0x65
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x3, InitializeCheap_PtrTable_2, 0x365
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_066, 0x66
@@ -4211,19 +4211,19 @@ InitializeCheap:
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x47, Cheap_ViewableTable_067, 0x67
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x47, InitializeCheap_PtrTable_3, 0x367
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_06A, 0x6a
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xea77e4, 0x36a
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Cheap_ResNameTable_36A, 0x36a
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x15, Cheap_ViewableTable_06B, 0x6b
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x15, InitializeCheap_PtrTable_4, 0x36b
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x53, Cheap_ViewableTable_06C, 0x6c
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x53, InitializeCheap_PtrTable_5, 0x36c
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_06D, 0x6d
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xea7aca, 0x36d
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Cheap_ResNameTable_36D, 0x36d
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_06E, 0x6e
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xea7ad0, 0x36e
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Cheap_ResNameTable_36E, 0x36e
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x15, Cheap_ViewableTable_077, 0x77
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x15, InitializeCheap_PtrTable_6, 0x377
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_079, 0x79
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xea7b8c, 0x379
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Cheap_ResNameTable_379, 0x379
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x5e, Cheap_ViewableTable_07B, 0x7b
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x5e, InitializeCheap_PtrTable_7, 0x37b
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Cheap_ViewableTable_07C, 0x7c

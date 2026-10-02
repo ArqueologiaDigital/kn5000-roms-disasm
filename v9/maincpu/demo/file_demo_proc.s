@@ -344,7 +344,7 @@ FDemo_LoadRegsAndPostEvent:
 	; --- Routine 2: load regs, jp FA9D58 (23 bytes) ---
 	ld xwa, 0xffffffff
 	ld xbc, EVT_EXEC_PRESENTATION
-	ld xde, 0x00ea009e
+	ld xde, FDemo_LoadRegsAndPostEvent_Str_FEATURE
 	jp ApPostEvent
 
 
@@ -1729,7 +1729,7 @@ FileIO_LoadRegion0_VRAM:
 	ld	de, 0:i3
 	call FileIO_ReadHeader				; init display region descriptor
 	lda xwa, (xsp + 2)			; reload buffer ptr
-	ld xbc, 0x00ea0194			; resource ID for region 0
+	ld xbc, FileIO_LoadRegion0_VRAM_Str_rb			; resource ID for region 0
 	call FileIO_OpenWithMode				; open display resource
 	cp hl, 0:i3				; check result (negative=error)
 	jr ge, LoadRegion0_OpenSuccess			; success, continue
@@ -1776,7 +1776,7 @@ FileIO_LoadRegion1_VRAM:
 	ld	de, 1:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 2)
-	ld xbc, 0x00ea0198			; resource ID for region 1
+	ld xbc, FileIO_LoadRegion1_VRAM_Str_rb			; resource ID for region 1
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadRegion1_OpenSuccess
@@ -1845,7 +1845,7 @@ FileIO_LoadRegion7_Flash:
 	ld	de, 7:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
-	ld xbc, 0x00ea019c			; resource ID for region 7
+	ld xbc, FileIO_LoadRegion7_Flash_Str_rb			; resource ID for region 7
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadRegion7_OpenSuccess
@@ -1909,7 +1909,7 @@ FileIO_LoadRegion2_ExtMem:
 	ld	de, 2:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 2)
-	ld xbc, 0x00ea01a0			; resource ID for region 2
+	ld xbc, FileIO_LoadRegion2_ExtMem_Str_rb			; resource ID for region 2
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadRegion2_OpenSuccess
@@ -2118,7 +2118,7 @@ FileIO_LoadRegion3_ExtMem:
 	ld	de, 3:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 2)
-	ld xbc, 0x00ea01b0			; resource ID for region 3
+	ld xbc, FileIO_LoadRegion3_ExtMem_Str_rb			; resource ID for region 3
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadRegion3_OpenSuccess
@@ -2160,7 +2160,7 @@ FileIO_LoadRegion5_VRAM:
 	ld	de, 5:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 2)
-	ld xbc, 0x00ea01b4			; resource ID for region 5
+	ld xbc, FileIO_LoadRegion5_VRAM_Str_rb			; resource ID for region 5
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadRegion5_OpenSuccess
@@ -2202,7 +2202,7 @@ FileIO_LoadRegion6_Simple:
 	ld	de, 6:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 2)
-	ld xbc, 0x00ea01b8			; resource ID for region 6
+	ld xbc, FileIO_LoadRegion6_Simple_Str_rb			; resource ID for region 6
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadRegion6_OpenSuccess
@@ -2235,7 +2235,7 @@ FileIO_LoadRegion4_VRAM:
 	ld	de, 4:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 18)
-	ld xbc, 0x00ea01bc			; resource ID for region 4
+	ld xbc, FileIO_LoadRegion4_VRAM_Str_rb			; resource ID for region 4
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadRegion4_OpenSuccess
@@ -2438,7 +2438,7 @@ SaveRegion0_SpaceOk:
 	ld	de, 0:i3
 	call FileIO_ReadHeader				; init region
 	lda xwa, (xsp + 8)			; buffer
-	ld xbc, 0x00ea01f0			; resource ID region 0
+	ld xbc, SaveRegion0_SpaceOk_Str_wb			; resource ID region 0
 	call FileIO_OpenWithMode				; open resource
 	cp hl, 0:i3
 	jr ge, SaveRegion0_OpenSuccess			; success
@@ -2497,7 +2497,7 @@ SaveRegion1_SpaceOk:
 	ld	de, 1:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
-	ld xbc, 0x00ea01f4			; resource ID region 1
+	ld xbc, SaveRegion1_SpaceOk_Str_wb			; resource ID region 1
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, SaveRegion1_OpenSuccess
@@ -2694,7 +2694,7 @@ SaveRegion5_SpaceOk:
 	ld	de, 5:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 8)
-	ld xbc, 0x00ea0204			; resource ID region 5
+	ld xbc, SaveRegion5_SpaceOk_Str_wb			; resource ID region 5
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, SaveRegion5_OpenSuccess
@@ -2729,7 +2729,7 @@ FileIO_SaveRegion6_Simple:
 	ld	de, 6:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 2)
-	ld xbc, 0x00ea0208			; resource ID region 6
+	ld xbc, FileIO_SaveRegion6_Simple_Str_wb			; resource ID region 6
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, SaveRegion6_OpenSuccess
@@ -2766,7 +2766,7 @@ SaveRegion4_SpaceOk:
 	ld	de, 4:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
-	ld xbc, 0x00ea020c			; resource ID region 4
+	ld xbc, SaveRegion4_SpaceOk_Str_wb			; resource ID region 4
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, SaveRegion4_OpenSuccess
@@ -5810,7 +5810,7 @@ IndexToRecordLookup:
 	ld xbc, xde				; restore saved arg
 	calr FileIO_CopyString			; format string
 	lda xwa, (xsp + 8)			; output buffer
-	ld xbc, 0x00ea0492			; descriptor
+	ld xbc, IndexToRecordLookup_Str_Dot_Star			; descriptor
 	calr FileIO_BuildFilePath			; additional format
 	lda xwa, (xsp + 8)			; output buffer
 	lda xbc, (xsp + 24)			; secondary buffer
@@ -6118,7 +6118,7 @@ ValidateAndSearchFile:
 	lda	xsp, (xsp-282)
 	pushw iz
 	ld iz, wa
-	ld xiy, 0x00ea049c
+	ld xiy, ValidateAndSearchFile_Str_Empty
 	lda xix, (xsp + 2)
 	ldw bc, 8
 	ldirw

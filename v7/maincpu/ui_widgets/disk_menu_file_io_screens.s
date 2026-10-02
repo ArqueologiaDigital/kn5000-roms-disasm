@@ -801,7 +801,7 @@ InitializeCheap_Str_TT_CMPLD:		.incbin "includes/generated/naka_disk_menu_file_i
 ; [nakarest] naka_disk_menu_file_io+0x6c02  +0x6c02..+0x6cea (0xea7fce, 232 B)
 ; [nakarest] the table itself: MainFunction slot 0x145 (table 0xea7fce, 57 entries,
 ; [nakarest] InitializeCheap), 57 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6C02, 0xE8
+InitializeCheap_PtrTable_8:	.incbin "includes/generated/naka_disk_menu_file_io.bin", 0x6C02, 0xE8	; 57 x 32-bit pointer
 ; [nakarest] naka_disk_menu_file_io+0x6cea  +0x6cea..+0x6dd4 (0xea80b6, 234 B)
 ; [nakarest] the table itself: MainFunction slot 0x445 (table 0xea80b6, 57 entries,
 ; [nakarest] InitializeCheap), 57 entry pointers x 4 bytes.

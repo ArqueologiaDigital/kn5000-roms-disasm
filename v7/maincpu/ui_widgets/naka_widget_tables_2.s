@@ -1209,7 +1209,8 @@ VocalistGrid_DispatchData_Str_2:	.incbin "includes/generated/naka_widget_tables_
 VocalistGrid_DispatchData_Str_Fmt2d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B5A, 0xC	; "    %2d    "
 VocalistGrid_DispatchData_Str_Fmt3d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B66, 0xC	; "   %3d    "
 VocalistGrid_DispatchData_Str_Fmtd:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B72, 0xC	; "     %d    "
-VocalistGrid_DispatchData_Str_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B7E, 0x18	; "     %s   "
+VocalistGrid_DispatchData_Str_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B7E, 0xC	; "     %s   "
+VocalistGrid_DispatchData_Str_OFF:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B8A, 0xC	; "   OFF    "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_3
 ; VocalistGrid_DispatchData_Str_3 -- NUL-terminated string(s), 12 bytes,
@@ -2979,7 +2980,8 @@ PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3:	.incbin "includes/generated/naka_widge
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t NakaInst_ON_E80168[82].
 ; -----------------------------------------------------------------------------
-NakaInst_ON_E80168:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DCA, 0xC
+NakaInst_ON_E80168:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DCA, 0x6
+PmemOutLGridCheck_Evt1C0001D_Str_OFF_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DD0, 0x6	; " OFF "
 PmemOutLGridCheck_Evt1C0001D_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DD6, 0x6	; " OFF "
 PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DDC, 0x6	; " %3d "
 PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DE2, 0x6	; " %3d "
@@ -3417,7 +3419,9 @@ MidiPartGridCheck_LocalInit:
 MidiPartGridCheck_LocalInit_Strings:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2631C, 0x6
 MidiPartGridCheck_Evt1C0001C_Str_Fmt2d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26322, 0x8	; " %2d  "
 MidiPartGridCheck_Evt1C0001C_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2632A, 0x6	; " OFF "
-MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26330, 0x14	; " %2d  "
+MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26330, 0x8	; " %2d  "
+MidiPartGridCheck_Evt1C0001C_Str_ON:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26338, 0x6	; " ON  "
+MidiPartGridCheck_Evt1C0001C_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2633E, 0x6	; " OFF "
 MidiSetup_EventHandler_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x26344, 0x6	; " OFF "
 MidiPart_AudioCmdDisplay_Str_Fmt2d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2634A, 0x8	; " %2d  "
 ; -----------------------------------------------------------------------------

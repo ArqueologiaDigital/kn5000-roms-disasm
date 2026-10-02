@@ -497,9 +497,9 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld XWA, (xwa + WS_RootFnTable)             ; Handler dispatch table
 	ld XWA, (xwa + RootFn_ClassProc)             ; Handler function via table offset 0x0168
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA  ; handler function ptr
-	ld wa, (0x29d97e:24)
+	ld wa, (HDAE5000_RECORD_COUNT:24)
 	ld (xsp + 8), wa	; ld (XSP+0x08), WA   ; record count (= 13)
-	lda xwa, (0x29c0aa:24)
+	lda xwa, (HDAE5000_RECORD_TABLE:24)
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA  ; data pointer
 	lda xwa, (xsp)	; lda XWA, XSP  ; XWA = param block ptr
 	ld xbc, xwa	; XBC = param block ptr
@@ -663,7 +663,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld XWA, (xwa + RootFn_ViewableProc)             ; Handler function via table offset 0x0280
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; entry count = 789 objects
-	lda xwa, (0x2a5d2c:24)	; = HDAE5000_UiObject_PtrTable
+	lda xwa, (HDAE5000_UiObject_PtrTable:24)	; = HDAE5000_UiObject_PtrTable
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
@@ -681,7 +681,7 @@ HDAE5000_Handler_Registration:	; 280020h
 	ld XWA, (xwa + RootFn_ResNameProc)             ; Handler function via table offset 0x0148
 	ld (xsp + 4), xwa	; ld (XSP+0x04), XWA
 	ldw (xsp + 8), 0x315	; ld (XSP+0x08), 0315h  ; entry count = 789 objects
-	lda xwa, (0x2a6984:24)	; = HDAE5000_UiObjectName_PtrTable
+	lda xwa, (HDAE5000_UiObjectName_PtrTable:24)	; = HDAE5000_UiObjectName_PtrTable
 	ld (xsp + 10), xwa	; ld (XSP+0x0A), XWA
 	lda xwa, (xsp)	; lda XWA, XSP
 	ld xbc, xwa
@@ -693,7 +693,7 @@ HDAE5000_Handler_Registration:	; 280020h
 
 	; === RootFn_RegisterTitle: title 0x7F = "TT_HDDEXT" ===
 	pushw 0xA	; module number 0x0A (InitializeHama pushes 9)
-	lda xwa, (0x2a849a:24)
+	lda xwa, (HDAE5000_GFX_INIT_PARAMS:24)
 	push xwa	; the title's name, "TT_HDDEXT"
 	ld xwa, (HDAE5000_RAM_MainWorkspacePtr:24)
 	ld XWA, (xwa + WS_RootFnTable)
@@ -736,7 +736,7 @@ HDAE5000_Alloc_Memory_1:	; 28030Eh
 	ld xhl, 0:i3
 	ret
 HDAE5000_Alloc_Memory_1__type_A1:
-	lda xhl, (0x2a898e:24); Palette data pointer 1
+	lda xhl, (HDAE5000_Bitmap_TitleLogo:24); Palette data pointer 1
 	ret
 HDAE5000_Alloc_Memory_1__type_A2:
 	ld xhl, 0x140	; 320 (width)
@@ -756,7 +756,7 @@ HDAE5000_Alloc_Memory_2:	; 28033Bh
 	ld xhl, 0:i3
 	ret
 HDAE5000_Alloc_Memory_2__type_A1:
-	lda xhl, (0x2bb98e:24); Palette data pointer 2
+	lda xhl, (HDAE5000_Bitmap_DriveMech:24); Palette data pointer 2
 	ret
 HDAE5000_Alloc_Memory_2__type_A2:
 	ld xhl, 0x140	; 320 (width)
@@ -776,7 +776,7 @@ HDAE5000_Alloc_Memory_3:	; 280368h
 	ld xhl, 0:i3
 	ret
 HDAE5000_Alloc_Memory_3__type_A1:
-	lda xhl, (0x2ce98e:24); Palette data pointer 3
+	lda xhl, (HDAE5000_Bitmap_FilePanel:24); Palette data pointer 3
 	ret
 HDAE5000_Alloc_Memory_3__type_A2:
 	ld xhl, 0x140	; 320 (width)
@@ -800,7 +800,7 @@ HDAE5000_BitmapHdd_icon:	; 280395h
 	ld xhl, 0:i3
 	ret
 HDAE5000_BitmapHdd_icon__type_A1:
-	lda xhl, (0x2e198e:24); HDAE5000_Bitmap_HddIcon data, NOT a palette
+	lda xhl, (HDAE5000_Bitmap_HddIcon:24); HDAE5000_Bitmap_HddIcon data, NOT a palette
 	ret
 HDAE5000_BitmapHdd_icon__type_A2:
 	ld xhl, 0x1B	; 27 (icon width)
@@ -922,7 +922,7 @@ HDAE5000_TtlScreenRProc:
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_051a                        ; [66 62] jr Z,0x28051a
 	pushw 0x9600
-	lda xwa, (0x2a898e:24)
+	lda xwa, (HDAE5000_Bitmap_TitleLogo:24)
 	push xwa
 	ld	xwa, 0x00056800
 	push xwa
@@ -934,7 +934,7 @@ HDAE5000_TtlScreenRProc:
 	push xwa
 	call HDAE5000_MemCopy
 	pushw 0x0400
-	lda xwa, (0x2a858e:24)
+	lda xwa, (HDAE5000_Palette_TitleLogo:24)
 	push xwa
 	ld	xwa, 0x00069400
 	push xwa
@@ -998,7 +998,7 @@ HDAE5000_TtlScreenR2Proc:
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_05f8                        ; [66 62] jr Z,0x2805f8
 	pushw 0x9600
-	lda xwa, (0x2bb98e:24)
+	lda xwa, (HDAE5000_Bitmap_DriveMech:24)
 	push xwa
 	ld	xwa, 0x00056800
 	push xwa
@@ -1010,7 +1010,7 @@ HDAE5000_TtlScreenR2Proc:
 	push xwa
 	call HDAE5000_MemCopy
 	pushw 0x0400
-	lda xwa, (0x2bb58e:24)
+	lda xwa, (HDAE5000_Palette_DriveMech:24)
 	push xwa
 	ld	xwa, 0x00069400
 	push xwa
@@ -1074,7 +1074,7 @@ HDAE5000_TtlScreenR3Proc:
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_06d6                        ; [66 62] jr Z,0x2806d6
 	pushw 0x9600
-	lda xwa, (0x2ce98e:24)
+	lda xwa, (HDAE5000_Bitmap_FilePanel:24)
 	push xwa
 	ld	xwa, 0x00056800
 	push xwa
@@ -1086,7 +1086,7 @@ HDAE5000_TtlScreenR3Proc:
 	push xwa
 	call HDAE5000_MemCopy
 	pushw 0x0400
-	lda xwa, (0x2ce58e:24)
+	lda xwa, (HDAE5000_Palette_FilePanel:24)
 	push xwa
 	ld	xwa, 0x00069400
 	push xwa
@@ -1150,7 +1150,7 @@ HDAE5000_IvScreenR2Proc:
 	or xhl, xhl                             ; or XHL,XHL
 	jr z, .LRF_078c                        ; [66 3c] jr Z,0x28078c
 	pushw 0x0400
-	lda xwa, (0x2bb58e:24)
+	lda xwa, (HDAE5000_Palette_DriveMech:24)
 	push xwa
 	ld	xwa, 0x00069400
 	push xwa

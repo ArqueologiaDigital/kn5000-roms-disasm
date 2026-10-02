@@ -1423,7 +1423,7 @@ DrawFunc_Init_Skip3:
 	push	xde
 	jr	DrawFunc_Init_Join8
 DrawFunc_Init_Skip13:
-	ld	xwa, 0xeab148
+	ld	xwa, DrawFunc_Init_Variant1_Str_Fmt3d
 DrawFunc_Init_Entry:
 	push	xwa
 	push	xde

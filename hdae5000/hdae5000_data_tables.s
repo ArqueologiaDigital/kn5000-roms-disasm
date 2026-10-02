@@ -16113,7 +16113,7 @@ HDAE5000_Dir_IsBlankName_Str_Blank16:	.asciz "                "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_Fls_IsBlankName_Str_Blank16:	.asciz "                "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "                          "
+HDAE5000_FlsItem_SongRecord_Str_Blank26:	.asciz "                          "
 	.byte 0x00
 	.byte 0x98, 0x8e
 	.asciz "/"
@@ -16191,84 +16191,84 @@ HDAE5000_FdSong_CheckFiles_Str_SQF:	.asciz ".SQF"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_LSW:	.asciz ".LSW"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_PMT:	.asciz ".PMT"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_2:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_SQT:	.asciz ".SQT"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_3:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_CMP:	.asciz ".CMP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_4:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_TM:	.asciz ".TM"
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_5:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_MSP:	.asciz ".MSP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_6:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_RCM:	.asciz ".RCM"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_7:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_MD:	.asciz ".MD"
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_8:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FdSong_CheckFiles_Str_TLX:	.asciz ".TLX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_FdSong_CheckFiles_Str_rb_9:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Str_TTX:	.asciz ".TTX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Lsw_Str_LSW:	.asciz ".LSW"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Lsw_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Pmt_Str_PMT:	.asciz ".PMT"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Pmt_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Sqt_Str_SQT:	.asciz ".SQT"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Sqt_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Cmp_Str_CMP:	.asciz ".CMP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Cmp_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Tm_Str_TM:	.asciz ".TM"
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Tm_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Msp_Str_MSP:	.asciz ".MSP"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Msp_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Rcm_Str_RCM:	.asciz ".RCM"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Rcm_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Md_Str_MD:	.asciz ".MD"
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Md_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_CopyFdSongToHd_Tlx_Str_TLX:	.asciz ".TLX"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "rb"
+HDAE5000_CopyFdSongToHd_Tlx_Str_rb:	.asciz "rb"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "---[ GetInfoBlockPointer ]---"
-HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_ppib_adr_Fmtx:	.asciz "ppib adr = %lx"
+HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_GetInfoBlockPointer:	.asciz "---[ GetInfoBlockPointer ]---"
+HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_ppib_adr_Fmtx:		.asciz "ppib adr = %lx"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ TurnHdMotorOff ]---"
+HDAE5000_PPORT_Svc01_GetInfoBlockPointer_Str_Blank1:	.asciz " "
+HDAE5000_PPORT_Svc02_TurnHdMotorOff_Str_TurnHdMotorOff:	.asciz "---[ TurnHdMotorOff ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ SendInfosAboutHd ]---"
+HDAE5000_PPORT_Svc02_TurnHdMotorOff_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_SendInfosAboutHd:	.asciz "---[ SendInfosAboutHd ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddname:	.asciz "hddname : "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -16280,23 +16280,23 @@ HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddsctr_Fmtd:	.asciz "hddsctr : %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_hddscby_Fmtd:	.asciz "hddscby : %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ SendInfosAboutDirBlock ]---"
+HDAE5000_PPORT_Svc03_SendInfosAboutHd_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_SendInfosAboutDirBlock:	.asciz "---[ SendInfosAboutDirBlock ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_ptr_Fmtx:	.asciz "FGB ptr : %lx"
 HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_wid_Fmtd:	.asciz "FGB wid : %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_FGB_num_Fmtd:	.asciz "FGB num : %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ SendInfosAboutFileSystemBlock ]---"
-HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_ptr_Fmtx:	.asciz "FEB ptr : %lx"
-HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_wid_Fmtd:	.asciz "FEB wid : %d"
+HDAE5000_PPORT_Svc04_SendInfosAboutDirBlock_Str_Blank1:					.asciz " "
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_SendInfosAboutFileSystemBlock:	.asciz "---[ SendInfosAboutFileSystemBlock ]---"
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_ptr_Fmtx:			.asciz "FEB ptr : %lx"
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_wid_Fmtd:			.asciz "FEB wid : %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_FEB_num_Fmtd:	.asciz "FEB num : %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ SendInfosAboutFlsBlock ]---"
+HDAE5000_PPORT_Svc05_SendInfosAboutFileSystemBlock_Str_Blank1:		.asciz " "
+HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_SendInfosAboutFlsBlock:	.asciz "---[ SendInfosAboutFlsBlock ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ptr_Fmtx:	.asciz "FLS ptr : %lx"
 HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_wid_Fmtd:	.asciz "FLS wid : %d"
@@ -16305,55 +16305,55 @@ HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_num_Fmtd:	.asciz "FLS num : 
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_FLS_ent_Fmtd:	.asciz "FLS ent : %d"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ ReadDirBlockFromHd ]---"
+HDAE5000_PPORT_Svc06_SendInfosAboutFlsBlock_Str_Blank1:		.asciz " "
+HDAE5000_PPORT_Svc07_ReadDirBlockFromHd_Str_ReadDirBlockFromHd:	.asciz "---[ ReadDirBlockFromHd ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ ReadFileBlockFromHd ]---"
-	.asciz " "
-	.asciz "---[ ReadFlsBlockFromHd ]---"
+HDAE5000_PPORT_Svc07_ReadDirBlockFromHd_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc08_ReadFileBlockFromHd_Str_ReadFileBlockFromHd:	.asciz "---[ ReadFileBlockFromHd ]---"
+HDAE5000_PPORT_Svc08_ReadFileBlockFromHd_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc09_ReadFlsBlockFromHd_Str_ReadFlsBlockFromHd:		.asciz "---[ ReadFlsBlockFromHd ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ WriteDirBlockToHd ]---"
-	.asciz " "
-	.asciz "---[ WriteFileSystemBlockToHd ]---"
+HDAE5000_PPORT_Svc09_ReadFlsBlockFromHd_Str_Blank1:				.asciz " "
+HDAE5000_PPORT_Svc10_WriteDirBlockToHd_Str_WriteDirBlockToHd:			.asciz "---[ WriteDirBlockToHd ]---"
+HDAE5000_PPORT_Svc10_WriteDirBlockToHd_Str_Blank1:				.asciz " "
+HDAE5000_PPORT_Svc11_WriteFileSystemBlockToHd_Str_WriteFileSystemBlockToHd:	.asciz "---[ WriteFileSystemBlockToHd ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ WriteFlsBlockToHd ]---"
-	.asciz " "
-	.asciz "---[ SendInfosAboutSong ]--- "
+HDAE5000_PPORT_Svc11_WriteFileSystemBlockToHd_Str_Blank1:	.asciz " "
+HDAE5000_PPORT_Svc12_WriteFlsBlockToHd_Str_WriteFlsBlockToHd:	.asciz "---[ WriteFlsBlockToHd ]---"
+HDAE5000_PPORT_Svc12_WriteFlsBlockToHd_Str_Blank1:		.asciz " "
+HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_SendInfosAboutSong:	.asciz "---[ SendInfosAboutSong ]--- "
 HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_dirname_Fmts:	.asciz "dirname : %s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_sngname_Fmts:	.asciz "sngname : %s"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ LoadSongFromHdToMemory ]---"
+HDAE5000_PPORT_Svc13_SendInfosAboutSong_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory_Str_LoadSongFromHdToMemory:	.asciz "---[ LoadSongFromHdToMemory ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ SaveSongInMemoryToHd ]---"
+HDAE5000_PPORT_Svc14_LoadSongFromHdToMemory_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc15_SaveSongInMemoryToHd_Str_SaveSongInMemoryToHd:	.asciz "---[ SaveSongInMemoryToHd ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ InitWholeSongInMemory ]---"
-	.asciz " "
-	.asciz "---[ FormatHd ]---"
+HDAE5000_PPORT_Svc15_SaveSongInMemoryToHd_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc16_InitWholeSongInMemory_Str_InitWholeSongInMemory:	.asciz "---[ InitWholeSongInMemory ]---"
+HDAE5000_PPORT_Svc16_InitWholeSongInMemory_Str_Blank1:			.asciz " "
+HDAE5000_PPORT_Svc17_FormatHd_Str_FormatHd:				.asciz "---[ FormatHd ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ SendPointerToFreeBufferSpace ]---"
+HDAE5000_PPORT_Svc17_FormatHd_Str_Blank1:						.asciz " "
+HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_SendPointerToFreeBufferSpace:	.asciz "---[ SendPointerToFreeBufferSpace ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_work_adr_Fmtx:	.asciz "work adr : %lx"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ PreWholeSongInMemory ]---"
+HDAE5000_PPORT_Svc19_SendPointerToFreeBufferSpace_Str_Blank1:		.asciz " "
+HDAE5000_PPORT_Svc20_PreWholeSongInMemory_Str_PreWholeSongInMemory:	.asciz "---[ PreWholeSongInMemory ]---"
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz " "
-	.asciz "---[ WriteOpenHD ]--- "
+HDAE5000_PPORT_Svc20_PreWholeSongInMemory_Str_Blank1:	.asciz " "
+HDAE5000_PPORT_Svc21_WriteOpenHD_Str_WriteOpenHD:	.asciz "---[ WriteOpenHD ]--- "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_PPORT_Svc21_WriteOpenHD_Str_SUFFIX_Fmtd:	.asciz "SUFFIX : %d"
-	.asciz "---[ WriteCloseHD ]--- "
-	.asciz "---[ WriteFileHD ]--- "
+HDAE5000_PPORT_Svc22_WriteCloseHD_Str_WriteCloseHD:	.asciz "---[ WriteCloseHD ]--- "
+HDAE5000_PPORT_Svc23_WriteFileHD_Str_WriteFileHD:	.asciz "---[ WriteFileHD ]--- "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
-	.asciz "---[ ReadOpenHD ]--- "
-	.asciz "---[ ReadFileHD ]--- "
+HDAE5000_PPORT_Svc24_ReadOpenHD_Str_ReadOpenHD:	.asciz "---[ ReadOpenHD ]--- "
+HDAE5000_PPORT_Svc25_ReadFileHD_Str_ReadFileHD:	.asciz "---[ ReadFileHD ]--- "
 
 ; ----------------------------------------------------------------------------
 ; HDAE5000_CType_Table  (0x2F9362 - 0x2F9461, 256 bytes): the C library's

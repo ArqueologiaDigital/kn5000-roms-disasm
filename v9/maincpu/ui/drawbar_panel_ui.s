@@ -1543,7 +1543,7 @@ PmemOutLGridCheck_JumpTable_Skip5:
 	ld	xwa, NakaInst_ON_E80168
 	jr	PmemOutLGridCheck_JumpTable_Join4
 PmemOutLGridCheck_JumpTable_Skip6:
-	ld	xwa, 0xe8016e
+	ld	xwa, PmemOutLGridCheck_Evt1C0001D_Str_OFF_6
 PmemOutLGridCheck_JumpTable_Join4:
 	push	xwa
 	ld	xwa, (xsp+16)
@@ -4326,10 +4326,10 @@ MidiPartGridCheck_Skip13:
 	jr	nz, MidiPartGridCheck_Skip15
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 3
-	ld	xwa, 0xe806dc
+	ld	xwa, MidiPartGridCheck_Evt1C0001C_Str_OFF_2
 	cpw	(xde), 0
 	jr	z, MidiPartGridCheck_Skip14
-	ld	xwa, 0xe806d6
+	ld	xwa, MidiPartGridCheck_Evt1C0001C_Str_ON
 MidiPartGridCheck_Skip14:
 	push	xwa
 	ld	xwa, (xsp+12)

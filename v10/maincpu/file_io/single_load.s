@@ -320,7 +320,7 @@ SLSrcBankList_FuncBody_Helper3_Epilogue:
 	jr	z, SLSrcBankList_FuncBody_Skip
 	ld	a, (0x89fc:16)
 	extz	wa
-	div	wa, (0xea0952:24)
+	div	wa, (PtrTbl_DrumKitNames_0x7A:24)
 	ld	(0x89fc:16), w
 SLSrcBankList_FuncBody_Skip:
 	ld	c, (PtrTbl_DrumKitNames_0x7A:24)

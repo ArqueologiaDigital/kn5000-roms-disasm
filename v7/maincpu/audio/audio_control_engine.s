@@ -987,7 +987,7 @@ FileIO_BytecodeData_Code_Epilogue22:
 	jr	nz, FileIO_BytecodeData_Code_Skip61
 	lda	xde, (15572348:24)
 	ld_rrb	c, xde, bc
-	lda	xde, (15572324:24)
+	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable:24)
 	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
@@ -996,7 +996,7 @@ FileIO_BytecodeData_Code_Epilogue22:
 FileIO_BytecodeData_Code_Skip60:
 	lda	xde, (15572378:24)
 	ld_rrb	c, xde, bc
-	lda	xde, (15572354:24)
+	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable_2:24)
 	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
@@ -1264,7 +1264,7 @@ FileIO_BytecodeData_Code_Helper4:
 	ret	ugt
 	extz	de
 	sla	de, 2
-	lda	xhl, (15572644:24)
+	lda	xhl, (FileIO_BytecodeData_Code_Entry8_PtrTable_3:24)
 	exts	xde
 	add	xde, xhl
 	ld	xhl, (xde)
@@ -10134,12 +10134,12 @@ VoiceParam_DispatchByMode:
 	ld	a, (0x9119:16)
 	and	a, 0x3
 	sll	a, 2
-	ld	xix, 0xfcaca4
+	ld	xix, VoiceParam_DispatchByMode_PtrTable
 	ld	xix, (xix+a)
 	call	(xix)
 VoiceParam_DispatchDone:
 	ret
-	.byte 0xb4, 0xac, 0xfc, 0x00
+VoiceParam_DispatchByMode_PtrTable:	.byte 0xb4, 0xac, 0xfc, 0x00
 	.long	VoiceParam_StoreVolume
 	.long	VoiceParam_StorePan
 	.long	VoiceNote_StoreBankSelect
@@ -11272,7 +11272,7 @@ MidiStream_DispatchLoop:
 	jr	ugt, MidiStream_AdvanceRxPtr
 	extz	wa
 	sll	wa, 2
-	ld	xiy, 0xfcc730
+	ld	xiy, MidiStream_DispatchLoop_PtrTable
 	ld	xiy, (xiy+wa)
 	cp	xiy, 0xffffffff
 	jr	z, MidiStream_AdvanceRxPtr
@@ -12024,7 +12024,7 @@ MidiStream_HandleRunningStatus_Return2:
 ; After the table (v7 0xFCCA30) comes the code of SoundParam_NotifyChange, whose
 ; v7 label sits 0x41A higher in kn5000_v7_program.s (the v7 label drift, see
 ; scripts/analysis/v7_label_drift.py); the rest of this file is that code.
-	.long	MidiStream_StatusPrecheck
+MidiStream_DispatchLoop_PtrTable:	.long	MidiStream_StatusPrecheck
 	.long	MidiStream_StatusPrecheck
 	.long	MidiStream_StatusPrecheck
 	.long	MidiStream_StatusPrecheck

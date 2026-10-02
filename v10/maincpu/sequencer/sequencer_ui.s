@@ -4359,10 +4359,10 @@ InitializeKubo:
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0xf, InitializeKubo_PtrTable_67, 0x3a3
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x11, InitializeKubo_PtrTable_31, 0xa4
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x11, InitializeKubo_PtrTable_68, 0x3a4
-	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, 0xe2ef60, 0xa8
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xe2fff0, 0x3a8
-	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, 0xe2ef64, 0xaa
-	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, 0xe2fff6, 0x3aa
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Kubo_ViewableTable_0A8, 0xa8
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Kubo_ResNameTable_3A8, 0x3a8
+	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x0, Kubo_ViewableTable_0AA, 0xaa
+	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x0, Kubo_ResNameTable_3AA, 0x3aa
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0x2, InitializeKubo_PtrTable_32, 0xab
 	RegObjTabl NAKA_CLASS_ResName, ResNameProc, 0x2, InitializeKubo_PtrTable_69, 0x3ab
 	RegObjTabl NAKA_CLASS_Viewable, ViewableProc, 0xf, InitializeKubo_PtrTable_33, 0xd6
@@ -13894,7 +13894,7 @@ Sqedt_ParamDispatch_Join:
 	ld xwa, FmtStr_pct3d_4B5E
 	jr	Sqedt_ParamDispatch_Join2
 	pushm (0xf1f2:16)
-	ld xwa, 0x00e34b64
+	ld xwa, Sqedt_ParamDispatch_Str_Fmt3d
 	jr	Sqedt_ParamDispatch_Join2
 	pushm (0xf229:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_4
@@ -14223,7 +14223,7 @@ Sqedt_ParamDispatch_Join8:
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1e7:16)
-	ld xwa, 0x00e34c44
+	ld xwa, Sqedt_ParamDispatch_Entry2_Str_Fmt3d_2
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)

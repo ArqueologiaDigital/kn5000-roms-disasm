@@ -11,7 +11,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
   This replaces such an operand literal with that symbol -- EXACT matches only:
 
     * only non-branch instruction operands (branches are symbolize_numeric_branches.py's);
-    * only values in the image's own ROM range 0xE00000..0xFFFFFF;
+    * only values in the image's own ROM range (main CPU 0xE00000..0xFFFFFF, HD-AE5000
+      0x280000..0x2FFFFF since 2026-10-02);
     * only when the image's linked ELF defines a non-local symbol AT that address; with several,
       a column-0 label beats a `.set`/`.equ` alias, a non-structural name beats a structural
       one (`_Skip`, `_Join`, `_Loop`, `_Return`, `_Helper`, `_Epilogue`, `_Data`, `_0x..`),
@@ -44,8 +45,14 @@ STRUCT = re.compile(r'_(Skip|Join|Loop|Return|Helper|Epilogue|Entry|Sub|Tail|Nex
                     r'End|Data|Block|Bytes|Code)\d*$|_0x[0-9A-Fa-f]+$|^LABEL_|^sub_|^loc_', re.I)
 
 
+IMAGES = {"v10": ("rebuilt_ROMs/kn5000_v10_program.llvm.elf", "v10/maincpu", (0xE00000, 0xFFFFFF)),
+          "v9": ("rebuilt_ROMs/kn5000_v9_program.llvm.elf", "v9/maincpu", (0xE00000, 0xFFFFFF)),
+          "v7": ("rebuilt_ROMs/kn5000_v7_program.llvm.elf", "v7/maincpu", (0xE00000, 0xFFFFFF)),
+          "hdae5000": ("rebuilt_ROMs/hd-ae5000_v2_06i.llvm.elf", "hdae5000", (0x280000, 0x2FFFFF))}
+
+
 def elf_symbols(image):
-    elf = os.path.join(REPO, "rebuilt_ROMs", "kn5000_%s_program.llvm.elf" % image)
+    elf = os.path.join(REPO, IMAGES[image][0])
     out = subprocess.run([NM, "--defined-only", elf], capture_output=True, text=True,
                          check=True).stdout
     by = collections.defaultdict(list)
@@ -73,11 +80,12 @@ def pick(names, col0):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--image", required=True, choices=("v10", "v9", "v7"))
+    ap.add_argument("--image", required=True, choices=sorted(IMAGES))
     ap.add_argument("--apply", action="store_true")
     ap.add_argument("--report")
     a = ap.parse_args()
-    files = sorted(glob.glob(os.path.join(REPO, a.image, "maincpu", "**", "*.s"), recursive=True))
+    files = sorted(glob.glob(os.path.join(REPO, IMAGES[a.image][1], "**", "*.s"), recursive=True))
+    lo, hi = IMAGES[a.image][2]
     syms = elf_symbols(a.image)
     col0 = labels_in_source(files)
     stats, rows = collections.Counter(), []
@@ -95,7 +103,7 @@ def main():
 
             def sub(mm):
                 v = int(mm.group(1), 0)
-                if not 0xE00000 <= v < 0x1000000:
+                if not lo <= v <= hi:
                     return mm.group(0)
                 names = syms.get(v)
                 rel = os.path.relpath(f, REPO)

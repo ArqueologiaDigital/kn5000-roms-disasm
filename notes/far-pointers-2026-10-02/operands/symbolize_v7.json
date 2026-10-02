@@ -1,0 +1,2235 @@
+[
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 169,
+  "value": "0xed9d30",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 172,
+  "value": "0xed9d32",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 175,
+  "value": "0xed9d34",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 178,
+  "value": "0xed9d36",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 181,
+  "value": "0xed9d38",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 451,
+  "value": "0xed9d3c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 459,
+  "value": "0xed9d44",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 462,
+  "value": "0xed9d4c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 568,
+  "value": "0xed9d4e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 577,
+  "value": "0xed9d56",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 580,
+  "value": "0xed9d58",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 792,
+  "value": "0xed9d60",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 988,
+  "value": "0xed9d7c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 990,
+  "value": "0xed9d64",
+  "result": "FileIO_BytecodeData_Code_Entry8_PtrTable",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 997,
+  "value": "0xed9d9a",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 999,
+  "value": "0xed9d82",
+  "result": "FileIO_BytecodeData_Code_Entry8_PtrTable_2",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 1051,
+  "value": "0xed9da0",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 1261,
+  "value": "0xed9da4",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 1267,
+  "value": "0xed9ea4",
+  "result": "FileIO_BytecodeData_Code_Entry8_PtrTable_3",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 3129,
+  "value": "0xfc6d9d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 4004,
+  "value": "0xfc73ba",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 5069,
+  "value": "0xfc7da5",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 5362,
+  "value": "0xfc7fc8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 5418,
+  "value": "0xfc8032",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 10137,
+  "value": "0xfcaca4",
+  "result": "VoiceParam_DispatchByMode_PtrTable",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/audio/audio_control_engine.s",
+  "line": 11275,
+  "value": "0xfcc730",
+  "result": "MidiStream_DispatchLoop_PtrTable",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "line": 3317,
+  "value": "0xfdc702",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "line": 4799,
+  "value": "0xfde509",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "line": 4839,
+  "value": "0xfde509",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "line": 4954,
+  "value": "0xfddafe",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/dsp_config_sysex.s",
+  "line": 5152,
+  "value": "0xfddd67",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 13051,
+  "value": "0xfe81d9",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 14567,
+  "value": "0xfe903d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 14574,
+  "value": "0xfe9049",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 16072,
+  "value": "0xfea080",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 16460,
+  "value": "0xfea445",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 17308,
+  "value": "0xfeac3e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 17386,
+  "value": "0xfead1f",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 18382,
+  "value": "0xfeb776",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 21454,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 23354,
+  "value": "0xfee50b",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/note_voice_mapping.s",
+  "line": 26151,
+  "value": "0xff00cc",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 5903,
+  "value": "0xf0dc61",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 5965,
+  "value": "0xf0dd0c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 6018,
+  "value": "0xf0dd9d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 8943,
+  "value": "0xf11cdc",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 9093,
+  "value": "0xf12284",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 9114,
+  "value": "0xf12352",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/audio/sound_editor_ui.s",
+  "line": 15318,
+  "value": "0xf15b73",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/boot/screen_group_dispatch.s",
+  "line": 47,
+  "value": "0xfde509",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/boot/system_handlers.s",
+  "line": 6291,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/boot/system_handlers.s",
+  "line": 6467,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/boot/system_handlers.s",
+  "line": 6478,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/boot/system_handlers.s",
+  "line": 6515,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/boot/system_handlers.s",
+  "line": 6653,
+  "value": "0xf000f0",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/demo/fdemotext_routines.s",
+  "line": 78,
+  "value": "0xf84397",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/demo/fdemotext_routines.s",
+  "line": 2965,
+  "value": "0xea0028",
+  "result": "Seq_LoadDisplayResource_Str_Empty",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/fdemotext_routines.s",
+  "line": 2999,
+  "value": "0xea004e",
+  "result": "Seq_LoadResource_Proceed_Str_rt",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/fdemotext_routines.s",
+  "line": 3042,
+  "value": "0xea006c",
+  "result": "Seq_FillBufferLoop_Str_rt",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/fdemotext_routines.s",
+  "line": 3059,
+  "value": "0xea0052",
+  "result": "Seq_FillBufferLoop_Str_ACTION_2",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 355,
+  "value": "0xea009e",
+  "result": "FDemo_LoadRegsAndPostEvent_Str_FEATURE",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 493,
+  "value": "0xea00a8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 1738,
+  "value": "0xea0194",
+  "result": "FileIO_LoadRegion0_VRAM_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 1785,
+  "value": "0xea0198",
+  "result": "FileIO_LoadRegion1_VRAM_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 1854,
+  "value": "0xea019c",
+  "result": "FileIO_LoadRegion7_Flash_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 1918,
+  "value": "0xea01a0",
+  "result": "FileIO_LoadRegion2_ExtMem_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2117,
+  "value": "0xea01b0",
+  "result": "FileIO_LoadRegion3_ExtMem_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2159,
+  "value": "0xea01b4",
+  "result": "FileIO_LoadRegion5_VRAM_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2201,
+  "value": "0xea01b8",
+  "result": "FileIO_LoadRegion6_Simple_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2234,
+  "value": "0xea01bc",
+  "result": "FileIO_LoadRegion4_VRAM_Str_rb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2437,
+  "value": "0xea01f0",
+  "result": "SaveRegion0_SpaceOk_Str_wb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2496,
+  "value": "0xea01f4",
+  "result": "SaveRegion1_SpaceOk_Str_wb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2693,
+  "value": "0xea0204",
+  "result": "SaveRegion5_SpaceOk_Str_wb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2728,
+  "value": "0xea0208",
+  "result": "FileIO_SaveRegion6_Simple_Str_wb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 2765,
+  "value": "0xea020c",
+  "result": "SaveRegion4_SpaceOk_Str_wb",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 5786,
+  "value": "0xea0492",
+  "result": "IndexToRecordLookup_Str_Dot_Star",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/demo/file_demo_proc.s",
+  "line": 6093,
+  "value": "0xea049c",
+  "result": "ValidateAndSearchFile_Str_Empty",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/display/graphics_text_vga.s",
+  "line": 1427,
+  "value": "0xeab148",
+  "result": "DrawFunc_Init_Variant1_Str_Fmt3d",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/display/scoop_display.s",
+  "line": 16272,
+  "value": "0xe0b42a",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 95,
+  "value": "0xe1f0bc",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 97,
+  "value": "0xe1f080",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 107,
+  "value": "0xe1f0d4",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 109,
+  "value": "0xe1f0be",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 119,
+  "value": "0xe1f0ea",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 121,
+  "value": "0xe1f0d6",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 132,
+  "value": "0xe1f04a",
+  "result": "InitializeHama_PtrTable",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 143,
+  "value": "0xe1f056",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 154,
+  "value": "0xe1f0ec",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 176,
+  "value": "0xe1fd2c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 187,
+  "value": "0xe1fd34",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 198,
+  "value": "0xe1fbd0",
+  "result": "InitializeHama_Str_Empty",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 209,
+  "value": "0xe1fc40",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 220,
+  "value": "0xe1fbd4",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 238,
+  "value": "0xe1fd18",
+  "result": "InitializeHama_Str_TT_HDDEXT",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 242,
+  "value": "0xfc0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 245,
+  "value": "0xe1fd22",
+  "result": "InitializeHama_Str_TT_EXTAPR",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 249,
+  "value": "0xfc0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 437,
+  "value": "0xfc0001",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 442,
+  "value": "0xfc0003",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/factory_test/test_init.s",
+  "line": 447,
+  "value": "0xfc0002",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 3986,
+  "value": "0xea1186",
+  "result": "Cheap_ClassCount_165",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 3988,
+  "value": "0xea0f46",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 3997,
+  "value": "0xea11f2",
+  "result": "Cheap_ResEventCount_1C5",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4008,
+  "value": "0xea1358",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4010,
+  "value": "0xea11f4",
+  "result": "Cheap_ResMethodTable_1E5",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4020,
+  "value": "0xea0a56",
+  "result": "InitializeCheap_PtrTable_9",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4040,
+  "value": "0xea135a",
+  "result": "InitializeCheap_PtrTable",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4060,
+  "value": "0xea7fce",
+  "result": "InitializeCheap_PtrTable_8",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4070,
+  "value": "0xea80b6",
+  "result": "Cheap_MainFunctionTable_445",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4080,
+  "value": "0xea67b6",
+  "result": "Cheap_ViewableTable_060",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4090,
+  "value": "0xea6fe2",
+  "result": "Cheap_ResNameTable_360",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4100,
+  "value": "0xea68e2",
+  "result": "Cheap_ViewableTable_061",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4110,
+  "value": "0xea7228",
+  "result": "Cheap_ResNameTable_361",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4120,
+  "value": "0xea6ae6",
+  "result": "Cheap_ViewableTable_062",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4130,
+  "value": "0xea75c6",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4140,
+  "value": "0xea6aea",
+  "result": "Cheap_ViewableTable_063",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4150,
+  "value": "0xea75cc",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4160,
+  "value": "0xea6aee",
+  "result": "Cheap_ViewableTable_064",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4170,
+  "value": "0xea75d2",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4180,
+  "value": "0xea6af2",
+  "result": "Cheap_ViewableTable_065",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4190,
+  "value": "0xea75d8",
+  "result": "InitializeCheap_PtrTable_2",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4200,
+  "value": "0xea6b02",
+  "result": "Cheap_ViewableTable_066",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4210,
+  "value": "0xea75fc",
+  "result": "InitializeCheap_Str_Empty",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4220,
+  "value": "0xea6b06",
+  "result": "Cheap_ViewableTable_067",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4230,
+  "value": "0xea7602",
+  "result": "InitializeCheap_PtrTable_3",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4240,
+  "value": "0xea6c26",
+  "result": "Cheap_ViewableTable_06A",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4250,
+  "value": "0xea77e4",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4260,
+  "value": "0xea6c2a",
+  "result": "Cheap_ViewableTable_06B",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4270,
+  "value": "0xea77ea",
+  "result": "InitializeCheap_PtrTable_4",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4280,
+  "value": "0xea6c82",
+  "result": "Cheap_ViewableTable_06C",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4290,
+  "value": "0xea7878",
+  "result": "InitializeCheap_PtrTable_5",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4300,
+  "value": "0xea6dd2",
+  "result": "Cheap_ViewableTable_06D",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4310,
+  "value": "0xea7aca",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4320,
+  "value": "0xea6dd6",
+  "result": "Cheap_ViewableTable_06E",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4330,
+  "value": "0xea7ad0",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4340,
+  "value": "0xea6dda",
+  "result": "Cheap_ViewableTable_077",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4350,
+  "value": "0xea7ad6",
+  "result": "InitializeCheap_PtrTable_6",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4360,
+  "value": "0xea6e32",
+  "result": "Cheap_ViewableTable_079",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4370,
+  "value": "0xea7b8c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4380,
+  "value": "0xea6e36",
+  "result": "Cheap_ViewableTable_07B",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4390,
+  "value": "0xea7b92",
+  "result": "InitializeCheap_PtrTable_7",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4400,
+  "value": "0xea6fb2",
+  "result": "Cheap_ViewableTable_07C",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4410,
+  "value": "0xea7e98",
+  "result": "Cheap_ResNameTable_37C",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4420,
+  "value": "0xea6fb6",
+  "result": "Cheap_ViewableTable_07D",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4430,
+  "value": "0xea7e9e",
+  "result": "Cheap_ResNameTable_37D",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4440,
+  "value": "0xea6fba",
+  "result": "Cheap_ViewableTable_07E",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4450,
+  "value": "0xea7ea4",
+  "result": "Cheap_ResNameTable_37E",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4460,
+  "value": "0xea6fde",
+  "result": "Cheap_ViewableTable_0BC",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/medley.s",
+  "line": 4470,
+  "value": "0xea7ee2",
+  "result": "Cheap_ResNameTable_3BC",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 352,
+  "value": "0xea0954",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 402,
+  "value": "0xea0954",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 738,
+  "value": "0xea0976",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 787,
+  "value": "0xea0976",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 1204,
+  "value": "0xea0994",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 1681,
+  "value": "0xea09ca",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 1735,
+  "value": "0xea09ca",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 1918,
+  "value": "0xea09d0",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 2101,
+  "value": "0xea09ee",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 2155,
+  "value": "0xea09ee",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/single_load.s",
+  "line": 2521,
+  "value": "0xea0a14",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/file_io/smf_operations.s",
+  "line": 537,
+  "value": "0xf8dcbb",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/kn5000_v7_program.s",
+  "line": 2170,
+  "value": "0xfb0960",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/ac_listener_handlers.s",
+  "line": 1319,
+  "value": "0xf75728",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/ac_listener_handlers.s",
+  "line": 1391,
+  "value": "0xf757f4",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 830,
+  "value": "0xfd12bd",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 861,
+  "value": "0xfd133d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 881,
+  "value": "0xfd13bd",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 903,
+  "value": "0xfd14bd",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 923,
+  "value": "0xfd153e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 943,
+  "value": "0xfd15be",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 964,
+  "value": "0xfd163e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 987,
+  "value": "0xfd16be",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1005,
+  "value": "0xfd12bd",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1142,
+  "value": "0xfd14bd",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1234,
+  "value": "0xfd12bd",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1249,
+  "value": "0xfd173e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1266,
+  "value": "0xfd17be",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1293,
+  "value": "0xfd183e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1323,
+  "value": "0xfd18be",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1340,
+  "value": "0xfd193e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1357,
+  "value": "0xfd19be",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1385,
+  "value": "0xfd1a3e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1416,
+  "value": "0xfd1abe",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1433,
+  "value": "0xfd1b3e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1450,
+  "value": "0xfd1bbe",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1467,
+  "value": "0xfd1c3e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1488,
+  "value": "0xfd1cbe",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 1505,
+  "value": "0xfd1d3e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 2062,
+  "value": "0xfd143d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 2083,
+  "value": "0xfd143d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 12780,
+  "value": "0xfd87ad",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_dispatch_handlers.s",
+  "line": 13865,
+  "value": "0xfd926d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midi_serial_routines.s",
+  "line": 701,
+  "value": "0xfd0696",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midipkt_routines.s",
+  "line": 888,
+  "value": "0xfda17c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midipkt_routines.s",
+  "line": 1295,
+  "value": "0xfda542",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/midi/midipkt_routines.s",
+  "line": 1344,
+  "value": "0xfda5c9",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "line": 11913,
+  "value": "0xe49ff8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "line": 11926,
+  "value": "0xe4a01a",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "line": 12455,
+  "value": "0xe49ff8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "line": 28057,
+  "value": "0xf675fe",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "line": 32454,
+  "value": "0xf6a83a",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/accompaniment_engine.s",
+  "line": 33007,
+  "value": "0xf6a96d",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/bmdredit_routines.s",
+  "line": 1810,
+  "value": "0xe4448e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2698,
+  "value": "0xe59c5a",
+  "result": "East_ViewableTable_009",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2708,
+  "value": "0xe5a122",
+  "result": "East_ResNameTable_309",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2718,
+  "value": "0xe59c6e",
+  "result": "East_ViewableTable_00F",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2728,
+  "value": "0xe5a152",
+  "result": "East_ResNameTable_30F",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2738,
+  "value": "0xe59c7e",
+  "result": "East_ViewableTable_018",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2748,
+  "value": "0xe5a17a",
+  "result": "East_ResNameTable_318",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2758,
+  "value": "0xe59cb2",
+  "result": "East_ViewableTable_019",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2768,
+  "value": "0xe5a1d4",
+  "result": "East_ResNameTable_319",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2778,
+  "value": "0xe59ce6",
+  "result": "East_ViewableTable_01A",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2788,
+  "value": "0xe5a23a",
+  "result": "East_ResNameTable_31A",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2798,
+  "value": "0xe59d1a",
+  "result": "East_ViewableTable_050",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2808,
+  "value": "0xe5a2a8",
+  "result": "East_ResNameTable_350",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2818,
+  "value": "0xe59d6e",
+  "result": "East_ViewableTable_051",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2828,
+  "value": "0xe5a350",
+  "result": "East_ResNameTable_351",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2838,
+  "value": "0xe59d8e",
+  "result": "East_ViewableTable_052",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2858,
+  "value": "0xe59db2",
+  "result": "East_ViewableTable_053",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2878,
+  "value": "0xe59dce",
+  "result": "East_ViewableTable_054",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2898,
+  "value": "0xe59de6",
+  "result": "East_ViewableTable_055",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2918,
+  "value": "0xe59dfe",
+  "result": "East_ViewableTable_056",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2938,
+  "value": "0xe59f0e",
+  "result": "East_ViewableTable_057",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2958,
+  "value": "0xe59f82",
+  "result": "East_ViewableTable_058",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2978,
+  "value": "0xe59fda",
+  "result": "East_ViewableTable_059",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 2998,
+  "value": "0xe59ff6",
+  "result": "East_ViewableTable_05A",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 3018,
+  "value": "0xe5a012",
+  "result": "East_ViewableTable_05B",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 3038,
+  "value": "0xe5a05a",
+  "result": "East_ViewableTable_05C",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 3058,
+  "value": "0xe5a07e",
+  "result": "East_ViewableTable_0D7",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 3078,
+  "value": "0xe5a0e2",
+  "result": "East_ViewableTable_0D8",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 3098,
+  "value": "0xe5a106",
+  "result": "East_ViewableTable_0EC",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 3264,
+  "value": "0xec0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/seq_event_playback.s",
+  "line": 3824,
+  "value": "0xe7ef28",
+  "result": "VocalistGrid_DispatchData_Str_OFF",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "line": 20992,
+  "value": "0xf448f6",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "line": 21052,
+  "value": "0xf449ab",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "line": 25347,
+  "value": "0xe7000e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "line": 32708,
+  "value": "0xe44ea2",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "line": 32730,
+  "value": "0xe44eaa",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_engine.s",
+  "line": 32767,
+  "value": "0xe44eae",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 225,
+  "value": "0xe10000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 232,
+  "value": "0xe20000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 239,
+  "value": "0xe30000",
+  "result": "InitializeYoko_PtrTable",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 7822,
+  "value": "0xf303ff",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 7874,
+  "value": "0xf304ab",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 14135,
+  "value": "0xf34a5f",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 14164,
+  "value": "0xf34ab4",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 14179,
+  "value": "0xe34b64",
+  "result": "Sqedt_ParamDispatch_Str_Fmt3d",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 14200,
+  "value": "0xf34b2c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 14508,
+  "value": "0xe34c44",
+  "result": "Sqedt_ParamDispatch_Entry2_Str_Fmt3d_2",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/sequencer/sequencer_ui.s",
+  "line": 15847,
+  "value": "0xe322f0",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/storage/fdc_routines.s",
+  "line": 219,
+  "value": "0xf968c0",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 980,
+  "value": "0xe0e95c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 991,
+  "value": "0xe0e962",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 1002,
+  "value": "0xe0e968",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 1054,
+  "value": "0xe14824",
+  "result": "Naka_MainFunctionTable_14B",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 1064,
+  "value": "0xe14828",
+  "result": "Naka_MainFunctionTable_44B",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 1084,
+  "value": "0xe13bca",
+  "result": "Naka_ResNameTable_3FD",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 1093,
+  "value": "0xfd0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5753,
+  "value": "0xe1b4e2",
+  "result": "Suna_ViewableTable_010",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5773,
+  "value": "0xe1b4f2",
+  "result": "Suna_ViewableTable_011",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5793,
+  "value": "0xe1b516",
+  "result": "Suna_ViewableTable_012",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5813,
+  "value": "0xe1b536",
+  "result": "Suna_ViewableTable_013",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5833,
+  "value": "0xe1b54a",
+  "result": "Suna_ViewableTable_014",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5853,
+  "value": "0xe1b55e",
+  "result": "Suna_ViewableTable_015",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5873,
+  "value": "0xe1b582",
+  "result": "Suna_ViewableTable_016",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5893,
+  "value": "0xe1b5a2",
+  "result": "Suna_ViewableTable_0B0",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5913,
+  "value": "0xe1b5ee",
+  "result": "Suna_ViewableTable_0B1",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5933,
+  "value": "0xe1b622",
+  "result": "Suna_ViewableTable_0B2",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5953,
+  "value": "0xe1b67e",
+  "result": "Suna_ViewableTable_0B3",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5973,
+  "value": "0xe1b696",
+  "result": "Suna_ViewableTable_0B4",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 5993,
+  "value": "0xe1b6e2",
+  "result": "Suna_ViewableTable_0B5",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 6013,
+  "value": "0xe1b762",
+  "result": "Suna_ViewableTable_0B6",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 6033,
+  "value": "0xe1b76a",
+  "result": "Suna_ViewableTable_0B7",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 6053,
+  "value": "0xe1b786",
+  "result": "Suna_ViewableTable_0B8",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/storage/flash_floppy_handlers.s",
+  "line": 6529,
+  "value": "0xed0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 1534,
+  "value": "0xe8016e",
+  "result": "PmemOutLGridCheck_Evt1C0001D_Str_OFF_6",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4080,
+  "value": "0xe80640",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4168,
+  "value": "0xe80650",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4300,
+  "value": "0xe806dc",
+  "result": "MidiPartGridCheck_Evt1C0001C_Str_OFF_2",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4303,
+  "value": "0xe806d6",
+  "result": "MidiPartGridCheck_Evt1C0001C_Str_ON",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4473,
+  "value": "0xe812e2",
+  "result": "Murai_ClassCount_161",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4484,
+  "value": "0xe813a4",
+  "result": "Murai_ResEventCount_1C1",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4486,
+  "value": "0xe812e4",
+  "result": "Murai_ResEventTable_1C1",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4495,
+  "value": "0xe814f2",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4527,
+  "value": "0xe814f4",
+  "result": "InitializeMurai_PtrTable_5",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4537,
+  "value": "0xe8158c",
+  "result": "Murai_FunctionTable_401",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4547,
+  "value": "0xe86638",
+  "result": "InitializeMurai_PtrTable_6",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4557,
+  "value": "0xe86644",
+  "result": "Murai_MainFunctionTable_441",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4567,
+  "value": "0xe85470",
+  "result": "Murai_ViewableTable_002",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4577,
+  "value": "0xe859f4",
+  "result": "Murai_ResNameTable_302",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4587,
+  "value": "0xe854c4",
+  "result": "Murai_ViewableTable_003",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4597,
+  "value": "0xe85a8e",
+  "result": "Murai_ResNameTable_303",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4607,
+  "value": "0xe85618",
+  "result": "Murai_ViewableTable_004",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4617,
+  "value": "0xe85cf0",
+  "result": "InitializeMurai_PtrTable",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4627,
+  "value": "0xe8562c",
+  "result": "Murai_ViewableTable_005",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4637,
+  "value": "0xe85d14",
+  "result": "InitializeMurai_PtrTable_2",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4647,
+  "value": "0xe85708",
+  "result": "Murai_ViewableTable_007",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4657,
+  "value": "0xe85f0a",
+  "result": "InitializeMurai_PtrTable_3",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4667,
+  "value": "0xe85718",
+  "result": "Murai_ViewableTable_008",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4677,
+  "value": "0xe85f2a",
+  "result": "InitializeMurai_PtrTable_4",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4687,
+  "value": "0xe8572c",
+  "result": "Murai_ViewableTable_00D",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4707,
+  "value": "0xe857a4",
+  "result": "Murai_ViewableTable_0A5",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4717,
+  "value": "0xe8608e",
+  "result": "Murai_ResNameTable_3A5",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4727,
+  "value": "0xe857b8",
+  "result": "Murai_ViewableTable_0E4",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4737,
+  "value": "0xe860b2",
+  "result": "Murai_ResNameTable_3E4",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4747,
+  "value": "0xe857f8",
+  "result": "Murai_ViewableTable_0EA",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4757,
+  "value": "0xe8617e",
+  "result": "Murai_ResNameTable_3EA",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4767,
+  "value": "0xe858ac",
+  "result": "Murai_ViewableTable_0EB",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4777,
+  "value": "0xe862f2",
+  "result": "Murai_ResNameTable_3EB",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4787,
+  "value": "0xe85944",
+  "result": "Murai_ViewableTable_0EE",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4797,
+  "value": "0xe863fe",
+  "result": "Murai_ResNameTable_3EE",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4807,
+  "value": "0xe859a8",
+  "result": "Murai_ViewableTable_0EF",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4827,
+  "value": "0xe859d8",
+  "result": "Murai_ViewableTable_0F0",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4837,
+  "value": "0xe86534",
+  "result": "Murai_ResNameTable_3F0",
+  "candidates": null
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4923,
+  "value": "0xeb0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4930,
+  "value": "0xee0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4937,
+  "value": "0xef0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 4944,
+  "value": "0xf00000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11228,
+  "value": "0xeb7930",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11236,
+  "value": "0xf00001",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11260,
+  "value": "0xf00003",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11272,
+  "value": "0xf00004",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11329,
+  "value": "0xef000a",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11823,
+  "value": "0xef0004",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/drawbar_panel_ui.s",
+  "line": 11832,
+  "value": "0xef0007",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1684,
+  "value": "0xf40001",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1720,
+  "value": "0xf40007",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1901,
+  "value": "0xf8000c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1911,
+  "value": "0xf8000e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1921,
+  "value": "0xf80010",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1931,
+  "value": "0xf80006",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1941,
+  "value": "0xf80008",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1951,
+  "value": "0xf8000a",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1966,
+  "value": "0xf80006",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1972,
+  "value": "0xf80008",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1978,
+  "value": "0xf8000a",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1984,
+  "value": "0xf8000c",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 1990,
+  "value": "0xf8000e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 2046,
+  "value": "0xf5000b",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 2053,
+  "value": "0xf5000e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 2060,
+  "value": "0xf50011",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_mode_handlers.s",
+  "line": 2065,
+  "value": "0xf50014",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 6921,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 6924,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 7092,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "v7/maincpu/ui/ui_window_procs.s",
+  "line": 7117,
+  "value": "0xff0000",
+  "result": "no-symbol"
+ }
+]

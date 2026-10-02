@@ -1531,7 +1531,7 @@ PmemOutLGridCheck_JumpTable_Skip8:
 	ld	xwa, NakaInst_ON_E80168
 	jr	PmemOutLGridCheck_JumpTable_Join6
 PmemOutLGridCheck_JumpTable_Skip9:
-	ld	xwa, 0xe8016e
+	ld	xwa, PmemOutLGridCheck_Evt1C0001D_Str_OFF_6
 PmemOutLGridCheck_JumpTable_Join6:
 	push	xwa
 	ld	xwa, (xsp+16)
@@ -4297,10 +4297,10 @@ MidiPartGridCheck_Skip13:
 	jr	nz, MidiPartGridCheck_Skip15
 	ld	xwa, (xsp+4)
 	ldw	(xwa), 3
-	ld	xwa, 0xe806dc
+	ld	xwa, MidiPartGridCheck_Evt1C0001C_Str_OFF_2
 	cpw	(xde), 0
 	jr	z, MidiPartGridCheck_Skip14
-	ld	xwa, 0xe806d6
+	ld	xwa, MidiPartGridCheck_Evt1C0001C_Str_ON
 MidiPartGridCheck_Skip14:
 	push	xwa
 	ld	xwa, (xsp+12)
@@ -4470,7 +4470,7 @@ InitializeMurai:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe812e2:24)
+	ld wa, (Murai_ClassCount_161:24)
 	ld (XBC+0x08),WA
 	lda xwa, (Murai_ClassTable_161:24)
 	ld (XBC+0x0a),XWA
@@ -4481,9 +4481,9 @@ InitializeMurai:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe813a4:24)
+	ld wa, (Murai_ResEventCount_1C1:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xe812e4:24)
+	lda xwa, (Murai_ResEventTable_1C1:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x01c1
 	call RegisterObjectTable
@@ -4524,7 +4524,7 @@ InitializeMurai:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe814f4:24)
+	lda xwa, (InitializeMurai_PtrTable_5:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0101
 	call RegisterObjectTable
@@ -4534,7 +4534,7 @@ InitializeMurai:
 	lda xwa, (FunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe8158c:24)
+	lda xwa, (Murai_FunctionTable_401:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0401
 	call RegisterObjectTable
@@ -4544,7 +4544,7 @@ InitializeMurai:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xe86638:24)
+	lda xwa, (InitializeMurai_PtrTable_6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0141
 	call RegisterObjectTable
@@ -4554,7 +4554,7 @@ InitializeMurai:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0002
-	lda xwa, (0xe86644:24)
+	lda xwa, (Murai_MainFunctionTable_441:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0441
 	call RegisterObjectTable
@@ -4564,7 +4564,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0014
-	lda xwa, (0xe85470:24)
+	lda xwa, (Murai_ViewableTable_002:24)
 	ld (XBC+0x0a),XWA
 	ld wa, 2:i3
 	call RegisterObjectTable
@@ -4574,7 +4574,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0014
-	lda xwa, (0xe859f4:24)
+	lda xwa, (Murai_ResNameTable_302:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0302
 	call RegisterObjectTable
@@ -4584,7 +4584,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0054
-	lda xwa, (0xe854c4:24)
+	lda xwa, (Murai_ViewableTable_003:24)
 	ld (XBC+0x0a),XWA
 	ld wa, 3:i3
 	call RegisterObjectTable
@@ -4594,7 +4594,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0054
-	lda xwa, (0xe85a8e:24)
+	lda xwa, (Murai_ResNameTable_303:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0303
 	call RegisterObjectTable
@@ -4604,7 +4604,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe85618:24)
+	lda xwa, (Murai_ViewableTable_004:24)
 	ld (XBC+0x0a),XWA
 	ld wa, 4:i3
 	call RegisterObjectTable
@@ -4614,7 +4614,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe85cf0:24)
+	lda xwa, (InitializeMurai_PtrTable:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0304
 	call RegisterObjectTable
@@ -4624,7 +4624,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0036
-	lda xwa, (0xe8562c:24)
+	lda xwa, (Murai_ViewableTable_005:24)
 	ld (XBC+0x0a),XWA
 	ld wa, 5:i3
 	call RegisterObjectTable
@@ -4634,7 +4634,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0036
-	lda xwa, (0xe85d14:24)
+	lda xwa, (InitializeMurai_PtrTable_2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0305
 	call RegisterObjectTable
@@ -4644,7 +4644,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xe85708:24)
+	lda xwa, (Murai_ViewableTable_007:24)
 	ld (XBC+0x0a),XWA
 	ld wa, 7:i3
 	call RegisterObjectTable
@@ -4654,7 +4654,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xe85f0a:24)
+	lda xwa, (InitializeMurai_PtrTable_3:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0307
 	call RegisterObjectTable
@@ -4664,7 +4664,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe85718:24)
+	lda xwa, (Murai_ViewableTable_008:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0008
 	call RegisterObjectTable
@@ -4674,7 +4674,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe85f2a:24)
+	lda xwa, (InitializeMurai_PtrTable_4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0308
 	call RegisterObjectTable
@@ -4684,7 +4684,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001d
-	lda xwa, (0xe8572c:24)
+	lda xwa, (Murai_ViewableTable_00D:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x000d
 	call RegisterObjectTable
@@ -4704,7 +4704,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe857a4:24)
+	lda xwa, (Murai_ViewableTable_0A5:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00a5
 	call RegisterObjectTable
@@ -4714,7 +4714,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe8608e:24)
+	lda xwa, (Murai_ResNameTable_3A5:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03a5
 	call RegisterObjectTable
@@ -4724,7 +4724,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe857b8:24)
+	lda xwa, (Murai_ViewableTable_0E4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00e4
 	call RegisterObjectTable
@@ -4734,7 +4734,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000f
-	lda xwa, (0xe860b2:24)
+	lda xwa, (Murai_ResNameTable_3E4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03e4
 	call RegisterObjectTable
@@ -4744,7 +4744,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe857f8:24)
+	lda xwa, (Murai_ViewableTable_0EA:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00ea
 	call RegisterObjectTable
@@ -4754,7 +4754,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x002c
-	lda xwa, (0xe8617e:24)
+	lda xwa, (Murai_ResNameTable_3EA:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03ea
 	call RegisterObjectTable
@@ -4764,7 +4764,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe858ac:24)
+	lda xwa, (Murai_ViewableTable_0EB:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00eb
 	call RegisterObjectTable
@@ -4774,7 +4774,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0025
-	lda xwa, (0xe862f2:24)
+	lda xwa, (Murai_ResNameTable_3EB:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03eb
 	call RegisterObjectTable
@@ -4784,7 +4784,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0018
-	lda xwa, (0xe85944:24)
+	lda xwa, (Murai_ViewableTable_0EE:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00ee
 	call RegisterObjectTable
@@ -4794,7 +4794,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0018
-	lda xwa, (0xe863fe:24)
+	lda xwa, (Murai_ResNameTable_3EE:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03ee
 	call RegisterObjectTable
@@ -4804,7 +4804,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000b
-	lda xwa, (0xe859a8:24)
+	lda xwa, (Murai_ViewableTable_0EF:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00ef
 	call RegisterObjectTable
@@ -4824,7 +4824,7 @@ InitializeMurai:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe859d8:24)
+	lda xwa, (Murai_ViewableTable_0F0:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00f0
 	call RegisterObjectTable
@@ -4834,7 +4834,7 @@ InitializeMurai:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe86534:24)
+	lda xwa, (Murai_ResNameTable_3F0:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03f0
 	call RegisterObjectTable

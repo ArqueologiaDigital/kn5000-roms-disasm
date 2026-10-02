@@ -848,7 +848,10 @@ Encoder_PrepareCallback_PtrTable_2:	.incbin "includes/generated/naka_extension_d
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
 ; [nakarest] `.long SoundParam_EncoderMappingData`); 1 data word in SystemConfig_PointerTable
 ; [nakarest] (at 0xee8ca6).
-SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x286
+SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x46
+FileIO_BytecodeData_Code_Entry8_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3598, 0x1E	; 6 x 32-bit pointer
+FileIO_BytecodeData_Code_Entry8_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x35B6, 0x122	; 6 x 32-bit pointer
+FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0x100	; 22 x 32-bit pointer
 ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x88	; 8 x 32-bit pointer
 ; [nakarest] EffectMode_DispatchTable  +0x3860..+0x3870 (0xeda02c, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeda02c not derived; readers below

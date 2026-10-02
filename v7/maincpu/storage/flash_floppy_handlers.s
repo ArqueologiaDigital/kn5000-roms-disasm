@@ -1051,7 +1051,7 @@ InitializeNaka:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe14824:24)
+	lda xwa, (Naka_MainFunctionTable_14B:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x014b
 	call RegisterObjectTable
@@ -1061,7 +1061,7 @@ InitializeNaka:
 	lda xwa, (MainFunctionProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xe14828:24)
+	lda xwa, (Naka_MainFunctionTable_44B:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x044b
 	call RegisterObjectTable
@@ -1081,7 +1081,7 @@ InitializeNaka:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x01de
-	lda xwa, (0xe13bca:24)
+	lda xwa, (Naka_ResNameTable_3FD:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x03fd
 	call RegisterObjectTable
@@ -5750,7 +5750,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0003
-	lda xwa, (0xe1b4e2:24)
+	lda xwa, (Suna_ViewableTable_010:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0010
 	call RegisterObjectTable
@@ -5770,7 +5770,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe1b4f2:24)
+	lda xwa, (Suna_ViewableTable_011:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0011
 	call RegisterObjectTable
@@ -5790,7 +5790,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe1b516:24)
+	lda xwa, (Suna_ViewableTable_012:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0012
 	call RegisterObjectTable
@@ -5810,7 +5810,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe1b536:24)
+	lda xwa, (Suna_ViewableTable_013:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0013
 	call RegisterObjectTable
@@ -5830,7 +5830,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0004
-	lda xwa, (0xe1b54a:24)
+	lda xwa, (Suna_ViewableTable_014:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0014
 	call RegisterObjectTable
@@ -5850,7 +5850,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0008
-	lda xwa, (0xe1b55e:24)
+	lda xwa, (Suna_ViewableTable_015:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0015
 	call RegisterObjectTable
@@ -5870,7 +5870,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0007
-	lda xwa, (0xe1b582:24)
+	lda xwa, (Suna_ViewableTable_016:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0016
 	call RegisterObjectTable
@@ -5890,7 +5890,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0012
-	lda xwa, (0xe1b5a2:24)
+	lda xwa, (Suna_ViewableTable_0B0:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b0
 	call RegisterObjectTable
@@ -5910,7 +5910,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x000c
-	lda xwa, (0xe1b5ee:24)
+	lda xwa, (Suna_ViewableTable_0B1:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b1
 	call RegisterObjectTable
@@ -5930,7 +5930,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0016
-	lda xwa, (0xe1b622:24)
+	lda xwa, (Suna_ViewableTable_0B2:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b2
 	call RegisterObjectTable
@@ -5950,7 +5950,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0005
-	lda xwa, (0xe1b67e:24)
+	lda xwa, (Suna_ViewableTable_0B3:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b3
 	call RegisterObjectTable
@@ -5970,7 +5970,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0012
-	lda xwa, (0xe1b696:24)
+	lda xwa, (Suna_ViewableTable_0B4:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b4
 	call RegisterObjectTable
@@ -5990,7 +5990,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x001f
-	lda xwa, (0xe1b6e2:24)
+	lda xwa, (Suna_ViewableTable_0B5:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b5
 	call RegisterObjectTable
@@ -6010,7 +6010,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0001
-	lda xwa, (0xe1b762:24)
+	lda xwa, (Suna_ViewableTable_0B6:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b6
 	call RegisterObjectTable
@@ -6030,7 +6030,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0006
-	lda xwa, (0xe1b76a:24)
+	lda xwa, (Suna_ViewableTable_0B7:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b7
 	call RegisterObjectTable
@@ -6050,7 +6050,7 @@ InitializeSuna:
 	lda xwa, (ViewableProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0021
-	lda xwa, (0xe1b786:24)
+	lda xwa, (Suna_ViewableTable_0B8:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x00b8
 	call RegisterObjectTable

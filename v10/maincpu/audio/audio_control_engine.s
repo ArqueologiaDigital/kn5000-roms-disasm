@@ -987,7 +987,7 @@ FileIO_BytecodeData_Code_Epilogue22:
 	jr	nz, FileIO_BytecodeData_Code_Skip61
 	lda	xde, (15572348:24)
 	ld_rrb	c, xde, bc
-	lda	xde, (15572324:24)
+	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable:24)
 	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
@@ -996,7 +996,7 @@ FileIO_BytecodeData_Code_Epilogue22:
 FileIO_BytecodeData_Code_Skip60:
 	lda	xde, (15572378:24)
 	ld_rrb	c, xde, bc
-	lda	xde, (15572354:24)
+	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable_2:24)
 	lda_rr	xde, xde, wa
 	ld	xwa, (xsp+2)
 	ld	xhl, (xde)
@@ -1264,7 +1264,7 @@ FileIO_BytecodeData_Code_Helper4:
 	ret	ugt
 	extz	de
 	sla	de, 2
-	lda	xhl, (15572644:24)
+	lda	xhl, (FileIO_BytecodeData_Code_Entry8_PtrTable_3:24)
 	exts	xde
 	add	xde, xhl
 	ld	xhl, (xde)

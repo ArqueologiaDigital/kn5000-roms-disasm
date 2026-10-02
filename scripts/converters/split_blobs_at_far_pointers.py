@@ -20,7 +20,8 @@ QUESTION THIS ANSWERS / JOB IT DOES
     * the target is the START of a NUL-terminated string in the image's own ROM: the slice's
       first byte, or the byte before it is 0x00 / 0xff (the 0xff alignment pad), and the bytes
       up to the NUL are text (0x20..0x7e, or >= 0x80 for the LCD font's glyphs).
-  Targets are (a) far-pointer push pairs with no symbol at the pointer, (b) numeric address
+  Targets are (a) far-pointer push pairs with no symbol at the pointer, (d) numeric own-ROM
+  instruction operands (`lda xbc, (0x29559e:24)`) likewise, (b) numeric address
   arguments of the NAKA registration macros (RegTitle/RegMode/RegObjTabl ..., see
   symbolize_far_pointer_pushes.REG_ADDR_ARGS) and (c) positional `.set A, B + N` aliases whose
   B + N is such a string.  Each slice is cut into one `.incbin`
@@ -311,6 +312,19 @@ def main():
                         role_name[v] = "%s_%s%s_%03X" % (pre, kind, "Table" if role == "table" else "Count",
                                                          int(ident, 0))
                 targets[v].append((addr_of.get(rd, 1 << 30), rd, "macro"))
+    OPER = re.compile(r'^\s*(?:[A-Za-z_.$][\w.$]*:)?\s*(?!jr\b|jrl\b|calr\b|call\b|jp\b|djnz\b|\.)'
+                      r'[a-z_][a-z0-9_]*\s+([^;\n]*)')
+    OLIT = re.compile(r'(?<![\w.$])(0x[0-9a-fA-F]+|\d{7,})(?![\w.$])')
+    for f, L in texts.items():                          # numeric own-ROM instruction operands
+        for i, l in enumerate(L):
+            m = OPER.match(l)
+            if not m or fp.PUSH.match(l) or fp.REG_MACRO.match(l):
+                continue
+            for x in OLIT.findall(m.group(1)):
+                v = int(x, 0)
+                if lo <= v <= hi and v not in syms:
+                    rd = rdx[(f, i)]
+                    targets[v].append((addr_of.get(rd, 1 << 30), rd or "?", "operand"))
     aliases = {}                                        # alias -> (addr, file, line)
     alias_note = {}
     for f, L in texts.items():
