@@ -5338,6 +5338,7 @@ ExtData_ToneParam_MultiChannel_Join3:
 	calr	7
 	call	ToneGen_DispatchByMode
 	jrl	MIDI_WriteResetSequence
+ExtData_ToneParam_MultiChannel_Helper2:
 	ld	c, (0x9131:16)
 	cp	c, 0:i3
 	ret	z

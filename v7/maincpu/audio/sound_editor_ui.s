@@ -8775,14 +8775,16 @@ SeMenu_PresetManager_SaveApply_Helper2:
 	ld C, 0x02:opc
 	jr t, .Lc_f0f818
 .Lc_f0f816:
+SeMenu_PresetManager_SaveApply_Helper2_Skip:
 	ld C, 0x04:opc
 .Lc_f0f818:
+SeMenu_PresetManager_SaveApply_Helper2_Join:
 	ld w, (0x065e:16)
 	ld A,C
 	sla A, 0x01
 	dec 1,A
 	.byte 0xc8, 0xff
-	jr	c, SeMenu_PresetManager_Data_Entry2
+	jr	c, SeMenu_PresetManager_SaveApply_Helper2_Skip2
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
@@ -8792,8 +8794,8 @@ SeMenu_PresetManager_SaveApply_Helper2:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
-	jr	SeMenu_PresetManager_Data_Join3
-SeMenu_PresetManager_Data_Entry2:
+	jr	SeMenu_PresetManager_SaveApply_Helper2_Join2
+SeMenu_PresetManager_SaveApply_Helper2_Skip2:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
@@ -8803,7 +8805,7 @@ SeMenu_PresetManager_Data_Entry2:
 	ld	xix, (xiz+bc)
 	call	SeGfx_DrawStaticList
 	pop c
-SeMenu_PresetManager_Data_Join3:
+SeMenu_PresetManager_SaveApply_Helper2_Join2:
 	djnz8	c, -84
 	ret
 SeMenu_WaveformSelect_Apply_Helper4:
@@ -8905,7 +8907,7 @@ SeMenu_PresetBrowser_Select_Helper:
 	sla	a, 1
 	dec	1, a
 	.byte 0xc8, 0xff
-	jr	c, SeMenu_PresetBrowser_Data_Code_Entry
+	jr	c, SeMenu_PresetBrowser_Select_Helper_Skip
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2
@@ -8916,7 +8918,7 @@ SeMenu_PresetBrowser_Select_Helper:
 	call	SeGfx_DrawStaticList
 	pop c
 	jr	SeMenu_PresetBrowser_Data_Code_Join
-SeMenu_PresetBrowser_Data_Code_Entry:
+SeMenu_PresetBrowser_Select_Helper_Skip:
 	.byte 0xcb, 0x04
 	xor	b, b
 	sla	bc, 2

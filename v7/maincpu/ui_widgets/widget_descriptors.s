@@ -4893,8 +4893,9 @@ FDC_DetectSector_CheckPianoDisc_Str_N1_PianoDisc:	.incbin "includes/generated/na
 ; (v10/v9 0xf654b0, v7 0xf650ac) and VoiceAssign_ProcessRequest (v10/v9
 ; 0xf67128, v7 0xf66d24) read them the same way. Measured: every
 ; non-zero pair forms hi:lo = a multiple of 0x800 below 0x70000; zero
-; pairs mark unused (bank, program) slots. What the 32-bit value locates
-; is not established.
+; pairs mark unused (bank, program) slots. It locates data in the Rhythm
+; Data ROM (0x400000, technics-docs memory-map.md): VoiceAssign_Process_Return
+; computes xix = 0x400000 + (the long at RAM 0x3277) + ((hi & 0xff) << 16 | lo).
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; RhythmROM_BankProgramLocators[8][128][2].
@@ -4909,7 +4910,7 @@ RhythmROM_BankProgramLocators:
 ; (v10/v9 0xf61f6e, v7 0xf61b6a) (`ld xix,
 ; Display_FontPalette_Table_0x12ea`), ToneGen_WriteMultiChanParam
 ; (v10/v9 0xf62986, v7 0xf62582) (`ld xix,
-; Display_FontPalette_Table_0x12ea`), __pad_F62B29 (v10/v9 0xf62b29, v7
+; Display_FontPalette_Table_0x12ea`), ToneGen_CompareVoiceBlocks_Helper3 (v10/v9 0xf62b29, v7
 ; 0xf62725) (`ld xix, Display_FontPalette_Table_0x12ea`),
 ; Rhythm_CrossVoice_Apply (v10/v9 0xf54ffe, v7 0xf54bfa) (`ld xiy,
 ; Display_FontPalette_Table_0x12ea`), Rhythm_NoteRangeCheck (v10/v9
@@ -5344,7 +5345,7 @@ RhythmParam_Dispatch_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AccRhythm_Ram3888_Records
 ; AccRhythm_Ram3888_Records -- 10 records x 16 bytes. The code after the
-; label __pad_F67459 (sequencer/accompaniment_engine.s): `ld xiy,<this>;
+; label RhythmVoice_LoadParams_Helper (sequencer/accompaniment_engine.s): `ld xiy,<this>;
 ; add xiy,xwa; ld xix,0x3888; ld xbc,0x10; ldir` -- one record is copied
 ; to RAM 0x3888. 160 = 10 x 16 is the extent to the next referenced
 ; object.
@@ -5371,14 +5372,23 @@ RhythmDrum_EntryCounts:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19374, 0x46
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] RhythmDrum_Entries
-; RhythmDrum_Entries -- 1718 u32 in 70 consecutive groups whose sizes
-; are RhythmDrum_EntryCounts (sum 1718 = 6872 / 4 -- the layout is
-; pinned by that sum). VoiceAssign_ProcessRequest (v10/v9 0xf67128, v7
-; 0xf66d24): xde = (sum of the counts before the group + byte 0x37b2 +
-; drum) * 4; `ld xhl,(<this>+xde)`. The values (0x100, 0x10100, 0x20100,
-; ...) are not addresses; their field meaning is not established.
+; RhythmDrum_Entries -- 1718 entries of four bytes in 70 consecutive groups
+; whose sizes are RhythmDrum_EntryCounts (sum 1718 = 6872 / 4).
+; VoiceAssign_ProcessRequest (v10/v9 0xf67128, v7 0xf66d24) picks entry (sum of
+; the counts before the group + byte 0x37b2 + drum) and splits it, each
+; byte on its own path (VoiceAssign_Process_Loop / _Return, VoiceAssign_ProcessRequest_Helper):
+;   +3 is stored at RAM 0x3881 + drum;
+;   +0/+1 (HL) go to SndParam_ApplyProgramChange_Safe (HL to RAM 0x90ea,
+;      selector 72 to 0x90ec, SndParam_ApplyAndFetch, new HL from 0x90ee),
+;      then VoiceParam_ClampAndValidate; the resulting L and H are stored
+;      at RAM 0x38d2 + drum and 0x38d9 + drum and select
+;      RhythmROM_BankProgramLocators entry H * 128 + (L & 0x7f);
+;   +2 is the index VoiceAssign_ProcessRequest_Helper reads the byte table
+;      RegPreset_LoadVoiceData with; that byte & 7 picks entries of two
+;      word tables.
+; So an entry is four fields, not one number.
 ;
-; Typed in naka_widget_descriptors.c as uint32_t
+; Typed in naka_widget_descriptors.c as rhythm_drum_entry_t
 ; RhythmDrum_Entries[1718].
 ; -----------------------------------------------------------------------------
 RhythmDrum_Entries:

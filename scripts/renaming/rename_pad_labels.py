@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""rename_pad_labels.py -- the `__pad_<ADDR>` labels get structural names that say what is there.
+
+QUESTION THIS ANSWERS / JOB IT DOES
+  Each KN5000 maincpu tree carries ~137 `__pad_F6xxxx` labels from the 2026-03 conversion.  The
+  name claims padding and only states an address -- and the semantic-debt dashboard cannot see
+  them (its address-label column skips `__` names).  Some do head padding (`__pad_F60077: nop /
+  nop` between two routines); others head real code that something calls
+  (`__pad_F671E7`, called by VoiceAssign_Process_Loop, is the routine that applies an entry's
+  preset selector).  Per label, from the source alone:
+    Pad     only nop / fill lines follow it up to the next label   -> <previous routine>_Pad
+    Helper  something calls it (call / calr)                        -> <first caller's routine>_Helper
+    Join    something branches to it (jr / jrl / jp / djnz)         -> <parent>_Join
+    Code    nothing references it and code follows                  -> <parent>_Code
+  (routine = the nearest column-0 label above that is not structural and not another __pad_;
+  unique with 2, 3, ...).  The renames go through scripts/renaming/rename_pad_labels_<tree>.sed,
+  applied to the tree's .s/.c/.ld.  Labels emit no byte: `make gate-all` proves it.
+
+USAGE
+  python3 scripts/renaming/rename_pad_labels.py --tree v10 [--apply]
+"""
+import argparse
+import collections
+import glob
+import os
+import re
+import subprocess
+import sys
+
+REPO = subprocess.run(["git", "rev-parse", "--show-toplevel"], capture_output=True,
+                      text=True).stdout.strip() or "."
+sys.path.insert(0, os.path.join(REPO, "scripts", "converters"))
+import symbolize_far_pointer_pushes as fp     # noqa: E402
+
+COL0 = re.compile(r'^([A-Za-z_][\w.$]*):')
+CALL = re.compile(r'^\s*(?:[A-Za-z_][\w.$]*:)?\s*(call|calr)\b', re.I)
+JUMP = re.compile(r'^\s*(?:[A-Za-z_][\w.$]*:)?\s*(jr|jrl|jp|djnz)\b', re.I)
+FILL = re.compile(r'^\s*(nop\b|\.fill\b|\.zero\b|\.space\b|\.byte\s+(0x00|0xff|0)(\s*,\s*(0x00|0xff|0))*\s*$)', re.I)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--tree", required=True, choices=("v10", "v9", "v7"))
+    ap.add_argument("--apply", action="store_true")
+    a = ap.parse_args()
+    files = sorted(glob.glob(os.path.join(REPO, a.tree, "maincpu", "**", "*.s"), recursive=True))
+    texts = {f: open(f, "rb").read().decode("latin-1").split("\n") for f in files}
+    taken, pads = set(), {}
+    for f, L in texts.items():
+        for i, l in enumerate(L):
+            m = COL0.match(l)
+            if m:
+                taken.add(m.group(1))
+                if m.group(1).startswith("__pad_"):
+                    pads[m.group(1)] = (f, i)
+    pat = re.compile(r'(?<![\w.$])(%s)(?![\w$])' % "|".join(map(re.escape, pads)))
+    refs = collections.defaultdict(list)                # pad -> [(kind, file, line)]
+    for f, L in texts.items():
+        for i, l in enumerate(L):
+            code = l.split(";", 1)[0]
+            for m in pat.finditer(code):
+                if code.strip().startswith(m.group(1) + ":"):
+                    continue
+                refs[m.group(1)].append(("call" if CALL.match(code) else "jump" if JUMP.match(code) else "other", f, i))
+
+    def routine_above(f, i):
+        for j in range(i, -1, -1):
+            m = COL0.match(texts[f][j])
+            if m and not fp.STRUCT.search(m.group(1)) and not m.group(1).startswith("__"):
+                return m.group(1)
+        return re.sub(r'\W', '_', os.path.splitext(os.path.basename(f))[0])
+    st, ren = collections.Counter(), {}
+    for p, (f, i) in sorted(pads.items(), key=lambda kv: kv[1]):
+        L = texts[f]
+        body = []
+        for j in range(i + 1, len(L)):
+            if COL0.match(L[j]):
+                break
+            c = L[j].split(";", 1)[0].strip()
+            if c:
+                body.append(c)
+        r = refs.get(p, [])
+        if any(k == "call" for k, _, _ in r):
+            _, cf, ci = next(x for x in r if x[0] == "call")
+            base, role = routine_above(cf, ci) + "_Helper", "Helper"
+        elif any(k == "jump" for k, _, _ in r):
+            base, role = routine_above(f, i) + "_Join", "Join"
+        elif body and all(FILL.match(c) for c in body):
+            base, role = routine_above(f, i) + "_Pad", "Pad"
+        elif not r:
+            base, role = routine_above(f, i) + "_Code", "Code"
+        else:
+            st["referenced otherwise: left"] += 1
+            continue
+        nm, k = base, 1
+        while nm in taken:
+            k += 1
+            nm = "%s%d" % (base, k)
+        taken.add(nm)
+        ren[p] = nm
+        st[role] += 1
+    print("%s: %d __pad_ labels; %s%s" % (a.tree, len(pads), dict(st), "" if a.apply else " (dry run)"))
+    if a.apply and ren:
+        sed = os.path.join(REPO, "scripts", "renaming", "rename_pad_labels_%s.sed" % a.tree)
+        with open(sed, "w") as s:
+            s.write("# generated by scripts/renaming/rename_pad_labels.py: __pad_<ADDR> labels -> structural names.\n")
+            for old, new in sorted(ren.items(), key=lambda kv: -len(kv[0])):
+                s.write("s/\\b%s\\b/%s/g\n" % (old, new))
+        targets = files + glob.glob(os.path.join(REPO, a.tree, "maincpu", "**", "*.c"), recursive=True) + \
+            glob.glob(os.path.join(REPO, a.tree, "maincpu", "**", "*.ld"), recursive=True)
+        subprocess.run(["sed", "-i", "-f", sed] + targets, check=True)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

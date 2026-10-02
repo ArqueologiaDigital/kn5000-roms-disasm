@@ -25823,7 +25823,7 @@ TmFlashWrite_ValidateParams:
 	jrl	lt, TmFlashWrite_Block2_Code_Skip
 	ld	iz, 0:i3
 	cp	(xsp+4), 64
-	jr	nc, FileIO_ByteBlock_DemoProc1_Helper7_Loop2
+	jr	nc, TmFlashWrite_ValidateParams_Loop2
 FileIO_ByteBlock_DemoProc1_Helper7_Loop:
 	ld	a, (xsp+4)
 	extz	wa
@@ -25848,7 +25848,7 @@ FileIO_ByteBlock_DemoProc1_Helper7_Loop:
 	lda	xde, (xhl+30720)
 	ldw	bc, 9400
 	jr	TmFlashWrite_Block3
-FileIO_ByteBlock_DemoProc1_Helper7_Loop2:
+TmFlashWrite_ValidateParams_Loop2:
 	ld	a, (xsp+4)
 	extz	wa
 	ldto_berp	c, 248
@@ -25856,7 +25856,7 @@ FileIO_ByteBlock_DemoProc1_Helper7_Loop2:
 	calr	HdaeRom_AltHandler
 	inc	1, iz
 	cp	iz, 128
-	jr	c, FileIO_ByteBlock_DemoProc1_Helper7_Loop2
+	jr	c, TmFlashWrite_ValidateParams_Loop2
 	calr	HdaeRom_DataDispatch_Block
 	lda	xwa, (0x1e4aa7:24)
 	ldw	bc, 0x2800
@@ -25868,13 +25868,13 @@ TmFlashWrite_Block3:
 	extz	wa
 	ldw	bc, 255
 	call	BuildAndSendPacket_Block
-	jr	FileIO_ByteBlock_DemoProc1_Helper7_Join
+	jr	TmFlashWrite_ValidateParams_Join
 TmFlashWrite_Block2_Code_Skip:
 	ld	a, (xsp+0x4)
 	extz	wa
 	ldw	bc, 255
 	call	COMM_BuildAndSendPacket
-FileIO_ByteBlock_DemoProc1_Helper7_Join:
+TmFlashWrite_ValidateParams_Join:
 	call	FDemoText_RefreshFullDisplay
 	pop	xiz
 	inc	2, xsp
@@ -26162,10 +26162,10 @@ TmFlash_CompareStrings_Loop:
 	call	Mem_Compare
 	add	xsp, 10
 	cp	hl, 0:i3
-	jr	nz, MssNameFunc_Helper_Skip
+	jr	nz, TmFlash_CompareStrings_Skip
 	ld	xhl, xiz
 	jr	TmFlash_CompareStrings_Epilogue
-MssNameFunc_Helper_Skip:
+TmFlash_CompareStrings_Skip:
 	inc	1, xiz
 	decm	1, (xsp+4)
 	ld	wa, (xsp+6)

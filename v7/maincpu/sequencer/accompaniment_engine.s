@@ -15543,7 +15543,7 @@ AccPatch_ResetSeqCounters_AdvLoop:
 AccPatch_ResetSeqCounters_Done:
 	ret
 
-__pad_F60077:
+AccPatch_ResetSeqCounters_AdvLoop_Pad:
 	nop
 	nop
 
@@ -15568,7 +15568,7 @@ AccPatch_ScanSeqEnd_HandleMarker:
 AccPatch_ScanDone:
 	ret
 
-__pad_F600A1:
+AccPatch_ScanDone_Pad:
 	nop
 	nop
 
@@ -15682,7 +15682,7 @@ AccPatch_UpdateSeqState_StoreFlags:
 AccPatch_UpdateSeqState_Return:
 	ret
 
-__pad_F601A3:
+AccPatch_UpdateSeqState_StoreFlags_Pad:
 	nop
 	nop
 
@@ -15789,7 +15789,7 @@ AccPatch_SeekFwd_AdvLoop:
 AccPatch_SeekFwd_Done:
 	ret
 
-__pad_F60273:
+AccPatch_SeekFwd_AdvLoop_Pad:
 	nop
 	nop
 
@@ -15830,7 +15830,7 @@ AccPatch_ParseHdr_RestorePos:
 AccPatch_ParseHdr_Return:
 	ret
 
-__pad_F602CB:
+AccPatch_ParseHdr_RestorePos_Pad:
 	nop
 	nop
 
@@ -15912,7 +15912,7 @@ AccPatch_ResumeSeq_InitSlot:
 AccPatch_ResumeSeq_Return:
 	ret
 
-__pad_F60386:
+AccPatch_ResumeSeq_InitSlot_Pad:
 	nop
 	nop
 
@@ -15954,7 +15954,7 @@ AccPatch_CheckChanged_DoCopy:
 AccPatch_CheckChanged_Return:
 	ret
 
-__pad_F603FC:
+AccPatch_CheckChanged_DoCopy_Pad:
 	nop
 	nop
 
@@ -15989,7 +15989,7 @@ AccPatch_CopyEntry_Store:
 	ld	wa, (13928:16)
 	ld	(13676:16), wa
 	ret
-__pad_F60464:
+AccPatch_CopyEntry_Store_Pad:
 	nop
 	nop
 
@@ -16040,7 +16040,7 @@ AccPatch_UpdateEntry_StoreDirect:
 AccPatch_NullRet:
 	ret
 
-__pad_F604BB:
+AccPatch_NullRet_Pad:
 	nop
 	nop
 
@@ -16261,7 +16261,7 @@ AccPatch_ContinueProcessing:
 AccPatch_EventDispatch_Done:
 	ret
 
-__pad_F60699:
+AccPatch_ContinueProcessing_Pad:
 	nop
 	nop
 
@@ -16284,7 +16284,7 @@ AccPatch_UpdatePlayback_CheckQueue:
 AccPatch_UpdatePlayback_ClearStep:
 	ld	(13667:16), 0
 	ret
-__pad_F606D3:
+AccPatch_UpdatePlayback_ClearStep_Pad:
 	nop
 	nop
 
@@ -16306,7 +16306,7 @@ AccPatch_AdvSlotCtr_Next:
 	cp	xhl, 13742
 	jr	nz, -31
 	ret
-__pad_F606FA:
+AccPatch_AdvSlotCtr_Store_Pad:
 	nop
 	nop
 
@@ -16333,7 +16333,7 @@ AccPatch_ReadBuf_StoreAndNext:
 AccPatch_ReadBuf_Done:
 	ret
 
-__pad_F6071F:
+AccPatch_ReadBuf_StoreAndNext_Pad:
 	nop
 	nop
 
@@ -16359,7 +16359,7 @@ AccPatch_ParseResolve_IncStep:
 	ld	a, (13916:16)
 	ld	(13668:16), a
 	ret
-__pad_F60764:
+AccPatch_ParseResolve_IncStep_Pad:
 	nop
 	nop
 
@@ -16390,7 +16390,7 @@ AccPatch_LookupStep_StoreResult:
 AccPatch_SetStepDone:
 	ret
 
-__pad_F607AA:
+AccPatch_SetStepDone_Pad:
 	nop
 	nop
 
@@ -16655,7 +16655,7 @@ AccPatch_SeqAdvStep_StorePos:
 	ld	(13686:16), hl
 	ldw	(13688:16), 6
 	ret
-__pad_F609EE:
+AccPatch_SeqAdvStep_StorePos_Pad:
 	nop
 	nop
 
@@ -16723,7 +16723,7 @@ AccPatch_TransposeCopy_DoCopy:
 
 
 
-__pad_F60A51:
+AccPatch_TransposeCopy_DoCopy_Pad:
 	nop
 	nop
 
@@ -16759,7 +16759,7 @@ AccPatch_FetchSequence:
 AccPatch_ProcessMarker_Return:
 	ret
 
-__pad_F60A95:
+AccPatch_FetchSequence_Pad:
 	nop
 	nop
 
@@ -16872,7 +16872,7 @@ AccPatch_InitSlot_Finalize:
 	ld	wa, (13928:16)
 	ld	(13672:16), wa
 	ret
-__pad_F60BD0:
+AccPatch_InitSlot_Finalize_Pad:
 	nop
 	nop
 
@@ -16917,7 +16917,7 @@ AccPatch_FindFreeSlot_Found:
 
 
 
-__pad_F60C04:
+AccPatch_FindFreeSlot_Found_Pad:
 	nop
 	nop
 
@@ -17014,7 +17014,7 @@ AccPatch_AdvAllSteps_Next:
 	cp	xix, 13742
 	jr	c, -29
 	ret
-__pad_F60D0C:
+AccPatch_AdvAllSteps_InnerLoop_Pad:
 	nop
 	nop
 
@@ -17040,7 +17040,7 @@ AccPatch_AdvSingleStep_Store:
 	ld (xix + 5), a
 	ret
 
-__pad_F60D33:
+AccPatch_AdvSingleStep_Store_Pad:
 	nop
 	nop
 
@@ -17055,7 +17055,7 @@ AccPatch_DispatchQueued_Loop:
 	jr	c, -23	; -> 0xF60936
 	ldw	(13682:16), 0
 	ret
-__pad_F60D58:
+AccPatch_DispatchQueuedNotes_Pad:
 	nop
 	nop
 
@@ -17098,7 +17098,7 @@ AccPatch_DispatchNote_NextSlot:
 AccPatch_DispatchNote_Return:
 	ret
 
-__pad_F60DB4:
+AccPatch_DispatchNote_NextSlot_Pad:
 	nop
 	nop
 
@@ -17140,7 +17140,7 @@ AccPatch_WriteVel_RestorePos:
 	ld	wa, (13920:16)
 	ld	(13688:16), wa
 	ret
-__pad_F60E12:
+AccPatch_WriteVel_RestorePos_Pad:
 	nop
 	nop
 
@@ -17156,7 +17156,7 @@ AccPatch_WriteSeqByte:
 	ld	(xix), a
 	pop	xix
 	ret
-__pad_F60E2A:
+AccPatch_WriteSeqByte_Pad:
 	nop
 	nop
 
@@ -17183,7 +17183,7 @@ AccPatch_CalcBlockCopy_DiffEntry:
 	jr	z, AccPatch_CalcBlockCopy_StoreIY
 	jr	AccPatch_CalcBlockCopy_CheckIX
 AccPatch_CalcBlockCopy_Clamp:
-	calr __pad_F60E86
+	calr AccPatch_CalcBlockCopy_Clamp_Helper
 	jr AccPatch_CalcBlockCopy_StoreIX
 
 AccPatch_CalcBlockCopy_StoreIY:
@@ -17200,7 +17200,7 @@ AccPatch_CalcBlockCopy_StoreIX:
 AccPatch_CalcBlockCopy_Done:
 	ret
 
-__pad_F60E86:
+AccPatch_CalcBlockCopy_Clamp_Helper:
 	ld wa, (0x35c4:16)
 	sub wa, (0x35c2:16)
 	ld (0x35b8:16), wa
@@ -17899,7 +17899,7 @@ AccPlayback_Finalize:
 	calr AccPlayback_UpdateRhythmSustain
 	ret
 
-__pad_F614A3:
+AccPlayback_Finalize_Code:
 	nop
 	nop
 	pushw	hl
@@ -17924,7 +17924,7 @@ ToneGen_CalcBufferAddr:
 	add xhl, 0x95c00
 	ret
 
-__pad_F614C1:
+ToneGen_CalcBufferAddr_Pad:
 	nop
 	nop
 
@@ -17974,7 +17974,7 @@ AccTiming_CompareStyles:
 AccTiming_Return:
 	ret
 
-__pad_F6152D:
+AccTiming_CompareStyles_Pad:
 	nop
 	nop
 
@@ -17999,7 +17999,7 @@ AccBeatAdj_StoreAndClear:
 	ld	(13408:16), 0
 	ld	(13407:16), 0
 	ret
-__pad_F61565:
+AccBeatAdj_StoreAndClear_Pad:
 	nop
 	nop
 
@@ -18100,7 +18100,7 @@ ToneGen_SaveRegsAndCall:
 	pop xwa
 	ret
 
-__pad_F61634:
+ToneGen_SaveRegsAndCall_Pad:
 	nop
 	nop
 
@@ -18193,7 +18193,7 @@ ToneGen_MapNote_OrMask:
 ToneGen_ParseEvent_Done:
 	ret
 
-__pad_F616D5:
+ToneGen_MapNote_OrMask_Pad:
 	nop
 	nop
 
@@ -18254,7 +18254,7 @@ AccPartChange_ProcessBit2:
 	calr ToneGen_CalcNoteWithWrap
 	cp bc, wa
 	jr ugt, AccPartChange_StoreResult
-	jr __pad_F61760
+	jr ToneGen_CalcAndRestart_Join
 
 AccPartChange_StoreResult:
 	; anddi8 (0x34d0), 223 (v7 patched)
@@ -18263,7 +18263,7 @@ ToneGen_CalcAndRestart:
 	calr ToneGen_RecalcAndRestart
 	jrl ToneGen_UpdateAndInitPattern
 
-__pad_F61760:
+ToneGen_CalcAndRestart_Join:
 	ld	wa, (0x33cf:16)
 	ld	(0x3478:16), wa
 	ld	wa, (0x33ad:16)
@@ -18432,7 +18432,7 @@ ToneGen_ProcessRestore_WrapOctave:
 ToneGen_ProcessRestore_Return:
 	ret
 
-__pad_F618FF:
+ToneGen_ProcessRestore_WrapOctave_Pad:
 	nop
 	nop
 
@@ -18545,7 +18545,7 @@ ToneGen_Velocity_Store:
 
 
 
-__pad_F61A1C:
+ToneGen_Velocity_Store_Pad:
 	nop
 	nop
 
@@ -18580,7 +18580,7 @@ ToneGen_CalcPos_Return:
 	ld w, d
 	ret
 
-__pad_F61A62:
+ToneGen_CalcPos_SubOctave_Pad:
 	nop
 	nop
 
@@ -18616,7 +18616,7 @@ ToneGen_AdjWrap_WrapMeasure:
 SustainLevel_SetExit:
 	ret
 
-__pad_F61AAF:
+SustainLevel_SetExit_Pad:
 	nop
 	nop
 
@@ -18683,7 +18683,7 @@ ToneGen_ScanRestored_EndMarker:
 ToneGen_ScanRestored_Return:
 	ret
 
-__pad_F61B56:
+ToneGen_ScanRestored_EndMarker_Pad:
 	nop
 	nop
 
@@ -18701,7 +18701,7 @@ ToneGen_GetSlot_Lookup:
 	ld	hl, (xiy+hl)
 	ret
 
-__pad_F61B78:
+ToneGen_GetSlot_Lookup_Pad:
 	nop
 	nop
 
@@ -18727,7 +18727,7 @@ ToneGen_CalcWrap_Store:
 	add	h, a
 	ld	wa, hl
 	ret
-__pad_F61BAB:
+ToneGen_CalcWrap_Store_Pad:
 	nop
 	nop
 
@@ -18744,7 +18744,7 @@ ToneGen_RecalcAndRestart:
 	ld	(13942:16), 4
 	ld	(13947:16), 255
 	ret
-__pad_F61BCE:
+ToneGen_RecalcAndRestart_Pad:
 	nop
 	nop
 
@@ -18777,7 +18777,7 @@ ToneGen_PeriodWrap_ResetBar:
 PitchValidate_Exit:
 	ret
 
-__pad_F61C16:
+ToneGen_PeriodWrap_ResetBar_Pad:
 	nop
 	nop
 
@@ -18803,7 +18803,7 @@ ToneGen_ClassifyStereoType:
 ToneGen_Classify_Return:
 	ret
 
-__pad_F61C3F:
+ToneGen_ClassifyStereoType_Pad:
 	nop
 	nop
 
@@ -18840,7 +18840,7 @@ ToneGen_ClassifyStereoSlot_Common:
 	ld	a, (xhl+wa)
 	ld (0x3685:16), a
 	ret
-__pad_F61C98:
+ToneGen_ClassifyStereoSlot_Common_Pad:
 	nop
 	nop
 
@@ -18937,7 +18937,7 @@ ToneGen_ClassifyMono_WriteNew:
 ToneGen_ClassifyMono_Return:
 	ret
 
-__pad_F61D76:
+ToneGen_ClassifyMono_WriteNew_Pad:
 	nop
 	nop
 
@@ -19067,7 +19067,7 @@ AccPlayback_NoteOn_WritePan:
 AccPlayback_NoteOn_Return:
 	ret
 
-__pad_F61EAF:
+AccPlayback_NoteOn_WritePan_Pad:
 	nop
 	nop
 
@@ -19166,7 +19166,7 @@ AccPlayback_AdvPattern_Done:
 AccPlayback_AdvPattern_Nop:
 	ret
 
-__pad_F61F3E:
+AccPlayback_AdvPattern_Nop_Pad:
 	nop
 	nop
 
@@ -19185,7 +19185,7 @@ AccPlayback_AdvanceRingBuffer:
 AccPlayback_AdvRingBuf_Return:
 	jr AccPlayback_TrackPosition
 
-__pad_F61F65:
+AccPlayback_AdvanceRingBuffer_Join:
 	ld w, 0xc:opc
 	sub w, a
 	add	(xix+hl), w
@@ -19198,7 +19198,7 @@ AccPlayback_TrackPosition:
 	ld	a, (xix+wa)
 	pop	xix
 	bit	4, (0x344e:16)
-	jr	z, __pad_F61FAC
+	jr	z, AccPlayback_TrackPosition_Join
 	ld	c, a
 	push	xix
 	xor	w, w
@@ -19214,7 +19214,7 @@ AccPlayback_TrackPosition:
 AccPlayback_TrackPos_Return:
 	ld a, c
 
-__pad_F61FAC:
+AccPlayback_TrackPosition_Join:
 	bit	6, (0x344e:16)
 	jr	z, AccPlayback_TrackPos_WrapCheck
 	bit	3, (0x36ff:16)
@@ -19250,8 +19250,8 @@ ToneGen_LoadRhythmPatternParams:
 AccPlayback_StyleRecalc_Return:
 	ret
 
-__pad_F62002:
-; __pad_F62002 -- NOT padding; the name is historical (it is also the base of
+ToneGen_LoadRhythmPatternParams_Pad:
+; ToneGen_LoadRhythmPatternParams_Pad -- NOT padding; the name is historical (it is also the base of
 ; the __pad_F62002_0x* symbols in shared/positional_labels.s, so it is kept).
 ; ** RE-TYPED 2026-09-25 (lane accomp): was nop/normal/scf mnemonics
 ; (data-as-code).  The same two tables as AccPatch_TransposeNoteTable, read
@@ -19368,7 +19368,7 @@ AccPlayback_Ongoing_D2Type:
 	ld	c, a
 	cp	de, bc
 	jr	ule, AccPlayback_Ongoing_StoreDone
-	calr	__pad_F621A7
+	calr	AccPlayback_Ongoing_D2Type_Helper
 	ld	hl, (13263:16)
 	calr	ToneGen_CalcBufferAddr
 	ld	a, (xhl+iy)
@@ -19420,7 +19420,7 @@ ToneGen_StepVoiceReturn:
 AccPlayback_Ongoing_Return:
 	ret
 
-__pad_F62169:
+ToneGen_StepVoiceReturn_Pad:
 	nop
 	nop
 
@@ -19449,7 +19449,7 @@ AccPlayback_Ongoing_AdvDone:
 	nop
 	nop
 
-__pad_F621A7:
+AccPlayback_Ongoing_D2Type_Helper:
 	ld	wa, (13263:16)
 	ld	(13438:16), wa
 	ld	a, (13209:16)
@@ -19503,8 +19503,8 @@ AccPlayback_VoiceState_CalcOff:
 AccPlayback_VoiceState_Return:
 	ret
 
-__pad_F62230:
-; __pad_F62230 -- NOT padding; the name is historical (base of the
+AccPlayback_VoiceState_CalcOff_Pad:
+; AccPlayback_VoiceState_CalcOff_Pad -- NOT padding; the name is historical (base of the
 ; __pad_F62230_0x* symbols in shared/positional_labels.s, so it is kept).
 ; ** RE-TYPED 2026-09-25 (lane accomp): was `.byte 0x9d` / `ldw de,0` / nop
 ; runs (data-as-code).  Two parallel 17-entry tables of RAM pointers, indexed
@@ -19570,7 +19570,7 @@ ToneGen_SearchBuf_FollowChain:
 ToneGen_SearchBuf_Return:
 	ret
 
-__pad_F622FD:
+ToneGen_SearchBuf_FollowChain_Pad:
 	nop
 	nop
 
@@ -19652,7 +19652,7 @@ FlagClear_Exit:
 AccBit5_Return:
 	ret
 
-__pad_F623D8:
+AccVoice_InitPlaybackState_Pad:
 	nop
 	nop
 
@@ -19733,7 +19733,7 @@ ToneGen_ScanPos_WrapBlock:
 PlaybackState_InitDone:
 	ret
 
-__pad_F62498:
+PlaybackState_InitDone_Pad:
 	nop
 	nop
 
@@ -19762,7 +19762,7 @@ ToneGen_InitPlay_SetupTables:
 	ld	hl, (xix)
 	ld	(13464:16), hl
 	ret
-__pad_F624E5:
+ToneGen_InitPlay_SetupTables_Pad:
 	nop
 	nop
 
@@ -19782,7 +19782,7 @@ ToneGen_AdvanceVoiceStep:
 ToneGen_AdvVoiceStep_Return:
 	ret
 
-__pad_F62502:
+ToneGen_AdvanceVoiceStep_Pad:
 	nop
 	nop
 
@@ -19802,7 +19802,7 @@ AccPlayback_ProcessTempoAdvance:
 AccPlayback_TempoAdv_Return:
 	ret
 
-__pad_F62534:
+AccPlayback_ProcessTempoAdvance_Pad:
 	nop
 	nop
 
@@ -19902,7 +19902,7 @@ ToneGen_AdvTempo_Continue:
 ToneGen_AdvTempo_StoreBeat:
 	ld	(13407:16), w
 	ret
-__pad_F62627:
+ToneGen_AdvTempo_StoreBeat_Pad:
 	nop
 	nop
 
@@ -19931,7 +19931,7 @@ AccPlayback_UpdateRhythmSustain:
 AccPlayback_RhythmSust_Return:
 	ret
 
-__pad_F6265F:
+AccPlayback_UpdateRhythmSustain_Pad:
 	nop
 	nop
 
@@ -19964,7 +19964,7 @@ AccVoice_DispatchType5Handler:
 TempoCheck_Exit:
 	ret
 
-__pad_F626A6:
+AccVoice_DispatchType5Handler_Pad:
 	nop
 	nop
 
@@ -20062,7 +20062,7 @@ ToneGen_AdjVel_WriteToBuffer:
 ToneGen_AdjVel_Return:
 	ret
 
-__pad_F62776:
+ToneGen_AdjVel_WriteToBuffer_Pad:
 	nop
 	nop
 
@@ -20116,7 +20116,7 @@ ToneGen_AdjVol_WriteToBuffer:
 ToneGen_AdjVol_Return:
 	ret
 
-__pad_F627F4:
+ToneGen_AdjVol_WriteToBuffer_Pad:
 	nop
 	nop
 
@@ -20182,7 +20182,7 @@ ToneGen_Stereo_WriteParam:
 ToneGen_Stereo_Return:
 	ret
 
-__pad_F6288E:
+ToneGen_Stereo_WriteParam_Code:
 	nop
 	nop
 	ret
@@ -20298,9 +20298,9 @@ ToneGen_MultiChan_WriteFinalNote:
 	nop
 
 ToneGen_CompareVoiceBlocks:
-	calr __pad_F62A0D
-	calr __pad_F62AAC
-	calr __pad_F62B29
+	calr ToneGen_CompareVoiceBlocks_Helper
+	calr ToneGen_CompareVoiceBlocks_Helper2
+	calr ToneGen_CompareVoiceBlocks_Helper3
 	calr ToneGen_StepWithBoundsCheck
 	ret
 
@@ -20308,7 +20308,7 @@ ToneGen_MultiChan_Return:
 	nop
 	nop
 
-__pad_F62A0D:
+ToneGen_CompareVoiceBlocks_Helper:
 	ld wa, (0x3476:16)
 	ld (0x33ad:16), wa
 	ld wa, (0x3478:16)
@@ -20354,7 +20354,7 @@ ToneGen_VoiceParamDisp_Return:
 	nop
 	nop
 
-__pad_F62AAC:
+ToneGen_CompareVoiceBlocks_Helper2:
 	ld wa, (0x3478:16)
 	ld (0x33cf:16), wa
 	ld (0x35be:16), wa
@@ -20395,7 +20395,7 @@ ToneGen_CalcBeat_Return:
 	nop
 	nop
 
-__pad_F62B29:
+ToneGen_CompareVoiceBlocks_Helper3:
 	ld XIY,0x000035ce
 	ld a, (0x339a:16)
 	ld (XIY),A
@@ -20432,7 +20432,7 @@ ToneGen_ReadBufUtil_Loop:
 	ld (xiy), 0x91
 	ld (xiy + 6), 0x3
 	ld (xiy + 7), 0x0
-	jr __pad_F62BC0
+	jr AccVoice_WriteNoteEventToBuffer_Join
 
 AccVoice_WriteNoteEventToBuffer:
 	xor xhl, xhl
@@ -20455,10 +20455,10 @@ AccVoice_WriteNoteEventToBuffer:
 ToneGen_ReadBufUtil_Return:
 	pop xix
 
-__pad_F62BC0:
+AccVoice_WriteNoteEventToBuffer_Join:
 	ret
 
-__pad_F62BC1_2:
+AccVoice_WriteNoteEventToBuffer_Pad:
 	nop
 	nop
 
@@ -20500,7 +20500,7 @@ ToneGen_SeqAdvanceMain:
 ToneGen_SeqAdv_Return:
 	ret
 
-__pad_F62C3E:
+ToneGen_SeqAdvanceMain_Pad:
 	nop
 	nop
 
@@ -20637,7 +20637,7 @@ ToneGen_AdvBeat_Return:
 	pop xhl
 	ret
 
-__pad_F62D57:
+ToneGen_ReadBufferWithIndirection_Pad:
 	nop
 	nop
 
@@ -20689,7 +20689,7 @@ ToneGen_StepFwd_Alternate:
 	ld C, 0x00:opc
 	jr t, ToneGen_StepAlt_Return
 ToneGen_StepAlt_CheckBeat:
-	calr __pad_F62E01
+	calr ToneGen_StepAlt_CheckBeat_Helper
 	calr ChordDetect_CheckDescending
 	calr ChordDetect_CheckRoot1
 	calr ChordDetect_CheckInversion1
@@ -20719,7 +20719,7 @@ ToneGen_StepAlt_Done:
 	nop
 	nop
 
-__pad_F62E01:
+ToneGen_StepAlt_CheckBeat_Helper:
 	ld a, c
 	add a, 0x3
 	cp b, a
@@ -20736,7 +20736,7 @@ __pad_F62E01:
 RhythmParam_CheckExit6:
 	ret
 
-__pad_F62E1B:
+RhythmParam_CheckExit6_Pad:
 	nop
 	nop
 
@@ -20760,7 +20760,7 @@ ChordDetect_CheckDescending:
 ToneGen_NullRet2:
 	ret
 
-__pad_F62E3D:
+ToneGen_NullRet2_Pad:
 	nop
 	nop
 
@@ -20780,7 +20780,7 @@ ChordDetect_CheckRoot1:
 RhythmParam_CheckExit5:
 	ret
 
-__pad_F62E57:
+RhythmParam_CheckExit5_Pad:
 	nop
 	nop
 
@@ -20800,7 +20800,7 @@ ChordDetect_CheckInversion1:
 RhythmParam_CheckExit4:
 	ret
 
-__pad_F62E71:
+RhythmParam_CheckExit4_Pad:
 	nop
 	nop
 
@@ -20821,7 +20821,7 @@ ChordDetect_CheckAscending:
 RhythmParam_CheckExit3:
 	ret
 
-__pad_F62E8D:
+RhythmParam_CheckExit3_Pad:
 	nop
 	nop
 
@@ -20844,7 +20844,7 @@ ChordDetect_CheckMirror:
 Rhythm_NullRet:
 	ret
 
-__pad_F62EAC:
+Rhythm_NullRet_Pad:
 	nop
 	nop
 
@@ -20864,7 +20864,7 @@ ChordDetect_CheckRoot2:
 RhythmParam_CheckExit2:
 	ret
 
-__pad_F62EC5:
+RhythmParam_CheckExit2_Pad:
 	nop
 	nop
 
@@ -20884,7 +20884,7 @@ ChordDetect_CheckInversion2:
 RhythmParam_ValidExit:
 	ret
 
-__pad_F62EDE:
+RhythmParam_ValidExit_Pad:
 	nop
 	nop
 
@@ -20931,7 +20931,7 @@ AccPlayback_MeasPos_SmallUpper:
 RhythmChannel_NullRet:
 	ret
 
-__pad_F62F32:
+RhythmChannel_NullRet_Pad:
 	nop
 	nop
 
@@ -21109,7 +21109,7 @@ AccPat_ShiftAndMask:
 	popw hl
 	ret
 
-__pad_F630DE:
+AccPat_ShiftAndMask_Pad:
 	nop
 	nop
 
@@ -21255,7 +21255,7 @@ AccPat_CleanupAndFree:
 AccPat_Dispatch_Return:
 	ret
 
-__pad_F6323D:
+AccPat_CleanupAndFree_Pad:
 	nop
 	nop
 
@@ -21367,7 +21367,7 @@ AccPat_DualVoice_ReadParamsA:
 
 
 
-__pad_F6333A:
+AccPat_DualVoice_ReadParamsA_Pad:
 	nop
 	nop
 
@@ -21398,7 +21398,7 @@ AccPatch_LoadDualVoiceParamsB:
 
 
 
-__pad_F63364:
+AccPatch_LoadDualVoiceParamsB_Pad:
 	nop
 	nop
 
@@ -21419,7 +21419,7 @@ AccPat_DualVoice_CopyAllBanks:
 	ld	ix, (13572:16)
 	calr	3
 	ret
-__pad_F6339E:
+AccPat_DualVoice_CopyAllBanks_Pad:
 	nop
 	nop
 
@@ -21443,7 +21443,7 @@ ToneBank_CopyEntry:
 	add	xix, 6
 	ldw	bc, 249
 	ldir85
-__pad_F633E3:
+ToneBank_CopyEntry_Join:
 	cpw	(0x3512:16), 65535
 	jrl	z, ToneBank_CopyComplete_Return
 	calr	ToneBank_CopyChunk_Return
@@ -21484,7 +21484,7 @@ __pad_F633E3:
 	add	xix, 6
 	ldw	bc, 249
 	ldir85
-	jrl	__pad_F633E3
+	jrl	ToneBank_CopyEntry_Join
 ToneBank_CopyComplete_Return:
 	ld	hl, (13562:16)
 	ld	xwa, (14614:16)
@@ -21505,7 +21505,7 @@ ToneBank_ComputeEntryAddress:
 ToneBank_CopyChunk_Return:
 	ldw de, 0x96
 
-__pad_F63498:
+ToneBank_ComputeEntryAddress_Join:
 	cp	de, 340
 	jr	nc, ToneBank_ComputeAddr_CheckRange
 	ld	hl, de
@@ -21514,14 +21514,14 @@ __pad_F63498:
 	bit	7, (xhl)
 	jr	z, ToneBank_ComputeAddr_Return
 	inc	1, de
-	jr	__pad_F63498
+	jr	ToneBank_ComputeEntryAddress_Join
 ToneBank_ComputeAddr_CheckRange:
 	; ordi8 0x35b0, 1 (v7 patched)
 	or	(0x3514:16), 1
 ToneBank_ComputeAddr_Return:
 	ret
 
-__pad_F634B5:
+AccFill_ProcessDone_Helper:
 	ldw de, 0x96
 
 ToneBank_CopyChunkWithSwap:
@@ -21539,7 +21539,7 @@ ToneBank_SwapCopy_Return:
 	or	(0x3514:16), 1
 ToneBank_SwapCopy_Pad:
 	ret
-__pad_F634D1:
+ToneBank_SwapCopy_Pad_Code:
 	nop
 	nop
 	ldw	de, 150
@@ -21602,7 +21602,7 @@ RhythmROM_LoadAndInit:
 AccPat_CalcAccent_Return:
 	ret
 
-__pad_F6358B:
+RhythmROM_LoadAndInit_Pad:
 	nop
 	nop
 
@@ -21646,7 +21646,7 @@ RhythmROM_PatternDisp_ReadByte:
 	ld	(xix), a
 	inc	1, xix
 	push	xix
-	calr	__pad_F636FB
+	calr	RhythmROM_PatternDisp_ReadByte_Helper
 	pop	xix
 	ld	(xix), a
 	inc	1, xix
@@ -21752,7 +21752,7 @@ RhythmROM_PatternDisp_Return:
 	nop
 	nop
 
-__pad_F636FB:
+RhythmROM_PatternDisp_ReadByte_Helper:
 	ld	xhl, (13512:16)
 	add	xhl, 280
 	calr	211
@@ -21766,7 +21766,7 @@ __pad_F636FB:
 	jr	z, 6
 	cp	a, 3:i3
 	jr	z, RhythmROM_InitPattern
-	jr	__pad_F63748
+	jr	RhythmROM_InitPattern_Join
 RhythmROM_InitPattern:
 	ld	xhl, (0x34c4:16)
 	xor	wa, wa
@@ -21781,7 +21781,7 @@ RhythmROM_InitPattern:
 RhythmVoice_WriteParam_Return:
 	jp RhythmROM_NullRet
 
-__pad_F63748:
+RhythmROM_InitPattern_Join:
 	ld	xhl, (13512:16)
 	add	xhl, 312
 	cp	a, 4:i3
@@ -21873,7 +21873,7 @@ RhythmVoice_WriteBuf_Clamp:
 RhythmVoice_WriteBuf_Done:
 	ret
 
-__pad_F63813:
+RhythmVoice_WriteBuf_Clamp_Code:
 	nop
 	nop
 	ld	c, 16:opc
@@ -22084,7 +22084,7 @@ RhythmROM_LoadKit_Return:
 	nop
 	nop
 
-__pad_F63A6C:
+ToneData_LookupEffectParam_Code:
 	ld	xix, (0x34c8:16)
 	add	xix, 977
 	ld	a, (xix)
@@ -22127,7 +22127,7 @@ RhythmROM_LoadKit_CopyReturn:
 	nop
 	nop
 
-__pad_F63AE7:
+RhythmROM_LoadKit_CopyReturn_Code:
 	ld l, (13395:16)
 
 	and l, 0xf
@@ -22246,7 +22246,7 @@ VoiceSlot_Resolve_Done:
 
 
 
-__pad_F63BDA:
+VoiceSlot_Resolve_StoreE_Code:
 	.byte 0x00, 0x00, 0xc1, 0xf0, 0x34, 0x20, 0x1e, 0x01
 	.byte 0xfb, 0xd1, 0xce, 0x34, 0x25, 0xd1, 0xe4, 0x34
 	.byte 0x24, 0xd1, 0xfc, 0x34, 0x22, 0x1e, 0x41, 0x02
@@ -22298,11 +22298,11 @@ AccSection_Process_Loop:
 	calr	RhythmROM_CalcPatternAddr
 	ld	iy, (13610:16)
 	calr	RhythmBuf_LoadPattern
-	jr	__pad_F63CFB
+	jr	AccSection_ProcessEntry_Join
 AccSection_Process_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-__pad_F63CFB:
+AccSection_ProcessEntry_Join:
 	and	(0x3514:16), 251
 	ld	w, (0x34f1:16)
 	calr	RhythmROM_CalcPatternAddr
@@ -22323,11 +22323,11 @@ __pad_F63CFB:
 	calr	RhythmROM_CalcPatternAddr
 	ld	iy, (0x352c:16)
 	calr	RhythmBuf_LoadPattern
-	jr	__pad_F63D47
+	jr	AccSection_ProcessEntry_Join2
 AccSection_Process2_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-__pad_F63D47:
+AccSection_ProcessEntry_Join2:
 	and	(0x3514:16), 251
 	ld	w, (0x34f2:16)
 	calr	RhythmROM_CalcPatternAddr
@@ -22348,11 +22348,11 @@ __pad_F63D47:
 	calr	RhythmROM_CalcPatternAddr
 	ld	iy, (0x352e:16)
 	calr	RhythmBuf_LoadPattern
-	jr	__pad_F63D93
+	jr	AccSection_ProcessEntry_Join3
 AccSection_Process3_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-__pad_F63D93:
+AccSection_ProcessEntry_Join3:
 	and	(0x3514:16), 251
 	ld	w, (0x34f3:16)
 	calr	RhythmROM_CalcPatternAddr
@@ -22373,11 +22373,11 @@ __pad_F63D93:
 	calr	RhythmROM_CalcPatternAddr
 	ld	iy, (0x3530:16)
 	calr	RhythmBuf_LoadPattern
-	jr	__pad_F63DDF
+	jr	AccSection_ProcessEntry_Join4
 AccSection_Process4_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-__pad_F63DDF:
+AccSection_ProcessEntry_Join4:
 	and	(0x3514:16), 251
 	ld	w, (0x34f4:16)
 	calr	RhythmROM_CalcPatternAddr
@@ -22402,7 +22402,7 @@ __pad_F63DDF:
 AccSection_Process5_Return:
 	calr RhythmBuf_FillEmptyPattern
 
-__pad_F63E2B:
+AccSection_ProcessEntry_Code:
 	; anddi8 (0x35b0), 251 (v7 patched)
 	and	(0x3514:16), 251
 	ret
@@ -22447,14 +22447,14 @@ AccFill_ProcessDone:
 	calr	AccPat_IndexToAddress
 	add	xhl, xiz
 	ld	(xhl), a
-__pad_F63E69:
+AccFill_ProcessDone_Join:
 	cp	a, 131
 	jr	z, AccFill_AdvCheck_Return
 	inc	1, xiy
 	inc	1, xiz
 	cp	xiz, 254
 	jr	ule, AccFill_AdvanceAndCheck
-	calr	__pad_F634B5
+	calr	AccFill_ProcessDone_Helper
 	bit	0, (0x3514:16)
 	jr	nz, AccFill_AdvCheck_Return
 	push	xiy
@@ -22480,7 +22480,7 @@ AccFill_AdvanceAndCheck:
 	calr AccPat_IndexToAddress
 	add xhl, xiz
 	ld (xhl), a
-	jr __pad_F63E69
+	jr AccFill_ProcessDone_Join
 
 AccFill_AdvCheck_Return:
 	ldw wa, 0xffff
@@ -22491,7 +22491,7 @@ AccFill_AdvCheck_Return:
 AccFill_AdvCheck_Done:
 	ret
 
-__pad_F63EC6:
+AccFill_AdvanceAndCheck_Pad:
 	nop
 	nop
 AccFill_AdvanceAndCheck_Code:
@@ -22567,7 +22567,7 @@ StyleConvert_Reload_Fallback:
 StyleConvert_Reload_Done:
 	ret
 
-__pad_F63F8F:
+StyleConvert_Reload_Fallback_Code:
 	.byte 0xc1, 0x51, 0x34, 0x27, 0xc1, 0x52, 0x34, 0x26
 	.byte 0x1d, 0xe1, 0x2e, 0xf5, 0xdb, 0x8a, 0x45, 0xbe
 	.byte 0x3b, 0xf6, 0x00, 0xdb, 0xd3, 0xd3, 0x07, 0xf4
@@ -22621,7 +22621,7 @@ __pad_F63F8F:
 	.byte 0x00, 0x00, 0xc1, 0x35, 0x34, 0x3e, 0x01, 0x1e
 	.byte 0x26, 0xf0, 0x48, 0x4b, 0xf1, 0x52, 0x34, 0x40
 	.byte 0xf1, 0x51, 0x34, 0x41, 0xf1, 0x3a, 0x34, 0x47
-__pad_F63F8F_0x1A8:
+StyleConvert_Reload_Fallback_Code2:
 	.byte 0x0e, 0x00, 0x00
 AccWidget_DispatchTable:
 	ld xiy, 0x9b4000
@@ -22633,7 +22633,7 @@ AccWidget_DispatchTable:
 AccWidget_Dispatch_Return:
 	ret
 
-__pad_F6414E:
+AccWidget_DispatchTable_Pad:
 	nop
 	nop
 AccWidget_ProcessSpecialCmd:
@@ -22647,7 +22647,7 @@ AccWidget_ProcessSpecialCmd:
 	sub	w, 30
 	cp	a, w
 	jrl	z, 906
-__pad_F64174:
+AccWidget_ProcessSpecialCmd_Code:
 	ld	a, (13393:16)
 	ld	w, (13394:16)
 	ld	l, (13395:16)
@@ -26657,9 +26657,9 @@ VoiceParam_B0_CheckType:
 	lda xbc, (xhl + 4)
 	lda xix, (xhl + 5)
 	cp a, 4:i3
-	jr nz, __pad_F66E4B
+	jr nz, VoiceParam_B0_Process_Join
 	bitm 3, (xix)
-	jr z, __pad_F66E4B
+	jr z, VoiceParam_B0_Process_Join
 	ld (xhl), 0xd3
 	bitm 3, (xbc)
 	jr nz, VoiceParam_B0_Process
@@ -26670,7 +26670,7 @@ VoiceParam_B0_Process:
 	ld (xde), 0x7f
 	ret
 
-__pad_F66E4B:
+VoiceParam_B0_Process_Join:
 	cp a, 0x8
 	jr nz, Voice_ClearSlotAndRet
 	ld a, (xix)
@@ -26863,7 +26863,7 @@ VoiceSlot_Dispatch_Return_Helper:
 DrumParam_ProcessChannel:
 	push xiz
 	calr DrumParam_LookupChannelBit
-	call __pad_F67013
+	call DrumParam_ProcessChannel_Helper
 	pop xiz
 	ret
 
@@ -26884,7 +26884,7 @@ PatIdx_Lookup_Return:
 	ld	(16:8), 32:io
 	.byte 0x40
 
-__pad_F67013:
+DrumParam_ProcessChannel_Helper:
 	push_a
 	calr DrumParam_ReadVoiceCount
 	ld L,A
@@ -26924,7 +26924,7 @@ RhythmVoice_LoadParams:
 
 VoiceTable_InitEntry_Done:
 	calr RhythmDrum_LoadVoiceParams
-	calr __pad_F67459
+	calr RhythmVoice_LoadParams_Helper
 	calr DrumParam_BuildActiveMask
 	ret
 
@@ -27058,7 +27058,7 @@ VoiceAssign_Process_Loop:
 	push	l
 	ld	xhl, 0:i3
 	pop	l
-	calr	__pad_F671E7
+	calr	VoiceAssign_ProcessRequest_Helper
 	ret
 VoiceAssign_Process_Return:
 	ld (0x905a:16), 0x48
@@ -27089,7 +27089,7 @@ VoiceAssign_Process_Return:
 VoiceAssign_StoreFinal:
 	ret
 
-__pad_F671E7:
+VoiceAssign_ProcessRequest_Helper:
 	pushw hl
 	push xix
 	calr Rhythm_MapChannelToDrumIndex
@@ -27128,7 +27128,7 @@ __pad_F671E7:
 	pop xix
 	pop xwa
 	push xix
-	calr __pad_F6742B
+	calr VoiceAssign_StoreFinal_Helper
 	pop xix
 	ret
 
@@ -27186,25 +27186,25 @@ RegPreset_Load_Loop:
 RegPreset_Load_Return:
 	ld xbc, 0:i3
 
-__pad_F6729B:
+RegPreset_LoadVoiceData_Join:
 	cp c, 4:i3
 	jr z, ChanAssign_StoreResult
 	push xbc
 	pushw wa
 	push xbc
-	calr __pad_F672B2
+	calr RegPreset_LoadVoiceData_Helper
 	pop xbc
 	calr ChanAssign_Lookup_Found
 	popw wa
 	pop xbc
 	inc 1, wa
 	inc 1, c
-	jr __pad_F6729B
+	jr RegPreset_LoadVoiceData_Join
 
 ChanAssign_StoreResult:
 	ret
 
-__pad_F672B2:
+RegPreset_LoadVoiceData_Helper:
 	ld xde, 0:i3
 	ld	e, (xix+wa)
 	sll e, 1
@@ -27410,11 +27410,11 @@ VoiceResolve_CheckAndStore:
 	cp A,C
 	jr nz, VoiceResolve_Return
 	ld A, 0x00:opc
-	jr t, __pad_F67412
+	jr t, VoiceResolve_CheckAndStore_Join
 VoiceResolve_Return:
 	ld a, 0x1:opc
 
-__pad_F67412:
+VoiceResolve_CheckAndStore_Join:
 	jr VoiceResolve_InitSearch
 
 Rhythm_ClearChannelDrumIndex:
@@ -27432,7 +27432,7 @@ VoiceResolve_SearchDone:
 	ld	(8:8), 16:io
 	.byte 0x20
 
-__pad_F6742B:
+VoiceAssign_StoreFinal_Helper:
 	ldw bc, 0x3d0
 
 	ld	a, (xix+bc)
@@ -27472,7 +27472,7 @@ VoiceResolve_FindSlot_Return:
 	add	a, 3
 	ret
 
-__pad_F67459:
+RhythmVoice_LoadParams_Helper:
 	calr Rhythm_MapChannelToDrumIndex
 	add XBC,0x0000370f
 	ld xwa, 0:i3
@@ -27522,16 +27522,16 @@ DrumParam_ClampVoiceCount:
 	jr gt, PartVoice_Update_Return
 	cp c, 0:i3
 	jr lt, PartVoice_Update_Done
-	jr __pad_F674CB
+	jr DrumParam_ClampVoiceCount_Join
 
 PartVoice_Update_Return:
 	ld c, w
-	jr __pad_F674CB
+	jr DrumParam_ClampVoiceCount_Join
 
 PartVoice_Update_Done:
 	ld c, 0x0:opc
 
-__pad_F674CB:
+DrumParam_ClampVoiceCount_Join:
 	ld (xix), c
 	calr RhythmDrum_LoadVoiceParams
 	calr DrumParam_BuildActiveMask
@@ -27677,7 +27677,7 @@ DrumParam_ReadMaxCount_Skip3:
 DrumParam_ReadMaxCount_Return5:
 	ret
 AccVoice_SetupStyleSlots:
-	calr __pad_F676E6
+	calr AccVoice_SetupStyleSlots_Helper2
 	calr DrumChannel_MapToIndexB
 	sll xbc, 1
 	add xix, xbc
@@ -27691,7 +27691,7 @@ AccVoice_SetupStyleSlots:
 	pop xwa
 	pushw hl
 	calr Voice_ClearSlotBuffer
-	calr __pad_F676C1
+	calr AccVoice_SetupStyleSlots_Helper
 	popw hl
 
 AccVoice_SetupSlots_Loop:
@@ -27736,7 +27736,7 @@ AccVoice_SetupSlots_StoreEntry:
 AccVoice_SetupSlots_Return:
 	ret
 
-__pad_F676C1:
+AccVoice_SetupStyleSlots_Helper:
 	add xwa, 0x6
 
 	ld xbc, 0:i3
@@ -27761,7 +27761,7 @@ AccVoice_SetupSlots_Done:
 	ld (xwa), c
 	ret
 
-__pad_F676E6:
+AccVoice_SetupStyleSlots_Helper2:
 	ld	xhl, 0:i3
 	ld	l, (13370:16)
 	cp	l, 30
@@ -27808,7 +27808,7 @@ AccVoice_SetupSlots_DataBlock_Helper:
 	sll	xbc, 3
 	add	xbc, 14133
 	ld	xiy, xbc
-	calr	__pad_F676E6
+	calr	AccVoice_SetupStyleSlots_Helper2
 	push	xix
 	calr	DrumChannel_MapToIndexA
 	pop	xix
@@ -27820,7 +27820,7 @@ AccVoice_SetupSlots_DataBlock_Helper:
 	ldir85
 	ret
 AccVoice_SetupSlots_DataBlock_Helper2:
-	calr	__pad_F676E6
+	calr	AccVoice_SetupStyleSlots_Helper2
 	calr	DrumChannel_MapToIndexB
 	sll	bc, 1
 	ld	hl, (xix+bc)
@@ -28488,7 +28488,7 @@ VoiceSlot_Init_Process:
 CmpMode_NullRet:
 	ret
 
-__pad_F67D15:
+CmpMode_NullRet_Code:
 	push	xiz
 	call	VoiceSlot_Init_Process_Helper
 	pop	xiz
@@ -30945,7 +30945,7 @@ CstmCp_StyleDataBlock:
 CstmCpTtl_Dispatch2_Code_Skip:
 	ld	xhl, 0:i3
 	ret
-__pad_F695CA:
+CstmCp_StyleDataBlock_Code:
 
 MainCstmNameFunc:
 	lda	xsp, (xsp-120)
@@ -31046,7 +31046,7 @@ CstmName_ReturnZero:
 	pop xiz
 	lda xsp, (xsp + 120)
 	ret
-__pad_F696AB:
+CstmName_ReturnZero_Code:
 
 MainS2cFunc:
 	dec	4, xsp
@@ -31114,7 +31114,7 @@ EventDelivery_ReturnZero:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-__pad_F69788:
+EventDelivery_ReturnZero_Code:
 
 MiddleNameFunc:
 	lda	xwa, (13344:16)
@@ -31171,7 +31171,7 @@ MiddleName_PostModeChange:
 MiddleName_ReturnZero:
 	ld xhl, 0:i3
 	ret
-__pad_F697FE:
+MiddleName_ReturnZero_Code:
 
 MiddleCmpClrFunc:
 	cp	xbc, EVT_CMP_CLR_NO
@@ -31202,7 +31202,7 @@ MiddleCmpClr_ReturnZero:
 	ld xhl, 0:i3
 	ret
 MainCmpCpFunc:
-__pad_F6985D:
+MainCmpCpFunc_Code:
 	lda	xsp, (xsp-18)
 	push	xiz
 	ld	xde, xbc
@@ -31487,7 +31487,7 @@ CmpSong_VariantA:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-__pad_F69B4C:
+CmpSong_VariantA_Code:
 
 MainEsCmpFunc:
 	dec	4, xsp
@@ -31597,12 +31597,12 @@ EsCmp_ReturnZero:
 	ld xhl, 0:i3
 	inc 4, xsp
 	ret
-__pad_F69C5B:
+EsCmp_ReturnZero_Code:
 
 MspBkslTtlFunc:
 	ld xhl, 0:i3
 	ret
-__pad_F69C5E:
+MspBkslTtlFunc_Code:
 
 MainMspBnkNameFunc:
 	ld xhl, 0:i3
@@ -31738,7 +31738,7 @@ AccSeq_DeliverC9_000A:
 	call	ApDeliveryEvent
 	ret
 
-__pad_F69D47:
+AccSeq_DeliverC9_000A_Code:
 
 MainMspRgpSetFunc:
 	ld	a, (0x7ea1:16)
@@ -32130,7 +32130,7 @@ SndArgTtl_Dispatch_Code_Skip:
 SndArgTtl_ReturnZero:
 	ld xhl, 0:i3
 	ret
-__pad_F6A0BB:
+SndArgTtl_ReturnZero_Code:
 
 SndArgNmGet:
 	lda	xsp, (xsp-76)
@@ -32394,7 +32394,7 @@ SndArgNm_ReturnZero:
 	popw_erp 0xfa
 	lda xsp, (xsp + 76)
 	ret
-__pad_F6A2E2:
+SndArgNm_ReturnZero_Code:
 
 CmpStepTitleFunc:
 	lda xsp, (xsp - 16)
@@ -34946,7 +34946,7 @@ DialCalc_Return:
 	pop xiz
 	inc 2, xsp
 	ret
-__pad_F6C160:
+PostEventSetup_Send_Code:
 
 StylCnvWaitTtlFunc:
 	cp	xbc, EVT_SW_IN
@@ -34991,7 +34991,7 @@ StylCnvWait_RestoreDisplay:
 AccChord_ReturnZero:
 	ld xhl, 0:i3
 	ret
-__pad_F6C1DE:
+AccChord_ReturnZero_Code:
 
 StylCnvTxtTtlFunc:
 	cp xbc, EVT_SW_IN
@@ -35017,7 +35017,7 @@ StylCnvTxt_HandleClose:
 StylCnvTxt_ReturnZero:
 	ld xhl, 0:i3
 	ret
-__pad_F6C229:
+StylCnvTxt_ReturnZero_Code:
 
 StylCnvModlTtlFunc:
 	lda	xsp, (xsp-36)
@@ -35925,7 +35925,7 @@ StylCnvCont_NotifyPart:
 AccRhythm_ReturnZero:
 	ld xhl, 0:i3
 	ret
-__pad_F6CBDE:
+AccRhythm_ReturnZero_Code:
 
 StylCnvStorTtlFunc:
 	cp xbc, EVT_ACTIVATE_STATE
@@ -35941,7 +35941,7 @@ StylCnvStor_HandleClose:
 StylCnvStor_ReturnZero:
 	ld xhl, 0:i3
 	ret
-__pad_F6CBFE:
+StylCnvStor_ReturnZero_Code:
 
 MainStylCnvFunc:
 	extz de
