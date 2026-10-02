@@ -335,7 +335,7 @@ Naka_DrawbarReg_Table:
 ; [nakarest] AllocNewVoiceEntry_LoadParam3 (audio/note_voice_mapping.s: `lda xde, (0xe82e:16)`),
 ; [nakarest] PsMixer_CtlTypeProc2_Skip7 (ui/drawbar_panel_ui.s: `cp xwa, 0xe808`),
 ; [nakarest] EffEdit_DSPConfigBlock_Skip3 (sequencer/sequencer_engine.s: `retd 0xe800`),
-; [nakarest] FlashWrite_BlockRef_Type6 (storage/flash_floppy_handlers.s: `ldw (9:8),
+; [nakarest] SeScreenData_0x4E8B (storage/flash_floppy_handlers.s: `ldw (9:8),
 ; [nakarest] 0xe400:io`), 19 more.
 Palette_8bit_RGBA_2_Data:
 	.incbin "includes/generated/naka_sequencer_channels.bin", 0x1A78, 0x488

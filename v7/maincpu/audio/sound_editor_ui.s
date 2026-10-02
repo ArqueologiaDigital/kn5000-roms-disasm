@@ -8433,16 +8433,16 @@ SeMenu_WaveformSelect_Data_Skip:
 	call	SeMenu_WaveformSelect_Data_0x6D
 	jr	SeMenu_WaveformSelect_Data_Return
 SeMenu_WaveformSelect_Data_Skip2:
-	ld	xiy, FlashWrite_BlockRef_Type6_0x295
-	ld	xix, FlashWrite_BlockRef_Type6_0x561
+	ld	xiy, SeScreenData_0x5120
+	ld	xix, SeScreenData_0x53EC
 	call	SeGfx_DrawStaticList
 	call	SeMenu_PresetManager_Data_0x152
 	ld	xiy, DrumDetailEdit_Entry_01
-	ld	xix, Data_Dispatch_Entry_0x39
+	ld	xix, SeScreenData_0x54EB
 	call	SeGfx_DrawBoundList
 	call	SeMenu_WaveformSelect_Data_0x99
 	ld	(0x3efa8:24), 1
-	ld	xiy, FlashWrite_BlockRef_Type6_0x561
+	ld	xiy, SeScreenData_0x53EC
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeGfx_DrawStaticList
 	ld	(0x3efa8:24), 0
@@ -8479,7 +8479,7 @@ SeMenu_WaveformSelect_Data_Loop:
 	ld	d, (xbc)
 	cp	d, 0:i3
 	jr	z, SeMenu_WaveformSelect_Data_Return2
-	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
+	ld	xiy, SeScreenData_0x5525
 	ld	(0x3efa8:24), 0
 	call	SeMenu_PatchEdit_Dispatch_Helper
 SeMenu_WaveformSelect_Data_Return2:
@@ -8503,27 +8503,27 @@ SeMenu_PresetManager_Init_Skip:
 	cp	a, 13
 	jrl	c, SeMenu_PresetManager_Init_Code_Skip2
 	ld	(0x03efa8:24), 0
-	ld	xiy, FlashWrite_BlockRef_Type6_0x633
-	ld	xix, FlashWrite_BlockRef_Type6_0x655
+	ld	xiy, SeScreenData_0x54BE
+	ld	xix, SeScreenData_0x54E0
 	call	SeGfx_DrawBoundList
 	call	SeMenu_WaveformSelect_Data_0x99
 	jrl	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip2:
 	ld	(0x03efa8:24), 1
-	ld	xiy, FlashWrite_BlockRef_Type6_0x690
-	ld	xix, FlashWrite_BlockRef_Type6_0x69A
+	ld	xiy, SeScreenData_0x551B
+	ld	xix, SeScreenData_0x5525
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
-	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
+	ld	xiy, SeScreenData_0x5525
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ld	(0x03efa8:24), 1
-	ld	xiy, FlashWrite_BlockRef_Type6_0x561
+	ld	xiy, SeScreenData_0x53EC
 	ld	xix, DrumDetailEdit_Entry_01
 	call	SeGfx_DrawStaticList
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Skip3:
 	ld	xiy, DrumDetailEdit_Entry_01
-	ld	xix, Data_Dispatch_Entry_0x39
+	ld	xix, SeScreenData_0x54EB
 	call	SeGfx_DrawBoundList
 	call	SeMenu_WaveformSelect_Data_0x99
 	jr	SeMenu_PresetManager_Init_Code_Return
@@ -8543,7 +8543,7 @@ SeMenu_PresetManager_Init_Code_Skip:
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_PresetManager_Init_Code_Return
 SeMenu_PresetManager_Init_Code_Skip2:
-	ld	xiy, FlashWrite_BlockRef_Type6_0x69A
+	ld	xiy, SeScreenData_0x5525
 	ld	(0x03efa8:24), 0
 	call	SeMenu_EqEdit_DrawInit_0x15
 SeMenu_PresetManager_Init_Code_Return:
@@ -9283,24 +9283,24 @@ SeMenu_NameEdit_DataBlock1_Join2:
 	ld	xix, FlashRead_BlockData_Field7
 	jr	SeMenu_NameEdit_DataBlock1_Join3
 SeMenu_NameEdit_DataBlock1_Skip3:
-	ld	xix, FlashWrite_BlockHandler_Table
+	ld	xix, SeScreenData_ListBounds
 SeMenu_NameEdit_DataBlock1_Join3:
 	call	SeGfx_DrawBoundList
 	xor	xwa, xwa
 	ld	a, (1648:16)
 	sla	wa, 3
-	ld	xiz, FlashWrite_BlockHandler_Table
+	ld	xiz, SeScreenData_ListBounds
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, (xiz+4)
 	call	SeGfx_DrawBoundList
 	ret
 SeMenu_NameEdit_DataBlock2:
-	ld	xiy, FlashWrite_BlockRef_Type6_0x118
-	ld	xix, FlashWrite_BlockRef_Type6_0x295
+	ld	xiy, SeScreenData_0x4FA3
+	ld	xix, SeScreenData_0x5120
 	call	SeGfx_DrawStaticList
 	ld	xiy, EffectParamEdit_Entry_01
-	ld	xix, DrumDetailEdit_Menu_Table_0x3C8
+	ld	xix, SeScreenData_0x58F1
 	call	SeGfx_DrawBoundList
 	call	SeMenu_NameEdit_CheckBit7
 	ret
@@ -9344,7 +9344,7 @@ SeMenu_PatchEdit_DataBlock:
 	cp	a, 7:i3
 	jr	nc, SeMenu_PatchEdit_DataBlock_Skip2
 	xor	xbc, xbc
-	ld	xiz, FlashWrite_BlockRef_Type6_0x10
+	ld	xiz, SeScreenData_0x4E9B
 	ld	c, (1648:16)
 	sla	bc, 2
 	ld_rrl xiy, xiz, bc
@@ -9355,7 +9355,7 @@ SeMenu_PatchEdit_DataBlock_Skip:
 	call	SeGfx_DrawBoundList
 	jr	SeMenu_PatchEdit_DataBlock_Return
 SeMenu_PatchEdit_DataBlock_Skip2:
-	ld	xiy, FlashRead_BlockHandler_Table
+	ld	xiy, SeScreenData_0x4D89
 SeMenu_PatchEdit_DataBlock_Join:
 	ld	(0x03efa8:24), 0
 	call	SeMenu_EqEdit_DrawInit_0x15
@@ -9572,8 +9572,8 @@ Data_UnknownBlock_Skip6:
 	jr	Data_UnknownBlock_Join3
 Data_UnknownBlock_Skip7:
 	ld	(0x3efa8:24), 1
-	ld	xiy, DrumDetailEdit_Menu_Table_0x2C6
-	ld	xix, DrumDetailEdit_Menu_Table_0x2D0
+	ld	xiy, SeScreenData_0x57EF
+	ld	xix, SeScreenData_0x57F9
 Data_UnknownBlock_Join3:
 	call	SeGfx_DrawStaticList
 	ld	a, 0:opc
@@ -9584,7 +9584,7 @@ Data_UnknownBlock_Join4:
 	ld	xiy, SeMenu_CompareScreen_DataTable_0xDB
 	jr	Data_UnknownBlock_Join5
 Data_UnknownBlock_Skip8:
-	ld	xiy, DrumDetailEdit_Menu_Table_0x2B2
+	ld	xiy, SeScreenData_0x57DB
 Data_UnknownBlock_Join5:
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	ret
@@ -9600,12 +9600,12 @@ Data_UnknownBlock_Skip9:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip10
 	ld	(0x3efa8:24), 0
-	ld	xiy, DrumDetailEdit_Menu_Table_0x32A
+	ld	xiy, SeScreenData_0x5853
 	call	SeMenu_PatchEdit_Dispatch_Helper
 	call	SeMenu_Utility_CopyBlock_Helper
 	jr	Data_UnknownBlock_Return2
 Data_UnknownBlock_Skip10:
-	ld	xiy, DrumDetailEdit_Menu_Table_0x32A
+	ld	xiy, SeScreenData_0x5853
 Data_UnknownBlock_Join6:
 	ld	(0x3efa8:24), 0
 	call	SeMenu_PatchEdit_Dispatch_Helper

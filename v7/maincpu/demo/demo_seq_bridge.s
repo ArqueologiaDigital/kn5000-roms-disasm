@@ -424,7 +424,7 @@ SongBank_EventHandler_Return:
 ; inside.  Same code as v9/v10 (see v10's demo/demo_seq_bridge.s, where it was
 ; a `.byte` block): two `return 0` stubs (no call, jump or 24-bit pointer to
 ; either found) and the two routines ui/setwall_routines.s calls as
-; CDlikeSwTtl_DispatchData_0x6 / _0x4A (shared/positional_labels.s aliases).
+; CDlikeSwTtl_SendEvt4 / _0x4A (shared/positional_labels.s aliases).
 ; -----------------------------------------------------------------------------
 CDlikeSwTtl_ReturnZeroStub:
 	ld xhl, 0:i3

@@ -27,8 +27,8 @@
 ; (0xFCD201) begins.  Types 0x00-0x1F all use MidiStream_StatusPrecheck (in
 ; part 1); the only other handlers are types 0x48, 0x60 and 0x98 below, each
 ; a short dispatcher on the record's byte 1 that sits directly in front of the
-; jump table it indexes (written as <table> - <its length> because the
-; dispatchers have no labels of their own in audio/audio_control_engine.s).
+; jump table it indexes (MidiStream_RecType48_SysExDispatch, _RecType60_CtrlDispatch,
+; _RecType98_CmdDispatch in audio/audio_control_engine.s).
 ; Open question, for whoever documents the writers of the RX buffer: which
 ; incoming MIDI traffic produces record types 0x48, 0x60 and 0x98.
 ;
@@ -40,16 +40,16 @@
 	.long	0xffffffff, 0xffffffff, 0xffffffff	; types 0x3D-0x3F
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x40-0x43
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x44-0x47
-	.long	MidiStream_SysExJumpTable - 23		; type 0x48: the dispatcher right before MidiStream_SysExJumpTable;
-						; it switches on record byte 1 (`cp l, 3`) through that table
+	.long	MidiStream_RecType48_SysExDispatch	; type 0x48: switches on record byte 1 (`cp l, 3`)
+						; through MidiStream_SysExJumpTable, right after it
 	.long	0xffffffff, 0xffffffff, 0xffffffff	; types 0x49-0x4B
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x4C-0x4F
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x50-0x53
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x54-0x57
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x58-0x5B
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x5C-0x5F
-	.long	MidiStream_CtrlJumpTable - 23		; type 0x60: the dispatcher right before MidiStream_CtrlJumpTable;
-						; it switches on record byte 1 (`cp l, 1`) through that table
+	.long	MidiStream_RecType60_CtrlDispatch	; type 0x60: switches on record byte 1 (`cp l, 1`)
+						; through MidiStream_CtrlJumpTable, right after it
 	.long	0xffffffff, 0xffffffff, 0xffffffff	; types 0x61-0x63
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x64-0x67
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x68-0x6B
@@ -64,8 +64,8 @@
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x8C-0x8F
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x90-0x93
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x94-0x97
-	.long	MidiStream_CmdJumpTable - 24		; type 0x98: the dispatcher right before MidiStream_CmdJumpTable;
-						; it switches on record byte 1 (`cp l, 0x0b`) through that table
+	.long	MidiStream_RecType98_CmdDispatch	; type 0x98: switches on record byte 1 (`cp l, 0x0b`)
+						; through MidiStream_CmdJumpTable, right after it
 	.long	0xffffffff, 0xffffffff, 0xffffffff	; types 0x99-0x9B
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0x9C-0x9F
 	.long	0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; types 0xA0-0xA3

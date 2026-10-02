@@ -81,8 +81,9 @@ SLIDE_STRING_2:
 ; Firmware-update banners: eight 224x22 monochrome bitmaps, 1 bpp
 ; -----------------------------------------------------------------------------
 ; Format, from the reader Draw_FlashMemUpdate_message_bitmap (0xEF5016,
-; boot/system_handlers.s): 616 bytes each = 22 rows x 28 bytes, row-major,
-; MSB = leftmost pixel.  The reader walks IZ = 0..0x267 (`cp iz, 0x268`),
+; boot/system_handlers.s): 616 bytes each = 22 rows x 28 bytes, stored BOTTOM-UP:
+; the reader draws row 0 at y = DE and each later row one line higher (`dec 1,
+; ix`), so the y values below are the bottom line; MSB = leftmost pixel.  The reader walks IZ = 0..0x267 (`cp iz, 0x268`),
 ; starts a new row every `div wa, 0x1c` (28 bytes = 224 pixels), tests each
 ; bit through a mask table and writes one 8-bpp pixel per bit into the
 ; 320-wide offscreen buffer at 0x43C00 (foreground / background palette

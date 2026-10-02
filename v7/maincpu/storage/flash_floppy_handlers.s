@@ -2,15 +2,16 @@
 ; Flash & Floppy Handlers
 ; =============================================================================
 ;
-; Flash memory sector write routines, floppy disk note event
-; loading, and FDC format UI. Bridges storage hardware to the
-; file I/O subsystem.
+; Opens with the TAIL of the sound editor's ScreenData block (0xF158A7-0xF165EA in
+; v10/v9; base SeScreenData at 0xF10C06, audio/sound_editor_ui.s; the lane seui record
+; model): list-boundary tables and bound record lists that GraphicsRender_Start and the
+; SeMenu code read.  The flash-memory sector write routines, floppy note-event loading
+; and the FDC format UI follow it, from InitializeNaka on.
 ; =============================================================================
 
 ; list-boundary table, 12 x {u32 start, u32 end} of bound record lists; the code reads XIY = (T+8i), XIX = (T+8i+4)
 ; evidence: SeMenu_NameEdit_DataBlock1_Join3+0x19 (0xF100A1)
-; (name FlashWrite_BlockHandler_Table kept: other files use it; the object is ScreenData, see above)
-FlashWrite_BlockHandler_Table:
+SeScreenData_ListBounds:
 	.long	SeScreenData_0x4D01
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D01
@@ -20,9 +21,9 @@ FlashWrite_BlockHandler_Table:
 	.long	SeScreenData_0x4D01
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D4C
-	.long	FlashRead_BlockHandler_Table
+	.long	SeScreenData_0x4D89
 	.long	SeScreenData_0x4D4C
-	.long	FlashRead_BlockHandler_Table
+	.long	SeScreenData_0x4D89
 	.long	SeScreenData_0x4DAD
 	.long	SeScreenData_0x4DDA
 	.long	SeScreenData_0x4DEE
@@ -32,9 +33,9 @@ FlashWrite_BlockHandler_Table:
 	.long	SeScreenData_0x4DEE
 	.long	SeScreenData_0x4E16
 	.long	SeScreenData_0x4E68
-	.long	FlashWrite_BlockRef_Type6
+	.long	SeScreenData_0x4E8B
 	.long	SeScreenData_0x4E68
-	.long	FlashWrite_BlockRef_Type6
+	.long	SeScreenData_0x4E8B
 ; bound record list (5 records {u8 op, u8 len, payload}), read by GraphicsRender_Start; ends 0xF15910
 ; evidence: pairs table 0xF1587D
 SeScreenData_0x4D01:
@@ -98,8 +99,8 @@ SeScreenData_0x4D7F:
 ; SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA)) -- so the entries that reader
 ; uses are 7 and 8 (corrected 2026-10-02 from "table of 7", Wave 2 claims review)
 ; evidence: SeMenu_PatchEdit_DataBlock_Join+0x6 (0xF10154)
-; (name FlashRead_BlockHandler_Table kept: other files use it; the object is ScreenData, see above)
-FlashRead_BlockHandler_Table:
+; (name SeScreenData_0x4D89 kept: other files use it; the object is ScreenData, see above)
+SeScreenData_0x4D89:
 	.long	SeScreenData_0x4D4C
 	.long	SeScreenData_0x4D4C
 	.long	SeScreenData_0x4D56
@@ -193,8 +194,8 @@ SeScreenData_0x4E68:
 	.byte	0x00, 0x0a, 0x63, 0x06, 0xff, 0x00, 0x20, 0xbb, 0x0f, 0x03
 ; table of 4 pointers to the records of the list at 0xF15A44 (entry 0 repeated); entry 10 of the per-variant table at 0xF15A77, drawn one record at a time by SeMenu_EqEdit_DrawInit_0x15 (XIY = (XIY + 4*WA))
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF1011C)
-; (name FlashWrite_BlockRef_Type6 kept: other files use it; the object is ScreenData, see above)
-FlashWrite_BlockRef_Type6:
+; (name SeScreenData_0x4E8B kept: other files use it; the object is ScreenData, see above)
+SeScreenData_0x4E8B:
 ; [v10] F15A91..F15AA1  4 x u32 pointer
 	.long	SeScreenData_0x4E68
 	.long	SeScreenData_0x4E68
@@ -207,14 +208,14 @@ SeScreenData_0x4E9B:
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D34
 	.long	SeScreenData_0x4D34
-	.long	FlashRead_BlockHandler_Table
-	.long	FlashRead_BlockHandler_Table
+	.long	SeScreenData_0x4D89
+	.long	SeScreenData_0x4D89
 	.long	SeScreenData_0x4DDA
 	.long	SeScreenData_0x4E16
 	.long	SeScreenData_0x4E54
 	.long	SeScreenData_0x4E16
-	.long	FlashWrite_BlockRef_Type6
-	.long	FlashWrite_BlockRef_Type6
+	.long	SeScreenData_0x4E8B
+	.long	SeScreenData_0x4E8B
 ; 12 list END pointers, one per screen variant = the byte at RAM 0x670, for the static list the code starts with `ld xiy, <start>`
 ; evidence: SeMenu_NameEdit_DataBlock1 (0xF0FFF6)
 SeScreenData_0x4ECB:
@@ -367,7 +368,7 @@ SeScreenData_0x5120:
 	.byte	0x17, 0x11, 0x47, 0x00, 0x64, 0x00
 	.ascii	"TONE SELECT"
 ; [v10] F15D89 flags=0x17 len=11
-; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15D8A-0xF15DA3 (25 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=60% dist=14 near FlashWrite_BlockRef_Type6_0x295+100
+; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15D8A-0xF15DA3 (25 B), unreached CODE-territory, was disassembled as 11 plausible-but-dead instruction lines; per=60% dist=14 near SeScreenData_0x5120+100
 	.byte	0x17, 0x0b, 0xa2, 0x00, 0x64, 0x00
 	.ascii	"LEVEL"
 ; [v10] F15D94 flags=0x17 len=9
@@ -432,7 +433,7 @@ SeScreenData_0x5120:
 	.byte	0x06, 0x05, 0x21, 0x22, 0x8d
 ; [v10] F15E6C flags=0x06 len=5
 	.byte	0x06, 0x05, 0x26, 0x22, 0x8d
-; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15E71-0xF15E84 (19 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=71% dist=9 near FlashWrite_BlockRef_Type6_0x295+331
+; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15E71-0xF15E84 (19 B), unreached CODE-territory, was disassembled as 9 plausible-but-dead instruction lines; per=71% dist=9 near SeScreenData_0x5120+331
 ; [v10] F15E71 flags=0x06 len=5
 	.byte	0x06, 0x05, 0x2b, 0x22, 0x8d
 ; [v10] F15E76 flags=0x06 len=5
@@ -461,7 +462,7 @@ SeScreenData_0x5120:
 	.byte	0x09, 0x0a, 0x12, 0x01, 0x1e, 0x00, 0x35, 0x01, 0x31, 0x00
 ; [v10] F15EBC flags=0x09 len=10
 	.byte	0x09, 0x0a, 0x14, 0x01, 0x20, 0x00, 0x33, 0x01, 0x2f, 0x00
-; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15EC9-0xF15EDD (20 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=60% dist=11 near FlashWrite_BlockRef_Type6_0x295+419
+; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15EC9-0xF15EDD (20 B), unreached CODE-territory, was disassembled as 13 plausible-but-dead instruction lines; per=60% dist=11 near SeScreenData_0x5120+419
 ; [v10] F15EC6 flags=0x09 len=10
 	.byte	0x09, 0x0a, 0x37, 0x00, 0x2e, 0x00, 0xfd, 0x00, 0x49, 0x00
 ; [v10] F15ED0 flags=0x09 len=10
@@ -480,7 +481,7 @@ SeScreenData_0x5120:
 	.byte	0x09, 0x0a, 0xd2, 0x00, 0xb5, 0x00, 0x35, 0x01, 0xca, 0x00
 ; [v10] F15F16 flags=0x09 len=10
 	.byte	0x09, 0x0a, 0xd4, 0x00, 0xb7, 0x00, 0x33, 0x01, 0xc8, 0x00
-; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F25-0xF15F3C (23 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=10 near FlashWrite_BlockRef_Type6_0x295+511
+; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F25-0xF15F3C (23 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=100% dist=10 near SeScreenData_0x5120+511
 ; [v10] F15F20 flags=0x22 len=10
 	.byte	0x22, 0x0a, 0x09, 0x00, 0xda, 0x00, 0x1e, 0x00, 0xee, 0x00
 ; [v10] F15F2A flags=0x22 len=10
@@ -503,7 +504,7 @@ SeScreenData_0x5120:
 	.byte	0x01, 0x0a, 0x0b, 0x00, 0x8c, 0x00, 0x19, 0x01, 0x8c, 0x00
 ; [v10] F15F84 flags=0x01 len=10
 	.byte	0x01, 0x0a, 0x09, 0x00, 0xe4, 0x00, 0x1e, 0x00, 0xe4, 0x00
-; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F8F-0xF15FA0 (17 B), unreached CODE-territory, was disassembled as 6 plausible-but-dead instruction lines; per=71% dist=8 near FlashWrite_BlockRef_Type6_0x295+617
+; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF15F8F-0xF15FA0 (17 B), unreached CODE-territory, was disassembled as 6 plausible-but-dead instruction lines; per=71% dist=8 near SeScreenData_0x5120+617
 ; [v10] F15F8E flags=0x01 len=10
 	.byte	0x01, 0x0a, 0x31, 0x00, 0xe4, 0x00, 0x46, 0x00, 0xe4, 0x00
 ; [v10] F15F98 flags=0x01 len=10
@@ -619,7 +620,7 @@ SeScreenData_0x54BE:
 ; single bound record (op 0x03, 11 B), read by GraphicsRender_Start
 ; evidence: recptrs table 0xF16101
 SeScreenData_0x54E0:
-; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF160F0-0xF16106 (22 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=80% dist=11 near FlashWrite_BlockRef_Type6_0x655+10
+; [v10] data-as-code (v10_data_as_code_census.py, STRICT rule): 0xF160F0-0xF16106 (22 B), unreached CODE-territory, was disassembled as 10 plausible-but-dead instruction lines; per=80% dist=11 near SeScreenData_0x54E0+10
 ; [v10] F160E6 flags=0x03 len=11
 	.byte	0x03, 0x0b, 0x60, 0x06, 0x03, 0x00, 0x05
 	.long	SeScreenData_0x5503

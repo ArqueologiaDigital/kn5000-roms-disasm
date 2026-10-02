@@ -2326,7 +2326,9 @@ MidiCC_PartTargets_CC93_Chorus:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC94_Celeste (+0x3E0): function 6 <- CC94 (MIDI 1.0
 ; "effect 4 depth", formerly celeste), reader MidiCC_RxCC94_Celeste (0xFD0012);
-; D = 0x40 here where the other level tables hold 0x7F.
+; Records {u8 part, u8 0x04, u8 0x40}, the selector form of CC64; the reader
+; ends in MidiCC_Helper_ConditionalESetup, so E = 0x40 when the controller
+; value is >= 0x40, else 0 -- an on/off flag (cf. CC64's 0x08), not a level.
 MidiCC_PartTargets_CC94_Celeste:
 	.byte 0x00, 0x04, 0x40, 0x01, 0x04, 0x40, 0x02, 0x04, 0x40, 0x03, 0x04, 0x40
 	.byte 0x04, 0x04, 0x40, 0x05, 0x04, 0x40, 0x06, 0x04, 0x40, 0x07, 0x04, 0x40
@@ -2772,7 +2774,10 @@ MidiCC_FunctionToCCNumber:
 	;     ld_rrl xix, xix, hl             ; xix = record[index]
 	;     cp xix, 0xffffffff / jr z, <skip>   ; 0xFFFFFFFF means 'no entry'
 	; => 32 entries of 4 bytes per record; present entries are work-RAM addresses
-	; 0x0000F9C3 + 26*k (26-byte parameter blocks); absent entries are 0xFFFFFFFF.
+	; 0x0000F9C3 + 26*k (26-byte parameter blocks, k = 0..23); absent entries are
+	; 0xFFFFFFFF.  Except: entries 23 and 24 of the six records 0xFD238F..0xFD260F
+	; point at 0xFD6F / 0xFD89, a second pair of 26-byte blocks (checked against
+	; the ROM: those 12 are the only present entries off the 0xF9C3 + 26*k grid).
 	; Record bases run 0xFD1A8E + 0x80*k for k=0..4, then 0xFD1D0F + 0x80*k for
 	; k=0..18 -- there is a ONE-BYTE 0xFF pad at 0xFD1D0E, which is why the
 	; second block is offset by one and why this span is emitted in three

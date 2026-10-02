@@ -34,7 +34,7 @@ MiddleFuncCall_DispatchData_Code_Helper:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 7
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper_Skip
-	call	CDlikeSwTtl_DispatchData_0x6
+	call	CDlikeSwTtl_SendEvt4
 MiddleFuncCall_DispatchData_Code_Helper_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
@@ -49,7 +49,7 @@ MiddleFuncCall_DispatchData_Code_Helper2:
 	call	SetWall_InlineCodeBlock2
 	cp (3295:16), 8
 	jr	z, MiddleFuncCall_DispatchData_Code_Helper2_Skip
-	call	CDlikeSwTtl_DispatchData_0x6
+	call	CDlikeSwTtl_SendEvt4
 MiddleFuncCall_DispatchData_Code_Helper2_Skip:
 	call	CDlikeSwTtl_SendStartEvt
 	ld	a, (3295:16)
@@ -95,7 +95,7 @@ SetWall_InlineCodeBlock_Sub:
 	jr	z, SetWall_InlineCodeBlock_Sub_Skip
 	jr	SetWall_InlineCodeBlock_Sub_Return
 SetWall_InlineCodeBlock_Sub_Skip:
-	call	CDlikeSwTtl_DispatchData_0x4A
+	call	CDlikeSwTtl_SendStartEvtArg1
 SetWall_InlineCodeBlock_Sub_Return:
 	ret
 	call	SetWall_InlineCodeBlock_0x7F

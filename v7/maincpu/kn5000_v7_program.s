@@ -4559,9 +4559,7 @@ ROM_PaddingFF:
 
 	.set Data_Dispatch_Entry, SeScreenData_0x54B2
 
-	.set Data_Dispatch_Entry_0x39, SeScreenData_0x54EB
 
-	.set Data_Dispatch_Entry_0x45, SeScreenData_0x54F7
 
 	.set EffectParamEdit_Entry_01, SeScreenData_0x5895
 

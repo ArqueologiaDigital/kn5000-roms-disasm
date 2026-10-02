@@ -21,9 +21,9 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 48,188
-#   semantic names ........... 44,845 (93.1%)
-#   positional names ......... 3,343
+#   symbols .................. 48,166
+#   semantic names ........... 44,843 (93.1%)
+#   positional names ......... 3,323
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -17411,8 +17411,8 @@ SeScreenData_0x4C5E 00F15864
 TuningSystem_Handler_Table_0x241D 00F15864
 SeScreenData_0x4C6D 00F15873
 TuningSystem_Handler_Table_0x242C 00F15873
-FlashWrite_BlockHandler_Table 00F158A7
 SeScreenData_End 00F158A7
+SeScreenData_ListBounds 00F158A7
 SeScreenData_0x4D01 00F15907
 SeScreenData_0x4D34 00F1593A
 SeScreenData_0x4D4C 00F15952
@@ -17421,7 +17421,7 @@ SeScreenData_0x4D60 00F15966
 SeScreenData_0x4D6A 00F15970
 SeScreenData_0x4D74 00F1597A
 SeScreenData_0x4D7F 00F15985
-FlashRead_BlockHandler_Table 00F1598F
+SeScreenData_0x4D89 00F1598F
 SeScreenData_0x4DAD 00F159B3
 SeScreenData_0x4DDA 00F159E0
 SeScreenData_0x4DEE 00F159F4
@@ -17429,17 +17429,12 @@ SeScreenData_0x4E16 00F15A1C
 SeScreenData_0x4E2A 00F15A30
 SeScreenData_0x4E54 00F15A5A
 SeScreenData_0x4E68 00F15A6E
-FlashWrite_BlockRef_Type6 00F15A91
-FlashWrite_BlockRef_Type6_0x10 00F15AA1
+SeScreenData_0x4E8B 00F15A91
 SeScreenData_0x4E9B 00F15AA1
-FlashWrite_BlockRef_Type6_0x40 00F15AD1
 SeScreenData_0x4ECB 00F15AD1
 SeScreenData_0x4EFB 00F15B01
-FlashWrite_BlockRef_Type6_0x118 00F15BA9
 SeScreenData_0x4FA3 00F15BA9
-FlashWrite_BlockRef_Type6_0x295 00F15D26
 SeScreenData_0x5120 00F15D26
-FlashWrite_BlockRef_Type6_0x561 00F15FF2
 SeScreenData_0x53EC 00F15FF2
 DrumDetailEdit_Entry_01 00F16006
 SeScreenData_0x5400 00F16006
@@ -17461,48 +17456,34 @@ DrumDetailEdit_Entry_09 00F160AB
 SeScreenData_0x54A5 00F160AB
 Data_Dispatch_Entry 00F160B8
 SeScreenData_0x54B2 00F160B8
-FlashWrite_BlockRef_Type6_0x633 00F160C4
 SeScreenData_0x54BE 00F160C4
-FlashWrite_BlockRef_Type6_0x655 00F160E6
 SeScreenData_0x54E0 00F160E6
-Data_Dispatch_Entry_0x39 00F160F1
 SeScreenData_0x54EB 00F160F1
-Data_Dispatch_Entry_0x45 00F160FD
 SeScreenData_0x54F7 00F160FD
 SeScreenData_0x5503 00F16109
-FlashWrite_BlockRef_Type6_0x690 00F16121
 SeScreenData_0x551B 00F16121
-FlashWrite_BlockRef_Type6_0x69A 00F1612B
 SeScreenData_0x5525 00F1612B
 DrumDetailEdit_Menu_Table 00F1612F
 SeScreenData_0x5569 00F1616F
 SeScreenData_0x5633 00F16239
-DrumDetailEdit_Menu_Table_0x1A4 00F162D3
 SeScreenData_0x56CD 00F162D3
-DrumDetailEdit_Menu_Table_0x27B 00F163AA
 SeScreenData_0x57A4 00F163AA
 SeScreenData_0x57AF 00F163B5
 SeScreenData_0x57BA 00F163C0
 SeScreenData_0x57C5 00F163CB
 SeScreenData_0x57D0 00F163D6
-DrumDetailEdit_Menu_Table_0x2B2 00F163E1
 SeScreenData_0x57DB 00F163E1
-DrumDetailEdit_Menu_Table_0x2C6 00F163F5
 SeScreenData_0x57EF 00F163F5
-DrumDetailEdit_Menu_Table_0x2D0 00F163FF
 SeScreenData_0x57F9 00F163FF
-DrumDetailEdit_Menu_Table_0x2E8 00F16417
 SeScreenData_0x5811 00F16417
 SeScreenData_0x5820 00F16426
 SeScreenData_0x582A 00F16430
 SeScreenData_0x5834 00F1643A
 SeScreenData_0x583E 00F16444
 SeScreenData_0x5848 00F1644E
-DrumDetailEdit_Menu_Table_0x32A 00F16459
 SeScreenData_0x5853 00F16459
 SeScreenData_0x5873 00F16479
 SeScreenData_0x587D 00F16483
-DrumDetailEdit_Menu_Table_0x35E 00F1648D
 SeScreenData_0x5887 00F1648D
 EffectParamEdit_Entry_01 00F1649B
 SeScreenData_0x5895 00F1649B
@@ -17520,7 +17501,6 @@ EffectParamEdit_Entry_07 00F164E1
 SeScreenData_0x58DB 00F164E1
 EffectParamEdit_Entry_08 00F164EC
 SeScreenData_0x58E6 00F164EC
-DrumDetailEdit_Menu_Table_0x3C8 00F164F7
 SeScreenData_0x58F1 00F164F7
 SeScreenData_0x5900 00F16506
 SeScreenData_0x590F 00F16515
@@ -19293,11 +19273,9 @@ SeqSongMem_PostAndReturn 00F228F9
 SongBank_EventHandler_Return 00F228FD
 CDlikeSwTtl_ReturnZeroStub 00F22901
 CDlikeSwTtl_ReturnZeroStub2 00F22904
-CDlikeSwTtl_DispatchData_0x6 00F22907
 CDlikeSwTtl_SendEvt4 00F22907
 CDlikeSwTtl_SendEvt4_Bit0Set 00F2292B
 CDlikeSwTtl_SendEvt4_Post 00F22947
-CDlikeSwTtl_DispatchData_0x4A 00F2294B
 CDlikeSwTtl_SendStartEvtArg1 00F2294B
 CDlikeSwTtl_SendStartEvt 00F2295B
 CDlikeSwTtl_SendResetEvent 00F2296B

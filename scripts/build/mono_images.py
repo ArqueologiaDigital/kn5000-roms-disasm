@@ -5,7 +5,11 @@ QUESTION ANSWERED: can the messages the KN5000 shows while it reflashes itself -
 Erasing", "Please Wait", "Turn On AGAIN", "Illegal Disk" -- be looked at, and still rebuild
 the ROM byte for byte?
 
-Format: 224x22 at 1 bit per pixel, row-major, 28 bytes per row, MSB leftmost. 616 B each.
+Format: 224x22 at 1 bit per pixel, 28 bytes per row, MSB leftmost, rows stored BOTTOM-UP.
+616 B each.  Draw_FlashMemUpdate_message_bitmap starts at y = DE and moves one line UP at every
+28-byte row (`dec 1, ix`), so the first stored row is the bottom line on screen.  Until
+2026-10-02 this script mapped stored row 0 to the PNG's top row and every committed PNG was
+upside down (found by the Wave 2 claims review); the .bin bytes are unchanged by the fix.
 
 These are the screens a user sees during a firmware update, including the failure ones, so
 having them visible matters more than their size suggests.
@@ -48,7 +52,7 @@ def export():
             px = img.load()
             for y in range(H):
                 for x in range(W):
-                    if d[y * STRIDE + (x >> 3)] & (0x80 >> (x & 7)):
+                    if d[(H - 1 - y) * STRIDE + (x >> 3)] & (0x80 >> (x & 7)):
                         px[x, y] = 1
             img.save(DIR / f'{n}.png')
         print(f"exported {len(NAMES)} banners in {DIR}")
@@ -59,7 +63,7 @@ def rebuild(DIR, n):
     assert img.size == (W, H), f'{n}: expected {(W, H)}, got {img.size}'
     px = img.load()
     out = bytearray()
-    for y in range(H):
+    for y in range(H - 1, -1, -1):              # stored BOTTOM-UP (see the docstring)
         for c in range(STRIDE):
             b = 0
             for bit in range(8):

@@ -156,11 +156,9 @@
 	.set Bitmap_MIDIConnections_2_0x3BDC, Bitmap_MIDIConnections_2 + 15324
 	.set Bitmap_MIDIConnections_2_0x3BDD, Bitmap_MIDIConnections_2 + 15325
 	.set Bitmap_SplitPoint_Gb_0x2B, Bitmap_SplitPoint_Gb + 43
-	; CDlikeSwTtl_DispatchData_0x4A / _0x6 are real routines now (demo/
+	; CDlikeSwTtl_SendStartEvtArg1 / _0x6 are real routines now (demo/
 	; demo_seq_bridge.s); these two aliases remain only for ui/setwall_routines.s,
 	; which should call CDlikeSwTtl_SendStartEvtArg1 / CDlikeSwTtl_SendEvt4.
-	.set CDlikeSwTtl_DispatchData_0x4A, CDlikeSwTtl_SendStartEvtArg1
-	.set CDlikeSwTtl_DispatchData_0x6, CDlikeSwTtl_SendEvt4
 	.set CharEncoding_PrintableHi_0x4, CharEncoding_PrintableHi + 4
 	.set CharEncoding_PrintableHi_0x7, CharEncoding_PrintableHi + 7
 	.set CharEncoding_PrintableHi_0xA, CharEncoding_PrintableHi + 10
@@ -409,15 +407,6 @@
 	.set DrawText_LayoutAndRender_Variant1_0x6CA, DrawText_LayoutAndRender_Variant1 + 1738
 	.set DrawText_PopAndReturn_0x7, DrawText_PopAndReturn + 7
 	.set DrawWall_Deferred_0x11, DrawWall_Deferred + 17
-	.set DrumDetailEdit_Menu_Table_0x1A4, SeScreenData_0x56CD
-	.set DrumDetailEdit_Menu_Table_0x27B, SeScreenData_0x57A4
-	.set DrumDetailEdit_Menu_Table_0x2B2, SeScreenData_0x57DB
-	.set DrumDetailEdit_Menu_Table_0x2C6, SeScreenData_0x57EF
-	.set DrumDetailEdit_Menu_Table_0x2D0, SeScreenData_0x57F9
-	.set DrumDetailEdit_Menu_Table_0x2E8, SeScreenData_0x5811
-	.set DrumDetailEdit_Menu_Table_0x32A, SeScreenData_0x5853
-	.set DrumDetailEdit_Menu_Table_0x35E, SeScreenData_0x5887
-	.set DrumDetailEdit_Menu_Table_0x3C8, SeScreenData_0x58F1
 	.set DrumKitExit_DataPad_0x1, DrumKitExit_DataPad + 1
 	.set DrumKit_GroupAssignTable_0x1E, DrumKit_GroupAssignTable + 30
 	.set DrumKit_GroupAssignTable_0x3C, DrumKit_GroupAssignTable + 60
@@ -544,15 +533,6 @@
 	.set FileTypeName_Song_0x6, FileTypeName_Song + 6
 	.set Filename_TemplateArea_0x26, Filename_TemplateArea + 38
 	.set Filename_TemplateArea_0x36, Filename_TemplateArea + 54
-	.set FlashWrite_BlockRef_Type6_0x10, SeScreenData_0x4E9B
-	.set FlashWrite_BlockRef_Type6_0x118, SeScreenData_0x4FA3
-	.set FlashWrite_BlockRef_Type6_0x295, SeScreenData_0x5120
-	.set FlashWrite_BlockRef_Type6_0x40, SeScreenData_0x4ECB
-	.set FlashWrite_BlockRef_Type6_0x561, SeScreenData_0x53EC
-	.set FlashWrite_BlockRef_Type6_0x633, SeScreenData_0x54BE
-	.set FlashWrite_BlockRef_Type6_0x655, SeScreenData_0x54E0
-	.set FlashWrite_BlockRef_Type6_0x690, SeScreenData_0x551B
-	.set FlashWrite_BlockRef_Type6_0x69A, SeScreenData_0x5525
 	.set Flash_InitBytecodeBlock_0x2BF, Flash_InitBytecodeBlock + 703
 	.set Flash_SlotUpdateOpsBlock_0x336, Flash_SlotUpdateOpsBlock + 822
 	.set Flash_SlotUpdateOpsBlock_0x480, Flash_SlotUpdateOpsBlock + 1152
@@ -2353,9 +2333,3 @@
 	.set __pad_F63F8F_0x33, __pad_F63F8F + 51
 	.set __pad_F67D15_0x7, __pad_F67D15 + 7
 
-	; FlashWrite_BlockRef_Type6_Skip (0xF1606C) is NOT a code entry: it is byte 9
-	; of the DrumDetailEdit_Entry_05 record (storage/flash_floppy_handlers.s, typed
-	; data since 2026-09-25).  Its only use is a `jrl ugt` in v9
-	; audio/sound_editor_ui.s that decodes data as code (ASCII "URV" next to it).
-	; Kept only so that file still assembles; delete it once that region is data.
-	.set FlashWrite_BlockRef_Type6_Skip, DrumDetailEdit_Entry_05 + 9

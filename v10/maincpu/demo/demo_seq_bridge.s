@@ -430,7 +430,7 @@ SongBank_EventHandler_Return:
 ; (scripts/lanes/sys/convert_code_runs.py; both `jp ApPostEvent` land on
 ; ApPostEvent, every instruction re-assembles to the ROM bytes).  The two
 ; entries other files call were reached through positional names
-; (CDlikeSwTtl_DispatchData_0x6 / _0x4A, shared/positional_labels.s), now
+; (CDlikeSwTtl_SendEvt4 / _0x4A, shared/positional_labels.s), now
 ; aliases of the labels below.
 ; -----------------------------------------------------------------------------
 ; Two `return 0` stubs; no call, jump or 24-bit pointer to either was found.
