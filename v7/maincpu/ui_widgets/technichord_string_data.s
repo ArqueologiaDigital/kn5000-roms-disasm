@@ -246,6 +246,7 @@ NakaInst_Sdtecd:
 ; [nakarest] naka_technichord_strings+0x140  +0x140..+0x154 (0xe8608e, 20 B)
 ; [nakarest] the table itself: ResName slot 0x3a5 (table 0xe8608e, 4 entries, InitializeMurai),
 ; [nakarest] 4 entry pointers x 4 bytes.
+Murai_ResNameTable_3A5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x140, 0x14
 ; [nakarest] NakaInst_Sqmixer_Term1  +0x154..+0x156 (0xe860a2, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe860a2 not derived; readers below
@@ -275,6 +276,7 @@ NakaInst_Sqmixer:
 ; [nakarest] naka_technichord_strings+0x164  +0x164..+0x1a4 (0xe860b2, 64 B)
 ; [nakarest] the table itself: ResName slot 0x3e4 (table 0xe860b2, 15 entries, InitializeMurai),
 ; [nakarest] 15 entry pointers x 4 bytes.
+Murai_ResNameTable_3E4:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x164, 0x40
 ; [nakarest] NakaInst_Sqmixer_PtrEnd  +0x1a4..+0x1a6 (0xe860f2, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe860f2 not derived; readers below
@@ -354,6 +356,7 @@ NakaInst_Demofeature:
 ; [nakarest] naka_technichord_strings+0x230  +0x230..+0x238 (0xe8617e, 8 B)
 ; [nakarest] the table itself: ResName slot 0x3ea (table 0xe8617e, 44 entries, InitializeMurai),
 ; [nakarest] 44 entry pointers x 4 bytes.
+Murai_ResNameTable_3EA:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x230, 0x8
 ; [nakarest] NakaInst_DrawbarPtrTable  +0x238..+0x2e6 (0xe86186, 174 B)
 ; [nakarest] purpose not established: 6 B at 0xe8622e that no registered NAKA table, symbol, 24/32-bit literal or data word points into
@@ -400,6 +403,7 @@ Str_Drawbar_Drawbar:
 ; [nakarest] naka_technichord_strings+0x3a4  +0x3a4..+0x43c (0xe862f2, 152 B)
 ; [nakarest] the table itself: ResName slot 0x3eb (table 0xe862f2, 37 entries, InitializeMurai),
 ; [nakarest] 37 entry pointers x 4 bytes.
+Murai_ResNameTable_3EB:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x3A4, 0x98
 ; [nakarest] DrawbarStrNull_E8638A  +0x43c..+0x43e (0xe8638a, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe8638a not derived; readers below
@@ -549,6 +553,7 @@ Str_Accordion_Accordion:
 ; [nakarest] naka_technichord_strings+0x4b0  +0x4b0..+0x516 (0xe863fe, 102 B)
 ; [nakarest] the table itself: ResName slot 0x3ee (table 0xe863fe, 24 entries, InitializeMurai),
 ; [nakarest] 24 entry pointers x 4 bytes.
+Murai_ResNameTable_3EE:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x4B0, 0x66
 ; [nakarest] naka_technichord_strings+0x516  +0x516..+0x582 (0xe86464, 108 B)
 ; [nakarest] name strings, entries 0-23 of ResName slot 0x3ee (table 0xe863fe, 24 entries,
@@ -624,6 +629,7 @@ Str_Version_Welcom:
 ; [nakarest] naka_technichord_strings+0x5e6  +0x5e6..+0x5ea (0xe86534, 4 B)
 ; [nakarest] the table itself: ResName slot 0x3f0 (table 0xe86534, 6 entries, InitializeMurai),
 ; [nakarest] 6 entry pointers x 4 bytes.
+Murai_ResNameTable_3F0:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x5E6, 0x4
 ; [nakarest] StrTable_SoftwareVersionComps  +0x5ea..+0x602 (0xe86538, 24 B)
 ; [nakarest] purpose not established: 4 B at 0xe8654c that no registered NAKA table, symbol, 24/32-bit literal or data word points into
@@ -688,6 +694,7 @@ InitializeMurai_Str_TT_SOFTVER:		.incbin "includes/generated/naka_technichord_st
 ; [nakarest] naka_technichord_strings+0x6f6  +0x6f6..+0x702 (0xe86644, 12 B)
 ; [nakarest] the table itself: MainFunction slot 0x441 (table 0xe86644, 2 entries,
 ; [nakarest] InitializeMurai), 2 entry pointers x 4 bytes.
+Murai_MainFunctionTable_441:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x6F6, 0xC
 ; [nakarest] Str_DrawCtrl_Empty  +0x702..+0x704 (0xe86650, 2 B)
 ; [nakarest] purpose not established: layout of 2 B at 0xe86650 not derived; readers below
@@ -6618,6 +6625,7 @@ Data_WinProp_EA0F42:
 ; [nakarest] purpose not established: layout of 2 B at 0xea1186 not derived; readers below
 ; [nakarest] Readers: source references InitializeCheap (file_io/medley.s: `ld wa,
 ; [nakarest] (0xea1186:24)`).
+Cheap_ClassCount_165:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B238, 0x2
 ; [nakarest] PtrTbl_EventNames_EA1188  +0x1b23a..+0x1b252 (0xea1188, 24 B)
 ; [nakarest] the table itself: ResEvent slot 0x1c5 (table 0xea1188, 5 entries, InitializeCheap),
@@ -6653,10 +6661,12 @@ Str_Ev_NotParaDraw:
 ; [nakarest] purpose not established: layout of 2 B at 0xea11f2 not derived; readers below
 ; [nakarest] Readers: source references InitializeCheap (file_io/medley.s: `ld wa,
 ; [nakarest] (0xea11f2:24)`).
+Cheap_ResEventCount_1C5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B2A4, 0x2
 ; [nakarest] naka_technichord_strings+0x1b2a6  +0x1b2a6..+0x1b2aa (0xea11f4, 4 B)
 ; [nakarest] the table itself: ResMethod slot 0x1e5 (table 0xea11f4, 17 entries,
 ; [nakarest] InitializeCheap), 17 entry pointers x 4 bytes.
+Cheap_ResMethodTable_1E5:
 	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B2A6, 0x4
 ; [nakarest] PtrTbl_MsgTypeNames_EA11F8  +0x1b2aa..+0x1b2ee (0xea11f8, 68 B)
 ; [nakarest] purpose not established: 4 B at 0xea1238 that no registered NAKA table, symbol, 24/32-bit literal or data word points into

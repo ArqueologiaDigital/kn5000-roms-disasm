@@ -13736,12 +13736,12 @@ SqplyFunc_FormatCases:
 	ld	(xsp), xwa
 	ld	wa, de
 	cp	de, 32770
-	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip
+	jr	nz, SqplyFunc_FormatCases_Skip
 	ld	xwa, SqplyFunc_ParamFormatData_Str
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join2
-EffectBoxProc_CopyNameAndSetup_Code_Skip:
+SqplyFunc_FormatCases_Skip:
 	cp	wa, 32769
-	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip2
+	jr	nz, SqplyFunc_FormatCases_Skip2
 	ld	xwa, SqplyFunc_ParamFormatData_Str_2
 EffectBoxProc_CopyNameAndSetup_Code_Join2:
 	push	xwa
@@ -13751,7 +13751,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join2:
 	call	Free_Compare2
 	inc	8, xsp
 	jrl	SqplyFunc_RestoreAndReturn
-EffectBoxProc_CopyNameAndSetup_Code_Skip2:
+SqplyFunc_FormatCases_Skip2:
 	pushw	wa
 	ld	xwa, SqplyFunc_ParamFormatData_Str_3
 	jrl	SqplyFunc_PushFormatAddr
@@ -13775,27 +13775,27 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip2:
 	ld	xwa, (xsp)
 	lda	xbc, (xwa+18)
 	cp	l, 130
-	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Skip4
+	jr	nz, SqplyFunc_FormatCases_Skip5
 	bit 0, (0x28b1:16)
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip3
+	jr	z, SqplyFunc_FormatCases_Skip4
 	ld	xwa, SqplyFunc_ParamFormatData_Str_6
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join3
-EffectBoxProc_CopyNameAndSetup_Code_Skip3:
+	jr	SqplyFunc_FormatCases_Join2
+SqplyFunc_FormatCases_Skip4:
 	ld	xwa, SqplyFunc_ParamFormatData_Str_7
-EffectBoxProc_CopyNameAndSetup_Code_Join3:
+SqplyFunc_FormatCases_Join2:
 	push	xwa
 	ld	xwa, (xbc)
 	push	xwa
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
-EffectBoxProc_CopyNameAndSetup_Code_Skip4:
+SqplyFunc_FormatCases_Skip5:
 	ld	xbc, (xbc)
 	bit 1, (0x28b1:16)
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip5
+	jr	z, SqplyFunc_FormatCases_Skip6
 	ld	xwa, SqplyFunc_ParamFormatData_Str_8
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join4
-EffectBoxProc_CopyNameAndSetup_Code_Skip5:
+	jr	SqplyFunc_FormatCases_Join3
+SqplyFunc_FormatCases_Skip6:
 	ld	xwa, SqplyFunc_ParamFormatData_Str_9
-EffectBoxProc_CopyNameAndSetup_Code_Join4:
+SqplyFunc_FormatCases_Join3:
 	push	xwa
 	push	xbc
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join5
@@ -13818,11 +13818,11 @@ EffectBoxProc_CopyNameAndSetup_Code_Join5:
 	ld	(xsp), xwa
 	call	GetTitleNow
 	cp	l, 134
-	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry
+	jr	nz, SqplyFunc_FormatCases_Skip7
 	pushm (0x2520:16)
 	ld	xwa, SqplyFunc_ParamFormatData_Str_12
 	jr	EffectBoxProc_CopyNameAndSetup_Code_Join6
-EffectBoxProc_CopyNameAndSetup_Code_Entry:
+SqplyFunc_FormatCases_Skip7:
 	pushm (0x251c:16)
 	ld	xwa, SqplyFunc_ParamFormatData_Str_13
 EffectBoxProc_CopyNameAndSetup_Code_Join6:
@@ -13831,14 +13831,14 @@ EffectBoxProc_CopyNameAndSetup_Code_Join6:
 	ld	(xsp), xwa
 	call	GetTitleNow
 	cp	l, 134
-	jr	nz, EffectBoxProc_CopyNameAndSetup_Code_Entry2
+	jr	nz, SqplyFunc_FormatCases_Skip8
 	pushm (0x2522:16)
 	ld	xwa, SqplyFunc_ParamFormatData_Str_14
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join7
-EffectBoxProc_CopyNameAndSetup_Code_Entry2:
+	jr	SqplyFunc_FormatCases_Join6
+SqplyFunc_FormatCases_Skip8:
 	pushm (0x251e:16)
 	ld	xwa, SqplyFunc_ParamFormatData_Str_15
-EffectBoxProc_CopyNameAndSetup_Code_Join7:
+SqplyFunc_FormatCases_Join6:
 	jr	SqplyFunc_PushFormatAddr
 SqplyFunc_FormatRhythmPattern:
 	ld xwa, (xsp + 4)
@@ -14062,16 +14062,16 @@ SqplyFunc_HandlePartQuery:
 
 SqplyFunc_PartQueryDispatch:
 	ld	l, 1:opc
-EffectBoxProc_CopyNameAndSetup_Code_Join8:
+SqplyFunc_PartQueryDispatch_Join:
 	ld	a, (0x02109c:24)
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
 	jr	SqplyFunc_Epilogue
 	ld	l, 2:opc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join8
+	jr	SqplyFunc_PartQueryDispatch_Join
 	ld	l, 3:opc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join8
+	jr	SqplyFunc_PartQueryDispatch_Join
 
 SqplyFunc_GetScreenId:
 	call GetTitleNow
@@ -14126,38 +14126,38 @@ Sqedt_ParamDispatch:
 	extz	hl
 	sub	hl, 156
 	cp	hl, 0:i3
-	jr	lt, EffectBoxProc_CopyNameAndSetup_Code_Skip7
+	jr	lt, Sqedt_ParamDispatch_Skip
 	cp	hl, 7:i3
-	jr	gt, EffectBoxProc_CopyNameAndSetup_Code_Skip7
+	jr	gt, Sqedt_ParamDispatch_Skip
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_3:24)
 	ld_rrw	hl, xix, hl
 	lda	xix, (15944287:24)
 	jp_rr	8, xix, hl
 	ld	a, (9742:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join9
+	jr	Sqedt_ParamDispatch_Join
 	ld	a, (9756:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join9
+	jr	Sqedt_ParamDispatch_Join
 	ld	a, (61910:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join9
+	jr	Sqedt_ParamDispatch_Join
 	ld	a, (61915:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join9
+	jr	Sqedt_ParamDispatch_Join
 	ld	a, (61937:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join9
+	jr	Sqedt_ParamDispatch_Join
 	ld	a, (61992:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join9
-EffectBoxProc_CopyNameAndSetup_Code_Skip7:
+	jr	Sqedt_ParamDispatch_Join
+Sqedt_ParamDispatch_Skip:
 	ld	a, (9732:16)
-EffectBoxProc_CopyNameAndSetup_Code_Join9:
-	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join16
+Sqedt_ParamDispatch_Join:
+	jrl	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	extz	hl
 	sub	hl, 156
 	cp	hl, 0:i3
-	jr	lt, EffectBoxProc_CopyNameAndSetup_Code_Entry3
+	jr	lt, Sqedt_ParamDispatch_Entry
 	cp	hl, 7:i3
-	jr	gt, EffectBoxProc_CopyNameAndSetup_Code_Entry3
+	jr	gt, Sqedt_ParamDispatch_Entry
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_2:24)
 	ld_rrw	hl, xix, hl
@@ -14165,35 +14165,35 @@ EffectBoxProc_CopyNameAndSetup_Code_Join9:
 	jp_rr	8, xix, hl
 	pushm (0x2610:16)
 	ld	xwa, Sqedt_ParamDispatch_Str
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
+	jr	Sqedt_ParamDispatch_Join2
 	pushm (0x261e:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_2
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
+	jr	Sqedt_ParamDispatch_Join2
 	pushm (0xf1d7:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_3
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
+	jr	Sqedt_ParamDispatch_Join2
 	pushm (0xf1dc:16)
 	ld xwa, FmtStr_pct3d_4B5E
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
+	jr	Sqedt_ParamDispatch_Join2
 	pushm (0xf1f2:16)
 	ld xwa, 0x00e34b64
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
+	jr	Sqedt_ParamDispatch_Join2
 	pushm (0xf229:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_4
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join10
-EffectBoxProc_CopyNameAndSetup_Code_Entry3:
+	jr	Sqedt_ParamDispatch_Join2
+Sqedt_ParamDispatch_Entry:
 	pushm (0x2606:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_5
-EffectBoxProc_CopyNameAndSetup_Code_Join10:
+Sqedt_ParamDispatch_Join2:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	extz	hl
 	sub	hl, 156
 	cp	hl, 0:i3
-	jr	lt, EffectBoxProc_CopyNameAndSetup_Code_Entry4
+	jr	lt, Sqedt_ParamDispatch_Entry2
 	cp	hl, 7:i3
-	jr	gt, EffectBoxProc_CopyNameAndSetup_Code_Entry4
+	jr	gt, Sqedt_ParamDispatch_Entry2
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable:24)
 	ld_rrw	hl, xix, hl
@@ -14201,54 +14201,54 @@ EffectBoxProc_CopyNameAndSetup_Code_Join10:
 	jp_rr	8, xix, hl
 	pushm (0x2612:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_6
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	jr	Sqedt_ParamDispatch_Entry2_Join
 	pushm (0x2620:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_7
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	jr	Sqedt_ParamDispatch_Entry2_Join
 	pushm (0x262c:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_8
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	jr	Sqedt_ParamDispatch_Entry2_Join
 	pushm (0x2626:16)
 	ld xwa, NakaInst_3d
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	jr	Sqedt_ParamDispatch_Entry2_Join
 	pushm (0x25fc:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_9
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
+	jr	Sqedt_ParamDispatch_Entry2_Join
 	pushm (0x25fa:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_10
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join
-EffectBoxProc_CopyNameAndSetup_Code_Entry4:
+	jr	Sqedt_ParamDispatch_Entry2_Join
+Sqedt_ParamDispatch_Entry2:
 	pushm (0x2608:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_11
-EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join:
+Sqedt_ParamDispatch_Entry2_Join:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (9740:16)
 	cp	e, 0:i3
-	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Entry4_Skip
+	jr	le, Sqedt_ParamDispatch_Entry2_Skip
 	exts	de
 	pushw de
 	pushw Sqedt_ParamDispatch_Entry2_Str_Fmt2d@hi16
 	pushw	Sqedt_ParamDispatch_Entry2_Str_Fmt2d@lo16
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join11
-EffectBoxProc_CopyNameAndSetup_Code_Entry4_Skip:
+	jr	Sqedt_ParamDispatch_Join3
+Sqedt_ParamDispatch_Entry2_Skip:
 	ld	xwa, (xsp+4)
 	lda	xbc, (xwa+18)
 	cp	e, 0:i3
-	jr	ge, EffectBoxProc_CopyNameAndSetup_Code_Skip8
+	jr	ge, Sqedt_ParamDispatch_Skip2
 	neg	e
 	exts	de
 	pushw	de
 	pushw	Sqedt_ParamDispatch_Entry2_Str_Fmt2d_2@hi16
 	pushw	Sqedt_ParamDispatch_Entry2_Str_Fmt2d_2@lo16
-EffectBoxProc_CopyNameAndSetup_Code_Join11:
+Sqedt_ParamDispatch_Join3:
 	ld	xwa, (xbc)
 	push	xwa
 	jrl	SqedtFunc_CheckMode_SendAudio
-EffectBoxProc_CopyNameAndSetup_Code_Skip8:
+Sqedt_ParamDispatch_Skip2:
 	exts	de
 	pushw	de
 	pushw	Sqedt_ParamDispatch_Entry2_Str_Fmt3d@hi16
@@ -14258,47 +14258,47 @@ EffectBoxProc_CopyNameAndSetup_Code_Skip8:
 	ld	(xsp+4), xwa
 	ld	e, (9762:16)
 	cp	e, 0:i3
-	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Skip9
+	jr	le, Sqedt_ParamDispatch_Skip3
 	exts	de
 	pushw	de
 	ld xwa, FmtStr_pluspct3d
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join12
-EffectBoxProc_CopyNameAndSetup_Code_Skip9:
+	jr	Sqedt_ParamDispatch_Join4
+Sqedt_ParamDispatch_Skip3:
 	cp	e, 0:i3
-	jr	ge, EffectBoxProc_CopyNameAndSetup_Code_Skip10
+	jr	ge, Sqedt_ParamDispatch_Skip4
 	neg	e
 	exts	de
 	pushw	de
 	ld xwa, FmtStr_minuspct3d
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join12
-EffectBoxProc_CopyNameAndSetup_Code_Skip10:
+	jr	Sqedt_ParamDispatch_Join4
+Sqedt_ParamDispatch_Skip4:
 	exts	de
 	pushw	de
 	ld	xwa, Sqedt_ParamDispatch_Str_12
-EffectBoxProc_CopyNameAndSetup_Code_Join12:
+Sqedt_ParamDispatch_Join4:
 	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join18
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	e, (61998:16)
 	cp	e, 0:i3
-	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Skip11
+	jr	le, Sqedt_ParamDispatch_Skip5
 	exts	de
 	pushw	de
 	ld	xwa, Sqedt_ParamDispatch_Str_13
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join13
-EffectBoxProc_CopyNameAndSetup_Code_Skip11:
+	jr	Sqedt_ParamDispatch_Join5
+Sqedt_ParamDispatch_Skip5:
 	cp	e, 0:i3
-	jr	ge, EffectBoxProc_CopyNameAndSetup_Code_Skip12
+	jr	ge, Sqedt_ParamDispatch_Skip6
 	neg	e
 	exts	de
 	pushw	de
 	ld	xwa, Sqedt_ParamDispatch_Str_14
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join13
-EffectBoxProc_CopyNameAndSetup_Code_Skip12:
+	jr	Sqedt_ParamDispatch_Join5
+Sqedt_ParamDispatch_Skip6:
 	exts	de
 	pushw	de
 	ld	xwa, Sqedt_ParamDispatch_Str_15
-EffectBoxProc_CopyNameAndSetup_Code_Join13:
+Sqedt_ParamDispatch_Join5:
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14338,22 +14338,22 @@ EffectBoxProc_CopyNameAndSetup_Code_Join13:
 	ld	a, e
 	exts	wa
 	cp	e, 0:i3
-	jr	le, EffectBoxProc_CopyNameAndSetup_Code_Skip13
+	jr	le, Sqedt_ParamDispatch_Skip7
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_17
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join14
-EffectBoxProc_CopyNameAndSetup_Code_Skip13:
+	jr	Sqedt_ParamDispatch_Join6
+Sqedt_ParamDispatch_Skip7:
 	cp	e, 0:i3
-	jr	ge, EffectBoxProc_CopyNameAndSetup_Code_Skip14
+	jr	ge, Sqedt_ParamDispatch_Skip8
 	neg	e
 	exts	de
 	pushw	de
 	ld	xwa, Sqedt_ParamDispatch_Str_18
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join14
-EffectBoxProc_CopyNameAndSetup_Code_Skip14:
+	jr	Sqedt_ParamDispatch_Join6
+Sqedt_ParamDispatch_Skip8:
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_19
-EffectBoxProc_CopyNameAndSetup_Code_Join14:
+Sqedt_ParamDispatch_Join6:
 	push	xwa
 	ld	xwa, (xsp+10)
 	lda	xbc, (xwa+18)
@@ -14380,7 +14380,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join14:
 	extz	wa
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_20
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join15
+	jr	Sqedt_ParamDispatch_Join7
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	lda	xbc, (xwa+18)
@@ -14403,7 +14403,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join14:
 	extz	wa
 	pushw	wa
 	ld	xwa, Sqedt_ParamDispatch_Str_21
-EffectBoxProc_CopyNameAndSetup_Code_Join15:
+Sqedt_ParamDispatch_Join7:
 	push	xwa
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+18)
@@ -14438,7 +14438,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61929:16)
-	jrl	EffectBoxProc_CopyNameAndSetup_Code_Join16
+	jrl	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1ea:16)
@@ -14456,7 +14456,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61934:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
+	jr	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1ef:16)
@@ -14476,7 +14476,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61921:16)
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join16
+	jr	Sqedt_ParamDispatch_Join8
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	pushm (0xf1e2:16)
@@ -14494,7 +14494,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join15:
 	ld	(xsp+4), xwa
 	pushw	5
 	ld	a, (61926:16)
-EffectBoxProc_CopyNameAndSetup_Code_Join16:
+Sqedt_ParamDispatch_Join8:
 	extz	wa
 	muls	wa, 5
 	ld xbc, LongStr_1_2_3
@@ -14531,7 +14531,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	ld	(xsp+4), xwa
 	pushw	3
 	ld a, (0x270c:16)
-	jr EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join2
+	jr Sqedt_ParamDispatch_Entry2_Join2
 	ld	xwa, (xsp+8)
 	ld	(xsp+4), xwa
 	ld	a, (9994:16)
@@ -14543,7 +14543,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join16:
 	ld	(xsp+4), xwa
 	pushw	3
 	ld	a, (9998:16)
-EffectBoxProc_CopyNameAndSetup_Code_Entry4_Join2:
+Sqedt_ParamDispatch_Entry2_Join2:
 	extz	wa
 	muls	wa, 3
 	ld	xbc, Sqedt_ParamDispatch_Table
@@ -14725,36 +14725,36 @@ Sqedt_ValueDispatch:
 	ld	l, 13:opc
 	jr	SqedtFunc_SignExtendAndReturn
 	cp	l, 156
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip18
+	jr	z, Sqedt_ValueDispatch_Skip4
 	cp	l, 161
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip17
+	jr	z, Sqedt_ValueDispatch_Skip3
 	cp	l, 158
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip16
+	jr	z, Sqedt_ValueDispatch_Skip2
 	cp	l, 157
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip15
+	jr	z, Sqedt_ValueDispatch_Skip
 	cp	l, 160
 	jr	nz, SqedtFunc_ReturnNegOne
 	ld	l, 3:opc
 	jr	SqedtFunc_SignExtendAndReturn
-EffectBoxProc_CopyNameAndSetup_Code_Skip15:
+Sqedt_ValueDispatch_Skip:
 	ld	l, 4:opc
 	jr	SqedtFunc_SignExtendAndReturn
-EffectBoxProc_CopyNameAndSetup_Code_Skip16:
+Sqedt_ValueDispatch_Skip2:
 	ld	l, 5:opc
 	jr	SqedtFunc_SignExtendAndReturn
-EffectBoxProc_CopyNameAndSetup_Code_Skip17:
+Sqedt_ValueDispatch_Skip3:
 	ld	l, 6:opc
 	jr	SqedtFunc_SignExtendAndReturn
-EffectBoxProc_CopyNameAndSetup_Code_Skip18:
+Sqedt_ValueDispatch_Skip4:
 	ld	l, 7:opc
 	jr	SqedtFunc_SignExtendAndReturn
 	cp	l, 159
-	jr	z, EffectBoxProc_CopyNameAndSetup_Code_Skip19
+	jr	z, Sqedt_ValueDispatch_Skip5
 	cp	l, 156
 	jr	nz, SqedtFunc_ReturnNegOne
 	ld	l, 8:opc
 	jr	SqedtFunc_SignExtendAndReturn
-EffectBoxProc_CopyNameAndSetup_Code_Skip19:
+Sqedt_ValueDispatch_Skip5:
 	ld	l, 10:opc
 	jr	SqedtFunc_SignExtendAndReturn
 
@@ -14797,22 +14797,22 @@ SqedtFunc_SignExtend:
 ; Sequencer format dispatch A
 SeqFormat_DispatchA:
 	ld	l, 0:opc
-EffectBoxProc_CopyNameAndSetup_Code_Join19:
+SeqFormat_DispatchA_Join:
 	ld	a, (0x02109c:24)
 	cp	a, l
 	scc16	z, hl
 	extz	xhl
 	jrl	SqedtFunc_Epilogue12
 	ld	l, 1:opc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join19
+	jr	SeqFormat_DispatchA_Join
 	ld	l, 2:opc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join19
+	jr	SeqFormat_DispatchA_Join
 	ld	l, 3:opc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join19
+	jr	SeqFormat_DispatchA_Join
 	ld	l, 5:opc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join19
+	jr	SeqFormat_DispatchA_Join
 	ld	l, 6:opc
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join19
+	jr	SeqFormat_DispatchA_Join
 	ld	xhl, 0:i3
 	ld	l, (0x03e2dc:24)
 	jrl	SqedtFunc_Epilogue12
@@ -14837,23 +14837,23 @@ EffectBoxProc_CopyNameAndSetup_Code_Join19:
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 15
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join20
+	jr	SeqFormat_DispatchA_Join2
 	cp	(0x03e2e0:24), 1
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 18
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join21
+	jr	SeqFormat_DispatchA_Join3
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 21
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join20
+	jr	SeqFormat_DispatchA_Join2
 	cp	(0x03e2e0:24), 1
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 24
-	jr	EffectBoxProc_CopyNameAndSetup_Code_Join21
+	jr	SeqFormat_DispatchA_Join3
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 27
-EffectBoxProc_CopyNameAndSetup_Code_Join20:
+SeqFormat_DispatchA_Join2:
 	ld	xbc, (xsp+8)
 	sub	xbc, xwa
 	ld	xwa, 0:i3
@@ -14865,7 +14865,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join20:
 	cp	(0x03e2e0:24), 1
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 29
-EffectBoxProc_CopyNameAndSetup_Code_Join21:
+SeqFormat_DispatchA_Join3:
 	ld	xbc, (xsp+8)
 	sub	xbc, xwa
 	ld	xwa, 0:i3

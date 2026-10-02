@@ -486,90 +486,112 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 ; [nakarest] naka_midi_reverb+0x3e22  +0x3e22..+0x3e36 (0xe59c5a, 20 B)
 ; [nakarest] the table itself: Viewable slot 0x9 (table 0xe59c5a, 4 entries, InitializeEast), 4
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_009:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3E22, 0x14
 ; [nakarest] naka_midi_reverb+0x3e36  +0x3e36..+0x3e46 (0xe59c6e, 16 B)
 ; [nakarest] the table itself: Viewable slot 0xf (table 0xe59c6e, 3 entries, InitializeEast), 3
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_00F:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3E36, 0x10
 ; [nakarest] naka_midi_reverb+0x3e46  +0x3e46..+0x3e7a (0xe59c7e, 52 B)
 ; [nakarest] the table itself: Viewable slot 0x18 (table 0xe59c7e, 12 entries, InitializeEast),
 ; [nakarest] 12 entry pointers x 4 bytes.
+East_ViewableTable_018:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3E46, 0x34
 ; [nakarest] naka_midi_reverb+0x3e7a  +0x3e7a..+0x3eae (0xe59cb2, 52 B)
 ; [nakarest] the table itself: Viewable slot 0x19 (table 0xe59cb2, 12 entries, InitializeEast),
 ; [nakarest] 12 entry pointers x 4 bytes.
+East_ViewableTable_019:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3E7A, 0x34
 ; [nakarest] naka_midi_reverb+0x3eae  +0x3eae..+0x3ee2 (0xe59ce6, 52 B)
 ; [nakarest] the table itself: Viewable slot 0x1a (table 0xe59ce6, 12 entries, InitializeEast),
 ; [nakarest] 12 entry pointers x 4 bytes.
+East_ViewableTable_01A:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3EAE, 0x34
 ; [nakarest] naka_midi_reverb+0x3ee2  +0x3ee2..+0x3f36 (0xe59d1a, 84 B)
 ; [nakarest] the table itself: Viewable slot 0x50 (table 0xe59d1a, 20 entries, InitializeEast),
 ; [nakarest] 20 entry pointers x 4 bytes.
+East_ViewableTable_050:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3EE2, 0x54
 ; [nakarest] naka_midi_reverb+0x3f36  +0x3f36..+0x3f56 (0xe59d6e, 32 B)
 ; [nakarest] the table itself: Viewable slot 0x51 (table 0xe59d6e, 7 entries, InitializeEast), 7
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_051:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3F36, 0x20
 ; [nakarest] naka_midi_reverb+0x3f56  +0x3f56..+0x3f7a (0xe59d8e, 36 B)
 ; [nakarest] the table itself: Viewable slot 0x52 (table 0xe59d8e, 8 entries, InitializeEast), 8
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_052:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3F56, 0x24
 ; [nakarest] naka_midi_reverb+0x3f7a  +0x3f7a..+0x3f96 (0xe59db2, 28 B)
 ; [nakarest] the table itself: Viewable slot 0x53 (table 0xe59db2, 6 entries, InitializeEast), 6
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_053:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3F7A, 0x1C
 ; [nakarest] naka_midi_reverb+0x3f96  +0x3f96..+0x3fae (0xe59dce, 24 B)
 ; [nakarest] the table itself: Viewable slot 0x54 (table 0xe59dce, 5 entries, InitializeEast), 5
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_054:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3F96, 0x18
 ; [nakarest] naka_midi_reverb+0x3fae  +0x3fae..+0x3fc6 (0xe59de6, 24 B)
 ; [nakarest] the table itself: Viewable slot 0x55 (table 0xe59de6, 5 entries, InitializeEast), 5
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_055:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3FAE, 0x18
 ; [nakarest] naka_midi_reverb+0x3fc6  +0x3fc6..+0x40d6 (0xe59dfe, 272 B)
 ; [nakarest] the table itself: Viewable slot 0x56 (table 0xe59dfe, 67 entries, InitializeEast),
 ; [nakarest] 67 entry pointers x 4 bytes.
+East_ViewableTable_056:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x3FC6, 0x110
 ; [nakarest] naka_midi_reverb+0x40d6  +0x40d6..+0x414a (0xe59f0e, 116 B)
 ; [nakarest] the table itself: Viewable slot 0x57 (table 0xe59f0e, 28 entries, InitializeEast),
 ; [nakarest] 28 entry pointers x 4 bytes.
+East_ViewableTable_057:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x40D6, 0x74
 ; [nakarest] naka_midi_reverb+0x414a  +0x414a..+0x41a2 (0xe59f82, 88 B)
 ; [nakarest] the table itself: Viewable slot 0x58 (table 0xe59f82, 21 entries, InitializeEast),
 ; [nakarest] 21 entry pointers x 4 bytes.
+East_ViewableTable_058:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x414A, 0x58
 ; [nakarest] naka_midi_reverb+0x41a2  +0x41a2..+0x41be (0xe59fda, 28 B)
 ; [nakarest] the table itself: Viewable slot 0x59 (table 0xe59fda, 6 entries, InitializeEast), 6
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_059:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x41A2, 0x1C
 ; [nakarest] naka_midi_reverb+0x41be  +0x41be..+0x41da (0xe59ff6, 28 B)
 ; [nakarest] the table itself: Viewable slot 0x5a (table 0xe59ff6, 6 entries, InitializeEast), 6
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_05A:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x41BE, 0x1C
 ; [nakarest] naka_midi_reverb+0x41da  +0x41da..+0x4222 (0xe5a012, 72 B)
 ; [nakarest] the table itself: Viewable slot 0x5b (table 0xe5a012, 17 entries, InitializeEast),
 ; [nakarest] 17 entry pointers x 4 bytes.
+East_ViewableTable_05B:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x41DA, 0x48
 ; [nakarest] naka_midi_reverb+0x4222  +0x4222..+0x4246 (0xe5a05a, 36 B)
 ; [nakarest] the table itself: Viewable slot 0x5c (table 0xe5a05a, 8 entries, InitializeEast), 8
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_05C:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x4222, 0x24
 ; [nakarest] naka_midi_reverb+0x4246  +0x4246..+0x42aa (0xe5a07e, 100 B)
 ; [nakarest] the table itself: Viewable slot 0xd7 (table 0xe5a07e, 24 entries, InitializeEast),
 ; [nakarest] 24 entry pointers x 4 bytes.
+East_ViewableTable_0D7:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x4246, 0x64
 ; [nakarest] naka_midi_reverb+0x42aa  +0x42aa..+0x42ce (0xe5a0e2, 36 B)
 ; [nakarest] the table itself: Viewable slot 0xd8 (table 0xe5a0e2, 8 entries, InitializeEast), 8
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_0D8:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x42AA, 0x24
 ; [nakarest] naka_midi_reverb+0x42ce  +0x42ce..+0x42ea (0xe5a106, 28 B)
 ; [nakarest] the table itself: Viewable slot 0xec (table 0xe5a106, 6 entries, InitializeEast), 6
 ; [nakarest] entry pointers x 4 bytes.
+East_ViewableTable_0EC:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x42CE, 0x1C
 ; [nakarest] naka_midi_reverb+0x42ea  +0x42ea..+0x4300 (0xe5a122, 22 B)
 ; [nakarest] the table itself: ResName slot 0x309 (table 0xe5a122, 4 entries, InitializeEast), 4
 ; [nakarest] entry pointers x 4 bytes.
+East_ResNameTable_309:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x42EA, 0x16
 ; [nakarest] naka_midi_reverb+0x4300  +0x4300..+0x431a (0xe5a138, 26 B)
 ; [nakarest] name strings, entries 0-3 of ResName slot 0x309 (table 0xe5a122, 4 entries,
@@ -578,6 +600,7 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 ; [nakarest] naka_midi_reverb+0x431a  +0x431a..+0x432c (0xe5a152, 18 B)
 ; [nakarest] the table itself: ResName slot 0x30f (table 0xe5a152, 3 entries, InitializeEast), 3
 ; [nakarest] entry pointers x 4 bytes.
+East_ResNameTable_30F:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x431A, 0x12
 ; [nakarest] naka_midi_reverb+0x432c  +0x432c..+0x4342 (0xe5a164, 22 B)
 ; [nakarest] name strings, entries 0-2 of ResName slot 0x30f (table 0xe5a152, 3 entries,
@@ -586,6 +609,7 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 ; [nakarest] naka_midi_reverb+0x4342  +0x4342..+0x4378 (0xe5a17a, 54 B)
 ; [nakarest] the table itself: ResName slot 0x318 (table 0xe5a17a, 12 entries, InitializeEast),
 ; [nakarest] 12 entry pointers x 4 bytes.
+East_ResNameTable_318:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x4342, 0x36
 ; [nakarest] naka_midi_reverb+0x4378  +0x4378..+0x439c (0xe5a1b0, 36 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x318 (table 0xe5a17a, 12 entries,
@@ -594,6 +618,7 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 ; [nakarest] naka_midi_reverb+0x439c  +0x439c..+0x43d2 (0xe5a1d4, 54 B)
 ; [nakarest] the table itself: ResName slot 0x319 (table 0xe5a1d4, 12 entries, InitializeEast),
 ; [nakarest] 12 entry pointers x 4 bytes.
+East_ResNameTable_319:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x439C, 0x36
 ; [nakarest] naka_midi_reverb+0x43d2  +0x43d2..+0x4402 (0xe5a20a, 48 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x319 (table 0xe5a1d4, 12 entries,
@@ -603,6 +628,7 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 ; [nakarest] naka_midi_reverb+0x4402  +0x4402..+0x4438 (0xe5a23a, 54 B)
 ; [nakarest] the table itself: ResName slot 0x31a (table 0xe5a23a, 12 entries, InitializeEast),
 ; [nakarest] 12 entry pointers x 4 bytes.
+East_ResNameTable_31A:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x4402, 0x36
 ; [nakarest] naka_midi_reverb+0x4438  +0x4438..+0x4470 (0xe5a270, 56 B)
 ; [nakarest] name strings, entries 0-11 of ResName slot 0x31a (table 0xe5a23a, 12 entries,
@@ -612,6 +638,7 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 ; [nakarest] naka_midi_reverb+0x4470  +0x4470..+0x44c6 (0xe5a2a8, 86 B)
 ; [nakarest] the table itself: ResName slot 0x350 (table 0xe5a2a8, 20 entries, InitializeEast),
 ; [nakarest] 20 entry pointers x 4 bytes.
+East_ResNameTable_350:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x4470, 0x56
 ; [nakarest] naka_midi_reverb+0x44c6  +0x44c6..+0x4518 (0xe5a2fe, 82 B)
 ; [nakarest] name strings, entries 0-19 of ResName slot 0x350 (table 0xe5a2a8, 20 entries,
@@ -621,6 +648,7 @@ NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 ; [nakarest] naka_midi_reverb+0x4518  +0x4518..+0x453a (0xe5a350, 34 B)
 ; [nakarest] the table itself: ResName slot 0x351 (table 0xe5a350, 7 entries, InitializeEast), 7
 ; [nakarest] entry pointers x 4 bytes.
+East_ResNameTable_351:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x4518, 0x22
 ; [nakarest] naka_midi_reverb+0x453a  +0x453a..+0x4566 (0xe5a372, 44 B)
 ; [nakarest] name strings, entries 0-6 of ResName slot 0x351 (table 0xe5a350, 7 entries,

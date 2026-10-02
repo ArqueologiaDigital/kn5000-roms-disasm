@@ -16418,12 +16418,12 @@ HdaeRom_FinishBlock:
 	ld	(xsp+0x3), (0xbfe3)
 	ld	a, (xsp+0x1)
 	cp	a, 24
-	jr	ugt, VoiceSlot_CheckAndApply_Data2_Epilogue6
+	jr	ugt, HdaeRom_FinishBlock_Epilogue
 	cp	a, 0:i3
-	jr	c, VoiceSlot_CheckAndApply_Data2_Epilogue6
+	jr	c, HdaeRom_FinishBlock_Epilogue
 	ld	a, (xsp+0x3)
 	and	a, 255
-	jr	z, VoiceSlot_CheckAndApply_Data2_Epilogue6
+	jr	z, HdaeRom_FinishBlock_Epilogue
 	ld	(xsp+0x1), 0
 	lda	xwa, (xsp)
 	ld	xde, xwa
@@ -16433,7 +16433,7 @@ HdaeRom_FinishBlock:
 	extz	bc
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
-VoiceSlot_CheckAndApply_Data2_Epilogue6:
+HdaeRom_FinishBlock_Epilogue:
 	inc	4, xsp
 	ret
 HdaeRom_TableEntry0:
@@ -16574,18 +16574,18 @@ HdaeRom_AltProcessBlock:
 	cp	a, 13
 	jr	ugt, HdaeRom_AltProcessBlock_Epilogue
 	cp	a, 2:i3
-	jr	nc, SndParam_ProcessEntry_Skip5
+	jr	nc, HdaeRom_AltProcessBlock_Skip3
 	cp	a, 0:i3
-	jr	z, SndParam_ProcessEntry_Skip3
+	jr	z, HdaeRom_AltProcessBlock_Skip
 	cp	a, 1:i3
-	jr	z, SndParam_ProcessEntry_Skip4
+	jr	z, HdaeRom_AltProcessBlock_Skip2
 	jr	HdaeRom_AltProcessBlock_Epilogue
-SndParam_ProcessEntry_Skip3:
+HdaeRom_AltProcessBlock_Skip:
 	lda	xwa, (xsp)
 	ldw	bc, 255
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltProcessBlock_Epilogue
-SndParam_ProcessEntry_Skip4:
+HdaeRom_AltProcessBlock_Skip2:
 	ld	a, (xsp+0x3)
 	and	a, 15
 	jr	z, HdaeRom_AltProcessBlock_Entry
@@ -16599,7 +16599,7 @@ HdaeRom_AltProcessBlock_Entry:
 	ldw	bc, 128
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltProcessBlock_Epilogue
-SndParam_ProcessEntry_Skip5:
+HdaeRom_AltProcessBlock_Skip3:
 	lda	xwa, (xsp)
 	ldw	bc, 255
 	calr	UIState_ProcessKeyEvent_Helper
@@ -16619,7 +16619,7 @@ HdaeRom_AltReadParam:
 	cp	a, 3:i3
 	jr	z, HdaeRom_AltReadParam_Epilogue
 	cp	a, 2:i3
-	jr	z, SndParam_ProcessEntry_Skip6
+	jr	z, HdaeRom_AltReadParam_Skip
 	cp	a, 1:i3
 	jr	z, HdaeRom_AltReadParam_Epilogue
 	cp	a, 0:i3
@@ -16635,7 +16635,7 @@ HdaeRom_AltReadParam:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltReadParam_Epilogue
-SndParam_ProcessEntry_Skip6:
+HdaeRom_AltReadParam_Skip:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, HdaeRom_AltReadParam_Epilogue
@@ -16658,15 +16658,15 @@ HdaeRom_AltCheckResult:
 	ld	(xsp+0x3), (0xbfe3)
 	ld	a, (xsp+0x1)
 	cp	a, 4:i3
-	jr	z, SndParam_ProcessEntry_Skip8
+	jr	z, HdaeRom_AltCheckResult_Skip3
 	cp	a, 3:i3
 	jr	z, HdaeRom_AltCheckResult_Epilogue
 	cp	a, 2:i3
-	jr	z, SndParam_ProcessEntry_Skip7
+	jr	z, HdaeRom_AltCheckResult_Skip2
 	cp	a, 1:i3
 	jr	z, HdaeRom_AltCheckResult_Epilogue
 	jr	HdaeRom_AltCheckResult_Epilogue
-SndParam_ProcessEntry_Skip7:
+HdaeRom_AltCheckResult_Skip2:
 	bitm	7, (xsp+0x3)
 	jr	z, HdaeRom_AltCheckResult_Epilogue
 	lda	xwa, (xsp)
@@ -16678,17 +16678,17 @@ SndParam_ProcessEntry_Skip7:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltCheckResult_Epilogue
-SndParam_ProcessEntry_Skip8:
+HdaeRom_AltCheckResult_Skip3:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, HdaeRom_AltCheckResult_Epilogue
 	lda	xbc, (xsp+0x2)
 	ld	a, 0:opc
 	bitm	7, (xsp+0x2)
-	jr	nz, SndParam_ProcessEntry_Skip9
+	jr	nz, HdaeRom_AltCheckResult_Skip4
 	ld	a, (xsp+0x2)
 	res	7, a
-SndParam_ProcessEntry_Skip9:
+HdaeRom_AltCheckResult_Skip4:
 	ld	(xbc), a
 	ld	a, (xsp+0x2)
 	extz	wa
@@ -16763,9 +16763,9 @@ HdaeRom_AltTableEntry1:
 	ld	(xsp+0x3), (0xbfe3)
 	ld	a, (xsp+0x1)
 	cp	a, 3:i3
-	jr	z, SndParam_ProcessEntry_Skip11
+	jr	z, HdaeRom_AltTableEntry1_Skip2
 	cp	a, 1:i3
-	jr	z, SndParam_ProcessEntry_Skip10
+	jr	z, HdaeRom_AltTableEntry1_Skip
 	cp	a, 0:i3
 	jr	nz, HdaeRom_AltTableEntry1_Epilogue
 	lda	xwa, (xsp)
@@ -16776,7 +16776,7 @@ HdaeRom_AltTableEntry1:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltTableEntry1_Epilogue
-SndParam_ProcessEntry_Skip10:
+HdaeRom_AltTableEntry1_Skip:
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16785,7 +16785,7 @@ SndParam_ProcessEntry_Skip10:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltTableEntry1_Epilogue
-SndParam_ProcessEntry_Skip11:
+HdaeRom_AltTableEntry1_Skip2:
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16835,10 +16835,10 @@ HdaeRom_AltTableEntry4:
 	ld	(xsp+0x2), (0xbfe2)
 	ld	(xsp+0x3), (0xbfe3)
 	cp	(xsp+0x1), 16
-	jr	c, SndParam_ProcessEntry_Skip12
+	jr	c, HdaeRom_AltTableEntry4_Skip
 	cp	(xsp+0x1), 20
 	jr	ule, SndParam_ProcessEntry_Epilogue2
-SndParam_ProcessEntry_Skip12:
+HdaeRom_AltTableEntry4_Skip:
 	lda	xwa, (xsp)
 	ld	xde, xwa
 	ld	a, (xsp+0x3)
@@ -16894,7 +16894,7 @@ HdaeRom_AltTableEntry9:
 	ld	(xsp+0x3), (0xbfe3)
 	ld	a, (xsp+0x1)
 	cp	a, 1:i3
-	jr	z, SndParam_ProcessEntry_Skip13
+	jr	z, HdaeRom_AltTableEntry9_Skip2
 	cp	a, 0:i3
 	jr	nz, HdaeRom_AltTableEntry9_Epilogue
 	bitm	7, (xsp+0x3)
@@ -16908,7 +16908,7 @@ HdaeRom_AltTableEntry9:
 	ld	xwa, xde
 	calr	UIState_ProcessKeyEvent_Helper
 	jr	HdaeRom_AltTableEntry9_Epilogue
-SndParam_ProcessEntry_Skip13:
+HdaeRom_AltTableEntry9_Skip2:
 	ld	a, (xsp+0x3)
 	res	7, a
 	cp	a, 0:i3

@@ -384,47 +384,47 @@ SeqPlay_DataBlock_BBE:
 	inc	1, wa
 	ld	(0xf238:16), wa
 	cp	wa, 998
-	jr	ule, SeqPlay_InitTempoAndActivateParts_Code_Skip
+	jr	ule, SeqPlay_DataBlock_BBE_Skip
 	ldw	(0xf238:16), 998
-SeqPlay_InitTempoAndActivateParts_Code_Skip:
-	calr	SeqPlay_InitTempoAndActivateParts_Code_Helper
+SeqPlay_DataBlock_BBE_Skip:
+	calr	SeqPlay_DataBlock_BBE_Helper
 	ld	wa, (0xf238:16)
 	cp wa, (62010:16)
-	jr	c, SeqPlay_InitTempoAndActivateParts_Code_Skip2
+	jr	c, SeqPlay_DataBlock_BBE_Skip2
 	inc	1, wa
 	ld	(0xf23a:16), wa
-SeqPlay_InitTempoAndActivateParts_Code_Skip2:
+SeqPlay_DataBlock_BBE_Skip2:
 	jrl	SeqAcc_SetupRepeatCount
 ApPlaySyori_Helper:
 	ld	wa, (0xf238:16)
 	cp	wa, 1:i3
-	jr	ule, SeqPlay_InitTempoAndActivateParts_Code_Skip3
+	jr	ule, SeqPlay_DataBlock_BBE_Skip3
 	dec	1, wa
 	ld	(0xf238:16), wa
-SeqPlay_InitTempoAndActivateParts_Code_Skip3:
-	calr	SeqPlay_InitTempoAndActivateParts_Code_Helper2
+SeqPlay_DataBlock_BBE_Skip3:
+	calr	SeqPlay_DataBlock_BBE_Helper2
 	jrl	SeqAcc_SetupRepeatCount
-SeqPlay_InitTempoAndActivateParts_Code_Helper:
+SeqPlay_DataBlock_BBE_Helper:
 	bit	0, (10418:16)
-	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip2
+	jr	z, SeqPlay_DataBlock_BBE_Helper_Skip2
 	ldw_d16	wa, (62008)
 	cp	wa, 2:i3
-	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip
+	jr	nz, SeqPlay_DataBlock_BBE_Helper_Skip
 	ldw	(9832:16), 0x8002
 	ldw	(9964:16), 0x8002
 	ldw	(0xf23f:16), 3
 	ret
-SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip:
+SeqPlay_DataBlock_BBE_Helper_Skip:
 	cp	wa, 3:i3
-	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Skip4
+	jr	nz, SeqPlay_DataBlock_BBE_Skip4
 	ldw	(9832:16), 1
 	ldw	(9964:16), 1
 	ldw	(0xf23f:16), 2
 	ret
-SeqPlay_InitTempoAndActivateParts_Code_Skip4:
+SeqPlay_DataBlock_BBE_Skip4:
 	cp	wa, 3:i3
 	ret	c
-SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip2:
+SeqPlay_DataBlock_BBE_Helper_Skip2:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -434,27 +434,27 @@ SeqPlay_InitTempoAndActivateParts_Code_Helper_Skip2:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	ret
-SeqPlay_InitTempoAndActivateParts_Code_Helper2:
+SeqPlay_DataBlock_BBE_Helper2:
 	bit	0, (10418:16)
-	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip2
+	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip2
 	ldw_d16	wa, (62008)
 	cp	wa, 1:i3
-	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip
+	jr	nz, SeqPlay_DataBlock_BBE_Helper2_Skip
 	ldw	(9832:16), 0x8002
 	ldw	(9964:16), 0x8002
 	ldw	(0xf23f:16), 2
 	ret
-SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip:
+SeqPlay_DataBlock_BBE_Helper2_Skip:
 	cp	wa, 2:i3
-	jr	nz, SeqPlay_InitTempoAndActivateParts_Code_Skip5
+	jr	nz, SeqPlay_DataBlock_BBE_Skip5
 	ldw	(9832:16), 2
 	ldw	(9964:16), 0x8002
 	ldw	(0xf23f:16), 3
 	ret
-SeqPlay_InitTempoAndActivateParts_Code_Skip5:
+SeqPlay_DataBlock_BBE_Skip5:
 	cp	wa, 3:i3
 	ret	c
-SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip2:
+SeqPlay_DataBlock_BBE_Helper2_Skip2:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -467,56 +467,56 @@ SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip2:
 ApPlaySyori_Helper2:
 	ld	wa, (0xf23a:16)
 	cp	wa, 999
-	jr	c, SeqPlay_InitTempoAndActivateParts_Code_Skip6
+	jr	c, SeqPlay_DataBlock_BBE_Skip6
 	ldw	(0xf23a:16), 999
 	ldw	wa, 999
-	jr	SeqPlay_InitTempoAndActivateParts_Code_Join
-SeqPlay_InitTempoAndActivateParts_Code_Skip6:
+	jr	SeqPlay_DataBlock_BBE_Join
+SeqPlay_DataBlock_BBE_Skip6:
 	inc	1, wa
 	ld	(0xf23a:16), wa
 	ld	wa, (0xf23a:16)
-SeqPlay_InitTempoAndActivateParts_Code_Join:
+SeqPlay_DataBlock_BBE_Join:
 	cp (62008:16), wa
 	ret	c
 	dec	1, wa
 	ld	(0xf238:16), wa
-	calr	SeqPlay_InitTempoAndActivateParts_Code_Helper
+	calr	SeqPlay_DataBlock_BBE_Helper
 	calr	SeqAcc_SetupRepeatCount
 	ret
 ApPlaySyori_Helper3:
 	ld	wa, (0xf23a:16)
 	cp	wa, 2:i3
-	jr	ugt, SeqPlay_InitTempoAndActivateParts_Code_Skip7
+	jr	ugt, SeqPlay_DataBlock_BBE_Skip7
 	ldw	(0xf23a:16), 2
 	ld	wa, 2:i3
-	jr	SeqPlay_InitTempoAndActivateParts_Code_Join2
-SeqPlay_InitTempoAndActivateParts_Code_Skip7:
+	jr	SeqPlay_DataBlock_BBE_Join2
+SeqPlay_DataBlock_BBE_Skip7:
 	dec	1, wa
 	ld	(0xf23a:16), wa
 	ld	wa, (0xf23a:16)
-SeqPlay_InitTempoAndActivateParts_Code_Join2:
+SeqPlay_DataBlock_BBE_Join2:
 	cp (62008:16), wa
 	ret	c
 	dec	1, wa
 	ld	(0xf238:16), wa
-	calr	SeqPlay_InitTempoAndActivateParts_Code_Helper2
+	calr	SeqPlay_DataBlock_BBE_Helper2
 	calr	SeqAcc_SetupRepeatCount
 	ret
 ApPlaySyori_Helper4:
 	bit	0, (10418:16)
-	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip3
+	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip3
 	cpw	(62008:16), 2
 	ret	ule
-SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip3:
+SeqPlay_DataBlock_BBE_Helper2_Skip3:
 	ld	wa, (0xf23f:16)
 	cp	wa, 997
-	jr	c, SeqPlay_InitTempoAndActivateParts_Code_Skip8
+	jr	c, SeqPlay_DataBlock_BBE_Skip8
 	ldw	(0xf23f:16), 997
-	jr	SeqPlay_InitTempoAndActivateParts_Code_Join3
-SeqPlay_InitTempoAndActivateParts_Code_Skip8:
+	jr	SeqPlay_DataBlock_BBE_Join3
+SeqPlay_DataBlock_BBE_Skip8:
 	inc	1, wa
 	ld	(0xf23f:16), wa
-SeqPlay_InitTempoAndActivateParts_Code_Join3:
+SeqPlay_DataBlock_BBE_Join3:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -528,16 +528,16 @@ SeqPlay_InitTempoAndActivateParts_Code_Join3:
 	jrl	SeqAcc_SetupRepeatCount
 ApPlaySyori_Helper5:
 	bit	0, (10418:16)
-	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip4
+	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip4
 	cpw	(62008:16), 2
 	ret	ule
-SeqPlay_InitTempoAndActivateParts_Code_Helper2_Skip4:
+SeqPlay_DataBlock_BBE_Helper2_Skip4:
 	ld	wa, (0xf23f:16)
 	cp	wa, 0:i3
-	jr	z, SeqPlay_InitTempoAndActivateParts_Code_Skip9
+	jr	z, SeqPlay_DataBlock_BBE_Skip9
 	dec	1, wa
 	ld	(0xf23f:16), wa
-SeqPlay_InitTempoAndActivateParts_Code_Skip9:
+SeqPlay_DataBlock_BBE_Skip9:
 	ld	wa, (0xf238:16)
 	dec	1, wa
 	ld	(0x28c3:16), wa
@@ -12210,24 +12210,24 @@ SeqValPTA_OKReturn:
 Seq_ValidateExtended_DataBlock:
 	ld	a, (0x2877:16)
 	cp	a, 127
-	jr	z, Seq_ValidatePartAndTempoAlt_Skip
+	jr	z, Seq_ValidateExtended_DataBlock_Skip
 	extz	wa
 	calr	Seq_ValidatePartNumber
 	cp	hl, 0:i3
-	jr	nz, Seq_ValidatePartAndTempoAlt_Skip2
-Seq_ValidatePartAndTempoAlt_Skip:
+	jr	nz, Seq_ValidateExtended_DataBlock_Skip2
+Seq_ValidateExtended_DataBlock_Skip:
 	ld	wa, (9778:16)
 	calr	Seq_ValidateTempoValue
 	cp	hl, 0:i3
-	jr	nz, Seq_ValidatePartAndTempoAlt_Skip2
+	jr	nz, Seq_ValidateExtended_DataBlock_Skip2
 	ld	wa, (9694:16)
 	calr	Seq_ValidateTempoValue
 	cp	hl, 0:i3
-	jr	z, Seq_ValidatePartAndTempoAlt_Skip3
-Seq_ValidatePartAndTempoAlt_Skip2:
+	jr	z, Seq_ValidateExtended_DataBlock_Skip3
+Seq_ValidateExtended_DataBlock_Skip2:
 	ldw	hl, 0xffff
 	ret
-Seq_ValidatePartAndTempoAlt_Skip3:
+Seq_ValidateExtended_DataBlock_Skip3:
 	ld	hl, 0:i3
 	ret
 
@@ -12958,9 +12958,9 @@ SeqPart_LoadDualPartData:
 	push	qiz
 	ldb_d8	a, (9776)
 	cp	a, 0:i3
-	jr	z, SeqPart_LoadDualPartData_Epilogue
+	jr	z, SeqPart_LoadDualPartData_Code_Epilogue
 	bit	3, (10363:16)
-	jr	nz, SeqPart_LoadDualPartData_Epilogue
+	jr	nz, SeqPart_LoadDualPartData_Code_Epilogue
 	ldb_d8	a, (61926)
 	cp	a, 17
 	jr	nz, SeqPart_LoadDualPartData_Skip
@@ -12975,15 +12975,15 @@ SeqPart_LoadDualPartData_Skip:
 	ldib_erp	251, 0	; ld qizh,0
 	ldb_d8	a, (9776)
 	cp	a, 0:i3
-	jr	ule, SeqPart_LoadDualPartData_Epilogue
+	jr	ule, SeqPart_LoadDualPartData_Code_Epilogue
 SeqPart_LoadDualPartData_Loop:
 	ld	(32422:16), 255
 	ld	(10362:16), 0
 	call	SeqPart_ByteBlockA95A
 	cp	(32422:16), 35
-	jr	nz, SeqPart_LoadDualPartData_Epilogue
+	jr	nz, SeqPart_LoadDualPartData_Code_Epilogue
 	bit	3, (10363:16)
-	jr	nz, SeqPart_LoadDualPartData_Epilogue
+	jr	nz, SeqPart_LoadDualPartData_Code_Epilogue
 	ldw_d16	wa, (9862)
 	add	wa, (0x25de:16)
 	ld	(9862:16), wa
@@ -12991,7 +12991,7 @@ SeqPart_LoadDualPartData_Loop:
 	ldto_berp	a, 251	; ld a,qizh
 	cp	a, (0x2630:16)
 	jr	c, SeqPart_LoadDualPartData_Loop
-SeqPart_LoadDualPartData_Epilogue:
+SeqPart_LoadDualPartData_Code_Epilogue:
 	pop	qiz
 	ret
 SeqVoice_SeekToBar:
@@ -25673,7 +25673,7 @@ FileIO_ByteBlock_DemoProc1_Helper2:
 	cp	bc, 0:i3
 	jr	ge, SeqLoad_ProcessDataBlock_Skip3
 	call	SeqVoice_InitEntryForCurrentBank
-	jrl	SeqLoad_ProcessDataBlock_Epilogue
+	jrl	SeqLoad_ProcessDataBlock_Join
 SeqLoad_ProcessDataBlock_Skip3:
 	calr	SeqBar_DataBlock
 	ld	a, (xsp+10)
@@ -25765,7 +25765,7 @@ SeqLoad_ProcessDataBlock_Skip7:
 	calr	SeqLoad_ProcessAllVoiceData
 	call	Seq_ResetAndRestartAccompaniment
 	ldw	(0xffec:24), (0xf19e:16)
-SeqLoad_ProcessDataBlock_Epilogue:
+SeqLoad_ProcessDataBlock_Join:
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -29621,10 +29621,10 @@ SeqPart_ByteBlockA207_Loop:
 	ld	a, (xwa)
 	ldfr_berp	a, 251	; ld qizh,a
 	cp_erpb	251, 13	; cp qizh,0x0d
-	jr	z, SeqPart_ByteBlockA207_Skip7
+	jr	z, SeqPart_ByteBlockA207_Code_Skip4
 	cp_erpb	251, 16	; cp qizh,0x10
 	jr	nz, SeqPart_ByteBlockA207_Skip9
-SeqPart_ByteBlockA207_Skip7:
+SeqPart_ByteBlockA207_Code_Skip4:
 	cp_erpb	251, 16	; cp qizh,0x10
 	jr	nz, SeqPart_ByteBlockA207_Skip8
 	set	6, (10363:16)

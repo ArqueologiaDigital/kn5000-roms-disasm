@@ -6821,32 +6821,32 @@ TchSensGrid_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jr	nz, TchSensGridCheck_Entry
+	jr	nz, TchSensGrid_EventDispatch_Skip
 	cp	de, 1:i3
-	jr	nz, TchSensGridCheck_Entry
+	jr	nz, TchSensGrid_EventDispatch_Skip
 	ld	xwa, 256
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jrl	TchSensGridCheck_Join
-TchSensGridCheck_Entry:
+TchSensGrid_EventDispatch_Skip:
 	cpw	(xwa), 1
-	jr	nz, TchSensGridCheck_Entry2
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip
 	cp	de, 4:i3
-	jr	nz, TchSensGridCheck_Entry2
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip
 	ld	xwa, 260
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jrl	TchSensGridCheck_Join
-TchSensGridCheck_Entry2:
+TchSensGrid_EventDispatch_Skip_Skip:
 	cpw	(xwa), 1
-	jr	nz, TchSensGridCheck_Entry3
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip2
 	cp	de, 5:i3
-	jr	nz, TchSensGridCheck_Entry3
+	jr	nz, TchSensGrid_EventDispatch_Skip_Skip2
 	ld	xwa, 258
 	ld	bc, 1:i3
 	ld	de, 2:i3
 	jrl	TchSensGridCheck_Join
-TchSensGridCheck_Entry3:
+TchSensGrid_EventDispatch_Skip_Skip2:
 	cpw	(xwa), 1
 	jrl	nz, TchSensGrid_ReturnZero
 	cp	de, 6:i3
@@ -7364,9 +7364,9 @@ FSWAssGrid_EventDispatch:
 	ld	(xwa), bc
 	ld	(xwa+2), de
 	cpw	(xwa), 1
-	jr	nz, FSWAssGridCheck_Entry
+	jr	nz, FSWAssGrid_EventDispatch_Skip4
 	cp	de, 2:i3
-	jr	nz, FSWAssGridCheck_Entry
+	jr	nz, FSWAssGrid_EventDispatch_Skip4
 	ld	xwa, 10374
 	call	AcApcToggleProc_Helper
 	extz	hl
@@ -7387,11 +7387,11 @@ FSWAssGrid_EventDispatch:
 	ld	xwa, 10374
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
-FSWAssGridCheck_Entry:
+FSWAssGrid_EventDispatch_Skip4:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGridCheck_Entry2
+	jr	nz, FSWAssGrid_EventDispatch_Skip5
 	cp	de, 3:i3
-	jr	nz, FSWAssGridCheck_Entry2
+	jr	nz, FSWAssGrid_EventDispatch_Skip5
 	ld	xwa, 10376
 	call	AcApcToggleProc_Helper
 	extz	hl
@@ -7412,11 +7412,11 @@ FSWAssGridCheck_Entry:
 	ld	xwa, 10376
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
-FSWAssGridCheck_Entry2:
+FSWAssGrid_EventDispatch_Skip5:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGridCheck_Entry3
+	jr	nz, FSWAssGrid_EventDispatch_Skip6
 	cp	de, 4:i3
-	jr	nz, FSWAssGridCheck_Entry3
+	jr	nz, FSWAssGrid_EventDispatch_Skip6
 	ld	xwa, 10378
 	call	AcApcToggleProc_Helper
 	extz	hl
@@ -7437,11 +7437,11 @@ FSWAssGridCheck_Entry2:
 	ld	xwa, 10378
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
-FSWAssGridCheck_Entry3:
+FSWAssGrid_EventDispatch_Skip6:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGridCheck_Entry4
+	jr	nz, FSWAssGrid_EventDispatch_Skip7
 	cp	de, 5:i3
-	jr	nz, FSWAssGridCheck_Entry4
+	jr	nz, FSWAssGrid_EventDispatch_Skip7
 	ld	xwa, 10380
 	call	AcApcToggleProc_Helper
 	extz	hl
@@ -7462,11 +7462,11 @@ FSWAssGridCheck_Entry3:
 	ld	xwa, 10380
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
-FSWAssGridCheck_Entry4:
+FSWAssGrid_EventDispatch_Skip7:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGridCheck_Entry5
+	jr	nz, FSWAssGrid_EventDispatch_Skip8
 	cp	de, 6:i3
-	jr	nz, FSWAssGridCheck_Entry5
+	jr	nz, FSWAssGrid_EventDispatch_Skip8
 	ld	xwa, 10382
 	call	AcApcToggleProc_Helper
 	extz	hl
@@ -7487,11 +7487,11 @@ FSWAssGridCheck_Entry4:
 	ld	xwa, 10382
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
-FSWAssGridCheck_Entry5:
+FSWAssGrid_EventDispatch_Skip8:
 	cpw	(xwa), 1
-	jr	nz, FSWAssGridCheck_Entry6
+	jr	nz, FSWAssGrid_EventDispatch_Skip9
 	cp	de, 7:i3
-	jr	nz, FSWAssGridCheck_Entry6
+	jr	nz, FSWAssGrid_EventDispatch_Skip9
 	ld	xwa, 10384
 	call	AcApcToggleProc_Helper
 	extz	hl
@@ -7512,7 +7512,7 @@ FSWAssGridCheck_Entry5:
 	ld	xwa, 10384
 	ld	de, 2:i3
 	jrl	FSWAssGridCheck_Join
-FSWAssGridCheck_Entry6:
+FSWAssGrid_EventDispatch_Skip9:
 	cpw	(xwa), 1
 	jrl	nz, AudioTable_ReturnZero
 	cp	de, 8

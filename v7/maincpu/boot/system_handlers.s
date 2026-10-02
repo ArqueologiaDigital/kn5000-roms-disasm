@@ -8092,13 +8092,13 @@ HDAE5000_FlashVerify_BytecodeBlock:
 	ld	xwa, 8388608
 	ld	(xsp+8), xwa
 	ld	(xsp+12), 0
-HDAE5000_ROM_Transfer_Loop:
+HDAE5000_FlashVerify_BytecodeBlock_Loop:
 	ld	a, (xsp+12)
 	ld	(1441792:24), a
 	lda	xwa, (2621440:24)
 	ld	(xsp+4), xwa
 	ld	xiz, 0:i3
-HDAE5000_ROM_Transfer_Loop2:
+HDAE5000_FlashVerify_BytecodeBlock_Loop2:
 	ld	xwa, (xsp+8)
 	lda	xbc, (xwa+:4)
 	ld	(xsp+8), xwa
@@ -8109,10 +8109,10 @@ HDAE5000_ROM_Transfer_Loop2:
 	call	Flash_ProgramByte
 	inc	1, xiz
 	cp	xiz, 131072
-	jr	c, HDAE5000_ROM_Transfer_Loop2
+	jr	c, HDAE5000_FlashVerify_BytecodeBlock_Loop2
 	incm8	1, (xsp+12)
 	cp	(xsp+0xc), 4
-	jr	c, HDAE5000_ROM_Transfer_Loop
+	jr	c, HDAE5000_FlashVerify_BytecodeBlock_Loop
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret

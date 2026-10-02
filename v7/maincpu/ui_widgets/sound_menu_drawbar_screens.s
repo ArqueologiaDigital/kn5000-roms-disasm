@@ -373,10 +373,12 @@ NakaData_SoundMenuDrawbar:
 ; [nakarest] Text (2 B at 0xe812e2), first string "%"; no registered NAKA table points into it;
 ; [nakarest] reached through source references InitializeMurai (ui/drawbar_panel_ui.s: `ld wa,
 ; [nakarest] (0xe812e2:24)`).
+Murai_ClassCount_161:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x300, 0x2
 ; [nakarest] naka_sound_menu_drawbar+0x302  +0x302..+0x306 (0xe812e4, 4 B)
 ; [nakarest] the table itself: ResEvent slot 0x1c1 (table 0xe812e4, 10 entries,
 ; [nakarest] InitializeMurai), 10 entry pointers x 4 bytes.
+Murai_ResEventTable_1C1:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x302, 0x4
 ; [nakarest] Naka_EventDispatch_Table  +0x306..+0x32e (0xe812e8, 40 B)
 ; [nakarest] purpose not established: 4 B at 0xe8130c that no registered NAKA table, symbol, 24/32-bit literal or data word points into
@@ -394,6 +396,7 @@ Naka_EventDispatch_Table:
 ; [nakarest] purpose not established: layout of 2 B at 0xe813a4 not derived; readers below
 ; [nakarest] Readers: source references InitializeMurai (ui/drawbar_panel_ui.s: `ld wa,
 ; [nakarest] (0xe813a4:24)`).
+Murai_ResEventCount_1C1:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x3C2, 0x2
 ; [nakarest] Naka_Event_Table3  +0x3c4..+0x404 (0xe813a6, 64 B)
 ; [nakarest] the table itself: ResMethod slot 0x1e1 (table 0xe813a6, 15 entries,
@@ -417,6 +420,7 @@ Naka_Event_Table3:
 ; [nakarest] naka_sound_menu_drawbar+0x5aa  +0x5aa..+0x5ae (0xe8158c, 4 B)
 ; [nakarest] the table itself: Function slot 0x401 (table 0xe8158c, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes.
+Murai_FunctionTable_401:
 	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x5AA, 0x4
 ; [nakarest] Naka_Event_Table2  +0x5ae..+0x642 (0xe81590, 148 B)
 ; [nakarest] purpose not established: 4 B at 0xe81620 that no registered NAKA table, symbol, 24/32-bit literal or data word points into

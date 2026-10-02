@@ -5653,12 +5653,12 @@ ExtData_Voice_MixedHandler_Helper:
 	jr	nz, 8
 	ldw	wa, 255
 	calr	ExtData_ToneParam_DispatchHandler_Helper2
-	jr	ExtData_Voice_MixedHandler_Entry
+	jr	ExtData_Voice_MixedHandler_Join3
 	.byte 0xf1, 0xe2, 0xe3
 	dec	6, a
 	pop	xde
 	and	c, 3
-	jr	z, ExtData_Voice_MixedHandler_Entry
+	jr	z, ExtData_Voice_MixedHandler_Join3
 	ld	a, (0x9130:16)
 	and	a, 3
 	cp	a, 1:i3
@@ -5688,7 +5688,7 @@ ExtData_Voice_MixedHandler_Skip3:
 	ld	(xbc), 5
 	ld	(0x9129:16), 5
 	ld	(0x912a:16), 255
-ExtData_Voice_MixedHandler_Entry:
+ExtData_Voice_MixedHandler_Join3:
 	.byte 0xc1
 	pushw	bc
 	.byte 0x91
@@ -5696,6 +5696,7 @@ ExtData_Voice_MixedHandler_Entry:
 	halt
 	jr	nz, 5
 	ld	(0x8d3c:16), 24
+ExtData_Voice_MixedHandler_Skip4:
 	jrl	2496
 ExtData_Voice_CheckMode3:
 	calr	2462
@@ -6588,6 +6589,7 @@ UIState_CheckAndRenderBitmap:
 	cp	a, 182
 	jr	nz, UIState_CheckAndRenderBitmap_Epilogue
 	ld	iz, 0:i3
+UIState_CheckAndRenderBitmap_Loop:
 	pushw	3
 	ld	wa, iz
 	ldw	bc, 11
@@ -6624,19 +6626,20 @@ UIState_RenderBitmapData:
 	extz	xwa
 	add	xwa, xde
 	ld	(xwa), c
+UIState_RenderBitmapData_Skip:
 	cp	(0xc07d:16), 12
-	jr	nz, UIState_RenderBitmapData_Code_Skip
+	jr	nz, UIState_RenderBitmapData_Skip2
 	bit	4, (0xc07f:16)
-	jr	z, UIState_RenderBitmapData_Code_Skip
+	jr	z, UIState_RenderBitmapData_Skip2
 	bit	4, (0xc07e:16)
-	jr	nz, UIState_RenderBitmapData_Code_Skip
+	jr	nz, UIState_RenderBitmapData_Skip2
 	ldb_d8	a, (0xc080)
 	extz	wa
 	pushw	3
 	ldw	bc, 0x1b2
 	ld	de, 0:i3
 	call	SndParam_NotifyAndReturn
-UIState_RenderBitmapData_Code_Skip:
+UIState_RenderBitmapData_Skip2:
 	cp	(0xc07d:16), 4
 	ret	nz
 	bit	5, (0xc07f:16)

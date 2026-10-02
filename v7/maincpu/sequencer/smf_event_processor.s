@@ -4889,6 +4889,7 @@ SeqStep_FileSectorPopReturn:
 	ld (XHL+0x1a),A
 	jrl t, .Lc_f4fa7f
 .Lc_f4f968:
+SeqStep_FileSectorPopReturn_Skip12:
 	ld WA,(XSP+0x04)
 	inc 1,WA
 	extz XWA
@@ -4900,6 +4901,7 @@ SeqStep_FileSectorPopReturn:
 	ld (XBC),A
 	jrl t, .Lc_f4fa7f
 .Lc_f4f984:
+SeqStep_FileSectorPopReturn_Skip:
 	ld WA,(XSP+0x04)
 	extz XWA
 	add XWA,0x0000001a
@@ -4933,6 +4935,7 @@ SeqStep_FileSectorPopReturn:
 	ld (XHL+0x1a),A
 	jrl t, .Lc_f4fa7f
 .Lc_f4f9da:
+SeqStep_FileSectorPopReturn_Skip13:
 	ld WA,(XSP+0x10)
 	srl wa, 8
 	ld BC,WA
@@ -4955,6 +4958,7 @@ SeqStep_FileSectorPopReturn:
 	ld (XWA),C
 	jr t, .Lc_f4fa7f
 .Lc_f4fa13:
+SeqStep_FileSectorPopReturn_Skip14:
 	ld WA,(XSP+0x0e)
 	extz XWA
 	ld XBC,XWA
@@ -4997,6 +5001,7 @@ SeqStep_FileSectorPopReturn:
 	srl wa, 8
 	ld (XBC),A
 .Lc_f4fa7f:
+SeqStep_FileSectorPopReturn_Epilogue:
 	pop XIZ
 	inc 2,XSP
 	ret

@@ -1692,7 +1692,7 @@ PerfMode_VolumeParam_Process_Helper:
 	ldw	bc, 27
 	ld	(xix+), a
 	djnz16	bc, -6
-	ld	xiy, PerfMode_VolumeParam_Process_Data
+	ld	xiy, Str_VolumeEq2
 	ld	xix, 3797
 	ldw	bc, 9
 	; v10 does not spell this byte either
@@ -1709,8 +1709,8 @@ PerfMode_VolumeParam_Process_Helper:
 	call	Display_UpdateRegion3
 	ret
 	; Loaded by PerfMode_VolumeParam_Process (0xEF69FB):
-	; `ld xiy, PerfMode_VolumeParam_Process_Data` -- a bare number until lane scoop gave this address a label.
-PerfMode_VolumeParam_Process_Data:
+	; `ld xiy, Str_VolumeEq2` -- a bare number until lane scoop gave this address a label.
+Str_VolumeEq2:
 	.byte 0x56	; v10 does not spell this byte either
 	.byte 0x4f	; v10 does not spell this byte either
 	.byte 0x4c	; v10 does not spell this byte either
@@ -3580,7 +3580,7 @@ MemConfig_Handler_5_Code_Helper4:
 	ld	c, (3576:16)
 	xor	b, b
 	cp	bc, 0:i3
-	jrl	z, MemConfig_Handler_5_Code_Skip9
+	jrl	z, MemConfig_Handler_5_Skip
 MemConfig_Handler_5_Code_Join:
 	pushw	bc
 	call	VoiceSlot_ReadCurrentParams
@@ -3606,7 +3606,7 @@ MemConfig_Handler_5_Code_Skip8:
 	call	MemConfig_Handler_5_Code_Helper3
 	popw	bc
 	djnz16	bc, -60
-MemConfig_Handler_5_Code_Skip9:
+MemConfig_Handler_5_Skip:
 	ld	a, (3575:16)
 	cp	(3415:16), 48
 	jrl	z, MemConfig_Handler_5_Code_Skip10
@@ -4484,9 +4484,9 @@ DisplayMode_Handler_3_Loop4:
 	ld	e, a
 	and	e, 240
 	cp	(3413:16), 255
-	jrl	z, DisplayMode_Handler_3_Skip22
+	jrl	z, DisplayMode_Handler_3_Skip33
 	cp	(3413:16), a
-	jrl	z, DisplayMode_Handler_3_Skip23
+	jrl	z, DisplayMode_Handler_3_Skip34
 	cp	(3413:16), 210
 	jrl	z, DisplayMode_Handler_3_Skip24
 DisplayMode_Handler_3_Loop5:
@@ -4505,13 +4505,13 @@ DisplayMode_Handler_3_Next2:
 	jp	DisplayMode_Handler_3_0x168
 DisplayMode_Handler_3_Skip24:
 	cp	a, 209
-	jrl	z, DisplayMode_Handler_3_Skip23
+	jrl	z, DisplayMode_Handler_3_Skip34
 	jp	DisplayMode_Handler_3_0x99
-DisplayMode_Handler_3_Skip22:
+DisplayMode_Handler_3_Skip33:
 	cp	a, (3536:16)
 	jrl	z, DisplayMode_Handler_3_Loop5
 	ld	(3536:16), 255
-DisplayMode_Handler_3_Skip23:
+DisplayMode_Handler_3_Skip34:
 	cp	a, 209
 	jrl	z, DisplayMode_Handler_3_Skip25
 	cp	a, 210
@@ -6835,7 +6835,7 @@ PerfMode_Handler_EvtB_Helper2:
 	call PerfMode_Handler_EvtB_Helper2_Helper3
 	call PerfMode_Handler_EvtB_Helper2_Helper5
 	call PerfMode_Handler_EvtB_Helper2_Helper6
-	call PerfMode_Handler_EvtB_Helper2_Helper7
+	call ClockConfig_Handler_0_Helper
 	cpw (0xf231:16), 0x0000
 	jrl nz, .Lc_efa1aa
 	call VoiceState_DataBlock2_0x184
@@ -6938,7 +6938,7 @@ PerfMode_Handler_EvtB_Helper2_Skip3:
 	jp	SerialPort_ModeHandler_0_Return6
 PerfMode_Handler_EvtB_Helper2_Skip4:
 	call PerfMode_Handler_EvtB_Helper2_Helper6
-	call PerfMode_Handler_EvtB_Helper2_Helper7
+	call ClockConfig_Handler_0_Helper
 	bit 3, (0x0d53:16)
 	jrl z, .Lc_efa2ef
 	call PortConfig_SetupBytecode_0x34
@@ -7359,6 +7359,7 @@ PerfMode_Handler_EvtB_Helper2_Helper3:
 	ldw WA, 0x1090
 	call SysInit_BytecodeBlock_0x3DB
 .Lc_efa734:
+PortConfig_DataTable_A_Sub_Return:
 	ret
 	; Byte data, 20 B.  Read by PortConfig_Handler_0 (0xEFA53B): `ld XHL,PortConfig_DataTable_B`
 	; indexed with stride 1 (`sla HL, 0x02`)
@@ -7403,7 +7404,7 @@ ClockConfig_Handler_1:
 ClockConfig_Handler_0:
 	and	(0xe31c:16), 253
 	ret
-PerfMode_Handler_EvtB_Helper2_Helper7:
+ClockConfig_Handler_0_Helper:
 	ret
 	; Byte data, 4 B.  No reader found: no label, positional or absolute .set
 	; name at this address is loaded anywhere in the image (searched by
@@ -8229,7 +8230,7 @@ MemConfig_Handler_4_Helper:
 	jrl	nz, MemConfig_Handler_3_Loop	; -> 0xEFB143
 	ld	wa, (3818:16)
 	cp	wa, (3416:16)
-	jrl	nz, MemConfig_Handler_4_Helper_Skip	; -> 0xEFB11D
+	jrl	nz, MemConfig_Handler_3_Skip	; -> 0xEFB11D
 	ld	a, (3820:16)
 	cp	a, (3415:16)
 	jrl	z, MemConfig_Handler_4_Helper_Return	; -> 0xEFB154
@@ -8238,7 +8239,7 @@ MemConfig_Handler_4_Helper:
 	jrl	z, MemConfig_Handler_4_Helper_Return	; -> 0xEFB154
 	jp	MemConfig_Handler_3_Join
 	; llvm-mc cannot spell this byte
-MemConfig_Handler_4_Helper_Skip:
+MemConfig_Handler_3_Skip:
 	cp	(0x0d5d:16), 4
 	jrl	ule, MemConfig_Handler_3_Join	; -> 0xEFB137
 	ld	a, (3821:16)
@@ -10352,22 +10353,22 @@ VoiceSlot_ComputeIndex_Skip:
 	ld	xiy, 3426
 	ld	xix, 13964
 	cp	a, 130
-	jrl	z, VoiceSlot_ComputeIndex_Entry
+	jrl	z, VoiceSlot_IndexDone_Skip5
 	cp	a, 132
 	jrl	z, VoiceSlot_ComputeIndex_Entry2
 	call	VoiceSlot_FlagCheck
 	ld	xiy, 3428
 	cp	a, 0:i3
-	jrl	z, VoiceSlot_ComputeIndex_Skip2
+	jrl	z, VoiceSlot_IndexDone_Skip2
 	ld	(xiy), 128
-VoiceSlot_ComputeIndex_Skip2:
+VoiceSlot_IndexDone_Skip2:
 	cp	(3415:16), 48
 	jrl	nz, VoiceSlot_ComputeIndex_Loop
 	cp	(xiy), 128
-	jrl	nz, VoiceSlot_ComputeIndex_Skip3
+	jrl	nz, VoiceSlot_IndexDone_Skip3
 	ld	(xiy), 0
 	jp	VoiceSlot_ComputeIndex_Loop
-VoiceSlot_ComputeIndex_Skip3:
+VoiceSlot_IndexDone_Skip3:
 	ld	(xiy), 128
 	ld	wa, (3426:16)
 	sub	wa, 1
@@ -10378,7 +10379,7 @@ VoiceSlot_ComputeIndex_Skip4:
 VoiceSlot_ComputeIndex_Loop:
 	call	VoiceSlot_ComputeIndex_Helper
 	jp	VoiceSlot_ComputeIndex_Return
-VoiceSlot_ComputeIndex_Entry:
+VoiceSlot_IndexDone_Skip5:
 	cpw	(xiy), 1
 	jrl	z, VoiceSlot_ComputeIndex_Skip5
 	cpw	(xiy), 0
@@ -12186,6 +12187,7 @@ SubCPU_ToneParamDisplay_Helper2:
 	ld	a, (xhl+wa)
 	ld (0x111d:16), a
 .Lc_efda73:
+SubCPU_ToneParamDisplay_Epilogue2:
 	pop XIX
 	ret
 SubCPU_ToneParamDisplay_Helper3:
@@ -12257,6 +12259,7 @@ SubCPU_ToneDispatch:
 	.long	0x00fb0800
 	.long	0x00fb2200
 	.byte	0x00
+SubCPU_ToneParamDisplay_Tbl:
 	ld	(9:8), 10:io
 	pushw	0xd7cf
 	bit	7, w
@@ -13343,7 +13346,7 @@ OscScope_UpdateDisplay:
 	ld	l, 96:opc
 	div	wa, l
 	cp	w, 48
-	jrl	z, OscScope_Handler_7_Skip
+	jrl	z, OscScope_UpdateDisplay_Skip2
 	exts	wa
 	ld	bc, wa
 	pushw	bc
@@ -13352,7 +13355,7 @@ OscScope_UpdateDisplay:
 	djnz16	bc, -9
 	ldw	(3778:16), 0
 	jp	OscScope_RefreshLoop_0x3F
-OscScope_Handler_7_Skip:
+OscScope_UpdateDisplay_Skip2:
 	ld	wa, (3778:16)
 	ld	l, 96:opc
 	div	wa, l
@@ -13497,7 +13500,7 @@ OscScope_Handler_7_Skip2:
 	call	OscScope_DrawWaveform_Code_Helper
 	; v10 does not spell this byte either
 	cp	(0x117f:16), 0
-	jrl	nz, OscScope_DrawWaveform_Code_Return
+	jrl	nz, OscScope_FinalizeRender_Return
 	ld	xiy, 3701
 	ld	xix, 3705
 	ld	c, 1:opc
@@ -13506,7 +13509,7 @@ OscScope_Handler_7_Skip2:
 	call	OscScope_DrawWaveform_Code_Helper
 	; v10 does not spell this byte either
 	cp	(0x117f:16), 0
-	jrl	nz, OscScope_DrawWaveform_Code_Return
+	jrl	nz, OscScope_FinalizeRender_Return
 	ld	xiy, 3733
 	ld	xix, 3737
 	ld	c, 1:opc
@@ -13516,27 +13519,27 @@ OscScope_Handler_7_Skip2:
 	ld	xiy, 3697
 	; v10 does not spell this byte either
 	cp	(xiy), 0
-	jrl	z, OscScope_DrawWaveform_Code_Skip5
+	jrl	z, OscScope_FinalizeRender_Skip
 	; v10 does not spell this byte either
 	ormi8	(xiy), 128
 	; v10 does not spell this byte either
-OscScope_DrawWaveform_Code_Skip5:
+OscScope_FinalizeRender_Skip:
 	ld	xiy, 3729
 	; v10 does not spell this byte either
 	cp	(xiy), 0
-	jrl	z, OscScope_DrawWaveform_Code_Skip6
+	jrl	z, OscScope_FinalizeRender_Skip2
 	; v10 does not spell this byte either
 	ormi8	(xiy), 128
 	; v10 does not spell this byte either
-OscScope_DrawWaveform_Code_Skip6:
+OscScope_FinalizeRender_Skip2:
 	ld	xiy, 3761
 	; v10 does not spell this byte either
 	cp	(xiy), 0
-	jrl	z, OscScope_DrawWaveform_Code_Return
+	jrl	z, OscScope_FinalizeRender_Return
 	; v10 does not spell this byte either
 	ormi8	(xiy), 128
 	; v10 does not spell this byte either
-OscScope_DrawWaveform_Code_Return:
+OscScope_FinalizeRender_Return:
 	ret
 OscScope_DrawWaveform_Code_Helper:
 	ld	(4479:16), 0
@@ -13549,11 +13552,11 @@ OscScope_DrawWaveform_Code_Helper_Join:
 	cp	a, 6:i3
 	jrl	z, OscScope_DrawWaveform_Code_Skip7
 	cp	a, 7:i3
-	jrl	nz, OscScope_DrawWaveform_Code_Entry
+	jrl	nz, OscScope_FinalizeRender_Entry
 OscScope_DrawWaveform_Code_Skip7:
 	ld	(4479:16), 255
 	jp	OscScope_DrawWaveform_Code_Helper_Return
-OscScope_DrawWaveform_Code_Entry:
+OscScope_FinalizeRender_Entry:
 	; v10 does not spell this byte either
 	cp	(xix+1), 0
 	; v10 does not spell this byte either

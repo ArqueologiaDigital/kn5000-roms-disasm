@@ -75,7 +75,7 @@ SoundMode_ApplyVoiceParams_Helper:
 	add	(xsp + 6), xwa
 	ld	a, (xsp + 10)
 	extz	wa
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper2
+	calr	SysEx_ClampVoiceIndex8_49
 	extz	hl
 	ld	xwa, 0x4900
 	ld	bc, hl
@@ -90,7 +90,7 @@ SoundMode_ApplyVoiceParams_Helper:
 	ld	(xsp + 4), a
 	ld	a, (xsp + 10)
 	extz	wa
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper2
+	calr	SysEx_ClampVoiceIndex8_49
 	ld	(0xfc74:16), l
 SysEx_ApplyVoiceParam_49_ReadSubParams:
 	ld	xwa, 0x4904
@@ -114,7 +114,7 @@ SysEx_ApplyVoiceParam_49_SlotLoop:
 	extz	wa
 	ldto_berp	C, 0xf8
 	extz	bc
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4
+	calr	SysEx_DispatchByChannel
 	ld	bc, hl
 	cp	bc, 0xd8f0
 	jr	z, SysEx_ApplyVoiceParam_49_SlotNext
@@ -148,7 +148,7 @@ SysEx_ApplyVoiceParam_49_128:
 	add	(xsp + 6), xwa
 	ld	a, (xsp + 10)
 	extz	wa
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper3
+	calr	SysEx_ClampVoiceIndex128_49
 	ld	(xsp + 10), l
 	lda	xbc, (0xfc74:16)
 	cp	xbc, (xsp + 6)

@@ -11593,7 +11593,7 @@ MidiStream_CmdPedalNotify_Skip:
 	jr	nz, MidiStream_CmdPedalNotify_Skip3
 MidiStream_CmdPedalNotify_Skip2:
 	cp	c, 72
-	jr	z, MidiStream_CmdPedalNotify_Return
+	jr	z, MidiStream_ExtendedDispatch_Return4
 MidiStream_CmdPedalNotify_Skip3:
 	ld	(0x905c:16), 255
 	cp	c, 0:i3
@@ -11601,17 +11601,17 @@ MidiStream_CmdPedalNotify_Skip3:
 	bit	3, (0xfd50:16)
 	jr	z, MidiStream_CmdPedalNotify_Skip4
 	cp	(0x8c98:16), 14
-	jr	z, MidiStream_CmdPedalNotify_Return
+	jr	z, MidiStream_ExtendedDispatch_Return4
 	cp	(0x8c98:16), 17
-	jr	z, MidiStream_CmdPedalNotify_Return
+	jr	z, MidiStream_ExtendedDispatch_Return4
 	cp	e, 80
-	jr	nc, MidiStream_CmdPedalNotify_Return
+	jr	nc, MidiStream_ExtendedDispatch_Return4
 	inc	1, e
 	ldw	bc, 0x198
 	ld	d, 127:opc
 	call	MIDI_WriteVoiceParamCC
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
-MidiStream_CmdPedalNotify_Return:
+MidiStream_ExtendedDispatch_Return4:
 	ret
 	calr	MidiStream_CmdPedalNotify_Helper3
 	ret

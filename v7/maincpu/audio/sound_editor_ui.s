@@ -8218,6 +8218,7 @@ UpdSeSel_DetailedUpdate_Helper4_Helper:
 	ld C, 0x05:opc
 	ld XIZ,SeMenu_ShowConfirmDialog_Data_0x3F4
 .Lc_f0f2e0:
+SeMenu_ShowConfirmDialog_Data_Code_Loop2:
 	ld HL,(XIZ)
 	ld DE,(XIZ+0x02)
 	add XIZ,0x00000004
@@ -8292,10 +8293,10 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Sub:
 	cp	(0x6ae:16), 1
 	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip
 	ld	xiz, SeBitmap_EnvCurve5_0xEBC
-	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join
+	jr	SeMenu_ShowConfirmDialog_Data_Code_Join
 UpdSeSel_DetailedUpdate_Helper4_Helper_Skip:
 	ld	xiz, SeBitmap_EnvCurve5_0xEA8
-UpdSeSel_DetailedUpdate_Helper4_Helper_Join:
+SeMenu_ShowConfirmDialog_Data_Code_Join:
 	push	xwa
 	add	xiz, xwa
 	ld	wa, (xiz)
@@ -8303,10 +8304,10 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Join:
 	ld	wa, (xiz+2)
 	ld	(0x6c8:16), wa
 	cp	(0x6ae:16), 1
-	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip2
+	jr	nz, SeMenu_ShowConfirmDialog_Data_Code_Skip3
 	ld	xiz, 1634
 	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join2
-UpdSeSel_DetailedUpdate_Helper4_Helper_Skip2:
+SeMenu_ShowConfirmDialog_Data_Code_Skip3:
 	ld	xiz, 1640
 UpdSeSel_DetailedUpdate_Helper4_Helper_Join2:
 	xor	xwa, xwa
@@ -8317,10 +8318,10 @@ UpdSeSel_DetailedUpdate_Helper4_Helper_Join2:
 	cp	(0x6ae:16), 1
 	jr	nz, UpdSeSel_DetailedUpdate_Helper4_Helper_Skip3
 	ld	xiz, SeBitmap_EnvCurve5_0xE9C
-	jr	UpdSeSel_DetailedUpdate_Helper4_Helper_Join3
+	jr	SeMenu_ShowConfirmDialog_Data_Code_Join3
 UpdSeSel_DetailedUpdate_Helper4_Helper_Skip3:
 	ld	xiz, SeBitmap_EnvCurve5_0xE88
-UpdSeSel_DetailedUpdate_Helper4_Helper_Join3:
+SeMenu_ShowConfirmDialog_Data_Code_Join3:
 	add	xiz, xwa
 	ld	xiy, (xiz)
 	ld	xix, xiy
@@ -19493,6 +19494,7 @@ StylCnvStorOkFunc_DataBlock_Join3:
 	ldw	(xsp+14), 0
 	cp	iz, 0:i3
 	jr	ule, 32
+StylCnvStorOkFunc_DataBlock_Loop:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
@@ -19506,6 +19508,7 @@ StylCnvStorOkFunc_DataBlock_Join3:
 	incw	1, (xsp+14)
 	cp	(xsp+14), iz
 	jr	c, -32
+StylCnvStorOkFunc_DataBlock_Skip5:
 	lda	xwa, (xsp+24)
 	lda	xbc, (xsp+20)
 	.byte 0x9f
@@ -19517,6 +19520,7 @@ StylCnvStorOkFunc_DataBlock_Join3:
 	ld	(xbc), wa
 	ldw (xsp+6), 65535
 	jr	StylCnvStorOkFunc_DataBlock_Join4
+StylCnvStorOkFunc_DataBlock_Skip6:
 	ld	wa, (xwa)
 	add	wa, iz
 	ld	(xbc), wa
@@ -19546,6 +19550,7 @@ StylCnvStorOkFunc_DataBlock_Join4:
 	nop
 	nop
 	jr	ule, 32
+StylCnvStorOkFunc_DataBlock_Loop2:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
@@ -19559,6 +19564,7 @@ StylCnvStorOkFunc_DataBlock_Join4:
 	ld	wa, (xsp+14)
 	.byte 0x9f, 0x04, 0xf0
 	jr	c, -32
+StylCnvStorOkFunc_DataBlock_Skip7:
 	lda	xix, (xsp+16)
 	lda	xhl, (xsp+20)
 	ld	wa, (xhl)
@@ -19582,6 +19588,7 @@ StylCnvStorOkFunc_DataBlock_Join4:
 	nop
 	nop
 	jr	ule, 32
+StylCnvStorOkFunc_DataBlock_Loop3:
 	lda	xwa, (xsp+20)
 	lda	xbc, (xsp+16)
 	.byte 0x9f
@@ -19595,6 +19602,7 @@ StylCnvStorOkFunc_DataBlock_Join4:
 	ld	wa, (xsp+14)
 	.byte 0x9f, 0x04, 0xf0
 	jr	c, -32
+StylCnvStorOkFunc_DataBlock_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	retd	4
@@ -19656,6 +19664,7 @@ StylCnvStorOkFunc_DataBlock_Entry3:
 	jr	5
 StylCnvStorOkFunc_DataBlock_Skip4:
 	ldw (xsp+6), 0
+StylCnvStorOkFunc_DataBlock_Join6:
 	.byte 0xbf
 	ld	(2:8), 1:io
 	nop
@@ -19669,11 +19678,13 @@ StylCnvStorOkFunc_DataBlock_Skip4:
 	ld	wa, (xwa+4)
 	ld	(xhl+6), wa
 	jr	StylCnvStorOkFunc_DataBlock_Join5
+StylCnvStorOkFunc_DataBlock_Skip8:
 	ld	wa, (xhl)
 	ld	(xsp+22), wa
 	ld	wa, (xhl)
 	add wa, qiz
 	ld	(xsp+18), wa
+StylCnvStorOkFunc_DataBlock_Join7:
 	ld	bc, (xiy)
 	ld	wa, (xde)
 	sub	wa, bc
@@ -19773,6 +19784,7 @@ StylCnvStorOkFunc_DataBlock_Skip4:
 	jr	lt, -78
 	.byte 0x50
 	jr	14
+StylCnvStorOkFunc_DataBlock_Skip9:
 	ld	wa, (xwa)
 	add wa, qiz
 	ld	(xbc), wa
@@ -19780,6 +19792,7 @@ StylCnvStorOkFunc_DataBlock_Skip4:
 	xor	(xwa), w
 	jr	ge, -78
 	.byte 0x50
+StylCnvStorOkFunc_DataBlock_Join8:
 	lda	xwa, (xsp+22)
 	lda	xhl, (xsp+26)
 	lda	xde, (xhl+2)
@@ -19854,9 +19867,11 @@ StylCnvStorBnk_ProcDataBlock_Skip:
 	pushm	(xhl)
 	calr	64928
 	jr	7
+StylCnvStorBnk_ProcDataBlock_Skip2:
 	pushm	(xix)
 	pushm	(xhl)
 	calr	64441
+StylCnvStorBnk_ProcDataBlock_Join:
 	ld	xhl, 0:i3
 StylCnvStorBnk_ProcDataBlock_Epilogue:
 	pop	xiz

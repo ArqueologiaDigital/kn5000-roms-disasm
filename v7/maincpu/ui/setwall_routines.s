@@ -59,6 +59,7 @@ MiddleFuncCall_DispatchData_Code_Helper2_Skip:
 	ld	(3295:16), a
 	call	SetWall_UpdateSlotIndex
 	ret
+NoRef_SetWall_SlotMap20x2:
 	nop
 	push	sr
 	nop
@@ -116,6 +117,7 @@ SetWall_UpdateSlotIndex_Sub:
 MiddleFuncCall_DispatchData_Code_Helper3:
 	call	SetWall_InlineCodeBlock_0x7F
 	ret
+SetWall_SlotMaskTable:
 	swi	7
 	swi	7
 	swi	7
@@ -2069,16 +2071,16 @@ SetWall_MiscDataAndCode_Skip4:
 	jr	c, SetWall_MiscDataAndCode_Loop
 	ld	xde, xbc
 	cp	xbc, 0
-	jr	z, SetWall_MiscDataAndCode_Skip5
+	jr	z, SetWall_MiscDataAndCode_Entry
 	ld	xde, xbc
 	mul	bc, 100
 	ld	hl, (10349:16)
 	div	xbc, hl
 	inc	1, bc
 	cp	bc, 100
-	jr	c, SetWall_MiscDataAndCode_Skip5
+	jr	c, SetWall_MiscDataAndCode_Entry
 	ldw	bc, 99
-SetWall_MiscDataAndCode_Skip5:
+SetWall_MiscDataAndCode_Entry:
 	ld	(10348:16), c
 	pop	xwa
 	ld	(4349:16), xwa

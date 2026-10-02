@@ -3982,28 +3982,28 @@ DSPCfg_Data_ParamDispatch_Skip5:
 	ld	(xsp+0x12), xhl
 	ld	a, (xsp+0xa)
 	cp	a, (xsp+0x10)
-	jr	ugt, DSPCfg_Data_ParamDispatch_Skip7
+	jr	ugt, DSPCfg_Data_ParamDispatch_Helper_Skip
 	ld	a, (xsp+0xa)
 	cp	a, (xsp+0x10)
 	jr	nz, DSPCfg_Data_ParamDispatch_Loop3
 	ld	a, (xsp+0x2)
 	and	a, (xsp+0xc)
 	jr	z, DSPCfg_Data_ParamDispatch_Loop3
-DSPCfg_Data_ParamDispatch_Skip7:
+DSPCfg_Data_ParamDispatch_Helper_Skip:
 	ld	a, (xsp+0xa)
 	cp	a, (xsp+0x10)
-	jr	ule, DSPCfg_Data_ParamDispatch_Skip9
+	jr	ule, DSPCfg_Data_ParamDispatch_Helper_Skip3
 	cp	(xsp+0x4), 112
-	jr	nz, DSPCfg_Data_ParamDispatch_Skip8
+	jr	nz, DSPCfg_Data_ParamDispatch_Helper_Skip2
 	dec	3, iz
-	jr	DSPCfg_Data_ParamDispatch_Join5
-DSPCfg_Data_ParamDispatch_Skip8:
+	jr	DSPCfg_Data_ParamDispatch_Helper_Join
+DSPCfg_Data_ParamDispatch_Helper_Skip2:
 	dec	1, iz
-DSPCfg_Data_ParamDispatch_Join5:
+DSPCfg_Data_ParamDispatch_Helper_Join:
 	cp	(xsp+0x6), 1
-	jr	nz, DSPCfg_Data_ParamDispatch_Skip9
+	jr	nz, DSPCfg_Data_ParamDispatch_Helper_Skip3
 	inc	1, iz
-DSPCfg_Data_ParamDispatch_Skip9:
+DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	ld	a, (xsp+0xc)
 	cpl	a
 	and	a, (xsp+0x2)

@@ -12480,13 +12480,13 @@ AccTuning_ComplexBytecodeData_Skip5:
 	ld	bc, de
 	or	bc, hl
 	cp	bc, 520
-	jr	z, AccTuning_ComplexBytecodeData_Skip6
+	jr	z, AccTuning_ComplexBytecodeData_Code_Skip
 	ld	c, (xwa)
 	extz	bc
 	or	de, bc
 	cp	de, 792
 	call	nz, (0xf5e2e7:24)
-AccTuning_ComplexBytecodeData_Skip6:
+AccTuning_ComplexBytecodeData_Code_Skip:
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
 	extz	wa
@@ -12745,6 +12745,7 @@ AccInit_AllPartPositions_Wrap:
 	call	AccPedal_ProcessAllChanges
 	pop	xiz
 	ret
+AccStyle_SetupPartAddressesByHL_Wrap:
 	push	xiz
 	ld	xiy, xwa
 	ld	xhl, xbc
@@ -13462,9 +13463,9 @@ AccPatch_GetSlotAddr_Preserve:
 	xor	xhl, xhl
 	ld	l, (13370:16)
 	cp	l, 30
-	jr	c, AccPatch_GetCurrentSlotAddr_Skip
+	jr	c, AccPatch_GetSlotAddr_Preserve_Skip
 	xor	l, l
-AccPatch_GetCurrentSlotAddr_Skip:
+AccPatch_GetSlotAddr_Preserve_Skip:
 	mul	hl, 96
 	add	xhl, 96
 	ld	xiy, 608256
@@ -24013,7 +24014,7 @@ RhythmVariation_Select_Code_Helper6:
 	and	l, 255
 	ld	h, (xiy+17)
 	and	h, 127
-	calr	DrumVoice_NotifyEE_Sub
+	calr	TimeSig_DisplayStrings_Code_Sub2
 	calr	DrumKit_PostMidiEvents
 RhythmVariation_Select_Code_Skip4:
 	calr	1435
@@ -24236,38 +24237,38 @@ DrumVoice_Handler4_Return:
 	ld	a, (0x344e:16)
 	and	a, 96
 	bit	7, w
-	jr	nz, DrumVoice_Handler4_Skip5
+	jr	nz, DrumVoice_Handler4_Code_Skip4
 	cp	a, 0:i3
-	jr	nz, DrumVoice_Handler4_Skip2
+	jr	nz, DrumVoice_Handler4_Code_Skip
 	ld	a, 64:opc
-	jr	DrumVoice_Handler4_Join
-DrumVoice_Handler4_Skip2:
+	jr	DrumVoice_Handler4_Code_Join
+DrumVoice_Handler4_Code_Skip:
 	cp	a, 64
-	jr	nz, DrumVoice_Handler4_Skip3
+	jr	nz, DrumVoice_Handler4_Code_Skip2
 	ld	a, 32:opc
-	jr	DrumVoice_Handler4_Join
-DrumVoice_Handler4_Skip3:
+	jr	DrumVoice_Handler4_Code_Join
+DrumVoice_Handler4_Code_Skip2:
 	cp	a, 32
-	jr	nz, DrumVoice_Handler4_Skip4
+	jr	nz, DrumVoice_Handler4_Code_Skip3
 	ld	a, 96:opc
-	jr	DrumVoice_Handler4_Join
-DrumVoice_Handler4_Skip4:
+	jr	DrumVoice_Handler4_Code_Join
+DrumVoice_Handler4_Code_Skip3:
 	cp	a, 96
-	jr	nz, DrumVoice_Handler4_Join
+	jr	nz, DrumVoice_Handler4_Code_Join
 	ld	a, 96:opc
-DrumVoice_Handler4_Join:
+DrumVoice_Handler4_Code_Join:
 	jr	DrumVoice_Handler4_Join2
-DrumVoice_Handler4_Skip5:
+DrumVoice_Handler4_Code_Skip4:
 	cp	a, 0:i3
-	jr	nz, DrumVoice_Handler4_Skip6
+	jr	nz, DrumVoice_Handler4_Code_Skip5
 	ld	a, 0:opc
 	jr	DrumVoice_Handler4_Join2
-DrumVoice_Handler4_Skip6:
+DrumVoice_Handler4_Code_Skip5:
 	cp	a, 64
-	jr	nz, DrumVoice_Handler4_Skip7
+	jr	nz, DrumVoice_Handler4_Code_Skip6
 	ld	a, 0:opc
 	jr	DrumVoice_Handler4_Join2
-DrumVoice_Handler4_Skip7:
+DrumVoice_Handler4_Code_Skip6:
 	cp	a, 32
 	jr	nz, DrumVoice_Handler4_Skip8
 	ld	a, 64:opc
@@ -24374,7 +24375,7 @@ TimeSig_DisplayStrings:
 	.ascii "(16/8)+0 "
 	.byte 8
 	call	VoiceParam_ClampAndValidate_Tramp
-DrumVoice_NotifyEE_Sub:
+TimeSig_DisplayStrings_Code_Sub2:
 	ld	(64602:16), l
 	and	h, 127
 	and	(0xfc5b:16), 128
@@ -24385,8 +24386,8 @@ DrumVoice_NotifyEE_Sub:
 	extz	hl
 	extz	xhl
 	add	xhl, 65426
-	jr	DrumVoice_NotifyEE_Join
-DrumVoice_NotifyEE_Join:
+	jr	TimeSig_DisplayStrings_Code_Join10
+TimeSig_DisplayStrings_Code_Join10:
 	ld	(xhl), w
 	ret
 	.byte 0xc8, 0x04
@@ -24399,28 +24400,28 @@ DrumVoice_NotifyEE_Join:
 	call	PartCtrl_WriteProgramChange
 	pop w
 	bit	7, w
-	jr	nz, DrumVoice_NotifyEE_Skip2
+	jr	nz, TimeSig_DisplayStrings_Code_Skip2
 	inc	1, l
 	cp	l, 14
-	jr	nz, DrumVoice_NotifyEE_Skip
+	jr	nz, TimeSig_DisplayStrings_Code_Skip
 	ld	l, 15:opc
-	jr	DrumVoice_NotifyEE_Join2
-DrumVoice_NotifyEE_Skip:
+	jr	TimeSig_DisplayStrings_Code_Join
+TimeSig_DisplayStrings_Code_Skip:
 	cp	l, 16
-	jr	c, DrumVoice_NotifyEE_Join2
+	jr	c, TimeSig_DisplayStrings_Code_Join
 	ld	l, 15:opc
-	jr	DrumVoice_NotifyEE_Join2
-DrumVoice_NotifyEE_Skip2:
+	jr	TimeSig_DisplayStrings_Code_Join
+TimeSig_DisplayStrings_Code_Skip2:
 	dec	1, l
 	cp	l, 14
-	jr	nz, DrumVoice_NotifyEE_Skip3
+	jr	nz, TimeSig_DisplayStrings_Code_Skip3
 	ld	l, 13:opc
-	jr	DrumVoice_NotifyEE_Join2
-DrumVoice_NotifyEE_Skip3:
+	jr	TimeSig_DisplayStrings_Code_Join
+TimeSig_DisplayStrings_Code_Skip3:
 	cp	l, 255
-	jr	nz, DrumVoice_NotifyEE_Join2
+	jr	nz, TimeSig_DisplayStrings_Code_Join
 	ld	l, 0:opc
-DrumVoice_NotifyEE_Join2:
+TimeSig_DisplayStrings_Code_Join:
 	ld	a, l
 	ld	xix, 65426
 	ld_rr8b	h, xix, l
@@ -24433,18 +24434,18 @@ DrumVoice_NotifyEE_Join2:
 	and	h, 127
 	ld	(64603:16), h
 	cp	(13395:16), 26
-	jr	z, DrumVoice_NotifyEE_Return
+	jr	z, TimeSig_DisplayStrings_Code_Return12
 	cp	(64602:16), 128
 	jr	c, DrumVoice_NotifyEE_Skip4
 	cp	(13395:16), 16
-	jr	nc, DrumVoice_NotifyEE_Return
+	jr	nc, TimeSig_DisplayStrings_Code_Return12
 	ld	(13395:16), 16
-	jr	DrumVoice_NotifyEE_Return
+	jr	TimeSig_DisplayStrings_Code_Return12
 DrumVoice_NotifyEE_Skip4:
 	cp	(13395:16), 16
-	jr	c, DrumVoice_NotifyEE_Return
+	jr	c, TimeSig_DisplayStrings_Code_Return12
 	ld	(13395:16), 0
-DrumVoice_NotifyEE_Return:
+TimeSig_DisplayStrings_Code_Return12:
 	ret
 	.byte 0xc8, 0x04
 	ld	l, (64602:16)
@@ -24468,27 +24469,27 @@ DrumVoice_NotifyEE_Return:
 	ld	xix, TimeSig_DisplayStrings_0x21B
 	ld_rr8b	a, xix, a
 	pop	xix
-	jr	DrumVoice_NotifyEE_Join3
+	jr	TimeSig_DisplayStrings_Code_Join2
 DrumVoice_NotifyEE_Skip5:
 	inc	1, a
 	cp	a, (13201:16)
-	jr	ule, DrumVoice_NotifyEE_Join3
+	jr	ule, TimeSig_DisplayStrings_Code_Join2
 	ld	a, (13201:16)
-	jr	DrumVoice_NotifyEE_Join3
+	jr	TimeSig_DisplayStrings_Code_Join2
 DrumVoice_NotifyEE_Skip6:
 	cp	l, 15
-	jr	nz, DrumVoice_NotifyEE_Skip7
+	jr	nz, TimeSig_DisplayStrings_Code_Skip5
 	push	xix
 	ld	xix, TimeSig_DisplayStrings_0x227
 	ld_rr8b	a, xix, a
 	pop	xix
-	jr	DrumVoice_NotifyEE_Join3
-DrumVoice_NotifyEE_Skip7:
+	jr	TimeSig_DisplayStrings_Code_Join2
+TimeSig_DisplayStrings_Code_Skip5:
 	dec	1, a
 	cp	a, 255
-	jr	nz, DrumVoice_NotifyEE_Join3
+	jr	nz, TimeSig_DisplayStrings_Code_Join2
 	ld	a, 0:opc
-DrumVoice_NotifyEE_Join3:
+TimeSig_DisplayStrings_Code_Join2:
 	ld	h, a
 	ld	xwa, 65426
 	st_rr8b	h, xwa, l
@@ -24591,11 +24592,11 @@ DrumVoice_NotifyEE_Return2:
 AccPatch_CallParamLookup_Helper7:
 	ret
 	cp	(13393:16), 128
-	jr	c, DrumVoice_NotifyEE_Return3
+	jr	c, TimeSig_DisplayStrings_Code_Return2
 	cp	(13395:16), 10
-	jr	c, DrumVoice_NotifyEE_Return3
+	jr	c, TimeSig_DisplayStrings_Code_Return2
 	ld	(13395:16), 0
-DrumVoice_NotifyEE_Return3:
+TimeSig_DisplayStrings_Code_Return2:
 	ret
 	.byte 0xc8, 0x04
 	ld	l, (64602:16)
@@ -24747,120 +24748,120 @@ DrumVoice_NotifyEE_Helper:
 	inc	1, a
 	cp	a, 31
 	jr	nz, DrumVoice_NotifyEE_Skip20
-	calr	DrumVoice_NotifyEE_Helper2
+	calr	TimeSig_DisplayStrings_Code_Helper
 	ld	a, 0:opc
-	jr	DrumVoice_NotifyEE_Join8
+	jr	TimeSig_DisplayStrings_Code_Join4
 DrumVoice_NotifyEE_Skip20:
 	cp	a, 4:i3
-	jr	nz, DrumVoice_NotifyEE_Skip21
+	jr	nz, TimeSig_DisplayStrings_Code_Skip16
 	ld	a, 12:opc
-	jr	DrumVoice_NotifyEE_Join8
-DrumVoice_NotifyEE_Skip21:
+	jr	TimeSig_DisplayStrings_Code_Join4
+TimeSig_DisplayStrings_Code_Skip16:
 	cp	a, 18
-	jr	lt, DrumVoice_NotifyEE_Join8
+	jr	lt, TimeSig_DisplayStrings_Code_Join4
 	ld	a, 17:opc
-	jr	DrumVoice_NotifyEE_Join8
-DrumVoice_NotifyEE_Join8:
-	jr	DrumVoice_NotifyEE_Return5
+	jr	TimeSig_DisplayStrings_Code_Join4
+TimeSig_DisplayStrings_Code_Join4:
+	jr	TimeSig_DisplayStrings_Code_Return4
 DrumVoice_NotifyEE_Skip22:
 	dec	1, a
 	cp	a, 29
 	jr	nz, DrumVoice_NotifyEE_Skip23
 	ld	a, 30:opc
-	jr	DrumVoice_NotifyEE_Return5
+	jr	TimeSig_DisplayStrings_Code_Return4
 DrumVoice_NotifyEE_Skip23:
 	cp	a, 255
-	jr	nz, DrumVoice_NotifyEE_Skip24
+	jr	nz, TimeSig_DisplayStrings_Code_Skip18
 	ld	a, 30:opc
 	ld	(13395:16), 26
-	jr	DrumVoice_NotifyEE_Return5
-DrumVoice_NotifyEE_Skip24:
+	jr	TimeSig_DisplayStrings_Code_Return4
+TimeSig_DisplayStrings_Code_Skip18:
 	cp	a, 11
-	jr	nz, DrumVoice_NotifyEE_Skip25
+	jr	nz, TimeSig_DisplayStrings_Code_Skip19
 	ld	a, 3:opc
-	jr	DrumVoice_NotifyEE_Return5
-DrumVoice_NotifyEE_Skip25:
+	jr	TimeSig_DisplayStrings_Code_Return4
+TimeSig_DisplayStrings_Code_Skip19:
 	cp	a, 18
-	jr	lt, DrumVoice_NotifyEE_Return5
+	jr	lt, TimeSig_DisplayStrings_Code_Return4
 	ld	a, 17:opc
-DrumVoice_NotifyEE_Return5:
+TimeSig_DisplayStrings_Code_Return4:
 	ret
-DrumVoice_NotifyEE_Helper2:
+TimeSig_DisplayStrings_Code_Helper:
 	ld	a, (64602:16)
 	and	a, 255
 	cp	a, 128
 	jr	c, DrumVoice_NotifyEE_Skip26
 	ld	(13395:16), 16
-	jr	DrumVoice_NotifyEE_Return6
+	jr	TimeSig_DisplayStrings_Code_Return5
 DrumVoice_NotifyEE_Skip26:
 	ld	(13395:16), 0
-DrumVoice_NotifyEE_Return6:
+TimeSig_DisplayStrings_Code_Return5:
 	ret
 DrumVoice_NotifyEE_Helper3:
 	bit	7, w
-	jr	nz, DrumVoice_NotifyEE_Skip29
+	jr	nz, TimeSig_DisplayStrings_Code_Skip23
 	inc	1, a
 	cp	a, 32
-	jr	nz, DrumVoice_NotifyEE_Skip27
-	calr	DrumVoice_NotifyEE_Helper2
+	jr	nz, TimeSig_DisplayStrings_Code_Skip21
+	calr	TimeSig_DisplayStrings_Code_Helper
 	ld	a, 4:opc
-	jr	DrumVoice_NotifyEE_Loop
-DrumVoice_NotifyEE_Skip27:
+	jr	TimeSig_DisplayStrings_Code_Loop
+TimeSig_DisplayStrings_Code_Skip21:
 	cp	a, 8
-	jr	nz, DrumVoice_NotifyEE_Skip28
+	jr	nz, TimeSig_DisplayStrings_Code_Skip22
 	ld	a, 18:opc
-	jr	DrumVoice_NotifyEE_Loop
-DrumVoice_NotifyEE_Skip28:
+	jr	TimeSig_DisplayStrings_Code_Loop
+TimeSig_DisplayStrings_Code_Skip22:
 	cp	a, 24
-	jr	lt, DrumVoice_NotifyEE_Loop
+	jr	lt, TimeSig_DisplayStrings_Code_Loop
 	ld	a, 23:opc
-DrumVoice_NotifyEE_Loop:
-	jr	DrumVoice_NotifyEE_Return7
-DrumVoice_NotifyEE_Skip29:
+TimeSig_DisplayStrings_Code_Loop:
+	jr	TimeSig_DisplayStrings_Code_Return6
+TimeSig_DisplayStrings_Code_Skip23:
 	dec	1, a
 	cp	a, 30
 	jr	nz, DrumVoice_NotifyEE_Skip30
 	ld	a, 31:opc
-	jr	DrumVoice_NotifyEE_Return7
+	jr	TimeSig_DisplayStrings_Code_Return6
 DrumVoice_NotifyEE_Skip30:
 	cp	a, 3:i3
-	jr	nz, DrumVoice_NotifyEE_Skip31
+	jr	nz, TimeSig_DisplayStrings_Code_Skip25
 	ld	a, 31:opc
 	ld	(13395:16), 26
-	jr	DrumVoice_NotifyEE_Return7
-DrumVoice_NotifyEE_Skip31:
+	jr	TimeSig_DisplayStrings_Code_Return6
+TimeSig_DisplayStrings_Code_Skip25:
 	cp	a, 17
-	jr	nz, DrumVoice_NotifyEE_Skip32
+	jr	nz, TimeSig_DisplayStrings_Code_Skip26
 	ld	a, 7:opc
-	jr	DrumVoice_NotifyEE_Return7
-DrumVoice_NotifyEE_Skip32:
+	jr	TimeSig_DisplayStrings_Code_Return6
+TimeSig_DisplayStrings_Code_Skip26:
 	cp	a, 24
-	jr	lt, DrumVoice_NotifyEE_Loop
+	jr	lt, TimeSig_DisplayStrings_Code_Loop
 	ld	a, 23:opc
-DrumVoice_NotifyEE_Return7:
+TimeSig_DisplayStrings_Code_Return6:
 	ret
 DrumVoice_NotifyEE_Helper4:
 	bit	7, w
-	jr	nz, DrumVoice_NotifyEE_Skip35
+	jr	nz, TimeSig_DisplayStrings_Code_Skip29
 	inc	1, a
 	cp	a, 33
-	jr	nz, DrumVoice_NotifyEE_Skip33
-	calr	DrumVoice_NotifyEE_Helper2
+	jr	nz, TimeSig_DisplayStrings_Code_Skip27
+	calr	TimeSig_DisplayStrings_Code_Helper
 	ld	a, 8:opc
-	jr	DrumVoice_NotifyEE_Loop2
-DrumVoice_NotifyEE_Skip33:
+	jr	TimeSig_DisplayStrings_Code_Join5
+TimeSig_DisplayStrings_Code_Skip27:
 	cp	a, 12
-	jr	nz, DrumVoice_NotifyEE_Skip34
+	jr	nz, TimeSig_DisplayStrings_Code_Skip28
 	ld	a, 24:opc
-	jr	DrumVoice_NotifyEE_Loop2
-DrumVoice_NotifyEE_Skip34:
+	jr	TimeSig_DisplayStrings_Code_Join5
+TimeSig_DisplayStrings_Code_Skip28:
 	cp	a, 30
-	jr	lt, DrumVoice_NotifyEE_Loop2
+	jr	lt, TimeSig_DisplayStrings_Code_Join5
 	ld	a, 29:opc
-	jr	DrumVoice_NotifyEE_Loop2
-DrumVoice_NotifyEE_Loop2:
+	jr	TimeSig_DisplayStrings_Code_Join5
+TimeSig_DisplayStrings_Code_Join5:
 	jr	DrumVoice_NotifyEE_Return8
-DrumVoice_NotifyEE_Skip35:
+TimeSig_DisplayStrings_Code_Skip29:
 	dec	1, a
 	cp	a, 31
 	jr	nz, DrumVoice_NotifyEE_Skip36
@@ -24868,18 +24869,18 @@ DrumVoice_NotifyEE_Skip35:
 	jr	DrumVoice_NotifyEE_Return8
 DrumVoice_NotifyEE_Skip36:
 	cp	a, 7:i3
-	jr	nz, DrumVoice_NotifyEE_Skip37
+	jr	nz, TimeSig_DisplayStrings_Code_Skip31
 	ld	a, 32:opc
 	ld	(13395:16), 26
 	jr	DrumVoice_NotifyEE_Return8
-DrumVoice_NotifyEE_Skip37:
+TimeSig_DisplayStrings_Code_Skip31:
 	cp	a, 23
 	jr	nz, DrumVoice_NotifyEE_Skip38
 	ld	a, 11:opc
 	jr	DrumVoice_NotifyEE_Return8
 DrumVoice_NotifyEE_Skip38:
 	cp	a, 30
-	jr	lt, DrumVoice_NotifyEE_Loop2
+	jr	lt, TimeSig_DisplayStrings_Code_Join5
 	ld	a, 29:opc
 	jr	DrumVoice_NotifyEE_Return8
 DrumVoice_NotifyEE_Return8:
@@ -25005,31 +25006,31 @@ DrumVoice_NotifyEE_Helper7:
 	calr	DrumVoice_NotifyEE_Helper8
 	popw	wa
 	cp	bc, 65535
-	jr	z, DrumVoice_NotifyEE_Skip47
+	jr	z, TimeSig_DisplayStrings_Code_Skip33
 	cp	bc, wa
-	jr	z, DrumVoice_NotifyEE_Skip47
+	jr	z, TimeSig_DisplayStrings_Code_Skip33
 	calr	DrumVoice_NotifyEE_Helper9
-DrumVoice_NotifyEE_Skip47:
+TimeSig_DisplayStrings_Code_Skip33:
 	pushw	wa
 	ld	h, 2:opc
 	calr	DrumVoice_NotifyEE_Helper8
 	popw	wa
 	cp	bc, 65535
-	jr	z, DrumVoice_NotifyEE_Skip48
+	jr	z, TimeSig_DisplayStrings_Code_Skip34
 	cp	bc, wa
-	jr	z, DrumVoice_NotifyEE_Skip48
+	jr	z, TimeSig_DisplayStrings_Code_Skip34
 	calr	DrumVoice_NotifyEE_Helper9
-DrumVoice_NotifyEE_Skip48:
+TimeSig_DisplayStrings_Code_Skip34:
 	pushw	wa
 	ld	h, 3:opc
 	calr	DrumVoice_NotifyEE_Helper8
 	popw	wa
 	cp	bc, 65535
-	jr	z, DrumVoice_NotifyEE_Return9
+	jr	z, TimeSig_DisplayStrings_Code_Helper_Return
 	cp	bc, wa
-	jr	z, DrumVoice_NotifyEE_Return9
+	jr	z, TimeSig_DisplayStrings_Code_Helper_Return
 	calr	DrumVoice_NotifyEE_Helper9
-DrumVoice_NotifyEE_Return9:
+TimeSig_DisplayStrings_Code_Helper_Return:
 	ret
 DrumVoice_NotifyEE_Helper8:
 	ld_rr8b	l, xix, h

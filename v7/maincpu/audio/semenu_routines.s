@@ -668,10 +668,10 @@ SeMenu_InitDisplayColumn_Data:
 	lda	xbc, (xsp)
 	ld	xwa, xbc
 	lda	xbc, (xbc+9)
-SeMenu_InitDisplayColumn_Loop2:
+SeMenu_InitDisplayColumn_Data_Loop:
 	ld (xwa+), 0
 	cp	xwa, xbc
-	jr	c, SeMenu_InitDisplayColumn_Loop2
+	jr	c, SeMenu_InitDisplayColumn_Data_Loop
 	lda	xwa, (xsp+10)
 	calr	SeMenu_LoadMasterPtr
 	lda	xwa, (xsp)
@@ -730,12 +730,12 @@ SeMenu_SetDisplayValue_Data:
 	div	a, 20
 	ld	c, w
 	cp	e, 0:i3
-	jr	z, SeMenu_SetDisplayValue_Skip
+	jr	z, SeMenu_SetDisplayValue_Data_Skip
 	ld	e, 17:opc
-	jr	SeMenu_SetDisplayValue_Join
-SeMenu_SetDisplayValue_Skip:
+	jr	SeMenu_SetDisplayValue_Data_Join
+SeMenu_SetDisplayValue_Data_Skip:
 	ld	e, 16:opc
-SeMenu_SetDisplayValue_Join:
+SeMenu_SetDisplayValue_Data_Join:
 	lda	xwa, (xsp+2)
 	ld	(xwa), e
 	ld	(xwa+1), c
@@ -746,20 +746,20 @@ SeMenu_SetDisplayValue_Join:
 	ld	e, (xwa+3)
 	ld	c, (xwa+4)
 	.byte 0x87, 0x3f, 0x01
-	jr	nz, SeMenu_SetDisplayValue_Entry
+	jr	nz, SeMenu_SetDisplayValue_Data_Skip2
 	lda	xwa, (63952:16)
 	ld	(xwa), e
-	jr	SeMenu_SetDisplayValue_Join2
-SeMenu_SetDisplayValue_Entry:
+	jr	SeMenu_SetDisplayValue_Data_Join2
+SeMenu_SetDisplayValue_Data_Skip2:
 	.byte 0x87, 0x3f, 0x02
-	jr	nz, SeMenu_SetDisplayValue_Skip2
+	jr	nz, SeMenu_SetDisplayValue_Data_Skip3
 	lda	xwa, (63978:16)
 	ld	(xwa), e
-	jr	SeMenu_SetDisplayValue_Join2
-SeMenu_SetDisplayValue_Skip2:
+	jr	SeMenu_SetDisplayValue_Data_Join2
+SeMenu_SetDisplayValue_Data_Skip3:
 	lda	xwa, (63926:16)
 	ld	(xwa), e
-SeMenu_SetDisplayValue_Join2:
+SeMenu_SetDisplayValue_Data_Join2:
 	ld	(xwa+1), c
 	extz	bc
 	pushw	bc
@@ -1107,7 +1107,9 @@ SeMenu_PartMask_Data_Code_Sub:
 	push	xsp
 	max
 	jr	ule, 2
+SeMenu_StorePartMask_Skip:
 	jr	77
+SeMenu_StorePartMask_Skip2:
 	lda	xwa, (xsp)
 	calr	10987
 	ld	a, (xsp+6)
@@ -1217,6 +1219,7 @@ SeMenu_BitShiftMask_End:
 	extz	bc
 	cp	bc, 0:i3
 	ret	ule
+SeMenu_BitShiftMask_End_Loop3:
 	srl	l, 1
 	inc	1, de
 	cp	de, bc
@@ -1610,6 +1613,7 @@ SeMenu_TransferPartValues_EndData_Entry:
 	nop
 	jr	nz, 3
 	ld	(xwa), 4
+SeMenu_TransferPartValues_EndData_Skip27:
 	.byte 0x80
 	push	xsp
 	halt
@@ -1622,7 +1626,9 @@ UpdSeSel_DetailedUpdate_Helper:
 	jr	c, 4
 	cp	c, 6:i3
 	jr	ule, 2
+SeMenu_TransferPartValues_EndData_Skip28:
 	ld	c, 1:opc
+SeMenu_TransferPartValues_EndData_Skip29:
 	ld	(xwa), c
 	ret
 SeMenu_CopyWriteUpdate_Helper4:

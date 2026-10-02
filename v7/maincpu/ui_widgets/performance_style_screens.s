@@ -73,6 +73,7 @@ NAKA_UIObjectTable:
 ; [nakarest] naka_perf_style+0x5256  +0x5256..+0x59d4 (0xe13bca, 1918 B)
 ; [nakarest] the table itself: ResName slot 0x3fd (table 0xe13bca, 478 entries, InitializeNaka),
 ; [nakarest] 478 entry pointers x 4 bytes.
+Naka_ResNameTable_3FD:
 	.incbin "includes/generated/naka_perf_style.bin", 0x5256, 0x77E
 ; [nakarest] naka_perf_style+0x59d4  +0x59d4..+0x5eb0 (0xe14348, 1244 B)
 ; [nakarest] name strings, entries 0-477 of ResName slot 0x3fd (table 0xe13bca, 478 entries,
@@ -82,10 +83,12 @@ InitializeNaka_Str_TT_FDMSP:	.incbin "includes/generated/naka_perf_style.bin", 0
 ; [nakarest] naka_perf_style+0x5eb0  +0x5eb0..+0x5eb4 (0xe14824, 4 B)
 ; [nakarest] the table itself: MainFunction slot 0x14b (table 0xe14824, 0 entries,
 ; [nakarest] InitializeNaka), 0 entry pointers x 4 bytes.
+Naka_MainFunctionTable_14B:
 	.incbin "includes/generated/naka_perf_style.bin", 0x5EB0, 0x4
 ; [nakarest] naka_perf_style+0x5eb4  +0x5eb4..+0x5eba (0xe14828, 6 B)
 ; [nakarest] the table itself: MainFunction slot 0x44b (table 0xe14828, 0 entries,
 ; [nakarest] InitializeNaka), 0 entry pointers x 4 bytes.
+Naka_MainFunctionTable_44B:
 	.incbin "includes/generated/naka_perf_style.bin", 0x5EB4, 0x6
 ; [nakarest] naka_perf_style+0x5eba  +0x5eba..+0x5f2c (0xe1482e, 114 B)
 ; [nakarest] A table of 6 pointers into this piece (114 B at 0xe1482e), then text; entry 0

@@ -2030,6 +2030,7 @@ Scoop_SoundEditorData_Join21:
 	ld C, 0x37:opc
 	jr t, .Lc_f0519e
 .Lc_f05185:
+Scoop_SoundEditorData_Helper2_Skip2:
 	ld A,(XSP+0x0e)
 	dec 1,A
 	extz WA
@@ -2040,6 +2041,7 @@ Scoop_SoundEditorData_Join21:
 	ld C,A
 	ld (XSP+0x0e),0x00
 .Lc_f0519e:
+Scoop_SoundEditorData_Helper2_Join2:
 	ld A,(XSP+0x10)
 	extz WA
 	ld E,(XSP+0x0e)
@@ -2085,6 +2087,7 @@ Scoop_SoundEditorData_Join22:
 	ld C, 0x36:opc
 	jr t, .Lc_f0522e
 .Lc_f05215:
+Scoop_SoundEditorData_Helper2_Skip3:
 	ld A,(XSP+0x0e)
 	dec 1,A
 	extz WA
@@ -2095,6 +2098,7 @@ Scoop_SoundEditorData_Join22:
 	ld C,A
 	ld (XSP+0x0e),0x00
 .Lc_f0522e:
+Scoop_SoundEditorData_Helper2_Join3:
 	ld A,(XSP+0x10)
 	extz WA
 	ld E,(XSP+0x0e)
@@ -2133,13 +2137,16 @@ Scoop_SoundEditorData_Join23:
 	ld (XWA),0x01
 	jr t, .Lc_f05295
 .Lc_f05292:
+Scoop_SoundEditorData_Helper2_Skip4:
 	ld (XWA),0xff
 .Lc_f05295:
+Scoop_SoundEditorData_Helper2_Join4:
 	cp (XSP+0x0c),0x00
 	jr nz, .Lc_f0529f
 	ld A, 0x50:opc
 	jr t, .Lc_f052b6
 .Lc_f0529f:
+Scoop_SoundEditorData_Helper2_Skip5:
 	ld A,(XSP+0x0e)
 	dec 1,A
 	extz WA
@@ -2149,6 +2156,7 @@ Scoop_SoundEditorData_Join23:
 	lda xwa, (xwa + 0x14)
 	ld (XSP+0x0e),0x00
 .Lc_f052b6:
+Scoop_SoundEditorData_Helper2_Join5:
 	ld E,(XSP+0x0e)
 	extz DE
 	extz WA
@@ -2187,6 +2195,7 @@ Scoop_SoundEditorData_Join24:
 	ld A, 0x4f:opc
 	jr t, .Lc_f05334
 .Lc_f0531d:
+Scoop_SoundEditorData_Helper2_Skip6:
 	ld A,(XSP+0x0e)
 	dec 1,A
 	extz WA
@@ -2196,6 +2205,7 @@ Scoop_SoundEditorData_Join24:
 	lda xwa, (xwa + 0x13)
 	ld (XSP+0x0e),0x00
 .Lc_f05334:
+Scoop_SoundEditorData_Helper2_Join6:
 	ld E,(XSP+0x0e)
 	extz DE
 	extz WA
@@ -2235,6 +2245,7 @@ Scoop_SoundEditorData_Join25:
 	ld A, 0x50:opc
 	jr t, .Lc_f053b5
 .Lc_f0539e:
+Scoop_SoundEditorData_Helper2_Skip7:
 	ld A,(XSP+0x0e)
 	dec 1,A
 	extz WA
@@ -2244,6 +2255,7 @@ Scoop_SoundEditorData_Join25:
 	lda xwa, (xwa + 0x14)
 	ld (XSP+0x0e),0x00
 .Lc_f053b5:
+Scoop_SoundEditorData_Helper2_Join7:
 	ld E,(XSP+0x0e)
 	extz DE
 	extz WA

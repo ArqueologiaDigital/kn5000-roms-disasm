@@ -1049,7 +1049,7 @@ MidiPkt_SysExBulkTransfer_Data_Join4:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	SysEx_DispatchByChannel_49_Entry_Code_Helper
+	calr	SysEx_ClampVoiceIndex8
 	extz	hl
 	ld	xwa, 0x4b00
 	ld	bc, hl
@@ -1069,7 +1069,7 @@ MidiPkt_SysExBulkTransfer_Data_Loop:
 	extz	wa
 	ldto_berp	c, 248
 	extz	bc
-	calr	SysEx_DispatchByChannel_Entry_Code_Sub
+	calr	SysEx_DispatchByChannel_49
 	ld	bc, hl
 	cp	bc, 0xd8f0
 	jr	z, MidiPkt_SysExBulkTransfer_Data_Skip
@@ -1098,11 +1098,11 @@ MidiPkt_SysExBulkTransfer_Data_Epilogue:
 ; presets and real-time parameter editing.
 ; =============================================================================
 
-SysEx_DispatchByChannel_49_Entry_Code_Helper:
+SysEx_ClampVoiceIndex8:
 	cp	a, 8
-	jr	c, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip
+	jr	c, SysEx_ClampVoiceIndex8_DoLookup
 	ld	a, 0:opc
-MidiPkt_SysExBulkTransfer_Data_Helper2_Skip:
+SysEx_ClampVoiceIndex8_DoLookup:
 	extz	wa
 	lda	xbc, (SysEx4B_VoiceIndexMap8:24)
 	ld	l, (xbc+wa)
@@ -1116,7 +1116,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Join:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper
+	calr	SysEx_ClampVoiceIndex128
 	ld	(xsp+4), l
 	ld	xwa, 0x4b04
 	call	DSPCfg_ReadParam_Map0
@@ -1155,11 +1155,11 @@ SysEx_ClampVoiceIndex8_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
-MidiPkt_SysExBulkTransfer_Data_Helper2_Helper:
+SysEx_ClampVoiceIndex128:
 	cp	a, 128
-	jr	c, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip2
+	jr	c, SysEx_ClampVoiceIndex128_DoLookup
 	ld	a, 0:opc
-MidiPkt_SysExBulkTransfer_Data_Helper2_Skip2:
+SysEx_ClampVoiceIndex128_DoLookup:
 	extz	wa
 	lda	xbc, (SysEx4B_LevelCurve128:24)
 	ld	l, (xbc+wa)
@@ -1173,7 +1173,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Join2:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper2
+	calr	SysEx_ClampVoiceIndex8_49
 	extz	hl
 	ld	xwa, 0x4900
 	ld	bc, hl
@@ -1193,7 +1193,7 @@ SysEx_ClampVoiceIndex128_Loop:
 	extz	wa
 	ldto_berp	c, 248
 	extz	bc
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4
+	calr	SysEx_DispatchByChannel
 	ld	bc, hl
 	cp	bc, 0xd8f0
 	jr	z, SysEx_ClampVoiceIndex128_Skip
@@ -1213,11 +1213,11 @@ SysEx_ClampVoiceIndex128_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
-MidiPkt_SysExBulkTransfer_Data_Helper2_Helper2:
+SysEx_ClampVoiceIndex8_49:
 	cp	a, 8
-	jr	c, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip3
+	jr	c, SysEx_ClampVoiceIndex8_49_DoLookup
 	ld	a, 0:opc
-MidiPkt_SysExBulkTransfer_Data_Helper2_Skip3:
+SysEx_ClampVoiceIndex8_49_DoLookup:
 	extz	wa
 	lda	xbc, (SysEx49_VoiceIndexMap8:24)
 	ld	l, (xbc+wa)
@@ -1231,7 +1231,7 @@ MidiPkt_SendBankSelect_Helper:
 	ld	(xsp+4), l
 	ld	a, (xsp+4)
 	extz	wa
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper3
+	calr	SysEx_ClampVoiceIndex128_49
 	ld	(xsp+4), l
 	ld	xwa, 0x4904
 	call	DSPCfg_ReadParam_Map0
@@ -1270,16 +1270,16 @@ SysEx_ApplyToSlot49_Format_Data_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
-MidiPkt_SysExBulkTransfer_Data_Helper2_Helper3:
+SysEx_ClampVoiceIndex128_49:
 	cp	a, 128
-	jr	c, MidiPkt_SysExBulkTransfer_Data_Helper2_Skip4
+	jr	c, SysEx_ClampVoiceIndex128_49_DoLookup
 	ld	a, 0:opc
-MidiPkt_SysExBulkTransfer_Data_Helper2_Skip4:
+SysEx_ClampVoiceIndex128_49_DoLookup:
 	extz	wa
 	lda	xbc, (SysEx49_LevelCurve128:24)
 	ld	l, (xbc+wa)
 	ret
-MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4:
+SysEx_DispatchByChannel:
 	ldw	hl, 0xd8f0
 	ld	e, c
 	extz	de
@@ -1328,7 +1328,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4:
 SysEx_DispatchByChannel_Entry:
 	ld	hl, (xwa+de)
 	ret
-SysEx_DispatchByChannel_Entry_Code_Sub:
+SysEx_DispatchByChannel_49:
 	ldw	hl, 0xd8f0
 	ld	e, c
 	extz	de
@@ -1444,7 +1444,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Join2:
 	add (xsp + 6), xwa
 	ld a, (xsp + 10)
 	extz wa
-	calr	SysEx_DispatchByChannel_49_Entry_Code_Helper
+	calr	SysEx_ClampVoiceIndex8
 	extz hl
 	ld xwa, 0x4b00
 	ld bc, hl
@@ -1459,7 +1459,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Join2:
 	ld (xsp + 4), a
 	ld a, (xsp + 10)
 	extz wa
-	calr	SysEx_DispatchByChannel_49_Entry_Code_Helper
+	calr	SysEx_ClampVoiceIndex8
 	ld (0xfc8e:16), l
 SysEx_DispatchByChannel_49_Entry_Code_Skip5:
 	ld xwa, 0x4b04
@@ -1483,7 +1483,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Loop:
 	extz wa
 	ldto_berp C, 0xf8
 	extz bc
-	calr	SysEx_DispatchByChannel_Entry_Code_Sub
+	calr	SysEx_DispatchByChannel_49
 	ld bc, hl
 	cp bc, 0xd8f0
 	jr	z, SysEx_DispatchByChannel_49_Entry_Code_Skip8
@@ -1516,7 +1516,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Join3:
 	add (xsp + 6), xwa
 	ld a, (xsp + 10)
 	extz wa
-	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper
+	calr	SysEx_ClampVoiceIndex128
 	ld (xsp + 10), l
 	lda xbc, (0xfc8e:16)
 	cp xbc, (xsp + 6)

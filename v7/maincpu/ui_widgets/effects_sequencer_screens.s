@@ -1947,7 +1947,7 @@ InitializeKubo_PtrTable_72:	.long 0x00E30932
 ; [nakarest] Text (1152 B at 0xe30946), first string
 ; [nakarest] "~43~2d~32~44~a0~bc~44~2d~32~45~a0~bc~45~2d~32~46"; no registered NAKA table points
 ; [nakarest] into it; reached through source references
-; [nakarest] EffectBoxProc_CopyNameAndSetup_Code_Join14 (sequencer/sequencer_ui.s: `lda xde,
+; [nakarest] Sqedt_ParamDispatch_Join6 (sequencer/sequencer_ui.s: `lda xde,
 ; [nakarest] (Naka_Help_569_E30113_0x833:24)`).
 	.incbin "includes/generated/naka_effects_seq.bin", 0x89A2, 0x480
 ; [nakarest] naka_effects_seq+0x8e22  +0x8e22..+0x8e5a (0xe30dc6, 56 B)

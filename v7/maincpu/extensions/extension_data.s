@@ -538,6 +538,7 @@ AcMstStyle1SubGridBoxProc_EventOffsets:	; read by AcMstStyle1SubGridBoxProc via 
 	.short 0x01cc, 0x02fa, 0x01cc, 0x02fa, 0x0529, 0x0511, 0x0511
 	aligned_string " "
 MstStyle1SubGrid_OutOfRange_Str_Blank16:	aligned_string "                "
+MstStyle1SubGrid_PadLeft_LoopB_Str_Blank1:
 	aligned_string " "
 MstStyle1SubGridCheck_EventOffsets:	; read by MstStyle1SubGridCheck via MstStyle1Sub_EventDispatch (Str_StoreTotalSetting_DE_0x136)
 	.short 0x0000, 0x0000, 0x0000, 0x0000, 0x015e, 0x0000, 0x0000
@@ -784,7 +785,9 @@ MssName_EventDispatch_Str_Memory_data:	aligned_string "Memory data "
 AcPmBkNoBox_Match_Str_Blank8:		aligned_string "        "
 AcPmBkNoBox_FormatBankNo_Str_Fmtd_Fmtd:	aligned_string "%d-%d:"
 AcBkNoBox_Match_Str_Fmtd:		.byte 0x25, 0x64, 0x3a, 0x00
+PmemMode_Paint_Str_PAGE_1_3:
 	aligned_string "PAGE 1/3"
+AcPmBkEdit_BankChanged_Str_BANK_Fmt2d:
 	aligned_string "BANK%2d:"
 AcPmBkEdit_BankEdit_Str_Fmtd:	.byte 0x25, 0x64, 0x3a, 0x00, 0x01, 0x00, 0x01, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x0a, 0x00, 0x04, 0x00
 	.byte 0x0a, 0x00, 0x0d, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00, 0xff, 0x53, 0x4f, 0x55, 0x4e, 0x44, 0x00

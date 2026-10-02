@@ -158,7 +158,7 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 	cp	a, 0x16
 	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip26
 	cp	a, 0xd
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip5
+	jr	z, UIStateEvt_VoiceAssign
 	cp	a, 0xc
 	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip4
 	cp	a, 0:i3
@@ -195,13 +195,13 @@ ScreenGroup_InitVoiceLoop_Code_Skip4:
 ; (v7 label ScreenGroup_InitParams8 stood here; dropped, see the file header)
 	orw	(0xc4f8:16), 4
 	ret
-ScreenGroup_InitVoiceLoop_Code_Skip5:
+UIStateEvt_VoiceAssign:
 	ld	a, e
 	and	a, 0xf
 ; (v7 label ScreenGroup_InitParam8Loop stood here; dropped, see the file header)
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip7
+	jr	z, UIStateEvt_ToneChange
 	bit	6, d
-	jr	nz, ScreenGroup_InitVoiceLoop_Code_Skip6
+	jr	nz, UIStateEvt_VoiceAssign_Reset
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
@@ -217,7 +217,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip5:
 	ld	(xix), a
 ; (v7 label ScreenGroup_InitParam8ComplexLoop stood here; dropped, see the file header)
 	jr	ScreenGroup_InitVoiceLoop_Code_Join3
-ScreenGroup_InitVoiceLoop_Code_Skip6:
+UIStateEvt_VoiceAssign_Reset:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
@@ -230,11 +230,11 @@ ScreenGroup_InitVoiceLoop_Code_Skip6:
 ScreenGroup_InitVoiceLoop_Code_Join3:
 	orw	(0xc500:16), 2048
 	orw	(0xc4f8:16), 4
-ScreenGroup_InitVoiceLoop_Code_Skip7:
+UIStateEvt_ToneChange:
 	bit	5, e
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip9
+	jr	z, UIStateEvt_DrumAssign
 	bit	5, d
-	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip8
+	jr	z, UIStateEvt_ToneChange_Set
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
@@ -249,7 +249,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip7:
 	ld	(0xc17c:16), 255
 ; (v7 label ScreenGroup_FinalInit stood here; dropped, see the file header)
 	jr	ScreenGroup_InitVoiceLoop_Code_Join4
-ScreenGroup_InitVoiceLoop_Code_Skip8:
+UIStateEvt_ToneChange_Set:
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)
@@ -273,7 +273,7 @@ ScreenGroup_InitVoiceLoop_Code_Join4:
 	orw	(0xc4f8:16), 4
 ; (v7 label ScreenGroup_InitFinalize stood here; dropped, see the file header)
 ; (was .incbin "includes/romslices/v7_block_screengroup_initfinalize.bin")
-ScreenGroup_InitVoiceLoop_Code_Skip9:
+UIStateEvt_DrumAssign:
 	bit	6, e
 	ret	z
 	bit	6, d

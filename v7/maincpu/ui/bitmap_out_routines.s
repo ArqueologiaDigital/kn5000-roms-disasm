@@ -3287,6 +3287,7 @@ FileIO_ByteBlock_DemoProc1_Helper4:
 .Lc_fb5b1a:
 	lds_erpb 0xfb, 0
 .Lc_fb5b1d:
+BitMapOut_UpdateWidget_Finalize_Loop:
 	ld_erpb_rr c, 0xfb
 	extz BC
 	ld A,(XSP+0x02)

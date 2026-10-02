@@ -9879,7 +9879,7 @@ DrawDottedLineWithMode_Impl_Skip13:
 	ld	xwa, (xsp+4)
 	cp	xwa, 0
 	jrl	lt, Voice_FactoryPresetData_Code_Join4
-DrawDottedLineWithMode_Impl_Loop2:
+DrawDottedLineWithMode_Impl_Entry:
 	cp	(xsp+24), 3
 	jr	ule, DrawDottedLineWithMode_Impl_Skip14
 	ld	(xsp+24), 0
@@ -9995,7 +9995,7 @@ DrawDottedLineWithMode_Impl_Join6:
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+4)
-	jrl	le, DrawDottedLineWithMode_Impl_Loop2
+	jrl	le, DrawDottedLineWithMode_Impl_Entry
 	jrl	Voice_FactoryPresetData_Code_Join4
 DrawDottedLineWithMode_Impl_Skip21:
 	lda	xwa, (xsp+46)

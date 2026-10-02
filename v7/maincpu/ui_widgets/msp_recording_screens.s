@@ -466,66 +466,82 @@ NakaNode_Accomp13_Widget06:
 ; [nakarest] naka_msp_recording+0x98a  +0x98a..+0x99a (0xe1b4e2, 16 B)
 ; [nakarest] the table itself: Viewable slot 0x10 (table 0xe1b4e2, 3 entries, InitializeSuna), 3
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_010:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x98A, 0x10
 ; [nakarest] naka_msp_recording+0x99a  +0x99a..+0x9be (0xe1b4f2, 36 B)
 ; [nakarest] the table itself: Viewable slot 0x11 (table 0xe1b4f2, 8 entries, InitializeSuna), 8
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_011:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x99A, 0x24
 ; [nakarest] naka_msp_recording+0x9be  +0x9be..+0x9de (0xe1b516, 32 B)
 ; [nakarest] the table itself: Viewable slot 0x12 (table 0xe1b516, 7 entries, InitializeSuna), 7
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_012:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x9BE, 0x20
 ; [nakarest] naka_msp_recording+0x9de  +0x9de..+0x9f2 (0xe1b536, 20 B)
 ; [nakarest] the table itself: Viewable slot 0x13 (table 0xe1b536, 4 entries, InitializeSuna), 4
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_013:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x9DE, 0x14
 ; [nakarest] naka_msp_recording+0x9f2  +0x9f2..+0xa06 (0xe1b54a, 20 B)
 ; [nakarest] the table itself: Viewable slot 0x14 (table 0xe1b54a, 4 entries, InitializeSuna), 4
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_014:
 	.incbin "includes/generated/naka_msp_recording.bin", 0x9F2, 0x14
 ; [nakarest] naka_msp_recording+0xa06  +0xa06..+0xa2a (0xe1b55e, 36 B)
 ; [nakarest] the table itself: Viewable slot 0x15 (table 0xe1b55e, 8 entries, InitializeSuna), 8
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_015:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xA06, 0x24
 ; [nakarest] naka_msp_recording+0xa2a  +0xa2a..+0xa4a (0xe1b582, 32 B)
 ; [nakarest] the table itself: Viewable slot 0x16 (table 0xe1b582, 7 entries, InitializeSuna), 7
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_016:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xA2A, 0x20
 ; [nakarest] naka_msp_recording+0xa4a  +0xa4a..+0xa96 (0xe1b5a2, 76 B)
 ; [nakarest] the table itself: Viewable slot 0xb0 (table 0xe1b5a2, 18 entries, InitializeSuna),
 ; [nakarest] 18 entry pointers x 4 bytes.
+Suna_ViewableTable_0B0:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xA4A, 0x4C
 ; [nakarest] naka_msp_recording+0xa96  +0xa96..+0xaca (0xe1b5ee, 52 B)
 ; [nakarest] the table itself: Viewable slot 0xb1 (table 0xe1b5ee, 12 entries, InitializeSuna),
 ; [nakarest] 12 entry pointers x 4 bytes.
+Suna_ViewableTable_0B1:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xA96, 0x34
 ; [nakarest] naka_msp_recording+0xaca  +0xaca..+0xb26 (0xe1b622, 92 B)
 ; [nakarest] the table itself: Viewable slot 0xb2 (table 0xe1b622, 22 entries, InitializeSuna),
 ; [nakarest] 22 entry pointers x 4 bytes.
+Suna_ViewableTable_0B2:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xACA, 0x5C
 ; [nakarest] naka_msp_recording+0xb26  +0xb26..+0xb3e (0xe1b67e, 24 B)
 ; [nakarest] the table itself: Viewable slot 0xb3 (table 0xe1b67e, 5 entries, InitializeSuna), 5
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_0B3:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xB26, 0x18
 ; [nakarest] naka_msp_recording+0xb3e  +0xb3e..+0xb8a (0xe1b696, 76 B)
 ; [nakarest] the table itself: Viewable slot 0xb4 (table 0xe1b696, 18 entries, InitializeSuna),
 ; [nakarest] 18 entry pointers x 4 bytes.
+Suna_ViewableTable_0B4:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xB3E, 0x4C
 ; [nakarest] naka_msp_recording+0xb8a  +0xb8a..+0xc0a (0xe1b6e2, 128 B)
 ; [nakarest] the table itself: Viewable slot 0xb5 (table 0xe1b6e2, 31 entries, InitializeSuna),
 ; [nakarest] 31 entry pointers x 4 bytes.
+Suna_ViewableTable_0B5:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xB8A, 0x80
 ; [nakarest] naka_msp_recording+0xc0a  +0xc0a..+0xc12 (0xe1b762, 8 B)
 ; [nakarest] the table itself: Viewable slot 0xb6 (table 0xe1b762, 1 entries, InitializeSuna), 1
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_0B6:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xC0A, 0x8
 ; [nakarest] naka_msp_recording+0xc12  +0xc12..+0xc2e (0xe1b76a, 28 B)
 ; [nakarest] the table itself: Viewable slot 0xb7 (table 0xe1b76a, 6 entries, InitializeSuna), 6
 ; [nakarest] entry pointers x 4 bytes.
+Suna_ViewableTable_0B7:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xC12, 0x1C
 ; [nakarest] naka_msp_recording+0xc2e  +0xc2e..+0xc96 (0xe1b786, 104 B)
 ; [nakarest] the table itself: Viewable slot 0xb8 (table 0xe1b786, 33 entries, InitializeSuna),
 ; [nakarest] 33 entry pointers x 4 bytes.
+Suna_ViewableTable_0B8:
 	.incbin "includes/generated/naka_msp_recording.bin", 0xC2E, 0x68
 ; External label offsets within the binary blob above.
 ; Referenced from naka_screen_dispatch.s (widget pointer tables).

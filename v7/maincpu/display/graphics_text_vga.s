@@ -2213,28 +2213,28 @@ FontGlyph_ByteData:
 SeMenu_CopyWriteUpdate_Helper19:
 	ld	e, (xwa)
 	cp	e, 32
-	jr	z, HexCharToNibble_Skip
+	jr	z, FontGlyph_ByteData_Skip
 	cp	e, 0:i3
-	jr	nz, HexCharToNibble_Skip2
-HexCharToNibble_Skip:
+	jr	nz, FontGlyph_ByteData_Skip2
+FontGlyph_ByteData_Skip:
 	ld	a, (xwa)
 	ld	(xbc), a
 	ret
-HexCharToNibble_Skip2:
+FontGlyph_ByteData_Skip2:
 	ld	de, 0:i3
 	lda	xhl, (Data_CharMapFormatBlock_0x14:24)
 	ld	a, (xwa)
-HexCharToNibble_Loop:
+FontGlyph_ByteData_Loop:
 	cp	(xhl+de), a	; cp (XHL+DE),A
-	jr	nz, HexCharToNibble_Skip3
+	jr	nz, FontGlyph_ByteData_Skip3
 	ld	a, e
 	ld	(xbc), a
-	jr	HexCharToNibble_Join
-HexCharToNibble_Skip3:
+	jr	FontGlyph_ByteData_Join
+FontGlyph_ByteData_Skip3:
 	inc	1, de
 	cp	de, 256
-	jr	lt, HexCharToNibble_Loop
-HexCharToNibble_Join:
+	jr	lt, FontGlyph_ByteData_Loop
+FontGlyph_ByteData_Join:
 	cp	de, 256
 	ret	nz
 	ld	(xbc), 32

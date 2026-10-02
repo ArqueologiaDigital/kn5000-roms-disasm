@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 48,154
-#   semantic names ........... 44,831 (93.1%)
+#   symbols .................. 48,157
+#   semantic names ........... 44,834 (93.1%)
 #   positional names ......... 3,323
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -42477,7 +42477,8 @@ ExtData_Voice_MixedHandler_Helper 00FC8C1E
 ExtData_Voice_MixedHandler_Skip2 00FC8C64
 ExtData_Voice_MixedHandler_Join2 00FC8C78
 ExtData_Voice_MixedHandler_Skip3 00FC8C7D
-ExtData_Voice_MixedHandler_Entry 00FC8C94
+ExtData_Voice_MixedHandler_Join3 00FC8C94
+ExtData_Voice_MixedHandler_Skip4 00FC8CA0
 ExtData_Voice_CheckMode3 00FC8CA3
 ExtData_Voice_RetEntry2 00FC8CB2
 ExtData_Voice_FullHandler 00FC8CB3
@@ -42549,10 +42550,12 @@ VoiceParamCC_NextPart 00FC948C
 VoiceParamCC_AdvancePart 00FC94FB
 VoiceParamCC_Done 00FC9503
 UIState_CheckAndRenderBitmap 00FC9507
+UIState_CheckAndRenderBitmap_Loop 00FC952B
 UIState_CheckAndRenderBitmap_Skip 00FC9544
 UIState_CheckAndRenderBitmap_Epilogue 00FC9552
 UIState_RenderBitmapData 00FC9554
-UIState_RenderBitmapData_Code_Skip 00FC95A6
+UIState_RenderBitmapData_Skip 00FC9581
+UIState_RenderBitmapData_Skip2 00FC95A6
 ToshiCmd_DefaultHandler_Ret 00FC95CD
 SndParam_FetchSequencerParams 00FC95CE
 SndParam_WriteLookupAndStore 00FC9644
@@ -45035,10 +45038,10 @@ DSPCfg_Data_ParamDispatch_Skip6 00FDCDD0
 DSPCfg_Data_ParamDispatch_Loop3 00FDCE0C
 DSPCfg_Data_ParamDispatch_Loop4 00FDCE3F
 DSPCfg_Data_ParamDispatch_Skip5 00FDCE4B
-DSPCfg_Data_ParamDispatch_Skip7 00FDCE6C
-DSPCfg_Data_ParamDispatch_Skip8 00FDCE7E
-DSPCfg_Data_ParamDispatch_Join5 00FDCE80
-DSPCfg_Data_ParamDispatch_Skip9 00FDCE88
+DSPCfg_Data_ParamDispatch_Helper_Skip 00FDCE6C
+DSPCfg_Data_ParamDispatch_Helper_Skip2 00FDCE7E
+DSPCfg_Data_ParamDispatch_Helper_Join 00FDCE80
+DSPCfg_Data_ParamDispatch_Helper_Skip3 00FDCE88
 DSPCfg_Data_ParamDispatch_0x1C9 00FDCEA0
 DSPCfg_Data_ParamDispatch_Join2 00FDCEE8
 DSPCfg_Data_ParamDispatch_Skip10 00FDCF07

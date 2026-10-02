@@ -3740,11 +3740,11 @@ Flash_InitBytecodeBlock_Helper9_Helper_Helper2:
 	ld	xwa, xbc
 	inc	4, xde
 	lda xbc, (xbc+200)
-Flash_InitBytecodeBlock_Helper9_Helper_Helper2_Loop:
+SlotTable_ExtendedOpsBlock_Loop2:
 	ldw (xde+:4), 0xffff
 	ldw (xwa+:4), 0xffff
 	cp	xwa, xbc
-	jr	c, Flash_InitBytecodeBlock_Helper9_Helper_Helper2_Loop
+	jr	c, SlotTable_ExtendedOpsBlock_Loop2
 	ret
 Flash_InitBytecodeBlock_Helper11_Helper:
 	lda	xix, (2360:16)
@@ -3756,7 +3756,7 @@ Flash_InitBytecodeBlock_Helper11_Helper:
 	lda	xde, (xix+106)
 	ld	hl, 0:i3
 	lda xbc, (xbc+200)
-Flash_InitBytecodeBlock_Helper11_Helper_Loop:
+SlotTable_ExtendedOpsBlock_Loop3:
 	ld iy, hl
 	inc	6, iy
 	ldw	(xix+iy), 0xffff
@@ -3764,7 +3764,7 @@ Flash_InitBytecodeBlock_Helper11_Helper_Loop:
 	ldw (xwa+:4), 0xffff
 	inc	2, hl
 	cp	xwa, xbc
-	jr	c, Flash_InitBytecodeBlock_Helper11_Helper_Loop
+	jr	c, SlotTable_ExtendedOpsBlock_Loop3
 	ret
 Flash_InitBytecodeBlock_Helper7_Helper:
 	lda	xix, (2666:16)
@@ -3776,7 +3776,7 @@ Flash_InitBytecodeBlock_Helper7_Helper:
 	lda	xde, (xix+106)
 	ld	hl, 0:i3
 	lda	xbc, (xbc+200)
-Flash_InitBytecodeBlock_Helper7_Helper_Loop:
+SlotTable_ExtendedOpsBlock_Loop4:
 	ld	iy, hl
 	inc	6, iy
 	ldw	(xix+iy), 0xffff
@@ -3784,35 +3784,35 @@ Flash_InitBytecodeBlock_Helper7_Helper_Loop:
 	ldw (xwa+:4), 0xffff
 	inc	2, hl
 	cp	xwa, xbc
-	jr	c, Flash_InitBytecodeBlock_Helper7_Helper_Loop
+	jr	c, SlotTable_ExtendedOpsBlock_Loop4
 	ret
 Flash_InitBytecodeBlock_Helper_Helper_Helper:
 	lda	xbc, (3074:16)
 	ldw (xbc), 65535
 	ld	l, 0:opc
 	ld	wa, 0:i3
-Flash_InitBytecodeBlock_Helper_Helper_Helper_Loop:
+SlotTable_ExtendedOpsBlock_Loop5:
 	ld	de, wa
 	inc	2, de
 	ldw	(xbc+de), 0xffff
 	inc	1, l
 	inc	2, wa
 	cp	l, 50
-	jr	c, Flash_InitBytecodeBlock_Helper_Helper_Helper_Loop
+	jr	c, SlotTable_ExtendedOpsBlock_Loop5
 	ret
 Flash_InitBytecodeBlock_Helper9_Helper_Helper3:
 	lda	xbc, (2972:16)
 	ldw (xbc), 65535
 	ld	l, 0:opc
 	ld	wa, 0:i3
-Flash_InitBytecodeBlock_Helper9_Helper_Helper3_Loop:
+SlotTable_ExtendedOpsBlock_Loop6:
 	ld	de, wa
 	inc	2, de
 	ldw	(xbc+de), 0xffff
 	inc	1, l
 	inc	2, wa
 	cp	l, 50
-	jr	c, Flash_InitBytecodeBlock_Helper9_Helper_Helper3_Loop
+	jr	c, SlotTable_ExtendedOpsBlock_Loop6
 	ret
 
 SlotTable_Insert1748:
@@ -5245,6 +5245,7 @@ ToneParam_ExtendedOpsBlock_Helper2_Helper:
 	ld (0x3912:16), xwa
 	ldw IZ, 0xff95
 .Lc_f19194:
+ToneParam_ExtendedOpsBlock_Epilogue:
 	ld HL,IZ
 	popw iz
 	ret
@@ -5252,6 +5253,7 @@ ToneParam_ExtendedOpsBlock_Helper_Helper:
 	ld L, 0x00:opc
 	ld de, 0:i3
 .Lc_f1919c:
+ToneParam_ExtendedOpsBlock_Helper3_Loop:
 	ld WA,DE
 	add WA,0x0060
 	ld xbc, (0x0c6e:16)
@@ -5384,6 +5386,7 @@ ToneParam_ExtendedOpsBlock_Helper_Helper2_Helper:
 	jr z, .Lc_f19378
 	ldw IZ, 0xff95
 .Lc_f19378:
+ToneParam_ExtendedOpsBlock_Epilogue2:
 	ld HL,IZ
 	popw iz
 	ret

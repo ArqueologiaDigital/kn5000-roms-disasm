@@ -140,8 +140,10 @@ Seq_LoadNamedResource_Helper:
 	ld (0x025b7e:24), xde
 	jr t, .Lc_f861f6
 .Lc_f861f4:
+FDemo_DisplayResourceData_Skip3:
 	ld xhl, 0:i3
 .Lc_f861f6:
+FDemo_DisplayResourceData_Return:
 	ret
 MainPreControl:
 	sub xbc, EVT_READ_PRESENTATION_REQ
@@ -689,13 +691,13 @@ Demo_SelectEntry_ByteTable_Code_Entry:
 Demo_SelectEntry_ByteTable_Code_Entry2:
 	set	3, (0x28ad:16)
 	cp	(35996:16), 228
-	jr	z, Demo_SelectEntry_ByteTable_Code_Skip
+	jr	z, Demo_SelectEntry_ByteTable_Skip3
 	call	CDlikeSwTtl_SetRecordAndNotify
 	ld	(4440:16), 0
-	jr	Demo_SelectEntry_ByteTable_Code_Join
-Demo_SelectEntry_ByteTable_Code_Skip:
+	jr	Demo_SelectEntry_ByteTable_Join
+Demo_SelectEntry_ByteTable_Skip3:
 	ld	(4440:16), 18
-Demo_SelectEntry_ByteTable_Code_Join:
+Demo_SelectEntry_ByteTable_Join:
 	jrl	Demo_SelectEntry_AfterSongLoad
 Demo_SelectEntry_ProcessSongList:
 	cpw (0x28b4:16), 0x0000

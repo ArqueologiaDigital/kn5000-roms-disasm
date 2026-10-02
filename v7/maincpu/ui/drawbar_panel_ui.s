@@ -1956,9 +1956,9 @@ TtMdCtlMsg_EventDispatch:
 	cpw	(xwa), 1
 	jrl	nz, TtMdCtlMsg_ReturnZero2
 	cp	bc, 2:i3
-	jrl	z, PmemOutLGridCheck_JumpTable_Code_Skip3
+	jrl	z, TtMdCtlMsg_EventDispatch_Skip7
 	cp	bc, 1:i3
-	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip2
+	jr	z, TtMdCtlMsg_EventDispatch_Skip6
 	cp	bc, 0:i3
 	jrl	nz, TtMdCtlMsg_ReturnZero2
 	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
@@ -1989,14 +1989,14 @@ TtMdCtlMsg_EventDispatch:
 	ld	(xwa+6), xbc
 	ld	xbc, (xwa)
 	bit	7, (xbc)
-	jr	z, PmemOutLGridCheck_JumpTable_Code_Skip
+	jr	z, TtMdCtlMsg_EventDispatch_Skip5
 	ld	xbc, 0:i3
 	ld	(xwa+14), xbc
 	call	MainRamPut
 	jrl	TtMdCtlMsg_ReturnZero2
-PmemOutLGridCheck_JumpTable_Code_Skip:
+TtMdCtlMsg_EventDispatch_Skip5:
 	jrl	PmemOutLGridCheck_JumpTable_Code_Join2
-PmemOutLGridCheck_JumpTable_Code_Skip2:
+TtMdCtlMsg_EventDispatch_Skip6:
 	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11
@@ -2024,7 +2024,7 @@ PmemOutLGridCheck_JumpTable_Code_Skip2:
 	ld	xbc, 255
 	ld	(xwa+6), xbc
 	jrl	PmemOutLGridCheck_JumpTable_Code_Join2
-PmemOutLGridCheck_JumpTable_Code_Skip3:
+TtMdCtlMsg_EventDispatch_Skip7:
 	ld	xiy, PmemOutLGridCheck_CaseTable_Tail
 	lda	xix, (xsp+56)
 	ldw	bc, 11

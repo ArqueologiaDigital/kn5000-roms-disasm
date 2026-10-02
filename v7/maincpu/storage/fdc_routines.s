@@ -56,6 +56,7 @@ FDC_WaitReady:
 	cpw QIZ, 0x0080
 	jr nz, .Lc_f96763
 .Lc_f9673a:
+FDC_WaitReady_Loop:
 	calr FDC_Read_Status
 	and L,0x1f
 	ld A,L
@@ -64,20 +65,24 @@ FDC_WaitReady:
 	jr nz, .Lc_f9674b
 	ld QIZ,0
 .Lc_f9674b:
+FDC_WaitReady_Skip:
 	ld wa, (0x0409:16)
 	sub WA,IZ
 	cp WA,0x01f4
 	jr ule, .Lc_f9675c
 	ldw QIZ, 0xffff
 .Lc_f9675c:
+FDC_WaitReady_Skip2:
 	cpw QIZ, 0x0080
 	jr z, .Lc_f9673a
 .Lc_f96763:
+FDC_WaitReady_Skip3:
 	cp QIZ,0
 	jr z, .Lc_f9676d
 	ld wa, 1:i3
 	calr FDC_Set_Status
 .Lc_f9676d:
+FDC_WaitReady_Epilogue:
 	pop XIZ
 	ret
 FDC_ResultPhase_Read_Code_Helper:
@@ -87,26 +92,31 @@ FDC_ResultPhase_Read_Code_Helper:
 	cpw QIZ, 0x0080
 	jr nz, .Lc_f967a6
 .Lc_f96780:
+FDC_WaitReady_Loop2:
 	calr FDC_Read_Status
 	and L,0x90
 	cp L,0x90
 	jr nz, .Lc_f9678e
 	ld QIZ,0
 .Lc_f9678e:
+FDC_WaitReady_Skip4:
 	ld wa, (0x0409:16)
 	sub WA,IZ
 	cp WA,0x01f4
 	jr ule, .Lc_f9679f
 	ldw QIZ, 0xffff
 .Lc_f9679f:
+FDC_WaitReady_Skip5:
 	cpw QIZ, 0x0080
 	jr z, .Lc_f96780
 .Lc_f967a6:
+FDC_WaitReady_Skip6:
 	cp QIZ,0
 	jr z, .Lc_f967b0
 	ld wa, 1:i3
 	calr FDC_Set_Status
 .Lc_f967b0:
+FDC_WaitReady_Epilogue2:
 	pop XIZ
 	ret
 FDC_InitSequence_Full_Helper:
@@ -141,7 +151,7 @@ FDC_CMD_EXEC_Helper2_Skip:
 	cp	hl, 0xffff
 	jr	z, FDC_CMD_EXEC_Helper2_Skip2
 	calr	FDC_ClearStatus_InitTimer
-	calr	FDC_Write_Data_Entry_Helper2
+	calr	FDC_WaitReady_Helper2
 	cp	(0x8988:16), 0
 	jr	z, FDC_WaitReady_Loop3
 	ld	(0x8984:16), 0
@@ -271,7 +281,7 @@ FDC_WaitReady_Skip13:
 FDC_WaitReady_Epilogue3:
 	pop	xiz
 	ret
-FDC_Write_Data_Entry_Helper2:
+FDC_WaitReady_Helper2:
 	ldw WA, 0x0036
 	calr FDC_Send_Command
 	ld wa, 2:i3
@@ -771,7 +781,7 @@ FDC_WaitReady_Helper3_Helper2:
 	calr	FDC_Write_Data
 	inc	2, xsp
 	ret
-FDC_HardwareSetup_Helper3_Helper:
+FDC_ResultPhase_Read_Helper2:
 	dec 2,XSP
 	ld (XSP),A
 	calr FDC_ResultPhase_Read
@@ -788,7 +798,7 @@ FDC_HardwareSetup_Helper3:
 	jr	nz, FDC_ResultPhase_Read_Epilogue
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper3_Helper
+	calr	FDC_ResultPhase_Read_Helper2
 FDC_ResultPhase_Read_Epilogue:
 	inc	2, xsp
 	ret
@@ -800,7 +810,7 @@ FDC_HardwareSetup_Helper4:
 	jr	nz, FDC_ResultPhase_Read_Epilogue2
 	ld	a, (xsp)
 	extz	wa
-	calr	FDC_HardwareSetup_Helper3_Helper
+	calr	FDC_ResultPhase_Read_Helper2
 	calr	FDC_Wait_Ready_Timeout
 	calr	FDC_Read_Data
 	ld	(0x89c5:16), l
@@ -1272,7 +1282,7 @@ FDC_ClearStatus_InitTimer:
 FDC_CmdRecalibrate_Helper:
 	ld (0x89c4:16), 0xff
 	ret
-FDC_CmdRecalibrate_Helper2:
+FDC_ClearStatus_InitTimer_Join:
 	push XIZ
 	ldw QIZ, 0x01f4
 	ld iz, (0x0409:16)
@@ -1282,6 +1292,7 @@ FDC_CmdRecalibrate_Helper2:
 	jr z, .Lc_f971eb
 	ldw BC, 0xffff
 .Lc_f971eb:
+FDC_ClearStatus_InitTimer_Join_Skip:
 	ld wa, (0x0409:16)
 	sub WA,IZ
 	cp WA,QIZ
@@ -1290,6 +1301,7 @@ FDC_CmdRecalibrate_Helper2:
 	calr FDC_Set_Status
 	ldw BC, 0xffff
 .Lc_f971ff:
+FDC_ClearStatus_InitTimer_Join_Skip2:
 	cp bc, 0:i3
 	jr z, .Lc_f971e1
 	pop XIZ
@@ -1353,7 +1365,7 @@ FDC_CmdRecalibrate:	; formerly FDC_SeekRecalibrate; recalibrate-to-track-0 twin 
 	calr	FDC_CmdRecalibrate_Helper
 	ld	wa, 7:i3
 	calr	FDC_WaitReady_Helper3
-	calr	FDC_CmdRecalibrate_Helper2
+	calr	FDC_ClearStatus_InitTimer_Join
 	cp	(0x8988:16), 0
 	jr	z, FDC_CmdRecalibrate_Skip
 	ld	(0x8a68:16), 255
@@ -1375,7 +1387,7 @@ FDC_CmdRecalibrate_Helper3:
 	calr	FDC_CmdRecalibrate_Helper
 	ldw	wa, 15
 	calr	FDC_WaitReady_Helper3
-	calr	FDC_CmdRecalibrate_Helper2
+	calr	FDC_ClearStatus_InitTimer_Join
 	cp	(0x8988:16), 0
 	jr	z, FDC_CMD_EXEC_Helper5_Skip
 	ld	(0x8a68:16), 255
@@ -1390,7 +1402,7 @@ FDC_CMD_EXEC_Helper6:
 	calr	FDC_WaitReady_Helper3
 	cp	(0x8988:16), 0
 	ret	nz
-	jrl	FDC_CmdRecalibrate_Helper2
+	jrl	FDC_ClearStatus_InitTimer_Join
 FDC_CMD_EXEC:
 ; [v10] --- FDC_CMD_EXEC: Main FDC command execution engine ---
 ; [v10] Two nearly identical halves: READ path (command type 1) and
@@ -1626,7 +1638,7 @@ FDC_CMD_EXEC_Helper7:
 	calr	FDC_WaitReady_Helper3
 	cp	(0x8988:16), 0
 	ret	nz
-	jrl	FDC_CmdRecalibrate_Helper2
+	jrl	FDC_ClearStatus_InitTimer_Join
 FDC_MODE_CONFIG:
 ; [v10] --- FDC_MODE_CONFIG: Configure FDC format parameters by disk type ---
 ; [v10] Reads format type from state variable 35436.
@@ -1888,7 +1900,7 @@ FDC_MC_EXIT_Code_Join2:
 	calr	FDC_WaitReady_Helper3
 	cp	(0x8988:16), 0
 	ret	nz
-	jrl	FDC_CmdRecalibrate_Helper2
+	jrl	FDC_ClearStatus_InitTimer_Join
 FDC_WaitReady_Helper4:
 	pushw	iz
 	set_dd8	3, 40
