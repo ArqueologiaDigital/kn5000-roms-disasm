@@ -1,0 +1,382 @@
+[
+ {
+  "addr": "0xe0cd4e",
+  "from": "Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3",
+  "old": "Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xee0010",
+  "from": "SndParamRun_EE0010",
+  "old": "NakaInst_Param_Bitmap80",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xee0016",
+  "from": "NakaInst_Param_Field02_0x4",
+  "to_has": [
+   "FDemoText_ByteData_LayoutEngine_Data_8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FDemoText_ByteData_LayoutEngine_Data_8"
+  ]
+ },
+ {
+  "addr": "0xef7779",
+  "from": "UIState_EventTable_Target11",
+  "old": "ScoopDisp_DispatchTable_Small_Target11",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xef7796",
+  "from": "UIState_EventTable_Target11_Return",
+  "to_has": [
+   "ScoopDisp_DispatchTable_Small_Target11_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ScoopDisp_DispatchTable_Small_Target11"
+  ]
+ },
+ {
+  "addr": "0xf0fb3d",
+  "from": "SeMenu_PresetBrowser_Data_Sub",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_PresetBrowser_Select"
+  ]
+ },
+ {
+  "addr": "0xfb2556",
+  "from": "ColorBlit_WithPaletteSave_Skip",
+  "to_has": [
+   "ColorBlit_Variant_ByteData_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ColorBlit_Variant_ByteData"
+  ]
+ },
+ {
+  "addr": "0xfb25c1",
+  "from": "ColorBlit_WithPaletteSave_Skip2",
+  "to_has": [
+   "ColorBlit_Variant_ByteData_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ColorBlit_Variant_ByteData"
+  ]
+ },
+ {
+  "addr": "0xfc6693",
+  "from": "FileIO_BytecodeData_Code_Skip79",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_Block98_Var80"
+  ]
+ },
+ {
+  "addr": "0xfc6696",
+  "from": "FileIO_BytecodeData_Code_Join23",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_Block98_Var80"
+  ]
+ },
+ {
+  "addr": "0xfc6703",
+  "from": "FileIO_BytecodeData_Code_Join24",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_ConfigAndWrite"
+  ]
+ },
+ {
+  "addr": "0xfc678e",
+  "from": "FileIO_BytecodeData_Code_Skip80",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_Block48_Var02"
+  ]
+ },
+ {
+  "addr": "0xfc6791",
+  "from": "FileIO_BytecodeData_Code_Join25",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_Block48_Var02"
+  ]
+ },
+ {
+  "addr": "0xfc67b3",
+  "from": "FileIO_BytecodeData_Code_Skip81",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_Block70_Var04"
+  ]
+ },
+ {
+  "addr": "0xfc67b6",
+  "from": "FileIO_BytecodeData_Code_Join26",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_Block70_Var04"
+  ]
+ },
+ {
+  "addr": "0xfc67e0",
+  "from": "FileIO_BytecodeData_Code_Skip82",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_DispatchAndWriteA8"
+  ]
+ },
+ {
+  "addr": "0xfc6839",
+  "from": "FileIO_BytecodeData_Code_Skip83",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_DispatchAndWriteA8_Alt"
+  ]
+ },
+ {
+  "addr": "0xfc68b5",
+  "from": "FileIO_BytecodeData_Code_Skip84",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_DispatchComplex"
+  ]
+ },
+ {
+  "addr": "0xfc693b",
+  "from": "FileIO_BytecodeData_Code_Epilogue36",
+  "to_has": [
+   "ExtDev_SndParam_BlockA9_Var02_Code_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtDev_SndParam_DispatchComplex"
+  ]
+ },
+ {
+  "addr": "0xfc8628",
+  "from": "ExtData_Voice_CheckMode3_Helper",
+  "to_has": [
+   "ExtData_ToneParam_DispatchHandler_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ExtData_ToneParam_DispatchHandler"
+  ]
+ },
+ {
+  "addr": "0xfcb08f",
+  "from": "VoiceMode3_DispatchTable_Code_Skip",
+  "to_has": [
+   "VoiceMode_ParamHandler_3_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType0"
+  ]
+ },
+ {
+  "addr": "0xfcb09d",
+  "from": "VoiceMode3_DispatchTable_Code_Skip2",
+  "to_has": [
+   "VoiceMode3_EvType0_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType0"
+  ]
+ },
+ {
+  "addr": "0xfcb0b0",
+  "from": "VoiceMode3_DispatchTable_Code_Skip3",
+  "to_has": [
+   "VoiceMode3_EvType0_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType0"
+  ]
+ },
+ {
+  "addr": "0xfcb0f1",
+  "from": "VoiceMode3_DispatchTable_Code_Return",
+  "to_has": [
+   "VoiceMode_ParamHandler_3_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType0"
+  ]
+ },
+ {
+  "addr": "0xfcb149",
+  "from": "VoiceMode3_DispatchTable_Code_Skip4",
+  "to_has": [
+   "VoiceMode_ParamHandler_3_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType6"
+  ]
+ },
+ {
+  "addr": "0xfcb18a",
+  "from": "VoiceMode3_DispatchTable_Code_Return2",
+  "to_has": [
+   "VoiceMode_ParamHandler_3_Return2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType6"
+  ]
+ },
+ {
+  "addr": "0xfcb2d5",
+  "from": "MidiVoice_DataBlockHandler_Return",
+  "to_has": [
+   "MidiPartCC_WriteAndDispatch_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType2"
+  ]
+ },
+ {
+  "addr": "0xfcb2fd",
+  "from": "MidiVoice_DataBlockHandler_Skip2",
+  "to_has": [
+   "MidiPartCC_WriteAndDispatch_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType3"
+  ]
+ },
+ {
+  "addr": "0xfcb325",
+  "from": "MidiVoice_DataBlockHandler_Return2",
+  "to_has": [
+   "MidiPartCC_WriteAndDispatch_Return2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType3"
+  ]
+ },
+ {
+  "addr": "0xfcb340",
+  "from": "MidiVoice_DataBlockHandler_Skip3",
+  "to_has": [
+   "MidiPartCC_WriteAndDispatch_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType4"
+  ]
+ },
+ {
+  "addr": "0xfcb368",
+  "from": "MidiVoice_DataBlockHandler_Return3",
+  "to_has": [
+   "MidiPartCC_WriteAndDispatch_Return3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceMode3_EvType4"
+  ]
+ },
+ {
+  "addr": "0xfd7306",
+  "from": "Param_SignExtendReturn_Helper3_Helper2",
+  "to_has": [
+   "Param_SignExtendReturn_Entry_Code_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Part_LookupReturnZero"
+  ]
+ },
+ {
+  "addr": "0xfdcf07",
+  "from": "DSPCfg_Data_ParamDispatch_Skip6",
+  "old": "DSPCfg_Data_ParamDispatch_Skip10",
+  "result": "rename"
+ },
+ {
+  "addr": "0xfdcf5d",
+  "from": "DSPCfg_Data_ParamDispatch_Join4",
+  "old": "DSPCfg_Data_ParamDispatch_Skip11",
+  "result": "rename"
+ },
+ {
+  "addr": "0xfdf696",
+  "from": "AudioInit_RefreshToneBank_Loop",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "AudioInit_VoiceRoutingTable"
+  ]
+ },
+ {
+  "addr": "0xff1dd8",
+  "from": "Sprintf_FormatFFixed_Entry",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Sprintf_FFixed_DataTable"
+  ]
+ },
+ {
+  "addr": "0xff1de0",
+  "from": "Sprintf_FormatFFixed_Skip",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Sprintf_FFixed_DataTable"
+  ]
+ },
+ {
+  "addr_to": "0xfdcf55",
+  "from": "DSPCfg_Data_ParamDispatch_Skip7",
+  "result": "insert",
+  "at": "audio/dsp_config_sysex.s:4084"
+ }
+]

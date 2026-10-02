@@ -278,11 +278,15 @@ NakaWidget_ToshiView044_0_MsaModeScreen:	.incbin "includes/generated/naka_ctrl_m
 NakaWidget_ToshiView044_1_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x744, 0x3A
 NakaWidget_ToshiView044_2_Icon:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x77E, 0x1A
 NakaWidget_ToshiView044_3_EditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x798, 0x2C
-NakaWidget_ToshiView044_4_EditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x7C4, 0x2C
+NakaWidget_ToshiView044_4_EditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x7C4, 0x28
+Str_7f:						.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x7EC, 0x4
 NakaWidget_ToshiView044_5_EditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x7F0, 0x2C
-NakaWidget_ToshiView044_6_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x81C, 0x28
-NakaWidget_ToshiView044_7_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x844, 0x30
-NakaWidget_ToshiView044_8_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x874, 0x2E
+NakaWidget_ToshiView044_6_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x81C, 0x20
+Str_RHYTHM:					.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x83C, 0x8
+NakaWidget_ToshiView044_7_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x844, 0x20
+SoundName_SOUNDRHYTHM:				.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x864, 0x10
+NakaWidget_ToshiView044_8_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x874, 0x20
+Str_PANEL_MEMORY:				.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x894, 0xE
 NakaWidget_ToshiView044_9_IvIntEasySet:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x8A2, 0x18
 NakaWidget_ToshiView044_10_MsaModeScreen:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x8BA, 0x34
 NakaWidget_ToshiView044_11_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x8EE, 0x3A
@@ -292,7 +296,8 @@ NakaWidget_ToshiView044_14_EditSw:		.incbin "includes/generated/naka_ctrl_menu_b
 NakaWidget_ToshiView044_15_EditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x99A, 0x2C
 NakaWidget_ToshiView044_16_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x9C6, 0x28
 NakaWidget_ToshiView044_17_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x9EE, 0x2E
-NakaWidget_ToshiView044_18_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xA1C, 0x2E
+NakaWidget_ToshiView044_18_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xA1C, 0x20
+Str_PANEL_MEMORY_4922:				.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xA3C, 0xE
 ; [nakarest] naka_ctrl_menu_body+0xa4a  +0xa4a..+0xdee (0xed4930, 932 B)
 ; [nakarest] widget records, elements 0-18 of Viewable slot 0x45 (table 0xed79ce, 19 entries,
 ; [nakarest] InitializeToshi): TtlScreen (42 B), IvPmemWindowPageCtl (26 B), IvPageControl (28
@@ -310,7 +315,8 @@ NakaWidget_ToshiView045_4_IvIntEasySet:			.incbin "includes/generated/naka_ctrl_
 NakaWidget_PMEM1:					.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xAF8, 0x24
 NakaWidget_ToshiView045_6_PmemModeBox:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xB1C, 0x2C
 NakaWidget_ToshiView045_7_EditSw:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xB48, 0x2C
-NakaWidget_ToshiView045_8_EditSw:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xB74, 0x2C
+NakaWidget_ToshiView045_8_EditSw:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xB74, 0x28
+Str_7f_4A82:						.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xB9C, 0x4
 NakaWidget_ToshiView045_9_Label:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xBA0, 0x28
 NakaWidget_ToshiView045_10_Label:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xBC8, 0x28
 NakaWidget_ToshiView045_11_AcLanguageText:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xBF0, 0x2A
@@ -332,7 +338,8 @@ NakaWidget_ToshiView045_18_Window:			.incbin "includes/generated/naka_ctrl_menu_
 ; [nakarest] 2); ....
 NakaWidget_ControlSys:				.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xDEE, 0x3C
 NakaWidget_ControlSys_1_AcDispTimeSetGridBox:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xE2A, 0xB2
-NakaWidget_ControlSys_2_Label:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xEDC, 0x2E
+NakaWidget_ControlSys_2_Label:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xEDC, 0x20
+Str_DISPLAY_TYPE:				.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xEFC, 0xE
 NakaWidget_ControlSys_3_Label:			.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xF0A, 0x26
 NakaWidget_ControlSys_4_AcIndexWideES:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xF30, 0x2A
 NakaWidget_ControlSys_5_AcIndexWideES:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0xF5A, 0x2A
@@ -356,9 +363,11 @@ NakaWidget_ToshiView048_6_Label:		.incbin "includes/generated/naka_ctrl_menu_bod
 NakaWidget_ToshiView048_7_AcRamEditBox:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x1150, 0x50
 NakaWidget_ToshiView048_8_AcRamEditBox:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x11A0, 0x50
 NakaWidget_ToshiView048_9_AcFuncEditSw:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x11F0, 0x2C
-NakaWidget_ToshiView048_10_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x121C, 0x2E
+NakaWidget_ToshiView048_10_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x121C, 0x20
+Str_USER_INITIAL:				.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x123C, 0xE
 NakaWidget_ToshiView048_11_AcIndexWideES:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x124A, 0x2A
-NakaWidget_ToshiView048_12_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x1274, 0x26
+NakaWidget_ToshiView048_12_Label:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x1274, 0x20
+Str_VALUE:					.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x1294, 0x6
 NakaWidget_ToshiView048_13_AcFuncEditSw:	.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x129A, 0x2C
 NakaWidget_ToshiView048_14_IvShowHide:		.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x12C6, 0x1A
 NakaWidget_WALLSETSURE:				.incbin "includes/generated/naka_ctrl_menu_body.bin", 0x12E0, 0x22

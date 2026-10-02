@@ -377,14 +377,18 @@ NakaWidget_MidiMenu_4_IvExitMode:	.incbin "includes/generated/naka_midi_reverb.b
 NakaWidget_MidiMenu_5_IvShowHide:	.incbin "includes/generated/naka_midi_reverb.bin", 0xBDC, 0x1A
 NakaWidget_MidiMenuPage1:		.incbin "includes/generated/naka_midi_reverb.bin", 0xBF6, 0x24
 NakaWidget_MidiMenu_7_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xC1A, 0x44
-NakaWidget_MidiMenu_8_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xC5E, 0x48
-NakaWidget_MidiMenu_9_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xCA6, 0x48
-NakaWidget_MidiMenu_10_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xCEE, 0x46
+NakaWidget_MidiMenu_8_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xC5E, 0x36
+NakaHandler_CtrlMessages:		.incbin "includes/generated/naka_midi_reverb.bin", 0xC94, 0x12
+NakaWidget_MidiMenu_9_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xCA6, 0x36
+NakaHandler_RealtimeMessages:		.incbin "includes/generated/naka_midi_reverb.bin", 0xCDC, 0x12
+NakaWidget_MidiMenu_10_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xCEE, 0x36
+NakaHandler_CommonSetting:		.incbin "includes/generated/naka_midi_reverb.bin", 0xD24, 0x10
 NakaWidget_MidiMenu_11_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xD34, 0x4C
 NakaWidget_MidiMenu_12_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xD80, 0x44
 NakaWidget_MidiMenu_13_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xDC4, 0x46
 NakaWidget_MidiMenu_14_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xE0A, 0x44
-NakaWidget_MidiMenu_15_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xE4E, 0x4C
+NakaWidget_MidiMenu_15_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xE4E, 0x36
+NakaHandler_ProgChangeMidiOut:		.incbin "includes/generated/naka_midi_reverb.bin", 0xE84, 0x16
 NakaWidget_MidiMenu_16_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xE9A, 0x44
 NakaWidget_MidiMenuPage2:		.incbin "includes/generated/naka_midi_reverb.bin", 0xEDE, 0x24
 NakaWidget_MidiMenu_18_AcTitleMenu:	.incbin "includes/generated/naka_midi_reverb.bin", 0xF02, 0x4A
@@ -456,7 +460,8 @@ NakaWidget_MidiCommonSetting_4_IvShowHide:	.incbin "includes/generated/naka_midi
 ; [nakarest] (AcInOutGridBox.fixedrow of element 1); " | " (AcInOutGridBox.fixedcol of element
 ; [nakarest] 1).
 NakaWidget_MidiInOutSetting:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1642, 0x40
-NakaWidget_InOutGridBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1682, 0x110
+NakaWidget_InOutGridBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1682, 0x4A
+NakaInst_InOutSettingGrid:			.incbin "includes/generated/naka_midi_reverb.bin", 0x16CC, 0xC6
 NakaWidget_MidiInOutSetting_2_AcIndexWideES:	.incbin "includes/generated/naka_midi_reverb.bin", 0x1792, 0x2A
 NakaWidget_MidiInOutSetting_3_AcIndexWideES:	.incbin "includes/generated/naka_midi_reverb.bin", 0x17BC, 0x2A
 NakaWidget_MidiInOutSetting_4_IvShowHide:	.incbin "includes/generated/naka_midi_reverb.bin", 0x17E6, 0x1A
@@ -496,12 +501,14 @@ NakaWidget_MpstSlaveWithoutList:	.incbin "includes/generated/naka_midi_reverb.bi
 ; [nakarest] element 21); ....
 NakaInst_95_Bass_Pedals_95_Ext_Sequencer_95:
 	.incbin "includes/generated/naka_midi_reverb.bin", 0x1A28, 0x36
-NakaWidget_MidiPresets_13_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1A5E, 0x2E
+NakaWidget_MidiPresets_13_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1A5E, 0x14
+NakaInst_MidiPresetConfig:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1A72, 0x1A
 NakaWidget_MidiPresets_14_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1A8C, 0x2C
 NakaWidget_MidiPresets_15_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1AB8, 0x2E
 NakaWidget_MidiPresets_16_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1AE6, 0x2A
 NakaWidget_MidiPresets_17_VwUserBitmap:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1B10, 0x1A
-NakaWidget_MidiPresets_18_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1B2A, 0x28
+NakaWidget_MidiPresets_18_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1B2A, 0x20
+NakaInst_KN5000_MidiPresets:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1B4A, 0x8
 NakaWidget_MidiPresetSlaveWith:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1B52, 0x24
 NakaWidget_MidiPresets_20_VwBox:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1B76, 0x1C
 NakaWidget_MpstSlaveWithList:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1B92, 0x100
@@ -515,7 +522,8 @@ NakaWidget_MidiPresets_28_AcFuncWideES:		.incbin "includes/generated/naka_midi_r
 NakaWidget_MidiPresets_29_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1DB0, 0x2C
 NakaWidget_MidiPresets_30_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1DDC, 0x26
 NakaWidget_MidiPresetPage3:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1E02, 0x24
-NakaWidget_MdPresetUserLoadList:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1E26, 0x64
+NakaWidget_MdPresetUserLoadList:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1E26, 0x30
+NakaInst_UserSettingSelector:			.incbin "includes/generated/naka_midi_reverb.bin", 0x1E56, 0x34
 NakaWidget_MidiPresets_33_AcIndexWideES:	.incbin "includes/generated/naka_midi_reverb.bin", 0x1E8A, 0x2A
 NakaWidget_MidiPresets_34_AcFuncEditSw:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1EB4, 0x2C
 NakaWidget_MidiPresets_35_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1EE0, 0x26
@@ -524,32 +532,42 @@ NakaWidget_MdPresetUserWriteList:		.incbin "includes/generated/naka_midi_reverb.
 NakaWidget_MidiPresets_38_AcIndexWideES:	.incbin "includes/generated/naka_midi_reverb.bin", 0x1F8E, 0x2A
 NakaWidget_MidiPresets_39_AcFuncEditSw:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1FB8, 0x2C
 NakaWidget_MidiPresets_40_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x1FE4, 0x26
-NakaWidget_MdpstSplitBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x200A, 0x5E
+NakaWidget_MdpstSplitBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x200A, 0x2C
+NakaHandler_SplitPointDialog:			.incbin "includes/generated/naka_midi_reverb.bin", 0x2036, 0x32
 NakaWidget_MidiPresets_42_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2068, 0x26
 NakaWidget_MidiPresetMasterWithout:		.incbin "includes/generated/naka_midi_reverb.bin", 0x208E, 0x24
 NakaWidget_MidiPresets_44_VwBox:		.incbin "includes/generated/naka_midi_reverb.bin", 0x20B2, 0x1C
-NakaWidget_MpstMasterWithoutList:		.incbin "includes/generated/naka_midi_reverb.bin", 0x20CE, 0x62
+NakaWidget_MpstMasterWithoutList:		.incbin "includes/generated/naka_midi_reverb.bin", 0x20CE, 0x30
+NakaInst_SndModVocalistExtSeq:			.incbin "includes/generated/naka_midi_reverb.bin", 0x20FE, 0x32
 NakaWidget_MidiPresets_46_VwUserBitmap:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2130, 0x1A
-NakaWidget_MidiPresets_47_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x214A, 0x28
+NakaWidget_MidiPresets_47_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x214A, 0x20
+NakaInst_KN5000_SysexBulkDump:			.incbin "includes/generated/naka_midi_reverb.bin", 0x216A, 0x8
 NakaWidget_MidiPresets_48_AcIndexWideES:	.incbin "includes/generated/naka_midi_reverb.bin", 0x2172, 0x2A
 NakaWidget_MidiPresets_49_AcFuncEditSw:		.incbin "includes/generated/naka_midi_reverb.bin", 0x219C, 0x2C
 NakaWidget_MidiPresets_50_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x21C8, 0x2E
-NakaWidget_MidiPresets_51_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x21F6, 0x2A
+NakaWidget_MidiPresets_51_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x21F6, 0x20
+NakaInst_WithAPC_Presets:			.incbin "includes/generated/naka_midi_reverb.bin", 0x2216, 0xA
 NakaWidget_MidiPresets_52_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2220, 0x2E
-NakaWidget_MidiPresets_53_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x224E, 0x2C
-NakaWidget_MidiPresets_54_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x227A, 0x26
+NakaWidget_MidiPresets_53_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x224E, 0x20
+NakaInst_WithoutAPC_Presets:			.incbin "includes/generated/naka_midi_reverb.bin", 0x226E, 0xC
+NakaWidget_MidiPresets_54_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x227A, 0x20
+NakaInst_Value_SysexPresets:			.incbin "includes/generated/naka_midi_reverb.bin", 0x229A, 0x6
 NakaWidget_MidiPresetMasterWith:		.incbin "includes/generated/naka_midi_reverb.bin", 0x22A0, 0x24
 NakaWidget_MidiPresets_56_VwBox:		.incbin "includes/generated/naka_midi_reverb.bin", 0x22C4, 0x1C
 NakaWidget_MpstMasterWithList:			.incbin "includes/generated/naka_midi_reverb.bin", 0x22E0, 0x62
 NakaWidget_MidiPresets_58_AcFuncEditSw:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2342, 0x2C
 NakaWidget_MidiPresets_59_AcIndexWideES:	.incbin "includes/generated/naka_midi_reverb.bin", 0x236E, 0x2A
 NakaWidget_MidiPresets_60_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2398, 0x2E
-NakaWidget_MidiPresets_61_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x23C6, 0x2A
+NakaWidget_MidiPresets_61_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x23C6, 0x20
+NakaInst_WithAPC_GM:				.incbin "includes/generated/naka_midi_reverb.bin", 0x23E6, 0xA
 NakaWidget_MidiPresets_62_AcFuncWideES:		.incbin "includes/generated/naka_midi_reverb.bin", 0x23F0, 0x2E
-NakaWidget_MidiPresets_63_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x241E, 0x2C
-NakaWidget_MidiPresets_64_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x244A, 0x26
+NakaWidget_MidiPresets_63_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x241E, 0x20
+NakaInst_WithoutAPC_GM:				.incbin "includes/generated/naka_midi_reverb.bin", 0x243E, 0xC
+NakaWidget_MidiPresets_64_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x244A, 0x20
+NakaInst_Value_GM:				.incbin "includes/generated/naka_midi_reverb.bin", 0x246A, 0x6
 NakaWidget_MidiPresets_65_VwUserBitmap:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2470, 0x1A
-NakaWidget_MidiPresets_66_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x248A, 0x28
+NakaWidget_MidiPresets_66_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x248A, 0x20
+NakaInst_KN5000_GM:				.incbin "includes/generated/naka_midi_reverb.bin", 0x24AA, 0x8
 ; [nakarest] naka_midi_reverb+0x24b2  +0x24b2..+0x2b1a (0xe582ea, 1640 B)
 ; [nakarest] widget records, elements 0-27 of Viewable slot 0x57 (table 0xe59f0e, 28 entries,
 ; [nakarest] InitializeEast) ("MidiExclusive"): TtlScreen (42 B), AcFuncEditSw (44 B), Label (32
@@ -562,7 +580,8 @@ NakaWidget_MidiPresets_66_Label:		.incbin "includes/generated/naka_midi_reverb.b
 NakaWidget_MidiExclusive:			.incbin "includes/generated/naka_midi_reverb.bin", 0x24B2, 0x3A
 NakaWidget_MidiExclusive_1_AcFuncEditSw:	.incbin "includes/generated/naka_midi_reverb.bin", 0x24EC, 0x2C
 NakaWidget_MidiExclusive_2_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2518, 0x26
-NakaWidget_ExcListBox:				.incbin "includes/generated/naka_midi_reverb.bin", 0x253E, 0x8E
+NakaWidget_ExcListBox:				.incbin "includes/generated/naka_midi_reverb.bin", 0x253E, 0x30
+NakaInst_BulkDumpCategorySelect:		.incbin "includes/generated/naka_midi_reverb.bin", 0x256E, 0x5E
 NakaWidget_MidiExclusive_4_AcIndexWideES:	.incbin "includes/generated/naka_midi_reverb.bin", 0x25CC, 0x2A
 NakaWidget_MidiExclusive_5_IvShowHide:		.incbin "includes/generated/naka_midi_reverb.bin", 0x25F6, 0x1A
 NakaWidget_ExcSendWindow:			.incbin "includes/generated/naka_midi_reverb.bin", 0x2610, 0x24
@@ -578,7 +597,8 @@ NakaWidget_ExcSendMspBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0
 NakaWidget_ExcSendDotBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x2868, 0x2C
 NakaWidget_ExcRcvWindow:			.incbin "includes/generated/naka_midi_reverb.bin", 0x2894, 0x24
 NakaWidget_MidiExclusive_18_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x28B8, 0x32
-NakaWidget_MidiExclusive_19_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x28EA, 0x2A
+NakaWidget_MidiExclusive_19_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x28EA, 0x20
+NakaInst_Receiving_Sysex:			.incbin "includes/generated/naka_midi_reverb.bin", 0x290A, 0xA
 NakaWidget_MidiExclusive_20_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x2914, 0x2E
 NakaWidget_ExcRcvShowBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x2942, 0x1C
 NakaWidget_ExcRcvPmemBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x295E, 0x50
@@ -654,10 +674,12 @@ NakaWidget_MidiPanelMemoryOutput:			.incbin "includes/generated/naka_midi_reverb
 NakaWidget_MidiPanelMemoryOutput_1_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x310E, 0x26
 NakaWidget_MidiPanelMemoryOutput_2_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3134, 0x28
 NakaWidget_MidiPanelMemoryOutput_3_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x315C, 0x26
-NakaWidget_MidiPanelMemoryOutput_4_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3182, 0x26
+NakaWidget_MidiPanelMemoryOutput_4_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3182, 0x20
+NakaInst_ProgChangeLabel:				.incbin "includes/generated/naka_midi_reverb.bin", 0x31A2, 0x6
 NakaWidget_MidiPanelMemoryOutput_5_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x31A8, 0x26
 NakaWidget_MidiPanelMemoryOutput_6_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x31CE, 0x24
-NakaWidget_MidiPanelMemoryOutput_7_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x31F2, 0x24
+NakaWidget_MidiPanelMemoryOutput_7_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x31F2, 0x20
+NakaInst_P_MEM_ON_OFF_PART:				.incbin "includes/generated/naka_midi_reverb.bin", 0x3212, 0x4
 NakaWidget_PmemOutLeft:					.incbin "includes/generated/naka_midi_reverb.bin", 0x3216, 0x66
 NakaWidget_PmemOutRight:				.incbin "includes/generated/naka_midi_reverb.bin", 0x327C, 0x6C
 NakaWidget_MidiPanelMemoryOutput_10_AcIndexEditSw:	.incbin "includes/generated/naka_midi_reverb.bin", 0x32E8, 0x28
@@ -700,7 +722,8 @@ NakaWidget_EntertainerVocal_2_IvPageControl:	.incbin "includes/generated/naka_mi
 NakaWidget_VocalistPage:			.incbin "includes/generated/naka_midi_reverb.bin", 0x3678, 0x24
 NakaWidget_EntertainerVocal_4_IvShowHide:	.incbin "includes/generated/naka_midi_reverb.bin", 0x369C, 0x1A
 NakaWidget_VocalistPage1:			.incbin "includes/generated/naka_midi_reverb.bin", 0x36B6, 0x24
-NakaWidget_EntertainerVocal_6_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x36DA, 0x30
+NakaWidget_EntertainerVocal_6_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x36DA, 0x20
+NakaInst_PresetSettingsLabel:			.incbin "includes/generated/naka_midi_reverb.bin", 0x36FA, 0x10
 NakaWidget_EntertainerVocal_7_VwBox:		.incbin "includes/generated/naka_midi_reverb.bin", 0x370A, 0x1C
 NakaWidget_EntertainerVocal_8_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3726, 0x40
 NakaWidget_EntertainerVocal_9_AcFuncEditSw:	.incbin "includes/generated/naka_midi_reverb.bin", 0x3766, 0x2C
@@ -709,7 +732,8 @@ NakaWidget_EntertainerVocal_11_AcIndexWideES:	.incbin "includes/generated/naka_m
 NakaWidget_HarmOnOffBox:			.incbin "includes/generated/naka_midi_reverb.bin", 0x38B8, 0x5C
 NakaWidget_VocalistPage2:			.incbin "includes/generated/naka_midi_reverb.bin", 0x3914, 0x24
 NakaWidget_VocalistPage2Box:			.incbin "includes/generated/naka_midi_reverb.bin", 0x3938, 0xCA
-NakaWidget_EntertainerVocal_15_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3A02, 0x26
+NakaWidget_EntertainerVocal_15_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3A02, 0x20
+NakaInst_ItemLabel_RevEqPreset:			.incbin "includes/generated/naka_midi_reverb.bin", 0x3A22, 0x6
 NakaWidget_EntertainerVocal_16_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3A28, 0x26
 NakaWidget_EntertainerVocal_17_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3A4E, 0x26
 NakaWidget_EntertainerVocal_18_Label:		.incbin "includes/generated/naka_midi_reverb.bin", 0x3A74, 0x2A

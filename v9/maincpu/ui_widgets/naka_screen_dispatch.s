@@ -1307,17 +1307,29 @@ StrCmpModeFunc:		aligned_string "CmpModeFunc"
 
 NoteStepDisplayData:
 	aligned_string " 12"
+NumStr_11:
 	aligned_string " 11"
+NumStr_10:
 	aligned_string " 10"
+NumStr_9:
 	aligned_string "  9"
+NumStr_8:
 	aligned_string "  8"
+NumStr_7:
 	aligned_string "  7"
+NumStr_6:
 	aligned_string "  6"
+NumStr_5:
 	aligned_string "  5"
+NumStr_4:
 	aligned_string "  4"
+NumStr_3:
 	aligned_string "  3"
+NumStr_2:
 	aligned_string "  2"
+NumStr_1:
 	aligned_string "  1"
+NumStr_0:
 	aligned_string "  0"
 CmpBndRng_DefaultString_Str_ERR:	aligned_string "ERR"
 CmpSetP1_DialGrid_Data:
@@ -2002,8 +2014,11 @@ PtrTbl_NotePositionStrs:
 	.long StrNotePos_Natural
 StrNotePos_Natural:
 	aligned_string " ~aa "
+StrNotePos_FlatAlt:
 	aligned_string " ~ab "
+StrNotePos_FlatAltB8:
 	aligned_string " ~ab~b8"
+StrNotePos_AcNatural:
 	aligned_string " ~ac "
 StrNotePos_AcFlatB8:	aligned_string " ~ac~b8"
 StrNotePos_AdNatural:	aligned_string " ~ad "

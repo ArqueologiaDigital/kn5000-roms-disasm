@@ -36,3 +36,8 @@ are named after a routine other than the label above them, e.g. 89
 `SeqByteBlock_PathNormalize_Skip*` inside `FatPath_Next83Component_CheckDotEntry`.  Often the
 label above is the anomaly (a data-named label mid-routine: `Flash_ExtendedOpsBlock`,
 `AccScreen_DataBlock`), so neither name can be chosen mechanically.
+
+## Round 3 (after the NAKA-record and address-constant passes)
+
+Matched v7 labels: 39,050 (round 2: 35,556).  Applied: v9 2 renamed + 1 inserted, v7 1 + 1
+(reports `*_round3.json`; the sed scripts now hold round 3's rules, round 2's are in 96d30767).

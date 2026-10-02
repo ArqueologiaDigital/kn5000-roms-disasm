@@ -406,7 +406,8 @@ NakaWidget_CmpRealScreen_1_Box:			.incbin "includes/generated/naka_composer_styl
 NakaWidget_CmpMem:				.incbin "includes/generated/naka_composer_style.bin", 0x15D8, 0x24
 NakaWidget_CmpRealScreen_3_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x15FC, 0x22
 NakaWidget_CmpRealScreen_4_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x161E, 0x2A
-NakaWidget_CmpRealScreen_5_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x1648, 0x2A
+NakaWidget_CmpRealScreen_5_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x1648, 0x20
+Str_TEMPO:					.incbin "includes/generated/naka_composer_style.bin", 0x1668, 0xA
 NakaWidget_CmpRealScreen_6_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x1672, 0x2A
 NakaWidget_CmpRealScreen_7_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x169C, 0x2A
 NakaWidget_CmpRealScreen_8_Label:		.incbin "includes/generated/naka_composer_style.bin", 0x16C6, 0x2A
@@ -908,7 +909,8 @@ NakaNode_CustomCopy_RootOuter:
 ; [nakarest] (Viewable slot 0xbe (table 0xe1b926, 33 entries, InitializeSuna)): "FROM"
 ; [nakarest] (Label.str of element 1).
 NakaLabel_CustomCopy_FromLabel:
-	.incbin "includes/generated/naka_composer_style.bin", 0x2B20, 0x26
+	.incbin "includes/generated/naka_composer_style.bin", 0x2B20, 0x20
+Str_FROM:	.incbin "includes/generated/naka_composer_style.bin", 0x2B40, 0x6
 ; [nakarest] Naka0x11_CustomCopy_FromFrame  +0x2b46..+0x2b62 (0xe1a22a, 28 B)
 ; [nakarest] widget record, element 2 of Viewable slot 0xbe (table 0xe1b926, 33 entries,
 ; [nakarest] InitializeSuna) ("CmpCstmCpScreen"): VwBox (28 B).

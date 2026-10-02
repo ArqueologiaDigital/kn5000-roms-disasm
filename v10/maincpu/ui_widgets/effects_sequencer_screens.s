@@ -1352,7 +1352,8 @@ NakaWidget_KuboView0E7_7_AcIndexWideToggle:	.incbin "includes/generated/naka_eff
 NakaWidget_KuboView0E7_8_AcIndexWideToggle:	.incbin "includes/generated/naka_effects_seq.bin", 0x5ED6, 0x42
 NakaWidget_KuboView0E7_9_AcIndexWideToggle:	.incbin "includes/generated/naka_effects_seq.bin", 0x5F18, 0x42
 NakaWidget_HelpXWin:				.incbin "includes/generated/naka_effects_seq.bin", 0x5F5A, 0x24
-NakaWidget_KuboView0E7_11_AcIndexWideToggle:	.incbin "includes/generated/naka_effects_seq.bin", 0x5F7E, 0x42
+NakaWidget_KuboView0E7_11_AcIndexWideToggle:	.incbin "includes/generated/naka_effects_seq.bin", 0x5F7E, 0x32
+Str_ENGLISH:					.incbin "includes/generated/naka_effects_seq.bin", 0x5FB0, 0x10
 NakaWidget_KuboView0E7_12_AcIndexWideToggle:	.incbin "includes/generated/naka_effects_seq.bin", 0x5FC0, 0x42
 NakaWidget_KuboView0E7_13_AcIndexWideToggle:	.incbin "includes/generated/naka_effects_seq.bin", 0x6002, 0x46
 NakaWidget_HelpSwTtl1Scr:			.incbin "includes/generated/naka_effects_seq.bin", 0x6048, 0x22
@@ -2351,7 +2352,12 @@ Kubo_ResNameTable_3AA:	.incbin "includes/generated/naka_effects_seq.bin", 0x8052
 ; [nakarest] naka_effects_seq+0x8058  +0x8058..+0x8066 (0xe2fffc, 14 B)
 ; [nakarest] the table itself: ResName slot 0x3ab (table 0xe2fffc, 2 entries, InitializeKubo), 2
 ; [nakarest] entry pointers x 4 bytes.
-InitializeKubo_PtrTable_69:	.incbin "includes/generated/naka_effects_seq.bin", 0x8058, 0xE
+InitializeKubo_PtrTable_69:	.incbin "includes/generated/naka_effects_seq.bin", 0x8058, 0x5
+NakaData_EffectsBlock_Byte1:	.incbin "includes/generated/naka_effects_seq.bin", 0x805D, 0x1
+NakaData_EffectsBlock_Byte2:	.incbin "includes/generated/naka_effects_seq.bin", 0x805E, 0x1
+NakaData_EffectsBlock_Byte3:	.incbin "includes/generated/naka_effects_seq.bin", 0x805F, 0x2
+NakaData_EffectsBlock_Byte5:	.incbin "includes/generated/naka_effects_seq.bin", 0x8061, 0x1
+NakaData_EffectsStringPtrs:	.incbin "includes/generated/naka_effects_seq.bin", 0x8062, 0x4
 ; [nakarest] naka_effects_seq+0x8066  +0x8066..+0x806a (0xe3000a, 4 B)
 ; [nakarest] name strings, entries 0-1 of ResName slot 0x3ab (table 0xe2fffc, 2 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xab): "", "".
@@ -2550,7 +2556,8 @@ NoteEdit_FormatTempoString_Data:
 ; [nakarest] into it; reached through source references InitializeKubo_Skip
 ; [nakarest] (sequencer/sequencer_ui.s: `.long Str_42a03242322043`), Sqedt_ParamDispatch_Entry2
 ; [nakarest] (sequencer/sequencer_ui.s: `.long Str_20469e32473220`).
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8B86, 0x29C
+Str_20469e32473220:	.incbin "includes/generated/naka_effects_seq.bin", 0x8B86, 0x27
+Str_42a03242322043:	.incbin "includes/generated/naka_effects_seq.bin", 0x8BAD, 0x275
 ; [nakarest] naka_effects_seq+0x8e22  +0x8e22..+0x8e5a (0xe30dc6, 56 B)
 ; [nakarest] purpose not established: layout of 56 B at 0xe30dc6 not derived; readers below
 ; [nakarest] Readers: source references Equalizer_DispatchA (sequencer/sequencer_ui.s: `lda xde,

@@ -55,8 +55,8 @@ extern const char FileIO_BytecodeData;
 extern const char NakaData_FileScreenDispatch;
 extern const char NakaData_StyleBitmapPad;
 extern const char NakaData_WidgetInit1;
-extern const char NakaData_WidgetInit2;
-extern const char NakaData_WidgetInit3;
+extern const char FileIO_BytecodeData_Code_Loop3;
+extern const char FileIO_BytecodeData_Code_Join18;
 extern const char Naka_PresentationRootState;
 
 #define BASE  0x00ED67CCu
@@ -10371,9 +10371,9 @@ const naka_extension_device_t naka_extension_device_data
         NAKA_ADDR(ExtDev_SndParam_Block70_Var04),
         NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8),
         NAKA_ADDR(ExtDev_SndParam_Write98_Block),
-        NAKA_ADDR(NakaData_WidgetInit3),
+        NAKA_ADDR(FileIO_BytecodeData_Code_Join18),
         NAKA_ADDR(ExtDev_SndParam_DispatchAndWriteA8_Alt),
-        NAKA_ADDR(NakaData_WidgetInit2),
+        NAKA_ADDR(FileIO_BytecodeData_Code_Loop3),
     },
 
     .field_35b0 = 0xB3AD,
@@ -10660,8 +10660,8 @@ const naka_extension_device_t naka_extension_device_data
     .ptrs_29 = {
         0x00FC63DE,
         NAKA_ADDR(NakaData_WidgetInit1),
-        NAKA_ADDR(NakaData_WidgetInit2),
-        NAKA_ADDR(NakaData_WidgetInit3),
+        NAKA_ADDR(FileIO_BytecodeData_Code_Loop3),
+        NAKA_ADDR(FileIO_BytecodeData_Code_Join18),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var40),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var80),
         NAKA_ADDR(ExtDev_SndParam_Block48_Var04),

@@ -168,6 +168,7 @@ StrFld_ParaList_Font:
 	.byte 0x66, 0x6f, 0x6e, 0x74
 	.byte 0x00			; padding
 	.byte 0xff			; padding
+StrFld_ParaList_Font_0x06:
 	.byte 0xb0, 0x6b, 0xe1, 0x00, 0x00, 0xff
 StrDesc_PsSCTxtBox2:
 	.long StrVal_Empty_PsSCTxtBox2
@@ -477,7 +478,9 @@ StrEmpty_PsStylCnvVer:	aligned_string ""
 StrName_PsStylCnvVer:	aligned_string "PsStylCnvVer"
 StrPrefix_S2cGridBox:
 	aligned_string "XXj"
+Str_S2cGridBox:
 	aligned_string "S2cGridBox"
+AlignedStr_CmpNameMenuBox:
 	.byte 0x00, 0xff
 StrName_CmpNameMenuBox:		aligned_string "CmpNameMenuBox"
 StrExtra_Yajirushi_JpChars:	aligned_string "^GBBB"
@@ -495,7 +498,9 @@ StrPrefix_AcSndArgGrid:
 StrName_AcSndArgGridBox:	aligned_string "AcSndArgGridBox"
 StrPrefix_AcApcToggle:
 	.byte 0x6a, 0x46, 0x00, 0xff
+NakaInst_AcApcToggle:
 	aligned_string "AcApcToggle"
+NakaInst_AcApcToggle_0x0C:
 	.byte 0x43, 0x00
 StrName_PsCstmCpNameBox:	aligned_string "PsCstmCpNameBox"
 StrEmpty_PsMspNameBnk:		aligned_string ""

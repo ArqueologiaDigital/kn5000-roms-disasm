@@ -369,26 +369,32 @@ NakaInst_ExtDevice_Screens:
 NakaWidget_TEST2:			.incbin "includes/generated/naka_extension_device.bin", 0x2C, 0x2C
 NakaWidget_TEST2_1_TextBox:		.incbin "includes/generated/naka_extension_device.bin", 0x58, 0x92
 NakaWidget_TEST2_2_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xEA, 0x34
-NakaWidget_TEST2_3_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x11E, 0x36
+NakaWidget_TEST2_3_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x11E, 0x20
+ExtDevScreen_SndParamBank_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0x13E, 0x16
 NakaWidget_TEST2_4_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x154, 0x2E
 NakaWidget_TEST2_5_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x182, 0x34
-NakaWidget_TEST2_6_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x1B6, 0x44
+NakaWidget_TEST2_6_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x1B6, 0x20
+ExtDevScreen_SndParamPage_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0x1D6, 0x24
 NakaWidget_TEST2_7_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x1FA, 0x1C
 NakaWidget_TEST2_8_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x216, 0x1C
 NakaWidget_TEST2_9_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x232, 0x1C
 NakaWidget_TEST2_10_IvPageControl:	.incbin "includes/generated/naka_extension_device.bin", 0x24E, 0x1C
 NakaWidget_TEST2OKOK:			.incbin "includes/generated/naka_extension_device.bin", 0x26A, 0x24
-NakaWidget_TEST2_12_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x28E, 0x24
+NakaWidget_TEST2_12_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x28E, 0x20
+ExtDevScreen_VoiceParamBank_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0x2AE, 0x4
 NakaWidget_TEST2_13_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x2B2, 0x24
 NakaWidget_TEST2NGNG:			.incbin "includes/generated/naka_extension_device.bin", 0x2D6, 0x24
 NakaWidget_TEST2_15_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x2FA, 0x24
-NakaWidget_TEST2_16_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x31E, 0x24
+NakaWidget_TEST2_16_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x31E, 0x20
+ExtDevScreen_VoiceParamRhythm_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0x33E, 0x4
 NakaWidget_TEST2NGOK:			.incbin "includes/generated/naka_extension_device.bin", 0x342, 0x24
-NakaWidget_TEST2_18_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x366, 0x24
+NakaWidget_TEST2_18_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x366, 0x20
+ExtDevScreen_VoiceParamDrums_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0x386, 0x4
 NakaWidget_TEST2_19_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x38A, 0x24
 NakaWidget_TEST2OKNG:			.incbin "includes/generated/naka_extension_device.bin", 0x3AE, 0x24
 NakaWidget_TEST2_21_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x3D2, 0x24
-NakaWidget_TEST2_22_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x3F6, 0x24
+NakaWidget_TEST2_22_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x3F6, 0x20
+ExtDevScreen_VoiceSetup_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0x416, 0x4
 ; [nakarest] naka_extension_device+0x41a  +0x41a..+0x44e (0xed6be6, 52 B)
 ; [nakarest] widget record, element 0 of Viewable slot 0xf6 (table 0xed7cfe, 1 entries,
 ; [nakarest] InitializeToshi) ("TEST3"): SineWaveScreen (52 B).
@@ -400,9 +406,10 @@ NakaWidget_TEST3:	.incbin "includes/generated/naka_extension_device.bin", 0x41A,
 ; [nakarest] InitializeToshi)): "" (TtlScreen.title of element 0); "After all LEDs ON and OFF,
 ; [nakarest] Please push any butt" (TextBox.text of element 1); "PANEL SW&LED CHECK" (Label.str
 ; [nakarest] of element 2).
-NakaWidget_TEST4:		.incbin "includes/generated/naka_extension_device.bin", 0x44E, 0x2C
-NakaWidget_TEST4_1_TextBox:	.incbin "includes/generated/naka_extension_device.bin", 0x47A, 0x9A
-NakaWidget_TEST4_2_Label:	.incbin "includes/generated/naka_extension_device.bin", 0x514, 0x34
+NakaWidget_TEST4:			.incbin "includes/generated/naka_extension_device.bin", 0x44E, 0x2C
+NakaWidget_TEST4_1_TextBox:		.incbin "includes/generated/naka_extension_device.bin", 0x47A, 0x28
+ExtDevScreen_VoiceMainPage_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0x4A2, 0x72
+NakaWidget_TEST4_2_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x514, 0x34
 ; [nakarest] naka_extension_device+0x548  +0x548..+0xe6c (0xed6d14, 2340 B)
 ; [nakarest] widget records, elements 0-66 of Viewable slot 0xf8 (table 0xed7d16, 67 entries,
 ; [nakarest] InitializeToshi) ("TEST5"): TtlScreen (42 B), IvPageControl (28 B) x5, Window (36
@@ -429,12 +436,14 @@ NakaWidget_TEST5_15_Label:		.incbin "includes/generated/naka_extension_device.bi
 NakaWidget_TEST56:			.incbin "includes/generated/naka_extension_device.bin", 0x7A4, 0x24
 NakaWidget_TEST5_17_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0x7C8, 0x1C
 NakaWidget_TEST5_18_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x7E4, 0x22
-NakaWidget_TEST5_19_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x806, 0x22
+NakaWidget_TEST5_19_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x806, 0x20
+ExtDevScreen_MidiCtrl_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0x826, 0x2
 NakaWidget_TEST5_20_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x828, 0x28
 NakaWidget_TEST5_21_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x850, 0x22
 NakaWidget_TEST5_22_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x872, 0x22
 NakaWidget_TEST5_23_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x894, 0x22
-NakaWidget_TEST5_24_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x8B6, 0x22
+NakaWidget_TEST5_24_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x8B6, 0x20
+ExtDevScreen_MidiCtrlPage_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0x8D6, 0x2
 NakaWidget_TEST5_25_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x8D8, 0x22
 NakaWidget_TEST5_26_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x8FA, 0x22
 NakaWidget_TEST5_27_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0x91C, 0x1C
@@ -442,19 +451,23 @@ NakaWidget_TEST5_28_Label:		.incbin "includes/generated/naka_extension_device.bi
 NakaWidget_TEST5_29_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x95A, 0x22
 NakaWidget_TEST5_30_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x97C, 0x28
 NakaWidget_TEST5_31_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x9A4, 0x22
-NakaWidget_TEST5_32_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x9C6, 0x22
+NakaWidget_TEST5_32_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x9C6, 0x20
+ExtDevScreen_MidiCtrlDetail_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0x9E6, 0x2
 NakaWidget_TEST5_33_Label:		.incbin "includes/generated/naka_extension_device.bin", 0x9E8, 0x22
 NakaWidget_TEST5_34_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA0A, 0x22
 NakaWidget_TEST5_35_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA2C, 0x22
-NakaWidget_TEST5_36_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA4E, 0x22
+NakaWidget_TEST5_36_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA4E, 0x20
+ExtDevScreen_MidiCtrlAdvanced_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0xA6E, 0x2
 NakaWidget_TEST5_37_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0xA70, 0x1C
 NakaWidget_TEST5_38_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xA8C, 0x22
-NakaWidget_TEST5_39_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xAAE, 0x22
+NakaWidget_TEST5_39_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xAAE, 0x20
+ExtDevScreen_DspEffect_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0xACE, 0x2
 NakaWidget_TEST5_40_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xAD0, 0x28
 NakaWidget_TEST5_41_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xAF8, 0x22
 NakaWidget_TEST5_42_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB1A, 0x22
 NakaWidget_TEST5_43_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB3C, 0x22
-NakaWidget_TEST5_44_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB5E, 0x22
+NakaWidget_TEST5_44_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB5E, 0x20
+ExtDevScreen_DspEffectPage_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0xB7E, 0x2
 NakaWidget_TEST5_45_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xB80, 0x22
 NakaWidget_TEST5_46_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xBA2, 0x22
 NakaWidget_TEST5_47_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0xBC4, 0x1C
@@ -462,19 +475,23 @@ NakaWidget_TEST5_48_Label:		.incbin "includes/generated/naka_extension_device.bi
 NakaWidget_TEST5_49_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC02, 0x22
 NakaWidget_TEST5_50_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC24, 0x28
 NakaWidget_TEST5_51_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC4C, 0x22
-NakaWidget_TEST5_52_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC6E, 0x22
+NakaWidget_TEST5_52_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC6E, 0x20
+ExtDevScreen_ReverbSetup_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0xC8E, 0x2
 NakaWidget_TEST5_53_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xC90, 0x22
 NakaWidget_TEST5_54_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xCB2, 0x22
 NakaWidget_TEST5_55_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xCD4, 0x22
-NakaWidget_TEST5_56_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xCF6, 0x22
+NakaWidget_TEST5_56_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xCF6, 0x20
+ExtDevScreen_ReverbPage_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0xD16, 0x2
 NakaWidget_TEST5_57_Frame:		.incbin "includes/generated/naka_extension_device.bin", 0xD18, 0x1C
 NakaWidget_TEST5_58_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xD34, 0x22
-NakaWidget_TEST5_59_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xD56, 0x22
+NakaWidget_TEST5_59_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xD56, 0x20
+ExtDevScreen_Equalizer_Desc:		.incbin "includes/generated/naka_extension_device.bin", 0xD76, 0x2
 NakaWidget_TEST5_60_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xD78, 0x28
 NakaWidget_TEST5_61_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xDA0, 0x22
 NakaWidget_TEST5_62_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xDC2, 0x22
 NakaWidget_TEST5_63_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xDE4, 0x22
-NakaWidget_TEST5_64_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE06, 0x22
+NakaWidget_TEST5_64_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE06, 0x20
+ExtDevScreen_EqualizerPage_Desc:	.incbin "includes/generated/naka_extension_device.bin", 0xE26, 0x2
 NakaWidget_TEST5_65_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE28, 0x22
 NakaWidget_TEST5_66_Label:		.incbin "includes/generated/naka_extension_device.bin", 0xE4A, 0x22
 ; [nakarest] naka_extension_device+0xe6c  +0xe6c..+0xfe0 (0xed7638, 372 B)
@@ -977,7 +994,9 @@ Encoder_PrepareCallback_PtrTable_2:	.incbin "includes/generated/naka_extension_d
 SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x46
 FileIO_BytecodeData_Code_Entry8_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3598, 0x1E	; 6 x 32-bit pointer
 FileIO_BytecodeData_Code_Entry8_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x35B6, 0x122	; 6 x 32-bit pointer
-FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0x100	; 22 x 32-bit pointer
+FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0xB0	; 22 x 32-bit pointer
+ExtDevScreen_UserInitWallpaper_Flag:		.incbin "includes/generated/naka_extension_device.bin", 0x3788, 0x8
+ExtDevScreen_UserInitWallpaper_Data:		.incbin "includes/generated/naka_extension_device.bin", 0x3790, 0x48
 ; [nakarest] naka_extension_device+0x37d8  +0x37d8..+0x3854 (0xed9fa4, 124 B)
 ; [nakarest] purpose not established: layout of 124 B at 0xed9fa4 not derived; readers below
 ; [nakarest] Readers: source references FileIO_BytecodeData_Code_Skip84

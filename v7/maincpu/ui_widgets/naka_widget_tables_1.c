@@ -152,25 +152,25 @@ extern const char NakaWidget_PDMedOrchSw;
 extern const char NakaWidget_PdMdlySkipLabel;
 extern const char NakaWidget_Perf2Container;
 extern const char NakaWidget_DemoMed2;
-extern const char NakaWidget_Perf2Flute;
+extern const char NakaWidget_DemoSong8;
 extern const char NakaWidget_Perf2Gamelan;
 extern const char NakaWidget_DemoSong9;
 extern const char NakaWidget_Perf2MeasureBox;
-extern const char NakaWidget_Perf2Piano;
+extern const char NakaWidget_DemoSong11;
 extern const char NakaWidget_Perf2RhythmSel;
 extern const char NakaWidget_Perf2SaxBrass;
 extern const char NakaWidget_Perf2SoundSel;
 extern const char NakaWidget_Perf2Strings;
 extern const char NakaWidget_Perf2StyleSel;
-extern const char NakaWidget_Perf3BigBand;
+extern const char NakaWidget_DemoSong15;
 extern const char NakaWidget_Perf3HokieDance;
-extern const char NakaWidget_Perf3JazzBand;
-extern const char NakaWidget_Perf3LatinOrch;
+extern const char NakaWidget_DemoSong13;
+extern const char NakaWidget_DemoSong14;
 extern const char NakaWidget_Perf3ModernBluegrass;
 extern const char NakaWidget_Perf3RhythmSel;
 extern const char NakaWidget_Perf3SoundSel;
 extern const char NakaWidget_Perf3StyleSel;
-extern const char NakaWidget_Perf3SymphOrch;
+extern const char NakaWidget_DemoSong16;
 extern const char NakaWidget_PerfAccordionMedley;
 extern const char NakaWidget_PerfClassical;
 extern const char NakaWidget_PerfContemporary;
@@ -1986,10 +1986,10 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
         NAKA_ADDR(NakaWidget_Perf2Container),
         NAKA_ADDR(NakaWidget_Perf2Strings),
         NAKA_ADDR(NakaWidget_Perf2Gamelan),
-        NAKA_ADDR(NakaWidget_Perf2Flute),
+        NAKA_ADDR(NakaWidget_DemoSong8),
         NAKA_ADDR(NakaWidget_DemoSong9),
         NAKA_ADDR(NakaWidget_Perf2SaxBrass),
-        NAKA_ADDR(NakaWidget_Perf2Piano),
+        NAKA_ADDR(NakaWidget_DemoSong11),
         NAKA_ADDR(NakaWidget_Perf2StyleSel),
         NAKA_ADDR(NakaWidget_Perf2SoundSel),
         NAKA_ADDR(NakaWidget_Perf2RhythmSel),
@@ -2001,10 +2001,10 @@ const naka_widget_tables_1_t naka_widget_tables_1_data
     .Yoko_ViewTable_0E3 = {
         0x00E23DF4,
         NAKA_ADDR(NakaWidget_Perf3HokieDance),
-        NAKA_ADDR(NakaWidget_Perf3JazzBand),
-        NAKA_ADDR(NakaWidget_Perf3LatinOrch),
-        NAKA_ADDR(NakaWidget_Perf3BigBand),
-        NAKA_ADDR(NakaWidget_Perf3SymphOrch),
+        NAKA_ADDR(NakaWidget_DemoSong13),
+        NAKA_ADDR(NakaWidget_DemoSong14),
+        NAKA_ADDR(NakaWidget_DemoSong15),
+        NAKA_ADDR(NakaWidget_DemoSong16),
         NAKA_ADDR(NakaWidget_Perf3ModernBluegrass),
         NAKA_ADDR(NakaWidget_Perf3StyleSel),
         NAKA_ADDR(NakaWidget_Perf3SoundSel),

@@ -4023,9 +4023,9 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	extz	wa
 	sub	wa, 97
 	cp	wa, 0:i3
-	jr	lt, DSPCfg_Data_ParamDispatch_Skip10
+	jr	lt, DSPCfg_Data_ParamDispatch_Skip6
 	cp	wa, 5:i3
-	jr	gt, DSPCfg_Data_ParamDispatch_Skip10
+	jr	gt, DSPCfg_Data_ParamDispatch_Skip6
 	add	wa, wa
 	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
 	ld_rrw	wa, xix, wa
@@ -4049,13 +4049,13 @@ DSPCfg_Data_ParamDispatch_Join2:
 	ld	xiz, 0x4e00
 	ld	wa, 3:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
-DSPCfg_Data_ParamDispatch_Skip10:
+DSPCfg_Data_ParamDispatch_Skip6:
 	ldw	(xsp+0x4), 0xffff
 DSPCfg_Data_ParamDispatch_Join3:
 	cp	(xsp+12), 1
-	jr	c, DSPCfg_Data_ParamDispatch_Skip11
+	jr	c, DSPCfg_Data_ParamDispatch_Join4
 	cp	(xsp+12), 17
-	jr	nc, DSPCfg_Data_ParamDispatch_Skip11
+	jr	nc, DSPCfg_Data_ParamDispatch_Join4
 	calr	DSPCfg_LookupMidiMap
 	ld	(xsp+6), xhl
 	ld	xwa, (xsp+6)
@@ -4081,10 +4081,11 @@ DSPCfg_Data_ParamDispatch_Join3:
 	swi	7
 	swi	7
 	jr	8
+DSPCfg_Data_ParamDispatch_Skip7:
 	add	hl, 16
 	exts	xhl
 	add	xiz, xhl
-DSPCfg_Data_ParamDispatch_Skip11:
+DSPCfg_Data_ParamDispatch_Join4:
 	ld	xwa, (xsp+18)
 	ld	(xwa), xiz
 	ld	hl, (xsp+4)

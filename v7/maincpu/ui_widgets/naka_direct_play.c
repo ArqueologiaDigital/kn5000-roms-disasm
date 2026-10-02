@@ -14,7 +14,7 @@ extern const char CRTC_LINE_COMPARE;
 extern const char INTETC45;
 extern const char NakaStr_DataFile1of2;
 extern const char NakaStr_DataFilePck;
-extern const char NakaStr_Rhythm;
+extern const char NakaWidget_Perf3RhythmSel_StrOn;
 extern const char NakaData_TechnichordBitmap1;
 extern const char NakaInst_NEXT;
 extern const char NakaInst_Param_EndFF;
@@ -6808,7 +6808,7 @@ const naka_direct_play_t naka_direct_play_data
 
     .ptr_2fd2 = 0x00E24066,
 
-    .ptr_2fd6 = NAKA_ADDR(NakaStr_Rhythm),
+    .ptr_2fd6 = NAKA_ADDR(NakaWidget_Perf3RhythmSel_StrOn),
 
 };
 

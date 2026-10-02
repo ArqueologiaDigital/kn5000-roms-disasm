@@ -1,0 +1,7087 @@
+[
+ {
+  "addr": "0xe0cd4e",
+  "from": "Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_3",
+  "old": "Scoop_EventLoop_36Entry_Branch3_Str_Fmt3d_2",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xe1f04a",
+  "from": "HamaObj_129_Data",
+  "to_has": [
+   "InitializeHama_PtrTable"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "InitializeHama_PtrTable"
+  ]
+ },
+ {
+  "addr": "0xe1f056",
+  "from": "HamaObj_429_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "InitializeHama_PtrTable"
+  ]
+ },
+ {
+  "addr": "0xe1f080",
+  "from": "HamaObj_169_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "HamaList_EntryStr_Empty"
+  ]
+ },
+ {
+  "addr": "0xe1f0be",
+  "from": "HamaObj_1C9_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "HamaStr_HamaList"
+  ]
+ },
+ {
+  "addr": "0xe1f0d6",
+  "from": "HamaObj_1E9_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "HamaStr_EV_INDEX_PUTS"
+  ]
+ },
+ {
+  "addr": "0xe1f0ec",
+  "from": "HamaObj_109_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "HamaStr_MT_CONTINUE"
+  ]
+ },
+ {
+  "addr": "0xe1ffb6",
+  "from": "WidgetDispatch_FDTestPtrTable",
+  "old": "FDTest_String_TestTitleFunc_PtrTable",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xe801d4",
+  "from": "TtMdCtlMsg_EventDispatch_Data",
+  "to_has": [
+   "PmemOutLGridCheck_CaseTable_Tail"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutLGridCheck_CaseTable"
+  ]
+ },
+ {
+  "addr": "0xe814f4",
+  "from": "Murai_FunctionTable_101",
+  "old": "InitializeMurai_PtrTable_5",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xe86638",
+  "from": "Murai_MainFunctionTable_141",
+  "old": "InitializeMurai_PtrTable_6",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xea0a0e",
+  "from": "SLDstBankList_FuncBody_Data_3",
+  "old": "SLDstBankList_FuncBody_Str_Colon_9",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xea135a",
+  "from": "Cheap_FunctionTable_105",
+  "old": "InitializeCheap_PtrTable",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xea7fce",
+  "from": "Cheap_MainFunctionTable_145",
+  "old": "InitializeCheap_PtrTable_8",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xed11f2",
+  "from": "FSWAssGrid_EventDispatch_Entry_Str_Fmts",
+  "old": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_2",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xed11f6",
+  "from": "FSWAssGrid_EventDispatch_Entry_Str_Fmts_2",
+  "old": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_3",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xed11fa",
+  "from": "FSWAssGrid_EventDispatch_Entry_Str_Fmts_3",
+  "old": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_4",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xed11fe",
+  "from": "FSWAssGrid_EventDispatch_Entry_Str_Fmts_4",
+  "old": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_5",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xed1202",
+  "from": "FSWAssGrid_EventDispatch_Entry_Str_Fmts_5",
+  "old": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_6",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xed1206",
+  "from": "FSWAssGrid_EventDispatch_Entry_Str_Fmts_6",
+  "old": "FSWAssGridCheck_Evt1C0001C_Str_Fmts_7",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xee0010",
+  "from": "SndParamRun_EE0010",
+  "old": "NakaInst_Param_Bitmap80",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xee0016",
+  "from": "NakaInst_Param_Field02_0x4",
+  "to_has": [
+   "FDemoText_ByteData_LayoutEngine_Data_8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FDemoText_ByteData_LayoutEngine_Data_8"
+  ]
+ },
+ {
+  "addr": "0xef0004",
+  "from": "AcWelcomScreen_SubCpuError_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "CharEncoding_PrintableHi"
+  ]
+ },
+ {
+  "addr": "0xef0007",
+  "from": "AcWelcomScreen_SubCpuLoaded_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "CharEncoding_PrintableHi"
+  ]
+ },
+ {
+  "addr": "0xef000a",
+  "from": "MPver_ShowHide_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "CharEncoding_PrintableHi"
+  ]
+ },
+ {
+  "addr": "0xef265a",
+  "from": "AltEvtBuf_WriteBytes_Return",
+  "to_has": [
+   "RhythmBuf_Init_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AltEvtBuf_InlineBytecode"
+  ]
+ },
+ {
+  "addr": "0xef2912",
+  "from": "SeqBuf2_WriteBytes_Return",
+  "to_has": [
+   "SeqBuf2_WriteByte_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqBuf2_InlineBytecode"
+  ]
+ },
+ {
+  "addr": "0xef29c0",
+  "from": "SeqBuf3_WriteBytes_Return",
+  "to_has": [
+   "SeqBuf3_ReadByte_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqBuf3_InlineBytecode"
+  ]
+ },
+ {
+  "addr": "0xef4784",
+  "from": "HANDLE_UPDATE_BASE_ADDR",
+  "old": "HANDLE_UPDATE_FILE_TYPE_ID_001h",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xef6143",
+  "from": "SoundEvt_LongPacketHandler_0xA6",
+  "to_has": [
+   "SoundEvt_LongPacketHandler_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SoundEvt_LongPacketHandler_DispatchTbl_Target1"
+  ]
+ },
+ {
+  "addr": "0xef6154",
+  "from": "SoundEvt_LongPacketHandler_0xB7",
+  "to_has": [
+   "SoundEvt_LongPacketHandler_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SoundEvt_LongPacketHandler_DispatchTbl_Target1"
+  ]
+ },
+ {
+  "addr": "0xef628e",
+  "from": "DefaultHandler_Ret_0xA6",
+  "to_has": [
+   "DefaultHandler_Ret_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DisplayMode_Dispatch_Mode0"
+  ]
+ },
+ {
+  "addr": "0xef6909",
+  "from": "PerfMode_ParamHandler_Data_0x12",
+  "to_has": [
+   "PerfMode_ParamHandler_Data_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PerfMode_ParamHandler_7"
+  ]
+ },
+ {
+  "addr": "0xef6bd3",
+  "from": "Unref_EF6BD3_Tbl",
+  "old": "Unref_EF6BA9_Tbl",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xef6c48",
+  "from": "PerfMode_Evt04_VolumeHandler_Skip",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PerfMode_VoiceAddressTable"
+  ]
+ },
+ {
+  "addr": "0xef6c4f",
+  "from": "PerfMode_Evt04_VolumeHandler_Return",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PerfMode_VoiceAddressTable"
+  ]
+ },
+ {
+  "addr": "0xef7779",
+  "from": "UIState_EventTable_Target11",
+  "old": "ScoopDisp_DispatchTable_Small_Target11",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xef77d2",
+  "from": "ScoopDisp_DispatchTable_Extended_0x79",
+  "to_has": [
+   "DefaultHandler_Ret_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ScoopDisp_DispatchTable_Small_Target11"
+  ]
+ },
+ {
+  "addr": "0xef8c30",
+  "from": "DisplayMode_Handler_3_0x435",
+  "to_has": [
+   "DisplayMode_Handler_3_Helper9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PerfMode_EventTable_0_Target1"
+  ]
+ },
+ {
+  "addr": "0xef956f",
+  "from": "VoiceSlot_TableSetup_Code_Loop2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "UIState_EventTable_Target5"
+  ]
+ },
+ {
+  "addr": "0xef95a4",
+  "from": "VoiceSlot_TableSetup_Code_Loop3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "UIState_EventTable_Target5"
+  ]
+ },
+ {
+  "addr": "0xefa716",
+  "from": "PortConfig_Handler_0_Sub",
+  "to_has": [
+   "PerfMode_Handler_EvtB_Helper2_Helper3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PortConfig_DataTable_A"
+  ]
+ },
+ {
+  "addr": "0xefa7c5",
+  "from": "Unref_EFA7C5_Tbl",
+  "old": "Unref_EFA79B_Tbl",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xefa83a",
+  "from": "ScoopParam_ValueTable_Helper6_Skip",
+  "to_has": [
+   "ClockConfig_Handler_0_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Unref_EFA79B_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefa85c",
+  "from": "ScoopParam_ValueTable_Helper6_Return",
+  "to_has": [
+   "ClockConfig_Handler_0_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Unref_EFA79B_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefa901",
+  "from": "ScoopParam_ValueTable_Helper6_Skip2",
+  "to_has": [
+   "ClockConfig_Handler_0_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ClockConfig_Handler_0_Tbl2"
+  ]
+ },
+ {
+  "addr": "0xefa919",
+  "from": "ScoopParam_ValueTable_Helper6_Skip3",
+  "to_has": [
+   "ClockConfig_Handler_0_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ClockConfig_Handler_0_Tbl2"
+  ]
+ },
+ {
+  "addr": "0xefa948",
+  "from": "ScoopParam_ValueTable_Helper6_Skip4",
+  "to_has": [
+   "ClockConfig_Handler_0_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ClockConfig_Handler_0_Tbl2"
+  ]
+ },
+ {
+  "addr": "0xefa9dc",
+  "from": "ScoopParam_ValueTable_Helper6_Skip5",
+  "to_has": [
+   "ClockConfig_Handler_0_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ClockConfig_Handler_0_Tbl2"
+  ]
+ },
+ {
+  "addr": "0xefaa02",
+  "from": "ScoopParam_ValueTable_Helper6_Return3",
+  "to_has": [
+   "ClockConfig_Handler_0_Return2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ClockConfig_Handler_0_Tbl2"
+  ]
+ },
+ {
+  "addr": "0xefad3f",
+  "from": "MemoryConfig_Handler_Table_Code_Sub_Skip",
+  "to_has": [
+   "MemoryConfig_Handler_Table_Target2_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MemoryConfig_Handler_Table_Target2"
+  ]
+ },
+ {
+  "addr": "0xefb334",
+  "from": "SndDispatch_ProcessCommand_0xF",
+  "old": "MemConfig_Handler_3_Helper",
+  "result": "rename"
+ },
+ {
+  "addr": "0xefb819",
+  "from": "SysInit_SendAllNotesAndReset_Skip",
+  "to_has": [
+   "SysEx_BytecodeDispatcher_Helper_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SystemInit_Handler_Table"
+  ]
+ },
+ {
+  "addr": "0xefb87e",
+  "from": "VoiceCtrl_ParamSetupBytecode_Tbl4",
+  "old": "SysInit_SendAllNotesAndReset_Tbl",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xefb8d3",
+  "from": "SystemInit_StepHandler_0_0x5E",
+  "to_has": [
+   "SysEx_BytecodeDispatcher_Helper2_Sub"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SysInit_SendAllNotesAndReset_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd6dd",
+  "from": "VoiceState_DataBlock2_0x563",
+  "to_has": [
+   "VoiceState_DataBlock2_Loop9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd71c",
+  "from": "VoiceState_DataBlock2_Code_Skip17",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip20"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd71f",
+  "from": "VoiceState_DataBlock2_0x5A5",
+  "to_has": [
+   "VoiceState_DataBlock2_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd733",
+  "from": "VoiceState_DataBlock2_Code_Skip19",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip22"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd75c",
+  "from": "VoiceState_DataBlock2_Code_Skip20",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip23"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd76b",
+  "from": "VoiceState_DataBlock2_0x5F1",
+  "to_has": [
+   "VoiceState_DataBlock2_Return6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd781",
+  "from": "VoiceState_DataBlock2_0x607",
+  "to_has": [
+   "VoiceState_DataBlock2_Helper10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd7ab",
+  "from": "VoiceState_DataBlock2_Code_Skip21",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip24"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd7b7",
+  "from": "VoiceState_DataBlock2_Code_Skip22",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip25"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd7c7",
+  "from": "VoiceState_DataBlock2_Code_Skip23",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip26"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd7d4",
+  "from": "VoiceState_DataBlock2_0x65A",
+  "to_has": [
+   "VoiceState_DataBlock2_Helper12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd7e2",
+  "from": "VoiceState_DataBlock2_Code_Loop9",
+  "to_has": [
+   "VoiceState_DataBlock2_Loop10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd7f9",
+  "from": "VoiceState_DataBlock2_Code_Loop10",
+  "to_has": [
+   "VoiceState_DataBlock2_Loop11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd813",
+  "from": "VoiceState_DataBlock2_Code_Skip24",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip27"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd81f",
+  "from": "VoiceState_DataBlock2_Code_Skip25",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip28"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd84d",
+  "from": "VoiceState_DataBlock2_Code_Skip26",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip29"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd855",
+  "from": "VoiceState_DataBlock2_Code_Skip27",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip30"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd869",
+  "from": "VoiceState_DataBlock2_Code_Skip28",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip31"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd86d",
+  "from": "VoiceState_DataBlock2_0x6F3",
+  "to_has": [
+   "VoiceState_DataBlock2_Join5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd8a1",
+  "from": "VoiceState_DataBlock2_Code_Skip29",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip32"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd8c2",
+  "from": "VoiceState_DataBlock2_Code_Entry4",
+  "to_has": [
+   "VoiceState_DataBlock2_Entry4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd8f4",
+  "from": "VoiceState_DataBlock2_Code_Skip32",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip35"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd8fc",
+  "from": "VoiceState_DataBlock2_Code_Entry5",
+  "to_has": [
+   "VoiceState_DataBlock2_Entry5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd90b",
+  "from": "VoiceState_DataBlock2_Code_Skip33",
+  "to_has": [
+   "VoiceState_DataBlock2_Skip36"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefd9bb",
+  "from": "VoiceState_DataBlock2_0x841",
+  "to_has": [
+   "VoiceState_DataBlock2_Return9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "VoiceState_DataBlock2_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefdb9e",
+  "from": "SubCPU_ToneParamRet_Target1_Skip",
+  "to_has": [
+   "SubCPU_ToneParamDisplay_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SubCPU_ToneParamDisplay_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefdbc1",
+  "from": "SubCPU_ToneParamRet_Target1_Return",
+  "to_has": [
+   "SubCPU_ToneParamDisplay_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SubCPU_ToneParamDisplay_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefea0c",
+  "from": "OscScope_RenderBlock_Join",
+  "to_has": [
+   "OscScope_DrawWaveform_Code_Helper_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "OscScope_FinalizeRender"
+  ]
+ },
+ {
+  "addr": "0xefea43",
+  "from": "OscScope_RenderBlock_Skip4",
+  "to_has": [
+   "OscScope_DrawWaveform_Code_Helper_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "OscScope_FinalizeRender"
+  ]
+ },
+ {
+  "addr": "0xefea54",
+  "from": "OscScope_RenderBlock_Return",
+  "to_has": [
+   "OscScope_DrawWaveform_Code_Helper_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "OscScope_FinalizeRender"
+  ]
+ },
+ {
+  "addr": "0xefecb5",
+  "from": "DisplayStr_BytecodeBlock_A_Loop3",
+  "to_has": [
+   "DisplayStr_BytecodeBlock_A_Code_Loop3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DisplayStr_BytecodeBlock_A_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefecbe",
+  "from": "DisplayStr_BytecodeBlock_A_Loop4",
+  "to_has": [
+   "DisplayStr_BytecodeBlock_A_Code_Loop4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DisplayStr_BytecodeBlock_A_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefecf4",
+  "from": "DisplayStr_BytecodeBlock_A_Skip7",
+  "to_has": [
+   "DisplayStr_BytecodeBlock_A_Code_Helper_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DisplayStr_BytecodeBlock_A_Tbl"
+  ]
+ },
+ {
+  "addr": "0xefefc1",
+  "from": "DisplayStr_BytecodeBlock_C_Skip3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "DisplayStr_BytecodeBlock_C_Text"
+  ]
+ },
+ {
+  "addr": "0xeff34e",
+  "from": "Display_BytecodeBlock_F_0x20A",
+  "to_has": [
+   "Display_BytecodeBlock_F_Return2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Display_BytecodeBlock_F_Tbl"
+  ]
+ },
+ {
+  "addr": "0xeff8ab",
+  "from": "StringData_KeyNames_0x312",
+  "to_has": [
+   "Disp_ShowNoteNameAndVelocity_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Disp_ShowNoteNameAndVelocity"
+  ]
+ },
+ {
+  "addr": "0xf00001",
+  "from": "Softver_ShowHide_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tbl_AccompPartNames"
+  ]
+ },
+ {
+  "addr": "0xf000f0",
+  "from": "StringData_APCModeNames_0x24F",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParamPopup_KeyNameBracketed"
+  ]
+ },
+ {
+  "addr": "0xf00990",
+  "from": "ParamPopup_PartPedal_Entry5",
+  "to_has": [
+   "ParamPopup_PartPedal_Entry"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tbl_PedalNames"
+  ]
+ },
+ {
+  "addr": "0xf02533",
+  "from": "Scoop_EventLoop_36Entry_Skip5",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02568",
+  "from": "Scoop_EventLoop_36Entry_Skip6",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02580",
+  "from": "Scoop_EventLoop_36Entry_Skip7",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02596",
+  "from": "Scoop_EventLoop_36Entry_Join",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02602",
+  "from": "Scoop_EventLoop_36Entry_Skip8",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf0262b",
+  "from": "Scoop_EventLoop_36Entry_Skip9",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02637",
+  "from": "Scoop_EventLoop_36Entry_Skip10",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf0263f",
+  "from": "Scoop_EventLoop_36Entry_Join2",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02662",
+  "from": "Scoop_EventLoop_36Entry_Skip",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf0267a",
+  "from": "Scoop_EventLoop_36Entry_Skip2",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02692",
+  "from": "Scoop_EventLoop_36Entry_Skip11",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf026b6",
+  "from": "Scoop_EventLoop_36Entry_Skip3",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf026ce",
+  "from": "Scoop_EventLoop_36Entry_Skip4",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf026e4",
+  "from": "Scoop_EventLoop_36Entry_Join3",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf0276d",
+  "from": "Scoop_EventLoop_36Entry_Skip12",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02782",
+  "from": "Scoop_EventLoop_36Entry_Skip13",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02795",
+  "from": "Scoop_EventLoop_36Entry_Join4",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02805",
+  "from": "Scoop_EventLoop_36Entry_Skip14",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip14"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02821",
+  "from": "Scoop_EventLoop_36Entry_Loop",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf02846",
+  "from": "Scoop_EventLoop_36Entry_Skip15",
+  "to_has": [
+   "Scoop_EventLoop_36Entry_Branch1_Code_Skip15"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Scoop_EventLoop_36Entry_Branch3"
+  ]
+ },
+ {
+  "addr": "0xf064e3",
+  "from": "SeMenu_RegisterParamDisplay_Data_Skip",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RegisterParamDisplay_ClearLoop"
+  ]
+ },
+ {
+  "addr": "0xf064e6",
+  "from": "SeMenu_RegisterParamDisplay_Data_Join",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RegisterParamDisplay_ClearLoop"
+  ]
+ },
+ {
+  "addr": "0xf06500",
+  "from": "SeMenu_RegisterParamDisplay_Data_0x71",
+  "to_has": [
+   "SeMenu_CopyWriteUpdate_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RegisterParamDisplay_ClearLoop"
+  ]
+ },
+ {
+  "addr": "0xf06557",
+  "from": "SeMenu_RegisterParamDisplay_Data_Skip2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RegisterParamDisplay_ClearLoop"
+  ]
+ },
+ {
+  "addr": "0xf0655a",
+  "from": "SeMenu_RegisterParamDisplay_Data_Join2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RegisterParamDisplay_ClearLoop"
+  ]
+ },
+ {
+  "addr": "0xf06aa5",
+  "from": "SeMenu_PartMask_Data_0x5",
+  "to_has": [
+   "SeMenu_PartMask_Data_Code_Sub"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_StorePartMask"
+  ]
+ },
+ {
+  "addr": "0xf06b72",
+  "from": "SeMenu_BitShiftMask_End_0x14",
+  "to_has": [
+   "SeMenu_RefreshPartDisplay_Data_2",
+   "SeMenu_TransferPartValues_EndData_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RefreshPartDisplay_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf06b84",
+  "from": "SeMenu_TransferPartValues_EndData_Helper_Skip",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RefreshPartDisplay_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf06b87",
+  "from": "SeMenu_TransferPartValues_EndData_Helper_Skip2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RefreshPartDisplay_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf06b92",
+  "from": "SeMenu_TransferPartValues_EndData_Helper_Skip3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RefreshPartDisplay_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf06b95",
+  "from": "SeMenu_TransferPartValues_EndData_Helper_Return",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RefreshPartDisplay_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf06b96",
+  "from": "SeMenu_TransferPartValues_EndData_Helper_Helper",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RefreshPartDisplay_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf06c48",
+  "from": "SeMenu_TransferPartValues_EndData_Helper_Helper2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_RefreshPartDisplay_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf09527",
+  "from": "SeMenu_ApplySynthParam_Data_Skip2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_ApplySynthParam_Alt"
+  ]
+ },
+ {
+  "addr": "0xf09533",
+  "from": "SeMenu_ApplySynthParam_Data_Join2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_ApplySynthParam_Alt"
+  ]
+ },
+ {
+  "addr": "0xf0953e",
+  "from": "SeMenu_ApplySynthParam_Data_Loop",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_ApplySynthParam_Alt"
+  ]
+ },
+ {
+  "addr": "0xf0955e",
+  "from": "SeMenu_ApplySynthParam_Data_Skip3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_ApplySynthParam_Alt"
+  ]
+ },
+ {
+  "addr": "0xf09567",
+  "from": "SeMenu_ApplySynthParam_Data_0x53",
+  "to_has": [
+   "SeMenu_CopyWriteUpdate_Helper12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_ApplySynthParam_Alt"
+  ]
+ },
+ {
+  "addr": "0xf0957e",
+  "from": "SeMenu_ApplySynthParam_Data_Skip4",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_ApplySynthParam_Alt"
+  ]
+ },
+ {
+  "addr": "0xf09764",
+  "from": "SeMenu_HandleMenuChange_Data_0x5",
+  "to_has": [
+   "SeMenu_CopyWriteUpdate_Helper15"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_HandleMenuChange_Overflow"
+  ]
+ },
+ {
+  "addr": "0xf0b048",
+  "from": "UpdSeSel_DetailedUpdate_Join7",
+  "to_has": [
+   "UpdSeSel_DetailedUpdate_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "UpdSeSel_DetailedUpdate_SetDisplayState"
+  ]
+ },
+ {
+  "addr": "0xf0b072",
+  "from": "UpdSeSel_DetailedUpdate_Join8",
+  "to_has": [
+   "UpdSeSel_DetailedUpdate_Join5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "UpdSeSel_DetailedUpdate_SetDisplayState"
+  ]
+ },
+ {
+  "addr": "0xf0b578",
+  "from": "SeMenu_AltUpdate_Loop",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b593",
+  "from": "SeMenu_AltUpdate_Loop2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b5ff",
+  "from": "SeMenu_AltUpdate_Loop3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b629",
+  "from": "SeMenu_AltUpdate_Epilogue",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b64d",
+  "from": "SeMenu_AltUpdate_Loop5",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b66b",
+  "from": "SeMenu_AltUpdate_Loop6",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b66e",
+  "from": "SeMenu_AltUpdate_Loop7",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b6d9",
+  "from": "SeMenu_AltUpdate_Loop8",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b708",
+  "from": "SeMenu_AltUpdate_Epilogue2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b72c",
+  "from": "SeMenu_AltUpdate_Loop9",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b74a",
+  "from": "SeMenu_AltUpdate_Loop10",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b74d",
+  "from": "SeMenu_AltUpdate_Loop11",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b7b8",
+  "from": "SeMenu_AltUpdate_Loop4",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0b7e7",
+  "from": "SeMenu_AltUpdate_Epilogue3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_AltUpdate_Step3Plus"
+  ]
+ },
+ {
+  "addr": "0xf0ed47",
+  "from": "SeMenu_NameEditor_End_Code_Return",
+  "to_has": [
+   "SeMenu_NameEditor_End_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeGfx_BoundOp06"
+  ]
+ },
+ {
+  "addr": "0xf0f607",
+  "from": "SeMenu_WaveformSelect_Data_Return3",
+  "to_has": [
+   "SeMenu_WaveformSelect_Data_Return2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_WaveformSelect_Apply"
+  ]
+ },
+ {
+  "addr": "0xf0f7a5",
+  "from": "SeMenu_PresetManager_Data_0x60",
+  "to_has": [
+   "SeMenu_PresetBrowser_Init_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_PresetManager_SaveApply"
+  ]
+ },
+ {
+  "addr": "0xf0f7c4",
+  "from": "SeMenu_PresetManager_Data_Skip2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_PresetManager_SaveApply"
+  ]
+ },
+ {
+  "addr": "0xf0fa7f",
+  "from": "SeMenu_PresetBrowser_Data_Loop",
+  "to_has": [
+   "SeMenu_PresetBrowser_Data_Code_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_PresetBrowser_Select"
+  ]
+ },
+ {
+  "addr": "0xf0fb3d",
+  "from": "SeMenu_PresetBrowser_Data_Sub",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_PresetBrowser_Select"
+  ]
+ },
+ {
+  "addr": "0xf0fb42",
+  "from": "SeMenu_PresetBrowser_Data_Join",
+  "to_has": [
+   "SeMenu_PresetBrowser_Data_Code_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_PresetBrowser_Select"
+  ]
+ },
+ {
+  "addr": "0xf12084",
+  "from": "SeBitmap_EnvCurve5_0x10B6",
+  "to_has": [
+   "SeMenu_Utility_CopyBlock_Data"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data_7"
+  ]
+ },
+ {
+  "addr": "0xf126fb",
+  "from": "SeBitmap_EnvCurve5_0x172D",
+  "to_has": [
+   "SeMenu_Utility_CopyBlock_Data_2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeMenu_Utility_CopyBlock_Data_2"
+  ]
+ },
+ {
+  "addr": "0xf16fe9",
+  "from": "Util_FrameSetup10_Skip",
+  "to_has": [
+   "PartGrid_OperationsBlock_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PartGrid_OperationsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17542",
+  "from": "Flash_StoreBaseAndInitAccPatch_Sub",
+  "to_has": [
+   "Flash_InitBytecodeBlock_Helper3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17553",
+  "from": "Flash_StoreBaseAndInitAccPatch_Sub_Loop",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf1758c",
+  "from": "Flash_StoreBaseAndInitAccPatch_Skip5",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17595",
+  "from": "Flash_StoreBaseAndInitAccPatch_Sub_Skip",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17598",
+  "from": "Flash_StoreBaseAndInitAccPatch_Loop4",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17cdb",
+  "from": "Flash_StoreBaseAndInitAccPatch_Helper",
+  "to_has": [
+   "Flash_InitBytecodeBlock_Helper9_Helper_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17ce7",
+  "from": "Flash_StoreBaseAndInitAccPatch_Skip18",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17cf3",
+  "from": "Flash_StoreBaseAndInitAccPatch_Skip19",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17cff",
+  "from": "Flash_StoreBaseAndInitAccPatch_Skip20",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17d0b",
+  "from": "Flash_StoreBaseAndInitAccPatch_Skip21",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17d0f",
+  "from": "Flash_StoreBaseAndInitAccPatch_Return",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17f19",
+  "from": "Flash_StoreBaseAndInitAccPatch_Join5",
+  "to_has": [
+   "Flash_ExtendedOpsBlock_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17f72",
+  "from": "Flash_InitBytecodeBlock_Helper7_Loop2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17f85",
+  "from": "Flash_InitBytecodeBlock_Helper7_Skip2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17f87",
+  "from": "Flash_InitBytecodeBlock_Helper7_Skip3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17f92",
+  "from": "Flash_InitBytecodeBlock_Helper7_Skip4",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17f94",
+  "from": "Flash_InitBytecodeBlock_Helper7_Loop3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17fa7",
+  "from": "Flash_InitBytecodeBlock_Helper7_Skip5",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17fa9",
+  "from": "Flash_InitBytecodeBlock_Helper7_Skip6",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf17fb1",
+  "from": "Flash_InitBytecodeBlock_Helper7_Return",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf181ca",
+  "from": "Flash_InitBytecodeBlock_Helper4_Helper",
+  "to_has": [
+   "Flash_InitBytecodeBlock_Helper9_Helper_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SlotTable_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf181f2",
+  "from": "Flash_InitBytecodeBlock_Helper6_Helper",
+  "to_has": [
+   "Flash_InitBytecodeBlock_Helper11_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SlotTable_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf1826c",
+  "from": "Flash_SlotUpdateOpsBlock_Helper2",
+  "to_has": [
+   "Flash_InitBytecodeBlock_Helper_Helper_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SlotTable_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf1828d",
+  "from": "Flash_InitBytecodeBlock_Helper4_Helper2",
+  "to_has": [
+   "Flash_InitBytecodeBlock_Helper9_Helper_Helper3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SlotTable_ExtendedOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf187e5",
+  "from": "Flash_WriteBackSlotTable_Skip5",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_SlotUpdateOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf187e9",
+  "from": "Flash_WriteBackSlotTable_Skip6",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_SlotUpdateOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf187ec",
+  "from": "Flash_InitBytecodeBlock_Helper9_Epilogue",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_SlotUpdateOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf1892c",
+  "from": "Flash_WriteBackSlotTable_Skip7",
+  "to_has": [
+   "Flash_SlotUpdateOpsBlock_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_SlotUpdateOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf18a69",
+  "from": "Flash_WriteBackSlotTable_Skip8",
+  "to_has": [
+   "Flash_SlotUpdateOpsBlock_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_SlotUpdateOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf18a6d",
+  "from": "Flash_WriteBackSlotTable_Join",
+  "to_has": [
+   "Flash_SlotUpdateOpsBlock_Code_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Flash_SlotUpdateOpsBlock"
+  ]
+ },
+ {
+  "addr": "0xf1dbc8",
+  "from": "StylCnvStorBnk_ProcDataBlock_Helper",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "StylCnvStorOkFunc_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf1dda6",
+  "from": "StylCnvStorBnk_ProcDataBlock_Helper2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "StylCnvStorOkFunc_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf1ee84",
+  "from": "MiddleFuncCall_DispatchData_Code_Helper2_Skip2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SetWall_InlineCodeBlock"
+  ]
+ },
+ {
+  "addr": "0xf1eeb5",
+  "from": "SetWall_InlineCodeBlock_Sub",
+  "to_has": [
+   "SetWall_UpdateSlotIndex_Sub"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "NoRef_SetWall_SlotMap20x2"
+  ]
+ },
+ {
+  "addr": "0xf1eefe",
+  "from": "SetWall_InlineCodeBlock_Sub_Skip",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "NoRef_SetWall_SlotMap20x2"
+  ]
+ },
+ {
+  "addr": "0xf1ef02",
+  "from": "SetWall_InlineCodeBlock_Sub_Return",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "NoRef_SetWall_SlotMap20x2"
+  ]
+ },
+ {
+  "addr": "0xf20969",
+  "from": "PartFormat_StartPlayback_Return",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PlayModeStop_InitFlagBlock"
+  ]
+ },
+ {
+  "addr": "0xf2097a",
+  "from": "PartFormat_StartPlayback_Return2",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PlayModeStop_InitFlagBlock"
+  ]
+ },
+ {
+  "addr": "0xf20992",
+  "from": "PartFormat_StartPlayback_Return3",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PlayModeStop_InitFlagBlock"
+  ]
+ },
+ {
+  "addr": "0xf209ff",
+  "from": "PlayMode_SendCommand6C_Return",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PlayModeStop_ClearFlagBlock"
+  ]
+ },
+ {
+  "addr": "0xf34180",
+  "from": "SeqAccomp_Dispatch_Join",
+  "to_has": [
+   "EffectBoxProc_CopyNameAndSetup_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "EffectBox_State1"
+  ]
+ },
+ {
+  "addr": "0xf34f78",
+  "from": "Sqedt_ParamDispatch_Join9",
+  "to_has": [
+   "EffectBoxProc_CopyNameAndSetup_Code_Join17"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SqedtFunc_Case2_CopyParam"
+  ]
+ },
+ {
+  "addr": "0xf34fab",
+  "from": "Sqedt_ParamDispatch_Join10",
+  "to_has": [
+   "EffectBoxProc_CopyNameAndSetup_Code_Join18"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SqedtFunc_CheckMode_CopyParam"
+  ]
+ },
+ {
+  "addr": "0xf3f84d",
+  "from": "SeqPos_DataBlock_Code_Entry",
+  "to_has": [
+   "SeqPos_DataBlock_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_InitEntryForCurrentBank"
+  ]
+ },
+ {
+  "addr": "0xf4752b",
+  "from": "EtmenuTitleFunc_Skip",
+  "to_has": [
+   "MainExe_SongLoadFinish_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MainExe_InlineByteData"
+  ]
+ },
+ {
+  "addr": "0xf4752f",
+  "from": "EtmenuTitleFunc_Join",
+  "to_has": [
+   "MainExe_SongLoadFinish_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MainExe_InlineByteData"
+  ]
+ },
+ {
+  "addr": "0xf4fed9",
+  "from": "SeqByteBlock_PathNormalize_Helper2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff13",
+  "from": "SeqByteBlock_PathNormalize_Helper2_Loop",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff23",
+  "from": "SeqStep_FileSectorPopReturn_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff2a",
+  "from": "SeqStep_FileSectorPopReturn_Loop2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff3f",
+  "from": "SeqStep_FileSectorPopReturn_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff46",
+  "from": "SeqStep_FileSectorPopReturn_Loop3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff5b",
+  "from": "SeqStep_FileSectorPopReturn_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff71",
+  "from": "SeqStep_FileSectorPopReturn_Skip5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ff96",
+  "from": "SeqByteBlock_PathNormalize_Helper2_Skip",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ffb0",
+  "from": "SeqStep_FileSectorPopReturn_Skip6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ffc5",
+  "from": "SeqStep_FileSectorPopReturn_Skip7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ffca",
+  "from": "SeqStep_FileSectorPopReturn_Entry",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4ffe5",
+  "from": "SeqStep_FileSectorPopReturn_Skip8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf4fff0",
+  "from": "SeqStep_FileSectorPopReturn_Entry2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf5000b",
+  "from": "SeqStep_FileSectorPopReturn_0x35E",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf5000e",
+  "from": "SeqStep_FileSectorPopReturn_0x361",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf50011",
+  "from": "SeqStep_FileSectorPopReturn_0x364",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf50018",
+  "from": "SeqStep_FileSectorPopReturn_Loop4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Fat_CountContiguousClusters_ReadFat"
+  ]
+ },
+ {
+  "addr": "0xf50035",
+  "from": "SeqByteBlock_PathNormalize_Helper2_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "NakaData_PerfStyleCode"
+  ]
+ },
+ {
+  "addr": "0xf50053",
+  "from": "SeqStep_FileSectorPopReturn_Join",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "NakaData_PerfStyleCode"
+  ]
+ },
+ {
+  "addr": "0xf50060",
+  "from": "SeqByteBlock_PathNormalize_Helper2_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "NakaData_PerfStyleCode"
+  ]
+ },
+ {
+  "addr": "0xf50062",
+  "from": "SeqStep_FileSectorPopReturn_Epilogue2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "NakaData_PerfStyleCode"
+  ]
+ },
+ {
+  "addr": "0xf5011e",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Helper",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5014a",
+  "from": "SeqByteBlock_PathNormalize_Loop",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50169",
+  "from": "SeqByteBlock_PathNormalize_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip19"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50170",
+  "from": "SeqByteBlock_PathNormalize_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip20"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50180",
+  "from": "SeqByteBlock_PathNormalize_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip21"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50189",
+  "from": "SeqByteBlock_PathNormalize_Skip5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip22"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf501b2",
+  "from": "SeqByteBlock_PathNormalize_Skip34",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip23"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf501c2",
+  "from": "SeqByteBlock_PathNormalize_Join13",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf501e6",
+  "from": "SeqByteBlock_PathNormalize_Loop2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf501f9",
+  "from": "SeqByteBlock_PathNormalize_Skip35",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip24"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50207",
+  "from": "SeqByteBlock_PathNormalize_Loop3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50277",
+  "from": "SeqByteBlock_PathNormalize_Loop13",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5029d",
+  "from": "SeqByteBlock_PathNormalize_Skip6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip25"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf502a7",
+  "from": "SeqByteBlock_PathNormalize_Join14",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf502b4",
+  "from": "SeqByteBlock_PathNormalize_Skip36",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip26"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf502cd",
+  "from": "SeqByteBlock_PathNormalize_Loop14",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf502d9",
+  "from": "SeqByteBlock_PathNormalize_Skip37",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip27"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf502de",
+  "from": "SeqByteBlock_PathNormalize_Skip38",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip28"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf502eb",
+  "from": "SeqByteBlock_PathNormalize_Skip39",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip29"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50317",
+  "from": "SeqByteBlock_PathNormalize_Skip40",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip30"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50341",
+  "from": "SeqByteBlock_PathNormalize_Loop4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5036b",
+  "from": "SeqByteBlock_PathNormalize_Skip41",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip31"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5037e",
+  "from": "SeqByteBlock_PathNormalize_Skip42",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip32"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50398",
+  "from": "SeqByteBlock_PathNormalize_Loop15",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop14"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf503f9",
+  "from": "SeqByteBlock_PathNormalize_Entry",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop15"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50401",
+  "from": "SeqByteBlock_PathNormalize_Entry2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip33"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5040e",
+  "from": "SeqByteBlock_PathNormalize_Skip7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip34"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50426",
+  "from": "SeqByteBlock_PathNormalize_Skip43",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip35"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50437",
+  "from": "SeqByteBlock_PathNormalize_Join15",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50452",
+  "from": "SeqByteBlock_PathNormalize_Skip44",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip36"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50487",
+  "from": "SeqByteBlock_PathNormalize_Skip45",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip37"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5048d",
+  "from": "SeqByteBlock_PathNormalize_Skip46",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip38"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50491",
+  "from": "SeqByteBlock_PathNormalize_Skip47",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip39"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50499",
+  "from": "SeqByteBlock_PathNormalize_Skip48",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip40"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf504ae",
+  "from": "SeqByteBlock_PathNormalize_Skip49",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip41"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf504b8",
+  "from": "SeqByteBlock_PathNormalize_Loop5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop16"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf504d5",
+  "from": "SeqByteBlock_PathNormalize_Skip50",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip42"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf504e6",
+  "from": "SeqByteBlock_PathNormalize_Skip51",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip43"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf504f6",
+  "from": "SeqByteBlock_PathNormalize_Skip52",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip44"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5050b",
+  "from": "SeqByteBlock_PathNormalize_Skip53",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip45"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5050d",
+  "from": "SeqByteBlock_PathNormalize_Epilogue",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50512",
+  "from": "SeqByteBlock_PathNormalize_Helper4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50556",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Loop",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop17"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50579",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip46"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5058c",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip47"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50599",
+  "from": "SeqByteBlock_PathNormalize_Loop6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop18"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf505a9",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip48"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf505ac",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Loop2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop19"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5060d",
+  "from": "SeqByteBlock_PathNormalize_Skip8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip49"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50617",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Join",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50624",
+  "from": "SeqByteBlock_PathNormalize_Skip9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip50"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50644",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip51"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5064a",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip52"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50662",
+  "from": "SeqByteBlock_PathNormalize_Loop7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop20"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50676",
+  "from": "SeqByteBlock_PathNormalize_Loop8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop21"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5069b",
+  "from": "SeqByteBlock_PathNormalize_Loop9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop22"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf506bc",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip53"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf506cf",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip54"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf506e2",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Loop3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Loop23"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50705",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Skip8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Skip55"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50714",
+  "from": "SeqByteBlock_PathNormalize_Helper4_Join2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50732",
+  "from": "SeqByteBlock_PathNormalize_Join2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Join13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf5075d",
+  "from": "SeqByteBlock_PathNormalize_Epilogue2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper_Epilogue5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50762",
+  "from": "SeqStep_FileSectorPopReturn_Helper",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50794",
+  "from": "SeqByteBlock_PathNormalize_Skip10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper2_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf507bd",
+  "from": "SeqByteBlock_PathNormalize_Epilogue3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper2_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf507c1",
+  "from": "SeqByteBlock_PathNormalize_Helper5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Helper3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf507d1",
+  "from": "SeqByteBlock_PathNormalize_Loop10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper2_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf507ed",
+  "from": "SeqByteBlock_PathNormalize_Join3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper2_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50800",
+  "from": "SeqByteBlock_PathNormalize_Skip11",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper2_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50820",
+  "from": "SeqByteBlock_PathNormalize_Helper5_Epilogue",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper2_Epilogue2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50867",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50898",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Loop",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf508c9",
+  "from": "SeqByteBlock_PathNormalize_Skip12",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf508cc",
+  "from": "SeqByteBlock_PathNormalize_Loop11",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Loop2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf508db",
+  "from": "SeqByteBlock_PathNormalize_Skip13",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50957",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50993",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Join",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf509af",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf509d0",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf509f7",
+  "from": "SeqByteBlock_PathNormalize_Join4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50a19",
+  "from": "SeqByteBlock_PathNormalize_Skip14",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50a52",
+  "from": "SeqByteBlock_PathNormalize_Skip15",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50a77",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip14"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50a9e",
+  "from": "SeqByteBlock_PathNormalize_Join5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50ae3",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip15"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50ae9",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip16"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50c63",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip17"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50c7e",
+  "from": "SeqByteBlock_PathNormalize_Epilogue4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FatPath_Next83Component_CheckDotEntry"
+  ]
+ },
+ {
+  "addr": "0xf50cb7",
+  "from": "SeqByteBlock_PathNormalize_Skip16",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50cbd",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50cd9",
+  "from": "SeqByteBlock_PathNormalize_Skip17",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50ce8",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50d00",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip11",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50d30",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip12",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50d43",
+  "from": "SeqByteBlock_PathNormalize_Helper6_Skip13",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50d5a",
+  "from": "SeqByteBlock_PathNormalize_Join6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50d62",
+  "from": "SeqByteBlock_PathNormalize_Skip18",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50d75",
+  "from": "SeqByteBlock_PathNormalize_Epilogue5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50d79",
+  "from": "SeqByteBlock_PathNormalize_Helper7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50dcd",
+  "from": "SeqByteBlock_PathNormalize_Skip19",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50e39",
+  "from": "SeqByteBlock_PathNormalize_Helper7_Skip",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50e50",
+  "from": "SeqByteBlock_PathNormalize_Helper7_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50e6e",
+  "from": "SeqByteBlock_PathNormalize_Helper7_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50e7f",
+  "from": "SeqByteBlock_PathNormalize_Loop12",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50e9b",
+  "from": "SeqByteBlock_PathNormalize_Helper7_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50ec6",
+  "from": "SeqByteBlock_PathNormalize_Helper7_Skip5",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50ecb",
+  "from": "SeqByteBlock_PathNormalize_Helper7_Skip6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50ee2",
+  "from": "SeqByteBlock_PathNormalize_Skip20",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50eeb",
+  "from": "SeqByteBlock_PathNormalize_Helper7_Join",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper4_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50f38",
+  "from": "SeqByteBlock_PathNormalize_Epilogue6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50f3c",
+  "from": "SeqByteBlock_PathNormalize_Helper8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50f7e",
+  "from": "SeqByteBlock_PathNormalize_Skip21",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50f84",
+  "from": "SeqByteBlock_PathNormalize_Epilogue7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50f88",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Helper",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf50f9b",
+  "from": "SeqByteBlock_PathNormalize_Helper8_Skip",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51002",
+  "from": "SeqByteBlock_PathNormalize_Skip22",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf5101c",
+  "from": "SeqByteBlock_PathNormalize_Skip23",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51045",
+  "from": "SeqByteBlock_PathNormalize_Skip24",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51075",
+  "from": "SeqByteBlock_PathNormalize_Helper8_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51078",
+  "from": "SeqByteBlock_PathNormalize_Join7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf510a7",
+  "from": "SeqByteBlock_PathNormalize_Skip25",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf510c2",
+  "from": "SeqByteBlock_PathNormalize_Join8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf510de",
+  "from": "SeqByteBlock_PathNormalize_Helper8_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf510e9",
+  "from": "SeqByteBlock_PathNormalize_Helper8_Join",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper5_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf5110f",
+  "from": "SeqByteBlock_PathNormalize_Epilogue8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51114",
+  "from": "SeqByteBlock_PathNormalize_Helper9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf5113d",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf5115b",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51167",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Join",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51172",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Loop",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf511ab",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf511b5",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Loop2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Loop2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf511d6",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf511e1",
+  "from": "SeqByteBlock_PathNormalize_Skip26",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51225",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Join2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51253",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf5128c",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf512a5",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf512af",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf512b1",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Join3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf512c8",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf512f0",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Join4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf512fb",
+  "from": "SeqByteBlock_PathNormalize_Join9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf5131d",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip11",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51325",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip12",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51335",
+  "from": "SeqByteBlock_PathNormalize_Helper9_Skip13",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper6_Skip13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51338",
+  "from": "SeqByteBlock_PathNormalize_Epilogue9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqByteBlock_ChannelContainer"
+  ]
+ },
+ {
+  "addr": "0xf51368",
+  "from": "SeqByteBlock_PathNormalize_Helper10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51388",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51390",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Loop",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf513db",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf513fa",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf513ff",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51402",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Join",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51421",
+  "from": "SeqByteBlock_PathNormalize_Skip27",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51469",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Join2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf5149b",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip6",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf514d4",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip7",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf514f2",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip8",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf514fc",
+  "from": "SeqByteBlock_PathNormalize_Skip28",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf514fe",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Join3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51505",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Loop2",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Loop2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51530",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip9",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51548",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip20",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip17"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51557",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Join4",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf5155c",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51586",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip11",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf51595",
+  "from": "SeqByteBlock_PathNormalize_Join10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Join5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf515ae",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip12",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf515d0",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip13",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf515d8",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip14",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip14"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf515db",
+  "from": "SeqByteBlock_PathNormalize_Epilogue10",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_InitChannelState"
+  ]
+ },
+ {
+  "addr": "0xf5161a",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip15",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip15"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_ValidateAndDispatch"
+  ]
+ },
+ {
+  "addr": "0xf51626",
+  "from": "SeqByteBlock_PathNormalize_Entry3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Entry"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_ValidateAndDispatch"
+  ]
+ },
+ {
+  "addr": "0xf51635",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip16",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Helper7_Skip16"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_ValidateAndDispatch"
+  ]
+ },
+ {
+  "addr": "0xf51645",
+  "from": "SeqByteBlock_PathNormalize_Epilogue11",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_ValidateAndDispatch"
+  ]
+ },
+ {
+  "addr": "0xf5166a",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip17",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip14"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_TraverseAndProcess"
+  ]
+ },
+ {
+  "addr": "0xf516ce",
+  "from": "SeqByteBlock_PathNormalize_Skip29",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip15"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_TraverseAndProcess"
+  ]
+ },
+ {
+  "addr": "0xf516ea",
+  "from": "SeqByteBlock_PathNormalize_Skip30",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip16"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_TraverseAndProcess"
+  ]
+ },
+ {
+  "addr": "0xf51706",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Loop3",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Loop2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_TraverseAndProcess"
+  ]
+ },
+ {
+  "addr": "0xf51728",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip18",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip17"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_TraverseAndProcess"
+  ]
+ },
+ {
+  "addr": "0xf51737",
+  "from": "SeqByteBlock_PathNormalize_Join11",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Join6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_TraverseAndProcess"
+  ]
+ },
+ {
+  "addr": "0xf517e4",
+  "from": "SeqByteBlock_PathNormalize_Helper10_Skip19",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip18"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_ReadNextFromLoop"
+  ]
+ },
+ {
+  "addr": "0xf51851",
+  "from": "SeqByteBlock_PathNormalize_Skip31",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip19"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_WriteExtendedPatch"
+  ]
+ },
+ {
+  "addr": "0xf51884",
+  "from": "SeqByteBlock_PathNormalize_Join12",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Join7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_WriteExtendedPatch"
+  ]
+ },
+ {
+  "addr": "0xf51888",
+  "from": "SeqByteBlock_PathNormalize_Skip32",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip20"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_WriteExtendedPatch"
+  ]
+ },
+ {
+  "addr": "0xf51897",
+  "from": "SeqByteBlock_PathNormalize_Skip33",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Skip21"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_WriteExtendedPatch"
+  ]
+ },
+ {
+  "addr": "0xf518a1",
+  "from": "SeqByteBlock_PathNormalize_Epilogue12",
+  "to_has": [
+   "SeqByteBlock_StyleBitmapRef_Code_Epilogue8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_WriteExtendedPatch"
+  ]
+ },
+ {
+  "addr": "0xf56649",
+  "from": "AccStyle_ReadParamOffset_Return",
+  "to_has": [
+   "AccStyle_ReadParamOff_Part16_Code_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccStyle_ByteDataBlock"
+  ]
+ },
+ {
+  "addr": "0xf577be",
+  "from": "AccVoice_CheckStyle_Skip",
+  "to_has": [
+   "AccVoice_CheckStyle_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_CorrectionData"
+  ]
+ },
+ {
+  "addr": "0xf5e7d6",
+  "from": "AccTuning_ComplexBytecodeData_Code_Helper3",
+  "to_has": [
+   "AccTuning_ComplexBytecodeData_Helper3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccPedal_DirectionA_Wrap"
+  ]
+ },
+ {
+  "addr": "0xf5fb39",
+  "from": "AccPatch_MultiCallWrapper_Helper",
+  "to_has": [
+   "AccDemo_InitWithFlag_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccPatch_ComplexDataBlock"
+  ]
+ },
+ {
+  "addr": "0xf64005",
+  "from": "AccPat_CalcAccentVelocity_Skip",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "__pad_F63F8F"
+  ]
+ },
+ {
+  "addr": "0xf64bcb",
+  "from": "DrumKitExit_DataPad_0x1",
+  "to_has": [
+   "DrumKit_ValidateBank_Wrap"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DrumKit_ValidateBank_Wrap"
+  ]
+ },
+ {
+  "addr": "0xf64f8c",
+  "from": "RhythmFillIn_Select_Return",
+  "to_has": [
+   "RhythmFillIn_PatternTable_Code_Helper_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "RhythmFillIn_PatternTable"
+  ]
+ },
+ {
+  "addr": "0xf6577b",
+  "from": "DrumVoice_Handler6_Helper",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "DrumVoice_Handler7"
+  ]
+ },
+ {
+  "addr": "0xf65d86",
+  "from": "DrumVoice_Handler7_Code_Helper2_Helper",
+  "to_has": [
+   "DrumVoice_NotifyEE_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TimeSig_DisplayStrings"
+  ]
+ },
+ {
+  "addr": "0xf65d99",
+  "from": "DrumVoice_Handler7_Code_Helper2_Skip3",
+  "to_has": [
+   "DrumVoice_NotifyEE_Skip20"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TimeSig_DisplayStrings"
+  ]
+ },
+ {
+  "addr": "0xf65dac",
+  "from": "DrumVoice_Handler7_Code_Helper2_Skip4",
+  "to_has": [
+   "DrumVoice_NotifyEE_Skip22"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TimeSig_DisplayStrings"
+  ]
+ },
+ {
+  "addr": "0xf65def",
+  "from": "DrumVoice_Handler7_Code_Helper2_Helper2",
+  "to_has": [
+   "DrumVoice_NotifyEE_Helper3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TimeSig_DisplayStrings"
+  ]
+ },
+ {
+  "addr": "0xf65e3d",
+  "from": "DrumVoice_Handler7_Code_Helper2_Helper3",
+  "to_has": [
+   "DrumVoice_NotifyEE_Helper4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TimeSig_DisplayStrings"
+  ]
+ },
+ {
+  "addr": "0xf66492",
+  "from": "Tempo_EditBPM_Skip2",
+  "to_has": [
+   "Tempo_EditBPMClamp_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tempo_EditBPMApply"
+  ]
+ },
+ {
+  "addr": "0xf664ca",
+  "from": "Tempo_EditBPM_Entry",
+  "to_has": [
+   "Tempo_EditBPMClamp_Code_Entry"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tempo_EditBPMApply"
+  ]
+ },
+ {
+  "addr": "0xf664ce",
+  "from": "Tempo_EditBPM_Epilogue",
+  "to_has": [
+   "Tempo_EditBPMClamp_Code_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tempo_EditBPMApply"
+  ]
+ },
+ {
+  "addr": "0xf6650c",
+  "from": "Tempo_EditBPM_Skip6",
+  "to_has": [
+   "Tempo_EditBPMClamp_Code_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tempo_EditBPMApply"
+  ]
+ },
+ {
+  "addr": "0xf66548",
+  "from": "Tempo_EditBPM_Entry2",
+  "to_has": [
+   "Tempo_EditBPMClamp_Code_Entry2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tempo_EditBPMApply"
+  ]
+ },
+ {
+  "addr": "0xf6654c",
+  "from": "Tempo_EditBPM_Epilogue2",
+  "to_has": [
+   "Tempo_EditBPMClamp_Code_Epilogue2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Tempo_EditBPMApply"
+  ]
+ },
+ {
+  "addr": "0xf67757",
+  "from": "AccPatch_ResolveEntryAddr_Helper2",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf6777c",
+  "from": "AccPatch_ResolveEntryAddr_Join",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67795",
+  "from": "AccPatch_ResolveEntryAddr_Skip",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67799",
+  "from": "AccPatch_ResolveEntryAddr_Helper4",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf677b6",
+  "from": "AccPatch_ResolveEntryAddr_Join2",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf677ea",
+  "from": "AccPatch_ResolveEntryAddr_Helper6",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67810",
+  "from": "AccPatch_ResolveEntryAddr_Skip2",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf6783f",
+  "from": "AccPatch_ResolveEntryAddr_Helper7",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf6784a",
+  "from": "AccPatch_ResolveEntryAddr_Skip3",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67853",
+  "from": "AccPatch_ResolveEntryAddr_Skip4",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf6785c",
+  "from": "AccPatch_ResolveEntryAddr_Skip5",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67865",
+  "from": "AccPatch_ResolveEntryAddr_Skip6",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67873",
+  "from": "AccPatch_ResolveEntryAddr_Skip7",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf6791f",
+  "from": "AccPatch_ResolveEntryAddr_Join4",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67a1f",
+  "from": "AccPatch_ResolveEntryAddr_Join5",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Join5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67a91",
+  "from": "AccPatch_ResolveEntryAddr_Join6",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Join6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c07",
+  "from": "AccPatch_ResolveEntryAddr_Skip16",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip16"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c09",
+  "from": "AccPatch_ResolveEntryAddr_Skip17",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip17"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c1b",
+  "from": "AccPatch_ResolveEntryAddr_Join8",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Join8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c31",
+  "from": "AccPatch_ResolveEntryAddr_Helper17_Entry",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper17_Entry"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c3f",
+  "from": "AccPatch_ResolveEntryAddr_Helper17_Skip",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper17_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c47",
+  "from": "AccPatch_ResolveEntryAddr_Skip18",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip18"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c4b",
+  "from": "AccPatch_ResolveEntryAddr_Join9",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Join9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c4d",
+  "from": "AccPatch_ResolveEntryAddr_Skip19",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Skip19"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67c62",
+  "from": "AccPatch_ResolveEntryAddr_Helper18_Join",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper18_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf67cc7",
+  "from": "AccPatch_ResolveEntryAddr_Helper18_Helper",
+  "to_has": [
+   "AccVoice_SetupSlots_DataBlock_Helper18_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccVoice_SetupSlots_DataBlock"
+  ]
+ },
+ {
+  "addr": "0xf68e5f",
+  "from": "S2cTtlFunc_Skip2",
+  "to_has": [
+   "S2cTtl_Dispatch_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "S2cTtl_Dispatch"
+  ]
+ },
+ {
+  "addr": "0xf68e70",
+  "from": "S2cTtlFunc_Skip3",
+  "to_has": [
+   "S2cTtl_Dispatch_Code_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "S2cTtl_Dispatch"
+  ]
+ },
+ {
+  "addr": "0xf68e7f",
+  "from": "S2cTtlFunc_Join",
+  "to_has": [
+   "S2cTtl_Dispatch_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "S2cTtl_Dispatch"
+  ]
+ },
+ {
+  "addr": "0xf695c7",
+  "from": "CstmCpTtlFunc_Skip16",
+  "to_has": [
+   "CstmCpTtl_Dispatch2_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "CstmCp_StyleDataBlock"
+  ]
+ },
+ {
+  "addr": "0xf69ae9",
+  "from": "MainCmpSetFunc_Skip",
+  "to_has": [
+   "MainCmpSetFunc_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MainCmpSet_Dispatch"
+  ]
+ },
+ {
+  "addr": "0xf69b43",
+  "from": "MainCmpSetFunc_Join",
+  "to_has": [
+   "MainCmpSetFunc_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MainCmpSet_Dispatch"
+  ]
+ },
+ {
+  "addr": "0xf6a0ac",
+  "from": "SndArgTtlFunc_Skip",
+  "to_has": [
+   "SndArgTtl_Dispatch_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndArgTtl_Dispatch"
+  ]
+ },
+ {
+  "addr": "0xf6e554",
+  "from": "AccompSeq_PortaFadeOut_Helper",
+  "to_has": [
+   "AccompSeq_ManualMidi_ClearFlags_Code_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccompSeq_LargeCodeBlock1"
+  ]
+ },
+ {
+  "addr": "0xf6e55f",
+  "from": "AccompSeq_PortaFadeOut_Return",
+  "to_has": [
+   "AccompSeq_ManualMidi_ClearFlags_Code_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccompSeq_LargeCodeBlock1"
+  ]
+ },
+ {
+  "addr": "0xf6e5e8",
+  "from": "AccompSeq_PortaFadeOut_Helper_Skip",
+  "to_has": [
+   "AccompSeq_ManualMidi_ClearFlags_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccompSeq_LargeCodeBlock1"
+  ]
+ },
+ {
+  "addr": "0xf6e5ec",
+  "from": "AccompSeq_PortaFadeOut_Join",
+  "to_has": [
+   "AccompSeq_ManualMidi_ClearFlags_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "AccompSeq_LargeCodeBlock1"
+  ]
+ },
+ {
+  "addr": "0xf76a4b",
+  "from": "ParaLoadOpt_AudioFlagCheck_Join",
+  "to_has": [
+   "ParaLoadOpt_DispatchTable_A_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_DispatchTable_A"
+  ]
+ },
+ {
+  "addr": "0xf76bf9",
+  "from": "ParaLoadOpt_AudioFlagCheck_B_Join",
+  "to_has": [
+   "ParaLoadOpt_DispatchTable_B_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_DispatchTable_B"
+  ]
+ },
+ {
+  "addr": "0xf7703c",
+  "from": "ParaLoadOpt_PostDualEvent_Skip",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf7705b",
+  "from": "ParaLoadOpt_PostDualEvent_Skip2",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf7707a",
+  "from": "ParaLoadOpt_PostDualEvent_Skip3",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf770fb",
+  "from": "ParaLoadOpt_PostDualEvent_Skip4",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf77121",
+  "from": "ParaLoadOpt_PostDualEvent_Skip8",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf77147",
+  "from": "ParaLoadOpt_PostDualEvent_Skip9",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf7716b",
+  "from": "ParaLoadOpt_PostDualEvent_Join",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf771b5",
+  "from": "ParaLoadOpt_PostDualEvent_Skip5",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf771e8",
+  "from": "ParaLoadOpt_PostDualEvent_Skip6",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf7721b",
+  "from": "ParaLoadOpt_PostDualEvent_Skip7",
+  "to_has": [
+   "ParaLoadOpt_GridDispatch_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ParaLoadOpt_GridDispatch"
+  ]
+ },
+ {
+  "addr": "0xf78b37",
+  "from": "PmemOutLGridCheck_JumpTable_Entry",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutLGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf79475",
+  "from": "TtMdCtlMsg_EventDispatch_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf7947f",
+  "from": "TtMdCtlMsg_EventDispatch_Skip9",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf794df",
+  "from": "TtMdCtlMsg_EventDispatch_Skip10",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf7954d",
+  "from": "TtMdCtlMsg_EventDispatch_Join",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf79554",
+  "from": "TtMdCtlMsg_EventDispatch_Skip_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf7955b",
+  "from": "TtMdCtlMsg_EventDispatch_Join2",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf795d3",
+  "from": "TtMdCtlMsg_EventDispatch_Join2_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf795e9",
+  "from": "TtMdCtlMsg_EventDispatch_Join3",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf796b7",
+  "from": "TtMdCtlMsg_EventDispatch_Join3_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf796cd",
+  "from": "TtMdCtlMsg_EventDispatch_Join4",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf796de",
+  "from": "TtMdCtlMsg_EventDispatch_Skip2",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf79738",
+  "from": "TtMdCtlMsg_EventDispatch_Skip2_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf7974e",
+  "from": "TtMdCtlMsg_EventDispatch_Join5",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf7981c",
+  "from": "TtMdCtlMsg_EventDispatch_Join5_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip13"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf7982f",
+  "from": "TtMdCtlMsg_EventDispatch_Join6",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf79840",
+  "from": "TtMdCtlMsg_EventDispatch_Skip2_Skip2",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip14"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf7989b",
+  "from": "TtMdCtlMsg_EventDispatch_Join6_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip15"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf798ad",
+  "from": "TtMdCtlMsg_EventDispatch_Join7",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf798be",
+  "from": "TtMdCtlMsg_EventDispatch_Skip3",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip16"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf79901",
+  "from": "TtMdCtlMsg_EventDispatch_Skip4",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip17"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf79934",
+  "from": "TtMdCtlMsg_EventDispatch_Skip4_Skip",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Skip18"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf79946",
+  "from": "TtMdCtlMsg_EventDispatch_Join8",
+  "to_has": [
+   "PmemOutLGridCheck_JumpTable_Code_Join8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmemOutRGridCheck_Evt1C0001D"
+  ]
+ },
+ {
+  "addr": "0xf7a095",
+  "from": "CtlMsgGridCheck_Entry",
+  "to_has": [
+   "CtlMsgGridCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "CtlMsgGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xf824c1",
+  "from": "AudioCtrl_DataBlock_0x1BDB",
+  "to_has": [
+   "AudioCtrl_DataBlock_Return2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PsMixer_CtlTypeProc8"
+  ]
+ },
+ {
+  "addr": "0xf824c2",
+  "from": "AudioCtrl_DataBlock_0x1BDC",
+  "to_has": [
+   "PostTitle_Function_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PsMixer_CtlTypeProc8"
+  ]
+ },
+ {
+  "addr": "0xf824c3",
+  "from": "AudioCtrl_DataBlock_0x1BDD",
+  "to_has": [
+   "AudioCtrl_DataBlock_Return3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PsMixer_CtlTypeProc8"
+  ]
+ },
+ {
+  "addr": "0xf96b7c",
+  "from": "FDC_ResultPhase_Read_Helper",
+  "to_has": [
+   "FDC_ResultPhase_Read_Code_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FDC_WaitReady"
+  ]
+ },
+ {
+  "addr": "0xf971d0",
+  "from": "FDC_HardwareSetup_Helper",
+  "to_has": [
+   "FDC_WaitReady_Helper3_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FDC_ResultPhase_Read"
+  ]
+ },
+ {
+  "addr": "0xf971e1",
+  "from": "FDC_HardwareSetup_Helper2",
+  "to_has": [
+   "FDC_WaitReady_Helper3_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FDC_ResultPhase_Read"
+  ]
+ },
+ {
+  "addr": "0xf9928f",
+  "from": "KeyScan_Disable_Join",
+  "to_has": [
+   "MainBitControl_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MainPmanCtrl_DispatchTable"
+  ]
+ },
+ {
+  "addr": "0xfa2d34",
+  "from": "IvInterruptProc_Skip",
+  "to_has": [
+   "AcPmemName_Confirm_Code_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ScrollDelta_ComputeDirection"
+  ]
+ },
+ {
+  "addr": "0xfa2d39",
+  "from": "IvInterruptProc_Skip2",
+  "to_has": [
+   "AcPmemName_Confirm_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ScrollDelta_ComputeDirection"
+  ]
+ },
+ {
+  "addr": "0xfa2d3f",
+  "from": "IvInterruptProc_Skip3",
+  "to_has": [
+   "AcPmemName_Confirm_Code_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ScrollDelta_ComputeDirection"
+  ]
+ },
+ {
+  "addr": "0xfa2d41",
+  "from": "IvInterruptProc_Return",
+  "to_has": [
+   "AcPmemName_Confirm_Code_Return"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ScrollDelta_ComputeDirection"
+  ]
+ },
+ {
+  "addr": "0xfb0aa4",
+  "from": "ColorBlit2_LargeCodeBlock_Entry2",
+  "to_has": [
+   "DrawDottedLineWithMode_Impl_Loop3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DrawDottedLineWithMode_Impl"
+  ]
+ },
+ {
+  "addr": "0xfb2556",
+  "from": "ColorBlit_WithPaletteSave_Skip",
+  "to_has": [
+   "ColorBlit_Variant_ByteData_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ColorBlit_Variant_ByteData"
+  ]
+ },
+ {
+  "addr": "0xfb25c1",
+  "from": "ColorBlit_WithPaletteSave_Skip2",
+  "to_has": [
+   "ColorBlit_Variant_ByteData_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "ColorBlit_Variant_ByteData"
+  ]
+ },
+ {
+  "addr": "0xfb62c3",
+  "from": "BitMapOut_UpdateWidget_Done_0x98",
+  "to_has": [
+   "FileIO_ByteBlock_DemoProc1_Helper3",
+   "LoadRegion1_OpenSuccess_Data"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "BitMapOut_UpdateWidget_Finalize"
+  ]
+ },
+ {
+  "addr": "0xfb6c03",
+  "from": "EffectMode_ByteData_Block4_Code_Skip",
+  "to_has": [
+   "EffectMode_ByteData_Block4_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "EffectMode_CopyVoiceParams"
+  ]
+ },
+ {
+  "addr": "0xfba451",
+  "from": "BitmapFinpic_ByteData_Skip",
+  "to_has": [
+   "MstStyle2GridCheck_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MstGrid2_ScrollJumpTable"
+  ]
+ },
+ {
+  "addr": "0xfba47f",
+  "from": "BitmapFinpic_ByteData_Join",
+  "to_has": [
+   "MstStyle2GridCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MstGrid2_ScrollJumpTable"
+  ]
+ },
+ {
+  "addr": "0xfbab51",
+  "from": "TchSensGrid_EventDispatch_Skip_Skip3",
+  "to_has": [
+   "TchSensGridCheck_Entry4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbab67",
+  "from": "TchSensGrid_EventDispatch_Skip_Skip4",
+  "to_has": [
+   "TchSensGridCheck_Entry5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbab7d",
+  "from": "TchSensGrid_EventDispatch_Skip_Skip5",
+  "to_has": [
+   "TchSensGridCheck_Entry6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbab93",
+  "from": "TchSensGrid_EventDispatch_Join",
+  "to_has": [
+   "TchSensGridCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbabda",
+  "from": "TchSensGrid_EventDispatch_Skip2",
+  "to_has": [
+   "TchSensGridCheck_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbac06",
+  "from": "TchSensGrid_EventDispatch_Skip2_Skip",
+  "to_has": [
+   "TchSensGridCheck_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbac1f",
+  "from": "TchSensGrid_EventDispatch_Skip2_Skip2",
+  "to_has": [
+   "TchSensGridCheck_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbac60",
+  "from": "TchSensGrid_EventDispatch_Skip3",
+  "to_has": [
+   "TchSensGridCheck_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "TchSensGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbb2e9",
+  "from": "FSWAssGrid_EventDispatch_Skip10",
+  "to_has": [
+   "FSWAssGridCheck_Entry7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbb332",
+  "from": "FSWAssGrid_EventDispatch_Skip11",
+  "to_has": [
+   "FSWAssGridCheck_Entry8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbb37b",
+  "from": "FSWAssGrid_EventDispatch_Skip12",
+  "to_has": [
+   "FSWAssGridCheck_Entry9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbb3c4",
+  "from": "FSWAssGrid_EventDispatch_Skip13",
+  "to_has": [
+   "FSWAssGridCheck_Entry10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbb40d",
+  "from": "FSWAssGrid_EventDispatch_Skip14",
+  "to_has": [
+   "FSWAssGridCheck_Entry11"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbb455",
+  "from": "FSWAssGrid_EventDispatch_Skip15",
+  "to_has": [
+   "FSWAssGridCheck_Entry12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbb4a0",
+  "from": "FSWAssGrid_EventDispatch_Join",
+  "to_has": [
+   "FSWAssGridCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbb503",
+  "from": "FSWAssGrid_EventDispatch_Entry",
+  "to_has": [
+   "FSWAssGridCheck_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbb55b",
+  "from": "FSWAssGrid_EventDispatch_Entry_Skip",
+  "to_has": [
+   "FSWAssGridCheck_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbb5ab",
+  "from": "FSWAssGrid_EventDispatch_Skip",
+  "to_has": [
+   "FSWAssGridCheck_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbb5fb",
+  "from": "FSWAssGrid_EventDispatch_Skip2",
+  "to_has": [
+   "FSWAssGridCheck_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbb64d",
+  "from": "FSWAssGrid_EventDispatch_Skip3",
+  "to_has": [
+   "FSWAssGridCheck_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbb69c",
+  "from": "FSWAssGrid_EventDispatch_Skip3_Skip",
+  "to_has": [
+   "FSWAssGridCheck_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "FSWAssGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc1d2",
+  "from": "FSWAss_RefreshAllVoices_Skip",
+  "to_has": [
+   "PmExpFilterGridCheck_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilter_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbc24c",
+  "from": "FSWAss_RefreshAllVoices_Skip2",
+  "to_has": [
+   "PmExpFilterGridCheck_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbc266",
+  "from": "FSWAss_RefreshAllVoices_Join",
+  "to_has": [
+   "PmExpFilterGridCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbc284",
+  "from": "FSWAss_RefreshAllVoices_Loop",
+  "to_has": [
+   "PmExpFilterGridCheck_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc2b8",
+  "from": "FSWAss_RefreshAllVoices_Skip9",
+  "to_has": [
+   "PmExpFilterGridCheck_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc2d3",
+  "from": "FSWAss_RefreshAllVoices_Skip10",
+  "to_has": [
+   "PmExpFilterGridCheck_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc2dd",
+  "from": "FSWAss_RefreshAllVoices_Skip11",
+  "to_has": [
+   "PmExpFilterGridCheck_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc2e6",
+  "from": "FSWAss_RefreshAllVoices_Loop2",
+  "to_has": [
+   "PmExpFilterGridCheck_Loop2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc31a",
+  "from": "FSWAss_RefreshAllVoices_Skip12",
+  "to_has": [
+   "PmExpFilterGridCheck_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc335",
+  "from": "FSWAss_RefreshAllVoices_Skip13",
+  "to_has": [
+   "PmExpFilterGridCheck_Skip7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "PmExpFilterGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbc786",
+  "from": "FSWAss_RefreshAllVoices_Skip3",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSet_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbc7b4",
+  "from": "FSWAss_RefreshAllVoices_Entry",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSet_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbc7df",
+  "from": "FSWAss_RefreshAllVoices_Skip14",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSet_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbc80d",
+  "from": "FSWAss_RefreshAllVoices_Skip15",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSet_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbc83b",
+  "from": "FSWAss_RefreshAllVoices_Skip16",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSet_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbc8c1",
+  "from": "FSWAss_RefreshAllVoices_Skip17",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbc8f2",
+  "from": "FSWAss_RefreshAllVoices_Skip18",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbc920",
+  "from": "FSWAss_RefreshAllVoices_Skip19",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry8"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbc950",
+  "from": "FSWAss_RefreshAllVoices_Skip20",
+  "to_has": [
+   "DispTimeSetGridCheck_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbc988",
+  "from": "FSWAss_RefreshAllVoices_Skip21",
+  "to_has": [
+   "DispTimeSetGridCheck_Entry9"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbc9b1",
+  "from": "FSWAss_RefreshAllVoices_Join2",
+  "to_has": [
+   "DispTimeSetGridCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C00018"
+  ]
+ },
+ {
+  "addr": "0xfbca04",
+  "from": "FSWAss_RefreshAllVoices_Skip4",
+  "to_has": [
+   "DispTimeSetGridCheck_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbca4d",
+  "from": "FSWAss_RefreshAllVoices_Skip5",
+  "to_has": [
+   "DispTimeSetGridCheck_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbca9c",
+  "from": "FSWAss_RefreshAllVoices_Skip6",
+  "to_has": [
+   "DispTimeSetGridCheck_Skip4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbcae3",
+  "from": "FSWAss_RefreshAllVoices_Skip7",
+  "to_has": [
+   "DispTimeSetGridCheck_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbcb2e",
+  "from": "FSWAss_RefreshAllVoices_Skip8",
+  "to_has": [
+   "DispTimeSetGridCheck_Skip6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DispTimeSetGridCheck_Evt1C0001C"
+  ]
+ },
+ {
+  "addr": "0xfbd34b",
+  "from": "NormScreenProc_Skip",
+  "to_has": [
+   "MssNameFunc_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MssName_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbd359",
+  "from": "NormScreenProc_Skip2",
+  "to_has": [
+   "MssNameFunc_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MssName_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbd399",
+  "from": "NormScreenProc_Skip3",
+  "to_has": [
+   "MssNameFunc_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MssName_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbd3be",
+  "from": "NormScreenProc_Join",
+  "to_has": [
+   "MssNameFunc_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MssName_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbd3cc",
+  "from": "NormScreenProc_Join2",
+  "to_has": [
+   "MssNameFunc_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MssName_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfbd3e8",
+  "from": "NormScreenProc_Epilogue",
+  "to_has": [
+   "MssNameFunc_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MssName_ReturnZero"
+  ]
+ },
+ {
+  "addr": "0xfc2587",
+  "from": "ToneGen_WriteParamByIndex_Skip",
+  "to_has": [
+   "WallMenuEditCheck_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallMenuEdit_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfc258e",
+  "from": "ToneGen_WriteParamByIndex_Skip2",
+  "to_has": [
+   "WallMenuEditCheck_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallMenuEdit_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfc2593",
+  "from": "ToneGen_WriteParamByIndex_Join2",
+  "to_has": [
+   "WallMenuEditCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallMenuEdit_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfc25b0",
+  "from": "ToneGen_WriteParamByIndex_Epilogue",
+  "to_has": [
+   "WallMenuEditCheck_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallOthEditCheck_RetZero"
+  ]
+ },
+ {
+  "addr": "0xfc2602",
+  "from": "ToneGen_WriteParamByIndex_Skip3",
+  "to_has": [
+   "WallOthEditCheck_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallOthEdit_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfc2609",
+  "from": "ToneGen_WriteParamByIndex_Skip4",
+  "to_has": [
+   "WallOthEditCheck_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallOthEdit_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfc260e",
+  "from": "ToneGen_WriteParamByIndex_Join3",
+  "to_has": [
+   "WallOthEditCheck_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallOthEdit_EventDispatch"
+  ]
+ },
+ {
+  "addr": "0xfc262b",
+  "from": "ToneGen_WriteParamByIndex_Epilogue2",
+  "to_has": [
+   "WallOthEditCheck_Epilogue"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "WallOthCheckLoop_RetZero"
+  ]
+ },
+ {
+  "addr": "0xfca409",
+  "from": "MidiStream_ExtendedDispatch_Helper2",
+  "to_has": [
+   "MidiStream_CmdPedalNotify_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "RegBitManip_Handler_4"
+  ]
+ },
+ {
+  "addr": "0xfca41e",
+  "from": "MidiStream_ExtendedDispatch_Helper3",
+  "to_has": [
+   "MidiStream_CmdPedalNotify_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "RegBitManip_Handler_4"
+  ]
+ },
+ {
+  "addr": "0xfcb46f",
+  "from": "VoiceParam_ModeDispatch_Table",
+  "old": "VoiceParam_DispatchByMode_PtrTable",
+  "result": "both-named-differently"
+ },
+ {
+  "addr": "0xfcfa04",
+  "from": "MidiSerial_StatusTable",
+  "to_has": [],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfd0876",
+  "from": "PanelEvt_Dispatch6_TableAndHandlers",
+  "to_has": [],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfd09aa",
+  "from": "PanelEvt_Dispatch11_TableAndHandlers",
+  "to_has": [],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfd0e67",
+  "from": "MidiCC_ChannelMappingData",
+  "to_has": [],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfd1a8e",
+  "from": "PanelEvt_Handler_0_NoteOnParam_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "MidiCC_FunctionToCCNumber"
+  ]
+ },
+ {
+  "addr": "0xfd1b0e",
+  "from": "PanelEvt_Handler_3_ValueCheck_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1b8e",
+  "from": "PanelEvt_Handler_5_ValueCheck_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1c8e",
+  "from": "PanelEvt_Handler_7_ValueCheck_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1d0f",
+  "from": "PanelEvt_Handler_8_ValueCheck_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1d8f",
+  "from": "PanelEvt_Handler_9_SingleByteParam_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1e0f",
+  "from": "PanelEvt_Handler_10_TwoByteParam_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1e8f",
+  "from": "PanelEvt_Handler_11_SingleByteParam_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1f0f",
+  "from": "MidiCC_ChannelDispatch_Ctrl40_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd1f8f",
+  "from": "MidiCC_ChannelDispatch_Ctrl41_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd200f",
+  "from": "MidiCC_ChannelDispatch_CtrlFlags_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd208f",
+  "from": "MidiCC_ChannelDispatch_Ctrl1_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd210f",
+  "from": "MidiCC_ChannelDispatch_Ctrl3_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd218f",
+  "from": "MidiCC_ChannelDispatch_CtrlFlags2_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd220f",
+  "from": "MidiCC_ChannelDispatch_Ctrl0_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd228f",
+  "from": "MidiCC_ChannelDispatch_Func09_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd230f",
+  "from": "MidiCC_ChannelDispatch_Func08_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd238f",
+  "from": "MidiCC_ChannelDispatch_Func12_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd240f",
+  "from": "MidiCC_ChannelDispatch_Func13_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd248f",
+  "from": "MidiCC_ChannelDispatch_Func14_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd250f",
+  "from": "MidiCC_ChannelDispatch_Func15_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "PanelEvt_Handler_4_DualValueCheck"
+  ]
+ },
+ {
+  "addr": "0xfd6d69",
+  "from": "SeqVoice_DispatchProcess_Data_0xDC",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6dae",
+  "from": "SeqVoice_DispatchProcess_Data_Skip3",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6dbf",
+  "from": "SeqVoice_DispatchProcess_Data_Skip4",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6dcb",
+  "from": "SeqVoice_DispatchProcess_Data_0x13E",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6dec",
+  "from": "SeqVoice_DispatchProcess_Data_0x15F",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper2_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6e05",
+  "from": "SeqVoice_DispatchProcess_Data_0x178",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper3_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6e1e",
+  "from": "SeqVoice_DispatchProcess_Data_0x191",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6e38",
+  "from": "SeqVoice_DispatchProcess_Data_0x1AB",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper5_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6e50",
+  "from": "SeqVoice_DispatchProcess_Data_0x1C3",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper6_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6e70",
+  "from": "SeqVoice_DispatchProcess_Data_0x1E3",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6ea0",
+  "from": "SeqVoice_DispatchProcess_Data_0x213",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper8_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6eb7",
+  "from": "SeqVoice_DispatchProcess_Data_0x22A",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper9_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6ece",
+  "from": "SeqVoice_DispatchProcess_Data_0x241",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper10_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6f17",
+  "from": "SeqVoice_DispatchProcess_Data_0x28A",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6f50",
+  "from": "SeqVoice_DispatchProcess_Data_0x2C3",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper11_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6f67",
+  "from": "SeqVoice_DispatchProcess_Data_0x2DA",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper12_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6f7f",
+  "from": "SeqVoice_DispatchProcess_Data_0x2F2",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper13_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6fb2",
+  "from": "SeqVoice_DispatchProcess_Data_0x325",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper6"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6fe1",
+  "from": "SeqVoice_DispatchProcess_Data_0x354",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper15_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd6ffa",
+  "from": "SeqVoice_DispatchProcess_Data_0x36D",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper16_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd7013",
+  "from": "SeqVoice_DispatchProcess_Data_0x386",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper17_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_StoreEntryDone"
+  ]
+ },
+ {
+  "addr": "0xfd72ce",
+  "from": "Part_ProcessEntry_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "Part_LookupReturnZero"
+  ]
+ },
+ {
+  "addr": "0xfd72e7",
+  "from": "Part_ProcessEntry_Data_0x19",
+  "to_has": [
+   "SndParam_LookupAndDispatch_Code_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "Part_LookupReturnZero"
+  ]
+ },
+ {
+  "addr": "0xfd7673",
+  "from": "MidiPkt_ArpPassLoop",
+  "to_has": [
+   "MidiPkt_ArpMultiPass_Loop"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfd770d",
+  "from": "MidiPkt_ArpConfigChain_Data",
+  "to_has": [
+   "MidiSeq_ApplyPendingParams_Helper7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MidiPkt_ArpPopReturn"
+  ]
+ },
+ {
+  "addr": "0xfd7b5b",
+  "from": "MidiTable_UseDefaultBuf",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper18_Skip"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfd82d1",
+  "from": "MidiSysEx_ProcessBlock_0x19A",
+  "to_has": [
+   "MidiSysEx_ProcessBlock_Helper11_Join2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_UnhandledCmd"
+  ]
+ },
+ {
+  "addr": "0xfd8304",
+  "from": "MidiSysEx_ProcessBlock_0x1CD",
+  "to_has": [
+   "MidiSysEx_ProcessBlock_Helper11_Join4"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_UnhandledCmd"
+  ]
+ },
+ {
+  "addr": "0xfd8314",
+  "from": "MidiSysEx_ProcessBlock_0x1DD",
+  "to_has": [
+   "MidiPkt_ArpConfigChain_Data_Helper18_Helper7"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_UnhandledCmd"
+  ]
+ },
+ {
+  "addr": "0xfd8321",
+  "from": "MidiSysEx_ProcessBlock_0x1EA",
+  "to_has": [
+   "MidiSysEx_ProcessBlock_Helper11_Join5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqChan_UnhandledCmd"
+  ]
+ },
+ {
+  "addr": "0xfd89d1",
+  "from": "TGReg_WriteCC11_PartMode",
+  "to_has": [
+   "SoundMode_FullRenderUpdate_Helper"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfda40f",
+  "from": "MidiPkt_EnqueueControl_3358",
+  "to_has": [
+   "SeqAlt_DescriptorBlock_Data_Helper2"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfda4b6",
+  "from": "MidiPkt_EnqueueControl_3358_SplitNibbles",
+  "to_has": [
+   "MidiPkt_EnqueueExtended_Data_Skip2"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfda4ee",
+  "from": "MidiPkt_EnqueueControl_335E",
+  "to_has": [
+   "VocalistPage2OKFunc_Helper2_Helper"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfdaa63",
+  "from": "MidiPkt_SysExBulkTransfer_Data_Helper2_Skip",
+  "to_has": [
+   "MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "MidiPkt_EnqueueControl_335E"
+  ]
+ },
+ {
+  "addr": "0xfdad13",
+  "from": "SysEx_ChannelHandler_4B_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SysEx_DispatchByChannel"
+  ]
+ },
+ {
+  "addr": "0xfdad9a",
+  "from": "SysEx_ChannelHandler_49_Data",
+  "to_has": [],
+  "result": "parent differs",
+  "v7_parent": [
+   "SysEx_DispatchByChannel_49"
+  ]
+ },
+ {
+  "addr": "0xfdcd2f",
+  "from": "DSPCfg_Data_ParamDispatch_Loop2",
+  "to_has": [
+   "DSPCfg_Data_ParamDispatch_Helper_Helper_Loop"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DSPCfg_WriteAllSlots_Combined"
+  ]
+ },
+ {
+  "addr": "0xfdcdac",
+  "from": "DSPCfg_Data_ParamDispatch_Join5",
+  "to_has": [
+   "DSPCfg_Data_ParamDispatch_Helper_Helper_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DSPCfg_WriteAllSlots_Combined"
+  ]
+ },
+ {
+  "addr": "0xfdcdd0",
+  "from": "DSPCfg_Data_ParamDispatch_Skip8",
+  "to_has": [
+   "DSPCfg_Data_ParamDispatch_Helper_Helper_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DSPCfg_WriteAllSlots_Combined"
+  ]
+ },
+ {
+  "addr": "0xfdcea0",
+  "from": "DSPCfg_Data_ParamDispatch_0x1C9",
+  "to_has": [
+   "EffEdit_DSPConfigBlock_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "DSPCfg_WriteAllSlots_Combined"
+  ]
+ },
+ {
+  "addr": "0xfde0d0",
+  "from": "UIStateEvt_PartRouting",
+  "to_has": [
+   "ScreenGroup_InitVoiceLoop_Code_Skip4"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfde24a",
+  "from": "UIStateEvt_TransposeUpdate",
+  "to_has": [
+   "AudioDispatch_CheckStereoMode_Code_Skip26"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfde335",
+  "from": "UIStateEvt_ParamEdit_Data_Skip2",
+  "to_has": [
+   "AudioDispatch_CheckStereoMode_Code_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "UIStateEvt_TransposeUpdate_Apply"
+  ]
+ },
+ {
+  "addr": "0xfde467",
+  "from": "UIStateEvt_ParamEdit_Data_Skip12",
+  "to_has": [
+   "AudioDispatch_CheckStereoMode_Code_Skip12"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "UIStateEvt_TransposeUpdate_Apply"
+  ]
+ },
+ {
+  "addr": "0xfde93b",
+  "from": "UIStateEvt_ChannelConfig_Data_Skip5",
+  "to_has": [
+   "AudioDispatch_CheckStereoMode_Code_Skip25"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "UIStateEvt_PlayModeGuard_ClearBit"
+  ]
+ },
+ {
+  "addr": "0xfdeb3f",
+  "from": "AudioInit_PushAndConfigVoice",
+  "to_has": [],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfdeb5b",
+  "from": "AudioInit_PushAndConfigVoiceAlt",
+  "to_has": [],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfded11",
+  "from": "AudioInit_VoiceParamCtrl",
+  "to_has": [
+   "DSPCfg_EventType50_Code_Helper2"
+  ],
+  "result": "name taken"
+ },
+ {
+  "addr": "0xfea8f0",
+  "from": "UIState_ProcessKeyEvent_Skip",
+  "to_has": [
+   "SndParam_Init_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_Init"
+  ]
+ },
+ {
+  "addr": "0xfea9fd",
+  "from": "UIState_ProcessKeyEvent_Skip2",
+  "to_has": [
+   "VoiceSlot_CheckAndApply_Data2_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_Init"
+  ]
+ },
+ {
+  "addr": "0xfeaa4d",
+  "from": "HdaeRom_Entry_Skip",
+  "to_has": [
+   "VoiceSlot_CheckAndApply_Data2_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_Init"
+  ]
+ },
+ {
+  "addr": "0xfeaa65",
+  "from": "HdaeRom_Entry_Skip2",
+  "to_has": [
+   "VoiceSlot_CheckAndApply_Data2_Skip3"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_Init"
+  ]
+ },
+ {
+  "addr": "0xfeac2c",
+  "from": "HdaeRom_TableEntry2_Skip",
+  "to_has": [
+   "UIState_ProcessKeyEvent"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "UIState_ProcessKeyEvent"
+  ]
+ },
+ {
+  "addr": "0xfeacc9",
+  "from": "UIStateEvt_ProcessHandler_Skip",
+  "to_has": [
+   "SndParam_ProcessEntry_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_ProcessEntry"
+  ]
+ },
+ {
+  "addr": "0xfeace6",
+  "from": "UIStateEvt_ProcessHandler_Skip2",
+  "to_has": [
+   "SndParam_ProcessEntry_Skip2"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_ProcessEntry"
+  ]
+ },
+ {
+  "addr": "0xfebca0",
+  "from": "SeqVoice_CheckAndRet_Data_0x4A",
+  "to_has": [
+   "SeqVoice_CheckAndRet_Data_Skip"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_CheckAndRet_Prologue"
+  ]
+ },
+ {
+  "addr": "0xfebd57",
+  "from": "SeqVoice_CheckAndRet_Data_0x101",
+  "to_has": [
+   "SeqVoice_CheckAndRet_Data_Skip10"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SeqVoice_CheckAndRet_Prologue"
+  ]
+ },
+ {
+  "addr": "0xfeefe6",
+  "from": "Param_SignExtendRetu_Data_0x3CB",
+  "to_has": [
+   "SndParam_LookupAndDispatch_Code_Join"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_LookupAndDispatch"
+  ]
+ },
+ {
+  "addr": "0xfef0de",
+  "from": "Param_SignExtendRetu_Data_0x4C3",
+  "to_has": [
+   "SeqAlt_ApplyDescriptor_TypeB_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_LookupAndDispatch"
+  ]
+ },
+ {
+  "addr": "0xfef1b7",
+  "from": "Param_SignExtendRetu_Data_0x59C",
+  "to_has": [
+   "SeqData_FormatOutput_CaseB_Helper"
+  ],
+  "result": "parent differs",
+  "v7_parent": [
+   "SndParam_LookupAndDispatch"
+  ]
+ },
+ {
+  "addr_to": "0xefb309",
+  "from": "SndDispatch_ProcessCommand_Return",
+  "result": "insert",
+  "at": "display/scoop_display.s:8460"
+ }
+]

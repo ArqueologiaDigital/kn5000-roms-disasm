@@ -9605,6 +9605,7 @@ Data_UnknownBlock_Return:
 	add xix, 20
 	call	SeGfx_DrawStaticList
 	ret
+SeMenu_DataBlock_01:
 	cp	(0x6ae:16), 1
 	jr	nz, Data_UnknownBlock_Skip10
 	cp	a, 3:i3
@@ -9646,10 +9647,12 @@ Data_UnknownBlock_Skip13:
 Data_UnknownBlock_Join6:
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
+SeMenu_DataBlock_02:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x24B8
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
+SeMenu_DataBlock_03:
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip14
 	ld	xiy, SeScreenData_0x250E
@@ -9669,10 +9672,12 @@ Data_UnknownBlock_Join7:
 	call	SeMenu_EqEdit_DrawInit_0x15
 Data_UnknownBlock_Return5:
 	ret
+SeMenu_DataBlock_04:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x25B7
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
+SeMenu_DataBlock_05:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip3
 	ld	(0x03efa8:24), 0
@@ -9686,6 +9691,7 @@ Data_UnknownBlock_Skip3:
 	call	SeMenu_EqEdit_DrawInit_0x15
 Data_UnknownBlock_Return2:
 	ret
+SeMenu_DataBlock_06:
 	cp	a, 5:i3
 	jr	nz, Data_UnknownBlock_Skip4
 	ld	(0x03efa8:24), 0
@@ -9699,18 +9705,22 @@ Data_UnknownBlock_Skip4:
 	call	SeMenu_EqEdit_DrawInit_0x15
 Data_UnknownBlock_Return3:
 	ret
+SeMenu_DataBlock_07:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
+SeMenu_DataBlock_08:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x224F
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
+SeMenu_DataBlock_09:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x22B0
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
+SeMenu_DataBlock_10:
 	cp	a, 0:i3
 	jr	nz, Data_UnknownBlock_Skip5
 	ld	(0x03efa8:24), 1
@@ -9723,6 +9733,7 @@ Data_UnknownBlock_Skip5:
 	ld	xiy, SeScreenData_0x2363
 	call	SeMenu_EqEdit_DrawInit_0x15
 	ret
+SeMenu_DataBlock_11:
 	ld	(0x03efa8:24), 0
 	ld	xiy, SeScreenData_0x2B12
 	ld	xix, SeScreenData_0x2C0A
@@ -9785,6 +9796,7 @@ Data_UnknownBlock_Skip7:
 	sub	xiy, 4
 	call	SeGfx_StaticOp07_Text
 	ret
+SeMenu_DataBlock_12:
 	ld	(0x03efa8:24), 0
 	cp	(0x6ae:16), 1
 	jr	z, Data_UnknownBlock_Skip16
@@ -9832,11 +9844,13 @@ Data_UnknownBlock_Skip17:
 	call	Data_UnknownBlock_0x46B
 Data_UnknownBlock_Return6:
 	ret
+SeMenu_DataBlock_13:
 	ld	xiy, SeScreenData_0x2C0A
 	ld	xix, SeScreenData_0x2C32
 	call	SeGfx_DrawBoundList
 	call	Data_UnknownBlock_0x23D
 	ret
+SeMenu_DataBlock_14:
 	cp	a, 0:i3
 	jr	z, Data_UnknownBlock_Skip21
 	cp	a, 1:i3
@@ -14899,7 +14913,9 @@ SeScreenData_0x4C5E:
 SeScreenData_0x4C6D:
 	sdb_str	0x0660, 0x80, 7, 0x20, SeScreenData_0x08D1, 3, 75*40+2
 	sdb_str	0x0660, 0x40, 6, 0x20, 0x00f15b9d, 6, 113*40+2
+FlashRead_BlockData_Field8:
 	sdb_snum	0x0668, 0xff, 0, 0x20, 175*40+27, 2, 0x00
+FlashRead_BlockData_Field7:
 	sdb_snum	0x0667, 0xff, 0, 0x20, 160*40+27, 2, 0x00
 SeScreenData_End:
 

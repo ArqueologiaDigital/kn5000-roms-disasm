@@ -11,10 +11,13 @@
 ; starts at 0xE27556 in the previous file.
 	.byte 0x6a, 0x00
 	aligned_string "SqedtVal2"
+NakaInst_SqedtVal:
 	aligned_string "^^jC"
 	aligned_string "SqedtVal"
+NakaInst_SqedtVal_B:
 	aligned_string "jC"
 	aligned_string "EqualizerBox"
+NakaInst_EqualizerBox:
 	aligned_string "jBBC"
 	aligned_string "EffectBox"
 ; Registered in v10 by InitializeKubo (sequencer/sequencer_ui.s:4298): `RegObjTable 0x1600004, 0xfa44e2, 0xe27596, 0xe27180, 0x168`

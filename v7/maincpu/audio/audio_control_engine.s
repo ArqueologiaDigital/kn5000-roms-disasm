@@ -1319,6 +1319,7 @@ FileIO_BytecodeData_Code_Epilogue33:
 	pop	xiz
 	inc	4, xsp
 	ret
+NakaData_WidgetInit1:
 	.byte	0xf1, 0x5d, 0x90, 0xb9
 	ld	(xwa), 72
 	ld	(xwa+1), 5

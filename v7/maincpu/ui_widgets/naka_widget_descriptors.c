@@ -1174,12 +1174,12 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint16_t EffectBox_StateDispatch_CaseTable[7];
     /* ---------------------------------------------------------------------
-     * EffectBox_StateDispatch_CaseTable_Tail -- 90 bytes after
+     * LongStr_1_2_3 -- 90 bytes after
      * EffectBox_StateDispatch_CaseTable that no registration or code
      * reference reaches (searched: RegObjTabl tables, slice and positional
      * labels). Contents not established.
      * --------------------------------------------------------------------- */
-    uint8_t EffectBox_StateDispatch_CaseTable_Tail[90];
+    uint8_t LongStr_1_2_3[90];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Table -- read by Sqedt_ParamDispatch (v10/v9
      * 0xF34A5C, v7 0xF34A32) (`ld xbc, Sqedt_ParamDispatch_Table`).
@@ -5577,7 +5577,7 @@ const naka_widget_descriptors_t naka_widget_descriptors_data
 
     .EffectBox_StateDispatch_CaseTable = { 0x0000, 0x0007, 0x000E, 0x0015, 0x001C, 0x0023, 0x002A },
 
-    .EffectBox_StateDispatch_CaseTable_Tail = {
+    .LongStr_1_2_3 = {
         0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x31, 0x20, 0x20, 0x20, 0x20, 0x32, 0x20, 0x20,
         0x20, 0x20, 0x33, 0x20, 0x20, 0x20, 0x20, 0x34, 0x20, 0x20, 0x20, 0x20, 0x35, 0x20, 0x20, 0x20,
         0x20, 0x36, 0x20, 0x20, 0x20, 0x20, 0x37, 0x20, 0x20, 0x20, 0x20, 0x38, 0x20, 0x20, 0x20, 0x20,

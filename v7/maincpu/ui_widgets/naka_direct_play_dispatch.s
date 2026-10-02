@@ -153,7 +153,9 @@ NakaBoxData_SongNameBox:	aligned_string "c^dB"
 NakaBoxName_SongNameBox:	aligned_string "SongNameBox"
 NakaBoxData_LyricsBox:
 	aligned_string "c^^dB"
+NakaStr_LyricsBox:
 	aligned_string "LyricsBox"
+AlignedStr_AcMuteToggleBox:
 	.byte 0x00, 0xff
 NakaBoxName_AcMuteToggleBox:	aligned_string "AcMuteToggleBox"
 NakaBoxData_MeasureBox:

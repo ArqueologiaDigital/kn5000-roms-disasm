@@ -1,0 +1,3574 @@
+[
+ {
+  "name": "PROGRAM_FLASH__BASE_ADDR",
+  "value": "0xe00000",
+  "result": "kept (region constant)"
+ },
+ {
+  "name": "LongStr_ics_KN5000_Program",
+  "value": "0xe00065",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "Str_gramDATAFILE22",
+  "value": "0xe00073",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "Str_AFILE22",
+  "value": "0xe0007c",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "NakaStr_DataFile1of2",
+  "value": "0xe000c3",
+  "result": "rebased",
+  "expr": "FILETYPE_SIG_TABLE_1 + 19"
+ },
+ {
+  "name": "Str_ableDATAFILEPCK",
+  "value": "0xe00111",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "NakaStr_DataFilePck",
+  "value": "0xe00113",
+  "result": "rebased",
+  "expr": "FILETYPE_SIG_TABLE_PCK + 19"
+ },
+ {
+  "name": "NakaData_FileScreenConfig",
+  "value": "0xe0019e",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "NakaData_FileScreenDispatch",
+  "value": "0xe00302",
+  "result": "rebased",
+  "expr": "Bitmap_1bit_Flash_Memory_Update + 372"
+ },
+ {
+  "name": "Bitmap_1bit_FlashStatus_Icon",
+  "value": "0xe00800",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "ScoopDisp_BitmapDataBlock",
+  "value": "0xe00b04",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "ScoopDisp_EmptyBitmapData",
+  "value": "0xe00b28",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "NakaUI_ObjectTable_End",
+  "value": "0xe14c32",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "LongStr_Explore_1000_Musical",
+  "value": "0xe14c86",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrFld_ParaList_Font_0x06",
+  "value": "0xe16bac",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "Str_S2cGridBox",
+  "value": "0xe1708a",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "AlignedStr_CmpNameMenuBox",
+  "value": "0xe17096",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_AcApcToggle",
+  "value": "0xe17112",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_AcApcToggle_0x0C",
+  "value": "0xe1711e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "Str_TEMPO",
+  "value": "0xe18d4c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_FROM",
+  "value": "0xe1a224",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NumStr_11",
+  "value": "0xe1cde2",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_10",
+  "value": "0xe1cde6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_9",
+  "value": "0xe1cdea",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_8",
+  "value": "0xe1cdee",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_7",
+  "value": "0xe1cdf2",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_6",
+  "value": "0xe1cdf6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_5",
+  "value": "0xe1cdfa",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_4",
+  "value": "0xe1cdfe",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_3",
+  "value": "0xe1ce02",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_2",
+  "value": "0xe1ce06",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_1",
+  "value": "0xe1ce0a",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NumStr_0",
+  "value": "0xe1ce0e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StrNotePos_FlatAlt",
+  "value": "0xe1dd4c",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StrNotePos_FlatAltB8",
+  "value": "0xe1dd52",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StrNotePos_AcNatural",
+  "value": "0xe1dd5a",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "WidgetDispatch_FDTestPtrTable",
+  "value": "0xe1ffb6",
+  "result": "retired",
+  "into": "FDTest_String_TestTitleFunc_PtrTable"
+ },
+ {
+  "name": "NakaDirectPlay_PropPtrTable",
+  "value": "0xe208a4",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaStr_LyricsBox",
+  "value": "0xe20b7c",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "AlignedStr_AcMuteToggleBox",
+  "value": "0xe20b86",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "Str_ORCH",
+  "value": "0xe21ad2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_PdMdlyOrcha",
+  "value": "0xe22322",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_AFTER_TOUCH_SETTING",
+  "value": "0xe2364a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Gamelan",
+  "value": "0xe23c12",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaWidget_Perf2Flute",
+  "value": "0xe23c1a",
+  "result": "retired",
+  "into": "NakaWidget_DemoSong8"
+ },
+ {
+  "name": "Str_SaxBrass",
+  "value": "0xe23cca",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaWidget_Perf2Piano",
+  "value": "0xe23cd4",
+  "result": "retired",
+  "into": "NakaWidget_DemoSong11"
+ },
+ {
+  "name": "NakaStr_Organ",
+  "value": "0xe23d0a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_HokieDance",
+  "value": "0xe23e62",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaWidget_Perf3JazzBand",
+  "value": "0xe23e6e",
+  "result": "retired",
+  "into": "NakaWidget_DemoSong13"
+ },
+ {
+  "name": "Str_GospelRevival",
+  "value": "0xe23ea4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaWidget_Perf3LatinOrch",
+  "value": "0xe23eb4",
+  "result": "retired",
+  "into": "NakaWidget_DemoSong14"
+ },
+ {
+  "name": "Str_OrganCombo",
+  "value": "0xe23eea",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaWidget_Perf3BigBand",
+  "value": "0xe23ef6",
+  "result": "retired",
+  "into": "NakaWidget_DemoSong15"
+ },
+ {
+  "name": "Str_BigBandMid",
+  "value": "0xe23f2c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaWidget_Perf3SymphOrch",
+  "value": "0xe23f3a",
+  "result": "retired",
+  "into": "NakaWidget_DemoSong16"
+ },
+ {
+  "name": "NakaStr_Rhythm",
+  "value": "0xe2405e",
+  "result": "retired",
+  "into": "NakaWidget_Perf3RhythmSel_StrOn"
+ },
+ {
+  "name": "NakaFld_TabIndexFunc",
+  "value": "0xe270ea",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaDesc_SeqExitWidgets",
+  "value": "0xe2713c",
+  "result": "retired",
+  "into": "ClassProps_IvPnlWrExit"
+ },
+ {
+  "name": "NakaInst_SqedtVal",
+  "value": "0xe27564",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_SqedtVal_B",
+  "value": "0xe27574",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_EqualizerBox",
+  "value": "0xe27586",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "Data_NakaPresetConfig",
+  "value": "0xe278a9",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "NakaInst_FadeInOutSetting_Params",
+  "value": "0xe2df22",
+  "result": "retired",
+  "into": "NakaWidget_KuboView0E7_11_AcIndexWideToggle"
+ },
+ {
+  "name": "Str_ENGLISH",
+  "value": "0xe2df54",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_EffectsBlock_Byte1",
+  "value": "0xe30001",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_EffectsBlock_Byte2",
+  "value": "0xe30002",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_EffectsBlock_Byte3",
+  "value": "0xe30003",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_EffectsBlock_Byte5",
+  "value": "0xe30005",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_EffectsStringPtrs",
+  "value": "0xe30006",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_20469e32473220",
+  "value": "0xe30b2a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_42a03242322043",
+  "value": "0xe30b51",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "TableData_NullDialogText",
+  "value": "0xe33824",
+  "result": "retired",
+  "into": "AttAreYouSureCheck_Strings"
+ },
+ {
+  "name": "Str_ATTENTION",
+  "value": "0xe3382c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_Apakahyakinakandihapus",
+  "value": "0xe338a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "WarnStr_Featuresforcreatingas",
+  "value": "0xe338c2",
+  "result": "retired",
+  "into": "StsSeqMenu1Check_Strings"
+ },
+ {
+  "name": "LongStr_Funktionen_zur_Erstellung",
+  "value": "0xe338e2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "LongStr_SongClear_Spanish",
+  "value": "0xe33ee4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "LongStr_Gunakan_SONG_CLEAR",
+  "value": "0xe33f22",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "LongStr_TrackClear_Spanish",
+  "value": "0xe3405e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "LongStr_Gunakan_TRACK_CLEAR",
+  "value": "0xe340a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "WarnStr_PresstheSTARTSTOPbutt",
+  "value": "0xe34104",
+  "result": "retired",
+  "into": "StsAtPunchCheck_Strings"
+ },
+ {
+  "name": "FmtStr_pct3d",
+  "value": "0xe34614",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "LongStr_1_2_3",
+  "value": "0xe34944",
+  "result": "label renamed",
+  "label": "EffectBox_StateDispatch_CaseTable_Tail"
+ },
+ {
+  "name": "FmtStr_pct3d_4B5E",
+  "value": "0xe34b5e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "FmtStr_pluspct3d",
+  "value": "0xe34bb6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "FmtStr_minuspct3d",
+  "value": "0xe34bbe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_AfterBitmap_Dredt0k",
+  "value": "0xe3def1",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_AfterBitmap_Dredt0k_2",
+  "value": "0xe3e0f1",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_BeforeBitmap_Dredt0d",
+  "value": "0xe3e2f2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_ExternalBase",
+  "value": "0xe40000",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_AfterNakaData_ExternalBase",
+  "value": "0xe40002",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_NakaExternal_Block1",
+  "value": "0xe40005",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_NakaExternal_Block2",
+  "value": "0xe40031",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_NakaExternal_Block3",
+  "value": "0xe40046",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_NakaExternal_Block4",
+  "value": "0xe40081",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_ExternalPadBlock_A",
+  "value": "0xe40096",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_ExternalPadBlock_B",
+  "value": "0xe400a9",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_BeforeNakaData_UserMemoryConfig",
+  "value": "0xe400be",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_UserMemoryConfig",
+  "value": "0xe400d0",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_AfterNakaData_UserMemoryConfig",
+  "value": "0xe40101",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_BeforeNakaData_StyleBitmapPad",
+  "value": "0xe40116",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_ExternalBitmapBlock",
+  "value": "0xe40a09",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_StyleBitmapPad",
+  "value": "0xe41807",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "RhythmTiming_OffsetTable",
+  "value": "0xe46312",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "TechnichordParam_Block1",
+  "value": "0xe5002d",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "TechnichordParam_Block2",
+  "value": "0xe5006e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "TechnichordParam_Block3",
+  "value": "0xe500be",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "TechnichordParam_Block4",
+  "value": "0xe500ce",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "TechnichordParam_Block5",
+  "value": "0xe500fe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_TechnichordParams",
+  "value": "0xe50117",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaHandler_CtrlMessages",
+  "value": "0xe56acc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaHandler_RealtimeMessages",
+  "value": "0xe56b14",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaHandler_CommonSetting",
+  "value": "0xe56b5c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaHandler_ProgChangeMidiOut",
+  "value": "0xe56cbc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_InOutSettingGrid",
+  "value": "0xe57504",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_MidiPresetConfig",
+  "value": "0xe578aa",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_KN5000_MidiPresets",
+  "value": "0xe57982",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_UserSettingSelector",
+  "value": "0xe57c8e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaHandler_SplitPointDialog",
+  "value": "0xe57e6e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_SndModVocalistExtSeq",
+  "value": "0xe57f36",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_KN5000_SysexBulkDump",
+  "value": "0xe57fa2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_WithAPC_Presets",
+  "value": "0xe5804e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_WithoutAPC_Presets",
+  "value": "0xe580a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_Value_SysexPresets",
+  "value": "0xe580d2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_WithAPC_GM",
+  "value": "0xe5821e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_WithoutAPC_GM",
+  "value": "0xe58276",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_Value_GM",
+  "value": "0xe582a2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_KN5000_GM",
+  "value": "0xe582e2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_BulkDumpCategorySelect",
+  "value": "0xe583a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_Receiving_Sysex",
+  "value": "0xe58742",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_ProgChangeLabel",
+  "value": "0xe58fda",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_P_MEM_ON_OFF_PART",
+  "value": "0xe5904a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_PresetSettingsLabel",
+  "value": "0xe59532",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_ItemLabel_RevEqPreset",
+  "value": "0xe5985a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorSection_Start",
+  "value": "0xe60000",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorPad1",
+  "value": "0xe60008",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorPad_ZeroA",
+  "value": "0xe6009a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorPad_ZeroB",
+  "value": "0xe600aa",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorPad_ZeroC",
+  "value": "0xe600da",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorZero",
+  "value": "0xe600df",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorZero_PadA",
+  "value": "0xe600e4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_DescriptorZero_PadB",
+  "value": "0xe600ec",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_AfterBitmap_MIDIConnections_1",
+  "value": "0xe678ff",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_Tables2Pad1",
+  "value": "0xe70015",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_Tables2Pad2",
+  "value": "0xe7001e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_AfterNakaData_Tables2Pad2",
+  "value": "0xe70022",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_Tables2Pad3",
+  "value": "0xe700de",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Bitmap_MIDIConnections_Header",
+  "value": "0xe70b28",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "DisplayMode_FormatStr1",
+  "value": "0xe7f91c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "DisplayMode_FormatStr2",
+  "value": "0xe7f922",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Data_AcGridParamTable",
+  "value": "0xe7f9ac",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_AL",
+  "value": "0xe8005f",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "AlignedStr_ON",
+  "value": "0xe8013c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_ON_E80168_0x6C",
+  "value": "0xe801d4",
+  "result": "retired",
+  "into": "PmemOutLGridCheck_CaseTable_Tail"
+ },
+ {
+  "name": "Transpose_String_Minus3",
+  "value": "0xe8068c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Transpose_String_Error",
+  "value": "0xe80692",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Transpose_String_Plus1",
+  "value": "0xe806a4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Transpose_String_Zero",
+  "value": "0xe806aa",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_ol",
+  "value": "0xe80b12",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Bitmap_AccompBitmapSpacer",
+  "value": "0xe878f9",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "DrawbarSlider_ConfigData",
+  "value": "0xe8cfeb",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Bitmap_TechnichordBackground_1",
+  "value": "0xe90077",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_TechnichordBitmap1",
+  "value": "0xe900d8",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaInst_SequencerComboBox",
+  "value": "0xe90130",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_TechnichordBitmap2",
+  "value": "0xe9013d",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Bitmap_TechnichordBackground_2",
+  "value": "0xe90b3b",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr03",
+  "value": "0xe96344",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr16",
+  "value": "0xe971de",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr20_End",
+  "value": "0xe97bde",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr24_Start",
+  "value": "0xe97dc2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr24_French_End",
+  "value": "0xe9871a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr28_Start",
+  "value": "0xe98aee",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr30_End",
+  "value": "0xe99a0e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr41_Start",
+  "value": "0xe99cd4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_BeimEmpfangderSys",
+  "value": "0xe99edc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_DiskErr43_Start",
+  "value": "0xe9a2c4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_Error55_End",
+  "value": "0xe9b92a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_Error55_Block2",
+  "value": "0xe9bf3a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_SpecialTracks_Start",
+  "value": "0xe9c524",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "LongStr_RKB_und_LKB",
+  "value": "0xe9c6fc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StrPtrTable_InitSettingWarning_Start",
+  "value": "0xe9cf14",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_DISKNAME",
+  "value": "0xea1d7a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_LOAD",
+  "value": "0xea2442",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_COMP",
+  "value": "0xea263a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_CUSTOM",
+  "value": "0xea26aa",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_MIDI",
+  "value": "0xea26d2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_RHYTHM_CUSTOM",
+  "value": "0xea27a2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_COMPOSER",
+  "value": "0xea2822",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_LOAD_2952",
+  "value": "0xea2952",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_SINGLE_LOAD",
+  "value": "0xea29a2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Single",
+  "value": "0xea2d36",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Bank",
+  "value": "0xea2d3e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_PREV",
+  "value": "0xea2e26",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_DISK",
+  "value": "0xea2f0e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_LOAD_AS",
+  "value": "0xea2f3a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_SOUND_MEMORY",
+  "value": "0xea3b5a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_SEQUENCER",
+  "value": "0xea3bb2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_PERFORM",
+  "value": "0xea3d2a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_BACKUP",
+  "value": "0xea3d7a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_PNL",
+  "value": "0xea3dca",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_COMP_3F6A",
+  "value": "0xea3f6a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_CUSTOM_3FDA",
+  "value": "0xea3fda",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_MIDI_4002",
+  "value": "0xea4002",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_ALL_OFF",
+  "value": "0xea4082",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_SAVE",
+  "value": "0xea41d2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_NEXT",
+  "value": "0xea435a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_OFF",
+  "value": "0xea43bc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_SAVE_44A2",
+  "value": "0xea44a2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_PREV_471A",
+  "value": "0xea471a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_DISKINSERTOPTION",
+  "value": "0xea66b6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_FILETYPEPRIORITY",
+  "value": "0xea6706",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "DiskWarning_GermanConfirm",
+  "value": "0xea8cbc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Pad_AfterStr_No",
+  "value": "0xeaaef4",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "FmtStr_pct2d",
+  "value": "0xeab18c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "WidgetPropStr_Max",
+  "value": "0xeac1ba",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "WidgetPropStr_RangeFigures",
+  "value": "0xeac1be",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_CharaFontTable",
+  "value": "0xeada96",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Chara1pFnt",
+  "value": "0xeadb1a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Chara5Fnt",
+  "value": "0xeadb26",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Chara4Fnt",
+  "value": "0xeadb32",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Chara3Fnt",
+  "value": "0xeadb3e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Chara2Fnt",
+  "value": "0xeadb4a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_Chara1Fnt",
+  "value": "0xeadb56",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "IconBitmapName_i96o",
+  "value": "0xeb2796",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i69_bmp",
+  "value": "0xeb287e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i68_bmp",
+  "value": "0xeb2886",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i67_bmp",
+  "value": "0xeb288e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i66_bmp",
+  "value": "0xeb2896",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i65_bmp",
+  "value": "0xeb289e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i64_bmp",
+  "value": "0xeb28a6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i63_bmp",
+  "value": "0xeb28ae",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i62_bmp",
+  "value": "0xeb28b6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i61_bmp",
+  "value": "0xeb28be",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i60_bmp",
+  "value": "0xeb28c6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i59_bmp",
+  "value": "0xeb28ce",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i58_bmp",
+  "value": "0xeb28d6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i57_bmp",
+  "value": "0xeb28de",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i56_bmp",
+  "value": "0xeb28e6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i55_bmp",
+  "value": "0xeb28ee",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i54_bmp",
+  "value": "0xeb28f6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i53_bmp",
+  "value": "0xeb28fe",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i52_bmp",
+  "value": "0xeb2906",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i51_bmp",
+  "value": "0xeb290e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i50_bmp",
+  "value": "0xeb2916",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i49_bmp",
+  "value": "0xeb291e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i48_bmp",
+  "value": "0xeb2926",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i47_bmp",
+  "value": "0xeb292e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i46_bmp",
+  "value": "0xeb2936",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i45_bmp",
+  "value": "0xeb293e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i44_bmp",
+  "value": "0xeb2946",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i43_bmp",
+  "value": "0xeb294e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i42_bmp",
+  "value": "0xeb2956",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i41_bmp",
+  "value": "0xeb295e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i40_bmp",
+  "value": "0xeb2966",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i39_bmp",
+  "value": "0xeb296e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i38_bmp",
+  "value": "0xeb2976",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i37_bmp",
+  "value": "0xeb297e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i36_bmp",
+  "value": "0xeb2986",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i35_bmp",
+  "value": "0xeb298e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i34_bmp",
+  "value": "0xeb2996",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i33_bmp",
+  "value": "0xeb299e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i32_bmp",
+  "value": "0xeb29a6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i31_bmp",
+  "value": "0xeb29ae",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i30_bmp",
+  "value": "0xeb29b6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i29_bmp",
+  "value": "0xeb29be",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i28_bmp",
+  "value": "0xeb29c6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i27_bmp",
+  "value": "0xeb29ce",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i26_bmp",
+  "value": "0xeb29d6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i25_bmp",
+  "value": "0xeb29de",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i24_bmp",
+  "value": "0xeb29e6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i23_bmp",
+  "value": "0xeb29ee",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i22_bmp",
+  "value": "0xeb29f6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i21_bmp",
+  "value": "0xeb29fe",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i20_bmp",
+  "value": "0xeb2a06",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i19_bmp",
+  "value": "0xeb2a0e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i18_bmp",
+  "value": "0xeb2a16",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i17_bmp",
+  "value": "0xeb2a1e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i16_bmp",
+  "value": "0xeb2a26",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i15_bmp",
+  "value": "0xeb2a2e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i14_bmp",
+  "value": "0xeb2a36",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i13_bmp",
+  "value": "0xeb2a3e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i12_bmp",
+  "value": "0xeb2a46",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i11_bmp",
+  "value": "0xeb2a4e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i10_bmp",
+  "value": "0xeb2a56",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i9_bmp",
+  "value": "0xeb2a5e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i8_bmp",
+  "value": "0xeb2a66",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i7_bmp",
+  "value": "0xeb2a6e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StyleBmp_i6obmp",
+  "value": "0xeb2a76",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i5_bmp",
+  "value": "0xeb2a7e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StyleBmp_i4obmp",
+  "value": "0xeb2a86",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StyleBmp_i3obmp",
+  "value": "0xeb2a8e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i2_bmp",
+  "value": "0xeb2a96",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i1_bmp",
+  "value": "0xeb2a9e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "BmpFile_i0_bmp",
+  "value": "0xeb2aa6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StyleBmp_trashbmp",
+  "value": "0xeb2aae",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "Palette_8bit_RGBA",
+  "value": "0xeb37de",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "StyleBmp_ZachariasSwing",
+  "value": "0xebbc26",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_YeeHaFiddles",
+  "value": "0xebbcae",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_WunderPops",
+  "value": "0xebbd36",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_WildSideOrgan",
+  "value": "0xebbdbe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_WheelsofLife",
+  "value": "0xebbe46",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_WeddingParty",
+  "value": "0xebbece",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_WandrinKeys",
+  "value": "0xebbf56",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_WaltzingConcert",
+  "value": "0xebbfde",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_WailersGuitar",
+  "value": "0xebc066",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_VocalBeats",
+  "value": "0xebc0ee",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ViennaWoods",
+  "value": "0xebc176",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_VegasShowman",
+  "value": "0xebc1fe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_UptownHorns",
+  "value": "0xebc286",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TwoStepDuo",
+  "value": "0xebc30e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TwilightPiano",
+  "value": "0xebc396",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TravoltaDance",
+  "value": "0xebc41e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TopBrassJive",
+  "value": "0xebc4a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TirolerHarp",
+  "value": "0xebc52e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TheatreBand",
+  "value": "0xebc5b6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ThePartyBand",
+  "value": "0xebc63e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TheDukesPiano",
+  "value": "0xebc6c6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TennesseeGuitar",
+  "value": "0xebc74e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TechnoFiddle",
+  "value": "0xebc7d6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TangoMarcato",
+  "value": "0xebc85e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_TakeItEasy",
+  "value": "0xebc8e6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SynthParty",
+  "value": "0xebc96e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SynthForSoul",
+  "value": "0xebc9f6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SymphonyBallad",
+  "value": "0xebca7e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SwingingKeys",
+  "value": "0xebcb06",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SwingSerenade",
+  "value": "0xebcb8e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SwingB3Threes",
+  "value": "0xebcc16",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SweetSoprano",
+  "value": "0xebcc9e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SweepingBridge",
+  "value": "0xebcd26",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SunnySpainMood",
+  "value": "0xebcdae",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_StreetTalk",
+  "value": "0xebce36",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_StephaneDjango",
+  "value": "0xebcebe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SteelStrings",
+  "value": "0xebcf46",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SpyraSteel",
+  "value": "0xebcfce",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SpanishMoments",
+  "value": "0xebd056",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SouthernStyle",
+  "value": "0xebd0de",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SoulfulWhaWha",
+  "value": "0xebd166",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SoulVocalDuo",
+  "value": "0xebd1ee",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SoulHorn",
+  "value": "0xebd276",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SopranoGroove",
+  "value": "0xebd2fe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SolidSixteen",
+  "value": "0xebd386",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SolidDistortion",
+  "value": "0xebd40e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SoftRock",
+  "value": "0xebd496",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SmoothLips",
+  "value": "0xebd51e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SlowSpinGroove",
+  "value": "0xebd5a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SlapBackRock",
+  "value": "0xebd62e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SkeletonDance",
+  "value": "0xebd6b6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SingItPlayIt",
+  "value": "0xebd73e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SinatraStrings",
+  "value": "0xebd7c6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SimpleBand",
+  "value": "0xebd84e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ShuffleOrgan",
+  "value": "0xebd8d6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ShearingCombo",
+  "value": "0xebd95e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SevilleOctaves",
+  "value": "0xebd9e6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SentimentalSolo",
+  "value": "0xebda6e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SaxyMambo",
+  "value": "0xebdaf6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SaxDrumsRRoll",
+  "value": "0xebdb7e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SaxMamboist",
+  "value": "0xebdc06",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SantasHelpers",
+  "value": "0xebdc8e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SambaUnion",
+  "value": "0xebdd16",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_SambaParty",
+  "value": "0xebdd9e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RossVocals",
+  "value": "0xebde26",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RollingWheels",
+  "value": "0xebdeae",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RockSymphony",
+  "value": "0xebdf36",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RockFall",
+  "value": "0xebdfbe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RioHorns",
+  "value": "0xebe046",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RickysStrat",
+  "value": "0xebe0ce",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RetroGroove",
+  "value": "0xebe156",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ReinhardtsSolo",
+  "value": "0xebe1de",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ReggaeDanceHit",
+  "value": "0xebe266",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ReedItSwing",
+  "value": "0xebe2ee",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RastaJambo",
+  "value": "0xebe376",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_RadioOrchestra",
+  "value": "0xebe3fe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PuentesBigband",
+  "value": "0xebe486",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PowerSaxSwing",
+  "value": "0xebe50e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PopLeader",
+  "value": "0xebe596",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PopBridge",
+  "value": "0xebe61e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PolyDance",
+  "value": "0xebe6a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PlateDance",
+  "value": "0xebe72e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PennyFolkSong",
+  "value": "0xebe7b6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PartyPopStack",
+  "value": "0xebe83e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_PartyAccordion",
+  "value": "0xebe8c6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ParadiseKeys",
+  "value": "0xebe94e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OverTheTopWah",
+  "value": "0xebe9d6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OrganistsSwing",
+  "value": "0xebea5e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OrchestralEight",
+  "value": "0xebeae6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OneTwoThree",
+  "value": "0xebeb6e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OleGuitar",
+  "value": "0xebebf6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OldTimeSaloon",
+  "value": "0xebec7e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OldNewFunk",
+  "value": "0xebed06",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OklahomaDance",
+  "value": "0xebed8e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_OceanVocals",
+  "value": "0xebee16",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_NotRavels",
+  "value": "0xebee9e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_NiceKeroncong",
+  "value": "0xebef26",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_NewSquareDance",
+  "value": "0xebefae",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_NewJazzBallad",
+  "value": "0xebf036",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_NashvilleDance",
+  "value": "0xebf0be",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MuteSoloist",
+  "value": "0xebf146",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MusetteBallad",
+  "value": "0xebf1ce",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MovieBallad",
+  "value": "0xebf256",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MoschsMilitary",
+  "value": "0xebf2de",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MoiksMarchshow",
+  "value": "0xebf366",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_ModernBoogie",
+  "value": "0xebf3ee",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MirandaMallets",
+  "value": "0xebf476",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MidnightTunes",
+  "value": "0xebf4fe",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MerengueParty",
+  "value": "0xebf586",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MellowSection",
+  "value": "0xebf60e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MellowJazzTabs",
+  "value": "0xebf696",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MellowShuffle",
+  "value": "0xebf71e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MaxsOrchestra",
+  "value": "0xebf7a6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MarchingPolka",
+  "value": "0xebf82e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MamboJambo",
+  "value": "0xebf8b6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_MadTabs",
+  "value": "0xebf93e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LondonsBigbone",
+  "value": "0xebf9c6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LionelsJazz",
+  "value": "0xebfa4e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LikeSunday",
+  "value": "0xebfad6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LetItShine",
+  "value": "0xebfb5e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LatinoPiccolo",
+  "value": "0xebfbe6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LatinPassion",
+  "value": "0xebfc6e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LatinBallroom",
+  "value": "0xebfcf6",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LastStarparade",
+  "value": "0xebfd7e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_LAWarmth",
+  "value": "0xebfe06",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_KnopflerTribute",
+  "value": "0xebfe8e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_KeyGrooves",
+  "value": "0xebff16",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleBmp_JustTheFlute",
+  "value": "0xebff9e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_SoundPreset176",
+  "value": "0xec00c7",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_160",
+  "value": "0xec00ec",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_ToTheBone",
+  "value": "0xec013b",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaStr_SoundPresetBone",
+  "value": "0xec013f",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_MournfulTenor",
+  "value": "0xec88ec",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleSound_BluesAlley_Data",
+  "value": "0xec8974",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_HymnBand",
+  "value": "0xec89b4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_PreachTheWord",
+  "value": "0xec8a7c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_LushTango",
+  "value": "0xecb09c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_AstorsTango",
+  "value": "0xecb164",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_SymphonicWaltz",
+  "value": "0xecb26c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "StyleSound_QuickWaltz_Data",
+  "value": "0xecb2f4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_NotStrauss",
+  "value": "0xecb334",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_BavarianFlutes",
+  "value": "0xecb3fc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_BeachPartySong",
+  "value": "0xecdbec",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_CubanReeds",
+  "value": "0xecdcb4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_LatinoPiccolo",
+  "value": "0xecdd7c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_JamaicanBars",
+  "value": "0xecde44",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_SambaUnion",
+  "value": "0xecde84",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_NewOrganSamba",
+  "value": "0xecdf4c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_NiceKeroncong",
+  "value": "0xece014",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_EasyDangdut",
+  "value": "0xece0dc",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_PadangBeat",
+  "value": "0xece11c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_RastaVoice",
+  "value": "0xece1e4",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_MarleysDrums",
+  "value": "0xece2ac",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "EffSeqScreen_ChordTypePtr_A",
+  "value": "0xed0072",
+  "result": "rebased",
+  "expr": "ChordTypeStr_Blank_1 + 2"
+ },
+ {
+  "name": "EffSeqScreen_ChordTypePtr_B",
+  "value": "0xed009c",
+  "result": "rebased",
+  "expr": "ChordTypeStr_Type55 + 2"
+ },
+ {
+  "name": "NakaInst_WITH_APC",
+  "value": "0xed00d5",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "NakaStr_CtrlParam9e9",
+  "value": "0xed013b",
+  "result": "rebased",
+  "expr": "ChordTypeStr_Flat13_Only + 1"
+ },
+ {
+  "name": "SeqChanContainer_ChordTypeRef_A",
+  "value": "0xed0212",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeqChanContainer_ChordTypeRef_B",
+  "value": "0xed029c",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ParamStr08_varisupart",
+  "value": "0xed210e",
+  "result": "retired",
+  "into": "ClassVar_VariScreen_varisu"
+ },
+ {
+  "name": "ParamStr08_page",
+  "value": "0xed2116",
+  "result": "retired",
+  "into": "ClassVar_VariScreen_part"
+ },
+ {
+  "name": "ParamStr08_fontcolor",
+  "value": "0xed211c",
+  "result": "retired",
+  "into": "ClassVar_VariScreen_page"
+ },
+ {
+  "name": "ParamStr08_font",
+  "value": "0xed2122",
+  "result": "retired",
+  "into": "ClassVar_VariScreen_fontcolor"
+ },
+ {
+  "name": "ParamStr08_func",
+  "value": "0xed212c",
+  "result": "retired",
+  "into": "ClassVar_VariScreen_font"
+ },
+ {
+  "name": "ParamStr19_fixedcol",
+  "value": "0xed250c",
+  "result": "retired",
+  "into": "ClassVar_AcMstStyle1GridBox_fixedrow"
+ },
+ {
+  "name": "ParamStr22_nowsongsubctgdtno",
+  "value": "0xed275c",
+  "result": "retired",
+  "into": "ClassVar_AcMstSong2GridBox_nowsongsubctgdtno"
+ },
+ {
+  "name": "ParamStr22_func",
+  "value": "0xed276e",
+  "result": "retired",
+  "into": "ClassVar_AcMstSong2GridBox_func"
+ },
+ {
+  "name": "ParamStr22_fixedrow",
+  "value": "0xed2774",
+  "result": "retired",
+  "into": "ClassVar_AcMstSong2GridBox_fixedrow"
+ },
+ {
+  "name": "ParamStr22_fixedcol",
+  "value": "0xed277e",
+  "result": "retired",
+  "into": "ClassVar_AcMstSong2GridBox_fixedcol"
+ },
+ {
+  "name": "NakaInst_AcMstSugAlpGridBox",
+  "value": "0xed2b9a",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_AcFSWAssGridBox",
+  "value": "0xed2be2",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaDesc_AcTchSensGridBox",
+  "value": "0xed2bf4",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_AcTchSensGridBox",
+  "value": "0xed2bf6",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaDesc_IvMstStyleWindowPgCtl",
+  "value": "0xed2c0c",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_IvMstStyleWindowPgCtl",
+  "value": "0xed2c0e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaDesc_IvPmemWindowPageCtl",
+  "value": "0xed2c22",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_IvPmemWindowPageCtl",
+  "value": "0xed2c24",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaInst_MsaModeScreen",
+  "value": "0xed2c62",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "Str_7f",
+  "value": "0xed46d2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_RHYTHM",
+  "value": "0xed4722",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "SoundName_SOUNDRHYTHM",
+  "value": "0xed474a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_PANEL_MEMORY",
+  "value": "0xed477a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_PANEL_MEMORY_4922",
+  "value": "0xed4922",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_7f_4A82",
+  "value": "0xed4a82",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_DISPLAY_TYPE",
+  "value": "0xed4de2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_USER_INITIAL",
+  "value": "0xed5122",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "Str_VALUE",
+  "value": "0xed517a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_SndParamBank_Desc",
+  "value": "0xed690a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_SndParamPage_Desc",
+  "value": "0xed69a2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_VoiceParamBank_Desc",
+  "value": "0xed6a7a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_VoiceParamRhythm_Desc",
+  "value": "0xed6b0a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_VoiceParamDrums_Desc",
+  "value": "0xed6b52",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_VoiceSetup_Desc",
+  "value": "0xed6be2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_VoiceMainPage_Desc",
+  "value": "0xed6c6e",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_MidiCtrl_Desc",
+  "value": "0xed6ff2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_MidiCtrlPage_Desc",
+  "value": "0xed70a2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_MidiCtrlDetail_Desc",
+  "value": "0xed71b2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_MidiCtrlAdvanced_Desc",
+  "value": "0xed723a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_DspEffect_Desc",
+  "value": "0xed729a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_DspEffectPage_Desc",
+  "value": "0xed734a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_ReverbSetup_Desc",
+  "value": "0xed745a",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_ReverbPage_Desc",
+  "value": "0xed74e2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_Equalizer_Desc",
+  "value": "0xed7542",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_EqualizerPage_Desc",
+  "value": "0xed75f2",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_UserInitWallpaper_Flag",
+  "value": "0xed9f54",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ExtDevScreen_UserInitWallpaper_Data",
+  "value": "0xed9f5c",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "ENCODER_LUT_VOLUME",
+  "value": "0xeda1bc",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ENCODER_LUT_BREATH_INDEX",
+  "value": "0xeda2bc",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ENCODER_LUT_BREATH_VALUE",
+  "value": "0xeda2d2",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ENCODER_LUT_BREATH_MULT",
+  "value": "0xeda3d2",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ENCODER_LUT_BREATH_OFFSET",
+  "value": "0xeda3ea",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ENCODER_LUT_FOOT",
+  "value": "0xeda402",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ENCODER_LUT_EXPRESSION",
+  "value": "0xeda482",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "ToshiParam_Entry_01",
+  "value": "0xeda704",
+  "result": "retired",
+  "into": "ReverbPreset_1"
+ },
+ {
+  "name": "ToshiParam_Entry_02",
+  "value": "0xeda71c",
+  "result": "retired",
+  "into": "ReverbPreset_2"
+ },
+ {
+  "name": "ToshiParam_Entry_03",
+  "value": "0xeda734",
+  "result": "retired",
+  "into": "ReverbPreset_3"
+ },
+ {
+  "name": "ToshiParam_Entry_04",
+  "value": "0xeda74c",
+  "result": "retired",
+  "into": "ReverbPreset_4"
+ },
+ {
+  "name": "ToshiParam_Entry_05",
+  "value": "0xeda764",
+  "result": "retired",
+  "into": "ReverbPreset_5"
+ },
+ {
+  "name": "ToshiParam_Entry_06",
+  "value": "0xeda77c",
+  "result": "retired",
+  "into": "ReverbPreset_6"
+ },
+ {
+  "name": "ToshiParam_Entry_07",
+  "value": "0xeda794",
+  "result": "retired",
+  "into": "ReverbPreset_7"
+ },
+ {
+  "name": "ToshiParam_Entry_08",
+  "value": "0xeda7ac",
+  "result": "retired",
+  "into": "ReverbPreset_8"
+ },
+ {
+  "name": "ToshiParam_Entry_09",
+  "value": "0xeda7c4",
+  "result": "retired",
+  "into": "ReverbPreset_9"
+ },
+ {
+  "name": "ToshiParam_Entry_10",
+  "value": "0xeda7dc",
+  "result": "retired",
+  "into": "EQPreset_0"
+ },
+ {
+  "name": "ToshiParam_Entry_11",
+  "value": "0xeda7f4",
+  "result": "retired",
+  "into": "EQPreset_1"
+ },
+ {
+  "name": "ToshiParam_Entry_12",
+  "value": "0xeda80c",
+  "result": "retired",
+  "into": "EQPreset_2"
+ },
+ {
+  "name": "ToshiParam_Entry_13",
+  "value": "0xeda824",
+  "result": "retired",
+  "into": "EQPreset_3"
+ },
+ {
+  "name": "ToshiParam_Entry_14",
+  "value": "0xeda83c",
+  "result": "retired",
+  "into": "EQPreset_4"
+ },
+ {
+  "name": "ToshiParam_Entry_15",
+  "value": "0xeda854",
+  "result": "retired",
+  "into": "EQPreset_5"
+ },
+ {
+  "name": "ToshiParam_Entry_16",
+  "value": "0xeda86c",
+  "result": "retired",
+  "into": "EQPreset_6"
+ },
+ {
+  "name": "ToshiParam_Entry_17",
+  "value": "0xeda884",
+  "result": "retired",
+  "into": "EQPreset_7"
+ },
+ {
+  "name": "ToshiParam_Entry_18",
+  "value": "0xeda89c",
+  "result": "retired",
+  "into": "EQPreset_8"
+ },
+ {
+  "name": "ToshiParam_Entry_19",
+  "value": "0xeda8b4",
+  "result": "retired",
+  "into": "CombinedPreset_0"
+ },
+ {
+  "name": "ToshiParam_Entry_20",
+  "value": "0xeda8e4",
+  "result": "retired",
+  "into": "CombinedPreset_1"
+ },
+ {
+  "name": "ToshiParam_Entry_21",
+  "value": "0xeda914",
+  "result": "retired",
+  "into": "CombinedPreset_2"
+ },
+ {
+  "name": "ToshiParam_Entry_22",
+  "value": "0xeda944",
+  "result": "retired",
+  "into": "CombinedPreset_3"
+ },
+ {
+  "name": "ToshiParam_Entry_23",
+  "value": "0xeda974",
+  "result": "retired",
+  "into": "CombinedPreset_4"
+ },
+ {
+  "name": "ToshiParam_Entry_24",
+  "value": "0xeda9a4",
+  "result": "retired",
+  "into": "CombinedPreset_5"
+ },
+ {
+  "name": "ToshiParam_Entry_25",
+  "value": "0xeda9d4",
+  "result": "retired",
+  "into": "CombinedPreset_6"
+ },
+ {
+  "name": "ToshiParam_Entry_26",
+  "value": "0xedaa04",
+  "result": "retired",
+  "into": "CombinedPreset_7"
+ },
+ {
+  "name": "ToshiParam_Entry_27",
+  "value": "0xedaa34",
+  "result": "retired",
+  "into": "CombinedPreset_8"
+ },
+ {
+  "name": "SoundProgram_ParamPtrTable",
+  "value": "0xedb2e4",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "WidgetParam_TestMode_Entry",
+  "value": "0xedba44",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "WidgetParam_SineWave_Entry",
+  "value": "0xedbaae",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeqData_SubDispatch_ParamA",
+  "value": "0xee3023",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "SeqData_SubDispatch_ParamB",
+  "value": "0xee3025",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "CharMap_PermutationPtrTable_A",
+  "value": "0xeed3de",
+  "result": "retired",
+  "into": "Subsys_HandlerTable11"
+ },
+ {
+  "name": "CharMap_PermutationPtrTable_B",
+  "value": "0xeed52b",
+  "result": "retired",
+  "into": "Subsys_HandlerTable01"
+ },
+ {
+  "name": "HdaeRom_DispatchOffsetTable",
+  "value": "0xeed747",
+  "result": "retired",
+  "into": "HdaeRomData_SwitchOffsets"
+ },
+ {
+  "name": "HdaeRom_AltDispatchOffsetTable",
+  "value": "0xeed753",
+  "result": "retired",
+  "into": "HdaeRomAlt_SwitchOffsets"
+ },
+ {
+  "name": "Pad_AfterNaka_DrawbarOrgan_Screens",
+  "value": "0xeee812",
+  "result": "placed",
+  "how": "incbin"
+ },
+ {
+  "name": "NakaData_NormalModeMap",
+  "value": "0xeefff5",
+  "result": "placed",
+  "how": "list"
+ },
+ {
+  "name": "PerfMode_Evt01_Handler",
+  "value": "0xef8b43",
+  "result": "retired",
+  "into": "PerfMode_EventTable_0_Target1"
+ },
+ {
+  "name": "PerfMode_Evt02_Handler",
+  "value": "0xef8dd1",
+  "result": "retired",
+  "into": "PerfMode_EventTable_0_Target2"
+ },
+ {
+  "name": "UIState_Evt06_Handler",
+  "value": "0xef952a",
+  "result": "retired",
+  "into": "UIState_EventTable_Target6"
+ },
+ {
+  "name": "UIState_Evt05_Handler",
+  "value": "0xef9533",
+  "result": "retired",
+  "into": "UIState_EventTable_Target5"
+ },
+ {
+  "name": "MemConfig_Handler_2",
+  "value": "0xefaccd",
+  "result": "retired",
+  "into": "MemoryConfig_Handler_Table_Target2"
+ },
+ {
+  "name": "SubCPU_ToneDispatch_0x54",
+  "value": "0xefdb6a",
+  "result": "kept (inside a line)",
+  "uses": 2
+ },
+ {
+  "name": "StringData_PartModeNames",
+  "value": "0xeff7fd",
+  "result": "retired",
+  "into": "Tbl_ArticulationNames"
+ },
+ {
+  "name": "SeMenu_DataBlock_01",
+  "value": "0xf10374",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_02",
+  "value": "0xf103e3",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_03",
+  "value": "0xf103f3",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_04",
+  "value": "0xf1042a",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_05",
+  "value": "0xf1043a",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_06",
+  "value": "0xf10464",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_07",
+  "value": "0xf1048e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_08",
+  "value": "0xf1049e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_09",
+  "value": "0xf104ae",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_10",
+  "value": "0xf104be",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_11",
+  "value": "0xf104e8",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_12",
+  "value": "0xf1059a",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_13",
+  "value": "0xf1064c",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "SeMenu_DataBlock_14",
+  "value": "0xf1065f",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "FlashRead_BlockData_Field8",
+  "value": "0xf15867",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "FlashRead_BlockData_Field7",
+  "value": "0xf15872",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaData_PerfStyleCode",
+  "value": "0xf4fc1b",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "MSP_FactoryPresetData_Continued",
+  "value": "0xf6fcb7",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "FDC_INIT",
+  "value": "0xf967b2",
+  "result": "label renamed",
+  "label": "FDC_InitSequence_Full_Helper"
+ },
+ {
+  "name": "FDC_CONFIG_VERIFY",
+  "value": "0xf967c3",
+  "result": "label renamed",
+  "label": "FDC_Write_Data_Entry"
+ },
+ {
+  "name": "FDC_CMD_DISPATCH_SUB",
+  "value": "0xf96988",
+  "result": "label renamed",
+  "label": "FDC_WaitReady_Helper2"
+ },
+ {
+  "name": "FDC_CMD_SEND",
+  "value": "0xf96eec",
+  "result": "label renamed",
+  "label": "FDC_WaitReady_Helper3"
+ },
+ {
+  "name": "FDC_DETECT_CHECK",
+  "value": "0xf970f1",
+  "result": "label renamed",
+  "label": "FDC_CMD_EXEC_Helper3"
+ },
+ {
+  "name": "FDC_DRIVE_DETECT",
+  "value": "0xf97137",
+  "result": "label renamed",
+  "label": "FDC_CMD_EXEC_Helper4"
+ },
+ {
+  "name": "FDC_DRIVE_STATUS",
+  "value": "0xf97185",
+  "result": "label renamed",
+  "label": "FDC_CMD_EXEC_Helper2_Helper"
+ },
+ {
+  "name": "FDC_PRE_OP_CHECK",
+  "value": "0xf9719f",
+  "result": "label renamed",
+  "label": "FDC_MODE_CONFIG_Helper"
+ },
+ {
+  "name": "FDC_TIMING_DELAY",
+  "value": "0xf971cf",
+  "result": "label renamed",
+  "label": "FDC_CmdRecalibrate_Helper"
+ },
+ {
+  "name": "FDC_POST_OP",
+  "value": "0xf971d5",
+  "result": "label renamed",
+  "label": "FDC_ClearStatus_InitTimer_Join"
+ },
+ {
+  "name": "FDC_CmdSeek",
+  "value": "0xf97289",
+  "result": "label renamed",
+  "label": "FDC_CmdRecalibrate_Helper3"
+ },
+ {
+  "name": "FDC_CE_DISPATCH",
+  "value": "0xf9741d",
+  "result": "label renamed",
+  "label": "FDC_CMD_EXEC_Entry2"
+ },
+ {
+  "name": "FDC_CE_EXIT",
+  "value": "0xf97426",
+  "result": "label renamed",
+  "label": "FDC_CMD_EXEC_Epilogue"
+ },
+ {
+  "name": "FDC_SECTOR_XFER",
+  "value": "0xf97428",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "FDC_SX_MAIN",
+  "value": "0xf97551",
+  "result": "retired",
+  "into": "FDC_CMD_EXEC_Join5"
+ },
+ {
+  "name": "FDC_SX_EXIT",
+  "value": "0xf9755a",
+  "result": "retired",
+  "into": "FDC_CMD_EXEC_Epilogue2"
+ },
+ {
+  "name": "FDC_CMD_ENABLE",
+  "value": "0xf97814",
+  "result": "label renamed",
+  "label": "FDC_WaitReady_Helper4"
+ },
+ {
+  "name": "FDC_CMD_DISABLE",
+  "value": "0xf9783e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "FDC_OUTPUT_CTRL",
+  "value": "0xf9784e",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaData_WidgetInit1",
+  "value": "0xfc5c8f",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "NakaData_WidgetInit2",
+  "value": "0xfc5cb4",
+  "result": "retired",
+  "into": "FileIO_BytecodeData_Code_Loop3"
+ },
+ {
+  "name": "NakaData_WidgetInit3",
+  "value": "0xfc5d1f",
+  "result": "retired",
+  "into": "FileIO_BytecodeData_Code_Join18"
+ },
+ {
+  "name": "SeqChan_UnhandledCmd",
+  "value": "0xfd7a90",
+  "result": "placed",
+  "how": "line-start"
+ },
+ {
+  "name": "AudioInit_PartConfig_Loop_0x26",
+  "value": "0xfdf884",
+  "result": "deleted (unused, inside a line)"
+ },
+ {
+  "name": "NakaData_RomEnd",
+  "value": "0xffffff",
+  "result": "kept (region constant)"
+ }
+]

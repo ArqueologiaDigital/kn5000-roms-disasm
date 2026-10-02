@@ -54,7 +54,8 @@
 ; [nakarest] 0xea8c64, 0xea8c60, 0xea8c5c), which is read by DiskSure (file_io/medley.s: `lda
 ; [nakarest] xhl, (DiskSure_PtrTable:24)`).
 DiskWarning_ConfirmStrings:
-	.incbin "includes/generated/naka_disk_warning.bin", 0x0, 0x30
+	.incbin "includes/generated/naka_disk_warning.bin", 0x0, 0x10
+DiskWarning_GermanConfirm:	.incbin "includes/generated/naka_disk_warning.bin", 0x10, 0x20
 ; [nakarest] naka_disk_warning+0x30  +0x30..+0x1c4 (0xea8cdc, 404 B)
 ; [nakarest] A table of 6 pointers into this piece (404 B at 0xea8cdc), then text; entry 0
 ; [nakarest] points at "Using DISK FORMAT will erase any current data on"; no registered NAKA
@@ -923,7 +924,7 @@ GraphicsRender_ByteData_Data:
 ; [nakarest] purpose not established: layout of 32 B at 0xeaaef4 not derived; readers below
 ; [nakarest] Readers: source references GraphicsRender_ByteData_Loop3
 ; [nakarest] (display/graphics_text_vga.s: `.long Pad_AfterStr_No`).
-	.incbin "includes/generated/naka_disk_warning.bin", 0x2248, 0x20
+Pad_AfterStr_No:	.incbin "includes/generated/naka_disk_warning.bin", 0x2248, 0x20
 ; [nakarest] naka_disk_warning+0x2268  +0x2268..+0x22f8 (0xeaaf14, 144 B)
 ; [nakarest] purpose not established: layout of 144 B at 0xeaaf14 not derived; readers below
 ; [nakarest] Readers: source references GraphicsRender_ProcessEntries
@@ -1107,7 +1108,7 @@ DrawFunc_Init_Entry3_Str_Fmt1d_2:	.incbin "includes/generated/naka_disk_warning.
 ; [nakarest] Text (4 B at 0xeab18c), first string "%2d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Entry4
 ; [nakarest] (display/graphics_text_vga.s: `.long FmtStr_pct2d`).
-	.incbin "includes/generated/naka_disk_warning.bin", 0x24E0, 0x4
+FmtStr_pct2d:	.incbin "includes/generated/naka_disk_warning.bin", 0x24E0, 0x4
 ; [nakarest] naka_disk_warning+0x24e4  +0x24e4..+0x24e8 (0xeab190, 4 B)
 ; [nakarest] Text (4 B at 0xeab190), first string "%3d"; no registered NAKA table points into
 ; [nakarest] it; reached through source references DrawFunc_Init_Skip9
@@ -1182,7 +1183,9 @@ BitmapIDProc_PtrTable:	.incbin "includes/generated/naka_disk_warning.bin", 0x272
 ; [nakarest] propname blocks (the +20 field-name table) of classes 0-108 of Class slot 0x160
 ; [nakarest] (table 0xeac9ee, 109 entries, InitializeRoot): Object {}; Function {func};
 ; [nakarest] ApFunction {}; ....
-	.incbin "includes/generated/naka_disk_warning.bin", 0x31E8, 0xB5A
+	.incbin "includes/generated/naka_disk_warning.bin", 0x31E8, 0x326
+WidgetPropStr_Max:		.incbin "includes/generated/naka_disk_warning.bin", 0x350E, 0x4
+WidgetPropStr_RangeFigures:	.incbin "includes/generated/naka_disk_warning.bin", 0x3512, 0x830
 ; [nakarest] naka_disk_warning+0x3d42  +0x3d42..+0x402e (0xeac9ee, 748 B)
 ; [nakarest] the table itself: Class slot 0x160 (table 0xeac9ee, 109 entries, InitializeRoot),
 ; [nakarest] 109 class definitions x 24 bytes. class definition entries 0-31 of Class slot 0x160

@@ -202,7 +202,7 @@ Root_MainFunctionTable_440:	.incbin "includes/generated/naka_debug_naming.bin", 
 ; [nakarest] at 0x0324fc -- which SetPaletteRGB writes and Table_LookupDword reads 4 bytes per
 ; [nakarest] colour (`sll xwa, 2`). 256 x {3 colour bytes, 0}: the 4th byte of all 256 entries
 ; [nakarest] is 0; the channel order was not traced.
-	.incbin "includes/generated/naka_debug_naming.bin", 0xCE0, 0x400
+Palette_8bit_RGBA:	.incbin "includes/generated/naka_debug_naming.bin", 0xCE0, 0x400
 ; [nakarest] NakaColor_Palette1  +0x10e0..+0x14e0 (0xeb3bde, 1024 B)
 ; [nakarest] A wallpaper palette: 256 x 4 bytes, three colour bytes and a 0 (the 4th byte of all
 ; [nakarest] 256 entries is 0; the channel order was not traced). Its address is entry 1 of the

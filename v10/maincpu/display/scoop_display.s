@@ -1004,7 +1004,7 @@ ScoopDisp_DispatchTable_Small:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	.long ScoopDisp_DispatchTable_Extended_0x20
+	.long UIState_EventTable_Target11
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret

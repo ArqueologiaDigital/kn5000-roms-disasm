@@ -589,7 +589,139 @@ MasterSetup_DialTurn_Underflow_Data:	.incbin "includes/generated/naka_style_bitm
 ; entry.
 ; -----------------------------------------------------------------------------
 StyleSong_Titles:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A46, 0x84D0
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A46, 0x22
+StyleBmp_ZachariasSwing:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4A68, 0x88
+StyleBmp_YeeHaFiddles:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4AF0, 0x88
+StyleBmp_WunderPops:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4B78, 0x88
+StyleBmp_WildSideOrgan:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4C00, 0x88
+StyleBmp_WheelsofLife:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4C88, 0x88
+StyleBmp_WeddingParty:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4D10, 0x88
+StyleBmp_WandrinKeys:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4D98, 0x88
+StyleBmp_WaltzingConcert:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x4E20, 0x88
+StyleBmp_WailersGuitar:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4EA8, 0x88
+StyleBmp_VocalBeats:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4F30, 0x88
+StyleBmp_ViennaWoods:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x4FB8, 0x88
+StyleBmp_VegasShowman:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5040, 0x88
+StyleBmp_UptownHorns:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x50C8, 0x88
+StyleBmp_TwoStepDuo:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5150, 0x88
+StyleBmp_TwilightPiano:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x51D8, 0x88
+StyleBmp_TravoltaDance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5260, 0x88
+StyleBmp_TopBrassJive:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x52E8, 0x88
+StyleBmp_TirolerHarp:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5370, 0x88
+StyleBmp_TheatreBand:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x53F8, 0x88
+StyleBmp_ThePartyBand:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5480, 0x88
+StyleBmp_TheDukesPiano:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5508, 0x88
+StyleBmp_TennesseeGuitar:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x5590, 0x88
+StyleBmp_TechnoFiddle:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5618, 0x88
+StyleBmp_TangoMarcato:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x56A0, 0x88
+StyleBmp_TakeItEasy:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5728, 0x88
+StyleBmp_SynthParty:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x57B0, 0x88
+StyleBmp_SynthForSoul:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5838, 0x88
+StyleBmp_SymphonyBallad:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x58C0, 0x88
+StyleBmp_SwingingKeys:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5948, 0x88
+StyleBmp_SwingSerenade:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x59D0, 0x88
+StyleBmp_SwingB3Threes:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5A58, 0x88
+StyleBmp_SweetSoprano:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5AE0, 0x88
+StyleBmp_SweepingBridge:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x5B68, 0x88
+StyleBmp_SunnySpainMood:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x5BF0, 0x88
+StyleBmp_StreetTalk:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5C78, 0x88
+StyleBmp_StephaneDjango:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x5D00, 0x88
+StyleBmp_SteelStrings:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5D88, 0x88
+StyleBmp_SpyraSteel:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5E10, 0x88
+StyleBmp_SpanishMoments:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x5E98, 0x88
+StyleBmp_SouthernStyle:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5F20, 0x88
+StyleBmp_SoulfulWhaWha:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x5FA8, 0x88
+StyleBmp_SoulVocalDuo:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6030, 0x88
+StyleBmp_SoulHorn:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x60B8, 0x88
+StyleBmp_SopranoGroove:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6140, 0x88
+StyleBmp_SolidSixteen:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x61C8, 0x88
+StyleBmp_SolidDistortion:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x6250, 0x88
+StyleBmp_SoftRock:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x62D8, 0x88
+StyleBmp_SmoothLips:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6360, 0x88
+StyleBmp_SlowSpinGroove:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x63E8, 0x88
+StyleBmp_SlapBackRock:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6470, 0x88
+StyleBmp_SkeletonDance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x64F8, 0x88
+StyleBmp_SingItPlayIt:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6580, 0x88
+StyleBmp_SinatraStrings:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x6608, 0x88
+StyleBmp_SimpleBand:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6690, 0x88
+StyleBmp_ShuffleOrgan:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6718, 0x88
+StyleBmp_ShearingCombo:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x67A0, 0x88
+StyleBmp_SevilleOctaves:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x6828, 0x88
+StyleBmp_SentimentalSolo:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x68B0, 0x88
+StyleBmp_SaxyMambo:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6938, 0x88
+StyleBmp_SaxDrumsRRoll:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x69C0, 0x88
+StyleBmp_SaxMamboist:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6A48, 0x88
+StyleBmp_SantasHelpers:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6AD0, 0x88
+StyleBmp_SambaUnion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6B58, 0x88
+StyleBmp_SambaParty:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6BE0, 0x88
+StyleBmp_RossVocals:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6C68, 0x88
+StyleBmp_RollingWheels:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6CF0, 0x88
+StyleBmp_RockSymphony:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6D78, 0x88
+StyleBmp_RockFall:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6E00, 0x88
+StyleBmp_RioHorns:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6E88, 0x88
+StyleBmp_RickysStrat:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6F10, 0x88
+StyleBmp_RetroGroove:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x6F98, 0x88
+StyleBmp_ReinhardtsSolo:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7020, 0x88
+StyleBmp_ReggaeDanceHit:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x70A8, 0x88
+StyleBmp_ReedItSwing:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7130, 0x88
+StyleBmp_RastaJambo:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x71B8, 0x88
+StyleBmp_RadioOrchestra:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7240, 0x88
+StyleBmp_PuentesBigband:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x72C8, 0x88
+StyleBmp_PowerSaxSwing:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7350, 0x88
+StyleBmp_PopLeader:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x73D8, 0x88
+StyleBmp_PopBridge:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7460, 0x88
+StyleBmp_PolyDance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x74E8, 0x88
+StyleBmp_PlateDance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7570, 0x88
+StyleBmp_PennyFolkSong:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x75F8, 0x88
+StyleBmp_PartyPopStack:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7680, 0x88
+StyleBmp_PartyAccordion:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7708, 0x88
+StyleBmp_ParadiseKeys:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7790, 0x88
+StyleBmp_OverTheTopWah:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7818, 0x88
+StyleBmp_OrganistsSwing:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x78A0, 0x88
+StyleBmp_OrchestralEight:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7928, 0x88
+StyleBmp_OneTwoThree:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x79B0, 0x88
+StyleBmp_OleGuitar:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7A38, 0x88
+StyleBmp_OldTimeSaloon:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7AC0, 0x88
+StyleBmp_OldNewFunk:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7B48, 0x88
+StyleBmp_OklahomaDance:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7BD0, 0x88
+StyleBmp_OceanVocals:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7C58, 0x88
+StyleBmp_NotRavels:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7CE0, 0x88
+StyleBmp_NiceKeroncong:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7D68, 0x88
+StyleBmp_NewSquareDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7DF0, 0x88
+StyleBmp_NewJazzBallad:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7E78, 0x88
+StyleBmp_NashvilleDance:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x7F00, 0x88
+StyleBmp_MuteSoloist:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x7F88, 0x88
+StyleBmp_MusetteBallad:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8010, 0x88
+StyleBmp_MovieBallad:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8098, 0x88
+StyleBmp_MoschsMilitary:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8120, 0x88
+StyleBmp_MoiksMarchshow:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x81A8, 0x88
+StyleBmp_ModernBoogie:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8230, 0x88
+StyleBmp_MirandaMallets:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x82B8, 0x88
+StyleBmp_MidnightTunes:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8340, 0x88
+StyleBmp_MerengueParty:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x83C8, 0x88
+StyleBmp_MellowSection:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8450, 0x88
+StyleBmp_MellowJazzTabs:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x84D8, 0x88
+StyleBmp_MellowShuffle:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8560, 0x88
+StyleBmp_MaxsOrchestra:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x85E8, 0x88
+StyleBmp_MarchingPolka:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8670, 0x88
+StyleBmp_MamboJambo:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x86F8, 0x88
+StyleBmp_MadTabs:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8780, 0x88
+StyleBmp_LondonsBigbone:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8808, 0x88
+StyleBmp_LionelsJazz:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8890, 0x88
+StyleBmp_LikeSunday:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8918, 0x88
+StyleBmp_LetItShine:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x89A0, 0x88
+StyleBmp_LatinoPiccolo:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8A28, 0x88
+StyleBmp_LatinPassion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8AB0, 0x88
+StyleBmp_LatinBallroom:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8B38, 0x88
+StyleBmp_LastStarparade:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8BC0, 0x88
+StyleBmp_LAWarmth:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8C48, 0x88
+StyleBmp_KnopflerTribute:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8CD0, 0x88
+StyleBmp_KeyGrooves:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D58, 0x88
+StyleBmp_JustTheFlute:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8DE0, 0x129
+NakaStr_SoundPreset176:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F09, 0x25
+SoundName_160:			.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F2E, 0x4F
+SoundName_ToTheBone:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F7D, 0x4
+NakaStr_SoundPresetBone:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F81, 0x3F95
 ; [nakarest] StyleVar_GermanSchlager  +0xcf16..+0xcf56 (0xec40d4, 64 B)
 ; [nakarest] variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry (the record
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
@@ -1721,7 +1853,11 @@ NakaInst_I_Got_The_Blues_83_EC88AC:
 ; [nakarest] StyleSong_Titles layout): "Mournful Tenor 120"; "Bad Blues Brass 120"; "Ham & Blues
 ; [nakarest] 120"; "Bluesy Alto 120"; ....
 StyleVar_BluesAlley:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x11710, 0x1F2
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x11710, 0x1E
+SoundName_MournfulTenor:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1172E, 0x88
+StyleSound_BluesAlley_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x117B6, 0x40
+SoundName_HymnBand:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x117F6, 0xC8
+SoundName_PreachTheWord:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x118BE, 0x44
 ; [nakarest] StyleVar_DayOfRest  +0x11902..+0x11986 (0xec8ac0, 132 B)
 ; [nakarest] variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry (the record
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
@@ -2429,7 +2565,9 @@ NakaInst_Tango_Marcato_120:
 ; [nakarest] StyleSong_Titles layout): "Tango Orchestra 130"; "Lush Tango 130"; "Holiday Tango
 ; [nakarest] 130"; "Italian Tango 130"; ....
 StyleVar_TangoDAmour:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13E9E, 0x14C
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13E9E, 0x40
+SoundName_LushTango:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13EDE, 0xC8
+SoundName_AstorsTango:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x13FA6, 0x44
 ; [nakarest] StyleVar_LastDanceWaltz  +0x13fea..+0x1406e (0xecb1a8, 132 B)
 ; [nakarest] variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry (the record
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
@@ -2450,7 +2588,11 @@ NakaInst_Concertina_Waltz_96:
 ; [nakarest] StyleSong_Titles layout): "Symphonic Waltz 130"; "Jazz Flute Gtr 130"; "Waltzing
 ; [nakarest] Flugel 130"; "3/4 Romance 130"; ....
 StyleVar_QuickWaltz:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14090, 0x1F2
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14090, 0x1E
+SoundName_SymphonicWaltz:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x140AE, 0x88
+StyleSound_QuickWaltz_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x14136, 0x40
+SoundName_NotStrauss:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x14176, 0xC8
+SoundName_BavarianFlutes:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x1423E, 0x44
 ; [nakarest] StyleVar_PartyVienna  +0x14282..+0x14306 (0xecb440, 132 B)
 ; [nakarest] variation table of 1 style: {u32 title, u16 id} x n + an all-zero entry (the record
 ; [nakarest] shape of StyleSong_MasterTable), walked 6 bytes at a time from 0x0340d6 by the
@@ -3005,7 +3147,18 @@ NakaInst_12_String_Samba_108:
 ; [nakarest] entry (the record shape of StyleSong_MasterTable), walked 6 bytes at a time from
 ; [nakarest] 0x0340d6 by the MstStyle2_* count loops.
 NakaInst_Torero_s_Trumpet_125:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x169EE, 0x744
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x169EE, 0x40
+SoundName_BeachPartySong:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16A2E, 0xC8
+SoundName_CubanReeds:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16AF6, 0xC8
+SoundName_LatinoPiccolo:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16BBE, 0xC8
+SoundName_JamaicanBars:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16C86, 0x40
+SoundName_SambaUnion:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16CC6, 0xC8
+SoundName_NewOrganSamba:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16D8E, 0xC8
+SoundName_NiceKeroncong:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x16E56, 0xC8
+SoundName_EasyDangdut:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16F1E, 0x40
+SoundName_PadangBeat:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x16F5E, 0xC8
+SoundName_RastaVoice:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x17026, 0xC8
+SoundName_MarleysDrums:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x170EE, 0x44
 ; [nakarest] StyleGroup_ModernDance_Table  +0x17132..+0x17232 (0xece2f0, 256 B)
 ; [nakarest] group table of the MstStyle browser, group 0: {u32 style name, u32 variation table}
 ; [nakarest] x n + an all-zero entry; MstStyle*_CountEntries walk it 8 bytes at a time until +0

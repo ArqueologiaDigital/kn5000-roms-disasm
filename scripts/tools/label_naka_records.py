@@ -193,7 +193,8 @@ def main():
         for p in sum((glob.glob(os.path.join(REPO, a.tree, "maincpu", "**", g), recursive=True)
                       for g in ("*.c", "*.h", "*.ld")), []):     # the C blobs link against *_link.ld
             t = open(p, "rb").read().decode("latin-1")
-            t2 = rp.sub(lambda q: {**renames, **retire}[q.group(1)], t) if rp else t
+            rpc = re.compile(r'(?<![\w$])(%s)(?![\w$])' % "|".join(map(re.escape, {**renames, **retire}))) if rp else None
+            t2 = rpc.sub(lambda q: {**renames, **retire}[q.group(1)], t) if rpc else t   # `.member` too
             if t2 != t:
                 open(p, "wb").write(t2.encode("latin-1"))
         if renames:

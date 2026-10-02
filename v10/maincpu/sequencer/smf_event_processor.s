@@ -5196,6 +5196,7 @@ SeqStep_FileSectorPopReturn_Loop4:
 	ld	xwa, 0:i3
 	push	xwa
 	push	xiz
+NakaData_PerfStyleCode:
 	ld	xwa, (xsp+30)
 	push	xwa
 	calr	SeqStep_FileIoCheck

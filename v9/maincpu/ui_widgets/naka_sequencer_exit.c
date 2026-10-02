@@ -21,7 +21,7 @@ extern const char NakaDesc_Empty_D;
 extern const char NakaDesc_FuncIndex;
 extern const char NakaDesc_Mode;
 extern const char NakaDesc_ColorFontPageFunc;
-extern const char NakaDesc_SeqExitWidgets;
+extern const char ClassProps_IvPnlWrExit;
 extern const char NakaDesc_Empty_E;
 extern const char NakaDesc_Empty_F;
 extern const char NakaDesc_Empty_G;
@@ -200,7 +200,7 @@ const naka_sequencer_exit_t naka_sequencer_exit_data
 
     .classdef_168_17 = { .proc = NAKA_ADDR(HelpTtlProc), .parent = 0x01600010, .allsize = 36, .selfsize = 14, .name = SELF(HelpTtl_name), .propdata = SELF(HelpTtl_code), .propname = NAKA_ADDR(NakaDesc_ColorFontPageFunc) },
 
-    .classdef_168_18 = { .proc = NAKA_ADDR(IvPnlWrExitProc), .parent = 0x01600047, .allsize = 22, .selfsize = 0, .name = SELF(IvPnlWrExit_name), .propdata = SELF(IvPnlWrExit_code), .propname = NAKA_ADDR(NakaDesc_SeqExitWidgets) },
+    .classdef_168_18 = { .proc = NAKA_ADDR(IvPnlWrExitProc), .parent = 0x01600047, .allsize = 22, .selfsize = 0, .name = SELF(IvPnlWrExit_name), .propdata = SELF(IvPnlWrExit_code), .propname = NAKA_ADDR(ClassProps_IvPnlWrExit) },
 
     .classdef_168_19 = { .proc = NAKA_ADDR(IvSdrevProc), .parent = 0x01600027, .allsize = 22, .selfsize = 0, .name = SELF(IvSdrev_name), .propdata = SELF(IvSdrev_code), .propname = NAKA_ADDR(NakaDesc_Empty_E) },
 

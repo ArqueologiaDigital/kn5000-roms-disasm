@@ -8278,7 +8278,7 @@ MemConfig_Handler_4_Helper2:
 	ld	(13964:16), 0
 	ld	a, (3415:16)
 	ld	(3521:16), a
-	call	MemConfig_Handler_3_Helper
+	call	SndDispatch_ProcessCommand_0xF
 	xor	w, w
 	sla	wa, 2
 	ld	hl, wa
@@ -8457,8 +8457,9 @@ SndDispatch_ProcessCommand:
 	jrl nz, .Lc_efb309
 	ld (0x0d57:16), a
 .Lc_efb309:
+SndDispatch_ProcessCommand_Return:
 	ret
-MemConfig_Handler_3_Helper:
+SndDispatch_ProcessCommand_0xF:
 	call	VoiceSlot_ReadCurrentParams
 	ld	xiy, 3415
 	xor	w, w

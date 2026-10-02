@@ -7243,7 +7243,7 @@ SwbtBank3_PostCallbacks:	.long 0xffffffff	; bank 3 post list: SwbtWr_PostCallbac
 Subsys_HandlerTableList:
 	.set SystemConfig_PointerTable, Subsys_HandlerTableList
 	.long Seq_InitFuncTable
-	.long CharMap_PermutationPtrTable_B
+	.long Subsys_HandlerTable01
 	.long WidgetDispatch_FDTestPtrTable
 	.long MIDI_SC0_DISPATCH_TABLE
 	.long SeqFormat_ReferenceData
@@ -7253,12 +7253,12 @@ Subsys_HandlerTableList:
 	.long WidgetStyleDataTable
 	.long EffectMode_DispatchTable
 	.long SoundParam_EncoderMappingData
-	.long CharMap_PermutationPtrTable_A
+	.long Subsys_HandlerTable11
 	.long WidgetData_CharsetMappingTable
 	.long SeqByteBlock_DispatchJumpTable
 	.long TempoScale_1Beat + 8	; no label at this target yet
 	.long AccTone_JumpTableData + 32	; no label at this target yet
-	.long CharMap_PermutationPtrTable_B + 82	; no label at this target yet
+	.long Subsys_HandlerTable01 + 82	; no label at this target yet
 	.long DemoDiskPrompt_English1 + 164	; no label at this target yet
 	.long CharMap_Preamble_Table
 	.long 0x00000000
@@ -9336,7 +9336,7 @@ SndParam_OffsetHandler_Data:
 	.short 0, 5, 10, 15, 45, 52
 ; 4 x u32 routine pointers: entry 11 of Subsys_HandlerTableList, so
 ; VoiceInit_Dispatch calls one entry of it with every subsystem's table.
-; (kn5000_v10_program.s also names this address CharMap_PermutationPtrTable_A
+; (kn5000_v10_program.s also names this address Subsys_HandlerTable11
 ; as an absolute .set; it is not a permutation table.)
 Subsys_HandlerTable11:
 	.long Param_SignExtendRetu_Block2
@@ -9420,7 +9420,7 @@ TmFlash_Return_Prologue_Data:
 	.byte 0, 2, 4, 5, 3, 0, 1, 1, 4, 2, 3
 ; 4 x u32 routine pointers: entry 1 of Subsys_HandlerTableList (see
 ; Subsys_HandlerTable11; kn5000_v10_program.s's absolute .set
-; CharMap_PermutationPtrTable_B names the same address).
+; Subsys_HandlerTable01 names the same address).
 Subsys_HandlerTable01:
 	.long CommParam_SetComplete_Block
 	.long CommParam_SetComplete_Block2

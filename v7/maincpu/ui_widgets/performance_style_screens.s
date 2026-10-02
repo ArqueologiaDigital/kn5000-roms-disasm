@@ -596,7 +596,9 @@ NAKA_InitDataBlock_PtrTable_4:	.incbin "includes/generated/naka_perf_style.bin",
 ; [nakarest] points at "Explore 1000 Musical Styles with the Music Styli"; no registered NAKA
 ; [nakarest] table points into it; reached through source references InitializeNaka_Skip4
 ; [nakarest] (storage/flash_floppy_handlers.s: `lda xhl, (NAKA_InitDataBlock_PtrTable_5:24)`).
-NAKA_InitDataBlock_PtrTable_5:	.incbin "includes/generated/naka_perf_style.bin", 0x61D6, 0x170	; 6 x 32-bit pointer
+NAKA_InitDataBlock_PtrTable_5:	.incbin "includes/generated/naka_perf_style.bin", 0x61D6, 0xE8	; 6 x 32-bit pointer
+NakaUI_ObjectTable_End:		.incbin "includes/generated/naka_perf_style.bin", 0x62BE, 0x54
+LongStr_Explore_1000_Musical:	.incbin "includes/generated/naka_perf_style.bin", 0x6312, 0x34
 ; [nakarest] naka_perf_style+0x6346  +0x6346..+0x64d8 (0xe14cba, 402 B)
 ; [nakarest] A table of 6 pointers into this piece (402 B at 0xe14cba), then text; entry 0
 ; [nakarest] points at "Add to your enjoyment with a wide range of Techn"; no registered NAKA

@@ -1208,7 +1208,9 @@ NoteEditFunc_Table:
 ; AttAreYouSureCheck_Strings[158].
 ; -----------------------------------------------------------------------------
 AttAreYouSureCheck_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x29C4, 0x9E
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x29C4, 0x8
+Str_ATTENTION:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x29CC, 0x7A
+Str_Apakahyakinakandihapus:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A46, 0x1C
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsSeqMenu1Check_Strings
 ; StsSeqMenu1Check_Strings -- the 2 strings StsSeqMenu1Check_PtrTable
@@ -1218,7 +1220,8 @@ AttAreYouSureCheck_Strings:
 ; StsSeqMenu1Check_Strings[70].
 ; -----------------------------------------------------------------------------
 StsSeqMenu1Check_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A62, 0x46
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A62, 0x20
+LongStr_Funktionen_zur_Erstellung:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2A82, 0x26
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsSeqMenu2Check_Strings
 ; StsSeqMenu2Check_Strings -- the 2 strings StsSeqMenu2Check_PtrTable
@@ -1298,7 +1301,9 @@ StsNtDrEditCheck_Strings:
 ; AttSongClrCheck_Strings[358].
 ; -----------------------------------------------------------------------------
 AttSongClrCheck_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2FAA, 0x166
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x2FAA, 0xDA
+LongStr_SongClear_Spanish:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3084, 0x3E
+LongStr_Gunakan_SONG_CLEAR:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x30C2, 0x4E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AttTrkClrCheck_Strings
 ; AttTrkClrCheck_Strings -- the 5 strings AttTrkClrCheck_PtrTable points
@@ -1308,7 +1313,9 @@ AttSongClrCheck_Strings:
 ; AttTrkClrCheck_Strings[404].
 ; -----------------------------------------------------------------------------
 AttTrkClrCheck_Strings:					.incbin "includes/generated/naka_widget_descriptors.bin", 0x3110, 0x8A
-NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x319A, 0x10A
+NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x319A, 0x64
+LongStr_TrackClear_Spanish:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x31FE, 0x48
+LongStr_Gunakan_TRACK_CLEAR:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x3246, 0x5E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsAtPunchCheck_Strings
 ; StsAtPunchCheck_Strings -- the 2 strings StsAtPunchCheck_PtrTable
@@ -1526,7 +1533,8 @@ StsAtPunchCheck_PtrTable:
 ;   (0xF2F3D6, pushw far pointer)
 ; -----------------------------------------------------------------------------
 StsAtPunchCheck_PtrTable_Strings:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37AC, 0x4
-NoteEditBox_EventDispatch2_Str_N81:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B0, 0x8	; "~81"
+NoteEditBox_EventDispatch2_Str_N81:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B0, 0x4	; "~81"
+FmtStr_pct3d:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B4, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Str
 ; NoteEditBox_EventDispatch2_Str -- NUL-terminated string(s), 8 bytes,
@@ -2356,16 +2364,16 @@ Equalizer_HandleSelectEvent_Table_2:
 EffectBox_StateDispatch_CaseTable:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AD6, 0xE
 ; -----------------------------------------------------------------------------
-; [naka_s_headers] EffectBox_StateDispatch_CaseTable_Tail
-; EffectBox_StateDispatch_CaseTable_Tail -- 90 bytes after
+; [naka_s_headers] LongStr_1_2_3
+; LongStr_1_2_3 -- 90 bytes after
 ; EffectBox_StateDispatch_CaseTable that no registration or code
 ; reference reaches (searched: RegObjTabl tables, slice and positional
 ; labels). Contents not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
-; EffectBox_StateDispatch_CaseTable_Tail[90].
+; LongStr_1_2_3[90].
 ; -----------------------------------------------------------------------------
-EffectBox_StateDispatch_CaseTable_Tail:
+LongStr_1_2_3:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3AE4, 0x5A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Table
@@ -2701,7 +2709,8 @@ Sqedt_ParamDispatch_Str_2:
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_3[18].
 ; -----------------------------------------------------------------------------
-Sqedt_ParamDispatch_Str_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CF8, 0xC
+Sqedt_ParamDispatch_Str_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CF8, 0x6
+FmtStr_pct3d_4B5E:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3CFE, 0x6
 Sqedt_ParamDispatch_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D04, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_4
@@ -2802,7 +2811,9 @@ Sqedt_ParamDispatch_Str_10:
 Sqedt_ParamDispatch_Str_11:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D3A, 0x6
 Sqedt_ParamDispatch_Entry2_Str_Fmt2d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D40, 0x8	; " +%2d "
 Sqedt_ParamDispatch_Entry2_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D48, 0x8	; " -%2d "
-Sqedt_ParamDispatch_Entry2_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D50, 0x16	; " %3d "
+Sqedt_ParamDispatch_Entry2_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D50, 0x6	; " %3d "
+FmtStr_pluspct3d:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D56, 0x8
+FmtStr_minuspct3d:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D5E, 0x8
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_12
 ; Sqedt_ParamDispatch_Str_12 -- NUL-terminated string(s), 6 bytes, used
@@ -3437,7 +3448,10 @@ Bitmap_Ntedt0d:
 ; (rows of 88 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0k:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBF18, 0x28E8
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBF18, 0x1179
+Pad_AfterBitmap_Dredt0k:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD091, 0x200
+Pad_AfterBitmap_Dredt0k_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD291, 0x201
+Pad_BeforeBitmap_Dredt0d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xD492, 0x136E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_Dredt0d
 ; Bitmap_Dredt0d  --  168 x 119 bitmap, 8 bpp, row stride 168, 19992 bytes
@@ -3471,10 +3485,24 @@ Bitmap_Dredt0k:
 ; (rows of 168 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Dredt0d:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x9A8
-Demofeat2_ShowHide_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A8, 0x1
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0xE800, 0x9A0
+NakaData_ExternalBase:			.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A0, 0x2
+Pad_AfterNakaData_ExternalBase:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A2, 0x3
+Pad_NakaExternal_Block1:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A5, 0x3
+Demofeat2_ShowHide_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A8, 0x1
 FDemoText_ByteData_LayoutEngine_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1A9, 0x1
-PresBox_TimerExpired_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1AA, 0x446E
+PresBox_TimerExpired_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1AA, 0x27
+Pad_NakaExternal_Block2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1D1, 0x15
+Pad_NakaExternal_Block3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF1E6, 0x3B
+Pad_NakaExternal_Block4:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF221, 0x15
+NakaData_ExternalPadBlock_A:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF236, 0x13
+NakaData_ExternalPadBlock_B:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF249, 0x15
+Pad_BeforeNakaData_UserMemoryConfig:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF25E, 0x12
+NakaData_UserMemoryConfig:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xF270, 0x31
+Pad_AfterNakaData_UserMemoryConfig:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF2A1, 0x15
+Pad_BeforeNakaData_StyleBitmapPad:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xF2B6, 0x8F3
+NakaData_ExternalBitmapBlock:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xFBA9, 0xDFE
+NakaData_StyleBitmapPad:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x109A7, 0x2C71
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] WidgetData_DrawbarPositionTable
 ; WidgetData_DrawbarPositionTable -- Historical name, kept for
@@ -4908,7 +4936,8 @@ AccPatch_Transpose_LookupTable_Data:
 ; Rhythm_VelLookA_TableLookup_Table[456].
 ; -----------------------------------------------------------------------------
 Rhythm_VelLookA_TableLookup_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15362, 0x1C8
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x15362, 0x150
+RhythmTiming_OffsetTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x154B2, 0x78
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VoiceParam_BankProgramWords
 ; VoiceParam_BankProgramWords -- 8 x 128 u16.
@@ -6002,7 +6031,13 @@ AccompSeq_StyleDataTable:
 ; AccompSeq_Stream_00_a .. AccompSeq_Stream_77_b.
 ; -----------------------------------------------------------------------------
 AccompSeq_Streams:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BD06, 0x86AA
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BD06, 0x34C7
+TechnichordParam_Block1:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F1CD, 0x41
+TechnichordParam_Block2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F20E, 0x50
+TechnichordParam_Block3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F25E, 0x10
+TechnichordParam_Block4:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F26E, 0x30
+TechnichordParam_Block5:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F29E, 0x19
+NakaData_TechnichordParams:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F2B7, 0x50F9
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiMenu_ApFunctionTable
 ; MidiMenu_ApFunctionTable (ROM 0xe55210) -- 60 procedure addresses and

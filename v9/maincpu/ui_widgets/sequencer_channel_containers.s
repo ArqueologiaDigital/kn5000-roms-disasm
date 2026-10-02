@@ -26,7 +26,7 @@ Naka_DrawbarOrgan_Screens:
 ; [nakarest] Pad_AfterNaka_DrawbarOrgan_Screens`); work-RAM image: Boot_InitWorkRAM copies these
 ; [nakarest] bytes to RAM 0x3e46e..0x3e47c (its ld xde/xhl/xbc + ldir blocks); no literal RAM
 ; [nakarest] reference into that copy was found.
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x79A, 0xE
+Pad_AfterNaka_DrawbarOrgan_Screens:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x79A, 0xE
 ; [nakarest] SeqCh_FeatureDemoCallbackData  +0x7a8..+0x888 (0xeee820, 224 B)
 ; [nakarest] purpose not established: layout of 224 B at 0xeee820 not derived; readers below
 ; [nakarest] Readers: source references FDemoText_ByteData_DisplayRefresh_Loop

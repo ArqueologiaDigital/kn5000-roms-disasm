@@ -110,20 +110,20 @@ FDC_WaitReady_Skip6:
 FDC_WaitReady_Epilogue2:
 	pop	xiz
 	ret
-FDC_CMD_EXEC_Helper:
+FDC_INIT:
 	ldw	wa, 54
 	calr	FDC_Send_Command
 	ld	wa, 2:i3
 	calr	SOME_DELAY
 	ld	(0x8b04:16), 255
 	ret
-FDC_CMD_EXEC_Helper2:
+FDC_CONFIG_VERIFY:
 	push	xiz
 	calr	FDC_ClearStatus_InitTimer
-	calr	FDC_CMD_EXEC_Helper4
+	calr	FDC_DRIVE_DETECT
 	cp	hl, 0xffff
 	jr	z, FDC_CMD_EXEC_Helper2_Skip
-	calr	FDC_CMD_EXEC_Helper2_Helper
+	calr	FDC_DRIVE_STATUS
 	cp	hl, 0xffff
 	jr	z, FDC_CMD_EXEC_Helper2_Skip
 	ld	(0x8b04:16), 255
@@ -135,14 +135,14 @@ FDC_CMD_EXEC_Helper2_Skip:
 	calr	FDC_Send_Command
 	ld	wa, 2:i3
 	calr	SOME_DELAY
-	calr	FDC_CMD_EXEC_Helper4
+	calr	FDC_DRIVE_DETECT
 	cp	hl, 0xffff
 	jr	z, FDC_CMD_EXEC_Helper2_Skip2
-	calr	FDC_CMD_EXEC_Helper2_Helper
+	calr	FDC_DRIVE_STATUS
 	cp	hl, 0xffff
 	jr	z, FDC_CMD_EXEC_Helper2_Skip2
 	calr	FDC_ClearStatus_InitTimer
-	calr	FDC_WaitReady_Helper2
+	calr	FDC_CMD_DISPATCH_SUB
 	cp	(0x8a24:16), 0
 	jr	z, FDC_WaitReady_Loop3
 	ld	(0x8a20:16), 0
@@ -184,14 +184,14 @@ FDC_WaitReady_Loop6:
 	jr	nz, FDC_WaitReady_Loop3
 FDC_CMD_EXEC_Helper2_Skip2:
 	ld	wa, 3:i3
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	jr	z, FDC_WaitReady_Skip9
 	ld	(0x8a20:16), 0
 	jrl	FDC_WaitReady_Epilogue3
 FDC_WaitReady_Skip9:
 	ldw	wa, 79
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	jr	z, FDC_WaitReady_Skip10
 	ld	(0x8a20:16), 0
@@ -255,13 +255,13 @@ FDC_WaitReady_Join:
 	ldto_berp a, 251
 	or a, 11
 	extz wa
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	jr	z, FDC_WaitReady_Skip12
 	ld	(0x8a20:16), 0
 	jr	FDC_WaitReady_Epilogue3
 FDC_WaitReady_Skip12:
-	calr	FDC_WaitReady_Helper4
+	calr	FDC_CMD_ENABLE
 	cp	(0x8a24:16), 0
 	jr	z, FDC_WaitReady_Skip13
 	ld	(0x8a20:16), 0
@@ -272,7 +272,7 @@ FDC_WaitReady_Skip13:
 FDC_WaitReady_Epilogue3:
 	pop	xiz
 	ret
-FDC_WaitReady_Helper2:
+FDC_CMD_DISPATCH_SUB:
 	ldw	wa, 54
 	calr	FDC_Send_Command
 	ld	wa, 2:i3
@@ -936,7 +936,7 @@ FDC_HardwareSetup:
 	or	a, 96
 	ld	(xbc), a
 	ret
-FDC_WaitReady_Helper3:
+FDC_CMD_SEND:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	FDC_WaitReady
@@ -1158,7 +1158,7 @@ FDC_HardwareSetup_Skip17:
 	extz	wa
 	calr	FDC_HardwareSetup_Helper2
 	ret
-FDC_CMD_EXEC_Helper3:
+FDC_DETECT_CHECK:
 	cpw	(0x8a46:16), 0
 	jr	z, FDC_HardwareSetup_Entry
 	ld	hl, 0:i3
@@ -1191,7 +1191,7 @@ FDC_CMD_EXEC_Helper3_Skip4:
 FDC_CMD_EXEC_Helper3_Skip5:
 	ldw	hl, 0xffff
 	ret
-FDC_CMD_EXEC_Helper4:
+FDC_DRIVE_DETECT:
 	cpw	(0x8a46:16), 0
 	jr	z, FDC_CMD_EXEC_Helper4_Skip
 	ld	hl, 0:i3
@@ -1227,7 +1227,7 @@ FDC_CMD_EXEC_Helper4_Skip6:
 FDC_CMD_EXEC_Helper4_Skip7:
 	ld	hl, 0:i3
 	ret
-FDC_CMD_EXEC_Helper2_Helper:
+FDC_DRIVE_STATUS:
 	cpw	(0x8a4a:16), 0xffff
 	jr	z, FDC_CMD_EXEC_Helper4_Skip8
 	ld	hl, 0:i3
@@ -1240,7 +1240,7 @@ FDC_CMD_EXEC_Helper4_Skip8:
 FDC_CMD_EXEC_Helper4_Skip9:
 	ldw	hl, 0xffff
 	ret
-FDC_MODE_CONFIG_Helper:
+FDC_PRE_OP_CHECK:
 	ret
 
 FDC_Set_Status:
@@ -1280,10 +1280,10 @@ FDC_SetStatus_Return:
 FDC_ClearStatus_InitTimer:
 	ld	(0x8a24:16), 0
 	ret
-FDC_CmdRecalibrate_Code_Helper:
+FDC_TIMING_DELAY:
 	ld	(0x8a60:16), 255
 	ret
-FDC_ClearStatus_InitTimer_Join:
+FDC_POST_OP:
 	push	xiz
 	ldw	qiz, 0x1f4
 	ldw_d16	iz, (0x409)
@@ -1361,12 +1361,12 @@ FDC_CmdRecalibrate:
 	ldfr_berp a, 251
 	ld	(0x8a36:16), 5
 	ld	(0x8b04:16), 255
-	calr	FDC_CMD_EXEC_Helper5
+	calr	FDC_CmdSeek
 	ld	(0x8b04:16), 0
-	calr	FDC_CmdRecalibrate_Code_Helper
+	calr	FDC_TIMING_DELAY
 	ld	wa, 7:i3
-	calr	FDC_WaitReady_Helper3
-	calr	FDC_ClearStatus_InitTimer_Join
+	calr	FDC_CMD_SEND
+	calr	FDC_POST_OP
 	cp	(0x8a24:16), 0
 	jr	z, FDC_CmdRecalibrate_Skip
 	ld	(0x8b04:16), 255
@@ -1377,17 +1377,17 @@ FDC_CmdRecalibrate_Skip:
 	calr	SOME_DELAY
 	pop qiz
 	ret
-FDC_CMD_EXEC_Helper5:
+FDC_CmdSeek:
 	ld	a, (0x8a36:16)
 	cp	a, (35588:16)
 	ret	z
 	ldmm8	0x8b04, 0x8a36
 	ld	wa, 2:i3
 	calr	SOME_DELAY
-	calr	FDC_CmdRecalibrate_Code_Helper
+	calr	FDC_TIMING_DELAY
 	ldw	wa, 15
-	calr	FDC_WaitReady_Helper3
-	calr	FDC_ClearStatus_InitTimer_Join
+	calr	FDC_CMD_SEND
+	calr	FDC_POST_OP
 	cp	(0x8a24:16), 0
 	jr	z, FDC_CMD_EXEC_Helper5_Skip
 	ld	(0x8b04:16), 255
@@ -1397,12 +1397,12 @@ FDC_CMD_EXEC_Helper5_Skip:
 FDC_CMD_EXEC_Helper6:
 	ld	(0x8a28:16), 198
 	calr	FDC_Setup_DMA_Mode
-	calr	FDC_CmdRecalibrate_Code_Helper
+	calr	FDC_TIMING_DELAY
 	ldw	wa, 198
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	ret	nz
-	jrl	FDC_ClearStatus_InitTimer_Join
+	jrl	FDC_POST_OP
 ; --- FDC_CMD_EXEC: Main FDC command execution engine ---
 ; Two nearly identical halves: READ path (command type 1) and
 ; WRITE path (command type 8), set in state variable 35432.
@@ -1418,32 +1418,32 @@ FDC_CMD_EXEC_Helper6:
 ; Uses (R+d16) addressing for all FDC state variable access. 672 bytes.
 FDC_CMD_EXEC:
 	pushw	iz
-	calr	FDC_CMD_EXEC_Helper3
+	calr	FDC_DETECT_CHECK
 	cp	hl, 0:i3
 	jr	z, FDC_CMD_EXEC_Skip
 	ld	(0x8a68:16), 1
-	jrl	FDC_CMD_EXEC_Entry2
+	jrl	FDC_CE_DISPATCH
 FDC_CMD_EXEC_Skip:
-	calr	FDC_CMD_EXEC_Helper4
+	calr	FDC_DRIVE_DETECT
 	cp	hl, 0:i3
 	jr	nz, FDC_CMD_EXEC_Skip2
 	ld	(0x8a68:16), 8
-	jrl	FDC_CMD_EXEC_Entry2
+	jrl	FDC_CE_DISPATCH
 FDC_CMD_EXEC_Skip2:
 	ld	(0x8a68:16), 1
-	jrl	FDC_CMD_EXEC_Entry2
+	jrl	FDC_CE_DISPATCH
 FDC_CMD_EXEC_Loop:
 	ld	(0x8a24:16), 0
-	calr	FDC_CMD_EXEC_Helper5
+	calr	FDC_CmdSeek
 	cp	(0x8a24:16), 0
 	jr	z, FDC_CMD_EXEC_Skip3
 	ld	a, (0x8a24:16)
 	ldfr_berp a, 248
 	exts	iz
-	calr	FDC_CMD_EXEC_Helper2
+	calr	FDC_CONFIG_VERIFY
 	ldto_berp	a, 248
 	stb_d8	(0x8a24), a
-	jrl	FDC_CMD_EXEC_Epilogue
+	jrl	FDC_CE_EXIT
 FDC_CMD_EXEC_Skip3:
 	ldw_d16	wa, (0x8a48)
 	cp	wa, (0x8b0c:16)
@@ -1484,29 +1484,29 @@ FDC_CMD_EXEC_Skip6:
 	jr	z, FDC_CMD_EXEC_Skip8
 	cp	(0x8a24:16), 9
 	jr	nz, FDC_CMD_EXEC_Skip7
-	calr	FDC_CMD_EXEC_Helper
-	jrl	FDC_CMD_EXEC_Epilogue
+	calr	FDC_INIT
+	jrl	FDC_CE_EXIT
 FDC_CMD_EXEC_Skip7:
-	calr	FDC_CMD_EXEC_Helper4
+	calr	FDC_DRIVE_DETECT
 	cp	hl, 0xffff
 	jr	z, FDC_CMD_EXEC_Entry
-	calr	FDC_CMD_EXEC_Helper2
+	calr	FDC_CONFIG_VERIFY
 	ld	(0x8b04:16), 255
-	calr	FDC_CMD_EXEC_Helper5
+	calr	FDC_CmdSeek
 FDC_CMD_EXEC_Entry:
 	ldmm16	0x8a4a, 0x8b12
 	dec	1, (0x8a68:16)
 	ldb_d8	a, (0x8a68)
 	cp	a, 0:i3
-	jr	nz, FDC_CMD_EXEC_Entry2
+	jr	nz, FDC_CE_DISPATCH
 	ld	(0x8a24:16), 16
-	jr	FDC_CMD_EXEC_Epilogue
+	jr	FDC_CE_EXIT
 FDC_CMD_EXEC_Skip8:
 	ld	wa, (0x8b12:16)
 	sub	wa, iz
 	ld	(0x8a4a:16), wa
 	cpw	(0x8a4a:16), 0
-	jr	z, FDC_CMD_EXEC_Entry2
+	jr	z, FDC_CE_DISPATCH
 	lda	xbc, (0x8a4c:16)
 	ld	wa, (0x8a1c:16)
 	extz	xwa
@@ -1519,29 +1519,30 @@ FDC_CMD_EXEC_Skip8:
 	ld	(0x8a29:16), a
 	ld	(0x8a2c:16), a
 	cp	(0x8a2c:16), 0
-	jr	nz, FDC_CMD_EXEC_Entry2
+	jr	nz, FDC_CE_DISPATCH
 	lda	xwa, (0x8a2b:16)
 	incm8	1, (xwa)
 	ld	a, (xwa)
 	ld	(0x8a36:16), a
-FDC_CMD_EXEC_Entry2:
+FDC_CE_DISPATCH:
 	cpw	(0x8a4a:16), 0
 	jrl	nz, FDC_CMD_EXEC_Loop
-FDC_CMD_EXEC_Epilogue:
+FDC_CE_EXIT:
 	popw	iz
 	ret
+FDC_SECTOR_XFER:
 	pushw	iz
 	ld	(0x8a68:16), 8
 	jrl	FDC_CMD_EXEC_Join5
 FDC_CMD_EXEC_Loop2:
 	ld	(0x8a24:16), 0
-	calr	FDC_CMD_EXEC_Helper5
+	calr	FDC_CmdSeek
 	cp	(0x8a24:16), 0
 	jr	z, FDC_CMD_EXEC_Skip9
 	ld	a, (0x8a24:16)
 	ldfr_berp a, 248
 	exts	iz
-	calr	FDC_CMD_EXEC_Helper2
+	calr	FDC_CONFIG_VERIFY
 	ldto_berp	a, 248
 	stb_d8	(0x8a24), a
 	jrl	FDC_CMD_EXEC_Epilogue2
@@ -1585,15 +1586,15 @@ FDC_CMD_EXEC_Skip12:
 	jr	z, FDC_CMD_EXEC_Skip14
 	cp	(0x8a24:16), 9
 	jr	nz, FDC_CMD_EXEC_Skip13
-	calr	FDC_CMD_EXEC_Helper
-	calr	FDC_CMD_EXEC_Helper2
+	calr	FDC_INIT
+	calr	FDC_CONFIG_VERIFY
 	jrl	FDC_CMD_EXEC_Epilogue2
 FDC_CMD_EXEC_Skip13:
 	cp	(0x8a24:16), 47
 	jr	z, FDC_CMD_EXEC_Epilogue2
-	calr	FDC_CMD_EXEC_Helper2
+	calr	FDC_CONFIG_VERIFY
 	ld	(0x8b04:16), 255
-	calr	FDC_CMD_EXEC_Helper5
+	calr	FDC_CmdSeek
 	ldmm16	0x8a4a, 0x8b12
 	dec	1, (0x8a68:16)
 	ldb_d8	a, (0x8a68)
@@ -1633,12 +1634,12 @@ FDC_CMD_EXEC_Epilogue2:
 FDC_CMD_EXEC_Helper7:
 	ld	(0x8a28:16), 197
 	calr	FDC_Setup_DMA_Mode
-	calr	FDC_CmdRecalibrate_Code_Helper
+	calr	FDC_TIMING_DELAY
 	ldw	wa, 197
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	ret	nz
-	jrl	FDC_ClearStatus_InitTimer_Join
+	jrl	FDC_POST_OP
 ; --- FDC_MODE_CONFIG: Configure FDC format parameters by disk type ---
 ; Reads format type from state variable 35436.
 ; Dispatch by type: 0=default, 2=MFM, 3/4/5 = other formats.
@@ -1650,7 +1651,7 @@ FDC_CMD_EXEC_Helper7:
 ; Then enters sector counting/validation loop.
 ; Uses (R+d16) addressing for all state variables. 184 bytes.
 FDC_MODE_CONFIG:
-	calr	FDC_MODE_CONFIG_Helper
+	calr	FDC_PRE_OP_CHECK
 	cp	(0x8a24:16), 0
 	jrl	nz, FDC_MC_EXIT
 	calr	FDC_INTERRUPT_HANDLER
@@ -1725,9 +1726,9 @@ FDC_MC_EXIT:
 	ld	(0x8b04:16), 255
 	ret
 FDC_MODE_CONFIG_Helper2:
-	calr	FDC_CMD_EXEC_Helper5
+	calr	FDC_CmdSeek
 	cp	(0x8a24:16), 0
-	jrl	nz, FDC_CMD_EXEC_Helper2
+	jrl	nz, FDC_CONFIG_VERIFY
 	calr	FDC_MC_EXIT_Code_Helper2
 	ld	(0x8a28:16), 77
 	lda	xwa, (0x8a70:16)
@@ -1894,17 +1895,17 @@ FDC_MC_EXIT_Code_Skip2:
 FDC_MC_EXIT_Code_Join2:
 	ld	(0x8a28:16), 77
 	calr	FDC_Setup_DMA_Mode
-	calr	FDC_CmdRecalibrate_Code_Helper
+	calr	FDC_TIMING_DELAY
 	ldw	wa, 77
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	ret	nz
-	jrl	FDC_ClearStatus_InitTimer_Join
-FDC_WaitReady_Helper4:
+	jrl	FDC_POST_OP
+FDC_CMD_ENABLE:
 	pushw	iz
 	set_dd8 3, 40
 	ldw	wa, 254
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	jr	z, FDC_MC_EXIT_Code_Skip3
 	ldw	wa, 49
@@ -1920,9 +1921,10 @@ FDC_MC_EXIT_Code_Skip3:
 FDC_MC_EXIT_Code_Epilogue:
 	popw	iz
 	ret
+FDC_CMD_DISABLE:
 	res_dd8 3, 40
 	ldw wa, 14
-	jrl	FDC_WaitReady_Helper3
+	jrl	FDC_CMD_SEND
 ; --- FDC_STATUS_COPY: Copy FDC status and validate drive count ---
 ; Copies status from source to destination via (R+d16) load/store.
 ; Validates drive count (35396): 0 or 1 are valid, else error 0xfe.
@@ -1931,6 +1933,7 @@ FDC_MC_EXIT_Code_Epilogue:
 FDC_STATUS_COPY:
 	ldmm8	0x8a24, 0x8a26
 	ret
+FDC_OUTPUT_CTRL:
 	ld	wa, (0x8a44:16)
 	cp	wa, 1:i3
 	jr	z, FDC_STATUS_COPY_Skip2
@@ -1959,7 +1962,7 @@ FDC_INTERRUPT_HANDLER:
 	cp	(0x8a24:16), 0
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	ld	wa, 4:i3
-	calr	FDC_WaitReady_Helper3
+	calr	FDC_CMD_SEND
 	cp	(0x8a24:16), 0
 	jr	nz, FDC_INTERRUPT_HANDLER_Code_Epilogue
 	calr	FDC_Wait_Ready_Timeout
@@ -2081,8 +2084,8 @@ FDC_CommandEntry_CopyParams:
 ; Jump targets within FDC routines
 	; (EQU->inline label) FDC_CE_DISPATCH = 0xf9782a
 	; (EQU->inline label) FDC_CE_EXIT = 0xf97833
-	; (EQU->inline label) FDC_SX_MAIN = 0xf9795e
-	; (EQU->inline label) FDC_SX_EXIT = 0xf97967
+	; (EQU->inline label) FDC_CMD_EXEC_Join5 = 0xf9795e
+	; (EQU->inline label) FDC_CMD_EXEC_Epilogue2 = 0xf97967
 	; (EQU->inline label) FDC_MC_EXIT = 0xf97a3c
 
 

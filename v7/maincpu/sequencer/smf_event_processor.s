@@ -5189,6 +5189,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop5:
 	ld	xwa, 0:i3
 	push	xwa
 	push	xiz
+NakaData_PerfStyleCode:
 	ld	xwa, (xsp+30)
 	push	xwa
 	calr	SeqStep_FileIoCheck

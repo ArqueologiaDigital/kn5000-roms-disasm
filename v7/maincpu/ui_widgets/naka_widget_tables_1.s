@@ -1990,7 +1990,8 @@ ClassProps_MsgToTtl:
 ; ClassProps_AcIndexWideToggle_Names[].
 ; -----------------------------------------------------------------------------
 ClassProps_AcIndexWideToggle:
-	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3078, 0x22
+	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3078, 0x1C
+NakaFld_TabIndexFunc:	.incbin "includes/generated/naka_widget_tables_1.bin", 0x3094, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvPlayExit
 ; ClassProps_IvPlayExit -- property names of class IvPlayExit

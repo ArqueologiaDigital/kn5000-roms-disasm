@@ -20,7 +20,8 @@ NakaData_SeqChannels:
 ; [nakarest] FileOpen_MatchDevice (sequencer/smf_event_processor.s: `lda xwa, (254908:24)`), 2
 ; [nakarest] more.
 Naka_DrawbarOrgan_Screens:
-	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0x108
+	.incbin "includes/generated/naka_sequencer_channels.bin", 0x6A0, 0xFA
+Pad_AfterNaka_DrawbarOrgan_Screens:	.incbin "includes/generated/naka_sequencer_channels.bin", 0x79A, 0xE
 ; [nakarest] SeqCh_FeatureDemoCallbackData  +0x7a8..+0x888 (0xeee820, 224 B)
 ; [nakarest] purpose not established: layout of 224 B at 0xeee820 not derived; readers below
 ; [nakarest] Readers: work-RAM image: Boot_InitWorkRAM copies these bytes to RAM

@@ -745,7 +745,8 @@ Str_DrawCtrl_MainPreControl:
 ; Bitmap_Accita16[95][120] (rows of 120 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Accita16:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x728, 0x2C88
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x728, 0x1283
+Bitmap_AccompBitmapSpacer:	.incbin "includes/generated/naka_technichord_strings.bin", 0x19AB, 0x1A05
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_Accger16
 ; Bitmap_Accger16  --  120 x 95 bitmap, 8 bpp, row stride 120, 11400 bytes
@@ -864,7 +865,8 @@ Bitmap_SomeArrows:
 ; -----------------------------------------------------------------------------
 BitmapBound_DrawbarSlider1_Start:
 Bitmap_DrawbarNumberedSlider_1:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x671C, 0x1314
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x671C, 0x981
+DrawbarSlider_ConfigData:	.incbin "includes/generated/naka_technichord_strings.bin", 0x709D, 0x993
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_DrawbarNumberedSlider_2
 ; Bitmap_DrawbarNumberedSlider_2  --  22 x 222 bitmap, 8 bpp, row stride 22, 4884 bytes
@@ -984,7 +986,12 @@ Bitmap_DrawbarNumberedSlider_3:
 ; Bitmap_Technics_Logo[45][312] (rows of 312 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_Technics_Logo:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0xA058, 0x36D8
+	.incbin "includes/generated/naka_technichord_strings.bin", 0xA058, 0xD1
+Bitmap_TechnichordBackground_1:	.incbin "includes/generated/naka_technichord_strings.bin", 0xA129, 0x61
+NakaData_TechnichordBitmap1:	.incbin "includes/generated/naka_technichord_strings.bin", 0xA18A, 0x58
+NakaInst_SequencerComboBox:	.incbin "includes/generated/naka_technichord_strings.bin", 0xA1E2, 0xD
+NakaData_TechnichordBitmap2:	.incbin "includes/generated/naka_technichord_strings.bin", 0xA1EF, 0x9FE
+Bitmap_TechnichordBackground_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0xABED, 0x2B43
 ; -----------------------------------------------------------------------------
 ; [nakarest_retype] Bitmap_KN5000_Logo
 ; Bitmap_KN5000_Logo  --  199 x 36 bitmap, 8 bpp, row stride 200, 7200 bytes
@@ -1714,7 +1721,8 @@ Str_DiskErr01_German:
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
 ; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog records 2-3.
 Str_DiskErr01_English:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x102E4, 0x116
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x102E4, 0x112
+StrPtrTable_DiskErr03:	.incbin "includes/generated/naka_technichord_strings.bin", 0x103F6, 0x4
 ; [nakarest] StrTable_DiskErr03  +0x103fa..+0x1040e (0xe96348, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
@@ -1944,7 +1952,8 @@ Str_DiskErr12_Spanish:
 ; [nakarest] table's own strings "English Header" ... "Indonesian Header") used as the text of
 ; [nakarest] catalog records 47-48.
 Str_DiskErr12_French:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1116C, 0x246
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1116C, 0x124
+StrPtrTable_DiskErr16:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11290, 0x122
 ; [nakarest] StrTable_DiskErr16  +0x113b2..+0x113c6 (0xe97300, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
@@ -2054,7 +2063,9 @@ Str_DiskErr20_Indonesian:
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
 ; [nakarest] "English Header" ... "Indonesian Header") used as the text of catalog records 15,
 ; [nakarest] 24-26.
-Str_DiskErr20_Italian:		.incbin "includes/generated/naka_technichord_strings.bin", 0x11AC0, 0x5DE
+Str_DiskErr20_Italian:		.incbin "includes/generated/naka_technichord_strings.bin", 0x11AC0, 0x1D0
+StrPtrTable_DiskErr20_End:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11C90, 0x1E4
+StrPtrTable_DiskErr24_Start:	.incbin "includes/generated/naka_technichord_strings.bin", 0x11E74, 0x22A
 MsgText_CheckLanguage_PtrTable:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1209E, 0x4	; 6 x 32-bit pointer
 ; [nakarest] StrTable_DiskErr24_Rhythm  +0x120a2..+0x120b6 (0xe97ff0, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
@@ -2185,7 +2196,9 @@ Str_Err24APC_Spanish:
 ; [nakarest] Indonesian "Ini hanya mungkin untuk meng"; Italian "ERROR 25"; Spanish "S\xF3lo es
 ; [nakarest] posible cambiar la v"; French "Je ne peux changer la v\xE9loci"; ....
 Str_Err24APC_French:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x126C6, 0x744
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x126C6, 0x106
+StrPtrTable_DiskErr24_French_End:	.incbin "includes/generated/naka_technichord_strings.bin", 0x127CC, 0x3D4
+StrPtrTable_DiskErr28_Start:		.incbin "includes/generated/naka_technichord_strings.bin", 0x12BA0, 0x26A
 ; [nakarest] StrTable_DiskErr28  +0x12e0a..+0x12e1e (0xe98d58, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
@@ -2251,7 +2264,9 @@ Str_DiskErr30_Indonesian:
 ; [nakarest] Italian, Indonesian -- the order of the header table's own strings "English Header"
 ; [nakarest] ... "Indonesian Header") used as the text of catalog records 22-23, 33-34.
 Str_DiskErr30_Italian:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x13382, 0xA08
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x13382, 0x73E
+StrPtrTable_DiskErr30_End:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13AC0, 0x2C6
+StrPtrTable_DiskErr41_Start:	.incbin "includes/generated/naka_technichord_strings.bin", 0x13D86, 0x4
 ; [nakarest] StrTable_DiskErr41  +0x13d8a..+0x13d9e (0xe99cd8, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
@@ -2279,7 +2294,9 @@ Str_DiskErr41_Spanish:
 ; [nakarest] table's own strings "English Header" ... "Indonesian Header") used as the text of
 ; [nakarest] catalog records 32, 43.
 Str_DiskErr41_French:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x13EE6, 0x494
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x13EE6, 0xA8
+Str_BeimEmpfangderSys:		.incbin "includes/generated/naka_technichord_strings.bin", 0x13F8E, 0x3E8
+StrPtrTable_DiskErr43_Start:	.incbin "includes/generated/naka_technichord_strings.bin", 0x14376, 0x4
 ; [nakarest] StrTable_DiskErr43  +0x1437a..+0x1438e (0xe9a2c8, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
@@ -2476,7 +2493,10 @@ NakaInst_Special_Tracks_seperti_Chord_APC_Rhythm_dan:
 ; [nakarest] strings "English Header" ... "Indonesian Header") used as the text of catalog
 ; [nakarest] records 59-61, 68-69.
 NakaInst_ERROR_55:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x156E6, 0xEF4
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x156E6, 0x2F6
+StrPtrTable_Error55_End:		.incbin "includes/generated/naka_technichord_strings.bin", 0x159DC, 0x610
+StrPtrTable_Error55_Block2:		.incbin "includes/generated/naka_technichord_strings.bin", 0x15FEC, 0x5EA
+StrPtrTable_SpecialTracks_Start:	.incbin "includes/generated/naka_technichord_strings.bin", 0x165D6, 0x4
 ; [nakarest] Str_RKBLKBSpecialTracks_Multilingual  +0x165da..+0x165ee (0xe9c528, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings
@@ -2504,7 +2524,9 @@ NakaInst_es_RKB_LKB_pistas_especiales:
 ; [nakarest] table's own strings "English Header" ... "Indonesian Header") used as the text of
 ; [nakarest] catalog records 62, 70-71.
 NakaInst_es_qui_ne_peuvent_tre_utilis_es_en_association:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x166DC, 0x8EE
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x166DC, 0xD2
+LongStr_RKB_und_LKB:			.incbin "includes/generated/naka_technichord_strings.bin", 0x167AE, 0x818
+StrPtrTable_InitSettingWarning_Start:	.incbin "includes/generated/naka_technichord_strings.bin", 0x16FC6, 0x4
 ; [nakarest] Str_InitSettingWarning_Multilingual  +0x16fca..+0x16fde (0xe9cf18, 20 B)
 ; [nakarest] Continues per-language string table (6 pointers each: English, German, French,
 ; [nakarest] Spanish, Italian, Indonesian -- the order of the header table's own strings

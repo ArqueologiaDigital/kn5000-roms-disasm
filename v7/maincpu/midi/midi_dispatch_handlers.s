@@ -11351,6 +11351,7 @@ SeqChan_StepCmd_Field1to2:
 	pop	xde
 	res	2, (0xbc7e:16)
 	ret
+SeqChan_UnhandledCmd:
 	ret
 	ret
 	ret

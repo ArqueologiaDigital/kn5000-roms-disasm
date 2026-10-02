@@ -25506,11 +25506,11 @@ HdaeRom_DataHandler:
 	cp	hl, 5:i3
 	jrl	gt, HdaeRom_DataDispatch_SetWord
 	add	hl, hl
-	lda	xix, (HdaeRom_DispatchOffsetTable:24)
+	lda	xix, (HdaeRomData_SwitchOffsets:24)
 	ld	hl, (xix+hl)
 	lda	xix, (HdaeRom_DataDispatch:24)
 	jp	t, (xix+hl)
-; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRom_DispatchOffsetTable)
+; HDAE5000 extension ROM data dispatch (6-entry, table HdaeRomData_SwitchOffsets)
 HdaeRom_DataDispatch:
 	ld	(xsp+6), xbc
 	cp	(xsp+442), 255
@@ -25697,11 +25697,11 @@ HdaeRom_AltHandler:
 	cp	hl, 5:i3
 	jr	gt, HdaeRom_AltDispatch_SetWord
 	add	hl, hl
-	lda	xix, (HdaeRom_AltDispatchOffsetTable:24)
+	lda	xix, (HdaeRomAlt_SwitchOffsets:24)
 	ld	hl, (xix+hl)
 	lda	xix, (HdaeRom_AltDispatch:24)
 	jp	t, (xix+hl)
-; HDAE5000 extension ROM alt dispatch (6-entry, table HdaeRom_AltDispatchOffsetTable)
+; HDAE5000 extension ROM alt dispatch (6-entry, table HdaeRomAlt_SwitchOffsets)
 HdaeRom_AltDispatch:
 	ld	xwa, 0x1e0000
 	calr	HdaeRom_DataDispatch_Block3

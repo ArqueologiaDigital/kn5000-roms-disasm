@@ -553,7 +553,8 @@ NakaWidget_PDR1Sw:
 ; [nakarest] (Viewable slot 0x71 (table 0xe24190, 11 entries, InitializeYoko)): "ORCH"
 ; [nakarest] (AcMuteToggleBox.stroff of element 8); "ORCH" (AcMuteToggleBox.stron of element 8).
 NakaWidget_PdDpOrchSelector:
-	.incbin "includes/generated/naka_direct_play.bin", 0xA2A, 0x38
+	.incbin "includes/generated/naka_direct_play.bin", 0xA2A, 0x2C
+Str_ORCH:	.incbin "includes/generated/naka_direct_play.bin", 0xA56, 0xC
 ; [nakarest] NakaWidget_PdDpMixer  +0xa62..+0xa9a (0xe21ade, 56 B)
 ; [nakarest] widget record, element 9 of Viewable slot 0x71 (table 0xe24190, 11 entries,
 ; [nakarest] InitializeYoko) ("DpPd"): VwMenuBox (50 B). 1 text the records point at (Viewable
@@ -862,7 +863,8 @@ NakaWidget_PDMedR1Sw:
 ; [nakarest] (AcMuteToggleBox.stroff of element 10); "ORCH" (AcMuteToggleBox.stron of element
 ; [nakarest] 10).
 NakaWidget_PDMedOrchSw:
-	.incbin "includes/generated/naka_direct_play.bin", 0x127A, 0x38
+	.incbin "includes/generated/naka_direct_play.bin", 0x127A, 0x2C
+NakaStr_PdMdlyOrcha:	.incbin "includes/generated/naka_direct_play.bin", 0x12A6, 0xC
 ; [nakarest] NakaWidget_PdMdlyMixer  +0x12b2..+0x12ea (0xe2232e, 56 B)
 ; [nakarest] widget record, element 11 of Viewable slot 0x75 (table 0xe24264, 13 entries,
 ; [nakarest] InitializeYoko) ("DpMdlyPd"): VwMenuBox (50 B). 1 text the records point at
@@ -1535,7 +1537,8 @@ NakaWidget_NamingOrchRow:
 ; [nakarest] InitializeYoko) ("AfterTouchSet"): TtlScreen (42 B). 1 text the records point at
 ; [nakarest] (Viewable slot 0x92 (table 0xe24494, 4 entries, InitializeYoko)): "AFTER TOUCH
 ; [nakarest] SETTING" (TtlScreen.title of element 0).
-NakaWidget_AfterTouchSet:	.incbin "includes/generated/naka_direct_play.bin", 0x25A4, 0x3E
+NakaWidget_AfterTouchSet:	.incbin "includes/generated/naka_direct_play.bin", 0x25A4, 0x2A
+Str_AFTER_TOUCH_SETTING:	.incbin "includes/generated/naka_direct_play.bin", 0x25CE, 0x14
 ; [nakarest] NakaWidget_AftTouchDuration  +0x25e2..+0x260c (0xe2365e, 42 B)
 ; [nakarest] widget record, element 1 of Viewable slot 0x92 (table 0xe24494, 4 entries,
 ; [nakarest] InitializeYoko) ("AfterTouchSet"): AcIndexWideES (42 B).
@@ -1710,7 +1713,8 @@ NakaWidget_Perf2Strings:
 ; [nakarest] (AcDemoSongBox.caption of element 2); "Guitar" (AcDemoSongBox.caption of element
 ; [nakarest] 3).
 NakaWidget_Perf2Gamelan:
-	.incbin "includes/generated/naka_direct_play.bin", 0x2B60, 0x3E
+	.incbin "includes/generated/naka_direct_play.bin", 0x2B60, 0x36
+NakaStr_Gamelan:	.incbin "includes/generated/naka_direct_play.bin", 0x2B96, 0x8
 NakaWidget_DemoSong8:	.incbin "includes/generated/naka_direct_play.bin", 0x2B9E, 0x3E
 ; [nakarest] NakaWidget_DemoSong9  +0x2bdc..+0x2c18 (0xe23c58, 60 B)
 ; [nakarest] widget record, element 4 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
@@ -1725,8 +1729,10 @@ NakaWidget_DemoSong9:
 ; [nakarest] at (Viewable slot 0xe2 (table 0xe24510, 12 entries, InitializeYoko)): "Sax&Brass"
 ; [nakarest] (AcDemoSongBox.caption of element 5); "Organ" (AcDemoSongBox.caption of element 6).
 NakaWidget_Perf2SaxBrass:
-	.incbin "includes/generated/naka_direct_play.bin", 0x2C18, 0x40
-NakaWidget_DemoSong11:	.incbin "includes/generated/naka_direct_play.bin", 0x2C58, 0x3C
+	.incbin "includes/generated/naka_direct_play.bin", 0x2C18, 0x36
+Str_SaxBrass:		.incbin "includes/generated/naka_direct_play.bin", 0x2C4E, 0xA
+NakaWidget_DemoSong11:	.incbin "includes/generated/naka_direct_play.bin", 0x2C58, 0x36
+NakaStr_Organ:		.incbin "includes/generated/naka_direct_play.bin", 0x2C8E, 0x6
 ; [nakarest] NakaWidget_Perf2StyleSel  +0x2c94..+0x2cca (0xe23d10, 54 B)
 ; [nakarest] widget record, element 7 of Viewable slot 0xe2 (table 0xe24510, 12 entries,
 ; [nakarest] InitializeYoko) ("DemoSound"): PsWideToggle (42 B). 2 texts the records point at
@@ -1772,10 +1778,14 @@ NakaWidget_DemoRhy:	.incbin "includes/generated/naka_direct_play.bin", 0x2D78, 0
 ; [nakarest] element 2); "Organ Combo" (AcDemoSongBox.caption of element 3); "Big Band Mid"
 ; [nakarest] (AcDemoSongBox.caption of element 4); ....
 NakaWidget_Perf3HokieDance:
-	.incbin "includes/generated/naka_direct_play.bin", 0x2DB0, 0x42
-NakaWidget_DemoSong13:	.incbin "includes/generated/naka_direct_play.bin", 0x2DF2, 0x46
-NakaWidget_DemoSong14:	.incbin "includes/generated/naka_direct_play.bin", 0x2E38, 0x42
-NakaWidget_DemoSong15:	.incbin "includes/generated/naka_direct_play.bin", 0x2E7A, 0x44
+	.incbin "includes/generated/naka_direct_play.bin", 0x2DB0, 0x36
+Str_HokieDance:		.incbin "includes/generated/naka_direct_play.bin", 0x2DE6, 0xC
+NakaWidget_DemoSong13:	.incbin "includes/generated/naka_direct_play.bin", 0x2DF2, 0x36
+Str_GospelRevival:	.incbin "includes/generated/naka_direct_play.bin", 0x2E28, 0x10
+NakaWidget_DemoSong14:	.incbin "includes/generated/naka_direct_play.bin", 0x2E38, 0x36
+Str_OrganCombo:		.incbin "includes/generated/naka_direct_play.bin", 0x2E6E, 0xC
+NakaWidget_DemoSong15:	.incbin "includes/generated/naka_direct_play.bin", 0x2E7A, 0x36
+Str_BigBandMid:		.incbin "includes/generated/naka_direct_play.bin", 0x2EB0, 0xE
 NakaWidget_DemoSong16:	.incbin "includes/generated/naka_direct_play.bin", 0x2EBE, 0x46
 ; [nakarest] NakaWidget_Perf3ModernBluegrass  +0x2f04..+0x2f4c (0xe23f80, 72 B)
 ; [nakarest] widget record, element 6 of Viewable slot 0xe3 (table 0xe24544, 12 entries,

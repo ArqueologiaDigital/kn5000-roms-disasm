@@ -115,6 +115,7 @@ NakaPropStr_TextLabel2_Font:
 	.byte 0x66, 0x6f, 0x6e, 0x74
 	.byte 0x00			; padding
 	.byte 0xff			; padding
+NakaDirectPlay_PropPtrTable:
 	.byte 0xd4, 0x08, 0xe2
 	.byte 0x00			; padding
 

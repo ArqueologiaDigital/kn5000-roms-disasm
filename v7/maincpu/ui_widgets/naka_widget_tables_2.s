@@ -620,7 +620,11 @@ Bitmap_SplitPoint_E:
 ; (rows of 58 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_F:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x515C, 0xBC8
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x515C, 0xB06
+NakaData_DescriptorSection_Start:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5C62, 0x8
+NakaData_DescriptorPad1:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x5C6A, 0x92
+NakaData_DescriptorPad_ZeroA:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x5CFC, 0x10
+NakaData_DescriptorPad_ZeroB:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D0C, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_SplitPoint_Gb
 ; Bitmap_SplitPoint_Gb  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
@@ -655,7 +659,11 @@ Bitmap_SplitPoint_F:
 ; Bitmap_SplitPoint_Gb[52][58] (rows of 58 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_SplitPoint_Gb:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D24, 0xBC8
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D24, 0x18
+NakaData_DescriptorPad_ZeroC:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D3C, 0x5
+NakaData_DescriptorZero:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D41, 0x5
+NakaData_DescriptorZero_PadA:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D46, 0x8
+NakaData_DescriptorZero_PadB:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x5D4E, 0xB9E
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_SplitPoint_G
 ; Bitmap_SplitPoint_G  --  57 x 52 bitmap, 8 bpp, row stride 58, 3016 bytes
@@ -866,7 +874,8 @@ Bitmap_SplitPoint_B:
 ; Bitmap_MIDIConnections_1[108][296] (rows of 296 bytes).
 ; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_1:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0xA3D4, 0x7CE0
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0xA3D4, 0x318D
+Pad_AfterBitmap_MIDIConnections_1:	.incbin "includes/generated/naka_widget_tables_2.bin", 0xD561, 0x4B53
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_MIDIConnections_2
 ; Bitmap_MIDIConnections_2  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes
@@ -899,19 +908,24 @@ Bitmap_MIDIConnections_1:
 ; -----------------------------------------------------------------------------
 Bitmap_MIDIConnections_2:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x120B4, 0x3BB0
-AcIndexToggle_SendVisibility_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C64, 0x3
-HelpLang_SetRegion5_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C67, 0x5
-HelpLangChkMain_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C6C, 0x6
-HelpLang_DispatchDataBlock_Entry_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C72, 0x7
+AcIndexToggle_SendVisibility_Data:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C64, 0x3
+HelpLang_SetRegion5_Data:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C67, 0x5
+HelpLangChkMain_Data:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C6C, 0x6
+HelpLang_DispatchDataBlock_Entry_Data:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C72, 0x5
+NakaData_Tables2Pad1:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C77, 0x2
 HelpLang_DispatchDataBlock_Entry_Data_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C79, 0x2
 HelpLang_DispatchDataBlock_Entry_Data_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C7B, 0x3
-HelpFuncChkFunc_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C7E, 0x8
+HelpFuncChkFunc_Data:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C7E, 0x2
+NakaData_Tables2Pad2:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C80, 0x4
+Pad_AfterNakaData_Tables2Pad2:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C84, 0x2
 HelpLang_DispatchDataBlock_Entry_Data_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C86, 0x2
 HelpLang_DispatchDataBlock_Entry_Data_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C88, 0x1
-HelpFuncChkFunc_Data_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C89, 0x5
+HelpFuncChkFunc_Data_2:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C89, 0x5
 HelpLang_DispatchDataBlock_Entry_Data_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C8E, 0x2
-HelpFuncChkFunc_Data_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C90, 0x1
-HelpLang_DispatchDataBlock_Entry_Data_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C91, 0x4103
+HelpFuncChkFunc_Data_3:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C90, 0x1
+HelpLang_DispatchDataBlock_Entry_Data_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C91, 0xAF
+NakaData_Tables2Pad3:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15D40, 0xA4A
+Bitmap_MIDIConnections_Header:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x1678A, 0x360A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Bitmap_MIDIConnections_3
 ; Bitmap_MIDIConnections_3  --  296 x 108 bitmap, 8 bpp, row stride 296, 31968 bytes
@@ -1876,7 +1890,9 @@ DisplayMode_OnOff_Table:
 ; DisplayMode_OnOff_Table_Strings[24].
 ; -----------------------------------------------------------------------------
 DisplayMode_OnOff_Table_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25572, 0x6
-NakaInst_OFF_WidgetTbl2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25578, 0x12
+NakaInst_OFF_WidgetTbl2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25578, 0x6
+DisplayMode_FormatStr1:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x2557E, 0x6
+DisplayMode_FormatStr2:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25584, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MdSetupLoadFunc_CaseTable
 ; MdSetupLoadFunc_CaseTable -- jump table of a compiled `switch` in
@@ -1973,7 +1989,8 @@ FadeSetGridCheck_LocalInit:
 ; FadeSetGridCheck_LocalInit_Strings[20].
 ; -----------------------------------------------------------------------------
 FadeSetGridCheck_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25600, 0x14
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25600, 0xE
+Data_AcGridParamTable:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2560E, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_FadeSetGridDispatch_Str
 ; Data_FadeSetGridDispatch_Str -- NUL-terminated string(s), 20 bytes,
@@ -2743,7 +2760,8 @@ ComSetGridCheck_JumpTable_Str_2:
 ; Typed in naka_widget_tables_2.c as char NakaInst_NORMAL[10].
 ; -----------------------------------------------------------------------------
 NakaInst_NORMAL:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CBC, 0xA
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CBC, 0x5
+Str_AL:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25CC1, 0x5
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Str_3
 ; ComSetGridCheck_JumpTable_Str_3 -- NUL-terminated string(s), 10 bytes,
@@ -2979,9 +2997,10 @@ PmemOutLGridCheck_LocalInit:
 ; PmemOutLGridCheck_LocalInit_Strings[52].
 ; -----------------------------------------------------------------------------
 PmemOutLGridCheck_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D96, 0x0A
-PmemOutLGrid_Str_ON:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA0, 0x06
-PmemOutLGrid_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA6, 0x06
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D96, 0x8
+AlignedStr_ON:					.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D9E, 0x2
+PmemOutLGrid_Str_ON:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA0, 0x06
+PmemOutLGrid_Str_OFF:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA6, 0x06
 PmemOutLGridCheck_LocalInit_Strings_Tail:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DAC, 0x6
 PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB2, 0x6	; " %3d "
 PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB8, 0x6	; " %3d "
@@ -3408,8 +3427,12 @@ Transpose_ValueDisplay_Table:
 ; Typed in naka_widget_tables_2.c as char
 ; Transpose_ValueDisplay_Table_Strings[48].
 ; -----------------------------------------------------------------------------
-Transpose_ValueDisplay_Table_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262E2, 0x1E
-Transpose_String_Plus2:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x26300, 0x12
+Transpose_ValueDisplay_Table_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262E2, 0xC
+Transpose_String_Minus3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x262EE, 0x6
+Transpose_String_Error:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x262F4, 0xC
+Transpose_String_Plus2:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x26300, 0x6
+Transpose_String_Plus1:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x26306, 0x6
+Transpose_String_Zero:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x2630C, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiPartGridCheck_LocalInit
 ; MidiPartGridCheck_LocalInit -- initializer of a local array:
@@ -3589,7 +3612,8 @@ ClassProps_AcLswPartEditBox:
 ; -----------------------------------------------------------------------------
 ClassProps_AcVolPartEditBox:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26754, 0xE
 NakaObj_FmuteVol_DataEntry:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26762, 0x4
-NakaInst_data_E80B04:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26766, 0x12
+NakaInst_data_E80B04:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26766, 0xE
+Str_ol:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x26774, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvMesage
 ; ClassProps_IvMesage -- property names of class IvMesage (descriptor 3
