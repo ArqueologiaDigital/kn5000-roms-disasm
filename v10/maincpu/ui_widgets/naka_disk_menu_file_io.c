@@ -2711,81 +2711,21 @@ typedef struct __attribute__((packed)) {
     char str_1456[64];
     char str_1457[64];
     char str_1458[64];
-    uint16_t field_73da;
-    uint16_t field_73dc;
-    uint16_t field_73de;
-    uint16_t field_73e0;
-    uint16_t field_73e2;
-    uint16_t field_73e4;
-    uint16_t field_73e6;
-    uint16_t field_73e8;
-    uint16_t field_73ea;
-    uint16_t field_73ec;
-    uint16_t field_73ee;
-    uint16_t field_73f0;
-    uint16_t field_73f2;
-    uint16_t field_73f4;
-    uint16_t field_73f6;
-    uint16_t field_73f8;
-    uint16_t field_73fa;
-    uint16_t field_73fc;
-    uint16_t field_73fe;
-    char str_1459[38];
+    char txt_Diese_Daten_sind_bereits[76];
     char str_1460[64];
     uint32_t ptrs_16[6];  /* 6 pointers */
     char str_1461[74];
     char str_1462[74];
     char str_1463[74];
     char str_1464[74];
-    uint16_t field_75a6;
-    uint16_t field_75a8;
-    uint16_t field_75aa;
-    uint16_t field_75ac;
-    uint16_t field_75ae;
-    uint16_t field_75b0;
-    uint16_t field_75b2;
-    uint16_t field_75b4;
-    uint16_t field_75b6;
-    uint16_t field_75b8;
-    uint16_t field_75ba;
-    uint16_t field_75bc;
-    uint16_t field_75be;
-    uint16_t field_75c0;
-    uint16_t field_75c2;
-    uint16_t field_75c4;
-    uint16_t field_75c6;
-    uint16_t field_75c8;
-    uint16_t field_75ca;
-    uint16_t field_75cc;
-    char str_1465[40];
+    char txt_Die_Songs_im_Sequenzer_sind[80];
     char str_1466[74];
     uint32_t ptrs_17[6];  /* 6 pointers */
     char str_1467[76];
     char str_1468[76];
     char str_1469[76];
     char str_1470[76];
-    uint16_t field_7788;
-    uint16_t field_778a;
-    uint16_t field_778c;
-    uint16_t field_778e;
-    uint16_t field_7790;
-    uint16_t field_7792;
-    uint16_t field_7794;
-    uint16_t field_7796;
-    uint16_t field_7798;
-    uint16_t field_779a;
-    uint16_t field_779c;
-    uint16_t field_779e;
-    uint16_t field_77a0;
-    uint16_t field_77a2;
-    uint16_t field_77a4;
-    uint16_t field_77a6;
-    uint16_t field_77a8;
-    uint16_t field_77aa;
-    uint16_t field_77ac;
-    uint16_t field_77ae;
-    uint16_t field_77b0;
-    char str_1471[38];
+    char txt_Die_Pattern_im_Composer_sind[80];
     char str_1472[76];
     char str_1473[6];
     char str_1474[4];
@@ -13891,7 +13831,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .ptrs_15 = {
         SELF(str_1460),
-        SELF(field_73da),
+        SELF(txt_Diese_Daten_sind_bereits),
         SELF(str_1458),
         SELF(str_1457),
         SELF(str_1456),
@@ -13906,51 +13846,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1458 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
-    .field_73da = 0x6944,
-
-    .field_73dc = 0x7365,
-
-    .field_73de = 0x2065,
-
-    .field_73e0 = 0x6144,
-
-    .field_73e2 = 0x6574,
-
-    .field_73e4 = 0x206E,
-
-    .field_73e6 = 0x6973,
-
-    .field_73e8 = 0x646E,
-
-    .field_73ea = 0x6220,
-
-    .field_73ec = 0x7265,
-
-    .field_73ee = 0x6965,
-
-    .field_73f0 = 0x7374,
-
-    .field_73f2 = 0x6B20,
-
-    .field_73f4 = 0x706F,
-
-    .field_73f6 = 0x6569,
-
-    .field_73f8 = 0x6772,
-
-    .field_73fa = 0x7365,
-
-    .field_73fc = 0x6863,
-
-    .field_73fe = 0x74FC,
-
-    .str_1459 = "zt. Bitte geben Sie das Password ein.",
+    .txt_Diese_Daten_sind_bereits = "Diese Daten sind bereits kopiergesch\374tzt. Bitte geben Sie das Password ein.\0",
 
     .str_1460 = ALIGNED_STRING("The data is already copy protected. Please enter the password."),
 
     .ptrs_16 = {
         SELF(str_1466),
-        SELF(field_75a6),
+        SELF(txt_Die_Songs_im_Sequenzer_sind),
         SELF(str_1464),
         SELF(str_1463),
         SELF(str_1462),
@@ -13965,53 +13867,13 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1464 = "The songs in the Sequencer are copy protected. Please enter the password.",
 
-    .field_75a6 = 0x6944,
-
-    .field_75a8 = 0x2065,
-
-    .field_75aa = 0x6F53,
-
-    .field_75ac = 0x676E,
-
-    .field_75ae = 0x2073,
-
-    .field_75b0 = 0x6D69,
-
-    .field_75b2 = 0x5320,
-
-    .field_75b4 = 0x7165,
-
-    .field_75b6 = 0x6575,
-
-    .field_75b8 = 0x7A6E,
-
-    .field_75ba = 0x7265,
-
-    .field_75bc = 0x7320,
-
-    .field_75be = 0x6E69,
-
-    .field_75c0 = 0x2064,
-
-    .field_75c2 = 0x6F6B,
-
-    .field_75c4 = 0x6970,
-
-    .field_75c6 = 0x7265,
-
-    .field_75c8 = 0x6567,
-
-    .field_75ca = 0x6373,
-
-    .field_75cc = 0xFC68,
-
-    .str_1465 = ALIGNED_STRING("tzt. Bitte geben Sie das Password ein."),
+    .txt_Die_Songs_im_Sequenzer_sind = "Die Songs im Sequenzer sind kopiergesch\374tzt. Bitte geben Sie das Password ein.\0\377",
 
     .str_1466 = "The songs in the Sequencer are copy protected. Please enter the password.",
 
     .ptrs_17 = {
         SELF(str_1472),
-        SELF(field_7788),
+        SELF(txt_Die_Pattern_im_Composer_sind),
         SELF(str_1470),
         SELF(str_1469),
         SELF(str_1468),
@@ -14026,49 +13888,7 @@ const naka_disk_menu_file_io_t naka_disk_menu_file_io_data
 
     .str_1470 = "The patterns in the Composer are copy protected. Please enter the password.",
 
-    .field_7788 = 0x6944,
-
-    .field_778a = 0x2065,
-
-    .field_778c = 0x6150,
-
-    .field_778e = 0x7474,
-
-    .field_7790 = 0x7265,
-
-    .field_7792 = 0x206E,
-
-    .field_7794 = 0x6D69,
-
-    .field_7796 = 0x4320,
-
-    .field_7798 = 0x6D6F,
-
-    .field_779a = 0x6F70,
-
-    .field_779c = 0x6573,
-
-    .field_779e = 0x2072,
-
-    .field_77a0 = 0x6973,
-
-    .field_77a2 = 0x646E,
-
-    .field_77a4 = 0x6B20,
-
-    .field_77a6 = 0x706F,
-
-    .field_77a8 = 0x6569,
-
-    .field_77aa = 0x6772,
-
-    .field_77ac = 0x7365,
-
-    .field_77ae = 0x6863,
-
-    .field_77b0 = 0x74FC,
-
-    .str_1471 = "zt. Bitte geben Sie das Password ein.",
+    .txt_Die_Pattern_im_Composer_sind = "Die Pattern im Composer sind kopiergesch\374tzt. Bitte geben Sie das Password ein.\0",
 
     .str_1472 = "The patterns in the Composer are copy protected. Please enter the password.",
 

@@ -1947,64 +1947,14 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_2[6];  /* 6 pointers */
     char str_875[2];
     char str_876[2];
-    uint16_t field_5f48;
-    uint16_t field_5f4a;
-    uint16_t field_5f4c;
-    uint16_t field_5f4e;
-    uint16_t field_5f50;
-    uint16_t field_5f52;
-    uint16_t field_5f54;
-    uint16_t field_5f56;
-    uint16_t field_5f58;
-    char str_877[12];
+    char txt_Altavoz_con_porton_para_bajos[30];
     char str_878[2];
     char str_879[2];
     char str_880[2];
     uint32_t ptrs_3[6];  /* 6 pointers */
     char str_881[96];
     char str_882[8];
-    uint16_t field_5fec;
-    uint16_t field_5fee;
-    uint16_t field_5ff0;
-    uint16_t field_5ff2;
-    uint16_t field_5ff4;
-    uint16_t field_5ff6;
-    uint16_t field_5ff8;
-    uint16_t field_5ffa;
-    uint16_t field_5ffc;
-    uint16_t field_5ffe;
-    uint16_t field_6000;
-    uint16_t field_6002;
-    uint16_t field_6004;
-    uint16_t field_6006;
-    uint16_t field_6008;
-    uint16_t field_600a;
-    uint16_t field_600c;
-    uint16_t field_600e;
-    uint16_t field_6010;
-    uint16_t field_6012;
-    uint16_t field_6014;
-    uint16_t field_6016;
-    uint16_t field_6018;
-    uint16_t field_601a;
-    uint16_t field_601c;
-    uint16_t field_601e;
-    uint16_t field_6020;
-    uint16_t field_6022;
-    uint16_t field_6024;
-    uint16_t field_6026;
-    uint16_t field_6028;
-    uint16_t field_602a;
-    uint16_t field_602c;
-    uint16_t field_602e;
-    uint16_t field_6030;
-    uint16_t field_6032;
-    uint16_t field_6034;
-    uint16_t field_6036;
-    uint16_t field_6038;
-    uint16_t field_603a;
-    uint16_t field_603c;
-    uint16_t field_603e;
+    char txt_El_porton_para_bajos_y_graves[84];
     char str_883[8];
     uint16_t field_6048;
     uint16_t field_604a;
@@ -2020,91 +1970,23 @@ typedef struct __attribute__((packed)) {
     char str_887[12];
     char str_888[8];
     char str_889[16];
-    uint16_t field_619a;
-    uint16_t field_619c;
-    uint16_t field_619e;
-    uint16_t field_61a0;
-    uint16_t field_61a2;
-    char str_890[12];
+    char txt_Diversite_des_styles[22];
     char str_891[26];
     char str_892[12];
     uint32_t ptrs_5[6];  /* 6 pointers */
     char str_893[56];
     char str_894[8];
     char str_895[58];
-    uint16_t field_6268;
-    uint16_t field_626a;
-    uint16_t field_626c;
-    uint16_t field_626e;
-    uint16_t field_6270;
-    uint16_t field_6272;
-    uint16_t field_6274;
-    uint16_t field_6276;
-    uint16_t field_6278;
-    uint16_t field_627a;
-    uint16_t field_627c;
-    uint16_t field_627e;
-    uint16_t field_6280;
-    uint16_t field_6282;
-    uint16_t field_6284;
-    uint16_t field_6286;
-    uint16_t field_6288;
-    uint16_t field_628a;
-    uint16_t field_628c;
-    uint16_t field_628e;
-    uint16_t field_6290;
-    uint16_t field_6292;
-    uint16_t field_6294;
-    char str_896[40];
+    char txt_Grace_au_Music_Stylist_explorez[86];
     uint16_t field_62be;
     char str_897[82];
     char str_898[52];
     uint32_t ptrs_6[6];  /* 6 pointers */
     char str_899[78];
     char str_900[8];
-    uint16_t field_63b4;
-    uint16_t field_63b6;
-    uint16_t field_63b8;
-    uint16_t field_63ba;
-    uint16_t field_63bc;
-    uint16_t field_63be;
-    char str_901[60];
-    uint16_t field_63fc;
-    uint16_t field_63fe;
-    uint16_t field_6400;
-    uint16_t field_6402;
-    uint16_t field_6404;
-    uint16_t field_6406;
-    uint16_t field_6408;
-    uint16_t field_640a;
-    uint16_t field_640c;
-    uint16_t field_640e;
-    uint16_t field_6410;
-    uint16_t field_6412;
-    uint16_t field_6414;
-    uint16_t field_6416;
-    uint16_t field_6418;
-    uint16_t field_641a;
-    uint16_t field_641c;
-    uint16_t field_641e;
-    uint16_t field_6420;
-    uint16_t field_6422;
-    uint16_t field_6424;
-    uint16_t field_6426;
-    uint16_t field_6428;
-    uint16_t field_642a;
-    char str_902[22];
-    uint16_t field_6442;
-    uint16_t field_6444;
-    uint16_t field_6446;
-    uint16_t field_6448;
-    uint16_t field_644a;
-    uint16_t field_644c;
-    uint16_t field_644e;
-    uint16_t field_6450;
-    uint16_t field_6452;
-    uint16_t field_6454;
-    char str_903[68];
+    char txt_Disfrute_mas_con_la_gran[72];
+    char txt_Encore_plus_de_possibilites[70];
+    char txt_Nutzen_Sie_das_groe_Technics[88];
     char str_904[62];
     uint32_t ptrs_7[6];  /* 6 pointers */
     char str_905[78];
@@ -2119,48 +2001,7 @@ typedef struct __attribute__((packed)) {
     char str_912[8];
     uint16_t field_66de;
     char str_913[92];
-    uint16_t field_673c;
-    uint16_t field_673e;
-    uint16_t field_6740;
-    uint16_t field_6742;
-    uint16_t field_6744;
-    uint16_t field_6746;
-    uint16_t field_6748;
-    uint16_t field_674a;
-    uint16_t field_674c;
-    uint16_t field_674e;
-    uint16_t field_6750;
-    uint16_t field_6752;
-    uint16_t field_6754;
-    uint16_t field_6756;
-    uint16_t field_6758;
-    uint16_t field_675a;
-    uint16_t field_675c;
-    uint16_t field_675e;
-    uint16_t field_6760;
-    uint16_t field_6762;
-    uint16_t field_6764;
-    uint16_t field_6766;
-    uint16_t field_6768;
-    uint16_t field_676a;
-    uint16_t field_676c;
-    uint16_t field_676e;
-    uint16_t field_6770;
-    uint16_t field_6772;
-    uint16_t field_6774;
-    uint16_t field_6776;
-    uint16_t field_6778;
-    uint16_t field_677a;
-    uint16_t field_677c;
-    uint16_t field_677e;
-    uint16_t field_6780;
-    uint16_t field_6782;
-    uint16_t field_6784;
-    uint16_t field_6786;
-    uint16_t field_6788;
-    uint16_t field_678a;
-    uint16_t field_678c;
-    char str_914[14];
+    char txt_Enregistrez_vos_motifs_preferes[96];
     char str_915[88];
     char str_916[84];
     uint32_t ptrs_9[6];  /* 6 pointers */
@@ -2173,87 +2014,9 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_10[6];  /* 6 pointers */
     char str_923[72];
     char str_924[8];
-    uint16_t field_6934;
-    uint16_t field_6936;
-    uint16_t field_6938;
-    uint16_t field_693a;
-    uint16_t field_693c;
-    uint16_t field_693e;
-    uint16_t field_6940;
-    uint16_t field_6942;
-    uint16_t field_6944;
-    uint16_t field_6946;
-    uint16_t field_6948;
-    uint16_t field_694a;
-    uint16_t field_694c;
-    uint16_t field_694e;
-    uint16_t field_6950;
-    uint16_t field_6952;
-    char str_925[54];
-    uint16_t field_698a;
-    uint16_t field_698c;
-    uint16_t field_698e;
-    uint16_t field_6990;
-    uint16_t field_6992;
-    uint16_t field_6994;
-    uint16_t field_6996;
-    uint16_t field_6998;
-    uint16_t field_699a;
-    uint16_t field_699c;
-    uint16_t field_699e;
-    uint16_t field_69a0;
-    uint16_t field_69a2;
-    uint16_t field_69a4;
-    uint16_t field_69a6;
-    uint16_t field_69a8;
-    uint16_t field_69aa;
-    uint16_t field_69ac;
-    uint16_t field_69ae;
-    uint16_t field_69b0;
-    uint16_t field_69b2;
-    uint16_t field_69b4;
-    uint16_t field_69b6;
-    uint16_t field_69b8;
-    uint16_t field_69ba;
-    uint16_t field_69bc;
-    uint16_t field_69be;
-    uint16_t field_69c0;
-    uint16_t field_69c2;
-    uint16_t field_69c4;
-    uint16_t field_69c6;
-    uint16_t field_69c8;
-    uint16_t field_69ca;
-    char str_926[20];
-    uint16_t field_69e0;
-    uint16_t field_69e2;
-    uint16_t field_69e4;
-    uint16_t field_69e6;
-    uint16_t field_69e8;
-    uint16_t field_69ea;
-    uint16_t field_69ec;
-    uint16_t field_69ee;
-    uint16_t field_69f0;
-    uint16_t field_69f2;
-    uint16_t field_69f4;
-    uint16_t field_69f6;
-    uint16_t field_69f8;
-    uint16_t field_69fa;
-    uint16_t field_69fc;
-    uint16_t field_69fe;
-    uint16_t field_6a00;
-    uint16_t field_6a02;
-    uint16_t field_6a04;
-    uint16_t field_6a06;
-    uint16_t field_6a08;
-    uint16_t field_6a0a;
-    uint16_t field_6a0c;
-    uint16_t field_6a0e;
-    uint16_t field_6a10;
-    uint16_t field_6a12;
-    uint16_t field_6a14;
-    uint16_t field_6a16;
-    uint16_t field_6a18;
-    uint16_t field_6a1a;
+    char txt_Un_mundo_de_sonidos_de_acordeon[86];
+    char txt_Avec_la_fonction_Accordion[86];
+    char txt_ACCORDION_REGISTER_eroffnet[60];
     char str_927[6];
     char str_928[76];
     uint32_t ptrs_11[6];  /* 6 pointers */
@@ -2278,40 +2041,8 @@ typedef struct __attribute__((packed)) {
     uint16_t field_6b4a;
     uint16_t field_6b4c;
     char str_937[36];
-    uint16_t field_6b72;
-    uint16_t field_6b74;
-    uint16_t field_6b76;
-    uint16_t field_6b78;
-    uint16_t field_6b7a;
-    uint16_t field_6b7c;
-    uint16_t field_6b7e;
-    uint16_t field_6b80;
-    uint16_t field_6b82;
-    uint16_t field_6b84;
-    uint16_t field_6b86;
-    uint16_t field_6b88;
-    uint16_t field_6b8a;
-    uint16_t field_6b8c;
-    uint16_t field_6b8e;
-    uint16_t field_6b90;
-    uint16_t field_6b92;
-    uint16_t field_6b94;
-    uint16_t field_6b96;
-    uint16_t field_6b98;
-    uint16_t field_6b9a;
-    uint16_t field_6b9c;
-    char str_938[42];
-    uint16_t field_6bc8;
-    uint16_t field_6bca;
-    uint16_t field_6bcc;
-    uint16_t field_6bce;
-    uint16_t field_6bd0;
-    uint16_t field_6bd2;
-    uint16_t field_6bd4;
-    uint16_t field_6bd6;
-    uint16_t field_6bd8;
-    uint16_t field_6bda;
-    char str_939[50];
+    char txt_Avec_les_tirettes_harmoniques[86];
+    char txt_Erzeugen_Sie_legendare[70];
     char str_940[50];
     uint32_t ptrs_13[6];  /* 6 pointers */
     char str_941[18];
@@ -2323,152 +2054,16 @@ typedef struct __attribute__((packed)) {
     uint32_t ptrs_14[6];  /* 6 pointers */
     char str_947[60];
     char str_948[8];
-    uint16_t field_6d16;
-    uint16_t field_6d18;
-    uint16_t field_6d1a;
-    uint16_t field_6d1c;
-    uint16_t field_6d1e;
-    uint16_t field_6d20;
-    uint16_t field_6d22;
-    uint16_t field_6d24;
-    uint16_t field_6d26;
-    uint16_t field_6d28;
-    uint16_t field_6d2a;
-    uint16_t field_6d2c;
-    uint16_t field_6d2e;
-    uint16_t field_6d30;
-    uint16_t field_6d32;
-    uint16_t field_6d34;
-    uint16_t field_6d36;
-    char str_949[22];
-    uint16_t field_6d4e;
-    uint16_t field_6d50;
-    uint16_t field_6d52;
-    uint16_t field_6d54;
-    uint16_t field_6d56;
-    uint16_t field_6d58;
-    uint16_t field_6d5a;
-    uint16_t field_6d5c;
-    uint16_t field_6d5e;
-    uint16_t field_6d60;
-    uint16_t field_6d62;
-    uint16_t field_6d64;
-    uint16_t field_6d66;
-    uint16_t field_6d68;
-    uint16_t field_6d6a;
-    uint16_t field_6d6c;
-    uint16_t field_6d6e;
-    uint16_t field_6d70;
-    uint16_t field_6d72;
-    uint16_t field_6d74;
-    uint16_t field_6d76;
-    uint16_t field_6d78;
-    uint16_t field_6d7a;
-    uint16_t field_6d7c;
-    uint16_t field_6d7e;
-    uint16_t field_6d80;
-    uint16_t field_6d82;
-    uint16_t field_6d84;
-    uint16_t field_6d86;
-    uint16_t field_6d88;
-    uint16_t field_6d8a;
-    uint16_t field_6d8c;
-    uint16_t field_6d8e;
-    char str_950[14];
-    uint16_t field_6d9e;
-    uint16_t field_6da0;
-    uint16_t field_6da2;
-    uint16_t field_6da4;
-    uint16_t field_6da6;
-    uint16_t field_6da8;
-    uint16_t field_6daa;
-    uint16_t field_6dac;
-    uint16_t field_6dae;
-    uint16_t field_6db0;
-    uint16_t field_6db2;
-    uint16_t field_6db4;
-    uint16_t field_6db6;
-    uint16_t field_6db8;
-    uint16_t field_6dba;
-    uint16_t field_6dbc;
-    uint16_t field_6dbe;
-    uint16_t field_6dc0;
-    uint16_t field_6dc2;
-    uint16_t field_6dc4;
-    uint16_t field_6dc6;
-    uint16_t field_6dc8;
-    uint16_t field_6dca;
-    uint16_t field_6dcc;
-    uint16_t field_6dce;
-    uint16_t field_6dd0;
-    uint16_t field_6dd2;
-    uint16_t field_6dd4;
-    uint16_t field_6dd6;
-    char str_951[12];
+    char txt_El_Acoustic_Illusion_amplia_su[56];
+    char txt_La_fonction_Acoustic_Illusion[80];
+    char txt_ACCOUSTIC_ILLUSION_verleiht_dem[70];
     char str_952[56];
     uint32_t ptrs_15[6];  /* 6 pointers */
     char str_953[74];
     char str_954[8];
-    uint16_t field_6e86;
-    uint16_t field_6e88;
-    uint16_t field_6e8a;
-    uint16_t field_6e8c;
-    uint16_t field_6e8e;
-    uint16_t field_6e90;
-    uint16_t field_6e92;
-    uint16_t field_6e94;
-    uint16_t field_6e96;
-    uint16_t field_6e98;
-    uint16_t field_6e9a;
-    uint16_t field_6e9c;
-    uint16_t field_6e9e;
-    uint16_t field_6ea0;
-    uint16_t field_6ea2;
-    uint16_t field_6ea4;
-    uint16_t field_6ea6;
-    uint16_t field_6ea8;
-    uint16_t field_6eaa;
-    uint16_t field_6eac;
-    uint16_t field_6eae;
-    uint16_t field_6eb0;
-    uint16_t field_6eb2;
-    uint16_t field_6eb4;
-    uint16_t field_6eb6;
-    uint16_t field_6eb8;
-    uint16_t field_6eba;
-    uint16_t field_6ebc;
-    uint16_t field_6ebe;
-    uint16_t field_6ec0;
-    uint16_t field_6ec2;
-    uint16_t field_6ec4;
-    uint16_t field_6ec6;
-    uint16_t field_6ec8;
-    char str_955[2];
-    uint16_t field_6ecc;
-    uint16_t field_6ece;
-    uint16_t field_6ed0;
-    uint16_t field_6ed2;
-    uint16_t field_6ed4;
-    uint16_t field_6ed6;
-    uint16_t field_6ed8;
-    uint16_t field_6eda;
-    uint16_t field_6edc;
-    uint16_t field_6ede;
-    char str_956[32];
-    uint16_t field_6f00;
-    uint16_t field_6f02;
-    uint16_t field_6f04;
-    uint16_t field_6f06;
-    uint16_t field_6f08;
-    uint16_t field_6f0a;
-    uint16_t field_6f0c;
-    uint16_t field_6f0e;
-    uint16_t field_6f10;
-    uint16_t field_6f12;
-    uint16_t field_6f14;
-    uint16_t field_6f16;
-    uint16_t field_6f18;
-    char str_957[60];
+    char txt_Una_serie_de_funciones[70];
+    char txt_Une_grande_diversite_de[52];
+    char txt_Viele_weitere_leistungsfahige[86];
     char str_958[54];
     uint32_t ptrs_16[6];  /* 6 pointers */
     char str_959[12];
@@ -11455,7 +11050,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_880),
         SELF(str_879),
         SELF(str_878),
-        SELF(field_5f48),
+        SELF(txt_Altavoz_con_porton_para_bajos),
         SELF(str_876),
         SELF(str_875),
     },
@@ -11464,25 +11059,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_876 = ALIGNED_STRING(""),
 
-    .field_5f48 = 0x6C41,
-
-    .field_5f4a = 0x6174,
-
-    .field_5f4c = 0x6F76,
-
-    .field_5f4e = 0x207A,
-
-    .field_5f50 = 0x6F63,
-
-    .field_5f52 = 0x206E,
-
-    .field_5f54 = 0x6F70,
-
-    .field_5f56 = 0x7472,
-
-    .field_5f58 = 0x6EF3,
-
-    .str_877 = " para bajos",
+    .txt_Altavoz_con_porton_para_bajos = "Altavoz con port\363n para bajos\0",
 
     .str_878 = ALIGNED_STRING(""),
 
@@ -11494,7 +11071,7 @@ const naka_perf_style_t naka_perf_style_data
         SELF(str_886),
         SELF(str_885),
         SELF(field_6048),
-        SELF(field_5fec),
+        SELF(txt_El_porton_para_bajos_y_graves),
         SELF(str_882),
         SELF(str_881),
     },
@@ -11503,89 +11080,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_882 = "Italian",
 
-    .field_5fec = 0x45A1,
-
-    .field_5fee = 0x206C,
-
-    .field_5ff0 = 0x6F70,
-
-    .field_5ff2 = 0x7472,
-
-    .field_5ff4 = 0x6EF3,
-
-    .field_5ff6 = 0x7020,
-
-    .field_5ff8 = 0x7261,
-
-    .field_5ffa = 0x2061,
-
-    .field_5ffc = 0x6162,
-
-    .field_5ffe = 0x6F6A,
-
-    .field_6000 = 0x2073,
-
-    .field_6002 = 0x2079,
-
-    .field_6004 = 0x7267,
-
-    .field_6006 = 0x7661,
-
-    .field_6008 = 0x7365,
-
-    .field_600a = 0x6520,
-
-    .field_600c = 0x7073,
-
-    .field_600e = 0x6365,
-
-    .field_6010 = 0x6169,
-
-    .field_6012 = 0x656C,
-
-    .field_6014 = 0x2073,
-
-    .field_6016 = 0x6564,
-
-    .field_6018 = 0x206C,
-
-    .field_601a = 0x4E4B,
-
-    .field_601c = 0x3035,
-
-    .field_601e = 0x3030,
-
-    .field_6020 = 0x7020,
-
-    .field_6022 = 0x6F72,
-
-    .field_6024 = 0x7564,
-
-    .field_6026 = 0x6563,
-
-    .field_6028 = 0x7520,
-
-    .field_602a = 0x206E,
-
-    .field_602c = 0x6F73,
-
-    .field_602e = 0x696E,
-
-    .field_6030 = 0x6F64,
-
-    .field_6032 = 0x7020,
-
-    .field_6034 = 0x746F,
-
-    .field_6036 = 0x6E65,
-
-    .field_6038 = 0x6574,
-
-    .field_603a = 0x7920,
-
-    .field_603c = 0x6D20,
-
-    .field_603e = 0x73E1,
+    .txt_El_porton_para_bajos_y_graves = "\241El port\363n para bajos y graves especiales del KN5000 produce un sonido potente y m\341s",
 
     .str_883 = ALIGNED_STRING(" rico!"),
 
@@ -11612,7 +11107,7 @@ const naka_perf_style_t naka_perf_style_data
     .ptrs_4 = {
         SELF(str_892),
         SELF(str_891),
-        SELF(field_619a),
+        SELF(txt_Diversite_des_styles),
         SELF(str_889),
         SELF(str_888),
         SELF(str_887),
@@ -11624,17 +11119,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_889 = "Estilos enormes",
 
-    .field_619a = 0x6944,
-
-    .field_619c = 0x6576,
-
-    .field_619e = 0x7372,
-
-    .field_61a0 = 0x7469,
-
-    .field_61a2 = 0x20E9,
-
-    .str_890 = ALIGNED_STRING("des styles"),
+    .txt_Diversite_des_styles = "Diversit\351 des styles\0\377",
 
     .str_891 = "Riesige Auswahl an Styles",
 
@@ -11643,7 +11128,7 @@ const naka_perf_style_t naka_perf_style_data
     .ptrs_5 = {
         SELF(str_898),
         SELF(field_62be),
-        SELF(field_6268),
+        SELF(txt_Grace_au_Music_Stylist_explorez),
         SELF(str_895),
         SELF(str_894),
         SELF(str_893),
@@ -11655,53 +11140,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_895 = ALIGNED_STRING("Explore los 1000 estilos musicales con el Music Stylist."),
 
-    .field_6268 = 0x7247,
-
-    .field_626a = 0x63E2,
-
-    .field_626c = 0x2065,
-
-    .field_626e = 0x7561,
-
-    .field_6270 = 0xAB20,
-
-    .field_6272 = 0x4D20,
-
-    .field_6274 = 0x7375,
-
-    .field_6276 = 0x6369,
-
-    .field_6278 = 0x5320,
-
-    .field_627a = 0x7974,
-
-    .field_627c = 0x696C,
-
-    .field_627e = 0x7473,
-
-    .field_6280 = 0xBB20,
-
-    .field_6282 = 0x202C,
-
-    .field_6284 = 0x7865,
-
-    .field_6286 = 0x6C70,
-
-    .field_6288 = 0x726F,
-
-    .field_628a = 0x7A65,
-
-    .field_628c = 0x6C20,
-
-    .field_628e = 0x7527,
-
-    .field_6290 = 0x206E,
-
-    .field_6292 = 0x7061,
-
-    .field_6294 = 0xE872,
-
-    .str_896 = ALIGNED_STRING("s l'autre les 1000 styles disponibles."),
+    .txt_Grace_au_Music_Stylist_explorez = "Gr\342ce au \253 Music Stylist \273, explorez l'un apr\350s l'autre les 1000 styles disponibles.\0\377",
 
     .field_62be = 0xE457,
 
@@ -11711,9 +11150,9 @@ const naka_perf_style_t naka_perf_style_data
 
     .ptrs_6 = {
         SELF(str_904),
-        SELF(field_6442),
-        SELF(field_63fc),
-        SELF(field_63b4),
+        SELF(txt_Nutzen_Sie_das_groe_Technics),
+        SELF(txt_Encore_plus_de_possibilites),
+        SELF(txt_Disfrute_mas_con_la_gran),
         SELF(str_900),
         SELF(str_899),
     },
@@ -11722,91 +11161,11 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_900 = "Italian",
 
-    .field_63b4 = 0x6944,
+    .txt_Disfrute_mas_con_la_gran = "Disfrute m\341s con la gran variedad de programas de software de Technics\0\377",
 
-    .field_63b6 = 0x6673,
+    .txt_Encore_plus_de_possibilites = "Encore plus de possibilit\351s gr\342ce \340 la diversit\351 du software Technics\0",
 
-    .field_63b8 = 0x7572,
-
-    .field_63ba = 0x6574,
-
-    .field_63bc = 0x6D20,
-
-    .field_63be = 0x73E1,
-
-    .str_901 = ALIGNED_STRING(" con la gran variedad de programas de software de Technics"),
-
-    .field_63fc = 0x6E45,
-
-    .field_63fe = 0x6F63,
-
-    .field_6400 = 0x6572,
-
-    .field_6402 = 0x7020,
-
-    .field_6404 = 0x756C,
-
-    .field_6406 = 0x2073,
-
-    .field_6408 = 0x6564,
-
-    .field_640a = 0x7020,
-
-    .field_640c = 0x736F,
-
-    .field_640e = 0x6973,
-
-    .field_6410 = 0x6962,
-
-    .field_6412 = 0x696C,
-
-    .field_6414 = 0xE974,
-
-    .field_6416 = 0x2073,
-
-    .field_6418 = 0x7267,
-
-    .field_641a = 0x63E2,
-
-    .field_641c = 0x2065,
-
-    .field_641e = 0x20E0,
-
-    .field_6420 = 0x616C,
-
-    .field_6422 = 0x6420,
-
-    .field_6424 = 0x7669,
-
-    .field_6426 = 0x7265,
-
-    .field_6428 = 0x6973,
-
-    .field_642a = 0xE974,
-
-    .str_902 = " du software Technics",
-
-    .field_6442 = 0x754E,
-
-    .field_6444 = 0x7A74,
-
-    .field_6446 = 0x6E65,
-
-    .field_6448 = 0x5320,
-
-    .field_644a = 0x6569,
-
-    .field_644c = 0x6420,
-
-    .field_644e = 0x7361,
-
-    .field_6450 = 0x6720,
-
-    .field_6452 = 0x6F72,
-
-    .field_6454 = 0x65DF,
-
-    .str_903 = " Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik.",
+    .txt_Nutzen_Sie_das_groe_Technics = "Nutzen Sie das gro\337e Technics-Softwareangebot zur individuellen Gestaltung Ihrer Musik.\0",
 
     .str_904 = ALIGNED_STRING("Add to your enjoyment with a wide range of Technics Software"),
 
@@ -11836,7 +11195,7 @@ const naka_perf_style_t naka_perf_style_data
     .ptrs_8 = {
         SELF(str_916),
         SELF(str_915),
-        SELF(field_673c),
+        SELF(txt_Enregistrez_vos_motifs_preferes),
         SELF(field_66de),
         SELF(str_912),
         SELF(str_911),
@@ -11850,89 +11209,7 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_913 = ALIGNED_STRING("emorice sus patrones de software favoritos con el Custom Rhythm Group ... permanentemente!"),
 
-    .field_673c = 0x6E45,
-
-    .field_673e = 0x6572,
-
-    .field_6740 = 0x6967,
-
-    .field_6742 = 0x7473,
-
-    .field_6744 = 0x6572,
-
-    .field_6746 = 0x207A,
-
-    .field_6748 = 0x6F76,
-
-    .field_674a = 0x2073,
-
-    .field_674c = 0x6F6D,
-
-    .field_674e = 0x6974,
-
-    .field_6750 = 0x7366,
-
-    .field_6752 = 0x7020,
-
-    .field_6754 = 0xE972,
-
-    .field_6756 = 0xE966,
-
-    .field_6758 = 0xE972,
-
-    .field_675a = 0x2073,
-
-    .field_675c = 0x6164,
-
-    .field_675e = 0x736E,
-
-    .field_6760 = 0x6C20,
-
-    .field_6762 = 0x2065,
-
-    .field_6764 = 0x7267,
-
-    .field_6766 = 0x756F,
-
-    .field_6768 = 0x6570,
-
-    .field_676a = 0x2020,
-
-    .field_676c = 0x20AB,
-
-    .field_676e = 0x7543,
-
-    .field_6770 = 0x7473,
-
-    .field_6772 = 0x6D6F,
-
-    .field_6774 = 0x5220,
-
-    .field_6776 = 0x7968,
-
-    .field_6778 = 0x6874,
-
-    .field_677a = 0x206D,
-
-    .field_677c = 0x7247,
-
-    .field_677e = 0x756F,
-
-    .field_6780 = 0x2070,
-
-    .field_6782 = 0x20BB,
-
-    .field_6784 = 0x2E2E,
-
-    .field_6786 = 0x642E,
-
-    .field_6788 = 0x2065,
-
-    .field_678a = 0x6166,
-
-    .field_678c = 0x6FE7,
-
-    .str_914 = "n permanente!",
+    .txt_Enregistrez_vos_motifs_preferes = "Enregistrez vos motifs pr\351f\351r\351s dans le groupe  \253 Custom Rhythm Group \273 ...de fa\347on permanente!\0",
 
     .str_915 = "Speichern Sie Ihre Lieblings Software-Rhythmen permanent in der CUSTOM-Rhythmus Gruppe!",
 
@@ -11961,9 +11238,9 @@ const naka_perf_style_t naka_perf_style_data
 
     .ptrs_10 = {
         SELF(str_928),
-        SELF(field_69e0),
-        SELF(field_698a),
-        SELF(field_6934),
+        SELF(txt_ACCORDION_REGISTER_eroffnet),
+        SELF(txt_Avec_la_fonction_Accordion),
+        SELF(txt_Un_mundo_de_sonidos_de_acordeon),
         SELF(str_924),
         SELF(str_923),
     },
@@ -11972,167 +11249,11 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_924 = "Italian",
 
-    .field_6934 = 0x55A1,
+    .txt_Un_mundo_de_sonidos_de_acordeon = "\241Un mundo de sonidos de acorde\363n en la punta de sus dedos con el Accordion Register!\0\377",
 
-    .field_6936 = 0x206E,
+    .txt_Avec_la_fonction_Accordion = "Avec la fonction \253Accordion Register\273, tout le monde de l'accord\351on sous vos doigts!\0\377",
 
-    .field_6938 = 0x756D,
-
-    .field_693a = 0x646E,
-
-    .field_693c = 0x206F,
-
-    .field_693e = 0x6564,
-
-    .field_6940 = 0x7320,
-
-    .field_6942 = 0x6E6F,
-
-    .field_6944 = 0x6469,
-
-    .field_6946 = 0x736F,
-
-    .field_6948 = 0x6420,
-
-    .field_694a = 0x2065,
-
-    .field_694c = 0x6361,
-
-    .field_694e = 0x726F,
-
-    .field_6950 = 0x6564,
-
-    .field_6952 = 0x6EF3,
-
-    .str_925 = ALIGNED_STRING(" en la punta de sus dedos con el Accordion Register!"),
-
-    .field_698a = 0x7641,
-
-    .field_698c = 0x6365,
-
-    .field_698e = 0x6C20,
-
-    .field_6990 = 0x2061,
-
-    .field_6992 = 0x6F66,
-
-    .field_6994 = 0x636E,
-
-    .field_6996 = 0x6974,
-
-    .field_6998 = 0x6E6F,
-
-    .field_699a = 0xAB20,
-
-    .field_699c = 0x6341,
-
-    .field_699e = 0x6F63,
-
-    .field_69a0 = 0x6472,
-
-    .field_69a2 = 0x6F69,
-
-    .field_69a4 = 0x206E,
-
-    .field_69a6 = 0x6552,
-
-    .field_69a8 = 0x6967,
-
-    .field_69aa = 0x7473,
-
-    .field_69ac = 0x7265,
-
-    .field_69ae = 0x2CBB,
-
-    .field_69b0 = 0x7420,
-
-    .field_69b2 = 0x756F,
-
-    .field_69b4 = 0x2074,
-
-    .field_69b6 = 0x656C,
-
-    .field_69b8 = 0x6D20,
-
-    .field_69ba = 0x6E6F,
-
-    .field_69bc = 0x6564,
-
-    .field_69be = 0x6420,
-
-    .field_69c0 = 0x2065,
-
-    .field_69c2 = 0x276C,
-
-    .field_69c4 = 0x6361,
-
-    .field_69c6 = 0x6F63,
-
-    .field_69c8 = 0x6472,
-
-    .field_69ca = 0x6FE9,
-
-    .str_926 = ALIGNED_STRING("n sous vos doigts!"),
-
-    .field_69e0 = 0x4341,
-
-    .field_69e2 = 0x4F43,
-
-    .field_69e4 = 0x4452,
-
-    .field_69e6 = 0x4F49,
-
-    .field_69e8 = 0x204E,
-
-    .field_69ea = 0x4552,
-
-    .field_69ec = 0x4947,
-
-    .field_69ee = 0x5453,
-
-    .field_69f0 = 0x5245,
-
-    .field_69f2 = 0x6520,
-
-    .field_69f4 = 0xF672,
-
-    .field_69f6 = 0x6666,
-
-    .field_69f8 = 0x656E,
-
-    .field_69fa = 0x2074,
-
-    .field_69fc = 0x6849,
-
-    .field_69fe = 0x656E,
-
-    .field_6a00 = 0x206E,
-
-    .field_6a02 = 0x6964,
-
-    .field_6a04 = 0x2065,
-
-    .field_6a06 = 0x6557,
-
-    .field_6a08 = 0x746C,
-
-    .field_6a0a = 0x6420,
-
-    .field_6a0c = 0x7265,
-
-    .field_6a0e = 0x4120,
-
-    .field_6a10 = 0x6B6B,
-
-    .field_6a12 = 0x726F,
-
-    .field_6a14 = 0x6564,
-
-    .field_6a16 = 0x6E6F,
-
-    .field_6a18 = 0x4B20,
-
-    .field_6a1a = 0xE46C,
+    .txt_ACCORDION_REGISTER_eroffnet = "ACCORDION REGISTER er\366ffnet Ihnen die Welt der Akkordeon Kl\344",
 
     .str_927 = ALIGNED_STRING("nge!"),
 
@@ -12161,8 +11282,8 @@ const naka_perf_style_t naka_perf_style_data
 
     .ptrs_12 = {
         SELF(str_940),
-        SELF(field_6bc8),
-        SELF(field_6b72),
+        SELF(txt_Erzeugen_Sie_legendare),
+        SELF(txt_Avec_les_tirettes_harmoniques),
         SELF(field_6b38),
         SELF(str_936),
         SELF(str_935),
@@ -12196,73 +11317,9 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_937 = ALIGNED_STRING("sicos con barras para Jazz y Rock!"),
 
-    .field_6b72 = 0x7641,
+    .txt_Avec_les_tirettes_harmoniques = "Avec les tirettes harmoniques, des sonorit\351s d'Orgues Classiques, de Jazz et de Rock!\0",
 
-    .field_6b74 = 0x6365,
-
-    .field_6b76 = 0x6C20,
-
-    .field_6b78 = 0x7365,
-
-    .field_6b7a = 0x7420,
-
-    .field_6b7c = 0x7269,
-
-    .field_6b7e = 0x7465,
-
-    .field_6b80 = 0x6574,
-
-    .field_6b82 = 0x2073,
-
-    .field_6b84 = 0x6168,
-
-    .field_6b86 = 0x6D72,
-
-    .field_6b88 = 0x6E6F,
-
-    .field_6b8a = 0x7169,
-
-    .field_6b8c = 0x6575,
-
-    .field_6b8e = 0x2C73,
-
-    .field_6b90 = 0x6420,
-
-    .field_6b92 = 0x7365,
-
-    .field_6b94 = 0x7320,
-
-    .field_6b96 = 0x6E6F,
-
-    .field_6b98 = 0x726F,
-
-    .field_6b9a = 0x7469,
-
-    .field_6b9c = 0x73E9,
-
-    .str_938 = " d'Orgues Classiques, de Jazz et de Rock!",
-
-    .field_6bc8 = 0x7245,
-
-    .field_6bca = 0x657A,
-
-    .field_6bcc = 0x6775,
-
-    .field_6bce = 0x6E65,
-
-    .field_6bd0 = 0x5320,
-
-    .field_6bd2 = 0x6569,
-
-    .field_6bd4 = 0x6C20,
-
-    .field_6bd6 = 0x6765,
-
-    .field_6bd8 = 0x6E65,
-
-    .field_6bda = 0xE464,
-
-    .str_939 = "re Orgelsounds mit den Jazz- und Rock-Zugriegeln!",
+    .txt_Erzeugen_Sie_legendare = "Erzeugen Sie legend\344re Orgelsounds mit den Jazz- und Rock-Zugriegeln!\0",
 
     .str_940 = "Classic Organ Sounds with Jazz and Rock Drawbars!",
 
@@ -12289,9 +11346,9 @@ const naka_perf_style_t naka_perf_style_data
 
     .ptrs_14 = {
         SELF(str_952),
-        SELF(field_6d9e),
-        SELF(field_6d4e),
-        SELF(field_6d16),
+        SELF(txt_ACCOUSTIC_ILLUSION_verleiht_dem),
+        SELF(txt_La_fonction_Acoustic_Illusion),
+        SELF(txt_El_Acoustic_Illusion_amplia_su),
         SELF(str_948),
         SELF(str_947),
     },
@@ -12300,177 +11357,19 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_948 = "Italian",
 
-    .field_6d16 = 0x45A1,
+    .txt_El_Acoustic_Illusion_amplia_su = "\241El Acoustic Illusion amplia su m\372sica a 3 dimensiones!\0",
 
-    .field_6d18 = 0x206C,
+    .txt_La_fonction_Acoustic_Illusion = "La fonction \253 Acoustic Illusion \273 apporte \340 votre musique une 3 \350me dimension!\0\377",
 
-    .field_6d1a = 0x6341,
-
-    .field_6d1c = 0x756F,
-
-    .field_6d1e = 0x7473,
-
-    .field_6d20 = 0x6369,
-
-    .field_6d22 = 0x4920,
-
-    .field_6d24 = 0x6C6C,
-
-    .field_6d26 = 0x7375,
-
-    .field_6d28 = 0x6F69,
-
-    .field_6d2a = 0x206E,
-
-    .field_6d2c = 0x6D61,
-
-    .field_6d2e = 0x6C70,
-
-    .field_6d30 = 0x6169,
-
-    .field_6d32 = 0x7320,
-
-    .field_6d34 = 0x2075,
-
-    .field_6d36 = 0xFA6D,
-
-    .str_949 = "sica a 3 dimensiones!",
-
-    .field_6d4e = 0x614C,
-
-    .field_6d50 = 0x6620,
-
-    .field_6d52 = 0x6E6F,
-
-    .field_6d54 = 0x7463,
-
-    .field_6d56 = 0x6F69,
-
-    .field_6d58 = 0x206E,
-
-    .field_6d5a = 0x20AB,
-
-    .field_6d5c = 0x6341,
-
-    .field_6d5e = 0x756F,
-
-    .field_6d60 = 0x7473,
-
-    .field_6d62 = 0x6369,
-
-    .field_6d64 = 0x4920,
-
-    .field_6d66 = 0x6C6C,
-
-    .field_6d68 = 0x7375,
-
-    .field_6d6a = 0x6F69,
-
-    .field_6d6c = 0x206E,
-
-    .field_6d6e = 0x20BB,
-
-    .field_6d70 = 0x7061,
-
-    .field_6d72 = 0x6F70,
-
-    .field_6d74 = 0x7472,
-
-    .field_6d76 = 0x2065,
-
-    .field_6d78 = 0x20E0,
-
-    .field_6d7a = 0x6F76,
-
-    .field_6d7c = 0x7274,
-
-    .field_6d7e = 0x2065,
-
-    .field_6d80 = 0x756D,
-
-    .field_6d82 = 0x6973,
-
-    .field_6d84 = 0x7571,
-
-    .field_6d86 = 0x2065,
-
-    .field_6d88 = 0x6E75,
-
-    .field_6d8a = 0x2065,
-
-    .field_6d8c = 0x2033,
-
-    .field_6d8e = 0x6DE8,
-
-    .str_950 = ALIGNED_STRING("e dimension!"),
-
-    .field_6d9e = 0x4341,
-
-    .field_6da0 = 0x4F43,
-
-    .field_6da2 = 0x5355,
-
-    .field_6da4 = 0x4954,
-
-    .field_6da6 = 0x2043,
-
-    .field_6da8 = 0x4C49,
-
-    .field_6daa = 0x554C,
-
-    .field_6dac = 0x4953,
-
-    .field_6dae = 0x4E4F,
-
-    .field_6db0 = 0x7620,
-
-    .field_6db2 = 0x7265,
-
-    .field_6db4 = 0x656C,
-
-    .field_6db6 = 0x6869,
-
-    .field_6db8 = 0x2074,
-
-    .field_6dba = 0x6564,
-
-    .field_6dbc = 0x206D,
-
-    .field_6dbe = 0x6C4B,
-
-    .field_6dc0 = 0x6E61,
-
-    .field_6dc2 = 0x2067,
-
-    .field_6dc4 = 0x7264,
-
-    .field_6dc6 = 0x6965,
-
-    .field_6dc8 = 0x6964,
-
-    .field_6dca = 0x656D,
-
-    .field_6dcc = 0x736E,
-
-    .field_6dce = 0x6F69,
-
-    .field_6dd0 = 0x616E,
-
-    .field_6dd2 = 0x656C,
-
-    .field_6dd4 = 0x5220,
-
-    .field_6dd6 = 0x75E4,
-
-    .str_951 = ALIGNED_STRING("mlichkeit."),
+    .txt_ACCOUSTIC_ILLUSION_verleiht_dem = "ACCOUSTIC ILLUSION verleiht dem Klang dreidimensionale R\344umlichkeit.\0\377",
 
     .str_952 = ALIGNED_STRING("Acoustic Illusion broadens your music to 3-Dimensions!"),
 
     .ptrs_15 = {
         SELF(str_958),
-        SELF(field_6f00),
-        SELF(field_6ecc),
-        SELF(field_6e86),
+        SELF(txt_Viele_weitere_leistungsfahige),
+        SELF(txt_Une_grande_diversite_de),
+        SELF(txt_Una_serie_de_funciones),
         SELF(str_954),
         SELF(str_953),
     },
@@ -12479,125 +11378,11 @@ const naka_perf_style_t naka_perf_style_data
 
     .str_954 = "Italian",
 
-    .field_6e86 = 0x55A1,
+    .txt_Una_serie_de_funciones = "\241Una serie de funciones apropiadas para cualquier estilo y ejecuci\363n!\0",
 
-    .field_6e88 = 0x616E,
+    .txt_Une_grande_diversite_de = "Une grande diversit\351 de fonctions pour tout jouer!\0\377",
 
-    .field_6e8a = 0x7320,
-
-    .field_6e8c = 0x7265,
-
-    .field_6e8e = 0x6569,
-
-    .field_6e90 = 0x6420,
-
-    .field_6e92 = 0x2065,
-
-    .field_6e94 = 0x7566,
-
-    .field_6e96 = 0x636E,
-
-    .field_6e98 = 0x6F69,
-
-    .field_6e9a = 0x656E,
-
-    .field_6e9c = 0x2073,
-
-    .field_6e9e = 0x7061,
-
-    .field_6ea0 = 0x6F72,
-
-    .field_6ea2 = 0x6970,
-
-    .field_6ea4 = 0x6461,
-
-    .field_6ea6 = 0x7361,
-
-    .field_6ea8 = 0x7020,
-
-    .field_6eaa = 0x7261,
-
-    .field_6eac = 0x2061,
-
-    .field_6eae = 0x7563,
-
-    .field_6eb0 = 0x6C61,
-
-    .field_6eb2 = 0x7571,
-
-    .field_6eb4 = 0x6569,
-
-    .field_6eb6 = 0x2072,
-
-    .field_6eb8 = 0x7365,
-
-    .field_6eba = 0x6974,
-
-    .field_6ebc = 0x6F6C,
-
-    .field_6ebe = 0x7920,
-
-    .field_6ec0 = 0x6520,
-
-    .field_6ec2 = 0x656A,
-
-    .field_6ec4 = 0x7563,
-
-    .field_6ec6 = 0x6963,
-
-    .field_6ec8 = 0x6EF3,
-
-    .str_955 = "!",
-
-    .field_6ecc = 0x6E55,
-
-    .field_6ece = 0x2065,
-
-    .field_6ed0 = 0x7267,
-
-    .field_6ed2 = 0x6E61,
-
-    .field_6ed4 = 0x6564,
-
-    .field_6ed6 = 0x6420,
-
-    .field_6ed8 = 0x7669,
-
-    .field_6eda = 0x7265,
-
-    .field_6edc = 0x6973,
-
-    .field_6ede = 0xE974,
-
-    .str_956 = ALIGNED_STRING(" de fonctions pour tout jouer!"),
-
-    .field_6f00 = 0x6956,
-
-    .field_6f02 = 0x6C65,
-
-    .field_6f04 = 0x2065,
-
-    .field_6f06 = 0x6577,
-
-    .field_6f08 = 0x7469,
-
-    .field_6f0a = 0x7265,
-
-    .field_6f0c = 0x2065,
-
-    .field_6f0e = 0x656C,
-
-    .field_6f10 = 0x7369,
-
-    .field_6f12 = 0x7574,
-
-    .field_6f14 = 0x676E,
-
-    .field_6f16 = 0x6673,
-
-    .field_6f18 = 0x68E4,
-
-    .str_957 = ALIGNED_STRING("ige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!"),
+    .txt_Viele_weitere_leistungsfahige = "Viele weitere leistungsf\344hige Funktionen zur Darbietung und Bearbeitung Ihrer Musik!\0\377",
 
     .str_958 = ALIGNED_STRING("A host of features to suit any style of performance!"),
 
