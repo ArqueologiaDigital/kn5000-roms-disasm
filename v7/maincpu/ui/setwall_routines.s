@@ -2112,7 +2112,6 @@ SetWall_MiscDataAndCode_Data:
 	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	.byte	0xe7, 0x34, 0x61	; inc 1,XBC3
 SetWall_MiscDataAndCode_Data_Code_Join:
-SetWall_MiscDataAndCode_Data_Code_Join:
 	push_lerp	52
 	call	SetWall_MiscDataAndCode_Data_Code_Helper
 	pop_lerp 52

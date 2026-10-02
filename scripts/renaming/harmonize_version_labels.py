@@ -133,7 +133,7 @@ def main():
             prev = n
             n = STRUCT.sub("", n)
         return n
-    taken = set(sT)
+    taken = set(sT) | col0T          # col0T too: the ELF can be older than the source
     for A, names in sorted(aF.items()):
         k = bisect.bisect_right(keys, A) - 1
         if k < 0 or k + 1 >= len(anch) or anch[k][1] != anch[k + 1][1]:

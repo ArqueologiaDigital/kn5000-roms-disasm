@@ -10959,7 +10959,7 @@ VoiceMode3_EvType3_Helper:
 	ld	l, (0x9645:16)
 	sla	hl, 1
 	ld	xix, 0x9674
-	.byte	0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f	; ld (XIX+HL),0x7f7f
+	ldw	(xix+hl), 0x7f7f
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret

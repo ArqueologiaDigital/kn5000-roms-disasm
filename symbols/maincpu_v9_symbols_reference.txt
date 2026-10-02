@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,019
-#   semantic names ........... 50,922 (97.9%)
-#   positional names ......... 1,097
+#   symbols .................. 52,038
+#   semantic names ........... 50,942 (97.9%)
+#   positional names ......... 1,096
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -22454,6 +22454,7 @@ SetWall_InlineCodeBlock3_Helper 00F20141
 SetWall_MiscDataAndCode_Skip3 00F2015A
 SetWall_MiscDataAndCode_Join 00F2016A
 SetWall_MiscDataAndCode_Loop 00F2016E
+SetWall_InlineCodeBlock3_Helper_Skip 00F20185
 SetWall_MiscDataAndCode_Entry 00F201B0
 SetWall_MiscDataAndCode_Data 00F201BA
 SetWall_MiscDataAndCode_Data_Code_Join 00F201E3
@@ -32172,6 +32173,14 @@ AccVoice_BarCounterBytecodeData_Join5 00F5E386
 AccVoice_BarCounterBytecodeData_Entry 00F5E38A
 AccTuning_ReadAndApplyOffset 00F5E393
 AccTuning_ComplexBytecodeData 00F5E3A6
+AccTuning_ComplexBytecodeData_Skip 00F5E3D1
+AccTuning_ComplexBytecodeData_Loop 00F5E3ED
+AccTuning_ComplexBytecodeData_Loop2 00F5E3F1
+AccTuning_ComplexBytecodeData_Skip2 00F5E401
+AccTuning_ComplexBytecodeData_Skip3 00F5E412
+AccTuning_ComplexBytecodeData_Skip4 00F5E42E
+AccTuning_ComplexBytecodeData_Join 00F5E45B
+AccTuning_ComplexBytecodeData_Skip5 00F5E463
 AccTuning_ComplexBytecodeData_Code_Skip 00F5E497
 AccTuning_ComplexBytecodeData_Code_Epilogue 00F5E4B9
 AccTuning_ComplexBytecodeData_Code_Skip2 00F5E4F4
@@ -33376,6 +33385,7 @@ DrumKit_InlineCode1 00F64C9F
 DrumKit_InlineCode1_Helper 00F64CA6
 CmpBkslTtl_Dispatch_Helper 00F64CA7
 DrumKit_InlineCode1_Data 00F64CAE
+DrumKit_InlineCode1_Data_Skip 00F64CC5
 DrumKit_UpdateStatusFlags_Helper 00F64CCB
 DrumKit_UpdateStatusFlags_Helper_Skip 00F64CED
 DrumKit_UpdateStatusFlags_Helper_Skip2 00F64CF6
@@ -33465,9 +33475,11 @@ RhythmVariation_Select_Entry 00F65206
 RhythmVariation_Select_Return3 00F6520B
 CmpSetTtl_Dispatch_Helper 00F6520C
 RhythmVariation_Select_Entry_Data 00F65213
+RhythmVariation_Select_Entry_Data_Skip 00F65235
 RhythmConfig_ReturnStub 00F65239
 RhythmConfig_InlineCode2 00F6523A
 RhythmConfig_InlineCode2_Data 00F65241
+RhythmConfig_InlineCode2_Data_Return 00F6524B
 DrumTempo_Adjust 00F6524C
 DrumTempo_CheckMax 00F65271
 DrumTempo_Decrement 00F65279
@@ -34379,6 +34391,7 @@ AccDraw_Secondary_Return5 00F6A761
 AccDraw_Secondary_Helper9 00F6A762
 AccDraw_Secondary_Join 00F6A76E
 AccDraw_Secondary_Helper9_Loop 00F6A795
+AccDraw_Secondary_Helper9_Skip 00F6A7DA
 AccDraw_Secondary_Return6 00F6A7F7
 AccDraw_Secondary_Helper9_Helper 00F6A7F8
 AccDraw_Secondary_Helper10 00F6A83D
@@ -46001,11 +46014,13 @@ MidiChanged_ProcessGroup3_Data_Target8 00FC75B7
 MIDI_ProcessChangedChannels_Data_Target0 00FC75E3
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Entry 00FC763E
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Join 00FC764E
+MIDI_ProcessChangedChannels_Data_Target0_Entry 00FC765B
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Skip 00FC767A
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue 00FC7681
 MidiChanged_ProcessGroup2_Data_Target0 00FC7686
 ExtData_VoiceParam_DispatchBytecode_Entry2 00FC76D6
 ExtData_VoiceParam_DispatchBytecode_Entry3 00FC76EA
+MidiChanged_ProcessGroup2_Data_Target0_Skip 00FC76F3
 ExtData_VoiceParam_DispatchBytecode_Epilogue 00FC7700
 MIDI_ProcessChangedChannels_Data_Target1 00FC7704
 ExtData_VoiceParam_DispatchBytecode_Skip 00FC7728
@@ -46220,6 +46235,7 @@ ExtData_ToneParam_MultiChannel_Skip7 00FC8980
 ExtData_ToneParam_MultiChannel_Join 00FC8991
 ExtData_ToneParam_MultiChannel_Join2 00FC8996
 ExtData_ToneParam_MultiChannel_Join3 00FC899A
+ExtData_ToneParam_MultiChannel_Entry 00FC89DB
 ExtData_ToneParam_MultiChannel_Helper2 00FC8A09
 ExtData_ToneParam_MultiChannel_Skip8 00FC8A62
 ExtData_ToneParam_MultiChannel_Skip9 00FC8A6E
@@ -51412,6 +51428,7 @@ SendPartDataBlock_Return5_Entry2_Code_Skip 00FF00B9
 SendPartDataBlock_Return5_Entry2_Code_Skip2 00FF00DB
 NoteEditBox_EventDispatch2_Data_2 00FF00F2
 SendPartDataBlock_Data5 00FF00F4
+SendPartDataBlock_Return5_Entry2_Code_Skip3 00FF0106
 SendPartDataBlock_Return5_Skip10 00FF010E
 SendPartDataBlock_InitVal4 00FF0123
 SendPartDataBlock_LoadReg2 00FF012A
@@ -52005,7 +52022,9 @@ Sprintf_StringNSearch 00FF2883
 Sprintf_StringNSearch_Found 00FF28A4
 Sprintf_StringNSearch_Copy 00FF28AD
 Sprintf_MemChr 00FF28C3
-Sprintf_DataBlock_28E9 00FF28DB
+Sprintf_StrNSet 00FF28DB
+Sprintf_StrNSet_Loop 00FF28E5
+Sprintf_StrNSet_Join 00FF28ED
 Sprintf_StringLength 00FF28FB
 Sprintf_StrLen_ScanLoop 00FF2916
 Sprintf_StrLen_NotFound 00FF291E

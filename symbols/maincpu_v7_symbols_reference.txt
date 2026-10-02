@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 52,023
-#   semantic names ........... 50,658 (97.4%)
-#   positional names ......... 1,365
+#   symbols .................. 52,039
+#   semantic names ........... 50,675 (97.4%)
+#   positional names ......... 1,364
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -22394,6 +22394,7 @@ SetWall_MiscDataAndCode_Loop 00F20144
 SetWall_MiscDataAndCode_Skip4 00F2015B
 SetWall_MiscDataAndCode_Entry 00F20186
 SetWall_MiscDataAndCode_Data 00F20190
+SetWall_MiscDataAndCode_Data_Code_Join 00F201B9
 SetWall_MiscDataAndCode_Data_Code_Return 00F201D9
 SetWall_MiscDataAndCode_Data_Code_Helper 00F201DA
 SetWall_SyncToneGenToDRAM 00F201F0
@@ -22523,7 +22524,11 @@ PartFormat_StartReturn 00F2092F
 PlayModeStop_InitFlagBlock 00F20930
 DpMdlySmfLyrTtlFunc_Helper 00F20934
 PlayModeStop_InitFlagBlock_Helper 00F20940
+PlayModeStop_InitFlagBlock_Helper_Return 00F20950
+PlayModeStop_InitFlagBlock_Helper2 00F20951
+PlayModeStop_InitFlagBlock_Helper_Helper 00F20951
 DpMdlySmfTtl_Dispatch_Data 00F2095C
+DpMdlySmfTtl_Dispatch_Data_Entry 00F20968
 PlayMode_StopAbortRetZero 00F20969
 PlayModeStop_SendStopCmd 00F20986
 PlayMode_StopAndAbort 00F20994
@@ -31671,6 +31676,7 @@ AccPos_ClearOnStart 00F5AFE4
 AccPos_ClearOnStart_Return 00F5B00D
 AccPos_ClearOnStart_Padding 00F5B00E
 AccPos_ClearOnStart_Padding_Sub 00F5B010
+AccPos_ClearOnStart_Padding_Sub_Return 00F5B041
 AccFlags_SyncTo64607 00F5B044
 AccFlags_Sync_Process 00F5B057
 AccFlags_Sync_UpdateLED 00F5B068
@@ -33445,7 +33451,7 @@ TimeSig_DisplayStrings_Code_Skip34 00F65BFC
 TimeSig_DisplayStrings_Code_Helper_Return 00F65C10
 DrumVoice_NotifyEE_Helper8 00F65C11
 TimeSig_DisplayStrings_Code_Helper2_Skip 00F65C35
-DrumVoice_NotifyEE_Helper8_Return 00F65C38
+TimeSig_DisplayStrings_Code_Helper2_Return 00F65C38
 TimeSig_DisplayStrings_Code_Helper3 00F65C39
 TimeSig_DisplayStrings_Code4 00F65C4A
 DrumVoice_NotifyEE_Join13 00F65C67
@@ -45745,11 +45751,13 @@ MidiChanged_ProcessGroup3_Data_Target8 00FC6DEC
 MIDI_ProcessChangedChannels_Data_Target0 00FC6E18
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Entry 00FC6E73
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Join 00FC6E83
+MIDI_ProcessChangedChannels_Data_Target0_Entry 00FC6E90
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Skip 00FC6EAF
 ExtData_VoiceParam_DispatchBytecode_Entry_Code_Epilogue 00FC6EB6
 MidiChanged_ProcessGroup2_Data_Target0 00FC6EBB
 ExtData_VoiceParam_DispatchBytecode_Entry2 00FC6F0B
 ExtData_VoiceParam_DispatchBytecode_Entry3 00FC6F1F
+MidiChanged_ProcessGroup2_Data_Target0_Skip 00FC6F28
 ExtData_VoiceParam_DispatchBytecode_Epilogue 00FC6F35
 MIDI_ProcessChangedChannels_Data_Target1 00FC6F39
 ExtData_VoiceParam_DispatchBytecode_Skip 00FC6F5D
@@ -45964,6 +45972,10 @@ ExtData_ToneParam_MultiChannel_Skip7 00FC81B5
 ExtData_ToneParam_MultiChannel_Join 00FC81C6
 ExtData_ToneParam_MultiChannel_Join2 00FC81CB
 ExtData_ToneParam_MultiChannel_Join3 00FC81CF
+ExtData_ToneParam_MultiChannel_Skip10 00FC8201
+ExtData_ToneParam_MultiChannel_Skip11 00FC8210
+ExtData_ToneParam_MultiChannel_Skip12 00FC8223
+ExtData_ToneParam_MultiChannel_Skip13 00FC8234
 ExtData_ToneParam_MultiChannel_Helper2 00FC823E
 ExtData_ToneParam_MultiChannel_Skip8 00FC8297
 ExtData_ToneParam_MultiChannel_Skip9 00FC82A3
@@ -49061,6 +49073,8 @@ AudioInit_MixFallbackDefault_0x5 00FDE8CD
 AudioInit_ChannelLoop_Init 00FDE8D0
 AudioInit_CheckMixMode 00FDE8D2
 AudioInit_ProcessVoiceAssign_Code_Loop 00FDE8D8
+DSPCfg_EventType50_Code_Helper5_Skip 00FDE914
+DSPCfg_EventType50_Code_Helper5_Skip2 00FDE91C
 AudioInit_DrumSaveReturn 00FDE928
 AudioInit_VoiceParamCtrl 00FDE945
 AudioInit_VoiceNotAssigned 00FDE95D
@@ -49177,6 +49191,7 @@ AudioInit_VoiceCompare_QueueCmd 00FDF624
 AudioInit_VoiceCompare_PanCheck 00FDF636
 AudioInit_CompareChannelMappings 00FDF659
 AudioInit_ChannelMap_Loop 00FDF66E
+AudioInit_VoiceCompare_NotBothFF_Code_Skip 00FDF6B7
 AudioInit_ChannelMap_Next 00FDF700
 AudioInit_ChannelMap_CheckPan 00FDF709
 AudioInit_ChannelMap_Return 00FDF734
@@ -51381,6 +51396,7 @@ SendPartDataBlock_Return5_Skip8 00FEF8C2
 SendPartDataBlock_Return5_Skip9 00FEF8CA
 SendPartDataBlock_Return5_Entry2_Code_Skip2 00FEF8EA
 SendPartDataBlock_Return5_Entry2_Code_Skip 00FEF90C
+SendPartDataBlock_Return5_Entry2_Code_Skip3 00FEF937
 SendPartDataBlock_Return5_Skip10 00FEF93F
 HdaeRom_DataHandler_Helper3 00FEF954
 SendPartDataBlock_LoadReg2 00FEF95B
@@ -51487,9 +51503,9 @@ TmFlash_BulkTransferToSubCPU_Epilogue3 00FF013A
 MssNameFunc_Helper 00FF0140
 TmFlash_CompareStrings 00FF0140
 TmFlash_CompareStrings_Loop 00FF016C
-MssNameFunc_Helper_Skip 00FF0189
+TmFlash_CompareStrings_Skip2 00FF0189
 TmFlash_CompareStrings_Skip 00FF018D
-MssNameFunc_Helper_Join 00FF0192
+TmFlash_CompareStrings_Join 00FF0192
 TmFlash_CompareStrings_Epilogue 00FF019C
 DrawEditSw_CopyVariant_Code_Helper 00FF01A0
 StrSearch_Init 00FF01A0
@@ -52008,9 +52024,9 @@ Sprintf_StringNSearch_Found 00FF20D6
 Sprintf_StringNSearch_Copy 00FF20DF
 Sprintf_MemChr 00FF20F5
 MssNameFunc_Helper2 00FF210D
-Sprintf_DataBlock_28E9 00FF210D
-Sprintf_DataBlock_28E9_Loop 00FF2117
-Sprintf_DataBlock_28E9_Join 00FF211F
+Sprintf_StrNSet 00FF210D
+Sprintf_StrNSet_Loop 00FF2117
+Sprintf_StrNSet_Join 00FF211F
 Sprintf_StringLength 00FF212D
 Sprintf_StrLen_ScanLoop 00FF2148
 Sprintf_StrLen_NotFound 00FF2150

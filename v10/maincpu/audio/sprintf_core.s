@@ -3074,22 +3074,22 @@ Sprintf_MemChr:
 	ld xhl, 0:i3
 	ret
 
-Sprintf_DataBlock_28E9:
+Sprintf_StrNSet:
 	ld	de, (xsp+10)
 	ld	xix, (xsp+4)
 	ld	xhl, xix
-	jr	Sprintf_DataBlock_28E9_Join
-Sprintf_DataBlock_28E9_Loop:
+	jr	Sprintf_StrNSet_Join
+Sprintf_StrNSet_Loop:
 	lda	xbc, (xix+:1)
 	ld	wa, (xsp+8)
 	ld	(xbc), a
-Sprintf_DataBlock_28E9_Join:
+Sprintf_StrNSet_Join:
 	ld	wa, de
 	dec	1, de
 	cp	wa, 0:i3
 	ret	z
-	.byte 0x84, 0x3f, 0x00
-	jr	nz, Sprintf_DataBlock_28E9_Loop
+	cp	(xix), 0
+	jr	nz, Sprintf_StrNSet_Loop
 	ret
 
 Sprintf_StringLength:

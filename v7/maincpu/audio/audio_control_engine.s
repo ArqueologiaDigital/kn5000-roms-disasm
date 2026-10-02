@@ -11016,7 +11016,7 @@ VoiceMode3_DispatchTable_Code_Helper:
 	ld	l, (0x95a9:16)
 	sla	hl, 1
 	ld	xix, 0x95d8
-	.byte	0xf3, 0x07, 0xf0, 0xec, 0x02, 0x7f, 0x7f	; ld (XIX+HL),0x7f7f
+	ldw	(xix+hl), 0x7f7f
 	ret
 	calr	MidiStream_CmdPedalNotify_Helper3
 	ret

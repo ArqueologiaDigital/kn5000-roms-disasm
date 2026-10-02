@@ -2722,22 +2722,22 @@ Sprintf_MemChr:
 	ld	xhl, 0:i3
 	ret
 MssNameFunc_Helper2:
-Sprintf_DataBlock_28E9:
+Sprintf_StrNSet:
 	ld	de, (xsp+10)
 	ld	xix, (xsp+4)
 	ld	xhl, xix
-	jr	Sprintf_DataBlock_28E9_Join
-Sprintf_DataBlock_28E9_Loop:
+	jr	Sprintf_StrNSet_Join
+Sprintf_StrNSet_Loop:
 	lda	xbc, (xix+:1)
 	ld	wa, (xsp+8)
 	ld	(xbc), a
-Sprintf_DataBlock_28E9_Join:
+Sprintf_StrNSet_Join:
 	ld	wa, de
 	dec	1, de
 	cp	wa, 0:i3
 	ret	z
-	.byte	0x84, 0x3f, 0x00
-	jr	nz, Sprintf_DataBlock_28E9_Loop
+	cp	(xix), 0
+	jr	nz, Sprintf_StrNSet_Loop
 	ret
 Sprintf_StringLength:
 	push	xiz
@@ -2773,7 +2773,7 @@ Sprintf_StrLen_Return:
 ; Sprintf_InsertCarry*, Sprintf_DivideDigitsByTen, Sprintf_MulByTen_*,
 ; Sprintf_CountLeadingZeros, Sprintf_DecimalExponent, Sprintf_DecExp_*,
 ; Sprintf_CopyBytes8/10, Sprintf_ItoaBaseN*, Sprintf_StringNSearch*,
-; Sprintf_MemChr, Sprintf_DataBlock_28E9, Sprintf_StringLength,
+; Sprintf_MemChr, Sprintf_StrNSet, Sprintf_StringLength,
 ; Sprintf_StrLen_*, Sprintf_FillToEnd).  No v7 source file referenced any
 ; of them (checked over every v7/maincpu .s/.c/.ld), and no byte here is
 ; anything but 0xFF, so they were names on erased flash, not routines.

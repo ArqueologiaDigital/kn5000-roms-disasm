@@ -22,8 +22,8 @@
 # =====================================================
 #
 #   symbols .................. 52,045
-#   semantic names ........... 50,948 (97.9%)
-#   positional names ......... 1,097
+#   semantic names ........... 50,949 (97.9%)
+#   positional names ......... 1,096
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -52045,9 +52045,9 @@ Sprintf_StringNSearch 00FF2891
 Sprintf_StringNSearch_Found 00FF28B2
 Sprintf_StringNSearch_Copy 00FF28BB
 Sprintf_MemChr 00FF28D1
-Sprintf_DataBlock_28E9 00FF28E9
-Sprintf_DataBlock_28E9_Loop 00FF28F3
-Sprintf_DataBlock_28E9_Join 00FF28FB
+Sprintf_StrNSet 00FF28E9
+Sprintf_StrNSet_Loop 00FF28F3
+Sprintf_StrNSet_Join 00FF28FB
 Sprintf_StringLength 00FF2909
 Sprintf_StrLen_ScanLoop 00FF2924
 Sprintf_StrLen_NotFound 00FF292C

@@ -10594,7 +10594,7 @@ NormScreenProc_Skip2:
 	ld	xwa, (xiz+18)
 	lda	xwa, (xwa+16)
 	push	xwa
-	call	Sprintf_DataBlock_28E9
+	call	Sprintf_StrNSet
 	lda	xsp, (xsp+18)
 	ld	xwa, MssName_EventDispatch_Str_Blank2
 	jr	NormScreenProc_Join
