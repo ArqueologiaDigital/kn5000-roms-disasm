@@ -89674,7 +89674,7 @@ T_F42BD4:	jp sub_F66191  ; -> prom_b 0x66191   x1
 T_F42BD8:	jp sub_F66201  ; -> prom_b 0x66201   x1
 T_F42BDC:	jp sub_F66522  ; -> prom_b 0x66522
 T_F42BE0:	jp sub_F6656D  ; -> prom_b 0x6656D
-T_F42BE4:	jp sub_F6652C  ; -> prom_b 0x6652C   x1
+T_F42BE4:	jp sub_F66522_Join  ; -> prom_b 0x6652C   x1
 T_F42BE8:	jp sub_F6655D  ; -> prom_b 0x6655D   x1
 T_F42BEC:	jp sub_F6657A  ; -> prom_b 0x6657A   x1
 T_F42BF0:	jp sub_F66598  ; -> prom_b 0x66598
@@ -143549,7 +143549,7 @@ sub_F66522:		; <- T_F42BDC
 	ld	(3075:16), 0	; F66527  ld (0x0c03),0x00
 
 ; --------------------------------------------------------------------------
-; sub_F6652C
+; sub_F66522_Join
 ; Called from: T_F42BE4 (x1)
 ; Touches: (0x0C03) (0x0C06) (0x0C07) (0x207B) (0x34BB)  |  0x603422
 ; Calls:   T_F409AC
@@ -143560,7 +143560,7 @@ sub_F66522:		; <- T_F42BDC
 ; Unknown: what the routine is FOR.  Left as sub_XXXXXX with the gap stated,
 ;          per this tree's rule that a stated gap beats a plausible guess.
 ; --------------------------------------------------------------------------
-sub_F6652C:		; <- T_F42BE4
+sub_F66522_Join:		; <- T_F42BE4
 	m_cp_mi8 MB16, 0x207b, 0x10	; F6652C  cp (0x207b),0x10
 	jr	z, sub_F662F7_Skip17	; F66531  jr Z,0xf66546
 	m_and_mi8 MB16, 0x0c07, 0xfe	; F66533  and (0x0c07),0xfe

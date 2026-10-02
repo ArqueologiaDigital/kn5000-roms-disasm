@@ -19,7 +19,7 @@ assembly spliced into `prom_a/wsa1_prom_a.s`). Gate: `make gate-wsa1`, green.
 ## The three-way split
 
 ```
-0xFDE74C-0xFDE75D      17 B  sub_FDE74C          falls through into sub_FDE75D (already converted)
+0xFDE74C-0xFDE75D      17 B  sub_FDE74C          falls through into sub_FDE74C_Skip (already converted)
 0xFDE760-0xFDFFDF   6,271 B  sub_FDE760...       CONVERTED, coverage only, sub_XXXXXX labels
 0xFDFFDF-0xFE0000      33 B  (unnamed)           REFUSED, left `.incbin`
 ```

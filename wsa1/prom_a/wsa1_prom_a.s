@@ -3745,9 +3745,9 @@ sub_F80C04:
 	ret                                                  ; F80CE2  0e
 	ret                                                  ; F80CE3  0e
 	bit 0x07,W                                           ; F80CE4  c8 33 07
-	jr nz, sub_F80CED                                    ; F80CE7  6e 04
+	jr nz, sub_F80C04_Return                                    ; F80CE7  6e 04
 	call T_F429D0                                        ; F80CE9  1d d0 29 f4
-sub_F80CED:
+sub_F80C04_Return:
 	ret                                                  ; F80CED  0e
 	ret                                                  ; F80CEE  0e
 	ret                                                  ; F80CEF  0e
@@ -18423,7 +18423,7 @@ Ctrl_SpanTable:
 ; ==============================================================================
 
 sub_F8A000:
-	jp sub_F8A018                                        ; F8A000  1b 18 a0 f8
+	jp sub_F8A000_Join                                        ; F8A000  1b 18 a0 f8
 	ret                                                  ; F8A004  0e
 	nop                                                  ; F8A005  00
 	nop                                                  ; F8A006  00
@@ -18444,7 +18444,7 @@ sub_F8A000:
 	nop                                                  ; F8A015  00
 	nop                                                  ; F8A016  00
 	nop                                                  ; F8A017  00
-sub_F8A018:
+sub_F8A000_Join:
 	ld (0x2000:16), 0xff                                 ; F8A018  f1 00 20 00 ff
 	ld (0x219a:16), 0x00                                 ; F8A01D  f1 9a 21 00 00
 	ret                                                  ; F8A022  0e
@@ -19471,7 +19471,7 @@ sub_F8A6F3:
 	cp a, 0x00:i3                                          ; F8A7FA  c9 d8
 	jr nz, 0x13                                          ; F8A7FC  6e 13
 	ld A,E                                               ; F8A7FE  cd 89
-	jp sub_F8A818                                        ; F8A800  1b 18 a8 f8
+	jp sub_F8A6F3_Join                                        ; F8A800  1b 18 a8 f8
 	ret                                                  ; F8A804  0e
 	nop                                                  ; F8A805  00
 	nop                                                  ; F8A806  00
@@ -19493,7 +19493,7 @@ sub_F8A6F3:
 	nop                                                  ; F8A815  00
 	nop                                                  ; F8A816  00
 	nop                                                  ; F8A817  00
-sub_F8A818:
+sub_F8A6F3_Join:
 	call T_AsciiField_Clear                              ; F8A818  1d f8 32 f4
 	ret                                                  ; F8A81C  0e
 sub_F8A81D:
@@ -20212,9 +20212,9 @@ PanelAction_SoundSelectOrKeypad_V1:   ; entry: PanelGroupActionListPool
 	calr LowestSetBitIndex1Based                                          ; F8ACF2  1e 1e fc
 	dec 1,E                                              ; F8ACF5  cd 69
 	cp a, 0x01:i3                                          ; F8ACF7  c9 d9
-	jr z, sub_F8ACFE                                           ; F8ACF9  66 03
+	jr z, PanelAction_SoundSelectOrKeypad_V1_Skip                                           ; F8ACF9  66 03
 	add E,0x08                                           ; F8ACFB  cd c8 08
-sub_F8ACFE:
+PanelAction_SoundSelectOrKeypad_V1_Skip:
 	ld d, 0x0f:opc                                          ; F8ACFE  24 0f
 	ld a, (0x2076:16)                                   ; F8AD00  c1 76 20 21
 	cp A,0x09                                            ; F8AD04  c9 cf 09
@@ -32275,8 +32275,8 @@ sub_F911E0:
 sub_F911E6:   ; entry: named by 2 `.long` operands, first at 0xF90CD8
 	add W,0x06                                           ; F911E6  c8 c8 06
 	m_bit 2, MD16, 0x2075                                ; F911E9  f1 75 20 ca
-	jr z, sub_F911EF                                     ; F911ED  66 00
-sub_F911EF:
+	jr z, sub_F911E6_Join                                     ; F911ED  66 00
+sub_F911E6_Join:
 	ldw (0x209b:16), 0x80                                ; F911EF  f1 9b 20 02 80 00
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F911F5  c1 75 20 3e 09
 	ld XIY,0x000078b2                                    ; F911FA  45 b2 78 00 00
@@ -32308,9 +32308,9 @@ sub_F911EF:
 sub_F9123B:   ; entry: named by 2 `.long` operands, first at 0xF90CDC
 	add W,0x01                                           ; F9123B  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F9123E  f1 75 20 ca
-	jr z, sub_F91247                                     ; F91242  66 03
+	jr z, sub_F9123B_Join                                     ; F91242  66 03
 	add W,0x02                                           ; F91244  c8 c8 02
-sub_F91247:
+sub_F9123B_Join:
 	ldw (0x209b:16), 0x0181                              ; F91247  f1 9b 20 02 81 01
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F9124D  c1 75 20 3e 09
 	m_cp_mi8 MB16, 0x207c, 0x01                          ; F91252  c1 7c 20 3f 01
@@ -32326,9 +32326,9 @@ sub_F91247:
 sub_F91269:   ; entry: named by 2 `.long` operands, first at 0xF90CE0
 	add W,0x01                                           ; F91269  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F9126C  f1 75 20 ca
-	jr z, sub_F91275                                     ; F91270  66 03
+	jr z, sub_F91269_Join                                     ; F91270  66 03
 	add W,0x02                                           ; F91272  c8 c8 02
-sub_F91275:
+sub_F91269_Join:
 	ldw (0x209b:16), 0x0282                              ; F91275  f1 9b 20 02 82 02
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F9127B  c1 75 20 3e 09
 	m_cp_mi8 MB16, 0x207c, 0x01                          ; F91280  c1 7c 20 3f 01
@@ -32344,9 +32344,9 @@ sub_F91275:
 sub_F91297:   ; entry: named by 2 `.long` operands, first at 0xF90CE4
 	add W,0x01                                           ; F91297  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F9129A  f1 75 20 ca
-	jr z, sub_F912A3                                     ; F9129E  66 03
+	jr z, sub_F91297_Join                                     ; F9129E  66 03
 	add W,0x02                                           ; F912A0  c8 c8 02
-sub_F912A3:
+sub_F91297_Join:
 	ldw (0x209b:16), 0x0383                              ; F912A3  f1 9b 20 02 83 03
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F912A9  c1 75 20 3e 09
 	calr sub_F94539                                          ; F912AE  1e 88 32
@@ -32415,9 +32415,9 @@ sub_F912E8:
 sub_F9134A:   ; entry: named by 2 `.long` operands, first at 0xF90CEC
 	add W,0x01                                           ; F9134A  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F9134D  f1 75 20 ca
-	jr z, sub_F91356                                     ; F91351  66 03
+	jr z, sub_F9134A_Join                                     ; F91351  66 03
 	add W,0x02                                           ; F91353  c8 c8 02
-sub_F91356:
+sub_F9134A_Join:
 	ldw (0x209b:16), 0x0585                              ; F91356  f1 9b 20 02 85 05
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F9135C  c1 75 20 3e 09
 	calr sub_F94539                                          ; F91361  1e d5 31
@@ -32455,9 +32455,9 @@ sub_F9139B:
 sub_F913B1:   ; entry: named by 1 `.long` operand, first at 0xF90CF4
 	add W,0x01                                           ; F913B1  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F913B4  f1 75 20 ca
-	jr z, sub_F913BD                                     ; F913B8  66 03
+	jr z, sub_F913B1_Join                                     ; F913B8  66 03
 	add W,0x02                                           ; F913BA  c8 c8 02
-sub_F913BD:
+sub_F913B1_Join:
 	ldw (0x209b:16), 0x0787                              ; F913BD  f1 9b 20 02 87 07
 	m_or_mi8 MB16, 0x2075, 0x09                          ; F913C3  c1 75 20 3e 09
 	calr sub_F94539                                          ; F913C8  1e 6e 31
@@ -32532,28 +32532,28 @@ sub_F91442:   ; entry: named by 2 `.long` operands, first at 0xF90D1C
 	m_bit 2, MD16, 0x2075                                ; F91445  f1 75 20 ca
 	jr z, .LF9144B                                       ; F91449  66 00
 .LF9144B:
-	jp sub_F911EF                                        ; F9144B  1b ef 11 f9
+	jp sub_F911E6_Join                                        ; F9144B  1b ef 11 f9
 sub_F9144F:   ; entry: named by 2 `.long` operands, first at 0xF90D20
 	add W,0x01                                           ; F9144F  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F91452  f1 75 20 ca
 	jr z, .LF9145B                                       ; F91456  66 03
 	add W,0x06                                           ; F91458  c8 c8 06
 .LF9145B:
-	jp sub_F91247                                        ; F9145B  1b 47 12 f9
+	jp sub_F9123B_Join                                        ; F9145B  1b 47 12 f9
 sub_F9145F:   ; entry: named by 2 `.long` operands, first at 0xF90D24
 	add W,0x01                                           ; F9145F  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F91462  f1 75 20 ca
 	jr z, .LF9146B                                       ; F91466  66 03
 	add W,0x06                                           ; F91468  c8 c8 06
 .LF9146B:
-	jp sub_F91275                                        ; F9146B  1b 75 12 f9
+	jp sub_F91269_Join                                        ; F9146B  1b 75 12 f9
 sub_F9146F:   ; entry: named by 2 `.long` operands, first at 0xF90D28
 	add W,0x01                                           ; F9146F  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F91472  f1 75 20 ca
 	jr z, .LF9147B                                       ; F91476  66 03
 	add W,0x06                                           ; F91478  c8 c8 06
 .LF9147B:
-	jp sub_F912A3                                        ; F9147B  1b a3 12 f9
+	jp sub_F91297_Join                                        ; F9147B  1b a3 12 f9
 sub_F9147F:   ; entry: named by 2 `.long` operands, first at 0xF90D2C
 	jp sub_F912E8                                        ; F9147F  1b e8 12 f9
 sub_F91483:   ; entry: named by 2 `.long` operands, first at 0xF90D30
@@ -32562,7 +32562,7 @@ sub_F91483:   ; entry: named by 2 `.long` operands, first at 0xF90D30
 	jr z, .LF9148F                                       ; F9148A  66 03
 	add W,0x06                                           ; F9148C  c8 c8 06
 .LF9148F:
-	jp sub_F91356                                        ; F9148F  1b 56 13 f9
+	jp sub_F9134A_Join                                        ; F9148F  1b 56 13 f9
 sub_F91493:   ; entry: named by 2 `.long` operands, first at 0xF90D34
 	jp sub_F9139B                                        ; F91493  1b 9b 13 f9
 sub_F91497:   ; entry: named by 1 `.long` operand, first at 0xF90D38
@@ -32571,7 +32571,7 @@ sub_F91497:   ; entry: named by 1 `.long` operand, first at 0xF90D38
 	jr z, .LF914A3                                       ; F9149E  66 03
 	add W,0x03                                           ; F914A0  c8 c8 03
 .LF914A3:
-	jp sub_F913BD                                        ; F914A3  1b bd 13 f9
+	jp sub_F913B1_Join                                        ; F914A3  1b bd 13 f9
 sub_F914A7:   ; entry: named by 2 `.long` operands, first at 0xF90D3C
 	ret                                                  ; F914A7  0e
 sub_F914A8:   ; entry: named by 1 `.long` operand, first at 0xF90D40
@@ -32728,7 +32728,7 @@ sub_F915FB:
 .LF9163B:
 	m_or_mi8 MB16, 0x2075, 0x01                          ; F9163B  c1 75 20 3e 01
 	m_bit 4, MD16, 0x2095                                ; F91640  f1 95 20 cc
-	jr nz, sub_F9167C                                    ; F91644  6e 36
+	jr nz, sub_F91678_Join                                    ; F91644  6e 36
 	m_cp_mi8 MB16, 0x2687, 0x00                          ; F91646  c1 87 26 3f 00
 	jr nz, .LF91667                                      ; F9164B  6e 1a
 	ldw (0x209b:16), 0x0181                              ; F9164D  f1 9b 20 02 81 01
@@ -32738,7 +32738,7 @@ sub_F915FB:
 	inc 4,XSP                                            ; F9165D  ef 64
 	ld a, 0x01:opc                                          ; F9165F  21 01
 	call T_Kernel_SemaSignal                             ; F91661  1d 88 2d f4
-	jr sub_F9167C                                        ; F91665  68 15
+	jr sub_F91678_Join                                        ; F91665  68 15
 .LF91667:
 	calr sub_F91791                                      ; F91667  1e 27 01
 	ld XWA,sub_F916AA                                    ; F9166A  40 aa 16 f9 00
@@ -32748,7 +32748,7 @@ sub_F915FB:
 	ld a, 0x01:opc                                          ; F91676  21 01
 sub_F91678:
 	call T_Kernel_SemaSignal                             ; F91678  1d 88 2d f4
-; sub_F9167C -- paints the screen whose own text reads "C0MBINATI0N M0DE", "PAGE2/2", "SOUND:"
+; sub_F91678_Join -- paints the screen whose own text reads "C0MBINATI0N M0DE", "PAGE2/2", "SOUND:"
 ;
 ; It reaches the display-list interpreters at 0xF417F0 (A) and 0xF417F4 (B)
 ; 4 time(s); XIY = list start, XIX = list end.  1 of those 4 list(s)
@@ -32783,7 +32783,7 @@ sub_F91678:
 ;    not established is that THIS routine paints it.
 ; Unknown: what this routine is for. Its body contains ZERO display-list calls.
 ; ---------------------------------------------------------------------
-sub_F9167C:
+sub_F91678_Join:
 	m_cp_mi8 MB16, 0x2687, 0x00                          ; F9167C  c1 87 26 3f 00
 	jr nz, .LF91697                                      ; F91681  6e 14
 	ld XWA,sub_F91CF2                                    ; F91683  40 f2 1c f9 00
@@ -33523,9 +33523,9 @@ sub_F91E3C:
 sub_F91E4B:   ; entry: named by 1 `.long` operand, first at 0xF9157B
 	inc 1,W                                              ; F91E4B  c8 61
 	m_bit 2, MD16, 0x2075                                ; F91E4D  f1 75 20 ca
-	jr z, sub_F91E55                                     ; F91E51  66 02
+	jr z, sub_F91E4B_Join                                     ; F91E51  66 02
 	inc 2,W                                              ; F91E53  c8 62
-sub_F91E55:
+sub_F91E4B_Join:
 	m_cp_mi8 MB16, 0x2250, 0x00                          ; F91E55  c1 50 22 3f 00
 	jr z, .LF91E9A                                       ; F91E5A  66 3e
 	m_bit 2, MD16, 0x2075                                ; F91E5C  f1 75 20 ca
@@ -33557,9 +33557,9 @@ sub_F91E55:
 sub_F91EA9:   ; entry: named by 1 `.long` operand, first at 0xF9157F
 	inc 1,W                                              ; F91EA9  c8 61
 	m_bit 2, MD16, 0x2075                                ; F91EAB  f1 75 20 ca
-	jr z, sub_F91EB3                                     ; F91EAF  66 02
+	jr z, sub_F91EA9_Join                                     ; F91EAF  66 02
 	inc 2,W                                              ; F91EB1  c8 62
-sub_F91EB3:
+sub_F91EA9_Join:
 	m_cp_mi8 MB16, 0x2250, 0x01                          ; F91EB3  c1 50 22 3f 01
 	jr z, .LF91EF8                                       ; F91EB8  66 3e
 	m_bit 2, MD16, 0x2075                                ; F91EBA  f1 75 20 ca
@@ -33591,9 +33591,9 @@ sub_F91EB3:
 sub_F91F07:   ; entry: named by 1 `.long` operand, first at 0xF91583
 	inc 1,W                                              ; F91F07  c8 61
 	m_bit 2, MD16, 0x2075                                ; F91F09  f1 75 20 ca
-	jr z, sub_F91F11                                     ; F91F0D  66 02
+	jr z, sub_F91F07_Join                                     ; F91F0D  66 02
 	inc 2,W                                              ; F91F0F  c8 62
-sub_F91F11:
+sub_F91F07_Join:
 	m_cp_mi8 MB16, 0x2250, 0x02                          ; F91F11  c1 50 22 3f 02
 	jr z, .LF91F56                                       ; F91F16  66 3e
 	m_bit 2, MD16, 0x2075                                ; F91F18  f1 75 20 ca
@@ -33625,9 +33625,9 @@ sub_F91F11:
 sub_F91F65:   ; entry: named by 1 `.long` operand, first at 0xF91587
 	or W,0x01                                            ; F91F65  c8 ce 01
 	m_bit 2, MD16, 0x2075                                ; F91F68  f1 75 20 ca
-	jr z, sub_F91F70                                     ; F91F6C  66 02
+	jr z, sub_F91F65_Join                                     ; F91F6C  66 02
 	inc 2,W                                              ; F91F6E  c8 62
-sub_F91F70:
+sub_F91F65_Join:
 	m_cp_mi8 MB16, 0x2250, 0x03                          ; F91F70  c1 50 22 3f 03
 	jr z, .LF91FB5                                       ; F91F75  66 3e
 	m_bit 2, MD16, 0x2075                                ; F91F77  f1 75 20 ca
@@ -33659,9 +33659,9 @@ sub_F91F70:
 sub_F91FC4:   ; entry: named by 1 `.long` operand, first at 0xF9158B
 	or W,0x01                                            ; F91FC4  c8 ce 01
 	m_bit 2, MD16, 0x2075                                ; F91FC7  f1 75 20 ca
-	jr z, sub_F91FCF                                     ; F91FCB  66 02
+	jr z, sub_F91FC4_Join                                     ; F91FCB  66 02
 	inc 2,W                                              ; F91FCD  c8 62
-sub_F91FCF:
+sub_F91FC4_Join:
 	m_cp_mi8 MB16, 0x2250, 0x04                          ; F91FCF  c1 50 22 3f 04
 	jr z, .LF92014                                       ; F91FD4  66 3e
 	m_bit 2, MD16, 0x2075                                ; F91FD6  f1 75 20 ca
@@ -33693,9 +33693,9 @@ sub_F91FCF:
 sub_F92023:   ; entry: named by 1 `.long` operand, first at 0xF9158F
 	or W,0x01                                            ; F92023  c8 ce 01
 	m_bit 2, MD16, 0x2075                                ; F92026  f1 75 20 ca
-	jr z, sub_F9202E                                     ; F9202A  66 02
+	jr z, sub_F92023_Join                                     ; F9202A  66 02
 	inc 2,W                                              ; F9202C  c8 62
-sub_F9202E:
+sub_F92023_Join:
 	m_cp_mi8 MB16, 0x2250, 0x05                          ; F9202E  c1 50 22 3f 05
 	jr z, .LF92073                                       ; F92033  66 3e
 	m_bit 2, MD16, 0x2075                                ; F92035  f1 75 20 ca
@@ -33727,9 +33727,9 @@ sub_F9202E:
 sub_F92082:   ; entry: named by 1 `.long` operand, first at 0xF91593
 	or W,0x01                                            ; F92082  c8 ce 01
 	m_bit 2, MD16, 0x2075                                ; F92085  f1 75 20 ca
-	jr z, sub_F9208D                                     ; F92089  66 02
+	jr z, sub_F92082_Join                                     ; F92089  66 02
 	inc 2,W                                              ; F9208B  c8 62
-sub_F9208D:
+sub_F92082_Join:
 	m_cp_mi8 MB16, 0x2250, 0x06                          ; F9208D  c1 50 22 3f 06
 	jr z, .LF920D2                                       ; F92092  66 3e
 	m_bit 2, MD16, 0x2075                                ; F92094  f1 75 20 ca
@@ -33761,9 +33761,9 @@ sub_F9208D:
 sub_F920E1:   ; entry: named by 2 `.long` operands, first at 0xF91517
 	or W,0x01                                            ; F920E1  c8 ce 01
 	m_bit 2, MD16, 0x2075                                ; F920E4  f1 75 20 ca
-	jr z, sub_F920EC                                     ; F920E8  66 02
+	jr z, sub_F920E1_Join                                     ; F920E8  66 02
 	inc 2,W                                              ; F920EA  c8 62
-sub_F920EC:
+sub_F920E1_Join:
 	m_cp_mi8 MB16, 0x2687, 0x00                          ; F920EC  c1 87 26 3f 00
 	jr z, .LF92148                                       ; F920F1  66 55
 	m_cp_mi8 MB16, 0x2250, 0x07                          ; F920F3  c1 50 22 3f 07
@@ -33990,56 +33990,56 @@ sub_F92364:   ; entry: named by 1 `.long` operand, first at 0xF915BF
 	jr z, .LF92370                                       ; F9236B  66 03
 	add W,0x06                                           ; F9236D  c8 c8 06
 .LF92370:
-	jp sub_F91E55                                        ; F92370  1b 55 1e f9
+	jp sub_F91E4B_Join                                        ; F92370  1b 55 1e f9
 sub_F92374:   ; entry: named by 1 `.long` operand, first at 0xF915C3
 	add W,0x01                                           ; F92374  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F92377  f1 75 20 ca
 	jr z, .LF92380                                       ; F9237B  66 03
 	add W,0x06                                           ; F9237D  c8 c8 06
 .LF92380:
-	jp sub_F91EB3                                        ; F92380  1b b3 1e f9
+	jp sub_F91EA9_Join                                        ; F92380  1b b3 1e f9
 sub_F92384:   ; entry: named by 1 `.long` operand, first at 0xF915C7
 	add W,0x01                                           ; F92384  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F92387  f1 75 20 ca
 	jr z, .LF92390                                       ; F9238B  66 03
 	add W,0x06                                           ; F9238D  c8 c8 06
 .LF92390:
-	jp sub_F91F11                                        ; F92390  1b 11 1f f9
+	jp sub_F91F07_Join                                        ; F92390  1b 11 1f f9
 sub_F92394:   ; entry: named by 1 `.long` operand, first at 0xF915CB
 	add W,0x01                                           ; F92394  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F92397  f1 75 20 ca
 	jr z, .LF923A0                                       ; F9239B  66 03
 	add W,0x06                                           ; F9239D  c8 c8 06
 .LF923A0:
-	jp sub_F91F70                                        ; F923A0  1b 70 1f f9
+	jp sub_F91F65_Join                                        ; F923A0  1b 70 1f f9
 sub_F923A4:   ; entry: named by 1 `.long` operand, first at 0xF915CF
 	add W,0x01                                           ; F923A4  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F923A7  f1 75 20 ca
 	jr z, .LF923B0                                       ; F923AB  66 03
 	add W,0x06                                           ; F923AD  c8 c8 06
 .LF923B0:
-	jp sub_F91FCF                                        ; F923B0  1b cf 1f f9
+	jp sub_F91FC4_Join                                        ; F923B0  1b cf 1f f9
 sub_F923B4:   ; entry: named by 1 `.long` operand, first at 0xF915D3
 	add W,0x01                                           ; F923B4  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F923B7  f1 75 20 ca
 	jr z, .LF923C0                                       ; F923BB  66 03
 	add W,0x06                                           ; F923BD  c8 c8 06
 .LF923C0:
-	jp sub_F9202E                                        ; F923C0  1b 2e 20 f9
+	jp sub_F92023_Join                                        ; F923C0  1b 2e 20 f9
 sub_F923C4:   ; entry: named by 1 `.long` operand, first at 0xF915D7
 	add W,0x01                                           ; F923C4  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F923C7  f1 75 20 ca
 	jr z, .LF923D0                                       ; F923CB  66 03
 	add W,0x06                                           ; F923CD  c8 c8 06
 .LF923D0:
-	jp sub_F9208D                                        ; F923D0  1b 8d 20 f9
+	jp sub_F92082_Join                                        ; F923D0  1b 8d 20 f9
 sub_F923D4:   ; entry: named by 2 `.long` operands, first at 0xF9155B
 	add W,0x01                                           ; F923D4  c8 c8 01
 	m_bit 2, MD16, 0x2075                                ; F923D7  f1 75 20 ca
 	jr z, .LF923E0                                       ; F923DB  66 03
 	add W,0x06                                           ; F923DD  c8 c8 06
 .LF923E0:
-	jp sub_F920EC                                        ; F923E0  1b ec 20 f9
+	jp sub_F920E1_Join                                        ; F923E0  1b ec 20 f9
 sub_F923E4:   ; entry: named by 1 `.long` operand, first at 0xF915DF
 	ret                                                  ; F923E4  0e
 sub_F923E5:   ; entry: named by 2 `.long` operands, first at 0xF91563
@@ -38163,7 +38163,7 @@ sub_F9461C:   ; entry: named by 1 `ld` operand, first at 0xF94609
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 1429, 1, 0x0E
 
-	jp sub_F94C18                                        ; F94C00  1b 18 4c f9
+	jp sub_F9461C_Join                                        ; F94C00  1b 18 4c f9
 	ret                                                  ; F94C04  0e
 	nop                                                  ; F94C05  00
 	nop                                                  ; F94C06  00
@@ -38184,7 +38184,7 @@ sub_F9461C:   ; entry: named by 1 `ld` operand, first at 0xF94609
 	nop                                                  ; F94C15  00
 	nop                                                  ; F94C16  00
 	nop                                                  ; F94C17  00
-sub_F94C18:
+sub_F9461C_Join:
 	ld XWA,0x00000000                                    ; F94C18  40 00 00 00 00
 	ld (0x284f:16), xwa                                 ; F94C1D  f1 4f 28 60
 	ld XWA,0x00002420                                    ; F94C21  40 20 24 00 00
@@ -38565,7 +38565,7 @@ TestMode_PanelSwitchesToLeds:
 	push XDE                                             ; F94E1F  3a
 	ld XIZ,0x00002b40                                    ; F94E20  46 40 2b 00 00
 	ld IX,(XIZ+0x06)                                     ; F94E25  9e 06 24
-sub_F94E28:
+TestMode_PanelSwitchesToLeds_Loop:
 	cp IX,(XIZ+0x04)                                     ; F94E28  9e 04 f4
 	jrl z, .LF94ED0                                          ; F94E2B  76 a2 00
 	mx_ld_rm MXB, ra_IZ, ra_IX, r1                       ; F94E2E  c3 07 f8 f0 21
@@ -38632,9 +38632,9 @@ sub_F94E28:
 	pop XIZ                                              ; F94EC2  5e
 .LF94EC3:
 	cp IX,(XIZ+0x02)                                     ; F94EC3  9e 02 f4
-	jrl ule, sub_F94E28                                        ; F94EC6  73 5f ff
+	jrl ule, TestMode_PanelSwitchesToLeds_Loop                                        ; F94EC6  73 5f ff
 	m_ld_rm MWD+r6, 0x00, r4                             ; F94EC9  9e 00 24
-	jp sub_F94E28                                        ; F94ECC  1b 28 4e f9
+	jp TestMode_PanelSwitchesToLeds_Loop                                        ; F94ECC  1b 28 4e f9
 .LF94ED0:
 	ld (XIZ+0x06),IX                                     ; F94ED0  be 06 54
 	pop XDE                                              ; F94ED3  5a
@@ -45076,7 +45076,7 @@ sub_F99400:
 ; emit this directive unless set(ROM[lo:hi]) == {0x0E}.
 	.fill 929, 1, 0x0E
 
-	jp sub_F99818                                        ; F99800  1b 18 98 f9
+	jp sub_F99400_Join                                        ; F99800  1b 18 98 f9
 	ret                                                  ; F99804  0e
 	nop                                                  ; F99805  00
 	nop                                                  ; F99806  00
@@ -45097,7 +45097,7 @@ sub_F99400:
 	nop                                                  ; F99815  00
 	nop                                                  ; F99816  00
 	nop                                                  ; F99817  00
-sub_F99818:
+sub_F99400_Join:
 	calr sub_F99820                                      ; F99818  1e 05 00
 	call sub_F9B4A1                                      ; F9981B  1d a1 b4 f9
 	ret                                                  ; F9981F  0e
@@ -49217,7 +49217,7 @@ LCD_ShowLayers1And2_SaveRegs:
 	pop XIX                                              ; F9C039  5c
 	pop XIZ                                              ; F9C03A  5e
 	ret                                                  ; F9C03B  0e
-	jp sub_F9C054                                        ; F9C03C  1b 54 c0 f9
+	jp LCD_ShowLayers1And2_SaveRegs_Join                                        ; F9C03C  1b 54 c0 f9
 	ret                                                  ; F9C040  0e
 	nop                                                  ; F9C041  00
 	nop                                                  ; F9C042  00
@@ -49238,7 +49238,7 @@ LCD_ShowLayers1And2_SaveRegs:
 	nop                                                  ; F9C051  00
 	nop                                                  ; F9C052  00
 	nop                                                  ; F9C053  00
-sub_F9C054:
+LCD_ShowLayers1And2_SaveRegs_Join:
 	calr sub_F9C058                                      ; F9C054  1e 01 00
 	ret                                                  ; F9C057  0e
 sub_F9C058:
@@ -58769,7 +58769,7 @@ sub_FA1445:
 	extz BC                                              ; FA145A  d9 12
 	extz XBC                                             ; FA145C  e9 12
 	cp bc, 0x06:i3                                         ; FA145E  d9 de
-	jr ugt, sub_FA14C6                                         ; FA1460  6b 64
+	jr ugt, sub_FA14C2_Join                                         ; FA1460  6b 64
 	sll bc, 0x02                                         ; FA1462  d9 ee 02
 	add XBC,JumpTable_FA146F                             ; FA1465  e9 c8 6f 14 fa 00
 	ld XBC,(XBC)                                         ; FA146B  a1 21
@@ -58790,31 +58790,31 @@ sub_FA148B:   ; entry: jump-table target (JumpTable_FA146F[0])
 ; entry: jump-table target (JumpTable_FA146F[1])
 sub_FA1499:   ; entry: named by 1 `.long` operand, first at 0xFA1473
 	call T_F43440                                        ; FA1499  1d 40 34 f4
-	jr sub_FA14C6                                     ; FA149D  68 27
+	jr sub_FA14C2_Join                                     ; FA149D  68 27
 ; entry: jump-table target (JumpTable_FA146F[2])
 sub_FA149F:   ; entry: named by 1 `.long` operand, first at 0xFA1477
 	call T_F415C4                                        ; FA149F  1d c4 15 f4
 	call T_F43444                                        ; FA14A3  1d 44 34 f4
 .LFA14A7:
 	calr sub_FA0DCC                                      ; FA14A7  1e 22 f9
-	jr sub_FA14C6                                     ; FA14AA  68 1a
+	jr sub_FA14C2_Join                                     ; FA14AA  68 1a
 ; entry: jump-table target (JumpTable_FA146F[3])
 sub_FA14AC:   ; entry: named by 1 `.long` operand, first at 0xFA147B
 	call T_F4077C                                        ; FA14AC  1d 7c 07 f4
-	jr sub_FA14C6                                     ; FA14B0  68 14
+	jr sub_FA14C2_Join                                     ; FA14B0  68 14
 ; entry: jump-table target (JumpTable_FA146F[4])
 sub_FA14B2:   ; entry: named by 1 `.long` operand, first at 0xFA147F
 	call T_F41048                                        ; FA14B2  1d 48 10 f4
 	call T_F4104C                                        ; FA14B6  1d 4c 10 f4
-	jr sub_FA14C6                                     ; FA14BA  68 0a
+	jr sub_FA14C2_Join                                     ; FA14BA  68 0a
 ; entry: jump-table target (JumpTable_FA146F[5])
 sub_FA14BC:   ; entry: named by 1 `.long` operand, first at 0xFA1483
 	call T_F41050                                        ; FA14BC  1d 50 10 f4
-	jr sub_FA14C6                                     ; FA14C0  68 04
+	jr sub_FA14C2_Join                                     ; FA14C0  68 04
 ; entry: jump-table target (JumpTable_FA146F[6])
 sub_FA14C2:   ; entry: named by 1 `.long` operand, first at 0xFA1487
 	call T_F40A18                                        ; FA14C2  1d 18 0a f4
-sub_FA14C6:   ; entry: reachable-run entry
+sub_FA14C2_Join:   ; entry: reachable-run entry
 	m_and_mi8 MB16, 0x2075, 0x6f                         ; FA14C6  c1 75 20 3c 6f
 	ld (0x2880:16), 0x23                                 ; FA14CB  f1 80 28 00 23
 	m_set 6, MD16, 0x2071                                ; FA14D0  f1 71 20 be
@@ -73398,7 +73398,7 @@ MidiOut_PartRecordPtrs_CC51General6:
 ; =====================================================================
 sub_FAA000:
 	jp 0xfaa42a                                          ; FAA000  1b 2a a4 fa
-	jp sub_FAA4B7                                        ; FAA004  1b b7 a4 fa
+	jp Queue2C00_PublishStagedIfPending_Join                                        ; FAA004  1b b7 a4 fa
 	jp 0xfaa482                                          ; FAA008  1b 82 a4 fa
 	jp 0xfaa4d7                                          ; FAA00C  1b d7 a4 fa
 	jp 0xfaa4b3                                          ; FAA010  1b b3 a4 fa
@@ -74012,7 +74012,7 @@ Queue2C00_PublishStagedIfPending:
 	cp HL,0x01fc                                         ; FAA4B0  db cf fc 01
 	jr c, .LFAA4CA                                       ; FAA4B4  67 14
 	push XWA                                             ; FAA4B6  38
-sub_FAA4B7:
+Queue2C00_PublishStagedIfPending_Join:
 	push XBC                                             ; FAA4B7  39
 	push XDE                                             ; FAA4B8  3a
 	push XHL                                             ; FAA4B9  3b
@@ -84852,7 +84852,7 @@ PatchList_RecordBytes2B_Ptr:
 ; Routines whose meaning is not established are `sub_XXXXXX` on purpose.
 ; ==============================================================================
 sub_FB2000:
-	jp sub_FB2018                                        ; FB2000  1b 18 20 fb
+	jp sub_FB2000_Join                                        ; FB2000  1b 18 20 fb
 	ret                                                  ; FB2004  0e
 	nop                                                  ; FB2005  00
 	nop                                                  ; FB2006  00
@@ -84870,7 +84870,7 @@ sub_FB2000:
 	nop                                                  ; FB2015  00
 	nop                                                  ; FB2016  00
 	nop                                                  ; FB2017  00
-sub_FB2018:
+sub_FB2000_Join:
 	call sub_FB818A                                      ; FB2018  1d 8a 81 fb
 	ret                                                  ; FB201C  0e
 sub_FB201D:
@@ -87825,13 +87825,13 @@ sub_FB3ACA:
 	ld W,(XBC+0x09)                                      ; FB3B1A  89 09 20
 	pop XIY                                              ; FB3B1D  5d
 	cp W,A                                               ; FB3B1E  c9 f0
-	jrl ugt, sub_FB3BC9                                  ; FB3B20  7b a6 00
+	jrl ugt, sub_FB3B8C_Skip                                  ; FB3B20  7b a6 00
 	ld W,(XBC+0x0a)                                      ; FB3B23  89 0a 20
 	cp A,W                                               ; FB3B26  c8 f1
-	jrl ugt, sub_FB3BC9                                  ; FB3B28  7b 9e 00
+	jrl ugt, sub_FB3B8C_Skip                                  ; FB3B28  7b 9e 00
 	ld H,(XBC+0x0e)                                      ; FB3B2B  89 0e 26
 	cp h, 0x05:i3                                          ; FB3B2E  ce dd
-	jrl nc, sub_FB3BC9                                   ; FB3B30  7f 96 00
+	jrl nc, sub_FB3B8C_Skip                                   ; FB3B30  7f 96 00
 	ld a, 0x04:opc                                          ; FB3B33  21 04
 	mul wa, h                                          ; FB3B35  ce 41
 	extz XWA                                             ; FB3B37  e8 12
@@ -87891,7 +87891,7 @@ sub_FB3B8C:
 	push XBC                                             ; FB3BC3  39
 	call sub_FB7890                                      ; FB3BC4  1d 90 78 fb
 	pop XIY                                              ; FB3BC8  5d
-sub_FB3BC9:
+sub_FB3B8C_Skip:
 	pop XIX                                              ; FB3BC9  5c
 	popw de                                              ; FB3BCA  4a
 	popw hl                                              ; FB3BCB  4b
@@ -96174,12 +96174,12 @@ sub_FB91EE:
 	ld_sd8b d, 0x96                                      ; FB91F5  c0 96 24
 	and D,0x04                                           ; FB91F8  cc cc 04
 	ldw hl, 0x7fff                                       ; FB91FB  33 ff 7f
-sub_FB91FE:
+sub_FB91EE_Loop:
 	cp d, 0x00:i3                                          ; FB91FE  cc d8
 	jr nz, .LFB9208                                      ; FB9200  6e 06
 	dec 1,HL                                             ; FB9202  db 69
 	cp hl, 0x00:i3                                         ; FB9204  db d8
-	jr nz, sub_FB91FE                                    ; FB9206  6e f6
+	jr nz, sub_FB91EE_Loop                                    ; FB9206  6e f6
 .LFB9208:
 	calr sub_FB916A                                      ; FB9208  1e 5f ff
 	call T_F42620                                        ; FB920B  1d 20 26 f4
@@ -101180,7 +101180,7 @@ sub_FBCF81:
 	ld H,A                                               ; FBCF98  c9 8e
 	ld (xiz-1), a                                        ; FBCF9A  be ff 41
 	cp H,0xff                                            ; FBCF9D  ce cf ff
-	jr z, sub_FBCFCC                                     ; FBCFA0  66 2a
+	jr z, sub_FBCF81_Skip                                     ; FBCFA0  66 2a
 	extz WA                                              ; FBCFA2  d8 12
 	extz XWA                                             ; FBCFA4  e8 12
 	add XWA,IndexMap_F1AF6D                              ; FBCFA6  e8 c8 6d af f1 00
@@ -101193,10 +101193,10 @@ sub_FBCF81:
 	call T_F42C78                                        ; FBCFBA  1d 78 2c f4
 	inc 8,XSP                                            ; FBCFBE  ef 60
 	cp a, 0x01:i3                                          ; FBCFC0  c9 d9
-	jr nz, sub_FBCFCC                                    ; FBCFC2  6e 08
+	jr nz, sub_FBCF81_Skip                                    ; FBCFC2  6e 08
 	call T_Blink_Stop                                    ; FBCFC4  1d 24 2e f4
 	m_set 4, MD16, 0x2071                                ; FBCFC8  f1 71 20 bc
-sub_FBCFCC:
+sub_FBCF81_Skip:
 	pop XIX                                              ; FBCFCC  5c
 	popw hl                                              ; FBCFCD  4b
 	unlk XIZ                                             ; FBCFCE  ee 0d
@@ -102525,9 +102525,9 @@ sub_FBDB95:
 .LFBDC57:
 	ld c, (0x2092:16)                                   ; FBDC57  c1 92 20 23
 	and C,0x01                                           ; FBDC5B  cb cc 01
-	jr z, sub_FBDC64                                     ; FBDC5E  66 04
+	jr z, sub_FBDB95_Skip                                     ; FBDC5E  66 04
 	m_set 7, MD16, 0x2075                                ; FBDC60  f1 75 20 bf
-sub_FBDC64:
+sub_FBDB95_Skip:
 	ld c, (0x2767:16)                                   ; FBDC64  c1 67 27 23
 	m_cp_rm MB16, 0x2768, r3                             ; FBDC68  c1 68 27 f3
 	jr nz, .LFBDC80                                      ; FBDC6C  6e 12
@@ -103488,7 +103488,7 @@ sub_FBE4B0:
 	ld BC,HL                                             ; FBE502  db 89
 	inc 7,BC                                             ; FBE504  d9 67
 	ld (XIX+0x12),BC                                     ; FBE506  bc 12 51
-	jr sub_FBE52B                                        ; FBE509  68 20
+	jr sub_FBE4B0_Join                                        ; FBE509  68 20
 .LFBE50B:
 	ld BC,HL                                             ; FBE50B  db 89
 	inc 1,BC                                             ; FBE50D  d9 61
@@ -103502,7 +103502,7 @@ sub_FBE4B0:
 	ld BC,HL                                             ; FBE522  db 89
 	add BC,0x000f                                        ; FBE524  d9 c8 0f 00
 	ld (XIX+0x12),BC                                     ; FBE528  bc 12 51
-sub_FBE52B:
+sub_FBE4B0_Join:
 	ld (0x2540:16), 0x01                                 ; FBE52B  f1 40 25 00 01
 	ld XBC,XIX                                           ; FBE530  ec 89
 	add XBC,0x00000014                                   ; FBE532  e9 c8 14 00 00 00
@@ -106493,7 +106493,7 @@ sub_FBFEDA:
 	swi 3                                                ; FBFF87  fb
 	swi 2                                                ; FBFF88  fa
 	swi 1                                                ; FBFF89  f9
-	jp sub_FBFFA2                                        ; FBFF8A  1b a2 ff fb
+	jp sub_FBFEDA_Join                                        ; FBFF8A  1b a2 ff fb
 	ret                                                  ; FBFF8E  0e
 	nop                                                  ; FBFF8F  00
 	nop                                                  ; FBFF90  00
@@ -106514,7 +106514,7 @@ sub_FBFEDA:
 	nop                                                  ; FBFF9F  00
 	nop                                                  ; FBFFA0  00
 	nop                                                  ; FBFFA1  00
-sub_FBFFA2:
+sub_FBFEDA_Join:
 	calr sub_FBFFA6                                      ; FBFFA2  1e 01 00
 	ret                                                  ; FBFFA5  0e
 sub_FBFFA6:
@@ -112880,7 +112880,7 @@ DisplayRecordPtrs_FC52B4:
 ; invented instructions in the file and the byte gate would not notice.
 ; =====================================================================
 sub_FC5400:
-	jp sub_FC5418                                        ; FC5400  1b 18 54 fc
+	jp sub_FC5400_Join                                        ; FC5400  1b 18 54 fc
 	ret                                                  ; FC5404  0e
 	nop                                                  ; FC5405  00
 	nop                                                  ; FC5406  00
@@ -112901,7 +112901,7 @@ sub_FC5400:
 	nop                                                  ; FC5415  00
 	nop                                                  ; FC5416  00
 	nop                                                  ; FC5417  00
-sub_FC5418:
+sub_FC5400_Join:
 	calr sub_FC5420                                      ; FC5418  1e 05 00
 	call sub_FC6393                                      ; FC541B  1d 93 63 fc
 	ret                                                  ; FC541F  0e
@@ -140132,7 +140132,7 @@ sub_FD8D21:
 	add WA,(XIZ+0x0a)                                    ; FD8D60  9e 0a 80
 	ld IX,WA                                             ; FD8D63  d8 8c
 	ldw de, 0xd5                                         ; FD8D65  32 d5 00
-	jr sub_FD8D98                                        ; FD8D68  68 2e
+	jr sub_FD8D21_Join                                        ; FD8D68  68 2e
 .LFD8D6A:
 	dec 1,HL                                             ; FD8D6A  db 69
 	cp DE,0x0102                                         ; FD8D6C  da cf 02 01
@@ -140153,7 +140153,7 @@ sub_FD8D21:
 	add WA,(XIZ+0x0a)                                    ; FD8D90  9e 0a 80
 	ld IX,WA                                             ; FD8D93  d8 8c
 	ldw de, 0x0102                                       ; FD8D95  32 02 01
-sub_FD8D98:
+sub_FD8D21_Join:
 	ld (xiz-2), ix                                       ; FD8D98  be fe 54
 .LFD8D9B:
 	pushw ix                                             ; FD8D9B  2c
@@ -150785,7 +150785,7 @@ sub_FDE70F:   ; entry: prom_b routine directory
 ; ---------------------------------------------------------------------
 sub_FDE729:
 	cp WA,0xffff                                  ; FDE729  d8 cf ff ff
-	jr z, sub_FDE75D                                    ; FDE72D  66 2e
+	jr z, sub_FDE74C_Skip                                    ; FDE72D  66 2e
 	ld bc, (xiz-2)                                ; FDE72F  9e fe 21
 	extz BC                                       ; FDE732  d9 12
 	pushw bc                                      ; FDE734  29
@@ -150799,7 +150799,7 @@ sub_FDE729:
 	jp (xbc)                                      ; FDE74A  b1 d8
 ; ---------------------------------------------------------------------
 ; sub_FDE74C -- 17 bytes, the head of the block that used to be all
-;               `.incbin`.  Falls straight through into sub_FDE75D
+;               `.incbin`.  Falls straight through into sub_FDE74C_Skip
 ;               (already converted).  See
 ;               notes/FINDINGS-prom_a-fde74c-boundary.md for the argument
 ;               that licenses treating this as code.
@@ -150808,12 +150808,12 @@ sub_FDE74C:
 	call PanelScreen_RequestPending                                 ; FDE74C  1d b9 60 fd
 	popw bc                                       ; FDE750  49
 	cp a, 0x00:i3                                   ; FDE751  c9 d8
-	jr nz, sub_FDE75D                                   ; FDE753  6e 08
+	jr nz, sub_FDE74C_Skip                                   ; FDE753  6e 08
 	pushw 0x10                                    ; FDE755  0b 10 00
 	call sub_FD6447                                 ; FDE758  1d 47 64 fd
 	popw bc                                       ; FDE75C  49
 ; ---------------------------------------------------------------------
-; sub_FDE75D -- an epilogue: `unlk XIZ / ret`, three bytes.
+; sub_FDE74C_Skip -- an epilogue: `unlk XIZ / ret`, three bytes.
 ; Evidence: START -- the `jr z` at 0xFDE729+4 = 0xFDE72D (bytes 66 2e) targets
 ;           0xFDE72D + 2 + 0x2E = 0xFDE75D exactly. That branch only became
 ;           visible when 0xFDE729 was converted in this same pass, which is why
@@ -150821,7 +150821,7 @@ sub_FDE74C:
 ;           run as having no start evidence. It has one now, and it is that
 ;           branch. Converted for COVERAGE; semantics deferred.
 ; ---------------------------------------------------------------------
-sub_FDE75D:
+sub_FDE74C_Skip:
 	unlk XIZ                                      ; FDE75D  ee 0d
 	ret                                           ; FDE75F  0e
 ; =======================================================================
@@ -160277,18 +160277,18 @@ sub_FE395A:
 	cp (XWA),0x01                                        ; FE3961  80 3f 01
 	jr nz, .LFE396B                                          ; FE3964  6e 05
 	ldw bc, 0x1000                                       ; FE3966  31 00 10
-	jr sub_FE3986                                              ; FE3969  68 1b
+	jr sub_FE395A_Join                                              ; FE3969  68 1b
 .LFE396B:
 	ld wa, (0x605d36:24)                                ; FE396B  d2 36 5d 60 20
 	cp wa, 0x00:i3                                         ; FE3970  d8 d8
-	jr mi, sub_FE3986                                          ; FE3972  65 12
+	jr mi, sub_FE395A_Join                                          ; FE3972  65 12
 	cp wa, 0x05:i3                                         ; FE3974  d8 dd
-	jr gt, sub_FE3986                                          ; FE3976  6a 0e
+	jr gt, sub_FE395A_Join                                          ; FE3976  6a 0e
 	add WA,WA                                            ; FE3978  d8 80
 	lda xix, (Table_FE6DBF+0xD:24)                       ; FE397A  f2 cc 6d fe 34
 	mx_ld_rm MXW, ra_IX, ra_WA, r0                       ; FE397F  d3 07 f0 e0 20
 	ld BC,WA                                             ; FE3984  d8 89
-sub_FE3986:
+sub_FE395A_Join:
 	ld XWA,(XSP+0x06)                                    ; FE3986  af 06 20
 	ld WA,(XWA+0x10)                                     ; FE3989  98 10 20
 	extz XWA                                             ; FE398C  e8 12
@@ -167954,12 +167954,12 @@ Disk_FormatSelectedMedia:
 	calr DiskImage_Build1440K                                          ; FE720A  1e 31 04
 	calr Disk_Format1440K                                          ; FE720D  1e f1 01
 	ld H,A                                               ; FE7210  c9 8e
-	jr sub_FE721C                                              ; FE7212  68 08
+	jr Disk_FormatSelectedMedia_Join                                              ; FE7212  68 08
 .LFE7214:
 	calr DiskImage_Build720K                                          ; FE7214  1e b3 03
 	calr Disk_Format720K                                            ; FE7217  1e 08 00
 	ld H,A                                               ; FE721A  c9 8e
-sub_FE721C:
+Disk_FormatSelectedMedia_Join:
 	ld (0x2243:16), h                                   ; FE721C  f1 43 22 46
 	popw hl                                              ; FE7220  4b
 	ret                                                  ; FE7221  0e
