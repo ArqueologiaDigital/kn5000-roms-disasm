@@ -259,7 +259,8 @@ What this leaves established, and what it does not:
   authoring tool's table is the open step, and it is not in these ROMs.
 
 ⚠ Two more misnomers met on this path, both curated guesses being used as evidence by their names
-alone: `Display_FontPalette_Table_0x12EA` is the mod-12 lookup, and `AccPlay_FindSlotByChannel`
+alone: `Display_FontPalette_Table_0x12EA` (a positional alias, retired on 2026-10-02 for its
+real label `AccPatch_Transpose_LookupTable_Data`) is the mod-12 lookup, and `AccPlay_FindSlotByChannel`
 searches by note. Neither name should be trusted in this area.
 
 Timing, inherited from the demo-preset work and not re-verified here: 96 ticks per beat, `pos` is

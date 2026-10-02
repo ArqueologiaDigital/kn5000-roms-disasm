@@ -106,7 +106,7 @@ AccPedal_BankBaseTableCopy:
 
 AccPedal_ProcessAllChanges:
 	xor WA,WA
-	ld XHL,Display_FontPalette_Table_0x1D58
+	ld XHL,AccStyle_ApplyExt_SkipClamp_Table
 	ld a, (0x0433:16)
 	bit_dri 0, 0x07, 0xec, 0xe0
 	jrl z, AccPedal_ReadBankAndReturn
@@ -166,7 +166,7 @@ AccPedal_ReadBankAndReturn:
 
 AccVoice_ReadBankAssign:
 	xor WA,WA
-	ld XHL,Display_FontPalette_Table_0x1D58
+	ld XHL,AccStyle_ApplyExt_SkipClamp_Table
 	ld a, (0x0433:16)
 	ld_rrb a, xhl, wa
 	bit 0, (0x31e7:16)
@@ -480,7 +480,7 @@ AccChord_DispatchVoiceChange:
 AccChord_CheckVoiceBit2:
 	bit 2, (0x326e:16)
 	jr z, AccChord_CheckLeftPedal0
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_CheckLeftPedal0
 	and (0x326e:16), 0xfb
@@ -565,7 +565,7 @@ AccChord_CheckPitchDirty:
 AccChord_CheckPitchLeftPedal1:
 	bit 1, (0x325f:16)
 	jr z, AccChord_NullRet
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_NullRet
 	and (0x328d:16), 0xc0
@@ -676,7 +676,7 @@ AccVoice_ComputeChannelIndex:
 	sla wa, 2
 	xor l, l
 	add hl, wa
-	ld xiy, Display_FontPalette_Table_0x2EA
+	ld xiy, RhythmROM_BankProgramLocators
 	ldw_sri WA, 0x07, 0xf4, 0xec
 	add hl, 0x2
 	ldw_sri IY, 0x07, 0xf4, 0xec
@@ -711,7 +711,7 @@ AccVoice_StorePatchAndLookup:
 AccStyle_ReadVoiceParam:
 	ldb_sri0 W, (xiy + 0x03da)
 	ldb_sri0 A, (xiy + 0x03d0)
-	ld xhl, Display_FontPalette_Table_0x1D32
+	ld xhl, AccTone_LookupByProgram_Table
 	ldb_sri A, 0x03, 0xec, 0xe0
 	ret
 
@@ -731,7 +731,7 @@ AccPatch_ClampedSetParam:
 	ld w, a
 	calr AccVoice_ResolveParamAddr
 	ld a, (xiy + 12)
-	ld xhl, Display_FontPalette_Table_0x1D32
+	ld xhl, AccTone_LookupByProgram_Table
 	ldb_sri A, 0x03, 0xec, 0xe0
 	ret
 

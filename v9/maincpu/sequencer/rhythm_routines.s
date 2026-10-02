@@ -407,7 +407,7 @@ Rhythm_CrossVoice_Apply:
 	sub w, 0xc
 	ld (0x332e:16), w
 	or (0x332d:16), 1
-	ld xiy, Display_FontPalette_Table_0x12EA
+	ld xiy, AccPatch_Transpose_LookupTable_Data
 	ldb_sri W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
@@ -423,7 +423,7 @@ Rhythm_NoteRangeCheck:
 	jr z, Rhythm_NoteRangeReturn
 	push xiy
 	ld w, a
-	ld xiy, Display_FontPalette_Table_0x12EA
+	ld xiy, AccPatch_Transpose_LookupTable_Data
 	ldb_sri W, 0x03, 0xf4, 0xe0
 	sub a, w
 	pop xiy
@@ -478,7 +478,7 @@ Rhythm_VelLookA_TableLookup:
 	ldb_sri L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, Display_FontPalette_Table_0x136A
+	ld xiy, Rhythm_VelLookA_TableLookup_Table
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a
@@ -491,7 +491,7 @@ Rhythm_VelLookA_Done:
 
 Rhythm_InstrBaseLookup:
 	push xiy
-	ld xiy, Display_FontPalette_Table_0x12EA
+	ld xiy, AccPatch_Transpose_LookupTable_Data
 	lda_dri XIY, 0x03, 0xf4, 0xe0
 	ld a, (xiy)
 	pop xiy
@@ -500,22 +500,22 @@ Rhythm_InstrBaseLookup:
 ; -----------------------------------------------------------------------------
 ; Rhythm_InstrMapTable_Default -- 3 variants x 49 bytes.  Each maps the RAM
 ; byte 0x32D8 (index clamped to 0..0x2F, anything larger reads entry 0) to a
-; ROW NUMBER of the 16-byte-row table at Display_FontPalette_Table_0x136A.
+; ROW NUMBER of the 16-byte-row table at Rhythm_VelLookA_TableLookup_Table.
 ; Readers (all the same pattern): Rhythm_VelocityLookup_A, Rhythm_VoiceMapLookup
 ; (second half) and Rhythm_TranspMod_BaseApply:
 ;     ld xiy, <variant> / ldb_sri L, ..., 0xf4, 0xec     ; L := variant[L]
-;     sla hl, 4 / ld xiy, Display_FontPalette_Table_0x136A
+;     sla hl, 4 / ld xiy, Rhythm_VelLookA_TableLookup_Table
 ;     lda_dri XIY, ...  ; xiy += row*16  /  ldb_sri A, ... ; A := row[A]
 ;     add w, a                                           ; note += row[col]
 ; where the column A came from Rhythm_InstrBaseLookup (a byte of
-; Display_FontPalette_Table_0x12EA indexed by the note).
+; AccPatch_Transpose_LookupTable_Data indexed by the note).
 ; Variant choice: bit 2 of RAM 0x32F4 selects +0x31 (the positional alias
 ; Rhythm_InstrMapTable_Default_0x31), bit 3 selects +0x62 (..._0x62) and,
 ; being tested second, wins over bit 2;
 ; Rhythm_TranspMod_BaseApply always uses +0x31.  Stride 0x31 = 49 is pinned by
 ; those two aliases; the tables end exactly at Rhythm_TransposeNote (147 B).
 ; Values 0..20 = row numbers.  What each 16-byte row holds belongs to the
-; documentation of Display_FontPalette_Table_0x136A (C data, another file).
+; documentation of Rhythm_VelLookA_TableLookup_Table (C data, another file).
 ; -----------------------------------------------------------------------------
 Rhythm_InstrMapTable_Default:
 	; +0x00: default (bits 2 and 3 of 0x32F4 clear)
@@ -662,7 +662,7 @@ Rhythm_VoiceMap_Inst2Bit3:
 	ldb_sri L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, Display_FontPalette_Table_0x136A
+	ld xiy, Rhythm_VelLookA_TableLookup_Table
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a
@@ -731,7 +731,7 @@ Rhythm_VelComp_Lookup:
 	ldb_sri L, 0x03, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, Display_FontPalette_Table_0x136A
+	ld xiy, Rhythm_VelLookA_TableLookup_Table
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a
@@ -745,7 +745,7 @@ Rhythm_VelComp_Done:
 ; -----------------------------------------------------------------------------
 ; Rhythm_VelocityTable_A -- 2 variants x 49 bytes, the same kind of table as
 ; Rhythm_InstrMapTable_Default (row numbers into the 16-byte rows at
-; Display_FontPalette_Table_0x136A), for a different reader.
+; Rhythm_VelLookA_TableLookup_Table), for a different reader.
 ; Reader: Rhythm_VelocityCompute -- `ld xiy, <variant>`, L := variant[L]
 ; (L = RAM 0x32D8 clamped 0..0x2F), `sla hl, 4`, row lookup, `add w, a`,
 ; `calr Rhythm_TransposeNote`: identical to Rhythm_VelocityLookup_A.
@@ -1596,7 +1596,7 @@ Rhythm_TranspMod_Done:
 
 Rhythm_TranspMod_BaseApply:
 	ld w, a
-	ld xiy, Display_FontPalette_Table_0x12EA
+	ld xiy, AccPatch_Transpose_LookupTable_Data
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	ld l, (0x32d8:16)
 	cp l, 0x30
@@ -1609,7 +1609,7 @@ Rhythm_TranspMod_BaseLookup:
 	ldb_sri L, 0x07, 0xf4, 0xec
 	extz hl
 	sla hl, 4
-	ld xiy, Display_FontPalette_Table_0x136A
+	ld xiy, Rhythm_VelLookA_TableLookup_Table
 	lda_dri XIY, 0x07, 0xf4, 0xec
 	ldb_sri A, 0x03, 0xf4, 0xe0
 	add w, a

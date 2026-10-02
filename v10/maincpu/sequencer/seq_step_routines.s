@@ -40,12 +40,12 @@ SeqStep_NoteReadEvent:
 	cp wa, 6:i3
 	jr gt, SeqStep_NoteSetOther
 	add wa, wa
-	lda xix, (Display_FontPalette_Table_0x7E:24)
+	lda xix, (SeqStep_NoteReadEvent_CaseTable:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda xix, (SeqStep_NoteCases:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
 
-; Case bodies of the `jp_ind` switch in the dispatcher above (event byte 0x80-0x86; word offsets at Display_FontPalette_Table_0x7E): jp (xix + r) with xix = this
+; Case bodies of the `jp_ind` switch in the dispatcher above (event byte 0x80-0x86; word offsets at SeqStep_NoteReadEvent_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 SeqStep_NoteCases:
@@ -307,7 +307,7 @@ SeqStep_EventPosConsumeAdvance:
 	cp wa, 6:i3
 	jr gt, SeqStep_EventPosSetD3
 	add wa, wa
-	lda xix, (Display_FontPalette_Table_0x8C:24)
+	lda xix, (SeqStep_EventPosConsumeAdvance_CaseTable:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda xix, (SeqStep_EventPosFinish:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -550,7 +550,7 @@ SeqStep_DeleteDone:
 	cp wa, 6:i3
 	jrl gt, SeqStep_DeleteSetOther
 	add wa, wa
-	lda xix, (Display_FontPalette_Table_0x9A:24)
+	lda xix, (SeqStep_DeleteDone_CaseTable:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda xix, (SeqStep_DeleteExitRestore:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -2243,7 +2243,7 @@ SeqStep_ParseRhythm:
 	ld (0x289d:16), c
 	ld e, (0x2873:16)
 	extz de
-	lda xhl, (FontPalette_Gradient7_0x32:24)
+	lda xhl, (SeqStep_ParseRhythm_ByteMap:24)
 	ld a, (4340:16)
 	cpb_sri_rm A, 0x07, 0xec, 0xe8
 	jr z, SeqStep_ParseRhythmLoop
@@ -2538,7 +2538,7 @@ SeqStep_TimerDispatchA:
 	ld a, (8956:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (Display_FontPalette_Table_0xA8:24)
+	lda xbc, (SeqStep_TimerDispatch_ProcTables:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	jp (xhl)
 
@@ -2546,7 +2546,7 @@ SeqStep_TimerDispatchB:
 	ld a, (8956:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (Display_FontPalette_Table_0x104:24)
+	lda xbc, (SeqStep_TimerDispatchB_PtrTable:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	jp (xhl)
 
@@ -2554,7 +2554,7 @@ SeqStep_TimerDispatchC:
 	ld a, (8956:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (Display_FontPalette_Table_0x160:24)
+	lda xbc, (SeqStep_TimerDispatchC_PtrTable:24)
 	ld_sril3 XHL, 0x07, 0xe4, 0xe0
 	jp (xhl)
 

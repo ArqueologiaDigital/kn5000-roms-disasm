@@ -289,7 +289,7 @@ FRename_PadDone:
 
 FRename_TextChange_Error:
 	ld xwa, 0x8870
-	ld xbc, DiskOp_ChannelCfgTable_0x52
+	ld xbc, FRename_TextChange_Error_Str_Under_Under_Under_Under
 	call FileIO_CopyString
 
 FRename_TextChange_SendApply:
@@ -392,7 +392,7 @@ FRenameSmf_PadDone:
 
 FRenameSmf_TextChange_Error:
 	ld xwa, 0x8870
-	ld xbc, DiskOp_ChannelCfgTable_0x5A
+	ld xbc, FRenameSmf_TextChange_Error_Str_Under_Under_Under_Under
 	call FileIO_CopyString
 
 FRenameSmf_TextChange_SendApply:
@@ -407,7 +407,7 @@ FRenameSmf_HandleApply:
 	ld xbc, (xsp + 4)
 	call FileIO_CopyString
 	ld xwa, 0x8870
-	ld xbc, DiskOp_ChannelCfgTable_0x64
+	ld xbc, FRenameSmf_HandleApply_Str_MID
 	call FileIO_BuildFilePath
 	ld xwa, 0x600026
 	ld xbc, EVT_SHOW
@@ -1048,7 +1048,7 @@ DiskInfo_RenderStrings:
 	ld xwa, 0x87ce
 	call FileIO_CopyString
 	ld xwa, 0x87ce
-	ld xbc, DiskOp_ChannelCfgTable_0x6A
+	ld xbc, DiskInfo_RenderStrings_Str_Colon
 	call FileIO_BuildFilePath
 	lda xwa, (0x87ce:16)
 	ld (xsp + 12), xwa
@@ -1059,7 +1059,7 @@ DiskInfo_RenderStrings:
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath
 	ld xwa, 0x87ce
-	ld xbc, DiskOp_ChannelCfgTable_0x6E
+	ld xbc, DiskInfo_RenderStrings_Str_KB_free
 	call FileIO_BuildFilePath
 	lda xwa, (0x87ce:16)
 	ld (xsp + 12), xwa
@@ -1070,7 +1070,7 @@ DiskInfo_RenderStrings:
 	ld xwa, (xsp + 12)
 	call FileIO_BuildFilePath
 	ld xwa, 0x87ce
-	ld xbc, DiskOp_ChannelCfgTable_0x78
+	ld xbc, DiskInfo_RenderStrings_Str_Fmtu_sed
 	call FileIO_BuildFilePath
 	ld xwa, (xsp + 16)
 	ld xbc, EVT_PARA_DRAW

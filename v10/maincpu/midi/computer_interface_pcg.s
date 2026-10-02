@@ -55,7 +55,7 @@ AcPcgOutGridBoxProc:
 	cp xbc, 0x6
 	jrl gt, PcgOutGrid_DefaultHandler
 	add xbc, xbc
-	add xbc, NakaInst_INITIAL_0x28
+	add xbc, AcPcgOutGridBoxProc_CaseTable
 	ld bc, (xbc)
 	lda xix, (PcgOutGridBoxEventDispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -267,11 +267,11 @@ PcgOutGridCheck:
 	push xiz
 	ld xiz, xde
 	ld (xsp + 44), xbc
-	ld xiy, UserMemory_FormatStrings_0x16
+	ld xiy, PcgOutGridCheck_LocalInit
 	lda xix, (xsp + 12)
 	ld bc, 5:i3
 	ldirw
-	ld xiy, MidiPart_PageStr_1of3_0xA
+	ld xiy, ComSetGridCheck_LocalInit
 	lda xix, (xsp + 4)
 	ld bc, 4:i3
 	ldirw
@@ -290,7 +290,7 @@ PcgOutGridCheck:
 	cp xwa, 0x6
 	jrl gt, PcgOutGridCheckComplete
 	add xwa, xwa
-	add xwa, UserMemory_FormatStrings_0xC0
+	add xwa, PcgOutGridCheck_CaseTable
 	ld wa, (xwa)
 	lda xix, (PcgOutGridCheckJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -509,8 +509,8 @@ PcgOutGridCheckJumpTable_Join4:
 	ld	xwa, (xwa)
 	inc	1, xwa
 	push	xwa
-	pushw	231
-	pushw	65358
+	pushw	PcgOutGridCheck_LocalInit_Strings@hi16
+	pushw	PcgOutGridCheck_LocalInit_Strings@lo16
 	push	xhl
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -527,8 +527,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip:
 	ld	xwa, (xwa)
 	inc	1, xwa
 	push	xwa
-	pushw	231
-	pushw	0xff54
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d@lo16
 	push	xhl
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -544,8 +544,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip2:
 	ldw	(xbc), 2
 	cp	(0x24770:24), 255
 	jr	nz, PcgOutGridCheckJumpTable_Entry_Code_Skip3
-	pushw	231
-	pushw	0xff5a
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash@lo16
 	push	xhl
 	call	Strcpy
 	inc	8, xsp
@@ -555,8 +555,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip2:
 	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	ldw	(xsp+6), 4
-	pushw	231
-	pushw	0xff60
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -569,8 +569,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip2:
 PcgOutGridCheckJumpTable_Entry_Code_Skip3:
 	ld	xwa, (xwa)
 	push	xwa
-	pushw	231
-	pushw	0xff68
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_2@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_2@lo16
 	push	xhl
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
@@ -586,8 +586,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip3:
 	sll	wa, 7
 	add	wa, bc
 	pushw	wa
-	pushw	231
-	pushw	0xff6e
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -605,8 +605,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip4:
 	ld	xwa, (xwa)
 	cp	xwa, 0xffffffff
 	jr	nz, PcgOutGridCheckJumpTable_Entry_Code_Skip5
-	pushw	231
-	pushw	0xff76
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash_2@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash_2@lo16
 	push	xhl
 	call	Strcpy
 	inc	8, xsp
@@ -616,8 +616,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip4:
 	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	ldw	(xsp+6), 3
-	pushw	231
-	pushw	0xff7c
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF_2@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF_2@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -628,8 +628,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip4:
 	ld	xbc, EVT_GRID_DRAW
 	call	SendEvent
 	ldw	(xsp+6), 4
-	pushw	231
-	pushw	0xff82
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF_3@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_OFF_3@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Strcpy
@@ -643,8 +643,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip5:
 	ld	a, (0x2476e:24)
 	exts	wa
 	pushw	wa
-	pushw	231
-	pushw	0xff8a
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_3@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_3@lo16
 	push	xhl
 	call	Sprintf_Locked
 	lda	xsp, (xsp+10)
@@ -656,8 +656,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip5:
 	ldw	(xsp+6), 3
 	ld	xwa, (xiz+14)
 	push	xwa
-	pushw	231
-	pushw	0xff90
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_4@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_4@lo16
 	lda	xwa, (xsp+20)
 	push	xwa
 	call	Sprintf_Locked
@@ -674,8 +674,8 @@ PcgOutGridCheckJumpTable_Entry_Code_Skip5:
 	sll	wa, 7
 	add	wa, bc
 	pushw	wa
-	pushw	231
-	pushw	0xff96
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d_2@hi16
+	pushw	PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d_2@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Sprintf_Locked
@@ -711,8 +711,8 @@ PcgOutCheckGridDataStructure:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xe7
-	pushw 0xff9e
+	pushw PcgOutCheckGridDataStructure_Str_Fmt3d@hi16
+	pushw PcgOutCheckGridDataStructure_Str_Fmt3d@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
@@ -727,8 +727,8 @@ PcgOutCheck_SendPreset1:
 	inc 1, a
 	extz wa
 	pushw wa
-	pushw 0xe7
-	pushw 0xffa4
+	pushw PcgOutCheck_SendPreset1_Str_Fmt3d@hi16
+	pushw PcgOutCheck_SendPreset1_Str_Fmt3d@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
@@ -741,8 +741,8 @@ PcgOutCheck_SendPreset1:
 PcgOutCheck_SendPreset2:
 	cp (0x024770:24), 0xff
 	jr nz, PcgOutCheck_SendPreset2Named
-	pushw 0xe7
-	pushw 0xffaa
+	pushw PcgOutCheck_SendPreset2_Str_Dash_Dash_Dash@hi16
+	pushw PcgOutCheck_SendPreset2_Str_Dash_Dash_Dash@lo16
 	push xbc
 	call Strcpy
 	inc 8, xsp
@@ -752,8 +752,8 @@ PcgOutCheck_SendPreset2:
 	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 	ldw (xsp + 6), 0x4
-	pushw 0xe7
-	pushw 0xffb0
+	pushw PcgOutCheck_SendPreset2_Str_OFF@hi16
+	pushw PcgOutCheck_SendPreset2_Str_OFF@lo16
 	lda xwa, (xsp + 16)
 	push xwa
 	call Strcpy
@@ -768,8 +768,8 @@ PcgOutCheck_SendPreset2Named:
 	ld a, (0x02476e:24)
 	exts wa
 	pushw wa
-	pushw 0xe7
-	pushw 0xffb8
+	pushw PcgOutCheck_SendPreset2Named_Str_Fmt3d@hi16
+	pushw PcgOutCheck_SendPreset2Named_Str_Fmt3d@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
@@ -786,8 +786,8 @@ PcgOutCheck_SendPreset2Named:
 	sll wa, 7
 	add wa, bc
 	pushw wa
-	pushw 0xe7
-	pushw 0xffbe
+	pushw PcgOutCheck_SendPreset2Named_Str_Fmt5d@hi16
+	pushw PcgOutCheck_SendPreset2Named_Str_Fmt5d@lo16
 	lda xwa, (xsp + 18)
 	push xwa
 	call Sprintf_Locked
@@ -802,8 +802,8 @@ PcgOutCheck_SendPreset3:
 	ldw (xwa), 0x2
 	cp (0x024770:24), 0xff
 	jr nz, PcgOutCheck_SendPreset3Named
-	pushw 0xe7
-	pushw 0xffc6
+	pushw PcgOutCheck_SendPreset3_Str_Dash_Dash_Dash@hi16
+	pushw PcgOutCheck_SendPreset3_Str_Dash_Dash_Dash@lo16
 	push xbc
 	call Strcpy
 	inc 8, xsp
@@ -813,8 +813,8 @@ PcgOutCheck_SendPreset3:
 	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 	ldw (xsp + 6), 0x3
-	pushw 0xe7
-	pushw 0xffcc
+	pushw PcgOutCheck_SendPreset3_Str_OFF@hi16
+	pushw PcgOutCheck_SendPreset3_Str_OFF@lo16
 	lda xwa, (xsp + 16)
 	push xwa
 	call Strcpy
@@ -825,8 +825,8 @@ PcgOutCheck_SendPreset3:
 	ld xbc, EVT_GRID_DRAW
 	call SendEvent
 	ldw (xsp + 6), 0x4
-	pushw 0xe7
-	pushw 0xffd2
+	pushw PcgOutCheck_SendPreset3_Str_OFF_2@hi16
+	pushw PcgOutCheck_SendPreset3_Str_OFF_2@lo16
 	lda xwa, (xsp + 16)
 	push xwa
 	call Strcpy
@@ -841,8 +841,8 @@ PcgOutCheck_SendPreset3Named:
 	ld a, (0x02476e:24)
 	exts wa
 	pushw wa
-	pushw 0xe7
-	pushw 0xffda
+	pushw PcgOutCheck_SendPreset3Named_Str_Fmt3d@hi16
+	pushw PcgOutCheck_SendPreset3Named_Str_Fmt3d@lo16
 	push xbc
 	call Sprintf_Locked
 	lda xsp, (xsp + 10)
@@ -855,8 +855,8 @@ PcgOutCheck_SendPreset3Named:
 	ld a, (0x024770:24)
 	exts wa
 	pushw wa
-	pushw 0xe7
-	pushw 0xffe0
+	pushw PcgOutCheck_SendPreset3Named_Str_Fmt3d_2@hi16
+	pushw PcgOutCheck_SendPreset3Named_Str_Fmt3d_2@lo16
 	lda xwa, (xsp + 18)
 	push xwa
 	call Sprintf_Locked
@@ -874,8 +874,8 @@ PcgOutCheck_SendPreset3Named:
 	sll wa, 7
 	add wa, bc
 	pushw wa
-	pushw 0xe7
-	pushw 0xffe6
+	pushw PcgOutCheck_SendPreset3Named_Str_Fmt5d@hi16
+	pushw PcgOutCheck_SendPreset3Named_Str_Fmt5d@lo16
 	lda xwa, (xsp + 18)
 	push xwa
 	call Sprintf_Locked

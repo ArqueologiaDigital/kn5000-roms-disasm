@@ -282,9 +282,8 @@ typedef struct __attribute__((packed)) {
     char East_ResNames_3EC[26];
     /* ---------------------------------------------------------------------
      * East_ResNames_3EC_Strings -- 252 bytes of NUL-terminated strings after
-     * East_ResNames_3EC; no registration or code reference reaches them
-     * (searched: RegObjTabl tables, slice and positional labels). Which code
-     * uses them is not established.
+     * East_ResNames_3EC; that code DOES reach (readers: the .s header, which also labels each
+     * string)
      * --------------------------------------------------------------------- */
     char East_ResNames_3EC_Strings[252];
     /* ---------------------------------------------------------------------
@@ -826,16 +825,16 @@ typedef struct __attribute__((packed)) {
     uint8_t MidiPart_PageDisplay_Data[8];
     /* ---------------------------------------------------------------------
      * AcCtlMsgGrid_Show_Table -- read by AcCtlMsgGrid_Show (v10/v9 0xF79BD8,
-     * v7 0xF797D4) (`ld xbc, MidiPart_PageDisplay_Data_0x8`),
+     * v7 0xF797D4) (`ld xbc, AcCtlMsgGrid_Show_Table`),
      * MidiSetup_TtlCase4 (v10/v9 0xF7A2F0, v7 0xF79EEC) (`ld xbc,
-     * MidiPart_PageDisplay_Data_0x8`). 4 bytes to the next object; the
+     * AcCtlMsgGrid_Show_Table`). 4 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcCtlMsgGrid_Show_Table[4];
     /* ---------------------------------------------------------------------
      * AcCtlMsgGrid_Show_PtrTable -- 2 u32 addresses, read by
      * AcCtlMsgGrid_Show (v10/v9 0xF79BD8, v7 0xF797D4) (`lda xbc,
-     * (MidiPart_PageDisplay_Data_0xC:24)`).
+     * (AcCtlMsgGrid_Show_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AcCtlMsgGrid_Show_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -846,7 +845,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MidiSetup_TtlCase4_PtrTable -- 3 u32 addresses, read by
      * MidiSetup_TtlCase4 (v10/v9 0xF7A2F0, v7 0xF79EEC) (`lda xbc,
-     * (MidiPart_PageStr_1of2_0xA:24)`).
+     * (MidiSetup_TtlCase4_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t MidiSetup_TtlCase4_PtrTable[3];
     /* ---------------------------------------------------------------------
@@ -858,31 +857,31 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_LocalInit -- initializer of a local array:
      * ComSetGridCheck (v10/v9 0xF77F6C, v7 0xF77B68) (`ld xiy,
-     * MidiPart_PageStr_1of3_0xA`), PmemOutLGridCheck (v10/v9 0xF78988, v7
-     * 0xF78584) (`ld xiy, MidiPart_PageStr_1of3_0xA`), PmemOutRGridCheck
-     * (v10/v9 0xF791E4, v7 0xF78DE0) (`ld xiy, MidiPart_PageStr_1of3_0xA`),
+     * ComSetGridCheck_LocalInit`), PmemOutLGridCheck (v10/v9 0xF78988, v7
+     * 0xF78584) (`ld xiy, ComSetGridCheck_LocalInit`), PmemOutRGridCheck
+     * (v10/v9 0xF791E4, v7 0xF78DE0) (`ld xiy, ComSetGridCheck_LocalInit`),
      * CtlMsgGridCheck (v10/v9 0xF79F88, v7 0xF79B84) (`ld xiy,
-     * MidiPart_PageStr_1of3_0xA`), MidiPartGridCheck (v10/v9 0xF7A869, v7
-     * 0xF7A465) (`ld xiy, MidiPart_PageStr_1of3_0xA`), FadeSetGridCheck
-     * (v10/v9 0xF754BE, v7 0xF750BA) (`ld xiy, MidiPart_PageStr_1of3_0xA`),
+     * ComSetGridCheck_LocalInit`), MidiPartGridCheck (v10/v9 0xF7A869, v7
+     * 0xF7A465) (`ld xiy, ComSetGridCheck_LocalInit`), FadeSetGridCheck
+     * (v10/v9 0xF754BE, v7 0xF750BA) (`ld xiy, ComSetGridCheck_LocalInit`),
      * InOutGridCheck (v10/v9 0xF75A83, v7 0xF7567F) (`ld xiy,
-     * MidiPart_PageStr_1of3_0xA`), PcgOutGridCheck (v10/v9 0xF77653, v7
-     * 0xF7724F) (`ld xiy, MidiPart_PageStr_1of3_0xA`), ParaLoadOptGridCheck
-     * (v10/v9 0xF76F62, v7 0xF76B5E) (`ld xiy, MidiPart_PageStr_1of3_0xA`),
+     * ComSetGridCheck_LocalInit`), PcgOutGridCheck (v10/v9 0xF77653, v7
+     * 0xF7724F) (`ld xiy, ComSetGridCheck_LocalInit`), ParaLoadOptGridCheck
+     * (v10/v9 0xF76F62, v7 0xF76B5E) (`ld xiy, ComSetGridCheck_LocalInit`),
      * VocalistGridCheck (v10/v9 0xF738D2, v7 0xF734CE) (`ld xiy,
-     * MidiPart_PageStr_1of3_0xA`) copies 8 bytes into its stack frame.
+     * ComSetGridCheck_LocalInit`) copies 8 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t ComSetGridCheck_LocalInit[4];
     /* ---------------------------------------------------------------------
      * AcVocalGrid_DialSetup_Table -- read by AcVocalGrid_DialSetup (v10/v9
-     * 0xF736A3, v7 0xF7329F) (`lda xbc, (MidiPart_PageStr_1of3_0x12:24)`).
+     * 0xF736A3, v7 0xF7329F) (`lda xbc, (AcVocalGrid_DialSetup_Table:24)`).
      * 24 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
     uint8_t AcVocalGrid_DialSetup_Table[24];
     /* ---------------------------------------------------------------------
      * AcVocalGrid_DialSetup_Table_2 -- read by AcVocalGrid_DialSetup (v10/v9
-     * 0xF736A3, v7 0xF7329F) (`lda xbc, (MidiPart_PageStr_1of3_0x2A:24)`).
+     * 0xF736A3, v7 0xF7329F) (`lda xbc, (AcVocalGrid_DialSetup_Table_2:24)`).
      * 24 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -890,14 +889,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AcVocalGridBoxProc_CaseTable -- jump table of a compiled `switch` in
      * AcVocalGridBoxProc (v10/v9 0xF73642, v7 0xF7323E) (`add xbc,
-     * MidiPart_PageStr_1of3_0x42`): 7 u16 case offsets from
+     * AcVocalGridBoxProc_CaseTable`): 7 u16 case offsets from
      * AcVocalGrid_DialSetup.
      * --------------------------------------------------------------------- */
     uint16_t AcVocalGridBoxProc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_PtrTable -- 2 u32 addresses, read by
      * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`lda xwa,
-     * (MidiPart_PageStr_1of3_0x50:24)`).
+     * (VocalistGrid_DispatchData_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t VocalistGrid_DispatchData_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -935,100 +934,100 @@ typedef struct __attribute__((packed)) {
     char MidiPart_OctaveTable_Strings[44];
     /* ---------------------------------------------------------------------
      * VocalistGridCheck_Table -- read by VocalistGridCheck (v10/v9 0xF738D2,
-     * v7 0xF734CE) (`lda xwa, (MidiPart_OctaveStr_m2_0x4:24)`),
+     * v7 0xF734CE) (`lda xwa, (VocalistGridCheck_Table:24)`),
      * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`lda xde,
-     * (MidiPart_OctaveStr_m2_0x4:24)`). 96 bytes to the next object; the
+     * (VocalistGridCheck_Table:24)`). 96 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t VocalistGridCheck_Table[96];
     /* ---------------------------------------------------------------------
      * VocalistGridCheck_LocalInit -- initializer of a local array:
      * VocalistGridCheck (v10/v9 0xF738D2, v7 0xF734CE) (`ld xiy,
-     * MidiPart_OctaveStr_m2_0x64`) copies 32 bytes into its stack frame.
+     * VocalistGridCheck_LocalInit`) copies 32 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t VocalistGridCheck_LocalInit[16];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str -- NUL-terminated string(s), 12 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0x84`).
+     * xwa, VocalistGrid_DispatchData_Str`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_2 -- NUL-terminated string(s), 72 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0x90`).
+     * xwa, VocalistGrid_DispatchData_Str_2`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_2[72];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_3 -- NUL-terminated string(s), 12 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0xD8`).
+     * xwa, VocalistGrid_DispatchData_Str_3`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_3[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_4 -- NUL-terminated string(s), 12 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0xE4`).
+     * xwa, VocalistGrid_DispatchData_Str_4`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_4[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_5 -- NUL-terminated string(s), 12 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0xF0`).
+     * xwa, VocalistGrid_DispatchData_Str_5`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_5[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_6 -- NUL-terminated string(s), 12 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0xFC`).
+     * xwa, VocalistGrid_DispatchData_Str_6`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_6[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_7 -- NUL-terminated string(s), 32 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0x108`).
+     * xwa, VocalistGrid_DispatchData_Str_7`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_7[32];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_8 -- NUL-terminated string(s), 6 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0x128`).
+     * xwa, VocalistGrid_DispatchData_Str_8`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_8[6];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_9 -- NUL-terminated string(s), 6 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_OctaveStr_m2_0x12E`).
+     * xwa, VocalistGrid_DispatchData_Str_9`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_9[6];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_10 -- NUL-terminated string(s), 12
      * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
-     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x134`).
+     * 0xF73534) (`ld xwa, VocalistGrid_DispatchData_Str_10`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_10[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_11 -- NUL-terminated string(s), 60
      * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
-     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x140`).
+     * 0xF73534) (`ld xwa, VocalistGrid_DispatchData_Str_11`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_11[60];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_12 -- NUL-terminated string(s), 12
      * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
-     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x17C`).
+     * 0xF73534) (`ld xwa, VocalistGrid_DispatchData_Str_12`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_12[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_13 -- NUL-terminated string(s), 12
      * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
-     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x188`).
+     * 0xF73534) (`ld xwa, VocalistGrid_DispatchData_Str_13`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_13[12];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_14 -- NUL-terminated string(s), 12
      * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
-     * 0xF73534) (`ld xwa, MidiPart_OctaveStr_m2_0x194`).
+     * 0xF73534) (`ld xwa, VocalistGrid_DispatchData_Str_14`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_14[12];
     /* ---------------------------------------------------------------------
@@ -1040,7 +1039,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_15 -- NUL-terminated string(s), 12
      * bytes, used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7
-     * 0xF73534) (`ld xwa, MidiPart_RecvTransStr_0xC`).
+     * 0xF73534) (`ld xwa, VocalistGrid_DispatchData_Str_15`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_15[12];
     /* ---------------------------------------------------------------------
@@ -1052,19 +1051,19 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_16 -- NUL-terminated string(s), 6 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_AfterStr_0x28`).
+     * xwa, VocalistGrid_DispatchData_Str_16`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_16[6];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_Str_17 -- NUL-terminated string(s), 6 bytes,
      * used by VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`ld
-     * xwa, MidiPart_AfterStr_0x2E`).
+     * xwa, VocalistGrid_DispatchData_Str_17`).
      * --------------------------------------------------------------------- */
     char VocalistGrid_DispatchData_Str_17[6];
     /* ---------------------------------------------------------------------
      * VocalistGrid_DispatchData_CaseTable -- jump table of a compiled
      * `switch` in VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534)
-     * (`add xwa, MidiPart_AfterStr_0x34`): 20 u16 case offsets from
+     * (`add xwa, VocalistGrid_DispatchData_CaseTable`): 20 u16 case offsets from
      * VocalistGrid_CheckDispData.
      * --------------------------------------------------------------------- */
     uint16_t VocalistGrid_DispatchData_CaseTable[20];
@@ -1078,22 +1077,22 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * VocalistGridCheck_CaseTable -- jump table of a compiled `switch` in
      * VocalistGridCheck (v10/v9 0xF738D2, v7 0xF734CE) (`add xwa,
-     * MidiPart_ColWidthData_0x28`): 7 u16 case offsets from
+     * VocalistGridCheck_CaseTable`): 7 u16 case offsets from
      * VocalistGrid_DispatchData.
      * --------------------------------------------------------------------- */
     uint16_t VocalistGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * AcVocalist_ListSetup_CaseTable -- jump table of a compiled `switch` in
      * AcVocalist_ListSetup (v10/v9 0xF73FC8, v7 0xF73BC4) (`add xhl,
-     * MidiPart_ColWidthData_0x36`): 6 u16 case offsets from
+     * AcVocalist_ListSetup_CaseTable`): 6 u16 case offsets from
      * AcVocalist_ListDispatch.
      * --------------------------------------------------------------------- */
     uint16_t AcVocalist_ListSetup_CaseTable[6];
     /* ---------------------------------------------------------------------
      * PsHarm_DrawActiveBox_PtrTable -- 1 u32 addresses, read by
      * PsHarm_DrawActiveBox (v10/v9 0xF740EC, v7 0xF73CE8) (`ld xde,
-     * (MidiPart_ColWidthData_0x42:24)`), PsHarm_DrawInactiveBox (v10/v9
-     * 0xF74147, v7 0xF73D43) (`ld xde, (MidiPart_ColWidthData_0x42:24)`).
+     * (PsHarm_DrawActiveBox_PtrTable:24)`), PsHarm_DrawInactiveBox (v10/v9
+     * 0xF74147, v7 0xF73D43) (`ld xde, (PsHarm_DrawActiveBox_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t PsHarm_DrawActiveBox_PtrTable[1];
     /* ---------------------------------------------------------------------
@@ -1104,38 +1103,38 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * PsHarmOnOffBoxProc_LocalInit -- initializer of a local array:
      * PsHarmOnOffBoxProc (v10/v9 0xF74019, v7 0xF73C15) (`ld xiy,
-     * MidiPart_HarmLocalStr_0x18`) copies 4 bytes into its stack frame.
+     * PsHarmOnOffBoxProc_LocalInit`) copies 4 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t PsHarmOnOffBoxProc_LocalInit[2];
     /* ---------------------------------------------------------------------
      * PsHarmOnOffBoxProc_LocalInit_2 -- initializer of a local array:
      * PsHarmOnOffBoxProc (v10/v9 0xF74019, v7 0xF73C15) (`ld xiy,
-     * MidiPart_HarmLocalStr_0x1C`) copies 8 bytes into its stack frame.
+     * PsHarmOnOffBoxProc_LocalInit_2`) copies 8 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t PsHarmOnOffBoxProc_LocalInit_2[4];
     /* ---------------------------------------------------------------------
      * MainVocalistPage1OKFunc_CaseTable -- jump table of a compiled `switch`
      * in MainVocalistPage1OKFunc (v10/v9 0xF74201, v7 0xF73DFD) (`lda xix,
-     * (MidiPart_HarmLocalStr_0x24:24)`): 6 u16 case offsets from
+     * (MainVocalistPage1OKFunc_CaseTable:24)`): 6 u16 case offsets from
      * VocalistPage1OK_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t MainVocalistPage1OKFunc_CaseTable[6];
     /* ---------------------------------------------------------------------
      * RevSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by
      * RevSel_HandleConfirm (v10/v9 0xF74403, v7 0xF73FFF) (`ld xde,
-     * MidiPart_HarmLocalStr_0x30`).
+     * RevSel_HandleConfirm_Str`).
      * --------------------------------------------------------------------- */
     char RevSel_HandleConfirm_Str[6];
     /* ---------------------------------------------------------------------
      * EqSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by
      * EqSel_HandleConfirm (v10/v9 0xF744E7, v7 0xF740E3) (`ld xde,
-     * MidiPart_HarmLocalStr_0x36`).
+     * EqSel_HandleConfirm_Str`).
      * --------------------------------------------------------------------- */
     char EqSel_HandleConfirm_Str[6];
     /* ---------------------------------------------------------------------
      * RevEqSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used
      * by RevEqSel_HandleConfirm (v10/v9 0xF7460D, v7 0xF74209) (`ld xde,
-     * MidiPart_HarmLocalStr_0x3C`).
+     * RevEqSel_HandleConfirm_Str`).
      * --------------------------------------------------------------------- */
     char RevEqSel_HandleConfirm_Str[6];
     /* ---------------------------------------------------------------------
@@ -1157,7 +1156,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * StsGMOnCheck_PtrTable -- 6 u32 addresses, read by StsGMOnCheck (v10/v9
      * 0xF74773, v7 0xF7436F) (`lda xhl,
-     * (GMMode_Attention_English2_0x204:24)`).
+     * (StsGMOnCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsGMOnCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
@@ -1168,13 +1167,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * StsGMOffCheck_PtrTable -- 6 u32 addresses, read by StsGMOffCheck
      * (v10/v9 0xF74784, v7 0xF74380) (`lda xhl,
-     * (GMMode_Attention_English2_0x47C:24)`).
+     * (StsGMOffCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsGMOffCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
      * StsAreYouSureCheck (v10/v9 0xF74795, v7 0xF74391) (`lda xhl,
-     * (GMMode_Attention_English2_0x494:24)`).
+     * (StsAreYouSureCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsAreYouSureCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
@@ -1186,7 +1185,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * StsSplitCheck_PtrTable -- 6 u32 addresses, read by StsSplitCheck
      * (v10/v9 0xF748A6, v7 0xF744A2) (`lda xhl,
-     * (GMMode_Attention_English2_0x514:24)`).
+     * (StsSplitCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsSplitCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
@@ -1218,101 +1217,98 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SplitPointFunc_LocalInit -- initializer of a local array:
      * SplitPointFunc (v10/v9 0xF748B7, v7 0xF744B3) (`ld xiy,
-     * SplitPoint_NoteEntry_C_Code_0x38`) copies 4 bytes into its stack
+     * SplitPointFunc_LocalInit`) copies 4 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t SplitPointFunc_LocalInit[2];
     /* ---------------------------------------------------------------------
      * SplitPointFunc_LocalInit_Strings -- 6 bytes of NUL-terminated strings
-     * after SplitPointFunc_LocalInit; no registration or code reference
-     * reaches them (searched: RegObjTabl tables, slice and positional
-     * labels). Which code uses them is not established.
+     * after SplitPointFunc_LocalInit; that code DOES reach (readers: the .s header)
      * --------------------------------------------------------------------- */
     char SplitPointFunc_LocalInit_Strings[6];
     /* ---------------------------------------------------------------------
      * R12Octave_HandleNoteEvt_Str -- NUL-terminated string(s), 6 bytes, used
      * by R12Octave_HandleNoteEvt (v10/v9 0xF74A7F, v7 0xF7467B) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0x42`).
+     * R12Octave_HandleNoteEvt_Str`).
      * --------------------------------------------------------------------- */
     char R12Octave_HandleNoteEvt_Str[6];
     /* ---------------------------------------------------------------------
      * R12Octave_Octave2_Str -- NUL-terminated string(s), 6 bytes, used by
      * R12Octave_Octave2 (v10/v9 0xF74AAA, v7 0xF746A6) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0x48`).
+     * R12Octave_Octave2_Str`).
      * --------------------------------------------------------------------- */
     char R12Octave_Octave2_Str[6];
     /* ---------------------------------------------------------------------
      * R12Octave_Octave3_Str -- NUL-terminated string(s), 6 bytes, used by
      * R12Octave_Octave3 (v10/v9 0xF74AB1, v7 0xF746AD) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0x4E`).
+     * R12Octave_Octave3_Str`).
      * --------------------------------------------------------------------- */
     char R12Octave_Octave3_Str[6];
     /* ---------------------------------------------------------------------
      * R12Octave_Octave4_Str -- NUL-terminated string(s), 6 bytes, used by
      * R12Octave_Octave4 (v10/v9 0xF74AB8, v7 0xF746B4) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0x54`).
+     * R12Octave_Octave4_Str`).
      * --------------------------------------------------------------------- */
     char R12Octave_Octave4_Str[6];
     /* ---------------------------------------------------------------------
      * R12Octave_Octave5_Str -- NUL-terminated string(s), 6 bytes, used by
      * R12Octave_Octave5 (v10/v9 0xF74ABF, v7 0xF746BB) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0x5A`).
+     * R12Octave_Octave5_Str`).
      * --------------------------------------------------------------------- */
     char R12Octave_Octave5_Str[6];
     /* ---------------------------------------------------------------------
      * R12Octave_OctaveDefault_Str -- NUL-terminated string(s), 6 bytes, used
      * by R12Octave_OctaveDefault (v10/v9 0xF74AC6, v7 0xF746C2) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0x60`).
+     * R12Octave_OctaveDefault_Str`).
      * --------------------------------------------------------------------- */
     char R12Octave_OctaveDefault_Str[6];
     /* ---------------------------------------------------------------------
      * MdCmptCnctFunc_LocalInit -- initializer of a local array:
      * MdCmptCnctFunc (v10/v9 0xF74B40, v7 0xF7473C) (`ld xiy,
-     * SplitPoint_NoteEntry_C_Code_0x66`) copies 4 bytes into its stack
+     * MdCmptCnctFunc_LocalInit`) copies 4 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t MdCmptCnctFunc_LocalInit[2];
     /* ---------------------------------------------------------------------
      * MdCmptCnctFunc_LocalInit_Strings -- 104 bytes of NUL-terminated
-     * strings after MdCmptCnctFunc_LocalInit; no registration or code
-     * reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after MdCmptCnctFunc_LocalInit; that code DOES reach (readers: the .s header, which
+     * also labels each string)
      * --------------------------------------------------------------------- */
     char MdCmptCnctFunc_LocalInit_Strings[104];
     /* ---------------------------------------------------------------------
      * PcgModeGridEventStart_Str -- NUL-terminated string(s), 10 bytes, used
      * by PcgModeGridEventStart (v10/v9 0xF74C4E, v7 0xF7484A) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0xD2`).
+     * PcgModeGridEventStart_Str`).
      * --------------------------------------------------------------------- */
     char PcgModeGridEventStart_Str[10];
     /* ---------------------------------------------------------------------
      * PcgModeDisplayString_Bank1_Str -- NUL-terminated string(s), 20 bytes,
      * used by PcgModeDisplayString_Bank1 (v10/v9 0xF74C6A, v7 0xF74866) (`ld
-     * xwa, SplitPoint_NoteEntry_C_Code_0xDC`).
+     * xwa, PcgModeDisplayString_Bank1_Str`).
      * --------------------------------------------------------------------- */
     char PcgModeDisplayString_Bank1_Str[20];
     /* ---------------------------------------------------------------------
      * PcgModeDefaultCase_Str -- NUL-terminated string(s), 10 bytes, used by
      * PcgModeDefaultCase (v10/v9 0xF74C7C, v7 0xF74878) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0xF0`).
+     * PcgModeDefaultCase_Str`).
      * --------------------------------------------------------------------- */
     char PcgModeDefaultCase_Str[10];
     /* ---------------------------------------------------------------------
      * DrumType_GridEvent_Str -- NUL-terminated string(s), 10 bytes, used by
      * DrumType_GridEvent (v10/v9 0xF74CC7, v7 0xF748C3) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0xFA`).
+     * DrumType_GridEvent_Str`).
      * --------------------------------------------------------------------- */
     char DrumType_GridEvent_Str[10];
     /* ---------------------------------------------------------------------
      * DrumType_CopyStrBank1_Str -- NUL-terminated string(s), 20 bytes, used
      * by DrumType_CopyStrBank1 (v10/v9 0xF74CE3, v7 0xF748DF) (`ld xwa,
-     * SplitPoint_NoteEntry_C_Code_0x104`).
+     * DrumType_CopyStrBank1_Str`).
      * --------------------------------------------------------------------- */
     char DrumType_CopyStrBank1_Str[20];
     /* ---------------------------------------------------------------------
      * DrumType_CopyStrDefault_Str -- NUL-terminated string(s), 10 bytes,
      * used by DrumType_CopyStrDefault (v10/v9 0xF74CF5, v7 0xF748F1) (`ld
-     * xwa, SplitPoint_NoteEntry_C_Code_0x118`).
+     * xwa, DrumType_CopyStrDefault_Str`).
      * --------------------------------------------------------------------- */
     char DrumType_CopyStrDefault_Str[10];
     /* ---------------------------------------------------------------------
@@ -1329,20 +1325,19 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MdSetupLoadFunc_CaseTable -- jump table of a compiled `switch` in
      * MdSetupLoadFunc (v10/v9 0xF74D11, v7 0xF7490D) (`add xhl,
-     * NakaInst_OFF_WidgetTbl2_0x12`): 10 u16 case offsets from
+     * MdSetupLoadFunc_CaseTable`): 10 u16 case offsets from
      * SetupLoadOptionJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t MdSetupLoadFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * MdSetupLoadFunc_CaseTable_Strings -- 12 bytes of NUL-terminated
-     * strings after MdSetupLoadFunc_CaseTable; no registration or code
-     * reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after MdSetupLoadFunc_CaseTable; that code DOES reach (readers: the .s header, which
+     * also labels each string)
      * --------------------------------------------------------------------- */
     char MdSetupLoadFunc_CaseTable_Strings[12];
     /* ---------------------------------------------------------------------
      * VoiceParam_ListHandler_Table -- read by VoiceParam_ListHandler (v10/v9
-     * 0xF7528A, v7 0xF74E86) (`lda xbc, (NakaInst_OFF_WidgetTbl2_0x32:24)`).
+     * 0xF7528A, v7 0xF74E86) (`lda xbc, (VoiceParam_ListHandler_Table:24)`).
      * 14 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1350,31 +1345,31 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * VoiceParam_ListHandler_Table_2 -- read by VoiceParam_ListHandler
      * (v10/v9 0xF7528A, v7 0xF74E86) (`lda xbc,
-     * (NakaInst_OFF_WidgetTbl2_0x40:24)`). 14 bytes to the next object; the
+     * (VoiceParam_ListHandler_Table_2:24)`). 14 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t VoiceParam_ListHandler_Table_2[14];
     /* ---------------------------------------------------------------------
      * AcFadeSetGridBoxProc_CaseTable -- jump table of a compiled `switch` in
      * AcFadeSetGridBoxProc (v10/v9 0xF75229, v7 0xF74E25) (`add xbc,
-     * NakaInst_OFF_WidgetTbl2_0x4E`): 7 u16 case offsets from
+     * AcFadeSetGridBoxProc_CaseTable`): 7 u16 case offsets from
      * VoiceParam_ListHandler.
      * --------------------------------------------------------------------- */
     uint16_t AcFadeSetGridBoxProc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * Data_FadeSetGridDispatch_Table -- read by Data_FadeSetGridDispatch
      * (v10/v9 0xF75517, v7 0xF75113) (`lda xbc,
-     * (NakaInst_OFF_WidgetTbl2_0x5C:24)`), Data_FadeSetGridDispatch (v10/v9
-     * 0xF75517, v7 0xF75113) (`lda xix, (NakaInst_OFF_WidgetTbl2_0x5C:24)`),
+     * (Data_FadeSetGridDispatch_Table:24)`), Data_FadeSetGridDispatch (v10/v9
+     * 0xF75517, v7 0xF75113) (`lda xix, (Data_FadeSetGridDispatch_Table:24)`),
      * AcInOutGrid_Handler (v10/v9 0xF75664, v7 0xF75260) (`lda xbc,
-     * (NakaInst_OFF_WidgetTbl2_0x5C:24)`). 28 bytes to the next object; the
+     * (Data_FadeSetGridDispatch_Table:24)`). 28 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Data_FadeSetGridDispatch_Table[28];
     /* ---------------------------------------------------------------------
      * FadeSetGridCheck_LocalInit -- initializer of a local array:
      * FadeSetGridCheck (v10/v9 0xF754BE, v7 0xF750BA) (`ld xiy,
-     * NakaInst_OFF_WidgetTbl2_0x78`) copies 16 bytes into its stack frame.
+     * FadeSetGridCheck_LocalInit`) copies 16 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t FadeSetGridCheck_LocalInit[8];
     /* ---------------------------------------------------------------------
@@ -1387,86 +1382,86 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_FadeSetGridDispatch_Str -- NUL-terminated string(s), 20 bytes,
      * used by Data_FadeSetGridDispatch (v10/v9 0xF75517, v7 0xF75113) (`ld
-     * xwa, NakaInst_OFF_WidgetTbl2_0x9C`).
+     * xwa, Data_FadeSetGridDispatch_Str`).
      * --------------------------------------------------------------------- */
     char Data_FadeSetGridDispatch_Str[20];
     /* ---------------------------------------------------------------------
      * SndParam_FormatAndDisplay_Str -- NUL-terminated string(s), 6 bytes,
      * used by SndParam_FormatAndDisplay (v10/v9 0xF756E6, v7 0xF752E2) (`ld
-     * xwa, NakaInst_OFF_WidgetTbl2_0xB0`).
+     * xwa, SndParam_FormatAndDisplay_Str`).
      * --------------------------------------------------------------------- */
     char SndParam_FormatAndDisplay_Str[6];
     /* ---------------------------------------------------------------------
      * SndParam_FormatAndDisplay_Str_2 -- NUL-terminated string(s), 6 bytes,
      * used by SndParam_FormatAndDisplay (v10/v9 0xF756E6, v7 0xF752E2) (`ld
-     * xwa, NakaInst_OFF_WidgetTbl2_0xB6`).
+     * xwa, SndParam_FormatAndDisplay_Str_2`).
      * --------------------------------------------------------------------- */
     char SndParam_FormatAndDisplay_Str_2[6];
     /* ---------------------------------------------------------------------
      * FadeSetGridCheck_CaseTable -- jump table of a compiled `switch` in
      * FadeSetGridCheck (v10/v9 0xF754BE, v7 0xF750BA) (`add xwa,
-     * NakaInst_OFF_WidgetTbl2_0xBC`): 7 u16 case offsets from
+     * FadeSetGridCheck_CaseTable`): 7 u16 case offsets from
      * Data_FadeSetGridDispatch.
      * --------------------------------------------------------------------- */
     uint16_t FadeSetGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_Init_Table -- read by AcInOutGrid_Init (v10/v9 0xF757BC,
-     * v7 0xF753B8) (`lda xbc, (NakaInst_OFF_WidgetTbl2_0xCA:24)`). 18 bytes
+     * v7 0xF753B8) (`lda xbc, (AcInOutGrid_Init_Table:24)`). 18 bytes
      * to the next object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcInOutGrid_Init_Table[18];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_ScrollUp_AltTable_Table -- read by
      * AcInOutGrid_ScrollUp_AltTable (v10/v9 0xF7588B, v7 0xF75487) (`lda
-     * xbc, (NakaInst_OFF_WidgetTbl2_0xDC:24)`). 18 bytes to the next object;
+     * xbc, (AcInOutGrid_ScrollUp_AltTable_Table:24)`). 18 bytes to the next object;
      * the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcInOutGrid_ScrollUp_AltTable_Table[18];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_ScrollUp_Dispatch_Table -- read by
      * AcInOutGrid_ScrollUp_Dispatch (v10/v9 0xF758AB, v7 0xF754A7) (`lda
-     * xbc, (NakaInst_OFF_WidgetTbl2_0xEE:24)`). 18 bytes to the next object;
+     * xbc, (AcInOutGrid_ScrollUp_Dispatch_Table:24)`). 18 bytes to the next object;
      * the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcInOutGrid_ScrollUp_Dispatch_Table[18];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_ScrollDown_AltTable_Table -- read by
      * AcInOutGrid_ScrollDown_AltTable (v10/v9 0xF75978, v7 0xF75574) (`lda
-     * xbc, (NakaInst_OFF_WidgetTbl2_0x100:24)`). 18 bytes to the next
+     * xbc, (AcInOutGrid_ScrollDown_AltTable_Table:24)`). 18 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcInOutGrid_ScrollDown_AltTable_Table[18];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_GetRowText_Str -- NUL-terminated string(s), 186 bytes,
      * used by AcInOutGrid_GetRowText (v10/v9 0xF75A12, v7 0xF7560E) (`ld
-     * xwa, NakaInst_OFF_WidgetTbl2_0x112`).
+     * xwa, AcInOutGrid_GetRowText_Str`).
      * --------------------------------------------------------------------- */
     char AcInOutGrid_GetRowText_Str[186];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_GetRowText_Src1_Str -- NUL-terminated string(s), 210
      * bytes, used by AcInOutGrid_GetRowText_Src1 (v10/v9 0xF75A2E, v7
-     * 0xF7562A) (`ld xwa, NakaInst_OFF_WidgetTbl2_0x1CC`).
+     * 0xF7562A) (`ld xwa, AcInOutGrid_GetRowText_Src1_Str`).
      * --------------------------------------------------------------------- */
     char AcInOutGrid_GetRowText_Src1_Str[210];
     /* ---------------------------------------------------------------------
      * AcInOutGrid_GetRowText_Src2_Str -- NUL-terminated string(s), 210
      * bytes, used by AcInOutGrid_GetRowText_Src2 (v10/v9 0xF75A35, v7
-     * 0xF75631) (`ld xwa, NakaInst_OFF_WidgetTbl2_0x29E`).
+     * 0xF75631) (`ld xwa, AcInOutGrid_GetRowText_Src2_Str`).
      * --------------------------------------------------------------------- */
     char AcInOutGrid_GetRowText_Src2_Str[210];
     /* ---------------------------------------------------------------------
      * AcInOutGridBoxProc_CaseTable -- jump table of a compiled `switch` in
      * AcInOutGridBoxProc (v10/v9 0xF7575A, v7 0xF75356) (`add xbc,
-     * NakaInst_OFF_WidgetTbl2_0x370`): 7 u16 case offsets from
+     * AcInOutGridBoxProc_CaseTable`): 7 u16 case offsets from
      * AcInOutGrid_Init.
      * --------------------------------------------------------------------- */
     uint16_t AcInOutGridBoxProc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_PtrTable -- 2 u32 addresses, read by
      * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xhl,
-     * (NakaInst_OFF_WidgetTbl2_0x37E:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * (Data_InOutGridDispatch_PtrTable:24)`), Data_ParaLoadOptDispatch (v10/v9
      * 0xF75F68, v7 0xF75B64) (`lda xwa,
-     * (NakaInst_OFF_WidgetTbl2_0x37E:24)`).
+     * (Data_InOutGridDispatch_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t Data_InOutGridDispatch_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -1478,8 +1473,8 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_PtrTable_2 -- 2 u32 addresses, read by
      * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xbc,
-     * (NakaInst_OFF_E7FCA2_0x6:24)`), Data_ParaLoadOptDispatch (v10/v9
-     * 0xF75F68, v7 0xF75B64) (`lda xwa, (NakaInst_OFF_E7FCA2_0x6:24)`).
+     * (Data_InOutGridDispatch_PtrTable_2:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * 0xF75F68, v7 0xF75B64) (`lda xwa, (Data_InOutGridDispatch_PtrTable_2:24)`).
      * --------------------------------------------------------------------- */
     uint32_t Data_InOutGridDispatch_PtrTable_2[2];
     /* ---------------------------------------------------------------------
@@ -1491,8 +1486,8 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_PtrTable_3 -- 3 u32 addresses, read by
      * Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xhl,
-     * (ControlMode_Option_Table_0xA:24)`), Data_ParaLoadOptDispatch (v10/v9
-     * 0xF75F68, v7 0xF75B64) (`lda xwa, (ControlMode_Option_Table_0xA:24)`).
+     * (Data_InOutGridDispatch_PtrTable_3:24)`), Data_ParaLoadOptDispatch (v10/v9
+     * 0xF75F68, v7 0xF75B64) (`lda xwa, (Data_InOutGridDispatch_PtrTable_3:24)`).
      * --------------------------------------------------------------------- */
     uint32_t Data_InOutGridDispatch_PtrTable_3[3];
     /* ---------------------------------------------------------------------
@@ -1504,20 +1499,19 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * InOutGridCheck_LocalInit -- initializer of a local array:
      * InOutGridCheck (v10/v9 0xF75A83, v7 0xF7567F) (`ld xiy,
-     * NakaInst_DIRECT_E7FCE4_0xA`) copies 16 bytes into its stack frame.
+     * InOutGridCheck_LocalInit`) copies 16 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t InOutGridCheck_LocalInit[8];
     /* ---------------------------------------------------------------------
      * InOutGridCheck_LocalInit_Strings -- 60 bytes of NUL-terminated strings
-     * after InOutGridCheck_LocalInit; no registration or code reference
-     * reaches them (searched: RegObjTabl tables, slice and positional
-     * labels). Which code uses them is not established.
+     * after InOutGridCheck_LocalInit; that code DOES reach (readers: the .s header, which also
+     * labels each string)
      * --------------------------------------------------------------------- */
     char InOutGridCheck_LocalInit_Strings[60];
     /* ---------------------------------------------------------------------
      * Data_InOutGridDispatch_CaseTable -- jump table of a compiled `switch`
      * in Data_InOutGridDispatch (v10/v9 0xF75ADE, v7 0xF756DA) (`lda xix,
-     * (NakaInst_DIRECT_E7FCE4_0x56:24)`): 9 u16 case offsets from
+     * (Data_InOutGridDispatch_CaseTable:24)`): 9 u16 case offsets from
      * Data_ParaLoadOptDispatch.
      * --------------------------------------------------------------------- */
     uint16_t Data_InOutGridDispatch_CaseTable[9];
@@ -1538,28 +1532,26 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * InOutGridCheck_CaseTable -- jump table of a compiled `switch` in
      * InOutGridCheck (v10/v9 0xF75A83, v7 0xF7567F) (`add xwa,
-     * NakaInst_DIRECT_E7FCE4_0x8C`): 7 u16 case offsets from
+     * InOutGridCheck_CaseTable`): 7 u16 case offsets from
      * Data_InOutGridDispatch.
      * --------------------------------------------------------------------- */
     uint16_t InOutGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * InOutGridCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings
-     * after InOutGridCheck_CaseTable; no registration or code reference
-     * reaches them (searched: RegObjTabl tables, slice and positional
-     * labels). Which code uses them is not established.
+     * after InOutGridCheck_CaseTable; that code DOES reach (readers: the .s header)
      * --------------------------------------------------------------------- */
     char InOutGridCheck_CaseTable_Strings[6];
     /* ---------------------------------------------------------------------
      * MainExcSend_ClampIndexToRange_Table -- read by
      * MainExcSend_ClampIndexToRange (v10/v9 0xF7665C, v7 0xF76258) (`ld xwa,
-     * NakaInst_DIRECT_E7FCE4_0xA0`). 6 bytes to the next object; the layout
+     * MainExcSend_ClampIndexToRange_Table`). 6 bytes to the next object; the layout
      * beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t MainExcSend_ClampIndexToRange_Table[6];
     /* ---------------------------------------------------------------------
      * ExcDotFunc_CaseTable -- jump table of a compiled `switch` in
      * ExcDotFunc (v10/v9 0xF7666C, v7 0xF76268) (`add xbc,
-     * NakaInst_DIRECT_E7FCE4_0xA6`): 10 u16 case offsets from
+     * ExcDotFunc_CaseTable`): 10 u16 case offsets from
      * ExcDotFunc_HandlerJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t ExcDotFunc_CaseTable[10];
@@ -1584,70 +1576,70 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ExcPmemFunc_CaseTable -- jump table of a compiled `switch` in
      * ExcPmemFunc (v10/v9 0xF766D9, v7 0xF762D5) (`add xbc,
-     * FileTransfer_BlankStatus_0xA`): 10 u16 case offsets from
+     * ExcPmemFunc_CaseTable`): 10 u16 case offsets from
      * ExcPmemFunc_HandlerJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t ExcPmemFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * ExcSmemFunc_CaseTable -- jump table of a compiled `switch` in
      * ExcSmemFunc (v10/v9 0xF76737, v7 0xF76333) (`add xbc,
-     * FileTransfer_BlankStatus_0x1E`): 10 u16 case offsets from
+     * ExcSmemFunc_CaseTable`): 10 u16 case offsets from
      * ExcSmemFunc_HandlerJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t ExcSmemFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * ExcCompFunc_CaseTable -- jump table of a compiled `switch` in
      * ExcCompFunc (v10/v9 0xF76795, v7 0xF76391) (`add xbc,
-     * FileTransfer_BlankStatus_0x32`): 10 u16 case offsets from
+     * ExcCompFunc_CaseTable`): 10 u16 case offsets from
      * ExcCompFunc_HandlerJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t ExcCompFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * ExcSeqFunc_CaseTable -- jump table of a compiled `switch` in
      * ExcSeqFunc (v10/v9 0xF767F3, v7 0xF763EF) (`add xbc,
-     * FileTransfer_BlankStatus_0x46`): 10 u16 case offsets from
+     * ExcSeqFunc_CaseTable`): 10 u16 case offsets from
      * ExcSeqFunc_HandlerJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t ExcSeqFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * ExcMspFunc_CaseTable -- jump table of a compiled `switch` in
      * ExcMspFunc (v10/v9 0xF76851, v7 0xF7644D) (`add xbc,
-     * FileTransfer_BlankStatus_0x5A`): 10 u16 case offsets from
+     * ExcMspFunc_CaseTable`): 10 u16 case offsets from
      * ExcMspFunc_HandlerJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t ExcMspFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * ParaLoadOpt_AudioFlagCheck_CaseTable -- jump table of a compiled
      * `switch` in ParaLoadOpt_AudioFlagCheck (v10/v9 0xF768AF, v7 0xF764AB)
-     * (`lda xix, (FileTransfer_BlankStatus_0x6E:24)`): 13 u16 case offsets
+     * (`lda xix, (ParaLoadOpt_AudioFlagCheck_CaseTable:24)`): 13 u16 case offsets
      * from ParaLoadOpt_DispatchTable_A.
      * --------------------------------------------------------------------- */
     uint16_t ParaLoadOpt_AudioFlagCheck_CaseTable[13];
     /* ---------------------------------------------------------------------
      * ParaLoadOpt_AudioFlagCheck_B_CaseTable -- jump table of a compiled
      * `switch` in ParaLoadOpt_AudioFlagCheck_B (v10/v9 0xF76A52, v7
-     * 0xF7664E) (`lda xix, (FileTransfer_BlankStatus_0x88:24)`): 13 u16 case
+     * 0xF7664E) (`lda xix, (ParaLoadOpt_AudioFlagCheck_B_CaseTable:24)`): 13 u16 case
      * offsets from ParaLoadOpt_DispatchTable_B.
      * --------------------------------------------------------------------- */
     uint16_t ParaLoadOpt_AudioFlagCheck_B_CaseTable[13];
     /* ---------------------------------------------------------------------
      * ParaLoadOpt_GridReturn_Table -- read by ParaLoadOpt_GridReturn (v10/v9
      * 0xF76D32, v7 0xF7692E) (`lda xbc,
-     * (FileTransfer_BlankStatus_0xA2:24)`). 18 bytes to the next object; the
+     * (ParaLoadOpt_GridReturn_Table:24)`). 18 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t ParaLoadOpt_GridReturn_Table[18];
     /* ---------------------------------------------------------------------
      * ParaLoadOpt_GridDelegateProc_Table -- read by
      * ParaLoadOpt_GridDelegateProc (v10/v9 0xF76DFC, v7 0xF769F8) (`lda xbc,
-     * (FileTransfer_BlankStatus_0xB4:24)`). 18 bytes to the next object; the
+     * (ParaLoadOpt_GridDelegateProc_Table:24)`). 18 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t ParaLoadOpt_GridDelegateProc_Table[18];
     /* ---------------------------------------------------------------------
      * AcParaLoadOptGridBoxProc_CaseTable -- jump table of a compiled
      * `switch` in AcParaLoadOptGridBoxProc (v10/v9 0xF76C5E, v7 0xF7685A)
-     * (`add xbc, FileTransfer_BlankStatus_0xC6`): 7 u16 case offsets from
+     * (`add xbc, AcParaLoadOptGridBoxProc_CaseTable`): 7 u16 case offsets from
      * ParaLoadOpt_GridHandler.
      * --------------------------------------------------------------------- */
     uint16_t AcParaLoadOptGridBoxProc_CaseTable[7];
@@ -1662,7 +1654,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ParaLoadOptGridCheck_PtrTable -- 2 u32 addresses, read by
      * ParaLoadOptGridCheck (v10/v9 0xF76F62, v7 0xF76B5E) (`lda xwa,
-     * (UserMemory_ConfirmData_0x16:24)`).
+     * (ParaLoadOptGridCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t ParaLoadOptGridCheck_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -1686,20 +1678,20 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ParaLoadOptGridCheck_LocalInit -- initializer of a local array:
      * ParaLoadOptGridCheck (v10/v9 0xF76F62, v7 0xF76B5E) (`ld xiy,
-     * NakaInst_INITIAL_0xA`) copies 16 bytes into its stack frame.
+     * ParaLoadOptGridCheck_LocalInit`) copies 16 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t ParaLoadOptGridCheck_LocalInit[8];
     /* ---------------------------------------------------------------------
      * ParaLoadOptGridCheck_CaseTable -- jump table of a compiled `switch` in
      * ParaLoadOptGridCheck (v10/v9 0xF76F62, v7 0xF76B5E) (`add xde,
-     * NakaInst_INITIAL_0x1A`): 7 u16 case offsets from
+     * ParaLoadOptGridCheck_CaseTable`): 7 u16 case offsets from
      * ParaLoadOpt_GridDispatch.
      * --------------------------------------------------------------------- */
     uint16_t ParaLoadOptGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * AcPcgOutGridBoxProc_CaseTable -- jump table of a compiled `switch` in
      * AcPcgOutGridBoxProc (v10/v9 0xF773DA, v7 0xF76FD6) (`add xbc,
-     * NakaInst_INITIAL_0x28`): 7 u16 case offsets from
+     * AcPcgOutGridBoxProc_CaseTable`): 7 u16 case offsets from
      * PcgOutGridBoxEventDispatch.
      * --------------------------------------------------------------------- */
     uint16_t AcPcgOutGridBoxProc_CaseTable[7];
@@ -1711,33 +1703,32 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * PcgOutGridCheck_LocalInit -- initializer of a local array:
      * PcgOutGridCheck (v10/v9 0xF77653, v7 0xF7724F) (`ld xiy,
-     * UserMemory_FormatStrings_0x16`) copies 10 bytes into its stack frame.
+     * PcgOutGridCheck_LocalInit`) copies 10 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t PcgOutGridCheck_LocalInit[5];
     /* ---------------------------------------------------------------------
      * PcgOutGridCheck_LocalInit_Strings -- 160 bytes of NUL-terminated
-     * strings after PcgOutGridCheck_LocalInit; no registration or code
-     * reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after PcgOutGridCheck_LocalInit; that code DOES reach (readers: the .s header, which
+     * also labels each string)
      * --------------------------------------------------------------------- */
     char PcgOutGridCheck_LocalInit_Strings[160];
     /* ---------------------------------------------------------------------
      * PcgOutGridCheck_CaseTable -- jump table of a compiled `switch` in
      * PcgOutGridCheck (v10/v9 0xF77653, v7 0xF7724F) (`add xwa,
-     * UserMemory_FormatStrings_0xC0`): 7 u16 case offsets from
+     * PcgOutGridCheck_CaseTable`): 7 u16 case offsets from
      * PcgOutGridCheckJumpTable.
      * --------------------------------------------------------------------- */
     uint16_t PcgOutGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * AcSendEditSw_EventD_Table -- read by AcSendEditSw_EventD (v10/v9
      * 0xF77E36, v7 0xF77A32) (`lda xwa,
-     * (UserMemory_FormatStrings_0xCE:24)`). 8 bytes to the next object; the
+     * (AcSendEditSw_EventD_Table:24)`). 8 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcSendEditSw_EventD_Table[8];
     /* ---------------------------------------------------------------------
      * AcSendEditSw_DrawAlt_Table -- read by AcSendEditSw_DrawAlt (v10/v9
-     * 0xF77E83, v7 0xF77A7F) (`ld xbc, UserMemory_FormatStrings_0xD6`). 4
+     * 0xF77E83, v7 0xF77A7F) (`ld xbc, AcSendEditSw_DrawAlt_Table`). 4
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1751,7 +1742,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AcSendEditSwProc_LocalInit -- initializer of a local array:
      * AcSendEditSwProc (v10/v9 0xF77DF5, v7 0xF779F1) (`ld xiy,
-     * NakaData_ModeConfig1_0x4`) copies 2 bytes into its stack frame.
+     * AcSendEditSwProc_LocalInit`) copies 2 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint8_t AcSendEditSwProc_LocalInit[2];
     /* ---------------------------------------------------------------------
@@ -1762,20 +1753,20 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Table -- read by ComSetGridCheck_Evt1C00017
      * (v10/v9 0xF77FC4, v7 0xF77BC0) (`lda xbc,
-     * (NakaData_ModeConfig2_0x8:24)`), ComSetGridCheck_Evt1C00017 (v10/v9
-     * 0xF77FC4, v7 0xF77BC0) (`lda xwa, (NakaData_ModeConfig2_0x8:24)`),
+     * (ComSetGridCheck_JumpTable_Table:24)`), ComSetGridCheck_Evt1C00017 (v10/v9
+     * 0xF77FC4, v7 0xF77BC0) (`lda xwa, (ComSetGridCheck_JumpTable_Table:24)`),
      * ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`lda xix,
-     * (NakaData_ModeConfig2_0x8:24)`), ComSetGrid_EventHandler (v10/v9
-     * 0xF781C1, v7 0xF77DBD) (`lda xbc, (NakaData_ModeConfig2_0x8:24)`),
+     * (ComSetGridCheck_JumpTable_Table:24)`), ComSetGrid_EventHandler (v10/v9
+     * 0xF781C1, v7 0xF77DBD) (`lda xbc, (ComSetGridCheck_JumpTable_Table:24)`),
      * ComSetGrid_LookupByColumn (v10/v9 0xF7827D, v7 0xF77E79) (`lda xwa,
-     * (NakaData_ModeConfig2_0x8:24)`). 36 bytes to the next object; the
+     * (ComSetGridCheck_JumpTable_Table:24)`). 36 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t ComSetGridCheck_JumpTable_Table[36];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_LocalInit_2 -- initializer of a local array:
      * ComSetGridCheck (v10/v9 0xF77F6C, v7 0xF77B68) (`ld xiy,
-     * NakaData_ModeConfig2_0x2C`) copies 6 bytes into its stack frame.
+     * ComSetGridCheck_LocalInit_2`) copies 6 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t ComSetGridCheck_LocalInit_2[3];
     /* ---------------------------------------------------------------------
@@ -1786,7 +1777,7 @@ typedef struct __attribute__((packed)) {
     char NakaToggle_OnOff_Data[4];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Table_2 -- read by ComSetGridCheck_Evt1C00017
-     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xbc, NakaToggle_OnOff_Data_0x4`).
+     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xbc, ComSetGridCheck_JumpTable_Table_2`).
      * 4 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1799,13 +1790,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xbc, NakaInst_OFF_E80048_0x2`).
+     * xbc, ComSetGridCheck_JumpTable_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str[6];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xwa, NakaInst_OFF_E80048_0x8`).
+     * xwa, ComSetGridCheck_JumpTable_Str_2`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_2[10];
     /* ---------------------------------------------------------------------
@@ -1817,12 +1808,12 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_3 -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xwa, NakaInst_NORMAL_0xA`).
+     * xwa, ComSetGridCheck_JumpTable_Str_3`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_3[10];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Table_3 -- read by ComSetGridCheck_Evt1C00017
-     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xwa, NakaInst_NORMAL_0x14`). 2
+     * (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld xwa, ComSetGridCheck_JumpTable_Table_3`). 2
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1835,68 +1826,67 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_JumpTable_Str_4 -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGridCheck_Evt1C00017 (v10/v9 0xF77FC4, v7 0xF77BC0) (`ld
-     * xwa, NakaInst_GM_0x8`).
+     * xwa, ComSetGridCheck_JumpTable_Str_4`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_JumpTable_Str_4[10];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_ParamDisplay_Str -- NUL-terminated string(s), 6 bytes,
      * used by ComSetGridCheck_ParamDisplay (v10/v9 0xF7823C, v7 0xF77E38)
-     * (`ld xwa, NakaInst_GM_0x12`).
+     * (`ld xwa, ComSetGridCheck_ParamDisplay_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_ParamDisplay_Str[6];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_ParamDisplay_Str_2 -- NUL-terminated string(s), 6
      * bytes, used by ComSetGridCheck_ParamDisplay (v10/v9 0xF7823C, v7
-     * 0xF77E38) (`ld xwa, NakaInst_GM_0x18`).
+     * 0xF77E38) (`ld xwa, ComSetGridCheck_ParamDisplay_Str_2`).
      * --------------------------------------------------------------------- */
     char ComSetGridCheck_ParamDisplay_Str_2[6];
     /* ---------------------------------------------------------------------
      * ComSetGrid_CopyStrAndDispatch_Str -- NUL-terminated string(s), 10
      * bytes, used by ComSetGrid_CopyStrAndDispatch (v10/v9 0xF78251, v7
-     * 0xF77E4D) (`ld xwa, NakaInst_GM_0x1E`).
+     * 0xF77E4D) (`ld xwa, ComSetGrid_CopyStrAndDispatch_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGrid_CopyStrAndDispatch_Str[10];
     /* ---------------------------------------------------------------------
      * ComSetGrid_LookupByColumn_Str -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGrid_LookupByColumn (v10/v9 0xF7827D, v7 0xF77E79) (`ld
-     * xwa, NakaInst_GM_0x28`).
+     * xwa, ComSetGrid_LookupByColumn_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGrid_LookupByColumn_Str[10];
     /* ---------------------------------------------------------------------
      * ComSetGrid_ParamStr1_Str -- NUL-terminated string(s), 10 bytes, used
      * by ComSetGrid_ParamStr1 (v10/v9 0xF782A4, v7 0xF77EA0) (`ld xwa,
-     * NakaInst_GM_0x32`).
+     * ComSetGrid_ParamStr1_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGrid_ParamStr1_Str[10];
     /* ---------------------------------------------------------------------
      * ComSetGrid_ParamStr3_Str -- NUL-terminated string(s), 10 bytes, used
      * by ComSetGrid_ParamStr3 (v10/v9 0xF782AB, v7 0xF77EA7) (`ld xwa,
-     * NakaInst_GM_0x3C`).
+     * ComSetGrid_ParamStr3_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGrid_ParamStr3_Str[10];
     /* ---------------------------------------------------------------------
      * ComSetGrid_ParamStrDefault_Str -- NUL-terminated string(s), 10 bytes,
      * used by ComSetGrid_ParamStrDefault (v10/v9 0xF782B2, v7 0xF77EAE) (`ld
-     * xwa, NakaInst_GM_0x46`).
+     * xwa, ComSetGrid_ParamStrDefault_Str`).
      * --------------------------------------------------------------------- */
     char ComSetGrid_ParamStrDefault_Str[10];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_CaseTable -- jump table of a compiled `switch` in
      * ComSetGridCheck (v10/v9 0xF77F6C, v7 0xF77B68) (`add xwa,
-     * NakaInst_GM_0x50`): 7 u16 case offsets from ComSetGridCheck_Evt1C00017.
+     * ComSetGridCheck_CaseTable`): 7 u16 case offsets from ComSetGridCheck_Evt1C00017.
      * --------------------------------------------------------------------- */
     uint16_t ComSetGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * ComSetGridCheck_CaseTable_Tail -- 14 bytes after
-     * ComSetGridCheck_CaseTable that no registration or code reference
-     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * ComSetGridCheck_CaseTable that code DOES reach (readers: the .s header)
      * Contents not established.
      * --------------------------------------------------------------------- */
     uint8_t ComSetGridCheck_CaseTable_Tail[14];
     /* ---------------------------------------------------------------------
      * AcPmemOutRGridBoxProc_CaseTable -- jump table of a compiled `switch`
      * in AcPmemOutRGridBoxProc (v10/v9 0xF7867C, v7 0xF78278) (`add xbc,
-     * NakaInst_GM_0x6C`): 6 u16 case offsets from AcPmemOutR_Init.
+     * AcPmemOutRGridBoxProc_CaseTable`): 6 u16 case offsets from AcPmemOutR_Init.
      * --------------------------------------------------------------------- */
     uint16_t AcPmemOutRGridBoxProc_CaseTable[6];
     /* ---------------------------------------------------------------------
@@ -1907,7 +1897,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * PmemOutLGridCheck_PtrTable -- 3 u32 addresses, read by
      * PmemOutLGridCheck (v10/v9 0xF78988, v7 0xF78584) (`lda xwa,
-     * (NakaInst_NEXT_E800E8_0x2:24)`).
+     * (PmemOutLGridCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t PmemOutLGridCheck_PtrTable[3];
     /* ---------------------------------------------------------------------
@@ -1916,9 +1906,8 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     char PmemOutLGridCheck_Strings[24];
     /* ---------------------------------------------------------------------
-     * NakaData_PartFlags -- 15 bytes after the string block before it that
-     * no registration or code reference reaches (searched: RegObjTabl
-     * tables, slice and positional labels). Contents not established.
+     * NakaData_PartFlags -- 15 bytes after the string block before it that code DOES reach
+     * (readers: the .s header) Contents not established.
      * --------------------------------------------------------------------- */
     uint8_t NakaData_PartFlags[15];
     /* ---------------------------------------------------------------------
@@ -1930,7 +1919,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * PmemOutLGridCheck_LocalInit -- initializer of a local array:
      * PmemOutLGridCheck (v10/v9 0xF78988, v7 0xF78584) (`ld xiy,
-     * NakaInst_2d_d_0x7`) copies 16 bytes into its stack frame.
+     * PmemOutLGridCheck_LocalInit`) copies 16 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t PmemOutLGridCheck_LocalInit[8];
     /* ---------------------------------------------------------------------
@@ -1948,145 +1937,143 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * PmemOutL_BitCheckDisplay_Str -- NUL-terminated string(s), 6 bytes,
      * used by PmemOutL_BitCheckDisplay (v10/v9 0xF7916A, v7 0xF78D66) (`ld
-     * xwa, NakaInst_ON_E80168_0x52`).
+     * xwa, PmemOutL_BitCheckDisplay_Str`).
      * --------------------------------------------------------------------- */
     char PmemOutL_BitCheckDisplay_Str[6];
     /* ---------------------------------------------------------------------
      * PmemOutL_LoadOffStr_Str -- NUL-terminated string(s), 6 bytes, used by
      * PmemOutL_LoadOffStr (v10/v9 0xF7918E, v7 0xF78D8A) (`ld xwa,
-     * NakaInst_ON_E80168_0x58`).
+     * PmemOutL_LoadOffStr_Str`).
      * --------------------------------------------------------------------- */
     char PmemOutL_LoadOffStr_Str[6];
     /* ---------------------------------------------------------------------
      * PmemOutLGridCheck_CaseTable -- jump table of a compiled `switch` in
      * PmemOutLGridCheck (v10/v9 0xF78988, v7 0xF78584) (`add xwa,
-     * NakaInst_ON_E80168_0x5E`): 7 u16 case offsets from
+     * PmemOutLGridCheck_CaseTable`): 7 u16 case offsets from
      * PmemOutLGridCheck_Evt1C00017.
      * --------------------------------------------------------------------- */
     uint16_t PmemOutLGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * PmemOutLGridCheck_CaseTable_Tail -- 22 bytes after
-     * PmemOutLGridCheck_CaseTable that no registration or code reference
-     * reaches (searched: RegObjTabl tables, slice and positional labels).
+     * PmemOutLGridCheck_CaseTable that code DOES reach (readers: the .s header)
      * Contents not established.
      * --------------------------------------------------------------------- */
     uint8_t PmemOutLGridCheck_CaseTable_Tail[22];
     /* ---------------------------------------------------------------------
      * PmemOutRGridCheck_LocalInit -- initializer of a local array:
      * PmemOutRGridCheck (v10/v9 0xF791E4, v7 0xF78DE0) (`ld xiy,
-     * NakaInst_ON_E80168_0x82`) copies 16 bytes into its stack frame.
+     * PmemOutRGridCheck_LocalInit`) copies 16 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t PmemOutRGridCheck_LocalInit[8];
     /* ---------------------------------------------------------------------
      * PmemOutRGridCheck_LocalInit_Strings -- 120 bytes of NUL-terminated
-     * strings after PmemOutRGridCheck_LocalInit; no registration or code
-     * reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after PmemOutRGridCheck_LocalInit; that code DOES reach (readers: the .s header,
+     * which also labels each string)
      * --------------------------------------------------------------------- */
     char PmemOutRGridCheck_LocalInit_Strings[120];
     /* ---------------------------------------------------------------------
      * PmemOutRGridCheck_CaseTable -- jump table of a compiled `switch` in
      * PmemOutRGridCheck (v10/v9 0xF791E4, v7 0xF78DE0) (`add xhl,
-     * NakaInst_ON_E80168_0x10A`): 7 u16 case offsets from
+     * PmemOutRGridCheck_CaseTable`): 7 u16 case offsets from
      * TtMdCtlMsg_EventDispatch.
      * --------------------------------------------------------------------- */
     uint16_t PmemOutRGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * AcCtlMsgGrid_ScrollUp_PageDec_Table -- read by
      * AcCtlMsgGrid_ScrollUp_PageDec (v10/v9 0xF79D32, v7 0xF7992E) (`lda
-     * xbc, (NakaInst_ON_E80168_0x118:24)`), AcCtlMsgGrid_ScrollUp_AutoScroll
+     * xbc, (AcCtlMsgGrid_ScrollUp_PageDec_Table:24)`), AcCtlMsgGrid_ScrollUp_AutoScroll
      * (v10/v9 0xF79DA5, v7 0xF799A1) (`lda xhl,
-     * (NakaInst_ON_E80168_0x118:24)`). 2 bytes to the next object; the
+     * (AcCtlMsgGrid_ScrollUp_PageDec_Table:24)`). 2 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AcCtlMsgGrid_ScrollUp_PageDec_Table[2];
     /* ---------------------------------------------------------------------
      * AcCtlMsgGridBoxProc_LocalInit -- initializer of a local array:
      * AcCtlMsgGridBoxProc (v10/v9 0xF79ADC, v7 0xF796D8) (`ld xiy,
-     * NakaInst_ON_E80168_0x11A`) copies 16 bytes into its stack frame.
+     * AcCtlMsgGridBoxProc_LocalInit`) copies 16 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t AcCtlMsgGridBoxProc_LocalInit[8];
     /* ---------------------------------------------------------------------
      * AcCtlMsgGrid_GetRowText_Str -- NUL-terminated string(s), 124 bytes,
      * used by AcCtlMsgGrid_GetRowText (v10/v9 0xF79F1F, v7 0xF79B1B) (`ld
-     * xwa, NakaInst_ON_E80168_0x12A`).
+     * xwa, AcCtlMsgGrid_GetRowText_Str`).
      * --------------------------------------------------------------------- */
     char AcCtlMsgGrid_GetRowText_Str[124];
     /* ---------------------------------------------------------------------
      * AcCtlMsgGrid_GetRowText_Page1_Str -- NUL-terminated string(s), 106
      * bytes, used by AcCtlMsgGrid_GetRowText_Page1 (v10/v9 0xF79F3A, v7
-     * 0xF79B36) (`ld xwa, NakaInst_ON_E80168_0x1A6`).
+     * 0xF79B36) (`ld xwa, AcCtlMsgGrid_GetRowText_Page1_Str`).
      * --------------------------------------------------------------------- */
     char AcCtlMsgGrid_GetRowText_Page1_Str[106];
     /* ---------------------------------------------------------------------
      * AcCtlMsgGridBoxProc_CaseTable -- jump table of a compiled `switch` in
      * AcCtlMsgGridBoxProc (v10/v9 0xF79ADC, v7 0xF796D8) (`add xbc,
-     * NakaInst_ON_E80168_0x210`): 7 u16 case offsets from AcCtlMsgGrid_Init.
+     * AcCtlMsgGridBoxProc_CaseTable`): 7 u16 case offsets from AcCtlMsgGrid_Init.
      * --------------------------------------------------------------------- */
     uint16_t AcCtlMsgGridBoxProc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_Table -- read by CtlMsgGridCheck (v10/v9 0xF79F88, v7
-     * 0xF79B84) (`lda xwa, (NakaInst_ON_E80168_0x21E:24)`),
+     * 0xF79B84) (`lda xwa, (CtlMsgGridCheck_Table:24)`),
      * CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`lda xwa,
-     * (NakaInst_ON_E80168_0x21E:24)`). 72 bytes to the next object; the
+     * (CtlMsgGridCheck_Table:24)`). 72 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t CtlMsgGridCheck_Table[72];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_LocalInit -- initializer of a local array:
      * CtlMsgGridCheck (v10/v9 0xF79F88, v7 0xF79B84) (`ld xiy,
-     * NakaInst_ON_E80168_0x266`) copies 10 bytes into its stack frame.
+     * CtlMsgGridCheck_LocalInit`) copies 10 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t CtlMsgGridCheck_LocalInit[5];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_JumpTable_Str -- NUL-terminated string(s), 6 bytes,
      * used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
-     * xbc, NakaInst_ON_E80168_0x270`).
+     * xbc, CtlMsgGridCheck_JumpTable_Str`).
      * --------------------------------------------------------------------- */
     char CtlMsgGridCheck_JumpTable_Str[6];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_JumpTable_Str_2 -- NUL-terminated string(s), 6 bytes,
      * used by CtlMsgGridCheck_Evt1C00017 (v10/v9 0xF79FF0, v7 0xF79BEC) (`ld
-     * xbc, NakaInst_ON_E80168_0x276`).
+     * xbc, CtlMsgGridCheck_JumpTable_Str_2`).
      * --------------------------------------------------------------------- */
     char CtlMsgGridCheck_JumpTable_Str_2[6];
     /* ---------------------------------------------------------------------
      * MidiSetup_TtlDispatch_Str -- NUL-terminated string(s), 6 bytes, used
      * by MidiSetup_TtlDispatch (v10/v9 0xF7A113, v7 0xF79D0F) (`ld xwa,
-     * NakaInst_ON_E80168_0x27C`).
+     * MidiSetup_TtlDispatch_Str`).
      * --------------------------------------------------------------------- */
     char MidiSetup_TtlDispatch_Str[6];
     /* ---------------------------------------------------------------------
      * MidiSetup_TtlDispatch_Str_2 -- NUL-terminated string(s), 6 bytes, used
      * by MidiSetup_TtlDispatch (v10/v9 0xF7A113, v7 0xF79D0F) (`ld xwa,
-     * NakaInst_ON_E80168_0x282`).
+     * MidiSetup_TtlDispatch_Str_2`).
      * --------------------------------------------------------------------- */
     char MidiSetup_TtlDispatch_Str_2[6];
     /* ---------------------------------------------------------------------
      * CtlMsgGridCheck_CaseTable -- jump table of a compiled `switch` in
      * CtlMsgGridCheck (v10/v9 0xF79F88, v7 0xF79B84) (`add xwa,
-     * NakaInst_ON_E80168_0x288`): 7 u16 case offsets from
+     * CtlMsgGridCheck_CaseTable`): 7 u16 case offsets from
      * CtlMsgGridCheck_Evt1C00017.
      * --------------------------------------------------------------------- */
     uint16_t CtlMsgGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * MidiPart_CallMainFunc_Str -- NUL-terminated string(s), 2 bytes, used
      * by MidiPart_CallMainFunc (v10/v9 0xF7A436, v7 0xF7A032) (`lda xbc,
-     * (NakaInst_ON_E80168_0x296:24)`), MidiPart_Part2ColumnNav (v10/v9
-     * 0xF7A51D, v7 0xF7A119) (`lda xbc, (NakaInst_ON_E80168_0x296:24)`),
+     * (MidiPart_CallMainFunc_Str:24)`), MidiPart_Part2ColumnNav (v10/v9
+     * 0xF7A51D, v7 0xF7A119) (`lda xbc, (MidiPart_CallMainFunc_Str:24)`),
      * MidiPart_GenericColumnNav (v10/v9 0xF7A584, v7 0xF7A180) (`lda xbc,
-     * (NakaInst_ON_E80168_0x296:24)`), MidiPart_Part2ColumnNavUp (v10/v9
-     * 0xF7A6DA, v7 0xF7A2D6) (`lda xbc, (NakaInst_ON_E80168_0x296:24)`),
+     * (MidiPart_CallMainFunc_Str:24)`), MidiPart_Part2ColumnNavUp (v10/v9
+     * 0xF7A6DA, v7 0xF7A2D6) (`lda xbc, (MidiPart_CallMainFunc_Str:24)`),
      * MidiPart_GenericColumnNavUp (v10/v9 0xF7A73D, v7 0xF7A339) (`lda xbc,
-     * (NakaInst_ON_E80168_0x296:24)`).
+     * (MidiPart_CallMainFunc_Str:24)`).
      * --------------------------------------------------------------------- */
     char MidiPart_CallMainFunc_Str[2];
     /* ---------------------------------------------------------------------
      * MidiSetup_TtlCase5_Table -- read by MidiSetup_TtlCase5 (v10/v9
-     * 0xF7A34F, v7 0xF79F4B) (`lda xbc, (NakaInst_ON_E80168_0x298:24)`),
+     * 0xF7A34F, v7 0xF79F4B) (`lda xbc, (MidiSetup_TtlCase5_Table:24)`),
      * MidiPart_DecrementPart (v10/v9 0xF7A3D9, v7 0xF79FD5) (`lda xbc,
-     * (NakaInst_ON_E80168_0x298:24)`), MidiPart_InitGridBox (v10/v9
-     * 0xF7A628, v7 0xF7A224) (`lda xbc, (NakaInst_ON_E80168_0x298:24)`). 28
+     * (MidiSetup_TtlCase5_Table:24)`), MidiPart_InitGridBox (v10/v9
+     * 0xF7A628, v7 0xF7A224) (`lda xbc, (MidiSetup_TtlCase5_Table:24)`). 28
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -2094,20 +2081,20 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MidiPart_Part2ColumnNav_Table -- read by MidiPart_Part2ColumnNav
      * (v10/v9 0xF7A51D, v7 0xF7A119) (`lda xbc,
-     * (NakaInst_ON_E80168_0x2B4:24)`). 18 bytes to the next object; the
+     * (MidiPart_Part2ColumnNav_Table:24)`). 18 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t MidiPart_Part2ColumnNav_Table[18];
     /* ---------------------------------------------------------------------
      * MidiPart_Part2ColumnNavUp_Table -- read by MidiPart_Part2ColumnNavUp
      * (v10/v9 0xF7A6DA, v7 0xF7A2D6) (`lda xbc,
-     * (NakaInst_ON_E80168_0x2C6:24)`). 20 bytes to the next object; the
+     * (MidiPart_Part2ColumnNavUp_Table:24)`). 20 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t MidiPart_Part2ColumnNavUp_Table[20];
     /* ---------------------------------------------------------------------
      * MidiPart_CallMainFunc_Table -- read by MidiPart_CallMainFunc (v10/v9
-     * 0xF7A436, v7 0xF7A032) (`lda xbc, (NakaInst_ON_E80168_0x2DA:24)`). 4
+     * 0xF7A436, v7 0xF7A032) (`lda xbc, (MidiPart_CallMainFunc_Table:24)`). 4
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -2115,37 +2102,37 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AcMidiPartGridBoxProc_LocalInit -- initializer of a local array:
      * AcMidiPartGridBoxProc (v10/v9 0xF7A1F4, v7 0xF79DF0) (`ld xiy,
-     * NakaInst_ON_E80168_0x2DE`) copies 16 bytes into its stack frame.
+     * AcMidiPartGridBoxProc_LocalInit`) copies 16 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t AcMidiPartGridBoxProc_LocalInit[8];
     /* ---------------------------------------------------------------------
      * MidiSetup_GridBoxCase1_Str -- NUL-terminated string(s), 60 bytes, used
      * by MidiSetup_GridBoxCase1 (v10/v9 0xF7A7F5, v7 0xF7A3F1) (`ld xwa,
-     * NakaInst_ON_E80168_0x2EE`).
+     * MidiSetup_GridBoxCase1_Str`).
      * --------------------------------------------------------------------- */
     char MidiSetup_GridBoxCase1_Str[60];
     /* ---------------------------------------------------------------------
      * MidiSetup_GridStr1_Str -- NUL-terminated string(s), 66 bytes, used by
      * MidiSetup_GridStr1 (v10/v9 0xF7A814, v7 0xF7A410) (`ld xwa,
-     * NakaInst_ON_E80168_0x32A`).
+     * MidiSetup_GridStr1_Str`).
      * --------------------------------------------------------------------- */
     char MidiSetup_GridStr1_Str[66];
     /* ---------------------------------------------------------------------
      * MidiSetup_GridStr2_Str -- NUL-terminated string(s), 62 bytes, used by
      * MidiSetup_GridStr2 (v10/v9 0xF7A81B, v7 0xF7A417) (`ld xwa,
-     * NakaInst_ON_E80168_0x36C`).
+     * MidiSetup_GridStr2_Str`).
      * --------------------------------------------------------------------- */
     char MidiSetup_GridStr2_Str[62];
     /* ---------------------------------------------------------------------
      * AcMidiPartGridBoxProc_CaseTable -- jump table of a compiled `switch`
      * in AcMidiPartGridBoxProc (v10/v9 0xF7A1F4, v7 0xF79DF0) (`add xbc,
-     * NakaInst_ON_E80168_0x3AA`): 7 u16 case offsets from
+     * AcMidiPartGridBoxProc_CaseTable`): 7 u16 case offsets from
      * MidiSetup_TtlCase3.
      * --------------------------------------------------------------------- */
     uint16_t AcMidiPartGridBoxProc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * MidiSetup_EventHandler_Table -- read by MidiSetup_EventHandler (v10/v9
-     * 0xF7AC20, v7 0xF7A81C) (`lda xbc, (NakaInst_ON_E80168_0x3B8:24)`). 8
+     * 0xF7AC20, v7 0xF7A81C) (`lda xbc, (MidiSetup_EventHandler_Table:24)`). 8
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -2153,7 +2140,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MidiPart_LookupFromTable_Table -- read by MidiPart_LookupFromTable
      * (v10/v9 0xF7ACFB, v7 0xF7A8F7) (`lda xbc,
-     * (NakaInst_ON_E80168_0x3C0:24)`). 312 bytes to the next object; the
+     * (MidiPart_LookupFromTable_Table:24)`). 312 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t MidiPart_LookupFromTable_Table[312];
@@ -2172,32 +2159,31 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MidiPartGridCheck_LocalInit -- initializer of a local array:
      * MidiPartGridCheck (v10/v9 0xF7A869, v7 0xF7A465) (`ld xiy,
-     * Transpose_String_Plus2_0x12`) copies 10 bytes into its stack frame.
+     * MidiPartGridCheck_LocalInit`) copies 10 bytes into its stack frame.
      * --------------------------------------------------------------------- */
     uint16_t MidiPartGridCheck_LocalInit[5];
     /* ---------------------------------------------------------------------
      * MidiPartGridCheck_LocalInit_Strings -- 54 bytes of NUL-terminated
-     * strings after MidiPartGridCheck_LocalInit; no registration or code
-     * reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after MidiPartGridCheck_LocalInit; that code DOES reach (readers: the .s header,
+     * which also labels each string)
      * --------------------------------------------------------------------- */
     char MidiPartGridCheck_LocalInit_Strings[54];
     /* ---------------------------------------------------------------------
      * MidiPart_LookupFromTable_Str -- NUL-terminated string(s), 6 bytes,
      * used by MidiPart_LookupFromTable (v10/v9 0xF7ACFB, v7 0xF7A8F7) (`ld
-     * xwa, Transpose_String_Plus2_0x52`).
+     * xwa, MidiPart_LookupFromTable_Str`).
      * --------------------------------------------------------------------- */
     char MidiPart_LookupFromTable_Str[6];
     /* ---------------------------------------------------------------------
      * MidiPart_LookupFromTable_Str_2 -- NUL-terminated string(s), 6 bytes,
      * used by MidiPart_LookupFromTable (v10/v9 0xF7ACFB, v7 0xF7A8F7) (`ld
-     * xwa, Transpose_String_Plus2_0x58`).
+     * xwa, MidiPart_LookupFromTable_Str_2`).
      * --------------------------------------------------------------------- */
     char MidiPart_LookupFromTable_Str_2[6];
     /* ---------------------------------------------------------------------
      * MidiPartGridCheck_CaseTable -- jump table of a compiled `switch` in
      * MidiPartGridCheck (v10/v9 0xF7A869, v7 0xF7A465) (`add xwa,
-     * Transpose_String_Plus2_0x5E`): 7 u16 case offsets from
+     * MidiPartGridCheck_CaseTable`): 7 u16 case offsets from
      * MidiPartGridCheck_Evt1C00017.
      * --------------------------------------------------------------------- */
     uint16_t MidiPartGridCheck_CaseTable[7];

@@ -993,8 +993,8 @@ PsGridBox_Scroll_Render:
 	ld (xde+4), xwa
 	pushm (xbc)
 	pushm (xde)
-	pushw 234
-	pushw 41452
+	pushw PsGridBox_Scroll_Render_Str_Fmtd_Fmtd@hi16
+	pushw PsGridBox_Scroll_Render_Str_Fmtd_Fmtd@lo16
 	push xwa
 	call Scoop_EventLoop_12Entry_Helper
 	lda xsp, (xsp+12)
@@ -1002,9 +1002,9 @@ PsGridBox_Scroll_Render:
 	ld xwa, (xsp+334)
 	ld xbc, EVT_GRID_DRAW
 	jrl PsGridBox_DispatchEvent
-	ld xwa, Data_SoundEditorCharsLayout_0x320
+	ld xwa, PsGridBox_Scroll_Render_Str_PART_CHANNEL_OCTAVE_LOCAL
 	jr PsGridBox_Scroll_CopyStr
-	ld xwa, Data_SoundEditorCharsLayout_0x340
+	ld xwa, PsGridBox_Scroll_Render_Str_RIGHT1_RIGHT2_LEFT_PART4_PART5
 PsGridBox_Scroll_CopyStr:
 	push	xwa
 	ld	xwa, (xsp+330)

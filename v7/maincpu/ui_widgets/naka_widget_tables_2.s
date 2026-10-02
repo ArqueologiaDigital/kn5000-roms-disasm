@@ -303,9 +303,8 @@ East_ResNames_3EC:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] East_ResNames_3EC_Strings
 ; East_ResNames_3EC_Strings -- 252 bytes of NUL-terminated strings after
-; East_ResNames_3EC; that code DOES reach (Readers below)
-; (searched: RegObjTabl tables, slice and positional labels). Which code
-; uses them is not established.
+; East_ResNames_3EC; that code reaches: the labels below name each string after the routine that
+; reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; East_ResNames_3EC_Strings[252].
@@ -313,8 +312,28 @@ East_ResNames_3EC:
 ;   InitializeEast (0xF72F2F, pushw far pointer); InitializeEast (0xF72F4B, pushw far pointer); and
 ;   19 more
 ; -----------------------------------------------------------------------------
-East_ResNames_3EC_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x8F2, 0xFC
+East_ResNames_3EC_Strings:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x8F2, 0x8
+InitializeEast_Str_TT_REVEQMENU:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x8FA, 0xE	; "TT_REVEQMENU"
+InitializeEast_Str_TT_SDOCT:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x908, 0xA	; "TT_SDOCT"
+InitializeEast_Str_TT_REVPRESET:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x912, 0xE	; "TT_REVPRESET"
+InitializeEast_Str_TT_EQPRESET:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x920, 0xC	; "TT_EQPRESET"
+InitializeEast_Str_TT_REVEQPRESET:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x92C, 0x10	; "TT_REVEQPRESET"
+InitializeEast_Str_TT_MDMENU:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x93C, 0xA	; "TT_MDMENU"
+InitializeEast_Str_TT_MDPART:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x946, 0xA	; "TT_MDPART"
+InitializeEast_Str_TT_MDCTRL:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x950, 0xA	; "TT_MDCTRL"
+InitializeEast_Str_TT_MDREAL:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x95A, 0xA	; "TT_MDREAL"
+InitializeEast_Str_TT_MDCOM:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x964, 0xA	; "TT_MDCOM"
+InitializeEast_Str_TT_MDINOUT:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x96E, 0xC	; "TT_MDINOUT"
+InitializeEast_Str_TT_MDPRESET:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x97A, 0xC	; "TT_MDPRESET"
+InitializeEast_Str_TT_MDEXC:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x986, 0xA	; "TT_MDEXC"
+InitializeEast_Str_TT_MDGMMODE:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x990, 0xC	; "TT_MDGMMODE"
+InitializeEast_Str_TT_MDTXPCG:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x99C, 0xC	; "TT_MDTXPCG"
+InitializeEast_Str_TT_MDCOMP:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x9A8, 0xA	; "TT_MDCOMP"
+InitializeEast_Str_TT_MDPMLCTL:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x9B2, 0xC	; "TT_MDPMLCTL"
+InitializeEast_Str_TT_MDSETUP:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x9BE, 0xC	; "TT_MDSETUP"
+InitializeEast_Str_TT_ETVOCAL:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x9CA, 0xC	; "TT_ETVOCAL"
+InitializeEast_Str_TT_ETFADEIN:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x9D6, 0xC	; "TT_ETFADEIN"
+InitializeEast_Str_TT_SPLITSEL:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x9E2, 0xC	; "TT_SPLITSEL"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] East_MainFuncTable_143
 ; East_MainFuncTable_143 -- object table: InitializeEast (v10/v9
@@ -964,9 +983,9 @@ MidiPart_PageDisplay_Data:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcCtlMsgGrid_Show_Table
 ; AcCtlMsgGrid_Show_Table -- read by AcCtlMsgGrid_Show (v10/v9 0xf79bd8,
-; v7 0xf797d4) (`ld xbc, MidiPart_PageDisplay_Data_0x8`),
+; v7 0xf797d4) (`ld xbc, AcCtlMsgGrid_Show_Table`),
 ; MidiSetup_TtlCase4 (v10/v9 0xf7a2f0, v7 0xf79eec) (`ld xbc,
-; MidiPart_PageDisplay_Data_0x8`). 4 bytes to the next object; the
+; AcCtlMsgGrid_Show_Table`). 4 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t AcCtlMsgGrid_Show_Table[4].
@@ -991,9 +1010,8 @@ AcCtlMsgGrid_Show_PtrTable:
 ;
 ; Typed in naka_widget_tables_2.c as char AcCtlMsgGrid_Show_Strings[20].
 ; -----------------------------------------------------------------------------
-AcCtlMsgGrid_Show_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24968, 0x14
-	.set MidiPart_PageStr_1of2, AcCtlMsgGrid_Show_Strings + 10	; historical label, used by other files
+AcCtlMsgGrid_Show_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24968, 0xA
+MidiPart_PageStr_1of2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x24972, 0xA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiSetup_TtlCase4_PtrTable
 ; MidiSetup_TtlCase4_PtrTable -- 3 u32 addresses, read by
@@ -1014,9 +1032,8 @@ MidiSetup_TtlCase4_PtrTable:
 ; Typed in naka_widget_tables_2.c as char
 ; MidiSetup_TtlCase4_Strings[30].
 ; -----------------------------------------------------------------------------
-MidiSetup_TtlCase4_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24988, 0x1E
-	.set MidiPart_PageStr_1of3, MidiSetup_TtlCase4_Strings + 20	; historical label, used by other files
+MidiSetup_TtlCase4_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24988, 0x14
+MidiPart_PageStr_1of3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2499C, 0xA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_LocalInit
 ; ComSetGridCheck_LocalInit -- initializer of a local array:
@@ -1043,7 +1060,7 @@ ComSetGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AcVocalGrid_DialSetup_Table
 ; AcVocalGrid_DialSetup_Table -- read by AcVocalGrid_DialSetup (v10/v9
-; 0xf736a3, v7 0xf7329f) (`lda xbc, (MidiPart_PageStr_1of3_0x12:24)`).
+; 0xf736a3, v7 0xf7329f) (`lda xbc, (AcVocalGrid_DialSetup_Table:24)`).
 ; 24 bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -1068,7 +1085,7 @@ AcVocalGrid_DialSetup_Table_2:
 ; [naka_s_headers] AcVocalGridBoxProc_CaseTable
 ; AcVocalGridBoxProc_CaseTable -- jump table of a compiled `switch` in
 ; AcVocalGridBoxProc (v10/v9 0xf73642, v7 0xf7323e) (`add xbc,
-; MidiPart_PageStr_1of3_0x42`): 7 u16 case offsets from
+; AcVocalGridBoxProc_CaseTable`): 7 u16 case offsets from
 ; AcVocalGrid_DialSetup.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1080,7 +1097,7 @@ AcVocalGridBoxProc_CaseTable:
 ; [naka_s_headers] VocalistGrid_DispatchData_PtrTable
 ; VocalistGrid_DispatchData_PtrTable -- 2 u32 addresses, read by
 ; VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`lda xwa,
-; (MidiPart_PageStr_1of3_0x50:24)`).
+; (VocalistGrid_DispatchData_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t
 ; VocalistGrid_DispatchData_PtrTable[2].
@@ -1142,15 +1159,14 @@ MidiPart_OctaveTable:
 ; Typed in naka_widget_tables_2.c as char
 ; MidiPart_OctaveTable_Strings[44].
 ; -----------------------------------------------------------------------------
-MidiPart_OctaveTable_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24A96, 0x2C
-	.set MidiPart_OctaveStr_m2, MidiPart_OctaveTable_Strings + 40	; historical label, used by other files
+MidiPart_OctaveTable_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24A96, 0x28
+MidiPart_OctaveStr_m2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x24ABE, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGridCheck_Table
 ; VocalistGridCheck_Table -- read by VocalistGridCheck (v10/v9 0xf738d2,
-; v7 0xf734ce) (`lda xwa, (MidiPart_OctaveStr_m2_0x4:24)`),
+; v7 0xf734ce) (`lda xwa, (VocalistGridCheck_Table:24)`),
 ; VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`lda xde,
-; (MidiPart_OctaveStr_m2_0x4:24)`). 96 bytes to the next object; the
+; (VocalistGridCheck_Table:24)`). 96 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
@@ -1162,7 +1178,7 @@ VocalistGridCheck_Table:
 ; [naka_s_headers] VocalistGridCheck_LocalInit
 ; VocalistGridCheck_LocalInit -- initializer of a local array:
 ; VocalistGridCheck (v10/v9 0xf738d2, v7 0xf734ce) (`ld xiy,
-; MidiPart_OctaveStr_m2_0x64`) copies 32 bytes into its stack frame.
+; VocalistGridCheck_LocalInit`) copies 32 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; VocalistGridCheck_LocalInit[16].
@@ -1173,7 +1189,7 @@ VocalistGridCheck_LocalInit:
 ; [naka_s_headers] VocalistGrid_DispatchData_Str
 ; VocalistGrid_DispatchData_Str -- NUL-terminated string(s), 12 bytes,
 ; used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`ld
-; xwa, MidiPart_OctaveStr_m2_0x84`).
+; xwa, VocalistGrid_DispatchData_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str[12].
@@ -1184,13 +1200,16 @@ VocalistGrid_DispatchData_Str:
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_2
 ; VocalistGrid_DispatchData_Str_2 -- NUL-terminated string(s), 72 bytes,
 ; used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`ld
-; xwa, MidiPart_OctaveStr_m2_0x90`).
+; xwa, VocalistGrid_DispatchData_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_2[72].
 ; -----------------------------------------------------------------------------
-VocalistGrid_DispatchData_Str_2:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B4E, 0x48
+VocalistGrid_DispatchData_Str_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B4E, 0xC
+VocalistGrid_DispatchData_Str_Fmt2d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B5A, 0xC	; "    %2d    "
+VocalistGrid_DispatchData_Str_Fmt3d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B66, 0xC	; "   %3d    "
+VocalistGrid_DispatchData_Str_Fmtd:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B72, 0xC	; "     %d    "
+VocalistGrid_DispatchData_Str_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24B7E, 0x18	; "     %s   "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_3
 ; VocalistGrid_DispatchData_Str_3 -- NUL-terminated string(s), 12 bytes,
@@ -1239,18 +1258,19 @@ VocalistGrid_DispatchData_Str_6:
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_7
 ; VocalistGrid_DispatchData_Str_7 -- NUL-terminated string(s), 32 bytes,
 ; used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`ld
-; xwa, MidiPart_OctaveStr_m2_0x108`).
+; xwa, VocalistGrid_DispatchData_Str_7`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_7[32].
 ; -----------------------------------------------------------------------------
-VocalistGrid_DispatchData_Str_7:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24BC6, 0x20
+VocalistGrid_DispatchData_Str_7:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x24BC6, 0xC
+VocalistGrid_DispatchData_Str_CC_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x24BD2, 0xC	; "  CC%3d   "
+VocalistGrid_DispatchData_Str_Fmts_Fmts_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24BDE, 0x8	; "%s %s%s"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_8
 ; VocalistGrid_DispatchData_Str_8 -- NUL-terminated string(s), 6 bytes,
 ; used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`ld
-; xwa, MidiPart_OctaveStr_m2_0x128`).
+; xwa, VocalistGrid_DispatchData_Str_8`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_8[6].
@@ -1272,7 +1292,7 @@ VocalistGrid_DispatchData_Str_9:
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_10
 ; VocalistGrid_DispatchData_Str_10 -- NUL-terminated string(s), 12
 ; bytes, used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7
-; 0xf73534) (`ld xwa, MidiPart_OctaveStr_m2_0x134`).
+; 0xf73534) (`ld xwa, VocalistGrid_DispatchData_Str_10`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_10[12].
@@ -1283,13 +1303,16 @@ VocalistGrid_DispatchData_Str_10:
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_11
 ; VocalistGrid_DispatchData_Str_11 -- NUL-terminated string(s), 60
 ; bytes, used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7
-; 0xf73534) (`ld xwa, MidiPart_OctaveStr_m2_0x140`).
+; 0xf73534) (`ld xwa, VocalistGrid_DispatchData_Str_11`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_11[60].
 ; -----------------------------------------------------------------------------
-VocalistGrid_DispatchData_Str_11:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24BFE, 0x3C
+VocalistGrid_DispatchData_Str_11:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24BFE, 0xC
+VocalistGrid_CheckDispData_Str_Fmt2d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C0A, 0xC	; "    %2d    "
+VocalistGrid_CheckDispData_Str_Fmt3d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C16, 0xC	; "   %3d    "
+VocalistGrid_CheckDispData_Str_Fmtd:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C22, 0xC	; "     %d    "
+VocalistGrid_CheckDispData_Str_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C2E, 0xC	; "     %s   "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_12
 ; VocalistGrid_DispatchData_Str_12 -- NUL-terminated string(s), 12
@@ -1305,7 +1328,7 @@ VocalistGrid_DispatchData_Str_12:
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_13
 ; VocalistGrid_DispatchData_Str_13 -- NUL-terminated string(s), 12
 ; bytes, used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7
-; 0xf73534) (`ld xwa, MidiPart_OctaveStr_m2_0x188`).
+; 0xf73534) (`ld xwa, VocalistGrid_DispatchData_Str_13`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_13[12].
@@ -1316,7 +1339,7 @@ VocalistGrid_DispatchData_Str_13:
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_14
 ; VocalistGrid_DispatchData_Str_14 -- NUL-terminated string(s), 12
 ; bytes, used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7
-; 0xf73534) (`ld xwa, MidiPart_OctaveStr_m2_0x194`).
+; 0xf73534) (`ld xwa, VocalistGrid_DispatchData_Str_14`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_14[12].
@@ -1352,13 +1375,15 @@ VocalistGrid_DispatchData_Str_15:
 ;
 ; Typed in naka_widget_tables_2.c as char MidiPart_AfterStr[40].
 ; -----------------------------------------------------------------------------
-MidiPart_AfterStr:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C76, 0x28
+MidiPart_AfterStr:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C76, 0xC
+VocalistGridCheck_Entry2_Str_CC_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C82, 0xC	; "  CC%3d   "
+VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C8E, 0x8	; "%s %s%s"
+VocalistGridCheck_Entry2_Str_Fmts_Fmts_Fmts_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24C96, 0x8	; "%s %s%s"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VocalistGrid_DispatchData_Str_16
 ; VocalistGrid_DispatchData_Str_16 -- NUL-terminated string(s), 6 bytes,
 ; used by VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`ld
-; xwa, MidiPart_AfterStr_0x28`).
+; xwa, VocalistGrid_DispatchData_Str_16`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; VocalistGrid_DispatchData_Str_16[6].
@@ -1380,7 +1405,7 @@ VocalistGrid_DispatchData_Str_17:
 ; [naka_s_headers] VocalistGrid_DispatchData_CaseTable
 ; VocalistGrid_DispatchData_CaseTable -- jump table of a compiled
 ; `switch` in VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534)
-; (`add xwa, MidiPart_AfterStr_0x34`): 20 u16 case offsets from
+; (`add xwa, VocalistGrid_DispatchData_CaseTable`): 20 u16 case offsets from
 ; VocalistGrid_CheckDispData.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1403,7 +1428,7 @@ MidiPart_ColWidthData:
 ; [naka_s_headers] VocalistGridCheck_CaseTable
 ; VocalistGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; VocalistGridCheck (v10/v9 0xf738d2, v7 0xf734ce) (`add xwa,
-; MidiPart_ColWidthData_0x28`): 7 u16 case offsets from
+; VocalistGridCheck_CaseTable`): 7 u16 case offsets from
 ; VocalistGrid_DispatchData.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1415,7 +1440,7 @@ VocalistGridCheck_CaseTable:
 ; [naka_s_headers] AcVocalist_ListSetup_CaseTable
 ; AcVocalist_ListSetup_CaseTable -- jump table of a compiled `switch` in
 ; AcVocalist_ListSetup (v10/v9 0xf73fc8, v7 0xf73bc4) (`add xhl,
-; MidiPart_ColWidthData_0x36`): 6 u16 case offsets from
+; AcVocalist_ListSetup_CaseTable`): 6 u16 case offsets from
 ; AcVocalist_ListDispatch.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1427,8 +1452,8 @@ AcVocalist_ListSetup_CaseTable:
 ; [naka_s_headers] PsHarm_DrawActiveBox_PtrTable
 ; PsHarm_DrawActiveBox_PtrTable -- 1 u32 addresses, read by
 ; PsHarm_DrawActiveBox (v10/v9 0xf740ec, v7 0xf73ce8) (`ld xde,
-; (MidiPart_ColWidthData_0x42:24)`), PsHarm_DrawInactiveBox (v10/v9
-; 0xf74147, v7 0xf73d43) (`ld xde, (MidiPart_ColWidthData_0x42:24)`).
+; (PsHarm_DrawActiveBox_PtrTable:24)`), PsHarm_DrawInactiveBox (v10/v9
+; 0xf74147, v7 0xf73d43) (`ld xde, (PsHarm_DrawActiveBox_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t
 ; PsHarm_DrawActiveBox_PtrTable[1].
@@ -1448,7 +1473,7 @@ MidiPart_HarmLocalStr:
 ; [naka_s_headers] PsHarmOnOffBoxProc_LocalInit
 ; PsHarmOnOffBoxProc_LocalInit -- initializer of a local array:
 ; PsHarmOnOffBoxProc (v10/v9 0xf74019, v7 0xf73c15) (`ld xiy,
-; MidiPart_HarmLocalStr_0x18`) copies 4 bytes into its stack frame.
+; PsHarmOnOffBoxProc_LocalInit`) copies 4 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; PsHarmOnOffBoxProc_LocalInit[2].
@@ -1470,7 +1495,7 @@ PsHarmOnOffBoxProc_LocalInit_2:
 ; [naka_s_headers] MainVocalistPage1OKFunc_CaseTable
 ; MainVocalistPage1OKFunc_CaseTable -- jump table of a compiled `switch`
 ; in MainVocalistPage1OKFunc (v10/v9 0xf74201, v7 0xf73dfd) (`lda xix,
-; (MidiPart_HarmLocalStr_0x24:24)`): 6 u16 case offsets from
+; (MainVocalistPage1OKFunc_CaseTable:24)`): 6 u16 case offsets from
 ; VocalistPage1OK_Dispatch.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1482,7 +1507,7 @@ MainVocalistPage1OKFunc_CaseTable:
 ; [naka_s_headers] RevSel_HandleConfirm_Str
 ; RevSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by
 ; RevSel_HandleConfirm (v10/v9 0xf74403, v7 0xf73fff) (`ld xde,
-; MidiPart_HarmLocalStr_0x30`).
+; RevSel_HandleConfirm_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char RevSel_HandleConfirm_Str[6].
 ; -----------------------------------------------------------------------------
@@ -1492,7 +1517,7 @@ RevSel_HandleConfirm_Str:
 ; [naka_s_headers] EqSel_HandleConfirm_Str
 ; EqSel_HandleConfirm_Str -- NUL-terminated string(s), 6 bytes, used by
 ; EqSel_HandleConfirm (v10/v9 0xf744e7, v7 0xf740e3) (`ld xde,
-; MidiPart_HarmLocalStr_0x36`).
+; EqSel_HandleConfirm_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char EqSel_HandleConfirm_Str[6].
 ; -----------------------------------------------------------------------------
@@ -1526,9 +1551,8 @@ GMMode_AttentionTable:
 ; Typed in naka_widget_tables_2.c as char
 ; GMMode_AttentionTable_Strings[70].
 ; -----------------------------------------------------------------------------
-GMMode_AttentionTable_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24D72, 0x46
-	.set GMMode_Attention_English2, GMMode_AttentionTable_Strings + 58	; historical label, used by other files
+GMMode_AttentionTable_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24D72, 0x3A
+GMMode_Attention_English2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x24DAC, 0xC
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsGMOnCheck_Strings
 ; StsGMOnCheck_Strings -- the 5 strings StsGMOnCheck_PtrTable points at
@@ -1542,7 +1566,7 @@ StsGMOnCheck_Strings:
 ; [naka_s_headers] StsGMOnCheck_PtrTable
 ; StsGMOnCheck_PtrTable -- 6 u32 addresses, read by StsGMOnCheck (v10/v9
 ; 0xf74773, v7 0xf7436f) (`lda xhl,
-; (GMMode_Attention_English2_0x204:24)`).
+; (StsGMOnCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t StsGMOnCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
@@ -1571,7 +1595,7 @@ StsGMOffCheck_PtrTable:
 ; [naka_s_headers] StsAreYouSureCheck_PtrTable
 ; StsAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
 ; StsAreYouSureCheck (v10/v9 0xf74795, v7 0xf74391) (`lda xhl,
-; (GMMode_Attention_English2_0x494:24)`).
+; (StsAreYouSureCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t
 ; StsAreYouSureCheck_PtrTable[6].
@@ -1593,7 +1617,7 @@ StsAreYouSureCheck_Strings:
 ; [naka_s_headers] StsSplitCheck_PtrTable
 ; StsSplitCheck_PtrTable -- 6 u32 addresses, read by StsSplitCheck
 ; (v10/v9 0xf748a6, v7 0xf744a2) (`lda xhl,
-; (GMMode_Attention_English2_0x514:24)`).
+; (StsSplitCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t StsSplitCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
@@ -1628,9 +1652,8 @@ SplitPoint_NoteNameTable:
 ; Typed in naka_widget_tables_2.c as char
 ; SplitPoint_NoteNameTable_Strings[58].
 ; -----------------------------------------------------------------------------
-SplitPoint_NoteNameTable_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2540A, 0x3A
-	.set SplitPoint_NoteEntry_C_Code, SplitPoint_NoteNameTable_Strings + 54	; historical label, used by other files
+SplitPoint_NoteNameTable_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2540A, 0x36
+SplitPoint_NoteEntry_C_Code:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25440, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SplitPoint_BitmapTable
 ; SplitPoint_BitmapTable -- the 13 keyboard-octave bitmaps of the
@@ -1649,7 +1672,7 @@ SplitPoint_BitmapTable:
 ; [naka_s_headers] SplitPointFunc_LocalInit
 ; SplitPointFunc_LocalInit -- initializer of a local array:
 ; SplitPointFunc (v10/v9 0xf748b7, v7 0xf744b3) (`ld xiy,
-; SplitPoint_NoteEntry_C_Code_0x38`) copies 4 bytes into its stack
+; SplitPointFunc_LocalInit`) copies 4 bytes into its stack
 ; frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1674,7 +1697,7 @@ SplitPointFunc_LocalInit_Strings:
 ; [naka_s_headers] R12Octave_HandleNoteEvt_Str
 ; R12Octave_HandleNoteEvt_Str -- NUL-terminated string(s), 6 bytes, used
 ; by R12Octave_HandleNoteEvt (v10/v9 0xf74a7f, v7 0xf7467b) (`ld xwa,
-; SplitPoint_NoteEntry_C_Code_0x42`).
+; R12Octave_HandleNoteEvt_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; R12Octave_HandleNoteEvt_Str[6].
@@ -1685,7 +1708,7 @@ R12Octave_HandleNoteEvt_Str:
 ; [naka_s_headers] R12Octave_Octave2_Str
 ; R12Octave_Octave2_Str -- NUL-terminated string(s), 6 bytes, used by
 ; R12Octave_Octave2 (v10/v9 0xf74aaa, v7 0xf746a6) (`ld xwa,
-; SplitPoint_NoteEntry_C_Code_0x48`).
+; R12Octave_Octave2_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char R12Octave_Octave2_Str[6].
 ; -----------------------------------------------------------------------------
@@ -1705,7 +1728,7 @@ R12Octave_Octave3_Str:
 ; [naka_s_headers] R12Octave_Octave4_Str
 ; R12Octave_Octave4_Str -- NUL-terminated string(s), 6 bytes, used by
 ; R12Octave_Octave4 (v10/v9 0xf74ab8, v7 0xf746b4) (`ld xwa,
-; SplitPoint_NoteEntry_C_Code_0x54`).
+; R12Octave_Octave4_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char R12Octave_Octave4_Str[6].
 ; -----------------------------------------------------------------------------
@@ -1725,7 +1748,7 @@ R12Octave_Octave5_Str:
 ; [naka_s_headers] R12Octave_OctaveDefault_Str
 ; R12Octave_OctaveDefault_Str -- NUL-terminated string(s), 6 bytes, used
 ; by R12Octave_OctaveDefault (v10/v9 0xf74ac6, v7 0xf746c2) (`ld xwa,
-; SplitPoint_NoteEntry_C_Code_0x60`).
+; R12Octave_OctaveDefault_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; R12Octave_OctaveDefault_Str[6].
@@ -1736,7 +1759,7 @@ R12Octave_OctaveDefault_Str:
 ; [naka_s_headers] MdCmptCnctFunc_LocalInit
 ; MdCmptCnctFunc_LocalInit -- initializer of a local array:
 ; MdCmptCnctFunc (v10/v9 0xf74b40, v7 0xf7473c) (`ld xiy,
-; SplitPoint_NoteEntry_C_Code_0x66`) copies 4 bytes into its stack
+; MdCmptCnctFunc_LocalInit`) copies 4 bytes into its stack
 ; frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1747,15 +1770,16 @@ MdCmptCnctFunc_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MdCmptCnctFunc_LocalInit_Strings
 ; MdCmptCnctFunc_LocalInit_Strings -- 104 bytes of NUL-terminated
-; strings after MdCmptCnctFunc_LocalInit; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after MdCmptCnctFunc_LocalInit; that code reaches: the labels below name each string
+; after the routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; MdCmptCnctFunc_LocalInit_Strings[104].
 ; -----------------------------------------------------------------------------
-MdCmptCnctFunc_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x254AA, 0x68
+MdCmptCnctFunc_LocalInit_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x254AA, 0x1A
+CmptCnct_DrawDiagram1_Str_KN_as_master:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x254C4, 0x1A	; "      KN as master      "
+CmptCnct_DrawDiagram2_Str_KN_as_slave:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x254DE, 0x1A	; "      KN as slave       "
+CmptCnct_DrawDiagramDefault_Str_Error:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x254F8, 0x1A	; "         Error!         "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PcgModeGridEventStart_Str
 ; PcgModeGridEventStart_Str -- NUL-terminated string(s), 10 bytes, used
@@ -1775,8 +1799,8 @@ PcgModeGridEventStart_Str:
 ; Typed in naka_widget_tables_2.c as char
 ; PcgModeDisplayString_Bank1_Str[20].
 ; -----------------------------------------------------------------------------
-PcgModeDisplayString_Bank1_Str:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2551C, 0x14
+PcgModeDisplayString_Bank1_Str:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2551C, 0xA
+PcgMode_CopyStrCustom_Str_GM:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25526, 0xA	; "   GM   "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PcgModeDefaultCase_Str
 ; PcgModeDefaultCase_Str -- NUL-terminated string(s), 10 bytes, used by
@@ -1801,17 +1825,17 @@ DrumType_GridEvent_Str:
 ; [naka_s_headers] DrumType_CopyStrBank1_Str
 ; DrumType_CopyStrBank1_Str -- NUL-terminated string(s), 20 bytes, used
 ; by DrumType_CopyStrBank1 (v10/v9 0xf74ce3, v7 0xf748df) (`ld xwa,
-; SplitPoint_NoteEntry_C_Code_0x104`).
+; DrumType_CopyStrBank1_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char DrumType_CopyStrBank1_Str[20].
 ; -----------------------------------------------------------------------------
-DrumType_CopyStrBank1_Str:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25544, 0x14
+DrumType_CopyStrBank1_Str:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25544, 0xA
+DrumType_CopyStrCustom_Str_GM:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2554E, 0xA	; "   GM   "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DrumType_CopyStrDefault_Str
 ; DrumType_CopyStrDefault_Str -- NUL-terminated string(s), 10 bytes,
 ; used by DrumType_CopyStrDefault (v10/v9 0xf74cf5, v7 0xf748f1) (`ld
-; xwa, SplitPoint_NoteEntry_C_Code_0x118`).
+; xwa, DrumType_CopyStrDefault_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; DrumType_CopyStrDefault_Str[10].
@@ -1837,14 +1861,13 @@ DisplayMode_OnOff_Table:
 ; Typed in naka_widget_tables_2.c as char
 ; DisplayMode_OnOff_Table_Strings[24].
 ; -----------------------------------------------------------------------------
-DisplayMode_OnOff_Table_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25572, 0x18
-	.set NakaInst_OFF_WidgetTbl2, DisplayMode_OnOff_Table_Strings + 6	; historical label, used by other files
+DisplayMode_OnOff_Table_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25572, 0x6
+NakaInst_OFF_WidgetTbl2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25578, 0x12
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MdSetupLoadFunc_CaseTable
 ; MdSetupLoadFunc_CaseTable -- jump table of a compiled `switch` in
 ; MdSetupLoadFunc (v10/v9 0xf74d11, v7 0xf7490d) (`add xhl,
-; NakaInst_OFF_WidgetTbl2_0x12`): 10 u16 case offsets from
+; MdSetupLoadFunc_CaseTable`): 10 u16 case offsets from
 ; SetupLoadOptionJumpTable.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -1855,19 +1878,18 @@ MdSetupLoadFunc_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MdSetupLoadFunc_CaseTable_Strings
 ; MdSetupLoadFunc_CaseTable_Strings -- 12 bytes of NUL-terminated
-; strings after MdSetupLoadFunc_CaseTable; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after MdSetupLoadFunc_CaseTable; that code reaches: the labels below name each string
+; after the routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; MdSetupLoadFunc_CaseTable_Strings[12].
 ; -----------------------------------------------------------------------------
-MdSetupLoadFunc_CaseTable_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2559E, 0xC
+MdSetupLoadFunc_CaseTable_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2559E, 0x6
+AcLswEdit_PushDefaultStr_Str_Error:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x255A4, 0x6	; "Error"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] VoiceParam_ListHandler_Table
 ; VoiceParam_ListHandler_Table -- read by VoiceParam_ListHandler (v10/v9
-; 0xf7528a, v7 0xf74e86) (`lda xbc, (NakaInst_OFF_WidgetTbl2_0x32:24)`).
+; 0xf7528a, v7 0xf74e86) (`lda xbc, (VoiceParam_ListHandler_Table:24)`).
 ; 14 bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -1880,7 +1902,7 @@ VoiceParam_ListHandler_Table:
 ; [naka_s_headers] VoiceParam_ListHandler_Table_2
 ; VoiceParam_ListHandler_Table_2 -- read by VoiceParam_ListHandler
 ; (v10/v9 0xf7528a, v7 0xf74e86) (`lda xbc,
-; (NakaInst_OFF_WidgetTbl2_0x40:24)`). 14 bytes to the next object; the
+; (VoiceParam_ListHandler_Table_2:24)`). 14 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
@@ -1919,7 +1941,7 @@ Data_FadeSetGridDispatch_Table:
 ; [naka_s_headers] FadeSetGridCheck_LocalInit
 ; FadeSetGridCheck_LocalInit -- initializer of a local array:
 ; FadeSetGridCheck (v10/v9 0xf754be, v7 0xf750ba) (`ld xiy,
-; NakaInst_OFF_WidgetTbl2_0x78`) copies 16 bytes into its stack frame.
+; FadeSetGridCheck_LocalInit`) copies 16 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; FadeSetGridCheck_LocalInit[8].
@@ -1947,8 +1969,8 @@ FadeSetGridCheck_LocalInit_Strings:
 ; Typed in naka_widget_tables_2.c as char
 ; Data_FadeSetGridDispatch_Str[20].
 ; -----------------------------------------------------------------------------
-Data_FadeSetGridDispatch_Str:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25614, 0x14
+Data_FadeSetGridDispatch_Str:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25614, 0x6
+SndParam_LookupAndSendCmd_Str_Fmt2d_measure:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2561A, 0xE	; " %2d measure "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SndParam_FormatAndDisplay_Str
 ; SndParam_FormatAndDisplay_Str -- NUL-terminated string(s), 6 bytes,
@@ -2021,7 +2043,7 @@ AcInOutGrid_ScrollUp_Dispatch_Table:
 ; [naka_s_headers] AcInOutGrid_ScrollDown_AltTable_Table
 ; AcInOutGrid_ScrollDown_AltTable_Table -- read by
 ; AcInOutGrid_ScrollDown_AltTable (v10/v9 0xf75978, v7 0xf75574) (`lda
-; xbc, (NakaInst_OFF_WidgetTbl2_0x100:24)`). 18 bytes to the next
+; xbc, (AcInOutGrid_ScrollDown_AltTable_Table:24)`). 18 bytes to the next
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
@@ -2066,7 +2088,7 @@ AcInOutGrid_GetRowText_Src2_Str:
 ; [naka_s_headers] AcInOutGridBoxProc_CaseTable
 ; AcInOutGridBoxProc_CaseTable -- jump table of a compiled `switch` in
 ; AcInOutGridBoxProc (v10/v9 0xf7575a, v7 0xf75356) (`add xbc,
-; NakaInst_OFF_WidgetTbl2_0x370`): 7 u16 case offsets from
+; AcInOutGridBoxProc_CaseTable`): 7 u16 case offsets from
 ; AcInOutGrid_Init.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -2096,9 +2118,8 @@ Data_InOutGridDispatch_PtrTable:
 ; Typed in naka_widget_tables_2.c as char
 ; Data_InOutGridDispatch_Strings[12].
 ; -----------------------------------------------------------------------------
-Data_InOutGridDispatch_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x258FE, 0xC
-	.set NakaInst_OFF_E7FCA2, Data_InOutGridDispatch_Strings + 6	; historical label, used by other files
+Data_InOutGridDispatch_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x258FE, 0x6
+NakaInst_OFF_E7FCA2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25904, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_PtrTable_2
 ; Data_InOutGridDispatch_PtrTable_2 -- 2 u32 addresses, read by
@@ -2120,9 +2141,8 @@ Data_InOutGridDispatch_PtrTable_2:
 ; Typed in naka_widget_tables_2.c as char
 ; Data_InOutGridDispatch_Strings_2[20].
 ; -----------------------------------------------------------------------------
-Data_InOutGridDispatch_Strings_2:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25912, 0x14
-	.set ControlMode_Option_Table, Data_InOutGridDispatch_Strings_2 + 10	; historical label, used by other files
+Data_InOutGridDispatch_Strings_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25912, 0xA
+ControlMode_Option_Table:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2591C, 0xA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_PtrTable_3
 ; Data_InOutGridDispatch_PtrTable_3 -- 3 u32 addresses, read by
@@ -2144,9 +2164,8 @@ Data_InOutGridDispatch_PtrTable_3:
 ; Typed in naka_widget_tables_2.c as char
 ; Data_InOutGridDispatch_Strings_3[30].
 ; -----------------------------------------------------------------------------
-Data_InOutGridDispatch_Strings_3:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25932, 0x1E
-	.set NakaInst_DIRECT_E7FCE4, Data_InOutGridDispatch_Strings_3 + 20	; historical label, used by other files
+Data_InOutGridDispatch_Strings_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25932, 0x14
+NakaInst_DIRECT_E7FCE4:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25946, 0xA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_LocalInit
 ; InOutGridCheck_LocalInit -- initializer of a local array:
@@ -2161,8 +2180,8 @@ InOutGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_LocalInit_Strings
 ; InOutGridCheck_LocalInit_Strings -- 60 bytes of NUL-terminated strings
-; after InOutGridCheck_LocalInit; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
-; labels). Which code uses them is not established.
+; after InOutGridCheck_LocalInit; that code reaches: the labels below name each string after the
+; routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; InOutGridCheck_LocalInit_Strings[60].
@@ -2170,13 +2189,21 @@ InOutGridCheck_LocalInit:
 ;   pointer); Data_InOutGridDispatch (0xF75A1A, pushw far pointer); Data_InOutGridDispatch
 ;   (0xF75A4F, pushw far pointer); and 7 more
 ; -----------------------------------------------------------------------------
-InOutGridCheck_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25960, 0x3C
+InOutGridCheck_LocalInit_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25960, 0x6
+Data_InOutGridDispatch_Str_Blank5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25966, 0x6	; "     "
+Data_InOutGridDispatch_Str_Fmt3d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2596C, 0x6	; " %3d "
+Data_InOutGridDispatch_Str_Blank5_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25972, 0x6	; "     "
+Data_ParaLoadOptDispatch_Str_Blank5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25978, 0x6	; "     "
+Data_ParaLoadOptDispatch_Str_Fmt3d:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2597E, 0x6	; " %3d "
+Data_ParaLoadOptDispatch_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25984, 0x6	; " %3d "
+Data_ParaLoadOptDispatch_Str_Blank5_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2598A, 0x6	; "     "
+Data_ParaLoadOptDispatch_Str_Fmt3d_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25990, 0x6	; " %3d "
+Data_ParaLoadOptDispatch_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25996, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Data_InOutGridDispatch_CaseTable
 ; Data_InOutGridDispatch_CaseTable -- jump table of a compiled `switch`
 ; in Data_InOutGridDispatch (v10/v9 0xf75ade, v7 0xf756da) (`lda xix,
-; (NakaInst_DIRECT_E7FCE4_0x56:24)`): 9 u16 case offsets from
+; (Data_InOutGridDispatch_CaseTable:24)`): 9 u16 case offsets from
 ; Data_ParaLoadOptDispatch.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -2282,9 +2309,8 @@ FileTransfer_Status_Table:
 ; Typed in naka_widget_tables_2.c as char
 ; FileTransfer_Status_Table_Strings[40].
 ; -----------------------------------------------------------------------------
-FileTransfer_Status_Table_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A10, 0x28
-	.set FileTransfer_BlankStatus, FileTransfer_Status_Table_Strings + 30	; historical label, used by other files
+FileTransfer_Status_Table_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A10, 0x1E
+FileTransfer_BlankStatus:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25A2E, 0xA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ExcPmemFunc_CaseTable
 ; ExcPmemFunc_CaseTable -- jump table of a compiled `switch` in
@@ -2311,7 +2337,7 @@ ExcSmemFunc_CaseTable:
 ; [naka_s_headers] ExcCompFunc_CaseTable
 ; ExcCompFunc_CaseTable -- jump table of a compiled `switch` in
 ; ExcCompFunc (v10/v9 0xf76795, v7 0xf76391) (`add xbc,
-; FileTransfer_BlankStatus_0x32`): 10 u16 case offsets from
+; ExcCompFunc_CaseTable`): 10 u16 case offsets from
 ; ExcCompFunc_HandlerJumpTable.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t ExcCompFunc_CaseTable[10].
@@ -2322,7 +2348,7 @@ ExcCompFunc_CaseTable:
 ; [naka_s_headers] ExcSeqFunc_CaseTable
 ; ExcSeqFunc_CaseTable -- jump table of a compiled `switch` in
 ; ExcSeqFunc (v10/v9 0xf767f3, v7 0xf763ef) (`add xbc,
-; FileTransfer_BlankStatus_0x46`): 10 u16 case offsets from
+; ExcSeqFunc_CaseTable`): 10 u16 case offsets from
 ; ExcSeqFunc_HandlerJumpTable.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t ExcSeqFunc_CaseTable[10].
@@ -2417,7 +2443,7 @@ UserMemory_ConfirmData:
 ; [naka_s_headers] ParaLoadOptGridCheck_PtrTable
 ; ParaLoadOptGridCheck_PtrTable -- 2 u32 addresses, read by
 ; ParaLoadOptGridCheck (v10/v9 0xf76f62, v7 0xf76b5e) (`lda xwa,
-; (UserMemory_ConfirmData_0x16:24)`).
+; (ParaLoadOptGridCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t
 ; ParaLoadOptGridCheck_PtrTable[2].
@@ -2455,9 +2481,8 @@ UserMemory_Config_Table:
 ; Typed in naka_widget_tables_2.c as char
 ; UserMemory_Config_Table_Strings[40].
 ; -----------------------------------------------------------------------------
-UserMemory_Config_Table_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25B3C, 0x28
-	.set NakaInst_INITIAL, UserMemory_Config_Table_Strings + 30	; historical label, used by other files
+UserMemory_Config_Table_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25B3C, 0x1E
+NakaInst_INITIAL:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25B5A, 0xA
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ParaLoadOptGridCheck_LocalInit
 ; ParaLoadOptGridCheck_LocalInit -- initializer of a local array:
@@ -2485,7 +2510,7 @@ ParaLoadOptGridCheck_CaseTable:
 ; [naka_s_headers] AcPcgOutGridBoxProc_CaseTable
 ; AcPcgOutGridBoxProc_CaseTable -- jump table of a compiled `switch` in
 ; AcPcgOutGridBoxProc (v10/v9 0xf773da, v7 0xf76fd6) (`add xbc,
-; NakaInst_INITIAL_0x28`): 7 u16 case offsets from
+; AcPcgOutGridBoxProc_CaseTable`): 7 u16 case offsets from
 ; PcgOutGridBoxEventDispatch.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -2507,7 +2532,7 @@ UserMemory_FormatStrings:
 ; [naka_s_headers] PcgOutGridCheck_LocalInit
 ; PcgOutGridCheck_LocalInit -- initializer of a local array:
 ; PcgOutGridCheck (v10/v9 0xf77653, v7 0xf7724f) (`ld xiy,
-; UserMemory_FormatStrings_0x16`) copies 10 bytes into its stack frame.
+; PcgOutGridCheck_LocalInit`) copies 10 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; PcgOutGridCheck_LocalInit[5].
@@ -2517,15 +2542,36 @@ PcgOutGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PcgOutGridCheck_LocalInit_Strings
 ; PcgOutGridCheck_LocalInit_Strings -- 160 bytes of NUL-terminated
-; strings after PcgOutGridCheck_LocalInit; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after PcgOutGridCheck_LocalInit; that code reaches: the labels below name each string
+; after the routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; PcgOutGridCheck_LocalInit_Strings[160].
 ; -----------------------------------------------------------------------------
-PcgOutGridCheck_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BB0, 0xA0
+PcgOutGridCheck_LocalInit_Strings:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BB0, 0x6
+PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BB6, 0x6	; " %3d "
+PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BBC, 0x6	; " --- "
+PcgOutGridCheckJumpTable_Entry2_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BC2, 0x8	; "  OFF  "
+PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BCA, 0x6	; " %3d "
+PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BD0, 0x8	; " %5d )"
+PcgOutGridCheckJumpTable_Entry2_Str_Dash_Dash_Dash_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BD8, 0x6	; " --- "
+PcgOutGridCheckJumpTable_Entry2_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BDE, 0x6	; " OFF "
+PcgOutGridCheckJumpTable_Entry2_Str_OFF_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BE4, 0x8	; "  OFF  "
+PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BEC, 0x6	; " %3d "
+PcgOutGridCheckJumpTable_Entry2_Str_Fmt3d_4:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BF2, 0x6	; " %3d "
+PcgOutGridCheckJumpTable_Entry2_Str_Fmt5d_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25BF8, 0x8	; " %5d )"
+PcgOutCheckGridDataStructure_Str_Fmt3d:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C00, 0x6	; " %3d "
+PcgOutCheck_SendPreset1_Str_Fmt3d:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C06, 0x6	; " %3d "
+PcgOutCheck_SendPreset2_Str_Dash_Dash_Dash:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C0C, 0x6	; " --- "
+PcgOutCheck_SendPreset2_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C12, 0x8	; "  OFF  "
+PcgOutCheck_SendPreset2Named_Str_Fmt3d:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C1A, 0x6	; " %3d "
+PcgOutCheck_SendPreset2Named_Str_Fmt5d:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C20, 0x8	; " %5d )"
+PcgOutCheck_SendPreset3_Str_Dash_Dash_Dash:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C28, 0x6	; " --- "
+PcgOutCheck_SendPreset3_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C2E, 0x6	; " OFF "
+PcgOutCheck_SendPreset3_Str_OFF_2:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C34, 0x8	; "  OFF  "
+PcgOutCheck_SendPreset3Named_Str_Fmt3d:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C3C, 0x6	; " %3d "
+PcgOutCheck_SendPreset3Named_Str_Fmt3d_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C42, 0x6	; " %3d "
+PcgOutCheck_SendPreset3Named_Str_Fmt5d:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25C48, 0x8	; " %5d )"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PcgOutGridCheck_CaseTable
 ; PcgOutGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -2576,7 +2622,7 @@ NakaData_ModeConfig1:
 ; [naka_s_headers] AcSendEditSwProc_LocalInit
 ; AcSendEditSwProc_LocalInit -- initializer of a local array:
 ; AcSendEditSwProc (v10/v9 0xf77df5, v7 0xf779f1) (`ld xiy,
-; NakaData_ModeConfig1_0x4`) copies 2 bytes into its stack frame.
+; AcSendEditSwProc_LocalInit`) copies 2 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
 ; AcSendEditSwProc_LocalInit[2].
@@ -2596,13 +2642,13 @@ NakaData_ModeConfig2:
 ; [naka_s_headers] ComSetGridCheck_JumpTable_Table
 ; ComSetGridCheck_JumpTable_Table -- read by ComSetGridCheck_Evt1C00017
 ; (v10/v9 0xf77fc4, v7 0xf77bc0) (`lda xbc,
-; (NakaData_ModeConfig2_0x8:24)`), ComSetGridCheck_Evt1C00017 (v10/v9
-; 0xf77fc4, v7 0xf77bc0) (`lda xwa, (NakaData_ModeConfig2_0x8:24)`),
+; (ComSetGridCheck_JumpTable_Table:24)`), ComSetGridCheck_Evt1C00017 (v10/v9
+; 0xf77fc4, v7 0xf77bc0) (`lda xwa, (ComSetGridCheck_JumpTable_Table:24)`),
 ; ComSetGridCheck_Evt1C00017 (v10/v9 0xf77fc4, v7 0xf77bc0) (`lda xix,
-; (NakaData_ModeConfig2_0x8:24)`), ComSetGrid_EventHandler (v10/v9
-; 0xf781c1, v7 0xf77dbd) (`lda xbc, (NakaData_ModeConfig2_0x8:24)`),
+; (ComSetGridCheck_JumpTable_Table:24)`), ComSetGrid_EventHandler (v10/v9
+; 0xf781c1, v7 0xf77dbd) (`lda xbc, (ComSetGridCheck_JumpTable_Table:24)`),
 ; ComSetGrid_LookupByColumn (v10/v9 0xf7827d, v7 0xf77e79) (`lda xwa,
-; (NakaData_ModeConfig2_0x8:24)`). 36 bytes to the next object; the
+; (ComSetGridCheck_JumpTable_Table:24)`). 36 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
@@ -2775,7 +2821,7 @@ ComSetGrid_LookupByColumn_Str:
 ; [naka_s_headers] ComSetGrid_ParamStr1_Str
 ; ComSetGrid_ParamStr1_Str -- NUL-terminated string(s), 10 bytes, used
 ; by ComSetGrid_ParamStr1 (v10/v9 0xf782a4, v7 0xf77ea0) (`ld xwa,
-; NakaInst_GM_0x32`).
+; ComSetGrid_ParamStr1_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char ComSetGrid_ParamStr1_Str[10].
 ; -----------------------------------------------------------------------------
@@ -2795,7 +2841,7 @@ ComSetGrid_ParamStr3_Str:
 ; [naka_s_headers] ComSetGrid_ParamStrDefault_Str
 ; ComSetGrid_ParamStrDefault_Str -- NUL-terminated string(s), 10 bytes,
 ; used by ComSetGrid_ParamStrDefault (v10/v9 0xf782b2, v7 0xf77eae) (`ld
-; xwa, NakaInst_GM_0x46`).
+; xwa, ComSetGrid_ParamStrDefault_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; ComSetGrid_ParamStrDefault_Str[10].
@@ -2806,7 +2852,7 @@ ComSetGrid_ParamStrDefault_Str:
 ; [naka_s_headers] ComSetGridCheck_CaseTable
 ; ComSetGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; ComSetGridCheck (v10/v9 0xf77f6c, v7 0xf77b68) (`add xwa,
-; NakaInst_GM_0x50`): 7 u16 case offsets from ComSetGridCheck_Evt1C00017.
+; ComSetGridCheck_CaseTable`): 7 u16 case offsets from ComSetGridCheck_Evt1C00017.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; ComSetGridCheck_CaseTable[7].
@@ -2851,14 +2897,13 @@ NakaInst_NEXT_E800E8:
 ; [naka_s_headers] PmemOutLGridCheck_PtrTable
 ; PmemOutLGridCheck_PtrTable -- 3 u32 addresses, read by
 ; PmemOutLGridCheck (v10/v9 0xf78988, v7 0xf78584) (`lda xwa,
-; (NakaInst_NEXT_E800E8_0x2:24)`).
+; (PmemOutLGridCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as uint32_t
 ; PmemOutLGridCheck_PtrTable[3].
 ; -----------------------------------------------------------------------------
-PmemOutLGridCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D4C, 0xC
-	.set NakaData_PartConfig, PmemOutLGridCheck_PtrTable + 3	; historical label, used by other files
+PmemOutLGridCheck_PtrTable:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D4C, 0x3
+NakaData_PartConfig:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D4F, 0x9
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutLGridCheck_Strings
 ; PmemOutLGridCheck_Strings -- the 3 strings PmemOutLGridCheck_PtrTable
@@ -2895,7 +2940,7 @@ NakaInst_2d_d:
 ; [naka_s_headers] PmemOutLGridCheck_LocalInit
 ; PmemOutLGridCheck_LocalInit -- initializer of a local array:
 ; PmemOutLGridCheck (v10/v9 0xf78988, v7 0xf78584) (`ld xiy,
-; NakaInst_2d_d_0x7`) copies 16 bytes into its stack frame.
+; PmemOutLGridCheck_LocalInit`) copies 16 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; PmemOutLGridCheck_LocalInit[8].
@@ -2922,7 +2967,11 @@ PmemOutLGridCheck_LocalInit_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D96, 0x0A
 PmemOutLGrid_Str_ON:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA0, 0x06
 PmemOutLGrid_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DA6, 0x06
-PmemOutLGridCheck_LocalInit_Strings_Tail:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DAC, 0x1E
+PmemOutLGridCheck_LocalInit_Strings_Tail:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DAC, 0x6
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB2, 0x6	; " %3d "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DB8, 0x6	; " %3d "
+PmemOutLGridCheck_Evt1C0001D_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DBE, 0x6	; " OFF "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DC4, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaInst_ON_E80168
 ; NakaInst_ON_E80168 -- label kept because other files use it; 82 bytes
@@ -2930,13 +2979,23 @@ PmemOutLGridCheck_LocalInit_Strings_Tail:	.incbin "includes/generated/naka_widge
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t NakaInst_ON_E80168[82].
 ; -----------------------------------------------------------------------------
-NakaInst_ON_E80168:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DCA, 0x52
+NakaInst_ON_E80168:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DCA, 0xC
+PmemOutLGridCheck_Evt1C0001D_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DD6, 0x6	; " OFF "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DDC, 0x6	; " %3d "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DE2, 0x6	; " %3d "
+PmemOutLGridCheck_Evt1C0001D_Str_OFF_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DE8, 0x6	; " OFF "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DEE, 0x6	; " %3d "
+PmemOutLGridCheck_Evt1C0001D_Str_OFF_4:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DF4, 0x6	; " OFF "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25DFA, 0x6	; " %3d "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_8:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E00, 0x6	; " %3d "
+PmemOutLGridCheck_Evt1C0001D_Str_OFF_5:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E06, 0x6	; " OFF "
+PmemOutLGridCheck_Evt1C0001D_Str_Fmt3d_9:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E0C, 0x6	; " %3d "
+PmemOutL_GridCheck_Str_Fmt2d_Fmtd:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E12, 0xA	; " %2d-%d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutL_BitCheckDisplay_Str
 ; PmemOutL_BitCheckDisplay_Str -- NUL-terminated string(s), 6 bytes,
 ; used by PmemOutL_BitCheckDisplay (v10/v9 0xf7916a, v7 0xf78d66) (`ld
-; xwa, NakaInst_ON_E80168_0x52`).
+; xwa, PmemOutL_BitCheckDisplay_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; PmemOutL_BitCheckDisplay_Str[6].
@@ -2947,7 +3006,7 @@ PmemOutL_BitCheckDisplay_Str:
 ; [naka_s_headers] PmemOutL_LoadOffStr_Str
 ; PmemOutL_LoadOffStr_Str -- NUL-terminated string(s), 6 bytes, used by
 ; PmemOutL_LoadOffStr (v10/v9 0xf7918e, v7 0xf78d8a) (`ld xwa,
-; NakaInst_ON_E80168_0x58`).
+; PmemOutL_LoadOffStr_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char PmemOutL_LoadOffStr_Str[6].
 ; -----------------------------------------------------------------------------
@@ -2984,7 +3043,7 @@ PmemOutLGridCheck_CaseTable_Tail:
 ; [naka_s_headers] PmemOutRGridCheck_LocalInit
 ; PmemOutRGridCheck_LocalInit -- initializer of a local array:
 ; PmemOutRGridCheck (v10/v9 0xf791e4, v7 0xf78de0) (`ld xiy,
-; NakaInst_ON_E80168_0x82`) copies 16 bytes into its stack frame.
+; PmemOutRGridCheck_LocalInit`) copies 16 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; PmemOutRGridCheck_LocalInit[8].
@@ -2994,15 +3053,32 @@ PmemOutRGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutRGridCheck_LocalInit_Strings
 ; PmemOutRGridCheck_LocalInit_Strings -- 120 bytes of NUL-terminated
-; strings after PmemOutRGridCheck_LocalInit; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after PmemOutRGridCheck_LocalInit; that code reaches: the labels below name each string
+; after the routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; PmemOutRGridCheck_LocalInit_Strings[120].
 ; -----------------------------------------------------------------------------
-PmemOutRGridCheck_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E5C, 0x78
+PmemOutRGridCheck_LocalInit_Strings:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E5C, 0x6
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E62, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E68, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E6E, 0x6	; " OFF "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_3:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E74, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_OFF_2:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E7A, 0x6	; " OFF "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_4:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E80, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_5:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E86, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_OFF_3:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E8C, 0x6	; " OFF "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_6:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E92, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_OFF_4:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E98, 0x6	; " OFF "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_7:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E9E, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_8:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EA4, 0x6	; " %3d "
+PmemOutRGridCheck_Evt1C0001D_Str_OFF_5:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EAA, 0x6	; " OFF "
+PmemOutRGridCheck_Evt1C0001D_Str_Fmt3d_9:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EB0, 0x6	; " %3d "
+CtlMsgGrid_EventHandler_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EB6, 0x6	; " OFF "
+CtlMsg_SendAudioCommand_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EBC, 0x6	; " %3d "
+CtlMsg_ReadOffsetAndSend_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EC2, 0x6	; " %3d "
+CtlMsg_ComputeAndCheck_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x25EC8, 0x6	; " OFF "
+CtlMsg_SendParamValue_Str_Fmt3d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x25ECE, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutRGridCheck_CaseTable
 ; PmemOutRGridCheck_CaseTable -- jump table of a compiled `switch` in
@@ -3019,9 +3095,9 @@ PmemOutRGridCheck_CaseTable:
 ; [naka_s_headers] AcCtlMsgGrid_ScrollUp_PageDec_Table
 ; AcCtlMsgGrid_ScrollUp_PageDec_Table -- read by
 ; AcCtlMsgGrid_ScrollUp_PageDec (v10/v9 0xf79d32, v7 0xf7992e) (`lda
-; xbc, (NakaInst_ON_E80168_0x118:24)`), AcCtlMsgGrid_ScrollUp_AutoScroll
+; xbc, (AcCtlMsgGrid_ScrollUp_PageDec_Table:24)`), AcCtlMsgGrid_ScrollUp_AutoScroll
 ; (v10/v9 0xf79da5, v7 0xf799a1) (`lda xhl,
-; (NakaInst_ON_E80168_0x118:24)`). 2 bytes to the next object; the
+; (AcCtlMsgGrid_ScrollUp_PageDec_Table:24)`). 2 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
@@ -3066,7 +3142,7 @@ AcCtlMsgGrid_GetRowText_Page1_Str:
 ; [naka_s_headers] AcCtlMsgGridBoxProc_CaseTable
 ; AcCtlMsgGridBoxProc_CaseTable -- jump table of a compiled `switch` in
 ; AcCtlMsgGridBoxProc (v10/v9 0xf79adc, v7 0xf796d8) (`add xbc,
-; NakaInst_ON_E80168_0x210`): 7 u16 case offsets from AcCtlMsgGrid_Init.
+; AcCtlMsgGridBoxProc_CaseTable`): 7 u16 case offsets from AcCtlMsgGrid_Init.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; AcCtlMsgGridBoxProc_CaseTable[7].
@@ -3089,7 +3165,7 @@ CtlMsgGridCheck_Table:
 ; [naka_s_headers] CtlMsgGridCheck_LocalInit
 ; CtlMsgGridCheck_LocalInit -- initializer of a local array:
 ; CtlMsgGridCheck (v10/v9 0xf79f88, v7 0xf79b84) (`ld xiy,
-; NakaInst_ON_E80168_0x266`) copies 10 bytes into its stack frame.
+; CtlMsgGridCheck_LocalInit`) copies 10 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; CtlMsgGridCheck_LocalInit[5].
@@ -3132,7 +3208,7 @@ MidiSetup_TtlDispatch_Str:
 ; [naka_s_headers] MidiSetup_TtlDispatch_Str_2
 ; MidiSetup_TtlDispatch_Str_2 -- NUL-terminated string(s), 6 bytes, used
 ; by MidiSetup_TtlDispatch (v10/v9 0xf7a113, v7 0xf79d0f) (`ld xwa,
-; NakaInst_ON_E80168_0x282`).
+; MidiSetup_TtlDispatch_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; MidiSetup_TtlDispatch_Str_2[6].
@@ -3143,7 +3219,7 @@ MidiSetup_TtlDispatch_Str_2:
 ; [naka_s_headers] CtlMsgGridCheck_CaseTable
 ; CtlMsgGridCheck_CaseTable -- jump table of a compiled `switch` in
 ; CtlMsgGridCheck (v10/v9 0xf79f88, v7 0xf79b84) (`add xwa,
-; NakaInst_ON_E80168_0x288`): 7 u16 case offsets from
+; CtlMsgGridCheck_CaseTable`): 7 u16 case offsets from
 ; CtlMsgGridCheck_Evt1C00017.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
@@ -3155,13 +3231,13 @@ CtlMsgGridCheck_CaseTable:
 ; [naka_s_headers] MidiPart_CallMainFunc_Str
 ; MidiPart_CallMainFunc_Str -- NUL-terminated string(s), 2 bytes, used
 ; by MidiPart_CallMainFunc (v10/v9 0xf7a436, v7 0xf7a032) (`lda xbc,
-; (NakaInst_ON_E80168_0x296:24)`), MidiPart_Part2ColumnNav (v10/v9
-; 0xf7a51d, v7 0xf7a119) (`lda xbc, (NakaInst_ON_E80168_0x296:24)`),
+; (MidiPart_CallMainFunc_Str:24)`), MidiPart_Part2ColumnNav (v10/v9
+; 0xf7a51d, v7 0xf7a119) (`lda xbc, (MidiPart_CallMainFunc_Str:24)`),
 ; MidiPart_GenericColumnNav (v10/v9 0xf7a584, v7 0xf7a180) (`lda xbc,
-; (NakaInst_ON_E80168_0x296:24)`), MidiPart_Part2ColumnNavUp (v10/v9
-; 0xf7a6da, v7 0xf7a2d6) (`lda xbc, (NakaInst_ON_E80168_0x296:24)`),
+; (MidiPart_CallMainFunc_Str:24)`), MidiPart_Part2ColumnNavUp (v10/v9
+; 0xf7a6da, v7 0xf7a2d6) (`lda xbc, (MidiPart_CallMainFunc_Str:24)`),
 ; MidiPart_GenericColumnNavUp (v10/v9 0xf7a73d, v7 0xf7a339) (`lda xbc,
-; (NakaInst_ON_E80168_0x296:24)`).
+; (MidiPart_CallMainFunc_Str:24)`).
 ;
 ; Typed in naka_widget_tables_2.c as char MidiPart_CallMainFunc_Str[2].
 ; -----------------------------------------------------------------------------
@@ -3170,10 +3246,10 @@ MidiPart_CallMainFunc_Str:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiSetup_TtlCase5_Table
 ; MidiSetup_TtlCase5_Table -- read by MidiSetup_TtlCase5 (v10/v9
-; 0xf7a34f, v7 0xf79f4b) (`lda xbc, (NakaInst_ON_E80168_0x298:24)`),
+; 0xf7a34f, v7 0xf79f4b) (`lda xbc, (MidiSetup_TtlCase5_Table:24)`),
 ; MidiPart_DecrementPart (v10/v9 0xf7a3d9, v7 0xf79fd5) (`lda xbc,
-; (NakaInst_ON_E80168_0x298:24)`), MidiPart_InitGridBox (v10/v9
-; 0xf7a628, v7 0xf7a224) (`lda xbc, (NakaInst_ON_E80168_0x298:24)`). 28
+; (MidiSetup_TtlCase5_Table:24)`), MidiPart_InitGridBox (v10/v9
+; 0xf7a628, v7 0xf7a224) (`lda xbc, (MidiSetup_TtlCase5_Table:24)`). 28
 ; bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -3316,14 +3392,13 @@ Transpose_ValueDisplay_Table:
 ; Typed in naka_widget_tables_2.c as char
 ; Transpose_ValueDisplay_Table_Strings[48].
 ; -----------------------------------------------------------------------------
-Transpose_ValueDisplay_Table_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262E2, 0x30
-	.set Transpose_String_Plus2, Transpose_ValueDisplay_Table_Strings + 30	; historical label, used by other files
+Transpose_ValueDisplay_Table_Strings:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262E2, 0x1E
+Transpose_String_Plus2:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x26300, 0x12
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiPartGridCheck_LocalInit
 ; MidiPartGridCheck_LocalInit -- initializer of a local array:
 ; MidiPartGridCheck (v10/v9 0xf7a869, v7 0xf7a465) (`ld xiy,
-; Transpose_String_Plus2_0x12`) copies 10 bytes into its stack frame.
+; MidiPartGridCheck_LocalInit`) copies 10 bytes into its stack frame.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t
 ; MidiPartGridCheck_LocalInit[5].
@@ -3333,20 +3408,23 @@ MidiPartGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiPartGridCheck_LocalInit_Strings
 ; MidiPartGridCheck_LocalInit_Strings -- 54 bytes of NUL-terminated
-; strings after MidiPartGridCheck_LocalInit; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after MidiPartGridCheck_LocalInit; that code reaches: the labels below name each string
+; after the routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; MidiPartGridCheck_LocalInit_Strings[54].
 ; -----------------------------------------------------------------------------
-MidiPartGridCheck_LocalInit_Strings:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2631C, 0x36
+MidiPartGridCheck_LocalInit_Strings:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2631C, 0x6
+MidiPartGridCheck_Evt1C0001C_Str_Fmt2d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26322, 0x8	; " %2d  "
+MidiPartGridCheck_Evt1C0001C_Str_OFF:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2632A, 0x6	; " OFF "
+MidiPartGridCheck_Evt1C0001C_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26330, 0x14	; " %2d  "
+MidiSetup_EventHandler_Str_OFF:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x26344, 0x6	; " OFF "
+MidiPart_AudioCmdDisplay_Str_Fmt2d:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x2634A, 0x8	; " %2d  "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] MidiPart_LookupFromTable_Str
 ; MidiPart_LookupFromTable_Str -- NUL-terminated string(s), 6 bytes,
 ; used by MidiPart_LookupFromTable (v10/v9 0xf7acfb, v7 0xf7a8f7) (`ld
-; xwa, Transpose_String_Plus2_0x52`).
+; xwa, MidiPart_LookupFromTable_Str`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; MidiPart_LookupFromTable_Str[6].
@@ -3357,7 +3435,7 @@ MidiPart_LookupFromTable_Str:
 ; [naka_s_headers] MidiPart_LookupFromTable_Str_2
 ; MidiPart_LookupFromTable_Str_2 -- NUL-terminated string(s), 6 bytes,
 ; used by MidiPart_LookupFromTable (v10/v9 0xf7acfb, v7 0xf7a8f7) (`ld
-; xwa, Transpose_String_Plus2_0x58`).
+; xwa, MidiPart_LookupFromTable_Str_2`).
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; MidiPart_LookupFromTable_Str_2[6].
@@ -3491,10 +3569,9 @@ ClassProps_AcLswPartEditBox:
 ; ClassProps_AcVolPartEditBox[4] and char
 ; ClassProps_AcVolPartEditBox_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_AcVolPartEditBox:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26754, 0x24
-	.set NakaInst_data_E80B04, ClassProps_AcVolPartEditBox + 18	; historical label, used by other files
-	.set NakaObj_FmuteVol_DataEntry, ClassProps_AcVolPartEditBox + 14	; historical label, used by other files
+ClassProps_AcVolPartEditBox:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26754, 0xE
+NakaObj_FmuteVol_DataEntry:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26762, 0x4
+NakaInst_data_E80B04:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26766, 0x12
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvMesage
 ; ClassProps_IvMesage -- property names of class IvMesage (descriptor 3
@@ -3505,9 +3582,8 @@ ClassProps_AcVolPartEditBox:
 ; Typed in naka_widget_tables_2.c as uint32_t ClassProps_IvMesage[1] and
 ; char ClassProps_IvMesage_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_IvMesage:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26778, 0x6
-	.set NakaObj_FmuteVol_LinkEntry1, ClassProps_IvMesage + 1	; historical label, used by other files
+ClassProps_IvMesage:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26778, 0x1
+NakaObj_FmuteVol_LinkEntry1:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26779, 0x5
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_IvAccordion
 ; ClassProps_IvAccordion -- property names of class IvAccordion
@@ -3752,9 +3828,8 @@ ClassProps_AcResetPage:
 ; Typed in naka_widget_tables_2.c as uint32_t ClassProps_PsVariBox[6]
 ; and char ClassProps_PsVariBox_Names[].
 ; -----------------------------------------------------------------------------
-ClassProps_PsVariBox:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26860, 0x42
-	.set TextInput_Prop_NullTerm, ClassProps_PsVariBox + 24	; historical label, used by other files
+ClassProps_PsVariBox:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x26860, 0x18
+TextInput_Prop_NullTerm:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x26878, 0x2A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ClassProps_AcPresentationControl
 ; ClassProps_AcPresentationControl -- property names of class

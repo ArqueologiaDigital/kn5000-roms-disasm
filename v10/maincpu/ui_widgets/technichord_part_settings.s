@@ -279,63 +279,63 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] naka_technichord_part+0x37a2  +0x37a2..+0x37f6 (0xe85470, 84 B)
 ; [nakarest] the table itself: Viewable slot 0x2 (table 0xe85470, 20 entries, InitializeMurai),
 ; [nakarest] 20 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x37A2, 0x54
+Murai_ViewableTable_002:	.incbin "includes/generated/naka_technichord_part.bin", 0x37A2, 0x54
 ; [nakarest] naka_technichord_part+0x37f6  +0x37f6..+0x394a (0xe854c4, 340 B)
 ; [nakarest] the table itself: Viewable slot 0x3 (table 0xe854c4, 84 entries, InitializeMurai),
 ; [nakarest] 84 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x37F6, 0x154
+Murai_ViewableTable_003:	.incbin "includes/generated/naka_technichord_part.bin", 0x37F6, 0x154
 ; [nakarest] naka_technichord_part+0x394a  +0x394a..+0x395e (0xe85618, 20 B)
 ; [nakarest] the table itself: Viewable slot 0x4 (table 0xe85618, 4 entries, InitializeMurai), 4
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x394A, 0x14
+Murai_ViewableTable_004:	.incbin "includes/generated/naka_technichord_part.bin", 0x394A, 0x14
 ; [nakarest] naka_technichord_part+0x395e  +0x395e..+0x3a3a (0xe8562c, 220 B)
 ; [nakarest] the table itself: Viewable slot 0x5 (table 0xe8562c, 54 entries, InitializeMurai),
 ; [nakarest] 54 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x395E, 0xDC
+Murai_ViewableTable_005:	.incbin "includes/generated/naka_technichord_part.bin", 0x395E, 0xDC
 ; [nakarest] naka_technichord_part+0x3a3a  +0x3a3a..+0x3a4a (0xe85708, 16 B)
 ; [nakarest] the table itself: Viewable slot 0x7 (table 0xe85708, 3 entries, InitializeMurai), 3
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3A3A, 0x10
+Murai_ViewableTable_007:	.incbin "includes/generated/naka_technichord_part.bin", 0x3A3A, 0x10
 ; [nakarest] naka_technichord_part+0x3a4a  +0x3a4a..+0x3a5e (0xe85718, 20 B)
 ; [nakarest] the table itself: Viewable slot 0x8 (table 0xe85718, 4 entries, InitializeMurai), 4
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3A4A, 0x14
+Murai_ViewableTable_008:	.incbin "includes/generated/naka_technichord_part.bin", 0x3A4A, 0x14
 ; [nakarest] naka_technichord_part+0x3a5e  +0x3a5e..+0x3ad6 (0xe8572c, 120 B)
 ; [nakarest] the table itself: Viewable slot 0xd (table 0xe8572c, 29 entries, InitializeMurai),
 ; [nakarest] 29 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3A5E, 0x78
+Murai_ViewableTable_00D:	.incbin "includes/generated/naka_technichord_part.bin", 0x3A5E, 0x78
 ; [nakarest] naka_technichord_part+0x3ad6  +0x3ad6..+0x3aea (0xe857a4, 20 B)
 ; [nakarest] the table itself: Viewable slot 0xa5 (table 0xe857a4, 4 entries, InitializeMurai),
 ; [nakarest] 4 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3AD6, 0x14
+Murai_ViewableTable_0A5:	.incbin "includes/generated/naka_technichord_part.bin", 0x3AD6, 0x14
 ; [nakarest] naka_technichord_part+0x3aea  +0x3aea..+0x3b2a (0xe857b8, 64 B)
 ; [nakarest] the table itself: Viewable slot 0xe4 (table 0xe857b8, 15 entries, InitializeMurai),
 ; [nakarest] 15 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3AEA, 0x40
+Murai_ViewableTable_0E4:	.incbin "includes/generated/naka_technichord_part.bin", 0x3AEA, 0x40
 ; [nakarest] naka_technichord_part+0x3b2a  +0x3b2a..+0x3bde (0xe857f8, 180 B)
 ; [nakarest] the table itself: Viewable slot 0xea (table 0xe857f8, 44 entries, InitializeMurai),
 ; [nakarest] 44 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3B2A, 0xB4
+Murai_ViewableTable_0EA:	.incbin "includes/generated/naka_technichord_part.bin", 0x3B2A, 0xB4
 ; [nakarest] naka_technichord_part+0x3bde  +0x3bde..+0x3c76 (0xe858ac, 152 B)
 ; [nakarest] the table itself: Viewable slot 0xeb (table 0xe858ac, 37 entries, InitializeMurai),
 ; [nakarest] 37 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3BDE, 0x98
+Murai_ViewableTable_0EB:	.incbin "includes/generated/naka_technichord_part.bin", 0x3BDE, 0x98
 ; [nakarest] naka_technichord_part+0x3c76  +0x3c76..+0x3cda (0xe85944, 100 B)
 ; [nakarest] the table itself: Viewable slot 0xee (table 0xe85944, 24 entries, InitializeMurai),
 ; [nakarest] 24 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3C76, 0x64
+Murai_ViewableTable_0EE:	.incbin "includes/generated/naka_technichord_part.bin", 0x3C76, 0x64
 ; [nakarest] naka_technichord_part+0x3cda  +0x3cda..+0x3d0a (0xe859a8, 48 B)
 ; [nakarest] the table itself: Viewable slot 0xef (table 0xe859a8, 11 entries, InitializeMurai),
 ; [nakarest] 11 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3CDA, 0x30
+Murai_ViewableTable_0EF:	.incbin "includes/generated/naka_technichord_part.bin", 0x3CDA, 0x30
 ; [nakarest] naka_technichord_part+0x3d0a  +0x3d0a..+0x3d26 (0xe859d8, 28 B)
 ; [nakarest] the table itself: Viewable slot 0xf0 (table 0xe859d8, 6 entries, InitializeMurai),
 ; [nakarest] 6 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3D0A, 0x1C
+Murai_ViewableTable_0F0:	.incbin "includes/generated/naka_technichord_part.bin", 0x3D0A, 0x1C
 ; [nakarest] naka_technichord_part+0x3d26  +0x3d26..+0x3d7c (0xe859f4, 86 B)
 ; [nakarest] the table itself: ResName slot 0x302 (table 0xe859f4, 20 entries, InitializeMurai),
 ; [nakarest] 20 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3D26, 0x56
+Murai_ResNameTable_302:	.incbin "includes/generated/naka_technichord_part.bin", 0x3D26, 0x56
 ; [nakarest] naka_technichord_part+0x3d7c  +0x3d7c..+0x3dc0 (0xe85a4a, 68 B)
 ; [nakarest] name strings, entries 0-19 of ResName slot 0x302 (table 0xe859f4, 20 entries,
 ; [nakarest] InitializeMurai) (names for Viewable slot 0x2): "", "", "Sdmenu2", "", "", "", ....
@@ -343,7 +343,7 @@ Naka_KeyScaling_NavTrail:
 ; [nakarest] naka_technichord_part+0x3dc0  +0x3dc0..+0x3e00 (0xe85a8e, 64 B)
 ; [nakarest] the table itself: ResName slot 0x303 (table 0xe85a8e, 84 entries, InitializeMurai),
 ; [nakarest] 84 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_technichord_part.bin", 0x3DC0, 0x40
+Murai_ResNameTable_303:	.incbin "includes/generated/naka_technichord_part.bin", 0x3DC0, 0x40
 EmbeddedPtrTable_v10_naka_technichord_part_003E00:
 	.long 0x00E85CB4
 	.long 0x00E85CB2

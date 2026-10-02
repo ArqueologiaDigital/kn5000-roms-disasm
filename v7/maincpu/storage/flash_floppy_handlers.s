@@ -1085,8 +1085,8 @@ InitializeNaka:
 	ldw WA, 0x03fd
 	call RegisterObjectTable
 	pushw 0x000b
-	pushw 0x00e1
-	pushw 0x481a
+	pushw InitializeNaka_Str_TT_FDMSP@hi16
+	pushw InitializeNaka_Str_TT_FDMSP@lo16
 	ld XWA,0x000000fd
 	ld XBC,NAKA_APFUNC_DefaultFunction
 	ld XDE,0x00fd0000
@@ -1097,126 +1097,126 @@ NAKA_InitDataBlock:
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip
-	lda	xhl, (NAKA_UIObjectTable_0x13E0:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable:24)
 	ret
 InitializeNaka_Skip:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip2
-	lda	xhl, (NAKA_UIObjectTable_0x1452:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_2:24)
 	ret
 InitializeNaka_Skip2:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip3
-	lda	xhl, (NAKA_UIObjectTable_0x1492:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_3:24)
 	ret
 InitializeNaka_Skip3:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip4
-	lda	xhl, (NAKA_UIObjectTable_0x1684:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_4:24)
 	ret
 InitializeNaka_Skip4:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip5
-	lda	xhl, (NAKA_UIObjectTable_0x16FC:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_5:24)
 	ret
 InitializeNaka_Skip5:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip6
-	lda	xhl, (NAKA_UIObjectTable_0x186C:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_6:24)
 	ret
 InitializeNaka_Skip6:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip7
-	lda	xhl, (NAKA_UIObjectTable_0x19FE:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_7:24)
 	ret
 InitializeNaka_Skip7:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip8
-	lda	xhl, (NAKA_UIObjectTable_0x1B8A:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_8:24)
 	ret
 InitializeNaka_Skip8:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip9
-	lda	xhl, (NAKA_UIObjectTable_0x1D6E:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_9:24)
 	ret
 InitializeNaka_Skip9:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip10
-	lda	xhl, (NAKA_UIObjectTable_0x1DF2:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_10:24)
 	ret
 InitializeNaka_Skip10:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip11
-	lda	xhl, (NAKA_UIObjectTable_0x1F94:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_11:24)
 	ret
 InitializeNaka_Skip11:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip12
-	lda	xhl, (NAKA_UIObjectTable_0x2004:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_12:24)
 	ret
 InitializeNaka_Skip12:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip13
-	lda	xhl, (NAKA_UIObjectTable_0x2166:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_13:24)
 	ret
 InitializeNaka_Skip13:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip14
-	lda	xhl, (NAKA_UIObjectTable_0x21E0:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_14:24)
 	ret
 InitializeNaka_Skip14:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip15
-	lda	xhl, (NAKA_UIObjectTable_0x2342:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_15:24)
 	ret
 InitializeNaka_Skip15:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip16
-	lda	xhl, (NAKA_UIObjectTable_0x24B2:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_16:24)
 	ret
 InitializeNaka_Skip16:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip17
-	lda	xhl, (NAKA_UIObjectTable_0x2512:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_17:24)
 	ret
 InitializeNaka_Skip17:
 	ld	xhl, 0:i3
 	ret
 	cp	xbc, EVT_GET_LANGUAGE_PTR
 	jr	nz, InitializeNaka_Skip18
-	lda	xhl, (NAKA_UIObjectTable_0x2572:24)
+	lda	xhl, (NAKA_InitDataBlock_PtrTable_18:24)
 	ret
 InitializeNaka_Skip18:
 	ld	xhl, 0:i3

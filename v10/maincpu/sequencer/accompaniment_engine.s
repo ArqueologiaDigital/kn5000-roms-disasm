@@ -64,7 +64,7 @@ AccStyle_LookupTempo_ClampL:
 AccStyle_LookupTempo_AddAndStore:
 	add xhl, xwa
 	sla xhl, 1
-	add xhl, Display_FontPalette_Table_0x4D07
+	add xhl, AccStyle_TempoWordTable
 	ld wa, (xhl)
 	ld (0x90ee:16), a
 	ld (0x90ef:16), w
@@ -93,7 +93,7 @@ AccStyle_LookupVelocityTable:
 	and a, 0x7
 	add xhl, xwa
 	sla xhl, 1
-	add xhl, Display_FontPalette_Table_0x4507
+	add xhl, AccStyle_VelocityTableMain
 	ld wa, (xhl)
 	jr AccStyle_Velocity_StoreResult
 
@@ -114,7 +114,7 @@ AccStyle_Velocity_ExtClamp:
 	and a, 0x7
 	add xhl, xwa
 	sla xhl, 1
-	add xhl, Display_FontPalette_Table_0x4FFB
+	add xhl, AccStyle_VelocityTableExt
 	ld wa, (xhl)
 	jr AccStyle_Velocity_StoreResult
 
@@ -128,7 +128,7 @@ AccStyle_Velocity_HighRange:
 
 AccStyle_Velocity_HighClamp:
 	sla xhl, 1
-	add xhl, Display_FontPalette_Table_0x50FB
+	add xhl, AccStyle_VelocityTableHigh
 	ld wa, (xhl)
 
 AccStyle_Velocity_StoreResult:
@@ -437,7 +437,7 @@ AccStyle_SetupPartAddresses:
 	calr AccPart_LookupBoundVoiceParam
 	call AccPart_GetParamAddr
 	ld (0x3291:16), wa
-	ld xwa, Display_FontPalette_Table_0x1D61
+	ld xwa, AccStyle_DefaultStream
 	add xwa, 0x6
 	ld (0x3293:16), xwa
 	and (0x3316:16), 192
@@ -446,7 +446,7 @@ AccStyle_SetupPartAddresses:
 	ret
 
 AccStyle_ApplyExtendedStyle:
-	ld xiy, Display_FontPalette_Table_0x1DA1
+	ld xiy, AccStyle_ExtStyleMap
 	ld a, (0x32e5:16)
 	and a, 0x7f
 	cp a, 0x1d
@@ -490,7 +490,7 @@ AccStyle_ApplyExt_CheckSplit:
 	bit 1, (0x32ff:16)
 	jr z, AccStyle_ApplyExt_CheckBit0
 	ld a, (1075:16)
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	bit_dri 0, 0x03, 0xec, 0xe0
 	jr z, AccStyle_ApplyExt_SelectPart
 	and (0x32ff:16), 253
@@ -635,7 +635,7 @@ AccStyle_SetupPartAddressesByHL:
 	ld (0x33d4:16), 32
 	call AccPart_GetParamAddr
 	ld (0x3291:16), wa
-	ld xwa, Display_FontPalette_Table_0x1D61
+	ld xwa, AccStyle_DefaultStream
 	add xwa, 0x6
 	ld (0x3293:16), xwa
 	ret
@@ -676,7 +676,7 @@ AccStyle_UseSecondary_Return:
 
 AccPart_InitPositionsAndBase:
 	call AccInit_AllPartPositions
-	ld xwa, Display_FontPalette_Table_0x1D61
+	ld xwa, AccStyle_DefaultStream
 	add xwa, 0x6
 	ld (0x3293:16), xwa
 	ret
@@ -1384,7 +1384,7 @@ AccVoice_NullRet:
 	ret
 
 AccVoice_LookupTableAddress:
-	ld xde, Display_FontPalette_Table_0x1D46
+	ld xde, AccVoice_LookupTableAddress_Table
 	and w, 0x7
 	sla w, 1
 	ldw_sri DE, 0x03, 0xe8, 0xe1
@@ -1393,7 +1393,7 @@ AccVoice_LookupTableAddress:
 	ret
 
 AccVoice_LookupExtParamAddr:
-	ld xde, Display_FontPalette_Table_0x1D46
+	ld xde, AccVoice_LookupTableAddress_Table
 	and w, 0x7
 	inc 1, w
 	sla w, 1
@@ -2171,7 +2171,7 @@ AccTempo_ComputeDelta:
 	xor xwa, xwa
 	ld a, (1112:16)
 	sla a, 1
-	add xwa, Display_FontPalette_Table_0x1D46
+	add xwa, AccVoice_LookupTableAddress_Table
 	add de, (xwa)
 	sub de, bc
 	ld a, e
@@ -2543,7 +2543,7 @@ AccSeq_NextBarPage:
 	add w, 0x10
 	ld (0x32b1:16), w
 	inc 1, (0x32bb:16)
-	ld xhl, Display_FontPalette_Table_0x1D61
+	ld xhl, AccStyle_DefaultStream
 	add xhl, 0x6
 	ld (0x3293:16), xhl
 	jrl AccSeq_ScanLoop
@@ -2568,7 +2568,7 @@ AccSeq_AdvancePointer:
 	ret
 
 AccSeq_ResetToStart:
-	ld xhl, Display_FontPalette_Table_0x1D61
+	ld xhl, AccStyle_DefaultStream
 	add xhl, 0x6
 	ld (0x3293:16), xhl
 	ld a, (xhl)
@@ -4429,7 +4429,7 @@ AccStyle_Init:
 	jr AccStyle_Finalize
 
 AccStyle_ExtendedInit:
-	ld xiy, Display_FontPalette_Table_0x1DA1
+	ld xiy, AccStyle_ExtStyleMap
 	ld a, (0x32e5:16)
 	and a, 0x7f
 	cp a, 0x1d
@@ -4765,7 +4765,7 @@ AccVoice_Reassign_Mode2:
 	ld a, (0x32e5:16)
 	and a, 0x7f
 	call AccPatch_SetVoiceParam
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	bit_dri 1, 0x03, 0xec, 0xe0
 	jr z, AccVoice_Reassign_Fallback
 	and (0xfc5f:16), 247
@@ -10587,7 +10587,7 @@ AccVoice_ComputedCopy:
 	xor h, h
 	add wa, hl
 	muls wa, 0xd
-	add xwa, Display_FontPalette_Table_0x22EF
+	add xwa, AccVoice_RomRecords13
 	ld xiy, xwa
 	ld xix, 0x34ab
 	ldw bc, 0xd
@@ -10754,7 +10754,7 @@ AccVoice_CopyFromROM_Do:
 	ld a, l
 	xor w, w
 	muls wa, 0x10
-	add xwa, Display_FontPalette_Table_0x21EF
+	add xwa, AccVoice_RomRecords16
 	ld xiy, xwa
 	ld xix, 0x34ab
 	ldw bc, 0x10
@@ -11508,7 +11508,7 @@ AccVoiceDelta_Part5_Store:
 
 AccStyle_InitVRAM:
 	xor a, a
-	ld xiy, Display_FontPalette_Table_0x3127
+	ld xiy, AccStyle_RamImage_1E7800
 	ld xix, 0x1e7800
 	ldw bc, 0x7e0
 	ldir85
@@ -11893,7 +11893,7 @@ AccTone_LookupByProgram:
 	sub a, 0xf0
 	extz wa
 	sla wa, 2
-	lda xbc, (Display_FontPalette_Table_0x515C:24)
+	lda xbc, (AccTone_LookupByProgram_Table_2:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld a, (xde)
 	extz wa
@@ -11903,7 +11903,7 @@ AccTone_LookupByProgram:
 	add_sril_rm XDE, 0x07, 0xe4, 0xe0
 	ld a, (xde + 12)
 	extz wa
-	lda xbc, (Display_FontPalette_Table_0x1D32:24)
+	lda xbc, (AccTone_LookupByProgram_Table:24)
 	ldb_sri L, 0x07, 0xe4, 0xe0
 	ret
 
@@ -11948,7 +11948,7 @@ AccTone_Process_UnderF0:
 	sub a, 0xf0
 	extz wa
 	sla wa, 2
-	lda xbc, (Display_FontPalette_Table_0x515C:24)
+	lda xbc, (AccTone_LookupByProgram_Table_2:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	ld e, (xwa)
 	extz de
@@ -11968,7 +11968,7 @@ AccTone_NoteLookup:
 	ld de, (4360:16)
 	ld ix, de
 	and ix, 0x4
-	lda xhl, (Display_FontPalette_Table_0x1EBF:24)
+	lda xhl, (AccTone_NoteLookup_Table:24)
 	ld a, c
 	add a, c
 	mul iy, 0x28
@@ -12009,7 +12009,7 @@ AccTone_ExtendAndDispatch_Body:
 	push xiz
 	extz bc
 	sla bc, 2
-	lda xde, (Display_FontPalette_Table_0x513C:24)
+	lda xde, (AccTone_ExtendAndDispatch_Body_Table_2:24)
 	ld_sril3 XIY, 0x07, 0xe8, 0xe4
 	ld e, a
 	extz de
@@ -12020,10 +12020,10 @@ AccTone_ExtendAndDispatch_Body:
 	add_sril_rm XIZ, 0x07, 0xf0, 0xe0
 	ld a, (xiz + 12)
 	extz wa
-	lda xhl, (Display_FontPalette_Table_0x1D32:24)
+	lda xhl, (AccTone_LookupByProgram_Table:24)
 	ldb_sri A, 0x07, 0xec, 0xe0
 	ldfr_berp A, 0xe2
-	lda xiz, (Display_FontPalette_Table_0x511C:24)
+	lda xiz, (AccTone_ExtendAndDispatch_Body_Table:24)
 	ld_sril3 XBC, 0x07, 0xf8, 0xe4
 	add de, 0x11
 	ldb_sri C, 0x07, 0xe4, 0xe8
@@ -12033,7 +12033,7 @@ AccTone_ExtendAndDispatch_Body:
 	extz bc
 	cp de, 4:i3
 	jr nz, AccTone_CheckBit10Flag
-	lda xde, (Display_FontPalette_Table_0x51E4:24)
+	lda xde, (AccTone_ExtendAndDispatch_Body_Table_3:24)
 	ldb_sri A, 0x07, 0xe8, 0xe4
 	extz wa
 	sla wa, 2
@@ -12057,7 +12057,7 @@ AccTone_CheckBit10Flag:
 	and de, 0x400
 	cp de, 0x400
 	jr nz, AccTone_CheckBit3Flag
-	lda xde, (Display_FontPalette_Table_0x51E8:24)
+	lda xde, (AccTone_ExtendAndDispatch_PopRet_Table:24)
 	ldb_sri A, 0x07, 0xe8, 0xe4
 	extz wa
 	sla wa, 2
@@ -12080,7 +12080,7 @@ AccTone_CheckBit3Flag:
 	jr nz, AccTone_SetupExit
 	ldto_berp A, 0xe2
 	extz wa
-	lda xbc, (Display_FontPalette_Table_0x1D58:24)
+	lda xbc, (AccStyle_ApplyExt_SkipClamp_Table:24)
 	bit_dri 0, 0x07, 0xe4, 0xe0
 	jr nz, AccTone_SetupExit
 	ld l, 0x1:opc
@@ -12091,7 +12091,7 @@ AccTone_CheckBit3Flag:
 	jrl z, AccTone_LookupFailed
 	extz bc
 	sla bc, 2
-	lda xde, (Display_FontPalette_Table_0x513C:24)
+	lda xde, (AccTone_ExtendAndDispatch_Body_Table_2:24)
 	ld_sril3 XDE, 0x07, 0xe8, 0xe4
 	extz wa
 	sla wa, 2
@@ -12099,10 +12099,10 @@ AccTone_CheckBit3Flag:
 	add_sril_rm XDE, 0x07, 0xe4, 0xe0
 	ld a, (xde + 12)
 	extz wa
-	lda xbc, (Display_FontPalette_Table_0x1D32:24)
+	lda xbc, (AccTone_LookupByProgram_Table:24)
 	ldb_sri A, 0x07, 0xe4, 0xe0
 	extz wa
-	lda xbc, (Display_FontPalette_Table_0x1D58:24)
+	lda xbc, (AccStyle_ApplyExt_SkipClamp_Table:24)
 	bit_dri 0, 0x07, 0xe4, 0xe0
 	jr nz, AccTone_LookupFailed
 	lda xwa, (xsp)
@@ -13122,7 +13122,7 @@ AccVoice_BarCounterBytecodeData_Entry:
 AccTuning_ReadAndApplyOffset:
 	ld a, (0x3423:16)
 	extz wa
-	lda xbc, (Display_FontPalette_Table_0x5170:24)
+	lda xbc, (AccTuning_ReadAndApplyOffset_Table:24)
 	ldmm_srib 0x07, 0xe4, 0xe0, 0x22, 0x34
 	ret
 
@@ -14033,7 +14033,7 @@ AccPatch_CheckAndInitDemo_Helper2:
 	calr	AccPatch_GetCurrentSlotAddr
 	ld	xwa, 0:i3
 	ld	a, (xiy+12)
-	add	xwa, Display_FontPalette_Table_0x1D32
+	add	xwa, AccTone_LookupByProgram_Table
 	ld	a, (xwa)
 	ld	c, (xiy+13)
 	inc	1, c
@@ -14500,7 +14500,7 @@ AccPatch_FillEntryWithVoiceData:
 	ld l, (xiy + 12)
 	xor h, h
 	ld xwa, 0:i3
-	ld xbc, Display_FontPalette_Table_0x1D32
+	ld xbc, AccTone_LookupByProgram_Table
 	ldb_sri A, 0x07, 0xe4, 0xec
 	ld xbc, 0:i3
 	ld b, (xiy + 13)
@@ -14695,7 +14695,7 @@ AccPatch_WriteSentinel_Loop:
 AccPatch_ReadVoiceStride:
 	ld xhl, 0:i3
 	ld l, (0x34d8:16)
-	ld xbc, Display_FontPalette_Table_0x1D32
+	ld xbc, AccTone_LookupByProgram_Table
 	add xbc, xhl
 	ld a, (xbc)
 	ld (0x34d9:16), a
@@ -14787,7 +14787,7 @@ AccPatch_RebuildChannelSlot:
 	calr AccPatch_FreeChainEntries
 	ld xhl, 0:i3
 	ld l, (0x34d8:16)
-	add xhl, Display_FontPalette_Table_0x1D32
+	add xhl, AccTone_LookupByProgram_Table
 	ld a, (xhl)
 	ld xhl, 0:i3
 	ld l, (0x34d7:16)
@@ -15892,7 +15892,7 @@ AccPatch_CallParamLookup_Helper4:
 	ld	l, (xiy+12)
 	xor	h, h
 	ld	xwa, 0:i3
-	ld	xbc, Display_FontPalette_Table_0x1D32
+	ld	xbc, AccTone_LookupByProgram_Table
 	ld_rrb a, xbc, hl
 	ld xbc, 0:i3
 	ld	b, (xiy+13)
@@ -15983,7 +15983,7 @@ AccPatch_FillSlotWithVoiceData:
 	ld l, (xiy + 12)
 	xor h, h
 	ld xwa, 0:i3
-	ld xbc, Display_FontPalette_Table_0x1D32
+	ld xbc, AccTone_LookupByProgram_Table
 	ldb_sri A, 0x07, 0xe4, 0xec
 	ld xbc, 0:i3
 	ld b, (xiy + 13)
@@ -17347,7 +17347,7 @@ AccPatch_Transpose_AddBack:
 AccPatch_Transpose_LookupTable:
 	ld xhl, 0:i3
 	ld l, (0x36ec:16)
-	add xhl, Display_FontPalette_Table_0x12EA
+	add xhl, AccPatch_Transpose_LookupTable_Data
 	ld a, (xhl)
 	bit 4, (0x34ea:16)
 	jr z, AccPatch_Transpose_CheckBit6
@@ -17411,7 +17411,7 @@ AccPatch_TransposeNoteTable:
 ; ** RE-TYPED 2026-09-25 (lane accomp): was nop/normal/scf mnemonics plus
 ; .zero/.byte fragments (data-as-code).  Readers:
 ;   AccPatch_Transpose_LookupTable: A = byte (0x36ec) of
-;       Display_FontPalette_Table_0x12EA, then ld l,a / add xhl,
+;       AccPatch_Transpose_LookupTable_Data, then ld l,a / add xhl,
 ;       AccPatch_TransposeNoteTable_0x2 / ld l,(xhl) / bit 0,l -- when set, A
 ;       and (0x36ec) are incremented by one.
 ;   AccPatch_StoreDrumParams: ld l,a / sll a,1 / add l,a (l = 3a) / add xhl,
@@ -20040,7 +20040,7 @@ AccPlayback_TrackPosition:
 	ldb_sri A, 0x07, 0xf0, 0xec
 	push xix
 	xor w, w
-	ld xix, Display_FontPalette_Table_0x12EA
+	ld xix, AccPatch_Transpose_LookupTable_Data
 	ldb_sri A, 0x07, 0xf0, 0xe0
 	pop xix
 	bit 4, (0x34ea:16)
@@ -20108,7 +20108,7 @@ __pad_F62002:
 ; (data-as-code).  The same two tables as AccPatch_TransposeNoteTable, read
 ; by the playback path instead of the patch path:
 ;   AccPlayback_TrackPosition: ld xix, __pad_F62002_0x2 / ldb_sri a,(xix+wa)
-;       with A = a byte of Display_FontPalette_Table_0x12EA; bit 0 set ->
+;       with A = a byte of AccPatch_Transpose_LookupTable_Data; bit 0 set ->
 ;       the note index is incremented.
 ;   ToneGen_LoadRhythmPatternParams: c = a, then sla a,1 / add c,a (3a) /
 ;       ld xix, __pad_F62002_0xE / add xix,xbc; (xix), (xix+1), (xix+2) are
@@ -21143,7 +21143,7 @@ ToneGen_WriteMultiChanParam:
 	xor h, h
 	ld l, e
 	push xix
-	ld xix, Display_FontPalette_Table_0x12EA
+	ld xix, AccPatch_Transpose_LookupTable_Data
 	ldb_sri A, 0x07, 0xf0, 0xec
 	pop xix
 	ld e, 0x90:opc
@@ -21318,7 +21318,7 @@ __pad_F62B29:
 	xor h, h
 	ld l, a
 	push xix
-	ld xix, Display_FontPalette_Table_0x12EA
+	ld xix, AccPatch_Transpose_LookupTable_Data
 	ldb_sri A, 0x07, 0xf0, 0xec
 	pop xix
 	bit 6, (0x34ea:16)
@@ -22467,7 +22467,7 @@ RhythmROM_PatternDispatcher:
 	ld (0x34ee:16), h
 	sla l, 1
 	sla hl, 1
-	ld xiy, Display_FontPalette_Table_0x2EA
+	ld xiy, RhythmROM_BankProgramLocators
 	ldw_sri WA, 0x07, 0xf4, 0xec
 	ld (0x355a:16), wa
 	add hl, 0x2
@@ -25741,7 +25741,7 @@ RhythmVariation_Select_Helper:
 	and	h, 127
 	sll	l, 1
 	sll	hl, 1
-	ld	xiy, Display_FontPalette_Table_0x2EA
+	ld	xiy, RhythmROM_BankProgramLocators
 	ld_rrw wa, xiy, hl
 	add hl, 2
 	ld	xde, 0:i3
@@ -26784,7 +26784,7 @@ TimeSig_DisplayStrings_Code_Return11:
 	ld	bc, de
 	extz	xbc
 	sll	xbc, 2
-	ld	xde, Display_FontPalette_Table_0x51EC
+	ld	xde, TimeSig_ProcTable
 	add	xde, xbc
 	ld	xhl, (xde)
 	call	(xhl)
@@ -26919,7 +26919,7 @@ Tempo_AdjustEffect:
 	ld a, (0x3990:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (Display_FontPalette_Table_0x524C:24)
+	lda xbc, (Tempo_AdjustEffect_Table:24)
 	ld_sril3 XBC, 0x07, 0xe4, 0xe0
 	ld a, (xbc)
 	cp (xsp), 0x0
@@ -27391,7 +27391,7 @@ Tempo_DisplayBPMExit:
 Tempo_DisplayBPMReturn:
 	lda xsp, (xsp - 18)
 	push xiz
-	ld xiy, Display_FontPalette_Table_0x5260
+	ld xiy, Tempo_DisplayBPMReturn_LocalInit
 	lda xix, (xsp + 6)
 	ldw bc, 0x8
 	ldirw
@@ -27536,7 +27536,7 @@ Tempo_RefreshDisplay5:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	lda xbc, (Display_FontPalette_Table_0x5270:24)
+	lda xbc, (Tempo_RefreshDisplay5_Table:24)
 	ld_sril3 XIX, 0x07, 0xe4, 0xe0
 	ld e, (xix + 1)
 	extz de
@@ -28106,7 +28106,7 @@ RhythmParam_Dispatch:
 	cp bc, 6:i3
 	jr gt, RhythmParam_CheckExit
 	add bc, bc
-	lda xix, (Display_FontPalette_Table_0x52CE:24)
+	lda xix, (RhythmParam_Dispatch_CaseTable:24)
 	ldw_sri BC, 0x07, 0xf0, 0xe4
 	lda xix, (RhythmParam_CheckExit:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -28294,7 +28294,7 @@ VoiceSlot_Dispatch:
 	cp de, 6:i3
 	jr gt, Voice_ClearSlotAndRet
 	add de, de
-	lda xix, (Display_FontPalette_Table_0x52C0:24)
+	lda xix, (VoiceSlot_Dispatch_CaseTable:24)
 	ldw_sri DE, 0x07, 0xf0, 0xe8
 	lda xix, (Voice_ClearSlotAndRet:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -28595,7 +28595,7 @@ RhythmDrum_LoadVoiceParams:
 	add xbc, xwa
 	ld xde, 0:i3
 	ld xhl, 0:i3
-	ld xwa, Display_FontPalette_Table_0x537C
+	ld xwa, RhythmDrum_EntryCounts
 
 VoiceAssign_ProcessRequest:
 	cp hl, bc
@@ -28618,7 +28618,7 @@ VoiceAssign_Process_Loop:
 	pop xde
 	add xde, xwa
 	sll xde, 2
-	ld xwa, Display_FontPalette_Table_0x53C2
+	ld xwa, RhythmDrum_Entries
 	add xwa, xde
 	ld xhl, (xwa)
 	push xhl
@@ -28655,7 +28655,7 @@ VoiceAssign_Process_Return:
 	stb_dri H, 0x03, 0xf0, 0xe4
 	sll l, 1
 	sll hl, 1
-	ld xiy, Display_FontPalette_Table_0x2EA
+	ld xiy, RhythmROM_BankProgramLocators
 	ldw_sri WA, 0x07, 0xf4, 0xec
 	add hl, 0x2
 	ld xde, 0:i3
@@ -29005,7 +29005,7 @@ __pad_F6742B:
 
 VoiceResolve_FindSlot:
 	push xbc
-	ld xbc, Display_FontPalette_Table_0x1D32
+	ld xbc, AccTone_LookupByProgram_Table
 	ldb_sri A, 0x03, 0xe4, 0xe0
 	pop xbc
 	ret
@@ -29020,7 +29020,7 @@ __pad_F67459:
 	ld xwa, 0:i3
 	ld a, (xbc)
 	sll xwa, 4
-	ld xiy, Display_FontPalette_Table_0x52DC
+	ld xiy, AccRhythm_Ram3888_Records
 	add xiy, xwa
 	ld xix, 0x3888
 	ld xbc, 0x10
@@ -29088,7 +29088,7 @@ DrumParam_ReadMaxCount:
 	add xhl, 0x37ab
 	ld l, (xhl)
 	mul bc, 0xa
-	ld xwa, Display_FontPalette_Table_0x537C
+	ld xwa, RhythmDrum_EntryCounts
 	add xwa, xbc
 	ldb_sri W, 0x03, 0xe0, 0xec
 	dec 1, w
@@ -29928,7 +29928,7 @@ AccPatch_ResolveEntryAddr_Helper19:
 	ld	xde, 0:i3
 	pop	e
 	sll	de, 7
-	add	xde, Display_FontPalette_Table_0x6E9A
+	add	xde, AccVoice_SlotRows
 	pop_a
 	ld_rr8b c, xde, a
 	ret
@@ -30073,7 +30073,7 @@ CmpMenuTtlFunc:
 	cp xde, 0x6
 	jr ugt, CmpMenuTtl_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x701A
+	add xde, CmpMenuTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CmpMenuTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -30131,7 +30131,7 @@ CmpSetTtlFunc:
 	cp xde, 0x6
 	jrl ugt, CmpReal_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x7040
+	add xde, CmpSetTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CmpSetTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -30241,7 +30241,7 @@ CmpSetTtl_SecondaryDispatch:
 ; CmpSetTtl dynamic table lookup
 CmpSetTtl_DynamicLookup:
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x7028
+	add xde, CmpSetTtl_DynamicLookup_CaseTable
 	ld de, (xde)
 	lda xix, (CmpSetTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -30286,7 +30286,7 @@ CmpRealTtlFunc:
 	cp xde, 0x6
 	jrl ugt, CmpBk_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x7068
+	add xde, CmpRealTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CmpRealTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -30324,7 +30324,7 @@ CmpRealTtl_MajorDispatch:
 	cp xwa, 0xc
 	jrl ugt, CmpBk_ReturnZero
 	add xwa, xwa
-	add xwa, Display_FontPalette_Table_0x704E
+	add xwa, CmpRealTtl_MajorDispatch_CaseTable
 	ld wa, (xwa)
 	lda xix, (CmpRealTtl_RhythmVar0:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -30556,7 +30556,7 @@ CmpBkslTtlFunc:
 	cp xde, 0x6
 	jrl ugt, CmpBksl_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x7076
+	add xde, CmpBkslTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CmpBkslTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -30761,7 +30761,7 @@ CmpBksl_STtlFunc:
 	cp xde, 0x6
 	jrl ugt, DisplayFunc_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x709A
+	add xde, CmpBksl_STtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CmpBkslSTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -30807,7 +30807,7 @@ CmpBkslSTtl_DirectMode:
 	cp xwa, 0xa
 	jrl ugt, DisplayFunc_ReturnZero
 	add xwa, xwa
-	add xwa, Display_FontPalette_Table_0x7084
+	add xwa, CmpBkslSTtl_DirectMode_CaseTable
 	ld wa, (xwa)
 	lda xix, (CmpBkslSTtl_FillIn4:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -30943,7 +30943,7 @@ CmpNcpTtlFunc:
 	cp xde, 0x6
 	jrl ugt, CmEsy_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x70D0
+	add xde, CmpNcpTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CmpNcpTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -31028,7 +31028,7 @@ CmpNcpTtl_SpecialMode7:
 ; CmpNcpTtl table-driven dispatch
 CmpNcpTtl_TableDispatch:
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x70A8
+	add xde, CmpNcpTtl_TableDispatch_CaseTable
 	ld de, (xde)
 	lda xix, (CmpNcpTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -31468,7 +31468,7 @@ CmEsyTtlFunc:
 	cp xde, 0x6
 	jrl ugt, S2cTtl_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x70FE
+	add xde, CmEsyTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CmEsyTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -31531,11 +31531,11 @@ CmpEsyTtl_Mode1:
 
 ; CmpEsyTtl mode 2
 CmpEsyTtl_Mode2:
-	add xde, Display_FontPalette_Table_0x70DE
+	add xde, CmpEsyTtl_Mode2_Table
 	ld de, (xde)
 	extz de
 	sll de, 1
-	ld xix, Display_FontPalette_Table_0x70F2
+	ld xix, CmpEsyTtl_Mode2_CaseTable
 	ldw_sri DE, 0x07, 0xf0, 0xe8
 	lda xix, (CmEsyTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -31655,7 +31655,7 @@ S2cTtlFunc:
 	cp xde, 0x6
 	jrl ugt, CstmCp_ReturnZero
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x7124
+	add xde, S2cTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (S2cTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -31716,7 +31716,7 @@ CmpEsyTtl_E_Var1:
 	cp xwa, 0xb
 	jrl ugt, CstmCp_ReturnZero
 	add xwa, xwa
-	add xwa, Display_FontPalette_Table_0x710C
+	add xwa, CmpEsyTtl_E_Var1_CaseTable
 	ld wa, (xwa)
 	lda xix, (CmpEsy_E_DispatchDataBlock:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -31994,7 +31994,7 @@ CstmCpTtlFunc:
 	cp xde, 0x6
 	jrl ugt, CstmCp_ReturnZero2
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x715A
+	add xde, CstmCpTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (CstmCpTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -32055,7 +32055,7 @@ CstmCpTtl_RecMode1:
 ; CstmCpTtl record mode 2
 CstmCpTtl_RecMode2:
 	add xde, xde
-	add xde, Display_FontPalette_Table_0x7132
+	add xde, CstmCpTtl_RecMode2_CaseTable
 	ld de, (xde)
 	lda xix, (CstmCpTtl_Dispatch2:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -32296,7 +32296,7 @@ MainCstmNameFunc:
 	lda xsp, (xsp - 120)
 	push xiz
 	ld xde, xbc
-	ld xiy, Display_FontPalette_Table_0x7168
+	ld xiy, MainCstmNameFunc_LocalInit
 	lda xix, (xsp + 4)
 	ldw bc, 0x3c
 	ldirw
@@ -32534,7 +32534,7 @@ MainCmpCpFunc:
 	lda xsp, (xsp - 18)
 	push xiz
 	ld xde, xbc
-	ld xiy, Display_FontPalette_Table_0x71E0
+	ld xiy, MainCmpCpFunc_LocalInit
 	lda xix, (xsp + 10)
 	ld bc, 6:i3
 	ldirw
@@ -32693,7 +32693,7 @@ MainCmpSetFunc:
 	cp xhl, 0x7
 	jrl gt, CmpSong_VariantA
 	add xhl, xhl
-	add xhl, NakaInst_MEMORY_A_0xE
+	add xhl, MainCmpSetFunc_CaseTable
 	ld hl, (xhl)
 	lda xix, (MainCmpSet_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xec
@@ -33132,7 +33132,7 @@ MspMenuTtlFunc:
 	cp xde, 0x6
 	jr ugt, MspNameTtl_ReturnZero
 	add xde, xde
-	add xde, NakaInst_MEMORY_A_0x26
+	add xde, MspMenuTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (MspMenuTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -33187,7 +33187,7 @@ MspNameTtlFunc:
 	cp xde, 0x6
 	jr ugt, MspRecMode_ReturnZero
 	add xde, xde
-	add xde, NakaInst_MEMORY_A_0x34
+	add xde, MspNameTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (MspNameTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -33243,7 +33243,7 @@ MspRecTtlFunc:
 	cp xde, 0x6
 	jrl ugt, MspRecTtl_ReturnZero
 	add xde, xde
-	add xde, NakaInst_MEMORY_A_0x42
+	add xde, MspRecTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (MspRecTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -33374,7 +33374,7 @@ SndArgTtlFunc:
 	cp xde, 0x6
 	jr ugt, SndArgTtl_ReturnZero
 	add xde, xde
-	add xde, NakaInst_MEMORY_A_0x50
+	add xde, SndArgTtlFunc_CaseTable
 	ld de, (xde)
 	lda xix, (SndArgTtl_Dispatch:24)
 	jp_ind 8, 0x07, 0xf0, 0xe8
@@ -33404,24 +33404,24 @@ SndArgNmGet:
 	pushw_erp 0xfa
 	ld (xsp + 70), xde
 	ld (xsp + 74), xbc
-	ld xiy, NakaInst_MEMORY_A_0x5E
+	ld xiy, SndArgNmGet_PtrTable
 	lda xix, (xsp + 66)
 	ldiw
 	ldiw
-	ld xiy, NakaInst_DashDash_0x4
+	ld xiy, SndArgNmGet_PtrTable_2
 	lda xix, (xsp + 58)
 	ld bc, 4:i3
 	ldirw
-	ld xiy, NakaInst_OFF_Str_0x4
+	ld xiy, SndArgNmGet_Bytes5
 	lda xix, (xsp + 52)
 	ld bc, 2:i3
 	ldirw
 	ldi85
-	ld xiy, NakaInst_OFF_Str_0xA
+	ld xiy, SndArgNmGet_RamPtrsA
 	lda xix, (xsp + 32)
 	ldw bc, 0xa
 	ldirw
-	ld xiy, NakaInst_OFF_Str_0x1E
+	ld xiy, SndArgNmGet_RamPtrsB
 	lda xix, (xsp + 12)
 	ldw bc, 0xa
 	ldirw
@@ -33602,7 +33602,7 @@ __pad_F6A2E2:
 CmpStepTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, NakaInst_OFF_Str_0x32
+	ld xiy, CmpStepTitleFunc_ProcTable
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -35862,7 +35862,7 @@ AccBankData_SlotScan_Loop:
 	muls wa, 0x3
 	ld de, wa
 	add de, bc
-	lda xwa, (NakaInst_OFF_Str_0x42:24)
+	lda xwa, (AccBankData_SlotOrder:24)
 	ldmm_srib 0x07, 0xe0, 0xe8, 0xac, 0x39
 	call AccPatch_InitFromSlotIndex
 	ld xwa, (0x3d5c:16)
@@ -35873,7 +35873,7 @@ AccBankData_SlotScan_Loop:
 	extz wa
 	muls wa, 0x3
 	ld bc, wa
-	lda xde, (NakaInst_OFF_Str_0x42:24)
+	lda xde, (AccBankData_SlotOrder:24)
 	ldmm_srib 0x07, 0xe8, 0xe4, 0xac, 0x39
 	ld a, (xsp + 2)
 	extz wa
@@ -35907,7 +35907,7 @@ AccBankData_ReInit_ScanLoop:
 	muls wa, 0x3
 	ld de, wa
 	add de, bc
-	lda xwa, (NakaInst_OFF_Str_0x42:24)
+	lda xwa, (AccBankData_SlotOrder:24)
 	ldmm_srib 0x07, 0xe0, 0xe8, 0xac, 0x39
 	call AccPatch_InitFromSlotIndex
 	inc1b_erp 0xfb
@@ -36224,7 +36224,7 @@ StylCnvModlTtlFunc:
 	jrl nz, StylCnvModl_Return
 	calr DialUI_PostInitEvents
 	ld (0x48da:16), 0
-	ld xwa, NakaInst_OFF_Str_0x60
+	ld xwa, StylCnvModl_CnvFilter
 	call ControlState_ProcessCommand
 	ldw (0x3a82:16), 0
 	ld iz, 0:i3
@@ -36296,7 +36296,7 @@ StylCnvModl_ClearDisplayBuf:
 	ld (xwa+), 0x00
 	cp xwa, xbc
 	jr c, StylCnvModl_ClearDisplayBuf
-	ld xwa, NakaInst_OFF_Str_0x6C
+	ld xwa, StylCnvModl_VerFilter
 	call ControlState_ProcessCommand
 	lda xbc, (xsp + 36)
 	ld xwa, 0x3f68
@@ -36521,7 +36521,7 @@ StylCnvModl_OK_SelectItem:
 	extz xde
 	add xde, xwa
 	ld xwa, xde
-	ld xbc, NakaInst_OFF_Str_0x78
+	ld xbc, StylCnv_ModeRb_Select
 	call FileIO_OpenWithBuiltPath
 	cp hl, 0:i3
 	jr ge, StylCnvModl_OK_Select_ClearMem
@@ -37287,8 +37287,8 @@ StylCnvDisp_Subtype80_Process:
 
 StylCnvDisp_ScanFileLoop:
 	pushw 0x3
-	pushw 0xe4
-	pushw 0xc14e
+	pushw StylCnv_Str_Stars@hi16
+	pushw StylCnv_Str_Stars@lo16
 	ld wa, (xsp + 10)
 	inc 2, wa
 	extz xwa
@@ -37610,7 +37610,7 @@ StylCnv_Type3_LoadFileLoop:
 	call Strcpy
 	inc 8, xsp
 	lda xwa, (xsp + 18)
-	ld xbc, NakaInst_OFF_Str_0x80
+	ld xbc, StylCnv_ModeRb_Type3
 	call FileIO_OpenWithBuiltPath
 	cp hl, 0:i3
 	jrl lt, StylCnv_AbortWithError
@@ -37742,7 +37742,7 @@ StylCnv_Type3_NextBlock:
 
 StylCnv_Type4_OpenFile:
 	ld xwa, 0x488c
-	ld xbc, NakaInst_OFF_Str_0x84
+	ld xbc, StylCnv_ModeRb_Type4
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr lt, StylCnv_AbortWithError
@@ -37855,7 +37855,7 @@ StylCnv_Type6_AppendName:
 	call Strcat
 	inc 8, xsp
 	ld xwa, 0x488c
-	ld xbc, NakaInst_OFF_Str_0x88
+	ld xbc, StylCnv_ModeRb_Type6
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jrl lt, StylCnv_Type6_FileOpenError
@@ -38005,7 +38005,7 @@ StylCnv_Type6_Case1_CopyName:
 	ld (xsp + 10), xwa
 	ldw (xsp + 8), 0x0
 	lda xwa, (xsp + 18)
-	ld xbc, NakaInst_OFF_Str_0x8C
+	ld xbc, StylCnv_ModeRb_Type6b
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jrl lt, StylCnv_AbortWithError
@@ -38080,7 +38080,7 @@ StylCnv_Single_WriteTMExtension:
 	ld bc, (xsp + 4)
 	inc 2, bc
 	stib_ind 0x07, 0xe0, 0xe4, 0x00
-	ld xbc, NakaInst_OFF_Str_0x90
+	ld xbc, StylCnv_ModeRb_Single
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jrl lt, DRI_ParseFieldsAndOpenFile
@@ -38161,7 +38161,7 @@ StylCnv_LSW_WriteExtension:
 	ld bc, (xsp + 4)
 	inc 3, bc
 	stib_ind 0x07, 0xe0, 0xe4, 0x00
-	ld xbc, NakaInst_OFF_Str_0x94
+	ld xbc, StylCnv_ModeRb_LSW
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jrl lt, FileLoad_ResetAndStartProcessing
@@ -38465,7 +38465,7 @@ AccStyle_TableDataEntry_Join:
 	push	xiz
 	ld	(xsp+34), c
 	ld	(xsp+36), a
-	ld	xiy, NakaInst_OFF_Str_0xB6
+	ld	xiy, AccStyle_SlotOrderB
 	lda	xix, (xsp+4)
 	ldw	bc, 15
 	ldirw
@@ -38542,7 +38542,7 @@ AccStyle_TableDataEntry_Skip12:
 	sub	a, 30
 	extz	wa
 	extz	xwa
-	add	xwa, NakaInst_OFF_Str_0x98
+	add	xwa, AccStyle_SlotOrderA
 	ld	xbc, xwa
 	ld	xde, xwa
 	ld	xhl, xwa
@@ -38705,7 +38705,7 @@ AccStyle_TableDataEntry_Loop3:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda	xwa, (NakaInst_OFF_Str_0x98:24)
+	lda	xwa, (AccStyle_SlotOrderA:24)
 	ld	(14764), (xwa+de)
 	call	AccPatch_InitFromSlotIndex
 	incb_erp	251, 1
@@ -38741,7 +38741,7 @@ AccStyle_TableDataEntry_Loop4:
 	muls	wa, 3
 	ld	de, wa
 	add	de, bc
-	lda	xwa, (NakaInst_OFF_Str_0x98:24)
+	lda	xwa, (AccStyle_SlotOrderA:24)
 	ld	(14764), (xwa+de)
 	call	AccPatch_InitFromSlotIndex
 	incb_erp	251, 1
@@ -38763,7 +38763,7 @@ AccStyle_TableDataEntry_Loop2:
 	muls	wa, 3
 	ld	bc, wa
 	add	wa, de
-	lda	xde, (NakaInst_OFF_Str_0x98:24)
+	lda	xde, (AccStyle_SlotOrderA:24)
 	ld	(14764), (xde+wa)
 	ld	a, (xsp+2)
 	sub	a, 30

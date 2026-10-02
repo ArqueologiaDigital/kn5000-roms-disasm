@@ -7377,8 +7377,8 @@ Detect_Disk_Type:
 	ld xde, xiz
 	calr FDC_ReadSectors
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x38	; "Technics KN5000 Program  DATA FILE 1/2"
+	pushw FILETYPE_SIG_PROGRAM_1@hi16
+	pushw FILETYPE_SIG_PROGRAM_1@lo16	; "Technics KN5000 Program  DATA FILE 1/2"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -7389,8 +7389,8 @@ Detect_Disk_Type:
 
 DetectDisk_CheckProgram2of2:
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x60	; "Technics KN5000 Program  DATA FILE 2/2"
+	pushw FILETYPE_SIG_PROGRAM_2@hi16
+	pushw FILETYPE_SIG_PROGRAM_2@lo16	; "Technics KN5000 Program  DATA FILE 2/2"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -7401,8 +7401,8 @@ DetectDisk_CheckProgram2of2:
 
 DetectDisk_CheckTable1of2:
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0xb0	; "Technics KN5000 Table    DATA FILE 1/2"
+	pushw FILETYPE_SIG_TABLE_1@hi16
+	pushw FILETYPE_SIG_TABLE_1@lo16	; "Technics KN5000 Table    DATA FILE 1/2"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -7413,8 +7413,8 @@ DetectDisk_CheckTable1of2:
 
 DetectDisk_CheckTable2of2:
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0xd8	; "Technics KN5000 Table    DATA FILE 2/2"
+	pushw FILETYPE_SIG_TABLE_2@hi16
+	pushw FILETYPE_SIG_TABLE_2@lo16	; "Technics KN5000 Table    DATA FILE 2/2"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -7425,8 +7425,8 @@ DetectDisk_CheckTable2of2:
 
 DetectDisk_CheckCmpCustom:
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x128	; "Technics KN5000 CMPCUSTOMDATA FILE"
+	pushw FILETYPE_SIG_CMPCUSTOM@hi16
+	pushw FILETYPE_SIG_CMPCUSTOM@lo16	; "Technics KN5000 CMPCUSTOMDATA FILE"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -7437,8 +7437,8 @@ DetectDisk_CheckCmpCustom:
 
 DetectDisk_CheckHDAEPRG:
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x150	; "Technics KN5000 HD-AEPRG DATA FILE"
+	pushw FILETYPE_SIG_HDAE_PRG@hi16
+	pushw FILETYPE_SIG_HDAE_PRG@lo16	; "Technics KN5000 HD-AEPRG DATA FILE"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -7449,8 +7449,8 @@ DetectDisk_CheckHDAEPRG:
 
 DetectDisk_CheckProgramPCK:
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x88	; "Technics KN5000 Program  DATA FILE PCK"
+	pushw FILETYPE_SIG_PROGRAM_PCK@hi16
+	pushw FILETYPE_SIG_PROGRAM_PCK@lo16	; "Technics KN5000 Program  DATA FILE PCK"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -7461,8 +7461,8 @@ DetectDisk_CheckProgramPCK:
 
 DetectDisk_CheckTablePCK:
 	pushw 0x26	; string length
-	pushw 0xe0
-	pushw 0x100	; "Technics KN5000 Table    DATA FILE PCK"
+	pushw FILETYPE_SIG_TABLE_PCK@hi16
+	pushw FILETYPE_SIG_TABLE_PCK@lo16	; "Technics KN5000 Table    DATA FILE PCK"
 	push xiz
 	call String_Compare
 	add xsp, 0xa
@@ -8456,8 +8456,8 @@ LZSS_Decompress_ReadHeader:
 	cp iz, 6:i3
 	jr c, LZSS_Decompress_ReadHeader
 	pushw 0x5	; lenght: 5 bytes
-	pushw 0xe0
-	pushw 0x188	; "SLIDE"
+	pushw SLIDE_STRING_2@hi16
+	pushw SLIDE_STRING_2@lo16	; "SLIDE"
 	push xwa
 	call String_Compare
 	add xsp, 0xa

@@ -1206,7 +1206,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xiz, xwa
 	cp	xiz, 0xffffffff
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip
-	lda	xhl, (DemoDiskPrompt_English1_0x192:24)
+	lda	xhl, (FDemoText_ByteData_DisplayRefresh_Str_NONE:24)
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue
 FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xwa, xiz
@@ -1455,7 +1455,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	push xwa
 	ld bc, (xsp + 26)
 	sla bc, 3
-	lda xwa, (DemoDiskPrompt_English1_0xB4:24)
+	lda xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	push xwa
 	call String_Compare
@@ -1464,7 +1464,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	jrl nz, FDemoText_ProcessMarkup_NextTag
 	ld bc, (xsp + 16)
 	sla bc, 3
-	lda xwa, (DemoDiskPrompt_English1_0xB8:24)
+	lda xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable_2:24)
 	ld_sril3 XWA, 0x07, 0xe0, 0xe4
 	ld (xsp + 4), xwa
 	or xwa, xwa
@@ -1600,7 +1600,7 @@ FDemoText_ProcessMarkup_NextTag:
 FDemoText_ProcessMarkup_TagTableLoop:
 	ld bc, (xsp + 16)
 	sla bc, 3
-	lda xwa, (DemoDiskPrompt_English1_0xB4:24)
+	lda xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable:24)
 	exts xbc
 	add xbc, xwa
 	ld xwa, (xbc)
@@ -1866,8 +1866,8 @@ FDemoText_TextDispatch_Skip3:
 	dec	1, wa
 	ld	(0x024876:24), wa
 	push	xbc
-	pushw	233
-	pushw	0xfe66
+	pushw	FDemoText_ByteData_LayoutEngine_Str_Fmt8s@hi16
+	pushw	FDemoText_ByteData_LayoutEngine_Str_Fmt8s@lo16
 	pushw	2
 	pushw	0x4878
 	call	Sprintf_Locked
@@ -1995,7 +1995,7 @@ FDemoText_TextDispatch_Join3:
 FDemoText_TextDispatch_Join7:
 	ld bc, qiz
 	sla bc, 2
-	lda	xwa, (FileTypeName_Song_0x5A:24)
+	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable:24)
 	ld_rrl	xwa, xwa, bc
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop7
@@ -2161,7 +2161,7 @@ FDemoText_TextDispatch_Skip8:
 FDemoText_TextDispatch_Join8:
 	ld bc, qiz
 	sla bc, 2
-	lda	xwa, (UIStr_No_0x4:24)
+	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable_2:24)
 	ld_rrl	xwa, xwa, bc
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop9
@@ -2353,7 +2353,7 @@ FDemoText_TextDispatch_Skip10:
 FDemoText_TextDispatch_Join5:
 	ld bc, qiz
 	sla bc, 2
-	lda	xwa, (ImgAttrName_Src_0x88:24)
+	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable_3:24)
 	ld_rrl	xbc, xwa, bc
 	cp	(xbc), 0
 	jr	nz, FDemoText_TextDispatch_Loop11
@@ -2824,8 +2824,8 @@ Seq_InitVoiceStructures:
 	ldiw_erp 0xfa, 0
 
 Seq_InitVoiceLoop:
-	pushw 0xea
-	pushw 0x4
+	pushw Presentation_RootEntry_0x4@hi16
+	pushw Presentation_RootEntry_0x4@lo16
 	ldto_werp BC, 0xfa
 	muls bc, 0x18
 	lda xwa, (0x0249d8:24)
@@ -2962,8 +2962,8 @@ Seq_LoadResource_Proceed:
 	lda xwa, (xsp + 8)			; buffer (adjusted for push)
 	push xwa
 	call Strcat			; format/prepare
-	pushw 0x00ea				; resource ID high
-	pushw 0x0048				; resource ID low
+	pushw Seq_LoadResource_Proceed_Str_PRE@hi16				; resource ID high
+	pushw Seq_LoadResource_Proceed_Str_PRE@lo16				; resource ID low
 	lda xwa, (xsp + 16)			; buffer
 	push xwa
 	call Strcat			; format/prepare
@@ -2973,8 +2973,8 @@ Seq_LoadResource_Proceed:
 	call FileIO_OpenWithMode				; open display resource
 	cp hl, 0:i3
 	jr lt, Seq_Epilogue32			; failed
-	pushw 0x00ea
-	pushw 0x0018
+	pushw Seq_LoadResource_Proceed_Str_PRESENTATION@hi16
+	pushw Seq_LoadResource_Proceed_Str_PRESENTATION@lo16
 	ld xwa, 0x000248c8			; data source
 	ld xbc, 0x00000100			; size 256
 	ld xde, Presentation_TagStrTable			; destination descriptor
@@ -3006,8 +3006,8 @@ Seq_FillBufferLoop:
 	call Strncpy				; format string into buffer
 	lda xwa, (xsp + 18)			; buffer (adjusted)
 	ld (xwa + 8), 0x00			; null-terminate at offset 8
-	pushw 0x00ea
-	pushw 0x0066				; resource ID
+	pushw Seq_FillBufferLoop_Str_ACT@hi16
+	pushw Seq_FillBufferLoop_Str_ACT@lo16				; resource ID
 	push xwa
 	call Strcat			; format/prepare
 	lda xsp, (xsp + 22)			; clean stack
@@ -3026,8 +3026,8 @@ Seq_FillBufferLoop:
 	calr	Seq_LoadNamedResource_Helper
 	ld xwa, xhl
 	ld (0x0249d0:24), xwa; store result
-	pushw 0x00ea
-	pushw 0x005c
+	pushw Seq_FillBufferLoop_Str_ACTION@hi16
+	pushw Seq_FillBufferLoop_Str_ACTION@lo16
 	ld xbc, xiz				; info ptr
 	ld xde, 0x00ea0052			; destination descriptor
 	calr	Seq_LoadDisplayResource_Helper

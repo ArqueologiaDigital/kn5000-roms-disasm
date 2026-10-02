@@ -1841,7 +1841,7 @@ ExtDev_SndParam_BlockA9_Var02_Code_Skip6:
 	ld	a, (0x8e90:16)
 	extz	wa
 	sla	wa, 2
-	lda	xde, (SoundParam_EncoderMappingData_0x286:24)
+	lda	xde, (ExtDev_SndParam_DispatchComplex_PtrTable:24)
 	ld_rrl xde, xde, wa
 	or xde, xde
 	jr	z, ExtDev_SndParam_BlockA9_Var02_Code_Epilogue
@@ -4517,14 +4517,14 @@ MidiMsg_LoopAndFlush:
 
 Display_SetupAndPrepareRender:
 	pushw 0x20
-	pushw 0xed
-	pushw 0xb3dc
+	pushw DataSlot_HeaderTemplate@hi16
+	pushw DataSlot_HeaderTemplate@lo16
 	pushw 0x0
 	pushw 0xf980
 	call Mem_Copy
 	pushw 0x620
-	pushw 0xed
-	pushw 0xb3fc
+	pushw SndParamRam_DefaultImage@hi16
+	pushw SndParamRam_DefaultImage@lo16
 	pushw 0x0
 	pushw 0xf9a0
 	call Mem_Copy

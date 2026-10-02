@@ -163211,8 +163211,8 @@ Unit1_Op5_FormatAndWriteDirBlocks:
 	cp XIZ,(XSP+0x0a)                                    ; FE5255  af 0a f6
 	jr c, .LFE5200                                            ; FE5258  67 a6
 .LFE525A:
-	pushw 0xfe                                           ; FE525A  0b fe 00
-	pushw 0x69bf                                         ; FE525D  0b bf 69
+	pushw DiskImage_HardDisk_BootSector@hi16                                           ; FE525A  0b fe 00
+	pushw DiskImage_HardDisk_BootSector@lo16                                         ; FE525D  0b bf 69
 	pushw 0x01                                           ; FE5260  0b 01 00
 	pushw 0x01                                           ; FE5263  0b 01 00
 	pushw 0x00                                           ; FE5266  0b 00 00
@@ -163220,8 +163220,8 @@ Unit1_Op5_FormatAndWriteDirBlocks:
 	add XSP,0x0000000a                                   ; FE526C  ef c8 0a 00 00 00
 	cp hl, 0x00:i3                                         ; FE5272  db d8
 	jrl nz, .LFE53D8                                       ; FE5274  7e 61 01
-	pushw 0xfe                                           ; FE5277  0b fe 00
-	pushw 0x6bbf                                         ; FE527A  0b bf 6b
+	pushw DiskImage_HardDisk_MBR@hi16                                           ; FE5277  0b fe 00
+	pushw DiskImage_HardDisk_MBR@lo16                                         ; FE527A  0b bf 6b
 	pushw 0x01                                           ; FE527D  0b 01 00
 	pushw 0x00                                           ; FE5280  0b 00 00
 	pushw 0x00                                           ; FE5283  0b 00 00

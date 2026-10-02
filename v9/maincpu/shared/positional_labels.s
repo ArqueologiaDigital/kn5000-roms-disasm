@@ -125,7 +125,6 @@
 	.set AudioInit_VoiceDispatch_Table_0x1BE, AudioInit_VoiceDispatch_Table + 446
 	.set AudioInit_VoiceDispatch_Table_0x7C, AudioInit_VoiceDispatch_Table + 124
 	.set AudioInit_VoiceDispatch_Table_0xFC, AudioInit_VoiceDispatch_Table + 252
-	.set BankStr_Bank3_0x6, BankStr_Bank3 + 6
 	.set BankStr_Memory_0xA, BankStr_Memory + 10
 	.set BitMapOut_UpdateWidget_Done_0x8A, BitMapOut_UpdateWidget_Done + 138
 	.set BitMapOut_UpdateWidget_Done_0x8B, BitMapOut_UpdateWidget_Done + 139
@@ -245,52 +244,22 @@
 	.set Composer_SettingsBlock_0x70, Composer_SettingsBlock + 112
 	.set Composer_SettingsBlock_0x80, Composer_SettingsBlock + 128
 	.set Composer_SettingsBlock_0xC0, Composer_SettingsBlock + 192
-	.set ControlMode_Option_Table_0xA, ControlMode_Option_Table + 10
 	.set CtrlAssignStr_Off_0x4A, CtrlAssignStr_Off + 74
 	.set CtrlAssignStr_Off_0x58, CtrlAssignStr_Off + 88
 	.set DMA_ChannelHandler_1_0x1E, DMA_ChannelHandler_1 + 30
 	.set DMA_ChannelHandler_2_0x19, DMA_ChannelHandler_2 + 25
 	.set DSPCfg_Data_ParamDispatch_0x1C9, DSPCfg_Data_ParamDispatch + 457
-	.set Data_CharMapFormatBlock_0x10, Data_CharMapFormatBlock + 16
 	.set Data_CharMapFormatBlock_0x14, Data_CharMapFormatBlock + 20
-	.set Data_CharMapFormatBlock_0x22A, Data_CharMapFormatBlock + 554
-	.set Data_CharMapFormatBlock_0x22C, Data_CharMapFormatBlock + 556
-	.set Data_CharMapFormatBlock_0x8, Data_CharMapFormatBlock + 8
-	.set Data_SaveLoadMenuTable_0x1A, Data_SaveLoadMenuTable + 26
 	.set Data_SaveLoadMenuTable_0x1E, Data_SaveLoadMenuTable + 30
 	.set Data_SaveLoadMenuTable_0x22, Data_SaveLoadMenuTable + 34
-	.set Data_SaveLoadMenuTable_0x26, Data_SaveLoadMenuTable + 38
-	.set Data_SaveLoadMenuTable_0x3A, Data_SaveLoadMenuTable + 58
-	.set Data_SaveLoadMenuTable_0x4, Data_SaveLoadMenuTable + 4
-	.set Data_SaveLoadMenuTable_0x4E, Data_SaveLoadMenuTable + 78
 	.set Data_SaveLoadMenuTable_0x62, Data_SaveLoadMenuTable + 98
 	.set Data_SaveLoadMenuTable_0x64, Data_SaveLoadMenuTable + 100
-	.set Data_SaveLoadMenuTable_0x8, Data_SaveLoadMenuTable + 8
-	.set Data_SoundEditorCharsLayout_0x18, Data_SoundEditorCharsLayout + 24
 	.set Data_SoundEditorCharsLayout_0x24, Data_SoundEditorCharsLayout + 36
-	.set Data_SoundEditorCharsLayout_0x294, Data_SoundEditorCharsLayout + 660
-	.set Data_SoundEditorCharsLayout_0x298, Data_SoundEditorCharsLayout + 664
-	.set Data_SoundEditorCharsLayout_0x29C, Data_SoundEditorCharsLayout + 668
-	.set Data_SoundEditorCharsLayout_0x2A0, Data_SoundEditorCharsLayout + 672
-	.set Data_SoundEditorCharsLayout_0x2A4, Data_SoundEditorCharsLayout + 676
-	.set Data_SoundEditorCharsLayout_0x2A8, Data_SoundEditorCharsLayout + 680
-	.set Data_SoundEditorCharsLayout_0x320, Data_SoundEditorCharsLayout + 800
-	.set Data_SoundEditorCharsLayout_0x340, Data_SoundEditorCharsLayout + 832
 	.set Data_SoundEditorCharsLayout_0x376, Data_SoundEditorCharsLayout + 886
 	.set Data_SoundEditorCharsLayout_0x386, Data_SoundEditorCharsLayout + 902
 	.set Data_SoundEditorCharsLayout_0x39A, Data_SoundEditorCharsLayout + 922
-	.set Data_SoundEditorCharsLayout_0x3B0, Data_SoundEditorCharsLayout + 944
-	.set Data_SoundEditorCharsLayout_0x3C8, Data_SoundEditorCharsLayout + 968
 	.set Data_SoundEditorCharsLayout_0x3E8, Data_SoundEditorCharsLayout + 1000
-	.set Data_SoundEditorCharsLayout_0x3FC, Data_SoundEditorCharsLayout + 1020
-	.set Data_SoundEditorCharsLayout_0x410, Data_SoundEditorCharsLayout + 1040
-	.set Data_SoundEditorCharsLayout_0x414, Data_SoundEditorCharsLayout + 1044
-	.set Data_SoundEditorCharsLayout_0x418, Data_SoundEditorCharsLayout + 1048
-	.set Data_SoundEditorCharsLayout_0x41C, Data_SoundEditorCharsLayout + 1052
-	.set Data_SoundEditorCharsLayout_0x420, Data_SoundEditorCharsLayout + 1056
-	.set Data_SoundEditorCharsLayout_0x424, Data_SoundEditorCharsLayout + 1060
 	.set Data_SoundEditorCharsLayout_0x4E, Data_SoundEditorCharsLayout + 78
-	.set Data_SoundEditorCharsLayout_0xC, Data_SoundEditorCharsLayout + 12
 	.set Data_UnknownBlock_0x23D, Data_UnknownBlock + 573
 	.set Data_UnknownBlock_0x46B, Data_UnknownBlock + 1131
 	.set Data_UnknownBlock_0x6E, Data_UnknownBlock + 110
@@ -299,14 +268,11 @@
 	.set DefaultHandler_Ret_0x1, DefaultHandler_Ret + 1
 	.set DefaultHandler_Ret_0x2B, DefaultHandler_Ret + 43
 	.set DefaultHandler_Ret_0xA6, DefaultHandler_Ret + 166
-	.set DemoDiskPrompt_English1_0x192, DemoDiskPrompt_English1 + 402
 	.set DemoDiskPrompt_English1_0x86, DemoDiskPrompt_English1 + 134
 	.set DemoDiskPrompt_English1_0x8A, DemoDiskPrompt_English1 + 138
 	.set DemoDiskPrompt_English1_0x8E, DemoDiskPrompt_English1 + 142
 	.set DemoDiskPrompt_English1_0x92, DemoDiskPrompt_English1 + 146
 	.set DemoDiskPrompt_English1_0x96, DemoDiskPrompt_English1 + 150
-	.set DemoDiskPrompt_English1_0xB4, DemoDiskPrompt_English1 + 180
-	.set DemoDiskPrompt_English1_0xB8, DemoDiskPrompt_English1 + 184
 	.set Demo_StyleRhythmData_0x240, Demo_StyleRhythmData + 576
 	.set Demo_StyleRhythmData_0x274, Demo_StyleRhythmData + 628
 	.set Demo_StyleRhythmData_0x334, Demo_StyleRhythmData + 820
@@ -316,41 +282,8 @@
 	.set Demo_StyleRhythmData_0x57C, Demo_StyleRhythmData + 1404
 	.set Demo_StyleRhythmData_0x60, Demo_StyleRhythmData + 96
 	.set DiskOp_ChannelCfgTable_0x10, DiskOp_ChannelCfgTable + 16
-	.set DiskOp_ChannelCfgTable_0x44, DiskOp_ChannelCfgTable + 68
-	.set DiskOp_ChannelCfgTable_0x52, DiskOp_ChannelCfgTable + 82
-	.set DiskOp_ChannelCfgTable_0x5A, DiskOp_ChannelCfgTable + 90
-	.set DiskOp_ChannelCfgTable_0x64, DiskOp_ChannelCfgTable + 100
-	.set DiskOp_ChannelCfgTable_0x6A, DiskOp_ChannelCfgTable + 106
-	.set DiskOp_ChannelCfgTable_0x6E, DiskOp_ChannelCfgTable + 110
-	.set DiskOp_ChannelCfgTable_0x78, DiskOp_ChannelCfgTable + 120
 	.set DiskOp_ChannelCfgTable_0x80, DiskOp_ChannelCfgTable + 128
-	.set DiskOp_ChannelCfgTable_0x82, DiskOp_ChannelCfgTable + 130
-	.set DiskOp_ChannelCfgTable_0x88, DiskOp_ChannelCfgTable + 136
-	.set DiskOp_ChannelCfgTable_0x8E, DiskOp_ChannelCfgTable + 142
-	.set DiskOp_ChannelCfgTable_0x94, DiskOp_ChannelCfgTable + 148
-	.set DiskOp_ChannelCfgTable_0x9A, DiskOp_ChannelCfgTable + 154
-	.set DiskOp_ChannelCfgTable_0xA0, DiskOp_ChannelCfgTable + 160
-	.set DiskOp_ChannelCfgTable_0xA6, DiskOp_ChannelCfgTable + 166
-	.set DiskOp_ChannelCfgTable_0xAC, DiskOp_ChannelCfgTable + 172
-	.set DiskOp_ChannelCfgTable_0xB2, DiskOp_ChannelCfgTable + 178
-	.set DiskOp_ChannelCfgTable_0xB8, DiskOp_ChannelCfgTable + 184
-	.set DiskOp_ChannelCfgTable_0xBE, DiskOp_ChannelCfgTable + 190
-	.set DiskOp_ChannelCfgTable_0xC4, DiskOp_ChannelCfgTable + 196
-	.set DiskOp_ChannelCfgTable_0xCA, DiskOp_ChannelCfgTable + 202
-	.set DiskOp_ChannelCfgTable_0xD0, DiskOp_ChannelCfgTable + 208
-	.set DiskOp_ChannelCfgTable_0xDC, DiskOp_ChannelCfgTable + 220
-	.set DiskOp_ChannelCfgTable_0xE8, DiskOp_ChannelCfgTable + 232
-	.set DiskWarning_ConfirmStrings_0x1154, DiskWarning_ConfirmStrings + 4436
-	.set DiskWarning_ConfirmStrings_0x1C4, DiskWarning_ConfirmStrings + 452
-	.set DiskWarning_ConfirmStrings_0x30, DiskWarning_ConfirmStrings + 48
-	.set DiskWarning_ConfirmStrings_0x47E, DiskWarning_ConfirmStrings + 1150
-	.set DiskWarning_ConfirmStrings_0x790, DiskWarning_ConfirmStrings + 1936
-	.set DiskWarning_ConfirmStrings_0x8AC, DiskWarning_ConfirmStrings + 2220
-	.set DiskWarning_ConfirmStrings_0x9DE, DiskWarning_ConfirmStrings + 2526
 	.set DiskWarning_ConfirmStrings_0xA38, DiskWarning_ConfirmStrings + 2616
-	.set DiskWarning_ConfirmStrings_0xA4C, DiskWarning_ConfirmStrings + 2636
-	.set DiskWarning_ConfirmStrings_0xA6C, DiskWarning_ConfirmStrings + 2668
-	.set DiskWarning_ConfirmStrings_0xB46, DiskWarning_ConfirmStrings + 2886
 	.set DiskWarning_ConfirmStrings_0xBFA, DiskWarning_ConfirmStrings + 3066
 	.set DiskWarning_ConfirmStrings_0xC06, DiskWarning_ConfirmStrings + 3078
 	.set DiskWarning_ConfirmStrings_0xC1E, DiskWarning_ConfirmStrings + 3102
@@ -363,14 +296,8 @@
 	.set DiskWarning_ConfirmStrings_0xE56, DiskWarning_ConfirmStrings + 3670
 	.set DiskWarning_ConfirmStrings_0xE70, DiskWarning_ConfirmStrings + 3696
 	.set DiskWarning_ConfirmStrings_0xE8A, DiskWarning_ConfirmStrings + 3722
-	.set DiskWarning_ConfirmStrings_0xE96, DiskWarning_ConfirmStrings + 3734
-	.set DiskWarning_ConfirmStrings_0xEB4, DiskWarning_ConfirmStrings + 3764
-	.set DiskWarning_ConfirmStrings_0xEC4, DiskWarning_ConfirmStrings + 3780
-	.set DiskWarning_ConfirmStrings_0xED6, DiskWarning_ConfirmStrings + 3798
-	.set DiskWarning_ConfirmStrings_0xF00, DiskWarning_ConfirmStrings + 3840
 	.set DiskWarning_ConfirmStrings_0xF12, DiskWarning_ConfirmStrings + 3858
 	.set DiskWarning_ConfirmStrings_0xF32, DiskWarning_ConfirmStrings + 3890
-	.set DiskWarning_ConfirmStrings_0xF46, DiskWarning_ConfirmStrings + 3910
 	.set DisplayMode_Handler_3_0x168, DisplayMode_Handler_3 + 360
 	.set DisplayMode_Handler_3_0x169, DisplayMode_Handler_3 + 361
 	.set DisplayMode_Handler_3_0x1E5, DisplayMode_Handler_3 + 485
@@ -468,85 +395,6 @@
 	.set Display_DeferOrDrawWall_0x18, Display_DeferOrDrawWall + 24
 	.set Display_DeferOrUpdateScreen_0x18, Display_DeferOrUpdateScreen + 24
 	.set Display_DeferOrUpdateScreen_Direct_0xF, Display_DeferOrUpdateScreen_Direct + 15
-	.set Display_FontPalette_Table_0x104, Display_FontPalette_Table + 260
-	.set Display_FontPalette_Table_0x12EA, Display_FontPalette_Table + 4842
-	.set Display_FontPalette_Table_0x136A, Display_FontPalette_Table + 4970
-	.set Display_FontPalette_Table_0x1532, Display_FontPalette_Table + 5426
-	.set Display_FontPalette_Table_0x160, Display_FontPalette_Table + 352
-	.set Display_FontPalette_Table_0x1D32, Display_FontPalette_Table + 7474
-	.set Display_FontPalette_Table_0x1D46, Display_FontPalette_Table + 7494
-	.set Display_FontPalette_Table_0x1D58, Display_FontPalette_Table + 7512
-	.set Display_FontPalette_Table_0x1D61, Display_FontPalette_Table + 7521
-	.set Display_FontPalette_Table_0x1DA1, Display_FontPalette_Table + 7585
-	.set Display_FontPalette_Table_0x1DBF, Display_FontPalette_Table + 7615
-	.set Display_FontPalette_Table_0x1E, Display_FontPalette_Table + 30
-	.set Display_FontPalette_Table_0x1EBF, Display_FontPalette_Table + 7871
-	.set Display_FontPalette_Table_0x1FE, Display_FontPalette_Table + 510
-	.set Display_FontPalette_Table_0x20, Display_FontPalette_Table + 32
-	.set Display_FontPalette_Table_0x21E, Display_FontPalette_Table + 542
-	.set Display_FontPalette_Table_0x21EF, Display_FontPalette_Table + 8687
-	.set Display_FontPalette_Table_0x22EF, Display_FontPalette_Table + 8943
-	.set Display_FontPalette_Table_0x23E, Display_FontPalette_Table + 574
-	.set Display_FontPalette_Table_0x24, Display_FontPalette_Table + 36
-	.set Display_FontPalette_Table_0x24E, Display_FontPalette_Table + 590
-	.set Display_FontPalette_Table_0x25E, Display_FontPalette_Table + 606
-	.set Display_FontPalette_Table_0x27E, Display_FontPalette_Table + 638
-	.set Display_FontPalette_Table_0x282, Display_FontPalette_Table + 642
-	.set Display_FontPalette_Table_0x2A2, Display_FontPalette_Table + 674
-	.set Display_FontPalette_Table_0x2AC, Display_FontPalette_Table + 684
-	.set Display_FontPalette_Table_0x2C, Display_FontPalette_Table + 44
-	.set Display_FontPalette_Table_0x2C0, Display_FontPalette_Table + 704
-	.set Display_FontPalette_Table_0x2EA, Display_FontPalette_Table + 746
-	.set Display_FontPalette_Table_0x30, Display_FontPalette_Table + 48
-	.set Display_FontPalette_Table_0x3127, Display_FontPalette_Table + 12583
-	.set Display_FontPalette_Table_0x36, Display_FontPalette_Table + 54
-	.set Display_FontPalette_Table_0x44, Display_FontPalette_Table + 68
-	.set Display_FontPalette_Table_0x4507, Display_FontPalette_Table + 17671
-	.set Display_FontPalette_Table_0x46, Display_FontPalette_Table + 70
-	.set Display_FontPalette_Table_0x4D07, Display_FontPalette_Table + 19719
-	.set Display_FontPalette_Table_0x4FFB, Display_FontPalette_Table + 20475
-	.set Display_FontPalette_Table_0x50FB, Display_FontPalette_Table + 20731
-	.set Display_FontPalette_Table_0x511C, Display_FontPalette_Table + 20764
-	.set Display_FontPalette_Table_0x513C, Display_FontPalette_Table + 20796
-	.set Display_FontPalette_Table_0x515C, Display_FontPalette_Table + 20828
-	.set Display_FontPalette_Table_0x5170, Display_FontPalette_Table + 20848
-	.set Display_FontPalette_Table_0x51E4, Display_FontPalette_Table + 20964
-	.set Display_FontPalette_Table_0x51E8, Display_FontPalette_Table + 20968
-	.set Display_FontPalette_Table_0x51EC, Display_FontPalette_Table + 20972
-	.set Display_FontPalette_Table_0x524C, Display_FontPalette_Table + 21068
-	.set Display_FontPalette_Table_0x5260, Display_FontPalette_Table + 21088
-	.set Display_FontPalette_Table_0x5270, Display_FontPalette_Table + 21104
-	.set Display_FontPalette_Table_0x52C0, Display_FontPalette_Table + 21184
-	.set Display_FontPalette_Table_0x52CE, Display_FontPalette_Table + 21198
-	.set Display_FontPalette_Table_0x52DC, Display_FontPalette_Table + 21212
-	.set Display_FontPalette_Table_0x537C, Display_FontPalette_Table + 21372
-	.set Display_FontPalette_Table_0x53C2, Display_FontPalette_Table + 21442
-	.set Display_FontPalette_Table_0x5C, Display_FontPalette_Table + 92
-	.set Display_FontPalette_Table_0x68, Display_FontPalette_Table + 104
-	.set Display_FontPalette_Table_0x6E9A, Display_FontPalette_Table + 28314
-	.set Display_FontPalette_Table_0x701A, Display_FontPalette_Table + 28698
-	.set Display_FontPalette_Table_0x7028, Display_FontPalette_Table + 28712
-	.set Display_FontPalette_Table_0x7040, Display_FontPalette_Table + 28736
-	.set Display_FontPalette_Table_0x704E, Display_FontPalette_Table + 28750
-	.set Display_FontPalette_Table_0x7068, Display_FontPalette_Table + 28776
-	.set Display_FontPalette_Table_0x7076, Display_FontPalette_Table + 28790
-	.set Display_FontPalette_Table_0x7084, Display_FontPalette_Table + 28804
-	.set Display_FontPalette_Table_0x709A, Display_FontPalette_Table + 28826
-	.set Display_FontPalette_Table_0x70A8, Display_FontPalette_Table + 28840
-	.set Display_FontPalette_Table_0x70D0, Display_FontPalette_Table + 28880
-	.set Display_FontPalette_Table_0x70DE, Display_FontPalette_Table + 28894
-	.set Display_FontPalette_Table_0x70F2, Display_FontPalette_Table + 28914
-	.set Display_FontPalette_Table_0x70FE, Display_FontPalette_Table + 28926
-	.set Display_FontPalette_Table_0x710C, Display_FontPalette_Table + 28940
-	.set Display_FontPalette_Table_0x7124, Display_FontPalette_Table + 28964
-	.set Display_FontPalette_Table_0x7132, Display_FontPalette_Table + 28978
-	.set Display_FontPalette_Table_0x715A, Display_FontPalette_Table + 29018
-	.set Display_FontPalette_Table_0x7168, Display_FontPalette_Table + 29032
-	.set Display_FontPalette_Table_0x71E0, Display_FontPalette_Table + 29152
-	.set Display_FontPalette_Table_0x7E, Display_FontPalette_Table + 126
-	.set Display_FontPalette_Table_0x8C, Display_FontPalette_Table + 140
-	.set Display_FontPalette_Table_0x9A, Display_FontPalette_Table + 154
-	.set Display_FontPalette_Table_0xA8, Display_FontPalette_Table + 168
 	.set DrawBitmapSP2_Return_0x6, DrawBitmapSP2_Return + 6
 	.set DrawBitmapSPFast_Return_0x6, DrawBitmapSPFast_Return + 6
 	.set DrawBitmapSP_Return_0x6, DrawBitmapSP_Return + 6
@@ -616,112 +464,6 @@
 	.set ENCODER_LUT_MODWHEEL_0x4BC, ENCODER_LUT_MODWHEEL + 1212
 	.set ENCODER_LUT_MODWHEEL_0x4D4, ENCODER_LUT_MODWHEEL + 1236
 	.set EffectMode_DispatchTable_0x10, EffectMode_DispatchTable + 16
-	.set ExtDevice_ModeDispatch_Table_0x104, ExtDevice_ModeDispatch_Table + 260
-	.set ExtDevice_ModeDispatch_Table_0x11C, ExtDevice_ModeDispatch_Table + 284
-	.set ExtDevice_ModeDispatch_Table_0x14, ExtDevice_ModeDispatch_Table + 20
-	.set ExtDevice_ModeDispatch_Table_0x140, ExtDevice_ModeDispatch_Table + 320
-	.set ExtDevice_ModeDispatch_Table_0x148, ExtDevice_ModeDispatch_Table + 328
-	.set ExtDevice_ModeDispatch_Table_0x14C, ExtDevice_ModeDispatch_Table + 332
-	.set ExtDevice_ModeDispatch_Table_0x154, ExtDevice_ModeDispatch_Table + 340
-	.set ExtDevice_ModeDispatch_Table_0x160, ExtDevice_ModeDispatch_Table + 352
-	.set ExtDevice_ModeDispatch_Table_0x164, ExtDevice_ModeDispatch_Table + 356
-	.set ExtDevice_ModeDispatch_Table_0x17C, ExtDevice_ModeDispatch_Table + 380
-	.set ExtDevice_ModeDispatch_Table_0x19C, ExtDevice_ModeDispatch_Table + 412
-	.set ExtDevice_ModeDispatch_Table_0x1A2, ExtDevice_ModeDispatch_Table + 418
-	.set ExtDevice_ModeDispatch_Table_0x1A8, ExtDevice_ModeDispatch_Table + 424
-	.set ExtDevice_ModeDispatch_Table_0x1AC, ExtDevice_ModeDispatch_Table + 428
-	.set ExtDevice_ModeDispatch_Table_0x1B2, ExtDevice_ModeDispatch_Table + 434
-	.set ExtDevice_ModeDispatch_Table_0x1B8, ExtDevice_ModeDispatch_Table + 440
-	.set ExtDevice_ModeDispatch_Table_0x1BC, ExtDevice_ModeDispatch_Table + 444
-	.set ExtDevice_ModeDispatch_Table_0x1C8, ExtDevice_ModeDispatch_Table + 456
-	.set ExtDevice_ModeDispatch_Table_0x1D0, ExtDevice_ModeDispatch_Table + 464
-	.set ExtDevice_ModeDispatch_Table_0x1D8, ExtDevice_ModeDispatch_Table + 472
-	.set ExtDevice_ModeDispatch_Table_0x1E0, ExtDevice_ModeDispatch_Table + 480
-	.set ExtDevice_ModeDispatch_Table_0x1E8, ExtDevice_ModeDispatch_Table + 488
-	.set ExtDevice_ModeDispatch_Table_0x1F0, ExtDevice_ModeDispatch_Table + 496
-	.set ExtDevice_ModeDispatch_Table_0x1FC, ExtDevice_ModeDispatch_Table + 508
-	.set ExtDevice_ModeDispatch_Table_0x200, ExtDevice_ModeDispatch_Table + 512
-	.set ExtDevice_ModeDispatch_Table_0x21C, ExtDevice_ModeDispatch_Table + 540
-	.set ExtDevice_ModeDispatch_Table_0x246, ExtDevice_ModeDispatch_Table + 582
-	.set ExtDevice_ModeDispatch_Table_0x258, ExtDevice_ModeDispatch_Table + 600
-	.set ExtDevice_ModeDispatch_Table_0x26A, ExtDevice_ModeDispatch_Table + 618
-	.set ExtDevice_ModeDispatch_Table_0x278, ExtDevice_ModeDispatch_Table + 632
-	.set ExtDevice_ModeDispatch_Table_0x29C, ExtDevice_ModeDispatch_Table + 668
-	.set ExtDevice_ModeDispatch_Table_0x2B0, ExtDevice_ModeDispatch_Table + 688
-	.set ExtDevice_ModeDispatch_Table_0x2BA, ExtDevice_ModeDispatch_Table + 698
-	.set ExtDevice_ModeDispatch_Table_0x2C, ExtDevice_ModeDispatch_Table + 44
-	.set ExtDevice_ModeDispatch_Table_0x2CE, ExtDevice_ModeDispatch_Table + 718
-	.set ExtDevice_ModeDispatch_Table_0x2D8, ExtDevice_ModeDispatch_Table + 728
-	.set ExtDevice_ModeDispatch_Table_0x2F6, ExtDevice_ModeDispatch_Table + 758
-	.set ExtDevice_ModeDispatch_Table_0x308, ExtDevice_ModeDispatch_Table + 776
-	.set ExtDevice_ModeDispatch_Table_0x31A, ExtDevice_ModeDispatch_Table + 794
-	.set ExtDevice_ModeDispatch_Table_0x334, ExtDevice_ModeDispatch_Table + 820
-	.set ExtDevice_ModeDispatch_Table_0x344, ExtDevice_ModeDispatch_Table + 836
-	.set ExtDevice_ModeDispatch_Table_0x362, ExtDevice_ModeDispatch_Table + 866
-	.set ExtDevice_ModeDispatch_Table_0x37A, ExtDevice_ModeDispatch_Table + 890
-	.set ExtDevice_ModeDispatch_Table_0x38A, ExtDevice_ModeDispatch_Table + 906
-	.set ExtDevice_ModeDispatch_Table_0x3A2, ExtDevice_ModeDispatch_Table + 930
-	.set ExtDevice_ModeDispatch_Table_0x3B2, ExtDevice_ModeDispatch_Table + 946
-	.set ExtDevice_ModeDispatch_Table_0x3B8, ExtDevice_ModeDispatch_Table + 952
-	.set ExtDevice_ModeDispatch_Table_0x3BC, ExtDevice_ModeDispatch_Table + 956
-	.set ExtDevice_ModeDispatch_Table_0x3C2, ExtDevice_ModeDispatch_Table + 962
-	.set ExtDevice_ModeDispatch_Table_0x3C8, ExtDevice_ModeDispatch_Table + 968
-	.set ExtDevice_ModeDispatch_Table_0x3CE, ExtDevice_ModeDispatch_Table + 974
-	.set ExtDevice_ModeDispatch_Table_0x3D0, ExtDevice_ModeDispatch_Table + 976
-	.set ExtDevice_ModeDispatch_Table_0x3DE, ExtDevice_ModeDispatch_Table + 990
-	.set ExtDevice_ModeDispatch_Table_0x3EC, ExtDevice_ModeDispatch_Table + 1004
-	.set ExtDevice_ModeDispatch_Table_0x3FA, ExtDevice_ModeDispatch_Table + 1018
-	.set ExtDevice_ModeDispatch_Table_0x402, ExtDevice_ModeDispatch_Table + 1026
-	.set ExtDevice_ModeDispatch_Table_0x408, ExtDevice_ModeDispatch_Table + 1032
-	.set ExtDevice_ModeDispatch_Table_0x428, ExtDevice_ModeDispatch_Table + 1064
-	.set ExtDevice_ModeDispatch_Table_0x42C, ExtDevice_ModeDispatch_Table + 1068
-	.set ExtDevice_ModeDispatch_Table_0x430, ExtDevice_ModeDispatch_Table + 1072
-	.set ExtDevice_ModeDispatch_Table_0x43E, ExtDevice_ModeDispatch_Table + 1086
-	.set ExtDevice_ModeDispatch_Table_0x44, ExtDevice_ModeDispatch_Table + 68
-	.set ExtDevice_ModeDispatch_Table_0x44E, ExtDevice_ModeDispatch_Table + 1102
-	.set ExtDevice_ModeDispatch_Table_0x45E, ExtDevice_ModeDispatch_Table + 1118
-	.set ExtDevice_ModeDispatch_Table_0x4C6, ExtDevice_ModeDispatch_Table + 1222
-	.set ExtDevice_ModeDispatch_Table_0x4FC, ExtDevice_ModeDispatch_Table + 1276
-	.set ExtDevice_ModeDispatch_Table_0x53E, ExtDevice_ModeDispatch_Table + 1342
-	.set ExtDevice_ModeDispatch_Table_0x55A, ExtDevice_ModeDispatch_Table + 1370
-	.set ExtDevice_ModeDispatch_Table_0x5C, ExtDevice_ModeDispatch_Table + 92
-	.set ExtDevice_ModeDispatch_Table_0x5C4, ExtDevice_ModeDispatch_Table + 1476
-	.set ExtDevice_ModeDispatch_Table_0x5C8, ExtDevice_ModeDispatch_Table + 1480
-	.set ExtDevice_ModeDispatch_Table_0x5CC, ExtDevice_ModeDispatch_Table + 1484
-	.set ExtDevice_ModeDispatch_Table_0x5D0, ExtDevice_ModeDispatch_Table + 1488
-	.set ExtDevice_ModeDispatch_Table_0x5D6, ExtDevice_ModeDispatch_Table + 1494
-	.set ExtDevice_ModeDispatch_Table_0x5DA, ExtDevice_ModeDispatch_Table + 1498
-	.set ExtDevice_ModeDispatch_Table_0x5E0, ExtDevice_ModeDispatch_Table + 1504
-	.set ExtDevice_ModeDispatch_Table_0x5E6, ExtDevice_ModeDispatch_Table + 1510
-	.set ExtDevice_ModeDispatch_Table_0x5EC, ExtDevice_ModeDispatch_Table + 1516
-	.set ExtDevice_ModeDispatch_Table_0x5F2, ExtDevice_ModeDispatch_Table + 1522
-	.set ExtDevice_ModeDispatch_Table_0x5F8, ExtDevice_ModeDispatch_Table + 1528
-	.set ExtDevice_ModeDispatch_Table_0x5FE, ExtDevice_ModeDispatch_Table + 1534
-	.set ExtDevice_ModeDispatch_Table_0x604, ExtDevice_ModeDispatch_Table + 1540
-	.set ExtDevice_ModeDispatch_Table_0x60A, ExtDevice_ModeDispatch_Table + 1546
-	.set ExtDevice_ModeDispatch_Table_0x610, ExtDevice_ModeDispatch_Table + 1552
-	.set ExtDevice_ModeDispatch_Table_0x616, ExtDevice_ModeDispatch_Table + 1558
-	.set ExtDevice_ModeDispatch_Table_0x61C, ExtDevice_ModeDispatch_Table + 1564
-	.set ExtDevice_ModeDispatch_Table_0x628, ExtDevice_ModeDispatch_Table + 1576
-	.set ExtDevice_ModeDispatch_Table_0x62E, ExtDevice_ModeDispatch_Table + 1582
-	.set ExtDevice_ModeDispatch_Table_0x634, ExtDevice_ModeDispatch_Table + 1588
-	.set ExtDevice_ModeDispatch_Table_0x63A, ExtDevice_ModeDispatch_Table + 1594
-	.set ExtDevice_ModeDispatch_Table_0x64A, ExtDevice_ModeDispatch_Table + 1610
-	.set ExtDevice_ModeDispatch_Table_0x660, ExtDevice_ModeDispatch_Table + 1632
-	.set ExtDevice_ModeDispatch_Table_0x674, ExtDevice_ModeDispatch_Table + 1652
-	.set ExtDevice_ModeDispatch_Table_0x67A, ExtDevice_ModeDispatch_Table + 1658
-	.set ExtDevice_ModeDispatch_Table_0x680, ExtDevice_ModeDispatch_Table + 1664
-	.set ExtDevice_ModeDispatch_Table_0x692, ExtDevice_ModeDispatch_Table + 1682
-	.set ExtDevice_ModeDispatch_Table_0x698, ExtDevice_ModeDispatch_Table + 1688
-	.set ExtDevice_ModeDispatch_Table_0x69E, ExtDevice_ModeDispatch_Table + 1694
-	.set ExtDevice_ModeDispatch_Table_0x6A4, ExtDevice_ModeDispatch_Table + 1700
-	.set ExtDevice_ModeDispatch_Table_0x6AA, ExtDevice_ModeDispatch_Table + 1706
-	.set ExtDevice_ModeDispatch_Table_0x74, ExtDevice_ModeDispatch_Table + 116
-	.set ExtDevice_ModeDispatch_Table_0x8C, ExtDevice_ModeDispatch_Table + 140
-	.set ExtDevice_ModeDispatch_Table_0xA4, ExtDevice_ModeDispatch_Table + 164
-	.set ExtDevice_ModeDispatch_Table_0xBC, ExtDevice_ModeDispatch_Table + 188
-	.set ExtDevice_ModeDispatch_Table_0xD4, ExtDevice_ModeDispatch_Table + 212
-	.set ExtDevice_ModeDispatch_Table_0xEC, ExtDevice_ModeDispatch_Table + 236
 	.set ExtVoice_ProcessList_0x1, ExtVoice_ProcessList + 1
 	.set ExtVoice_ProcessList_0x1C, ExtVoice_ProcessList + 28
 	.set ExtVoice_ProcessList_0x23, ExtVoice_ProcessList + 35
@@ -797,55 +539,11 @@
 	.set FileIO_ByteBlock_DemoProc2_0x2D, FileIO_ByteBlock_DemoProc2 + 45
 	.set FileIO_ByteBlock_DemoProc2_0x323, FileIO_ByteBlock_DemoProc2 + 803
 	.set FileIO_ByteBlock_DemoProc2_0xA7, FileIO_ByteBlock_DemoProc2 + 167
-	.set FileOp_StubAndDirNames_0x10, FileOp_StubAndDirNames + 16
-	.set FileOp_StubAndDirNames_0x14, FileOp_StubAndDirNames + 20
-	.set FileOp_StubAndDirNames_0x18, FileOp_StubAndDirNames + 24
-	.set FileOp_StubAndDirNames_0x1C, FileOp_StubAndDirNames + 28
-	.set FileOp_StubAndDirNames_0x1E, FileOp_StubAndDirNames + 30
-	.set FileOp_StubAndDirNames_0x22, FileOp_StubAndDirNames + 34
-	.set FileOp_StubAndDirNames_0x2C, FileOp_StubAndDirNames + 44
-	.set FileOp_StubAndDirNames_0x30, FileOp_StubAndDirNames + 48
-	.set FileOp_StubAndDirNames_0x3E, FileOp_StubAndDirNames + 62
-	.set FileOp_StubAndDirNames_0x4, FileOp_StubAndDirNames + 4
-	.set FileOp_StubAndDirNames_0x42, FileOp_StubAndDirNames + 66
-	.set FileOp_StubAndDirNames_0x4C, FileOp_StubAndDirNames + 76
-	.set FileOp_StubAndDirNames_0x50, FileOp_StubAndDirNames + 80
-	.set FileOp_StubAndDirNames_0x5E, FileOp_StubAndDirNames + 94
-	.set FileOp_StubAndDirNames_0x62, FileOp_StubAndDirNames + 98
-	.set FileOp_StubAndDirNames_0x6C, FileOp_StubAndDirNames + 108
-	.set FileOp_StubAndDirNames_0x70, FileOp_StubAndDirNames + 112
-	.set FileOp_StubAndDirNames_0x7E, FileOp_StubAndDirNames + 126
-	.set FileOp_StubAndDirNames_0x8, FileOp_StubAndDirNames + 8
-	.set FileOp_StubAndDirNames_0x82, FileOp_StubAndDirNames + 130
-	.set FileOp_StubAndDirNames_0x86, FileOp_StubAndDirNames + 134
-	.set FileOp_StubAndDirNames_0x8A, FileOp_StubAndDirNames + 138
 	.set FileOp_StubAndDirNames_0x90, FileOp_StubAndDirNames + 144
-	.set FileOp_StubAndDirNames_0xC, FileOp_StubAndDirNames + 12
-	.set FileTransfer_BlankStatus_0x1E, FileTransfer_BlankStatus + 30
-	.set FileTransfer_BlankStatus_0x32, FileTransfer_BlankStatus + 50
-	.set FileTransfer_BlankStatus_0x46, FileTransfer_BlankStatus + 70
-	.set FileTransfer_BlankStatus_0x5A, FileTransfer_BlankStatus + 90
-	.set FileTransfer_BlankStatus_0x6E, FileTransfer_BlankStatus + 110
-	.set FileTransfer_BlankStatus_0x88, FileTransfer_BlankStatus + 136
-	.set FileTransfer_BlankStatus_0xA, FileTransfer_BlankStatus + 10
-	.set FileTransfer_BlankStatus_0xA2, FileTransfer_BlankStatus + 162
-	.set FileTransfer_BlankStatus_0xB4, FileTransfer_BlankStatus + 180
-	.set FileTransfer_BlankStatus_0xC6, FileTransfer_BlankStatus + 198
 	.set FileTypeName_Song_0x48, FileTypeName_Song + 72
-	.set FileTypeName_Song_0x5A, FileTypeName_Song + 90
 	.set FileTypeName_Song_0x6, FileTypeName_Song + 6
-	.set Filename_TemplateArea_0x18, Filename_TemplateArea + 24
-	.set Filename_TemplateArea_0x1A, Filename_TemplateArea + 26
-	.set Filename_TemplateArea_0x2, Filename_TemplateArea + 2
 	.set Filename_TemplateArea_0x26, Filename_TemplateArea + 38
 	.set Filename_TemplateArea_0x36, Filename_TemplateArea + 54
-	.set Filename_TemplateArea_0x46, Filename_TemplateArea + 70
-	.set Filename_TemplateArea_0x4E, Filename_TemplateArea + 78
-	.set Filename_TemplateArea_0x64, Filename_TemplateArea + 100
-	.set Filename_TemplateArea_0x6A, Filename_TemplateArea + 106
-	.set Filename_TemplateArea_0x70, Filename_TemplateArea + 112
-	.set Filename_TemplateArea_0x76, Filename_TemplateArea + 118
-	.set Filename_TemplateArea_0xA, Filename_TemplateArea + 10
 	.set FlashWrite_BlockRef_Type6_0x10, SeScreenData_0x4E9B
 	.set FlashWrite_BlockRef_Type6_0x118, SeScreenData_0x4FA3
 	.set FlashWrite_BlockRef_Type6_0x295, SeScreenData_0x5120
@@ -859,11 +557,6 @@
 	.set Flash_SlotUpdateOpsBlock_0x336, Flash_SlotUpdateOpsBlock + 822
 	.set Flash_SlotUpdateOpsBlock_0x480, Flash_SlotUpdateOpsBlock + 1152
 	.set FontGlyph_ByteData_0x11, FontGlyph_ByteData + 17
-	.set FontPalette_Gradient7_0x32, FontPalette_Gradient7 + 50
-	.set GMMode_Attention_English2_0x204, GMMode_Attention_English2 + 516
-	.set GMMode_Attention_English2_0x47C, GMMode_Attention_English2 + 1148
-	.set GMMode_Attention_English2_0x494, GMMode_Attention_English2 + 1172
-	.set GMMode_Attention_English2_0x514, GMMode_Attention_English2 + 1300
 	.set GUI_FormatStrings_0x20, GUI_FormatStrings + 32
 	.set GUI_FormatStrings_0x34, GUI_FormatStrings + 52
 	.set GUI_FormatStrings_0x3C, GUI_FormatStrings + 60
@@ -874,7 +567,6 @@
 	.set GraphicsRender_ShortByteBlock_0x5, GraphicsRender_ShortByteBlock + 5
 	.set ImgAttrName_Src_0x4, ImgAttrName_Src + 4
 	.set ImgAttrName_Src_0x46, ImgAttrName_Src + 70
-	.set ImgAttrName_Src_0x88, ImgAttrName_Src + 136
 	.set ImgAttr_Size_0x6, ImgAttr_Size + 6
 	.set Interrupt_FlagSetBytecode_0x13, Interrupt_FlagSetBytecode + 19
 	.set KeyScaleNoteStr_G_0x14, KeyScaleNoteStr_G + 20
@@ -896,8 +588,6 @@
 	.set MSP_Default_SeqReserved_0x40, MSP_Default_SeqReserved + 64
 	.set MSP_Default_SoundReserved_0x30, MSP_Default_SoundReserved + 48
 	.set MSP_Default_SoundReserved_0x50, MSP_Default_SoundReserved + 80
-	.set MedleyDisp_Blank_0x18, MedleyDisp_Blank + 24
-	.set MedleyDisp_Blank_0xC, MedleyDisp_Blank + 12
 	.set MemConfig_Handler_0_0x24, MemConfig_Handler_0 + 36
 	.set MemConfig_Handler_0_0x63, MemConfig_Handler_0 + 99
 	.set MemConfig_Handler_1_0x13D, MemConfig_Handler_1 + 317
@@ -945,7 +635,6 @@
 	.set MemConfig_Handler_5_0xCC, MemConfig_Handler_5 + 204
 	.set MemConfig_Handler_5_0xE4, MemConfig_Handler_5 + 228
 	.set MemConfig_Handler_5_0xEE, MemConfig_Handler_5 + 238
-	.set MemScreen_Blank_0x4, MemScreen_Blank + 4
 	.set MemoryConfig_Handler_Table_0x18, MemoryConfig_Handler_Table + 24
 	.set MemoryConfig_Handler_Table_0x67, MemoryConfig_Handler_Table + 103
 	.set MemoryConfig_Handler_Table_0x88, MemoryConfig_Handler_Table + 136
@@ -981,43 +670,6 @@
 	.set MidiParam_MixerCfgData_0x6A, MidiParam_MixerCfgData + 106
 	.set MidiParam_MixerCfgData_0x78, MidiParam_MixerCfgData + 120
 	.set MidiParam_MixerCfgData_0x8A, MidiParam_MixerCfgData + 138
-	.set MidiPart_AfterStr_0x28, MidiPart_AfterStr + 40
-	.set MidiPart_AfterStr_0x2E, MidiPart_AfterStr + 46
-	.set MidiPart_AfterStr_0x34, MidiPart_AfterStr + 52
-	.set MidiPart_ColWidthData_0x28, MidiPart_ColWidthData + 40
-	.set MidiPart_ColWidthData_0x36, MidiPart_ColWidthData + 54
-	.set MidiPart_ColWidthData_0x42, MidiPart_ColWidthData + 66
-	.set MidiPart_HarmLocalStr_0x18, MidiPart_HarmLocalStr + 24
-	.set MidiPart_HarmLocalStr_0x1C, MidiPart_HarmLocalStr + 28
-	.set MidiPart_HarmLocalStr_0x24, MidiPart_HarmLocalStr + 36
-	.set MidiPart_HarmLocalStr_0x30, MidiPart_HarmLocalStr + 48
-	.set MidiPart_HarmLocalStr_0x36, MidiPart_HarmLocalStr + 54
-	.set MidiPart_HarmLocalStr_0x3C, MidiPart_HarmLocalStr + 60
-	.set MidiPart_OctaveStr_m2_0x108, MidiPart_OctaveStr_m2 + 264
-	.set MidiPart_OctaveStr_m2_0x128, MidiPart_OctaveStr_m2 + 296
-	.set MidiPart_OctaveStr_m2_0x12E, MidiPart_OctaveStr_m2 + 302
-	.set MidiPart_OctaveStr_m2_0x134, MidiPart_OctaveStr_m2 + 308
-	.set MidiPart_OctaveStr_m2_0x140, MidiPart_OctaveStr_m2 + 320
-	.set MidiPart_OctaveStr_m2_0x17C, MidiPart_OctaveStr_m2 + 380
-	.set MidiPart_OctaveStr_m2_0x188, MidiPart_OctaveStr_m2 + 392
-	.set MidiPart_OctaveStr_m2_0x194, MidiPart_OctaveStr_m2 + 404
-	.set MidiPart_OctaveStr_m2_0x4, MidiPart_OctaveStr_m2 + 4
-	.set MidiPart_OctaveStr_m2_0x64, MidiPart_OctaveStr_m2 + 100
-	.set MidiPart_OctaveStr_m2_0x84, MidiPart_OctaveStr_m2 + 132
-	.set MidiPart_OctaveStr_m2_0x90, MidiPart_OctaveStr_m2 + 144
-	.set MidiPart_OctaveStr_m2_0xD8, MidiPart_OctaveStr_m2 + 216
-	.set MidiPart_OctaveStr_m2_0xE4, MidiPart_OctaveStr_m2 + 228
-	.set MidiPart_OctaveStr_m2_0xF0, MidiPart_OctaveStr_m2 + 240
-	.set MidiPart_OctaveStr_m2_0xFC, MidiPart_OctaveStr_m2 + 252
-	.set MidiPart_PageDisplay_Data_0x8, MidiPart_PageDisplay_Data + 8
-	.set MidiPart_PageDisplay_Data_0xC, MidiPart_PageDisplay_Data + 12
-	.set MidiPart_PageStr_1of2_0xA, MidiPart_PageStr_1of2 + 10
-	.set MidiPart_PageStr_1of3_0x12, MidiPart_PageStr_1of3 + 18
-	.set MidiPart_PageStr_1of3_0x2A, MidiPart_PageStr_1of3 + 42
-	.set MidiPart_PageStr_1of3_0x42, MidiPart_PageStr_1of3 + 66
-	.set MidiPart_PageStr_1of3_0x50, MidiPart_PageStr_1of3 + 80
-	.set MidiPart_PageStr_1of3_0xA, MidiPart_PageStr_1of3 + 10
-	.set MidiPart_RecvTransStr_0xC, MidiPart_RecvTransStr + 12
 	.set MidiPkt_ArpConfigChain_Data_0x34C, MidiPkt_ArpConfigChain_Data + 844
 	.set MidiPkt_EventType_Table_0x300, MidiPkt_EventType_Table + 768
 	.set MidiPkt_EventType_Table_0x304, MidiPkt_EventType_Table + 772
@@ -1123,36 +775,12 @@
 	.set MixerPartTable_Start_0x8, MixerPartTable_Start + 8
 	.set MixerPartTable_Start_0x80, MixerPartTable_Start + 128
 	.set NAKA_PerfReg_Container_Root_0x1697, NAKA_PerfReg_Container_Root + 5783
-	.set NAKA_UIObjectTable_0x13E0, NAKA_UIObjectTable + 5088
-	.set NAKA_UIObjectTable_0x1452, NAKA_UIObjectTable + 5202
-	.set NAKA_UIObjectTable_0x1492, NAKA_UIObjectTable + 5266
-	.set NAKA_UIObjectTable_0x1684, NAKA_UIObjectTable + 5764
-	.set NAKA_UIObjectTable_0x16FC, NAKA_UIObjectTable + 5884
-	.set NAKA_UIObjectTable_0x186C, NAKA_UIObjectTable + 6252
-	.set NAKA_UIObjectTable_0x19FE, NAKA_UIObjectTable + 6654
-	.set NAKA_UIObjectTable_0x1B8A, NAKA_UIObjectTable + 7050
-	.set NAKA_UIObjectTable_0x1D6E, NAKA_UIObjectTable + 7534
-	.set NAKA_UIObjectTable_0x1DF2, NAKA_UIObjectTable + 7666
-	.set NAKA_UIObjectTable_0x1F94, NAKA_UIObjectTable + 8084
-	.set NAKA_UIObjectTable_0x2004, NAKA_UIObjectTable + 8196
-	.set NAKA_UIObjectTable_0x2166, NAKA_UIObjectTable + 8550
-	.set NAKA_UIObjectTable_0x21E0, NAKA_UIObjectTable + 8672
-	.set NAKA_UIObjectTable_0x2342, NAKA_UIObjectTable + 9026
-	.set NAKA_UIObjectTable_0x24B2, NAKA_UIObjectTable + 9394
-	.set NAKA_UIObjectTable_0x2512, NAKA_UIObjectTable + 9490
-	.set NAKA_UIObjectTable_0x2572, NAKA_UIObjectTable + 9586
 	.set NAKA_UIObjectTable_0x25D2, NAKA_UIObjectTable + 9682
 	.set NAKA_UIObjectTable_0x26D2, NAKA_UIObjectTable + 9938
-	.set NakaData_ModeConfig1_0x4, NakaData_ModeConfig1 + 4
-	.set NakaData_ModeConfig2_0x2C, NakaData_ModeConfig2 + 44
-	.set NakaData_ModeConfig2_0x8, NakaData_ModeConfig2 + 8
 	.set NakaData_WidgetDescriptors_0x1196, NakaData_WidgetDescriptors + 4502
 	.set NakaData_WidgetDescriptors_0x11A6, NakaData_WidgetDescriptors + 4518
 	.set NakaData_WidgetDescriptors_0x139A, NakaData_WidgetDescriptors + 5018
 	.set NakaData_WidgetDescriptors_0x1530, NakaData_WidgetDescriptors + 5424
-	.set NakaData_WidgetDescriptors_0x15B8, NakaData_WidgetDescriptors + 5560
-	.set NakaData_WidgetDescriptors_0x1664, NakaData_WidgetDescriptors + 5732
-	.set NakaData_WidgetDescriptors_0x1C1A, NakaData_WidgetDescriptors + 7194
 	.set NakaData_WidgetDescriptors_0x1F4, NakaData_WidgetDescriptors + 500
 	.set NakaData_WidgetDescriptors_0x272, NakaData_WidgetDescriptors + 626
 	.set NakaData_WidgetDescriptors_0x466, NakaData_WidgetDescriptors + 1126
@@ -1164,201 +792,28 @@
 	.set NakaData_WidgetDescriptors_0xDAE, NakaData_WidgetDescriptors + 3502
 	.set NakaData_WidgetDescriptors_0xFA2, NakaData_WidgetDescriptors + 4002
 	.set NakaData_WidgetNames_0x624, NakaData_WidgetNames + 1572
-	.set NakaInst_2d_0x12, NakaInst_2d + 18
-	.set NakaInst_2d_0x120, NakaInst_2d + 288
-	.set NakaInst_2d_0x142, NakaInst_2d + 322
-	.set NakaInst_2d_0x154, NakaInst_2d + 340
-	.set NakaInst_2d_0x176, NakaInst_2d + 374
-	.set NakaInst_2d_0x17E, NakaInst_2d + 382
-	.set NakaInst_2d_0x18C, NakaInst_2d + 396
-	.set NakaInst_2d_0x19E, NakaInst_2d + 414
-	.set NakaInst_2d_0x1BC, NakaInst_2d + 444
-	.set NakaInst_2d_0x1C, NakaInst_2d + 28
-	.set NakaInst_2d_0x1C2, NakaInst_2d + 450
-	.set NakaInst_2d_0x1C8, NakaInst_2d + 456
-	.set NakaInst_2d_0x1D4, NakaInst_2d + 468
-	.set NakaInst_2d_0x1D8, NakaInst_2d + 472
-	.set NakaInst_2d_0x20, NakaInst_2d + 32
-	.set NakaInst_2d_0x204, NakaInst_2d + 516
-	.set NakaInst_2d_0x40, NakaInst_2d + 64
-	.set NakaInst_2d_0x5E, NakaInst_2d + 94
-	.set NakaInst_2d_0x6, NakaInst_2d + 6
-	.set NakaInst_2d_0x70, NakaInst_2d + 112
-	.set NakaInst_2d_0x80, NakaInst_2d + 128
-	.set NakaInst_2d_0x92, NakaInst_2d + 146
-	.set NakaInst_2d_0xA0, NakaInst_2d + 160
-	.set NakaInst_2d_0xB0, NakaInst_2d + 176
-	.set NakaInst_2d_0xC0, NakaInst_2d + 192
-	.set NakaInst_2d_0xD0, NakaInst_2d + 208
-	.set NakaInst_2d_d_0x7, NakaInst_2d_d + 7
-	.set NakaInst_3d_0x12, NakaInst_3d + 18
-	.set NakaInst_3d_0x3E, NakaInst_3d + 62
-	.set NakaInst_3d_0x44, NakaInst_3d + 68
-	.set NakaInst_3d_0x4C, NakaInst_3d + 76
-	.set NakaInst_3d_0x54, NakaInst_3d + 84
-	.set NakaInst_3d_0x5A, NakaInst_3d + 90
-	.set NakaInst_3d_0x6, NakaInst_3d + 6
-	.set NakaInst_3d_0x60, NakaInst_3d + 96
-	.set NakaInst_3d_0x68, NakaInst_3d + 104
-	.set NakaInst_3d_0x70, NakaInst_3d + 112
-	.set NakaInst_3d_0x76, NakaInst_3d + 118
-	.set NakaInst_3d_0x7E, NakaInst_3d + 126
-	.set NakaInst_3d_0x86, NakaInst_3d + 134
-	.set NakaInst_3d_0x8C, NakaInst_3d + 140
-	.set NakaInst_3d_0x92, NakaInst_3d + 146
-	.set NakaInst_3d_0x98, NakaInst_3d + 152
-	.set NakaInst_3d_0x9E, NakaInst_3d + 158
-	.set NakaInst_3d_0xA4, NakaInst_3d + 164
-	.set NakaInst_3d_0xAA, NakaInst_3d + 170
-	.set NakaInst_3d_0xB0, NakaInst_3d + 176
-	.set NakaInst_3d_0xB6, NakaInst_3d + 182
-	.set NakaInst_3d_0xC, NakaInst_3d + 12
-	.set NakaInst_3d_0xC2, NakaInst_3d + 194
-	.set NakaInst_DIRECT_E7FCE4_0x56, NakaInst_DIRECT_E7FCE4 + 86
 	.set NakaInst_DIRECT_E7FCE4_0x68, NakaInst_DIRECT_E7FCE4 + 104
 	.set NakaInst_DIRECT_E7FCE4_0x7A, NakaInst_DIRECT_E7FCE4 + 122
-	.set NakaInst_DIRECT_E7FCE4_0x8C, NakaInst_DIRECT_E7FCE4 + 140
-	.set NakaInst_DIRECT_E7FCE4_0xA, NakaInst_DIRECT_E7FCE4 + 10
-	.set NakaInst_DIRECT_E7FCE4_0xA0, NakaInst_DIRECT_E7FCE4 + 160
-	.set NakaInst_DIRECT_E7FCE4_0xA6, NakaInst_DIRECT_E7FCE4 + 166
-	.set NakaInst_DashDash_0x4, NakaInst_DashDash + 4
 	.set NakaInst_ExtDevice_Screens_0x2814, NakaInst_ExtDevice_Screens + 10260
 	.set NakaInst_ExtDevice_Screens_0x29E0, NakaInst_ExtDevice_Screens + 10720
 	.set NakaInst_ExtDevice_Screens_0x2B0C, NakaInst_ExtDevice_Screens + 11020
 	.set NakaInst_ExtDevice_Screens_0x2B26, NakaInst_ExtDevice_Screens + 11046
 	.set NakaInst_ExtDevice_Screens_0x2B3E, NakaInst_ExtDevice_Screens + 11070
-	.set NakaInst_ExtDevice_Screens_0x2B6E, NakaInst_ExtDevice_Screens + 11118
 	.set NakaInst_ExtDevice_Screens_0x2C68, NakaInst_ExtDevice_Screens + 11368
 	.set NakaInst_ExtDevice_Screens_0x2D52, NakaInst_ExtDevice_Screens + 11602
 	.set NakaInst_ExtDevice_Screens_0x2E3C, NakaInst_ExtDevice_Screens + 11836
 	.set NakaInst_ExtDevice_Screens_0x2E4E, NakaInst_ExtDevice_Screens + 11854
 	.set NakaInst_ExtDevice_Screens_0x2E60, NakaInst_ExtDevice_Screens + 11872
-	.set NakaInst_ExtDevice_Screens_0x3452, NakaInst_ExtDevice_Screens + 13394
-	.set NakaInst_ExtDevice_Screens_0x34D2, NakaInst_ExtDevice_Screens + 13522
 	.set NakaInst_FADE_IN_OUT_SETTING_0x2475, NakaInst_FADE_IN_OUT_SETTING + 9333
-	.set NakaInst_GM_0x12, NakaInst_GM + 18
-	.set NakaInst_GM_0x18, NakaInst_GM + 24
-	.set NakaInst_GM_0x1E, NakaInst_GM + 30
-	.set NakaInst_GM_0x28, NakaInst_GM + 40
-	.set NakaInst_GM_0x32, NakaInst_GM + 50
-	.set NakaInst_GM_0x3C, NakaInst_GM + 60
-	.set NakaInst_GM_0x46, NakaInst_GM + 70
-	.set NakaInst_GM_0x50, NakaInst_GM + 80
-	.set NakaInst_GM_0x6C, NakaInst_GM + 108
-	.set NakaInst_GM_0x8, NakaInst_GM + 8
-	.set NakaInst_INITIAL_0x1A, NakaInst_INITIAL + 26
-	.set NakaInst_INITIAL_0x28, NakaInst_INITIAL + 40
-	.set NakaInst_INITIAL_0xA, NakaInst_INITIAL + 10
 	.set NakaInst_IT_Off_0x8, NakaInst_IT_Off + 8
-	.set NakaInst_KEY_C_E9DE14_0xA, NakaInst_KEY_C_E9DE14 + 10
-	.set NakaInst_MEMORY_A_0x26, NakaInst_MEMORY_A + 38
-	.set NakaInst_MEMORY_A_0x34, NakaInst_MEMORY_A + 52
-	.set NakaInst_MEMORY_A_0x42, NakaInst_MEMORY_A + 66
-	.set NakaInst_MEMORY_A_0x50, NakaInst_MEMORY_A + 80
-	.set NakaInst_MEMORY_A_0x5E, NakaInst_MEMORY_A + 94
-	.set NakaInst_MEMORY_A_0xE, NakaInst_MEMORY_A + 14
 	.set NakaInst_MEMORY_A_ECFDF4_0xA, NakaInst_MEMORY_A_ECFDF4 + 10
-	.set NakaInst_NEXT_E800E8_0x2, NakaInst_NEXT_E800E8 + 2
-	.set NakaInst_NORMAL_0x14, NakaInst_NORMAL + 20
-	.set NakaInst_NORMAL_0xA, NakaInst_NORMAL + 10
-	.set NakaInst_NO_OPERATION_0x12, NakaInst_NO_OPERATION + 18
-	.set NakaInst_NO_OPERATION_0x19A, NakaInst_NO_OPERATION + 410
-	.set NakaInst_NO_OPERATION_0x1A, NakaInst_NO_OPERATION + 26
-	.set NakaInst_NO_OPERATION_0x1D4, NakaInst_NO_OPERATION + 468
-	.set NakaInst_NO_OPERATION_0x1F0, NakaInst_NO_OPERATION + 496
-	.set NakaInst_NO_OPERATION_0x1FC, NakaInst_NO_OPERATION + 508
-	.set NakaInst_NO_OPERATION_0x208, NakaInst_NO_OPERATION + 520
-	.set NakaInst_NO_OPERATION_0x22, NakaInst_NO_OPERATION + 34
-	.set NakaInst_NO_OPERATION_0x250, NakaInst_NO_OPERATION + 592
-	.set NakaInst_NO_OPERATION_0x268, NakaInst_NO_OPERATION + 616
-	.set NakaInst_NO_OPERATION_0x27A, NakaInst_NO_OPERATION + 634
-	.set NakaInst_NO_OPERATION_0x82, NakaInst_NO_OPERATION + 130
-	.set NakaInst_OFF_E7FCA2_0x6, NakaInst_OFF_E7FCA2 + 6
-	.set NakaInst_OFF_E80048_0x2, NakaInst_OFF_E80048 + 2
-	.set NakaInst_OFF_E80048_0x8, NakaInst_OFF_E80048 + 8
-	.set NakaInst_OFF_Str_0x1E, NakaInst_OFF_Str + 30
-	.set NakaInst_OFF_Str_0x32, NakaInst_OFF_Str + 50
-	.set NakaInst_OFF_Str_0x4, NakaInst_OFF_Str + 4
-	.set NakaInst_OFF_Str_0x42, NakaInst_OFF_Str + 66
-	.set NakaInst_OFF_Str_0x60, NakaInst_OFF_Str + 96
-	.set NakaInst_OFF_Str_0x6C, NakaInst_OFF_Str + 108
-	.set NakaInst_OFF_Str_0x78, NakaInst_OFF_Str + 120
-	.set NakaInst_OFF_Str_0x80, NakaInst_OFF_Str + 128
-	.set NakaInst_OFF_Str_0x84, NakaInst_OFF_Str + 132
-	.set NakaInst_OFF_Str_0x88, NakaInst_OFF_Str + 136
-	.set NakaInst_OFF_Str_0x8C, NakaInst_OFF_Str + 140
-	.set NakaInst_OFF_Str_0x90, NakaInst_OFF_Str + 144
-	.set NakaInst_OFF_Str_0x94, NakaInst_OFF_Str + 148
-	.set NakaInst_OFF_Str_0x98, NakaInst_OFF_Str + 152
-	.set NakaInst_OFF_Str_0xA, NakaInst_OFF_Str + 10
-	.set NakaInst_OFF_Str_0xB6, NakaInst_OFF_Str + 182
-	.set NakaInst_OFF_Str_0xD4, NakaInst_OFF_Str + 212
-	.set NakaInst_OFF_WidgetTbl2_0x100, NakaInst_OFF_WidgetTbl2 + 256
-	.set NakaInst_OFF_WidgetTbl2_0x112, NakaInst_OFF_WidgetTbl2 + 274
-	.set NakaInst_OFF_WidgetTbl2_0x12, NakaInst_OFF_WidgetTbl2 + 18
-	.set NakaInst_OFF_WidgetTbl2_0x1CC, NakaInst_OFF_WidgetTbl2 + 460
-	.set NakaInst_OFF_WidgetTbl2_0x29E, NakaInst_OFF_WidgetTbl2 + 670
-	.set NakaInst_OFF_WidgetTbl2_0x32, NakaInst_OFF_WidgetTbl2 + 50
-	.set NakaInst_OFF_WidgetTbl2_0x370, NakaInst_OFF_WidgetTbl2 + 880
-	.set NakaInst_OFF_WidgetTbl2_0x37E, NakaInst_OFF_WidgetTbl2 + 894
-	.set NakaInst_OFF_WidgetTbl2_0x40, NakaInst_OFF_WidgetTbl2 + 64
-	.set NakaInst_OFF_WidgetTbl2_0x4E, NakaInst_OFF_WidgetTbl2 + 78
-	.set NakaInst_OFF_WidgetTbl2_0x5C, NakaInst_OFF_WidgetTbl2 + 92
-	.set NakaInst_OFF_WidgetTbl2_0x78, NakaInst_OFF_WidgetTbl2 + 120
-	.set NakaInst_OFF_WidgetTbl2_0x9C, NakaInst_OFF_WidgetTbl2 + 156
-	.set NakaInst_OFF_WidgetTbl2_0xB0, NakaInst_OFF_WidgetTbl2 + 176
-	.set NakaInst_OFF_WidgetTbl2_0xB6, NakaInst_OFF_WidgetTbl2 + 182
-	.set NakaInst_OFF_WidgetTbl2_0xBC, NakaInst_OFF_WidgetTbl2 + 188
-	.set NakaInst_OFF_WidgetTbl2_0xCA, NakaInst_OFF_WidgetTbl2 + 202
-	.set NakaInst_OFF_WidgetTbl2_0xDC, NakaInst_OFF_WidgetTbl2 + 220
-	.set NakaInst_OFF_WidgetTbl2_0xEE, NakaInst_OFF_WidgetTbl2 + 238
-	.set NakaInst_OK_0x10, NakaInst_OK + 16
-	.set NakaInst_OK_0x14, NakaInst_OK + 20
-	.set NakaInst_OK_0x18, NakaInst_OK + 24
-	.set NakaInst_OK_0x4, NakaInst_OK + 4
-	.set NakaInst_OK_0x8, NakaInst_OK + 8
-	.set NakaInst_OK_0xC, NakaInst_OK + 12
-	.set NakaInst_OK_0xE, NakaInst_OK + 14
-	.set NakaInst_ON_E80168_0x10A, NakaInst_ON_E80168 + 266
-	.set NakaInst_ON_E80168_0x118, NakaInst_ON_E80168 + 280
-	.set NakaInst_ON_E80168_0x11A, NakaInst_ON_E80168 + 282
-	.set NakaInst_ON_E80168_0x12A, NakaInst_ON_E80168 + 298
-	.set NakaInst_ON_E80168_0x1A6, NakaInst_ON_E80168 + 422
-	.set NakaInst_ON_E80168_0x210, NakaInst_ON_E80168 + 528
-	.set NakaInst_ON_E80168_0x21E, NakaInst_ON_E80168 + 542
-	.set NakaInst_ON_E80168_0x266, NakaInst_ON_E80168 + 614
-	.set NakaInst_ON_E80168_0x270, NakaInst_ON_E80168 + 624
-	.set NakaInst_ON_E80168_0x276, NakaInst_ON_E80168 + 630
-	.set NakaInst_ON_E80168_0x27C, NakaInst_ON_E80168 + 636
-	.set NakaInst_ON_E80168_0x282, NakaInst_ON_E80168 + 642
-	.set NakaInst_ON_E80168_0x288, NakaInst_ON_E80168 + 648
-	.set NakaInst_ON_E80168_0x296, NakaInst_ON_E80168 + 662
-	.set NakaInst_ON_E80168_0x298, NakaInst_ON_E80168 + 664
-	.set NakaInst_ON_E80168_0x2B4, NakaInst_ON_E80168 + 692
-	.set NakaInst_ON_E80168_0x2C6, NakaInst_ON_E80168 + 710
-	.set NakaInst_ON_E80168_0x2DA, NakaInst_ON_E80168 + 730
-	.set NakaInst_ON_E80168_0x2DE, NakaInst_ON_E80168 + 734
-	.set NakaInst_ON_E80168_0x2EE, NakaInst_ON_E80168 + 750
-	.set NakaInst_ON_E80168_0x32A, NakaInst_ON_E80168 + 810
-	.set NakaInst_ON_E80168_0x36C, NakaInst_ON_E80168 + 876
-	.set NakaInst_ON_E80168_0x3AA, NakaInst_ON_E80168 + 938
-	.set NakaInst_ON_E80168_0x3B8, NakaInst_ON_E80168 + 952
-	.set NakaInst_ON_E80168_0x3C0, NakaInst_ON_E80168 + 960
-	.set NakaInst_ON_E80168_0x52, NakaInst_ON_E80168 + 82
-	.set NakaInst_ON_E80168_0x58, NakaInst_ON_E80168 + 88
-	.set NakaInst_ON_E80168_0x5E, NakaInst_ON_E80168 + 94
-	.set NakaInst_ON_E80168_0x82, NakaInst_ON_E80168 + 130
 	.set NakaInst_Param_Field02_0x4, NakaInst_Param_Field02 + 4
 	.set NakaInst_Param_IdxA0_01_0x12, NakaInst_Param_IdxA0_01 + 18
 	.set NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x118, NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea + 280
-	.set NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x11E, NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea + 286
 	.set NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x122, NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea + 290
-	.set NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x586, NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea + 1414
-	.set NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea_0x5A2, NakaInst_Por_favor_seleccione_el_Panel_Memory_al_que_desea + 1442
 	.set NakaInst_RIGHT_1_E9D9B0_0x1C, NakaInst_RIGHT_1_E9D9B0 + 28
 	.set NakaInst_RIGHT_1_E9D9B0_0x54, NakaInst_RIGHT_1_E9D9B0 + 84
 	.set NakaInst_RIGHT_1_E9DB0C_0x14, NakaInst_RIGHT_1_E9DB0C + 20
-	.set NakaInst_RIGHT_1_E9DB0C_0x64, NakaInst_RIGHT_1_E9DB0C + 100
 	.set NakaInst_RIGHT_1_E9DB0C_0x70, NakaInst_RIGHT_1_E9DB0C + 112
 	.set NakaInst_RIGHT_1_E9DB0C_0xAA, NakaInst_RIGHT_1_E9DB0C + 170
 	.set NakaInst_Rock_Pop_0x24, NakaInst_Rock_Pop + 36
@@ -1376,62 +831,6 @@
 	.set NakaInst_SoundConfig_LookupTable_0x58, NakaInst_SoundConfig_LookupTable + 88
 	.set NakaInst_SoundConfig_LookupTable_0x8A, NakaInst_SoundConfig_LookupTable + 138
 	.set NakaInst_TOTAL_0x34, NakaInst_TOTAL + 52
-	.set NakaInst_WaitWinCtlSmf_0x7C8, NakaInst_WaitWinCtlSmf + 1992
-	.set NakaInst_WaitWinCtlSmf_0x88E, NakaInst_WaitWinCtlSmf + 2190
-	.set NakaInst_WaitWinCtlSmf_0xA32, NakaInst_WaitWinCtlSmf + 2610
-	.set NakaInst_WaitWinCtlSmf_0xC0C, NakaInst_WaitWinCtlSmf + 3084
-	.set NakaInst_WaitWinCtlSmf_0xDF0, NakaInst_WaitWinCtlSmf + 3568
-	.set NakaInst_WaitWinCtlSmf_0xDFE, NakaInst_WaitWinCtlSmf + 3582
-	.set NakaInst_WaitWinCtlSmf_0xE5C, NakaInst_WaitWinCtlSmf + 3676
-	.set NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x3F4, NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las + 1012
-	.set NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x4DA, NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las + 1242
-	.set NakaToggle_OnOff_Data_0x4, NakaToggle_OnOff_Data + 4
-	.set NakaWidgetPtrTbl_SmfDp_0x1DA0, NakaWidgetPtrTbl_SmfDp + 7584
-	.set NakaWidgetPtrTbl_SmfDp_0x1FC8, NakaWidgetPtrTbl_SmfDp + 8136
-	.set NakaWidgetPtrTbl_SmfDp_0x1FE0, NakaWidgetPtrTbl_SmfDp + 8160
-	.set NakaWidgetPtrTbl_SmfDp_0x1FF8, NakaWidgetPtrTbl_SmfDp + 8184
-	.set NakaWidgetPtrTbl_SmfDp_0x2010, NakaWidgetPtrTbl_SmfDp + 8208
-	.set NakaWidgetPtrTbl_SmfDp_0x2028, NakaWidgetPtrTbl_SmfDp + 8232
-	.set NakaWidgetPtrTbl_SmfDp_0x2040, NakaWidgetPtrTbl_SmfDp + 8256
-	.set NakaWidgetPtrTbl_SmfDp_0x2058, NakaWidgetPtrTbl_SmfDp + 8280
-	.set NakaWidgetPtrTbl_SmfDp_0x2070, NakaWidgetPtrTbl_SmfDp + 8304
-	.set NakaWidgetPtrTbl_SmfDp_0x221A, NakaWidgetPtrTbl_SmfDp + 8730
-	.set NakaWidgetPtrTbl_SmfDp_0x2332, NakaWidgetPtrTbl_SmfDp + 9010
-	.set NakaWidgetPtrTbl_SmfDp_0x235E, NakaWidgetPtrTbl_SmfDp + 9054
-	.set NakaWidgetPtrTbl_SmfDp_0x238A, NakaWidgetPtrTbl_SmfDp + 9098
-	.set NakaWidgetPtrTbl_SmfDp_0x2398, NakaWidgetPtrTbl_SmfDp + 9112
-	.set NakaWidgetPtrTbl_SmfDp_0x23B8, NakaWidgetPtrTbl_SmfDp + 9144
-	.set NakaWidgetPtrTbl_SmfDp_0x23CC, NakaWidgetPtrTbl_SmfDp + 9164
-	.set NakaWidgetPtrTbl_SmfDp_0x23E0, NakaWidgetPtrTbl_SmfDp + 9184
-	.set NakaWidgetPtrTbl_SmfDp_0x23E4, NakaWidgetPtrTbl_SmfDp + 9188
-	.set NakaWidgetPtrTbl_SmfDp_0x23E8, NakaWidgetPtrTbl_SmfDp + 9192
-	.set NakaWidgetPtrTbl_SmfDp_0x23EC, NakaWidgetPtrTbl_SmfDp + 9196
-	.set NakaWidgetPtrTbl_SmfDp_0x23F0, NakaWidgetPtrTbl_SmfDp + 9200
-	.set NakaWidgetPtrTbl_SmfDp_0x23F4, NakaWidgetPtrTbl_SmfDp + 9204
-	.set NakaWidgetPtrTbl_SmfDp_0x23F8, NakaWidgetPtrTbl_SmfDp + 9208
-	.set NakaWidgetPtrTbl_SmfDp_0x23FC, NakaWidgetPtrTbl_SmfDp + 9212
-	.set NakaWidgetPtrTbl_SmfDp_0x2400, NakaWidgetPtrTbl_SmfDp + 9216
-	.set NakaWidgetPtrTbl_SmfDp_0x2404, NakaWidgetPtrTbl_SmfDp + 9220
-	.set NakaWidgetPtrTbl_SmfDp_0x2408, NakaWidgetPtrTbl_SmfDp + 9224
-	.set NakaWidgetPtrTbl_SmfDp_0x240C, NakaWidgetPtrTbl_SmfDp + 9228
-	.set NakaWidgetPtrTbl_SmfDp_0x2410, NakaWidgetPtrTbl_SmfDp + 9232
-	.set NakaWidgetPtrTbl_SmfDp_0x2414, NakaWidgetPtrTbl_SmfDp + 9236
-	.set NakaWidgetPtrTbl_SmfDp_0x2418, NakaWidgetPtrTbl_SmfDp + 9240
-	.set NakaWidgetPtrTbl_SmfDp_0x241C, NakaWidgetPtrTbl_SmfDp + 9244
-	.set NakaWidgetPtrTbl_SmfDp_0x2420, NakaWidgetPtrTbl_SmfDp + 9248
-	.set NakaWidgetPtrTbl_SmfDp_0x242E, NakaWidgetPtrTbl_SmfDp + 9262
-	.set NakaWidgetPtrTbl_SmfDp_0x2434, NakaWidgetPtrTbl_SmfDp + 9268
-	.set NakaWidgetPtrTbl_SmfDp_0x243A, NakaWidgetPtrTbl_SmfDp + 9274
-	.set NakaWidgetPtrTbl_SmfDp_0x2460, NakaWidgetPtrTbl_SmfDp + 9312
-	.set NakaWidgetPtrTbl_SmfDp_0x2500, NakaWidgetPtrTbl_SmfDp + 9472
-	.set NakaWidgetPtrTbl_SmfDp_0x2514, NakaWidgetPtrTbl_SmfDp + 9492
-	.set NakaWidgetPtrTbl_SmfDp_0x25AE, NakaWidgetPtrTbl_SmfDp + 9646
-	.set NakaWidgetPtrTbl_SmfDp_0x25C2, NakaWidgetPtrTbl_SmfDp + 9666
-	.set NakaWidgetPtrTbl_SmfDp_0x25D6, NakaWidgetPtrTbl_SmfDp + 9686
-	.set NakaWidgetPtrTbl_SmfDp_0x25F6, NakaWidgetPtrTbl_SmfDp + 9718
-	.set NakaWidgetPtrTbl_SmfDp_0x26B6, NakaWidgetPtrTbl_SmfDp + 9910
-	.set NakaWidgetPtrTbl_SmfDp_0x26CA, NakaWidgetPtrTbl_SmfDp + 9930
-	.set NakaWidgetPtrTbl_SmfDp_0x26D6, NakaWidgetPtrTbl_SmfDp + 9942
 	.set Naka_DisplayMode_Table_0x10, Naka_DisplayMode_Table + 16
 	.set Naka_DrawbarReg_Table_0x4DE, Naka_DrawbarReg_Table + 1246
 	.set Naka_Help_569_E30113_0x82B, Naka_Help_569_E30113 + 2091
@@ -1547,10 +946,6 @@
 	.set PlayModeStop_InitFlagBlock_0x21, PlayModeStop_InitFlagBlock + 33
 	.set PlayModeStop_InitFlagBlock_0x2C, PlayModeStop_InitFlagBlock + 44
 	.set PlayModeStop_InitFlagBlock_0x4, PlayModeStop_InitFlagBlock + 4
-	.set PlayModeStr_Pause_0x6, PlayModeStr_Pause + 6
-	.set PlayModeStr_Pause_0xC, PlayModeStr_Pause + 12
-	.set PlayModeStr_Play_0x6, PlayModeStr_Play + 6
-	.set PlayModeStr_Play_0xC, PlayModeStr_Play + 12
 	.set PlayMode_InitFlagBlock_0x16, PlayMode_InitFlagBlock + 22
 	.set PlayMode_InitFlagBlock_0x5, PlayMode_InitFlagBlock + 5
 	.set PortConfig_DataTable_A_0x51, PortConfig_DataTable_A + 81
@@ -1569,12 +964,7 @@
 	.set Presentation_RootEntry_0x6, Presentation_RootEntry + 6
 	.set Presentation_TagStrTable_0x100, Presentation_TagStrTable + 256
 	.set Presentation_TagStrTable_0x102, Presentation_TagStrTable + 258
-	.set Presentation_TagStrTable_0x16, Presentation_TagStrTable + 22
 	.set Presentation_TagStrTable_0x17, Presentation_TagStrTable + 23
-	.set Presentation_TagStrTable_0x18, Presentation_TagStrTable + 24
-	.set Presentation_TagStrTable_0x1E, Presentation_TagStrTable + 30
-	.set Presentation_TagStrTable_0x4, Presentation_TagStrTable + 4
-	.set Presentation_TagStrTable_0x6E, Presentation_TagStrTable + 110
 	.set Presentation_TagStrTable_0x72, Presentation_TagStrTable + 114
 	.set Presentation_TagStrTable_0x88, Presentation_TagStrTable + 136
 	.set Presentation_TagStrTable_0xA4, Presentation_TagStrTable + 164
@@ -1582,17 +972,7 @@
 	.set Presentation_TagStrTable_0xD2, Presentation_TagStrTable + 210
 	.set Presentation_TagStrTable_0xF2, Presentation_TagStrTable + 242
 	.set Presentation_TagStrTable_0xFC, Presentation_TagStrTable + 252
-	.set Presentation_TagTableEnd_0x33, Presentation_TagTableEnd + 51
-	.set Presentation_TagTableEnd_0x37, Presentation_TagTableEnd + 55
-	.set Presentation_TagTableEnd_0x3B, Presentation_TagTableEnd + 59
-	.set Presentation_TagTableEnd_0x3F, Presentation_TagTableEnd + 63
-	.set Presentation_TagTableEnd_0x43, Presentation_TagTableEnd + 67
 	.set Presentation_TagTableEnd_0x47, Presentation_TagTableEnd + 71
-	.set Presentation_TagTableEnd_0x4D, Presentation_TagTableEnd + 77
-	.set Presentation_TagTableEnd_0x51, Presentation_TagTableEnd + 81
-	.set Presentation_TagTableEnd_0x65, Presentation_TagTableEnd + 101
-	.set Presentation_TagTableEnd_0x69, Presentation_TagTableEnd + 105
-	.set Presentation_TagTableEnd_0x6D, Presentation_TagTableEnd + 109
 	.set Presentation_TagTableEnd_0x81, Presentation_TagTableEnd + 129
 	.set Presentation_TagTableEnd_0x83, Presentation_TagTableEnd + 131
 	.set Protocol_values_for_LED_rows_0x10, Protocol_values_for_LED_rows + 16
@@ -1601,18 +981,8 @@
 	.set Protocol_values_for_LED_rows_0x3E, Protocol_values_for_LED_rows + 62
 	.set Protocol_values_for_LED_rows_0x46, Protocol_values_for_LED_rows + 70
 	.set Protocol_values_for_LED_rows_0x56, Protocol_values_for_LED_rows + 86
-	.set PtrTbl_DrumKitNames_0x2, PtrTbl_DrumKitNames + 2
-	.set PtrTbl_DrumKitNames_0x60, PtrTbl_DrumKitNames + 96
-	.set PtrTbl_DrumKitNames_0x64, PtrTbl_DrumKitNames + 100
-	.set PtrTbl_DrumKitNames_0x68, PtrTbl_DrumKitNames + 104
 	.set PtrTbl_DrumKitNames_0x7A, PtrTbl_DrumKitNames + 122
-	.set PtrTbl_DrumKitNames_0x80, PtrTbl_DrumKitNames + 128
-	.set PtrTbl_DrumKitNames_0x82, PtrTbl_DrumKitNames + 130
-	.set PtrTbl_DrumKitNames_0x86, PtrTbl_DrumKitNames + 134
-	.set PtrTbl_DrumKitNames_0x8A, PtrTbl_DrumKitNames + 138
 	.set PtrTbl_DrumKitNames_0x9C, PtrTbl_DrumKitNames + 156
-	.set PtrTbl_DrumKitNames_0xA0, PtrTbl_DrumKitNames + 160
-	.set PtrTbl_DrumKitNames_0xA4, PtrTbl_DrumKitNames + 164
 	.set ROM_PaddingFF_0x2, ROM_PaddingFF + 2
 	.set ROM_PaddingFF_0x3, ROM_PaddingFF + 3
 	.set ROM_PaddingFF_0x4, ROM_PaddingFF + 4
@@ -1626,21 +996,6 @@
 	.set Reset_Floppy_Disk_Controller_0x12, Reset_Floppy_Disk_Controller + 18
 	.set Resource_Region3_Start_0x10, Resource_Region3_Start + 16
 	.set Resource_Region3_Start_0x12, Resource_Region3_Start + 18
-	.set Resource_Region3_Start_0x40, Resource_Region3_Start + 64
-	.set Resource_Region3_Start_0x44, Resource_Region3_Start + 68
-	.set Resource_Region3_Start_0x48, Resource_Region3_Start + 72
-	.set Resource_RegionPad_0x10, Resource_RegionPad + 16
-	.set Resource_RegionPad_0x14, Resource_RegionPad + 20
-	.set Resource_RegionPad_0x18, Resource_RegionPad + 24
-	.set Resource_RegionPad_0x1C, Resource_RegionPad + 28
-	.set Resource_RegionPad_0x4, Resource_RegionPad + 4
-	.set Resource_RegionPad_0x8, Resource_RegionPad + 8
-	.set Resource_RegionPad_0x9C, Resource_RegionPad + 156
-	.set Resource_RegionPad_0xAC, Resource_RegionPad + 172
-	.set Resource_RegionPad_0xBC, Resource_RegionPad + 188
-	.set Resource_RegionPad_0xC, Resource_RegionPad + 12
-	.set Resource_RegionPad_0xCC, Resource_RegionPad + 204
-	.set Resource_RegionPad_0xDC, Resource_RegionPad + 220
 	.set RhythmConfig_InlineCode2_0x7, RhythmConfig_InlineCode2 + 7
 	.set RhythmFillIn_PatternTable_0x8, RhythmFillIn_PatternTable + 8
 	.set RhythmROM_LoadPattern_0x34, RhythmROM_LoadPattern + 52
@@ -2013,7 +1368,6 @@
 	.set SeqChan_CommandDispatch_Table_0x1AA, SeqChan_CommandDispatch_Table + 426
 	.set SeqChan_CommandDispatch_Table_0x9C, SeqChan_CommandDispatch_Table + 156
 	.set SeqChan_CommandDispatch_Table_0xF4, SeqChan_CommandDispatch_Table + 244
-	.set SeqChan_Map_2ch_0x2, SeqChan_Map_2ch + 2
 	.set SeqData_ScanTracks_InnerLoop_0x5, SeqData_ScanTracks_InnerLoop + 5
 	.set SeqData_ScanTracks_OuterLoop_0xC, SeqData_ScanTracks_OuterLoop + 12
 	.set SeqData_SubDispatch_Table_0x9C, SeqData_SubDispatch_Table + 156
@@ -2152,7 +1506,6 @@
 	.set SoundEvt_LongPacketHandler_0x35, SoundEvt_LongPacketHandler + 53
 	.set SoundEvt_LongPacketHandler_0xA6, SoundEvt_LongPacketHandler + 166
 	.set SoundEvt_LongPacketHandler_0xB7, SoundEvt_LongPacketHandler + 183
-	.set SoundParam_EncoderMappingData_0x286, SoundParam_EncoderMappingData + 646
 	.set SoundParam_EncoderMappingData_0x302, SoundParam_EncoderMappingData + 770
 	.set SoundProgram_DispatchTable_0x400, SoundProgram_DispatchTable + 1024
 	.set SoundProgram_DispatchTable_0x800, SoundProgram_DispatchTable + 2048
@@ -2168,26 +1521,10 @@
 	.set SoundProgram_DispatchTable_0x8F4, SoundProgram_DispatchTable + 2292
 	.set SoundProgram_DispatchTable_0x908, SoundProgram_DispatchTable + 2312
 	.set SplitNoteStr_C_0x4, SplitNoteStr_C + 4
-	.set SplitPoint_NoteEntry_C_Code_0x104, SplitPoint_NoteEntry_C_Code + 260
-	.set SplitPoint_NoteEntry_C_Code_0x118, SplitPoint_NoteEntry_C_Code + 280
-	.set SplitPoint_NoteEntry_C_Code_0x38, SplitPoint_NoteEntry_C_Code + 56
-	.set SplitPoint_NoteEntry_C_Code_0x4, SplitPoint_NoteEntry_C_Code + 4
-	.set SplitPoint_NoteEntry_C_Code_0x42, SplitPoint_NoteEntry_C_Code + 66
-	.set SplitPoint_NoteEntry_C_Code_0x48, SplitPoint_NoteEntry_C_Code + 72
-	.set SplitPoint_NoteEntry_C_Code_0x4E, SplitPoint_NoteEntry_C_Code + 78
-	.set SplitPoint_NoteEntry_C_Code_0x54, SplitPoint_NoteEntry_C_Code + 84
-	.set SplitPoint_NoteEntry_C_Code_0x5A, SplitPoint_NoteEntry_C_Code + 90
-	.set SplitPoint_NoteEntry_C_Code_0x60, SplitPoint_NoteEntry_C_Code + 96
-	.set SplitPoint_NoteEntry_C_Code_0x66, SplitPoint_NoteEntry_C_Code + 102
-	.set SplitPoint_NoteEntry_C_Code_0xD2, SplitPoint_NoteEntry_C_Code + 210
-	.set SplitPoint_NoteEntry_C_Code_0xDC, SplitPoint_NoteEntry_C_Code + 220
-	.set SplitPoint_NoteEntry_C_Code_0xF0, SplitPoint_NoteEntry_C_Code + 240
-	.set SplitPoint_NoteEntry_C_Code_0xFA, SplitPoint_NoteEntry_C_Code + 250
 	.set Sprintf_Octal_ZeroFill_0x7, Sprintf_Octal_ZeroFill + 7
 	.set Sqedt_ValueDispatch_0x28, Sqedt_ValueDispatch + 40
 	.set Sqedt_ValueDispatch_0x58, Sqedt_ValueDispatch + 88
 	.set Sqedt_ValueDispatch_0x82, Sqedt_ValueDispatch + 130
-	.set StorageAreaName_PanelMemory_0xE, StorageAreaName_PanelMemory + 14
 	.set StrBankShort_User1_0xA, StrBankShort_User1 + 10
 	.set StrBeatOff_0x12, StrBeatOff + 18
 	.set StrBeatOff_0x4, StrBeatOff + 4
@@ -2214,42 +1551,20 @@
 	.set StrTranspose_Minus25_0x12, StrTranspose_Minus25 + 18
 	.set StrTranspose_Minus25_0x4, StrTranspose_Minus25 + 4
 	.set Str_AllOption_EA0980_0x12, Str_AllOption_EA0980 + 18
-	.set Str_AllOption_EA0980_0x16, Str_AllOption_EA0980 + 22
-	.set Str_AllOption_EA0980_0x2A, Str_AllOption_EA0980 + 42
-	.set Str_AllOption_EA0980_0x2E, Str_AllOption_EA0980 + 46
-	.set Str_AllOption_EA09B2_0x12, Str_AllOption_EA09B2 + 18
 	.set Str_AllOption_EA09B2_0x16, Str_AllOption_EA09B2 + 22
-	.set Str_AllOption_EA09B2_0x1A, Str_AllOption_EA09B2 + 26
-	.set Str_AllOption_EA09B2_0x20, Str_AllOption_EA09B2 + 32
-	.set Str_AllOption_EA09B2_0x24, Str_AllOption_EA09B2 + 36
-	.set Str_AllOption_EA09B2_0x28, Str_AllOption_EA09B2 + 40
 	.set Str_AllOption_EA09B2_0x3A, Str_AllOption_EA09B2 + 58
 	.set Str_AreYouSure_IT_0x46, Str_AreYouSure_IT + 70
 	.set Str_Attention_EN_0xC, Str_Attention_EN + 12
-	.set Str_DiskErr20_Italian_0x5DE, Str_DiskErr20_Italian + 1502
-	.set Str_Err24Chord_English_0x4E, Str_Err24Chord_English + 78
-	.set Str_Err24Ctrl_Italian_0x170, Str_Err24Ctrl_Italian + 368
 	.set Str_FactoryResetDesc_EN3_0x156, Str_FactoryResetDesc_EN3 + 342
 	.set Str_InitSettingWarn_IT_0x19A, Str_InitSettingWarn_IT + 410
 	.set Str_InitializeRoot_0x10, Str_InitializeRoot + 16
-	.set Str_InitializeRoot_0x12, Str_InitializeRoot + 18
 	.set Str_No_0x1F6, Str_No + 502
 	.set Str_No_0x1FA, Str_No + 506
 	.set Str_No_0x26, Str_No + 38
 	.set Str_No_0x30E, Str_No + 782
 	.set Str_No_0x38, Str_No + 56
-	.set Str_No_0x39E, Str_No + 926
-	.set Str_No_0x3A4, Str_No + 932
-	.set Str_No_0x3E4, Str_No + 996
-	.set Str_No_0x3FC, Str_No + 1020
 	.set Str_No_0x4, Str_No + 4
-	.set Str_No_0x42E, Str_No + 1070
-	.set Str_No_0x43A, Str_No + 1082
-	.set Str_No_0x4DA, Str_No + 1242
 	.set Str_No_0x504, Str_No + 1284
-	.set Str_No_0x514, Str_No + 1300
-	.set Str_No_0x51E, Str_No + 1310
-	.set Str_No_0x52E, Str_No + 1326
 	.set Str_No_0x58E, Str_No + 1422
 	.set Str_No_0x5B6, Str_No + 1462
 	.set Str_No_0x5C6, Str_No + 1478
@@ -2261,47 +1576,25 @@
 	.set Str_No_0x600, Str_No + 1536
 	.set Str_No_0x602, Str_No + 1538
 	.set Str_No_0x606, Str_No + 1542
-	.set Str_No_0x6AA, Str_No + 1706
 	.set Str_No_0x6B6, Str_No + 1718
 	.set Str_No_0x6D0, Str_No + 1744
 	.set Str_No_0x6DE, Str_No + 1758
-	.set Str_No_0x6E, Str_No + 110
-	.set Str_No_0x6E8, Str_No + 1768
 	.set Str_No_0x6EE, Str_No + 1774
-	.set Str_No_0x6FA, Str_No + 1786
 	.set Str_No_0x700, Str_No + 1792
-	.set Str_No_0x70C, Str_No + 1804
 	.set Str_No_0x712, Str_No + 1810
-	.set Str_No_0x71E, Str_No + 1822
 	.set Str_No_0x724, Str_No + 1828
-	.set Str_No_0x730, Str_No + 1840
 	.set Str_No_0x736, Str_No + 1846
-	.set Str_No_0x74, Str_No + 116
-	.set Str_No_0x742, Str_No + 1858
 	.set Str_No_0x748, Str_No + 1864
-	.set Str_No_0x754, Str_No + 1876
-	.set Str_No_0x7A, Str_No + 122
-	.set Str_No_0x80, Str_No + 128
-	.set Str_No_0x866, Str_No + 2150
-	.set Str_No_0x86A, Str_No + 2154
-	.set Str_No_0x892, Str_No + 2194
-	.set Str_No_0x896, Str_No + 2198
-	.set Str_No_0x8B6, Str_No + 2230
 	.set Str_No_0x8BC, Str_No + 2236
-	.set Str_No_0x8C0, Str_No + 2240
 	.set Str_No_0x8C8, Str_No + 2248
 	.set Str_No_0x8CE, Str_No + 2254
 	.set Str_No_0x8DC, Str_No + 2268
 	.set Str_No_0xAE0, Str_No + 2784
-	.set Str_No_0xB0, Str_No + 176
 	.set Str_No_0xB00, Str_No + 2816
-	.set Str_No_0xB48, Str_No + 2888
 	.set Str_No_0xB4C, Str_No + 2892
 	.set Str_No_0xB50, Str_No + 2896
 	.set Str_No_0xB7E, Str_No + 2942
 	.set Str_No_0xBBE, Str_No + 3006
-	.set Str_No_0xBFE, Str_No + 3070
-	.set Str_No_0xC8E, Str_No + 3214
 	.set Str_No_0xCBE, Str_No + 3262
 	.set Str_No_0xCC6, Str_No + 3270
 	.set Str_No_0xCCE, Str_No + 3278
@@ -2313,71 +1606,13 @@
 	.set Str_No_0xDFE, Str_No + 3582
 	.set Str_No_0xE06, Str_No + 3590
 	.set Str_No_0xE0E, Str_No + 3598
-	.set Str_No_0xE16, Str_No + 3606
-	.set Str_No_0xE1A, Str_No + 3610
-	.set Str_No_0xE1E, Str_No + 3614
 	.set Str_No_0xE22, Str_No + 3618
-	.set Str_No_0xE2A, Str_No + 3626
-	.set Str_No_0xE36, Str_No + 3638
-	.set Str_No_0xE3A, Str_No + 3642
-	.set Str_No_0xE3E, Str_No + 3646
 	.set Str_No_0xE42, Str_No + 3650
-	.set Str_No_0xE4A, Str_No + 3658
-	.set Str_No_0xE4E, Str_No + 3662
-	.set Str_No_0xE52, Str_No + 3666
 	.set Str_No_0xE56, Str_No + 3670
-	.set Str_No_0xE5E, Str_No + 3678
-	.set Str_No_0xE62, Str_No + 3682
-	.set Str_No_0xE66, Str_No + 3686
 	.set Str_No_0xE6A, Str_No + 3690
-	.set Str_No_0xE72, Str_No + 3698
-	.set Str_No_0xE7A, Str_No + 3706
-	.set Str_No_0xE7E, Str_No + 3710
-	.set Str_No_0xE82, Str_No + 3714
-	.set Str_No_0xE86, Str_No + 3718
-	.set Str_No_0xF4, Str_No + 244
 	.set Str_PartName_Right1_0x10, Str_PartName_Right1 + 16
-	.set Str_PartName_Right1_0x100, Str_PartName_Right1 + 256
-	.set Str_PartName_Right1_0x104, Str_PartName_Right1 + 260
-	.set Str_PartName_Right1_0x108, Str_PartName_Right1 + 264
-	.set Str_PartName_Right1_0x10C, Str_PartName_Right1 + 268
-	.set Str_PartName_Right1_0x110, Str_PartName_Right1 + 272
-	.set Str_PartName_Right1_0x114, Str_PartName_Right1 + 276
-	.set Str_PartName_Right1_0x118, Str_PartName_Right1 + 280
-	.set Str_PartName_Right1_0x24, Str_PartName_Right1 + 36
-	.set Str_PartName_Right1_0x4C, Str_PartName_Right1 + 76
-	.set Str_PartName_Right1_0x52, Str_PartName_Right1 + 82
-	.set Str_PartName_Right1_0x5C, Str_PartName_Right1 + 92
-	.set Str_PartName_Right1_0x62, Str_PartName_Right1 + 98
-	.set Str_PartName_Right1_0x68, Str_PartName_Right1 + 104
-	.set Str_PartName_Right1_0x6C, Str_PartName_Right1 + 108
-	.set Str_PartName_Right1_0x72, Str_PartName_Right1 + 114
-	.set Str_PartName_Right1_0x78, Str_PartName_Right1 + 120
-	.set Str_PartName_Right1_0x8C, Str_PartName_Right1 + 140
-	.set Str_PartName_Right1_0x90, Str_PartName_Right1 + 144
-	.set Str_PartName_Right1_0x94, Str_PartName_Right1 + 148
-	.set Str_PartName_Right1_0x98, Str_PartName_Right1 + 152
-	.set Str_PartName_Right1_0x9C, Str_PartName_Right1 + 156
-	.set Str_PartName_Right1_0xA0, Str_PartName_Right1 + 160
-	.set Str_PartName_Right1_0xB2, Str_PartName_Right1 + 178
-	.set Str_PartName_Right1_0xB6, Str_PartName_Right1 + 182
-	.set Str_PartName_Right1_0xC0, Str_PartName_Right1 + 192
-	.set Str_PartName_Right1_0xC6, Str_PartName_Right1 + 198
-	.set Str_PartName_Right1_0xD4, Str_PartName_Right1 + 212
-	.set Str_PartName_Right1_0xD8, Str_PartName_Right1 + 216
-	.set Str_PartName_Right1_0xDC, Str_PartName_Right1 + 220
-	.set Str_PartName_Right1_0xE0, Str_PartName_Right1 + 224
-	.set Str_PartName_Right1_0xE4, Str_PartName_Right1 + 228
-	.set Str_PartName_Right1_0xE8, Str_PartName_Right1 + 232
-	.set Str_PartName_Right1_0xEC, Str_PartName_Right1 + 236
-	.set Str_PartName_Right1_0xF0, Str_PartName_Right1 + 240
-	.set Str_PartName_Right1_0xF4, Str_PartName_Right1 + 244
-	.set Str_PartName_Right1_0xF8, Str_PartName_Right1 + 248
-	.set Str_PartName_Right1_0xFC, Str_PartName_Right1 + 252
-	.set Str_SmfConvert_GmToGm_0x10, Str_SmfConvert_GmToGm + 16
 	.set Str_SmfConvert_GmToGm_0x1E, Str_SmfConvert_GmToGm + 30
 	.set Str_SmfConvert_GmToGm_0x2A, Str_SmfConvert_GmToGm + 42
-	.set Str_SmfConvert_GmToGm_0x2E, Str_SmfConvert_GmToGm + 46
 	.set Str_StoreSoundBalance_DE_0x58, Str_StoreSoundBalance_DE + 88
 	.set Str_StoreTotalSetting_DE_0x112, Str_StoreTotalSetting_DE + 274
 	.set Str_StoreTotalSetting_DE_0x136, Str_StoreTotalSetting_DE + 310
@@ -2404,7 +1639,6 @@
 	.set Str_StoreTotalSetting_DE_0xCC, Str_StoreTotalSetting_DE + 204
 	.set Str_StoreTotalSetting_DE_0xDA, Str_StoreTotalSetting_DE + 218
 	.set Str_StoreTotalSetting_DE_0xFE, Str_StoreTotalSetting_DE + 254
-	.set Str_Variation1_0x8, Str_Variation1 + 8
 	.set StringData_APCModeNames_0x141, StringData_APCModeNames + 321
 	.set StringData_APCModeNames_0x160, StringData_APCModeNames + 352
 	.set StringData_APCModeNames_0x161, StringData_APCModeNames + 353
@@ -2703,7 +1937,6 @@
 	.set ToneKit_FrequencyTable_0xB2, ToneKit_FrequencyTable + 178
 	.set ToneKit_FrequencyTable_0xDA, ToneKit_FrequencyTable + 218
 	.set ToneKit_ParamBlock_116_0x18, ToneKit_ParamBlock_116 + 24
-	.set ToneKit_ParamBlock_116_0x7C, ToneKit_ParamBlock_116 + 124
 	.set ToneKit_VoiceDispatch_Table_0x18C, ToneKit_VoiceDispatch_Table + 396
 	.set ToneKit_VoiceDispatch_Table_0x31C, ToneKit_VoiceDispatch_Table + 796
 	.set ToneKit_VoiceDispatch_Table_0x320, ToneKit_VoiceDispatch_Table + 800
@@ -2783,10 +2016,6 @@
 	.set TransposeNoteStr_C_0xA0, TransposeNoteStr_C + 160
 	.set TransposeNoteStr_C_0xC6, TransposeNoteStr_C + 198
 	.set TransposeNoteStr_C_0xE4, TransposeNoteStr_C + 228
-	.set Transpose_String_Plus2_0x12, Transpose_String_Plus2 + 18
-	.set Transpose_String_Plus2_0x52, Transpose_String_Plus2 + 82
-	.set Transpose_String_Plus2_0x58, Transpose_String_Plus2 + 88
-	.set Transpose_String_Plus2_0x5E, Transpose_String_Plus2 + 94
 	.set TuningSys_Param_01_0x24A, TuningSys_Param_01 + 586
 	.set TuningSys_Param_01_0x254, TuningSys_Param_01 + 596
 	.set TuningSys_Param_01_0x25E, TuningSys_Param_01 + 606
@@ -2883,7 +2112,6 @@
 	.set UIState_DefaultConfig_B_0x4, UIState_DefaultConfig_B + 4
 	.set UIState_DefaultConfig_C_0x4, UIState_DefaultConfig_C + 4
 	.set UIState_ProcessKeyEvent_0x3D, UIState_ProcessKeyEvent + 61
-	.set UIStr_No_0x4, UIStr_No + 4
 	.set UpdSeSel_ExtendedOps_Data_0x1F6, UpdSeSel_ExtendedOps_Data + 502
 	.set UpdSeSel_ExtendedOps_Data_0x28C, UpdSeSel_ExtendedOps_Data + 652
 	.set UpdSeSel_ExtendedOps_Data_0x336, UpdSeSel_ExtendedOps_Data + 822
@@ -2905,11 +2133,6 @@
 	.set UpdSeSel_ExtendedOps_Data_0xC88, UpdSeSel_ExtendedOps_Data + 3208
 	.set UpdSeSel_ExtendedOps_Data_0xD32, UpdSeSel_ExtendedOps_Data + 3378
 	.set UpdSeSel_ExtendedOps_Data_0xE1, UpdSeSel_ExtendedOps_Data + 225
-	.set UserMemory_ConfirmData_0x16, UserMemory_ConfirmData + 22
-	.set UserMemory_FormatStrings_0x16, UserMemory_FormatStrings + 22
-	.set UserMemory_FormatStrings_0xC0, UserMemory_FormatStrings + 192
-	.set UserMemory_FormatStrings_0xCE, UserMemory_FormatStrings + 206
-	.set UserMemory_FormatStrings_0xD6, UserMemory_FormatStrings + 214
 	.set VariationStr_V1_0x3C, VariationStr_V1 + 60
 	.set VariationStr_V1_0x4, VariationStr_V1 + 4
 	.set VocalistGrid_DispatchData_0x160, VocalistGrid_DispatchData + 352
@@ -3068,66 +2291,6 @@
 	.set Voice_NoteChannelTable2_0x2, Voice_NoteChannelTable2 + 2
 	.set Voice_NoteParamTable_0x2, Voice_NoteParamTable + 2
 	.set VwMenuBox_Confirm_RenderBottom_0x2E, VwMenuBox_Confirm_RenderBottom + 46
-	.set WidgetData_CharsetMappingTable_0x10, WidgetData_CharsetMappingTable + 16
-	.set WidgetData_CharsetMappingTable_0x126, WidgetData_CharsetMappingTable + 294
-	.set WidgetData_CharsetMappingTable_0x1A6, WidgetData_CharsetMappingTable + 422
-	.set WidgetData_CharsetMappingTable_0x20, WidgetData_CharsetMappingTable + 32
-	.set WidgetData_CharsetMappingTable_0x226, WidgetData_CharsetMappingTable + 550
-	.set WidgetData_CharsetMappingTable_0x248, WidgetData_CharsetMappingTable + 584
-	.set WidgetData_CharsetMappingTable_0x26, WidgetData_CharsetMappingTable + 38
-	.set WidgetData_CharsetMappingTable_0x264, WidgetData_CharsetMappingTable + 612
-	.set WidgetData_CharsetMappingTable_0x270, WidgetData_CharsetMappingTable + 624
-	.set WidgetData_CharsetMappingTable_0x27C, WidgetData_CharsetMappingTable + 636
-	.set WidgetData_CharsetMappingTable_0x28C, WidgetData_CharsetMappingTable + 652
-	.set WidgetData_CharsetMappingTable_0x29C, WidgetData_CharsetMappingTable + 668
-	.set WidgetData_CharsetMappingTable_0x2C0, WidgetData_CharsetMappingTable + 704
-	.set WidgetData_CharsetMappingTable_0x300, WidgetData_CharsetMappingTable + 768
-	.set WidgetData_CharsetMappingTable_0x30C, WidgetData_CharsetMappingTable + 780
-	.set WidgetData_CharsetMappingTable_0x318, WidgetData_CharsetMappingTable + 792
-	.set WidgetData_CharsetMappingTable_0x328, WidgetData_CharsetMappingTable + 808
-	.set WidgetData_CharsetMappingTable_0x338, WidgetData_CharsetMappingTable + 824
-	.set WidgetData_CharsetMappingTable_0x35C, WidgetData_CharsetMappingTable + 860
-	.set WidgetData_CharsetMappingTable_0x39C, WidgetData_CharsetMappingTable + 924
-	.set WidgetData_CharsetMappingTable_0x3AC, WidgetData_CharsetMappingTable + 940
-	.set WidgetData_CharsetMappingTable_0x3CC, WidgetData_CharsetMappingTable + 972
-	.set WidgetData_CharsetMappingTable_0x3E4, WidgetData_CharsetMappingTable + 996
-	.set WidgetData_CharsetMappingTable_0x3FC, WidgetData_CharsetMappingTable + 1020
-	.set WidgetData_CharsetMappingTable_0x40C, WidgetData_CharsetMappingTable + 1036
-	.set WidgetData_CharsetMappingTable_0x41C, WidgetData_CharsetMappingTable + 1052
-	.set WidgetData_CharsetMappingTable_0x434, WidgetData_CharsetMappingTable + 1076
-	.set WidgetData_CharsetMappingTable_0x452, WidgetData_CharsetMappingTable + 1106
-	.set WidgetData_CharsetMappingTable_0x474, WidgetData_CharsetMappingTable + 1140
-	.set WidgetData_CharsetMappingTable_0x4A6, WidgetData_CharsetMappingTable + 1190
-	.set WidgetData_CharsetMappingTable_0x4D8, WidgetData_CharsetMappingTable + 1240
-	.set WidgetData_CharsetMappingTable_0x50A, WidgetData_CharsetMappingTable + 1290
-	.set WidgetData_CharsetMappingTable_0x8, WidgetData_CharsetMappingTable + 8
-	.set WidgetData_CharsetMappingTable_0xA6, WidgetData_CharsetMappingTable + 166
-	.set WidgetData_DrawbarPositionTable_0x122, WidgetData_DrawbarPositionTable + 290
-	.set WidgetData_DrawbarPositionTable_0x12E, WidgetData_DrawbarPositionTable + 302
-	.set WidgetData_DrawbarPositionTable_0x13A, WidgetData_DrawbarPositionTable + 314
-	.set WidgetData_DrawbarPositionTable_0x146, WidgetData_DrawbarPositionTable + 326
-	.set WidgetData_DrawbarPositionTable_0x152, WidgetData_DrawbarPositionTable + 338
-	.set WidgetData_DrawbarPositionTable_0x15E, WidgetData_DrawbarPositionTable + 350
-	.set WidgetData_DrawbarPositionTable_0x16A, WidgetData_DrawbarPositionTable + 362
-	.set WidgetData_DrawbarPositionTable_0x176, WidgetData_DrawbarPositionTable + 374
-	.set WidgetData_DrawbarPositionTable_0x17A, WidgetData_DrawbarPositionTable + 378
-	.set WidgetData_DrawbarPositionTable_0x188, WidgetData_DrawbarPositionTable + 392
-	.set WidgetData_DrawbarPositionTable_0x198, WidgetData_DrawbarPositionTable + 408
-	.set WidgetData_DrawbarPositionTable_0x19C, WidgetData_DrawbarPositionTable + 412
-	.set WidgetData_DrawbarPositionTable_0x1A0, WidgetData_DrawbarPositionTable + 416
-	.set WidgetData_DrawbarPositionTable_0x1A4, WidgetData_DrawbarPositionTable + 420
-	.set WidgetData_DrawbarPositionTable_0x1A8, WidgetData_DrawbarPositionTable + 424
-	.set WidgetData_DrawbarPositionTable_0x1B0, WidgetData_DrawbarPositionTable + 432
-	.set WidgetData_DrawbarPositionTable_0x1B6, WidgetData_DrawbarPositionTable + 438
-	.set WidgetData_DrawbarPositionTable_0x1BA, WidgetData_DrawbarPositionTable + 442
-	.set WidgetData_DrawbarPositionTable_0x6A, WidgetData_DrawbarPositionTable + 106
-	.set WidgetData_DrawbarPositionTable_0x82, WidgetData_DrawbarPositionTable + 130
-	.set WidgetData_DrawbarPositionTable_0x86, WidgetData_DrawbarPositionTable + 134
-	.set WidgetData_DrawbarPositionTable_0xA6, WidgetData_DrawbarPositionTable + 166
-	.set WidgetData_DrawbarPositionTable_0xBE, WidgetData_DrawbarPositionTable + 190
-	.set WidgetData_DrawbarPositionTable_0xD2, WidgetData_DrawbarPositionTable + 210
-	.set WidgetData_DrawbarPositionTable_0xE2, WidgetData_DrawbarPositionTable + 226
-	.set WidgetData_DrawbarPositionTable_0xF2, WidgetData_DrawbarPositionTable + 242
 	.set WidgetName_InitPtrTable_0x15, WidgetName_InitPtrTable + 21
 	.set WidgetName_PtrBlock_A_0x1, WidgetName_PtrBlock_A + 1
 	.set WidgetName_PtrBlock_A_0xF, WidgetName_PtrBlock_A + 15

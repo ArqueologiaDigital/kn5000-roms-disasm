@@ -277,7 +277,7 @@ SaveFN_HandleApply:
 	ldw	bc, 8
 	calr	RenderSmfFilename
 	ld	xwa, 34740
-	ld	xbc, DiskOp_ChannelCfgTable_0xCA
+	ld	xbc, SaveFN_HandleApply_Str_MID
 	call	FileIO_BuildFilePath
 	ld	xwa, 34740
 	call	FileIO_WriteRecordName
@@ -298,7 +298,7 @@ SmfSeqToSongNumFunc:
 SeqToSong_BuildEntry:
 	lda	xwa, (32760:16)
 	ld	(xwa+), 0
-	ld	xbc, DiskOp_ChannelCfgTable_0xD0
+	ld	xbc, SeqToSong_BuildEntry_Str_TO_SONG
 	call	FileIO_CopyString
 	lda	xiz, (32761:16)
 	ld	a, (34988:16)
@@ -329,7 +329,7 @@ SmfSeqFromSongNumFunc:
 SeqFromSong_BuildEntry:
 	lda	xwa, (32892:16)
 	ld	(xwa+), 0
-	ld	xbc, DiskOp_ChannelCfgTable_0xDC
+	ld	xbc, SeqFromSong_BuildEntry_Str_FROM_SONG
 	call	FileIO_CopyString
 	lda	xiz, (32893:16)
 	ld	a, (34988:16)
@@ -381,7 +381,7 @@ SmfLoadAs_Apply:
 	ld	a, (34986:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (DiskOp_ChannelCfgTable_0xE8:24)
+	lda	xbc, (SmfLoadAs_Apply_PtrTable:24)
 	ld_rrl	xde, xbc, wa
 	ld	xwa, (33024:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -1162,7 +1162,7 @@ SmfFN_UpdateFilenameField:
 	cp	wa, 0:i3
 	jr	le, SmfFN_FetchFilename
 	ld	xwa, xiz
-	ld	xbc, Str_SmfConvert_GmToGm_0x10
+	ld	xbc, SmfFN_UpdateFilenameField_Str_MID
 	call	FileIO_CopyString
 	jr	SmfFN_WriteFilenameField
 SmfFN_FetchFilename:

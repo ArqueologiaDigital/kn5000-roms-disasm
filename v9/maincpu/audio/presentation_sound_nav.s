@@ -1129,7 +1129,7 @@ IvDirmdScreenProc:
 	cp xbc, 0xe
 	jrl gt, DirmdEmu_CaseE
 	add xbc, xbc
-	add xbc, DiskWarning_ConfirmStrings_0xE96
+	add xbc, IvDirmdScreenProc_Str_K
 	ld bc, (xbc)
 	lda xix, (DirmdEmu_CaseB:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -1262,7 +1262,7 @@ GetDirmdFlag:
 DirmdTitleFunc:
 	lda xsp, (xsp - 16)
 	ld xhl, xbc
-	ld xiy, DiskWarning_ConfirmStrings_0xEB4
+	ld xiy, DirmdTitleFunc_PtrTable
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -1285,10 +1285,10 @@ DirmdEmu_CaseF:
 	ldw	wa, 255
 	call	GraphicsRender_ByteData_0x6
 PostTitle_Function_Skip:
-	ld	xwa, DiskWarning_ConfirmStrings_0xEC4
+	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
 	call	DbMemo_DrawContent_Loop_0x61
 	jp	AudioCtrl_DataBlock_0x1BDA
-	ld	xwa, DiskWarning_ConfirmStrings_0xED6
+	ld	xwa, DirmdTitleFunc_Str_DirmdTitleOld
 	call	DbMemo_DrawContent_Loop_0x61
 	jp	AudioCtrl_DataBlock_0x1BDB
 	lda	xsp, (xsp-256)
@@ -1296,8 +1296,8 @@ PostTitle_Function_Skip:
 	pushm	(xsp+264)
 	ld	iz, (xsp+264)
 	pushw	iz
-	pushw 234
-	pushw 0x9b94
+	pushw DirmdTitleFunc_Str_DirmdTitleESw_Fmtd_Fmtd@hi16
+	pushw DirmdTitleFunc_Str_DirmdTitleESw_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	Sprintf_Locked
@@ -1310,7 +1310,7 @@ PostTitle_Function_Skip:
 	popw	iz
 	lda	xsp, (xsp+256)
 	ret
-	ld	xwa, DiskWarning_ConfirmStrings_0xF00
+	ld	xwa, DirmdTitleFunc_Str_DirmdTitleCur
 	call	DbMemo_DrawContent_Loop_0x61
 	jp	AudioCtrl_DataBlock_0x1BDD
 DirmdEmulator_Entry:
@@ -1888,7 +1888,7 @@ AcNaming_QueryCharSet:
 	ld wa, hl
 	extz xwa
 	sll xwa, 2
-	ld xbc, Data_SoundEditorCharsLayout_0x18
+	ld xbc, AcNaming_QueryCharSet_PtrTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	ld (0x0274e4:24), xwa

@@ -964,6 +964,7 @@ binary, wave 3a, 2026-10-02):
 | Operation | Mnemonic | Example Encoding |
 |-----------|----------|-----------------|
 | Push 16-bit immediate | `pushw imm16` (NOT `push imm16`) | `pushw 0x007f` → `0b 7f 00` |
+| Far pointer as two word pushes (C argument, high half first) | `pushw Sym@hi16` / `pushw Sym@lo16` (TOOLCHAIN_VERSION UPDATE 20; R_TLCS900_HI16/LO16, an absolute `.equ` is folded; only in a 16-bit immediate) | `pushw Str@hi16` → `0b e4 00` for Str = 0xe45126.  Never leave `pushw 0xe4 / pushw 0x5126`: `scripts/converters/far_pointer_pipeline.sh` |
 | Post-increment / pre-decrement operand (UPDATE 17) | `(xde+)`, `(-xwa)`, step `(xwa+:N)`, N = 1, 2 or 4 -- default = the data size; LDA/JP/CALL must write it; bank regs `(xbc3+)` | `ld (xde+), a` → `f5 e8 41`; `lda xbc, (xwa+:1)` → `f5 e0 31`.  `(+r)` / `(r-)` are errors; the `*_spi`/`*_dpi` pseudos are deleted |
 | Register-indirect displacement width (UPDATE 17) | `(xrr+D:8)` forces (Xrr+d8), `(xrr+D:16)` forces (Xrr+d16) | `lda xwa, (xsp+0:8)` → `bf 00 30`; `ld a, (xiz+5:16)` → `c3 f9 05 00 21`.  A plain `(xsp+256)` is +256 (`f3 fd 00 01 30`) -- it used to mean d8+0 |
 | Compare register with D2 memory | `cp wa, (addr:24)` (sub-opcode 0xF0+r; the old `cpda16_24 xwa, ...` named XWA for WA and is deleted, TOOLCHAIN_VERSION UPDATE 17) | `cp wa, (0x230e72:24)` → `d2 72 0e 23 f0` |

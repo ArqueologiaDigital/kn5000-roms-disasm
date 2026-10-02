@@ -32,6 +32,15 @@ COLUMNS (each is a count of source lines or tokens; lower is better)
            CLAUDE.md "Event Code Freshness" wants these spelled as EVT_* / class constants.
            On 2026-10-02 these were 9,230 of the 9,909 "big" operands in v10, so they are
            counted apart from numaddr rather than inflating it.
+  numfar   numeric FAR POINTERS into the tree's own ROM that the operand columns cannot see,
+           because each half is below the ROM range: adjacent `pushw HI` / `pushw LO` lines
+           (HI <= 0xff; the C compiler's far-pointer argument, `pushw 0xe4 / pushw 0x5126` =
+           0xe45126), plus numeric address arguments of the NAKA registration macros
+           (`RegTitle 0x3, 0xe5, 0xac98, ...`, `RegObjTabl ..., 0xe55210, ...`).  The assembler
+           spells them `Sym@hi16` / `Sym@lo16` since TOOLCHAIN_VERSION UPDATE 20 (2026-10-02).
+  posalias positional alias DEFINITIONS, `.set Base_0x1C1A, Base + 7194`: a second name that says
+           only where it is (scripts/converters/split_blobs_at_far_pointers.py retires those
+           that land on a string, a table or a label).
   bytecmt  `.byte` lines whose comment carries an instruction reading (`; ld a, (xwa)`,
            `; MAME: ...`) -- code still held as bytes. An upper bound: some are data annotated
            with a decode on purpose.
@@ -64,6 +73,14 @@ ADDRLBL = re.compile(rb'^(?:LABEL|Label|label|sub|SUB|loc|LOC|Unknown|UNKNOWN|Un
 BYTECMT = re.compile(rb'^\s*(\S+:)?\s*\.byte\b[^;\n]*;\s*(?:MAME:|unidasm:|=\s*)?\s*(ld|lda|ldw|ldb|push|pop|call|calr|jp|jr|jrl|ret|reti|add|sub|and|or|xor|cp|inc|dec|bit|set|res|tset|ex|mul|div|sll|srl|sla|sra|rlc|rrc|rl|rr|ldir|lddr|ldi|ldd|swi|ei|nop|halt|link|unlk|djnz|scc|neg|cpl|extz|exts|mirr|paa|incf|decf|ldf|ldc|ldx)\b', re.M | re.I)
 NUMADDR = re.compile(rb'^\s*(?:\S+:)?\s*(?!jr\b|jrl\b|calr\b|call\b|jp\b|djnz\b|\.)([a-z_][a-z0-9_]*)\s+([^;\n]*)', re.M)
 LIT = re.compile(rb'(?<![\w.$])(0x[0-9a-fA-F]+|\d{7,})(?![\w.$])')
+PUSHW = re.compile(rb'^\s*(?:[A-Za-z_.$][\w.$]*:)?\s*pushw\s+(0x[0-9a-fA-F]+|\d+)\s*(?:;.*)?$')
+REGMAC = re.compile(rb'^\s+(RegObjTable|RegObjTabl|RegModeHiLo|RegTitleHiLo|RegMode|RegTitle|'
+                    rb'RegObjTableHama|RegObjTablHama|RegTitleHama)\s+([^;\n]*)', re.M)
+REG_ADDR_ARGS = {b"RegObjTable": (1, 2, 3), b"RegObjTabl": (1, 3), b"RegObjTableHama": (1, 2, 3),
+                 b"RegObjTablHama": (1, 3), b"RegTitleHama": (1,), b"RegMode": (1,),
+                 b"RegTitle": (1,), b"RegModeHiLo": (1,), b"RegTitleHiLo": (1,)}
+NUMLIT = re.compile(rb'^(0x[0-9a-fA-F]+|\d+)$')
+POSALIAS = re.compile(rb'^\s*\.(?:set|equ)\s+[A-Za-z_][\w.$]*_0x[0-9A-Fa-f]+\s*,\s*[A-Za-z_][\w.$]*\s*\+', re.M)
 FIELD = re.compile(rb'\b(?:field|unk|unknown|pad)_(?:0x)?[0-9A-Fa-f]{2,6}\b')
 TODO = re.compile(rb'(?:;|//|/\*|#).*?(?:\bTODO\b|\bFIXME\b|\bunknown\b|\bpurpose unknown\b|\?\?\?)', re.I)
 
@@ -98,8 +115,32 @@ OWN_ROM = {"v10/maincpu": (0xE00000, 0xFFFFFF), "v9/maincpu": (0xE00000, 0xFFFFF
            "wsa1/prom_b": (0xF00000, 0xF7FFFF), "wsa1/prom_c": (0xF80000, 0xFFFFFF)}
 
 
+def numfar(data, rng):
+    lo, hi = rng
+    n = 0
+    lines = data.split(b"\n")
+    for i in range(len(lines) - 1):
+        m1, m2 = PUSHW.match(lines[i]), PUSHW.match(lines[i + 1])
+        if m1 and m2:
+            h, l = int(m1.group(1), 0), int(m2.group(1), 0)
+            if h <= 0xff and l <= 0xffff and lo <= (h << 16 | l) <= hi:
+                n += 1
+    for m in REGMAC.finditer(data):
+        args = [x.strip() for x in m.group(2).split(b",")]
+        if m.group(1) in (b"RegMode", b"RegTitle", b"RegModeHiLo", b"RegTitleHiLo") and len(args) == 6:
+            if NUMLIT.match(args[1]) and NUMLIT.match(args[2]) and \
+                    lo <= (int(args[1], 0) << 16 | int(args[2], 0)) <= hi:
+                n += 1
+            continue
+        for k in REG_ADDR_ARGS[m.group(1)]:
+            if k < len(args) and NUMLIT.match(args[k]) and lo <= int(args[k], 0) <= hi:
+                n += 1
+    return n
+
+
 def measure(rev, path):
-    c = dict(numbr=0, numaddr=0, numevt=0, addrlbl=0, bytecmt=0, field=0, todo=0, files=0)
+    c = dict(numbr=0, numaddr=0, numevt=0, numfar=0, posalias=0, addrlbl=0, bytecmt=0, field=0,
+             todo=0, files=0)
     for name, data in blobs(rev, path):
         c["files"] += 1
         if name.endswith(C_EXT):
@@ -114,6 +155,8 @@ def measure(rev, path):
                 c["numaddr"] += 1
             if any(0x1000000 <= v < 0x2000000 for v in vals):
                 c["numevt"] += 1
+        c["numfar"] += numfar(data, OWN_ROM.get(path, (1, 0)))
+        c["posalias"] += len(POSALIAS.findall(data))
         c["addrlbl"] += len(ADDRLBL.findall(data))
         c["bytecmt"] += len(BYTECMT.findall(data))
         c["todo"] += len(TODO.findall(data))
@@ -128,7 +171,8 @@ def main():
     a = ap.parse_args()
     short = subprocess.run(["git", "-C", REPO, "rev-parse", "--short", a.rev],
                            capture_output=True, text=True, check=True).stdout.strip()
-    cols = ["files", "numbr", "numaddr", "numevt", "addrlbl", "bytecmt", "field", "todo"]
+    cols = ["files", "numbr", "numaddr", "numevt", "numfar", "posalias", "addrlbl", "bytecmt",
+            "field", "todo"]
     tot = dict.fromkeys(cols, 0)
     rows = []
     for t in a.trees.split(","):

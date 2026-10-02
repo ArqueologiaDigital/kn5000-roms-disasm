@@ -35,13 +35,13 @@ FDemo_DisplayResourceData_Loop:
 	call	0xff0516
 	lda	xwa, (xsp+0x116)
 	ld	(xwa+0x8), 0
-	pushw	234
-	pushw	112
+	pushw	FDemo_DisplayResourceData_Str_SQT@hi16
+	pushw	FDemo_DisplayResourceData_Str_SQT@lo16
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+22)
 	lda	xwa, (xsp+0x108)
-	ld	xbc, Presentation_TagStrTable_0x6E
+	ld	xbc, FDemo_DisplayResourceData_Str_rb
 	call	FileIO_OpenWithMode
 	ld	(xsp+4), hl
 	cpw	(xsp+0x4), 0
@@ -1466,7 +1466,7 @@ FileIO_ValidateSig_Process:
 	lda xwa, (xsp + 4)
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
-	ld xbc, Presentation_TagTableEnd_0x33
+	ld xbc, FileIO_ValidateSig_Process_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr lt, FileIO_ValidateSig_Done
@@ -1506,19 +1506,19 @@ FileIO_ReadValidateHdr_Store:
 	jr lt, FileIO_ReadValidateHdr_Loop
 	call FileIO_SeekRead_ExtReturn
 	lda xwa, (xsp + 2)
-	ld xbc, Presentation_TagTableEnd_0x3F
+	ld xbc, FileIO_ReadValidateHdr_Store_Str_H
 	ld de, 3:i3
 	call FileIO_Search_SkipEntry
 	cp hl, 0:i3
 	jr z, FileIO_ReadHeader_TypeMatch
 	lda xwa, (xsp + 2)
-	ld xbc, Presentation_TagTableEnd_0x37
+	ld xbc, FileIO_ReadValidateHdr_Store_Str_G
 	ld de, 3:i3
 	call FileIO_Search_SkipEntry
 	cp hl, 0:i3
 	jr z, FileIO_ReadHeader_TypeMatch
 	lda xwa, (xsp + 2)
-	ld xbc, Presentation_TagTableEnd_0x3B
+	ld xbc, FileIO_ReadValidateHdr_Store_Str_LKE
 	ld de, 3:i3
 	call FileIO_Search_SkipEntry
 	ld wa, 0:i3
@@ -1559,7 +1559,7 @@ FileIO_ValidateOpen_Process:
 	ld de, 3:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
-	ld xbc, Presentation_TagTableEnd_0x43
+	ld xbc, FileIO_ValidateOpen_Process_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr lt, FileIO_ValidateOpen_Done
@@ -1619,7 +1619,7 @@ FileIO_ValidateFileWithRegion:
 	ld de, 2:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
-	ld xbc, Presentation_TagTableEnd_0x4D
+	ld xbc, FileIO_ValidateFileWithRegion_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, FileIO_ValidateRegion_CheckSig
@@ -1687,7 +1687,7 @@ FileIO_ValidateWithExtHeader:
 	ld de, 1:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 4)
-	ld xbc, Presentation_TagTableEnd_0x51
+	ld xbc, FileIO_ValidateWithExtHeader_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, FileIO_ValidateExt_CheckSig
@@ -1982,7 +1982,7 @@ FileIO_LoadSongRegion8:
 	ldw DE, 0x0008
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 0x0c)
-	ld XBC,Presentation_TagTableEnd_0x65
+	ld XBC,FileIO_LoadSongRegion8_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, .Lc_f872f2
@@ -2025,7 +2025,7 @@ FileIO_LoadSongRegion8:
 	ldw DE, 0x0009
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 0x0c)
-	ld XBC,Presentation_TagTableEnd_0x69
+	ld XBC,LoadSong8_ReadDone_Str_rb
 	call FileIO_OpenWithMode
 	call FileIO_ReturnError
 	ld (XSP+0x02),HL
@@ -2069,7 +2069,7 @@ FileIO_LoadSongRegion8:
 	ldw DE, 0x0009
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 0x0c)
-	ld XBC,Presentation_TagTableEnd_0x6D
+	ld XBC,LoadSong8_AltPresetPath_Str_rb
 	call FileIO_OpenWithMode
 	call FileIO_ReturnError
 	ld (XSP+0x02),HL
@@ -2932,7 +2932,7 @@ LoadSMF_GetRecordPtr:
 	call GetRecordPtrForFile
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
-	ld xbc, Resource_Region3_Start_0x40
+	ld xbc, LoadSMF_GetRecordPtr_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadSMF_OpenAndProcess
@@ -2956,7 +2956,7 @@ LoadSMF_Return:
 	inc 8, xsp
 	ret
 
-; WARNING: opens with mode "wb" (Resource_Region3_Start_0x44 -> 0xEA0244,
+; WARNING: opens with mode "wb" (LoadFileVariant_Str_wb -> 0xEA0244,
 ; verified), i.e. for WRITING, and then calls SMF_LoadSoundBankAndPlay, which
 ; genuinely loads a sound bank and plays it. The name says Load, the mode says
 ; write. Flagged by scripts/analysis/l2_name_vs_fopen_mode.py; inspection says
@@ -2972,7 +2972,7 @@ LoadFileVariant:
 	call FileIO_GetRecordPtrAlt
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
-	ld xbc, Resource_Region3_Start_0x44
+	ld xbc, LoadFileVariant_Str_wb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadVariant_OpenAndProcess
@@ -3059,7 +3059,7 @@ MultiPass_LoopNext:
 	ld de, 2:i3
 	call FileIO_ReadHeader
 	lda xwa, (xsp + 6)
-	ld xbc, Resource_Region3_Start_0x48
+	ld xbc, MultiPass_LoopNext_Str_wb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, MultiPass_Finalize
@@ -3190,7 +3190,7 @@ FileIO_ByteBlock_DemoProc1_Skip4:
 	ld	de, 1:i3
 	call	FileIO_ReadHeader
 	lda	xwa, (xsp+12)
-	ld	xbc, Resource_RegionPad_0x4
+	ld	xbc, FileIO_ByteBlock_DemoProc1_Str_rb
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, FileIO_ByteBlock_DemoProc1_Skip5
@@ -3291,7 +3291,7 @@ FileIO_ByteBlock_DemoProc1_Skip7:
 	ld	de, 2:i3
 	call	FileIO_ReadHeader
 	lda	xwa, (xsp+8)
-	ld	xbc, Resource_RegionPad_0x8
+	ld	xbc, FileIO_ByteBlock_DemoProc1_Str_rb_2
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, FileIO_ByteBlock_DemoProc1_Skip8
@@ -3382,7 +3382,7 @@ FileIO_ByteBlock_DemoProc1_Skip12:
 	ld	de, 3:i3
 	call	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
-	ld	xbc, Resource_RegionPad_0xC
+	ld	xbc, FileIO_ByteBlock_DemoProc1_Str_rb_3
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, FileIO_ByteBlock_DemoProc1_Skip13
@@ -3433,7 +3433,7 @@ FileIO_ByteBlock_DemoProc1_Skip15:
 	ld	de, 4:i3
 	call	FileIO_ReadHeader
 	lda	xwa, (xsp+16)
-	ld	xbc, Resource_RegionPad_0x10
+	ld	xbc, FileIO_ByteBlock_DemoProc1_Str_rb_4
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, FileIO_ByteBlock_DemoProc1_Skip16
@@ -3557,7 +3557,7 @@ FileIO_ByteBlock_DemoProc1_Skip20:
 	ld	de, 4:i3
 	call	FileIO_ReadHeader
 	lda	xwa, (xsp+12)
-	ld	xbc, Resource_RegionPad_0x14
+	ld	xbc, FileIO_ByteBlock_DemoProc1_Str_rb_5
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, FileIO_ByteBlock_DemoProc1_Skip21
@@ -4072,7 +4072,7 @@ LoadSecondary_OpenFile:
 	ld wa, hl
 	call FileIO_GetWallpaperEntry
 	ld xwa, xhl
-	ld xbc, Resource_RegionPad_0x18
+	ld xbc, LoadSecondary_OpenFile_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr ge, LoadSecondary_Process
@@ -4097,7 +4097,7 @@ FileIO_OpenWithMode:
 	push XIZ
 	ld XIZ,XBC
 	ld XDE,XWA
-	ld XIY,Resource_RegionPad_0x1C
+	ld XIY,FileIO_OpenWithMode_Str_A
 	lda xix, (xsp + 0x04)
 	ldw BC, 0x0040
 	ldirw
@@ -4157,7 +4157,7 @@ FileIO_CloseHandle_Done:
 FileIO_OpenDefault:
 	lda xsp, (xsp - 16)
 	ld xde, xwa
-	ld xiy, Resource_RegionPad_0x9C
+	ld xiy, FileIO_OpenDefault_Str_A
 	ld xix, xsp
 	ldw bc, 0x8
 	ldirw
@@ -4191,11 +4191,11 @@ FileIO_CopyAndOpen:
 	push xiz
 	ld xiz, xbc
 	ld xde, xwa
-	ld xiy, Resource_RegionPad_0xAC
+	ld xiy, FileIO_CopyAndOpen_Str_A
 	lda xix, (xsp + 20)
 	ldw bc, 0x8
 	ldirw
-	ld xiy, Resource_RegionPad_0xBC
+	ld xiy, FileIO_CopyAndOpen_Str_A_2
 	lda xix, (xsp + 4)
 	ldw bc, 0x8
 	ldirw
@@ -4529,19 +4529,19 @@ FileIO_CompareFiles:
 	ld (xsp + 48), xbc
 	ld xde, xwa
 	ldw (xsp + 10), 0x0
-	ld xiy, Resource_RegionPad_0xCC
+	ld xiy, FileIO_CompareFiles_Str_A
 	lda xix, (xsp + 32)
 	ldw bc, 0x8
 	ldirw
-	ld xiy, Resource_RegionPad_0xDC
+	ld xiy, FileIO_CompareFiles_Str_A_2
 	lda xix, (xsp + 16)
 	ldw bc, 0x8
 	ldirw
 	lda xwa, (xsp + 16)
 	ld xbc, xde
 	call FileIO_BuildFilePath
-	pushw 0xea
-	pushw 0x338
+	pushw FileIO_CompareFiles_Str_wb@hi16
+	pushw FileIO_CompareFiles_Str_wb@lo16
 	lda xwa, (xsp + 20)
 	push xwa
 	call FileOpen
@@ -4563,8 +4563,8 @@ FileIO_Compare_Return:
 	lda xwa, (xsp + 32)
 	ld xbc, (xsp + 48)
 	call FileIO_BuildFilePath
-	pushw 0xea
-	pushw 0x33c
+	pushw FileIO_Compare_Mismatch_Str_rb@hi16
+	pushw FileIO_Compare_Mismatch_Str_rb@lo16
 	lda xwa, (xsp + 36)
 	push xwa
 	call FileOpen
@@ -4664,10 +4664,10 @@ FileIO_ValidateRecord_Return:
 	ldw (0x0272ce:24), 0x003f
 	ld (0x0272d0:24), 0x00
 	ld xwa, 0x25eaa
-	ld xbc, Filename_TemplateArea_0x2
+	ld xbc, FileIO_ValidateRecord_Ok_Str_Under_Under_Under_Under
 	calr FileIO_CopyString
 	ld xwa, 0x271f2
-	ld xbc, Filename_TemplateArea_0xA	; pointer to "________.MID"
+	ld xbc, FileIO_ValidateRecord_Ok_Str_MID	; pointer to "________.MID"
 	jr FileIO_CopyString
 
 FileIO_CopyString:
@@ -4823,7 +4823,7 @@ FileIO_ReadHeader:
 	ld xwa, xiz
 	calr FileIO_CopyString
 	ld xwa, xiz
-	ld xbc, Filename_TemplateArea_0x18
+	ld xbc, FileIO_ReadHeader_Str_Dot
 	calr FileIO_BuildFilePath
 	ld a, (xsp + 4)
 	extz wa
@@ -5331,7 +5331,7 @@ FileIO_SearchAndLoadFile:
 	jr nz, SearchLoad_CopyPath
 
 SearchLoad_DefaultVolume:
-	ld xiz, Filename_TemplateArea_0x1A
+	ld xiz, SearchLoad_DefaultVolume_Str_Under_Under_Under_Under
 
 SearchLoad_CopyPath:
 	lda xwa, (0x025d74:24)
@@ -5687,7 +5687,7 @@ GetEncFileSize_CopyRecordLoop:
 	jr c, GetEncFileSize_CopyRecordLoop
 	ld iz, 0:i3
 	lda xbc, (xsp + 10)
-	ld xwa, Filename_TemplateArea_0x46
+	ld xwa, GetEncFileSize_CopyRecordLoop_Str_Star_Dot_Star
 	call _findfirst
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
@@ -5958,7 +5958,7 @@ BuildSecondPage_CopyRecordLoop:
 	jr c, BuildSecondPage_CopyRecordLoop
 	ld iz, 0:i3
 	lda xbc, (xsp + 10)
-	ld xwa, Filename_TemplateArea_0x4E
+	ld xwa, BuildSecondPage_CopyRecordLoop_Str_MID
 	call _findfirst
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
@@ -6366,7 +6366,7 @@ ProcessFileRecord:
 	call	InitializeKubo_Helper
 	ld	xwa, 155314
 	add	xwa, xhl
-	ld	xbc, Filename_TemplateArea_0x76
+	ld	xbc, ProcessFileRecord_Str_rb
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jrl	lt, ProcessRecord_ErrorReturn
@@ -6375,7 +6375,7 @@ ProcessRecord_MatchLoop1:
 	call	FileIO_ReadByte
 	ld	wa, iz
 	extz	xwa
-	ld	xbc, Filename_TemplateArea_0x64
+	ld	xbc, ProcessRecord_MatchLoop1_Str_MThd
 	add	xbc, xwa
 	ld	a, (xbc)
 	exts	wa
@@ -6389,7 +6389,7 @@ ProcessRecord_MatchLoop1:
 	add	xwa, xhl
 	setm	5, (xwa + 80)
 	lda	xwa, (xwa + 14)
-	ld	xbc, Filename_TemplateArea_0x70
+	ld	xbc, ProcessRecord_MatchLoop1_Str_Blank5
 	calr	FileIO_CopyString
 	jr	ProcessRecord_CheckBit5
 ProcessRecord_Match1Next:
@@ -6414,7 +6414,7 @@ ProcessRecord_MatchLoop2:
 	call	FileIO_ReadByte
 	ld	wa, iz
 	extz	xwa
-	ld	xbc, Filename_TemplateArea_0x64
+	ld	xbc, ProcessRecord_MatchLoop1_Str_MThd
 	add	xbc, xwa
 	ld	a, (xbc)
 	exts	wa
@@ -6428,7 +6428,7 @@ ProcessRecord_MatchLoop2:
 	add	xwa, xhl
 	setm	5, (xwa + 80)
 	lda	xwa, (xwa + 14)
-	ld	xbc, Filename_TemplateArea_0x70
+	ld	xbc, ProcessRecord_MatchLoop1_Str_Blank5
 	jrl	ProcessRecord_CopyPath
 ProcessRecord_Match2Next:
 	inc	1, iz
@@ -6469,7 +6469,7 @@ ProcessRecord_MatchLoop3:
 	call FileIO_ReadByte
 	ld WA,IZ
 	extz XWA
-	ld XBC,Filename_TemplateArea_0x6A
+	ld XBC,ProcessRecord_MatchLoop3_Str_MTrk
 	add XBC,XWA
 	ld A,(XBC)
 	exts WA
@@ -6483,7 +6483,7 @@ ProcessRecord_MatchLoop3:
 	add XWA,XHL
 	set 5,(XWA+0x50)
 	lda xwa, (xwa + 0x0e)
-	ld XBC,Filename_TemplateArea_0x70
+	ld XBC,ProcessRecord_MatchLoop1_Str_Blank5
 	jr t, ProcessRecord_CopyPath
 ProcessRecord_CheckTempo:
 	cp iz, 1:i3
@@ -6506,7 +6506,7 @@ ProcessRecord_DefaultSetBit:
 	add XWA,XHL
 	set 5,(XWA+0x50)
 	lda xwa, (xwa + 0x0e)
-	ld XBC,Filename_TemplateArea_0x70
+	ld XBC,ProcessRecord_MatchLoop1_Str_Blank5
 ProcessRecord_CopyPath:
 	calr FileIO_CopyString
 	call FileIO_CloseHandle
@@ -6538,7 +6538,7 @@ ProcessRecord_NoTrackName:
 	call	InitializeKubo_Helper
 	lda	xwa, (155328:24)
 	add	xwa, xhl
-	ld	xbc, Filename_TemplateArea_0x70
+	ld	xbc, ProcessRecord_MatchLoop1_Str_Blank5
 	jr	ProcessRecord_CopyAndClose
 ProcessRecord_SearchTrackName:
 	lda	xbc, (SeqFileTypeCode_Lsw_0x6A:24)
@@ -6555,7 +6555,7 @@ ProcessRecord_SearchTrackName:
 	lda	xwa, (xwa + 14)
 	cpw	(xsp + 8), 0x0
 	jr	nz, ProcessRecord_UseTrackName
-	ld	xbc, Filename_TemplateArea_0x70
+	ld	xbc, ProcessRecord_MatchLoop1_Str_Blank5
 	jr	ProcessRecord_CopyAndClose
 ProcessRecord_UseTrackName:
 	ld xbc, (xsp + 4)
@@ -6698,7 +6698,7 @@ SLSrcBankList_FuncBody_Helper2:
 	ld	de, 1:i3
 	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+4)
-	ld	xbc, FileOp_StubAndDirNames_0x4
+	ld	xbc, FileIO_ByteBlock_DemoProc2_Str_rb
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, GetFileEntryByIndex_Skip5
@@ -6750,7 +6750,7 @@ SLSrcBankList_FuncBody_Helper3:
 	ld	de, 2:i3
 	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
-	ld	xbc, FileOp_StubAndDirNames_0x8
+	ld	xbc, FileIO_ByteBlock_DemoProc2_Str_rb_2
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, GetFileEntryByIndex_Skip7
@@ -6796,7 +6796,7 @@ SLSrcBankList_FuncBody_Helper4:
 	ld	de, 3:i3
 	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
-	ld	xbc, FileOp_StubAndDirNames_0xC
+	ld	xbc, FileIO_ByteBlock_DemoProc2_Str_rb_3
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, GetFileEntryByIndex_Skip9
@@ -6843,7 +6843,7 @@ SLSrcBankList_FuncBody_Helper5:
 	ld	de, 4:i3
 	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
-	ld	xbc, FileOp_StubAndDirNames_0x10
+	ld	xbc, FileIO_ByteBlock_DemoProc2_Str_rb_4
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, GetFileEntryByIndex_Skip11
@@ -6887,7 +6887,7 @@ SLSrcBankList_FuncBody_Helper6:
 	ld	de, 4:i3
 	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
-	ld	xbc, FileOp_StubAndDirNames_0x14
+	ld	xbc, GetFileEntryByIndex_Entry_Str_rb
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, GetFileEntryByIndex_Skip13
@@ -6929,7 +6929,7 @@ SLSrcBankList_FuncBody_Helper7:
 	ld	de, 4:i3
 	calr	FileIO_ReadHeader
 	lda	xwa, (xsp+2)
-	ld	xbc, FileOp_StubAndDirNames_0x18
+	ld	xbc, GetFileEntryByIndex_Entry2_Str_rb
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	ge, GetFileEntryByIndex_Skip15
@@ -7019,7 +7019,7 @@ BuildRecords_CopyLoop:
 	jr c, BuildRecords_CopyLoop
 	ld iz, 0:i3
 	lda xbc, (xsp + 10)
-	ld xwa, FileOp_StubAndDirNames_0x1C
+	ld xwa, BuildRecords_CopyLoop_Str_Star
 	call _findfirst
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
@@ -7240,8 +7240,8 @@ DetectType_KnownType:
 DetectType_TryOpen:
 	cp l, 2:i3
 	jrl nz, DetectType_NotFound
-	ld xwa, FileOp_StubAndDirNames_0x22
-	ld xbc, FileOp_StubAndDirNames_0x1E
+	ld xwa, DetectType_TryOpen_Str_MUSIC_DIR
+	ld xbc, DetectType_TryOpen_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr lt, DetectType_TryExtended
@@ -7270,8 +7270,8 @@ DetectType_TrimAndReturn:
 	ret
 
 DetectType_TryExtended:
-	ld xwa, FileOp_StubAndDirNames_0x30
-	ld xbc, FileOp_StubAndDirNames_0x2C
+	ld xwa, DetectType_TryExtended_Str_PIANODIR_FIL
+	ld xbc, DetectType_TryExtended_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr lt, DetectType_NotFound
@@ -7379,8 +7379,8 @@ InitDirScan_CopyLoop:
 	ldiw_erp 0xfa, 0
 	cp (0x025db6:24), 0x06
 	jrl nz, DirScan_AltMediaPath
-	ld xwa, FileOp_StubAndDirNames_0x42
-	ld xbc, FileOp_StubAndDirNames_0x3E
+	ld xwa, InitDirScan_CopyLoop_Str_MUSIC_DIR
+	ld xbc, InitDirScan_CopyLoop_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr lt, DirScan_ReturnResult
@@ -7431,8 +7431,8 @@ DirScan_ReturnResult:
 	ret
 
 DirScan_AltMediaPath:
-	ld xwa, FileOp_StubAndDirNames_0x50
-	ld xbc, FileOp_StubAndDirNames_0x4C
+	ld xwa, DirScan_AltMediaPath_Str_PIANODIR_FIL
+	ld xbc, DirScan_AltMediaPath_Str_rb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jr lt, DirScan_ReturnResult
@@ -7562,8 +7562,8 @@ FileIO_RefreshFileNames:
 	push xiz
 	cp (0x025db6:24), 0x06
 	jrl nz, RefreshNames_AltMediaPath
-	ld xwa, FileOp_StubAndDirNames_0x62
-	ld xbc, FileOp_StubAndDirNames_0x5E
+	ld xwa, FileIO_RefreshFileNames_Str_NAME_MDA
+	ld xbc, FileIO_RefreshFileNames_Str_rb
 	call FileIO_OpenWithMode
 	ld wa, (0x0271ee:24)
 	ld iz, wa
@@ -7634,8 +7634,8 @@ RefreshNames_NextEntry:
 	jrl FileIO_ScanDone
 
 RefreshNames_AltMediaPath:
-	ld xwa, FileOp_StubAndDirNames_0x70
-	ld xbc, FileOp_StubAndDirNames_0x6C
+	ld xwa, RefreshNames_AltMediaPath_Str_PIANODIR_FIL
+	ld xbc, RefreshNames_AltMediaPath_Str_rb
 	call FileIO_OpenWithMode
 	ld wa, (0x0271ee:24)
 	cp hl, 0:i3
@@ -7793,7 +7793,7 @@ FileIO_BuildFileIndex:
 BuildIndex_ScanLoop:
 	ld xwa, (xsp + 4)
 	lda_dri XWA, 0x07, 0xe0, 0xf8
-	ld xbc, FileOp_StubAndDirNames_0x7E
+	ld xbc, BuildIndex_ScanLoop_Str_Star_Star_Star
 	ld de, 3:i3
 	calr FileIO_Search_SkipEntry
 	cp hl, 0:i3
@@ -7808,7 +7808,7 @@ BuildIndex_CheckSubEntry:
 	addw_erp BC, 0xfa
 	lda xhl, (0x027312:24)
 	stb_dri E, 0x07, 0xec, 0xe4
-	ld xbc, FileOp_StubAndDirNames_0x82
+	ld xbc, BuildIndex_CheckSubEntry_Str_Star_Star_Star
 	ld de, 3:i3
 	calr FileIO_Search_SkipEntry
 	cp hl, 0:i3
@@ -7922,7 +7922,7 @@ FileIO_FindFirstMatch:
 
 FindFirst_BuildPathLoop:
 	ld xwa, 0x25c6c
-	ld xbc, FileOp_StubAndDirNames_0x86
+	ld xbc, FindFirst_BuildPathLoop_Str_A
 	calr FileIO_CopyString
 	ld xwa, 0x25c6c
 	ld xbc, 0x272d2
@@ -8207,7 +8207,7 @@ ScanDir_CopyEntryLoop:
 	jr c, ScanDir_CopyEntryLoop
 	ld iz, 0:i3
 	lda xbc, (xsp + 10)
-	ld xwa, FileOp_StubAndDirNames_0x8A
+	ld xwa, ScanDir_CopyEntryLoop_Str_BMP
 	call _findfirst
 	ld (xsp + 2), xhl
 	ld xwa, (xsp + 2)
@@ -8838,7 +8838,7 @@ FileIO_ErrorCodeByteBlock_Skip11:
 	cp	wa, 2:i3
 	ret	nz
 FileIO_ErrorCodeByteBlock_Skip12:
-	ld	xwa, DiskOp_ChannelCfgTable_0x44
+	ld	xwa, FileIO_ErrorCodeByteBlock_Entry_Str_FEATURE_PRE
 	call	FileIO_CheckFileExists
 	cp	l, 0:i3
 	ret	z

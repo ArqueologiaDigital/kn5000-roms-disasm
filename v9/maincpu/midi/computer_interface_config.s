@@ -48,7 +48,7 @@ MdCmptCnctFunc:
 	ld xhl, xde
 	ld xde, xbc
 	ld xiz, xwa
-	ld xiy, SplitPoint_NoteEntry_C_Code_0x66
+	ld xiy, MdCmptCnctFunc_LocalInit
 	lda xix, (xsp + 4)
 	ldiw
 	ldiw
@@ -74,8 +74,8 @@ CmptCnctDrawConnectionDiagram:
 	jr z, CmptCnct_DrawDiagram1
 	cp bc, 0:i3
 	jr nz, CmptCnct_DrawDiagramDefault
-	pushw 0xe7
-	pushw 0xf848
+	pushw MdCmptCnctFunc_LocalInit_Strings@hi16
+	pushw MdCmptCnctFunc_LocalInit_Strings@lo16
 	push xwa
 	call Strcpy
 	inc 8, xsp
@@ -86,8 +86,8 @@ CmptCnctDrawConnectionDiagram:
 	jr CmptCnctBitmapDrawComplete
 
 CmptCnct_DrawDiagram1:
-	pushw 0xe7
-	pushw 0xf862
+	pushw CmptCnct_DrawDiagram1_Str_KN_as_master@hi16
+	pushw CmptCnct_DrawDiagram1_Str_KN_as_master@lo16
 	push xwa
 	call Strcpy
 	inc 8, xsp
@@ -98,8 +98,8 @@ CmptCnct_DrawDiagram1:
 	jr CmptCnctBitmapDrawComplete
 
 CmptCnct_DrawDiagram2:
-	pushw 0xe7
-	pushw 0xf87c
+	pushw CmptCnct_DrawDiagram2_Str_KN_as_slave@hi16
+	pushw CmptCnct_DrawDiagram2_Str_KN_as_slave@lo16
 	push xwa
 	call Strcpy
 	inc 8, xsp
@@ -110,8 +110,8 @@ CmptCnct_DrawDiagram2:
 	jr CmptCnctBitmapDrawComplete
 
 CmptCnct_DrawDiagramDefault:
-	pushw 0xe7
-	pushw 0xf896
+	pushw CmptCnct_DrawDiagramDefault_Str_Error@hi16
+	pushw CmptCnct_DrawDiagramDefault_Str_Error@lo16
 	push xwa
 	call Strcpy
 	inc 8, xsp
@@ -164,22 +164,22 @@ PcgModeGridEventStart:
 	jr z, PcgModeDisplayString_Bank1
 	cp de, 0:i3
 	jr nz, PcgModeDefaultCase
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xD2
+	ld xwa, PcgModeGridEventStart_Str
 	jr PcgMode_CopyStrEntry
 
 PcgModeDisplayString_Bank1:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xDC
+	ld xwa, PcgModeDisplayString_Bank1_Str
 	jr PcgMode_CopyStrEntry
 
 PcgMode_CopyStrCustom:
-	pushw 0xe7
-	pushw 0xf8c4
+	pushw PcgMode_CopyStrCustom_Str_GM@hi16
+	pushw PcgMode_CopyStrCustom_Str_GM@lo16
 	ld xwa, (xwa)
 	push xwa
 	jr PcgMode_CallStrcpy
 
 PcgModeDefaultCase:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xF0
+	ld xwa, PcgModeDefaultCase_Str
 
 PcgMode_CopyStrEntry:
 	push xwa
@@ -229,22 +229,22 @@ DrumType_GridEvent:
 	jr z, DrumType_CopyStrBank1
 	cp de, 0:i3
 	jr nz, DrumType_CopyStrDefault
-	ld xwa, SplitPoint_NoteEntry_C_Code_0xFA
+	ld xwa, DrumType_GridEvent_Str
 	jr DrumType_CopyStrEntry
 
 DrumType_CopyStrBank1:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x104
+	ld xwa, DrumType_CopyStrBank1_Str
 	jr DrumType_CopyStrEntry
 
 DrumType_CopyStrCustom:
-	pushw 0xe7
-	pushw 0xf8ec
+	pushw DrumType_CopyStrCustom_Str_GM@hi16
+	pushw DrumType_CopyStrCustom_Str_GM@lo16
 	ld xwa, (xwa)
 	push xwa
 	jr DrumType_CallStrcpy
 
 DrumType_CopyStrDefault:
-	ld xwa, SplitPoint_NoteEntry_C_Code_0x118
+	ld xwa, DrumType_CopyStrDefault_Str
 
 DrumType_CopyStrEntry:
 	push xwa
@@ -282,7 +282,7 @@ MdSetupLoadFunc:
 	cp xhl, 0x9
 	jr gt, SetupLoadInvalidIndex
 	add xhl, xhl
-	add xhl, NakaInst_OFF_WidgetTbl2_0x12
+	add xhl, MdSetupLoadFunc_CaseTable
 	ld hl, (xhl)
 	lda xix, (SetupLoadOptionJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xec

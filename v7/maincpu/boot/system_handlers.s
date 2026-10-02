@@ -7373,8 +7373,8 @@ Detect_Disk_Type:
 	ld	xde, xiz
 	calr	FDC_ReadSectors
 	pushw	38
-	pushw	224
-	pushw	56
+	pushw	FILETYPE_SIG_PROGRAM_1@hi16
+	pushw	FILETYPE_SIG_PROGRAM_1@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -7384,8 +7384,8 @@ Detect_Disk_Type:
 	jrl	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckProgram2of2:
 	pushw	38
-	pushw	224
-	pushw	96
+	pushw	FILETYPE_SIG_PROGRAM_2@hi16
+	pushw	FILETYPE_SIG_PROGRAM_2@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -7395,8 +7395,8 @@ DetectDisk_CheckProgram2of2:
 	jrl	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckTable1of2:
 	pushw	38
-	pushw	224
-	pushw	176
+	pushw	FILETYPE_SIG_TABLE_1@hi16
+	pushw	FILETYPE_SIG_TABLE_1@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -7406,8 +7406,8 @@ DetectDisk_CheckTable1of2:
 	jrl	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckTable2of2:
 	pushw	38
-	pushw	224
-	pushw	216
+	pushw	FILETYPE_SIG_TABLE_2@hi16
+	pushw	FILETYPE_SIG_TABLE_2@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -7417,8 +7417,8 @@ DetectDisk_CheckTable2of2:
 	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckCmpCustom:
 	pushw	38
-	pushw	224
-	pushw	296
+	pushw	FILETYPE_SIG_CMPCUSTOM@hi16
+	pushw	FILETYPE_SIG_CMPCUSTOM@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -7428,8 +7428,8 @@ DetectDisk_CheckCmpCustom:
 	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckHDAEPRG:
 	pushw	38
-	pushw	224
-	pushw	336
+	pushw	FILETYPE_SIG_HDAE_PRG@hi16
+	pushw	FILETYPE_SIG_HDAE_PRG@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -7439,8 +7439,8 @@ DetectDisk_CheckHDAEPRG:
 	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckProgramPCK:
 	pushw	38
-	pushw	224
-	pushw	136
+	pushw	FILETYPE_SIG_PROGRAM_PCK@hi16
+	pushw	FILETYPE_SIG_PROGRAM_PCK@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -7450,8 +7450,8 @@ DetectDisk_CheckProgramPCK:
 	jr	DetectDisk_FreeBufAndReturn
 DetectDisk_CheckTablePCK:
 	pushw	38
-	pushw	224
-	pushw	256
+	pushw	FILETYPE_SIG_TABLE_PCK@hi16
+	pushw	FILETYPE_SIG_TABLE_PCK@lo16
 	push	xiz
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10
@@ -8441,8 +8441,8 @@ LZSS_Decompress_ReadHeader:
 	cp	iz, 6:i3
 	jr	c, LZSS_Decompress_ReadHeader
 	pushw	5
-	pushw	224
-	pushw	392
+	pushw	SLIDE_STRING_2@hi16
+	pushw	SLIDE_STRING_2@lo16
 	push	xwa
 	call	SLIDE_Parse_Header_Helper
 	add	xsp, 10

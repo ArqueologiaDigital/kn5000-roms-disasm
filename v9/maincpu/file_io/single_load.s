@@ -51,7 +51,7 @@ SLDstBank_HandleShow:
 	ld a, (0x89f8:16)
 	extz wa
 	sla wa, 2
-	lda xbc, (StorageAreaName_PanelMemory_0xE:24)
+	lda xbc, (SLDstBank_HandleShow_PtrTable:24)
 	ld_sril3 XDE, 0x07, 0xe4, 0xe0
 	ld xwa, (0x81ba:16)
 	ld xbc, EVT_PARA_DRAW
@@ -71,7 +71,7 @@ SingleLoadDstMemFunc:
 
 SLDstMem_HandleShow:
 	ld xwa, (0x81be:16)
-	lda xde, (BankStr_Bank3_0x6:24)
+	lda xde, (SLDstMem_HandleShow_PtrTable:24)
 	cp (0x89fa:16), 0
 	jr z, SLDstMem_ShowFromBank
 	cp (0x89f8:16), 1
@@ -104,7 +104,7 @@ SingleLoadSrcBankFunc:
 
 SLSrcBank_HandleShow:
 	ld xwa, (0x81c2:16)
-	lda xde, (StorageAreaName_PanelMemory_0xE:24)
+	lda xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld c, (0x89f8:16)
 	cp c, 0:i3
 	jr nz, SLSrcBank_ShowFromIndex
@@ -137,7 +137,7 @@ SingleLoadSrcMemFunc:
 
 SLSrcMem_HandleShow:
 	ld xwa, (0x81c6:16)
-	lda xde, (BankStr_Bank3_0x6:24)
+	lda xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld c, (0x89f8:16)
 	cp c, 1:i3
 	jr z, SLSrcMem_ShowDirect
@@ -172,12 +172,12 @@ SLSrcBankList_FuncBody:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
+	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x894f:16)
-	ld	xbc, PtrTbl_DrumKitNames_0x60
+	ld	xbc, SLSrcBankList_FuncBody_Str_Colon
 	call	FileIO_BuildFilePath
 	lda	xiz, (0x894f:16)
 	ld	a, (0x89fc:16)
@@ -236,12 +236,12 @@ SLSrcBankList_FuncBody_Helper2:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (BankStr_Bank3_0x6:24)
+	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8979:16)
-	ld	xbc, PtrTbl_DrumKitNames_0x64
+	ld	xbc, SLSrcBankList_FuncBody_Str_Colon_2
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
 	jr	nz, SLSrcBankList_FuncBody_Helper2_Skip
@@ -270,7 +270,7 @@ SLSrcBankList_FuncBody_Helper2_Skip:
 	lda	xwa, (0x894e:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
-	ld	xbc, PtrTbl_DrumKitNames_0x68
+	ld	xbc, SLSrcBankList_FuncBody_Str_ALL
 	call	FileIO_CopyString
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+6)
@@ -512,12 +512,12 @@ SLSrcBankList_FuncBody_Join4:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (BankStr_Bank3_0x6:24)
+	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8964:16)
-	ld	xbc, PtrTbl_DrumKitNames_0x80
+	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_Colon
 	call	FileIO_BuildFilePath
 	lda	xwa, (0x8964:16)
 	ldw	bc, 16
@@ -570,12 +570,12 @@ SLSrcBankList_FuncBody_Helper4:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
+	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x894f:16)
-	ld	xbc, PtrTbl_DrumKitNames_0x82
+	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_Colon_2
 	call	FileIO_BuildFilePath
 	lda	xwa, (0x894f:16)
 	ldw	bc, 16
@@ -615,12 +615,12 @@ SLSrcBankList_FuncBody_Helper5:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (BankStr_Bank3_0x6:24)
+	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8979:16)
-	ld	xbc, PtrTbl_DrumKitNames_0x86
+	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_Colon_3
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
 	jr	nz, SLSrcBankList_FuncBody_Helper5_Skip
@@ -644,7 +644,7 @@ SLSrcBankList_FuncBody_Helper5_Skip:
 	jr	z, SLSrcBankList_FuncBody_Helper5_Skip2
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
-	ld	xbc, PtrTbl_DrumKitNames_0x8A
+	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_ALL
 	call	FileIO_CopyString
 	lda	xde, (0x898d:16)
 	ld	xwa, (xsp+8)
@@ -922,12 +922,12 @@ SLSrcBankList_FuncBody_Helper8:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
+	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x894f:16)
-	ld	xbc, PtrTbl_DrumKitNames_0xA0
+	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_Colon_4
 	call	FileIO_BuildFilePath
 	lda	xwa, (0x894f:16)
 	ldw	bc, 16
@@ -991,12 +991,12 @@ SLSrcBankList_FuncBody_Helper10:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (BankStr_Bank3_0x6:24)
+	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x8979:16)
-	ld	xbc, PtrTbl_DrumKitNames_0xA4
+	ld	xbc, SLSrcBankList_FuncBody_Entry_Str_Colon_5
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
 	jr	nz, SLSrcBankList_FuncBody_Helper10_Skip2
@@ -1415,7 +1415,7 @@ SLSrc_HandleShow:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Str_AllOption_EA0980_0x16:24)
+	lda xde, (SLSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1445,7 +1445,7 @@ SLSrc_ScrollMode5_Dispatch:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Str_AllOption_EA0980_0x16:24)
+	lda xde, (SLSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1476,7 +1476,7 @@ SLSrc_ScrollMode6_Dispatch:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Str_AllOption_EA0980_0x16:24)
+	lda xde, (SLSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1495,7 +1495,7 @@ SLSrc_ScrollMode7:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Str_AllOption_EA0980_0x16:24)
+	lda xde, (SLSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1513,7 +1513,7 @@ SLSrc_ScrollMode8:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Str_AllOption_EA0980_0x16:24)
+	lda xde, (SLSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1527,7 +1527,7 @@ SLSrc_ScrollMode40:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Str_AllOption_EA0980_0x16:24)
+	lda xde, (SLSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 4)
 	ld xde, xiz
@@ -1556,12 +1556,12 @@ SLDstBankList_FuncBody:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
+	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89a3:16)
-	ld	xbc, Str_AllOption_EA0980_0x2A
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon
 	call	FileIO_BuildFilePath
 	lda	xiz, (0x89a3:16)
 	ld	a, (0x8a02:16)
@@ -1608,7 +1608,7 @@ SLDstBankList_FuncBody_Helper:
 	ld	(xde+63), 3
 	ld	a, (0x89f8:16)
 	extz	wa
-	lda	xhl, (BankStr_Bank3_0x6:24)
+	lda	xhl, (SLDstMem_HandleShow_PtrTable:24)
 	ld	bc, wa
 	sla	bc, 2
 	lda	xwa, (xde+43)
@@ -1618,7 +1618,7 @@ SLDstBankList_FuncBody_Helper:
 	jr	z, SLDstBankList_FuncBody_Helper_Skip
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
-	ld	xbc, Str_AllOption_EA0980_0x2E
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon_2
 	call	FileIO_BuildFilePath
 	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
@@ -1631,7 +1631,7 @@ SLDstBankList_FuncBody_Helper:
 SLDstBankList_FuncBody_Helper_Skip:
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
-	ld	xbc, Str_AllOption_EA09B2_0x12
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon_3
 	call	FileIO_BuildFilePath
 	lda	xiz, (0x89cd:16)
 	ld	a, (0x8a02:16)
@@ -1855,12 +1855,12 @@ SLDstBankList_FuncBody_Helper2:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (BankStr_Bank3_0x6:24)
+	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89b8:16)
-	ld	xbc, Str_AllOption_EA09B2_0x1A
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon_4
 	call	FileIO_BuildFilePath
 	lda	xiz, (0x89b8:16)
 	ld	a, (0x8a04:16)
@@ -1990,12 +1990,12 @@ SLDstBankList_FuncBody_Helper3:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
+	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89a3:16)
-	ld	xbc, Str_AllOption_EA09B2_0x20
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon_5
 	call	FileIO_BuildFilePath
 	lda	xwa, (0x89a3:16)
 	ldw	bc, 16
@@ -2029,12 +2029,12 @@ SLDstBankList_FuncBody_Helper4:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (BankStr_Bank3_0x6:24)
+	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
-	ld	xbc, Str_AllOption_EA09B2_0x24
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon_6
 	call	FileIO_BuildFilePath
 	cp	(0x89fa:16), 0
 	jr	nz, SLDstBankList_FuncBody_Helper4_Skip
@@ -2058,7 +2058,7 @@ SLDstBankList_FuncBody_Helper4_Skip:
 	jr	z, SLDstBankList_FuncBody_Helper4_Skip2
 	ld	(xwa), 3
 	lda	xwa, (xbc+64)
-	ld	xbc, Str_AllOption_EA09B2_0x28
+	ld	xbc, SLDstBankList_FuncBody_Str_ALL
 	call	FileIO_CopyString
 	jr	SLDstBankList_FuncBody_Helper4_Join
 SLDstBankList_FuncBody_Helper4_Skip2:
@@ -2275,7 +2275,7 @@ SLDstBankList_FuncBody_Helper5:
 	ld	c, (0x89f8:16)
 	extz	bc
 	sla	bc, 2
-	lda	xde, (StorageAreaName_PanelMemory_0xE:24)
+	lda	xde, (SLDstBank_HandleShow_PtrTable:24)
 	ld_rrl	xbc, xde, bc
 	inc	1, xbc
 	call	FileIO_CopyString
@@ -2316,7 +2316,7 @@ SLDstBankList_FuncBody_Helper6:
 	push	xiz
 	ld	(xsp+4), c
 	ld	(xsp+6), xwa
-	lda	xde, (BankStr_Bank3_0x6:24)
+	lda	xde, (SLDstMem_HandleShow_PtrTable:24)
 	cp	(0x89fa:16), 0
 	jr	z, SLDstBankList_FuncBody_Helper6_Skip
 	lda	xwa, (0x89a2:16)
@@ -2329,7 +2329,7 @@ SLDstBankList_FuncBody_Helper6:
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
-	ld	xbc, Data_SaveLoadMenuTable_0x4
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon_7
 	call	FileIO_BuildFilePath
 	lda	xwa, (0x89cd:16)
 	ldw	bc, 16
@@ -2337,7 +2337,7 @@ SLDstBankList_FuncBody_Helper6:
 	lda	xwa, (0x89a2:16)
 	ld	(xwa+63), 3
 	lda	xwa, (xwa+64)
-	ld	xbc, Data_SaveLoadMenuTable_0x8
+	ld	xbc, SLDstBankList_FuncBody_Str_ALL_2
 	call	FileIO_CopyString
 	jrl	SLDstBankList_FuncBody_Helper6_Join
 SLDstBankList_FuncBody_Helper6_Skip:
@@ -2355,7 +2355,7 @@ SLDstBankList_FuncBody_Helper6_Skip:
 	inc	1, xbc
 	call	FileIO_CopyString
 	lda	xwa, (0x89cd:16)
-	ld	xbc, Data_SaveLoadMenuTable_0x1A
+	ld	xbc, SLDstBankList_FuncBody_Str_Colon_8
 	call	FileIO_BuildFilePath
 	lda	xiz, (0x89cd:16)
 	ld	c, (xsp+4)
@@ -2807,7 +2807,7 @@ SLDst_HandleShow:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -2824,7 +2824,7 @@ SLDst_HandleConfirm:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -2862,7 +2862,7 @@ SLDst_HandleScroll:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -2926,7 +2926,7 @@ SLDst_ScrollMode4_Dispatch:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -2956,7 +2956,7 @@ SLDst_ScrollDispatch:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -2988,7 +2988,7 @@ SLDst_Scroll_ChildReturn:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3005,7 +3005,7 @@ SLDst_Scroll_SubMode:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3027,7 +3027,7 @@ SLDst_Scroll_SubMode2:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3045,7 +3045,7 @@ SLDst_Scroll_SubMode3:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3061,7 +3061,7 @@ SLDst_Scroll_SubMode4:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3080,7 +3080,7 @@ SLDst_Scroll_SubMode5:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3099,7 +3099,7 @@ SLDst_Scroll_SubMode6:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x26:24)
+	lda xde, (SLDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3146,7 +3146,7 @@ CmpSrc_HandleShow:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda xde, (CmpSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3166,7 +3166,7 @@ CmpSrc_HandleScroll:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda xde, (CmpSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3188,7 +3188,7 @@ CmpSrc_ScrollMode6:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda xde, (CmpSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3205,7 +3205,7 @@ CmpSrc_ScrollMode6_NoStep:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda xde, (CmpSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3225,7 +3225,7 @@ CmpSrc_ScrollMode7:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda xde, (CmpSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3246,7 +3246,7 @@ CmpSrc_ScrollMode8:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda xde, (CmpSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3261,7 +3261,7 @@ CmpSrc_ScrollMode40:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x3A:24)
+	lda xde, (CmpSrc_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, xiz
 	ld xde, (xsp + 4)
@@ -3333,7 +3333,7 @@ CmpDst_HandleShow:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3369,7 +3369,7 @@ CmpDst_HandleScroll:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, EVT_PAINT
 	ld xde, 0:i3
@@ -3397,7 +3397,7 @@ CmpDst_ScrollModeA:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3427,7 +3427,7 @@ CmpDst_ScrollMode7:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3449,7 +3449,7 @@ CmpDst_ScrollMode8:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3465,7 +3465,7 @@ CmpDst_ScrollMode8_NoStep:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3484,7 +3484,7 @@ CmpDst_ScrollMode5:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)
@@ -3505,7 +3505,7 @@ CmpDst_ScrollMode6:
 	ld c, (0x89f8:16)
 	extz bc
 	sla bc, 2
-	lda xde, (Data_SaveLoadMenuTable_0x4E:24)
+	lda xde, (CmpDst_HandleShow_PtrTable:24)
 	lda_dri XHL, 0x07, 0xe8, 0xe4
 	ld xbc, (xsp + 8)
 	ld xde, (xsp + 4)

@@ -69,7 +69,7 @@ ExcDotFunc:
 	cp xbc, 0x9
 	jr gt, ExcDotFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, NakaInst_DIRECT_E7FCE4_0xA6
+	add xbc, ExcDotFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcDotFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -120,7 +120,7 @@ ExcPmemFunc:
 	cp xbc, 0x9
 	jr gt, ExcPmemFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0xA
+	add xbc, ExcPmemFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcPmemFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -159,7 +159,7 @@ ExcSmemFunc:
 	cp xbc, 0x9
 	jr gt, ExcSmemFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x1E
+	add xbc, ExcSmemFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcSmemFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -198,7 +198,7 @@ ExcCompFunc:
 	cp xbc, 0x9
 	jr gt, ExcCompFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x32
+	add xbc, ExcCompFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcCompFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -237,7 +237,7 @@ ExcSeqFunc:
 	cp xbc, 0x9
 	jr gt, ExcSeqFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x46
+	add xbc, ExcSeqFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcSeqFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4
@@ -276,7 +276,7 @@ ExcMspFunc:
 	cp xbc, 0x9
 	jr gt, ExcMspFunc_InvalidIndex_Exit
 	add xbc, xbc
-	add xbc, FileTransfer_BlankStatus_0x5A
+	add xbc, ExcMspFunc_CaseTable
 	ld bc, (xbc)
 	lda xix, (ExcMspFunc_HandlerJumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe4

@@ -79,17 +79,108 @@ GUI_DisplayStructData:
 ; 32 parameter blocks of 8 B, one per object 0x20..0x3f (class 0x01600010, proc ViewableProc),
 ; registered by InitializeScoop+0x16F: the block address is the +10 data field of the 14-byte
 ; descriptor {+0 class, +4 proc, +8 u16, +10 data} RegisterObjectTable copies to 0x27ED2 + 14*index
-GUI_DisplayStructData_0x226:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x226, 0x100
+GUI_DisplayStructData_0x226:	.incbin "includes/generated/gui_display_struct_data.bin", 0x226, 0x8
+Scoop_ViewableTable_021:	.incbin "includes/generated/gui_display_struct_data.bin", 0x22E, 0x8
+Scoop_ViewableTable_022:	.incbin "includes/generated/gui_display_struct_data.bin", 0x236, 0x8
+Scoop_ViewableTable_023:	.incbin "includes/generated/gui_display_struct_data.bin", 0x23E, 0x8
+Scoop_ViewableTable_024:	.incbin "includes/generated/gui_display_struct_data.bin", 0x246, 0x8
+Scoop_ViewableTable_025:	.incbin "includes/generated/gui_display_struct_data.bin", 0x24E, 0x8
+Scoop_ViewableTable_026:	.incbin "includes/generated/gui_display_struct_data.bin", 0x256, 0x8
+Scoop_ViewableTable_027:	.incbin "includes/generated/gui_display_struct_data.bin", 0x25E, 0x8
+Scoop_ViewableTable_028:	.incbin "includes/generated/gui_display_struct_data.bin", 0x266, 0x8
+Scoop_ViewableTable_029:	.incbin "includes/generated/gui_display_struct_data.bin", 0x26E, 0x8
+Scoop_ViewableTable_02A:	.incbin "includes/generated/gui_display_struct_data.bin", 0x276, 0x8
+Scoop_ViewableTable_02B:	.incbin "includes/generated/gui_display_struct_data.bin", 0x27E, 0x8
+Scoop_ViewableTable_02C:	.incbin "includes/generated/gui_display_struct_data.bin", 0x286, 0x8
+Scoop_ViewableTable_02D:	.incbin "includes/generated/gui_display_struct_data.bin", 0x28E, 0x8
+Scoop_ViewableTable_02E:	.incbin "includes/generated/gui_display_struct_data.bin", 0x296, 0x8
+Scoop_ViewableTable_02F:	.incbin "includes/generated/gui_display_struct_data.bin", 0x29E, 0x8
+Scoop_ViewableTable_030:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2A6, 0x8
+Scoop_ViewableTable_031:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2AE, 0x8
+Scoop_ViewableTable_032:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2B6, 0x8
+Scoop_ViewableTable_033:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2BE, 0x8
+Scoop_ViewableTable_034:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2C6, 0x8
+Scoop_ViewableTable_035:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2CE, 0x8
+Scoop_ViewableTable_036:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2D6, 0x8
+Scoop_ViewableTable_037:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2DE, 0x8
+Scoop_ViewableTable_038:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2E6, 0x8
+Scoop_ViewableTable_039:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2EE, 0x8
+Scoop_ViewableTable_03A:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2F6, 0x8
+Scoop_ViewableTable_03B:	.incbin "includes/generated/gui_display_struct_data.bin", 0x2FE, 0x8
+Scoop_ViewableTable_03C:	.incbin "includes/generated/gui_display_struct_data.bin", 0x306, 0x8
+Scoop_ViewableTable_03D:	.incbin "includes/generated/gui_display_struct_data.bin", 0x30E, 0x8
+Scoop_ViewableTable_03E:	.incbin "includes/generated/gui_display_struct_data.bin", 0x316, 0x8
+Scoop_ViewableTable_03F:	.incbin "includes/generated/gui_display_struct_data.bin", 0x31E, 0x8
 ; 32 parameter blocks of 18-20 B (address differences), one per object 0x320..0x33f (class 0x0160000F, proc ResNameProc),
 ; registered by InitializeScoop+0x194: the block address is the +10 data field of the 14-byte
 ; descriptor {+0 class, +4 proc, +8 u16, +10 data} RegisterObjectTable copies to 0x27ED2 + 14*index
-GUI_DisplayStructData_0x326:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x326, 0x276
+GUI_DisplayStructData_0x326:	.incbin "includes/generated/gui_display_struct_data.bin", 0x326, 0x12
+Scoop_ResNameTable_321:		.incbin "includes/generated/gui_display_struct_data.bin", 0x338, 0x12
+Scoop_ResNameTable_322:		.incbin "includes/generated/gui_display_struct_data.bin", 0x34A, 0x14
+Scoop_ResNameTable_323:		.incbin "includes/generated/gui_display_struct_data.bin", 0x35E, 0x14
+Scoop_ResNameTable_324:		.incbin "includes/generated/gui_display_struct_data.bin", 0x372, 0x14
+Scoop_ResNameTable_325:		.incbin "includes/generated/gui_display_struct_data.bin", 0x386, 0x14
+Scoop_ResNameTable_326:		.incbin "includes/generated/gui_display_struct_data.bin", 0x39A, 0x14
+Scoop_ResNameTable_327:		.incbin "includes/generated/gui_display_struct_data.bin", 0x3AE, 0x14
+Scoop_ResNameTable_328:		.incbin "includes/generated/gui_display_struct_data.bin", 0x3C2, 0x14
+Scoop_ResNameTable_329:		.incbin "includes/generated/gui_display_struct_data.bin", 0x3D6, 0x14
+Scoop_ResNameTable_32A:		.incbin "includes/generated/gui_display_struct_data.bin", 0x3EA, 0x14
+Scoop_ResNameTable_32B:		.incbin "includes/generated/gui_display_struct_data.bin", 0x3FE, 0x14
+Scoop_ResNameTable_32C:		.incbin "includes/generated/gui_display_struct_data.bin", 0x412, 0x14
+Scoop_ResNameTable_32D:		.incbin "includes/generated/gui_display_struct_data.bin", 0x426, 0x14
+Scoop_ResNameTable_32E:		.incbin "includes/generated/gui_display_struct_data.bin", 0x43A, 0x14
+Scoop_ResNameTable_32F:		.incbin "includes/generated/gui_display_struct_data.bin", 0x44E, 0x14
+Scoop_ResNameTable_330:		.incbin "includes/generated/gui_display_struct_data.bin", 0x462, 0x14
+Scoop_ResNameTable_331:		.incbin "includes/generated/gui_display_struct_data.bin", 0x476, 0x14
+Scoop_ResNameTable_332:		.incbin "includes/generated/gui_display_struct_data.bin", 0x48A, 0x14
+Scoop_ResNameTable_333:		.incbin "includes/generated/gui_display_struct_data.bin", 0x49E, 0x14
+Scoop_ResNameTable_334:		.incbin "includes/generated/gui_display_struct_data.bin", 0x4B2, 0x14
+Scoop_ResNameTable_335:		.incbin "includes/generated/gui_display_struct_data.bin", 0x4C6, 0x14
+Scoop_ResNameTable_336:		.incbin "includes/generated/gui_display_struct_data.bin", 0x4DA, 0x14
+Scoop_ResNameTable_337:		.incbin "includes/generated/gui_display_struct_data.bin", 0x4EE, 0x14
+Scoop_ResNameTable_338:		.incbin "includes/generated/gui_display_struct_data.bin", 0x502, 0x14
+Scoop_ResNameTable_339:		.incbin "includes/generated/gui_display_struct_data.bin", 0x516, 0x14
+Scoop_ResNameTable_33A:		.incbin "includes/generated/gui_display_struct_data.bin", 0x52A, 0x14
+Scoop_ResNameTable_33B:		.incbin "includes/generated/gui_display_struct_data.bin", 0x53E, 0x12
+Scoop_ResNameTable_33C:		.incbin "includes/generated/gui_display_struct_data.bin", 0x550, 0x12
+Scoop_ResNameTable_33D:		.incbin "includes/generated/gui_display_struct_data.bin", 0x562, 0x12
+Scoop_ResNameTable_33E:		.incbin "includes/generated/gui_display_struct_data.bin", 0x574, 0x14
+Scoop_ResNameTable_33F:		.incbin "includes/generated/gui_display_struct_data.bin", 0x588, 0x14
 ; purpose not established.
 ; tried: `lda`/`ld` of a 24- or 32-bit immediate, and any little-endian 24-bit copy of an address from 0x120 B before this slice to its end, anywhere in the ROM: none found
-GUI_DisplayStructData_0x59C:
-	.incbin "includes/generated/gui_display_struct_data.bin", 0x59C, 0x1B4
+GUI_DisplayStructData_0x59C:		.incbin "includes/generated/gui_display_struct_data.bin", 0x59C, 0xE
+InitializeScoop_Str_TT_SEMENU:		.incbin "includes/generated/gui_display_struct_data.bin", 0x5AA, 0xA	; "TT_SEMENU"
+InitializeScoop_Str_TT_SEEASY:		.incbin "includes/generated/gui_display_struct_data.bin", 0x5B4, 0xA	; "TT_SEEASY"
+InitializeScoop_Str_TT_SETONTON1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x5BE, 0xE	; "TT_SETONTON1"
+InitializeScoop_Str_TT_SETONTON2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x5CC, 0xE	; "TT_SETONTON2"
+InitializeScoop_Str_TT_SETONRAN1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x5DA, 0xE	; "TT_SETONRAN1"
+InitializeScoop_Str_TT_SETONRAN2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x5E8, 0xE	; "TT_SETONRAN2"
+InitializeScoop_Str_TT_SETONHYB1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x5F6, 0xE	; "TT_SETONHYB1"
+InitializeScoop_Str_TT_SEPITPIT1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x604, 0xE	; "TT_SEPITPIT1"
+InitializeScoop_Str_TT_SEPITENV1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x612, 0xE	; "TT_SEPITENV1"
+InitializeScoop_Str_TT_SEPITENV2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x620, 0xE	; "TT_SEPITENV2"
+InitializeScoop_Str_TT_SEPITLFO1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x62E, 0xE	; "TT_SEPITLFO1"
+InitializeScoop_Str_TT_SEAMPAMP1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x63C, 0xE	; "TT_SEAMPAMP1"
+InitializeScoop_Str_TT_SEAMPAMP2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x64A, 0xE	; "TT_SEAMPAMP2"
+InitializeScoop_Str_TT_SEAMPENV1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x658, 0xE	; "TT_SEAMPENV1"
+InitializeScoop_Str_TT_SEAMPENV2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x666, 0xE	; "TT_SEAMPENV2"
+InitializeScoop_Str_TT_SEAMPLFO1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x674, 0xE	; "TT_SEAMPLFO1"
+InitializeScoop_Str_TT_SEFILLPQ1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x682, 0xE	; "TT_SEFILLPQ1"
+InitializeScoop_Str_TT_SEFILHPQ1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x690, 0xE	; "TT_SEFILHPQ1"
+InitializeScoop_Str_TT_SEFILL241:	.incbin "includes/generated/gui_display_struct_data.bin", 0x69E, 0xE	; "TT_SEFILL241"
+InitializeScoop_Str_TT_SEFILH241:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6AC, 0xE	; "TT_SEFILH241"
+InitializeScoop_Str_TT_SEFILBPF1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6BA, 0xE	; "TT_SEFILBPF1"
+InitializeScoop_Str_TT_SEFILBCF1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6C8, 0xE	; "TT_SEFILBCF1"
+InitializeScoop_Str_TT_SEFILFIL2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6D6, 0xE	; "TT_SEFILFIL2"
+InitializeScoop_Str_TT_SEFILENV1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6E4, 0xE	; "TT_SEFILENV1"
+InitializeScoop_Str_TT_SEFILENV2:	.incbin "includes/generated/gui_display_struct_data.bin", 0x6F2, 0xE	; "TT_SEFILENV2"
+InitializeScoop_Str_TT_SEFILLFO1:	.incbin "includes/generated/gui_display_struct_data.bin", 0x700, 0xE	; "TT_SEFILLFO1"
+InitializeScoop_Str_TT_SEDIGEFF:	.incbin "includes/generated/gui_display_struct_data.bin", 0x70E, 0xC	; "TT_SEDIGEFF"
+InitializeScoop_Str_TT_SECTR2:		.incbin "includes/generated/gui_display_struct_data.bin", 0x71A, 0xA	; "TT_SECTR2"
+InitializeScoop_Str_TT_SECTR3:		.incbin "includes/generated/gui_display_struct_data.bin", 0x724, 0xA	; "TT_SECTR3"
+InitializeScoop_Str_TT_SECOPY:		.incbin "includes/generated/gui_display_struct_data.bin", 0x72E, 0xA	; "TT_SECOPY"
+InitializeScoop_Str_TT_SEWRTMEM:	.incbin "includes/generated/gui_display_struct_data.bin", 0x738, 0xC	; "TT_SEWRTMEM"
+InitializeScoop_Str_TT_SEWRTSND:	.incbin "includes/generated/gui_display_struct_data.bin", 0x744, 0xC	; "TT_SEWRTSND"
 ; parameter block of object 0x146 (class 0x01600003, proc MainFunctionProc), registered by InitializeScoop+0x125
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 136 B; the proc's read length was not measured
 GUI_DisplayStructData_0x750:
@@ -2853,7 +2944,7 @@ MainChordPre:
 	ld	a, (0x8ca6:16)
 	extz	wa
 	sla	wa, 2
-	lda	xbc, (MemScreen_Blank_0x4:24)
+	lda	xbc, (MainChordPre_PtrTable:24)
 	ld_sril3	XWA, 0x07, 0xe4, 0xe0
 	push	xwa
 	push	xiz

@@ -105,7 +105,7 @@ AccPedal_BankBaseTableCopy:
 
 AccPedal_ProcessAllChanges:
 	xor wa, wa
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	ld a, (1075:16)
 	bit_dri 0, 0x07, 0xec, 0xe0
 	jrl z, AccPedal_ReadBankAndReturn
@@ -173,7 +173,7 @@ AccPedal_ReadBankAndReturn:
 
 AccVoice_ReadBankAssign:
 	xor wa, wa
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	ld a, (1075:16)
 	ldb_sri A, 0x07, 0xec, 0xe0
 	bit 0, (0x3283:16)
@@ -495,7 +495,7 @@ AccChord_DispatchVoiceChange:
 AccChord_CheckVoiceBit2:
 	bit 2, (0x330a:16)
 	jr z, AccChord_CheckLeftPedal0
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_CheckLeftPedal0
 	and (0x330a:16), 251
@@ -587,7 +587,7 @@ AccChord_CheckPitchDirty:
 AccChord_CheckPitchLeftPedal1:
 	bit 1, (0x32fb:16)
 	jr z, AccChord_NullRet
-	ld xhl, Display_FontPalette_Table_0x1D58
+	ld xhl, AccStyle_ApplyExt_SkipClamp_Table
 	bit_dri 0, 0x03, 0xec, 0xe4
 	jr z, AccChord_NullRet
 	and (0x3329:16), 192
@@ -706,7 +706,7 @@ AccVoice_ComputeChannelIndex:
 	sla wa, 2
 	xor l, l
 	add hl, wa
-	ld xiy, Display_FontPalette_Table_0x2EA
+	ld xiy, RhythmROM_BankProgramLocators
 	ldw_sri WA, 0x07, 0xf4, 0xec
 	add hl, 0x2
 	ldw_sri IY, 0x07, 0xf4, 0xec
@@ -735,7 +735,7 @@ AccVoice_PatchFromDirect:
 
 AccVoice_StorePatchAndLookup:
 	ld (1075:16), a
-	ld xhl, Display_FontPalette_Table_0x1D46
+	ld xhl, AccVoice_LookupTableAddress_Table
 	sla a, 1
 	ldw_sri WA, 0x03, 0xec, 0xe0
 	ld (0x327b:16), wa
@@ -744,7 +744,7 @@ AccVoice_StorePatchAndLookup:
 AccStyle_ReadVoiceParam:
 	ldb_sri0 W, (xiy + 0x03da)
 	ldb_sri0 A, (xiy + 0x03d0)
-	ld xhl, Display_FontPalette_Table_0x1D32
+	ld xhl, AccTone_LookupByProgram_Table
 	ldb_sri A, 0x03, 0xec, 0xe0
 	ret
 
@@ -764,7 +764,7 @@ AccPatch_ClampedSetParam:
 	ld w, a
 	calr AccVoice_ResolveParamAddr
 	ld a, (xiy + 12)
-	ld xhl, Display_FontPalette_Table_0x1D32
+	ld xhl, AccTone_LookupByProgram_Table
 	ldb_sri A, 0x03, 0xec, 0xe0
 	ret
 

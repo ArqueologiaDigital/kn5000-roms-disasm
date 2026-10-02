@@ -1,0 +1,2900 @@
+[
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 4158,
+  "value": "0x2e2264",
+  "result": "HDAE5000_Str_HDTYPE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 4200,
+  "value": "0x2e2270",
+  "result": "HDAE5000_Fmt_Fre_Capa_3_1f_MB",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 4322,
+  "value": "0x2e22ae",
+  "result": "HDAE5000_Fmt_2_2d",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 56,
+  "value": "0x2e2d24",
+  "result": "HDAE5000_Fmt_1_1d",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 77,
+  "value": "0x2e2d2a",
+  "result": "HDAE5000_Fmt_2_2d_Lbn_ShowEntry",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 95,
+  "value": "0x2e2d30",
+  "result": "HDAE5000_Fmt_3_3d_Lbn_ShowEntry",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 132,
+  "value": "0x2e2d36",
+  "result": "HDAE5000_Fmt_1_1d_Lbn_ShowEntry",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 150,
+  "value": "0x2e2d3e",
+  "result": "HDAE5000_Fmt_2_2d_Lbn_ShowEntry_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 383,
+  "value": "0x2e2d70",
+  "result": "HDAE5000_Fmt_s_FileLBNNameCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 391,
+  "value": "0x2e2d54",
+  "result": "HDAE5000_Str_Blank26",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 454,
+  "value": "0x2e2d88",
+  "result": "HDAE5000_Fmt_s_LBNLswBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 560,
+  "value": "0x2e2da0",
+  "result": "HDAE5000_Fmt_s_LBNPmtBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 666,
+  "value": "0x2e2db8",
+  "result": "HDAE5000_Fmt_s_LBNSqtBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 772,
+  "value": "0x2e2dd0",
+  "result": "HDAE5000_Fmt_s_LBNCmpBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 878,
+  "value": "0x2e2de8",
+  "result": "HDAE5000_Fmt_s_LBNTmBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 984,
+  "value": "0x2e2e00",
+  "result": "HDAE5000_Fmt_s_LBNMspBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1090,
+  "value": "0x2e2e18",
+  "result": "HDAE5000_Fmt_s_LBNRcmBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1196,
+  "value": "0x2e2e30",
+  "result": "HDAE5000_Fmt_s_LBNMdBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1307,
+  "value": "0x2e2e48",
+  "result": "HDAE5000_Fmt_s_LBNTlxBitCheck_Unregistered",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1432,
+  "value": "0x2e2e76",
+  "result": "HDAE5000_Fmt_3_3d_FlsList_BuildPage",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1732,
+  "value": "0x2e2eac",
+  "result": "HDAE5000_Str_FLSNAME",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1740,
+  "value": "0x2e2eb6",
+  "result": "HDAE5000_Fmt_2_2d_FlsScreen_Refresh",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1751,
+  "value": "0x2e2ebc",
+  "result": "HDAE5000_Str_Chr3A_FlsScreen_Refresh",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1764,
+  "value": "0x2e2ebe",
+  "result": "HDAE5000_Str_Blank0Tab_FlsScreen_Refresh",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1820,
+  "value": "0x2e2ee4",
+  "result": "HDAE5000_Fmt_2_2d_FlsScreen_Refresh_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1933,
+  "value": "0x2e2eea",
+  "result": "HDAE5000_Fmt_LOC_3_3d_2_2d",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 1941,
+  "value": "0x2e2efe",
+  "result": "HDAE5000_Str_LOC00000",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3490,
+  "value": "0x2e2f24",
+  "result": "HDAE5000_Fmt_2_2d_CopyToHd_Execute",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3544,
+  "value": "0x2e2f2a",
+  "result": "HDAE5000_Str_LSW",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3567,
+  "value": "0x2e2f30",
+  "result": "HDAE5000_Str_PMT",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3590,
+  "value": "0x2e2f36",
+  "result": "HDAE5000_Str_SQT",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3613,
+  "value": "0x2e2f3c",
+  "result": "HDAE5000_Str_CMP",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3636,
+  "value": "0x2e2f42",
+  "result": "HDAE5000_Str_TM",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3659,
+  "value": "0x2e2f46",
+  "result": "HDAE5000_Str_MSP",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3682,
+  "value": "0x2e2f4c",
+  "result": "HDAE5000_Str_RCM",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3705,
+  "value": "0x2e2f52",
+  "result": "HDAE5000_Str_MD",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 3728,
+  "value": "0x2e2f56",
+  "result": "HDAE5000_Str_TLX",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 4544,
+  "value": "0x2e2f68",
+  "result": "HDAE5000_Fmt_s_DelOptNameCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 4612,
+  "value": "0x2e2f80",
+  "result": "HDAE5000_Fmt_s_DelLswEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 4689,
+  "value": "0x2e2f98",
+  "result": "HDAE5000_Fmt_s_DelPmtEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 4766,
+  "value": "0x2e2fb0",
+  "result": "HDAE5000_Fmt_s_DelSqtEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 4843,
+  "value": "0x2e2fc8",
+  "result": "HDAE5000_Fmt_s_DelCmpEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 4920,
+  "value": "0x2e2fe0",
+  "result": "HDAE5000_Fmt_s_DelTmEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 4997,
+  "value": "0x2e2ff8",
+  "result": "HDAE5000_Fmt_s_DelMspEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 5074,
+  "value": "0x2e3010",
+  "result": "HDAE5000_Fmt_s_DelRcmEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 5151,
+  "value": "0x2e3028",
+  "result": "HDAE5000_Fmt_s_DelMdEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_filesystem.s",
+  "line": 5228,
+  "value": "0x2e3040",
+  "result": "HDAE5000_Fmt_s_DelTlxEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 422,
+  "value": "0x2e235c",
+  "result": "HDAE5000_Fmt_s",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 445,
+  "value": "0x2e2360",
+  "result": "HDAE5000_Fmt_s_TitleInfo_Build",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 465,
+  "value": "0x2e2364",
+  "result": "HDAE5000_Fmt_d",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 485,
+  "value": "0x2e236a",
+  "result": "HDAE5000_Fmt_d_TitleInfo_Build",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 505,
+  "value": "0x2e2372",
+  "result": "HDAE5000_Fmt_d_TitleInfo_Build_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 531,
+  "value": "0x2e237a",
+  "result": "HDAE5000_Fmt_4ldMB",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 836,
+  "value": "0x2e23d2",
+  "result": "HDAE5000_Fmt_3_3d",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 1283,
+  "value": "0x2e2500",
+  "result": "HDAE5000_Str_DIRECTORY",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 1291,
+  "value": "0x2e250c",
+  "result": "HDAE5000_Fmt_2_2d_SongScreen_Refresh",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 1302,
+  "value": "0x2e2512",
+  "result": "HDAE5000_Str_Chr3A_SongScreen_Refresh",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 1315,
+  "value": "0x2e2514",
+  "result": "HDAE5000_Str_Blank0Tab",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 1366,
+  "value": "0x2e2534",
+  "result": "HDAE5000_Fmt_2_2d_SongScreen_Refresh_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2140,
+  "value": "0x2e2568",
+  "result": "HDAE5000_Str_LSWFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2153,
+  "value": "0x2e2582",
+  "result": "HDAE5000_Str_Adr",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2177,
+  "value": "0x2e258a",
+  "result": "HDAE5000_Str_Size",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2208,
+  "value": "0x2e2592",
+  "result": "HDAE5000_Str_SDAFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2221,
+  "value": "0x2e25ac",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2245,
+  "value": "0x2e25b4",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2276,
+  "value": "0x2e25bc",
+  "result": "HDAE5000_Str_PMTFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2289,
+  "value": "0x2e25d6",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2313,
+  "value": "0x2e25de",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2344,
+  "value": "0x2e25e6",
+  "result": "HDAE5000_Str_SQFFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2357,
+  "value": "0x2e2600",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_3",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2381,
+  "value": "0x2e2608",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_3",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2412,
+  "value": "0x2e2610",
+  "result": "HDAE5000_Str_SEQFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2425,
+  "value": "0x2e262a",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_4",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2449,
+  "value": "0x2e2632",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_4",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2480,
+  "value": "0x2e263a",
+  "result": "HDAE5000_Str_CMPFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2493,
+  "value": "0x2e2654",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_5",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2517,
+  "value": "0x2e265c",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_5",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2548,
+  "value": "0x2e2664",
+  "result": "HDAE5000_Str_TMFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2561,
+  "value": "0x2e267c",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_6",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2585,
+  "value": "0x2e2684",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_6",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2616,
+  "value": "0x2e268c",
+  "result": "HDAE5000_Str_MSPFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2629,
+  "value": "0x2e26a6",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_7",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2653,
+  "value": "0x2e26ae",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_7",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2684,
+  "value": "0x2e26b6",
+  "result": "HDAE5000_Str_RCMFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2697,
+  "value": "0x2e26d0",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_8",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2721,
+  "value": "0x2e26d8",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_8",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2752,
+  "value": "0x2e26e0",
+  "result": "HDAE5000_Str_MDFileInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2765,
+  "value": "0x2e26f8",
+  "result": "HDAE5000_Str_Adr_HDD_UTIL_PAGE_9",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 2789,
+  "value": "0x2e2700",
+  "result": "HDAE5000_Str_Size_HDD_UTIL_PAGE_9",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 3193,
+  "value": "0x2e2786",
+  "result": "HDAE5000_Fmt_s_SeparateOutputModeCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 3262,
+  "value": "0x2e2848",
+  "result": "HDAE5000_Fmt_s_SeparateDrumPartCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 3331,
+  "value": "0x2e290a",
+  "result": "HDAE5000_Fmt_s_SeparateBassPartCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 3495,
+  "value": "0x2e293a",
+  "result": "HDAE5000_Fmt_s_SaveOptNameCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 3804,
+  "value": "0x2e2958",
+  "result": "HDAE5000_Fmt_s_FileOptNameCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 3864,
+  "value": "0x2e2970",
+  "result": "HDAE5000_Fmt_s_SfxLswBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 3939,
+  "value": "0x2e2988",
+  "result": "HDAE5000_Fmt_s_SfxPmtBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4014,
+  "value": "0x2e29a0",
+  "result": "HDAE5000_Fmt_s_SfxSqtBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4089,
+  "value": "0x2e29b8",
+  "result": "HDAE5000_Fmt_s_SfxCmpBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4164,
+  "value": "0x2e29d0",
+  "result": "HDAE5000_Fmt_s_SfxTmBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4239,
+  "value": "0x2e29e8",
+  "result": "HDAE5000_Fmt_s_SfxMspBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4314,
+  "value": "0x2e2a00",
+  "result": "HDAE5000_Fmt_s_SfxRcmBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4389,
+  "value": "0x2e2a18",
+  "result": "HDAE5000_Fmt_s_SfxMdBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4466,
+  "value": "0x2e2a30",
+  "result": "HDAE5000_Fmt_s_SfxTlxBitCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4555,
+  "value": "0x2e2a48",
+  "result": "HDAE5000_Fmt_s_WriteProtectEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4610,
+  "value": "0x2e2a60",
+  "result": "HDAE5000_Fmt_1d",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4652,
+  "value": "0x2e2a78",
+  "result": "HDAE5000_Fmt_1d_LyricJumpEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4702,
+  "value": "0x2e2ab8",
+  "result": "HDAE5000_Fmt_s_LyricForeColorCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4761,
+  "value": "0x2e2b0c",
+  "result": "HDAE5000_Fmt_s_LyricBackColorCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4820,
+  "value": "0x2e2b24",
+  "result": "HDAE5000_Fmt_s_WriteConfirmEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4872,
+  "value": "0x2e2b3c",
+  "result": "HDAE5000_Fmt_1d_QuickLoadModeEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4924,
+  "value": "0x2e2b54",
+  "result": "HDAE5000_Fmt_1d_LoadByNumberModeEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 4976,
+  "value": "0x2e2b6c",
+  "result": "HDAE5000_Fmt_1d_JumpAfterLoadModeEditCheck",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 5101,
+  "value": "0x2e2cbe",
+  "result": "HDAE5000_Fmt_6_1f",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 5137,
+  "value": "0x2e2cc4",
+  "result": "HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 5172,
+  "value": "0x2e2cca",
+  "result": "HDAE5000_Fmt_6_1f_SetupPage_BuildDriveInfo_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 5315,
+  "value": "0x2e1e2c",
+  "result": "HDAE5000_Str_050354",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_hd_driver.s",
+  "line": 5326,
+  "value": "0x2e1e34",
+  "result": "HDAE5000_Str_965768",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 566,
+  "value": "0x2e1c82",
+  "result": "HDAE5000_Str_V206i",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 968,
+  "value": "0x2e36e6",
+  "result": "HDAE5000_Str_LANENG00",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 979,
+  "value": "0x2e36f0",
+  "result": "HDAE5000_Str_LANDEU00",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 990,
+  "value": "0x2e36fa",
+  "result": "HDAE5000_Str_LANFRA00",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1037,
+  "value": "0x2e3704",
+  "result": "HDAE5000_LangMsg_001_EN",
+  "candidates": [
+   "HDAE5000_LangMsg_001_EN",
+   "HDAE5000_Multilingual_Messages"
+  ]
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1046,
+  "value": "0x2e3734",
+  "result": "HDAE5000_LangMsg_001_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1055,
+  "value": "0x2e3770",
+  "result": "HDAE5000_LangMsg_001_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1065,
+  "value": "0x2e3792",
+  "result": "HDAE5000_LangMsg_002_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1074,
+  "value": "0x2e37be",
+  "result": "HDAE5000_LangMsg_002_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1083,
+  "value": "0x2e37f6",
+  "result": "HDAE5000_LangMsg_002_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1093,
+  "value": "0x2e3814",
+  "result": "HDAE5000_LangMsg_003_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1102,
+  "value": "0x2e382a",
+  "result": "HDAE5000_LangMsg_003_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1111,
+  "value": "0x2e3840",
+  "result": "HDAE5000_LangMsg_003_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1121,
+  "value": "0x2e3856",
+  "result": "HDAE5000_LangMsg_004_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1130,
+  "value": "0x2e3866",
+  "result": "HDAE5000_LangMsg_004_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1139,
+  "value": "0x2e3876",
+  "result": "HDAE5000_LangMsg_004_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1149,
+  "value": "0x2e3886",
+  "result": "HDAE5000_LangMsg_005_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1158,
+  "value": "0x2e389c",
+  "result": "HDAE5000_LangMsg_005_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1167,
+  "value": "0x2e38b2",
+  "result": "HDAE5000_LangMsg_005_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1177,
+  "value": "0x2e38c8",
+  "result": "HDAE5000_LangMsg_006_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1186,
+  "value": "0x2e38dc",
+  "result": "HDAE5000_LangMsg_006_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1195,
+  "value": "0x2e38f0",
+  "result": "HDAE5000_LangMsg_006_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1205,
+  "value": "0x2e3904",
+  "result": "HDAE5000_LangMsg_007_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1214,
+  "value": "0x2e391c",
+  "result": "HDAE5000_LangMsg_007_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1223,
+  "value": "0x2e3934",
+  "result": "HDAE5000_LangMsg_007_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1233,
+  "value": "0x2e394c",
+  "result": "HDAE5000_LangMsg_008_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1242,
+  "value": "0x2e395c",
+  "result": "HDAE5000_LangMsg_008_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1251,
+  "value": "0x2e396c",
+  "result": "HDAE5000_LangMsg_008_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1261,
+  "value": "0x2e397c",
+  "result": "HDAE5000_LangMsg_009_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1270,
+  "value": "0x2e398c",
+  "result": "HDAE5000_LangMsg_009_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1279,
+  "value": "0x2e399c",
+  "result": "HDAE5000_LangMsg_009_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1289,
+  "value": "0x2e39ac",
+  "result": "HDAE5000_LangMsg_010_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1298,
+  "value": "0x2e39ba",
+  "result": "HDAE5000_LangMsg_010_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1307,
+  "value": "0x2e39c8",
+  "result": "HDAE5000_LangMsg_010_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1317,
+  "value": "0x2e39d6",
+  "result": "HDAE5000_LangMsg_011_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1326,
+  "value": "0x2e39e2",
+  "result": "HDAE5000_LangMsg_011_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1335,
+  "value": "0x2e39ee",
+  "result": "HDAE5000_LangMsg_011_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1345,
+  "value": "0x2e39fa",
+  "result": "HDAE5000_LangMsg_012_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1354,
+  "value": "0x2e3a0a",
+  "result": "HDAE5000_LangMsg_012_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1363,
+  "value": "0x2e3a1a",
+  "result": "HDAE5000_LangMsg_012_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1373,
+  "value": "0x2e3a2a",
+  "result": "HDAE5000_LangMsg_013_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1382,
+  "value": "0x2e3a40",
+  "result": "HDAE5000_LangMsg_013_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1391,
+  "value": "0x2e3a56",
+  "result": "HDAE5000_LangMsg_013_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1401,
+  "value": "0x2e3a6c",
+  "result": "HDAE5000_LangMsg_014_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1410,
+  "value": "0x2e3a8c",
+  "result": "HDAE5000_LangMsg_014_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1419,
+  "value": "0x2e3aac",
+  "result": "HDAE5000_LangMsg_014_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1429,
+  "value": "0x2e3acc",
+  "result": "HDAE5000_LangMsg_015_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1438,
+  "value": "0x2e3aec",
+  "result": "HDAE5000_LangMsg_015_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1447,
+  "value": "0x2e3b0c",
+  "result": "HDAE5000_LangMsg_015_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1457,
+  "value": "0x2e3b2c",
+  "result": "HDAE5000_LangMsg_016_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1466,
+  "value": "0x2e3b78",
+  "result": "HDAE5000_LangMsg_016_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1475,
+  "value": "0x2e3bc8",
+  "result": "HDAE5000_LangMsg_016_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1485,
+  "value": "0x2e3c18",
+  "result": "HDAE5000_LangMsg_017_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1494,
+  "value": "0x2e3c3c",
+  "result": "HDAE5000_LangMsg_017_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1503,
+  "value": "0x2e3c60",
+  "result": "HDAE5000_LangMsg_017_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1513,
+  "value": "0x2e3c84",
+  "result": "HDAE5000_LangMsg_018_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1522,
+  "value": "0x2e3cae",
+  "result": "HDAE5000_LangMsg_018_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1531,
+  "value": "0x2e3cda",
+  "result": "HDAE5000_LangMsg_018_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1541,
+  "value": "0x2e3d04",
+  "result": "HDAE5000_LangMsg_019_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1550,
+  "value": "0x2e3d30",
+  "result": "HDAE5000_LangMsg_019_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1559,
+  "value": "0x2e3d5a",
+  "result": "HDAE5000_LangMsg_019_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1569,
+  "value": "0x2e3d86",
+  "result": "HDAE5000_LangMsg_020_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1578,
+  "value": "0x2e3d9a",
+  "result": "HDAE5000_LangMsg_020_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1587,
+  "value": "0x2e3dae",
+  "result": "HDAE5000_LangMsg_020_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1597,
+  "value": "0x2e3dc2",
+  "result": "HDAE5000_LangMsg_021_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1606,
+  "value": "0x2e3dfa",
+  "result": "HDAE5000_LangMsg_021_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1615,
+  "value": "0x2e3e46",
+  "result": "HDAE5000_LangMsg_021_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1625,
+  "value": "0x2e3e8c",
+  "result": "HDAE5000_LangMsg_022_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1634,
+  "value": "0x2e3ebc",
+  "result": "HDAE5000_LangMsg_022_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1643,
+  "value": "0x2e3efc",
+  "result": "HDAE5000_LangMsg_022_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1653,
+  "value": "0x2e3f2c",
+  "result": "HDAE5000_LangMsg_023_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1662,
+  "value": "0x2e3f5a",
+  "result": "HDAE5000_LangMsg_023_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1671,
+  "value": "0x2e3f94",
+  "result": "HDAE5000_LangMsg_023_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1681,
+  "value": "0x2e3fba",
+  "result": "HDAE5000_LangMsg_024_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1690,
+  "value": "0x2e3fe2",
+  "result": "HDAE5000_LangMsg_024_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1699,
+  "value": "0x2e4014",
+  "result": "HDAE5000_LangMsg_024_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1709,
+  "value": "0x2e4050",
+  "result": "HDAE5000_LangMsg_025_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1718,
+  "value": "0x2e40ae",
+  "result": "HDAE5000_LangMsg_025_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1727,
+  "value": "0x2e411a",
+  "result": "HDAE5000_LangMsg_025_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1737,
+  "value": "0x2e4170",
+  "result": "HDAE5000_LangMsg_026_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1746,
+  "value": "0x2e41ac",
+  "result": "HDAE5000_LangMsg_026_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1755,
+  "value": "0x2e41ee",
+  "result": "HDAE5000_LangMsg_026_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1765,
+  "value": "0x2e4230",
+  "result": "HDAE5000_LangMsg_027_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1774,
+  "value": "0x2e4264",
+  "result": "HDAE5000_LangMsg_027_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1783,
+  "value": "0x2e42a8",
+  "result": "HDAE5000_LangMsg_027_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1793,
+  "value": "0x2e42ea",
+  "result": "HDAE5000_LangMsg_028_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1802,
+  "value": "0x2e4320",
+  "result": "HDAE5000_LangMsg_028_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1811,
+  "value": "0x2e4362",
+  "result": "HDAE5000_LangMsg_028_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1821,
+  "value": "0x2e439a",
+  "result": "HDAE5000_LangMsg_029_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1830,
+  "value": "0x2e43bc",
+  "result": "HDAE5000_LangMsg_029_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1839,
+  "value": "0x2e43e2",
+  "result": "HDAE5000_LangMsg_029_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1849,
+  "value": "0x2e4412",
+  "result": "HDAE5000_LangMsg_030_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1858,
+  "value": "0x2e443c",
+  "result": "HDAE5000_LangMsg_030_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1867,
+  "value": "0x2e4472",
+  "result": "HDAE5000_LangMsg_030_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1877,
+  "value": "0x2e449c",
+  "result": "HDAE5000_LangMsg_031_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1886,
+  "value": "0x2e44bc",
+  "result": "HDAE5000_LangMsg_031_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1895,
+  "value": "0x2e44e2",
+  "result": "HDAE5000_LangMsg_031_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1905,
+  "value": "0x2e4504",
+  "result": "HDAE5000_LangMsg_032_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1914,
+  "value": "0x2e451a",
+  "result": "HDAE5000_LangMsg_032_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1923,
+  "value": "0x2e4548",
+  "result": "HDAE5000_LangMsg_032_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1933,
+  "value": "0x2e4576",
+  "result": "HDAE5000_LangMsg_033_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1942,
+  "value": "0x2e458e",
+  "result": "HDAE5000_LangMsg_033_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1951,
+  "value": "0x2e45c0",
+  "result": "HDAE5000_LangMsg_033_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1961,
+  "value": "0x2e45e4",
+  "result": "HDAE5000_LangMsg_034_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1970,
+  "value": "0x2e45fa",
+  "result": "HDAE5000_LangMsg_034_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1979,
+  "value": "0x2e4630",
+  "result": "HDAE5000_LangMsg_034_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1989,
+  "value": "0x2e4658",
+  "result": "HDAE5000_LangMsg_035_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 1998,
+  "value": "0x2e4672",
+  "result": "HDAE5000_LangMsg_035_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2007,
+  "value": "0x2e46a6",
+  "result": "HDAE5000_LangMsg_035_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2017,
+  "value": "0x2e46ce",
+  "result": "HDAE5000_LangMsg_036_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2026,
+  "value": "0x2e46e8",
+  "result": "HDAE5000_LangMsg_036_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2035,
+  "value": "0x2e471c",
+  "result": "HDAE5000_LangMsg_036_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2045,
+  "value": "0x2e474a",
+  "result": "HDAE5000_LangMsg_037_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2054,
+  "value": "0x2e4764",
+  "result": "HDAE5000_LangMsg_037_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2063,
+  "value": "0x2e4798",
+  "result": "HDAE5000_LangMsg_037_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2073,
+  "value": "0x2e47c2",
+  "result": "HDAE5000_LangMsg_038_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2082,
+  "value": "0x2e47dc",
+  "result": "HDAE5000_LangMsg_038_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2091,
+  "value": "0x2e4810",
+  "result": "HDAE5000_LangMsg_038_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2101,
+  "value": "0x2e483a",
+  "result": "HDAE5000_LangMsg_039_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2110,
+  "value": "0x2e4864",
+  "result": "HDAE5000_LangMsg_039_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2119,
+  "value": "0x2e4892",
+  "result": "HDAE5000_LangMsg_039_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2129,
+  "value": "0x2e48c4",
+  "result": "HDAE5000_LangMsg_040_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2138,
+  "value": "0x2e490c",
+  "result": "HDAE5000_LangMsg_040_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2147,
+  "value": "0x2e4968",
+  "result": "HDAE5000_LangMsg_040_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2157,
+  "value": "0x2e49c0",
+  "result": "HDAE5000_LangMsg_041_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2166,
+  "value": "0x2e4a08",
+  "result": "HDAE5000_LangMsg_041_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2175,
+  "value": "0x2e4a64",
+  "result": "HDAE5000_LangMsg_041_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2185,
+  "value": "0x2e4abc",
+  "result": "HDAE5000_LangMsg_042_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2194,
+  "value": "0x2e4b20",
+  "result": "HDAE5000_LangMsg_042_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2203,
+  "value": "0x2e4b82",
+  "result": "HDAE5000_LangMsg_042_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2213,
+  "value": "0x2e4bd8",
+  "result": "HDAE5000_LangMsg_043_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2222,
+  "value": "0x2e4c2c",
+  "result": "HDAE5000_LangMsg_043_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2231,
+  "value": "0x2e4c8e",
+  "result": "HDAE5000_LangMsg_043_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2241,
+  "value": "0x2e4cd4",
+  "result": "HDAE5000_LangMsg_044_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2250,
+  "value": "0x2e4d12",
+  "result": "HDAE5000_LangMsg_044_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2259,
+  "value": "0x2e4d5e",
+  "result": "HDAE5000_LangMsg_044_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2269,
+  "value": "0x2e4d8e",
+  "result": "HDAE5000_LangMsg_045_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2278,
+  "value": "0x2e4dc4",
+  "result": "HDAE5000_LangMsg_045_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2287,
+  "value": "0x2e4e06",
+  "result": "HDAE5000_LangMsg_045_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2297,
+  "value": "0x2e4e4c",
+  "result": "HDAE5000_LangMsg_046_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2306,
+  "value": "0x2e4e96",
+  "result": "HDAE5000_LangMsg_046_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2315,
+  "value": "0x2e4eee",
+  "result": "HDAE5000_LangMsg_046_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2325,
+  "value": "0x2e4f18",
+  "result": "HDAE5000_LangMsg_047_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2334,
+  "value": "0x2e4f38",
+  "result": "HDAE5000_LangMsg_047_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2343,
+  "value": "0x2e4f72",
+  "result": "HDAE5000_LangMsg_047_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2353,
+  "value": "0x2e4f96",
+  "result": "HDAE5000_LangMsg_048_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2362,
+  "value": "0x2e4fb8",
+  "result": "HDAE5000_LangMsg_048_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2371,
+  "value": "0x2e4fe0",
+  "result": "HDAE5000_LangMsg_048_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2381,
+  "value": "0x2e4ffe",
+  "result": "HDAE5000_LangMsg_049_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2390,
+  "value": "0x2e500e",
+  "result": "HDAE5000_LangMsg_049_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2399,
+  "value": "0x2e5020",
+  "result": "HDAE5000_LangMsg_049_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2409,
+  "value": "0x2e5030",
+  "result": "HDAE5000_LangMsg_050_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2418,
+  "value": "0x2e5040",
+  "result": "HDAE5000_LangMsg_050_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2427,
+  "value": "0x2e5050",
+  "result": "HDAE5000_LangMsg_050_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2437,
+  "value": "0x2e5060",
+  "result": "HDAE5000_LangMsg_051_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2446,
+  "value": "0x2e508c",
+  "result": "HDAE5000_LangMsg_051_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2455,
+  "value": "0x2e50b4",
+  "result": "HDAE5000_LangMsg_051_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2465,
+  "value": "0x2e50f2",
+  "result": "HDAE5000_LangMsg_052_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2474,
+  "value": "0x2e5144",
+  "result": "HDAE5000_LangMsg_052_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2483,
+  "value": "0x2e51a8",
+  "result": "HDAE5000_LangMsg_052_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2493,
+  "value": "0x2e520e",
+  "result": "HDAE5000_LangMsg_053_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2502,
+  "value": "0x2e521c",
+  "result": "HDAE5000_LangMsg_053_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2511,
+  "value": "0x2e522c",
+  "result": "HDAE5000_LangMsg_053_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2521,
+  "value": "0x2e5240",
+  "result": "HDAE5000_LangMsg_054_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2530,
+  "value": "0x2e525e",
+  "result": "HDAE5000_LangMsg_054_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2539,
+  "value": "0x2e527e",
+  "result": "HDAE5000_LangMsg_054_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2549,
+  "value": "0x2e529a",
+  "result": "HDAE5000_LangMsg_055_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2558,
+  "value": "0x2e52ec",
+  "result": "HDAE5000_LangMsg_055_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2567,
+  "value": "0x2e5350",
+  "result": "HDAE5000_LangMsg_055_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2577,
+  "value": "0x2e53ae",
+  "result": "HDAE5000_LangMsg_056_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2586,
+  "value": "0x2e53ca",
+  "result": "HDAE5000_LangMsg_056_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2595,
+  "value": "0x2e53e8",
+  "result": "HDAE5000_LangMsg_056_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2605,
+  "value": "0x2e5406",
+  "result": "HDAE5000_LangMsg_057_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2614,
+  "value": "0x2e5456",
+  "result": "HDAE5000_LangMsg_057_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2623,
+  "value": "0x2e54a6",
+  "result": "HDAE5000_LangMsg_057_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2633,
+  "value": "0x2e54f6",
+  "result": "HDAE5000_LangMsg_058_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2642,
+  "value": "0x2e5542",
+  "result": "HDAE5000_LangMsg_058_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2651,
+  "value": "0x2e5592",
+  "result": "HDAE5000_LangMsg_058_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2661,
+  "value": "0x2e55de",
+  "result": "HDAE5000_LangMsg_059_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2670,
+  "value": "0x2e55fa",
+  "result": "HDAE5000_LangMsg_059_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2679,
+  "value": "0x2e5616",
+  "result": "HDAE5000_LangMsg_059_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2689,
+  "value": "0x2e5632",
+  "result": "HDAE5000_LangMsg_060_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2698,
+  "value": "0x2e564e",
+  "result": "HDAE5000_LangMsg_060_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2707,
+  "value": "0x2e566c",
+  "result": "HDAE5000_LangMsg_060_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2717,
+  "value": "0x2e568e",
+  "result": "HDAE5000_LangMsg_061_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2726,
+  "value": "0x2e56b4",
+  "result": "HDAE5000_LangMsg_061_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2735,
+  "value": "0x2e56e8",
+  "result": "HDAE5000_LangMsg_061_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2745,
+  "value": "0x2e5718",
+  "result": "HDAE5000_LangMsg_062_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2754,
+  "value": "0x2e572c",
+  "result": "HDAE5000_LangMsg_062_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2763,
+  "value": "0x2e5742",
+  "result": "HDAE5000_LangMsg_062_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2773,
+  "value": "0x2e5758",
+  "result": "HDAE5000_LangMsg_064_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2782,
+  "value": "0x2e576a",
+  "result": "HDAE5000_LangMsg_064_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2791,
+  "value": "0x2e577c",
+  "result": "HDAE5000_LangMsg_064_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2801,
+  "value": "0x2e578e",
+  "result": "HDAE5000_LangMsg_065_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2810,
+  "value": "0x2e579a",
+  "result": "HDAE5000_LangMsg_065_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2819,
+  "value": "0x2e57a8",
+  "result": "HDAE5000_LangMsg_065_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2829,
+  "value": "0x2e57b6",
+  "result": "HDAE5000_LangMsg_066_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2838,
+  "value": "0x2e57c4",
+  "result": "HDAE5000_LangMsg_066_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2847,
+  "value": "0x2e57d2",
+  "result": "HDAE5000_LangMsg_066_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2857,
+  "value": "0x2e57e2",
+  "result": "HDAE5000_LangMsg_067_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2866,
+  "value": "0x2e581e",
+  "result": "HDAE5000_LangMsg_067_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2875,
+  "value": "0x2e585e",
+  "result": "HDAE5000_LangMsg_067_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2885,
+  "value": "0x2e58a0",
+  "result": "HDAE5000_LangMsg_200_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2894,
+  "value": "0x2e58a4",
+  "result": "HDAE5000_LangMsg_200_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2903,
+  "value": "0x2e58a8",
+  "result": "HDAE5000_LangMsg_200_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2913,
+  "value": "0x2e58ac",
+  "result": "HDAE5000_LangMsg_201_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2922,
+  "value": "0x2e58b0",
+  "result": "HDAE5000_LangMsg_201_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2931,
+  "value": "0x2e58b6",
+  "result": "HDAE5000_LangMsg_201_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2941,
+  "value": "0x2e58ba",
+  "result": "HDAE5000_LangMsg_202_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2950,
+  "value": "0x2e58be",
+  "result": "HDAE5000_LangMsg_202_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2959,
+  "value": "0x2e58c2",
+  "result": "HDAE5000_LangMsg_202_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2969,
+  "value": "0x2e58c6",
+  "result": "HDAE5000_LangMsg_203_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2978,
+  "value": "0x2e58ce",
+  "result": "HDAE5000_LangMsg_203_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2987,
+  "value": "0x2e58d6",
+  "result": "HDAE5000_LangMsg_203_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 2997,
+  "value": "0x2e58de",
+  "result": "HDAE5000_LangMsg_206_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3006,
+  "value": "0x2e58f0",
+  "result": "HDAE5000_LangMsg_206_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3015,
+  "value": "0x2e5902",
+  "result": "HDAE5000_LangMsg_206_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3025,
+  "value": "0x2e5916",
+  "result": "HDAE5000_LangMsg_207_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3034,
+  "value": "0x2e5924",
+  "result": "HDAE5000_LangMsg_207_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3043,
+  "value": "0x2e5932",
+  "result": "HDAE5000_LangMsg_207_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3053,
+  "value": "0x2e5940",
+  "result": "HDAE5000_LangMsg_208_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3062,
+  "value": "0x2e594e",
+  "result": "HDAE5000_LangMsg_208_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3071,
+  "value": "0x2e595c",
+  "result": "HDAE5000_LangMsg_208_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3081,
+  "value": "0x2e596a",
+  "result": "HDAE5000_LangMsg_209_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3090,
+  "value": "0x2e597a",
+  "result": "HDAE5000_LangMsg_209_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3099,
+  "value": "0x2e598a",
+  "result": "HDAE5000_LangMsg_209_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3109,
+  "value": "0x2e599a",
+  "result": "HDAE5000_LangMsg_210_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3118,
+  "value": "0x2e59a6",
+  "result": "HDAE5000_LangMsg_210_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3127,
+  "value": "0x2e59b0",
+  "result": "HDAE5000_LangMsg_210_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3137,
+  "value": "0x2e59bc",
+  "result": "HDAE5000_LangMsg_211_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3146,
+  "value": "0x2e59e6",
+  "result": "HDAE5000_LangMsg_211_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3155,
+  "value": "0x2e5a2c",
+  "result": "HDAE5000_LangMsg_211_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3165,
+  "value": "0x2e5a5c",
+  "result": "HDAE5000_LangMsg_212_EN",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3174,
+  "value": "0x2e5a88",
+  "result": "HDAE5000_LangMsg_212_DE",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3183,
+  "value": "0x2e5ab0",
+  "result": "HDAE5000_LangMsg_212_FR",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3191,
+  "value": "0x2e5ad4",
+  "result": "HDAE5000_LangMsg_NoMessage",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 3784,
+  "value": "0x2e5bb6",
+  "result": "HDAE5000_Fmt_03i_i",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4053,
+  "value": "0x2e5bf2",
+  "result": "HDAE5000_Fmt_Fault_No_Lyrics_loaded_o",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4250,
+  "value": "0x2e5c30",
+  "result": "HDAE5000_Fmt_i_i",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4274,
+  "value": "0x2e5c38",
+  "result": "HDAE5000_Fmt_Chord_s",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4363,
+  "value": "0x2e5c52",
+  "result": "HDAE5000_Str_Info",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4503,
+  "value": "0x2e5c76",
+  "result": "HDAE5000_Str_NoCopyrightInfo",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4552,
+  "value": "0x2e5c88",
+  "result": "HDAE5000_Str_NoSongTitle",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4616,
+  "value": "0x2e5c96",
+  "result": "HDAE5000_Fmt_i_i_File_Load",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4806,
+  "value": "0x2e5c9e",
+  "result": "HDAE5000_Str_Empty_File_Delete",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 4857,
+  "value": "0x2e5ca0",
+  "result": "HDAE5000_Str_Empty_File_Delete_2",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 5692,
+  "value": "0x2e5cae",
+  "result": "HDAE5000_Str_Empty_FDFileSelectProc",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6066,
+  "value": "0x2e5d22",
+  "result": "HDAE5000_Fmt_s_s",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6086,
+  "value": "0x2e5d28",
+  "result": "HDAE5000_Fmt_s_s_FDFileSelectProc",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6132,
+  "value": "0x280000",
+  "result": "HDAE5000_ROM_HEADER",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6355,
+  "value": "0x2e5d2e",
+  "result": "HDAE5000_Str_TLX_FDFileSelectProc",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6478,
+  "value": "0x2e5d50",
+  "result": "HDAE5000_Str_Chr202D3E",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6549,
+  "value": "0x2e5d58",
+  "result": "HDAE5000_Str_TTX",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6597,
+  "value": "0x2e5d62",
+  "result": "HDAE5000_Str_MID",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6679,
+  "value": "0x2e5d6c",
+  "result": "HDAE5000_Str_XLT",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6855,
+  "value": "0x2e5dc6",
+  "result": "HDAE5000_Str_XAP",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 7829,
+  "value": "0x2f8de0",
+  "result": "inside HDAE5000_Display_Params+0x12"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 7833,
+  "value": "0x2f8de0",
+  "result": "inside HDAE5000_Display_Params+0x12"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 7984,
+  "value": "0x2f8df2",
+  "result": "inside HDAE5000_Display_Params+0x24"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 7989,
+  "value": "0x2f8df2",
+  "result": "inside HDAE5000_Display_Params+0x24"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11302,
+  "value": "0x2f8e9c",
+  "result": "inside HDAE5000_Display_Params+0xce"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11326,
+  "value": "0x2f8ea2",
+  "result": "inside HDAE5000_Display_Params+0xd4"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11353,
+  "value": "0x2f8ea8",
+  "result": "inside HDAE5000_Display_Params+0xda"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11387,
+  "value": "0x2f8eb2",
+  "result": "inside HDAE5000_Display_Params+0xe4"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11421,
+  "value": "0x2f8ebc",
+  "result": "inside HDAE5000_Display_Params+0xee"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11455,
+  "value": "0x2f8ec6",
+  "result": "inside HDAE5000_Display_Params+0xf8"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11489,
+  "value": "0x2f8ed0",
+  "result": "inside HDAE5000_Display_Params+0x102"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11523,
+  "value": "0x2f8ed8",
+  "result": "inside HDAE5000_Display_Params+0x10a"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11557,
+  "value": "0x2f8ee2",
+  "result": "inside HDAE5000_Display_Params+0x114"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11591,
+  "value": "0x2f8eec",
+  "result": "inside HDAE5000_Display_Params+0x11e"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11625,
+  "value": "0x2f8ef4",
+  "result": "inside HDAE5000_Display_Params+0x126"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11856,
+  "value": "0x2f8efe",
+  "result": "inside HDAE5000_Display_Params+0x130"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11965,
+  "value": "0x2f8f08",
+  "result": "inside HDAE5000_Display_Params+0x13a"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12100,
+  "value": "0x2f8f12",
+  "result": "inside HDAE5000_Display_Params+0x144"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12250,
+  "value": "0x2f8f1c",
+  "result": "inside HDAE5000_Display_Params+0x14e"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12396,
+  "value": "0x2f8f26",
+  "result": "inside HDAE5000_Display_Params+0x158"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12534,
+  "value": "0x2f8f30",
+  "result": "inside HDAE5000_Display_Params+0x162"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12638,
+  "value": "0x2f8f38",
+  "result": "inside HDAE5000_Display_Params+0x16a"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12733,
+  "value": "0x2f8f42",
+  "result": "inside HDAE5000_Display_Params+0x174"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12869,
+  "value": "0x2f8f4c",
+  "result": "inside HDAE5000_Display_Params+0x17e"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 12964,
+  "value": "0x2f8f54",
+  "result": "inside HDAE5000_Display_Params+0x186"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 14922,
+  "value": "0x2f8f7c",
+  "result": "inside HDAE5000_Display_Params+0x1ae"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 14985,
+  "value": "0x2f8fc6",
+  "result": "inside HDAE5000_Display_Params+0x1f8"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15001,
+  "value": "0x2f8fd2",
+  "result": "inside HDAE5000_Display_Params+0x204"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15010,
+  "value": "0x2f8fe0",
+  "result": "inside HDAE5000_Display_Params+0x212"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15019,
+  "value": "0x2f8fee",
+  "result": "inside HDAE5000_Display_Params+0x220"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15028,
+  "value": "0x2f8ffc",
+  "result": "inside HDAE5000_Display_Params+0x22e"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15062,
+  "value": "0x2f902e",
+  "result": "inside HDAE5000_Display_Params+0x260"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15071,
+  "value": "0x2f903c",
+  "result": "inside HDAE5000_Display_Params+0x26e"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15080,
+  "value": "0x2f904a",
+  "result": "inside HDAE5000_Display_Params+0x27c"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15113,
+  "value": "0x2f9082",
+  "result": "inside HDAE5000_Display_Params+0x2b4"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15122,
+  "value": "0x2f9090",
+  "result": "inside HDAE5000_Display_Params+0x2c2"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15131,
+  "value": "0x2f909e",
+  "result": "inside HDAE5000_Display_Params+0x2d0"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15166,
+  "value": "0x2f90d0",
+  "result": "inside HDAE5000_Display_Params+0x302"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15175,
+  "value": "0x2f90de",
+  "result": "inside HDAE5000_Display_Params+0x310"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15184,
+  "value": "0x2f90ec",
+  "result": "inside HDAE5000_Display_Params+0x31e"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15193,
+  "value": "0x2f90fa",
+  "result": "inside HDAE5000_Display_Params+0x32c"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15528,
+  "value": "0x2f91ea",
+  "result": "inside HDAE5000_Display_Params+0x41c"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15538,
+  "value": "0x2f91f8",
+  "result": "inside HDAE5000_Display_Params+0x42a"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15725,
+  "value": "0x2f92ae",
+  "result": "inside HDAE5000_Display_Params+0x4e0"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 15884,
+  "value": "0x2f92fa",
+  "result": "inside HDAE5000_Display_Params+0x52c"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 25399,
+  "value": "0x29ac21",
+  "result": "HDAE5000_SPrintf_PutChar",
+  "candidates": null
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 25418,
+  "value": "0x29ac21",
+  "result": "HDAE5000_SPrintf_PutChar",
+  "candidates": null
+ }
+]

@@ -813,15 +813,15 @@ NakaInst_FADE_IN_OUT_SETTING:
 ; [nakarest] naka_effects_seq+0x6680  +0x6680..+0x66b4 (0xe2e624, 52 B)
 ; [nakarest] the table itself: Viewable slot 0xa (table 0xe2e624, 12 entries, InitializeKubo),
 ; [nakarest] 12 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x6680, 0x34
+Kubo_ViewableTable_00A:	.incbin "includes/generated/naka_effects_seq.bin", 0x6680, 0x34
 ; [nakarest] naka_effects_seq+0x66b4  +0x66b4..+0x66e8 (0xe2e658, 52 B)
 ; [nakarest] the table itself: Viewable slot 0xb (table 0xe2e658, 12 entries, InitializeKubo),
 ; [nakarest] 12 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x66B4, 0x34
+Kubo_ViewableTable_00B:	.incbin "includes/generated/naka_effects_seq.bin", 0x66B4, 0x34
 ; [nakarest] naka_effects_seq+0x66e8  +0x66e8..+0x6700 (0xe2e68c, 24 B)
 ; [nakarest] the table itself: Viewable slot 0xc (table 0xe2e68c, 37 entries, InitializeKubo),
 ; [nakarest] 37 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x66E8, 0x18
+Kubo_ViewableTable_00C:	.incbin "includes/generated/naka_effects_seq.bin", 0x66E8, 0x18
 EmbeddedPtrTable_v9_naka_effects_seq_006700:
 	.long 0x00E2841C
 	.long 0x00E28444
@@ -1818,11 +1818,57 @@ Naka_Help_569_E30113:
 ; [nakarest] name strings, entries 0-60 of ResName slot 0x3e7 (table 0xe3009e, 61 entries,
 ; [nakarest] InitializeKubo) (names for Viewable slot 0xe7): "", "HelpLang4P4", "",
 ; [nakarest] "HelpLang4P3", "", "HelpLang4P2", ....
-	.incbin "includes/generated/naka_effects_seq.bin", 0x81F4, 0x384
+	.incbin "includes/generated/naka_effects_seq.bin", 0x81F4, 0x160
+InitializeKubo_Str_MD_ENTERTAINER:	.incbin "includes/generated/naka_effects_seq.bin", 0x8354, 0x10	; "MD_ENTERTAINER"
+InitializeKubo_Str_MD_SEQ:		.incbin "includes/generated/naka_effects_seq.bin", 0x8364, 0x8	; "MD_SEQ"
+InitializeKubo_Str_MD_SEQ_EREC:		.incbin "includes/generated/naka_effects_seq.bin", 0x836C, 0xC	; "MD_SEQ_EREC"
+InitializeKubo_Str_MD_SEQ_PLAY:		.incbin "includes/generated/naka_effects_seq.bin", 0x8378, 0xC	; "MD_SEQ_PLAY"
+InitializeKubo_Str_MD_SEQ_REAL:		.incbin "includes/generated/naka_effects_seq.bin", 0x8384, 0xC	; "MD_SEQ_REAL"
+InitializeKubo_Str_MD_SEQ_EDIT:		.incbin "includes/generated/naka_effects_seq.bin", 0x8390, 0xC	; "MD_SEQ_EDIT"
+InitializeKubo_Str_MD_HELP:		.incbin "includes/generated/naka_effects_seq.bin", 0x839C, 0x8	; "MD_HELP"
+InitializeKubo_Str_TT_SDREVSET:		.incbin "includes/generated/naka_effects_seq.bin", 0x83A4, 0xC	; "TT_SDREVSET"
+InitializeKubo_Str_TT_SDDSPEFF:		.incbin "includes/generated/naka_effects_seq.bin", 0x83B0, 0xC	; "TT_SDDSPEFF"
+InitializeKubo_Str_TT_SDEQUALIZER:	.incbin "includes/generated/naka_effects_seq.bin", 0x83BC, 0x10	; "TT_SDEQUALIZER"
+InitializeKubo_Str_TT_SDACCILL:		.incbin "includes/generated/naka_effects_seq.bin", 0x83CC, 0xC	; "TT_SDACCILL"
+InitializeKubo_Str_TT_SQMENU:		.incbin "includes/generated/naka_effects_seq.bin", 0x83D8, 0xA	; "TT_SQMENU"
+InitializeKubo_Str_TT_SQPLAY:		.incbin "includes/generated/naka_effects_seq.bin", 0x83E2, 0xA	; "TT_SQPLAY"
+InitializeKubo_Str_TT_SQCYCPLY:		.incbin "includes/generated/naka_effects_seq.bin", 0x83EC, 0xC	; "TT_SQCYCPLY"
+InitializeKubo_Str_TT_SQEASYREC:	.incbin "includes/generated/naka_effects_seq.bin", 0x83F8, 0xE	; "TT_SQEASYREC"
+InitializeKubo_Str_TT_SQCMENU:		.incbin "includes/generated/naka_effects_seq.bin", 0x8406, 0xC	; "TT_SQCMENU"
+InitializeKubo_Str_TT_SQREALREC:	.incbin "includes/generated/naka_effects_seq.bin", 0x8412, 0xE	; "TT_SQREALREC"
+InitializeKubo_Str_TT_SQCYCREC:		.incbin "includes/generated/naka_effects_seq.bin", 0x8420, 0xC	; "TT_SQCYCREC"
+InitializeKubo_Str_TT_SQPUNCH:		.incbin "includes/generated/naka_effects_seq.bin", 0x842C, 0xC	; "TT_SQPUNCH"
+InitializeKubo_Str_TT_SQPUNCHM:		.incbin "includes/generated/naka_effects_seq.bin", 0x8438, 0xC	; "TT_SQPUNCHM"
+InitializeKubo_Str_TT_SQPNLWR:		.incbin "includes/generated/naka_effects_seq.bin", 0x8444, 0xC	; "TT_SQPNLWR"
+InitializeKubo_Str_TT_SQSNGCLR:		.incbin "includes/generated/naka_effects_seq.bin", 0x8450, 0xC	; "TT_SQSNGCLR"
+InitializeKubo_Str_TT_SQSNGCP:		.incbin "includes/generated/naka_effects_seq.bin", 0x845C, 0xC	; "TT_SQSNGCP"
+InitializeKubo_Str_TT_SQEMENU:		.incbin "includes/generated/naka_effects_seq.bin", 0x8468, 0xC	; "TT_SQEMENU"
+InitializeKubo_Str_TT_SQNOTESEL:	.incbin "includes/generated/naka_effects_seq.bin", 0x8474, 0xE	; "TT_SQNOTESEL"
+InitializeKubo_Str_TT_SQNOTEEDT:	.incbin "includes/generated/naka_effects_seq.bin", 0x8482, 0xE	; "TT_SQNOTEEDT"
+InitializeKubo_Str_TT_SQNOTECYCP:	.incbin "includes/generated/naka_effects_seq.bin", 0x8490, 0xE	; "TT_SQNOTECYCP"
+InitializeKubo_Str_TT_SQDRMSEL:		.incbin "includes/generated/naka_effects_seq.bin", 0x849E, 0xC	; "TT_SQDRMSEL"
+InitializeKubo_Str_TT_SQDRMEDT:		.incbin "includes/generated/naka_effects_seq.bin", 0x84AA, 0xC	; "TT_SQDRMEDT"
+InitializeKubo_Str_TT_SQDRMCYCP:	.incbin "includes/generated/naka_effects_seq.bin", 0x84B6, 0xE	; "TT_SQDRMCYCP"
+InitializeKubo_Str_TT_SQTRKCLR:		.incbin "includes/generated/naka_effects_seq.bin", 0x84C4, 0xC	; "TT_SQTRKCLR"
+InitializeKubo_Str_TT_SQTRKMRG:		.incbin "includes/generated/naka_effects_seq.bin", 0x84D0, 0xC	; "TT_SQTRKMRG"
+InitializeKubo_Str_TT_SQQTZ:		.incbin "includes/generated/naka_effects_seq.bin", 0x84DC, 0xA	; "TT_SQQTZ"
+InitializeKubo_Str_TT_SQTRNS:		.incbin "includes/generated/naka_effects_seq.bin", 0x84E6, 0xA	; "TT_SQTRNS"
+InitializeKubo_Str_TT_SQVELOCNG:	.incbin "includes/generated/naka_effects_seq.bin", 0x84F0, 0xE	; "TT_SQVELOCNG"
+InitializeKubo_Str_TT_SQNOTECNG:	.incbin "includes/generated/naka_effects_seq.bin", 0x84FE, 0xE	; "TT_SQNOTECNG"
+InitializeKubo_Str_TT_SQADVDLY:		.incbin "includes/generated/naka_effects_seq.bin", 0x850C, 0xC	; "TT_SQADVDLY"
+InitializeKubo_Str_TT_SQMERS:		.incbin "includes/generated/naka_effects_seq.bin", 0x8518, 0xA	; "TT_SQMERS"
+InitializeKubo_Str_TT_SQMCP:		.incbin "includes/generated/naka_effects_seq.bin", 0x8522, 0xA	; "TT_SQMCP"
+InitializeKubo_Str_TT_SQMDEL:		.incbin "includes/generated/naka_effects_seq.bin", 0x852C, 0xA	; "TT_SQMDEL"
+InitializeKubo_Str_TT_SQMINS:		.incbin "includes/generated/naka_effects_seq.bin", 0x8536, 0xA	; "TT_SQMINS"
+InitializeKubo_Str_TT_SQSNGCPC:		.incbin "includes/generated/naka_effects_seq.bin", 0x8540, 0xC	; "TT_SQSNGCPC"
+InitializeKubo_Str_TT_SQPNLWRM:		.incbin "includes/generated/naka_effects_seq.bin", 0x854C, 0xC	; "TT_SQPNLWRM"
+InitializeKubo_Str_TT_SQMETBAL:		.incbin "includes/generated/naka_effects_seq.bin", 0x8558, 0xC	; "TT_SQMETBAL"
+InitializeKubo_Str_TT_ETMENU:		.incbin "includes/generated/naka_effects_seq.bin", 0x8564, 0xA	; "TT_ETMENU"
+InitializeKubo_Str_TT_SWHELP:		.incbin "includes/generated/naka_effects_seq.bin", 0x856E, 0xA	; "TT_SWHELP"
 ; [nakarest] naka_effects_seq+0x8578  +0x8578..+0x8600 (0xe3051c, 136 B)
 ; [nakarest] the table itself: MainFunction slot 0x148 (table 0xe3051c, 44 entries,
 ; [nakarest] InitializeKubo), 44 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_effects_seq.bin", 0x8578, 0x88
+Kubo_MainFunctionTable_148:	.incbin "includes/generated/naka_effects_seq.bin", 0x8578, 0x88
 EmbeddedPtrTable_v9_naka_effects_seq_008600:
 	.long SdAccillTitleFunc
 	.long MimeSyori

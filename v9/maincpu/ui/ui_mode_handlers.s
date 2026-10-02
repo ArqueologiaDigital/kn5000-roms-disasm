@@ -14169,7 +14169,7 @@ RVari_Select_CheckSameBank:
 	srl e, 2
 	extz de
 	sla de, 2
-	lda xhl, (SeqChan_Map_2ch_0x2:24)
+	lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	ld xhl, 1:i3
 	push xhl
@@ -14214,7 +14214,7 @@ RVari_Select_CheckSameBank:
 	srl e, 2
 	extz de
 	sla de, 2
-	lda xhl, (SeqChan_Map_2ch_0x2:24)
+	lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	ld xhl, 1:i3
 	push xhl

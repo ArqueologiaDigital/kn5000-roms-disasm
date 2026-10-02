@@ -745,7 +745,39 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] naka_extension_device+0x21ac  +0x21ac..+0x2814 (0xed8978, 1640 B)
 ; [nakarest] name string, entry 0 of ResName slot 0x3fb (table 0xed896e, 1 entries,
 ; [nakarest] InitializeToshi) (names for Viewable slot 0xfb): "EXT".
-	.incbin "includes/generated/naka_extension_device.bin", 0x21AC, 0x668
+	.incbin "includes/generated/naka_extension_device.bin", 0x21AC, 0x4
+InitializeToshi_Str_MD_NORMAL:		.incbin "includes/generated/naka_extension_device.bin", 0x21B0, 0xA	; "MD_NORMAL"
+InitializeToshi_Str_MD_CONTROL:		.incbin "includes/generated/naka_extension_device.bin", 0x21BA, 0xC	; "MD_CONTROL"
+InitializeToshi_Str_MD_OTP:		.incbin "includes/generated/naka_extension_device.bin", 0x21C6, 0x8	; "MD_OTP"
+InitializeToshi_Str_TT_NORMAL:		.incbin "includes/generated/naka_extension_device.bin", 0x21CE, 0xA	; "TT_NORMAL"
+InitializeToshi_Str_TT_CTMENU:		.incbin "includes/generated/naka_extension_device.bin", 0x21D8, 0xA	; "TT_CTMENU"
+InitializeToshi_Str_TT_CTINIT:		.incbin "includes/generated/naka_extension_device.bin", 0x21E2, 0xA	; "TT_CTINIT"
+InitializeToshi_Str_TT_CTFSWAS:		.incbin "includes/generated/naka_extension_device.bin", 0x21EC, 0xC	; "TT_CTFSWAS"
+InitializeToshi_Str_TT_CTTOUCH:		.incbin "includes/generated/naka_extension_device.bin", 0x21F8, 0xC	; "TT_CTTOUCH"
+InitializeToshi_Str_TT_MSAMODE:		.incbin "includes/generated/naka_extension_device.bin", 0x2204, 0xC	; "TT_MSAMODE"
+InitializeToshi_Str_TT_CTPMMD:		.incbin "includes/generated/naka_extension_device.bin", 0x2210, 0xA	; "TT_CTPMMD"
+InitializeToshi_Str_TT_CTPMPARA:	.incbin "includes/generated/naka_extension_device.bin", 0x221A, 0xC	; "TT_CTPMPARA"
+InitializeToshi_Str_TT_CTSYSTEM:	.incbin "includes/generated/naka_extension_device.bin", 0x2226, 0xC	; "TT_CTSYSTEM"
+InitializeToshi_Str_TT_CTWALLSET:	.incbin "includes/generated/naka_extension_device.bin", 0x2232, 0xE	; "TT_CTWALLSET"
+InitializeToshi_Str_TT_ONETCH:		.incbin "includes/generated/naka_extension_device.bin", 0x2240, 0xA	; "TT_ONETCH"
+InitializeToshi_Str_TT_MUSICSTYL:	.incbin "includes/generated/naka_extension_device.bin", 0x224A, 0xE	; "TT_MUSICSTYL"
+InitializeToshi_Str_TT_MSCTSEL:		.incbin "includes/generated/naka_extension_device.bin", 0x2258, 0xC	; "TT_MSCTSEL"
+InitializeToshi_Str_TT_MSSCTSEL:	.incbin "includes/generated/naka_extension_device.bin", 0x2264, 0xC	; "TT_MSSCTSEL"
+InitializeToshi_Str_TT_MSSONGLIST:	.incbin "includes/generated/naka_extension_device.bin", 0x2270, 0xE	; "TT_MSSONGLIST"
+InitializeToshi_Str_TT_MSALPSEL:	.incbin "includes/generated/naka_extension_device.bin", 0x227E, 0xC	; "TT_MSALPSEL"
+InitializeToshi_Str_TT_PMBKSEL:		.incbin "includes/generated/naka_extension_device.bin", 0x228A, 0xC	; "TT_PMBKSEL"
+InitializeToshi_Str_TT_PMVIEW:		.incbin "includes/generated/naka_extension_device.bin", 0x2296, 0xA	; "TT_PMVIEW"
+InitializeToshi_Str_TT_PMNAME:		.incbin "includes/generated/naka_extension_device.bin", 0x22A0, 0xA	; "TT_PMNAME"
+InitializeToshi_Str_TT_PMBKNAME:	.incbin "includes/generated/naka_extension_device.bin", 0x22AA, 0xC	; "TT_PMBKNAME"
+InitializeToshi_Str_TT_SVARI:		.incbin "includes/generated/naka_extension_device.bin", 0x22B6, 0xA	; "TT_SVARI"
+InitializeToshi_Str_TT_RVARI:		.incbin "includes/generated/naka_extension_device.bin", 0x22C0, 0xA	; "TT_RVARI"
+InitializeToshi_Str_TT_TEST1:		.incbin "includes/generated/naka_extension_device.bin", 0x22CA, 0xA	; "TT_TEST1"
+InitializeToshi_Str_TT_TEST2:		.incbin "includes/generated/naka_extension_device.bin", 0x22D4, 0xA	; "TT_TEST2"
+InitializeToshi_Str_TT_TEST3:		.incbin "includes/generated/naka_extension_device.bin", 0x22DE, 0xA	; "TT_TEST3"
+InitializeToshi_Str_TT_TEST4:		.incbin "includes/generated/naka_extension_device.bin", 0x22E8, 0xA	; "TT_TEST4"
+InitializeToshi_Str_TT_TEST5:		.incbin "includes/generated/naka_extension_device.bin", 0x22F2, 0xA	; "TT_TEST5"
+InitializeToshi_Str_TT_TEST6:		.incbin "includes/generated/naka_extension_device.bin", 0x22FC, 0xA	; "TT_TEST6"
+InitializeToshi_Str_TT_EXT:		.incbin "includes/generated/naka_extension_device.bin", 0x2306, 0x50E	; "TT_EXT"
 ; [nakarest] naka_extension_device+0x2814  +0x2814..+0x29e0 (0xed8fe0, 460 B)
 ; [nakarest] purpose not established: layout of 460 B at 0xed8fe0 not derived; readers below
 ; [nakarest] Readers: source references DSPCfg_ResetEntryLoop (audio/tonegen_fileio_handlers.s:
@@ -776,8 +808,8 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] naka_extension_device+0x2b6e  +0x2b6e..+0x2e3c (0xed933a, 718 B)
 ; [nakarest] purpose not established: layout of 718 B at 0xed933a not derived; readers below
 ; [nakarest] Readers: source references ToneGen_FlashVerify (audio/tonegen_fileio_handlers.s:
-; [nakarest] `lda xhl, (NakaInst_ExtDevice_Screens_0x2B6E:24)`).
-	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0x2CE
+; [nakarest] `lda xhl, (ToneGen_FlashVerify_Str_HK:24)`).
+ToneGen_FlashVerify_Str_HK:	.incbin "includes/generated/naka_extension_device.bin", 0x2B6E, 0x2CE	; "HK "
 ; [nakarest] naka_extension_device+0x2e3c  +0x2e3c..+0x2e4e (0xed9608, 18 B)
 ; [nakarest] purpose not established: layout of 18 B at 0xed9608 not derived; readers below
 ; [nakarest] Readers: source references CtrlPanel_IndicatorJumpTable
@@ -794,30 +826,30 @@ NakaInst_ExtDevice_Screens:
 ; [nakarest] Readers: source references PanelDisplay_DispatchByMode
 ; [nakarest] (audio/tonegen_fileio_handlers.s: `lda xix,
 ; [nakarest] (NakaInst_ExtDevice_Screens_0x2E60:24)`); 32 data words in
-; [nakarest] NakaInst_ExtDevice_Screens_0x3452 (at 0xed9c1e, 0xed9c22, 0xed9c26), which is read
+; [nakarest] Encoder_PrepareCallback_PtrTable (at 0xed9c1e, 0xed9c22, 0xed9c26), which is read
 ; [nakarest] by Encoder_PrepareCallback (audio/tonegen_fileio_handlers.s: `ld
-; [nakarest] XWA,NakaInst_ExtDevice_Screens_0x3452`); 32 data words in
-; [nakarest] NakaInst_ExtDevice_Screens_0x34D2 (at 0xed9c9e, 0xed9ca2, 0xed9ca6), which is read
+; [nakarest] XWA,Encoder_PrepareCallback_PtrTable`); 32 data words in
+; [nakarest] Encoder_PrepareCallback_PtrTable_2 (at 0xed9c9e, 0xed9ca2, 0xed9ca6), which is read
 ; [nakarest] by Encoder_PrepareCallback (audio/tonegen_fileio_handlers.s: `ld
-; [nakarest] XWA,NakaInst_ExtDevice_Screens_0x34D2`).
+; [nakarest] XWA,Encoder_PrepareCallback_PtrTable_2`).
 	.incbin "includes/generated/naka_extension_device.bin", 0x2E60, 0x5F2
 ; [nakarest] naka_extension_device+0x3452  +0x3452..+0x34d2 (0xed9c1e, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xed9c1e not derived; readers below
 ; [nakarest] Readers: source references Encoder_PrepareCallback
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld XWA,NakaInst_ExtDevice_Screens_0x3452`).
-	.incbin "includes/generated/naka_extension_device.bin", 0x3452, 0x80
+; [nakarest] (audio/tonegen_fileio_handlers.s: `ld XWA,Encoder_PrepareCallback_PtrTable`).
+Encoder_PrepareCallback_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3452, 0x80	; 68 x 32-bit pointer
 ; [nakarest] naka_extension_device+0x34d2  +0x34d2..+0x3552 (0xed9c9e, 128 B)
 ; [nakarest] purpose not established: layout of 128 B at 0xed9c9e not derived; readers below
 ; [nakarest] Readers: source references Encoder_PrepareCallback
-; [nakarest] (audio/tonegen_fileio_handlers.s: `ld XWA,NakaInst_ExtDevice_Screens_0x34D2`).
-	.incbin "includes/generated/naka_extension_device.bin", 0x34D2, 0x80
+; [nakarest] (audio/tonegen_fileio_handlers.s: `ld XWA,Encoder_PrepareCallback_PtrTable_2`).
+Encoder_PrepareCallback_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x34D2, 0x80	; 36 x 32-bit pointer
 ; [nakarest] SoundParam_EncoderMappingData  +0x3552..+0x3860 (0xed9d1e, 782 B)
 ; [nakarest] purpose not established: layout of 782 B at 0xed9d1e not derived; readers below
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
 ; [nakarest] `.long SoundParam_EncoderMappingData`); 1 data word in SystemConfig_PointerTable
 ; [nakarest] (at 0xee8ca6).
-SoundParam_EncoderMappingData:
-	.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x30E
+SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x286
+ExtDev_SndParam_DispatchComplex_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x37D8, 0x88	; 8 x 32-bit pointer
 ; [nakarest] EffectMode_DispatchTable  +0x3860..+0x3870 (0xeda02c, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeda02c not derived; readers below
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:

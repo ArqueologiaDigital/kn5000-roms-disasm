@@ -234,7 +234,7 @@ GraphicsRender_ProcessEntries:
 	push xiz
 	stl_dri XBC, 0xfd, 0x96, 0x00
 	ld xiz, xwa
-	ld xiy, Str_No_0xBFE
+	ld xiy, GraphicsRender_ProcessEntries_PtrTable
 	lda xix, (xsp + 6)
 	ldw bc, 0x48
 	ldirw
@@ -277,7 +277,7 @@ GraphicsRender_Start:
 	push xiz
 	ld (xsp + 54), xbc
 	ld xiz, xwa
-	ld xiy, Str_No_0xC8E
+	ld xiy, GraphicsRender_Start_PtrTable
 	lda xix, (xsp + 6)
 	ldw bc, 0x18
 	ldirw
@@ -1322,15 +1322,15 @@ DrawFunc_Init_SkipShift:
 	jr z, DrawFunc_Init_FontTable2
 	cp ix, 1:i3
 	jr nz, DrawFunc_Init_FontTable0
-	ld xwa, Str_No_0xE16
+	ld xwa, DrawFunc_Init_SkipShift_Str_Fmt1d
 	jr DrawFunc_Init_PushFontAndDraw
 
 DrawFunc_Init_FontTable2:
-	ld xwa, Str_No_0xE1A
+	ld xwa, DrawFunc_Init_FontTable2_Str_Fmt2d
 	jr DrawFunc_Init_PushFontAndDraw
 
 DrawFunc_Init_FontTable0:
-	ld xwa, Str_No_0xE1E
+	ld xwa, DrawFunc_Init_FontTable0_Str_Fmt3d
 
 DrawFunc_Init_PushFontAndDraw:
 	push xwa
@@ -1414,12 +1414,12 @@ DrawFunc_Init_Join:
 	pushw	bc
 	cp	hl, 1:i3
 	jr	nz, DrawFunc_Init_Skip13
-	ld	xwa, Str_No_0xE2A
+	ld	xwa, DrawFunc_Init_Variant1_Str_Fmt1d
 	jr	DrawFunc_Init_Entry
 DrawFunc_Init_Skip3:
 	pushw	bc
-	pushw	234
-	pushw 0xb144
+	pushw	DrawFunc_Init_Variant1_Str_Fmt2d@hi16
+	pushw DrawFunc_Init_Variant1_Str_Fmt2d@lo16
 	push	xde
 	jr	DrawFunc_Init_Join8
 DrawFunc_Init_Skip13:
@@ -1434,13 +1434,13 @@ DrawFunc_Init_Skip4:
 	jr	z, DrawFunc_Init_Skip5
 	cp	hl, 1:i3
 	jr	nz, DrawFunc_Init_Skip6
-	ld	xwa, Str_No_0xE36
+	ld	xwa, DrawFunc_Init_Entry_Str_Fmt2d
 	jr	DrawFunc_Init_Join2
 DrawFunc_Init_Skip5:
-	ld	xwa, Str_No_0xE3A
+	ld	xwa, DrawFunc_Init_Entry_Str_Fmt3d
 	jr	DrawFunc_Init_Join2
 DrawFunc_Init_Skip6:
-	ld	xwa, Str_No_0xE3E
+	ld	xwa, DrawFunc_Init_Entry_Str_Fmt4d
 DrawFunc_Init_Join2:
 	push	xwa
 	lda	xwa, (xsp+10)
@@ -1491,15 +1491,15 @@ DrawFunc_Init_Join8:
 	cp	hl, 1:i3
 	jr	nz, DrawFunc_Init_Entry3
 	pushm	(xix)
-	ld	xwa, Str_No_0xE4A
+	ld	xwa, DrawFunc_Init_Entry_Str_Fmt1d
 	jr	DrawFunc_Init_Join3
 DrawFunc_Init_Entry2:
 	pushm	(xix)
-	ld	xwa, Str_No_0xE4E
+	ld	xwa, DrawFunc_Init_Entry2_Str_Fmt2d
 	jr	DrawFunc_Init_Join3
 DrawFunc_Init_Entry3:
 	pushm	(xix)
-	ld	xwa, Str_No_0xE52
+	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt3d
 DrawFunc_Init_Join3:
 	push	xwa
 	push	xbc
@@ -1553,13 +1553,13 @@ DrawFunc_Init_Skip14:
 	jr	z, DrawFunc_Init_Skip15
 	cp	l, 1:i3
 	jr	nz, DrawFunc_Init_Skip16
-	ld	xwa, Str_No_0xE5E
+	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt1d
 	jr	DrawFunc_Init_Join4
 DrawFunc_Init_Skip15:
-	ld	xwa, Str_No_0xE62
+	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt2d
 	jr	DrawFunc_Init_Join4
 DrawFunc_Init_Skip16:
-	ld	xwa, Str_No_0xE66
+	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt3d_2
 DrawFunc_Init_Join4:
 	push	xwa
 	push	xbc
@@ -1633,13 +1633,13 @@ DrawFunc_Init_Join5:
 	jr	z, DrawFunc_Init_Entry4
 	cp	l, 1:i3
 	jr	nz, DrawFunc_Init_Skip9
-	ld	xwa, Str_No_0xE72
+	ld	xwa, DrawFunc_Init_Entry3_Str_Fmt1d_2
 	jr	DrawFunc_Init_Entry5
 DrawFunc_Init_Entry4:
 	ld	xwa, FmtStr_pct2d
 	jr	DrawFunc_Init_Entry5
 DrawFunc_Init_Skip9:
-	ld	xwa, Str_No_0xE7A
+	ld	xwa, DrawFunc_Init_Entry4_Str_Fmt3d
 DrawFunc_Init_Entry5:
 	push	xwa
 	push	xbc
@@ -1651,13 +1651,13 @@ DrawFunc_Init_Skip18:
 	jr	z, DrawFunc_Init_Skip10
 	cp	l, 1:i3
 	jr	nz, DrawFunc_Init_Skip11
-	ld	xwa, Str_No_0xE7E
+	ld	xwa, DrawFunc_Init_Entry5_Str_Fmt2d
 	jr	DrawFunc_Init_Join6
 DrawFunc_Init_Skip10:
-	ld	xwa, Str_No_0xE82
+	ld	xwa, DrawFunc_Init_Entry5_Str_Fmt3d
 	jr	DrawFunc_Init_Join6
 DrawFunc_Init_Skip11:
-	ld	xwa, Str_No_0xE86
+	ld	xwa, DrawFunc_Init_Entry5_Str_Fmt4d
 DrawFunc_Init_Join6:
 	push	xwa
 	push	xbc
@@ -1701,17 +1701,17 @@ DrawFunc_Init_Join9:
 	cp	l, 1:i3
 	jr	nz, DrawFunc_Init_Skip20
 	pushm	(xde)
-	ld	xwa, Data_CharMapFormatBlock_0x8
+	ld	xwa, DrawFunc_Init_Entry5_Str_Fmt1d
 	jr	DrawFunc_Init_Join10
 DrawFunc_Init_Skip19:
 	pushm	(xde)
-	pushw	234
-	pushw	0xb1ac
+	pushw	DrawFunc_Init_Entry5_Str_Fmt2d_2@hi16
+	pushw	DrawFunc_Init_Entry5_Str_Fmt2d_2@lo16
 	push	xbc
 	jr	DrawFunc_Init_Join7
 DrawFunc_Init_Skip20:
 	pushm	(xde)
-	ld	xwa, Data_CharMapFormatBlock_0x10
+	ld	xwa, DrawFunc_Init_Entry5_Str_Fmt3d_2
 DrawFunc_Init_Join10:
 	push	xwa
 	push	xbc
@@ -2311,24 +2311,24 @@ GetWallPaletteRGB:
 InitializeRoot:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, 0xfa44e2, 0xeada92, 0xeac9ee, 0x160
-	RegObjTable 0x160000c, 0xfa58fb, 0xeaebb0, 0xeae7b6, 0x1c0
-	RegObjTable 0x160000d, 0xfa5948, 0xeafa6c, 0xeaebb2, 0x1e0
-	RegObjTabl 0x1600002, ApFunctionProc, 0xc, 0xeab2b4, 0x120
-	RegObjTabl 0x1600002, ApFunctionProc, 0xc, 0xeab2e8, 0x420
-	RegObjTabl 0x1600001, FunctionProc, 0x160, 0xeafa6e, 0x100
+	RegObjTable 0x1600004, ClassProc, Root_ClassCount_160, Root_ClassTable_160, 0x160
+	RegObjTable 0x160000c, ResEventProc, Root_ResEventCount_1C0, Root_ResEventTable_1C0, 0x1c0
+	RegObjTable 0x160000d, ResMethodProc, Root_ResMethodCount_1E0, Root_ResMethodTable_1E0, 0x1e0
+	RegObjTabl 0x1600002, ApFunctionProc, 0xc, Root_ApFunctionTable_120, 0x120
+	RegObjTabl 0x1600002, ApFunctionProc, 0xc, Root_ApFunctionTable_420, 0x420
+	RegObjTabl 0x1600001, FunctionProc, 0x160, Root_FunctionTable_100, 0x100
 	RegObjTabl 0x1600001, FunctionProc, 0x160, WidgetName_InitPtrTable, 0x400
-	RegObjTabl 0x1600003, MainFunctionProc, 0xd, 0xeb3698, 0x140
-	RegObjTabl 0x1600003, MainFunctionProc, 0xd, 0xeb36d0, 0x440
-	RegObjTabl 0x1600010, ViewableProc, 0x33, 0xeb3374, 0x0
-	RegObjTabl 0x160000f, ResNameProc, 0x33, 0xeb346c, 0x300
-	RegObjTabl 0x1600010, ViewableProc, 0x9, 0xeb3444, 0xff
-	RegObjTabl 0x160000f, ResNameProc, 0x9, 0xeb362a, 0x3ff
+	RegObjTabl 0x1600003, MainFunctionProc, 0xd, Root_MainFunctionTable_140, 0x140
+	RegObjTabl 0x1600003, MainFunctionProc, 0xd, Root_MainFunctionTable_440, 0x440
+	RegObjTabl 0x1600010, ViewableProc, 0x33, Root_ViewableTable_000, 0x0
+	RegObjTabl 0x160000f, ResNameProc, 0x33, Root_ResNameTable_300, 0x300
+	RegObjTabl 0x1600010, ViewableProc, 0x9, Root_ViewableTable_0FF, 0xff
+	RegObjTabl 0x160000f, ResNameProc, 0x9, Root_ResNameTable_3FF, 0x3ff
 
-	RegMode 0x0, 0xeb, 0x3682, 0x0, 0x1200000, 0x1a00000
+	RegMode 0x0, InitializeRoot_Str_MD_PS, 0x0, 0x1200000, 0x1a00000
 
-	RegTitle 0x0, 0xeb, 0x3688, 0x0, 0x1200000, 0x0
-	RegTitle 0x0, 0xeb, 0x368e, 0xff, 0x1400009, 0xff0000
+	RegTitle 0x0, InitializeRoot_Str_TT_PS, 0x0, 0x1200000, 0x0
+	RegTitle 0x0, InitializeRoot_Str_TT_CHECK, 0xff, 0x1400009, 0xff0000
 
 	lda xsp, (xsp + 14)
 	ret
@@ -3991,8 +3991,8 @@ PmBank_DrawRegionInfo:
 	lda xbc, (ParamStr_Table_05:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
-	pushw 0xed
-	pushw 0x1718
+	pushw SoundCheck_Text@hi16
+	pushw SoundCheck_Text@lo16
 	lda xwa, (xsp + 20)
 	push xwa
 	call Sprintf_Locked

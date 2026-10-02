@@ -348,7 +348,7 @@ BmDrEdit_RenderHorizontal:
 	ld a, (0x2806:16)
 	extz wa
 	add wa, wa
-	lda xbc, (NakaInst_NO_OPERATION_0x19A:24)
+	lda xbc, (BmDrEdit_RenderHorizontal_Table:24)
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
 	ld wa, (0x27be:16)
 	inc 3, wa
@@ -367,7 +367,7 @@ BmDrEdit_RenderVertical:
 	ld a, (0x2806:16)
 	extz wa
 	add wa, wa
-	lda xbc, (NakaInst_NO_OPERATION_0x1D4:24)
+	lda xbc, (BmDrEdit_RenderVertical_Table:24)
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xbe, 0x27
 	ld wa, (0x27be:16)
 	inc 3, wa
@@ -412,7 +412,7 @@ BmDrEdit_RenderSecondaryHoriz:
 	ld a, (0x0210b0:24)
 	extz wa
 	add wa, wa
-	lda xbc, (NakaInst_NO_OPERATION_0x19A:24)
+	lda xbc, (BmDrEdit_RenderHorizontal_Table:24)
 	ldmm_sriw 0x07, 0xe4, 0xe0, 0xc6, 0x27
 	ld wa, (0x27c6:16)
 	inc 3, wa
@@ -431,7 +431,7 @@ BmDrEdit_RenderSecondaryVert:
 	ld a, (0x0210b0:24)
 	extz wa
 	add wa, wa
-	lda xbc, (NakaInst_NO_OPERATION_0x1D4:24)
+	lda xbc, (BmDrEdit_RenderVertical_Table:24)
 	ldw_sri WA, 0x07, 0xe4, 0xe0
 	ld (0x27c6:16), wa
 	inc 3, wa

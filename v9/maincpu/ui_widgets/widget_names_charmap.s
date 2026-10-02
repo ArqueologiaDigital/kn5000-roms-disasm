@@ -918,7 +918,7 @@ NakaData_WidgetNames:
 ; [nakarest] Text (2 B at 0xeada92), first string "m"; no registered NAKA table points into it;
 ; [nakarest] reached through source references InitializeRoot (display/graphics_text_vga.s:
 ; [nakarest] `RegObjTable 0x1600004, 0xfa44e2, 0xeada92, 0xeac9ee, 0x160`).
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x622, 0x2
+Root_ClassCount_160:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x622, 0x2
 ; [nakarest] naka_widget_names_charmap+0x624  +0x624..+0x628 (0xeada94, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeada94 not derived; readers below
 ; [nakarest] Readers: source references SliderH_Setup (ui/ui_widget_defs.s: `ld hl,
@@ -1007,7 +1007,7 @@ NakaInst_ara6_fnt:
 ; [nakarest] naka_widget_names_charmap+0x1346  +0x1346..+0x143a (0xeae7b6, 244 B)
 ; [nakarest] the table itself: ResEvent slot 0x1c0 (table 0xeae7b6, 60 entries, InitializeRoot),
 ; [nakarest] 60 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1346, 0xF4
+Root_ResEventTable_1C0:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1346, 0xF4
 ; [nakarest] naka_widget_names_charmap+0x143a  +0x143a..+0x1740 (0xeae8aa, 774 B)
 ; [nakarest] name strings, entries 0-59 of ResEvent slot 0x1c0 (table 0xeae7b6, 60 entries,
 ; [nakarest] InitializeRoot): "EV_SWIN_MODE", "EV_OLD_TITLE", "EV_NEW_TITLE", "EV_ASSSWB",
@@ -1017,11 +1017,11 @@ NakaInst_ara6_fnt:
 ; [nakarest] Text (2 B at 0xeaebb0), first string "<"; no registered NAKA table points into it;
 ; [nakarest] reached through source references InitializeRoot (display/graphics_text_vga.s:
 ; [nakarest] `RegObjTable 0x160000c, 0xfa58fb, 0xeaebb0, 0xeae7b6, 0x1c0`).
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1740, 0x2
+Root_ResEventCount_1C0:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1740, 0x2
 ; [nakarest] naka_widget_names_charmap+0x1742  +0x1742..+0x1a36 (0xeaebb2, 756 B)
 ; [nakarest] the table itself: ResMethod slot 0x1e0 (table 0xeaebb2, 188 entries,
 ; [nakarest] InitializeRoot), 188 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1742, 0x2F4
+Root_ResMethodTable_1E0:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x1742, 0x2F4
 ; [nakarest] naka_widget_names_charmap+0x1a36  +0x1a36..+0x25fc (0xeaeea6, 3014 B)
 ; [nakarest] name strings, entries 0-187 of ResMethod slot 0x1e0 (table 0xeaebb2, 188 entries,
 ; [nakarest] InitializeRoot): "MT_MainLoopCount", "MT_SetTitleFlag", "MT_GetInitData",
@@ -1031,11 +1031,11 @@ NakaInst_ara6_fnt:
 ; [nakarest] purpose not established: layout of 2 B at 0xeafa6c not derived; readers below
 ; [nakarest] Readers: source references InitializeRoot (display/graphics_text_vga.s:
 ; [nakarest] `RegObjTable 0x160000d, 0xfa5948, 0xeafa6c, 0xeaebb2, 0x1e0`).
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x25FC, 0x2
+Root_ResMethodCount_1E0:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x25FC, 0x2
 ; [nakarest] naka_widget_names_charmap+0x25fe  +0x25fe..+0x2b82 (0xeafa6e, 1412 B)
 ; [nakarest] the table itself: Function slot 0x100 (table 0xeafa6e, 352 entries,
 ; [nakarest] InitializeRoot), 352 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x25FE, 0x584
+Root_FunctionTable_100:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x25FE, 0x584
 ; [nakarest] WidgetName_InitPtrTable  +0x2b82..+0x2b98 (0xeafff2, 22 B)
 ; [nakarest] the table itself: Function slot 0x400 (table 0xeafff2, 352 entries,
 ; [nakarest] InitializeRoot), 352 entry pointers x 4 bytes.
@@ -2943,10 +2943,10 @@ Str_InitializeRoot:
 ; [nakarest] naka_widget_names_charmap+0x44cc  +0x44cc..+0x44d0 (0xeb193c, 4 B)
 ; [nakarest] purpose not established: layout of 4 B at 0xeb193c not derived; readers below
 ; [nakarest] Readers: source references IconIDProc (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] Str_InitializeRoot_0x12`), SliderV_CalcRange (ui/ui_widget_defs.s: `ld xbc,
-; [nakarest] Str_InitializeRoot_0x12`), SliderV_ReturnAlt (ui/ui_widget_defs.s: `ld xwa,
-; [nakarest] Str_InitializeRoot_0x12`).
-	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CC, 0x4
+; [nakarest] IconIDProc_PtrTable`), SliderV_CalcRange (ui/ui_widget_defs.s: `ld xbc,
+; [nakarest] IconIDProc_PtrTable`), SliderV_ReturnAlt (ui/ui_widget_defs.s: `ld xwa,
+; [nakarest] IconIDProc_PtrTable`).
+IconIDProc_PtrTable:	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x44CC, 0x4	; 177 x 32-bit pointer
 ; [nakarest] IconNamePtrTable  +0x44d0..+0x4500 (0xeb1940, 48 B)
 ; [nakarest] purpose not established: 48 B at 0xeb1940 that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 IconNamePtrTable:
@@ -4381,9 +4381,9 @@ IconName_i0:
 ; [nakarest] IconName_Default  +0x4c1a..+0x4c28 (0xeb208a, 14 B)
 ; [nakarest] Text (14 B at 0xeb208a), first string "Default"; no registered NAKA table points
 ; [nakarest] into it; reached through 1 data word in IconNamePtrTable (at 0xeb1940); 1 data word
-; [nakarest] in Str_InitializeRoot_0x12 (at 0xeb193c), which is read by IconIDProc
-; [nakarest] (ui/ui_widget_defs.s: `ld xbc, Str_InitializeRoot_0x12`), SliderV_CalcRange
-; [nakarest] (ui/ui_widget_defs.s: `ld xbc, Str_InitializeRoot_0x12`), 1 more.
+; [nakarest] in IconIDProc_PtrTable (at 0xeb193c), which is read by IconIDProc
+; [nakarest] (ui/ui_widget_defs.s: `ld xbc, IconIDProc_PtrTable`), SliderV_CalcRange
+; [nakarest] (ui/ui_widget_defs.s: `ld xbc, IconIDProc_PtrTable`), 1 more.
 IconName_Default:
 	.incbin "includes/generated/naka_widget_names_charmap.bin", 0x4C1A, 0xE
 EmbeddedPtrTable_v9_naka_widget_names_charmap_004C28:

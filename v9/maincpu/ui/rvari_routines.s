@@ -947,7 +947,7 @@ RVari_Confirm_TypeF_SubItems:
 	ld c, (xsp + 8)
 	extz bc
 	sla bc, 2
-	lda xhl, (SeqChan_Map_2ch_0x2:24)
+	lda xhl, (RVari_Select_CheckSameBank_PtrTable:24)
 	ld_sril3 XHL, 0x07, 0xec, 0xe4
 	ld xbc, 1:i3
 	push xbc

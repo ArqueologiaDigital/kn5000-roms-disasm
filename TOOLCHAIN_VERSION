@@ -7,18 +7,25 @@
 # Further LLVM changes must be new commits on top.
 
 Branch: tlcs900_backend
-Commit: 12b3a5571450 (12b3a55714501f683391967d48929c2a8dac584b)
+Commit: b2487ca69ec7 (b2487ca69ec7f81adf5f3d50631e55b11e539f9d)
 Date: 2026-10-02
-Subject: [TLCS900] A shift/rotate count is 1..16; codegen splits wider shifts; raw pseudos range-checked
+Subject: [TLCS900] `sym@hi16` / `sym@lo16`: the two halves of a far pointer in a 16-bit immediate
 
-Binary: llvm-mc sha256 9ed604e16fd9b8199b90e87c2ef4217117a7b200acb4a34003887d18f6389968
+Binary: llvm-mc sha256 54f7d5fd6253f1a79bb276ef1f5be895d6cca57688a0f91ae100b147a430a9df
         preserved at ~/compartilhado/toolchain-snapshot/llvm-mc.snap
         built FROM SCRATCH from the committed, clean tree (every TLCS900
-        object, .inc and library deleted, CCACHE_DISABLE=1) -- twice, same
-        sha, as for llvm-objdump 475b26d38b66 (preserved as
-        llvm-objdump.snap.12b3a5571450-475b26d3), llc 5ed8a7cfb3f7,
-        clang-21 f8cce07f2ec1, lld 645ef3485809, llvm-objcopy 82887137c75e
-        and llvm-nm 6a1c3fedd96d from the same tree.
+        object, .inc and library deleted, the binaries removed,
+        CCACHE_DISABLE=1) -- twice, same sha, as for llvm-objdump
+        2cba2988ae9a (preserved as llvm-objdump.snap.b2487ca69ec7-2cba2988),
+        llc d6cc55a57866, clang-21 5e230599b005, lld 613da9751da5,
+        llvm-objcopy a0ca58d07b78 and llvm-nm 882286a716d4 from the same tree.
+
+⚠ PIN PROMOTED ON 2026-10-02 (UPDATE 20, far pointers):
+  12b3a5571450 / 9ed604e1 -> b2487ca69ec7 / 54f7d5fd.  The tree now writes
+  far-pointer halves as `pushw Sym@hi16` / `pushw Sym@lo16` and RegTitle /
+  RegMode take one address; no earlier binary parses `@hi16`, so tree and
+  pin move in one commit.  Prior snapshot kept at
+  llvm-mc.snap.12b3a5571450-9ed604e1.  The LLVM: trailer is now b2487ca69ec7.
 
 ⚠ PIN PROMOTED ON 2026-10-02 (UPDATE 19, wave 3a second fix round):
   d7752a16b6ee / c39a1525 -> 12b3a5571450 / 9ed604e1.  The shift/rotate
@@ -1310,3 +1317,53 @@ Repository: /home/fsanches/compartilhado/llvm-project
 #   optimisation for counts >= 65536; MUL/DIV immediates (owner ruling);
 #   byte-wide Q registers (QE ...) have no assembler name, so the tree still
 #   writes them through the raw-number ERP pseudos (`ldib_erp 234, 0`).
+
+# UPDATE 20 (2026-10-02): FAR POINTERS -- `sym@hi16` / `sym@lo16`.
+#
+#   llvm-project b2487ca69ec7 (one commit):
+#   * The firmware's C compiler passes a far pointer argument as two word
+#     pushes, high half first (`pushw 0xe4 / pushw 0x5126` = 0xe45126).  The
+#     assembler could not write either half symbolically (`pushw (Str >> 16)`
+#     = "expected relocatable expression"), so ~4,000 such references (and
+#     the NAKA registration macros' (hi, lo) arguments) stayed numbers, below
+#     every numeric-address audit's ROM range.
+#   * `hi16` / `lo16` @-specifiers in a 16-bit immediate -> new fixups
+#     fixup_tlcs900_hi16/lo16 -> R_TLCS900_HI16/LO16 (already in the ELF reloc
+#     table and ld.lld, unused until now).  An absolute .set/.equ symbol is
+#     folded by the assembler (the generic path crashed in ELFObjectWriter::
+#     recordRelocation on it).  Anywhere else the specifier is an error.  An
+#     addend applies before the split (`Str@hi16 + 1` = hi16(Str+1)).
+#   * Tests: MC/TLCS900/hi16-lo16.s, lld/test/ELF/tlcs900-hi16-lo16.s.
+#     TLCS900 lit 108/108.
+#   * The llvm commit message says "1,353 pushw pairs symbolized"; that was a
+#     slip written before the run was counted -- the counts are below.
+#
+#   disasm (the commit that promotes this pin), all by
+#   scripts/converters/far_pointer_pipeline.sh (notes/far-pointers-2026-10-02/):
+#   * symbolize_far_pointer_pushes.py: `pushw HI / pushw LO` pairs whose
+#     pointer has a symbol in the image's own ELF -> `Sym@hi16 / Sym@lo16`
+#     (340 v10, 340 v9, 401 v7, 375 HD-AE5000, 2 prom_a); the numeric ROM
+#     address arguments of RegObjTable/RegObjTabl/RegTitle/RegMode and the
+#     *Hama variants -> labels; RegTitle/RegMode respelled to take ONE
+#     address (`RegTitle 0x3, InitializeEast_Str_TT_REVEQMENU, ...`), with a
+#     RegTitleHiLo/RegModeHiLo copy of the old macro kept in v10/v9 for the
+#     32 calls whose pointer has no label yet (none left in v7).
+#   * split_blobs_at_far_pointers.py: a pointer INSIDE an .incbin slice to a
+#     string, a pointer table or a registered table splits the slice there,
+#     and the piece is named after the routine that reaches it
+#     (`PathInfo_BuildAndOpen_Str_wb`, `InitializeEast_Str_TT_MDMENU`,
+#     `Scoop_ViewableTable_021`); positional `.set Base_0xNN, Base + N`
+#     aliases that land on a piece or a label retire (838 v10/v9, 741 v7) and
+#     named `.set`/`.equ` aliases inside a slice become labels under their own
+#     names (109 per tree, e.g. DspEffectName_PtrTable); v9/v7 take v10's
+#     name for the same piece (--names-from).  1,092 new labels v10/v9, 976 v7.
+#   * scripts/analysis/semantic_debt_dashboard.py gains numfar (numeric far
+#     pointers into the tree's own ROM: push pairs + Reg* macro arguments) and
+#     posalias (positional alias definitions).  745e6b2c -> this commit:
+#     numfar 4,074 -> 1,227, posalias 9,511 -> 7,097; numbr, numaddr, numevt,
+#     addrlbl, bytecmt, field and todo unchanged.
+#   * Gate: make gate-all 13/13 with llvm-mc 54f7d5fd; foils: one @hi16
+#     flipped to @lo16, and one RegTitle string argument swapped for its
+#     neighbour, each change the v10 ROM.
+#
+# ⚠ STILL OPEN after UPDATE 20: UPDATE 19's list, unchanged.

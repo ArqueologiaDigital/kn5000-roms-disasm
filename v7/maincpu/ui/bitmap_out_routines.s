@@ -3182,8 +3182,8 @@ BitMapOut_UpdateDisplayWidget:
 	cp a, 0:i3
 	jr nz, BitMapOut_UpdateWidget_CheckType
 	pushw 0x10
-	pushw 0xeb
-	pushw 0x7bc8
+	pushw BitMapOut_UpdateDisplayWidget_Str_Non_Panel_Memory@hi16
+	pushw BitMapOut_UpdateDisplayWidget_Str_Non_Panel_Memory@lo16
 	jr BitMapOut_UpdateWidget_TypeA
 
 BitMapOut_UpdateWidget_CheckType:

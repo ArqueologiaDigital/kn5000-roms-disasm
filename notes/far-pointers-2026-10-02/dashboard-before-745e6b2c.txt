@@ -1,0 +1,15 @@
+semantic debt at 745e6b2c (lower is better; see the docstring for each column)
+tree           files    numbr  numaddr   numevt   numfar posalias  addrlbl  bytecmt    field     todo
+v10              263      585      108        2     1283     3172        0       90    31735        8
+v9               249      611      117        2     1283     3172        0       90    30782        8
+v7               249     2101      346       57     1049     3167        0      109    30782        5
+v142               5        0        0        1        0        0        0       10        0       11
+subboot            1        0        0        1        0        0        0        0        0        0
+tabledata         26        0       25        1        0        0        0        0        0       21
+customdata         1        0        0        0        0        0        0        0        0        0
+hdae5000           8        1      116        0      420        0        0        0        0        2
+prom_a             1      197       17        0       37        0     3795        0        0      671
+prom_b             1      206       20        0        0        0     2476        0        0     2368
+prom_c            27        6        8        0        2        0      173        0        0      761
+prom_d             4        0        0        0        0        0        0        0        0        2
+TOTAL            835     3707      757       64     4074     9511     6444      299    93299     3857

@@ -290,7 +290,8 @@ WidgetStyleDataTable:
 ; [nakarest] purpose not established: layout of 330 B at 0xeb7a90 not derived; readers below
 ; [nakarest] Readers: source references BitMapOut_DeltaEncode_Type90Final
 ; [nakarest] (ui/bitmap_out_routines.s: `lda xhl, (WidgetStyleDataTable_0x15E:24)`).
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D2, 0x14A
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D2, 0x138
+BitMapOut_UpdateDisplayWidget_Str_Non_Panel_Memory:	.incbin "includes/generated/naka_style_bitmaps.bin", 0xA0A, 0x12	; "Non Panel Memory"
 ; [nakarest] naka_style_bitmaps+0xa1c  +0xa1c..+0xad6 (0xeb7bda, 186 B)
 ; [nakarest] purpose not established: layout of 186 B at 0xeb7bda not derived; readers below
 ; [nakarest] Readers: source references EffectMode_UpdateBitFlags_Loop (ui/ui_mode_handlers.s:
@@ -3817,27 +3818,27 @@ SeqChan_Map_2ch:
 ; [nakarest] naka_style_bitmaps+0x18c16  +0x18c16..+0x18c22 (0xecfdd4, 12 B)
 ; [nakarest] purpose not established: layout of 12 B at 0xecfdd4 not derived; readers below
 ; [nakarest] Readers: source references RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda
-; [nakarest] xhl, (SeqChan_Map_2ch_0x2:24)`).
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C16, 0xC
+; [nakarest] xhl, (RVari_Select_CheckSameBank_PtrTable:24)`).
+RVari_Select_CheckSameBank_PtrTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C16, 0xC	; 3 x 32-bit pointer
 ; [nakarest] NakaInst_MEMORY_C_ECFDE0  +0x18c22..+0x18c2c (0xecfde0, 10 B)
 ; [nakarest] Text (10 B at 0xecfde0), first string "MEMORY-C"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in SeqChan_Map_2ch_0x2 (at 0xecfddc), which is
+; [nakarest] into it; reached through 1 data word in RVari_Select_CheckSameBank_PtrTable (at 0xecfddc), which is
 ; [nakarest] read by RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda xhl,
-; [nakarest] (SeqChan_Map_2ch_0x2:24)`).
+; [nakarest] (RVari_Select_CheckSameBank_PtrTable:24)`).
 NakaInst_MEMORY_C_ECFDE0:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C22, 0xA
 ; [nakarest] NakaInst_MEMORY_B_ECFDEA  +0x18c2c..+0x18c36 (0xecfdea, 10 B)
 ; [nakarest] Text (10 B at 0xecfdea), first string "MEMORY-B"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in SeqChan_Map_2ch_0x2 (at 0xecfdd8), which is
+; [nakarest] into it; reached through 1 data word in RVari_Select_CheckSameBank_PtrTable (at 0xecfdd8), which is
 ; [nakarest] read by RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda xhl,
-; [nakarest] (SeqChan_Map_2ch_0x2:24)`).
+; [nakarest] (RVari_Select_CheckSameBank_PtrTable:24)`).
 NakaInst_MEMORY_B_ECFDEA:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C2C, 0xA
 ; [nakarest] NakaInst_MEMORY_A_ECFDF4  +0x18c36..+0x18d22 (0xecfdf4, 236 B)
 ; [nakarest] Text (236 B at 0xecfdf4), first string "MEMORY-A"; no registered NAKA table points
-; [nakarest] into it; reached through 1 data word in SeqChan_Map_2ch_0x2 (at 0xecfdd4), which is
+; [nakarest] into it; reached through 1 data word in RVari_Select_CheckSameBank_PtrTable (at 0xecfdd4), which is
 ; [nakarest] read by RVari_Confirm_TypeF_SubItems (ui/rvari_routines.s: `lda xhl,
-; [nakarest] (SeqChan_Map_2ch_0x2:24)`).
+; [nakarest] (RVari_Select_CheckSameBank_PtrTable:24)`).
 NakaInst_MEMORY_A_ECFDF4:
 	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18C36, 0xEC
 ; [nakarest] Naka_MemoryC_Screens  +0x18d22..+0x18d62 (0xecfee0, 64 B)
@@ -3922,8 +3923,8 @@ MemScreen_NoteC:
 ; [nakarest] MemScreen_Blank  +0x18da8..+0x18e42 (0xecff66, 154 B)
 ; [nakarest] purpose not established: layout of 154 B at 0xecff66 not derived; readers below
 ; [nakarest] Readers: 1 data word in Naka_MemoryC_Screens (at 0xecfee0).
-MemScreen_Blank:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DA8, 0x9A
+MemScreen_Blank:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DA8, 0x4
+MainChordPre_PtrTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18DAC, 0x96	; 64 x 32-bit pointer
 ; [nakarest] naka_style_bitmaps+0x18e42  +0x18e42..+0x18e4a (0xed0000, 8 B)
 ; [nakarest] purpose not established: layout of 8 B at 0xed0000 not derived; readers below
 ; [nakarest] Readers: source references InitializeSuna (storage/flash_floppy_handlers.s: `ld

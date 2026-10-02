@@ -4185,78 +4185,78 @@ CheckSlotIndexValid:
 InitializeCheap:
 	lda xsp, (xsp - 14)
 
-	RegObjTable 0x1600004, ClassProc, 0xea1186, 0xea0f46, 0x165
-	RegObjTable 0x160000c, ResEventProc, 0xea11f2, PtrTbl_EventNames_EA1188, 0x1c5
-	RegObjTable 0x160000d, ResMethodProc, 0xea1358, 0xea11f4, 0x1e5
+	RegObjTable 0x1600004, ClassProc, Cheap_ClassCount_165, Cheap_ClassTable_165, 0x165
+	RegObjTable 0x160000c, ResEventProc, Cheap_ResEventCount_1C5, PtrTbl_EventNames_EA1188, 0x1c5
+	RegObjTable 0x160000d, ResMethodProc, Cheap_ResMethodCount_1E5, Cheap_ResMethodTable_1E5, 0x1e5
 	RegObjTabl 0x1600002, ApFunctionProc, 0x1d, 0xea0a56, 0x125
 	RegObjTabl 0x1600002, ApFunctionProc, 0x1d, PtrTbl_DiskFuncNames, 0x425
-	RegObjTabl 0x1600001, FunctionProc, 0xd, 0xea135a, 0x105
+	RegObjTabl 0x1600001, FunctionProc, 0xd, Cheap_FunctionTable_105, 0x105
 	RegObjTabl 0x1600001, FunctionProc, 0xd, PtrTbl_NakaModuleHandlers, 0x405
-	RegObjTabl 0x1600003, MainFunctionProc, 0x39, 0xea7fce, 0x145
-	RegObjTabl 0x1600003, MainFunctionProc, 0x39, 0xea80b6, 0x445
-	RegObjTabl 0x1600010, ViewableProc, 0x4a, 0xea67b6, 0x60
-	RegObjTabl 0x160000f, ResNameProc, 0x4a, 0xea6fe2, 0x360
-	RegObjTabl 0x1600010, ViewableProc, 0x80, 0xea68e2, 0x61
-	RegObjTabl 0x160000f, ResNameProc, 0x80, 0xea7228, 0x361
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6ae6, 0x62
+	RegObjTabl 0x1600003, MainFunctionProc, 0x39, Cheap_MainFunctionTable_145, 0x145
+	RegObjTabl 0x1600003, MainFunctionProc, 0x39, Cheap_MainFunctionTable_445, 0x445
+	RegObjTabl 0x1600010, ViewableProc, 0x4a, Cheap_ViewableTable_060, 0x60
+	RegObjTabl 0x160000f, ResNameProc, 0x4a, Cheap_ResNameTable_360, 0x360
+	RegObjTabl 0x1600010, ViewableProc, 0x80, Cheap_ViewableTable_061, 0x61
+	RegObjTabl 0x160000f, ResNameProc, 0x80, Cheap_ResNameTable_361, 0x361
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_062, 0x62
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea75c6, 0x362
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6aea, 0x63
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_063, 0x63
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea75cc, 0x363
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6aee, 0x64
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_064, 0x64
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea75d2, 0x364
-	RegObjTabl 0x1600010, ViewableProc, 0x3, 0xea6af2, 0x65
+	RegObjTabl 0x1600010, ViewableProc, 0x3, Cheap_ViewableTable_065, 0x65
 	RegObjTabl 0x160000f, ResNameProc, 0x3, 0xea75d8, 0x365
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6b02, 0x66
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_066, 0x66
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea75fc, 0x366
-	RegObjTabl 0x1600010, ViewableProc, 0x47, 0xea6b06, 0x67
+	RegObjTabl 0x1600010, ViewableProc, 0x47, Cheap_ViewableTable_067, 0x67
 	RegObjTabl 0x160000f, ResNameProc, 0x47, 0xea7602, 0x367
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6c26, 0x6a
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_06A, 0x6a
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea77e4, 0x36a
-	RegObjTabl 0x1600010, ViewableProc, 0x15, 0xea6c2a, 0x6b
+	RegObjTabl 0x1600010, ViewableProc, 0x15, Cheap_ViewableTable_06B, 0x6b
 	RegObjTabl 0x160000f, ResNameProc, 0x15, 0xea77ea, 0x36b
-	RegObjTabl 0x1600010, ViewableProc, 0x53, 0xea6c82, 0x6c
+	RegObjTabl 0x1600010, ViewableProc, 0x53, Cheap_ViewableTable_06C, 0x6c
 	RegObjTabl 0x160000f, ResNameProc, 0x53, 0xea7878, 0x36c
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6dd2, 0x6d
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_06D, 0x6d
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7aca, 0x36d
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6dd6, 0x6e
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_06E, 0x6e
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7ad0, 0x36e
-	RegObjTabl 0x1600010, ViewableProc, 0x15, 0xea6dda, 0x77
+	RegObjTabl 0x1600010, ViewableProc, 0x15, Cheap_ViewableTable_077, 0x77
 	RegObjTabl 0x160000f, ResNameProc, 0x15, 0xea7ad6, 0x377
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6e32, 0x79
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_079, 0x79
 	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7b8c, 0x379
-	RegObjTabl 0x1600010, ViewableProc, 0x5e, 0xea6e36, 0x7b
+	RegObjTabl 0x1600010, ViewableProc, 0x5e, Cheap_ViewableTable_07B, 0x7b
 	RegObjTabl 0x160000f, ResNameProc, 0x5e, 0xea7b92, 0x37b
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6fb2, 0x7c
-	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7e98, 0x37c
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6fb6, 0x7d
-	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7e9e, 0x37d
-	RegObjTabl 0x1600010, ViewableProc, 0x8, 0xea6fba, 0x7e
-	RegObjTabl 0x160000f, ResNameProc, 0x8, 0xea7ea4, 0x37e
-	RegObjTabl 0x1600010, ViewableProc, 0x0, 0xea6fde, 0xbc
-	RegObjTabl 0x160000f, ResNameProc, 0x0, 0xea7ee2, 0x3bc
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_07C, 0x7c
+	RegObjTabl 0x160000f, ResNameProc, 0x0, Cheap_ResNameTable_37C, 0x37c
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_07D, 0x7d
+	RegObjTabl 0x160000f, ResNameProc, 0x0, Cheap_ResNameTable_37D, 0x37d
+	RegObjTabl 0x1600010, ViewableProc, 0x8, Cheap_ViewableTable_07E, 0x7e
+	RegObjTabl 0x160000f, ResNameProc, 0x8, Cheap_ResNameTable_37E, 0x37e
+	RegObjTabl 0x1600010, ViewableProc, 0x0, Cheap_ViewableTable_0BC, 0xbc
+	RegObjTabl 0x160000f, ResNameProc, 0x0, Cheap_ResNameTable_3BC, 0x3bc
 
-	RegMode 0x5, 0xea, 0x7ee8, 0x6, 0x1200000, 0x1a00060
+	RegMode 0x5, InitializeCheap_Str_MD_DISK, 0x6, 0x1200000, 0x1a00060
 
-	RegTitle 0x5, 0xea, 0x7ef0, 0x60, 0x1200000, 0x600000
-	RegTitle 0x5, 0xea, 0x7efa, 0x61, 0x1450027, 0x610000
-	RegTitle 0x5, 0xea, 0x7f02, 0x62, 0x1450036, 0x610069
-	RegTitle 0x5, 0xea, 0x7f10, 0x63, 0x1450037, 0x60002b
-	RegTitle 0x5, 0xea, 0x7f1a, 0x64, 0x1450029, 0x61004b
-	RegTitle 0x5, 0xea, 0x7f26, 0x65, 0x1200000, 0x650000
-	RegTitle 0x5, 0xea, 0x7f32, 0x66, 0x1200000, 0x600018
-	RegTitle 0x5, 0xea, 0x7f3e, 0x67, 0x1450028, 0x670000
-	RegTitle 0x5, 0xea, 0x7f46, 0x6a, 0x1200000, 0x600028
-	RegTitle 0x5, 0xea, 0x7f56, 0x6b, 0x145002d, 0x6b0000
-	RegTitle 0x5, 0xea, 0x7f62, 0x6c, 0x145001c, 0x6c0000
-	RegTitle 0x5, 0xea, 0x7f6e, 0x6d, 0x145001e, 0x6c0026
-	RegTitle 0x5, 0xea, 0x7f7a, 0x6e, 0x145001d, 0x6c003d
-	RegTitle 0x5, 0xea, 0x7f84, 0x77, 0x1450026, 0x770000
-	RegTitle 0x5, 0xea, 0x7f8e, 0x79, 0x1450011, 0x60000a
-	RegTitle 0x5, 0xea, 0x7f98, 0x7b, 0x1450031, 0x7b0000
-	RegTitle 0x5, 0xea, 0x7fa0, 0x7c, 0x1450032, 0x7b0019
-	RegTitle 0x5, 0xea, 0x7fac, 0x7d, 0x1450021, 0x7b0018
-	RegTitle 0x5, 0xea, 0x7fb8, 0x7e, 0x1200000, 0x7e0000
-	RegTitle 0x5, 0xea, 0x7fc4, 0xbc, 0x1450025, 0x60001b
+	RegTitle 0x5, InitializeCheap_Str_TT_DKMENU, 0x60, 0x1200000, 0x600000
+	RegTitle 0x5, InitializeCheap_Str_TT_DKLD, 0x61, 0x1450027, 0x610000
+	RegTitle 0x5, InitializeCheap_Str_TT_CMPLDSNGL, 0x62, 0x1450036, 0x610069
+	RegTitle 0x5, InitializeCheap_Str_TT_DKWPLD, 0x63, 0x1450037, 0x60002b
+	RegTitle 0x5, InitializeCheap_Str_TT_DKLDSMF, 0x64, 0x1450029, 0x61004b
+	RegTitle 0x5, InitializeCheap_Str_TT_DKSVMENU, 0x65, 0x1200000, 0x650000
+	RegTitle 0x5, InitializeCheap_Str_TT_DKSVNAME, 0x66, 0x1200000, 0x600018
+	RegTitle 0x5, InitializeCheap_Str_TT_DKSV, 0x67, 0x1450028, 0x670000
+	RegTitle 0x5, InitializeCheap_Str_TT_DKSVNAMESMF, 0x6a, 0x1200000, 0x600028
+	RegTitle 0x5, InitializeCheap_Str_TT_DKSVSMF, 0x6b, 0x145002d, 0x6b0000
+	RegTitle 0x5, InitializeCheap_Str_TT_DKDPSMF, 0x6c, 0x145001c, 0x6c0000
+	RegTitle 0x5, InitializeCheap_Str_TT_DKDPDOC, 0x6d, 0x145001e, 0x6c0026
+	RegTitle 0x5, InitializeCheap_Str_TT_DKDPPD, 0x6e, 0x145001d, 0x6c003d
+	RegTitle 0x5, InitializeCheap_Str_TT_DKMDLY, 0x77, 0x1450026, 0x770000
+	RegTitle 0x5, InitializeCheap_Str_TT_SQMDLY, 0x79, 0x1450011, 0x60000a
+	RegTitle 0x5, InitializeCheap_Str_TT_DKUT, 0x7b, 0x1450031, 0x7b0000
+	RegTitle 0x5, InitializeCheap_Str_TT_DKUTSMF, 0x7c, 0x1450032, 0x7b0019
+	RegTitle 0x5, InitializeCheap_Str_TT_DKUTFRMT, 0x7d, 0x1450021, 0x7b0018
+	RegTitle 0x5, InitializeCheap_Str_TT_DKSETUP, 0x7e, 0x1200000, 0x7e0000
+	RegTitle 0x5, InitializeCheap_Str_TT_CMPLD, 0xbc, 0x1450025, 0x60001b
 
 	lda xsp, (xsp + 14)
 	ret
@@ -4264,7 +4264,7 @@ InitializeCheap:
 PasswordText:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PasswordText_Exit
-	lda xhl, (NakaInst_WaitWinCtlSmf_0x7C8:24)
+	lda xhl, (PasswordText_PtrTable:24)
 	ret
 
 PasswordText_Exit:
@@ -4279,15 +4279,15 @@ CheckPasswordText:
 	jr z, CheckPwd_Type2
 	cp a, 1:i3
 	jr nz, CheckPwd_Type0
-	ld xhl, NakaInst_WaitWinCtlSmf_0xA32
+	ld xhl, CheckPasswordText_PtrTable
 	jr CheckPwd_Return
 
 CheckPwd_Type2:
-	ld xhl, NakaInst_WaitWinCtlSmf_0xC0C
+	ld xhl, CheckPwd_Type2_PtrTable
 	jr CheckPwd_Return
 
 CheckPwd_Type0:
-	ld xhl, NakaInst_WaitWinCtlSmf_0x88E
+	ld xhl, CheckPwd_Type0_PtrTable
 
 CheckPwd_Return:
 	ret
@@ -4326,7 +4326,7 @@ WakeUp_HandleDirect:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, EVT_PARA_DRAW
-	ld xde, NakaInst_WaitWinCtlSmf_0xDF0
+	ld xde, WakeUp_HandleDirect_Str_CcEv
 	call SendEvent
 	jrl WakeUp_ReturnZero
 
@@ -4400,8 +4400,8 @@ PasswordOk:
 	jr z, PwdOk_ReturnZero
 	cp xbc, EVT_GET_STRING
 	jr nz, PwdOk_ReturnZero
-	pushw 0xea
-	pushw 0x8bf6
+	pushw PasswordOk_Str_Query_Query@hi16
+	pushw PasswordOk_Str_Query_Query@lo16
 	push xde
 	call Strcpy
 	inc 8, xsp
@@ -4454,8 +4454,8 @@ CheckPasswordOk:
 	jrl z, CheckOk_ReturnZero
 	cp xbc, EVT_GET_STRING
 	jrl nz, CheckOk_ReturnZero
-	pushw 0xea
-	pushw 0x8bfa
+	pushw CheckPasswordOk_Str_Query_Query@hi16
+	pushw CheckPasswordOk_Str_Query_Query@lo16
 	push xde
 	call Strcpy
 	inc 8, xsp
@@ -4567,7 +4567,7 @@ CheckNo_HandleConfirm:
 DiskAttention:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type1
-	lda xhl, (NakaInst_WaitWinCtlSmf_0xDFE:24)
+	lda xhl, (DiskAttention_PtrTable:24)
 	ret
 
 CheckNo_Type1:
@@ -4577,7 +4577,7 @@ CheckNo_Type1:
 DiskSure:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type2
-	lda xhl, (NakaInst_WaitWinCtlSmf_0xE5C:24)
+	lda xhl, (DiskSure_PtrTable:24)
 	ret
 
 CheckNo_Type2:
@@ -4587,7 +4587,7 @@ CheckNo_Type2:
 FormatText:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_Type3
-	lda xhl, (DiskWarning_ConfirmStrings_0x30:24)
+	lda xhl, (FormatText_PtrTable:24)
 	ret
 
 CheckNo_Type3:
@@ -4597,7 +4597,7 @@ CheckNo_Type3:
 DeleteText:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, CheckNo_CallFunc
-	lda xhl, (DiskWarning_ConfirmStrings_0x1C4:24)
+	lda xhl, (DeleteText_PtrTable:24)
 	ret
 
 CheckNo_CallFunc:
@@ -4651,7 +4651,7 @@ PwdChange_Type1:
 SaveText:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PwdChange_CallFunc
-	lda xhl, (DiskWarning_ConfirmStrings_0x47E:24)
+	lda xhl, (SaveText_PtrTable:24)
 	ret
 
 PwdChange_CallFunc:
@@ -4705,7 +4705,7 @@ PwdDel_Type1:
 InsertOptionText:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PwdDel_Type2
-	lda xhl, (DiskWarning_ConfirmStrings_0x790:24)
+	lda xhl, (InsertOptionText_PtrTable:24)
 	ret
 
 PwdDel_Type2:
@@ -4715,7 +4715,7 @@ PwdDel_Type2:
 TypePriorityText:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, PwdDel_CallFunc
-	lda xhl, (DiskWarning_ConfirmStrings_0x8AC:24)
+	lda xhl, (TypePriorityText_PtrTable:24)
 	ret
 
 PwdDel_CallFunc:

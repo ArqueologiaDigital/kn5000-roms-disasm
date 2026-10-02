@@ -693,14 +693,14 @@ PsNumEditBox_Confirm:
 	ld	xwa, (xsp+42)
 	call	GetViewInstance
 	ld	xiz, xhl
-	pushw	234
-	pushw	41594
+	pushw	PsNumEditBox_Confirm_Str_Chr25@hi16
+	pushw	PsNumEditBox_Confirm_Str_Chr25@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Free_Compare2
 	pushw	(xiz+50)
-	pushw	234
-	pushw	41596
+	pushw	PsNumEditBox_Confirm_Str_Fmtd@hi16
+	pushw	PsNumEditBox_Confirm_Str_Fmtd@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -710,8 +710,8 @@ PsNumEditBox_Confirm:
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+26)
-	pushw	234
-	pushw	41600
+	pushw	PsNumEditBox_Confirm_Str_d@hi16
+	pushw	PsNumEditBox_Confirm_Str_d@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -773,7 +773,7 @@ PasTableCheck:
 	jr	nz, PasTableCheck_Return
 	ld	xwa, (xde)
 	sll	xwa, 2
-	ld	xbc, Data_SoundEditorCharsLayout_0x3B0
+	ld	xbc, PasTableCheck_PtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -816,7 +816,7 @@ AcOnOff_GetText:
 	ld	wa, (xwa)
 	extz	xwa
 	sll	xwa, 2
-	ld	xbc, Data_SoundEditorCharsLayout_0x3C8
+	ld	xbc, AcOnOff_GetText_PtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -930,15 +930,15 @@ AcNumEdit_GetText:
 	ld	xwa, (xsp+32)
 	call	GetViewInstance
 	ld	(xsp+4), xhl
-	pushw 234
-	pushw 41642
+	pushw AcNumEdit_GetText_Str_Chr25@hi16
+	pushw AcNumEdit_GetText_Str_Chr25@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	Free_Compare2
 	ld	xwa, (xsp+12)
 	pushw	(xwa+54)
-	pushw	234
-	pushw	41644
+	pushw	AcNumEdit_GetText_Str_Fmtd@hi16
+	pushw	AcNumEdit_GetText_Str_Fmtd@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -948,8 +948,8 @@ AcNumEdit_GetText:
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+26)
-	pushw 234
-	pushw 41648
+	pushw AcNumEdit_GetText_Str_d@hi16
+	pushw AcNumEdit_GetText_Str_d@lo16
 	lda	xwa, (xsp+22)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -1424,8 +1424,8 @@ LswEditCheck:
 	cp	xbc, EVT_GET_LSW_STRING
 	jr	nz, LswEditCheck_NotHandled
 	pushw	(xde+4)
-	pushw	234
-	pushw	41650
+	pushw	LswEditCheck_Str_Fmt3d@hi16
+	pushw	LswEditCheck_Str_Fmt3d@lo16
 	ld	xwa, (xde+8)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -2019,8 +2019,8 @@ RamEditCheck:
 RamEditCheck_JumpStart:
 	ld	xwa, (xde+14)
 	push	xwa
-	pushw	234
-	pushw	41654
+	pushw	RamEditCheck_JumpStart_Str_Fmt3d@hi16
+	pushw	RamEditCheck_JumpStart_Str_Fmt3d@lo16
 	ld	xwa, (xde+18)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -2379,7 +2379,7 @@ BitEditCheck:
 	ld	wa, (xde+8)
 	and	wa, 1
 	sla	wa, 2
-	lda	xbc, (Data_SoundEditorCharsLayout_0x3FC:24)
+	lda	xbc, (BitEditCheck_PtrTable:24)
 	ld_rrl	xwa, xbc, wa
 	push	xwa
 	ld	xwa, (xde+10)
@@ -3575,7 +3575,7 @@ ButtonState_Paint_Default:
 	pushw	(xhl+32)
 	ld xde, xhl
 	pushw	(xde+22)
-	ld xde, Data_SoundEditorCharsLayout_0x410
+	ld xde, ButtonState_Paint_EventConfirm_Str_ON
 	call DrawStringCentered
 	lda xwa, (xsp+280)
 	ldw_sri0 BC, (xsp + 0x0112)
@@ -3593,7 +3593,7 @@ ButtonState_Paint_Default:
 	pushw	(xhl+32)
 	ld xde, xhl
 	pushw	(xde+22)
-	ld xde, Data_SoundEditorCharsLayout_0x414
+	ld xde, ButtonState_Paint_EventConfirm_Str_OFF
 
 ButtonState_Paint_DrawAndReturn:
 	call DrawStringCentered
@@ -3619,29 +3619,29 @@ ButtonState_DispatchDSP_InlineData:
 	ld	xbc, EVT_GET_STRING
 	call	SendEvent
 	jr	ButtonState_Paint_DrawAligned
-	ld	xwa, Data_SoundEditorCharsLayout_0x418
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N9b
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, Data_SoundEditorCharsLayout_0x41C
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N98
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, Data_SoundEditorCharsLayout_0x420
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N85
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, Data_SoundEditorCharsLayout_0x424
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N81
 	jr	ButtonState_PaintProc_Join
 	ld	xwa, NakaInst_OK
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, NakaInst_OK_0x4
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_OFF
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, NakaInst_OK_0x8
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_OK
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, NakaInst_OK_0xC
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_Lt
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, NakaInst_OK_0xE
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_Gt
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, NakaInst_OK_0x10
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N7f
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, NakaInst_OK_0x14
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_N80
 	jr	ButtonState_PaintProc_Join
-	ld	xwa, NakaInst_OK_0x18
+	ld	xwa, ButtonState_DispatchDSP_InlineData_Str_YES
 	jr	ButtonState_PaintProc_Join
 	ld	xwa, Str_No
 ButtonState_PaintProc_Join:
@@ -4183,8 +4183,8 @@ PsPageBox_Confirm_DrawValue:
 	call	SendEvent
 	pushw	hl
 	pushw	iz
-	pushw	234
-	pushw	41812
+	pushw	PsPageBox_Confirm_DrawValue_Str_PAGE_Fmtd_Fmtd@hi16
+	pushw	PsPageBox_Confirm_DrawValue_Str_PAGE_Fmtd_Fmtd@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -4937,8 +4937,8 @@ IvPageControl_Paint:
 	jr IvPageControl_Dispatch
 
 IvPageControl_GetText:
-	pushw	234
-	pushw	41824
+	pushw	IvPageControl_GetText_Str_PAGE@hi16
+	pushw	IvPageControl_GetText_Str_PAGE@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	Free_Compare2
@@ -5013,8 +5013,8 @@ IvMainEditSwProc:
 	jr IvMainEditSw_ReturnZero
 
 IvMainEditSw_GetText:
-	pushw	234
-	pushw	41830
+	pushw	IvMainEditSw_GetText_Str_MnSw@hi16
+	pushw	IvMainEditSw_GetText_Str_MnSw@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -5091,8 +5091,8 @@ IvExit_Paint:
 	jr IvExit_ReturnZero
 
 IvExit_GetText:
-	pushw	234
-	pushw	41836
+	pushw	IvExit_GetText_Str_EXIT@hi16
+	pushw	IvExit_GetText_Str_EXIT@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -5126,8 +5126,8 @@ IvExitModeProc:
 	jrl IvExitMode_DefaultTail
 
 IvExitMode_GetText:
-	pushw	234
-	pushw	41842
+	pushw	IvExitMode_GetText_Str_ExMD@hi16
+	pushw	IvExitMode_GetText_Str_ExMD@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -5199,8 +5199,8 @@ IvExitScreenProc:
 	jrl IvExitScreen_DefaultTail
 
 IvExitScreen_GetText:
-	pushw	234
-	pushw	41848
+	pushw	IvExitScreen_GetText_Str_ExSC@hi16
+	pushw	IvExitScreen_GetText_Str_ExSC@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -5271,8 +5271,8 @@ IvExitWindowProc:
 	jrl IvExitWindow_DefaultTail
 
 IvExitWindow_GetText:
-	pushw	234
-	pushw	41854
+	pushw	IvExitWindow_GetText_Str_ExWn@hi16
+	pushw	IvExitWindow_GetText_Str_ExWn@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -5352,7 +5352,7 @@ IvFixWin_Paint:
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
 	ld xbc, EVT_PARA_DRAW
-	ld xde, Str_No_0x6E
+	ld xde, IvFixWin_Paint_Str_FWin
 	jr IvFixWin_Dispatch
 
 IvFixWin_Init:
@@ -5411,7 +5411,7 @@ IvNaming_Paint:
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 8)
 	ld xbc, EVT_PARA_DRAW
-	ld xde, Str_No_0x74
+	ld xde, IvNaming_Paint_Str_Name
 	jr IvNaming_Dispatch
 
 IvNaming_Init:
@@ -5508,7 +5508,7 @@ IvTrackSwitch_Paint:
 	calr PsInvisibleBoxProc
 	ld xwa, xiz
 	ld xbc, EVT_PARA_DRAW
-	ld xde, Str_No_0x7A
+	ld xde, IvTrackSwitch_Paint_Str_TrSw
 	jr IvTrackSwitch_Dispatch
 
 IvTrackSwitch_Init:
@@ -5616,7 +5616,7 @@ DefaultClass_Paint:
 	call InheritedProc
 	ld xwa, xiz
 	ld xbc, EVT_PARA_DRAW
-	ld xde, Str_No_0x80
+	ld xde, DefaultClass_Paint_Str_CcEv
 	call SendEvent
 	ld xhl, 0:i3
 
@@ -5678,8 +5678,8 @@ IvInterrupt_Paint:
 	jr IvInterrupt_ReturnZero
 
 IvInterrupt_GetText:
-	pushw	234
-	pushw	41884
+	pushw	IvInterrupt_GetText_Str_IntT@hi16
+	pushw	IvInterrupt_GetText_Str_IntT@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -5714,8 +5714,8 @@ IvIntReminderProc:
 	jr	z, IvIntReminder_GetInterval
 	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
-	pushw	234
-	pushw	41890
+	pushw	IvIntReminderProc_Str_iRem@hi16
+	pushw	IvIntReminderProc_Str_iRem@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -5731,8 +5731,8 @@ IvIntCompleteProc:
 	jr	z, IvIntComplete_GetInterval
 	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
-	pushw	234
-	pushw	41896
+	pushw	IvIntCompleteProc_Str_iCmp@hi16
+	pushw	IvIntCompleteProc_Str_iCmp@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -5748,8 +5748,8 @@ IvIntErrorProc:
 	jr	z, IvIntError_GetInterval
 	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
-	pushw	234
-	pushw	41902
+	pushw	IvIntErrorProc_Str_iErr@hi16
+	pushw	IvIntErrorProc_Str_iErr@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -5800,8 +5800,8 @@ IvIntVari_ForwardToInterrupt:
 	jr IvIntVari_ReturnZero
 
 IvIntVari_GetText:
-	pushw	234
-	pushw	41908
+	pushw	IvIntVari_GetText_Str_iVar@hi16
+	pushw	IvIntVari_GetText_Str_iVar@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -5824,8 +5824,8 @@ IvIntEasySetProc:
 	jr	z, IvIntEasySet_GetInterval
 	cp	xbc, EVT_GET_STRING
 	jrl	nz, IvInterruptProc
-	pushw	234
-	pushw	41914
+	pushw	IvIntEasySetProc_Str_iEsy@hi16
+	pushw	IvIntEasySetProc_Str_iEsy@lo16
 	push	xde
 	call	Free_Compare2
 	inc	8, xsp
@@ -5876,8 +5876,8 @@ IvIntWelcome_ForwardToInterrupt:
 	jr IvIntWelcome_ReturnZero
 
 IvIntWelcome_GetText:
-	pushw	234
-	pushw	41920
+	pushw	IvIntWelcome_GetText_Str_iVar@hi16
+	pushw	IvIntWelcome_GetText_Str_iVar@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -5918,7 +5918,7 @@ IvShowHideProc:
 	calr PsInvisibleBoxProc
 	ld xwa, (xsp + 8)
 	ld xbc, EVT_PARA_DRAW
-	ld xde, Str_No_0xB0
+	ld xde, IvShowHideProc_Str_Show
 	call SendEvent
 	jr IvShowHide_ReturnZero
 
@@ -6281,8 +6281,8 @@ AcPmemName_Confirm:
 	extz	bc
 	pushw	bc
 	pushw	hl
-	pushw	234
-	pushw	41932
+	pushw	AcPmemName_Confirm_Str_PMEM_Fmt2d_Fmtd_Fmt16s@hi16
+	pushw	AcPmemName_Confirm_Str_PMEM_Fmt2d_Fmtd_Fmt16s@lo16
 	push	xix
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+16)
@@ -6291,16 +6291,16 @@ AcPmemName_Confirm_ZeroIndex:
 	ld	xwa, (xde)
 	push	xwa
 	pushw	hl
-	pushw	234
-	pushw	41950
+	pushw	AcPmemName_Confirm_ZeroIndex_Str_PMEM_Fmt2d_Fmt16s@hi16
+	pushw	AcPmemName_Confirm_ZeroIndex_Str_PMEM_Fmt2d_Fmt16s@lo16
 	push	xix
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
 	jr	AcPmemName_Confirm_SendEvent
 AcPmemName_Confirm_EmptySlot:
 	pushw	hl
-	pushw	234
-	pushw	41966
+	pushw	AcPmemName_Confirm_EmptySlot_Str_PMEM_Fmt2d@hi16
+	pushw	AcPmemName_Confirm_EmptySlot_Str_PMEM_Fmt2d@lo16
 	push	xix
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
@@ -6414,7 +6414,7 @@ AcMixerVol_Paint:
 	ld de, (xde + 28)
 	extz xde
 	sll xde, 2
-	ld xhl, Str_No_0xF4
+	ld xhl, AcMixerVol_Paint_PtrTable
 	add xhl, xde
 	ld xde, (xhl)
 	ld xhl, 3:i3
@@ -6481,8 +6481,8 @@ AcMixerVol_Confirm:
 	inc 4,WA
 	ld (XBC+0x02),WA
 	pushw	(xsp+4)
-	pushw	234
-	pushw	42672
+	pushw	AcMixerVol_Confirm_Str_Fmt3d@hi16
+	pushw	AcMixerVol_Confirm_Str_Fmt3d@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -6541,7 +6541,7 @@ AcMixerVol_Confirm:
 	pushw	0
 	pushw	0
 	pushw	1
-	ld	xde, Str_No_0x39E
+	ld	xde, AcMixerVol_Confirm_Str_MUTE
 	call	DrawStringReverse
 	jrl	UIList_ReturnZeroJmp
 AcMixerVol_PartSelect:
@@ -6915,7 +6915,7 @@ DbMemo_Paint:
 	call DrawDesignBox
 	ld xwa, (xsp + 106)
 	ld xbc, EVT_MEMO_DRAW
-	ld xde, Str_No_0x3A4
+	ld xde, DbMemo_Paint_Str_Debug_Time
 	call SendEvent
 
 DbMemo_ReturnZero:
@@ -7161,8 +7161,8 @@ DbMemDump_Confirm_RowLoop:
 	ld XWA,XIZ
 	srl XWA, 16
 	pushw wa
-	pushw 0x00ea
-	pushw 0xa6c6
+	pushw DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt4X@hi16
+	pushw DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt4X@lo16
 	lda xwa, (xsp + 0x26)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -7200,8 +7200,8 @@ DbMemDump_Confirm_RowLoop:
 	ld	a, (xbc)
 	extz	wa
 	pushw	wa
-	pushw	234
-	pushw	42706
+	pushw	DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt2X_Fmt2X_Fmt2X_Fmt2X@hi16
+	pushw	DbMemDump_Confirm_RowLoop_Str_Fmt2X_Fmt2X_Fmt2X_Fmt2X_Fmt2X@lo16
 	lda	xwa, (xsp+40)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -7244,9 +7244,9 @@ DbMemDump_Confirm_SanitizeNext:
 ; DbMemDump_StepTable -- the memory-dump debugger's step-size table.  Six u32
 ; entries at Str_No + 0x3E4 (v10: 0xEAA6FA), the hex-digit weights
 ; 0x100000, 0x10000, 0x1000, 0x100, 0x10, 0x1, indexed 0..5 by the
-; `cp xwa, 0x5` / `sll xwa, 2` below.  The positional alias Str_No_0x3E4 is
-; auto-generated and kept; this name says what the bytes ARE.  Not a string.
-	.set DbMemDump_StepTable, Str_No + 996
+; `cp xwa, 0x5` / `sll xwa, 2` below.  Not a string.  It is a label of its own
+; in the Str_No run (disk_warning_strings.s) since 2026-10-02, when the run
+; was cut at every address code reaches; it was a `.set` alias before.
 DbMemDump_OK:
 	ld xwa, 0x2600024
 	ld xbc, EVT_MAKE_EDIT_SW_ID
@@ -7568,7 +7568,7 @@ DbDebugMenu_Init:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xde, (Str_No_0x42E:24)
+	lda xde, (DbDebugMenu_Init_Str_N1:24)
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	cp xwa, 0xffffffff
 	jrl z, PsMenuBox_ZeroReturn
@@ -7587,7 +7587,7 @@ DbDebugMenu_Close:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xde, (Str_No_0x42E:24)
+	lda xde, (DbDebugMenu_Init_Str_N1:24)
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_Close_CallMenu
@@ -7632,7 +7632,7 @@ DbDebugMenu_Confirm:
 	ld xde, (xde + 42)
 	ld de, (xde)
 	sla de, 2
-	lda xhl, (Str_No_0x3FC:24)
+	lda xhl, (DbDebugMenu_Confirm_PtrTable:24)
 	ld_sril3 XDE, 0x07, 0xec, 0xe8
 	ld xhl, 3:i3
 	push xhl
@@ -7656,7 +7656,7 @@ DbDebugMenu_OK:
 	ld xwa, (xbc)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xde, (Str_No_0x42E:24)
+	lda xde, (DbDebugMenu_Init_Str_N1:24)
 	ld_sril3 XWA, 0x07, 0xe8, 0xe0
 	cp xwa, 0xffffffff
 	jr z, DbDebugMenu_OK_Advance
@@ -7677,7 +7677,7 @@ DbDebugMenu_OK_Advance:
 	ld xbc, (xwa)
 	ld wa, (xbc)
 	sla wa, 2
-	lda xhl, (Str_No_0x3FC:24)
+	lda xhl, (DbDebugMenu_Confirm_PtrTable:24)
 	ld_sril3 XWA, 0x07, 0xec, 0xe0
 	cp (xwa), 0x0
 	jr nz, DbDebugMenu_OK_CheckValid
@@ -7687,7 +7687,7 @@ DbDebugMenu_OK_CheckValid:
 	ld xwa, (xde)
 	ld wa, (xwa)
 	sla wa, 2
-	lda xbc, (Str_No_0x42E:24)
+	lda xbc, (DbDebugMenu_Init_Str_N1:24)
 	lda_dri XBC, 0x07, 0xe4, 0xe0
 	ld xwa, (xbc)
 	cp xwa, 0xffffffff
@@ -7741,11 +7741,11 @@ PsTrackSwitchProc:
 	stl_dri XDE, 0xfd, 0xae, 0x00
 	ld xde, xbc
 	stl_dri XWA, 0xfd, 0xb2, 0x00
-	ld xiy, Str_No_0x43A
+	ld xiy, PsTrackSwitchProc_PtrTable
 	lda xix, (xsp + 38)
 	ldw bc, 0x28
 	ldirw
-	ld xiy, Str_No_0x4DA
+	ld xiy, PsTrackSwitchProc_PtrTable_2
 	lda xix, (xsp + 18)
 	ldw bc, 0xa
 	ldirw
@@ -7872,8 +7872,8 @@ PsTrkSw_Confirm_DrawGeometry:
 	ld	wa, (xwa+22)
 	inc	1, wa
 	pushw	wa
-	pushw 234
-	pushw 43044
+	pushw PsTrkSw_Confirm_DrawGeometry_Str_Fmtd@hi16
+	pushw PsTrkSw_Confirm_DrawGeometry_Str_Fmtd@lo16
 	lda	xwa, (xsp+124)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -8393,7 +8393,7 @@ AcTrkSw_Select_LowTrack:
 	jr AcTrkSw_Select_DrawTrack
 
 AcTrkSw_Select_HighTrack:
-	lda xhl, (Str_No_0x514:24)
+	lda xhl, (AcTrkSw_Select_HighTrack_Str_PsTextBox:24)
 
 AcTrkSw_Select_DrawTrack:
 	pop xiz
@@ -8431,7 +8431,7 @@ AcTrkSw_ShowHide:
 	jr AcTrkSw_ShowHide_Refresh
 
 AcTrkSw_ShowHide_CheckDirty:
-	lda xhl, (Str_No_0x51E:24)
+	lda xhl, (AcTrkSw_ShowHide_CheckDirty_Str_AcLanguageText:24)
 
 AcTrkSw_ShowHide_Refresh:
 	pop xiz
@@ -8440,7 +8440,7 @@ AcTrkSw_ShowHide_Refresh:
 LanguageCheck:
 	cp xbc, EVT_GET_LANGUAGE_PTR
 	jr nz, ObjectProc_ClassDispatch
-	lda xhl, (Str_No_0x52E:24)
+	lda xhl, (LanguageCheck_PtrTable:24)
 	ret
 
 ; ObjectProc class dispatch with dual handler
@@ -8551,8 +8551,8 @@ ObjectProc_Evt1E00019:
 	call	SendEvent
 	or	xhl, xhl
 	jr	z, ObjectProc_Skip
-	pushw 234
-	pushw 43152
+	pushw ObjectProc_Evt1E00019_Str_YZ@hi16
+	pushw ObjectProc_Evt1E00019_Str_YZ@lo16
 	ld	xwa, (xsp+140)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -8577,8 +8577,8 @@ ObjectProc_Evt1E00018:
 	lda	xde, (xwa+4)
 	cp	(xhl), 89
 	jr	nz, ObjectProc_Skip2
-	pushw 234
-	pushw 43156
+	pushw ObjectProc_Evt1E00018_Str_name@hi16
+	pushw ObjectProc_Evt1E00018_Str_name@lo16
 	ld	xwa, (xde)
 	push	xwa
 	jr	ObjectProc_Join
@@ -8588,16 +8588,16 @@ ObjectProc_Skip2:
 	ld	xwa, (xde)
 	cp	(xbc), 90
 	jr	nz, ObjectProc_Skip3
-	pushw 234
-	pushw 43162
+	pushw ObjectProc_Evt1E00018_Str_romram@hi16
+	pushw ObjectProc_Evt1E00018_Str_romram@lo16
 	push	xwa
 ObjectProc_Join:
 	call	Free_Compare2
 	inc	8, xsp
 	jrl	ObjectProc_Join4
 ObjectProc_Skip3:
-	pushw 234
-	pushw 43170
+	pushw ObjectProc_Evt1E00018_Str_Empty@hi16
+	pushw ObjectProc_Evt1E00018_Str_Empty@lo16
 	push	xwa
 	call	Free_Compare2
 	inc	8, xsp
@@ -10231,10 +10231,10 @@ TitleProc:
 	cp xde, 0x5
 	jrl gt, EnumList_Select_Send
 	add xde, xde
-	add xde, Str_No_0x6AA
+	add xde, TitleProc_Str_j
 	ld de, (xde)
 	lda xix, (TitleProc_EventDispatch:24)
-; Computed jump: target = TitleProc_EventDispatch + Str_No_0x6AA[i], Str_No_0x6AA = 16-bit offsets (6 words, read
+; Computed jump: target = TitleProc_EventDispatch + TitleProc_Str_j[i], TitleProc_Str_j = 16-bit offsets (6 words, read
 ;   from the ROM by scripts/analysis/lane_uiproc_dispatch_tables.py); i = event - 0x1e00030:
 ;   0x1e00030 -> TitleProc_Evt1E00030
 ;   0x1e00031 -> TitleProc_Evt1E00031
@@ -12824,7 +12824,7 @@ BoxStyle7_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6E8
+	ld xwa, BoxStyle7_CalcWidth_Str_Fmts_Fmtd
 
 BoxStyle7_CheckInner:
 	push	xwa
@@ -12944,7 +12944,7 @@ BoxStyle8_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x6FA
+	ld xwa, BoxStyle8_CalcWidth_Str_Fmts_Fmtd
 
 BoxStyle8_CheckInner:
 	push	xwa
@@ -13064,7 +13064,7 @@ BoxStyle9_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x70C
+	ld xwa, BoxStyle9_CalcWidth_Str_Fmts_Fmtd
 
 BoxStyle9_CheckInner:
 	push	xwa
@@ -13184,7 +13184,7 @@ BoxStyle10_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x71E
+	ld xwa, BoxStyle10_CalcWidth_Str_Fmts_Fmtd
 
 BoxStyle10_CheckInner:
 	push	xwa
@@ -13305,7 +13305,7 @@ BoxStyle11_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x730
+	ld xwa, BoxStyle11_CalcWidth_Str_Fmts_Fmtd
 
 BoxStyle11_CheckInner:
 	push	xwa
@@ -13425,7 +13425,7 @@ BoxStyle12_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x742
+	ld xwa, BoxStyle12_CalcWidth_Str_Fmts_Fmtd
 
 BoxStyle12_CheckInner:
 	push	xwa
@@ -13545,7 +13545,7 @@ BoxStyle13_CalcWidth:
 	push xwa
 	lda xwa, (xsp + 12)
 	push xwa
-	ld xwa, Str_No_0x754
+	ld xwa, BoxStyle13_CalcWidth_Str_Fmts_Fmtd
 
 BoxStyle13_CheckInner:
 	push	xwa
@@ -13683,16 +13683,16 @@ RectX1Proc:
 	jr EdgeDraw_BottomLeft_Done
 
 EdgeDraw_TopRight_Inner:
-	pushw	234
-	pushw	43632
+	pushw	EdgeDraw_TopRight_Inner_Str_left@hi16
+	pushw	EdgeDraw_TopRight_Inner_Str_left@lo16
 	ld	xwa, (xsp+268)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
 	jr	EdgeDraw_BottomLeft
 EdgeDraw_TopRight_Done:
-	pushw	234
-	pushw	43638
+	pushw	EdgeDraw_TopRight_Inner_Str_LBrace@hi16
+	pushw	EdgeDraw_TopRight_Inner_Str_LBrace@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Free_Compare2
@@ -13775,8 +13775,8 @@ RectY1Proc:
 	jr EdgeDraw_BottomRight_Draw
 
 EdgeDraw_BottomRight:
-	pushw	234
-	pushw	43640
+	pushw	EdgeDraw_BottomRight_Str_top@hi16
+	pushw	EdgeDraw_BottomRight_Str_top@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -13849,8 +13849,8 @@ RectX2Proc:
 	jr TabDraw_TopEdge_Execute
 
 TabDraw_TopEdge:
-	pushw	234
-	pushw	43646
+	pushw	TabDraw_TopEdge_Str_width@hi16
+	pushw	TabDraw_TopEdge_Str_width@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -13951,8 +13951,8 @@ RectY2Proc:
 	jr EdgeVariant_A_Done
 
 EdgeVariant_A_Setup:
-	pushw	234
-	pushw	43654
+	pushw	EdgeVariant_A_Setup_Str_height@hi16
+	pushw	EdgeVariant_A_Setup_Str_height@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -13960,8 +13960,8 @@ EdgeVariant_A_Setup:
 	ld	xhl, 1:i3
 	jr	POINTWProc_Return
 EdgeVariant_A_CalcWidth:
-	pushw	234
-	pushw	43662
+	pushw	EdgeVariant_A_CalcWidth_Str_RBrace@hi16
+	pushw	EdgeVariant_A_CalcWidth_Str_RBrace@lo16
 	ld	xwa, (xsp+12)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -14121,16 +14121,16 @@ PointXProc:
 	jr EdgeVariant_C_CalcHeight2
 
 EdgeVariant_C_CalcWidth:
-	pushw	234
-	pushw	43664
+	pushw	EdgeVariant_C_CalcWidth_Str_x@hi16
+	pushw	EdgeVariant_C_CalcWidth_Str_x@lo16
 	ld	xwa, (xsp+264)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	inc	8, xsp
 	jr	EdgeVariant_C_CheckInner
 EdgeVariant_C_CalcHeight:
-	pushw	234
-	pushw	43668
+	pushw	EdgeVariant_C_CalcHeight_Str_LBrace@hi16
+	pushw	EdgeVariant_C_CalcHeight_Str_LBrace@lo16
 	lda	xwa, (xsp+8)
 	push	xwa
 	call	Free_Compare2
@@ -14207,8 +14207,8 @@ PointYProc:
 	jr ShadowBox_A_CalcHeight
 
 ShadowBox_A_Setup:
-	pushw	234
-	pushw	43670
+	pushw	ShadowBox_A_Setup_Str_y@hi16
+	pushw	ShadowBox_A_Setup_Str_y@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -14216,8 +14216,8 @@ ShadowBox_A_Setup:
 	ld	xhl, 1:i3
 	jr	IDCursorProc_Return
 ShadowBox_A_CalcWidth:
-	pushw	234
-	pushw	43674
+	pushw	ShadowBox_A_CalcWidth_Str_RBrace@hi16
+	pushw	ShadowBox_A_CalcWidth_Str_RBrace@lo16
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -14341,8 +14341,8 @@ ShadowBox_B_Setup:
 	jrl ViewFlagProc_Return
 
 ShadowBox_B_Prologue:
-	pushw	234
-	pushw	43676
+	pushw	ShadowBox_B_Prologue_Str_idc@hi16
+	pushw	ShadowBox_B_Prologue_Str_idc@lo16
 	lda	xwa, (xsp+20)
 	push	xwa
 	call	Free_Compare2
@@ -15121,8 +15121,8 @@ ScrollBar_Setup:
 	ld	xwa, (xsp+14)
 	jrl	ScrollBar_ReturnAlt
 ScrollBar_CalcRange:
-	pushw	234
-	pushw	43680
+	pushw	ScrollBar_CalcRange_Str_DQuote@hi16
+	pushw	ScrollBar_CalcRange_Str_DQuote@lo16
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	Free_Compare2
@@ -15131,8 +15131,8 @@ ScrollBar_CalcRange:
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
-	pushw	234
-	pushw	43682
+	pushw	ScrollBar_CalcRange_Str_DQuote_2@hi16
+	pushw	ScrollBar_CalcRange_Str_DQuote_2@lo16
 	lda	xwa, (xsp+34)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -15226,8 +15226,8 @@ SliderH_Setup:
 	jrl SliderH_ReturnAlt5
 
 SliderH_Prologue:
-	pushw	234
-	pushw	43684
+	pushw	SliderH_Prologue_Str_id@hi16
+	pushw	SliderH_Prologue_Str_id@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Free_Compare2
@@ -15335,7 +15335,7 @@ IconIDProc:
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
-	ld xbc, Str_InitializeRoot_0x12
+	ld xbc, IconIDProc_PtrTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15347,8 +15347,8 @@ SliderV_Setup:
 	jrl BitmapIDProc_Return
 
 SliderV_Prologue:
-	pushw	234
-	pushw	43688
+	pushw	SliderV_Prologue_Str_idICON@hi16
+	pushw	SliderV_Prologue_Str_idICON@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Free_Compare2
@@ -15371,7 +15371,7 @@ SliderV_CalcRange:
 	ld (xwa), xbc
 	ld xwa, (xwa)
 	sll xwa, 2
-	ld xbc, Str_InitializeRoot_0x12
+	ld xbc, IconIDProc_PtrTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15410,7 +15410,7 @@ SliderV_ReturnZero:
 SliderV_ReturnAlt:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, Str_InitializeRoot_0x12
+	ld xwa, IconIDProc_PtrTable
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa
@@ -15456,20 +15456,20 @@ BitmapIDProc:
 	ld XWA, (xsp + 0x0108)
 	ld xwa, (xwa + 8)
 	sll xwa, 2
-	ld xbc, Data_CharMapFormatBlock_0x22C
+	ld xbc, BitmapIDProc_PtrTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
 	jr DrawHelper_A_CalcThumb
 
 DrawHelper_A_Setup:
-	ld hl, (Data_CharMapFormatBlock_0x22A:24)
+	ld hl, (DrawHelper_A_Setup_Str_DQuote:24)
 	extz xhl
 	jrl ApFuncIDProc_Return
 
 DrawHelper_A_Prologue:
-	pushw	234
-	pushw	43696
+	pushw	DrawHelper_A_Prologue_Str_id@hi16
+	pushw	DrawHelper_A_Prologue_Str_id@lo16
 	lda	xwa, (xsp+12)
 	push	xwa
 	call	Free_Compare2
@@ -15492,7 +15492,7 @@ DrawHelper_A_CalcRange:
 	ld (xwa), xbc
 	ld xwa, (xwa)
 	sll xwa, 2
-	ld xbc, Data_CharMapFormatBlock_0x22C
+	ld xbc, BitmapIDProc_PtrTable
 	add xbc, xwa
 	ld xwa, (xbc)
 	push xwa
@@ -15531,7 +15531,7 @@ DrawHelper_A_ReturnZero:
 DrawHelper_A_ReturnAlt:
 	ld xbc, xiz
 	sll xbc, 2
-	ld xwa, Data_CharMapFormatBlock_0x22C
+	ld xwa, BitmapIDProc_PtrTable
 	add xwa, xbc
 	ld xwa, (xwa)
 	or xwa, xwa
@@ -15637,8 +15637,8 @@ DrawHelper_B_Finish:
 	jrl MainFuncIDProc_Return
 
 DrawHelper_B_FinishAlt:
-	pushw	234
-	pushw	43700
+	pushw	DrawHelper_B_FinishAlt_Str_idf@hi16
+	pushw	DrawHelper_B_FinishAlt_Str_idf@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Free_Compare2
@@ -15830,8 +15830,8 @@ DrawHelper_D_Finish:
 	jrl ViewIDProc_Return
 
 DrawHelper_D_FinishAlt:
-	pushw	234
-	pushw	43704
+	pushw	DrawHelper_D_FinishAlt_Str_idf@hi16
+	pushw	DrawHelper_D_FinishAlt_Str_idf@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Free_Compare2
@@ -16022,8 +16022,8 @@ ViewID_EventSwitch:
 	ld	xwa, (xwa+8)
 	cp	xwa, (xsp+16)
 	jr	nz, ViewID_Select_Lookup
-	pushw	234
-	pushw	43708
+	pushw	ViewID_EventSwitch_Str_idNONE@hi16
+	pushw	ViewID_EventSwitch_Str_idNONE@lo16
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16041,8 +16041,8 @@ ViewID_Select_Lookup:
 	cp	(xhl), 0
 	jr	z, ViewID_Select_NoName
 	push	xhl
-	pushw	234
-	pushw	43716
+	pushw	ViewID_Select_Lookup_Str_idi_Fmts@hi16
+	pushw	ViewID_Select_Lookup_Str_idi_Fmts@lo16
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16068,8 +16068,8 @@ ViewID_Select_NoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43722
+	pushw	ViewID_Select_NoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	ViewID_Select_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xde+4)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16081,8 +16081,8 @@ ViewID_EnumCount:
 	jrl ViewID_Return
 
 ViewID_GetInfoStr:
-	pushw	234
-	pushw	43730
+	pushw	ViewID_GetInfoStr_Str_sword@hi16
+	pushw	ViewID_GetInfoStr_Str_sword@lo16
 	lda	xwa, (xsp+24)
 	push	xwa
 	call	Free_Compare2
@@ -16123,8 +16123,8 @@ ViewID_GetCurrent:
 	cp	(xhl), 0
 	jr	z, ViewID_GetCurrent_NoName
 	push	xhl
-	pushw 234
-	pushw 43738
+	pushw ViewID_GetCurrent_Str_idi_Fmts@hi16
+	pushw ViewID_GetCurrent_Str_idi_Fmts@lo16
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16146,16 +16146,16 @@ ViewID_GetCurrent_NoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43744
+	pushw	ViewID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	ViewID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xbc+4)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
 	jr	ViewID_ReturnZero
 ViewID_GetCurrent_None:
-	pushw 0xea
-	pushw 0xaae8
+	pushw ViewID_GetCurrent_None_Str_idNONE@hi16
+	pushw ViewID_GetCurrent_None_Str_idNONE@lo16
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa
@@ -16327,8 +16327,8 @@ ScreenID_EventSwitch:
 	ld XWA,(XWA+0x08)
 	cp XWA,(XSP+0x10)
 	jr nz, .Lc_fa8308
-	pushw 0x00ea
-	pushw 0xaaf0
+	pushw ScreenID_EventSwitch_Str_idNONE@hi16
+	pushw ScreenID_EventSwitch_Str_idNONE@lo16
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x04)
 	push XWA
@@ -16347,8 +16347,8 @@ ScreenID_Select_Lookup:
 	cp	(xhl), 0
 	jr	z, ScreenID_Select_NoName
 	push	xhl
-	pushw	234
-	pushw	43768
+	pushw	ScreenID_Select_Lookup_Str_idi_Fmts@hi16
+	pushw	ScreenID_Select_Lookup_Str_idi_Fmts@lo16
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16378,8 +16378,8 @@ ScreenID_Select_NoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43774
+	pushw	ScreenID_Select_NoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	ScreenID_Select_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xde+4)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16409,8 +16409,8 @@ ScreenID_GetCurrent:
 	cp (XHL),0x00
 	jr z, ScreenID_GetCurrent_NoName
 	push XHL
-	pushw 0x00ea
-	pushw 0xab06
+	pushw ScreenID_GetCurrent_Str_idi_Fmts@hi16
+	pushw ScreenID_GetCurrent_Str_idi_Fmts@lo16
 	ld XWA,(XSP+0x0c)
 	ld XWA,(XWA+0x04)
 	push XWA
@@ -16432,16 +16432,16 @@ ScreenID_GetCurrent_NoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43788
+	pushw	ScreenID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	ScreenID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xbc+4)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
 	jr	ScreenID_ReturnZero
 ScreenID_GetCurrent_None:
-	pushw	234
-	pushw	43796
+	pushw	ScreenID_GetCurrent_None_Str_idNONE@hi16
+	pushw	ScreenID_GetCurrent_None_Str_idNONE@lo16
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16474,8 +16474,8 @@ ScreenID_EnumOpen_ScanLoop:
 	cp	(xhl), 0
 	jr	z, ScreenID_EnumOpen_ScanNoName
 	push	xhl
-	pushw	234
-	pushw	43804
+	pushw	ScreenID_EnumOpen_ScanLoop_Str_idi_Fmts@hi16
+	pushw	ScreenID_EnumOpen_ScanLoop_Str_idi_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16502,8 +16502,8 @@ ScreenID_EnumOpen_ScanNoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43810
+	pushw	ScreenID_EnumOpen_ScanNoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	ScreenID_EnumOpen_ScanNoName_Str_idi_Fmts_Fmtd@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16542,8 +16542,8 @@ ScreenID_EnumOpen_NotFound:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
-	pushw	234
-	pushw	43818
+	pushw	ScreenID_EnumOpen_NotFound_Str_idNONE@hi16
+	pushw	ScreenID_EnumOpen_NotFound_Str_idNONE@lo16
 	call	16713560
 	inc	8, xsp
 	cp	hl, 0:i3
@@ -16669,8 +16669,8 @@ WindowID_EventSwitch:
 	ld XWA,(XWA+0x08)
 	cp XWA,(XSP+0x10)
 	jr nz, .Lc_fa8698
-	pushw 0x00ea
-	pushw 0xab32
+	pushw WindowID_EventSwitch_Str_idNONE@hi16
+	pushw WindowID_EventSwitch_Str_idNONE@lo16
 	ld XWA,(XSP+0x08)
 	ld XWA,(XWA+0x04)
 	push XWA
@@ -16689,8 +16689,8 @@ WindowID_Select_Lookup:
 	cp	(xhl), 0
 	jr	z, WindowID_Select_NoName
 	push	xhl
-	pushw	234
-	pushw	43834
+	pushw	WindowID_Select_Lookup_Str_idi_Fmts@hi16
+	pushw	WindowID_Select_Lookup_Str_idi_Fmts@lo16
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16720,8 +16720,8 @@ WindowID_Select_NoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43840
+	pushw	WindowID_Select_NoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	WindowID_Select_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xde+4)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16751,8 +16751,8 @@ WindowID_GetCurrent:
 	cp (XHL),0x00
 	jr z, WindowID_GetCurrent_NoName
 	push XHL
-	pushw 0x00ea
-	pushw 0xab48
+	pushw WindowID_GetCurrent_Str_idi_Fmts@hi16
+	pushw WindowID_GetCurrent_Str_idi_Fmts@lo16
 	ld XWA,(XSP+0x0c)
 	ld XWA,(XWA+0x04)
 	push XWA
@@ -16774,16 +16774,16 @@ WindowID_GetCurrent_NoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43854
+	pushw	WindowID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	WindowID_GetCurrent_NoName_Str_idi_Fmts_Fmtd@lo16
 	ld	xwa, (xbc+4)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+14)
 	jr	WindowID_ReturnZero
 WindowID_GetCurrent_None:
-	pushw	234
-	pushw	43862
+	pushw	WindowID_GetCurrent_None_Str_idNONE@hi16
+	pushw	WindowID_GetCurrent_None_Str_idNONE@lo16
 	ld	xwa, (xsp+8)
 	ld	xwa, (xwa+4)
 	push	xwa
@@ -16816,8 +16816,8 @@ WindowID_EnumOpen_ScanLoop:
 	cp	(xhl), 0
 	jr	z, WindowID_EnumOpen_ScanNoName
 	push	xhl
-	pushw	234
-	pushw	43870
+	pushw	WindowID_EnumOpen_ScanLoop_Str_idi_Fmts@hi16
+	pushw	WindowID_EnumOpen_ScanLoop_Str_idi_Fmts@lo16
 	lda	xwa, (xsp+28)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16844,8 +16844,8 @@ WindowID_EnumOpen_ScanNoName:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw	234
-	pushw	43876
+	pushw	WindowID_EnumOpen_ScanNoName_Str_idi_Fmts_Fmtd@hi16
+	pushw	WindowID_EnumOpen_ScanNoName_Str_idi_Fmts_Fmtd@lo16
 	lda	xwa, (xsp+30)
 	push	xwa
 	call	Scoop_EventLoop_12Entry_Helper
@@ -16884,8 +16884,8 @@ WindowID_EnumOpen_NotFound:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
-	pushw	234
-	pushw	43884
+	pushw	WindowID_EnumOpen_NotFound_Str_idNONE@hi16
+	pushw	WindowID_EnumOpen_NotFound_Str_idNONE@lo16
 	call	16713560
 	inc	8, xsp
 	cp	hl, 0:i3
@@ -17007,8 +17007,8 @@ ModeID_EnumFill:
 	jr	nz, ModeID_EnumFill_HasName
 	ld	xwa, (xiz+8)
 	push	xwa
-	pushw	234
-	pushw	43892
+	pushw	ModeID_EnumFill_Str_Mode_Fmtd@hi16
+	pushw	ModeID_EnumFill_Str_Mode_Fmtd@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -17036,12 +17036,12 @@ ModeID_GetCurrent:
 	jr nz, ModeID_GetCurrent_HasName
 	ld xwa, (xiz)
 	push xwa
-	ld xwa, Str_No_0x866
+	ld xwa, ModeID_GetCurrent_Str_Fmtd
 	jr ModeID_GetCurrent_SendAudio
 
 ModeID_GetCurrent_HasName:
 	push xhl
-	ld xwa, Str_No_0x86A
+	ld xwa, ModeID_GetCurrent_HasName_Str_MAKEMODEID_Fmts
 
 ModeID_GetCurrent_SendAudio:
 	push	xwa
@@ -17066,8 +17066,8 @@ ModeID_GetNext:
 	ld XBC,(XIZ)
 	ld QBC,0
 	pushw bc
-	pushw 0x00ea
-	pushw 0xab90
+	pushw ModeID_GetNext_Str_Mode_Fmtd@hi16
+	pushw ModeID_GetNext_Str_Mode_Fmtd@lo16
 	ld XWA,(XWA)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -17114,8 +17114,8 @@ ModeID_EnumOpen_SearchLoop:
 	jr	nz, ModeID_EnumOpen_Compare
 	ld	xwa, (xsp+8)
 	push	xwa
-	pushw	234
-	pushw	43928
+	pushw	ModeID_EnumOpen_SearchLoop_Str_Mode_Fmtd@hi16
+	pushw	ModeID_EnumOpen_SearchLoop_Str_Mode_Fmtd@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -17246,8 +17246,8 @@ TitleID_EnumFill:
 	jr	nz, TitleID_EnumFill_HasName
 	ld	xwa, (xiz+8)
 	push	xwa
-	pushw	234
-	pushw	43936
+	pushw	TitleID_EnumFill_Str_Title_Fmtd@hi16
+	pushw	TitleID_EnumFill_Str_Title_Fmtd@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -17275,12 +17275,12 @@ TitleID_GetCurrent:
 	jr nz, TitleID_GetCurrent_HasName
 	ld xwa, (xiz)
 	push xwa
-	ld xwa, Str_No_0x892
+	ld xwa, TitleID_GetCurrent_Str_Fmtd
 	jr TitleID_GetCurrent_SendAudio
 
 TitleID_GetCurrent_HasName:
 	push xhl
-	ld xwa, Str_No_0x896
+	ld xwa, TitleID_GetCurrent_HasName_Str_MAKETITLEID_Fmts
 
 TitleID_GetCurrent_SendAudio:
 	push	xwa
@@ -17305,8 +17305,8 @@ TitleID_GetNext:
 	ld XBC,(XIZ)
 	ld QBC,0
 	pushw bc
-	pushw 0x00ea
-	pushw 0xabbc
+	pushw TitleID_GetNext_Str_Title_Fmtd@hi16
+	pushw TitleID_GetNext_Str_Title_Fmtd@lo16
 	ld XWA,(XWA)
 	push XWA
 	call Scoop_EventLoop_12Entry_Helper
@@ -17353,8 +17353,8 @@ TitleID_EnumOpen_SearchLoop:
 	jr	nz, TitleID_EnumOpen_Compare
 	ld	xwa, (xsp+8)
 	push	xwa
-	pushw	234
-	pushw	43972
+	pushw	TitleID_EnumOpen_SearchLoop_Str_Title_Fmtd@hi16
+	pushw	TitleID_EnumOpen_SearchLoop_Str_Title_Fmtd@lo16
 	push	xbc
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+12)
@@ -17429,7 +17429,7 @@ NameProc:
 	jr ConstFlagProc_ReturnZero
 
 NameProc_Init:
-	ld xwa, Str_No_0x8B6
+	ld xwa, NameProc_Init_Str_name
 	jr NameProc_Close
 
 NameProc_Init_SetPtr:
@@ -17441,8 +17441,8 @@ NameProc_Close:
 	jr NameProc_DefaultForward
 
 NameProc_GetText:
-	pushw 0xea
-	pushw 0xabd4
+	pushw NameProc_GetText_Str_Empty@hi16
+	pushw NameProc_GetText_Str_Empty@lo16
 	jr NameProc_ReturnZero
 
 NameProc_GetText_CopyStr:
@@ -17495,7 +17495,7 @@ ConstFlagProc:
 	jr ConstFlagProc_Default_Done
 
 ConstFlagProc_GetValue:
-	ld xwa, Str_No_0x8C0
+	ld xwa, ConstFlagProc_GetValue_Str_romram
 	jr ConstFlagProc_SetValue
 
 ConstFlagProc_GetValue_Set:
@@ -17508,8 +17508,8 @@ ConstFlagProc_SetValue:
 	jr ConstFlagProc_SetValue_Store
 
 ConstFlagProc_SetValue_Check:
-	pushw 0xea
-	pushw 0xabe0
+	pushw ConstFlagProc_SetValue_Check_Str_Empty@hi16
+	pushw ConstFlagProc_SetValue_Check_Str_Empty@lo16
 	ld xwa, (xsp + 8)
 	ld xwa, (xwa + 4)
 	push xwa

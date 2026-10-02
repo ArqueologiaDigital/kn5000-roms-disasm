@@ -1608,8 +1608,8 @@ MidiSysEx_BuildAndSend:
 	or xiz, xiz
 	jr z, MidiSysEx_BuildAndSend_Exit
 	pushw 0x7
-	pushw 0xee
-	pushw 0x4fb2
+	pushw Midi_BankProgramTemplate@hi16
+	pushw Midi_BankProgramTemplate@lo16
 	push xiz
 	call Mem_Copy
 	lda xsp, (xsp + 10)
@@ -2838,7 +2838,7 @@ DSPCfg_LookupAndExtract:
 	dec 8, xsp
 	extz xbc
 	sll xbc, 2
-	ld xde, ToneKit_ParamBlock_116_0x7C
+	ld xde, DSPCfg_LookupAndExtract_PtrTable
 	add xde, xbc
 	mul wa, 0x6
 	add xwa, (xde)
@@ -2920,7 +2920,7 @@ DSPCfg_Data_003:
 	ld	xwa, xbc
 	calr	65182
 	sla	hl, 2
-	lda	xbc, (ToneKit_ParamBlock_116_0x7C:24)
+	lda	xbc, (DSPCfg_LookupAndExtract_PtrTable:24)
 	mul	iz, 6
 	ld	xwa, xiz
 	.byte 0xe3
@@ -3288,7 +3288,7 @@ DSPCfg_ClampAndExtract:
 	ld wa, iz
 	extz xwa
 	sll xwa, 2
-	ld xbc, ToneKit_ParamBlock_116_0x7C
+	ld xbc, DSPCfg_LookupAndExtract_PtrTable
 	add xbc, xwa
 	ld wa, (xsp + 16)
 	mul wa, 0x6

@@ -906,9 +906,8 @@ typedef struct __attribute__((packed)) {
     char Yoko_ResNames_3E3[100];
     /* ---------------------------------------------------------------------
      * Yoko_ResNames_3E3_Strings -- 306 bytes of NUL-terminated strings after
-     * Yoko_ResNames_3E3; no registration or code reference reaches them
-     * (searched: RegObjTabl tables, slice and positional labels). Which code
-     * uses them is not established.
+     * Yoko_ResNames_3E3; that code DOES reach (readers: the .s header, which also labels each
+     * string)
      * --------------------------------------------------------------------- */
     char Yoko_ResNames_3E3_Strings[306];
     /* ---------------------------------------------------------------------
@@ -973,7 +972,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x1DA0:24)`).
+     * (TrAsSureLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
@@ -984,49 +983,49 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * PartSelLangCheck_PtrTable -- 6 u32 addresses, read by PartSelLangCheck
      * (v10/v9 0xF2A92C, v7 0xF2A902) (`lda xhl,
-     * (NakaWidgetPtrTbl_SmfDp_0x1FC8:24)`).
+     * (PartSelLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t PartSelLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * AfterLangCheck_PtrTable -- 6 u32 addresses, read by AfterLangCheck
      * (v10/v9 0xF2A93D, v7 0xF2A913) (`lda xhl,
-     * (NakaWidgetPtrTbl_SmfDp_0x1FE0:24)`).
+     * (AfterLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AfterLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * TrAsPreLangCheck_PtrTable -- 6 u32 addresses, read by TrAsPreLangCheck
      * (v10/v9 0xF2A94E, v7 0xF2A924) (`lda xhl,
-     * (NakaWidgetPtrTbl_SmfDp_0x1FF8:24)`).
+     * (TrAsPreLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsPreLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * AtentionLangCheck_PtrTable -- 6 u32 addresses, read by
      * AtentionLangCheck (v10/v9 0xF2A95F, v7 0xF2A935) (`lda xhl,
-     * (NakaWidgetPtrTbl_SmfDp_0x2010:24)`).
+     * (AtentionLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AtentionLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * AreYouSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * AreYouSureLangCheck (v10/v9 0xF2A970, v7 0xF2A946) (`lda xhl,
-     * (NakaWidgetPtrTbl_SmfDp_0x2028:24)`).
+     * (AreYouSureLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AreYouSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * GmOnSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * GmOnSureLangCheck (v10/v9 0xF2A981, v7 0xF2A957) (`lda xhl,
-     * (NakaWidgetPtrTbl_SmfDp_0x2040:24)`).
+     * (GmOnSureLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t GmOnSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * GmOffSureLangCheck_PtrTable -- 6 u32 addresses, read by
      * GmOffSureLangCheck (v10/v9 0xF2A992, v7 0xF2A968) (`lda xhl,
-     * (NakaWidgetPtrTbl_SmfDp_0x2058:24)`).
+     * (GmOffSureLangCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t GmOffSureLangCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * TrAsSureLangCheck_PtrTable_2 -- 20 u32 addresses, read by
      * TrAsSureLangCheck (v10/v9 0xF2A9A3, v7 0xF2A979) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x2070:24)`).
+     * (TrAsSureLangCheck_PtrTable_2:24)`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsSureLangCheck_PtrTable_2[20];
     /* ---------------------------------------------------------------------
@@ -1037,15 +1036,14 @@ typedef struct __attribute__((packed)) {
     char TrAsSureLangCheck_Strings_2[138];
     /* ---------------------------------------------------------------------
      * NakaT1_Str021A4 -- 208 bytes of NUL-terminated strings after the
-     * string block before it; no registration or code reference reaches them
-     * (searched: RegObjTabl tables, slice and positional labels). Which code
-     * uses them is not established.
+     * string block before it; that code DOES reach (readers: the .s header, which also labels each
+     * string)
      * --------------------------------------------------------------------- */
     char NakaT1_Str021A4[208];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part1_SendAudio_PtrTable -- 20 u32 addresses, read by
      * TrAsGridChk_Part1_SendAudio (v10/v9 0xF2C798, v7 0xF2C76E) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x221A`).
+     * TrAsGridChk_Part1_SendAudio_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t TrAsGridChk_Part1_SendAudio_PtrTable[20];
     /* ---------------------------------------------------------------------
@@ -1057,39 +1055,39 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsGrid_GetDirectionLabel_Str -- NUL-terminated string(s), 44 bytes,
      * used by TrAsGrid_GetDirectionLabel (v10/v9 0xF2C2FF, v7 0xF2C2D5) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x2332`).
+     * xwa, TrAsGrid_GetDirectionLabel_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGrid_GetDirectionLabel_Str[44];
     /* ---------------------------------------------------------------------
      * TrAsGrid_DirectionLabel2_Str -- NUL-terminated string(s), 44 bytes,
      * used by TrAsGrid_DirectionLabel2 (v10/v9 0xF2C30C, v7 0xF2C2E2) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x235E`).
+     * xwa, TrAsGrid_DirectionLabel2_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGrid_DirectionLabel2_Str[44];
     /* ---------------------------------------------------------------------
      * AcTrAsGridBoxProc_CaseTable -- jump table of a compiled `switch` in
      * AcTrAsGridBoxProc (v10/v9 0xF2BF1E, v7 0xF2BEF4) (`add xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x238A`): 7 u16 case offsets from
+     * AcTrAsGridBoxProc_CaseTable`): 7 u16 case offsets from
      * TrAsGrid_HandleInit.
      * --------------------------------------------------------------------- */
     uint16_t AcTrAsGridBoxProc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * TrAsGrid_LookupTable_Table -- read by TrAsGrid_LookupTable (v10/v9
      * 0xF2C40B, v7 0xF2C3E1) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x2398:24)`). 32 bytes to the next object; the
+     * (TrAsGrid_LookupTable_Table:24)`). 32 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t TrAsGrid_LookupTable_Table[32];
     /* ---------------------------------------------------------------------
      * TrAsGrid_ByteData1_Table -- read by TrAsGrid_StepListValue (v10/v9
      * 0xF2C41A, v7 0xF2C3F0) (`lda xde,
-     * (NakaWidgetPtrTbl_SmfDp_0x23B8:24)`). 20 bytes to the next object; the
+     * (TrAsGrid_ByteData1_Table:24)`). 20 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t TrAsGrid_ByteData1_Table[20];
     /* ---------------------------------------------------------------------
      * TrAsGrid_ByteData1_Table_2 -- read by TrAsGrid_StepListValue (v10/v9
-     * 0xF2C41A, v7 0xF2C3F0) (`ld xbc, NakaWidgetPtrTbl_SmfDp_0x23CC`). 20
+     * 0xF2C41A, v7 0xF2C3F0) (`ld xbc, TrAsGrid_ByteData1_Table_2`). 20
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1097,123 +1095,123 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_Start_Str -- NUL-terminated string(s), 4 bytes, used
      * by TrAsGridChk_Part2_Start (v10/v9 0xF2C7C3, v7 0xF2C799) (`ld xwa,
-     * NakaWidgetPtrTbl_SmfDp_0x23E0`).
+     * TrAsGridChk_Part2_Start_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_Start_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_Start_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part2_Start (v10/v9 0xF2C7C3, v7 0xF2C799) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x23E4`).
+     * xwa, TrAsGridChk_Part2_Start_Str_2`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_Start_Str_2[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part2_PushCmd (v10/v9 0xF2C7E5, v7 0xF2C7BB) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x23E8`).
+     * xwa, TrAsGridChk_Part2_PushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_PushCmd_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part2_PushCmd (v10/v9 0xF2C7E5, v7 0xF2C7BB) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x23EC`).
+     * xwa, TrAsGridChk_Part2_PushCmd_Str_2`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_PushCmd_Str_2[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_UpDir_Str -- NUL-terminated string(s), 4 bytes, used
      * by TrAsGridChk_Part2_UpDir (v10/v9 0xF2C82E, v7 0xF2C804) (`ld xwa,
-     * NakaWidgetPtrTbl_SmfDp_0x23F0`).
+     * TrAsGridChk_Part2_UpDir_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_UpDir_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_UpDir_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part2_UpDir (v10/v9 0xF2C82E, v7 0xF2C804) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x23F4`).
+     * xwa, TrAsGridChk_Part2_UpDir_Str_2`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_UpDir_Str_2[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part2_UpPushCmd (v10/v9 0xF2C84A, v7 0xF2C820)
-     * (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x23F8`).
+     * (`ld xwa, TrAsGridChk_Part2_UpPushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_UpPushCmd_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part2_UpCheckType0_Str -- NUL-terminated string(s), 4
      * bytes, used by TrAsGridChk_Part2_UpCheckType0 (v10/v9 0xF2C882, v7
-     * 0xF2C858) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x23FC`).
+     * 0xF2C858) (`ld xwa, TrAsGridChk_Part2_UpCheckType0_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part2_UpCheckType0_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_Start_Str -- NUL-terminated string(s), 4 bytes, used
      * by TrAsGridChk_Part3_Start (v10/v9 0xF2C8AC, v7 0xF2C882) (`ld xwa,
-     * NakaWidgetPtrTbl_SmfDp_0x2400`).
+     * TrAsGridChk_Part3_Start_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_Start_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_Start_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part3_Start (v10/v9 0xF2C8AC, v7 0xF2C882) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x2404`).
+     * xwa, TrAsGridChk_Part3_Start_Str_2`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_Start_Str_2[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_PushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part3_PushCmd (v10/v9 0xF2C8CB, v7 0xF2C8A1) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x2408`).
+     * xwa, TrAsGridChk_Part3_PushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_PushCmd_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_PushCmd_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part3_PushCmd (v10/v9 0xF2C8CB, v7 0xF2C8A1) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x240C`).
+     * xwa, TrAsGridChk_Part3_PushCmd_Str_2`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_PushCmd_Str_2[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_UpDir_Str -- NUL-terminated string(s), 4 bytes, used
      * by TrAsGridChk_Part3_UpDir (v10/v9 0xF2C917, v7 0xF2C8ED) (`ld xwa,
-     * NakaWidgetPtrTbl_SmfDp_0x2410`).
+     * TrAsGridChk_Part3_UpDir_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_UpDir_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_UpDir_Str_2 -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part3_UpDir (v10/v9 0xF2C917, v7 0xF2C8ED) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x2414`).
+     * xwa, TrAsGridChk_Part3_UpDir_Str_2`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_UpDir_Str_2[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_UpPushCmd_Str -- NUL-terminated string(s), 4 bytes,
      * used by TrAsGridChk_Part3_UpPushCmd (v10/v9 0xF2C930, v7 0xF2C906)
-     * (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x2418`).
+     * (`ld xwa, TrAsGridChk_Part3_UpPushCmd_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_UpPushCmd_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridChk_Part3_UpCheckType0_Str -- NUL-terminated string(s), 4
      * bytes, used by TrAsGridChk_Part3_UpCheckType0 (v10/v9 0xF2C96B, v7
-     * 0xF2C941) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x241C`).
+     * 0xF2C941) (`ld xwa, TrAsGridChk_Part3_UpCheckType0_Str`).
      * --------------------------------------------------------------------- */
     char TrAsGridChk_Part3_UpCheckType0_Str[4];
     /* ---------------------------------------------------------------------
      * TrAsGridCheck_CaseTable -- jump table of a compiled `switch` in
      * TrAsGridCheck (v10/v9 0xF2C477, v7 0xF2C44D) (`add xwa,
-     * NakaWidgetPtrTbl_SmfDp_0x2420`): 7 u16 case offsets from
+     * TrAsGridCheck_CaseTable`): 7 u16 case offsets from
      * TrAsGridCheck_Cases.
      * --------------------------------------------------------------------- */
     uint16_t TrAsGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * VoiceConfig_LookupByScreenType_Table -- read by
      * VoiceConfig_LookupByScreenType (v10/v9 0xF2CA12, v7 0xF2C9E8) (`ld
-     * xwa, NakaWidgetPtrTbl_SmfDp_0x242E`). 6 bytes to the next object; the
+     * xwa, VoiceConfig_LookupByScreenType_Table`). 6 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t VoiceConfig_LookupByScreenType_Table[6];
     /* ---------------------------------------------------------------------
      * VoiceConfig_LoadTableA_Table -- read by VoiceConfig_LoadTableA (v10/v9
-     * 0xF2CA4A, v7 0xF2CA20) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x2434`). 6
+     * 0xF2CA4A, v7 0xF2CA20) (`ld xwa, VoiceConfig_LoadTableA_Table`). 6
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
     uint8_t VoiceConfig_LoadTableA_Table[6];
     /* ---------------------------------------------------------------------
      * VoiceConfig_LoadTableB_Table -- read by VoiceConfig_LoadTableB (v10/v9
-     * 0xF2CA51, v7 0xF2CA27) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x243A`). 38
+     * 0xF2CA51, v7 0xF2CA27) (`ld xwa, VoiceConfig_LoadTableB_Table`). 38
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1221,7 +1219,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MuteChSel_Dispatch_PtrTable -- 16 u32 addresses, read by
      * MuteChSel_Dispatch (v10/v9 0xF2CC54, v7 0xF2CC2A) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x2460`).
+     * MuteChSel_Dispatch_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t MuteChSel_Dispatch_PtrTable[16];
     /* ---------------------------------------------------------------------
@@ -1233,14 +1231,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SmfMuteChSelFunc_CaseTable -- jump table of a compiled `switch` in
      * SmfMuteChSelFunc (v10/v9 0xF2CC27, v7 0xF2CBFD) (`add xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x2500`): 10 u16 case offsets from
+     * SmfMuteChSelFunc_CaseTable`): 10 u16 case offsets from
      * MuteChSel_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t SmfMuteChSelFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * SqTrAsPsSong_Dispatch_PtrTable -- 11 u32 addresses, read by
      * SqTrAsPsSong_Dispatch (v10/v9 0xF2CCB5, v7 0xF2CC8B) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x2514`).
+     * SqTrAsPsSong_Dispatch_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t SqTrAsPsSong_Dispatch_PtrTable[11];
     /* ---------------------------------------------------------------------
@@ -1252,14 +1250,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqTrAsPsSongFunc_CaseTable -- jump table of a compiled `switch` in
      * SqTrAsPsSongFunc (v10/v9 0xF2CC88, v7 0xF2CC5E) (`add xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x25AE`): 10 u16 case offsets from
+     * SqTrAsPsSongFunc_CaseTable`): 10 u16 case offsets from
      * SqTrAsPsSong_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t SqTrAsPsSongFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * SqAftSetFunc_PtrTable -- 2 u32 addresses, read by SqAftSetFunc (v10/v9
      * 0xF2CCE8, v7 0xF2CCBE) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x25C2:24)`).
+     * (SqAftSetFunc_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t SqAftSetFunc_PtrTable[2];
     /* ---------------------------------------------------------------------
@@ -1270,14 +1268,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqAftSet_LookupTableEntry_Table -- read by SqAftSet_LookupTableEntry
      * (v10/v9 0xF2CD39, v7 0xF2CD0F) (`lda xbc,
-     * (NakaWidgetPtrTbl_SmfDp_0x25D6:24)`). 32 bytes to the next object; the
+     * (SqAftSet_LookupTableEntry_Table:24)`). 32 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SqAftSet_LookupTableEntry_Table[32];
     /* ---------------------------------------------------------------------
      * MuteChSet_Dispatch_PtrTable -- 16 u32 addresses, read by
      * MuteChSet_Dispatch (v10/v9 0xF2CD84, v7 0xF2CD5A) (`ld xbc,
-     * NakaWidgetPtrTbl_SmfDp_0x25F6`).
+     * MuteChSet_Dispatch_PtrTable`).
      * --------------------------------------------------------------------- */
     uint32_t MuteChSet_Dispatch_PtrTable[16];
     /* ---------------------------------------------------------------------
@@ -1289,20 +1287,20 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MuteChSetFunc_CaseTable -- jump table of a compiled `switch` in
      * MuteChSetFunc (v10/v9 0xF2CD4D, v7 0xF2CD23) (`add xwa,
-     * NakaWidgetPtrTbl_SmfDp_0x26B6`): 10 u16 case offsets from
+     * MuteChSetFunc_CaseTable`): 10 u16 case offsets from
      * MuteChSet_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t MuteChSetFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * AcDemoMedley_HandleScrollEvent_Str -- NUL-terminated string(s), 12
      * bytes, used by AcDemoMedley_HandleScrollEvent (v10/v9 0xF2D078, v7
-     * 0xF2D04E) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x26CA`).
+     * 0xF2D04E) (`ld xwa, AcDemoMedley_HandleScrollEvent_Str`).
      * --------------------------------------------------------------------- */
     char AcDemoMedley_HandleScrollEvent_Str[12];
     /* ---------------------------------------------------------------------
      * AcDemoMedley_HandleScrollEvent_Str_2 -- NUL-terminated string(s), 12
      * bytes, used by AcDemoMedley_HandleScrollEvent (v10/v9 0xF2D078, v7
-     * 0xF2D04E) (`ld xwa, NakaWidgetPtrTbl_SmfDp_0x26D6`).
+     * 0xF2D04E) (`ld xwa, AcDemoMedley_HandleScrollEvent_Str_2`).
      * --------------------------------------------------------------------- */
     char AcDemoMedley_HandleScrollEvent_Str_2[12];
     /* ---------------------------------------------------------------------
@@ -1314,13 +1312,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * DemoMedDsp_Dispatch_Str -- NUL-terminated string(s), 12 bytes, used by
      * DemoMedDsp_Dispatch (v10/v9 0xF2D0E9, v7 0xF2D0BF) (`ld xwa,
-     * MedleyDisp_Blank_0xC`).
+     * DemoMedDsp_Dispatch_Str`).
      * --------------------------------------------------------------------- */
     char DemoMedDsp_Dispatch_Str[12];
     /* ---------------------------------------------------------------------
      * DemoMedDspCheck_CaseTable -- jump table of a compiled `switch` in
      * DemoMedDspCheck (v10/v9 0xF2D0B2, v7 0xF2D088) (`add xwa,
-     * MedleyDisp_Blank_0x18`): 10 u16 case offsets from DemoMedDsp_Dispatch.
+     * DemoMedDspCheck_CaseTable`): 10 u16 case offsets from DemoMedDsp_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t DemoMedDspCheck_CaseTable[10];
     /* ---------------------------------------------------------------------
@@ -1332,13 +1330,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * DPPlayDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
      * DPPlayDsp_Dispatch (v10/v9 0xF2D161, v7 0xF2D137) (`ld xwa,
-     * PlayModeStr_Play_0x6`).
+     * DPPlayDsp_Dispatch_Str`).
      * --------------------------------------------------------------------- */
     char DPPlayDsp_Dispatch_Str[6];
     /* ---------------------------------------------------------------------
      * DPPlayDspCheck_CaseTable -- jump table of a compiled `switch` in
      * DPPlayDspCheck (v10/v9 0xF2D12A, v7 0xF2D100) (`add xwa,
-     * PlayModeStr_Play_0xC`): 10 u16 case offsets from DPPlayDsp_Dispatch.
+     * DPPlayDspCheck_CaseTable`): 10 u16 case offsets from DPPlayDsp_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t DPPlayDspCheck_CaseTable[10];
     /* ---------------------------------------------------------------------
@@ -1350,20 +1348,18 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * DPPauseDsp_Dispatch_Str -- NUL-terminated string(s), 6 bytes, used by
      * DPPauseDsp_Dispatch (v10/v9 0xF2D1D9, v7 0xF2D1AF) (`ld xwa,
-     * PlayModeStr_Pause_0x6`).
+     * DPPauseDsp_Dispatch_Str`).
      * --------------------------------------------------------------------- */
     char DPPauseDsp_Dispatch_Str[6];
     /* ---------------------------------------------------------------------
      * DPPauseDspCheck_CaseTable -- jump table of a compiled `switch` in
      * DPPauseDspCheck (v10/v9 0xF2D1A2, v7 0xF2D178) (`add xwa,
-     * PlayModeStr_Pause_0xC`): 10 u16 case offsets from DPPauseDsp_Dispatch.
+     * DPPauseDspCheck_CaseTable`): 10 u16 case offsets from DPPauseDsp_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t DPPauseDspCheck_CaseTable[10];
     /* ---------------------------------------------------------------------
      * DPPauseDspCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings
-     * after DPPauseDspCheck_CaseTable; no registration or code reference
-     * reaches them (searched: RegObjTabl tables, slice and positional
-     * labels). Which code uses them is not established.
+     * after DPPauseDspCheck_CaseTable; that code DOES reach (readers: the .s header)
      * --------------------------------------------------------------------- */
     char DPPauseDspCheck_CaseTable_Strings[6];
     /* ---------------------------------------------------------------------

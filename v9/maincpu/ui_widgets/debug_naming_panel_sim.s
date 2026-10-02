@@ -102,15 +102,15 @@ NakaDbg_LowerCaseChars2:
 ; [nakarest] naka_debug_naming+0x876  +0x876..+0x946 (0xeb3374, 208 B)
 ; [nakarest] the table itself: Viewable slot 0x0 (table 0xeb3374, 51 entries, InitializeRoot),
 ; [nakarest] 51 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_debug_naming.bin", 0x876, 0xD0
+Root_ViewableTable_000:	.incbin "includes/generated/naka_debug_naming.bin", 0x876, 0xD0
 ; [nakarest] naka_debug_naming+0x946  +0x946..+0x96e (0xeb3444, 40 B)
 ; [nakarest] the table itself: Viewable slot 0xff (table 0xeb3444, 9 entries, InitializeRoot), 9
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_debug_naming.bin", 0x946, 0x28
+Root_ViewableTable_0FF:	.incbin "includes/generated/naka_debug_naming.bin", 0x946, 0x28
 ; [nakarest] naka_debug_naming+0x96e  +0x96e..+0xa40 (0xeb346c, 210 B)
 ; [nakarest] the table itself: ResName slot 0x300 (table 0xeb346c, 51 entries, InitializeRoot),
 ; [nakarest] 51 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_debug_naming.bin", 0x96E, 0xD2
+Root_ResNameTable_300:	.incbin "includes/generated/naka_debug_naming.bin", 0x96E, 0xD2
 ; [nakarest] naka_debug_naming+0xa40  +0xa40..+0xb2c (0xeb353e, 236 B)
 ; [nakarest] name strings, entries 0-50 of ResName slot 0x300 (table 0xeb346c, 51 entries,
 ; [nakarest] InitializeRoot) (names for Viewable slot 0x0): "", "MemDumpWindow", "", "", "", "",
@@ -119,20 +119,23 @@ NakaDbg_LowerCaseChars2:
 ; [nakarest] naka_debug_naming+0xb2c  +0xb2c..+0xb56 (0xeb362a, 42 B)
 ; [nakarest] the table itself: ResName slot 0x3ff (table 0xeb362a, 9 entries, InitializeRoot), 9
 ; [nakarest] entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_debug_naming.bin", 0xB2C, 0x2A
+Root_ResNameTable_3FF:	.incbin "includes/generated/naka_debug_naming.bin", 0xB2C, 0x2A
 ; [nakarest] naka_debug_naming+0xb56  +0xb56..+0xb9a (0xeb3654, 68 B)
 ; [nakarest] name strings, entries 0-8 of ResName slot 0x3ff (table 0xeb362a, 9 entries,
 ; [nakarest] InitializeRoot) (names for Viewable slot 0xff): "", "CheckWall", "", "",
 ; [nakarest] "CheckNaming", "", ....
-	.incbin "includes/generated/naka_debug_naming.bin", 0xB56, 0x44
+	.incbin "includes/generated/naka_debug_naming.bin", 0xB56, 0x2E
+InitializeRoot_Str_MD_PS:	.incbin "includes/generated/naka_debug_naming.bin", 0xB84, 0x6	; "MD_PS"
+InitializeRoot_Str_TT_PS:	.incbin "includes/generated/naka_debug_naming.bin", 0xB8A, 0x6	; "TT_PS"
+InitializeRoot_Str_TT_CHECK:	.incbin "includes/generated/naka_debug_naming.bin", 0xB90, 0xA	; "TT_CHECK"
 ; [nakarest] naka_debug_naming+0xb9a  +0xb9a..+0xbd2 (0xeb3698, 56 B)
 ; [nakarest] the table itself: MainFunction slot 0x140 (table 0xeb3698, 13 entries,
 ; [nakarest] InitializeRoot), 13 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_debug_naming.bin", 0xB9A, 0x38
+Root_MainFunctionTable_140:	.incbin "includes/generated/naka_debug_naming.bin", 0xB9A, 0x38
 ; [nakarest] naka_debug_naming+0xbd2  +0xbd2..+0xc0c (0xeb36d0, 58 B)
 ; [nakarest] the table itself: MainFunction slot 0x440 (table 0xeb36d0, 13 entries,
 ; [nakarest] InitializeRoot), 13 entry pointers x 4 bytes.
-	.incbin "includes/generated/naka_debug_naming.bin", 0xBD2, 0x3A
+Root_MainFunctionTable_440:	.incbin "includes/generated/naka_debug_naming.bin", 0xBD2, 0x3A
 ; [nakarest] naka_debug_naming+0xc0c  +0xc0c..+0xce0 (0xeb370a, 212 B)
 ; [nakarest] name strings, entries 0-12 of MainFunction slot 0x440 (table 0xeb36d0, 13 entries,
 ; [nakarest] InitializeRoot) (names for MainFunction slot 0x140): "MainTaskControl",

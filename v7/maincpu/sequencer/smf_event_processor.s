@@ -3632,8 +3632,8 @@ SeqStep_MallocWrapper:
 	inc	2, xsp
 	ret
 FileOpenDefault:
-	pushw 0xe4
-	pushw 0x5016
+	pushw FileOpenDefault_Str_w@hi16
+	pushw FileOpenDefault_Str_w@lo16
 	ld xwa, (xsp + 8)
 	push xwa
 	call FileOpen
@@ -3658,8 +3658,8 @@ SeqStep_ByteBlockF245:
 	ld	wa, (0x1e53c:24)
 	ld	(xsp+4), wa
 	ldw	(0x1e53c:24), 0
-	pushw	228
-	pushw	0x501a
+	pushw	SeqStep_ByteBlockF245_Str_d@hi16
+	pushw	SeqStep_ByteBlockF245_Str_d@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	FileOpen
@@ -3682,8 +3682,8 @@ FileOpenDefault_Skip4:
 	ld	wa, (xsp+4)
 	exts	wa
 	ld	(0x1e53c:24), wa
-	pushw	228
-	pushw	0x501c
+	pushw	SeqStep_ByteBlockF245_Str_wb@hi16
+	pushw	SeqStep_ByteBlockF245_Str_wb@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	FileOpen
@@ -3879,8 +3879,8 @@ SeqStep_FileSeekError:
 SeqStep_FileSeekCleanup:
 	dec 6, xsp
 	push xiz
-	pushw 0xe4
-	pushw 0x5020
+	pushw SeqStep_FileSeekCleanup_Str_r@hi16
+	pushw SeqStep_FileSeekCleanup_Str_r@lo16
 	ld xwa, (xsp + 18)
 	push xwa
 	call FileOpen
@@ -3892,8 +3892,8 @@ SeqStep_FileSeekCleanup:
 	cpw (0x1e53c:24), 13
 	jr nz, SeqStep_FileTellSetup
 	ldw (0x01e53c:24), 0x0000
-	pushw 0xe4
-	pushw 0x5022
+	pushw SeqStep_FileSeekCleanup_Str_d@hi16
+	pushw SeqStep_FileSeekCleanup_Str_d@lo16
 	ld xwa, (xsp + 18)
 	push xwa
 	call FileOpen
@@ -3912,8 +3912,8 @@ SeqStep_FileTellSetup:
 	jrl SeqStep_FileTellExit
 
 SeqStep_FileTellReturn:
-	pushw 0xe4
-	pushw 0x5024
+	pushw SeqStep_FileTellReturn_Str_r@hi16
+	pushw SeqStep_FileTellReturn_Str_r@lo16
 	ld xwa, (xsp + 22)
 	push xwa
 	call FileOpen
@@ -3933,8 +3933,8 @@ SeqStep_FileTellReturn:
 
 SeqStep_FileTellProcess:
 	ldw (0x01e53c:24), 0x0000
-	pushw 0xe4
-	pushw 0x5026
+	pushw SeqStep_FileTellProcess_Str_a@hi16
+	pushw SeqStep_FileTellProcess_Str_a@lo16
 	ld xwa, (xsp + 22)
 	push xwa
 	call FileOpen
@@ -3989,8 +3989,8 @@ SeqStep_FileTellExit:
 SeqStep_FileTellFinal:
 	lda	xsp, (xsp-36)
 	push	xiz
-	pushw	228
-	pushw	0x5028
+	pushw	SeqStep_FileTellFinal_Str_d@hi16
+	pushw	SeqStep_FileTellFinal_Str_d@lo16
 	ld	xwa, (xsp+48)
 	push	xwa
 	call	FileOpen
@@ -7637,8 +7637,8 @@ SeqChan_ReadNextFromLoop:
 	ld	xwa, (xiz+34)
 	lda	xwa, (xwa+26)
 	ld	(xsp+6), xwa
-	pushw 228
-	pushw 20522
+	pushw SeqChan_ReadNextFromLoop_Str_Dot@hi16
+	pushw SeqChan_ReadNextFromLoop_Str_Dot@lo16
 	lda	xwa, (xsp+14)
 	push	xwa
 	call	Free_Compare2
@@ -7838,8 +7838,8 @@ SeqStep_SectorCompareBlock_Skip4:
 	ret
 	dec	2, xsp
 	push	xiz
-	pushw	228
-	pushw	0x5036
+	pushw	SeqStep_SectorCompareBlock_Str_r@hi16
+	pushw	SeqStep_SectorCompareBlock_Str_r@lo16
 	ld	xwa, (xsp+14)
 	push	xwa
 	call	FileOpen
@@ -7966,8 +7966,8 @@ SeqChan_ByteBlockC_Skip:
 	jr	SeqChan_ByteBlockC_Epilogue
 SeqChan_ByteBlockC_Skip2:
 	pushw 512
-	pushw 228
-	pushw 20536
+	pushw SeqChan_ByteBlockC_Str_Empty@hi16
+	pushw SeqChan_ByteBlockC_Str_Empty@lo16
 	push	xiz
 	call	16713148
 	lda	xsp, (xsp+10)
@@ -8475,7 +8475,7 @@ FDC_Format2DD_Start:
 	pushw_erp 0xfa
 	ld wa, 0:i3
 	calr FDC_SetSectorLength
-	lda xwa, (Display_FontPalette_Table_0x21E:24)
+	lda xwa, (FDC_Format2DD_Start_FdcCmd:24)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8489,7 +8489,7 @@ FDC_Format2DD_Start:
 	jrl FDC_CmdFrame_Epilogue
 
 FDC_Format2DD_Step2:
-	lda xwa, (Display_FontPalette_Table_0x1FE:24)
+	lda xwa, (FDC_Format2DD_Step2_FdcCmd:24)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8519,7 +8519,7 @@ FDC_Format2DD_WriteBoot:
 	push	xwa
 	call	16713757
 	pushw	32
-	lda	xwa, (Display_FontPalette_Table_0x25E:24)
+	lda	xwa, (FDC_Format2DD_BootSectorHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
@@ -8555,7 +8555,7 @@ FDC_Format2DD_WriteFAT1:
 	push	xwa
 	call	16713757
 	pushw	3
-	lda	xwa, (Display_FontPalette_Table_0x27E:24)
+	lda	xwa, (FDC_Format2DD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
@@ -8637,7 +8637,7 @@ FDC_Format2DD_WriteDataSec1:
 	push	xwa
 	call	16713757
 	pushw	3
-	lda	xwa, (Display_FontPalette_Table_0x27E:24)
+	lda	xwa, (FDC_Format2DD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
@@ -8839,7 +8839,7 @@ FDC_Format2HD_Start:
 	pushw_erp 0xfa
 	ld wa, 0:i3
 	calr FDC_SetSectorLength
-	lda xwa, (Display_FontPalette_Table_0x23E:24)
+	lda xwa, (FDC_Format2HD_Start_FdcCmd:24)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8853,7 +8853,7 @@ FDC_Format2HD_Start:
 	jrl FdcOp_Epilogue20
 
 FDC_Format2HD_Step2:
-	lda xwa, (Display_FontPalette_Table_0x1FE:24)
+	lda xwa, (FDC_Format2DD_Step2_FdcCmd:24)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -8883,7 +8883,7 @@ FDC_Format2HD_WriteBoot:
 	push	xwa
 	call	16713757
 	pushw	32
-	lda	xwa, (Display_FontPalette_Table_0x282:24)
+	lda	xwa, (FDC_Format2HD_BootSectorHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
@@ -8919,7 +8919,7 @@ FDC_Format2HD_WriteFAT1:
 	push	xwa
 	call	16713757
 	pushw	3
-	lda	xwa, (Display_FontPalette_Table_0x2A2:24)
+	lda	xwa, (FDC_Format2HD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
@@ -8986,7 +8986,7 @@ FDC_Format2HD_TrackTest:
 	push	xwa
 	call	16713757
 	pushw	3
-	lda	xwa, (Display_FontPalette_Table_0x2A2:24)
+	lda	xwa, (FDC_Format2HD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
@@ -9190,7 +9190,7 @@ GetMediaType_SetupReadCmd:
 	lds_erpb 0xfb, 1
 	jrl t, GetMediaType_Epilogue
 GetMediaType_TryRecalib:
-	lda xwa, (Display_FontPalette_Table_0x24E:24)
+	lda xwa, (GetMediaType_TryRecalib_FdcCmd:24)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9200,7 +9200,7 @@ GetMediaType_TryRecalib:
 	jrl GetMediaType_Epilogue
 
 GetMediaType_TryFormat2HD:
-	lda xwa, (Display_FontPalette_Table_0x23E:24)
+	lda xwa, (FDC_Format2HD_Start_FdcCmd:24)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9246,7 +9246,7 @@ GetMediaType_Invalid:
 	jr GetMediaType_Epilogue
 
 GetMediaType_Try2DDHeader:
-	lda xwa, (Display_FontPalette_Table_0x21E:24)
+	lda xwa, (FDC_Format2DD_Start_FdcCmd:24)
 	push xwa
 	call FDC_CommandEntry
 	inc 4, xsp
@@ -9328,7 +9328,7 @@ GetDiskFreeSpace:
 	cp wa, 6:i3
 	jr gt, FileIO_ReadFreeSpaceViaFAT
 	add wa, wa
-	lda xix, (Display_FontPalette_Table_0x2AC:24)
+	lda xix, (GetDiskFreeSpace_CaseTable:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda xix, (GetDiskFreeSpace_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -9346,10 +9346,10 @@ GetDiskFreeSpace_JumpTable:
 	ld	(xiz), xwa
 
 FileIO_ReadFreeSpaceViaFAT:
-	pushw 0xe4
-	pushw 0x50fe
-	pushw 0xe4
-	pushw 0x5100
+	pushw FDC_Format2HD_FatHead_Tail@hi16
+	pushw FDC_Format2HD_FatHead_Tail@lo16
+	pushw FileIO_ReadFreeSpaceViaFAT_Str_A@hi16
+	pushw FileIO_ReadFreeSpaceViaFAT_Str_A@lo16
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
@@ -9384,7 +9384,7 @@ GetVolumeLabel:
 	cp wa, 6:i3
 	jr gt, FileIO_ReadVolumeLabelEntry
 	add wa, wa
-	lda xix, (Display_FontPalette_Table_0x2C0:24)
+	lda xix, (GetVolumeLabel_CaseTable:24)
 	ldw_sri WA, 0x07, 0xf0, 0xe0
 	lda xix, (GetVolumeLabel_JumpTable:24)
 	jp_ind 8, 0x07, 0xf0, 0xe0
@@ -9394,10 +9394,10 @@ GetVolumeLabel_JumpTable:
 	jrl	GetVolumeLabel_Return
 
 FileIO_ReadVolumeLabelEntry:
-	pushw 0xe4
-	pushw 0x5112
-	pushw 0xe4
-	pushw 0x5114
+	pushw GetDiskFreeSpace_CaseTable_Tail@hi16
+	pushw GetDiskFreeSpace_CaseTable_Tail@lo16
+	pushw FileIO_ReadVolumeLabelEntry_Str_A@hi16
+	pushw FileIO_ReadVolumeLabelEntry_Str_A@lo16
 	call FileOpen
 	inc 8, xsp
 	ld xiz, xhl
@@ -9477,8 +9477,8 @@ FileIO_CheckPathAndVolumeLabel:
 
 PathInfo_BuildAndOpen:
 	ld	(xsp+6), 0
-	pushw	228
-	pushw	20774
+	pushw	GetVolumeLabel_CaseTable_Tail@hi16
+	pushw	GetVolumeLabel_CaseTable_Tail@lo16
 	lda	xwa, (xsp+10)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -9487,8 +9487,8 @@ PathInfo_BuildAndOpen:
 	lda	xwa, (xsp+18)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
-	pushw	228
-	pushw	20778
+	pushw	PathInfo_BuildAndOpen_Str_wb@hi16
+	pushw	PathInfo_BuildAndOpen_Str_wb@lo16
 	lda	xwa, (xsp+26)
 	push	xwa
 	call	FileOpen
@@ -9538,8 +9538,8 @@ FileIO_ParseLoop_CheckChar:
 	ld	xwa, (xsp+18)
 	cp	(xwa), 0
 	jr	z, FileIO_ParseLoop_AppendSlash
-	pushw	228
-	pushw	20782
+	pushw	FileIO_ParseLoop_CheckChar_Str_Backslash@hi16
+	pushw	FileIO_ParseLoop_CheckChar_Str_Backslash@lo16
 	ld	xwa, (xsp+22)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -9635,8 +9635,8 @@ FindFirst_ParseAndOpen:
 	ld	xhl, 4294967295
 	jrl	FdcFile_Epilogue20
 FindFirst_OpenDir:
-	pushw	228
-	pushw	20784
+	pushw	FindFirst_OpenDir_Str_d@hi16
+	pushw	FindFirst_OpenDir_Str_d@lo16
 	ld	xwa, xiz
 	push	xwa
 	call	FileOpen
@@ -10277,8 +10277,8 @@ SndTable_LookupA:
 	ld (0x02358a:24), 0x01
 	lda xbc, (0x022d72:24)
 	ld (0x03e3ee:24), xbc
-	pushw 0xe4
-	pushw 0x5132
+	pushw SndTable_LookupA_Str_rb@hi16
+	pushw SndTable_LookupA_Str_rb@lo16
 	push xwa
 	call FileOpen
 	inc 8, xsp
@@ -10467,8 +10467,8 @@ FDC_DetectSector_Return1B:
 
 FDC_DetectSector_CheckPianoDisc:
 	pushw	11
-	pushw	228
-	pushw	20790
+	pushw	FDC_DetectSector_CheckPianoDisc_Str_N1_PianoDisc@hi16
+	pushw	FDC_DetectSector_CheckPianoDisc_Str_N1_PianoDisc@lo16
 	lda	xwa, (148302:24)
 	push	xwa
 	call	SLIDE_Parse_Header_Helper
@@ -10810,7 +10810,7 @@ VoiceParam_Clamp_CheckRange:
 	jr TableLoad_Return
 
 VoiceParam_Clamp_LookupTable:
-	ld xwa, Display_FontPalette_Table_0x1532
+	ld xwa, VoiceParam_BankProgramWords
 	sla l, 1
 	and h, 0x7f
 	and h, 0x7
@@ -10834,7 +10834,7 @@ Seq_ReadTempoLookup:
 	xor	xhl, xhl
 	ld	wa, (1033:16)
 	ld	l, a
-	add	xhl, Display_FontPalette_Table_0x1DBF
+	add	xhl, Seq_TempoByteMap
 	ld	a, (xhl)
 	ld	(12975:16), wa
 	ret
@@ -10858,7 +10858,7 @@ Seq_InputState_StoreFlag:
 	xor XHL,XHL
 	ld l, (0x31e4:16)
 	sla L, 0x01
-	add XHL,Display_FontPalette_Table_0x1D46
+	add XHL,AccVoice_LookupTableAddress_Table
 	ld BC,(XHL)
 	xor HL,HL
 	ld l, (0x31e3:16)

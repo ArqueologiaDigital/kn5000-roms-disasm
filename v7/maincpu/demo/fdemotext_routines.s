@@ -1227,7 +1227,7 @@ FDemoText_ByteData_DisplayRefresh:
 	ld	xiz, xwa
 	cp	xiz, 4294967295
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip
-	lda	xhl, (DemoDiskPrompt_English1_0x192:24)
+	lda	xhl, (FDemoText_ByteData_DisplayRefresh_Str_NONE:24)
 	jr	FDemoText_ByteData_DisplayRefresh_Epilogue
 FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	xwa, xiz
@@ -1248,8 +1248,8 @@ FDemoText_ByteData_DisplayRefresh_Skip:
 	ld	qwa, 0
 	pushw	wa
 	push	xhl
-	pushw 233
-	pushw 64982
+	pushw FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd@hi16
+	pushw FDemoText_ByteData_DisplayRefresh_Str_Fmts_Fmtd@lo16
 	pushw 2
 	pushw 18422
 	call	Scoop_EventLoop_12Entry_Helper
@@ -1475,7 +1475,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	push	xwa
 	ld	bc, (xsp + 26)
 	sla	bc, 3
-	lda	xwa, (DemoDiskPrompt_English1_0xB4:24)
+	lda	xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable:24)
 	ld_sril3	XWA, 0x07, 0xe0, 0xe4
 	push	xwa
 	call	SLIDE_Parse_Header_Helper
@@ -1484,7 +1484,7 @@ FDemoText_ProcessMarkup_LookupTag:
 	jrl	nz, FDemoText_ProcessMarkup_NextTag
 	ld	bc, (xsp + 16)
 	sla	bc, 3
-	lda	xwa, (DemoDiskPrompt_English1_0xB8:24)
+	lda	xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable_2:24)
 	ld_sril3	XWA, 0x07, 0xe0, 0xe4
 	ld	(xsp + 4), xwa
 	or	xwa, xwa
@@ -1617,7 +1617,7 @@ FDemoText_ProcessMarkup_NextTag:
 FDemoText_ProcessMarkup_TagTableLoop:
 	ld bc, (xsp + 16)
 	sla bc, 3
-	lda xwa, (DemoDiskPrompt_English1_0xB4:24)
+	lda xwa, (FDemoText_ProcessMarkup_LookupTag_PtrTable:24)
 	exts xbc
 	add xbc, xwa
 	ld xwa, (xbc)
@@ -1912,8 +1912,8 @@ FDemoText_TextDispatch_Skip3:
 	dec	1, wa
 	ld	(0x024876:24), wa
 	push	xbc
-	pushw	233
-	pushw	0xfe66
+	pushw	FDemoText_ByteData_LayoutEngine_Str_Fmt8s@hi16
+	pushw	FDemoText_ByteData_LayoutEngine_Str_Fmt8s@lo16
 	pushw	2
 	pushw	0x4878
 	call	Scoop_EventLoop_12Entry_Helper
@@ -2041,7 +2041,7 @@ FDemoText_TextDispatch_Join3:
 FDemoText_TextDispatch_Join7:
 	ld	bc, qiz
 	sla	bc, 2
-	lda	xwa, (FileTypeName_Song_0x5A:24)
+	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable:24)
 	ld_rrl	xwa, xwa, bc
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop7
@@ -2207,7 +2207,7 @@ FDemoText_TextDispatch_Skip8:
 FDemoText_TextDispatch_Join8:
 	ld	bc, qiz
 	sla	bc, 2
-	lda	xwa, (UIStr_No_0x4:24)
+	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable_2:24)
 	ld_rrl	xwa, xwa, bc
 	cp	(xwa), 0
 	jr	nz, FDemoText_TextDispatch_Loop9
@@ -2399,7 +2399,7 @@ FDemoText_TextDispatch_Skip10:
 FDemoText_TextDispatch_Join5:
 	ld	bc, qiz
 	sla	bc, 2
-	lda	xwa, (ImgAttrName_Src_0x88:24)
+	lda	xwa, (FDemoText_ByteData_LayoutEngine_PtrTable_3:24)
 	ld_rrl	xbc, xwa, bc
 	cp	(xbc), 0
 	jr	nz, FDemoText_TextDispatch_Loop11
@@ -2864,8 +2864,8 @@ Seq_InitVoiceStructures:
 	ld (0x0249c8:24), xwa
 	ldiw_erp 0xfa, 0
 Seq_InitVoiceLoop:
-	pushw	0xea
-	pushw	0x4
+	pushw	Presentation_RootEntry_0x4@hi16
+	pushw	Presentation_RootEntry_0x4@lo16
 	ld	bc, qiz
 	muls	bc, 24
 	lda	xwa, (149976:24)
@@ -2989,8 +2989,8 @@ Seq_LoadResource_Proceed:
 	lda	xwa, (xsp+8)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
-	pushw	234
-	pushw	72
+	pushw	Seq_LoadResource_Proceed_Str_PRE@hi16
+	pushw	Seq_LoadResource_Proceed_Str_PRE@lo16
 	lda	xwa, (xsp+16)
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
@@ -3000,8 +3000,8 @@ Seq_LoadResource_Proceed:
 	call	FileIO_OpenWithMode
 	cp	hl, 0:i3
 	jr	lt, Seq_Epilogue32
-	pushw	234
-	pushw	24
+	pushw	Seq_LoadResource_Proceed_Str_PRESENTATION@hi16
+	pushw	Seq_LoadResource_Proceed_Str_PRESENTATION@lo16
 	ld	xwa, 149704
 	ld	xbc, 256
 	ld	xde, Presentation_TagStrTable
@@ -3033,8 +3033,8 @@ Seq_FillBufferLoop:
 	call	16712982
 	lda	xwa, (xsp+18)
 	ld	(xwa+8), 0
-	pushw	234
-	pushw	102
+	pushw	Seq_FillBufferLoop_Str_ACT@hi16
+	pushw	Seq_FillBufferLoop_Str_ACT@lo16
 	push	xwa
 	call	FileIO_CheckPathAndVolumeLabel_Helper
 	lda	xsp, (xsp+22)
@@ -3053,8 +3053,8 @@ Seq_FillBufferLoop:
 	calr	Seq_LoadNamedResource_Helper
 	ld	xwa, xhl
 	ld	(149968:24), xwa
-	pushw	234
-	pushw	92
+	pushw	Seq_FillBufferLoop_Str_ACTION@hi16
+	pushw	Seq_FillBufferLoop_Str_ACTION@lo16
 	ld	xbc, xiz
 	ld	xde, 15335506
 	calr	Seq_LoadDisplayResource_Helper

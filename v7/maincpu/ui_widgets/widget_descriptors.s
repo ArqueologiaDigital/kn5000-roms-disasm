@@ -39,8 +39,95 @@
 ; v142/subcpu/subcpu_data_tables.s (DSP_EffNN_* / DSP2_EffNN_* blocks) and
 ; technics-docs/dsp-effect-data-zone.md.
 ; =============================================================================
-NakaData_WidgetDescriptors:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x1E1A
+NakaData_WidgetDescriptors:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x15B8
+DspParamUnit_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x15B8, 0xAC	; 86 x 2
+DspParamName_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1664, 0x11	; 86 x 17
+DspParamName_01_VOLUME:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1675, 0x11	; slot  1 "VOLUME"
+DspParamName_02_VOLUME:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1686, 0x11	; slot  2 "VOLUME"
+DspParamName_03_REV_SEND:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1697, 0x11	; slot  3 "REV SEND"
+DspParamName_04_DRIVE:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x16A8, 0x11	; slot  4 "DRIVE"
+DspParamName_05_ADJUST:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x16B9, 0x11	; slot  5 "ADJUST"
+DspParamName_06_EMPHASIS_GAIN:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x16CA, 0x11	; slot  6 "EMPHASIS GAIN"
+DspParamName_07_DEPTH:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x16DB, 0x11	; slot  7 "DEPTH"
+DspParamName_08_LFO_SPEED:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x16EC, 0x11	; slot  8 "LFO SPEED" [Hz]
+DspParamName_09_SLOW_LFO_SPEED:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x16FD, 0x11	; slot  9 "SLOW LFO SPEED" [Hz]
+DspParamName_10_FAST_LFO_BALANCE:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x170E, 0x11	; slot 10 "FAST LFO BALANCE"
+DspParamName_11_RESONANCE:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x171F, 0x11	; slot 11 "RESONANCE"
+DspParamName_12_MANUAL:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1730, 0x11	; slot 12 "MANUAL"
+DspParamName_13_SLOW_FAST:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1741, 0x11	; slot 13 "SLOW/FAST"
+DspParamName_14_TREBLE_FAST:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1752, 0x11	; slot 14 "TREBLE FAST" [Hz]
+DspParamName_15_SLOW:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1763, 0x11	; slot 15 "SLOW" [Hz]
+DspParamName_16_WIND_UP:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1774, 0x11	; slot 16 "WIND UP" [s ]
+DspParamName_17_WIND_DOWN:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1785, 0x11	; slot 17 "WIND DOWN" [s ]
+DspParamName_18_BASS_FAST:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1796, 0x11	; slot 18 "BASS   FAST" [Hz]
+DspParamName_19_BASS_SLOW:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x17A7, 0x11	; slot 19 "BASS   SLOW" [Hz]
+DspParamName_20_VOLUME_ADJUST:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x17B8, 0x11	; slot 20 "VOLUME ADJUST"
+DspParamName_21_OSC_SPEED:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x17C9, 0x11	; slot 21 "OSC SPEED" [Hz]
+DspParamName_22_DELAY_L:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x17DA, 0x11	; slot 22 "DELAY L" [ms]
+DspParamName_23_DELAY_R:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x17EB, 0x11	; slot 23 "DELAY R" [ms]
+DspParamName_24_FEEDBACK_L:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x17FC, 0x11	; slot 24 "FEEDBACK L"
+DspParamName_25_FEEDBACK_R:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x180D, 0x11	; slot 25 "FEEDBACK R"
+DspParamName_26_DELAY_DRY_WET:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x181E, 0x11	; slot 26 "DELAY DRY/WET"
+DspParamName_27_CHORUS_DRY_WET:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x182F, 0x11	; slot 27 "CHORUS DRY/WET"
+DspParamName_28_FLANGER_DRY_WET:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1840, 0x11	; slot 28 "FLANGER DRY/WET"
+DspParamName_29_PHASER_DRY_WET:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1851, 0x11	; slot 29 "PHASER DRY/WET"
+DspParamName_30_LOW_EMPHASIS_FC:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1862, 0x11	; slot 30 "LOW  EMPHASIS FC"
+DspParamName_31_LOW_EMPHASIS_G:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1873, 0x11	; slot 31 "LOW  EMPHASIS  G"
+DspParamName_32_HIGH_EMPHASIS_FC:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1884, 0x11	; slot 32 "HIGH EMPHASIS FC" [Hz]
+DspParamName_33_HIGH_EMPHASIS_G:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1895, 0x11	; slot 33 "HIGH EMPHASIS  G"
+DspParamName_34_REVERB_TIME:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x18A6, 0x11	; slot 34 "REVERB TIME" [s ]
+DspParamName_35_PRE_DELAY:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x18B7, 0x11	; slot 35 "PRE DELAY" [ms]
+DspParamName_36_HIGH_DAMP_GAIN:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x18C8, 0x11	; slot 36 "HIGH DAMP GAIN"
+DspParamName_37_ERLEVEL:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x18D9, 0x11	; slot 37 "ER.LEVEL"
+DspParamName_38_PITCH_L:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x18EA, 0x11	; slot 38 "PITCH L"
+DspParamName_39_PITCH_R:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x18FB, 0x11	; slot 39 "PITCH R"
+DspParamName_40_THRESHOLD:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x190C, 0x11	; slot 40 "THRESHOLD"
+DspParamName_41_RATIO:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x191D, 0x11	; slot 41 "RATIO"
+DspParamName_42_ATTACK_SENS:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x192E, 0x11	; slot 42 "ATTACK SENS." [s ]
+DspParamName_43_RELEASE_SENS:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x193F, 0x11	; slot 43 "RELEASE SENS." [s ]
+DspParamName_44_ATTACK_RATE:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1950, 0x11	; slot 44 "ATTACK RATE" [s ]
+DspParamName_45_RELEASE_RATE:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1961, 0x11	; slot 45 "RELEASE RATE" [s ]
+DspParamName_46_GATE_TIME:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1972, 0x11	; slot 46 "GATE TIME" [ms]
+DspParamName_47_MASK_TIME:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1983, 0x11	; slot 47 "MASK TIME" [ms]
+DspParamName_48_HARS_TIME:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1994, 0x11	; slot 48 "HARS TIME"
+DspParamName_49_LFO_WAVEFORM:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x19A5, 0x11	; slot 49 "LFO WAVEFORM"
+DspParamName_50_OSC_WAVEFORM:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x19B6, 0x11	; slot 50 "OSC WAVEFORM"
+DspParamName_51_BAND_EMPHASIS_FC:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19C7, 0x11	; slot 51 "BAND EMPHASIS FC" [Hz]
+DspParamName_52_BAND_EMPHASIS_Q:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19D8, 0x11	; slot 52 "BAND EMPHASIS  Q"
+DspParamName_53_BAND_EMPHASIS_G:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19E9, 0x11	; slot 53 "BAND EMPHASIS  G"
+DspParamName_54_LOW_MIX:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x19FA, 0x11	; slot 54 "LOW MIX"
+DspParamName_55_HIGH_MIX:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A0B, 0x11	; slot 55 "HIGH MIX"
+DspParamName_56_PHASE:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A1C, 0x11	; slot 56 "PHASE"
+DspParamName_57_FEEDBACK:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A2D, 0x11	; slot 57 "FEEDBACK"
+DspParamName_58_SWEEP_RANGE:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A3E, 0x11	; slot 58 "SWEEP RANGE"
+DspParamName_59_WAH_CENTER_FC:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A4F, 0x11	; slot 59 "WAH CENTER FC"
+DspParamName_60_HARS_TIME_L:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A60, 0x11	; slot 60 "HARS TIME L" [ms]
+DspParamName_61_HARS_TIME_R:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A71, 0x11	; slot 61 "HARS TIME R" [ms]
+DspParamName_62_BALANCE_L:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A82, 0x11	; slot 62 "BALANCE L"
+DspParamName_63_BALANCE_R:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1A93, 0x11	; slot 63 "BALANCE R"
+DspParamName_64_FAST_LFO_SPEED_L:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1AA4, 0x11	; slot 64 "FAST LFO SPEED L" [Hz]
+DspParamName_65_FAST_LFO_SPEED_R:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1AB5, 0x11	; slot 65 "FAST LFO SPEED R" [Hz]
+DspParamName_66_MODULATION_DEPTH:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1AC6, 0x11	; slot 66 "MODULATION DEPTH"
+DspParamName_67_DELAY1_DRY_WET:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1AD7, 0x11	; slot 67 "DELAY1 DRY/WET"
+DspParamName_68_DELAY2_DRY_WET:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1AE8, 0x11	; slot 68 "DELAY2 DRY/WET"
+DspParamName_69_VIBRATO_DRY_WET:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1AF9, 0x11	; slot 69 "VIBRATO DRY/WET"
+DspParamName_70_WAH_DRY_WET:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B0A, 0x11	; slot 70 "WAH DRY/WET"
+DspParamName_71_FAST_LFO_SPEED:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B1B, 0x11	; slot 71 "FAST LFO SPEED" [Hz]
+DspParamName_72_TREBLE_DEPTH:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B2C, 0x11	; slot 72 "TREBLE DEPTH"
+DspParamName_73_FAST:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B3D, 0x11	; slot 73 "FAST" [Hz]
+DspParamName_74_BASS_DEPTH:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B4E, 0x11	; slot 74 "BASS DEPTH"
+DspParamName_75_DELAY_1:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B5F, 0x11	; slot 75 "DELAY 1" [ms]
+DspParamName_76_DELAY_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B70, 0x11	; slot 76 "DELAY 2" [ms]
+DspParamName_77_DELAY_3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B81, 0x11	; slot 77 "DELAY 3" [ms]
+DspParamName_78_DELAY_4:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1B92, 0x11	; slot 78 "DELAY 4" [ms]
+DspParamName_79_PAN_1:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BA3, 0x11	; slot 79 "PAN   1"
+DspParamName_80_PAN_2:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BB4, 0x11	; slot 80 "PAN   2"
+DspParamName_81_PAN_3:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BC5, 0x11	; slot 81 "PAN   3"
+DspParamName_82_PAN_4:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BD6, 0x11	; slot 82 "PAN   4"
+DspParamName_83_INTENSITY:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BE7, 0x11	; slot 83 "INTENSITY"
+DspParamName_84_EXCITE:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1BF8, 0x11	; slot 84 "EXCITE"
+DspParamName_85_Blank:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1C09, 0x11	; slot 85 "(spare)"
+DspEffectName_PtrTable:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1C1A, 0x200	; 128 x u32
 ; [naka_s_headers:short] NakaInst_FxReservedSlot_00
 ; Effect 127 name, 18 bytes (" ----------", NUL, 0xff):
 ; DspEffectName_PtrTable entry 127 points here, and
@@ -940,7 +1027,7 @@ NakaInst_NO_OPERATION:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EffectBox_HandleInitEvent_Table
 ; EffectBox_HandleInitEvent_Table -- read by EffectBox_HandleInitEvent
-; (v10/v9 0xf3354a, v7 0xf33520) (`ld xbc, NakaInst_NO_OPERATION_0x12`).
+; (v10/v9 0xf3354a, v7 0xf33520) (`ld xbc, EffectBox_HandleInitEvent_Table`).
 ; 8 bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -966,7 +1053,7 @@ EffectBox_PostFillSetup_Table:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyVal_HandleScrollEvent_Table
 ; SqplyVal_HandleScrollEvent_Table -- read by SqplyVal_HandleScrollEvent
-; (v10/v9 0xf30b75, v7 0xf30b4b) (`ld xde, NakaInst_NO_OPERATION_0x22`).
+; (v10/v9 0xf30b75, v7 0xf30b4b) (`ld xde, SqplyVal_HandleScrollEvent_Table`).
 ; 96 bytes to the next object; the layout beyond that access is not
 ; established.
 ;
@@ -978,15 +1065,15 @@ SqplyVal_HandleScrollEvent_Table:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqedtVal_HandleScrollEvent_Table
 ; SqedtVal_HandleScrollEvent_Table -- read by SqedtVal_HandleScrollEvent
-; (v10/v9 0xf31125, v7 0xf310fb) (`ld xde, NakaInst_NO_OPERATION_0x82`),
+; (v10/v9 0xf31125, v7 0xf310fb) (`ld xde, SqedtVal_HandleScrollEvent_Table`),
 ; SqedtVal3_HandleScrollEvent (v10/v9 0xf31f13, v7 0xf31ee9) (`lda xde,
-; (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop1 (v10/v9
-; 0xf31fb4, v7 0xf31f8a) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+; (SqedtVal_HandleScrollEvent_Table:24)`), SqedtVal3_FillBufferLoop1 (v10/v9
+; 0xf31fb4, v7 0xf31f8a) (`lda xde, (SqedtVal_HandleScrollEvent_Table:24)`),
 ; SqedtVal3_FillBufferLoop2 (v10/v9 0xf3205d, v7 0xf32033) (`lda xde,
-; (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop3 (v10/v9
-; 0xf32106, v7 0xf320dc) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+; (SqedtVal_HandleScrollEvent_Table:24)`), SqedtVal3_FillBufferLoop3 (v10/v9
+; 0xf32106, v7 0xf320dc) (`lda xde, (SqedtVal_HandleScrollEvent_Table:24)`),
 ; SqedtVal2_HandleScrollEvent (v10/v9 0xf32380, v7 0xf32356) (`ld xde,
-; NakaInst_NO_OPERATION_0x82`). 280 bytes to the next object; the layout
+; SqedtVal_HandleScrollEvent_Table`). 280 bytes to the next object; the layout
 ; beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1050,12 +1137,12 @@ NoteEditBox_HandleFocusLost_Table_2:
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Table
 ; NoteEditBox_EventDispatch2_Table -- read by NoteEditBox_EventDispatch2
 ; (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xde,
-; (NakaInst_NO_OPERATION_0x208:24)`), NoteEditBox_EventDispatch2 (v10/v9
-; 0xf2f2a0, v7 0xf2f276) (`lda xbc, (NakaInst_NO_OPERATION_0x208:24)`),
+; (NoteEditBox_EventDispatch2_Table:24)`), NoteEditBox_EventDispatch2 (v10/v9
+; 0xf2f2a0, v7 0xf2f276) (`lda xbc, (NoteEditBox_EventDispatch2_Table:24)`),
 ; NoteEditBox_EventDispatch2 (v10/v9 0xf2f2a0, v7 0xf2f276) (`lda xix,
-; (NakaInst_NO_OPERATION_0x208:24)`), NoteEditGrid_LoadCoordinates
+; (NoteEditBox_EventDispatch2_Table:24)`), NoteEditGrid_LoadCoordinates
 ; (v10/v9 0xf2f97f, v7 0xf2f955) (`lda xde,
-; (NakaInst_NO_OPERATION_0x208:24)`). 72 bytes to the next object; the
+; (NoteEditBox_EventDispatch2_Table:24)`). 72 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1206,9 +1293,8 @@ AttSongClrCheck_Strings:
 ; Typed in naka_widget_descriptors.c as char
 ; AttTrkClrCheck_Strings[404].
 ; -----------------------------------------------------------------------------
-AttTrkClrCheck_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3110, 0x194
-	.set NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las, AttTrkClrCheck_Strings + 138	; historical label, used by other files
+AttTrkClrCheck_Strings:					.incbin "includes/generated/naka_widget_descriptors.bin", 0x3110, 0x8A
+NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x319A, 0x10A
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsAtPunchCheck_Strings
 ; StsAtPunchCheck_Strings -- the 2 strings StsAtPunchCheck_PtrTable
@@ -1257,15 +1343,19 @@ HelpTtlFunc_LookupSlide_PtrTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] HelpTtlFunc_LookupSlide_PtrTable_Strings
 ; HelpTtlFunc_LookupSlide_PtrTable_Strings -- 30 bytes of NUL-terminated
-; strings after HelpTtlFunc_LookupSlide_PtrTable; no registration or
-; code reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after HelpTtlFunc_LookupSlide_PtrTable; that code reaches: the labels below name each
+; string after the routine that reaches it first
+; (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; HelpTtlFunc_LookupSlide_PtrTable_Strings[30].
 ; -----------------------------------------------------------------------------
-HelpTtlFunc_LookupSlide_PtrTable_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3656, 0x1E
+HelpTtlFunc_LookupSlide_PtrTable_Strings:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3656, 0x4
+IvSddsp_CopyString_Str_Dsp:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x365A, 0x4	; "Dsp"
+IvSdacc_CopyString_Str_Acc:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x365E, 0x4	; "Acc"
+IvPlayExit_CopyString_Str_ExMD:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x3662, 0x6	; "ExMD"
+IvPunchExit_CopyString_Str_ExPR:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3668, 0x6	; "ExPR"
+IvAutoPunchExit_CopyString_Str_ExAP:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x366E, 0x6	; "ExAP"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AttAreYouSureCheck_PtrTable
 ; AttAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
@@ -1275,14 +1365,13 @@ HelpTtlFunc_LookupSlide_PtrTable_Strings:
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; AttAreYouSureCheck_PtrTable[6].
 ; -----------------------------------------------------------------------------
-AttAreYouSureCheck_PtrTable:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3674, 0x18
-	.set ExtDevice_ModeDispatch_Table, AttAreYouSureCheck_PtrTable + 4	; historical label, used by other files
+AttAreYouSureCheck_PtrTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3674, 0x4
+ExtDevice_ModeDispatch_Table:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3678, 0x14
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AttAttentionCheck_PtrTable
 ; AttAttentionCheck_PtrTable -- 6 u32 addresses, read by
 ; AttAttentionCheck (v10/v9 0xf2ef2e, v7 0xf2ef04) (`lda xhl,
-; (ExtDevice_ModeDispatch_Table_0x14:24)`).
+; (AttAttentionCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; AttAttentionCheck_PtrTable[6].
@@ -1304,7 +1393,7 @@ StsSeqMenu1Check_PtrTable:
 ; [naka_s_headers] StsSeqMenu2Check_PtrTable
 ; StsSeqMenu2Check_PtrTable -- 6 u32 addresses, read by StsSeqMenu2Check
 ; (v10/v9 0xf2ef50, v7 0xf2ef26) (`lda xhl,
-; (ExtDevice_ModeDispatch_Table_0x44:24)`).
+; (StsSeqMenu2Check_PtrTable:24)`).
 ;
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; StsSeqMenu2Check_PtrTable[6].
@@ -1326,7 +1415,7 @@ StsEasyRec1Check_PtrTable:
 ; [naka_s_headers] StsEasyRec2Check_PtrTable
 ; StsEasyRec2Check_PtrTable -- 6 u32 addresses, read by StsEasyRec2Check
 ; (v10/v9 0xf2ef72, v7 0xf2ef48) (`lda xhl,
-; (ExtDevice_ModeDispatch_Table_0x74:24)`).
+; (StsEasyRec2Check_PtrTable:24)`).
 ;
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; StsEasyRec2Check_PtrTable[6].
@@ -1392,7 +1481,7 @@ AttTrkClrCheck_PtrTable:
 ; [naka_s_headers] AttSongClrCheck_PtrTable
 ; AttSongClrCheck_PtrTable -- 6 u32 addresses, read by AttSongClrCheck
 ; (v10/v9 0xf2efd8, v7 0xf2efae) (`lda xhl,
-; (ExtDevice_ModeDispatch_Table_0x104:24)`).
+; (AttSongClrCheck_PtrTable:24)`).
 ;
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; AttSongClrCheck_PtrTable[6].
@@ -1413,8 +1502,8 @@ StsAtPunchCheck_PtrTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsAtPunchCheck_PtrTable_Strings
 ; StsAtPunchCheck_PtrTable_Strings -- 12 bytes of NUL-terminated strings
-; after StsAtPunchCheck_PtrTable; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
-; labels). Which code uses them is not established.
+; after StsAtPunchCheck_PtrTable; that code reaches: the labels below name each string after the
+; routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; StsAtPunchCheck_PtrTable_Strings[12].
@@ -1422,8 +1511,8 @@ StsAtPunchCheck_PtrTable:
 ;   pointer); NoteEditBox_EventDispatch2 (0xF2F347, pushw far pointer); NoteEditBox_EventDispatch2
 ;   (0xF2F3D6, pushw far pointer)
 ; -----------------------------------------------------------------------------
-StsAtPunchCheck_PtrTable_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37AC, 0xC
+StsAtPunchCheck_PtrTable_Strings:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37AC, 0x4
+NoteEditBox_EventDispatch2_Str_N81:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B0, 0x8	; "~81"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Str
 ; NoteEditBox_EventDispatch2_Str -- NUL-terminated string(s), 8 bytes,
@@ -1433,8 +1522,8 @@ StsAtPunchCheck_PtrTable_Strings:
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEditBox_EventDispatch2_Str[8].
 ; -----------------------------------------------------------------------------
-NoteEditBox_EventDispatch2_Str:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B8, 0x8
+NoteEditBox_EventDispatch2_Str:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x37B8, 0x4
+NoteEditBox_EventDispatch2_Str_Fmt2d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37BC, 0x4	; "%2d"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditBox_EventDispatch2_Str_2
 ; NoteEditBox_EventDispatch2_Str_2 -- NUL-terminated string(s), 4 bytes,
@@ -1455,13 +1544,13 @@ NoteEditBox_EventDispatch2_Str_2:
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEditBox_EventDispatch2_Str_3[8].
 ; -----------------------------------------------------------------------------
-NoteEditBox_EventDispatch2_Str_3:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37C4, 0x8
+NoteEditBox_EventDispatch2_Str_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37C4, 0x4
+NoteEditBox_EventDispatch2_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37C8, 0x4	; "%2d"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEdit_FormatEntry_Table
 ; NoteEdit_FormatEntry_Table -- read by NoteEdit_FormatEntry (v10/v9
 ; 0xf2fa09, v7 0xf2f9df) (`add xwa,
-; ExtDevice_ModeDispatch_Table_0x154`). 12 bytes to the next object; the
+; NoteEdit_FormatEntry_Table`). 12 bytes to the next object; the
 ; layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1473,7 +1562,7 @@ NoteEdit_FormatEntry_Table:
 ; [naka_s_headers] NoteEdit_FormatEntry_CaseTable
 ; NoteEdit_FormatEntry_CaseTable -- jump table of a compiled `switch` in
 ; NoteEdit_FormatEntry (v10/v9 0xf2fa09, v7 0xf2f9df) (`ld xix,
-; ExtDevice_ModeDispatch_Table_0x160`): 2 u16 case offsets from
+; NoteEdit_FormatEntry_CaseTable`): 2 u16 case offsets from
 ; NoteEditBox_GridDispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -1485,7 +1574,7 @@ NoteEdit_FormatEntry_CaseTable:
 ; [naka_s_headers] NoteEditBox_GridDispatch2_CaseTable
 ; NoteEditBox_GridDispatch2_CaseTable -- jump table of a compiled
 ; `switch` in NoteEditBox_GridDispatch2 (v10/v9 0xf2f251, v7 0xf2f227)
-; (`add xwa, ExtDevice_ModeDispatch_Table_0x164`): 12 u16 case offsets
+; (`add xwa, NoteEditBox_GridDispatch2_CaseTable`): 12 u16 case offsets
 ; from NoteEditBox_EventDispatch2.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -1508,15 +1597,15 @@ NoteEditBox_SetupGrid_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditBox_SetupGrid_CaseTable_Strings
 ; NoteEditBox_SetupGrid_CaseTable_Strings -- 12 bytes of NUL-terminated
-; strings after NoteEditBox_SetupGrid_CaseTable; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after NoteEditBox_SetupGrid_CaseTable; that code reaches: the labels below name each
+; string after the routine that reaches it first
+; (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEditBox_SetupGrid_CaseTable_Strings[12].
 ; -----------------------------------------------------------------------------
-NoteEditBox_SetupGrid_CaseTable_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3808, 0xC
+NoteEditBox_SetupGrid_CaseTable_Strings:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3808, 0x6
+NoteEdit_FormatTempoString_Str_Star_Star_Star_Dot:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x380E, 0x6	; "***."
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEdit_FormatTempoString_Str
 ; NoteEdit_FormatTempoString_Str -- NUL-terminated string(s), 6 bytes,
@@ -1592,8 +1681,8 @@ NoteEdit_FormatNoteOther_Str_4:
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEdit_FormatNoteOther_Str_5[12].
 ; -----------------------------------------------------------------------------
-NoteEdit_FormatNoteOther_Str_5:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3834, 0xC
+NoteEdit_FormatNoteOther_Str_5:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3834, 0x4
+NoteEdit_FormatNoteOther_Str_ad_b8:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3838, 0x8	; "~ad~b8"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEdit_GateTime0C_Str
 ; NoteEdit_GateTime0C_Str -- NUL-terminated string(s), 8 bytes, used by
@@ -1653,8 +1742,8 @@ NoteEdit_GateTime30_Str:
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEdit_GateTime60_Str[12].
 ; -----------------------------------------------------------------------------
-NoteEdit_GateTime60_Str:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3868, 0xC
+NoteEdit_GateTime60_Str:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3868, 0x8
+NoteEdit_GateTimeNumeric_Str_Fmt2d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3870, 0x4	; "%2d"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEdit_FormatChordType_Str
 ; NoteEdit_FormatChordType_Str -- NUL-terminated string(s), 4 bytes,
@@ -1670,7 +1759,7 @@ NoteEdit_FormatChordType_Str:
 ; [naka_s_headers] NoteEdit_GetParamValue_CaseTable
 ; NoteEdit_GetParamValue_CaseTable -- jump table of a compiled `switch`
 ; in NoteEdit_GetParamValue (v10/v9 0xf2fc64, v7 0xf2fc3a) (`add xde,
-; ExtDevice_ModeDispatch_Table_0x200`): 14 u16 case offsets from
+; NoteEdit_GetParamValue_CaseTable`): 14 u16 case offsets from
 ; NoteEdit_GetParamValue_Cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -1707,7 +1796,7 @@ NoteEditFunc_CaseTable_Strings:
 ; [naka_s_headers] EntGrid_PostMainEvent_Table
 ; EntGrid_PostMainEvent_Table -- read by EntGrid_PostMainEvent (v10/v9
 ; 0xf300ec, v7 0xf300c2) (`lda xbc,
-; (ExtDevice_ModeDispatch_Table_0x246:24)`). 18 bytes to the next
+; (EntGrid_PostMainEvent_Table:24)`). 18 bytes to the next
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1719,7 +1808,7 @@ EntGrid_PostMainEvent_Table:
 ; [naka_s_headers] EntGrid_PostMainEvent_Table_2
 ; EntGrid_PostMainEvent_Table_2 -- read by EntGrid_PostMainEvent (v10/v9
 ; 0xf300ec, v7 0xf300c2) (`lda xbc,
-; (ExtDevice_ModeDispatch_Table_0x258:24)`). 18 bytes to the next
+; (EntGrid_PostMainEvent_Table_2:24)`). 18 bytes to the next
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1742,13 +1831,13 @@ AcEntertainerGridBoxProc_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SndParam_Dispatch_Table
 ; SndParam_Dispatch_Table -- read by SndParam_Dispatch (v10/v9 0xf303d6,
-; v7 0xf303ac) (`lda xbc, (ExtDevice_ModeDispatch_Table_0x278:24)`),
+; v7 0xf303ac) (`lda xbc, (SndParam_Dispatch_Table:24)`),
 ; SndParam_Dispatch (v10/v9 0xf303d6, v7 0xf303ac) (`lda xwa,
-; (ExtDevice_ModeDispatch_Table_0x278:24)`), SndParam_Dispatch (v10/v9
+; (SndParam_Dispatch_Table:24)`), SndParam_Dispatch (v10/v9
 ; 0xf303d6, v7 0xf303ac) (`lda xix,
-; (ExtDevice_ModeDispatch_Table_0x278:24)`), EntGridCheck_Handler
+; (SndParam_Dispatch_Table:24)`), EntGridCheck_Handler
 ; (v10/v9 0xf305c9, v7 0xf3059f) (`lda xbc,
-; (ExtDevice_ModeDispatch_Table_0x278:24)`). 36 bytes to the next
+; (SndParam_Dispatch_Table:24)`). 36 bytes to the next
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -1799,8 +1888,8 @@ SndParam_Dispatch_Str:
 ; Typed in naka_widget_descriptors.c as char
 ; SndParam_Dispatch_Str_2[20].
 ; -----------------------------------------------------------------------------
-SndParam_Dispatch_Str_2:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3932, 0x14
+SndParam_Dispatch_Str_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3932, 0xA
+EntGridCheck_Handler_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x393C, 0xA	; "     %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EntGridCheck_Handle4140_Str
 ; EntGridCheck_Handle4140_Str -- NUL-terminated string(s), 10 bytes,
@@ -1884,20 +1973,20 @@ EntertainerGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] EntertainerGridCheck_CaseTable_Strings
 ; EntertainerGridCheck_CaseTable_Strings -- 12 bytes of NUL-terminated
-; strings after EntertainerGridCheck_CaseTable; no registration or code
-; reference reaches them (searched: RegObjTabl tables, slice and
-; positional labels). Which code uses them is not established.
+; strings after EntertainerGridCheck_CaseTable; that code reaches: the labels below name each
+; string after the routine that reaches it first
+; (scripts/converters/split_blobs_at_far_pointers.py).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; EntertainerGridCheck_CaseTable_Strings[12].
 ; -----------------------------------------------------------------------------
-EntertainerGridCheck_CaseTable_Strings:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39A0, 0xC
+EntertainerGridCheck_CaseTable_Strings:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39A0, 0x6
+IvPnlWrExit_CopyString_Str_ExMD:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x39A6, 0x6	; "ExMD"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyVal_HandleExtraParams_CaseTable
 ; SqplyVal_HandleExtraParams_CaseTable -- jump table of a compiled
 ; `switch` in SqplyVal_HandleExtraParams (v10/v9 0xf30cbf, v7 0xf30c95)
-; (`add xhl, ExtDevice_ModeDispatch_Table_0x334`): 8 u16 case offsets
+; (`add xhl, SqplyVal_HandleExtraParams_CaseTable`): 8 u16 case offsets
 ; from SqplyVal_ParamCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -1909,7 +1998,7 @@ SqplyVal_HandleExtraParams_CaseTable:
 ; [naka_s_headers] SqedtVal_ClearDrawBuffer_CaseTable
 ; SqedtVal_ClearDrawBuffer_CaseTable -- jump table of a compiled
 ; `switch` in SqedtVal_ClearDrawBuffer (v10/v9 0xf311c6, v7 0xf3119c)
-; (`add xwa, ExtDevice_ModeDispatch_Table_0x344`): 15 u16 case offsets
+; (`add xwa, SqedtVal_ClearDrawBuffer_CaseTable`): 15 u16 case offsets
 ; from SqedtVal_ParamCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -1921,7 +2010,7 @@ SqedtVal_ClearDrawBuffer_CaseTable:
 ; [naka_s_headers] SqedtVal2_UpScrollDefault_Table
 ; SqedtVal2_UpScrollDefault_Table -- read by SqedtVal2_UpScrollDefault
 ; (v10/v9 0xf326ae, v7 0xf32684) (`lda xiy,
-; (ExtDevice_ModeDispatch_Table_0x362:24)`). 24 bytes to the next
+; (SqedtVal2_UpScrollDefault_Table:24)`). 24 bytes to the next
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -2148,7 +2237,7 @@ SqedtFixProc_LocalInit_10_Tail:
 ; [naka_s_headers] SqedtFixProc_LocalInit_11
 ; SqedtFixProc_LocalInit_11 -- initializer of a local array:
 ; SqedtFixProc (v10/v9 0xf3154f, v7 0xf31525) (`ld xiy,
-; ExtDevice_ModeDispatch_Table_0x402`) copies 5 bytes into its stack
+; SqedtFixProc_LocalInit_11`) copies 5 bytes into its stack
 ; frame.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -2172,7 +2261,7 @@ SqedtFixProc_LocalInit_11_Tail:
 ; [naka_s_headers] SqplyVal_ExtraParams_CaseTable
 ; SqplyVal_ExtraParams_CaseTable -- jump table of a compiled `switch` in
 ; SqplyVal_ExtraParams (v10/v9 0xf3240a, v7 0xf323e0) (`add xhl,
-; ExtDevice_ModeDispatch_Table_0x408`): 16 u16 case offsets from
+; SqplyVal_ExtraParams_CaseTable`): 16 u16 case offsets from
 ; AccIll_Dispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -2184,7 +2273,7 @@ SqplyVal_ExtraParams_CaseTable:
 ; [naka_s_headers] EffectBoxProc_LocalInit
 ; EffectBoxProc_LocalInit -- initializer of a local array: EffectBoxProc
 ; (v10/v9 0xf3344e, v7 0xf33424) (`ld xiy,
-; ExtDevice_ModeDispatch_Table_0x428`) copies 4 bytes into its stack
+; EffectBoxProc_LocalInit`) copies 4 bytes into its stack
 ; frame.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -2208,7 +2297,7 @@ EffectBoxProc_LocalInit_2:
 ; [naka_s_headers] EffectBox_NameSetup_CaseTable
 ; EffectBox_NameSetup_CaseTable -- jump table of a compiled `switch` in
 ; EffectBox_NameSetup (v10/v9 0xf33a51, v7 0xf33a27) (`add xhl,
-; ExtDevice_ModeDispatch_Table_0x430`): 7 u16 case offsets from
+; EffectBox_NameSetup_CaseTable`): 7 u16 case offsets from
 ; EffectBox_Dispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -2481,7 +2570,7 @@ SqplyFunc_ParamFormatData_Str_15:
 ; [naka_s_headers] SqplyFunc_FormatRhythmPattern_Str
 ; SqplyFunc_FormatRhythmPattern_Str -- NUL-terminated string(s), 6
 ; bytes, used by SqplyFunc_FormatRhythmPattern (v10/v9 0xf34801, v7
-; 0xf347d7) (`ld xwa, ExtDevice_ModeDispatch_Table_0x616`).
+; 0xf347d7) (`ld xwa, SqplyFunc_FormatRhythmPattern_Str`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; SqplyFunc_FormatRhythmPattern_Str[6].
@@ -2497,13 +2586,13 @@ SqplyFunc_FormatRhythmPattern_Str:
 ; Typed in naka_widget_descriptors.c as char
 ; SqplyFunc_FormatRhythmPattern_Str_2[12].
 ; -----------------------------------------------------------------------------
-SqplyFunc_FormatRhythmPattern_Str_2:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C94, 0xC
+SqplyFunc_FormatRhythmPattern_Str_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C94, 0x6
+SqplyFunc_FormatPatternNumeric_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3C9A, 0x6	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SqplyFunc_FormatIntro_Str
 ; SqplyFunc_FormatIntro_Str -- NUL-terminated string(s), 6 bytes, used
 ; by SqplyFunc_FormatIntro (v10/v9 0xf3483a, v7 0xf34810) (`ld xwa,
-; ExtDevice_ModeDispatch_Table_0x628`).
+; SqplyFunc_FormatIntro_Str`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; SqplyFunc_FormatIntro_Str[6].
@@ -2525,7 +2614,7 @@ SqplyFunc_FormatEnding_Str:
 ; [naka_s_headers] SqplyFunc_FormatFillIn_Str
 ; SqplyFunc_FormatFillIn_Str -- NUL-terminated string(s), 6 bytes, used
 ; by SqplyFunc_FormatFillIn (v10/v9 0xf34864, v7 0xf3483a) (`ld xwa,
-; ExtDevice_ModeDispatch_Table_0x634`).
+; SqplyFunc_FormatFillIn_Str`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; SqplyFunc_FormatFillIn_Str[6].
@@ -2560,7 +2649,7 @@ SqplyFunc_HandleGetValue_CaseTable:
 ; [naka_s_headers] SqplyFunc_CaseTable
 ; SqplyFunc_CaseTable -- jump table of a compiled `switch` in SqplyFunc
 ; (v10/v9 0xf34655, v7 0xf3462b) (`add xhl,
-; ExtDevice_ModeDispatch_Table_0x660`): 10 u16 case offsets from
+; SqplyFunc_CaseTable`): 10 u16 case offsets from
 ; SqplyFunc_FormatCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -2572,7 +2661,7 @@ SqplyFunc_CaseTable:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str
 ; Sqedt_ParamDispatch_Str -- NUL-terminated string(s), 6 bytes, used by
 ; Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; ExtDevice_ModeDispatch_Table_0x674`).
+; Sqedt_ParamDispatch_Str`).
 ;
 ; Typed in naka_widget_descriptors.c as char Sqedt_ParamDispatch_Str[6].
 ; -----------------------------------------------------------------------------
@@ -2593,7 +2682,7 @@ Sqedt_ParamDispatch_Str_2:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_3
 ; Sqedt_ParamDispatch_Str_3 -- NUL-terminated string(s), 18 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; ExtDevice_ModeDispatch_Table_0x680`).
+; Sqedt_ParamDispatch_Str_3`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_3[18].
@@ -2604,7 +2693,7 @@ Sqedt_ParamDispatch_Str_3:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_4
 ; Sqedt_ParamDispatch_Str_4 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; ExtDevice_ModeDispatch_Table_0x692`).
+; Sqedt_ParamDispatch_Str_4`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_4[6].
@@ -2615,7 +2704,7 @@ Sqedt_ParamDispatch_Str_4:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_5
 ; Sqedt_ParamDispatch_Str_5 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; ExtDevice_ModeDispatch_Table_0x698`).
+; Sqedt_ParamDispatch_Str_5`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_5[6].
@@ -2669,7 +2758,7 @@ NakaInst_3d:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_9
 ; Sqedt_ParamDispatch_Str_9 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x6`).
+; Sqedt_ParamDispatch_Str_9`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_9[6].
@@ -2691,13 +2780,15 @@ Sqedt_ParamDispatch_Str_10:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_11
 ; Sqedt_ParamDispatch_Str_11 -- NUL-terminated string(s), 44 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x12`).
+; Sqedt_ParamDispatch_Str_11`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_11[44].
 ; -----------------------------------------------------------------------------
-Sqedt_ParamDispatch_Str_11:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D3A, 0x2C
+Sqedt_ParamDispatch_Str_11:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D3A, 0x6
+Sqedt_ParamDispatch_Entry2_Str_Fmt2d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D40, 0x8	; " +%2d "
+Sqedt_ParamDispatch_Entry2_Str_Fmt2d_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D48, 0x8	; " -%2d "
+Sqedt_ParamDispatch_Entry2_Str_Fmt3d:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3D50, 0x16	; " %3d "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_12
 ; Sqedt_ParamDispatch_Str_12 -- NUL-terminated string(s), 6 bytes, used
@@ -2713,7 +2804,7 @@ Sqedt_ParamDispatch_Str_12:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_13
 ; Sqedt_ParamDispatch_Str_13 -- NUL-terminated string(s), 8 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x44`).
+; Sqedt_ParamDispatch_Str_13`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_13[8].
@@ -2735,7 +2826,7 @@ Sqedt_ParamDispatch_Str_14:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_15
 ; Sqedt_ParamDispatch_Str_15 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x54`).
+; Sqedt_ParamDispatch_Str_15`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_15[6].
@@ -2757,7 +2848,7 @@ Sqedt_ParamDispatch_Str_16:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_17
 ; Sqedt_ParamDispatch_Str_17 -- NUL-terminated string(s), 8 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x60`).
+; Sqedt_ParamDispatch_Str_17`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_17[8].
@@ -2768,7 +2859,7 @@ Sqedt_ParamDispatch_Str_17:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_18
 ; Sqedt_ParamDispatch_Str_18 -- NUL-terminated string(s), 8 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x68`).
+; Sqedt_ParamDispatch_Str_18`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_18[8].
@@ -2779,7 +2870,7 @@ Sqedt_ParamDispatch_Str_18:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_19
 ; Sqedt_ParamDispatch_Str_19 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x70`).
+; Sqedt_ParamDispatch_Str_19`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_19[6].
@@ -2790,7 +2881,7 @@ Sqedt_ParamDispatch_Str_19:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_20
 ; Sqedt_ParamDispatch_Str_20 -- NUL-terminated string(s), 8 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x76`).
+; Sqedt_ParamDispatch_Str_20`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_20[8].
@@ -2812,7 +2903,7 @@ Sqedt_ParamDispatch_Str_21:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_22
 ; Sqedt_ParamDispatch_Str_22 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x86`).
+; Sqedt_ParamDispatch_Str_22`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_22[6].
@@ -2834,7 +2925,7 @@ Sqedt_ParamDispatch_Str_23:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_24
 ; Sqedt_ParamDispatch_Str_24 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x92`).
+; Sqedt_ParamDispatch_Str_24`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_24[6].
@@ -2845,7 +2936,7 @@ Sqedt_ParamDispatch_Str_24:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_25
 ; Sqedt_ParamDispatch_Str_25 -- NUL-terminated string(s), 6 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_3d_0x98`).
+; Sqedt_ParamDispatch_Str_25`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_25[6].
@@ -2932,24 +3023,24 @@ NakaInst_2d:
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_32
 ; Sqedt_ParamDispatch_Str_32 -- NUL-terminated string(s), 12 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_2d_0x6`).
+; Sqedt_ParamDispatch_Str_32`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_32[12].
 ; -----------------------------------------------------------------------------
-Sqedt_ParamDispatch_Str_32:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DF6, 0xC
+Sqedt_ParamDispatch_Str_32:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DF6, 0x6
+Sqedt_ParamDispatch_Entry2_Str_Blank5:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3DFC, 0x6	; "     "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_33
 ; Sqedt_ParamDispatch_Str_33 -- NUL-terminated string(s), 10 bytes, used
 ; by Sqedt_ParamDispatch (v10/v9 0xf34a5c, v7 0xf34a32) (`ld xwa,
-; NakaInst_2d_0x12`).
+; Sqedt_ParamDispatch_Str_33`).
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; Sqedt_ParamDispatch_Str_33[10].
 ; -----------------------------------------------------------------------------
-Sqedt_ParamDispatch_Str_33:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E02, 0xA
+Sqedt_ParamDispatch_Str_33:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E02, 0x6
+SqedtFunc_CheckMode_Str_N100:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3E08, 0x4	; "100"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Sqedt_ParamDispatch_Str_34
 ; Sqedt_ParamDispatch_Str_34 -- NUL-terminated string(s), 4 bytes, used
@@ -2965,7 +3056,7 @@ Sqedt_ParamDispatch_Str_34:
 ; [naka_s_headers] SeqFormat_DispatchA_CaseTable
 ; SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
 ; SeqFormat_DispatchA (v10/v9 0xf3513d, v7 0xf35113) (`lda xix,
-; (NakaInst_2d_0x20:24)`): 16 u16 case offsets from
+; (SeqFormat_DispatchA_CaseTable:24)`): 16 u16 case offsets from
 ; SeqFormat_DispatchA_0x70.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -2977,7 +3068,7 @@ SeqFormat_DispatchA_CaseTable:
 ; [naka_s_headers] SqedtFunc_SignExtend_CaseTable
 ; SqedtFunc_SignExtend_CaseTable -- jump table of a compiled `switch` in
 ; SqedtFunc_SignExtend (v10/v9 0xf35115, v7 0xf350eb) (`lda xix,
-; (NakaInst_2d_0x40:24)`): 15 u16 case offsets from SeqFormat_DispatchA.
+; (SqedtFunc_SignExtend_CaseTable:24)`): 15 u16 case offsets from SeqFormat_DispatchA.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SqedtFunc_SignExtend_CaseTable[15].
@@ -3000,7 +3091,7 @@ Sqedt_ValueDispatch_CaseTable:
 ; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_2
 ; Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
 ; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
-; (NakaInst_2d_0x70:24)`): 8 u16 case offsets from
+; (Sqedt_ValueDispatch_CaseTable_2:24)`): 8 u16 case offsets from
 ; Sqedt_ValueDispatch_0x58.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3012,7 +3103,7 @@ Sqedt_ValueDispatch_CaseTable_2:
 ; [naka_s_headers] Sqedt_ValueDispatch_CaseTable_3
 ; Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
 ; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
-; (NakaInst_2d_0x80:24)`): 9 u16 case offsets from
+; (Sqedt_ValueDispatch_CaseTable_3:24)`): 9 u16 case offsets from
 ; Sqedt_ValueDispatch_0x28.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3024,7 +3115,7 @@ Sqedt_ValueDispatch_CaseTable_3:
 ; [naka_s_headers] SeqFunc_ReturnZeroJmp_CaseTable
 ; SeqFunc_ReturnZeroJmp_CaseTable -- jump table of a compiled `switch`
 ; in SeqFunc_ReturnZeroJmp (v10/v9 0xf35005, v7 0xf34fdb) (`lda xix,
-; (NakaInst_2d_0x92:24)`): 7 u16 case offsets from Sqedt_ValueDispatch.
+; (SeqFunc_ReturnZeroJmp_CaseTable:24)`): 7 u16 case offsets from Sqedt_ValueDispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SeqFunc_ReturnZeroJmp_CaseTable[7].
@@ -3079,7 +3170,7 @@ SqedtFunc_CaseTable:
 ; [naka_s_headers] SqedtFunc_StateChainB_CaseTable
 ; SqedtFunc_StateChainB_CaseTable -- jump table of a compiled `switch`
 ; in SqedtFunc_StateChainB (v10/v9 0xf3523e, v7 0xf35214) (`lda xix,
-; (NakaInst_2d_0x120:24)`): 14 u16 case offsets from
+; (SqedtFunc_StateChainB_CaseTable:24)`): 14 u16 case offsets from
 ; SeqFormat_DispatchB.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3103,7 +3194,7 @@ SqedtFunc_StateChainB_CaseTable_Strings:
 ; [naka_s_headers] DspItem0_TypeChangeHandler_CaseTable
 ; DspItem0_TypeChangeHandler_CaseTable -- jump table of a compiled
 ; `switch` in DspItem0_TypeChangeHandler (v10/v9 0xf3572b, v7 0xf35701)
-; (`add xde, NakaInst_2d_0x142`): 9 u16 case offsets from
+; (`add xde, DspItem0_TypeChangeHandler_CaseTable`): 9 u16 case offsets from
 ; DspItem0_TypeDispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3115,7 +3206,7 @@ DspItem0_TypeChangeHandler_CaseTable:
 ; [naka_s_headers] DspItem0CngFunc_CaseTable
 ; DspItem0CngFunc_CaseTable -- jump table of a compiled `switch` in
 ; DspItem0CngFunc (v10/v9 0xf35527, v7 0xf354fd) (`add xiy,
-; NakaInst_2d_0x154`): 17 u16 case offsets from
+; DspItem0CngFunc_CaseTable`): 17 u16 case offsets from
 ; DspItem0_DisplayEffectName.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3126,7 +3217,7 @@ DspItem0CngFunc_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Equalizer_ParamByIndex_Table
 ; Equalizer_ParamByIndex_Table -- read by Equalizer_ParamByIndex (v10/v9
-; 0xf35914, v7 0xf358ea) (`add xde, NakaInst_2d_0x176`). 8 bytes to the
+; 0xf35914, v7 0xf358ea) (`add xde, Equalizer_ParamByIndex_Table`). 8 bytes to the
 ; next object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3198,8 +3289,8 @@ EqFormat_NegativeValue_Str:
 ; Typed in naka_widget_descriptors.c as char
 ; EqFormat_PositiveValue_Str[12].
 ; -----------------------------------------------------------------------------
-EqFormat_PositiveValue_Str:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FB8, 0xC
+EqFormat_PositiveValue_Str:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FB8, 0x6
+Equalizer_CopyFixedString_Str_Blank5:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x3FBE, 0x6	; "     "
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PrepareAudioParam_Str
 ; PrepareAudioParam_Str -- NUL-terminated string(s), 4 bytes, used by
@@ -3226,7 +3317,7 @@ Equalizer_FormatDispatch_Table:
 ; [naka_s_headers] Equalizer_FormatDispatch_CaseTable
 ; Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
 ; `switch` in Equalizer_FormatDispatch (v10/v9 0xf35b62, v7 0xf35b38)
-; (`ld xix, NakaInst_2d_0x204`): 18 u16 case offsets from
+; (`ld xix, Equalizer_FormatDispatch_CaseTable`): 18 u16 case offsets from
 ; Equalizer_FormatCases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3399,9 +3490,9 @@ SeqPlay_SaveAndPrepareState_Table:
 ; [naka_s_headers] SeqPlay_SaveState_ChordShiftDone_Table
 ; SeqPlay_SaveState_ChordShiftDone_Table -- read by
 ; SeqPlay_SaveState_ChordShiftDone (v10/v9 0xf3a022, v7 0xf39fe7) (`lda
-; xbc, (WidgetData_DrawbarPositionTable_0x82:24)`),
+; xbc, (SeqPlay_SaveState_ChordShiftDone_Table:24)`),
 ; SeqPlay_SaveState_BassShiftDone (v10/v9 0xf3a066, v7 0xf3a02b) (`lda
-; xbc, (WidgetData_DrawbarPositionTable_0x82:24)`). 4 bytes to the next
+; xbc, (SeqPlay_SaveState_ChordShiftDone_Table:24)`). 4 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3413,11 +3504,11 @@ SeqPlay_SaveState_ChordShiftDone_Table:
 ; [naka_s_headers] SeqNote_ProcessCurrent_DrumCheck_Table
 ; SeqNote_ProcessCurrent_DrumCheck_Table -- read by
 ; SeqNote_ProcessCurrent_DrumCheck (v10/v9 0xf3aaf3, v7 0xf3aab8) (`lda
-; xbc, (WidgetData_DrawbarPositionTable_0x86:24)`),
+; xbc, (SeqNote_ProcessCurrent_DrumCheck_Table:24)`),
 ; VoiceConfig_SlotCheck_GetChannel (v10/v9 0xf3ab7b, v7 0xf3ab40) (`lda
-; xbc, (WidgetData_DrawbarPositionTable_0x86:24)`),
+; xbc, (SeqNote_ProcessCurrent_DrumCheck_Table:24)`),
 ; VoiceConfig_EventType_GetChannel (v10/v9 0xf3abe6, v7 0xf3abab) (`lda
-; xhl, (WidgetData_DrawbarPositionTable_0x86:24)`). 32 bytes to the next
+; xhl, (SeqNote_ProcessCurrent_DrumCheck_Table:24)`). 32 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3508,7 +3599,7 @@ PartSubBlkA_WriteLoop48_Table:
 ; [naka_s_headers] SeqVoice_ApplyTableEntry_Table
 ; SeqVoice_ApplyTableEntry_Table -- read by SeqVoice_ApplyTableEntry
 ; (v10/v9 0xf3ff42, v7 0xf3ff34) (`ld xwa,
-; WidgetData_DrawbarPositionTable_0x122`). 12 bytes to the next
+; SeqVoice_ApplyTableEntry_Table`). 12 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3544,7 +3635,7 @@ AppEvent_ExtendedHandler_Table_2:
 ; [naka_s_headers] Part_ApplyVoiceTableB_Table
 ; Part_ApplyVoiceTableB_Table -- read by Part_ApplyVoiceTableB (v10/v9
 ; 0xf3ff2d, v7 0xf3ff1f) (`ld xwa,
-; WidgetData_DrawbarPositionTable_0x146`). 12 bytes to the next
+; Part_ApplyVoiceTableB_Table`). 12 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3556,7 +3647,7 @@ Part_ApplyVoiceTableB_Table:
 ; [naka_s_headers] Part_ApplyVoiceTableA_Table
 ; Part_ApplyVoiceTableA_Table -- read by Part_ApplyVoiceTableA (v10/v9
 ; 0xf3ff34, v7 0xf3ff26) (`ld xwa,
-; WidgetData_DrawbarPositionTable_0x152`). 12 bytes to the next
+; Part_ApplyVoiceTableA_Table`). 12 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3593,7 +3684,7 @@ SeqPlay_WriteErrorToVoiceTable_Data:
 ; [naka_s_headers] Seq_SyncPositionAndOutputMIDITiming_LocalInit
 ; Seq_SyncPositionAndOutputMIDITiming_LocalInit -- initializer of a
 ; local array: Seq_SyncPositionAndOutputMIDITiming (v10/v9 0xf3e1c9, v7
-; 0xf3e1ad) (`ld xiy, WidgetData_DrawbarPositionTable_0x176`); `lda xix,
+; 0xf3e1ad) (`ld xiy, Seq_SyncPositionAndOutputMIDITiming_LocalInit`); `lda xix,
 ; (xsp + 4); ldi85; ldiw; cp (0xe388:16), 1; jr nz,
 ; SeqSync_CheckDemoMode` copies 3 bytes into the routine's stack frame.
 ;
@@ -3631,7 +3722,7 @@ SeqValPTK_LookupAndReturn_Table:
 ; [naka_s_headers] SeqData_CopyBlockWithLookup_LocalInit
 ; SeqData_CopyBlockWithLookup_LocalInit -- initializer of a local array:
 ; SeqData_CopyBlockWithLookup (v10/v9 0xf409f3, v7 0xf409e5) (`ld xiy,
-; WidgetData_DrawbarPositionTable_0x188`); `ld xix, xsp; ldw bc, 0x8;
+; SeqData_CopyBlockWithLookup_LocalInit`); `ld xix, xsp; ldw bc, 0x8;
 ; ldirw` copies 16 bytes into the routine's stack frame.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3643,7 +3734,7 @@ SeqData_CopyBlockWithLookup_LocalInit:
 ; [naka_s_headers] Rhythm_DispatchNoteAlloc_LocalInit
 ; Rhythm_DispatchNoteAlloc_LocalInit -- initializer of a local array:
 ; Rhythm_DispatchNoteAlloc (v10/v9 0xf42852, v7 0xf42844) (`ld xiy,
-; WidgetData_DrawbarPositionTable_0x198`); `lda xix, (xsp + 10); ldiw;
+; Rhythm_DispatchNoteAlloc_LocalInit`); `lda xix, (xsp + 10); ldiw;
 ; ldiw; ld xiy, WidgetData_DrawbarPositionTable_0x19c; lda xix, (xsp +
 ; 6)` copies 4 bytes into the routine's stack frame.
 ;
@@ -3754,13 +3845,13 @@ SeqEvt_ProcessBlock_LocalInit_2:
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; WidgetData_CharsetMappingTable[4].
 ; -----------------------------------------------------------------------------
-WidgetData_CharsetMappingTable:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137D6, 0x10
+WidgetData_CharsetMappingTable:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x137D6, 0x8
+MidiSysEx_ProcessBlock_PtrTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x137DE, 0x8	; 2 x 32-bit pointer
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Part_InitFromPreset_LocalInit
 ; Part_InitFromPreset_LocalInit -- initializer of a local array:
 ; Part_InitFromPreset (v10/v9 0xf42ea4, v7 0xf42e96) (`ld xiy,
-; WidgetData_CharsetMappingTable_0x10`); `lda xix, (xsp + 4); ldw bc,
+; Part_InitFromPreset_LocalInit`); `lda xix, (xsp + 4); ldw bc,
 ; 0x8; ldirw` copies 16 bytes into the routine's stack frame.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3772,7 +3863,7 @@ Part_InitFromPreset_LocalInit:
 ; [naka_s_headers] SeqData_SendVoiceTableBlock_LocalInit
 ; SeqData_SendVoiceTableBlock_LocalInit -- initializer of a local array:
 ; SeqData_SendVoiceTableBlock (v10/v9 0xf43a59, v7 0xf43a4b) (`ld xiy,
-; WidgetData_CharsetMappingTable_0x20`); `ld xix, xsp; ld bc, 2:i3;
+; SeqData_SendVoiceTableBlock_LocalInit`); `ld xix, xsp; ld bc, 2:i3;
 ; ldirw` copies 5 bytes into the routine's stack frame.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3797,7 +3888,7 @@ SeqData_SendVoiceTableBlock_LocalInit_Tail:
 ; [naka_s_headers] EffEdit_ParamChangeB_Table
 ; EffEdit_ParamChangeB_Table -- read by EffEdit_ParamChangeB (v10/v9
 ; 0xf45410, v7 0xf45402) (`lda xwa,
-; (WidgetData_CharsetMappingTable_0x26:24)`). 128 bytes to the next
+; (EffEdit_ParamChangeB_Table:24)`). 128 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3821,7 +3912,7 @@ EffEdit_ParamChangeB_Table_2:
 ; [naka_s_headers] EffEdit_ParamChangeA_Table
 ; EffEdit_ParamChangeA_Table -- read by EffEdit_ParamChangeA (v10/v9
 ; 0xf45398, v7 0xf4538a) (`lda xwa,
-; (WidgetData_CharsetMappingTable_0x126:24)`). 128 bytes to the next
+; (EffEdit_ParamChangeA_Table:24)`). 128 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3857,7 +3948,7 @@ AppEvent_RecordDispatch_BitMasks:
 ; [naka_s_headers] SeqEvent_MainHandler_CaseTable
 ; SeqEvent_MainHandler_CaseTable -- jump table of a compiled `switch` in
 ; SeqEvent_MainHandler (v10/v9 0xf43d4c, v7 0xf43d3e) (`lda xix,
-; (WidgetData_CharsetMappingTable_0x248:24)`): case k jumps to
+; (SeqEvent_MainHandler_CaseTable:24)`): case k jumps to
 ; SeqEvent_Dispatch + entry[k] (`lda xix,(SeqEvent_Dispatch); jp_ind`).
 ; 14 u16 offsets; the reader's bound `cp ..., 13` pins 14 cases.
 ;
@@ -3870,7 +3961,7 @@ SeqEvent_MainHandler_CaseTable:
 ; [naka_s_headers] AppEvtHandler_Branch_024_CaseTable
 ; AppEvtHandler_Branch_024_CaseTable -- jump table of a compiled
 ; `switch` in AppEvtHandler_Branch_024 (v10/v9 0xf445b0, v7 0xf445a2)
-; (`add xwa, WidgetData_CharsetMappingTable_0x264`): case k jumps to
+; (`add xwa, AppEvtHandler_Branch_024_CaseTable`): case k jumps to
 ; AppEvtHandler_Branch_024_0x97 + entry[k] (`lda
 ; xix,(AppEvtHandler_Branch_024_0x97); jp_ind`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
@@ -3884,7 +3975,7 @@ AppEvtHandler_Branch_024_CaseTable:
 ; [naka_s_headers] AppEvtHandler_Branch_021_CaseTable
 ; AppEvtHandler_Branch_021_CaseTable -- jump table of a compiled
 ; `switch` in AppEvtHandler_Branch_021 (v10/v9 0xf444b9, v7 0xf444ab)
-; (`add xwa, WidgetData_CharsetMappingTable_0x270`): case k jumps to
+; (`add xwa, AppEvtHandler_Branch_021_CaseTable`): case k jumps to
 ; AppEvtHandler_Branch_021_0x5e + entry[k] (`lda
 ; xix,(AppEvtHandler_Branch_021_0x5e); jp_ind`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
@@ -3953,7 +4044,7 @@ AppEvent_ChainDispatch1_CaseTable:
 ; [naka_s_headers] AppEvent_SubDispatch_CaseTable
 ; AppEvent_SubDispatch_CaseTable -- jump table of a compiled `switch` in
 ; AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) (`add xwa,
-; WidgetData_CharsetMappingTable_0x300`): case k jumps to
+; AppEvent_SubDispatch_CaseTable`): case k jumps to
 ; AppEvent_SubDispatch_0x4cc + entry[k] (`lda
 ; xix,(AppEvent_SubDispatch_0x4cc); jp_ind`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
@@ -3981,7 +4072,7 @@ AppEvent_SubDispatch_CaseTable_2:
 ; [naka_s_headers] AppEvent_SubDispatch_Table
 ; AppEvent_SubDispatch_Table -- read by AppEvent_SubDispatch (v10/v9
 ; 0xf448a4, v7 0xf44896) (`lda xix,
-; (WidgetData_CharsetMappingTable_0x318:24)`). 16 bytes to the next
+; (AppEvent_SubDispatch_Table:24)`). 16 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -3993,7 +4084,7 @@ AppEvent_SubDispatch_Table:
 ; [naka_s_headers] AppEvent_SubDispatch_Table_2
 ; AppEvent_SubDispatch_Table_2 -- read by AppEvent_SubDispatch (v10/v9
 ; 0xf448a4, v7 0xf44896) (`lda xix,
-; (WidgetData_CharsetMappingTable_0x328:24)`). 16 bytes to the next
+; (AppEvent_SubDispatch_Table_2:24)`). 16 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -4128,7 +4219,7 @@ NoteEditSy_HandleDownScroll_CaseTable:
 ; [naka_s_headers] NoteEditSy_HandleUpScroll_CaseTable
 ; NoteEditSy_HandleUpScroll_CaseTable -- jump table of a compiled
 ; `switch` in NoteEditSy_HandleUpScroll (v10/v9 0xf466f2, v7 0xf466e4)
-; (`add xde, WidgetData_CharsetMappingTable_0x434`): case k jumps to
+; (`add xde, NoteEditSy_HandleUpScroll_CaseTable`): case k jumps to
 ; NoteEditSy_UpScroll_Param0 + entry[k] (`lda
 ; xix,(NoteEditSy_UpScroll_Param0); jp_ind`). 15 u16 offsets; the
 ; reader's bound `cp ..., 14` pins 15 cases.
@@ -4142,7 +4233,7 @@ NoteEditSy_HandleUpScroll_CaseTable:
 ; [naka_s_headers] MainExeCall_CaseTable
 ; MainExeCall_CaseTable -- jump table of a compiled `switch` in
 ; MainExeCall (v10/v9 0xf470a4, v7 0xf47096) (`lda xix,
-; (WidgetData_CharsetMappingTable_0x452:24)`): case k jumps to
+; (MainExeCall_CaseTable:24)`): case k jumps to
 ; MainExe_HandleD6 + entry[k] (`lda xix,(MainExe_HandleD6); jp_ind`). 17
 ; u16 offsets; the reader's bound `cp ..., 16` pins 17 cases.
 ;
@@ -4358,7 +4449,7 @@ SeqPart_VelCurveData_Table:
 ; [naka_s_headers] SeqPart_VelCurveData_Table_2
 ; SeqPart_VelCurveData_Table_2 -- read by SeqPart_VelCurveData (v10/v9
 ; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
-; (Display_FontPalette_Table_0x20:24)`). 4 bytes to the next referenced
+; (SeqPart_VelCurveData_Table_2:24)`). 4 bytes to the next referenced
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -4370,7 +4461,7 @@ SeqPart_VelCurveData_Table_2:
 ; [naka_s_headers] SeqPart_VelCurveData_Table_3
 ; SeqPart_VelCurveData_Table_3 -- read by SeqPart_VelCurveData (v10/v9
 ; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
-; (Display_FontPalette_Table_0x24:24)`). 8 bytes to the next referenced
+; (SeqPart_VelCurveData_Table_3:24)`). 8 bytes to the next referenced
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -4394,7 +4485,7 @@ SeqPart_VelCurveData_Table_4:
 ; [naka_s_headers] SeqPart_VelCurveData_Table_5
 ; SeqPart_VelCurveData_Table_5 -- read by SeqPart_VelCurveData (v10/v9
 ; 0xf4c38c, v7 0xf4bfa2) (`lda xbc,
-; (Display_FontPalette_Table_0x30:24)`). 6 bytes to the next referenced
+; (SeqPart_VelCurveData_Table_5:24)`). 6 bytes to the next referenced
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -4406,7 +4497,7 @@ SeqPart_VelCurveData_Table_5:
 ; [naka_s_headers] SeqPart_VelZoneLookup_Table
 ; SeqPart_VelZoneLookup_Table -- read by SeqPart_VelZoneLookup (v10/v9
 ; 0xf4c56d, v7 0xf4c183) (`lda xbc,
-; (Display_FontPalette_Table_0x36:24)`). 14 bytes to the next referenced
+; (SeqPart_VelZoneLookup_Table:24)`). 14 bytes to the next referenced
 ; object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -4417,7 +4508,7 @@ SeqPart_VelZoneLookup_Table:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqPart_VelCurveData_Table_6
 ; SeqPart_VelCurveData_Table_6 -- read by SeqPart_VelCurveData (v10/v9
-; 0xf4c38c, v7 0xf4bfa2) (`ld xbc, Display_FontPalette_Table_0x44`). 2
+; 0xf4c38c, v7 0xf4bfa2) (`ld xbc, SeqPart_VelCurveData_Table_6`). 2
 ; bytes to the next referenced object; the layout beyond that access is
 ; not established.
 ;
@@ -4429,7 +4520,7 @@ SeqPart_VelCurveData_Table_6:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqPart_VelCurveData_Table_7
 ; SeqPart_VelCurveData_Table_7 -- read by SeqPart_VelCurveData (v10/v9
-; 0xf4c38c, v7 0xf4bfa2) (`ld xbc, Display_FontPalette_Table_0x46`). 22
+; 0xf4c38c, v7 0xf4bfa2) (`ld xbc, SeqPart_VelCurveData_Table_7`). 22
 ; bytes to the next referenced object; the layout beyond that access is
 ; not established.
 ;
@@ -4454,7 +4545,7 @@ SeqPart_VelZoneLookup_Table_2:
 ; [naka_s_headers] SeqPart_VelocityCurveCalc_CaseTable
 ; SeqPart_VelocityCurveCalc_CaseTable -- jump table of a compiled
 ; `switch` in SeqPart_VelocityCurveCalc (v10/v9 0xf4c360, v7 0xf4bf76)
-; (`lda xix, (Display_FontPalette_Table_0x68:24)`): case k jumps to
+; (`lda xix, (SeqPart_VelocityCurveCalc_CaseTable:24)`): case k jumps to
 ; SeqPart_VelCurveData + entry[k] (`lda xix,(SeqPart_VelCurveData);
 ; jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
 ; cases.
@@ -4521,14 +4612,14 @@ SeqStep_DeleteDone_CaseTable:
 ; Typed in naka_widget_descriptors.c as uint32_t
 ; SeqStep_TimerDispatch_ProcTables[3][23].
 ; -----------------------------------------------------------------------------
-SeqStep_TimerDispatch_ProcTables:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x140A0, 0x114
+SeqStep_TimerDispatch_ProcTables:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x140A0, 0x5C
+SeqStep_TimerDispatchB_PtrTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x140FC, 0x5C	; 46 x 32-bit pointer
+SeqStep_TimerDispatchC_PtrTable:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14158, 0x5C	; 23 x 32-bit pointer
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqStep_TimerDispatch_ProcTables_Tail
 ; SeqStep_TimerDispatch_ProcTables_Tail -- 66 bytes after
-; SeqStep_TimerDispatch_ProcTables that code DOES reach (Readers below)
-; (searched: every label and positional-label name anchored on the
-; historical labels of this span, in all v10 .s files). Holds short
+; SeqStep_TimerDispatch_ProcTables that code reaches: the labels below name each string after the
+; routine that reaches it first (scripts/converters/split_blobs_at_far_pointers.py). Holds short
 ; NUL-terminated strings -- "A", "w~", "d", "wb", "r", "d", "r", "a",
 ; "d", ". " padded to 11 characters, "r" -- then zeros and 02 02 01 00
 ; 02 70 00 A0 05 F9 03 00 09 00 02 00, the 2DD geometry fields of
@@ -4540,8 +4631,18 @@ SeqStep_TimerDispatch_ProcTables:
 ;   pointer); FileOpenDefault (0xF4EE1B, pushw far pointer); SeqStep_ByteBlockF245 (0xF4EE53, pushw
 ;   far pointer); SeqStep_ByteBlockF245 (0xF4EE94, pushw far pointer); and 8 more
 ; -----------------------------------------------------------------------------
-SeqStep_TimerDispatch_ProcTables_Tail:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141B4, 0x42
+SeqStep_TimerDispatch_ProcTables_Tail:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141B4, 0x2
+FileOpenDefault_Str_w:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x141B6, 0x4	; "w~"
+SeqStep_ByteBlockF245_Str_d:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141BA, 0x2	; "d"
+SeqStep_ByteBlockF245_Str_wb:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141BC, 0x4	; "wb"
+SeqStep_FileSeekCleanup_Str_r:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141C0, 0x2	; "r"
+SeqStep_FileSeekCleanup_Str_d:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141C2, 0x2	; "d"
+SeqStep_FileTellReturn_Str_r:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141C4, 0x2	; "r"
+SeqStep_FileTellProcess_Str_a:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141C6, 0x2	; "a"
+SeqStep_FileTellFinal_Str_d:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141C8, 0x2	; "d"
+SeqChan_ReadNextFromLoop_Str_Dot:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141CA, 0xC	; ".          "
+SeqStep_SectorCompareBlock_Str_r:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141D6, 0x2	; "r"
+SeqChan_ByteBlockC_Str_Empty:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x141D8, 0x1E	; ""
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] FDC_Format2DD_Step2_FdcCmd
 ; FDC_Format2DD_Step2_FdcCmd -- FDC command block: FDC_Format2DD_Step2
@@ -4656,17 +4757,18 @@ FDC_Format2HD_FatHead:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429A, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] FDC_Format2HD_FatHead_Tail
-; FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that code DOES reach (Readers below) (searched: every label and positional-label
-; name anchored on the historical labels of this span, in all v10 .s
-; files). Holds the strings "d" and "A:\". Contents not established.
+; FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that code reaches: the labels
+; below name each string after the routine that reaches it first
+; (scripts/converters/split_blobs_at_far_pointers.py). Holds the strings "d" and "A:\". Contents
+; not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; FDC_Format2HD_FatHead_Tail[6].
 ; Readers (claims_lint.py unread-claims, 2026-10-02): FileIO_ReadFreeSpaceViaFAT (0xF52397, pushw
 ;   far pointer); FileIO_ReadFreeSpaceViaFAT (0xF5239D, pushw far pointer)
 ; -----------------------------------------------------------------------------
-FDC_Format2HD_FatHead_Tail:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429E, 0x6
+FDC_Format2HD_FatHead_Tail:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429E, 0x2
+FileIO_ReadFreeSpaceViaFAT_Str_A:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142A0, 0x4	; "A:\\"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetDiskFreeSpace_CaseTable
 ; GetDiskFreeSpace_CaseTable -- jump table of a compiled `switch` in
@@ -4684,17 +4786,17 @@ GetDiskFreeSpace_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetDiskFreeSpace_CaseTable_Tail
 ; GetDiskFreeSpace_CaseTable_Tail -- 6 bytes after
-; GetDiskFreeSpace_CaseTable that code DOES reach (Readers below) (searched:
-; every label and positional-label name anchored on the historical
-; labels of this span, in all v10 .s files). Contents not established.
+; GetDiskFreeSpace_CaseTable that code reaches: the labels below name each string after the routine
+; that reaches it first (scripts/converters/split_blobs_at_far_pointers.py). Contents not
+; established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; GetDiskFreeSpace_CaseTable_Tail[6].
 ; Readers (claims_lint.py unread-claims, 2026-10-02): FileIO_ReadVolumeLabelEntry (0xF523F8, pushw
 ;   far pointer); FileIO_ReadVolumeLabelEntry (0xF523FE, pushw far pointer)
 ; -----------------------------------------------------------------------------
-GetDiskFreeSpace_CaseTable_Tail:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B2, 0x6
+GetDiskFreeSpace_CaseTable_Tail:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B2, 0x2
+FileIO_ReadVolumeLabelEntry_Str_A:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B4, 0x4	; "A:\\"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetVolumeLabel_CaseTable
 ; GetVolumeLabel_CaseTable -- jump table of a compiled `switch` in
@@ -4712,9 +4814,9 @@ GetVolumeLabel_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetVolumeLabel_CaseTable_Tail
 ; GetVolumeLabel_CaseTable_Tail -- 28 bytes after
-; GetVolumeLabel_CaseTable that code DOES reach (Readers below) (searched:
-; every label and positional-label name anchored on the historical
-; labels of this span, in all v10 .s files). Holds the strings "A:\",
+; GetVolumeLabel_CaseTable that code reaches: the labels below name each string after the routine
+; that reaches it first (scripts/converters/split_blobs_at_far_pointers.py). Holds the strings
+; "A:\",
 ; "+wb", "\", "d", "rb", then 0xff and "1 PianoDisc". Contents not
 ; established.
 ;
@@ -4724,8 +4826,12 @@ GetVolumeLabel_CaseTable:
 ;   pointer); PathInfo_BuildAndOpen (0xF524C6, pushw far pointer); FileIO_ParseLoop_CheckChar
 ;   (0xF52533, pushw far pointer); and 3 more
 ; -----------------------------------------------------------------------------
-GetVolumeLabel_CaseTable_Tail:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142C6, 0x1C
+GetVolumeLabel_CaseTable_Tail:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142C6, 0x4
+PathInfo_BuildAndOpen_Str_wb:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142CA, 0x4	; "+wb"
+FileIO_ParseLoop_CheckChar_Str_Backslash:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x142CE, 0x2	; "\\"
+FindFirst_OpenDir_Str_d:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142D0, 0x2	; "d"
+SndTable_LookupA_Str_rb:				.incbin "includes/generated/naka_widget_descriptors.bin", 0x142D2, 0x4	; "rb"
+FDC_DetectSector_CheckPianoDisc_Str_N1_PianoDisc:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142D6, 0xC	; "1 PianoDisc"
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] RhythmROM_BankProgramLocators
 ; RhythmROM_BankProgramLocators -- 8 banks x 128 programs x {u16 hi, u16
@@ -5074,7 +5180,7 @@ AccTone_LookupByProgram_Table_2:
 ; [naka_s_headers] AccTuning_ReadAndApplyOffset_Table
 ; AccTuning_ReadAndApplyOffset_Table -- read by
 ; AccTuning_ReadAndApplyOffset (v10/v9 0xf5e393, v7 0xf5df8f) (`lda xbc,
-; (Display_FontPalette_Table_0x5170:24)`). 116 bytes to the next
+; (AccTuning_ReadAndApplyOffset_Table:24)`). 116 bytes to the next
 ; referenced object; the layout beyond that access is not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
@@ -5249,7 +5355,7 @@ CmpMenuTtlFunc_CaseTable:
 ; [naka_s_headers] CmpSetTtl_DynamicLookup_CaseTable
 ; CmpSetTtl_DynamicLookup_CaseTable -- jump table of a compiled `switch`
 ; in CmpSetTtl_DynamicLookup (v10/v9 0xf67f79, v7 0xf67b75) (`add xde,
-; Display_FontPalette_Table_0x7028`): case k jumps to
+; CmpSetTtl_DynamicLookup_CaseTable`): case k jumps to
 ; CmpSetTtl_Dispatch2 + entry[k] (`lda xix,(CmpSetTtl_Dispatch2);
 ; jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
 ; cases.
@@ -5263,7 +5369,7 @@ CmpSetTtl_DynamicLookup_CaseTable:
 ; [naka_s_headers] CmpSetTtlFunc_CaseTable
 ; CmpSetTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; CmpSetTtlFunc (v10/v9 0xf67e59, v7 0xf67a55) (`add xde,
-; Display_FontPalette_Table_0x7040`): case k jumps to CmpSetTtl_Dispatch
+; CmpSetTtlFunc_CaseTable`): case k jumps to CmpSetTtl_Dispatch
 ; + entry[k] (`lda xix,(CmpSetTtl_Dispatch); jp_ind`). 7 u16 offsets;
 ; the reader's bound `cp ..., 6` pins 7 cases.
 ;
@@ -5290,7 +5396,7 @@ CmpRealTtl_MajorDispatch_CaseTable:
 ; [naka_s_headers] CmpRealTtlFunc_CaseTable
 ; CmpRealTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; CmpRealTtlFunc (v10/v9 0xf67fee, v7 0xf67bea) (`add xde,
-; Display_FontPalette_Table_0x7068`): case k jumps to
+; CmpRealTtlFunc_CaseTable`): case k jumps to
 ; CmpRealTtl_Dispatch + entry[k] (`lda xix,(CmpRealTtl_Dispatch);
 ; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
@@ -5303,7 +5409,7 @@ CmpRealTtlFunc_CaseTable:
 ; [naka_s_headers] CmpBkslTtlFunc_CaseTable
 ; CmpBkslTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; CmpBkslTtlFunc (v10/v9 0xf682e2, v7 0xf67ede) (`add xde,
-; Display_FontPalette_Table_0x7076`): case k jumps to
+; CmpBkslTtlFunc_CaseTable`): case k jumps to
 ; CmpBkslTtl_Dispatch + entry[k] (`lda xix,(CmpBkslTtl_Dispatch);
 ; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
@@ -5316,7 +5422,7 @@ CmpBkslTtlFunc_CaseTable:
 ; [naka_s_headers] CmpBkslSTtl_DirectMode_CaseTable
 ; CmpBkslSTtl_DirectMode_CaseTable -- jump table of a compiled `switch`
 ; in CmpBkslSTtl_DirectMode (v10/v9 0xf684bf, v7 0xf680bb) (`add xwa,
-; Display_FontPalette_Table_0x7084`): case k jumps to
+; CmpBkslSTtl_DirectMode_CaseTable`): case k jumps to
 ; CmpBkslSTtl_FillIn4 + entry[k] (`lda xix,(CmpBkslSTtl_FillIn4);
 ; jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
 ; cases.
@@ -5424,7 +5530,7 @@ CmpEsyTtl_E_Var1_CaseTable:
 ; [naka_s_headers] S2cTtlFunc_CaseTable
 ; S2cTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; S2cTtlFunc (v10/v9 0xf68de2, v7 0xf689de) (`add xde,
-; Display_FontPalette_Table_0x7124`): case k jumps to S2cTtl_Dispatch +
+; S2cTtlFunc_CaseTable`): case k jumps to S2cTtl_Dispatch +
 ; entry[k] (`lda xix,(S2cTtl_Dispatch); jp_ind`). 7 u16 offsets; the
 ; reader's bound `cp ..., 6` pins 7 cases.
 ;
@@ -5437,7 +5543,7 @@ S2cTtlFunc_CaseTable:
 ; [naka_s_headers] CstmCpTtl_RecMode2_CaseTable
 ; CstmCpTtl_RecMode2_CaseTable -- jump table of a compiled `switch` in
 ; CstmCpTtl_RecMode2 (v10/v9 0xf692fc, v7 0xf68ef8) (`add xde,
-; Display_FontPalette_Table_0x7132`): case k jumps to
+; CstmCpTtl_RecMode2_CaseTable`): case k jumps to
 ; CstmCpTtl_Dispatch2 + entry[k] (`lda xix,(CstmCpTtl_Dispatch2);
 ; jp_ind`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
 ; cases.
@@ -5542,7 +5648,7 @@ MainCmpSetFunc_CaseTable_Tail:
 ; [naka_s_headers] MspMenuTtlFunc_CaseTable
 ; MspMenuTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; MspMenuTtlFunc (v10/v9 0xf69e22, v7 0xf69a1e) (`add xde,
-; NakaInst_MEMORY_A_0x26`): 7 u16 case offsets from MspMenuTtl_Dispatch.
+; MspMenuTtlFunc_CaseTable`): 7 u16 case offsets from MspMenuTtl_Dispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; MspMenuTtlFunc_CaseTable[7].
@@ -5553,7 +5659,7 @@ MspMenuTtlFunc_CaseTable:
 ; [naka_s_headers] MspNameTtlFunc_CaseTable
 ; MspNameTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; MspNameTtlFunc (v10/v9 0xf69ea9, v7 0xf69aa5) (`add xde,
-; NakaInst_MEMORY_A_0x34`): 7 u16 case offsets from MspNameTtl_Dispatch.
+; MspNameTtlFunc_CaseTable`): 7 u16 case offsets from MspNameTtl_Dispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; MspNameTtlFunc_CaseTable[7].
@@ -5564,7 +5670,7 @@ MspNameTtlFunc_CaseTable:
 ; [naka_s_headers] MspRecTtlFunc_CaseTable
 ; MspRecTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; MspRecTtlFunc (v10/v9 0xf69f2b, v7 0xf69b27) (`add xde,
-; NakaInst_MEMORY_A_0x42`): 7 u16 case offsets from MspRecTtl_Dispatch.
+; MspRecTtlFunc_CaseTable`): 7 u16 case offsets from MspRecTtl_Dispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; MspRecTtlFunc_CaseTable[7].
@@ -5575,7 +5681,7 @@ MspRecTtlFunc_CaseTable:
 ; [naka_s_headers] SndArgTtlFunc_CaseTable
 ; SndArgTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; SndArgTtlFunc (v10/v9 0xf6a064, v7 0xf69c60) (`add xde,
-; NakaInst_MEMORY_A_0x50`): 7 u16 case offsets from SndArgTtl_Dispatch.
+; SndArgTtlFunc_CaseTable`): 7 u16 case offsets from SndArgTtl_Dispatch.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SndArgTtlFunc_CaseTable[7].
@@ -7276,96 +7382,9 @@ East_ClassTable_163_Tail:
 ; NakaInst_NO_OPERATION (+0x02708) is effect 0 -- so the effect number of
 ; any label in that run is (0x02708 - offset) / 18.
 
-; --- DSP effect naming zone: table bases ---------------------------------
-	.equ DspParamUnit_Table, NakaData_WidgetDescriptors + 0x015b8	; 0xE32418, 86 x 2
-	.equ DspParamName_Table, NakaData_WidgetDescriptors + 0x01664	; 0xE324C4, 86 x 17
-	.equ DspEffectName_PtrTable, NakaData_WidgetDescriptors + 0x01c1a	; 0xE32A7A, 128 x u32
+; --- DSP effect naming zone ---------------------------------------------
+; DspParamUnit_Table (86 x 2), DspParamName_Table (86 x 17; slot 0 is "(spare)"),
+; DspParamName_NN_<NAME> (slot NN: name at DspParamName_Table + 0x11*NN, unit at
+; DspParamUnit_Table + 2*NN) and DspEffectName_PtrTable (128 x u32) are labels at the
+; top of the blob (split there on 2026-10-02 by split_blobs_at_far_pointers.py).
 	.equ DspEffectName_Strings, NakaData_WidgetDescriptors + 0x01e1a	; 0xE32C7A, 128 x 18
-
-; --- DSP parameter slots: name at +0x11*i, unit at DspParamUnit_Table+2*i -
-	.equ DspParamName_00_Blank, NakaData_WidgetDescriptors + 0x01664	; slot  0 "(spare)"
-	.equ DspParamName_01_VOLUME, NakaData_WidgetDescriptors + 0x01675	; slot  1 "VOLUME"
-	.equ DspParamName_02_VOLUME, NakaData_WidgetDescriptors + 0x01686	; slot  2 "VOLUME"
-	.equ DspParamName_03_REV_SEND, NakaData_WidgetDescriptors + 0x01697	; slot  3 "REV SEND"
-	.equ DspParamName_04_DRIVE, NakaData_WidgetDescriptors + 0x016a8	; slot  4 "DRIVE"
-	.equ DspParamName_05_ADJUST, NakaData_WidgetDescriptors + 0x016b9	; slot  5 "ADJUST"
-	.equ DspParamName_06_EMPHASIS_GAIN, NakaData_WidgetDescriptors + 0x016ca	; slot  6 "EMPHASIS GAIN"
-	.equ DspParamName_07_DEPTH, NakaData_WidgetDescriptors + 0x016db	; slot  7 "DEPTH"
-	.equ DspParamName_08_LFO_SPEED, NakaData_WidgetDescriptors + 0x016ec	; slot  8 "LFO SPEED" [Hz]
-	.equ DspParamName_09_SLOW_LFO_SPEED, NakaData_WidgetDescriptors + 0x016fd	; slot  9 "SLOW LFO SPEED" [Hz]
-	.equ DspParamName_10_FAST_LFO_BALANCE, NakaData_WidgetDescriptors + 0x0170e	; slot 10 "FAST LFO BALANCE"
-	.equ DspParamName_11_RESONANCE, NakaData_WidgetDescriptors + 0x0171f	; slot 11 "RESONANCE"
-	.equ DspParamName_12_MANUAL, NakaData_WidgetDescriptors + 0x01730	; slot 12 "MANUAL"
-	.equ DspParamName_13_SLOW_FAST, NakaData_WidgetDescriptors + 0x01741	; slot 13 "SLOW/FAST"
-	.equ DspParamName_14_TREBLE_FAST, NakaData_WidgetDescriptors + 0x01752	; slot 14 "TREBLE FAST" [Hz]
-	.equ DspParamName_15_SLOW, NakaData_WidgetDescriptors + 0x01763	; slot 15 "SLOW" [Hz]
-	.equ DspParamName_16_WIND_UP, NakaData_WidgetDescriptors + 0x01774	; slot 16 "WIND UP" [s ]
-	.equ DspParamName_17_WIND_DOWN, NakaData_WidgetDescriptors + 0x01785	; slot 17 "WIND DOWN" [s ]
-	.equ DspParamName_18_BASS_FAST, NakaData_WidgetDescriptors + 0x01796	; slot 18 "BASS   FAST" [Hz]
-	.equ DspParamName_19_BASS_SLOW, NakaData_WidgetDescriptors + 0x017a7	; slot 19 "BASS   SLOW" [Hz]
-	.equ DspParamName_20_VOLUME_ADJUST, NakaData_WidgetDescriptors + 0x017b8	; slot 20 "VOLUME ADJUST"
-	.equ DspParamName_21_OSC_SPEED, NakaData_WidgetDescriptors + 0x017c9	; slot 21 "OSC SPEED" [Hz]
-	.equ DspParamName_22_DELAY_L, NakaData_WidgetDescriptors + 0x017da	; slot 22 "DELAY L" [ms]
-	.equ DspParamName_23_DELAY_R, NakaData_WidgetDescriptors + 0x017eb	; slot 23 "DELAY R" [ms]
-	.equ DspParamName_24_FEEDBACK_L, NakaData_WidgetDescriptors + 0x017fc	; slot 24 "FEEDBACK L"
-	.equ DspParamName_25_FEEDBACK_R, NakaData_WidgetDescriptors + 0x0180d	; slot 25 "FEEDBACK R"
-	.equ DspParamName_26_DELAY_DRY_WET, NakaData_WidgetDescriptors + 0x0181e	; slot 26 "DELAY DRY/WET"
-	.equ DspParamName_27_CHORUS_DRY_WET, NakaData_WidgetDescriptors + 0x0182f	; slot 27 "CHORUS DRY/WET"
-	.equ DspParamName_28_FLANGER_DRY_WET, NakaData_WidgetDescriptors + 0x01840	; slot 28 "FLANGER DRY/WET"
-	.equ DspParamName_29_PHASER_DRY_WET, NakaData_WidgetDescriptors + 0x01851	; slot 29 "PHASER DRY/WET"
-	.equ DspParamName_30_LOW_EMPHASIS_FC, NakaData_WidgetDescriptors + 0x01862	; slot 30 "LOW  EMPHASIS FC"
-	.equ DspParamName_31_LOW_EMPHASIS_G, NakaData_WidgetDescriptors + 0x01873	; slot 31 "LOW  EMPHASIS  G"
-	.equ DspParamName_32_HIGH_EMPHASIS_FC, NakaData_WidgetDescriptors + 0x01884	; slot 32 "HIGH EMPHASIS FC" [Hz]
-	.equ DspParamName_33_HIGH_EMPHASIS_G, NakaData_WidgetDescriptors + 0x01895	; slot 33 "HIGH EMPHASIS  G"
-	.equ DspParamName_34_REVERB_TIME, NakaData_WidgetDescriptors + 0x018a6	; slot 34 "REVERB TIME" [s ]
-	.equ DspParamName_35_PRE_DELAY, NakaData_WidgetDescriptors + 0x018b7	; slot 35 "PRE DELAY" [ms]
-	.equ DspParamName_36_HIGH_DAMP_GAIN, NakaData_WidgetDescriptors + 0x018c8	; slot 36 "HIGH DAMP GAIN"
-	.equ DspParamName_37_ERLEVEL, NakaData_WidgetDescriptors + 0x018d9	; slot 37 "ER.LEVEL"
-	.equ DspParamName_38_PITCH_L, NakaData_WidgetDescriptors + 0x018ea	; slot 38 "PITCH L"
-	.equ DspParamName_39_PITCH_R, NakaData_WidgetDescriptors + 0x018fb	; slot 39 "PITCH R"
-	.equ DspParamName_40_THRESHOLD, NakaData_WidgetDescriptors + 0x0190c	; slot 40 "THRESHOLD"
-	.equ DspParamName_41_RATIO, NakaData_WidgetDescriptors + 0x0191d	; slot 41 "RATIO"
-	.equ DspParamName_42_ATTACK_SENS, NakaData_WidgetDescriptors + 0x0192e	; slot 42 "ATTACK SENS." [s ]
-	.equ DspParamName_43_RELEASE_SENS, NakaData_WidgetDescriptors + 0x0193f	; slot 43 "RELEASE SENS." [s ]
-	.equ DspParamName_44_ATTACK_RATE, NakaData_WidgetDescriptors + 0x01950	; slot 44 "ATTACK RATE" [s ]
-	.equ DspParamName_45_RELEASE_RATE, NakaData_WidgetDescriptors + 0x01961	; slot 45 "RELEASE RATE" [s ]
-	.equ DspParamName_46_GATE_TIME, NakaData_WidgetDescriptors + 0x01972	; slot 46 "GATE TIME" [ms]
-	.equ DspParamName_47_MASK_TIME, NakaData_WidgetDescriptors + 0x01983	; slot 47 "MASK TIME" [ms]
-	.equ DspParamName_48_HARS_TIME, NakaData_WidgetDescriptors + 0x01994	; slot 48 "HARS TIME"
-	.equ DspParamName_49_LFO_WAVEFORM, NakaData_WidgetDescriptors + 0x019a5	; slot 49 "LFO WAVEFORM"
-	.equ DspParamName_50_OSC_WAVEFORM, NakaData_WidgetDescriptors + 0x019b6	; slot 50 "OSC WAVEFORM"
-	.equ DspParamName_51_BAND_EMPHASIS_FC, NakaData_WidgetDescriptors + 0x019c7	; slot 51 "BAND EMPHASIS FC" [Hz]
-	.equ DspParamName_52_BAND_EMPHASIS_Q, NakaData_WidgetDescriptors + 0x019d8	; slot 52 "BAND EMPHASIS  Q"
-	.equ DspParamName_53_BAND_EMPHASIS_G, NakaData_WidgetDescriptors + 0x019e9	; slot 53 "BAND EMPHASIS  G"
-	.equ DspParamName_54_LOW_MIX, NakaData_WidgetDescriptors + 0x019fa	; slot 54 "LOW MIX"
-	.equ DspParamName_55_HIGH_MIX, NakaData_WidgetDescriptors + 0x01a0b	; slot 55 "HIGH MIX"
-	.equ DspParamName_56_PHASE, NakaData_WidgetDescriptors + 0x01a1c	; slot 56 "PHASE"
-	.equ DspParamName_57_FEEDBACK, NakaData_WidgetDescriptors + 0x01a2d	; slot 57 "FEEDBACK"
-	.equ DspParamName_58_SWEEP_RANGE, NakaData_WidgetDescriptors + 0x01a3e	; slot 58 "SWEEP RANGE"
-	.equ DspParamName_59_WAH_CENTER_FC, NakaData_WidgetDescriptors + 0x01a4f	; slot 59 "WAH CENTER FC"
-	.equ DspParamName_60_HARS_TIME_L, NakaData_WidgetDescriptors + 0x01a60	; slot 60 "HARS TIME L" [ms]
-	.equ DspParamName_61_HARS_TIME_R, NakaData_WidgetDescriptors + 0x01a71	; slot 61 "HARS TIME R" [ms]
-	.equ DspParamName_62_BALANCE_L, NakaData_WidgetDescriptors + 0x01a82	; slot 62 "BALANCE L"
-	.equ DspParamName_63_BALANCE_R, NakaData_WidgetDescriptors + 0x01a93	; slot 63 "BALANCE R"
-	.equ DspParamName_64_FAST_LFO_SPEED_L, NakaData_WidgetDescriptors + 0x01aa4	; slot 64 "FAST LFO SPEED L" [Hz]
-	.equ DspParamName_65_FAST_LFO_SPEED_R, NakaData_WidgetDescriptors + 0x01ab5	; slot 65 "FAST LFO SPEED R" [Hz]
-	.equ DspParamName_66_MODULATION_DEPTH, NakaData_WidgetDescriptors + 0x01ac6	; slot 66 "MODULATION DEPTH"
-	.equ DspParamName_67_DELAY1_DRY_WET, NakaData_WidgetDescriptors + 0x01ad7	; slot 67 "DELAY1 DRY/WET"
-	.equ DspParamName_68_DELAY2_DRY_WET, NakaData_WidgetDescriptors + 0x01ae8	; slot 68 "DELAY2 DRY/WET"
-	.equ DspParamName_69_VIBRATO_DRY_WET, NakaData_WidgetDescriptors + 0x01af9	; slot 69 "VIBRATO DRY/WET"
-	.equ DspParamName_70_WAH_DRY_WET, NakaData_WidgetDescriptors + 0x01b0a	; slot 70 "WAH DRY/WET"
-	.equ DspParamName_71_FAST_LFO_SPEED, NakaData_WidgetDescriptors + 0x01b1b	; slot 71 "FAST LFO SPEED" [Hz]
-	.equ DspParamName_72_TREBLE_DEPTH, NakaData_WidgetDescriptors + 0x01b2c	; slot 72 "TREBLE DEPTH"
-	.equ DspParamName_73_FAST, NakaData_WidgetDescriptors + 0x01b3d	; slot 73 "FAST" [Hz]
-	.equ DspParamName_74_BASS_DEPTH, NakaData_WidgetDescriptors + 0x01b4e	; slot 74 "BASS DEPTH"
-	.equ DspParamName_75_DELAY_1, NakaData_WidgetDescriptors + 0x01b5f	; slot 75 "DELAY 1" [ms]
-	.equ DspParamName_76_DELAY_2, NakaData_WidgetDescriptors + 0x01b70	; slot 76 "DELAY 2" [ms]
-	.equ DspParamName_77_DELAY_3, NakaData_WidgetDescriptors + 0x01b81	; slot 77 "DELAY 3" [ms]
-	.equ DspParamName_78_DELAY_4, NakaData_WidgetDescriptors + 0x01b92	; slot 78 "DELAY 4" [ms]
-	.equ DspParamName_79_PAN_1, NakaData_WidgetDescriptors + 0x01ba3	; slot 79 "PAN   1"
-	.equ DspParamName_80_PAN_2, NakaData_WidgetDescriptors + 0x01bb4	; slot 80 "PAN   2"
-	.equ DspParamName_81_PAN_3, NakaData_WidgetDescriptors + 0x01bc5	; slot 81 "PAN   3"
-	.equ DspParamName_82_PAN_4, NakaData_WidgetDescriptors + 0x01bd6	; slot 82 "PAN   4"
-	.equ DspParamName_83_INTENSITY, NakaData_WidgetDescriptors + 0x01be7	; slot 83 "INTENSITY"
-	.equ DspParamName_84_EXCITE, NakaData_WidgetDescriptors + 0x01bf8	; slot 84 "EXCITE"
-	.equ DspParamName_85_Blank, NakaData_WidgetDescriptors + 0x01c09	; slot 85 "(spare)"

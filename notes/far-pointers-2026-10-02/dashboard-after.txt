@@ -1,0 +1,15 @@
+semantic debt at the commit that adds this file (tree 4cc19a4afc9d43bd07f8d034e4902075f6f651c6) (lower is better; see the docstring for each column)
+tree           files    numbr  numaddr   numevt   numfar posalias  addrlbl  bytecmt    field     todo
+v10              263      585      108        2      390     2335        0       90    31735        8
+v9               249      611      117        2      390     2335        0       90    30782        8
+v7               249     2101      346       57      365     2427        0      109    30782        5
+v142               5        0        0        1        0        0        0       10        0       11
+subboot            1        0        0        1        0        0        0        0        0        0
+tabledata         26        0       25        1        0        0        0        0        0       21
+customdata         1        0        0        0        0        0        0        0        0        0
+hdae5000           8        1      116        0       45        0        0        0        0        2
+prom_a             1      197       17        0       35        0     3795        0        0      671
+prom_b             1      206       20        0        0        0     2476        0        0     2368
+prom_c            27        6        8        0        2        0      173        0        0      761
+prom_d             4        0        0        0        0        0        0        0        0        2
+TOTAL            835     3707      757       64     1227     7097     6444      299    93299     3857

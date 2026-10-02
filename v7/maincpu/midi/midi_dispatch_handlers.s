@@ -6531,8 +6531,8 @@ DataBuf_Data_FormatDispatch:
 	call	16713148
 	lda	xwa, (0xf9a0:16)
 	pushw	1568
-	pushw	237
-	pushw	0xb3fc
+	pushw	SndParamRam_DefaultImage@hi16
+	pushw	SndParamRam_DefaultImage@lo16
 	push	xwa
 	call	16713148
 	lda	xsp, (xsp+30)
@@ -6601,8 +6601,8 @@ DataBuf_InitSlotFromPreset:
 	lda xwa, (0xfda2:16)
 	sub xwa, 0xf9a0
 	pushw wa
-	pushw 0xed
-	pushw 0xb3fc
+	pushw SndParamRam_DefaultImage@hi16
+	pushw SndParamRam_DefaultImage@lo16
 	push xbc
 	call	16713148
 	lda xsp, (xsp + 20)
@@ -6629,8 +6629,8 @@ DataBuf_InitSlotFromPreset_Alt:
 	lda xwa, (0xfda2:16)
 	sub xwa, 0xf9a0
 	pushw wa
-	pushw 0xed
-	pushw 0xb3fc
+	pushw SndParamRam_DefaultImage@hi16
+	pushw SndParamRam_DefaultImage@lo16
 	push xbc
 	call	16713148
 	lda xsp, (xsp + 20)
@@ -6833,8 +6833,8 @@ SndParam_AllocAndCopyPreset:
 	cp (xsp + 4), 0x3
 	jrl	nc, SoundData_FreeSoundPtr
 	pushw 0xea
-	pushw 0xee
-	pushw 0x15fe
+	pushw NakaInst_SoundConfig_LookupTable_0x8A@hi16
+	pushw NakaInst_SoundConfig_LookupTable_0x8A@lo16
 	push xiz
 	call	16713148
 	lda xsp, (xsp + 10)
@@ -11430,7 +11430,7 @@ MidiSysEx_ProcessBlock_Helper11_Join4:
 	push	xhl
 	push	xix
 	push	xiz
-	ld	xhl, (WidgetData_CharsetMappingTable_0x8:24)
+	ld	xhl, (MidiSysEx_ProcessBlock_PtrTable:24)
 	call	(xhl)
 	pop	xiz
 	pop	xix

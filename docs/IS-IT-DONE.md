@@ -669,7 +669,8 @@ Written here because they cost more than any single format did, and they will ca
    destroyed `.ascii` payloads and produced a confident, committed, false conclusion that a working
    build could not work.
 3. **Curated symbol names are not evidence.** `AccPlay_FindSlotByChannel` searches by NOTE.
-   `Display_FontPalette_Table_0x12EA` is a mod-12 lookup. `CharMap_ValueData_B` is a parameter
+   `Display_FontPalette_Table_0x12EA` (an alias of `AccPatch_Transpose_LookupTable_Data`,
+   retired 2026-10-02) is a mod-12 lookup. `CharMap_ValueData_B` is a parameter
    table. Cite instructions and addresses.
 4. **A tool that shares a scratch file is not safe to parallelise.** Both converters wrote the
    bytes-to-decode to a FIXED path under the temp dir, then read the disassembly back. Run two at

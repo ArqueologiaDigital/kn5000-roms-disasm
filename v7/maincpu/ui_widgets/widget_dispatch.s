@@ -4199,17 +4199,17 @@ ToneKit_ParamBlock_115:
 ; The C slice named ToneKit_ParamBlock_116 is 0x80 bytes: its +0x18..+0x7B
 ; are the DSP parameter-count bytes (DSPCfg_GetSlotCount, 0xEE5FE0) and
 ; +0x7C..+0x7F is entry 0 of the range table (0xEE6044).
-ToneKit_ParamBlock_116:
-	.incbin "includes/generated/tonekit_param_blocks.bin", 0x1002, 0x80
+ToneKit_ParamBlock_116:			.incbin "includes/generated/tonekit_param_blocks.bin", 0x1002, 0x7C
+DSPCfg_LookupAndExtract_PtrTable:	.incbin "includes/generated/tonekit_param_blocks.bin", 0x107E, 0x4	; 200 x 32-bit pointer
 ; =============================================================================
 ; DSP EFFECT TABLES, indexed by DSP effect number 0..99 (names from
 ; DspEffectName_PtrTable 0xE32A7A), and seven small DSPCfg arrays
 ; =============================================================================
-; Parameter-range pointer table, base 0xEE6044 (= ToneKit_ParamBlock_116_0x7C:
+; Parameter-range pointer table, base 0xEE6044 (= DSPCfg_LookupAndExtract_PtrTable:
 ; entry 0 is the last 4 bytes of the ToneKit C blob, so the label below is
 ; ENTRY 1).  Entry n -> the effect's {min,max,param_id} u16 x3 records, one per
 ; parameter; DSPCfg_LookupAndExtract (0xFDBC4C) indexes it `sll xbc,2` from
-; ToneKit_ParamBlock_116_0x7C and steps records with `mul wa,6`.  The
+; DSPCfg_LookupAndExtract_PtrTable and steps records with `mul wa,6`.  The
 ; parameter count is the byte table at 0xEE5FE0 (DSPCfg_GetSlotCount).
 ; ToneKit_VoiceDispatch_Table keeps its name: shared/positional_labels.s
 ; derives the DSPCfg arrays below from it (+0x18C .. +0x348).

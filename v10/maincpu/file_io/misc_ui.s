@@ -29,7 +29,7 @@ JumpInsertFunc:
 JumpInsert_DispatchBody:
 	ld	xwa, (xde+14)
 	sll	xwa, 2
-	ld	xbc, DiskWarning_ConfirmStrings_0x9DE
+	ld	xbc, JumpInsert_DispatchBody_PtrTable
 	add	xbc, xwa
 	ld	xwa, (xbc)
 	push	xwa
@@ -67,7 +67,7 @@ FilePriorityFunc:
 	ld wa, (xde + 8)
 	and wa, 0x1
 	sla wa, 2
-	lda xbc, (DiskWarning_ConfirmStrings_0xA4C:24)
+	lda xbc, (FilePriorityFunc_PtrTable:24)
 	ld_sril3 XWA, 0x07, 0xe4, 0xe0
 	push xwa
 	ld xwa, (xde + 10)
@@ -472,7 +472,7 @@ WaitingFunc_DrawMessage:
 	ld a, (0x0340e4:24)
 	extz wa
 	sla wa, 2
-	lda xbc, (DiskWarning_ConfirmStrings_0xA6C:24)
+	lda xbc, (WaitingFunc_DrawMessage_PtrTable:24)
 	ld_sril3 XIZ, 0x07, 0xe4, 0xe0
 	push xiz
 	call Strlen

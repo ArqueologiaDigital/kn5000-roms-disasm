@@ -238,7 +238,7 @@ WndScroll_ItemCountCheck:
 	add bc, wa
 	extz xbc
 	add xbc, xbc
-	ld xde, Data_SoundEditorCharsLayout_0xC
+	ld xde, WndScroll_ItemCountCheck_Str_Chr25
 	add xde, xbc
 	cp iz, (xde)
 	jr ule, WndScroll_DrawSingleItem
@@ -415,7 +415,7 @@ WndEvt_EventCodeDispatch_Skip2:
 	add	wa, (0x0274da:24)
 	extz	xwa
 	add	xwa, xwa
-	lda	xde, (Data_SoundEditorCharsLayout_0xC:24)
+	lda	xde, (WndScroll_ItemCountCheck_Str_Chr25:24)
 	ld	xbc, xde
 	add	xbc, xwa
 	ld	wa, (0x0274de:24)
@@ -509,7 +509,7 @@ WndEvt_DispatchByEventCode_Case4:
 	add	wa, bc
 	extz	xwa
 	add	xwa, xwa
-	ld	xbc, Data_SoundEditorCharsLayout_0xC
+	ld	xbc, WndScroll_ItemCountCheck_Str_Chr25
 	add	xbc, xwa
 	ld	wa, (0x0274de:24)
 	ld	de, wa
@@ -847,7 +847,7 @@ WndScroll_SendSelectionEvents:
 	ld wa, (0x0274da:24)
 	extz xwa
 	sll xwa, 2
-	ld xbc, DiskWarning_ConfirmStrings_0xF46
+	ld xbc, WndScroll_SendSelectionEvents_PtrTable
 	add xbc, xwa
 	ld xde, (xbc)
 	ld xwa, 0x1d
@@ -934,7 +934,7 @@ WndScroll_SetUnderscoreOffset:
 	jr WndScroll_SendPageEvents
 
 WndScroll_SearchCharTable:
-	lda xwa, (DiskWarning_ConfirmStrings_0x1154:24)
+	lda xwa, (WndScroll_SearchCharTable_PtrTable:24)
 	ld (xsp + 8), xwa
 	ld iz, 0:i3
 	jr WndScroll_CheckTableEnd
@@ -966,7 +966,7 @@ WndScroll_CheckTableEnd:
 	inc 2, wa
 	extz xwa
 	add xwa, xwa
-	ld xbc, Data_SoundEditorCharsLayout_0xC
+	ld xbc, WndScroll_ItemCountCheck_Str_Chr25
 	add xbc, xwa
 	cp iz, (xbc)
 	jr ule, WndScroll_CompareCharLoop
@@ -1018,7 +1018,7 @@ WndScroll_HandleDialPage:
 	ld bc, wa
 	extz xbc
 	add xbc, xbc
-	ld xwa, Data_SoundEditorCharsLayout_0xC
+	ld xwa, WndScroll_ItemCountCheck_Str_Chr25
 	add xwa, xbc
 	ld wa, (xwa)
 	cp (0x0274de:24), wa
@@ -1244,8 +1244,8 @@ TitleEdit_HandlePaint:
 	call GetTitleNow
 	ldiw_erp 0xee, 0
 	pushw hl
-	pushw 0xea
-	pushw 0x9f14
+	pushw TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts@hi16
+	pushw TitleEdit_HandlePaint_Str_N0x_Fmt2X_Fmts@lo16
 	lda xwa, (xsp + 14)
 	push xwa
 	call Sprintf_Locked
@@ -1952,13 +1952,13 @@ EditSw_ByteData:
 	jr	z, DrawDesignFrame_Skip2
 	cpw	(xwa), 0
 	jr	nz, DrawDesignFrame_Skip
-	ld	xwa, Data_SoundEditorCharsLayout_0x294
+	ld	xwa, EditSw_ByteData_Str_N7f
 	jr	DrawDesignFrame_Join
 DrawDesignFrame_Skip:
-	ld	xwa, Data_SoundEditorCharsLayout_0x298
+	ld	xwa, EditSw_ByteData_Str_N80
 	jr	DrawDesignFrame_Join
 DrawDesignFrame_Skip2:
-	ld	xwa, Data_SoundEditorCharsLayout_0x29C
+	ld	xwa, EditSw_ByteData_Str_N81
 DrawDesignFrame_Join:
 	push	xwa
 	push	xbc
@@ -2072,15 +2072,15 @@ DrawEditSw:
 	jr z, DrawEditSw_SelectVariantC
 	cpw (xwa), 0x0
 	jr nz, DrawEditSw_SelectVariantA
-	ld xwa, Data_SoundEditorCharsLayout_0x2A0
+	ld xwa, DrawEditSw_Str_N7f
 	jr DrawEditSw_CopyVariant
 
 DrawEditSw_SelectVariantA:
-	ld xwa, Data_SoundEditorCharsLayout_0x2A4
+	ld xwa, DrawEditSw_SelectVariantA_Str_N80
 	jr DrawEditSw_CopyVariant
 
 DrawEditSw_SelectVariantC:
-	ld xwa, Data_SoundEditorCharsLayout_0x2A8
+	ld xwa, DrawEditSw_SelectVariantC_Str_N81
 
 DrawEditSw_CopyVariant:
 	push xwa
@@ -2898,8 +2898,8 @@ AcTempoBox_MatchTempoID:
 	ld xwa, 4:i3
 	call SndParam_LookupReadOnly
 	pushw hl
-	pushw 0xea
-	pushw 0xa180
+	pushw AcTempoBox_MatchTempoID_Str_aa_Fmt3d@hi16
+	pushw AcTempoBox_MatchTempoID_Str_aa_Fmt3d@lo16
 	lda xwa, (xsp + 10)
 	push xwa
 	call Sprintf_Locked
@@ -2907,8 +2907,8 @@ AcTempoBox_MatchTempoID:
 	jr AcTempoBox_SendConfirmEvent
 
 AcTempoBox_CopyTempoString:
-	pushw 0xea
-	pushw 0xa188
+	pushw AcTempoBox_CopyTempoString_Str_aa@hi16
+	pushw AcTempoBox_CopyTempoString_Str_aa@lo16
 	lda xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -3713,8 +3713,8 @@ PsListBox_SendEvent:
 	jr PsListBox_ReturnZero
 
 PsListBox_GetText:
-	pushw 0xea
-	pushw 0xa190
+	pushw PsListBox_GetText_Str_No_My_Car_Day_Memory_AyaSam@hi16
+	pushw PsListBox_GetText_Str_No_My_Car_Day_Memory_AyaSam@lo16
 	ld XWA, (xsp + 0x012a)
 	push xwa
 	call Strcpy
@@ -6925,8 +6925,8 @@ CaptureLcd:
 	lda xsp, (xsp-1094)
 	pushw iz
 	lda xwa, (xsp+1082)
-	pushw 0xea
-	pushw 0xae4c
+	pushw CaptureLcd_Str_BM@hi16
+	pushw CaptureLcd_Str_BM@lo16
 	push xwa
 	call Strcpy
 	lda xbc, (xsp+1090)
@@ -6957,8 +6957,8 @@ CaptureLcd:
 	ld (xbc + 36), xwa
 	ld xwa, (0x03044a:24)
 	push xwa
-	pushw 0xea
-	pushw 0xae50
+	pushw CaptureLcd_Str_HKLCD_Fmt3d_BMP@hi16
+	pushw CaptureLcd_Str_HKLCD_Fmt3d_BMP@lo16
 	lda xwa, (xsp + 18)
 	push xwa
 	call Sprintf_Locked
@@ -6968,7 +6968,7 @@ CaptureLcd:
 	call GetDiskSizeInfo
 	call GetEncodedFileSizeData
 	lda xwa, (xsp + 2)
-	ld xbc, Str_No_0xB48
+	ld xbc, CaptureLcd_Str_wb
 	call FileIO_OpenWithMode
 	cp hl, 0:i3
 	jrl nz, CaptureLcd_WriteFailed

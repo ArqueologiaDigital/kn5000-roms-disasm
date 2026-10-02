@@ -524,7 +524,7 @@ AcFileSfx_HandleSfxEvent:
 	ldw (xsp + 4), 0x1
 
 AcFileSfx_DrawLoop:
-	lda xhl, (DiskWarning_ConfirmStrings_0xB46:24)
+	lda xhl, (AcFileSfx_DrawLoop_PtrTable:24)
 	ld xwa, (xsp + 8)
 	lda xix, (xwa + 22)
 	lda xwa, (xsp + 16)
@@ -752,8 +752,8 @@ IvTimer_HandleDestroy:
 	jr IvTimer_ReturnZero
 
 IvTimer_HandleEvent3A:
-	pushw 0xea
-	pushw 0x9894
+	pushw IvTimer_HandleEvent3A_Str_N1shot@hi16
+	pushw IvTimer_HandleEvent3A_Str_N1shot@lo16
 	ld xwa, (xsp + 12)
 	push xwa
 	call Strcpy
@@ -1366,8 +1366,8 @@ Slider_Case1E00067:
 	jrl Slider_UpdateDone
 
 Slider_Case1E0006A:
-	pushw 0xea
-	pushw 0x989a
+	pushw IvIndexSwCtrlProc_Str_ISC@hi16
+	pushw IvIndexSwCtrlProc_Str_ISC@lo16
 	ld xwa, (xsp + 12)
 	push xwa
 	call Strcpy
@@ -1737,8 +1737,8 @@ Bounds_Case1E0006B:
 	jr Bounds_Done
 
 Bounds_Case1E0006A:
-	pushw 0xea
-	pushw 0x989e
+	pushw IvIndexSwDelayProc_Str_ISD@hi16
+	pushw IvIndexSwDelayProc_Str_ISD@lo16
 	ld xwa, (xsp + 8)
 	push xwa
 	call Strcpy
@@ -1822,8 +1822,8 @@ Edit_Case1E00067:
 	jr Edit_Update
 
 Edit_Case1E00069:
-	pushw 0xea
-	pushw 0x98a2
+	pushw IvWaitWinCtlProc_Str_WWC@hi16
+	pushw IvWaitWinCtlProc_Str_WWC@lo16
 	push xde
 	call Strcpy
 	inc 8, xsp

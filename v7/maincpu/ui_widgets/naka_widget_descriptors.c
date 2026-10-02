@@ -432,82 +432,82 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * [typed] by span_d_ui
      * EffectBox_HandleInitEvent_Table -- read by EffectBox_HandleInitEvent
-     * (v10/v9 0xF3354A, v7 0xF33520) (`ld xbc, NakaInst_NO_OPERATION_0x12`).
+     * (v10/v9 0xF3354A, v7 0xF33520) (`ld xbc, EffectBox_HandleInitEvent_Table`).
      * 8 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
     uint8_t EffectBox_HandleInitEvent_Table[8];
     /* ---------------------------------------------------------------------
      * EffectBox_PostFillSetup_Table -- read by EffectBox_PostFillSetup
-     * (v10/v9 0xF33752, v7 0xF33728) (`ld xhl, NakaInst_NO_OPERATION_0x1A`),
+     * (v10/v9 0xF33752, v7 0xF33728) (`ld xhl, EffectBox_PostFillSetup_Table`),
      * EffectBox_PostFill3Setup (v10/v9 0xF337F8, v7 0xF337CE) (`ld xhl,
-     * NakaInst_NO_OPERATION_0x1A`), EffectBox_HandleSelectEvent (v10/v9
-     * 0xF339BF, v7 0xF33995) (`ld xwa, NakaInst_NO_OPERATION_0x1A`). 8 bytes
+     * EffectBox_PostFillSetup_Table`), EffectBox_HandleSelectEvent (v10/v9
+     * 0xF339BF, v7 0xF33995) (`ld xwa, EffectBox_PostFillSetup_Table`). 8 bytes
      * to the next object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t EffectBox_PostFillSetup_Table[8];
     /* ---------------------------------------------------------------------
      * SqplyVal_HandleScrollEvent_Table -- read by SqplyVal_HandleScrollEvent
-     * (v10/v9 0xF30B75, v7 0xF30B4B) (`ld xde, NakaInst_NO_OPERATION_0x22`).
+     * (v10/v9 0xF30B75, v7 0xF30B4B) (`ld xde, SqplyVal_HandleScrollEvent_Table`).
      * 96 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
     uint8_t SqplyVal_HandleScrollEvent_Table[96];
     /* ---------------------------------------------------------------------
      * SqedtVal_HandleScrollEvent_Table -- read by SqedtVal_HandleScrollEvent
-     * (v10/v9 0xF31125, v7 0xF310FB) (`ld xde, NakaInst_NO_OPERATION_0x82`),
+     * (v10/v9 0xF31125, v7 0xF310FB) (`ld xde, SqedtVal_HandleScrollEvent_Table`),
      * SqedtVal3_HandleScrollEvent (v10/v9 0xF31F13, v7 0xF31EE9) (`lda xde,
-     * (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop1 (v10/v9
-     * 0xF31FB4, v7 0xF31F8A) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+     * (SqedtVal_HandleScrollEvent_Table:24)`), SqedtVal3_FillBufferLoop1 (v10/v9
+     * 0xF31FB4, v7 0xF31F8A) (`lda xde, (SqedtVal_HandleScrollEvent_Table:24)`),
      * SqedtVal3_FillBufferLoop2 (v10/v9 0xF3205D, v7 0xF32033) (`lda xde,
-     * (NakaInst_NO_OPERATION_0x82:24)`), SqedtVal3_FillBufferLoop3 (v10/v9
-     * 0xF32106, v7 0xF320DC) (`lda xde, (NakaInst_NO_OPERATION_0x82:24)`),
+     * (SqedtVal_HandleScrollEvent_Table:24)`), SqedtVal3_FillBufferLoop3 (v10/v9
+     * 0xF32106, v7 0xF320DC) (`lda xde, (SqedtVal_HandleScrollEvent_Table:24)`),
      * SqedtVal2_HandleScrollEvent (v10/v9 0xF32380, v7 0xF32356) (`ld xde,
-     * NakaInst_NO_OPERATION_0x82`). 280 bytes to the next object; the layout
+     * SqedtVal_HandleScrollEvent_Table`). 280 bytes to the next object; the layout
      * beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SqedtVal_HandleScrollEvent_Table[280];
     /* ---------------------------------------------------------------------
      * BmDrEdit_RenderHorizontal_Table -- read by BmDrEdit_RenderHorizontal
      * (v10/v9 0xF361C1, v7 0xF36197) (`lda xbc,
-     * (NakaInst_NO_OPERATION_0x19A:24)`), BmDrEdit_RenderSecondaryHoriz
+     * (BmDrEdit_RenderHorizontal_Table:24)`), BmDrEdit_RenderSecondaryHoriz
      * (v10/v9 0xF36282, v7 0xF36258) (`lda xbc,
-     * (NakaInst_NO_OPERATION_0x19A:24)`). 58 bytes to the next object; the
+     * (BmDrEdit_RenderHorizontal_Table:24)`). 58 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t BmDrEdit_RenderHorizontal_Table[58];
     /* ---------------------------------------------------------------------
      * BmDrEdit_RenderVertical_Table -- read by BmDrEdit_RenderVertical
      * (v10/v9 0xF361FE, v7 0xF361D4) (`lda xbc,
-     * (NakaInst_NO_OPERATION_0x1D4:24)`), BmDrEdit_RenderSecondaryVert
+     * (BmDrEdit_RenderVertical_Table:24)`), BmDrEdit_RenderSecondaryVert
      * (v10/v9 0xF362C1, v7 0xF36297) (`lda xbc,
-     * (NakaInst_NO_OPERATION_0x1D4:24)`). 28 bytes to the next object; the
+     * (BmDrEdit_RenderVertical_Table:24)`). 28 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t BmDrEdit_RenderVertical_Table[28];
     /* ---------------------------------------------------------------------
      * NoteEditBox_HandleFocusLost_Table -- read by
      * NoteEditBox_HandleFocusLost (v10/v9 0xF2F0F9, v7 0xF2F0CF) (`ld xwa,
-     * NakaInst_NO_OPERATION_0x1F0`). 12 bytes to the next object; the layout
+     * NoteEditBox_HandleFocusLost_Table`). 12 bytes to the next object; the layout
      * beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t NoteEditBox_HandleFocusLost_Table[12];
     /* ---------------------------------------------------------------------
      * NoteEditBox_HandleFocusLost_Table_2 -- read by
      * NoteEditBox_HandleFocusLost (v10/v9 0xF2F0F9, v7 0xF2F0CF) (`ld xwa,
-     * NakaInst_NO_OPERATION_0x1FC`). 12 bytes to the next object; the layout
+     * NoteEditBox_HandleFocusLost_Table_2`). 12 bytes to the next object; the layout
      * beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t NoteEditBox_HandleFocusLost_Table_2[12];
     /* ---------------------------------------------------------------------
      * NoteEditBox_EventDispatch2_Table -- read by NoteEditBox_EventDispatch2
      * (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xde,
-     * (NakaInst_NO_OPERATION_0x208:24)`), NoteEditBox_EventDispatch2 (v10/v9
-     * 0xF2F2A0, v7 0xF2F276) (`lda xbc, (NakaInst_NO_OPERATION_0x208:24)`),
+     * (NoteEditBox_EventDispatch2_Table:24)`), NoteEditBox_EventDispatch2 (v10/v9
+     * 0xF2F2A0, v7 0xF2F276) (`lda xbc, (NoteEditBox_EventDispatch2_Table:24)`),
      * NoteEditBox_EventDispatch2 (v10/v9 0xF2F2A0, v7 0xF2F276) (`lda xix,
-     * (NakaInst_NO_OPERATION_0x208:24)`), NoteEditGrid_LoadCoordinates
+     * (NoteEditBox_EventDispatch2_Table:24)`), NoteEditGrid_LoadCoordinates
      * (v10/v9 0xF2F97F, v7 0xF2F955) (`lda xde,
-     * (NakaInst_NO_OPERATION_0x208:24)`). 72 bytes to the next object; the
+     * (NoteEditBox_EventDispatch2_Table:24)`). 72 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t NoteEditBox_EventDispatch2_Table[72];
@@ -527,7 +527,7 @@ typedef struct __attribute__((packed)) {
     uint8_t NoteEditBox_EventDispatch2_Table_3[18];
     /* ---------------------------------------------------------------------
      * NoteEditFunc_Table -- read by NoteEditFunc (v10/v9 0xF2FA5A, v7
-     * 0xF2FA30) (`lda xhl, (NakaInst_NO_OPERATION_0x27A:24)`). 66 bytes to
+     * 0xF2FA30) (`lda xhl, (NoteEditFunc_Table:24)`). 66 bytes to
      * the next object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t NoteEditFunc_Table[66];
@@ -594,9 +594,7 @@ typedef struct __attribute__((packed)) {
     char StsAtPunchCheck_Strings[102];
     /* ---------------------------------------------------------------------
      * NakaDesc_Str0330A -- 6 bytes of NUL-terminated strings after the
-     * string block before it; no registration or code reference reaches them
-     * (searched: RegObjTabl tables, slice and positional labels). Which code
-     * uses them is not established.
+     * string block before it; that code DOES reach (readers: the .s header)
      * --------------------------------------------------------------------- */
     char NakaDesc_Str0330A[6];
     /* ---------------------------------------------------------------------
@@ -613,94 +611,92 @@ typedef struct __attribute__((packed)) {
     uint32_t HelpTtlFunc_LookupSlide_PtrTable[50];
     /* ---------------------------------------------------------------------
      * HelpTtlFunc_LookupSlide_PtrTable_Strings -- 30 bytes of NUL-terminated
-     * strings after HelpTtlFunc_LookupSlide_PtrTable; no registration or
-     * code reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after HelpTtlFunc_LookupSlide_PtrTable; that code DOES reach (readers: the .s
+     * header, which also labels each string)
      * --------------------------------------------------------------------- */
     char HelpTtlFunc_LookupSlide_PtrTable_Strings[30];
     /* ---------------------------------------------------------------------
      * AttAreYouSureCheck_PtrTable -- 6 u32 addresses, read by
      * AttAreYouSureCheck (v10/v9 0xF2EF1D, v7 0xF2EEF3) (`lda xhl,
-     * (NakaInst_anular_la_pista_se_borra_la_grabaci_n_de_las_0x4DA:24)`).
+     * (AttAreYouSureCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AttAreYouSureCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * AttAttentionCheck_PtrTable -- 6 u32 addresses, read by
      * AttAttentionCheck (v10/v9 0xF2EF2E, v7 0xF2EF04) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x14:24)`).
+     * (AttAttentionCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AttAttentionCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsSeqMenu1Check_PtrTable -- 6 u32 addresses, read by StsSeqMenu1Check
      * (v10/v9 0xF2EF3F, v7 0xF2EF15) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x2C:24)`).
+     * (StsSeqMenu1Check_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsSeqMenu1Check_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsSeqMenu2Check_PtrTable -- 6 u32 addresses, read by StsSeqMenu2Check
      * (v10/v9 0xF2EF50, v7 0xF2EF26) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x44:24)`).
+     * (StsSeqMenu2Check_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsSeqMenu2Check_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsEasyRec1Check_PtrTable -- 6 u32 addresses, read by StsEasyRec1Check
      * (v10/v9 0xF2EF61, v7 0xF2EF37) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x5C:24)`).
+     * (StsEasyRec1Check_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsEasyRec1Check_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsEasyRec2Check_PtrTable -- 6 u32 addresses, read by StsEasyRec2Check
      * (v10/v9 0xF2EF72, v7 0xF2EF48) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x74:24)`).
+     * (StsEasyRec2Check_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsEasyRec2Check_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsPnlWrtCheck_PtrTable -- 6 u32 addresses, read by StsPnlWrtCheck
      * (v10/v9 0xF2EF83, v7 0xF2EF59) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x8C:24)`).
+     * (StsPnlWrtCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsPnlWrtCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsTrkClr1Check_PtrTable -- 6 u32 addresses, read by StsTrkClr1Check
      * (v10/v9 0xF2EF94, v7 0xF2EF6A) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0xA4:24)`).
+     * (StsTrkClr1Check_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsTrkClr1Check_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsTrkClr2Check_PtrTable -- 6 u32 addresses, read by StsTrkClr2Check
      * (v10/v9 0xF2EFA5, v7 0xF2EF7B) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0xBC:24)`).
+     * (StsTrkClr2Check_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsTrkClr2Check_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsNtDrEditCheck_PtrTable -- 6 u32 addresses, read by StsNtDrEditCheck
      * (v10/v9 0xF2EFB6, v7 0xF2EF8C) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0xD4:24)`).
+     * (StsNtDrEditCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsNtDrEditCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * AttTrkClrCheck_PtrTable -- 6 u32 addresses, read by AttTrkClrCheck
      * (v10/v9 0xF2EFC7, v7 0xF2EF9D) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0xEC:24)`).
+     * (AttTrkClrCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AttTrkClrCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * AttSongClrCheck_PtrTable -- 6 u32 addresses, read by AttSongClrCheck
      * (v10/v9 0xF2EFD8, v7 0xF2EFAE) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x104:24)`).
+     * (AttSongClrCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t AttSongClrCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsAtPunchCheck_PtrTable -- 6 u32 addresses, read by StsAtPunchCheck
      * (v10/v9 0xF2EFE9, v7 0xF2EFBF) (`lda xhl,
-     * (ExtDevice_ModeDispatch_Table_0x11C:24)`).
+     * (StsAtPunchCheck_PtrTable:24)`).
      * --------------------------------------------------------------------- */
     uint32_t StsAtPunchCheck_PtrTable[6];
     /* ---------------------------------------------------------------------
      * StsAtPunchCheck_PtrTable_Strings -- 12 bytes of NUL-terminated strings
-     * after StsAtPunchCheck_PtrTable; no registration or code reference
-     * reaches them (searched: RegObjTabl tables, slice and positional
-     * labels). Which code uses them is not established.
+     * after StsAtPunchCheck_PtrTable; that code DOES reach (readers: the .s header, which also
+     * labels each string)
      * --------------------------------------------------------------------- */
     char StsAtPunchCheck_PtrTable_Strings[12];
     /* ---------------------------------------------------------------------
@@ -724,36 +720,35 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatEntry_Table -- read by NoteEdit_FormatEntry (v10/v9
      * 0xF2FA09, v7 0xF2F9DF) (`add xwa,
-     * ExtDevice_ModeDispatch_Table_0x154`). 12 bytes to the next object; the
+     * NoteEdit_FormatEntry_Table`). 12 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t NoteEdit_FormatEntry_Table[12];
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatEntry_CaseTable -- jump table of a compiled `switch` in
      * NoteEdit_FormatEntry (v10/v9 0xF2FA09, v7 0xF2F9DF) (`ld xix,
-     * ExtDevice_ModeDispatch_Table_0x160`): 2 u16 case offsets from
+     * NoteEdit_FormatEntry_CaseTable`): 2 u16 case offsets from
      * NoteEditBox_GridDispatch.
      * --------------------------------------------------------------------- */
     uint16_t NoteEdit_FormatEntry_CaseTable[2];
     /* ---------------------------------------------------------------------
      * NoteEditBox_GridDispatch2_CaseTable -- jump table of a compiled
      * `switch` in NoteEditBox_GridDispatch2 (v10/v9 0xF2F251, v7 0xF2F227)
-     * (`add xwa, ExtDevice_ModeDispatch_Table_0x164`): 12 u16 case offsets
+     * (`add xwa, NoteEditBox_GridDispatch2_CaseTable`): 12 u16 case offsets
      * from NoteEditBox_EventDispatch2.
      * --------------------------------------------------------------------- */
     uint16_t NoteEditBox_GridDispatch2_CaseTable[12];
     /* ---------------------------------------------------------------------
      * NoteEditBox_SetupGrid_CaseTable -- jump table of a compiled `switch`
      * in NoteEditBox_SetupGrid (v10/v9 0xF2F1A2, v7 0xF2F178) (`add xhl,
-     * ExtDevice_ModeDispatch_Table_0x17C`): 10 u16 case offsets from
+     * NoteEditBox_SetupGrid_CaseTable`): 10 u16 case offsets from
      * NoteEditBox_EventDispatch1.
      * --------------------------------------------------------------------- */
     uint16_t NoteEditBox_SetupGrid_CaseTable[10];
     /* ---------------------------------------------------------------------
      * NoteEditBox_SetupGrid_CaseTable_Strings -- 12 bytes of NUL-terminated
-     * strings after NoteEditBox_SetupGrid_CaseTable; no registration or code
-     * reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after NoteEditBox_SetupGrid_CaseTable; that code DOES reach (readers: the .s header,
+     * which also labels each string)
      * --------------------------------------------------------------------- */
     char NoteEditBox_SetupGrid_CaseTable_Strings[12];
     /* ---------------------------------------------------------------------
@@ -771,133 +766,131 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatNoteOther_Str -- NUL-terminated string(s), 4 bytes,
      * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x1A8`).
+     * xwa, NoteEdit_FormatNoteOther_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatNoteOther_Str[4];
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatNoteOther_Str_2 -- NUL-terminated string(s), 6 bytes,
      * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x1AC`).
+     * xwa, NoteEdit_FormatNoteOther_Str_2`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatNoteOther_Str_2[6];
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatNoteOther_Str_3 -- NUL-terminated string(s), 6 bytes,
      * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x1B2`).
+     * xwa, NoteEdit_FormatNoteOther_Str_3`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatNoteOther_Str_3[6];
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatNoteOther_Str_4 -- NUL-terminated string(s), 4 bytes,
      * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x1B8`).
+     * xwa, NoteEdit_FormatNoteOther_Str_4`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatNoteOther_Str_4[4];
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatNoteOther_Str_5 -- NUL-terminated string(s), 12 bytes,
      * used by NoteEdit_FormatNoteOther (v10/v9 0xF2FB54, v7 0xF2FB2A) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x1BC`).
+     * xwa, NoteEdit_FormatNoteOther_Str_5`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatNoteOther_Str_5[12];
     /* ---------------------------------------------------------------------
      * NoteEdit_GateTime0C_Str -- NUL-terminated string(s), 8 bytes, used by
      * NoteEdit_GateTime0C (v10/v9 0xF2FBD9, v7 0xF2FBAF) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x1C8`).
+     * NoteEdit_GateTime0C_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_GateTime0C_Str[8];
     /* ---------------------------------------------------------------------
      * NoteEdit_GateTime10_Str -- NUL-terminated string(s), 8 bytes, used by
      * NoteEdit_GateTime10 (v10/v9 0xF2FBE0, v7 0xF2FBB6) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x1D0`).
+     * NoteEdit_GateTime10_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_GateTime10_Str[8];
     /* ---------------------------------------------------------------------
      * NoteEdit_GateTime18_Str -- NUL-terminated string(s), 8 bytes, used by
      * NoteEdit_GateTime18 (v10/v9 0xF2FBEB, v7 0xF2FBC1) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x1D8`).
+     * NoteEdit_GateTime18_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_GateTime18_Str[8];
     /* ---------------------------------------------------------------------
      * NoteEdit_GateTime20_Str -- NUL-terminated string(s), 8 bytes, used by
      * NoteEdit_GateTime20 (v10/v9 0xF2FBF2, v7 0xF2FBC8) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x1E0`).
+     * NoteEdit_GateTime20_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_GateTime20_Str[8];
     /* ---------------------------------------------------------------------
      * NoteEdit_GateTime30_Str -- NUL-terminated string(s), 8 bytes, used by
      * NoteEdit_GateTime30 (v10/v9 0xF2FBF9, v7 0xF2FBCF) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x1E8`).
+     * NoteEdit_GateTime30_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_GateTime30_Str[8];
     /* ---------------------------------------------------------------------
      * NoteEdit_GateTime60_Str -- NUL-terminated string(s), 12 bytes, used by
      * NoteEdit_GateTime60 (v10/v9 0xF2FC00, v7 0xF2FBD6) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x1F0`).
+     * NoteEdit_GateTime60_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_GateTime60_Str[12];
     /* ---------------------------------------------------------------------
      * NoteEdit_FormatChordType_Str -- NUL-terminated string(s), 4 bytes,
      * used by NoteEdit_FormatChordType (v10/v9 0xF2FC1D, v7 0xF2FBF3) (`ld
-     * xwa, ExtDevice_ModeDispatch_Table_0x1FC`).
+     * xwa, NoteEdit_FormatChordType_Str`).
      * --------------------------------------------------------------------- */
     char NoteEdit_FormatChordType_Str[4];
     /* ---------------------------------------------------------------------
      * NoteEdit_GetParamValue_CaseTable -- jump table of a compiled `switch`
      * in NoteEdit_GetParamValue (v10/v9 0xF2FC64, v7 0xF2FC3A) (`add xde,
-     * ExtDevice_ModeDispatch_Table_0x200`): 14 u16 case offsets from
+     * NoteEdit_GetParamValue_CaseTable`): 14 u16 case offsets from
      * NoteEdit_GetParamValue_Cases.
      * --------------------------------------------------------------------- */
     uint16_t NoteEdit_GetParamValue_CaseTable[14];
     /* ---------------------------------------------------------------------
      * NoteEditFunc_CaseTable -- jump table of a compiled `switch` in
      * NoteEditFunc (v10/v9 0xF2FA5A, v7 0xF2FA30) (`add xwa,
-     * ExtDevice_ModeDispatch_Table_0x21C`): 16 u16 case offsets from
+     * NoteEditFunc_CaseTable`): 16 u16 case offsets from
      * NoteEdit_FormatTempo.
      * --------------------------------------------------------------------- */
     uint16_t NoteEditFunc_CaseTable[16];
     /* ---------------------------------------------------------------------
      * NoteEditFunc_CaseTable_Strings -- 10 bytes of NUL-terminated strings
-     * after NoteEditFunc_CaseTable; no registration or code reference
-     * reaches them (searched: RegObjTabl tables, slice and positional
-     * labels). Which code uses them is not established.
+     * after NoteEditFunc_CaseTable; that code DOES reach (readers: the .s header)
      * --------------------------------------------------------------------- */
     char NoteEditFunc_CaseTable_Strings[10];
     /* ---------------------------------------------------------------------
      * EntGrid_PostMainEvent_Table -- read by EntGrid_PostMainEvent (v10/v9
      * 0xF300EC, v7 0xF300C2) (`lda xbc,
-     * (ExtDevice_ModeDispatch_Table_0x246:24)`). 18 bytes to the next
+     * (EntGrid_PostMainEvent_Table:24)`). 18 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t EntGrid_PostMainEvent_Table[18];
     /* ---------------------------------------------------------------------
      * EntGrid_PostMainEvent_Table_2 -- read by EntGrid_PostMainEvent (v10/v9
      * 0xF300EC, v7 0xF300C2) (`lda xbc,
-     * (ExtDevice_ModeDispatch_Table_0x258:24)`). 18 bytes to the next
+     * (EntGrid_PostMainEvent_Table_2:24)`). 18 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t EntGrid_PostMainEvent_Table_2[18];
     /* ---------------------------------------------------------------------
      * AcEntertainerGridBoxProc_CaseTable -- jump table of a compiled
      * `switch` in AcEntertainerGridBoxProc (v10/v9 0xF30048, v7 0xF3001E)
-     * (`add xbc, ExtDevice_ModeDispatch_Table_0x26A`): 7 u16 case offsets
+     * (`add xbc, AcEntertainerGridBoxProc_CaseTable`): 7 u16 case offsets
      * from AcEntertainer_EventDispatch.
      * --------------------------------------------------------------------- */
     uint16_t AcEntertainerGridBoxProc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * SndParam_Dispatch_Table -- read by SndParam_Dispatch (v10/v9 0xF303D6,
-     * v7 0xF303AC) (`lda xbc, (ExtDevice_ModeDispatch_Table_0x278:24)`),
+     * v7 0xF303AC) (`lda xbc, (SndParam_Dispatch_Table:24)`),
      * SndParam_Dispatch (v10/v9 0xF303D6, v7 0xF303AC) (`lda xwa,
-     * (ExtDevice_ModeDispatch_Table_0x278:24)`), SndParam_Dispatch (v10/v9
+     * (SndParam_Dispatch_Table:24)`), SndParam_Dispatch (v10/v9
      * 0xF303D6, v7 0xF303AC) (`lda xix,
-     * (ExtDevice_ModeDispatch_Table_0x278:24)`), EntGridCheck_Handler
+     * (SndParam_Dispatch_Table:24)`), EntGridCheck_Handler
      * (v10/v9 0xF305C9, v7 0xF3059F) (`lda xbc,
-     * (ExtDevice_ModeDispatch_Table_0x278:24)`). 36 bytes to the next
+     * (SndParam_Dispatch_Table:24)`). 36 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SndParam_Dispatch_Table[36];
     /* ---------------------------------------------------------------------
      * EntertainerGridCheck_LocalInit -- initializer of a local array:
      * EntertainerGridCheck (v10/v9 0xF30326, v7 0xF302FC) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x29C`) copies 10 bytes into its stack
+     * EntertainerGridCheck_LocalInit`) copies 10 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t EntertainerGridCheck_LocalInit[5];
@@ -961,63 +954,62 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * EntertainerGridCheck_CaseTable -- jump table of a compiled `switch` in
      * EntertainerGridCheck (v10/v9 0xF30326, v7 0xF302FC) (`add xwa,
-     * ExtDevice_ModeDispatch_Table_0x31A`): 7 u16 case offsets from
+     * EntertainerGridCheck_CaseTable`): 7 u16 case offsets from
      * SndParam_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t EntertainerGridCheck_CaseTable[7];
     /* ---------------------------------------------------------------------
      * EntertainerGridCheck_CaseTable_Strings -- 12 bytes of NUL-terminated
-     * strings after EntertainerGridCheck_CaseTable; no registration or code
-     * reference reaches them (searched: RegObjTabl tables, slice and
-     * positional labels). Which code uses them is not established.
+     * strings after EntertainerGridCheck_CaseTable; that code DOES reach (readers: the .s header,
+     * which also labels each string)
      * --------------------------------------------------------------------- */
     char EntertainerGridCheck_CaseTable_Strings[12];
     /* ---------------------------------------------------------------------
      * SqplyVal_HandleExtraParams_CaseTable -- jump table of a compiled
      * `switch` in SqplyVal_HandleExtraParams (v10/v9 0xF30CBF, v7 0xF30C95)
-     * (`add xhl, ExtDevice_ModeDispatch_Table_0x334`): 8 u16 case offsets
+     * (`add xhl, SqplyVal_HandleExtraParams_CaseTable`): 8 u16 case offsets
      * from SqplyVal_ParamCases.
      * --------------------------------------------------------------------- */
     uint16_t SqplyVal_HandleExtraParams_CaseTable[8];
     /* ---------------------------------------------------------------------
      * SqedtVal_ClearDrawBuffer_CaseTable -- jump table of a compiled
      * `switch` in SqedtVal_ClearDrawBuffer (v10/v9 0xF311C6, v7 0xF3119C)
-     * (`add xwa, ExtDevice_ModeDispatch_Table_0x344`): 15 u16 case offsets
+     * (`add xwa, SqedtVal_ClearDrawBuffer_CaseTable`): 15 u16 case offsets
      * from SqedtVal_ParamCases.
      * --------------------------------------------------------------------- */
     uint16_t SqedtVal_ClearDrawBuffer_CaseTable[15];
     /* ---------------------------------------------------------------------
      * SqedtVal2_UpScrollDefault_Table -- read by SqedtVal2_UpScrollDefault
      * (v10/v9 0xF326AE, v7 0xF32684) (`lda xiy,
-     * (ExtDevice_ModeDispatch_Table_0x362:24)`). 24 bytes to the next
+     * (SqedtVal2_UpScrollDefault_Table:24)`). 24 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SqedtVal2_UpScrollDefault_Table[24];
     /* ---------------------------------------------------------------------
      * SqedtVal2_UpScrollModeA2_Table -- read by SqedtVal2_UpScrollModeA2
      * (v10/v9 0xF32688, v7 0xF3265E) (`lda xiy,
-     * (ExtDevice_ModeDispatch_Table_0x37A:24)`). 16 bytes to the next
+     * (SqedtVal2_UpScrollModeA2_Table:24)`). 16 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SqedtVal2_UpScrollModeA2_Table[16];
     /* ---------------------------------------------------------------------
      * SqedtVal2_DownScrollDefault_Table -- read by
      * SqedtVal2_DownScrollDefault (v10/v9 0xF32716, v7 0xF326EC) (`lda xbc,
-     * (ExtDevice_ModeDispatch_Table_0x38A:24)`). 24 bytes to the next
+     * (SqedtVal2_DownScrollDefault_Table:24)`). 24 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SqedtVal2_DownScrollDefault_Table[24];
     /* ---------------------------------------------------------------------
      * SqedtVal2_DownScrollModeA2_Table -- read by SqedtVal2_DownScrollModeA2
      * (v10/v9 0xF326EF, v7 0xF326C5) (`lda xbc,
-     * (ExtDevice_ModeDispatch_Table_0x3A2:24)`). 16 bytes to the next
+     * (SqedtVal2_DownScrollModeA2_Table:24)`). 16 bytes to the next
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SqedtVal2_DownScrollModeA2_Table[16];
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3B2`) copies 5 bytes into its stack
+     * SqedtFixProc_LocalInit`) copies 5 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint8_t SqedtFixProc_LocalInit[5];
@@ -1030,7 +1022,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_2 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3B8`) copies 3 bytes into its stack
+     * SqedtFixProc_LocalInit_2`) copies 3 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint8_t SqedtFixProc_LocalInit_2[3];
@@ -1044,7 +1036,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_3 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3BC`) copies 5 bytes into its stack
+     * SqedtFixProc_LocalInit_3`) copies 5 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint8_t SqedtFixProc_LocalInit_3[5];
@@ -1058,35 +1050,35 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_4 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3C2`) copies 6 bytes into its stack
+     * SqedtFixProc_LocalInit_4`) copies 6 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t SqedtFixProc_LocalInit_4[3];
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_5 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3C8`) copies 6 bytes into its stack
+     * SqedtFixProc_LocalInit_5`) copies 6 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t SqedtFixProc_LocalInit_5[3];
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_6 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3CE`) copies 2 bytes into its stack
+     * SqedtFixProc_LocalInit_6`) copies 2 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint8_t SqedtFixProc_LocalInit_6[2];
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_7 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3D0`) copies 14 bytes into its stack
+     * SqedtFixProc_LocalInit_7`) copies 14 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t SqedtFixProc_LocalInit_7[7];
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_8 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3DE`) copies 13 bytes into its stack
+     * SqedtFixProc_LocalInit_8`) copies 13 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint8_t SqedtFixProc_LocalInit_8[13];
@@ -1100,14 +1092,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_9 -- initializer of a local array: SqedtFixProc
      * (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3EC`) copies 14 bytes into its stack
+     * SqedtFixProc_LocalInit_9`) copies 14 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t SqedtFixProc_LocalInit_9[7];
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_10 -- initializer of a local array:
      * SqedtFixProc (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x3FA`) copies 7 bytes into its stack
+     * SqedtFixProc_LocalInit_10`) copies 7 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint8_t SqedtFixProc_LocalInit_10[7];
@@ -1121,7 +1113,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqedtFixProc_LocalInit_11 -- initializer of a local array:
      * SqedtFixProc (v10/v9 0xF3154F, v7 0xF31525) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x402`) copies 5 bytes into its stack
+     * SqedtFixProc_LocalInit_11`) copies 5 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint8_t SqedtFixProc_LocalInit_11[5];
@@ -1135,49 +1127,49 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqplyVal_ExtraParams_CaseTable -- jump table of a compiled `switch` in
      * SqplyVal_ExtraParams (v10/v9 0xF3240A, v7 0xF323E0) (`add xhl,
-     * ExtDevice_ModeDispatch_Table_0x408`): 16 u16 case offsets from
+     * SqplyVal_ExtraParams_CaseTable`): 16 u16 case offsets from
      * AccIll_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t SqplyVal_ExtraParams_CaseTable[16];
     /* ---------------------------------------------------------------------
      * EffectBoxProc_LocalInit -- initializer of a local array: EffectBoxProc
      * (v10/v9 0xF3344E, v7 0xF33424) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x428`) copies 4 bytes into its stack
+     * EffectBoxProc_LocalInit`) copies 4 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t EffectBoxProc_LocalInit[2];
     /* ---------------------------------------------------------------------
      * EffectBoxProc_LocalInit_2 -- initializer of a local array:
      * EffectBoxProc (v10/v9 0xF3344E, v7 0xF33424) (`ld xiy,
-     * ExtDevice_ModeDispatch_Table_0x42C`) copies 4 bytes into its stack
+     * EffectBoxProc_LocalInit_2`) copies 4 bytes into its stack
      * frame.
      * --------------------------------------------------------------------- */
     uint16_t EffectBoxProc_LocalInit_2[2];
     /* ---------------------------------------------------------------------
      * EffectBox_NameSetup_CaseTable -- jump table of a compiled `switch` in
      * EffectBox_NameSetup (v10/v9 0xF33A51, v7 0xF33A27) (`add xhl,
-     * ExtDevice_ModeDispatch_Table_0x430`): 7 u16 case offsets from
+     * EffectBox_NameSetup_CaseTable`): 7 u16 case offsets from
      * EffectBox_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t EffectBox_NameSetup_CaseTable[7];
     /* ---------------------------------------------------------------------
      * Equalizer_HandleSelectEvent_Table -- read by
      * Equalizer_HandleSelectEvent (v10/v9 0xF34061, v7 0xF34037) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x43E`). 16 bytes to the next object; the
+     * Equalizer_HandleSelectEvent_Table`). 16 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Equalizer_HandleSelectEvent_Table[16];
     /* ---------------------------------------------------------------------
      * Equalizer_HandleSelectEvent_Table_2 -- read by
      * Equalizer_HandleSelectEvent (v10/v9 0xF34061, v7 0xF34037) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x44E`). 16 bytes to the next object; the
+     * Equalizer_HandleSelectEvent_Table_2`). 16 bytes to the next object; the
      * layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Equalizer_HandleSelectEvent_Table_2[16];
     /* ---------------------------------------------------------------------
      * EffectBox_StateDispatch_CaseTable -- jump table of a compiled `switch`
      * in EffectBox_StateDispatch (v10/v9 0xF340F2, v7 0xF340C8) (`add xbc,
-     * ExtDevice_ModeDispatch_Table_0x45E`): 7 u16 case offsets from
+     * EffectBox_StateDispatch_CaseTable`): 7 u16 case offsets from
      * SeqAccomp_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t EffectBox_StateDispatch_CaseTable[7];
@@ -1190,28 +1182,28 @@ typedef struct __attribute__((packed)) {
     uint8_t EffectBox_StateDispatch_CaseTable_Tail[90];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Table -- read by Sqedt_ParamDispatch (v10/v9
-     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x4C6`).
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, Sqedt_ParamDispatch_Table`).
      * 54 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
     uint8_t Sqedt_ParamDispatch_Table[54];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Table_2 -- read by Sqedt_ParamDispatch (v10/v9
-     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x4FC`).
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, Sqedt_ParamDispatch_Table_2`).
      * 66 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
     uint8_t Sqedt_ParamDispatch_Table_2[66];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Table_3 -- read by Sqedt_ParamDispatch (v10/v9
-     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x53E`).
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, Sqedt_ParamDispatch_Table_3`).
      * 28 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
     uint8_t Sqedt_ParamDispatch_Table_3[28];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Table_4 -- read by Sqedt_ParamDispatch (v10/v9
-     * 0xF34A5C, v7 0xF34A32) (`ld xbc, ExtDevice_ModeDispatch_Table_0x55A`).
+     * 0xF34A5C, v7 0xF34A32) (`ld xbc, Sqedt_ParamDispatch_Table_4`).
      * 106 bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1309,100 +1301,100 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SqplyFunc_FormatRhythmPattern_Str -- NUL-terminated string(s), 6
      * bytes, used by SqplyFunc_FormatRhythmPattern (v10/v9 0xF34801, v7
-     * 0xF347D7) (`ld xwa, ExtDevice_ModeDispatch_Table_0x616`).
+     * 0xF347D7) (`ld xwa, SqplyFunc_FormatRhythmPattern_Str`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_FormatRhythmPattern_Str[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_FormatRhythmPattern_Str_2 -- NUL-terminated string(s), 12
      * bytes, used by SqplyFunc_FormatRhythmPattern (v10/v9 0xF34801, v7
-     * 0xF347D7) (`ld xwa, ExtDevice_ModeDispatch_Table_0x61C`).
+     * 0xF347D7) (`ld xwa, SqplyFunc_FormatRhythmPattern_Str_2`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_FormatRhythmPattern_Str_2[12];
     /* ---------------------------------------------------------------------
      * SqplyFunc_FormatIntro_Str -- NUL-terminated string(s), 6 bytes, used
      * by SqplyFunc_FormatIntro (v10/v9 0xF3483A, v7 0xF34810) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x628`).
+     * SqplyFunc_FormatIntro_Str`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_FormatIntro_Str[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_FormatEnding_Str -- NUL-terminated string(s), 6 bytes, used
      * by SqplyFunc_FormatEnding (v10/v9 0xF3484A, v7 0xF34820) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x62E`).
+     * SqplyFunc_FormatEnding_Str`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_FormatEnding_Str[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_FormatFillIn_Str -- NUL-terminated string(s), 6 bytes, used
      * by SqplyFunc_FormatFillIn (v10/v9 0xF34864, v7 0xF3483A) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x634`).
+     * SqplyFunc_FormatFillIn_Str`).
      * --------------------------------------------------------------------- */
     char SqplyFunc_FormatFillIn_Str[6];
     /* ---------------------------------------------------------------------
      * SqplyFunc_HandlePartQuery_CaseTable -- jump table of a compiled
      * `switch` in SqplyFunc_HandlePartQuery (v10/v9 0xF3498E, v7 0xF34964)
-     * (`lda xix, (ExtDevice_ModeDispatch_Table_0x63A:24)`): 8 u16 case
+     * (`lda xix, (SqplyFunc_HandlePartQuery_CaseTable:24)`): 8 u16 case
      * offsets from SqplyFunc_PartQueryDispatch.
      * --------------------------------------------------------------------- */
     uint16_t SqplyFunc_HandlePartQuery_CaseTable[8];
     /* ---------------------------------------------------------------------
      * SqplyFunc_HandleGetValue_CaseTable -- jump table of a compiled
      * `switch` in SqplyFunc_HandleGetValue (v10/v9 0xF34887, v7 0xF3485D)
-     * (`add xwa, ExtDevice_ModeDispatch_Table_0x64A`): 11 u16 case offsets
+     * (`add xwa, SqplyFunc_HandleGetValue_CaseTable`): 11 u16 case offsets
      * from SqplyFunc_GetValueDispatch.
      * --------------------------------------------------------------------- */
     uint16_t SqplyFunc_HandleGetValue_CaseTable[11];
     /* ---------------------------------------------------------------------
      * SqplyFunc_CaseTable -- jump table of a compiled `switch` in SqplyFunc
      * (v10/v9 0xF34655, v7 0xF3462B) (`add xhl,
-     * ExtDevice_ModeDispatch_Table_0x660`): 10 u16 case offsets from
+     * SqplyFunc_CaseTable`): 10 u16 case offsets from
      * SqplyFunc_FormatCases.
      * --------------------------------------------------------------------- */
     uint16_t SqplyFunc_CaseTable[10];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str -- NUL-terminated string(s), 6 bytes, used by
      * Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x674`).
+     * Sqedt_ParamDispatch_Str`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_2 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x67A`).
+     * Sqedt_ParamDispatch_Str_2`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_2[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_3 -- NUL-terminated string(s), 18 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x680`).
+     * Sqedt_ParamDispatch_Str_3`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_3[18];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_4 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x692`).
+     * Sqedt_ParamDispatch_Str_4`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_4[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_5 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x698`).
+     * Sqedt_ParamDispatch_Str_5`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_5[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_6 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x69E`).
+     * Sqedt_ParamDispatch_Str_6`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_6[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_7 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x6A4`).
+     * Sqedt_ParamDispatch_Str_7`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_7[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_8 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * ExtDevice_ModeDispatch_Table_0x6AA`).
+     * Sqedt_ParamDispatch_Str_8`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_8[6];
     /* ---------------------------------------------------------------------
@@ -1414,139 +1406,139 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_9 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x6`).
+     * Sqedt_ParamDispatch_Str_9`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_9[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_10 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0xC`).
+     * Sqedt_ParamDispatch_Str_10`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_10[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_11 -- NUL-terminated string(s), 44 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x12`).
+     * Sqedt_ParamDispatch_Str_11`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_11[44];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_12 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x3E`).
+     * Sqedt_ParamDispatch_Str_12`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_12[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_13 -- NUL-terminated string(s), 8 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x44`).
+     * Sqedt_ParamDispatch_Str_13`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_13[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_14 -- NUL-terminated string(s), 8 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x4C`).
+     * Sqedt_ParamDispatch_Str_14`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_14[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_15 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x54`).
+     * Sqedt_ParamDispatch_Str_15`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_15[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_16 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x5A`).
+     * Sqedt_ParamDispatch_Str_16`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_16[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_17 -- NUL-terminated string(s), 8 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x60`).
+     * Sqedt_ParamDispatch_Str_17`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_17[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_18 -- NUL-terminated string(s), 8 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x68`).
+     * Sqedt_ParamDispatch_Str_18`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_18[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_19 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x70`).
+     * Sqedt_ParamDispatch_Str_19`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_19[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_20 -- NUL-terminated string(s), 8 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x76`).
+     * Sqedt_ParamDispatch_Str_20`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_20[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_21 -- NUL-terminated string(s), 8 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x7E`).
+     * Sqedt_ParamDispatch_Str_21`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_21[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_22 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x86`).
+     * Sqedt_ParamDispatch_Str_22`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_22[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_23 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x8C`).
+     * Sqedt_ParamDispatch_Str_23`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_23[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_24 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x92`).
+     * Sqedt_ParamDispatch_Str_24`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_24[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_25 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x98`).
+     * Sqedt_ParamDispatch_Str_25`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_25[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_26 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0x9E`).
+     * Sqedt_ParamDispatch_Str_26`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_26[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_27 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0xA4`).
+     * Sqedt_ParamDispatch_Str_27`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_27[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_28 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0xAA`).
+     * Sqedt_ParamDispatch_Str_28`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_28[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_29 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0xB0`).
+     * Sqedt_ParamDispatch_Str_29`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_29[6];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_30 -- NUL-terminated string(s), 12 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0xB6`).
+     * Sqedt_ParamDispatch_Str_30`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_30[12];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_31 -- NUL-terminated string(s), 6 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_3d_0xC2`).
+     * Sqedt_ParamDispatch_Str_31`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_31[6];
     /* ---------------------------------------------------------------------
@@ -1558,89 +1550,89 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_32 -- NUL-terminated string(s), 12 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_2d_0x6`).
+     * Sqedt_ParamDispatch_Str_32`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_32[12];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_33 -- NUL-terminated string(s), 10 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_2d_0x12`).
+     * Sqedt_ParamDispatch_Str_33`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_33[10];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_Str_34 -- NUL-terminated string(s), 4 bytes, used
      * by Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`ld xwa,
-     * NakaInst_2d_0x1C`).
+     * Sqedt_ParamDispatch_Str_34`).
      * --------------------------------------------------------------------- */
     char Sqedt_ParamDispatch_Str_34[4];
     /* ---------------------------------------------------------------------
      * SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
      * SeqFormat_DispatchA (v10/v9 0xF3513D, v7 0xF35113) (`lda xix,
-     * (NakaInst_2d_0x20:24)`): 16 u16 case offsets from
+     * (SeqFormat_DispatchA_CaseTable:24)`): 16 u16 case offsets from
      * SeqFormat_DispatchA_0x70.
      * --------------------------------------------------------------------- */
     uint16_t SeqFormat_DispatchA_CaseTable[16];
     /* ---------------------------------------------------------------------
      * SqedtFunc_SignExtend_CaseTable -- jump table of a compiled `switch` in
      * SqedtFunc_SignExtend (v10/v9 0xF35115, v7 0xF350EB) (`lda xix,
-     * (NakaInst_2d_0x40:24)`): 15 u16 case offsets from SeqFormat_DispatchA.
+     * (SqedtFunc_SignExtend_CaseTable:24)`): 15 u16 case offsets from SeqFormat_DispatchA.
      * --------------------------------------------------------------------- */
     uint16_t SqedtFunc_SignExtend_CaseTable[15];
     /* ---------------------------------------------------------------------
      * Sqedt_ValueDispatch_CaseTable -- jump table of a compiled `switch` in
      * Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
-     * (NakaInst_2d_0x5E:24)`): 9 u16 case offsets from
+     * (Sqedt_ValueDispatch_CaseTable:24)`): 9 u16 case offsets from
      * Sqedt_ValueDispatch_0x82.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ValueDispatch_CaseTable[9];
     /* ---------------------------------------------------------------------
      * Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
      * in Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
-     * (NakaInst_2d_0x70:24)`): 8 u16 case offsets from
+     * (Sqedt_ValueDispatch_CaseTable_2:24)`): 8 u16 case offsets from
      * Sqedt_ValueDispatch_0x58.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ValueDispatch_CaseTable_2[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
      * in Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
-     * (NakaInst_2d_0x80:24)`): 9 u16 case offsets from
+     * (Sqedt_ValueDispatch_CaseTable_3:24)`): 9 u16 case offsets from
      * Sqedt_ValueDispatch_0x28.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ValueDispatch_CaseTable_3[9];
     /* ---------------------------------------------------------------------
      * SeqFunc_ReturnZeroJmp_CaseTable -- jump table of a compiled `switch`
      * in SeqFunc_ReturnZeroJmp (v10/v9 0xF35005, v7 0xF34FDB) (`lda xix,
-     * (NakaInst_2d_0x92:24)`): 7 u16 case offsets from Sqedt_ValueDispatch.
+     * (SeqFunc_ReturnZeroJmp_CaseTable:24)`): 7 u16 case offsets from Sqedt_ValueDispatch.
      * --------------------------------------------------------------------- */
     uint16_t SeqFunc_ReturnZeroJmp_CaseTable[7];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_CaseTable -- jump table of a compiled `switch` in
      * Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`lda xix,
-     * (NakaInst_2d_0xA0:24)`): 8 u16 case offsets from 15944534.
+     * (Sqedt_ParamDispatch_CaseTable:24)`): 8 u16 case offsets from 15944534.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ParamDispatch_CaseTable[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_CaseTable_2 -- jump table of a compiled `switch`
      * in Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`lda xix,
-     * (NakaInst_2d_0xB0:24)`): 8 u16 case offsets from 15944414.
+     * (Sqedt_ParamDispatch_CaseTable_2:24)`): 8 u16 case offsets from 15944414.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ParamDispatch_CaseTable_2[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ParamDispatch_CaseTable_3 -- jump table of a compiled `switch`
      * in Sqedt_ParamDispatch (v10/v9 0xF34A5C, v7 0xF34A32) (`lda xix,
-     * (NakaInst_2d_0xC0:24)`): 8 u16 case offsets from 15944329.
+     * (Sqedt_ParamDispatch_CaseTable_3:24)`): 8 u16 case offsets from 15944329.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ParamDispatch_CaseTable_3[8];
     /* ---------------------------------------------------------------------
      * SqedtFunc_CaseTable -- jump table of a compiled `switch` in SqedtFunc
-     * (v10/v9 0xF349D3, v7 0xF349A9) (`add xde, NakaInst_2d_0xD0`): 40 u16
+     * (v10/v9 0xF349D3, v7 0xF349A9) (`add xde, SqedtFunc_CaseTable`): 40 u16
      * case offsets from Sqedt_ParamDispatch.
      * --------------------------------------------------------------------- */
     uint16_t SqedtFunc_CaseTable[40];
     /* ---------------------------------------------------------------------
      * SqedtFunc_StateChainB_CaseTable -- jump table of a compiled `switch`
      * in SqedtFunc_StateChainB (v10/v9 0xF3523E, v7 0xF35214) (`lda xix,
-     * (NakaInst_2d_0x120:24)`): 14 u16 case offsets from
+     * (SqedtFunc_StateChainB_CaseTable:24)`): 14 u16 case offsets from
      * SeqFormat_DispatchB.
      * --------------------------------------------------------------------- */
     uint16_t SqedtFunc_StateChainB_CaseTable[14];
@@ -1654,68 +1646,68 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * DspItem0_TypeChangeHandler_CaseTable -- jump table of a compiled
      * `switch` in DspItem0_TypeChangeHandler (v10/v9 0xF3572B, v7 0xF35701)
-     * (`add xde, NakaInst_2d_0x142`): 9 u16 case offsets from
+     * (`add xde, DspItem0_TypeChangeHandler_CaseTable`): 9 u16 case offsets from
      * DspItem0_TypeDispatch.
      * --------------------------------------------------------------------- */
     uint16_t DspItem0_TypeChangeHandler_CaseTable[9];
     /* ---------------------------------------------------------------------
      * DspItem0CngFunc_CaseTable -- jump table of a compiled `switch` in
      * DspItem0CngFunc (v10/v9 0xF35527, v7 0xF354FD) (`add xiy,
-     * NakaInst_2d_0x154`): 17 u16 case offsets from
+     * DspItem0CngFunc_CaseTable`): 17 u16 case offsets from
      * DspItem0_DisplayEffectName.
      * --------------------------------------------------------------------- */
     uint16_t DspItem0CngFunc_CaseTable[17];
     /* ---------------------------------------------------------------------
      * Equalizer_ParamByIndex_Table -- read by Equalizer_ParamByIndex (v10/v9
-     * 0xF35914, v7 0xF358EA) (`add xde, NakaInst_2d_0x176`). 8 bytes to the
+     * 0xF35914, v7 0xF358EA) (`add xde, Equalizer_ParamByIndex_Table`). 8 bytes to the
      * next object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Equalizer_ParamByIndex_Table[8];
     /* ---------------------------------------------------------------------
      * Equalizer_DispatchA_CaseTable -- jump table of a compiled `switch` in
      * Equalizer_DispatchA (v10/v9 0xF35858, v7 0xF3582E) (`add xwa,
-     * NakaInst_2d_0x17E`): 7 u16 case offsets from Equalizer_DispatchB.
+     * Equalizer_DispatchA_CaseTable`): 7 u16 case offsets from Equalizer_DispatchB.
      * --------------------------------------------------------------------- */
     uint16_t Equalizer_DispatchA_CaseTable[7];
     /* ---------------------------------------------------------------------
      * EqualizerCngFunc_CaseTable -- jump table of a compiled `switch` in
      * EqualizerCngFunc (v10/v9 0xF3580D, v7 0xF357E3) (`add xwa,
-     * NakaInst_2d_0x18C`): 9 u16 case offsets from Equalizer_DispatchA.
+     * EqualizerCngFunc_CaseTable`): 9 u16 case offsets from Equalizer_DispatchA.
      * --------------------------------------------------------------------- */
     uint16_t EqualizerCngFunc_CaseTable[9];
     /* ---------------------------------------------------------------------
      * Equalizer_CmdDispatch_CaseTable -- jump table of a compiled `switch`
      * in Equalizer_CmdDispatch (v10/v9 0xF359FC, v7 0xF359D2) (`add xwa,
-     * NakaInst_2d_0x19E`): 15 u16 case offsets from Equalizer_CmdCase0.
+     * Equalizer_CmdDispatch_CaseTable`): 15 u16 case offsets from Equalizer_CmdCase0.
      * --------------------------------------------------------------------- */
     uint16_t Equalizer_CmdDispatch_CaseTable[15];
     /* ---------------------------------------------------------------------
      * Equalizer_FormatDefault_Str -- NUL-terminated string(s), 6 bytes, used
      * by Equalizer_FormatDefault (v10/v9 0xF35BC7, v7 0xF35B9D) (`ld xwa,
-     * NakaInst_2d_0x1BC`).
+     * Equalizer_FormatDefault_Str`).
      * --------------------------------------------------------------------- */
     char Equalizer_FormatDefault_Str[6];
     /* ---------------------------------------------------------------------
      * EqFormat_NegativeValue_Str -- NUL-terminated string(s), 6 bytes, used
      * by EqFormat_NegativeValue (v10/v9 0xF35C2D, v7 0xF35C03) (`ld xwa,
-     * NakaInst_2d_0x1C2`).
+     * EqFormat_NegativeValue_Str`).
      * --------------------------------------------------------------------- */
     char EqFormat_NegativeValue_Str[6];
     /* ---------------------------------------------------------------------
      * EqFormat_PositiveValue_Str -- NUL-terminated string(s), 12 bytes, used
      * by EqFormat_PositiveValue (v10/v9 0xF35C39, v7 0xF35C0F) (`ld xwa,
-     * NakaInst_2d_0x1C8`).
+     * EqFormat_PositiveValue_Str`).
      * --------------------------------------------------------------------- */
     char EqFormat_PositiveValue_Str[12];
     /* ---------------------------------------------------------------------
      * PrepareAudioParam_Str -- NUL-terminated string(s), 4 bytes, used by
      * PrepareAudioParam (v10/v9 0xF35C7E, v7 0xF35C54) (`ld xwa,
-     * NakaInst_2d_0x1D4`).
+     * PrepareAudioParam_Str`).
      * --------------------------------------------------------------------- */
     char PrepareAudioParam_Str[4];
     /* ---------------------------------------------------------------------
      * Equalizer_FormatDispatch_Table -- read by Equalizer_FormatDispatch
-     * (v10/v9 0xF35B62, v7 0xF35B38) (`lda xix, (NakaInst_2d_0x1D8:24)`). 44
+     * (v10/v9 0xF35B62, v7 0xF35B38) (`lda xix, (Equalizer_FormatDispatch_Table:24)`). 44
      * bytes to the next object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1723,7 +1715,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Equalizer_FormatDispatch_CaseTable -- jump table of a compiled
      * `switch` in Equalizer_FormatDispatch (v10/v9 0xF35B62, v7 0xF35B38)
-     * (`ld xix, NakaInst_2d_0x204`): 18 u16 case offsets from
+     * (`ld xix, Equalizer_FormatDispatch_CaseTable`): 18 u16 case offsets from
      * Equalizer_FormatCases.
      * --------------------------------------------------------------------- */
     uint16_t Equalizer_FormatDispatch_CaseTable[18];
@@ -1853,36 +1845,36 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqPlay_SaveAndPrepareState_Table -- read by
      * SeqPlay_SaveAndPrepareState (v10/v9 0xF39F39, v7 0xF39EFE) (`lda xbc,
-     * (WidgetData_DrawbarPositionTable_0x6A:24)`),
+     * (SeqPlay_SaveAndPrepareState_Table:24)`),
      * SeqPlay_SaveState_SetPlayFlags (v10/v9 0xF39FB7, v7 0xF39F7C) (`lda
-     * xbc, (WidgetData_DrawbarPositionTable_0x6A:24)`). 24 bytes to the next
+     * xbc, (SeqPlay_SaveAndPrepareState_Table:24)`). 24 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPlay_SaveAndPrepareState_Table[24];
     /* ---------------------------------------------------------------------
      * SeqPlay_SaveState_ChordShiftDone_Table -- read by
      * SeqPlay_SaveState_ChordShiftDone (v10/v9 0xF3A022, v7 0xF39FE7) (`lda
-     * xbc, (WidgetData_DrawbarPositionTable_0x82:24)`),
+     * xbc, (SeqPlay_SaveState_ChordShiftDone_Table:24)`),
      * SeqPlay_SaveState_BassShiftDone (v10/v9 0xF3A066, v7 0xF3A02B) (`lda
-     * xbc, (WidgetData_DrawbarPositionTable_0x82:24)`). 4 bytes to the next
+     * xbc, (SeqPlay_SaveState_ChordShiftDone_Table:24)`). 4 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPlay_SaveState_ChordShiftDone_Table[4];
     /* ---------------------------------------------------------------------
      * SeqNote_ProcessCurrent_DrumCheck_Table -- read by
      * SeqNote_ProcessCurrent_DrumCheck (v10/v9 0xF3AAF3, v7 0xF3AAB8) (`lda
-     * xbc, (WidgetData_DrawbarPositionTable_0x86:24)`),
+     * xbc, (SeqNote_ProcessCurrent_DrumCheck_Table:24)`),
      * VoiceConfig_SlotCheck_GetChannel (v10/v9 0xF3AB7B, v7 0xF3AB40) (`lda
-     * xbc, (WidgetData_DrawbarPositionTable_0x86:24)`),
+     * xbc, (SeqNote_ProcessCurrent_DrumCheck_Table:24)`),
      * VoiceConfig_EventType_GetChannel (v10/v9 0xF3ABE6, v7 0xF3ABAB) (`lda
-     * xhl, (WidgetData_DrawbarPositionTable_0x86:24)`). 32 bytes to the next
+     * xhl, (SeqNote_ProcessCurrent_DrumCheck_Table:24)`). 32 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqNote_ProcessCurrent_DrumCheck_Table[32];
     /* ---------------------------------------------------------------------
      * SeqPlay_AssignChordVoices_LocalInit -- initializer of a local array:
      * SeqPlay_AssignChordVoices (v10/v9 0xF3C66A, v7 0xF3C62F) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0xA6`); `lda xix, (xsp + 2); ld bc,
+     * SeqPlay_AssignChordVoices_LocalInit`); `lda xix, (xsp + 2); ld bc,
      * 4:i3; ldirw` copies 8 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t SeqPlay_AssignChordVoices_LocalInit[4];
@@ -1897,83 +1889,83 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * PartDetect_LookupAndApply_Table -- read by PartDetect_LookupAndApply
      * (v10/v9 0xF3E098, v7 0xF3E07C) (`lda xbc,
-     * (WidgetData_DrawbarPositionTable_0xBE:24)`),
+     * (PartDetect_LookupAndApply_Table:24)`),
      * Part_SendVoiceOffAndCCEvents (v10/v9 0xF3EBC3, v7 0xF3EBA7) (`lda xbc,
-     * (WidgetData_DrawbarPositionTable_0xBE:24)`),
+     * (PartDetect_LookupAndApply_Table:24)`),
      * SeqVoiceSingle_LookupAndApply (v10/v9 0xF3EC8F, v7 0xF3EC73) (`lda
-     * xbc, (WidgetData_DrawbarPositionTable_0xBE:24)`). 20 bytes to the next
+     * xbc, (PartDetect_LookupAndApply_Table:24)`). 20 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t PartDetect_LookupAndApply_Table[20];
     /* ---------------------------------------------------------------------
      * PartSubBlkA_WriteLoop32_Table -- read by PartSubBlkA_WriteLoop32
      * (v10/v9 0xF418FD, v7 0xF418EF) (`lda xhl,
-     * (WidgetData_DrawbarPositionTable_0xD2:24)`). 16 bytes to the next
+     * (PartSubBlkA_WriteLoop32_Table:24)`). 16 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t PartSubBlkA_WriteLoop32_Table[16];
     /* ---------------------------------------------------------------------
      * PartSubBlkB_WriteLoop32_Table -- read by PartSubBlkB_WriteLoop32
      * (v10/v9 0xF4195F, v7 0xF41951) (`lda xhl,
-     * (WidgetData_DrawbarPositionTable_0xE2:24)`). 16 bytes to the next
+     * (PartSubBlkB_WriteLoop32_Table:24)`). 16 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t PartSubBlkB_WriteLoop32_Table[16];
     /* ---------------------------------------------------------------------
      * PartSubBlkA_WriteLoop48_Table -- read by PartSubBlkA_WriteLoop48
      * (v10/v9 0xF41927, v7 0xF41919) (`lda xhl,
-     * (WidgetData_DrawbarPositionTable_0xF2:24)`), PartSubBlkB_WriteLoop48
+     * (PartSubBlkA_WriteLoop48_Table:24)`), PartSubBlkB_WriteLoop48
      * (v10/v9 0xF41989, v7 0xF4197B) (`lda xhl,
-     * (WidgetData_DrawbarPositionTable_0xF2:24)`). 48 bytes to the next
+     * (PartSubBlkA_WriteLoop48_Table:24)`). 48 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t PartSubBlkA_WriteLoop48_Table[48];
     /* ---------------------------------------------------------------------
      * SeqVoice_ApplyTableEntry_Table -- read by SeqVoice_ApplyTableEntry
      * (v10/v9 0xF3FF42, v7 0xF3FF34) (`ld xwa,
-     * WidgetData_DrawbarPositionTable_0x122`). 12 bytes to the next
+     * SeqVoice_ApplyTableEntry_Table`). 12 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqVoice_ApplyTableEntry_Table[12];
     /* ---------------------------------------------------------------------
      * AppEvent_ExtendedHandler_Table -- read by AppEvent_ExtendedHandler
      * (v10/v9 0xF3FF1F, v7 0xF3FF11) (`ld xwa,
-     * WidgetData_DrawbarPositionTable_0x12E`). 12 bytes to the next
+     * AppEvent_ExtendedHandler_Table`). 12 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AppEvent_ExtendedHandler_Table[12];
     /* ---------------------------------------------------------------------
      * AppEvent_ExtendedHandler_Table_2 -- read by AppEvent_ExtendedHandler
      * (v10/v9 0xF3FF1F, v7 0xF3FF11) (`ld xwa,
-     * WidgetData_DrawbarPositionTable_0x13A`). 12 bytes to the next
+     * AppEvent_ExtendedHandler_Table_2`). 12 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AppEvent_ExtendedHandler_Table_2[12];
     /* ---------------------------------------------------------------------
      * Part_ApplyVoiceTableB_Table -- read by Part_ApplyVoiceTableB (v10/v9
      * 0xF3FF2D, v7 0xF3FF1F) (`ld xwa,
-     * WidgetData_DrawbarPositionTable_0x146`). 12 bytes to the next
+     * Part_ApplyVoiceTableB_Table`). 12 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Part_ApplyVoiceTableB_Table[12];
     /* ---------------------------------------------------------------------
      * Part_ApplyVoiceTableA_Table -- read by Part_ApplyVoiceTableA (v10/v9
      * 0xF3FF34, v7 0xF3FF26) (`ld xwa,
-     * WidgetData_DrawbarPositionTable_0x152`). 12 bytes to the next
+     * Part_ApplyVoiceTableA_Table`). 12 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Part_ApplyVoiceTableA_Table[12];
     /* ---------------------------------------------------------------------
      * Part_ApplyVoiceTableC_Table -- read by Part_ApplyVoiceTableC (v10/v9
      * 0xF3FF3B, v7 0xF3FF2D) (`ld xwa,
-     * WidgetData_DrawbarPositionTable_0x15E`). 12 bytes to the next
+     * Part_ApplyVoiceTableC_Table`). 12 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Part_ApplyVoiceTableC_Table[12];
     /* ---------------------------------------------------------------------
      * SeqPlay_WriteErrorToVoiceTable_Data -- read by
      * SeqPlay_WriteErrorToVoiceTable (v10/v9 0xF43A46, v7 0xF43A38) (`lda
-     * xbc, (WidgetData_DrawbarPositionTable_0x16A:24)`). 12 bytes to the
+     * xbc, (SeqPlay_WriteErrorToVoiceTable_Data:24)`). 12 bytes to the
      * next referenced object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -1981,7 +1973,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Seq_SyncPositionAndOutputMIDITiming_LocalInit -- initializer of a
      * local array: Seq_SyncPositionAndOutputMIDITiming (v10/v9 0xF3E1C9, v7
-     * 0xF3E1AD) (`ld xiy, WidgetData_DrawbarPositionTable_0x176`); `lda xix,
+     * 0xF3E1AD) (`ld xiy, Seq_SyncPositionAndOutputMIDITiming_LocalInit`); `lda xix,
      * (xsp + 4); ldi85; ldiw; cp (0xe388:16), 1; jr nz,
      * SeqSync_CheckDemoMode` copies 3 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
@@ -1997,29 +1989,29 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqValPTK_LookupAndReturn_Table -- read by SeqValPTK_LookupAndReturn
      * (v10/v9 0xF3F6EF, v7 0xF3F6E1) (`lda xix,
-     * (WidgetData_DrawbarPositionTable_0x17A:24)`). 14 bytes to the next
+     * (SeqValPTK_LookupAndReturn_Table:24)`). 14 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqValPTK_LookupAndReturn_Table[14];
     /* ---------------------------------------------------------------------
      * SeqData_CopyBlockWithLookup_LocalInit -- initializer of a local array:
      * SeqData_CopyBlockWithLookup (v10/v9 0xF409F3, v7 0xF409E5) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x188`); `ld xix, xsp; ldw bc, 0x8;
+     * SeqData_CopyBlockWithLookup_LocalInit`); `ld xix, xsp; ldw bc, 0x8;
      * ldirw` copies 16 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t SeqData_CopyBlockWithLookup_LocalInit[8];
     /* ---------------------------------------------------------------------
      * Rhythm_DispatchNoteAlloc_LocalInit -- initializer of a local array:
      * Rhythm_DispatchNoteAlloc (v10/v9 0xF42852, v7 0xF42844) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x198`); `lda xix, (xsp + 10); ldiw;
-     * ldiw; ld xiy, WidgetData_DrawbarPositionTable_0x19C; lda xix, (xsp +
+     * Rhythm_DispatchNoteAlloc_LocalInit`); `lda xix, (xsp + 10); ldiw;
+     * ldiw; ld xiy, Rhythm_DispatchNoteAlloc_LocalInit_2; lda xix, (xsp +
      * 6)` copies 4 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t Rhythm_DispatchNoteAlloc_LocalInit[2];
     /* ---------------------------------------------------------------------
      * Rhythm_DispatchNoteAlloc_LocalInit_2 -- initializer of a local array:
      * Rhythm_DispatchNoteAlloc (v10/v9 0xF42852, v7 0xF42844) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x19C`); `lda xix, (xsp + 6); ldiw;
+     * Rhythm_DispatchNoteAlloc_LocalInit_2`); `lda xix, (xsp + 6); ldiw;
      * ldiw; calr SeqPart_FindActiveVoiceSlot; ldb_erp L, 0xfb` copies 4
      * bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
@@ -2027,15 +2019,15 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Rhythm_ExtendedNoteAlloc_LocalInit -- initializer of a local array:
      * Rhythm_ExtendedNoteAlloc (v10/v9 0xF429A0, v7 0xF42992) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x1A0`); `lda xix, (xsp + 12); ldiw;
-     * ldiw; ld xiy, WidgetData_DrawbarPositionTable_0x1A4; lda xix, (xsp +
+     * Rhythm_ExtendedNoteAlloc_LocalInit`); `lda xix, (xsp + 12); ldiw;
+     * ldiw; ld xiy, Rhythm_ExtendedNoteAlloc_LocalInit_2; lda xix, (xsp +
      * 8)` copies 4 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t Rhythm_ExtendedNoteAlloc_LocalInit[2];
     /* ---------------------------------------------------------------------
      * Rhythm_ExtendedNoteAlloc_LocalInit_2 -- initializer of a local array:
      * Rhythm_ExtendedNoteAlloc (v10/v9 0xF429A0, v7 0xF42992) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x1A4`); `lda xix, (xsp + 8); ldiw;
+     * Rhythm_ExtendedNoteAlloc_LocalInit_2`); `lda xix, (xsp + 8); ldiw;
      * ldiw; calr SeqPart_FindActiveVoiceSlot; ldb_erp L, 0xfa` copies 4
      * bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
@@ -2043,21 +2035,21 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqEvent_ProcessRhythm4Ch_LocalInit -- initializer of a local array:
      * SeqEvent_ProcessRhythm4Ch (v10/v9 0xF42B61, v7 0xF42B53) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x1A8`); `lda xix, (xsp + 2); ld bc,
+     * SeqEvent_ProcessRhythm4Ch_LocalInit`); `lda xix, (xsp + 2); ld bc,
      * 4:i3; ldirw` copies 8 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t SeqEvent_ProcessRhythm4Ch_LocalInit[4];
     /* ---------------------------------------------------------------------
      * SeqEvent_ProcessRhythm3Ch_LocalInit -- initializer of a local array:
      * SeqEvent_ProcessRhythm3Ch (v10/v9 0xF42BD2, v7 0xF42BC4) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x1B0`); `lda xix, (xsp + 2); ld bc,
+     * SeqEvent_ProcessRhythm3Ch_LocalInit`); `lda xix, (xsp + 2); ld bc,
      * 3:i3; ldirw` copies 6 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t SeqEvent_ProcessRhythm3Ch_LocalInit[3];
     /* ---------------------------------------------------------------------
      * SeqEvt_ProcessBlock_LocalInit -- initializer of a local array:
      * SeqEvt_ProcessBlock (v10/v9 0xF42D0B, v7 0xF42CFD) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x1B6`); `lda xix, (xsp+4); ldiw;
+     * SeqEvt_ProcessBlock_LocalInit`); `lda xix, (xsp+4); ldiw;
      * ldiw; ld c, (xsp+8); extz bc` copies 4 bytes into the routine's stack
      * frame.
      * --------------------------------------------------------------------- */
@@ -2065,7 +2057,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqEvt_ProcessBlock_LocalInit_2 -- initializer of a local array:
      * SeqEvt_ProcessBlock (v10/v9 0xF42D0B, v7 0xF42CFD) (`ld xiy,
-     * WidgetData_DrawbarPositionTable_0x1BA`); `lda xix, (xsp+4); ldiw;
+     * SeqEvt_ProcessBlock_LocalInit_2`); `lda xix, (xsp+4); ldiw;
      * ldiw; ld c, (xsp+8); extz bc` copies 4 bytes into the routine's stack
      * frame.
      * --------------------------------------------------------------------- */
@@ -2083,14 +2075,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * Part_InitFromPreset_LocalInit -- initializer of a local array:
      * Part_InitFromPreset (v10/v9 0xF42EA4, v7 0xF42E96) (`ld xiy,
-     * WidgetData_CharsetMappingTable_0x10`); `lda xix, (xsp + 4); ldw bc,
+     * Part_InitFromPreset_LocalInit`); `lda xix, (xsp + 4); ldw bc,
      * 0x8; ldirw` copies 16 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint16_t Part_InitFromPreset_LocalInit[8];
     /* ---------------------------------------------------------------------
      * SeqData_SendVoiceTableBlock_LocalInit -- initializer of a local array:
      * SeqData_SendVoiceTableBlock (v10/v9 0xF43A59, v7 0xF43A4B) (`ld xiy,
-     * WidgetData_CharsetMappingTable_0x20`); `ld xix, xsp; ld bc, 2:i3;
+     * SeqData_SendVoiceTableBlock_LocalInit`); `ld xix, xsp; ld bc, 2:i3;
      * ldirw` copies 5 bytes into the routine's stack frame.
      * --------------------------------------------------------------------- */
     uint8_t SeqData_SendVoiceTableBlock_LocalInit[5];
@@ -2105,28 +2097,28 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * EffEdit_ParamChangeB_Table -- read by EffEdit_ParamChangeB (v10/v9
      * 0xF45410, v7 0xF45402) (`lda xwa,
-     * (WidgetData_CharsetMappingTable_0x26:24)`). 128 bytes to the next
+     * (EffEdit_ParamChangeB_Table:24)`). 128 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t EffEdit_ParamChangeB_Table[128];
     /* ---------------------------------------------------------------------
      * EffEdit_ParamChangeB_Table_2 -- read by EffEdit_ParamChangeB (v10/v9
      * 0xF45410, v7 0xF45402) (`lda xde,
-     * (WidgetData_CharsetMappingTable_0xA6:24)`). 128 bytes to the next
+     * (EffEdit_ParamChangeB_Table_2:24)`). 128 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t EffEdit_ParamChangeB_Table_2[128];
     /* ---------------------------------------------------------------------
      * EffEdit_ParamChangeA_Table -- read by EffEdit_ParamChangeA (v10/v9
      * 0xF45398, v7 0xF4538A) (`lda xwa,
-     * (WidgetData_CharsetMappingTable_0x126:24)`). 128 bytes to the next
+     * (EffEdit_ParamChangeA_Table:24)`). 128 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t EffEdit_ParamChangeA_Table[128];
     /* ---------------------------------------------------------------------
      * EffEdit_ParamChangeA_Table_2 -- read by EffEdit_ParamChangeA (v10/v9
      * 0xF45398, v7 0xF4538A) (`lda xde,
-     * (WidgetData_CharsetMappingTable_0x1A6:24)`). 128 bytes to the next
+     * (EffEdit_ParamChangeA_Table_2:24)`). 128 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t EffEdit_ParamChangeA_Table_2[128];
@@ -2140,7 +2132,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqEvent_MainHandler_CaseTable -- jump table of a compiled `switch` in
      * SeqEvent_MainHandler (v10/v9 0xF43D4C, v7 0xF43D3E) (`lda xix,
-     * (WidgetData_CharsetMappingTable_0x248:24)`): case k jumps to
+     * (SeqEvent_MainHandler_CaseTable:24)`): case k jumps to
      * SeqEvent_Dispatch + entry[k] (`lda xix,(SeqEvent_Dispatch); jp_ind`).
      * 14 u16 offsets; the reader's bound `cp ..., 13` pins 14 cases.
      * --------------------------------------------------------------------- */
@@ -2148,7 +2140,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvtHandler_Branch_024_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_024 (v10/v9 0xF445B0, v7 0xF445A2)
-     * (`add xwa, WidgetData_CharsetMappingTable_0x264`): case k jumps to
+     * (`add xwa, AppEvtHandler_Branch_024_CaseTable`): case k jumps to
      * AppEvtHandler_Branch_024_0x97 + entry[k] (`lda
      * xix,(AppEvtHandler_Branch_024_0x97); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
@@ -2157,7 +2149,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvtHandler_Branch_021_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_021 (v10/v9 0xF444B9, v7 0xF444AB)
-     * (`add xwa, WidgetData_CharsetMappingTable_0x270`): case k jumps to
+     * (`add xwa, AppEvtHandler_Branch_021_CaseTable`): case k jumps to
      * AppEvtHandler_Branch_021_0x5E + entry[k] (`lda
      * xix,(AppEvtHandler_Branch_021_0x5E); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
@@ -2166,7 +2158,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvtHandler_Branch_006_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_006 (v10/v9 0xF44243, v7 0xF44235)
-     * (`lda xix, (WidgetData_CharsetMappingTable_0x27C:24)`): case k jumps
+     * (`lda xix, (AppEvtHandler_Branch_006_CaseTable:24)`): case k jumps
      * to AppEvtHandler_Branch_006_0x3B + entry[k] (`lda
      * xix,(AppEvtHandler_Branch_006_0x3B); jp_ind`). 8 u16 offsets; the
      * reader's bound `cp ..., 7` pins 8 cases.
@@ -2175,7 +2167,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvtHandler_Branch_002_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_002 (v10/v9 0xF4417E, v7 0xF44170)
-     * (`lda xix, (WidgetData_CharsetMappingTable_0x28C:24)`): case k jumps
+     * (`lda xix, (AppEvtHandler_Branch_002_CaseTable:24)`): case k jumps
      * to AppEvtHandler_Branch_002_0x4B + entry[k] (`lda
      * xix,(AppEvtHandler_Branch_002_0x4B); jp_ind`). 8 u16 offsets; the
      * reader's bound `cp ..., 7` pins 8 cases.
@@ -2192,7 +2184,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvent_ChainDispatch1_CaseTable -- jump table of a compiled `switch`
      * in AppEvent_ChainDispatch1 (v10/v9 0xF44147, v7 0xF44139) (`add xbc,
-     * WidgetData_CharsetMappingTable_0x2C0`): case k jumps to
+     * AppEvent_ChainDispatch1_CaseTable`): case k jumps to
      * APP_EVENT_HANDLER_TABLE + entry[k] (`lda
      * xix,(APP_EVENT_HANDLER_TABLE); jp_ind`). 32 u16 offsets; the reader's
      * bound `cp ..., 31` pins 32 cases.
@@ -2201,7 +2193,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvent_SubDispatch_CaseTable -- jump table of a compiled `switch` in
      * AppEvent_SubDispatch (v10/v9 0xF448A4, v7 0xF44896) (`add xwa,
-     * WidgetData_CharsetMappingTable_0x300`): case k jumps to
+     * AppEvent_SubDispatch_CaseTable`): case k jumps to
      * AppEvent_SubDispatch_0x4CC + entry[k] (`lda
      * xix,(AppEvent_SubDispatch_0x4CC); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
@@ -2210,7 +2202,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvent_SubDispatch_CaseTable_2 -- jump table of a compiled `switch`
      * in AppEvent_SubDispatch (v10/v9 0xF448A4, v7 0xF44896) (`add xwa,
-     * WidgetData_CharsetMappingTable_0x30C`): case k jumps to
+     * AppEvent_SubDispatch_CaseTable_2`): case k jumps to
      * AppEvent_SubDispatch_0x3A6 + entry[k] (`lda
      * xix,(AppEvent_SubDispatch_0x3A6); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
@@ -2219,14 +2211,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvent_SubDispatch_Table -- read by AppEvent_SubDispatch (v10/v9
      * 0xF448A4, v7 0xF44896) (`lda xix,
-     * (WidgetData_CharsetMappingTable_0x318:24)`). 16 bytes to the next
+     * (AppEvent_SubDispatch_Table:24)`). 16 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AppEvent_SubDispatch_Table[16];
     /* ---------------------------------------------------------------------
      * AppEvent_SubDispatch_Table_2 -- read by AppEvent_SubDispatch (v10/v9
      * 0xF448A4, v7 0xF44896) (`lda xix,
-     * (WidgetData_CharsetMappingTable_0x328:24)`). 16 bytes to the next
+     * (AppEvent_SubDispatch_Table_2:24)`). 16 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AppEvent_SubDispatch_Table_2[16];
@@ -2241,7 +2233,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvent_InlineHandler_CaseTable -- jump table of a compiled `switch`
      * in AppEvent_InlineHandler (v10/v9 0xF44882, v7 0xF44874) (`add xbc,
-     * WidgetData_CharsetMappingTable_0x35C`): case k jumps to
+     * AppEvent_InlineHandler_CaseTable`): case k jumps to
      * AppEvent_SubDispatch + entry[k] (`lda xix,(AppEvent_SubDispatch);
      * jp_ind`). 32 u16 offsets; the reader's bound `cp ..., 31` pins 32
      * cases.
@@ -2250,14 +2242,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AppEvent_RecordDispatch_Table -- read by AppEvent_RecordDispatch
      * (v10/v9 0xF45242, v7 0xF45234) (`lda xix,
-     * (WidgetData_CharsetMappingTable_0x39C:24)`). 16 bytes to the next
+     * (AppEvent_RecordDispatch_Table:24)`). 16 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AppEvent_RecordDispatch_Table[16];
     /* ---------------------------------------------------------------------
      * SeqState_LabelDispatch_CaseTable -- jump table of a compiled `switch`
      * in SeqState_LabelDispatch (v10/v9 0xF4519B, v7 0xF4518D) (`lda xix,
-     * (WidgetData_CharsetMappingTable_0x3AC:24)`): case k jumps to
+     * (SeqState_LabelDispatch_CaseTable:24)`): case k jumps to
      * SoundData_HandlerDispatch + entry[k] (`lda
      * xix,(SoundData_HandlerDispatch); jp_ind`). 16 u16 offsets; the
      * reader's bound `cp ..., 15` pins 16 cases.
@@ -2266,7 +2258,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqAccomp_SubChain_CaseTable -- jump table of a compiled `switch` in
      * SeqAccomp_SubChain (v10/v9 0xF45FD9, v7 0xF45FCB) (`add xwa,
-     * WidgetData_CharsetMappingTable_0x3CC`): case k jumps to
+     * SeqAccomp_SubChain_CaseTable`): case k jumps to
      * SeqAccomp_SubHandlerB + entry[k] (`lda xix,(SeqAccomp_SubHandlerB);
      * jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
      * cases.
@@ -2275,7 +2267,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqAccomp_ParamDelivery_CaseTable -- jump table of a compiled `switch`
      * in SeqAccomp_ParamDelivery (v10/v9 0xF45DC1, v7 0xF45DB3) (`add xwa,
-     * WidgetData_CharsetMappingTable_0x3E4`): case k jumps to
+     * SeqAccomp_ParamDelivery_CaseTable`): case k jumps to
      * SeqAccomp_SubHandlerA + entry[k] (`lda xix,(SeqAccomp_SubHandlerA);
      * jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
      * cases.
@@ -2284,7 +2276,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * ApPlaySyori_CaseTable -- jump table of a compiled `switch` in
      * ApPlaySyori (v10/v9 0xF45AB8, v7 0xF45AAA) (`lda xix,
-     * (WidgetData_CharsetMappingTable_0x3FC:24)`): case k jumps to
+     * (ApPlaySyori_CaseTable:24)`): case k jumps to
      * SeqAccomp_EventDispatch + entry[k] (`lda
      * xix,(SeqAccomp_EventDispatch); jp_ind`). 8 u16 offsets; the reader's
      * bound `cp ..., 7` pins 8 cases.
@@ -2293,7 +2285,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEditSy_SendModeScrollReset_CaseTable -- jump table of a compiled
      * `switch` in NoteEditSy_SendModeScrollReset (v10/v9 0xF464E4, v7
-     * 0xF464D6) (`lda xix, (WidgetData_CharsetMappingTable_0x40C:24)`): case
+     * 0xF464D6) (`lda xix, (NoteEditSy_SendModeScrollReset_CaseTable:24)`): case
      * k jumps to NoteEditSy_ModeDispatch + entry[k] (`lda
      * xix,(NoteEditSy_ModeDispatch); jp_ind`). 8 u16 offsets; the reader's
      * bound `cp ..., 7` pins 8 cases.
@@ -2302,7 +2294,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEditSy_HandleDownScroll_CaseTable -- jump table of a compiled
      * `switch` in NoteEditSy_HandleDownScroll (v10/v9 0xF46762, v7 0xF46754)
-     * (`add xde, WidgetData_CharsetMappingTable_0x41C`): case k jumps to
+     * (`add xde, NoteEditSy_HandleDownScroll_CaseTable`): case k jumps to
      * NoteEditSy_DownScroll_Param0 + entry[k] (`lda
      * xix,(NoteEditSy_DownScroll_Param0); jp_ind`). 12 u16 offsets; the
      * reader's bound `cp ..., 11` pins 12 cases.
@@ -2311,7 +2303,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * NoteEditSy_HandleUpScroll_CaseTable -- jump table of a compiled
      * `switch` in NoteEditSy_HandleUpScroll (v10/v9 0xF466F2, v7 0xF466E4)
-     * (`add xde, WidgetData_CharsetMappingTable_0x434`): case k jumps to
+     * (`add xde, NoteEditSy_HandleUpScroll_CaseTable`): case k jumps to
      * NoteEditSy_UpScroll_Param0 + entry[k] (`lda
      * xix,(NoteEditSy_UpScroll_Param0); jp_ind`). 15 u16 offsets; the
      * reader's bound `cp ..., 14` pins 15 cases.
@@ -2320,7 +2312,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MainExeCall_CaseTable -- jump table of a compiled `switch` in
      * MainExeCall (v10/v9 0xF470A4, v7 0xF47096) (`lda xix,
-     * (WidgetData_CharsetMappingTable_0x452:24)`): case k jumps to
+     * (MainExeCall_CaseTable:24)`): case k jumps to
      * MainExe_HandleD6 + entry[k] (`lda xix,(MainExe_HandleD6); jp_ind`). 17
      * u16 offsets; the reader's bound `cp ..., 16` pins 17 cases.
      * --------------------------------------------------------------------- */
@@ -2455,62 +2447,62 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqPart_VelCurveData_Table -- read by SeqPart_VelCurveData (v10/v9
      * 0xF4C38C, v7 0xF4BFA2) (`lda xbc,
-     * (Display_FontPalette_Table_0x1E:24)`). 2 bytes to the next referenced
+     * (SeqPart_VelCurveData_Table:24)`). 2 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelCurveData_Table[2];
     /* ---------------------------------------------------------------------
      * SeqPart_VelCurveData_Table_2 -- read by SeqPart_VelCurveData (v10/v9
      * 0xF4C38C, v7 0xF4BFA2) (`lda xbc,
-     * (Display_FontPalette_Table_0x20:24)`). 4 bytes to the next referenced
+     * (SeqPart_VelCurveData_Table_2:24)`). 4 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelCurveData_Table_2[4];
     /* ---------------------------------------------------------------------
      * SeqPart_VelCurveData_Table_3 -- read by SeqPart_VelCurveData (v10/v9
      * 0xF4C38C, v7 0xF4BFA2) (`lda xbc,
-     * (Display_FontPalette_Table_0x24:24)`). 8 bytes to the next referenced
+     * (SeqPart_VelCurveData_Table_3:24)`). 8 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelCurveData_Table_3[8];
     /* ---------------------------------------------------------------------
      * SeqPart_VelCurveData_Table_4 -- read by SeqPart_VelCurveData (v10/v9
      * 0xF4C38C, v7 0xF4BFA2) (`lda xbc,
-     * (Display_FontPalette_Table_0x2C:24)`). 4 bytes to the next referenced
+     * (SeqPart_VelCurveData_Table_4:24)`). 4 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelCurveData_Table_4[4];
     /* ---------------------------------------------------------------------
      * SeqPart_VelCurveData_Table_5 -- read by SeqPart_VelCurveData (v10/v9
      * 0xF4C38C, v7 0xF4BFA2) (`lda xbc,
-     * (Display_FontPalette_Table_0x30:24)`). 6 bytes to the next referenced
+     * (SeqPart_VelCurveData_Table_5:24)`). 6 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelCurveData_Table_5[6];
     /* ---------------------------------------------------------------------
      * SeqPart_VelZoneLookup_Table -- read by SeqPart_VelZoneLookup (v10/v9
      * 0xF4C56D, v7 0xF4C183) (`lda xbc,
-     * (Display_FontPalette_Table_0x36:24)`). 14 bytes to the next referenced
+     * (SeqPart_VelZoneLookup_Table:24)`). 14 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelZoneLookup_Table[14];
     /* ---------------------------------------------------------------------
      * SeqPart_VelCurveData_Table_6 -- read by SeqPart_VelCurveData (v10/v9
-     * 0xF4C38C, v7 0xF4BFA2) (`ld xbc, Display_FontPalette_Table_0x44`). 2
+     * 0xF4C38C, v7 0xF4BFA2) (`ld xbc, SeqPart_VelCurveData_Table_6`). 2
      * bytes to the next referenced object; the layout beyond that access is
      * not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelCurveData_Table_6[2];
     /* ---------------------------------------------------------------------
      * SeqPart_VelCurveData_Table_7 -- read by SeqPart_VelCurveData (v10/v9
-     * 0xF4C38C, v7 0xF4BFA2) (`ld xbc, Display_FontPalette_Table_0x46`). 22
+     * 0xF4C38C, v7 0xF4BFA2) (`ld xbc, SeqPart_VelCurveData_Table_7`). 22
      * bytes to the next referenced object; the layout beyond that access is
      * not established.
      * --------------------------------------------------------------------- */
     uint8_t SeqPart_VelCurveData_Table_7[22];
     /* ---------------------------------------------------------------------
      * SeqPart_VelZoneLookup_Table_2 -- read by SeqPart_VelZoneLookup (v10/v9
-     * 0xF4C56D, v7 0xF4C183) (`ld xbc, Display_FontPalette_Table_0x5C`). 12
+     * 0xF4C56D, v7 0xF4C183) (`ld xbc, SeqPart_VelZoneLookup_Table_2`). 12
      * bytes to the next referenced object; the layout beyond that access is
      * not established.
      * --------------------------------------------------------------------- */
@@ -2518,7 +2510,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqPart_VelocityCurveCalc_CaseTable -- jump table of a compiled
      * `switch` in SeqPart_VelocityCurveCalc (v10/v9 0xF4C360, v7 0xF4BF76)
-     * (`lda xix, (Display_FontPalette_Table_0x68:24)`): case k jumps to
+     * (`lda xix, (SeqPart_VelocityCurveCalc_CaseTable:24)`): case k jumps to
      * SeqPart_VelCurveData + entry[k] (`lda xix,(SeqPart_VelCurveData);
      * jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
      * cases.
@@ -2527,7 +2519,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqStep_NoteReadEvent_CaseTable -- jump table of a compiled `switch`
      * in SeqStep_NoteReadEvent (v10/v9 0xF4CE61, v7 0xF4CA77) (`lda xix,
-     * (Display_FontPalette_Table_0x7E:24)`): case k jumps to
+     * (SeqStep_NoteReadEvent_CaseTable:24)`): case k jumps to
      * SeqStep_NoteByteBlock + entry[k] (`lda xix,(SeqStep_NoteByteBlock);
      * jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -2535,7 +2527,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqStep_EventPosConsumeAdvance_CaseTable -- jump table of a compiled
      * `switch` in SeqStep_EventPosConsumeAdvance (v10/v9 0xF4D127, v7
-     * 0xF4CD3D) (`lda xix, (Display_FontPalette_Table_0x8C:24)`): case k
+     * 0xF4CD3D) (`lda xix, (SeqStep_EventPosConsumeAdvance_CaseTable:24)`): case k
      * jumps to SeqStep_EventPosFinish + entry[k] (`lda
      * xix,(SeqStep_EventPosFinish); jp_ind`). 7 u16 offsets; the reader's
      * bound `cp ..., 6` pins 7 cases.
@@ -2544,7 +2536,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * SeqStep_DeleteDone_CaseTable -- jump table of a compiled `switch` in
      * SeqStep_DeleteDone (v10/v9 0xF4D37D, v7 0xF4CF93) (`lda xix,
-     * (Display_FontPalette_Table_0x9A:24)`): case k jumps to
+     * (SeqStep_DeleteDone_CaseTable:24)`): case k jumps to
      * SeqStep_DeleteExitRestore + entry[k] (`lda
      * xix,(SeqStep_DeleteExitRestore); jp_ind`). 7 u16 offsets; the reader's
      * bound `cp ..., 6` pins 7 cases.
@@ -2565,9 +2557,9 @@ typedef struct __attribute__((packed)) {
     uint32_t SeqStep_TimerDispatch_ProcTables[3][23];
     /* ---------------------------------------------------------------------
      * SeqStep_TimerDispatch_ProcTables_Tail -- 66 bytes after
-     * SeqStep_TimerDispatch_ProcTables that no code reference reaches
-     * (searched: every label and positional-label name anchored on the
-     * historical labels of this span, in all v10 .s files). Holds short
+     * SeqStep_TimerDispatch_ProcTables that code DOES reach (readers: the .s header, which also
+     * labels each string)
+     * Holds short
      * NUL-terminated strings -- "A", "w~", "d", "wb", "r", "d", "r", "a",
      * "d", ". " padded to 11 characters, "r" -- then zeros and 02 02 01 00
      * 02 70 00 A0 05 F9 03 00 09 00 02 00, the 2DD geometry fields of
@@ -2577,9 +2569,9 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * FDC_Format2DD_Step2_FdcCmd -- FDC command block: FDC_Format2DD_Step2
      * (v10/v9 0xF51ED7, v7 0xF51AD3) (`lda xwa,
-     * (Display_FontPalette_Table_0x1FE:24)`), FDC_Format2HD_Step2 (v10/v9
+     * (FDC_Format2DD_Step2_FdcCmd:24)`), FDC_Format2HD_Step2 (v10/v9
      * 0xF522BD, v7 0xF51EB9) (`lda xwa,
-     * (Display_FontPalette_Table_0x1FE:24)`) passes its address to
+     * (FDC_Format2DD_Step2_FdcCmd:24)`) passes its address to
      * FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
      * 32 bytes to the next referenced object; the field layout is not
      * established.
@@ -2588,9 +2580,9 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * FDC_Format2DD_Start_FdcCmd -- FDC command block: FDC_Format2DD_Start
      * (v10/v9 0xF51EAB, v7 0xF51AA7) (`lda xwa,
-     * (Display_FontPalette_Table_0x21E:24)`), GetMediaType_Try2DDHeader
+     * (FDC_Format2DD_Start_FdcCmd:24)`), GetMediaType_Try2DDHeader
      * (v10/v9 0xF526D4, v7 0xF522D0) (`lda xwa,
-     * (Display_FontPalette_Table_0x21E:24)`) passes its address to
+     * (FDC_Format2DD_Start_FdcCmd:24)`) passes its address to
      * FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
      * 32 bytes to the next referenced object; the field layout is not
      * established.
@@ -2599,9 +2591,9 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * FDC_Format2HD_Start_FdcCmd -- FDC command block: FDC_Format2HD_Start
      * (v10/v9 0xF52291, v7 0xF51E8D) (`lda xwa,
-     * (Display_FontPalette_Table_0x23E:24)`), GetMediaType_TryFormat2HD
+     * (FDC_Format2HD_Start_FdcCmd:24)`), GetMediaType_TryFormat2HD
      * (v10/v9 0xF5266D, v7 0xF52269) (`lda xwa,
-     * (Display_FontPalette_Table_0x23E:24)`) passes its address to
+     * (FDC_Format2HD_Start_FdcCmd:24)`) passes its address to
      * FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
      * 16 bytes to the next referenced object; the field layout is not
      * established.
@@ -2610,7 +2602,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * GetMediaType_TryRecalib_FdcCmd -- FDC command block:
      * GetMediaType_TryRecalib (v10/v9 0xF52657, v7 0xF52253) (`lda xwa,
-     * (Display_FontPalette_Table_0x24E:24)`) passes its address to
+     * (GetMediaType_TryRecalib_FdcCmd:24)`) passes its address to
      * FDC_CommandEntry (`lda xwa,<this>; push xwa; call FDC_CommandEntry`).
      * 16 bytes to the next referenced object; the field layout is not
      * established.
@@ -2647,16 +2639,14 @@ typedef struct __attribute__((packed)) {
      * --------------------------------------------------------------------- */
     uint8_t FDC_Format2HD_FatHead[4];
     /* ---------------------------------------------------------------------
-     * FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that
-     * no code reference reaches (searched: every label and positional-label
-     * name anchored on the historical labels of this span, in all v10 .s
-     * files). Holds the strings "d" and "A:\". Contents not established.
+     * FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that code DOES reach
+     * (readers: the .s header) Holds the strings "d" and "A:\". Contents not established.
      * --------------------------------------------------------------------- */
     uint8_t FDC_Format2HD_FatHead_Tail[6];
     /* ---------------------------------------------------------------------
      * GetDiskFreeSpace_CaseTable -- jump table of a compiled `switch` in
      * GetDiskFreeSpace (v10/v9 0xF52751, v7 0xF5234D) (`lda xix,
-     * (Display_FontPalette_Table_0x2AC:24)`): case k jumps to
+     * (GetDiskFreeSpace_CaseTable:24)`): case k jumps to
      * GetDiskFreeSpace_JumpTable + entry[k] (`lda
      * xix,(GetDiskFreeSpace_JumpTable); jp_ind`). 7 u16 offsets; the
      * reader's bound `cp ..., 6` pins 7 cases.
@@ -2664,15 +2654,14 @@ typedef struct __attribute__((packed)) {
     uint16_t GetDiskFreeSpace_CaseTable[7];
     /* ---------------------------------------------------------------------
      * GetDiskFreeSpace_CaseTable_Tail -- 6 bytes after
-     * GetDiskFreeSpace_CaseTable that no code reference reaches (searched:
-     * every label and positional-label name anchored on the historical
-     * labels of this span, in all v10 .s files). Contents not established.
+     * GetDiskFreeSpace_CaseTable that code DOES reach (readers: the .s header, which also labels
+     * each string) Contents not established.
      * --------------------------------------------------------------------- */
     uint8_t GetDiskFreeSpace_CaseTable_Tail[6];
     /* ---------------------------------------------------------------------
      * GetVolumeLabel_CaseTable -- jump table of a compiled `switch` in
      * GetVolumeLabel (v10/v9 0xF527CE, v7 0xF523CA) (`lda xix,
-     * (Display_FontPalette_Table_0x2C0:24)`): case k jumps to
+     * (GetVolumeLabel_CaseTable:24)`): case k jumps to
      * GetVolumeLabel_JumpTable + entry[k] (`lda
      * xix,(GetVolumeLabel_JumpTable); jp_ind`). 7 u16 offsets; the reader's
      * bound `cp ..., 6` pins 7 cases.
@@ -2680,9 +2669,8 @@ typedef struct __attribute__((packed)) {
     uint16_t GetVolumeLabel_CaseTable[7];
     /* ---------------------------------------------------------------------
      * GetVolumeLabel_CaseTable_Tail -- 28 bytes after
-     * GetVolumeLabel_CaseTable that no code reference reaches (searched:
-     * every label and positional-label name anchored on the historical
-     * labels of this span, in all v10 .s files). Holds the strings "A:\",
+     * GetVolumeLabel_CaseTable that code DOES reach (readers: the .s header, which also labels
+     * each string) Holds the strings "A:\",
      * "+wb", "\", "d", "rb", then 0xFF and "1 PianoDisc". Contents not
      * established.
      * --------------------------------------------------------------------- */
@@ -2703,32 +2691,32 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AccPatch_Transpose_LookupTable_Data -- read by
      * AccPatch_Transpose_LookupTable (v10/v9 0xF60874, v7 0xF60470) (`add
-     * xhl, Display_FontPalette_Table_0x12EA`), AccPlayback_TrackPosition
+     * xhl, AccPatch_Transpose_LookupTable_Data`), AccPlayback_TrackPosition
      * (v10/v9 0xF61F6E, v7 0xF61B6A) (`ld xix,
-     * Display_FontPalette_Table_0x12EA`), ToneGen_WriteMultiChanParam
+     * AccPatch_Transpose_LookupTable_Data`), ToneGen_WriteMultiChanParam
      * (v10/v9 0xF62986, v7 0xF62582) (`ld xix,
-     * Display_FontPalette_Table_0x12EA`), __pad_F62B29 (v10/v9 0xF62B29, v7
-     * 0xF62725) (`ld xix, Display_FontPalette_Table_0x12EA`),
+     * AccPatch_Transpose_LookupTable_Data`), __pad_F62B29 (v10/v9 0xF62B29, v7
+     * 0xF62725) (`ld xix, AccPatch_Transpose_LookupTable_Data`),
      * Rhythm_CrossVoice_Apply (v10/v9 0xF54FFE, v7 0xF54BFA) (`ld xiy,
-     * Display_FontPalette_Table_0x12EA`), Rhythm_NoteRangeCheck (v10/v9
-     * 0xF55030, v7 0xF54C2C) (`ld xiy, Display_FontPalette_Table_0x12EA`),
+     * AccPatch_Transpose_LookupTable_Data`), Rhythm_NoteRangeCheck (v10/v9
+     * 0xF55030, v7 0xF54C2C) (`ld xiy, AccPatch_Transpose_LookupTable_Data`),
      * Rhythm_InstrBaseLookup (v10/v9 0xF550BB, v7 0xF54CB7) (`ld xiy,
-     * Display_FontPalette_Table_0x12EA`), Rhythm_TranspMod_BaseApply (v10/v9
-     * 0xF55B44, v7 0xF55740) (`ld xiy, Display_FontPalette_Table_0x12EA`),
+     * AccPatch_Transpose_LookupTable_Data`), Rhythm_TranspMod_BaseApply (v10/v9
+     * 0xF55B44, v7 0xF55740) (`ld xiy, AccPatch_Transpose_LookupTable_Data`),
      * AccPlay_NoteAllocAndWrite (v10/v9 0xF722AB, v7 0xF71EA7) (`ld xix,
-     * Display_FontPalette_Table_0x12EA`). 128 bytes to the next referenced
+     * AccPatch_Transpose_LookupTable_Data`). 128 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccPatch_Transpose_LookupTable_Data[128];
     /* ---------------------------------------------------------------------
      * Rhythm_VelLookA_TableLookup_Table -- read by
      * Rhythm_VelLookA_TableLookup (v10/v9 0xF5509A, v7 0xF54C96) (`ld xiy,
-     * Display_FontPalette_Table_0x136A`), Rhythm_VoiceMap_Inst2Bit3 (v10/v9
-     * 0xF5524E, v7 0xF54E4A) (`ld xiy, Display_FontPalette_Table_0x136A`),
+     * Rhythm_VelLookA_TableLookup_Table`), Rhythm_VoiceMap_Inst2Bit3 (v10/v9
+     * 0xF5524E, v7 0xF54E4A) (`ld xiy, Rhythm_VelLookA_TableLookup_Table`),
      * Rhythm_VelComp_Lookup (v10/v9 0xF5530D, v7 0xF54F09) (`ld xiy,
-     * Display_FontPalette_Table_0x136A`), Rhythm_TranspMod_BaseLookup
+     * Rhythm_VelLookA_TableLookup_Table`), Rhythm_TranspMod_BaseLookup
      * (v10/v9 0xF55B5B, v7 0xF55757) (`ld xiy,
-     * Display_FontPalette_Table_0x136A`). 456 bytes to the next referenced
+     * Rhythm_VelLookA_TableLookup_Table`). 456 bytes to the next referenced
      * object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t Rhythm_VelLookA_TableLookup_Table[456];
@@ -2743,25 +2731,25 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AccTone_LookupByProgram_Table -- read by AccTone_LookupByProgram
      * (v10/v9 0xF5D640, v7 0xF5D23C) (`lda xbc,
-     * (Display_FontPalette_Table_0x1D32:24)`),
+     * (AccTone_LookupByProgram_Table:24)`),
      * AccTone_ExtendAndDispatch_Body (v10/v9 0xF5D740, v7 0xF5D33C) (`lda
-     * xhl, (Display_FontPalette_Table_0x1D32:24)`),
+     * xhl, (AccTone_LookupByProgram_Table:24)`),
      * AccTone_FoundMatch_IncRet (v10/v9 0xF5D7F4, v7 0xF5D3F0) (`lda xbc,
-     * (Display_FontPalette_Table_0x1D32:24)`), AccPatch_SlotScanByteData
+     * (AccTone_LookupByProgram_Table:24)`), AccPatch_SlotScanByteData
      * (v10/v9 0xF5EB9C, v7 0xF5E798) (`add xwa,
-     * Display_FontPalette_Table_0x1D32`), AccPatch_FillEntryWithVoiceData
+     * AccTone_LookupByProgram_Table`), AccPatch_FillEntryWithVoiceData
      * (v10/v9 0xF5EF3B, v7 0xF5EB37) (`ld xbc,
-     * Display_FontPalette_Table_0x1D32`), AccPatch_ReadVoiceStride (v10/v9
-     * 0xF5F108, v7 0xF5ED04) (`ld xbc, Display_FontPalette_Table_0x1D32`),
+     * AccTone_LookupByProgram_Table`), AccPatch_ReadVoiceStride (v10/v9
+     * 0xF5F108, v7 0xF5ED04) (`ld xbc, AccTone_LookupByProgram_Table`),
      * AccPatch_RebuildChannelSlot (v10/v9 0xF5F1B7, v7 0xF5EDB3) (`add xhl,
-     * Display_FontPalette_Table_0x1D32`), AccPatch_ComplexDataBlock (v10/v9
-     * 0xF5FAC8, v7 0xF5F6C4) (`ld xbc, Display_FontPalette_Table_0x1D32`),
+     * AccTone_LookupByProgram_Table`), AccPatch_ComplexDataBlock (v10/v9
+     * 0xF5FAC8, v7 0xF5F6C4) (`ld xbc, AccTone_LookupByProgram_Table`),
      * AccPatch_FillSlotWithVoiceData (v10/v9 0xF5FD29, v7 0xF5F925) (`ld
-     * xbc, Display_FontPalette_Table_0x1D32`), VoiceResolve_FindSlot (v10/v9
-     * 0xF67448, v7 0xF67044) (`ld xbc, Display_FontPalette_Table_0x1D32`),
+     * xbc, AccTone_LookupByProgram_Table`), VoiceResolve_FindSlot (v10/v9
+     * 0xF67448, v7 0xF67044) (`ld xbc, AccTone_LookupByProgram_Table`),
      * AccStyle_ReadVoiceParam (v10/v9 0xF53DDC, v7 0xF539D8) (`ld xhl,
-     * Display_FontPalette_Table_0x1D32`), AccPatch_ClampedSetParam (v10/v9
-     * 0xF53DF8, v7 0xF539F4) (`ld xhl, Display_FontPalette_Table_0x1D32`).
+     * AccTone_LookupByProgram_Table`), AccPatch_ClampedSetParam (v10/v9
+     * 0xF53DF8, v7 0xF539F4) (`ld xhl, AccTone_LookupByProgram_Table`).
      * 20 bytes to the next referenced object; the layout beyond that access
      * is not established.
      * --------------------------------------------------------------------- */
@@ -2769,13 +2757,13 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AccVoice_LookupTableAddress_Table -- read by
      * AccVoice_LookupTableAddress (v10/v9 0xF569DB, v7 0xF565D7) (`ld xde,
-     * Display_FontPalette_Table_0x1D46`), AccVoice_LookupExtParamAddr
+     * AccVoice_LookupTableAddress_Table`), AccVoice_LookupExtParamAddr
      * (v10/v9 0xF569F0, v7 0xF565EC) (`ld xde,
-     * Display_FontPalette_Table_0x1D46`), AccTempo_ComputeDelta (v10/v9
-     * 0xF570F8, v7 0xF56CF4) (`add xwa, Display_FontPalette_Table_0x1D46`),
+     * AccVoice_LookupTableAddress_Table`), AccTempo_ComputeDelta (v10/v9
+     * 0xF570F8, v7 0xF56CF4) (`add xwa, AccVoice_LookupTableAddress_Table`),
      * AccVoice_PatchFromDirect (v10/v9 0xF53DBC, v7 0xF539B8) (`ld xhl,
-     * Display_FontPalette_Table_0x1D46`), Seq_ProcessAllInputState (v10/v9
-     * 0xF53509, v7 0xF53105) (`add xhl, Display_FontPalette_Table_0x1D46`).
+     * AccVoice_LookupTableAddress_Table`), Seq_ProcessAllInputState (v10/v9
+     * 0xF53509, v7 0xF53105) (`add xhl, AccVoice_LookupTableAddress_Table`).
      * 18 bytes to the next referenced object; the layout beyond that access
      * is not established.
      * --------------------------------------------------------------------- */
@@ -2783,16 +2771,16 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AccStyle_ApplyExt_SkipClamp_Table -- read by
      * AccStyle_ApplyExt_SkipClamp (v10/v9 0xF560C5, v7 0xF55CC1) (`ld xhl,
-     * Display_FontPalette_Table_0x1D58`), AccVoice_Reassign_Mode2 (v10/v9
-     * 0xF58AFD, v7 0xF586F9) (`ld xhl, Display_FontPalette_Table_0x1D58`),
+     * AccStyle_ApplyExt_SkipClamp_Table`), AccVoice_Reassign_Mode2 (v10/v9
+     * 0xF58AFD, v7 0xF586F9) (`ld xhl, AccStyle_ApplyExt_SkipClamp_Table`),
      * AccTone_FoundMatch_IncRet (v10/v9 0xF5D7F4, v7 0xF5D3F0) (`lda xbc,
-     * (Display_FontPalette_Table_0x1D58:24)`), AccPedal_ProcessAllChanges
+     * (AccStyle_ApplyExt_SkipClamp_Table:24)`), AccPedal_ProcessAllChanges
      * (v10/v9 0xF537F0, v7 0xF533EC) (`ld xhl,
-     * Display_FontPalette_Table_0x1D58`), AccVoice_ReadBankAssign (v10/v9
-     * 0xF5387B, v7 0xF53477) (`ld xhl, Display_FontPalette_Table_0x1D58`),
+     * AccStyle_ApplyExt_SkipClamp_Table`), AccVoice_ReadBankAssign (v10/v9
+     * 0xF5387B, v7 0xF53477) (`ld xhl, AccStyle_ApplyExt_SkipClamp_Table`),
      * AccChord_DispatchVoiceChange (v10/v9 0xF53B62, v7 0xF5375E) (`ld xhl,
-     * Display_FontPalette_Table_0x1D58`), RhythmPart_ProcessBit1 (v10/v9
-     * 0xF53C2F, v7 0xF5382B) (`ld xhl, Display_FontPalette_Table_0x1D58`). 9
+     * AccStyle_ApplyExt_SkipClamp_Table`), RhythmPart_ProcessBit1 (v10/v9
+     * 0xF53C2F, v7 0xF5382B) (`ld xhl, AccStyle_ApplyExt_SkipClamp_Table`). 9
      * bytes to the next referenced object; the layout beyond that access is
      * not established.
      * --------------------------------------------------------------------- */
@@ -2827,7 +2815,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AccTone_NoteLookup_Table -- read by AccTone_NoteLookup (v10/v9
      * 0xF5D6ED, v7 0xF5D2E9) (`lda xhl,
-     * (Display_FontPalette_Table_0x1EBF:24)`). 816 bytes to the next
+     * (AccTone_NoteLookup_Table:24)`). 816 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccTone_NoteLookup_Table[816];
@@ -2895,46 +2883,46 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * AccTone_ExtendAndDispatch_Body_Table -- read by
      * AccTone_ExtendAndDispatch_Body (v10/v9 0xF5D740, v7 0xF5D33C) (`lda
-     * xiz, (Display_FontPalette_Table_0x511C:24)`). 32 bytes to the next
+     * xiz, (AccTone_ExtendAndDispatch_Body_Table:24)`). 32 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccTone_ExtendAndDispatch_Body_Table[32];
     /* ---------------------------------------------------------------------
      * AccTone_ExtendAndDispatch_Body_Table_2 -- read by
      * AccTone_ExtendAndDispatch_Body (v10/v9 0xF5D740, v7 0xF5D33C) (`lda
-     * xde, (Display_FontPalette_Table_0x513C:24)`),
+     * xde, (AccTone_ExtendAndDispatch_Body_Table_2:24)`),
      * AccTone_FoundMatch_IncRet (v10/v9 0xF5D7F4, v7 0xF5D3F0) (`lda xde,
-     * (Display_FontPalette_Table_0x513C:24)`). 32 bytes to the next
+     * (AccTone_ExtendAndDispatch_Body_Table_2:24)`). 32 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccTone_ExtendAndDispatch_Body_Table_2[32];
     /* ---------------------------------------------------------------------
      * AccTone_LookupByProgram_Table_2 -- read by AccTone_LookupByProgram
      * (v10/v9 0xF5D640, v7 0xF5D23C) (`lda xbc,
-     * (Display_FontPalette_Table_0x515C:24)`), AccTone_Process_UnderF0
+     * (AccTone_LookupByProgram_Table_2:24)`), AccTone_Process_UnderF0
      * (v10/v9 0xF5D6CB, v7 0xF5D2C7) (`lda xbc,
-     * (Display_FontPalette_Table_0x515C:24)`). 20 bytes to the next
+     * (AccTone_LookupByProgram_Table_2:24)`). 20 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccTone_LookupByProgram_Table_2[20];
     /* ---------------------------------------------------------------------
      * AccTuning_ReadAndApplyOffset_Table -- read by
      * AccTuning_ReadAndApplyOffset (v10/v9 0xF5E393, v7 0xF5DF8F) (`lda xbc,
-     * (Display_FontPalette_Table_0x5170:24)`). 116 bytes to the next
+     * (AccTuning_ReadAndApplyOffset_Table:24)`). 116 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccTuning_ReadAndApplyOffset_Table[116];
     /* ---------------------------------------------------------------------
      * AccTone_ExtendAndDispatch_Body_Table_3 -- read by
      * AccTone_ExtendAndDispatch_Body (v10/v9 0xF5D740, v7 0xF5D33C) (`lda
-     * xde, (Display_FontPalette_Table_0x51E4:24)`). 4 bytes to the next
+     * xde, (AccTone_ExtendAndDispatch_Body_Table_3:24)`). 4 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccTone_ExtendAndDispatch_Body_Table_3[4];
     /* ---------------------------------------------------------------------
      * AccTone_ExtendAndDispatch_PopRet_Table -- read by
      * AccTone_ExtendAndDispatch_PopRet (v10/v9 0xF5D7C1, v7 0xF5D3BD) (`lda
-     * xde, (Display_FontPalette_Table_0x51E8:24)`). 4 bytes to the next
+     * xde, (AccTone_ExtendAndDispatch_PopRet_Table:24)`). 4 bytes to the next
      * referenced object; the layout beyond that access is not established.
      * --------------------------------------------------------------------- */
     uint8_t AccTone_ExtendAndDispatch_PopRet_Table[4];
@@ -2969,7 +2957,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * VoiceSlot_Dispatch_CaseTable -- jump table of a compiled `switch` in
      * VoiceSlot_Dispatch (v10/v9 0xF66E99, v7 0xF66A95) (`lda xix,
-     * (Display_FontPalette_Table_0x52C0:24)`): case k jumps to
+     * (VoiceSlot_Dispatch_CaseTable:24)`): case k jumps to
      * Voice_ClearSlotAndRet + entry[k] (`lda xix,(Voice_ClearSlotAndRet);
      * jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -2977,7 +2965,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * RhythmParam_Dispatch_CaseTable -- jump table of a compiled `switch` in
      * RhythmParam_Dispatch (v10/v9 0xF66D36, v7 0xF66932) (`lda xix,
-     * (Display_FontPalette_Table_0x52CE:24)`): case k jumps to
+     * (RhythmParam_Dispatch_CaseTable:24)`): case k jumps to
      * RhythmParam_CheckExit + entry[k] (`lda xix,(RhythmParam_CheckExit);
      * jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3018,7 +3006,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpMenuTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CmpMenuTtlFunc (v10/v9 0xF67DD0, v7 0xF679CC) (`add xde,
-     * Display_FontPalette_Table_0x701A`): case k jumps to
+     * CmpMenuTtlFunc_CaseTable`): case k jumps to
      * CmpMenuTtl_Dispatch + entry[k] (`lda xix,(CmpMenuTtl_Dispatch);
      * jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3026,7 +3014,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpSetTtl_DynamicLookup_CaseTable -- jump table of a compiled `switch`
      * in CmpSetTtl_DynamicLookup (v10/v9 0xF67F79, v7 0xF67B75) (`add xde,
-     * Display_FontPalette_Table_0x7028`): case k jumps to
+     * CmpSetTtl_DynamicLookup_CaseTable`): case k jumps to
      * CmpSetTtl_Dispatch2 + entry[k] (`lda xix,(CmpSetTtl_Dispatch2);
      * jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
      * cases.
@@ -3035,7 +3023,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpSetTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CmpSetTtlFunc (v10/v9 0xF67E59, v7 0xF67A55) (`add xde,
-     * Display_FontPalette_Table_0x7040`): case k jumps to CmpSetTtl_Dispatch
+     * CmpSetTtlFunc_CaseTable`): case k jumps to CmpSetTtl_Dispatch
      * + entry[k] (`lda xix,(CmpSetTtl_Dispatch); jp_ind`). 7 u16 offsets;
      * the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3043,7 +3031,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpRealTtl_MajorDispatch_CaseTable -- jump table of a compiled
      * `switch` in CmpRealTtl_MajorDispatch (v10/v9 0xF68048, v7 0xF67C44)
-     * (`add xwa, Display_FontPalette_Table_0x704E`): case k jumps to
+     * (`add xwa, CmpRealTtl_MajorDispatch_CaseTable`): case k jumps to
      * CmpRealTtl_RhythmVar0 + entry[k] (`lda xix,(CmpRealTtl_RhythmVar0);
      * jp_ind`). 13 u16 offsets; the reader's bound `cp ..., 12` pins 13
      * cases.
@@ -3052,7 +3040,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpRealTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CmpRealTtlFunc (v10/v9 0xF67FEE, v7 0xF67BEA) (`add xde,
-     * Display_FontPalette_Table_0x7068`): case k jumps to
+     * CmpRealTtlFunc_CaseTable`): case k jumps to
      * CmpRealTtl_Dispatch + entry[k] (`lda xix,(CmpRealTtl_Dispatch);
      * jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3060,7 +3048,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpBkslTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CmpBkslTtlFunc (v10/v9 0xF682E2, v7 0xF67EDE) (`add xde,
-     * Display_FontPalette_Table_0x7076`): case k jumps to
+     * CmpBkslTtlFunc_CaseTable`): case k jumps to
      * CmpBkslTtl_Dispatch + entry[k] (`lda xix,(CmpBkslTtl_Dispatch);
      * jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3068,7 +3056,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpBkslSTtl_DirectMode_CaseTable -- jump table of a compiled `switch`
      * in CmpBkslSTtl_DirectMode (v10/v9 0xF684BF, v7 0xF680BB) (`add xwa,
-     * Display_FontPalette_Table_0x7084`): case k jumps to
+     * CmpBkslSTtl_DirectMode_CaseTable`): case k jumps to
      * CmpBkslSTtl_FillIn4 + entry[k] (`lda xix,(CmpBkslSTtl_FillIn4);
      * jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
      * cases.
@@ -3077,7 +3065,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpBksl_STtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CmpBksl_STtlFunc (v10/v9 0xF6845B, v7 0xF68057) (`add xde,
-     * Display_FontPalette_Table_0x709A`): case k jumps to
+     * CmpBksl_STtlFunc_CaseTable`): case k jumps to
      * CmpBkslSTtl_Dispatch + entry[k] (`lda xix,(CmpBkslSTtl_Dispatch);
      * jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3085,7 +3073,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpNcpTtl_TableDispatch_CaseTable -- jump table of a compiled `switch`
      * in CmpNcpTtl_TableDispatch (v10/v9 0xF686E3, v7 0xF682DF) (`add xde,
-     * Display_FontPalette_Table_0x70A8`): case k jumps to
+     * CmpNcpTtl_TableDispatch_CaseTable`): case k jumps to
      * CmpNcpTtl_Dispatch2 + entry[k] (`lda xix,(CmpNcpTtl_Dispatch2);
      * jp_ind`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
      * cases.
@@ -3094,14 +3082,14 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpNcpTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CmpNcpTtlFunc (v10/v9 0xF685F9, v7 0xF681F5) (`add xde,
-     * Display_FontPalette_Table_0x70D0`): case k jumps to CmpNcpTtl_Dispatch
+     * CmpNcpTtlFunc_CaseTable`): case k jumps to CmpNcpTtl_Dispatch
      * + entry[k] (`lda xix,(CmpNcpTtl_Dispatch); jp_ind`). 7 u16 offsets;
      * the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
     uint16_t CmpNcpTtlFunc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * CmpEsyTtl_Mode2_Table -- read by CmpEsyTtl_Mode2 (v10/v9 0xF68CFB, v7
-     * 0xF688F7) (`add xde, Display_FontPalette_Table_0x70DE`). 20 bytes to
+     * 0xF688F7) (`add xde, CmpEsyTtl_Mode2_Table`). 20 bytes to
      * the next referenced object; the layout beyond that access is not
      * established.
      * --------------------------------------------------------------------- */
@@ -3109,7 +3097,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpEsyTtl_Mode2_CaseTable -- jump table of a compiled `switch` in
      * CmpEsyTtl_Mode2 (v10/v9 0xF68CFB, v7 0xF688F7) (`ld xix,
-     * Display_FontPalette_Table_0x70F2`): case k jumps to CmEsyTtl_Dispatch2
+     * CmpEsyTtl_Mode2_CaseTable`): case k jumps to CmEsyTtl_Dispatch2
      * + entry[k] (`lda xix,(CmEsyTtl_Dispatch2); jp_ind`). 6 u16 offsets;
      * the reader's bound is not visible in the source (the code after the
      * load is still misframed), so the 6 entries are the extent to the next
@@ -3119,7 +3107,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmEsyTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CmEsyTtlFunc (v10/v9 0xF68C19, v7 0xF68815) (`add xde,
-     * Display_FontPalette_Table_0x70FE`): case k jumps to CmEsyTtl_Dispatch
+     * CmEsyTtlFunc_CaseTable`): case k jumps to CmEsyTtl_Dispatch
      * + entry[k] (`lda xix,(CmEsyTtl_Dispatch); jp_ind`). 7 u16 offsets; the
      * reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3127,7 +3115,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CmpEsyTtl_E_Var1_CaseTable -- jump table of a compiled `switch` in
      * CmpEsyTtl_E_Var1 (v10/v9 0xF68E86, v7 0xF68A82) (`add xwa,
-     * Display_FontPalette_Table_0x710C`): case k jumps to
+     * CmpEsyTtl_E_Var1_CaseTable`): case k jumps to
      * CmpEsy_E_DispatchDataBlock + entry[k] (`lda
      * xix,(CmpEsy_E_DispatchDataBlock); jp_ind`). 12 u16 offsets; the
      * reader's bound `cp ..., 11` pins 12 cases.
@@ -3136,7 +3124,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * S2cTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * S2cTtlFunc (v10/v9 0xF68DE2, v7 0xF689DE) (`add xde,
-     * Display_FontPalette_Table_0x7124`): case k jumps to S2cTtl_Dispatch +
+     * S2cTtlFunc_CaseTable`): case k jumps to S2cTtl_Dispatch +
      * entry[k] (`lda xix,(S2cTtl_Dispatch); jp_ind`). 7 u16 offsets; the
      * reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3144,7 +3132,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CstmCpTtl_RecMode2_CaseTable -- jump table of a compiled `switch` in
      * CstmCpTtl_RecMode2 (v10/v9 0xF692FC, v7 0xF68EF8) (`add xde,
-     * Display_FontPalette_Table_0x7132`): case k jumps to
+     * CstmCpTtl_RecMode2_CaseTable`): case k jumps to
      * CstmCpTtl_Dispatch2 + entry[k] (`lda xix,(CstmCpTtl_Dispatch2);
      * jp_ind`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
      * cases.
@@ -3153,7 +3141,7 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * CstmCpTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * CstmCpTtlFunc (v10/v9 0xF69227, v7 0xF68E23) (`add xde,
-     * Display_FontPalette_Table_0x715A`): case k jumps to CstmCpTtl_Dispatch
+     * CstmCpTtlFunc_CaseTable`): case k jumps to CstmCpTtl_Dispatch
      * + entry[k] (`lda xix,(CstmCpTtl_Dispatch); jp_ind`). 7 u16 offsets;
      * the reader's bound `cp ..., 6` pins 7 cases.
      * --------------------------------------------------------------------- */
@@ -3208,25 +3196,25 @@ typedef struct __attribute__((packed)) {
     /* ---------------------------------------------------------------------
      * MspMenuTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * MspMenuTtlFunc (v10/v9 0xF69E22, v7 0xF69A1E) (`add xde,
-     * NakaInst_MEMORY_A_0x26`): 7 u16 case offsets from MspMenuTtl_Dispatch.
+     * MspMenuTtlFunc_CaseTable`): 7 u16 case offsets from MspMenuTtl_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t MspMenuTtlFunc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * MspNameTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * MspNameTtlFunc (v10/v9 0xF69EA9, v7 0xF69AA5) (`add xde,
-     * NakaInst_MEMORY_A_0x34`): 7 u16 case offsets from MspNameTtl_Dispatch.
+     * MspNameTtlFunc_CaseTable`): 7 u16 case offsets from MspNameTtl_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t MspNameTtlFunc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * MspRecTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * MspRecTtlFunc (v10/v9 0xF69F2B, v7 0xF69B27) (`add xde,
-     * NakaInst_MEMORY_A_0x42`): 7 u16 case offsets from MspRecTtl_Dispatch.
+     * MspRecTtlFunc_CaseTable`): 7 u16 case offsets from MspRecTtl_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t MspRecTtlFunc_CaseTable[7];
     /* ---------------------------------------------------------------------
      * SndArgTtlFunc_CaseTable -- jump table of a compiled `switch` in
      * SndArgTtlFunc (v10/v9 0xF6A064, v7 0xF69C60) (`add xde,
-     * NakaInst_MEMORY_A_0x50`): 7 u16 case offsets from SndArgTtl_Dispatch.
+     * SndArgTtlFunc_CaseTable`): 7 u16 case offsets from SndArgTtl_Dispatch.
      * --------------------------------------------------------------------- */
     uint16_t SndArgTtlFunc_CaseTable[7];
     /* ---------------------------------------------------------------------

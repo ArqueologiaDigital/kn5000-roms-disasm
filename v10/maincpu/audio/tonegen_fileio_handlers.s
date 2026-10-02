@@ -870,7 +870,7 @@ ToneGen_FileIO_RestoreFromBackup:
 	ret
 
 ToneGen_FlashVerify:
-	lda xhl, (NakaInst_ExtDevice_Screens_0x2B6E:24)
+	lda xhl, (ToneGen_FlashVerify_Str_HK:24)
 	ld xde, 0x3d3000
 	ld bc, 0:i3
 
@@ -888,7 +888,7 @@ ToneGen_FlashWriteAll:
 	ld xwa, 0x3d3000
 	push xwa
 	ld wa, 1:i3
-	ld xbc, NakaInst_ExtDevice_Screens_0x2B6E
+	ld xbc, ToneGen_FlashVerify_Str_HK
 	ldw de, 0xfa
 	call FlashWrite
 	lda xbc, (NakaInst_ExtDevice_Screens_0x2C68:24)
@@ -1283,10 +1283,10 @@ Encoder_PrepareCallback:
 	ld c, (0x8e90:16)
 	extz bc
 	sla bc, 2
-	ld xwa, NakaInst_ExtDevice_Screens_0x3452
+	ld xwa, Encoder_PrepareCallback_PtrTable
 	cp (0x8d34:16), 20
 	jr nz, Encoder_ResolveCallbackAddr
-	ld xwa, NakaInst_ExtDevice_Screens_0x34D2
+	ld xwa, Encoder_PrepareCallback_PtrTable_2
 
 Encoder_ResolveCallbackAddr:
 	ld_sril3 XIZ, 0x07, 0xe0, 0xe4
