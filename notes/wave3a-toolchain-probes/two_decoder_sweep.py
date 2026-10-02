@@ -160,26 +160,43 @@ def classify(llvm_len, llvm_text, mame_len, mame_text):
     return "AGREE"
 
 
-def probes():
-    """-> list of (group, bytes)."""
+def probes(all_fields=False):
+    """-> list of (group, bytes).
+
+    all_fields=False is the probe set every figure in TOOLCHAIN_VERSION
+    UPDATE 17 was measured with: ONE register field (r = 1, XBC / BC / A) in
+    each register-indirect and register prefix.  all_fields=True (the wave 3a
+    T1 fix round, `--all-reg-fields`) repeats those rows for r = 0..7 and the
+    post-increment / pre-decrement rows for every current-bank register byte
+    -- the one-field set could not see a defect that only one register has
+    (16-bit SP, field 7, refused by the assembler: 21,388 probes of the V1
+    panel's sweeps)."""
     out = []
+    fields = range(8) if all_fields else [1]
     def row(group, head):
         for s in range(256):
             out.append((group, bytes(head + [s] + TAIL)))
     # register-indirect: src 80/90/A0 (+r), d8 88/98/A8, dst B0/B8
     for base, grp in ((0x80, "80+r"), (0x90, "90+r"), (0xA0, "A0+r"), (0xB0, "B0+r")):
-        row(grp, [base + 1])
-        row(grp.replace("0+r", "8+r:d8"), [base + 8 + 1, 0x05])
+        for r in fields:
+            g = grp if not all_fields else grp.replace("+r", "+%d" % r)
+            row(g, [base + r])
+            row(g.replace("0+", "8+") + ":d8", [base + 8 + r, 0x05])
     for hi, grp in ((0xC0, "C"), (0xD0, "D"), (0xE0, "E"), (0xF0, "F")):
         row(grp + "0:a8", [hi + 0, 0x1E])
         row(grp + "1:a16", [hi + 1, 0x1E, 0x23])
         row(grp + "2:a24", [hi + 2, 0x1E, 0x23, 0x00])
         row(grp + "3:d16", [hi + 3, 0xE5, 0x34, 0x12])
-        row(grp + "4:-r", [hi + 4, 0xE8 + (0 if hi in (0xC0, 0xF0) else 1 if hi == 0xD0 else 2)])
-        row(grp + "5:r+", [hi + 5, 0xE8 + (0 if hi in (0xC0, 0xF0) else 1 if hi == 0xD0 else 2)])
-    row("C8+r", [0xC9])
-    row("D8+r", [0xD9])
-    row("E8+r", [0xE9])
+        step = 0 if hi in (0xC0, 0xF0) else 1 if hi == 0xD0 else 2
+        for r in (range(8) if all_fields else [2]):
+            sfx = "" if not all_fields else "@%d" % r
+            row(grp + "4:-r" + sfx, [hi + 4, 0xE0 + 4 * r + step])
+            row(grp + "5:r+" + sfx, [hi + 5, 0xE0 + 4 * r + step])
+    for r in fields:
+        sfx = "" if not all_fields else "@%d" % r
+        row("C8+r" + sfx, [0xC8 + r])
+        row("D8+r" + sfx, [0xD8 + r])
+        row("E8+r" + sfx, [0xE8 + r])
     row("C7:erp", [0xC7, 0xE4])
     row("D7:erp", [0xD7, 0xE4])
     row("E7:erp", [0xE7, 0xE4])
@@ -305,11 +322,14 @@ def main():
                     help="classes to list examples of")
     ap.add_argument("--limit", type=int, default=400)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--all-reg-fields", action="store_true",
+                    help="every register field 0..7, not only field 1 (see probes())")
     a = ap.parse_args()
     if a.selftest:
         sys.exit(0 if selftest() else 1)
     print("toolchain:", toolchain())
-    pr = probes()
+    pr = probes(a.all_reg_fields)
+    print("probe set:", "every register field" if a.all_reg_fields else "register field 1")
     blobs = [b for _, b in pr]
     ld = llvm_decode(blobs)
     md = mame_decode(blobs)
