@@ -63,7 +63,7 @@ DrawLine_DeferredPath:
 	ldiw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawLine_Return:
 	pop xiz
@@ -1037,7 +1037,7 @@ DrawBox_DeferredPath:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawBox_Return:
 	pop xiz
@@ -1215,7 +1215,7 @@ DrawFrame_DeferredPath:
 	ldirw
 	ld bc, (xsp + 4)
 	ld (xwa + 12), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawFrame_Return:
 	pop xiz
@@ -1977,7 +1977,7 @@ MovePixels_DeferredPath:
 	lda xix, (xwa + 12)
 	ldiw
 	ldiw
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 MovePixels_Return:
 	pop xiz
@@ -2134,7 +2134,7 @@ DrawWall_Deferred:
 	ld xwa, xhl
 	lda xbc, (DrawWall_Deferred_0x11:24)
 	ld (xwa), xbc
-	jrl DisplayCmd_DequeueAndExecute
+	jrl DrawRing_Post
 	jr DrawWall_DoCopy
 
 DrawWall_DoCopy:
@@ -2212,7 +2212,7 @@ DrawBitmap_DeferredPath:
 	ldiw
 	ld xbc, (xsp + 4)
 	ld (xwa + 8), xbc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawBitmap_Return:
 	pop xiz
@@ -2448,7 +2448,7 @@ DrawBitmapFast_DeferredPath:
 	ldiw
 	ld xbc, (xsp + 4)
 	ld (xwa + 8), xbc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawBitmapFast_Return:
 	pop xiz
@@ -2597,7 +2597,7 @@ DrawIcons_DeferredPath:
 	ldiw
 	ld xbc, (xsp + 4)
 	ld (xwa + 8), xbc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawIcons_Return:
 	pop xiz
@@ -2746,7 +2746,7 @@ DrawFrameSP_DeferredPath:
 	ld (xwa + 8), bc
 	ld bc, (xsp + 4)
 	ld (xwa + 10), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawFrameSP_Return:
 	pop xiz
@@ -2932,7 +2932,7 @@ DrawBitmapSP_DeferredPath:
 	ld (xwa + 12), bc
 	ld bc, (xsp + 14)
 	ld (xwa + 14), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawBitmapSP_Return:
 	pop xiz
@@ -3154,7 +3154,7 @@ DrawBitmapSPFast_DeferredPath:
 	ld (xwa + 12), bc
 	ld bc, (xsp + 14)
 	ld (xwa + 14), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawBitmapSPFast_Return:
 	pop xiz
@@ -3287,7 +3287,7 @@ DrawBitmapSP2_DeferredPath:
 	ld (xwa + 16), bc
 	ld bc, (xsp + 14)
 	ld (xwa + 18), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawBitmapSP2_Return:
 	pop xiz
@@ -3451,7 +3451,7 @@ DrawBitmapFile_DeferredPath:
 	ldiw
 	ld xbc, (xsp + 4)
 	ld (xwa + 8), xbc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawBitmapFile_Return:
 	pop xiz
@@ -3915,7 +3915,7 @@ DrawString_DeferredPath:
 	ld wa, (xsp + 24)
 	ld (xiz + 26), wa
 	ld xwa, xiz
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawString_Return:
 	pop xiz

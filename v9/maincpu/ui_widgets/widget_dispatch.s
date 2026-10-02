@@ -7162,8 +7162,9 @@ Bit16Mask_Table:
 ; 32 x u32 routine pointers indexed by RAM byte 0x8D34.  AudioModeChange_Handler
 ; (0xFDDE1A), AudioSubsystem_Callback (0xFDDE9A), AudioVoice_Callback (0xFDDF67)
 ; and AudioVoiceReset_Handler (0xFDDFC1): `ldb_d8 a,(0x8d34); sla wa,2;
-; lda xbc,(<this>); ld_rrl xhl,xbc,wa`, skip when the entry equals 0xFDEDEF,
-; else `call (xhl)`.
+; lda xbc,(<this>); ld_rrl xhl,xbc,wa`, skip (`ret z`) when the entry equals
+; 0xFDECEF (AudioInit_MixFallbackDefault+5) -- no entry of this table does, so every
+; entry is called -- else `call (xhl)`.
 ; AudioInit_VoiceDispatch_Table (kept for positional_labels.s) is entry 1.
 AudioVoiceHandler_Table:
 	.set AudioInit_VoiceDispatch_Table, AudioVoiceHandler_Table + 4

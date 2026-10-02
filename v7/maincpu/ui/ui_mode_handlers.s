@@ -67,8 +67,10 @@ EffectMode_CopyVoiceParams_Done:
 ;   CheckTransposeAndLookup caches there -- and jumps to
 ;   EffectMode_CheckTransposeChanged, i.e. forces the transpose re-check.
 ;   No reference to it was found in v10 (label uses, 32-bit pointers).
-; Block2, Block3, Block4: panel-event callbacks, listed in
-;   UIState_ConfigA_108, _072 and _105 (ui_widgets/widget_dispatch.s).  They
+; Block2, Block3, Block4: panel-event callbacks, listed in the bank-1
+;   listener lists SwbtB1_CodeA8_Listeners (Block2), SwbtB1_Code48_Listeners
+;   (Block3) and SwbtB1_Code98_Listeners (Block4) (ui_widgets/widget_dispatch.s),
+;   i.e. called by SwbtWr_DispatchLoop for event codes 0xA8 / 0x48 / 0x98.  They
 ;   test the payload bytes (Block2: 0xbfe1 == 2, Block4: 0xbfe1 == 3, Block3:
 ;   0xbfe1 == 0 or 7) and react by posting event 0x1e0009a / part- or
 ;   mode-change events (Block2) or re-reading sound parameters 0x0400/0x0401/

@@ -4433,7 +4433,8 @@ MidiSetup_ReturnZero:
 ; =============================================================================
 ; MidiPart_DataBlock - a panel-event callback (CODE, despite the name)
 ;
-; 7th entry of the callback list UIState_ConfigB_081 (ui_widgets/widget_dispatch.s).
+; 11th entry of SwbtB2_CodeA8_Listeners (bank 2, event code 0xA8;
+; ui_widgets/widget_dispatch.s), so a panel-event CALLBACK, despite its name.
 ; It reads 0xbfe4 and 0xbfe1-0xbfe3: in v7 these are the type and payload
 ; bytes of the current panel event, which v9/v10 keep at 0xc080 / 0xc07d-0xc07f
 ; (where SwbtWr_DispatchLoop stores them: ../technics-docs/data-wheel-

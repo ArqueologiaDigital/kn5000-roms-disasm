@@ -2199,7 +2199,7 @@ Voice_FactoryPresetData_Code_Skip10:
 	ld	(xwa+12), bc
 	ld	c, (257960:24)
 	ld	(xwa+14), c
-	calr	DisplayCmd_DequeueAndExecute
+	calr	DrawRing_Post
 Voice_FactoryPresetData_Code_Epilogue2:
 	pop	xiz
 	inc	2, xsp
@@ -2376,7 +2376,7 @@ DrawText_QueueDeferred:
 	ld a, (0x03efa8:24)
 	ld (xiz + 28), a
 	ld xwa, xiz
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawText_PopAndReturn:
 	pop xiz

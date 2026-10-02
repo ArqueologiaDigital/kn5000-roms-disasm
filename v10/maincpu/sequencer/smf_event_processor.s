@@ -4703,8 +4703,9 @@ SeqStep_FileSectorReturn:
 
 ; Fat_ReadEntry(file, n)  -- named 2026-09-25 (lane seqeng; was
 ; SeqStep_FileSectorError, which it is not).  Returns HL = FAT entry n of the
-; volume whose record is at file+30.  FAT12 when that record's word +36 (its
-; highest cluster number) is 0xFFF: byte offset n*3/2 and a 12-bit unpack by
+; volume whose record is at file+30.  FAT12 when the volume's word +36 is 0xFFF
+; -- +36 is the FAT entry mask / end-of-chain value, 0xFFF for FAT12 and 0xFFFF for
+; FAT16, set at mount from the cluster count in +54 (> 4087 -> FAT16) -- byte offset n*3/2 and a 12-bit unpack by
 ; the parity of n; otherwise FAT16: offset 2n.  Sector = offset >> 9 plus the
 ; FAT's first sector (volume +24); the sector is fetched with
 ; SeqStep_FileIoCheck (last buffer kept in file +38; data at buffer +0x1A), and

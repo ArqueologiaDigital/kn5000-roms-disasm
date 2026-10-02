@@ -19332,7 +19332,7 @@ InitDrawTask:
 DrawTask_DequeueLoop_Check:
 	ld wa, 3:i3
 	call TaskSched_WaitForEvent
-	calr DisplayCmd_ScanQueue_Continue
+	calr DrawRing_Init
 	ld wa, 3:i3
 	jp TaskSched_SignalEvent
 
@@ -19340,7 +19340,7 @@ DrawTask_Dispatch:
 	push xiz
 	ld wa, 3:i3
 	call TaskSched_WaitForEvent
-	calr DisplayCmd_Execute
+	calr DrawRing_TryTake
 	ld xiz, xhl
 	ld wa, 3:i3
 	call TaskSched_SignalEvent
@@ -19350,45 +19350,48 @@ DrawTask_Dispatch:
 
 
 ; ============================================================================
-; DisplayCmd_DequeueAndExecute - Dequeue and execute display commands
+; DrawRing_Post - post one draw command to the draw task's ring, waiting while it is full
 ; ============================================================================
-; Input:  XWA = display context pointer
-; Output: XHL = result (0 = no commands, non-zero = command data pointer)
-; Waits for display event (event 3), dequeues a command from the draw queue,
-; signals completion, and adjusts task priority when the queue is empty.
-; Core display refresh loop using TaskSched_WaitForEvent/SignalEvent.
+; Input:  XWA = the command (a DrawQueue_Alloc record pointer)
+; Output: XHL = the ring slot it was stored in
+; Under event 3 (TaskSched_WaitForEvent / SignalEvent) it calls DrawRing_TryPost, which
+; stores XWA at the ring's write index (RAM 0x03247C, 0x80 bytes of u32 entries; fields
+; at -10 alloc, -8 read, -4 write, -2 free bytes) when more than 4 bytes are free, and
+; returns 0 when the ring is full; then it lowers its priority (TaskSched_ChangePriority
+; 5, 2) and tries again.  The draw task takes entries with DrawRing_TryTake and runs them
+; through DrawTask_FuncDispatch.  Named DisplayCmd_DequeueAndExecute until 2026-10-02.
 ; ============================================================================
-DisplayCmd_DequeueAndExecute:
+DrawRing_Post:
 	dec 4, xsp
 	push xiz
 	ld (xsp + 4), xwa
 
-DisplayCmd_ScanQueue:
+DrawRing_Post_Retry:
 	ld wa, 3:i3
 	call TaskSched_WaitForEvent
 	ld xwa, (xsp + 4)
-	calr DisplayCmd_Execute_Type2
+	calr DrawRing_TryPost
 	ld xiz, xhl
 	ld wa, 3:i3
 	call TaskSched_SignalEvent
 	or xiz, xiz
-	jr nz, DisplayCmd_ScanQueue_Match
+	jr nz, DrawRing_Post_Check
 	ld wa, 5:i3
 	ld bc, 2:i3
 	call TaskSched_ChangePriority
 
-DisplayCmd_ScanQueue_Match:
+DrawRing_Post_Check:
 	or xiz, xiz
-	jr z, DisplayCmd_ScanQueue
+	jr z, DrawRing_Post_Retry
 	ld xhl, xiz
 	pop xiz
 	inc 4, xsp
 	ret
 
-DisplayCmd_ScanQueue_MatchDone:
+DrawRing_Post_Return:
 	ret
 
-DisplayCmd_ScanQueue_Continue:
+DrawRing_Init:
 	lda xde, (0x03247c:24)
 	ldw (xde - 10), 0x0
 	ldw (xde - 8), 0x0
@@ -19400,29 +19403,29 @@ DisplayCmd_ScanQueue_Continue:
 	ld (0x03246a:24), xwa
 	ret
 
-DisplayCmd_Execute:
+DrawRing_TryTake:
 	lda xde, (0x03247c:24)
 	ld ix, (xde - 8)
 	cp ix, (xde - 4)
-	jr nz, DisplayCmd_Execute_Type1
+	jr nz, DrawRing_TryTake_Load
 	ld xhl, 0:i3
 	ret
 
-DisplayCmd_Execute_Type1:
+DrawRing_TryTake_Load:
 	ld	xhl, (xde+ix)
 	minc4_16 ix, 0x7c
 	ld (xde - 8), ix
 	incw 4, (xde - 2)
 	ret
 
-DisplayCmd_Execute_Type2:
+DrawRing_TryPost:
 	lda xde, (0x03247c:24)
 	cpw (xde - 2), 0x4
-	jr gt, DisplayCmd_Execute_Type3
+	jr gt, DrawRing_TryPost_Store
 	lda_dd8l XHL, (0x00)
 	ret
 
-DisplayCmd_Execute_Type3:
+DrawRing_TryPost_Store:
 	ld ix, (xde - 4)
 	ld	(xde+ix), xwa
 	minc4_16 ix, 0x7c
@@ -19539,7 +19542,7 @@ DrawFunc_DispatchDone:
 	lda xbc, (DrawFunc_StackHandler:24)
 	ld (xwa), xbc
 	ld (xwa + 4), xiz
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawFunc_StackSetup:
 	pop xiz
@@ -19583,7 +19586,7 @@ DrawFunc_StackEntry_Prologue:
 	lda xbc, (DrawFunc_StackHandler:24)
 	ld (xwa), xbc
 	ld (xwa + 4), xiz
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawFunc_XspCheck_Prologue:
 	pop xiz
@@ -19664,7 +19667,7 @@ LcdOn:
 	ld xwa, xhl
 	lda xbc, (InitGraphics_SetupVRAM:24)
 	ld (xwa), xbc
-	jrl DisplayCmd_DequeueAndExecute
+	jrl DrawRing_Post
 
 InitGraphics_SetupVRAM:
 	jr InitGraphics_SetupVRAM_Loop
@@ -19683,7 +19686,7 @@ LcdOff:
 	ld xwa, xhl
 	lda xbc, (LcdOn_Done:24)
 	ld (xwa), xbc
-	jrl DisplayCmd_DequeueAndExecute
+	jrl DrawRing_Post
 
 LcdOn_Done:
 	jr LcdOn_Return
@@ -19749,7 +19752,7 @@ UpdateScreen_Prologue:
 	ld xwa, xhl
 	lda xbc, (UpdateScreen_CheckDirty:24)
 	ld (xwa), xbc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 	ret
 
 UpdateScreen_CheckDirty:

@@ -1457,9 +1457,9 @@ Voice_InitSlotTemplate:
 Voice_SlotTemplateData:
 ; 16-byte template of one voice slot, copied as 8 LE16 words.  Read by
 ; Voice_InitSlotTemplate (0xF7210D): XIX = the slot (XIY on
-; entry), XIY = this, BC = 8, ldirw; the slot's byte +0 then gets back its
-; own old high nibble (and 0xF0), so only the template's low nibble of
-; byte +0 survives.  TYPED 2026-09-25 (lane seqeng); was spelled
+; entry), XIY = this, BC = 8, ldirw; then byte +0 is overwritten with its
+; own old value AND 0xF0 (old high nibble kept, low nibble cleared), so the
+; template's byte +0 is discarded.  TYPED 2026-09-25 (lane seqeng); was spelled
 ; nop / swi 7 / jrl nc,64 (0xFF bytes read as swi 7).
 	.short 0x0000, 0xff00, 0x00ff, 0x0000, 0x0000, 0x7f00, 0x0040, 0x0000
 

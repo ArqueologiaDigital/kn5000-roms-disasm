@@ -108,7 +108,7 @@ GraphicsRender_ByteData_Skip:
 	lda	xbc, (GraphicsRender_ByteData_0x2D:24)
 	ld	(xwa), xbc
 	ld	(xwa+4), iz
-	calr	DisplayCmd_DequeueAndExecute
+	calr	DrawRing_Post
 GraphicsRender_ByteData_Epilogue:
 	popw	iz
 	ret
@@ -142,7 +142,7 @@ PostTitle_Function_Helper4:
 	ld	xwa, xhl
 	lda	xbc, (GraphicsRender_ByteData_0x7F:24)
 	ld	(xwa), xbc
-	jrl	DisplayCmd_DequeueAndExecute
+	jrl	DrawRing_Post
 	jr	GraphicsRender_ByteData_Join
 GraphicsRender_ByteData_Join:
 	pushw	iz
@@ -192,7 +192,7 @@ Display_DeferOrDrawWall:
 	ld xwa, xhl
 	lda xbc, (Display_DeferOrDrawWall_0x18:24)
 	ld (xwa), xbc
-	jrl DisplayCmd_DequeueAndExecute
+	jrl DrawRing_Post
 	jr Display_DeferOrDrawWall_Direct
 
 Display_DeferOrDrawWall_Direct:
@@ -210,7 +210,7 @@ Display_DeferOrUpdateScreen:
 	ld xwa, xhl
 	lda xbc, (Display_DeferOrUpdateScreen_0x18:24)
 	ld (xwa), xbc
-	jrl DisplayCmd_DequeueAndExecute
+	jrl DrawRing_Post
 	jr Display_DeferOrUpdateScreen_Direct
 
 Display_DeferOrUpdateScreen_Direct:

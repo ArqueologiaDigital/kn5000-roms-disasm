@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 48,243
-#   semantic names ........... 44,815 (92.9%)
-#   positional names ......... 3,428
+#   semantic names ........... 44,816 (92.9%)
+#   positional names ......... 3,427
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -12723,10 +12723,10 @@ ScoopDisp_HandlerData2_0x7E 00EF61AD
 ScoopDisp_HandlerData2_0x7F 00EF61AE
 SoundEvt_LongPacketHandler_DispatchTbl 00EF61AE
 DefaultHandler_Ret 00EF61BE
-DefaultHandler_Ret_0x1 00EF61BF
+DisplayMode_Dispatch 00EF61BF
 DefaultHandler_Ret_0x2B 00EF61E9
-DefaultHandler_Ret_PtrTbl 00EF61E9
-DefaultHandler_Ret_PtrTbl_Target0 00EF61F9
+DisplayMode_Dispatch_Tbl 00EF61E9
+DisplayMode_Dispatch_Mode0 00EF61F9
 DefaultHandler_Ret_Skip 00EF6224
 DefaultHandler_Ret_Skip2 00EF6232
 DefaultHandler_Ret_Skip3 00EF6240
@@ -12741,7 +12741,7 @@ ScoopDisp_DispatchTable_Small 00EF627D
 ToneParam_Evt0F_BytecodeHandler 00EF62FD
 ToneParam_Evt0F_BytecodeHandler_0x17 00EF6314
 ToneParam_Evt0F_BytecodeHandler_Return 00EF6314
-DefaultHandler_Ret_PtrTbl_Target1 00EF6315
+DisplayMode_Dispatch_Mode1 00EF6315
 ToneParam_Evt0F_BytecodeHandler_Skip 00EF634D
 ToneParam_Evt0F_BytecodeHandler_Skip2 00EF6362
 ToneParam_Evt0F_BytecodeHandler_Skip3 00EF636C
@@ -12751,7 +12751,7 @@ ToneParam_Evt0F_BytecodeHandler_0x8D 00EF638A
 ToneParam_Evt0F_BytecodeHandler_Skip6 00EF638A
 ToneParam_Evt0F_BytecodeHandler_Return2 00EF6392
 PerfMode_ParamHandler_Table 00EF6393
-DefaultHandler_Ret_PtrTbl_Target3 00EF63DF
+DisplayMode_Dispatch_Mode3 00EF63DF
 PerfMode_JumpTable_Extended 00EF63F9
 PerfMode_ParamHandler_0 00EF6445
 PerfMode_ParamHandler_0_Return 00EF645F
@@ -38852,15 +38852,15 @@ DrawTask_DequeueLoop 00FA9F26
 InitDrawTask 00FA9F38
 DrawTask_DequeueLoop_Check 00FA9F3A
 DrawTask_Dispatch 00FA9F49
-DisplayCmd_DequeueAndExecute 00FA9F5F
-DisplayCmd_ScanQueue 00FA9F65
-DisplayCmd_ScanQueue_Match 00FA9F85
-DisplayCmd_ScanQueue_MatchDone 00FA9F8F
-DisplayCmd_ScanQueue_Continue 00FA9F90
-DisplayCmd_Execute 00FA9FBE
-DisplayCmd_Execute_Type1 00FA9FCE
-DisplayCmd_Execute_Type2 00FA9FDE
-DisplayCmd_Execute_Type3 00FA9FEE
+DrawRing_Post 00FA9F5F
+DrawRing_Post_Retry 00FA9F65
+DrawRing_Post_Check 00FA9F85
+DrawRing_Post_Return 00FA9F8F
+DrawRing_Init 00FA9F90
+DrawRing_TryTake 00FA9FBE
+DrawRing_TryTake_Load 00FA9FCE
+DrawRing_TryPost 00FA9FDE
+DrawRing_TryPost_Store 00FA9FEE
 DisplayCmd_Return 00FAA00F
 DrawQueue_Alloc_Prologue 00FAA01A
 DrawQueue_Alloc_FindSlot 00FAA02A

@@ -4014,7 +4014,7 @@ ClampColorToRange_Skip:
 	ldiw
 	ld	bc, (xsp+4)
 	ld	(xwa+12), bc
-	calr	DisplayCmd_DequeueAndExecute
+	calr	DrawRing_Post
 ClampColorToRange_Epilogue:
 	pop	xiz
 	inc	6, xsp
@@ -4347,7 +4347,7 @@ DrawDesignBox_QueuedPath:
 	ld (xwa + 12), bc
 	ld bc, (xsp + 4)
 	ld (xwa + 14), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 DrawDesignBox_DirectEpilogue:
 	pop xiz
@@ -7093,7 +7093,7 @@ ChangeWall_QueuedPath:
 	lda xbc, (ChangeWall_QueueCallback:24)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 ChangeWall_Epilogue:
 	popw iz
@@ -7134,7 +7134,7 @@ ChangeWallPalette_QueuedPath:
 	lda xbc, (ChangeWallPalette_QueueCallback:24)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 ChangeWallPalette_Epilogue:
 	popw iz
@@ -7211,7 +7211,7 @@ ChangePalette_QueuedPath:
 	lda xbc, (ChangePalette_QueueCallback:24)
 	ld (xwa), xbc
 	ld (xwa + 4), iz
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 ChangePalette_Epilogue:
 	popw iz
@@ -7287,7 +7287,7 @@ PaletteBankRotate:
 	ld xwa, xhl
 	lda xbc, (PaletteBankRotate_0x18:24)
 	ld (xwa), xbc
-	jrl DisplayCmd_DequeueAndExecute
+	jrl DrawRing_Post
 	jr PaletteBankRotate_Impl
 
 PaletteBankRotate_Impl:
@@ -7371,7 +7371,7 @@ ClipBlit_Replace_Deferred:
 	ldiw
 	ld bc, (xsp + 4)
 	ld (xwa + 8), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 ClipBlit_Replace_Return:
 	pop xiz
 	inc	2, xsp
@@ -7517,7 +7517,7 @@ ClipBlit_Direct_Deferred:
 	ldiw
 	ld bc, (xsp + 4)
 	ld (xwa + 8), bc
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 ClipBlit_Direct_Return:
 	pop xiz
 	inc	2, xsp
@@ -7653,7 +7653,7 @@ ColorBlit_Deferred:
 	ld (xwa + 12), bc
 	ld c, (0x03efa8:24)
 	ld (xwa + 14), c
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 ColorBlit_Return:
 	pop xiz
@@ -7949,7 +7949,7 @@ ColorBlit2_Deferred:
 	ld (xwa + 12), bc
 	ld c, (0x03efa8:24)
 	ld (xwa + 14), c
-	calr DisplayCmd_DequeueAndExecute
+	calr DrawRing_Post
 
 ColorBlit2_Return:
 	pop xiz
@@ -8263,8 +8263,10 @@ ColorBlit2_PopReturn:
 ; draw mode byte at 0x03efa8 is latched into 0x03efaa; if the caller is not the
 ; draw task (IS_XSP_INSIDE_4K_REGION_AT_1C032 returns 0) the call is queued as a
 ; 20-byte DrawQueue_Alloc record {+0 DrawMonoBitmap_ParamBlock, +4 rect (4
-; words), +12 bitmap pointer, +16 colour, +18 draw mode} and executed later by
-; DisplayCmd_DequeueAndExecute; nothing is drawn while the word at 0x03044e is 0.
+; words), +12 bitmap pointer, +16 colour, +18 draw mode} and posted to the draw
+; task's ring (RAM 0x03247C) by DrawRing_Post, which retries while the ring is
+; full; the draw task later runs it through DrawTask_FuncDispatch (`ld xhl,(xiz);
+; ld xwa,xiz; call (xhl)`).  Nothing is drawn while the word at 0x03044e is 0.
 ;
 ; DrawMonoBitmap_Impl dispatches on the latched draw mode (0x03efaa):
 ;   0  pixel = (pixel & 0x60) | (colour & 0x9f)   -- bits 5-6 of the buffer
@@ -8313,7 +8315,7 @@ DrawMonoBitmap_DeferredPath:
 	ld	(xwa+16), bc
 	ld	c, (0x03efa8:24)
 	ld	(xwa+18), c
-	calr	DisplayCmd_DequeueAndExecute
+	calr	DrawRing_Post
 DrawMonoBitmap_Return:
 	pop	xiz
 	inc	6, xsp
@@ -8672,10 +8674,12 @@ DrawMonoBitmap_Impl_Done:
 ; pixel at a time and the other in 16.16 fixed point: the slope comes from
 ; Math_DivideSigned32 on the delta shifted left 16 (`sla 0` = 16), rounded by
 ; adding 0x8000.  Pixel writes follow the latched draw mode (0x03efaa): 0 writes
-; the colour into bits 0-4,7 keeping bits 5-6 (as DrawMonoBitmap); 1 sets or
-; clears bit 5 (_Impl_Mode1) and 2 bit 6 (_Impl_Mode2) according to the pixel's
-; bit 7 -- the axis-aligned paths and the general path use OPPOSITE polarity
-; (set-if-bit7 vs clear-if-bit7), as the ROM has it; other modes draw nothing.
+; the colour into bits 0-4,7 keeping bits 5-6 (as DrawMonoBitmap).  Mode 1
+; (_Impl_Mode1) writes bit 5 from the pixel's bit 7: the axis-aligned paths
+; (_Loop7/_Loop8) SET bit 5 when bit 7 is set (else clear it) and the general
+; paths (_Loop9/_Loop10) CLEAR it when bit 7 is set (else set it) -- opposite
+; polarity, as the ROM has it.  Mode 2 (_Impl_Mode2): all four paths clear bit 6
+; when bit 7 is set and set it otherwise.  Other modes draw nothing.
 ; It ends with SetChangeRect over the rectangle spanned by the two points
 ; (_Impl_Done).  DrawLine's wrapper (ui/drawing_primitives.s) does not latch the
 ; draw mode byte; this one does.
@@ -8723,7 +8727,7 @@ DrawLineWithMode_DeferredPath:
 	ld	(xwa+12), bc
 	ld	c, (0x03efa8:24)
 	ld	(xwa+14), c
-	calr	DisplayCmd_DequeueAndExecute
+	calr	DrawRing_Post
 DrawLineWithMode_Return:
 	pop	xiz
 	inc	6, xsp
@@ -9566,7 +9570,7 @@ DrawDottedLineWithMode_DeferredPath:
 	ld	(xwa+12), bc
 	ld	c, (0x03efa8:24)
 	ld	(xwa+14), c
-	calr	DisplayCmd_DequeueAndExecute
+	calr	DrawRing_Post
 DrawDottedLineWithMode_Return:
 	pop	xiz
 	inc	6, xsp

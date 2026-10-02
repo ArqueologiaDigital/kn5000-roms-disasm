@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 48,166
-#   semantic names ........... 44,843 (93.1%)
-#   positional names ......... 3,323
+#   semantic names ........... 44,844 (93.1%)
+#   positional names ......... 3,322
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -12772,11 +12772,11 @@ ScoopDisp_HandlerData2_0x7E 00EF61D7
 ScoopDisp_HandlerData2_0x7F 00EF61D8
 SoundEvt_LongPacketHandler_DispatchTbl2 00EF61D8
 DefaultHandler_Ret 00EF61E8
-DefaultHandler_Ret_0x1 00EF61E9
-DefaultHandler_Ret_Return2 00EF6212
+DisplayMode_Dispatch 00EF61E9
+DisplayMode_Dispatch_Return 00EF6212
 DefaultHandler_Ret_0x2B 00EF6213
-DefaultHandler_Ret_DispatchTbl 00EF6213
-DefaultHandler_Ret_DispatchTbl_Target0 00EF6223
+DisplayMode_Dispatch_Tbl 00EF6213
+DisplayMode_Dispatch_Mode0 00EF6223
 DefaultHandler_Ret_Skip 00EF624E
 DefaultHandler_Ret_Skip2 00EF625C
 DefaultHandler_Ret_Skip3 00EF626A
@@ -12790,7 +12790,7 @@ ScoopDisp_DispatchTable_Small 00EF62A7
 ToneParam_Evt0F_BytecodeHandler 00EF6327
 ToneParam_Evt0F_BytecodeHandler_0x17 00EF633E
 ToneParam_Evt0F_BytecodeHandler_Return 00EF633E
-DefaultHandler_Ret_DispatchTbl_Target1 00EF633F
+DisplayMode_Dispatch_Mode1 00EF633F
 ToneParam_Evt0F_BytecodeHandler_Skip 00EF6377
 ToneParam_Evt0F_BytecodeHandler_Skip2 00EF638C
 ToneParam_Evt0F_BytecodeHandler_Skip3 00EF6396
@@ -12800,7 +12800,7 @@ ToneParam_Evt0F_BytecodeHandler_0x8D 00EF63B4
 ToneParam_Evt0F_BytecodeHandler_Skip6 00EF63B4
 ToneParam_Evt0F_BytecodeHandler_Return2 00EF63BC
 PerfMode_ParamHandler_Table 00EF63BD
-DefaultHandler_Ret_DispatchTbl_Target3 00EF6409
+DisplayMode_Dispatch_Mode3 00EF6409
 PerfMode_JumpTable_Extended 00EF6423
 PerfMode_ParamHandler_0 00EF646F
 PerfMode_ParamHandler_0_Return 00EF6489
@@ -18603,7 +18603,7 @@ MiddleFuncCall_DispatchData_Code_Helper_Skip2 00F1EE5E
 MiddleFuncCall_DispatchData_Code_Helper2 00F1EE67
 MiddleFuncCall_DispatchData_Code_Helper2_Skip 00F1EE76
 MiddleFuncCall_DispatchData_Code_Helper2_Skip2 00F1EE84
-NoRef_SetWall_SlotPerm20x2 00F1EE8D
+NoRef_SetWall_SlotMap20x2 00F1EE8D
 SetWall_InlineCodeBlock_Sub 00F1EEB5
 SetWall_InlineCodeBlock_0x7F 00F1EEBA
 SetWall_InlineCodeBlock_Sub_Skip 00F1EEFE
@@ -39105,15 +39105,15 @@ DrawTask_DequeueLoop 00FAA333
 InitDrawTask 00FAA345
 DrawTask_DequeueLoop_Check 00FAA347
 DrawTask_Dispatch 00FAA356
-DisplayCmd_DequeueAndExecute 00FAA36C
-DisplayCmd_ScanQueue 00FAA372
-DisplayCmd_ScanQueue_Match 00FAA392
-DisplayCmd_ScanQueue_MatchDone 00FAA39C
-DisplayCmd_ScanQueue_Continue 00FAA39D
-DisplayCmd_Execute 00FAA3CB
-DisplayCmd_Execute_Type1 00FAA3DB
-DisplayCmd_Execute_Type2 00FAA3EB
-DisplayCmd_Execute_Type3 00FAA3FB
+DrawRing_Post 00FAA36C
+DrawRing_Post_Retry 00FAA372
+DrawRing_Post_Check 00FAA392
+DrawRing_Post_Return 00FAA39C
+DrawRing_Init 00FAA39D
+DrawRing_TryTake 00FAA3CB
+DrawRing_TryTake_Load 00FAA3DB
+DrawRing_TryPost 00FAA3EB
+DrawRing_TryPost_Store 00FAA3FB
 DisplayCmd_Return 00FAA41C
 DrawQueue_Alloc_Prologue 00FAA427
 DrawQueue_Alloc_FindSlot 00FAA437

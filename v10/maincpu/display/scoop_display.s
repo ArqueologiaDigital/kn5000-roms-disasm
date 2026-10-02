@@ -754,7 +754,7 @@ Display_DeletePollEvent:
 	ret
 Display_CallSetupRoutine:
 	; --- Simple wrapper: call EF61E9 ---
-	call DefaultHandler_Ret_0x1
+	call DisplayMode_Dispatch
 	ret
 Display_NullHandler:
 	ret
@@ -906,9 +906,13 @@ SoundEvt_LongPacketHandler_DispatchTbl2:
 ; ============================================================================
 DefaultHandler_Ret:
 	ret
+; DisplayMode_Dispatch -- if SeqState_HasModeChanged returns 0, dispatch on the
+; display mode byte (0x0D65) & 3 through DisplayMode_Dispatch_Tbl, with BC (stored to
+; 9920) as the handlers' argument.  Called from Display_CallSetupRoutine.
+DisplayMode_Dispatch:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
-	jrl	nz, DefaultHandler_Ret_Return2
+	jrl	nz, DisplayMode_Dispatch_Return
 	ld	e, (3429:16)
 	and	e, 3
 	xor	d, d
@@ -916,22 +920,22 @@ DefaultHandler_Ret:
 	ld	iy, de
 	ld	(9920:16), bc
 	push	xhl
-	ld	xhl, DefaultHandler_Ret_DispatchTbl
+	ld	xhl, DisplayMode_Dispatch_Tbl
 	ld_rrl xiy, xhl, iy
 	pop xhl
 	call	(xiy)
-DefaultHandler_Ret_Return2:
+DisplayMode_Dispatch_Return:
 	ret
-	; Handler dispatch table, 16 B.  Read by DefaultHandler_Ret (0xEF61E8): `ld xhl, DefaultHandler_Ret_DispatchTbl`
-	; indexed with stride 4 (`sla de, 2`)
+	; 4 handlers indexed by (0x0D65) & 3, the display mode; read by DisplayMode_Dispatch
+	; (`ld xhl, DisplayMode_Dispatch_Tbl / ld_rrl xiy, xhl, iy / call (xiy)`)
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
-DefaultHandler_Ret_DispatchTbl:
-	.long	DefaultHandler_Ret_DispatchTbl_Target0
-	.long	DefaultHandler_Ret_DispatchTbl_Target1
-	.long	DefaultHandler_Ret_DispatchTbl_Target1
-	.long	DefaultHandler_Ret_DispatchTbl_Target3
-	; Entry 0 of DefaultHandler_Ret_DispatchTbl (a code pointer the table holds).
-DefaultHandler_Ret_DispatchTbl_Target0:
+DisplayMode_Dispatch_Tbl:
+	.long	DisplayMode_Dispatch_Mode0
+	.long	DisplayMode_Dispatch_Mode1
+	.long	DisplayMode_Dispatch_Mode1
+	.long	DisplayMode_Dispatch_Mode3
+	; Entry 0 of DisplayMode_Dispatch_Tbl (a code pointer the table holds).
+DisplayMode_Dispatch_Mode0:
 	cp	(0x28be:16), 255
 	jrl	nz, DefaultHandler_Ret_Skip4
 	ld	hl, bc
@@ -1027,8 +1031,8 @@ ToneParam_Evt0F_BytecodeHandler:
 	jp	ToneParam_Evt0F_BytecodeHandler_0x17
 ToneParam_Evt0F_BytecodeHandler_Return:
 	ret
-	; Entry 1 of DefaultHandler_Ret_DispatchTbl (a code pointer the table holds).
-DefaultHandler_Ret_DispatchTbl_Target1:
+	; Entry 1 of DisplayMode_Dispatch_Tbl (a code pointer the table holds).
+DisplayMode_Dispatch_Mode1:
 	and	(0x0dd3:16), 254
 	ld	e, (3567:16)
 	xor	d, d
@@ -1105,8 +1109,8 @@ PerfMode_ParamHandler_Table:
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
 	.long DefaultHandler_Ret
-	; Entry 3 of DefaultHandler_Ret_DispatchTbl (a code pointer the table holds).
-DefaultHandler_Ret_DispatchTbl_Target3:
+	; Entry 3 of DisplayMode_Dispatch_Tbl (a code pointer the table holds).
+DisplayMode_Dispatch_Mode3:
 	ld	e, (3567:16)
 	xor	d, d
 	sla	de, 2
@@ -1117,7 +1121,7 @@ DefaultHandler_Ret_DispatchTbl_Target3:
 	pop	xhl
 	call	(xiy)
 	ret
-	; Handler dispatch table, 76 B.  Read by DefaultHandler_Ret_DispatchTbl_Target3 (0xEF6409): `ld xhl, PerfMode_JumpTable_Extended`
+	; Handler dispatch table, 76 B.  Read by DisplayMode_Dispatch_Mode3 (0xEF6409): `ld xhl, PerfMode_JumpTable_Extended`
 	; indexed with stride 4 (`sla de, 2`)
 	; 19 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 PerfMode_JumpTable_Extended:
@@ -7360,12 +7364,13 @@ ScoopParam_ValueTable_Helper6_Skip:
 	call	SysInit_BytecodeBlock_0x486
 ScoopParam_ValueTable_Helper6_Return:
 	ret
-	; Byte data, 6 B.  Read by ClockConfig_Handler_0 (0xEFA7BE): `ld xiy, ClockConfig_Handler_0_Tbl`
-	; reader ClockConfig_Handler_0: `ld xiy, ClockConfig_Handler_0_Tbl`
+	; 6-byte template, copied (`ldir`, BC = 6) to RAM 0x0D8F by ScoopParam_ValueTable_Sub_Helper
+	; (display mode 3), which fills bytes +0/+4/+5 from 0xFC5A/0xFC5B and passes the six
+	; bytes to SysInit_BytecodeBlock_0x486 (W = 6).
 ClockConfig_Handler_0_Tbl:
 	.byte	0xc0, 0x00, 0x48, 0x00, 0x00, 0x00
-	; Byte data, 6 B.  Read by ClockConfig_Handler_0 (0xEFA7BE): `ld xiy, ClockConfig_Handler_0_Tbl2`
-	; reader ClockConfig_Handler_0: `ld xiy, ClockConfig_Handler_0_Tbl2`
+	; 6-byte template, copied the same way (`ldir`, BC = 6, to RAM 0x0D8F) by the
+	; ScoopParam_ValueTable_Helper6_Skip path, which fills it from 0xFC61.
 ClockConfig_Handler_0_Tbl2:
 	.byte	0xb0, 0x00, 0x48, 0x07, 0x00, 0x30
 ScoopParam_ValueTable_Sub_Helper2:

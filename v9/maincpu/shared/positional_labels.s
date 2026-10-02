@@ -263,7 +263,6 @@
 	.set Data_UnknownBlock_0x6E, Data_UnknownBlock + 110
 	.set DbMemo_DrawContent_Loop_0x61, DbMemo_DrawContent_Loop + 97
 	.set Debug_SWI_JumpTable_0x6, Debug_SWI_JumpTable + 6
-	.set DefaultHandler_Ret_0x1, DefaultHandler_Ret + 1
 	.set DefaultHandler_Ret_0x2B, DefaultHandler_Ret + 43
 	.set DefaultHandler_Ret_0xA6, DefaultHandler_Ret + 166
 	.set DemoDiskPrompt_English1_0x86, DemoDiskPrompt_English1 + 134

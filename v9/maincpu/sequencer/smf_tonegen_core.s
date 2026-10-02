@@ -4572,9 +4572,10 @@ VoiceChannel_NextParam_Done:
 VoiceChannel_ParamLimitTable:
 ; Upper limits (12, 127, 255) for the three per-channel parameters of
 ; VoiceSynth_DataEntry_PtrTable, same index.  Read by
-; VoiceSynth_HandleDataEntry / VoiceChannel_SelectNextParam /
-; VoiceChannel_SelectPrevParam as `ld xiy, VoiceChannel_ParamLimitTable /
-; ld E,(XIY+IX)`, IX = index; a value above E is replaced by E.
+; VoiceSynth_HandleDataEntry, VoiceChannel_SelectNextParam,
+; VoiceParam_HandleDataEntry, VoiceSynth_Algo_ChannelConfig and
+; VoiceParam_ReadUpdate_6 as `ld xiy, VoiceChannel_ParamLimitTable /
+; ld E,(XIY+IX)` (VoiceChannel_SelectPrevParam does not: it floors at 0), IX = index; a value above E is replaced by E.
 	.byte 0x0c, 0x7f, 0xff
 
 VoiceChannel_SelectPrevParam:
