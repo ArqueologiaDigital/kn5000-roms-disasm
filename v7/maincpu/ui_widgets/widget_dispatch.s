@@ -3700,7 +3700,9 @@ MidiCtl_AssSwbHandlers:
 	.long VoiceParam_AssSwb_MultiBlock_Data + 457	; no label at this target yet; v10: MidiPkt_BuildZeroData
 	.long VoiceParam_AssSwb_MultiBlock_Data + 411	; no label at this target yet; v10: MidiPkt_BuildFromConstant
 ; B0 00 00 20 00 C0 00 + 0xFF: control change 0 (bank MSB) = 0, CC 0x20 (bank
-; LSB) = 0, program change 0 on channel 1.  No reader found by the operand scan.
+; LSB) = 0, program change 0 on channel 1.  Readers below. by the operand scan.
+; Readers (claims_lint.py unread-claims, 2026-10-02): MidiSysEx_BuildAndSend (0xFDB15A, pushw far
+;   pointer)
 Midi_BankProgramTemplate:
 	.byte 0xb0, 0x00, 0x00, 0x20, 0x00, 0xc0, 0x00, 0xff
 ; B0 7B 00 78 00 79 00 + 0xFF: CC 123 All Notes Off, CC 120 All Sound Off, CC 121

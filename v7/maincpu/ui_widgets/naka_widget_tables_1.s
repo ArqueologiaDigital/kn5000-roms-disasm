@@ -799,12 +799,15 @@ Yoko_ResNames_3E3:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Yoko_ResNames_3E3_Strings
 ; Yoko_ResNames_3E3_Strings -- 306 bytes of NUL-terminated strings after
-; Yoko_ResNames_3E3; no registration or code reference reaches them
+; Yoko_ResNames_3E3; that code DOES reach (Readers below)
 ; (searched: RegObjTabl tables, slice and positional labels). Which code
 ; uses them is not established.
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; Yoko_ResNames_3E3_Strings[306].
+; Readers (claims_lint.py unread-claims, 2026-10-02): InitializeYoko (0xF2A645, pushw far pointer);
+;   InitializeYoko (0xF2A661, pushw far pointer); InitializeYoko (0xF2A67D, pushw far pointer); and
+;   22 more
 ; -----------------------------------------------------------------------------
 Yoko_ResNames_3E3_Strings:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0xEBA, 0x132
@@ -1066,11 +1069,14 @@ TrAsSureLangCheck_Strings_2:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaT1_Str021A4
 ; NakaT1_Str021A4 -- 208 bytes of NUL-terminated strings after the
-; string block before it; no registration or code reference reaches them
+; string block before it; that code DOES reach (Readers below)
 ; (searched: RegObjTabl tables, slice and positional labels). Which code
 ; uses them is not established.
 ;
 ; Typed in naka_widget_tables_1.c as char NakaT1_Str021A4[208].
+; Readers (claims_lint.py unread-claims, 2026-10-02): LyricsBoxFunc_CopyString (0xF2B22C, pushw far
+;   pointer); MeasureBoxFunc_DrawMeasure (0xF2B68B, pushw far pointer); AcDiskFileName_HandleEventF
+;   (0xF2B708, pushw far pointer); and 7 more
 ; -----------------------------------------------------------------------------
 NakaT1_Str021A4:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x21A4, 0xD0
@@ -1641,12 +1647,13 @@ DPPauseDspCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] DPPauseDspCheck_CaseTable_Strings
 ; DPPauseDspCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings
-; after DPPauseDspCheck_CaseTable; no registration or code reference
-; reaches them (searched: RegObjTabl tables, slice and positional
+; after DPPauseDspCheck_CaseTable; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
 ; labels). Which code uses them is not established.
 ;
 ; Typed in naka_widget_tables_1.c as char
 ; DPPauseDspCheck_CaseTable_Strings[6].
+; Readers (claims_lint.py unread-claims, 2026-10-02): IvExitTrSel_CopyString (0xF2D218, pushw far
+;   pointer)
 ; -----------------------------------------------------------------------------
 DPPauseDspCheck_CaseTable_Strings:
 	.incbin "includes/generated/naka_widget_tables_1.bin", 0x27A8, 0x6

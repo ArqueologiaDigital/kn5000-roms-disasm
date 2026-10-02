@@ -2205,8 +2205,12 @@ sub_F002F4_Return:
 ;   0x000C4D+0x000BB3).  These are 25 proven entry points for whoever converts
 ;   it; this file converts the TABLE, not the routines.
 ; Unknown: what the routines do, and what selects a slot.  No reader for this
-;          table has been found -- 0x00F00340 is not a 32-bit word anywhere in
-;          the four images -- so the index is presumably computed.
+;          table base has been found -- 0x00F00340 is not a 32-bit word anywhere
+;          in the four images -- because the reader indexes from SLOT 17:
+;          sub_F00D65 (0xF00D92) does `add xbc, PtrTable_F00340 + 0x44` on
+;          XBC = 4*n, then `ld xbc, (xbc)` (claims_lint.py unread-claims,
+;          2026-10-02).  A 32-bit 0x00F00380 (slot 16) also sits at 0xF513FB,
+;          inside RecordArray_F511DD's records.
 ; --------------------------------------------------------------------------
 PtrTable_F00340:
 	.long sub_F01200	; F00340  [  0]
@@ -3173,7 +3177,7 @@ sub_F00D65:
 	ld	c, 4:opc	; F00D8B  ld C,0x04
 	m_mul MBD+r6, 0xfc, 3	; F00D8D  mul BC,(XIZ+0xfc)
 	extz	xbc	; F00D90  extz XBC
-	add	xbc, 15729540	; F00D92  add XBC,0x00f00384
+	add	xbc, PtrTable_F00340 + 0x44	; F00D92  add XBC,0x00f00384
 	ld	xbc, (xbc)	; F00D98  ld XBC,(XBC)
 	lda	xiy, (sub_F00D65_Resume:24)	; F00D9A  lda XIY,0xf00da2
 	push	xiy	; F00D9F  push XIY

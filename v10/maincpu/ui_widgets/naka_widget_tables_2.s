@@ -303,12 +303,15 @@ East_ResNames_3EC:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] East_ResNames_3EC_Strings
 ; East_ResNames_3EC_Strings -- 252 bytes of NUL-terminated strings after
-; East_ResNames_3EC; no registration or code reference reaches them
+; East_ResNames_3EC; that code DOES reach (Readers below)
 ; (searched: RegObjTabl tables, slice and positional labels). Which code
 ; uses them is not established.
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; East_ResNames_3EC_Strings[252].
+; Readers (claims_lint.py unread-claims, 2026-10-02): InitializeEast (0xF7331A, pushw far pointer);
+;   InitializeEast (0xF73333, pushw far pointer); InitializeEast (0xF7334F, pushw far pointer); and
+;   19 more
 ; -----------------------------------------------------------------------------
 East_ResNames_3EC_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x8F2, 0xFC
@@ -1657,12 +1660,13 @@ SplitPointFunc_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SplitPointFunc_LocalInit_Strings
 ; SplitPointFunc_LocalInit_Strings -- 6 bytes of NUL-terminated strings
-; after SplitPointFunc_LocalInit; no registration or code reference
-; reaches them (searched: RegObjTabl tables, slice and positional
+; after SplitPointFunc_LocalInit; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
 ; labels). Which code uses them is not established.
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; SplitPointFunc_LocalInit_Strings[6].
+; Readers (claims_lint.py unread-claims, 2026-10-02): SplitPoint_HandleNoteEvt (0xF749F4, pushw far
+;   pointer)
 ; -----------------------------------------------------------------------------
 SplitPointFunc_LocalInit_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2547C, 0x6
@@ -2157,12 +2161,14 @@ InOutGridCheck_LocalInit:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_LocalInit_Strings
 ; InOutGridCheck_LocalInit_Strings -- 60 bytes of NUL-terminated strings
-; after InOutGridCheck_LocalInit; no registration or code reference
-; reaches them (searched: RegObjTabl tables, slice and positional
+; after InOutGridCheck_LocalInit; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
 ; labels). Which code uses them is not established.
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; InOutGridCheck_LocalInit_Strings[60].
+; Readers (claims_lint.py unread-claims, 2026-10-02): Data_InOutGridDispatch (0xF75E0B, pushw far
+;   pointer); Data_InOutGridDispatch (0xF75E1E, pushw far pointer); Data_InOutGridDispatch
+;   (0xF75E53, pushw far pointer); and 7 more
 ; -----------------------------------------------------------------------------
 InOutGridCheck_LocalInit_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25960, 0x3C
@@ -2217,12 +2223,13 @@ InOutGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] InOutGridCheck_CaseTable_Strings
 ; InOutGridCheck_CaseTable_Strings -- 6 bytes of NUL-terminated strings
-; after InOutGridCheck_CaseTable; no registration or code reference
-; reaches them (searched: RegObjTabl tables, slice and positional
+; after InOutGridCheck_CaseTable; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
 ; labels). Which code uses them is not established.
 ;
 ; Typed in naka_widget_tables_2.c as char
 ; InOutGridCheck_CaseTable_Strings[6].
+; Readers (claims_lint.py unread-claims, 2026-10-02): IvMpst_HandleGetName (0xF76288, pushw far
+;   pointer)
 ; -----------------------------------------------------------------------------
 InOutGridCheck_CaseTable_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x259E0, 0x6
@@ -2809,12 +2816,14 @@ ComSetGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] ComSetGridCheck_CaseTable_Tail
 ; ComSetGridCheck_CaseTable_Tail -- 14 bytes after
-; ComSetGridCheck_CaseTable that no registration or code reference
-; reaches (searched: RegObjTabl tables, slice and positional labels).
+; ComSetGridCheck_CaseTable that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional labels).
 ; Contents not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
 ; ComSetGridCheck_CaseTable_Tail[14].
+; Readers (claims_lint.py unread-claims, 2026-10-02): Naka_ReverbScreen_EmptyStr (0xE28588, 32-bit
+;   pointer); AcPmemOutLGridBoxProc (0xF7837B, 32-bit pointer); NAKA_PerfReg_Container_Root_0x1697
+;   (0xE10276, 32-bit pointer); NakaWidget_SmfDpMuteCtrl5 (0xE2163E, 32-bit pointer)
 ; -----------------------------------------------------------------------------
 ComSetGridCheck_CaseTable_Tail:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D30, 0xE
@@ -2861,11 +2870,14 @@ PmemOutLGridCheck_Strings:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D58, 0x18
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaData_PartFlags
-; NakaData_PartFlags -- 15 bytes after the string block before it that
-; no registration or code reference reaches (searched: RegObjTabl
+; NakaData_PartFlags -- 15 bytes after the string block before it that code DOES reach (Readers below) (searched: RegObjTabl
 ; tables, slice and positional labels). Contents not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t NakaData_PartFlags[15].
+; Readers (claims_lint.py unread-claims, 2026-10-02): PmemOutLGridCheck_Evt1C00017 (0xF78A47, 32-bit
+;   pointer); PmemOutLGridCheck_Evt1C00017 (0xF78A69, 32-bit pointer); PmemOutLGridCheck_Evt1C00017
+;   (0xF78ABA, 32-bit pointer); PmemOutLGridCheck_Evt1C00018 (0xF78B0F, 32-bit pointer);
+;   drawbar_panel_ui.s:1203 (source reference); and 14 more
 ; -----------------------------------------------------------------------------
 NakaData_PartFlags:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25D70, 0xF
@@ -2956,12 +2968,14 @@ PmemOutLGridCheck_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] PmemOutLGridCheck_CaseTable_Tail
 ; PmemOutLGridCheck_CaseTable_Tail -- 22 bytes after
-; PmemOutLGridCheck_CaseTable that no registration or code reference
-; reaches (searched: RegObjTabl tables, slice and positional labels).
+; PmemOutLGridCheck_CaseTable that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional labels).
 ; Contents not established.
 ;
 ; Typed in naka_widget_tables_2.c as uint8_t
 ; PmemOutLGridCheck_CaseTable_Tail[22].
+; Readers (claims_lint.py unread-claims, 2026-10-02): TtMdCtlMsg_EventDispatch (0xF7929B, 32-bit
+;   pointer); TtMdCtlMsg_EventDispatch (0xF79306, 32-bit pointer); TtMdCtlMsg_EventDispatch
+;   (0xF7935F, 32-bit pointer); PmemOutRGridCheck_Evt1C00018 (0xF79405, 32-bit pointer); and 8 more
 ; -----------------------------------------------------------------------------
 PmemOutLGridCheck_CaseTable_Tail:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x25E36, 0x16

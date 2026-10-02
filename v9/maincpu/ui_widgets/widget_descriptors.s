@@ -1222,11 +1222,13 @@ StsAtPunchCheck_Strings:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NakaDesc_Str0330A
 ; NakaDesc_Str0330A -- 6 bytes of NUL-terminated strings after the
-; string block before it; no registration or code reference reaches them
+; string block before it; that code DOES reach (Readers below)
 ; (searched: RegObjTabl tables, slice and positional labels). Which code
 ; uses them is not established.
 ;
 ; Typed in naka_widget_descriptors.c as char NakaDesc_Str0330A[6].
+; Readers (claims_lint.py unread-claims, 2026-10-02): IvRealRecExit_CopyString (0xF2E4B5, pushw far
+;   pointer)
 ; -----------------------------------------------------------------------------
 NakaDesc_Str0330A:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x330A, 0x6
@@ -1411,12 +1413,14 @@ StsAtPunchCheck_PtrTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] StsAtPunchCheck_PtrTable_Strings
 ; StsAtPunchCheck_PtrTable_Strings -- 12 bytes of NUL-terminated strings
-; after StsAtPunchCheck_PtrTable; no registration or code reference
-; reaches them (searched: RegObjTabl tables, slice and positional
+; after StsAtPunchCheck_PtrTable; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
 ; labels). Which code uses them is not established.
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; StsAtPunchCheck_PtrTable_Strings[12].
+; Readers (claims_lint.py unread-claims, 2026-10-02): NoteEditBox_EventDispatch2 (0xF2F4E8, 32-bit
+;   pointer); NoteEditBox_EventDispatch2 (0xF2F371, pushw far pointer); NoteEditBox_EventDispatch2
+;   (0xF2F400, pushw far pointer)
 ; -----------------------------------------------------------------------------
 StsAtPunchCheck_PtrTable_Strings:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x37AC, 0xC
@@ -1689,12 +1693,13 @@ NoteEditFunc_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] NoteEditFunc_CaseTable_Strings
 ; NoteEditFunc_CaseTable_Strings -- 10 bytes of NUL-terminated strings
-; after NoteEditFunc_CaseTable; no registration or code reference
-; reaches them (searched: RegObjTabl tables, slice and positional
+; after NoteEditFunc_CaseTable; that code DOES reach (Readers below) (searched: RegObjTabl tables, slice and positional
 ; labels). Which code uses them is not established.
 ;
 ; Typed in naka_widget_descriptors.c as char
 ; NoteEditFunc_CaseTable_Strings[10].
+; Readers (claims_lint.py unread-claims, 2026-10-02): SngSelFunc_HandleEvent47 (0xF2FF2D, pushw far
+;   pointer); SngSelFunc_HandleEvent47 (0xF2FF45, pushw far pointer)
 ; -----------------------------------------------------------------------------
 NoteEditFunc_CaseTable_Strings:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x38B4, 0xA
@@ -4521,7 +4526,7 @@ SeqStep_TimerDispatch_ProcTables:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqStep_TimerDispatch_ProcTables_Tail
 ; SeqStep_TimerDispatch_ProcTables_Tail -- 66 bytes after
-; SeqStep_TimerDispatch_ProcTables that no code reference reaches
+; SeqStep_TimerDispatch_ProcTables that code DOES reach (Readers below)
 ; (searched: every label and positional-label name anchored on the
 ; historical labels of this span, in all v10 .s files). Holds short
 ; NUL-terminated strings -- "A", "w~", "d", "wb", "r", "d", "r", "a",
@@ -4531,6 +4536,9 @@ SeqStep_TimerDispatch_ProcTables:
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; SeqStep_TimerDispatch_ProcTables_Tail[66].
+; Readers (claims_lint.py unread-claims, 2026-10-02): Naka_DrawbarOrgan_Screens (0xEEE776, 32-bit
+;   pointer); FileOpenDefault (0xF4F21F, pushw far pointer); SeqStep_ByteBlockF245 (0xF4F257, pushw
+;   far pointer); SeqStep_ByteBlockF245 (0xF4F298, pushw far pointer); and 8 more
 ; -----------------------------------------------------------------------------
 SeqStep_TimerDispatch_ProcTables_Tail:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x141B4, 0x42
@@ -4648,13 +4656,14 @@ FDC_Format2HD_FatHead:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429A, 0x4
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] FDC_Format2HD_FatHead_Tail
-; FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that
-; no code reference reaches (searched: every label and positional-label
+; FDC_Format2HD_FatHead_Tail -- 6 bytes after FDC_Format2HD_FatHead that code DOES reach (Readers below) (searched: every label and positional-label
 ; name anchored on the historical labels of this span, in all v10 .s
 ; files). Holds the strings "d" and "A:\". Contents not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; FDC_Format2HD_FatHead_Tail[6].
+; Readers (claims_lint.py unread-claims, 2026-10-02): FileIO_ReadFreeSpaceViaFAT (0xF5279B, pushw
+;   far pointer); FileIO_ReadFreeSpaceViaFAT (0xF527A1, pushw far pointer)
 ; -----------------------------------------------------------------------------
 FDC_Format2HD_FatHead_Tail:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1429E, 0x6
@@ -4675,12 +4684,14 @@ GetDiskFreeSpace_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetDiskFreeSpace_CaseTable_Tail
 ; GetDiskFreeSpace_CaseTable_Tail -- 6 bytes after
-; GetDiskFreeSpace_CaseTable that no code reference reaches (searched:
+; GetDiskFreeSpace_CaseTable that code DOES reach (Readers below) (searched:
 ; every label and positional-label name anchored on the historical
 ; labels of this span, in all v10 .s files). Contents not established.
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; GetDiskFreeSpace_CaseTable_Tail[6].
+; Readers (claims_lint.py unread-claims, 2026-10-02): FileIO_ReadVolumeLabelEntry (0xF527FC, pushw
+;   far pointer); FileIO_ReadVolumeLabelEntry (0xF52802, pushw far pointer)
 ; -----------------------------------------------------------------------------
 GetDiskFreeSpace_CaseTable_Tail:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142B2, 0x6
@@ -4701,7 +4712,7 @@ GetVolumeLabel_CaseTable:
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] GetVolumeLabel_CaseTable_Tail
 ; GetVolumeLabel_CaseTable_Tail -- 28 bytes after
-; GetVolumeLabel_CaseTable that no code reference reaches (searched:
+; GetVolumeLabel_CaseTable that code DOES reach (Readers below) (searched:
 ; every label and positional-label name anchored on the historical
 ; labels of this span, in all v10 .s files). Holds the strings "A:\",
 ; "+wb", "\", "d", "rb", then 0xff and "1 PianoDisc". Contents not
@@ -4709,6 +4720,9 @@ GetVolumeLabel_CaseTable:
 ;
 ; Typed in naka_widget_descriptors.c as uint8_t
 ; GetVolumeLabel_CaseTable_Tail[28].
+; Readers (claims_lint.py unread-claims, 2026-10-02): PathInfo_BuildAndOpen (0xF528B1, pushw far
+;   pointer); PathInfo_BuildAndOpen (0xF528CA, pushw far pointer); FileIO_ParseLoop_CheckChar
+;   (0xF52937, pushw far pointer); and 3 more
 ; -----------------------------------------------------------------------------
 GetVolumeLabel_CaseTable_Tail:
 	.incbin "includes/generated/naka_widget_descriptors.bin", 0x142C6, 0x1C

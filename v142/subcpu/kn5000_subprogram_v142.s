@@ -28940,7 +28940,9 @@ __jrt_nop_02DBD0:
 	pop	xiz
 	ret
 ; Second routine inside the 0x02DBB3 blob; no symbol in either source. Raises then releases the
-; bit15 strobe on 0x05C0 + ch using shadow +0x3E (the 0x05C0 twin of 0x02DAB8). Unreferenced.
+; bit15 strobe on 0x05C0 + ch using shadow +0x3E (the 0x05C0 twin of 0x02DAB8). Readers below.
+; Readers (claims_lint.py unread-claims, 2026-10-02): kn5000_subprogram_v142.s:17453 (source
+;   reference)
 ToneGen_Write_ExtParam_05C0_Strobe:
 	dec	4, xsp
 	pushw	iz

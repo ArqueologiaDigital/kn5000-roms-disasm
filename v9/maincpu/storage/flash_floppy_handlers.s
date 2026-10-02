@@ -91,7 +91,11 @@ SeScreenData_0x4D74:
 SeScreenData_0x4D7F:
 ; F15985 flags=0x00 len=10
 	.byte	0x00, 0x0a, 0x66, 0x06, 0xff, 0x00, 0x20, 0xc4, 0x16, 0x02
-; table of 7 pointers to bound records; the code loads it into XIY and SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA))
+; table of 9 pointers, entry = A (0..8; entry 0 repeated): entries 1-6 -> the records
+; SeScreenData_0x4D56.., entries 7/8 -> FlashRead_BlockData_Field7/_Field8.  The code loads it
+; into XIY only on SeMenu_PatchEdit_DataBlock's `cp a, 7 / jr nc` path, and
+; SeMenu_EqEdit_DrawInit_0x15 draws entry WA (XIY = (XIY + 4*WA)) -- so the entries that reader
+; uses are 7 and 8 (corrected 2026-10-02 from "table of 7", Wave 2 claims review)
 ; evidence: SeMenu_PatchEdit_DataBlock_Join+0x6 (0xF1017E)
 ; (name FlashRead_BlockHandler_Table kept: other files use it; the object is ScreenData, see above)
 FlashRead_BlockHandler_Table:
@@ -185,7 +189,7 @@ SeScreenData_0x4E68:
 ; evidence: SeMenu_PatchEdit_DataBlock (0xF10146)
 ; (name FlashWrite_BlockRef_Type6 kept: other files use it; the object is ScreenData, see above)
 FlashWrite_BlockRef_Type6:
-; F15A91..F15B01  28 x u32 pointer
+; F15A91..F15AA1  4 x u32 pointer
 	.long	SeScreenData_0x4E68
 	.long	SeScreenData_0x4E68
 	.long	SeScreenData_0x4E68 + 0xf
