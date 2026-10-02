@@ -698,7 +698,7 @@ MidiCC_Handler_SimpleParamStore:
 	or	(0x428:16), 1
 	ret
 MidiRx_ControlChange:
-	ld	xix, 0xfd0696
+	ld	xix, MidiRx_ControlChange_Data
 	ld	l, (0x9599:16)
 	ld	a, (xix+l)
 	ld	(0x95bb:16), a

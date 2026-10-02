@@ -885,8 +885,9 @@ MidiPkt_SysExBulkTransfer_Data:
 	add	hl, hl
 	lda	xix, (SysExBulk_SwitchOffsets:24)
 	ld	hl, (xix+hl)
-	lda	xix, (0xfda17c:24)
+	lda	xix, (MidiPkt_SendBankSelect_Send_Code:24)
 	jp_rr 8, xix, hl
+MidiPkt_SendBankSelect_Send_Code:
 	jr	MidiPkt_SysExBulkTransfer_Data_Join
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join3
 	jrl	MidiPkt_SysExBulkTransfer_Data_Join4
@@ -1292,8 +1293,9 @@ SysEx_DispatchByChannel:
 	add	wa, wa
 	lda	xix, (SysEx4B_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda	xix, (0xfda542:24)
+	lda	xix, (SysEx_DispatchByChannel_Code:24)
 	jp_rr	8, xix, wa
+SysEx_DispatchByChannel_Code:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_Data
@@ -1341,8 +1343,9 @@ SysEx_DispatchByChannel_49:
 	add	wa, wa
 	lda	xix, (SysEx49_ChannelSwitch:24)
 	ld	wa, (xix+wa)
-	lda	xix, (0xfda5c9:24)
+	lda	xix, (SysEx_DispatchByChannel_49_Code:24)
 	jp_rr	8, xix, wa
+SysEx_DispatchByChannel_49_Code:
 	cp	c, 5:i3
 	ret	nc
 	ld	xwa, SysEx_DispatchByChannel_49_Data

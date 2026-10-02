@@ -5242,7 +5242,7 @@ FDemo_LoadRegsAndPostEvent_Str_FEATURE:	.incbin "includes/generated/naka_technic
 ; [nakarest] Text (4 B at 0xea00a8), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FDemo_FileOpen_DoOpen (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea00a8`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15A, 0x4
+FDemo_FileOpen_DoOpen_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15A, 0x4
 ; [nakarest] naka_technichord_strings+0x1a15e  +0x1a15e..+0x1a18c (0xea00ac, 46 B)
 ; [nakarest] purpose not established: layout of 46 B at 0xea00ac not derived; readers below
 ; [nakarest] Readers: source references Demo_SelectEntry_DrawSecondary (demo/file_demo_proc.s:
@@ -6452,7 +6452,8 @@ SLSrcBankList_FuncBody_Str_ALL:	.incbin "includes/generated/naka_technichord_str
 ; [nakarest] (SLSrcBankList_FuncBody_Data:24)`), SLSrcBankList_FuncBody_Skip2
 ; [nakarest] (file_io/single_load.s: `ld l, (SLSrcBankList_FuncBody_Data:24)`), 3 more.
 SLSrcBankList_FuncBody_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA04, 0x6
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA04, 0x2
+SLSrcBankList_FuncBody_Data_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA06, 0x4
 ; [nakarest] naka_technichord_strings+0x1aa0a  +0x1aa0a..+0x1aa0c (0xea0958, 2 B)
 ; [nakarest] Text (2 B at 0xea0958), first string ":"; no registered NAKA table points into it;
 ; [nakarest] reached through source references SLSrcBankList_FuncBody_Join4
@@ -6482,7 +6483,8 @@ SLSrcBankList_FuncBody_Entry_Str_ALL:	.incbin "includes/generated/naka_technicho
 ; [nakarest] (SLSrcBankList_FuncBody_Entry_Data:24)`), SLSrcBankList_FuncBody_Skip15
 ; [nakarest] (file_io/single_load.s: `ld e, (SLSrcBankList_FuncBody_Entry_Data:24)`), 1 more.
 SLSrcBankList_FuncBody_Entry_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA26, 0x4
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA26, 0x2
+SLSrcBankList_FuncBody_Data_3:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA28, 0x2
 ; [nakarest] naka_technichord_strings+0x1aa2a  +0x1aa2a..+0x1aa2e (0xea0978, 4 B)
 ; [nakarest] Text (4 B at 0xea0978), first string ": "; no registered NAKA table points into it;
 ; [nakarest] reached through source references SLSrcBankList_FuncBody_Helper8
@@ -6508,7 +6510,8 @@ Str_AllOption_EA0980:
 ; [nakarest] (SLSrcBankList_FuncBody_Entry_Data_2:24)`), SLSrcBankList_FuncBody_Join13
 ; [nakarest] (file_io/single_load.s: `ld c, (SLSrcBankList_FuncBody_Entry_Data_2:24)`), 6 more.
 SLSrcBankList_FuncBody_Entry_Data_2:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA44, 0x4
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA44, 0x2
+SLSrcBankList_FuncBody_Data_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA46, 0x2
 ; [nakarest] naka_technichord_strings+0x1aa48  +0x1aa48..+0x1aa5c (0xea0996, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xea0996 not derived; readers below
 ; [nakarest] Readers: source references SLSrc_HandleShow (file_io/single_load.s: `lda xde,
@@ -6548,12 +6551,14 @@ SLDstBankList_FuncBody_Str_Colon_3:	.incbin "includes/generated/naka_technichord
 ; [nakarest] (SLDstBankList_FuncBody_Data:24)`), SLDstBankList_FuncBody_Skip4
 ; [nakarest] (file_io/single_load.s: `ld e, (SLDstBankList_FuncBody_Data:24)`), 1 more.
 SLDstBankList_FuncBody_Data:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7A, 0x4
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7A, 0x2
+SLDstBankList_FuncBody_Data_5:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7C, 0x2
 ; [nakarest] naka_technichord_strings+0x1aa7e  +0x1aa7e..+0x1aa84 (0xea09cc, 6 B)
 ; [nakarest] purpose not established: layout of 6 B at 0xea09cc not derived; readers below
 ; [nakarest] Readers: source references SLDstBankList_FuncBody_Helper2 (file_io/single_load.s:
 ; [nakarest] `ld xbc, SLDstBankList_FuncBody_Str_Colon_4`).
-SLDstBankList_FuncBody_Str_Colon_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7E, 0x6	; ": "
+SLDstBankList_FuncBody_Str_Colon_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7E, 0x4	; ": "
+SLDstBankList_FuncBody_Data_6:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA82, 0x2
 ; [nakarest] naka_technichord_strings+0x1aa84  +0x1aa84..+0x1aa88 (0xea09d2, 4 B)
 ; [nakarest] Text (4 B at 0xea09d2), first string ": "; no registered NAKA table points into it;
 ; [nakarest] reached through source references SLDstBankList_FuncBody_Helper3
@@ -6578,7 +6583,8 @@ SLDstBankList_FuncBody_Str_ALL:	.incbin "includes/generated/naka_technichord_str
 ; [nakarest] (SLDstBankList_FuncBody_Data_2:24)`), SLDstBankList_FuncBody_Skip18
 ; [nakarest] (file_io/single_load.s: `ld e, (SLDstBankList_FuncBody_Data_2:24)`), 1 more.
 SLDstBankList_FuncBody_Data_2:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA9E, 0x4
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA9E, 0x2
+SLDstBankList_FuncBody_Data_7:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAA0, 0x2
 ; [nakarest] Data_SaveLoadMenuTable  +0x1aaa2..+0x1aaa6 (0xea09f0, 4 B)
 ; [nakarest] Text (4 B at 0xea09f0), first string ": "; no registered NAKA table points into it;
 ; [nakarest] reached through source references SLDstBankList_FuncBody_Helper5
@@ -6615,7 +6621,8 @@ SLDstBankList_FuncBody_Data_3:
 ; [nakarest] (SLDstBankList_FuncBody_Data_4:24)`), SLDstBankList_FuncBody_Skip24
 ; [nakarest] (file_io/single_load.s: `ld c, (SLDstBankList_FuncBody_Data_4:24)`), 5 more.
 SLDstBankList_FuncBody_Data_4:
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC4, 0x4
+	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC4, 0x2
+SLDstBankList_FuncBody_Data_8:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC6, 0x2
 ; [nakarest] naka_technichord_strings+0x1aac8  +0x1aac8..+0x1aadc (0xea0a16, 20 B)
 ; [nakarest] purpose not established: layout of 20 B at 0xea0a16 not derived; readers below
 ; [nakarest] Readers: source references SLDst_HandleConfirm (file_io/single_load.s: `lda xde,

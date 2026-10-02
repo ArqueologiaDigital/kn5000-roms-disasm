@@ -12661,7 +12661,7 @@ AccVoice_BarCounterBytecodeData_Helper10:
 	jr	AccVoice_BarCounterBytecodeData_Helper3_Join
 AccVoice_BarCounterBytecodeData_Helper3_Skip:
 	extz	wa
-	lda	xbc, (0xe49ff8:24)
+	lda	xbc, (AccTone_InlineBytecodeData_Data:24)
 	ld_rrb	a, xbc, wa
 	ld	xbc, (0x3426:16)
 	extz	wa
@@ -12673,7 +12673,7 @@ AccVoice_BarCounterBytecodeData_Helper3_Join:
 	ld	xix, (0x3426:16)
 	ld	c, a
 	extz	bc
-	lda	xde, (0xe4a01a:24)
+	lda	xde, (AccTone_InlineBytecodeData_Data_2:24)
 	ld_rrb	e, xde, bc
 	extz	de
 	ld	bc, de
@@ -13176,7 +13176,7 @@ AccTuning_ComplexBytecodeData:
 	ld e, (13161:16)
 	jr -61
 	extz wa
-	lda	xbc, (14983160:24)
+	lda	xbc, (AccTone_InlineBytecodeData_Data:24)
 	ld_rrb	l, xbc, wa
 	ld	a, e
 	extz	wa
@@ -29695,13 +29695,14 @@ AccPatch_ResolveEntryAddr_Helper10:
 	ld_rr8b w, xiy, c
 	ld a, 17:opc
 	st_rr8b w, xix, a
-	ld xiy, 16153090
+	ld xiy, AccVoice_SetupSlots_DataBlock_Data
 	add	xix, 64
 	ld	xbc, 0:i3
 	ldw	bc, 16
 	.byte 0x85
 	scf
 	ret
+AccVoice_SetupSlots_DataBlock_Data:
 	aligned_string "Easy            #"
 	ld	(0x38d1:16), c
 	ld	c, (0x34d7:16)
@@ -33829,7 +33830,7 @@ AccDraw_Secondary_Helper2_Skip2:
 	calr	AccGraphics_RenderStart
 	ld	(0x03efa8:24), 0
 	ldmm8	14779, 14098
-	ld	xiy, 16165950
+	ld	xiy, AccScreen_DataBlock_Data_7
 	calr	AccDraw_Secondary
 	calr	AccDraw_Secondary_Helper9
 	calr	AccDraw_Secondary_Helper12
@@ -34524,7 +34525,8 @@ AccScreen_DataBlock_Data_4:	.byte	0x02, 0x0f, 0xbb, 0x39, 0xff, 0x00, 0x20, 0x09
 	.byte 0x16, 0x04, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x8b, 0xac, 0xf6, 0x00, 0x00, 0x0a, 0xc0, 0x39	; |...............9|
 	.byte	0x0f, 0x00, 0x06, 0x83, 0x1b, 0x01	; |.............8..|
 AccScreen_DataBlock_Data_5:	.byte	0x04, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x38, 0xac, 0xf6
-	.byte 0x00, 0x1d, 0x1f, 0x14, 0x00, 0x28, 0x00, 0x02, 0x0f, 0xbb, 0x39, 0x01, 0x00, 0x06, 0x4d, 0xac	; |.....(....9...M.|
+	.byte	0x00, 0x1d, 0x1f, 0x14, 0x00, 0x28, 0x00	; |.....(....9...M.|
+AccScreen_DataBlock_Data_7:	.byte	0x02, 0x0f, 0xbb, 0x39, 0x01, 0x00, 0x06, 0x4d, 0xac
 	.byte 0xf6, 0x00, 0x05, 0x00, 0x31, 0x1f, 0x20, 0x50, 0x48, 0x52, 0x53, 0x56, 0x41, 0x4c, 0x55, 0x45	; |....1. PHRSVALUE|
 	.byte 0x04, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x62, 0xac, 0xf6, 0x00, 0xf0, 0x05, 0x22, 0x00, 0x88	; |.......b....."..|
 	.byte	0x00	; |....9...s...Q.!.|

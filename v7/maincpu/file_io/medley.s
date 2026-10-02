@@ -3985,7 +3985,7 @@ InitializeCheap:
 	ld (XBC+0x04),XWA
 	ld wa, (Cheap_ClassCount_165:24)
 	ld (XBC+0x08),WA
-	lda xwa, (0xea0f46:24)
+	lda xwa, (Cheap_ClassTable_165:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0165
 	call RegisterObjectTable
@@ -4005,7 +4005,7 @@ InitializeCheap:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xea1358:24)
+	ld wa, (InitializeCheap_Data:24)
 	ld (XBC+0x08),WA
 	lda xwa, (Cheap_ResMethodTable_1E5:24)
 	ld (XBC+0x0a),XWA
@@ -4127,7 +4127,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea75c6:24)
+	lda xwa, (Cheap_ResNameTable_362:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0362
 	call RegisterObjectTable
@@ -4147,7 +4147,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea75cc:24)
+	lda xwa, (Cheap_ResNameTable_363:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0363
 	call RegisterObjectTable
@@ -4167,7 +4167,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea75d2:24)
+	lda xwa, (Cheap_ResNameTable_364:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0364
 	call RegisterObjectTable
@@ -4247,7 +4247,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea77e4:24)
+	lda xwa, (Cheap_ResNameTable_36A:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036a
 	call RegisterObjectTable
@@ -4307,7 +4307,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea7aca:24)
+	lda xwa, (Cheap_ResNameTable_36D:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036d
 	call RegisterObjectTable
@@ -4327,7 +4327,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea7ad0:24)
+	lda xwa, (Cheap_ResNameTable_36E:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x036e
 	call RegisterObjectTable
@@ -4367,7 +4367,7 @@ InitializeCheap:
 	lda xwa, (ResNameProc:24)
 	ld (XBC+0x04),XWA
 	ldw (XBC+0x08), 0x0000
-	lda xwa, (0xea7b8c:24)
+	lda xwa, (Cheap_ResNameTable_379:24)
 	ld (XBC+0x0a),XWA
 	ldw WA, 0x0379
 	call RegisterObjectTable

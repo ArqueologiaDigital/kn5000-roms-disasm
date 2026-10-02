@@ -354,7 +354,7 @@ SLSrcBankList_FuncBody_Skip2:
 	ld	a, l
 	ld	c, e
 	add	a, e
-	cp a, (15337812:24)
+	cp a, (SLSrcBankList_FuncBody_Data_2:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip3
 	add	c, l
 	ld	(0x89fc:16), c
@@ -404,7 +404,7 @@ SLSrcBankList_FuncBody_Skip5:
 	ld	c, e
 	ld	a, e
 	inc	1, a
-	cp a, (15337812:24)
+	cp a, (SLSrcBankList_FuncBody_Data_2:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip6
 	ld	e, (SLSrcBankList_FuncBody_Data:24)
 	ld	l, e
@@ -740,7 +740,7 @@ SLSrcBankList_FuncBody_Skip12:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cp a, (15337846:24)
+	cp a, (SLSrcBankList_FuncBody_Data_3:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip13
 	add	c, e
 	ld	(0x89fe:16), c
@@ -789,7 +789,7 @@ SLSrcBankList_FuncBody_Skip15:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (15337846:24)
+	cp a, (SLSrcBankList_FuncBody_Data_3:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip16
 	ld	e, (SLSrcBankList_FuncBody_Entry_Data:24)
 	ld	l, e
@@ -1206,7 +1206,7 @@ SLSrcBankList_FuncBody_Skip30:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (15337876:24)
+	cp a, (SLSrcBankList_FuncBody_Data_4:24)
 	jr	nc, SLSrcBankList_FuncBody_Skip32
 	ld	e, (SLSrcBankList_FuncBody_Entry_Data_2:24)
 	ld	a, e
@@ -1697,7 +1697,7 @@ SLDstBankList_FuncBody_Skip:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cp a, (15337930:24)
+	cp a, (SLDstBankList_FuncBody_Data_5:24)
 	jr	nc, SLDstBankList_FuncBody_Skip2
 	add	c, e
 	ld	(0x8a02:16), c
@@ -1751,7 +1751,7 @@ SLDstBankList_FuncBody_Skip4:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (15337930:24)
+	cp a, (SLDstBankList_FuncBody_Data_5:24)
 	jr	nc, SLDstBankList_FuncBody_Skip5
 	ld	e, (SLDstBankList_FuncBody_Data:24)
 	ld	l, e
@@ -1934,7 +1934,7 @@ SLDstBankList_FuncBody_Skip10:
 	ld	c, w
 	ld	a, w
 	inc	1, a
-	cp a, (15337936:24)
+	cp a, (SLDstBankList_FuncBody_Data_6:24)
 	jr	nc, SLDstBankList_FuncBody_Skip11
 	inc	1, c
 	ld	(0x8a04:16), c
@@ -2117,7 +2117,7 @@ SLDstBankList_FuncBody_Skip15:
 	ld	a, e
 	ld	c, l
 	add	a, l
-	cp a, (15337966:24)
+	cp a, (SLDstBankList_FuncBody_Data_7:24)
 	jr	nc, SLDstBankList_FuncBody_Skip16
 	add	c, e
 	ld	(0x8a06:16), c
@@ -2171,7 +2171,7 @@ SLDstBankList_FuncBody_Skip18:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp a, (15337966:24)
+	cp a, (SLDstBankList_FuncBody_Data_7:24)
 	jr	nc, SLDstBankList_FuncBody_Skip19
 	ld	e, (SLDstBankList_FuncBody_Data_2:24)
 	ld	l, e
@@ -2537,7 +2537,7 @@ SLDstBankList_FuncBody_Skip29:
 	ld	c, l
 	ld	a, l
 	inc	1, a
-	cp	a, (0xea0a14:24)
+	cp	a, (SLDstBankList_FuncBody_Data_8:24)
 	jr	nc, SLDstBankList_FuncBody_Skip31
 	ld	e, (SLDstBankList_FuncBody_Data_4:24)
 	ld	a, e

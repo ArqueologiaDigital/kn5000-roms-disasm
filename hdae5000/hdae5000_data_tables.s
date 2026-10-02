@@ -16108,6 +16108,7 @@ HDAE5000_Bitmap_BootSplash:	; 0x2E61CE
 HDAE5000_Display_Params:	; 0x2F8DCE
 	; Display configuration parameters
 	.asciz "HD-AE5000"
+HDAE5000_LoadSong_Rcm_Data:
 	.zero 8
 HDAE5000_Dir_IsBlankName_Str_Blank16:	.asciz "                "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
@@ -16115,10 +16116,13 @@ HDAE5000_Fls_IsBlankName_Str_Blank16:	.asciz "                "
 	.balign 2, 0x00                       ; word-align pad (proven: see convert_align_pads.py header)
 HDAE5000_FlsItem_SongRecord_Str_Blank26:	.asciz "                          "
 	.byte 0x00
+HDAE5000_CheckFileSignature_Data:
 	.byte 0x98, 0x8e
 	.asciz "/"
+HDAE5000_CheckFileSignature_Data_2:
 	.byte 0x04
 	.byte 0x00
+HDAE5000_CheckFileSignature_Data_3:
 	.byte 0x02
 	.byte 0x00
 	.byte 0x94, 0x8e

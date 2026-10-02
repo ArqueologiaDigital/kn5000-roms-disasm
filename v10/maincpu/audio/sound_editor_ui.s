@@ -5911,8 +5911,9 @@ SeMenu_CopyWriteUpdate_Epilogue34:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x2EE:24)
 	ld_rrw wa, xix, wa
-	lda xix, (15785099:24)
+	lda xix, (SeMenu_CopyWriteUpdate_Step3_Code:24)
 	jp_rr 8, xix, wa
+SeMenu_CopyWriteUpdate_Step3_Code:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
@@ -5973,8 +5974,9 @@ SeMenu_CopyWriteUpdate_Epilogue35:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x306:24)
 	ld_rrw wa, xix, wa
-	lda xix, (15785270:24)
+	lda xix, (SeMenu_CopyWriteUpdate_Step3_Code_2:24)
 	jp_rr 8, xix, wa
+SeMenu_CopyWriteUpdate_Step3_Code_2:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 SeMenu_CopyWriteUpdate_Join39:
@@ -6026,8 +6028,9 @@ SeMenu_CopyWriteUpdate_Epilogue36:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x31A:24)
 	ld_rrw wa, xix, wa
-	lda xix, (15785415:24)
+	lda xix, (SeMenu_CopyWriteUpdate_Step3_Code_3:24)
 	jp_rr 8, xix, wa
+SeMenu_CopyWriteUpdate_Step3_Code_3:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
@@ -14912,7 +14915,7 @@ SeScreenData_0x4C5E:
 ; evidence: SeMenu_PatchEdit_DataBlock
 SeScreenData_0x4C6D:
 	sdb_str	0x0660, 0x80, 7, 0x20, SeScreenData_0x08D1, 3, 75*40+2
-	sdb_str	0x0660, 0x40, 6, 0x20, 0x00f15b9d, 6, 113*40+2
+	sdb_str	0x0660, 0x40, 6, 0x20, TuningSys_Param_01_Data, 6, 113*40+2
 FlashRead_BlockData_Field8:
 	sdb_snum	0x0668, 0xff, 0, 0x20, 175*40+27, 2, 0x00
 FlashRead_BlockData_Field7:

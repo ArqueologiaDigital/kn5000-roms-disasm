@@ -1807,7 +1807,7 @@ BmDrEdit_TestPartTableEntry:
 	ld a, (xwa)
 	extz wa
 	sla wa, 2
-	lda xbc, (0xe4448e:24)
+	lda xbc, (BmDrEdit_TestPartTableEntry_Data:24)
 	ld_rrl xwa, xbc, wa
 	cp (xwa), 240
 	jr c, BmDrEdit_TestPartTableEntry_Below

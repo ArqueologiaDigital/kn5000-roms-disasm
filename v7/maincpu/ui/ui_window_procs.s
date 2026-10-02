@@ -6918,10 +6918,10 @@ PaletteReduce_FindClosest:
 	ld XWA,(XSP+0x18)
 	add (XSP+0x14),XWA
 	ld XWA,(XSP+0x2c)
-	and XWA,0x00ff0000
+	and XWA,ToneGen_ProcessMidiConverge_Code
 	srl XWA, 16
 	ld XBC,(XSP+0x28)
-	and XBC,0x00ff0000
+	and XBC,ToneGen_ProcessMidiConverge_Code
 	srl XBC, 16
 	sub XBC,XWA
 	ld XWA,XBC
@@ -7089,7 +7089,7 @@ CaptureLcd_WritePaletteOr94:
 	sla de, 2
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
-	and xbc, 0xff0000	; is this a mask for Red?
+	and xbc, ToneGen_ProcessMidiConverge_Code	; is this a mask for Red?
 	srl xbc, 16
 	ld	(xwa+de), c
 	ld bc, iz
@@ -7114,7 +7114,7 @@ CaptureLcd_WritePaletteNoOr94:
 	sla de, 2
 	lda xwa, (xsp + 18)
 	ld xbc, xhl
-	and xbc, 0xff0000	; is this a mask for Red?
+	and xbc, ToneGen_ProcessMidiConverge_Code	; is this a mask for Red?
 	srl xbc, 16
 	ld	(xwa+de), c
 	ld bc, iz

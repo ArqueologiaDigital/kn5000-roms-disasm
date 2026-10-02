@@ -292,6 +292,7 @@ AudioInit_MixFallbackConfig:
 AudioInit_VoiceNotConfigured_Code_Skip:
 	extz	wa
 	jrl	AudioInit_VoiceNotConfigured_Code_Helper
+AudioModeChange_Handler_Code:
 	extz	wa
 	jrl	AudioInit_VoiceNotConfigured_Code_Helper
 ; v10 name for this address: AudioInit_DrumSaveReturn -- not a label here: v7 defines that name outside this span (= 0xFDE928)

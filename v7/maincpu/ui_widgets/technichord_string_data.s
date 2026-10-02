@@ -4980,7 +4980,7 @@ FDemo_LoadRegsAndPostEvent_Str_FEATURE:	.incbin "includes/generated/naka_technic
 ; [nakarest] Text (4 B at 0xea00a8), first string "rb"; no registered NAKA table points into it;
 ; [nakarest] reached through source references FDemo_FileOpen_DoOpen (demo/file_demo_proc.s: `ld
 ; [nakarest] xbc, 0x00ea00a8`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15A, 0x4
+FDemo_FileOpen_DoOpen_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1A15A, 0x4
 ; [nakarest] naka_technichord_strings+0x1a15e  +0x1a15e..+0x1a18c (0xea00ac, 46 B)
 ; [nakarest] purpose not established: layout of 46 B at 0xea00ac not derived; readers below
 ; [nakarest] Readers: source references Demo_SelectEntry_LoadPattern (demo/file_demo_proc.s:
@@ -5963,18 +5963,21 @@ WP_GetPresetName3_PtrTable:			.incbin "includes/generated/naka_technichord_strin
 SLSrcBankList_FuncBody_Str_Colon:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1A9EA, 0x4	; ": "
 SLSrcBankList_FuncBody_Str_Colon_2:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1A9EE, 0x4	; ": "
 SLSrcBankList_FuncBody_Str_ALL:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1A9F2, 0x12	; "      ALL       "
-SLSrcBankList_FuncBody_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA04, 0x6
+SLSrcBankList_FuncBody_Data:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA04, 0x2
+SLSrcBankList_FuncBody_Data_2:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA06, 0x4
 SLSrcBankList_FuncBody_Entry_Str_Colon:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA0A, 0x2	; ":"
 SLSrcBankList_FuncBody_Entry_Str_Colon_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA0C, 0x4	; ": "
 SLSrcBankList_FuncBody_Entry_Str_Colon_3:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA10, 0x4	; ": "
 SLSrcBankList_FuncBody_Entry_Str_ALL:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA14, 0x12	; "      ALL       "
-SLSrcBankList_FuncBody_Entry_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA26, 0x4
+SLSrcBankList_FuncBody_Entry_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA26, 0x2
+SLSrcBankList_FuncBody_Data_3:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA28, 0x2
 SLSrcBankList_FuncBody_Entry_Str_Colon_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA2A, 0x4	; ": "
 SLSrcBankList_FuncBody_Entry_Str_Colon_5:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA2E, 0x4	; ": "
 ; [nakarest] Str_AllOption_EA0980  +0x1aa32..+0x1aa64 (0xea0980, 50 B)
 ; [nakarest] 50 B at 0xea0980: split since into the labelled pieces below; code or data uses Str_AllOption_EA0980, SLSrcBankList_FuncBody_Entry_Data_2, SLSrc_HandleShow_PtrTable, SLDstBankList_FuncBody_Str_Colon and 1 more.
 Str_AllOption_EA0980:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA32, 0x12
-SLSrcBankList_FuncBody_Entry_Data_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA44, 0x4
+SLSrcBankList_FuncBody_Entry_Data_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA44, 0x2
+SLSrcBankList_FuncBody_Data_4:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA46, 0x2
 SLSrc_HandleShow_PtrTable:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA48, 0x14	; 5 x 32-bit pointer
 SLDstBankList_FuncBody_Str_Colon:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA5C, 0x4	; ": "
 SLDstBankList_FuncBody_Str_Colon_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA60, 0x4	; ": "
@@ -5982,12 +5985,15 @@ SLDstBankList_FuncBody_Str_Colon_2:	.incbin "includes/generated/naka_technichord
 ; [nakarest] 62 B at 0xea09b2: split since into the labelled pieces below; code or data uses Str_AllOption_EA09B2, SLDstBankList_FuncBody_Str_Colon_3, SLDstBankList_FuncBody_Data, SLDstBankList_FuncBody_Str_Colon_4 and 4 more.
 Str_AllOption_EA09B2:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA64, 0x12
 SLDstBankList_FuncBody_Str_Colon_3:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA76, 0x4	; ": "
-SLDstBankList_FuncBody_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7A, 0x4
-SLDstBankList_FuncBody_Str_Colon_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7E, 0x6	; ": "
+SLDstBankList_FuncBody_Data:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7A, 0x2
+SLDstBankList_FuncBody_Data_3:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7C, 0x2
+SLDstBankList_FuncBody_Str_Colon_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA7E, 0x4	; ": "
+SLDstBankList_FuncBody_Data_5:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA82, 0x2
 SLDstBankList_FuncBody_Str_Colon_5:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA84, 0x4	; ": "
 SLDstBankList_FuncBody_Str_Colon_6:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA88, 0x4	; ": "
 SLDstBankList_FuncBody_Str_ALL:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA8C, 0x12	; "      ALL       "
-SLDstBankList_FuncBody_Data_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA9E, 0x4
+SLDstBankList_FuncBody_Data_2:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AA9E, 0x2
+SLDstBankList_FuncBody_Data_6:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAA0, 0x2
 ; [nakarest] Data_SaveLoadMenuTable  +0x1aaa2..+0x1aaf0 (0xea09f0, 78 B)
 ; [nakarest] 78 B at 0xea09f0: split since into the labelled pieces below; code or data uses Data_SaveLoadMenuTable, SLDstBankList_FuncBody_Str_Colon_7, SLDstBankList_FuncBody_Str_ALL_2, SLDstBankList_FuncBody_Str_Colon_8 and 4 more.
 Data_SaveLoadMenuTable:			.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAA2, 0x4
@@ -5995,7 +6001,8 @@ SLDstBankList_FuncBody_Str_Colon_7:	.incbin "includes/generated/naka_technichord
 SLDstBankList_FuncBody_Str_ALL_2:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAAA, 0x12	; "      ALL       "
 SLDstBankList_FuncBody_Str_Colon_8:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AABC, 0x4	; ": "
 SLDstBankList_FuncBody_Str_Colon_9:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC0, 0x4	; ": "
-SLDstBankList_FuncBody_Data_4:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC4, 0x4
+SLDstBankList_FuncBody_Data_4:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC4, 0x2
+SLDstBankList_FuncBody_Data_7:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC6, 0x2
 SLDst_HandleShow_PtrTable:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AAC8, 0x14	; 15 x 32-bit pointer
 CmpSrc_HandleShow_PtrTable:		.incbin "includes/generated/naka_technichord_strings.bin", 0x1AADC, 0x14	; 10 x 32-bit pointer
 ; [nakarest] naka_technichord_strings+0x1aaf0  +0x1aaf0..+0x1ab00 (0xea0a3e, 16 B)
@@ -6870,7 +6877,7 @@ Str_Mt_SetFileSfx:
 ; [nakarest] purpose not established: layout of 2 B at 0xea1358 not derived; readers below
 ; [nakarest] Readers: source references InitializeCheap (file_io/medley.s: `ld wa,
 ; [nakarest] (0xea1358:24)`).
-	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B40A, 0x2
+InitializeCheap_Data:	.incbin "includes/generated/naka_technichord_strings.bin", 0x1B40A, 0x2
 ; [nakarest] naka_technichord_strings+0x1b40c  +0x1b40c..+0x1b444 (0xea135a, 56 B)
 ; [nakarest] the table itself: Function slot 0x105 (table 0xea135a, 13 entries,
 ; [nakarest] InitializeCheap), 13 entry pointers x 4 bytes.

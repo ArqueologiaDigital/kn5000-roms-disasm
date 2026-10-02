@@ -247,6 +247,7 @@ SeScreenData_0x4EFB:
 	.ascii	"REPEAT DELAY "
 	.ascii	"SOLO EFFECT 1"
 	.ascii	"SOLO EFFECT 2"
+TuningSys_Param_01_Data:
 	.ascii	"MONO  STEREO"
 ; static record list (37 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15CFC
 ; evidence: SeMenu_NameEdit_DataBlock2+0xA (0xF100B0)
@@ -977,7 +978,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ClassProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe0e95c:24)
+	ld wa, (Naka_ClassCount_16B:24)
 	ld (XBC+0x08),WA
 	lda xwa, (ToneGen_ParamTable_0x53D:24)
 	ld (XBC+0x0a),XWA
@@ -988,7 +989,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResEventProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe0e962:24)
+	ld wa, (InitializeNaka_Data_2:24)
 	ld (XBC+0x08),WA
 	lda xwa, (ToneGen_ParamTable_0x557:24)
 	ld (XBC+0x0a),XWA
@@ -999,7 +1000,7 @@ InitializeNaka:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe0e968:24)
+	ld wa, (InitializeNaka_Data_3:24)
 	ld (XBC+0x08),WA
 	lda xwa, (ToneGen_ParamTable_0x55D:24)
 	ld (XBC+0x0a),XWA
@@ -6526,7 +6527,7 @@ InitializeSuna:
 	pushw InitializeSuna_Str_TT_APCSEL@lo16
 	ld XWA,0x000000ed
 	ld XBC,NAKA_APFUNC_DefaultFunction
-	ld XDE,0x00ed0000
+	ld XDE,InitializeSuna_Data
 	call RegisterTitle
 	lda xsp, (xsp + 0x0e)
 	ret

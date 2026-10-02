@@ -2204,7 +2204,7 @@ Voice_FactoryPresetData_Code_Skip10:
 	ldw	wa, 16
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (16452973:24)
+	lda	xbc, (Voice_FactoryPresetData_Code:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -2219,6 +2219,7 @@ Voice_FactoryPresetData_Code_Epilogue2:
 	pop	xiz
 	inc	2, xsp
 	ret
+Voice_FactoryPresetData_Code:
 	ld	xbc, xwa
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)

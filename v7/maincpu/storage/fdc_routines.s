@@ -216,8 +216,9 @@ FDC_WaitReady_Skip10:
 	add	wa, wa
 	lda	xix, (FDC_WaitReady_Data:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xf968c0:24)
+	lda	xix, (FDC_CONFIG_VERIFY_Code:24)
 	jp_rr	8, xix, wa
+FDC_CONFIG_VERIFY_Code:
 	ld	(0x89d0:16), 0
 	ldw	(0x8986:16), 0
 	ldib_erp	251, 0

@@ -243,6 +243,7 @@ SeScreenData_0x4EFB:
 	.ascii	"REPEAT DELAY "
 	.ascii	"SOLO EFFECT 1"
 	.ascii	"SOLO EFFECT 2"
+TuningSys_Param_01_Data:
 	.ascii	"MONO  STEREO"
 ; static record list (37 records {u8 op, u8 len, payload}), read by GraphicsRender_ProcessEntries; ends 0xF15D26
 ; evidence: SeMenu_NameEdit_DataBlock2+0xA (0xF100DA)

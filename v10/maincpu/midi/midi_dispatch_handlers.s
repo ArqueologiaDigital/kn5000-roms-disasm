@@ -13616,8 +13616,9 @@ SeqData_FormatOutput_Data_Helper:
 	add	hl, hl
 	lda	xix, (SeqData_FormatOutput_Dispatch_Data:24)
 	ld	hl, (xix+hl)
-	lda xix, (16617342:24)
+	lda xix, (SeqData_FormatOutput_Default_Code:24)
 	jp_rr 8, xix, hl
+SeqData_FormatOutput_Default_Code:
 	jr	SeqData_FormatOutput_Data_Helper_Join
 	jr	SeqData_FormatOutput_Data_Helper_Join2
 	jrl	SeqData_FormatOutput_Data_Helper_Join3
@@ -14754,8 +14755,9 @@ VoiceParam_AssSwb_MultiBlock_Data:
 	add	hl, hl
 	lda	xix, (VoiceParam_MultiMode_StubRet_Data:24)
 	ld	hl, (xix+hl)
-	lda xix, (16620094:24)
+	lda xix, (VoiceParam_MultiMode_StubRet_Code:24)
 	jp_rr 8, xix, hl
+VoiceParam_MultiMode_StubRet_Code:
 	jr	VoiceParam_AssSwb_MultiBlock_Data_Join
 	jr	VoiceParam_AssSwb_MultiBlock_Data_Join2
 	jrl	VoiceParam_AssSwb_MultiBlock_Data_Join3

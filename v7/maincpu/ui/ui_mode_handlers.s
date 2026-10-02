@@ -1908,7 +1908,7 @@ EffectMode_HandleTimerEvents:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step1E:
-	ld	xwa, 16252942
+	ld	xwa, EffectMode_TimerEvent_Step1E_Code
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1918,7 +1918,7 @@ EffectMode_TimerEvent_Step1E:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step3C:
-	ld	xwa, 16252944
+	ld	xwa, EffectMode_TimerEvent_Step3C_Code
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1938,7 +1938,7 @@ EffectMode_TimerEvent_Step5A:
 	ld	(36062:16), a
 	ret
 EffectMode_TimerEvent_Step78:
-	ld	xwa, 16252936
+	ld	xwa, EffectMode_TimerEvent_Step78_Code
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1969,7 +1969,7 @@ EffectMode_RunDiagSequence:
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
-	ld	xwa, 16252936
+	ld	xwa, EffectMode_TimerEvent_Step78_Code
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -1987,7 +1987,7 @@ EffectMode_RunDiagSequence:
 	call	ApPostEvent
 	calr	A_Short_Pause
 	calr	A_Short_Pause
-	ld	xwa, 16252942
+	ld	xwa, EffectMode_TimerEvent_Step1E_Code
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent

@@ -412,7 +412,7 @@ Naka_Event_Table3:
 ; [nakarest] purpose not established: layout of 2 B at 0xe814f2 not derived; readers below
 ; [nakarest] Readers: source references InitializeMurai (ui/drawbar_panel_ui.s: `ld wa,
 ; [nakarest] (0xe814f2:24)`).
-	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x510, 0x2
+InitializeMurai_Data:	.incbin "includes/generated/naka_sound_menu_drawbar.bin", 0x510, 0x2
 ; [nakarest] naka_sound_menu_drawbar+0x512  +0x512..+0x5aa (0xe814f4, 152 B)
 ; [nakarest] the table itself: Function slot 0x101 (table 0xe814f4, 37 entries,
 ; [nakarest] InitializeMurai), 37 entry pointers x 4 bytes.

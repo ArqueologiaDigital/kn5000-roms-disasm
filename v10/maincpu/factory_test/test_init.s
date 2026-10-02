@@ -311,7 +311,7 @@ RunTestCounters_Display:
 	call ApPostEvent
 	ld de, (0x03dd02:24)
 	exts xde
-	ld xwa, 0x00fc0002
+	ld xwa, RunTestCounters_Display_Code
 	ld xbc, EVT_PARA_DRAW
 	jp ApPostEvent
 

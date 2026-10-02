@@ -166,19 +166,19 @@ FileIO_BytecodeData_Code_Skip4:
 	nop
 	jr	FileIO_BytecodeData_Code_Join2
 FileIO_BytecodeData_Code_Skip5:
-	ld	xwa, 15572272
+	ld	xwa, FileIO_BytecodeData_Data
 	jr	FileIO_BytecodeData_Code_Join2
 FileIO_BytecodeData_Code_Skip6:
-	ld	xwa, 15572274
+	ld	xwa, FileIO_BytecodeData_Data_2
 	jr	FileIO_BytecodeData_Code_Join2
 FileIO_BytecodeData_Code_Skip7:
-	ld	xwa, 15572276
+	ld	xwa, FileIO_BytecodeData_Data_3
 	jr	FileIO_BytecodeData_Code_Join2
 FileIO_BytecodeData_Code_Skip8:
-	ld	xwa, 15572278
+	ld	xwa, FileIO_BytecodeData_Data_4
 	jr	FileIO_BytecodeData_Code_Join2
 FileIO_BytecodeData_Code_Skip9:
-	ld	xwa, 15572280
+	ld	xwa, FileIO_BytecodeData_Data_5
 FileIO_BytecodeData_Code_Join2:
 	ld_rrb	a, xwa, hl
 	ld	(xde), a
@@ -448,7 +448,7 @@ FileIO_BytecodeData_Code_Skip28:
 	jr	z, FileIO_BytecodeData_Code_Skip29
 	cp	a, 12
 	jrl	nz, FileIO_BytecodeData_Code_Epilogue9
-	ld	xwa, 15572284
+	ld	xwa, FileIO_BytecodeData_Data_6
 FileIO_BytecodeData_Code_Join7:
 	ld_rrb	a, xwa, hl
 	ld	(xde), a
@@ -456,10 +456,10 @@ FileIO_BytecodeData_Code_Join7:
 	jr	ule, FileIO_BytecodeData_Code_Skip31
 	jrl	FileIO_BytecodeData_Code_Epilogue9
 FileIO_BytecodeData_Code_Skip29:
-	ld	xwa, 15572292
+	ld	xwa, FileIO_BytecodeData_Data_7
 	jr	FileIO_BytecodeData_Code_Join7
 FileIO_BytecodeData_Code_Skip30:
-	ld	xwa, 15572300
+	ld	xwa, FileIO_BytecodeData_Data_8
 	jr	FileIO_BytecodeData_Code_Join7
 FileIO_BytecodeData_Code_Skip31:
 	extz	wa
@@ -565,7 +565,7 @@ FileIO_BytecodeData_Code_Skip38:
 	jr	z, FileIO_BytecodeData_Code_Skip39
 	cp	a, 0:i3
 	jr	nz, FileIO_BytecodeData_Code_Epilogue10
-	ld	xwa, 15572302
+	ld	xwa, FileIO_BytecodeData_Data_9
 FileIO_BytecodeData_Code_Join8:
 	ld_rrb	a, xwa, hl
 	ld	(xde), a
@@ -574,10 +574,10 @@ FileIO_BytecodeData_Code_Join8:
 	jr	ule, FileIO_BytecodeData_Code_Skip41
 	jr	FileIO_BytecodeData_Code_Epilogue10
 FileIO_BytecodeData_Code_Skip39:
-	ld	xwa, 15572310
+	ld	xwa, FileIO_BytecodeData_Data_10
 	jr	FileIO_BytecodeData_Code_Join8
 FileIO_BytecodeData_Code_Skip40:
-	ld	xwa, 15572312
+	ld	xwa, FileIO_BytecodeData_Data_11
 	jr	FileIO_BytecodeData_Code_Join8
 FileIO_BytecodeData_Code_Skip41:
 	cp	(36150:16), 184
@@ -789,7 +789,7 @@ FileIO_BytecodeData_Code_Entry6:
 	extz	xwa
 	call	Util_FindLowestSetBit
 	extz	hl
-	lda	xbc, (15572320:24)
+	lda	xbc, (FileIO_BytecodeData_Data_12:24)
 	ld_rrb	a, xbc, hl
 	ld	(xiz+2), a
 	ld	(36154:16), a
@@ -985,7 +985,7 @@ FileIO_BytecodeData_Code_Epilogue22:
 	jr	z, FileIO_BytecodeData_Code_Skip60
 	cp	hl, 17
 	jr	nz, FileIO_BytecodeData_Code_Skip61
-	lda	xde, (15572348:24)
+	lda	xde, (FileIO_BytecodeData_Data_13:24)
 	ld_rrb	c, xde, bc
 	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable:24)
 	lda_rr	xde, xde, wa
@@ -994,7 +994,7 @@ FileIO_BytecodeData_Code_Epilogue22:
 	call	(xhl)
 	jr	FileIO_BytecodeData_Code_Join12
 FileIO_BytecodeData_Code_Skip60:
-	lda	xde, (15572378:24)
+	lda	xde, (FileIO_BytecodeData_Data_14:24)
 	ld_rrb	c, xde, bc
 	lda	xde, (FileIO_BytecodeData_Code_Entry8_PtrTable_2:24)
 	lda_rr	xde, xde, wa
@@ -1048,7 +1048,7 @@ FileIO_BytecodeData_Code_Epilogue23:
 	jr	nc, FileIO_BytecodeData_Code_Skip63
 	ldto_berp	a, 251
 	extz	wa
-	lda	xhl, (15572384:24)
+	lda	xhl, (FileIO_BytecodeData_Data_15:24)
 	ld_rrb	a, xhl, wa
 	ld	(xbc), a
 	ld	(xde), 48
@@ -1258,7 +1258,7 @@ FileIO_BytecodeData_Code_Helper3:
 	ret
 FileIO_BytecodeData_Code_Helper4:
 	extz	bc
-	lda	xde, (15572388:24)
+	lda	xde, (FileIO_BytecodeData_Data_16:24)
 	ld_rrb	e, xde, bc
 	cp	e, 22
 	ret	ugt
@@ -3058,8 +3058,9 @@ ExtData_VoiceParam_DispatchBytecode:
 	add	wa, wa
 	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Data:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfc7568:24)
+	lda	xix, (ExtData_VoiceParam_DispatchBytecode_Code:24)
 	jp_rr	8, xix, wa
+ExtData_VoiceParam_DispatchBytecode_Code:
 	setm	7, (xbc)
 	jr	ExtData_VoiceParam_DispatchBytecode_Epilogue2
 	ld	a, 1:opc
@@ -4912,8 +4913,9 @@ ExtData_ToneParam_DispatchHandler:
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_DispatchHandler_Data:24)
 	ld_rrw wa, xix, wa
-	lda xix, (16549232:24)
+	lda xix, (ExtData_ToneParam_DispatchHandler_Code:24)
 	jp_rr 8, xix, wa
+ExtData_ToneParam_DispatchHandler_Code:
 	jr ExtData_ToneParam_DispatchHandler_Join
 	jrl	ExtData_ToneParam_DispatchHandler_Loop
 	jrl	ExtData_ToneParam_DispatchHandler_Join2
@@ -5143,8 +5145,9 @@ ExtData_ToneParam_AltDispatch:
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_AltDispatch_Data:24)
 	ld_rrw wa, xix, wa
-	lda xix, (16549779:24)
+	lda xix, (ExtData_ToneParam_AltDispatch_Code:24)
 	jp_rr 8, xix, wa
+ExtData_ToneParam_AltDispatch_Code:
 	jr ExtData_ToneParam_AltDispatch_Join
 	jr ExtData_ToneParam_AltDispatch_Join2
 	jr	ExtData_ToneParam_AltDispatch_Join3
@@ -5185,8 +5188,9 @@ ExtData_ToneParam_AltBody:
 	add	wa, wa
 	lda	xix, (ExtData_ToneParam_AltBody_Data:24)
 	ld_rrw wa, xix, wa
-	lda xix, (16549885:24)
+	lda xix, (ExtData_ToneParam_AltBody_Code:24)
 	jp_rr 8, xix, wa
+ExtData_ToneParam_AltBody_Code:
 	jr 15
 	jr 112
 	jrl	143

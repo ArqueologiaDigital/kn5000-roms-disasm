@@ -75,8 +75,9 @@ FDemoText_ByteData_VoiceProbeC:
 	add	wa, wa
 	lda	xix, (FDemoText_ByteData_VoiceProbeC_Data_3:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xf84397:24)
+	lda	xix, (FDemoText_ByteData_VoiceProbeC_Code:24)
 	jp_rr	8, xix, wa
+FDemoText_ByteData_VoiceProbeC_Code:
 	set	6, (0x247ec:24)
 	ret
 	ld	xwa, FDemoText_ByteData_VoiceProbeC_Data

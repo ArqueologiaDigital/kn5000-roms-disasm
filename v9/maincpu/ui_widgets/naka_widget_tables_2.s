@@ -910,7 +910,8 @@ Bitmap_MIDIConnections_2:
 	.incbin "includes/generated/naka_widget_tables_2.bin", 0x120B4, 0x3BB0
 AcIndexToggle_SendVisibility_Data:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C64, 0x3
 HelpLang_SetRegion5_Data:			.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C67, 0x5
-HelpLangChkMain_Data:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C6C, 0x6
+HelpLangChkMain_Data:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C6C, 0x4
+HelpLang_DispatchDataBlock_Data:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C70, 0x2
 HelpLang_DispatchDataBlock_Entry_Data:		.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C72, 0x5
 NakaData_Tables2Pad1:				.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C77, 0x2
 HelpLang_DispatchDataBlock_Entry_Data_2:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x15C79, 0x2
@@ -3407,7 +3408,9 @@ MidiSetup_EventHandler_Table:
 ; MidiPart_LookupFromTable_Table[312].
 ; -----------------------------------------------------------------------------
 MidiPart_LookupFromTable_Table:
-	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2618A, 0x138
+	.incbin "includes/generated/naka_widget_tables_2.bin", 0x2618A, 0x118
+MidiPartGridCheck_Evt1C00017_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262A2, 0x10
+MidiPartGridCheck_Evt1C00018_Data:	.incbin "includes/generated/naka_widget_tables_2.bin", 0x262B2, 0x10
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] Transpose_ValueDisplay_Table
 ; Transpose_ValueDisplay_Table -- 8 u32 addresses, read by

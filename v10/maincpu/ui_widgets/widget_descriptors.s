@@ -40,20 +40,21 @@
 ; technics-docs/dsp-effect-data-zone.md.
 ; =============================================================================
 NakaData_WidgetDescriptors:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x0, 0x1F4
-EqFormat_PositiveValue_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F4, 0x7E
-Equalizer_FormatDefault_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x272, 0x1F4
-Equalizer_FormatDefault_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x466, 0x1F4
-Equalizer_FormatDefault_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x65A, 0x1F4
-Equalizer_FormatDefault_Data_4:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x84E, 0x1F4
-Equalizer_FormatDefault_Data_5:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xA42, 0x16E
-Equalizer_FormatDefault_Data_6:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBB0, 0xA
-Equalizer_FormatDefault_Data_7:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xBBA, 0x1F4
-Equalizer_FormatDefault_Data_8:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xDAE, 0x1F4
-FormatParamString_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0xFA2, 0x1F4
-FormatParamString_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1196, 0x10
-FormatParamString_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x11A6, 0x1F4
-EntertainerGridCheck_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x139A, 0x196
-EntertainerGridCheck_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1530, 0x88
+EqFormat_PositiveValue_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1F4, 0x7E
+Equalizer_FormatDefault_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x272, 0x1F4
+Equalizer_FormatDefault_Data_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x466, 0x1F4
+Equalizer_FormatDefault_Data_3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x65A, 0x1F4
+Equalizer_FormatDefault_Data_4:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x84E, 0x1F4
+Equalizer_FormatDefault_Data_5:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xA42, 0x16E
+Equalizer_FormatDefault_Data_6:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xBB0, 0xA
+Equalizer_FormatDefault_Data_7:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xBBA, 0x1F4
+Equalizer_FormatDefault_Data_8:		.incbin "includes/generated/naka_widget_descriptors.bin", 0xDAE, 0x1F4
+FormatParamString_Data:			.incbin "includes/generated/naka_widget_descriptors.bin", 0xFA2, 0x1F4
+FormatParamString_Data_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1196, 0x10
+FormatParamString_Data_3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x11A6, 0x1F4
+EntertainerGridCheck_Data_2:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x139A, 0xF6
+Equalizer_FormatCases_Data:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1490, 0xA0
+EntertainerGridCheck_Data_3:		.incbin "includes/generated/naka_widget_descriptors.bin", 0x1530, 0x88
 DspParamUnit_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x15B8, 0xAC	; 86 x 2
 DspParamName_Table:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1664, 0x11	; 86 x 17
 DspParamName_01_VOLUME:			.incbin "includes/generated/naka_widget_descriptors.bin", 0x1675, 0x11	; slot  1 "VOLUME"
@@ -3518,7 +3519,8 @@ NakaData_StyleBitmapPad:		.incbin "includes/generated/naka_widget_descriptors.bi
 ; WidgetData_DrawbarPositionTable[106].
 ; -----------------------------------------------------------------------------
 WidgetData_DrawbarPositionTable:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13618, 0x6A
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x13618, 0x16
+BmDrEdit_TestPartTableEntry_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1362E, 0x54
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqPlay_SaveAndPrepareState_Table
 ; SeqPlay_SaveAndPrepareState_Table -- read by
@@ -4575,7 +4577,10 @@ SeqPart_VelCurveData_Table_6:
 ; SeqPart_VelCurveData_Table_7[22].
 ; -----------------------------------------------------------------------------
 SeqPart_VelCurveData_Table_7:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1403E, 0x16
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1403E, 0x4
+SeqPart_VelCurveData_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x14042, 0x8
+SeqPart_VelCurveData_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1404A, 0x4
+SeqPart_VelCurveData_Data_3:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x1404E, 0x6
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] SeqPart_VelZoneLookup_Table_2
 ; SeqPart_VelZoneLookup_Table_2 -- read by SeqPart_VelZoneLookup (v10/v9
@@ -5235,7 +5240,9 @@ AccTone_LookupByProgram_Table_2:
 ; AccTuning_ReadAndApplyOffset_Table[116].
 ; -----------------------------------------------------------------------------
 AccTuning_ReadAndApplyOffset_Table:
-	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19168, 0x74
+	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19168, 0x30
+AccTone_InlineBytecodeData_Data:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x19198, 0x22
+AccTone_InlineBytecodeData_Data_2:	.incbin "includes/generated/naka_widget_descriptors.bin", 0x191BA, 0x22
 ; -----------------------------------------------------------------------------
 ; [naka_s_headers] AccTone_ExtendAndDispatch_Body_Table_3
 ; AccTone_ExtendAndDispatch_Body_Table_3 -- read by

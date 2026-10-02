@@ -92,9 +92,9 @@ InitializeHama:
 	ld	(xsp+0:8), xwa
 	lda	xwa, (ClassProc:24)
 	ld	(xsp+4), xwa
-	ld	wa, (14807228:24)
+	ld	wa, (InitializeHama_Data_3:24)
 	ld	(xsp+8), wa
-	lda	xwa, (14807168:24)
+	lda	xwa, (InitializeHama_Data_2:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -104,9 +104,9 @@ InitializeHama:
 	ld	(xsp+0:8), xwa
 	lda	xwa, (ResEventProc:24)
 	ld	(xsp+4), xwa
-	ld	wa, (14807252:24)
+	ld	wa, (InitializeHama_Data_5:24)
 	ld	(xsp+8), wa
-	lda	xwa, (14807230:24)
+	lda	xwa, (InitializeHama_Data_4:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -116,9 +116,9 @@ InitializeHama:
 	ld	(xsp+0:8), xwa
 	lda	xwa, (ResMethodProc:24)
 	ld	(xsp+4), xwa
-	ld	wa, (14807274:24)
+	ld	wa, (InitializeHama_Data_7:24)
 	ld	(xsp+8), wa
-	lda	xwa, (14807254:24)
+	lda	xwa, (InitializeHama_Data_6:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -140,7 +140,7 @@ InitializeHama:
 	lda	xwa, (ApFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 2
-	lda	xwa, (14807126:24)
+	lda	xwa, (InitializeHama_Data:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -151,7 +151,7 @@ InitializeHama:
 	lda	xwa, (FunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 75
-	lda	xwa, (14807276:24)
+	lda	xwa, (InitializeHama_Data_8:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -173,7 +173,7 @@ InitializeHama:
 	lda	xwa, (MainFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
-	lda	xwa, (14810412:24)
+	lda	xwa, (InitializeHama_Data_11:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -184,7 +184,7 @@ InitializeHama:
 	lda	xwa, (MainFunctionProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 1
-	lda	xwa, (14810420:24)
+	lda	xwa, (InitializeHama_Data_12:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -206,7 +206,7 @@ InitializeHama:
 	lda	xwa, (ResNameProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 0
-	lda	xwa, (14810176:24)
+	lda	xwa, (InitializeHama_Data_10:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -217,7 +217,7 @@ InitializeHama:
 	lda	xwa, (ViewableProc:24)
 	ld	(xsp+4), xwa
 	ldw	(xsp+8), 26
-	lda	xwa, (14810068:24)
+	lda	xwa, (InitializeHama_Data_9:24)
 	ld	(xsp+10), xwa
 	lda	xwa, (xsp)
 	ld	xbc, xwa
@@ -434,12 +434,12 @@ RunTestCounters_Display:
 	calr FDTest_PrintDiag
 	ld de, (0x03dcfe:24)
 	exts xde
-	ld xwa, 0x00fc0001
+	ld xwa, RunTestCounters_Display_Code
 	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd00:24)
 	exts xde
-	ld xwa, 0x00fc0003
+	ld xwa, RunTestCounters_Display_Code_2
 	ld xbc, EVT_PARA_DRAW
 	call ApPostEvent
 	ld de, (0x03dd02:24)

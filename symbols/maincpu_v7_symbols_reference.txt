@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 51,577
-#   semantic names ........... 49,438 (95.9%)
+#   symbols .................. 51,712
+#   semantic names ........... 49,573 (95.9%)
 #   positional names ......... 2,139
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -860,8 +860,11 @@ ToneGen_ParamTable_0x326 00E0E72D
 ToneGen_ParamTable_0x3A7 00E0E7AE
 ToneGen_ParamTable_0x3F3 00E0E7FA
 ToneGen_ParamTable_0x53D 00E0E944
+Naka_ClassCount_16B 00E0E95C
 ToneGen_ParamTable_0x557 00E0E95E
+InitializeNaka_Data_2 00E0E962
 ToneGen_ParamTable_0x55D 00E0E964
+InitializeNaka_Data_3 00E0E968
 ToneGen_ParamTable_0x563 00E0E96A
 ToneGen_ParamTable_0x567 00E0E96E
 NAKA_PerfReg_Container_Root 00E0E974
@@ -1033,6 +1036,7 @@ NakaWidget_ftdemo01_165_Label 00E0FF6C
 NakaWidget_ftdemo01_166_Box 00E0FF90
 NakaWidget_ftdemo01_167_Label 00E0FFAA
 NakaWidget_ftdemo01_168_Label 00E0FFE6
+InitializeYoko_Data 00E10000
 CDlikeSwTtl_SetRecordAndNotify_Data 00E1000B
 NakaWidget_ftdemo01_169_Label 00E1000C
 NakaWidget_ftdemo01_170_Label 00E10040
@@ -3262,15 +3266,23 @@ NakaInst_SelectSoundForPart_C 00E1EFF2
 NakaInst_SelectSoundForPart_D 00E1F012
 Hama_ModeInit_Table 00E1F032
 InitializeHama_PtrTable 00E1F04A
+InitializeHama_Data 00E1F056
 HamaStr_Empty 00E1F062
 HamaStr_hamadeb 00E1F064
 HamaStr_HamaPage1Func 00E1F06C
 HamaList_Entry 00E1F07A
 HamaList_EntryStr_Empty 00E1F07E
+InitializeHama_Data_2 00E1F080
 HamaList_HeaderStr_Empty 00E1F0B0
 HamaStr_HamaList 00E1F0B2
+InitializeHama_Data_3 00E1F0BC
+InitializeHama_Data_4 00E1F0BE
 HamaStr_EV_INDEX_PUTS 00E1F0C6
+InitializeHama_Data_5 00E1F0D4
+InitializeHama_Data_6 00E1F0D6
 HamaStr_MT_CONTINUE 00E1F0DE
+InitializeHama_Data_7 00E1F0EA
+InitializeHama_Data_8 00E1F0EC
 Hama_ModeParam_Table 00E1F240
 HamaStr_ModeParam_Empty 00E1F394
 HamaStr_ferror_ext 00E1F396
@@ -3393,7 +3405,9 @@ FDTest_StatusBar_Memory 00E1FB92
 FDTest_Label_Console2 00E1FBA8
 String_CONSOLE 00E1FBC8
 InitializeHama_Str_Empty 00E1FBD0
+InitializeHama_Data_9 00E1FBD4
 FDTest_DataBlock_Table 00E1FBD8
+InitializeHama_Data_10 00E1FC40
 FDTest_DataBlock_Terminator 00E1FC44
 FDTest_Config_Table 00E1FC46
 FDTest_CfgName_Slot26 00E1FCB2
@@ -3425,6 +3439,8 @@ FDTest_CfgName_Total 00E1FD08
 FDTest_CfgName_FDDTest 00E1FD0E
 InitializeHama_Str_TT_HDDEXT 00E1FD18
 InitializeHama_Str_TT_EXTAPR 00E1FD22
+InitializeHama_Data_11 00E1FD2C
+InitializeHama_Data_12 00E1FD34
 FDTest_TestTitle_Terminator 00E1FD3C
 FDTest_String_TestTitleFunc 00E1FD3E
 TitleFunc_ActionDispatch_Data 00E1FD4C
@@ -5258,6 +5274,7 @@ FormatParamString_Data 00E31E02
 FormatParamString_Data_2 00E31FF6
 FormatParamString_Data_3 00E32006
 EntertainerGridCheck_Data_2 00E321FA
+Equalizer_FormatCases_Data 00E322F0
 EntertainerGridCheck_Data_3 00E32390
 DspParamUnit_Table 00E32418
 DspParamName_Table 00E324C4
@@ -5768,6 +5785,7 @@ Pad_BeforeNakaData_StyleBitmapPad 00E40116
 NakaData_ExternalBitmapBlock 00E40A09
 NakaData_StyleBitmapPad 00E41807
 WidgetData_DrawbarPositionTable 00E44478
+BmDrEdit_TestPartTableEntry_Data 00E4448E
 SeqPlay_SaveAndPrepareState_Table 00E444E2
 SeqPlay_SaveState_ChordShiftDone_Table 00E444FA
 SeqNote_ProcessCurrent_DrumCheck_Table 00E444FE
@@ -5851,6 +5869,9 @@ SeqPart_VelCurveData_Table_5 00E44E88
 SeqPart_VelZoneLookup_Table 00E44E8E
 SeqPart_VelCurveData_Table_6 00E44E9C
 SeqPart_VelCurveData_Table_7 00E44E9E
+SeqPart_VelCurveData_Data 00E44EA2
+SeqPart_VelCurveData_Data_2 00E44EAA
+SeqPart_VelCurveData_Data_3 00E44EAE
 SeqPart_VelZoneLookup_Table_2 00E44EB4
 SeqPart_VelocityCurveCalc_CaseTable 00E44EC0
 SeqStep_NoteReadEvent_CaseTable 00E44ED6
@@ -5922,6 +5943,8 @@ AccTone_ExtendAndDispatch_Body_Table 00E49F74
 AccTone_ExtendAndDispatch_Body_Table_2 00E49F94
 AccTone_LookupByProgram_Table_2 00E49FB4
 AccTuning_ReadAndApplyOffset_Table 00E49FC8
+AccTone_InlineBytecodeData_Data 00E49FF8
+AccTone_InlineBytecodeData_Data_2 00E4A01A
 AccTone_ExtendAndDispatch_Body_Table_3 00E4A03C
 AccTone_ExtendAndDispatch_PopRet_Table 00E4A040
 Display_FontPalette_Table_0x51EC 00E4A044
@@ -6560,6 +6583,7 @@ Bitmap_MIDIConnections_2 00E6C452
 AcIndexToggle_SendVisibility_Data 00E70002
 HelpLang_SetRegion5_Data 00E70005
 HelpLangChkMain_Data 00E7000A
+HelpLang_DispatchDataBlock_Data 00E7000E
 HelpLang_DispatchDataBlock_Entry_Data 00E70010
 NakaData_Tables2Pad1 00E70015
 HelpLang_DispatchDataBlock_Entry_Data_2 00E70017
@@ -6918,6 +6942,8 @@ MidiSetup_GridStr2_Str 00E804D4
 AcMidiPartGridBoxProc_CaseTable 00E80512
 MidiSetup_EventHandler_Table 00E80520
 MidiPart_LookupFromTable_Table 00E80528
+MidiPartGridCheck_Evt1C00017_Data 00E80640
+MidiPartGridCheck_Evt1C00018_Data 00E80650
 Transpose_ValueDisplay_Table 00E80660
 Transpose_ValueDisplay_Table_Strings 00E80680
 Transpose_String_Minus3 00E8068C
@@ -6990,6 +7016,7 @@ Murai_ResEventTable_1C1 00E812E4
 Naka_EventDispatch_Table 00E812E8
 Murai_ResEventCount_1C1 00E813A4
 Naka_Event_Table3 00E813A6
+InitializeMurai_Data 00E814F2
 InitializeMurai_PtrTable_5 00E814F4
 Murai_FunctionTable_401 00E8158C
 Naka_Event_Table2 00E81590
@@ -8301,6 +8328,7 @@ FDemo_DisplayResourceData_Str_rb 00EA0076
 MainPreControl_Data 00EA007A
 ApPreControl_Data 00EA0090
 FDemo_LoadRegsAndPostEvent_Str_FEATURE 00EA009E
+FDemo_FileOpen_DoOpen_Data 00EA00A8
 Demo_SelectEntry_LoadPattern_Data 00EA00AC
 Demo_SelectEntry_DrawSecondary_Data 00EA00AD
 Demo_ScanPartLoop_Data 00EA00DA
@@ -8505,32 +8533,39 @@ SLSrcBankList_FuncBody_Str_Colon 00EA0938
 SLSrcBankList_FuncBody_Str_Colon_2 00EA093C
 SLSrcBankList_FuncBody_Str_ALL 00EA0940
 SLSrcBankList_FuncBody_Data 00EA0952
+SLSrcBankList_FuncBody_Data_2 00EA0954
 SLSrcBankList_FuncBody_Entry_Str_Colon 00EA0958
 SLSrcBankList_FuncBody_Entry_Str_Colon_2 00EA095A
 SLSrcBankList_FuncBody_Entry_Str_Colon_3 00EA095E
 SLSrcBankList_FuncBody_Entry_Str_ALL 00EA0962
 SLSrcBankList_FuncBody_Entry_Data 00EA0974
+SLSrcBankList_FuncBody_Data_3 00EA0976
 SLSrcBankList_FuncBody_Entry_Str_Colon_4 00EA0978
 SLSrcBankList_FuncBody_Entry_Str_Colon_5 00EA097C
 Str_AllOption_EA0980 00EA0980
 SLSrcBankList_FuncBody_Entry_Data_2 00EA0992
+SLSrcBankList_FuncBody_Data_4 00EA0994
 SLSrc_HandleShow_PtrTable 00EA0996
 SLDstBankList_FuncBody_Str_Colon 00EA09AA
 SLDstBankList_FuncBody_Str_Colon_2 00EA09AE
 Str_AllOption_EA09B2 00EA09B2
 SLDstBankList_FuncBody_Str_Colon_3 00EA09C4
 SLDstBankList_FuncBody_Data 00EA09C8
+SLDstBankList_FuncBody_Data_3 00EA09CA
 SLDstBankList_FuncBody_Str_Colon_4 00EA09CC
+SLDstBankList_FuncBody_Data_5 00EA09D0
 SLDstBankList_FuncBody_Str_Colon_5 00EA09D2
 SLDstBankList_FuncBody_Str_Colon_6 00EA09D6
 SLDstBankList_FuncBody_Str_ALL 00EA09DA
 SLDstBankList_FuncBody_Data_2 00EA09EC
+SLDstBankList_FuncBody_Data_6 00EA09EE
 Data_SaveLoadMenuTable 00EA09F0
 SLDstBankList_FuncBody_Str_Colon_7 00EA09F4
 SLDstBankList_FuncBody_Str_ALL_2 00EA09F8
 SLDstBankList_FuncBody_Str_Colon_8 00EA0A0A
 SLDstBankList_FuncBody_Str_Colon_9 00EA0A0E
 SLDstBankList_FuncBody_Data_4 00EA0A12
+SLDstBankList_FuncBody_Data_7 00EA0A14
 SLDst_HandleShow_PtrTable 00EA0A16
 CmpSrc_HandleShow_PtrTable 00EA0A2A
 CmpDst_HandleShow_PtrTable 00EA0A3E
@@ -8659,6 +8694,7 @@ Str_Mt_PsFileNameBoxId 00EA12F4
 Str_Mt_GetSelectedFileNumber 00EA1308
 Str_Mt_SetSelectedFileNumber 00EA1322
 Str_Mt_SetFileSfx 00EA133C
+InitializeCheap_Data 00EA1358
 InitializeCheap_PtrTable 00EA135A
 PtrTbl_NakaModuleHandlers 00EA1392
 Data_NakaSep_EA13CA 00EA13CA
@@ -9728,6 +9764,7 @@ Root_ResMethodTable_1E0 00EAEBB2
 Root_ResMethodCount_1E0 00EAFA6C
 Root_FunctionTable_100 00EAFA6E
 WidgetName_InitPtrTable 00EAFFF2
+InitializeMurai_Data_2 00EB0000
 IvAccordion_ShowHide_UpdatePart_Data 00EB0007
 WidgetName_PtrBlock_A 00EB0008
 IvAccordion_ShowHide_Data 00EB0009
@@ -10608,6 +10645,7 @@ NakaInst_IT_Default 00EB767C
 NakaInst_IT_Off 00EB7688
 ExitWindow_OK_Data_2 00EB7690
 NakaInst_WindowID_Cont 00EB78FF
+Softver_ShowHide_Data 00EB7930
 WidgetStyleDataTable 00EB7932
 BitMapOut_CopyPreset9_Execute_Data 00EB7942
 BitMapOut_DeltaEncode_Type90Final_Data 00EB7A86
@@ -10763,6 +10801,7 @@ StyleBmp_LAWarmth 00EBFE06
 StyleBmp_KnopflerTribute 00EBFE8E
 StyleBmp_KeyGrooves 00EBFF16
 StyleBmp_JustTheFlute 00EBFF9E
+InitializeEast_Data 00EC0000
 NakaStr_SoundPreset176 00EC00C7
 SoundName_160 00EC00EC
 SoundName_ToTheBone 00EC013B
@@ -11360,6 +11399,7 @@ NakaInst_D_a0_ECFF5C 00ECFF5C
 MemScreen_NoteC 00ECFF62
 MemScreen_Blank 00ECFF66
 MainChordPre_PtrTable 00ECFF6A
+InitializeSuna_Data 00ED0000
 ExtData_ChordTypeTable_Top 00ED0008
 ChordTypeStr_Blank_0 00ED006A
 ChordTypeStr_Blank_1 00ED0070
@@ -12748,8 +12788,24 @@ PanelDisplay_DispatchByMode_Data 00ED962C
 Encoder_PrepareCallback_PtrTable 00ED9C1E
 Encoder_PrepareCallback_PtrTable_2 00ED9C9E
 SoundParam_EncoderMappingData 00ED9D1E
+FileIO_BytecodeData_Data 00ED9D30
+FileIO_BytecodeData_Data_2 00ED9D32
+FileIO_BytecodeData_Data_3 00ED9D34
+FileIO_BytecodeData_Data_4 00ED9D36
+FileIO_BytecodeData_Data_5 00ED9D38
+FileIO_BytecodeData_Data_6 00ED9D3C
+FileIO_BytecodeData_Data_7 00ED9D44
+FileIO_BytecodeData_Data_8 00ED9D4C
+FileIO_BytecodeData_Data_9 00ED9D4E
+FileIO_BytecodeData_Data_10 00ED9D56
+FileIO_BytecodeData_Data_11 00ED9D58
+FileIO_BytecodeData_Data_12 00ED9D60
 FileIO_BytecodeData_Code_Entry8_PtrTable 00ED9D64
+FileIO_BytecodeData_Data_13 00ED9D7C
 FileIO_BytecodeData_Code_Entry8_PtrTable_2 00ED9D82
+FileIO_BytecodeData_Data_14 00ED9D9A
+FileIO_BytecodeData_Data_15 00ED9DA0
+FileIO_BytecodeData_Data_16 00ED9DA4
 FileIO_BytecodeData_Code_Entry8_PtrTable_3 00ED9EA4
 ExtDevScreen_UserInitWallpaper_Flag 00ED9F54
 ExtDevScreen_UserInitWallpaper_Data 00ED9F5C
@@ -15460,6 +15516,10 @@ CharEncoding_PrintableHi 00EEFFD6
 CharEncoding_PrintableHi_0x4 00EEFFDA
 CharEncoding_PrintableHi_0xA 00EEFFE0
 NakaData_NormalModeMap 00EEFFF5
+InitializeMurai_Data_3 00EF0000
+AcWelcomScreen_SubCpuError_Data 00EF0004
+AcWelcomScreen_SubCpuLoaded_Data 00EF0007
+MPver_ShowHide_Data 00EF000A
 WorkRam2_VoiceLinkA_FreeList 00EF000C
 WorkRam2_VoiceLinkA_ListHeads 00EF000E
 CharEncoding_ExtendedLo 00EF001C
@@ -18215,7 +18275,9 @@ Softver_ShowHide_Data_4 00EFFFDA
 StringData_APCModeNames_0x163 00EFFFDA
 Str_OffAccomp 00EFFFEC
 ParamPopup_DynamicAccomp 00EFFFEF
+Softver_ShowHide_Code 00F00001
 ParamPopup_DynamicAccomp_Skip 00F00002
+Softver_ShowHide_Code_2 00F00003
 ParamPopup_DynamicAccomp_Skip2 00F0002A
 Str_DynamicAccompOn 00F0002F
 ParamPopup_TechniChord 00F00041
@@ -19782,11 +19844,14 @@ Scoop_SoundEditorData_Helper_Join10 00F0DBD8
 Scoop_SoundEditorData_Helper_Skip17 00F0DBF7
 Scoop_SoundEditorData_Helper_Skip18 00F0DBFF
 Scoop_SoundEditorData_Helper_Epilogue8 00F0DC07
+SeMenu_CopyWriteUpdate_Step3_Code 00F0DC61
 Scoop_SoundEditorData_Helper_Join11 00F0DC6B
 Scoop_SoundEditorData_Helper_Join12 00F0DCAC
 Scoop_SoundEditorData_Helper_Epilogue9 00F0DCB2
+SeMenu_CopyWriteUpdate_Step3_Code_2 00F0DD0C
 Scoop_SoundEditorData_Helper_Join13 00F0DD12
 Scoop_SoundEditorData_Helper_Epilogue10 00F0DD45
+SeMenu_CopyWriteUpdate_Step3_Code_3 00F0DD9D
 Scoop_SoundEditorData_Helper_Join14 00F0DDA7
 Scoop_SoundEditorData_Helper_Epilogue11 00F0DDD2
 Scoop_SoundEditorData_Helper_Skip19 00F0DE12
@@ -20297,6 +20362,7 @@ SeBitmap_EnvCurve5_0xC7B 00F11C1F
 SeScreenData_0x1043 00F11C1F
 SeBitmap_EnvCurve5_0xCC1 00F11C65
 SeScreenData_0x1089 00F11C65
+SeMenu_CompareAndApply_Apply_Data 00F11CDC
 SeScreenData_0x113B 00F11D17
 SeScreenData_0x1140 00F11D1C
 UpdSeSel_DetailedUpdate_Helper4_Helper_Sub_Data 00F11D1C
@@ -20329,9 +20395,11 @@ SeScreenData_0x1523 00F120FF
 SeScreenData_0x166E 00F1224A
 SeBitmap_EnvCurve5_0x12BA 00F1225E
 SeScreenData_0x1682 00F1225E
+SeMenu_Utility_SearchByte_Data 00F12284
 SeScreenData_0x173B 00F12317
 SeScreenData_0x1740 00F1231C
 SeScreenData_0x175E 00F1233A
+SeMenu_Utility_FormatNumber_Data_2 00F12352
 SeScreenData_0x1780 00F1235C
 SeMenu_Utility_CompareBlock_Data 00F12367
 SeScreenData_0x178B 00F12367
@@ -20765,6 +20833,7 @@ SeScreenData_0x4E8B 00F15A67
 SeScreenData_0x4E9B 00F15A77
 SeScreenData_0x4ECB 00F15AA7
 SeScreenData_0x4EFB 00F15AD7
+TuningSys_Param_01_Data 00F15B73
 SeScreenData_0x4FA3 00F15B7F
 SeScreenData_0x5120 00F15CFC
 SeScreenData_0x53EC 00F15FC8
@@ -24458,8 +24527,10 @@ EntGrid_CellAction3 00F302EB
 EntGrid_Epilogue 00F302F7
 EntertainerGridCheck 00F302FC
 SndParam_Dispatch 00F303AC
+SndParam_Dispatch_Code 00F303FF
 SndParam_Dispatch_Skip 00F3041D
 SndParam_Dispatch_Join 00F3042B
+SndParam_Dispatch_Code_2 00F304AB
 SndParam_Dispatch_Skip2 00F304CA
 SndParam_Dispatch_Join2 00F304CF
 SndParam_Dispatch_Join3 00F304FD
@@ -24794,10 +24865,13 @@ SqplyFunc_GetScreenId 00F3499D
 SqplyFunc_Epilogue 00F349A5
 SqedtFunc 00F349A9
 Sqedt_ParamDispatch 00F34A32
+Sqedt_ParamDispatch_Code 00F34A5F
 Sqedt_ParamDispatch_Skip 00F34A83
 Sqedt_ParamDispatch_Join 00F34A87
+Sqedt_ParamDispatch_Code_2 00F34AB4
 Sqedt_ParamDispatch_Entry 00F34AF6
 Sqedt_ParamDispatch_Join2 00F34AFF
+Sqedt_ParamDispatch_Code_3 00F34B2C
 Sqedt_ParamDispatch_Entry2 00F34B6E
 Sqedt_ParamDispatch_Entry2_Join 00F34B77
 Sqedt_ParamDispatch_Entry2_Skip 00F34B99
@@ -27517,10 +27591,12 @@ AppEvent_InlineHandler 00F44874
 AppEvent_SubDispatch 00F44896
 AppEvent_InlineHandler_Skip 00F448A8
 AppEvent_InlineHandler_Skip2 00F448AB
+AppEvent_SubDispatch_Code 00F448F6
 AppEvent_InlineHandler_Skip3 00F44932
 AppEvent_InlineHandler_Join 00F4493A
 AppEvent_InlineHandler_Skip4 00F44954
 AppEvent_InlineHandler_Skip5 00F44970
+AppEvent_SubDispatch_Code_2 00F449AB
 AppEvent_InlineHandler_Skip6 00F449E7
 AppEvent_InlineHandler_Join2 00F449EF
 AppEvent_InlineHandler_Skip7 00F44A0C
@@ -33500,6 +33576,7 @@ AccVoice_SetupSlots_DataBlock_Skip9 00F6755A
 AccVoice_SetupSlots_DataBlock_Return5 00F67565
 AccVoice_SetupSlots_DataBlock_Helper10 00F67566
 AccVoice_SetupSlots_DataBlock_0x26C 00F6757F
+AccVoice_SetupSlots_DataBlock_Data 00F675FE
 AccVoice_SetupSlots_DataBlock_Join5 00F6761B
 AccVoice_SetupSlots_DataBlock_Skip10 00F67634
 AccVoice_SetupSlots_DataBlock_Helper11 00F67638
@@ -33900,6 +33977,7 @@ AccScreen_DataBlock_Data_2 00F6A606
 AccScreen_DataBlock_Data_3 00F6A72D
 AccScreen_DataBlock_Data_4 00F6A7BA
 AccScreen_DataBlock_Data_5 00F6A829
+AccScreen_DataBlock_Data_7 00F6A83A
 AccScreen_DataBlock_Data_6 00F6A864
 AccScreen_DrawMeasureDetail_Data 00F6A88D
 AccScreen_DrawMeas_Variant3_Data 00F6A914
@@ -35175,7 +35253,9 @@ AcInOutGrid_Default 00F7566D
 AcInOutGrid_Epilogue 00F7567A
 InOutGridCheck 00F7567F
 Data_InOutGridDispatch 00F756DA
+Data_InOutGridDispatch_Code 00F75728
 InOutGridCheck_Skip 00F7576A
+Data_InOutGridDispatch_Code_2 00F757F4
 InOutGridCheck_Skip2 00F75836
 InOutGridCheck_Join 00F75870
 InOutGridCheck_Skip3 00F7590B
@@ -36350,6 +36430,9 @@ PsMixer_ArrayReadHandler 00F7FF18
 AudioCtrl_MixerDispatch 00F7FF8F
 AudioCtrl_MixerLoopNext 00F7FFE4
 PsMixer_UnmatchedPartScan 00F80002
+EffectMode_TimerEvent_Step78_Code 00F80008
+EffectMode_TimerEvent_Step1E_Code 00F8000E
+EffectMode_TimerEvent_Step3C_Code 00F80010
 AudioCtrl_ArrayReadHandler 00F8002D
 AudioCtrl_DispatchCallback 00F8008F
 PsMixer_ScanArrayNext 00F800E1
@@ -36830,6 +36913,7 @@ FDemoText_ByteData_VoiceProbeA_Skip 00F84322
 FDemoText_ByteData_VoiceProbeA_Skip2 00F84332
 FDemoText_ByteData_VoiceProbeB 00F84352
 FDemoText_ByteData_VoiceProbeC 00F8436A
+FDemoText_ByteData_VoiceProbeC_Code 00F84397
 FDemoText_ByteData_VoiceProbeC_Skip 00F843C0
 FDemoText_ByteData_VoiceProbeC_Join 00F843CE
 FDemoText_ProcessVoiceFlags 00F843DB
@@ -38427,6 +38511,7 @@ ValidateFN_LoopHead 00F8DC4D
 ValidateFN_ReturnValid 00F8DC5A
 FmmSmfFileNameFunc 00F8DC5D
 SmfFN_JumpTable 00F8DCB6
+FmmSmfFileNameFunc_Code 00F8DCBB
 FmmSmfFileNameFunc_Skip 00F8DCE4
 FmmSmfFileNameFunc_Skip2 00F8DCF2
 FmmSmfFileNameFunc_Join 00F8DCF6
@@ -39555,6 +39640,7 @@ FDC_WaitReady_Loop6 00F96854
 FDC_CMD_EXEC_Helper2_Skip2 00F9686E
 FDC_WaitReady_Skip9 00F96882
 FDC_WaitReady_Skip10 00F96897
+FDC_CONFIG_VERIFY_Code 00F968C0
 FDC_WaitReady_Skip11 00F96941
 FDC_WaitReady_Join 00F96954
 FDC_WaitReady_Skip12 00F9696D
@@ -43066,6 +43152,7 @@ Voice_FactoryPresetData_Code_Epilogue2 00FB0902
 DrawText_LayoutAndRender_Variant1_Helper 00FB0907
 Voice_FactoryPresetData_Code_Skip9 00FB0933
 Voice_FactoryPresetData_Code_Epilogue 00FB095C
+Voice_FactoryPresetData_Code 00FB0960
 Voice_FactoryPresetData_Code_Helper 00FB097F
 Voice_FactoryPresetData_Code_Skip10 00FB099E
 Voice_FactoryPresetData_Code_Skip11 00FB09AB
@@ -44506,6 +44593,8 @@ RVari_Confirm_TypeF_SubItems 00FBFE76
 RVari_Confirm_TypeNotF 00FBFEFD
 RVari_Confirm_CalcVisible 00FBFFC1
 RVari_ConfirmE_Loop 00FBFFD6
+RunTestCounters_Display_Code 00FC0001
+RunTestCounters_Display_Code_2 00FC0003
 RVari_ConfirmE_CheckSelected 00FC006F
 RVari_ConfirmE_Item_NotFirst 00FC00F3
 RVari_ConfirmE_Item_Draw 00FC0101
@@ -45417,6 +45506,7 @@ SndParam_SetResBit7_ViaF9A541 00FC6D36
 SndParamF9A541_ResBit7 00FC6D4A
 SndParamF9A541_Done 00FC6D4C
 ExtData_VoiceParam_DispatchBytecode 00FC6D4E
+ExtData_VoiceParam_DispatchBytecode_Code 00FC6D9D
 SndParamF9A541_ResBit7_Code_Join 00FC6DD6
 SndParamF9A541_ResBit7_Code_Epilogue 00FC6DD9
 ExtData_VoiceParam_DispatchBytecode_Entry 00FC6DE9
@@ -45570,6 +45660,7 @@ Audio_SyncBufferPositions 00FC7D11
 FileIO_OperationDispatch 00FC7D1F
 FileIO_ProcessRemainingOps 00FC7D51
 ExtData_ToneParam_DispatchHandler 00FC7D77
+ExtData_ToneParam_DispatchHandler_Code 00FC7DA5
 ExtData_ToneParam_DispatchHandler_Skip 00FC7DC2
 ExtData_ToneParam_DispatchHandler_Join 00FC7DC6
 ExtData_Voice_CheckMode3_Helper 00FC7E5D
@@ -45586,12 +45677,14 @@ ExtData_ToneParam_CheckMode_Skip 00FC7F83
 ExtData_ToneParam_CheckMode_Join 00FC7F87
 ExtData_ToneParam_CheckMode_Helper 00FC7F90
 ExtData_ToneParam_AltDispatch 00FC7F9F
+ExtData_ToneParam_AltDispatch_Code 00FC7FC8
 ExtData_ToneParam_AltDispatch_Join 00FC7FD2
 ExtData_ToneParam_AltDispatch_Join2 00FC7FDB
 ExtData_ToneParam_AltDispatch_Join3 00FC7FEA
 ExtData_ToneParam_AltDispatch_Helper 00FC7FF9
 ExtData_ToneParam_AltEntry 00FC8008
 ExtData_ToneParam_AltBody 00FC8009
+ExtData_ToneParam_AltBody_Code 00FC8032
 ExtData_ToneParam_AltBody_Skip2 00FC80C2
 ExtData_ToneParam_AltBody_Skip 00FC8104
 ExtData_ToneParam_AltBody_Epilogue 00FC812C
@@ -46939,6 +47032,7 @@ Periodic_TimestampHelper_Data 00FD0662
 Periodic_TimestampCheck 00FD0674
 Periodic_TimestampCompare 00FD0678
 Periodic_TimestampCompare_Done 00FD0693
+MidiRx_ControlChange_Data 00FD0696
 MidiCC_FunctionRxFilter 00FD0716
 MidiCC_PartTargets_CC64_Sustain 00FD0776
 MidiCC_PartTargets_Func08 00FD07D6
@@ -46975,23 +47069,44 @@ PanelEvt_Handler_4_DualValueCheck_Return 00FD0F8C
 MidiDispatchCC_HandlerTable 00FD0F8D
 MidiCC_ChannelMappingData_0x620 00FD10D0
 MidiCC_FunctionToCCNumber 00FD128D
+PanelEvt_Handler_0_NoteOnParam_Data 00FD12BD
 PanelEvt_Handler_4_DualValueCheck 00FD1330
+PanelEvt_Handler_3_ValueCheck_Data 00FD133D
 PanelEvt_Handler_4_DualValueCheck_0x77 00FD13A7
+PanelEvt_Handler_5_ValueCheck_Data 00FD13BD
 PanelEvt_Handler_4_DualValueCheck_Data 00FD143D
+PanelEvt_Handler_7_ValueCheck_Data 00FD14BD
+PanelEvt_Handler_8_ValueCheck_Data 00FD153E
+PanelEvt_Handler_9_SingleByteParam_Data 00FD15BE
+PanelEvt_Handler_10_TwoByteParam_Data 00FD163E
 PanelEvt_Handler_4_DualValueCheck_0x377 00FD16A7
+PanelEvt_Handler_11_SingleByteParam_Data 00FD16BE
 PanelEvt_Handler_4_DualValueCheck_0x3A7 00FD16D7
+MidiCC_ChannelDispatch_Ctrl40_Data 00FD173E
 PanelEvt_Handler_4_DualValueCheck_0x427 00FD1757
+MidiCC_ChannelDispatch_Ctrl41_Data 00FD17BE
 PanelEvt_Handler_4_DualValueCheck_0x4A7 00FD17D7
+MidiCC_ChannelDispatch_CtrlFlags_Data 00FD183E
 PanelEvt_Handler_4_DualValueCheck_0x527 00FD1857
+MidiCC_ChannelDispatch_Ctrl1_Data 00FD18BE
 PanelEvt_Handler_4_DualValueCheck_0x5A7 00FD18D7
+MidiCC_ChannelDispatch_Ctrl3_Data 00FD193E
 PanelEvt_Handler_4_DualValueCheck_0x628 00FD1958
+MidiCC_ChannelDispatch_CtrlFlags2_Data 00FD19BE
 PanelEvt_Handler_4_DualValueCheck_0x6A8 00FD19D8
+MidiCC_ChannelDispatch_Ctrl0_Data 00FD1A3E
 PanelEvt_Handler_4_DualValueCheck_0x728 00FD1A58
+MidiCC_ChannelDispatch_Func09_Data 00FD1ABE
 PanelEvt_Handler_4_DualValueCheck_0x7A8 00FD1AD8
+MidiCC_ChannelDispatch_Func08_Data 00FD1B3E
 PanelEvt_Handler_4_DualValueCheck_0x828 00FD1B58
+MidiCC_ChannelDispatch_Func12_Data 00FD1BBE
 PanelEvt_Handler_4_DualValueCheck_0x8A8 00FD1BD8
+MidiCC_ChannelDispatch_Func13_Data 00FD1C3E
 PanelEvt_Handler_4_DualValueCheck_0x928 00FD1C58
+MidiCC_ChannelDispatch_Func14_Data 00FD1CBE
 PanelEvt_Handler_4_DualValueCheck_0x9A8 00FD1CD8
+MidiCC_ChannelDispatch_Func15_Data 00FD1D3E
 PanelEvt_Handler_4_DualValueCheck_0xA28 00FD1D58
 PanelEvt_Handler_4_DualValueCheck_0xAA8 00FD1DD8
 PanelEvt_Handler_4_DualValueCheck_0xB28 00FD1E58
@@ -47786,6 +47901,7 @@ SeqData_FormatOutput_Default 00FD872C
 SwbtWr_WriteLoop_CC_B2 00FD8751
 SeqData_FormatOutput_Data 00FD8759
 SeqData_FormatOutput_Data_Helper 00FD8781
+SeqData_FormatOutput_Default_Code 00FD87AD
 SeqData_FormatOutput_Data_Helper_Join 00FD87C1
 SeqData_FormatOutput_Data_Code_Epilogue 00FD881B
 SeqData_FormatOutput_Data_Helper_Join2 00FD881F
@@ -47873,6 +47989,7 @@ VoiceParam_MultiMode_SetupHW 00FD9230
 VoiceParam_MultiMode_Dispatch 00FD9234
 VoiceParam_LoopExit 00FD9238
 VoiceParam_MultiMode_StubRet 00FD923A
+VoiceParam_MultiMode_StubRet_Code 00FD926D
 SeqAlt_DescriptorBlock_Data_Join 00FD9281
 VoiceParam_AssSwb_MultiBlock_Data_Code_Epilogue 00FD92DB
 SeqAlt_DescriptorBlock_Data_Join2 00FD92DF
@@ -47985,6 +48102,7 @@ MidiPkt_SysExProcessor_Data_Skip2 00FDA11B
 MidiPkt_SysExProcessor_Data_Skip3 00FDA125
 MidiPkt_EnqueueControl_335E 00FDA137
 MidiPkt_SysExBulkTransfer_Data 00FDA150
+MidiPkt_SendBankSelect_Send_Code 00FDA17C
 MidiPkt_SysExBulkTransfer_Data_Helper 00FDA18E
 MidiPkt_SysExBulkTransfer_Data_Helper2 00FDA1B5
 MidiPkt_SysExBulkTransfer_Data_Join 00FDA1E0
@@ -48023,8 +48141,10 @@ SysEx_ApplyToSlot49_Format_Data_Epilogue 00FDA501
 SysEx_ClampVoiceIndex128_49 00FDA505
 SysEx_ClampVoiceIndex128_49_DoLookup 00FDA50C
 SysEx_DispatchByChannel 00FDA519
+SysEx_DispatchByChannel_Code 00FDA542
 SysEx_DispatchByChannel_Entry 00FDA59A
 SysEx_DispatchByChannel_49 00FDA5A0
+SysEx_DispatchByChannel_49_Code 00FDA5C9
 SysEx_DispatchByChannel_49_Entry 00FDA61F
 SMF_ProcessSysExBlock_Helper 00FDA625
 SysEx_DispatchByChannel_49_Entry_Code_Skip 00FDA663
@@ -48377,6 +48497,7 @@ DSPCfg_Data_ParamDispatch_Helper_Skip2 00FDC6AD
 DSPCfg_Data_ParamDispatch_Helper_Join 00FDC6AF
 DSPCfg_Data_ParamDispatch_Helper_Skip3 00FDC6B7
 EffEdit_DSPConfigBlock_Helper 00FDC6CF
+DSPCfg_WriteAllSlots_Combined_Code 00FDC702
 DSPCfg_Data_ParamDispatch_Join2 00FDC717
 DSPCfg_Data_ParamDispatch_Skip6 00FDC736
 DSPCfg_Data_ParamDispatch_Join3 00FDC73B
@@ -48486,6 +48607,7 @@ AudioDispatch_CheckStereoMode_Code_Skip26 00FDDA79
 UIStateEvt_TransposeUpdate_Clear 00FDDAB0
 Audio_CheckSubsystemReady 00FDDAB8
 UIStateEvt_TransposeUpdate_Apply 00FDDAD0
+UIStateEvt_TransposeUpdate_Apply_Code 00FDDAFE
 AudioDispatch_CheckStereoMode_Code_Skip 00FDDB3D
 AudioDispatch_CheckStereoMode_Code_Skip2 00FDDB64
 AudioDispatch_CheckStereoMode_Code_Join 00FDDB79
@@ -48507,6 +48629,7 @@ AudioDispatch_CheckStereoMode_Code_Join5 00FDDCAB
 AudioDispatch_CheckStereoMode_Code_Skip13 00FDDCCC
 UIStateEvt_PartRouting 00FDDD19
 UIStateEvt_ParamEdit_Data_Epilogue 00FDDD41
+UIStateEvt_TransposeUpdate_Apply_Code_2 00FDDD67
 UIStateEvt_PartRouting_Code_Skip 00FDDD86
 AudioDispatch_CheckStereoMode_Code_Skip14 00FDDDB2
 AudioDispatch_CheckStereoMode_Code_Join6 00FDDDC5
@@ -48597,6 +48720,7 @@ AudioInit_G51FallbackDefault 00FDE4B3
 AudioInit_LoadAndConfigure 00FDE4D0
 AudioInit_MixFallbackConfig 00FDE4FE
 AudioInit_VoiceNotConfigured_Code_Skip 00FDE504
+AudioModeChange_Handler_Code 00FDE509
 DSPCfg_EventType50_Code_Helper 00FDE50E
 DSPCfg_EventType50_Code_Helper2 00FDE52B
 AudioInit_CheckVoiceParamState 00FDE538
@@ -49630,6 +49754,7 @@ NonNoteDispatchLoop_LoadParam 00FE8075
 NonNoteDispatchLoop_ReadAlt2 00FE80CB
 NonNoteDispatchLoop_LoadParam2 00FE8103
 SeqPart_EmitPercussionNote_Skip 00FE817E
+NonNoteDispatchLoop_LoadParam2_Code 00FE81D9
 ProcessEventDispatch_Prologue_Skip 00FE8205
 SeqPerformance_Event_Block 00FE82A6
 SeqPerformance_Event_Send 00FE82A9
@@ -49803,6 +49928,8 @@ VoiceSlot_StoreParams_LoadReg3 00FE8FDE
 VoiceSlot_StoreParams_LoadReg4 00FE8FF0
 VoiceSlot_StoreParams_Increment 00FE9010
 VoiceSlot_StoreParams_LoadReg5 00FE9015
+VoiceSlot_StoreParams_LoadReg4_Code 00FE903D
+VoiceSlot_StoreParams_LoadReg5_Code 00FE9049
 Voice_ComputeNoteBitPosition 00FE904D
 ComputeNoteBitPositi_Prologue 00FE9069
 ComputeNoteBitPositi_Data 00FE909C
@@ -49977,6 +50104,7 @@ NoteDisplay_StoreAnd_LoadReg3 00FE9FE6
 MIDI_FinalizeParamBlock 00FE9FF5
 SndParam_Init 00FEA01C
 VoiceSlot_CheckAndApply_Data_0xBA 00FEA04E
+SndParam_Init_Code 00FEA080
 SndParam_ProcessEntry_Entry 00FEA109
 SndParam_Init_Skip 00FEA121
 VoiceSlot_CheckAndApply_Data2 00FEA15F
@@ -49999,6 +50127,7 @@ HdaeRom_FinishBlock_Epilogue 00FEA403
 HdaeRom_TableEntry0 00FEA406
 HdaeRom_TableEntry1 00FEA408
 HdaeRom_TableEntry2 00FEA40A
+HdaeRom_TableEntry2_Code 00FEA445
 UIState_ProcessKeyEvent 00FEA45D
 UIState_ProcessKeyEvent_0x3D 00FEA49A
 HdaeRom_TableEntry2_Epilogue 00FEA4AF
@@ -50077,6 +50206,7 @@ SendEpilogue_Data_Skip4 00FEABDA
 SendEpilogue_Data_Skip5 00FEABEF
 SendEpilogue_Data_Skip6 00FEABF8
 SendEpilogue_Data_Skip7 00FEAC0D
+MIDI_SendEpilogue_Code 00FEAC3E
 SendEpilogue_Data_Skip8 00FEAC83
 SendEpilogue_Data_Skip9 00FEAC96
 SendEpilogue_Data_Skip10 00FEACB2
@@ -50084,6 +50214,7 @@ SendEpilogue_Data_Skip11 00FEACC1
 SendEpilogue_Data_Skip12 00FEACCD
 SendEpilogue_Data_Skip13 00FEACE3
 SendEpilogue_Data_Skip14 00FEACF7
+MIDI_SendEpilogue_Code_2 00FEAD1F
 SendEpilogue_Data_Skip15 00FEAD28
 SendEpilogue_Data_Loop 00FEAD74
 SendEpilogue_Data_Skip16 00FEAD8D
@@ -50175,6 +50306,7 @@ MIDI_SendAllSoundOff 00FEB72D
 SendAllSoundOff_Loop 00FEB736
 SendAllSoundOff_Flush 00FEB748
 MIDI_WriteChannelData_Block 00FEB74E
+SendAllSoundOff_Flush_Code 00FEB776
 MIDI_SendCmdPacket 00FEB779
 SendCmdPacket_Loop 00FEB77D
 SendCmdPacket_CheckCount 00FEB791
@@ -50807,6 +50939,7 @@ Param_SignExtendReturn_Helper3 00FEE479
 Param_SignExtendRetu_Data_0x69 00FEE4B5
 Param_SignExtendReturn_Skip 00FEE4C7
 ApplyProgramChange_LoadDRAM 00FEE4CA
+ApplyProgramChange_LoadDRAM_Code 00FEE50B
 SndParam_LookupOscEnvelope 00FEE53C
 Param_SignExtendReturn_Skip2 00FEE577
 Param_SignExtendReturn_Skip3 00FEE589
@@ -51031,6 +51164,7 @@ TmFlash_WriteRoutine_Skip2 00FEFF57
 TmFlash_BulkTransferToSubCPU 00FEFF8F
 TmFlash_BulkTransferToSubCPU_Skip 00FEFFB5
 TmFlash_BulkTransferToSubCPU_Skip2 00FEFFCB
+ToneGen_ProcessMidiConverge_Code 00FF0000
 PsMixer_CtlTypeProc5_Data 00FF0008
 VoiceParam_DispatchTable1 00FF001E
 TmFlash_BulkTransferToSubCPU_Join 00FF002A
@@ -51038,6 +51172,7 @@ TmFlash_BulkTransferToSubCPU_Skip3 00FF0050
 TmFlash_BulkTransferToSubCPU_Epilogue 00FF0055
 TmFlash_BulkTransferToSubCPU_Skip4 00FF008C
 TmFlash_BulkTransferToSubCPU_Epilogue2 00FF008F
+VoiceParam_DispatchTable1_Code 00FF00CC
 TmFlash_BulkTransferToSubCPU_Join2 00FF012E
 TmFlash_BulkTransferToSubCPU_Skip5 00FF0137
 TmFlash_BulkTransferToSubCPU_Epilogue3 00FF013A

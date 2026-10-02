@@ -996,9 +996,25 @@ Encoder_PrepareCallback_PtrTable_2:	.incbin "includes/generated/naka_extension_d
 ; [nakarest] (at 0xed9fa4, 0xed9fa8, 0xed9fac), which is read by
 ; [nakarest] ExtDev_SndParam_BlockA9_Var02_Code_Skip6 (audio/audio_control_engine.s: `lda xde,
 ; [nakarest] (ExtDev_SndParam_DispatchComplex_PtrTable:24)`).
-SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x46
-FileIO_BytecodeData_Code_Entry8_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3598, 0x1E	; 6 x 32-bit pointer
-FileIO_BytecodeData_Code_Entry8_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x35B6, 0x122	; 6 x 32-bit pointer
+SoundParam_EncoderMappingData:			.incbin "includes/generated/naka_extension_device.bin", 0x3552, 0x12
+FileIO_BytecodeData_Data:			.incbin "includes/generated/naka_extension_device.bin", 0x3564, 0x2
+FileIO_BytecodeData_Data_2:			.incbin "includes/generated/naka_extension_device.bin", 0x3566, 0x2
+FileIO_BytecodeData_Data_3:			.incbin "includes/generated/naka_extension_device.bin", 0x3568, 0x2
+FileIO_BytecodeData_Data_4:			.incbin "includes/generated/naka_extension_device.bin", 0x356A, 0x2
+FileIO_BytecodeData_Data_5:			.incbin "includes/generated/naka_extension_device.bin", 0x356C, 0x4
+FileIO_BytecodeData_Data_6:			.incbin "includes/generated/naka_extension_device.bin", 0x3570, 0x8
+FileIO_BytecodeData_Data_7:			.incbin "includes/generated/naka_extension_device.bin", 0x3578, 0x8
+FileIO_BytecodeData_Data_8:			.incbin "includes/generated/naka_extension_device.bin", 0x3580, 0x2
+FileIO_BytecodeData_Data_9:			.incbin "includes/generated/naka_extension_device.bin", 0x3582, 0x8
+FileIO_BytecodeData_Data_10:			.incbin "includes/generated/naka_extension_device.bin", 0x358A, 0x2
+FileIO_BytecodeData_Data_11:			.incbin "includes/generated/naka_extension_device.bin", 0x358C, 0x8
+FileIO_BytecodeData_Data_12:			.incbin "includes/generated/naka_extension_device.bin", 0x3594, 0x4
+FileIO_BytecodeData_Code_Entry8_PtrTable:	.incbin "includes/generated/naka_extension_device.bin", 0x3598, 0x18	; 6 x 32-bit pointer
+FileIO_BytecodeData_Data_13:			.incbin "includes/generated/naka_extension_device.bin", 0x35B0, 0x6
+FileIO_BytecodeData_Code_Entry8_PtrTable_2:	.incbin "includes/generated/naka_extension_device.bin", 0x35B6, 0x18	; 6 x 32-bit pointer
+FileIO_BytecodeData_Data_14:			.incbin "includes/generated/naka_extension_device.bin", 0x35CE, 0x6
+FileIO_BytecodeData_Data_15:			.incbin "includes/generated/naka_extension_device.bin", 0x35D4, 0x4
+FileIO_BytecodeData_Data_16:			.incbin "includes/generated/naka_extension_device.bin", 0x35D8, 0x100
 FileIO_BytecodeData_Code_Entry8_PtrTable_3:	.incbin "includes/generated/naka_extension_device.bin", 0x36D8, 0xB0	; 22 x 32-bit pointer
 ExtDevScreen_UserInitWallpaper_Flag:		.incbin "includes/generated/naka_extension_device.bin", 0x3788, 0x8
 ExtDevScreen_UserInitWallpaper_Data:		.incbin "includes/generated/naka_extension_device.bin", 0x3790, 0x48

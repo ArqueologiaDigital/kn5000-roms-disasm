@@ -10009,7 +10009,7 @@ HDAE5000_LoadSong_Rcm:	; 0x290EC0 (133 bytes)
 	ld xwa, (xwa)		; XWA = table entry value
 	cp xwa, 0xFFFFFFFF	; empty entry?
 	jr z, .Lts290_exit	; skip if -1
-	ld xiy, 0x002F8DD8	; destination for ldirw
+	ld xiy, HDAE5000_LoadSong_Rcm_Data	; destination for ldirw
 	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; source for ldirw
 	ld bc, 4:i3		; count = 4 words (8 bytes)
 	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
@@ -11029,7 +11029,7 @@ HDAE5000_SaveSong_Rcm:	; 0x2919DC (134 bytes)
 	push xiz		; save XIZ
 	ld de, bc		; DE = BC (file number param)
 	ld hl, 0:i3		; HL = 0
-	ld xiy, 0x002F8DD8	; destination for ldirw
+	ld xiy, HDAE5000_LoadSong_Rcm_Data	; destination for ldirw
 	ld xix, HDAE5000_RAM_HdStreamBufferEnd	; source for ldirw
 	ld bc, 4:i3		; count = 4 words
 	mriw2 0x95, 0x11	; ldirw — copy from XIX to XIY
@@ -11247,14 +11247,14 @@ HDAE5000_CheckFileSignature:	; 0x291C0D (2171 bytes)
 	ld	de, wa
 	extz xde                                ; extz XDE
 	sll	xde, 0x03
-	lda xhl, (0x2f8e26:24)
+	lda xhl, (HDAE5000_CheckFileSignature_Data_3:24)
 	add	xhl, xde
 	ld	de, (xhl)
 	pushw de                                ; push DE
 	ld	de, wa
 	extz xde                                ; extz XDE
 	sll	xde, 0x03
-	lda xhl, (0x2f8e24:24)
+	lda xhl, (HDAE5000_CheckFileSignature_Data_2:24)
 	add	xhl, xde
 	ld	de, (xhl)
 	extz xde                                ; extz XDE
@@ -11262,7 +11262,7 @@ HDAE5000_CheckFileSignature:	; 0x291C0D (2171 bytes)
 	push xde
 	extz xwa
 	sll	xwa, 0x03
-	ld	xbc, 0x002f8e20
+	ld	xbc, HDAE5000_CheckFileSignature_Data
 	add	xbc, xwa
 	ld xwa, (xbc)                           ; ld XWA,(XBC)
 	push xwa
@@ -16753,8 +16753,10 @@ HDAE5000_PPORT_Cmd19_Nothing_Str_N19_nothing:	.asciz "19>nothing            "
 	.byte 0x00                            ; record terminator (24B stride; see header above)
 HDAE5000_PPORT_Cmd20_SendXapFileFlash_Str_N20_Send_XapFile_flash:	.asciz "20>Send XapFile flash "
 	.byte 0x00                            ; record terminator (24B stride; see header above)
+HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data:
 	.ascii "20>End flash right"
 	.byte 0x09, 0x20, 0x20, 0x00          ; 22B record filler: TAB + 2 spaces + NUL (record start 0x2955FE is a direct call-site literal, see header above)
+HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data_2:
 	.ascii "20>End flash false"
 	.byte 0x09, 0x20, 0x20, 0x00          ; 22B record filler: TAB + 2 spaces + NUL (record start 0x295614 is a direct call-site literal, see header above)
 HDAE5000_PPORT_Cmd01_SendInfosAboutHd_Str_Error_Wrong_Dll_Ver:	.asciz "Error : Wrong Dll Ver "
@@ -18466,7 +18468,7 @@ HDAE5000_PPORT_Cmd20_SendXapFileFlash:	; 0x29670C (164 bytes)
 	; Error path
 	ldw wa, 0x001A				; display command
 	nop
-	lda xbc, (0x295614:24); lda XBC, 0x295614 — error string
+	lda xbc, (HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data_2:24); lda XBC, 0x295614 — error string
 	nop
 	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_CommandDone
@@ -18474,7 +18476,7 @@ HDAE5000_PPORT_Cmd20_SendXapFileFlash:	; 0x29670C (164 bytes)
 	; Success path
 	ldw wa, 0x001A				; display command
 	nop
-	lda xbc, (0x2955fe:24); lda XBC, 0x2955FE — success string
+	lda xbc, (HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data:24); lda XBC, 0x2955FE — success string
 	nop
 	call HDAE5000_PPORT_CallService
 	jp HDAE5000_PPORT_CommandDone

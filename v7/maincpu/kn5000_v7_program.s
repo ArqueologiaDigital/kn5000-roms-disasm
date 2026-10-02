@@ -872,15 +872,18 @@ ToneGen_ParamTable_0x3F3:
 ; parameter block of object 0x16b (class 0x01600004, proc ClassProc), registered by InitializeNaka+0x1C
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 26 B; the proc's read length was not measured
 ToneGen_ParamTable_0x53D:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x53D, 0x1A
+	.incbin "includes/generated/tonegen_param_table.bin", 0x53D, 0x18
+Naka_ClassCount_16B:	.incbin "includes/generated/tonegen_param_table.bin", 0x555, 0x2
 ; parameter block of object 0x1cb (class 0x0160000C, proc ResEventProc), registered by InitializeNaka+0x44
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
 ToneGen_ParamTable_0x557:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x557, 0x6
+	.incbin "includes/generated/tonegen_param_table.bin", 0x557, 0x4
+InitializeNaka_Data_2:	.incbin "includes/generated/tonegen_param_table.bin", 0x55B, 0x2
 ; parameter block of object 0x1eb (class 0x0160000D, proc ResMethodProc), registered by InitializeNaka+0x6C
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 6 B; the proc's read length was not measured
 ToneGen_ParamTable_0x55D:
-	.incbin "includes/generated/tonegen_param_table.bin", 0x55D, 0x6
+	.incbin "includes/generated/tonegen_param_table.bin", 0x55D, 0x4
+InitializeNaka_Data_3:	.incbin "includes/generated/tonegen_param_table.bin", 0x561, 0x2
 ; parameter block of object 0x10b (class 0x01600001, proc FunctionProc), registered by InitializeNaka+0xDB
 ; (+10 data field of a RegisterObjectTable descriptor, registry 0x27ED2 + 14*index); the slice runs to the next boundary, 4 B; the proc's read length was not measured
 ToneGen_ParamTable_0x563:
@@ -2182,7 +2185,7 @@ Voice_FactoryPresetData_Code_Skip9:
 	ldw	wa, 16
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (16451936:24)
+	lda	xbc, (Voice_FactoryPresetData_Code:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -2197,6 +2200,7 @@ Voice_FactoryPresetData_Code_Epilogue:
 	pop	xiz
 	inc	2, xsp
 	ret
+Voice_FactoryPresetData_Code:
 	ld	xbc, xwa
 	lda	xwa, (xbc+4)
 	ld	de, (xbc+12)

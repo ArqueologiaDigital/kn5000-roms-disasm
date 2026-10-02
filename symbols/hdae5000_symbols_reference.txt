@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 4,058
-#   semantic names ........... 4,055 (99.9%)
+#   symbols .................. 4,064
+#   semantic names ........... 4,061 (99.9%)
 #   positional names ......... 3
 #
 HDAE5000_ROM_HEADER 00280000
@@ -810,6 +810,8 @@ HDAE5000_PPORT_Cmd17_FormatHd_Str_N17_Formating_HD 0029559E
 HDAE5000_PPORT_Cmd18_SwitchHdMotorOff_Str_N18_Switch_HD_motor_off 002955B6
 HDAE5000_PPORT_Cmd19_Nothing_Str_N19_nothing 002955CE
 HDAE5000_PPORT_Cmd20_SendXapFileFlash_Str_N20_Send_XapFile_flash 002955E6
+HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data 002955FE
+HDAE5000_PPORT_Cmd20_SendXapFileFlash_Data_2 00295614
 HDAE5000_PPORT_Cmd01_SendInfosAboutHd_Str_Error_Wrong_Dll_Ver 0029562A
 HDAE5000_PPORT_Cmd01_SendInfosAboutHd 00295642
 HDAE5000_PPORT_Cmd02_ExitPport 002956CC
@@ -3921,9 +3923,13 @@ HDAE5000_Str_Rb_Extension_Check 002E5DCA
 HDAE5000_Palette_Data 002E5DCE
 HDAE5000_Bitmap_BootSplash 002E61CE
 HDAE5000_Display_Params 002F8DCE
+HDAE5000_LoadSong_Rcm_Data 002F8DD8
 HDAE5000_Dir_IsBlankName_Str_Blank16 002F8DE0
 HDAE5000_Fls_IsBlankName_Str_Blank16 002F8DF2
 HDAE5000_FlsItem_SongRecord_Str_Blank26 002F8E04
+HDAE5000_CheckFileSignature_Data 002F8E20
+HDAE5000_CheckFileSignature_Data_2 002F8E24
+HDAE5000_CheckFileSignature_Data_3 002F8E26
 HDAE5000_FdSong_CheckFiles_Str_SEQ 002F8E9C
 HDAE5000_FdSong_CheckFiles_Str_SQF 002F8EA2
 HDAE5000_FdSong_CheckFiles_Str_LSW 002F8EA8

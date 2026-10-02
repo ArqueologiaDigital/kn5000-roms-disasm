@@ -222,7 +222,7 @@ InitializeYoko:
 	pushw InitializeYoko_Str_TT_DEMOSTYLE@lo16
 	ld XWA,0x000000e1
 	ld XBC,NAKA_MAINFUNC_DemoStyleTtlFunc
-	ld XDE,0x00e10000
+	ld XDE,InitializeYoko_Data
 	call RegisterTitle
 	pushw 0x0007
 	pushw InitializeYoko_Str_TT_DEMOSOUND@hi16
@@ -7819,8 +7819,9 @@ SndParam_Dispatch:
 	add	wa, wa
 	lda	xix, (SndParam_Dispatch_PtrTable_2:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (15926271:24)
+	lda	xix, (SndParam_Dispatch_Code:24)
 	jp_rr 8, xix, wa
+SndParam_Dispatch_Code:
 	ld	xbc, (xsp+62)
 	sla	de, 2
 	cp	xbc, EVT_INDEXSW_UP_AIC
@@ -7871,8 +7872,9 @@ SndParam_Dispatch_Join:
 	add	wa, wa
 	lda	xix, (SndParam_Dispatch_PtrTable:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (15926443:24)
+	lda	xix, (SndParam_Dispatch_Code_2:24)
 	jp_rr 8, xix, wa
+SndParam_Dispatch_Code_2:
 	ld	xde, (xsp+62)
 	sla	hl, 2
 	lda	xwa, (SndParam_Dispatch_Table:24)
@@ -14132,8 +14134,9 @@ Sqedt_ParamDispatch:
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_3:24)
 	ld_rrw	hl, xix, hl
-	lda	xix, (15944287:24)
+	lda	xix, (Sqedt_ParamDispatch_Code:24)
 	jp_rr	8, xix, hl
+Sqedt_ParamDispatch_Code:
 	ld	a, (9742:16)
 	jr	Sqedt_ParamDispatch_Join
 	ld	a, (9756:16)
@@ -14161,8 +14164,9 @@ Sqedt_ParamDispatch_Join:
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable_2:24)
 	ld_rrw	hl, xix, hl
-	lda	xix, (15944372:24)
+	lda	xix, (Sqedt_ParamDispatch_Code_2:24)
 	jp_rr	8, xix, hl
+Sqedt_ParamDispatch_Code_2:
 	pushm (0x2610:16)
 	ld	xwa, Sqedt_ParamDispatch_Str
 	jr	Sqedt_ParamDispatch_Join2
@@ -14197,8 +14201,9 @@ Sqedt_ParamDispatch_Join2:
 	add	hl, hl
 	lda	xix, (Sqedt_ParamDispatch_CaseTable:24)
 	ld_rrw	hl, xix, hl
-	lda	xix, (15944492:24)
+	lda	xix, (Sqedt_ParamDispatch_Code_3:24)
 	jp_rr	8, xix, hl
+Sqedt_ParamDispatch_Code_3:
 	pushm (0x2612:16)
 	ld	xwa, Sqedt_ParamDispatch_Str_6
 	jr	Sqedt_ParamDispatch_Entry2_Join
@@ -15844,7 +15849,7 @@ Equalizer_FormatCases:
 	ld xwa, EntertainerGridCheck_Data_3
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x0005
-	ld xwa, 0x00e322f0
+	ld xwa, Equalizer_FormatCases_Data
 	jrl FormatParamStr_CopyEnumName
 	pushw 0x0005
 	ld xwa, EntertainerGridCheck_Data_2

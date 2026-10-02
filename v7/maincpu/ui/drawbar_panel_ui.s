@@ -4077,7 +4077,7 @@ MidiPartGridCheck_Skip3:
 	call	AcApcToggleProc_Helper
 	ld	wa, hl
 	add	wa, wa
-	lda	xbc, (0xe80640:24)
+	lda	xbc, (MidiPartGridCheck_Evt1C00017_Data:24)
 	ld_rrw	bc, xbc, wa	; ld bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
@@ -4165,7 +4165,7 @@ MidiPartGridCheck_Skip7:
 	call	AcApcToggleProc_Helper
 	ld	wa, hl
 	add	wa, wa
-	lda	xbc, (0xe80650:24)
+	lda	xbc, (MidiPartGridCheck_Evt1C00018_Data:24)
 	ld_rrw	bc, xbc, wa	; ld bc, (xbc+wa)
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
@@ -4492,7 +4492,7 @@ InitializeMurai:
 	ld (XBC),XWA
 	lda xwa, (ResMethodProc:24)
 	ld (XBC+0x04),XWA
-	ld wa, (0xe814f2:24)
+	ld wa, (InitializeMurai_Data:24)
 	ld (XBC+0x08),WA
 	lda xwa, (Naka_Event_Table3:24)
 	ld (XBC+0x0a),XWA
@@ -4920,7 +4920,7 @@ InitializeMurai:
 	pushw	InitializeMurai_Str_TT_ACCORDION@lo16
 	ld	xwa, 235
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, 0xeb0000
+	ld	xde, InitializeMurai_Data_2
 	call	RegisterTitle
 	pushw	1
 	pushw	InitializeMurai_Str_TT_MESAGE@hi16
@@ -4934,7 +4934,7 @@ InitializeMurai:
 	pushw	InitializeMurai_Str_TT_WELCOM@lo16
 	ld	xwa, 239
 	ld	xbc, NAKA_APFUNC_DefaultFunction
-	ld	xde, 0xef0000
+	ld	xde, InitializeMurai_Data_3
 	call	RegisterTitle
 	pushw	1
 	pushw	InitializeMurai_Str_TT_SOFTVER@hi16
@@ -11225,7 +11225,7 @@ IvSoftverProc:
 Softver_ShowHide:
 	ld	xwa, xiz
 	call	InheritedProc
-	pushw	(0xeb7930:24)
+	pushw	(Softver_ShowHide_Data:24)
 	pushw	Softver_ShowHide_Str_Fmt4d@hi16
 	pushw	Softver_ShowHide_Str_Fmt4d@lo16
 	lda	xwa, (xsp+10)
@@ -11233,7 +11233,7 @@ Softver_ShowHide:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, 0xf00001
+	ld	xwa, Softver_ShowHide_Code
 	ld	xbc, EVT_PARA_DRAW
 	call	SendEvent
 	call	Boot_ParseTableDataTimestamp
@@ -11257,7 +11257,7 @@ Softver_ShowHide:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, 0xf00003
+	ld	xwa, Softver_ShowHide_Code_2
 	ld	xbc, EVT_PARA_DRAW
 	call	SendEvent
 	call	Boot_ParseSubCPUTimestamp
@@ -11326,7 +11326,7 @@ MPver_ShowHide:
 	call	Scoop_EventLoop_12Entry_Helper
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
-	ld	xwa, 15663114
+	ld	xwa, MPver_ShowHide_Data
 	ld	xbc, EVT_PARA_DRAW
 	jr	MPver_SendEvent
 MPver_Paint:
@@ -11820,7 +11820,7 @@ AcWelcomScreen_SubCpuError:
 	ld	xbc, xiz
 	ld	xde, (xsp+16)
 	call	InheritedProc
-	ld	xwa, 15663108
+	ld	xwa, AcWelcomScreen_SubCpuError_Data
 	ld	xbc, EVT_SHOW
 	ld	xde, 3:i3
 	jr	AcWelcomScreen_DispatchEvent
@@ -11829,7 +11829,7 @@ AcWelcomScreen_SubCpuLoaded:
 	ld	xbc, xiz
 	ld	xde, (xsp+16)
 	call	InheritedProc
-	ld	xwa, 15663111
+	ld	xwa, AcWelcomScreen_SubCpuLoaded_Data
 	ld	xbc, EVT_SHOW
 	ld	xde, 3:i3
 AcWelcomScreen_DispatchEvent:
@@ -12717,9 +12717,12 @@ AudioCtrl_MixerLoopNext:
 PsMixer_UnmatchedPartScan:
 	ld wa, (xsp + 8)
 	calr Util_SignExtendAndDouble
+EffectMode_TimerEvent_Step78_Code:
 	ld (xsp + 4), xhl
 	ld xwa, (xsp + 4)
+EffectMode_TimerEvent_Step1E_Code:
 	ld wa, (xwa)
+EffectMode_TimerEvent_Step3C_Code:
 	sla wa, 2
 	lda xbc, (PsMixer_MidiScanOuterLoop_Data:24)
 	ld	xwa, (xbc+wa)

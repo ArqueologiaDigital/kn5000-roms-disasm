@@ -265,7 +265,8 @@ ExitWindow_OK_Data_2:
 ; [nakarest] NakaInst_WindowID_Cont  +0x741..+0x774 (0xeb78ff, 51 B)
 ; [nakarest] purpose not established: 51 B at 0xeb78ff that no registered NAKA table, symbol, 24/32-bit literal or data word points into
 NakaInst_WindowID_Cont:
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x741, 0x33
+	.incbin "includes/generated/naka_style_bitmaps.bin", 0x741, 0x31
+Softver_ShowHide_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x772, 0x2
 ; [nakarest] WidgetStyleDataTable  +0x774..+0x784 (0xeb7932, 16 B)
 ; [nakarest] purpose not established: layout of 16 B at 0xeb7932 not derived; readers below
 ; [nakarest] Readers: source references SystemConfig_PointerTable (ui_widgets/widget_dispatch.s:
@@ -703,7 +704,8 @@ StyleBmp_LastStarparade:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x
 StyleBmp_LAWarmth:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8C48, 0x88
 StyleBmp_KnopflerTribute:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x8CD0, 0x88
 StyleBmp_KeyGrooves:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8D58, 0x88
-StyleBmp_JustTheFlute:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8DE0, 0x129
+StyleBmp_JustTheFlute:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8DE0, 0x62
+InitializeEast_Data:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8E42, 0xC7
 NakaStr_SoundPreset176:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F09, 0x25
 SoundName_160:			.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F2E, 0x4F
 SoundName_ToTheBone:		.incbin "includes/generated/naka_style_bitmaps.bin", 0x8F7D, 0x4
@@ -4111,6 +4113,6 @@ MainChordPre_PtrTable:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18
 ; [nakarest] word in AcWelcomScreenProc_Data_2 (at 0xe9edcc), which is read by AcWelcomScreenProc
 ; [nakarest] (ui/drawbar_panel_ui.s: `ld xwa, AcWelcomScreenProc_Data_2`); 2 data words in
 ; [nakarest] Naka_KeyScaling_NavTrail (at 0xe8303c, 0xe846c6).
-	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18E42, 0x8
+InitializeSuna_Data:	.incbin "includes/generated/naka_style_bitmaps.bin", 0x18E42, 0x8
 ; External label offsets within the binary blob above.
 .include "extensions/extension_data.s"

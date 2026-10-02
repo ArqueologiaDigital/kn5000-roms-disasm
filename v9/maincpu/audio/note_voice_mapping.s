@@ -17572,8 +17572,9 @@ HdaeRom_TableEntry2:
 	add	wa, wa
 	lda	xix, (HdaeRomEntry2_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfeac14:24)
+	lda	xix, (HdaeRom_TableEntry2_Code:24)
 	jp_rr	8, xix, wa
+HdaeRom_TableEntry2_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, HdaeRom_TableEntry2_Epilogue
@@ -18441,8 +18442,9 @@ SendEpilogue_Data_Skip7:
 	add	wa, wa
 	lda	xix, (MIDI_SendEpilogue_Data_2:24)
 	ld_rrw wa, xix, wa
-	lda xix, (16692237:24)
+	lda xix, (MIDI_SendEpilogue_Code:24)
 	jp_rr 8, xix, wa
+MIDI_SendEpilogue_Code:
 	ldto_berp a, 248
 	extz	wa
 	call	SendPartDataBlock_Block
@@ -18519,8 +18521,9 @@ SendEpilogue_Data_Skip14:
 	add	wa, wa
 	lda	xix, (MIDI_SendEpilogue_Data:24)
 	ld_rrw wa, xix, wa
-	lda xix, (16692462:24)
+	lda xix, (MIDI_SendEpilogue_Code_2:24)
 	jp_rr 8, xix, wa
+MIDI_SendEpilogue_Code_2:
 	ldw	wa, 127
 	cp	iz, 0:i3
 	jr	nz, SendEpilogue_Data_Skip15
@@ -19560,8 +19563,9 @@ MIDI_WriteChannelData_Block:
 	add	wa, wa
 	lda	xix, (SendAllSoundOff_Flush_Data:24)
 	ld_rrw wa, xix, wa
-	lda xix, (16695109:24)
+	lda xix, (SendAllSoundOff_Flush_Code:24)
 	jp_rr 8, xix, wa
+SendAllSoundOff_Flush_Code:
 	ld	l, 1:opc
 	ret
 
@@ -25037,8 +25041,9 @@ Param_SignExtendReturn_Skip:
 	sll	hl, 1
 	ld	xix, Param_SignExtendReturn_Data_4
 	ld_rrw hl, xix, hl
-	lda xix, (16706778:24)
+	lda xix, (Param_SignExtendReturn_Code:24)
 	jp_rr 8, xix, hl
+Param_SignExtendReturn_Code:
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -27930,8 +27935,9 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	add	hl, hl
 	lda	xix, (TmFlashBulkB_SwitchOffsets:24)
 	ld_rrw	hl, xix, hl
-	lda	xix, (0xff089b:24)
+	lda	xix, (VoiceParam_DispatchTable1_Code:24)
 	jp_rr	8, xix, hl
+VoiceParam_DispatchTable1_Code:
 	ld	xwa, xbc
 	ld	xbc, 0x1d6
 	call	Math_MultiplyAccumulate

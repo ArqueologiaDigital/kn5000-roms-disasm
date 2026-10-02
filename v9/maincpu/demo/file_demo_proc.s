@@ -485,7 +485,7 @@ FDemo_FileOpenAndProcess:
 	jr t, FDemo_FileOpen_Exit
 FDemo_FileOpen_DoOpen:
 	lda	xwa, (xsp+10)
-	ld xbc, 0x00ea00a8
+	ld xbc, FDemo_FileOpen_DoOpen_Data
 	call FileIO_OpenWithMode
 	ld (xsp+4), hl
 	cpw (xsp+4), 0x0000

@@ -13049,10 +13049,11 @@ SeqPart_EmitPercussionNote_Skip:
 	add	wa, wa
 	lda	xix, (SeqEvtBuf_NoteDispatch_Data:24)
 	ld	wa, (xix+wa)
-	lda	xix, (0xfe81d9:24)
+	lda	xix, (NonNoteDispatchLoop_LoadParam2_Code:24)
 	jp	t, (xix+wa)
 ; v10 name for this address: SeqPerformance_EventDispatch -- not a label here: v7 keeps that name at 0xFE85F3 for ui_widgets/widget_dispatch.s
 ; Sequence performance event dispatch (6-entry, table 0xee8fc0)
+NonNoteDispatchLoop_LoadParam2_Code:
 	ld	wa, (xsp+4)
 	ld	de, iz
 	ld	bc, 1:i3
@@ -14565,14 +14566,14 @@ VoiceSlot_StoreParams_LoadReg4:
 	ld	xiz, Chord_Tables + 0xd
 	ld	l, (xiz+hl)
 	dec	1, hl
-	ld	xiz, 0xfe903d
+	ld	xiz, VoiceSlot_StoreParams_LoadReg4_Code
 	or	a, (xiz+hl)
 VoiceSlot_StoreParams_Increment:
 	inc	2, iy
 	djnz16	bc, VoiceSlot_StoreParams_LoadReg4
 VoiceSlot_StoreParams_LoadReg5:
 	ld	l, a
-	ld	xiz, 0xfe9049
+	ld	xiz, VoiceSlot_StoreParams_LoadReg5_Code
 	ld	a, (xiz+hl)
 	ld	l, (0xce4a:24)
 	ld	xiz, Chord_Tables + 0xd
@@ -14581,6 +14582,7 @@ VoiceSlot_StoreParams_LoadReg5:
 	and	(0xce42:24), 239
 	ret
 ; v10 name for this address: VoiceSlot_StoreParams_Data -- not a label here: v7 keeps that name at 0xFE9457 for shared/positional_labels.s
+VoiceSlot_StoreParams_LoadReg4_Code:
 	normal
 	push	sr
 	normal
@@ -14593,6 +14595,7 @@ VoiceSlot_StoreParams_LoadReg5:
 	normal
 	push	sr
 	normal
+VoiceSlot_StoreParams_LoadReg5_Code:
 	normal
 	push	sr
 	halt
@@ -16070,8 +16073,9 @@ SndParam_Init:
 	add	wa, wa
 	lda	xix, (KeyEvent_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfea080:24)
+	lda	xix, (SndParam_Init_Code:24)
 	jp_rr	8, xix, wa
+SndParam_Init_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
@@ -16458,8 +16462,9 @@ HdaeRom_TableEntry2:
 	add	wa, wa
 	lda	xix, (HdaeRomEntry2_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfea445:24)
+	lda	xix, (HdaeRom_TableEntry2_Code:24)
 	jp_rr	8, xix, wa
+HdaeRom_TableEntry2_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jr	z, HdaeRom_TableEntry2_Epilogue
@@ -17306,8 +17311,9 @@ SendEpilogue_Data_Skip7:
 	add	wa, wa
 	lda	xix, (MIDI_SendEpilogue_Data_2:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfeac3e:24)
+	lda	xix, (MIDI_SendEpilogue_Code:24)
 	jp_rr	8, xix, wa
+MIDI_SendEpilogue_Code:
 	ldto_berp	a, 248
 	extz	wa
 	call	SendPartDataBlock_Block
@@ -17384,8 +17390,9 @@ SendEpilogue_Data_Skip14:
 	add	wa, wa
 	lda	xix, (MIDI_SendEpilogue_Data:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfead1f:24)
+	lda	xix, (MIDI_SendEpilogue_Code_2:24)
 	jp_rr	8, xix, wa
+MIDI_SendEpilogue_Code_2:
 	ldw	wa, 127
 	cp	iz, 0:i3
 	jr	nz, SendEpilogue_Data_Skip15
@@ -18380,8 +18387,9 @@ MIDI_WriteChannelData_Block:
 	add	wa, wa
 	lda	xix, (SendAllSoundOff_Flush_Data:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfeb776:24)
+	lda	xix, (SendAllSoundOff_Flush_Code:24)
 	jp_rr	8, xix, wa
+SendAllSoundOff_Flush_Code:
 	ld	l, 1:opc
 	ret
 ; ============================================================================
@@ -21452,7 +21460,7 @@ ProcessMidiConverge_Block:
 	ld	xwa, 0:i3
 	ld	a, l
 	sll	xwa, 16
-	and	xwa, 0xff0000
+	and	xwa, ToneGen_ProcessMidiConverge_Code
 	add	(0xeb37:16), xwa
 	calr	RingBuffer_ReadByte
 	ld	wa, hl
@@ -23352,8 +23360,9 @@ ApplyProgramChange_LoadDRAM:
 	sll	hl, 1
 	ld	xix, Param_SignExtendReturn_Data_4
 	ld_rrw	hl, xix, hl
-	lda	xix, (0xfee50b:24)
+	lda	xix, (ApplyProgramChange_LoadDRAM_Code:24)
 	jp_rr	8, xix, hl
+ApplyProgramChange_LoadDRAM_Code:
 	ld	a, (xsp)
 	exts	wa
 	pushw	50
@@ -26073,6 +26082,7 @@ TmFlash_BulkTransferToSubCPU_Skip2:
 	extz	xwa
 	extz	hl
 	dec	1, hl
+ToneGen_ProcessMidiConverge_Code:
 	cp	hl, 0:i3
 	jr	lt, TmFlash_BulkTransferToSubCPU_Skip3
 	cp	hl, 5:i3
@@ -26150,8 +26160,9 @@ TmFlash_BulkTransferToSubCPU_Epilogue2:
 	add	hl, hl
 	lda	xix, (TmFlashBulkB_SwitchOffsets:24)
 	ld_rrw	hl, xix, hl
-	lda	xix, (0xff00cc:24)
+	lda	xix, (VoiceParam_DispatchTable1_Code:24)
 	jp_rr	8, xix, hl
+VoiceParam_DispatchTable1_Code:
 	ld	xwa, xbc
 	ld	xbc, 0x1d6
 	call	InitializeKubo_Helper

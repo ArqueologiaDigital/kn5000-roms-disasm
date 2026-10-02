@@ -44,7 +44,7 @@ screen_group_dispatch_Skip2:
 	lda	xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
-	lda	xwa, (0xfde509:24)
+	lda	xwa, (AudioModeChange_Handler_Code:24)
 	cp	xwa, xbc
 	jr	z, screen_group_dispatch_Skip3
 	ld	wa, 0:i3

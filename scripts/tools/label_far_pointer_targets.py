@@ -10,15 +10,21 @@ QUESTION THIS ANSWERS / JOB IT DOES
   label at the pointer (scripts/tools/place_labels.py: in front of the line, or by cutting the
   `.incbin` slice / list there; a pointer inside an instruction is left and reported) named
   after the routine that pushes it -- the nearest non-structural column-0 label above the push
-  -- as `<Reader>_Str_<Text>` when a NUL-terminated ASCII string starts there
-  (split_blobs_at_far_pointers.c_string_at / text_token), else `<Reader>_Data`; unique with
-  _2, _3 ...  Then run symbolize_far_pointer_pushes.py --apply (after `make`) to spell the
-  pushes.  A label emits no byte: `make gate-all` proves it.
+  -- as `<Reader>_Code` when a code line starts there (a callback or handler address loaded as
+  a value: structural on purpose, what it does is not established here), `<Reader>_Str_<Text>`
+  when a NUL-terminated ASCII string starts there (split_blobs_at_far_pointers.c_string_at /
+  text_token), else `<Reader>_Data`; unique with _2, _3 ...  Then run
+  symbolize_far_pointer_pushes.py --apply (after `make`) to spell the pushes.
+  It also takes symbolize_kn5000_rom_operands.py's report: its "no-symbol" rows are numeric
+  operands (`lda xix, 0xed9d30`) at addresses with no label; follow with that script --apply.
+  A label emits no byte: `make gate-all` proves it.
 
 USAGE
   make all
   python3 scripts/converters/symbolize_far_pointer_pushes.py --image v10 --report FAR.json
   python3 scripts/tools/label_far_pointer_targets.py --tree v10 FAR.json [--apply]
+  python3 scripts/converters/symbolize_kn5000_rom_operands.py --image v10 --report OPS.json
+  python3 scripts/tools/label_far_pointer_targets.py --tree v10 OPS.json [--apply]
 """
 import argparse
 import collections
@@ -45,7 +51,10 @@ def main():
     ap.add_argument("report")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args()
-    rows = [x for x in json.load(open(a.report)) if str(x.get("result", "")).startswith("inside ")]
+    # far-pointer report rows "inside <obj>+<off>", or operand report rows "no-symbol"
+    # (scripts/converters/symbolize_kn5000_rom_operands.py --report)
+    rows = [x for x in json.load(open(a.report))
+            if str(x.get("result", "")).startswith("inside ") or x.get("result") == "no-symbol"]
     elf, src, _ = fp.IMAGES[a.tree]
     rom_path, base = sb.ROM[a.tree]
     rom = open(os.path.join(REPO, rom_path), "rb").read()
@@ -72,7 +81,10 @@ def main():
             continue
         s = sb.c_string_at(rom, base, v)
         good = s is not None and len(s) >= 1 and rom[v - base - 1] in (0, 0xff)
-        want[v] = "%s_Str_%s" % (r, sb.text_token(s)) if good else "%s_Data" % r
+        w = planner.where(v)
+        code = bool(w) and w[0] == v and \
+            place_labels.snb.drc.classify_line(planner.lines(w[1])[w[2]], planner.macros)[0] == "code"
+        want[v] = "%s_Code" % r if code else "%s_Str_%s" % (r, sb.text_token(s)) if good else "%s_Data" % r
     for v, nm in sorted(want.items()):
         b, k = nm, 2
         while nm in taken:

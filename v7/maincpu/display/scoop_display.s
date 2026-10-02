@@ -15405,9 +15405,11 @@ ParamPopup_DynamicAccomp:
 	ld	(0x0def:16), 1
 	pushw	wa
 	call	Display_UpdateRegion0
+Softver_ShowHide_Code:
 	popw	wa
 ParamPopup_DynamicAccomp_Skip:
 	pushw	wa
+Softver_ShowHide_Code_2:
 	call	DisplayStr_ClearRegion
 	popw	wa
 	ld	xiy, Str_DynamicAccompOn

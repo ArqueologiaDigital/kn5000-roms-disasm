@@ -1,0 +1,68 @@
+[
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 931,
+  "value": "0x2b1f8e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 1007,
+  "value": "0x2c4f8e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hd-ae5000_v2_06i.s",
+  "line": 1083,
+  "value": "0x2d7f8e",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 6864,
+  "value": "0x2f0000",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 10012,
+  "value": "0x2f8dd8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11032,
+  "value": "0x2f8dd8",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11250,
+  "value": "0x2f8e26",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11257,
+  "value": "0x2f8e24",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 11265,
+  "value": "0x2f8e20",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18469,
+  "value": "0x295614",
+  "result": "no-symbol"
+ },
+ {
+  "file": "hdae5000/hdae5000_ui_display.s",
+  "line": 18477,
+  "value": "0x2955fe",
+  "result": "no-symbol"
+ }
+]

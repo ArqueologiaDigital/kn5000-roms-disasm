@@ -5900,8 +5900,9 @@ Scoop_SoundEditorData_Helper_Epilogue8:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x2EE:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xf0dc61:24)
+	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code:24)
 	jp_rr	8, xix, wa
+SeMenu_CopyWriteUpdate_Step3_Code:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 	ld	(xwa+9), 206
@@ -5962,8 +5963,9 @@ Scoop_SoundEditorData_Helper_Epilogue9:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x306:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xf0dd0c:24)
+	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code_2:24)
 	jp_rr	8, xix, wa
+SeMenu_CopyWriteUpdate_Step3_Code_2:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 50
 Scoop_SoundEditorData_Helper_Join13:
@@ -6015,8 +6017,9 @@ Scoop_SoundEditorData_Helper_Epilogue10:
 	add	wa, wa
 	lda	xix, (ToneGen_ParamTable_0x31A:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xf0dd9d:24)
+	lda	xix, (SeMenu_CopyWriteUpdate_Step3_Code_3:24)
 	jp_rr	8, xix, wa
+SeMenu_CopyWriteUpdate_Step3_Code_3:
 	lda	xwa, (xsp)
 	ld	(xwa+8), 100
 	ld	(xwa+9), 0
@@ -8947,7 +8950,7 @@ SeMenu_CompareAndApply_Data:
 	ld XIX,SeScreenData_0x113B
 	jr t, SeMenu_CompareAndApply_Data3
 SeMenu_CompareAndApply_Data2:
-	ld	xix, 15801564
+	ld	xix, SeMenu_CompareAndApply_Apply_Data
 SeMenu_CompareAndApply_Data3:
 	call SeGfx_DrawStaticList
 	ret
@@ -9097,7 +9100,7 @@ SeMenu_Utility_SearchByte:
 	ld XIX,SeScreenData_0x173B
 	jr t, SeMenu_Utility_FormatNumber
 SeMenu_Utility_SearchByte_End:
-	ld	xix, 15803012
+	ld	xix, SeMenu_Utility_SearchByte_Data
 SeMenu_Utility_FormatNumber:
 	ld	xiy, SeScreenData_0x1682
 	call	SeGfx_DrawStaticList
@@ -9118,7 +9121,7 @@ SeMenu_Utility_FormatNumber_End:
 	ld XIX,SeScreenData_0x1780
 	jr t, SeMenu_Utility_FormatSigned
 SeMenu_Utility_FormatNumber_Data:
-	ld	xix, 15803218
+	ld	xix, SeMenu_Utility_FormatNumber_Data_2
 SeMenu_Utility_FormatSigned:
 	call	SeGfx_DrawStaticList
 	ld	(257960:24), 0
@@ -12547,6 +12550,7 @@ SeScreenData_0x1089:
 	sd_quad	0x01, 289, 62, 294, 62
 	sd_quad	0x01, 290, 63, 293, 63
 	sd_quad	0x09, 291, 54, 292, 65
+SeMenu_CompareAndApply_Apply_Data:
 	sd_ctext	0x06, 9, 109*40+35, "LF0 \021"
 	sd_quad	0x01, 290, 96, 293, 96
 	sd_quad	0x01, 289, 97, 294, 97
@@ -12781,6 +12785,7 @@ SeScreenData_0x1682:
 	sd_ptext	0x1c, 12, 140, 5, "FILTER"
 	sd_ptext	0x17, 16, 6, 7, "SOUND EDIT"
 	sd_quad	0x09, 4, 4, 68, 16
+SeMenu_Utility_SearchByte_Data:
 	sd_ctext	0x06, 9, 41*40+35, "ENV \021"
 	sd_ctext	0x06, 7, 69*40+34, "FIL"
 	sd_ctext	0x06, 5, 75*40+39, "\021"
@@ -12816,6 +12821,7 @@ SeScreenData_0x175E:
 	sd_ctext	0x06, 8, 137*40+32, "M0DE"
 	sd_ctext	0x06, 6, 153*40+38, " \021"
 	sd_quad	0x05, 252, 149, 308, 166
+SeMenu_Utility_FormatNumber_Data_2:
 	sd_quad	0x05, 270, 67, 306, 92
 ; static record list (1 record), read by GraphicsRender_ProcessEntries; end SeScreenData_0x178B
 ; evidence: SeMenu_Utility_CompareBlock_End
@@ -15374,7 +15380,7 @@ SeScreenData_0x4C5E:
 ; evidence: SeMenu_PatchEdit_DataBlock
 SeScreenData_0x4C6D:
 	sdb_str	0x0660, 0x80, 7, 0x20, SeScreenData_0x08D1, 3, 75*40+2
-	sdb_str	0x0660, 0x40, 6, 0x20, 0x00f15b73, 6, 113*40+2
+	sdb_str	0x0660, 0x40, 6, 0x20, TuningSys_Param_01_Data, 6, 113*40+2
 FlashRead_BlockData_Field8:
 	sdb_snum	0x0668, 0xff, 0, 0x20, 175*40+27, 2, 0x00
 FlashRead_BlockData_Field7:

@@ -4029,8 +4029,9 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	add	wa, wa
 	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfdced3:24)
+	lda	xix, (DSPCfg_Data_ParamDispatch_Code:24)
 	jp_rr	8, xix, wa
+DSPCfg_Data_ParamDispatch_Code:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
@@ -5757,8 +5758,9 @@ UIStateEvt_ParamEdit_Data:
 	add	wa, wa
 	lda	xix, (ParamEdit_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfde2cf:24)
+	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code:24)
 	jp_rr	8, xix, wa
+UIStateEvt_TransposeUpdate_Apply_Code:
 	ldb_d8	a, (0xc07f)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Entry
@@ -5954,8 +5956,9 @@ UIStateEvt_VolumeMixer_Data:
 	add	wa, wa
 	lda	xix, (VolumeMixer_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfde538:24)
+	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code_2:24)
 	jp_rr	8, xix, wa
+UIStateEvt_TransposeUpdate_Apply_Code_2:
 	ldb_d8	a, (0xc07f)
 	and	a, 31
 	jr	z, UIStateEvt_VolumeMixer_Data_Skip

@@ -20932,8 +20932,9 @@ AppEvent_InlineHandler_Skip16:
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table_2:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (16009476:24)
+	lda	xix, (AppEvent_SubDispatch_Code:24)
 	jp_rr	8, xix, wa
+AppEvent_SubDispatch_Code:
 	lda_d16	xiz, (9744)
 	lda	xwa, (9746:16)
 	jr	AppEvent_InlineHandler_Join9
@@ -20992,8 +20993,9 @@ AppEvent_InlineHandler_Skip:
 	add	wa, wa
 	lda	xix, (AppEvent_SubDispatch_Table:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (16009657:24)
+	lda	xix, (AppEvent_SubDispatch_Code_2:24)
 	jp_rr	8, xix, wa
+AppEvent_SubDispatch_Code_2:
 	lda_d16	xiz, (9744)
 	lda_d16	xwa, (9746)
 	jr	AppEvent_InlineHandler_Join
@@ -25310,7 +25312,7 @@ HelpLang_DispatchDataBlock_Join:
 	ld_rrb a, xwa, bc
 	cp a, 1:i3
 	jr nz, HelpLang_DispatchDataBlock_Skip4
-	ld xwa, 15138830
+	ld xwa, HelpLang_DispatchDataBlock_Data
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	call	ApPostEvent
@@ -33139,7 +33141,7 @@ SeqPart_VelocityCurveCalc_Join:
 	extz	de
 	lda	xbc, (SeqPart_VelCurveData_Table_3:24)
 	ld	(9792), (xbc+de)
-	ld	xbc, 14962338
+	ld	xbc, SeqPart_VelCurveData_Data
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
 	ld	a, c
@@ -33161,7 +33163,7 @@ SeqPart_VelocityCurveCalc_Join4:
 	extz	de
 	lda	xbc, (SeqPart_VelCurveData_Table_4:24)
 	ld	(9792), (xbc+de)
-	ld	xbc, 14962346
+	ld	xbc, SeqPart_VelCurveData_Data_2
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
 	ld	a, c
@@ -33198,7 +33200,7 @@ SeqPart_VelocityCurveCalc_Join2:
 	extz	de
 	lda	xbc, (SeqPart_VelCurveData_Table_5:24)
 	ld	(9792), (xbc+de)
-	ld	xbc, 14962350
+	ld	xbc, SeqPart_VelCurveData_Data_3
 	ld	(9794), (xbc+de)
 	jrl	SeqPart_VelocityCurveCalc_Join5
 

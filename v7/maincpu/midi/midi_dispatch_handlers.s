@@ -827,7 +827,7 @@ PanelEvt_Handler_0_NoteOnParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_0_NoteOnParam_Return
-	ld	xix, 0xfd12bd
+	ld	xix, PanelEvt_Handler_0_NoteOnParam_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -858,7 +858,7 @@ PanelEvt_Handler_3_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_3_ValueCheck_Return
-	ld	xix, 0xfd133d
+	ld	xix, PanelEvt_Handler_3_ValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -878,7 +878,7 @@ PanelEvt_Handler_5_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_5_ValueCheck_Return
-	ld	xix, 0xfd13bd
+	ld	xix, PanelEvt_Handler_5_ValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -900,7 +900,7 @@ PanelEvt_Handler_7_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_7_ValueCheck_Return
-	ld	xix, 0xfd14bd
+	ld	xix, PanelEvt_Handler_7_ValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -920,7 +920,7 @@ PanelEvt_Handler_8_ValueCheck:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_8_ValueCheck_Return
-	ld	xix, 0xfd153e
+	ld	xix, PanelEvt_Handler_8_ValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -940,7 +940,7 @@ PanelEvt_Handler_9_SingleByteParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_9_SingleByteParam_Return
-	ld	xix, 0xfd15be
+	ld	xix, PanelEvt_Handler_9_SingleByteParam_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -961,7 +961,7 @@ PanelEvt_Handler_10_TwoByteParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_10_TwoByteParam_Return
-	ld	xix, 0xfd163e
+	ld	xix, PanelEvt_Handler_10_TwoByteParam_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -984,7 +984,7 @@ PanelEvt_Handler_11_SingleByteParam:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_11_SingleByteParam_Return
-	ld	xix, 0xfd16be
+	ld	xix, PanelEvt_Handler_11_SingleByteParam_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1002,7 +1002,7 @@ PanelEvt_Handler_15_ConditionalSet:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_15_ConditionalSet_Return
-	ld	xix, 0xfd12bd
+	ld	xix, PanelEvt_Handler_0_NoteOnParam_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1139,7 +1139,7 @@ PanelEvt_D3ASlot1_SendCC91:
 	bit	7, (0x95b3:16)
 	jr	z, PanelEvt_Dispatch3Entry_A_Return
 	ld	l, 25:opc
-	ld	xix, 0xfd14bd
+	ld	xix, PanelEvt_Handler_7_ValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1231,7 +1231,7 @@ PanelEvent_DispatchByIndex:
 PanelEvt_DispatchByIndex_Ret:
 	ret
 MidiCC_ChannelDispatch_TableA:
-	ld	xix, 0xfd12bd
+	ld	xix, PanelEvt_Handler_0_NoteOnParam_Data
 	ld	l, (0x95b1:16)
 	extz hl
 	sll l, 2
@@ -1246,7 +1246,7 @@ MidiCC_ChannelDispatch_Ctrl40:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl40_ConfigExit
-	ld	xix, 0xfd173e
+	ld	xix, MidiCC_ChannelDispatch_Ctrl40_Data
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1263,7 +1263,7 @@ MidiCC_ChannelDispatch_Ctrl41:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl41_Ret
-	ld	xix, 0xfd17be
+	ld	xix, MidiCC_ChannelDispatch_Ctrl41_Data
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1290,7 +1290,7 @@ MidiCC_ChannelDispatch_CtrlFlags:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, PanelEvent_NullRet
-	ld	xix, 0xfd183e
+	ld	xix, MidiCC_ChannelDispatch_CtrlFlags_Data
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1320,7 +1320,7 @@ MidiCC_ChannelDispatch_Ctrl1:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl1_ConfigExit
-	ld	xix, 0xfd18be
+	ld	xix, MidiCC_ChannelDispatch_Ctrl1_Data
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1337,7 +1337,7 @@ MidiCC_ChannelDispatch_Ctrl3:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl3_ConfigExit
-	ld	xix, 0xfd193e
+	ld	xix, MidiCC_ChannelDispatch_Ctrl3_Data
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1354,7 +1354,7 @@ MidiCC_ChannelDispatch_CtrlFlags2:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, PanelEvent_NullRet2
-	ld	xix, 0xfd19be
+	ld	xix, MidiCC_ChannelDispatch_CtrlFlags2_Data
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1382,7 +1382,7 @@ MidiCC_ChannelDispatch_Ctrl0:
 	ld	l, (0x95b1:16)
 	cp l, 0x1f
 	jr	ugt, BitMask_Ctrl0_ConfigExit
-	ld	xix, 0xfd1a3e
+	ld	xix, MidiCC_ChannelDispatch_Ctrl0_Data
 	extz hl
 	sll l, 2
 	ld	xix, (xix+hl)
@@ -1413,7 +1413,7 @@ MidiCC_ChannelDispatch_Func09:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return
-	ld	xix, 0xfd1abe
+	ld	xix, MidiCC_ChannelDispatch_Func09_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1430,7 +1430,7 @@ MidiCC_ChannelDispatch_Func08:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return2
-	ld	xix, 0xfd1b3e
+	ld	xix, MidiCC_ChannelDispatch_Func08_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1447,7 +1447,7 @@ MidiCC_ChannelDispatch_Func12:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return3
-	ld	xix, 0xfd1bbe
+	ld	xix, MidiCC_ChannelDispatch_Func12_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1464,7 +1464,7 @@ MidiCC_ChannelDispatch_Func13:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return4
-	ld	xix, 0xfd1c3e
+	ld	xix, MidiCC_ChannelDispatch_Func13_Data
 	extz	hl
 ; v7 NAME DISPLACED: `PanelEvt_Dispatch6_TableAndHandlers` (0xFD04BF) falls inside the line above in the
 ; correct framing (v10 0xFD0C90).  Kept as an alias because another v7
@@ -1485,7 +1485,7 @@ MidiCC_ChannelDispatch_Func14:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return5
-	ld	xix, 0xfd1cbe
+	ld	xix, MidiCC_ChannelDispatch_Func14_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1502,7 +1502,7 @@ MidiCC_ChannelDispatch_Func15:
 	ld	l, (0x95b1:16)
 	cp	l, 31
 	jr	ugt, MidiCC_ChannelDispatch_Ctrl0_Return6
-	ld	xix, 0xfd1d3e
+	ld	xix, MidiCC_ChannelDispatch_Func15_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -1708,6 +1708,7 @@ Periodic_TimestampCompare_Done:
 ; CC7->2 CC10->4 CC11->3 CC32->25 CC38->33 CC64->0 CC80->16 CC82->17
 ; CC83->18 CC91->7 CC93->5 CC94->6 CC100->35 CC101->34 CC120->41 CC121->40.
 ; No controller maps to functions 8-15 in this table.
+MidiRx_ControlChange_Data:
 	.byte 0x18, 0x01, 0xff, 0xff, 0xff, 0xff, 0x20, 0x02, 0xff, 0xff, 0x04, 0x03, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0x19, 0xff, 0xff, 0xff, 0xff, 0xff, 0x21, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
@@ -2059,7 +2060,7 @@ MidiCC_PartTargets_BankSelect:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_4_DualValueCheck_Skip2
-	ld	xix, 0xfd143d
+	ld	xix, PanelEvt_Handler_4_DualValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -2080,7 +2081,7 @@ PanelEvt_Handler_4_DualValueCheck_Skip2:
 	ld	l, (0x95b0:16)
 	cp	l, 31
 	jr	ugt, PanelEvt_Handler_4_DualValueCheck_Return
-	ld	xix, 0xfd143d
+	ld	xix, PanelEvt_Handler_4_DualValueCheck_Data
 	extz	hl
 	sll	l, 2
 	ld	xix, (xix+hl)
@@ -2353,6 +2354,7 @@ MidiCC_FunctionToCCNumber:
 	; Supersedes 44 v10_data_as_code_census.py notes inside this span, all carved
 	; one byte late for the same reason (e.g. 0xFD1A93-0xFD1AB2 (31 B) is the tail
 	; of the record that really starts at 0xFD1A8E).
+PanelEvt_Handler_0_NoteOnParam_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2365,6 +2367,7 @@ MidiCC_FunctionToCCNumber:
 ; correct framing (v10 0xFD1B01).  Kept as an alias because another v7
 ; file references this address by this name.
 	.set PanelEvt_Handler_4_DualValueCheck, MidiCC_FunctionToCCNumber + 163
+PanelEvt_Handler_3_ValueCheck_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2373,6 +2376,7 @@ MidiCC_FunctionToCCNumber:
 	.long 0x0000fbcb, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+PanelEvt_Handler_5_ValueCheck_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2390,6 +2394,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+PanelEvt_Handler_7_ValueCheck_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2400,6 +2405,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	; one-byte 0xFF pad; the record grid restarts at 0xFD1D0F
 	.byte 0xff
+PanelEvt_Handler_8_ValueCheck_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2408,6 +2414,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+PanelEvt_Handler_9_SingleByteParam_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2416,6 +2423,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+PanelEvt_Handler_10_TwoByteParam_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2424,6 +2432,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+PanelEvt_Handler_11_SingleByteParam_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2432,6 +2441,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Ctrl40_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2440,6 +2450,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Ctrl41_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2448,6 +2459,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_CtrlFlags_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2456,6 +2468,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Ctrl1_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2464,6 +2477,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Ctrl3_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2472,6 +2486,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0x0000fc19, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_CtrlFlags2_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2480,14 +2495,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
-	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
-	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
-	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
-	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
-	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
-	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
-	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Ctrl0_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2496,6 +2504,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Func09_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2504,6 +2513,16 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Func08_Data:
+	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
+	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
+	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
+	.long 0x0000fafb, 0x0000fb15, 0x0000fb2f, 0xffffffff
+	.long 0x0000fb63, 0x0000fb7d, 0x0000fb97, 0x0000fbb1
+	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Func12_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2512,6 +2531,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
 	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Func13_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2520,6 +2540,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
 	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Func14_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -2528,6 +2549,7 @@ PanelEvt_Handler_4_DualValueCheck_Data:
 	.long 0xffffffff, 0x0000fbe5, 0xffffffff, 0x0000fd6f
 	.long 0x0000fd89, 0xffffffff, 0xffffffff, 0xffffffff
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff
+MidiCC_ChannelDispatch_Func15_Data:
 	.long 0x0000f9c3, 0x0000f9dd, 0x0000f9f7, 0x0000fa11
 	.long 0x0000fa2b, 0x0000fa45, 0x0000fa5f, 0x0000fa79
 	.long 0x0000fa93, 0x0000faad, 0x0000fac7, 0x0000fae1
@@ -12779,8 +12801,9 @@ SeqData_FormatOutput_Data_Helper:
 	add	hl, hl
 	lda	xix, (SeqDataFmt_SwitchOffsets:24)
 	ld	hl, (xix+hl)
-	lda	xix, (0xfd87ad:24)
+	lda	xix, (SeqData_FormatOutput_Default_Code:24)
 	jp_rr 8, xix, hl
+SeqData_FormatOutput_Default_Code:
 	jr	SeqData_FormatOutput_Data_Helper_Join
 	jr	SeqData_FormatOutput_Data_Helper_Join2
 	jrl	SeqData_FormatOutput_Data_Helper_Join3
@@ -13864,8 +13887,9 @@ VoiceParam_MultiMode_StubRet:
 	add	hl, hl
 	lda	xix, (AssSwbMulti_SwitchOffsets:24)
 	ld	hl, (xix+hl)
-	lda	xix, (0xfd926d:24)
+	lda	xix, (VoiceParam_MultiMode_StubRet_Code:24)
 	jp_rr	8, xix, hl
+VoiceParam_MultiMode_StubRet_Code:
 	jr	SeqAlt_DescriptorBlock_Data_Join
 	jr	SeqAlt_DescriptorBlock_Data_Join2
 	jrl	SeqAlt_DescriptorBlock_Data_Join3

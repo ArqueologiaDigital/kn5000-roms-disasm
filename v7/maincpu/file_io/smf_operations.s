@@ -534,9 +534,10 @@ FmmSmfFileNameFunc:
 	add	xde, xde
 	add	xde, FmmSmfFileNameFunc_Data
 	ld	de, (xde)
-	lda	xix, (16309435:24)
+	lda	xix, (FmmSmfFileNameFunc_Code:24)
 SmfFN_JumpTable:
 	jp_rr 8, xix, de
+FmmSmfFileNameFunc_Code:
 	ld	(33028:16), xbc
 	ld	xwa, 0:i3
 	ld	(33032:16), xwa

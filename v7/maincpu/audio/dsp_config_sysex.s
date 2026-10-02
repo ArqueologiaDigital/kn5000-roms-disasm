@@ -3314,8 +3314,9 @@ EffEdit_DSPConfigBlock_Helper:
 	add	wa, wa
 	lda	xix, (DspCfg_OpLetter_JumpOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfdc702:24)
+	lda	xix, (DSPCfg_WriteAllSlots_Combined_Code:24)
 	jp_rr	8, xix, wa
+DSPCfg_WriteAllSlots_Combined_Code:
 	ld	xiz, 0x4900
 	ld	wa, 0:i3
 	jr	DSPCfg_Data_ParamDispatch_Join3
@@ -4796,7 +4797,7 @@ AudioModeChange_Handler:
 	lda	xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
-	lda	xwa, (0xfde509:24)
+	lda	xwa, (AudioModeChange_Handler_Code:24)
 	cp	xwa, xbc
 	ret	z
 	ld	wa, 0:i3
@@ -4836,7 +4837,7 @@ AudioSubsystem_Callback:
 	lda	xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld	xbc, xhl
-	lda	xwa, (0xfde509:24)
+	lda	xwa, (AudioModeChange_Handler_Code:24)
 	cp	xwa, xbc
 	ret	z
 	ld	wa, 0:i3
@@ -4951,8 +4952,9 @@ UIStateEvt_TransposeUpdate_Apply:
 	add	wa, wa
 	lda	xix, (ParamEdit_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfddafe:24)
+	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code:24)
 	jp_rr	8, xix, wa
+UIStateEvt_TransposeUpdate_Apply_Code:
 	ldb_d8	a, (0xbfe3)
 	and	a, 7
 	jrl	z, UIStateEvt_ParamEdit_Data_Entry
@@ -5149,8 +5151,9 @@ UIStateEvt_ParamEdit_Data_Epilogue:
 	add	wa, wa
 	lda	xix, (VolumeMixer_SwitchOffsets:24)
 	ld_rrw	wa, xix, wa
-	lda	xix, (0xfddd67:24)
+	lda	xix, (UIStateEvt_TransposeUpdate_Apply_Code_2:24)
 	jp_rr	8, xix, wa
+UIStateEvt_TransposeUpdate_Apply_Code_2:
 	ldb_d8	a, (0xbfe3)
 	and	a, 31
 	jr	z, UIStateEvt_PartRouting_Code_Skip

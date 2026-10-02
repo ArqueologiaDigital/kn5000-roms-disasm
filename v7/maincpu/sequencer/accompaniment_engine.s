@@ -11936,7 +11936,7 @@ AccTone_ValidateAndClamp_Helper:
 	jr	AccTone_ValidateAndClamp_Helper_Join
 AccTone_ValidateAndClamp_Helper_Skip:
 	extz	wa
-	lda	xbc, (0xe49ff8:24)
+	lda	xbc, (AccTone_InlineBytecodeData_Data:24)
 	ld_rrb	a, xbc, wa
 	ld	xbc, (0x338a:16)
 	extz	wa
@@ -11949,7 +11949,7 @@ AccTone_ValidateAndClamp_Helper2:
 	ld xix, (0x338a:16)
 	ld C,A
 	extz BC
-	lda xde, (0xe4a01a:24)
+	lda xde, (AccTone_InlineBytecodeData_Data_2:24)
 	ld	e, (xde+bc)
 	extz DE
 	ld BC,DE
@@ -12478,7 +12478,7 @@ AccTuning_ComplexBytecodeData_Skip3:
 	jr	AccTuning_ComplexBytecodeData_Loop2
 AccTuning_ComplexBytecodeData_Skip4:
 	extz	wa
-	lda	xbc, (0xe49ff8:24)
+	lda	xbc, (AccTone_InlineBytecodeData_Data:24)
 	ld_rrb	l, xbc, wa
 	ld	a, e
 	extz	wa
@@ -28114,13 +28114,14 @@ AccVoice_SetupSlots_DataBlock_Helper10:
 	ld_rr8b	w, xiy, c
 	ld	a, 17:opc
 	st_rr8b	w, xix, a
-	ld	xiy, 16152062
+	ld	xiy, AccVoice_SetupSlots_DataBlock_Data
 	add	xix, 64
 	ld	xbc, 0:i3
 	ldw	bc, 16
 	; v10 does not spell this byte either
 	ldir85
 	ret
+AccVoice_SetupSlots_DataBlock_Data:
 	.byte 0x45	; v10 does not spell this byte either
 	.byte 0x61	; v10 does not spell this byte either
 	.byte 0x73	; v10 does not spell this byte either
@@ -32511,7 +32512,7 @@ AccDraw_Secondary_Skip2:
 	calr	AccGraphics_RenderStart
 	ld	(257960:24), 0
 	ldmm8	14623, 13942
-	ld	xiy, 16164922
+	ld	xiy, AccScreen_DataBlock_Data_7
 	calr	AccDraw_Secondary
 	calr	AccDraw_Secondary_Helper14
 	calr	AccDraw_Secondary_Helper18
@@ -33238,7 +33239,8 @@ AccScreen_DataBlock_Data_4:	.byte	0x02, 0x0f, 0x1f, 0x39, 0xff, 0x00, 0x20, 0x05
 	.byte 0x16, 0x04, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x87, 0xa8, 0xf6, 0x00, 0x00, 0x0a, 0x24, 0x39	; |..............$9|
 	.byte	0x0f, 0x00, 0x06, 0x83, 0x1b, 0x01	; |.............4..|
 AccScreen_DataBlock_Data_5:	.byte	0x04, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x34, 0xa8, 0xf6
-	.byte 0x00, 0x1d, 0x1f, 0x14, 0x00, 0x28, 0x00, 0x02, 0x0f, 0x1f, 0x39, 0x01, 0x00, 0x06, 0x49, 0xa8	; |.....(....9...I.|
+	.byte	0x00, 0x1d, 0x1f, 0x14, 0x00, 0x28, 0x00	; |.....(....9...I.|
+AccScreen_DataBlock_Data_7:	.byte	0x02, 0x0f, 0x1f, 0x39, 0x01, 0x00, 0x06, 0x49, 0xa8
 	.byte 0xf6, 0x00, 0x05, 0x00, 0x31, 0x1f, 0x20, 0x50, 0x48, 0x52, 0x53, 0x56, 0x41, 0x4c, 0x55, 0x45	; |....1. PHRSVALUE|
 	.byte 0x04, 0x0b, 0x00, 0x00, 0x00, 0x00, 0x0e, 0x5e, 0xa8, 0xf6, 0x00, 0xf0, 0x05, 0x22, 0x00, 0x88	; |.......^....."..|
 	.byte	0x00	; |....9...o...Q.!.|

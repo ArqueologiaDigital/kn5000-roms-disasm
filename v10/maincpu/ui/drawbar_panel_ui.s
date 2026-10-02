@@ -4104,7 +4104,7 @@ MidiPartGridCheck_Skip3:
 	call	SndParam_LookupReadOnly
 	ld	wa, hl
 	add	wa, wa
-	lda	xbc, (15205952:24)
+	lda	xbc, (MidiPartGridCheck_Evt1C00017_Data:24)
 	ld_rrw	bc, xbc, wa
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
@@ -4192,7 +4192,7 @@ MidiPartGridCheck_Skip7:
 	call	SndParam_LookupReadOnly
 	ld	wa, hl
 	add	wa, wa
-	lda	xbc, (15205968:24)
+	lda	xbc, (MidiPartGridCheck_Evt1C00018_Data:24)
 	ld_rrw	bc, xbc, wa
 	cp	bc, hl
 	jrl	z, MidiSetup_ReturnZero
