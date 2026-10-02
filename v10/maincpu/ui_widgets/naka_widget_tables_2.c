@@ -1071,7 +1071,7 @@ typedef struct __attribute__((packed)) {
      * MidiPart_ColWidthData -- jump table of a compiled `switch` in
      * VocalistGrid_DispatchData (v10/v9 0xF73938, v7 0xF73534) (`.long
      * MidiPart_ColWidthData`): 20 u16 case offsets from
-     * VocalistGrid_DispatchData_0x160.
+     * VocalistGrid_DispatchData_Code.
      * --------------------------------------------------------------------- */
     uint16_t MidiPart_ColWidthData[20];
     /* ---------------------------------------------------------------------

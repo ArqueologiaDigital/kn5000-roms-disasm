@@ -2258,6 +2258,7 @@ Reset_Floppy_Disk_Controller:
 	res_dd8	0, 52
 	ldw	wa, 10
 	jrl	SOME_DELAY
+TitleFunc_LifecycleTable_Helper:
 	ld	(71:8), 30:io
 	bit_dd8	6, 52
 	ret	nz

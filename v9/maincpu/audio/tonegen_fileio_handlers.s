@@ -93,6 +93,7 @@ ToneGen_ApplyMaskLoop:
 ToneGen_DSPCfg_Initialize:
 	calr ToneGen_DSPCfg_ResetAll
 	jrl ToneGen_DSPCfg_ResetAllChannels
+MidiSysEx_ProcessBlock_Helper13:
 	lda xwa, (0xf480:16)
 	jrl DSPCfg_InitAllEntries
 

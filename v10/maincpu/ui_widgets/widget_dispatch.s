@@ -1883,12 +1883,12 @@ SysEx_Msg_359A:
 SysEx_Msg_35A0:
 MidiPkt_ArpPopReturn_Data:
 	.byte 0xf0, 0x50, 0x27, 0x7e, 0xf7, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD7A59): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by SysEx_SendDispatch_Helper2 (0xFD7A59): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35A6:
 MidiPkt_ArpPopReturn_Data_2:
 	.byte 0xf0, 0x50, 0x28, 0x7e, 0xf7, 0xff
-; MIDI system-exclusive bytes (0xF0 ...) sent by MidiPkt_ArpConfigChain_Data_0x34C (0xFD7A59): `ld xwa,<this>;
+; MIDI system-exclusive bytes (0xF0 ...) sent by SysEx_SendDispatch_Helper2 (0xFD7A59): `ld xwa,<this>;
 ; ld bc,5; call SeqBuf_FlushNoteOffs` queues the first 5 bytes; the rest is 0xFF padding.
 SysEx_Msg_35AC:
 MidiPkt_ArpPopReturn_Data_3:

@@ -1941,6 +1941,7 @@ Fill_memory_at_XWA_with_DE_words_of_BC_value:
 Checksum_ComputeComplement:
 	xor xhl, xhl
 	extz xbc
+Checksum_ComputeComplement_Code:
 	add xbc, xwa
 
 Checksum_AccumulateLoop:
@@ -2104,8 +2105,9 @@ TaskSched_InitMsgQueues:
 	ld	(xhl+), ix
 	ld	(xhl+), ix
 	djnz8	b, -11
-	ld	xwa, TaskSched_InitMsgQueues_0x12
+	ld	xwa, TaskSched_InitMsgQueues_Code
 	jr	8	; -> 0xEF1A5C
+TaskSched_InitMsgQueues_Code:
 	normal
 	nop
 	normal
@@ -2284,7 +2286,7 @@ Show_ScreenGroup_Entry:
 	ld l, 0xc:opc
 	mul hl, a
 	extz xhl
-	add xhl, Checksum_ComputeComplement_0x4
+	add xhl, Checksum_ComputeComplement_Code
 	ld c, 0xc:opc
 	mul bc, a
 	add bc, 0x47d
@@ -2319,6 +2321,7 @@ Show_ScreenGroup_Entry:
 	ld (xwa), ix
 	ld (xiy + 2), ix
 	jrl TaskSched_Dispatch
+SndTable_ByteBlock_ReadOps_Helper:
 	ei 6
 	ld xsp, 0x1e53a
 	ld ix, (1159:16)
@@ -8249,7 +8252,7 @@ HDAE5000_TableData_Write_Join2:
 	jr	HDAE5000_TableData_Write_Join2
 HDAE5000_TableData_Write_Skip6:
 	ei	7
-	ld	xwa, Debug_SWI_JumpTable_0x6
+	ld	xwa, Debug_SWI_JumpTable_Code
 	ldw	ix, 331
 	extz	xix
 	.byte	0xe9, 0xee

@@ -69,11 +69,11 @@ SeMenuTitleFunc:
 
 SeMenuTitleFunc_DisplayData:
 	jp	UpdSeSel_ProcessStep
-	jp	SeMenu_CopyWriteUpdate_Data_0x212
+	jp	SeMenu_CopyWriteUpdate_Step3_Join3
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0x582
-	jp	SeMenu_CopyWriteUpdate_Data_0x21C
+	jp	SeMenu_CopyWriteUpdate_Step3_Join35
+	jp	SeMenu_CopyWriteUpdate_Step3_Return
 
 SeEasyTitleFunc:
 	lda xsp, (xsp - 16)
@@ -90,11 +90,11 @@ SeEasyTitleFunc:
 
 SeEasyTitleFunc_DisplayData:
 	jp	UpdSeSel_ExtendedOps_Data
-	jp	SeMenu_CopyWriteUpdate_Data_0x34A
+	jp	SeMenu_CopyWriteUpdate_Step3_Join30
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0x1D4C
-	jp	SeMenu_CopyWriteUpdate_Data_0x354
+	jp	SeMenu_CopyWriteUpdate_Step3_Join41
+	jp	SeMenu_CopyWriteUpdate_Step3_Return30
 
 SeTonTon1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -111,11 +111,11 @@ SeTonTon1TitleFunc:
 
 SeTonTon1TitleFunc_DisplayData:
 	jp	SeMenu_AltUpdate
-	jp	SeMenu_CopyWriteUpdate_Data_0x2A1
+	jp	SeMenu_CopyWriteUpdate_Step3_Join15
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0xD15
-	jp	SeMenu_CopyWriteUpdate_Data_0x2AB
+	jp	SeMenu_CopyWriteUpdate_Step3_Join36
+	jp	SeMenu_CopyWriteUpdate_Step3_Return13
 
 SeTonTon2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -132,11 +132,11 @@ SeTonTon2TitleFunc:
 
 SeTonTon2TitleFunc_DisplayData:
 	jp	SeMenu_AltUpdate_Data
-	jp	SeMenu_CopyWriteUpdate_Data_0x2AC
+	jp	SeMenu_CopyWriteUpdate_Step3_Join16
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0xD43
-	jp	SeMenu_CopyWriteUpdate_Data_0x2B6
+	jp	SeMenu_CopyWriteUpdate_Step3_Join37
+	jp	SeMenu_CopyWriteUpdate_Step3_Return14
 
 SeTonRan1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -152,12 +152,12 @@ SeTonRan1TitleFunc:
 	ret
 
 SeTonRan1TitleFunc_DisplayData:
-	jp	SeMenu_AltUpdate_Data_0xDC
-	jp	SeMenu_CopyWriteUpdate_Data_0x2B7
+	jp	SeMenu_AltUpdate_Step3Plus_Join
+	jp	SeMenu_CopyWriteUpdate_Step3_Join17
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0xD71
-	jp	SeMenu_CopyWriteUpdate_Data_0x2C1
+	jp	SeMenu_CopyWriteUpdate_Step3_Join38
+	jp	SeMenu_CopyWriteUpdate_Step3_Return15
 
 SeTonRan2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -173,12 +173,12 @@ SeTonRan2TitleFunc:
 	ret
 
 SeTonRan2TitleFunc_DisplayData:
-	jp	SeMenu_AltUpdate_Data_0x1BB
-	jp	SeMenu_CopyWriteUpdate_Data_0x2C2
+	jp	SeMenu_AltUpdate_Step3Plus_Join2
+	jp	SeMenu_CopyWriteUpdate_Step3_Join18
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0xD9F
-	jp	SeMenu_CopyWriteUpdate_Data_0x2CC
+	jp	SeMenu_CopyWriteUpdate_Step3_Join39
+	jp	SeMenu_CopyWriteUpdate_Step3_Return16
 
 SeTonHyb1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -195,11 +195,11 @@ SeTonHyb1TitleFunc:
 
 SeTonHyb1TitleFunc_DisplayData:
 	jp	SeMenu_ControllerUpdate
-	jp	SeMenu_CopyWriteUpdate_Data_0x2CD
+	jp	SeMenu_CopyWriteUpdate_Step3_Join19
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0xDCD
-	jp	SeMenu_CopyWriteUpdate_Data_0x2D7
+	jp	SeMenu_CopyWriteUpdate_Step3_Join40
+	jp	SeMenu_CopyWriteUpdate_Step3_Return17
 
 SePitPit1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -215,12 +215,12 @@ SePitPit1TitleFunc:
 	ret
 
 SePitPit1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xE1
-	jp	SeMenu_CopyWriteUpdate_Data_0x21D
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join
+	jp	SeMenu_CopyWriteUpdate_Step3_Join4
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_RefreshPartDisplay_Data_0xD
-	jp	SeMenu_CopyWriteUpdate_Data_0x227
+	jp	SeMenu_RefreshPartDisplay_Join5
+	jp	SeMenu_CopyWriteUpdate_Step3_Return2
 
 SePitEnv1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -236,12 +236,12 @@ SePitEnv1TitleFunc:
 	ret
 
 SePitEnv1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x1F6
-	jp	SeMenu_CopyWriteUpdate_Data_0x228
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join2
+	jp	SeMenu_CopyWriteUpdate_Step3_Join5
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_RefreshPartDisplay_Data_0x3B
-	jp	SeMenu_CopyWriteUpdate_Data_0x232
+	jp	SeMenu_RefreshPartDisplay_Join6
+	jp	SeMenu_CopyWriteUpdate_Step3_Return3
 
 SePitEnv2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -257,12 +257,12 @@ SePitEnv2TitleFunc:
 	ret
 
 SePitEnv2TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x28C
-	jp	SeMenu_CopyWriteUpdate_Data_0x233
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join3
+	jp	SeMenu_CopyWriteUpdate_Step3_Join6
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_RefreshPartDisplay_Data_0x69
-	jp	SeMenu_CopyWriteUpdate_Data_0x23D
+	jp	SeMenu_RefreshPartDisplay_Join7
+	jp	SeMenu_CopyWriteUpdate_Step3_Return4
 
 SePitLfo1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -278,12 +278,12 @@ SePitLfo1TitleFunc:
 	ret
 
 SePitLfo1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x336
-	jp	SeMenu_CopyWriteUpdate_Data_0x23E
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join4
+	jp	SeMenu_CopyWriteUpdate_Step3_Join7
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_RefreshPartDisplay_Data_0x97
-	jp	SeMenu_CopyWriteUpdate_Data_0x248
+	jp	SeMenu_RefreshPartDisplay_Join8
+	jp	SeMenu_CopyWriteUpdate_Step3_Return5
 
 SeAmpAmp1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -299,12 +299,12 @@ SeAmpAmp1TitleFunc:
 	ret
 
 SeAmpAmp1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x43E
-	jp	SeMenu_CopyWriteUpdate_Data_0x249
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join5
+	jp	SeMenu_CopyWriteUpdate_Step3_Join8
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x33
-	jp	SeMenu_CopyWriteUpdate_Data_0x253
+	jp	Scoop_SoundEditorData_Join56
+	jp	SeMenu_CopyWriteUpdate_Step3_Return6
 
 SeAmpAmp2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -320,12 +320,12 @@ SeAmpAmp2TitleFunc:
 	ret
 
 SeAmpAmp2TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x58E
-	jp	SeMenu_CopyWriteUpdate_Data_0x254
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join6
+	jp	SeMenu_CopyWriteUpdate_Step3_Join9
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x61
-	jp	SeMenu_CopyWriteUpdate_Data_0x25E
+	jp	Scoop_SoundEditorData_Join57
+	jp	SeMenu_CopyWriteUpdate_Step3_Return7
 
 SeAmpEnv1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -341,12 +341,12 @@ SeAmpEnv1TitleFunc:
 	ret
 
 SeAmpEnv1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x62F
-	jp	SeMenu_CopyWriteUpdate_Data_0x25F
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join7
+	jp	SeMenu_CopyWriteUpdate_Step3_Join10
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x8F
-	jp	SeMenu_CopyWriteUpdate_Data_0x269
+	jp	Scoop_SoundEditorData_Join58
+	jp	SeMenu_CopyWriteUpdate_Step3_Return8
 
 SeAmpEnv2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -362,12 +362,12 @@ SeAmpEnv2TitleFunc:
 	ret
 
 SeAmpEnv2TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x72B
-	jp	SeMenu_CopyWriteUpdate_Data_0x26A
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join8
+	jp	SeMenu_CopyWriteUpdate_Step3_Join11
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0xBD
-	jp	SeMenu_CopyWriteUpdate_Data_0x274
+	jp	Scoop_SoundEditorData_Join59
+	jp	SeMenu_CopyWriteUpdate_Step3_Return9
 
 SeAmpLfo1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -383,12 +383,12 @@ SeAmpLfo1TitleFunc:
 	ret
 
 SeAmpLfo1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x7D6
-	jp	SeMenu_CopyWriteUpdate_Data_0x275
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join9
+	jp	SeMenu_CopyWriteUpdate_Step3_Join12
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
 	jp	Scoop_SoundEditorData_0xEB
-	jp	SeMenu_CopyWriteUpdate_Data_0x27F
+	jp	SeMenu_CopyWriteUpdate_Step3_Return10
 
 SeFilLpq1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -404,12 +404,12 @@ SeFilLpq1TitleFunc:
 	ret
 
 SeFilLpq1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x9AA
-	jp	SeMenu_CopyWriteUpdate_Data_0x2D8
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join12
+	jp	SeMenu_CopyWriteUpdate_Step3_Join20
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x10DE
-	jp	SeMenu_CopyWriteUpdate_Data_0x2E2
+	jp	Scoop_SoundEditorData_Join60
+	jp	SeMenu_CopyWriteUpdate_Step3_Return18
 
 SeFilHpq1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -425,12 +425,12 @@ SeFilHpq1TitleFunc:
 	ret
 
 SeFilHpq1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xAE6
-	jp	SeMenu_CopyWriteUpdate_Data_0x2E3
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join13
+	jp	SeMenu_CopyWriteUpdate_Step3_Join21
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x110C
-	jp	SeMenu_CopyWriteUpdate_Data_0x2ED
+	jp	Scoop_SoundEditorData_Join61
+	jp	SeMenu_CopyWriteUpdate_Step3_Return19
 
 SeFilL241TitleFunc:
 	lda xsp, (xsp - 16)
@@ -446,12 +446,12 @@ SeFilL241TitleFunc:
 	ret
 
 SeFilL241TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xB01
-	jp	SeMenu_CopyWriteUpdate_Data_0x2EE
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join14
+	jp	SeMenu_CopyWriteUpdate_Step3_Join22
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x113A
-	jp	SeMenu_CopyWriteUpdate_Data_0x2F8
+	jp	Scoop_SoundEditorData_Join62
+	jp	SeMenu_CopyWriteUpdate_Step3_Return20
 
 SeFilH241TitleFunc:
 	lda xsp, (xsp - 16)
@@ -467,12 +467,12 @@ SeFilH241TitleFunc:
 	ret
 
 SeFilH241TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xB18
-	jp	SeMenu_CopyWriteUpdate_Data_0x2F9
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join15
+	jp	SeMenu_CopyWriteUpdate_Step3_Join23
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x1168
-	jp	SeMenu_CopyWriteUpdate_Data_0x303
+	jp	Scoop_SoundEditorData_Join63
+	jp	SeMenu_CopyWriteUpdate_Step3_Return21
 
 SeFilBpf1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -488,12 +488,12 @@ SeFilBpf1TitleFunc:
 	ret
 
 SeFilBpf1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xB2F
-	jp	SeMenu_CopyWriteUpdate_Data_0x304
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join16
+	jp	SeMenu_CopyWriteUpdate_Step3_Join24
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x1196
-	jp	SeMenu_CopyWriteUpdate_Data_0x30E
+	jp	Scoop_SoundEditorData_Join64
+	jp	SeMenu_CopyWriteUpdate_Step3_Return22
 
 SeFilBcf1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -509,12 +509,12 @@ SeFilBcf1TitleFunc:
 	ret
 
 SeFilBcf1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xB42
-	jp	SeMenu_CopyWriteUpdate_Data_0x30F
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join17
+	jp	SeMenu_CopyWriteUpdate_Step3_Join25
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x11C4
-	jp	SeMenu_CopyWriteUpdate_Data_0x319
+	jp	Scoop_SoundEditorData_Join65
+	jp	SeMenu_CopyWriteUpdate_Step3_Return23
 
 SeFilFil2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -530,12 +530,12 @@ SeFilFil2TitleFunc:
 	ret
 
 SeFilFil2TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xB51
-	jp	SeMenu_CopyWriteUpdate_Data_0x31A
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join18
+	jp	SeMenu_CopyWriteUpdate_Step3_Join26
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x11F2
-	jp	SeMenu_CopyWriteUpdate_Data_0x324
+	jp	Scoop_SoundEditorData_Join66
+	jp	SeMenu_CopyWriteUpdate_Step3_Return24
 
 SeFilEnv1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -551,12 +551,12 @@ SeFilEnv1TitleFunc:
 	ret
 
 SeFilEnv1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xBF2
-	jp	SeMenu_CopyWriteUpdate_Data_0x325
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join19
+	jp	SeMenu_CopyWriteUpdate_Step3_Join27
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x1220
-	jp	SeMenu_CopyWriteUpdate_Data_0x32F
+	jp	Scoop_SoundEditorData_Join67
+	jp	SeMenu_CopyWriteUpdate_Step3_Return25
 
 SeFilEnv2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -572,12 +572,12 @@ SeFilEnv2TitleFunc:
 	ret
 
 SeFilEnv2TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xC88
-	jp	SeMenu_CopyWriteUpdate_Data_0x330
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join20
+	jp	SeMenu_CopyWriteUpdate_Step3_Join28
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	Scoop_SoundEditorData_0x124E
-	jp	SeMenu_CopyWriteUpdate_Data_0x33A
+	jp	Scoop_SoundEditorData_Join68
+	jp	SeMenu_CopyWriteUpdate_Step3_Return26
 
 SeFilLfo1TitleFunc:
 	lda xsp, (xsp - 16)
@@ -593,12 +593,12 @@ SeFilLfo1TitleFunc:
 	ret
 
 SeFilLfo1TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0xD32
-	jp	SeMenu_CopyWriteUpdate_Data_0x33B
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join21
+	jp	SeMenu_CopyWriteUpdate_Step3_Join29
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
 	jp	Scoop_SoundEditorData_0x127C
-	jp	SeMenu_CopyWriteUpdate_Data_0x345
+	jp	SeMenu_CopyWriteUpdate_Step3_Return27
 
 SeDigEffTitleFunc:
 	lda xsp, (xsp - 16)
@@ -614,12 +614,12 @@ SeDigEffTitleFunc:
 	ret
 
 SeDigEffTitleFunc_DisplayData:
-	jp	SeMenu_CopyWriteUpdate_Data_0x114
-	jp	SeMenu_CopyWriteUpdate_Data_0x355
+	jp	SeMenu_CopyWriteUpdate_Step3_Join
+	jp	SeMenu_CopyWriteUpdate_Step3_Join31
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0x1E04
-	jp	SeMenu_CopyWriteUpdate_Data_0x35F
+	jp	SeMenu_CopyWriteUpdate_Step3_Join44
+	jp	SeMenu_CopyWriteUpdate_Step3_Return31
 
 SeCtr2TitleFunc:
 	lda xsp, (xsp - 16)
@@ -635,12 +635,12 @@ SeCtr2TitleFunc:
 	ret
 
 SeCtr2TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x7DC
-	jp	SeMenu_CopyWriteUpdate_Data_0x28B
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join10
+	jp	SeMenu_CopyWriteUpdate_Step3_Join13
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0x36B
-	jp	SeMenu_CopyWriteUpdate_Data_0x295
+	jp	SeMenu_CopyWriteUpdate_Step3_Join33
+	jp	SeMenu_CopyWriteUpdate_Step3_Return11
 
 SeCtr3TitleFunc:
 	lda xsp, (xsp - 16)
@@ -656,12 +656,12 @@ SeCtr3TitleFunc:
 	ret
 
 SeCtr3TitleFunc_DisplayData:
-	jp	UpdSeSel_ExtendedOps_Data_0x966
-	jp	SeMenu_CopyWriteUpdate_Data_0x296
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Join11
+	jp	SeMenu_CopyWriteUpdate_Step3_Join14
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0x399
-	jp	SeMenu_CopyWriteUpdate_Data_0x2A0
+	jp	SeMenu_CopyWriteUpdate_Step3_Join34
+	jp	SeMenu_CopyWriteUpdate_Step3_Return12
 
 SeCopyTitleFunc:
 	lda xsp, (xsp - 16)
@@ -677,12 +677,12 @@ SeCopyTitleFunc:
 	ret
 
 SeCopyTitleFunc_DisplayData:
-	jp	SeMenu_CopyWriteUpdate_Data_0x1B9
-	jp	SeMenu_CopyWriteUpdate_Data_0x360
+	jp	SeMenu_CopyWriteUpdate_Step3_Join2
+	jp	SeMenu_CopyWriteUpdate_Step3_Join32
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0x1D7A
-	jp	SeMenu_CopyWriteUpdate_Data_0x36A
+	jp	SeMenu_CopyWriteUpdate_Step3_Join42
+	jp	SeMenu_CopyWriteUpdate_Step3_Return32
 
 SeWrtMemTitleFunc:
 	lda xsp, (xsp - 16)
@@ -699,11 +699,11 @@ SeWrtMemTitleFunc:
 
 SeWrtMemTitleFunc_DisplayData:
 	jp	SeMenu_CopyWriteUpdate_Data
-	jp	SeMenu_CopyWriteUpdate_Data_0x346
+	jp	SeMenu_CopyWriteUpdate_Step3_Return28
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	jp	SeMenu_CopyWriteUpdate_Data_0x1DA8
-	jp	SeMenu_CopyWriteUpdate_Data_0x347
+	jp	SeMenu_CopyWriteUpdate_Step3_Join43
+	jp	SeMenu_CopyWriteUpdate_Step3_Return29
 
 SeWrtSndTitleFunc:
 	lda xsp, (xsp - 16)

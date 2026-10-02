@@ -1271,10 +1271,10 @@ DirmdEmu_CaseF:
 PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
 	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_Return
+	jp	PsMixer_CtlTypeProc8_Return
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleOld
 	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_Return2
+	jp	PsMixer_CtlTypeProc8_Return2
 	lda	xsp, (xsp-256)
 	pushw	iz
 	.byte 0xd3, 0xfd, 0x08, 0x01, 0x04
@@ -1296,7 +1296,7 @@ PostTitle_Function_Skip:
 	ret
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleCur
 	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_Return3
+	jp	PsMixer_CtlTypeProc8_Return3
 DirmdEmulator_Entry:
 
 DirmdEmulator:

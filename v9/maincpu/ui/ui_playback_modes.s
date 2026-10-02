@@ -17,7 +17,7 @@ UIStateEvt_VoiceParamHandler:
 	jr	lt, UIStateEvt_VoiceParamHandler_Skip2
 	cp	a, 122
 	jr	le, UIStateEvt_VoiceParamHandler_Skip
-	jp	UIStateEvt_VoiceParamHandler_0x24
+	jp	UIStateEvt_VoiceParamHandler_Skip2
 UIStateEvt_VoiceParamHandler_Skip:
 	ld	(4330:16), 0
 	jrl	UIStateEvt_VoiceParamHandler_Return
@@ -50,7 +50,7 @@ UIStateEvt_VoiceParamHandler_Skip6:
 	call	Part_WriteAllVoiceSubBlocks_B
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_0xC9
+	call	UIStateEvt_VoiceParamHandler_Helper
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -66,7 +66,7 @@ UIStateEvt_VoiceParamHandler_Skip7:
 	call	Part_WriteAllVoiceSubBlocks_A
 	popw	wa
 	call	SeqPlay_RestoreVoiceState_Return
-	call	UIStateEvt_VoiceParamHandler_0xC9
+	call	UIStateEvt_VoiceParamHandler_Helper
 	call	AccWrap_PlayModeDispatch
 	call	SeqBuf_Init
 	ld	(1073:16), 0
@@ -76,6 +76,7 @@ UIStateEvt_VoiceParamHandler_Skip7:
 	call	SeqPlay_CheckStartConditions
 UIStateEvt_VoiceParamHandler_Return:
 	ret
+UIStateEvt_VoiceParamHandler_Helper:
 	ld	xix, 0xf1a0
 	xor	bc, bc
 	ld	c, 16:opc
@@ -360,14 +361,16 @@ DispatchHandler_ClearActiveFlag:
 	ret
 
 PlayMode_InitFlagBlock:
-	call	PlayMode_InitFlagBlock_0x5
+	call	PlayMode_InitFlagBlock_Helper
 	ret
+PlayMode_InitFlagBlock_Helper:
 	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
-	call	PlayMode_InitFlagBlock_0x16
+	call	PlayMode_InitFlagBlock_Helper2
 PlayMode_InitFlagBlock_Return:
 	ret
+PlayMode_InitFlagBlock_Helper2:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
@@ -522,17 +525,21 @@ Medley_GetPlaybackStatus:
 SongMode_InitFlagBlock:
 	ret
 	ret
-	call	SongMode_InitFlagBlock_0x7
+DpMdlyDocTtl_Dispatch_Helper:
+	call	SongMode_InitFlagBlock_Helper
 	ret
+SongMode_InitFlagBlock_Helper:
 	cp (3380:16), 0
 	jr	nz, Medley_GetPlaybackStatus_Return
 	ld	(3380:16), 1
-	call	SongMode_InitFlagBlock_0x18
+	call	SongMode_InitFlagBlock_Helper2
 Medley_GetPlaybackStatus_Return:
 	ret
+SongMode_InitFlagBlock_Helper2:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
+DpMdlyDocTtl_Dispatch_Helper2:
 	ld	(3380:16), 0
 	ret
 
@@ -671,17 +678,21 @@ PartFormat_InitFlagBlock:
 	ret
 	ret
 	ret
-	call	PartFormat_InitFlagBlock_0xA
+DpMdlyPdTtl_Dispatch_Helper:
+	call	PartFormat_InitFlagBlock_Helper
 	ret
+PartFormat_InitFlagBlock_Helper:
 	cp (3380:16), 0
 	jr	nz, SongMode_VoiceStateDisp_Return
 	ld	(3380:16), 1
-	call	PartFormat_InitFlagBlock_0x1B
+	call	PartFormat_InitFlagBlock_Helper2
 SongMode_VoiceStateDisp_Return:
 	ret
+PartFormat_InitFlagBlock_Helper2:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
+DpMdlyPdTtl_Dispatch_Helper2:
 	ld	(3380:16), 0
 	ret
 
@@ -726,20 +737,24 @@ PlayModeStop_InitFlagBlock:
 	ret
 	ret
 	ret
+DpMdlySmfTtl_Dispatch_Helper:
 	cp (36151:16), 118
 	jr z, PartFormat_StartPlayback_Return
-	call	PlayModeStop_InitFlagBlock_0x10
+	call	PlayModeStop_InitFlagBlock_Helper
 PartFormat_StartPlayback_Return:
 	ret
+PlayModeStop_InitFlagBlock_Helper:
 	cp (3380:16), 0
 	jr	nz, PartFormat_StartPlayback_Return2
 	ld	(3380:16), 1
-	call	PlayModeStop_InitFlagBlock_0x21
+	call	PlayModeStop_InitFlagBlock_Helper2
 PartFormat_StartPlayback_Return2:
 	ret
+PlayModeStop_InitFlagBlock_Helper2:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
+DpMdlySmfTtl_Dispatch_Helper2:
 	cp (36150:16), 108
 	jr nz, PartFormat_StartPlayback_Return3
 	ld	(3380:16), 0
@@ -788,7 +803,9 @@ PlayModeStop_ClearFlagBlock:
 	ret
 	ret
 	ret
+DpMdlySmfLyrTtl_Dispatch_Helper:
 	ret
+DpMdlySmfLyrTtl_Dispatch_Helper2:
 	cp (36150:16), 108
 	jr nz, PlayMode_SendCommand6C_Return
 	ld	(3380:16), 0
@@ -1100,7 +1117,7 @@ SqTrAs_CondCheck:
 	push xhl
 	push xix
 	push xiz
-	call	SetWall_InlineCodeBlock3_0x1
+	call	SqTrAs_CondCheck_Helper
 	pop xiz
 	pop xix
 	pop xhl
@@ -1110,7 +1127,7 @@ SqTrAs_CondCheck:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SetWall_InlineCodeBlock3_0x40
+	call	SqTrAs_CondCheck_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1349,7 +1366,7 @@ SqTrAsPsTtl_Dispatch:
 	push xhl
 	push xix
 	push xiz
-	call	SetWall_DataBlock1_0xF
+	call	SqTrAsPsTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1767,7 +1784,7 @@ DpMdlyDocTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SongMode_InitFlagBlock_0x2
+	call	DpMdlyDocTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1777,7 +1794,7 @@ DpMdlyDocTtl_Dispatch:
 	push xhl
 	push xix
 	push xiz
-	call	SongMode_InitFlagBlock_0x23
+	call	DpMdlyDocTtl_Dispatch_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1860,7 +1877,7 @@ DpMdlyPdTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	PartFormat_InitFlagBlock_0x5
+	call	DpMdlyPdTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1870,7 +1887,7 @@ DpMdlyPdTtl_Dispatch:
 	push xhl
 	push xix
 	push xiz
-	call	PartFormat_InitFlagBlock_0x26
+	call	DpMdlyPdTtl_Dispatch_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1957,7 +1974,7 @@ DpMdlySmfTtlFunc_Skip:
 	push	xhl
 	push	xix
 	push	xiz
-	call	PlayModeStop_InitFlagBlock_0x4
+	call	DpMdlySmfTtl_Dispatch_Helper
 	pop xiz
 	pop xix
 	pop xhl
@@ -1967,7 +1984,7 @@ DpMdlySmfTtlFunc_Skip:
 	push xhl
 	push xix
 	push xiz
-	call	PlayModeStop_InitFlagBlock_0x2C
+	call	DpMdlySmfTtl_Dispatch_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -2057,7 +2074,7 @@ DpMdlySmfLyrTtlFunc_Skip:
 	push	xhl
 	push	xix
 	push	xiz
-	call	PlayModeStop_InitFlagBlock_0x4
+	call	DpMdlySmfTtl_Dispatch_Helper
 	pop xiz
 	pop xix
 	pop xhl
@@ -2068,7 +2085,7 @@ DpMdlySmfLyrTtlFunc_Skip2:
 	push xhl
 	push xix
 	push xiz
-	call	PlayModeStop_ClearFlagBlock_0x4
+	call	DpMdlySmfLyrTtl_Dispatch_Helper
 	pop xiz
 	pop xix
 	pop xhl
@@ -2082,7 +2099,7 @@ DpMdlySmfLyrTtlFunc_Join:
 	push xhl
 	push xix
 	push xiz
-	call	PlayModeStop_ClearFlagBlock_0x5
+	call	DpMdlySmfLyrTtl_Dispatch_Helper2
 	pop xiz
 	pop xix
 	pop xhl
@@ -3414,10 +3431,10 @@ Display_InitGraphicsAndScreen:
 	ldw wa, 0x00ff
 	call GraphicsRender_ByteData
 	ldw wa, 0x00f5
-	call TextRender_PopAndReturn_0x9
-	call GraphicsRender_ByteData_0x67
+	call DirmdEmulator_Dispatch_Code_Helper
+	call DirmdEmulator_Dispatch_Code_Helper3
 	ldw wa, 0x00ff
-	call GraphicsRender_ByteData_0x6
+	call DirmdEmulator_Dispatch_Code_Helper2
 Display_CallInitScreenLayout:
 	push xde
 	push xhl

@@ -15526,7 +15526,7 @@ VoiceSlot_StoreParams_Increment:
 
 VoiceSlot_StoreParams_LoadReg5:
 	ld l, a
-	ld xiz, VoiceSlot_StoreParams_Data_0xC
+	ld xiz, VoiceSlot_StoreParams_LoadReg5_Code
 	ld	a, (xiz+hl)
 	ld l, (0x00cee6:24)
 	ld xiz, VoiceSlot_StoreParams_LoadReg_Data
@@ -15548,6 +15548,7 @@ VoiceSlot_StoreParams_Data:
 	normal
 	push	sr
 	normal
+VoiceSlot_StoreParams_LoadReg5_Code:
 	normal
 	push	sr
 	halt
@@ -17166,8 +17167,9 @@ UIState_ProcessKeyEvent:
 	add	wa, wa
 	lda	xix, (KeyEvent_SwitchOffsets:24)
 	ld	wa, (xix+wa)
-	lda	xix, (UIState_ProcessKeyEvent_0x3D:24)
+	lda	xix, (UIState_ProcessKeyEvent_Code:24)
 	jp	t, (xix+wa)
+UIState_ProcessKeyEvent_Code:
 	ld	a, (xsp+0x3)
 	and	a, 255
 	jrl	z, SndParam_ProcessEntry_Epilogue
@@ -19257,7 +19259,7 @@ SeqVoice_CheckAndRet_Data:
 	add	wa, wa
 	lda	xix, (SeqVoice_CheckAndRet_Prologue_Data_15:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeqVoice_CheckAndRet_Data_0x4A:24)
+	lda	xix, (SeqVoice_CheckAndRet_Data_Skip:24)
 	jp	t, (xix+wa)
 SeqVoice_CheckAndRet_Data_Skip:
 	lda	xhl, (SeqVoice_CheckAndRet_Prologue_Data:24)
@@ -24405,6 +24407,7 @@ ApplyProgramChangeAs_LoadReg2:
 	ld xbc, 0x20
 	ldw de, 0x200
 	jr ApplyProgramChangeAs_LoadDRAM2
+SndBuf_WriteParamEntries_Helper:
 	jr ApplyProgramChangeAs_LoadReg
 
 SndParam_FetchOscTableEntry:
@@ -24996,8 +24999,9 @@ Param_SignExtendReturn_Helper3:
 	add	xhl, xhl
 	add	xhl, Param_SignExtendReturn_Data_5
 	ld	hl, (xhl)
-	lda	xix, (Param_SignExtendRetu_Data_0x69:24)
+	lda	xix, (Param_SignExtendReturn_Code2:24)
 	jp	t, (xix+hl)
+Param_SignExtendReturn_Code2:
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -25174,8 +25178,9 @@ Param_SignExtendReturn_Skip5:
 	add	xhl, xhl
 	add	xhl, Param_SignExtendReturn_Data_10
 	ld	hl, (xhl)
-	lda	xix, (Param_SignExtendRetu_Data_0x264:24)
+	lda	xix, (Param_SignExtendReturn_Code3:24)
 	jp	t, (xix+hl)
+Param_SignExtendReturn_Code3:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)
@@ -25297,6 +25302,7 @@ Param_SignExtendReturn_Skip12:
 	inc	6, xsp
 	ret
 	ret
+Param_SignExtendReturn_Join7:
 	lda	xsp, (xsp-0x16)
 	pushw	iz
 	ld	(xsp+0x14), xwa
@@ -25394,6 +25400,7 @@ Param_SignExtendReturn_Join3:
 	popw	iz
 	lda	xsp, (xsp+22)
 	ret
+SeqAlt_PopIzSkip4Ret2_Helper:
 	ld	xde, xwa
 	lda	xhl, (xde+12)
 	ld	c, (xhl+1)
@@ -25475,6 +25482,7 @@ Param_SignExtendReturn_Return:
 	pop	xiz
 	inc	2, xsp
 	ret
+SeqData_FormatOutput_Default_Helper:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa

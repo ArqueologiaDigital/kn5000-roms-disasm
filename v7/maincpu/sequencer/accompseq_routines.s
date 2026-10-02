@@ -1020,8 +1020,8 @@ AccompSeq_UpdatePos_Store:
 	ld	(32166:16), wa
 	ret
 AccompSeq_JumpTable:
-	jp	AccompSeq_LargeCodeBlock2_0x4
-	jp	AccompSeq_WriteMidi_CodeBlock_0xA
+	jp	AccompSeq_LargeCodeBlock2_Join
+	jp	AccompSeq_ProcessAfterNote_Helper
 	jp	AccompSeq_GuardedNoteOff
 
 AccompSeq_StopSequence:
@@ -1040,6 +1040,7 @@ AccompSeq_ProcessAfterNote:
 	jp AccompSeq_PostNoteProcess
 AccompSeq_LargeCodeBlock2:
 	jp	AccompSeq_ClearPendingFlag
+AccompSeq_LargeCodeBlock2_Join:
 	ld	a, (49121:16)
 	cp	a, 9
 	jrl	nz, AccompSeq_ProcessAfterNote_Return

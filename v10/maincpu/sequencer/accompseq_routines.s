@@ -1049,8 +1049,8 @@ AccompSeq_UpdatePos_Store:
 	ret
 
 AccompSeq_JumpTable:
-	jp	AccompSeq_LargeCodeBlock2_0x4
-	jp	AccompSeq_WriteMidi_CodeBlock_0xA
+	jp	AccompSeq_LargeCodeBlock2_Join
+	jp	AccompSeq_ProcessAfterNote_Helper
 	jp	AccompSeq_GuardedNoteOff
 
 AccompSeq_StopSequence:
@@ -1069,6 +1069,7 @@ AccompSeq_ProcessAfterNote:
 	jp AccompSeq_PostNoteProcess
 AccompSeq_LargeCodeBlock2:
 	jp	AccompSeq_ClearPendingFlag
+AccompSeq_LargeCodeBlock2_Join:
 	ld	a, (0xc07d:16)
 	cp	a, 9
 	jrl	nz, AccompSeq_ProcessAfterNote_Return
@@ -1095,7 +1096,7 @@ AccompSeq_ProcessAfterNote_Skip2:
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	xor	w, w
 	ld	hl, wa
-	ld	xix, AccompSeq_MidiFilterCodeBlock_0x7A
+	ld	xix, AccompSeq_MidiFilterCodeBlock_Code
 	ld	h, (xix+hl)
 	ld l, (64786:16)
 	cp l, 17
@@ -1119,7 +1120,7 @@ AccompSeq_ProcessAfterNote_Skip4:
 	cp l, 14
 	jr	ugt, AccompSeq_ProcessAfterNote_Return
 AccompSeq_ProcessAfterNote_Skip5:
-	call	Voice_NoteChannelTable1_0x422
+	call	Voice_NoteChannelGrid_Lookup
 	cp	h, 0:i3
 	jr	z, AccompSeq_ProcessAfterNote_Return
 	cp	(0x7f0b:16), 0
@@ -1673,7 +1674,7 @@ AccompSeq_MidiFilterCodeBlock:
 	ld	(14:8), 14:io
 	cp	(0x7f0b:16), 0
 	jr	z, AccompSeq_MidiFilterCodeBlock_Code_Skip
-	jp	AccompSeq_MidiFilterCodeBlock_0x79
+	jp	AccompSeq_MidiFilterCodeBlock_Code_Return
 AccompSeq_MidiFilterCodeBlock_Code_Skip:
 	ld	e, 12:opc
 	ld	a, (0xfd12:16)
@@ -1718,6 +1719,7 @@ AccompSeq_MidiFilterCodeBlock_Code_Entry:
 	or	(0xe3de:16), 16
 AccompSeq_MidiFilterCodeBlock_Code_Return:
 	ret
+AccompSeq_MidiFilterCodeBlock_Code:
 	nop
 	nop
 	.byte 0x01

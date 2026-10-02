@@ -13092,6 +13092,7 @@ SeqVoice_InitReturnZero:
 AppEvent_ExtendedHandler:
 	ld xwa, AppEvent_ExtendedHandler_Table
 	jr Part_LoadAndApplyVoiceTable
+SeqPart_ByteBlockA95A_Helper:
 	ld xwa, AppEvent_ExtendedHandler_Table_2
 	jr Part_LoadAndApplyVoiceTable
 
@@ -20420,8 +20421,9 @@ AppEvtHandler_Branch_002:
 	add	wa, wa
 	lda	xix, (AppEvtHandler_Branch_002_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (AppEvtHandler_Branch_002_0x4B:24)
+	lda	xix, (AppEvtHandler_Branch_002_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_002_Code:
 	lda_d16	xiz, (9744)
 	lda_d16	xwa, (9746)
 	jr	AppEvtHandler_Branch_004
@@ -20480,8 +20482,9 @@ AppEvtHandler_Branch_006:
 	add	wa, wa
 	lda	xix, (AppEvtHandler_Branch_006_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (AppEvtHandler_Branch_006_0x3B:24)
+	lda	xix, (AppEvtHandler_Branch_006_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_006_Code:
 	lda	xiz, (9744:16)
 	lda	xwa, (9746:16)
 	jr	AppEvtHandler_Branch_008	; -> 0xF442B4
@@ -20689,8 +20692,9 @@ AppEvtHandler_Branch_021:
 	add xwa, xwa
 	add xwa, AppEvtHandler_Branch_021_CaseTable
 	ld wa, (xwa)
-	lda xix, (AppEvtHandler_Branch_021_0x5E:24)
+	lda xix, (AppEvtHandler_Branch_021_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_021_Code:
 	ld a, (0xf1e9:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_024
@@ -20775,8 +20779,9 @@ AppEvtHandler_Branch_024:
 	add xwa, xwa
 	add xwa, AppEvtHandler_Branch_024_CaseTable
 	ld wa, (xwa)
-	lda xix, (AppEvtHandler_Branch_024_0x97:24)
+	lda xix, (AppEvtHandler_Branch_024_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_024_Code:
 	ld a, (0xf1e1:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_027
@@ -21261,8 +21266,9 @@ AppEvent_InlineHandler_Join6:
 	add	xwa, xwa
 	add	xwa, AppEvent_SubDispatch_CaseTable_2
 	ld	wa, (xwa)
-	lda	xix, (AppEvent_SubDispatch_0x3A6:24)
+	lda	xix, (AppEvent_SubDispatch_Code_2_Code:24)
 	jp	t, (xix+wa)
+AppEvent_SubDispatch_Code_2_Code:
 	ld	a, (61929:16)
 	cp	a, 1:i3
 	jrl	ule, AppEvent_InlineHandler_Join8
@@ -21347,8 +21353,9 @@ AppEvent_InlineHandler_Join8:
 	add	xwa, xwa
 	add	xwa, AppEvent_SubDispatch_CaseTable
 	ld	wa, (xwa)
-	lda	xix, (AppEvent_SubDispatch_0x4CC:24)
+	lda	xix, (AppEvent_SubDispatch_Code_2_Code2:24)
 	jp	t, (xix+wa)
+AppEvent_SubDispatch_Code_2_Code2:
 	ld	a, (61921:16)
 	cp	a, 1:i3
 	jrl	ule, AppEvent_InlineHandler_Join10
@@ -30486,7 +30493,7 @@ SeqPart_ByteBlockA95A_Code_Epilogue:
 	pop qiz
 	ret
 SeqPart_ByteBlockA95A_Code_Helper:
-	call	AppEvent_ExtendedHandler_0x7
+	call	SeqPart_ByteBlockA95A_Helper
 	call	SeqVoice_InitReturnZero
 	res	0, (10361:16)
 	res	1, (10361:16)

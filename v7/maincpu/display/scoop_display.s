@@ -571,7 +571,7 @@ ScoopDisp_BytecodeBlock1_0x32:
 	xor	b, b
 	ld	a, w
 	xor	w, w
-	call	Scoop_CurveUpdate_DrawSegment_0x20
+	call	ScoopDisp_BytecodeBlock1_Helper
 	ld	a, l
 	pop	xiz
 	pop	xiy
@@ -715,7 +715,7 @@ Display_InitParamLoader2:
 	ret
 Display_CallMenuInit:
 	; --- Simple wrapper: call EFA133 ---
-	call ScoopParam_ValueTable_0x186
+	call Display_CallMenuInit_Helper
 	ret
 Display_ConditionalCompare:
 	call Display_CallMenuConfig
@@ -726,7 +726,7 @@ Display_ConditionalCompare_Ret:
 	ret
 Display_CallMenuConfig:
 	; --- Simple wrapper: call EFA8CE ---
-	call ClockConfig_Handler_0_0x110
+	call Display_CallMenuConfig_Helper
 	ret
 Display_PollAudioAndUpdate:
 	; --- Polling function with loop ---
@@ -839,11 +839,11 @@ SoundEvt_LongPacketHandler_Skip:
 	jrl	ule, SoundEvt_LongPacketHandler_Entry
 SoundEvt_LongPacketHandler_Join:
 	call	SoundEvt_LongPacketHandler_Helper2
-	jp	SoundEvt_LongPacketHandler_Join2
+	jp	SoundEvt_LongPacketHandler_DispatchTbl_Target1_Join
 SoundEvt_LongPacketHandler_Entry:
 	or	(0x0dd3:16), 1
 	call	VoiceSlot_TableSetup
-SoundEvt_LongPacketHandler_Join2:
+SoundEvt_LongPacketHandler_DispatchTbl_Target1_Join:
 	call	SoundEvt_LongPacketHandler_Helper
 	ret
 	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl_Target1 (0xEF60B8): `ld xhl, ScoopDisp_HandlerData2`
@@ -876,22 +876,24 @@ SoundEvt_LongPacketHandler_DispatchTbl_Target2:
 	ldb_d8	a, (0x0d5c)
 	ldb_d8	w, (0x0eed)
 	cp	a, w
-	jrl	z, ScoopDisp_HandlerData2_0x6D
+	jrl	z, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Join
 	cp	(0x0d5d:16), 4
-	jrl	ule, ScoopDisp_HandlerData2_0x6D
+	jrl	ule, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Join
 	cp	w, 3:i3
 	jrl	ugt, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip
 	cp	a, 3:i3
 	jrl	ugt, SoundEvt_LongPacketHandler_Entry
-	jp	ScoopDisp_HandlerData2_0x6D
+	jp	SoundEvt_LongPacketHandler_DispatchTbl_Target2_Join
 SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip:
 	cp	a, 3:i3
 	jrl	ule, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Join:
 	call	SoundEvt_LongPacketHandler_Helper2
-	jp	ScoopDisp_HandlerData2_0x7E
+	jp	SoundEvt_LongPacketHandler_DispatchTbl_Target2_Return
 SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2:
 	or	(0x0dd3:16), 1
 	call	VoiceSlot_TableSetup
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Return:
 	ret
 	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl_Target2 (0xEF613F): `ld xhl, SoundEvt_LongPacketHandler_DispatchTbl2`
 	; indexed with stride 4 (`sla wa, 2`)
@@ -975,10 +977,10 @@ ScoopDisp_FlagSetAndDispatch:
 	bit	7, w
 	jrl	z, ScoopDisp_FlagSetAndDispatch_Skip
 	call	VoiceState_DataBlock2_Helper6
-	jp	ScoopDisp_FlagSetAndDispatch_0x17
+	jp	ScoopDisp_FlagSetAndDispatch_Return
 ScoopDisp_FlagSetAndDispatch_Skip:
 	call	ScoopDisp_FlagSetAndDispatch_Helper
-ScoopDisp_FlagSetAndDispatch_0x17:
+ScoopDisp_FlagSetAndDispatch_Return:
 	ret	
 	; Handler dispatch table, 128 B.  Read by DisplayMode_Dispatch_Mode0 (0xEF61F9): `ld xix, ScoopDisp_DispatchTable_Small`
 	; indexed with stride 4 (`sla hl, 2`)
@@ -1023,7 +1025,7 @@ ToneParam_Evt0F_BytecodeHandler:
 	xor	wa, wa
 	ld	a, 137:opc
 	call	UI_PostModeChangeEvent
-	jp	ToneParam_Evt0F_BytecodeHandler_0x17
+	jp	ToneParam_Evt0F_BytecodeHandler_Return
 ToneParam_Evt0F_BytecodeHandler_Return:
 	ret
 	; Entry 1 of DisplayMode_Dispatch_Tbl (a code pointer the table holds).
@@ -1068,12 +1070,12 @@ ToneParam_Evt0F_BytecodeHandler_Skip4:
 	jrl	nz, ToneParam_Evt0F_BytecodeHandler_Skip6
 	cp	bc, 4:i3
 	jrl	z, ToneParam_Evt0F_BytecodeHandler_Skip5
-	jp	ToneParam_Evt0F_BytecodeHandler_0x8D
+	jp	ToneParam_Evt0F_BytecodeHandler_Skip6
 ToneParam_Evt0F_BytecodeHandler_Skip5:
 	and	(0x0dd3:16), 254
 ToneParam_Evt0F_BytecodeHandler_Skip6:
 	call	VoiceSlot_TableSetup
-	call	Timer_ModeHandler_0_0x13
+	call	DisplayMode_Dispatch_Mode1_Helper
 ToneParam_Evt0F_BytecodeHandler_Return2:
 	ret
 
@@ -1258,7 +1260,7 @@ UIDisp_DefaultInputHandler:
 	push	xix
 	push	xiy
 	push	xiz
-	call	UIDisp_DefaultInputHandler_0x20
+	call	UIDisp_DefaultInputHandler_Helper
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -1270,15 +1272,17 @@ UIDisp_DefaultInputHandler:
 	call	Display_UpdateRegion5
 	call	Display_UpdateRegion3
 	ret
+UIDisp_DefaultInputHandler_Helper:
 	or	(0x0f57:16), 1
 	ld	(3923:16), 1
 	ld	(3385:16), w
 	bit	7, w
 	jrl	z, UIDisp_DefaultInputHandler_Skip
-	call	ToneParam_HandlerTable_BC_0x532
-	jp	UIDisp_DefaultInputHandler_0x40
+	call	VoiceState_DataBlock2_Helper4
+	jp	UIDisp_DefaultInputHandler_Return
 UIDisp_DefaultInputHandler_Skip:
-	call	ToneParam_HandlerTable_BC_0x4F5
+	call	VoiceState_DataBlock2_Helper3
+UIDisp_DefaultInputHandler_Return:
 	ret
 
 
@@ -1384,10 +1388,11 @@ PerfMode_ParamHandler_3_Return:
 PerfMode_ParamHandler_3_Entry:
 	bit	7, w
 	jrl	nz, PerfMode_ParamHandler_3_Entry_Skip
-	call	DisplayMode_Handler_3_0x55E
-	jp	PerfMode_ParamHandler_3_Entry_0x12
+	call	PerfMode_ParamHandler_3_Helper
+	jp	PerfMode_ParamHandler_3_Return2
 PerfMode_ParamHandler_3_Entry_Skip:
-	call	DisplayMode_Handler_3_0x5AF
+	call	PerfMode_ParamHandler_3_Helper2
+PerfMode_ParamHandler_3_Return2:
 	ret
 	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_3 (0xEF66CE): `ld xix, PerfMode_EventTable_3`
 	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
@@ -1541,10 +1546,10 @@ PerfMode_ParamHandler_Data:
 	bit	7, w
 	jrl	nz, PerfMode_ParamHandler_Data_Skip
 	call	PerfMode_ParamHandler_Data_Helper
-	jp	PerfMode_ParamHandler_Data_Return
+	jp	PerfMode_ParamHandler_7_Return2
 PerfMode_ParamHandler_Data_Skip:
 	call	PerfMode_ParamHandler_Data_Helper2
-PerfMode_ParamHandler_Data_Return:
+PerfMode_ParamHandler_7_Return2:
 	ret
 	; Handler dispatch table, 128 B.  Read by PerfMode_ParamHandler_7 (0xEF68B2): `ld xix, PerfMode_ParamHandler_7_DispatchTbl`
 	; indexed with stride 4 (`sla hl, 2`), index from `ld hl, bc`
@@ -1638,12 +1643,12 @@ PerfMode_EventTable_7:
 PerfMode_VolumeParam_Process:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 50 of 83 slots byte-identical
 	bit	7, w
-	jrl	nz, PerfMode_VolumeParam_Process_0x6F
+	jrl	nz, PerfMode_VolumeParam_Process_Return
 	ld	a, (3429:16)
 	cp	a, 0:i3
-	jrl	z, PerfMode_VolumeParam_Process_0x6F
+	jrl	z, PerfMode_VolumeParam_Process_Return
 	cp	a, 3:i3
-	jrl	z, PerfMode_VolumeParam_Process_0x6F
+	jrl	z, PerfMode_VolumeParam_Process_Return
 	cp	a, 2:i3
 	jrl	z, PerfMode_VolumeParam_Process_Skip
 	ld	l, (3424:16)
@@ -1683,12 +1688,12 @@ PerfMode_VolumeParam_Process:
 	ld	a, (xhl)
 	ld	(3831:16), a
 	call	PerfMode_VolumeParam_Process_Helper
-	jp	PerfMode_VolumeParam_Process_0x6F
+	jp	PerfMode_VolumeParam_Process_Return
 PerfMode_VolumeParam_Process_Skip:
 	xor	wa, wa
 	ld	a, 169:opc
 	call	SoundCtrl_SendCommand
-PerfMode_VolumeParam_Process_0x6F:
+PerfMode_VolumeParam_Process_Return:
 	ret
 PerfMode_VolumeParam_Process_Helper:
 	ld	xix, 3789
@@ -1778,7 +1783,7 @@ PerfMode_Evt04_VolumeHandler:
 	ldb_d8	a, (0x0ef7)
 	ld	l, 0:opc
 	ld	h, 127:opc
-	call	PerfMode_VoiceAddressTable_0x50
+	call	PerfMode_Evt04_VolumeHandler_Helper
 	stb_d8	(0x0ef7), a
 	ldb_d8	l, (0x0d60)
 	dec	1, l
@@ -1796,13 +1801,13 @@ PerfMode_Evt04_VolumeHandler:
 	ld	w, 127:opc
 	pushw	de
 	call	SysEx_ApplyVoiceParam_49
-	call	PerfMode_VolumeParam_Process_0x70
+	call	PerfMode_VolumeParam_Process_Helper
 	popw	de
 	ld	c, e
 	ld	b, 3:opc
 	ldb_d8	e, (0x0ef7)
 	ld	d, 127:opc
-	call	MidiStream_DispatchData_0x16
+	call	PerfMode_Evt04_VolumeHandler_Helper2
 	call	MidiStream_LoadAllPresets
 	call	Audio_ProcessAllMidiStreams
 	ret
@@ -1836,6 +1841,7 @@ PerfMode_VoiceAddressTable:
 	.long	0x0000faf1
 	.long	0x0000fb0b
 	.long	0x0000fb25
+PerfMode_Evt04_VolumeHandler_Helper:
 	bit 0x07,W
 	jrl nz, .Lc_ef6c1e
 	cp A,H
@@ -1914,7 +1920,7 @@ VoiceParam_MultiDispatch:
 	ld	a, (4339:16)
 	ld l, 0x34:opc
 	ld h, 0x4c:opc
-	call PerfMode_VoiceAddressTable_0x50
+	call PerfMode_Evt04_VolumeHandler_Helper
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1925,7 +1931,7 @@ VoiceParam_Case03:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x7f:opc
-	call PerfMode_VoiceAddressTable_0x50
+	call PerfMode_Evt04_VolumeHandler_Helper
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1936,7 +1942,7 @@ VoiceParam_Case08:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x7f:opc
-	call PerfMode_VoiceAddressTable_0x50
+	call PerfMode_Evt04_VolumeHandler_Helper
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1947,7 +1953,7 @@ VoiceParam_Case0A:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0xff:opc
-	call PerfMode_VoiceAddressTable_0x50
+	call PerfMode_Evt04_VolumeHandler_Helper
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceParam_BitManipHelper
@@ -1958,7 +1964,7 @@ VoiceParam_Case0B:
 	ld	a, (4339:16)
 	ld l, 0x00:opc
 	ld h, 0x0c:opc
-	call PerfMode_VoiceAddressTable_0x50
+	call PerfMode_Evt04_VolumeHandler_Helper
 	ld	(4339:16), a
 	ld	(3571:16), 4
 	call VoiceSlot_ReadParamsWithSaveRestore
@@ -1973,24 +1979,24 @@ VoiceParam_CommonTail:
 
 VoiceSlot_ReadParamsWithSaveRestore:
 	; --- Helper 1: guard on W, parameter setup + calls (44 bytes) ---
-	call VoiceState_DataBlock2_0x10C
+	call ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
 	jrl z, VoiceParam_SaveRestore_Ret
 	xor	a, a
 	call VoiceSlot_SaveState
 	ld	e, (3571:16)
 	xor d, d
-	call VoiceSlot_FinalRetZ_0xB8
+	call Timer_ModeHandler_0_Helper6
 	call VoiceSlot_ReadCurrentParams
 	ld	w, (4339:16)
-	call VoiceSlot_FinalRetZ_0x84
+	call MemConfig_Handler_5_Code_Helper13
 	xor	a, a
 	call VoiceSlot_RestoreState
 VoiceParam_SaveRestore_Ret:
 	ret
 VoiceParam_BitManipHelper:
 	; --- Helper 2: guard on W, bit manipulation + calls (70 bytes) ---
-	call VoiceState_DataBlock2_0x10C
+	call ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
 	jrl z, VoiceParam_BitManip_Ret
 	xor	a, a
@@ -2001,14 +2007,14 @@ VoiceParam_BitManipHelper:
 	rlc	w
 	and a, 0xfe
 	or w, a
-	call VoiceSlot_FinalRetZ_0x84
+	call MemConfig_Handler_5_Code_Helper13
 	ld	e, (3571:16)
 	xor d, d
-	call VoiceSlot_FinalRetZ_0xB8
+	call Timer_ModeHandler_0_Helper6
 	call VoiceSlot_ReadCurrentParams
 	ld	w, (4339:16)
 	and w, 0x7f
-	call VoiceSlot_FinalRetZ_0x84
+	call MemConfig_Handler_5_Code_Helper13
 	xor	a, a
 	call VoiceSlot_RestoreState
 VoiceParam_BitManip_Ret:
@@ -2075,7 +2081,7 @@ UIState_DispatchHandler:
 	call	UIState_DispatchHandler_Helper
 	jp	UIState_CheckValueChanged
 UIState_CallDecHandler:
-	call VoiceSlot_TableSetup_0x56D
+	call VoiceState_DataBlock2_Helper5
 UIState_CheckValueChanged:
 	ld wa, (0x367e:16)
 	cp wa, (0x0ee8:16)
@@ -2686,7 +2692,7 @@ PerfMode_DispatchTable_C:
 PerfMode_Handler_EvtA:
 	bit	7, w
 	jrl	nz, PerfMode_Handler_EvtA_Return
-	call	ScoopDisp_DispatchTable_Extended_0x3E
+	call	DefaultHandler_Ret_Helper
 PerfMode_Handler_EvtA_Return:
 	ret
 PerfMode_Handler_EvtB:
@@ -2875,7 +2881,7 @@ ScoopDisp_DispatchTable_Small_Target11:
 	stb_d8	(0x0df0), a
 	ld	(xiy), 18
 	ld	(0x0d5e:16), 0
-	call	Display_BytecodeBlock_F_0x33F
+	call	ScoopDisp_DispatchTable_Small_Target11_Helper2
 ScoopDisp_DispatchTable_Small_Target11_Return:
 	ret
 DefaultHandler_Ret_Helper:
@@ -2885,7 +2891,7 @@ DefaultHandler_Ret_Helper:
 	res 7, (0x0d54:16)
 	ld (0x0d6a:16), 0x00
 	ld (0x10fa:16), 0x01
-	call ScoopParam_ValueTable_0x1DD
+	call PerfMode_Handler_EvtB_Helper2
 	ld (0x10fa:16), 0x00
 	and (0xe31c:16), 0x6f
 	ld (0x7ea6:16), 0x23
@@ -2897,7 +2903,7 @@ DefaultHandler_Ret_Helper:
 DefaultHandler_Ret_Helper2:
 	ldb_d8	a, (0x0df0)
 	stb_d8	(0x0def), a
-	call	PortConfig_SetupBytecode_0x34
+	call	ScoopDisp_DispatchTable_Small_Target11_Helper
 	ret
 Display_DirtyRegionDispatch:
 	bit 3, (3411:16)
@@ -2932,11 +2938,11 @@ Timer_ModeSelect_Table:
 	.long	Timer_ModeHandler_3
 Timer_ModeHandler_1:
 	; --- Guard/init function (55 bytes) ---
-	call VoiceState_DataBlock2_0x1D8
+	call Timer_ModeHandler_0_Helper7
 	cp	w, 0:i3
 	jrl nz, Timer_GuardCallSetup_Ret
-	call DisplayMode_Handler_3_0x5F
-	call MemConfig_Handler_4_0x15B
+	call Timer_ModeHandler_1_Helper
+	call Timer_ModeHandler_0_Helper2
 	call SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl nz, Timer_GuardCallSetup_Ret
@@ -2945,7 +2951,7 @@ Timer_ModeHandler_1:
 	and	(3927:16), 254
 Timer_GuardCallSetup:
 	call VoiceSlot_TableSetup
-	call Timer_ModeHandler_0_0x13
+	call DisplayMode_Dispatch_Mode1_Helper
 	call Display_UpdateRegion5
 	call Display_UpdateRegion3
 Timer_GuardCallSetup_Ret:
@@ -2953,24 +2959,24 @@ Timer_GuardCallSetup_Ret:
 
 
 Timer_ModeHandler_3:
-	call	VoiceState_DataBlock2_0x1D8
+	call	Timer_ModeHandler_0_Helper7
 	cp	w, 0:i3
 	jrl	nz, Timer_ModeHandler_3_Return
 	cp	(0x0def:16), 18
 	jrl	nz, Timer_ModeHandler_3_Skip
-	call	PortConfig_DataTable_B_0x20
-	jp	Timer_ModeHandler_3_0x3B
+	call	PortConfig_Handler_0_Loop
+	jp	Timer_ModeHandler_3_Return
 Timer_ModeHandler_3_Skip:
-	call	DisplayMode_Handler_3_0x5F
+	call	Timer_ModeHandler_1_Helper
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, Timer_ModeHandler_3_Return
 	call	UIState_UpdateMultiRegions
-	call	MemConfig_Handler_4_0x15B
+	call	Timer_ModeHandler_0_Helper2
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, Timer_ModeHandler_3_Return
-	call	DisplayStr_StyleSectionNames_0x69
+	call	VoiceState_DataBlock2_Helper16
 Timer_ModeHandler_3_Return:
 	ret
 Timer_ModeHandler_0:
@@ -2981,6 +2987,7 @@ Timer_ModeHandler_0:
 	ld	(13964:16), 0
 Timer_ModeHandler_0_Return:
 	ret
+DisplayMode_Dispatch_Mode1_Helper:
 	ld	xiy, 3411
 	bitm	0, (xiy)
 	jrl	z, Timer_ModeHandler_0_Return2
@@ -3005,6 +3012,7 @@ Timer_ModeHandler_0_Entry:
 	call	Display_UpdateRegion4
 Timer_ModeHandler_0_Return2:
 	ret
+VoiceSlot_StatusRet_Helper:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
 	jrl	nz, Timer_ModeHandler_0_Skip2
@@ -3135,43 +3143,48 @@ Timer_ModeHandler_0_Helper:
 	ret
 Timer_ParamLoadAndCompare:
 	ld (0x0dd0:16), 0xff
-	call VoiceState_DataBlock2_0x10C
+	call ToneParam_ModeGuardEntry_Helper4
 	cp W,0xff
 	jrl z, .Lc_ef7a12
 	cp c, 2:i3
 	jrl ugt, .Lc_ef7a12
-	call SysInit_BytecodeBlock_0xC9
+	call Timer_ParamLoadAndCompare_Helper2
 	cp (0x7ea6:16), 0x0f
 	jrl z, .Lc_ef7a1f
 .Lc_ef7a12:
 Timer_ParamLoadAndCompare_Skip:
 	ld W, 0x00:opc
-	call Timer_ParamCompareAlt_0x2A
+	call Timer_ParamLoadAndCompare_Helper
 	bit 5, (0x0d54:16)
 	jrl nz, .Lc_ef7a28
 .Lc_ef7a1f:
+Timer_ParamLoadAndCompare_Join:
 	ld (0x0d55:16), 0xff
-	jp Timer_ParamLoadAndCompare_0x44
+	jp Timer_ParamLoadAndCompare_Return
 .Lc_ef7a28:
 	ld W, 0x00:opc
-	call Timer_ParamCompareAlt_0x2A
+	call Timer_ParamLoadAndCompare_Helper
 	res 5, (0x0d54:16)
-	jp Timer_ParamLoadAndCompare_0x2D
+	jp Timer_ParamLoadAndCompare_Join
+Timer_ParamLoadAndCompare_Return:
 	ret
 Timer_ParamCompareAlt:
 	ld (0x0dd0:16), 0xff
 	ld W, 0x01:opc
-	call Timer_ParamCompareAlt_0x2A
+	call Timer_ParamLoadAndCompare_Helper
 	bit 5, (0x0d54:16)
 	jrl nz, .Lc_ef7a52
+Timer_ParamCompareAlt_Join7:
 	ld (0x0d55:16), 0xff
-	jp Timer_ParamCompareAlt_0x29
+	jp Timer_ParamCompareAlt_Return4
 .Lc_ef7a52:
 	ld W, 0x01:opc
-	call Timer_ParamCompareAlt_0x2A
+	call Timer_ParamLoadAndCompare_Helper
 	res 5, (0x0d54:16)
-	jp Timer_ParamCompareAlt_0x12
+	jp Timer_ParamCompareAlt_Join7
+Timer_ParamCompareAlt_Return4:
 	ret
+Timer_ParamLoadAndCompare_Helper:
 	call	Timer_ParamCompareAlt_Helper7
 	xor	a, a
 	call	VoiceSlot_SaveState
@@ -3479,10 +3492,10 @@ ToneParam_ModeGuardEntry_Join:
 	cp	a, (3415:16)
 	jrl	ugt, ToneParam_ModeGuardEntry_Skip2
 	call	DMA_FlagCheckWithCalls
-	jp	ToneParam_ModeGuardEntry_0x6D
+	jp	ToneParam_ModeGuardEntry_Join2
 ToneParam_ModeGuardEntry_Skip2:
 	call	Timer_ParamCompareAlt_Helper6
-ToneParam_ModeGuardEntry_0x6D:
+ToneParam_ModeGuardEntry_Join2:
 	res	2, (0x0d54:16)
 	call	Display_UpdateRegion3
 ToneParam_ModeGuardEntry_Return:
@@ -3509,7 +3522,7 @@ MemConfig_Handler_5:
 	cp	(3415:16), 48
 	jrl	nz, MemConfig_Handler_5_Code_Skip4
 MemConfig_Handler_5_Code_Loop:
-	call	MemConfig_Handler_5_0xCC
+	call	MemConfig_Handler_5_Helper2
 MemConfig_Handler_5_Code_Entry:
 	or	(0x8cec:16), 1
 	call	VoiceSlot_ReadCurrentParams
@@ -3532,12 +3545,12 @@ MemConfig_Handler_5_Code_Skip4:
 	call	VoiceSlot_FlagCheck
 	cp	a, 48
 	jrl	nz, MemConfig_Handler_5_Code_Loop
-	call	MemConfig_Handler_5_0x1BF
+	call	MemConfig_Handler_5_Helper6
 	jp	MemConfig_Handler_5_Code_Entry
 MemConfig_Handler_5_0x83:
 	cp	(3415:16), 48
 	jrl	z, MemConfig_Handler_5_Skip17
-	call	MemConfig_Handler_5_Code_Helper3
+	call	MemConfig_Handler_5_Helper3
 MemConfig_Handler_5_Code_Entry2:
 	or	(0x8cec:16), 1
 	jp	MemConfig_Handler_5_Code_Return
@@ -3549,28 +3562,28 @@ MemConfig_Handler_5_Skip17:
 	jrl	z, MemConfig_Handler_5_Code_Entry2
 	cp	a, 129
 	jrl	nz, MemConfig_Handler_5_Skip18
-	call	MemConfig_Handler_5_Code_Helper3
+	call	MemConfig_Handler_5_Helper3
 	jp	MemConfig_Handler_5_Code_Entry2
 MemConfig_Handler_5_Skip18:
-	call	MemConfig_Handler_5_Code_Helper3
+	call	MemConfig_Handler_5_Helper3
 	call	VoiceSlot_FlagCheck
 	cp	a, 48
 	jrl	z, MemConfig_Handler_5_Code_Entry2
-	call	MemConfig_Handler_5_0x1BF
+	call	MemConfig_Handler_5_Helper6
 	jp	MemConfig_Handler_5_Code_Entry2
-MemConfig_Handler_5_0xCC:
+MemConfig_Handler_5_Helper2:
 	cp	(3572:16), 144
 	jrl	nz, MemConfig_Handler_5_Code_Skip7
-	call	MemConfig_Handler_5_0xEE
+	call	MemConfig_Handler_5_Helper4
 	jp	MemConfig_Handler_5_Code_Return
 MemConfig_Handler_5_Code_Skip7:
 	call	ToneParam_Evt09_BytecodeHandler_Sub
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_Code_Helper3:
+MemConfig_Handler_5_Helper3:
 	ld	w, 1:opc
 	call	VoiceSlot_RetZ
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_0xEE:
+MemConfig_Handler_5_Helper4:
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ld	de, 4:i3
@@ -3581,12 +3594,12 @@ MemConfig_Handler_5_0xEE:
 	ld	(3576:16), a
 	xor	a, a
 	call	VoiceSlot_RestoreState
-	call	MemConfig_Handler_5_0x198
+	call	MemConfig_Handler_5_Helper5
 	ld	c, (3576:16)
 	xor	b, b
 	cp	bc, 0:i3
 	jrl	z, MemConfig_Handler_5_Skip
-MemConfig_Handler_5_0x11F:
+MemConfig_Handler_5_Join:
 	pushw	bc
 	call	VoiceSlot_ReadCurrentParams
 	popw	bc
@@ -3599,16 +3612,16 @@ MemConfig_Handler_5_0x11F:
 	cp	b, 23
 	jrl	z, MemConfig_Handler_5_Skip20
 	popw	bc
-	jp	MemConfig_Handler_5_0x191
+	jp	MemConfig_Handler_5_Join2
 MemConfig_Handler_5_Skip20:
 	pushdi_w	(0x0d58)
 	call	VoiceSlot_LoadAndDispatch
 	popw_dd16 0x58, 0x0d	; popw (0x0d58)
 	popw	bc
-	jp	MemConfig_Handler_5_0x11F
+	jp	MemConfig_Handler_5_Join
 MemConfig_Handler_5_Skip21:
 	pushw	bc
-	call	MemConfig_Handler_5_Code_Helper3
+	call	MemConfig_Handler_5_Helper3
 	popw	bc
 	djnz16	bc, -60
 MemConfig_Handler_5_Skip:
@@ -3617,7 +3630,7 @@ MemConfig_Handler_5_Skip:
 	jrl	z, MemConfig_Handler_5_Skip22
 	cp	a, 48
 	jrl	nz, MemConfig_Handler_5_Code_Return
-	call	MemConfig_Handler_5_0x1BF
+	call	MemConfig_Handler_5_Helper6
 	jp	MemConfig_Handler_5_Code_Return
 MemConfig_Handler_5_Skip22:
 	cp	a, 48
@@ -3625,14 +3638,14 @@ MemConfig_Handler_5_Skip22:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	nz, MemConfig_Handler_5_Code_Return
-	call	MemConfig_Handler_5_Code_Helper3
-	call	MemConfig_Handler_5_0x1BF
+	call	MemConfig_Handler_5_Helper3
+	call	MemConfig_Handler_5_Helper6
 	jp	MemConfig_Handler_5_Code_Return
-MemConfig_Handler_5_0x191:
+MemConfig_Handler_5_Join2:
 	add	xsp, 2
 MemConfig_Handler_5_Code_Return:
 	ret
-MemConfig_Handler_5_0x198:
+MemConfig_Handler_5_Helper5:
 	call	VoiceSlot_FlagCheck
 	ld	(3523:16), a
 MemConfig_Handler_5_Loop3:
@@ -3647,17 +3660,17 @@ MemConfig_Handler_5_Loop3:
 	jrl	z, MemConfig_Handler_5_Loop3
 MemConfig_Handler_5_Return2:
 	ret
-MemConfig_Handler_5_0x1BF:
+MemConfig_Handler_5_Helper6:
 	xor	a, a
 	call	VoiceSlot_SaveState
 	ld	xiy, 3577
 	cp	(3415:16), 48
 	jrl	nz, MemConfig_Handler_5_Skip23
 	ld	(xiy), 2
-	jp	MemConfig_Handler_5_0x1DC
+	jp	MemConfig_Handler_5_Loop4
 MemConfig_Handler_5_Skip23:
 	ld	(xiy), 1
-MemConfig_Handler_5_0x1DC:
+MemConfig_Handler_5_Loop4:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
 	jrl	z, MemConfig_Handler_5_Code_Join2
@@ -3665,19 +3678,19 @@ MemConfig_Handler_5_0x1DC:
 	jrl	z, MemConfig_Handler_5_Code_Join2
 	cp	(3577:16), 1
 	jrl	z, MemConfig_Handler_5_Code_Skip12
-	call	MemConfig_Handler_5_0x286
+	call	MemConfig_Handler_5_Helper8
 	cp	w, 255
-	jrl	nz, MemConfig_Handler_5_0x1DC
+	jrl	nz, MemConfig_Handler_5_Loop4
 MemConfig_Handler_5_Code_Join2:
 	xor	a, a
 	call	VoiceSlot_RestoreState
-	jp	MemConfig_Handler_5_0x2F0
+	jp	MemConfig_Handler_5_Return3
 MemConfig_Handler_5_Code_Skip12:
-	call	MemConfig_Handler_5_0x216
+	call	MemConfig_Handler_5_Helper7
 	cp	w, 255
-	jrl	nz, MemConfig_Handler_5_0x1DC
+	jrl	nz, MemConfig_Handler_5_Loop4
 	jp	MemConfig_Handler_5_Code_Join2
-MemConfig_Handler_5_0x216:
+MemConfig_Handler_5_Helper7:
 	cp	a, 129
 	jrl	z, MemConfig_Handler_5_Code_Join3
 	bit	7, a
@@ -3693,31 +3706,31 @@ MemConfig_Handler_5_0x216:
 	jrl	z, MemConfig_Handler_5_Skip6
 MemConfig_Handler_5_Code_Join3:
 	call	VoiceSlot_LoadAndDispatch
-	jp	MemConfig_Handler_5_0x2F0
+	jp	MemConfig_Handler_5_Return3
 MemConfig_Handler_5_Skip3:
 	xor	w, w
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	jp	MemConfig_Handler_5_Code_Join3
 MemConfig_Handler_5_Skip4:
 	ld	w, 47:opc
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	jp	MemConfig_Handler_5_Code_Join3
 MemConfig_Handler_5_Skip5:
 	ld	w, 95:opc
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	jp	MemConfig_Handler_5_Code_Join3
 MemConfig_Handler_5_Skip6:
 	ld	(3577:16), 2
 	ld	a, 1:opc
 	call	VoiceSlot_SaveState
 	ld	w, 48:opc
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
 	call	VoiceSlot_CompareAndBranch
-	call	MemConfig_Handler_5_Code_Helper3
+	call	MemConfig_Handler_5_Helper3
 	jp	MemConfig_Handler_5_Code_Join3
-MemConfig_Handler_5_0x286:
+MemConfig_Handler_5_Helper8:
 	cp	a, 129
 	jrl	z, MemConfig_Handler_5_Code_Join4
 	bit	7, a
@@ -3733,31 +3746,31 @@ MemConfig_Handler_5_0x286:
 	jrl	z, MemConfig_Handler_5_Skip11
 MemConfig_Handler_5_Code_Join4:
 	call	VoiceSlot_LoadAndDispatch
-	jp	MemConfig_Handler_5_0x2F0
+	jp	MemConfig_Handler_5_Return3
 MemConfig_Handler_5_Skip8:
 	ld	w, 48:opc
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	jp	MemConfig_Handler_5_Code_Join4
 MemConfig_Handler_5_Skip9:
 	ld	w, 47:opc
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	jp	MemConfig_Handler_5_Code_Join4
 MemConfig_Handler_5_Skip10:
 	ld	w, 95:opc
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	jp	MemConfig_Handler_5_Code_Join4
 MemConfig_Handler_5_Skip11:
 	ld	(3577:16), 1
 	call	MemConfig_Handler_5_Code_Helper12
 	xor	w, w
-	call	MemConfig_Handler_5_0x2E6
+	call	MemConfig_Handler_5_Helper9
 	jp	MemConfig_Handler_5_Code_Join4
-MemConfig_Handler_5_0x2E6:
+MemConfig_Handler_5_Helper9:
 	pushw	wa
 	call	VoiceSlot_FinalRetZ
 	popw	wa
 	call	MemConfig_Handler_5_Code_Helper13
-MemConfig_Handler_5_0x2F0:
+MemConfig_Handler_5_Return3:
 	ret
 ToneParam_ShortCallHandler:
 	call	ToneParam_Evt09_BytecodeHandler
@@ -3767,10 +3780,10 @@ ToneParam_Evt09_BytecodeHandler:
 	bit 0x07,W
 	jrl nz, .Lc_ef80e6
 ToneParam_Evt09_BytecodeHandler_Sub:
-	call ToneParam_HandlerTable_BC_0x10
+	call ToneParam_Evt09_BytecodeHandler_Helper
 	cp w, 1:i3
 	jrl z, .Lc_ef80bb
-	call VoiceState_DataBlock2_0x20B
+	call ToneParam_Evt09_BytecodeHandler_Helper2
 	cp w, 1:i3
 	jrl z, .Lc_ef80bb
 	call VoiceCtrl_BytecodeHandler
@@ -3781,9 +3794,10 @@ ToneParam_Evt09_BytecodeHandler_Loop2:
 	call VoiceSlot_FlagCheck
 	cp a, (0x0d57:16)
 	jrl nz, .Lc_ef80e6
-	call ToneParam_HandlerTable_BC_0x4DC
+	call VoiceState_DataBlock2_Helper2
 	ld (0x7ea6:16), 0xff
 .Lc_ef80bb:
+ToneParam_Evt09_BytecodeHandler_Skip2:
 	or (0x0dd3:16), 0x01
 	ld l, (0x0d65:16)
 	and HL,0x0003
@@ -3793,12 +3807,12 @@ ToneParam_Evt09_BytecodeHandler_Loop2:
 	ld	xhl, (xix+hl)
 	pop XIX
 	call (XHL)
-	call PortConfig_Handler_0_0xD7
+	call PortConfig_Handler_0_Helper2
 	res 2, (0x0d54:16)
 	or (0x8cec:16), 0x01
 .Lc_ef80e6:
 ToneParam_Evt09_BytecodeHandler_Loop3:
-	jp ToneParam_Evt09_BytecodeHandler_0xCF
+	jp ToneParam_Evt09_BytecodeHandler_Return
 .Lc_ef80ea:
 ToneParam_Evt09_BytecodeHandler_Skip3:
 	call VoiceSlot_FlagCheck
@@ -3812,7 +3826,7 @@ ToneParam_Evt09_BytecodeHandler_Skip3:
 	ld (0x0dca:16), b
 	ld A, 0x01:opc
 	call VoiceSlot_SaveState
-	call ToneParam_HandlerTable_BC_0x4DC
+	call VoiceState_DataBlock2_Helper2
 	ld (0x7ea6:16), 0xff
 .Lc_ef8115:
 ToneParam_Evt09_BytecodeHandler_Loop:
@@ -3830,12 +3844,14 @@ ToneParam_Evt09_BytecodeHandler_Loop:
 	call VoiceSlot_RestoreState
 	ld w, (0x0dcc:16)
 	call VoiceSlot_RetZ
+ToneParam_Evt09_BytecodeHandler_Join2:
 	ld A, 0x01:opc
 	call VoiceSlot_RestoreState
-	jp ToneParam_Evt09_BytecodeHandler_0x36
+	jp ToneParam_Evt09_BytecodeHandler_Skip2
 .Lc_ef814a:
 	add XSP,0x00000002
-	jp ToneParam_Evt09_BytecodeHandler_0xBB
+	jp ToneParam_Evt09_BytecodeHandler_Join2
+ToneParam_Evt09_BytecodeHandler_Return:
 	ret
 	; Pointer table, 16 B.  Read by ToneParam_Evt09_BytecodeHandler (0xEF8085): `ld XIX,ToneParam_HandlerTable_BC`
 	; indexed with stride 1 (`sla HL, 0x02`), index from `ld l, (0x0d65:16)`
@@ -3844,72 +3860,78 @@ ToneParam_HandlerTable_BC:
 	.long	VoiceSlot_TableSetup
 	.long	VoiceSlot_TableSetup
 	.long	DefaultHandler_Ret
+ToneParam_Evt09_BytecodeHandler_Helper:
 	cp (0x0d65:16), 0x03
 	jrl z, .Lc_ef8173
 .Lc_ef816d:
+ToneParam_HandlerTable_BC_Join:
 	ld W, 0x00:opc
-	jp ToneParam_HandlerTable_BC_0x9E
+	jp ToneParam_HandlerTable_BC_Return
 .Lc_ef8173:
-	call ToneParam_HandlerTable_BC_0x269
+	call ToneParam_HandlerTable_BC_Helper5
 	cp W,0xff
 	jrl z, .Lc_ef816d
-	call ToneParam_HandlerTable_BC_0x2D4
+	call VoiceState_DataBlock2_Helper
 	cp w, 0:i3
 	jrl nz, .Lc_ef8192
 	ld W, 0x68:opc
 	call MIDI_SendSysExFromW
 	ld W, 0x01:opc
-	jp ToneParam_HandlerTable_BC_0x9E
+	jp ToneParam_HandlerTable_BC_Return
 .Lc_ef8192:
 	ld a, (0x0e3f:16)
 	ld (0x0e41:16), a
-	call ToneParam_HandlerTable_BC_0x1A2
+	call ToneParam_HandlerTable_BC_Helper3
 	ld a, (0x0e3f:16)
 	ld (0x0e40:16), a
 	cp a, (0x0e41:16)
 	jrl nz, .Lc_ef81b1
-	jp ToneParam_HandlerTable_BC_0x18
+	jp ToneParam_HandlerTable_BC_Join
 .Lc_ef81b1:
 	ld wa, (0x0d5a:16)
 	cp wa, (0x0d6b:16)
 	jrl c, .Lc_ef81dd
-	call ToneParam_HandlerTable_BC_0x4DC
+	call VoiceState_DataBlock2_Helper2
 	ld a, (0x0e40:16)
 	cp a, (0x0e41:16)
 	jrl c, .Lc_ef81d3
-	call ToneParam_HandlerTable_BC_0x2EB
-	jp ToneParam_HandlerTable_BC_0x82
+	call ToneParam_HandlerTable_BC_Helper6
+	jp ToneParam_HandlerTable_BC_Join2
 .Lc_ef81d3:
-	call ToneParam_HandlerTable_BC_0x357
+	call ToneParam_HandlerTable_BC_Helper7
+ToneParam_HandlerTable_BC_Join2:
 	ld W, 0x01:opc
-	jp ToneParam_HandlerTable_BC_0x9E
+	jp ToneParam_HandlerTable_BC_Return
 .Lc_ef81dd:
 	and (0xe31c:16), 0x6f
 	ld (0x7ea6:16), 0x19
 	xor WA,WA
 	ld A, 0xee:opc
 	call SoundCtrl_SendCommand
-	jp ToneParam_HandlerTable_BC_0x82
+	jp ToneParam_HandlerTable_BC_Join2
+ToneParam_HandlerTable_BC_Return:
 	ret
 VoiceCtrl_ParamSetupBytecode_Helper:
 	ldb_d8	a, (0x0d65)
 	cp	a, 3:i3
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Helper_Skip
 	ld	w, 0:opc
-	jp	ToneParam_HandlerTable_BC_0xD3
+	jp	ToneParam_HandlerTable_BC_Return2
 VoiceCtrl_ParamSetupBytecode_Helper_Skip:
 	ldb_d8	a, (0x3686)
 	ldb_d8	d, (0x0e47)
 	call	Rhythm_DispatchNote_Tramp
 	stb_d8	(0x0e40), a
-	call	ToneParam_HandlerTable_BC_0x1CB
+	call	ToneParam_HandlerTable_BC_Helper4
 	cp	w, 0:i3
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper_Skip2
-	call	ToneParam_HandlerTable_BC_0xD4
-	jp	ToneParam_HandlerTable_BC_0xD3
+	call	ToneParam_HandlerTable_BC_Helper
+	jp	ToneParam_HandlerTable_BC_Return2
 VoiceCtrl_ParamSetupBytecode_Helper_Skip2:
-	call	ToneParam_HandlerTable_BC_0x148
+	call	ToneParam_HandlerTable_BC_Helper2
+ToneParam_HandlerTable_BC_Return2:
 	ret
+ToneParam_HandlerTable_BC_Helper:
 	ldb_d8	a, (0x0e3f)
 	stb_d8	(0x0e41), a
 	ldb_d8	a, (0x0e40)
@@ -3919,7 +3941,7 @@ VoiceCtrl_ParamSetupBytecode_Helper_Skip2:
 	ld	w, 6:opc
 	ld	xiy, 0x0d8f
 	call	DisplayMode_Handler_3_Helper16
-	jp	ToneParam_HandlerTable_BC_0x145
+	jp	ToneParam_HandlerTable_BC_Join4
 VoiceCtrl_ParamSetupBytecode_Helper_Skip3:
 	ldw_d16	wa, (0x0d5a)
 	cp	wa, (0x0d6b:16)
@@ -3928,31 +3950,34 @@ VoiceCtrl_ParamSetupBytecode_Helper_Skip3:
 	ldb_d8	a, (0x0e40)
 	cp	a, (0x0e41:16)
 	jrl	c, VoiceCtrl_ParamSetupBytecode_Helper_Skip4
-	call	ToneParam_HandlerTable_BC_0x2EB
-	jp	ToneParam_HandlerTable_BC_0x120
+	call	ToneParam_HandlerTable_BC_Helper6
+	jp	ToneParam_HandlerTable_BC_Join3
 VoiceCtrl_ParamSetupBytecode_Helper_Skip4:
-	call	ToneParam_HandlerTable_BC_0x357
+	call	ToneParam_HandlerTable_BC_Helper7
+ToneParam_HandlerTable_BC_Join3:
 	ld	w, 6:opc
 	ld	xiy, 0x0d8f
 	call	DisplayMode_Handler_3_Helper16
-	jp	ToneParam_HandlerTable_BC_0x145
+	jp	ToneParam_HandlerTable_BC_Join4
 VoiceCtrl_ParamSetupBytecode_Helper_Skip5:
 	and	(0xe31c:16), 111
 	ld	(0x7ea6:16), 25
 	xor	wa, wa
 	ld	a, 238:opc
 	call	SoundCtrl_SendCommand
-	jp	ToneParam_HandlerTable_BC_0x145
+	jp	ToneParam_HandlerTable_BC_Join4
+ToneParam_HandlerTable_BC_Join4:
 	ld	w, 1:opc
 	ret
-	call	ToneParam_HandlerTable_BC_0x1A2
+ToneParam_HandlerTable_BC_Helper2:
+	call	ToneParam_HandlerTable_BC_Helper3
 	ldb_d8	a, (0x0e3f)
 	stb_d8	(0x0e41), a
 	ldb_d8	a, (0x0e40)
 	cp	a, (0x0e41:16)
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper_Skip6
 	ld	w, 0:opc
-	jp	ToneParam_HandlerTable_BC_0x1A1
+	jp	ToneParam_HandlerTable_BC_Return3
 VoiceCtrl_ParamSetupBytecode_Helper_Skip6:
 	ldw_d16	wa, (0x0d5a)
 	cp	wa, (0x0d6b:16)
@@ -3960,12 +3985,13 @@ VoiceCtrl_ParamSetupBytecode_Helper_Skip6:
 	ldb_d8	a, (0x0e40)
 	cp	a, (0x0e41:16)
 	jrl	c, VoiceCtrl_ParamSetupBytecode_Helper_Skip7
-	call	ToneParam_HandlerTable_BC_0x2EB
-	jp	ToneParam_HandlerTable_BC_0x187
+	call	ToneParam_HandlerTable_BC_Helper6
+	jp	ToneParam_HandlerTable_BC_Join5
 VoiceCtrl_ParamSetupBytecode_Helper_Skip7:
-	call	ToneParam_HandlerTable_BC_0x357
+	call	ToneParam_HandlerTable_BC_Helper7
+ToneParam_HandlerTable_BC_Join5:
 	ld	w, 0:opc
-	jp	ToneParam_HandlerTable_BC_0x1A1
+	jp	ToneParam_HandlerTable_BC_Return3
 VoiceCtrl_ParamSetupBytecode_Helper_Skip8:
 	and	(0xe31c:16), 111
 	ld	(0x7ea6:16), 25
@@ -3973,22 +3999,26 @@ VoiceCtrl_ParamSetupBytecode_Helper_Skip8:
 	ld	a, 238:opc
 	call	SoundCtrl_SendCommand
 	ld	w, 1:opc
+ToneParam_HandlerTable_BC_Return3:
 	ret
+ToneParam_HandlerTable_BC_Helper3:
 	ld A, 0x03:opc
 	call VoiceSlot_SaveState
 .Lc_ef82fd:
-	call VoiceSlot_CompareAndBranch_0x7
+	call Timer_ParamCompareAlt_Helper5
 	cp W,0xff
 	jrl z, .Lc_ef8314
-	call ToneParam_HandlerTable_BC_0x269
+	call ToneParam_HandlerTable_BC_Helper5
 	cp w, 0:i3
 	jrl nz, .Lc_ef82fd
-	jp ToneParam_HandlerTable_BC_0x1C4
+	jp ToneParam_HandlerTable_BC_Join6
 .Lc_ef8314:
 	ld (0x0e3f:16), 0x04
+ToneParam_HandlerTable_BC_Join6:
 	ld A, 0x03:opc
 	call VoiceSlot_RestoreState
 	ret
+ToneParam_HandlerTable_BC_Helper4:
 	ld	a, 3:opc
 	call	VoiceSlot_SaveState
 VoiceCtrl_ParamSetupBytecode_Helper_Loop:
@@ -4005,24 +4035,25 @@ VoiceCtrl_ParamSetupBytecode_Helper_Loop2:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Helper_Skip11
-	call	ToneParam_HandlerTable_BC_0x269
+	call	ToneParam_HandlerTable_BC_Helper5
 	cp	w, 0:i3
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper_Loop2
 	ld	a, 4:opc
 	call	VoiceSlot_SaveState
 	ldb_d8	a, (0x0e3f)
 	stb_d8	(0x0e42), a
+ToneParam_HandlerTable_BC_Loop:
 	call	Timer_ParamCompareAlt_Helper5
 	cp	w, 255
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Helper_Skip9
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Helper_Loop3
-	call	ToneParam_HandlerTable_BC_0x269
+	call	ToneParam_HandlerTable_BC_Helper5
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_0x210
+	jrl	nz, ToneParam_HandlerTable_BC_Loop
 	call	VoiceState_DataBlock2_Helper2
-	jp	ToneParam_HandlerTable_BC_0x210
+	jp	ToneParam_HandlerTable_BC_Loop
 VoiceCtrl_ParamSetupBytecode_Helper_Loop3:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
@@ -4031,19 +4062,21 @@ VoiceCtrl_ParamSetupBytecode_Helper_Loop3:
 	cp	a, 129
 	jrl	z, VoiceCtrl_ParamSetupBytecode_Helper_Skip10
 VoiceCtrl_ParamSetupBytecode_Helper_Skip9:
-	call	ToneParam_HandlerTable_BC_0x269
+	call	ToneParam_HandlerTable_BC_Helper5
 	cp	w, 0:i3
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper_Loop3
 VoiceCtrl_ParamSetupBytecode_Helper_Skip10:
 	ldb_d8	a, (0x0e42)
 	stb_d8	(0x0e3f), a
 	ld	w, 0:opc
-	jp	ToneParam_HandlerTable_BC_0x268
+	jp	ToneParam_HandlerTable_BC_Return4
 VoiceCtrl_ParamSetupBytecode_Helper_Skip11:
 	ld	a, 3:opc
 	call	VoiceSlot_RestoreState
 	ld	w, 255:opc
+ToneParam_HandlerTable_BC_Return4:
 	ret
+ToneParam_HandlerTable_BC_Helper5:
 	push	xiy
 	ld	a, 2:opc
 	call	VoiceSlot_SaveState
@@ -4052,7 +4085,7 @@ VoiceCtrl_ParamSetupBytecode_Helper_Skip11:
 	and	a, 240
 	cp	a, 192
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper_Skip13
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	cp	a, 72
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper_Skip13
 	call	VoiceSlot_FinalRetZ
@@ -4076,9 +4109,10 @@ VoiceCtrl_ParamSetupBytecode_Helper_Skip12:
 	call	Rhythm_DispatchNote_Tramp
 	stb_d8	(0x0e3f), a
 	ld	w, 0:opc
-	jp	ToneParam_HandlerTable_BC_0x2CC
+	jp	ToneParam_HandlerTable_BC_Join7
 VoiceCtrl_ParamSetupBytecode_Helper_Skip13:
 	ld	w, 255:opc
+ToneParam_HandlerTable_BC_Join7:
 	ld	a, 2:opc
 	call	VoiceSlot_RestoreState
 	pop	xiy
@@ -4095,6 +4129,7 @@ VoiceState_DataBlock2_Helper:
 .Lc_ef843e:
 	popw de
 	ret
+ToneParam_HandlerTable_BC_Helper6:
 	push XWA
 	push XHL
 	push XBC
@@ -4104,6 +4139,7 @@ VoiceState_DataBlock2_Helper:
 	push XIZ
 	ld A, 0x01:opc
 	call VoiceSlot_SaveState
+ToneParam_HandlerTable_BC_Join8:
 	xor A,A
 	ld (0x0e43:16), a
 .Lc_ef8453:
@@ -4121,9 +4157,9 @@ VoiceState_DataBlock2_Helper:
 	ld c, (0x0e40:16)
 	sub c, (0x0e41:16)
 .Lc_ef8480:
-	call SysInit_BytecodeBlock_0xFF
+	call MemConfig_Handler_5_Code_Helper12
 	djnz16 bc, .Lc_ef8480
-	jp ToneParam_HandlerTable_BC_0x2F8
+	jp ToneParam_HandlerTable_BC_Join8
 .Lc_ef848b:
 	and A,0xf0
 	cp A,0xc0
@@ -4142,6 +4178,7 @@ VoiceState_DataBlock2_Helper:
 	pop XHL
 	pop XWA
 	ret
+ToneParam_HandlerTable_BC_Helper7:
 	push XWA
 	push XHL
 	push XBC
@@ -4151,9 +4188,11 @@ VoiceState_DataBlock2_Helper:
 	push XIZ
 	ld A, 0x01:opc
 	call VoiceSlot_SaveState
+ToneParam_HandlerTable_BC_Join9:
 	xor A,A
 	ld (0x0e43:16), a
 .Lc_ef84bf:
+ToneParam_HandlerTable_BC_Join10:
 	call VoiceSlot_FlagCheck
 	cp A,0x82
 	jrl z, .Lc_ef8549
@@ -4168,10 +4207,10 @@ VoiceState_DataBlock2_Helper:
 	call VoiceSlot_DispatchRet
 	cp W,0xff
 	jrl z, .Lc_ef8549
-	jp ToneParam_HandlerTable_BC_0x36A
+	jp ToneParam_HandlerTable_BC_Join10
 .Lc_ef84f0:
 	inc 1, (0x0e43:16)
-	call MemConfig_Handler_5_0xE4
+	call MemConfig_Handler_5_Helper3
 	ld a, (0x0e41:16)
 	sub a, (0x0e40:16)
 	cp a, (0x0e43:16)
@@ -4179,6 +4218,7 @@ VoiceState_DataBlock2_Helper:
 	xor B,B
 	ld c, (0x0e40:16)
 .Lc_ef850d:
+ToneParam_HandlerTable_BC_Join11:
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x82
 	jrl z, .Lc_ef8549
@@ -4192,7 +4232,7 @@ VoiceState_DataBlock2_Helper:
 	cp W,0xff
 	jrl z, .Lc_ef8549
 	djnz16 bc, .Lc_ef850d
-	jp ToneParam_HandlerTable_BC_0x364
+	jp ToneParam_HandlerTable_BC_Join9
 .Lc_ef8536:
 	and A,0xf0
 	cp A,0xc0
@@ -4200,7 +4240,7 @@ VoiceState_DataBlock2_Helper:
 	pushw bc
 	call VoiceSlot_DispatchRet
 	popw bc
-	jp ToneParam_HandlerTable_BC_0x3B8
+	jp ToneParam_HandlerTable_BC_Join11
 .Lc_ef8549:
 	ld A, 0x01:opc
 	call VoiceSlot_RestoreState
@@ -4220,6 +4260,7 @@ PerfMode_Handler_EvtB_Helper2_Helper:
 	ld	(0x0d6b:16), wa
 	cp	(0x0d65:16), 3
 	jrl	nz, VoiceState_DataBlock2_Helper_Skip3
+ToneParam_HandlerTable_BC_Loop2:
 	ldb_d8	a, (0x0eee)
 	inc	1, a
 	cp	a, 16
@@ -4231,12 +4272,12 @@ PerfMode_Handler_EvtB_Helper2_Helper:
 	ld	xix, 0xf1a0
 	cp	(xix+iz), 0x10	; cp (XIX+IZ),0x10
 	pop	xix
-	jrl	z, ToneParam_HandlerTable_BC_0x41C
+	jrl	z, ToneParam_HandlerTable_BC_Loop2
 	xor	wa, wa
 	ld	(0x0e44:16), wa
 	call	VoiceState_DataBlock2_Helper7
 	cp	w, 0:i3
-	jrl	nz, ToneParam_HandlerTable_BC_0x41C
+	jrl	nz, ToneParam_HandlerTable_BC_Loop2
 	xor	wa, wa
 	ldb_d8	a, (0x0eee)
 	dec	1, a
@@ -4274,10 +4315,10 @@ VoiceState_DataBlock2_Helper_Skip:
 	jrl	z, VoiceState_DataBlock2_Helper_Skip2
 	ldw_d16	wa, (0x0e44)
 	cp	wa, (0x0d6b:16)
-	jrl	c, ToneParam_HandlerTable_BC_0x41C
+	jrl	c, ToneParam_HandlerTable_BC_Loop2
 	dec	1, wa
 	ld	(0x0d6b:16), wa
-	jp	ToneParam_HandlerTable_BC_0x41C
+	jp	ToneParam_HandlerTable_BC_Loop2
 VoiceState_DataBlock2_Helper_Skip2:
 	ldw	(0x0d6b:16), 65535
 VoiceState_DataBlock2_Helper_Skip3:
@@ -4326,17 +4367,19 @@ VoiceState_DataBlock2_Helper4:
 	ld (0x0dcd:16), hl
 	ld (0x0dce:16), 0x00
 	ld (0x7ea6:16), 0xff
-	call DisplayMode_Handler_3_0x30C
+	call DisplayMode_Handler_3_Sub
 	res 2, (0x0d54:16)
 	ld (0x0d55:16), 0xff
 .Lc_ef86bb:
 	ret
+PortConfig_Handler_1_Helper:
 	call Display_UpdateRegion0
 	call Display_UpdateRegion1
 	call Display_UpdateRegion4
 	call Display_UpdateRegion3
 	call Display_UpdateRegion2
 	ret
+VoiceSlot_TableSetup_Helper:
 	cp c, 0:i3
 	jrl z, .Lc_ef870f
 .Lc_ef86d6:
@@ -4348,10 +4391,11 @@ VoiceState_DataBlock2_Helper4:
 	jrl z, .Lc_ef8715
 	cp (0x0dcf:16), 0x00
 	jrl z, .Lc_ef86f7
-	call VoiceSlot_CompareAndBranch_0x7
-	jp ToneParam_HandlerTable_BC_0x5A6
+	call Timer_ParamCompareAlt_Helper5
+	jp ToneParam_HandlerTable_BC_Join12
 .Lc_ef86f7:
 	call VoiceSlot_DispatchRet
+ToneParam_HandlerTable_BC_Join12:
 	cp W,0xff
 	jrl z, .Lc_ef8717
 	call VoiceSlot_ReadCurrentParams
@@ -4361,17 +4405,18 @@ VoiceState_DataBlock2_Helper4:
 	djnz16 bc, .Lc_ef86d6
 .Lc_ef870f:
 	ld W, 0x00:opc
-	jp ToneParam_HandlerTable_BC_0x5C3
+	jp ToneParam_HandlerTable_BC_Return5
 .Lc_ef8715:
 	ld W, 0x00:opc
 .Lc_ef8717:
 	popw bc
+ToneParam_HandlerTable_BC_Return5:
 	ret
 ToneEvt_Handler_Mode9:
 	bit	7, w
 	jrl	nz, ToneEvt_Handler_Mode9_Return
 	call	ToneEvt_Handler_ModeSingle
-	call	DisplayMode_Handler_3_0x3F
+	call	ToneEvt_Handler_Mode9_Helper
 ToneEvt_Handler_Mode9_Return:
 	ret
 ToneEvt_Handler_ModeSingle:
@@ -4400,11 +4445,11 @@ PeriphReg_StoreAndUpdate:
 	ld	(3536:16), a
 	cp	a, (3537:16)
 	jrl nz, PeriphReg_LoadWordAndCall
-	call ToneParam_HandlerTable_BC_0x4DC
+	call VoiceState_DataBlock2_Helper2
 PeriphReg_LoadWordAndCall:
 	ld	w, (3538:16)
 	ld xiy, 0x00000d8f
-	call SysInit_BytecodeBlock_0x486
+	call DisplayMode_Handler_3_Helper16
 	call Display_ModeHandler
 PeriphReg_Ret:
 	ret
@@ -4414,7 +4459,7 @@ Display_ModeHandler:
 	xor	a, a
 	ld	(3538:16), a
 	ld	(3413:16), 255
-	call VoiceState_DataBlock2_0x10C
+	call ToneParam_ModeGuardEntry_Helper4
 	cp w, 0:i3
 	jrl	nz, DisplayMode_Handler_3_Skip
 	ld	l, (3429:16)
@@ -4444,7 +4489,7 @@ DisplayMode_Handler_1:
 	ret
 DisplayMode_Handler_2:
 	ld	(3567:16), 8
-	call	DisplayStr_TempoString_0x32
+	call	DisplayMode_Handler_2_Helper
 	ret
 DisplayMode_Handler_3:
 	ld	(3567:16), 15
@@ -4462,11 +4507,13 @@ DisplayMode_Handler_3_Skip:
 	cp a, (0x0d57:16)
 	jrl ugt, .Lc_ef8807
 	call DMA_FlagCheckWithCalls
-	jp DisplayMode_Handler_3_0x3A
+	jp DisplayMode_Handler_3_Join
 .Lc_ef8807:
-	call DisplayMode_Handler_3_0x775
+	call Timer_ParamCompareAlt_Helper6
+DisplayMode_Handler_3_Join:
 	res	2, (0x0d54:16)
 	ret
+ToneEvt_Handler_Mode9_Helper:
 	push XIY
 	ld (XIY),0x54
 	ldw (XIY+0x01), 0x4152
@@ -4479,6 +4526,7 @@ DisplayMode_Handler_3_Skip:
 	ldw	(xiy+3), 8224
 	pop	xiy
 	ret
+Timer_ModeHandler_1_Helper:
 	or	(0x0dd3:16), 1
 	call	VoiceSlot_ReadCurrentParams
 	ld	w, a
@@ -4511,11 +4559,11 @@ DisplayMode_Handler_3_Next:
 	cp	(3413:16), 255
 	jrl	nz, DisplayMode_Handler_3_Next2
 DisplayMode_Handler_3_Next2:
-	jp	DisplayMode_Handler_3_0x168
+	jp	DisplayMode_Handler_3_Return7
 DisplayMode_Handler_3_Skip35:
 	cp	a, 209
 	jrl	z, DisplayMode_Handler_3_Skip34
-	jp	DisplayMode_Handler_3_0x99
+	jp	DisplayMode_Handler_3_Loop5
 DisplayMode_Handler_3_Skip33:
 	cp	a, (3536:16)
 	jrl	z, DisplayMode_Handler_3_Loop5
@@ -4573,6 +4621,7 @@ DisplayMode_Handler_3_Skip26:
 	jrl	nz, DisplayMode_Handler_3_Loop
 	call	DisplayMode_Handler_3_Helper15
 	jp	DisplayMode_Handler_3_0x9D
+DisplayMode_Handler_3_Return7:
 	ret
 DisplayMode_Handler_3_Helper3:
 	call	Timer_ParamCompareAlt_Helper7
@@ -4729,14 +4778,14 @@ DisplayMode_Handler_3_Sub:
 	add hl, (3418:16)
 DisplayMode_Handler_3_Join4:
 	cp hl, (3418:16)
-	jrl	z, DisplayMode_Handler_3_Skip13
+	jrl	z, DisplayMode_Handler_3_Skip23
 	push	xhl
 	call	Timer_ParamLoadAndCompare
 	pop	xhl
 	cp	(32422:16), 15
 	jrl	z, DisplayMode_Handler_3_Skip15
 	jp	DisplayMode_Handler_3_Join4
-DisplayMode_Handler_3_Skip13:
+DisplayMode_Handler_3_Skip23:
 	ld	l, (3534:16)
 	and	(0x0d53:16), 251
 DisplayMode_Handler_3_Join5:
@@ -4810,7 +4859,7 @@ DisplayMode_Handler_3_Helper7:
 DisplayMode_Handler_3_Skip18:
 	ld	(13948:16), a
 	pushw	hl
-	call	DisplayMode_Handler_3_Helper9
+	call	PerfMode_EventTable_0_Target1_Helper5
 	popw	hl
 	call	VoiceSlot_ComputeWordIndex
 	sra	iz, 1
@@ -4854,7 +4903,7 @@ DisplayMode_Handler_3_Skip20:
 	call	ScoopDisp_BytecodeBlock1_0x32
 DisplayMode_Handler_3_Return5:
 	ret
-DisplayMode_Handler_3_Helper9:
+PerfMode_EventTable_0_Target1_Helper5:
 	pushw	wa
 	call	VoiceSlot_ComputeWordIndex
 	srl	xiz, 1
@@ -4875,19 +4924,20 @@ DisplayMode_Handler_3_Return6:
 PerfMode_ParamHandler_Data_Helper:
 	ldw (0x0ef0:16), 0x0001
 	ld (0x0df3:16), 0x02
-	call DisplayMode_Handler_3_0x4C9
-	call Display_BytecodeBlock_F_0x2A2
+	call PerfMode_EventTable_0_Target1_Helper
+	call Display_BytecodeBlock_F_Helper
 	call Display_UpdateRegion3
 	or (0xe31c:16), 0x08
 	ret
 PerfMode_ParamHandler_Data_Helper2:
 	ldw (0x0ef0:16), 0xffff
 	ld (0x0df3:16), 0x02
-	call DisplayMode_Handler_3_0x4C9
-	call Display_BytecodeBlock_F_0x2A2
+	call PerfMode_EventTable_0_Target1_Helper
+	call Display_BytecodeBlock_F_Helper
 	call Display_UpdateRegion3
 	or (0xe31c:16), 0x08
 	ret
+PerfMode_EventTable_0_Target1_Helper:
 	call	ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
 	jrl	z, DisplayMode_Handler_3_Helper9_Return
@@ -4918,11 +4968,12 @@ PerfMode_ParamHandler_Data_Helper2:
 	cp	wa, 40
 	jrl	nc, DisplayMode_Handler_3_Helper9_Skip
 	ld	wa, bc
-	jp	DisplayMode_Handler_3_0x52C
+	jp	PerfMode_EventTable_0_Target1_Join
 DisplayMode_Handler_3_Helper9_Skip:
 	cp	wa, 300
-	jrl	ule, DisplayMode_Handler_3_0x52C
+	jrl	ule, PerfMode_EventTable_0_Target1_Join
 	ld	wa, bc
+PerfMode_EventTable_0_Target1_Join:
 	ld	(0x0ef2:16), wa
 	ld	bc, wa
 	and	a, 127
@@ -4943,6 +4994,7 @@ DisplayMode_Handler_3_Helper9_Skip:
 	call	VoiceSlot_RestoreState
 DisplayMode_Handler_3_Helper9_Return:
 	ret
+PerfMode_ParamHandler_3_Helper:
 	ld	(0x0df2:16), 1
 	ld	(0x0df3:16), 2
 	call	VoiceSlot_ReadCurrentParams
@@ -4961,15 +5013,17 @@ DisplayMode_Handler_3_Helper9_Return:
 	pop	xhl
 	cp	l, 210
 	jrl	nz, PerfMode_ParamHandler_Data_Helper2_Skip
-	call	DisplayMode_Handler_3_0x6DF
-	jp	DisplayMode_Handler_3_0x5A1
+	call	PerfMode_EventTable_0_Target1_Helper3
+	jp	PerfMode_EventTable_0_Target1_Join2
 PerfMode_ParamHandler_Data_Helper2_Skip:
-	call	DisplayMode_Handler_3_0x6A1
-	call	Display_BytecodeBlock_F_0x17C
+	call	PerfMode_EventTable_0_Target1_Helper2
+PerfMode_EventTable_0_Target1_Join2:
+	call	PerfMode_EventTable_0_Target1_Helper4
 	call	Display_UpdateRegion3
 	or	(0xe31c:16), 8
 DisplayMode_Handler_3_Helper9_Return2:
 	ret
+PerfMode_ParamHandler_3_Helper2:
 	ld	(0x0df2:16), 255
 	ld	(0x0df3:16), 2
 	call	VoiceSlot_ReadCurrentParams
@@ -4988,11 +5042,12 @@ DisplayMode_Handler_3_Helper9_Return2:
 	pop	xhl
 	cp	l, 210
 	jrl	nz, DisplayMode_Handler_3_Helper9_Skip2
-	call	DisplayMode_Handler_3_0x6DF
-	jp	DisplayMode_Handler_3_0x5F2
+	call	PerfMode_EventTable_0_Target1_Helper3
+	jp	PerfMode_EventTable_0_Target1_Join3
 DisplayMode_Handler_3_Helper9_Skip2:
-	call	DisplayMode_Handler_3_0x6A1
-	call	Display_BytecodeBlock_F_0x17C
+	call	PerfMode_EventTable_0_Target1_Helper2
+PerfMode_EventTable_0_Target1_Join3:
+	call	PerfMode_EventTable_0_Target1_Helper4
 	call	Display_UpdateRegion3
 	or	(0xe31c:16), 8
 DisplayMode_Handler_3_Helper9_Return3:
@@ -5002,9 +5057,10 @@ PerfMode_EventTable_0_Target2:
 	bit	7, w
 	jrl	nz, DisplayMode_Handler_3_Helper9_Skip3
 	call	DisplayMode_Handler_3_Helper9_Helper
-	jp	DisplayMode_Handler_3_0x612
+	jp	PerfMode_EventTable_0_Target2_Return
 DisplayMode_Handler_3_Helper9_Skip3:
-	call	DisplayMode_Handler_3_0x65A
+	call	PerfMode_EventTable_0_Target2_Helper
+PerfMode_EventTable_0_Target2_Return:
 	ret
 DisplayMode_Handler_3_Helper9_Helper:
 	ld	(0x0df2:16), 1
@@ -5022,12 +5078,13 @@ DisplayMode_Handler_3_Helper9_Helper:
 	ld	xhl, 0x367b
 	ld	(0x110e:16), xhl
 	pop	xhl
-	call	DisplayMode_Handler_3_0x6A1
+	call	PerfMode_EventTable_0_Target1_Helper2
 	call	DisplayMode_Handler_3_Helper20
 	or	(0xe31c:16), 8
 	call	Display_UpdateRegion3
 DisplayMode_Handler_3_Helper9_Return4:
 	ret
+PerfMode_EventTable_0_Target2_Helper:
 	ld	(0x0df2:16), 255
 	ld	(0x0df3:16), 3
 	cp	(0x0d65:16), 1
@@ -5043,12 +5100,13 @@ DisplayMode_Handler_3_Helper9_Return4:
 	ld	xhl, 0x367b
 	ld	(0x110e:16), xhl
 	pop	xhl
-	call	DisplayMode_Handler_3_0x6A1
+	call	PerfMode_EventTable_0_Target1_Helper2
 	call	DisplayMode_Handler_3_Helper20
 	or	(0xe31c:16), 8
 	call	Display_UpdateRegion3
 DisplayMode_Handler_3_Helper9_Return5:
 	ret
+PerfMode_EventTable_0_Target1_Helper2:
 	call	ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
 	jrl	z, DisplayMode_Handler_3_Helper9_Return6
@@ -5072,6 +5130,7 @@ DisplayMode_Handler_3_Helper9_Skip4:
 	call	VoiceSlot_RestoreState
 DisplayMode_Handler_3_Helper9_Return6:
 	ret
+PerfMode_EventTable_0_Target1_Helper3:
 	call	ToneParam_ModeGuardEntry_Helper4
 	cp	w, 0:i3
 	jrl	z, DisplayMode_Handler_3_Helper9_Return7
@@ -5153,20 +5212,22 @@ DMA_ChannelHandler_1:
 	ld	(0x367b:16), 255
 	cp	(0x0def:16), 0
 	jrl	nz, DMA_ChannelHandler_1_Skip
-	call	Display_BytecodeBlock_F_0x4
-	jp	DMA_ChannelHandler_1_0x1E
+	call	Display_BytecodeBlock_F_Sub3
+	jp	DMA_ChannelHandler_1_Return
 DMA_ChannelHandler_1_Skip:
 	ld	(0x0def:16), 0
 	call	Display_BytecodeBlock_F
+DMA_ChannelHandler_1_Return:
 	ret
 DMA_ChannelHandler_2:
 	cp	(0x0def:16), 8
 	jrl	nz, DMA_ChannelHandler_2_Skip
-	call	DisplayStr_TempoString_0x36
-	jp	DMA_ChannelHandler_2_0x19
+	call	DisplayStr_BytecodeBlock_C_Tbl2_Sub
+	jp	DMA_ChannelHandler_2_Return
 DMA_ChannelHandler_2_Skip:
 	ld	(3567:16), 8
-	call	DisplayStr_TempoString_0x32
+	call	DisplayMode_Handler_2_Helper
+DMA_ChannelHandler_2_Return:
 	ret
 DMA_ChannelHandler_0:
 	ld	(13964:16), 0
@@ -5177,7 +5238,7 @@ DMA_ChannelHandler_3:
 	cp	(3567:16), 15
 	jrl z, DMA_Channel3_CallAndInit
 	ld	(3567:16), 15
-	call DisplayStr_TempoString_0x6F
+	call DisplayMode_Handler_3_Helper19
 DMA_Channel3_CallAndInit:
 	call	DMA_ChannelHandler_3_Helper
 	ld	(13964:16), 0
@@ -5204,25 +5265,26 @@ DMA_StoreFlagAndReturn:
 VoiceSlot_TableSetup:
 	bit 0, (0x0dd3:16)
 	jrl z, .Lc_ef900f
-	jp VoiceSlot_TableSetup_0xF
+	jp VoiceSlot_TableSetup_Join
 .Lc_ef900f:
-	jp VoiceSlot_TableSetup_0x106
+	jp VoiceSlot_TableSetup_Return
+VoiceSlot_TableSetup_Join:
 	and (0x0dd3:16), 0xfe
 	call AccPedal_CheckBitAndUpdate
-	call VoiceState_DataBlock2_0x472
+	call SoundEvt_LongPacketHandler_Helper2
 	xor A,A
 	call VoiceSlot_SaveState
-	call VoiceSlot_TableSetup_0x107
+	call VoiceSlot_TableSetup_Helper2
 	ld (0x0dcf:16), 0x01
-	call ToneParam_HandlerTable_BC_0x57C
-	call VoiceState_DataBlock2_0xAD
+	call VoiceSlot_TableSetup_Helper
+	call MemConfig_Handler_4_Helper6
 	cp w, 0:i3
 	jrl nz, .Lc_ef904e
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
 	jrl nz, .Lc_ef906a
 	dec 1, (0x0de7:16)
-	jp VoiceSlot_TableSetup_0x66
+	jp VoiceSlot_TableSetup_Join2
 .Lc_ef904e:
 	call VoiceSlot_ReadCurrentParams
 	cp A,0x81
@@ -5233,6 +5295,7 @@ VoiceSlot_TableSetup:
 	jrl nz, .Lc_ef906a
 	dec 1, (0x0de7:16)
 .Lc_ef906a:
+VoiceSlot_TableSetup_Join2:
 	ld a, (0x0eee:16)
 	dec 1,A
 	xor W,W
@@ -5249,7 +5312,7 @@ VoiceSlot_TableSetup:
 	ld c, (0x0de7:16)
 	xor B,B
 	ld (0x0dcf:16), 0x00
-	call ToneParam_HandlerTable_BC_0x57C
+	call VoiceSlot_TableSetup_Helper
 	ld a, (0x0eee:16)
 	dec 1,A
 	xor W,W
@@ -5263,8 +5326,8 @@ VoiceSlot_TableSetup:
 	ld	wa, (xix+hl)
 	ld (0x0dea:16), wa
 	pop XIX
-	call VoiceSlot_TableSetup_0x12C
-	call DisplayStr_StyleSectionNames_0x69
+	call VoiceSlot_TableSetup_Helper3
+	call VoiceState_DataBlock2_Helper16
 	call Display_UpdateRegion5
 	ld wa, (0x367e:16)
 	cp WA,0x03e8
@@ -5274,29 +5337,33 @@ VoiceSlot_TableSetup:
 	ld (0x0e4e:16), wa
 	xor A,A
 	call VoiceSlot_RestoreState
-	call VoiceSlot_TableSetup_0x2E0
-	call VoiceSlot_TableSetup_0x40F
+	call VoiceSlot_TableSetup_Helper4
+	call VoiceSlot_TableSetup_Helper5
 	call Display_UpdateRegion1
 	bit 0, (0x0f57:16)
 	jrl nz, .Lc_ef910a
 	call Display_UpdateRegion4
 .Lc_ef910a:
+VoiceSlot_TableSetup_Return:
 	ret
+VoiceSlot_TableSetup_Helper2:
 	ld c, (0x0d5c:16)
 	ld a, (0x0d5d:16)
 	cp a, 4:i3
 	jrl ugt, .Lc_ef911c
-	jp VoiceSlot_TableSetup_0x127
+	jp VoiceSlot_TableSetup_Join3
 .Lc_ef911c:
 	sub A,0x04
 	cp c, 3:i3
 	jrl ugt, .Lc_ef9128
-	jp VoiceSlot_TableSetup_0x127
+	jp VoiceSlot_TableSetup_Join3
 .Lc_ef9128:
 	sub C,0x04
+VoiceSlot_TableSetup_Join3:
 	inc 1,C
 	xor B,B
 	ret
+VoiceSlot_TableSetup_Helper3:
 	ldw_d16	wa, (0x0de8)
 	ldb_d8	l, (0x0eee)
 	dec	1, l
@@ -5345,7 +5412,7 @@ VoiceSlot_TableSetup:
 	jrl	nz, VoiceSlot_TableSetup_Skip4
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
-	jrl	nz, VoiceSlot_TableSetup_0x2DE
+	jrl	nz, VoiceSlot_TableSetup_Epilogue
 	ld	xwa, xix
 	sub	xwa, 13974
 	cp	wa, 1:i3
@@ -5359,7 +5426,8 @@ VoiceSlot_TableSetup_Skip:
 VoiceSlot_TableSetup_Skip2:
 	stb_d8	(0x0f5b), a
 	ld	(0x0f5a:16), 2
-	jp	VoiceSlot_TableSetup_0x2DE
+	jp	VoiceSlot_TableSetup_Epilogue
+VoiceSlot_TableSetup_Loop:
 	call	VoiceSlot_ComputeWordIndex
 	srl	xiz, 1
 	push	xde
@@ -5370,7 +5438,7 @@ VoiceSlot_TableSetup_Skip2:
 	call	VoiceSlot_DispatchRet
 	pop	xix
 	cp	w, 0:i3
-	jrl	nz, VoiceSlot_TableSetup_0x2DE
+	jrl	nz, VoiceSlot_TableSetup_Epilogue
 	ldb_d8	l, (0x0eee)
 	dec	1, l
 	xor	h, h
@@ -5390,7 +5458,7 @@ VoiceSlot_TableSetup_Skip2:
 	jrl	nz, VoiceSlot_TableSetup_Skip4
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
-	jrl	nz, VoiceSlot_TableSetup_0x2DE
+	jrl	nz, VoiceSlot_TableSetup_Epilogue
 	ld	xwa, xix
 	sub	xwa, 13974
 	push	xwa
@@ -5401,7 +5469,7 @@ VoiceSlot_TableSetup_Skip2:
 	popw	bc
 	pop	xwa
 	cp	h, 255
-	jrl	z, VoiceSlot_TableSetup_0x2DE
+	jrl	z, VoiceSlot_TableSetup_Epilogue
 	cp	l, 2:i3
 	jrl	nz, VoiceSlot_TableSetup_Skip3
 	inc	1, wa
@@ -5410,14 +5478,14 @@ VoiceSlot_TableSetup_Skip3:
 	inc	1, a
 	stb_d8	(0x0f5b), a
 	ld	(0x0f5a:16), 2
-	jp	VoiceSlot_TableSetup_0x2DE
+	jp	VoiceSlot_TableSetup_Epilogue
 VoiceSlot_TableSetup_Skip4:
 	call	VoiceSlot_ReadCurrentParams
 	cp	w, 0:i3
-	jrl	nz, VoiceSlot_TableSetup_0x2DE
+	jrl	nz, VoiceSlot_TableSetup_Epilogue
 	call	VoiceSlot_StatusCheck
 	cp	w, 0:i3
-	jrl	nz, VoiceSlot_TableSetup_0x1F2
+	jrl	nz, VoiceSlot_TableSetup_Loop
 	cp	a, 130
 	jrl	nz, VoiceSlot_TableSetup_Skip5
 	ld	xwa, xix
@@ -5427,7 +5495,7 @@ VoiceSlot_TableSetup_Skip4:
 	ld	(0x0f5a:16), 2
 VoiceSlot_TableSetup_Skip5:
 	cp	a, 132
-	jrl	z, VoiceSlot_TableSetup_0x2DE
+	jrl	z, VoiceSlot_TableSetup_Epilogue
 	cp	a, 129
 	jrl	z, VoiceSlot_TableSetup_Skip6
 	call	VoiceSlot_FlagCheck
@@ -5442,14 +5510,16 @@ VoiceSlot_TableSetup_Skip5:
 	stcf	a, (xix)
 	ldto_berp	a, 60
 	push	xix
-	jp	VoiceSlot_TableSetup_0x1F2
+	jp	VoiceSlot_TableSetup_Loop
 VoiceSlot_TableSetup_Skip6:
 	pop	xix
 	inc	1, xix
 	push	xix
-	jp	VoiceSlot_TableSetup_0x1F2
+	jp	VoiceSlot_TableSetup_Loop
+VoiceSlot_TableSetup_Epilogue:
 	pop	xix
 	ret
+VoiceSlot_TableSetup_Helper4:
 	ld l, (0x0d60:16)
 	dec 1,L
 	ld H,L
@@ -5464,7 +5534,7 @@ VoiceSlot_TableSetup_Skip6:
 	xor	wa, wa
 	ld	(0x0e4c:16), wa
 	stb_d8	(0x0e52), a
-	jp	VoiceSlot_TableSetup_0x40E
+	jp	VoiceSlot_TableSetup_Return2
 VoiceSlot_TableSetup_Skip7:
 	cpw	(0x367e:16), 1
 	jrl	z, VoiceSlot_TableSetup_Skip11
@@ -5472,11 +5542,11 @@ VoiceSlot_TableSetup_Skip7:
 	jrl	c, VoiceSlot_TableSetup_Skip9
 	ldw_d16	wa, (0x367e)
 	ld	(0x287f:16), wa
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0d60)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
-	jrl	nz, VoiceSlot_TableSetup_0x40E
+	jrl	nz, VoiceSlot_TableSetup_Return2
 	ld	(0x0e52:16), 4
 	ld	(0x28c1:16), iy
 	ldw_d16	iy, (0x28af)
@@ -5487,12 +5557,12 @@ VoiceSlot_TableSetup_Skip7:
 	ldw	iy, 1000
 VoiceSlot_TableSetup_Skip8:
 	ld	(0x0e4c:16), iy
-	jp	VoiceSlot_TableSetup_0x3FD
+	jp	VoiceSlot_TableSetup_Join4
 VoiceSlot_TableSetup_Skip9:
 	ldw_d16	wa, (0x367e)
 	dec	1, wa
 	ld	(0x287f:16), wa
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0d60)
 	call	SetWall_SlotResolve
 	ld	(0x28c1:16), iy
@@ -5506,25 +5576,25 @@ VoiceSlot_TableSetup_Skip10:
 	ld	(0x0e4c:16), iy
 	stb_d8	(0x0e52), a
 	cp	a, 5:i3
-	jrl	c, VoiceSlot_TableSetup_0x3FD
+	jrl	c, VoiceSlot_TableSetup_Join4
 	sub	a, 4
 	stb_d8	(0x0e52), a
-	call	SubCPU_ToneParamRet_0x354
-	jp	VoiceSlot_TableSetup_0x3FD
+	call	VoiceSlot_TableSetup_Helper8
+	jp	VoiceSlot_TableSetup_Join4
 VoiceSlot_TableSetup_Skip11:
 	cp	(0x0d5c:16), 3
 	jrl	ugt, VoiceSlot_TableSetup_Skip12
 	ldw	(0x0e4c:16), 0
-	jp	VoiceSlot_TableSetup_0x40E
+	jp	VoiceSlot_TableSetup_Return2
 VoiceSlot_TableSetup_Skip12:
 	ld	(0x0e52:16), 4
 	ldw_d16	wa, (0x367e)
 	ld	(0x287f:16), wa
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0d60)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
-	jrl	nz, VoiceSlot_TableSetup_0x40E
+	jrl	nz, VoiceSlot_TableSetup_Return2
 	ld	(0x28c1:16), iy
 	ldw_d16	iy, (0x28af)
 	ld	(0x28bf:16), iy
@@ -5534,11 +5604,14 @@ VoiceSlot_TableSetup_Skip12:
 	ldw	iy, 1000
 VoiceSlot_TableSetup_Skip13:
 	ld	(0x0e4c:16), iy
+VoiceSlot_TableSetup_Join4:
 	ld	xix, 0x3692
 	ldb_d8	a, (0x0e52)
 	stb_d8	(0x0ec1), a
-	call	VoiceState_DataBlock2_0x561
+	call	VoiceSlot_TableSetup_Helper6
+VoiceSlot_TableSetup_Return2:
 	ret
+VoiceSlot_TableSetup_Helper5:
 	ld l, (0x0d60:16)
 	dec 1,L
 	ld H,L
@@ -5553,7 +5626,7 @@ VoiceSlot_TableSetup_Skip13:
 	xor	wa, wa
 	ld	(0x0e50:16), wa
 	stb_d8	(0x0e54), a
-	jp	VoiceSlot_TableSetup_0x525
+	jp	VoiceSlot_TableSetup_Return3
 VoiceSlot_TableSetup_Skip14:
 	cp	(0x0d5c:16), 3
 	jrl	ugt, VoiceSlot_TableSetup_Skip15
@@ -5568,12 +5641,12 @@ VoiceSlot_TableSetup_Skip15:
 	ldw	wa, 1000
 VoiceSlot_TableSetup_Skip16:
 	ld	(0x0e50:16), wa
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
 	jrl	z, VoiceSlot_TableSetup_Skip18
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	cp	w, 0:i3
 	jrl	z, VoiceSlot_TableSetup_Skip17
 	ld	a, w
@@ -5581,16 +5654,17 @@ VoiceSlot_TableSetup_Skip16:
 	cp	(0x287a:16), 0
 	jrl	nz, VoiceSlot_TableSetup_Skip17
 	cp	a, 4:i3
-	jrl	ule, VoiceSlot_TableSetup_0x4A7
+	jrl	ule, VoiceSlot_TableSetup_Join5
 	ld	a, 4:opc
-	jp	VoiceSlot_TableSetup_0x4A7
+	jp	VoiceSlot_TableSetup_Join5
 VoiceSlot_TableSetup_Skip17:
 	ldb_d8	a, (0x0d5d)
 	cp	(0x0d5d:16), 4
-	jrl	ule, VoiceSlot_TableSetup_0x4A7
+	jrl	ule, VoiceSlot_TableSetup_Join5
 	ld	a, 4:opc
+VoiceSlot_TableSetup_Join5:
 	stb_d8	(0x0e54), a
-	jp	VoiceSlot_TableSetup_0x525
+	jp	VoiceSlot_TableSetup_Return3
 VoiceSlot_TableSetup_Skip18:
 	ld	(0x28c1:16), iy
 	ldw_d16	iy, (0x28af)
@@ -5600,7 +5674,7 @@ VoiceSlot_TableSetup_Skip18:
 	ld	a, 4:opc
 VoiceSlot_TableSetup_Skip19:
 	stb_d8	(0x0e54), a
-	jp	VoiceSlot_TableSetup_0x514
+	jp	VoiceSlot_TableSetup_Join6
 VoiceSlot_TableSetup_Skip20:
 	ldb_d8	a, (0x0d5d)
 	sub	a, 4
@@ -5612,21 +5686,23 @@ VoiceSlot_TableSetup_Skip20:
 	ldw	wa, 1000
 VoiceSlot_TableSetup_Code_Skip8:
 	ld	(0x0e50:16), wa
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0d60)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
-	jrl	nz, VoiceSlot_TableSetup_0x525
+	jrl	nz, VoiceSlot_TableSetup_Return3
 	ld	(0x28c1:16), iy
 	ldw_d16	iy, (0x28af)
 	ld	(0x28bf:16), iy
-	call	SubCPU_ToneParamRet_0x354
+	call	VoiceSlot_TableSetup_Helper8
 	cp	c, 4:i3
-	jrl	nz, VoiceSlot_TableSetup_0x525
+	jrl	nz, VoiceSlot_TableSetup_Return3
+VoiceSlot_TableSetup_Join6:
 	ldb_d8	a, (0x0e54)
 	stb_d8	(0x0ec1), a
 	ld	xix, 0x369a
-	call	VoiceState_DataBlock2_0x561
+	call	VoiceSlot_TableSetup_Helper6
+VoiceSlot_TableSetup_Return3:
 	ret
 	; Entry 6 of UIState_EventTable (a code pointer the table holds).
 UIState_EventTable_Target6:
@@ -5818,6 +5894,7 @@ VoiceCtrl_BytecodeHandler_Skip3:
 	or	a, 128
 VoiceCtrl_BytecodeHandler_Skip4:
 	ld	c, 7:opc
+VoiceCtrl_BytecodeHandler_Join:
 	ldfr_berp a, 60
 	ldfr_berp a, 61
 	ld a, c
@@ -5828,13 +5905,13 @@ VoiceCtrl_BytecodeHandler_Skip4:
 	cp	c, 0:i3
 	jrl	z, VoiceCtrl_BytecodeHandler_Skip
 	dec	1, c
-	jp	VoiceCtrl_BytecodeHandler_0x61
+	jp	VoiceCtrl_BytecodeHandler_Join
 VoiceCtrl_BytecodeHandler_Skip:
 	ld	b, 255:opc
 VoiceCtrl_BytecodeHandler_Loop:
 	ld	a, 2:opc
 	call	VoiceSlot_RestoreState
-	jp	VoiceCtrl_BytecodeHandler_0xB9
+	jp	VoiceCtrl_BytecodeHandler_Return
 VoiceCtrl_BytecodeHandler_Skip5:
 	ld	b, c
 	ldfr_berp a, 60
@@ -5843,17 +5920,19 @@ VoiceCtrl_BytecodeHandler_Skip5:
 	xorcf a,(0x0dc7:16)	; xorcf A,(0x0dc7)
 	ldto_berp a, 60
 	jrl	c, VoiceCtrl_BytecodeHandler_Skip6
+VoiceCtrl_BytecodeHandler_Join2:
 	cpib_erp 56, 6
 	jrl nz, VoiceCtrl_BytecodeHandler_Loop
 	add	b, 8
-	jp	VoiceCtrl_BytecodeHandler_0x80
+	jp	VoiceCtrl_BytecodeHandler_Loop
 VoiceCtrl_BytecodeHandler_Skip6:
 	cpib_erp 56, 6
 	jrl nz, VoiceCtrl_BytecodeHandler_Skip7
 	add	b, 8
 VoiceCtrl_BytecodeHandler_Skip7:
 	set	4, b
-	jp	VoiceCtrl_BytecodeHandler_0x9C
+	jp	VoiceCtrl_BytecodeHandler_Join2
+VoiceCtrl_BytecodeHandler_Return:
 	ret
 VoiceCtrl_CheckAndReset:
 	or	(0x0d53:16), 32
@@ -6525,7 +6604,7 @@ SerialPort_ModeHandler_0_Skip:
 	ld	(13956:16), 2
 	cp	(3567:16), 2
 	jrl	nz, SerialPort_ModeHandler_0_Skip2
-	call	DisplayStr_BytecodeBlock_B_0x3D
+	call	DisplayStr_BytecodeBlock_B_Sub2
 	jp	SerialPort_ModeHandler_0_Join
 SerialPort_ModeHandler_0_Skip2:
 	ld	(3567:16), 2
@@ -6564,7 +6643,7 @@ SerialPort_ModeHandler_0_Skip3:
 	ld	(13956:16), 1
 	cp	(3567:16), 2
 	jrl	nz, SerialPort_ModeHandler_0_Skip4
-	call	DisplayStr_BytecodeBlock_B_0x3D
+	call	DisplayStr_BytecodeBlock_B_Sub2
 	jp	SerialPort_ModeHandler_0_Join2
 SerialPort_ModeHandler_0_Skip4:
 	ld	(3567:16), 2
@@ -6813,6 +6892,7 @@ SerialPort_ModeHandler_0_Data:
 SerialPort_ModeHandler_0_Data2:
 	.byte	0x03, 0x03, 0x03, 0x03, 0x03
 	.byte	0x03, 0x03, 0x03, 0x04
+Display_CallMenuInit_Helper:
 	ld	(0x10fa:16), 0
 	ldb_d8	a, (0x8c9a)
 	cp	a, (0x8c9b:16)
@@ -6849,19 +6929,19 @@ PerfMode_Handler_EvtB_Helper2:
 	call ClockConfig_Handler_0_Helper
 	cpw (0xf231:16), 0x0000
 	jrl nz, .Lc_efa1aa
-	call VoiceState_DataBlock2_0x184
+	call VoiceState_DataBlock2_Helper7
 	cp w, 0:i3
 	jrl z, .Lc_efa1aa
 	ld (0x0d69:16), 0x18
 	jp SerialPort_ModeHandler_0_Return6
 .Lc_efa1aa:
 	res 7, (0x0d54:16)
-	call PortConfig_DataTable_B_0x20
+	call PortConfig_Handler_0_Loop
 	call SeqBuf_Init
 	call PerfMode_Handler_EvtB_Helper2_Helper2
 	call PerfMode_Handler_EvtB_Helper2_Helper9
 	call BitMapOut_ComputeRegionDelta
-	call MemConfig_Handler_4_0x15B
+	call Timer_ModeHandler_0_Helper2
 	call PortConfig_SetupBytecode
 	xor WA,WA
 	ld (0x0d4f:16), wa
@@ -6919,14 +6999,14 @@ PerfMode_Handler_EvtB_Helper2:
 	call	VoiceState_DataBlock2_Helper7
 	cp	w, 0:i3
 	jrl	z, PerfMode_Handler_EvtB_Helper2_Skip
-	call	SysInit_BytecodeBlock_0xFB
+	call	ToneParam_ModeGuardEntry_Helper2_Helper
 	call	VoiceSlot_CompareAndBranch
 	call	PerfMode_Handler_EvtB_Helper2_Helper8
 	jp	PerfMode_Handler_EvtB_Helper2_Join
 PerfMode_Handler_EvtB_Helper2_Skip:
 	call	MemoryConfig_Handler_Table_Target2_Sub
 PerfMode_Handler_EvtB_Helper2_Join:
-	call	ClockConfig_Handler_0_0xAB
+	call	MemConfig_Handler_4_Helper5_Helper
 	bit	2, (0x0421:16)
 	jrl	z, PerfMode_Handler_EvtB_Helper2_Skip2
 	call	Demo_PreSetupAndScan
@@ -6943,7 +7023,7 @@ PerfMode_Handler_EvtB_Helper2_Skip2:
 	ld	(0x368c:16), 0
 	cp	(0x10fa:16), 0
 	jrl	nz, PerfMode_Handler_EvtB_Helper2_Skip3
-	call	PortConfig_SetupBytecode_0x34
+	call	ScoopDisp_DispatchTable_Small_Target11_Helper
 PerfMode_Handler_EvtB_Helper2_Skip3:
 	call	PerfMode_Handler_EvtB_Helper2_Helper
 	jp	SerialPort_ModeHandler_0_Return6
@@ -6952,7 +7032,7 @@ PerfMode_Handler_EvtB_Helper2_Skip4:
 	call ClockConfig_Handler_0_Helper
 	bit 3, (0x0d53:16)
 	jrl z, .Lc_efa2ef
-	call PortConfig_SetupBytecode_0x34
+	call ScoopDisp_DispatchTable_Small_Target11_Helper
 	cp (0x0d65:16), 0x00
 	jrl nz, .Lc_efa2ef
 .Lc_efa2ef:
@@ -7169,6 +7249,7 @@ PortConfig_SetupBytecode:
 	pop	xix
 PortConfig_SetupBytecode_Return:
 	ret
+ScoopDisp_DispatchTable_Small_Target11_Helper:
 	ld	a, (3429:16)
 	and	wa, 3
 	sla	wa, 2
@@ -7190,9 +7271,9 @@ PortConfig_Select_Table:
 PortConfig_Handler_1:
 	or	(0x0dd3:16), 1
 	call	VoiceSlot_TableSetup
-	call	Timer_ModeHandler_0_0x13
-	call	PortConfig_Handler_0_0xD7
-	call	ToneParam_HandlerTable_BC_0x567
+	call	DisplayMode_Dispatch_Mode1_Helper
+	call	PortConfig_Handler_0_Helper2
+	call	PortConfig_Handler_1_Helper
 	res	2, (0x0d54:16)
 	ret
 PortConfig_Handler_3:
@@ -7201,9 +7282,9 @@ PortConfig_Handler_3:
 	ld	(0x0205e8:24), 255
 	ld	(0x0205ec:24), 255
 	ld	(0x0205ea:24), 255
-	call DisplayStr_TempoString_0x6F
-	call DisplayStr_TempoString_0x74
-	call PortConfig_Handler_0_0xD7
+	call DisplayMode_Handler_3_Helper19
+	call DMA_ChannelHandler_3_Helper
+	call PortConfig_Handler_0_Helper2
 	call UIState_UpdateMultiRegions
 	call Display_UpdateRegion3
 	call Display_UpdateRegion2
@@ -7290,10 +7371,11 @@ PortConfig_Handler_0_Helper2:
 	jrl z, .Lc_efa641
 	cp a, (0x0d57:16)
 	jrl nz, .Lc_efa641
-	call SndDispatch_ProcessCommand_0x266
-	jp PortConfig_Handler_0_0x10A
+	call PortConfig_Handler_0_Helper5
+	jp PortConfig_Handler_0_Return2
 .Lc_efa641:
-	call DisplayMode_Handler_3_0x775
+	call Timer_ParamCompareAlt_Helper6
+PortConfig_Handler_0_Return2:
 	ret
 PerfMode_Handler_EvtB_Helper2_Helper2:
 	call	VoiceSlot_ComputeIndex
@@ -7364,11 +7446,12 @@ PerfMode_Handler_EvtB_Helper2_Helper3:
 	ld	a, (xhl+a)
 	cp A,0xff
 	jrl z, .Lc_efa734
+PortConfig_DataTable_A_Sub:
 	ld (0x8c9e:16), a
 	ld E,A
 	ld D, 0xff:opc
 	ldw WA, 0x1090
-	call SysInit_BytecodeBlock_0x3DB
+	call PortConfig_DataTable_A_Helper
 .Lc_efa734:
 PortConfig_DataTable_A_Sub_Return:
 	ret
@@ -7478,7 +7561,7 @@ ClockConfig_Handler_0_Return:
 	ret
 	; 6-byte template, copied (`ldir`, BC = 6) to RAM 0x0D8F by PerfMode_Handler_EvtB_Helper2_Helper8
 	; (v10: ScoopParam_ValueTable_Sub_Helper; display mode 3), which fills bytes +0/+4/+5 from 0xFC5A/0xFC5B and passes the six
-	; bytes to SysInit_BytecodeBlock_0x486 (W = 6).
+	; bytes to DisplayMode_Handler_3_Helper16 (W = 6).
 ClockConfig_Handler_0_Tbl:
 	.byte	0xc0, 0x00, 'H', 0x00, 0x00, 0x00
 	; 6-byte template, copied the same way (`ldir`, BC = 6, to RAM 0x0D8F) by the
@@ -7517,14 +7600,15 @@ MemConfig_Handler_4_Helper5_Helper:
 	popw	bc
 	ld	(0x3680:16), 32
 	ret
+Display_CallMenuConfig_Helper:
 	ld (0x3673:16), 0x00
-	call DisplayStr_StyleSectionNames_0x69
+	call VoiceState_DataBlock2_Helper16
 	ld (0x0d55:16), 0xff
 	and (0x0f57:16), 0xfe
 	ld (0x0d36:16), 0x00
 	ld a, (0x8c9b:16)
 	cp	(0x8c9a:16), a
-	jrl	z, ClockConfig_Handler_0_0x227
+	jrl	z, ClockConfig_Handler_0_Tbl2_Return
 	and	(0x0d53:16), 254
 	bit	0, (0x0f54:16)
 	jrl	z, ClockConfig_Handler_0_Skip2
@@ -7535,7 +7619,7 @@ ClockConfig_Handler_0_Skip2:
 	jrl	nz, ClockConfig_Handler_0_Skip3
 	cp	(0x28be:16), 255
 	jrl	nz, ClockConfig_Handler_0_Skip3
-	call	ScoopParam_ValueTable_0x84
+	call	Timer_ParamCompareAlt_Helper7
 ClockConfig_Handler_0_Skip3:
 	and	(0x1126:16), 254
 	ldw_d16	de, (0x2875)
@@ -7565,7 +7649,7 @@ ClockConfig_Handler_0_Skip4:
 	ld	w, 8:opc
 	call	SysEx_ApplyVoiceParam_49
 	ldb_d8	a, (0x0d66)
-	call	PortConfig_DataTable_A_0x51
+	call	PortConfig_DataTable_A_Sub
 	xor	wa, wa
 	ld	(0x0d4f:16), wa
 	ld	(0x0d51:16), wa
@@ -7576,7 +7660,7 @@ ClockConfig_Handler_0_Skip4:
 	stb_d8	(0x10fa), a
 	res	3, (0x0d54:16)
 	call	VoiceState_DataBlock2_Helper16
-	call	ClockConfig_Handler_0_0x228
+	call	ClockConfig_Handler_0_Tbl2_Helper
 	ldw_d16	wa, (0xf1d0)
 	ld	(0x0f58:16), wa
 	call	PerfMode_Handler_EvtB_Helper2_Helper11
@@ -7591,13 +7675,15 @@ ClockConfig_Handler_0_Skip4:
 	ldb_d8	a, (0x0d65)
 	cp	a, 3:i3
 	jrl	nz, ClockConfig_Handler_0_Skip5
-	call	SysInit_BytecodeBlock_0x1A1
-	jp	ClockConfig_Handler_0_0x227
+	call	ClockConfig_Handler_0_Tbl2_Helper2
+	jp	ClockConfig_Handler_0_Tbl2_Return
 ClockConfig_Handler_0_Skip5:
 	cp	a, 0:i3
-	jrl	nz, ClockConfig_Handler_0_0x227
-	call	SysInit_BytecodeBlock_0x255
+	jrl	nz, ClockConfig_Handler_0_Tbl2_Return
+	call	SysInit_BytecodeBlock_Sub
+ClockConfig_Handler_0_Tbl2_Return:
 	ret
+ClockConfig_Handler_0_Tbl2_Helper:
 	cp	(0x28be:16), 255
 	jrl	z, ClockConfig_Handler_0_Return2
 	call	VoiceSlot_ComputeWordIndex
@@ -7706,7 +7792,7 @@ SysEx_BytecodeDispatcher:
 	ld	xiy, 4360
 	cp	(xiy), wa
 	jrl	nz, SysEx_BytecodeDispatcher_Skip3
-	jp	SysEx_BytecodeDispatcher_0x108
+	jp	SysEx_BytecodeDispatcher_Return
 SysEx_BytecodeDispatcher_Skip:
 	call	SysEx_BytecodeDispatcher_Helper5
 	call	SysEx_BytecodeDispatcher_Helper8
@@ -7772,7 +7858,7 @@ SysEx_BytecodeDispatcher_Join:
 	cp	w, 255
 	jrl	nz, SysEx_BytecodeDispatcher_Skip5
 	call	SysInit_SendAllNotesAndReset
-	jp	SysEx_BytecodeDispatcher_0x108
+	jp	SysEx_BytecodeDispatcher_Return
 SysEx_BytecodeDispatcher_Skip5:
 	call	AccPedal_CheckBitAndUpdate
 	ld	a, (3420:16)
@@ -7783,7 +7869,7 @@ SysEx_BytecodeDispatcher_Skip6:
 	ld	(13949:16), a
 	call	PortConfig_Handler_0_Helper3
 	call	Display_UpdateRegion3
-SysEx_BytecodeDispatcher_0x108:
+SysEx_BytecodeDispatcher_Return:
 	ret
 	; Handler dispatch table, 24 B.  Read by SysEx_BytecodeDispatcher (0xEFAAB1): `ld xix, MemoryConfig_Handler_Table`
 	; indexed with stride 4 (`sla hl, 2`)
@@ -7795,6 +7881,7 @@ MemoryConfig_Handler_Table:
 	.long	MemConfig_Handler_3
 	.long	MemConfig_Handler_4
 	.long	MemConfig_Handler_5
+SystemInit_Handler_Table_Helper:
 	ld XIY,SysEx_BytecodeDispatcher_Tbl
 	ld XIX,0x00000d8f
 	ld A, 0xb0:opc
@@ -7818,9 +7905,10 @@ SysEx_BytecodeDispatcher_Skip7:
 	jrl	z, SysEx_BytecodeDispatcher_Skip8
 	ormi8	(xix), 1
 	ld	(xix+4), w
-	jp	MemoryConfig_Handler_Table_0x67
+	jp	MemoryConfig_Handler_Table_Join
 SysEx_BytecodeDispatcher_Skip8:
 	ld	(xix+4), a
+MemoryConfig_Handler_Table_Join:
 	ldfr_lerp	xiy, 56
 	lda	xiy, (xiy+hl)
 	ld	a, (xiy+1)
@@ -7829,9 +7917,10 @@ SysEx_BytecodeDispatcher_Skip8:
 	jrl	z, SysEx_BytecodeDispatcher_Skip9
 	ormi8	(xix), 2
 	ld	(xix+5), w
-	jp	MemoryConfig_Handler_Table_0x88
+	jp	MemoryConfig_Handler_Table_Join2
 SysEx_BytecodeDispatcher_Skip9:
 	ld	(xix+5), a
+MemoryConfig_Handler_Table_Join2:
 	push	xiy
 	ld	w, 6:opc
 	ld	xiy, 0x0d8f
@@ -7882,7 +7971,7 @@ MemoryConfig_Handler_Table_Target2_Sub:
 	ld	xiz, 0x0d53
 	andmi8	(xiz), 191
 	call	MemConfig_VoiceSlotLookup
-	call	ClockConfig_Handler_0_0xAB
+	call	MemConfig_Handler_4_Helper5_Helper
 MemoryConfig_Handler_Table_Target2_Join:
 	cp	(0x0d65:16), 0
 	jrl	nz, MemoryConfig_Handler_Table_Target2_Entry
@@ -7892,7 +7981,7 @@ MemoryConfig_Handler_Table_Target2_Join:
 	jr	nz, MemoryConfig_Handler_Table_Target2_Skip2
 	call	MemConfig_Handler_5_Code_Helper10
 MemoryConfig_Handler_Table_Target2_Skip2:
-	call	SubCPU_ToneParamRet_0x4BD
+	call	MemConfig_Handler_5_Helper
 	call	DMA_FlagCheckWithCalls
 	call	MemConfig_Handler_5_Code_Helper11
 MemoryConfig_Handler_Table_Target2_Entry:
@@ -7935,8 +8024,8 @@ MemConfig_Handler_0:
 	bit 3,(XHL)
 	jrl z, .Lc_efad7e
 	res 3,(XHL)
-	call PortConfig_SetupBytecode_0x34
-	jp MemConfig_Handler_0_0x63
+	call ScoopDisp_DispatchTable_Small_Target11_Helper
+	jp MemConfig_Handler_0_Return
 .Lc_efad7e:
 MemConfig_Handler_0_Skip3:
 	call VoiceCtrl_BytecodeHandler
@@ -7944,28 +8033,30 @@ MemConfig_Handler_0_Skip3:
 	jrl z, .Lc_efadc5
 	cp B,0x17
 	jrl z, .Lc_efadc5
+MemConfig_Handler_0_Join:
 	call VoiceSlot_FlagCheck
 	cp W,0xff
 	jrl z, .Lc_efadba
 	xor A,A
 	call VoiceSlot_SaveState
 	ld W, 0x81:opc
-	call VoiceSlot_FinalRetZ_0x84
+	call MemConfig_Handler_5_Code_Helper13
 	ld de, 1:i3
-	call VoiceSlot_FinalRetZ_0xB8
+	call Timer_ModeHandler_0_Helper6
 	ld W, 0x82:opc
-	call VoiceSlot_FinalRetZ_0x84
+	call MemConfig_Handler_5_Code_Helper13
 	xor A,A
 	call VoiceSlot_RestoreState
-	call MemConfig_Handler_1_0x8B
+	call MemConfig_Handler_0_Helper
 .Lc_efadba:
 	ld W, 0xff:opc
 	or (0x8cec:16), 0x01
-	jp MemConfig_Handler_0_0x63
+	jp MemConfig_Handler_0_Return
 .Lc_efadc5:
 MemConfig_Handler_0_Skip2:
 	call VoiceSlot_LoadAndDispatch
-	jp MemConfig_Handler_0_0x24
+	jp MemConfig_Handler_0_Join
+MemConfig_Handler_0_Return:
 	ret
 MemConfig_Handler_1:
 	res	7, (0x0d54:16)
@@ -7974,6 +8065,7 @@ MemConfig_Handler_1:
 	jrl	z, MemConfig_Handler_1_Skip4
 	cp	b, 23
 	jrl	z, MemConfig_Handler_1_Skip4
+MemConfig_Handler_1_Join:
 	xor	a, a
 	call	VoiceSlot_SaveState
 	call	VoiceSlot_ReadCurrentParams
@@ -7985,13 +8077,13 @@ MemConfig_Handler_1_Loop:
 	jrl	z, MemConfig_Handler_1_Skip2
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	z, MemConfig_Handler_1_Skip
+	jrl	z, MemConfig_Handler_1_Code_Skip
 	and	a, 240
 	cp	a, 144
-	jrl	z, MemConfig_Handler_1_Skip
+	jrl	z, MemConfig_Handler_1_Code_Skip
 	cp	a, 176
 	jrl	nz, MemConfig_Handler_1_Loop
-MemConfig_Handler_1_Skip:
+MemConfig_Handler_1_Code_Skip:
 	pushw	wa
 	xor	a, a
 	call	VoiceSlot_RestoreState
@@ -7999,6 +8091,7 @@ MemConfig_Handler_1_Skip:
 	cp	a, 129
 	jrl	nz, MemConfig_Handler_1_Skip3
 	ld	w, 132:opc
+MemConfig_Handler_1_Join2:
 	call	MemConfig_Handler_5_Code_Helper13
 	ld	de, 1:i3
 	call	Timer_ModeHandler_0_Helper6
@@ -8006,18 +8099,20 @@ MemConfig_Handler_1_Skip:
 	call	MemConfig_Handler_5_Code_Helper13
 	xor	a, a
 	call	VoiceSlot_RestoreState
-	call	MemConfig_Handler_1_0x8B
+	call	MemConfig_Handler_0_Helper
 MemConfig_Handler_1_Skip2:
 	ld	w, 255:opc
 	or	(0x8cec:16), 1
-	jp	MemConfig_Handler_1_0x8A
+	jp	MemConfig_Handler_1_Return
 MemConfig_Handler_1_Skip3:
 	ld	w, 129:opc
-	jp	MemConfig_Handler_1_0x57
+	jp	MemConfig_Handler_1_Join2
 MemConfig_Handler_1_Skip4:
 	call	VoiceSlot_LoadAndDispatch
-	jp	MemConfig_Handler_1_0x14
+	jp	MemConfig_Handler_1_Join
+MemConfig_Handler_1_Return:
 	ret
+MemConfig_Handler_0_Helper:
 	call VoiceSlot_ComputeWordIndex
 	push XIX
 	ld XIX,0x00000c9e
@@ -8025,8 +8120,9 @@ MemConfig_Handler_1_Skip4:
 	pop XIX
 	cp IY,0xffff
 	jrl nz, .Lc_efae74
-	jp MemConfig_Handler_1_0x13D
+	jp MemConfig_Handler_1_Return2
 .Lc_efae74:
+MemConfig_Handler_1_Code_Skip3:
 	srl IZ, 0x01
 	push XIX
 	ld XIX,0x00000cbe
@@ -8052,14 +8148,15 @@ MemConfig_Handler_1_Skip4:
 	pop XIX
 	cp IY,0xffff
 	jrl z, .Lc_efaf0b
+MemConfig_Handler_1_Join3:
 	call VoiceSlot_UpdateCurrentPointer
 	ld xhl, (0x10fd:16)
 	ld IY,(XHL+0x03)
 	cp IY,0xffff
 	jrl z, .Lc_efaf0b
 	ld wa, (0x286d:16)
-	call VoiceSlot_FinalRetZ_0x1B2
-	jp MemConfig_Handler_1_0x13D
+	call MemConfig_Handler_1_Helper3
+	jp MemConfig_Handler_1_Return2
 .Lc_efaee4:
 	push XIX
 	ld XIX,0x0000f218
@@ -8070,8 +8167,9 @@ MemConfig_Handler_1_Skip4:
 	ld XIX,0x0000f1f8
 	ld	(xix+iz), iy
 	pop XIX
-	jp MemConfig_Handler_1_0xF8
+	jp MemConfig_Handler_1_Join3
 .Lc_efaf0b:
+MemConfig_Handler_1_Return2:
 	ret
 VoiceState_DataBlock2_Helper6:
 	call	VoiceSlot_FlagCheck
@@ -8083,7 +8181,7 @@ VoiceState_DataBlock2_Helper6:
 	call	VoiceSlot_SaveState
 	ldb_d8	a, (0x0d5d)
 	sub	a, (0x0d5c:16)
-	call	MemConfig_Handler_1_0x1C6
+	call	MemConfig_Handler_1_Helper
 	ld	a, 4:opc
 	call	VoiceSlot_SaveState
 	ld	a, 3:opc
@@ -8093,7 +8191,7 @@ VoiceState_DataBlock2_Helper6_Loop:
 	cp	(0x0d6a:16), 0
 	jrl	nz, VoiceState_DataBlock2_Helper6_Skip
 	ld	a, 4:opc
-	call	VoiceState_DataBlock2_0x7D
+	call	MemConfig_Handler_1_Helper4
 	cp	w, 1:i3
 	jrl	z, VoiceState_DataBlock2_Helper6_Skip
 	cp	w, 2:i3
@@ -8105,9 +8203,9 @@ VoiceState_DataBlock2_Helper6_Loop:
 VoiceState_DataBlock2_Helper6_Skip:
 	call	AccPedal_CheckBitAndUpdate
 	ld	(0x0d6a:16), 0
-	call	SubCPU_ToneParamRet_0x4BD
+	call	MemConfig_Handler_5_Helper
 	call	PortConfig_Handler_0_Helper3
-	call	SndDispatch_ProcessCommand_0x266
+	call	PortConfig_Handler_0_Helper5
 	call	MemConfig_Handler_5_Code_Helper11
 VoiceState_DataBlock2_Helper6_Skip2:
 	ld	(0x0d6a:16), 0
@@ -8117,6 +8215,7 @@ VoiceState_DataBlock2_Helper6_Skip2:
 	ldb_d8	a, (0x0d5c)
 	stb_d8	(0x367d), a
 	ret
+MemConfig_Handler_1_Helper:
 	stb_d8	(0x0dfe), a
 VoiceState_DataBlock2_Helper6_Loop2:
 	call	VoiceSlot_ReadCurrentParams
@@ -8137,12 +8236,12 @@ ScoopDisp_FlagSetAndDispatch_Helper:
 	call	VoiceSlot_SaveState
 	ldb_d8	a, (0x0d5c)
 	add	a, (0x0d5d:16)
-	call	MemConfig_Handler_1_0x295
+	call	MemConfig_Handler_1_Helper2
 	call	AccPedal_CheckBitAndUpdate
 	cp	(0x0d5c:16), 0
 	jrl	z, VoiceState_DataBlock2_Helper6_Skip4
 	ldb_d8	a, (0x0d5c)
-	call	MemConfig_Handler_1_0x295
+	call	MemConfig_Handler_1_Helper2
 VoiceState_DataBlock2_Helper6_Skip4:
 	ld	a, 4:opc
 	call	VoiceSlot_SaveState
@@ -8154,9 +8253,9 @@ VoiceState_DataBlock2_Helper6_Loop3:
 	call	VoiceSlot_SaveState
 	call	MemConfig_Handler_4_Helper2
 	cp	(0x0d6a:16), 0
-	jrl	nz, VoiceState_DataBlock2_Helper6_Skip6
+	jrl	nz, MemConfig_Handler_1_Skip9
 	ld	a, 4:opc
-	call	VoiceState_DataBlock2_0x7D
+	call	MemConfig_Handler_1_Helper4
 	cp	w, 1:i3
 	jrl	z, VoiceState_DataBlock2_Helper6_Skip5
 	cp	w, 2:i3
@@ -8164,29 +8263,31 @@ VoiceState_DataBlock2_Helper6_Loop3:
 	bit	7, (0x0d53:16)
 	jrl	z, VoiceState_DataBlock2_Helper6_Skip5
 	ld	a, 6:opc
-	jp	MemConfig_Handler_1_0x256
+	jp	MemConfig_Handler_1_Join4
 VoiceState_DataBlock2_Helper6_Skip5:
 	ld	a, 4:opc
+MemConfig_Handler_1_Join4:
 	call	VoiceSlot_RestoreState
-VoiceState_DataBlock2_Helper6_Skip6:
+MemConfig_Handler_1_Skip9:
 	call	AccPedal_CheckBitAndUpdate
 	call	MemConfig_Handler_4_Helper6
 	cp	w, 255
-	jrl	z, VoiceState_DataBlock2_Helper6_Skip7
+	jrl	z, MemConfig_Handler_1_Skip10
 	xor	a, a
 	stb_d8	(0x0d57), a
 	ldb_d8	a, (0x0d5c)
 	stb_d8	(0x367d), a
-VoiceState_DataBlock2_Helper6_Skip7:
-	call	SubCPU_ToneParamRet_0x4BD
+MemConfig_Handler_1_Skip10:
+	call	MemConfig_Handler_5_Helper
 	call	PortConfig_Handler_0_Helper3
-	call	SndDispatch_ProcessCommand_0x266
+	call	PortConfig_Handler_0_Helper5
 	call	MemConfig_Handler_5_Code_Helper11
 	xor	a, a
 	stb_d8	(0x0d57), a
 	ldb_d8	a, (0x0d5c)
 	stb_d8	(0x367d), a
 	ret
+MemConfig_Handler_1_Helper2:
 	stb_d8	(0x0dfe), a
 VoiceState_DataBlock2_Helper6_Loop4:
 	call	VoiceSlot_CompareAndBranch
@@ -8199,7 +8300,7 @@ VoiceState_DataBlock2_Helper6_Loop4:
 	decm8	1, (xiy)
 	cp	(xiy), 0
 	jrl	nz, VoiceState_DataBlock2_Helper6_Loop4
-MemConfig_Handler_1_Loop2:
+MemConfig_Handler_1_Loop4:
 	ld	a, 6:opc
 	call	VoiceSlot_SaveState
 	call	Timer_ParamCompareAlt_Helper5
@@ -8207,7 +8308,7 @@ MemConfig_Handler_1_Loop2:
 	jrl	z, VoiceState_DataBlock2_Helper6_Return2
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
-	jrl	nz, MemConfig_Handler_1_Loop2
+	jrl	nz, MemConfig_Handler_1_Loop4
 	ld	a, 6:opc
 	call	VoiceSlot_RestoreState
 VoiceState_DataBlock2_Helper6_Return2:
@@ -8215,7 +8316,7 @@ VoiceState_DataBlock2_Helper6_Return2:
 MemConfig_Handler_3:
 	call	MemConfig_Handler_4_Helper
 	call	MemConfig_Handler_4_Helper2
-	call	MemConfig_Handler_3_0x42
+	call	MemConfig_Handler_3_Helper3
 	call	MemConfig_Handler_4_Helper3
 	call	MemConfig_Handler_5_Code_Helper11
 	; llvm-mc cannot spell this byte
@@ -8237,6 +8338,7 @@ MemConfig_Handler_4_Helper:
 	ld	(3821:16), a
 	popw	wa
 	ret
+MemConfig_Handler_3_Helper3:
 	call	AccPedal_CheckBitAndUpdate
 	ld	wa, (3816:16)
 	cp	wa, (13950:16)
@@ -8250,18 +8352,18 @@ MemConfig_Handler_4_Helper:
 	call	MemConfig_Handler_4_Helper_Helper2
 	cp	w, 0:i3
 	jrl	z, MemConfig_Handler_4_Helper_Return	; -> 0xEFB154
-	jp	MemConfig_Handler_3_0x8E
+	jp	MemConfig_Handler_3_Skip2
 	; llvm-mc cannot spell this byte
 MemConfig_Handler_3_Skip:
 	cp	(0x0d5d:16), 4
-	jrl	ule, MemConfig_Handler_3_0x8E	; -> 0xEFB137
+	jrl	ule, MemConfig_Handler_3_Skip2	; -> 0xEFB137
 	ld	a, (3821:16)
 	ld	w, (3420:16)
 	cp	a, 4:i3
 	jrl	ule, MemConfig_Handler_4_Helper_Skip2	; -> 0xEFB14B
 	cp	w, 4:i3
 	jrl	c, MemConfig_Handler_3_Loop	; -> 0xEFB143
-MemConfig_Handler_3_0x8E:
+MemConfig_Handler_3_Skip2:
 	call	MemConfig_Handler_4_Helper_Helper
 	call	Display_UpdateRegion2
 	jp	MemConfig_Handler_4_Helper_Return
@@ -8271,7 +8373,7 @@ MemConfig_Handler_3_Loop:
 MemConfig_Handler_4_Helper_Skip2:
 	cp	w, 3:i3
 	jrl	ugt, MemConfig_Handler_3_Loop	; -> 0xEFB143
-	jp	MemConfig_Handler_3_0x8E
+	jp	MemConfig_Handler_3_Skip2
 MemConfig_Handler_4_Helper_Return:
 	ret
 MemConfig_Handler_4_Helper2:
@@ -8304,8 +8406,8 @@ SndDispatch_JumpTable_Main:
 	.long	SndDispatch_Handler_3
 	.long	SndDispatch_Handler_4
 SndDispatch_Handler_1:
-	call	SndDispatch_ProcessCommand_0xF9
-	call	SndDispatch_ProcessCommand_0xA5
+	call	SndDispatch_Handler_1_Helper2
+	call	SndDispatch_Handler_1_Helper
 	cp	a, 0:i3
 	jrl	z, SndDispatch_Handler_1_Return
 	dec	1, a
@@ -8330,8 +8432,8 @@ SndDispatch_SubTable_1:
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 SndDispatch_Handler_2:
-	call	SndDispatch_ProcessCommand_0xF9
-	call	SndDispatch_ProcessCommand_0xA5
+	call	SndDispatch_Handler_1_Helper2
+	call	SndDispatch_Handler_1_Helper
 	cp	a, 0:i3
 	jrl	z, SndDispatch_Handler_2_Return
 	dec	1, a
@@ -8356,8 +8458,8 @@ SndDispatch_SubTable_2:
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 SndDispatch_TableEntryBegin:
-	call	SndDispatch_ProcessCommand_0xF9
-	call	SndDispatch_ProcessCommand_0xA5
+	call	SndDispatch_Handler_1_Helper2
+	call	SndDispatch_Handler_1_Helper
 	cp	a, 0:i3
 	jrl	z, SndDispatch_TableEntryBegin_Return
 	dec	1, a
@@ -8386,8 +8488,8 @@ SndDispatch_ShortHandler:
 	call	SndDispatch_ProcessCommand
 	ret
 SndDispatch_Handler_3:
-	call	SndDispatch_ProcessCommand_0xF9
-	call	SndDispatch_ProcessCommand_0xA5
+	call	SndDispatch_Handler_1_Helper2
+	call	SndDispatch_Handler_1_Helper
 	cp	a, 0:i3
 	jrl	z, SndDispatch_Handler_3_Return
 	dec	1, a
@@ -8412,8 +8514,8 @@ SndDispatch_SubTable_4:
 	.long	SndDispatch_InitHandler
 	.long	DefaultHandler_Ret
 SndDispatch_Handler_4:
-	call	SndDispatch_ProcessCommand_0xF9
-	call	SndDispatch_ProcessCommand_0xA5
+	call	SndDispatch_Handler_1_Helper2
+	call	SndDispatch_Handler_1_Helper
 	cp	a, 0:i3
 	jrl	z, SndDispatch_Handler_4_Return
 	dec	1, a
@@ -8523,6 +8625,7 @@ SndDispatch_ProcessCommand_Skip10:
 	xor	a, a
 SndDispatch_ProcessCommand_0xA4:
 	ret
+SndDispatch_Handler_1_Helper:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
 	jrl	nz, SndDispatch_ProcessCommand_Skip11
@@ -8557,6 +8660,7 @@ SndDispatch_ProcessCommand_Skip15:
 	ld	a, 3:opc
 SndDispatch_ProcessCommand_Return2:
 	ret
+SndDispatch_Handler_1_Helper2:
 	xor	a, a
 	ld	(3580:16), a
 	ld	(3581:16), a
@@ -8675,6 +8779,7 @@ SndDispatch_ProcessCommand_Skip23:
 	call	VoiceSlot_RestoreState
 SndDispatch_ProcessCommand_Return3:
 	ret
+PortConfig_Handler_0_Helper5:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 144
 	jr	nz, SndDispatch_ProcessCommand_Skip24
@@ -8858,12 +8963,12 @@ Timer_ModeHandler_0_Helper2:
 	ld W, 0x05:opc
 	xor E,E
 	ld D, 0x04:opc
-	call SysInit_BytecodeBlock_0x3DB
+	call PortConfig_DataTable_A_Helper
 	ld A, 0x48:opc
 	ld W, 0x06:opc
 	ld D, 0x04:opc
 	xor E,E
-	call SysInit_BytecodeBlock_0x3DB
+	call PortConfig_DataTable_A_Helper
 	pop XIZ
 	pop XIY
 	pop XIX
@@ -8874,12 +8979,12 @@ Timer_ModeHandler_0_Helper2:
 	ret
 PerfMode_Handler_EvtB_Helper2_Helper9:
 	cp	(0x0d65:16), 0
-	jrl	nz, MemConfig_Handler_4_0x1BA
+	jrl	nz, MemConfig_Handler_4_Return4
 	ldb_d8	a, (0xfc5d)
 	and	a, 7
 	cp	a, 1:i3
 	jrl	nz, Timer_ModeHandler_0_Helper2_Skip
-	jp	MemConfig_Handler_4_0x1BA
+	jp	MemConfig_Handler_4_Return4
 Timer_ModeHandler_0_Helper2_Skip:
 	and	(0xfc5d:16), 248
 	or	(0xfc5d:16), 2
@@ -8887,7 +8992,8 @@ Timer_ModeHandler_0_Helper2_Skip:
 	ld	w, 3:opc
 	ld	e, 2:opc
 	ld	d, 2:opc
-	call	SysInit_BytecodeBlock_0x3DB
+	call	PortConfig_DataTable_A_Helper
+MemConfig_Handler_4_Return4:
 	ret
 SysInit_SendAllNotesAndReset:
 	ld	(13964:16), 0
@@ -8921,7 +9027,8 @@ SystemInit_Handler_Table_0x18:
 SysEx_BytecodeDispatcher_Helper_Skip:
 	xor	h, h
 	sla	hl, 3
-	call MemoryConfig_Handler_Table_0x18
+SystemInit_Handler_Table_Join:
+	call SystemInit_Handler_Table_Helper
 	ld A,W
 	exts WA
 	sla WA, 0x02
@@ -8940,8 +9047,8 @@ SystemInit_StepHandler_5:
 	push	xiy
 	push	xiz
 	ld	l, 5:opc
-	call	SystemInit_StepHandler_0_0x4B
-	call	SysInit_BytecodeBlock_0xC
+	call	SysEx_BytecodeDispatcher_Helper2
+	call	SysEx_BytecodeDispatcher_Helper3
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -8950,12 +9057,12 @@ SystemInit_StepHandler_5:
 	pop	xhl
 	pop	xwa
 	add	hl, 4
-	jp	SystemInit_Handler_Table_0x43
+	jp	SystemInit_Handler_Table_Join
 SystemInit_StepHandler_4:
 	add	hl, 4
-	jp	SystemInit_Handler_Table_0x43
+	jp	SystemInit_Handler_Table_Join
 SystemInit_StepHandler_3:
-	call	SystemInit_StepHandler_0_0x19
+	call	SystemInit_StepHandler_3_Helper
 	jp	SystemInit_StepHandler_0
 SystemInit_StepHandler_2:
 	call	MemConfig_Handler_0
@@ -8970,6 +9077,7 @@ SystemInit_StepHandler_0:
 	; also read by SysInit_SendAllNotesAndReset
 SysInit_SendAllNotesAndReset_Tbl:
 	.byte	0x00, 0x00, 0x05, 0x06, 0x07, 0x0b, 0x03, 0x04, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x00
+SystemInit_StepHandler_3_Helper:
 	cp	(3429:16), 0
 	jrl	nz, SystemInit_StepHandler_0_Skip2
 	call	SystemInit_StepHandler_0_Helper
@@ -9043,7 +9151,7 @@ SysEx_BytecodeDispatcher_Helper3:
 	add B,C
 	ld W,B
 	ld XIY,0x00000d8f
-	call SysInit_BytecodeBlock_0x486
+	call DisplayMode_Handler_3_Helper16
 	ret
 SysEx_BytecodeDispatcher_Helper3_Loop:
 	call	VoiceSlot_DispatchRet
@@ -9057,7 +9165,7 @@ SysEx_BytecodeDispatcher_Helper3_Sub:
 	jrl	z, SysEx_BytecodeDispatcher_Helper3_Loop
 SysEx_BytecodeDispatcher_Helper3_Skip:
 	ld	xiy, 0x0dbf
-	call	SysInit_BytecodeBlock_0x413
+	call	SysEx_BytecodeDispatcher_Helper8
 	cp	l, 255
 	jrl	z, SysEx_BytecodeDispatcher_Helper3_Return
 	xor	h, h
@@ -9078,20 +9186,21 @@ SysEx_BytecodeDispatcher_Helper3_Sub2:
 	jrl	c, SysEx_BytecodeDispatcher_Helper3_Skip2
 	sub	a, 96
 	stb_d8	(0x0d57), a
-	call	SysInit_BytecodeBlock_0xFB
+	call	ToneParam_ModeGuardEntry_Helper2_Helper
 	cp	a, 96
 	jrl	c, SysEx_BytecodeDispatcher_Helper3_Skip2
 	sub	a, 96
 	stb_d8	(0x0d57), a
-	call	SysInit_BytecodeBlock_0xFB
+	call	ToneParam_ModeGuardEntry_Helper2_Helper
 SysEx_BytecodeDispatcher_Helper3_Skip2:
 	djnz16	bc, -39
 	stb_d8	(0x0d57), a
 	cp	a, (0x0dfa:16)
 	jrl	z, SysEx_BytecodeDispatcher_Helper3_Return
-	call	MemConfig_Handler_5_0x1BF
+	call	MemConfig_Handler_5_Helper6
 SysEx_BytecodeDispatcher_Helper3_Return:
 	ret
+SysInit_BytecodeBlock_Join:
 	call	ToneParam_ModeGuardEntry_Helper4
 	cp	w, 255
 	jrl	z, SysEx_BytecodeDispatcher_Helper3_Skip3
@@ -9102,9 +9211,10 @@ SysEx_BytecodeDispatcher_Helper3_Skip3:
 	cp	a, 129
 	jrl	nz, SysEx_BytecodeDispatcher_Helper3_Return2
 	call	VoiceSlot_LoadAndDispatch
-	jp	SysInit_BytecodeBlock_0xA7
+	jp	SysInit_BytecodeBlock_Join
 SysEx_BytecodeDispatcher_Helper3_Return2:
 	ret
+Timer_ParamLoadAndCompare_Helper2:
 	xor A,A
 	call VoiceSlot_SaveState
 	call VoiceSlot_FlagCheck
@@ -9112,7 +9222,7 @@ SysEx_BytecodeDispatcher_Helper3_Return2:
 	jrl nz, .Lc_efb9fd
 	set 7, (0x0d54:16)
 .Lc_efb9fd:
-	call SysInit_BytecodeBlock_0xFF
+	call MemConfig_Handler_5_Code_Helper12
 	xor A,A
 	call VoiceSlot_RestoreState
 	ret
@@ -9137,7 +9247,7 @@ MemConfig_Handler_5_Code_Helper12:
 	ld W, 0x01:opc
 	ld XIY,0x00000e48
 	ld (XIY),0x81
-	call SysInit_BytecodeBlock_0x486
+	call DisplayMode_Handler_3_Helper16
 	pop XIZ
 	pop XIY
 	pop XIX
@@ -9150,58 +9260,62 @@ SysEx_BytecodeDispatcher_Helper4:
 	cp	l, 2:i3
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Skip
 	cp	l, 10
-	jrl	nz, SysInit_BytecodeBlock_0x154
+	jrl	nz, SysInit_BytecodeBlock_Return
 SysEx_BytecodeDispatcher_Helper4_Skip:
 	pushw	hl
 	call	MemConfig_Handler_4_Helper6
 	popw	hl
 	cp	w, 255
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Skip2
-	jp	SysInit_BytecodeBlock_0x154
+	jp	SysInit_BytecodeBlock_Return
 SysEx_BytecodeDispatcher_Helper4_Skip2:
 	xor	wa, wa
 	cp	(0x0d58:16), wa
 	jrl	nz, SysEx_BytecodeDispatcher_Helper4_Skip3
 	cp	(0x0d57:16), a
-	jrl	z, SysInit_BytecodeBlock_0x154
+	jrl	z, SysInit_BytecodeBlock_Return
 SysEx_BytecodeDispatcher_Helper4_Skip3:
 	cp	l, 2:i3
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Skip4
 	ld	l, 5:opc
-	jp	SysInit_BytecodeBlock_0x154
+	jp	SysInit_BytecodeBlock_Return
 SysEx_BytecodeDispatcher_Helper4_Skip4:
 	ld	l, 4:opc
+SysInit_BytecodeBlock_Return:
 	ret
 SysEx_BytecodeDispatcher_Helper6:
 	cp	l, 7:i3
-	jrl	nz, SysInit_BytecodeBlock_0x179
+	jrl	nz, SysInit_BytecodeBlock_Return2
 	call	MemConfig_Handler_4_Helper6
 	cp	w, 0:i3
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Skip5
-	jp	SysInit_BytecodeBlock_0x179
+	jp	SysInit_BytecodeBlock_Return2
 SysEx_BytecodeDispatcher_Helper4_Skip5:
 	xor	wa, wa
 	cp	(0x0d58:16), wa
-	jrl	nz, SysInit_BytecodeBlock_0x179
+	jrl	nz, SysInit_BytecodeBlock_Return2
 	cp	(0x0d57:16), a
-	jrl	nz, SysInit_BytecodeBlock_0x179
+	jrl	nz, SysInit_BytecodeBlock_Return2
 	ld	l, 3:opc
+SysInit_BytecodeBlock_Return2:
 	ret
 SysEx_BytecodeDispatcher_Helper7:
 	cp	l, 10
-	jrl	nz, SysInit_BytecodeBlock_0x1A0
+	jrl	nz, SysInit_BytecodeBlock_Return3
 	call	MemConfig_Handler_4_Helper6
 	cp	w, 255
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Skip6
-	jp	SysInit_BytecodeBlock_0x1A0
+	jp	SysInit_BytecodeBlock_Return3
 SysEx_BytecodeDispatcher_Helper4_Skip6:
 	xor	wa, wa
 	cp	(0x0d58:16), wa
-	jrl	nz, SysInit_BytecodeBlock_0x1A0
+	jrl	nz, SysInit_BytecodeBlock_Return3
 	cp	(0x0d57:16), a
-	jrl	nz, SysInit_BytecodeBlock_0x1A0
+	jrl	nz, SysInit_BytecodeBlock_Return3
 	ld	l, 5:opc
+SysInit_BytecodeBlock_Return3:
 	ret
+ClockConfig_Handler_0_Tbl2_Helper2:
 	ld	xhl, 0x0d54
 	bitm	7, (xhl)
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Return
@@ -9221,13 +9335,14 @@ SysEx_BytecodeDispatcher_Helper4_Skip6:
 	ld	xix, 0x0cbe
 	ld	(xix+iz), a
 	pop	xix
+SysInit_BytecodeBlock_Join2:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 132
 	jrl	nz, SysEx_BytecodeDispatcher_Helper4_Skip7
 	call	Timer_ParamCompareAlt_Helper5
 	cp	w, 255
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Return
-	jp	SysInit_BytecodeBlock_0x1E7
+	jp	SysInit_BytecodeBlock_Join2
 SysEx_BytecodeDispatcher_Helper4_Skip7:
 	cp	a, 129
 	jrl	nz, SysEx_BytecodeDispatcher_Helper4_Return
@@ -9241,7 +9356,7 @@ SysEx_BytecodeDispatcher_Helper4_Skip7:
 	call	MemConfig_Handler_5_Code_Helper13
 	xor	a, a
 	call	VoiceSlot_RestoreState
-	call	MemConfig_Handler_1_0x8B
+	call	MemConfig_Handler_0_Helper
 SysEx_BytecodeDispatcher_Helper4_Return:
 	ret
 	xor	a, a
@@ -9250,7 +9365,7 @@ SysEx_BytecodeDispatcher_Helper4_Loop:
 	ldb_d8	a, (0x0eee)
 	inc	1, a
 	cp	a, 15
-	jrl	ugt, SysInit_BytecodeBlock_0x3DA
+	jrl	ugt, SysInit_BytecodeBlock_Return4
 	stb_d8	(0x0eee), a
 	call	VoiceSlot_ComputeWordIndex
 	srl	xiz, 1
@@ -9259,9 +9374,10 @@ SysEx_BytecodeDispatcher_Helper4_Loop:
 	cp	(xix+iz), 0x0d	; cp (XIX+IZ),0x0d
 	pop	xix
 	jrl	nz, SysEx_BytecodeDispatcher_Helper4_Loop
+SysInit_BytecodeBlock_Sub:
 	call	VoiceState_DataBlock2_Helper7
 	cp	w, 0:i3
-	jrl	nz, SysInit_BytecodeBlock_0x3DA
+	jrl	nz, SysInit_BytecodeBlock_Return4
 	call	VoiceSlot_ComputeIndex
 	push	xix
 	ld	xix, 0xf250
@@ -9276,6 +9392,7 @@ SysEx_BytecodeDispatcher_Helper4_Loop:
 	ld	xix, 0x0cbe
 	ld	(xix+iz), 0x05	; ld (XIX+IZ),0x05
 	pop	xix
+SysInit_BytecodeBlock_Join3:
 	ld	a, 1:opc
 	call	VoiceSlot_SaveState
 	call	VoiceSlot_ReadCurrentParams
@@ -9283,16 +9400,18 @@ SysEx_BytecodeDispatcher_Helper4_Loop:
 	and	a, 240
 	cp	a, 176
 	jrl	z, SysEx_BytecodeDispatcher_Helper4_Skip8
+SysInit_BytecodeBlock_Join4:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
-	jrl	z, SysInit_BytecodeBlock_0x3DA
+	jrl	z, SysInit_BytecodeBlock_Return4
+SysInit_BytecodeBlock_Join5:
 	call	VoiceSlot_FlagCheck
 	cp	a, 130
-	jrl	z, SysInit_BytecodeBlock_0x3DA
+	jrl	z, SysInit_BytecodeBlock_Return4
 	cp	a, 132
-	jrl	z, SysInit_BytecodeBlock_0x3DA
-	jp	SysInit_BytecodeBlock_0x28C
-	jp	SysInit_BytecodeBlock_0x3DA
+	jrl	z, SysInit_BytecodeBlock_Return4
+	jp	SysInit_BytecodeBlock_Join3
+	jp	SysInit_BytecodeBlock_Return4
 SysEx_BytecodeDispatcher_Helper4_Skip8:
 	and	w, 1
 	rrc	w
@@ -9340,7 +9459,7 @@ SysEx_BytecodeDispatcher_Helper4_Loop2:
 SysEx_BytecodeDispatcher_Helper4_Skip12:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
-	jp	SysInit_BytecodeBlock_0x2A1
+	jp	SysInit_BytecodeBlock_Join4
 SysEx_BytecodeDispatcher_Helper4_Skip13:
 	call	VoiceSlot_FlagCheck
 	cp	(0x0e4a:16), a
@@ -9364,6 +9483,7 @@ SysEx_BytecodeDispatcher_Helper4_Skip14:
 	ld	xiy, 0x0d8f
 	ld	(0x0dd2:16), 0
 	ld	(xiy), a
+SysInit_BytecodeBlock_Join6:
 	inc	1, xiy
 	inc	1, (0x0dd2:16)
 	push	xiy
@@ -9372,7 +9492,7 @@ SysEx_BytecodeDispatcher_Helper4_Skip14:
 	bit	7, a
 	jrl	nz, SysEx_BytecodeDispatcher_Helper4_Skip15
 	ld	(xiy), a
-	jp	SysInit_BytecodeBlock_0x392
+	jp	SysInit_BytecodeBlock_Join6
 SysEx_BytecodeDispatcher_Helper4_Skip15:
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
@@ -9388,8 +9508,10 @@ SysEx_BytecodeDispatcher_Helper4_Skip15:
 	call	DisplayMode_Handler_3_Helper16
 	ld	a, 1:opc
 	call	VoiceSlot_RestoreState
-	jp	SysInit_BytecodeBlock_0x2AB
+	jp	SysInit_BytecodeBlock_Join5
+SysInit_BytecodeBlock_Return4:
 	ret
+PortConfig_DataTable_A_Helper:
 	push XIX
 	pushw hl
 	ld XIX,0x0000be9d
@@ -9422,11 +9544,13 @@ SysEx_BytecodeDispatcher_Helper4_Loop4:
 	cp	c, 8
 	jrl	c, SysEx_BytecodeDispatcher_Helper4_Loop4
 	ld	l, 255:opc
+SysInit_BytecodeBlock_Join7:
 	popw	bc
-	jp	SysInit_BytecodeBlock_0x439
+	jp	SysInit_BytecodeBlock_Return5
 SysEx_BytecodeDispatcher_Helper4_Skip16:
 	ld	l, c
-	jp	SysInit_BytecodeBlock_0x42E
+	jp	SysInit_BytecodeBlock_Join7
+SysInit_BytecodeBlock_Return5:
 	ret
 SysEx_BytecodeDispatcher_Helper9:
 	push	xiy
@@ -9455,23 +9579,26 @@ SysEx_BytecodeDispatcher_Helper4_Loop6:
 	cp	c, 8
 	jrl	c, SysEx_BytecodeDispatcher_Helper4_Loop6
 	ld	l, 255:opc
+SysInit_BytecodeBlock_Join8:
 	popw	bc
 	pop	xiy
-	jp	SysInit_BytecodeBlock_0x485
+	jp	SysInit_BytecodeBlock_Return6
 SysEx_BytecodeDispatcher_Helper4_Skip17:
 	ld	l, c
-	jp	SysInit_BytecodeBlock_0x470
+	jp	SysInit_BytecodeBlock_Join8
 SysEx_BytecodeDispatcher_Helper4_Skip18:
 	ld	l, c
 	add	l, 8
-	jp	SysInit_BytecodeBlock_0x470
+	jp	SysInit_BytecodeBlock_Join8
+SysInit_BytecodeBlock_Return6:
 	ret
 DisplayMode_Handler_3_Helper16:
 	ld a, (0x0eee:16)
-	call SysInit_BytecodeBlock_0x499
+	call SysInit_BytecodeBlock_Helper
 	or (0x8cec:16), 0x01
 	or (0x266a:16), 0x01
 	ret
+SysInit_BytecodeBlock_Helper:
 	pushw	bc
 	ld	(0x1101:16), xiy
 	stb_d8	(0x0eee), a
@@ -9479,6 +9606,7 @@ DisplayMode_Handler_3_Helper16:
 	call	VoiceSlot_ComputeWordIndex
 	ld	xix, 0xf1f8
 	xor	b, b
+SysInit_BytecodeBlock_Join9:
 	ld	iy, (xix+iz)
 	cp	iy, 65535
 	jrl	z, DisplayMode_Handler_3_Helper16_Skip3
@@ -9492,6 +9620,7 @@ DisplayMode_Handler_3_Helper16:
 	sla	iz, 1
 	ld	(0x28bc:16), wa
 	ld	xix, 0x0c9e
+SysInit_BytecodeBlock_Join10:
 	ld	de, (xix+iz)
 	cp	de, 65535
 	jrl	nz, DisplayMode_Handler_3_Helper16_Skip
@@ -9502,7 +9631,7 @@ DisplayMode_Handler_3_Helper16:
 	ld	(xix+32), 5
 	ldto_lerp	xix, 56
 	sla	iz, 1
-	jp	SysInit_BytecodeBlock_0x4DE
+	jp	SysInit_BytecodeBlock_Join10
 DisplayMode_Handler_3_Helper16_Skip:
 	srl	iz, 1
 	ldfr_lerp	xix, 56
@@ -9550,7 +9679,7 @@ DisplayMode_Handler_3_Helper16_Skip:
 	call	VoiceSlot_InitAndProcess
 	xor	w, w
 	popw	bc
-	jp	SysInit_BytecodeBlock_0x691
+	jp	SysInit_BytecodeBlock_Return7
 DisplayMode_Handler_3_Helper16_Skip2:
 	sub	wa, 251
 	ld	(0x28b6:16), wa
@@ -9595,7 +9724,7 @@ DisplayMode_Handler_3_Helper16_Skip2:
 	call	VoiceSlot_InitAndProcess
 	xor	w, w
 	popw	bc
-	jp	SysInit_BytecodeBlock_0x691
+	jp	SysInit_BytecodeBlock_Return7
 DisplayMode_Handler_3_Helper16_Loop:
 	ld	w, 104:opc
 	call	MIDI_SendSysExFromW
@@ -9605,7 +9734,7 @@ DisplayMode_Handler_3_Helper16_Loop:
 	ld	a, 238:opc
 	call	SoundCtrl_SendCommand
 	popw	bc
-	jp	SysInit_BytecodeBlock_0x691
+	jp	SysInit_BytecodeBlock_Return7
 DisplayMode_Handler_3_Helper16_Skip3:
 	push	xix
 	call	DispatchHandler_JumpToSubHandler
@@ -9645,7 +9774,8 @@ DisplayMode_Handler_3_Helper16_Skip3:
 	ld	xhl, (0x10fd:16)
 	ldw	(xhl+1), 0
 	ldw	(xhl+3), 65535
-	jp	SysInit_BytecodeBlock_0x4AF
+	jp	SysInit_BytecodeBlock_Join9
+SysInit_BytecodeBlock_Return7:
 	ret
 VoiceSlot_InitAndProcess:
 	cp bc, 0:i3
@@ -9749,15 +9879,17 @@ VoiceSlot_RetZ:
 	add	wa, bc
 	cp	wa, 255
 	jrl	ugt, VoiceSlot_RetZ_Skip
+VoiceSlot_RetZ_Join:
 	ld	(0x28ba:16), iy
 	ld	(0x28bc:16), wa
-	jp	VoiceSlot_RetZ_0x58
+	jp	VoiceSlot_RetZ_Join2
 VoiceSlot_RetZ_Skip:
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (4349:16)
 	ld	iy, (xhl+3)
 	sub	wa, 251
-	jp	VoiceSlot_RetZ_0x39
+	jp	VoiceSlot_RetZ_Join
+VoiceSlot_RetZ_Join2:
 	ld	xix, 0xf1f8
 	ld	de, (xix+iz)
 	srl	iz, 1
@@ -9792,14 +9924,15 @@ VoiceSlot_RetZ_Skip:
 	ld	(xix+32), a
 	ldto_lerp	xix, 56
 	sla	iz, 1
-	jp	VoiceSlot_RetZ_0xF8
+	jp	VoiceSlot_RetZ_Return
 VoiceSlot_RetZ_Skip2:
 	cp	wa, 0xffff
 	jrl	le, VoiceSlot_RetZ_Skip3
 	add	a, 251
-	jp	VoiceSlot_RetZ_0xBF
+	jp	VoiceSlot_RetZ_Join3
 VoiceSlot_RetZ_Skip3:
 	sub	wa, 5
+VoiceSlot_RetZ_Join3:
 	ld	iy, de
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (4349:16)
@@ -9816,7 +9949,8 @@ VoiceSlot_RetZ_Skip3:
 	sla	iz, 1
 	ld	iy, (xhl+3)
 	ld	wa, 1:i3
-	call	VoiceSlot_FinalRetZ_0x1B2
+	call	MemConfig_Handler_1_Helper3
+VoiceSlot_RetZ_Return:
 	ret
 
 VoiceSlot_LoadAndDispatch:
@@ -10076,7 +10210,7 @@ VoiceSlot_FinalRetZ:
 	call VoiceSlot_ReadCurrentParams
 	pushw WA
 	ld de, 1:i3
-	call VoiceSlot_FinalRetZ_0xB8
+	call Timer_ModeHandler_0_Helper6
 	ld D,W
 	popw	wa
 	ld	w, d
@@ -10244,6 +10378,7 @@ VoiceSlot_FinalRetZ_Return:
 	ld	xwa, (7514:16)
 	ld	(xhl), xwa
 	ret
+MemConfig_Handler_1_Helper3:
 	ld	xhl, 4362
 	push	xde
 	ld	xde, (7514:16)
@@ -10356,14 +10491,14 @@ VoiceSlot_IndexDone:
 	xor	wa, wa
 	ld	(3428:16), a
 	ld	(3426:16), wa
-VoiceSlot_IndexDone_0xA:
+VoiceSlot_IndexDone_Join:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	nz, VoiceSlot_ComputeIndex_Skip
 	ld	de, 1:i3
 	call	Timer_ModeHandler_0_Helper6
 	incw	1, (3426:16)
-	jp	VoiceSlot_IndexDone_0xA
+	jp	VoiceSlot_IndexDone_Join
 VoiceSlot_ComputeIndex_Skip:
 	ld	xiy, 3426
 	ld	xix, 13964
@@ -10378,11 +10513,11 @@ VoiceSlot_ComputeIndex_Skip:
 	ld	(xiy), 128
 VoiceSlot_IndexDone_Skip2:
 	cp	(3415:16), 48
-	jrl	nz, VoiceSlot_IndexDone_0x72
+	jrl	nz, VoiceSlot_IndexDone_Loop
 	cp	(xiy), 128
 	jrl	nz, VoiceSlot_IndexDone_Skip3
 	ld	(xiy), 0
-	jp	VoiceSlot_IndexDone_0x72
+	jp	VoiceSlot_IndexDone_Loop
 VoiceSlot_IndexDone_Skip3:
 	ld	(xiy), 128
 	ld	wa, (3426:16)
@@ -10391,26 +10526,26 @@ VoiceSlot_IndexDone_Skip3:
 	xor	wa, wa
 VoiceSlot_IndexDone_Skip4:
 	ld	(3426:16), wa
-VoiceSlot_IndexDone_0x72:
+VoiceSlot_IndexDone_Loop:
 	call	VoiceSlot_ComputeIndex_Helper
-	jp	VoiceSlot_IndexDone_0xA3
+	jp	VoiceSlot_IndexDone_Return
 VoiceSlot_IndexDone_Skip5:
 	cpw	(xiy), 1
 	jrl	z, VoiceSlot_IndexDone_Skip6
 	cpw	(xiy), 0
 	jrl	z, VoiceSlot_IndexDone_Skip6
 	decm	1, (xiy)
-	jp	VoiceSlot_IndexDone_0x72
+	jp	VoiceSlot_IndexDone_Loop
 VoiceSlot_IndexDone_Skip6:
 	ld	(xix), 8
-	jp	VoiceSlot_IndexDone_0x9F
+	jp	VoiceSlot_IndexDone_Join2
 VoiceSlot_ComputeIndex_Entry2:
 	cpw	(xiy), 0
-	jrl	nz, VoiceSlot_IndexDone_0x72
+	jrl	nz, VoiceSlot_IndexDone_Loop
 	ld	(xix), 9
-VoiceSlot_IndexDone_0x9F:
+VoiceSlot_IndexDone_Join2:
 	call	SerialPort_ModeHandler_0_Helper
-VoiceSlot_IndexDone_0xA3:
+VoiceSlot_IndexDone_Return:
 	ret
 VoiceSlot_StatusCheck:
 	bit 7, a
@@ -10449,7 +10584,7 @@ VoiceSlot_StatusRet:
 	jrl	z, VoiceSlot_StatusRet_Skip2
 VoiceSlot_StatusRet_Skip:
 	call	VoiceSlot_IndexDone
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip2:
 	call	VoiceSlot_ReadCurrentParams
 	ld	w, a
@@ -10468,22 +10603,23 @@ VoiceSlot_StatusRet_Skip2:
 	cp	a, 128
 	jrl	z, VoiceSlot_StatusRet_Skip72
 	cp	a, 208
-	jrl	nz, VoiceSlot_StatusRet_0x60
-	jp	VoiceSlot_StatusRet_0x7D4
+	jrl	nz, VoiceSlot_StatusRet_Loop2
+	jp	VoiceSlot_StatusRet_Join5
+VoiceSlot_StatusRet_Loop2:
 	ld	(0x3684:16), 0
 	cp	(0x0def:16), 1
 	jrl	nz, VoiceSlot_StatusRet_Skip3
-	call	DisplayStr_BytecodeBlock_B_0x4
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	DisplayStr_BytecodeBlock_B_Sub
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip3:
 	ld	(0x0def:16), 1
 	call	DisplayStr_BytecodeBlock_B
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip4:
 	cp	(0x0d65:16), 0
 	jrl	z, VoiceSlot_StatusRet_Skip7
 	call	VoiceSlot_FinalRetZ
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	pushw	wa
 	call	VoiceSlot_ComputeWordIndex
 	srl	iz, 1
@@ -10492,29 +10628,31 @@ VoiceSlot_StatusRet_Skip4:
 	ld	xix, 0xf1a0
 	cp	(xix+iz), 0x0c	; cp (XIX+IZ),0x0c
 	pop	xix
-	jrl	nz, VoiceSlot_StatusRet_0xBE
+	jrl	nz, VoiceSlot_StatusRet_Join
 	bit	2, (0xfdad:16)
 	jrl	z, VoiceSlot_StatusRet_Skip5
-	jp	VoiceSlot_StatusRet_0xBE
+	jp	VoiceSlot_StatusRet_Join
 VoiceSlot_StatusRet_Skip5:
 	ldb_d8	w, (0xfb3c)
 	call	ScoopDisp_BytecodeBlock1_0x32
+VoiceSlot_StatusRet_Join:
 	stb_d8	(0x367c), a
 	call	VoiceSlot_FinalRetZ
 	stb_d8	(0x367b), a
 	cp	(0x0def:16), 0
 	jrl	nz, VoiceSlot_StatusRet_Skip6
-	call	Display_BytecodeBlock_F_0x4
-	jp	VoiceSlot_StatusRet_0xE3
+	call	Display_BytecodeBlock_F_Sub3
+	jp	VoiceSlot_StatusRet_Join2
 VoiceSlot_StatusRet_Skip6:
 	ld	(0x0def:16), 0
 	call	Display_BytecodeBlock_F
-	jp	VoiceSlot_StatusRet_0x8A0
+VoiceSlot_StatusRet_Join2:
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip7:
-	call	Timer_ModeHandler_0_0x53
+	call	VoiceSlot_StatusRet_Helper
 	call	VoiceSlot_FinalRetZ
-	call	VoiceSlot_StatusRet_0x8A1
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
+	call	ToneParam_HandlerTable_BC_Helper8
 	and	a, 32
 	rlc a, 3	; rlc 0x03,A
 	ld	e, a
@@ -10526,10 +10664,10 @@ VoiceSlot_StatusRet_Skip7:
 	ld	a, (xhl+a)
 	stb_d8	(0x0d61), a
 	call	SNS_Init_Startup
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip8:
 	call	VoiceSlot_FinalRetZ
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	cp	a, 72
 	jrl	z, VoiceSlot_StatusRet_Skip10
 	stb_d8	(0x11bb), a
@@ -10552,11 +10690,11 @@ VoiceSlot_StatusRet_Skip9:
 	stb_d8	(0x11be), h
 	ld	(0x0def:16), 1
 	call	Display_BytecodeBlock_F_Sub
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip10:
 	call	VoiceSlot_FinalRetZ
 	cp	a, 0:i3
-	jrl	nz, VoiceSlot_StatusRet_0x60
+	jrl	nz, VoiceSlot_StatusRet_Loop2
 	call	VoiceSlot_FinalRetZ
 	bit	0, (0x0dc8:16)
 	jrl	z, VoiceSlot_StatusRet_Skip11
@@ -10573,16 +10711,17 @@ VoiceSlot_StatusRet_Skip12:
 	cp	(0x0d65:16), 3
 	jrl	z, VoiceSlot_StatusRet_Skip13
 	ld	(0x0def:16), 4
-	call	DisplayStr_BytecodeBlock_B_0x8C
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	DisplayMode_Handler_3_Helper10_Helper
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip13:
 	ld	(0x0def:16), 12
 	call	DisplayStr_BytecodeBlock_D
-	jp	VoiceSlot_StatusRet_0x8A0
-	jp	VoiceSlot_StatusRet_0x60
+	jp	VoiceSlot_StatusRet_Return
+VoiceSlot_StatusRet_Loop3:
+	jp	VoiceSlot_StatusRet_Loop2
 VoiceSlot_StatusRet_Skip14:
 	call	VoiceSlot_FinalRetZ
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	and	a, 127
 	ldb_d8	h, (0x0dc8)
 	and	h, 4
@@ -10602,7 +10741,7 @@ VoiceSlot_StatusRet_Skip14:
 	jrl	z, VoiceSlot_StatusRet_Skip18
 	cp	a, 4:i3
 	jrl	z, VoiceSlot_StatusRet_Skip22
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip15:
 	call	VoiceSlot_FinalRetZ
 	ld	c, a
@@ -10614,21 +10753,21 @@ VoiceSlot_StatusRet_Skip15:
 	jrl	z, VoiceSlot_StatusRet_Skip16
 	cp	a, 2:i3
 	jrl	z, VoiceSlot_StatusRet_Skip17
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip16:
 	ld	(0x0def:16), 15
 	pushw	bc
 	call	Display_UpdateRegion0
 	popw	bc
-	call	DisplayStr_RhythmLabel_0x4C
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	VoiceCtrl_ParamSetupBytecode_Sub_Helper2
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip17:
 	ld	(0x0def:16), 4
 	pushw	bc
 	call	Display_UpdateRegion0
 	popw	bc
-	call	DisplayStr_RhythmLabel_0xA
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	VoiceCtrl_ParamSetupBytecode_Sub_Helper
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip18:
 	call	VoiceSlot_FinalRetZ
 	stb_d8	(0x10f3), a
@@ -10649,12 +10788,12 @@ VoiceSlot_StatusRet_Skip18:
 	ldto_berp	a, 60
 	jrl	z, VoiceSlot_StatusRet_Skip19
 	call	ParamPopup_ApcMode
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip19:
 	bit	3, a
 	jrl	z, VoiceSlot_StatusRet_Skip20
 	call	ParamPopup_ApcMemory
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip20:
 	ldfr_berp	a, 60
 	and	a, 224
@@ -10662,7 +10801,7 @@ VoiceSlot_StatusRet_Skip20:
 	jrl	z, VoiceSlot_StatusRet_Skip21
 	call	ParamPopup_AccompPart
 VoiceSlot_StatusRet_Skip21:
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip22:
 	call	VoiceSlot_FinalRetZ
 	stb_d8	(0x10f3), a
@@ -10681,14 +10820,14 @@ VoiceSlot_StatusRet_Skip22:
 	bit	4, a
 	jrl	z, VoiceSlot_StatusRet_Skip23
 	call	ParamPopup_DynamicAccomp
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip23:
 	bit	6, a
 	jrl	z, VoiceSlot_StatusRet_Skip24
 	call	ParamPopup_TechniChord
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip24:
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip25:
 	ldfr_berp	a, 56
 	stb_d8	(0x10f2), a
@@ -10718,7 +10857,7 @@ VoiceSlot_StatusRet_Skip27:
 	jrl	nz, VoiceSlot_StatusRet_Skip32
 	bit	3, a
 	jrl	nz, VoiceSlot_StatusRet_Skip34
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip28:
 	ldfr_berp	c, 60
 	and	c, 192
@@ -10727,14 +10866,15 @@ VoiceSlot_StatusRet_Skip28:
 	bit	6, c
 	jrl	z, VoiceSlot_StatusRet_Skip29
 	ld	(xiy), 3
-	jp	VoiceSlot_StatusRet_0x371
+	jp	VoiceSlot_StatusRet_Join3
 VoiceSlot_StatusRet_Skip29:
 	ld	(xiy), 4
+VoiceSlot_StatusRet_Join3:
 	call	Display_ModePopupDispatch
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Loop:
 	set	5, (0x0d54:16)
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip30:
 	ldfr_berp	c, 60
 	and	c, 48
@@ -10746,7 +10886,7 @@ VoiceSlot_StatusRet_Skip30:
 	ld	(xiy), 11
 VoiceSlot_StatusRet_Skip31:
 	call	Display_ModePopupDispatch
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip32:
 	ld	(xiy), 5
 	cp	(0x10f2:16), 6
@@ -10754,11 +10894,11 @@ VoiceSlot_StatusRet_Skip32:
 	ld	(xiy), 12
 VoiceSlot_StatusRet_Skip33:
 	call	Display_ModePopupDispatch
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip34:
 	ld	(xiy), 6
 	call	Display_ModePopupDispatch
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip35:
 	call	VoiceSlot_FinalRetZ
 	stb_d8	(0x10f2), a
@@ -10806,7 +10946,7 @@ VoiceSlot_StatusRet_Skip35:
 	cp	a, 18
 	jrl	z, VoiceSlot_StatusRet_Skip37
 VoiceSlot_StatusRet_Skip36:
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip37:
 	ldb_d8	a, (0x10f2)
 	cp	a, 0:i3
@@ -10823,7 +10963,7 @@ VoiceSlot_StatusRet_Skip37:
 	jrl	z, VoiceSlot_StatusRet_Skip38
 	cp	a, 11
 	jrl	z, VoiceSlot_StatusRet_Skip38
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip38:
 	ldb_d8	a, (0x10f3)
 	cp	(0x10f1:16), 112
@@ -10835,21 +10975,21 @@ VoiceSlot_StatusRet_Skip38:
 	jrl	z, VoiceSlot_StatusRet_Skip53
 	cp	l, 2:i3
 	jrl	z, VoiceSlot_StatusRet_Skip39
-	jp	VoiceSlot_StatusRet_0x1C5
-	call	StringData_APCModeNames_0x3F8
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Loop3
+	call	VoiceSlot_StatusRet_Helper6
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip39:
 	call	ParamPopup_KeyNameBracketed
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip40:
 	bit	2, (0x10f5:16)
-	jrl	z, VoiceSlot_StatusRet_0x1C5
-	call	StringData_APCModeNames_0x463
-	jp	VoiceSlot_StatusRet_0x8A0
+	jrl	z, VoiceSlot_StatusRet_Loop3
+	call	VoiceSlot_StatusRet_Helper10
+	jp	VoiceSlot_StatusRet_Return
 	bit	7, (0x10f5:16)
-	jrl	z, VoiceSlot_StatusRet_0x1C5
+	jrl	z, VoiceSlot_StatusRet_Loop3
 	call	ParamPopup_TotalReverb
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip41:
 	cp	(0x10f1:16), 152
 	jrl	nz, VoiceSlot_StatusRet_Skip47
@@ -10866,11 +11006,11 @@ VoiceSlot_StatusRet_Skip41:
 	ldto_berp	a, 60
 	jrl	z, VoiceSlot_StatusRet_Skip52
 	call	ParamPopup_Msa
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip42:
 	and	a, 127
 	call	ParamPopup_PanelMemory
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip43:
 	ldb_d8	a, (0x0dc8)
 	and	a, 2
@@ -10884,7 +11024,7 @@ VoiceSlot_StatusRet_Skip44:
 	ldb_d8	a, (0x0dc8)
 	and	a, 1
 	call	ParamPopup_FadeIn
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip45:
 	ldb_d8	a, (0x10f3)
 	and	a, 64
@@ -10893,48 +11033,49 @@ VoiceSlot_StatusRet_Skip45:
 	ld	a, 1:opc
 VoiceSlot_StatusRet_Skip46:
 	call	ParamPopup_FadeOut
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip47:
 	cp	(0x10f1:16), 19
 	jrl	nz, VoiceSlot_StatusRet_Skip48
 	cp	(0x10f2:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip52
 	ld	hl, 1:i3
-	jp	VoiceSlot_StatusRet_0x5B7
+	jp	VoiceSlot_StatusRet_Join4
 VoiceSlot_StatusRet_Skip48:
 	cp	(0x10f1:16), 20
 	jrl	nz, VoiceSlot_StatusRet_Skip49
 	cp	(0x10f2:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip52
 	ld	hl, 2:i3
-	jp	VoiceSlot_StatusRet_0x5B7
+	jp	VoiceSlot_StatusRet_Join4
 VoiceSlot_StatusRet_Skip49:
 	cp	(0x10f1:16), 16
 	jrl	nz, VoiceSlot_StatusRet_Skip50
 	cp	(0x10f2:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip52
 	ld	hl, 3:i3
-	jp	VoiceSlot_StatusRet_0x5B7
+	jp	VoiceSlot_StatusRet_Join4
 VoiceSlot_StatusRet_Skip50:
 	cp	(0x10f1:16), 17
 	jrl	nz, VoiceSlot_StatusRet_Skip51
 	cp	(0x10f2:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip52
 	ld	hl, 4:i3
-	jp	VoiceSlot_StatusRet_0x5B7
+	jp	VoiceSlot_StatusRet_Join4
 VoiceSlot_StatusRet_Skip51:
 	cp	(0x10f1:16), 18
 	jrl	nz, VoiceSlot_StatusRet_Skip52
 	cp	(0x10f2:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip52
 	ld	hl, 5:i3
-	jp	VoiceSlot_StatusRet_0x5B7
+	jp	VoiceSlot_StatusRet_Join4
 VoiceSlot_StatusRet_Skip52:
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip53:
 	xor	hl, hl
+VoiceSlot_StatusRet_Join4:
 	call	ParamPopup_AccompVolume
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip54:
 	ldb_d8	a, (0x10f1)
 	cp	a, 144
@@ -10952,11 +11093,11 @@ VoiceSlot_StatusRet_Skip54:
 	cp	a, 15
 	jrl	z, VoiceSlot_StatusRet_Skip56
 VoiceSlot_StatusRet_Skip55:
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip56:
 	ldb_d8	a, (0x10f2)
 	cp	a, 3:i3
-	jrl	z, VoiceSlot_StatusRet_0x62A
+	jrl	z, VoiceSlot_StatusRet_Helper2
 	cp	a, 4:i3
 	jrl	z, VoiceSlot_StatusRet_Skip57
 	cp	a, 12
@@ -10973,56 +11114,57 @@ VoiceSlot_StatusRet_Skip56:
 	jrl	z, VoiceSlot_StatusRet_Skip60
 	cp	a, 7:i3
 	jrl	z, VoiceSlot_StatusRet_Skip61
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
+VoiceSlot_StatusRet_Helper2:
 	call	ParamPopup_PartVolume
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip57:
 	ldb_d8	a, (0x10f5)
 	bit	3, a
 	jrl	nz, VoiceSlot_StatusRet_Skip58
 	bit	6, a
 	jrl	nz, VoiceSlot_StatusRet_Skip59
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip58:
 	call	ParamPopup_PartSustain
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 	call	ParamPopup_PartDspEffectOff
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip59:
 	call	ParamPopup_PartEffect
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip60:
 	call	ParamPopup_PartDspEffectLevel
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip61:
 	call	ParamPopup_PartReverb
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip62:
 	ldfr_berp	a, 60
 	ldb_d8	a, (0x10f5)
 	and	a, 192
 	ldto_berp	a, 60
-	jrl	z, VoiceSlot_StatusRet_0x1C5
+	jrl	z, VoiceSlot_StatusRet_Loop3
 	call	ParamPopup_PartTimbre
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip63:
 	call	ParamPopup_PartPanpot
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip64:
 	call	ParamPopup_PartKeyShift
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip65:
 	call	ParamPopup_PartTuning
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip66:
 	call	ParamPopup_PartBendSense
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip67:
-	jp	VoiceSlot_StatusRet_0x1C5
-	jp	VoiceSlot_StatusRet_0x1C5
-	jp	VoiceSlot_StatusRet_0x1C5
-	call	VoiceSlot_StatusRet_0x62A
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Loop3
+	jp	VoiceSlot_StatusRet_Loop3
+	jp	VoiceSlot_StatusRet_Loop3
+	call	VoiceSlot_StatusRet_Helper2
+	jp	VoiceSlot_StatusRet_Return
 	ldb_d8	a, (0x10f5)
 	bit	3, a
 	jrl	nz, VoiceSlot_StatusRet_Skip68
@@ -11030,36 +11172,36 @@ VoiceSlot_StatusRet_Skip67:
 	jrl	nz, VoiceSlot_StatusRet_Skip69
 	bit	7, a
 	jrl	nz, VoiceSlot_StatusRet_Skip70
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip68:
 	call	ParamPopup_PartSustain
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip69:
-	call	StringData_APCModeNames_0x394
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	VoiceSlot_StatusRet_Helper5
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip70:
 	call	ParamPopup_PartTremolo
-	jp	VoiceSlot_StatusRet_0x8A0
-	call	StringData_APCModeNames_0x3F9
-	jp	VoiceSlot_StatusRet_0x8A0
-	call	StringData_APCModeNames_0x3FA
-	jp	VoiceSlot_StatusRet_0x8A0
-	call	StringData_APCModeNames_0x413
-	jp	VoiceSlot_StatusRet_0x8A0
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Return
+	call	VoiceSlot_StatusRet_Helper7
+	jp	VoiceSlot_StatusRet_Return
+	call	VoiceSlot_StatusRet_Helper8
+	jp	VoiceSlot_StatusRet_Return
+	call	VoiceSlot_StatusRet_Helper9
+	jp	VoiceSlot_StatusRet_Return
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip71:
 	ldb_d8	a, (0x10f2)
-	jp	VoiceSlot_StatusRet_0x1C5
+	jp	VoiceSlot_StatusRet_Loop3
 	ldb_d8	a, (0x10f3)
 	bit	0, a
-	jrl	nz, VoiceSlot_StatusRet_0x1C5
+	jrl	nz, VoiceSlot_StatusRet_Loop3
 	bit	1, a
-	jrl	nz, VoiceSlot_StatusRet_0x1C5
+	jrl	nz, VoiceSlot_StatusRet_Loop3
 	bit	2, a
-	jrl	nz, VoiceSlot_StatusRet_0x1C5
+	jrl	nz, VoiceSlot_StatusRet_Loop3
 	bit	4, a
-	jrl	nz, VoiceSlot_StatusRet_0x1C5
-	jp	VoiceSlot_StatusRet_0x1C5
+	jrl	nz, VoiceSlot_StatusRet_Loop3
+	jp	VoiceSlot_StatusRet_Loop3
 VoiceSlot_StatusRet_Skip72:
 	call	VoiceSlot_FinalRetZ
 	ld	xiy, 0x368c
@@ -11073,13 +11215,13 @@ VoiceSlot_StatusRet_Skip72:
 	jrl	z, VoiceSlot_StatusRet_Skip78
 	cp	a, 132
 	jrl	z, VoiceSlot_StatusRet_Skip73
-	jp	VoiceSlot_StatusRet_0x60
+	jp	VoiceSlot_StatusRet_Loop2
 VoiceSlot_StatusRet_Skip73:
 	ld	(xiy), 9
 	call	SerialPort_ModeHandler_0_Helper
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip74:
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	ld	c, a
 	pushw	bc
 	call	VoiceSlot_ReadCurrentParams
@@ -11095,27 +11237,28 @@ VoiceSlot_StatusRet_Skip74:
 	cp	(0x0d65:16), 3
 	jrl	z, VoiceSlot_StatusRet_Skip75
 	ld	(0x0def:16), 7
-	call	DisplayStr_BytecodeBlock_C_0x90
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	VoiceSlot_StatusRet_Helper3
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip75:
 	ld	(0x0def:16), 17
 	call	Display_UpdateRegion0
-	call	Display_BytecodeBlock_F_0x2DA
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	VoiceSlot_StatusRet_Helper4
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip76:
 	ld	(xiy), 1
 	call	Display_ModePopupDispatch
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip77:
 	ld	(xiy), 2
 	call	Display_ModePopupDispatch
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip78:
 	cp	(0x0d65:16), 0
 	jrl	nz, VoiceSlot_StatusRet_Skip79
 	call	VoiceSlot_IndexDone
 VoiceSlot_StatusRet_Skip79:
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
+VoiceSlot_StatusRet_Join5:
 	call	VoiceSlot_FinalRetZ
 	cp	a, 208
 	jrl	z, VoiceSlot_StatusRet_Skip80
@@ -11125,57 +11268,59 @@ VoiceSlot_StatusRet_Skip79:
 	jrl	z, VoiceSlot_StatusRet_Skip84
 	cp	a, 211
 	jrl	z, VoiceSlot_StatusRet_Skip86
-	jp	VoiceSlot_StatusRet_0x60
+	jp	VoiceSlot_StatusRet_Loop2
 VoiceSlot_StatusRet_Skip80:
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	stb_d8	(0x3685), a
 	ld	(0x3684:16), 5
 	cp	(0x0def:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip81
-	call	DisplayStr_BytecodeBlock_B_0x4
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	DisplayStr_BytecodeBlock_B_Sub
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip81:
 	ld	(0x0def:16), 3
 	call	DisplayStr_BytecodeBlock_B
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip82:
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	stb_d8	(0x3685), a
 	ld	(0x3684:16), 2
 	cp	(0x0def:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip83
-	call	DisplayStr_BytecodeBlock_B_0x4
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	DisplayStr_BytecodeBlock_B_Sub
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip83:
 	ld	(0x0def:16), 3
 	call	DisplayStr_BytecodeBlock_B
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip84:
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	stb_d8	(0x3685), a
 	ld	(0x3684:16), 1
 	call	VoiceSlot_FinalRetZ
 	stb_d8	(0x1112), a
 	cp	(0x0def:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip85
-	call	DisplayStr_BytecodeBlock_B_0x4
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	DisplayStr_BytecodeBlock_B_Sub
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip85:
 	ld	(0x0def:16), 3
 	call	DisplayStr_BytecodeBlock_B
-	jp	VoiceSlot_StatusRet_0x8A0
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip86:
-	call	VoiceSlot_StatusRet_0x8A1
+	call	ToneParam_HandlerTable_BC_Helper8
 	stb_d8	(0x3685), a
 	ld	(0x3684:16), 3
 	cp	(0x0def:16), 3
 	jrl	nz, VoiceSlot_StatusRet_Skip87
-	call	DisplayStr_BytecodeBlock_B_0x4
-	jp	VoiceSlot_StatusRet_0x8A0
+	call	DisplayStr_BytecodeBlock_B_Sub
+	jp	VoiceSlot_StatusRet_Return
 VoiceSlot_StatusRet_Skip87:
 	ld	(0x0def:16), 3
 	call	DisplayStr_BytecodeBlock_B
+VoiceSlot_StatusRet_Return:
 	ret
+ToneParam_HandlerTable_BC_Helper8:
 	call	VoiceSlot_FinalRetZ
 	call	VoiceSlot_FinalRetZ
 	ret
@@ -11319,37 +11464,37 @@ VoiceState_DataBlock2:
 	ld	xiy, 3230
 	ld	wa, (xiy+iz)
 	cp	(xix), wa
-	jrl	nz, VoiceState_DataBlock2_Join
+	jrl	nz, VoiceState_DataBlock2_Code_Skip3
 	srl	iz, 1
 	ldfr_lerp	xiy, 56
 	lda	xiy, (xiy+iz)
 	ld	a, (xiy+32)
 	ldto_lerp	xiy, 56
 	cp	(xix+2), a
-	jrl	ule, VoiceState_DataBlock2_Skip
+	jrl	ule, VoiceState_DataBlock2_Code_Skip
 	ld	w, 3:opc
 	jp	VoiceState_DataBlock2_Epilogue
-VoiceState_DataBlock2_Skip:
-	jrl	z, VoiceState_DataBlock2_Skip2
+VoiceState_DataBlock2_Code_Skip:
+	jrl	z, VoiceState_DataBlock2_Code_Skip2
 	ld	w, 2:opc
 	jp	VoiceState_DataBlock2_Epilogue
-VoiceState_DataBlock2_Skip2:
+VoiceState_DataBlock2_Code_Skip2:
 	ld	w, 1:opc
 	jp	VoiceState_DataBlock2_Epilogue
-VoiceState_DataBlock2_Join:
+VoiceState_DataBlock2_Code_Skip3:
 	ld	iy, wa
 	call	VoiceSlot_UpdateCurrentPointer
 	ld	xhl, (4349:16)
 	ld	wa, (xhl+1)
 	cp	wa, 0:i3
-	jrl	z, VoiceState_DataBlock2_Skip3
+	jrl	z, VoiceState_DataBlock2_Code_Skip4
 	cp	wa, (xix)
-	jrl	z, VoiceState_DataBlock2_Skip4
-	jp	VoiceState_DataBlock2_Join
-VoiceState_DataBlock2_Skip3:
+	jrl	z, VoiceState_DataBlock2_Code_Skip5
+	jp	VoiceState_DataBlock2_Code_Skip3
+VoiceState_DataBlock2_Code_Skip4:
 	ld	w, 3:opc
 	jp	VoiceState_DataBlock2_Epilogue
-VoiceState_DataBlock2_Skip4:
+VoiceState_DataBlock2_Code_Skip5:
 	ld	w, 2:opc
 VoiceState_DataBlock2_Epilogue:
 	pop	xix
@@ -11357,6 +11502,7 @@ VoiceState_DataBlock2_Epilogue:
 	pop	xiz
 	pop	xhl
 	ret
+MemConfig_Handler_1_Helper4:
 	push	xhl
 	xor	w, w
 	and	a, 7
@@ -11366,14 +11512,14 @@ VoiceState_DataBlock2_Epilogue:
 	ld	xhl, xwa
 	ld	hl, (xhl+4)
 	cp hl, (3416:16)
-	jrl	ule, VoiceState_DataBlock2_Skip5
+	jrl	ule, VoiceState_DataBlock2_Code_Skip6
 	ld	w, 3:opc
 	jp	VoiceState_DataBlock2_Epilogue2
-VoiceState_DataBlock2_Skip5:
-	jrl	z, VoiceState_DataBlock2_Skip6
+VoiceState_DataBlock2_Code_Skip6:
+	jrl	z, VoiceState_DataBlock2_Code_Skip7
 	ld	w, 2:opc
 	jp	VoiceState_DataBlock2_Epilogue2
-VoiceState_DataBlock2_Skip6:
+VoiceState_DataBlock2_Code_Skip7:
 	ld	w, 1:opc
 VoiceState_DataBlock2_Epilogue2:
 	pop	xhl
@@ -11407,7 +11553,7 @@ MemConfig_Handler_4_Helper6:
 	pop XHL
 	popw wa
 	ld W, 0xff:opc
-	jp VoiceState_DataBlock2_0x10B
+	jp VoiceState_DataBlock2_Return10
 .Lc_efd242:
 	srl IX, 0x01
 	push XDE
@@ -11421,6 +11567,7 @@ MemConfig_Handler_4_Helper6:
 	pop XHL
 	popw wa
 	ld W, 0x00:opc
+VoiceState_DataBlock2_Return10:
 	ret
 ToneParam_ModeGuardEntry_Helper4:
 	push XHL
@@ -11466,18 +11613,20 @@ ToneParam_ModeGuardEntry_Helper4:
 	cp A,0x84
 	jrl z, .Lc_efd2c1
 	ld W, 0xff:opc
-	jp VoiceState_DataBlock2_0x173
+	jp VoiceState_DataBlock2_Join6
 .Lc_efd2c1:
 	ld W, 0x00:opc
+VoiceState_DataBlock2_Join6:
 	pop XHL
 	pushw wa
 	ld A, 0x07:opc
 	call VoiceSlot_RestoreState
 	popw wa
-	jp VoiceState_DataBlock2_0x183
+	jp VoiceState_DataBlock2_Return11
 .Lc_efd2d0:
 	ld bc, 2:i3
 	pop XHL
+VoiceState_DataBlock2_Return11:
 	ret
 VoiceState_DataBlock2_Helper7:
 	push	xhl
@@ -11523,9 +11672,10 @@ Timer_ModeHandler_0_Helper7:
 	cp wa, 0:i3
 	jrl z, .Lc_efd339
 	ld W, 0x00:opc
-	jp VoiceState_DataBlock2_0x1EB
+	jp VoiceState_DataBlock2_Return12
 .Lc_efd339:
 	ld W, 0xff:opc
+VoiceState_DataBlock2_Return12:
 	ret
 SystemInit_StepHandler_0_Helper:
 	call	Rhythm_TransposeTrampBlock
@@ -11540,6 +11690,7 @@ SystemInit_StepHandler_0_Helper:
 	mul	wa, e
 VoiceState_DataBlock2_Return2:
 	ret
+ToneParam_Evt09_BytecodeHandler_Helper2:
 	cp	(3429:16), 3
 	jrl	z, VoiceState_DataBlock2_Skip7
 VoiceState_DataBlock2_Loop:
@@ -11855,6 +12006,7 @@ VoiceState_DataBlock2_Entry3_Code_Return:
 VoiceState_DataBlock2_Tbl:
 	.byte	0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80, 0x00
 	.byte	0x00, 0x01, 0x00, 0x02, 0x00, 0x04, 0x00, 0x08, 0x00, 0x10, 0x00, 0x20, 0x00, 0x40, 0x00, 0x80
+VoiceSlot_TableSetup_Helper6:
 	xor	bc, bc
 VoiceState_DataBlock2_Loop9:
 	pushw	bc
@@ -12181,7 +12333,7 @@ SubCPU_ToneParamDisplay_Skip2:
 	ld	(xix+2), a
 	ld	l, (4380:16)
 	exts	hl
-	ld	xiy, SubCPU_ToneDispatch_0x50
+	ld	xiy, SubCPU_ToneParamDisplay_Tbl
 	ld	a, (xiy+hl)
 	ld	(xix+3), a
 	pop	xiy
@@ -12201,7 +12353,7 @@ SubCPU_ToneParamDisplay_Helper2:
 	jrl z, .Lc_efda73
 	xor WA,WA
 	ld a, (0x111c:16)
-	ld XIX,SubCPU_ToneDispatch_0x50
+	ld XIX,SubCPU_ToneParamDisplay_Tbl
 	ld	a, (xix+wa)
 	ld	a, (xhl+wa)
 	ld (0x111d:16), a
@@ -12292,9 +12444,9 @@ SubCPU_ToneParamDisplay_Skip5:
 	ld	h, 3:opc
 	call	SubCPU_ToneStoreDigits
 	ld	(4380:16), a
-	call	SubCPU_ToneParamDisplay_0x9F
-	call	SubCPU_ToneParamDisplay_0xE3
-	call	SubCPU_ToneParamDisplay_0x4E
+	call	SubCPU_ToneParamDisplay_Helper2
+	call	SubCPU_ToneParamDisplay_Helper3
+	call	SubCPU_ToneParamDisplay_Helper
 SubCPU_ToneParamDisplay_Return:
 	ret
 SubCPU_ToneHandler_A:
@@ -12317,10 +12469,10 @@ SubCPU_ToneLoadAndStore:
 	jrl nz, SubCPU_CallRoutine
 	ld h, 0xff:opc
 SubCPU_CallRoutine:
-	call PerfMode_VoiceAddressTable_0x50
+	call PerfMode_Evt04_VolumeHandler_Helper
 	ld	(4381:16), a
-	call SubCPU_ToneParamDisplay_0xE3
-	call SubCPU_ToneParamDisplay_0x4E
+	call SubCPU_ToneParamDisplay_Helper3
+	call SubCPU_ToneParamDisplay_Helper
 	ret
 SubCPU_ToneStoreDigits:
 	; --- Clamp/adjust: inc/dec A within [L..H] based on W bit 7 (34 bytes) ---
@@ -12345,12 +12497,12 @@ PerfMode_NullRet:
 SubCPU_ToneFormatDone:
 	bit	7, w
 	jrl	z, SubCPU_ToneFormatDone_Skip
-	jp	SubCPU_ToneClearRegion_0x62
+	jp	SubCPU_ToneClearRegion_Return
 SubCPU_ToneFormatDone_Skip:
 	ld	w, (3538:16)
 	ld	w, 6:opc
 	ld	xiy, 4382
-	call	SysInit_BytecodeBlock_0x486
+	call	DisplayMode_Handler_3_Helper16
 SubCPU_ToneClearRegion:
 	or	(0x0dd3:16), 1
 	xor	a, a
@@ -12368,7 +12520,7 @@ SubCPU_ToneClearRegion:
 	ld	xhl, (xix+hl)
 	pop	xix
 	call	(xhl)
-	jp	SubCPU_ToneClearRegion_0x62
+	jp	SubCPU_ToneClearRegion_Return
 SubCPU_ToneClearRegion_Skip:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
@@ -12379,10 +12531,12 @@ SubCPU_ToneClearRegion_Skip:
 	cp	a, (0x0d57:16)
 	jrl	ugt, SubCPU_ToneClearRegion_Skip2
 	call	DMA_FlagCheckWithCalls
-	jp	SubCPU_ToneClearRegion_0x5E
+	jp	SubCPU_ToneClearRegion_Join
 SubCPU_ToneClearRegion_Skip2:
-	call	DisplayMode_Handler_3_0x775
+	call	Timer_ParamCompareAlt_Helper6
+SubCPU_ToneClearRegion_Join:
 	res	2, (0x0d54:16)
+SubCPU_ToneClearRegion_Return:
 	ret
 PerfMode_ParamHandler_11:
 	ld	hl, bc
@@ -12433,7 +12587,8 @@ SubCPU_ToneParamRet:
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
 	.long	DefaultHandler_Ret
-	call	SubCPU_ToneParamRet_0x315
+SubCPU_ToneParamRet_Helper:
+	call	VoiceSlot_TableSetup_Helper7
 	call	AccPedal_CheckBitAndUpdate
 	ldw_d16	wa, (0x367e)
 	ld	(0x0e4e:16), wa
@@ -12444,11 +12599,11 @@ SubCPU_ToneParamRet:
 	jrl	z, PerfMode_ParamHandler_11_Skip7
 	cp	(0x0ec8:16), 4
 	jrl	ugt, PerfMode_ParamHandler_11_Skip3
-	call	SubCPU_ToneParamRet_0x38A
+	call	SubCPU_ToneParamRet_Helper2
 	ldw_d16	de, (0x0e4e)
 	inc	1, de
 	ld	(0x287f:16), de
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
@@ -12456,7 +12611,7 @@ SubCPU_ToneParamRet:
 	xor	wa, wa
 	ld	(0x0e50:16), wa
 	stb_d8	(0x0e54), a
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip:
 	ldw_d16	hl, (0x0e4e)
 	inc	1, hl
@@ -12467,22 +12622,22 @@ PerfMode_ParamHandler_11_Skip:
 	jrl	ule, PerfMode_ParamHandler_11_Skip2
 	ld	(0x0e54:16), 4
 PerfMode_ParamHandler_11_Skip2:
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip3:
 	cp	(0x0d5c:16), 3
 	jrl	ugt, PerfMode_ParamHandler_11_Skip4
-	call	SubCPU_ToneParamRet_0x38A
+	call	SubCPU_ToneParamRet_Helper2
 	ldw_d16	wa, (0x0e4e)
 	ld	(0x0e50:16), wa
 	ldb_d8	a, (0x0e53)
 	sub	a, 4
 	stb_d8	(0x0e54), a
 	ld	(0x0e53:16), 4
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip4:
 	ldw_d16	de, (0x0e4e)
 	ld	(0x287f:16), de
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
 	ldw_d16	wa, (0x28af)
@@ -12497,7 +12652,7 @@ PerfMode_ParamHandler_11_Skip4:
 	ldw_d16	de, (0x0e4e)
 	inc	1, de
 	ld	(0x287f:16), de
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
@@ -12511,12 +12666,12 @@ PerfMode_ParamHandler_11_Skip4:
 	jrl	ule, PerfMode_ParamHandler_11_Skip5
 	ld	(0x0e54:16), 4
 PerfMode_ParamHandler_11_Skip5:
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip6:
 	xor	wa, wa
 	ld	(0x0e50:16), wa
 	stb_d8	(0x0e54), a
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip7:
 	ldb_d8	l, (0x0eee)
 	dec	1, l
@@ -12541,7 +12696,7 @@ PerfMode_ParamHandler_11_Skip7:
 	ldw_d16	de, (0x0e4e)
 	inc	1, de
 	ld	(0x287f:16), de
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
@@ -12555,12 +12710,12 @@ PerfMode_ParamHandler_11_Skip7:
 	jrl	ule, PerfMode_ParamHandler_11_Skip8
 	ld	(0x0e54:16), 4
 PerfMode_ParamHandler_11_Skip8:
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip9:
 	xor	wa, wa
 	ld	(0x0e50:16), wa
 	stb_d8	(0x0e54), a
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip10:
 	cp	(0x0d5c:16), 3
 	jrl	ugt, PerfMode_ParamHandler_11_Skip11
@@ -12573,7 +12728,7 @@ PerfMode_ParamHandler_11_Skip10:
 	stb_d8	(0x0e54), a
 	ldw_d16	wa, (0x0e4e)
 	ld	(0x0e50:16), wa
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip11:
 	ldw_d16	wa, (0x367e)
 	ld	(0x0e4c:16), wa
@@ -12584,7 +12739,7 @@ PerfMode_ParamHandler_11_Skip11:
 	ldw_d16	de, (0x367e)
 	inc	1, de
 	ld	(0x287f:16), de
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
 	cp	(0x287a:16), 0
@@ -12598,12 +12753,13 @@ PerfMode_ParamHandler_11_Skip11:
 	jrl	ule, PerfMode_ParamHandler_11_Skip12
 	ld	(0x0e54:16), 4
 PerfMode_ParamHandler_11_Skip12:
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
 PerfMode_ParamHandler_11_Skip13:
 	xor	wa, wa
 	ld	(0x0e50:16), wa
 	stb_d8	(0x0e54), a
-	jp	SubCPU_ToneParamRet_0x2CC
+	jp	SubCPU_ToneParamRet_Join
+SubCPU_ToneParamRet_Join:
 	ldw_d16	wa, (0x0e4c)
 	ld	(0x117c:16), wa
 	ldb_d8	a, (0x0e52)
@@ -12624,12 +12780,14 @@ PerfMode_ParamHandler_11_Skip13:
 	stb_d8	(0x0ec1), a
 PerfMode_ParamHandler_11_Return2:
 	ret
+VoiceSlot_TableSetup_Helper7:
 	xor	w, w
 	bit	0, (0x0d54:16)
 	jrl	z, PerfMode_ParamHandler_11_Skip15
 	xor	hl, hl
+SubCPU_ToneParamRet_Join2:
 	cp	hl, 15
-	jrl	ugt, SubCPU_ToneParamRet_0x353
+	jrl	ugt, SubCPU_ToneParamRet_Return
 	push	xde
 	ld	xde, 0xf1a0
 	cp	(xde+hl), 0x10	; cp (XDE+HL),0x10
@@ -12637,16 +12795,20 @@ PerfMode_ParamHandler_11_Return2:
 	jrl	nz, PerfMode_ParamHandler_11_Skip14
 	ld	w, l
 	inc	1, w
-	jp	SubCPU_ToneParamRet_0x34E
+	jp	SubCPU_ToneParamRet_Join3
 PerfMode_ParamHandler_11_Skip14:
 	inc	1, hl
-	jp	SubCPU_ToneParamRet_0x320
+	jp	SubCPU_ToneParamRet_Join2
 PerfMode_ParamHandler_11_Skip15:
 	and	(0x287b:16), 251
-	jp	SubCPU_ToneParamRet_0x353
+	jp	SubCPU_ToneParamRet_Return
+SubCPU_ToneParamRet_Join3:
 	or	(0x287b:16), 4
+SubCPU_ToneParamRet_Return:
 	ret
+VoiceSlot_TableSetup_Helper8:
 	xor	bc, bc
+SubCPU_ToneParamRet_Join4:
 	pushw	bc
 	call	VoiceBank_LoadLerpState
 	popw	bc
@@ -12665,15 +12827,16 @@ PerfMode_ParamHandler_11_Skip16:
 	pushw	bc
 	call	VoiceBank_UpdateLerpState
 	popw	bc
-	jp	SubCPU_ToneParamRet_0x356
+	jp	SubCPU_ToneParamRet_Join4
 PerfMode_ParamHandler_11_Skip17:
 	call	VoiceBank_UpdateLerpState
 PerfMode_ParamHandler_11_Return3:
 	ret
+SubCPU_ToneParamRet_Helper2:
 	ldw_d16	de, (0x0e4e)
 	dec	1, de
 	ld	(0x287f:16), de
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	ldb_d8	a, (0x0eee)
 	call	SetWall_SlotResolve
 	pushw	wa
@@ -12690,35 +12853,36 @@ PerfMode_ParamHandler_11_Return3:
 	jrl	ule, PerfMode_ParamHandler_11_Return4
 	sub	a, 4
 	stb_d8	(0x0e52), a
-	call	SubCPU_ToneParamRet_0x354
+	call	VoiceSlot_TableSetup_Helper8
 PerfMode_ParamHandler_11_Return4:
 	ret
 	call	Display_ResetDirtyFlags
-	call	SubCPU_ToneParamRet_0x3DE
+	call	SubCPU_ToneParamRet_Helper3
 	call	Display_UpdateDirtyRegions
 	ret
+SubCPU_ToneParamRet_Helper3:
 	cp	(0x8c9c:16), 138
-	jrl	nz, SubCPU_ToneParamRet_0x4BC
+	jrl	nz, SubCPU_ToneParamRet_Return2
 	ldb_d8	a, (0xbfe1)
 	cp	a, 0:i3
-	jrl	nz, SubCPU_ToneParamRet_0x4BC
+	jrl	nz, SubCPU_ToneParamRet_Return2
 	ldb_d8	a, (0x0d65)
 	cp	a, 1:i3
 	jrl	z, PerfMode_ParamHandler_11_Skip18
 	cp	a, 2:i3
-	jrl	nz, SubCPU_ToneParamRet_0x4BC
+	jrl	nz, SubCPU_ToneParamRet_Return2
 PerfMode_ParamHandler_11_Skip18:
 	ldb_d8	w, (0xbfe2)
 	ldb_d8	a, (0xbfe3)
 	cp	w, 0:i3
-	jrl	nz, SubCPU_ToneParamRet_0x4BC
+	jrl	nz, SubCPU_ToneParamRet_Return2
 	and	a, 3
 	cp	a, 1:i3
 	jrl	z, PerfMode_ParamHandler_11_Skip19
 	cp	a, 2:i3
 	jrl	z, PerfMode_ParamHandler_11_Skip19
 	cp	a, 3:i3
-	jrl	nz, SubCPU_ToneParamRet_0x4BC
+	jrl	nz, SubCPU_ToneParamRet_Return2
 PerfMode_ParamHandler_11_Skip19:
 	ld	(0x0d36:16), 0
 	bit	7, (0x0d39:16)
@@ -12735,14 +12899,15 @@ PerfMode_ParamHandler_11_Skip19:
 	jrl	nc, PerfMode_ParamHandler_11_Skip20
 	call	DMA_FlagCheckWithCalls
 	res	2, (0x0d54:16)
-	jp	SubCPU_ToneParamRet_0x461
+	jp	SubCPU_ToneParamRet_Join5
 PerfMode_ParamHandler_11_Skip20:
 	ld	(0x367b:16), 255
-	call	DisplayMode_Handler_3_0x775
+	call	Timer_ParamCompareAlt_Helper6
+SubCPU_ToneParamRet_Join5:
 	or	(0x0dd3:16), 1
 	ldw	(0x26c0:16), 0
 	call	VoiceSlot_TableSetup
-	jp	SubCPU_ToneParamRet_0x4BC
+	jp	SubCPU_ToneParamRet_Return2
 PerfMode_ParamHandler_11_Skip21:
 	and	(0x0f57:16), 254
 	call	Display_UpdateRegion0
@@ -12756,20 +12921,22 @@ PerfMode_ParamHandler_11_Skip21:
 	jrl	nc, PerfMode_ParamHandler_11_Skip22
 	call	DMA_FlagCheckWithCalls
 	res	2, (0x0d54:16)
-	jp	SubCPU_ToneParamRet_0x4AD
+	jp	SubCPU_ToneParamRet_Join6
 PerfMode_ParamHandler_11_Skip22:
 	ld	(0x367b:16), 255
-	call	DisplayMode_Handler_3_0x775
+	call	Timer_ParamCompareAlt_Helper6
+SubCPU_ToneParamRet_Join6:
 	or	(0x0dd3:16), 1
 	ldw	(0x26c0:16), 0
 	call	VoiceSlot_TableSetup
+SubCPU_ToneParamRet_Return2:
 	ret
 MemConfig_Handler_5_Helper:
 	cp	(0x28be:16), 255
 	jrl	z, PerfMode_ParamHandler_11_Skip23
 PerfMode_ParamHandler_11_Loop:
 	call	Display_UpdateRegion1
-	jp	SubCPU_ToneParamRet_0x7B8
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip23:
 	ldb_d8	l, (0x0d60)
 	dec	1, l
@@ -12782,20 +12949,21 @@ PerfMode_ParamHandler_11_Skip23:
 	bit	7, (xde+hl)	; bit 7,(XDE+HL)
 	pop	xde
 	jrl	z, PerfMode_ParamHandler_11_Loop
-	call	OscScope_RenderBlock_0x21
-	call	SubCPU_ToneParamRet_0x80
+	call	SubCPU_ToneParamRet_Helper13
+	call	SubCPU_ToneParamRet_Helper
+SubCPU_ToneParamRet_Join7:
 	call	VoiceBank_ProcessCommand
 	cp	(0x0eb5:16), 129
 	jrl	nz, PerfMode_ParamHandler_11_Skip25
-	call	DisplayStr_BytecodeBlock_A_0x1A4
+	call	SubCPU_ToneParamRet_Helper18
 	ldb_d8	a, (0x0ebb)
 	cp	a, 130
 	jrl	nz, PerfMode_ParamHandler_11_Skip24
-	call	SubCPU_ToneParamRet_0x98D
-	jp	SubCPU_ToneParamRet_0x7B8
+	call	SubCPU_ToneParamRet_Helper8
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip24:
-	call	StringData_APCModeNames_0x713
-	jp	SubCPU_ToneParamRet_0x5E9
+	call	SubCPU_ToneParamRet_Helper19
+	jp	SubCPU_ToneParamRet_Loop
 PerfMode_ParamHandler_11_Skip25:
 	cp	(0x0eb5:16), 130
 	jrl	z, PerfMode_ParamHandler_11_Skip26
@@ -12803,8 +12971,8 @@ PerfMode_ParamHandler_11_Skip25:
 	jrl	z, PerfMode_ParamHandler_11_Skip26
 	cp	(0x0eb6:16), 48
 	jrl	nz, PerfMode_ParamHandler_11_Skip26
-	call	StringData_APCModeNames_0x713
-	jp	SubCPU_ToneParamRet_0x5E9
+	call	SubCPU_ToneParamRet_Helper19
+	jp	SubCPU_ToneParamRet_Loop
 PerfMode_ParamHandler_11_Skip26:
 	ldw	(0x0ec2:16), 0
 	ldb_d8	a, (0x0eb5)
@@ -12812,25 +12980,25 @@ PerfMode_ParamHandler_11_Skip26:
 	jrl	z, PerfMode_ParamHandler_11_Skip27
 	cp	a, 132
 	jrl	nz, PerfMode_ParamHandler_11_Skip28
-	call	SubCPU_ToneParamRet_0x9AF
-	jp	SubCPU_ToneParamRet_0x7B8
+	call	SubCPU_ToneParamRet_Helper9
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip27:
-	call	SubCPU_ToneParamRet_0x98D
-	jp	SubCPU_ToneParamRet_0x7B8
+	call	SubCPU_ToneParamRet_Helper8
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip28:
 	and	a, 240
 	cp	a, 144
 	jrl	nz, PerfMode_ParamHandler_11_Skip29
-	call	SubCPU_ToneParamRet_0x8C5
+	call	SubCPU_ToneParamRet_Helper7
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
-	jp	SubCPU_ToneParamRet_0x5E9
+	jrl	nz, SubCPU_ToneParamRet_Join9
+	jp	SubCPU_ToneParamRet_Loop
 PerfMode_ParamHandler_11_Skip29:
 	ldb_d8	a, (0x0eb5)
 	cp	a, 132
 	jrl	nz, PerfMode_ParamHandler_11_Skip30
-	call	SubCPU_ToneParamRet_0x9AF
-	jp	SubCPU_ToneParamRet_0x7B8
+	call	SubCPU_ToneParamRet_Helper9
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip30:
 	and	a, 240
 	ldb_d8	a, (0x0eb6)
@@ -12839,41 +13007,42 @@ PerfMode_ParamHandler_11_Skip30:
 	cp	a, 95
 	jrl	nz, PerfMode_ParamHandler_11_Skip32
 PerfMode_ParamHandler_11_Skip31:
-	jp	SubCPU_ToneParamRet_0x4F3
+	jp	SubCPU_ToneParamRet_Join7
 PerfMode_ParamHandler_11_Skip32:
-	call	SubCPU_ToneParamRet_0xA1F
+	call	SubCPU_ToneParamRet_Helper11
 	ldb_d8	a, (0x0eb6)
 	stb_d8	(0x0f70), a
 PerfMode_ParamHandler_11_Loop2:
 	call	VoiceBank_ProcessCommand
 	ldb_d8	a, (0x0eb5)
 	cp	a, 129
-	jrl	z, SubCPU_ToneParamRet_0x5E9
+	jrl	z, SubCPU_ToneParamRet_Loop
 	cp	a, 132
-	jrl	z, SubCPU_ToneParamRet_0x5E9
+	jrl	z, SubCPU_ToneParamRet_Loop
 	ldb_d8	l, (0x0eb6)
 	cp	l, 47
 	jrl	z, PerfMode_ParamHandler_11_Loop2
 	cp	l, 95
 	jrl	z, PerfMode_ParamHandler_11_Loop2
 	cp	l, (0x0f70:16)
-	jrl	nz, SubCPU_ToneParamRet_0x5E9
+	jrl	nz, SubCPU_ToneParamRet_Loop
 	and	a, 240
 	cp	a, 144
 	jrl	nz, PerfMode_ParamHandler_11_Loop2
-	jp	SubCPU_ToneParamRet_0x5E9
+	jp	SubCPU_ToneParamRet_Loop
+SubCPU_ToneParamRet_Loop:
 	ldb_d8	a, (0x0eb5)
 	cp	a, 129
 	jrl	z, PerfMode_ParamHandler_11_Skip39
 	cp	a, 130
 	jrl	nz, PerfMode_ParamHandler_11_Skip33
-	call	SubCPU_ToneParamRet_0x98D
-	jp	SubCPU_ToneParamRet_0x7B8
+	call	SubCPU_ToneParamRet_Helper8
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip33:
 	cp	a, 132
 	jrl	nz, PerfMode_ParamHandler_11_Skip34
-	call	SubCPU_ToneParamRet_0x9AF
-	jp	SubCPU_ToneParamRet_0x7B8
+	call	SubCPU_ToneParamRet_Helper9
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip34:
 	and	a, 240
 	cp	a, 144
@@ -12884,7 +13053,7 @@ PerfMode_ParamHandler_11_Skip34:
 	jrl	nz, PerfMode_ParamHandler_11_Skip36
 PerfMode_ParamHandler_11_Skip35:
 	call	VoiceBank_ProcessCommand
-	jp	SubCPU_ToneParamRet_0x5E9
+	jp	SubCPU_ToneParamRet_Loop
 PerfMode_ParamHandler_11_Skip36:
 	ldb_d8	a, (0x0eb6)
 	ldb_d8	l, (0x0ec2)
@@ -12895,11 +13064,11 @@ PerfMode_ParamHandler_11_Skip37:
 	sub	a, l
 	cp	a, 0:i3
 	jrl	z, PerfMode_ParamHandler_11_Skip38
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
+	jrl	nz, SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip38:
-	call	SubCPU_ToneParamRet_0xA1F
+	call	SubCPU_ToneParamRet_Helper11
 	ldw	(0x0ec2:16), 0
 	ldb_d8	a, (0x0eb6)
 	stb_d8	(0x0f70), a
@@ -12907,9 +13076,9 @@ PerfMode_ParamHandler_11_Loop3:
 	call	VoiceBank_ProcessCommand
 	ldb_d8	a, (0x0eb5)
 	cp	a, 129
-	jrl	z, SubCPU_ToneParamRet_0x5E9
+	jrl	z, SubCPU_ToneParamRet_Loop
 	cp	a, 132
-	jrl	z, SubCPU_ToneParamRet_0x5E9
+	jrl	z, SubCPU_ToneParamRet_Loop
 	ldb_d8	h, (0x0eb6)
 	cp	h, 47
 	jrl	z, PerfMode_ParamHandler_11_Loop3
@@ -12917,13 +13086,13 @@ PerfMode_ParamHandler_11_Loop3:
 	jrl	z, PerfMode_ParamHandler_11_Loop3
 	ldb_d8	l, (0x0f70)
 	cp	l, h
-	jrl	nz, SubCPU_ToneParamRet_0x5E9
+	jrl	nz, SubCPU_ToneParamRet_Loop
 	and	a, 240
 	cp	a, 144
 	jrl	nz, PerfMode_ParamHandler_11_Loop3
-	jp	SubCPU_ToneParamRet_0x5E9
+	jp	SubCPU_ToneParamRet_Loop
 PerfMode_ParamHandler_11_Skip39:
-	call	DisplayStr_BytecodeBlock_A_0x1A4
+	call	SubCPU_ToneParamRet_Helper18
 	ldb_d8	a, (0x0ebb)
 	cp	a, 130
 	jrl	z, PerfMode_ParamHandler_11_Skip41
@@ -12934,12 +13103,12 @@ PerfMode_ParamHandler_11_Skip39:
 PerfMode_ParamHandler_11_Skip40:
 	call	DisplayStr_BytecodeBlock_A
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
+	jrl	nz, SubCPU_ToneParamRet_Join9
 	call	VoiceBank_ProcessCommand
-	jp	SubCPU_ToneParamRet_0x5E9
+	jp	SubCPU_ToneParamRet_Loop
 PerfMode_ParamHandler_11_Skip41:
-	call	SubCPU_ToneParamRet_0x98D
-	jp	SubCPU_ToneParamRet_0x7B8
+	call	SubCPU_ToneParamRet_Helper8
+	jp	SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip42:
 	ldb_d8	l, (0x0ebc)
 	add	l, 96
@@ -12955,10 +13124,10 @@ PerfMode_ParamHandler_11_Skip43:
 	jrl	z, PerfMode_ParamHandler_11_Skip47
 	call	DisplayStr_BytecodeBlock_A
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	jrl	nz, SubCPU_ToneParamRet_Join9
+	call	SubCPU_ToneParamRet_Helper17
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
+	jrl	nz, SubCPU_ToneParamRet_Join9
 	xor	a, a
 	cp	(0x0ebc:16), 48
 	jrl	nz, PerfMode_ParamHandler_11_Skip44
@@ -12966,11 +13135,11 @@ PerfMode_ParamHandler_11_Skip43:
 PerfMode_ParamHandler_11_Skip44:
 	stb_d8	(0x0f70), a
 	ldw	(0x0ec2:16), 0
-	jp	SubCPU_ToneParamRet_0x777
+	jp	SubCPU_ToneParamRet_Join8
 PerfMode_ParamHandler_11_Skip45:
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
+	jrl	nz, SubCPU_ToneParamRet_Join9
 	xor	a, a
 	cp	(0x0ebc:16), 48
 	jrl	nz, PerfMode_ParamHandler_11_Skip46
@@ -12978,19 +13147,20 @@ PerfMode_ParamHandler_11_Skip45:
 PerfMode_ParamHandler_11_Skip46:
 	stb_d8	(0x0f70), a
 	ldw	(0x0ec2:16), 0
-	jp	SubCPU_ToneParamRet_0x777
+	jp	SubCPU_ToneParamRet_Join8
 PerfMode_ParamHandler_11_Skip47:
 	call	DisplayStr_BytecodeBlock_A
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
+	jrl	nz, SubCPU_ToneParamRet_Join9
 	xor	wa, wa
 	ld	(0x0ec2:16), wa
 	stb_d8	(0x0f70), a
 	cp	(0x0ebc:16), 0
-	jrl	z, SubCPU_ToneParamRet_0x777
+	jrl	z, SubCPU_ToneParamRet_Join8
 	ld	(0x0f70:16), 48
+SubCPU_ToneParamRet_Join8:
 	call	VoiceBank_ProcessCommand
-	jp	SubCPU_ToneParamRet_0x5E9
+	jp	SubCPU_ToneParamRet_Loop
 PerfMode_ParamHandler_11_Skip48:
 	ldb_d8	a, (0x0eb6)
 	ldb_d8	l, (0x0ec2)
@@ -13002,31 +13172,33 @@ PerfMode_ParamHandler_11_Skip49:
 	sub	a, l
 	cp	a, 48
 	jrl	nz, PerfMode_ParamHandler_11_Skip50
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
+	jrl	nz, SubCPU_ToneParamRet_Join9
 PerfMode_ParamHandler_11_Skip50:
-	call	SubCPU_ToneParamRet_0x8C5
+	call	SubCPU_ToneParamRet_Helper7
 	cp	(0x0ef6:16), 0
-	jrl	nz, SubCPU_ToneParamRet_0x7B8
-	jp	SubCPU_ToneParamRet_0x5E9
-	call	OscScope_RenderBlock_0x61
-	call	SubCPU_ToneParamRet_0x7C1
+	jrl	nz, SubCPU_ToneParamRet_Join9
+	jp	SubCPU_ToneParamRet_Loop
+SubCPU_ToneParamRet_Join9:
+	call	SubCPU_ToneParamRet_Helper16
+	call	MemConfig_Handler_4_Helper_Helper
 	ret
 MemConfig_Handler_4_Helper_Helper:
 	cp	(0x0d6a:16), 0
 	jrl	nz, PerfMode_ParamHandler_11_Return5
-	call	SubCPU_ToneParamRet_0x315
+	call	VoiceSlot_TableSetup_Helper7
 	call	AccPedal_CheckBitAndUpdate
 	cp	(0x0d5d:16), 4
 	jrl	ugt, PerfMode_ParamHandler_11_Skip51
 	ldb_d8	a, (0x0d5c)
-	jp	SubCPU_ToneParamRet_0x7ED
+	jp	SubCPU_ToneParamRet_Join10
 PerfMode_ParamHandler_11_Skip51:
 	ldb_d8	a, (0x0d5c)
 	cp	a, 4:i3
-	jrl	c, SubCPU_ToneParamRet_0x7ED
+	jrl	c, SubCPU_ToneParamRet_Join10
 	sub	a, 4
+SubCPU_ToneParamRet_Join10:
 	sla	a, 1
 	cp	(0x0d57:16), 0
 	jrl	z, PerfMode_ParamHandler_11_Skip52
@@ -13035,12 +13207,13 @@ PerfMode_ParamHandler_11_Skip52:
 	stb_d8	(0x0eef), a
 PerfMode_ParamHandler_11_Return5:
 	ret
+SubCPU_ToneParamRet_Helper4:
 	pushw	wa
 	push	xiy
 	push	xix
 	ldb_d8	a, (0x117e)
 	stb_d8	(0x0d43), a
-	call	SubCPU_ToneParamRet_0x840
+	call	SubCPU_ToneParamRet_Helper5
 	ldb_d8	c, (0x117e)
 	xor	b, b
 	ld	xiy, 0x1169
@@ -13063,16 +13236,19 @@ PerfMode_ParamHandler_11_Return5:
 	pop	xiy
 	popw	wa
 	ret
+SubCPU_ToneParamRet_Helper5:
 	ld	c, a
 	dec	1, c
 	xor	b, b
 	xor	de, de
+SubCPU_ToneParamRet_Loop2:
 	ld	xiy, 0x1169
 	ld	xix, xiy
 	inc	1, xix
 	lda	xiy, (xiy+de)
 	lda	xix, (xix+de)
 	ld	a, (xiy)
+SubCPU_ToneParamRet_Join11:
 	ld	w, (xix)
 	cp	a, w
 	jrl	c, PerfMode_ParamHandler_11_Skip53
@@ -13081,17 +13257,18 @@ PerfMode_ParamHandler_11_Return5:
 	lda	xhl, (xhl+bc)
 	cp	xix, xhl
 	jrl	ugt, PerfMode_ParamHandler_11_Skip54
-	jp	SubCPU_ToneParamRet_0x85D
+	jp	SubCPU_ToneParamRet_Join11
 PerfMode_ParamHandler_11_Skip53:
 	ld	(xiy), w
 	ld	(xix), a
 	xor	de, de
-	jp	SubCPU_ToneParamRet_0x848
+	jp	SubCPU_ToneParamRet_Loop2
 PerfMode_ParamHandler_11_Skip54:
 	inc	1, de
 	cp	de, bc
-	jrl	c, SubCPU_ToneParamRet_0x848
+	jrl	c, SubCPU_ToneParamRet_Loop2
 	ret
+SubCPU_ToneParamRet_Helper6:
 	ld	xix, (0x1114:16)
 	xor	hl, hl
 	ldb_d8	l, (0x0ec4)
@@ -13103,16 +13280,18 @@ PerfMode_ParamHandler_11_Skip54:
 	cp	a, 0:i3
 	jrl	z, PerfMode_ParamHandler_11_Skip55
 	inc	1, xix
-	jp	SubCPU_ToneParamRet_0x8B4
+	jp	SubCPU_ToneParamRet_Join12
 PerfMode_ParamHandler_11_Skip55:
 	ld	a, 32:opc
 	ld	(xix+), a
+SubCPU_ToneParamRet_Join12:
 	xor	a, a
 	ld	(xix+), a
 	ldb_d8	w, (0x0d43)
 	ldb_d8	a, (0x0d44)
 	ld	(xix+), wa
 	ret
+SubCPU_ToneParamRet_Helper7:
 	pushw	bc
 	xor	wa, wa
 	ld	bc, 3:i3
@@ -13157,30 +13336,34 @@ PerfMode_ParamHandler_11_Skip56:
 	ld	l, 96:opc
 	div	wa, l
 	cp	a, 0:i3
-	jrl	z, SubCPU_ToneParamRet_0x980
+	jrl	z, SubCPU_ToneParamRet_Join15
 	ld	c, a
 	xor	b, b
+SubCPU_ToneParamRet_Join13:
 	cp	(0x0eb5:16), 129
 	jrl	nz, PerfMode_ParamHandler_11_Skip57
 	djnz16	bc, 4
-	jp	SubCPU_ToneParamRet_0x97C
+	jp	SubCPU_ToneParamRet_Join14
 PerfMode_ParamHandler_11_Loop4:
 	pushw	bc
 	call	VoiceBank_ProcessCommand
 	popw	bc
-	jp	SubCPU_ToneParamRet_0x94F
+	jp	SubCPU_ToneParamRet_Join13
 PerfMode_ParamHandler_11_Skip57:
 	ldb_d8	a, (0x0eb6)
 	cp	a, 47
 	jrl	z, PerfMode_ParamHandler_11_Loop4
 	cp	a, 95
 	jrl	z, PerfMode_ParamHandler_11_Loop4
-	jp	SubCPU_ToneParamRet_0x980
+	jp	SubCPU_ToneParamRet_Join15
+SubCPU_ToneParamRet_Join14:
 	call	VoiceBank_ProcessCommand
-	call	SubCPU_ToneParamRet_0x7FF
-	call	SubCPU_ToneParamRet_0x88B
-	call	OscScope_DrawWaveform_0x4
+SubCPU_ToneParamRet_Join15:
+	call	SubCPU_ToneParamRet_Helper4
+	call	SubCPU_ToneParamRet_Helper6
+	call	SubCPU_ToneParamRet_Helper12
 	ret
+SubCPU_ToneParamRet_Helper8:
 	ld	xix, (0x1114:16)
 	ldb_d8	e, (0x0ec4)
 	sla	e, 2
@@ -13191,8 +13374,9 @@ PerfMode_ParamHandler_11_Skip57:
 	andmi8	(xix), 127
 	ld	(xix+1), 1
 	ld	(xix+2), de
-	call	SubCPU_ToneParamRet_0x9D1
+	call	SubCPU_ToneParamRet_Helper10
 	ret
+SubCPU_ToneParamRet_Helper9:
 	ld	xix, (0x1114:16)
 	ldb_d8	e, (0x0ec4)
 	sla	e, 2
@@ -13203,8 +13387,9 @@ PerfMode_ParamHandler_11_Skip57:
 	andmi8	(xix), 127
 	ld	(xix+1), 2
 	ld	(xix+2), de
-	call	SubCPU_ToneParamRet_0x9D1
+	call	SubCPU_ToneParamRet_Helper10
 	ret
+SubCPU_ToneParamRet_Helper10:
 	ldb_d8	l, (0x0ec1)
 	sla	l, 1
 	ldb_d8	a, (0x0ec4)
@@ -13229,27 +13414,28 @@ PerfMode_ParamHandler_11_Skip58:
 	jrl	z, PerfMode_ParamHandler_11_Return6
 	cp	e, 0:i3
 	jrl	nz, PerfMode_ParamHandler_11_Skip59
-	call	OscScope_RenderBlock_0x3F
+	call	SubCPU_ToneParamRet_Helper14
 PerfMode_ParamHandler_11_Skip59:
-	call	OscScope_RenderBlock_0x50
+	call	SubCPU_ToneParamRet_Helper15
 PerfMode_ParamHandler_11_Return6:
 	ret
+SubCPU_ToneParamRet_Helper11:
 	ldb_d8	a, (0x0eb5)
 	and	a, 1
 	rrc	a
 	stb_d8	(0x116d), a
 	ldb_d8	l, (0x0eb6)
 	cp	l, 47
-	jrl	z, SubCPU_ToneParamRet_0xAA3
+	jrl	z, SubCPU_ToneParamRet_Return3
 	cp	l, 95
-	jrl	z, SubCPU_ToneParamRet_0xAA3
+	jrl	z, SubCPU_ToneParamRet_Return3
 	ldb_d8	l, (0x0eb7)
 	cp	l, 72
-	jrl	nz, SubCPU_ToneParamRet_0xAA3
+	jrl	nz, SubCPU_ToneParamRet_Return3
 	cp	(0x0eb8:16), 5
 	jrl	z, PerfMode_ParamHandler_11_Skip60
 	cp	(0x0eb8:16), 6
-	jrl	nz, SubCPU_ToneParamRet_0xAA3
+	jrl	nz, SubCPU_ToneParamRet_Return3
 PerfMode_ParamHandler_11_Skip60:
 	ldb_d8	a, (0x0eb9)
 	and	a, 127
@@ -13266,7 +13452,7 @@ PerfMode_ParamHandler_11_Loop5:
 	inc	1, c
 	cp	c, 7:i3
 	jrl	ule, PerfMode_ParamHandler_11_Loop5
-	jp	SubCPU_ToneParamRet_0xAA3
+	jp	SubCPU_ToneParamRet_Return3
 PerfMode_ParamHandler_11_Skip61:
 	cp	(0x0eb8:16), 6
 	jrl	nz, PerfMode_ParamHandler_11_Skip62
@@ -13281,6 +13467,7 @@ PerfMode_ParamHandler_11_Skip62:
 	ld	xhl, (xde+hl)
 	pop	xde
 	call	(xhl)
+SubCPU_ToneParamRet_Return3:
 	ret
 	; Handler dispatch table, 64 B.  Read by PerfMode_ParamHandler_11 (0xEFDC7C): `ld xde, OscScope_HandlerTable`
 	; indexed with stride 4 (`sla hl, 2`)
@@ -13305,20 +13492,21 @@ OscScope_HandlerTable:
 SndHandler_DefaultRet:
 	ret
 OscScope_Handler_2:
-	call	OscScope_Handler_7_0x5
+	call	OscScope_Handler_2_Helper
 	ret
 OscScope_Handler_3:
-	call	OscScope_Handler_7_0x5
+	call	OscScope_Handler_2_Helper
 	ret
 OscScope_Handler_4:
-	call	OscScope_Handler_7_0x5
+	call	OscScope_Handler_2_Helper
 	ret
 OscScope_Handler_6:
-	call	OscScope_Handler_7_0x5
+	call	OscScope_Handler_2_Helper
 	ret
 OscScope_Handler_7:
-	call	OscScope_Handler_7_0x5
+	call	OscScope_Handler_2_Helper
 	ret
+OscScope_Handler_2_Helper:
 	ld	xix, (4372:16)
 	ld	e, (3780:16)
 	sla	e, 2
@@ -13353,6 +13541,7 @@ OscScope_Handler_7_Helper:
 	pop	xhl
 	popw	wa
 	ret
+SubCPU_ToneParamRet_Helper12:
 	cp	(0x0f70:16), 48
 	jrl	nz, OscScope_RefreshLoop
 	ld	wa, (3778:16)
@@ -13369,11 +13558,11 @@ OscScope_UpdateDisplay:
 	exts	wa
 	ld	bc, wa
 	pushw	bc
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	popw	bc
 	djnz16	bc, -9
 	ldw	(3778:16), 0
-	jp	OscScope_RefreshLoop_0x3F
+	jp	OscScope_Handler_7_Return
 OscScope_UpdateDisplay_Skip2:
 	ld	wa, (3778:16)
 	ld	l, 96:opc
@@ -13391,14 +13580,14 @@ OscScope_UpdateDisplay_Skip2:
 	exts	wa
 	ld	bc, wa
 	pushw	bc
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	popw	bc
 	djnz16	bc, -9
 OscScope_UpdateDisplay_Skip:
-	call	DisplayStr_BytecodeBlock_A_0x120
+	call	DisplayStr_BytecodeBlock_A_Code_Helper
 	ldw	(3778:16), 0
 	ld	(3952:16), 0
-	jp	OscScope_RefreshLoop_0x3F
+	jp	OscScope_Handler_7_Return
 OscScope_RefreshLoop:
 	ld	wa, (3778:16)
 	ld	l, 96:opc
@@ -13413,7 +13602,7 @@ OscScope_RefreshLoop:
 	xor b, b
 	pushw	bc
 	pushw	de
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	popw	de
 	popw	bc
 	cp	(0x0ef6:16), 0
@@ -13423,8 +13612,8 @@ OscScope_RefreshLoop_Skip:
 	cp	e, 0:i3
 	jrl	z, OscScope_Handler_7_Return
 	cp	(0x0f70:16), 48
-	jrl	z, OscScope_RefreshLoop_0x3F
-	call	DisplayStr_BytecodeBlock_A_0x120
+	jrl	z, OscScope_Handler_7_Return
+	call	DisplayStr_BytecodeBlock_A_Code_Helper
 OscScope_Handler_7_Return:
 	ret
 MemConfig_Handler_4_Helper_Helper2:
@@ -13473,42 +13662,49 @@ OscScope_RenderBlock:
 	jrl	z, OscScope_RenderBlock_Skip2
 OscScope_RenderBlock_Skip:
 	ld	w, 255:opc
-	jp	OscScope_RenderBlock_0xE
+	jp	OscScope_RenderBlock_Join3
 OscScope_RenderBlock_Skip2:
 	ld	w, 0:opc
+OscScope_RenderBlock_Join3:
 	pop	xhl
 	pushw	wa
 	ld	a, 7:opc
 	call	VoiceSlot_RestoreState
 	popw	wa
-	jp	OscScope_RenderBlock_0x20
+	jp	OscScope_RenderBlock_Return2
 OscScope_Handler_7_Skip2:
 	ld	bc, 2:i3
 	pop	xhl
 	ld	w, 255:opc
+OscScope_RenderBlock_Return2:
 	ret
-	call	OscScope_RenderBlock_0x2E
-	call	OscScope_RenderBlock_0x3F
-	call	OscScope_RenderBlock_0x50
+SubCPU_ToneParamRet_Helper13:
+	call	OscScope_RenderBlock_Helper
+	call	SubCPU_ToneParamRet_Helper14
+	call	SubCPU_ToneParamRet_Helper15
 	ret
+OscScope_RenderBlock_Helper:
 	ld	xix, 3669
 	ldw	bc, 16
 	xor	wa, wa
 	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
+SubCPU_ToneParamRet_Helper14:
 	ld	xix, 3701
 	ldw	bc, 16
 	xor	wa, wa
 	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
+SubCPU_ToneParamRet_Helper15:
 	ld	xix, 3733
 	ldw	bc, 16
 	xor	wa, wa
 	ld (xix+), wa
 	djnz16	bc, -6
 	ret
+SubCPU_ToneParamRet_Helper16:
 	ld	xiy, 3669
 	.set	OscScope_FinalizeRender, . + 2	; no instruction starts here: the name points 2 byte(s) into the one below
 	ld	xix, 0x0e59
@@ -13691,10 +13887,10 @@ DisplayStr_BytecodeBlock_A:
 	ld	a, (xiy+hl)
 	and	a, 96
 	cp	a, 0:i3
-	jrl	nz, DisplayStr_BytecodeBlock_A_Skip
+	jrl	nz, DisplayStr_BytecodeBlock_A_Skip4
 	ld	a, 32:opc
 	ld	(xiy+hl), a
-DisplayStr_BytecodeBlock_A_Skip:
+DisplayStr_BytecodeBlock_A_Skip4:
 	xor	wa, wa
 	ldfr_lerp	xiy, 56
 	lda	xiy, (xiy+hl)
@@ -13704,9 +13900,10 @@ DisplayStr_BytecodeBlock_A_Skip:
 	lda	xiy, (xiy+hl)
 	ld	(xiy+2), wa
 	ldto_lerp	xiy, 56
-	call	DisplayStr_BytecodeBlock_A_0x53
-DisplayStr_BytecodeBlock_A_Return:
+	call	OscScope_UpdateDisplay_Helper
+DisplayStr_BytecodeBlock_A_Return3:
 	ret
+OscScope_UpdateDisplay_Helper:
 	ld (0x0ef6:16), 0x00
 	addw (0x0ec4:16), 0x0002
 	ld c, (0x0ec1:16)
@@ -13728,7 +13925,7 @@ DisplayStr_BytecodeBlock_A_Return:
 	jrl	nz, DisplayStr_BytecodeBlock_A_Code_Skip
 DisplayStr_BytecodeBlock_A_Code_Loop:
 	ld	(3830:16), 1
-	jp	DisplayStr_BytecodeBlock_A_Return
+	jp	DisplayStr_BytecodeBlock_A_Return3
 DisplayStr_BytecodeBlock_A_Code_Skip:
 	ld	l, (3782:16)
 	cp	l, 2:i3
@@ -13748,6 +13945,7 @@ DisplayStr_BytecodeBlock_A_Code_Skip2:
 	sub (3780:16), bc
 DisplayStr_BytecodeBlock_A_Code_Return:
 	ret
+SubCPU_ToneParamRet_Helper17:
 	ld	(3830:16), 0
 	ld	c, (3777:16)
 	sla	c, 1
@@ -13759,10 +13957,10 @@ DisplayStr_BytecodeBlock_A_Code_Return:
 	ld	a, (xiy+hl)
 	and	a, 96
 	cp	a, 0:i3
-	jrl	nz, DisplayStr_BytecodeBlock_A_Code_Skip3
+	jrl	nz, DisplayStr_BytecodeBlock_A_Skip5
 	ld	a, 32:opc
 	ld	(xiy+hl), a
-DisplayStr_BytecodeBlock_A_Code_Skip3:
+DisplayStr_BytecodeBlock_A_Skip5:
 	xor	wa, wa
 	ldfr_lerp	xiy, 56
 	lda	xiy, (xiy+hl)
@@ -13773,7 +13971,7 @@ DisplayStr_BytecodeBlock_A_Code_Skip3:
 	ld	(xiy+2), wa
 	ldto_lerp	xiy, 56
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
-DisplayStr_BytecodeBlock_A_Code_Return2:
+DisplayStr_BytecodeBlock_A_Return4:
 	ret
 DisplayStr_BytecodeBlock_A_Code_Helper:
 	ld	(3830:16), 0
@@ -13781,10 +13979,10 @@ DisplayStr_BytecodeBlock_A_Code_Helper:
 	ld	c, (3777:16)
 	sla	c, 1
 	cp	(3780:16), c
-	jrl	c, DisplayStr_BytecodeBlock_A_Code_Return3
+	jrl	c, DisplayStr_BytecodeBlock_A_Return2
 	ld	l, (3782:16)
 	cp	l, 2:i3
-	jrl	z, DisplayStr_BytecodeBlock_A_Code_Loop2
+	jrl	z, DisplayStr_BytecodeBlock_A_Loop2
 	inc	1, l
 	xor	h, h
 	sla	hl, 2
@@ -13794,33 +13992,34 @@ DisplayStr_BytecodeBlock_A_Code_Helper:
 	pop	xde
 	ld	wa, (xhl)
 	cp	wa, 0:i3
-	jrl	nz, DisplayStr_BytecodeBlock_A_Code_Skip4
-DisplayStr_BytecodeBlock_A_Code_Loop2:
+	jrl	nz, DisplayStr_BytecodeBlock_A_Skip3
+DisplayStr_BytecodeBlock_A_Loop2:
 	ld	(3830:16), 1
-	jp	DisplayStr_BytecodeBlock_A_Code_Return2
-DisplayStr_BytecodeBlock_A_Code_Skip4:
+	jp	DisplayStr_BytecodeBlock_A_Return4
+DisplayStr_BytecodeBlock_A_Skip3:
 	ld	l, (3782:16)
 	cp	l, 2:i3
-	jrl	z, DisplayStr_BytecodeBlock_A_Code_Loop2
+	jrl	z, DisplayStr_BytecodeBlock_A_Loop2
 	inc	1, l
 	ld	xwa, 3701
 	ld	e, (3667:16)
 	cp	l, 1:i3
-	jrl	z, DisplayStr_BytecodeBlock_A_Code_Helper_Skip
+	jrl	z, DisplayStr_BytecodeBlock_A_Skip6
 	ld	xwa, 3733
 	ld	e, (3668:16)
-DisplayStr_BytecodeBlock_A_Code_Helper_Skip:
+DisplayStr_BytecodeBlock_A_Skip6:
 	ld	(3777:16), e
 	ld	(4372:16), xwa
 	ld	(3782:16), l
 	xor	b, b
 	sub (3780:16), bc
-DisplayStr_BytecodeBlock_A_Code_Return3:
+DisplayStr_BytecodeBlock_A_Return2:
 	ret
 	; Byte data, 12 B.  Read by DisplayStr_BytecodeBlock_A (0xEFEADC): `ld xde, DisplayStr_BytecodeBlock_A_Tbl`
 	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3782:16)`
 DisplayStr_BytecodeBlock_A_Tbl:
 	.byte	0x4c, 0x0e, 0x00, 0x00, 0x4e, 0x0e, 0x00, 0x00, 0x50, 0x0e, 0x00, 0x00
+SubCPU_ToneParamRet_Helper18:
 	pushdi_w	(0x28bf)
 	pushdi_w	(0x28c1)
 	push	xhl
@@ -13867,6 +14066,7 @@ DisplayStr_ComputeTableAddr:
 
 DisplayStr_BytecodeBlock_B:
 	call	Display_UpdateRegion0
+DisplayStr_BytecodeBlock_B_Sub:
 	call	Display_BytecodeBlock_F_Sub2
 	ld	xix, 0x0eca
 	ldw	wa, 8224
@@ -13880,25 +14080,26 @@ DisplayStr_BytecodeBlock_B:
 	ld	a, 32:opc
 	ld	(xix+), a
 	call	Display_UpdateRegion5
-	call	Display_BytecodeBlock_F_0x17C
+	call	PerfMode_EventTable_0_Target1_Helper4
 	call	Display_UpdateRegion3
 	ret
 DisplayStr_BytecodeBlock_B_0x39:
 	call	Display_UpdateRegion0
-DisplayStr_BytecodeBlock_B_0x3D:
+DisplayStr_BytecodeBlock_B_Sub2:
 	call	Display_BytecodeBlock_F_Sub2
 	ld	xiy, Str_Control
 	ld	xix, 0x0ecf
 	ld	bc, 7:i3
 	ldir85
 	call	Display_UpdateRegion5
-	call	Display_BytecodeBlock_F_0x17C
+	call	PerfMode_EventTable_0_Target1_Helper4
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 7 B.  Read by DisplayStr_BytecodeBlock_B (0xEFECE8): `ld xiy, Str_Control`
 	; copies 7 byte(s) per use (`ld bc, 7` + ldir) into the LCD text buffer
 Str_Control:
 	.ascii	"CONTROL"
+Str_Control_Helper:
 	ldb_d8	h, (0x3687)
 	ldb_d8	l, (0x3686)
 	ldb_d8	h, (0x0ef5)
@@ -13918,7 +14119,7 @@ DisplayMode_Handler_3_Helper10_Helper:
 	ld	bc, 6:i3
 	ldir85
 	call	Display_UpdateRegion5
-	call	DisplayStr_BytecodeBlock_B_0x63
+	call	Str_Control_Helper
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 1 B.  Read by DisplayStr_BytecodeBlock_B (0xEFECE8): `ld xiy, DisplayStr_RhythmLabel`
@@ -13934,7 +14135,7 @@ VoiceCtrl_ParamSetupBytecode_Sub_Helper:
 	call	Display_BytecodeBlock_F_Sub2
 	ld	xiy, DisplayStr_RhythmLabel
 	push	xiy
-	call	StringData_APCModeNames_0x54E
+	call	Str_Rhythm_Helper2
 	pop	xiy
 	bit	0, (0x10f6:16)
 	jrl	z, DisplayStr_BytecodeBlock_B_Skip
@@ -13945,7 +14146,7 @@ DisplayStr_BytecodeBlock_B_Skip:
 	ldirw
 	popw	bc
 	ld	xix, 0x0ed9
-	call	DisplayStr_RhythmLabel_0x64
+	call	Str_Rhythm_Helper
 	call	Display_UpdateRegion5
 	call	Display_UpdateRegion3
 	ret
@@ -13959,9 +14160,10 @@ VoiceCtrl_ParamSetupBytecode_Sub_Helper2:
 	call	DisplayStr_ClearRegion
 	popw	bc
 	ld	xix, 0x0ed4
-	call	DisplayStr_RhythmLabel_0x64
+	call	Str_Rhythm_Helper
 	call	Display_UpdateRegion3
 	ret
+Str_Rhythm_Helper:
 	xor	wa, wa
 	ld	a, c
 	and	a, 48
@@ -13980,6 +14182,7 @@ VoiceCtrl_ParamSetupBytecode_Sub_Helper2:
 	; copies 4 byte(s) per use (`ld bc, 4` + ldir) into the LCD text buffer
 Str_VarivariOff:
 	.ascii	"VARIVARI OFF"
+DisplayStr_BytecodeBlock_C_Helper:
 	call DisplayStr_ClearRegion
 	ld XIY,DisplayStr_StyleSectionNames
 	ld XIX,0x00000ed8
@@ -13992,17 +14195,17 @@ Str_VarivariOff:
 	ret
 DisplayStr_BytecodeBlock_C:
 	call	Display_UpdateRegion0
-	call	Display_BytecodeBlock_F_0x32D
+	call	Display_BytecodeBlock_F_Sub2
 	ld	xiy, DisplayStr_RhythmLabel
 	ld	xix, 3791
 	ldw	bc, 9
 	ldir85
 	call	Display_UpdateRegion5
-	call	DisplayStr_RhythmLabel_0x92
+	call	DisplayStr_BytecodeBlock_C_Helper
 	call	Display_UpdateRegion3
 	ret
 DisplayStr_BytecodeBlock_C_0x24:
-	call	Display_BytecodeBlock_F_0x32D
+	call	Display_BytecodeBlock_F_Sub2
 	ld	xix, 3786
 	ld	xiy, Str_TempoEq
 	cp	(0xfc5a:16), 7
@@ -14015,7 +14218,7 @@ DisplayStr_BytecodeBlock_C_Skip:
 	ldw	bc, 25
 	ldir85
 	call	Display_UpdateRegion5
-	call	Display_BytecodeBlock_F_0x2A2
+	call	Display_BytecodeBlock_F_Helper
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE47): `ld xiy, Str_TempoEq`
@@ -14030,8 +14233,9 @@ DisplayStr_BytecodeBlock_C_Tbl:
 	.ascii	"  TEMPO  "
 	.byte	0x93
 	.ascii	"=              "
+VoiceSlot_StatusRet_Helper3:
 	call	Display_UpdateRegion0
-	call	Display_BytecodeBlock_F_0x32D
+	call	Display_BytecodeBlock_F_Sub2
 	ld	xiy, DisplayStr_TempoString
 	cp	(0xfc5a:16), 7
 	jrl	nz, VoiceCtrl_ParamSetupBytecode_Helper10_Skip
@@ -14043,7 +14247,7 @@ VoiceCtrl_ParamSetupBytecode_Helper10_Skip:
 	ldw	bc, 25
 	ldir85
 	call	Display_UpdateRegion5
-	call	Display_BytecodeBlock_F_0x2A2
+	call	Display_BytecodeBlock_F_Helper
 	call	Display_UpdateRegion3
 	ret
 	; Lcd text, 25 B.  Read by DisplayStr_BytecodeBlock_C (0xEFEE47): `ld xiy, DisplayStr_TempoString`
@@ -14058,8 +14262,10 @@ DisplayStr_BytecodeBlock_C_Tbl2:
 	.ascii	"  TEMPO  "
 	.byte	0x93
 	.ascii	"=              "
+DisplayMode_Handler_2_Helper:
 	call	Display_UpdateRegion0
-	call Display_BytecodeBlock_F_0x32D
+DisplayStr_BytecodeBlock_C_Tbl2_Sub:
+	call Display_BytecodeBlock_F_Sub2
 	ld XIY,DisplayStr_BytecodeBlock_C_Text
 	ld XIX,0x00000eca
 	ldw BC, 0x0019
@@ -14080,7 +14286,7 @@ DMA_ChannelHandler_3_Helper:
 	cp WA,0x03e8
 	jrl c, .Lc_efef97
 	call DisplayStr_FillDashes
-	jp DisplayStr_TempoString_0x9F
+	jp DisplayStr_BytecodeBlock_C_Text_Return
 .Lc_efef97:
 	call ParamDigit_ExtractAndFormat
 	ld XIY,0x00001181
@@ -14089,6 +14295,7 @@ DMA_ChannelHandler_3_Helper:
 	ld (XIX),WA
 	ld A,(XIY+0x02)
 	ld (XIX+0x02),A
+DisplayStr_BytecodeBlock_C_Text_Return:
 	ret
 DisplayStr_FillDashes:
 	ld xix, 0xeca
@@ -14201,7 +14408,8 @@ Display_RedrawMenu_Update:
 
 Display_BytecodeBlock_F:
 	call Display_UpdateRegion0
-	call Display_BytecodeBlock_F_0x32D
+Display_BytecodeBlock_F_Sub3:
+	call Display_BytecodeBlock_F_Sub2
 	ld XIX,0x00000eca
 	ldw (XIX+0x09), 0x5620
 	call Display_UpdateRegion5
@@ -14298,6 +14506,7 @@ Display_BytecodeBlock_F_Sub:
 	call	Display_BytecodeBlock_F_Sub_Helper
 	call	Display_UpdateRegion3
 	ret
+PerfMode_EventTable_0_Target1_Helper4:
 	ld	xiy, Str_PBendModExpEq
 	ld	xix, 3800
 	xor	hl, hl
@@ -14399,6 +14608,7 @@ Display_BytecodeBlock_F_Skip6:
 	ld	w, (xiy+2)
 	ld	(xix+2), w
 	ret
+VoiceSlot_StatusRet_Helper4:
 	ld	xiy, Display_BytecodeBlock_F_Tbl2
 	ld	xix, 3791
 	cp	(64602:16), 7
@@ -14431,6 +14641,7 @@ Display_BytecodeBlock_F_Sub2:
 	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
+ScoopDisp_DispatchTable_Small_Target11_Helper2:
 	call	Display_UpdateRegion0
 	ret
 VoiceSlot_ComputeIndex_Helper:
@@ -15222,9 +15433,10 @@ ParamPopup_FadeIn_Skip2:
 	jr	z, ParamPopup_FadeIn_Next
 ParamPopup_FadeIn_Next:
 	ld	xiy, Str_On
-	jp	StringData_EffectLabel_0x176
+	jp	ParamPopup_FadeIn_Join
 ParamPopup_FadeIn_Skip:
 	ld	xiy, Str_Off
+ParamPopup_FadeIn_Join:
 	ld	bc, 3:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15265,9 +15477,10 @@ ParamPopup_FadeOut_Skip:
 	jr	z, ParamPopup_FadeOut_Next
 ParamPopup_FadeOut_Next:
 	ld	xiy, Str_On
-	jp	StringData_EffectLabel_0x1CB
+	jp	ParamPopup_FadeOut_Join
 ParamPopup_FadeOut_Skip2:
 	ld	xiy, Str_Off
+ParamPopup_FadeOut_Join:
 	ld	bc, 3:i3
 	ldir85
 	call	Display_UpdateRegion3
@@ -15482,6 +15695,7 @@ ParamPopup_KeyNameBracketed_Skip:
 	xor	h, h
 	sla	hl, 2
 	ld	xiy, Tbl_KeyNamesBracketed
+ParamPopup_KeyNameBracketed_Code:
 	ld	wa, (xiy+hl)
 	ld	(xix), wa
 	add	hl, 2
@@ -15534,7 +15748,7 @@ ParamPopup_AccompVolume_Skip2:
 	ld	xix, 0x0ede
 	ldw	bc, 8
 	ldir85
-	jp	StringData_APCModeNames_0x31F
+	jp	ParamPopup_AccompVolume_Join
 ParamPopup_AccompVolume_Skip3:
 	xor	w, w
 	call	ParamDigit_ExtractAndFormat
@@ -15542,6 +15756,7 @@ ParamPopup_AccompVolume_Skip3:
 	ld	xix, 0x0edf
 	ld	bc, 3:i3
 	ldir85
+ParamPopup_AccompVolume_Join:
 	call	Display_UpdateRegion3
 	ret
 	; 6 x 16 chars (ACC. TOTAL VOL.= / BASS / DRUMS / ACCMP1 / ACCMP2 / ACCMP3
@@ -15553,6 +15768,7 @@ Tbl_AccompVolumeLabels:
 	; (0xF00123): +8 when bit 7 of (0x10f3) is clear, 8 bytes copied.
 Tbl_MuteOnOff:
 	.ascii	"MUTE ON MUTE OFF"
+VoiceSlot_StatusRet_Helper5:
 	ret
 	; ParamPopup_PartTremolo -- LCD parameter pop-up.
 	; Pop-up id 1.  "<part> TREMOLO ON/OFF": part name = StringData_PartNames[(0x10f1)*4], 4 chars, Str_Tremolo,
@@ -15591,8 +15807,11 @@ ParamPopup_PartTremolo_Skip2:
 	; reader ParamPopup_PartTremolo: `ld xiy, Str_Tremolo` then `ld bc, 8` + ldir (8 bytes copied)
 Str_Tremolo:
 	.ascii	"TREMOLO "
+VoiceSlot_StatusRet_Helper6:
 	ret
+VoiceSlot_StatusRet_Helper7:
 	ret
+VoiceSlot_StatusRet_Helper8:
 	ret
 	ret
 	; "EXT.TAB EFFECT:" + "EN  " + "DIS " (23 bytes).  No reader found: no
@@ -15600,6 +15819,7 @@ Str_Tremolo:
 	; ROM; the text sits where the three `ret` stubs 0xF0026F-0xF00272 end.
 Str_ExtTabEffectEnDis:
 	.ascii	"EXT.TAB EFFECT:EN  DIS "
+VoiceSlot_StatusRet_Helper9:
 	ret
 	; ParamPopup_TotalReverb -- LCD parameter pop-up.
 	; Pop-up id 1.  Str_TotalReverb (13 chars at 0x0ED1), then 4 chars of
@@ -15630,6 +15850,7 @@ ParamPopup_TotalReverb_Skip2:
 	; reader ParamPopup_TotalReverb: `ld xiy, Str_TotalReverb` then `ld bc, 13` + ldir (13 bytes copied)
 Str_TotalReverb:
 	.ascii	"TOTAL REVERB "
+VoiceSlot_StatusRet_Helper10:
 	ret
 	; ParamPopup_PartTimbre -- LCD parameter pop-up.
 	; Pop-up id 1.  part name = StringData_PartNames[(0x10f1)*4], 4 chars at 0x0ED1, then 6 chars of
@@ -15675,15 +15896,16 @@ ParamPopup_Msa:
 	cp	(0x0d65:16), 3
 	jrl	nz, ParamPopup_Msa_Skip
 	cp	(0x0def:16), 15
-	jrl	z, StringData_APCModeNames_0x506
+	jrl	z, ParamPopup_Msa_Join
 	ld	(0x0def:16), 15
 	call	Display_UpdateRegion0
-	jp	StringData_APCModeNames_0x506
+	jp	ParamPopup_Msa_Join
 ParamPopup_Msa_Skip:
 	cp	(0x0def:16), 1
-	jrl	z, StringData_APCModeNames_0x506
+	jrl	z, ParamPopup_Msa_Join
 	ld	(0x0def:16), 1
 	call	Display_UpdateRegion0
+ParamPopup_Msa_Join:
 	call	DisplayStr_ClearRegion
 	ld	xiy, Str_Msa
 	ld	xix, 0x0ed1
@@ -15707,6 +15929,7 @@ Str_Msa:
 	; `ld l, (0x10f3) / and l, 7 / sla hl, 2`, 4 bytes copied.
 Tbl_MsaStates:
 	.ascii	"OFF ON  #2  #3  "
+Str_Rhythm_Helper2:
 	push	xiz
 	ld	xiz, (0x10fd:16)
 	ldfr_lerp	xiz, 56
@@ -15727,6 +15950,7 @@ Tbl_MsaStates:
 	call	VoiceSlot_ReadCurrentParams
 	cp	a, 129
 	jrl	nz, ParamPopup_Msa_Skip3
+Tbl_MsaStates_Loop:
 	call	VoiceSlot_DispatchRet
 	cp	w, 255
 	jrl	z, ParamPopup_Msa_Skip4
@@ -15755,9 +15979,9 @@ ParamPopup_Msa_Skip2:
 ParamPopup_Msa_Skip3:
 	and	a, 240
 	cp	a, 176
-	jrl	nz, StringData_APCModeNames_0x57E
-	call	StringData_APCModeNames_0x5F5
-	jp	StringData_APCModeNames_0x57E
+	jrl	nz, Tbl_MsaStates_Loop
+	call	Tbl_MsaStates_Helper
+	jp	Tbl_MsaStates_Loop
 ParamPopup_Msa_Skip4:
 	ld	a, 5:opc
 	call	VoiceSlot_RestoreState
@@ -15774,6 +15998,7 @@ ParamPopup_Msa_Skip4:
 	ld	(0x10fd:16), xiz
 	pop	xiz
 	ret
+Tbl_MsaStates_Helper:
 	call	VoiceSlot_ComputeWordIndex
 	push	xhl
 	ld	xhl, 0x0c9e
@@ -15847,7 +16072,7 @@ ParamPopup_PartPedal_Skip2:
 	ld	xiy, 0x1181
 	ld	bc, 3:i3
 	ldir85
-	jp	StringData_APCModeNames_0x6F0
+	jp	ParamPopup_PartPedal_Join2
 ParamPopup_PartPedal_Skip3:
 	ldb_d8	c, (0x10f3)
 	xor	hl, hl
@@ -15859,28 +16084,30 @@ ParamPopup_PartPedal_Skip4:
 	lda	xiy, (xiy+hl)
 	ld	bc, 4:i3
 	ldir85
+ParamPopup_PartPedal_Join2:
 	call	Display_UpdateRegion3
 	ret
 	; 3 x 10 chars " SUSTAIN  " / "SOFT PEDAL" / "SOSTENUTE ", read by
 	; ParamPopup_PartPedal (0xF004DB): index ((0x10f1) - 181) times 10.
 Tbl_PedalNames:
 	.ascii	" SUSTAIN  SOFT PEDALSOSTENUTE "
-	call	StringData_APCModeNames_0x9D6
+SubCPU_ToneParamRet_Helper19:
+	call	Tbl_PedalNames_Helper3
 	cp	l, 0:i3
 	jrl	z, ParamPopup_PartPedal_Skip
 	ldb_d8	a, (0x0eb5)
 	cp	a, 129
 	jrl	z, ParamPopup_PartPedal_Skip5
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9B1
+	jp	Tbl_PedalNames_Return
 ParamPopup_PartPedal_Skip5:
 	call	DisplayStr_BytecodeBlock_A
 	xor	wa, wa
 	stb_d8	(0x0f70), a
 	ld	(0x0ec2:16), wa
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip:
 	ldb_d8	a, (0x116f)
 	stb_d8	(0x0f70), a
@@ -15890,18 +16117,18 @@ ParamPopup_PartPedal_Skip:
 	jrl	z, ParamPopup_PartPedal_Skip7
 	cp	(0x0eb5:16), 129
 	jrl	z, ParamPopup_PartPedal_Skip6
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	ldw	(0x0ec2:16), 0
 	ld	(0x0f70:16), 48
-	jp	StringData_APCModeNames_0x9B1
+	jp	Tbl_PedalNames_Return
 ParamPopup_PartPedal_Skip6:
 	call	DisplayStr_BytecodeBlock_A
 	xor	wa, wa
 	ld	(0x0ec2:16), wa
 	stb_d8	(0x0f70), a
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip7:
-	call	StringData_APCModeNames_0x9C1
+	call	Tbl_PedalNames_Helper2
 	ldb_d8	a, (0x116f)
 	exts	wa
 	add	(0x0ec2:16), wa
@@ -15923,15 +16150,15 @@ ParamPopup_PartPedal_Skip8:
 	jrl	c, ParamPopup_PartPedal_Skip15
 	cp	(0x0eb5:16), 129
 	jrl	nz, ParamPopup_PartPedal_Skip9
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	ld	(0x0f70:16), 0
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip9:
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9B1
+	jp	Tbl_PedalNames_Return
 ParamPopup_PartPedal_Skip10:
 	sub	wa, hl
 	ld	(0x0ec2:16), wa
@@ -15952,58 +16179,58 @@ ParamPopup_PartPedal_Skip10:
 	ld	(0x0ec2:16), de
 	ldw	(0x0f70:16), 0
 	pushw	bc
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	popw	bc
 	pushw	bc
 	call	VoiceBank_ProcessCommand
 	popw	bc
 	pushw	bc
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	popw	bc
 	cp	(0x0ef6:16), 0
-	jrl	nz, StringData_APCModeNames_0x9B1
+	jrl	nz, Tbl_PedalNames_Return
 	djnz16	bc, -23
 	cpw	(0x0ec2:16), 48
-	jrl	nz, StringData_APCModeNames_0x9AD
+	jrl	nz, Tbl_PedalNames_Join3
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip11:
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
-	call	DisplayStr_BytecodeBlock_A_0x1A4
+	call	SubCPU_ToneParamRet_Helper18
 	cp	(0x0ebb:16), 129
 	jrl	nz, ParamPopup_PartPedal_Skip12
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip12:
 	cp	(0x0ebb:16), 132
 	jrl	nz, ParamPopup_PartPedal_Skip13
-	call	StringData_APCModeNames_0x9B2
-	jp	StringData_APCModeNames_0x9AD
+	call	Tbl_PedalNames_Helper
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip13:
 	cp	(0x0ebc:16), 0
 	jrl	nz, ParamPopup_PartPedal_Skip14
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	xor	wa, wa
 	ld	(0x0f70:16), 0
 	ld	(0x0ec2:16), wa
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip14:
-	call	DisplayStr_BytecodeBlock_A_0x53
+	call	OscScope_UpdateDisplay_Helper
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip15:
 	sub	hl, wa
 	cp	hl, 96
 	jrl	c, ParamPopup_PartPedal_Skip19
 	cp	(0x0eb5:16), 129
 	jrl	z, ParamPopup_PartPedal_Skip16
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9B1
+	jp	Tbl_PedalNames_Return
 ParamPopup_PartPedal_Skip16:
 	ld	wa, hl
 	ld	l, 96:opc
@@ -16012,7 +16239,7 @@ ParamPopup_PartPedal_Skip16:
 	cp	(0x116e:16), 129
 	jrl	z, ParamPopup_PartPedal_Skip17
 	pushw	wa
-	call	DisplayStr_BytecodeBlock_A_0x1A4
+	call	SubCPU_ToneParamRet_Helper18
 	popw	wa
 	cp	w, 48
 	jrl	nz, ParamPopup_PartPedal_Skip17
@@ -16020,61 +16247,67 @@ ParamPopup_PartPedal_Skip16:
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
 	popw	wa
 	cp	(0x0ebb:16), 129
-	jrl	z, StringData_APCModeNames_0x928
+	jrl	z, Tbl_PedalNames_Join
 	cp	(0x0ebc:16), 48
-	jrl	z, StringData_APCModeNames_0x928
+	jrl	z, Tbl_PedalNames_Join
 ParamPopup_PartPedal_Skip17:
 	cp	w, 48
 	jrl	z, ParamPopup_PartPedal_Skip18
-	jp	StringData_APCModeNames_0x928
+	jp	Tbl_PedalNames_Join
 	cp	a, 1:i3
-	jrl	z, StringData_APCModeNames_0x928
+	jrl	z, Tbl_PedalNames_Join
 ParamPopup_PartPedal_Skip18:
-	call	DisplayStr_BytecodeBlock_A_0xCD
-	jp	StringData_APCModeNames_0x92C
+	call	SubCPU_ToneParamRet_Helper17
+	jp	Tbl_PedalNames_Join2
+Tbl_PedalNames_Join:
 	call	DisplayStr_BytecodeBlock_A
+Tbl_PedalNames_Join2:
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip19:
 	cp	(0x0eb5:16), 129
 	jrl	z, ParamPopup_PartPedal_Skip20
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9B1
+	jp	Tbl_PedalNames_Return
 ParamPopup_PartPedal_Skip20:
 	call	DisplayStr_BytecodeBlock_A_Code_Helper
-	call	DisplayStr_BytecodeBlock_A_0x1A4
+	call	SubCPU_ToneParamRet_Helper18
 	cp	(0x0ebb:16), 129
 	jrl	nz, ParamPopup_PartPedal_Skip21
 	call	DisplayStr_BytecodeBlock_A
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip21:
 	cp	(0x0ebb:16), 132
 	jrl	nz, ParamPopup_PartPedal_Skip22
-	call	StringData_APCModeNames_0x9B2
-	jp	StringData_APCModeNames_0x9AD
+	call	Tbl_PedalNames_Helper
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip22:
 	cp	(0x0ebc:16), 0
 	jrl	nz, ParamPopup_PartPedal_Skip23
-	call	DisplayStr_BytecodeBlock_A_0xCD
+	call	SubCPU_ToneParamRet_Helper17
 	xor	wa, wa
 	stb_d8	(0x0f70), a
 	ld	(0x0ec2:16), wa
-	jp	StringData_APCModeNames_0x9AD
+	jp	Tbl_PedalNames_Join3
 ParamPopup_PartPedal_Skip23:
 	call	DisplayStr_BytecodeBlock_A
 	ld	(0x0f70:16), 48
 	ldw	(0x0ec2:16), 0
+Tbl_PedalNames_Join3:
 	call	VoiceBank_ProcessCommand
+Tbl_PedalNames_Return:
 	ret
-	call	DisplayStr_BytecodeBlock_A_0xCD
+Tbl_PedalNames_Helper:
+	call	SubCPU_ToneParamRet_Helper17
 	xor	wa, wa
 	stb_d8	(0x0f70), a
 	ld	(0x0ec2:16), wa
 	ret
+Tbl_PedalNames_Helper2:
 	ldb_d8	a, (0x1173)
 	ld	w, 96:opc
 	muls	wa, w
@@ -16083,8 +16316,9 @@ ParamPopup_PartPedal_Skip23:
 	add	wa, hl
 	ld	(0x0ec2:16), wa
 	ret
+Tbl_PedalNames_Helper3:
 	push	xiy
-	call	StringData_APCModeNames_0xA38
+	call	Tbl_PedalNames_Helper4
 	xor	wa, wa
 	ld	(0x1174:16), wa
 	ldw_d16	wa, (0x28c1)
@@ -16092,37 +16326,40 @@ ParamPopup_PartPedal_Skip23:
 	ldw_d16	wa, (0x28bf)
 	ld	(0x117a:16), wa
 ParamPopup_PartPedal_Loop:
-	call	StringData_APCModeNames_0xA48
-	call	StringData_APCModeNames_0xAAC
+	call	Tbl_PedalNames_Helper5
+	call	Tbl_PedalNames_Helper6
 	bit	7, a
 	jrl	z, ParamPopup_PartPedal_Loop
-	call	StringData_APCModeNames_0xA48
+Tbl_PedalNames_Loop:
+	call	Tbl_PedalNames_Helper5
 	cp	l, 0:i3
 	jrl	nz, ParamPopup_PartPedal_Epilogue
-	call	StringData_APCModeNames_0xAAC
+	call	Tbl_PedalNames_Helper6
 	bit	7, a
-	jrl	z, StringData_APCModeNames_0x9FF
+	jrl	z, Tbl_PedalNames_Loop
 	cp	a, 129
 	jrl	nz, ParamPopup_PartPedal_Skip24
 	incw	1, (0x1174:16)
-	jp	StringData_APCModeNames_0x9FF
+	jp	Tbl_PedalNames_Loop
 ParamPopup_PartPedal_Skip24:
 	ld	l, 0:opc
-	call	StringData_APCModeNames_0xAC2
+	call	Tbl_PedalNames_Helper7
 	ldb_d8	a, (0x116f)
 	cp	a, 47
-	jrl	z, StringData_APCModeNames_0x9FF
+	jrl	z, Tbl_PedalNames_Loop
 	cp	a, 95
-	jrl	z, StringData_APCModeNames_0x9FF
+	jrl	z, Tbl_PedalNames_Loop
 ParamPopup_PartPedal_Epilogue:
 	pop	xiy
 	ret
+Tbl_PedalNames_Helper4:
 	ld	xix, 0x116e
 	xor	wa, wa
 	ld	bc, 3:i3
 	ld	(xix+), wa
 	djnz16	bc, -6
 	ret
+Tbl_PedalNames_Helper5:
 	ldw_d16	wa, (0x1178)
 	cp	wa, 5:i3
 	jrl	nz, ParamPopup_PartPedal_Skip26
@@ -16133,15 +16370,17 @@ ParamPopup_PartPedal_Epilogue:
 	cp	wa, 0:i3
 	jrl	nz, ParamPopup_PartPedal_Skip25
 	ld	l, 1:opc
-	jp	StringData_APCModeNames_0xA7E
+	jp	Tbl_PedalNames_Return2
 ParamPopup_PartPedal_Skip25:
 	ld	(0x117a:16), wa
 	ldw	wa, 255
-	jp	StringData_APCModeNames_0xA78
+	jp	Tbl_PedalNames_Join4
 ParamPopup_PartPedal_Skip26:
 	dec	1, wa
+Tbl_PedalNames_Join4:
 	ld	(0x1178:16), wa
 	xor	hl, hl
+Tbl_PedalNames_Return2:
 	ret
 ParamPopup_PartPedal_Helper:
 	push	xix
@@ -16154,29 +16393,32 @@ ParamPopup_PartPedal_Helper:
 	ld	hl, (xhl+3)
 	ld	(0x117a:16), hl
 	ld	wa, 5:i3
-	jp	StringData_APCModeNames_0xAA6
+	jp	Tbl_PedalNames_Join5
 ParamPopup_PartPedal_Skip27:
 	inc	1, wa
+Tbl_PedalNames_Join5:
 	ld	(0x1178:16), wa
 	pop	xix
 	ret
+Tbl_PedalNames_Helper6:
 	ldw_d16	hl, (0x117a)
 	call	DisplayStr_ComputeTableAddr
 	ld	xhl, (0x10fd:16)
 	ldw_d16	iy, (0x1178)
 	ld	a, (xhl+iy)
 	ret
+Tbl_PedalNames_Helper7:
 	pushdi_w	(0x117a)
 	pushdi_w	(0x1178)
 	ld	xix, 0x116e
 	push	xix
-	call	StringData_APCModeNames_0xAAC
+	call	Tbl_PedalNames_Helper6
 	pop	xix
 	ld	(xix+), a
 ParamPopup_PartPedal_Join:
 	push	xix
 	call	ParamPopup_PartPedal_Helper
-	call	StringData_APCModeNames_0xAAC
+	call	Tbl_PedalNames_Helper6
 	pop	xix
 	bit	7, a
 	jrl	nz, ParamPopup_PartPedal_Entry
@@ -16290,13 +16532,14 @@ Scoop_DisplayData_ButtonLayout:
 ; layout list the same way.
 Scoop_DrawButtonLayout2:
 	ld	xiy, Scoop_CallDisplayHelper_DisplayList
-	ld	xix, Scoop_DisplayData_ButtonLayout_0x21
+	ld	xix, Scoop_CallDisplayHelper_DisplayList_Code
 	call	UIRender_TwoTableGeneral
 	ret
 	; Uirender display list, 10 B.  Read by Scoop_DrawButtonLayout2: `ld xiy, Scoop_CallDisplayHelper_DisplayList`
 	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_CallDisplayHelper_DisplayList:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x32, 0x00, 0x10, 0x01, 0x42, 0x00
+Scoop_CallDisplayHelper_DisplayList_Code:
 	ld	xiy, 0xe0b42a
 	ld	xix, SOUND_DATA_DRUM_KITS_0x1A
 	call	UIRender_SingleTable
@@ -17245,7 +17488,7 @@ Scoop_EventHandler_SpecialMode_Join:
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
 	sub bc, (10428:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop
@@ -17256,14 +17499,14 @@ Scoop_EventHandler_SpecialMode_Loop:
 	jr	Scoop_EventHandler_SpecialMode_Join2
 Scoop_EventHandler_SpecialMode_Skip4:
 	ld	bc, (9870:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
-	call	Scoop_SpecialMode_UpdateParams_0x38
+	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	Scoop_EventHandler_SpecialMode_Helper
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip5
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip5:
 	ld	bc, (9872:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop
@@ -17280,13 +17523,13 @@ Scoop_EventHandler_SpecialMode_Join3:
 	sub bc, (10428:16)
 	ld	iy, (0x28bc:16)
 	ld	ix, (0x28b6:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip6
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip6:
-	call	Scoop_SpecialMode_UpdateParams_0x38
+	call	Scoop_EventHandler_SpecialMode_Helper
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop2
 	jrl	Scoop_EventHandler_SpecialMode_Return
@@ -17297,13 +17540,13 @@ Scoop_EventHandler_SpecialMode_Loop2:
 Scoop_EventHandler_SpecialMode_Skip7:
 	ldw	bc, 256
 	sub	bc, 5
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip8
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip8:
-	call	Scoop_SpecialMode_UpdateParams_0x38
+	call	Scoop_EventHandler_SpecialMode_Helper
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop2
 	jrl	Scoop_EventHandler_SpecialMode_Return
@@ -17328,14 +17571,14 @@ Scoop_EventHandler_SpecialMode_Join5:
 	ld	ix, (0x28b6:16)
 	ldw	bc, 256
 	sub bc, (10422:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
-	call	Scoop_SpecialMode_UpdateParams_0x38
+	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	Scoop_EventHandler_SpecialMode_Helper
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip9
 	jrl	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip9:
 	ld	bc, (9870:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop3
@@ -17346,14 +17589,14 @@ Scoop_EventHandler_SpecialMode_Loop3:
 	jr	Scoop_EventHandler_SpecialMode_Join6
 Scoop_EventHandler_SpecialMode_Skip10:
 	ld	bc, (9872:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
-	call	Scoop_SpecialMode_UpdateParams_0x38
+	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	Scoop_EventHandler_SpecialMode_Helper
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip11
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip11:
 	ld	bc, (9870:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 	call	Scoop_SpecialMode_UpdateParams
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Loop3
@@ -17374,19 +17617,19 @@ Scoop_EventHandler_SpecialMode_Join7:
 	jr	nc, Scoop_EventHandler_SpecialMode_Skip12
 	jr	Scoop_EventHandler_SpecialMode_Join8
 Scoop_EventHandler_SpecialMode_Skip12:
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Join8:
 	ld	bc, (9876:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
-	call	Scoop_SpecialMode_UpdateParams_0x38
+	call	Scoop_EventHandler_SpecialMode_Helper2
+	call	Scoop_EventHandler_SpecialMode_Helper
 	cp	(0x287a:16), 0
 	jr	z, Scoop_EventHandler_SpecialMode_Skip13
 	jr	Scoop_EventHandler_SpecialMode_Return
 Scoop_EventHandler_SpecialMode_Skip13:
 	ld	bc, (9880:16)
 	sub bc, (9876:16)
-	call	Scoop_SpecialMode_UpdateParams_0x70
+	call	Scoop_EventHandler_SpecialMode_Helper2
 Scoop_EventHandler_SpecialMode_Return:
 	ret
 
@@ -17485,6 +17728,7 @@ Scoop_SpecialMode_UpdateParams_Skip:
 	ld	iy, 5:i3
 Scoop_SpecialMode_UpdateParams_Return:
 	ret
+Scoop_EventHandler_SpecialMode_Helper:
 	xor	xix, xix
 	ld	xix, (9850:16)
 	ld	(4349:16), xix
@@ -17506,6 +17750,7 @@ Scoop_SpecialMode_UpdateParams_Skip2:
 	ld	ix, 5:i3
 Scoop_SpecialMode_UpdateParams_Return2:
 	ret
+Scoop_EventHandler_SpecialMode_Helper2:
 	pushw	wa
 	push	xde
 	push	xhl
@@ -17655,6 +17900,7 @@ Scoop_CurveUpdate_DrawSegment:
 	ld	iy, ix
 	andmi8	(xhl), 127
 	jr	Scoop_SpecialMode_ValueSend_Part3
+ScoopDisp_BytecodeBlock1_Helper:
 	ld E,A
 	extz DE
 	ld A,C

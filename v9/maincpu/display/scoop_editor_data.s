@@ -30,11 +30,11 @@
 
 
 Scoop_SoundEditorData:
-	jp	SeMenu_CopyWriteUpdate_Data_0xFA
-	jp	SeMenu_CopyWriteUpdate_Data_0x348
+	jp	SeMenu_CopyWriteUpdate_Step3_Join
+	jp	SeMenu_CopyWriteUpdate_Step3_Return30
 	ld	wa, (xsp+4)
 	ld	bc, (xsp+6)
-	call	SeMenu_CopyWriteUpdate_Data_0x1DD6
+	call	Scoop_SoundEditorData_Helper12
 Scoop_SoundEditorData_Join:
 	ld	wa, 1:i3
 	call	AudioLock_GetCount
@@ -47,12 +47,13 @@ Scoop_SoundEditorData_Skip:
 	ld	xwa, 0:i3
 	ld	xbc, EVT_SW_IN
 	jp	DeleteEvent
-	jp	SeMenu_CopyWriteUpdate_Data_0x349
+	jp	SeMenu_CopyWriteUpdate_Step3_Return31
+Scoop_SoundEditorData_Join48:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue
 	ld	a, (xsp)
@@ -68,11 +69,12 @@ Scoop_SoundEditorData_Skip:
 Scoop_SoundEditorData_Epilogue:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join49:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue2
 	ld	a, (xsp)
@@ -88,11 +90,12 @@ Scoop_SoundEditorData_Epilogue:
 Scoop_SoundEditorData_Epilogue2:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join50:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue3
 	ld	a, (xsp)
@@ -108,11 +111,12 @@ Scoop_SoundEditorData_Epilogue2:
 Scoop_SoundEditorData_Epilogue3:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join51:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue4
 	ld	a, (xsp)
@@ -128,11 +132,12 @@ Scoop_SoundEditorData_Epilogue3:
 Scoop_SoundEditorData_Epilogue4:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join52:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue5
 	ld	a, (xsp)
@@ -162,7 +167,7 @@ Scoop_SoundEditorData_Epilogue5:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	lda	xhl, (xsp+2)
 	lda	xwa, (xhl+6)
 	lda	xbc, (xhl+7)
@@ -199,7 +204,7 @@ Scoop_SoundEditorData_Join2:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 43
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip3
 	cp	l, 1:i3
@@ -211,7 +216,7 @@ Scoop_SoundEditorData_Join2:
 	call	SeMenu_StoreParamByte
 Scoop_SoundEditorData_Skip3:
 	ld	wa, 3:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-18)
@@ -239,7 +244,7 @@ Scoop_SoundEditorData_Join3:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	lda	xhl, (xsp+2)
 	lda	xwa, (xhl+6)
 	lda	xbc, (xhl+7)
@@ -276,9 +281,9 @@ Scoop_SoundEditorData_Join4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 43
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 4:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -305,7 +310,7 @@ Scoop_SoundEditorData_Join4:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ldto_berp c, 251
 	extz	bc
 	ld	e, (xsp+16)
@@ -314,15 +319,15 @@ Scoop_SoundEditorData_Join4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 43
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 5:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 Scoop_SoundEditorData_Epilogue36:
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	cp	a, 0:i3
-	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
+	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -331,7 +336,7 @@ Scoop_SoundEditorData_Epilogue36:
 	ldw	wa, 43
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	Scoop_SoundEditorData_Helper9
 	ret
 	dec	4, xsp
 	ld	(xsp+2), a
@@ -349,7 +354,7 @@ Scoop_SoundEditorData_Skip54:
 	ldw	wa, 43
 	ld	bc, 2:i3
 	ld	de, 1:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	Scoop_SoundEditorData_Helper9
 Scoop_SoundEditorData_Epilogue37:
 	inc	4, xsp
 	ret
@@ -364,7 +369,7 @@ Scoop_SoundEditorData_Epilogue37:
 	ldw	wa, 43
 	ld	bc, 3:i3
 	ld	de, 1:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	Scoop_SoundEditorData_Helper9
 Scoop_SoundEditorData_Epilogue38:
 	inc	4, xsp
 	ret
@@ -379,7 +384,7 @@ Scoop_SoundEditorData_Epilogue38:
 	ldw	wa, 43
 	ld	bc, 4:i3
 	ld	de, 1:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	Scoop_SoundEditorData_Helper9
 Scoop_SoundEditorData_Epilogue39:
 	inc	4, xsp
 	ret
@@ -433,7 +438,7 @@ Scoop_SoundEditorData_Epilogue6:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	pushw	29
@@ -441,7 +446,7 @@ Scoop_SoundEditorData_Epilogue6:
 	push	xwa
 	ldw	wa, 44
 	ld	bc, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip6
 	lda	xbc, (xsp+12)
@@ -453,10 +458,10 @@ Scoop_SoundEditorData_Epilogue6:
 	call	SeMenu_StorePartParam
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip6:
 	ld	wa, 3:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 	dec	8, xsp
@@ -472,7 +477,7 @@ Scoop_SoundEditorData_Skip6:
 	pushw	bc
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip7
 	lda	xwa, (xsp+4)
@@ -492,10 +497,10 @@ Scoop_SoundEditorData_Skip6:
 	inc	4, xsp
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip7:
 	ld	wa, 4:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-10)
@@ -516,7 +521,7 @@ Scoop_SoundEditorData_Skip7:
 	extz	bc
 	pushw	bc
 	ld	bc, 0:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip8
 	lda	xwa, (xsp+6)
@@ -536,10 +541,10 @@ Scoop_SoundEditorData_Skip7:
 	inc	4, xsp
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip8:
 	ld	wa, 5:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+10)
 	ret
 	dec	8, xsp
@@ -554,7 +559,7 @@ Scoop_SoundEditorData_Skip8:
 	extz	de
 	pushw	127
 	ld	bc, 2:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip9
 	lda	xwa, (xsp+4)
@@ -574,21 +579,21 @@ Scoop_SoundEditorData_Skip8:
 	inc	4, xsp
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip9:
 	ld	wa, 6:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	inc	8, xsp
 	ret
 	cp	a, 0:i3
-	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
+	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -602,7 +607,7 @@ Scoop_SoundEditorData_Skip9:
 	jr	Scoop_SoundEditorData_Join6
 Scoop_SoundEditorData_Skip10:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -613,7 +618,7 @@ Scoop_SoundEditorData_Join6:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -623,7 +628,7 @@ Scoop_SoundEditorData_Join6:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 44
@@ -665,7 +670,7 @@ Scoop_SoundEditorData_Join6:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip11
 	ld	a, 39:opc
@@ -689,10 +694,10 @@ Scoop_SoundEditorData_Join7:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper8
 	ld	wa, 1:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -724,7 +729,7 @@ Scoop_SoundEditorData_Skip55:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip12
 	ld	a, 40:opc
@@ -748,10 +753,10 @@ Scoop_SoundEditorData_Join8:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper8
 	ld	wa, 2:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -783,7 +788,7 @@ Scoop_SoundEditorData_Skip56:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip13
 	ld	a, 41:opc
@@ -807,10 +812,10 @@ Scoop_SoundEditorData_Join9:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper8
 	ld	wa, 3:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -842,7 +847,7 @@ Scoop_SoundEditorData_Skip57:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+14), 0
 	jr	nz, Scoop_SoundEditorData_Skip14
 	ld	a, 42:opc
@@ -866,10 +871,10 @@ Scoop_SoundEditorData_Join10:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper8
 	ld	wa, 4:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
@@ -908,7 +913,7 @@ Scoop_SoundEditorData_Join11:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+16), 0
 	jr	nz, Scoop_SoundEditorData_Skip15
 	ld	a, 43:opc
@@ -932,10 +937,10 @@ Scoop_SoundEditorData_Join12:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper8
 	ld	wa, 5:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 Scoop_SoundEditorData_Epilogue41:
 	pop qiz
 	lda	xsp, (xsp+20)
@@ -975,7 +980,7 @@ Scoop_SoundEditorData_Join13:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+16), 0
 	jr	nz, Scoop_SoundEditorData_Skip16
 	ld	a, 44:opc
@@ -999,10 +1004,10 @@ Scoop_SoundEditorData_Join14:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 45
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper8
 	ld	wa, 6:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 Scoop_SoundEditorData_Epilogue42:
 	pop qiz
 	lda	xsp, (xsp+20)
@@ -1026,7 +1031,7 @@ Scoop_SoundEditorData_Epilogue42:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	pushw	45
@@ -1034,10 +1039,10 @@ Scoop_SoundEditorData_Epilogue42:
 	push	xwa
 	ldw	wa, 45
 	ld	bc, 6:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper8
 	ld	wa, 7:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 Scoop_SoundEditorData_Epilogue43:
 	lda	xsp, (xsp+18)
 	ret
@@ -1060,7 +1065,7 @@ Scoop_SoundEditorData_Epilogue43:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	a, (xsp+14)
 	dec	1, a
 	extz	wa
@@ -1075,15 +1080,15 @@ Scoop_SoundEditorData_Epilogue43:
 	ldw	wa, 45
 	ld	bc, 7:i3
 	ld	de, 0:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ldw	wa, 8
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 Scoop_SoundEditorData_Epilogue44:
 	lda	xsp, (xsp+18)
 	ret
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 	ret
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Skip17
@@ -1092,7 +1097,7 @@ Scoop_SoundEditorData_Epilogue44:
 	jr	Scoop_SoundEditorData_Join15
 Scoop_SoundEditorData_Skip17:
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 45
@@ -1113,7 +1118,7 @@ Scoop_SoundEditorData_Join15:
 	jr	Scoop_SoundEditorData_Join16
 Scoop_SoundEditorData_Skip18:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue7
 	ldw	wa, 45
@@ -1132,7 +1137,7 @@ Scoop_SoundEditorData_Epilogue7:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Epilogue45
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue45
 	ldw	wa, 45
@@ -1150,7 +1155,7 @@ Scoop_SoundEditorData_Epilogue45:
 	cp	(xsp+2), 0
 	jr	nz, Scoop_SoundEditorData_Skip19
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue8
 	ldw	wa, 45
@@ -1181,7 +1186,7 @@ Scoop_SoundEditorData_Join17:
 	ld	wa, 0:i3
 	ldw	bc, 13
 	call	SeMenu_SetupDisplayObject_Alt1
-	call	SeMenu_ApplyPartEdit_Data2_0xA69
+	call	Scoop_SoundEditorData_Helper8
 Scoop_SoundEditorData_Epilogue8:
 	inc	6, xsp
 	ret
@@ -1235,7 +1240,7 @@ Scoop_SoundEditorData_Epilogue9:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	pushw	51
@@ -1243,7 +1248,7 @@ Scoop_SoundEditorData_Epilogue9:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 5:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	lda	xbc, (xsp+12)
 	ld	wa, 5:i3
 	call	SeMenu_LoadPartParam
@@ -1253,7 +1258,7 @@ Scoop_SoundEditorData_Epilogue9:
 	call	SeMenu_StorePartParam
 	ld	wa, 2:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
 	call	SeMenu_LoadPartParam
@@ -1268,7 +1273,7 @@ Scoop_SoundEditorData_Epilogue9:
 	inc	4, xsp
 Scoop_SoundEditorData_Skip61:
 	ld	wa, 1:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
@@ -1286,7 +1291,7 @@ Scoop_SoundEditorData_Skip61:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	pushw	52
@@ -1294,7 +1299,7 @@ Scoop_SoundEditorData_Skip61:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 6:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	lda	xbc, (xsp+12)
 	ld	wa, 6:i3
 	call	SeMenu_LoadPartParam
@@ -1304,7 +1309,7 @@ Scoop_SoundEditorData_Skip61:
 	call	SeMenu_StorePartParam
 	ld	wa, 2:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
 	call	SeMenu_LoadPartParam
@@ -1319,7 +1324,7 @@ Scoop_SoundEditorData_Skip61:
 	inc	4, xsp
 Scoop_SoundEditorData_Skip62:
 	ld	wa, 2:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 	lda	xsp, (xsp-18)
@@ -1337,7 +1342,7 @@ Scoop_SoundEditorData_Skip62:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	pushw	53
@@ -1345,7 +1350,7 @@ Scoop_SoundEditorData_Skip62:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 7:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	lda	xbc, (xsp+12)
 	ld	wa, 7:i3
 	call	SeMenu_LoadPartParam
@@ -1355,7 +1360,7 @@ Scoop_SoundEditorData_Skip62:
 	call	SeMenu_StorePartParam
 	ld	wa, 2:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 	lda	xbc, (xsp+12)
 	ldw	wa, 9
 	call	SeMenu_LoadPartParam
@@ -1370,7 +1375,7 @@ Scoop_SoundEditorData_Skip62:
 	inc	4, xsp
 Scoop_SoundEditorData_Skip63:
 	ld	wa, 3:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 	dec	8, xsp
@@ -1386,7 +1391,7 @@ Scoop_SoundEditorData_Skip63:
 	pushw	bc
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip21
 	lda	xwa, (xsp+4)
@@ -1406,10 +1411,10 @@ Scoop_SoundEditorData_Skip63:
 	inc	4, xsp
 	ld	wa, 2:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip21:
 	ld	wa, 4:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-10)
@@ -1430,7 +1435,7 @@ Scoop_SoundEditorData_Skip21:
 	extz	bc
 	pushw	bc
 	ld	bc, 2:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip22
 	lda	xwa, (xsp+6)
@@ -1450,10 +1455,10 @@ Scoop_SoundEditorData_Skip21:
 	inc	4, xsp
 	ld	wa, 2:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip22:
 	ld	wa, 5:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+10)
 	ret
 	dec	8, xsp
@@ -1468,7 +1473,7 @@ Scoop_SoundEditorData_Skip22:
 	extz	de
 	pushw	127
 	ld	bc, 4:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip23
 	lda	xwa, (xsp+4)
@@ -1488,10 +1493,10 @@ Scoop_SoundEditorData_Skip22:
 	inc	4, xsp
 	ld	wa, 2:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip23:
 	ld	wa, 6:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-16)
@@ -1509,7 +1514,7 @@ Scoop_SoundEditorData_Skip23:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	pushw	46
@@ -1517,9 +1522,9 @@ Scoop_SoundEditorData_Skip23:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 0:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 7:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+16)
 	ret
 	lda	xsp, (xsp-16)
@@ -1537,7 +1542,7 @@ Scoop_SoundEditorData_Skip23:
 	ld	a, (xsp+14)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+12)
 	extz	de
 	pushw	47
@@ -1545,14 +1550,14 @@ Scoop_SoundEditorData_Skip23:
 	push	xwa
 	ldw	wa, 46
 	ld	bc, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ldw	wa, 8
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+16)
 	ret
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 	ret
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Skip24
@@ -1561,7 +1566,7 @@ Scoop_SoundEditorData_Skip23:
 	jr	Scoop_SoundEditorData_Join19
 Scoop_SoundEditorData_Skip24:
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1576,7 +1581,7 @@ Scoop_SoundEditorData_Join19:
 	jr	Scoop_SoundEditorData_Join20
 Scoop_SoundEditorData_Skip25:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1587,7 +1592,7 @@ Scoop_SoundEditorData_Join20:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1597,7 +1602,7 @@ Scoop_SoundEditorData_Join20:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 46
@@ -1623,24 +1628,24 @@ Scoop_SoundEditorData_Join20:
 	jp	SeMenu_ApplyPartEdit_Data2
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x39
+	jp	SeMenu_ApplyPartEdit_AltStore_Join
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0xB6
+	jp	SeMenu_ApplyPartEdit_AltStore_Join2
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x133
+	jp	SeMenu_ApplyPartEdit_AltStore_Join3
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1B0
+	jp	SeMenu_ApplyPartEdit_AltStore_Join4
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x22B
+	jp	SeMenu_ApplyPartEdit_AltStore_Join5
 	extz	wa
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x292
+	jp	SeMenu_ApplyPartEdit_AltStore_Join6
 	cp	a, 0:i3
-	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
+	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 45
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -1652,24 +1657,24 @@ Scoop_SoundEditorData_Join20:
 Scoop_SoundEditorData_Skip26:
 	ld	wa, 0:i3
 	ld	bc, 1:i3
-	jp	SeMenu_TransferPartValues_EndData_0x20E
+	jp	Scoop_SoundEditorData_Helper6
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 0:i3
 	ld	bc, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 0:i3
 	ld	bc, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 0:i3
 	ld	bc, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	nz
@@ -1679,11 +1684,12 @@ Scoop_SoundEditorData_Skip26:
 	ld	bc, 0:i3
 	call	SeMenu_SendEvent
 	ret
+Scoop_SoundEditorData_Join53:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue10
 	ld	a, (xsp)
@@ -1699,11 +1705,12 @@ Scoop_SoundEditorData_Skip26:
 Scoop_SoundEditorData_Epilogue10:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join54:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue11
 	ld	a, (xsp)
@@ -1719,11 +1726,12 @@ Scoop_SoundEditorData_Epilogue10:
 Scoop_SoundEditorData_Epilogue11:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join55:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue12
 	ld	a, (xsp)
@@ -1739,11 +1747,12 @@ Scoop_SoundEditorData_Epilogue11:
 Scoop_SoundEditorData_Epilogue12:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join56:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue13
 	ld	a, (xsp)
@@ -1759,11 +1768,12 @@ Scoop_SoundEditorData_Epilogue12:
 Scoop_SoundEditorData_Epilogue13:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join57:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue14
 	ld	a, (xsp)
@@ -1779,11 +1789,12 @@ Scoop_SoundEditorData_Epilogue13:
 Scoop_SoundEditorData_Epilogue14:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join58:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue15
 	ld	a, (xsp)
@@ -1799,11 +1810,12 @@ Scoop_SoundEditorData_Epilogue14:
 Scoop_SoundEditorData_Epilogue15:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join59:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue16
 	ld	a, (xsp)
@@ -1819,11 +1831,12 @@ Scoop_SoundEditorData_Epilogue15:
 Scoop_SoundEditorData_Epilogue16:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join60:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue17
 	ld	a, (xsp)
@@ -1839,11 +1852,12 @@ Scoop_SoundEditorData_Epilogue16:
 Scoop_SoundEditorData_Epilogue17:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join61:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue18
 	ld	a, (xsp)
@@ -1859,11 +1873,12 @@ Scoop_SoundEditorData_Epilogue17:
 Scoop_SoundEditorData_Epilogue18:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Join62:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, Scoop_SoundEditorData_Epilogue19
 	ld	a, (xsp)
@@ -1885,7 +1900,7 @@ Scoop_SoundEditorData_Epilogue19:
 	calr	Scoop_SoundEditorData_Helper
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 Scoop_SoundEditorData_Helper:
 	lda	xsp, (xsp-22)
 	ld	(xsp+16), e
@@ -1906,7 +1921,7 @@ Scoop_SoundEditorData_Helper:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper_Skip
 	ld	c, 77:opc
@@ -1931,10 +1946,10 @@ Scoop_SoundEditorData_Helper_Join:
 	lda	xbc, (xsp+2)
 	push	xbc
 	ld	bc, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	a, (xsp+18)
 	extz	wa
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+22)
 	ret
 	extz	wa
@@ -1943,7 +1958,7 @@ Scoop_SoundEditorData_Helper_Join:
 	calr	Scoop_SoundEditorData_Helper2
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 Scoop_SoundEditorData_Helper2:
 	lda	xsp, (xsp-22)
 	ld	(xsp+16), e
@@ -1964,7 +1979,7 @@ Scoop_SoundEditorData_Helper2:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip
 	ld	c, 78:opc
@@ -1989,10 +2004,10 @@ Scoop_SoundEditorData_Helper2_Join:
 	lda	xbc, (xsp+2)
 	push	xbc
 	ld	bc, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	a, (xsp+18)
 	extz	wa
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+22)
 	ret
 	extz	wa
@@ -2019,7 +2034,7 @@ Scoop_SoundEditorData_Join21:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip2
 	ld	c, 55:opc
@@ -2044,10 +2059,10 @@ Scoop_SoundEditorData_Helper2_Join2:
 	lda	xbc, (xsp+2)
 	push	xbc
 	ld	bc, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	a, (xsp+18)
 	extz	wa
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+22)
 	ret
 	extz	wa
@@ -2074,7 +2089,7 @@ Scoop_SoundEditorData_Join22:
 	ld	a, (xsp+20)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip3
 	ld	c, 54:opc
@@ -2099,10 +2114,10 @@ Scoop_SoundEditorData_Helper2_Join3:
 	lda	xbc, (xsp+2)
 	push	xbc
 	ld	bc, 0:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	a, (xsp+18)
 	extz	wa
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+22)
 	ret
 Scoop_SoundEditorData_Join23:
@@ -2151,11 +2166,11 @@ Scoop_SoundEditorData_Helper2_Join5:
 	push	xbc
 	ldw	wa, 48
 	ld	bc, 5:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	cp	l, 1:i3
-	call	z, (SeMenu_ApplyPartEdit_Data2_0x19BD:24)
+	call	z, (Scoop_SoundEditorData_Helper10:24)
 	ld	wa, 6:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 Scoop_SoundEditorData_Join24:
@@ -2176,7 +2191,7 @@ Scoop_SoundEditorData_Join24:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip6
 	ld	a, 79:opc
@@ -2199,11 +2214,11 @@ Scoop_SoundEditorData_Helper2_Join6:
 	push	xwa
 	ldw	wa, 48
 	ld	bc, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	cp	l, 1:i3
-	call	z, (SeMenu_ApplyPartEdit_Data2_0x19BD:24)
+	call	z, (Scoop_SoundEditorData_Helper10:24)
 	ld	wa, 7:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 Scoop_SoundEditorData_Join25:
@@ -2224,7 +2239,7 @@ Scoop_SoundEditorData_Join25:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip7
 	ld	a, 80:opc
@@ -2247,11 +2262,11 @@ Scoop_SoundEditorData_Helper2_Join7:
 	push	xwa
 	ldw	wa, 48
 	ld	bc, 5:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	cp	l, 1:i3
-	call	z, (SeMenu_ApplyPartEdit_Data2_0x19BD:24)
+	call	z, (Scoop_SoundEditorData_Helper10:24)
 	ldw	wa, 8
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 Scoop_SoundEditorData_Join26:
@@ -2268,7 +2283,7 @@ Scoop_SoundEditorData_Join26:
 	call	SeMenu_SendEvent
 	jr	Scoop_SoundEditorData_Epilogue20
 Scoop_SoundEditorData_Skip27:
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 Scoop_SoundEditorData_Epilogue20:
 	inc	4, xsp
 	ret
@@ -2276,7 +2291,7 @@ Scoop_SoundEditorData_Join27:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -2297,7 +2312,7 @@ Scoop_SoundEditorData_Join28:
 	jr	Scoop_SoundEditorData_Join29
 Scoop_SoundEditorData_Skip28:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue21
 	ldw	wa, 48
@@ -2320,7 +2335,7 @@ Scoop_SoundEditorData_Epilogue21:
 	setm	1, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
-	call	SeMenu_BitShiftMask_End_0x1C4
+	call	Scoop_SoundEditorData_Helper4
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Helper2_Join8
@@ -2328,7 +2343,7 @@ Scoop_SoundEditorData_Helper2_Skip8:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue
 	ldw	wa, 48
@@ -2348,7 +2363,7 @@ Scoop_SoundEditorData_Join30:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue2
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue2
 	ldw	wa, 48
@@ -2398,14 +2413,14 @@ Scoop_SoundEditorData_Epilogue22:
 	calr	Scoop_SoundEditorData_Helper
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 	extz	wa
 	ld	bc, 2:i3
 	ldw	de, 49
 	calr	Scoop_SoundEditorData_Helper2
 	ld	wa, 1:i3
 	ld	bc, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 	extz	wa
 	ld	bc, 3:i3
 	ldw	de, 49
@@ -2439,7 +2454,7 @@ Scoop_SoundEditorData_Epilogue22:
 	ormi8	(xsp+2), 3
 	ld	a, (xsp+2)
 	extz	wa
-	call	SeMenu_BitShiftMask_End_0x1C4
+	call	Scoop_SoundEditorData_Helper4
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Helper2_Join9
@@ -2447,7 +2462,7 @@ Scoop_SoundEditorData_Helper2_Skip9:
 	cp	(xsp), 0
 	jr	nz, Scoop_SoundEditorData_Epilogue23
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue23
 	ldw	wa, 48
@@ -2500,14 +2515,14 @@ Scoop_SoundEditorData_Epilogue25:
 	calr	Scoop_SoundEditorData_Helper
 	ld	wa, 0:i3
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 	extz	wa
 	ld	bc, 4:i3
 	ldw	de, 50
 	calr	Scoop_SoundEditorData_Helper2
 	ld	wa, 0:i3
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 	extz	wa
 	ld	bc, 5:i3
 	ldw	de, 50
@@ -2530,7 +2545,7 @@ Scoop_SoundEditorData_Join33:
 	call	SeMenu_SendEvent
 	jr	Scoop_SoundEditorData_Epilogue26
 Scoop_SoundEditorData_Skip31:
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 Scoop_SoundEditorData_Epilogue26:
 	inc	4, xsp
 	ret
@@ -2538,7 +2553,7 @@ Scoop_SoundEditorData_Join34:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -2559,7 +2574,7 @@ Scoop_SoundEditorData_Join35:
 	jr	Scoop_SoundEditorData_Join36
 Scoop_SoundEditorData_Skip32:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue27
 	ldw	wa, 48
@@ -2582,7 +2597,7 @@ Scoop_SoundEditorData_Epilogue27:
 	setm	2, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
-	call	SeMenu_BitShiftMask_End_0x1C4
+	call	Scoop_SoundEditorData_Helper4
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Helper2_Join10
@@ -2590,7 +2605,7 @@ Scoop_SoundEditorData_Helper2_Skip10:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue4
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue4
 	ldw	wa, 48
@@ -2610,7 +2625,7 @@ Scoop_SoundEditorData_Helper2_Join11:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue5
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue5
 	ldw	wa, 48
@@ -2660,14 +2675,14 @@ Scoop_SoundEditorData_Epilogue28:
 	calr	Scoop_SoundEditorData_Helper
 	ld	wa, 1:i3
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 	extz	wa
 	ld	bc, 4:i3
 	ldw	de, 51
 	calr	Scoop_SoundEditorData_Helper2
 	ld	wa, 1:i3
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1815
+	jp	UpdSeSel_DetailedUpdate_SetDisplayState_Helper4
 	extz	wa
 	ld	bc, 5:i3
 	ldw	de, 51
@@ -2695,7 +2710,7 @@ Scoop_SoundEditorData_Epilogue28:
 	ormi8	(xsp+2), 5
 	ld	a, (xsp+2)
 	extz	wa
-	call	SeMenu_BitShiftMask_End_0x1C4
+	call	Scoop_SoundEditorData_Helper4
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Helper2_Join12
@@ -2703,7 +2718,7 @@ Scoop_SoundEditorData_Helper2_Skip11:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue7
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue7
 	ldw	wa, 48
@@ -2772,7 +2787,7 @@ Scoop_SoundEditorData_Epilogue29:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip12
 	ld	a, 77:opc
@@ -2795,17 +2810,17 @@ Scoop_SoundEditorData_Helper2_Join13:
 	push	xwa
 	ldw	wa, 52
 	ld	bc, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0x1AAD
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper11
 	ld	wa, 2:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
 	extz	wa
 	ld	bc, 3:i3
 	ldw	de, 52
 	calr	Scoop_SoundEditorData_Helper2
-	jp	SeMenu_ApplyPartEdit_Data2_0x1AAD
+	jp	Scoop_SoundEditorData_Helper11
 	lda	xsp, (xsp-20)
 	ld	(xsp+18), a
 	lda	xwa, (xsp+16)
@@ -2828,7 +2843,7 @@ Scoop_SoundEditorData_Helper2_Join13:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	lda	xbc, (xsp)
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip13
@@ -2854,10 +2869,10 @@ Scoop_SoundEditorData_Helper2_Skip13:
 	ld	bc, 4:i3
 	ld	de, 0:i3
 Scoop_SoundEditorData_Helper2_Join14:
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0x1AAD
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper11
 	ld	wa, 4:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
 	lda	xsp, (xsp-18)
@@ -2877,7 +2892,7 @@ Scoop_SoundEditorData_Helper2_Join14:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	lda	xbc, (xsp)
 	cp	(xsp+12), 0
 	jr	nz, Scoop_SoundEditorData_Helper2_Skip14
@@ -2903,10 +2918,10 @@ Scoop_SoundEditorData_Helper2_Skip14:
 	ld	bc, 5:i3
 	ld	de, 0:i3
 Scoop_SoundEditorData_Helper2_Join15:
-	call	SeMenu_TransferPartValues_EndData_0x169
-	call	SeMenu_ApplyPartEdit_Data2_0x1AAD
+	call	SeMenu_ApplyPartEdit_Helper2
+	call	Scoop_SoundEditorData_Helper11
 	ld	wa, 5:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 	extz	wa
@@ -2930,14 +2945,14 @@ Scoop_SoundEditorData_Helper2_Join15:
 	call	SeMenu_SendEvent
 	jr	Scoop_SoundEditorData_Epilogue30
 Scoop_SoundEditorData_Skip35:
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 Scoop_SoundEditorData_Epilogue30:
 	inc	4, xsp
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -2957,7 +2972,7 @@ Scoop_SoundEditorData_Epilogue30:
 	jr	Scoop_SoundEditorData_Join39
 Scoop_SoundEditorData_Skip36:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue31
 	ldw	wa, 48
@@ -2979,7 +2994,7 @@ Scoop_SoundEditorData_Epilogue31:
 	andmi8	(xsp+2), 248
 	ld	a, (xsp+2)
 	extz	wa
-	call	SeMenu_BitShiftMask_End_0x1C4
+	call	Scoop_SoundEditorData_Helper4
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Helper2_Join16
@@ -2987,7 +3002,7 @@ Scoop_SoundEditorData_Helper2_Skip15:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue9
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue9
 	ldw	wa, 48
@@ -3006,7 +3021,7 @@ Scoop_SoundEditorData_Helper2_Epilogue9:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue10
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue10
 	ldw	wa, 48
@@ -3063,14 +3078,14 @@ Scoop_SoundEditorData_Epilogue32:
 	call	SeMenu_SendEvent
 	jr	Scoop_SoundEditorData_Epilogue33
 Scoop_SoundEditorData_Skip38:
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 Scoop_SoundEditorData_Epilogue33:
 	inc	4, xsp
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 48
@@ -3090,7 +3105,7 @@ Scoop_SoundEditorData_Epilogue33:
 	jr	Scoop_SoundEditorData_Join41
 Scoop_SoundEditorData_Skip39:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Epilogue34
 	ldw	wa, 48
@@ -3113,7 +3128,7 @@ Scoop_SoundEditorData_Epilogue34:
 	setm	0, (xsp+2)
 	ld	a, (xsp+2)
 	extz	wa
-	call	SeMenu_BitShiftMask_End_0x1C4
+	call	Scoop_SoundEditorData_Helper4
 	ldw	wa, 48
 	ld	bc, 0:i3
 	jr	Scoop_SoundEditorData_Helper2_Join17
@@ -3121,7 +3136,7 @@ Scoop_SoundEditorData_Helper2_Skip16:
 	cp	(xsp), 1
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue12
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue12
 	ldw	wa, 48
@@ -3140,7 +3155,7 @@ Scoop_SoundEditorData_Helper2_Epilogue12:
 	cp	(xsp+2), 0
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue13
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	jr	z, Scoop_SoundEditorData_Helper2_Epilogue13
 	ldw	wa, 48
@@ -3199,7 +3214,7 @@ Scoop_SoundEditorData_Epilogue35:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ld	e, (xsp+14)
 	extz	de
 	pushw	60
@@ -3207,7 +3222,7 @@ Scoop_SoundEditorData_Epilogue35:
 	push	xwa
 	ldw	wa, 54
 	ld	bc, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip41
 	lda	xbc, (xsp+12)
@@ -3219,10 +3234,10 @@ Scoop_SoundEditorData_Epilogue35:
 	call	SeMenu_StorePartParam
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip41:
 	ld	wa, 3:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
 	dec	8, xsp
@@ -3238,7 +3253,7 @@ Scoop_SoundEditorData_Skip41:
 	pushw	bc
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip42
 	lda	xwa, (xsp+4)
@@ -3258,10 +3273,10 @@ Scoop_SoundEditorData_Skip41:
 	inc	4, xsp
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip42:
 	ld	wa, 4:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	inc	8, xsp
 	ret
 	lda	xsp, (xsp-10)
@@ -3282,7 +3297,7 @@ Scoop_SoundEditorData_Skip42:
 	extz	bc
 	pushw	bc
 	ld	bc, 0:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip43
 	lda	xwa, (xsp+6)
@@ -3302,10 +3317,10 @@ Scoop_SoundEditorData_Skip42:
 	inc	4, xsp
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip43:
 	ld	wa, 5:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+10)
 	ret
 	dec	8, xsp
@@ -3320,7 +3335,7 @@ Scoop_SoundEditorData_Skip43:
 	extz	de
 	pushw	127
 	ld	bc, 2:i3
-	call	SeMenu_PatchBank_Data_0x74
+	call	SeMenu_ApplyPartEdit_Helper13
 	cp	l, 1:i3
 	jr	nz, Scoop_SoundEditorData_Skip44
 	lda	xwa, (xsp+4)
@@ -3340,21 +3355,21 @@ Scoop_SoundEditorData_Skip43:
 	inc	4, xsp
 	ld	wa, 0:i3
 	ld	bc, 0:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x13DE
+	call	SeMenu_ApplyPartEdit_Helper11
 Scoop_SoundEditorData_Skip44:
 	ld	wa, 6:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	inc	8, xsp
 	ret
 	cp	a, 0:i3
-	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
+	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 55
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3368,7 +3383,7 @@ Scoop_SoundEditorData_Skip44:
 	jr	Scoop_SoundEditorData_Join43
 Scoop_SoundEditorData_Skip45:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3379,7 +3394,7 @@ Scoop_SoundEditorData_Join43:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3389,7 +3404,7 @@ Scoop_SoundEditorData_Join43:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 54
@@ -3413,34 +3428,34 @@ Scoop_SoundEditorData_Join43:
 	extz	wa
 	ldw	bc, 63
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x332
+	jp	SeMenu_ApplyPartEdit_AltStore_Join8
 	extz	wa
 	ldw	bc, 64
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x396
+	jp	SeMenu_ApplyPartEdit_AltStore_Join9
 	extz	wa
 	ldw	bc, 62
 	ldw	de, 65
-	jp	SeMenu_ApplyPartEdit_Data2_0x3FA
+	jp	SeMenu_ApplyPartEdit_AltStore_Join10
 	extz	wa
 	ldw	bc, 66
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x498
+	jp	SeMenu_ApplyPartEdit_AltStore_Join11
 	extz	wa
 	ldw	bc, 70
 	ldw	de, 67
-	jp	SeMenu_ApplyPartEdit_Data2_0x4FC
+	jp	SeMenu_ApplyPartEdit_AltStore_Join12
 	extz	wa
 	ldw	bc, 68
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x59C
+	jp	SeMenu_ApplyPartEdit_AltStore_Join13
 	extz	wa
 	ldw	bc, 61
 	ldw	de, 69
-	jp	SeMenu_ApplyPartEdit_Data2_0x602
+	jp	SeMenu_ApplyPartEdit_AltStore_Join14
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 	ret
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Skip46
@@ -3449,7 +3464,7 @@ Scoop_SoundEditorData_Join43:
 	jr	Scoop_SoundEditorData_Join44
 Scoop_SoundEditorData_Skip46:
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3464,7 +3479,7 @@ Scoop_SoundEditorData_Join44:
 	jr	Scoop_SoundEditorData_Join45
 Scoop_SoundEditorData_Skip47:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3475,10 +3490,10 @@ Scoop_SoundEditorData_Join45:
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Skip48
 	ld	wa, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 Scoop_SoundEditorData_Skip48:
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3488,10 +3503,10 @@ Scoop_SoundEditorData_Skip48:
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Skip49
 	ld	wa, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 Scoop_SoundEditorData_Skip49:
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 55
@@ -3514,25 +3529,25 @@ Scoop_SoundEditorData_Skip49:
 	ret
 	extz	wa
 	ldw	bc, 74
-	jp	SeMenu_ApplyPartEdit_Data2_0x6A2
+	jp	SeMenu_ApplyPartEdit_AltStore_Join15
 	extz	wa
 	ldw	bc, 75
-	jp	SeMenu_ApplyPartEdit_Data2_0x732
+	jp	SeMenu_ApplyPartEdit_AltStore_Join16
 	extz	wa
 	ldw	bc, 76
-	jp	SeMenu_ApplyPartEdit_Data2_0x7C2
+	jp	SeMenu_ApplyPartEdit_AltStore_Join17
 	extz	wa
 	ldw	bc, 73
-	jp	SeMenu_ApplyPartEdit_Data2_0x852
+	jp	SeMenu_ApplyPartEdit_AltStore_Join18
 	extz	wa
 	ldw	bc, 71
-	jp	SeMenu_ApplyPartEdit_Data2_0x8A1
+	jp	SeMenu_ApplyPartEdit_AltStore_Join19
 	extz	wa
 	ldw	bc, 72
-	jp	SeMenu_ApplyPartEdit_Data2_0x8F4
+	jp	SeMenu_ApplyPartEdit_AltStore_Join20
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 	ret
 	cp	a, 0:i3
 	jr	nz, Scoop_SoundEditorData_Skip50
@@ -3541,7 +3556,7 @@ Scoop_SoundEditorData_Skip49:
 	jr	Scoop_SoundEditorData_Join46
 Scoop_SoundEditorData_Skip50:
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3556,7 +3571,7 @@ Scoop_SoundEditorData_Join46:
 	jr	Scoop_SoundEditorData_Join47
 Scoop_SoundEditorData_Skip51:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3567,7 +3582,7 @@ Scoop_SoundEditorData_Join47:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3577,7 +3592,7 @@ Scoop_SoundEditorData_Join47:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 56
@@ -3603,24 +3618,24 @@ Scoop_SoundEditorData_Join47:
 	jp	SeMenu_ApplyPartEdit_Data2
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x39
+	jp	SeMenu_ApplyPartEdit_AltStore_Join
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0xB6
+	jp	SeMenu_ApplyPartEdit_AltStore_Join2
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x133
+	jp	SeMenu_ApplyPartEdit_AltStore_Join3
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1B0
+	jp	SeMenu_ApplyPartEdit_AltStore_Join4
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x22B
+	jp	SeMenu_ApplyPartEdit_AltStore_Join5
 	extz	wa
 	ld	bc, 2:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x292
+	jp	SeMenu_ApplyPartEdit_AltStore_Join6
 	cp	a, 0:i3
-	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
+	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 55
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -3632,24 +3647,24 @@ Scoop_SoundEditorData_Join47:
 Scoop_SoundEditorData_Skip52:
 	ld	wa, 2:i3
 	ld	bc, 1:i3
-	jp	SeMenu_TransferPartValues_EndData_0x20E
+	jp	Scoop_SoundEditorData_Helper6
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
 	ld	bc, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
 	ld	bc, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 2:i3
 	ld	bc, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	nz

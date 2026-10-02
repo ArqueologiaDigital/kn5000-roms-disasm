@@ -1818,7 +1818,7 @@ LoadRegion1_OpenSuccess:
 	ld iz, hl
 	ld	wa, 0:i3
 	ld bc, iz
-	call BitMapOut_UpdateWidget_Done_0x99
+	call FileIO_ByteBlock_DemoProc1_Helper4
 	jr LoadRegion1_Finalize
 LoadRegion1_AltPmLoad:
 	call	PrePmLoad
@@ -2179,7 +2179,7 @@ LoadRegion5_OpenSuccess:
 	call msp_ld_ato
 	jr LoadRegion5_Finalize
 LoadRegion5_AltPath:
-	call DualVoice_WriteBackSlots_0x5				; alternate path
+	call LoadRegion5_AltPath_Helper				; alternate path
 	ld iz, hl
 LoadRegion5_Finalize:
 	call FileIO_CloseHandle
@@ -2209,7 +2209,7 @@ LoadRegion6_OpenSuccess:
 	calr FileIO_CheckRegionSignature
 	cp hl, 0:i3
 	jr z, LoadRegion6_ModeError
-	call Flash_SlotUpdateOpsBlock_0x336
+	call LoadRegion6_OpenSuccess_Helper
 	ld iz, hl
 	jr LoadRegion6_Finalize
 LoadRegion6_ModeError:
@@ -2732,7 +2732,7 @@ FileIO_SaveRegion6_Simple:
 	call FileIO_ReturnError
 	jr SaveRegion6_Return
 SaveRegion6_OpenSuccess:
-	call Flash_SlotUpdateOpsBlock_0x480				; region-specific handler
+	call SaveRegion6_OpenSuccess_Helper				; region-specific handler
 	ld iz, hl
 	call FileIO_CloseHandle
 	cp iz, 0:i3

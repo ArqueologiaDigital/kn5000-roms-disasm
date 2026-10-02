@@ -3741,8 +3741,9 @@ VocalistGridCheck_Join4:
 	add	xwa, xwa
 	add	xwa, MidiPart_ColWidthData
 	ld	wa, (xwa)
-	lda	xix, (VocalistGrid_DispatchData_0x160:24)
+	lda	xix, (VocalistGrid_DispatchData_Code:24)
 	jp	t, (xix+wa)
+VocalistGrid_DispatchData_Code:
 	ld	wa, (xbc)
 	cp	wa, 16
 	jr	z, VocalistGridCheck_Skip5

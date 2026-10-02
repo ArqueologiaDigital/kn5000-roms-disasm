@@ -14420,8 +14420,9 @@ Sqedt_ValueDispatch:
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable_3:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ValueDispatch_0x28:24)
+	lda	xix, (Sqedt_ValueDispatch_Code:24)
 	jp	t, (xix+hl)
+Sqedt_ValueDispatch_Code:
 	ld	l, 0:opc
 	jrl	SqedtFunc_SignExtendAndReturn
 	ld	l, 12:opc
@@ -14435,8 +14436,9 @@ Sqedt_ValueDispatch:
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable_2:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ValueDispatch_0x58:24)
+	lda	xix, (Sqedt_ValueDispatch_Code2:24)
 	jp	t, (xix+hl)
+Sqedt_ValueDispatch_Code2:
 	ld	l, 1:opc
 	jr	SqedtFunc_SignExtendAndReturn
 	extz	hl
@@ -14448,8 +14450,9 @@ Sqedt_ValueDispatch:
 	add	hl, hl
 	lda	xix, (Sqedt_ValueDispatch_CaseTable:24)
 	ld	hl, (xix+hl)
-	lda	xix, (Sqedt_ValueDispatch_0x82:24)
+	lda	xix, (Sqedt_ValueDispatch_Code3:24)
 	jp	t, (xix+hl)
+Sqedt_ValueDispatch_Code3:
 	ld	l, 2:opc
 	jr	SqedtFunc_SignExtendAndReturn
 	ld	l, 13:opc
@@ -14562,8 +14565,9 @@ SeqFormat_DispatchA_Join:
 	add	wa, wa
 	lda	xix, (SeqFormat_DispatchA_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda	xix, (SeqFormat_DispatchA_0x70:24)
+	lda	xix, (SeqFormat_DispatchA_Code:24)
 	jp	t, (xix+wa)
+SeqFormat_DispatchA_Code:
 	cp	(0x03e2e0:24), 0
 	jrl	nz, SeqFunc_ReturnZeroJmp
 	ld	xwa, 15

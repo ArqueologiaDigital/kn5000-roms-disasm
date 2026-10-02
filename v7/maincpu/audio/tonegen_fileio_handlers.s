@@ -89,6 +89,7 @@ ToneGen_ApplyMaskLoop:
 ToneGen_DSPCfg_Initialize:
 	calr	ToneGen_DSPCfg_ResetAll
 	jrl	ToneGen_DSPCfg_ResetAllChannels
+SeqChan_WriteField_Data_E_Helper2:
 	lda	xwa, (0xf480:16)
 	jrl	DSPCfg_InitAllEntries
 ToneGen_InitAllChannelEntries_Skip:

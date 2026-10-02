@@ -44,7 +44,7 @@ MiddleFuncCall_DispatchData:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SetWall_MiscDataAndCode_0x2
+	call	MiddleFuncCall_DispatchData_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -104,7 +104,7 @@ MiddleFuncCall_DispatchData:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SetWall_InlineCodeBlock_0xC8
+	call	MiddleFuncCall_DispatchData_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl

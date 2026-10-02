@@ -5181,7 +5181,9 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Skip10:
 	ld	xwa, (xsp+12)
 	ld	xwa, (xwa+20)
 	add	xwa, xhl
+Fat_CountContiguousClusters_ReadFat_Code:
 	ld	(xsp+8), xwa
+Fat_CountContiguousClusters_ReadFat_Code2:
 	ld	xiz, xwa
 	jr	SeqByteBlock_StyleBitmapRef_Code_Helper_Join4
 SeqByteBlock_StyleBitmapRef_Code_Helper_Loop5:
@@ -8049,7 +8051,7 @@ SeqChan_ByteBlockD_Skip:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736
+	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry
@@ -8066,7 +8068,7 @@ SeqChan_ByteBlockD_Helper_Skip2:
 	ld	xwa, (xwa+26)
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736
+	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
 	inc	4, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Entry2
@@ -8084,7 +8086,7 @@ SeqChan_ByteBlockD_Helper_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736
+	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Skip2
@@ -8102,7 +8104,7 @@ SeqChan_ByteBlockD_Skip3:
 	calr	SeqChan_ByteBlockA
 	ld	xwa, (xiz)
 	push	xwa
-	call	SeqByteBlock_StyleBitmapRef_0x736
+	call	SeqByteBlock_StyleBitmapRef_Code_Helper3
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, SeqChan_ByteBlockD_Helper_Skip4
@@ -10142,7 +10144,7 @@ SndTable_ByteBlock_ReadOps_Code_Skip2:
 	jrl	ule, SndTable_ByteBlock_ReadOps_Loop
 SndTable_ByteBlock_ReadOps_Code_Join:
 	ld	(0x2357e:24), 0
-	call	Show_ScreenGroup_Entry_0x7A
+	call	SndTable_ByteBlock_ReadOps_Helper
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -10635,12 +10637,14 @@ SeqDispatch_PostInit:
 
 
 SeqDispatch_TrampolineBlock:
-	jp	SeqDispatch_TrampolineBlock_0xB
+	jp	SeqDispatch_TrampolineBlock_Return
 	ret
-	jp	SeqDispatch_TrampolineBlock_0xC
+	jp	SeqDispatch_TrampolineBlock_Join
 	ret
 	ret
+SeqDispatch_TrampolineBlock_Return:
 	ret
+SeqDispatch_TrampolineBlock_Join:
 	calr	AccBuf_ResetAndReload
 	ret
 
@@ -10682,7 +10686,7 @@ Rhythm_DispatchNote_Finalize:
 Rhythm_TransposeWithMod_Tramp:
 	jp Rhythm_TransposeWithMod
 Rhythm_TransposeTrampBlock:
-	jp	AccStyle_TempoLookupData_0x6
+	jp	Rhythm_DispatchNote_Helper
 
 Seq_DispatcherTick:
 	cp (0x8c9a:16), 0x10

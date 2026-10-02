@@ -909,7 +909,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MidiStream_ExtendedDispatch_0x298
+	call	MidiCC_Handler_PairedParamA_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -929,7 +929,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2:
 	push	xhl
 	push	xix
 	push	xiz
-	call	MidiStream_ExtendedDispatch_0x1
+	call	MidiRx_ProgramChange_Helper
 	call	SwbtWr_ReinitOutputBank
 	pop	xiz
 	pop	xix

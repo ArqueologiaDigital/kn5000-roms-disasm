@@ -3085,7 +3085,7 @@ Sqedt_ParamDispatch_Str_34:
 ; SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
 ; SeqFormat_DispatchA (v10/v9 0xf3513d, v7 0xf35113) (`lda xix,
 ; (SeqFormat_DispatchA_CaseTable:24)`): 16 u16 case offsets from
-; SeqFormat_DispatchA_0x70.
+; SeqFormat_DispatchA_Code.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SeqFormat_DispatchA_CaseTable[16].
@@ -3108,7 +3108,7 @@ SqedtFunc_SignExtend_CaseTable:
 ; Sqedt_ValueDispatch_CaseTable -- jump table of a compiled `switch` in
 ; Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (NakaInst_2d_0x5e:24)`): 9 u16 case offsets from
-; Sqedt_ValueDispatch_0x82.
+; Sqedt_ValueDispatch_Code3.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Sqedt_ValueDispatch_CaseTable[9].
@@ -3120,7 +3120,7 @@ Sqedt_ValueDispatch_CaseTable:
 ; Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
 ; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable_2:24)`): 8 u16 case offsets from
-; Sqedt_ValueDispatch_0x58.
+; Sqedt_ValueDispatch_Code2.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Sqedt_ValueDispatch_CaseTable_2[8].
@@ -3132,7 +3132,7 @@ Sqedt_ValueDispatch_CaseTable_2:
 ; Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
 ; in Sqedt_ValueDispatch (v10/v9 0xf3502c, v7 0xf35002) (`lda xix,
 ; (Sqedt_ValueDispatch_CaseTable_3:24)`): 9 u16 case offsets from
-; Sqedt_ValueDispatch_0x28.
+; Sqedt_ValueDispatch_Code.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; Sqedt_ValueDispatch_CaseTable_3[9].
@@ -4011,8 +4011,8 @@ SeqEvent_MainHandler_CaseTable:
 ; AppEvtHandler_Branch_024_CaseTable -- jump table of a compiled
 ; `switch` in AppEvtHandler_Branch_024 (v10/v9 0xf445b0, v7 0xf445a2)
 ; (`add xwa, AppEvtHandler_Branch_024_CaseTable`): case k jumps to
-; AppEvtHandler_Branch_024_0x97 + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_024_0x97); jp t, (xrr+rr)`). 6 u16 offsets; the
+; AppEvtHandler_Branch_024_Code + entry[k] (`lda
+; xix,(AppEvtHandler_Branch_024_Code); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t

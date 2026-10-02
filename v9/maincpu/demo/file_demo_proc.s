@@ -1791,7 +1791,7 @@ LoadRegion1_OpenSuccess:
 	cp hl, 0:i3
 	jr z, LoadRegion1_AltPmLoad
 	ld	wa, 0:i3
-	call BitMapOut_UpdateWidget_Done_0x98
+	call LoadRegion1_OpenSuccess_Helper
 	ld xwa, 0x00000010
 	ld	bc, 0:i3
 	call FileIO_SeekAndReadBlock				; set region param
@@ -1812,7 +1812,7 @@ LoadRegion1_OpenSuccess:
 	ld iz, hl
 	ld	wa, 0:i3
 	ld bc, iz
-	call BitMapOut_UpdateWidget_Done_0x99
+	call LoadRegion1_OpenSuccess_Helper2
 	jr LoadRegion1_Finalize
 LoadRegion1_AltPmLoad:
 	call PrePmLoad				; alternate region setup
@@ -2183,7 +2183,7 @@ LoadRegion5_OpenSuccess:
 	call msp_ld_ato
 	jr LoadRegion5_Finalize
 LoadRegion5_AltPath:
-	call DualVoice_WriteBackSlots_0x5				; alternate path
+	call LoadRegion5_AltPath_Helper				; alternate path
 	ld iz, hl
 LoadRegion5_Finalize:
 	call FileIO_CloseHandle
@@ -2213,7 +2213,7 @@ LoadRegion6_OpenSuccess:
 	calr FileIO_CheckRegionSignature
 	cp hl, 0:i3
 	jr z, LoadRegion6_ModeError
-	call Flash_SlotUpdateOpsBlock_0x336
+	call LoadRegion6_OpenSuccess_Helper
 	ld iz, hl
 	jr LoadRegion6_Finalize
 LoadRegion6_ModeError:
@@ -2736,7 +2736,7 @@ FileIO_SaveRegion6_Simple:
 	call FileIO_ReturnError
 	jr SaveRegion6_Return
 SaveRegion6_OpenSuccess:
-	call Flash_SlotUpdateOpsBlock_0x480				; region-specific handler
+	call SaveRegion6_OpenSuccess_Helper				; region-specific handler
 	ld iz, hl
 	call FileIO_CloseHandle
 	cp iz, 0:i3
@@ -3145,7 +3145,7 @@ FileIO_ByteBlock_DemoProc1_Skip2:
 	jr	lt, FileIO_ByteBlock_DemoProc1_Join
 	ld	wa, (xsp+36)
 	extz	wa
-	call	BitMapOut_UpdateWidget_Done_0x8A
+	call	FileIO_ByteBlock_DemoProc1_Helper4
 	lda	xwa, (0x1ed350:24)
 	add	xwa, (xsp+0x4)
 	ld	xbc, (xsp+0x8)
@@ -3155,7 +3155,7 @@ FileIO_ByteBlock_DemoProc1_Skip2:
 	ld	wa, (xsp+36)
 	extz	wa
 	ld	bc, iz
-	call	BitMapOut_UpdateWidget_Done_0x8B
+	call	FileIO_ByteBlock_DemoProc1_Helper5
 	jr	FileIO_ByteBlock_DemoProc1_Join
 FileIO_ByteBlock_DemoProc1_Skip3:
 	ldw	iz, 0xff9a
@@ -3166,6 +3166,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
+SLDstBankList_FuncBody_Helper7:
 	lda	xsp, (xsp-36)
 	push	xiz
 	ld	(xsp+36), bc
@@ -3221,7 +3222,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	jrl	lt, FileIO_ByteBlock_DemoProc1_Join2
 	ld	wa, (xsp+36)
 	extz	wa
-	call	BitMapOut_UpdateWidget_Done_0x98
+	call	LoadRegion1_OpenSuccess_Helper
 	lda	xwa, (0x1ed350:24)
 	add	xwa, (xsp+0x4)
 	ld	xbc, 16
@@ -3256,7 +3257,7 @@ FileIO_ByteBlock_DemoProc1_Skip5:
 	ld	wa, (xsp+36)
 	extz	wa
 	ld	bc, iz
-	call	BitMapOut_UpdateWidget_Done_0x99
+	call	LoadRegion1_OpenSuccess_Helper2
 	jr	FileIO_ByteBlock_DemoProc1_Join2
 FileIO_ByteBlock_DemoProc1_Skip6:
 	ldw	iz, 0xff9a
@@ -3267,6 +3268,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+36)
 	ret
+SLDstBankList_FuncBody_Helper8:
 	lda	xsp, (xsp-30)
 	push	xiz
 	ld	(xsp+32), wa
@@ -3319,7 +3321,7 @@ FileIO_ByteBlock_DemoProc1_Skip9:
 	jr	c, FileIO_ByteBlock_DemoProc1_Skip10
 	ld	wa, (xsp+32)
 	extz	wa
-	call	SeqLoad_ProcessDataBlock_0x80
+	call	FileIO_ByteBlock_DemoProc1_Helper
 	ld	xiz, xhl
 	ld	bc, (xsp+32)
 	extz	xbc
@@ -3337,7 +3339,7 @@ FileIO_ByteBlock_DemoProc1_Skip9:
 	ld	wa, (xsp+32)
 	extz	wa
 	ld	bc, iz
-	call	SeqLoad_ProcessDataBlock_0xCC
+	call	FileIO_ByteBlock_DemoProc1_Helper2
 	cp	iz, 0:i3
 	jr	lt, FileIO_ByteBlock_DemoProc1_Join3
 	ld	wa, (xsp+32)
@@ -3356,6 +3358,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue3:
 	pop	xiz
 	lda	xsp, (xsp+30)
 	ret
+SLDstBankList_FuncBody_Helper9:
 	lda	xsp, (xsp-28)
 	pushw	iz
 	ld	(xsp+26), bc
@@ -3394,7 +3397,7 @@ FileIO_ByteBlock_DemoProc1_Skip13:
 	extz	wa
 	ld	bc, (xsp+26)
 	extz	bc
-	call	AccStyle_TableDataEntry_0x90
+	call	FileIO_ByteBlock_DemoProc1_Helper3
 	ld	iz, hl
 	jr	FileIO_ByteBlock_DemoProc1_Join4
 FileIO_ByteBlock_DemoProc1_Skip14:
@@ -3406,6 +3409,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue4:
 	popw	iz
 	lda	xsp, (xsp+28)
 	ret
+SLDstBankList_FuncBody_Helper10:
 	lda	xsp, (xsp-42)
 	pushw	iz
 	ld	(xsp+40), bc
@@ -3529,6 +3533,7 @@ FileIO_ByteBlock_DemoProc1_Epilogue5:
 	popw	iz
 	lda	xsp, (xsp+42)
 	ret
+SLDstBankList_FuncBody_Helper11:
 	lda	xsp, (xsp-36)
 	push	xiz
 	ld	(xsp+36), bc
@@ -6675,6 +6680,7 @@ GetFileEntryByIndex_Skip:
 GetFileEntryByIndex_Epilogue:
 	popw	iz
 	ret
+SLSrcBankList_FuncBody_Helper12:
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
@@ -6719,6 +6725,7 @@ GetFileEntryByIndex_Epilogue2:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
+SLSrcBankList_FuncBody_Helper13:
 	lda	xsp, (xsp-26)
 	push	xiz
 	ld	(xsp+28), wa
@@ -6770,6 +6777,7 @@ GetFileEntryByIndex_Epilogue3:
 	pop	xiz
 	lda	xsp, (xsp+26)
 	ret
+SLSrcBankList_FuncBody_Helper14:
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
@@ -6814,6 +6822,7 @@ GetFileEntryByIndex_Epilogue4:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
+SLSrcBankList_FuncBody_Helper15:
 	lda	xsp, (xsp-28)
 	pushw	iz
 	ld	(xsp+26), bc
@@ -6861,6 +6870,7 @@ GetFileEntryByIndex_Epilogue5:
 	popw	iz
 	lda	xsp, (xsp+28)
 	ret
+SLSrcBankList_FuncBody_Helper16:
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa
@@ -6906,6 +6916,7 @@ GetFileEntryByIndex_Epilogue6:
 	popw	iz
 	lda	xsp, (xsp+26)
 	ret
+SLSrcBankList_FuncBody_Helper17:
 	lda	xsp, (xsp-24)
 	pushw	iz
 	calr	GetCurrentFileIndex
@@ -6947,6 +6958,7 @@ GetFileEntryByIndex_Epilogue7:
 	popw	iz
 	lda	xsp, (xsp+24)
 	ret
+SLSrcBankList_FuncBody_Helper18:
 	lda	xsp, (xsp-26)
 	pushw	iz
 	ld	(xsp+26), wa

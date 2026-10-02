@@ -805,7 +805,7 @@ MidiCC_Handler_BitManipulation_Skip:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	VoiceMode_ParamConfigTables_0xB68
+	call	MidiCC_NullHandlerBlock_Helper
 MidiCC_Handler_BitManipulation_Return:
 	ret
 ; 0xFF filler after the `ret`; nothing reads it (the table below starts at +1).
@@ -814,7 +814,7 @@ MidiCC_Handler_BitManipulation_Return:
 ; MidiCC_Handler_BitManipulation (0xFCF8BD), CC function 18 <- CC83
 ; (MidiCC_ChannelMappingData): only for part 25, with `bit 2, (0xfd51)` set;
 ; `ld a, (0x9636) / cp a, 2 / jr ugt` (E stays 0 above 2) / `ld e, (xix+a)`,
-; then BC = 0x0B98, D = 0xC0 -> VoiceMode_ParamConfigTables_0xB68.
+; then BC = 0x0B98, D = 0xC0 -> MidiCC_NullHandlerBlock_Helper.
 ; Previously spelled `.byte 0x80, 0x40` behind a `nop`.
 MidiCC_CC83_ValueMap:
 	.byte 0x00, 0x80, 0x40
@@ -836,7 +836,7 @@ MidiCC_Handler_PairedParamA:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_ExtendedDispatch_0x298
+	call	MidiCC_Handler_PairedParamA_Helper
 MidiCC_Handler_PairedParamA_Return:
 	ret
 MidiCC_Handler_PairedParamB:
@@ -857,7 +857,7 @@ MidiCC_Handler_PairedParamB:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_ExtendedDispatch_0x298
+	call	MidiCC_Handler_PairedParamA_Helper
 MidiCC_Handler_PairedParamB_Return:
 	ret
 MidiCC_Handler_RangeCheck:

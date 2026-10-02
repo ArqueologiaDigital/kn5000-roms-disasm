@@ -23309,8 +23309,9 @@ Param_SignExtendReturn_Helper3:
 	add	xhl, xhl
 	add	xhl, Param_SignExtendReturn_Data_5
 	ld	hl, (xhl)
-	lda	xix, (Param_SignExtendRetu_Data_0x69:24)
+	lda	xix, (FetchOscTableEntry_Prologue_Code:24)
 	jp	t, (xix+hl)
+FetchOscTableEntry_Prologue_Code:
 	ld	a, (xsp)
 	exts	wa
 	pushw	127
@@ -23499,8 +23500,9 @@ SndParam_LookupAndDispatch:
 	add	xhl, xhl
 	add	xhl, Param_SignExtendReturn_Data_10
 	ld	hl, (xhl)
-	lda	xix, (Param_SignExtendRetu_Data_0x264:24)
+	lda	xix, (SndParam_LookupAndDispatch_Code:24)
 	jp	t, (xix+hl)
+SndParam_LookupAndDispatch_Code:
 	pushw	127
 	pushw	0
 	ld	wa, (xsp+10)

@@ -142,6 +142,7 @@ SeMenu_RegisterElement_Type1_ClearLoop:
 	ld hl, 0:i3
 	lda xsp, (xsp + 18)
 	retd 0x2
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper:
 	lda xsp, (xsp - 16)
 	ld (xsp + 12), c
 	ld (xsp + 14), a
@@ -412,6 +413,7 @@ SeMenu_RegisterParamDisplay_Data_Join:
 	popw	iz
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper:
 	lda	xsp, (xsp-22)
 	pushw	iz
 	ld	iz, de
@@ -585,6 +587,7 @@ SeMenu_SetupDisplayObject_Alt2_Continue:
 	calr SeMenu_FlushDisplayObj
 	lda xsp, (xsp + 20)
 	retd 0x2
+SeMenu_CopyWriteUpdate_Step3_Helper2:
 	lda xsp, (xsp - 14)
 	ld (xsp + 12), a
 	lda xbc, (xsp)
@@ -1092,6 +1095,7 @@ SeMenu_StorePartMask:
 SeMenu_PartMask_Data:
 	ld	(xwa), (0x65e)
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper3:
 	dec	8, xsp
 	ld	(xsp+4), c
 	ld	(xsp+6), a
@@ -1390,6 +1394,7 @@ SeMenu_BitShiftMask_End_Skip6:
 SeMenu_BitShiftMask_End_Join4:
 	ld	(xiz), a
 	jr	SeMenu_BitShiftMask_End_Join3
+Scoop_SoundEditorData_Helper3:
 	dec	2, xsp
 	lda	xwa, (xsp)
 	calr	SeMenu_SetupMenuDisplay_Finalize
@@ -1403,9 +1408,10 @@ SeMenu_BitShiftMask_End_Join5:
 	calr	SeMenu_SetupMenuDisplay_Section3_End
 	ld	wa, 1:i3
 	calr	SeMenu_SetupMenuDisplay
-	call	SeMenu_ShowConfirmDialog_Data_0xC0
+	call	SeMenu_BitShiftMask_Helper
 	inc	2, xsp
 	ret
+Scoop_SoundEditorData_Helper4:
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xwa, (xsp+2)
@@ -1578,6 +1584,7 @@ SeMenu_TransferPartValues_EndData_Skip27:
 	ret	nz
 	ld	(xwa), 1
 	ret
+UpdSeSel_DetailedUpdate_SetDisplayState_Helper:
 	ld	c, (1685:16)
 	cp	c, 1:i3
 	jr	c, SeMenu_TransferPartValues_EndData_Skip28
@@ -1588,8 +1595,10 @@ SeMenu_TransferPartValues_EndData_Skip28:
 SeMenu_TransferPartValues_EndData_Skip29:
 	ld	(xwa), c
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper4:
 	ld	(1685:16), a
 	ret
+UpdSeSel_DetailedUpdate_SetDisplayState_Helper2:
 	cp	a, 6:i3
 	jr	z, SeMenu_TransferPartValues_EndData_Skip14
 	cp	a, 5:i3
@@ -1609,6 +1618,7 @@ SeMenu_TransferPartValues_EndData_Skip15:
 SeMenu_TransferPartValues_EndData_Join2:
 	ld	(xbc), a
 	ret
+UpdSeSel_DetailedUpdate_SetDisplayState_Helper3:
 	cp	a, 6:i3
 	jr	z, SeMenu_TransferPartValues_EndData_Skip17
 	cp	a, 5:i3
@@ -1738,6 +1748,7 @@ SeMenu_TransferPartValues_EndData_Epilogue2:
 	pop	xiz
 	inc	8, xsp
 	retd	6
+Scoop_SoundEditorData_Helper5:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xwa, (xsp)
@@ -1761,6 +1772,7 @@ SeMenu_TransferPartValues_EndData_Skip22:
 SeMenu_TransferPartValues_EndData_Epilogue3:
 	inc	4, xsp
 	ret
+Scoop_SoundEditorData_Helper6:
 	lda	xsp, (xsp-14)
 	ld	(xsp+10), c
 	ld	(xsp+12), a
@@ -2158,6 +2170,7 @@ SeMenu_SetupPartDisplay_End_Loop4:
 	cp	w, e
 	jr	c, SeMenu_SetupPartDisplay_End_Loop4
 	ret
+Scoop_SoundEditorData_Helper7:
 	ld	xhl, (xsp+4)
 	bit	15, bc
 	jr	z, SeMenu_SetupPartDisplay_End_Skip4
@@ -2193,6 +2206,7 @@ SeMenu_SetupPartDisplay_End_Skip7:
 	ldw	hl, 0xffff
 SeMenu_SetupPartDisplay_End_Return:
 	retd	4
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper2:
 	ld	xhl, xbc
 	ld	b, 0:opc
 	cp	e, 0:i3
@@ -2204,6 +2218,7 @@ SeMenu_SetupPartDisplay_End_Loop6:
 	cp b, e
 	jr	c, SeMenu_SetupPartDisplay_End_Loop6
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper5:
 	lda	xsp, (xsp-16)
 	push	qiz
 	ld	(xsp+14), xwa
@@ -2280,16 +2295,20 @@ SeMenu_SetupPartDisplay_End_Epilogue:
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper3:
 	ld	(xwa), (0x6ad)
 	ret
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper4:
 	ld	(1709:16), a
 	ret
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper5:
 	cp	a, 15
 	ret	ugt
 	extz	wa
 	lda	xde, (0x020bf3:24)
 	ld	(xde+wa), c
 	ret
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper6:
 	cp a, 15
 	ret	ugt
 	extz	wa
@@ -2343,6 +2362,7 @@ SeMenu_SetupPartDisplay_End_Skip8:
 	muls	a, 3
 	ld	(xbc), a
 	ret
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper7:
 	cp	a, 97
 	jr	c, SeMenu_SetupPartDisplay_End_Skip9
 	ld	(xbc), 32
@@ -2353,6 +2373,7 @@ SeMenu_SetupPartDisplay_End_Skip9:
 	ld	a, (xde+wa)
 	ld (xbc), a
 	ret
+SeMenu_CopyWriteUpdate_Step3_Code_3_Helper8:
 	cp a, 130
 	jr	c, SeMenu_ApplyPartEdit_Helper5_Skip
 	ld	(xbc), 0
@@ -2367,6 +2388,7 @@ SeMenu_ApplyPartEdit_Helper5_Join:
 	ret	ule
 	ld	(xbc), 0
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper6:
 	dec	6, xsp
 	push	qiz
 	ld	(xsp+6), a
@@ -2552,6 +2574,7 @@ SeMenu_ApplyPartEdit_Skip30:
 SeMenu_ApplyPartEdit_Epilogue:
 	inc	2, xsp
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2600,6 +2623,7 @@ SeMenu_ApplyPartEdit_Skip31:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join2:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2648,6 +2672,7 @@ SeMenu_ApplyPartEdit_Skip32:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join3:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2696,6 +2721,7 @@ SeMenu_ApplyPartEdit_Skip33:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join4:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2743,6 +2769,7 @@ SeMenu_ApplyPartEdit_Skip34:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join5:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2782,6 +2809,7 @@ SeMenu_ApplyPartEdit_Skip34:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join6:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2821,6 +2849,7 @@ SeMenu_ApplyPartEdit_Skip34:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join7:
 	dec	4, xsp
 	ld	(xsp+2), a
 	lda	xbc, (xsp)
@@ -2847,6 +2876,7 @@ SeMenu_ApplyPartEdit_Join19:
 SeMenu_ApplyPartEdit_Epilogue8:
 	inc	4, xsp
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join8:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2885,6 +2915,7 @@ SeMenu_ApplyPartEdit_Epilogue8:
 SeMenu_ApplyPartEdit_Epilogue2:
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join9:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -2923,6 +2954,7 @@ SeMenu_ApplyPartEdit_Epilogue2:
 SeMenu_ApplyPartEdit_Epilogue3:
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join10:
 	lda	xsp, (xsp-22)
 	push	qiz
 	ld	(xsp+18), e
@@ -2980,6 +3012,7 @@ SeMenu_ApplyPartEdit_Join2:
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join11:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -3018,6 +3051,7 @@ SeMenu_ApplyPartEdit_Join2:
 SeMenu_ApplyPartEdit_Epilogue4:
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join12:
 	lda	xsp, (xsp-22)
 	push	qiz
 	ld	(xsp+18), e
@@ -3075,6 +3109,7 @@ SeMenu_ApplyPartEdit_Join3:
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join13:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -3113,6 +3148,7 @@ SeMenu_ApplyPartEdit_Join3:
 SeMenu_ApplyPartEdit_Epilogue5:
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join14:
 	lda	xsp, (xsp-22)
 	push	qiz
 	ld	(xsp+18), e
@@ -3170,6 +3206,7 @@ SeMenu_ApplyPartEdit_Join4:
 	pop qiz
 	lda	xsp, (xsp+22)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join15:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -3224,6 +3261,7 @@ SeMenu_ApplyPartEdit_Skip36:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join16:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -3278,6 +3316,7 @@ SeMenu_ApplyPartEdit_Skip4:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join17:
 	lda	xsp, (xsp-20)
 	ld	(xsp+16), c
 	ld	(xsp+18), a
@@ -3332,6 +3371,7 @@ SeMenu_ApplyPartEdit_Skip37:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+20)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join18:
 	dec	6, xsp
 	ld	(xsp+4), c
 	extz	wa
@@ -3365,6 +3405,7 @@ SeMenu_ApplyPartEdit_Skip5:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	inc	6, xsp
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join19:
 	lda	xsp, (xsp-18)
 	ld	(xsp+14), c
 	ld	(xsp+16), a
@@ -3396,6 +3437,7 @@ SeMenu_ApplyPartEdit_Skip5:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join20:
 	lda	xsp, (xsp-18)
 	ld	(xsp+14), c
 	ld	(xsp+16), a
@@ -3427,6 +3469,7 @@ SeMenu_ApplyPartEdit_Skip5:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	lda	xsp, (xsp+18)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join21:
 	lda	xsp, (xsp-24)
 	push	qiz
 	ld	(xsp+22), c
@@ -3515,6 +3558,7 @@ SeMenu_ApplyPartEdit_Epilogue6:
 	pop qiz
 	lda	xsp, (xsp+24)
 	ret
+SeMenu_ApplyPartEdit_AltStore_Join22:
 	dec	6, xsp
 	ld	(xsp+4), a
 	lda	xbc, (xsp+2)
@@ -3533,6 +3577,7 @@ SeMenu_ApplyPartEdit_Epilogue6:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	inc	6, xsp
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper7:
 	dec	2, xsp
 	ld	(xsp), a
 	res	7, c
@@ -3548,13 +3593,14 @@ SeMenu_ApplyPartEdit_Epilogue6:
 	calr	SeMenu_ApplyPartEdit_Helper4
 	inc	2, xsp
 	ret
+Scoop_SoundEditorData_Helper8:
 	lda	xsp, (xsp-22)
 	push	xiz
 	pushw	144
 	pushw	256
 	pushw	59
 	pushw	51
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ld	wa, 2:i3
@@ -3909,7 +3955,7 @@ SeMenu_ApplyPartEdit_Helper7:
 	pushw	256
 	pushw	59
 	pushw	51
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp
 	lda	xbc, (xsp+30)
 	ld	wa, 3:i3
@@ -4488,7 +4534,7 @@ SeMenu_ApplyPartEdit_Join16:
 	pushm	(xsp+8)
 	pushm	(xsp+12)
 	pushm	(xsp+16)
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	inc	8, xsp
 SeMenu_ApplyPartEdit_Helper9_Epilogue:
 	popw	iz
@@ -4535,7 +4581,7 @@ SeMenu_ApplyPartEdit_Helper11:
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data_3@hi16
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data_3@lo16
 	pushw	48
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp
 	lda	xbc, (xsp+18)
 	ldw	wa, 10
@@ -4622,17 +4668,17 @@ SeMenu_ApplyPartEdit_Helper11_Join:
 	pushw	254
 	pushw	97
 	pushw	48
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushw	121
 	pushm	(xsp+24)
 	pushw	97
 	.byte 0x9f, 0x1c, 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	pushw	121
 	pushm	(xsp+22)
 	pushw	97
 	.byte 0x9f, 0x1a, 0x04
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	lda	xsp, (xsp+24)
 	pushw	121
 	pushm	(xsp+8)
@@ -4706,35 +4752,35 @@ SeMenu_ApplyPartEdit_Helper11_Join3:
 	pushm	(xsp+18)
 	pushw	iz
 	pushw	48
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	push	qiz
 	pushm	(xsp+22)
 	pushw	iz
 	pushm	(xsp+30)
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	push	qiz
 	pushw	254
 	push	qiz
 	pushm	(xsp+34)
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushw	121
 	pushm	(xsp+40)
 	pushw	97
 	pushm	(xsp+44)
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	lda	xsp, (xsp+32)
 	pushw	121
 	pushm	(xsp+6)
 	pushw	iz
 	pushm	(xsp+10)
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	inc	8, xsp
 	pushw	121
 	pushm	(xsp+8)
 	push	qiz
 SeMenu_ApplyPartEdit_Helper11_Join4:
 	pushm	(xsp+12)
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+28)
@@ -4746,6 +4792,7 @@ SeMenu_ApplyPartEdit_Helper12:
 SeMenu_ApplyPartEdit_Helper12_Skip:
 	ld	(xbc), a
 	ret
+SeMenu_AltUpdate_Step3Plus_Helper:
 	lda	xsp, (xsp-28)
 	ld	(xsp+22), e
 	ld	(xsp+24), c
@@ -4780,7 +4827,7 @@ SeMenu_ApplyPartEdit_Entry5:
 	.byte 0x9f, 0x06, 0xa0
 	pushw	wa
 	pushm	(xsp+10)
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp
 	ld	a, (xsp+22)
 	extz	wa
@@ -4877,25 +4924,26 @@ SeMenu_ApplyPartEdit_Join18:
 	pushm	(xsp+12)
 	pushm	(xsp+4)
 	pushm	(xsp+18)
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	ld	wa, (xsp+8)
 	sub	wa, (xsp+10)
 	pushw	wa
 	pushm	(xsp+18)
 	pushw	wa
 	pushm	(xsp+24)
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushm	(xsp+16)
 	pushm	(xsp+24)
 	ld	wa, (xsp+20)
 	sub	wa, (xsp+22)
 	pushw	wa
 	pushm	(xsp+30)
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	lda	xsp, (xsp+24)
 SeMenu_ApplyPartEdit_Epilogue7:
 	lda	xsp, (xsp+28)
 	ret
+Scoop_SoundEditorData_Helper9:
 	dec	8, xsp
 	ld	(xsp+2), e
 	ld	(xsp+4), c
@@ -4932,6 +4980,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip:
 SeMenu_ApplyPartEdit_Entry5_Code_Epilogue:
 	inc	8, xsp
 	ret
+UpdSeSel_DetailedUpdate_SetDisplayState_Helper4:
 	lda	xsp, (xsp-16)
 	push	xiz
 	ld	(xsp+16), c
@@ -4986,7 +5035,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join:
 	pushw	232
 	pushm	(xsp+8)
 	pushw	67
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp
 	cp	(xsp+18), 0
 	jr	nz, SeMenu_ApplyPartEdit_Entry5_Code_Skip8
@@ -4996,14 +5045,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join:
 	pushw	wa
 	pushm	(xsp+12)
 	pushw	67
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushm	(xsp+18)
 	push	qiz
 	pushm	(xsp+20)
 	ld	wa, qiz
 	sub	wa, 10
 	pushw	wa
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	lda	xsp, (xsp+16)
 	ldw	de, 232
 	sub	de, qiz
@@ -5074,14 +5123,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join5:
 	push	qiz
 	pushw	wa
 	pushw	bc
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushm	(xsp+16)
 	ld	wa, qiz
 	add	wa, 10
 	pushw	wa
 	pushm	(xsp+22)
 	push	qiz
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	lda	xsp, (xsp+16)
 	pushm	(xsp+8)
 	pushw	232
@@ -5090,17 +5139,18 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join5:
 	add	wa, 10
 	pushw	wa
 SeMenu_ApplyPartEdit_Entry5_Code_Join6:
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	inc	8, xsp
 	pushm	(xsp+6)
 	push	qiz
 	pushm	(xsp+14)
 	push	qiz
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
+Scoop_SoundEditorData_Helper10:
 	lda	xsp, (xsp-12)
 	push	xiz
 	lda	xbc, (xsp+14)
@@ -5139,7 +5189,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip12:
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@hi16
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data_2@lo16
 	pushw	67
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp
 	ld	a, (xsp+10)
 	.byte 0x8f, 0x04, 0xc1
@@ -5150,14 +5200,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip12:
 	pushw	wa
 	pushm	(xsp+12)
 	pushw	67
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushw	iz
 	push	qiz
 	pushm	(xsp+20)
 	ld	wa, qiz
 	dec	6, wa
 	pushw	wa
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	lda	xsp, (xsp+16)
 	pushw	iz
 	pushw	232
@@ -5168,14 +5218,14 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip13:
 	pushw	iz
 	push	xiz
 	pushw	67
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushm	(xsp+16)
 	ld	wa, qiz
 	inc	6, wa
 	pushw	wa
 	pushw	iz
 	push	qiz
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	lda	xsp, (xsp+16)
 	pushm	(xsp+8)
 	pushw	232
@@ -5184,16 +5234,17 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip13:
 	inc	6, wa
 	pushw	wa
 SeMenu_ApplyPartEdit_Entry5_Code_Join7:
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	inc	8, xsp
 	pushm	(xsp+6)
 	push	xiz
 	push	qiz
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	inc	8, xsp
 	pop	xiz
 	lda	xsp, (xsp+12)
 	ret
+Scoop_SoundEditorData_Helper11:
 	lda	xsp, (xsp-22)
 	push	xiz
 	lda	xbc, (xsp+24)
@@ -5265,7 +5316,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip16:
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data@hi16
 	pushw	SeMenu_ApplyPartEdit_AltStore_Data@lo16
 	pushw	67
-	call	SeMenu_ShowConfirmDialog_Data_0x1BF
+	call	SeMenu_ApplyPartEdit_AltStore_Helper3
 	inc	8, xsp
 	ld	bc, iz
 	sub	bc, 67
@@ -5285,7 +5336,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join8:
 	pushw	iz
 	pushw	wa
 	pushw	de
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	inc	8, xsp
 	cp	(xsp+4), 1
 	jr	nz, SeMenu_ApplyPartEdit_Entry5_Code_Skip18
@@ -5301,7 +5352,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip18:
 	pushw	wa
 	pushm	(xsp+16)
 	pushw	iz
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushm	(xsp+18)
 	ld	wa, (xsp+18)
 	sub	wa, 10
@@ -5310,7 +5361,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip18:
 	ld	wa, iz
 	add	wa, 10
 	pushw	wa
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	lda	xsp, (xsp+16)
 	pushm	(xsp+14)
 	pushm	(xsp+10)
@@ -5319,7 +5370,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Skip18:
 	sub	wa, 10
 	pushw	wa
 SeMenu_ApplyPartEdit_Entry5_Code_Join9:
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	inc	8, xsp
 	ldw	bc, 232
 	sub	bc, (xsp+8)
@@ -5338,17 +5389,17 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join10:
 	pushw	de
 	pushm	(xsp+18)
 	pushm	(xsp+14)
-	call	SeMenu_DisplayPartValue_Data_0x7F
+	call	SeMenu_ApplyPartEdit_AltStore_Helper
 	pushm	(xsp+14)
 	pushw	iz
 	pushm	(xsp+24)
 	pushw	iz
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	pushm	(xsp+22)
 	pushm	(xsp+26)
 	pushm	(xsp+34)
 	pushm	(xsp+30)
-	call	SeMenu_DisplayPartValue_Data_0xB6
+	call	SeMenu_ApplyPartEdit_AltStore_Helper2
 	lda	xsp, (xsp+24)
 	pop	xiz
 	lda	xsp, (xsp+22)
@@ -5359,6 +5410,7 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join10:
 	lda	xde, (1698:16)
 	ld	(xde+wa), bc
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper8:
 	dec	1, a
 	extz	wa
 	add	wa, wa
@@ -5368,10 +5420,12 @@ SeMenu_ApplyPartEdit_Entry5_Code_Join10:
 	ret
 	ld	(1706:16), wa
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper9:
 	ldw	(xwa), (0x6aa)
 	ret
 	ld	(1708:16), a
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper10:
 	ld	(xwa), (0x6ac)
 	ret
 
@@ -5651,6 +5705,7 @@ SeMenu_ApplySynthParam_Data_Skip3:
 	pop	xiz
 	inc	8, xsp
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper11:
 	dec	2, xsp
 	push	xiz
 	ld	xiz, xde
@@ -5702,10 +5757,12 @@ SeMenu_SetMode:
 SeMenu_SetMode_Data:
 	ld	(1712:16), wa
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper12:
 	ldw	(xwa), (0x6b0)
 	ret
 	ld	(1714:16), wa
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper13:
 	ldw	(xwa), (0x6b2)
 	ret
 
@@ -5913,6 +5970,7 @@ SeMenu_HandleMenuChange_End:
 SeMenu_HandleMenuChange_Data:
 	ld	(xwa), (0x6b7)
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper14:
 	ld	(1719:16), a
 	ret
 
@@ -6125,8 +6183,10 @@ SeMenu_SetDisplayState:
 SeMenu_DisplayState_Data:
 	ld	(xwa), (0x6c5)
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper15:
 	ld	(1626:16), a
 	ret
+SeMenu_CopyWriteUpdate_Step3_Helper16:
 	ld	(xwa), (0x65a)
 	ret
 
@@ -6314,11 +6374,12 @@ SeMenu_RefreshPartDisplay_Data:
 	ld	(1709:16), 0
 	ret
 	ret
+SeMenu_RefreshPartDisplay_Join8:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue
 	ld	a, (xsp)
@@ -6334,11 +6395,12 @@ SeMenu_RefreshPartDisplay_Data:
 SeMenu_RefreshPartDisplay_Epilogue:
 	inc	4, xsp
 	ret
+SeMenu_RefreshPartDisplay_Join9:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue2
 	ld	a, (xsp)
@@ -6354,11 +6416,12 @@ SeMenu_RefreshPartDisplay_Epilogue:
 SeMenu_RefreshPartDisplay_Epilogue2:
 	inc	4, xsp
 	ret
+SeMenu_RefreshPartDisplay_Join10:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue3
 	ld	a, (xsp)
@@ -6374,11 +6437,12 @@ SeMenu_RefreshPartDisplay_Epilogue2:
 SeMenu_RefreshPartDisplay_Epilogue3:
 	inc	4, xsp
 	ret
+SeMenu_RefreshPartDisplay_Join11:
 	dec	4, xsp
 	lda	xde, (xsp+2)
 	lda	xhl, (xsp)
 	push	xhl
-	call	SeMenu_SetupPartDisplay_End_0x90
+	call	Scoop_SoundEditorData_Helper7
 	cp	hl, 0xffff
 	jr	z, SeMenu_RefreshPartDisplay_Epilogue4
 	ld	a, (xsp)
@@ -6415,7 +6479,7 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ldto_berp c, 251
 	extz	bc
 	ld	e, (xsp+14)
@@ -6424,9 +6488,9 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 2:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
@@ -6451,7 +6515,7 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ldto_berp c, 251
 	extz	bc
 	ld	e, (xsp+14)
@@ -6460,9 +6524,9 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 3:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
@@ -6485,7 +6549,7 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	ld	a, (xsp+16)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ldto_berp c, 251
 	extz	bc
 	ld	e, (xsp+14)
@@ -6494,9 +6558,9 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	lda	xwa, (xsp+4)
 	push	xwa
 	ldw	wa, 39
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 4:i3
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+16)
 	ret
@@ -6525,9 +6589,9 @@ SeMenu_RefreshPartDisplay_Epilogue4:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xbc+10)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	lda	xwa, (xsp+2)
-	call	SeMenu_BitShiftMask_End_0x14
+	call	SeMenu_TransferPartValues_EndData_Helper
 	cp	l, 1:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip
 	ld	a, (xsp+5)
@@ -6585,7 +6649,7 @@ SeMenu_RefreshPartDisplay_Join2:
 	ld	a, (xsp+18)
 	extz	wa
 	lda	xbc, (xsp+12)
-	call	SeMenu_SetupPartDisplay_End_0x219
+	call	SeMenu_ApplyPartEdit_Helper5
 	ldto_berp c, 251
 	extz	bc
 	ldto_berp a, 250
@@ -6595,15 +6659,15 @@ SeMenu_RefreshPartDisplay_Join2:
 	push	xwa
 	ldw	wa, 39
 	ld	de, 0:i3
-	call	SeMenu_TransferPartValues_EndData_0x169
+	call	SeMenu_ApplyPartEdit_Helper2
 	ld	wa, 6:i3
 SeMenu_RefreshPartDisplay_Join3:
-	call	SeMenu_SetupPartDisplay_End_0x1F6
+	call	SeMenu_ApplyPartEdit_Helper4
 	pop qiz
 	lda	xsp, (xsp+18)
 	ret
 	cp	a, 0:i3
-	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
+	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -6612,7 +6676,7 @@ SeMenu_RefreshPartDisplay_Join3:
 	ldw	wa, 39
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	Scoop_SoundEditorData_Helper9
 	ret
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip4
@@ -6623,7 +6687,7 @@ SeMenu_RefreshPartDisplay_Skip4:
 	ldw	wa, 39
 	ld	bc, 2:i3
 	ld	de, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x17C1
+	jp	Scoop_SoundEditorData_Helper9
 	dec	2, xsp
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip13
@@ -6646,7 +6710,7 @@ SeMenu_RefreshPartDisplay_Skip13:
 	ldw	wa, 39
 	ld	bc, 3:i3
 	ld	de, 1:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	Scoop_SoundEditorData_Helper9
 SeMenu_RefreshPartDisplay_Epilogue5:
 	inc	2, xsp
 	ret
@@ -6672,7 +6736,7 @@ SeMenu_RefreshPartDisplay_Skip14:
 	ldw	wa, 39
 	ld	bc, 4:i3
 	ld	de, 1:i3
-	call	SeMenu_ApplyPartEdit_Data2_0x17C1
+	call	Scoop_SoundEditorData_Helper9
 SeMenu_RefreshPartDisplay_Epilogue6:
 	inc	2, xsp
 	ret
@@ -6687,34 +6751,34 @@ SeMenu_RefreshPartDisplay_Epilogue6:
 	extz	wa
 	ldw	bc, 9
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x332
+	jp	SeMenu_ApplyPartEdit_AltStore_Join8
 	extz	wa
 	ldw	bc, 10
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x396
+	jp	SeMenu_ApplyPartEdit_AltStore_Join9
 	extz	wa
 	ldw	bc, 8
 	ldw	de, 11
-	jp	SeMenu_ApplyPartEdit_Data2_0x3FA
+	jp	SeMenu_ApplyPartEdit_AltStore_Join10
 	extz	wa
 	ldw	bc, 12
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x498
+	jp	SeMenu_ApplyPartEdit_AltStore_Join11
 	extz	wa
 	ldw	bc, 16
 	ldw	de, 13
-	jp	SeMenu_ApplyPartEdit_Data2_0x4FC
+	jp	SeMenu_ApplyPartEdit_AltStore_Join12
 	extz	wa
 	ldw	bc, 14
 	ld	de, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x59C
+	jp	SeMenu_ApplyPartEdit_AltStore_Join13
 	extz	wa
 	ld	bc, 7:i3
 	ldw	de, 15
-	jp	SeMenu_ApplyPartEdit_Data2_0x602
+	jp	SeMenu_ApplyPartEdit_AltStore_Join14
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 	ret
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip5
@@ -6723,7 +6787,7 @@ SeMenu_RefreshPartDisplay_Epilogue6:
 	jr	SeMenu_RefreshPartDisplay_Join4
 SeMenu_RefreshPartDisplay_Skip5:
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6738,7 +6802,7 @@ SeMenu_RefreshPartDisplay_Join4:
 	jr	SeMenu_RefreshPartDisplay_Join5
 SeMenu_RefreshPartDisplay_Skip6:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6749,10 +6813,10 @@ SeMenu_RefreshPartDisplay_Join5:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip7
 	ld	wa, 0:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 SeMenu_RefreshPartDisplay_Skip7:
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6762,10 +6826,10 @@ SeMenu_RefreshPartDisplay_Skip7:
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip8
 	ld	wa, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x2FA
+	jp	SeMenu_ApplyPartEdit_AltStore_Join7
 SeMenu_RefreshPartDisplay_Skip8:
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 40
@@ -6788,25 +6852,25 @@ SeMenu_RefreshPartDisplay_Skip8:
 	ret
 	extz	wa
 	ldw	bc, 20
-	jp	SeMenu_ApplyPartEdit_Data2_0x6A2
+	jp	SeMenu_ApplyPartEdit_AltStore_Join15
 	extz	wa
 	ldw	bc, 21
-	jp	SeMenu_ApplyPartEdit_Data2_0x732
+	jp	SeMenu_ApplyPartEdit_AltStore_Join16
 	extz	wa
 	ldw	bc, 22
-	jp	SeMenu_ApplyPartEdit_Data2_0x7C2
+	jp	SeMenu_ApplyPartEdit_AltStore_Join17
 	extz	wa
 	ldw	bc, 19
-	jp	SeMenu_ApplyPartEdit_Data2_0x852
+	jp	SeMenu_ApplyPartEdit_AltStore_Join18
 	extz	wa
 	ldw	bc, 17
-	jp	SeMenu_ApplyPartEdit_Data2_0x8A1
+	jp	SeMenu_ApplyPartEdit_AltStore_Join19
 	extz	wa
 	ldw	bc, 18
-	jp	SeMenu_ApplyPartEdit_Data2_0x8F4
+	jp	SeMenu_ApplyPartEdit_AltStore_Join20
 	cp	a, 0:i3
 	ret	z
-	call	SeMenu_BitShiftMask_End_0x1A3
+	call	Scoop_SoundEditorData_Helper3
 	ret
 	cp	a, 0:i3
 	jr	nz, SeMenu_RefreshPartDisplay_Skip9
@@ -6815,7 +6879,7 @@ SeMenu_RefreshPartDisplay_Skip8:
 	jr	SeMenu_RefreshPartDisplay_Join6
 SeMenu_RefreshPartDisplay_Skip9:
 	ld	wa, 1:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -6830,7 +6894,7 @@ SeMenu_RefreshPartDisplay_Join6:
 	jr	SeMenu_RefreshPartDisplay_Join7
 SeMenu_RefreshPartDisplay_Skip10:
 	ld	wa, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -6841,7 +6905,7 @@ SeMenu_RefreshPartDisplay_Join7:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -6851,7 +6915,7 @@ SeMenu_RefreshPartDisplay_Join7:
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x1E0
+	call	Scoop_SoundEditorData_Helper5
 	cp	l, 0:i3
 	ret	z
 	ldw	wa, 41
@@ -6877,24 +6941,24 @@ SeMenu_RefreshPartDisplay_Join7:
 	jp	SeMenu_ApplyPartEdit_Data2
 	extz	wa
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x39
+	jp	SeMenu_ApplyPartEdit_AltStore_Join
 	extz	wa
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0xB6
+	jp	SeMenu_ApplyPartEdit_AltStore_Join2
 	extz	wa
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x133
+	jp	SeMenu_ApplyPartEdit_AltStore_Join3
 	extz	wa
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x1B0
+	jp	SeMenu_ApplyPartEdit_AltStore_Join4
 	extz	wa
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x22B
+	jp	SeMenu_ApplyPartEdit_AltStore_Join5
 	extz	wa
 	ld	bc, 1:i3
-	jp	SeMenu_ApplyPartEdit_Data2_0x292
+	jp	SeMenu_ApplyPartEdit_AltStore_Join6
 	cp	a, 0:i3
-	jp	nz, (SeMenu_BitShiftMask_End_0x1A3:24)
+	jp	nz, (Scoop_SoundEditorData_Helper3:24)
 	ldw	wa, 40
 	ld	bc, 0:i3
 	jp	SeMenu_SendEvent
@@ -6906,24 +6970,24 @@ SeMenu_RefreshPartDisplay_Join7:
 SeMenu_RefreshPartDisplay_Skip11:
 	ld	wa, 1:i3
 	ld	bc, 1:i3
-	jp	SeMenu_TransferPartValues_EndData_0x20E
+	jp	Scoop_SoundEditorData_Helper6
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 2:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 3:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	z
 	ld	wa, 1:i3
 	ld	bc, 4:i3
-	call	SeMenu_TransferPartValues_EndData_0x20E
+	call	Scoop_SoundEditorData_Helper6
 	ret
 	cp	a, 0:i3
 	ret	nz

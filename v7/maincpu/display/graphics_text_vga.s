@@ -105,13 +105,14 @@ GraphicsRender_ByteData_Skip:
 	ld	wa, 6:i3
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (GraphicsRender_ByteData_0x2D:24)
+	lda	xbc, (GraphicsRender_ByteData_Code:24)
 	ld	(xwa), xbc
 	ld	(xwa+4), iz
 	calr	DrawRing_Post
 GraphicsRender_ByteData_Epilogue:
 	popw	iz
 	ret
+GraphicsRender_ByteData_Code:
 	ld	wa, (xwa+4)
 	jr	GraphicsRender_ByteData_Helper
 GraphicsRender_ByteData_Helper:
@@ -140,9 +141,10 @@ PostTitle_Function_Helper4:
 	ld	wa, 4:i3
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (GraphicsRender_ByteData_0x7F:24)
+	lda	xbc, (GraphicsRender_ByteData_Code2:24)
 	ld	(xwa), xbc
 	jrl	DrawRing_Post
+GraphicsRender_ByteData_Code2:
 	jr	GraphicsRender_ByteData_Join
 GraphicsRender_ByteData_Join:
 	pushw	iz
@@ -190,9 +192,10 @@ Display_DeferOrDrawWall:
 	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (Display_DeferOrDrawWall_0x18:24)
+	lda xbc, (Display_DeferOrDrawWall_Code:24)
 	ld (xwa), xbc
 	jrl DrawRing_Post
+Display_DeferOrDrawWall_Code:
 	jr Display_DeferOrDrawWall_Direct
 
 Display_DeferOrDrawWall_Direct:
@@ -208,9 +211,10 @@ Display_DeferOrUpdateScreen:
 	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (Display_DeferOrUpdateScreen_0x18:24)
+	lda xbc, (Display_DeferOrUpdateScreen_Code:24)
 	ld (xwa), xbc
 	jrl DrawRing_Post
+Display_DeferOrUpdateScreen_Code:
 	jr Display_DeferOrUpdateScreen_Direct
 
 Display_DeferOrUpdateScreen_Direct:
@@ -227,6 +231,7 @@ GraphicsRender_RetStub:
 GraphicsRender_ShortByteBlock:
 	lda	xbc, (xwa+1)
 	jr	GraphicsRender_ProcessEntries
+SeGfx_DrawBoundRecord_Helper:
 	lda	xbc, (xwa+1)
 	jr	t, GraphicsRender_Start
 
@@ -659,6 +664,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	pop	xiz
 	lda	xsp, (xsp+274)
 	ret
+SeGfx_StaticOp00_FromBuf_Helper:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -691,6 +697,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
+SeGfx_StaticOp02_FromBuf_Helper:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -739,6 +746,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
+SeGfx_StaticOp15_FromBuf_Helper:
 	dec	8, xsp
 	ld	xde, xwa
 	lda	xwa, (xsp+4)
@@ -755,6 +763,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
+SeGfx_StaticOp09_FromBuf_Helper:
 	dec	8, xsp
 	lda	xbc, (xsp)
 	ld	de, (xwa+2)
@@ -965,6 +974,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
+SeGfx_StaticOp03_BlitAtCell_Helper:
 	dec	8, xsp
 	lda	xhl, (xsp)
 	lda	xde, (xhl+2)
@@ -5168,13 +5178,13 @@ MainSysCtrl_Entry5_VoiceInit:
 	call Voice_InitBankDataSafe
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry6:
-	call VoiceData_ExtendedParamSetup_0x27
+	call MainSysCtrl_Entry5_VoiceInit_Helper
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry7:
-	call VoiceData_ExtendedParamSetup_0x40
+	call MainSysCtrl_Entry5_VoiceInit_Helper2
 	jr t, MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry8:
-	call VoiceData_ExtendedParamSetup_0xAF
+	call MainSysCtrl_Entry5_VoiceInit_Helper3
 
 
 MainSysControl_PostDispatchFinalize:

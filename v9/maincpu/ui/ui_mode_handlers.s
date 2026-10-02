@@ -1839,8 +1839,8 @@ EffectMode_HandleTimerEvents:
 	jr z, EffectMode_TimerEvent_Step1E
 	cp a, 0:i3
 	jrl nz, EffectMode_TimerEvent_Default
-	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x11)
-	ld xwa, AudioCtrl_PageHandler_0x11
+	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_Code)
+	ld xwa, AudioCtrl_PageHandler_Code
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -1938,8 +1938,8 @@ EffectMode_RunDiagSequence:
 	call ApPostEvent
 	calr A_Short_Pause
 	calr A_Short_Pause
-	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_0x11)
-	ld xwa, AudioCtrl_PageHandler_0x11
+	; object handle 0xf8000c = class 0x0f8, instance 12 (SendEvent indexes its class table by bits 16-27; not an address -- was AudioCtrl_PageHandler_Code)
+	ld xwa, AudioCtrl_PageHandler_Code
 	ld xbc, EVT_SHOW
 	ld xde, 0:i3
 	call ApPostEvent
@@ -2021,13 +2021,13 @@ EffectMode_ByteData_DiagEvents_Skip:
 EffectMode_ByteData_DiagEvents_Skip2:
 	bit_erpb 251, 0
 	jr z, EffectMode_ByteData_DiagEvents_Skip3
-	ld	xwa, SeqStep_FileSectorPopReturn_0x364
+	ld	xwa, Fat_CountContiguousClusters_ReadFat_Code
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 	jr	EffectMode_ByteData_DiagEvents_Join
 EffectMode_ByteData_DiagEvents_Skip3:
-	; object handle 0xf50014 = class 0x0f5, instance 20 (SendEvent indexes its class table by bits 16-27; not an address -- was SeqStep_FileSectorPopReturn_0x367)
-	ld	xwa, SeqStep_FileSectorPopReturn_0x367
+	; object handle 0xf50014 = class 0x0f5, instance 20 (SendEvent indexes its class table by bits 16-27; not an address -- was Fat_CountContiguousClusters_ReadFat_Code2)
+	ld	xwa, Fat_CountContiguousClusters_ReadFat_Code2
 	ld	xbc, EVT_SHOW
 	ld	xde, 0:i3
 EffectMode_ByteData_DiagEvents_Join:

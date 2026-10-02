@@ -12025,6 +12025,7 @@ AudioCtrl_PageHandler:
 	cp xwa, 0x8f
 	jrl nz, AudioCtrl_CheckEventF
 	incw 8, (0x24790:24)
+AudioCtrl_PageHandler_Code:
 	incw 1, (0x24794:24)
 	ld wa, (0x024790:24)
 	calr PsMixer_ReadWordArrayEntry
@@ -15322,9 +15323,13 @@ PsMixer_CtlTypeProc8_Epilogue:
 	popw	iz
 	lda	xsp, (xsp+18)
 	ret
+PsMixer_CtlTypeProc8_Return:
 	ret
+PsMixer_CtlTypeProc8_Return2:
 	ret
+DirmdEmu_CaseF_Helper:
 	ret
+PsMixer_CtlTypeProc8_Return3:
 	ret
 
 IvDrawbarProc:

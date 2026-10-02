@@ -3833,12 +3833,16 @@ BitMapOut_UpdateWidget_Done_Skip:
 BitMapOut_UpdateWidget_Done_Join:
 	call	ApPostEvent
 	ret
+FileIO_ByteBlock_DemoProc1_Helper4:
 	ret
+FileIO_ByteBlock_DemoProc1_Helper5:
 	extz	wa
 	cp	bc, 0:i3
 	jp	lt, (VoiceData_InitAndCopyParams:24)
 	jp	ToneGen_LookupByVoiceIndex
+LoadRegion1_OpenSuccess_Helper:
 	ret
+LoadRegion1_OpenSuccess_Helper2:
 	dec	2, xsp
 	push qiz
 	ld	(xsp+2), a

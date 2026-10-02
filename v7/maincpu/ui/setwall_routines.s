@@ -86,8 +86,9 @@ NoRef_SetWall_SlotMap20x2:
 	zcf
 	incf
 SetWall_UpdateSlotIndex_Sub:
-	call	SetWall_InlineCodeBlock_0x7F
+	call	NoRef_SetWall_SlotMap20x2_Helper
 	ret
+NoRef_SetWall_SlotMap20x2_Helper:
 	ld	a, (0x2873:16)
 	cp	a, 13
 	jr	z, 59
@@ -115,7 +116,7 @@ SetWall_UpdateSlotIndex_Sub:
 	call	CDlikeSwTtl_SendStartEvtArg1
 	ret
 MiddleFuncCall_DispatchData_Code_Helper3:
-	call	SetWall_InlineCodeBlock_0x7F
+	call	NoRef_SetWall_SlotMap20x2_Helper
 	ret
 SetWall_SlotMaskTable:
 	swi	7
@@ -233,7 +234,7 @@ SetWall_CompareAndSwap:
 	xor w, w
 	ld iy, wa
 	push xde
-	ld xde, SetWall_InlineCodeBlock_0xCD
+	ld xde, SetWall_SlotMaskTable
 	ld	c, (xde+iy)
 	ld a, (3295:16)
 	ld iy, wa
@@ -241,7 +242,7 @@ SetWall_CompareAndSwap:
 	ld	a, (xde+iy)
 	ld (3297:16), a
 	ld iy, wa
-	ld xde, SetWall_InlineCodeBlock_0xCD
+	ld xde, SetWall_SlotMaskTable
 	ld	a, (xde+iy)
 	pop xde
 	and a, c
@@ -338,6 +339,7 @@ SetWall_DataBlock1:
 	ld	a, (65507:24)
 	ld	(3391:16), a
 	ret
+SqTrAsPsTtl_Dispatch_Helper:
 	ret
 	ret
 	ret
@@ -636,20 +638,20 @@ SetWall_InlineCodeBlock2:
 	pop xde
 	cp a, (10355:16)
 	jr	nz, SetWall_InlineCodeBlock2_Skip
-	jp	SetWall_InlineCodeBlock2_0x5E
+	jp	SetWall_InlineCodeBlock2_Return
 SetWall_InlineCodeBlock2_Skip:
 	ld	a, (0x2873:16)
 	xor	w, w
 	ld	iy, wa
 	push	xde
-	ld	xde, SetWall_InlineCodeBlock_0xCD
+	ld	xde, SetWall_SlotMaskTable
 	ld	c, (xde+iy)
 	ld a, (3295:16)
 	ld iy, wa
 	ld	xde, 0xf1a0
 	ld	a, (xde+iy)
 	ld iy, wa
-	ld	xde, SetWall_InlineCodeBlock_0xCD
+	ld	xde, SetWall_SlotMaskTable
 	ld	a, (xde+iy)
 	pop xde
 	and	a, c
@@ -657,9 +659,10 @@ SetWall_InlineCodeBlock2_Skip:
 	jr	z, SetWall_InlineCodeBlock2_Skip2
 	jr	SetWall_InlineCodeBlock2_Join
 SetWall_InlineCodeBlock2_Skip2:
-	jp	SetWall_InlineCodeBlock2_0x5E
+	jp	SetWall_InlineCodeBlock2_Return
 SetWall_InlineCodeBlock2_Join:
 	call	SetWall_CrossTypeChange
+SetWall_InlineCodeBlock2_Return:
 	ret
 
 SetWall_CrossTypeChange:
@@ -1962,6 +1965,7 @@ SetWall_ForwardSkip_Return:
 
 SetWall_InlineCodeBlock3:
 	ret
+SqTrAs_CondCheck_Helper:
 	call	AccWrap_PlayModeDispatch
 	or (10407:16), 4
 	ld	wa, (0xffec:24)
@@ -1973,7 +1977,7 @@ SetWall_InlineCodeBlock3:
 SetWall_ForwardSkip_Loop2:
 	ld	(0x286b:16), c
 	push	xix
-	call	SetWall_MiscDataAndCode_0x52
+	call	SetWall_InlineCodeBlock3_Helper
 	pop	xix
 	xor	bc, bc
 	ld	c, (0x286b:16)
@@ -1985,6 +1989,7 @@ SetWall_ForwardSkip_Loop2:
 	popw	bc
 	pop	xix
 	ret
+SqTrAs_CondCheck_Helper2:
 	and (10407:16), 251
 	xor	wa, wa
 	ld	a, 76:opc
@@ -2032,12 +2037,13 @@ NoteEditBox_EventDispatch2_Data:
 SetWall_MiscDataAndCode_Skip:
 	ld	a, 142:opc
 	call	UI_PostModeChangeEvent
-	jp	SetWall_MiscDataAndCode_0x51
+	jp	SetWall_MiscDataAndCode_Return
 SetWall_MiscDataAndCode_Skip2:
 	ld	a, 131:opc
 	call	UI_PostModeChangeEvent
-SetWall_MiscDataAndCode_0x51:
+SetWall_MiscDataAndCode_Return:
 	ret
+SetWall_InlineCodeBlock3_Helper:
 	ld	xwa, (4349:16)
 	push	xwa
 	xor	xwa, xwa
@@ -2092,29 +2098,29 @@ SetWall_MiscDataAndCode_Data:
 	inc	1, wa
 	ld	hl, (xix+wa)
 	cp	hl, 65535
-	jr	z, SetWall_MiscDataAndCode_Return2
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	push	xhl
 	push_lerp 52
-	call	SetWall_MiscDataAndCode_Helper2
+	call	SetWall_MiscDataAndCode_Data_Code_Helper
 	pop_lerp 52
 	ld	xhl, (4349:16)
 	bitm 7, (xhl)
 	pop	xhl
-	jr	z, SetWall_MiscDataAndCode_Return2
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	.byte 0xe7, 0x34, 0x61, 0xe7, 0x34, 0x04
-	call	SetWall_MiscDataAndCode_Helper2
+	call	SetWall_MiscDataAndCode_Data_Code_Helper
 	pop_lerp 52
 	ld	xhl, (4349:16)
 	.byte 0xb3, 0xcf
-	jr	z, SetWall_MiscDataAndCode_Return2
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	ld	hl, (xhl+3)
 	cp	hl, 65535
-	jr	z, SetWall_MiscDataAndCode_Return2
+	jr	z, SetWall_MiscDataAndCode_Data_Code_Return
 	.byte 0xe7, 0x34, 0x61
 	jr	-32
-SetWall_MiscDataAndCode_Return2:
+SetWall_MiscDataAndCode_Data_Code_Return:
 	ret
-SetWall_MiscDataAndCode_Helper2:
+SetWall_MiscDataAndCode_Data_Code_Helper:
 	push	xiy
 	ld	xiy, (7514:16)
 	extz	xhl

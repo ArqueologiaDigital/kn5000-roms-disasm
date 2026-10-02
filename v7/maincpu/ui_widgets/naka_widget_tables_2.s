@@ -1447,7 +1447,7 @@ VocalistGrid_DispatchData_CaseTable:
 ; MidiPart_ColWidthData -- jump table of a compiled `switch` in
 ; VocalistGrid_DispatchData (v10/v9 0xf73938, v7 0xf73534) (`.long
 ; MidiPart_ColWidthData`): 20 u16 case offsets from
-; VocalistGrid_DispatchData_0x160.
+; VocalistGrid_DispatchData_Code.
 ;
 ; Typed in naka_widget_tables_2.c as uint16_t MidiPart_ColWidthData[20].
 ; -----------------------------------------------------------------------------

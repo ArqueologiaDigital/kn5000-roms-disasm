@@ -211,7 +211,7 @@ SLSrcBankList_FuncBody_Helper:
 	extz	wa
 	div	wa, c
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc2_0x2D
+	call	SLSrcBankList_FuncBody_Helper12
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -291,7 +291,7 @@ SLSrcBankList_FuncBody_Helper3:
 	lda	xiz, (xwa+64)
 	ld	a, (0x89fc:16)
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc2_0xA7
+	call	SLSrcBankList_FuncBody_Helper13
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -526,7 +526,7 @@ SLSrcBankList_FuncBody_Join4:
 	ld	(xwa+42), 2
 	lda	xiz, (xwa+43)
 	ld	wa, 0:i3
-	call	FileIO_ByteBlock_DemoProc2_0x13A
+	call	SLSrcBankList_FuncBody_Helper14
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -690,7 +690,7 @@ SLSrcBankList_FuncBody_Helper6:
 	extz	wa
 	div	wa, e
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc2_0x1B4
+	call	SLSrcBankList_FuncBody_Helper15
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -965,7 +965,7 @@ SLSrcBankList_FuncBody_Helper9:
 	lda	xwa, (0x894e:16)
 	ld	(xwa+21), 1
 	lda	xiz, (xwa+22)
-	call	FileIO_ByteBlock_DemoProc2_0x2B3
+	call	SLSrcBankList_FuncBody_Helper17
 	ld	xbc, xhl
 	ld	xwa, xiz
 	call	FileIO_CopyString
@@ -1068,13 +1068,13 @@ SLSrcBankList_FuncBody_Helper11:
 	jr	c, SLSrcBankList_FuncBody_Helper11_Skip
 	sub	a, e
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc2_0x323
+	call	SLSrcBankList_FuncBody_Helper18
 	ld	xbc, xhl
 	ld	xwa, xiz
 	jr	SLSrcBankList_FuncBody_Join11
 SLSrcBankList_FuncBody_Helper11_Skip:
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc2_0x238
+	call	SLSrcBankList_FuncBody_Helper16
 	ld	xbc, xhl
 	ld	xwa, xiz
 SLSrcBankList_FuncBody_Join11:
@@ -1831,7 +1831,7 @@ SLDstBankList_FuncBody_Skip9:
 	div	de, c
 	extz	de
 	ld	bc, de
-	call	FileIO_ByteBlock_DemoProc1_0xD8
+	call	SLDstBankList_FuncBody_Helper7
 	exts	xhl
 	jr	SLDstBankList_FuncBody_Epilogue
 SLDstBankList_FuncBody_Helper_Skip2:
@@ -1975,7 +1975,7 @@ SLDstBankList_FuncBody_Skip14:
 	jr	nz, SLDstBankList_FuncBody_Loop2
 	ld	a, (0x8a04:16)
 	extz	wa
-	call	FileIO_ByteBlock_DemoProc1_0x1F8
+	call	SLDstBankList_FuncBody_Helper8
 	exts	xhl
 SLDstBankList_FuncBody_Epilogue2:
 	pop	xiz
@@ -2260,7 +2260,7 @@ SLDstBankList_FuncBody_Helper4_Skip3:
 	ld	c, (0x8a06:16)
 	extz	bc
 SLDstBankList_FuncBody_Join10:
-	call	FileIO_ByteBlock_DemoProc1_0x2DE
+	call	SLDstBankList_FuncBody_Helper9
 	exts	xhl
 SLDstBankList_FuncBody_Epilogue3:
 	pop	xiz
@@ -2662,7 +2662,7 @@ SLDstBankList_FuncBody_Skip36:
 	extz	bc
 	div	bc, e
 	extz	bc
-	call	FileIO_ByteBlock_DemoProc1_0x4AC
+	call	SLDstBankList_FuncBody_Helper11
 	exts	xhl
 	jr	SLDstBankList_FuncBody_Epilogue4
 SLDstBankList_FuncBody_Helper6_Skip3:
@@ -2670,7 +2670,7 @@ SLDstBankList_FuncBody_Helper6_Skip3:
 	extz	wa
 	ld	c, (0x8a08:16)
 	extz	bc
-	call	FileIO_ByteBlock_DemoProc1_0x356
+	call	SLDstBankList_FuncBody_Helper10
 	exts	xhl
 SLDstBankList_FuncBody_Epilogue4:
 	pop	xiz

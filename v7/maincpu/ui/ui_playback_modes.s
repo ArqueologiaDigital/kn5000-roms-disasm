@@ -347,14 +347,16 @@ DispatchHandler_ClearActiveFlag:
 	ret
 
 PlayMode_InitFlagBlock:
-	call	PlayMode_InitFlagBlock_0x5
+	call	PlayMode_InitFlagBlock_Helper
 	ret
+PlayMode_InitFlagBlock_Helper:
 	cp (3380:16), 0
 	jr	nz, PlayMode_InitFlagBlock_Return
 	ld	(3380:16), 1
-	call	PlayMode_InitFlagBlock_0x16
+	call	PlayMode_InitFlagBlock_Helper2
 PlayMode_InitFlagBlock_Return:
 	ret
+PlayMode_InitFlagBlock_Helper2:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
@@ -506,17 +508,21 @@ Medley_GetPlaybackStatus:
 SongMode_InitFlagBlock:
 	ret
 	ret
-	call	SongMode_InitFlagBlock_0x7
+DpMdlyDocTtl_Dispatch_Helper:
+	call	SongMode_InitFlagBlock_Helper
 	ret
+SongMode_InitFlagBlock_Helper:
 	cp (3380:16), 0
 	jr	nz, Medley_GetPlaybackStatus_Return
 	ld	(3380:16), 1
-	call	SongMode_InitFlagBlock_0x18
+	call	SongMode_InitFlagBlock_Helper2
 Medley_GetPlaybackStatus_Return:
 	ret
+SongMode_InitFlagBlock_Helper2:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
+DpMdlyDocTtl_Dispatch_Helper2:
 	ld	(3380:16), 0
 	ret
 
@@ -657,17 +663,21 @@ PartFormat_InitFlagBlock:
 	ret
 	ret
 	ret
-	call	PartFormat_InitFlagBlock_0xA
+DpMdlyPdTtl_Dispatch_Helper:
+	call	PartFormat_InitFlagBlock_Helper
 	ret
+PartFormat_InitFlagBlock_Helper:
 	cp (3380:16), 0
 	jr	nz, SongMode_VoiceStateDisp_Return
 	ld	(3380:16), 1
-	call	PartFormat_InitFlagBlock_0x1B
+	call	PartFormat_InitFlagBlock_Helper2
 SongMode_VoiceStateDisp_Return:
 	ret
+PartFormat_InitFlagBlock_Helper2:
 	or (10412:16), 4
 	ld	(4420:16), 10
 	ret
+DpMdlyPdTtl_Dispatch_Helper2:
 	ld	(3380:16), 0
 	ret
 
@@ -719,10 +729,10 @@ PlayModeStop_InitFlagBlock:
 DpMdlySmfLyrTtlFunc_Helper:
 	cp (0x8c9b:16), 0x76
 	jr z, .Lc_f2093f
-	call PlayModeStop_InitFlagBlock_0x10
+	call PlayModeStop_InitFlagBlock_Helper
 .Lc_f2093f:
 	ret
-PlayModeStop_InitFlagBlock_0x10:
+PlayModeStop_InitFlagBlock_Helper:
 	.byte 0xc1, 0x34, 0x0d, 0x3f, 0x00, 0x6e, 0x09, 0xf1
 	.byte 0x34, 0x0d, 0x00, 0x01, 0x1d, 0x51, 0x09, 0xf2
 	.byte 0x0e, 0xc1, 0xac, 0x28, 0x3e, 0x04, 0xf1, 0x44
@@ -1080,7 +1090,7 @@ SqTrAs_CondCheck:
 	push xhl
 	push xix
 	push xiz
-	call	SetWall_InlineCodeBlock3_0x1
+	call	SqTrAs_CondCheck_Helper
 	pop xiz
 	pop xix
 	pop xhl
@@ -1090,7 +1100,7 @@ SqTrAs_CondCheck:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SetWall_InlineCodeBlock3_0x40
+	call	SqTrAs_CondCheck_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1318,7 +1328,7 @@ SqTrAsPsTtl_Dispatch:
 	push xhl
 	push xix
 	push xiz
-	call	SetWall_DataBlock1_0xF
+	call	SqTrAsPsTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1723,7 +1733,7 @@ DpMdlyDocTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	SongMode_InitFlagBlock_0x2
+	call	DpMdlyDocTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1733,7 +1743,7 @@ DpMdlyDocTtl_Dispatch:
 	push xhl
 	push xix
 	push xiz
-	call	SongMode_InitFlagBlock_0x23
+	call	DpMdlyDocTtl_Dispatch_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1816,7 +1826,7 @@ DpMdlyPdTtl_Dispatch:
 	push	xhl
 	push	xix
 	push	xiz
-	call	PartFormat_InitFlagBlock_0x5
+	call	DpMdlyPdTtl_Dispatch_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -1826,7 +1836,7 @@ DpMdlyPdTtl_Dispatch:
 	push xhl
 	push xix
 	push xiz
-	call	PartFormat_InitFlagBlock_0x26
+	call	DpMdlyPdTtl_Dispatch_Helper2
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -3323,10 +3333,10 @@ Display_InitGraphicsAndScreen:
 	ldw wa, 0x00ff
 	call GraphicsRender_ByteData
 	ldw wa, 0x00f5
-	call TextRender_PopAndReturn_0x9
-	call GraphicsRender_ByteData_0x67
+	call PostTitle_Function_Helper2
+	call PostTitle_Function_Helper4
 	ldw wa, 0x00ff
-	call GraphicsRender_ByteData_0x6
+	call PostTitle_Function_Helper3
 Display_CallInitScreenLayout:
 	push xde
 	push xhl

@@ -1280,17 +1280,17 @@ DirmdEmu_CaseF:
 	ldw	wa, 255
 	call	GraphicsRender_ByteData
 	ldw	wa, 245
-	call	TextRender_PopAndReturn_0x9
-	call	GraphicsRender_ByteData_0x67
+	call	DirmdEmulator_Dispatch_Code_Helper
+	call	DirmdEmulator_Dispatch_Code_Helper3
 	ldw	wa, 255
-	call	GraphicsRender_ByteData_0x6
+	call	DirmdEmulator_Dispatch_Code_Helper2
 PostTitle_Function_Skip:
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleNew
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDA
+	call	FDemoText_ByteData_DisplayRefresh_Helper
+	jp	PsMixer_CtlTypeProc8_Return
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleOld
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDB
+	call	FDemoText_ByteData_DisplayRefresh_Helper
+	jp	PsMixer_CtlTypeProc8_Return2
 	lda	xsp, (xsp-256)
 	pushw	iz
 	pushm	(xsp+264)
@@ -1303,16 +1303,16 @@ PostTitle_Function_Skip:
 	call	Sprintf_Locked
 	lda	xsp, (xsp+12)
 	lda	xwa, (xsp+2)
-	call	DbMemo_DrawContent_Loop_0x61
+	call	FDemoText_ByteData_DisplayRefresh_Helper
 	ld	wa, iz
 	ld	bc, (xsp+264)
-	call	AudioCtrl_DataBlock_0x1BDC
+	call	DirmdEmu_CaseF_Helper
 	popw	iz
 	lda	xsp, (xsp+256)
 	ret
 	ld	xwa, DirmdTitleFunc_Str_DirmdTitleCur
-	call	DbMemo_DrawContent_Loop_0x61
-	jp	AudioCtrl_DataBlock_0x1BDD
+	call	FDemoText_ByteData_DisplayRefresh_Helper
+	jp	PsMixer_CtlTypeProc8_Return3
 DirmdEmulator_Entry:
 
 DirmdEmulator:

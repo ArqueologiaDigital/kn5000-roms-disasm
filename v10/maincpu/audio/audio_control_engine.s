@@ -4177,6 +4177,7 @@ VoiceData_ExtendedParamSetup:
 	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
+MainSysCtrl_Entry5_VoiceInit_Helper:
 	calr	Display_SetupAndPrepareRender
 	call	ToneGen_Config_InitAllEntries
 	call	Voice_InitAllChannelEntries
@@ -4184,6 +4185,7 @@ VoiceData_ExtendedParamSetup:
 	calr	MidiMsg_ParseChannelStream
 	call	MainTitle_SetBootFlag
 	jrl	Audio_FillParamBuffer
+MainSysCtrl_Entry5_VoiceInit_Helper2:
 	dec	8, xsp
 	pushw	iz
 	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
@@ -4230,6 +4232,7 @@ VoiceData_ExtendedParamSetup_Loop3:
 	popw	iz
 	inc	8, xsp
 	ret
+MainSysCtrl_Entry5_VoiceInit_Helper3:
 	lda	xsp, (xsp-10)
 	push	qiz
 	lda	xwa, (SMF_SlotChain_ExtendedVoice_Data:24)
@@ -7199,6 +7202,7 @@ SndBuf_WriteParamEntries:
 	ld	(xde+1), a
 	inc	6, xsp
 	ret
+RegBitManip_Handler_4_Helper:
 	dec	6, xsp
 	lda	xwa, (xsp)
 	lda	xde, (0x90ea:16)
@@ -7236,7 +7240,7 @@ MidiStream_ExtendedDispatch_Helper3_Helper:
 	push_a
 	ldx
 	.byte 0x90
-	call	ApplyProgramChangeAs_LoadReg2_0xA
+	call	SndBuf_WriteParamEntries_Helper
 	lda	xbc, (0x90ee:16)
 	lda	xwa, (xsp)
 	ld	l, (xwa)
@@ -8273,7 +8277,7 @@ VoiceMode_ParamHandler_4_Helper:
 	push	xix
 	push	xiy
 	push	xiz
-	call	SndBuf_WriteParamEntries_0x36
+	call	RegBitManip_Handler_4_Helper
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -8317,6 +8321,7 @@ MidiStream_ExtendedDispatch_Helper3:
 	pop	xbc
 	pop	xwa
 	ret
+RegBitManip_Handler_4_Code:
 	ld	(0x916f:16), hl
 ;
 	push	xwa
@@ -9820,7 +9825,7 @@ VoiceMode3_EvType3:
 	ld	(0x9644:16), wa
 	ldw	wa, 0x7f00
 	ld	(0x9646:16), wa
-	call	MidiStream_DispatchData_0xEE
+	call	VoiceMode3_EvType3_Helper
 	ld	a, (0x91b6:16)
 	ld	(0x90f8:16), a
 MidiVoice_DataBlockHandler_Skip2:
@@ -10903,6 +10908,7 @@ MidiStream_InitFromLookup_Data:
 	.byte 0xb2, 0x13, 0x7f, 0x00, 0xb3, 0x13, 0x7f, 0x02
 	.byte 0x13, 0x04, 0x08, 0x03, 0x13, 0x08, 0x7f, 0x04
 	.fill 8, 1, 0xff
+MidiCC_Handler_BitManipulation_Helper:
 	ld	(0x90f8:16), 255
 	ld	a, (0xfda1:16)
 	and	a, 63
@@ -10946,12 +10952,14 @@ MidiStream_ApplyDone:
 MidiStream_DispatchData:
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_Helper_ConditionalESetup_Store_Helper:
 	ld	(0x90f8:16), 255
 	call	MIDI_WriteVoiceParamDirect
 	call	SwbtWr_WriteVoiceParam_PreserveRegs
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+PerfMode_Evt04_VolumeHandler_Helper2:
 	cp	bc, 176
 	jr	z, MidiStream_ApplyPendingParams_Skip
 	cp	c, 31
@@ -10968,6 +10976,7 @@ MidiStream_ApplyPendingParams_Return:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_RxCC11_Expression_Helper:
 	cp	c, 176
 	jr	nz, MidiStream_ApplyPendingParams_Skip2
 	set	7, e
@@ -10983,6 +10992,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr MidiStream_ExtendedDispatch
 	ret
+MidiRx_PitchBend_Helper:
 	cp	b, 31
 	jr	ugt, MidiStream_ApplyPendingParams_Return2
 	set	7, e
@@ -10992,6 +11002,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_RxCC1_Modulation_Helper:
 	cp	b, 31
 	jr	ugt, MidiStream_ApplyPendingParams_Return2
 	set	7, e
@@ -11000,6 +11011,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_Handler_BankModeSelect_Helper:
 	ld	(0x90f8:16), 255
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
@@ -11008,6 +11020,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_RxFunc08_Helper:
 	ld	(0x90f8:16), 255
 	ld	wa, (0x9644:16)
 	ld	(0x9127:16), wa
@@ -11017,6 +11030,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_RxFunc12_Helper:
 	ld	(0x90f8:16), 255
 	ld	wa, (0x9644:16)
 	ld	(0x9127:16), wa
@@ -11026,6 +11040,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+VoiceMode3_EvType3_Helper:
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
 	ld	(0x90f8:16), 255
@@ -11064,6 +11079,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_Handler_TableDispatch_Helper:
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
 	ld	(0x90f8:16), 255
@@ -11073,6 +11089,7 @@ MidiStream_ApplyPendingParams_Return2:
 	ret
 	calr	MidiStream_ExtendedDispatch
 	ret
+MidiCC_RxCC10_Pan_Helper:
 	ld	(0x90f8:16), 255
 	ld	bc, (0x9644:16)
 	ld	de, (0x9646:16)
@@ -11262,7 +11279,7 @@ MidiStream_HandleNoteCC_Body:
 	ld	(0x90ea:16), wa
 	pushw wa
 	ld	(0x90ec:16), c
-	call RegBitManip_Handler_4_0x8
+	call VoiceMode_ParamHandler_4_Helper
 	popw wa
 	pushw hl
 	call MIDI_ParamValidate_CheckBit2
@@ -11499,6 +11516,7 @@ MidiStream_PartSelectDone:
 
 MidiStream_ExtendedDispatch:
 	ret
+MidiRx_ProgramChange_Helper:
 	cp	(0x9644:16), 20
 	jr	nz, MidiStream_ExtendedDispatch_Skip8
 	ld	(0x9644:16), 72
@@ -11722,7 +11740,7 @@ MidiStream_ExtendedDispatch_Helper_Helper:
 	stb_d8	(0x90f7), c
 	ld	l, e
 	ld	h, b
-	ld	xix, RegBitManip_Handler_4_0x43
+	ld	xix, RegBitManip_Handler_4_Code
 	ldb_d8	e, (0xfd50)
 	and	e, 3
 	cp	e, 1:i3
@@ -11779,6 +11797,7 @@ MidiStream_ExtendedDispatch_Helper_Helper2:
 MidiStream_ExtendedDispatch_Helper_Skip4:
 	rcf
 	ret
+MidiCC_Handler_PairedParamA_Helper:
 	cp	(0x9644:16), 72
 	jr	nz, MidiStream_ExtendedDispatch_Helper_Skip5
 	ld	(0x9644:16), 20

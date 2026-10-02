@@ -1569,7 +1569,7 @@ typedef struct __attribute__((packed)) {
      * SeqFormat_DispatchA_CaseTable -- jump table of a compiled `switch` in
      * SeqFormat_DispatchA (v10/v9 0xF3513D, v7 0xF35113) (`lda xix,
      * (SeqFormat_DispatchA_CaseTable:24)`): 16 u16 case offsets from
-     * SeqFormat_DispatchA_0x70.
+     * SeqFormat_DispatchA_Code.
      * --------------------------------------------------------------------- */
     uint16_t SeqFormat_DispatchA_CaseTable[16];
     /* ---------------------------------------------------------------------
@@ -1582,21 +1582,21 @@ typedef struct __attribute__((packed)) {
      * Sqedt_ValueDispatch_CaseTable -- jump table of a compiled `switch` in
      * Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
      * (Sqedt_ValueDispatch_CaseTable:24)`): 9 u16 case offsets from
-     * Sqedt_ValueDispatch_0x82.
+     * Sqedt_ValueDispatch_Code3.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ValueDispatch_CaseTable[9];
     /* ---------------------------------------------------------------------
      * Sqedt_ValueDispatch_CaseTable_2 -- jump table of a compiled `switch`
      * in Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
      * (Sqedt_ValueDispatch_CaseTable_2:24)`): 8 u16 case offsets from
-     * Sqedt_ValueDispatch_0x58.
+     * Sqedt_ValueDispatch_Code2.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ValueDispatch_CaseTable_2[8];
     /* ---------------------------------------------------------------------
      * Sqedt_ValueDispatch_CaseTable_3 -- jump table of a compiled `switch`
      * in Sqedt_ValueDispatch (v10/v9 0xF3502C, v7 0xF35002) (`lda xix,
      * (Sqedt_ValueDispatch_CaseTable_3:24)`): 9 u16 case offsets from
-     * Sqedt_ValueDispatch_0x28.
+     * Sqedt_ValueDispatch_Code.
      * --------------------------------------------------------------------- */
     uint16_t Sqedt_ValueDispatch_CaseTable_3[9];
     /* ---------------------------------------------------------------------
@@ -2141,8 +2141,8 @@ typedef struct __attribute__((packed)) {
      * AppEvtHandler_Branch_024_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_024 (v10/v9 0xF445B0, v7 0xF445A2)
      * (`add xwa, AppEvtHandler_Branch_024_CaseTable`): case k jumps to
-     * AppEvtHandler_Branch_024_0x97 + entry[k] (`lda
-     * xix,(AppEvtHandler_Branch_024_0x97); jp_ind`). 6 u16 offsets; the
+     * AppEvtHandler_Branch_024_Code + entry[k] (`lda
+     * xix,(AppEvtHandler_Branch_024_Code); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
      * --------------------------------------------------------------------- */
     uint16_t AppEvtHandler_Branch_024_CaseTable[6];
@@ -2150,8 +2150,8 @@ typedef struct __attribute__((packed)) {
      * AppEvtHandler_Branch_021_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_021 (v10/v9 0xF444B9, v7 0xF444AB)
      * (`add xwa, AppEvtHandler_Branch_021_CaseTable`): case k jumps to
-     * AppEvtHandler_Branch_021_0x5E + entry[k] (`lda
-     * xix,(AppEvtHandler_Branch_021_0x5E); jp_ind`). 6 u16 offsets; the
+     * AppEvtHandler_Branch_021_Code + entry[k] (`lda
+     * xix,(AppEvtHandler_Branch_021_Code); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
      * --------------------------------------------------------------------- */
     uint16_t AppEvtHandler_Branch_021_CaseTable[6];
@@ -2159,8 +2159,8 @@ typedef struct __attribute__((packed)) {
      * AppEvtHandler_Branch_006_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_006 (v10/v9 0xF44243, v7 0xF44235)
      * (`lda xix, (AppEvtHandler_Branch_006_CaseTable:24)`): case k jumps
-     * to AppEvtHandler_Branch_006_0x3B + entry[k] (`lda
-     * xix,(AppEvtHandler_Branch_006_0x3B); jp_ind`). 8 u16 offsets; the
+     * to AppEvtHandler_Branch_006_Code + entry[k] (`lda
+     * xix,(AppEvtHandler_Branch_006_Code); jp_ind`). 8 u16 offsets; the
      * reader's bound `cp ..., 7` pins 8 cases.
      * --------------------------------------------------------------------- */
     uint16_t AppEvtHandler_Branch_006_CaseTable[8];
@@ -2168,8 +2168,8 @@ typedef struct __attribute__((packed)) {
      * AppEvtHandler_Branch_002_CaseTable -- jump table of a compiled
      * `switch` in AppEvtHandler_Branch_002 (v10/v9 0xF4417E, v7 0xF44170)
      * (`lda xix, (AppEvtHandler_Branch_002_CaseTable:24)`): case k jumps
-     * to AppEvtHandler_Branch_002_0x4B + entry[k] (`lda
-     * xix,(AppEvtHandler_Branch_002_0x4B); jp_ind`). 8 u16 offsets; the
+     * to AppEvtHandler_Branch_002_Code + entry[k] (`lda
+     * xix,(AppEvtHandler_Branch_002_Code); jp_ind`). 8 u16 offsets; the
      * reader's bound `cp ..., 7` pins 8 cases.
      * --------------------------------------------------------------------- */
     uint16_t AppEvtHandler_Branch_002_CaseTable[8];
@@ -2194,8 +2194,8 @@ typedef struct __attribute__((packed)) {
      * AppEvent_SubDispatch_CaseTable -- jump table of a compiled `switch` in
      * AppEvent_SubDispatch (v10/v9 0xF448A4, v7 0xF44896) (`add xwa,
      * AppEvent_SubDispatch_CaseTable`): case k jumps to
-     * AppEvent_SubDispatch_0x4CC + entry[k] (`lda
-     * xix,(AppEvent_SubDispatch_0x4CC); jp_ind`). 6 u16 offsets; the
+     * AppEvent_SubDispatch_Code_2_Code2 + entry[k] (`lda
+     * xix,(AppEvent_SubDispatch_Code_2_Code2); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
      * --------------------------------------------------------------------- */
     uint16_t AppEvent_SubDispatch_CaseTable[6];
@@ -2203,8 +2203,8 @@ typedef struct __attribute__((packed)) {
      * AppEvent_SubDispatch_CaseTable_2 -- jump table of a compiled `switch`
      * in AppEvent_SubDispatch (v10/v9 0xF448A4, v7 0xF44896) (`add xwa,
      * AppEvent_SubDispatch_CaseTable_2`): case k jumps to
-     * AppEvent_SubDispatch_0x3A6 + entry[k] (`lda
-     * xix,(AppEvent_SubDispatch_0x3A6); jp_ind`). 6 u16 offsets; the
+     * AppEvent_SubDispatch_Code_2_Code + entry[k] (`lda
+     * xix,(AppEvent_SubDispatch_Code_2_Code); jp_ind`). 6 u16 offsets; the
      * reader's bound `cp ..., 5` pins 6 cases.
      * --------------------------------------------------------------------- */
     uint16_t AppEvent_SubDispatch_CaseTable_2[6];

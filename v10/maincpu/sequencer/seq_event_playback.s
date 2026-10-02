@@ -701,7 +701,7 @@ Voice_DecodeNoteChannel_Data:
 	.short 0x000d, 0x010d, 0x020d, 0x030d, 0x040d, 0x050d, 0x000e, 0x010e
 	.short 0x020e, 0x030e, 0x040e, 0x050e, 0x000c, 0x000c, 0x000c, 0x000c
 ; Voice_NoteChannelGrid_Lookup (= Voice_NoteChannelTable1 +0x422, the
-; address shared/positional_labels.s still calls Voice_NoteChannelTable1_0x422;
+; address shared/positional_labels.s still calls Voice_NoteChannelGrid_Lookup;
 ; its one caller is AccompSeq_ProcessAfterNote in accompseq_routines.s).
 ; In: L = row (low 4 bits used), H = column (low 3 bits used).
 ; Out: HL = word [(L & 15) * 8 + (H & 7)] of the 16 x 8 grid at +0x43F below.
@@ -3178,8 +3178,9 @@ VocalistGridCheck_Join16:
 	add	xwa, xwa
 	add	xwa, MidiPart_ColWidthData
 	ld	wa, (xwa)
-	lda	xix, (VocalistGrid_DispatchData_0x160:24)
+	lda	xix, (VocalistGrid_DispatchData_Code:24)
 	jp	t, (xix+wa)
+VocalistGrid_DispatchData_Code:
 	ld wa, (xbc)
 	cp wa, 16
 	jr	z, VocalistGridCheck_Skip2

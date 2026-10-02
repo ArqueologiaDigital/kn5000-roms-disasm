@@ -372,6 +372,7 @@ SeqPlay_DataBlock_BBE_Skip:
 	ld	(0xf23a:16), wa
 SeqPlay_DataBlock_BBE_Skip2:
 	jrl	SeqAcc_SetupRepeatCount
+SeqAccomp_SubHandlerB_Helper:
 	ld	wa, (0xf238:16)
 	cp	wa, 1:i3
 	jr	ule, SeqPlay_DataBlock_BBE_Skip3
@@ -440,6 +441,7 @@ SeqPlay_DataBlock_BBE_Helper2_Skip2:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	ret
+SeqAccomp_SubHandlerA_Helper:
 	ld	wa, (0xf23a:16)
 	cp	wa, 999
 	jr	c, SeqPlay_DataBlock_BBE_Skip6
@@ -458,6 +460,7 @@ SeqPlay_DataBlock_BBE_Join:
 	calr	SeqPlay_DataBlock_BBE_Helper
 	calr	SeqAcc_SetupRepeatCount
 	ret
+SeqAccomp_SubHandlerB_Helper2:
 	ld	wa, (0xf23a:16)
 	cp	wa, 2:i3
 	jr	ugt, SeqPlay_DataBlock_BBE_Skip7
@@ -476,6 +479,7 @@ SeqPlay_DataBlock_BBE_Join2:
 	calr	SeqPlay_DataBlock_BBE_Helper2
 	calr	SeqAcc_SetupRepeatCount
 	ret
+SeqAccomp_SubHandlerA_Helper2:
 	bit	0, (10418:16)
 	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip3
 	cpw	(62008:16), 2
@@ -499,6 +503,7 @@ SeqPlay_DataBlock_BBE_Join3:
 	ld	(9832:16), wa
 	ld	(9964:16), wa
 	jrl	SeqAcc_SetupRepeatCount
+SeqAccomp_SubHandlerB_Helper3:
 	bit	0, (10418:16)
 	jr	z, SeqPlay_DataBlock_BBE_Helper2_Skip4
 	cpw	(62008:16), 2
@@ -13007,6 +13012,7 @@ SeqVoice_InitReturnZero:
 AppEvent_ExtendedHandler:
 	ld xwa, AppEvent_ExtendedHandler_Table
 	jr Part_LoadAndApplyVoiceTable
+SeqPart_ByteBlockA95A_Helper:
 	ld xwa, AppEvent_ExtendedHandler_Table_2
 	jr Part_LoadAndApplyVoiceTable
 
@@ -20361,8 +20367,9 @@ AppEvtHandler_Branch_002:
 	add wa, wa
 	lda xix, (AppEvtHandler_Branch_002_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (AppEvtHandler_Branch_002_0x4B:24)
+	lda xix, (AppEvtHandler_Branch_002_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_002_Code:
 	lda xiz, (9744:16)
 	lda xwa, (9746:16)
 	jr AppEvtHandler_Branch_004
@@ -20421,8 +20428,9 @@ AppEvtHandler_Branch_006:
 	add wa, wa
 	lda xix, (AppEvtHandler_Branch_006_CaseTable:24)
 	ld	wa, (xix+wa)
-	lda xix, (AppEvtHandler_Branch_006_0x3B:24)
+	lda xix, (AppEvtHandler_Branch_006_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_006_Code:
 	lda xiz, (9744:16)
 	lda xwa, (9746:16)
 	jr AppEvtHandler_Branch_008
@@ -20630,8 +20638,9 @@ AppEvtHandler_Branch_021:
 	add xwa, xwa
 	add xwa, AppEvtHandler_Branch_021_CaseTable
 	ld wa, (xwa)
-	lda xix, (AppEvtHandler_Branch_021_0x5E:24)
+	lda xix, (AppEvtHandler_Branch_021_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_021_Code:
 	ld a, (0xf1e9:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_024
@@ -20716,8 +20725,9 @@ AppEvtHandler_Branch_024:
 	add xwa, xwa
 	add xwa, AppEvtHandler_Branch_024_CaseTable
 	ld wa, (xwa)
-	lda xix, (AppEvtHandler_Branch_024_0x97:24)
+	lda xix, (AppEvtHandler_Branch_024_Code:24)
 	jp	t, (xix+wa)
+AppEvtHandler_Branch_024_Code:
 	ld a, (0xf1e1:16)
 	cp a, 0x11
 	jrl nc, AppEvtHandler_Branch_027
@@ -21203,8 +21213,9 @@ AppEvent_InlineHandler_Entry2:
 	add	xwa, xwa
 	add	xwa, AppEvent_SubDispatch_CaseTable_2
 	ld	wa, (xwa)
-	lda	xix, (AppEvent_SubDispatch_0x3A6:24)
+	lda	xix, (AppEvent_SubDispatch_Code_2_Code:24)
 	jp	t, (xix+wa)
+AppEvent_SubDispatch_Code_2_Code:
 	ld a, (61929:16)
 	cp a, 1:i3
 	jrl ule, AppEvent_InlineHandler_Join5
@@ -21289,8 +21300,9 @@ AppEvent_InlineHandler_Join5:
 	add	xwa, xwa
 	add	xwa, AppEvent_SubDispatch_CaseTable
 	ld	wa, (xwa)
-	lda	xix, (AppEvent_SubDispatch_0x4CC:24)
+	lda	xix, (AppEvent_SubDispatch_Code_2_Code2:24)
 	jp	t, (xix+wa)
+AppEvent_SubDispatch_Code_2_Code2:
 	ld a, (61921:16)
 	cp a, 1:i3
 	jrl ule, AppEvent_InlineHandler_Entry3
@@ -22070,7 +22082,7 @@ EffEdit_DSPConfigBlock:
 	extz	de
 	lda	xhl, (xsp+2)
 	push	xhl
-	call	DSPCfg_Data_ParamDispatch_0x1C9
+	call	EffEdit_DSPConfigBlock_Helper
 	cp	hl, 0:i3
 	jrl	lt, EffEdit_DSPConfigBlock_Epilogue
 	ld	a, (0x8d38:16)
@@ -22962,10 +22974,10 @@ ApPlaySyori_Join2:
 	call	SeqPlay_DataBlock_BBE
 	jr	ApPlaySyori_Join3
 ApPlaySyori_Skip4:
-	call	SeqPlay_DataBlock_BBE_0xF4
+	call	SeqAccomp_SubHandlerA_Helper
 	jr	ApPlaySyori_Join3
 ApPlaySyori_Skip5:
-	call	SeqPlay_DataBlock_BBE_0x155
+	call	SeqAccomp_SubHandlerA_Helper2
 ApPlaySyori_Join3:
 	ld	xwa, (0x2972:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -23138,13 +23150,13 @@ SeqAccomp_SubHandlerB_Code_Join:
 	jr	z, ApPlaySyori_Skip10
 	cp	xwa, 8
 	jr	nz, ApPlaySyori_Join8
-	call	SeqPlay_DataBlock_BBE_0x2C
+	call	SeqAccomp_SubHandlerB_Helper
 	jr	ApPlaySyori_Join8
 ApPlaySyori_Skip10:
-	call	SeqPlay_DataBlock_BBE_0x126
+	call	SeqAccomp_SubHandlerB_Helper2
 	jr	ApPlaySyori_Join8
 ApPlaySyori_Skip11:
-	call	SeqPlay_DataBlock_BBE_0x19B
+	call	SeqAccomp_SubHandlerB_Helper3
 ApPlaySyori_Join8:
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
@@ -25616,6 +25628,7 @@ SeqLoad_ProcessDataBlock_Skip2:
 	pop qiz
 	inc	6, xsp
 	ret
+FileIO_ByteBlock_DemoProc1_Helper:
 	dec	2, xsp
 	pushw	iz
 	ld	(xsp+2), a
@@ -25640,6 +25653,7 @@ SeqLoad_ProcessDataBlock_Skip2:
 	popw	iz
 	inc	2, xsp
 	ret
+FileIO_ByteBlock_DemoProc1_Helper2:
 	dec	8, xsp
 	push	xiz
 	ld	(xsp+10), a
@@ -30919,7 +30933,7 @@ SeqPart_ByteBlockA95A_Code_Epilogue:
 	pop qiz
 	ret
 SeqPart_ByteBlockA95A_Code_Helper:
-	call	AppEvent_ExtendedHandler_0x7
+	call	SeqPart_ByteBlockA95A_Helper
 	call	SeqVoice_InitReturnZero
 	res	0, (10361:16)
 	res	1, (10361:16)

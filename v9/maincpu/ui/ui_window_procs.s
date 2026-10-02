@@ -4001,7 +4001,7 @@ ClampColorToRange_Skip:
 	ldw	wa, 14
 	calr	DrawQueue_Alloc
 	ld	xwa, xhl
-	lda	xbc, (DrawDesignBox_ByteData_0x59:24)
+	lda	xbc, (DrawDesignBox_ByteData_Code:24)
 	ld	(xwa), xbc
 	ld	xiy, xiz
 	lda	xix, (xwa+4)
@@ -4019,6 +4019,7 @@ ClampColorToRange_Epilogue:
 	pop	xiz
 	inc	6, xsp
 	ret
+DrawDesignBox_ByteData_Code:
 	lda	xhl, (xwa+4)
 	lda	xbc, (xwa+8)
 	ld	de, (xwa+12)
@@ -7285,9 +7286,10 @@ PaletteBankRotate:
 	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (PaletteBankRotate_0x18:24)
+	lda xbc, (PaletteBankRotate_Code:24)
 	ld (xwa), xbc
 	jrl DrawRing_Post
+PaletteBankRotate_Code:
 	jr PaletteBankRotate_Impl
 
 PaletteBankRotate_Impl:

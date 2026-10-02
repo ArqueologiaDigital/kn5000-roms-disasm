@@ -4015,6 +4015,7 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	popw	iz
 	lda	xsp, (xsp+0x18)
 	retd	4
+EffEdit_DSPConfigBlock_Helper:
 	lda	xsp, (xsp-0xa)
 	push	xiz
 	ld	(xsp+0xa), e
@@ -5325,7 +5326,7 @@ AudioModeChange_Handler:
 	lda xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
+	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
 	cp xwa, xbc
 	ret z
 	ld wa, 0:i3
@@ -5367,7 +5368,7 @@ AudioSubsystem_Callback:
 	lda xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
+	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
 	cp xwa, xbc
 	ret z
 	ld wa, 0:i3
@@ -5438,7 +5439,7 @@ AudioVoice_Callback:
 	lda xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
+	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
 	cp xwa, xbc
 	jr z, AudioVoice_SkipToDispatch
 	ld wa, 0:i3
@@ -5483,7 +5484,7 @@ AudioVoiceReset_Handler:
 	lda xbc, (AudioModeChange_Handler_Data:24)
 	ld	xhl, (xbc+wa)
 	ld xbc, xhl
-	lda xwa, (AudioInit_MixFallbackDefault_0x5:24)
+	lda xwa, (AudioInit_MixFallbackDefault_Code:24)
 	cp xwa, xbc
 	ret z
 	ld wa, 1:i3

@@ -2132,9 +2132,10 @@ DrawWall_Deferred:
 	ld wa, 4:i3
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawWall_Deferred_0x11:24)
+	lda xbc, (DrawWall_Deferred_Code:24)
 	ld (xwa), xbc
 	jrl DrawRing_Post
+DrawWall_Deferred_Code:
 	jr DrawWall_DoCopy
 
 DrawWall_DoCopy:
@@ -2920,7 +2921,7 @@ DrawBitmapSP_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmapSP_Return_0x6:24)
+	lda xbc, (DrawBitmapSP_DeferredPath_Code:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -2938,6 +2939,7 @@ DrawBitmapSP_Return:
 	pop xiz
 	inc 6, xsp
 	retd 0x2
+DrawBitmapSP_DeferredPath_Code:
 	lda xbc, (xwa + 4)
 	ld xhl, (xwa + 8)
 	ld de, (xwa + 12)
@@ -3142,7 +3144,7 @@ DrawBitmapSPFast_DeferredPath:
 	ldw wa, 0x10
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmapSPFast_Return_0x6:24)
+	lda xbc, (DrawBitmapSPFast_DeferredPath_Code:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3160,6 +3162,7 @@ DrawBitmapSPFast_Return:
 	pop xiz
 	inc 6, xsp
 	retd 0x2
+DrawBitmapSPFast_DeferredPath_Code:
 	lda xbc, (xwa + 4)
 	ld xhl, (xwa + 8)
 	ld de, (xwa + 12)
@@ -3271,7 +3274,7 @@ DrawBitmapSP2_DeferredPath:
 	ldw wa, 0x14
 	calr DrawQueue_Alloc
 	ld xwa, xhl
-	lda xbc, (DrawBitmapSP2_Return_0x6:24)
+	lda xbc, (DrawBitmapSP2_DeferredPath_Code:24)
 	ld (xwa), xbc
 	ld xiy, xiz
 	lda xix, (xwa + 4)
@@ -3293,6 +3296,7 @@ DrawBitmapSP2_Return:
 	pop xiz
 	inc 6, xsp
 	retd 0x6
+DrawBitmapSP2_DeferredPath_Code:
 	lda xhl, (xwa + 4)
 	ld xbc, (xwa + 8)
 	ld de, (xwa + 12)
@@ -3889,7 +3893,7 @@ DrawString_DeferredPath:
 	ldw wa, 0x1c
 	calr DrawQueue_Alloc
 	ld xiz, xhl
-	lda xwa, (DrawString_Return_0x7:24)
+	lda xwa, (DrawString_DeferredPath_Code:24)
 	ld (xhl), xwa
 	ld xwa, (xsp + 16)
 	ld xiy, xwa
@@ -3921,6 +3925,7 @@ DrawString_Return:
 	pop xiz
 	lda xsp, (xsp + 16)
 	retd 0x8
+DrawString_DeferredPath_Code:
 	push xiz
 	ld xiz, xwa
 	lda xwa, (xiz + 4)

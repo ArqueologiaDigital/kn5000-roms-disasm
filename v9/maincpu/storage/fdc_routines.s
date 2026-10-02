@@ -2303,6 +2303,7 @@ Reset_Floppy_Disk_Controller:
 
 	; then do a lot of other stuff I still don't undertsand:
 
+TitleFunc_LifecycleTable_Helper:
 	ld (0x47:8), 0x1e:io
 	bit_dd8 6, 0x34	; Port D bit 6: "FD.I/O signal"
 	ret nz

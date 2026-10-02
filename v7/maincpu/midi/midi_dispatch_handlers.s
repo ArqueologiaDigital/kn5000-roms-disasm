@@ -92,7 +92,7 @@ MidiCC_RxFunc08:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_DispatchData_0xB2
+	call	MidiCC_RxFunc08_Helper
 MidiCC_RxFunc08_Return:
 	ret
 MidiCC_RxFunc09:
@@ -114,7 +114,7 @@ MidiCC_RxFunc09:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_DispatchData_0xB2
+	call	MidiCC_RxFunc08_Helper
 MidiCC_RxFunc09_Return:
 	ret
 MidiCC_RxCC1_Modulation:
@@ -136,7 +136,7 @@ MidiCC_RxCC1_Modulation:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_DispatchData_0x81
+	call	MidiCC_RxCC1_Modulation_Helper
 MidiCC_RxCC1_Modulation_Return:
 	ret
 MidiCC_RxCC7_Volume:
@@ -158,7 +158,7 @@ MidiCC_RxCC7_Volume:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_DispatchData_0x16
+	call	PerfMode_Evt04_VolumeHandler_Helper2
 MidiCC_RxCC7_Volume_Return:
 	ret
 MidiCC_RxCC11_Expression:
@@ -180,7 +180,7 @@ MidiCC_RxCC11_Expression:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_DispatchData_0x42
+	call	MidiCC_RxCC11_Expression_Helper
 MidiCC_RxCC11_Expression_Return:
 	ret
 MidiCC_RxCC10_Pan:
@@ -573,7 +573,7 @@ MidiRx_ProgramChange:
 	ld	(0x95ac:16), a
 	ld	(0x95a8:16), bc
 	ld	(0x95aa:16), de
-	call	MidiStream_ExtendedDispatch_0x1
+	call	MidiRx_ProgramChange_Helper
 MidiRx_ProgramChange_Return:
 	ret
 MidiRx_PitchBend:
@@ -1799,7 +1799,7 @@ MidiCC_PartTargets_CC64_Sustain:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_Func08 (+0x140): function 8, reader MidiCC_RxFunc08
-; (0xFCFE4B) -> MidiStream_DispatchData_0xB2.  No controller maps to function 8
+; (0xFCFE4B) -> MidiCC_RxFunc08_Helper.  No controller maps to function 8
 ; in MidiCC_ChannelMappingData, so this table is reachable only if (0x9657) is
 ; set some other way (not searched).
 MidiCC_PartTargets_Func08:
@@ -1812,7 +1812,7 @@ MidiCC_PartTargets_Func08:
 	.byte 0xb7, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_Func09 (+0x1A0): function 9, reader MidiCC_RxFunc09
-; (0xFCFE8C) -> MidiStream_DispatchData_0xB2.  Unmapped, as function 8.
+; (0xFCFE8C) -> MidiCC_RxFunc08_Helper.  Unmapped, as function 8.
 MidiCC_PartTargets_Func09:
 	.byte 0xb6, 0x00, 0x7f, 0xb6, 0x01, 0x7f, 0xb6, 0x02, 0x7f, 0xb6, 0x03, 0x7f
 	.byte 0xb6, 0x04, 0x7f, 0xb6, 0x05, 0x7f, 0xb6, 0x06, 0x7f, 0xb6, 0x07, 0x7f
@@ -1823,7 +1823,7 @@ MidiCC_PartTargets_Func09:
 	.byte 0xb6, 0x18, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC1_Modulation (+0x200): function 1 <- CC1, reader
-; MidiCC_RxCC1_Modulation (0xFCF6FC) -> MidiStream_DispatchData_0x81.
+; MidiCC_RxCC1_Modulation (0xFCF6FC) -> MidiCC_RxCC1_Modulation_Helper.
 MidiCC_PartTargets_CC1_Modulation:
 	.byte 0xb2, 0x00, 0x7f, 0xb2, 0x01, 0x7f, 0xb2, 0x02, 0x7f, 0xb2, 0x03, 0x7f
 	.byte 0xb2, 0x04, 0x7f, 0xb2, 0x05, 0x7f, 0xb2, 0x06, 0x7f, 0xb2, 0x07, 0x7f
@@ -1834,7 +1834,7 @@ MidiCC_PartTargets_CC1_Modulation:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC7_Volume (+0x260): function 2 <- CC7, reader
-; MidiCC_RxCC7_Volume (0xFCF73D) -> MidiStream_DispatchData_0x16.
+; MidiCC_RxCC7_Volume (0xFCF73D) -> PerfMode_Evt04_VolumeHandler_Helper2.
 MidiCC_PartTargets_CC7_Volume:
 	.byte 0x00, 0x03, 0x7f, 0x01, 0x03, 0x7f, 0x02, 0x03, 0x7f, 0x03, 0x03, 0x7f
 	.byte 0x04, 0x03, 0x7f, 0x05, 0x03, 0x7f, 0x06, 0x03, 0x7f, 0x07, 0x03, 0x7f
@@ -1845,7 +1845,7 @@ MidiCC_PartTargets_CC7_Volume:
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 	.byte 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
 ; MidiCC_PartTargets_CC11_Expression (+0x2C0): function 3 <- CC11, reader
-; MidiCC_RxCC11_Expression (0xFCF77E) -> MidiStream_DispatchData_0x42.
+; MidiCC_RxCC11_Expression (0xFCF77E) -> MidiCC_RxCC11_Expression_Helper.
 MidiCC_PartTargets_CC11_Expression:
 	.byte 0xb3, 0x00, 0x7f, 0xb3, 0x01, 0x7f, 0xb3, 0x02, 0x7f, 0xb3, 0x03, 0x7f
 	.byte 0xb3, 0x04, 0x7f, 0xb3, 0x05, 0x7f, 0xb3, 0x06, 0x7f, 0xb3, 0x07, 0x7f
@@ -2013,7 +2013,7 @@ MidiCC_PartTargets_CC120_AllSoundOff:
 ; MidiPC_PartTargets (+0x760): PROGRAM CHANGE (status Cx).  Reader
 ; MidiRx_ProgramChange (0xFCFBCB, MidiCC_LowRange_Table slot 4):
 ; E = program number (0x9635), D = 0xFF, gated by bit 4 of (0xFD57),
-; -> MidiStream_ExtendedDispatch_0x1.
+; -> MidiRx_ProgramChange_Helper.
 MidiPC_PartTargets:
 	.short 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007
 	.short 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f
@@ -2049,7 +2049,7 @@ MidiCC_PartSelector_DataEntry:
 ; and CC32 (bank select MSB/LSB).  Readers MidiCC_Handler_PairedParamB
 ; (0xFCFCFA, CC0: D = value, E = 0xFF) and MidiCC_Handler_PairedParamA
 ; (0xFCFCBC, CC32: E = value, D = 0xFF), both gated by bit 4 of (0xFD57), ->
-; MidiStream_ExtendedDispatch_0x298.
+; MidiCC_Handler_PairedParamA_Helper.
 MidiCC_PartTargets_BankSelect:
 	.short 0x0000, 0x0001, 0x0002, 0x0003, 0x0004, 0x0005, 0x0006, 0x0007
 	.short 0x0008, 0x0009, 0x000a, 0x000b, 0x000c, 0x000d, 0x000e, 0x000f
@@ -9579,7 +9579,7 @@ SeqVoice_DispatchProcess_Data_Helper3:
 	push	xhl
 	push	xix
 	push	xiz
-	call	Voice_InitBankDataSafe_Alt1_0x7
+	call	SeqVoice_StoreEntryDone_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11343,9 +11343,9 @@ MidiSysEx_ProcessBlock_Helper9:
 	push	xhl
 	push	xix
 	push	xiz
-	call	ToneGen_DSPCfg_Initialize_0x6
+	call	SeqChan_WriteField_Data_E_Helper2
 	call	ToneGen_InitAllChannelEntries_Skip
-	call	SeqStep_ByteBlockEA5F_0x4E
+	call	SeqChan_WriteField_Data_E_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11400,11 +11400,11 @@ MidiSysEx_ProcessBlock_Helper11:
 	ret
 	ret
 	jp	MidiSysEx_ProcessBlock_Helper11_Join
-	jp	MidiSysEx_ProcessBlock_Helper11_Join2
+	jp	SeqChan_UnhandledCmd_Join2
 	jp	MidiSysEx_ProcessBlock_Helper11_Join3
-	jp	MidiSysEx_ProcessBlock_Helper11_Join4
+	jp	SeqChan_UnhandledCmd_Join4
 	ret
-	jp	MidiSysEx_ProcessBlock_Helper11_Join5
+	jp	SeqChan_UnhandledCmd_Join5
 MidiSysEx_ProcessBlock_Helper11_Join:
 	set	4, (0x905d:16)
 	push	xde
@@ -11421,7 +11421,7 @@ MidiSysEx_ProcessBlock_Helper11_Join:
 	pop	xde
 	res	4, (0x905d:16)
 	ret
-MidiSysEx_ProcessBlock_Helper11_Join2:
+SeqChan_UnhandledCmd_Join2:
 	push	xde
 	push	xhl
 	push	xix
@@ -11457,7 +11457,7 @@ MidiSysEx_ProcessBlock_Helper11_Join3:
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper11_Join4:
+SeqChan_UnhandledCmd_Join4:
 	push	xde
 	push	xhl
 	push	xix
@@ -11474,13 +11474,13 @@ MidiPkt_ArpConfigChain_Data_Helper18_Helper7:
 	push	xhl
 	push	xix
 	push	xiz
-	call	Voice_InitBankDataSafe_Alt1_0xE
+	call	SeqChan_UnhandledCmd_Helper
 	pop	xiz
 	pop	xix
 	pop	xhl
 	pop	xde
 	ret
-MidiSysEx_ProcessBlock_Helper11_Join5:
+SeqChan_UnhandledCmd_Join5:
 	push	xde
 	push	xhl
 	push	xix
