@@ -11,7 +11,7 @@ QUESTION THIS ANSWERS
       * +0x11 is the PARTIAL MASK (VoiceBuf_TypeSelector_MatchEpilogue, masks
         01/04/10/40 from subcpu table 0x00FB4E),
       * a present partial p is bound to the block at rec + 0x66 + 0x51*rank
-        (WaveSel_Bind_PartRecords), which becomes the voice's paramA,
+        (VoiceParam_Update), which becomes the voice's paramA,
     and the voice code reads the 81-byte block in field groups (two
     envelopes, pitch, amplitude envelope, filter control, third envelope,
     filter registers).  This script splits the head into its three fields,
@@ -239,7 +239,7 @@ def main():
                 k += 1
             r = blk
             if r in rank_to_p:
-                new.append("\t; = partial %d (rank %d): bound by WaveSel_Bind_PartRecords to part +0x%02x, the voice's paramA"
+                new.append("\t; = partial %d (rank %d): bound by VoiceParam_Update to part +0x%02x, the voice's paramA"
                            % (rank_to_p[r], r, 0x6E + 0x25 * rank_to_p[r]))
             else:
                 new.append("\t; bound to no partial by this record's mask (a 426-byte staging-stream record keeps all 4 blocks)")

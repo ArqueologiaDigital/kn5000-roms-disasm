@@ -19,7 +19,7 @@
 ; Part_Record_Base: part 0's 287-byte (0x11F) record; part p's is at +p*0x11F.  Its +0 word is
 ;   the part status/flags word ("(value & 3) == 0: the part is not loaded", bit 0 = RAM user tone).
 ; Part_PresentWord / Part_PatchRecord_Ptr: fields +2 and +6 of that record, the names the headers
-;   use (Partial_GetBaseKey, WaveSel_Bind_PartRecords, ...), indexed `+ part*0x11F`.
+;   use (Partial_GetBaseKey, VoiceParam_Update, ...), indexed `+ part*0x11F`.
 ; Voice_GlobalFlags: "the global flag word 0x041343" -- bit 1 disables the patch octave shift,
 ;   bits 9/10/11/12 are set and tested by the key-shift / tuning / CC setters that document them.
 	.equ	ToneGen_StagingBlock, 0x0451CC
@@ -37000,7 +37000,7 @@ VoiceBuf_TypeSelector_NoMatch:
 ;       (L = 0xFF); else L = the number of present partials among indices
 ;       1..p.  Callers pass the result straight into the 0x51-byte partial
 ;       block address patchrec + 0x66 + 0x51*L.
-; Callers: 0x032253 and 0x032345 (both inside WaveSel_Bind_PartRecords).
+; Callers: 0x032253 and 0x032345 (both inside VoiceParam_Update).
 VoiceBuf_TypeSelector_MatchEpilogue:
 	ld e, a
 	extz de

@@ -3,7 +3,7 @@
 
 QUESTION THIS ANSWERS
     A melodic tone record (part mode 0x00) carries one 81-byte block per
-    present partial at rec + 0x66 + 0x51*rank.  WaveSel_Bind_PartRecords
+    present partial at rec + 0x66 + 0x51*rank.  VoiceParam_Update
     (EFFSlotScan_AssignPath, subcpu 0x032295) stores that block's address in
     the part record at +0x6E + 0x25*partial, and Voice_Build_Partial_Descriptor
     (0x02B717) copies it into the voice slot at +0x17 -- the pointer the voice
