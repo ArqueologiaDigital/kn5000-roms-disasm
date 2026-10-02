@@ -112,6 +112,16 @@ def derive():
     odd = [k for k in range(32) if pay(k)[1] != 0x00]
     check("  payload byte 1 is 0x00 for every part but part 9 (0x%02X) -- channel 10" % pay(9)[1],
           odd == [9])
+    # whole first halves, the channel byte masked (claims review 2026-10-02, item 46: byte 1
+    # alone could not see part 0's +0x0C)
+    def masked(k):
+        b = bytearray(pay(k))
+        b[0x0D] = 0
+        return bytes(b)
+    diffA = {k: [i for i in range(len(pay(k))) if masked(k)[i] != masked(1)[i]] for k in range(32)}
+    check("  first halves, +0x0D masked, equal part 1's but for part 0 (+0x0C = 0x%02X) and part 9 "
+          "(+0x01)" % pay(0)[0x0C],
+          {k: v for k, v in diffA.items() if v} == {0: [0x0C], 9: [0x01]})
     diffB = [k for k in range(32) if pay(0x20 + k) != pay(0x20)]
     check("  the 32 second halves (ids 0x20-0x3F) are identical but for part 9's (id 0x29)",
           diffB == [9])
@@ -160,8 +170,9 @@ BANNER = r"""; =================================================================
 ; to sub_F114DA via T_F42F58) and sub_FAA967 (T_F4077C; bytes 0x0D-0x15 of ids
 ; 0x00-0x1F).  Ids 0x00-0x1F / 0x20-0x3F are the two halves of the 32 PART
 ; records (prom_a's ParamNumber_RecordPtrs header): part k's channel byte
-; (+0x0D) defaults to k, and part 9 -- channel 10 -- alone differs in both
-; halves.  Ids 0x61-0x63 are the three DSP effect blocks (IndexedTable entries
+; (+0x0D) defaults to k.  The first halves are otherwise identical except part
+; 0 (+0x0C = 0x08, all others 0x00) and part 9 -- channel 10 -- (+0x01 = 0x20);
+; the second halves except part 9's (+0x19, +0x1C, +0x1D).  Ids 0x61-0x63 are the three DSP effect blocks (IndexedTable entries
 ; 97-99), defaulting to algorithms 1, 35 and 20.  What the other 11 ids hold is
 ; for their readers to say.  notes/promb-2026-09-25/factory_default_records.py.
 ; =============================================================================="""

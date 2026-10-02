@@ -6,11 +6,14 @@ Tool: `scripts/tools/label_alias_branch_targets.py --tree <v> [--apply]` (run `m
 |---|---|---|---|
 | positional aliases before | 1,266 | 1,265 | 1,058 |
 | label placed: Helper (called, starts a routine of its own) | 457 | 456 | 179 |
-| label placed: Join / Return / Sub / Code / Epilogue | 230 / 106 / 23 / 67 / 2 | (same shape) | 194 / ... / 52 |
-| retired into a label already there | 128 | | |
+| label placed: Join / Return / Sub / Code / Epilogue | 230 / 106 / 23 / 67 / 2 | not recorded | Join 194, Code 52, the rest not recorded |
+| retired into a label already there | 128 | not recorded | not recorded |
 | left: unused, or used by data | 131 | 131 | 334 |
 | left: not the start of a code line | 122 | 121 | 114 |
 | positional aliases after (dashboard posalias) | 253 | 252 | 448 |
+
+"not recorded": the run's printout was cut short and the aliases are gone, so those
+counts cannot be re-measured; the totals in the last row are the dashboard's.
 
 Roles follow scripts/converters/symbolize_numeric_branches.py (structure only, no claim of
 purpose).  v7 then harmonized with v10 (70 renamed, 5 inserted: v7's parents differ, so its

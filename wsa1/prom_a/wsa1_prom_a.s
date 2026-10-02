@@ -180277,7 +180277,8 @@ KeyboardRuler_Strip9:
 ; 0xFF21F6-0xFF226A: 22 unidasm + 20 llvm spellings, OK); every internal branch
 ; lands on an instruction boundary; the one external call target, 0xFE8334,
 ; is an independently labelled routine; each routine ends in `ret`; and all
-; four entries are called from outside (9 + 30 + 25 + 4 call sites).
+; four entries are called from outside (12 + 43 + 54 + 4 call sites: SeekNextTag, Step,
+; ReadByte, WriteByte; branch lines outside the block, counted 2026-10-02).
 ; ---------------------------------------------------------------------
 
 ; BStoreCursor_SeekNextTag -- advance the cursor to the next byte with bit 7 SET
@@ -180285,7 +180286,7 @@ KeyboardRuler_Strip9:
 ; starts ON a tag byte moves past it to the following one.
 ; In: (0x345C)/(0x345E).  Out: A = the tag byte; cursor left on it.
 ; Clobbers: WA, XHL, XIY (through its callees).
-; Called from 9 sites in this module (0xFE8CE4, 0xFE9250, 0xFE962D, ...).
+; Called from 12 sites in this module (0xFE8CE4, 0xFE9250, 0xFE962D, ... 0xFEFF50).
 BStoreCursor_SeekNextTag:
 	calr BStoreCursor_Step                               ; FF21F6  1e 0b 00
 	calr BStoreCursor_ReadByte                           ; FF21F9  1e 36 00

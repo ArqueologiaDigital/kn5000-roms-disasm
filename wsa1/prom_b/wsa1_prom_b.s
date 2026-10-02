@@ -27602,18 +27602,19 @@ OldBuild_ValueGlyph_Table:
 
 
 ; --------------------------------------------------------------------------
-; OldBuild_ValueGlyph_Bitmaps -- 287 bytes this block could not split.  No content rule
-;                framed it -- not PTRTAB, RAMTAB, BITTAB, IDENT, BYTEMAP or
-;                ASCII -- and the code walk never reached it from a thunk
-;                slot, a proven call site, an opcode-anchored call or an
-;                entry of a table the firmware transfers to.  So it is
-;                emitted as bytes rather than guessed.
+; OldBuild_ValueGlyph_Bitmaps -- 288 bytes (to Data_F0F000): the older build's
+;                ValueGlyph_Bitmaps glyphs 0-3 (four 24x24 dials, 3 columns x
+;                24 bytes), byte for byte as the live ones at 0xF31EE1 (see
+;                ANSWERED below).  The splitter's original verdict -- no
+;                content rule framed it, no code walk reached it -- stands
+;                as its record of how the block was first met.
 ; Contains: printable bytes |.........../................|.............<....
 ;           ..................................../................|..........
 ;           ...|......................................../................|..
 ;           ...........|......................................../...........
 ;           .....|.............|............................|
-; Read by: 1 byte-scan hit: 1 dispatch-table entry (DispatchTable_F0EE6C[0])
+; Read by: nothing in this build; OldBuild_ValueGlyph_Table[0] (itself unread, a dead
+;          glyph-pointer table, not a dispatch table) points at it.
 ; Evidence: the bytes are re-read on every emit; the classification is
 ;           NEGATIVE (no rule matched, no walk arrived) and is stated as
 ;           such.
@@ -29250,8 +29251,9 @@ sub_F0F536:
 ;               to it, so the entries are ENTRY POINTS and they seed this
 ;               block's code walk
 ; Read by: 2 byte-scan hits: 1 instruction operand -- `add XBC,0x00f0f558`
-;          at 0xF0F54E (operand field 2 bytes in); 1 dispatch-table entry
-;          (DispatchTable_F0EE6C[23])
+;          at 0xF0F54E (operand field 2 bytes in); 1 entry of
+;          OldBuild_ValueGlyph_Table ([23]; that table was named
+;          DispatchTable_F0EE6C when this header was written)
 ; Entry count: 6, and it is NOT a byte extent divided by four.  The chain
 ;              rule that finds it stops at the first word that is not an
 ;              0x00F0xxxx-0x00F7xxxx address; that word is at 0xF0F570.
@@ -62664,9 +62666,10 @@ DL_Error:
 ;   the 8x16 Latin "2" -- each a DLHandler_IX_Text record: op, length,
 ;   IX, characters.  A sentence is cut into one-script pieces of 1..9
 ;   characters, which is why a search for RUNS of kana finds nothing.
-; Read by: no start is named anywhere.  prom_a's PtrTable_F99121 holds the
-;   (start, end) pairs T_DisplayListB_Run_Stack is given, and 0xF2E91A occurs
-;   in it only as the END of DL_Error's pair (0xF2E910, 0xF2E91A); 0xF2E97A
+; Read by: no start is named anywhere.  prom_a's MessageScreen_ListPairs
+;   (0xF99121) holds the (start, end) pairs sub_F99098 gives T_DisplayList_Run_Stack
+;   (interpreter A, `call` at 0xF990DA), and 0xF2E91A occurs in it only as the
+;   END of DL_Error's pair (0xF2E910, 0xF2E91A); 0xF2E97A
 ;   is spelled in neither image (24- or 32-bit).  So the two lists look like
 ;   a Japanese build's text left in place, not a screen this build draws --
 ;   an inference from the absence of a reader, stated as such.
@@ -86674,8 +86677,9 @@ DL_F3E2EB:
 ; to sub_F114DA via T_F42F58) and sub_FAA967 (T_F4077C; bytes 0x0D-0x15 of ids
 ; 0x00-0x1F).  Ids 0x00-0x1F / 0x20-0x3F are the two halves of the 32 PART
 ; records (prom_a's ParamNumber_RecordPtrs header): part k's channel byte
-; (+0x0D) defaults to k, and part 9 -- channel 10 -- alone differs in both
-; halves.  Ids 0x61-0x63 are the three DSP effect blocks (IndexedTable entries
+; (+0x0D) defaults to k.  The first halves are otherwise identical except part
+; 0 (+0x0C = 0x08, all others 0x00) and part 9 -- channel 10 -- (+0x01 = 0x20);
+; the second halves except part 9's (+0x19, +0x1C, +0x1D).  Ids 0x61-0x63 are the three DSP effect blocks (IndexedTable entries
 ; 97-99), defaulting to algorithms 1, 35 and 20.  What the other 11 ids hold is
 ; for their readers to say.  notes/promb-2026-09-25/factory_default_records.py.
 ; ==============================================================================

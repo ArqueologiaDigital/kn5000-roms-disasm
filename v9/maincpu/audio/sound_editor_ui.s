@@ -12326,7 +12326,7 @@ SeScreenData_0x086E:
 SeScreenData_0x0878:
 	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x0883
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x0878
 SeScreenData_0x0883:
 	.short	8, 73, 34, 86
@@ -12342,12 +12342,12 @@ SeScreenData_0x0883:
 SeScreenData_0x08AB:
 	.ascii	"NORM 1/2 1/4 1/81/161/321/64 FIX"
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 2)
+; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x28B4, bound op02 record DrumDetailEdit_Menu_Table
 SeScreenData_0x08CB:
 	.ascii	"OFF", " ON"
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 2)
+; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x4C6D
 SeScreenData_0x08D1:
 	.ascii	"OFF", "ON "
@@ -13267,7 +13267,7 @@ SeScreenData_0x1EB8:
 SeScreenData_0x1EC3:
 	sdb_box	0x03, 0x065d, 0x0f, 0, 0x05, SeScreenData_0x1F4D
 ; string table, 1-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 16)
+; a bound op 02/07 record; value at most 16 by the record's mask; the table holds 25 cells)
 ; evidence: bound op02 record at SeScreenData_0x1DCB, bound op02 record at SeScreenData_0x1DE9, bound op02 record at SeScreenData_0x1E07, bound op02 record at SeScreenData_0x1E25
 SeScreenData_0x1ECE:
 	.ascii	"A", "B", "C", "D", "E", "F", "G", "H"
@@ -13275,7 +13275,7 @@ SeScreenData_0x1ECE:
 	.ascii	"Q", "R", "S", "U", "V", "W", "X", "Y"
 	.ascii	"Z"
 ; string table, 4-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 2)
+; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 4 cells)
 ; evidence: bound op02 record at SeScreenData_0x21A2
 SeScreenData_0x1EE7:
 	.ascii	"LOW ", "HIGH", "MONO", "POLY"
@@ -13306,7 +13306,7 @@ SeScreenData_0x1EF7:
 SeScreenData_0x1F43:
 	sd_quad	0x1b, 13, 73, 307, 197
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x1EC3
 SeScreenData_0x1F4D:
 	.short	13, 73, 307, 101
@@ -13329,7 +13329,7 @@ SeScreenData_0x1F80:
 	.set	SeScreenData_0x2091, . + 273
 	.incbin "includes/generated/se_drumkit_display.bin"
 ; string table, 2-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 32)
+; a bound op 02/07 record; value at most 32 by the record's mask; the table holds 25 cells; values >= 25 would read past it)
 ; evidence: bound op07 record DrumDetailEdit_Entry_02, bound op07 record DrumDetailEdit_Entry_06, bound op02 record at SeScreenData_0x1F80, bound op02 record at SeScreenData_0x1FA8 (+2 more)
 SeScreenData_0x20C9:
 	.ascii	"A:", "B:", "C:", "D:", "E:", "F:", "G:", "H:"
@@ -13341,7 +13341,7 @@ SeScreenData_0x20C9:
 SeScreenData_0x20FB:
 	sd_quad	0x1b, 61, 118, 252, 180
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x1F75
 SeScreenData_0x2105:
 	.short	61, 118, 252, 132
@@ -13354,7 +13354,7 @@ SeScreenData_0x2105:
 SeScreenData_0x212D:
 	sdb_str	0x0678, 0x07, 0, 0x20, SeScreenData_0x213C, 6, 153*40+32
 ; string table, 6-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 8)
+; a bound op 02/07 record; value at most 8 by the record's mask; the table holds 6 cells; values >= 6 would read past it)
 ; evidence: bound op02 record at SeScreenData_0x212D
 SeScreenData_0x213C:
 	.ascii	"LPF+EQ"
@@ -13383,18 +13383,18 @@ SeScreenData_0x21C0:
 	.long	SeScreenData_0x2184
 	.long	SeScreenData_0x2193
 ; string table, 2-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 8)
+; a bound op 02/07 record; value at most 8 by the record's mask; the table holds 6 cells; values >= 6 would read past it)
 ; evidence: bound op02 record at SeScreenData_0x2184, bound op02 record at SeScreenData_0x2283, bound op02 record at SeScreenData_0x22A1
 SeScreenData_0x21D4:
 	.ascii	"-6", "-3", " 0", "+3", "+6", "+9"
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 8)
+; a bound op 02/07 record; value at most 8 by the record's mask; the table holds 6 cells; values >= 6 would read past it)
 ; evidence: bound op02 record at SeScreenData_0x2240
 SeScreenData_0x21E0:
 	.ascii	"-12", "- 6", "  0", "+ 6"
 	.ascii	"+12", "+18"
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 128)
+; a bound op 02/07 record; value at most 128 by the record's mask; the table holds 14 cells; values >= 14 would read past it)
 ; evidence: bound op02 record at SeScreenData_0x21B1
 SeScreenData_0x21F2:
 	.ascii	" --", " -6", " -5", " -4"
@@ -13509,7 +13509,7 @@ SeScreenData_0x2332:
 SeScreenData_0x233D:
 	.ascii	"+-"
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 2)
+; record's value (pointer field +7; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op03 record at SeScreenData_0x2332
 SeMenu_CompareScreen_DataTable:
 	.short	61, 189, 284, 202
@@ -13572,7 +13572,7 @@ SeScreenData_0x241A:
 SeScreenData_0x244E:
 	sd_quad	0x1b, 13, 76, 210, 200
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x240F
 SeScreenData_0x2458:
 	.short	13, 76, 210, 104
@@ -13678,7 +13678,7 @@ SeScreenData_0x2583:
 SeScreenData_0x258E:
 	sdb_strxy	0x0669, 0x03, 0, 0x17, SeScreenData_0x259F, 8, 157, 62
 ; string table, 8-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 4)
+; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 3 cells; values >= 3 would read past it)
 ; evidence: bound op07 record at SeScreenData_0x258E, bound op07 record at SeScreenData_0x3BCA
 SeScreenData_0x259F:
 	.ascii	"ATTACK) "
@@ -13720,7 +13720,7 @@ TuningSys_Param_01:
 	.set	SeScreenData_0x26AE, . + 207
 	.incbin "includes/generated/se_name_editor.bin"
 ; string table, 8-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 32)
+; a bound op 02/07 record; value at most 32 by the record's mask; the table holds 32 cells)
 ; evidence: bound op02 record at SeScreenData_0x2673
 SeScreenData_0x26B9:
 	.ascii	"OFF     "
@@ -13756,13 +13756,13 @@ SeScreenData_0x26B9:
 	.ascii	"OFF     "
 	.ascii	"OFF     "
 ; string table, 4-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 8)
+; a bound op 02/07 record; value at most 8 by the record's mask; the table holds 8 cells)
 ; evidence: bound op02 record at SeScreenData_0x25F5, bound op02 record at SeScreenData_0x261A, bound op02 record at SeScreenData_0x263F, bound op02 record at SeScreenData_0x2664
 SeScreenData_0x27B9:
 	.ascii	"NORM", " 1/2", " 1/4", " 1/8"
 	.ascii	"1/16", "1/32", "1/64", " FIX"
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 8)
+; record's value (pointer field +7; value at most 8 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x26A3
 SeScreenData_0x27D9:
 	.short	13, 76, 166, 104
@@ -13771,7 +13771,7 @@ SeScreenData_0x27D9:
 	.short	13, 140, 166, 168
 	.short	13, 172, 166, 200
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x26AE
 SeScreenData_0x2801:
 	.short	181, 67, 249, 80
@@ -13846,7 +13846,7 @@ SeScreenData_0x28EC:
 SeScreenData_0x28FB:
 	sdb_str	0x0668, 0x10, 4, 0x20, SeScreenData_0x290A, 1, 158*40+10
 ; string table, 1-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 2)
+; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x28CE, bound op02 record at SeScreenData_0x28DD, bound op02 record at SeScreenData_0x28EC, bound op02 record at SeScreenData_0x28FB
 SeScreenData_0x290A:
 	.ascii	"+", "-"
@@ -13866,12 +13866,12 @@ SeScreenData_0x2920:
 	.long	SeScreenData_0x28EC
 	.long	SeScreenData_0x28FB
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 4)
+; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 4 cells)
 ; evidence: bound op02 record at SeScreenData_0x287D
 SeScreenData_0x2930:
 	.ascii	"SIN", "TRI", "SQR", "SAW"
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 8)
+; record's value (pointer field +7; value at most 8 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x28C3
 SeScreenData_0x293C:
 	.short	182, 62, 218, 75
@@ -14081,7 +14081,7 @@ SeScreenData_0x2C0A:
 	sdb_num	0x0661, 0xff, 0, 0x07, 124*40+22, 2
 	sdb_str	0x0000, 0x00, 0, 0x07, 0x00020bf3, 16, 92*40+9
 ; string table, 1-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 4)
+; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 3 cells; values >= 3 would read past it)
 ; evidence: bound op02 record at SeScreenData_0x2C0A
 SeScreenData_0x2C32:
 	.ascii	" ", "A", "B"
@@ -14174,7 +14174,7 @@ SeScreenData_0x2EAC:
 SeScreenData_0x2EB6:
 	sd_quad	0x1b, 32, 103, 280, 192
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 16 cells)
 ; evidence: bound op03 record at SeScreenData_0x2E85, bound op03 record at SeScreenData_0x2EA1, bound op03 record at SeScreenData_0x2E69
 SeScreenData_0x2EC0:
 	.short	81, 62, 92, 79
@@ -14203,7 +14203,7 @@ SeScreenData_0x2F40:
 SeScreenData_0x2F60:
 	.short	103, 118, 133, 148, 163, 178
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 128)
+; a bound op 02/07 record; value at most 128 by the record's mask; the table holds 128 cells)
 ; evidence: bound op07 record DrumDetailEdit_Entry_01, bound op02 record at SeScreenData_0x248B, bound op02 record at SeScreenData_0x249A, bound op02 record at SeScreenData_0x24A9 (+8 more)
 SeScreenData_0x2F6C:
 	.ascii	"C-2", "D\210-", "D-2", "E\210-"
@@ -14239,7 +14239,7 @@ SeScreenData_0x2F6C:
 	.ascii	"C8 ", "D\2108", "D8 ", "E\2108"
 	.ascii	"E8 ", "F8 ", "F\2148", "G8 "
 ; string table, 5-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 128)
+; a bound op 02/07 record; value at most 128 by the record's mask; the table holds 128 cells)
 ; evidence: bound op02 record at SeScreenData_0x2175, bound op02 record at SeScreenData_0x2193, bound op02 record at SeScreenData_0x2231, bound op02 record at SeScreenData_0x2274 (+1 more)
 SeScreenData_0x30EC:
 	.ascii	" 65.4"
@@ -14590,19 +14590,19 @@ SeScreenData_0x3A3A:
 	.long	SeScreenData_0x3A1C
 	.long	SeScreenData_0x3A2B
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 4)
+; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 3 cells; values >= 3 would read past it)
 ; evidence: bound op07 record DrumDetailEdit_Entry_09, bound op02 record at SeScreenData_0x394F, bound op02 record at SeScreenData_0x395E, bound op02 record at SeScreenData_0x396D (+1 more)
 SeScreenData_0x3A52:
 	.ascii	"CTR", "L  ", "R  "
 ; string table, 7-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 4)
+; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 3 cells; values >= 3 would read past it)
 ; evidence: bound op02 record at SeScreenData_0x38E1, bound op02 record at SeScreenData_0x38F0, bound op02 record at SeScreenData_0x38FF, bound op02 record at SeScreenData_0x390E
 SeScreenData_0x3A5B:
 	.ascii	"KEY ON "
 	.ascii	"KEY OFF"
 	.ascii	"LEGATO "
 ; string table, 7-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 2)
+; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x39FE, bound op02 record at SeScreenData_0x3A0D, bound op02 record at SeScreenData_0x3A1C, bound op02 record at SeScreenData_0x3A2B
 SeScreenData_0x3A70:
 	.ascii	"NON LEG"
@@ -14612,7 +14612,7 @@ SeScreenData_0x3A70:
 SeScreenData_0x3A7E:
 	sd_quad	0x1b, 13, 76, 228, 200
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x398B
 SeScreenData_0x3A88:
 	.short	13, 76, 228, 104
@@ -14653,7 +14653,7 @@ SeScreenData_0x3AF7:
 SeScreenData_0x3B0B:
 	sd_quad	0x1b, 8, 73, 250, 197
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 16)
+; record's value (pointer field +7; value at most 16 by the record's mask; the table holds 5 cells; values >= 5 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x3AEC, bound op03 record at SeScreenData_0x3B65
 SeScreenData_0x3B15:
 	.short	8, 73, 250, 103
@@ -14822,12 +14822,12 @@ SeScreenData_0x3E60:
 	.long	SeScreenData_0x3E1E
 	.long	SeScreenData_0x3E2D
 ; string table, 3-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 4)
+; a bound op 02/07 record; value at most 4 by the record's mask; the table holds 4 cells)
 ; evidence: bound op02 record at SeScreenData_0x3E37, bound op02 record at SeScreenData_0x3E46, bound op02 record at SeScreenData_0x3DD3, bound op02 record at SeScreenData_0x3DE2
 SeScreenData_0x3E80:
 	.ascii	"OFF", " ON", "---", "INV"
 ; string table, 13-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 64)
+; a bound op 02/07 record; value at most 64 by the record's mask; the table holds 64 cells)
 ; evidence: bound op02 record at SeScreenData_0x3DF1, bound op02 record at SeScreenData_0x3E00, bound op02 record at SeScreenData_0x3E0F, bound op02 record at SeScreenData_0x3E1E
 SeScreenData_0x3E8C:
 	.ascii	"-------------"
@@ -14901,7 +14901,7 @@ SeScreenData_0x41CC:
 	sd_quad	0x05, 77, 110, 298, 125
 	sd_quad	0x05, 77, 141, 298, 156
 ; box table: {x1, y1, x2, y2} u16 per entry, indexed by a bound op 03/04/08
-; record's value (pointer field +7; value range up to 8)
+; record's value (pointer field +7; value at most 8 by the record's mask; the table holds 7 cells; values >= 7 would read past it)
 ; evidence: bound op03 record at SeScreenData_0x3E55
 SeScreenData_0x41EA:
 	.short	77, 74, 186, 89
@@ -14918,12 +14918,12 @@ SeScreenData_0x41EA:
 SeScreenData_0x4222:
 	.incbin "includes/generated/se_setup_sel3.bin"
 ; string table, 4-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 2)
+; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x4222
 SeScreenData_0x4240:
 	.ascii	"LONG", "HOLD"
 ; string table, 7-char cells, indexed by a bound record's value (field +7 of
-; a bound op 02/07 record; value range up to 2)
+; a bound op 02/07 record; value at most 2 by the record's mask; the table holds 2 cells)
 ; evidence: bound op02 record at SeScreenData_0x4231
 SeScreenData_0x4248:
 	.ascii	"DISABLE"

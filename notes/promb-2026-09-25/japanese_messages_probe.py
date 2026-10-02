@@ -27,8 +27,11 @@ QUESTION THIS ANSWERS
         kana" without an order; the text needs 0x46 to be ッ (トラ?ク), and the
         katakana glyphs are checked structurally -- 0x46 has the three strokes
         of ッ, 0x3E the hooked top of ァ;
-      * who runs the lists: prom_a's PtrTable_F99121 holds (start, end) pairs
-        of prom_b display lists for T_DisplayListB_Run_Stack; 0xF2E91A occurs
+      * who runs the lists: prom_a's MessageScreen_ListPairs (0xF99121, once
+        PtrTable_F99121) holds (start, end) pairs of prom_b display lists that
+        sub_F99098 gives T_DisplayList_Run_Stack, interpreter A (corrected by the
+        claims review of 2026-10-02: not T_DisplayListB_Run_Stack, which only
+        MessageScreen_ListPairsB's three pairs reach); 0xF2E91A occurs
         in it only as the END of DL_Error's pair (0xF2E910, 0xF2E91A), and
         0xF2E97A occurs in neither image at all -- so no start of either
         Japanese list is named anywhere (the shapes searched: the 24- and
