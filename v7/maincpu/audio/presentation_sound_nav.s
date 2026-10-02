@@ -32,11 +32,11 @@
 ; GroupBoxProc_Ev1C00030 fall-through).
 GroupBoxProc_StartSSFPresentation:
 	ld	xwa, (xsp+38)
-	call	16400561
+	call	SetRootObject
 	ld	xwa, EVT_LSW_DATA
-	call	16400567
+	call	SetRootEvent
 	lda	xwa, (xsp+18)
-	call	16400573
+	call	SetRootParam
 	lda	xbc, (xsp+30)
 	ld	xde, xbc
 	inc	1, xde
@@ -51,14 +51,14 @@ GroupBoxProc_StartSSFPresentation:
 	ld	(xwa), c
 	lda	xbc, (xsp+10)
 	lda	xde, (xsp+8)
-	call	16567598
+	call	GroupBoxProc_StartSSFPresentation_Helper
 	cp	hl, 65535
-	jrl	z, 620
+	jrl	z, GroupBox_ReturnZero
 GroupBoxProc_SSFItemLoop:
 	ld	xwa, (xsp+10)
 	ld	(xsp+18), xwa
 	ld	xwa, (xsp+10)
-	call	16567398
+	call	AcApcToggleProc_Helper
 	lda	xde, (xsp+18)
 	ld	(xde+4), hl
 	ldw	(xde+6), 0
@@ -70,10 +70,10 @@ GroupBoxProc_SSFItemLoop:
 	lda	xwa, (xsp+14)
 	lda	xbc, (xsp+10)
 	lda	xde, (xsp+8)
-	call	16567598
+	call	GroupBoxProc_StartSSFPresentation_Helper
 	cp	hl, 65535
-	jr	nz, -62	; -> 0xF99EAD
-	jrl	555	; -> 0xF9A119
+	jr	nz, GroupBoxProc_SSFItemLoop	; -> 0xF99EAD
+	jrl	GroupBox_ReturnZero	; -> 0xF9A119
 GroupBox_CancelBack:
 	ld iz, 0:i3
 

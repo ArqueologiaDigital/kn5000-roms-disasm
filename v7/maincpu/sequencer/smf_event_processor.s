@@ -642,7 +642,7 @@ VoiceChannel_StoreVoiceIdx:
 	cpw (0x1a5f:16), 0x0009
 	jr nz, VoiceChannel_StoreVoiceReturn
 	ld XWA,0x00001a57
-	call 0xfee195
+	call SndParam_ApplyVoiceValue
 	ld XHL,0x00001a37
 	ld bc, (0x1a5f:16)
 	mul C,0x02
@@ -688,17 +688,17 @@ SMF_SysEx_CheckBlockLimit:
 	cpw (0x1074:16), 0x0000
 	jr nz, Seq_AdvanceBlock
 	cp	(0x1073:16), a
-	jr	ugt, 37
+	jr	ugt, Seq_AdvanceBlock
 	ld	bc, ix
 	ld	xix, xiy
 	ld	xiy, 4206
 	.byte 0x85, 0x11	; ldir
 	call	SysEx_ReadBytesLoop_Init
 	cp	(6880:16), 255
-	jr	z, 19
+	jr	z, Seq_ReturnToDispatcher
 	ld	xwa, 6753
 	ld	xbc, 0:i3
-	call	16623141
+	call	SMF_ProcessSysExBlock_Helper
 	jp	Seq_ReturnToDispatcher
 Seq_AdvanceBlock:
 	call Sequencer_AdvanceBlockPosition
@@ -813,11 +813,11 @@ SMF_Seek_WritePosition:
 
 SMF_RestoreTimerState:
 	bit	0, (10405:16)
-	jr	z, 15
+	jr	z, SMF_SeekReturn
 	ld	wa, (65516:24)
 	ld	(61854:16), wa
 	push	xhl
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	pop	xhl
 SMF_SeekReturn:
 	ret
@@ -839,9 +839,9 @@ SeqPlay_QueueDisplayEvent:
 	ld	e, 145:opc
 	ld	d, 3:opc
 	ld	w, 4:opc
-	call	16624640
+	call	SwbtWr_QueueMainEvent
 	call	SwbtWr_ReinitBothBanks
-	call	16625070
+	call	BitMapOut_RenderDisplay
 	ret
 SMF_InitPlaybackState:
 	pushw wa
@@ -1045,9 +1045,9 @@ SMF_WriteChannel_Continue:
 
 	cp (6709:16), 0
 
-	jrl z, 1309
+	jrl z, SMF_FinishChannelAndGetNextEvent
 
-	call 16625030
+	call BitMapOut_ComputeRegionDelta
 
 	ld (0x2877:16), 0
 
@@ -3036,17 +3036,17 @@ FileOpen_DeviceSearchLoop:
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	z, 23	; -> 0xF4E8FC
+	jr	z, FileOpen_DeviceFound	; -> 0xF4E8FC
 	incm8	1, (xsp+6)
 	ld	xwa, 34
 	add	(xsp+8), xwa
 	ld	a, (xsp+6)
 	extz	wa
 	cp	wa, (254942:24)
-	jr	lt, -44	; -> 0xF4E8D0
+	jr	lt, FileOpen_DeviceSearchLoop	; -> 0xF4E8D0
 FileOpen_DeviceFound:
 	ld xwa, (xsp + 12)
 	push xwa
@@ -4576,7 +4576,7 @@ SeqStep_FileSectorComplete:
 	push	xwa
 	ld	xwa, (xsp+18)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ld	xwa, (xsp+22)
 	ld	(xwa+11), 0
 	ld	xwa, (xsp+22)
@@ -4617,7 +4617,7 @@ SeqStep_FileSectorReturn:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	c, (xiz+12)
@@ -5200,7 +5200,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Skip12:
 	pushw	0
 	lda	xwa, (xhl+26)
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	inc	1, xiz
 SeqByteBlock_StyleBitmapRef_Code_Helper_Join4:
@@ -5237,7 +5237,7 @@ FatPath_Next83Component_Restart:
 	pushw	32
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	ld	xwa, (xsp+8)
 	ld	(xwa+11), 0
@@ -5795,7 +5795,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper_Loop19:
 	push	xwa
 	lda	xwa, (xiz+52)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ld	(xiz+64), 0
 	ldw	(xiz+69), 0
 	ld	xwa, 0:i3
@@ -6458,7 +6458,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper3_Skip16:
 	ld	xwa, xde
 	ld	xbc, (xsp+4)
 	ld	xbc, (xbc+32)
-	call	16712763
+	call	Math_DivideU32
 	inc	1, xhl
 	ld	xwa, (xsp+4)
 	ld	(xwa+54), hl
@@ -6608,7 +6608,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper4:
 	extz	xbc
 	ld	xwa, (xsp+16)
 	ld	xwa, (xwa+22)
-	call	16712763
+	call	Math_DivideU32
 	ld	xwa, (xsp+8)
 	ld	xbc, (xwa+28)
 	add	xbc, xhl
@@ -6643,7 +6643,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip4:
 	ld	bc, (xwa+38)
 	extz	xbc
 	ld	xwa, xiz
-	call	16712763
+	call	Math_DivideU32
 	ld	a, l
 	ld	(xsp+6), a
 	ld	xwa, (xsp+16)
@@ -6843,7 +6843,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper5_Skip:
 	ld	bc, (xwa+40)
 	extz	xbc
 	ld	xwa, xde
-	call	16712763
+	call	Math_DivideU32
 	ld	wa, (xsp+4)
 	extz	xwa
 	sub	xhl, xwa
@@ -7087,7 +7087,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper6_Join2:
 	push	xbc
 	ld	xwa, (xsp+20)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	sub	(xsp+18), iz
 	ld	wa, iz
@@ -7325,7 +7325,7 @@ SeqByteBlock_StyleBitmapRef_Code_Helper7_Join2:
 	ld	xwa, (xsp+18)
 	push	xwa
 	push	xde
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	sub	(xsp+20), iz
 	ld	xwa, (xsp+16)
@@ -7551,7 +7551,7 @@ SeqByteBlock_StyleBitmapRef_Code_Skip14:
 	ld	bc, (xwa+40)
 	extz	xbc
 	ld	xwa, (xsp+16)
-	call	16712763
+	call	Math_DivideU32
 	ld	xwa, (xsp+12)
 	ld	wa, (xwa+46)
 	extz	xwa
@@ -7969,7 +7969,7 @@ SeqChan_ByteBlockC_Skip2:
 	pushw SeqChan_ByteBlockC_Str_Empty@hi16
 	pushw SeqChan_ByteBlockC_Str_Empty@lo16
 	push	xiz
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	hl, 0:i3
 	jr	SeqChan_ByteBlockC_Epilogue
@@ -8135,7 +8135,7 @@ SeqChan_ByteBlockE:
 	ld	bc, (xwa+50)
 	extz	xbc
 	ld	xwa, xhl
-	call	16712763
+	call	Math_DivideU32
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
@@ -8273,7 +8273,7 @@ SeqChan_ByteBlockF:
 	ld	bc, (xwa+50)
 	extz	xbc
 	ld	xwa, xhl
-	call	16712763
+	call	Math_DivideU32
 	ld	xbc, xhl
 	ld	xwa, (xsp+2)
 	; v10 does not spell this byte either
@@ -8517,13 +8517,13 @@ FDC_Format2DD_WriteBoot:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	32
 	lda	xwa, (FDC_Format2DD_BootSectorHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ldw	(xsp+24), 4
 	ldw	(xsp+26), 0
 	ldw	(xsp+28), 0
@@ -8553,13 +8553,13 @@ FDC_Format2DD_WriteFAT1:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	3
 	lda	xwa, (FDC_Format2DD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ldw	(xsp+24), 4
 	ldw	(xsp+26), 0
 	ldw	(xsp+28), 0
@@ -8589,7 +8589,7 @@ FDC_Format2DD_WriteFAT2:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	ldw	(xsp+22), 3
 	lda	xwa, (xsp+14)
 	push	xwa
@@ -8597,22 +8597,22 @@ FDC_Format2DD_WriteFAT2:
 	lda	xsp, (xsp+12)
 	ldfr_berp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51C22
+	jr	z, FDC_Format2DD_WriteRoot	; -> 0xF51C22
 	ldto_berp	a, 251
 	extz	wa
-	calr	65096
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	612	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_WriteRoot:
 	pushw	512
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	ldw	(xsp+22), 4
 	lda	xwa, (xsp+14)
 	push	xwa
@@ -8620,28 +8620,28 @@ FDC_Format2DD_WriteRoot:
 	lda	xsp, (xsp+12)
 	ldfr_berp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51C5F
+	jr	z, FDC_Format2DD_WriteDataSec1	; -> 0xF51C5F
 	ldto_berp	a, 251
 	extz	wa
-	calr	65035
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	551	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_WriteDataSec1:
 	pushw	512
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	3
 	lda	xwa, (FDC_Format2DD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ldw	(xsp+24), 4
 	ldw	(xsp+26), 0
 	ldw	(xsp+28), 0
@@ -8671,7 +8671,7 @@ FDC_Format2DD_WriteDataSec2:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	ldw	(xsp+22), 6
 	lda	xwa, (xsp+14)
 	push	xwa
@@ -8679,22 +8679,22 @@ FDC_Format2DD_WriteDataSec2:
 	lda	xsp, (xsp+12)
 	ldfr_berp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51D09
+	jr	z, FDC_Format2DD_WriteDataSec3	; -> 0xF51D09
 	ldto_berp	a, 251
 	extz	wa
-	calr	64865
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	381	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_WriteDataSec3:
 	pushw	512
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	ldw	(xsp+22), 7
 	lda	xwa, (xsp+14)
 	push	xwa
@@ -8702,22 +8702,22 @@ FDC_Format2DD_WriteDataSec3:
 	lda	xsp, (xsp+12)
 	ldfr_berp	l, 251
 	cpib_erp	251, 0
-	jr	z, 23	; -> 0xF51D46
+	jr	z, FDC_Format2DD_InitTrackLoop	; -> 0xF51D46
 	ldto_berp	a, 251
 	extz	wa
-	calr	64804
+	calr	FDC_SetSectorLength
 	ld	xwa, (xsp+2)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
 	inc	4, xsp
 	ld	hl, 0:i3
-	jrl	320	; -> 0xF51E86
+	jrl	FDC_CmdFrame_Epilogue	; -> 0xF51E86
 FDC_Format2DD_InitTrackLoop:
 	pushw	512
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	ldw	(xsp+6), 4
 	ldw	(xsp+8), 0
@@ -8727,7 +8727,7 @@ FDC_Format2DD_InitTrackLoop:
 	ld	xwa, (xsp+2)
 	ld	(xsp+18), xwa
 	ldw	(xsp+14), 8
-	jr	44	; -> 0xF51DA8
+	jr	FDC_Format2DD_TrackTest	; -> 0xF51DA8
 FDC_Format2DD_TrackBody:
 	lda	xwa, (xsp+6)
 	push	xwa
@@ -8881,13 +8881,13 @@ FDC_Format2HD_WriteBoot:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	32
 	lda	xwa, (FDC_Format2HD_BootSectorHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ldw	(xsp+24), 4
 	ldw	(xsp+26), 0
 	ldw	(xsp+28), 0
@@ -8917,13 +8917,13 @@ FDC_Format2HD_WriteFAT1:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	3
 	lda	xwa, (FDC_Format2HD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ldw	(xsp+24), 4
 	ldw	(xsp+26), 0
 	ldw	(xsp+28), 0
@@ -8953,10 +8953,10 @@ FDC_Format2HD_InitTrackLoop:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	ldw	(xsp+14), 3
-	jr	44	; -> 0xF5200E
+	jr	FDC_Format2HD_TrackTest	; -> 0xF5200E
 FDC_Format2HD_TrackBody:
 	lda	xwa, (xsp+6)
 	push	xwa
@@ -8984,13 +8984,13 @@ FDC_Format2HD_TrackTest:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	3
 	lda	xwa, (FDC_Format2HD_FatHead:24)
 	push	xwa
 	ld	xwa, (xsp+16)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ldw	(xsp+24), 4
 	ldw	(xsp+26), 0
 	ldw	(xsp+28), 0
@@ -9020,10 +9020,10 @@ FDC_Format2HD_WriteFAT2:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	ldw	(xsp+14), 12
-	jr	44	; -> 0xF520C5
+	jr	FDC_Format2HD_Side2Test	; -> 0xF520C5
 FDC_Format2HD_Side2Body:
 	lda	xwa, (xsp+6)
 	push	xwa
@@ -9070,10 +9070,10 @@ FDC_Format2HD_InitSide1Loop:
 	pushw	0
 	ld	xwa, (xsp+6)
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	ldw	(xsp+14), 2
-	jr	44	; -> 0xF52142
+	jr	FDC_Format2HD_Side1Test	; -> 0xF52142
 FDC_Format2HD_Side1Body:
 	lda	xwa, (xsp+6)
 	push	xwa
@@ -9436,7 +9436,7 @@ GetVolumeLabel_ScanEntry:
 	push	xwa
 	lda	xwa, (141088:24)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ld	(141099:24), 0
 	push	xiz
 	call	FileClose
@@ -9791,14 +9791,14 @@ FindNext_MatchEntry:
 	push	xwa
 	lda	xwa, (xiz+6)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	ld	(xiz+14), 46
 	pushw	3
 	lda	xwa, (xsp+64)
 	push	xwa
 	lda	xwa, (xiz+15)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+20)
 	ld	(xiz+18), 0
 	ld	xwa, (xsp+63)
@@ -9843,13 +9843,13 @@ WildMatch_InitBuffer:
 	pushw	63
 	lda	xwa, (xsp+8)
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	ld	(xsp+15), 0
 	lda	xwa, (xsp+4)
 	ld	xbc, xwa
 	cp	(xiz), 0
-	jr	z, 25
+	jr	z, WildMatch_FillName
 WildMatch_ScanLoop:
 	cp (xiz), 0x2e
 	jr nz, WildMatch_CopyChar
@@ -10007,7 +10007,7 @@ FileIO_ReadDirEntry_Body:
 	ld	xwa, (xsp+10)
 	inc	6, xwa
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	(xwa+26), 0
@@ -10543,7 +10543,7 @@ FileIO_ReadDir_CopyLoop:
 	muls	wa, 44
 	lda	xbc, (144808:24)
 	.byte 0xd3, 0x07, 0xe4, 0xe0, 0x3f, 0xfe, 0xfe	; cp (xbc+wa),0xfefe
-	jr	z, 50
+	jr	z, FileIO_FillRemainingEntries
 	pushw	20
 	ld	wa, iz
 	muls	wa, 44
@@ -10557,11 +10557,11 @@ FileIO_ReadDir_CopyLoop:
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	inc	1, iz
 	cp	iz, 80
-	jr	lt, -70
+	jr	lt, FileIO_ReadDir_CopyLoop
 FileIO_FillRemainingEntries:
 	ld (0x024750:24), iz
 	cp iz, 0x50
@@ -10576,11 +10576,11 @@ FileIO_FillRemaining_Loop:
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	inc	1, iz
 	cp	iz, 80
-	jr	lt, -36
+	jr	lt, FileIO_FillRemaining_Loop
 FileIO_ReadDir_GetRetVal:
 	ldto_werp HL, 0xfa
 

@@ -485,7 +485,7 @@ LyricsBox_CheckCurrentLine:
 	pushm (xsp + 0x0a)
 	push XHL
 	push XBC
-	call 0xff0516
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp + 0x0a)
 	ld WA,(XSP+0x0a)
 	extz XWA
@@ -651,7 +651,7 @@ LyricsBox_DrawCurrentLine:
 
 	pushw 0xdfe
 
-	call	16712982
+	call	CmpNamingCheck_Helper
 
 	lda xsp, (xsp + 10)
 
@@ -767,7 +767,7 @@ LyricsBox_DrawSelLine:
 
 	pushw 0xdfe
 
-	call	16712982
+	call	CmpNamingCheck_Helper
 
 	lda xsp, (xsp + 10)
 
@@ -907,7 +907,7 @@ SongEdit_CheckBounds:
 	exts XWA
 	add XWA,XBC
 	push XWA
-	call 0xff0516
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp + 0x0a)
 	lda xbc, (0x020e4a:24)
 	ld A,(XSP)
@@ -1010,7 +1010,7 @@ SongEdit_OverflowCheck:
 
 	push xwa
 
-	call	16712982
+	call	CmpNamingCheck_Helper
 
 	lda xsp, (xsp + 10)
 
@@ -1160,7 +1160,7 @@ LyricsTrack_ResetBufferLoop:
 
 	push xwa
 
-	call	16713148
+	call	Mem_Copy
 
 	lda xsp, (xsp + 10)
 
@@ -1269,7 +1269,7 @@ LyricsFile_InsertNormalChar:
 	lda xwa, (0x20cbe:24)
 	lda_rr xwa, xwa, bc
 	push xwa
-	call 16712982
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp+14)
 	lda xwa, (0x20e42:24)
 	ld bc, iz
@@ -4278,7 +4278,7 @@ SeqNamingCheck:
 	pushw	62080
 	pushw	2
 	pushw	3234
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xwa, (134306:24)
 	ld	(xwa+16), 0
 	push	xwa
@@ -6951,7 +6951,7 @@ NoteEdit_FormatTempoString:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	jrl	NoteEdit_RestoreAndReturn
 NoteEdit_FormatNoteOther:
@@ -7161,7 +7161,7 @@ NoteEdit_CopyNoteName:
 NoteEdit_DoStrncpy:
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 NoteEdit_RestoreAndReturn:
 	ld xhl, (xsp + 4)
@@ -7389,7 +7389,7 @@ SngSelFunc_HandleEvent47:
 	ld	xwa, (xbc)
 	inc	7, xwa
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+28)
 	ld	xwa, (xiz+18)
 	ld	(xwa+23), 0
@@ -8037,7 +8037,7 @@ EntGridCheck_Handle4E00:
 	push	xwa
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	(xsp+57), 0
 	call	GetFocusObject
@@ -8061,7 +8061,7 @@ EntGridCheck_Handle4E10:
 	push	xwa
 	ld	xwa, (xsp+38)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+7), 115
@@ -8086,7 +8086,7 @@ EntGridCheck_Handle4E11:
 	push	xwa
 	ld	xwa, (xsp+42)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+6), 72
@@ -8116,7 +8116,7 @@ EntGridCheck_Handle4E12:
 	push	xwa
 	lda	xwa, (xde+3)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+8), 32
@@ -8186,7 +8186,7 @@ EntGridCheck_Return:
 
 	push xde
 
-	call	16712982
+	call	CmpNamingCheck_Helper
 
 	lda xsp, (xsp + 10)
 
@@ -8245,7 +8245,7 @@ EntGridCheck_Default:
 	push XWA
 	ld XWA,(XSP+0x2a)
 	push XWA
-	call 0xff0516
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp + 0x0a)
 	lda xwa, (xsp + 0x30)
 	ld (XWA+0x07),0x73
@@ -8263,7 +8263,7 @@ EntGridCheck_DefaultCase1:
 	add	xwa, xde
 	push	xwa
 	push	xbc
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+6), 72
@@ -8287,7 +8287,7 @@ EntGridCheck_DefaultCase2:
 	ld	xwa, (xsp+26)
 	inc	3, xwa
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+48)
 	ld	(xwa+8), 32
@@ -12400,7 +12400,7 @@ EffectBox_PostFillSetup:
 	push xbc
 	lda xwa, (xsp+44)
 	push xwa
-	call 16712982
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp+10)
 	lda xwa, (xsp+318)
 	lda xbc, (xsp+314)
@@ -12461,7 +12461,7 @@ EffectBox_PostFill3Setup:
 	push	xbc
 	lda	xwa, (xsp+44)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+318)
 	lda	xbc, (xsp+314)
@@ -12512,7 +12512,7 @@ EffectBox_PostFill3Setup:
 	push	xwa
 	lda	xwa, (xsp+44)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	(xsp+42), 0
 	jr	EffectBox_DrawField1
@@ -12564,7 +12564,7 @@ EffectBox_DrawField1:
 	lda	xbc, (xsp+10)
 	push	xbc
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	(xsp+42), 0
 	jr	EffectBox_DrawField2
@@ -12707,7 +12707,7 @@ EffectBox_Dispatch_Join:
 	push xwa
 	lda xwa, (xsp+44)
 	push xwa
-	call 16712982
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp+10)
 	ld xwa, (xsp+4)
 	ld xwa, (xwa+28)
@@ -14374,7 +14374,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join14:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	a, (9750:16)
 	extz	wa
@@ -14397,7 +14397,7 @@ EffectBoxProc_CopyNameAndSetup_Code_Join14:
 	ld	xwa, (xbc)
 	inc	1, xwa
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	a, (9816:16)
 	extz	wa
@@ -14649,7 +14649,7 @@ SqedtFunc_ModeC_Entry:
 	ld	xwa, (xsp+10)
 	ld	xwa, (xwa+18)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 StringCopyEpilog:
 	ld xhl, (xsp + 12)
@@ -15307,7 +15307,7 @@ DspItem0_DisplayParamNames:
 	ld xwa, (xwa+18)
 	add xwa, xbc
 	push xwa
-	call 16712982
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp+10)
 	incm 1, (xsp+18)
 	cpw (xsp+18), 8
@@ -15336,7 +15336,7 @@ DspItem0_DisplayParamValues:
 	ld xwa, (xwa+18)
 	add xwa, xbc
 	push xwa
-	call 16712982
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp+10)
 	incm 1, (xsp+18)
 	cpw (xsp+18), 8
@@ -15666,7 +15666,7 @@ FormatEqParamValue:
 FormatEqParam_CopyAndReturn:
 	ld	xwa, (xix+18)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	xhl, xiz
 	jr	Equalizer_PopIzRet
@@ -15922,7 +15922,7 @@ FormatParamStr_CopyEnumName:
 	add XWA,XDE
 	push XWA
 	push XHL
-	call 0xff0516
+	call CmpNamingCheck_Helper
 	lda xsp, (xsp + 0x0a)
 	jr t, Equalizer_PadSpaceAndReturn
 Equalizer_CopyFixedString:

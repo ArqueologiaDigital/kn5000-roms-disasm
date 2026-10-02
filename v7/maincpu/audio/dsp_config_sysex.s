@@ -65,6 +65,7 @@ SysEx_ApplyVoiceParam_4B_128_Return:
 	inc	8, xsp
 	ret
 ; v10 name for this address: SysEx_ApplyVoiceParam_49 -- not a label here: v7 keeps that name at 0xFDAC20 for audio/audio_control_engine.s, sequencer/accompaniment_engine.s, sequencer/seq_event_playback.s, ui/setwall_routines.s, ui/ui_playback_modes.s
+SoundMode_ApplyVoiceParams_Helper:
 	dec	8, xsp
 	push	xiz
 	ld	(xsp + 6), xbc
@@ -74,7 +75,7 @@ SysEx_ApplyVoiceParam_4B_128_Return:
 	add	(xsp + 6), xwa
 	ld	a, (xsp + 10)
 	extz	wa
-	calr	-931
+	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper2
 	extz	hl
 	ld	xwa, 0x4900
 	ld	bc, hl
@@ -89,7 +90,7 @@ SysEx_ApplyVoiceParam_4B_128_Return:
 	ld	(xsp + 4), a
 	ld	a, (xsp + 10)
 	extz	wa
-	calr	-973
+	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper2
 	ld	(0xfc74:16), l
 SysEx_ApplyVoiceParam_49_ReadSubParams:
 	ld	xwa, 0x4904
@@ -113,7 +114,7 @@ SysEx_ApplyVoiceParam_49_SlotLoop:
 	extz	wa
 	ldto_berp	C, 0xf8
 	extz	bc
-	calr	-878
+	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4
 	ld	bc, hl
 	cp	bc, 0xd8f0
 	jr	z, SysEx_ApplyVoiceParam_49_SlotNext
@@ -147,7 +148,7 @@ SysEx_ApplyVoiceParam_49_128:
 	add	(xsp + 6), xwa
 	ld	a, (xsp + 10)
 	extz	wa
-	calr	-978
+	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper3
 	ld	(xsp + 10), l
 	lda	xbc, (0xfc74:16)
 	cp	xbc, (xsp + 6)
@@ -870,7 +871,7 @@ SeqOut_WriteTimedBytes:
 	call	SeqBuf_MidiOut_WriteBytes
 	inc	6, xsp
 	ldfr_werp	HL, 0xfa
-	call	0xfcf1c0
+	call	MIDI_SC0_ENABLE_TX
 	jr	MIDI_SeqProcess_DisableIntReturn
 SeqOut_WriteTimedBytes_BufferFull:
 	ldi_erpw	0xfa, 0xff, 0xff
@@ -912,7 +913,7 @@ MidiSeq_ReceiveAndForward:
 	ld	xwa, (xsp + 8)
 	ld	a, (xwa)
 	extz	wa
-	call	0xfcea53
+	call	MidiSeq_ReceiveAndForward_Helper
 	call	SeqMain_GetTimingValue
 	ld	iz, hl
 	jr	MidiSeq_ReceiveAndForward_Exit
@@ -973,7 +974,7 @@ MidiSeq_SendMultiByte_PC2SendLoop:
 	ld	xwa, (xsp + 10)
 	ld	a, (xwa)
 	extz	wa
-	call	0xfcea53
+	call	MidiSeq_ReceiveAndForward_Helper
 	call	SeqBuf_MidiOut_GetTimingValue
 	cp	hl, 1:i3
 	jr	lt, MidiSeq_SendMultiByte_PC2NextByte
@@ -986,7 +987,7 @@ MidiSeq_SendMultiByte_PC2SendLoop:
 	call	SeqBuf_MidiOut_WriteByte
 	inc	2, xsp
 	ld	(xsp + 2), hl
-	call	0xfcf1c0
+	call	MIDI_SC0_ENABLE_TX
 MidiSeq_SendMultiByte_PC2NextByte:
 	ld	xwa, 1:i3
 	add	(xsp + 10), xwa
@@ -1013,7 +1014,7 @@ MidiSeq_SendMultiByte_SerialSendLoop:
 	call	SeqBuf_MidiOut_WriteByte
 	inc	2, xsp
 	ld	(xsp + 2), hl
-	call	0xfcf1c0
+	call	MIDI_SC0_ENABLE_TX
 MidiSeq_SendMultiByte_SerialNextByte:
 	ld	xwa, 1:i3
 	add	(xsp + 10), xwa
@@ -1123,7 +1124,7 @@ MIDI_BroadcastCC_MidiOutLoop:
 	call	SeqBuf_MidiOut_WriteBytes
 	inc	6, xsp
 	ei	0
-	call	0xfcf1c0
+	call	MIDI_SC0_ENABLE_TX
 	inc1b_erp	0xfb
 	cp_erpb	0xfb, 0x0f
 	jr	ule, MIDI_BroadcastCC_MidiOutLoop
@@ -3298,6 +3299,7 @@ DSPCfg_Data_ParamDispatch_Helper_Skip3:
 	popw	iz
 	lda	xsp, (xsp+0x18)
 	retd	4
+EffEdit_DSPConfigBlock_Helper:
 	lda	xsp, (xsp-0xa)
 	push	xiz
 	ld	(xsp+0xa), e
@@ -4542,6 +4544,7 @@ DSPCfg_ReturnValueTable:
 	call	SndParam_Init
 	call	MainTitle_InitGraphicsAndEvents
 	jp	LoadAndRunXapr_Entry
+Boot_InitPeripherals_Helper:
 	push	xiz
 	ld	iz, wa	; Screen group ID
 	cp	iz, 0:i3
@@ -4805,6 +4808,7 @@ AudioModeChange_Handler:
 	call	AudioInit_DispatchChanges
 	ret
 ; v10 name for this address: Audio_CheckSubsystemReady -- not a label here: v7 keeps that name at 0xFDDAB8 for ui_widgets/widget_dispatch.s
+PerfMode_Handler_EvtB_Helper2_Helper11:
 	call	DSPCfg_EventType50_Code_Helper5
 	ld	wa, (0xc4fc:16)
 	and	wa, 0x60
@@ -4902,6 +4906,7 @@ UIStateEvt_DrumAssign_Notify:
 	orw	(0xc4f8:16), 4
 	ret
 ; v10 name for this address: UIStateEvt_TransposeUpdate -- not a label here: v7 keeps that name at 0xFDDE93 for kn5000_v7_program.s, ui_widgets/widget_dispatch.s
+AudioDispatch_CheckStereoMode_Code_Skip26:
 	bit	0, e
 	ret	z
 	bit	0, d

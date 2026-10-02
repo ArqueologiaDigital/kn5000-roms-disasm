@@ -277,9 +277,9 @@ BitMapOut_SetDefaultTimer:
 	ld	(36000:16), 64
 	ret
 BitMapOut_DecrementTimer:
-	call	16405594
+	call	GetTitleNow
 	cp	xhl, TITLE_WELCOM
-	jr	z, -18
+	jr	z, BitMapOut_SetDefaultTimer
 	ld	a, (36000:16)
 	cp	a, 0:i3
 	ret	z
@@ -288,12 +288,12 @@ BitMapOut_DecrementTimer:
 	cp	a, 0:i3
 	ret	nz
 	ld	xwa, 3:i3
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	de, hl
 	pushw	255
 	ldw	wa, 112
 	ld	bc, 2:i3
-	call	16624211
+	call	AddswbWr
 	ret
 BitMapOut_ByteData_TransitionSeq:
 	; framing ported from v10's source for the same label (same span length, statement for statement); 35 of 57 slots byte-identical
@@ -817,7 +817,7 @@ BitMapOut_CopyROMToWorkspace:
 	push	xwa
 	pushw	0
 	pushw	63904
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 BitMapOut_SelectiveFieldRestore:
@@ -1736,7 +1736,7 @@ BitMapOut_SaveDisplayToROM:
 	pushw	63904
 	pushw	3
 	pushw	51428
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 BitMapOut_DetectChanges:
@@ -3201,7 +3201,7 @@ BitMapOut_UpdateWidget_CheckType:
 
 BitMapOut_UpdateWidget_TypeA:
 	push	xiz
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	(xiz+16), 0
 	pop	xiz
@@ -3221,7 +3221,7 @@ BitMapOut_UpdateWidget_TypeB:
 	sub XWA,0x00000020
 	add XWA,XDE
 	push XWA
-	call 0xff05bc
+	call Mem_Copy
 	lda xsp, (xsp + 0x0a)
 	ret
 BitMapOut_UpdateWidget_PostDraw:
@@ -3235,7 +3235,7 @@ BitMapOut_UpdateWidget_PostDraw:
 	add	xwa, xbc
 	push	xwa
 	push	xiz
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	(xiz+16), 0
 	pop	xiz
@@ -3249,7 +3249,7 @@ BitMapOut_UpdateWidget_Finalize:
 	exts	xwa
 	add	xwa, xbc
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 BitMapOut_UpdateWidget_Done:

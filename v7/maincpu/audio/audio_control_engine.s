@@ -7525,7 +7525,7 @@ MidiStream_CmdPedalNotify_Helper2_Helper:
 	push_a
 	.byte 0x5b
 	.byte	0x90
-	call	0xfee019
+	call	MidiStream_CmdPedalNotify_Helper2_Helper_Helper
 	lda	xbc, (0x9052:16)
 	lda	xwa, (xsp)
 	ld	l, (xwa)
@@ -8461,7 +8461,7 @@ SeqTimer_RoundUp:
 	jr	nz, SeqTimer_ClearFlag
 	bit	4, (0x905d:16)
 	jr	nz, SeqTimer_ClearFlag
-	call	0xfd862c
+	call	SeqData_DispatchLoop_Done
 ; (pre-port v7 note about the bytes at 0xFC9BBA:)
 ; anddi8 (0x90f9), 239 (v7 patched)
 SeqTimer_ClearFlag:
@@ -12301,11 +12301,11 @@ MidiStream_HandleRunningStatus_Skip6:
 	cp	wa, 0:i3
 	jr	nz, MidiStream_HandleRunningStatus_Loop2
 	ld	wa, (xsp+0xa)
-	calr	6547
+	calr	Audio_ResetAfterPayloadError_Helper_Helper
 	jr	MidiStream_HandleRunningStatus_Loop2
 MidiStream_HandleRunningStatus_Skip7:
 	ld	wa, (xsp+0xa)
-	calr	6728
+	calr	Audio_ResetAfterPayloadError_Helper_Helper2
 	jr	MidiStream_HandleRunningStatus_Loop2
 MidiStream_HandleRunningStatus_Skip8:
 	ldw	(xsp+0x4), 0xffff
@@ -12330,13 +12330,14 @@ MidiStream_HandleRunningStatus_Skip9:
 UIState_CheckAndRenderBitmap_Helper:
 	pushw	iz
 	ld	iz, de
-	calr	7006
+	calr	UIState_CheckAndRenderBitmap_Helper_Helper
 	ld	xwa, xhl
 	ld	bc, iz
 	ld	de, (xsp+0x6)
 	calr	Audio_ResetAfterPayloadError_Helper
 	popw	iz
 	retd	2
+MainTitle_PrepareAndDispatch_Helper:
 	lda	xsp, (xsp-0xa)
 	push	xiz
 	ld	(xsp+0xa), de
@@ -12398,10 +12399,10 @@ MidiStream_HandleRunningStatus_Join4:
 MidiStream_HandleRunningStatus_Skip11:
 	ld	xwa, (xsp+0x6)
 	or	xwa, xwa
-	jr	z, 71
+	jr	z, interrupt_vector_trampolines_Skip2
 	ld	a, (xwa+0xe)
 	cp	a, 8
-	jr	nc, 63
+	jr	nc, interrupt_vector_trampolines_Skip2
 	extz	wa
 	sla	wa, 2
 	lda	xbc, (SndParam_Register2Handlers:24)
@@ -12413,12 +12414,12 @@ MidiStream_HandleRunningStatus_Skip11:
 	call	(xhl)
 	ld	xbc, xhl
 	cpw	(xbc), 0xffff
-	jr	z, 27
+	jr	z, interrupt_vector_trampolines_Skip2
 	ld	wa, (xbc+0x2)
 	cp	wa, 1:i3
-	jr	z, 12
+	jr	z, interrupt_vector_trampolines_Skip
 	cp	wa, 0:i3
-	jr	nz, 21
+	jr	nz, interrupt_vector_trampolines_Join
 	ld	wa, (xsp+0xa)
-	calr	6249
-	jr	13
+	calr	Audio_ResetAfterPayloadError_Helper_Helper
+	jr	interrupt_vector_trampolines_Join

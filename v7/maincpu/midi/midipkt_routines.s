@@ -633,7 +633,7 @@ MidiPkt_BuildControl_Helper:
 	push	xwa
 	ld	xwa, (xiz+4)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+8)
 	ld	xbc, (xiz)
@@ -827,7 +827,7 @@ MidiPkt_SysExValidator_Data_Skip3:
 	pushw	4
 	ldw	wa, 145
 	ld	bc, 3:i3
-	call	16624162
+	call	AssswbWr
 ; v7 NAME DISPLACED: `MidiPkt_EnqueueControl_3358_SplitNibbles` (0xFDA0FF) falls inside the line above in the
 ; correct framing (v10 0xFDA8D0).  Kept as an alias because another v7
 ; file references this address by this name.
@@ -867,7 +867,7 @@ MidiPkt_SysExProcessor_Data_Skip3:
 	pushw	4
 	ldw	wa, 145
 	ld	bc, 3:i3
-	call	16624162
+	call	AssswbWr
 	push	xiz
 	call	SwbtWr_ReinitBothBanks
 	pop	xiz
@@ -967,13 +967,13 @@ MidiPkt_SysExBulkTransfer_Data_Join:
 	pushw	0
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	16567114
+	call	UIState_CheckAndRenderBitmap_Helper
 	ldto_berp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
 	ldw	de, 120
-	call	16567114
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x340
 	lda	xix, (xsp+10)
 	ldiw
@@ -1002,13 +1002,13 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Skip5:
 	pushw	0
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	16567114
+	call	UIState_CheckAndRenderBitmap_Helper
 	ldto_berp	a, 251
 	extz	wa
 	pushw	0
 	ldw	bc, 32
 	ld	de, 0:i3
-	call	16567114
+	call	UIState_CheckAndRenderBitmap_Helper
 	ld	xiy, MidiPkt_EventType_Table_0x34C
 	lda	xix, (xsp+10)
 	ldiw
@@ -1057,7 +1057,7 @@ MidiPkt_SysExBulkTransfer_Data_Join4:
 	cp	hl, 0:i3
 	jr	lt, MidiPkt_SysExBulkTransfer_Data_Epilogue
 	ld	xwa, 0x4b04
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, MidiPkt_SysExBulkTransfer_Data_Epilogue
@@ -1119,7 +1119,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Join:
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper
 	ld	(xsp+4), l
 	ld	xwa, 0x4b04
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, SysEx_ClampVoiceIndex8_Epilogue
@@ -1130,7 +1130,7 @@ SysEx_ClampVoiceIndex8_Loop:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 0x4b10
-	call	16629526
+	call	DSPCfg_ResolveAndExtract
 	cp	hl, 1:i3
 	jr	z, SysEx_ClampVoiceIndex8_Skip
 	cp	hl, 2:i3
@@ -1181,7 +1181,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Join2:
 	cp	hl, 0:i3
 	jr	lt, SysEx_ClampVoiceIndex128_Epilogue
 	ld	xwa, 0x4904
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, SysEx_ClampVoiceIndex128_Epilogue
@@ -1234,7 +1234,7 @@ MidiPkt_SendBankSelect_Helper:
 	calr	MidiPkt_SysExBulkTransfer_Data_Helper2_Helper3
 	ld	(xsp+4), l
 	ld	xwa, 0x4904
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	qiz, hl
 	cp	qiz, 0
 	jr	lt, SysEx_ApplyToSlot49_Format_Data_Epilogue
@@ -1245,7 +1245,7 @@ SysEx_ApplyToSlot49_Format_Data_Loop:
 	ld	wa, iz
 	exts	xwa
 	add	xwa, 0x4910
-	call	16629526
+	call	DSPCfg_ResolveAndExtract
 	cp	hl, 1:i3
 	jr	z, SysEx_ApplyToSlot49_Format_Data_Skip
 	cp	hl, 2:i3
@@ -1377,6 +1377,7 @@ SysEx_DispatchByChannel_Entry_Code_Sub:
 SysEx_DispatchByChannel_49_Entry:
 	ld	hl, (xwa+de)
 	ret
+SMF_ProcessSysExBlock_Helper:
 	cp	c, 10
 	ret	ugt
 	cp	(xwa+), 240
@@ -1427,11 +1428,11 @@ SysEx_DispatchByChannel_49_Entry_Code_Skip2:
 SysEx_DispatchByChannel_49_Entry_Code_Skip3:
 	ld	a, (xwa)
 	extz	wa
-	jrl	352
+	jrl	SoundMode_ApplyVoiceParams_Helper
 SysEx_DispatchByChannel_49_Entry_Code_Skip4:
 	ld	a, (xwa)
 	extz	wa
-	calr	524
+	calr	SysEx_ApplyVoiceParam_49_128
 	ret
 SysEx_DispatchByChannel_49_Entry_Code_Join2:
 	dec 8, xsp
@@ -1462,7 +1463,7 @@ SysEx_DispatchByChannel_49_Entry_Code_Join2:
 	ld (0xfc8e:16), l
 SysEx_DispatchByChannel_49_Entry_Code_Skip5:
 	ld xwa, 0x4b04
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	ge, SysEx_DispatchByChannel_49_Entry_Code_Skip7
@@ -1519,5 +1520,5 @@ SysEx_DispatchByChannel_49_Entry_Code_Join3:
 	ld (xsp + 10), l
 	lda xbc, (0xfc8e:16)
 	cp xbc, (xsp + 6)
-	jr	z, 12
+	jr	z, SysEx_ApplyVoiceParam_4B_128_ReadSub
 	ld a, (xbc)

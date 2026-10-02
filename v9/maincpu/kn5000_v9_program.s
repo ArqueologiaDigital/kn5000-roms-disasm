@@ -2001,6 +2001,7 @@ Voice_FactoryPresetData_Code_Skip:
 	setm	6, (xde)
 Voice_FactoryPresetData_Code_Join:
 	incm8	1, (xsp+24)
+Voice_FactoryPresetData_Code_Join6:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)

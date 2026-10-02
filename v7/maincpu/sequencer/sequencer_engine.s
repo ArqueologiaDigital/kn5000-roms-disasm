@@ -270,7 +270,7 @@ SeqPlay_ActivatePartsAndSendOff:
 
 	and (0xf19e:16), wa
 
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 
 	ldib_erp 0xfb, 1
 
@@ -325,7 +325,7 @@ SeqPlay_DeactivateParts_ShiftDone:
 SeqPlay_DeactivateParts_LoopNext:
 	inc1b_erp	251	; inc 1,qizh
 	cp_erpb	251, 16	; cp qizh,0x10
-	jr	c, -38
+	jr	c, SeqPlay_DeactivateParts_PartLoop
 	ei	0x06
 	ldmm8	10443, 1051
 	ldmm16	10444, 1052
@@ -334,7 +334,7 @@ SeqPlay_DeactivateParts_LoopNext:
 	ldw	(0x28a8:16), 0x0000
 	ldw_d16	wa, (10438)
 	or	(0xf19e:16), wa
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	pop	qiz
 	ret
 SeqPlay_ResetPlaybackState:
@@ -356,14 +356,14 @@ SeqPlay_InitTempoAndActivateParts:
 	call	TempoRingBuf_Init
 	ldw_d16	wa, (10408)
 	cp	wa, 0:i3
-	jr	z, 38
+	jr	z, SeqPlay_InitAccAndSetMode
 	or	(0xf19e:16), wa
 	set	3, (10419:16)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	set	0, (10437:16)
 	ldb_d8	a, (10418)
 	bit	0, a
-	jr	z, 13
+	jr	z, SeqPlay_InitAccAndSetMode
 	set	1, a
 	ld	(0x28b2:16), a
 	ldmm16	9014, 9832
@@ -573,18 +573,18 @@ SeqPlay_ProcessParts_PartLoop:
 
 SeqPlay_ProcessParts_ShiftDone:
 	and	bc, (10574:16)
-	jr	z, 109	; -> 0xF38DFB
+	jr	z, SeqPlay_ProcessParts_LoopNext	; -> 0xF38DFB
 	call	Part_ProcessAndDecrementVoice
 	ld	iz, hl
 	cp	iz, 65535
-	jr	nz, 32	; -> 0xF38DBA
+	jr	nz, SeqPlay_ProcessParts_HandleResult	; -> 0xF38DBA
 	ldw	(10408:16), 0
 	ldw	(61854:16), 0
 	ldw	(10410:16), 0
 	ldw	(10420:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	l, 2:opc
-	jr	92	; -> 0xF38E16
+	jr	SeqPlay_ProcessParts_Return	; -> 0xF38E16
 SeqPlay_ProcessParts_HandleResult:
 	set 0, (9834:16)
 	ld wa, iz
@@ -730,18 +730,18 @@ SeqAcc_ProcessTempo_NextPart:
 	inc	1, a
 	ld	(0x25e0:16), a
 	cp	a, 16
-	jrl	c, -136
+	jrl	c, SeqAcc_ProcessTempo_PartScanLoop
 	ldw	(0x28aa:16), 0x0000
 	ldw	(0x28b4:16), 0x0000
 	ldw	(0x28a8:16), 0x0000
 	ldw_d16	wa, (10576)
 	or	(0xf19e:16), wa
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	set	4, (10419:16)
 	res	3, (10407:16)
 	ldw	wa, 35
 	call	SoundCtrl_SaveAndSendCmd_EE
-	jr	41
+	jr	SeqPlay_FinalizeAndReturn
 SeqAcc_ProcessTempo_NoActiveParts:
 	ldw (0x28aa:16), 0
 
@@ -749,7 +749,7 @@ SeqAcc_ProcessTempo_NoActiveParts:
 
 	ldw (0x28a8:16), 0
 
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 
 	set 4, (0x28b3:16)
 
@@ -798,7 +798,7 @@ SeqPlay_SendStopAndClearParts:
 
 	ldw (0x28b4:16), 0
 
-	call 16635550
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 
 	set 4, (0x28b3:16)
 
@@ -819,7 +819,7 @@ SeqPlay_FinalCleanupAndReset:
 SeqPlay_FinalCleanup_ClearFlags:
 	res 3, (0x28b3:16)
 
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 
 	ld (0x28c5:16), 0
 
@@ -1141,9 +1141,9 @@ SeqPlay_SyncPosition_ApplyParts:
 	ld	wa, qbc
 	ld	(10438:16), wa
 	and	(61854:16), de
-	call	16635550
-	calr	113
-	jr	109	; -> 0xF3936A
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	calr	SeqPlay_ReactivatePartsAndResume
+	jr	SeqPlay_PopIzRet	; -> 0xF3936A
 SeqPlay_SyncPosition_AltMode:
 	ld wa, (0xf23a:16)
 	ld de, bc
@@ -1171,13 +1171,13 @@ SeqPlay_SyncPosition_StopAndReset:
 	ldw_d16	wa, (10438)
 	or	(0xf19e:16), wa
 	ldw	(0x28c6:16), 0x0000
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw_d16	wa, (10585)
 	dec	1, wa
 	ld	(10444:16), wa
 	ld	(10443:16), 95
 	cpw	(10420:16), 0
-	jr	nz, 15
+	jr	nz, SeqPlay_PopIzRet
 	ld	(8956:16), 0
 	ldmm16	9832, 62010
 	call	NoteEditSy_SendModeScrollReset
@@ -1192,7 +1192,7 @@ SeqPlay_ReactivatePartsAndResume:
 
 	res 3, (0x28b3:16)
 
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 
 	set 6, (0x28c5:16)
 
@@ -2136,7 +2136,7 @@ SeqPlay_FindVoicesAndReturn:
 	ret
 
 SeqPlay_InitFreshPlayback:
-	calr 63255
+	calr SeqAcc_InitPlaybackState
 
 	ld a, (0x28b2:16)
 
@@ -2150,13 +2150,13 @@ SeqPlay_InitFreshPlayback:
 
 	res 3, (0x28b3:16)
 
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 
 	res 3, (0x28a7:16)
 
 	cpw (0x28a8:16), 0
 
-	jrl z, 224
+	jrl z, SeqPlay_InitFresh_Return
 
 	ldw (8998:16), 0
 
@@ -2193,16 +2193,16 @@ SeqPlay_InitFresh_PartLoopNext:
 	inc	1, l
 	inc	1, c
 	cp	l, 16
-	jr	ule, -47
+	jr	ule, SeqPlay_InitFresh_PartClearLoop
 	ld	a, (10418:16)
 	bit	0, a
-	jr	z, 23
+	jr	z, SeqPlay_InitFresh_SetPosition
 	set	1, a
 	ld	(10418:16), a
 	ld	wa, (9832:16)
 	ld	(9014:16), wa
 	set	3, (10419:16)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 SeqPlay_InitFresh_SetPosition:
 	ldw	(9008:16), 0
 	call	NoteEditSy_SendModeScrollReset
@@ -2214,10 +2214,10 @@ SeqPlay_InitFresh_SetPosition:
 	ld	(9010:16), a
 	call	SeqMode_SendStatusUpdate
 	cpw	(61854:16), 0
-	jr	z, 10
+	jr	z, SeqPlay_InitFresh_NoVoices
 	set	3, (10419:16)
-	call	16635550
-	jr	24
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	jr	SeqPlay_InitFresh_TempoInit
 SeqPlay_InitFresh_NoVoices:
 	ldw (8980:16), 0
 	ld a, (0x28a7:16)
@@ -2227,15 +2227,15 @@ SeqPlay_InitFresh_NoVoices:
 	call SeqBuf_Init
 
 SeqPlay_InitFresh_TempoInit:
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	TempoRingBuf_Init
-	call	16625030
+	call	BitMapOut_ComputeRegionDelta
 	bit	0, (10418:16)
-	jr	nz, 16
+	jr	nz, SeqPlay_InitFresh_State8orC
 	cpw	(61854:16), 0
-	jr	z, 4
+	jr	z, SeqPlay_InitFresh_StateB
 	ld	a, 11:opc
-	jr	16
+	jr	SeqPlay_StoreChannelVal
 SeqPlay_InitFresh_StateB:
 	ld a, 0x7:opc
 	jr SeqPlay_StoreChannelVal
@@ -2303,16 +2303,16 @@ SeqPlay_InitResume_LoopNext:
 	ld (9014:16), wa
 SeqPlay_InitResume_SetFlags:
 	set	3, (10419:16)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldmm16	9008, 1052
 	call	NoteEditSy_SendModeScrollReset
 	ld	a, (1075:16)
 	ld	(9010:16), a
 	call	SeqMode_SendStatusUpdate
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	SeqBuf_Init
 	call	TempoRingBuf_Init
-	call	16625030
+	call	BitMapOut_ComputeRegionDelta
 	ld	a, (8986:16)
 	ldfr_berp	a, 251
 	extz	wa
@@ -2383,24 +2383,24 @@ SeqPlay_SaveAndPrepareState:
 
 SeqPlay_SaveState_CheckActive:
 	bit	0, (10437:16)
-	jr	z, 38
+	jr	z, SeqPlay_SaveState_NoActiveParts
 	res	1, (10419:16)
 	ldb_d8	a, (8956)
 	extz	wa
 	lda	xbc, (SeqPlay_SaveAndPrepareState_Table:24)
 	ld	(8956), (xbc+wa)
 	bit	0, (62012:16)
-	jr	nz, 57
+	jr	nz, SeqPlay_ReassignVoicesAlt
 	res	3, (10419:16)
-	call	16635550
-	jr	47
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	jr	SeqPlay_ReassignVoicesAlt
 SeqPlay_SaveState_NoActiveParts:
 	res	3, (10419:16)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	bit	1, (10419:16)
-	jr	nz, 16
+	jr	nz, SeqPlay_SaveState_CheckBit1
 	bit	0, (10418:16)
-	jr	z, 10
+	jr	z, SeqPlay_SaveState_CheckBit1
 	ldmm16	9832, 9014
 	call	NoteEditSy_SendModeScrollReset
 SeqPlay_SaveState_CheckBit1:
@@ -2596,29 +2596,29 @@ SeqPlay_HandleEvent_StopAndClean:
 	call	BitMapOut_PrepareAndDisplaySimple
 	call	AccompSeq_StopSequence
 	cpw	(61854:16), 0
-	jr	z, 112
+	jr	z, SeqPlay_ClearFlagsRet
 	cp	(35992:16), 19
-	jr	nz, 16
+	jr	nz, SeqPlay_HandleEvent_SyncTiming
 	ldw	(61854:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	(10420:16), 0
 SeqPlay_HandleEvent_SyncTiming:
 	set	2, (10407:16)
 	call	Seq_SyncPositionAndOutputMIDITiming
 	ld	(1073:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldb_d8	a, (13278)
 	bit	2, a
-	jr	z, 45
+	jr	z, SeqPlay_CheckSilentAndStop
 	ldb_d8	e, (12920)
 	ldb_d8	c, (12921)
 	ldb_d8	a, (12940)
 	cp	e, 0:i3
-	jr	nz, 8
+	jr	nz, SeqPlay_HandleEvent_ClearAccFlag
 	cp	c, 0:i3
-	jr	nz, 4
+	jr	nz, SeqPlay_HandleEvent_ClearAccFlag
 	cp	a, 0:i3
-	jr	z, 6
+	jr	z, SeqPlay_HandleEvent_SetAccFlag
 SeqPlay_HandleEvent_ClearAccFlag:
 	res 0, (0x28a6:16)
 	jr SeqPlay_CheckSilentAndStop
@@ -2689,13 +2689,13 @@ SeqPlay_StopAndCleanup:
 	res	1, a
 	ld	(10418:16), a
 	ldw	(10408:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	(10420:16), 0
 	res	3, (10419:16)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	SeqBuffer_ClearAndInitIteration
-	call	16635550
-	jrl	178
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	jrl	SeqPlay_ProcessVoice_Return
 SeqPlay_ProcessVoice_ReadTempo:
 	ld wa, (9012:16)
 	ld (9832:16), wa
@@ -4796,7 +4796,7 @@ AccPedalConfig_CheckCtrl7:
 	pushw	wa
 	ldw	wa, 72
 	ld	bc, 7:i3
-	call	16624211
+	call	AddswbWr
 	ld	(7546:16), 72
 	ld	(7548:16), 7
 	ldto_berp	a, 250
@@ -5025,7 +5025,7 @@ AccPedalDirect_ClearBit7:
 	extz	wa
 	pushw	wa
 	ldw	wa, 72
-	call	16624211
+	call	AddswbWr
 	ld	(7546:16), 72
 	ld	(7548), (xiz+3)
 	ld	(7550), (xsp+4)
@@ -5090,7 +5090,7 @@ AccPedalTempo_ClearBit7:
 
 	ldw bc, 0x8
 
-	call	16624211
+	call	AddswbWr
 
 	ldto_berp E, 0xfb
 
@@ -5103,7 +5103,7 @@ AccPedalTempo_ClearBit7:
 	ldw bc, 0x9
 
 	; call AddswbWr (v7 addr)
-	call	16624211
+	call	AddswbWr
 
 	; call SeqTimer_UpdateTempoReg (v7 addr)
 	call	SeqTimer_UpdateTempoReg
@@ -7211,7 +7211,7 @@ SeqPlay_EmergencyStopAll:
 	ret NZ
 	ld	(8976:16), 1
 	ldw	(0xf19e:16), 0x0000
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	AccWrap_PositionClear
 	res	0, (10406:16)
 	ldw	wa, 50
@@ -7239,7 +7239,7 @@ Seq_ResetRestart_NormalPath:
 	calr SeqAcc_InitPlaybackState
 
 Seq_ResetRestart_CheckSubsystem:
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 SeqPlay_StopAndResetAll:
 	bit 0, (0x28c5:16)
 	jr z, SeqPlay_StopReset_NotPlaying
@@ -7283,7 +7283,7 @@ SeqPlay_StopReset_CleanupAll:
 	cp	(35992:16), 19
 	ret	nz
 	ldw	(61854:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	(10420:16), 0
 	call	UI_PostTimerResetEvent
 	call	Demo_SelectEntry_AfterSongLoad
@@ -8108,11 +8108,11 @@ SeqPlay_ReallocateAndReconfig:
 	push XIZ
 	ldw WA, 0x0032
 	call SeqBuf_WriteNoteOffEntry
-	call 0xfe09be
-	call 0xfdee26
+	call Interrupt_FlagSetBytecode_Helper2
+	call AudioInit_RefreshToneBank
 	call VoiceAlloc_ProcessAll
 	call BitMapOut_PrepareAndDisplay
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	cpw (0x28a8:16), 0x0000
 	jrl z, SeqPlay_PendingCh_Return
 	calr SeqChanAssignExt_InitLoop
@@ -8358,7 +8358,7 @@ SeqPlay_PendingCh_ActivateNext:
 
 SeqPlay_PendingCh_ClearAndDealloc:
 	ldw	(10408:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	(10410:16), 0
 SeqPlay_PendingCh_Return:
 	call Part_DeallocVoices1And2
@@ -8655,9 +8655,9 @@ SeqActivate_PartShiftDone:
 SeqActivate_PartLoopNext:
 	inc1b_erp	251
 	cp_erpb	251, 16
-	jr	ule, -40	; -> 0xF3D74D
+	jr	ule, SeqActivate_PartLoop	; -> 0xF3D74D
 	ldw	(10408:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	(10410:16), 0
 	ldw	wa, 50
 	call	SeqBuf_WriteNoteOffEntry
@@ -8665,7 +8665,7 @@ SeqActivate_PartLoopNext:
 	call	Interrupt_FlagSetBytecode_Helper
 	call	VoiceAlloc_ProcessAll
 	call	BitMapOut_PrepareAndDisplay
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	pop	qiz
 	ret
 SeqPlay_CheckDrumAndStart:
@@ -8960,7 +8960,7 @@ SeqBufDirect_Return:
 
 SeqBuf_FlushAndReinit_NoteEvents:
 	call	SeqBuf_SaveWritePos
-	call	16646645
+	call	AccNoteOn_ChannelDispatch
 	call	SeqBuf_Init
 	ld	(7556:16), 0
 	ret
@@ -9680,7 +9680,7 @@ PartDetect_LookupAndApply:
 	pushw	255
 	ldw	wa, 144
 	ldw	bc, 16
-	call	16624211
+	call	AddswbWr
 	ret
 Part_DeactivateVoiceChannel:
 	dec 2, xsp
@@ -9698,22 +9698,22 @@ PartDeact_CheckSysFlags:
 	ld	a, (xsp)
 	extz	wa
 	bit	2, (1057:16)
-	jr	z, 57
+	jr	z, PartDeact_ClearPartBit
 	cpw	(61854:16), 0
-	jr	nz, 44
+	jr	nz, PartDeact_SendVoiceOff
 	ldw	(0x28b4:16), 0x0000
 	ldw	wa, 50
-	calr	65291
+	calr	SeqBuf_WriteNoteOffEntry
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 1:i3
-	calr	13171
-	calr	4231
+	calr	Chan_SetActiveBit
+	calr	VoiceAlloc_ProcessAll
 	ldw	(0xf19e:16), 0x0000
-	call	16635550
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	SeqBuf_Init
-	jr	50
+	jr	AccWrap_ClearPositionAndReset
 PartDeact_SendVoiceOff:
 	calr Part_SendVoiceOffAndCCEvents
 	jr AccWrap_ClearPositionAndReset
@@ -9741,7 +9741,7 @@ AccWrap_ClearPositionAndReset:
 	call AccWrap_PositionClear
 
 PartDeact_CheckSubsystem:
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	inc	2, xsp
 	ret
 Accomp_UpdateModeFlag:
@@ -9759,7 +9759,7 @@ AccompMode_ClearFlag:
 AccompMode_ApplyAndNotify:
 	ld	wa, (65516:24)
 	ld	(61854:16), wa
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	wa, 76
 	jp	CtrlPanel_SetIndicatorBit
 Accomp_ValidateAutoPlayChordVoice:
@@ -9845,7 +9845,7 @@ SeqSync_CheckDemoMode:
 	lda	xwa, (xsp+4)
 	push	xwa
 	pushw	3
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc	6, xsp
 	ei	0x00
 Seq_PopIzSkip8Ret:
@@ -11070,7 +11070,7 @@ SeqVoiceSingle_LookupAndApply:
 	pushw	255
 	ldw	wa, 144
 	ldw	bc, 16
-	call	16624211
+	call	AddswbWr
 	ret
 SeqNotify_DataBlock:
 	set	0, (10419:16)
@@ -11538,7 +11538,7 @@ SeqVoice_ScanParts_ReadGPIO:
 	pushw	7
 	ldw	wa, 72
 	ld	bc, 4:i3
-	call	16624211
+	call	AddswbWr
 SeqVoice_ScanParts_LoopNext:
 	inc1b_erp 0xfb
 	ldto_berp A, 0xfb
@@ -11914,7 +11914,7 @@ PartRelRange_OuterNext:
 	ldw	wa, 145
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	call	16624211
+	call	AddswbWr
 	pop	xiz
 	lda	xsp, (xsp+10)
 	ret
@@ -12456,7 +12456,7 @@ SeqTempo_ApplyAndReturn:
 	cp	a, (65507:24)
 	jr	nz, SeqBufPos_HandleOverflow	; -> 0xF3F9FE
 	ldw	(61854:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	(65516:24), 0
 	ldw	(61852:16), 0
 	ld	(62027:16), 0
@@ -12553,7 +12553,7 @@ SeqBufPos_Return:
 	jr	ule, SeqBufPos_StoreResult	; -> 0xF3FA0D
 	ldw	(61854:16), 0
 	ldw	(65516:24), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	(62027:16), 0
 	calr	SeqStatus_ResetAndSendCmd
 	ldw	(10357:16), 0
@@ -13698,7 +13698,7 @@ SeqPart_CalcDivideAndStore:
 	dec	1, xhl
 	ld	xwa, xhl
 	ld	xbc, 251
-	call	16712763
+	call	Math_DivideU32
 	ld	(9914:16), xhl
 SeqPart_CalcStoreResult:
 	ld xwa, (9914:16)
@@ -13808,7 +13808,7 @@ SeqPart_CalcTickDivide:
 	sub	xhl, xwa
 	ld	xwa, xhl
 	ld	xbc, 251
-	call	16712763
+	call	Math_DivideU32
 	inc	1, xhl
 SeqPart_CalcTickStore:
 	ld (9930:16), hl
@@ -13956,7 +13956,7 @@ SeqBuf_CalcPageDivision:
 	add	xwa, 251
 	dec	1, xwa
 	ld	xbc, 251
-	call	16712763
+	call	Math_DivideU32
 	ld	iz, hl
 	ld	(9882:16), iz
 	ld	wa, iz
@@ -14902,7 +14902,7 @@ SeqPlay_HandleSmallerDelta:
 	sub	(xsp+8), xwa
 	ld	xwa, (xsp+8)
 	ld	xbc, 251
-	call	16712763
+	call	Math_DivideU32
 	ld	(xsp+22), hl
 	ld	xwa, (xsp+8)
 	ld	xbc, 251
@@ -15409,7 +15409,7 @@ Chan_ClearBit:
 	and (0xf19e:16), de
 
 Chan_CheckSubsystem:
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 SeqVoice_SetOrClearBitMask:
 	dec 1, a
 	ld de, 1:i3
@@ -15428,7 +15428,7 @@ SeqVoiceBit_ClearBit:
 	and (0x28a8:16), de
 
 SeqVoiceBit_CheckSubsystem:
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 Part_CopyBlock16:
 	cp a, 0:i3
 	jr nz, PartCopy16_ComputeAddr
@@ -15752,7 +15752,7 @@ PartSubBlk_WriteAndCheck:
 	extz	bc
 	lda_rr	xwa, xhl, bc
 	ld	(xwa-1), e
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 Part_ReadSubBlock32:
 	cp a, 0:i3
 	jr nz, PartSubBlkRd_ComputeAddr
@@ -15793,7 +15793,7 @@ PartSubBlk48_WriteAndCheck:
 	extz	bc
 	lda_rr	xwa, xhl, bc
 	ld	(xwa-1), e
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 Part_VoiceSearchBlock:
 	cp	a, 0:i3
 	jr	nz, Part_WriteSubBlock48_Skip
@@ -18507,27 +18507,27 @@ SeqInit_FullReset:
 	push	qiz
 	ldw	(9832:16), 1
 	ldw	(61854:16), 0
-	call	16635550
-	calr	53465
-	calr	976
-	calr	50828
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	calr	SeqVoice_SetDefaultParams
+	calr	SeqInit_ClearPlaybackFlags
+	calr	SeqParams_InitDefaults
 	call	BmDrEdit_InitDisplayParams
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldib_erp	251, 0
 SeqInit_ClearCBLoop:
 	ldto_berp	a, 251
 	extz	wa
 	ldw	bc, 203
 	ld	de, 0:i3
-	calr	59102
+	calr	Part_WriteByte
 	inc1b_erp	251
 	cp_erpb	251, 10
-	jr	ule, -22	; -> 0xF42E25
+	jr	ule, SeqInit_ClearCBLoop	; -> 0xF42E25
 	pushw	1
 	ldw	wa, 145
 	ld	bc, 3:i3
 	ld	de, 0:i3
-	call	16624211
+	call	AddswbWr
 	ldib_erp	251, 0
 SeqInit_WriteDefaultsLoop:
 	ldto_berp A, 0xfb
@@ -18843,7 +18843,7 @@ SeqInit_ClearPartDataLoop:
 	inc1b_erp	251
 	cp_erpb	251, 10
 	jrl	ule, SeqInit_FinalizeSetup
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	res	0, (10405:16)
 	ldw	wa, 76
 	call	CtrlPanel_SetIndicatorBit
@@ -19050,8 +19050,8 @@ Chan_ActivateAndNotify:
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 1:i3
-	calr	57589
-	call	16635550
+	calr	Chan_SetActiveBit
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	inc	2, xsp
 	ret
 SeqPlay_DeactivateChannelFull:
@@ -19067,14 +19067,14 @@ SeqPlay_DeactClearBit:
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 0:i3
-	calr	57553
-	call	16635550
+	calr	Chan_SetActiveBit
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	cpw	(61854:16), 0
-	jr	nz, 16
+	jr	nz, Chan_DeactivateAfterAccomp
 	bit	2, (1054:16)
-	jr	z, 6
+	jr	z, SeqPlay_DeactDispatchAccomp
 	call	AccWrap_PlayModeStopExpr
-	jr	4
+	jr	Chan_DeactivateAfterAccomp
 SeqPlay_DeactDispatchAccomp:
 	call AccWrap_PlayModeDispatch
 
@@ -19119,12 +19119,12 @@ SeqActivate_DispatchAccomp:
 SeqActivate_AssignAndEnable:
 	ld	a, (xsp)
 	extz	wa
-	calr	326
+	calr	SeqVoice_UpdateSubBlockAssign
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 1:i3
-	calr	57433
-	call	16635550
+	calr	Chan_SetActiveBit
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	inc	2, xsp
 	ret
 Part_DeactivateChannel:
@@ -19133,11 +19133,11 @@ Part_DeactivateChannel:
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 0:i3
-	calr	57413
-	call	16635550
+	calr	Chan_SetActiveBit
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	a, (xsp)
 	extz	wa
-	calr	44166
+	calr	Part_DeactivateVoiceChannel
 	inc	2, xsp
 	ret
 SeqPlay_FindAndActivateVoice:
@@ -19184,11 +19184,11 @@ SeqPlay_FindCheckBitMask:
 SeqPlay_FindClearFlags:
 	ld	a, (xsp)
 	extz	wa
-	calr	250
+	calr	SeqPlay_ReassignVoiceSlot
 	bit	1, (10417:16)
-	jr	z, 10
+	jr	z, SeqPlay_FindSetBitAndDeact
 	ldw	(10408:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 SeqPlay_FindSetBitAndDeact:
 	ld	a, (xsp)
 	extz	wa
@@ -19211,11 +19211,11 @@ SeqPlay_FindSetBitAndDeact:
 	ei	0x00
 	call	SeqBuf_Init
 SeqPlay_FindAfterReset:
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldb_d8	a, (1056)
 	and	a, 5
 	call	z, (16094901:24)
-	calr	43861
+	calr	Part_DetectSingleVoiceType
 SeqPlay_FindReturn:
 	inc 2, xsp
 	ret
@@ -19227,7 +19227,7 @@ SeqVoice_DeactivateAndReinit:
 	extz WA
 	ld bc, 0:i3
 	calr SeqVoice_SetOrClearBitMask
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	ld A,(XSP)
 	extz WA
 	calr SeqVoice_UpdateSubBlockAssign
@@ -19357,7 +19357,7 @@ SeqNoteOff_ShiftDone3:
 	ldw	wa, 72
 	ld	bc, 5:i3
 	ld	de, 0:i3
-	call	16624211
+	call	AddswbWr
 	cpw	(10408:16), 0
 	jr	nz, SeqVoice_PopRetFA
 	cp	(7570:16), 0
@@ -19376,9 +19376,9 @@ SeqPlay_SaveStateAndCleanup:
 	bit 0, (0x28a5:16)
 	jr nz, SeqSave_JumpCheckSubsys
 	ldw (0xf19e:16), 0x0000
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 SeqSave_JumpCheckSubsys:
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 SeqPlay_CheckAndStartPlayback:
 	cp (9508:16), 0
 	jp nz, (TempoRingBuf_Init:24)
@@ -19426,12 +19426,12 @@ SeqAcc_RestorePlaybackState:
 	pushw iz
 	ld iz, (0x2875:16)
 	ld (0xf19e:16), iz
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	cp iz, 0:i3
 	jr z, SeqRestore_ClearIndicator
 	res 3, (0x28a7:16)
 	call SeqAcc_InitPlaybackState
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	set 0, (0x28a5:16)
 	jr t, SeqRestore_SetIndicator
 SeqRestore_ClearIndicator:
@@ -19525,23 +19525,23 @@ SeqPlay_DispatchAndResetAll:
 	call SeqPlay_ActivateAllChannels
 	ld (0x11f4:16), 0x00
 	ld wa, 0:i3
-	call 0xfdada0
+	call BitMapOut_PrepareAndRender
 	res 3, (0x28a7:16)
 	call TempoRingBuf_Init
 	set 4, (0x28b3:16)
 	ldw WA, 0x000f
 	call SoundCtrl_SaveAndSendCmd_EE
 	ldw WA, 0x0008
-	jp 0xfeb5d2
+	jp MIDI_SendSysExCmd
 SeqPlay_StopAndClearChannels:
 	ldw	(10408:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldw	(10410:16), 0
 	call	TempoRingBuf_Init
 	ldw	wa, 15
 	call	SoundCtrl_SaveAndSendCmd_EE
 	ldw	wa, 8
-	jp	16692690
+	jp	MIDI_SendSysExCmd
 SeqPlay_StopAndClearSequence:
 	call AccWrap_PlayModeDispatch
 	ldw (0x28b4:16), 0x0000
@@ -19553,7 +19553,7 @@ SeqPlay_StopAndClearSequence:
 	ldw WA, 0x000e
 	call SoundCtrl_SaveAndSendCmd_EE
 	ldw WA, 0x0008
-	jp 0xfeb5d2
+	jp MIDI_SendSysExCmd
 SeqPlay_BufferUpdateBlock:
 	ld wa, (0x2330:16)
 	ld bc, (0x041c:16)
@@ -19631,8 +19631,8 @@ SeqPlay_StopAndClearSequence_Join:
 	cp	a, 72
 	ret	c
 	res	3, (10419:16)
-	call	16635550
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	a, (8956:16)
 	cp	a, 20
 	jr	z, SeqPlay_StopAndClearSequence_Skip7
@@ -19766,7 +19766,7 @@ SeqStatus_ResetAndSendCmd:
 
 	ld de, 0:i3
 
-	call	16624211
+	call	AddswbWr
 
 	ret
 
@@ -19963,7 +19963,7 @@ SeqTimer_BarReturn:
 	extz WA
 	call Voice_GetPresetFieldWord
 	ld (0xf19e:16), hl
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	ld_erpb_rr a, 0xfb
 	extz WA
 	call Voice_GetPresetFieldAddr
@@ -20021,7 +20021,7 @@ SeqTimer_BarChangeLoop:
 	ld de, 0:i3
 
 SeqTimer_BarChangeEnd:
-	call	16624162
+	call	AssswbWr
 SeqTimer_BarChangeReturn:
 	push	xiz
 	call	SwbtWr_ReinitOutputBank
@@ -22113,7 +22113,7 @@ EffEdit_DSPConfigBlock:
 	extz	de
 	lda	xhl, (xsp+2)
 	push	xhl
-	call	16631503
+	call	EffEdit_DSPConfigBlock_Helper
 	cp	hl, 0:i3
 	jrl	lt, .Lc_f457bd
 	ldb_d8	a, (35996)
@@ -22151,7 +22151,7 @@ EffEdit_DSPConfigBlock_Loop:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, 19216
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld	bc, hl
 	ld	wa, iz
 	extz	xwa
@@ -22169,7 +22169,7 @@ EffEdit_DSPConfigBlock_Skip:
 	sub	xwa, 19216
 	ld	iz, wa
 	ld	xwa, (xsp+2)
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	wa, iz
 	add	wa, wa
 	lda_d16	xbc, (10616)
@@ -22206,7 +22206,7 @@ EffEdit_DSPConfigBlock_Loop2:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, 18704
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld	bc, hl
 	ld	wa, iz
 	extz	xwa
@@ -22224,7 +22224,7 @@ EffEdit_DSPConfigBlock_Skip3:
 	sub	xwa, 18704
 	ld	iz, wa
 	ld	xwa, (xsp+2)
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	wa, iz
 	add	wa, wa
 	lda_d16	xbc, (10616)
@@ -22247,7 +22247,7 @@ EffEdit_DSPConfigBlock_Skip4:
 	sub	xwa, 19472
 	ld	iz, wa
 	ld	xwa, (xsp+2)
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	wa, iz
 	add	wa, wa
 	lda_d16	xbc, (10616)
@@ -22273,7 +22273,7 @@ EffEdit_DSPConfigBlock_Skip5:
 	cp	(58096:16), 1
 	jrl	nz, .Lc_f4576f
 	ld	xwa, 19728
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld	bc, hl
 	ld	xwa, 19728
 	call	AppEvent_HandleChannelEvent_Helper
@@ -22283,7 +22283,7 @@ EffEdit_DSPConfigBlock_Skip6:
 	cp	xwa, 19728
 	jrl	nz, .Lc_f457bd
 	ld	xwa, (xsp+2)
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	(10616:16), hl
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_RET_EFF_PARA
@@ -22307,12 +22307,12 @@ EffEdit_DSPConfigBlock_Skip7:
 	ld WA,IZ
 	extz XWA
 	add XWA,0x00004e10
-	call 0xfdc02d
+	call DSPCfg_ReadParam_Map1
 	ld BC,HL
 	ld WA,IZ
 	extz XWA
 	add XWA,0x00004e10
-	call 0xfdc130
+	call AppEvent_HandleChannelEvent_Helper
 	inc 1,IZ
 	cp iz, 4:i3
 	jr c, .Lc_f4574b
@@ -22330,7 +22330,7 @@ EffEdit_DSPConfigBlock_Skip7:
 	sub XWA,0x00004e10
 	ld IZ,WA
 	ld XWA,(XSP+0x02)
-	call 0xfdc028
+	call DSPCfg_ReadParam_Map0
 	ld WA,IZ
 	add WA,WA
 	lda xbc, (0x2978:16)
@@ -22371,11 +22371,11 @@ EffEdit_ValidateLoop:
 	cp	a, 10
 	jrl	nz, EffEdit_ReturnError	; -> 0xF459D4
 	ld	xwa, 19200
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	and	hl, 127
 	ld	(10614:16), hl
 	ld	xwa, 19204
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	(10666:16), hl
 	ldib_erp	251, 0
 	jr	EffEdit_ReadParamA_Check	; -> 0xF45863
@@ -22386,7 +22386,7 @@ EffEdit_ReadParamA_Body:
 
 	add xwa, 0x4b10
 
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 
 	ldto_berp A, 0xfb
 
@@ -22404,7 +22404,7 @@ EffEdit_ReadParamA_Body:
 
 	add xwa, 0x4b10
 
-	call	16629526
+	call	DSPCfg_ResolveAndExtract
 
 	ldto_berp C, 0xfb
 
@@ -22450,14 +22450,14 @@ EffEdit_ReturnZeroJmp:
 
 EffEdit_ReadParamB:
 	ld	xwa, 18688
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	and	hl, 127
 	ld	(10614:16), hl
 	ld	xwa, 18692
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	(10666:16), hl
 	ldib_erp	251, 0
-	jr	64
+	jr	EffEdit_ReadParamB_Check
 EffEdit_ReadParamB_Body:
 	ld xwa, 0:i3
 
@@ -22465,7 +22465,7 @@ EffEdit_ReadParamB_Body:
 
 	add xwa, 0x4910
 
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 
 	ldto_berp A, 0xfb
 
@@ -22483,7 +22483,7 @@ EffEdit_ReadParamB_Body:
 
 	add xwa, 0x4910
 
-	call	16629526
+	call	DSPCfg_ResolveAndExtract
 
 	ldto_berp C, 0xfb
 
@@ -22528,7 +22528,7 @@ EffEdit_ReadParamC_Loop:
 	ld	xwa, 0:i3
 	ldto_berp	a, 251
 	add	xwa, 19472
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldto_berp	a, 251
 	extz	wa
 	add	wa, wa
@@ -22536,21 +22536,21 @@ EffEdit_ReadParamC_Loop:
 	st_rrw	hl, xbc, wa
 	inc1b_erp	251
 	cp_erpb	251, 8
-	jr	c, -40
-	jrl	-195
+	jr	c, EffEdit_ReadParamC_Loop
+	jrl	EffEdit_ReturnZeroJmp
 EffEdit_ReadParamE:
 	ld	xwa, 19712
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	and	hl, 127
 	ld	(10614:16), hl
 	ld	xwa, 19728
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	(10616:16), hl
-	jrl	-228
+	jrl	EffEdit_ReturnZeroJmp
 EffEdit_ReadParamD6:
 	ld xwa, 0x4e00
 
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 
 	and hl, 0x7f
 
@@ -22564,7 +22564,7 @@ EffEdit_ReadParamD6_Loop:
 	ld	xwa, 0:i3
 	ldto_berp	a, 251
 	add	xwa, 19984
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldto_berp	a, 251
 	extz	wa
 	add	wa, wa
@@ -22573,7 +22573,7 @@ EffEdit_ReadParamD6_Loop:
 	ld	xwa, 0:i3
 	ldto_berp	a, 251
 	add	xwa, 19984
-	call	16629526
+	call	DSPCfg_ResolveAndExtract
 	ldto_berp	c, 251
 	extz	bc
 	lda	xwa, (10668:16)
@@ -22582,8 +22582,8 @@ EffEdit_ReadParamD6_Loop:
 	ld	(xbc), l
 	inc1b_erp	251
 	cpib_erp	251, 4
-	jr	c, -69	; -> 0xF4598C
-	jrl	-320	; -> 0xF45894
+	jr	c, EffEdit_ReadParamD6_Loop	; -> 0xF4598C
+	jrl	EffEdit_ReturnZeroJmp	; -> 0xF45894
 EffEdit_ReturnError:
 	ldw hl, 0xffff
 
@@ -22597,16 +22597,16 @@ EffEdit_ValidateRangeDelta:
 	ld (XSP+0x06),BC
 	ld (XSP+0x08),XWA
 	ld XWA,0x00004c10
-	call 0xfdc028
+	call DSPCfg_ReadParam_Map0
 	ld (XSP+0x04),HL
 	ld XWA,0x00004c12
-	call 0xfdc028
+	call DSPCfg_ReadParam_Map0
 	ld QIZ,HL
 	ld XWA,0x00004c14
-	call 0xfdc028
+	call DSPCfg_ReadParam_Map0
 	ld IZ,HL
 	ld XWA,0x00004c16
-	call 0xfdc028
+	call DSPCfg_ReadParam_Map0
 	ld BC,QIZ
 	sub BC,(XSP+0x04)
 	ld XWA,(XSP+0x08)
@@ -22670,11 +22670,11 @@ EffEdit_PopIzSkip8Ret:
 
 MimeSyori:
 	cp	xbc, EVT_SET_PARAM
-	jr	nz, 10
+	jr	nz, MimeSyori_ReturnZero
 	or	xde, xde
 	scc8	nz, a
 	extz	wa
-	call	16635979
+	call	MimeSyori_Helper
 MimeSyori_ReturnZero:
 	ld xhl, 0:i3
 	ret
@@ -23068,7 +23068,7 @@ ApPlaySyori_Join4:
 	jrl	z, AppEvent_ReturnZero
 	ld	(10298:16), 1
 	ldmm16	61854, 10595
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 11
@@ -23134,7 +23134,7 @@ ApPlaySyori_Skip8:
 	cpl	wa
 	and	bc, wa
 	ld	(61854:16), bc
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 ApPlaySyori_Join5:
 	call	SeqPlay_InitStartState
 ApPlaySyori_Join6:
@@ -23247,17 +23247,17 @@ SeqAccomp_StartHandler:
 	jrl z, AppEvent_ReturnZero
 	ld (0x283a:16), 0x00
 	ldw	(0xf19e:16), (0xffec:24)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	xwa, (10610:16)
 	ld	xbc, EVT_PARA_DRAW
 	ld	xde, 11
 	call	ApDeliveryEvent
 	ldmm16	10296, 61854
 	bit	2, (1057:16)
-	jrl	nz, 370
+	jrl	nz, AppEvent_ReturnZero
 ApPlaySyori_Skip15:
 	call	SeqPlay_AllocBuffersAndInit
-	jrl	363
+	jrl	AppEvent_ReturnZero
 SeqAccomp_StartHelper:
 	cp	(35994:16), 133
 	jrl	nz, SeqAccomp_HandleOtherState
@@ -23284,7 +23284,7 @@ SeqAccomp_ToggleSendStatus:
 SeqAccomp_HandleStartStop:
 	ld	xwa, (xsp+2)
 	or	xwa, xwa
-	jr	nz, 60
+	jr	nz, SeqAccomp_ActivateAndAssign
 	res	1, (10417:16)
 	ldw	(9832:16), 1
 	ld	wa, (10408:16)
@@ -23292,7 +23292,7 @@ SeqAccomp_HandleStartStop:
 	cpl	wa
 	and	bc, wa
 	ld	(61854:16), bc
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	xwa, 8716308
 	ld	bc, 0:i3
 	call	SetVisible
@@ -23300,7 +23300,7 @@ SeqAccomp_HandleStartStop:
 	ld	xbc, EVT_SET_VISIBLE
 	ld	xde, 0:i3
 	call	ApDeliveryEvent
-	jrl	207
+	jrl	SeqAccomp_InitAndReturn
 SeqAccomp_ActivateAndAssign:
 	call SeqVoice_ScanAndAssignParts
 	set 1, (0x28b1:16)
@@ -24238,7 +24238,7 @@ SeqReal_HandleActivation:
 	call	PartSelect_UpdateDisplayState
 	call	SeqPlay_ProcessVoiceAndNotes
 	ldw	(10408:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	SeqPlay_SaveStateAndCleanup
 	ldw	wa, 76
 	call	CtrlPanel_SetIndicatorBit
@@ -24304,18 +24304,18 @@ SeqEdit_ReturnZero:
 SqRealRecTitleFunc:
 	push	qiz
 	cp	xbc, EVT_ACTIVATE_STATE
-	jrl	nz, 137
+	jrl	nz, SqRealRec_ReturnZero
 	cp	xde, 3
-	jr	z, 118
+	jr	z, SqRealRec_HandleExitState
 	cp	xde, 2
-	jr	nz, 121
+	jr	nz, SqRealRec_ReturnZero
 	cp	(35997:16), 131
-	jr	nz, 114
+	jr	nz, SqRealRec_ReturnZero
 	cp	(9980:16), 1
-	jr	nz, 107
+	jr	nz, SqRealRec_ReturnZero
 	ld	(9508:16), 1
 	ldw	(0x28a8:16), 0x0000
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ldib_erp	251, 1	; ld qizh,1
 SqRealRec_SetBitMaskLoop:
 	ldto_berp A, 0xfb
@@ -24342,10 +24342,10 @@ SqRealRec_SetBitMaskLoop:
 
 SqRealRec_DetectAndInit:
 	call	Part_DetectSingleVoiceType
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	SeqPlay_InitializePlayback
 	ld	(9508:16), 0
-	jr	11
+	jr	SqRealRec_ReturnZero
 SqRealRec_HandleExitState:
 	cp	(35992:16), 10
 	jr	z, SqRealRec_ReturnZero
@@ -24812,10 +24812,10 @@ MainExeCall:
 	lda	xix, (MainExe_HandleD6:24)
 	jp_rr	8, xix, wa
 MainExe_HandleD6:
-	call	16648347
-	call	16626122
+	call	NoteMap_ProcessAndMerge
+	call	MIDI_BroadcastControlChange
 	call	SeqData_SendVoiceTableBlock
-	jrl	1042
+	jrl	MainExe_ReturnZero
 MainExe_Handle83:
 	calr MainExe_SequencerStop
 	jrl MainExe_ReturnZero
@@ -24881,9 +24881,9 @@ MainExe_Handle90_Finish:
 
 
 MainExe_Handle8D:
-	call	16625030
+	call	BitMapOut_ComputeRegionDelta
 	ldw	wa, 35
-	jr	112
+	jr	MainExe_CallSongHandler
 MainExe_Handle91:
 	call SeqStep_TrackChange
 
@@ -25286,7 +25286,7 @@ MainExe_SeqStopFinish:
 	ldw	bc, 50
 	call	Part_ReleaseVoicesForRange
 	ldw	(0xf19e:16), 0x0000
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	AccWrap_PositionClear
 	res	0, (10406:16)
 	ldw	(65516:24), 0
@@ -25296,9 +25296,9 @@ MainExe_SeqStopFinish:
 	jp	UI_PostPartChangeEvent
 MainPanic:
 	cp	xbc, EVT_PANIC
-	jr	nz, 12
-	call	16648347
-	call	16626122
+	jr	nz, MainPanic_ReturnZero
+	call	NoteMap_ProcessAndMerge
+	call	MIDI_BroadcastControlChange
 	call	SeqData_SendVoiceTableBlock
 MainPanic_ReturnZero:
 	ld xhl, 0:i3
@@ -25499,17 +25499,17 @@ SeqLoad_PostInitParts:
 	ld	bc, 4:i3
 	ld	de, 0:i3
 	call	Part_WriteByte
-	calr	1843
+	calr	SeqLoad_RestorePartConfig
 	call	SeqStep_FindLastUsedPart
 	ld	a, (0xffe3:24)
 	extz	wa
 	call	VoicePreset_LoadAndInitPan
 	cpw	(61902:16), 0
-	jr	z, 17
+	jr	z, SeqLoad_PostSetPositions
 	call	SeqStep_FindAndCompactEntry
 	ldw	(0xf19e:16), (0xffec:24)
-	call	16635550
-	jr	9
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	jr	SeqLoad_PostCheckAutoAccomp
 SeqLoad_PostSetPositions:
 	ldw (0xf22f:16), 3
 	calr SeqBar_ComputeAndSetPositions
@@ -25544,10 +25544,10 @@ SeqLoad_AltInitParts:
 	call	VoicePreset_LoadAndInitPan
 	ldw	(0xffec:24), (0xf19e:16)
 	cpw	(61902:16), 0
-	jr	z, 10
+	jr	z, SeqLoad_AltSetPositions
 	call	SeqStep_FindAndCompactEntry
-	call	16635550
-	jr	9
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
+	jr	SeqLoad_AltCheckAutoAccomp
 SeqLoad_AltSetPositions:
 	ldw (0xf22f:16), 3
 	calr SeqBar_ComputeAndSetPositions
@@ -25647,7 +25647,7 @@ FileIO_ByteBlock_DemoProc1_Helper:
 	pushw	iz
 	ld	(xsp+2), a
 	ldw	(0xf19e:16), (0xffec:24)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	a, (65507:24)
 	extz	wa
 	call	SeqData_CopyBlockToBuffer
@@ -25910,7 +25910,7 @@ SeqSave_PreparePartData:
 	cp A,(XSP+0x08)
 	jr nz, SeqSave_CopyBlockAndInit
 	ldw	(0xf19e:16), (0xffec:24)
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 SeqSave_CopyBlockAndInit:
 	ld a, (0x00ffe3:24)
 	extz wa
@@ -27989,7 +27989,7 @@ Portamento_NotifyParams:
 
 	ld de, 3:i3
 
-	call 16566832
+	call Audio_ResetAfterPayloadError_Helper
 
 	ldto_berp C, 0xfb
 
@@ -27999,7 +27999,7 @@ Portamento_NotifyParams:
 
 	ld de, 3:i3
 
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 
 	popw_erp 0xfa
 

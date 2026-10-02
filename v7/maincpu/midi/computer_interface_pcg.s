@@ -921,13 +921,13 @@ PcgOutSendFunc_Exit:
 
 MainPcgOutSend:
 	cp	xbc, EVT_PCG_SEND
-	jr	nz, 16
+	jr	nz, MainPcgOutSend_Exit
 	ld	a, (xde)
 	extz	wa
 	ld	c, (xde+1)
 	extz	bc
 	ld	de, (xde+2)
-	call	16625971
+	call	MidiSysEx_BuildAndSend
 MainPcgOutSend_Exit:
 	ld xhl, 0:i3
 	ret

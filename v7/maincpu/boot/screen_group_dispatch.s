@@ -49,15 +49,16 @@ screen_group_dispatch_Skip2:
 	jr	z, screen_group_dispatch_Skip3
 	ld	wa, 0:i3
 	call	(xhl)
-	call	0xfde7d8
+	call	DSPCfg_EventType50_Code_Helper4
 screen_group_dispatch_Skip3:
 	jp	AudioInit_DispatchChanges
+AudioMode_CheckAndUpdateStereo_Helper:
 	bit	0, (0xfc69:16)
 	ret	z
 ; (v7 label ScreenGroup_WidgetLoop stood here; dropped, see the file header)
 	orw	(0xc4fa:16), 128
 	orw	(0xc4f8:16), 4
-	calr	65095
+	calr	AudioInit_ProcessModeChange
 	ret
 DkMdlyPly_CheckState_Helper2:
 	bit	1, (0xfc67:16)
@@ -91,12 +92,13 @@ DkMdlyPly_CheckState_Helper2_Join:
 	ret	z
 	ld	wa, 1:i3
 	call	(xhl)
-	call	0xfde5b1
-	call	0xfde50e
-	call	0xfde52b
-	call	0xfde7d8
+	call	DSPCfg_EventType50_Code_Helper3
+	call	DSPCfg_EventType50_Code_Helper
+	call	DSPCfg_EventType50_Code_Helper2
+	call	DSPCfg_EventType50_Code_Helper4
 	call	AudioInit_DispatchChanges
 	ret
+MimeSyori_Helper:
 	ld	(0xc162:16), 0
 	cp	a, 0:i3
 	jr	z, DkMdlyPly_CheckState_Helper2_Skip2
@@ -132,7 +134,7 @@ ScreenGroup_InitVoiceLoop_Code_Join:
 	or	(0xc162:16), a
 ScreenGroup_InitVoiceLoop_Code_Join2:
 	orw	(0xc4f8:16), 4
-	jrl	-663
+	jrl	AudioInit_ProcessModeChange
 ; [v10] ============================================================================
 ; [v10] UIState_ProcessMidiEvent - Process an incoming MIDI event in UI state
 ; [v10] ============================================================================
@@ -154,7 +156,7 @@ ScreenGroup_InitVoiceLoop_Code_Join2:
 	ld_sril3	XWA, 0x07, 0xe4, 0xe0
 	ld	a, h
 	cp	a, 0x16
-	jrl	z, 406
+	jrl	z, AudioDispatch_CheckStereoMode_Code_Skip26
 	cp	a, 0xd
 	jr	z, ScreenGroup_InitVoiceLoop_Code_Skip5
 	cp	a, 0xc
@@ -275,7 +277,7 @@ ScreenGroup_InitVoiceLoop_Code_Skip9:
 	bit	6, e
 	ret	z
 	bit	6, d
-	jr	z, 29
+	jr	z, UIStateEvt_DrumAssign_Set
 	ld	a, l
 	extz	wa
 	lda	xbc, (AudioInit_VoiceDispatch_Table_0xFC:24)

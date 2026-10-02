@@ -25470,14 +25470,14 @@ Param_SignExtendReturn_Return:
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 13
-	call	0xfd72e7
+	call	Param_SignExtendReturn_Helper3_Helper
 	ld	(xiz+), l
 	ld	(xiz), 247
 	ld	xwa, (0xe193:16)
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 15
-	call	0xfd7306
+	call	Param_SignExtendReturn_Helper3_Helper2
 	pop	xiz
 	inc	2, xsp
 	ret
@@ -27422,12 +27422,13 @@ HdaeRom_DataDispatch_Block3:
 	cp xix, xhl
 	jr	c, HdaeRom_DataDispatch_Block3_Skip
 	lda	xde, (xix-1)
+HdaeRom_DataDispatch_Block3_Loop2:
 	ld	c, (xde)
 	ld	(xde+1), c
 	dec	1, xde
 	dec	1, xix
 	cp	xix, xhl
-	jr	nc, -13
+	jr	nc, HdaeRom_DataDispatch_Block3_Loop2
 ; For QE = 0..127 and DE = 2*QE: XHL = XWA + 0x49A7 + DE, then bits 5..4 of
 ; the byte at XHL+1 become 0b10 (clear 0x30, set bit 5; XBC = XWA + exts(BC)
 ; reaches the same byte).  Re-framed 2026-10-02 from MAME unidasm's reading

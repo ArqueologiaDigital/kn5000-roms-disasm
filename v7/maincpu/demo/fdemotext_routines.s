@@ -110,12 +110,12 @@ FDemoText_ProcessVoiceFlags:
 	res	6, a
 	ld	(0x8caa:16), a
 FDemoText_ProcessVoiceFlags_ReadState:
-	call	15665005
+	call	Boot_CheckConfigFlag7
 	cp	hl, 0:i3
-	jrl	z, 353
+	jrl	z, FDemoText_ProcessOutput_ClearAll
 	ld	a, (149486:24)
 	bit	6, a
-	jr	z, 29
+	jr	z, FDemoText_ProcessVoiceFlags_CheckBits
 	set	7, a
 	res	6, a
 	ld	(149486:24), a
@@ -123,8 +123,8 @@ FDemoText_ProcessVoiceFlags_ReadState:
 	ldw	wa, 68
 	ldw	bc, 8
 	ld	de, 0:i3
-	call	16624211
-	jrl	332
+	call	AddswbWr
+	jrl	FDemoText_ProcessVoiceFlags_Return
 FDemoText_ProcessVoiceFlags_CheckBits:
 	and a, 0x7
 	call nz, (FDemoText_ScanMIDIChannels:24)
@@ -318,7 +318,7 @@ FDemoText_UpdateVoiceDisplay:
 	pushw	0x7f
 	ld	bc, 5:i3
 	ld	de, 0:i3
-	call	0xfdaa53
+	call	AddswbWr
 	lda	xwa, (xiz + 2)
 	cp	(xwa), 0x0
 	jr	nz, FDemoText_UpdateVoiceDisplay_CheckSend
@@ -328,7 +328,7 @@ FDemoText_UpdateVoiceDisplay:
 	pushw	0x7f
 	ld	bc, 7:i3
 	ldw	de, 0x5a
-	call	0xfdaa53
+	call	AddswbWr
 FDemoText_UpdateVoiceDisplay_CheckSend:
 	ld a, (0x0247ee:24)
 	and a, 0x38
@@ -440,7 +440,7 @@ FDemoText_UpdateChannel_Active:
 	pushw	0x7f
 	ld	bc, 5:i3
 	ldw	de, 0x50
-	call	0xfdaa53
+	call	AddswbWr
 	lda	xwa, (xiz + 2)
 	cp	(xwa), 0x0
 	jr	z, FDemoText_UpdateChannel_Done
@@ -451,7 +451,7 @@ FDemoText_UpdateChannel_Active:
 	ld	bc, 7:i3
 	ld	de, 0:i3
 FDemoText_UpdateChannel_SendCmd:
-	call	16624211
+	call	AddswbWr
 FDemoText_UpdateChannel_Done:
 	pop xiz
 	inc 2, xsp
@@ -482,7 +482,7 @@ FDemoText_CheckAndSetTimer:
 	pushw 0x007f
 	ld bc, 7:i3
 	ldw DE, 0x005a
-	call 0xfdaa53
+	call AddswbWr
 FDemoText_CheckTimer_Done:
 	pop xiz
 	inc 2, xsp
@@ -680,16 +680,16 @@ FDemoText_SendParams_LevelLoop:
 	ld	(xde+4), a
 	ld	wa, 0:i3
 	ld	bc, 6:i3
-	call	15676106
+	call	sendCOMM
 	ld	xwa, 1:i3
 	add	(xsp+2), xwa
 	inc1b_erp	251
 	cp_erpb	251, 8
-	jr	ule, -39
+	jr	ule, FDemoText_SendParams_LevelLoop
 	ld	c, (xsp+12)
 	extz	bc
 	ldw	wa, 255
-	call	16649334
+	call	VoiceEvent_FlushAndReturn
 FDemoText_SendVoiceParams_Return:
 	popw_erp 0xfa
 	lda xsp, (xsp + 12)
@@ -750,11 +750,11 @@ FDemoText_SendExtParams_LevelLoop:
 	add	(xsp+2), xwa
 	inc1b_erp	251
 	cp_erpb	251, 8
-	jr	ule, -39	; -> 0xF849FC
+	jr	ule, FDemoText_SendExtParams_LevelLoop	; -> 0xF849FC
 	ld	c, (xsp+22)
 	extz	bc
 	ldw	wa, 255
-	call	16649334
+	call	VoiceEvent_FlushAndReturn
 	pop	qiz
 	lda	xsp, (xsp+22)
 	ret
@@ -862,7 +862,7 @@ FDemoText_ProbeVoiceType:
 
 	extz wa
 
-	calr	-2103
+	calr	FDemoText_LookupTableEntry
 
 	lda xbc, (xsp)
 
@@ -880,7 +880,7 @@ FDemoText_ProbeVoiceType:
 
 	ld xwa, xbc
 
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 
 	ld l, (xsp + 0:8)
 
@@ -895,7 +895,7 @@ FDemoText_ByteData_ProbeHelper:
 	ld	(xsp+6), a
 	ld	a, (xsp+6)
 	extz	wa
-	calr	63389
+	calr	FDemoText_LookupTableEntry
 	lda	xbc, (xsp)
 	ld	a, (xhl+)
 	ld	(xbc+3), a
@@ -904,7 +904,7 @@ FDemoText_ByteData_ProbeHelper:
 	ld	a, (xsp+6)
 	ld	(xbc+2), a
 	ld	xwa, xbc
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 	ld	l, (xsp+1)
 	inc	8, xsp
 	ret
@@ -1163,32 +1163,32 @@ FDemoText_NotifyUIChange:
 	push	xiz
 	extz	bc
 	ld	xwa, 18688
-	call	16630064
+	call	AppEvent_HandleChannelEvent_Helper
 	ld	e, (64628:16)
 	extz	de
 	pushw	255
 	ldw	wa, 97
 	ld	bc, 0:i3
-	call	16624211
+	call	AddswbWr
 	ld	xwa, 18692
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ld	qiz, hl
 	ld	iz, 0:i3
 	cp	qiz, 0
-	jr	ule, 37
+	jr	ule, FDemoText_NotifyUI_Done
 FDemoText_NotifyUI_Loop:
 	ld	wa, iz
 	extz	xwa
 	add	xwa, 18704
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld	bc, hl
 	ld	wa, iz
 	extz	xwa
 	add	xwa, 18704
-	call	16630064
+	call	AppEvent_HandleChannelEvent_Helper
 	inc	1, iz
 	cp	iz, qiz
-	jr	c, -37
+	jr	c, FDemoText_NotifyUI_Loop
 FDemoText_NotifyUI_Done:
 	pop xiz
 	ret
@@ -1304,7 +1304,7 @@ FDemoText_ByteData_DisplayRefresh_Loop2:
 	push	xhl
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, FDemoText_ByteData_DisplayRefresh_Skip3
@@ -1517,7 +1517,7 @@ FDemoText_ProcessMarkup_AllocCopy:
 	inc	1, xwa
 	push	xwa
 	push	xbc
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+12)
 	ld	xwa, (xsp+12)
 	add	xwa, xiz
@@ -1683,7 +1683,7 @@ FDemoText_ProcessMarkup_CopyAndRender:
 
 	push xwa
 
-	call	16713148
+	call	Mem_Copy
 
 	lda xsp, (xsp + 12)
 
@@ -1752,7 +1752,7 @@ FDemoText_ByteData_TextRenderer:
 	push	xwa
 	ld	xwa, (xsp+26)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+24)
 	ld	xwa, (xsp+6)
 	ld	(xwa+64), 0
@@ -1859,7 +1859,7 @@ FDemoText_TextDispatch_Loop5:
 	lda	xwa, (xsp+152)
 	push	xwa
 	push	xbc
-	call	0xff0758
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, FDemoText_TextDispatch_Join
@@ -1998,7 +1998,7 @@ FDemoText_TextDispatch_Loop7:
 	lda	xbc, (xsp+72)
 	push	xbc
 	push	xwa
-	call	0xff0758
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, FDemoText_TextDispatch_Join3
@@ -2171,7 +2171,7 @@ FDemoText_TextDispatch_Loop9:
 	lda	xbc, (xsp+76)
 	push	xbc
 	push	xwa
-	call	0xff0758
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, FDemoText_TextDispatch_Skip8
@@ -2297,7 +2297,7 @@ FDemoText_TextDispatch_Loop13:
 	lda	xwa, (xsp+202)
 	push	xwa
 	push	xbc
-	call	0xff0758
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, FDemoText_TextDispatch_Skip24
@@ -2382,7 +2382,7 @@ FDemoText_TextDispatch_Loop11:
 	lda	xwa, (xsp+136)
 	push	xwa
 	push	xbc
-	call	0xff0758
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, FDemoText_TextDispatch_Skip10
@@ -3030,7 +3030,7 @@ Seq_FillBufferLoop:
 	push	xiz
 	lda	xwa, (xsp+14)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xwa, (xsp+18)
 	ld	(xwa+8), 0
 	pushw	Seq_FillBufferLoop_Str_ACT@hi16

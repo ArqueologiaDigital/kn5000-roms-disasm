@@ -5230,7 +5230,7 @@ ToneParam_ExtendedOpsBlock_Helper4:
 	pushw	iz
 	ld	iz, wa
 	set	0, (0x34d1:16)
-	call	0xf63149
+	call	AccPat_IndexToAddress_Sub
 	ldb_d8	a, (0x35b0)
 	extz	wa
 	bit	0, wa

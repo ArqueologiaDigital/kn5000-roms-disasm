@@ -2539,9 +2539,9 @@ AccPlay_InitAndStartLoop:
 
 	ld a, 0x8:opc
 
-	call 16692690
+	call MIDI_SendSysExCmd
 
-	calr 62419
+	calr AccPlay_MainUpdateLoop
 
 	ret
 
@@ -4462,7 +4462,7 @@ MainVocalistPage1OKFunc:
 ; MainVocalistPage1OKFunc dispatch
 VocalistPage1OK_Dispatch:
 	call	VocalistPage2OKFunc_Helper2
-	call	16602124
+	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 11
 	call	VocalistPage2OKFunc_Helper
 	ld	xwa, (xsp)
@@ -4479,7 +4479,7 @@ VocalistPage2OKFunc_Skip:
 	ld	bc, 0:i3
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join:
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -4487,7 +4487,7 @@ VocalistPage2OKFunc_Join:
 VocalistPage2OKFunc_Join2:
 	call	ApPostEvent
 	ld	(32420:16), 1
-	call	16601121
+	call	MidiSysEx_SendAllParams
 	ld	(32420:16), 0
 VocalistPage_Handler:
 	ld xhl, 0:i3
@@ -4496,7 +4496,7 @@ VocalistPage_Handler:
 
 VocalistPage1_DispatchData:
 	call	VocalistPage2OKFunc_Helper2
-	call	16602124
+	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 2
 	call	VocalistPage2OKFunc_Helper
 	ld	xwa, (xsp)
@@ -4513,7 +4513,7 @@ VocalistPage2OKFunc_Skip2:
 	ld	bc, 0:i3
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join3:
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -4521,13 +4521,13 @@ VocalistPage2OKFunc_Join3:
 	jr	VocalistPage2OKFunc_Join2
 	ld	wa, bc
 	call	VocalistPage2OKFunc_Helper2
-	call	16602124
+	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 24
 	call	VocalistPage2OKFunc_Helper
 	ld	xwa, 16897
 	ld	bc, 3:i3
 	ld	de, 2:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	xwa, (xsp)
 	srl	xwa, 16
 	ld	qwa, 0
@@ -4542,7 +4542,7 @@ VocalistPage2OKFunc_Skip3:
 	ld	bc, 0:i3
 	ld	de, 2:i3
 VocalistPage2OKFunc_Join4:
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -4550,7 +4550,7 @@ VocalistPage2OKFunc_Join4:
 	jrl	VocalistPage2OKFunc_Join2
 	ld	wa, bc
 	call	VocalistPage2OKFunc_Helper2
-	call	16602124
+	call	MidiSysEx_SendAllPartChannels
 	ld	(46928:16), 1
 	call	VocalistPage2OKFunc_Helper
 	ld	wa, 1:i3
@@ -4562,8 +4562,8 @@ VocalistPage2OKFunc_Join4:
 	jrl	VocalistPage2OKFunc_Join2
 MainVocalistPage2OKFunc:
 	cp	xbc, EVT_VST_SEND_OK
-	jr	nz, 28
-	call	16601121
+	jr	nz, VocalistPage2_ReturnZero
+	call	MidiSysEx_SendAllParams
 	ld	(32422:16), 35
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
@@ -5130,7 +5130,7 @@ SplitPointFunc:
 	ld	xwa, 16768
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	xwa, (xsp+8)
 	ldfr_berp	a, 251	; ld qizh,a
 	cp_erpb	251, 36	; cp qizh,0x24
@@ -5268,7 +5268,7 @@ AccWrap_SetMinVelocity:
 
 	ld de, 1:i3
 
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 
 	ret
 

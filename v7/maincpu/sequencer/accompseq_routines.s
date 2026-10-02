@@ -1402,7 +1402,7 @@ AccompSeq_HandleSpecialMode_Skip4:
 	ld	(32422:16), 57
 	call	DrumVoice_NotifyEE
 	ld	a, 8:opc
-	call	16692690
+	call	MIDI_SendSysExCmd
 AccompSeq_HandleSpecialMode_Return:
 	ret
 AccompSeq_OutputEvent:
@@ -1430,7 +1430,7 @@ AccompSeq_Output_CheckFilter:
 AccompSeq_Output_CheckManual:
 	bit	1, (0x7e79:16)
 	jr	nz, AccompSeq_Output_Return
-	call	16602249
+	call	MidiPkt_SendControlPair
 AccompSeq_Output_Return:
 	popw hl
 	ret

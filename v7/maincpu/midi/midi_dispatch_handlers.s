@@ -2664,12 +2664,12 @@ FileData_LoadFromSlot_Return:
 FileData_RawDataBlock:
 	lda	xsp, (xsp-10)
 	push	xiz
-	call	16624739
+	call	PreLswLoad
 	calr	DataBuf_Data_FormatDispatch
 	lda	xwa, (0xf980:16)
 	ld	(xsp+6), xwa
 	pushw	1664
-	call	16713379
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
@@ -2797,7 +2797,7 @@ FileData_RawDataBlock_Loop4:
 	ld	xbc, (xsp+6)
 	calr	DataBuf_CopyBulkBitfields_Large
 	ld	wa, 0:i3
-	call	16624746
+	call	PostLswLoad
 	ld	xwa, (xsp+10)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
@@ -2817,7 +2817,7 @@ FileData_AllocLoadAndParse_Helper:
 	jr	nz, FileData_AllocLoadAndParse_Helper_Skip3
 	ldw	(xsp+12), 10
 FileData_AllocLoadAndParse_Helper_Join:
-	call	16624831
+	call	PrePmLoad
 	ld	wa, (xsp+12)
 	calr	DataBuf_CopyBulkBitfields_Large_Helper3
 	ldw (xsp+8), 0
@@ -2981,10 +2981,10 @@ FileData_RawDataBlock_Loop:
 	jrl	c, FileData_AllocLoadAndParse_Helper_Loop2
 FileData_AllocLoadAndParse_Helper_Skip5:
 	ld	wa, 0:i3
-	call	16624832
+	call	PostPmLoad
 	ld	xwa, (xsp+14)
 	push	xwa
-	call	16712469
+	call	Free
 	inc	4, xsp
 	ld	hl, 0:i3
 FileData_RawDataBlock_Epilogue2:
@@ -3014,7 +3014,7 @@ DataBuf_AllocAndLoadFormatted_AllocOk:
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
 	lda xwa, (xwa+736)
@@ -3669,11 +3669,11 @@ DataBuf_LoadAndDispatchFormat2:
 	pushw wa
 	push xbc
 	push xde
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
 	inc 2, xwa
-	call	16631865
+	call	DSPCfg_ApplyParamStruct
 	cp hl, 0:i3
 	jrl	ge, DataBuf_LoadAndDispatchFormat2_Return
 	ld xwa, (xsp + 6)
@@ -3694,7 +3694,7 @@ DataBuf_LoadAndDispatchFormat2:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call	16713757
+	call	Memset
 	inc 8, xsp
 	lda xbc, (0xfc74:16)
 	ld a, (xbc)
@@ -3703,7 +3703,7 @@ DataBuf_LoadAndDispatchFormat2:
 	ld a, (xwa + 2)
 	ld (xbc), a
 	ld xwa, 0x4904
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_Format2_Type61_RestoreSlotId
@@ -3714,14 +3714,14 @@ DataBuf_Format2_Type61_UpdateLoop:
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4910
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4910
 	ld xde, (xsp + 6)
 	inc 2, xde
-	call	16630342
+	call	DSPCfg_WriteParamSimple
 	inc 1, iz
 	cpw_erp IZ, 0xfa
 	jr	lt, DataBuf_Format2_Type61_UpdateLoop
@@ -3740,7 +3740,7 @@ DataBuf_Format2_Type63:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call	16713757
+	call	Memset
 	inc 8, xsp
 	lda xbc, (0xfc8e:16)
 	ld a, (xbc)
@@ -3749,7 +3749,7 @@ DataBuf_Format2_Type63:
 	ld a, (xwa + 2)
 	ld (xbc), a
 	ld xwa, 0x4b04
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_Format2_Type63_RestoreSlotId
@@ -3760,14 +3760,14 @@ DataBuf_Format2_Type63_UpdateLoop:
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4b10
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4b10
 	ld xde, (xsp + 6)
 	inc 2, xde
-	call	16630342
+	call	DSPCfg_WriteParamSimple
 	inc 1, iz
 	cpw_erp IZ, 0xfa
 	jr	lt, DataBuf_Format2_Type63_UpdateLoop
@@ -3778,7 +3778,7 @@ DataBuf_Format2_FormatType2:
 	pushw wa
 	push xbc
 	push xde
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
 	inc 2, xwa
@@ -3803,7 +3803,7 @@ DataBuf_Format2_FormatType2:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call	16713757
+	call	Memset
 	inc 8, xsp
 	lda xbc, (0xfc74:16)
 	ld a, (xbc)
@@ -3812,7 +3812,7 @@ DataBuf_Format2_FormatType2:
 	ld a, (xwa + 2)
 	ld (xbc), a
 	ld xwa, 0x4904
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_FormatType2_RestoreSlotId
@@ -3823,14 +3823,14 @@ DataBuf_FormatType2_Type61_UpdateLoop:
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4910
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4910
 	ld xde, (xsp + 6)
 	inc 2, xde
-	call	16630342
+	call	DSPCfg_WriteParamSimple
 	inc 1, iz
 	cpw_erp IZ, 0xfa
 	jr	lt, DataBuf_FormatType2_Type61_UpdateLoop
@@ -3853,7 +3853,7 @@ DataBuf_FormatType2_Type63:
 	pushw 0x0
 	lda xwa, (xbc + 3)
 	push xwa
-	call	16713757
+	call	Memset
 	inc 8, xsp
 	lda xbc, (0xfc8e:16)
 	ld a, (xbc)
@@ -3862,7 +3862,7 @@ DataBuf_FormatType2_Type63:
 	ld a, (xwa + 2)
 	ld (xbc), a
 	ld xwa, 0x4b04
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DataBuf_FormatType2_Type63_RestoreSlotId
@@ -3873,14 +3873,14 @@ DataBuf_FormatType2_Type63_UpdateLoop:
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4b10
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4b10
 	ld xde, (xsp + 6)
 	inc 2, xde
-	call	16630342
+	call	DSPCfg_WriteParamSimple
 	inc 1, iz
 	cpw_erp IZ, 0xfa
 	jr	lt, DataBuf_FormatType2_Type63_UpdateLoop
@@ -5116,12 +5116,12 @@ DataBuf_CopyBulkBitfields_Large_Loop:
 FileData_AllocLoadAndParse_Helper2:
 	lda	xsp, (xsp-10)
 	push	xiz
-	call	16624739
+	call	PreLswLoad
 	calr	DataBuf_Data_FormatDispatch
 	lda	xwa, (0xf980:16)
 	ld	(xsp+6), xwa
 	pushw 1088
-	call	16713379
+	call	Malloc
 	inc	2, xsp
 	ld	(xsp+10), xhl
 	ld	xwa, (xsp+10)
@@ -5224,7 +5224,7 @@ DataBuf_CopyBulkBitfields_Large_Loop3:
 	ld	xbc, (xsp+6)
 	calr	DataBuf_CopyBulkBitfields_Large_Helper
 	ld	wa, 0:i3
-	call	16624746
+	call	PostLswLoad
 	ld	xwa, (xsp+10)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
@@ -5237,7 +5237,7 @@ DataBuf_CopyBulkBitfields_Large_Epilogue:
 FileData_AllocLoadAndParse_Helper3:
 	lda	xsp, (xsp-14)
 	pushw	iz
-	call	16624831
+	call	PrePmLoad
 	ldw	wa, 24
 	calr	DataBuf_CopyBulkBitfields_Large_Helper3
 	ld	iz, 0:i3
@@ -5340,7 +5340,7 @@ DataBuf_CopyBulkBitfields_Large_Loop6:
 	cpw	(xsp+6), 24
 	jrl	c, DataBuf_CopyBulkBitfields_Large_Loop5
 	ld	wa, 0:i3
-	call	16624832
+	call	PostPmLoad
 	ld	xwa, (xsp+8)
 	push	xwa
 	call	SLIDE_Decompress_4K_Init_Helper
@@ -5376,7 +5376,7 @@ FileData_LoadAndParseType3_Continue:
 	push xwa
 	ld xwa, (xsp + 12)
 	push xwa
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, (xsp + 6)
 	lda xwa, (xwa+256)
@@ -5968,7 +5968,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	pushw 0x0
 	lda xwa, (xbc+757)
 	push xwa
-	call	16713757
+	call	Memset
 	inc 8, xsp
 	lda xbc, (0xfc74:16)
 	ld a, (xbc)
@@ -5977,7 +5977,7 @@ DSPCfg_ConfigureVoiceSlotA:
 	ldb_sri0 A, (xwa + 0x02f4)
 	ld (xbc), a
 	ld xwa, 0x4904
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DSPCfg_VoiceSlotA_RestoreContext
@@ -5988,14 +5988,14 @@ DSPCfg_VoiceSlotA_ParamLoop:
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4910
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4910
 	ld xde, (xsp + 6)
 	lda xde, (xde+756)
-	call	16630342
+	call	DSPCfg_WriteParamSimple
 	inc 1, iz
 	cpw_erp IZ, 0xfa
 	jr	lt, DSPCfg_VoiceSlotA_ParamLoop
@@ -6024,7 +6024,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	pushw 0x0
 	lda xwa, (xbc+783)
 	push xwa
-	call	16713757
+	call	Memset
 	inc 8, xsp
 	lda xbc, (0xfc8e:16)
 	ld a, (xbc)
@@ -6033,7 +6033,7 @@ DSPCfg_ConfigureVoiceSlotB:
 	ldb_sri0 A, (xwa + 0x030e)
 	ld (xbc), a
 	ld xwa, 0x4b04
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DSPCfg_VoiceSlotB_RestorePort
@@ -6044,7 +6044,7 @@ DSPCfg_VoiceSlotB_ParamLoop:
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4b10
-	call	16629526
+	call	DSPCfg_ResolveAndExtract
 	ld wa, iz
 	exts xwa
 	add xwa, 0x4b10
@@ -6065,7 +6065,7 @@ DSPCfg_VoiceSlotB_MapAndWrite:
 	lda xde, (xde+782)
 	jr	DSPCfg_VoiceSlotB_WriteAndLoop
 DSPCfg_VoiceSlotB_ReadAndWrite:
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld wa, iz
 	exts xwa
@@ -6522,32 +6522,32 @@ DataBuf_Data_FormatDispatch:
 	pushw	0xfc54
 	lda	xwa, (xsp+30)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	pushw	24
 	pushw	0
 	pushw	0xfcdc
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xwa, (0xf9a0:16)
 	pushw	1568
 	pushw	SndParamRam_DefaultImage@hi16
 	pushw	SndParamRam_DefaultImage@lo16
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+30)
 	pushw	4
 	lda	xwa, (xsp+26)
 	push	xwa
 	pushw	0
 	pushw	0xfc54
-	call	16713148
+	call	Mem_Copy
 	pushw	24
 	lda	xwa, (xsp+12)
 	push	xwa
 	pushw	0
 	pushw	0xfcdc
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+48)
 	ret
 DataBuf_CopyBulkBitfields_Large_Helper3:
@@ -6572,7 +6572,7 @@ DataBuf_Data_FormatDispatch_Loop:
 	ld	xwa, (xsp+4)
 	push	xwa
 	push	xde
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	inc	1, iz
 	cp	iz, (xsp+6)
@@ -6595,7 +6595,7 @@ DataBuf_InitSlotFromPreset:
 	pushw 0x20
 	push xwa
 	push xbc
-	call	16713148
+	call	Mem_Copy
 	lda xbc, (0x00f180:24)
 	add xbc, 0x300
 	lda xwa, (0xfda2:16)
@@ -6604,7 +6604,7 @@ DataBuf_InitSlotFromPreset:
 	pushw SndParamRam_DefaultImage@hi16
 	pushw SndParamRam_DefaultImage@lo16
 	push xbc
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 20)
 	jr	SndParam_PopIzRet
 DataBuf_InitSlotFromPreset_Alt:
@@ -6618,7 +6618,7 @@ DataBuf_InitSlotFromPreset_Alt:
 	pushw 0x20
 	push xwa
 	push xde
-	call	16713148
+	call	Mem_Copy
 	ld wa, iz
 	dec 1, wa
 	extz xwa
@@ -6632,7 +6632,7 @@ DataBuf_InitSlotFromPreset_Alt:
 	pushw SndParamRam_DefaultImage@hi16
 	pushw SndParamRam_DefaultImage@lo16
 	push xbc
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 20)
 SndParam_PopIzRet:
 	popw iz
@@ -6662,7 +6662,7 @@ SndParam_TableDispatch_Memset:
 	pushw	16
 	pushw	32
 	push xbc
-	call	16713757
+	call	Memset
 	inc 8, xsp
 	ret
 ; v7 NAME DISPLACED: `VocalistPage2OKFunc_Helper` sits where v10 has `SndParam_ApplyAndSync` (v10 0xFD5476).
@@ -6692,7 +6692,7 @@ SndParam_ReadAndApply:
 	ld xwa, 0xc0
 	ld bc, 0:i3
 	ld de, 1:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	push xde
 	push xhl
 	push xix
@@ -6825,7 +6825,7 @@ SndParam_AllocAndCopyPreset:
 	push xiz
 	ld (xsp + 4), a
 	pushw 0xea
-	call	16713379
+	call	Malloc
 	inc 2, xsp
 	ld xiz, xhl
 	or xiz, xiz
@@ -6836,7 +6836,7 @@ SndParam_AllocAndCopyPreset:
 	pushw NakaInst_SoundConfig_LookupTable_0x8A@hi16
 	pushw NakaInst_SoundConfig_LookupTable_0x8A@lo16
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	lda xwa, (xiz + 5)
 	ld xbc, xwa
@@ -7051,7 +7051,7 @@ SndParam_UpdateChan_CopyMemory:
 	push xbc
 	ld xwa, (xsp + 6)
 	push xwa
-	call	16713148
+	call	Mem_Copy
 	lda xbc, (0xf9a0:16)
 	lda xwa, (0xffc0:16)
 	sub xwa, xbc
@@ -7059,7 +7059,7 @@ SndParam_UpdateChan_CopyMemory:
 	pushw 0x3
 	pushw 0xc8e4
 	push xbc
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 20)
 	res	0, (0xb752:16)
 	ld c, (xsp + 4)
@@ -7081,7 +7081,7 @@ MidiSysEx_SendAllParams:
 	ld xiz, xhl
 	or xiz, xiz
 	jrl	z, MidiSysEx_PopIzAndReturn
-	call	16626534
+	call	GET_COMPUTER_INTERFACE_SELECTION
 	ld (xsp + 4), l
 	ld xwa, 0x2d03
 	call	AcApcToggleProc_Helper
@@ -7091,7 +7091,7 @@ MidiSysEx_SendAllParams:
 	pushw 0xee
 	pushw 0x2cd8
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
 	call	AcApcToggleProc_Helper
@@ -7102,7 +7102,7 @@ MidiSysEx_SendAllParams:
 	jr	nz, MidiSysEx_SendParamViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendReverbParam
 MidiSysEx_SendParamViaCOMM:
@@ -7112,25 +7112,25 @@ MidiSysEx_SendParamViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendReverbParam:
 	ld xwa, 0x2d01
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendProgramChange
 	pushw 0xe
 	pushw 0xee
 	pushw 0x2cd8
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld	(xiz+4), (0xb756)
 	ld (xiz + 9), 0x11
 	ld xwa, 0x2d00
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendReverbViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendReverbParam2
 MidiSysEx_SendReverbViaCOMM:
@@ -7144,7 +7144,7 @@ MidiSysEx_SendReverbParam2:
 	jr	nz, MidiSysEx_SendReverb2ViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendReverbFixup
 MidiSysEx_SendReverb2ViaCOMM:
@@ -7156,29 +7156,29 @@ MidiSysEx_SendReverbFixup:
 	ld	(0xb756), (xiz+12)
 MidiSysEx_SendProgramChange:
 	ld xwa, 0x2d03
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendControlChange1
 	pushw 0x2
 	pushw 0xee
 	pushw 0x2cea
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0xf
 	jr	gt, MidiSysEx_SendPCRegValue
 	or (xiz), l
 MidiSysEx_SendPCRegValue:
 	ld xwa, 0x2d02
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz + 1), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendPCViaCOMM
 	push xiz
 	pushw 0x2
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendControlChange1
 MidiSysEx_SendPCViaCOMM:
@@ -7188,29 +7188,29 @@ MidiSysEx_SendPCViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendControlChange1:
 	ld xwa, 0x2d05
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendControlChange2
 	pushw 0x3
 	pushw 0xee
 	pushw 0x2ce6
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0xf
 	jr	gt, MidiSysEx_SendCC1RegValue
 	or (xiz), l
 MidiSysEx_SendCC1RegValue:
 	ld xwa, 0x2d04
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendCC1ViaCOMM
 	push xiz
 	pushw 0x3
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendControlChange2
 MidiSysEx_SendCC1ViaCOMM:
@@ -7220,30 +7220,30 @@ MidiSysEx_SendCC1ViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendControlChange2:
 	ld xwa, 0x2d07
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0:i3
 	jr	z, MidiSysEx_CheckDelayAndSend
 	pushw 0x3
 	pushw 0xee
 	pushw 0x2ce6
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0xf
 	jr	gt, MidiSysEx_SendCC2RegValue
 	or (xiz), l
 MidiSysEx_SendCC2RegValue:
 	ld xwa, 0x2d06
-	call	16567398
+	call	AcApcToggleProc_Helper
 	add hl, 0x3c
 	ld (xiz + 2), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendCC2ViaCOMM
 	push xiz
 	pushw 0x3
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_CheckDelayAndSend
 MidiSysEx_SendCC2ViaCOMM:
@@ -7266,7 +7266,7 @@ MidiSysEx_SendAfterDelay:
 	pushw 0xee
 	pushw 0x2cd8
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
 	call	AcApcToggleProc_Helper
@@ -7279,7 +7279,7 @@ MidiSysEx_SendAfterDelay:
 	jr	nz, MidiSysEx_SendAfterDelayViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendBankData1
 MidiSysEx_SendAfterDelayViaCOMM:
@@ -7289,17 +7289,17 @@ MidiSysEx_SendAfterDelayViaCOMM:
 	call	sendCOMM
 MidiSysEx_SendBankData1:
 	ld xwa, 0x2d0b
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp hl, 0:i3
 	jr	z, MidiSysEx_SendBankData2
 	pushw 0xe
 	pushw 0xee
 	pushw 0x2cd8
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz + 4), l
 	ld (xiz + 9), 0x16
 	ld (xiz + 12), 0x0
@@ -7307,7 +7307,7 @@ MidiSysEx_SendBankData1:
 	jr	nz, MidiSysEx_SendBank1ViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendBank1Param2
 MidiSysEx_SendBank1ViaCOMM:
@@ -7318,13 +7318,13 @@ MidiSysEx_SendBank1ViaCOMM:
 MidiSysEx_SendBank1Param2:
 	ld (xiz + 9), 0x17
 	ld xwa, 0x2d0a
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank1P2ViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendBankData2
 MidiSysEx_SendBank1P2ViaCOMM:
@@ -7341,7 +7341,7 @@ MidiSysEx_SendBankData2:
 	pushw 0xee
 	pushw 0x2cd8
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
 	call	AcApcToggleProc_Helper
@@ -7354,7 +7354,7 @@ MidiSysEx_SendBankData2:
 	jr	nz, MidiSysEx_SendBank2ViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendBank2Param2
 MidiSysEx_SendBank2ViaCOMM:
@@ -7365,13 +7365,13 @@ MidiSysEx_SendBank2ViaCOMM:
 MidiSysEx_SendBank2Param2:
 	ld (xiz + 9), 0x29
 	ld xwa, 0x2d0d
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank2P2ViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendBankData3
 MidiSysEx_SendBank2P2ViaCOMM:
@@ -7388,7 +7388,7 @@ MidiSysEx_SendBankData3:
 	pushw 0xee
 	pushw 0x2cd8
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	ld xwa, 0x2d00
 	call	AcApcToggleProc_Helper
@@ -7401,7 +7401,7 @@ MidiSysEx_SendBankData3:
 	jr	nz, MidiSysEx_SendBank3ViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_SendBank3Param2
 MidiSysEx_SendBank3ViaCOMM:
@@ -7412,13 +7412,13 @@ MidiSysEx_SendBank3ViaCOMM:
 MidiSysEx_SendBank3Param2:
 	ld (xiz + 9), 0x1c
 	ld xwa, 0x2d11
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz + 12), l
 	cp (xsp + 4), 0x0
 	jr	nz, MidiSysEx_SendBank3P2ViaCOMM
 	push xiz
 	pushw 0xe
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	jr	MidiSysEx_FreeAndReturn
 MidiSysEx_SendBank3P2ViaCOMM:
@@ -7450,23 +7450,23 @@ MidiSysEx_SendPartChanLoop:
 	pushw	238
 	pushw	0x2cec
 	push xiz
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	wa, (xsp+4)
 	ld (xiz+4), a
 	ld (xiz+9), 0x12
 	ld xwa, 0x00002d00
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld (xiz+0x0c), l
 	push xiz
 	pushw	14
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	incw	1, (xsp+4)
 	cpw (xsp+4), 0x0010
 	jr	c, MidiSysEx_SendPartChanLoop
 	push xiz
-	call	16712469
+	call	Free
 	inc 4, xsp
 MidiSysEx_SendPartChan_Done:
 	pop xiz
@@ -7486,7 +7486,7 @@ MidiSysEx_CopyParamToBuffer:
 	push xwa
 	pushw	0
 	pushw	0xfc4a
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 MidiPkt_SendControlPair:
@@ -9059,7 +9059,7 @@ SeqOut_ChunkLoop32:
 	ei 6
 	push xiz
 	pushw 0x20
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	ei 0
 	submi16 (xsp + 4), 0x20
@@ -9070,7 +9070,7 @@ SeqOut_ChunkRemainder:
 	ei 6
 	push xiz
 	pushm (xsp + 8)
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	ei 0
 	pop xiz
@@ -9092,7 +9092,7 @@ SeqOut_TimedChunkLoop32:
 	ei 6
 	push xiz
 	pushw 0x20
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	ei 0
 	submi16 (xsp + 4), 0x20
@@ -9103,7 +9103,7 @@ SeqOut_TimedChunkRemainder:
 	ei 6
 	push xiz
 	pushm (xsp + 8)
-	call	16625570
+	call	SeqOut_WriteTimedBytes
 	inc 6, xsp
 	ei 0
 	pop xiz
@@ -9700,7 +9700,7 @@ AssSwb_ApplyBitDescriptor:
 	ld l, (xix)
 	extz hl
 	pushw hl
-	call	16624162
+	call	AssswbWr
 	jr	AssSwb_Return
 AssSwb_NoEntry:
 	ldw (xsp + 4), 0xffff
@@ -9766,7 +9766,7 @@ AssSwb_ProcessLoop_Data:
 	ld	hl, (xhl)
 	extz	hl
 	pushw	hl
-	call	16624162
+	call	AssswbWr
 	ld	a, (xiz)
 	extz	wa
 	ld	l, (xiz+1)
@@ -9782,7 +9782,7 @@ AssSwb_ProcessLoop_Data:
 	srl	hl, 8
 	extz	hl
 	pushw	hl
-	call	16624162
+	call	AssswbWr
 	jr	AssSwb_ProcessLoop_Data_Join
 AssSwb_ProcessLoop_Data_Skip:
 	ldw	(xsp+4), 0xffff
@@ -9817,6 +9817,7 @@ Part_LookupTableEntry_Loop:
 	cp	wa, 0:i3
 	jr	nz, Part_LookupTableEntry_Loop
 	ret
+SndParam_LookupAndDispatch_Code_Helper:
 	inc	1, xwa
 	ld	l, 0:opc
 	dec	1, bc
@@ -9834,6 +9835,7 @@ Part_LookupTableEntry_Skip:
 	neg	l
 	res	7, l
 	ret
+SndParam_LookupAndDispatch_Code_Helper2:
 	calr	ArpQueue_Enqueue
 	ld	xwa, (0xbbc0:16)
 	calr	SeqOut_FlushWithChunking
@@ -9979,7 +9981,7 @@ MidiSeq_ComputeExpression:
 	or xbc, xbc
 	ret z
 	ld xwa, xde
-	call	16712763
+	call	Math_DivideU32
 	sub xhl, 0x20
 	cpl hl
 	cplw_erp 0xee
@@ -10000,7 +10002,7 @@ MidiSeq_Expression_Lower:
 	or xbc, xbc
 	ret z
 	ld xwa, xde
-	call	16712763
+	call	Math_DivideU32
 	sub xhl, 0x20
 	cpl hl
 	cplw_erp 0xee
@@ -10905,8 +10907,8 @@ SeqChan_StepCmd_Field5to6:
 	ld	bc, 3:i3
 	ld	de, 5:i3
 	call	MIDI_ReadChannelParam
-	call	16606396
-	call	16711567
+	call	MidiPkt_ArpConfigChain_Data_Helper18_Helper
+	call	TmFlash_BulkTransferToSubCPU
 	ld	xwa, (0xbc10:16)
 	ldw	bc, 15
 	call	SeqData_ReadFieldByIndex
@@ -11271,7 +11273,7 @@ MidiSysEx_ProcessBlock_Helper6:
 	push	xhl
 	push	xix
 	push	xiz
-	call	16693022
+	call	MIDI_PitchBendData_Block
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11395,7 +11397,7 @@ MidiSysEx_ProcessBlock_Helper11_Join2:
 	push	xix
 	push	xiz
 	call	TmFlash_Return_LoadReg
-	call	16693022
+	call	MIDI_PitchBendData_Block
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -11619,10 +11621,10 @@ SoundMode_RetStub_D:
 SoundMode_ApplyVoiceParams:
 	ld wa, 2:i3
 	ld xbc, 0xf980
-	call	16623622
+	call	SoundMode_ApplyVoiceParams_Helper
 	ld wa, 4:i3
 	ld xbc, 0xf980
-	call	16623278
+	call	SysEx_DispatchByChannel_49_Entry_Code_Join2
 	lda	xbc, (0x90f1:16)
 	ld xwa, xbc
 	lda xbc, (xbc + 31)
@@ -11707,7 +11709,7 @@ SoundMode_DispatchRender_1:
 SoundMode_DispatchRender_2:
 	calr	SoundMode_AlternateRender
 SoundMode_PostRender:
-	call	16625030
+	call	BitMapOut_ComputeRegionDelta
 	lda xde, (0x03c8e4:24)
 	lda xbc, (0xf9a0:16)
 	ld xhl, xbc
@@ -11779,11 +11781,11 @@ SoundMode_NotifyActiveVoices:
 	ld xwa, 0x2201
 	ld bc, 1:i3
 	ld de, 0:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ld xwa, 0x2205
 	ld bc, 1:i3
 	ld de, 0:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 SoundMode_RenderPopRegs:
 	pop xiz
 	pop xix
@@ -11887,7 +11889,7 @@ MidiCtrl_FullReconfigure:
 	cp a, 0x6c
 	jr	nc, SoundMode_ProcessToneAndParams
 MidiCtrl_DeltaAndProcess:
-	call	16625030
+	call	BitMapOut_ComputeRegionDelta
 	jr	SoundMode_ProcessToneAndParams
 MidiCtrl_RenderAndProcess:
 	calr	SoundMode_RenderWithNotify
@@ -12402,7 +12404,7 @@ MidiCtrl_Bit2ToChannel:
 MidiCtrl_Bit2ToChannel_Store:
 	extz bc
 	ld wa, bc
-	jp	16692739
+	jp	COMM_WriteAndCheck
 MidiCtrl_SendControlPacket:
 	dec 4, xsp
 	ld c, a
@@ -12446,7 +12448,7 @@ VoiceData_SyncLoop:
 	pushw bc
 	push xde
 	push xhl
-	call	16713148
+	call	Mem_Copy
 	lda xsp, (xsp + 10)
 	inc 1, iz
 	cp iz, 7:i3
@@ -12718,13 +12720,13 @@ SeqData_FormatOutput_CaseC:
 	.set SwbtWr_WriteLoop_CC_B1, SeqData_FormatOutput_CaseC + 5
 	ld	xwa, (0xbbb8:16)
 	lda	xwa, (xwa+14)
-	jp	16705559
+	jp	SndParam_LookupAndDispatch_Code_Join
 SeqData_FormatOutput_Default:
 	bit	4, (0xfd50:16)
 	ret	nz
 	ld	xwa, (0xbbb8:16)
 	lda	xwa, (xwa+14)
-	call	16706024
+	call	SeqData_FormatOutput_CaseB_Helper
 	cp	hl, 0:i3
 	ret	z
 	ld	xwa, MidiPkt_EventType_Table_0x560
@@ -13481,7 +13483,7 @@ SeqAlt_NibbleSearch_Epilogue3:
 	ret
 	ld	xwa, (0xbbb8:16)
 	lda	xwa, (xwa+14)
-	call	16705807
+	call	SeqAlt_ApplyDescriptor_TypeB_Helper
 	cp	hl, 0:i3
 	ret	z
 	ld	xwa, MidiPkt_EventType_Table_0x560
@@ -13547,7 +13549,7 @@ SeqAlt_ApplyDescD_NoShift:
 	pushw wa
 	ld a, e
 	ld de, hl
-	call	16624162
+	call	AssswbWr
 SeqAlt_ApplyDescD_Cleanup:
 	pop xiz
 	ret
@@ -13661,12 +13663,12 @@ DSPParam_StoreWithLoop_NoShift:
 	add xwa, 0x4900
 	extz hl
 	ld bc, hl
-	call	16630064
+	call	AppEvent_HandleChannelEvent_Helper
 	cp hl, 0:i3
 	jr	lt, DSP_ParamLoop_Cleanup
 	ld xwa, (xsp + 4)
 	add xwa, 0x4904
-	call	16629800
+	call	DSPCfg_ReadParam_Map0
 	ldfr_werp HL, 0xfa
 	cpiw_erp 0xfa, 0
 	jr	lt, DSP_ParamLoop_Cleanup
@@ -13679,14 +13681,14 @@ VoiceParam_ApplyRangeCheck:
 	ld xwa, (xsp + 4)
 	add xwa, 0x4910
 	add xwa, xbc
-	call	16629805
+	call	DSPCfg_ReadParam_Map1
 	ld bc, hl
 	ld de, iz
 	exts xde
 	ld xwa, (xsp + 4)
 	add xwa, 0x4910
 	add xwa, xde
-	call	16630064
+	call	AppEvent_HandleChannelEvent_Helper
 	inc 1, iz
 	cpw_erp IZ, 0xfa
 	jr	lt, VoiceParam_ApplyRangeCheck
@@ -14303,7 +14305,7 @@ MidiPkt_BuildControl_Skip:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+10)
 	ld	c, (xsp+4)

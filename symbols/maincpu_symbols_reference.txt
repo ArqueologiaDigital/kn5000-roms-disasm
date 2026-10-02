@@ -21,8 +21,8 @@
 #   For v9  use maincpu_v9_symbols_reference.txt
 # =====================================================
 #
-#   symbols .................. 47,982
-#   semantic names ........... 44,639 (93.0%)
+#   symbols .................. 47,987
+#   semantic names ........... 44,644 (93.0%)
 #   positional names ......... 3,343
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -29352,6 +29352,7 @@ __pad_F630DE 00F630DE
 AccPat_IndexToAddress 00F630E0
 AccPat_InlineFunctions_DataBlock 00F630F0
 AccPat_InlineFunctions_DataBlock_0x35 00F63125
+AccPat_IndexToAddress_Sub 00F63149
 AccPat_DispatchNoteChange 00F6314F
 AccPat_Dispatch_AllocAndProcess 00F63159
 AccPat_Dispatch_CalcAccent 00F6319C
@@ -39762,6 +39763,7 @@ DrawDottedLineWithMode_Impl_Skip26 00FB0B62
 DrawDottedLineWithMode_Impl_Skip27 00FB0B66
 Voice_FactoryPresetData_Code_Skip 00FB0B76
 Voice_FactoryPresetData_Code_Join 00FB0B78
+Voice_FactoryPresetData_Code_Join6 00FB0B7B
 Voice_FactoryPresetData_Code_Skip2 00FB0BA0
 Voice_FactoryPresetData_Code_Loop 00FB0BEB
 Voice_FactoryPresetData_Code_Skip3 00FB0BF8
@@ -43995,9 +43997,11 @@ Part_LookupTableEntry 00FD72AD
 Part_LookupReturnZero 00FD72CB
 Part_ProcessEntry_Data 00FD72CE
 Part_LookupTableEntry_Loop 00FD72D8
+Param_SignExtendReturn_Helper3_Helper 00FD72E7
 Part_ProcessEntry_Data_0x19 00FD72E7
 Part_LookupTableEntry_Loop2 00FD72F5
 Part_LookupTableEntry_Skip 00FD7300
+Param_SignExtendReturn_Helper3_Helper2 00FD7306
 Part_ProcessEntry_Data_0x48 00FD7316
 MidiChan_ClearAllStates 00FD7317
 MidiChan_SetStateMode 00FD7366
@@ -47431,6 +47435,7 @@ HdaeRom_DataHandler_Epilogue 00FF03D5
 HdaeRom_DataDispatch_Block 00FF03DC
 HdaeRom_DataDispatch_Block2 00FF03EB
 HdaeRom_DataDispatch_Block3 00FF03FB
+HdaeRom_DataDispatch_Block3_Loop2 00FF040E
 HdaeRom_DataDispatch_Block3_Skip 00FF041B
 HdaeRom_DataDispatch_Block3_Loop 00FF0423
 HdaeRom_AltHandler 00FF0445

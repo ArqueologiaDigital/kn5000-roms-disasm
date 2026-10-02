@@ -20,21 +20,25 @@
 ; (notes below mark where).
 
 ; (was .incbin "includes/romslices/v7_block_interrupt_vector_trampolines_head.bin")
+interrupt_vector_trampolines_Skip:
 	ld	wa, (xsp + 10)
-	calr	6430
-	jr	5
+	calr	Audio_ResetAfterPayloadError_Helper_Helper2
+	jr	interrupt_vector_trampolines_Join
+interrupt_vector_trampolines_Skip2:
 	ldw	(xsp + 4), 0xffff
+interrupt_vector_trampolines_Join:
 	ld	hl, (xsp + 4)
 	pop	xiz
 	lda	xsp, (xsp + 10)
 	ret
+KeyScan_Disable_Helper:
 	pushw	iz
 	ld	iz, de
-	calr	6742
+	calr	UIState_CheckAndRenderBitmap_Helper_Helper
 	ld	xwa, xhl
 	ld	bc, iz
 	ld	de, (xsp+6)
-	calr	-260
+	calr	MainTitle_PrepareAndDispatch_Helper
 	popw	iz
 	retd	2
 AcApcToggleProc_Helper:
@@ -122,9 +126,10 @@ AcApcToggleProc_Helper_Skip3:
 	ret
 ; (was .incbin "includes/romslices/v7_block_interrupt_vector_trampolines_tail.bin")
 DkMdlyPly_CheckState_Helper:
-	calr	6533
+	calr	UIState_CheckAndRenderBitmap_Helper_Helper
 	ld	xwa, xhl
 	jrl	AcApcToggleProc_Helper
+GroupBoxProc_StartSSFPresentation_Helper:
 	lda	xsp, (xsp - 22)
 	push	xiz
 	ld	(xsp + 14), xde

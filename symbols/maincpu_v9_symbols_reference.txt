@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 47,976
-#   semantic names ........... 44,632 (93.0%)
+#   symbols .................. 47,981
+#   semantic names ........... 44,637 (93.0%)
 #   positional names ......... 3,344
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -29337,6 +29337,7 @@ __pad_F630DE 00F630DE
 AccPat_IndexToAddress 00F630E0
 AccPat_InlineFunctions_DataBlock 00F630F0
 AccPat_InlineFunctions_DataBlock_0x35 00F63125
+AccPat_IndexToAddress_Sub 00F63149
 AccPat_DispatchNoteChange 00F6314F
 AccPat_Dispatch_AllocAndProcess 00F63159
 AccPat_Dispatch_CalcAccent 00F6319C
@@ -39747,6 +39748,7 @@ DrawDottedLineWithMode_Impl_Skip26 00FB0B62
 DrawDottedLineWithMode_Impl_Skip27 00FB0B66
 Voice_FactoryPresetData_Code_Skip 00FB0B76
 Voice_FactoryPresetData_Code_Join 00FB0B78
+Voice_FactoryPresetData_Code_Join6 00FB0B7B
 Voice_FactoryPresetData_Code_Skip2 00FB0BA0
 Voice_FactoryPresetData_Code_Loop 00FB0BEB
 Voice_FactoryPresetData_Code_Skip3 00FB0BF8
@@ -43982,9 +43984,11 @@ Part_LookupTableEntry 00FD72AD
 Part_LookupReturnZero 00FD72CB
 Part_ProcessEntry_Data 00FD72CE
 Part_LookupTableEntry_Loop 00FD72D8
+Param_SignExtendReturn_Entry_Code_Helper 00FD72E7
 Part_ProcessEntry_Data_0x19 00FD72E7
 Part_LookupTableEntry_Loop2 00FD72F5
 Part_LookupTableEntry_Skip 00FD7300
+Param_SignExtendReturn_Entry_Code_Helper2 00FD7306
 Part_ProcessEntry_Data_0x48 00FD7316
 MidiChan_ClearAllStates 00FD7317
 MidiChan_SetStateMode 00FD7366
@@ -47413,6 +47417,7 @@ HdaeRom_DataHandler_Epilogue 00FF03CA
 HdaeRom_DataDispatch_Block 00FF03D1
 HdaeRom_DataDispatch_Block2 00FF03E0
 HdaeRom_DataDispatch_Block3 00FF03ED
+HdaeRom_DataDispatch_Block3_Loop2 00FF0400
 HdaeRom_DataDispatch_Block3_Skip 00FF040D
 HdaeRom_DataDispatch_Block3_Loop 00FF0415
 HdaeRom_AltHandler 00FF0437

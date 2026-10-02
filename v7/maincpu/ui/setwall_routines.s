@@ -476,7 +476,7 @@ SetWall_WriteSingle_SetMode:
 
 	ld c, (3390:16)
 
-	call	16600920
+	call	SndParam_UpdateChannels
 
 	ret
 
@@ -534,12 +534,12 @@ SetWall_WriteAll_ModeSet:
 	ldw	(xix), 65535
 	inc1b_erp	52
 	cp_erpb	52, 10
-	jr	c, -102	; -> 0xF1F23C
+	jr	c, SetWall_WriteAll_Loop	; -> 0xF1F23C
 	xor	xwa, xwa
 	ld	a, (3391:16)
 	xor	xbc, xbc
 	ld	c, (3390:16)
-	call	16600920
+	call	SndParam_UpdateChannels
 	call	SetWall_SyncToneGenToDRAM
 	call	VoiceChannels_InitPanFromPreset
 	ret
@@ -611,14 +611,14 @@ SetWall_LocalWriteAll_Mode:
 	ldw	(xix), 65535
 	inc1b_erp	52
 	cp_erpb	52, 10
-	jr	c, -102
+	jr	c, SetWall_LocalWriteAll_Loop
 	xor	xwa, xwa
 	ld	a, (3391:16)
 	xor	xbc, xbc
 	ld	c, (3390:16)
-	call	16600920
-	call	15860208
-	call	16553566
+	call	SndParam_UpdateChannels
+	call	SetWall_SyncToneGenToDRAM
+	call	VoiceChannels_InitPanFromPreset
 	ret
 SetWall_ExternalSync:
 	call CDlikeSwTtl_SendEvent8C_0
@@ -685,7 +685,7 @@ SetWall_CrossTypeChange:
 
 	call SetWall_CrossType_Validate	; call SetWall_CrossType_Validate (v7 addr)
 
-	call 16635550	; call Audio_CheckSubsystemReady (v7 addr)
+	call PerfMode_Handler_EvtB_Helper2_Helper11	; call Audio_CheckSubsystemReady (v7 addr)
 
 	ret
 
@@ -2167,12 +2167,12 @@ SetWall_Sync_PostEvent:
 	ld	e, 145:opc
 	ld	d, 3:opc
 	ld	w, 4:opc
-	call	16624640
-	call	15668398
+	call	SwbtWr_QueueMainEvent
+	call	SwbtWr_ReinitBothBanks
 SetWall_Sync_FinalUpdate:
 	ld (4596:16), 1
 
-	call	16625070
+	call	BitMapOut_RenderDisplay
 
 	ld (4596:16), 1
 
@@ -2182,7 +2182,7 @@ SetWall_Sync_FinalUpdate:
 
 	and (0x28b1:16), 254
 
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 
 	ret
 

@@ -1049,39 +1049,39 @@ Boot_MainSequence_Trampoline:
 User_didnt_request_flash_mem_update:
 	ld	a, (1026:16)
 	extz	wa
-	calr	514
+	calr	Boot_HandleFactoryReset
 	ldw	(65482:24), 0
 	set_dd8	0, 40
-	call	15676020
+	call	SubCPU_Init_DMA_Channels
 	ei	0
-	calr	134
-	calr	804
+	calr	SubCPU_Send_Payload
+	calr	SubCPU_Payload_Verify
 	ld	wa, 0:i3
-	call	16634741
+	call	Boot_InitPeripherals_Helper
 	ei	0
-	call	16477975
-	calr	867
+	call	SelfTest_FirmwareVersionCheck
+	calr	SubCPU_Payload_GetErrorFlag
 	cp	hl, 0:i3
-	jr	nz, 4
+	jr	nz, Boot_PayloadError
 	ld	wa, 1:i3
-	jr	2
+	jr	Boot_DisplayScreen
 Boot_PayloadError:
 	ld wa, 2:i3	; Error: use screen group 2
 
 Boot_DisplayScreen:
-	call	16634741
+	call	Boot_InitPeripherals_Helper
 	ld	(1024:16), 6
 	ld	wa, 3:i3
-	call	16634741
+	call	Boot_InitPeripherals_Helper
 	ld	(1024:16), 128
 	ldw	(65492:24), 0
 	ld	a, (1026:16)
 	extz	wa
-	calr	350
+	calr	Boot_HandleComboDisplay
 	ld	wa, 4:i3
-	call	15670130
-	calr	325
-	jp	15667739
+	call	Show_ScreenGroup
+	calr	Boot_SetConfigFlag7
+	jp	MainLoop
 Boot_GetButtonComboCode:
 	ld l, (1026:16)
 	ret
@@ -1686,14 +1686,14 @@ PlayHalt:
 	jr	z, PlayHalt_SkipSetFlag
 	set	2, (10407:16)
 PlayHalt_SkipSetFlag:
-	call	16179766
-	call	16641574
-	call	16648347
-	call	16647846
-	call	16648855
-	call	16648774
-	call	16693037
-	call	16626529
+	call	AccompSeq_StopSequence
+	call	AudioInit_RefreshToneBank
+	call	NoteMap_ProcessAndMerge
+	call	DemoMode_Main_Operation_Helper
+	call	Voice_InitTablePair
+	call	Voice_InitTableGroup
+	call	MIDI_SendAllSoundOff
+	call	MidiThru_Enable
 	inc	2, xsp
 	ret
 PlayStandBy:
@@ -1704,7 +1704,7 @@ PlayStandBy:
 PlayStandBy_SkipClearFlag:
 	res	3, (10407:16)
 	call	SeqAcc_InitPlaybackState
-	jp	0xfdb35c
+	jp	MidiThru_Disable
 EditSwRefresh:
 	call CPanel_InitButtonState_SaveRegs
 	call RefreshSwEvent
@@ -1725,7 +1725,7 @@ putc_mrx_bf_X:
 	ret
 
 midi_out_en_X:
-	jp	16576929
+	jp	MIDI_SC0_TX_DISPATCH
 GetAdr_sqbtof:
 	lda xhl, (1052:16)
 	ret
@@ -1977,6 +1977,7 @@ Voice_FactoryPresetData_Code_Skip:
 	setm	6, (xde)
 Voice_FactoryPresetData_Code_Join:
 	incm8	1, (xsp+24)
+Voice_FactoryPresetData_Code_Join6:
 	ld	xwa, (xsp+12)
 	add	(xsp+4), xwa
 	ld	xwa, (xsp+4)
@@ -1988,13 +1989,14 @@ Voice_FactoryPresetData_Code_Join:
 	add	(xsp+20), xwa
 	ld	xwa, (xsp+20)
 	cp	xwa, (xsp+8)
-	jrl	le, -249
+	jrl	le, DrawDottedLineWithMode_Impl_Loop3
 	jrl	Voice_FactoryPresetData_Code_Join4
+Voice_FactoryPresetData_Code_Skip15:
 	ld	xwa, (xsp+8)
 	sla	xwa, 16
 	ld	xbc, (xsp+4)
 ; call Math_DivideSigned32 (v7)
-	call	0xff0431
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
@@ -2141,6 +2143,7 @@ Voice_FactoryPresetData_Code_Join4:
 	ld	bc, (xbc)
 	ld	(xwa+6), bc
 	calr	SetChangeRect
+Voice_FactoryPresetData_Code_Epilogue2:
 	pop	xiz
 	lda	xsp, (xsp+56)
 	ret
@@ -2247,7 +2250,7 @@ Voice_FactoryPresetData_Code_Skip14:
 	ld	de, (xde)
 	ld	(xiy), de
 	ld	de, (xsp+14)
-	calr	61759
+	calr	DrawLineWithMode_Impl
 	lda	xwa, (xsp+10)
 	ld	xbc, (xsp+16)
 	lda	xde, (xbc+6)
@@ -2257,7 +2260,7 @@ Voice_FactoryPresetData_Code_Skip14:
 	ld	de, (xde)
 	ld	(xbc+2), de
 	ld	de, (xsp+14)
-	calr	61731
+	calr	DrawLineWithMode_Impl
 	lda	xwa, (xsp+10)
 	ld	xhl, (xsp+16)
 	ld	bc, (xhl+2)
@@ -2270,7 +2273,7 @@ Voice_FactoryPresetData_Code_Skip14:
 	ld	de, (xhl+6)
 	ld	(xbc+2), de
 	ld	de, (xsp+14)
-	calr	61696
+	calr	DrawLineWithMode_Impl
 	lda	xwa, (xsp+10)
 	ld	xbc, (xsp+16)
 	lda	xde, (xbc+4)
@@ -2281,7 +2284,7 @@ Voice_FactoryPresetData_Code_Skip14:
 	ld	(xbc), de
 	ld	de, (xsp+14)
 Voice_FactoryPresetData_Code_Join5:
-	calr	61670
+	calr	DrawLineWithMode_Impl
 	ld	xwa, (xsp+16)
 	calr	SetChangeRect
 	popw	iz
@@ -3191,13 +3194,13 @@ EmptyRoutine_03_Skip2:
 SndParam_RW_ProcessResult_v7:
 	ld	xiz, xwa
 	or	xwa, xwa
-	jr	z, 98
+	jr	z, SndParam_ProbeMatchFound_Join_Skip
 	ld	xwa, (xsp + 18)
 	ld	xbc, (xiz)
 	ld	(xwa), xbc
 	ld	xwa, (xsp + 22)
 	cp	(xwa), 0xb1
-	jr	z, 47
+	jr	z, SndParam_ProbeMatchFound_Skip
 	ld	a, (xiz + 15)
 	inc	3, a
 	extz	wa

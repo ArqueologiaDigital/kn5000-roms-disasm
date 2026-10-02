@@ -32,7 +32,7 @@ FDemo_DisplayResourceData_Loop:
 	push	xiz
 	lda	xwa, (xsp+0x112)
 	push	xwa
-	call	0xff0516
+	call	CmpNamingCheck_Helper
 	lda	xwa, (xsp+0x116)
 	ld	(xwa+0x8), 0
 	pushw	FDemo_DisplayResourceData_Str_SQT@hi16
@@ -61,7 +61,7 @@ FDemo_DisplayResourceData_Loop:
 	pushw	256
 	push	xbc
 	push	xhl
-	call	0xff05bc
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 FDemo_DisplayResourceData_Skip4:
 	ld	iz, 1:i3
@@ -77,7 +77,7 @@ FDemo_DisplayResourceData_Loop2:
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
-	call	0xff05bc
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 FDemo_DisplayResourceData_Skip:
 	inc	1, iz
@@ -106,7 +106,7 @@ FDemo_DisplayResourceData_Loop4:
 	lda	xwa, (xsp+10)
 	push	xwa
 	push	xhl
-	call	0xff05bc
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xwa, (xsp+8)
 	ld	xbc, 256
@@ -367,14 +367,14 @@ FDemo_LinkedListSearchLoop:
 	push	xiz
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	z, 10
+	jr	z, FDemo_LinkedListSearchFound
 	lda	xiz, (xiz+24)
 	ld	xwa, (xiz+16)
 	or	xwa, xwa
-	jr	nz, -25
+	jr	nz, FDemo_LinkedListSearchLoop
 FDemo_LinkedListSearchFound:
 	ld xwa, (xiz + 16)
 	or xwa, xwa
@@ -409,7 +409,7 @@ FDemo_LinkedListSearchInsert_Loop:
 	push	xwa
 	ld	xwa, (xsp+10)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	z, FDemo_LinkedListSearchInsert_Skip
@@ -532,9 +532,9 @@ DemoMode_Main_Operation:
 	push XBC
 	pushw 0x0003
 	pushw 0xcf04
-	call 0xff05bc
+	call Mem_Copy
 	lda xsp, (xsp + 0x0a)
-	call 0xfdb581
+	call Audio_ConfigureDSP
 	calr Voice_LoadVoiceTable
 	set 4, (0xfd50:16)
 	res 2, (0xfd50:16)
@@ -545,7 +545,7 @@ DemoMode_Main_Operation:
 	calr Voice_CopyPreset
 	call DemoMode_Main_Operation_Helper2
 	calr Timer7_DisableInterrupt
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	set 6, (0xb746:16)
 	res 3, (0x28ad:16)
 	call SeqInit_PostEventSequence
@@ -585,7 +585,7 @@ DemoMode_Initialize:
 FDemo_PostBannerCheck:
 	calr	Banner_Loop_Check
 ; call Audio_CheckSubsystemReady (v7 addr)
-	call	0xfdd69e
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 ; resda 6, 0xb7e2 (v7 patched)
 	res	6, (0xb746:16)
 
@@ -633,7 +633,7 @@ Demo_SelectEntry_PreSaveCheck:
 	pushw 0x0003
 	pushw 0xcf04
 	push XBC
-	call 0xff05bc
+	call Mem_Copy
 	lda xsp, (xsp + 0x0a)
 	jr t, Demo_SelectEntry_ExitDispatch
 Demo_SelectEntry_CheckVoiceKeys:
@@ -778,7 +778,7 @@ Demo_SelectEntry_Debounce:
 	ldw	wa, 168
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	16624211
+	call	AddswbWr
 	ret
 Demo_SelectEntry_AfterSongLoad:
 	cp	(35996:16), 228
@@ -884,7 +884,7 @@ Demo_SelectEntry_StartPlayback:
 	cp (0x8c98:16), 0x13
 	ret NZ
 	call Seq_ResetAndRestartAccompaniment
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	ldmm8 0x1157, 0x28a4
 	cp (0x8c9c:16), 0xe4
 	ret Z
@@ -925,7 +925,7 @@ Timer7_DisableInterrupt:
 	pushw	128
 	ldw	wa, 152
 	ld	bc, 2:i3
-	call	16624211
+	call	AddswbWr
 	ret
 Voice_LoadVoiceTable:
 	pushw_erp 0xfa
@@ -1075,7 +1075,7 @@ Voice_SavePreset:
 	pushw	3278
 	pushw	0
 	pushw	61856
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 Voice_CopyPreset:
@@ -1084,7 +1084,7 @@ Voice_CopyPreset:
 	pushw	61856
 	pushw	0
 	pushw	3278
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 Demo_LookupPartTableEntry:
@@ -1741,27 +1741,27 @@ FileIO_LoadRegion0_VRAM:
 	jr LoadRegion0_Return				; return
 LoadRegion0_OpenSuccess:
 	ld	wa, 0:i3
-	calr	64813
+	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jr	z, 52
-	call	16624739
+	jr	z, LoadRegion0_AltPath
+	call	PreLswLoad
 	lda	xwa, (63872:16)
 	lda	xbc, (65472:16)
 	ld	xde, xwa
 	sub	xbc, xde
-	call	16288103
+	call	FileIO_ReadBlock
 	lda	xwa, (1996800:24)
 	ld	xde, xwa
 	lda	xbc, (1998848:24)
 	sub	xbc, xde
-	call	16288103
-	call	16287669
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, iz
-	call	16624746
-	jr	6
+	call	PostLswLoad
+	jr	LoadRegion0_Finalize
 LoadRegion0_AltPath:
-	call	16588523
+	call	FileData_AllocLoadAndParse
 	ld	iz, hl
 LoadRegion0_Finalize:
 	call FileIO_CloseHandle			; finalize display
@@ -1819,17 +1819,17 @@ LoadRegion1_OpenSuccess:
 	call BitMapOut_UpdateWidget_Done_0x99
 	jr LoadRegion1_Finalize
 LoadRegion1_AltPmLoad:
-	call	16624831
+	call	PrePmLoad
 	lda	xwa, (2020176:24)
 	ld	xde, xwa
 	lda	xbc, (2097152:24)
 	sub	xbc, xde
-	call	16288103
-	call	16287669
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, iz
-	call	16624832
-	jr	3
+	call	PostPmLoad
+	jr	LoadRegion1_Finalize
 LoadRegion1_ModeError:
 	ldw iz, 0xff9a				; error code
 LoadRegion1_Finalize:
@@ -1870,7 +1870,7 @@ LoadRegion7_OpenSuccess:
 	pushw	0
 	pushw	1024
 	push	xiz
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	ld	xwa, xiz
 	ld	xbc, 1024
@@ -2043,7 +2043,7 @@ FileIO_LoadSongRegion8:
 .Lc_f87396:
 	ld_erpb_rr a, 0xf8
 	extz WA
-	call 0xfd1f61
+	call FileData_LoadFromSlot
 	inc 1,IZ
 	cp IZ,0x000a
 	jr lt, .Lc_f87396
@@ -2084,7 +2084,7 @@ FileIO_LoadSongRegion8:
 	ld (XSP+0x02),HL
 .Lc_f87423:
 	ld wa, 0:i3
-	call 0xfd1f61
+	call FileData_LoadFromSlot
 	call SMF_InitSongPlayback
 	ld WA,(XSP+0x02)
 	call SeqLoad_JmpAltEntry
@@ -2237,20 +2237,20 @@ FileIO_LoadRegion4_VRAM:
 	jrl LoadRegion4_Return
 LoadRegion4_OpenSuccess:
 	ld	wa, 4:i3
-	calr	63533
+	calr	FileIO_CheckRegionSignature
 	cp	hl, 0:i3
-	jr	z, 36
-	call	16710850
+	jr	z, LoadRegion4_AltIterLoop
+	call	PreTmLoad
 	lda	xwa, (1966080:24)
 	ld	xde, xwa
 	lda	xbc, (1996800:24)
 	sub	xbc, xde
-	call	16288103
-	call	16287669
+	call	FileIO_ReadBlock
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, iz
-	call	16710851
-	jr	83
+	call	PostTmLoad
+	jr	LoadRegion4_Finalize
 LoadRegion4_AltIterLoop:
 	ld	iz, 0:i3
 LoadRegion4_ReadByteLoop:
@@ -2439,22 +2439,22 @@ SaveRegion0_SpaceOk:
 	call FileIO_ReturnError				; close/cleanup
 	jr SaveRegion0_Return				; return error
 SaveRegion0_OpenSuccess:
-	call	16624829
+	call	PreLswSave
 	ld	xwa, 63872
 	ld	xbc, (xsp+4)
-	call	16288283
+	call	FileIO_WriteByte_Impl
 	ld	xwa, 1996800
 	ld	xbc, xiz
-	call	16288283
-	call	16287669
+	call	FileIO_WriteByte_Impl
+	call	FileIO_ReturnError
 	ld	iz, hl
 	ld	wa, iz
-	call	16624830
-	call	16287803
+	call	PostLswSave
+	call	FileIO_CloseHandle
 	cp	iz, 0:i3
-	jr	ge, 7
+	jr	ge, SaveRegion0_Done
 	lda	xwa, (xsp+8)
-	call	16287827
+	call	FileIO_OpenDefault
 SaveRegion0_Done:
 	ld hl, iz				; return status
 SaveRegion0_Return:
@@ -3396,7 +3396,7 @@ FileIO_ByteBlock_DemoProc1_Skip13:
 	extz	wa
 	ld	bc, (xsp+26)
 	extz	bc
-	call	16176345
+	call	SLDstBankList_FuncBody_Helper3_Helper
 	ld	iz, hl
 	jr	FileIO_ByteBlock_DemoProc1_Join4
 FileIO_ByteBlock_DemoProc1_Skip14:
@@ -8396,14 +8396,14 @@ InitializeOperationState:
 	jr z, InitOp_SkipSetFlag
 	set 2, (0x28a7:16)
 InitOp_SkipSetFlag:
-	call	16179766
-	call	16641574
-	call	16648347
-	call	16647846
-	call	16648855
-	call	16648774
-	call	16693037
-	call	16626529
+	call	AccompSeq_StopSequence
+	call	AudioInit_RefreshToneBank
+	call	NoteMap_ProcessAndMerge
+	call	DemoMode_Main_Operation_Helper
+	call	Voice_InitTablePair
+	call	Voice_InitTableGroup
+	call	MIDI_SendAllSoundOff
+	call	MidiThru_Enable
 	inc	2, xsp
 	ret
 CancelOperationCleanup:
@@ -8416,7 +8416,7 @@ CancelOperationCleanup:
 CancelOp_ClearSeq:
 	res	3, (0x28a7:16)
 	call	SeqAcc_InitPlaybackState
-	jp	0xfdb35c
+	jp	MidiThru_Disable
 SignalProgressUpdate:
 	call CPanel_InitButtonState_SaveRegs
 	jp RefreshSwEvent
@@ -8502,20 +8502,20 @@ FileIO_MidiOutSendByte:
 	dec	2, xsp
 	ld	(xsp), a
 	ld	xwa, 8832
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 0:i3
-	jr	z, 35
+	jr	z, MidiOutSend_Return
 	ld	(1060:16), 243
 	ei	6
 	pushw	243
-	call	15673329
+	call	SeqBuf_MidiOut_WriteByte
 	ld	a, (xsp+2)
 	res	7, a
 	extz	wa
 	pushw	wa
-	call	15673329
+	call	SeqBuf_MidiOut_WriteByte
 	inc	4, xsp
-	call	16576929
+	call	MIDI_SC0_TX_DISPATCH
 	ei	0
 MidiOutSend_Return:
 	inc 2, xsp

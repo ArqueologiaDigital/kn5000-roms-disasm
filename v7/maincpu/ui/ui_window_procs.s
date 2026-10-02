@@ -4273,7 +4273,7 @@ ClampColorToRange_Skip12:
 	ld	xwa, (xsp+4)
 	sla	xwa, 16
 	ld	xbc, (xsp+8)
-	call	16712753
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
@@ -4331,7 +4331,7 @@ ClampColorToRange_Skip15:
 	ld	xwa, (xsp+8)
 	sla	xwa, 16
 	ld	xbc, (xsp+4)
-	call	16712753
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
@@ -6213,19 +6213,19 @@ Gfx_ClearFrameBuffers:
 	pushw	0
 	ld	xwa, 354304
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	38400
 	pushw	0
 	ld	xwa, 392704
 	push	xwa
-	call	16713757
+	call	Memset
 	pushw	1024
 	pushw	0
 	ld	xwa, 431104
 	push	xwa
-	call	16713757
+	call	Memset
 	lda	xsp, (xsp+24)
-	jrl	1950
+	jrl	Flash_SaveSplashScreen
 Gfx_LoadSplashBMP:
 	lda xsp, (xsp - 0x0456)
 	pushw iz
@@ -6344,7 +6344,7 @@ SplashBMP_ReadInfoHeader:
 	ld	xbc, xwa
 	dec	1, xwa
 	add	xwa, (xsp+14)
-	call	0xff0431
+	call	Math_DivideSigned32
 	ld	(xsp+18), xhl
 	sla	xhl, 2
 	ld	(xsp+18), xhl
@@ -6444,7 +6444,7 @@ SplashBMP_WideImage:
 	ld	(xsp+10), xwa
 	ld	xbc, (xsp+14)
 	ld	xwa, 320
-	call	16712753
+	call	Math_DivideSigned32
 	cp	xhl, 0
 	jr	le, SplashBMP_CopyRemainder
 SplashBMP_TileNarrow:
@@ -6457,13 +6457,13 @@ SplashBMP_TileNarrow:
 	call	InitializeKubo_Helper
 	add	xhl, (xsp+28)
 	push	xhl
-	call	0xff05bc
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, 1:i3
 	add	(xsp+10), xwa
 	ld	xbc, (xsp+14)
 	ld	xwa, 320
-	call	0xff0431
+	call	Math_DivideSigned32
 	cp	(xsp+10), xhl
 	jr	lt, SplashBMP_TileNarrow
 SplashBMP_CopyRemainder:
@@ -6490,7 +6490,7 @@ SplashBMP_CopyRemainder:
 
 
 SplashBMP_CopyToFramebuffer:
-	call	16713148
+	call	Mem_Copy
 
 	lda xsp, (xsp + 10)
 
@@ -6531,7 +6531,7 @@ SplashBMP_PadCopyLoop:
 	push	xwa
 	ld	xwa, (xsp+28)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, 320
 	add	(xsp+26), xwa
@@ -6540,7 +6540,7 @@ SplashBMP_PadCopyLoop:
 	add	(xsp+6), xwa
 	ld	xwa, (xsp+6)
 	cp	xwa, 240
-	jr	lt, -45
+	jr	lt, SplashBMP_PadCopyLoop
 SplashBMP_Finish:
 	calr Gfx_DecodeImageToBuffer
 	calr Flash_SaveSplashScreen
@@ -6585,7 +6585,7 @@ Gfx_ProcessSplashData:
 	ld	xwa, (xsp+32)
 	push	xwa
 	push	xbc
-	call	0xff05bc
+	call	Mem_Copy
 	lda	xsp, (xsp+12)
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+18)
@@ -6622,7 +6622,7 @@ SplashData_1bppSetup:
 	ld	xwa, (xsp+18)
 	ld	(xsp+4), xwa
 	pushw	hl
-	call	16713379
+	call	Malloc
 	ld	(xsp+16), xhl
 	ld	xbc, (xsp+16)
 	ld	(xsp+12), xbc
@@ -6631,12 +6631,12 @@ SplashData_1bppSetup:
 	ld	xwa, (xsp+32)
 	push	xwa
 	push	xbc
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+12)
 	ld	xbc, 0:i3
 	ld	xwa, (xsp+18)
 	cp	xwa, 0
-	jrl	le, 151
+	jrl	le, SplashData_1bppFree
 SplashData_1bppLoop:
 	ld xde, xbc
 	add xde, (xsp + 28)
@@ -6774,21 +6774,21 @@ ImageDecode_CheckNextEntry:
 ImageDecode_PaletteReduceLoop:
 	ld	xwa, xbc
 	ld	xbc, 1000000
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	xwa, xhl
 	ld	xbc, 1300000
-	call	16712753
+	call	Math_DivideSigned32
 	ld	bc, hl
 	exts	xbc
 	ld	xwa, xbc
 	cp	xbc, 10
-	jr	z, 16
+	jr	z, PaletteReduce_SpecialCase
 	cp	xwa, 9
-	jr	z, 8
+	jr	z, PaletteReduce_SpecialCase
 	or	xwa, xwa
-	jr	nz, 9
+	jr	nz, PaletteReduce_StartSortPass
 	ld	xbc, 1:i3
-	jr	5
+	jr	PaletteReduce_StartSortPass
 PaletteReduce_SpecialCase:
 	ld xbc, 0xb
 
@@ -7393,13 +7393,13 @@ PaletteBankRotate_Impl:
 	push	xwa
 	ld	xwa, 354304
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	add	xiz, 38400
 	pushw	38400
 	push	xiz
 	ld	xwa, 392704
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+20)
 	lda	xwa, (277504:24)
 	ld	xbc, xwa
@@ -7420,22 +7420,22 @@ PaletteBankRotate_NextCol:
 	inc	1, xbc
 	inc	1, hl
 	cp	hl, 320
-	jr	lt, -23
+	jr	lt, PaletteBankRotate_ColLoop
 	inc	1, de
 	cp	de, 240
-	jr	lt, -33
+	jr	lt, PaletteBankRotate_RowLoop
 	ld	xiz, xwa
 	pushw	38400
 	push	xwa
 	ld	xwa, 432128
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	add	xiz, 38400
 	pushw	38400
 	push	xiz
 	ld	xwa, 470528
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+20)
 	pop	xiz
 	ret
@@ -7559,7 +7559,7 @@ ClipBlit_Replace_ScanlineLoop:
 	pushw	de
 	push	xbc
 	push	xhl
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+12)
 	ld	xwa, 320
 	add	(xsp+12), xwa
@@ -7687,7 +7687,7 @@ ClipBlit_Direct_ScanlineLoop:
 	push	xwa
 	ld	xwa, (xsp+22)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, 320
 	add	(xsp+12), xwa
@@ -8916,14 +8916,14 @@ DrawLineWithMode_Impl_Skip5:
 	ld	xwa, (xsp+8)
 	sla	xwa, 16
 	ld	xbc, (xsp+4)
-	call	0xff0431
+	call	Math_DivideSigned32
 	ld	(xsp+34), xhl
 	lda	xwa, (xsp+62)
 	ld	(xsp+42), xwa
 	ld	xwa, (xsp+4)
 	sla	xwa, 16
 	ld	xbc, (xsp+8)
-	call	0xff0431
+	call	Math_DivideSigned32
 	ld	xix, (xsp+42)
 	lda	xwa, (xix+2)
 	ld	(xsp+46), xwa
@@ -9733,7 +9733,7 @@ DrawDottedLineWithMode_Impl_Join2:
 	jr	nz, DrawDottedLineWithMode_Impl_Skip5
 	ld	xwa, (xsp+8)
 	or	xwa, xwa
-	jrl	z, 1328
+	jrl	z, Voice_FactoryPresetData_Code_Epilogue2
 DrawDottedLineWithMode_Impl_Skip5:
 	ld	xwa, (xsp+56)
 	ld	xiy, xwa
@@ -9998,11 +9998,11 @@ DrawDottedLineWithMode_Impl_Skip21:
 	ld	(xsp+34), xwa
 	ld	xwa, (xsp+8)
 	cp	xwa, (xsp+4)
-	jrl	le, 322
+	jrl	le, Voice_FactoryPresetData_Code_Skip15
 	ld	xwa, (xsp+4)
 	sla	xwa, 16
 	ld	xbc, (xsp+8)
-	call	0xff0431
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+12)
 	ld	xbc, xiz
@@ -10022,10 +10022,11 @@ DrawDottedLineWithMode_Impl_Skip21:
 	ld	xwa, (xsp+8)
 	cp	xwa, 0
 	jrl	lt, Voice_FactoryPresetData_Code_Join4
+DrawDottedLineWithMode_Impl_Loop3:
 	cp	(xsp+24), 3
 	jr	ule, DrawDottedLineWithMode_Impl_Skip22
 	ld	(xsp+24), 0
-	jrl	202
+	jrl	Voice_FactoryPresetData_Code_Join6
 DrawDottedLineWithMode_Impl_Skip22:
 	cp	(xsp+24), 1
 	jrl	ugt, Voice_FactoryPresetData_Code_Join

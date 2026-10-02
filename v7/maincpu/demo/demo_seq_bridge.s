@@ -109,7 +109,7 @@ MiddleFuncCall_DispatchData_Code:
 	pop	xhl
 	pop	xde
 	jr	SqTrSel_CaseC
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	jr	SqTrSel_CaseC
 	calr	DisplayMode_RefreshState
 	jr	SqTrSel_CaseC
@@ -594,22 +594,22 @@ SeqRecPlay_DisableBoth:
 
 ; SqTrSelTtl case D
 SqTrSel_CaseD:
-	calr	65484
-	call	16693581
+	calr	SeqRecPlay_DisableBoth
+	call	Song_AbortPlayback
 	ld	(7498:16), 0
 	ret
 SqTrSel_CaseE:
-	calr	65471
-	call	16693581
+	calr	SeqRecPlay_DisableBoth
+	call	Song_AbortPlayback
 	ld	xwa, 7274534
 	ld	xbc, EVT_LYRICS_ALL_CLEAR
 	ld	xde, 0:i3
-	call	16423243
+	call	ApPostEvent
 	ld	(7498:16), 0
 	ret
 SqTrSel_CaseF:
-	calr	65442
-	call	16693581
+	calr	SeqRecPlay_DisableBoth
+	call	Song_AbortPlayback
 	ld	(7498:16), 0
 	ret
 PlayMode_SendStopEvent:
@@ -686,11 +686,11 @@ SqTrSel_CaseG_Thunk4:
 PlayMode_CheckAndAbort:
 	cp (0x8c9a:16), 0x72
 	ret Z
-	call 0xfeb7ab
+	call CDlikeSwTtl_ShowSongTitle_Helper
 	bit 0x00,HL
 	ret Z
 	calr SeqRecPlay_DisableBoth
-	call 0xfeb94d
+	call Song_AbortPlayback
 	ld XWA,0x006f0026
 	ld XBC,EVT_LYRICS_ALL_CLEAR
 	ld xde, 0:i3
@@ -1092,7 +1092,7 @@ VoiceSlot_SendErrorAndReset:
 	ld w, 0x68:opc
 
 ; call MIDI_SendSysExCmd (v7 addr)
-	call	0xfeb5d2
+	call	MIDI_SendSysExCmd
 ; anddi8 (0xe3e2), 111 (v7 patched)
 	and	(0xe31c:16), 111
 ; stdi8 (0x7f42), 15 (v7 patched)

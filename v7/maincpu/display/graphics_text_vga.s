@@ -672,7 +672,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58578
+	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -688,7 +688,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58536
+	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -704,7 +704,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58494
+	calr	DrawLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -720,7 +720,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60477
+	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -736,7 +736,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60435
+	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -752,7 +752,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xde+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60393
+	calr	DrawDottedLineWithMode
 	inc	8, xsp
 	ret
 	dec	8, xsp
@@ -801,7 +801,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58238
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -818,7 +818,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	inc	2, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58193
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	1, bc
@@ -835,7 +835,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58148
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	2, bc
@@ -852,7 +852,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	inc	2, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	58103
+	calr	DrawLineWithMode
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -871,7 +871,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xhl)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60081
+	calr	DrawDottedLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	ld	(xwa), bc
@@ -884,7 +884,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xhl)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60044
+	calr	DrawDottedLineWithMode
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+2)
 	ld	bc, (xde)
@@ -897,7 +897,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	60007
+	calr	DrawDottedLineWithMode
 	lda	xwa, (xsp+8)
 	lda	xde, (xiz+6)
 	ld	bc, (xde)
@@ -910,7 +910,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	ld	de, (xiz+8)
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	59970
+	calr	DrawDottedLineWithMode
 	pop	xiz
 	inc	8, xsp
 	ret
@@ -944,7 +944,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	57856
+	calr	DrawLineWithMode
 	lda	xwa, (xsp+8)
 	ld	bc, (xiz+2)
 	inc	1, bc
@@ -961,7 +961,7 @@ DrawText_LayoutAndRender_Variant1_Skip5:
 	inc	1, de
 	ld	(xbc+2), de
 	ld	de, (0x03efa4:24)
-	calr	57811
+	calr	DrawLineWithMode
 	pop	xiz
 	lda	xsp, (xsp+16)
 	ret
@@ -2210,6 +2210,7 @@ FontGlyph_ByteData:
 	ld_rrb	a, xde, wa
 	ld	(xbc), a
 	ret
+SeMenu_CopyWriteUpdate_Helper19:
 	ld	e, (xwa)
 	cp	e, 32
 	jr	z, HexCharToNibble_Skip
@@ -2600,12 +2601,12 @@ VGA_ClearVRAM:
 	pushw	0
 	pushw	26
 	pushw	0
-	call	16713757
+	call	Memset
 	pushw	38400
 	pushw	0
 	lda	xwa, (1742336:24)
 	push	xwa
-	call	16713757
+	call	Memset
 	lda	xsp, (xsp+16)
 	ret
 _Write_VGA_Register:
@@ -2634,13 +2635,13 @@ AllBOut:
 	pushw	15360
 	pushw	26
 	pushw	0
-	call	16713148
+	call	Mem_Copy
 	pushw	38400
 	lda	xwa, (315904:24)
 	push	xwa
 	lda	xwa, (1742336:24)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+20)
 	ret
 DisplayBuffer_Process:
@@ -2697,7 +2698,7 @@ DisplayBuf_CopyEvenRow:
 
 	push xbc
 
-	call 16713148
+	call Mem_Copy
 
 	lda xsp, (xsp + 10)
 
@@ -2746,7 +2747,7 @@ DisplayBuf_CopyOddRow:
 
 	push xbc
 
-	call 16713148
+	call Mem_Copy
 
 	lda xsp, (xsp + 10)
 
@@ -4757,7 +4758,7 @@ MainVariSet:
 	extz	bc
 	pushw	bc
 	ld	bc, 0:i3
-	call	16624260
+	call	SwbtWr
 	ld	wa, 1:i3
 	call	BitMapOut_StorePresetValue
 MainVariSet_Done:
@@ -4785,7 +4786,7 @@ MainSvariIni:
 	ld	(xiz+4), l
 	ld	(xiz+2), (0x8c9e)
 	ld	xwa, xiz
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 	ld	a, (xiz)
 	extz	wa
 	call	VariScreenProc_Helper
@@ -4859,11 +4860,11 @@ MainGetSndGrpName:
 	lda	xwa, (xsp+4)
 	ld	(xwa+4), l
 	ld	(xwa+2), (0x8c9e)
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 	ld	a, (xsp+4)
 	extz	wa
 	ld	xbc, xiz
-	call	16703033
+	call	StoreDRAMInit_LoadDRAM
 	ld	xwa, 4294967295
 	ld	xbc, EVT_SOUND_GRP_NAME
 	ld	xde, xiz
@@ -4942,7 +4943,7 @@ MainGetRhyGrpName:
 	pushw	16
 	push	xhl
 	push	xiz
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	(xiz+16), 0
 	ld	xwa, 4294967295
@@ -4983,7 +4984,7 @@ MainGetRhyName:
 	ld	xwa, (xsp+12)
 	inc	1, xwa
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+6)
 	ld	(xwa+14), 0
@@ -5149,7 +5150,7 @@ MainSysControl:
 	jp_rr	8, xix, wa
 MainSysCtrl_DispatchTable:
 	ld	wa, 2:i3
-	call	16634741
+	call	Boot_InitPeripherals_Helper
 	jr	MainSysControl_PostDispatchFinalize
 MainSysCtrl_Entry1_AccDemo:
 	call AccDemo_InitDone

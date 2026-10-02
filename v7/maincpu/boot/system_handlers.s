@@ -417,7 +417,7 @@ INTT1_NoOverflow:
 	jr	ule, INTT1_StoreCounters
 	ld	w, 0x0:opc
 	or	(1065:16), 16
-	call	0xfcf1a1
+	call	MIDI_SC0_TX_DISPATCH
 INTT1_StoreCounters:
 	ld (1062:16), w
 	ld (1063:16), a
@@ -454,7 +454,7 @@ INTT1_CheckMidiSync:
 	push SR
 	ei 0x06
 	or (0x0429:16), 0x08
-	call 0xfcf1a1
+	call MIDI_SC0_TX_DISPATCH
 	pop SR
 UIState_DispatchBranch:
 	jr UIStateMachine_DispatchEntry
@@ -481,7 +481,7 @@ INTT1_CheckMidiSyncGate:
 	push	sr
 	ei	6
 	or	(1065:16), 1
-	call	0xfcf1a1
+	call	MIDI_SC0_TX_DISPATCH
 	pop	sr
 INTT1_SkipToDispatch:
 	jr UIStateMachine_DispatchEntry
@@ -762,7 +762,7 @@ INTTR4_SeqAutoStart:
 	push	sr
 	ei	6
 	or	(1065:16), 2
-	call	0xfcf1a1
+	call	MIDI_SC0_TX_DISPATCH
 	pop	sr
 INTTR4_SeqAutoStart_Skip:
 	jr INTTR4_MetroBeat_Check
@@ -795,7 +795,7 @@ INTTR4_MetroBeat_OnBeat:
 	push	sr
 	ei	6
 	or	(1065:16), 8
-	call	0xfcf1a1
+	call	MIDI_SC0_TX_DISPATCH
 	pop	sr
 INTTR4_SeqBeat_Check:
 	bit 3, (1054:16)
@@ -822,7 +822,7 @@ INTTR4_MetroQuarter_Check:
 	push	sr
 	ei	6
 	or	(1065:16), 1
-	call	0xfcf1a1
+	call	MIDI_SC0_TX_DISPATCH
 	pop	sr
 INTTR4_SeqAccum_Update:
 	bit 2, (1054:16)
@@ -1171,7 +1171,7 @@ MainLoop_AfterPedalReset:
 	call	Encoder_ValueScanAndSync
 	cp	(0xbe9d:16), 255
 	jr	z, MainLoop_AfterSwbtWr
-	call	0xfdaaca
+	call	SwbtWr_ProcessAll
 MainLoop_AfterSwbtWr:
 	call MainTitle_PrepareAndDispatch
 	calr MainLoop_ReinitSwbtWr
@@ -1208,12 +1208,12 @@ MainLoop_AfterDemoTick:
 	jr	nz, MainLoop_AfterMidiPoll2
 	call	MIDI_ProcessChangedChannels
 	call	CPanel_Poll
-	call	0xfeeee2
+	call	CommPort_StatusCheckAndSend
 MainLoop_AfterMidiPoll2:
 	tset_dd16	7, 0x13, 0x04
 	jr	nz, MainLoop_AfterBitmapTimer
 	call	BitMapOut_DecrementTimer
-	call	0xfd0674
+	call	Periodic_TimestampCheck
 MainLoop_AfterBitmapTimer:
 	ei 0
 	bit 7, (1068:16)
@@ -1252,15 +1252,15 @@ SeqTick_Return:
 	ret
 
 MainLoop_ReinitSwbtWr:
-	call	16624440
-	call	16547029
+	call	SwbtWr_InitBank3
+	call	Audio_MainPeriodicUpdate
 	ld	(49053:16), 255
-	calr	281
+	calr	SwbtWr_ReinitBothBanks
 	ret
 MainLoop_AudioPeriodicCheck:
-	call	16648936
-	call	16682077
-	call	16679601
+	call	VoiceEvent_ResetAndInit
+	call	Voice_UpdateNoteState
+	call	SndParam_DispatchReturn
 	ret
 Seq_ProcessMidiEvent:
 	lda xhl, (0x01f37b:24)
@@ -1346,15 +1346,15 @@ MidiSerial_BufferWrap:
 MidiEvt_ProcessNoteOn:
 	pushw	iz
 	ld	(xhl-6), iy
-	call	16644726
-	jr	17
+	call	NoteOn_EntryPoint
+	jr	MidiEvt_UpdateReadPosition
 MidiSerial_ProcessAndReinit:
 	pushw	iz
 	ld	(xhl-6), iy
-	call	16576989
-	call	16555922
-	calr	75
-	jr	0
+	call	MidiSerial_ProcessInput
+	call	Audio_ProcessAllMidiStreams
+	calr	SwbtWr_ReinitBothBanks
+	jr	MidiEvt_UpdateReadPosition
 MidiEvt_UpdateReadPosition:
 	lda xhl, (0x01f37b:24)
 	ld wa, (xhl - 6)
@@ -1368,7 +1368,7 @@ RhythmBuf_DispatchWrap:
 	ret
 
 Seq_EventProcessingTick:
-	call 0xfdff18
+	call AccNoteOn_ProcessVoiceSetup
 	bit 7, (0x0422:16)
 	jr nz, .Lc_ef1486
 	calr SeqEvt_CheckExpiry
@@ -1378,7 +1378,7 @@ SeqEvtTick_ProcessTimers:
 	call RhythmBuf_ProcessEvents
 	call SeqEvt_ProcessBuffer
 	call MIDI_SendChannelPressure
-	call 0xfd855a
+	call SysEx_ParseAndDispatch
 	cp (0x0474:16), 0x55
 	jr z, SeqEvtTick_Return
 Seq_ProcessEventLoop:
@@ -1397,8 +1397,8 @@ SeqEvtTick_Return:
 SwbtWr_ReinitBothBanks:
 	cp (0xbca0:16), 0xff
 	jr z, SwbtWr_ReinitBothBanks_Return
-	call 0xfdaafa
-	call 0xfdab19
+	call SwbtWr_InitBank1
+	call SwbtWr_InitBank2
 	ld (0xbca0:16), 0xff
 	ldw (0x9042:16), 0x0000
 SwbtWr_ReinitBothBanks_Return:
@@ -1409,7 +1409,7 @@ SwbtWr_ReinitBothBanks_Return:
 SwbtWr_ReinitOutputBank:
 	cp (0xbca0:16), 0xff
 	jr z, SwbtWr_ReinitOutputBank_Return
-	call 0xfdab19
+	call SwbtWr_InitBank2
 	ld (0xbca0:16), 0xff
 	ldw (0x9042:16), 0x0000
 SwbtWr_ReinitOutputBank_Return:
@@ -1432,12 +1432,12 @@ RhythmBuf_ProcessLoop_Done:
 
 RhythmBuf_DispatchEvent:
 	lda	xhl, (126813:24)
-	calr	41
-	jr	c, 6
-	call	16646967
-	jr	4
+	calr	RhythmBuf_ScanForNoteOn
+	jr	c, RhythmBuf_Dispatch_NonNoteOn
+	call	RhythmMidi_Dispatcher
+	jr	RhythmBuf_Dispatch_UpdateReadPos
 RhythmBuf_Dispatch_NonNoteOn:
-	call	16677892
+	call	SeqPart_EmitNoteOn_Full
 RhythmBuf_Dispatch_UpdateReadPos:
 	ld wa, (0x01ef57:24)
 	ld bc, (0x01ef55:24)
@@ -1517,10 +1517,10 @@ SeqEvt_ProcessLoop:
 	jr	z, SeqEvt_ProcessDone
 	calr	SeqEvt_ScanForNoteOn
 	jr	c, SeqEvt_Dispatch_NonNoteOn
-	call	0xfe0584
+	call	RhythmMidi_SeqEvt
 	jr	SeqEvt_UpdateReadPos
 SeqEvt_Dispatch_NonNoteOn:
-	call	16678899
+	call	ProcessEventDispatch_Prologue
 SeqEvt_UpdateReadPos:
 	lda xhl, (0x01f271:24)
 	ld wa, (xhl - 6)
@@ -1599,8 +1599,8 @@ SeqEvt_ProcessTimedEvents:
 	jr z, SeqEvt_ProcessTimedEvents_Idle
 	call SeqEvent_CaseA
 	calr Seq_TickWrapper
-	call 0xfced26
-	call 0xfdff18
+	call SeqEvt_ProcessTimedEvents_Helper
+	call AccNoteOn_ProcessVoiceSetup
 	call RhythmBuf_ProcessEvents
 	ret
 SeqEvt_ProcessTimedEvents_Idle:
@@ -1675,10 +1675,10 @@ SeqEvt_CheckExpiry:
 	dec 1,A
 	ld (0xe8f6:16), a
 	jr nz, SeqEvt_CheckExpiry_Return
-	call 0xfe832d
+	call NoteMap_FindBestMatch
 	cp L,0xff
 	jr z, SeqEvt_CheckExpiry_Return
-	call 0xfe0b2d
+	call VoiceEvent_DispatchTable
 SeqEvt_CheckExpiry_Return:
 	ret
 
@@ -6600,7 +6600,7 @@ FlashWrite:
 	ld	xwa, (xsp + 8)
 	push	xwa
 	push	xde
-	call	0xff05bc
+	call	Mem_Copy
 	lda	xsp, (xsp + 10)
 	calr	Flash_CheckReady
 	cp	hl, 0xffff
@@ -7285,7 +7285,7 @@ FDC_SetupSectorParams:
 
 	ld xbc, 0x12
 
-	call	16712763
+	call	Math_DivideU32
 
 	lda xiz, (1582:16)
 

@@ -763,7 +763,7 @@ Display_NullHandler:
 
 MIDI_SendSysExFromW:
 	ld	a, w
-	call	16692690
+	call	MIDI_SendSysExCmd
 	ret
 SoundEvt_ShortPacketHandler:
 	ld	(3923:16), 0
@@ -6845,7 +6845,7 @@ PerfMode_Handler_EvtB_Helper2:
 	call SeqBuf_Init
 	call PerfMode_Handler_EvtB_Helper2_Helper2
 	call PerfMode_Handler_EvtB_Helper2_Helper9
-	call 0xfdad86
+	call BitMapOut_ComputeRegionDelta
 	call MemConfig_Handler_4_0x15B
 	call PortConfig_SetupBytecode
 	xor WA,WA
@@ -6900,7 +6900,7 @@ PerfMode_Handler_EvtB_Helper2:
 	ld	(0x2875:16), de
 	ldto_werp DE, 0x3e	; ld DE,QHL3
 	ldw	(0x0f58:16), 65535
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	call	VoiceState_DataBlock2_Helper7
 	cp	w, 0:i3
 	jrl	z, PerfMode_Handler_EvtB_Helper2_Skip
@@ -7070,7 +7070,7 @@ Interrupt_FlagSetBytecode:
 MemConfig_Handler_5_Code_Helper10:
 	ld	(3432:16), 2
 	ld	(3431:16), 4
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ret
 Interrupt_SendAllNotesOff:
 	ld	(3432:16), 3
@@ -7111,12 +7111,12 @@ Interrupt_ClearModeRegs:
 	xor	a, a
 	ld	(3432:16), a
 	ld	(3431:16), a
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ret
 Interrupt_SetFlagBytecode:
 	ld	(3432:16), 4
 	ld	(3431:16), 0
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ret
 Interrupt_UpdateFromHW:
 	call Display_RegionUpdateFromHW
@@ -7539,7 +7539,7 @@ ClockConfig_Handler_0_Skip4:
 	ld	(0xffec:24), de
 	or	(0x28a5:16), 1
 	ld	(0x11f4:16), 0
-	call	16625070
+	call	BitMapOut_RenderDisplay
 	ldb_d8	a, (0x1128)
 	stb_d8	(0xfc5d), a
 	ld	e, 72:opc
@@ -7561,7 +7561,7 @@ ClockConfig_Handler_0_Skip4:
 	call	ClockConfig_Handler_0_0x228
 	ldw_d16	wa, (0xf1d0)
 	ld	(0x0f58:16), wa
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	pushw	wa
 	xor	a, a
 	call	Part_InitVoiceDefaults
@@ -17625,7 +17625,7 @@ Scoop_CurveUpdate_DrawSegment:
 	ld BC,DE
 	ld DE,WA
 	ld wa, 1:i3
-	jp 0xfee40d
+	jp Param_SignExtendReturn
 Scoop_CurveUpdate_NextSegment:
 	ld	e, a
 	extz	de
@@ -17634,7 +17634,7 @@ Scoop_CurveUpdate_NextSegment:
 	ld	bc, de
 	ld	de, wa
 	ld	wa, 2:i3
-	jp	16704525
+	jp	Param_SignExtendReturn
 Scoop_CurveUpdate_SegmentEnd:
 	lda xsp, (xsp-272)
 	push xiz

@@ -7682,7 +7682,7 @@ ScanEmitMidi_VoiceLoop:
 	ld	a, (xsp + 4)
 	or	a, 0x90
 	extz	wa
-	call	0xfd1ebe
+	call	FileData_ValidateFormat
 	cp	hl, 0:i3
 	jr	ge, ScanEmitMidi_ValidFormat
 	ld	wa, iz
@@ -16947,7 +16947,7 @@ UIState_ProcessKeyEvent_Helper:
 	lda	xwa, (xsp+10)
 	ld	xde, xwa
 	ld	xwa, xiz
-	call	0xfccd2e
+	call	GroupBoxProc_StartSSFPresentation_Helper
 	cp	hl, 0xffff
 	jr	z, HdaeRom_AltTableEntry9_Join
 	lda	xwa, (xsp+12)
@@ -22777,6 +22777,7 @@ SndParam_FetchOscTableEntry_Helper:
 	ld	xbc, 0x20
 	ldw	de, 0x200
 	jr	MIDI_DistributeParamToChannels_Helper_Join
+MidiStream_CmdPedalNotify_Helper2_Helper_Helper:
 	jr	ApplyProgramChangeAs_LoadReg
 SndParam_FetchOscTableEntry:
 	push	xiz
@@ -23635,6 +23636,7 @@ Param_SignExtendReturn_Skip12:
 	inc	6, xsp
 	ret
 	ret
+SndParam_LookupAndDispatch_Code_Join:
 	lda	xsp, (xsp-0x16)
 	pushw	iz
 	ld	(xsp+0x14), xwa
@@ -23728,6 +23730,7 @@ Param_SignExtendReturn_Join3:
 	popw	iz
 	lda	xsp, (xsp+22)
 	ret
+SeqAlt_ApplyDescriptor_TypeB_Helper:
 	ld	xde, xwa
 	lda	xhl, (xde+12)
 	ld	c, (xhl+1)
@@ -23798,17 +23801,18 @@ Param_SignExtendReturn_Return:
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 13
-	call	0xfd6b16
+	call	SndParam_LookupAndDispatch_Code_Helper
 	ld	(xiz+), l
 	ld	(xiz), 247
 	ld	xwa, (0xe0f7:16)
 	ld	bc, (xsp+0x4)
 	add	bc, bc
 	add	bc, 15
-	call	0xfd6b35
+	call	SndParam_LookupAndDispatch_Code_Helper2
 	pop	xiz
 	inc	2, xsp
 	ret
+SeqData_FormatOutput_CaseB_Helper:
 	dec	4, xsp
 	push	xiz
 	ld	xiz, xwa
@@ -25649,12 +25653,13 @@ HdaeRom_DataDispatch_Block3:
 	cp	xix, xhl
 	jr	c, HdaeRom_DataDispatch_Block3_Skip
 	lda	xde, (xix-1)
+HdaeRom_DataDispatch_Block3_Loop2:
 	ld	c, (xde)
 	ld	(xde+1), c
 	dec	1, xde
 	dec	1, xix
 	cp	xix, xhl
-	jr	nc, -13
+	jr	nc, HdaeRom_DataDispatch_Block3_Loop2
 ; For QE = 0..127 and DE = 2*QE: XHL = XWA + 0x49A7 + DE, then bits 5..4 of
 ; the byte at XHL+1 become 0b10 (clear 0x30, set bit 5; XBC = XWA + exts(BC)
 ; reaches the same byte).  Re-framed 2026-10-02 from MAME unidasm's reading
@@ -25684,7 +25689,7 @@ SendPartDataBlock_Data3:	; kept: ui_widgets/naka_effects_seq_link.ld names this 
 HdaeRom_AltHandler:
 	pushw	iz
 	ld	xwa, 0x1e0000
-	calr	-797
+	calr	HdaeRom_DataHandler_Helper3
 	extz	hl
 	dec	1, hl
 	cp	hl, 0:i3
@@ -26697,6 +26702,7 @@ String_Compare_Extend:
 ; v10 name for this address: Strncpy -- not a label here: v7 keeps that name at 0xFF0930 for ui_widgets/naka_widget_descriptors.c
 ; Strncpy -- Copy string with length limit, zero-pad remainder
 ; Args: (xsp+4)=dest, (xsp+8)=src, (xsp+12)=maxlen
+CmpNamingCheck_Helper:
 	ld	bc, (xsp + 12)
 	ld	xde, (xsp + 8)
 	ld	xix, (xsp + 4)

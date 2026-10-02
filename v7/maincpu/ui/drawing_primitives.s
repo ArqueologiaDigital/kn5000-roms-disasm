@@ -183,11 +183,11 @@ DrawLine_Impl_CopyStartPos:
 	ld (xsp+44), xwa
 	ld xwa, xbc
 	ld xbc, (xsp+4)
-	call 16712753
+	call Math_DivideSigned32
 	ld (xsp+28), xhl
 	ld xwa, (xsp+40)
 	ld xbc, (xsp+8)
-	call 16712753
+	call Math_DivideSigned32
 	ld (xsp+24), xhl
 	ld xbc, (xsp+44)
 	ld (xsp+32), xbc
@@ -270,9 +270,9 @@ DrawLine_Impl_HorzCalcNegDir:
 	push xbc
 
 DrawLine_Impl_HorzMemset:
-	call	16713757
+	call	Memset
 	inc	8, xsp
-	jrl	814
+	jrl	DrawLine_Impl_BuildDirtyRect
 DrawLine_Impl_SteepCheck:
 	ld xwa, (xsp+8)
 	cp xwa, (xsp+4)
@@ -469,9 +469,9 @@ DrawLine_Impl_PatternHorzNegDir:
 	push xbc
 
 DrawLine_Impl_PatternHorzMemcpy:
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
-	jrl	315
+	jrl	DrawLine_Impl_BuildDirtyRect
 DrawLine_Impl_PatternDiagCheck:
 	ld xwa, (xsp + 8)
 
@@ -861,7 +861,7 @@ DrawLineEx_DiagSetup:
 
 	ld xbc, (xsp + 8)
 
-	call	16712753
+	call	Math_DivideSigned32
 
 	ld xiz, xhl
 
@@ -951,7 +951,7 @@ DrawLineEx_ShallowSetup:
 	ld	xwa, (xsp+8)
 	sla	xwa, 16
 	ld	xbc, (xsp+4)
-	call	16712753
+	call	Math_DivideSigned32
 	ld	xiz, xhl
 	ld	xwa, (xsp+16)
 	ld	xbc, xiz
@@ -1171,7 +1171,7 @@ DrawBox_Impl_FillRowLoop:
 	pushm (xsp+14)
 	ld xwa, (xsp+6)
 	push xwa
-	call 16713757
+	call Memset
 	inc 8, xsp
 	ld xwa, (xsp+2)
 	lda xwa, (xwa+320)
@@ -1179,8 +1179,8 @@ DrawBox_Impl_FillRowLoop:
 	inc 1, iz
 	ld xwa, (xsp+14)
 	cp iz, (xwa+6)
-	jr le, -37
-	jr 73
+	jr le, DrawBox_Impl_FillRowLoop
+	jr DrawBox_Impl_SetChangeRect
 DrawBox_Impl_PatternSetup:
 	ld xwa, (0x030452:24)
 	ld (xsp + 6), xwa
@@ -1199,7 +1199,7 @@ DrawBox_Impl_PatternRowLoop:
 	push xwa
 	ld xwa, (xsp+8)
 	push xwa
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	ld xwa, 320
 	add (xsp+6), xwa
@@ -1209,7 +1209,7 @@ DrawBox_Impl_PatternRowLoop:
 	inc 1, iz
 	ld xwa, (xsp+14)
 	cp iz, (xwa+6)
-	jr le, -47
+	jr le, DrawBox_Impl_PatternRowLoop
 DrawBox_Impl_SetChangeRect:
 	ld xwa, (xsp + 14)
 	calr SetChangeRect
@@ -1348,7 +1348,7 @@ DrawFrame_Impl_ClipYMax:
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
-	call 16713757
+	call Memset
 	inc 8, xsp
 	jrl DrawFrame_Impl_SetChangeRect
 DrawFrame_Impl_SolidTwoEdges:
@@ -1365,7 +1365,7 @@ DrawFrame_Impl_SolidTwoEdges:
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
-	call 16713757
+	call Memset
 	ld xde, (xsp+52)
 	ld bc, (xde+4)
 	sub bc, (xde)
@@ -1386,7 +1386,7 @@ DrawFrame_Impl_SolidTwoEdges:
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
-	call 16713757
+	call Memset
 	lda xsp, (xsp+16)
 	ldw (xsp+28), 65535
 	ld xbc, (xsp+44)
@@ -1504,7 +1504,7 @@ DrawFrame_Impl_PatternSetup:
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	jrl DrawFrame_Impl_SetChangeRect
 DrawFrame_Impl_PatternTwoEdges:
@@ -1526,7 +1526,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
-	call 16713148
+	call Mem_Copy
 	ld xhl, (xsp+54)
 	ld bc, (xhl+4)
 	sub bc, (xhl)
@@ -1550,7 +1550,7 @@ DrawFrame_Impl_PatternTwoEdges:
 	ld xbc, OFFSCREEN_BUFFER_1
 	add xbc, xwa
 	push xbc
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+20)
 	ldw (xsp+4), 65535
 	ld xde, (xsp+44)
@@ -2191,7 +2191,7 @@ DrawWall_DoCopy:
 
 	push xwa
 
-	call	16713148
+	call	Mem_Copy
 
 	ld xwa, 0x9600
 
@@ -2207,7 +2207,7 @@ DrawWall_DoCopy:
 
 	push xwa
 
-	call	16713148
+	call	Mem_Copy
 
 	lda xsp, (xsp + 20)
 
@@ -2596,7 +2596,7 @@ DrawBitmapFast_Impl_RowLoop:
 	push xwa
 	ld xwa, (xsp+18)
 	push xwa
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	ld wa, (xiz)
 	exts xwa
@@ -3287,13 +3287,13 @@ DrawBitmapSPFast_Impl:
 
 DrawBitmapSPFast_Impl_RowLoop:
 	cpw (xsp+6), 240
-	jr nc, 53
+	jr nc, DrawBitmapSPFast_Impl_BuildDirtyRect
 	ld wa, (xsp+16)
 	pushw wa
 	ld xwa, (xsp+20)
 	push xwa
 	push xiz
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	ld wa, (xsp+16)
 	inc 1, wa
@@ -3307,7 +3307,7 @@ DrawBitmapSPFast_Impl_RowLoop:
 	incm 1, (xsp+4)
 	ld wa, (xsp+30)
 	cp (xsp+4), wa
-	jr c, -60
+	jr c, DrawBitmapSPFast_Impl_RowLoop
 DrawBitmapSPFast_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 8)
 	ld xhl, (xsp + 22)
@@ -3602,7 +3602,7 @@ DrawBitmapFile_Impl:
 	push XWA
 	lda xwa, (xsp + 0x3a)
 	push XWA
-	call 0xff05bc
+	call Mem_Copy
 	lda xsp, (xsp + 0x0a)
 	ld XWA,(XSP+0x20)
 	srl XWA, 0x02
@@ -3672,7 +3672,7 @@ DrawBitmapFile_Impl_ParseDimensions:
 	ld xwa, xbc
 	dec 1, xwa
 	add xwa, (xsp+16)
-	call 16712753
+	call Math_DivideSigned32
 	ld (xsp+20), xhl
 	sla xhl, 2
 	ld (xsp+20), xhl
@@ -3731,29 +3731,29 @@ DrawBitmapFile_Impl_DecodeRowLoop:
 	push	xwa
 	ld	xwa, (xsp+30)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+4)
 	ld	de, (xwa+14)
 	ld	xwa, (xsp+24)
 	ld	xbc, (xsp+20)
-	calr	8860
+	calr	Gfx_ProcessSplashData
 	ld	xwa, (xsp+16)
 	cp	xwa, 320
-	jr	lt, 13
+	jr	lt, DrawBitmapFile_Impl_TileRow
 	pushw	320
 	ld	xwa, (xsp+26)
 	push	xwa
 	ld	xwa, (xsp+34)
 	push	xwa
-	jr	93
+	jr	DrawBitmapFile_Impl_RowCopy
 DrawBitmapFile_Impl_TileRow:
 	ld	xiz, 0:i3
 	ld	xbc, (xsp+16)
 	ld	xwa, 320
-	call	16712753
+	call	Math_DivideSigned32
 	cp	xhl, 0
-	jr	le, 46
+	jr	le, DrawBitmapFile_Impl_TileRemainder
 DrawBitmapFile_Impl_TileLoop:
 	ld xwa, (xsp+16)
 	pushw wa
@@ -3764,14 +3764,14 @@ DrawBitmapFile_Impl_TileLoop:
 	call InitializeKubo_Helper
 	add xhl, (xsp+34)
 	push xhl
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	inc 1, xiz
 	ld xbc, (xsp+16)
 	ld xwa, 320
-	call 16712753
+	call Math_DivideSigned32
 	cp xiz, xhl
-	jr lt, -46
+	jr lt, DrawBitmapFile_Impl_TileLoop
 DrawBitmapFile_Impl_TileRemainder:
 	ld xwa, xiz
 
@@ -3796,7 +3796,7 @@ DrawBitmapFile_Impl_TileRemainder:
 
 
 DrawBitmapFile_Impl_RowCopy:
-	call 16713148
+	call Mem_Copy
 
 	lda xsp, (xsp + 10)
 
@@ -3816,7 +3816,7 @@ DrawBitmapFile_Impl_RowCopy:
 
 	cp xwa, (xsp + 8)
 
-	jrl lt, -190	; jrl lt, DrawBitmapFile_Impl_DecodeRowLoop (v7 displacement)
+	jrl lt, DrawBitmapFile_Impl_DecodeRowLoop	; jrl lt, DrawBitmapFile_Impl_DecodeRowLoop (v7 displacement)
 
 
 
@@ -3839,7 +3839,7 @@ DrawBitmapFile_Impl_FillLoop:
 	push	xiz
 	ld	xwa, (xsp+34)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xiz, (xiz+320)
 	ld	xwa, 320
@@ -3848,7 +3848,7 @@ DrawBitmapFile_Impl_FillLoop:
 	add	(xsp+12), xwa
 	ld	xwa, (xsp+12)
 	cp	xwa, 240
-	jr	lt, -44
+	jr	lt, DrawBitmapFile_Impl_FillLoop
 DrawBitmapFile_Impl_CopyToVRAM:
 	ld	xwa, (xsp+40)
 	push	xwa
@@ -3887,13 +3887,13 @@ DrawBitmapFile_Impl_CopyToVRAM:
 	jr	ule, DrawBitmapFile_Impl_BuildDirtyRect	; -> 0xFAC68A
 DrawBitmapFile_Impl_VRAMRowLoop:
 	cpw (xsp+34), 240
-	jr nc, 43
+	jr nc, DrawBitmapFile_Impl_BuildDirtyRect
 	ld wa, (xsp+40)
 	pushw wa
 	ld xwa, (xsp+38)
 	push xwa
 	push xiz
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	ld xwa, 320
 	add (xsp+36), xwa
@@ -3902,7 +3902,7 @@ DrawBitmapFile_Impl_VRAMRowLoop:
 	incm 1, (xsp+32)
 	ld wa, (xsp+42)
 	cp (xsp+32), wa
-	jr c, -50
+	jr c, DrawBitmapFile_Impl_VRAMRowLoop
 DrawBitmapFile_Impl_BuildDirtyRect:
 	lda xwa, (xsp + 44)
 	ld XHL, (xsp + 0x0438)

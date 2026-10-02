@@ -96,7 +96,7 @@ RVari_SelectE_FirstItem_Draw:
 	push	xhl
 	lda	xwa, (xsp+283)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	(xsp+290), 0
 	ld	(xsp+10), 255
@@ -292,7 +292,7 @@ RVari_SelectO_Item_Draw:
 	push xhl
 	lda xwa, (xsp+283)
 	push xwa
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	ld (xsp+290), 0
 	ld (xsp+10), 255
@@ -493,7 +493,7 @@ RVari_SelNE_FirstItem_Draw:
 	push xhl
 	lda xwa, (xsp+283)
 	push xwa
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	ld (xsp+290), 0
 	ld (xsp+10), 255
@@ -661,7 +661,7 @@ RVari_SelNE_SecondItem_Draw:
 	push xhl
 	lda xwa, (xsp+283)
 	push xwa
-	call 16713148
+	call Mem_Copy
 	lda xsp, (xsp+10)
 	ld (xsp+290), 0
 	ld (xsp+10), 255
@@ -790,7 +790,7 @@ RVari_Confirm_TypeF_Loop:
 	push XHL
 	lda xwa, (xsp + 0x011a)
 	push XWA
-	call 0xff05bc
+	call Mem_Copy
 	lda xsp, (xsp + 0x0a)
 	ld (XSP+0x0121),0x00
 	ld (XSP+0x0a),0xff
@@ -1050,7 +1050,7 @@ RVari_ConfirmE_Loop:
 	push XHL
 	lda xwa, (xsp + 0x011b)
 	push XWA
-	call 0xff05bc
+	call Mem_Copy
 	lda xsp, (xsp + 0x0a)
 	ld (XSP+0x0122),0x00
 	ld (XSP+0x0a),0xff
@@ -1217,7 +1217,7 @@ RVari_ConfirmNE_Loop:
 	push XHL
 	lda xwa, (xsp + 0x011b)
 	push XWA
-	call 0xff05bc
+	call Mem_Copy
 	lda xsp, (xsp + 0x0a)
 	ld (XSP+0x0122),0x00
 	ld (XSP+0x0a),0xff

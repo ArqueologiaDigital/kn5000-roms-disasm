@@ -2285,7 +2285,7 @@ SeMenu_SetupPartDisplay_End_Join:
 	ld	(xwa+4), c
 	ld	c, (xsp+6)
 	ld	(xwa+2), c
-	call	0xfee01b
+	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+8)
 	ld	a, (xbc)
 	ldfr_berp	a, 251
@@ -5843,13 +5843,13 @@ SeMenu_SetupSoundBankPair_NonZero:
 	extz	wa
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	call	0xfe5e2d
+	call	SndParam_UpdateChannelTuning
 	ld	(xiz), l
 	ld	a, (xsp+8)
 	extz	wa
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	0xfe5e2d
+	call	SndParam_UpdateChannelTuning
 	ld	xwa, (xsp+10)
 	ld	(xwa), l
 	cp	(xiz), 255
@@ -5858,7 +5858,7 @@ SeMenu_SetupSoundBankPair_NonZero:
 	extz	wa
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	0xfe5e2d
+	call	SndParam_UpdateChannelTuning
 	ld	(xiz), l
 	ld	xwa, (xsp+10)
 	ld	(xwa), l

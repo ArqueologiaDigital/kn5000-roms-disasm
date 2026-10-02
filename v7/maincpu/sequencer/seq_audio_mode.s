@@ -21,7 +21,7 @@ AudioMode_CheckAndUpdateStereo:
 	jr ugt, AudioMode_CheckDone
 AudioMode_ApplyStereoUpdate:
 .Lc_f5336e:
-	call 0xfdd7c0
+	call AudioMode_CheckAndUpdateStereo_Helper
 	and (0x31e8:16), 0xf7
 
 

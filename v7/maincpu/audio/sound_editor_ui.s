@@ -2491,7 +2491,7 @@ SeMenu_CopyWriteUpdate_Loop:
 	lda	xbc, (xsp+6)
 	lda_rr	xbc, xbc, wa
 	ld	xwa, xbc
-	call	16458804
+	call	SeMenu_CopyWriteUpdate_Helper19
 	inc1b_erp	251
 	cp_erpb	251, 16
 	jr	c, SeMenu_CopyWriteUpdate_Loop
@@ -3703,14 +3703,14 @@ SeMenu_CopyWriteUpdate_Skip18:
 	extz	wa
 	ld	bc, 0:i3
 	ld	de, 1:i3
-	call	16670253
+	call	SndParam_UpdateChannelTuning
 	cp	l, 255
 	jr	nz, SeMenu_CopyWriteUpdate_Skip19
 	ld	a, (xsp)
 	extz	wa
 	ld	bc, 1:i3
 	ld	de, 1:i3
-	call	16670253
+	call	SndParam_UpdateChannelTuning
 	cp	l, 255
 	jr	z, SeMenu_CopyWriteUpdate_Epilogue20
 SeMenu_CopyWriteUpdate_Skip19:
@@ -5631,7 +5631,7 @@ Scoop_SoundEditorData_Helper_Skip8:
 	ld	bc, 4:i3
 	ld	de, 0:i3
 Scoop_SoundEditorData_Helper_Join4:
-	call	0xfdaa53
+	call	AddswbWr
 	jr	Scoop_SoundEditorData_Helper_Join2
 Scoop_SoundEditorData_Helper_Skip9:
 	ld	(xwa+10), 255
@@ -6220,7 +6220,7 @@ Scoop_SoundEditorData_Helper_Skip22:
 	ld	bc, 4:i3
 	ldw	de, 64
 Scoop_SoundEditorData_Helper_Join15:
-	call	0xfdaa53
+	call	AddswbWr
 	ld	c, (xsp+2)
 	extz	bc
 	ld	wa, 0:i3
@@ -7714,14 +7714,14 @@ SeMenu_DisplayPartValue:
 	ld	de, (xiz+8)
 	ld	d, 0:opc
 	push	xiz
-	call	16624640
+	call	SwbtWr_QueueMainEvent
 	pop	xiz
 	ld	wa, (xiz+12)
 	ld	w, 127:opc
 	ld	de, (xiz+8)
 	ld	d, 1:opc
 	push	xiz
-	call	16624640
+	call	SwbtWr_QueueMainEvent
 	pop	xiz
 	call	BitMapOut_DeltaEncode_Type90Return
 	pop	xiy
@@ -16515,25 +16515,25 @@ CmpNamingCheck:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, EVT_GET_STRING_LENGTH
-	jr	z, 63
+	jr	z, CmpNamingCheck_Return0xD
 	cp	xbc, EVT_GET_NAMING_MODE
-	jr	z, 51
+	jr	z, CmpNamingCheck_ReturnZero
 	cp	xbc, EVT_GET_STRING
-	jr	nz, 43
+	jr	nz, CmpNamingCheck_ReturnZero
 	pushw	0
 	pushw	13344
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	pushw	13
 	pushw	0
 	pushw	13344
 	pushw	2
 	pushw	3156
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+18)
 	ld	(134241:24), 0
 	ld	xhl, xiz
-	jr	9
+	jr	CmpNamingCheck_Epilogue
 CmpNamingCheck_ReturnZero:
 	ld xhl, 0:i3
 	jr CmpNamingCheck_Epilogue
@@ -17084,7 +17084,7 @@ EasyCmp_GridEvtCase_Epilogue:
 	push	xwa
 	pushw	0
 	pushw	13344
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	(13360:16), 0
 MspNaming_CleanupExit:
@@ -17098,24 +17098,24 @@ MspNamingCheck:
 	push	xiz
 	ld	xiz, xwa
 	cp	xbc, EVT_GET_STRING_LENGTH
-	jr	z, 57
+	jr	z, MspNamingCheck_ReturnHex10
 	cp	xbc, EVT_GET_NAMING_MODE
-	jr	z, 45
+	jr	z, MspNamingCheck_ReturnZero
 	cp	xbc, EVT_GET_STRING
-	jr	nz, 37
+	jr	nz, MspNamingCheck_ReturnZero
 	pushw	0
 	pushw	13344
 	push	xde
-	call	16713584
+	call	Free_Compare2
 	pushw	16
 	pushw	0
 	pushw	13344
 	pushw	2
 	pushw	3184
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+18)
 	ld	xhl, xiz
-	jr	9
+	jr	MspNamingCheck_Epilogue
 MspNamingCheck_ReturnZero:
 	ld xhl, 0:i3
 	jr MspNamingCheck_Epilogue
@@ -17485,9 +17485,9 @@ VwVariBox_GetText_PlaySample:
 	push	xwa
 	ld	xwa, (xsp+282)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
-	jr	-126
+	jr	VwVariBox_ReturnHandled
 VwVariBox_OK:
 	ld XWA,(XSP+0x0118)
 	call GetViewInstance
@@ -18019,10 +18019,10 @@ RgpSetBnk_EvtEnc_CopyMem:
 	pushw	16
 	push	xwa
 	push	xde
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	(xsp+16), 0
-	jr	22
+	jr	AudioEvt_GetFocusRetZero
 RgpSetBnk_EvtEnc_SendAudioCmd:
 	ld	a, (xwa+1)
 	inc	1, a
@@ -18351,13 +18351,13 @@ MspRecBnkBox_CopyMemBlock:
 	push	xwa
 	lda	xwa, (xsp+10)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+4)
 	ld	(xde+16), 0
 	ld	xwa, xiz
 	ld	xbc, EVT_PARA_DRAW
-	call	16421459
+	call	SendEvent
 MspRecBnkBox_SetReturnZero:
 	ld xhl, 0:i3
 

@@ -5,8 +5,8 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 48,047
-#   semantic names ........... 44,599 (92.8%)
+#   symbols .................. 48,086
+#   semantic names ........... 44,638 (92.8%)
 #   positional names ......... 3,448
 #
 LED_patterns_indicating_firmware_version 00E00000
@@ -17305,6 +17305,7 @@ Flash_InitBytecodeBlock_Join5 00F16D1D
 Flash_InitBytecodeBlock_Join2 00F16D32
 Flash_InitBytecodeBlock_Skip7 00F16D40
 Flash_InitBytecodeBlock_Join3 00F16D4B
+CstmCpTtlFunc_Helper 00F16D60
 Flash_InitBytecodeBlock_0x2BF 00F16D60
 Flash_InitBytecodeBlock_Skip8 00F16D8F
 Flash_InitBytecodeBlock_Join4 00F16D92
@@ -18842,6 +18843,7 @@ CDlikeSwTtl_PdNavNoRedraw 00F21CB2
 CDlikeSwTtl_PdNavReturn 00F21CE3
 DpDocTtlFunc 00F21CE5
 DpDocTtl_Dispatch 00F21D30
+DpDocTtlFunc_Skip 00F21D53
 DpDoc_CaseA 00F21D59
 DpDoc_CaseB 00F21DA6
 DpDoc_CaseC 00F21DAB
@@ -18857,6 +18859,7 @@ DpDoc_CaseJ 00F21E0E
 DpDocTtl_ReturnZero 00F21E11
 DpPdTtlFunc 00F21E14
 DpPdTtl_Dispatch 00F21E5F
+DpPdTtlFunc_Skip 00F21E82
 DpPd_CaseA 00F21E88
 DpPd_CaseB 00F21ED5
 DpPd_CaseC 00F21EDA
@@ -18872,6 +18875,7 @@ DpPd_CaseJ 00F21F3D
 DpPdTtl_ReturnZero 00F21F40
 DpSmfTtlFunc 00F21F43
 DpSmfTtl_Dispatch 00F21F8F
+DpSmfTtlFunc_Skip 00F21FD8
 DpSmf_CaseA 00F21FDE
 DpSmf_CaseB 00F2202B
 DpSmf_CaseC 00F22030
@@ -30787,6 +30791,7 @@ AccStyle_TableDataEntry_Skip5 00F6D4B8
 AccStyle_TableDataEntry_Skip6 00F6D4C0
 AccStyle_TableDataEntry_Join 00F6D4D4
 AccStyle_TableDataEntry_0x90 00F6D4D9
+SLDstBankList_FuncBody_Helper3_Helper 00F6D4D9
 AccStyle_TableDataEntry_Skip7 00F6D547
 AccStyle_TableDataEntry_Skip8 00F6D558
 AccStyle_TableDataEntry_Skip9 00F6D56D
@@ -39499,6 +39504,7 @@ DrawDottedLineWithMode_Impl_Skip20 00FB0626
 DrawDottedLineWithMode_Impl_Join5 00FB0628
 DrawDottedLineWithMode_Impl_Join6 00FB062B
 DrawDottedLineWithMode_Impl_Skip21 00FB0642
+DrawDottedLineWithMode_Impl_Loop3 00FB0697
 DrawDottedLineWithMode_Impl_Skip22 00FB06A4
 DrawDottedLineWithMode_Impl_Skip23 00FB070C
 DrawDottedLineWithMode_Impl_Skip24 00FB0740
@@ -39507,6 +39513,8 @@ DrawDottedLineWithMode_Impl_Skip26 00FB0755
 DrawDottedLineWithMode_Impl_Skip27 00FB0759
 Voice_FactoryPresetData_Code_Skip 00FB0769
 Voice_FactoryPresetData_Code_Join 00FB076B
+Voice_FactoryPresetData_Code_Join6 00FB076E
+Voice_FactoryPresetData_Code_Skip15 00FB0793
 Voice_FactoryPresetData_Code_Loop 00FB07DE
 Voice_FactoryPresetData_Code_Skip2 00FB07EB
 Voice_FactoryPresetData_Code_Skip3 00FB084D
@@ -39518,6 +39526,7 @@ Voice_FactoryPresetData_Code_Skip8 00FB08B4
 Voice_FactoryPresetData_Code_Join2 00FB08B6
 Voice_FactoryPresetData_Code_Join3 00FB08B9
 Voice_FactoryPresetData_Code_Join4 00FB08DD
+Voice_FactoryPresetData_Code_Epilogue2 00FB0902
 DrawText_LayoutAndRender_Variant1_Helper 00FB0907
 Voice_FactoryPresetData_Code_Skip9 00FB0933
 Voice_FactoryPresetData_Code_Epilogue 00FB095C
@@ -39733,6 +39742,7 @@ HexCharToNibble_CheckUpper 00FB2410
 HexCharToNibble_Invalid 00FB2420
 FontGlyph_ByteData 00FB2423
 FontGlyph_ByteData_0x11 00FB2434
+SeMenu_CopyWriteUpdate_Helper19 00FB2434
 HexCharToNibble_Skip 00FB243F
 HexCharToNibble_Skip2 00FB2444
 HexCharToNibble_Loop 00FB244D
@@ -42678,11 +42688,16 @@ MidiStream_HandleRunningStatus_Skip8 00FCCB1B
 MidiStream_HandleRunningStatus_Loop2 00FCCB20
 MidiStream_HandleRunningStatus_Skip9 00FCCB28
 UIState_CheckAndRenderBitmap_Helper 00FCCB4A
+MainTitle_PrepareAndDispatch_Helper 00FCCB5E
 MidiStream_HandleRunningStatus_Loop3 00FCCBB3
 MidiStream_HandleRunningStatus_Skip10 00FCCBBE
 MidiStream_HandleRunningStatus_Join3 00FCCBCA
 MidiStream_HandleRunningStatus_Join4 00FCCBDF
 MidiStream_HandleRunningStatus_Skip11 00FCCBF7
+interrupt_vector_trampolines_Skip 00FCCC3D
+interrupt_vector_trampolines_Skip2 00FCCC45
+interrupt_vector_trampolines_Join 00FCCC4A
+KeyScan_Disable_Helper 00FCCC52
 AcApcToggleProc_Helper 00FCCC66
 AcApcToggleProc_Helper_Loop 00FCCCB4
 AcApcToggleProc_Helper_Skip 00FCCCBF
@@ -42691,6 +42706,7 @@ AcApcToggleProc_Helper_Join2 00FCCCE0
 AcApcToggleProc_Helper_Skip2 00FCCCF8
 AcApcToggleProc_Helper_Skip3 00FCCD1F
 DkMdlyPly_CheckState_Helper 00FCCD26
+GroupBoxProc_StartSSFPresentation_Helper 00FCCD2E
 DkMdlyPly_CheckState_Helper_Skip 00FCCE13
 DkMdlyPly_CheckState_Helper_Skip2 00FCCE17
 DkMdlyPly_CheckState_Helper_Loop 00FCCE24
@@ -42702,9 +42718,11 @@ EmptyRoutine_03_Skip2 00FCCE6C
 SndParam_RW_ProcessResult_v7 00FCCE6E
 SndParam_ProbeCheckMatch 00FCCE9F
 SndParam_ProbeMatchFound 00FCCEAA
+SndParam_ProbeMatchFound_Skip 00FCCEB2
 SndParam_ProbeAdvance 00FCCEB6
 SndParam_ProbeEntry 00FCCECB
 SndParam_ProbeMatchFound_Join 00FCCED2
+SndParam_ProbeMatchFound_Join_Skip 00FCCED6
 SndParam_ProbeEntry_Epilogue 00FCCED9
 SndParam_DispatchCallback 00FCCEE3
 SndParam_CallbackType1 00FCCF2D
@@ -42970,6 +42988,7 @@ SndParam_NotifyQuick_Data_Skip11 00FCE416
 SndParam_NotifyQuick_Data_Join2 00FCE44B
 SndParam_RegisterWide_Data 00FCE46A
 SndParam_NotifyQuick_Data_Helper 00FCE48C
+Audio_ResetAfterPayloadError_Helper_Helper 00FCE4A4
 SndParam_NotifyQuick_Data_Skip12 00FCE4B4
 SndParam_NotifyQuick_Data_Skip13 00FCE4BA
 SndParam_NotifyQuick_Data_Helper2 00FCE4BE
@@ -42978,6 +42997,7 @@ SndParam_NotifyQuick_Data_Join3 00FCE54A
 SndParam_NotifyQuick_Data_Skip15 00FCE553
 SndParam_NotifyQuick_Data_Skip16 00FCE55A
 SndParam_NotifyQuick_Data_Epilogue 00FCE55F
+Audio_ResetAfterPayloadError_Helper_Helper2 00FCE561
 SndParam_EncodeFieldDirect_Data 00FCE593
 SndParam_EncodeFieldSub_Data 00FCE5C2
 SndParam_NotifyQuick_Data_Skip17 00FCE5DA
@@ -42995,6 +43015,7 @@ SndParam_NotifyQuick_Data_Skip21 00FCE6A2
 SndParam_NotifyQuick_Data_Join5 00FCE6A6
 SndParam_NotifyQuick_Data_Skip22 00FCE6AA
 SndParam_ReturnInvalid 00FCE6AD
+UIState_CheckAndRenderBitmap_Helper_Helper 00FCE6AE
 SndParam_WriteFieldDirect_Data 00FCE6B1
 SndParam_NotifyQuick_Data_Helper3 00FCE6D5
 SndParam_NotifyQuick_Data_Loop2 00FCE6E1
@@ -43049,6 +43070,7 @@ SndParam_WidgetNotifyType1_Join 00FCEA06
 SndParam_WidgetNotifyType1_Epilogue 00FCEA1C
 SndParam_Widget1_AppendTail 00FCEA3B
 SndParam_Widget1_CallType3 00FCEA44
+MidiSeq_ReceiveAndForward_Helper 00FCEA53
 SndParam_Widget1_AppendType2_Skip 00FCEA74
 SndParam_Widget1_AppendType2_Skip2 00FCEAA0
 SndParam_Widget1_AppendType2_Skip3 00FCEAAC
@@ -43082,6 +43104,7 @@ SndParam_Widget1_AppendType2_Entry8 00FCECF0
 SndParam_Widget1_AppendType2_Return2 00FCED0D
 SndParam_Widget1_AppendType2_Entry9 00FCED0E
 SndParam_Widget1_AppendType2_Return3 00FCED25
+SeqEvt_ProcessTimedEvents_Helper 00FCED26
 SndParam_Widget1_AppendType2_Return4 00FCED38
 SndParam_Widget1_AppendType2_Entry10 00FCED39
 SndParam_Widget1_AppendType2_Sub 00FCED4A
@@ -43910,9 +43933,11 @@ SeqVoice_DispatchProcess_Data_0x213 00FD6AE9
 Part_LookupReturnZero 00FD6AFA
 SeqVoice_DispatchProcess_Data_0x22A 00FD6B00
 Part_LookupTableEntry_Loop 00FD6B07
+SndParam_LookupAndDispatch_Code_Helper 00FD6B16
 SeqVoice_DispatchProcess_Data_0x241 00FD6B17
 Part_LookupTableEntry_Loop2 00FD6B24
 Part_LookupTableEntry_Skip 00FD6B2F
+SndParam_LookupAndDispatch_Code_Helper2 00FD6B35
 MidiPkt_ArpConfigChain_Data_Helper18_Helper3 00FD6B45
 MidiChan_ClearAllStates 00FD6B46
 SeqVoice_DispatchProcess_Data_0x28A 00FD6B60
@@ -44503,6 +44528,7 @@ MidiPkt_SysExBulkTransfer_Data_Helper2_Helper4 00FDA519
 SysEx_DispatchByChannel_Entry 00FDA59A
 SysEx_DispatchByChannel_Entry_Code_Sub 00FDA5A0
 SysEx_DispatchByChannel_49_Entry 00FDA61F
+SMF_ProcessSysExBlock_Helper 00FDA625
 SysEx_DispatchByChannel_49_Entry_Code_Skip 00FDA663
 SysEx_DispatchByChannel_49_Entry_Code_Join 00FDA67B
 SysEx_DispatchByChannel_49_Entry_Code_Skip2 00FDA698
@@ -44525,6 +44551,7 @@ SysEx_ApplyVoiceParam_4B_128_WriteSlot 00FDA7D5
 SysEx_ApplyVoiceParam_4B_128_SlotNext 00FDA7ED
 SysEx_ApplyVoiceParam_4B_128_RestoreSlotId 00FDA7F4
 SysEx_ApplyVoiceParam_4B_128_Return 00FDA802
+SoundMode_ApplyVoiceParams_Helper 00FDA806
 SysEx_ApplyVoiceParam_49_ReadSubParams 00FDA852
 SysEx_ApplyVoiceParam_49_SkipRestore 00FDA871
 SysEx_ApplyVoiceParam_49_IterateSlots 00FDA873
@@ -44851,6 +44878,7 @@ DSPCfg_Data_ParamDispatch_Helper_Skip 00FDC69B
 DSPCfg_Data_ParamDispatch_Helper_Skip2 00FDC6AD
 DSPCfg_Data_ParamDispatch_Helper_Join 00FDC6AF
 DSPCfg_Data_ParamDispatch_Helper_Skip3 00FDC6B7
+EffEdit_DSPConfigBlock_Helper 00FDC6CF
 DSPCfg_Data_ParamDispatch_Join2 00FDC717
 DSPCfg_Data_ParamDispatch_Skip6 00FDC736
 DSPCfg_Data_ParamDispatch_Join3 00FDC73B
@@ -44900,6 +44928,7 @@ DataBuf_CopyVoiceBlock24_Code_Helper2_Skip 00FDD1E7
 DSPCfg_EventType51 00FDD28F
 DSPCfg_Epilogue 00FDD340
 DSPCfg_ReturnValueTable 00FDD348
+Boot_InitPeripherals_Helper 00FDD375
 DataBuf_CopyVoiceBlock24_Code_Helper2_Skip2 00FDD384
 DataBuf_CopyVoiceBlock24_Code_Helper2_Loop 00FDD389
 DataBuf_CopyVoiceBlock24_Code_Helper2_Join 00FDD3AC
@@ -44918,6 +44947,7 @@ DSPCfg_EventType50 00FDD601
 AudioInit_ProcessModeChange 00FDD61C
 AudioModeChange_ClearVoiceFlags 00FDD644
 AudioModeChange_Handler 00FDD649
+PerfMode_Handler_EvtB_Helper2_Helper11 00FDD69E
 AudioSubsystem_ClearVoiceFlags 00FDD6C4
 AudioSubsystem_Callback 00FDD6C9
 AudioInit_SelectAndDispatch 00FDD71E
@@ -44932,9 +44962,11 @@ screen_group_dispatch_Skip 00FDD78B
 screen_group_dispatch_Entry 00FDD790
 screen_group_dispatch_Skip2 00FDD796
 screen_group_dispatch_Skip3 00FDD7BC
+AudioMode_CheckAndUpdateStereo_Helper 00FDD7C0
 DkMdlyPly_CheckState_Helper2 00FDD7D6
 DkMdlyPly_CheckState_Helper2_Skip 00FDD7EB
 DkMdlyPly_CheckState_Helper2_Join 00FDD7F0
+MimeSyori_Helper 00FDD84B
 DkMdlyPly_CheckState_Helper2_Skip2 00FDD85C
 ScreenGroup_InitVoiceLoop 00FDD864
 ScreenGroup_InitVoiceLoop_Code_Skip 00FDD86C
@@ -44952,6 +44984,7 @@ ScreenGroup_InitVoiceLoop_Code_Join4 00FDDA06
 ScreenGroup_InitVoiceLoop_Code_Skip9 00FDDA12
 UIStateEvt_DrumAssign_Set 00FDDA39
 UIStateEvt_DrumAssign_Notify 00FDDA6C
+AudioDispatch_CheckStereoMode_Code_Skip26 00FDDA79
 UIStateEvt_TransposeUpdate_Clear 00FDDAB0
 Audio_CheckSubsystemReady 00FDDAB8
 UIStateEvt_TransposeUpdate_Apply 00FDDAD0
@@ -47198,6 +47231,7 @@ ApplyProgramChangeAs_Return 00FEDFC8
 MIDI_DistributeParamToChannels_Helper_Join 00FEDFC9
 ApplyProgramChangeAs_LoadReg 00FEE005
 SndParam_FetchOscTableEntry_Helper 00FEE00F
+MidiStream_CmdPedalNotify_Helper2_Helper_Helper 00FEE019
 SndParam_FetchOscTableEntry 00FEE01B
 FetchOscTableEntry_LoadIter 00FEE032
 FetchOscTableEntry_Epilogue 00FEE037
@@ -47298,6 +47332,7 @@ Param_SignExtendReturn_Skip11 00FEE7DB
 Param_SignExtendReturn_Join2 00FEE809
 Param_SignExtendReturn_Skip12 00FEE80F
 Param_SignExtendRetu_Data_0x3CB 00FEE817
+SndParam_LookupAndDispatch_Code_Join 00FEE817
 Param_SignExtendReturn_Skip13 00FEE87D
 Param_SignExtendReturn_Loop 00FEE89C
 Param_SignExtendReturn_Skip14 00FEE8A9
@@ -47306,6 +47341,7 @@ Param_SignExtendReturn_Skip15 00FEE8EB
 Param_SignExtendReturn_Skip16 00FEE902
 Param_SignExtendReturn_Join3 00FEE907
 Param_SignExtendRetu_Data_0x4C3 00FEE90F
+SeqAlt_ApplyDescriptor_TypeB_Helper 00FEE90F
 Param_SignExtendReturn_Skip17 00FEE939
 Param_SignExtendReturn_Skip18 00FEE944
 Param_SignExtendReturn_Skip19 00FEE94E
@@ -47313,6 +47349,7 @@ Param_SignExtendReturn_Join4 00FEE95B
 Param_SignExtendReturn_Skip20 00FEE963
 Param_SignExtendReturn_Return 00FEE965
 Param_SignExtendRetu_Data_0x59C 00FEE9E8
+SeqData_FormatOutput_CaseB_Helper 00FEE9E8
 Param_SignExtendReturn_Skip21 00FEEA59
 Param_SignExtendReturn_Join5 00FEEA6C
 Param_SignExtendReturn_Skip22 00FEEA77
@@ -47452,6 +47489,7 @@ HdaeRom_DataHandler_Epilogue 00FEFBFB
 HdaeRom_DataDispatch_Block 00FEFC02
 HdaeRom_DataDispatch_Block2 00FEFC11
 HdaeRom_DataDispatch_Block3 00FEFC1E
+HdaeRom_DataDispatch_Block3_Loop2 00FEFC31
 HdaeRom_DataDispatch_Block3_Skip 00FEFC3E
 SendPartDataBlock_Data2 00FEFC40
 HdaeRom_DataDispatch_Block3_Loop 00FEFC46
@@ -47591,6 +47629,7 @@ String_Compare_NextIter 00FF04F7
 String_Compare_Compare 00FF04FD
 String_Compare_ClearByte 00FF0507
 String_Compare_Extend 00FF0513
+CmpNamingCheck_Helper 00FF0516
 Strncpy_Block 00FF0523
 Strncpy_Compare 00FF052B
 Strncpy_Block2 00FF0534

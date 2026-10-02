@@ -123,7 +123,7 @@ MainTitle_PrepareAndDispatch:
 	ld	xwa, 3:i3
 	ld	bc, 5:i3
 	ld	de, 4:i3
-	call	0xfcca30
+	call	Audio_ResetAfterPayloadError_Helper
 	jr	SndParam_SendDiskMenuEvents
 CtrlPanel_HandleSingleBit:
 	and e, c
@@ -142,7 +142,7 @@ CtrlPanel_HandleBit1SndParam:
 	ld de, 4:i3
 
 CtrlPanel_DispatchSndParamLookup:
-	call	16567134
+	call	MainTitle_PrepareAndDispatch_Helper
 SndParam_SendDiskMenuEvents:
 	ld	c, (0xbfe3:16)
 	ld	a, (0xbfe2:16)

@@ -57,7 +57,7 @@ MainExcSend_ClampIndexToRange:
 	ld	xwa, MainExcSend_ClampIndexToRange_Table
 	add	xwa, xde
 	ld	a, (xwa)
-	call	16614621
+	call	SysEx_InitiateSend
 MainExcSend_UnexpectedMessageType_Exit:
 	ld xhl, 0:i3
 	ret

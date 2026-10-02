@@ -44,14 +44,14 @@ SeqPlay_FinishFloppyLoadAndStart:
 	call VoiceChannels_LoadPartMapAndInitPan
 	ldw (0x1a2b:16), 0x0001
 	call SeqPlay_DelayLoop_Outer
-	call 0xfdadae
+	call BitMapOut_RenderDisplay
 	ld wa, (0x00ffec:24)
 	ld (0xf19e:16), wa
 	and (0x28a7:16), 0xf7
 	call SeqPlay_CheckStartConditions
 	call SeqPlay_InitChannelParams
 	ldw (0xf19c:16), 0x0000
-	call 0xfdd69e
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 SeqPlay_ReadyStateTransition:
 	call SeqStep_PlaybackNop
 	ret
@@ -209,7 +209,7 @@ FloppyIO_SelectReadMode_ModeDefault:
 	ld a, 0x1:opc
 
 FloppyIO_SelectReadMode_Dispatch:
-	call	16612777
+	call	SoundMode_DispatchRender
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -261,7 +261,7 @@ FloppyIO_ConfigSwb_QueueEvent:
 	pop xhl
 
 FloppyIO_ConfigSwb_DispatchAndReinit:
-	call	16624640
+	call	SwbtWr_QueueMainEvent
 	call	SwbtWr_ReinitBothBanks
 	ret
 SeqPlay_PrepareAndScanChannels:
@@ -3040,7 +3040,7 @@ MidiPgmChg_Mode0_SetupA:
 	stb_d8	(6748), l
 	pop	xix
 	ld	xwa, 6743
-	call	16703893
+	call	SndParam_ApplyVoiceValue
 	push	xiy
 	push	xhl
 	call	SoundGen_CaptureVoiceParams
@@ -3762,7 +3762,7 @@ MidiPgmChg_Mode0_SetupB:
 	pop	xix
 	stb_d8	(6748), l
 	ld	xwa, 6743
-	call	16703893
+	call	SndParam_ApplyVoiceValue
 	push	xiy
 	push	xhl
 	call	SoundGen_ReadVoiceRegs
@@ -4765,7 +4765,7 @@ VoiceParam_ByMode_Mode0:
 	pop	xix
 	push	xiy
 	ld	xwa, 6743
-	call	16703893
+	call	SndParam_ApplyVoiceValue
 	pop	xiy
 	ld	l, (6746:16)
 	ld	h, (6747:16)
@@ -5098,7 +5098,7 @@ VoiceSynth_ConditionalUpdate_StoreAndCall:
 	call VoiceChannel_UpdateWithPitch
 	ret
 VoiceSynth_ConditionalUpdate_Helper:
-	call	16704068
+	call	SndParam_CompactLookupStub
 	ld	a, l
 	ret
 VoiceSynth_Algo_MultiStage:

@@ -1510,8 +1510,8 @@ Flash_InitBytecodeBlock_Skip3:
 	extz	wa
 	calr	Flash_InitBytecodeBlock_Helper4
 	calr	Flash_InitBytecodeBlock_Helper5
-	call	16711343
-	jrl	274
+	call	TmFlash_CopyToExtMem
+	jrl	Flash_InitBytecodeBlock_Join5
 Flash_InitBytecodeBlock_Skip4:
 	calr	Flash_InitBytecodeBlock_Helper8
 	calr	Flash_InitBytecodeBlock_Helper10
@@ -1624,6 +1624,7 @@ Flash_InitBytecodeBlock_Join3:
 	ld	(0xc6a), (xsp+0xa)
 	ld	(0xc6c), (xsp+0x6)
 	jr	Flash_InitBytecodeBlock_Join5
+CstmCpTtlFunc_Helper:
 	dec	2, xsp
 	ld	(xsp), a
 	calr	Flash_InitExtMemAddrs
@@ -2710,7 +2711,7 @@ Flash_InitBytecodeBlock_Helper5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 2:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2722,7 +2723,7 @@ Flash_InitBytecodeBlock_Helper5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 3:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
@@ -2768,7 +2769,7 @@ Flash_InitBytecodeBlock_Helper3_Loop2:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 0:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2780,7 +2781,7 @@ Flash_InitBytecodeBlock_Helper3_Loop2:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 1:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	sub	xix, 0x346800
 	cp	hl, 0:i3
@@ -2829,7 +2830,7 @@ Flash_InitBytecodeBlock_Helper9_Helper:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 3:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2841,7 +2842,7 @@ Flash_InitBytecodeBlock_Helper9_Helper:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 2:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	cp	hl, 0:i3
 	jr	nz, Flash_StoreBaseAndInitAccPatch_Skip14
@@ -2886,7 +2887,7 @@ Flash_InitBytecodeBlock_Helper3_Loop5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 1:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xiz, (xsp+12)
 	ld	wa, (xsp+10)
 	ld	(xsp+8), wa
@@ -2898,7 +2899,7 @@ Flash_InitBytecodeBlock_Helper3_Loop5:
 	lda	xwa, (xsp+10)
 	push	xwa
 	ld	wa, 0:i3
-	call	0xfefeca
+	call	TmFlash_WriteRoutine
 	ld	xix, (xsp+12)
 	cp	hl, 0:i3
 	jr	nz, Flash_InitBytecodeBlock_Helper3_Skip2
@@ -4030,7 +4031,7 @@ Flash_InitBytecodeBlock_Helper6:
 	extz	wa
 	calr	Flash_InitBytecodeBlock_Helper4
 	calr	Flash_InitBytecodeBlock_Helper5
-	call	0xfefeaf
+	call	TmFlash_CopyToExtMem
 	lda	xwa, (2360:16)
 	cpw	(xwa+0x2), 0xffff
 	jr	z, Flash_InitBytecodeBlock_Helper8_Skip
@@ -4170,7 +4171,7 @@ Flash_InitBytecodeBlock_Helper9:
 	ldw	bc, 0xb400
 	ldirw
 	calr	Flash_InitBytecodeBlock_Helper9_Helper
-	jp	0xfeff8f
+	jp	TmFlash_BulkTransferToSubCPU
 	dec	2, xsp
 	ld	(xsp), e
 	calr	SlotTable_ExtendedOpsBlock
@@ -4317,7 +4318,7 @@ Flash_WriteBackSlotTable_Skip4:
 	ld xde, (0x0c92:16)
 	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
-	call 0xfefeaf
+	call TmFlash_CopyToExtMem
 .Lc_f187bb:
 	ld HL,IZ
 	jr t, .Lc_f187c2
@@ -4683,7 +4684,7 @@ FloppyDisk_LoadNoteEvents:
 	ld xde, (0x0c92:16)
 	ld wa, 1:i3
 	call Flash_EraseSectorAndWrite
-	call 0xfefeaf
+	call TmFlash_CopyToExtMem
 FloppyCtrl_LoadIzAndContinue:
 	ld hl, iz
 	jr FloppyCtrl_PopIzStoreHL

@@ -69,7 +69,7 @@ SoundLookup_ByCategory:
 	ld	(xwa+4), l
 	ld	xbc, (xsp+20)
 	ld	(xwa+2), c
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+14)
 	ld	e, (xbc+1)
 	extz	de
@@ -113,7 +113,7 @@ Sound_SetSelection:
 	extz	bc
 	pushw	bc
 	ld	bc, 0:i3
-	call	16624260
+	call	SwbtWr
 	ld	wa, 1:i3
 	jrl	Sound_Navigate_Notify
 Sound_Navigate_Entry:
@@ -158,7 +158,7 @@ Sound_Navigate_Init:
 
 	ld (xwa + 2), c
 
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 
 	lda xbc, (xsp + 14)
 
@@ -295,7 +295,7 @@ Sound_Navigate_ApplyChange:
 
 	extz de
 
-	call	16553262
+	call	MIDI_DistributeParamToChannels
 
 	ld wa, (xsp + 4)
 
@@ -315,7 +315,7 @@ Sound_Navigate_ApplyChange:
 
 	ld bc, 0:i3
 
-	call	16624260
+	call	SwbtWr
 
 	ld wa, 1:i3
 
@@ -414,7 +414,7 @@ MainGetRhythmName:
 	push	xhl
 	ld	xwa, (xsp+8)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+2)
 	ld	(xwa+13), 0
@@ -453,7 +453,7 @@ MainGetPmemName:
 	pushw	63906
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	xwa, (xsp+2)
 	lda	xbc, (xwa+2)

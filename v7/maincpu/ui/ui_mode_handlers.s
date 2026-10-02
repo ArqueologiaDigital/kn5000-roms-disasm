@@ -496,10 +496,10 @@ EffectMode_DisplayName_DefaultLookup:
 EffectMode_DisplayName_Render:
 	lda	xwa, (63906:16)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ldw	wa, 128
-	call	16472167
+	call	BitMapOut_GetRenderMode_CheckBit3
 EffectMode_DisplayName_Done:
 	popw iz
 	ret
@@ -729,7 +729,7 @@ EffectMode_BackupParamBlock:
 	push	xbc
 	pushw	3
 	pushw	49860
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ret
 EffectMode_CopyHoldPedalBits:
@@ -904,33 +904,33 @@ EffectMode_CopyPresetBits:
 	ret
 EffectMode_ReinitSoundOutput:
 	ld	xwa, 770
-	call	16567398
+	call	AcApcToggleProc_Helper
 	ld	(36020:16), l
 	ld	xwa, 770
 	ld	bc, 1:i3
 	ld	de, 0:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ldw	wa, 128
 	ld	xbc, 246468
-	call	16465864
+	call	BitMapOut_CopyVoicePreset9
 	ldw	wa, 128
-	call	16466337
-	calr	-979
+	call	BitMapOut_SnapshotFromROM
+	calr	EffectMode_DisplayPresetName
 	res	4, (0x8cb6:16)
 	cp	(36020:16), 1
-	jr	z, 11
+	jr	z, EffectMode_ReinitSound_NotifyBank1
 	ld	xwa, 770
 	ld	bc, 0:i3
 	ld	de, 0:i3
-	jr	9
+	jr	EffectMode_ReinitSound_CallNotify
 EffectMode_ReinitSound_NotifyBank1:
 	ld xwa, 0x302
 	ld bc, 1:i3
 	ld de, 0:i3
 
 EffectMode_ReinitSound_CallNotify:
-	call	16566832
-	jp	15668425
+	call	Audio_ResetAfterPayloadError_Helper
+	jp	SwbtWr_ReinitOutputBank
 EffectMode_ReinitWithFlag:
 	set 5, (0x8cb6:16)
 	calr EffectMode_CheckModeAndReinit
@@ -1002,10 +1002,10 @@ SndOutput_ReinitByMode_NotifyParam:
 	extz	bc
 	ld	xwa, 768
 	ld	de, 3:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ld	a, (36022:16)
 	bit	5, a
-	jr	z, 7
+	jr	z, SndOutput_ReinitByMode_CheckBit3
 	set	2, a
 	ld	(36022:16), a
 SndOutput_ReinitByMode_CheckBit3:
@@ -1808,7 +1808,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 	ld bc, 1:i3
 
-	call	16624211
+	call	AddswbWr
 
 	pushw 0xff
 
@@ -1818,7 +1818,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 	ld de, 0:i3
 
-	call	16624211
+	call	AddswbWr
 
 	pushw 0xf
 
@@ -1828,7 +1828,7 @@ EffectMode_InitSwbWr_DiagMode:
 
 	ld de, 6:i3
 
-	call	16624211
+	call	AddswbWr
 
 	ret
 
@@ -1853,7 +1853,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	ld bc, 1:i3
 
-	call	16624211
+	call	AddswbWr
 
 	pushw 0xff
 
@@ -1863,7 +1863,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	ldw de, 0x40
 
-	call	16624211
+	call	AddswbWr
 
 	pushw 0xf
 
@@ -1873,7 +1873,7 @@ EffectMode_RestoreSwbWr_NormalMode:
 
 	ld de, 0:i3
 
-	call	16624211
+	call	AddswbWr
 
 	ret
 
@@ -2074,7 +2074,7 @@ TEST3FUNC_Helper:
 	ld	xwa, 16386
 	ldw	bc, 128
 	ld	de, 3:i3
-	call	0xfccb5e
+	call	MainTitle_PrepareAndDispatch_Helper
 	call	DemoMode_Main_Operation_Helper
 	ret
 Voice_EmitNoteWithVelocity:
@@ -3544,7 +3544,7 @@ MstStyleAlp_AppendPadChar:
 	pushw	3378
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	16712885
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+14)
 MstStyleAlp_PadLoopCond:
@@ -3599,7 +3599,7 @@ MstStyleAlp_AppendPadChar2:
 	pushw	3414
 	lda	xwa, (xsp+22)
 	push	xwa
-	call	16712885
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+14)
 MstStyleAlp_PadLoopCond2:
@@ -4047,7 +4047,7 @@ MstStyle1Grid_PadLeft_Loop:
 	pushw	3444
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	16712885
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+10)
 MstStyle1Grid_PadLeft_Check:
@@ -4094,7 +4094,7 @@ MstStyle1Grid_PadLeft_LoopB:
 	pushw	3464
 	lda	xwa, (xsp+18)
 	push	xwa
-	call	0xff04b5
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+10)
 MstStyle1Grid_PadLeft_CheckB:
@@ -4747,7 +4747,7 @@ MstStyle1SubGrid_PadLeft_Loop:
 
 	push xwa
 
-	call	16712885
+	call	Strncat
 
 	lda xsp, (xsp + 10)
 
@@ -4806,7 +4806,7 @@ MstStyle1SubGrid_PadLeft_LoopB:
 
 	push xwa
 
-	call	16712885
+	call	Strncat
 
 	lda xsp, (xsp + 10)
 
@@ -6221,7 +6221,7 @@ MstGrid2_PadLeft_LoopA:
 	pushw	3602
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712885
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckA:
@@ -6265,7 +6265,7 @@ MstGrid2_PadLeft_LoopB:
 	pushw	3638
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712885
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckB:
@@ -6311,7 +6311,7 @@ MstGrid2_PadLeft_LoopC:
 	pushw	3674
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712885
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckC:
@@ -6364,7 +6364,7 @@ MstGrid2_PadLeft_LoopD:
 	pushw	3710
 	lda	xwa, (xsp+26)
 	push	xwa
-	call	16712885
+	call	Strncat
 	lda	xsp, (xsp+10)
 	inc	1, (xsp+18)
 MstGrid2_PadLeft_CheckD:
@@ -8163,26 +8163,26 @@ SeqLoadFunc_ReturnZero:
 
 FSWAss_CheckAndNotify:
 	ld	xwa, 16512
-	call	16567398
+	call	AcApcToggleProc_Helper
 	cp	hl, 1:i3
 	ret	nz
 	ld	xwa, 16512
 	ld	bc, 0:i3
 	ld	de, 4:i3
-	call	16566832
+	call	Audio_ResetAfterPayloadError_Helper
 	ret
 FSWAss_RefreshAllVoices:
 	push	xde
 	push	xhl
 	push	xix
 	push	xiz
-	call	16641574
-	call	16648347
-	call	16647846
-	call	16648638
-	call	16648774
-	call	16648855
-	call	16693037
+	call	AudioInit_RefreshToneBank
+	call	NoteMap_ProcessAndMerge
+	call	DemoMode_Main_Operation_Helper
+	call	Interrupt_FlagSetBytecode_Helper2
+	call	Voice_InitTableGroup
+	call	Voice_InitTablePair
+	call	MIDI_SendAllSoundOff
 	pop	xiz
 	pop	xix
 	pop	xhl
@@ -10581,7 +10581,7 @@ MssNameFunc_Skip2:
 	push	xhl
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	pushw	2
 	pushw	32
 	ld	xwa, (xiz+18)
@@ -10602,7 +10602,7 @@ MssNameFunc_Skip3:
 	push	xwa
 	ld	xwa, (xiz+18)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	xwa, FadeTimeStr_Off_0x5E
 MssNameFunc_Join:
@@ -12000,7 +12000,7 @@ VariScreen_HandleShow:
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
 	ld	(xwa+2), (35998)	; differs from v10 here and llvm-objdump cannot read it
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 	ld	xhl, (xsp+24)
 	ld	xde, (xhl+56)
 	lda	xbc, (xsp+28)
@@ -12101,11 +12101,11 @@ VariScreen_HandlePaint:
 	lda	xwa, (xsp+28)
 	ld	(xwa+4), l
 	ld	(xwa+2), (35998)
-	call	0xfee01b
+	call	SndParam_FetchOscTableEntry
 	ld	a, (xsp+28)
 	extz	wa
 	lda	xbc, (xsp+290)
-	call	0xfede39
+	call	StoreDRAMInit_LoadDRAM
 	lda	xbc, (xsp+546)
 	ldw	(xbc), 104
 	lda	xhl, (xbc+2)
@@ -13877,7 +13877,7 @@ RVari_Paint:
 	push	xhl
 	lda	xwa, (xsp+282)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	lda	xde, (xsp+276)
 	ld	(xde+16), 0
@@ -13957,7 +13957,7 @@ RVari_Select:
 	push	xhl
 	lda	xwa, (xsp+282)
 	push	xwa
-	call	0xff05bc
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	(xsp+289), 0
 	ld	(xsp+10), 255
@@ -14095,7 +14095,7 @@ RVari_Select_CheckSameBank:
 	push	xhl
 	lda	xwa, (xsp+282)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+10)
 	ld	(xsp+289), 0
 	ld	xwa, (xiz+60)

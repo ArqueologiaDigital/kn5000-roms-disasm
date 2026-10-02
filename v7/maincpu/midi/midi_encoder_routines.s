@@ -111,7 +111,7 @@ Encoder_PerformScaling:
 	sll	xhl, 8
 	ld	xwa, xhl
 	ld	xbc, 236
-	call	16712763
+	call	Math_DivideU32
 	ld	a, (36416:16)
 	extz	wa
 	add	wa, wa
@@ -119,10 +119,10 @@ Encoder_PerformScaling:
 	ld	bc, (xbc+wa)
 	extz	xbc
 	ld	xwa, xhl
-	call	16712319
+	call	InitializeKubo_Helper
 	ld	xwa, xhl
 	ld	xbc, 20
-	call	16712763
+	call	Math_DivideU32
 	cp	xhl, 127
 	ret	ule
 	ld	xhl, 127

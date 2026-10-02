@@ -30,6 +30,7 @@ SndParam_ProbeMatchFound:
 	ld	xwa, (xsp+22)
 	and	(xwa+3), c
 	jr	SndParam_ProbeMatchFound_Join
+SndParam_ProbeMatchFound_Skip:
 	ld	xwa, (xsp+10)
 	.set	SndParam_ProbeAdvance, . + 1
 	ld	c, (xwa)
@@ -48,6 +49,7 @@ SndParam_ProbeEntry:
 SndParam_ProbeMatchFound_Join:
 	ld	hl, 0:i3
 	jr	SndParam_ProbeEntry_Epilogue
+SndParam_ProbeMatchFound_Join_Skip:
 	ldw	hl, 65535
 SndParam_ProbeEntry_Epilogue:
 	pop	xiz
@@ -2303,7 +2305,7 @@ SndParam_RegisterOffset_Data:
 	ld_rrw	bc, xix, bc
 	and	bc, 127
 	ld	(xwa+4), c
-	call	0xfee01b
+	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+10)
 	ld	a, (xbc+1)
 	ldfr_berp	a, 250
@@ -2343,7 +2345,7 @@ SndParam_NotifyQuick_Data_Skip11:
 	ld_rrw	bc, xix, bc
 	and	bc, 127
 	ld	(xwa+4), c
-	call	0xfee104
+	call	SndParam_ComputeVoiceIndex
 	lda	xbc, (xsp+4)
 	ld	a, (xbc)
 	ldfr_berp	a, 250
@@ -2391,6 +2393,7 @@ SndParam_NotifyQuick_Data_Helper:
 	pop	xhl
 	pop	xde
 	ret
+Audio_ResetAfterPayloadError_Helper_Helper:
 	cp	(xbc+4), 72
 	jr	nz, SndParam_NotifyQuick_Data_Skip12
 	cp	(xbc+5), 8
@@ -2460,14 +2463,15 @@ SndParam_NotifyQuick_Data_Join3:
 	jr	SndParam_NotifyQuick_Data_Epilogue
 SndParam_NotifyQuick_Data_Skip15:
 	pushw	ix
-	call	0xfdaa53
+	call	AddswbWr
 	jr	SndParam_NotifyQuick_Data_Epilogue
 SndParam_NotifyQuick_Data_Skip16:
 	pushw	ix
-	call	0xfdaa84
+	call	SwbtWr
 SndParam_NotifyQuick_Data_Epilogue:
 	pop	xiz
 	ret
+Audio_ResetAfterPayloadError_Helper_Helper2:
 	push	xiz
 	ld	xiz, xbc
 	ld	e, (xiz+7)
@@ -2547,7 +2551,7 @@ SndParam_NotifyQuick_Data_Skip18:
 	extz	de
 	pushw	ix
 	ld	wa, hl
-	call	0xfdaa53
+	call	AddswbWr
 	ld	a, (xiz+8)
 	extz	wa
 	ld	c, (xiz+9)
@@ -2558,14 +2562,14 @@ SndParam_NotifyQuick_Data_Skip18:
 	extz	hl
 SndParam_DecodeFieldAlt_Data:
 	pushw	hl
-	call	0xfdaa53
+	call	AddswbWr
 	jr	SndParam_NotifyQuick_Data_Epilogue2
 SndParam_NotifyQuick_Data_Skip19:
 	and	e, (xiy)
 	extz	de
 	pushw	ix
 	ld	wa, hl
-	call	0xfdaa84
+	call	SwbtWr
 	ld	a, (xiz+8)
 	extz	wa
 	ld	c, (xiz+9)
@@ -2576,7 +2580,7 @@ SndParam_NotifyQuick_Data_Skip19:
 	extz	de
 	extz	hl
 	pushw	hl
-	call	0xfdaa84
+	call	SwbtWr
 SndParam_NotifyQuick_Data_Epilogue2:
 	pop	xiz
 	ret
@@ -2614,6 +2618,7 @@ SndParam_NotifyQuick_Data_Skip22:
 SndParam_ReturnInvalid:
 	ret
 	.set	SndParam_WriteFieldDirect_Data, . + 3
+UIState_CheckAndRenderBitmap_Helper_Helper:
 	ld	xhl, 32768
 	and	wa, 63
 	sll	wa, 10
@@ -3009,7 +3014,7 @@ SndParam_Widget1_AppendTail:
 	ld	wa, 1:i3
 SndParam_Widget1_CallType3:
 	pushw	wa
-	call	0xfdb00b
+	call	MidiSeq_ReceiveAndForward
 	inc	8, xsp
 	pop	xiz
 	pop	xiy
@@ -3019,6 +3024,7 @@ SndParam_Widget1_CallType3:
 	pop	xbc
 	pop	xwa
 	reti
+MidiSeq_ReceiveAndForward_Helper:
 	stb_d8	(0xb743), a
 	push	xwa
 	push	xbc
@@ -3061,7 +3067,7 @@ SndParam_Widget1_AppendType2_Skip3:
 SndParam_Widget1_AppendType2_Skip4:
 	calr	ClkTick_BeatSubdivCheck
 SndParam_Widget1_AppendType2_Join:
-	calr	1515
+	calr	MIDI_RX_CONTEXT_SAVE
 	pop	xiz
 	pop	xiy
 	pop	xix
@@ -3134,7 +3140,7 @@ SndParam_Widget1_AppendType2_Entry2:
 	incw	1, (1128:16)
 	cp	(32367:16), 0
 	jr	z, SndParam_Widget1_AppendType2_Skip10
-	calr	845
+	calr	MIDI_QUEUE_TRACK_EVENT
 SndParam_Widget1_AppendType2_Skip10:
 	ld	a, (1056:16)
 	pushw	wa
@@ -3176,7 +3182,7 @@ SndParam_Widget1_AppendType2_Entry4:
 	ld	a, (14079:16)
 	and	a, 31
 	jr	z, SndParam_Widget1_AppendType2_Skip13
-	calr	719
+	calr	MIDI_QUEUE_TRACK_EVENT
 SndParam_Widget1_AppendType2_Skip13:
 	ld	a, (1046:16)
 	ld	w, (1075:16)
@@ -3224,7 +3230,7 @@ SndParam_Widget1_AppendType2_Entry5:
 	cpw	(10410:16), 0
 	jr	z, SndParam_Widget1_AppendType2_Entry6
 	ld	a, 133:opc
-	calr	643
+	calr	MIDI_QUEUE_EVENT_PAIR
 SndParam_Widget1_AppendType2_Entry6:
 	.byte 0xf1, 0x31, 0x04, 0xcb
 	jr	z, SndParam_Widget1_AppendType2_Skip17
@@ -3235,7 +3241,7 @@ SndParam_Widget1_AppendType2_Entry6:
 	cpw	(10410:16), 0
 	jr	z, SndParam_Widget1_AppendType2_Skip17
 	ld	a, 134:opc
-	calr	609
+	calr	MIDI_QUEUE_EVENT_PAIR
 SndParam_Widget1_AppendType2_Skip17:
 	cp	(1051:16), 96
 	jr	nz, SndParam_Widget1_AppendType2_Return2
@@ -3243,7 +3249,7 @@ SndParam_Widget1_AppendType2_Skip17:
 	incw	1, (1052:16)
 	cpw	(10410:16), 0
 	jr	z, SndParam_Widget1_AppendType2_Entry7
-	calr	512
+	calr	MIDI_QUEUE_TRACK_EVENT
 SndParam_Widget1_AppendType2_Entry7:
 	.byte 0xf1, 0x52, 0xfd, 0xca
 	jr	z, SndParam_Widget1_AppendType2_Return2
@@ -3260,7 +3266,7 @@ SndParam_Widget1_AppendType2_Skip18:
 	cpw	(10410:16), 0
 	jr	z, SndParam_Widget1_AppendType2_Entry8
 	ld	a, 134:opc
-	calr	532
+	calr	MIDI_QUEUE_EVENT_PAIR
 SndParam_Widget1_AppendType2_Entry8:
 	.byte 0xf1, 0x21, 0x04, 0xca
 	jr	z, SndParam_Widget1_AppendType2_Return2
@@ -3281,15 +3287,16 @@ SndParam_Widget1_AppendType2_Entry9:
 	cp	d, 250
 	jr	z, SndParam_Widget1_AppendType2_Entry10
 	cp	d, 251
-	jrl	z, 200
+	jrl	z, Continue_SetRunning
 SndParam_Widget1_AppendType2_Return3:
 	ret
+SeqEvt_ProcessTimedEvents_Helper:
 	cpw	(61854:16), 0
 	jr	z, SndParam_Widget1_AppendType2_Return4
 	push	sr
 	ei	0x06
 	calr	SndParam_Widget1_AppendType2_Sub
-	calr	100
+	calr	MIDI_APPLY_STARTUP_TIMING
 	pop	sr
 SndParam_Widget1_AppendType2_Return4:
 	ret
@@ -3297,7 +3304,7 @@ SndParam_Widget1_AppendType2_Entry10:
 	.byte 0xf1, 0xac, 0x28, 0xbd
 	ld	(1108:16), 0
 	cpw	(61854:16), 0
-	jr	nz, 80
+	jr	nz, ResetPlay_Return
 SndParam_Widget1_AppendType2_Sub:
 	xor	wa, wa
 	ld	(1047:16), a

@@ -385,7 +385,7 @@ SC0Init_Entry:
 	calr	SC0Init_ClearContextSlots
 	calr	SC0Init_StandardBaudTable
 	calr	READ_COM_SELECT_SWITCH
-	call	16626225
+	call	CompIface_SendActiveSensing
 	calr	SC0Init_EnableRegisters
 	ret
 SC0Init_StandardBaudTable:
@@ -485,7 +485,7 @@ MIDI_SC0_TX_DISPATCH:
 	calr	MIDI_SC0_ENABLE_TX
 	jr	SC0TxDisp_RestoreAndReturn
 SC0TxDisp_NonMidiPath:
-	call	16625970
+	call	SeqBuf3_EnableTx_Stub
 SC0TxDisp_RestoreAndReturn:
 	pop xiz
 	pop xiy

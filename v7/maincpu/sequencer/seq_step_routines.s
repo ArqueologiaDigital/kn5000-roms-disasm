@@ -3140,7 +3140,7 @@ SeqStep_MemAllocWrapper:
 	pushw	wa
 	pushw	0
 	push	xiz
-	call	16713757
+	call	Memset
 	inc	8, xsp
 	jr	SeqStep_MemAllocReturn
 SeqStep_MemAllocFail:

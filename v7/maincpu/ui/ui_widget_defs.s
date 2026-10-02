@@ -2408,22 +2408,22 @@ MainBitPut:
 	push	xiz
 	ld	xiz, xwa
 	pushw	14
-	call	16713379
+	call	Malloc
 	ld	(xsp+6), xhl
 	pushw	14
 	push	xiz
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713148
+	call	Mem_Copy
 	lda	xsp, (xsp+12)
 	ld	xwa, NAKA_MAINFUNC_MainBitControl
 	ld	xbc, EVT_BIT_PUT
 	ld	xde, (xsp+4)
-	call	16402006
+	call	MainFuncCall
 	ld	xwa, NAKA_MAINFUNC_MainAutoFree
 	ld	xbc, EVT_AUTO_FREE
 	ld	xde, (xsp+4)
-	call	16402006
+	call	MainFuncCall
 	pop	xiz
 	inc	4, xsp
 	ret
@@ -6818,7 +6818,7 @@ AcMixerVol_EncoderUpdate:
 	ld	(xwa+4), l
 	ld	xbc, (xsp+36)
 	ld	(xwa+2), c
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 	lda	xbc, (xsp+12)
 	ld	e, (xbc+1)
 	extz	de
@@ -6987,7 +6987,7 @@ DbMemo_DrawContent_Loop:
 	push	xwa
 	lda	xwa, (xsp+16)
 	push	xwa
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 	ld	wa, (xsp+4)
 	extz	xwa
@@ -7155,7 +7155,7 @@ DbMemDump_Confirm_RowLoop:
 	push XIZ
 	lda xwa, (xsp + 0x10)
 	push XWA
-	call 0xff05bc
+	call Mem_Copy
 	ld WA,IZ
 	pushw wa
 	ld XWA,XIZ
@@ -8286,7 +8286,7 @@ AcTrkSw_Reset_DrawTrack:
 	pushw	wa
 	pushw	0
 	push	xbc
-	call	0xff081d
+	call	Memset
 	lda	xsp, (xsp+14)
 	ld	xwa, (xsp+16)
 	ld	xbc, (xsp+24)
@@ -14399,7 +14399,7 @@ ShadowBox_B_Execute:
 	ld	xde, 0:i3
 	call	ClassProc
 	push	xhl
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, ShadowBox_C_Setup
@@ -15276,13 +15276,13 @@ SliderH_DrawThumb:
 	ld	xwa, (xsp+268)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 7
+	jr	nz, SliderH_ReturnZero
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	31
+	jr	SliderH_ReturnAlt2
 SliderH_ReturnZero:
 	inc 1, xiz
 
@@ -15397,13 +15397,13 @@ SliderV_DrawThumb:
 	ld	xwa, (xsp+268)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 7
+	jr	nz, SliderV_ReturnZero
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	31
+	jr	SliderV_ReturnAlt2
 SliderV_ReturnZero:
 	inc 1, xiz
 
@@ -15518,13 +15518,13 @@ DrawHelper_A_DrawThumb:
 	ld	xwa, (xsp+268)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 7
+	jr	nz, DrawHelper_A_ReturnZero
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	31
+	jr	DrawHelper_A_ReturnAlt2
 DrawHelper_A_ReturnZero:
 	inc 1, xiz
 
@@ -15701,7 +15701,7 @@ DrawHelper_C_ReturnZero:
 	ld	xwa, (xwa+4)
 	push	xwa
 	push	xhl
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, DrawHelper_C_ReturnAlt
@@ -15894,7 +15894,7 @@ DrawHelper_E_ReturnZero:
 	ld	xwa, (xwa+4)
 	push	xwa
 	push	xhl
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, DrawHelper_E_ReturnAlt
@@ -16191,7 +16191,7 @@ ViewID_EnumOpen_ScanLoop:
 	ld	xwa, (xwa+4)
 	push	xwa
 	push	xhl
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, ViewID_EnumOpen_ScanNext
@@ -16514,10 +16514,10 @@ ScreenID_EnumOpen_Compare:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 28
+	jr	nz, ScreenID_EnumOpen_ScanNext
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+276)
@@ -16527,7 +16527,7 @@ ScreenID_EnumOpen_Compare:
 	ld	(xwa+4), xbc
 	ld	xwa, 0:i3
 	ld	(xsp+12), xwa
-	jr	69
+	jr	ScreenID_EnumOpen_Store
 ScreenID_EnumOpen_ScanNext:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
@@ -16538,22 +16538,22 @@ ScreenID_EnumOpen_ScanNext:
 ScreenID_EnumOpen_NotFound:
 	ld	xwa, (xsp+12)
 	or	xwa, xwa
-	jr	z, 41
+	jr	z, ScreenID_EnumOpen_CheckEmpty
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
 	pushw	ScreenID_EnumOpen_NotFound_Str_idNONE@hi16
 	pushw	ScreenID_EnumOpen_NotFound_Str_idNONE@lo16
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 18
+	jr	nz, ScreenID_EnumOpen_CheckEmpty
 	ld	xwa, (xsp+4)
 	ld	xbc, 4294967295
 	ld	(xwa+4), xbc
 	ld	xwa, 0:i3
 	ld	(xsp+12), xwa
-	jr	7
+	jr	ScreenID_EnumOpen_Store
 ScreenID_EnumOpen_CheckEmpty:
 	ld xwa, (xsp + 12)
 	or xwa, xwa
@@ -16856,10 +16856,10 @@ WindowID_EnumOpen_Compare:
 	push	xwa
 	lda	xwa, (xsp+24)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 28
+	jr	nz, WindowID_EnumOpen_ScanNext
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+276)
@@ -16869,7 +16869,7 @@ WindowID_EnumOpen_Compare:
 	ld	(xwa+4), xbc
 	ld	xwa, 0:i3
 	ld	(xsp+12), xwa
-	jr	69
+	jr	WindowID_EnumOpen_Store
 WindowID_EnumOpen_ScanNext:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
@@ -16880,22 +16880,22 @@ WindowID_EnumOpen_ScanNext:
 WindowID_EnumOpen_NotFound:
 	ld	xwa, (xsp+12)
 	or	xwa, xwa
-	jr	z, 41
+	jr	z, WindowID_EnumOpen_CheckEmpty
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
 	pushw	WindowID_EnumOpen_NotFound_Str_idNONE@hi16
 	pushw	WindowID_EnumOpen_NotFound_Str_idNONE@lo16
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 18
+	jr	nz, WindowID_EnumOpen_CheckEmpty
 	ld	xwa, (xsp+4)
 	ld	xbc, 4294967295
 	ld	(xwa+4), xbc
 	ld	xwa, 0:i3
 	ld	(xsp+12), xwa
-	jr	7
+	jr	WindowID_EnumOpen_Store
 WindowID_EnumOpen_CheckEmpty:
 	ld xwa, (xsp + 12)
 	or xwa, xwa
@@ -17124,10 +17124,10 @@ ModeID_EnumOpen_Compare:
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 25
+	jr	nz, ModeID_EnumOpen_SearchNext
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+272)
@@ -17136,7 +17136,7 @@ ModeID_EnumOpen_Compare:
 	ld	(xiz+4), xwa
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	20
+	jr	ModeID_EnumOpen_UpdateCursor
 ModeID_EnumOpen_SearchNext:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
@@ -17363,10 +17363,10 @@ TitleID_EnumOpen_Compare:
 	push	xwa
 	lda	xwa, (xsp+20)
 	push	xwa
-	call	16713560
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
-	jr	nz, 25
+	jr	nz, TitleID_EnumOpen_SearchNext
 	ld	xwa, (xsp+8)
 	sll	xwa, 2
 	lda	xbc, (xsp+272)
@@ -17375,7 +17375,7 @@ TitleID_EnumOpen_Compare:
 	ld	(xiz+4), xwa
 	ld	xwa, 0:i3
 	ld	(xsp+4), xwa
-	jr	20
+	jr	TitleID_EnumOpen_UpdateCursor
 TitleID_EnumOpen_SearchNext:
 	ld xwa, 1:i3
 	add (xsp + 8), xwa
@@ -17701,7 +17701,7 @@ CommonIDProc_EnumSearch_Compare:
 	push	xwa
 	ld	xwa, (xbc)
 	push	xwa
-	call	0xff0758
+	call	Strcmp
 	inc	8, xsp
 	cp	hl, 0:i3
 	jr	nz, CommonIDProc_EnumSearch_Next
@@ -17744,7 +17744,7 @@ CommonIDProc_EnumSearch_Atoi:
 	ld	xwa, (xsp+4)
 	ld	xwa, (xwa+4)
 	push	xwa
-	call	16712217
+	call	ParseInt32
 	inc	4, xsp
 	ld	xwa, (xsp+4)
 	ld	(xwa+4), xhl
@@ -19637,12 +19637,12 @@ InitializeGraphics:
 	pushw 0x9600
 	pushw 0x0000
 	push XWA
-	call 0xff081d
+	call Memset
 	add XIZ,0x00009600
 	pushw 0x9600
 	pushw 0x0000
 	push XIZ
-	call 0xff081d
+	call Memset
 	lda xsp, (xsp + 0x10)
 	lda xwa, (xsp + 0x04)
 	ldw (XWA+0x02), 0x0000

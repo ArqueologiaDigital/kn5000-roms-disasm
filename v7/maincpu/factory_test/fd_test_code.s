@@ -139,7 +139,7 @@ FDTest_CloseAndReopen:
 	pushw	0
 	ld	xwa, (xsp+12)
 	push	xwa
-	call	16713757
+	call	Memset
 	lda	xsp, (xsp+12)
 	lda	xwa, (FDTest_String_TestTitleFunc_0x180:24)
 	calr	FDTest_PrintDiag

@@ -5149,7 +5149,7 @@ SndParam_ResolveOscEntry:
 
 	ld (xwa + 2), c
 
-	call	16703515
+	call	SndParam_FetchOscTableEntry
 
 	lda xbc, (xsp + 2)
 
@@ -9334,7 +9334,7 @@ PleaseWait_OverflowPath:
 	push xbc
 
 PleaseWait_Strncpy:
-	call	16712982
+	call	CmpNamingCheck_Helper
 	lda	xsp, (xsp+10)
 LanguageStringcpyReturn:
 	ld xhl, 0:i3

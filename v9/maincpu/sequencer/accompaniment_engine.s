@@ -22088,6 +22088,7 @@ AccPat_InlineFunctions_DataBlock:
 	nop
 	pop	xix
 	push	0
+AccPat_IndexToAddress_Sub:
 	push	xiz
 	calr	AccPat_DispatchNoteChange
 	pop	xiz

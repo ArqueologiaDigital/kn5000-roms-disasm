@@ -1975,7 +1975,7 @@ BmDrEdit_ResetAndScanNotes:
 	calr BmDrEdit_ScanChannelEvents
 
 BmDrEdit_FlagDisplayUpdate:
-	call 16635550
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 
 	set 0, (0x27b0:16)
 
@@ -2023,7 +2023,7 @@ BmDrEdit_CleanupCommon:
 
 	ldmm16 9832, 0x2744
 
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 
 	res 0, (0x27b0:16)
 	calr BmDrEdit_ClearAllSlotsAlt	; calr BmDrEdit_ClearAllSlotsAlt (v7 displacement)
@@ -3033,7 +3033,7 @@ BmDrEdit_DrumVoiceUp_UpdateDisplay:
 	calr	BmDrEdit_SendMetronomeNoteOn_Alt
 	ld	(10588:16), 131
 	ld	(10589:16), 5
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 BmDrEdit_DrumVoiceDown_Check:
 	bit 7, (0x295c:16)
 	jr z, BmDrEdit_DrumVoiceDown_ClearFlag
@@ -3068,7 +3068,7 @@ BmDrEdit_DrumVoiceDown_UpdateDisplay:
 	calr	BmDrEdit_SendMetronomeNoteOn_Alt
 	ld	(10588:16), 131
 	ld	(10589:16), 5
-	jp	16635550
+	jp	PerfMode_Handler_EvtB_Helper2_Helper11
 BmDrEdit_CalcTrackPosition:
 	bit 0, (0x2742:16)
 	ret z
@@ -4530,7 +4530,7 @@ BmDrEdit_EnterPlay_RestoreSettings:
 	ldmm16 0xf19e, 0x2963
 
 BmDrEdit_EnterPlay_CheckAudio:
-	call	16635550
+	call	PerfMode_Handler_EvtB_Helper2_Helper11
 	ld	wa, (10052:16)
 	ld	(9500:16), wa
 	cp	wa, (9502:16)
@@ -4551,7 +4551,7 @@ BmDrEdit_ExitPlayMode:
 	ret Z
 	ldmm8 0x28b1, 0x283c
 	ldw (0xf19e:16), 0
-	call 16635550
+	call PerfMode_Handler_EvtB_Helper2_Helper11
 	call AccWrap_PlayModeDispatch
 	ld a, (0x8c9c:16)
 	cp a, 149

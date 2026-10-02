@@ -2073,7 +2073,7 @@ PartSelect_UpdateDisplayState:
 	pushw	255
 	ldw	wa, 144
 	ldw	bc, 16
-	call	16624211
+	call	AddswbWr
 	ret
 ApTaskControl:
 	cp xbc, EVT_REFRESH_AP_TASK
@@ -2662,15 +2662,15 @@ MainPmanCtrl_Case0:
 	ld xwa, (xiz)
 	ld bc, (xiz+4)
 	ld de, (xiz+6)
-	call 16566832
-	jrl 301
+	call Audio_ResetAfterPayloadError_Helper
+	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case1:
 	ld xiz, xde
 	ld xwa, (xiz)
 	ld bc, (xiz+4)
 	ld de, (xiz+6)
-	call 16567134
-	jrl 284
+	call MainTitle_PrepareAndDispatch_Helper
+	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case2:
 	ld xiz, xde
 	ld xwa, (xiz)
@@ -2701,8 +2701,8 @@ MainPmanCtrl_Case3:
 	ld xbc, (xiz)
 	pushm (xiz+6)
 	ld de, (xiz+4)
-	call 16567114
-	jrl 193
+	call UIState_CheckAndRenderBitmap_Helper
+	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case4:
 	ld xiz, xde
 	ld xwa, (xiz)
@@ -2711,8 +2711,8 @@ MainPmanCtrl_Case4:
 	ld xbc, (xiz)
 	pushm (xiz+6)
 	ld de, (xiz+4)
-	call 16567378
-	jrl 168
+	call KeyScan_Disable_Helper
+	jrl MainTitle_SendEventDone
 MainPmanCtrl_Case5:
 	ld xiz, xde
 	ld xwa, (xiz)
@@ -2769,12 +2769,12 @@ MainPmanCtrl_LoadPartSelect:
 	ld	e, (35998:16)
 MainPmanCtrl_CompareAndUpdate:
 	cp e, (xsp+6)
-	jr z, 15
+	jr z, MainTitle_SendEventDone
 	extz de
 	pushw 255
 	ldw wa, 144
 	ldw bc, 16
-	call 16624211
+	call AddswbWr
 MainTitle_SendEventDone:
 	ld xhl, 0:i3
 	pop xiz

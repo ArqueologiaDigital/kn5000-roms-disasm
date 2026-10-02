@@ -1,0 +1,3137 @@
+{
+ "image": "v9",
+ "stats": {
+  "numeric_jr": 411,
+  "numeric_calr": 131,
+  "numeric_jrl": 50,
+  "numeric_call": 15,
+  "numeric_jp": 4,
+  "absurd_marker_swi": 118,
+  "absurd_marker_incf": 7,
+  "absurd_marker_reti": 58,
+  "absurd_marker_normal": 46,
+  "absurd_marker_decf": 4,
+  "absurd_marker_halt": 21,
+  "absurd_marker_jr": 3,
+  "absurd_marker_nop": 380,
+  "absurd_marker_max": 59,
+  "absurd_marker_ldf": 5,
+  "refuse_R3_absurd_block": 532,
+  "refuse_R2_fragment": 3,
+  "refuse_R5_second_decoder_disagrees": 24,
+  "refuse_R6_text_or_pointer_table": 15,
+  "refuse_R1_incoherent_small_block": 2,
+  "target_external": 2,
+  "site_external": 2,
+  "target_mid-line-code": 15,
+  "site_mid-line-code": 15,
+  "target_mid-line-data": 13,
+  "site_mid-line-data": 13,
+  "target_new": 5,
+  "site_boundary-code": 5
+ },
+ "labels_new": [
+  [
+   "0xF63149",
+   "AccPat_IndexToAddress_Sub",
+   "sequencer/accompaniment_engine.s:22091",
+   "boundary-code"
+  ],
+  [
+   "0xFB0B7B",
+   "Voice_FactoryPresetData_Code_Join6",
+   "kn5000_v9_program.s:2004",
+   "boundary-code"
+  ],
+  [
+   "0xFD72E7",
+   "Param_SignExtendReturn_Entry_Code_Helper",
+   "midi/midi_dispatch_handlers.s:10561",
+   "boundary-code"
+  ],
+  [
+   "0xFD7306",
+   "Param_SignExtendReturn_Entry_Code_Helper2",
+   "midi/midi_dispatch_handlers.s:10578",
+   "boundary-code"
+  ],
+  [
+   "0xFF0400",
+   "HdaeRom_DataDispatch_Block3_Loop2",
+   "audio/note_voice_mapping.s:27433",
+   "boundary-code"
+  ]
+ ],
+ "report": {
+  "R3": [
+   {
+    "src": "boot/system_handlers.s:36",
+    "src_addr": "0xEF08D2",
+    "target": "0xEF08D1"
+   },
+   {
+    "src": "boot/system_handlers.s:5899",
+    "src_addr": "0xEF3530",
+    "target": "0xEF3535"
+   },
+   {
+    "src": "audio/semenu_routines.s:4160",
+    "src_addr": "0xF086B9",
+    "target": "0xF086C8"
+   },
+   {
+    "src": "audio/semenu_routines.s:4170",
+    "src_addr": "0xF086C6",
+    "target": "0xF086D4"
+   },
+   {
+    "src": "audio/semenu_routines.s:4297",
+    "src_addr": "0xF08805",
+    "target": "0xF08814"
+   },
+   {
+    "src": "audio/semenu_routines.s:4307",
+    "src_addr": "0xF08812",
+    "target": "0xF08820"
+   },
+   {
+    "src": "audio/semenu_routines.s:4328",
+    "src_addr": "0xF08840",
+    "target": "0xF083B5"
+   },
+   {
+    "src": "audio/semenu_routines.s:4330",
+    "src_addr": "0xF08845",
+    "target": "0xF08857"
+   },
+   {
+    "src": "audio/semenu_routines.s:6268",
+    "src_addr": "0xF09A4A",
+    "target": "0xF06D71"
+   },
+   {
+    "src": "audio/semenu_routines.s:6286",
+    "src_addr": "0xF09A6F",
+    "target": "0xF061DA"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:5049",
+    "src_addr": "0xF0D43D",
+    "target": "0xF0D625"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:5064",
+    "src_addr": "0xF0D45B",
+    "target": "0xF0D462"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:5066",
+    "src_addr": "0xF0D460",
+    "target": "0xF0D46A"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:5102",
+    "src_addr": "0xF0D4AE",
+    "target": "0xF0D4B6"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:5105",
+    "src_addr": "0xF0D4B4",
+    "target": "0xF0D499"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:6675",
+    "src_addr": "0xF0E43E",
+    "target": "0xF0E426"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:6715",
+    "src_addr": "0xF0E4A1",
+    "target": "0xF0E486"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:6787",
+    "src_addr": "0xF0E55D",
+    "target": "0xF0E540"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7021",
+    "src_addr": "0xF0E7A9",
+    "target": "0xF0E791"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7027",
+    "src_addr": "0xF0E7B7",
+    "target": "0xF0E7D6"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7043",
+    "src_addr": "0xF0E7D4",
+    "target": "0xF0E7BC"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7046",
+    "src_addr": "0xF0E7DB",
+    "target": "0xF0E7ED"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7047",
+    "src_addr": "0xF0E7DD",
+    "target": "0xF0E8DF"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7052",
+    "src_addr": "0xF0E7EB",
+    "target": "0xF0E7DD"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7055",
+    "src_addr": "0xF0E7F2",
+    "target": "0xF0E813"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7070",
+    "src_addr": "0xF0E811",
+    "target": "0xF0E7F7"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7082",
+    "src_addr": "0xF0E836",
+    "target": "0xF0E852"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7097",
+    "src_addr": "0xF0E850",
+    "target": "0xF0E83D"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7119",
+    "src_addr": "0xF0E888",
+    "target": "0xF0E8A6"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7134",
+    "src_addr": "0xF0E8A4",
+    "target": "0xF0E892"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8083",
+    "src_addr": "0xF0F0B8",
+    "target": "0xF0F0D0"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8096",
+    "src_addr": "0xF0F0DD",
+    "target": "0xF0F101"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8106",
+    "src_addr": "0xF0F0FF",
+    "target": "0xF0F121"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8297",
+    "src_addr": "0xF0F37B",
+    "target": "0xF0F34D"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8316",
+    "src_addr": "0xF0F397",
+    "target": "0xF0F3AF"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8321",
+    "src_addr": "0xF0F3AD",
+    "target": "0xF0F3C3"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8658",
+    "src_addr": "0xF0F7C2",
+    "target": "0xF0F7DA"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8671",
+    "src_addr": "0xF0F7E7",
+    "target": "0xF0F80B"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8681",
+    "src_addr": "0xF0F809",
+    "target": "0xF0F82B"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8695",
+    "src_addr": "0xF0F83A",
+    "target": "0xF0F840"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8697",
+    "src_addr": "0xF0F83E",
+    "target": "0xF0F842"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8705",
+    "src_addr": "0xF0F84F",
+    "target": "0xF0F873"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8715",
+    "src_addr": "0xF0F871",
+    "target": "0xF0F893"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8735",
+    "src_addr": "0xF0F8AC",
+    "target": "0xF0F8D0"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8745",
+    "src_addr": "0xF0F8CE",
+    "target": "0xF0F8F0"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8826",
+    "src_addr": "0xF0F9E6",
+    "target": "0xF0FA0A"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:8836",
+    "src_addr": "0xF0FA08",
+    "target": "0xF0FA2A"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1702",
+    "src_addr": "0xF16FAD",
+    "target": "0xF16FDF"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1704",
+    "src_addr": "0xF16FB3",
+    "target": "0xF16FD5"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1706",
+    "src_addr": "0xF16FB9",
+    "target": "0xF16FCB"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1708",
+    "src_addr": "0xF16FBF",
+    "target": "0xF16FF7"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1711",
+    "src_addr": "0xF16FC9",
+    "target": "0xF16FF1"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1716",
+    "src_addr": "0xF16FD3",
+    "target": "0xF16FF1"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1721",
+    "src_addr": "0xF16FDD",
+    "target": "0xF16FF1"
+   },
+   {
+    "src": "storage/flash_floppy_handlers.s:1724",
+    "src_addr": "0xF16FE7",
+    "target": "0xF16FF1"
+   },
+   {
+    "src": "ui/setwall_routines.s:2021",
+    "src_addr": "0xF201CA",
+    "target": "0xF20203"
+   },
+   {
+    "src": "ui/setwall_routines.s:2024",
+    "src_addr": "0xF201D0",
+    "target": "0xF20204"
+   },
+   {
+    "src": "ui/setwall_routines.s:2029",
+    "src_addr": "0xF201DE",
+    "target": "0xF20203"
+   },
+   {
+    "src": "ui/setwall_routines.s:2043",
+    "src_addr": "0xF201FC",
+    "target": "0xF20203"
+   },
+   {
+    "src": "ui/ui_playback_modes.s:99",
+    "src_addr": "0xF203DF",
+    "target": "0xF2040E"
+   },
+   {
+    "src": "ui/ui_playback_modes.s:111",
+    "src_addr": "0xF203F5",
+    "target": "0xF203FA"
+   },
+   {
+    "src": "ui/ui_playback_modes.s:113",
+    "src_addr": "0xF203F8",
+    "target": "0xF2040E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:882",
+    "src_addr": "0xF56548",
+    "target": "0xF5654A"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:900",
+    "src_addr": "0xF56564",
+    "target": "0xF5656A"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:6365",
+    "src_addr": "0xF59B75",
+    "target": "0xF59B92"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8040",
+    "src_addr": "0xF5AAD6",
+    "target": "0xF5AAFA"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8042",
+    "src_addr": "0xF5AADC",
+    "target": "0xF5AAFA"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8044",
+    "src_addr": "0xF5AAE2",
+    "target": "0xF5AAFA"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8047",
+    "src_addr": "0xF5AAE8",
+    "target": "0xF5AAFA"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8048",
+    "src_addr": "0xF5AAEA",
+    "target": "0xF5AB35"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:8731",
+    "src_addr": "0xF5B015",
+    "target": "0xF5B084"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:9062",
+    "src_addr": "0xF5B2BD",
+    "target": "0xF5B2C3"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:9210",
+    "src_addr": "0xF5B419",
+    "target": "0xF5B427"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:9213",
+    "src_addr": "0xF5B425",
+    "target": "0xF5B445"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:9215",
+    "src_addr": "0xF5B42B",
+    "target": "0xF5B445"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:9219",
+    "src_addr": "0xF5B436",
+    "target": "0xF5B445"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:9221",
+    "src_addr": "0xF5B43D",
+    "target": "0xF5B2C6"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:10393",
+    "src_addr": "0xF5BF44",
+    "target": "0xF5BF4E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:10773",
+    "src_addr": "0xF5C4CA",
+    "target": "0xF5C09D"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:10779",
+    "src_addr": "0xF5C4DA",
+    "target": "0xF5C4E1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:14571",
+    "src_addr": "0xF5EFCD",
+    "target": "0xF63FD0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:17629",
+    "src_addr": "0xF60AAD",
+    "target": "0xF60AA3"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:17635",
+    "src_addr": "0xF60ABF",
+    "target": "0xF60D5A"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21535",
+    "src_addr": "0xF62D2E",
+    "target": "0xF62D33"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21976",
+    "src_addr": "0xF63051",
+    "target": "0xF63055"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21977",
+    "src_addr": "0xF63053",
+    "target": "0xF63091"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21980",
+    "src_addr": "0xF6305C",
+    "target": "0xF63094"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21983",
+    "src_addr": "0xF63066",
+    "target": "0xF63094"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21986",
+    "src_addr": "0xF63070",
+    "target": "0xF63094"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21989",
+    "src_addr": "0xF6307A",
+    "target": "0xF63094"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21992",
+    "src_addr": "0xF63084",
+    "target": "0xF63094"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21995",
+    "src_addr": "0xF6308E",
+    "target": "0xF63094"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21999",
+    "src_addr": "0xF63094",
+    "target": "0xF630AB"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22002",
+    "src_addr": "0xF6309A",
+    "target": "0xF630A8"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22006",
+    "src_addr": "0xF630A2",
+    "target": "0xF630A8"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22238",
+    "src_addr": "0xF632C4",
+    "target": "0xF632C8"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22249",
+    "src_addr": "0xF632EE",
+    "target": "0xF632F2"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22450",
+    "src_addr": "0xF634DA",
+    "target": "0xF634E9"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22452",
+    "src_addr": "0xF634DE",
+    "target": "0xF630F2"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22454",
+    "src_addr": "0xF634E3",
+    "target": "0xF634EE"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22456",
+    "src_addr": "0xF634E7",
+    "target": "0xF634D6"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22791",
+    "src_addr": "0xF63819",
+    "target": "0xF6381E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22793",
+    "src_addr": "0xF6381E",
+    "target": "0xF63823"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22798",
+    "src_addr": "0xF63829",
+    "target": "0xF63817"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23152",
+    "src_addr": "0xF63BE0",
+    "target": "0xF636E4"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23156",
+    "src_addr": "0xF63BEF",
+    "target": "0xF63E33"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23158",
+    "src_addr": "0xF63BF6",
+    "target": "0xF636E4"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23160",
+    "src_addr": "0xF63BFD",
+    "target": "0xF63E33"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23196",
+    "src_addr": "0xF63C84",
+    "target": "0xF636E4"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23200",
+    "src_addr": "0xF63C93",
+    "target": "0xF63E33"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23202",
+    "src_addr": "0xF63C9A",
+    "target": "0xF636E4"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23204",
+    "src_addr": "0xF63CA1",
+    "target": "0xF63E33"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23477",
+    "src_addr": "0xF63F1F",
+    "target": "0xF63F3F"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23480",
+    "src_addr": "0xF63F28",
+    "target": "0xF63F37"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23483",
+    "src_addr": "0xF63F32",
+    "target": "0xF63F37"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23534",
+    "src_addr": "0xF63FAD",
+    "target": "0xF63FBD"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23536",
+    "src_addr": "0xF63FB1",
+    "target": "0xF63FB9"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23538",
+    "src_addr": "0xF63FB7",
+    "target": "0xF63FA4"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23540",
+    "src_addr": "0xF63FBB",
+    "target": "0xF63FBF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23562",
+    "src_addr": "0xF63FDF",
+    "target": "0xF6400B"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23564",
+    "src_addr": "0xF63FE4",
+    "target": "0xF63FF2"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23567",
+    "src_addr": "0xF63FEC",
+    "target": "0xF63FF0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23569",
+    "src_addr": "0xF63FF0",
+    "target": "0xF64022"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23581",
+    "src_addr": "0xF6400E",
+    "target": "0xF64014"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23583",
+    "src_addr": "0xF64012",
+    "target": "0xF64022"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23609",
+    "src_addr": "0xF6404F",
+    "target": "0xF64055"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23612",
+    "src_addr": "0xF6405A",
+    "target": "0xF64060"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23664",
+    "src_addr": "0xF6411A",
+    "target": "0xF64129"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:23667",
+    "src_addr": "0xF64126",
+    "target": "0xF6314F"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24528",
+    "src_addr": "0xF64CE7",
+    "target": "0xF64CED"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24530",
+    "src_addr": "0xF64CEB",
+    "target": "0xF64CF8"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24532",
+    "src_addr": "0xF64CF0",
+    "target": "0xF64CF6"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24534",
+    "src_addr": "0xF64CF4",
+    "target": "0xF64CF8"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24537",
+    "src_addr": "0xF64CFC",
+    "target": "0xF64AEE"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24779",
+    "src_addr": "0xF64F56",
+    "target": "0xF64F5C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24785",
+    "src_addr": "0xF64F6B",
+    "target": "0xF64F8C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24955",
+    "src_addr": "0xF650E6",
+    "target": "0xF64C62"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24979",
+    "src_addr": "0xF6510B",
+    "target": "0xF65110"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24990",
+    "src_addr": "0xF6512D",
+    "target": "0xF64C62"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25019",
+    "src_addr": "0xF65153",
+    "target": "0xF65158"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25023",
+    "src_addr": "0xF6515D",
+    "target": "0xF65161"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25024",
+    "src_addr": "0xF6515F",
+    "target": "0xF6518A"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25026",
+    "src_addr": "0xF65164",
+    "target": "0xF65178"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25420",
+    "src_addr": "0xF65512",
+    "target": "0xF65885"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25443",
+    "src_addr": "0xF65531",
+    "target": "0xF65549"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25444",
+    "src_addr": "0xF65533",
+    "target": "0xF65B53"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25447",
+    "src_addr": "0xF6553E",
+    "target": "0xF659D1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25448",
+    "src_addr": "0xF65541",
+    "target": "0xF64C24"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25517",
+    "src_addr": "0xF655EB",
+    "target": "0xF65641"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25531",
+    "src_addr": "0xF65604",
+    "target": "0xF6560E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25533",
+    "src_addr": "0xF65608",
+    "target": "0xF65618"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25551",
+    "src_addr": "0xF65631",
+    "target": "0xF65641"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25593",
+    "src_addr": "0xF65683",
+    "target": "0xF659FF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25594",
+    "src_addr": "0xF65686",
+    "target": "0xF64C24"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25595",
+    "src_addr": "0xF65689",
+    "target": "0xF65B3C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25596",
+    "src_addr": "0xF6568C",
+    "target": "0xF65BF7"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25605",
+    "src_addr": "0xF656A0",
+    "target": "0xF65A95"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25606",
+    "src_addr": "0xF656A3",
+    "target": "0xF64C24"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25607",
+    "src_addr": "0xF656A6",
+    "target": "0xF65B3C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25616",
+    "src_addr": "0xF656BA",
+    "target": "0xF65C0C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25631",
+    "src_addr": "0xF656DD",
+    "target": "0xF65D64"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25640",
+    "src_addr": "0xF656ED",
+    "target": "0xF65710"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25661",
+    "src_addr": "0xF65724",
+    "target": "0xF6572B"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25681",
+    "src_addr": "0xF65748",
+    "target": "0xF65755"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25684",
+    "src_addr": "0xF6574F",
+    "target": "0xF6575E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25686",
+    "src_addr": "0xF65753",
+    "target": "0xF6575E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25689",
+    "src_addr": "0xF6575A",
+    "target": "0xF6575E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26028",
+    "src_addr": "0xF65B11",
+    "target": "0xFCA18C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26065",
+    "src_addr": "0xF65B5D",
+    "target": "0xF65B6A"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26188",
+    "src_addr": "0xF65CA8",
+    "target": "0xF65CAA"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26192",
+    "src_addr": "0xF65CAF",
+    "target": "0xF67AD0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26193",
+    "src_addr": "0xF65CB2",
+    "target": "0xF67BD4"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26229",
+    "src_addr": "0xF65CF4",
+    "target": "0xF65D30"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26231",
+    "src_addr": "0xF65CFA",
+    "target": "0xF65D12"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26236",
+    "src_addr": "0xF65D10",
+    "target": "0xF65D63"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26238",
+    "src_addr": "0xF65D16",
+    "target": "0xF65D1A"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26239",
+    "src_addr": "0xF65D18",
+    "target": "0xF65D63"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26468",
+    "src_addr": "0xF65F28",
+    "target": "0xF65F36"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26470",
+    "src_addr": "0xF65F2C",
+    "target": "0xF65F32"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26472",
+    "src_addr": "0xF65F30",
+    "target": "0xF65F34"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26474",
+    "src_addr": "0xF65F34",
+    "target": "0xF65F40"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26579",
+    "src_addr": "0xF66037",
+    "target": "0xF6603C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26605",
+    "src_addr": "0xF66070",
+    "target": "0xF66085"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26606",
+    "src_addr": "0xF66072",
+    "target": "0xF65ED5"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29337",
+    "src_addr": "0xF67717",
+    "target": "0xF670BF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29432",
+    "src_addr": "0xF67808",
+    "target": "0xF67879"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29435",
+    "src_addr": "0xF6780E",
+    "target": "0xF67815"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29438",
+    "src_addr": "0xF67811",
+    "target": "0xF67879"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29441",
+    "src_addr": "0xF67818",
+    "target": "0xF6781C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29442",
+    "src_addr": "0xF6781A",
+    "target": "0xF677EA"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29449",
+    "src_addr": "0xF67822",
+    "target": "0xF670BF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29454",
+    "src_addr": "0xF67836",
+    "target": "0xF6783C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29456",
+    "src_addr": "0xF6783A",
+    "target": "0xF6783E"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29595",
+    "src_addr": "0xF6796A",
+    "target": "0xF670BF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29601",
+    "src_addr": "0xF6797F",
+    "target": "0xF67879"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29606",
+    "src_addr": "0xF6798A",
+    "target": "0xF67730"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29607",
+    "src_addr": "0xF6798D",
+    "target": "0xF67997"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29608",
+    "src_addr": "0xF67990",
+    "target": "0xF67757"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29611",
+    "src_addr": "0xF67997",
+    "target": "0xF676E6"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29805",
+    "src_addr": "0xF67BAD",
+    "target": "0xF670BF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29831",
+    "src_addr": "0xF67BEE",
+    "target": "0xF67C09"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:33855",
+    "src_addr": "0xF6A4FF",
+    "target": "0xF6A503"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:33925",
+    "src_addr": "0xF6A599",
+    "target": "0xF6A5A2"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:33927",
+    "src_addr": "0xF6A5A0",
+    "target": "0xF6A5A7"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:33933",
+    "src_addr": "0xF6A5AD",
+    "target": "0xF6A5C5"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:34012",
+    "src_addr": "0xF6A67E",
+    "target": "0xF6A68F"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:34014",
+    "src_addr": "0xF6A684",
+    "target": "0xF6A68F"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:34022",
+    "src_addr": "0xF6A698",
+    "target": "0xF6A6A9"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:34024",
+    "src_addr": "0xF6A69E",
+    "target": "0xF6A6A9"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:34029",
+    "src_addr": "0xF6A6AD",
+    "target": "0xF6A6B4"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35453",
+    "src_addr": "0xF6BB81",
+    "target": "0xF6BB88"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35455",
+    "src_addr": "0xF6BB86",
+    "target": "0xF6BB8D"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35460",
+    "src_addr": "0xF6BB99",
+    "target": "0xF6BB24"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35463",
+    "src_addr": "0xF6BB9F",
+    "target": "0xF6B57C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35474",
+    "src_addr": "0xF6BBB4",
+    "target": "0xF6BBCF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35476",
+    "src_addr": "0xF6BBB6",
+    "target": "0xF6B57C"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35479",
+    "src_addr": "0xF6BBBE",
+    "target": "0xF6BBCF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:35482",
+    "src_addr": "0xF6BBC6",
+    "target": "0xF6BBCA"
+   },
+   {
+    "src": "sequencer/accompseq_routines.s:1711",
+    "src_addr": "0xF6EC21",
+    "target": "0xF6EC25"
+   },
+   {
+    "src": "sequencer/accompseq_routines.s:1714",
+    "src_addr": "0xF6EC27",
+    "target": "0xF6EC2B"
+   },
+   {
+    "src": "storage/fdc_routines.s:567",
+    "src_addr": "0xF9704F",
+    "target": "0xF97051"
+   },
+   {
+    "src": "ui/bitmap_out_routines.s:3849",
+    "src_addr": "0xFB62CE",
+    "target": "0xFB62DB"
+   },
+   {
+    "src": "ui/bitmap_out_routines.s:3853",
+    "src_addr": "0xFB62D9",
+    "target": "0xFB62FA"
+   },
+   {
+    "src": "audio/tonegen_fileio_handlers.s:571",
+    "src_addr": "0xFC50EE",
+    "target": "0xFC5163"
+   },
+   {
+    "src": "audio/tonegen_fileio_handlers.s:575",
+    "src_addr": "0xFC50F7",
+    "target": "0xFC5150"
+   },
+   {
+    "src": "audio/tonegen_fileio_handlers.s:577",
+    "src_addr": "0xFC50FD",
+    "target": "0xFC5115"
+   },
+   {
+    "src": "audio/tonegen_fileio_handlers.s:623",
+    "src_addr": "0xFC5161",
+    "target": "0xFC50F0"
+   },
+   {
+    "src": "audio/tonegen_fileio_handlers.s:630",
+    "src_addr": "0xFC516D",
+    "target": "0xFC50DB"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1487",
+    "src_addr": "0xFC65DD",
+    "target": "0xFC65E2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1491",
+    "src_addr": "0xFC65E5",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1500",
+    "src_addr": "0xFC65FA",
+    "target": "0xFC6623"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1510",
+    "src_addr": "0xFC6611",
+    "target": "0xFC6618"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1512",
+    "src_addr": "0xFC6616",
+    "target": "0xFC661B"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1516",
+    "src_addr": "0xFC6620",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1527",
+    "src_addr": "0xFC663A",
+    "target": "0xFC6641"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1529",
+    "src_addr": "0xFC663F",
+    "target": "0xFC6644"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1532",
+    "src_addr": "0xFC6647",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1547",
+    "src_addr": "0xFC6666",
+    "target": "0xFC666D"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1549",
+    "src_addr": "0xFC666B",
+    "target": "0xFC6670"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1552",
+    "src_addr": "0xFC6673",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1578",
+    "src_addr": "0xFC66B1",
+    "target": "0xFC66B8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1580",
+    "src_addr": "0xFC66B6",
+    "target": "0xFC66BB"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1583",
+    "src_addr": "0xFC66BE",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1603",
+    "src_addr": "0xFC66EA",
+    "target": "0xFC6700"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1616",
+    "src_addr": "0xFC6709",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1635",
+    "src_addr": "0xFC672E",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1643",
+    "src_addr": "0xFC6740",
+    "target": "0xFC6769"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1653",
+    "src_addr": "0xFC6757",
+    "target": "0xFC675E"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1655",
+    "src_addr": "0xFC675C",
+    "target": "0xFC6761"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1659",
+    "src_addr": "0xFC6766",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1705",
+    "src_addr": "0xFC67D0",
+    "target": "0xFC67E0"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1707",
+    "src_addr": "0xFC67D5",
+    "target": "0xFC67E0"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1709",
+    "src_addr": "0xFC67D9",
+    "target": "0xFC67E0"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1711",
+    "src_addr": "0xFC67DE",
+    "target": "0xFC67E2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1713",
+    "src_addr": "0xFC67E0",
+    "target": "0xFC6813"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1717",
+    "src_addr": "0xFC67ED",
+    "target": "0xFC6813"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1728",
+    "src_addr": "0xFC6806",
+    "target": "0xFC6813"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1732",
+    "src_addr": "0xFC6810",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1744",
+    "src_addr": "0xFC6829",
+    "target": "0xFC6839"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1746",
+    "src_addr": "0xFC682E",
+    "target": "0xFC6839"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1748",
+    "src_addr": "0xFC6832",
+    "target": "0xFC6839"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1750",
+    "src_addr": "0xFC6837",
+    "target": "0xFC683B"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1752",
+    "src_addr": "0xFC6839",
+    "target": "0xFC686C"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1756",
+    "src_addr": "0xFC6846",
+    "target": "0xFC686C"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1767",
+    "src_addr": "0xFC685F",
+    "target": "0xFC686C"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1771",
+    "src_addr": "0xFC6869",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1802",
+    "src_addr": "0xFC68AE",
+    "target": "0xFC68B5"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1804",
+    "src_addr": "0xFC68B3",
+    "target": "0xFC68B7"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1806",
+    "src_addr": "0xFC68B5",
+    "target": "0xFC68F2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1810",
+    "src_addr": "0xFC68C2",
+    "target": "0xFC68F2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:1827",
+    "src_addr": "0xFC68EF",
+    "target": "0xFC5874"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3152",
+    "src_addr": "0xFC7634",
+    "target": "0xFC763E"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3156",
+    "src_addr": "0xFC763C",
+    "target": "0xFC764E"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3168",
+    "src_addr": "0xFC7659",
+    "target": "0xFC7681"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3172",
+    "src_addr": "0xFC765E",
+    "target": "0xFC767A"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3184",
+    "src_addr": "0xFC7678",
+    "target": "0xFC7681"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3264",
+    "src_addr": "0xFC7726",
+    "target": "0xFC773F"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3269",
+    "src_addr": "0xFC7730",
+    "target": "0xFC773F"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3274",
+    "src_addr": "0xFC773A",
+    "target": "0xFC773F"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3286",
+    "src_addr": "0xFC7751",
+    "target": "0xFC7757"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3288",
+    "src_addr": "0xFC7755",
+    "target": "0xFC7759"
+   },
+   {
+    "src": "audio/audio_control_engine.s:3853",
+    "src_addr": "0xFC7B9E",
+    "target": "0xFC7BA5"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4244",
+    "src_addr": "0xFC7F27",
+    "target": "0xFC7ED6"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4281",
+    "src_addr": "0xFC7F8B",
+    "target": "0xFC8396"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4319",
+    "src_addr": "0xFC7FF2",
+    "target": "0xFC8396"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4322",
+    "src_addr": "0xFC7FFC",
+    "target": "0xFC7FC3"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4328",
+    "src_addr": "0xFC8005",
+    "target": "0xFC7F4A"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4352",
+    "src_addr": "0xFC8048",
+    "target": "0xFC8396"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4358",
+    "src_addr": "0xFC8052",
+    "target": "0xFC802D"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4365",
+    "src_addr": "0xFC8061",
+    "target": "0xFC8077"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4373",
+    "src_addr": "0xFC8074",
+    "target": "0xFC8396"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4920",
+    "src_addr": "0xFC857B",
+    "target": "0xFC86F8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4921",
+    "src_addr": "0xFC857E",
+    "target": "0xFC8707"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4922",
+    "src_addr": "0xFC8581",
+    "target": "0xFC8710"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4923",
+    "src_addr": "0xFC8584",
+    "target": "0xFC8719"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4924",
+    "src_addr": "0xFC8587",
+    "target": "0xFC8722"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4925",
+    "src_addr": "0xFC858A",
+    "target": "0xFC872B"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4927",
+    "src_addr": "0xFC858D",
+    "target": "0xFC8734"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4944",
+    "src_addr": "0xFC85AD",
+    "target": "0xFC9DF4"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4946",
+    "src_addr": "0xFC85B6",
+    "target": "0xFC8625"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4951",
+    "src_addr": "0xFC85BD",
+    "target": "0xFC85D8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4956",
+    "src_addr": "0xFC85C4",
+    "target": "0xFC85D8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4960",
+    "src_addr": "0xFC85CF",
+    "target": "0xFC85D8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:4964",
+    "src_addr": "0xFC85D6",
+    "target": "0xFC8625"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5034",
+    "src_addr": "0xFC8678",
+    "target": "0xFC8682"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5042",
+    "src_addr": "0xFC8686",
+    "target": "0xFC8693"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5044",
+    "src_addr": "0xFC868B",
+    "target": "0xFC98D8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5046",
+    "src_addr": "0xFC8691",
+    "target": "0xFC8696"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5048",
+    "src_addr": "0xFC8696",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5189",
+    "src_addr": "0xFC87FD",
+    "target": "0xFC880E"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5190",
+    "src_addr": "0xFC87FF",
+    "target": "0xFC8871"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5191",
+    "src_addr": "0xFC8801",
+    "target": "0xFC8893"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5192",
+    "src_addr": "0xFC8804",
+    "target": "0xFC889C"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5193",
+    "src_addr": "0xFC8807",
+    "target": "0xFC88AB"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5194",
+    "src_addr": "0xFC880A",
+    "target": "0xFC88B4"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5209",
+    "src_addr": "0xFC882A",
+    "target": "0xFC9DF4"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5235",
+    "src_addr": "0xFC886D",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5238",
+    "src_addr": "0xFC8873",
+    "target": "0xFC981A"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5240",
+    "src_addr": "0xFC8879",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5243",
+    "src_addr": "0xFC8883",
+    "target": "0xFC888D"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5248",
+    "src_addr": "0xFC888D",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5249",
+    "src_addr": "0xFC8890",
+    "target": "0xFC8A97"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5251",
+    "src_addr": "0xFC8896",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5252",
+    "src_addr": "0xFC8899",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5260",
+    "src_addr": "0xFC88A8",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5262",
+    "src_addr": "0xFC88AE",
+    "target": "0xFC9772"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5377",
+    "src_addr": "0xFC89B9",
+    "target": "0xFC89DB"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5379",
+    "src_addr": "0xFC89BD",
+    "target": "0xFC89DB"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5391",
+    "src_addr": "0xFC89D1",
+    "target": "0xFC89DB"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5401",
+    "src_addr": "0xFC89E0",
+    "target": "0xFC89FF"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5403",
+    "src_addr": "0xFC89E4",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5407",
+    "src_addr": "0xFC89EB",
+    "target": "0xFC89EE"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5416",
+    "src_addr": "0xFC89FF",
+    "target": "0xFC8A09"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5418",
+    "src_addr": "0xFC8A06",
+    "target": "0xFC8A97"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5456",
+    "src_addr": "0xFC8A58",
+    "target": "0xFC8A62"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5462",
+    "src_addr": "0xFC8A67",
+    "target": "0xFC8A6E"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5555",
+    "src_addr": "0xFC8B51",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5557",
+    "src_addr": "0xFC8B56",
+    "target": "0xFC9772"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5558",
+    "src_addr": "0xFC8B59",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5578",
+    "src_addr": "0xFC8B84",
+    "target": "0xFC8A97"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5588",
+    "src_addr": "0xFC8B94",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5590",
+    "src_addr": "0xFC8B97",
+    "target": "0xFC9644"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5615",
+    "src_addr": "0xFC8BC7",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5616",
+    "src_addr": "0xFC8BCA",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5622",
+    "src_addr": "0xFC8BE0",
+    "target": "0xFC986B"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5623",
+    "src_addr": "0xFC8BE3",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5632",
+    "src_addr": "0xFC8BF8",
+    "target": "0xFC8C11"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5643",
+    "src_addr": "0xFC8C0F",
+    "target": "0xFC8C16"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5653",
+    "src_addr": "0xFC8C2A",
+    "target": "0xFC8C34"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5681",
+    "src_addr": "0xFC8C78",
+    "target": "0xFC986B"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5682",
+    "src_addr": "0xFC8C7B",
+    "target": "0xFC8C94"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5697",
+    "src_addr": "0xFC8C99",
+    "target": "0xFC8CA0"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5699",
+    "src_addr": "0xFC8CA0",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5701",
+    "src_addr": "0xFC8CA3",
+    "target": "0xFC9644"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5705",
+    "src_addr": "0xFC8CAE",
+    "target": "0xFC8628"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5710",
+    "src_addr": "0xFC8CB3",
+    "target": "0xFC9644"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5728",
+    "src_addr": "0xFC8CD9",
+    "target": "0xFC98D8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5733",
+    "src_addr": "0xFC8CE4",
+    "target": "0xFC971B"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5734",
+    "src_addr": "0xFC8CE7",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5740",
+    "src_addr": "0xFC8CF6",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5741",
+    "src_addr": "0xFC8CF9",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5750",
+    "src_addr": "0xFC8D0A",
+    "target": "0xFC98D8"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5751",
+    "src_addr": "0xFC8D0D",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5760",
+    "src_addr": "0xFC8D20",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5762",
+    "src_addr": "0xFC8D26",
+    "target": "0xFC96C2"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5768",
+    "src_addr": "0xFC8D37",
+    "target": "0xFC8D49"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5775",
+    "src_addr": "0xFC8D42",
+    "target": "0xFC8D47"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5789",
+    "src_addr": "0xFC8D61",
+    "target": "0xFC8D6A"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5801",
+    "src_addr": "0xFC8D7D",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5812",
+    "src_addr": "0xFC8D90",
+    "target": "0xFC9663"
+   },
+   {
+    "src": "audio/audio_control_engine.s:6598",
+    "src_addr": "0xFC9540",
+    "target": "0xFC952B"
+   },
+   {
+    "src": "audio/audio_control_engine.s:6599",
+    "src_addr": "0xFC9542",
+    "target": "0xFC9552"
+   },
+   {
+    "src": "audio/audio_control_engine.s:6612",
+    "src_addr": "0xFC9559",
+    "target": "0xFC9581"
+   },
+   {
+    "src": "audio/audio_control_engine.s:6616",
+    "src_addr": "0xFC9564",
+    "target": "0xFC9581"
+   },
+   {
+    "src": "audio/audio_control_engine.s:6620",
+    "src_addr": "0xFC956F",
+    "target": "0xFC9581"
+   },
+   {
+    "src": "audio/audio_control_engine.s:6700",
+    "src_addr": "0xFC964A",
+    "target": "0xFC9DF4"
+   },
+   {
+    "src": "audio/audio_control_engine.s:9542",
+    "src_addr": "0xFCAF05",
+    "target": "0xFCA203"
+   },
+   {
+    "src": "audio/audio_control_engine.s:11104",
+    "src_addr": "0xFCC722",
+    "target": "0xFCCB1C"
+   },
+   {
+    "src": "audio/audio_control_engine.s:11113",
+    "src_addr": "0xFCC740",
+    "target": "0xFCCB1C"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1046",
+    "src_addr": "0xFCDBC1",
+    "target": "0xFCDBC6"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1056",
+    "src_addr": "0xFCDBE0",
+    "target": "0xFCDBE4"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1064",
+    "src_addr": "0xFCDBF5",
+    "target": "0xFCDC02"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1069",
+    "src_addr": "0xFCDC00",
+    "target": "0xFCDC3B"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1142",
+    "src_addr": "0xFCDCB7",
+    "target": "0xFCDCBC"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1152",
+    "src_addr": "0xFCDCD6",
+    "target": "0xFCDCDA"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1159",
+    "src_addr": "0xFCDCE5",
+    "target": "0xFCDCEF"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1163",
+    "src_addr": "0xFCDCED",
+    "target": "0xFCDD21"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1263",
+    "src_addr": "0xFCDDE7",
+    "target": "0xFCDDEB"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1270",
+    "src_addr": "0xFCDDF8",
+    "target": "0xFCDDFC"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1278",
+    "src_addr": "0xFCDE0C",
+    "target": "0xFCDE16"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1282",
+    "src_addr": "0xFCDE14",
+    "target": "0xFCDE4E"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1448",
+    "src_addr": "0xFCDFAD",
+    "target": "0xFCDFB8"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1452",
+    "src_addr": "0xFCDFB6",
+    "target": "0xFCDFD2"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1454",
+    "src_addr": "0xFCDFBB",
+    "target": "0xFCDFD2"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1458",
+    "src_addr": "0xFCDFC6",
+    "target": "0xFCDFCA"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1468",
+    "src_addr": "0xFCDFDE",
+    "target": "0xFCDFE2"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1478",
+    "src_addr": "0xFCDFF6",
+    "target": "0xFCE003"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1558",
+    "src_addr": "0xFCE0B5",
+    "target": "0xFCE0C1"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1561",
+    "src_addr": "0xFCE0BF",
+    "target": "0xFCE0C3"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1567",
+    "src_addr": "0xFCE0CE",
+    "target": "0xFCE0E4"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1573",
+    "src_addr": "0xFCE0D7",
+    "target": "0xFCE0DD"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1575",
+    "src_addr": "0xFCE0DB",
+    "target": "0xFCE0E7"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1578",
+    "src_addr": "0xFCE0E2",
+    "target": "0xFCE0D0"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1583",
+    "src_addr": "0xFCE0ED",
+    "target": "0xFCE0F5"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1606",
+    "src_addr": "0xFCE127",
+    "target": "0xFCE12B"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1614",
+    "src_addr": "0xFCE13B",
+    "target": "0xFCE145"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1618",
+    "src_addr": "0xFCE143",
+    "target": "0xFCE17D"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1781",
+    "src_addr": "0xFCE2DF",
+    "target": "0xFCE2E3"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1788",
+    "src_addr": "0xFCE2EC",
+    "target": "0xFCE2F0"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1793",
+    "src_addr": "0xFCE2F7",
+    "target": "0xFCE2FB"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1800",
+    "src_addr": "0xFCE30B",
+    "target": "0xFCE325"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1807",
+    "src_addr": "0xFCE31B",
+    "target": "0xFCE31F"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1812",
+    "src_addr": "0xFCE323",
+    "target": "0xFCE34E"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1820",
+    "src_addr": "0xFCE336",
+    "target": "0xFCE33A"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1834",
+    "src_addr": "0xFCE358",
+    "target": "0xFCE37A"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1892",
+    "src_addr": "0xFCE3F2",
+    "target": "0xFCE3F6"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1899",
+    "src_addr": "0xFCE3FF",
+    "target": "0xFCE403"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1904",
+    "src_addr": "0xFCE40A",
+    "target": "0xFCE40E"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1911",
+    "src_addr": "0xFCE41E",
+    "target": "0xFCE438"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1918",
+    "src_addr": "0xFCE42E",
+    "target": "0xFCE432"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1923",
+    "src_addr": "0xFCE436",
+    "target": "0xFCE461"
+   },
+   {
+    "src": "audio/sndparam_routines.s:1931",
+    "src_addr": "0xFCE449",
+    "target": "0xFCE44D"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2036",
+    "src_addr": "0xFCE551",
+    "target": "0xFCE555"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2157",
+    "src_addr": "0xFCE678",
+    "target": "0xFCE67C"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2164",
+    "src_addr": "0xFCE689",
+    "target": "0xFCE695"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2167",
+    "src_addr": "0xFCE693",
+    "target": "0xFCE697"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2175",
+    "src_addr": "0xFCE6A6",
+    "target": "0xFCE6BC"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2181",
+    "src_addr": "0xFCE6AF",
+    "target": "0xFCE6B5"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2183",
+    "src_addr": "0xFCE6B3",
+    "target": "0xFCE6BF"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2186",
+    "src_addr": "0xFCE6BA",
+    "target": "0xFCE6A8"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2192",
+    "src_addr": "0xFCE6C8",
+    "target": "0xFCE6D0"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2217",
+    "src_addr": "0xFCE703",
+    "target": "0xFCE707"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2227",
+    "src_addr": "0xFCE71E",
+    "target": "0xFCE731"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2368",
+    "src_addr": "0xFCE890",
+    "target": "0xFCE894"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2378",
+    "src_addr": "0xFCE89E",
+    "target": "0xFCE8A2"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2383",
+    "src_addr": "0xFCE8A9",
+    "target": "0xFCE8AD"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2407",
+    "src_addr": "0xFCE8EC",
+    "target": "0xFCE8F2"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2412",
+    "src_addr": "0xFCE8F4",
+    "target": "0xFCE945"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2420",
+    "src_addr": "0xFCE904",
+    "target": "0xFCE908"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2456",
+    "src_addr": "0xFCE955",
+    "target": "0xFCE959"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2460",
+    "src_addr": "0xFCE95E",
+    "target": "0xFCE962"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2464",
+    "src_addr": "0xFCE968",
+    "target": "0xFCE96C"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2482",
+    "src_addr": "0xFCE991",
+    "target": "0xFCE995"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2488",
+    "src_addr": "0xFCE99F",
+    "target": "0xFCE9A3"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2502",
+    "src_addr": "0xFCE9C0",
+    "target": "0xFCE9C7"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2520",
+    "src_addr": "0xFCE9E7",
+    "target": "0xFCE9EB"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2525",
+    "src_addr": "0xFCE9F0",
+    "target": "0xFCE9F4"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2529",
+    "src_addr": "0xFCE9F9",
+    "target": "0xFCE9FD"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2543",
+    "src_addr": "0xFCEA16",
+    "target": "0xFCEA1A"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2551",
+    "src_addr": "0xFCEA2D",
+    "target": "0xFCEA33"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2553",
+    "src_addr": "0xFCEA31",
+    "target": "0xFCEA3C"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2556",
+    "src_addr": "0xFCEA38",
+    "target": "0xFCEA3C"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2590",
+    "src_addr": "0xFCEA81",
+    "target": "0xFCEA85"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2619",
+    "src_addr": "0xFCEAC2",
+    "target": "0xFCEAC6"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2630",
+    "src_addr": "0xFCEADD",
+    "target": "0xFCEAE1"
+   },
+   {
+    "src": "audio/sndparam_routines.s:2643",
+    "src_addr": "0xFCEAF8",
+    "target": "0xFCEC5D"
+   },
+   {
+    "src": "midi/midi_dispatch_handlers.s:126",
+    "src_addr": "0xFCFAB3",
+    "target": "0xFCFAB8"
+   },
+   {
+    "src": "midi/midi_dispatch_handlers.s:133",
+    "src_addr": "0xFCFAC5",
+    "target": "0xFCFACA"
+   },
+   {
+    "src": "midi/midi_dispatch_handlers.s:177",
+    "src_addr": "0xFCFB39",
+    "target": "0xFCFB05"
+   },
+   {
+    "src": "midi/midi_dispatch_handlers.s:210",
+    "src_addr": "0xFCFB78",
+    "target": "0xFCFBB2"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:238",
+    "src_addr": "0xFDAD49",
+    "target": "0xFDAD6B"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:242",
+    "src_addr": "0xFDAD55",
+    "target": "0xFDAD6B"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:246",
+    "src_addr": "0xFDAD60",
+    "target": "0xFDAD6B"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:292",
+    "src_addr": "0xFDADCF",
+    "target": "0xFDADF0"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:296",
+    "src_addr": "0xFDADDA",
+    "target": "0xFDADF0"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:300",
+    "src_addr": "0xFDADE5",
+    "target": "0xFDADF0"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:2914",
+    "src_addr": "0xFDC4BE",
+    "target": "0xFDC35F"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:2929",
+    "src_addr": "0xFDC4E2",
+    "target": "0xFDC3C9"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:2934",
+    "src_addr": "0xFDC4EC",
+    "target": "0xFDC4F0"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:2940",
+    "src_addr": "0xFDC4F6",
+    "target": "0xFDC500"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:2942",
+    "src_addr": "0xFDC4FA",
+    "target": "0xFDC500"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:2944",
+    "src_addr": "0xFDC4FE",
+    "target": "0xFDC503"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:4075",
+    "src_addr": "0xFDCF45",
+    "target": "0xFDCDE7"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:4077",
+    "src_addr": "0xFDCF4C",
+    "target": "0xFDCF55"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:4082",
+    "src_addr": "0xFDCF53",
+    "target": "0xFDCF5D"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5908",
+    "src_addr": "0xFDE4A2",
+    "target": "0xFDE512"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5911",
+    "src_addr": "0xFDE4AB",
+    "target": "0xFDE4CB"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5913",
+    "src_addr": "0xFDE4B1",
+    "target": "0xFDE4C5"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5916",
+    "src_addr": "0xFDE4BA",
+    "target": "0xFDE4C5"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5919",
+    "src_addr": "0xFDE4C3",
+    "target": "0xFDE4C5"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5922",
+    "src_addr": "0xFDE4CF",
+    "target": "0xFDE512"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5924",
+    "src_addr": "0xFDE4D5",
+    "target": "0xFDE4E3"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5929",
+    "src_addr": "0xFDE4E9",
+    "target": "0xFDE512"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5932",
+    "src_addr": "0xFDE4F2",
+    "target": "0xFDE512"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5934",
+    "src_addr": "0xFDE4F8",
+    "target": "0xFDE50C"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5937",
+    "src_addr": "0xFDE501",
+    "target": "0xFDE50C"
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:5940",
+    "src_addr": "0xFDE50A",
+    "target": "0xFDE50C"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4368",
+    "src_addr": "0xFE2BC1",
+    "target": "0xFE2C41"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4375",
+    "src_addr": "0xFE2BD5",
+    "target": "0xFE2C00"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4378",
+    "src_addr": "0xFE2BDC",
+    "target": "0xFE3FB9"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4381",
+    "src_addr": "0xFE2BE4",
+    "target": "0xFE3FB9"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4387",
+    "src_addr": "0xFE2BED",
+    "target": "0xFE2C00"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4390",
+    "src_addr": "0xFE2BF6",
+    "target": "0xFE2C00"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4393",
+    "src_addr": "0xFE2BFD",
+    "target": "0xFE3FB9"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4396",
+    "src_addr": "0xFE2C07",
+    "target": "0xFE2D6D"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4469",
+    "src_addr": "0xFE2CBF",
+    "target": "0xFE2CE3"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4486",
+    "src_addr": "0xFE2CEA",
+    "target": "0xFE2D21"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:4489",
+    "src_addr": "0xFE2CF3",
+    "target": "0xFE2D21"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:15616",
+    "src_addr": "0xFE989F",
+    "target": "0xFE98A3"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:20358",
+    "src_addr": "0xFEC5AA",
+    "target": "0xFEC5D1"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:20369",
+    "src_addr": "0xFEC5C1",
+    "target": "0xFEC5D1"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:25530",
+    "src_addr": "0xFEF226",
+    "target": "0xFEF23B"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:25533",
+    "src_addr": "0xFEF22E",
+    "target": "0xFEF246"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:25543",
+    "src_addr": "0xFEF244",
+    "target": "0xFEF24B"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:26559",
+    "src_addr": "0xFEFC15",
+    "target": "0xFEFA5C"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:26695",
+    "src_addr": "0xFEFD79",
+    "target": "0xFEFD1D"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:26890",
+    "src_addr": "0xFEFF4C",
+    "target": "0xFEFF55"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:26893",
+    "src_addr": "0xFEFF53",
+    "target": "0xFEFF6D"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:26897",
+    "src_addr": "0xFEFF59",
+    "target": "0xFEFF62"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:26900",
+    "src_addr": "0xFEFF60",
+    "target": "0xFEFF6D"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:26904",
+    "src_addr": "0xFEFF66",
+    "target": "0xFEFF6D"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27319",
+    "src_addr": "0xFF02E6",
+    "target": "0xFEF9A9"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27324",
+    "src_addr": "0xFF02EE",
+    "target": "0xFF029E"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27325",
+    "src_addr": "0xFF02F0",
+    "target": "0xFF03C3"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27328",
+    "src_addr": "0xFF02FC",
+    "target": "0xFF0358"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27330",
+    "src_addr": "0xFF0304",
+    "target": "0xFF0358"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27357",
+    "src_addr": "0xFF034C",
+    "target": "0xFEFD6C"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27362",
+    "src_addr": "0xFF0354",
+    "target": "0xFF030B"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27363",
+    "src_addr": "0xFF0356",
+    "target": "0xFF03C3"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27367",
+    "src_addr": "0xFF0362",
+    "target": "0xFF03B5"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27705",
+    "src_addr": "0xFF0668",
+    "target": "0xFF0676"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27710",
+    "src_addr": "0xFF0672",
+    "target": "0xFEF455"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27711",
+    "src_addr": "0xFF0676",
+    "target": "0xF851DE"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27769",
+    "src_addr": "0xFF0718",
+    "target": "0xFF0703"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27774",
+    "src_addr": "0xFF0724",
+    "target": "0xFF0757"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27786",
+    "src_addr": "0xFF0735",
+    "target": "0xFF0703"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27797",
+    "src_addr": "0xFF074B",
+    "target": "0xFF0703"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27990",
+    "src_addr": "0xFF0937",
+    "target": "0xFF0958"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27991",
+    "src_addr": "0xFF0939",
+    "target": "0xFF0961"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27995",
+    "src_addr": "0xFF0940",
+    "target": "0xFF095C"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:28004",
+    "src_addr": "0xFF0956",
+    "target": "0xFF095C"
+   },
+   {
+    "src": "kn5000_v9_program.s:3270",
+    "src_addr": "0xFFFEB7",
+    "target": "0xFFFEBD"
+   }
+  ],
+  "R2": [
+   {
+    "src": "boot/system_handlers.s:2011",
+    "src_addr": "0xEF1949",
+    "target": "0xEF1949"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25907",
+    "src_addr": "0xF659D1",
+    "target": "0xF532E5"
+   },
+   {
+    "src": "audio/audio_control_engine.s:8333",
+    "src_addr": "0xFCA3DF",
+    "target": "0xFCA3E4"
+   }
+  ],
+  "R5": [
+   {
+    "src": "audio/sound_editor_ui.s:5059",
+    "src_addr": "0xF0D451",
+    "target": "0xF0EB13",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/sound_editor_ui.s:5099",
+    "src_addr": "0xF0D4A6",
+    "target": "0xF0DC17",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7038",
+    "src_addr": "0xF0E7CB",
+    "target": "0xF0E794",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7040",
+    "src_addr": "0xF0E7CE",
+    "target": "0xF0E797",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7092",
+    "src_addr": "0xF0E847",
+    "target": "0xF0E822",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7093",
+    "src_addr": "0xF0E849",
+    "target": "0xF0E812",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7130",
+    "src_addr": "0xF0E89C",
+    "target": "0xF0E877",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/sound_editor_ui.s:7131",
+    "src_addr": "0xF0E89E",
+    "target": "0xF0E867",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:14569",
+    "src_addr": "0xF5EFC9",
+    "target": "0xF627CC",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:14573",
+    "src_addr": "0xF5EFD1",
+    "target": "0xF630D4",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22592",
+    "src_addr": "0xF63649",
+    "target": "0xF6A452",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25102",
+    "src_addr": "0xF65219",
+    "target": "0x3540F1",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29104",
+    "src_addr": "0xF674FD",
+    "target": "0xF63F04",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:30261",
+    "src_addr": "0xF67FC5",
+    "target": "0xF67FBD",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:30270",
+    "src_addr": "0xF67FE5",
+    "target": "0xF67FDD",
+    "unidasm": "- "
+   },
+   {
+    "src": "sequencer/accompseq_routines.s:1699",
+    "src_addr": "0xF6EC01",
+    "target": "0xF72B82",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/audio_control_engine.s:5908",
+    "src_addr": "0xFC8EA3",
+    "target": "0xFC5037",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/audio_control_engine.s:5912",
+    "src_addr": "0xFC8EA9",
+    "target": "0xFC503D",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/audio_control_engine.s:6578",
+    "src_addr": "0xFC9509",
+    "target": "0xFCD4CC",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/audio_control_engine.s:6610",
+    "src_addr": "0xFC9555",
+    "target": "0xFCD518",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/dsp_config_sysex.s:1725",
+    "src_addr": "0xFDBA42",
+    "target": "0xFDFA05",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27044",
+    "src_addr": "0xFF00AF",
+    "target": "0xFEFFF1",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27050",
+    "src_addr": "0xFF00BD",
+    "target": "0x41B421",
+    "unidasm": "- "
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27678",
+    "src_addr": "0xFF062C",
+    "target": "0xFF3761",
+    "unidasm": "- "
+   }
+  ],
+  "R6": [
+   {
+    "src": "demo/demo_seq_bridge.s:62",
+    "src_addr": "0xF225C8",
+    "target": "0xF22625"
+   },
+   {
+    "src": "demo/demo_seq_bridge.s:72",
+    "src_addr": "0xF225D6",
+    "target": "0xF22625"
+   },
+   {
+    "src": "demo/demo_seq_bridge.s:82",
+    "src_addr": "0xF225E4",
+    "target": "0xF22625"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21114",
+    "src_addr": "0xF6290A",
+    "target": "0xF6291B"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:24621",
+    "src_addr": "0xF64D9D",
+    "target": "0xF64DA5"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25570",
+    "src_addr": "0xF65657",
+    "target": "0xF64CB0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:30255",
+    "src_addr": "0xF67FA5",
+    "target": "0xF67F9D"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:30258",
+    "src_addr": "0xF67FB5",
+    "target": "0xF67FAD"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:33809",
+    "src_addr": "0xF6A4A5",
+    "target": "0xF6A44D"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:33812",
+    "src_addr": "0xF6A4A9",
+    "target": "0xF69B52"
+   },
+   {
+    "src": "sequencer/accompseq_routines.s:2221",
+    "src_addr": "0xF6F068",
+    "target": "0xF6E75B"
+   },
+   {
+    "src": "sequencer/accompseq_routines.s:2223",
+    "src_addr": "0xF6F06C",
+    "target": "0xF6E75F"
+   },
+   {
+    "src": "audio/audio_control_engine.s:9536",
+    "src_addr": "0xFCAEF5",
+    "target": "0xFCABA7"
+   },
+   {
+    "src": "audio/audio_control_engine.s:9681",
+    "src_addr": "0xFCB065",
+    "target": "0xFCB990"
+   },
+   {
+    "src": "audio/audio_control_engine.s:11865",
+    "src_addr": "0xFCCE33",
+    "target": "0xFCCE5F"
+   }
+  ],
+  "R1": [
+   {
+    "src": "audio/note_voice_mapping.s:27056",
+    "src_addr": "0xFF00CE",
+    "target": "0xFF00DB"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27059",
+    "src_addr": "0xFF00D6",
+    "target": "0xFF00DB"
+   }
+  ],
+  "external": [
+   {
+    "src": "sequencer/accompaniment_engine.s:21119",
+    "src_addr": "0xF62956",
+    "target": "0x09121D"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:21088",
+    "src_addr": "0xF628C8",
+    "target": "0x1E1D1C"
+   }
+  ],
+  "mid-line-code": [
+   {
+    "src": "boot/system_handlers.s:2155",
+    "src_addr": "0xEF1A82",
+    "target": "0xEF1A9D"
+   },
+   {
+    "src": "audio/sound_editor_ui.s:5051",
+    "src_addr": "0xF0D443",
+    "target": "0xF0D452"
+   },
+   {
+    "src": "ui/setwall_routines.s:1987",
+    "src_addr": "0xF20176",
+    "target": "0xF20185"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:14958",
+    "src_addr": "0xF5F397",
+    "target": "0xF5F3A0"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:25622",
+    "src_addr": "0xF656C9",
+    "target": "0xF65CF1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:30265",
+    "src_addr": "0xF67FD3",
+    "target": "0xF661AD"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29219",
+    "src_addr": "0xF67645",
+    "target": "0xF67984"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26197",
+    "src_addr": "0xF65CBB",
+    "target": "0xF67ADC"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26198",
+    "src_addr": "0xF65CBE",
+    "target": "0xF67ADF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29778",
+    "src_addr": "0xF67B72",
+    "target": "0xF67BD1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:26202",
+    "src_addr": "0xF65CCD",
+    "target": "0xF67CEF"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22590",
+    "src_addr": "0xF63645",
+    "target": "0xF67E4A"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5381",
+    "src_addr": "0xFC89C1",
+    "target": "0xFC89CC"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27045",
+    "src_addr": "0xFF00B2",
+    "target": "0xFF00B9"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27690",
+    "src_addr": "0xFF0646",
+    "target": "0xFF0633"
+   }
+  ],
+  "mid-line-data": [
+   {
+    "src": "sequencer/accompaniment_engine.s:13147",
+    "src_addr": "0xF5E41E",
+    "target": "0xF5E3ED"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:13151",
+    "src_addr": "0xF5E42C",
+    "target": "0xF5E3F1"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:22594",
+    "src_addr": "0xF6364D",
+    "target": "0xF63656"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:29609",
+    "src_addr": "0xF67993",
+    "target": "0xF67A12"
+   },
+   {
+    "src": "sequencer/accompaniment_engine.s:32797",
+    "src_addr": "0xF69B17",
+    "target": "0xF69B1F"
+   },
+   {
+    "src": "audio/audio_control_engine.s:5887",
+    "src_addr": "0xFC8E66",
+    "target": "0xFC8E79"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:19331",
+    "src_addr": "0xFEBD2D",
+    "target": "0xFEBD5B"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:19329",
+    "src_addr": "0xFEBD28",
+    "target": "0xFEBD60"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:19327",
+    "src_addr": "0xFEBD23",
+    "target": "0xFEBD65"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:19325",
+    "src_addr": "0xFEBD1E",
+    "target": "0xFEBD6A"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:19323",
+    "src_addr": "0xFEBD1A",
+    "target": "0xFEBD6E"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:19321",
+    "src_addr": "0xFEBD16",
+    "target": "0xFEBD72"
+   },
+   {
+    "src": "audio/note_voice_mapping.s:27663",
+    "src_addr": "0xFF05FE",
+    "target": "0xFF05EB"
+   }
+  ]
+ }
+}

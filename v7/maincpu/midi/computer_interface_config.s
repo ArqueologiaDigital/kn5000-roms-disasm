@@ -20,23 +20,23 @@
 
 TtComputerConnection:
 	cp	xbc, EVT_REPAINT
-	jr	z, 60
+	jr	z, ComputerConnectionTitleExit
 	cp	xbc, EVT_PAINT
-	jr	z, 52
+	jr	z, ComputerConnectionTitleExit
 	cp	xbc, EVT_HIDE
-	jr	z, 44
+	jr	z, ComputerConnectionTitleExit
 	cp	xbc, EVT_SHOW
-	jr	nz, 36
+	jr	nz, ComputerConnectionTitleExit
 	or	xde, xde
-	jr	nz, 32
-	call	16626534
+	jr	nz, ComputerConnectionTitleExit
+	call	GET_COMPUTER_INTERFACE_SELECTION
 	cp	l, 0:i3
-	jr	nz, 24
+	jr	nz, ComputerConnectionTitleExit
 	ld	(32422:16), 70
 	ld	xwa, 4294967295
 	ld	xbc, EVT_INTERRUPT_TITLE
 	ld	xde, TITLE_MESAGE
-	call	16421701
+	call	PostEvent
 ComputerConnectionTitleExit:
 	ld xhl, 0:i3
 	ret

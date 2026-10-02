@@ -9942,7 +9942,7 @@ DrawDottedLineWithMode_Impl_Entry2:
 	cp	(xsp+24), 3
 	jr	ule, DrawDottedLineWithMode_Impl_Skip22
 	ld	(xsp+24), 0
-	jrl	202
+	jrl	Voice_FactoryPresetData_Code_Join6
 DrawDottedLineWithMode_Impl_Skip22:
 	cp	(xsp+24), 1
 	jrl	ugt, Voice_FactoryPresetData_Code_Join
