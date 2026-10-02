@@ -1018,7 +1018,7 @@ RhythmAccent_UpdateDone:
 ; ============================================================================
 ; RingBuf_AdvanceIndex - Advance circular buffer index with wraparound
 ; ============================================================================
-; Input:  IY = current index, BC = limit, XHL+256 = reset value
+; Input:  IY = current index, BC = limit, word at (XHL) = reset value
 ; Output: IY = incremented index (wrapped if >= limit)
 ; Called 110+ times, typically in bursts of 5-7 sequential calls while
 ; storing/loading data parameters through the ring buffer.
