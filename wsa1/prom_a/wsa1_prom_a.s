@@ -7207,7 +7207,7 @@ sub_F8294C:
 .LF829A5:
 	ret                                                  ; F829A5  0e
 sub_F829A6:
-	ld c, (0xfffff8:24)                                 ; F829A6  c2 f8 ff ff 23
+	ld c, (BUILD_TAG+8:24)                                 ; F829A6  c2 f8 ff ff 23
 	and C,0x0f                                           ; F829AB  cb cc 0f
 	ld XIY,LedNibblePatterns_F829F4                      ; F829AE  45 f4 29 f8 00
 	mx8_ld_rm MXB, ra_IY, rb_C, r1                       ; F829B3  c3 03 f4 e4 21
@@ -7559,12 +7559,19 @@ INTWD_Reboot:
 ; Notes:   the seven NOPs are one byte apart because each SWI slot points one
 ;          byte further along; that is the whole reason they exist.
 ; ---------------------------------------------------------------------
+IRQ_UnusedVector_SWI1:
 	nop                                           ; F82D02  00
+IRQ_UnusedVector_SWI2:
 	nop                                           ; F82D03  00
+IRQ_UnusedVector_SWI3:
 	nop                                           ; F82D04  00
+IRQ_UnusedVector_SWI4:
 	nop                                           ; F82D05  00
+IRQ_UnusedVector_SWI5:
 	nop                                           ; F82D06  00
+IRQ_UnusedVector_SWI6:
 	nop                                           ; F82D07  00
+IRQ_UnusedVector_INT4:
 	nop                                           ; F82D08  00
 IRQ_UnusedVector_Hang:
 	jr T,IRQ_UnusedVector_Hang                                 ; F82D09  68 fe
@@ -10808,7 +10815,7 @@ EntryPoint_Records:
 	.short 0x8800, 0x0003
 	.long 0x00F42E88, 0x0060E980			; F85E96  thunk -> 0xF8DA00
 	.short 0x8800, 0x0003
-	.long 0x00F85EC8, 0x0060EC80			; F85EA2  DSP_RefreshTask, in prom_a
+	.long DSP_RefreshTask, 0x0060EC80			; F85EA2  DSP_RefreshTask, in prom_a
 	.short 0x8800, 0x0001
 	.long 0x00F433C0, 0x0060EB00			; F85EAE  thunk -> 0xFE02AB
 	.short 0x8800, 0x0003
@@ -12984,9 +12991,9 @@ EditValue_ApplyStep:   ; entry: prom_b directory slot T_EditValue_ApplyStep (T_F
 EditStep_UseCurveA:   ; entry: prom_b directory slot T_EditStep_UseCurveA (T_F40F6C)
 	push XIY                                      ; F86B6F  3d
 	push XHL                                      ; F86B70  3b
-	ld XIY,0x00f86ba0                             ; F86B71  45 a0 6b f8 00
+	ld XIY,EditStep_Lookup_Data_F86BA0                             ; F86B71  45 a0 6b f8 00
 	jr EditStep_Lookup                                       ; F86B76  68 15   jr T,0xf86b8d
-	ld XIY,0x00f86ba8                             ; F86B78  45 a8 6b f8 00
+	ld XIY,EditStep_Lookup_Data_F86BA8                             ; F86B78  45 a8 6b f8 00
 	jr EditStep_Lookup                                       ; F86B7D  68 0e   jr T,0xf86b8d
 
 ; ---------------------------------------------------------------------
@@ -13002,7 +13009,7 @@ EditStep_UseCurveA:   ; entry: prom_b directory slot T_EditStep_UseCurveA (T_F40
 EditStep_UseCurveC:   ; entry: prom_b directory slot T_EditStep_UseCurveC (T_F40F70)
 	push XIY                                      ; F86B7F  3d
 	push XHL                                      ; F86B80  3b
-	ld XIY,0x00f86bb0                             ; F86B81  45 b0 6b f8 00
+	ld XIY,EditStep_Lookup_Data_F86BB0                             ; F86B81  45 b0 6b f8 00
 	jr EditStep_Lookup                                       ; F86B86  68 05   jr T,0xf86b8d
 
 ; --- 0xF86B88-0xF86B8C  an instruction NOTHING branches to (5 bytes) ---
@@ -13031,12 +13038,15 @@ EditStep_Lookup:
 	ret                                           ; F86B9F  0e
 
 ; --- 0xF86BA0-0xF86BA7  table (8 bytes) ---
+EditStep_Lookup_Data_F86BA0:
 	.byte 0x00, 0x01, 0x05, 0x0a, 0x0f, 0x14, 0x19, 0x1e   ; F86BA0
 
 ; --- 0xF86BA8-0xF86BAF  table (8 bytes) ---
+EditStep_Lookup_Data_F86BA8:
 	.byte 0x00, 0x01, 0x03, 0x05, 0x0a, 0x0f, 0x14, 0x19   ; F86BA8
 
 ; --- 0xF86BB0-0xF86BB7  table (8 bytes) ---
+EditStep_Lookup_Data_F86BB0:
 	.byte 0x00, 0x01, 0x0a, 0x14, 0x1e, 0x28, 0x32, 0x3c   ; F86BB0
 
 ; --- 0xF86BB8-0xF86BBF  table (8 bytes) ---
@@ -19003,7 +19013,7 @@ PanelGroupQueue_Append:
 
 PanelGroupQueue_ExpandToEvents_DeadCopy:
 	push XIX                                             ; F8A44B  3c
-	ld XIX,0x00f8addd                                    ; F8A44C  44 dd ad f8 00
+	ld XIX,PanelKeypad_OrdinalToKey_V1+16                                    ; F8A44C  44 dd ad f8 00
 	m_bit 2, MD16, 0x7f37                                ; F8A451  f1 37 7f ca
 	jr nz, .LF8A45C                                          ; F8A455  6e 05
 	ld XIX,.LF8AD71                                      ; F8A457  44 71 ad f8 00
@@ -22703,42 +22713,42 @@ sub_F8C338:   ; entry: prom_b routine directory
 	m_cp_mi16 MW16, 0x2118, 0x0000                       ; F8C341  d1 18 21 3f 00 00
 	jr z, .LF8C356                                       ; F8C347  66 0d
 	ld XIY,0x00002118                                    ; F8C349  45 18 21 00 00
-	ld XIX,0x00f8c428                                    ; F8C34E  44 28 c4 f8 00
+	ld XIX,sub_F8C3FB_Data_F8C428                                    ; F8C34E  44 28 c4 f8 00
 	calr sub_F8C42A                                            ; F8C353  1e d4 00
 .LF8C356:
 	.byte 0xd1, 0x24, 0x21, 0x3c, 0x05, 0x05             ; F8C356  d1 24 21 3c 05 05
 	m_cp_mi16 MW16, 0x2124, 0x0000                       ; F8C35C  d1 24 21 3f 00 00
 	jr z, .LF8C371                                       ; F8C362  66 0d
 	ld XIY,0x00002124                                    ; F8C364  45 24 21 00 00
-	ld XIX,0x00f8c428                                    ; F8C369  44 28 c4 f8 00
+	ld XIX,sub_F8C3FB_Data_F8C428                                    ; F8C369  44 28 c4 f8 00
 	calr sub_F8C42A                                            ; F8C36E  1e b9 00
 .LF8C371:
 	.byte 0xd1, 0x2a, 0x21, 0x3c, 0x1f, 0x01             ; F8C371  d1 2a 21 3c 1f 01
 	m_cp_mi16 MW16, 0x212a, 0x0000                       ; F8C377  d1 2a 21 3f 00 00
 	jr z, .LF8C38C                                       ; F8C37D  66 0d
 	ld XIY,0x0000212a                                    ; F8C37F  45 2a 21 00 00
-	ld XIX,0x00f8c428                                    ; F8C384  44 28 c4 f8 00
+	ld XIX,sub_F8C3FB_Data_F8C428                                    ; F8C384  44 28 c4 f8 00
 	calr sub_F8C42A                                            ; F8C389  1e 9e 00
 .LF8C38C:
 	.byte 0xd1, 0x30, 0x21, 0x3c, 0x01, 0x01             ; F8C38C  d1 30 21 3c 01 01
 	m_cp_mi16 MW16, 0x2130, 0x0000                       ; F8C392  d1 30 21 3f 00 00
 	jr z, .LF8C3A7                                       ; F8C398  66 0d
 	ld XIY,0x00002130                                    ; F8C39A  45 30 21 00 00
-	ld XIX,0x00f8c428                                    ; F8C39F  44 28 c4 f8 00
+	ld XIX,sub_F8C3FB_Data_F8C428                                    ; F8C39F  44 28 c4 f8 00
 	calr sub_F8C42A                                            ; F8C3A4  1e 83 00
 .LF8C3A7:
 	.byte 0xd1, 0x36, 0x21, 0x3c, 0xfe, 0xed             ; F8C3A7  d1 36 21 3c fe ed
 	m_cp_mi16 MW16, 0x2136, 0x0000                       ; F8C3AD  d1 36 21 3f 00 00
 	jr z, .LF8C3C2                                       ; F8C3B3  66 0d
 	ld XIY,0x00002136                                    ; F8C3B5  45 36 21 00 00
-	ld XIX,0x00f8c428                                    ; F8C3BA  44 28 c4 f8 00
+	ld XIX,sub_F8C3FB_Data_F8C428                                    ; F8C3BA  44 28 c4 f8 00
 	calr sub_F8C42A                                            ; F8C3BF  1e 68 00
 .LF8C3C2:
 	.byte 0xd1, 0x3c, 0x21, 0x3c, 0xbf, 0x0f             ; F8C3C2  d1 3c 21 3c bf 0f
 	m_cp_mi16 MW16, 0x213c, 0x0000                       ; F8C3C8  d1 3c 21 3f 00 00
 	jr z, .LF8C3DD                                       ; F8C3CE  66 0d
 	ld XIY,0x0000213c                                    ; F8C3D0  45 3c 21 00 00
-	ld XIX,0x00f8c428                                    ; F8C3D5  44 28 c4 f8 00
+	ld XIX,sub_F8C3FB_Data_F8C428                                    ; F8C3D5  44 28 c4 f8 00
 	calr sub_F8C42A                                            ; F8C3DA  1e 4d 00
 .LF8C3DD:
 	calr .LF8C3E4                                        ; F8C3DD  1e 04 00
@@ -22774,6 +22784,7 @@ sub_F8C3FB:   ; entry: prom_b routine directory
 ; 0xF8C428-0xF8C429 -- 2 bytes of 0xFF (erased-flash pad) between sub_F8C3FB's
 ; `ret` and sub_F8C42A.  Too short for gen_prom_a_block.py's pad_runs() (MIN_PAD
 ; 32) to catch, and it is not a uniform-0x0E run either, so it is typed by hand.
+sub_F8C3FB_Data_F8C428:
 	.byte 0xff, 0xff                                     ; F8C428  ff ff
 sub_F8C42A:   ; entry: reachable-run entry
 	xor HL,HL                                            ; F8C42A  db d3
@@ -25104,7 +25115,7 @@ AddrTable_F8E77C:   ; 8 entries
 	.long 0x00f8e67a   ; F8E780  [1]
 	.long 0x00f8e000   ; F8E784  [2]
 	.long .LF8E69C     ; F8E788  [3]  instruction boundary
-	.long 0x00f8e6ad   ; F8E78C  [4]
+	.long uDMA2_SetDest+11   ; F8E78C  [4]
 	.long uDMA3_GetDest+0x1 ; F8E790  [5]
 	.long 0x00f8e6be   ; F8E794  [6]
 	.long 0x00f8e000   ; F8E798  [7]
@@ -29359,7 +29370,7 @@ LCD_DitherRotate_Table:
 ;          place and handed back.
 ; ---------------------------------------------------------------------
 LCD_Dither_RightEdgeMask:
-	ld XHL,0x00f8fe77                             ; F8FE64  43 77 fe f8 00
+	ld XHL,LCD_Dither_RightEdge_Table                             ; F8FE64  43 77 fe f8 00
 	mx_ld_rm MXB, ra_HL, ra_DE, r1                ; F8FE69  c3 07 ec e8 21
 	and (0x255e:16), a                            ; F8FE6E  c1 5e 25 c9
 	ld a, (0x255e:16)                            ; F8FE72  c1 5e 25 21
@@ -31579,6 +31590,7 @@ sub_F90A42:   ; entry: named by 1 `ld` operand, first at 0xF909BC
 	ld (0x2643:16), a                                   ; F90AF3  f1 43 26 41
 	ld XIY,0x00f28444                                    ; F90AF7  45 44 84 f2 00
 	call T_F4180C                                        ; F90AFC  1d 0c 18 f4
+sub_F90A42__F90B00:
 	pop XIY                                              ; F90B00  5d
 .LF90B01:
 	m_bit 4, MD16, 0x2676                                ; F90B01  f1 76 26 cc
@@ -35793,7 +35805,7 @@ sub_F932C6:
 	xor H,H                                              ; F932D0  ce d6
 	sla hl, 0x01                                         ; F932D2  db ec 01
 	push XIY                                             ; F932D5  3d
-	ld XIY,0x00f93386                                    ; F932D6  45 86 33 f9 00
+	ld XIY,sub_F932C6__F93386                                    ; F932D6  45 86 33 f9 00
 	mx_ld_rm MXW, ra_IY, ra_HL, r1                       ; F932DB  d3 07 f4 ec 21
 	pop XIY                                              ; F932E0  5d
 	popw hl                                              ; F932E1  4b
@@ -35854,6 +35866,7 @@ sub_F932C6:
 	m_and_mi8 MB16, 0x2075, 0x7f                         ; F93380  c1 75 20 3c 7f
 .LF93385:
 	ret                                                  ; F93385  0e
+sub_F932C6__F93386:
 	normal                                               ; F93386  01
 	nop                                                  ; F93387  00
 	normal                                               ; F93388  01
@@ -35959,34 +35972,41 @@ sub_F93398:
 ; Unknown:  everything the arrays contain.
 ; ---------------------------------------------------------------------
 PtrTable_F93444:
-	.long 0x00f93460                                 ; F93444  [  0]
-	.long 0x00f93461                                 ; F93448  [  1]
-	.long 0x00f93463                                 ; F9344C  [  2]
-	.long 0x00f93466                                 ; F93450  [  3]
-	.long 0x00f9346a                                 ; F93454  [  4]
-	.long 0x00f9346f                                 ; F93458  [  5]
-	.long 0x00f93475                                 ; F9345C  [  6]
+	.long PtrTable_F93444__F93460                                 ; F93444  [  0]
+	.long PtrTable_F93444__F93461                                 ; F93448  [  1]
+	.long PtrTable_F93444__F93463                                 ; F9344C  [  2]
+	.long PtrTable_F93444__F93466                                 ; F93450  [  3]
+	.long PtrTable_F93444__F9346A                                 ; F93454  [  4]
+	.long PtrTable_F93444__F9346F                                 ; F93458  [  5]
+	.long PtrTable_F93444__F93475                                 ; F9345C  [  6]
+PtrTable_F93444__F93460:
 	nop                                                  ; F93460  00
+PtrTable_F93444__F93461:
 	nop                                                  ; F93461  00
 	pop SR                                               ; F93462  03
+PtrTable_F93444__F93463:
 	nop                                                  ; F93463  00
 	nop                                                  ; F93464  00
 	push SR                                              ; F93465  02
+PtrTable_F93444__F93466:
 	nop                                                  ; F93466  00
 	nop                                                  ; F93467  00
 	push SR                                              ; F93468  02
 	push SR                                              ; F93469  02
+PtrTable_F93444__F9346A:
 	nop                                                  ; F9346A  00
 	nop                                                  ; F9346B  00
 	nop                                                  ; F9346C  00
 	normal                                               ; F9346D  01
 	normal                                               ; F9346E  01
+PtrTable_F93444__F9346F:
 	nop                                                  ; F9346F  00
 	nop                                                  ; F93470  00
 	nop                                                  ; F93471  00
 	normal                                               ; F93472  01
 	normal                                               ; F93473  01
 	normal                                               ; F93474  01
+PtrTable_F93444__F93475:
 	nop                                                  ; F93475  00
 	nop                                                  ; F93476  00
 	nop                                                  ; F93477  00
@@ -37134,7 +37154,7 @@ sub_F93D6D:
 	xor H,H                                              ; F93D77  ce d6
 	sla hl, 0x01                                         ; F93D79  db ec 01
 	push XIY                                             ; F93D7C  3d
-	ld XIY,0x00f93386                                    ; F93D7D  45 86 33 f9 00
+	ld XIY,sub_F932C6__F93386                                    ; F93D7D  45 86 33 f9 00
 	mx_ld_rm MXW, ra_IY, ra_HL, r1                       ; F93D82  d3 07 f4 ec 21
 	pop XIY                                              ; F93D87  5d
 	popw hl                                              ; F93D88  4b
@@ -37514,7 +37534,7 @@ DisplayListPtrs_F9408E:
 	.long sub_F92CE6                                 ; F940BE  [ 12]
 	.long sub_F92CE6                                 ; F940C2  [ 13]
 	.long sub_F92CE6                                 ; F940C6  [ 14]
-	.long 0x00f94262                                 ; F940CA  [ 15]
+	.long sub_F94261__F94262                                 ; F940CA  [ 15]
 	.long sub_F92CE6                                 ; F940CE  [ 16]
 	.long sub_F92CE6                                 ; F940D2  [ 17]
 	.long sub_F92CE6                                 ; F940D6  [ 18]
@@ -37669,7 +37689,7 @@ LCD_ScrollLayer2_Forward3Lines:
 ; ---------------------------------------------------------------------
 LCD_DrawAllInitialSettingMessage:
 	ld (0x2540:16), 0x00                                 ; F94210  f1 40 25 00 00
-	ld XIY,0x00f9422c                                    ; F94215  45 2c 42 f9 00
+	ld XIY,LCD_DrawAllInitialSettingMessage__F9422C                                    ; F94215  45 2c 42 f9 00
 	ldw hl, 0x00                                         ; F9421A  33 00 00
 	ldw bc, 0x14                                         ; F9421D  31 14 00
 	ldw ix, 0x07d0                                       ; F94220  34 d0 07
@@ -37679,6 +37699,7 @@ LCD_DrawAllInitialSettingMessage:
 	ld a, 0x0c:opc                                          ; F94228  21 0c
 	swi 7                                                ; F9422A  ff
 	ret                                                  ; F9422B  0e
+LCD_DrawAllInitialSettingMessage__F9422C:
 	ld XBC,0x49204c4c                                    ; F9422C  41 4c 4c 20 49
 	popw iz                                              ; F94231  4e
 	popw bc                                              ; F94232  49
@@ -37701,6 +37722,7 @@ LCD_DrawAllInitialSettingMessage:
 	ret                                                  ; F94260  0e
 sub_F94261:
 	ret                                                  ; F94261  0e
+sub_F94261__F94262:
 	ld a, (0x7f02:16)                                   ; F94262  c1 02 7f 21
 	and A,0xf0                                           ; F94266  c9 cc f0
 	cp a, 0x00:i3                                          ; F94269  c9 d8
@@ -38048,7 +38070,7 @@ sub_F945B0:
 	and W,0x80                                           ; F945B5  c8 cc 80
 	srl w, 0x04                                          ; F945B8  c8 ef 04
 	or W,L                                               ; F945BB  cf e0
-	ld XHL,0x00f945e4                                    ; F945BD  43 e4 45 f9 00
+	ld XHL,sub_F945B0__F945E4                                    ; F945BD  43 e4 45 f9 00
 	mx8_ld_rm MXB, ra_HL, rb_W, r7                       ; F945C2  c3 03 ec e1 27
 	exts HL                                              ; F945C7  db 13
 	add DE,HL                                            ; F945C9  db 82
@@ -38067,6 +38089,7 @@ sub_F945B0:
 	ld DE,IX                                             ; F945E1  dc 8a
 .LF945E3:
 	ret                                                  ; F945E3  0e
+sub_F945B0__F945E4:
 	nop                                                  ; F945E4  00
 	normal                                               ; F945E5  01
 	push SR                                              ; F945E6  02
@@ -38262,13 +38285,14 @@ Print_DebugMonitor:
 	push XDE                                             ; F94C4F  3a
 	ld XWA,0x00000000                                    ; F94C50  40 00 00 00 00
 	ld (0x284f:16), xwa                                 ; F94C55  f1 4f 28 60
-	ld XIY,0x00f94c67                                    ; F94C59  45 67 4c f9 00
+	ld XIY,Print_DebugMonitor__F94C67                                    ; F94C59  45 67 4c f9 00
 	call LCD_PrintLine40_AdvanceRow                                      ; F94C5E  1d 82 4d f9
 	pop XDE                                              ; F94C62  5a
 	pop XHL                                              ; F94C63  5b
 	pop XIX                                              ; F94C64  5c
 	pop XIZ                                              ; F94C65  5e
 	ret                                                  ; F94C66  0e
+Print_DebugMonitor__F94C67:
 	ld w, 0x2d:opc                                          ; F94C67  20 2d
 	pushw iy                                             ; F94C69  2d
 	pushw iy                                             ; F94C6A  2d
@@ -38816,13 +38840,13 @@ sub_F951D8:
 .LF951E8:
 	ld IX,DE                                             ; F951E8  da 8c
 	extz XIX                                             ; F951EA  ec 12
-	lda xbc, (0xf95c83:24)                               ; F951EC  f2 83 5c f9 31
+	lda xbc, (sub_F95C2D__F95C83:24)                               ; F951EC  f2 83 5c f9 31
 	add XBC,XIX                                          ; F951F1  ec 81
 	ld XWA,(XBC)                                         ; F951F3  a1 20
 	ld (xiz-12), xwa                                     ; F951F5  be f4 60
 	ld XBC,XIX                                           ; F951F8  ec 89
 	inc 4,XBC                                            ; F951FA  e9 64
-	add XBC,0x00f95c83                                   ; F951FC  e9 c8 83 5c f9 00
+	add XBC,sub_F95C2D__F95C83                                   ; F951FC  e9 c8 83 5c f9 00
 	ld XBC,(XBC)                                         ; F95202  a1 21
 	srl xbc, 0x01                                        ; F95204  e9 ef 01
 	ld (xiz-8), xbc                                      ; F95207  be f8 61
@@ -38838,7 +38862,7 @@ sub_F951D8:
 	ld A,(XBC)                                           ; F9521F  81 21
 	cp A,0x5a                                            ; F95221  c9 cf 5a
 	jr z, .LF95233                                           ; F95224  66 0d
-	lda xwa, (0xf95c83:24)                               ; F95226  f2 83 5c f9 30
+	lda xwa, (sub_F95C2D__F95C83:24)                               ; F95226  f2 83 5c f9 30
 	m_add_rm MLD+r6, 0xfc, r0                            ; F9522B  ae fc 80
 	ld C,(XWA)                                           ; F9522E  80 23
 	or (xiz-13), c                                       ; F95230  8e f3 eb
@@ -38855,7 +38879,7 @@ sub_F951D8:
 	ld A,(XBC)                                           ; F9524A  81 21
 	cp A,0xa5                                            ; F9524C  c9 cf a5
 	jr z, .LF9525E                                           ; F9524F  66 0d
-	lda xwa, (0xf95c83:24)                               ; F95251  f2 83 5c f9 30
+	lda xwa, (sub_F95C2D__F95C83:24)                               ; F95251  f2 83 5c f9 30
 	m_add_rm MLD+r6, 0xfc, r0                            ; F95256  ae fc 80
 	ld C,(XWA)                                           ; F95259  80 23
 	or (xiz-13), c                                       ; F9525B  8e f3 eb
@@ -38892,18 +38916,18 @@ sub_F95287:
 	ld BC,DE                                             ; F95299  da 89
 	extz XBC                                             ; F9529B  e9 12
 	ld (xiz-10), xbc                                     ; F9529D  be f6 61
-	add XBC,0x00f95c7a                                   ; F952A0  e9 c8 7a 5c f9 00
+	add XBC,sub_F95C2D_Data_F95C7A                                   ; F952A0  e9 c8 7a 5c f9 00
 	ld XBC,(XBC)                                         ; F952A6  a1 21
 	ld (xiz-6), xbc                                      ; F952A8  be fa 61
 	ld l, 0x00:opc                                          ; F952AB  27 00
 	ld xwa, (xiz-10)                                     ; F952AD  ae f6 20
 	inc 8,XWA                                            ; F952B0  e8 60
-	add XWA,0x00f95c7a                                   ; F952B2  e8 c8 7a 5c f9 00
+	add XWA,sub_F95C2D_Data_F95C7A                                   ; F952B2  e8 c8 7a 5c f9 00
 	ld H,(XWA)                                           ; F952B8  80 26
 	ld xix, (xiz-10)                                     ; F952BA  ae f6 24
 	inc 4,XIX                                            ; F952BD  ec 64
 .LF952BF:
-	lda xbc, (0xf95c7a:24)                               ; F952BF  f2 7a 5c f9 31
+	lda xbc, (sub_F95C2D_Data_F95C7A:24)                               ; F952BF  f2 7a 5c f9 31
 	add XBC,XIX                                          ; F952C4  ec 81
 	ld A,(XBC)                                           ; F952C6  81 21
 	ld (xiz-13), a                                       ; F952C8  be f3 41
@@ -39265,7 +39289,7 @@ sub_F955F8:
 	ld C,(XIX)                                           ; F95614  84 23
 	extz BC                                              ; F95616  d9 12
 	extz XBC                                             ; F95618  e9 12
-	add XBC,0x00f95c60                                   ; F9561A  e9 c8 60 5c f9 00
+	add XBC,sub_F95C2D__F95C60                                   ; F9561A  e9 c8 60 5c f9 00
 	ld A,(XBC)                                           ; F95620  81 21
 	ld (0x2070:16), a                                   ; F95622  f1 70 20 41
 	ld (0x2071:16), 0x40                                 ; F95626  f1 71 20 00 40
@@ -39983,6 +40007,7 @@ sub_F959C8:
 	ld c, (0x2095:16)                                   ; F959C8  c1 95 20 23
 	and C,0x10                                           ; F959CC  cb cc 10
 	jr nz, .LF959D9                                          ; F959CF  6e 08
+sub_F959C8__F959D1:
 	call LCD_BlankThenSetPanel2Layer                                      ; F959D1  1d 2b 4c f9
 	m_set 7, MD16, 0x2075                                ; F959D5  f1 75 20 bf
 .LF959D9:
@@ -40032,6 +40057,7 @@ sub_F95A1A:   ; entry: screen button-handler table
 	srl xiy, 16                                        ; F95A37  ed ef 00
 	and XIY,0x000000f0                                   ; F95A3A  ed cc f0 00 00 00
 	srl xiy, 0x04                                        ; F95A40  ed ef 04
+sub_F95A1A__F95A43:
 	ld_erpb_rr c, 0xf4                                   ; F95A43  c7 f4 8b   ld C,IYL
 	ld (XIX),C                                           ; F95A46  b4 43
 	ld (XIX+0x01),H                                      ; F95A48  bc 01 46
@@ -40105,6 +40131,7 @@ sub_F95AD1:   ; entry: screen button-handler table
 	ld C,(XIX)                                           ; F95B00  84 23
 	extz BC                                              ; F95B02  d9 12
 	sll bc, 0x0c                                         ; F95B04  d9 ee 0c
+sub_F95AD1__F95B07:
 	extz XBC                                             ; F95B07  e9 12
 	ld (xiz-4), xbc                                      ; F95B09  be fc 61
 	ld xwa, (0x2846:16)                                 ; F95B0C  e1 46 28 20
@@ -40172,6 +40199,7 @@ sub_F95B77:   ; entry: screen button-handler table
 	ld xwa, (0x2846:16)                                 ; F95BB2  e1 46 28 20
 	and XWA,0x00ffff0f                                   ; F95BB6  e8 cc 0f ff ff 00
 	or XBC,XWA                                           ; F95BBC  e8 e1
+sub_F95B77__F95BBE:
 	ld (0x2846:16), xbc                                 ; F95BBE  f1 46 28 61
 	calr sub_F95C2D                                            ; F95BC2  1e 68 00
 	pop XIX                                              ; F95BC5  5c
@@ -40205,6 +40233,7 @@ sub_F95BCA:   ; entry: screen button-handler table
 	calr sub_F95C2D                                            ; F95C0C  1e 1e 00
 	pop XIX                                              ; F95C0F  5c
 	popw hl                                              ; F95C10  4b
+sub_F95BCA__F95C11:
 	unlk XIZ                                             ; F95C11  ee 0d
 	ret                                                  ; F95C13  0e
 sub_F95C14:
@@ -40225,22 +40254,27 @@ sub_F95C2D:
 	lda xix, (0xf94c8f:24)                               ; F95C2E  f2 8f 4c f9 34
 	ld (0x2540:16), 0x00                                 ; F95C33  f1 40 25 00 00
 	ldw (0x284f:16), 0x00                                ; F95C38  f1 4f 28 02 00 00
-	lda xiy, (0xf95c46:24)                               ; F95C3E  f2 46 5c f9 35
+	lda xiy, (sub_F95C2D__F95C46:24)                               ; F95C3E  f2 46 5c f9 35
 	push XIY                                             ; F95C43  3d
 	jp (xix)                                             ; F95C44  b4 d8
+sub_F95C2D__F95C46:
 	call Print_DebugMonitor                                      ; F95C46  1d 4c 4c f9
-	lda xiy, (0xf95c52:24)                               ; F95C4A  f2 52 5c f9 35
+	lda xiy, (sub_F95C2D__F95C52:24)                               ; F95C4A  f2 52 5c f9 35
 	push XIY                                             ; F95C4F  3d
 	jp (xix)                                             ; F95C50  b4 d8
+sub_F95C2D__F95C52:
 	call sub_F94CBB                                      ; F95C52  1d bb 4c f9
-	lda xiy, (0xf95c5e:24)                               ; F95C56  f2 5e 5c f9 35
+	lda xiy, (sub_F95C2D__F95C5E:24)                               ; F95C56  f2 5e 5c f9 35
 	push XIY                                             ; F95C5B  3d
 	jp (xix)                                             ; F95C5C  b4 d8
+sub_F95C2D__F95C5E:
 	pop XIX                                              ; F95C5E  5c
 	ret                                                  ; F95C5F  0e
+sub_F95C2D__F95C60:
 	normal                                               ; F95C60  01
 	normal                                               ; F95C61  01
 	sub XBC,(XWA)                                        ; F95C62  a0 a1
+sub_F95C2D__F95C64:
 	ld XBC,0xff060271                                    ; F95C64  41 71 02 06 ff
 	nop                                                  ; F95C69  00
 	swi 7                                                ; F95C6A  ff
@@ -40257,10 +40291,12 @@ sub_F95C2D:
 	reti                                                 ; F95C77  07
 	swi 7                                                ; F95C78  ff
 	swi 7                                                ; F95C79  ff
+sub_F95C2D_Data_F95C7A:
 	.byte 0xf0, 0xff, 0xff                               ; F95C7A  f0 ff ff
 	nop                                                  ; F95C7D  00
 	jrl c, 0x6173                                        ; F95C7E  77 73 61
 	jr lt, 0x01                                          ; F95C81  61 01
+sub_F95C2D__F95C83:
 	nop                                                  ; F95C83  00
 .LF95C84:
 	normal                                               ; F95C84  01
@@ -40422,65 +40458,65 @@ ScreenObjF40130_ButtonHandlers:
 ; ---------------------------------------------------------------------
 ScreenButtonHandlers_StaleCopy:
 	.byte 0x00                                       ; F95D95  top byte of copy word 4
-	.long 0x00f95a43                                 ; F95D96  [ 0]
-	.long 0x00f95d19                                 ; F95D9A  [ 1]
-	.long 0x00f95d19                                 ; F95D9E  [ 2]
-	.long 0x00f95d19                                 ; F95DA2  [ 3]
-	.long 0x00f95d19                                 ; F95DA6  [ 4]
-	.long 0x00f95d19                                 ; F95DAA  [ 5]
-	.long 0x00f95d19                                 ; F95DAE  [ 6]
-	.long 0x00f95d19                                 ; F95DB2  [ 7]
-	.long 0x00f95d19                                 ; F95DB6  [ 8]
-	.long 0x00f95d19                                 ; F95DBA  [ 9]
-	.long 0x00f95d02                                 ; F95DBE  [10]
-	.long 0x00f95d19                                 ; F95DC2  [11]
-	.long 0x00f95d19                                 ; F95DC6  [12]
-	.long 0x00f95d19                                 ; F95DCA  [13]
-	.long 0x00f95d19                                 ; F95DCE  [14]
-	.long 0x00f959d1                                 ; F95DD2  [15]
+	.long sub_F95A1A__F95A43                                 ; F95D96  [ 0]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95D9A  [ 1]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95D9E  [ 2]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DA2  [ 3]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DA6  [ 4]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DAA  [ 5]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DAE  [ 6]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DB2  [ 7]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DB6  [ 8]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DBA  [ 9]
+	.long ScreenButtonHandlers_SineWaveCheckMode+109                                 ; F95DBE  [10]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DC2  [11]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DC6  [12]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DCA  [13]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DCE  [14]
+	.long sub_F959C8__F959D1                                 ; F95DD2  [15]
 	.long 0x00f95a0a                                 ; F95DD6  [16]
-	.long 0x00f95a43                                 ; F95DDA  [17]
-	.long 0x00f95d19                                 ; F95DDE  [18]
-	.long 0x00f95d19                                 ; F95DE2  [19]
-	.long 0x00f95d19                                 ; F95DE6  [20]
-	.long 0x00f95d19                                 ; F95DEA  [21]
-	.long 0x00f95d19                                 ; F95DEE  [22]
-	.long 0x00f95d19                                 ; F95DF2  [23]
-	.long 0x00f95d19                                 ; F95DF6  [24]
-	.long 0x00f95d19                                 ; F95DFA  [25]
-	.long 0x00f95d19                                 ; F95DFE  [26]
-	.long 0x00f95b07                                 ; F95E02  [27]
+	.long sub_F95A1A__F95A43                                 ; F95DDA  [17]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DDE  [18]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DE2  [19]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DE6  [20]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DEA  [21]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DEE  [22]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DF2  [23]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DF6  [24]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DFA  [25]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95DFE  [26]
+	.long sub_F95AD1__F95B07                                 ; F95E02  [27]
 	.long 0x00f95b67                                 ; F95E06  [28]
-	.long 0x00f95bbe                                 ; F95E0A  [29]
-	.long 0x00f95c11                                 ; F95E0E  [30]
-	.long 0x00f95c64                                 ; F95E12  [31]
-	.long 0x00f95cb7                                 ; F95E16  [32]
-	.long 0x00f95d19                                 ; F95E1A  [33]
-	.long 0x00f95d19                                 ; F95E1E  [34]
-	.long 0x00f95d19                                 ; F95E22  [35]
-	.long 0x00f95d19                                 ; F95E26  [36]
-	.long 0x00f95d19                                 ; F95E2A  [37]
-	.long 0x00f95d19                                 ; F95E2E  [38]
-	.long 0x00f95d19                                 ; F95E32  [39]
-	.long 0x00f95d19                                 ; F95E36  [40]
-	.long 0x00f95d19                                 ; F95E3A  [41]
-	.long 0x00f95d02                                 ; F95E3E  [42]
-	.long 0x00f95d19                                 ; F95E42  [43]
-	.long 0x00f95b07                                 ; F95E46  [44]
+	.long sub_F95B77__F95BBE                                 ; F95E0A  [29]
+	.long sub_F95BCA__F95C11                                 ; F95E0E  [30]
+	.long sub_F95C2D__F95C64                                 ; F95E12  [31]
+	.long ScreenButtonHandlers_SineWaveCheckMode+34                                 ; F95E16  [32]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E1A  [33]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E1E  [34]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E22  [35]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E26  [36]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E2A  [37]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E2E  [38]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E32  [39]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E36  [40]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E3A  [41]
+	.long ScreenButtonHandlers_SineWaveCheckMode+109                                 ; F95E3E  [42]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E42  [43]
+	.long sub_F95AD1__F95B07                                 ; F95E46  [44]
 	.long 0x00f95b67                                 ; F95E4A  [45]
-	.long 0x00f95bbe                                 ; F95E4E  [46]
-	.long 0x00f95c11                                 ; F95E52  [47]
-	.long 0x00f95c64                                 ; F95E56  [48]
-	.long 0x00f95cb7                                 ; F95E5A  [49]
-	.long 0x00f95d19                                 ; F95E5E  [50]
-	.long 0x00f95d19                                 ; F95E62  [51]
-	.long 0x00f95d19                                 ; F95E66  [52]
-	.long 0x00f95d19                                 ; F95E6A  [53]
-	.long 0x00f95d19                                 ; F95E6E  [54]
-	.long 0x00f95d19                                 ; F95E72  [55]
-	.long 0x00f95d19                                 ; F95E76  [56]
-	.long 0x00f95d19                                 ; F95E7A  [57]
-	.long 0x00f95d19                                 ; F95E7E  [58]
+	.long sub_F95B77__F95BBE                                 ; F95E4E  [46]
+	.long sub_F95BCA__F95C11                                 ; F95E52  [47]
+	.long sub_F95C2D__F95C64                                 ; F95E56  [48]
+	.long ScreenButtonHandlers_SineWaveCheckMode+34                                 ; F95E5A  [49]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E5E  [50]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E62  [51]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E66  [52]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E6A  [53]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E6E  [54]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E72  [55]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E76  [56]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E7A  [57]
+	.long ScreenObjF40130_ButtonHandlers+4                                 ; F95E7E  [58]
 	ret                                                  ; F95E82  0e
 
 ; 0xF95E83-0xF96000 -- 382 bytes of 0x0E (RET), module padding.
@@ -41448,92 +41484,92 @@ ScriptOpHandlers_F969A1:
 ; 0xFFFFFFFF terminator `.LF964B9` stops on.  Named by `ld XIX,0x00f969dd` at 0xF96455 and 0xF96484.
 ; ------------------------------------------------------------------------------
 ScriptTableA_F969DD:
-	.long 0x00000000, 0x00f9667a   ; F969DD  [ 0] +0x0000 -> Script_F9667A
-	.long 0x00000012, 0x00f966ab   ; F969E5  [ 1] +0x0012 -> Script_F966AB
-	.long 0x00000020, 0x00f966ac   ; F969ED  [ 2] +0x0020 -> Script_F966AC
-	.long 0x00000040, 0x00f966f2   ; F969F5  [ 3] +0x0040 -> Script_F966F2
-	.long 0x00000060, 0x00f96738   ; F969FD  [ 4] +0x0060 -> Script_F96738
-	.long 0x00000080, 0x00f9677e   ; F96A05  [ 5] +0x0080 -> Script_F9677E
-	.long 0x000000a0, 0x00f967c4   ; F96A0D  [ 6] +0x00a0 -> Script_F967C4
-	.long 0x000000c0, 0x00f9677e   ; F96A15  [ 7] +0x00c0 -> Script_F9677E
-	.long 0x000000e0, 0x00f967c4   ; F96A1D  [ 8] +0x00e0 -> Script_F967C4
-	.long 0x00000100, 0x00f9677e   ; F96A25  [ 9] +0x0100 -> Script_F9677E
-	.long 0x00000120, 0x00f967c4   ; F96A2D  [10] +0x0120 -> Script_F967C4
-	.long 0x00000140, 0x00f9677e   ; F96A35  [11] +0x0140 -> Script_F9677E
-	.long 0x00000160, 0x00f967c4   ; F96A3D  [12] +0x0160 -> Script_F967C4
-	.long 0x00000180, 0x00f9677e   ; F96A45  [13] +0x0180 -> Script_F9677E
-	.long 0x000001a0, 0x00f967c4   ; F96A4D  [14] +0x01a0 -> Script_F967C4
-	.long 0x000001c0, 0x00f9677e   ; F96A55  [15] +0x01c0 -> Script_F9677E
-	.long 0x000001e0, 0x00f967c4   ; F96A5D  [16] +0x01e0 -> Script_F967C4
-	.long 0x00000200, 0x00f9677e   ; F96A65  [17] +0x0200 -> Script_F9677E
-	.long 0x00000220, 0x00f967c4   ; F96A6D  [18] +0x0220 -> Script_F967C4
-	.long 0x00000240, 0x00f9677e   ; F96A75  [19] +0x0240 -> Script_F9677E
-	.long 0x00000260, 0x00f967c4   ; F96A7D  [20] +0x0260 -> Script_F967C4
-	.long 0x00000280, 0x00f9682b   ; F96A85  [21] +0x0280 -> Script_F9682B
-	.long 0x00000290, 0x00f9685c   ; F96A8D  [22] +0x0290 -> Script_F9685C
-	.long 0x000002be, 0x00f9687b   ; F96A95  [23] +0x02be -> Script_F9687B
+	.long 0x00000000, Script_F9667A   ; F969DD  [ 0] +0x0000 -> Script_F9667A
+	.long 0x00000012, Script_F966AB   ; F969E5  [ 1] +0x0012 -> Script_F966AB
+	.long 0x00000020, Script_F966AC   ; F969ED  [ 2] +0x0020 -> Script_F966AC
+	.long 0x00000040, Script_F966F2   ; F969F5  [ 3] +0x0040 -> Script_F966F2
+	.long 0x00000060, Script_F96738   ; F969FD  [ 4] +0x0060 -> Script_F96738
+	.long 0x00000080, Script_F9677E   ; F96A05  [ 5] +0x0080 -> Script_F9677E
+	.long 0x000000a0, Script_F967C4   ; F96A0D  [ 6] +0x00a0 -> Script_F967C4
+	.long 0x000000c0, Script_F9677E   ; F96A15  [ 7] +0x00c0 -> Script_F9677E
+	.long 0x000000e0, Script_F967C4   ; F96A1D  [ 8] +0x00e0 -> Script_F967C4
+	.long 0x00000100, Script_F9677E   ; F96A25  [ 9] +0x0100 -> Script_F9677E
+	.long 0x00000120, Script_F967C4   ; F96A2D  [10] +0x0120 -> Script_F967C4
+	.long 0x00000140, Script_F9677E   ; F96A35  [11] +0x0140 -> Script_F9677E
+	.long 0x00000160, Script_F967C4   ; F96A3D  [12] +0x0160 -> Script_F967C4
+	.long 0x00000180, Script_F9677E   ; F96A45  [13] +0x0180 -> Script_F9677E
+	.long 0x000001a0, Script_F967C4   ; F96A4D  [14] +0x01a0 -> Script_F967C4
+	.long 0x000001c0, Script_F9677E   ; F96A55  [15] +0x01c0 -> Script_F9677E
+	.long 0x000001e0, Script_F967C4   ; F96A5D  [16] +0x01e0 -> Script_F967C4
+	.long 0x00000200, Script_F9677E   ; F96A65  [17] +0x0200 -> Script_F9677E
+	.long 0x00000220, Script_F967C4   ; F96A6D  [18] +0x0220 -> Script_F967C4
+	.long 0x00000240, Script_F9677E   ; F96A75  [19] +0x0240 -> Script_F9677E
+	.long 0x00000260, Script_F967C4   ; F96A7D  [20] +0x0260 -> Script_F967C4
+	.long 0x00000280, Script_F9682B   ; F96A85  [21] +0x0280 -> Script_F9682B
+	.long 0x00000290, Script_F9685C   ; F96A8D  [22] +0x0290 -> Script_F9685C
+	.long 0x000002be, Script_F9687B   ; F96A95  [23] +0x02be -> Script_F9687B
 	.long 0xffffffff   ; F96A9D  end of table
 ; ------------------------------------------------------------------------------
 ; ScriptTableB_F96AA1 -- 56 (u32 struct offset, u32 script) pairs then the
 ; 0xFFFFFFFF terminator `.LF964B9` stops on.  Named by `ld XIX,0x00f96aa1` at 0xF96476.
 ; ------------------------------------------------------------------------------
 ScriptTableB_F96AA1:
-	.long 0x000002c0, 0x00f9677e   ; F96AA1  [ 0] +0x02c0 -> Script_F9677E
-	.long 0x000002e0, 0x00f967c4   ; F96AA9  [ 1] +0x02e0 -> Script_F967C4
-	.long 0x00000300, 0x00f9677e   ; F96AB1  [ 2] +0x0300 -> Script_F9677E
-	.long 0x00000320, 0x00f967c4   ; F96AB9  [ 3] +0x0320 -> Script_F967C4
-	.long 0x00000340, 0x00f9677e   ; F96AC1  [ 4] +0x0340 -> Script_F9677E
-	.long 0x00000360, 0x00f967c4   ; F96AC9  [ 5] +0x0360 -> Script_F967C4
-	.long 0x00000380, 0x00f9677e   ; F96AD1  [ 6] +0x0380 -> Script_F9677E
-	.long 0x000003a0, 0x00f967c4   ; F96AD9  [ 7] +0x03a0 -> Script_F967C4
-	.long 0x000003c0, 0x00f9677e   ; F96AE1  [ 8] +0x03c0 -> Script_F9677E
-	.long 0x000003e0, 0x00f967c4   ; F96AE9  [ 9] +0x03e0 -> Script_F967C4
-	.long 0x00000400, 0x00f9677e   ; F96AF1  [10] +0x0400 -> Script_F9677E
-	.long 0x00000420, 0x00f967c4   ; F96AF9  [11] +0x0420 -> Script_F967C4
-	.long 0x00000440, 0x00f9677e   ; F96B01  [12] +0x0440 -> Script_F9677E
-	.long 0x00000460, 0x00f967c4   ; F96B09  [13] +0x0460 -> Script_F967C4
-	.long 0x00000480, 0x00f9677e   ; F96B11  [14] +0x0480 -> Script_F9677E
-	.long 0x000004a0, 0x00f967c4   ; F96B19  [15] +0x04a0 -> Script_F967C4
-	.long 0x000004c0, 0x00f9677e   ; F96B21  [16] +0x04c0 -> Script_F9677E
-	.long 0x000004e0, 0x00f967c4   ; F96B29  [17] +0x04e0 -> Script_F967C4
-	.long 0x00000500, 0x00f9677e   ; F96B31  [18] +0x0500 -> Script_F9677E
-	.long 0x00000520, 0x00f967c4   ; F96B39  [19] +0x0520 -> Script_F967C4
-	.long 0x00000540, 0x00f9677e   ; F96B41  [20] +0x0540 -> Script_F9677E
-	.long 0x00000560, 0x00f967c4   ; F96B49  [21] +0x0560 -> Script_F967C4
-	.long 0x00000580, 0x00f9677e   ; F96B51  [22] +0x0580 -> Script_F9677E
-	.long 0x000005a0, 0x00f967c4   ; F96B59  [23] +0x05a0 -> Script_F967C4
-	.long 0x000005c0, 0x00f9677e   ; F96B61  [24] +0x05c0 -> Script_F9677E
-	.long 0x000005e0, 0x00f967c4   ; F96B69  [25] +0x05e0 -> Script_F967C4
-	.long 0x00000600, 0x00f9677e   ; F96B71  [26] +0x0600 -> Script_F9677E
-	.long 0x00000620, 0x00f967c4   ; F96B79  [27] +0x0620 -> Script_F967C4
-	.long 0x00000640, 0x00f9677e   ; F96B81  [28] +0x0640 -> Script_F9677E
-	.long 0x00000660, 0x00f967c4   ; F96B89  [29] +0x0660 -> Script_F967C4
-	.long 0x00000680, 0x00f9677e   ; F96B91  [30] +0x0680 -> Script_F9677E
-	.long 0x000006a0, 0x00f967c4   ; F96B99  [31] +0x06a0 -> Script_F967C4
-	.long 0x000006c0, 0x00f9677e   ; F96BA1  [32] +0x06c0 -> Script_F9677E
-	.long 0x000006e0, 0x00f967c4   ; F96BA9  [33] +0x06e0 -> Script_F967C4
-	.long 0x00000700, 0x00f9677e   ; F96BB1  [34] +0x0700 -> Script_F9677E
-	.long 0x00000720, 0x00f967c4   ; F96BB9  [35] +0x0720 -> Script_F967C4
-	.long 0x00000740, 0x00f9677e   ; F96BC1  [36] +0x0740 -> Script_F9677E
-	.long 0x00000760, 0x00f967c4   ; F96BC9  [37] +0x0760 -> Script_F967C4
-	.long 0x00000780, 0x00f9677e   ; F96BD1  [38] +0x0780 -> Script_F9677E
-	.long 0x000007a0, 0x00f967c4   ; F96BD9  [39] +0x07a0 -> Script_F967C4
-	.long 0x000007c0, 0x00f9677e   ; F96BE1  [40] +0x07c0 -> Script_F9677E
-	.long 0x000007e0, 0x00f967c4   ; F96BE9  [41] +0x07e0 -> Script_F967C4
-	.long 0x00000800, 0x00f9677e   ; F96BF1  [42] +0x0800 -> Script_F9677E
-	.long 0x00000820, 0x00f967c4   ; F96BF9  [43] +0x0820 -> Script_F967C4
-	.long 0x00000840, 0x00f9677e   ; F96C01  [44] +0x0840 -> Script_F9677E
-	.long 0x00000860, 0x00f967c4   ; F96C09  [45] +0x0860 -> Script_F967C4
-	.long 0x00000880, 0x00f9677e   ; F96C11  [46] +0x0880 -> Script_F9677E
-	.long 0x000008a0, 0x00f967c4   ; F96C19  [47] +0x08a0 -> Script_F967C4
-	.long 0x000008c0, 0x00f96882   ; F96C21  [48] +0x08c0 -> Script_F96882
-	.long 0x000008de, 0x00f96898   ; F96C29  [49] +0x08de -> Script_F96898
-	.long 0x000008e0, 0x00f9689f   ; F96C31  [50] +0x08e0 -> Script_F9689F
-	.long 0x000008f0, 0x00f968b2   ; F96C39  [51] +0x08f0 -> Script_F968B2
-	.long 0x00000910, 0x00f96904   ; F96C41  [52] +0x0910 -> Script_F96904
-	.long 0x00000928, 0x00f9693e   ; F96C49  [53] +0x0928 -> Script_F9693E
-	.long 0x00000938, 0x00f96954   ; F96C51  [54] +0x0938 -> Script_F96954
-	.long 0x0000095e, 0x00f9699a   ; F96C59  [55] +0x095e -> Script_F9699A
+	.long 0x000002c0, Script_F9677E   ; F96AA1  [ 0] +0x02c0 -> Script_F9677E
+	.long 0x000002e0, Script_F967C4   ; F96AA9  [ 1] +0x02e0 -> Script_F967C4
+	.long 0x00000300, Script_F9677E   ; F96AB1  [ 2] +0x0300 -> Script_F9677E
+	.long 0x00000320, Script_F967C4   ; F96AB9  [ 3] +0x0320 -> Script_F967C4
+	.long 0x00000340, Script_F9677E   ; F96AC1  [ 4] +0x0340 -> Script_F9677E
+	.long 0x00000360, Script_F967C4   ; F96AC9  [ 5] +0x0360 -> Script_F967C4
+	.long 0x00000380, Script_F9677E   ; F96AD1  [ 6] +0x0380 -> Script_F9677E
+	.long 0x000003a0, Script_F967C4   ; F96AD9  [ 7] +0x03a0 -> Script_F967C4
+	.long 0x000003c0, Script_F9677E   ; F96AE1  [ 8] +0x03c0 -> Script_F9677E
+	.long 0x000003e0, Script_F967C4   ; F96AE9  [ 9] +0x03e0 -> Script_F967C4
+	.long 0x00000400, Script_F9677E   ; F96AF1  [10] +0x0400 -> Script_F9677E
+	.long 0x00000420, Script_F967C4   ; F96AF9  [11] +0x0420 -> Script_F967C4
+	.long 0x00000440, Script_F9677E   ; F96B01  [12] +0x0440 -> Script_F9677E
+	.long 0x00000460, Script_F967C4   ; F96B09  [13] +0x0460 -> Script_F967C4
+	.long 0x00000480, Script_F9677E   ; F96B11  [14] +0x0480 -> Script_F9677E
+	.long 0x000004a0, Script_F967C4   ; F96B19  [15] +0x04a0 -> Script_F967C4
+	.long 0x000004c0, Script_F9677E   ; F96B21  [16] +0x04c0 -> Script_F9677E
+	.long 0x000004e0, Script_F967C4   ; F96B29  [17] +0x04e0 -> Script_F967C4
+	.long 0x00000500, Script_F9677E   ; F96B31  [18] +0x0500 -> Script_F9677E
+	.long 0x00000520, Script_F967C4   ; F96B39  [19] +0x0520 -> Script_F967C4
+	.long 0x00000540, Script_F9677E   ; F96B41  [20] +0x0540 -> Script_F9677E
+	.long 0x00000560, Script_F967C4   ; F96B49  [21] +0x0560 -> Script_F967C4
+	.long 0x00000580, Script_F9677E   ; F96B51  [22] +0x0580 -> Script_F9677E
+	.long 0x000005a0, Script_F967C4   ; F96B59  [23] +0x05a0 -> Script_F967C4
+	.long 0x000005c0, Script_F9677E   ; F96B61  [24] +0x05c0 -> Script_F9677E
+	.long 0x000005e0, Script_F967C4   ; F96B69  [25] +0x05e0 -> Script_F967C4
+	.long 0x00000600, Script_F9677E   ; F96B71  [26] +0x0600 -> Script_F9677E
+	.long 0x00000620, Script_F967C4   ; F96B79  [27] +0x0620 -> Script_F967C4
+	.long 0x00000640, Script_F9677E   ; F96B81  [28] +0x0640 -> Script_F9677E
+	.long 0x00000660, Script_F967C4   ; F96B89  [29] +0x0660 -> Script_F967C4
+	.long 0x00000680, Script_F9677E   ; F96B91  [30] +0x0680 -> Script_F9677E
+	.long 0x000006a0, Script_F967C4   ; F96B99  [31] +0x06a0 -> Script_F967C4
+	.long 0x000006c0, Script_F9677E   ; F96BA1  [32] +0x06c0 -> Script_F9677E
+	.long 0x000006e0, Script_F967C4   ; F96BA9  [33] +0x06e0 -> Script_F967C4
+	.long 0x00000700, Script_F9677E   ; F96BB1  [34] +0x0700 -> Script_F9677E
+	.long 0x00000720, Script_F967C4   ; F96BB9  [35] +0x0720 -> Script_F967C4
+	.long 0x00000740, Script_F9677E   ; F96BC1  [36] +0x0740 -> Script_F9677E
+	.long 0x00000760, Script_F967C4   ; F96BC9  [37] +0x0760 -> Script_F967C4
+	.long 0x00000780, Script_F9677E   ; F96BD1  [38] +0x0780 -> Script_F9677E
+	.long 0x000007a0, Script_F967C4   ; F96BD9  [39] +0x07a0 -> Script_F967C4
+	.long 0x000007c0, Script_F9677E   ; F96BE1  [40] +0x07c0 -> Script_F9677E
+	.long 0x000007e0, Script_F967C4   ; F96BE9  [41] +0x07e0 -> Script_F967C4
+	.long 0x00000800, Script_F9677E   ; F96BF1  [42] +0x0800 -> Script_F9677E
+	.long 0x00000820, Script_F967C4   ; F96BF9  [43] +0x0820 -> Script_F967C4
+	.long 0x00000840, Script_F9677E   ; F96C01  [44] +0x0840 -> Script_F9677E
+	.long 0x00000860, Script_F967C4   ; F96C09  [45] +0x0860 -> Script_F967C4
+	.long 0x00000880, Script_F9677E   ; F96C11  [46] +0x0880 -> Script_F9677E
+	.long 0x000008a0, Script_F967C4   ; F96C19  [47] +0x08a0 -> Script_F967C4
+	.long 0x000008c0, Script_F96882   ; F96C21  [48] +0x08c0 -> Script_F96882
+	.long 0x000008de, Script_F96898   ; F96C29  [49] +0x08de -> Script_F96898
+	.long 0x000008e0, Script_F9689F   ; F96C31  [50] +0x08e0 -> Script_F9689F
+	.long 0x000008f0, Script_F968B2   ; F96C39  [51] +0x08f0 -> Script_F968B2
+	.long 0x00000910, Script_F96904   ; F96C41  [52] +0x0910 -> Script_F96904
+	.long 0x00000928, Script_F9693E   ; F96C49  [53] +0x0928 -> Script_F9693E
+	.long 0x00000938, Script_F96954   ; F96C51  [54] +0x0938 -> Script_F96954
+	.long 0x0000095e, Script_F9699A   ; F96C59  [55] +0x095e -> Script_F9699A
 	.long 0xffffffff   ; F96C61  end of table
 sub_F96C65:   ; entry: branch/call in converted code
 	ld XIY,ReservedRecordTable_F96C7B                    ; F96C65  45 7b 6c f9 00
@@ -45302,7 +45338,7 @@ ScreenButtonRow_SysexBulkDump:
 	.long sub_F99A65                                 ; F9988C  [  7]
 	.long sub_F99A66                                 ; F99890  [  8]
 	.long sub_F99A8F                                 ; F99894  [  9]
-	.long 0x00f99aeb                                 ; F99898  [ 10]
+	.long sub_F99A8F__F99AEB                                 ; F99898  [ 10]
 	.long sub_F99B14                                 ; F9989C  [ 11]
 	.long sub_F99B3D                                 ; F998A0  [ 12]
 	.long sub_F99B6C                                 ; F998A4  [ 13]
@@ -45501,7 +45537,7 @@ sub_F99A8F:   ; entry: named by 1 `.long` operand, first at 0xF99894
 	bit 0x07,W                                           ; F99A8F  c8 33 07
 	jr nz, .LF99ABF                                      ; F99A92  6e 2b
 	m_and_mi8 MB16, 0x2075, 0x6f                         ; F99A94  c1 75 20 3c 6f
-	ld XIY,0x00f99ae3                                    ; F99A99  45 e3 9a f9 00
+	ld XIY,sub_F99A8F__F99AE3                                    ; F99A99  45 e3 9a f9 00
 	ld a, (0x2720:16)                                   ; F99A9E  c1 20 27 21
 	and A,0x07                                           ; F99AA2  c9 cc 07
 	mx8_ld_rm MXB, ra_IY, rb_A, r1                       ; F99AA5  c3 03 f4 e0 21
@@ -45521,6 +45557,7 @@ sub_F99A8F:   ; entry: named by 1 `.long` operand, first at 0xF99894
 	call T_F4181C                                        ; F99ADE  1d 1c 18 f4
 .LF99AE2:
 	ret                                                  ; F99AE2  0e
+sub_F99A8F__F99AE3:
 	nop                                                  ; F99AE3  00
 	pop SR                                               ; F99AE4  03
 	halt                                                 ; F99AE5  05
@@ -45529,6 +45566,7 @@ sub_F99A8F:   ; entry: named by 1 `.long` operand, first at 0xF99894
 	nop                                                  ; F99AE8  00
 	nop                                                  ; F99AE9  00
 	nop                                                  ; F99AEA  00
+sub_F99A8F__F99AEB:
 	bit 0x07,W                                           ; F99AEB  c8 33 07
 	jr z, .LF99B13                                       ; F99AEE  66 23
 	m_cp_mi8 MB16, 0x2720, 0x02                          ; F99AF0  c1 20 27 3f 02
@@ -46666,7 +46704,7 @@ ScreenButtonHandlers_MidiTotalMode:
 	.long sub_F9A343                                 ; F9A2D7  [ 12]
 	.long sub_F9A343                                 ; F9A2DB  [ 13]
 	.long sub_F9A343                                 ; F9A2DF  [ 14]
-	.long 0x00f9a327                                 ; F9A2E3  [ 15]
+	.long ScreenButtonHandlers_MidiTotalMode__F9A327                                 ; F9A2E3  [ 15]
 	.long sub_F9A343                                 ; F9A2E7  [ 16]
 	.long sub_F9A330                                 ; F9A2EB  [ 17]
 	.long sub_F9A330                                 ; F9A2EF  [ 18]
@@ -46683,6 +46721,7 @@ ScreenButtonHandlers_MidiTotalMode:
 	.long sub_F9A343                                 ; F9A31B  [ 29]
 	.long sub_F9A343                                 ; F9A31F  [ 30]
 	.long sub_F9A343                                 ; F9A323  [ 31]
+ScreenButtonHandlers_MidiTotalMode__F9A327:
 	push 0x00                                            ; F9A327  09 00
 	push H                                               ; F9A329  ce 04
 	calr sub_F9A0E7                                          ; F9A32B  1e b9 fd
@@ -48220,13 +48259,13 @@ Paint_MidiOutProgramChange:
 	link XIZ,0xffe9                                      ; F9AF61  ee 0c e9 ff
 	push XIX                                             ; F9AF65  3c
 	lda xix, (0x2741:16)                                ; F9AF66  f1 41 27 34
-	ld xbc, (0xf9b67f:24)                               ; F9AF6A  e2 7f b6 f9 21
+	ld xbc, (sub_F9B652__F9B67F:24)                               ; F9AF6A  e2 7f b6 f9 21
 	ld (xiz-8), xbc                                      ; F9AF6F  be f8 61
-	ld xbc, (0xf9b683:24)                               ; F9AF72  e2 83 b6 f9 21
+	ld xbc, (sub_F9B652__F9B683:24)                               ; F9AF72  e2 83 b6 f9 21
 	ld (xiz-4), xbc                                      ; F9AF77  be fc 61
 	push XIX                                             ; F9AF7A  3c
 	ldw bc, 0x0b                                         ; F9AF7B  31 0b 00
-	lda xiy, (0xf9b687:24)                               ; F9AF7E  f2 87 b6 f9 35
+	lda xiy, (sub_F9B652__F9B687:24)                               ; F9AF7E  f2 87 b6 f9 35
 	lda xix, (xiz-19)                                    ; F9AF83  be ed 34
 	ldir85                                               ; F9AF86  85 11
 	pop XIX                                              ; F9AF88  5c
@@ -48527,12 +48566,12 @@ sub_F9B18A:
 sub_F9B1D5:
 	link XIZ,0xffed                                      ; F9B1D5  ee 0c ed ff
 	push XIX                                             ; F9B1D9  3c
-	ld xbc, (0xf9b692:24)                               ; F9B1DA  e2 92 b6 f9 21
+	ld xbc, (sub_F9B652__F9B692:24)                               ; F9B1DA  e2 92 b6 f9 21
 	ld (xiz-8), xbc                                      ; F9B1DF  be f8 61
-	ld xbc, (0xf9b696:24)                               ; F9B1E2  e2 96 b6 f9 21
+	ld xbc, (sub_F9B652__F9B696:24)                               ; F9B1E2  e2 96 b6 f9 21
 	ld (xiz-4), xbc                                      ; F9B1E7  be fc 61
 	ldw bc, 0x0b                                         ; F9B1EA  31 0b 00
-	lda xiy, (0xf9b69a:24)                               ; F9B1ED  f2 9a b6 f9 35
+	lda xiy, (sub_F9B652__F9B69A:24)                               ; F9B1ED  f2 9a b6 f9 35
 	lda xix, (xiz-19)                                    ; F9B1F2  be ed 34
 	ldir85                                               ; F9B1F5  85 11
 	lda xbc, (xiz-8)                                     ; F9B1F7  be f8 31
@@ -48651,7 +48690,7 @@ sub_F9B2E2:
 	lda xix, (xiz-6)                                     ; F9B2E9  be fa 34
 	push XIX                                             ; F9B2EC  3c
 	ldw bc, 0x0f                                         ; F9B2ED  31 0f 00
-	lda xiy, (0xf9b6a5:24)                               ; F9B2F0  f2 a5 b6 f9 35
+	lda xiy, (sub_F9B652__F9B6A5:24)                               ; F9B2F0  f2 a5 b6 f9 35
 	lda xix, (xiz-21)                                    ; F9B2F5  be eb 34
 	ldir85                                               ; F9B2F8  85 11
 	pop XIX                                              ; F9B2FA  5c
@@ -49036,24 +49075,30 @@ sub_F9B652:
 	popw hl                                              ; F9B67B  4b
 	unlk XIZ                                             ; F9B67C  ee 0d
 	ret                                                  ; F9B67E  0e
+sub_F9B652__F9B67F:
 	ret                                                  ; F9B67F  0e
 	normal                                               ; F9B680  01
 	popw wa                                              ; F9B681  48
 	nop                                                  ; F9B682  00
+sub_F9B652__F9B683:
 	ldw de, 0x5501                                       ; F9B683  32 01 55
 	nop                                                  ; F9B686  00
+sub_F9B652__F9B687:
 	ld (0x0b:8), 0x00:io                                      ; F9B687  08 0b 00
 	nop                                                  ; F9B68A  00
 	nop                                                  ; F9B68B  00
 	nop                                                  ; F9B68C  00
 	jp 0x000000                                          ; F9B68D  1b 00 00 00
 	nop                                                  ; F9B691  00
+sub_F9B652__F9B692:
 	ret                                                  ; F9B692  0e
 	normal                                               ; F9B693  01
 	popw wa                                              ; F9B694  48
 	nop                                                  ; F9B695  00
+sub_F9B652__F9B696:
 	ldw de, 0x5501                                       ; F9B696  32 01 55
 	nop                                                  ; F9B699  00
+sub_F9B652__F9B69A:
 	pop SR                                               ; F9B69A  03
 	pushw 0x00                                           ; F9B69B  0b 00 00
 	nop                                                  ; F9B69E  00
@@ -49063,6 +49108,7 @@ sub_F9B652:
 	nop                                                  ; F9B6A2  00
 	nop                                                  ; F9B6A3  00
 	nop                                                  ; F9B6A4  00
+sub_F9B652__F9B6A5:
 	push SR                                              ; F9B6A5  02
 	retd 0x0000                                          ; F9B6A6  0f 00 00
 	nop                                                  ; F9B6A9  00
@@ -50954,9 +51000,10 @@ sub_F9CEC3:
 	cp bc, 0x04:i3                                         ; F9CED4  d9 dc
 	jrl ugt, .LF9CF62                                    ; F9CED6  7b 89 00
 	sll bc, 0x02                                         ; F9CED9  d9 ee 02
-	add XBC,0x00f9cee6                                   ; F9CEDC  e9 c8 e6 ce f9 00
+	add XBC,sub_F9CEC3__F9CEE6                                   ; F9CEDC  e9 c8 e6 ce f9 00
 	ld XBC,(XBC)                                         ; F9CEE2  a1 21
 	jp (xbc)                                             ; F9CEE4  b1 d8
+sub_F9CEC3__F9CEE6:
 	swi 2                                                ; F9CEE6  fa
 	.byte 0xce, 0xf9                                     ; F9CEE7  ce f9   rrc A,H
 	nop                                                  ; F9CEE9  00
@@ -55923,7 +55970,7 @@ sub_F9F984:
 	extz WA                                              ; F9F9C4  d8 12
 	mul WA,0x1600                                        ; F9F9C6  d8 08 00 16
 	add XWA,XBC                                          ; F9F9CA  e9 80
-	add XWA,0x00f80300                                   ; F9F9CC  e8 c8 00 03 f8 00
+	add XWA,.LF80300                                   ; F9F9CC  e8 c8 00 03 f8 00
 	ld XIY,XWA                                           ; F9F9D2  e8 8d
 	jrl .LF9FABC                                         ; F9F9D4  78 e5 00
 .LF9F9D7:
@@ -55945,7 +55992,7 @@ sub_F9F984:
 	extz WA                                              ; F9FA00  d8 12
 	mul WA,0x02c0                                        ; F9FA02  d8 08 c0 02
 	add XBC,XWA                                          ; F9FA06  e8 81
-	add XBC,0x00f90b00                                   ; F9FA08  e9 c8 00 0b f9 00
+	add XBC,sub_F90A42__F90B00                                   ; F9FA08  e9 c8 00 0b f9 00
 	ld XIY,XBC                                           ; F9FA0E  e9 8d
 	jrl .LF9FABC                                         ; F9FA10  78 a9 00
 .LF9FA13:
@@ -57009,9 +57056,10 @@ sub_FA046A:
 	cp bc, 0x04:i3                                         ; FA0475  d9 dc
 	jrl ugt, .LFA04F1                                    ; FA0477  7b 77 00
 	sll bc, 0x02                                         ; FA047A  d9 ee 02
-	add XBC,0x00fa0487                                   ; FA047D  e9 c8 87 04 fa 00
+	add XBC,sub_FA046A__FA0487                                   ; FA047D  e9 c8 87 04 fa 00
 	ld XBC,(XBC)                                         ; FA0483  a1 21
 	jp (xbc)                                             ; FA0485  b1 d8
+sub_FA046A__FA0487:
 	cp (XHL+0x04),DE                                     ; FA0487  9b 04 fa
 	nop                                                  ; FA048A  00
 	m_pop MDI+r5, 0                                      ; FA048B  b5 04
@@ -57568,13 +57616,14 @@ sub_FA095B:   ; entry: named by 1 `.long` operand, first at 0xFA08D3
 ; Evidence / Unknown: as JumpTable_F99F96.
 ; ---------------------------------------------------------------------
 JumpTable_FA09BD:
-	.long 0x00fa09d5                                 ; FA09BD  [  0]
+	.long JumpTable_FA09BD__FA09D5                                 ; FA09BD  [  0]
 	.long sub_FA09EE                                 ; FA09C1  [  1]
 	.long sub_FA0A07                                 ; FA09C5  [  2]
 	.long sub_FA0A22                                 ; FA09C9  [  3]
 	.long sub_FA0A3D                                 ; FA09CD  [  4]
 	.long sub_FA0A58                                 ; FA09D1  [  5]
-	lda xbc, (0xfa1ec7:24)                               ; FA09D5  f2 c7 1e fa 31
+JumpTable_FA09BD__FA09D5:
+	lda xbc, (Descriptor3_FA1EC7:24)                               ; FA09D5  f2 c7 1e fa 31
 	push XBC                                             ; FA09DA  39
 	lda xwa, (0x26a7:16)                                ; FA09DB  f1 a7 26 30
 	push XWA                                             ; FA09DF  38
@@ -58038,7 +58087,7 @@ sub_FA0E4D:
 sub_FA0E51:
 	push XIX                                             ; FA0E51  3c
 	lda xix, (xiz-4)                                     ; FA0E52  be fc 34
-	ld xbc, (0xfa1b7e:24)                               ; FA0E55  e2 7e 1b fa 21
+	ld xbc, (ByteTable4_FA1B7E:24)                               ; FA0E55  e2 7e 1b fa 21
 	ld (xiz-4), xbc                                      ; FA0E5A  be fc 61
 	ld a, (0x207a:16)                                   ; FA0E5D  c1 7a 20 21
 	m_cp_rm MB16, 0x207b, r1                             ; FA0E61  c1 7b 20 f1
@@ -65366,7 +65415,7 @@ MIDI_Fg_SystemCommon:
 	link XIZ,0xfffe                               ; FA5AEB  ee 0c fe ff
 	pushw hl                                      ; FA5AEF  2b   push HL
 	ld H,(XIZ+0x08)                               ; FA5AF0  8e 08 26
-	ld bc, (0xfa5cb8:24)                         ; FA5AF3  d2 b8 5c fa 21   ld BC,(0xfa5cb8)
+	ld bc, (MIDI_SysExHeader:24)                         ; FA5AF3  d2 b8 5c fa 21   ld BC,(0xfa5cb8)
 	ld (xiz-2), bc                                ; FA5AF8  be fe 51   ld (XIZ+0xfe),BC
 	ld wa, (0x0960:16)                          ; FA5AFB  d1 60 09 20   ld WA,(0x0960)
 	extz WA                                       ; FA5AFF  d8 12
@@ -68507,7 +68556,7 @@ MidiOut_CC51_General6:   ; entry: MidiOut_ParamNumberTable[32-63]
 	nop                                           ; FA7511  00
 	nop                                           ; FA7512  00
 	nop                                           ; FA7513  00
-	ld XIY,0x00fa7520                             ; FA7514  45 20 75 fa 00
+	ld XIY,MidiOut_CC51_General6_JumpTable_FA7520                             ; FA7514  45 20 75 fa 00
 	ld a, 0x03:opc                                   ; FA7519  21 03   ld A,0x03
 	calr 0x2e                                     ; FA751B  1e 2e 00   calr 0xfa754c
 	ret                                           ; FA751E  0e
@@ -68516,6 +68565,7 @@ MidiOut_CC51_General6:   ; entry: MidiOut_ParamNumberTable[32-63]
 	.byte 0x00   ; FA751F
 
 ; --- 0xFA7520-0xFA752F  pointer table (16 bytes) ---
+MidiOut_CC51_General6_JumpTable_FA7520:
 	.long MidiIn_NullHandler                    ; FA7520  [232]   -> MidiIn_NullHandler
 	.long sub_FA7530                            ; FA7524  [233]   -> sub_FA7530
 	.long MidiIn_NullHandler                    ; FA7528  [234]   -> MidiIn_NullHandler
@@ -68523,12 +68573,13 @@ MidiOut_CC51_General6:   ; entry: MidiOut_ParamNumberTable[32-63]
 sub_FA7530:   ; entry: 0xFA7520[1]
 	ret                                           ; FA7530  0e
 sub_FA7531:   ; entry: MidiOut_ParamNumberTable[112]
-	ld XIY,0x00fa753c                             ; FA7531  45 3c 75 fa 00
+	ld XIY,sub_FA7531_JumpTable_FA753C                             ; FA7531  45 3c 75 fa 00
 	ld a, 0x03:opc                                   ; FA7536  21 03   ld A,0x03
 	calr 0x11                                     ; FA7538  1e 11 00   calr 0xfa754c
 	ret                                           ; FA753B  0e
 
 ; --- 0xFA753C-0xFA754B  pointer table (16 bytes) ---
+sub_FA7531_JumpTable_FA753C:
 	.long MidiIn_NullHandler                    ; FA753C  [239]   -> MidiIn_NullHandler
 	.long MidiIn_NullHandler                    ; FA7540  [240]   -> MidiIn_NullHandler
 	.long MidiIn_NullHandler                    ; FA7544  [241]   -> MidiIn_NullHandler
@@ -77174,7 +77225,7 @@ sub_FABFFF:
 	link XIZ,0xfffc                                      ; FABFFF  ee 0c fc ff
 	push XIX                                             ; FAC003  3c
 	lda xix, (xiz-4)                                     ; FAC004  be fc 34
-	ld xbc, (0xfac8e6:24)                               ; FAC007  e2 e6 c8 fa 21
+	ld xbc, (Gap_FAC8E6:24)                               ; FAC007  e2 e6 c8 fa 21
 	ld (xiz-4), xbc                                      ; FAC00C  be fc 61
 	ld a, (0x7f27:16)                                   ; FAC00F  c1 27 7f 21
 	pushw wa                                             ; FAC013  28
@@ -79702,10 +79753,11 @@ Evt2030_Class00to1F:   ; entry: pointer-table entry
 	cp L,0x0b
 	jr ugt, Evt2030_Class00to1F_Op01
 	sll hl, 0x02
-	ld XIX,0x00fadba9
+	ld XIX,Evt2030_Class00to1F_JumpTable_FADBA9
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADBA9-0xFADBD9  pointer table (48 bytes) ---
+Evt2030_Class00to1F_JumpTable_FADBA9:
 	.long Evt2030_Class00to1F_Op00 ; -> Evt2030_Class00to1F_Op00   ; FADBA9
 	.long Evt2030_Class00to1F_Op01 ; -> Evt2030_Class00to1F_Op01   ; FADBAD
 	.long Evt2030_Class00to1F_Op01 ; -> Evt2030_Class00to1F_Op01   ; FADBB1
@@ -79863,10 +79915,11 @@ Evt2030_Class20to3F:   ; entry: pointer-table entry
 	cp l, 0x02:i3
 	jr ugt, DuplicateTail_FAD3EB_Code_Return
 	sll hl, 0x02
-	ld XIX,0x00fadcbe
+	ld XIX,Evt2030_Class20to3F_JumpTable_FADCBE
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADCBE-0xFADCCA  pointer table (12 bytes) ---
+Evt2030_Class20to3F_JumpTable_FADCBE:
 	.long Evt2030_Class20to3F_Op18 ; -> Evt2030_Class20to3F_Op18   ; FADCBE
 	.long Evt2030_Class20to3F_Op19 ; -> Evt2030_Class20to3F_Op19   ; FADCC2
 	.long Evt2030_Class20to3F_Op1A ; -> Evt2030_Class20to3F_Op1A   ; FADCC6
@@ -80002,10 +80055,11 @@ BitMaskToOrdinal6:
 	cp l, 0x03:i3
 	jr ugt, 0x1f
 	sll hl, 0x02
-	ld XIX,0x00fadd77
+	ld XIX,BitMaskToOrdinal6_JumpTable_FADD77
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADD77-0xFADD87  pointer table (16 bytes) ---
+BitMaskToOrdinal6_JumpTable_FADD77:
 	.long Evt2030_Class00to1F_Op00 ; -> Evt2030_Class00to1F_Op00   ; FADD77
 	.long sub_FADD87   ; -> sub_FADD87   ; FADD7B
 	.long sub_FADD87   ; -> sub_FADD87   ; FADD7F
@@ -80043,10 +80097,11 @@ sub_FADD88:   ; entry: pointer-table entry
 	cp l, 0x01:i3
 	jr ugt, sub_FADDA8
 	sll hl, 0x02
-	ld XIX,0x00fadda0
+	ld XIX,sub_FADD88_JumpTable_FADDA0
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADDA0-0xFADDA8  pointer table (8 bytes) ---
+sub_FADD88_JumpTable_FADDA0:
 	.long sub_FADDA8   ; -> sub_FADDA8   ; FADDA0
 	.long sub_FADDA9   ; -> sub_FADDA9   ; FADDA4
 ; ---------------------------------------------------------------------
@@ -80094,10 +80149,11 @@ Evt2030_Class98:   ; entry: pointer-table entry
 	cp l, 0x01:i3
 	jr ugt, Evt2030_Class98_Op00
 	sll hl, 0x02
-	ld XIX,0x00faddc1
+	ld XIX,Evt2030_Class98_JumpTable_FADDC1
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFADDC1-0xFADDC9  pointer table (8 bytes) ---
+Evt2030_Class98_JumpTable_FADDC1:
 	.long Evt2030_Class98_Op00 ; -> Evt2030_Class98_Op00   ; FADDC1
 	.long Evt2030_Class98_Op01 ; -> Evt2030_Class98_Op01   ; FADDC5
 ; ---------------------------------------------------------------------
@@ -80137,10 +80193,11 @@ Evt2030_Class98_Op01:   ; entry: pointer-table entry
 	ld l, (0x7f32:16)
 	and L,0x03
 	sll l, 0x02
-	ld XIX,0x00faddf1
+	ld XIX,Evt2030_Class98_Op01_JumpTable_FADDF1
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	jp (xix)
 ; --- 0xFADDF1-0xFADE01  pointer table (16 bytes) ---
+Evt2030_Class98_Op01_JumpTable_FADDF1:
 	.long sub_FADE01   ; -> sub_FADE01   ; FADDF1
 	.long sub_FADE2F   ; -> sub_FADE2F   ; FADDF5
 	.long sub_FADE55   ; -> sub_FADE55   ; FADDF9
@@ -80576,10 +80633,11 @@ ParamApply_ByModeOfParam80:
 	ld l, (0x7f32:16)
 	and L,0x03
 	sll l, 0x02
-	ld XIX,0x00fadf77
+	ld XIX,ParamApply_ByModeOfParam80_JumpTable_FADF77
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	jp (xix)
 ; --- 0xFADF77-0xFADF87  pointer table (16 bytes) ---
+ParamApply_ByModeOfParam80_JumpTable_FADF77:
 	.long sub_FADF87   ; -> sub_FADF87   ; FADF77
 	.long sub_FADFD9   ; -> sub_FADFD9   ; FADF7B
 	.long sub_FAE02D   ; -> sub_FAE02D   ; FADF7F
@@ -80692,13 +80750,14 @@ Dev7F_WriteAllFourSlots_Skip:
 	ld l, (0x7f32:16)
 	and L,0x03
 	sla l, 0x02
-	ld XIX,0x00fae04d
+	ld XIX,Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	call (xix)
 	ret
 	calr Dev7F_WriteAllFourSlots
 	ret
 ; --- 0xFAE04D-0xFAE05D  pointer table (16 bytes) ---
+Dev7F_WriteAllFourSlots_Skip_JumpTable_FAE04D:
 	.long sub_FAE05D   ; -> sub_FAE05D   ; FAE04D
 	.long sub_FAE0FC   ; -> sub_FAE0FC   ; FAE051
 	.long sub_FAE188   ; -> sub_FAE188   ; FAE055
@@ -80968,10 +81027,11 @@ ParamApply_StorePairAndDerive:
 	ld b, (0x7f32:16)
 	and B,0x03
 	sll b, 0x02
-	ld XIY,0x00fae28f
+	ld XIY,ParamApply_StorePairAndDerive_JumpTable_FAE28F
 	mx8_ld_rm MXL, ra_IY, rb_B, r5
 	jp (xiy)
 ; --- 0xFAE28F-0xFAE29F  pointer table (16 bytes) ---
+ParamApply_StorePairAndDerive_JumpTable_FAE28F:
 	.long sub_FAE29F   ; -> sub_FAE29F   ; FAE28F
 	.long sub_FAE2A1   ; -> sub_FAE2A1   ; FAE293
 	.long sub_FAE2D3   ; -> sub_FAE2D3   ; FAE297
@@ -81097,7 +81157,7 @@ Evt2030_Class00to1F_Op00:   ; entry: pointer-table entry
 	ld l, (0x7f32:16)
 	and L,0x03
 	sll l, 0x02
-	ld XIX,0x00fae30e
+	ld XIX,sub_FAE30D_JumpTable_FAE30E
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	jp (xix)
 .LFAE30D:
@@ -81121,6 +81181,7 @@ Evt2030_Class00to1F_Op00:   ; entry: pointer-table entry
 sub_FAE30D:   ; entry: pointer-table entry
 	ret
 ; --- 0xFAE30E-0xFAE31E  pointer table (16 bytes) ---
+sub_FAE30D_JumpTable_FAE30E:
 	.long sub_FAE31E   ; -> sub_FAE31E   ; FAE30E
 	.long sub_FAE36C   ; -> sub_FAE36C   ; FAE312
 	.long sub_FAE30D   ; -> sub_FAE30D   ; FAE316
@@ -81701,7 +81762,7 @@ sub_FAE84A:   ; entry: pointer-table entry
 .LFAE9A0:
 	and W,0x0f
 	sll w, 0x02
-	ld XIX,0x00fae9d0
+	ld XIX,sub_FAE84A_JumpTable_FAE9D0
 	mx8_ld_rm MXL, ra_IX, rb_W, r4
 	call (xix)
 .LFAE9B2:
@@ -81718,6 +81779,7 @@ sub_FAE84A:   ; entry: pointer-table entry
 ; --- 0xFAE9CF-0xFAE9D0  align (1 bytes) ---
 	.byte 0x00   ; FAE9CF
 ; --- 0xFAE9D0-0xFAEA10  pointer table (64 bytes) ---
+sub_FAE84A_JumpTable_FAE9D0:
 	.long sub_FAEA12   ; -> sub_FAEA12   ; FAE9D0
 	.long sub_FAEA6B   ; -> sub_FAEA6B   ; FAE9D4
 	.long sub_FAEB75   ; -> sub_FAEB75   ; FAE9D8
@@ -82158,13 +82220,14 @@ sub_FAEBBC:
 	ld l, (0x60f308:24)
 	and L,0x70
 	srl hl, 0x02
-	ld XIY,0x00faedf0
+	ld XIY,sub_FAEBBC_JumpTable_FAEDF0
 	mx_ld_rm MXL, ra_IY, ra_HL, r5
 	call (xiy)
 	jr .LFAED9C
 ; --- 0xFAEDEF-0xFAEDF0  align (1 bytes) ---
 	.byte 0x00   ; FAEDEF
 ; --- 0xFAEDF0-0xFAEE10  pointer table (32 bytes) ---
+sub_FAEBBC_JumpTable_FAEDF0:
 	.long sub_FAF0FE   ; -> sub_FAF0FE   ; FAEDF0
 	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEDF4
 	.long sub_FAEE10   ; -> sub_FAEE10   ; FAEDF8
@@ -82223,7 +82286,7 @@ sub_FAEE36:   ; entry: pointer-table entry
 	ld l, (0x60f327:24)
 	and L,0x0f
 	sll hl, 0x02
-	ld XIX,0x00faee5c
+	ld XIX,sub_FAEE36_JumpTable_FAEE5C
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	call (xix)
 .LFAEE5A:
@@ -82231,6 +82294,7 @@ sub_FAEE36:   ; entry: pointer-table entry
 ; --- 0xFAEE5B-0xFAEE5C  align (1 bytes) ---
 	.byte 0x00   ; FAEE5B
 ; --- 0xFAEE5C-0xFAEE9C  pointer table (64 bytes) ---
+sub_FAEE36_JumpTable_FAEE5C:
 	.long sub_FAEE9C   ; -> sub_FAEE9C   ; FAEE5C
 	.long sub_FAEFB1   ; -> sub_FAEFB1   ; FAEE60
 	.long sub_FAEFB2   ; -> sub_FAEFB2   ; FAEE64
@@ -82584,7 +82648,7 @@ sub_FAF148:   ; entry: pointer-table entry
 	ld a, (0x60f308:24)
 	and A,0x03
 	sll a, 0x02
-	ld XIX,0x00faf16c
+	ld XIX,sub_FAF148_JumpTable_FAF16C
 	mx8_ld_rm MXL, ra_IX, rb_A, r4
 	call (xix)
 .LFAF16A:
@@ -82592,6 +82656,7 @@ sub_FAF148:   ; entry: pointer-table entry
 ; --- 0xFAF16B-0xFAF16C  align (1 bytes) ---
 	.byte 0x00   ; FAF16B
 ; --- 0xFAF16C-0xFAF17C  pointer table (16 bytes) ---
+sub_FAF148_JumpTable_FAF16C:
 	.long sub_FAF17C   ; -> sub_FAF17C   ; FAF16C
 	.long sub_FAF20B   ; -> sub_FAF20B   ; FAF170
 	.long sub_FAF29A   ; -> sub_FAF29A   ; FAF174
@@ -82826,10 +82891,11 @@ sub_FAF3F9:
 	ld l, (0x60f308:24)
 	and L,0x03
 	sll l, 0x02
-	ld XIX,0x00faf410
+	ld XIX,sub_FAF3F9_JumpTable_FAF410
 	mx8_ld_rm MXL, ra_IX, rb_L, r4
 	jp (xix)
 ; --- 0xFAF410-0xFAF420  pointer table (16 bytes) ---
+sub_FAF3F9_JumpTable_FAF410:
 	.long sub_FAF420   ; -> sub_FAF420   ; FAF410
 	.long sub_FAF431   ; -> sub_FAF431   ; FAF414
 	.long sub_FAF442   ; -> sub_FAF442   ; FAF418
@@ -82847,7 +82913,7 @@ sub_FAF3F9:
 ;          names (0x60F308) & 3, so this label stays sub_XXXXXX.
 ; ---------------------------------------------------------------------
 sub_FAF420:   ; entry: pointer-table entry
-	ld XIY,0x00faf7c7
+	ld XIY,IdentityMap32_FAF7C7
 	ld XBC,0x00000020
 	ld l, (0x60f30b:24)
 	jr .LFAF462
@@ -83117,12 +83183,13 @@ sub_FAF5C1:   ; entry: pointer-table entry
 	ld l, (0x7f32:16)
 	and L,0x03
 	sll hl, 0x02
-	ld XIX,0x00faf6b8
+	ld XIX,sub_FAF5C1_JumpTable_FAF6B8
 	mx_ld_rm MXL, ra_IX, ra_HL, r4
 	jp (xix)
 ; --- 0xFAF6B7-0xFAF6B8  align (1 bytes) ---
 	.byte 0x00   ; FAF6B7
 ; --- 0xFAF6B8-0xFAF6C8  pointer table (16 bytes) ---
+sub_FAF5C1_JumpTable_FAF6B8:
 	.long sub_FAF6C8   ; -> sub_FAF6C8   ; FAF6B8
 	.long sub_FAF728   ; -> sub_FAF728   ; FAF6BC
 	.long sub_FAF771   ; -> sub_FAF771   ; FAF6C0
@@ -96720,9 +96787,9 @@ sub_FB9697:
 	pushw de                                             ; FB969C  2a
 	push XIX                                             ; FB969D  3c
 	lda xix, (0x605147:24)                               ; FB969E  f2 47 51 60 34
-	ld xbc, (0xfba169:24)                               ; FB96A3  e2 69 a1 fb 21
+	ld xbc, (MidiFile_Tables_FBA169:24)                               ; FB96A3  e2 69 a1 fb 21
 	ld (xiz-4), xbc                                      ; FB96A8  be fc 61
-	ld xwa, (0xfba16d:24)                               ; FB96AB  e2 6d a1 fb 20
+	ld xwa, (MidiFile_Tables_FBA169+4:24)                               ; FB96AB  e2 6d a1 fb 20
 	ld (xiz-8), xwa                                      ; FB96B0  be f8 60
 	ld h, 0x00:opc                                          ; FB96B3  26 00
 .LFB96B5:
@@ -110217,7 +110284,7 @@ sub_FC1E68:
 	and (XIY+0x01),0x3f                                  ; FC1F31  8d 01 3c 3f
 	jr .LFC1F3C                                          ; FC1F35  68 05
 .LFC1F37:
-	ld XIY,0x00fc1f49                                    ; FC1F37  45 49 1f fc 00
+	ld XIY,sub_FC1E68__FC1F49                                    ; FC1F37  45 49 1f fc 00
 .LFC1F3C:
 	ld a, 0x04:opc                                          ; FC1F3C  21 04
 	call T_Kernel_SemaSignal                             ; FC1F3E  1d 88 2d f4
@@ -110227,6 +110294,7 @@ sub_FC1E68:
 	pop W                                                ; FC1F45  c8 05
 	pop XIX                                              ; FC1F47  5c
 	ret                                                  ; FC1F48  0e
+sub_FC1E68__FC1F49:
 	nop                                                  ; FC1F49  00
 	nop                                                  ; FC1F4A  00
 sub_FC1F4B:
@@ -121628,7 +121696,7 @@ sub_FCC573:
 	ld BC,(XIZ+0x08)                                     ; FCC753  9e 08 21
 	extz BC                                              ; FCC756  d9 12
 	extz XBC                                             ; FCC758  e9 12
-	add XBC,0x00fd0500                                   ; FCC75A  e9 c8 00 05 fd 00
+	add XBC,.LFD0500                                   ; FCC75A  e9 c8 00 05 fd 00
 	ld L,(XBC)                                           ; FCC760  81 27
 	m_ld_mi16 MDD+r6, 0xfa, 0x0000                       ; FCC762  be fa 02 00 00
 	ld BC,(XIZ+0x0e)                                     ; FCC767  9e 0e 21
@@ -155362,7 +155430,7 @@ sub_FE0B43:
 	unlk XIZ                                             ; FE0BF2  ee 0d
 	ret                                                  ; FE0BF4  0e
 sub_FE0BF5:
-	lda xbc, (0xfe7000:24)                               ; FE0BF5  f2 00 70 fe 31
+	lda xbc, (sub_FE6F89_Data_FE7000:24)                               ; FE0BF5  f2 00 70 fe 31
 	push XBC                                             ; FE0BFA  39
 	pushw 0x06                                           ; FE0BFB  0b 06 00
 	pushw 0x00                                           ; FE0BFE  0b 00 00
@@ -156254,7 +156322,7 @@ sub_FE1456:
 	ret                                                  ; FE14E8  0e
 sub_FE14E9:
 	link XIZ,0xfffe                                      ; FE14E9  ee 0c fe ff
-	ld bc, (0xfe7006:24)                                ; FE14ED  d2 06 70 fe 21
+	ld bc, (sub_FE6F89_Data_FE7006:24)                                ; FE14ED  d2 06 70 fe 21
 	ld (xiz-2), bc                                       ; FE14F2  be fe 51
 	ld a, (0x7f33:16)                                   ; FE14F5  c1 33 7f 21
 	and A,0x08                                           ; FE14F9  c9 cc 08
@@ -156293,9 +156361,10 @@ sub_FE152E:
 	cp bc, 0x04:i3                                         ; FE153F  d9 dc
 	jrl ugt, .LFE15ED                                        ; FE1541  7b a9 00
 	sll bc, 0x02                                         ; FE1544  d9 ee 02
-	add XBC,0x00fe1551                                   ; FE1547  e9 c8 51 15 fe 00
+	add XBC,sub_FE152E__FE1551                                   ; FE1547  e9 c8 51 15 fe 00
 	ld XBC,(XBC)                                         ; FE154D  a1 21
 	jp (xbc)                                             ; FE154F  b1 d8
+sub_FE152E__FE1551:
 	jr mi, 0x15                                          ; FE1551  65 15
 	swi 6                                                ; FE1553  fe
 	nop                                                  ; FE1554  00
@@ -156593,7 +156662,7 @@ sub_FE1838:
 	ld BC,(XIZ+0x08)                                     ; FE183C  9e 08 21
 	extz BC                                              ; FE183F  d9 12
 	extz XBC                                             ; FE1841  e9 12
-	add XBC,0x00fe7008                                   ; FE1843  e9 c8 08 70 fe 00
+	add XBC,.LFE6FFB+13                                   ; FE1843  e9 c8 08 70 fe 00
 	ld A,(XBC)                                           ; FE1849  81 21
 	ld (0x2880:16), a                                   ; FE184B  f1 80 28 41
 	ld b, (0x21e8:16)                                   ; FE184F  c1 e8 21 22
@@ -157184,7 +157253,7 @@ sub_FE1CE9:
 	extz BC                                              ; FE1CF8  d9 12
 	extz XBC                                             ; FE1CFA  e9 12
 	ld (xiz-4), xbc                                      ; FE1CFC  be fc 61
-	add XBC,0x00fe7027                                   ; FE1CFF  e9 c8 27 70 fe 00
+	add XBC,sub_FE6F89_Data_FE7027                                   ; FE1CFF  e9 c8 27 70 fe 00
 	ld L,(XBC)                                           ; FE1D05  81 27
 	ld XBC,XIX                                           ; FE1D07  ec 89
 	m_add_rm MLD+r6, 0xfc, r1                            ; FE1D09  ae fc 81
@@ -159066,7 +159135,7 @@ sub_FE2E3D:
 	extz BC                                              ; FE2E4C  d9 12
 	extz XBC                                             ; FE2E4E  e9 12
 	ld (xiz-4), xbc                                      ; FE2E50  be fc 61
-	add XBC,0x00fe7049                                   ; FE2E53  e9 c8 49 70 fe 00
+	add XBC,sub_FE6F89_Data_FE7049                                   ; FE2E53  e9 c8 49 70 fe 00
 	ld L,(XBC)                                           ; FE2E59  81 27
 	ld XBC,XIX                                           ; FE2E5B  ec 89
 	m_add_rm MLD+r6, 0xfc, r1                            ; FE2E5D  ae fc 81
@@ -159228,7 +159297,7 @@ sub_FE2F93:
 	pushw 0x01                                           ; FE2F9B  0b 01 00
 	ld BC,(XIX)                                          ; FE2F9E  94 21
 	pushw bc                                             ; FE2FA0  29
-	lda xbc, (0xfe706e:24)                               ; FE2FA1  f2 6e 70 fe 31
+	lda xbc, (sub_FE6F89__FE706E:24)                               ; FE2FA1  f2 6e 70 fe 31
 	push XBC                                             ; FE2FA6  39
 	call sub_FE0019                                      ; FE2FA7  1d 19 00 fe
 	ld BC,(XIX)                                          ; FE2FAB  94 21
@@ -167572,10 +167641,12 @@ sub_FE6F89:
 .LFE6FFB:
 	inc 1,D                                              ; FE6FFB  cc 61
 	cp D,0x10                                            ; FE6FFD  cc cf 10
+sub_FE6F89_Data_FE7000:
 	.byte 0x88, 0x00, 0x18                               ; FE7000  88 00 18
 	nop                                                  ; FE7003  00
 	nop                                                  ; FE7004  00
 	nop                                                  ; FE7005  00
+sub_FE6F89_Data_FE7006:
 	.byte 0xf3, 0x00, 0xff                               ; FE7006  f3 00 ff
 	ld c, 0x23:opc                                          ; FE7009  23 23
 	ld c, 0x03:opc                                          ; FE700B  23 03
@@ -167595,6 +167666,7 @@ sub_FE6F89:
 	swi 7                                                ; FE7024  ff
 	swi 7                                                ; FE7025  ff
 	push XIY                                             ; FE7026  3d
+sub_FE6F89_Data_FE7027:
 	.byte 0x57                                           ; FE7027  57
 	.byte 0x53                                           ; FE7028  53
 	ld XBC,0x554f5320                                    ; FE7029  41 20 53 4f 55
@@ -167610,6 +167682,7 @@ sub_FE6F89:
 	popw iz                                              ; FE7042  4e
 	ld XIX,0x4d415220                                    ; FE7043  44 20 52 41 4d
 	nop                                                  ; FE7048  00
+sub_FE6F89_Data_FE7049:
 	.byte 0x57                                           ; FE7049  57
 	.byte 0x53                                           ; FE704A  53
 	ld XBC,0x5a5a0031                                    ; FE704B  41 31 00 5a 5a
@@ -167639,6 +167712,7 @@ sub_FE6F89:
 	nop                                                  ; FE706B  00
 	nop                                                  ; FE706C  00
 	nop                                                  ; FE706D  00
+sub_FE6F89__FE706E:
 	pushw iz                                             ; FE706E  2e
 	pop XIX                                              ; FE706F  5c
 	pop XHL                                              ; FE7070  5b
@@ -169695,7 +169769,7 @@ sub_FE8565:
 ; ---------------------------------------------------------------------
 
 ScreenDispatch_FE857C:
-	.long 0x00fe8621                                 ; FE857C  [  0]
+	.long sub_FE85FC__FE8621                                 ; FE857C  [  0]
 	.long sub_FE8649                                 ; FE8580  [  1]
 	.long sub_FE8671                                 ; FE8584  [  2]
 	.long sub_FE8699                                 ; FE8588  [  3]
@@ -169712,7 +169786,7 @@ ScreenDispatch_FE857C:
 	.long sub_FE8761                                 ; FE85B4  [ 14]
 	.long sub_FE8762                                 ; FE85B8  [ 15]
 	.long sub_FE8761                                 ; FE85BC  [ 16]
-	.long 0x00fe8621                                 ; FE85C0  [ 17]
+	.long sub_FE85FC__FE8621                                 ; FE85C0  [ 17]
 	.long sub_FE8649                                 ; FE85C4  [ 18]
 	.long sub_FE8671                                 ; FE85C8  [ 19]
 	.long sub_FE8699                                 ; FE85CC  [ 20]
@@ -169730,6 +169804,7 @@ ScreenDispatch_FE857C:
 sub_FE85FC:
 	xor A,A                                              ; FE85FC  c9 d1
 	ret                                                  ; FE85FE  0e
+sub_FE85FC__FE85FF:
 	normal                                               ; FE85FF  01
 	nop                                                  ; FE8600  00
 	push SR                                              ; FE8601  02
@@ -169750,6 +169825,7 @@ sub_FE85FC:
 	nop                                                  ; FE8619  00
 	ld w, 0x00:opc                                          ; FE861A  20 00
 	ld XWA,0x00018000                                    ; FE861C  40 00 80 01 00
+sub_FE85FC__FE8621:
 	bit 0x07,W                                           ; FE8621  c8 33 07
 	jr nz, .LFE8638                                      ; FE8624  6e 12
 	ldw bc, 0x00                                         ; FE8626  31 00 00
@@ -169931,7 +170007,7 @@ sub_FE8772:   ; entry: named by 7 `.long` operands, first at 0xFE85E0
 	ret                                                  ; FE8772  0e
 sub_FE8773:
 	ld (0x601f00:24), bc                                ; FE8773  f2 00 1f 60 51
-	ld XIX,0x00fe85ff                                    ; FE8778  44 ff 85 fe 00
+	ld XIX,sub_FE85FC__FE85FF                                    ; FE8778  44 ff 85 fe 00
 	sll bc, 0x01                                         ; FE877D  d9 ee 01
 	xor XWA,XWA                                          ; FE8780  e8 d0
 	mx_ld_rm MXW, ra_IX, ra_BC, r0                       ; FE8782  d3 07 f0 e4 20
@@ -176537,7 +176613,7 @@ DisplayList_FEF770:
 ; ---------------------------------------------------------------------
 sub_FEF778:
 	ld (0x2540:16), 0x00                                 ; FEF778  f1 40 25 00 00
-	ld XIY,0x00fef78c                                    ; FEF77D  45 8c f7 fe 00
+	ld XIY,DisplayList_FEF78C                                    ; FEF77D  45 8c f7 fe 00
 	ld XIX,sub_FEF796                                    ; FEF782  44 96 f7 fe 00
 	call T_DisplayList_Run                               ; FEF787  1d f0 17 f4
 	ret                                                  ; FEF78B  0e
@@ -176565,7 +176641,7 @@ DisplayList_FEF78C:
 ; ---------------------------------------------------------------------
 sub_FEF796:
 	ld (0x2540:16), 0x01                                 ; FEF796  f1 40 25 00 01
-	ld XIY,0x00fef7aa                                    ; FEF79B  45 aa f7 fe 00
+	ld XIY,DisplayList_FEF7AA                                    ; FEF79B  45 aa f7 fe 00
 	ld XIX,sub_FEF7B4                                    ; FEF7A0  44 b4 f7 fe 00
 	call T_DisplayList_Run                               ; FEF7A5  1d f0 17 f4
 	ret                                                  ; FEF7A9  0e
@@ -176659,7 +176735,7 @@ sub_FEF7FF:
 ;          list's opcodes decoded or a caller that says what it is.
 ; ---------------------------------------------------------------------
 sub_FEF804:
-	ld XIY,0x00fef813                                    ; FEF804  45 13 f8 fe 00
+	ld XIY,DisplayList_FEF813                                    ; FEF804  45 13 f8 fe 00
 	ld XIX,sub_FEF81D                                    ; FEF809  44 1d f8 fe 00
 	call T_DisplayList_Run                               ; FEF80E  1d f0 17 f4
 	ret                                                  ; FEF812  0e
@@ -176687,7 +176763,7 @@ DisplayList_FEF813:
 ; ---------------------------------------------------------------------
 sub_FEF81D:
 	ld (0x2540:16), 0x00                                 ; FEF81D  f1 40 25 00 00
-	ld XIY,0x00fef831                                    ; FEF822  45 31 f8 fe 00
+	ld XIY,DisplayList_FEF831                                    ; FEF822  45 31 f8 fe 00
 	ld XIX,sub_FEF83B                                    ; FEF827  44 3b f8 fe 00
 	call T_DisplayList_Run                               ; FEF82C  1d f0 17 f4
 	ret                                                  ; FEF830  0e
@@ -176715,7 +176791,7 @@ DisplayList_FEF831:
 ; ---------------------------------------------------------------------
 sub_FEF83B:
 	ld (0x2540:16), 0x00                                 ; FEF83B  f1 40 25 00 00
-	ld XIY,0x00fef84f                                    ; FEF840  45 4f f8 fe 00
+	ld XIY,DisplayList_FEF84F                                    ; FEF840  45 4f f8 fe 00
 	ld XIX,sub_FEF859                                    ; FEF845  44 59 f8 fe 00
 	call T_DisplayList_Run                               ; FEF84A  1d f0 17 f4
 	ret                                                  ; FEF84E  0e
@@ -178632,7 +178708,7 @@ sub_FF0989:
 	jr c, .LFF09AC                                       ; FF0995  67 15
 	ldw (0x26b0:16), 0x00                                ; FF0997  f1 b0 26 02 00 00
 	ld XIY,DisplayList_FF09D8                            ; FF099D  45 d8 09 ff 00
-	ld XIX,0x00ff09e7                                    ; FF09A2  44 e7 09 ff 00
+	ld XIX,DisplayList_FF09D8__FF09E7                                    ; FF09A2  44 e7 09 ff 00
 	call T_DisplayListB_Run                              ; FF09A7  1d f4 17 f4
 	ret                                                  ; FF09AB  0e
 .LFF09AC:
@@ -178652,6 +178728,7 @@ sub_FF0989:
 DisplayList_FF09D8:
 	.byte 0x02, 0x0F                               ; FF09D8  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xE7, 0x09, 0xFF, 0x00, 0x04, 0x00, 0xF9, 0x1B  ; FF09DA
+DisplayList_FF09D8__FF09E7:
 	pushw de                                             ; FF09E7  2a
 	pushw de                                             ; FF09E8  2a
 	pushw de                                             ; FF09E9  2a
@@ -178902,7 +178979,7 @@ sub_FF0B46:
 .LFF0B90:
 	ldw (0x26b0:16), 0x00                                ; FF0B90  f1 b0 26 02 00 00
 	ld XIY,DisplayList_FF0BE1                            ; FF0B96  45 e1 0b ff 00
-	ld XIX,0x00ff0bf0                                    ; FF0B9B  44 f0 0b ff 00
+	ld XIX,DisplayList_FF0BE1__FF0BF0                                    ; FF0B9B  44 f0 0b ff 00
 	call T_DisplayListB_Run                              ; FF0BA0  1d f4 17 f4
 	xor WA,WA                                            ; FF0BA4  d8 d0
 	ld a, (0x601f19:24)                                 ; FF0BA6  c2 19 1f 60 21
@@ -178935,6 +179012,7 @@ DisplayList_FF0BD2:
 DisplayList_FF0BE1:
 	.byte 0x02, 0x0F                               ; FF0BE1  op 02, 15 bytes, handler 0xF31B21
 	.byte 0xB0, 0x26, 0xFF, 0x00, 0x06, 0xF0, 0x0B, 0xFF, 0x00, 0x01, 0x00, 0x07, 0x1C  ; FF0BE3
+DisplayList_FF0BE1__FF0BF0:
 	jrl z, 0x40f1                                        ; FF0BF0  76 f1 40
 	ld e, 0x00:opc                                          ; FF0BF3  25 00
 	nop                                                  ; FF0BF5  00
@@ -180399,38 +180477,38 @@ BStoreCursor_WriteByte:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF3800:
-	.long 0x00ff42b1                                 ; FF3800  [  0]
-	.long 0x00ff42b1                                 ; FF3804  [  1]
-	.long 0x00ff42b1                                 ; FF3808  [  2]
-	.long 0x00ff42b1                                 ; FF380C  [  3]
-	.long 0x00ff42b1                                 ; FF3810  [  4]
-	.long 0x00ff42b1                                 ; FF3814  [  5]
-	.long 0x00ff42b1                                 ; FF3818  [  6]
-	.long 0x00ff42b1                                 ; FF381C  [  7]
+	.long Text_FF42A1__FF42B1                                 ; FF3800  [  0]
+	.long Text_FF42A1__FF42B1                                 ; FF3804  [  1]
+	.long Text_FF42A1__FF42B1                                 ; FF3808  [  2]
+	.long Text_FF42A1__FF42B1                                 ; FF380C  [  3]
+	.long Text_FF42A1__FF42B1                                 ; FF3810  [  4]
+	.long Text_FF42A1__FF42B1                                 ; FF3814  [  5]
+	.long Text_FF42A1__FF42B1                                 ; FF3818  [  6]
+	.long Text_FF42A1__FF42B1                                 ; FF381C  [  7]
 	.long LcdKeyRow1_DiskMenu                        ; FF3820  [  8]
 	.long LcdKeyRow2_DiskMenu                        ; FF3824  [  9]
 	.long LcdKeyRow3_DiskMenu                        ; FF3828  [ 10]
 	.long LcdKeyRow4_DiskMenu                        ; FF382C  [ 11]
-	.long 0x00ff42b1                                 ; FF3830  [ 12]
-	.long 0x00ff42b1                                 ; FF3834  [ 13]
-	.long 0x00ff42b1                                 ; FF3838  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF3830  [ 12]
+	.long Text_FF42A1__FF42B1                                 ; FF3834  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF3838  [ 14]
 	.long ExitKey_DiskMenu                           ; FF383C  [ 15]
-	.long 0x00ff42b1                                 ; FF3840  [ 16]
-	.long 0x00ff42b1                                 ; FF3844  [ 17]
-	.long 0x00ff42b1                                 ; FF3848  [ 18]
-	.long 0x00ff42b1                                 ; FF384C  [ 19]
-	.long 0x00ff42b1                                 ; FF3850  [ 20]
-	.long 0x00ff42b1                                 ; FF3854  [ 21]
-	.long 0x00ff42b1                                 ; FF3858  [ 22]
-	.long 0x00ff42b1                                 ; FF385C  [ 23]
-	.long 0x00ff42b1                                 ; FF3860  [ 24]
-	.long 0x00ff42b1                                 ; FF3864  [ 25]
-	.long 0x00ff42b1                                 ; FF3868  [ 26]
-	.long 0x00ff42b1                                 ; FF386C  [ 27]
-	.long 0x00ff42b1                                 ; FF3870  [ 28]
-	.long 0x00ff42b1                                 ; FF3874  [ 29]
-	.long 0x00ff42b1                                 ; FF3878  [ 30]
-	.long 0x00ff42b1                                 ; FF387C  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF3840  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF3844  [ 17]
+	.long Text_FF42A1__FF42B1                                 ; FF3848  [ 18]
+	.long Text_FF42A1__FF42B1                                 ; FF384C  [ 19]
+	.long Text_FF42A1__FF42B1                                 ; FF3850  [ 20]
+	.long Text_FF42A1__FF42B1                                 ; FF3854  [ 21]
+	.long Text_FF42A1__FF42B1                                 ; FF3858  [ 22]
+	.long Text_FF42A1__FF42B1                                 ; FF385C  [ 23]
+	.long Text_FF42A1__FF42B1                                 ; FF3860  [ 24]
+	.long Text_FF42A1__FF42B1                                 ; FF3864  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF3868  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF386C  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF3870  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF3874  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF3878  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF387C  [ 31]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF3880 -- 32 handler pointers.  Read by 0xFF4596, whose bound is the
 ; same `cp H,0x20 / jr NC` at 0xFF459E.  As Dispatch_FF3800 in every other way.
@@ -180468,38 +180546,38 @@ Dispatch_FF3800:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF3880:
-	.long 0x00ff42b1                                 ; FF3880  [  0]
-	.long 0x00ff42b1                                 ; FF3884  [  1]
-	.long 0x00ff42b1                                 ; FF3888  [  2]
-	.long 0x00ff42b1                                 ; FF388C  [  3]
-	.long 0x00ff42b1                                 ; FF3890  [  4]
-	.long 0x00ff42b1                                 ; FF3894  [  5]
-	.long 0x00ff42b1                                 ; FF3898  [  6]
-	.long 0x00ff42b1                                 ; FF389C  [  7]
+	.long Text_FF42A1__FF42B1                                 ; FF3880  [  0]
+	.long Text_FF42A1__FF42B1                                 ; FF3884  [  1]
+	.long Text_FF42A1__FF42B1                                 ; FF3888  [  2]
+	.long Text_FF42A1__FF42B1                                 ; FF388C  [  3]
+	.long Text_FF42A1__FF42B1                                 ; FF3890  [  4]
+	.long Text_FF42A1__FF42B1                                 ; FF3894  [  5]
+	.long Text_FF42A1__FF42B1                                 ; FF3898  [  6]
+	.long Text_FF42A1__FF42B1                                 ; FF389C  [  7]
 	.long LcdKeyRow1_MidiFileDirectPlay              ; FF38A0  [  8]
 	.long LcdKeyRow2_MidiFileDirectPlay              ; FF38A4  [  9]
 	.long LcdKeyRow3_MidiFileDirectPlay              ; FF38A8  [ 10]
 	.long LcdKeyRow4_MidiFileDirectPlay              ; FF38AC  [ 11]
 	.long LcdKeyRow5_MidiFileDirectPlay              ; FF38B0  [ 12]
-	.long 0x00ff42b1                                 ; FF38B4  [ 13]
-	.long 0x00ff42b1                                 ; FF38B8  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF38B4  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF38B8  [ 14]
 	.long ExitKey_MidiFileDirectPlay                 ; FF38BC  [ 15]
-	.long 0x00ff42b1                                 ; FF38C0  [ 16]
-	.long 0x00ff42b1                                 ; FF38C4  [ 17]
-	.long 0x00ff42b1                                 ; FF38C8  [ 18]
-	.long 0x00ff42b1                                 ; FF38CC  [ 19]
-	.long 0x00ff42b1                                 ; FF38D0  [ 20]
-	.long 0x00ff42b1                                 ; FF38D4  [ 21]
-	.long 0x00ff42b1                                 ; FF38D8  [ 22]
-	.long 0x00ff42b1                                 ; FF38DC  [ 23]
-	.long 0x00ff42b1                                 ; FF38E0  [ 24]
-	.long 0x00ff42b1                                 ; FF38E4  [ 25]
-	.long 0x00ff42b1                                 ; FF38E8  [ 26]
-	.long 0x00ff42b1                                 ; FF38EC  [ 27]
-	.long 0x00ff42b1                                 ; FF38F0  [ 28]
-	.long 0x00ff42b1                                 ; FF38F4  [ 29]
-	.long 0x00ff42b1                                 ; FF38F8  [ 30]
-	.long 0x00ff42b1                                 ; FF38FC  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF38C0  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF38C4  [ 17]
+	.long Text_FF42A1__FF42B1                                 ; FF38C8  [ 18]
+	.long Text_FF42A1__FF42B1                                 ; FF38CC  [ 19]
+	.long Text_FF42A1__FF42B1                                 ; FF38D0  [ 20]
+	.long Text_FF42A1__FF42B1                                 ; FF38D4  [ 21]
+	.long Text_FF42A1__FF42B1                                 ; FF38D8  [ 22]
+	.long Text_FF42A1__FF42B1                                 ; FF38DC  [ 23]
+	.long Text_FF42A1__FF42B1                                 ; FF38E0  [ 24]
+	.long Text_FF42A1__FF42B1                                 ; FF38E4  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF38E8  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF38EC  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF38F0  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF38F4  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF38F8  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF38FC  [ 31]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF3900 -- 32 handler pointers.  Read by 0xFF4995 (`cp H,0x20` at
 ; 0xFF499D).
@@ -180537,38 +180615,38 @@ Dispatch_FF3880:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF3900:
-	.long 0x00ff42b1                                 ; FF3900  [  0]
-	.long 0x00ff42b1                                 ; FF3904  [  1]
-	.long 0x00ff42b1                                 ; FF3908  [  2]
-	.long 0x00ff42b1                                 ; FF390C  [  3]
-	.long 0x00ff42b1                                 ; FF3910  [  4]
-	.long 0x00ff42b1                                 ; FF3914  [  5]
-	.long 0x00ff42b1                                 ; FF3918  [  6]
-	.long 0x00ff42b1                                 ; FF391C  [  7]
+	.long Text_FF42A1__FF42B1                                 ; FF3900  [  0]
+	.long Text_FF42A1__FF42B1                                 ; FF3904  [  1]
+	.long Text_FF42A1__FF42B1                                 ; FF3908  [  2]
+	.long Text_FF42A1__FF42B1                                 ; FF390C  [  3]
+	.long Text_FF42A1__FF42B1                                 ; FF3910  [  4]
+	.long Text_FF42A1__FF42B1                                 ; FF3914  [  5]
+	.long Text_FF42A1__FF42B1                                 ; FF3918  [  6]
+	.long Text_FF42A1__FF42B1                                 ; FF391C  [  7]
 	.long LcdKeyRow1_DiskL0adFile                    ; FF3920  [  8]
 	.long LcdKeyRow2_DiskL0adFile                    ; FF3924  [  9]
 	.long LcdKeyRow3_DiskL0adFile                    ; FF3928  [ 10]
 	.long LcdKeyRow4_DiskL0adFile                    ; FF392C  [ 11]
 	.long LcdKeyRow5_DiskL0adFile                    ; FF3930  [ 12]
-	.long 0x00ff42b1                                 ; FF3934  [ 13]
-	.long 0x00ff42b1                                 ; FF3938  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF3934  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF3938  [ 14]
 	.long ExitKey_DiskL0adFile                       ; FF393C  [ 15]
-	.long 0x00ff42b1                                 ; FF3940  [ 16]
-	.long 0x00ff42b1                                 ; FF3944  [ 17]
-	.long 0x00ff42b1                                 ; FF3948  [ 18]
-	.long 0x00ff42b1                                 ; FF394C  [ 19]
-	.long 0x00ff42b1                                 ; FF3950  [ 20]
-	.long 0x00ff42b1                                 ; FF3954  [ 21]
-	.long 0x00ff42b1                                 ; FF3958  [ 22]
-	.long 0x00ff42b1                                 ; FF395C  [ 23]
-	.long 0x00ff42b1                                 ; FF3960  [ 24]
-	.long 0x00ff42b1                                 ; FF3964  [ 25]
-	.long 0x00ff42b1                                 ; FF3968  [ 26]
-	.long 0x00ff42b1                                 ; FF396C  [ 27]
-	.long 0x00ff42b1                                 ; FF3970  [ 28]
-	.long 0x00ff42b1                                 ; FF3974  [ 29]
-	.long 0x00ff42b1                                 ; FF3978  [ 30]
-	.long 0x00ff42b1                                 ; FF397C  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF3940  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF3944  [ 17]
+	.long Text_FF42A1__FF42B1                                 ; FF3948  [ 18]
+	.long Text_FF42A1__FF42B1                                 ; FF394C  [ 19]
+	.long Text_FF42A1__FF42B1                                 ; FF3950  [ 20]
+	.long Text_FF42A1__FF42B1                                 ; FF3954  [ 21]
+	.long Text_FF42A1__FF42B1                                 ; FF3958  [ 22]
+	.long Text_FF42A1__FF42B1                                 ; FF395C  [ 23]
+	.long Text_FF42A1__FF42B1                                 ; FF3960  [ 24]
+	.long Text_FF42A1__FF42B1                                 ; FF3964  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF3968  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF396C  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF3970  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF3974  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF3978  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF397C  [ 31]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF3980 -- 32 handler pointers.  Read by 0xFF522F (`cp H,0x20` at
 ; 0xFF5237).
@@ -180606,38 +180684,38 @@ Dispatch_FF3900:
 ; ⚠ A live index names the CONTROL, not the FUNCTION.
 ; ---------------------------------------------------------------------
 Dispatch_FF3980:
-	.long 0x00ff42b1                                 ; FF3980  [  0]
-	.long 0x00ff42b1                                 ; FF3984  [  1]
-	.long 0x00ff42b1                                 ; FF3988  [  2]
-	.long 0x00ff42b1                                 ; FF398C  [  3]
-	.long 0x00ff42b1                                 ; FF3990  [  4]
-	.long 0x00ff42b1                                 ; FF3994  [  5]
-	.long 0x00ff42b1                                 ; FF3998  [  6]
-	.long 0x00ff42b1                                 ; FF399C  [  7]
+	.long Text_FF42A1__FF42B1                                 ; FF3980  [  0]
+	.long Text_FF42A1__FF42B1                                 ; FF3984  [  1]
+	.long Text_FF42A1__FF42B1                                 ; FF3988  [  2]
+	.long Text_FF42A1__FF42B1                                 ; FF398C  [  3]
+	.long Text_FF42A1__FF42B1                                 ; FF3990  [  4]
+	.long Text_FF42A1__FF42B1                                 ; FF3994  [  5]
+	.long Text_FF42A1__FF42B1                                 ; FF3998  [  6]
+	.long Text_FF42A1__FF42B1                                 ; FF399C  [  7]
 	.long LcdKeyRow1_MidiFileL0ad                    ; FF39A0  [  8]
 	.long LcdKeyRow2_MidiFileL0ad                    ; FF39A4  [  9]
 	.long LcdKeyRow3_MidiFileL0ad                    ; FF39A8  [ 10]
 	.long LcdKeyRow4_MidiFileL0ad                    ; FF39AC  [ 11]
 	.long LcdKeyRow5_MidiFileL0ad                    ; FF39B0  [ 12]
-	.long 0x00ff42b1                                 ; FF39B4  [ 13]
-	.long 0x00ff42b1                                 ; FF39B8  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF39B4  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF39B8  [ 14]
 	.long ExitKey_MidiFileL0ad                       ; FF39BC  [ 15]
-	.long 0x00ff42b1                                 ; FF39C0  [ 16]
-	.long 0x00ff42b1                                 ; FF39C4  [ 17]
-	.long 0x00ff42b1                                 ; FF39C8  [ 18]
-	.long 0x00ff42b1                                 ; FF39CC  [ 19]
-	.long 0x00ff42b1                                 ; FF39D0  [ 20]
-	.long 0x00ff42b1                                 ; FF39D4  [ 21]
-	.long 0x00ff42b1                                 ; FF39D8  [ 22]
-	.long 0x00ff42b1                                 ; FF39DC  [ 23]
-	.long 0x00ff42b1                                 ; FF39E0  [ 24]
-	.long 0x00ff42b1                                 ; FF39E4  [ 25]
-	.long 0x00ff42b1                                 ; FF39E8  [ 26]
-	.long 0x00ff42b1                                 ; FF39EC  [ 27]
-	.long 0x00ff42b1                                 ; FF39F0  [ 28]
-	.long 0x00ff42b1                                 ; FF39F4  [ 29]
-	.long 0x00ff42b1                                 ; FF39F8  [ 30]
-	.long 0x00ff42b1                                 ; FF39FC  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF39C0  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF39C4  [ 17]
+	.long Text_FF42A1__FF42B1                                 ; FF39C8  [ 18]
+	.long Text_FF42A1__FF42B1                                 ; FF39CC  [ 19]
+	.long Text_FF42A1__FF42B1                                 ; FF39D0  [ 20]
+	.long Text_FF42A1__FF42B1                                 ; FF39D4  [ 21]
+	.long Text_FF42A1__FF42B1                                 ; FF39D8  [ 22]
+	.long Text_FF42A1__FF42B1                                 ; FF39DC  [ 23]
+	.long Text_FF42A1__FF42B1                                 ; FF39E0  [ 24]
+	.long Text_FF42A1__FF42B1                                 ; FF39E4  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF39E8  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF39EC  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF39F0  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF39F4  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF39F8  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF39FC  [ 31]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF3A00 -- SIX handler pointers, indexed by the page byte (0x2229)
 ;
@@ -180720,100 +180798,100 @@ Text_FF3A18:
 Dispatch_FF3A29:
 	.long sub_FF5768                                 ; FF3A29  [  0]
 	.long sub_FF57C0                                 ; FF3A2D  [  1]
-	.long 0x00ff42b1                                 ; FF3A31  [  2]
+	.long Text_FF42A1__FF42B1                                 ; FF3A31  [  2]
 	.long sub_FF5818                                 ; FF3A35  [  3]
 	.long sub_FF585C                                 ; FF3A39  [  4]
-	.long 0x00ff42b1                                 ; FF3A3D  [  5]
+	.long Text_FF42A1__FF42B1                                 ; FF3A3D  [  5]
 	.long sub_FF58A0                                 ; FF3A41  [  6]
-	.long 0x00ff42b1                                 ; FF3A45  [  7]
+	.long Text_FF42A1__FF42B1                                 ; FF3A45  [  7]
 	.long LcdKeyRow1_DiskSaveFile_Page0              ; FF3A49  [  8]
-	.long 0x00ff42b1                                 ; FF3A4D  [  9]
-	.long 0x00ff42b1                                 ; FF3A51  [ 10]
+	.long Text_FF42A1__FF42B1                                 ; FF3A4D  [  9]
+	.long Text_FF42A1__FF42B1                                 ; FF3A51  [ 10]
 	.long LcdKeyRow4_DiskSaveFile_Page0              ; FF3A55  [ 11]
-	.long 0x00ff42b1                                 ; FF3A59  [ 12]
-	.long 0x00ff42b1                                 ; FF3A5D  [ 13]
-	.long 0x00ff42b1                                 ; FF3A61  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF3A59  [ 12]
+	.long Text_FF42A1__FF42B1                                 ; FF3A5D  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF3A61  [ 14]
 	.long ExitKey_DiskSaveFile_Page0                 ; FF3A65  [ 15]
-	.long 0x00ff42b1                                 ; FF3A69  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF3A69  [ 16]
 	.long sub_FF5768                                 ; FF3A6D  [ 17]
 	.long sub_FF57C0                                 ; FF3A71  [ 18]
-	.long 0x00ff42b1                                 ; FF3A75  [ 19]
+	.long Text_FF42A1__FF42B1                                 ; FF3A75  [ 19]
 	.long sub_FF5818                                 ; FF3A79  [ 20]
 	.long sub_FF585C                                 ; FF3A7D  [ 21]
-	.long 0x00ff42b1                                 ; FF3A81  [ 22]
+	.long Text_FF42A1__FF42B1                                 ; FF3A81  [ 22]
 	.long sub_FF58A0                                 ; FF3A85  [ 23]
-	.long 0x00ff42b1                                 ; FF3A89  [ 24]
-	.long 0x00ff42b1                                 ; FF3A8D  [ 25]
-	.long 0x00ff42b1                                 ; FF3A91  [ 26]
-	.long 0x00ff42b1                                 ; FF3A95  [ 27]
-	.long 0x00ff42b1                                 ; FF3A99  [ 28]
-	.long 0x00ff42b1                                 ; FF3A9D  [ 29]
-	.long 0x00ff42b1                                 ; FF3AA1  [ 30]
-	.long 0x00ff42b1                                 ; FF3AA5  [ 31]
-	.long 0x00ff42b1                                 ; FF3AA9  [ 32]
-	.long 0x00ff42b1                                 ; FF3AAD  [ 33]
-	.long 0x00ff42b1                                 ; FF3AB1  [ 34]
+	.long Text_FF42A1__FF42B1                                 ; FF3A89  [ 24]
+	.long Text_FF42A1__FF42B1                                 ; FF3A8D  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF3A91  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF3A95  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF3A99  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF3A9D  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF3AA1  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF3AA5  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF3AA9  [ 32]
+	.long Text_FF42A1__FF42B1                                 ; FF3AAD  [ 33]
+	.long Text_FF42A1__FF42B1                                 ; FF3AB1  [ 34]
 	.long sub_FF59A5                                 ; FF3AB5  [ 35]
-	.long 0x00ff42b1                                 ; FF3AB9  [ 36]
-	.long 0x00ff42b1                                 ; FF3ABD  [ 37]
-	.long 0x00ff42b1                                 ; FF3AC1  [ 38]
-	.long 0x00ff42b1                                 ; FF3AC5  [ 39]
+	.long Text_FF42A1__FF42B1                                 ; FF3AB9  [ 36]
+	.long Text_FF42A1__FF42B1                                 ; FF3ABD  [ 37]
+	.long Text_FF42A1__FF42B1                                 ; FF3AC1  [ 38]
+	.long Text_FF42A1__FF42B1                                 ; FF3AC5  [ 39]
 	.long LcdKeyRow1_DiskSaveFile_Page1              ; FF3AC9  [ 40]
 	.long LcdKeyRow2_DiskSaveFile_Page1              ; FF3ACD  [ 41]
 	.long LcdKeyRow3_DiskSaveFile_Page1              ; FF3AD1  [ 42]
 	.long LcdKeyRow4_DiskSaveFile_Page1              ; FF3AD5  [ 43]
 	.long LcdKeyRow5_DiskSaveFile_Page1              ; FF3AD9  [ 44]
-	.long 0x00ff42b1                                 ; FF3ADD  [ 45]
-	.long 0x00ff42b1                                 ; FF3AE1  [ 46]
+	.long Text_FF42A1__FF42B1                                 ; FF3ADD  [ 45]
+	.long Text_FF42A1__FF42B1                                 ; FF3AE1  [ 46]
 	.long ExitKey_DiskSaveFile_Page1                 ; FF3AE5  [ 47]
-	.long 0x00ff42b1                                 ; FF3AE9  [ 48]
-	.long 0x00ff42b1                                 ; FF3AED  [ 49]
-	.long 0x00ff42b1                                 ; FF3AF1  [ 50]
-	.long 0x00ff42b1                                 ; FF3AF5  [ 51]
+	.long Text_FF42A1__FF42B1                                 ; FF3AE9  [ 48]
+	.long Text_FF42A1__FF42B1                                 ; FF3AED  [ 49]
+	.long Text_FF42A1__FF42B1                                 ; FF3AF1  [ 50]
+	.long Text_FF42A1__FF42B1                                 ; FF3AF5  [ 51]
 	.long sub_FF59A5                                 ; FF3AF9  [ 52]
-	.long 0x00ff42b1                                 ; FF3AFD  [ 53]
-	.long 0x00ff42b1                                 ; FF3B01  [ 54]
-	.long 0x00ff42b1                                 ; FF3B05  [ 55]
-	.long 0x00ff42b1                                 ; FF3B09  [ 56]
-	.long 0x00ff42b1                                 ; FF3B0D  [ 57]
-	.long 0x00ff42b1                                 ; FF3B11  [ 58]
-	.long 0x00ff42b1                                 ; FF3B15  [ 59]
-	.long 0x00ff42b1                                 ; FF3B19  [ 60]
-	.long 0x00ff42b1                                 ; FF3B1D  [ 61]
-	.long 0x00ff42b1                                 ; FF3B21  [ 62]
-	.long 0x00ff42b1                                 ; FF3B25  [ 63]
-	.long 0x00ff42b1                                 ; FF3B29  [ 64]
-	.long 0x00ff42b1                                 ; FF3B2D  [ 65]
-	.long 0x00ff42b1                                 ; FF3B31  [ 66]
-	.long 0x00ff42b1                                 ; FF3B35  [ 67]
-	.long 0x00ff42b1                                 ; FF3B39  [ 68]
-	.long 0x00ff42b1                                 ; FF3B3D  [ 69]
-	.long 0x00ff42b1                                 ; FF3B41  [ 70]
-	.long 0x00ff42b1                                 ; FF3B45  [ 71]
-	.long 0x00ff42b1                                 ; FF3B49  [ 72]
-	.long 0x00ff42b1                                 ; FF3B4D  [ 73]
+	.long Text_FF42A1__FF42B1                                 ; FF3AFD  [ 53]
+	.long Text_FF42A1__FF42B1                                 ; FF3B01  [ 54]
+	.long Text_FF42A1__FF42B1                                 ; FF3B05  [ 55]
+	.long Text_FF42A1__FF42B1                                 ; FF3B09  [ 56]
+	.long Text_FF42A1__FF42B1                                 ; FF3B0D  [ 57]
+	.long Text_FF42A1__FF42B1                                 ; FF3B11  [ 58]
+	.long Text_FF42A1__FF42B1                                 ; FF3B15  [ 59]
+	.long Text_FF42A1__FF42B1                                 ; FF3B19  [ 60]
+	.long Text_FF42A1__FF42B1                                 ; FF3B1D  [ 61]
+	.long Text_FF42A1__FF42B1                                 ; FF3B21  [ 62]
+	.long Text_FF42A1__FF42B1                                 ; FF3B25  [ 63]
+	.long Text_FF42A1__FF42B1                                 ; FF3B29  [ 64]
+	.long Text_FF42A1__FF42B1                                 ; FF3B2D  [ 65]
+	.long Text_FF42A1__FF42B1                                 ; FF3B31  [ 66]
+	.long Text_FF42A1__FF42B1                                 ; FF3B35  [ 67]
+	.long Text_FF42A1__FF42B1                                 ; FF3B39  [ 68]
+	.long Text_FF42A1__FF42B1                                 ; FF3B3D  [ 69]
+	.long Text_FF42A1__FF42B1                                 ; FF3B41  [ 70]
+	.long Text_FF42A1__FF42B1                                 ; FF3B45  [ 71]
+	.long Text_FF42A1__FF42B1                                 ; FF3B49  [ 72]
+	.long Text_FF42A1__FF42B1                                 ; FF3B4D  [ 73]
 	.long LcdKeyRow3_DiskSaveFile_Page2              ; FF3B51  [ 74]
 	.long LcdKeyRow4_DiskSaveFile_Page2              ; FF3B55  [ 75]
-	.long 0x00ff42b1                                 ; FF3B59  [ 76]
-	.long 0x00ff42b1                                 ; FF3B5D  [ 77]
-	.long 0x00ff42b1                                 ; FF3B61  [ 78]
+	.long Text_FF42A1__FF42B1                                 ; FF3B59  [ 76]
+	.long Text_FF42A1__FF42B1                                 ; FF3B5D  [ 77]
+	.long Text_FF42A1__FF42B1                                 ; FF3B61  [ 78]
 	.long ExitKey_DiskSaveFile_Page2                 ; FF3B65  [ 79]
-	.long 0x00ff42b1                                 ; FF3B69  [ 80]
-	.long 0x00ff42b1                                 ; FF3B6D  [ 81]
-	.long 0x00ff42b1                                 ; FF3B71  [ 82]
-	.long 0x00ff42b1                                 ; FF3B75  [ 83]
-	.long 0x00ff42b1                                 ; FF3B79  [ 84]
-	.long 0x00ff42b1                                 ; FF3B7D  [ 85]
-	.long 0x00ff42b1                                 ; FF3B81  [ 86]
-	.long 0x00ff42b1                                 ; FF3B85  [ 87]
-	.long 0x00ff42b1                                 ; FF3B89  [ 88]
-	.long 0x00ff42b1                                 ; FF3B8D  [ 89]
-	.long 0x00ff42b1                                 ; FF3B91  [ 90]
-	.long 0x00ff42b1                                 ; FF3B95  [ 91]
-	.long 0x00ff42b1                                 ; FF3B99  [ 92]
-	.long 0x00ff42b1                                 ; FF3B9D  [ 93]
-	.long 0x00ff42b1                                 ; FF3BA1  [ 94]
-	.long 0x00ff42b1                                 ; FF3BA5  [ 95]
+	.long Text_FF42A1__FF42B1                                 ; FF3B69  [ 80]
+	.long Text_FF42A1__FF42B1                                 ; FF3B6D  [ 81]
+	.long Text_FF42A1__FF42B1                                 ; FF3B71  [ 82]
+	.long Text_FF42A1__FF42B1                                 ; FF3B75  [ 83]
+	.long Text_FF42A1__FF42B1                                 ; FF3B79  [ 84]
+	.long Text_FF42A1__FF42B1                                 ; FF3B7D  [ 85]
+	.long Text_FF42A1__FF42B1                                 ; FF3B81  [ 86]
+	.long Text_FF42A1__FF42B1                                 ; FF3B85  [ 87]
+	.long Text_FF42A1__FF42B1                                 ; FF3B89  [ 88]
+	.long Text_FF42A1__FF42B1                                 ; FF3B8D  [ 89]
+	.long Text_FF42A1__FF42B1                                 ; FF3B91  [ 90]
+	.long Text_FF42A1__FF42B1                                 ; FF3B95  [ 91]
+	.long Text_FF42A1__FF42B1                                 ; FF3B99  [ 92]
+	.long Text_FF42A1__FF42B1                                 ; FF3B9D  [ 93]
+	.long Text_FF42A1__FF42B1                                 ; FF3BA1  [ 94]
+	.long Text_FF42A1__FF42B1                                 ; FF3BA5  [ 95]
 	.long T_F42F84                                   ; FF3BA9  [ 96]
 	.long T_F42F88                                   ; FF3BAD  [ 97]
 	.long T_F42F8C                                   ; FF3BB1  [ 98]
@@ -180823,14 +180901,14 @@ Dispatch_FF3A29:
 	.long T_F42F9C                                   ; FF3BC1  [102]
 	.long T_F42FA0                                   ; FF3BC5  [103]
 	.long LcdKeyRow1_DiskSaveFile_Page3              ; FF3BC9  [104]
-	.long 0x00ff42b1                                 ; FF3BCD  [105]
-	.long 0x00ff42b1                                 ; FF3BD1  [106]
-	.long 0x00ff42b1                                 ; FF3BD5  [107]
-	.long 0x00ff42b1                                 ; FF3BD9  [108]
-	.long 0x00ff42b1                                 ; FF3BDD  [109]
-	.long 0x00ff42b1                                 ; FF3BE1  [110]
+	.long Text_FF42A1__FF42B1                                 ; FF3BCD  [105]
+	.long Text_FF42A1__FF42B1                                 ; FF3BD1  [106]
+	.long Text_FF42A1__FF42B1                                 ; FF3BD5  [107]
+	.long Text_FF42A1__FF42B1                                 ; FF3BD9  [108]
+	.long Text_FF42A1__FF42B1                                 ; FF3BDD  [109]
+	.long Text_FF42A1__FF42B1                                 ; FF3BE1  [110]
 	.long ExitKey_DiskSaveFile_Pages3_4              ; FF3BE5  [111]
-	.long 0x00ff42b1                                 ; FF3BE9  [112]
+	.long Text_FF42A1__FF42B1                                 ; FF3BE9  [112]
 	.long T_F42F84                                   ; FF3BED  [113]
 	.long T_F42F88                                   ; FF3BF1  [114]
 	.long T_F42F8C                                   ; FF3BF5  [115]
@@ -180839,13 +180917,13 @@ Dispatch_FF3A29:
 	.long T_F42F98                                   ; FF3C01  [118]
 	.long T_F42F9C                                   ; FF3C05  [119]
 	.long T_F42FA0                                   ; FF3C09  [120]
-	.long 0x00ff42b1                                 ; FF3C0D  [121]
-	.long 0x00ff42b1                                 ; FF3C11  [122]
-	.long 0x00ff42b1                                 ; FF3C15  [123]
-	.long 0x00ff42b1                                 ; FF3C19  [124]
-	.long 0x00ff42b1                                 ; FF3C1D  [125]
-	.long 0x00ff42b1                                 ; FF3C21  [126]
-	.long 0x00ff42b1                                 ; FF3C25  [127]
+	.long Text_FF42A1__FF42B1                                 ; FF3C0D  [121]
+	.long Text_FF42A1__FF42B1                                 ; FF3C11  [122]
+	.long Text_FF42A1__FF42B1                                 ; FF3C15  [123]
+	.long Text_FF42A1__FF42B1                                 ; FF3C19  [124]
+	.long Text_FF42A1__FF42B1                                 ; FF3C1D  [125]
+	.long Text_FF42A1__FF42B1                                 ; FF3C21  [126]
+	.long Text_FF42A1__FF42B1                                 ; FF3C25  [127]
 	.long T_F42F84                                   ; FF3C29  [128]
 	.long T_F42F88                                   ; FF3C2D  [129]
 	.long T_F42F8C                                   ; FF3C31  [130]
@@ -180855,14 +180933,14 @@ Dispatch_FF3A29:
 	.long T_F42F9C                                   ; FF3C41  [134]
 	.long T_F42FA0                                   ; FF3C45  [135]
 	.long LcdKeyRow1_DiskSaveFile_Page4              ; FF3C49  [136]
-	.long 0x00ff42b1                                 ; FF3C4D  [137]
-	.long 0x00ff42b1                                 ; FF3C51  [138]
-	.long 0x00ff42b1                                 ; FF3C55  [139]
-	.long 0x00ff42b1                                 ; FF3C59  [140]
-	.long 0x00ff42b1                                 ; FF3C5D  [141]
-	.long 0x00ff42b1                                 ; FF3C61  [142]
+	.long Text_FF42A1__FF42B1                                 ; FF3C4D  [137]
+	.long Text_FF42A1__FF42B1                                 ; FF3C51  [138]
+	.long Text_FF42A1__FF42B1                                 ; FF3C55  [139]
+	.long Text_FF42A1__FF42B1                                 ; FF3C59  [140]
+	.long Text_FF42A1__FF42B1                                 ; FF3C5D  [141]
+	.long Text_FF42A1__FF42B1                                 ; FF3C61  [142]
 	.long ExitKey_DiskSaveFile_Pages3_4              ; FF3C65  [143]
-	.long 0x00ff42b1                                 ; FF3C69  [144]
+	.long Text_FF42A1__FF42B1                                 ; FF3C69  [144]
 	.long T_F42F84                                   ; FF3C6D  [145]
 	.long T_F42F88                                   ; FF3C71  [146]
 	.long T_F42F8C                                   ; FF3C75  [147]
@@ -180871,45 +180949,45 @@ Dispatch_FF3A29:
 	.long T_F42F98                                   ; FF3C81  [150]
 	.long T_F42F9C                                   ; FF3C85  [151]
 	.long T_F42FA0                                   ; FF3C89  [152]
-	.long 0x00ff42b1                                 ; FF3C8D  [153]
-	.long 0x00ff42b1                                 ; FF3C91  [154]
-	.long 0x00ff42b1                                 ; FF3C95  [155]
-	.long 0x00ff42b1                                 ; FF3C99  [156]
-	.long 0x00ff42b1                                 ; FF3C9D  [157]
-	.long 0x00ff42b1                                 ; FF3CA1  [158]
-	.long 0x00ff42b1                                 ; FF3CA5  [159]
-	.long 0x00ff42b1                                 ; FF3CA9  [160]
-	.long 0x00ff42b1                                 ; FF3CAD  [161]
-	.long 0x00ff42b1                                 ; FF3CB1  [162]
-	.long 0x00ff42b1                                 ; FF3CB5  [163]
-	.long 0x00ff42b1                                 ; FF3CB9  [164]
-	.long 0x00ff42b1                                 ; FF3CBD  [165]
-	.long 0x00ff42b1                                 ; FF3CC1  [166]
-	.long 0x00ff42b1                                 ; FF3CC5  [167]
-	.long 0x00ff42b1                                 ; FF3CC9  [168]
-	.long 0x00ff42b1                                 ; FF3CCD  [169]
+	.long Text_FF42A1__FF42B1                                 ; FF3C8D  [153]
+	.long Text_FF42A1__FF42B1                                 ; FF3C91  [154]
+	.long Text_FF42A1__FF42B1                                 ; FF3C95  [155]
+	.long Text_FF42A1__FF42B1                                 ; FF3C99  [156]
+	.long Text_FF42A1__FF42B1                                 ; FF3C9D  [157]
+	.long Text_FF42A1__FF42B1                                 ; FF3CA1  [158]
+	.long Text_FF42A1__FF42B1                                 ; FF3CA5  [159]
+	.long Text_FF42A1__FF42B1                                 ; FF3CA9  [160]
+	.long Text_FF42A1__FF42B1                                 ; FF3CAD  [161]
+	.long Text_FF42A1__FF42B1                                 ; FF3CB1  [162]
+	.long Text_FF42A1__FF42B1                                 ; FF3CB5  [163]
+	.long Text_FF42A1__FF42B1                                 ; FF3CB9  [164]
+	.long Text_FF42A1__FF42B1                                 ; FF3CBD  [165]
+	.long Text_FF42A1__FF42B1                                 ; FF3CC1  [166]
+	.long Text_FF42A1__FF42B1                                 ; FF3CC5  [167]
+	.long Text_FF42A1__FF42B1                                 ; FF3CC9  [168]
+	.long Text_FF42A1__FF42B1                                 ; FF3CCD  [169]
 	.long LcdKeyRow3_DiskSaveFile_Page5              ; FF3CD1  [170]
 	.long LcdKeyRow4_DiskSaveFile_Page5              ; FF3CD5  [171]
-	.long 0x00ff42b1                                 ; FF3CD9  [172]
-	.long 0x00ff42b1                                 ; FF3CDD  [173]
-	.long 0x00ff42b1                                 ; FF3CE1  [174]
+	.long Text_FF42A1__FF42B1                                 ; FF3CD9  [172]
+	.long Text_FF42A1__FF42B1                                 ; FF3CDD  [173]
+	.long Text_FF42A1__FF42B1                                 ; FF3CE1  [174]
 	.long ExitKey_DiskSaveFile_Page5                 ; FF3CE5  [175]
-	.long 0x00ff42b1                                 ; FF3CE9  [176]
-	.long 0x00ff42b1                                 ; FF3CED  [177]
-	.long 0x00ff42b1                                 ; FF3CF1  [178]
-	.long 0x00ff42b1                                 ; FF3CF5  [179]
-	.long 0x00ff42b1                                 ; FF3CF9  [180]
-	.long 0x00ff42b1                                 ; FF3CFD  [181]
-	.long 0x00ff42b1                                 ; FF3D01  [182]
-	.long 0x00ff42b1                                 ; FF3D05  [183]
-	.long 0x00ff42b1                                 ; FF3D09  [184]
-	.long 0x00ff42b1                                 ; FF3D0D  [185]
-	.long 0x00ff42b1                                 ; FF3D11  [186]
-	.long 0x00ff42b1                                 ; FF3D15  [187]
-	.long 0x00ff42b1                                 ; FF3D19  [188]
-	.long 0x00ff42b1                                 ; FF3D1D  [189]
-	.long 0x00ff42b1                                 ; FF3D21  [190]
-	.long 0x00ff42b1                                 ; FF3D25  [191]
+	.long Text_FF42A1__FF42B1                                 ; FF3CE9  [176]
+	.long Text_FF42A1__FF42B1                                 ; FF3CED  [177]
+	.long Text_FF42A1__FF42B1                                 ; FF3CF1  [178]
+	.long Text_FF42A1__FF42B1                                 ; FF3CF5  [179]
+	.long Text_FF42A1__FF42B1                                 ; FF3CF9  [180]
+	.long Text_FF42A1__FF42B1                                 ; FF3CFD  [181]
+	.long Text_FF42A1__FF42B1                                 ; FF3D01  [182]
+	.long Text_FF42A1__FF42B1                                 ; FF3D05  [183]
+	.long Text_FF42A1__FF42B1                                 ; FF3D09  [184]
+	.long Text_FF42A1__FF42B1                                 ; FF3D0D  [185]
+	.long Text_FF42A1__FF42B1                                 ; FF3D11  [186]
+	.long Text_FF42A1__FF42B1                                 ; FF3D15  [187]
+	.long Text_FF42A1__FF42B1                                 ; FF3D19  [188]
+	.long Text_FF42A1__FF42B1                                 ; FF3D1D  [189]
+	.long Text_FF42A1__FF42B1                                 ; FF3D21  [190]
+	.long Text_FF42A1__FF42B1                                 ; FF3D25  [191]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF3D29 -- FOUR handler pointers, indexed by the page byte (0x2229)
 ;
@@ -180973,196 +181051,196 @@ Dispatch_FF3D29:
 Dispatch_FF3D39:
 	.long sub_FF5F0B                                 ; FF3D39  [  0]
 	.long sub_FF5F13                                 ; FF3D3D  [  1]
-	.long 0x00ff42b1                                 ; FF3D41  [  2]
+	.long Text_FF42A1__FF42B1                                 ; FF3D41  [  2]
 	.long sub_FF5F90                                 ; FF3D45  [  3]
 	.long sub_FF5F98                                 ; FF3D49  [  4]
-	.long 0x00ff42b1                                 ; FF3D4D  [  5]
+	.long Text_FF42A1__FF42B1                                 ; FF3D4D  [  5]
 	.long sub_FF5FFF                                 ; FF3D51  [  6]
-	.long 0x00ff42b1                                 ; FF3D55  [  7]
+	.long Text_FF42A1__FF42B1                                 ; FF3D55  [  7]
 	.long LcdKeyRow1_MidiFileSave_Page0              ; FF3D59  [  8]
-	.long 0x00ff42b1                                 ; FF3D5D  [  9]
-	.long 0x00ff42b1                                 ; FF3D61  [ 10]
+	.long Text_FF42A1__FF42B1                                 ; FF3D5D  [  9]
+	.long Text_FF42A1__FF42B1                                 ; FF3D61  [ 10]
 	.long LcdKeyRow4_MidiFileSave_Page0              ; FF3D65  [ 11]
-	.long 0x00ff42b1                                 ; FF3D69  [ 12]
-	.long 0x00ff42b1                                 ; FF3D6D  [ 13]
-	.long 0x00ff42b1                                 ; FF3D71  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF3D69  [ 12]
+	.long Text_FF42A1__FF42B1                                 ; FF3D6D  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF3D71  [ 14]
 	.long ExitKey_MidiFileSave_Pages0_1_2_3          ; FF3D75  [ 15]
-	.long 0x00ff42b1                                 ; FF3D79  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF3D79  [ 16]
 	.long sub_FF5F0B                                 ; FF3D7D  [ 17]
 	.long sub_FF5F13                                 ; FF3D81  [ 18]
-	.long 0x00ff42b1                                 ; FF3D85  [ 19]
+	.long Text_FF42A1__FF42B1                                 ; FF3D85  [ 19]
 	.long sub_FF5F90                                 ; FF3D89  [ 20]
 	.long sub_FF5F98                                 ; FF3D8D  [ 21]
-	.long 0x00ff42b1                                 ; FF3D91  [ 22]
+	.long Text_FF42A1__FF42B1                                 ; FF3D91  [ 22]
 	.long sub_FF5FFF                                 ; FF3D95  [ 23]
-	.long 0x00ff42b1                                 ; FF3D99  [ 24]
-	.long 0x00ff42b1                                 ; FF3D9D  [ 25]
-	.long 0x00ff42b1                                 ; FF3DA1  [ 26]
-	.long 0x00ff42b1                                 ; FF3DA5  [ 27]
-	.long 0x00ff42b1                                 ; FF3DA9  [ 28]
-	.long 0x00ff42b1                                 ; FF3DAD  [ 29]
-	.long 0x00ff42b1                                 ; FF3DB1  [ 30]
-	.long 0x00ff42b1                                 ; FF3DB5  [ 31]
-	.long 0x00ff42b1                                 ; FF3DB9  [ 32]
-	.long 0x00ff42b1                                 ; FF3DBD  [ 33]
-	.long 0x00ff42b1                                 ; FF3DC1  [ 34]
-	.long 0x00ff42b1                                 ; FF3DC5  [ 35]
-	.long 0x00ff42b1                                 ; FF3DC9  [ 36]
-	.long 0x00ff42b1                                 ; FF3DCD  [ 37]
-	.long 0x00ff42b1                                 ; FF3DD1  [ 38]
-	.long 0x00ff42b1                                 ; FF3DD5  [ 39]
+	.long Text_FF42A1__FF42B1                                 ; FF3D99  [ 24]
+	.long Text_FF42A1__FF42B1                                 ; FF3D9D  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF3DA1  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF3DA5  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF3DA9  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF3DAD  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF3DB1  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF3DB5  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF3DB9  [ 32]
+	.long Text_FF42A1__FF42B1                                 ; FF3DBD  [ 33]
+	.long Text_FF42A1__FF42B1                                 ; FF3DC1  [ 34]
+	.long Text_FF42A1__FF42B1                                 ; FF3DC5  [ 35]
+	.long Text_FF42A1__FF42B1                                 ; FF3DC9  [ 36]
+	.long Text_FF42A1__FF42B1                                 ; FF3DCD  [ 37]
+	.long Text_FF42A1__FF42B1                                 ; FF3DD1  [ 38]
+	.long Text_FF42A1__FF42B1                                 ; FF3DD5  [ 39]
 	.long LcdKeyRow1_MidiFileSave_Page1              ; FF3DD9  [ 40]
 	.long LcdKeyRow2_MidiFileSave_Page1              ; FF3DDD  [ 41]
 	.long LcdKeyRow3_MidiFileSave_Page1              ; FF3DE1  [ 42]
 	.long LcdKeyRow4_MidiFileSave_Page1              ; FF3DE5  [ 43]
 	.long LcdKeyRow5_MidiFileSave_Page1              ; FF3DE9  [ 44]
-	.long 0x00ff42b1                                 ; FF3DED  [ 45]
-	.long 0x00ff42b1                                 ; FF3DF1  [ 46]
+	.long Text_FF42A1__FF42B1                                 ; FF3DED  [ 45]
+	.long Text_FF42A1__FF42B1                                 ; FF3DF1  [ 46]
 	.long ExitKey_MidiFileSave_Pages0_1_2_3          ; FF3DF5  [ 47]
-	.long 0x00ff42b1                                 ; FF3DF9  [ 48]
-	.long 0x00ff42b1                                 ; FF3DFD  [ 49]
-	.long 0x00ff42b1                                 ; FF3E01  [ 50]
-	.long 0x00ff42b1                                 ; FF3E05  [ 51]
-	.long 0x00ff42b1                                 ; FF3E09  [ 52]
-	.long 0x00ff42b1                                 ; FF3E0D  [ 53]
-	.long 0x00ff42b1                                 ; FF3E11  [ 54]
-	.long 0x00ff42b1                                 ; FF3E15  [ 55]
-	.long 0x00ff42b1                                 ; FF3E19  [ 56]
-	.long 0x00ff42b1                                 ; FF3E1D  [ 57]
-	.long 0x00ff42b1                                 ; FF3E21  [ 58]
-	.long 0x00ff42b1                                 ; FF3E25  [ 59]
-	.long 0x00ff42b1                                 ; FF3E29  [ 60]
-	.long 0x00ff42b1                                 ; FF3E2D  [ 61]
-	.long 0x00ff42b1                                 ; FF3E31  [ 62]
-	.long 0x00ff42b1                                 ; FF3E35  [ 63]
-	.long 0x00ff42b1                                 ; FF3E39  [ 64]
-	.long 0x00ff42b1                                 ; FF3E3D  [ 65]
-	.long 0x00ff42b1                                 ; FF3E41  [ 66]
-	.long 0x00ff42b1                                 ; FF3E45  [ 67]
-	.long 0x00ff42b1                                 ; FF3E49  [ 68]
-	.long 0x00ff42b1                                 ; FF3E4D  [ 69]
-	.long 0x00ff42b1                                 ; FF3E51  [ 70]
-	.long 0x00ff42b1                                 ; FF3E55  [ 71]
-	.long 0x00ff42b1                                 ; FF3E59  [ 72]
-	.long 0x00ff42b1                                 ; FF3E5D  [ 73]
+	.long Text_FF42A1__FF42B1                                 ; FF3DF9  [ 48]
+	.long Text_FF42A1__FF42B1                                 ; FF3DFD  [ 49]
+	.long Text_FF42A1__FF42B1                                 ; FF3E01  [ 50]
+	.long Text_FF42A1__FF42B1                                 ; FF3E05  [ 51]
+	.long Text_FF42A1__FF42B1                                 ; FF3E09  [ 52]
+	.long Text_FF42A1__FF42B1                                 ; FF3E0D  [ 53]
+	.long Text_FF42A1__FF42B1                                 ; FF3E11  [ 54]
+	.long Text_FF42A1__FF42B1                                 ; FF3E15  [ 55]
+	.long Text_FF42A1__FF42B1                                 ; FF3E19  [ 56]
+	.long Text_FF42A1__FF42B1                                 ; FF3E1D  [ 57]
+	.long Text_FF42A1__FF42B1                                 ; FF3E21  [ 58]
+	.long Text_FF42A1__FF42B1                                 ; FF3E25  [ 59]
+	.long Text_FF42A1__FF42B1                                 ; FF3E29  [ 60]
+	.long Text_FF42A1__FF42B1                                 ; FF3E2D  [ 61]
+	.long Text_FF42A1__FF42B1                                 ; FF3E31  [ 62]
+	.long Text_FF42A1__FF42B1                                 ; FF3E35  [ 63]
+	.long Text_FF42A1__FF42B1                                 ; FF3E39  [ 64]
+	.long Text_FF42A1__FF42B1                                 ; FF3E3D  [ 65]
+	.long Text_FF42A1__FF42B1                                 ; FF3E41  [ 66]
+	.long Text_FF42A1__FF42B1                                 ; FF3E45  [ 67]
+	.long Text_FF42A1__FF42B1                                 ; FF3E49  [ 68]
+	.long Text_FF42A1__FF42B1                                 ; FF3E4D  [ 69]
+	.long Text_FF42A1__FF42B1                                 ; FF3E51  [ 70]
+	.long Text_FF42A1__FF42B1                                 ; FF3E55  [ 71]
+	.long Text_FF42A1__FF42B1                                 ; FF3E59  [ 72]
+	.long Text_FF42A1__FF42B1                                 ; FF3E5D  [ 73]
 	.long LcdKeyRow3_MidiFileSave_Page2              ; FF3E61  [ 74]
 	.long LcdKeyRow4_MidiFileSave_Page2              ; FF3E65  [ 75]
-	.long 0x00ff42b1                                 ; FF3E69  [ 76]
-	.long 0x00ff42b1                                 ; FF3E6D  [ 77]
-	.long 0x00ff42b1                                 ; FF3E71  [ 78]
+	.long Text_FF42A1__FF42B1                                 ; FF3E69  [ 76]
+	.long Text_FF42A1__FF42B1                                 ; FF3E6D  [ 77]
+	.long Text_FF42A1__FF42B1                                 ; FF3E71  [ 78]
 	.long ExitKey_MidiFileSave_Pages0_1_2_3          ; FF3E75  [ 79]
-	.long 0x00ff42b1                                 ; FF3E79  [ 80]
-	.long 0x00ff42b1                                 ; FF3E7D  [ 81]
-	.long 0x00ff42b1                                 ; FF3E81  [ 82]
-	.long 0x00ff42b1                                 ; FF3E85  [ 83]
-	.long 0x00ff42b1                                 ; FF3E89  [ 84]
-	.long 0x00ff42b1                                 ; FF3E8D  [ 85]
-	.long 0x00ff42b1                                 ; FF3E91  [ 86]
-	.long 0x00ff42b1                                 ; FF3E95  [ 87]
-	.long 0x00ff42b1                                 ; FF3E99  [ 88]
-	.long 0x00ff42b1                                 ; FF3E9D  [ 89]
-	.long 0x00ff42b1                                 ; FF3EA1  [ 90]
-	.long 0x00ff42b1                                 ; FF3EA5  [ 91]
-	.long 0x00ff42b1                                 ; FF3EA9  [ 92]
-	.long 0x00ff42b1                                 ; FF3EAD  [ 93]
-	.long 0x00ff42b1                                 ; FF3EB1  [ 94]
-	.long 0x00ff42b1                                 ; FF3EB5  [ 95]
-	.long 0x00ff42b1                                 ; FF3EB9  [ 96]
-	.long 0x00ff42b1                                 ; FF3EBD  [ 97]
-	.long 0x00ff42b1                                 ; FF3EC1  [ 98]
-	.long 0x00ff42b1                                 ; FF3EC5  [ 99]
-	.long 0x00ff42b1                                 ; FF3EC9  [100]
-	.long 0x00ff42b1                                 ; FF3ECD  [101]
-	.long 0x00ff42b1                                 ; FF3ED1  [102]
-	.long 0x00ff42b1                                 ; FF3ED5  [103]
-	.long 0x00ff42b1                                 ; FF3ED9  [104]
-	.long 0x00ff42b1                                 ; FF3EDD  [105]
+	.long Text_FF42A1__FF42B1                                 ; FF3E79  [ 80]
+	.long Text_FF42A1__FF42B1                                 ; FF3E7D  [ 81]
+	.long Text_FF42A1__FF42B1                                 ; FF3E81  [ 82]
+	.long Text_FF42A1__FF42B1                                 ; FF3E85  [ 83]
+	.long Text_FF42A1__FF42B1                                 ; FF3E89  [ 84]
+	.long Text_FF42A1__FF42B1                                 ; FF3E8D  [ 85]
+	.long Text_FF42A1__FF42B1                                 ; FF3E91  [ 86]
+	.long Text_FF42A1__FF42B1                                 ; FF3E95  [ 87]
+	.long Text_FF42A1__FF42B1                                 ; FF3E99  [ 88]
+	.long Text_FF42A1__FF42B1                                 ; FF3E9D  [ 89]
+	.long Text_FF42A1__FF42B1                                 ; FF3EA1  [ 90]
+	.long Text_FF42A1__FF42B1                                 ; FF3EA5  [ 91]
+	.long Text_FF42A1__FF42B1                                 ; FF3EA9  [ 92]
+	.long Text_FF42A1__FF42B1                                 ; FF3EAD  [ 93]
+	.long Text_FF42A1__FF42B1                                 ; FF3EB1  [ 94]
+	.long Text_FF42A1__FF42B1                                 ; FF3EB5  [ 95]
+	.long Text_FF42A1__FF42B1                                 ; FF3EB9  [ 96]
+	.long Text_FF42A1__FF42B1                                 ; FF3EBD  [ 97]
+	.long Text_FF42A1__FF42B1                                 ; FF3EC1  [ 98]
+	.long Text_FF42A1__FF42B1                                 ; FF3EC5  [ 99]
+	.long Text_FF42A1__FF42B1                                 ; FF3EC9  [100]
+	.long Text_FF42A1__FF42B1                                 ; FF3ECD  [101]
+	.long Text_FF42A1__FF42B1                                 ; FF3ED1  [102]
+	.long Text_FF42A1__FF42B1                                 ; FF3ED5  [103]
+	.long Text_FF42A1__FF42B1                                 ; FF3ED9  [104]
+	.long Text_FF42A1__FF42B1                                 ; FF3EDD  [105]
 	.long LcdKeyRow3_MidiFileSave_Page3              ; FF3EE1  [106]
 	.long LcdKeyRow4_MidiFileSave_Page3              ; FF3EE5  [107]
-	.long 0x00ff42b1                                 ; FF3EE9  [108]
-	.long 0x00ff42b1                                 ; FF3EED  [109]
-	.long 0x00ff42b1                                 ; FF3EF1  [110]
+	.long Text_FF42A1__FF42B1                                 ; FF3EE9  [108]
+	.long Text_FF42A1__FF42B1                                 ; FF3EED  [109]
+	.long Text_FF42A1__FF42B1                                 ; FF3EF1  [110]
 	.long ExitKey_MidiFileSave_Pages0_1_2_3          ; FF3EF5  [111]
-	.long 0x00ff42b1                                 ; FF3EF9  [112]
-	.long 0x00ff42b1                                 ; FF3EFD  [113]
-	.long 0x00ff42b1                                 ; FF3F01  [114]
-	.long 0x00ff42b1                                 ; FF3F05  [115]
-	.long 0x00ff42b1                                 ; FF3F09  [116]
-	.long 0x00ff42b1                                 ; FF3F0D  [117]
-	.long 0x00ff42b1                                 ; FF3F11  [118]
-	.long 0x00ff42b1                                 ; FF3F15  [119]
-	.long 0x00ff42b1                                 ; FF3F19  [120]
-	.long 0x00ff42b1                                 ; FF3F1D  [121]
-	.long 0x00ff42b1                                 ; FF3F21  [122]
-	.long 0x00ff42b1                                 ; FF3F25  [123]
-	.long 0x00ff42b1                                 ; FF3F29  [124]
-	.long 0x00ff42b1                                 ; FF3F2D  [125]
-	.long 0x00ff42b1                                 ; FF3F31  [126]
-	.long 0x00ff42b1                                 ; FF3F35  [127]
-	.long 0x00ff42b1                                 ; FF3F39  [128]
-	.long 0x00ff42b1                                 ; FF3F3D  [129]
-	.long 0x00ff42b1                                 ; FF3F41  [130]
+	.long Text_FF42A1__FF42B1                                 ; FF3EF9  [112]
+	.long Text_FF42A1__FF42B1                                 ; FF3EFD  [113]
+	.long Text_FF42A1__FF42B1                                 ; FF3F01  [114]
+	.long Text_FF42A1__FF42B1                                 ; FF3F05  [115]
+	.long Text_FF42A1__FF42B1                                 ; FF3F09  [116]
+	.long Text_FF42A1__FF42B1                                 ; FF3F0D  [117]
+	.long Text_FF42A1__FF42B1                                 ; FF3F11  [118]
+	.long Text_FF42A1__FF42B1                                 ; FF3F15  [119]
+	.long Text_FF42A1__FF42B1                                 ; FF3F19  [120]
+	.long Text_FF42A1__FF42B1                                 ; FF3F1D  [121]
+	.long Text_FF42A1__FF42B1                                 ; FF3F21  [122]
+	.long Text_FF42A1__FF42B1                                 ; FF3F25  [123]
+	.long Text_FF42A1__FF42B1                                 ; FF3F29  [124]
+	.long Text_FF42A1__FF42B1                                 ; FF3F2D  [125]
+	.long Text_FF42A1__FF42B1                                 ; FF3F31  [126]
+	.long Text_FF42A1__FF42B1                                 ; FF3F35  [127]
+	.long Text_FF42A1__FF42B1                                 ; FF3F39  [128]
+	.long Text_FF42A1__FF42B1                                 ; FF3F3D  [129]
+	.long Text_FF42A1__FF42B1                                 ; FF3F41  [130]
 	.long sub_FF657B                                 ; FF3F45  [131]
-	.long 0x00ff42b1                                 ; FF3F49  [132]
-	.long 0x00ff42b1                                 ; FF3F4D  [133]
-	.long 0x00ff42b1                                 ; FF3F51  [134]
-	.long 0x00ff42b1                                 ; FF3F55  [135]
-	.long 0x00ff42b1                                 ; FF3F59  [136]
-	.long 0x00ff42b1                                 ; FF3F5D  [137]
+	.long Text_FF42A1__FF42B1                                 ; FF3F49  [132]
+	.long Text_FF42A1__FF42B1                                 ; FF3F4D  [133]
+	.long Text_FF42A1__FF42B1                                 ; FF3F51  [134]
+	.long Text_FF42A1__FF42B1                                 ; FF3F55  [135]
+	.long Text_FF42A1__FF42B1                                 ; FF3F59  [136]
+	.long Text_FF42A1__FF42B1                                 ; FF3F5D  [137]
 	.long LcdKeyRow3_MidiFileSave_Page4              ; FF3F61  [138]
 	.long LcdKeyRow4_MidiFileSave_Page4              ; FF3F65  [139]
-	.long 0x00ff42b1                                 ; FF3F69  [140]
-	.long 0x00ff42b1                                 ; FF3F6D  [141]
-	.long 0x00ff42b1                                 ; FF3F71  [142]
+	.long Text_FF42A1__FF42B1                                 ; FF3F69  [140]
+	.long Text_FF42A1__FF42B1                                 ; FF3F6D  [141]
+	.long Text_FF42A1__FF42B1                                 ; FF3F71  [142]
 	.long ExitKey_MidiFileSave_Page4                 ; FF3F75  [143]
-	.long 0x00ff42b1                                 ; FF3F79  [144]
-	.long 0x00ff42b1                                 ; FF3F7D  [145]
-	.long 0x00ff42b1                                 ; FF3F81  [146]
-	.long 0x00ff42b1                                 ; FF3F85  [147]
-	.long 0x00ff42b1                                 ; FF3F89  [148]
+	.long Text_FF42A1__FF42B1                                 ; FF3F79  [144]
+	.long Text_FF42A1__FF42B1                                 ; FF3F7D  [145]
+	.long Text_FF42A1__FF42B1                                 ; FF3F81  [146]
+	.long Text_FF42A1__FF42B1                                 ; FF3F85  [147]
+	.long Text_FF42A1__FF42B1                                 ; FF3F89  [148]
 	.long sub_FF657B                                 ; FF3F8D  [149]
-	.long 0x00ff42b1                                 ; FF3F91  [150]
-	.long 0x00ff42b1                                 ; FF3F95  [151]
-	.long 0x00ff42b1                                 ; FF3F99  [152]
-	.long 0x00ff42b1                                 ; FF3F9D  [153]
-	.long 0x00ff42b1                                 ; FF3FA1  [154]
-	.long 0x00ff42b1                                 ; FF3FA5  [155]
-	.long 0x00ff42b1                                 ; FF3FA9  [156]
-	.long 0x00ff42b1                                 ; FF3FAD  [157]
-	.long 0x00ff42b1                                 ; FF3FB1  [158]
-	.long 0x00ff42b1                                 ; FF3FB5  [159]
-	.long 0x00ff42b1                                 ; FF3FB9  [160]
-	.long 0x00ff42b1                                 ; FF3FBD  [161]
-	.long 0x00ff42b1                                 ; FF3FC1  [162]
-	.long 0x00ff42b1                                 ; FF3FC5  [163]
-	.long 0x00ff42b1                                 ; FF3FC9  [164]
-	.long 0x00ff42b1                                 ; FF3FCD  [165]
-	.long 0x00ff42b1                                 ; FF3FD1  [166]
-	.long 0x00ff42b1                                 ; FF3FD5  [167]
-	.long 0x00ff42b1                                 ; FF3FD9  [168]
-	.long 0x00ff42b1                                 ; FF3FDD  [169]
+	.long Text_FF42A1__FF42B1                                 ; FF3F91  [150]
+	.long Text_FF42A1__FF42B1                                 ; FF3F95  [151]
+	.long Text_FF42A1__FF42B1                                 ; FF3F99  [152]
+	.long Text_FF42A1__FF42B1                                 ; FF3F9D  [153]
+	.long Text_FF42A1__FF42B1                                 ; FF3FA1  [154]
+	.long Text_FF42A1__FF42B1                                 ; FF3FA5  [155]
+	.long Text_FF42A1__FF42B1                                 ; FF3FA9  [156]
+	.long Text_FF42A1__FF42B1                                 ; FF3FAD  [157]
+	.long Text_FF42A1__FF42B1                                 ; FF3FB1  [158]
+	.long Text_FF42A1__FF42B1                                 ; FF3FB5  [159]
+	.long Text_FF42A1__FF42B1                                 ; FF3FB9  [160]
+	.long Text_FF42A1__FF42B1                                 ; FF3FBD  [161]
+	.long Text_FF42A1__FF42B1                                 ; FF3FC1  [162]
+	.long Text_FF42A1__FF42B1                                 ; FF3FC5  [163]
+	.long Text_FF42A1__FF42B1                                 ; FF3FC9  [164]
+	.long Text_FF42A1__FF42B1                                 ; FF3FCD  [165]
+	.long Text_FF42A1__FF42B1                                 ; FF3FD1  [166]
+	.long Text_FF42A1__FF42B1                                 ; FF3FD5  [167]
+	.long Text_FF42A1__FF42B1                                 ; FF3FD9  [168]
+	.long Text_FF42A1__FF42B1                                 ; FF3FDD  [169]
 	.long LcdKeyRow3_MidiFileSave_Page5              ; FF3FE1  [170]
 	.long LcdKeyRow4_MidiFileSave_Page5              ; FF3FE5  [171]
-	.long 0x00ff42b1                                 ; FF3FE9  [172]
-	.long 0x00ff42b1                                 ; FF3FED  [173]
-	.long 0x00ff42b1                                 ; FF3FF1  [174]
+	.long Text_FF42A1__FF42B1                                 ; FF3FE9  [172]
+	.long Text_FF42A1__FF42B1                                 ; FF3FED  [173]
+	.long Text_FF42A1__FF42B1                                 ; FF3FF1  [174]
 	.long ExitKey_MidiFileSave_Page5                 ; FF3FF5  [175]
-	.long 0x00ff42b1                                 ; FF3FF9  [176]
-	.long 0x00ff42b1                                 ; FF3FFD  [177]
-	.long 0x00ff42b1                                 ; FF4001  [178]
-	.long 0x00ff42b1                                 ; FF4005  [179]
-	.long 0x00ff42b1                                 ; FF4009  [180]
-	.long 0x00ff42b1                                 ; FF400D  [181]
-	.long 0x00ff42b1                                 ; FF4011  [182]
-	.long 0x00ff42b1                                 ; FF4015  [183]
-	.long 0x00ff42b1                                 ; FF4019  [184]
-	.long 0x00ff42b1                                 ; FF401D  [185]
-	.long 0x00ff42b1                                 ; FF4021  [186]
-	.long 0x00ff42b1                                 ; FF4025  [187]
-	.long 0x00ff42b1                                 ; FF4029  [188]
-	.long 0x00ff42b1                                 ; FF402D  [189]
-	.long 0x00ff42b1                                 ; FF4031  [190]
-	.long 0x00ff42b1                                 ; FF4035  [191]
+	.long Text_FF42A1__FF42B1                                 ; FF3FF9  [176]
+	.long Text_FF42A1__FF42B1                                 ; FF3FFD  [177]
+	.long Text_FF42A1__FF42B1                                 ; FF4001  [178]
+	.long Text_FF42A1__FF42B1                                 ; FF4005  [179]
+	.long Text_FF42A1__FF42B1                                 ; FF4009  [180]
+	.long Text_FF42A1__FF42B1                                 ; FF400D  [181]
+	.long Text_FF42A1__FF42B1                                 ; FF4011  [182]
+	.long Text_FF42A1__FF42B1                                 ; FF4015  [183]
+	.long Text_FF42A1__FF42B1                                 ; FF4019  [184]
+	.long Text_FF42A1__FF42B1                                 ; FF401D  [185]
+	.long Text_FF42A1__FF42B1                                 ; FF4021  [186]
+	.long Text_FF42A1__FF42B1                                 ; FF4025  [187]
+	.long Text_FF42A1__FF42B1                                 ; FF4029  [188]
+	.long Text_FF42A1__FF42B1                                 ; FF402D  [189]
+	.long Text_FF42A1__FF42B1                                 ; FF4031  [190]
+	.long Text_FF42A1__FF42B1                                 ; FF4035  [191]
 ; ---------------------------------------------------------------------
 ; Table_FF4039 -- FOUR 16-bit values: 0x0008, 0x0009, 0x0028, 0x0029
 ;
@@ -181241,14 +181319,14 @@ Dispatch_FF4049:
 	.long sub_FF6CF0                                 ; FF4061  [  6]
 	.long sub_FF6CF0                                 ; FF4065  [  7]
 	.long LcdKeyRow1_L0adSingleS0und_Page0           ; FF4069  [  8]
-	.long 0x00ff42b1                                 ; FF406D  [  9]
-	.long 0x00ff42b1                                 ; FF4071  [ 10]
-	.long 0x00ff42b1                                 ; FF4075  [ 11]
-	.long 0x00ff42b1                                 ; FF4079  [ 12]
-	.long 0x00ff42b1                                 ; FF407D  [ 13]
-	.long 0x00ff42b1                                 ; FF4081  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF406D  [  9]
+	.long Text_FF42A1__FF42B1                                 ; FF4071  [ 10]
+	.long Text_FF42A1__FF42B1                                 ; FF4075  [ 11]
+	.long Text_FF42A1__FF42B1                                 ; FF4079  [ 12]
+	.long Text_FF42A1__FF42B1                                 ; FF407D  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF4081  [ 14]
 	.long ExitKey_L0adSingleS0und_Pages0_1           ; FF4085  [ 15]
-	.long 0x00ff42b1                                 ; FF4089  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF4089  [ 16]
 	.long sub_FF6906                                 ; FF408D  [ 17]
 	.long sub_FF6B35                                 ; FF4091  [ 18]
 	.long sub_FF6BD2                                 ; FF4095  [ 19]
@@ -181257,13 +181335,13 @@ Dispatch_FF4049:
 	.long sub_FF6C9E                                 ; FF40A1  [ 22]
 	.long sub_FF6CF0                                 ; FF40A5  [ 23]
 	.long sub_FF6CF0                                 ; FF40A9  [ 24]
-	.long 0x00ff42b1                                 ; FF40AD  [ 25]
-	.long 0x00ff42b1                                 ; FF40B1  [ 26]
-	.long 0x00ff42b1                                 ; FF40B5  [ 27]
-	.long 0x00ff42b1                                 ; FF40B9  [ 28]
-	.long 0x00ff42b1                                 ; FF40BD  [ 29]
-	.long 0x00ff42b1                                 ; FF40C1  [ 30]
-	.long 0x00ff42b1                                 ; FF40C5  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF40AD  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF40B1  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF40B5  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF40B9  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF40BD  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF40C1  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF40C5  [ 31]
 	.long sub_FF6906                                 ; FF40C9  [ 32]
 	.long sub_FF6924                                 ; FF40CD  [ 33]
 	.long sub_FF69B9                                 ; FF40D1  [ 34]
@@ -181273,14 +181351,14 @@ Dispatch_FF4049:
 	.long sub_FF6A6C                                 ; FF40E1  [ 38]
 	.long sub_FF6A6C                                 ; FF40E5  [ 39]
 	.long LcdKeyRow1_L0adSingleS0und_Page1           ; FF40E9  [ 40]
-	.long 0x00ff42b1                                 ; FF40ED  [ 41]
-	.long 0x00ff42b1                                 ; FF40F1  [ 42]
-	.long 0x00ff42b1                                 ; FF40F5  [ 43]
-	.long 0x00ff42b1                                 ; FF40F9  [ 44]
-	.long 0x00ff42b1                                 ; FF40FD  [ 45]
-	.long 0x00ff42b1                                 ; FF4101  [ 46]
+	.long Text_FF42A1__FF42B1                                 ; FF40ED  [ 41]
+	.long Text_FF42A1__FF42B1                                 ; FF40F1  [ 42]
+	.long Text_FF42A1__FF42B1                                 ; FF40F5  [ 43]
+	.long Text_FF42A1__FF42B1                                 ; FF40F9  [ 44]
+	.long Text_FF42A1__FF42B1                                 ; FF40FD  [ 45]
+	.long Text_FF42A1__FF42B1                                 ; FF4101  [ 46]
 	.long ExitKey_L0adSingleS0und_Pages0_1           ; FF4105  [ 47]
-	.long 0x00ff42b1                                 ; FF4109  [ 48]
+	.long Text_FF42A1__FF42B1                                 ; FF4109  [ 48]
 	.long sub_FF6906                                 ; FF410D  [ 49]
 	.long sub_FF6924                                 ; FF4111  [ 50]
 	.long sub_FF69B9                                 ; FF4115  [ 51]
@@ -181289,13 +181367,13 @@ Dispatch_FF4049:
 	.long sub_FF6A17                                 ; FF4121  [ 54]
 	.long sub_FF6A6C                                 ; FF4125  [ 55]
 	.long sub_FF6A6C                                 ; FF4129  [ 56]
-	.long 0x00ff42b1                                 ; FF412D  [ 57]
-	.long 0x00ff42b1                                 ; FF4131  [ 58]
-	.long 0x00ff42b1                                 ; FF4135  [ 59]
-	.long 0x00ff42b1                                 ; FF4139  [ 60]
-	.long 0x00ff42b1                                 ; FF413D  [ 61]
-	.long 0x00ff42b1                                 ; FF4141  [ 62]
-	.long 0x00ff42b1                                 ; FF4145  [ 63]
+	.long Text_FF42A1__FF42B1                                 ; FF412D  [ 57]
+	.long Text_FF42A1__FF42B1                                 ; FF4131  [ 58]
+	.long Text_FF42A1__FF42B1                                 ; FF4135  [ 59]
+	.long Text_FF42A1__FF42B1                                 ; FF4139  [ 60]
+	.long Text_FF42A1__FF42B1                                 ; FF413D  [ 61]
+	.long Text_FF42A1__FF42B1                                 ; FF4141  [ 62]
+	.long Text_FF42A1__FF42B1                                 ; FF4145  [ 63]
 ; ---------------------------------------------------------------------
 ; Dispatch_FF4149 -- TWO handler pointers, indexed by the page byte (0x2229)
 ; Read by: 0xFF6DB7.  ENTRY COUNT 2, from `cp (0x2229),0x02 / jr NC`.
@@ -181344,69 +181422,69 @@ Dispatch_FF4149:
 ; ---------------------------------------------------------------------
 Dispatch_FF4151:
 	.long sub_FF6906                                 ; FF4151  [  0]
-	.long 0x00ff42b1                                 ; FF4155  [  1]
+	.long Text_FF42A1__FF42B1                                 ; FF4155  [  1]
 	.long sub_FF6F86                                 ; FF4159  [  2]
 	.long sub_FF6F86                                 ; FF415D  [  3]
-	.long 0x00ff42b1                                 ; FF4161  [  4]
+	.long Text_FF42A1__FF42B1                                 ; FF4161  [  4]
 	.long sub_FF6C9E                                 ; FF4165  [  5]
 	.long sub_FF6FC0                                 ; FF4169  [  6]
 	.long sub_FF6FC0                                 ; FF416D  [  7]
 	.long LcdKeyRow1_L0adSingleC0mbination_Page0     ; FF4171  [  8]
-	.long 0x00ff42b1                                 ; FF4175  [  9]
-	.long 0x00ff42b1                                 ; FF4179  [ 10]
-	.long 0x00ff42b1                                 ; FF417D  [ 11]
-	.long 0x00ff42b1                                 ; FF4181  [ 12]
-	.long 0x00ff42b1                                 ; FF4185  [ 13]
-	.long 0x00ff42b1                                 ; FF4189  [ 14]
+	.long Text_FF42A1__FF42B1                                 ; FF4175  [  9]
+	.long Text_FF42A1__FF42B1                                 ; FF4179  [ 10]
+	.long Text_FF42A1__FF42B1                                 ; FF417D  [ 11]
+	.long Text_FF42A1__FF42B1                                 ; FF4181  [ 12]
+	.long Text_FF42A1__FF42B1                                 ; FF4185  [ 13]
+	.long Text_FF42A1__FF42B1                                 ; FF4189  [ 14]
 	.long ExitKey_L0adSingleC0mbination_Pages0_1     ; FF418D  [ 15]
-	.long 0x00ff42b1                                 ; FF4191  [ 16]
+	.long Text_FF42A1__FF42B1                                 ; FF4191  [ 16]
 	.long sub_FF6906                                 ; FF4195  [ 17]
-	.long 0x00ff42b1                                 ; FF4199  [ 18]
+	.long Text_FF42A1__FF42B1                                 ; FF4199  [ 18]
 	.long sub_FF6F86                                 ; FF419D  [ 19]
 	.long sub_FF6F86                                 ; FF41A1  [ 20]
-	.long 0x00ff42b1                                 ; FF41A5  [ 21]
+	.long Text_FF42A1__FF42B1                                 ; FF41A5  [ 21]
 	.long sub_FF6C9E                                 ; FF41A9  [ 22]
 	.long sub_FF6FC0                                 ; FF41AD  [ 23]
 	.long sub_FF6FC0                                 ; FF41B1  [ 24]
-	.long 0x00ff42b1                                 ; FF41B5  [ 25]
-	.long 0x00ff42b1                                 ; FF41B9  [ 26]
-	.long 0x00ff42b1                                 ; FF41BD  [ 27]
-	.long 0x00ff42b1                                 ; FF41C1  [ 28]
-	.long 0x00ff42b1                                 ; FF41C5  [ 29]
-	.long 0x00ff42b1                                 ; FF41C9  [ 30]
-	.long 0x00ff42b1                                 ; FF41CD  [ 31]
+	.long Text_FF42A1__FF42B1                                 ; FF41B5  [ 25]
+	.long Text_FF42A1__FF42B1                                 ; FF41B9  [ 26]
+	.long Text_FF42A1__FF42B1                                 ; FF41BD  [ 27]
+	.long Text_FF42A1__FF42B1                                 ; FF41C1  [ 28]
+	.long Text_FF42A1__FF42B1                                 ; FF41C5  [ 29]
+	.long Text_FF42A1__FF42B1                                 ; FF41C9  [ 30]
+	.long Text_FF42A1__FF42B1                                 ; FF41CD  [ 31]
 	.long sub_FF6906                                 ; FF41D1  [ 32]
-	.long 0x00ff42b1                                 ; FF41D5  [ 33]
+	.long Text_FF42A1__FF42B1                                 ; FF41D5  [ 33]
 	.long sub_FF69B9                                 ; FF41D9  [ 34]
 	.long sub_FF69B9                                 ; FF41DD  [ 35]
-	.long 0x00ff42b1                                 ; FF41E1  [ 36]
-	.long 0x00ff42b1                                 ; FF41E5  [ 37]
+	.long Text_FF42A1__FF42B1                                 ; FF41E1  [ 36]
+	.long Text_FF42A1__FF42B1                                 ; FF41E5  [ 37]
 	.long sub_FF6A6C                                 ; FF41E9  [ 38]
 	.long sub_FF6A6C                                 ; FF41ED  [ 39]
 	.long LcdKeyRow1_L0adSingleC0mbination_Page1     ; FF41F1  [ 40]
-	.long 0x00ff42b1                                 ; FF41F5  [ 41]
-	.long 0x00ff42b1                                 ; FF41F9  [ 42]
-	.long 0x00ff42b1                                 ; FF41FD  [ 43]
-	.long 0x00ff42b1                                 ; FF4201  [ 44]
-	.long 0x00ff42b1                                 ; FF4205  [ 45]
-	.long 0x00ff42b1                                 ; FF4209  [ 46]
+	.long Text_FF42A1__FF42B1                                 ; FF41F5  [ 41]
+	.long Text_FF42A1__FF42B1                                 ; FF41F9  [ 42]
+	.long Text_FF42A1__FF42B1                                 ; FF41FD  [ 43]
+	.long Text_FF42A1__FF42B1                                 ; FF4201  [ 44]
+	.long Text_FF42A1__FF42B1                                 ; FF4205  [ 45]
+	.long Text_FF42A1__FF42B1                                 ; FF4209  [ 46]
 	.long ExitKey_L0adSingleC0mbination_Pages0_1     ; FF420D  [ 47]
-	.long 0x00ff42b1                                 ; FF4211  [ 48]
+	.long Text_FF42A1__FF42B1                                 ; FF4211  [ 48]
 	.long sub_FF6906                                 ; FF4215  [ 49]
-	.long 0x00ff42b1                                 ; FF4219  [ 50]
+	.long Text_FF42A1__FF42B1                                 ; FF4219  [ 50]
 	.long sub_FF69B9                                 ; FF421D  [ 51]
 	.long sub_FF69B9                                 ; FF4221  [ 52]
-	.long 0x00ff42b1                                 ; FF4225  [ 53]
-	.long 0x00ff42b1                                 ; FF4229  [ 54]
+	.long Text_FF42A1__FF42B1                                 ; FF4225  [ 53]
+	.long Text_FF42A1__FF42B1                                 ; FF4229  [ 54]
 	.long sub_FF6A6C                                 ; FF422D  [ 55]
 	.long sub_FF6A6C                                 ; FF4231  [ 56]
-	.long 0x00ff42b1                                 ; FF4235  [ 57]
-	.long 0x00ff42b1                                 ; FF4239  [ 58]
-	.long 0x00ff42b1                                 ; FF423D  [ 59]
-	.long 0x00ff42b1                                 ; FF4241  [ 60]
-	.long 0x00ff42b1                                 ; FF4245  [ 61]
-	.long 0x00ff42b1                                 ; FF4249  [ 62]
-	.long 0x00ff42b1                                 ; FF424D  [ 63]
+	.long Text_FF42A1__FF42B1                                 ; FF4235  [ 57]
+	.long Text_FF42A1__FF42B1                                 ; FF4239  [ 58]
+	.long Text_FF42A1__FF42B1                                 ; FF423D  [ 59]
+	.long Text_FF42A1__FF42B1                                 ; FF4241  [ 60]
+	.long Text_FF42A1__FF42B1                                 ; FF4245  [ 61]
+	.long Text_FF42A1__FF42B1                                 ; FF4249  [ 62]
+	.long Text_FF42A1__FF42B1                                 ; FF424D  [ 63]
 ; ---------------------------------------------------------------------
 ; PtrTable_FF4251 -- SIXTEEN 32-bit RAM addresses
 ;
@@ -181473,6 +181551,7 @@ Text_FF4291:
 ; ---------------------------------------------------------------------
 Text_FF42A1:
 	.byte 0x55, 0x31, 0x20, 0x2d, 0x55, 0x32, 0x20, 0x2d, 0x55, 0x44, 0x31, 0x2d, 0x55, 0x44, 0x32, 0x2d  ; FF42A1
+Text_FF42A1__FF42B1:
 	ret                                                  ; FF42B1  0e
 sub_FF42B2:
 	call T_CallbackQueue_ResetAndRestartTask2            ; FF42B2  1d 80 2e f4
@@ -191803,12 +191882,12 @@ SplashImage_Wordmark:
 ;
 VECTORS:
 	.long RESET			; 0x00  RESET
-	.long 0x00F82D02	; 0x04  SWI1
-	.long 0x00F82D03	; 0x08  SWI2 / INTUNDEF
-	.long 0x00F82D04	; 0x0C  SWI3
-	.long 0x00F82D05	; 0x10  SWI4
-	.long 0x00F82D06	; 0x14  SWI5
-	.long 0x00F82D07	; 0x18  SWI6
+	.long IRQ_UnusedVector_SWI1	; 0x04  SWI1
+	.long IRQ_UnusedVector_SWI2	; 0x08  SWI2 / INTUNDEF
+	.long IRQ_UnusedVector_SWI3	; 0x0C  SWI3
+	.long IRQ_UnusedVector_SWI4	; 0x10  SWI4
+	.long IRQ_UnusedVector_SWI5	; 0x14  SWI5
+	.long IRQ_UnusedVector_SWI6	; 0x18  SWI6
 	.long T_SWI7_ServiceCall_Dispatch ; 0x1C  SWI7 -> prom_b thunk `jp 0xF8E9A5` =
 				;       SWI7_ServiceCall_Dispatch, the 64-slot
 				;       graphics service call
@@ -191816,7 +191895,7 @@ VECTORS:
 	.long INTWD_Reboot		; 0x24  INTWD -- jumps back to RESET
 	.long T_INT0_LinkByte ; 0x28  INT0       -> prom_b thunk (file 0x40EDC:
 				;                     `jp 0xF8E47F`)
-	.long 0x00F82D08	; 0x2C  INT4
+	.long IRQ_UnusedVector_INT4	; 0x2C  INT4
 	.long T_INT5_Dev7B_Receive_Alias ; 0x30  INT5
 	.long T_INT6_SC1_PeerRequest ; 0x34  INT6
 	.long IRQ_UnusedVector_Hang	; 0x38  INT7   ⚠ not a stub -- it HANGS

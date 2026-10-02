@@ -1,0 +1,44 @@
+{
+ "name": "proma-irq-sled",
+ "files": [
+  "wsa1/prom_a/wsa1_prom_a.s"
+ ],
+ "renames": [
+  {
+   "old": "INTWD_Reboot__F82D02",
+   "new": "IRQ_UnusedVector_SWI1",
+   "evidence": "vector table slot 0x04 lands on this NOP of the sled that falls into IRQ_UnusedVector_Hang (the header above it)"
+  },
+  {
+   "old": "INTWD_Reboot__F82D03",
+   "new": "IRQ_UnusedVector_SWI2",
+   "evidence": "vector table slot 0x08 lands on this NOP of the sled that falls into IRQ_UnusedVector_Hang (the header above it)"
+  },
+  {
+   "old": "INTWD_Reboot__F82D04",
+   "new": "IRQ_UnusedVector_SWI3",
+   "evidence": "vector table slot 0x0C lands on this NOP of the sled that falls into IRQ_UnusedVector_Hang (the header above it)"
+  },
+  {
+   "old": "INTWD_Reboot__F82D05",
+   "new": "IRQ_UnusedVector_SWI4",
+   "evidence": "vector table slot 0x10 lands on this NOP of the sled that falls into IRQ_UnusedVector_Hang (the header above it)"
+  },
+  {
+   "old": "INTWD_Reboot__F82D06",
+   "new": "IRQ_UnusedVector_SWI5",
+   "evidence": "vector table slot 0x14 lands on this NOP of the sled that falls into IRQ_UnusedVector_Hang (the header above it)"
+  },
+  {
+   "old": "INTWD_Reboot__F82D07",
+   "new": "IRQ_UnusedVector_SWI6",
+   "evidence": "vector table slot 0x18 lands on this NOP of the sled that falls into IRQ_UnusedVector_Hang (the header above it)"
+  },
+  {
+   "old": "INTWD_Reboot__F82D08",
+   "new": "IRQ_UnusedVector_INT4",
+   "evidence": "vector table slot 0x2C lands on this NOP of the sled that falls into IRQ_UnusedVector_Hang (the header above it)"
+  }
+ ],
+ "headers": []
+}
