@@ -1,0 +1,27 @@
+images: v10,v9,v7,v142,subboot,tabledata,customdata,hdae5000,prom_a,prom_b,prom_c,prom_d; source files scanned: 785 (.s reached by each root's .include graph, plus the tree's .c/.h); ELFs from: /home/fsanches/compartilhado/kn5000-roms-disasm/rebuilt_ROMs, /home/fsanches/compartilhado/kn5000-roms-disasm/wsa1/rebuilt_ROMs
+not reached by any include (not scanned): v10=20, v9=20, v7=20
+
+HITS (strong kinds) per check per image
+                         v10         v9         v7       v142    subboot  tabledata customdata   hdae5000     prom_a     prom_b     prom_c     prom_d    total
+stale-names              651        654        639        268          0       1062          1         89        148        184         40        385     4121
+unread-claims             19         19         19          1          0          0          0          0          0          1          0          0       59
+table-counts               2          2          2          0          0          0          0          0          0          0          0          0        6
+header-addrs               4         17        272          0          0          0          0          3          0          0          3          0      299
+empty-templates           35         35         35          0          0          0          0          0          0          0          0          0      105
+
+WEAK-* rows (same TSVs, filter on detail prefix)
+                         v10         v9         v7       v142    subboot  tabledata customdata   hdae5000     prom_a     prom_b     prom_c     prom_d    total
+stale-names             2929       2929       2880        153          4        328         23       2441        595        638        210        388    13518
+unread-claims              5          5          4          0          0          4          0          0          3          4          0          0       25
+table-counts              77         77         79        173          0          1          0          1         50         97          6       1353     1914
+header-addrs               0          0          3         55          0          0          0         26        176         37        145          6      448
+empty-templates           13         13         10          1          0          4          0          1          0          0          0          0       42
+
+stale-names of which STALE-RENAMED (on the OLD side of scripts/renaming): v10=101, v9=101, v7=99, v142=6, subboot=0, tabledata=5, customdata=0, hdae5000=1, prom_a=0, prom_b=0, prom_c=0, prom_d=0, total=313
+unread-claims: claim blocks whose range could not be resolved (skipped): v10=4, v9=4, v7=4, v142=3, subboot=0, tabledata=4, customdata=0, hdae5000=1, prom_a=0, prom_b=1, prom_c=1, prom_d=0
+
+TSV: /home/fsanches/compartilhado/disasm-lanes/claims-lint/out-fb30d288/stale-names.tsv
+TSV: /home/fsanches/compartilhado/disasm-lanes/claims-lint/out-fb30d288/unread-claims.tsv
+TSV: /home/fsanches/compartilhado/disasm-lanes/claims-lint/out-fb30d288/table-counts.tsv
+TSV: /home/fsanches/compartilhado/disasm-lanes/claims-lint/out-fb30d288/header-addrs.tsv
+TSV: /home/fsanches/compartilhado/disasm-lanes/claims-lint/out-fb30d288/empty-templates.tsv
