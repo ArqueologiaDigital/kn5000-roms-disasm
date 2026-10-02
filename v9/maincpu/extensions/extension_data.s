@@ -66,7 +66,7 @@
 ; Reader: MainChordPre (kn5000_v10_program.s, 0xFC304E) builds the chord
 ; display string with Strcat: the root-note name (RAM byte 0x8D40 x4 into
 ; Naka_MemoryC_Screens), then the CHORD-TYPE name -- RAM byte 0x8D42, `sla
-; wa, 2`, `lda xbc, (0xecff6a:24)`, `ld_sril3` -- then "on" or "  "
+; wa, 2`, `lda xbc, (0xecff6a:24)`, `ld r, (xrr+rr)` -- then "on" or "  "
 ; (ChordStr_On / ChordStr_Blank, loaded as the immediates 0xED1C96 and
 ; 0xED1C9A).  The pointer table it indexes is 64 entries, 0xECFF6A-0xED0069:
 ; entries 0-39 lie in MemScreen_Blank's blob in ui_widgets/style_bitmaps.s
@@ -502,7 +502,7 @@ MasterSetup_GetNameB_DrawString_Str_Fmtc_Fmtd_Fmtd:	aligned_string "%c:%d/%d  "
 ; Eleven procedures in ui/ui_mode_handlers.s dispatch the seven events
 ; 0x1C00017-0x1C0001D the same way: `sub x, 0x1c00017`, bounds 0..6, `add
 ; x, x`, add a table address, `ld wa/bc, (table)`, `lda xix, (<base>:24)`,
-; `jp_ind` -- so each *_EventOffsets table is SEVEN u16 offsets FROM ITS
+; `jp t, (xrr+rr)` -- so each *_EventOffsets table is SEVEN u16 offsets FROM ITS
 ; BASE LABEL (0 = the base itself).  The procedure names are the originals
 ; from Toshi_Function_Table / Toshi_ApFunctionName_Table.  The code still
 ; reaches these tables through positional names Str_StoreTotalSetting_DE_0xNN
@@ -2275,7 +2275,7 @@ Str_ErrorDialog_NeedsRepairing:	aligned_string "this unit needs repairing."
 ; (ENCODER_LUT_*; listed also in midi_encoder_constants.s) and read by the
 ; Encoder_Process* routines of midi/midi_encoder_routines.s, e.g.
 ; Encoder_ProcessVolume (0xFC6CAE): `extz wa` / `lda xbc,
-; (ENCODER_LUT_VOLUME:24)` / `ldb_sri a` -- one byte per raw controller
+; (ENCODER_LUT_VOLUME:24)` / `ld a, (xrr+rr)` -- one byte per raw controller
 ; value.  They are monotonic curves, which is why earlier passes wrote whole
 ; stretches of them as .ascii "!\"#$%&..."; they are bytes, not text.
 ;
@@ -2657,7 +2657,7 @@ CombinedPreset_8:
 ; record SndParam_FetchSequencerParams (0xFC95CE) moves byte 0 to RAM 0x9127
 ; (the command), byte 1 to 0x9128/0x912F and byte 2 to 0x9130; the
 ; dispatcher then does `ld a, (0x9127)` / `sla wa, 2` / `lda xbc,
-; (SoundProgram_DispatchTable)` / `ld_sril3` / `call (xhl)`.
+; (SoundProgram_DispatchTable)` / `ld r, (xrr+rr)` / `call (xhl)`.
 ; Entries: 0x00-0x19 ExtData_ToneParam_DispatchHandler; 0x43-0x48, 0x60,
 ; 0x68, 0x70, 0x72, 0x7A, 0x90, 0x98, 0xA8 and 0xB0 their own handlers;
 ; 0xB1-0xBD the MidiCh_Iterate* volume / expression / pan loops; every other
@@ -2928,7 +2928,7 @@ SoundProgram_DispatchTable:
 ; SoundProgram_DispatchTable + 0x400 (SoundProgram_DispatchTable_0x400 in
 ; shared/positional_labels.s): 256 RAM addresses, indexed by the SAME command
 ; byte.  VoiceData_LookupPtrByIndex (audio/audio_control_engine.s, 0xFC9DF4)
-; does `sla wa, 2` / `lda xbc, (+0x400)` / `ld_sril3`, and
+; does `sla wa, 2` / `lda xbc, (+0x400)` / `ld r, (xrr+rr)`, and
 ; SndParam_FetchSequencerParams stores the result at RAM 0x912B next to the
 ; command byte it fetched; Audio_InitAllDefaults (0xFC7C49) stores this
 ; table's address at RAM 0x90F2.
@@ -2969,7 +2969,7 @@ SoundProgram_DispatchTable:
 	.long 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff	; [0xf8]
 ; SoundProgram_DispatchTable + 0x800 (..._0x800): 32 RAM addresses, one per
 ; channel 0-31: VoiceData_LookupPtrByChannel (0xFC9E04) does `cp a, 0x1f` /
-; `jr ugt` / `sla wa, 2` / `lda xbc, (+0x800)` / `ld_sril3`;
+; `jr ugt` / `sla wa, 2` / `lda xbc, (+0x800)` / `ld r, (xrr+rr)`;
 ; Audio_InitAllDefaults stores the table's address at RAM 0x9182.
 	.long 0x0000fdda, 0x0000fdee, 0x0000fe02, 0x0000fe16, 0x0000fe2a, 0x0000fe3e, 0x0000fe52, 0x0000fe66	; [0x00]
 	.long 0x0000fe7a, 0x0000fe8e, 0x0000fea2, 0x0000feb6, 0x0000feca, 0x0000fede, 0x0000fef2, 0x0000ff06	; [0x08]
@@ -3020,7 +3020,7 @@ SoundProgram_DispatchTable:
 	; +0x8DA: 26 bytes, 0..24 then 0xFF, read by CtrlPanel_BuildIndicatorBitmask (0xFC9249).
 	.byte 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 	.byte 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 0xff
-	; +0x8F4: 20 bytes, a channel remap read with `ldb_sri a` by
+	; +0x8F4: 20 bytes, a channel remap read with `ld a, (xrr+rr)` by
 	; VoiceChannels_InitPanFromPreset; its result goes to VoiceData_LookupPtrByIndex.
 	.byte 0, 2, 1, 7, 8, 9, 10, 11, 4, 5, 6, 3, 15, 21, 21, 25, 20, 12, 13, 14
 ReverbPreset_Table:

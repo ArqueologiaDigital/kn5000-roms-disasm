@@ -770,7 +770,7 @@ FP_SP_Sub_Done:
 FP_CmpResult_Pad:	; 03D977h
 	.byte 0xff	; Padding
 ; The three rows are indexed by the comparison-kind code 0..5 (DE in FP_dcmp / FP_fcmp,
-; BC in FP_DP_CmpZero64 / FP_SP_CmpZero32), `ldb_sri` / `xor_srib_rm` = row[kind].
+; BC in FP_DP_CmpZero64 / FP_SP_CmpZero32), `ld r, (xrr+rr)` / `xor r, (mem)` = row[kind].
 	; Equal table (0x03D978)
 FP_CmpResult_Equal:
 	.byte 0x01, 0x00, 0x01, 0x00, 0x01, 0x00

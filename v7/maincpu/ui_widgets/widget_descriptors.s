@@ -3949,7 +3949,7 @@ AppEvent_RecordDispatch_BitMasks:
 ; SeqEvent_MainHandler_CaseTable -- jump table of a compiled `switch` in
 ; SeqEvent_MainHandler (v10/v9 0xf43d4c, v7 0xf43d3e) (`lda xix,
 ; (SeqEvent_MainHandler_CaseTable:24)`): case k jumps to
-; SeqEvent_Dispatch + entry[k] (`lda xix,(SeqEvent_Dispatch); jp_ind`).
+; SeqEvent_Dispatch + entry[k] (`lda xix,(SeqEvent_Dispatch); jp t, (xrr+rr)`).
 ; 14 u16 offsets; the reader's bound `cp ..., 13` pins 14 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3963,7 +3963,7 @@ SeqEvent_MainHandler_CaseTable:
 ; `switch` in AppEvtHandler_Branch_024 (v10/v9 0xf445b0, v7 0xf445a2)
 ; (`add xwa, AppEvtHandler_Branch_024_CaseTable`): case k jumps to
 ; AppEvtHandler_Branch_024_0x97 + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_024_0x97); jp_ind`). 6 u16 offsets; the
+; xix,(AppEvtHandler_Branch_024_0x97); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3977,7 +3977,7 @@ AppEvtHandler_Branch_024_CaseTable:
 ; `switch` in AppEvtHandler_Branch_021 (v10/v9 0xf444b9, v7 0xf444ab)
 ; (`add xwa, AppEvtHandler_Branch_021_CaseTable`): case k jumps to
 ; AppEvtHandler_Branch_021_0x5e + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_021_0x5e); jp_ind`). 6 u16 offsets; the
+; xix,(AppEvtHandler_Branch_021_0x5e); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -3991,7 +3991,7 @@ AppEvtHandler_Branch_021_CaseTable:
 ; `switch` in AppEvtHandler_Branch_006 (v10/v9 0xf44243, v7 0xf44235)
 ; (`lda xix, (WidgetData_CharsetMappingTable_0x27c:24)`): case k jumps
 ; to AppEvtHandler_Branch_006_0x3b + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_006_0x3b); jp_ind`). 8 u16 offsets; the
+; xix,(AppEvtHandler_Branch_006_0x3b); jp t, (xrr+rr)`). 8 u16 offsets; the
 ; reader's bound `cp ..., 7` pins 8 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4005,7 +4005,7 @@ AppEvtHandler_Branch_006_CaseTable:
 ; `switch` in AppEvtHandler_Branch_002 (v10/v9 0xf4417e, v7 0xf44170)
 ; (`lda xix, (WidgetData_CharsetMappingTable_0x28c:24)`): case k jumps
 ; to AppEvtHandler_Branch_002_0x4b + entry[k] (`lda
-; xix,(AppEvtHandler_Branch_002_0x4b); jp_ind`). 8 u16 offsets; the
+; xix,(AppEvtHandler_Branch_002_0x4b); jp t, (xrr+rr)`). 8 u16 offsets; the
 ; reader's bound `cp ..., 7` pins 8 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4032,7 +4032,7 @@ AppEvtHandler_Branch_002_RamPtrs:
 ; in AppEvent_ChainDispatch1 (v10/v9 0xf44147, v7 0xf44139) (`add xbc,
 ; WidgetData_CharsetMappingTable_0x2c0`): case k jumps to
 ; APP_EVENT_HANDLER_TABLE + entry[k] (`lda
-; xix,(APP_EVENT_HANDLER_TABLE); jp_ind`). 32 u16 offsets; the reader's
+; xix,(APP_EVENT_HANDLER_TABLE); jp t, (xrr+rr)`). 32 u16 offsets; the reader's
 ; bound `cp ..., 31` pins 32 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4046,7 +4046,7 @@ AppEvent_ChainDispatch1_CaseTable:
 ; AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) (`add xwa,
 ; AppEvent_SubDispatch_CaseTable`): case k jumps to
 ; AppEvent_SubDispatch_0x4cc + entry[k] (`lda
-; xix,(AppEvent_SubDispatch_0x4cc); jp_ind`). 6 u16 offsets; the
+; xix,(AppEvent_SubDispatch_0x4cc); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4060,7 +4060,7 @@ AppEvent_SubDispatch_CaseTable:
 ; in AppEvent_SubDispatch (v10/v9 0xf448a4, v7 0xf44896) (`add xwa,
 ; WidgetData_CharsetMappingTable_0x30c`): case k jumps to
 ; AppEvent_SubDispatch_0x3a6 + entry[k] (`lda
-; xix,(AppEvent_SubDispatch_0x3a6); jp_ind`). 6 u16 offsets; the
+; xix,(AppEvent_SubDispatch_0x3a6); jp t, (xrr+rr)`). 6 u16 offsets; the
 ; reader's bound `cp ..., 5` pins 6 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4111,7 +4111,7 @@ AppEvent_SubDispatch_RamPtrs:
 ; in AppEvent_InlineHandler (v10/v9 0xf44882, v7 0xf44874) (`add xbc,
 ; WidgetData_CharsetMappingTable_0x35c`): case k jumps to
 ; AppEvent_SubDispatch + entry[k] (`lda xix,(AppEvent_SubDispatch);
-; jp_ind`). 32 u16 offsets; the reader's bound `cp ..., 31` pins 32
+; jp t, (xrr+rr)`). 32 u16 offsets; the reader's bound `cp ..., 31` pins 32
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4137,7 +4137,7 @@ AppEvent_RecordDispatch_Table:
 ; in SeqState_LabelDispatch (v10/v9 0xf4519b, v7 0xf4518d) (`lda xix,
 ; (WidgetData_CharsetMappingTable_0x3ac:24)`): case k jumps to
 ; SoundData_HandlerDispatch + entry[k] (`lda
-; xix,(SoundData_HandlerDispatch); jp_ind`). 16 u16 offsets; the
+; xix,(SoundData_HandlerDispatch); jp t, (xrr+rr)`). 16 u16 offsets; the
 ; reader's bound `cp ..., 15` pins 16 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4151,7 +4151,7 @@ SeqState_LabelDispatch_CaseTable:
 ; SeqAccomp_SubChain (v10/v9 0xf45fd9, v7 0xf45fcb) (`add xwa,
 ; WidgetData_CharsetMappingTable_0x3cc`): case k jumps to
 ; SeqAccomp_SubHandlerB + entry[k] (`lda xix,(SeqAccomp_SubHandlerB);
-; jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
+; jp t, (xrr+rr)`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4165,7 +4165,7 @@ SeqAccomp_SubChain_CaseTable:
 ; in SeqAccomp_ParamDelivery (v10/v9 0xf45dc1, v7 0xf45db3) (`add xwa,
 ; WidgetData_CharsetMappingTable_0x3e4`): case k jumps to
 ; SeqAccomp_SubHandlerA + entry[k] (`lda xix,(SeqAccomp_SubHandlerA);
-; jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
+; jp t, (xrr+rr)`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4179,7 +4179,7 @@ SeqAccomp_ParamDelivery_CaseTable:
 ; ApPlaySyori (v10/v9 0xf45ab8, v7 0xf45aaa) (`lda xix,
 ; (WidgetData_CharsetMappingTable_0x3fc:24)`): case k jumps to
 ; SeqAccomp_EventDispatch + entry[k] (`lda
-; xix,(SeqAccomp_EventDispatch); jp_ind`). 8 u16 offsets; the reader's
+; xix,(SeqAccomp_EventDispatch); jp t, (xrr+rr)`). 8 u16 offsets; the reader's
 ; bound `cp ..., 7` pins 8 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4193,7 +4193,7 @@ ApPlaySyori_CaseTable:
 ; `switch` in NoteEditSy_SendModeScrollReset (v10/v9 0xf464e4, v7
 ; 0xf464d6) (`lda xix, (WidgetData_CharsetMappingTable_0x40c:24)`): case
 ; k jumps to NoteEditSy_ModeDispatch + entry[k] (`lda
-; xix,(NoteEditSy_ModeDispatch); jp_ind`). 8 u16 offsets; the reader's
+; xix,(NoteEditSy_ModeDispatch); jp t, (xrr+rr)`). 8 u16 offsets; the reader's
 ; bound `cp ..., 7` pins 8 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4207,7 +4207,7 @@ NoteEditSy_SendModeScrollReset_CaseTable:
 ; `switch` in NoteEditSy_HandleDownScroll (v10/v9 0xf46762, v7 0xf46754)
 ; (`add xde, WidgetData_CharsetMappingTable_0x41c`): case k jumps to
 ; NoteEditSy_DownScroll_Param0 + entry[k] (`lda
-; xix,(NoteEditSy_DownScroll_Param0); jp_ind`). 12 u16 offsets; the
+; xix,(NoteEditSy_DownScroll_Param0); jp t, (xrr+rr)`). 12 u16 offsets; the
 ; reader's bound `cp ..., 11` pins 12 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4221,7 +4221,7 @@ NoteEditSy_HandleDownScroll_CaseTable:
 ; `switch` in NoteEditSy_HandleUpScroll (v10/v9 0xf466f2, v7 0xf466e4)
 ; (`add xde, NoteEditSy_HandleUpScroll_CaseTable`): case k jumps to
 ; NoteEditSy_UpScroll_Param0 + entry[k] (`lda
-; xix,(NoteEditSy_UpScroll_Param0); jp_ind`). 15 u16 offsets; the
+; xix,(NoteEditSy_UpScroll_Param0); jp t, (xrr+rr)`). 15 u16 offsets; the
 ; reader's bound `cp ..., 14` pins 15 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4234,7 +4234,7 @@ NoteEditSy_HandleUpScroll_CaseTable:
 ; MainExeCall_CaseTable -- jump table of a compiled `switch` in
 ; MainExeCall (v10/v9 0xf470a4, v7 0xf47096) (`lda xix,
 ; (MainExeCall_CaseTable:24)`): case k jumps to
-; MainExe_HandleD6 + entry[k] (`lda xix,(MainExe_HandleD6); jp_ind`). 17
+; MainExe_HandleD6 + entry[k] (`lda xix,(MainExe_HandleD6); jp t, (xrr+rr)`). 17
 ; u16 offsets; the reader's bound `cp ..., 16` pins 17 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4547,7 +4547,7 @@ SeqPart_VelZoneLookup_Table_2:
 ; `switch` in SeqPart_VelocityCurveCalc (v10/v9 0xf4c360, v7 0xf4bf76)
 ; (`lda xix, (SeqPart_VelocityCurveCalc_CaseTable:24)`): case k jumps to
 ; SeqPart_VelCurveData + entry[k] (`lda xix,(SeqPart_VelCurveData);
-; jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
+; jp t, (xrr+rr)`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4561,7 +4561,7 @@ SeqPart_VelocityCurveCalc_CaseTable:
 ; in SeqStep_NoteReadEvent (v10/v9 0xf4ce61, v7 0xf4ca77) (`lda xix,
 ; (Display_FontPalette_Table_0x7e:24)`): case k jumps to
 ; SeqStep_NoteCases + entry[k] (`lda xix,(SeqStep_NoteCases);
-; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+; jp t, (xrr+rr)`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; SeqStep_NoteReadEvent_CaseTable[7].
@@ -4574,7 +4574,7 @@ SeqStep_NoteReadEvent_CaseTable:
 ; `switch` in SeqStep_EventPosConsumeAdvance (v10/v9 0xf4d127, v7
 ; 0xf4cd3d) (`lda xix, (Display_FontPalette_Table_0x8c:24)`): case k
 ; jumps to SeqStep_EventPosFinish + entry[k] (`lda
-; xix,(SeqStep_EventPosFinish); jp_ind`). 7 u16 offsets; the reader's
+; xix,(SeqStep_EventPosFinish); jp t, (xrr+rr)`). 7 u16 offsets; the reader's
 ; bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4588,7 +4588,7 @@ SeqStep_EventPosConsumeAdvance_CaseTable:
 ; SeqStep_DeleteDone (v10/v9 0xf4d37d, v7 0xf4cf93) (`lda xix,
 ; (Display_FontPalette_Table_0x9a:24)`): case k jumps to
 ; SeqStep_DeleteExitRestore + entry[k] (`lda
-; xix,(SeqStep_DeleteExitRestore); jp_ind`). 7 u16 offsets; the reader's
+; xix,(SeqStep_DeleteExitRestore); jp t, (xrr+rr)`). 7 u16 offsets; the reader's
 ; bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4775,7 +4775,7 @@ FileIO_ReadFreeSpaceViaFAT_Str_A:	.incbin "includes/generated/naka_widget_descri
 ; GetDiskFreeSpace (v10/v9 0xf52751, v7 0xf5234d) (`lda xix,
 ; (Display_FontPalette_Table_0x2ac:24)`): case k jumps to
 ; GetDiskFreeSpace_JumpTable + entry[k] (`lda
-; xix,(GetDiskFreeSpace_JumpTable); jp_ind`). 7 u16 offsets; the
+; xix,(GetDiskFreeSpace_JumpTable); jp t, (xrr+rr)`). 7 u16 offsets; the
 ; reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -4803,7 +4803,7 @@ FileIO_ReadVolumeLabelEntry_Str_A:	.incbin "includes/generated/naka_widget_descr
 ; GetVolumeLabel (v10/v9 0xf527ce, v7 0xf523ca) (`lda xix,
 ; (Display_FontPalette_Table_0x2c0:24)`): case k jumps to
 ; GetVolumeLabel_JumpTable + entry[k] (`lda
-; xix,(GetVolumeLabel_JumpTable); jp_ind`). 7 u16 offsets; the reader's
+; xix,(GetVolumeLabel_JumpTable); jp t, (xrr+rr)`). 7 u16 offsets; the reader's
 ; bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5265,7 +5265,7 @@ Tempo_RefreshDisplay5_Table:
 ; VoiceSlot_Dispatch (v10/v9 0xf66e99, v7 0xf66a95) (`lda xix,
 ; (Display_FontPalette_Table_0x52c0:24)`): case k jumps to
 ; Voice_ClearSlotAndRet + entry[k] (`lda xix,(Voice_ClearSlotAndRet);
-; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+; jp t, (xrr+rr)`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; VoiceSlot_Dispatch_CaseTable[7].
@@ -5278,7 +5278,7 @@ VoiceSlot_Dispatch_CaseTable:
 ; RhythmParam_Dispatch (v10/v9 0xf66d36, v7 0xf66932) (`lda xix,
 ; (Display_FontPalette_Table_0x52ce:24)`): case k jumps to
 ; RhythmParam_CheckExit + entry[k] (`lda xix,(RhythmParam_CheckExit);
-; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+; jp t, (xrr+rr)`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; RhythmParam_Dispatch_CaseTable[7].
@@ -5344,7 +5344,7 @@ AccVoice_SlotRows:
 ; CmpMenuTtlFunc (v10/v9 0xf67dd0, v7 0xf679cc) (`add xde,
 ; Display_FontPalette_Table_0x701a`): case k jumps to
 ; CmpMenuTtl_Dispatch + entry[k] (`lda xix,(CmpMenuTtl_Dispatch);
-; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+; jp t, (xrr+rr)`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; CmpMenuTtlFunc_CaseTable[7].
@@ -5357,7 +5357,7 @@ CmpMenuTtlFunc_CaseTable:
 ; in CmpSetTtl_DynamicLookup (v10/v9 0xf67f79, v7 0xf67b75) (`add xde,
 ; CmpSetTtl_DynamicLookup_CaseTable`): case k jumps to
 ; CmpSetTtl_Dispatch2 + entry[k] (`lda xix,(CmpSetTtl_Dispatch2);
-; jp_ind`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
+; jp t, (xrr+rr)`). 12 u16 offsets; the reader's bound `cp ..., 11` pins 12
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5370,7 +5370,7 @@ CmpSetTtl_DynamicLookup_CaseTable:
 ; CmpSetTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; CmpSetTtlFunc (v10/v9 0xf67e59, v7 0xf67a55) (`add xde,
 ; CmpSetTtlFunc_CaseTable`): case k jumps to CmpSetTtl_Dispatch
-; + entry[k] (`lda xix,(CmpSetTtl_Dispatch); jp_ind`). 7 u16 offsets;
+; + entry[k] (`lda xix,(CmpSetTtl_Dispatch); jp t, (xrr+rr)`). 7 u16 offsets;
 ; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5384,7 +5384,7 @@ CmpSetTtlFunc_CaseTable:
 ; `switch` in CmpRealTtl_MajorDispatch (v10/v9 0xf68048, v7 0xf67c44)
 ; (`add xwa, Display_FontPalette_Table_0x704e`): case k jumps to
 ; CmpRealTtl_RhythmVar0 + entry[k] (`lda xix,(CmpRealTtl_RhythmVar0);
-; jp_ind`). 13 u16 offsets; the reader's bound `cp ..., 12` pins 13
+; jp t, (xrr+rr)`). 13 u16 offsets; the reader's bound `cp ..., 12` pins 13
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5398,7 +5398,7 @@ CmpRealTtl_MajorDispatch_CaseTable:
 ; CmpRealTtlFunc (v10/v9 0xf67fee, v7 0xf67bea) (`add xde,
 ; CmpRealTtlFunc_CaseTable`): case k jumps to
 ; CmpRealTtl_Dispatch + entry[k] (`lda xix,(CmpRealTtl_Dispatch);
-; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+; jp t, (xrr+rr)`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; CmpRealTtlFunc_CaseTable[7].
@@ -5411,7 +5411,7 @@ CmpRealTtlFunc_CaseTable:
 ; CmpBkslTtlFunc (v10/v9 0xf682e2, v7 0xf67ede) (`add xde,
 ; CmpBkslTtlFunc_CaseTable`): case k jumps to
 ; CmpBkslTtl_Dispatch + entry[k] (`lda xix,(CmpBkslTtl_Dispatch);
-; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+; jp t, (xrr+rr)`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; CmpBkslTtlFunc_CaseTable[7].
@@ -5424,7 +5424,7 @@ CmpBkslTtlFunc_CaseTable:
 ; in CmpBkslSTtl_DirectMode (v10/v9 0xf684bf, v7 0xf680bb) (`add xwa,
 ; CmpBkslSTtl_DirectMode_CaseTable`): case k jumps to
 ; CmpBkslSTtl_FillIn4 + entry[k] (`lda xix,(CmpBkslSTtl_FillIn4);
-; jp_ind`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
+; jp t, (xrr+rr)`). 11 u16 offsets; the reader's bound `cp ..., 10` pins 11
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5438,7 +5438,7 @@ CmpBkslSTtl_DirectMode_CaseTable:
 ; CmpBksl_STtlFunc (v10/v9 0xf6845b, v7 0xf68057) (`add xde,
 ; Display_FontPalette_Table_0x709a`): case k jumps to
 ; CmpBkslSTtl_Dispatch + entry[k] (`lda xix,(CmpBkslSTtl_Dispatch);
-; jp_ind`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
+; jp t, (xrr+rr)`). 7 u16 offsets; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
 ; CmpBksl_STtlFunc_CaseTable[7].
@@ -5451,7 +5451,7 @@ CmpBksl_STtlFunc_CaseTable:
 ; in CmpNcpTtl_TableDispatch (v10/v9 0xf686e3, v7 0xf682df) (`add xde,
 ; Display_FontPalette_Table_0x70a8`): case k jumps to
 ; CmpNcpTtl_Dispatch2 + entry[k] (`lda xix,(CmpNcpTtl_Dispatch2);
-; jp_ind`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
+; jp t, (xrr+rr)`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5464,7 +5464,7 @@ CmpNcpTtl_TableDispatch_CaseTable:
 ; CmpNcpTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; CmpNcpTtlFunc (v10/v9 0xf685f9, v7 0xf681f5) (`add xde,
 ; Display_FontPalette_Table_0x70d0`): case k jumps to CmpNcpTtl_Dispatch
-; + entry[k] (`lda xix,(CmpNcpTtl_Dispatch); jp_ind`). 7 u16 offsets;
+; + entry[k] (`lda xix,(CmpNcpTtl_Dispatch); jp t, (xrr+rr)`). 7 u16 offsets;
 ; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5489,7 +5489,7 @@ CmpEsyTtl_Mode2_Table:
 ; CmpEsyTtl_Mode2_CaseTable -- jump table of a compiled `switch` in
 ; CmpEsyTtl_Mode2 (v10/v9 0xf68cfb, v7 0xf688f7) (`ld xix,
 ; Display_FontPalette_Table_0x70f2`): case k jumps to CmEsyTtl_Dispatch2
-; + entry[k] (`lda xix,(CmEsyTtl_Dispatch2); jp_ind`). 6 u16 offsets;
+; + entry[k] (`lda xix,(CmEsyTtl_Dispatch2); jp t, (xrr+rr)`). 6 u16 offsets;
 ; the reader's bound is not visible in the source (the code after the
 ; load is still misframed), so the 6 entries are the extent to the next
 ; referenced object.
@@ -5504,7 +5504,7 @@ CmpEsyTtl_Mode2_CaseTable:
 ; CmEsyTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; CmEsyTtlFunc (v10/v9 0xf68c19, v7 0xf68815) (`add xde,
 ; Display_FontPalette_Table_0x70fe`): case k jumps to CmEsyTtl_Dispatch
-; + entry[k] (`lda xix,(CmEsyTtl_Dispatch); jp_ind`). 7 u16 offsets; the
+; + entry[k] (`lda xix,(CmEsyTtl_Dispatch); jp t, (xrr+rr)`). 7 u16 offsets; the
 ; reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5518,7 +5518,7 @@ CmEsyTtlFunc_CaseTable:
 ; CmpEsyTtl_E_Var1 (v10/v9 0xf68e86, v7 0xf68a82) (`add xwa,
 ; Display_FontPalette_Table_0x710c`): case k jumps to
 ; CmpEsy_E_DispatchDataBlock + entry[k] (`lda
-; xix,(CmpEsy_E_DispatchDataBlock); jp_ind`). 12 u16 offsets; the
+; xix,(CmpEsy_E_DispatchDataBlock); jp t, (xrr+rr)`). 12 u16 offsets; the
 ; reader's bound `cp ..., 11` pins 12 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5531,7 +5531,7 @@ CmpEsyTtl_E_Var1_CaseTable:
 ; S2cTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; S2cTtlFunc (v10/v9 0xf68de2, v7 0xf689de) (`add xde,
 ; S2cTtlFunc_CaseTable`): case k jumps to S2cTtl_Dispatch +
-; entry[k] (`lda xix,(S2cTtl_Dispatch); jp_ind`). 7 u16 offsets; the
+; entry[k] (`lda xix,(S2cTtl_Dispatch); jp t, (xrr+rr)`). 7 u16 offsets; the
 ; reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5545,7 +5545,7 @@ S2cTtlFunc_CaseTable:
 ; CstmCpTtl_RecMode2 (v10/v9 0xf692fc, v7 0xf68ef8) (`add xde,
 ; CstmCpTtl_RecMode2_CaseTable`): case k jumps to
 ; CstmCpTtl_Dispatch2 + entry[k] (`lda xix,(CstmCpTtl_Dispatch2);
-; jp_ind`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
+; jp t, (xrr+rr)`). 20 u16 offsets; the reader's bound `cp ..., 19` pins 20
 ; cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t
@@ -5558,7 +5558,7 @@ CstmCpTtl_RecMode2_CaseTable:
 ; CstmCpTtlFunc_CaseTable -- jump table of a compiled `switch` in
 ; CstmCpTtlFunc (v10/v9 0xf69227, v7 0xf68e23) (`add xde,
 ; Display_FontPalette_Table_0x715a`): case k jumps to CstmCpTtl_Dispatch
-; + entry[k] (`lda xix,(CstmCpTtl_Dispatch); jp_ind`). 7 u16 offsets;
+; + entry[k] (`lda xix,(CstmCpTtl_Dispatch); jp t, (xrr+rr)`). 7 u16 offsets;
 ; the reader's bound `cp ..., 6` pins 7 cases.
 ;
 ; Typed in naka_widget_descriptors.c as uint16_t

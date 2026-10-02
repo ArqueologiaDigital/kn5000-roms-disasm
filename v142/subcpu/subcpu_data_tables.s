@@ -324,7 +324,7 @@ Serial1_RxBuf_Struct:	; Struct do buffer de recepção da serial #1
 ; --- 0x00F460-0x00F46B  AudioTick_CaseOffsets -- 6 x u16 jump offsets for the audio tick round-robin
 ; Read by Timer_AudioTick_Handler (0x01FB41, hardware vector 21 = INTT1): it keeps a byte counter
 ; at DRAM 0xF014 (61460), gates it to 0..5, doubles it, indexes this table and jumps to
-; base 0x01FB76 + offset (`lda_24 xix,0x00f460 / ldw_sri BC / lda_24 xix,0x01fb76 / jp_ind`).
+; base 0x01FB76 + offset (`lda_24 xix,0x00f460 / ld bc, (xrr+rr) / lda_24 xix,0x01fb76 / jp t, (xrr+rr)`).
 ; Contents 0x0000, 0x0008, 0x000C, 0x0010, 0x0018, 0x0021 -- all six resolve exactly onto existing
 ; symbols: AUDIO_PLAYNOTE_VARIANT_1 (0x01FB76), _VARIANT_2 (0x01FB7E), _VARIANT_3 (0x01FB82),
 ; AudioTick_Variant_4, AudioTick_Variant_5, AudioTick_Variant_6. That six-way landing is what proves the decoding.
@@ -344,7 +344,7 @@ AudioTick_CaseOffsets:
 ; ----------------------------------------------------------------------------
 ; --- 0x00F46C-0x00F48B  CMD_DISPATCH_TABLE -- 8 x u32 inter-CPU command handlers
 ; Indexed by the TOP 3 BITS of the command byte the main CPU wrote to the latch at 0x120000:
-; MICRODMA_CH0_HANDLER state 1 does `srl c,5 / sla wa,2 / lda_24 xbc,0x00f46c / ld_sril3 / call (xwa)`
+; MICRODMA_CH0_HANDLER state 1 does `srl c,5 / sla wa,2 / lda_24 xbc,0x00f46c / ld r, (xrr+rr) / call (xwa)`
 ; (0x020F2E..). The low 5 bits of the same byte are the payload length minus 1.
 ; Targets, in order (cmd byte range in brackets):
 ;   0 [0x00-0x1F] 0x034D5F   4 [0x80-0x9F] 0x01F890  SERIAL1_DATATRANSMIT_LOOP
@@ -367,7 +367,7 @@ CMD_DISPATCH_TABLE:
 
 
 ; --- 0x00F48C-0x00F4AB  Voice_PolyphonyLimits_Table -- 32 bytes, indexed by (part & 0x1F)
-; Read by ExtVoice_Alloc_StreamSlot (0x0212xx region) as `and a,0x1F / lda_24 xbc,0x00f48c / ldb_sri A`.
+; Read by ExtVoice_Alloc_StreamSlot (0x0212xx region) as `and a,0x1F / lda_24 xbc,0x00f48c / ld a, (xrr+rr)`.
 ; Values 00 00 00 00 01 01 01 01 02 02 02 02 03 00 03 00 01 01 01 01 then 12 x 00 -- a group id
 ; (0..3) per part rather than a count.
 Voice_PolyphonyLimits_Table:
@@ -406,7 +406,7 @@ Voice_CommandIndexTable:
 ;  32+16+4+12 = 64 = the machine's full polyphony -> these are ALLOCATION
 ;  QUOTAS, not the envelope stage widths the old name claimed.
 ; Read by CmdTable_InitEntry_Loop (0x021FB4, inside Voice_Reset_Engine) when the caller flag at
-; (xsp+6) is 0: `lda xbc,(this:24) / ldb_sri` byte i -> offset 0 of the 30-byte pool record at
+; (xsp+6) is 0: `lda xbc,(this:24) / ld r, (xrr+rr)` byte i -> offset 0 of the 30-byte pool record at
 ; 0x112D + 30*i, for i = 0..0x11 (18 entries, the loop's `cp (xsp+4),0x12`).
 Voice_Pool_Quota_ModeA:
 	.byte 32, 16, 4, 12, 0, 0, 0, 0		; pools 0-7
@@ -436,7 +436,7 @@ Voice_Pool_Quota_ModeB:
 ;  (0x1349 + p*0x0C).  Every value is 0x112D + g*0x1E, the address of one of
 ;  the 18 voice pools.  Mode-B counterpart is the table at 0x00F597.
 ; Read by ChanStruct_Init_Entry (0x02205A) when the caller flag at (xsp+6) is 0: entry p
-; (`sla wa,2 / lda xbc,(this:24) / ld_sril3`) is stored at offset 0 of the 12-byte part record
+; (`sla wa,2 / lda xbc,(this:24) / ld r, (xrr+rr)`) is stored at offset 0 of the 12-byte part record
 ; at 0x1349 + 12*p, for p = 0..0x1A (27 entries, the loop's `cp (xsp+4),0x1B`).  Written below
 ; as pool-record addresses 0x112D + 30*g, g = pool index.
 Voice_Part_PoolPtr_ModeA:
@@ -586,7 +586,7 @@ Voice_SFX_ModulationTable:
 
 ; --- 0x00F693-0x00F6A6  10 x u16 case offsets from Pitch_Get_Patch_Octave_Shift_JumpTable (0x022982).
 ; Read by Pitch_Get_Patch_Octave_Shift (0x02294E): WA = selector - 0x10, range-checked 0..9
-; (so 10 entries), doubled, `lda xix,(table:24) / ldw_sri / lda xix,(base:24) / jp_ind`.
+; (so 10 entries), doubled, `lda xix,(table:24) / ld r, (xrr+rr) / lda xix,(base:24) / jp t, (xrr+rr)`.
 ; Only selector 0x14 (entry 4) reaches the fallback; the other nine return 0.
 Pitch_OctaveShift_CaseOffsets:
 	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x10
@@ -601,7 +601,7 @@ Pitch_OctaveShift_CaseOffsets:
 	.short Pitch_Get_Patch_Octave_Shift_JumpTable - Pitch_Get_Patch_Octave_Shift_JumpTable		; selector 0x19
 ; --- 0x00F6A7-0x00F6B2  6 x u16 case offsets from TVF_Build_Dispatch_Table (0x02412B).
 ; Read by TVF_Build_Dispatch (0x024102): index = (tonerec+54) & 7, range-checked 0..5
-; (6 entries), doubled, then the same ldw_sri / jp_ind computed goto.
+; (6 entries), doubled, then the same ldw_sri / jp t, (xrr+rr) computed goto.
 TVF_Build_CaseOffsets:
 	.short TVF_Build_Dispatch_Table - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 0
 	.short TVF_Build_Dispatch_Case1 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 1
@@ -611,7 +611,7 @@ TVF_Build_CaseOffsets:
 	.short TVF_Build_Dispatch_Case5 - TVF_Build_Dispatch_Table					; (tonerec+54)&7 = 5
 ; --- 0x00F6B3-0x00F6BE  6 x u16 case offsets from TVF_BuildEmit_Short_Dispatch_Table (0x02432C).
 ; Read by TVF_BuildEmit_Short_Dispatch (0x024300): index = (tonerec+0x0F) & 7,
-; range-checked 0..5 (6 entries), doubled, ldw_sri / jp_ind.
+; range-checked 0..5 (6 entries), doubled, ldw_sri / jp t, (xrr+rr).
 TVF_BuildEmit_Short_CaseOffsets:
 	.short TVF_BuildEmit_Short_Dispatch_Table - TVF_BuildEmit_Short_Dispatch_Table			; (tonerec+0x0F)&7 = 0
 	.short TVF_BuildEmit_Short_Case1 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 1
@@ -621,7 +621,7 @@ TVF_BuildEmit_Short_CaseOffsets:
 	.short TVF_BuildEmit_Short_Case5 - TVF_BuildEmit_Short_Dispatch_Table				; (tonerec+0x0F)&7 = 5
 ; --- 0x00F6BF-0x00F6CA  6 x u16 case offsets from TVF_Emit_Registers_Table (0x024472).
 ; Read by TVF_Emit_Registers (0x024444): index = (tonerec+54) & 7, range-checked 0..5
-; (6 entries), doubled, ldw_sri / jp_ind.  Cases 1 and 2 share one body.
+; (6 entries), doubled, ldw_sri / jp t, (xrr+rr).  Cases 1 and 2 share one body.
 TVF_Emit_Registers_CaseOffsets:
 	.short TVF_Emit_Registers_Table - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 0
 	.short TVF_Emit_Registers_Case1 - TVF_Emit_Registers_Table					; (tonerec+54)&7 = 1
@@ -632,7 +632,7 @@ TVF_Emit_Registers_CaseOffsets:
 ; --- 0x00F6CB-0x00F6D6  6 x u16 case offsets from Voice_PanReg_WriteDispatchB_Table (0x024582); the same six
 ; values as TVF_Emit_Registers_CaseOffsets, for the twin landing pad.
 ; Read by Voice_PanReg_WriteDispatchB (0x024554): index = (tonerec+0x0F) & 7, range-checked
-; 0..5 (6 entries), doubled, ldw_sri / jp_ind.  Cases 1 and 2 share one body.
+; 0..5 (6 entries), doubled, ldw_sri / jp t, (xrr+rr).  Cases 1 and 2 share one body.
 Voice_PanReg_WriteDispatchB_CaseOffsets:
 	.short Voice_PanReg_WriteDispatchB_Table - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 0
 	.short Voice_PanReg_WriteDispatchB_Case1 - Voice_PanReg_WriteDispatchB_Table			; (tonerec+0x0F)&7 = 1
@@ -652,7 +652,7 @@ AudioMod_BusRouting_OrIXBits:
 	.byte 0x02, 0x08, 0x20, 0x80		; buses 0..3: bits 1, 3, 5, 7 of C
 ; --- 0x00F6DF-0x00F6F2  10 x u16 case offsets from AudioMod_Porta_Curve_JumpBase (0x028500).
 ; Read by AudioMod_Apply_Porta_Curve (0x0284AC): index = A - 0x10, range-checked 0..9
-; (10 entries), doubled, ldw_sri / jp_ind.  Only A = 0x14 (entry 4) reaches
+; (10 entries), doubled, ldw_sri / jp t, (xrr+rr).  Only A = 0x14 (entry 4) reaches
 ; AudioMod_Apply_Porta_Curve_Skip; the other nine take the shared base body.
 AudioMod_PortaCurve_CaseOffsets:
 	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x10
@@ -667,7 +667,7 @@ AudioMod_PortaCurve_CaseOffsets:
 	.short AudioMod_Porta_Curve_JumpBase - AudioMod_Porta_Curve_JumpBase				; A = 0x19
 ; --- 0x00F6F3-0x00F702  8 x u16, rhythm-mode word stored at 0x041360
 ; Read by Voice_SetRhythmMode (0x028B9C): index = bits 7..4 of the packed SysEx byte A
-; (`and c,0xF0 / srl c,4 / add bc,bc / lda xde,(table:24) / ldw_sri`), result -> 0x041360.
+; (`and c,0xF0 / srl c,4 / add bc,bc / lda xde,(table:24) / ld r, (xrr+rr)`), result -> 0x041360.
 ; Count 8 is pinned by the next table (AudioChannel_CaseOffsets, 0x00F703): the reader
 ; does NOT bound the index, so a nibble of 8..15 would read that table instead.
 ; High bytes 0x60 0x62 0x64 0x65 0x67 0x69 0x6B 0x6C step 2,2,1,2,2,2,1 -- a major scale --
@@ -679,7 +679,7 @@ Voice_RhythmMode_ScalePitch_Table:
 ; --- 0x00F703-0x00F738  27 x u16 case offsets from AudioChannel_DispatchTable (0x029E5B): the stub for
 ; destination command id k+1 (entries 0..2 are 5-byte stubs, the rest 11-byte ones).
 ; Read by AudioChannel_Dispatch (0x029E31): index = ((XDE+1) & 0x3F) - 1, range-checked
-; 0..0x1A (27 entries), doubled, ldw_sri / jp_ind.
+; 0..0x1A (27 entries), doubled, ldw_sri / jp t, (xrr+rr).
 AudioChannel_CaseOffsets:
 	.short AudioChannel_DispatchTable - AudioChannel_DispatchTable					; command id 0x01
 	.short AudioChannel_Stub_Cmd02 - AudioChannel_DispatchTable					; command id 0x02
@@ -711,7 +711,7 @@ AudioChannel_CaseOffsets:
 ; --- 0x00F739-0x00F74E  11 x u16 case offsets for controller numbers 120..130, relative to Voice_CC_ModWheel
 ; (0x02A306, which is only the base of the arithmetic here, not a case).
 ; Read by Voice_CtrlChange (0x02A282) after its explicit compares for the other CCs:
-; WA = CC - 0x78, range-checked 0..0x0A (11 entries), doubled, ldw_sri / jp_ind.
+; WA = CC - 0x78, range-checked 0..0x0A (11 entries), doubled, ldw_sri / jp t, (xrr+rr).
 ; 122 and 124..127 go straight to Voice_CC_Exit.  (MIDI 1.0 names 120/121/123 All
 ; Sound Off / Reset All Controllers / All Notes Off; 128..130 are not MIDI controller
 ; numbers, so they arrive from inside the firmware.  Each target's body is its callee
@@ -732,7 +732,7 @@ Voice_CC_Mode_CaseOffsets:
 ; Read by Voice_SystemMsg (0x02A7AF, the jump at Voice_SystemMsg_DispatchJump):
 ; sub-command C - 0x80 in 0..7 is used directly; otherwise C - 0x80 - 0x1B must be
 ; 8..0x16, so entries 8..22 serve sub-commands 0xA3..0xB1 (23 entries in all).
-; Doubled, ldw_sri / jp_ind.  Sub-command 0x84 lands on a bare `ret`.
+; Doubled, ldw_sri / jp t, (xrr+rr).  Sub-command 0x84 lands on a bare `ret`.
 Voice_SystemMsg_CaseOffsets:
 	.short Voice_SystemMsg_Sub80 - Voice_SystemMsg_DispatchTable					; sub-command 0x80
 	.short Voice_SystemMsg_Sub81 - Voice_SystemMsg_DispatchTable					; sub-command 0x81
@@ -769,7 +769,7 @@ Voice_Selector_FieldSlot_Table:
 	.byte 2, 4, 7		; group 2: fields 0,1,2 -> slots 2, 4, 7
 
 ; --- 0x00F786-0x00F799  10 x s16, part transpose/trim table A -> DRAM 0x041476
-; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / stw_dri` in Voice_Selector_ComputeMixWeights
+; `add wa,wa / lda_24 xbc,0x00f786 / ldw_sri WA / ld (mem), rr` in Voice_Selector_ComputeMixWeights
 ; (0x02AD03); the
 ; destination is 0x041476 + part*0x11F, i.e. one 287-byte record per part.
 ; Values 0, 0, -1, -2, -3, -4, -5, -6, -7, -8.
@@ -795,7 +795,7 @@ Voice_Selector_FieldSlot_Table:
 ; ★ 2026-09-25: the 20-byte table is now one object.  It used to be `Const_Zero_Byte: .byte 0x00`
 ; here plus 19 bytes under a second label, PitchDetune_OffsetTable, at 0x00F787 -- the middle of
 ; entry 0, referenced by nothing.  Relabelled Voice_Part_Trim_Table_A after its siblings
-; (Voice_Part_Trim_Table_B ...), typed as the 10 x s16 its reader loads (`ldw_sri`), and the
+; (Voice_Part_Trim_Table_B ...), typed as the 10 x s16 its reader loads (`ld r, (xrr+rr)`), and the
 ; mid-entry label dropped.
 Voice_Part_Trim_Table_A:
 	.short 0, 0, -1, -2, -3, -4, -5, -6, -7, -8
@@ -843,7 +843,7 @@ Voice_Part_Trim_Addend_2:
 	.byte 0xed, 0xff, 0xf5, 0xff, 0xfb, 0xff, 0x00, 0x00
 	.byte 0x00, 0x00
 ; 10 x s16, extent 0x00F7D2-0x00F7E5. Values 0, 0, 2, 4, 6, 8, 10, 12, 14, 16.
-; Loaded first (`ldw_sri DE`) then the two addends above are added to it (`add_sriw_rm DE`).
+; Loaded first (`ld de, (xrr+rr)`) then the two addends above are added to it (`add de, (mem)`).
 Voice_Part_Trim_Base:
 	.byte 0x00, 0x00, 0x00, 0x00, 0x02, 0x00
 	.byte 0x04, 0x00, 0x06, 0x00, 0x08, 0x00, 0x0a, 0x00
@@ -2650,7 +2650,7 @@ Voice_PolyNoteOn_Setup_PtrTable:
 	.long ToneGen_SetupPolyVoice
 
 ; --- 0x012171-0x012176  6 bytes, per-voice-type pitch bias
-; `lda_24 xbc,0x012171 / ldb_sri A`, added to the note number in ToneGen_SetupPolyVoice.
+; `lda_24 xbc,0x012171 / ld a, (xrr+rr)`, added to the note number in ToneGen_SetupPolyVoice.
 ; Values 00 00 18 E8 00 00 (0x18 = +24, 0xE8 = -24 as signed bytes). CORRECTED 2026-08-21:
 ; the unit is SEMITONES, not octaves -- the byte is added to the MIDI note number, and the same
 ; routine indexes the octave table at 0x01217D with (note / 12) * 2. So +24/-24 are TWO octaves
@@ -2664,7 +2664,7 @@ Voice_PolyNoteOn_Setup_PtrTable:
 ; the per-effect parameter metadata block at 0x0133cf (split completed 2026-08).
 Audio_DSP_StateTable_Packed:
 	.byte 0x00, 0x00, 0x18, 0xe8, 0x00, 0x00
-; 6 bytes, same index as 0x012171. Values 7F 7F 7F 7F 00 5F. Read with `cpib_sri ...,0x00`
+; 6 bytes, same index as 0x012171. Values 7F 7F 7F 7F 00 5F. Read with `cp (mem), 0x00`
 ; first: a zero entry means "keep the caller's value", otherwise this byte replaces it.
 ToneGen_VoiceType_Default_Level:
 	.byte 0x7f
@@ -4759,7 +4759,7 @@ EFF_ParamMeta_ByteTableB:
 ; The DSP bytecode interpreter's PRIMARY opcode dispatch. DSP_BytecodeInterpreter_Loop
 ; (0x03C2CB) takes the high nibble of the fetched byte (`srl wa,4`), special-cases 0x0E
 ; (SendCommand) and 0x0D (StateChange), rejects >5, then `add wa,wa / lda_24 xix,0x014739 /
-; ldw_sri WA / lda_24 xix,0x03c32e / jp_ind`. The source already documents the target: 1613
+; ldw_sri WA / lda_24 xix,0x03c32e / jp t, (xrr+rr)`. The source already documents the target: 1613
 ; bytes of hand TLCS-900 code implementing handlers 0..5, kept as raw bytes because of
 ; unsupported addressing.
 ; ★ 2026-09-25: no longer raw bytes -- the six handlers are instructions, and every entry
@@ -4786,7 +4786,7 @@ OFFSETS_14739:
 ; --- 0x014745-0x014776  OFFSETS_14745 -- 25 x u16 jump offsets, base 0x03CB8E
 ; The DSP bytecode interpreter's SECONDARY dispatch, for opcodes 0x61..0x79: `sub wa,0x61 /
 ; reject <0 or >0x18 / add wa,wa / lda_24 xix,0x014745 / ldw_sri WA / lda_24 xix,0x03cb8e /
-; jp_ind`. 0x18+1 = 25 entries = 50 bytes, matching the extent exactly. Opcodes 0x21, 0x24 and
+; jp t, (xrr+rr)`. 0x18+1 = 25 entries = 50 bytes, matching the extent exactly. Opcodes 0x21, 0x24 and
 ; 0x40 are handled before this table (Interp2Point, MultiStepInterp, PanScale).
 ; --- 0x014745-0x014776  OFFSETS_14745 ("DSP_Translator_OpcodeOffsetTable" is descriptive
 ;     text from symbols/proposals/subcpu-region-15.txt, not a symbol -- the label used here

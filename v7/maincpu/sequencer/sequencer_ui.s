@@ -3098,7 +3098,7 @@ TrAsGridCheck:
 	lda xix, (TrAsGridCheck_Cases:24)
 	jp	t, (xix+wa)
 
-; Case bodies of the `jp_ind` switch in TrAsGridCheck (events 0x1C00017-0x1C0001D; word offsets at TrAsGridCheck_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in TrAsGridCheck (events 0x1C00017-0x1C0001D; word offsets at TrAsGridCheck_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 TrAsGridCheck_Cases:
@@ -7086,7 +7086,7 @@ NoteEdit_GetParamValue:
 	ld de, (xde)
 	lda xix, (NoteEdit_GetParamValue_Cases:24)
 	jp	t, (xix+de)
-; Case bodies of the `jp_ind` switch in NoteEdit_GetParamValue (xde-1 = 0..13; word offsets at NoteEdit_GetParamValue_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in NoteEdit_GetParamValue (xde-1 = 0..13; word offsets at NoteEdit_GetParamValue_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 NoteEdit_GetParamValue_Cases:
@@ -8677,7 +8677,7 @@ SqplyVal_HandleExtraParams:
 	ld hl, (xhl)
 	lda xix, (SqplyVal_ParamCases:24)
 	jp	t, (xix+hl)
-; Case bodies of the `jp_ind` switch in the SqplyVal handler above (index 0..7; word offsets at SqplyVal_HandleExtraParams_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in the SqplyVal handler above (index 0..7; word offsets at SqplyVal_HandleExtraParams_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 SqplyVal_ParamCases:
@@ -9112,7 +9112,7 @@ SqedtVal_ClearDrawBuffer:
 	lda xix, (SqedtVal_ParamCases:24)
 	jp	t, (xix+wa)
 
-; Case bodies of the `jp_ind` switch in the SqedtVal handler above (index 0..14; word offsets at SqedtVal_ClearDrawBuffer_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in the SqedtVal handler above (index 0..14; word offsets at SqedtVal_ClearDrawBuffer_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 SqedtVal_ParamCases:
@@ -13728,7 +13728,7 @@ SqplyFunc:
 	ld hl, (xhl)
 	lda xix, (SqplyFunc_FormatCases:24)
 	jp	t, (xix+hl)
-; Case bodies of the `jp_ind` switch in the SqplyFunc handler above (events 0x1E8003E-0x1E80047; word offsets at SqplyFunc_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in the SqplyFunc handler above (events 0x1E8003E-0x1E80047; word offsets at SqplyFunc_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 SqplyFunc_FormatCases:
@@ -15836,7 +15836,7 @@ Equalizer_FormatDispatch:
 	lda xix, (Equalizer_FormatCases:24)
 	jp	t, (xix+wa)
 
-; Case bodies of the `jp_ind` switch in Equalizer_FormatDispatch (word offsets at Equalizer_FormatDispatch_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in Equalizer_FormatDispatch (word offsets at Equalizer_FormatDispatch_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 Equalizer_FormatCases:

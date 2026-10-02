@@ -21484,7 +21484,7 @@ Voice_ModWheel_Apply_Exit:
 ; --- 0x02A061-0x02A0E8  VoiceModWheel_DataTable_02A061 -- was MISLABELLED, now fully code
 ; All 136 bytes are TLCS-900H instructions (round-trip verified byte-identical to
 ; kn5000_subprogram_v142.rom, converted 2026-09-02).  llvm-mc's own disassembler cannot decode
-; this span cleanly (the `ld_sril3`/`lda_rr`/`*_erp` register-indexed forms it can ENCODE but
+; this span cleanly (the `ld r, (xrr+rr)`/`lda_rr`/`*_erp` register-indexed forms it can ENCODE but
 ; not auto-DECODE), so MAME unidasm supplied the framing and the mnemonics were hand-matched to
 ; the encoder, then proved by re-assembling to the exact original bytes.
 ; ★ No caller found: an exhaustive scan of the whole 0x30000-byte ROM for CALL (0x1D),

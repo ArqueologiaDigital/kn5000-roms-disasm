@@ -2444,7 +2444,7 @@ StringData_Stop:	.ascii "STOP"
 StringData_Rhythm:	.ascii "RHYTHM"
 
 	; Lcd text, 40 B.  Read by Display_TitleString_Mode5 (0xEF71F8): `ld xiy, StringData_VariNames`
-	; reader Display_TitleString_Mode5: `ld xiy, StringData_VariNames` then `lda_dri xiy, 0x07, 0xf4, 0xe0`
+	; reader Display_TitleString_Mode5: `ld xiy, StringData_VariNames` then `lda xiy, (xiy+wa)`
 StringData_VariNames:	.ascii "VARI 1    VARI 2    VARI 3    VARI 4    "
 
 	; Lcd text, 128 B.  Read by TitleString_BuildFromBank (0xEF728B): `ld xiy, StringData_StyleSections`

@@ -4465,7 +4465,7 @@ DspCfg_ResolveFallback_WordTable:	.short 0, 2, 4, 5, 3
 DspCfg_OpLetter_JumpOffsets:	.short 0, 9, 16, 25, 34, 43
 ; switch table: u16 offset from AssSwb_SwapEntriesAndDispatch, 21 entries,
 ; used by DspConfig_EventDispatch (0xFDD29D: index = type-1 for 0..8, or
-; type-1-0x12 for 9..20; `add bc,bc`, `ldw_sri`, `jp_ind`).  Offset 0 is the
+; type-1-0x12 for 9..20; `add bc,bc`, `ld r, (xrr+rr)`, `jp t, (xrr+rr)`).  Offset 0 is the
 ; default (AssSwb_SwapEntriesAndDispatch itself); the other targets have no
 ; labels yet.
 DspConfig_EventDispatch_JumpOffsets:	.short 285, 328, 0, 436, 501, 878, 0
@@ -7341,7 +7341,7 @@ VoiceEvent_SwitchOffsets:
 	.short 101, 115, 129, 143, 157, 157, 171
 ; 3 x u32 RAM addresses (0xCF5F, 0xCF77, 0xCE66).  NoteMap_InitVoiceSlots (0xFE3D2A)
 ; and a NoteMap_* sibling: `sla wa,2; lda xbc,(<this>)`, a 32-bit indexed load
-; (`ld_sril3`) into xiz, then `cpw (xiz),0`.
+; (`ld r, (xrr+rr)`) into xiz, then `cpw (xiz),0`.
 NoteMap_VoiceSlotRamPtrs:
 	.long 0x0000cf5f
 	.long 0x0000cf77
@@ -7350,7 +7350,7 @@ NoteMap_VoiceSlotRamPtrs:
 ; +12 u8 flags} + one 0xFF pad.  LookupTableEntries_Prologue (0xFE43E4) scales
 ; the index with `muls hl,0xd` and reads +0/+4/+8 through positional names
 ; CharMap_ValueData_B_0x56/_0x5A/_0x5E (= this+0/+4/+8); the +8 map is then
-; indexed with `ldb_sri`.  Flags: 0x80 x4, 0x20.
+; indexed with `ld r, (xrr+rr)`.  Flags: 0x80 x4, 0x20.
 NoteMap_ChannelMapRecords:
 	.long 0x0000c66a, 0x0000e82e, NoteMap_ByteMap_81	; record 0
 	.byte 0x80
@@ -7373,7 +7373,7 @@ SetChannelParam_ByteMap:
 NoteOn_ChannelByVoice:
 	.byte 0x00, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0xff
 ; 13 x {u8, u8}.  MarkEntriesAboveThre_LoadParam (0xFE5938): `sub a,0x54; add wa,wa;
-; lda xbc,(<this>)` / `(<this>+1)`; `ldb_sri` -- one pair per value 0x54..0x60
+; lda xbc,(<this>)` / `(<this>+1)`; `ld r, (xrr+rr)` -- one pair per value 0x54..0x60
 ; of the byte it indexes with (13 pairs to the next referenced object).
 NoteThreshold_PairTable:
 	.byte 0x00, 0x20
@@ -7961,7 +7961,7 @@ NoRef_HarmonyLike_EEA22E:
 	.byte 0x04, 0x08, 0x05, 0x09, 0x05, 0x0a, 0x05, 0x0b, 0x03, 0x08, 0x03, 0x09
 ; 28 rows x 12 columns x 4 bytes = 1344 bytes.  SoundFX_Handler_8 (0xFE9241): row =
 ; RAM byte 0xCEDF - 1 (`muls wa,0x30`), column x4 (`sla de,2`); the four bytes
-; (`ldb_sri`, `ld c,(xwa+1..3)`) are subtracted from RAM 0xCEAA like the tables
+; (`ld r, (xrr+rr)`, `ld c,(xwa+1..3)`) are subtracted from RAM 0xCEAA like the tables
 ; above.  UIParam_CallbackDispatch selects SoundFX_Handler_8.
 Harmony_Offsets4_B:
 	.byte 0x05, 0x08, 0x0c, 0x0f, 0x06, 0x09, 0x0c, 0x0f, 0x07, 0x0a, 0x0c, 0x0f

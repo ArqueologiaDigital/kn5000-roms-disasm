@@ -45,7 +45,7 @@ SeqStep_NoteReadEvent:
 	lda xix, (SeqStep_NoteCases:24)
 	jp	t, (xix+wa)
 
-; Case bodies of the `jp_ind` switch in the dispatcher above (event byte 0x80-0x86; word offsets at SeqStep_NoteReadEvent_CaseTable): jp (xix + r) with xix = this
+; Case bodies of the `jp t, (xrr+rr)` switch in the dispatcher above (event byte 0x80-0x86; word offsets at SeqStep_NoteReadEvent_CaseTable): jp (xix + r) with xix = this
 ; label, so this label is the offset-0 case.  Formerly named as data; it is
 ; code.
 SeqStep_NoteCases:

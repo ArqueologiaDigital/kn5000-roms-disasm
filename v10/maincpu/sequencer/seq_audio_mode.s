@@ -677,7 +677,7 @@ AccVoice_ComputeParamOffset:
 ; 0x32E6.
 ; Reader: AccVoice_ComputeParamOffset (0xF53D2E, the tail of
 ; AccVoice_ResolveParamAddr 0xF53D20): `ld xix, AccVoice_BankBaseTable` then
-; `ld_sril3 XIX, 0x07, 0xf0, 0xe0` = ld xix, (xix + wa) with wa = (0x32E6)*4.
+; `ld xix, (xix+wa)` = ld xix, (xix + wa) with wa = (0x32E6)*4.
 ; The entry is added to the 32-bit offset the routine first loaded from
 ; RhythmTiming_OffsetTable[A] (A clamped to 0..0x1D), plus 0x60; the sum is
 ; returned in XIY.  So each entry is the base of a bank that those offsets

@@ -659,7 +659,7 @@ Rhythm_VoiceMap_Done:
 ; Rhythm_PitchShiftTable_Default -- 2 variants x 49 bytes of SHIFT SELECTORS,
 ; indexed like Rhythm_InstrMapTable_Default by RAM 0x323C (clamped 0..0x2F).
 ; Reader: Rhythm_VoiceMapLookup, first half: `ld xiy, <variant>`,
-; `ldb_sri L, ..., 0xf4, 0xec` (L := variant[L]); then
+; `ld l, (xiy+hl)` (L := variant[L]); then
 ;     0 -> no shift;  1 -> shift byte RAM 0x3397;  2 -> shift byte RAM 0x3398,
 ; where a shift byte with bit 5 set returns 0 (muted), bit 4 set subtracts and
 ; clear adds its low nibble to A.  Rhythm_NoteRangeCheck clears both bytes.
@@ -1447,7 +1447,7 @@ Rhythm_SeqReset_Store:
 ; 0x36FF.
 ; Reader: Rhythm_SeqResetCheck -- when bit 2 of RAM 0x3433 is set and bit 4
 ; clear: L := (0x36FF), `sla l, 2`, `ld xiy, Rhythm_SeqResetTable`,
-; `ldl_dri xix, 0x07, 0xf4, 0xec` (xix := table[L]); if non-zero, with
+; `ld xix, (xiy+hl)` (xix := table[L]); if non-zero, with
 ; interrupts masked (`ei 6` .. `ei 0`) the word at (xix+6) is copied to
 ; (xix+4).  Stride 4 from `sla l, 2`; 17 entries = 68 bytes, to
 ; Rhythm_TransposeWithMod.  Non-zero entries: [1] 0x2CF8, [2] 0x2DF8,

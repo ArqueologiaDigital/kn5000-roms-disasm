@@ -202,8 +202,8 @@ SMF_HeaderConstants:
 	; Readers SMF_ScanAndProcessChannel (0xF2727F), SMF_WriteVol_PanAndPitch (0xF274EB),
 	; SMF_WriteRPN_FineTune (0xF2759F), SMF_WriteRPN_CoarseTune (0xF27661) and
 	; SMF_WriteRPN_Transpose (0xF27719): `ld xix, SMF_HeaderConstants_0x1A`,
-	; `ldw_sri HL, ...` (hl := table[code]); 0xFFFF skips the channel;
-	; otherwise the offset is added to RAM 0xF460 (`lda_dri XIY`) to reach
+	; `ld hl, (xrr+rr)` (hl := table[code]); 0xFFFF skips the channel;
+	; otherwise the offset is added to RAM 0xF460 (`lda xiy, (xrr+rr)`) to reach
 	; that part's record.  The offsets are 0x36 + 26*k (k = 0..15), so the
 	; records sit 26 bytes apart.  20 entries, pinned by the next piece at +0x42.
 	.short 0x0036, 0x006a, 0x0050, 0x00ec, 0x0106	; codes 0-4
@@ -219,7 +219,7 @@ SMF_HeaderConstants:
 	.byte 0x00, 0xf0, 0x05, 0x7e, 0x7f, 0x09, 0x02, 0xf7
 	; +0x52 (SMF_HeaderConstants_0x52): 20 bytes, indexed by the same
 	; part-type code.  SMF_ProgramChange_ProcessPatch (0xF27B68): L := 0xF1A0[ch],
-	; `ld xix, SMF_HeaderConstants_0x52`, `ldb_sri L, ...` (L := table[L]),
+	; `ld xix, SMF_HeaderConstants_0x52`, `ld l, (xrr+rr)` (L := table[L]),
 	; stored at RAM 0x1A5C, the third byte of the 3-byte message built at
 	; 0x1A5A before SndParam_InitBufferConverge.  0x7F exactly where the
 	; offset table above holds 0xFFFF (codes 13-16).
@@ -1885,7 +1885,7 @@ SMF_Translate_Return:
 ; -----------------------------------------------------------------------------
 ; SMF_ChannelTranslationTable -- 64 bytes, indexed by the value in A.
 ; Reader: SMF_TranslateChannel (0xF29034): `ld xix, SMF_ChannelTranslationTable`,
-; `ldb_sri W, 0x07, 0xf0, 0xec` (W := table[A]).  0xFF leaves A unchanged;
+; `ld w, (xix+hl)` (W := table[A]).  0xFF leaves A unchanged;
 ; otherwise A := W, except that with RAM byte 0x112A == 3 the inputs 0x0E and
 ; 0x10 give 0x17 and 0x18 instead.  Its 17 calr sites (SMF_SlotParam_*
 ; handlers) pass the (XIY+2) byte of a slot record; 16 of them treat bit 7 of
@@ -3247,7 +3247,7 @@ SMF_SlotParam_RPNDone:
 ; SMF_SlotParam_RPNReturn -- two identical 31-byte halves, remapping the byte
 ; at (XIY+3) of a slot record.
 ; Reader: SMF_SlotParam_BankLSBReturn (0xF29C95), for a record whose (XIY+2) is
-; 0x39: with HL := 0 and L := (XIY+3), `ld_sri`-style load A := (XIX+HL);
+; 0x39: with HL := 0 and L := (XIY+3), `ld r, (mem)`-style load A := (XIX+HL);
 ;   bit 5 of (XIY+3) clear: XIX = SMF_SlotParam_RPNReturn,       (XIY+2) := 0xAD
 ;   bit 5 of (XIY+3) set:   XIX = SMF_SlotParam_RPNReturn_0x1F,  (XIY+2) := 0xAE
 ; and A is written back to (XIY+3).  62 bytes to SMF_SlotParam_NRPN (code).

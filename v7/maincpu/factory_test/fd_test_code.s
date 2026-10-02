@@ -282,7 +282,7 @@ FDListDir_Return:
 ;   0x1e0008d  -> Format and display event parameter (xde) via 0xfa44d0,
 ;                 then send event 0x1e0008c via 0xfa9660.
 ;   0x1c00017..0x1C0001D (7 entries) -> Jump table at 0xe1ff34 (word offsets
-;                 added to xix base, dispatched via jp_ind).
+;                 added to xix base, dispatched via jp t, (xrr+rr)).
 ;   All others -> Return 0 (unhandled).
 ; Args: xbc = event ID, xde = event parameter
 ; Returns: xhl = 0
