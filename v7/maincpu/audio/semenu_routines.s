@@ -1093,10 +1093,8 @@ SeMenu_StorePartMask:
 	ret
 
 SeMenu_PartMask_Data:
-	.byte 0xb0
-	push_a
-	pop	xiz
-	ei	14
+	ld	(xwa), (0x65e)
+	ret
 SeMenu_PartMask_Data_Code_Sub:
 	dec	8, xsp
 	ld	(xsp+4), c
@@ -6211,16 +6209,12 @@ SeMenu_SetDisplayState:
 	ret
 
 SeMenu_DisplayState_Data:
-	.byte 0xb0
-	push_a
-	.byte 0xc5, 0x06
+	ld	(xwa), (0x6c5)
 	ret
 	ld	(1626:16), a
 	ret
-	.byte 0xb0
-	push_a
-	pop	xde
-	ei	14
+	ld	(xwa), (0x65a)
+	ret
 
 SeMenu_StoreEffectParam:
 	extz wa
