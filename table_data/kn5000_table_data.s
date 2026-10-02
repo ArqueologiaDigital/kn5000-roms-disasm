@@ -82,6 +82,23 @@
 ; =============================================================================
 ; Subcpu boot ROM handler addresses (cross-ROM references for IVT)
 ; =============================================================================
+; Table Data flash: two x16 AMD-command-set chips side by side on the 32-bit bus
+; (Flash_ReadID_32bit accepts AM29F800B / AM29LV800B), so every command word below
+; carries the 8-bit command in both 16-bit halves, and the chips' word addresses
+; 0x5555 / 0x2AAA appear at byte offsets 0x5555 * 4 and 0x2AAA * 4.
+.equ TD_FLASH_BASE, 0x800000		; first 1 MB: disk "1/2" is copied here
+.equ TD_FLASH_HALF2, 0x900000		; second 1 MB: disk "2/2" (Boot_LoadDiskData)
+.equ TD_FLASH_UNLOCK1, TD_FLASH_BASE + 0x5555 * 4
+.equ TD_FLASH_UNLOCK2, TD_FLASH_BASE + 0x2aaa * 4
+.equ FLASH2_CMD_UNLOCK1, 0x00aa00aa
+.equ FLASH2_CMD_UNLOCK2, 0x00550055
+.equ FLASH2_CMD_RESET, 0x00f000f0
+.equ FLASH2_CMD_AUTOSELECT, 0x00900090	; manufacturer / device ID read
+.equ FLASH2_CMD_PROGRAM, 0x00a000a0
+.equ FLASH2_CMD_ERASE_SETUP, 0x00800080
+.equ FLASH2_CMD_CHIP_ERASE, 0x00100010
+.equ FLASH2_CMD_SECTOR_ERASE, 0x00300030
+
 ; CORRECTED 2026-09-25: these are not sub-CPU boot ROM addresses.  Each value
 ; is the boot-time alias (ROM label + 0x600000) of a handler in THIS ROM --
 ; e.g. 0xFFFEE0 = RESET_HANDLER at 0x9FFEE0 -- which the IVT at 0x9FFF00
@@ -2305,24 +2322,24 @@ MemBlock_FillWithZeros__fill_loop:
 ;   Read any address to complete cycle
 ; -----------------------------------------------------------------------------
 Flash_Reset_32bit:
-	ld xde, 0x800000	; Table Data ROM base address
+	ld xde, TD_FLASH_BASE	; Table Data ROM base address
 Flash_Reset_32bit__wait_ready:
 	bit_dd8 5, 0x1C	; Wait for P3 bit 5 (flash ready)
 	jr z, Flash_Reset_32bit__wait_ready
 
 	ld xbc, xde	; XBC = base
 	add xbc, 0x15554	; XBC = base + unlock addr 1
-	ld xwa, 0xAA00AA	; Unlock value 1 (both chips)
+	ld xwa, FLASH2_CMD_UNLOCK1	; Unlock value 1 (both chips)
 	ld (xbc), xwa	; Write unlock
 
 	ld xbc, xde	; Reset XBC
 	add xbc, 0xAAA8	; XBC = base + unlock addr 2
-	ld xwa, 0x550055	; Unlock value 2 (both chips)
+	ld xwa, FLASH2_CMD_UNLOCK2	; Unlock value 2 (both chips)
 	ld (xbc), xwa	; Write unlock
 
 	ld xbc, xde	; Reset XBC
 	add xbc, 0x15554	; XBC = base + command addr
-	ld xwa, 0xF000F0	; Software reset command (both chips)
+	ld xwa, FLASH2_CMD_RESET	; Software reset command (both chips)
 	ld (xbc), xwa	; Send reset
 
 	ld XWA, (xde + 0x6464)             ; LD XWA, (XDE+6464h) - completion read
@@ -2355,21 +2372,21 @@ Flash_ReadID_32bit:
 	ei 6	; Disable lower-priority interrupts
 
 	; Send ID read command sequence
-	ld xwa, 0xAA00AA	; Unlock 1
-	ld (0x815554:24), xwa; LD (815554h), XWA
+	ld xwa, FLASH2_CMD_UNLOCK1	; Unlock 1
+	ld (TD_FLASH_UNLOCK1:24), xwa; LD (815554h), XWA
 
-	ld xwa, 0x550055	; Unlock 2
-	ld (0x80aaa8:24), xwa; LD (80AAA8h), XWA
+	ld xwa, FLASH2_CMD_UNLOCK2	; Unlock 2
+	ld (TD_FLASH_UNLOCK2:24), xwa; LD (80AAA8h), XWA
 
-	ld xwa, 0x900090	; ID read command
-	ld (0x815554:24), xwa; LD (815554h), XWA
+	ld xwa, FLASH2_CMD_AUTOSELECT	; ID read command
+	ld (TD_FLASH_UNLOCK1:24), xwa; LD (815554h), XWA
 
 	; Read manufacturer ID from base address
-	ld xwa, (0x800000:24); LD XWA, (800000h)
+	ld xwa, (TD_FLASH_BASE:24); LD XWA, (800000h)
 	ld (xsp + 4), xwa	; LD (XSP+04h), XWA - save mfr ID
 
 	; Read device ID from base+4
-	ld xwa, 0x800000
+	ld xwa, TD_FLASH_BASE
 	ld xiz, (xwa + 4)	; LD XIZ, (XWA+04h)
 
 	ei 0	; Re-enable interrupts
@@ -2429,14 +2446,14 @@ Flash_ProgramWord_32bit__wait_ready:
 	ei 6	; Disable lower-priority interrupts
 
 	; Send program command sequence
-	ld xwa, 0xAA00AA	; Unlock 1
-	ld (0x815554:24), xwa; LD (815554h), XWA
+	ld xwa, FLASH2_CMD_UNLOCK1	; Unlock 1
+	ld (TD_FLASH_UNLOCK1:24), xwa; LD (815554h), XWA
 
-	ld xwa, 0x550055	; Unlock 2
-	ld (0x80aaa8:24), xwa; LD (80AAA8h), XWA
+	ld xwa, FLASH2_CMD_UNLOCK2	; Unlock 2
+	ld (TD_FLASH_UNLOCK2:24), xwa; LD (80AAA8h), XWA
 
-	ld xwa, 0xA000A0	; Program command
-	ld (0x815554:24), xwa; LD (815554h), XWA
+	ld xwa, FLASH2_CMD_PROGRAM	; Program command
+	ld (TD_FLASH_UNLOCK1:24), xwa; LD (815554h), XWA
 
 	; Write data to destination
 	ld xwa, (xsp + 4)	; LD XWA, (XSP+04h) - get dest addr
@@ -2468,44 +2485,44 @@ Flash_ProgramWord_32bit__skip_program:
 ; -----------------------------------------------------------------------------
 Flash_ChipErase_32bit:
 	push xiz
-	ld xiz, 0x800000	; Table Data ROM base
+	ld xiz, TD_FLASH_BASE	; Table Data ROM base
 
 	ei 6	; Disable lower-priority interrupts
 
 	; Unlock sequence 1
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0xAA00AA
+	ld xwa, FLASH2_CMD_UNLOCK1
 	ld (xbc), xwa
 
 	; Unlock sequence 2
 	ld xbc, xiz
 	add xbc, 0xAAA8
-	ld xwa, 0x550055
+	ld xwa, FLASH2_CMD_UNLOCK2
 	ld (xbc), xwa
 
 	; Erase setup command
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0x800080
+	ld xwa, FLASH2_CMD_ERASE_SETUP
 	ld (xbc), xwa
 
 	; Unlock sequence 1 (again)
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0xAA00AA
+	ld xwa, FLASH2_CMD_UNLOCK1
 	ld (xbc), xwa
 
 	; Unlock sequence 2 (again)
 	ld xbc, xiz
 	add xbc, 0xAAA8
-	ld xwa, 0x550055
+	ld xwa, FLASH2_CMD_UNLOCK2
 	ld (xbc), xwa
 
 	; Chip erase command
 	ld xbc, xiz
 	add xbc, 0x15554
-	ld xwa, 0x100010
+	ld xwa, FLASH2_CMD_CHIP_ERASE
 	ld (xbc), xwa
 
 	ei 0	; Re-enable interrupts
@@ -2530,37 +2547,37 @@ Flash_ChipErase_32bit:
 ; -----------------------------------------------------------------------------
 Flash_SectorErase_32bit:
 	push xiz	; 3e
-	ld xiz, 0x800000	; 46 00 00 80 00 - Table Data base
+	ld xiz, TD_FLASH_BASE	; 46 00 00 80 00 - Table Data base
 	ei 6	; 06 06 - disable lower-priority IRQs
 
 	; Send erase setup sequence
 	ld xbc, xiz	; ee 89
 	add xbc, 0x15554	; e9 c8 54 55 01 00
-	ld xwa, 0xAA00AA	; 40 aa 00 aa 00 - Unlock 1
+	ld xwa, FLASH2_CMD_UNLOCK1	; 40 aa 00 aa 00 - Unlock 1
 	ld (xbc), xwa	; b1 60
 
 	ld xbc, xiz	; ee 89
 	add xbc, 0xAAA8	; e9 c8 a8 aa 00 00
-	ld xwa, 0x550055	; 40 55 00 55 00 - Unlock 2
+	ld xwa, FLASH2_CMD_UNLOCK2	; 40 55 00 55 00 - Unlock 2
 	ld (xbc), xwa	; b1 60
 
 	ld xbc, xiz	; ee 89
 	add xbc, 0x15554	; e9 c8 54 55 01 00
-	ld xwa, 0x800080	; 40 80 00 80 00 - Erase setup
+	ld xwa, FLASH2_CMD_ERASE_SETUP	; 40 80 00 80 00 - Erase setup
 	ld (xbc), xwa	; b1 60
 
 	ld xbc, xiz	; ee 89
 	add xbc, 0x15554	; e9 c8 54 55 01 00
-	ld xwa, 0xAA00AA	; 40 aa 00 aa 00 - Unlock 1
+	ld xwa, FLASH2_CMD_UNLOCK1	; 40 aa 00 aa 00 - Unlock 1
 	ld (xbc), xwa	; b1 60
 
 	ld xbc, xiz	; ee 89
 	add xbc, 0xAAA8	; e9 c8 a8 aa 00 00
-	ld xwa, 0x550055	; 40 55 00 55 00 - Unlock 2
+	ld xwa, FLASH2_CMD_UNLOCK2	; 40 55 00 55 00 - Unlock 2
 	ld (xbc), xwa	; b1 60
 
 	; Now send 0x30 sector erase command to each sector
-	ld xwa, 0x300030	; 40 30 00 30 00 - Sector erase cmd
+	ld xwa, FLASH2_CMD_SECTOR_ERASE	; 40 30 00 30 00 - Sector erase cmd
 	ld (xiz), xwa	; b6 60 - Sector 0
 
 	ld xbc, xiz	; ee 89
@@ -3428,12 +3445,12 @@ Boot_LoadDiskData__ldd_Program12:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	ldw wa, 0x24	; LD WA, 0x0024 - start sector
-	ld xbc, 0x800000	; LD XBC, 0x00800000 - dest
+	ld xbc, TD_FLASH_BASE	; LD XBC, 0x00800000 - dest
 	calr Boot_CopySectors	; CALR Boot_CopySectors
 	ld wa, 2:i3	; LD WA, 2 - disk 2
 	calr Boot_WaitDiskInsert	; CALR Boot_WaitDiskInsert
 	ldw wa, 0x24	; LD WA, 0x0024
-	ld xbc, 0x900000	; LD XBC, 0x00900000
+	ld xbc, TD_FLASH_HALF2	; LD XBC, 0x00900000
 	jr Boot_LoadDiskData__ldd_copy2	; 68 1e
 
 ; Disk type 3 handler, "Table DATA FILE 1/2" (0x9FC46A): same shape as type 1,
@@ -3443,12 +3460,12 @@ Boot_LoadDiskData__ldd_Table12:
 	calr Boot_WaitFDCReady	; CALR Boot_WaitFDCReady
 	calr Boot_ClearScreen	; CALR Boot_ClearScreen
 	ldw wa, 0x24	; LD WA, 0x0024
-	ld xbc, 0x800000	; LD XBC, 0x00800000
+	ld xbc, TD_FLASH_BASE	; LD XBC, 0x00800000
 	calr Boot_CopySectors	; CALR Boot_CopySectors
 	ld wa, 4:i3	; LD WA, 4 - next is disk 4
 	calr Boot_WaitDiskInsert	; CALR Boot_WaitDiskInsert
 	ldw wa, 0x24	; LD WA, 0x0024
-	ld xbc, 0x900000	; LD XBC, 0x00900000
+	ld xbc, TD_FLASH_HALF2	; LD XBC, 0x00900000
 
 Boot_LoadDiskData__ldd_copy2:
 	calr Boot_CopySectors	; CALR Boot_CopySectors
@@ -3691,7 +3708,7 @@ Boot_ProgramCustomFlash__pcf_copy_loop:
 Flash_ProgramHDAE_Initialization:
 	lda xsp, (xsp - 10)	; LDA XSP, XSP+0xF6
 	push xiz	; 3e
-	ld xwa, 0x800000	; LD XWA, 0x00800000 - source
+	ld xwa, TD_FLASH_BASE	; LD XWA, 0x00800000 - source
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld (xsp + 12), 0x0	; LD (XSP+0x0C), 0x00 - bank
 
@@ -3730,7 +3747,7 @@ Flash_ProgramHDAE_Initialization__phd1_copy_loop:
 Flash_ProgramHDAE_Payload:
 	lda xsp, (xsp - 10)	; LDA XSP, XSP+0xF6
 	push xiz	; 3e
-	ld xwa, 0x800000	; LD XWA, 0x00800000
+	ld xwa, TD_FLASH_BASE	; LD XWA, 0x00800000
 	ld (xsp + 8), xwa	; LD (XSP+0x08), XWA
 	ld (xsp + 12), 0x4	; LD (XSP+0x0C), 0x04 - start at bank 4
 
@@ -3831,7 +3848,7 @@ HDAE5000_InitializeParallelPort__probe_fail_halt:
 	; === Erase both flash devices (only if not already blank) ===
 HDAE5000_InitializeParallelPort__erase_flash:
 	ld (0x160004:24), 0x00	; LD (0x160004), 0x00 - LEDs off
-	ld xwa, 0x800000	; table-data flash start
+	ld xwa, TD_FLASH_BASE	; table-data flash start
 	ld xbc, 0xA00000	; table-data flash end
 	calr Flash_SearchFirstNonEmptyBlock
 	or xhl, xhl	; XHL != 0 -> data present, needs erase
@@ -3869,7 +3886,7 @@ HDAE5000_InitializeParallelPort__program_flash:
 	; === Verify both devices (LED bit 1; on mismatch toggle bit 2/3 forever) ===
 	set 1, (0x160004:24)	; SET 1, (0x160004)
 	pushw 0x3	; last bank to verify = 3
-	ld xwa, 0x800000	; reference: table-data image
+	ld xwa, TD_FLASH_BASE	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window
 	ld de, 0:i3	; LD DE, 0 - first bank
 	calr Boot_VerifyFlash
@@ -3927,7 +3944,7 @@ HDAE5000_ProgramPayloadOnly:
 HDAE5000_ProgramPayloadOnly__probe_fail_halt:
 	jr HDAE5000_ProgramPayloadOnly__probe_fail_halt	; 68 fe
 HDAE5000_ProgramPayloadOnly__erase_flash:
-	ld xwa, 0x800000	; table-data flash start
+	ld xwa, TD_FLASH_BASE	; table-data flash start
 	ld xbc, 0xA00000	; table-data flash end
 	calr Flash_SearchFirstNonEmptyBlock
 	or xhl, xhl	; XHL != 0 -> data present, needs erase
@@ -3948,7 +3965,7 @@ HDAE5000_ProgramPayloadOnly__program_flash:
 	res 0, (0x160004:24)	; RES 0, (0x160004)
 	set 1, (0x160004:24)	; SET 1, (0x160004) - LED bit 1 while verifying
 	pushw 0x7	; last bank to verify = 7
-	ld xwa, 0x800000	; reference: table-data image
+	ld xwa, TD_FLASH_BASE	; reference: table-data image
 	ld xbc, 0x280000	; HDAE5000 banked window
 	ld de, 4:i3	; LD DE, 4 - first bank
 	calr Boot_VerifyFlash
@@ -4255,7 +4272,7 @@ LZSS_Decompress__prefill_loop:
 	; === Setup source and display parameters ===
 	lda xwa, (0x0099a4:24); LDA XWA, 0x0099A4 - sector buffer
 	ld (3116:16), xwa	; LD (0x0C2C), XWA
-	ld xwa, 0x800000	; LD XWA, 0x00800000 - source ROM base
+	ld xwa, TD_FLASH_BASE	; LD XWA, 0x00800000 - source ROM base
 	ld (3112:16), xwa	; LD (0x0C28), XWA
 	ldw (3120:16), 50; LD (0x0C30), 0x0032 - display X
 	ldw (3122:16), 180; LD (0x0C32), 0x00B4 - display Y
