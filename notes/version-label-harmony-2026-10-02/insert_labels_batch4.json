@@ -1,0 +1,14 @@
+[
+ {"name": "SoundEvt_ModeDispatch", "v10": "0xEF60AE", "alias": "SoundEvt_LongPacketHandler_0x11",
+  "header": ["; SoundEvt_ModeDispatch -- if SeqState_HasModeChanged returns 0, dispatch on the",
+             "; display mode byte (0x0D65) & 3 through SoundEvt_ModeDispatch_Tbl.  Called with",
+             "; W = 1 / 2 by the two routines above."]},
+ {"name": "Display_ModePopupDispatch", "v10": "0xEFD05C", "alias": "VoiceSlot_StatusRet_0x8AA",
+  "header": ["; Display_ModePopupDispatch -- the pop-up id for the display mode (0x0D65), from",
+             "; Display_ModePopupIds, goes to (0x0DEF) before Display_UpdateRegion0; then a call",
+             "; through Display_ModePopupDispatch_Tbl[(0x0D65) & 3]."]},
+ {"name": "Scoop_DrawButtonLayout2", "v10": "0xF00AAB", "alias": "Scoop_DisplayData_ButtonLayout_0x8",
+  "header": ["; Scoop_DrawButtonLayout2 -- reached as the XIX continuation of",
+             "; Scoop_CallDisplayHelper's UIRender_TwoTableGeneral call; draws the next button",
+             "; layout list the same way."]}
+]

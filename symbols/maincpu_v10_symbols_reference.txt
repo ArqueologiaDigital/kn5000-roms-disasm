@@ -6,8 +6,8 @@
 # Do not hand-edit: rename in the sources and regenerate.
 #
 #   symbols .................. 48,217
-#   semantic names ........... 44,895 (93.1%)
-#   positional names ......... 3,322
+#   semantic names ........... 44,898 (93.1%)
+#   positional names ......... 3,319
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -12803,10 +12803,10 @@ Display_NullHandler 00EF6084
 MIDI_SendSysExFromW 00EF6085
 SoundEvt_ShortPacketHandler 00EF608C
 SoundEvt_LongPacketHandler 00EF609D
-SoundEvt_LongPacketHandler_0x11 00EF60AE
+SoundEvt_ModeDispatch 00EF60AE
 SoundEvt_LongPacketHandler_Return 00EF60D1
 SoundEvt_LongPacketHandler_0x35 00EF60D2
-SoundEvt_LongPacketHandler_DispatchTbl 00EF60D2
+SoundEvt_ModeDispatch_Tbl 00EF60D2
 SoundEvt_LongPacketHandler_DispatchTbl_Target1 00EF60E2
 SoundEvt_LongPacketHandler_Skip 00EF613E
 SoundEvt_LongPacketHandler_0xA6 00EF6143
@@ -14121,11 +14121,11 @@ VoiceSlot_StatusRet_Skip37 00EFD02C
 VoiceSlot_StatusRet_Skip38 00EFD049
 VoiceSlot_StatusRet_0x8A0 00EFD052
 VoiceSlot_StatusRet_0x8A1 00EFD053
-VoiceSlot_StatusRet_0x8AA 00EFD05C
+Display_ModePopupDispatch 00EFD05C
 VoiceState_SaveAndRestore 00EFD08E
-VoiceSlot_StatusRet_DispatchTbl 00EFD097
+Display_ModePopupDispatch_Tbl 00EFD097
 VoiceState_SaveAndRestore_0x9 00EFD097
-VoiceSlot_StatusRet_Tbl 00EFD0A7
+Display_ModePopupIds 00EFD0A7
 VoiceState_SaveAndRestore_0x19 00EFD0A7
 VoiceSlot_StatusRet_Tbl2 00EFD0AB
 VoiceState_SaveAndRestore_0x1D 00EFD0AB
@@ -14850,7 +14850,7 @@ Scoop_CheckPartStatus 00F00A75
 Scoop_CheckPartStatus_End 00F00A91
 Scoop_CallDisplayHelper 00F00A94
 Scoop_DisplayData_ButtonLayout 00F00AA3
-Scoop_DisplayData_ButtonLayout_0x8 00F00AAB
+Scoop_DrawButtonLayout2 00F00AAB
 Scoop_CallDisplayHelper_DisplayList 00F00ABA
 Scoop_DisplayData_ButtonLayout_0x17 00F00ABA
 Scoop_DisplayData_ButtonLayout_0x21 00F00AC4

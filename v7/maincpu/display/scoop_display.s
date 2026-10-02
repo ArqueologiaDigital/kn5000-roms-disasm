@@ -769,15 +769,18 @@ SoundEvt_ShortPacketHandler:
 	ld	(3923:16), 0
 	or	(0xe31c:16), 8
 	ld	w, 1:opc
-	call	SoundEvt_ShortPacketHandler_Helper
+	call	SoundEvt_ModeDispatch
 	ret
 SoundEvt_LongPacketHandler:
 	ld	(3923:16), 0
 	or	(0xe31c:16), 8
 	ld	w, 2:opc
-	call	SoundEvt_ShortPacketHandler_Helper
+	call	SoundEvt_ModeDispatch
 	ret
-SoundEvt_ShortPacketHandler_Helper:
+; SoundEvt_ModeDispatch -- if SeqState_HasModeChanged returns 0, dispatch on the
+; display mode byte (0x0D65) & 3 through SoundEvt_ModeDispatch_Tbl.  Called with
+; W = 1 / 2 by the two routines above.
+SoundEvt_ModeDispatch:
 	call	SeqState_HasModeChanged
 	cp	hl, 0:i3
 	jrl	nz, SoundEvt_LongPacketHandler_Return
@@ -786,22 +789,22 @@ SoundEvt_ShortPacketHandler_Helper:
 	xor	h, h
 	sla	hl, 2
 	push	xix
-	ld	xix, SoundEvt_LongPacketHandler_DispatchTbl2
+	ld	xix, SoundEvt_ModeDispatch_Tbl
 	ld_rrl	xhl, xix, hl
 	pop	xix
 	call (xhl)
 SoundEvt_LongPacketHandler_Return:
 	ret
-	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler (0xEF6073): `ld xix, SoundEvt_LongPacketHandler_DispatchTbl2`
-	; indexed with stride 4 (`sla hl, 2`), index from `ld l, (3429:16)`
+	; 4 handlers indexed by (0x0D65) & 3, the display mode; read by SoundEvt_ModeDispatch
+	; (`ld xix, SoundEvt_ModeDispatch_Tbl`, stride 4).
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
-SoundEvt_LongPacketHandler_DispatchTbl2:
+SoundEvt_ModeDispatch_Tbl:
 	.long	DefaultHandler_Ret
-	.long	SoundEvt_LongPacketHandler_DispatchTbl2_Target1
-	.long	SoundEvt_LongPacketHandler_DispatchTbl2_Target2
+	.long	SoundEvt_LongPacketHandler_DispatchTbl_Target1
+	.long	SoundEvt_LongPacketHandler_DispatchTbl_Target2
 	.long	DefaultHandler_Ret
-	; Entry 1 of SoundEvt_LongPacketHandler_DispatchTbl2 (a code pointer the table holds).
-SoundEvt_LongPacketHandler_DispatchTbl2_Target1:
+	; Entry 1 of SoundEvt_ModeDispatch_Tbl (a code pointer the table holds).
+SoundEvt_LongPacketHandler_DispatchTbl_Target1:
 	and	w, 3
 	ld	(3925:16), w
 	ex8 a, w
@@ -843,7 +846,7 @@ SoundEvt_LongPacketHandler_Entry:
 SoundEvt_LongPacketHandler_Join2:
 	call	SoundEvt_LongPacketHandler_Helper
 	ret
-	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl2_Target1 (0xEF60B8): `ld xhl, ScoopDisp_HandlerData2`
+	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl_Target1 (0xEF60B8): `ld xhl, ScoopDisp_HandlerData2`
 	; indexed with stride 4 (`sla wa, 2`), index from `ld a, (3420:16)`
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
 ScoopDisp_HandlerData2:
@@ -851,8 +854,8 @@ ScoopDisp_HandlerData2:
 	.long	Timer_ParamCompareAlt
 	.long	Timer_ParamLoadAndCompare
 	.long	DefaultHandler_Ret
-	; Entry 2 of SoundEvt_LongPacketHandler_DispatchTbl2 (a code pointer the table holds).
-SoundEvt_LongPacketHandler_DispatchTbl2_Target2:
+	; Entry 2 of SoundEvt_ModeDispatch_Tbl (a code pointer the table holds).
+SoundEvt_LongPacketHandler_DispatchTbl_Target2:
 	and	w, 3
 	ex8	a, w
 	exts	wa
@@ -863,13 +866,13 @@ SoundEvt_LongPacketHandler_DispatchTbl2_Target2:
 	ldb_d8	a, (0x0d5c)
 	stb_d8	(0x0eed), a
 	push	xhl
-	ld	xhl, SoundEvt_LongPacketHandler_DispatchTbl
+	ld	xhl, SoundEvt_LongPacketHandler_DispatchTbl2
 	ld_rrl	xiy, xhl, iy
 	pop	xhl
 	call	(xiy)
 	ldw_d16	wa, (0x367e)
 	cp	wa, (0x0ee8:16)
-	jrl	nz, SoundEvt_LongPacketHandler_DispatchTbl2_Target2_Skip2
+	jrl	nz, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2
 	ldb_d8	a, (0x0d5c)
 	ldb_d8	w, (0x0eed)
 	cp	a, w
@@ -877,23 +880,23 @@ SoundEvt_LongPacketHandler_DispatchTbl2_Target2:
 	cp	(0x0d5d:16), 4
 	jrl	ule, ScoopDisp_HandlerData2_0x6D
 	cp	w, 3:i3
-	jrl	ugt, SoundEvt_LongPacketHandler_DispatchTbl2_Target2_Skip
+	jrl	ugt, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip
 	cp	a, 3:i3
 	jrl	ugt, SoundEvt_LongPacketHandler_Entry
 	jp	ScoopDisp_HandlerData2_0x6D
-SoundEvt_LongPacketHandler_DispatchTbl2_Target2_Skip:
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip:
 	cp	a, 3:i3
-	jrl	ule, SoundEvt_LongPacketHandler_DispatchTbl2_Target2_Skip2
+	jrl	ule, SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2
 	call	SoundEvt_LongPacketHandler_Helper2
 	jp	ScoopDisp_HandlerData2_0x7E
-SoundEvt_LongPacketHandler_DispatchTbl2_Target2_Skip2:
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2:
 	or	(0x0dd3:16), 1
 	call	VoiceSlot_TableSetup
 	ret
-	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl2_Target2 (0xEF613F): `ld xhl, SoundEvt_LongPacketHandler_DispatchTbl`
+	; Handler dispatch table, 16 B.  Read by SoundEvt_LongPacketHandler_DispatchTbl_Target2 (0xEF613F): `ld xhl, SoundEvt_LongPacketHandler_DispatchTbl2`
 	; indexed with stride 4 (`sla wa, 2`)
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
-SoundEvt_LongPacketHandler_DispatchTbl:
+SoundEvt_LongPacketHandler_DispatchTbl2:
 	.long	DefaultHandler_Ret
 	.long	Timer_ParamCompareAlt
 	.long	Timer_ParamLoadAndCompare
@@ -10715,7 +10718,7 @@ VoiceSlot_StatusRet_Skip28:
 	jp	VoiceSlot_StatusRet_0x371
 VoiceSlot_StatusRet_Skip29:
 	ld	(xiy), 4
-	call	VoiceSlot_StatusRet_0x8AA
+	call	Display_ModePopupDispatch
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Loop:
 	set	5, (0x0d54:16)
@@ -10730,7 +10733,7 @@ VoiceSlot_StatusRet_Skip30:
 	jrl	nz, VoiceSlot_StatusRet_Skip31
 	ld	(xiy), 11
 VoiceSlot_StatusRet_Skip31:
-	call	VoiceSlot_StatusRet_0x8AA
+	call	Display_ModePopupDispatch
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip32:
 	ld	(xiy), 5
@@ -10738,11 +10741,11 @@ VoiceSlot_StatusRet_Skip32:
 	jrl	nz, VoiceSlot_StatusRet_Skip33
 	ld	(xiy), 12
 VoiceSlot_StatusRet_Skip33:
-	call	VoiceSlot_StatusRet_0x8AA
+	call	Display_ModePopupDispatch
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip34:
 	ld	(xiy), 6
-	call	VoiceSlot_StatusRet_0x8AA
+	call	Display_ModePopupDispatch
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip35:
 	call	VoiceSlot_FinalRetZ
@@ -11089,11 +11092,11 @@ VoiceSlot_StatusRet_Skip75:
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip76:
 	ld	(xiy), 1
-	call	VoiceSlot_StatusRet_0x8AA
+	call	Display_ModePopupDispatch
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip77:
 	ld	(xiy), 2
-	call	VoiceSlot_StatusRet_0x8AA
+	call	Display_ModePopupDispatch
 	jp	VoiceSlot_StatusRet_0x8A0
 VoiceSlot_StatusRet_Skip78:
 	cp	(0x0d65:16), 0
@@ -11164,8 +11167,12 @@ VoiceSlot_StatusRet_Skip87:
 	call	VoiceSlot_FinalRetZ
 	call	VoiceSlot_FinalRetZ
 	ret
+; Display_ModePopupDispatch -- the pop-up id for the display mode (0x0D65), from
+; Display_ModePopupIds, goes to (0x0DEF) before Display_UpdateRegion0; then a call
+; through Display_ModePopupDispatch_Tbl[(0x0D65) & 3].
+Display_ModePopupDispatch:
 	ldb_d8	a, (0x0d65)
-	ld	xhl, VoiceSlot_StatusRet_Tbl
+	ld	xhl, Display_ModePopupIds
 	ld_rr8b	a, xhl, a
 	stb_d8	(0x0def), a
 	call	Display_UpdateRegion0
@@ -11174,7 +11181,7 @@ VoiceSlot_StatusRet_Skip87:
 	sla	hl, 2
 	extz	xhl
 	push	xix
-	ld	xix, VoiceSlot_StatusRet_DispatchTbl
+	ld	xix, Display_ModePopupDispatch_Tbl
 	ld_rrl	xhl, xix, hl
 	pop	xix
 	call	(xhl)
@@ -11183,17 +11190,17 @@ VoiceState_SaveAndRestore:
 	call	DMA_ChannelHandler_3_Helper
 	call	DisplayStr_StyleSectionInit
 	ret
-	; Handler dispatch table, 16 B.  Read by VoiceSlot_StatusRet (0xEFC788): `ld xix, VoiceSlot_StatusRet_DispatchTbl`
+	; Handler dispatch table, 16 B.  Read by VoiceSlot_StatusRet (0xEFC788): `ld xix, Display_ModePopupDispatch_Tbl`
 	; indexed with stride 4 (`sla hl, 2`)
 	; 4 x 4-byte handler pointers; entry = index * 4, called through `call (x)`
-VoiceSlot_StatusRet_DispatchTbl:
+Display_ModePopupDispatch_Tbl:
 	.long	SerialPort_ModeHandler_0_Helper
 	.long	DisplayStr_BytecodeBlock_C
 	.long	DisplayStr_BytecodeBlock_C
 	.long	VoiceState_SaveAndRestore
-	; Byte data, 4 B.  Read by VoiceSlot_StatusRet (0xEFC788): `ld xhl, VoiceSlot_StatusRet_Tbl`
+	; Byte data, 4 B.  Read by VoiceSlot_StatusRet (0xEFC788): `ld xhl, Display_ModePopupIds`
 	; indexed with stride 4 (`sla hl, 2`)
-VoiceSlot_StatusRet_Tbl:
+Display_ModePopupIds:
 	.byte	0x00, 0x05, 0x05, 0x0f
 	; Byte data, 12 B.  Read by VoiceSlot_StatusRet (0xEFC788): `ld xhl, VoiceSlot_StatusRet_Tbl2`
 	; reader VoiceSlot_StatusRet: `ld xhl, VoiceSlot_StatusRet_Tbl2` then `ld_rr8b a, xhl, a`
@@ -16253,7 +16260,7 @@ Scoop_CheckPartStatus_End:
 
 Scoop_CallDisplayHelper:
 	ld xiy, Scoop_DisplayData_ButtonLayout
-	ld xix, Scoop_DisplayData_ButtonLayout_0x8
+	ld xix, Scoop_DrawButtonLayout2
 	call UIRender_TwoTableGeneral
 	ret
 
@@ -16261,11 +16268,15 @@ Scoop_CallDisplayHelper:
 	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_DisplayData_ButtonLayout:
 	.byte	0x0e, 0x08, 0x92, 0x12, 0x06, 0x00, 0x13, 0x00
+; Scoop_DrawButtonLayout2 -- reached as the XIX continuation of
+; Scoop_CallDisplayHelper's UIRender_TwoTableGeneral call; draws the next button
+; layout list the same way.
+Scoop_DrawButtonLayout2:
 	ld	xiy, Scoop_CallDisplayHelper_DisplayList
 	ld	xix, Scoop_DisplayData_ButtonLayout_0x21
 	call	UIRender_TwoTableGeneral
 	ret
-	; Uirender display list, 10 B.  Read by Scoop_CallDisplayHelper (0xF00A6A): `ld xiy, Scoop_CallDisplayHelper_DisplayList`
+	; Uirender display list, 10 B.  Read by Scoop_DrawButtonLayout2: `ld xiy, Scoop_CallDisplayHelper_DisplayList`
 	; handed in XIY to UIRender_TwoTableGeneral
 Scoop_CallDisplayHelper_DisplayList:
 	.byte	0x1b, 0x0a, 0x08, 0x00, 0x32, 0x00, 0x10, 0x01, 0x42, 0x00

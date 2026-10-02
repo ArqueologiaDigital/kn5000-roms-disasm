@@ -5,9 +5,9 @@
 # scripts/analysis/l2_symbol_reference.py --regen
 # Do not hand-edit: rename in the sources and regenerate.
 #
-#   symbols .................. 48,482
-#   semantic names ........... 45,055 (92.9%)
-#   positional names ......... 3,427
+#   symbols .................. 48,481
+#   semantic names ........... 45,057 (92.9%)
+#   positional names ......... 3,424
 #
 LED_patterns_indicating_firmware_version 00E00000
 LED_patterns_firmware_v8_plus 00E00008
@@ -12877,12 +12877,11 @@ Display_NullHandler 00EF605A
 MIDI_SendSysExFromW 00EF605B
 SoundEvt_ShortPacketHandler 00EF6062
 SoundEvt_LongPacketHandler 00EF6073
-SoundEvt_LongPacketHandler_0x11 00EF6084
-SoundEvt_ShortPacketHandler_Helper 00EF6084
+SoundEvt_ModeDispatch 00EF6084
 SoundEvt_LongPacketHandler_Return 00EF60A7
 SoundEvt_LongPacketHandler_0x35 00EF60A8
-SoundEvt_LongPacketHandler_DispatchTbl2 00EF60A8
-SoundEvt_LongPacketHandler_DispatchTbl2_Target1 00EF60B8
+SoundEvt_ModeDispatch_Tbl 00EF60A8
+SoundEvt_LongPacketHandler_DispatchTbl_Target1 00EF60B8
 SoundEvt_LongPacketHandler_Skip 00EF6114
 SoundEvt_LongPacketHandler_0xA6 00EF6119
 SoundEvt_LongPacketHandler_Join 00EF6119
@@ -12890,13 +12889,13 @@ SoundEvt_LongPacketHandler_Entry 00EF6121
 SoundEvt_LongPacketHandler_0xB7 00EF612A
 SoundEvt_LongPacketHandler_Join2 00EF612A
 ScoopDisp_HandlerData2 00EF612F
-SoundEvt_LongPacketHandler_DispatchTbl2_Target2 00EF613F
-SoundEvt_LongPacketHandler_DispatchTbl2_Target2_Skip 00EF6197
+SoundEvt_LongPacketHandler_DispatchTbl_Target2 00EF613F
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip 00EF6197
 ScoopDisp_HandlerData2_0x6D 00EF619C
-SoundEvt_LongPacketHandler_DispatchTbl2_Target2_Skip2 00EF61A4
+SoundEvt_LongPacketHandler_DispatchTbl_Target2_Skip2 00EF61A4
 ScoopDisp_HandlerData2_0x7E 00EF61AD
 ScoopDisp_HandlerData2_0x7F 00EF61AE
-SoundEvt_LongPacketHandler_DispatchTbl 00EF61AE
+SoundEvt_LongPacketHandler_DispatchTbl2 00EF61AE
 DefaultHandler_Ret 00EF61BE
 DisplayMode_Dispatch 00EF61BF
 DefaultHandler_Ret_0x2B 00EF61E9
@@ -14262,11 +14261,11 @@ VoiceSlot_StatusRet_Skip86 00EFD002
 VoiceSlot_StatusRet_Skip87 00EFD01F
 VoiceSlot_StatusRet_0x8A0 00EFD028
 VoiceSlot_StatusRet_0x8A1 00EFD029
-VoiceSlot_StatusRet_0x8AA 00EFD032
+Display_ModePopupDispatch 00EFD032
 VoiceState_SaveAndRestore 00EFD064
-VoiceSlot_StatusRet_DispatchTbl 00EFD06D
+Display_ModePopupDispatch_Tbl 00EFD06D
 VoiceState_SaveAndRestore_0x9 00EFD06D
-VoiceSlot_StatusRet_Tbl 00EFD07D
+Display_ModePopupIds 00EFD07D
 VoiceState_SaveAndRestore_0x19 00EFD07D
 VoiceSlot_StatusRet_Tbl2 00EFD081
 VoiceState_SaveAndRestore_0x1D 00EFD081
@@ -15021,7 +15020,7 @@ Scoop_CheckPartStatus 00F00A4B
 Scoop_CheckPartStatus_End 00F00A67
 Scoop_CallDisplayHelper 00F00A6A
 Scoop_DisplayData_ButtonLayout 00F00A79
-Scoop_DisplayData_ButtonLayout_0x8 00F00A81
+Scoop_DrawButtonLayout2 00F00A81
 Scoop_CallDisplayHelper_DisplayList 00F00A90
 Scoop_DisplayData_ButtonLayout_0x17 00F00A90
 Scoop_DisplayData_ButtonLayout_0x21 00F00A9A

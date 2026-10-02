@@ -1017,7 +1017,6 @@
 	.set Scoop_CurveUpdate_DrawSegment_0x20, Scoop_CurveUpdate_DrawSegment + 32
 	.set Scoop_DisplayData_ButtonLayout_0x17, Scoop_DisplayData_ButtonLayout + 23
 	.set Scoop_DisplayData_ButtonLayout_0x21, Scoop_DisplayData_ButtonLayout + 33
-	.set Scoop_DisplayData_ButtonLayout_0x8, Scoop_DisplayData_ButtonLayout + 8
 	.set Scoop_SoundEditorData_0x10DE, Scoop_SoundEditorData + 4318
 	.set Scoop_SoundEditorData_0x110C, Scoop_SoundEditorData + 4364
 	.set Scoop_SoundEditorData_0x113A, Scoop_SoundEditorData + 4410
@@ -1481,7 +1480,6 @@
 	.set SoundEffect_Dispatch_Table_0x1450, SoundEffect_Dispatch_Table + 5200
 	.set SoundEffect_Dispatch_Table_0x1460, SoundEffect_Dispatch_Table + 5216
 	.set SoundEffect_Dispatch_Table_0x3C, SoundEffect_Dispatch_Table + 60
-	.set SoundEvt_LongPacketHandler_0x11, SoundEvt_LongPacketHandler + 17
 	.set SoundEvt_LongPacketHandler_0x35, SoundEvt_LongPacketHandler + 53
 	.set SoundEvt_LongPacketHandler_0xA6, SoundEvt_LongPacketHandler + 166
 	.set SoundEvt_LongPacketHandler_0xB7, SoundEvt_LongPacketHandler + 183
@@ -2189,7 +2187,6 @@
 	.set VoiceSlot_StatusRet_0x7D4, VoiceSlot_StatusRet + 2004
 	.set VoiceSlot_StatusRet_0x8A0, VoiceSlot_StatusRet + 2208
 	.set VoiceSlot_StatusRet_0x8A1, VoiceSlot_StatusRet + 2209
-	.set VoiceSlot_StatusRet_0x8AA, VoiceSlot_StatusRet + 2218
 	.set VoiceSlot_StatusRet_0xBE, VoiceSlot_StatusRet + 190
 	.set VoiceSlot_StatusRet_0xE3, VoiceSlot_StatusRet + 227
 	.set VoiceSlot_TableSetup_0x106, VoiceSlot_TableSetup + 262
